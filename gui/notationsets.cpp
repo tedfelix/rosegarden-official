@@ -172,6 +172,7 @@ public:
     }
 };
 
+//////////////////////////////////////////////////////////////////////
 
 Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
     NotationSet(nel, i, quantized),
@@ -193,6 +194,22 @@ Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
     }
 }
 
+Chord::~Chord()
+{
+}
+
+bool Chord::test(const NELIterator &i)
+{
+    return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
+}
+
+void Chord::sample(const NELIterator &i)
+{
+    NotationSet::sample(i);
+    push_back(i);
+}
+
+//////////////////////////////////////////////////////////////////////
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i, const Clef &clef, const Key &key) :
@@ -226,6 +243,17 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
             kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
         }
     }
+}
+
+NotationGroup::~NotationGroup()
+{
+}
+
+bool NotationGroup::test(const NELIterator &i)
+{
+    long n;
+    return ((*i)->event()->get<Rosegarden::Int>(P_GROUP_NO, n) &&
+            n == m_groupNo);
 }
 
 void

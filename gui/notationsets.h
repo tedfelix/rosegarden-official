@@ -115,16 +115,12 @@ class Chord : public NotationSet,
 public:
     Chord(const NotationElementList &nel, NELIterator elementInChord,
           bool quantized = true);
-    virtual ~Chord() { }
+
+    virtual ~Chord();
 
 protected:
-    virtual bool test(const NELIterator &i) {
-        return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
-    }
-    virtual void sample(const NELIterator &i) {
-        NotationSet::sample(i);
-        push_back(i);
-    }
+    virtual bool test(const NELIterator&);
+    virtual void sample(const NELIterator&);
 
 private:
     Rosegarden::Event::timeT m_time;
@@ -148,7 +144,8 @@ public:
     
     NotationGroup(const NotationElementList &nel, NELIterator elementInGroup,
                   const Rosegarden::Clef &clef, const Rosegarden::Key &key);
-    virtual ~NotationGroup() { }
+
+    virtual ~NotationGroup();
 
     Type getGroupType() const { return m_type; }
 
@@ -157,11 +154,8 @@ public:
     void applyBeam(Staff &);
 
 protected:
-    virtual bool test(const NELIterator &i) {
-        long n;
-        return ((*i)->event()->get<Rosegarden::Int>(P_GROUP_NO, n) &&
-                n == m_groupNo);
-    }
+    virtual bool test(const NELIterator &i);
+
     virtual void sample(const NELIterator &i);
 
 private:
