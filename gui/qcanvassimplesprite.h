@@ -86,14 +86,4 @@ protected:
     static std::vector<QCanvasPixmapArray*> m_pixmapArrays;
 };
 
-class ConstantWidthRectangle : public QCanvasRectangle
-{
-public:
-    ConstantWidthRectangle(QCanvas *canvas) : QCanvasRectangle(canvas) {}
-
-protected:
-    virtual void drawShape(QPainter &p);
-};
-
-
 #endif
