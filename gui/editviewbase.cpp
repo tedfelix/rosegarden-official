@@ -38,6 +38,7 @@
 #include "qcanvasgroupableitem.h"
 #include "basiccommand.h"
 #include "rosegardenguidoc.h"
+#include "rosegardenconfiguredialog.h"
 #include "multiviewcommandhistory.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
@@ -167,7 +168,10 @@ void EditViewBase::setupActions(QString rcFileName)
 
 void EditViewBase::slotConfigure()
 {
-    KMessageBox::sorry(0, "Not implemented yet");
+    Rosegarden::ConfigureDialog *configDlg = 
+        new Rosegarden::ConfigureDialog(m_document, m_config, this);
+
+    configDlg->show();
 }
 
 void EditViewBase::slotEditKeys()
