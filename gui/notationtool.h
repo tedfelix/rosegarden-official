@@ -223,6 +223,7 @@ protected:
     double m_clickInsertX;
 
     Rosegarden::Accidental m_accidental;
+    Rosegarden::Accidental m_lastAccidental;
 
     static const char* m_actionsAccidental[][5];
 };

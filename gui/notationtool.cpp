@@ -163,7 +163,8 @@ NoteInserter::NoteInserter(NotationView* view)
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_autoBeam(true),
-      m_accidental(Rosegarden::Accidentals::NoAccidental)
+      m_accidental(Rosegarden::Accidentals::NoAccidental),
+      m_lastAccidental(Rosegarden::Accidentals::NoAccidental)
 {
     QIconSet icon;
 
@@ -229,7 +230,8 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_noteDots(0),
       m_autoBeam(false),
       m_clickHappened(false),
-      m_accidental(Rosegarden::Accidentals::NoAccidental)
+      m_accidental(Rosegarden::Accidentals::NoAccidental),
+      m_lastAccidental(Rosegarden::Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
@@ -295,7 +297,9 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
     }
 
     Event *lastInsertedEvent = doAddCommand
-	(segment, m_clickTime, endTime, note, m_clickPitch, m_accidental);
+	(segment, m_clickTime, endTime, note, m_clickPitch,
+	 m_accidental == Rosegarden::Accidentals::NoAccidental ?
+	    m_lastAccidental : m_accidental);
 
     if (lastInsertedEvent) {
 
@@ -399,6 +403,33 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     Rosegarden::Pitch p(height, clef, key, m_accidental);
     int pitch = p.getPerformancePitch();
+
+    // [RFE 987960] When inserting via mouse, if no accidental is
+    // selected, we use the same accidental (and thus the same pitch)
+    // as of the previous note found at this height -- iff such a note
+    // is found more recently than the last key signature.
+
+    if (m_accidental == Rosegarden::Accidentals::NoAccidental) {
+	Rosegarden::Segment &segment = staff->getSegment();
+	m_lastAccidental = m_accidental;
+	Segment::iterator i = segment.findNearestTime(time);
+	while (i != segment.end()) {
+	    if ((*i)->isa(Rosegarden::Key::EventType)) break;
+	    if ((*i)->isa(Rosegarden::Note::EventType)) {
+		if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF)) {
+		    int h = (*i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF);
+		    if (h == height) {
+			pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+			(*i)->get<String>(Rosegarden::BaseProperties::ACCIDENTAL,
+					  m_lastAccidental);
+			break;
+		    }
+		}
+	    }
+	    if (i == segment.begin()) break;
+	    --i;
+	}
+    }
 
     bool changed = false;
 
