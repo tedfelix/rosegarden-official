@@ -84,7 +84,7 @@
     <Action name="slashes_5"/>
   </Menu>
   <Menu name="Respell">
-    <text>&amp;Force Accidentals</text>
+    <text>&amp;Respell Accidentals</text>
     <Action name="respell_doubleflat"/>
     <Action name="respell_flat"/>
     <Action name="respell_natural"/>

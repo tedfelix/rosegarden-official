@@ -1488,7 +1488,7 @@ RespellCommand::getGlobalName(Type type, Accidental accidental)
 
     case Set:
     {
-	QString s(i18n("Force to %1"));
+	QString s(i18n("Respell with %1"));
 	//!!! should be in notationstrings:
 	if (accidental == DoubleSharp) {
 	    s = s.arg(i18n("Do&uble Sharp"));
@@ -1507,16 +1507,16 @@ RespellCommand::getGlobalName(Type type, Accidental accidental)
     }
 
     case Up:
-	return i18n("Force Accidentals &Up");
+	return i18n("Respell Accidentals &Upward");
 
     case Down:
-	return i18n("Force Accidentals &Down");
+	return i18n("Respell Accidentals &Downward");
 
     case Restore:
 	return i18n("Restore &Computed Accidentals");
     }
 
-    return i18n("Force Accidentals");
+    return i18n("Respell Accidentals");
 }
 
 void
