@@ -85,7 +85,7 @@ NotationStaff::changeFont(string fontName, int resolution)
     delete m_npf;
     m_npf = new NotePixmapFactory(fontName, resolution);
 
-    resizeStaffLines();
+//!!!    resizeStaffLines();
 }
 
 void
@@ -140,7 +140,7 @@ void NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
     cx -= m_x;
 
     int i;
-    int row = getRowForCanvasY(cy);
+    int row = getRowForCanvasCoords(cx, cy);
 
     //??? do I have this right?
     //!!! rewrite taking advantage of cleaner LinedStaff API, even

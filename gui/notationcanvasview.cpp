@@ -295,7 +295,7 @@ NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
 //			 << e->y() << " snapped to line -> " << lineY
 //			 << " (height " << height << ")" << endl;
 
-    int spacing = staff->getLineSpacing();
+    int spacing = staff->getLineSpacing() - 1;
 
     m_staffLineThreshold = spacing;
     m_vert1->setPoints(0, -spacing/2, 0, spacing/2);

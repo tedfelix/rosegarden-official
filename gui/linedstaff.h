@@ -342,8 +342,8 @@ protected:
 	return (int)(x / m_pageWidth);
     }
 
-    int getRowForCanvasY(int y) const {
-	if (!m_pageMode) return 0;
+    int getRowForCanvasCoords(double x, int y) const {
+	if (!m_pageMode) return (int)((x - m_x) / m_pageWidth);
 	else return ((y - m_y) / m_rowSpacing);
     }
 

@@ -35,7 +35,9 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(false),
     m_pageWidth(0.0),
-    m_rowSpacing(0.0)
+    m_rowSpacing(0.0),
+    m_startLayoutX(0),
+    m_endLayoutX(0)
 {
     // nothing
 }
@@ -53,7 +55,9 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(true),
     m_pageWidth(pageWidth),
-    m_rowSpacing(rowSpacing)
+    m_rowSpacing(rowSpacing),
+    m_startLayoutX(0),
+    m_endLayoutX(0)
 {
     // nothing
 }
@@ -71,7 +75,9 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(pageMode),
     m_pageWidth(pageWidth),
-    m_rowSpacing(rowSpacing)
+    m_rowSpacing(rowSpacing),
+    m_startLayoutX(0),
+    m_endLayoutX(0)
 {
     // nothing
 }
@@ -210,7 +216,7 @@ LinedStaff<T>::getCanvasYForHeight(int h, int baseY) const
 {
     int y;
     if (baseY >= 0) {
-	y = getCanvasYForTopLine(getRowForCanvasY(baseY));
+	y = getCanvasYForTopLine(getRowForCanvasCoords(m_x, baseY));
     } else {
 	y = getCanvasYForTopLine();
     }
@@ -242,7 +248,7 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
 //			 << ", getLineSpacing() = " << m_npf->getLineSpacing()
 //			 << endl;
 
-    int row = getRowForCanvasY(y);
+    int row = getRowForCanvasCoords(m_x, y);
     int ph = (y - getCanvasYForTopLine(row)) * getHeightPerLine() /
 	getLineSpacing();
     ph = getTopLineHeight() - ph;
@@ -281,7 +287,7 @@ template <class T>
 QRect
 LinedStaff<T>::getBarExtents(double x, int y) const
 {
-    int row = getRowForCanvasY(y);
+    int row = getRowForCanvasCoords(x, y);
 
     for (int i = 1; i < m_barLines.size(); ++i) {
 
@@ -450,6 +456,8 @@ LinedStaff<T>::resizeStaffLines()
 {
     int firstRow = getRowForLayoutX(m_startLayoutX);
     int  lastRow = getRowForLayoutX(m_endLayoutX);
+
+    assert(lastRow >= firstRow);
     
     int i;
 
@@ -466,15 +474,19 @@ LinedStaff<T>::resizeStaffLines()
 
     while (i <= lastRow) {
 
-	double x0 = 0;
-	double x1 = m_pageWidth;
+	double x0;
+	double x1;
 
 	if (i == firstRow) {
 	    x0 = getCanvasXForLayoutX(m_startLayoutX);
+	} else {
+	    x0 = getCanvasXForLeftOfRow(i);
 	}
 
 	if (i == lastRow) {
 	    x1 = getCanvasXForLayoutX(m_endLayoutX);
+	} else {
+	    x1 = getCanvasXForRightOfRow(i);
 	}
 
 	resizeStaffLineRow(i, x0, x1 - x0);
@@ -508,7 +520,7 @@ LinedStaff<T>::clearStaffLineRow(int row)
 
 template <class T>
 void
-LinedStaff<T>::resizeStaffLineRow(int row, double offset, double length)
+LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 {
 //    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLineRow: row "
 //			 << row << ", offset " << offset << ", length " 
@@ -536,8 +548,7 @@ LinedStaff<T>::resizeStaffLineRow(int row, double offset, double length)
     }
 */
     QCanvasLine *line;
-    double lx;
-    int ly;
+    int y;
 
     delete m_staffConnectingLines[row];
     line = 0;
@@ -572,17 +583,11 @@ LinedStaff<T>::resizeStaffLineRow(int row, double offset, double length)
 		line = new QCanvasLine(m_canvas);
 	    }
 
-	    lx = getCanvasXForLeftOfRow(row) + offset;
-	    ly = getCanvasYForHeight
+	    y = getCanvasYForHeight
 		(getBottomLineHeight() + getHeightPerLine() * h,
 		 getCanvasYForTopLine(row)) + j;
 
-//	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
-//				 << "; setting line points to ("
-//				 << lx << "," << ly << ") -> ("
-//				 << (lx+length-1) << "," << ly << ")" << endl;
-
-	    line->setPoints(lx, ly, lx + length - 1, ly);
+	    line->setPoints(x, y, x + length - 1, y);
 
 //	    if (j > 0) line->setSignificant(false);
 
