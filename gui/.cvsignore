@@ -5,6 +5,12 @@ Makefile.in
 rosegardentransport.cpp
 rosegardentransport.h
 rosegardentransport.moc
+rosegardenconfigure.cpp
+rosegardenconfigure.h
+rosegardenconfigure.moc
+rosegardentempo.cpp
+rosegardentempo.h
+rosegardentempo.moc
 rosegarden
 *.moc.cpp
 *_skel.cpp
