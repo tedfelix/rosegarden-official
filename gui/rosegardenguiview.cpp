@@ -282,12 +282,12 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
               getDocument()->getComposition().begin();
          i != getDocument()->getComposition().end(); i++)
     {
-        if ((*i)->getTrack() == (unsigned int) trackId)
+        if (((int)(*i)->getTrack()) == trackId)
             segments.push_back(*i);
     }
 
-    // It we matched any on the current track then/ select them
+    // Send the segment list even if it's empty as we
+    // use that to clear any current selection
     //
-    if (segments.size() > 0)
-      emit selectSegments(segments);
+    emit selectSegments(segments);
 }
