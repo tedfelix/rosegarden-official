@@ -535,8 +535,6 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     /*
     RG_DEBUG << "TrackEditor::setPointerPosition - scale = " << ruler->getUnitsPerPixel() << endl;
     */
-    int width = int(rint((PointerWidth * ruler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
-    width = int(PointerWidth);
 
     m_pointer->updateHeight();
 
