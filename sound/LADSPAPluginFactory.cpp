@@ -372,7 +372,6 @@ void
 LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
 				   QString identifier)
 {
-    
     if (m_instances.find(instance) == m_instances.end()) {
 	std::cerr << "WARNING: LADSPAPluginFactory::releasePlugin: Not one of mine!"
 		  << std::endl;

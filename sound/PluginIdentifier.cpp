@@ -30,7 +30,6 @@ PluginIdentifier::createIdentifier(QString type,
 				   QString label)
 {
     QString identifier = type + ":" + soName + ":" + label;
-    std::cerr << "PluginIdentifier::createIdentifier: " << identifier << std::endl;
     return identifier;
 }
 
@@ -55,13 +54,8 @@ PluginIdentifier::areIdentifiersSimilar(QString id1, QString id2)
 
     if (type1 != type2 || label1 != label2) return false;
 
-    std::cerr << "PluginIdentifier::areIdentifiersSimilar(" << id1 << "," << id2 << ")" << std::endl;
-
     bool similar = (soName1.section('/', -1).section('.', 0, 0) ==
 		    soName2.section('/', -1).section('.', 0, 0));
-
-    if (similar)
-	std::cerr << "(yes)" << std::endl;
 
     return similar;
 }
