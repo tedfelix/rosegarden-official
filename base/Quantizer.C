@@ -287,16 +287,30 @@ Quantizer::quantize(EventSelection *selection)
     Segment::iterator j = i;
     Segment::iterator k = segment.findTime(selection->getEndTime());
 
+    if (j == segment.end()) {
+	std::cerr << "j is at end" << endl;
+    } else {
+	std::cerr << "j is at " << (*j)->getAbsoluteTime() << std::endl;
+    }
+
+    if (k == segment.end()) {
+	std::cerr << "k is at end" << endl;
+    } else {
+	std::cerr << "k is at " << (*k)->getAbsoluteTime() << std::endl;
+    }
+
     while (j != k) {
+
+//	std::cerr << "j is now at " << (*j)->getAbsoluteTime() << " with type " << (*j)->getType() << endl;
 
         for (j = i; j != k && selection->contains(*j); ++j);
 
         if (j != i) {
             ranges.push_back(RangeList::value_type(i, j));
+	}
 
-            for (i = j; i != k && !selection->contains(*i); ++i);
-            j = i;
-        }
+	for (i = j; i != k && !selection->contains(*i); ++i);
+	j = i;
     }
 
     // So that we can retrieve a list of new events we cheat and stop
