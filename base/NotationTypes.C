@@ -1964,7 +1964,18 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
     }
 
-
+    if (m_barReset != BarResetTotal) {
+	if (acc == NoAccidental) {
+	    if (prevBarAcc != NoAccidental && prevBarAcc != Natural) {
+		cautionary = (m_barReset == BarResetCautionary);
+		if (keyAcc == NoAccidental) {
+		    acc = Natural;
+		} else {
+		    acc = keyAcc;
+		}
+	    }
+	}
+    }	
 
     if (acc != NoAccidental) {
 	m_newAccidentals[height] = AccidentalRec(acc, false);
