@@ -1,0 +1,13 @@
+
+* Take up all following rests into account when inserting a note (rest collapsing function ?)
+
+* when replacing a rest, split it according to where the click
+  occurred. E.g. Inserting a 4th over a whole note rest. The final
+  result can be note, 4th note rest, half note rest or 4th note rest, note,
+  half note rest, or half note rest, note, 4th note rest, etc...
+
+* give ViewElements a pointer to the Event they represent
+
+* give Track a pointer to the ViewElementsManager which represents it
+
+* status message and beep on input rejection in NotationView.
