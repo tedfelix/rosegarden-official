@@ -4,3 +4,5 @@ rosegardengui
 .libs
 Makefile
 Makefile.in
+rosegardenguiiface_skel.cpp
+

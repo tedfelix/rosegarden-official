@@ -45,7 +45,7 @@
 
 
 RosegardenGUIApp::RosegardenGUIApp()
-    : KMainWindow(0),
+    : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
       m_config(kapp->config()),
       m_fileRecent(0),
       m_view(0),
@@ -550,6 +550,12 @@ void RosegardenGUIApp::slotFileQuit()
     }	
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
+
+void RosegardenGUIApp::quit()
+{
+    slotFileQuit();
+}
+
 
 void RosegardenGUIApp::slotEditUndo()
 {

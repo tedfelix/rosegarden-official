@@ -1,11 +1,10 @@
-####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = rosegardengui
-rosegardengui_SOURCES = trackscanvas.cpp trackseditor.cpp rosedebug.cpp staffline.cpp notationcanvasview.cpp notationview.cpp viewelementsmanager.cpp notationelement.cpp notationsets.cpp quantizer.cpp rosexmlhandler.cpp xmlstorableevent.cpp notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp notepixmapfactory.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
+rosegardengui_SOURCES = trackscanvas.cpp trackseditor.cpp rosedebug.cpp staffline.cpp notationcanvasview.cpp notationview.cpp viewelementsmanager.cpp notationelement.cpp notationsets.cpp quantizer.cpp rosexmlhandler.cpp xmlstorableevent.cpp notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp notepixmapfactory.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp rosegardenguiiface.skel
 rosegardengui_LDADD   = -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 
-EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h quantizer.cpp quantizer.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h 
+EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h quantizer.cpp quantizer.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h rosegardenguiiface.h rosegardenguiiface.cpp
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
@@ -20,7 +19,6 @@ uninstall-local:
 	-rm -f $(kde_icondir)/medium/locolor/apps/rosegardengui.xpm
 	-rm -f $(kde_icondir)/small/locolor/apps/rosegardengui.xpm
 
-####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
 # kde_appsdir       Where your application file (.kdelnk) should go to. 

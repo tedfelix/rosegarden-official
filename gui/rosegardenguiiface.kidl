@@ -1,0 +1,12 @@
+<!DOCTYPE DCOP-IDL><DCOP-IDL>
+<SOURCE>./rosegardenguiiface.h</SOURCE>
+<INCLUDE>dcopobject.h</INCLUDE>
+<CLASS>
+    <NAME>RosegardenGUIIface</NAME>
+    <SUPER>DCOPObject</SUPER>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>quit</NAME>
+     </FUNC>
+</CLASS>
+</DCOP-IDL>

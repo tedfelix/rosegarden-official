@@ -21,7 +21,9 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
+#include <dcopclient.h>
 
+#include "rosedebug.h"
 #include "rosegardengui.h"
 
 static const char *description =
@@ -69,6 +71,15 @@ int main(int argc, char *argv[])
     }
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+
+    DCOPClient *client = kapp->dcopClient();
+
+    kdDebug(KDEBUG_AREA) << "kapp->name : " << kapp->name() << endl;
+    
+    QCString realAppId = client->registerAs(kapp->name());
+    
+    //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
+    
 
     return app.exec();
 }  
