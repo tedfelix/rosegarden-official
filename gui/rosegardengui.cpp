@@ -109,7 +109,7 @@ using Rosegarden::RosegardenTransportDialog;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver)
-    : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
+    : DCOPObject("RosegardenIface"), RosegardenIface(this), KMainWindow(0), 
       m_actionsSetup(false),
       m_fileRecent(0),
       m_view(0),
@@ -2898,7 +2898,7 @@ bool RosegardenGUIApp::launchJack()
         {
             if (i == 0)
             {
-                cout << "PROCESS = " << (*it) << endl;
+                std::cout << "PROCESS = " << (*it) << std::endl;
                 *m_jackProcess << (*it);
             }
             else
@@ -2909,7 +2909,7 @@ bool RosegardenGUIApp::launchJack()
 
         *m_jackProcess << args;
 
-        cout << "ARGS = " << args << endl;
+        std::cout << "ARGS = " << args << std::endl;
 
         m_jackProcess->start();
     }
