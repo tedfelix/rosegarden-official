@@ -77,9 +77,7 @@ public:
 				Rosegarden::timeT endTime = 0);
 
     virtual void updateView();
-    virtual void slotEditCut();
-    virtual void slotEditCopy();
-    virtual void slotEditPaste();
+
     virtual void setupActions();
     virtual void initStatusBar();
     virtual QSize getViewSize(); 
@@ -90,6 +88,16 @@ public:
     void setButtonsToFilter();
 
 public slots:
+
+    // standard slots
+    virtual void slotEditCut();
+    virtual void slotEditCopy();
+    virtual void slotEditPaste();
+
+    // other edit slots
+    void slotEditDelete();
+    void slotEditInsert();
+
     // on double click on the event list
     //
     void slotPopupEventEditor(QListViewItem*);
@@ -126,6 +134,8 @@ protected:
     QCheckBox      *m_otherCheckBox;
 
     static const char* const LayoutConfigGroupName;
+
+    std::vector<int> m_listSelection;
 
 };
 

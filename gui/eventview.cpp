@@ -29,6 +29,7 @@
 #include <ktoolbar.h>
 #include <ktmpstatusmsg.h>
 #include <kstdaction.h> 
+#include <kaction.h>
 
 #include <qvbox.h>
 #include <qlayout.h>
@@ -47,11 +48,14 @@
 #include "editcommands.h"
 #include "matrixtool.h"
 #include "sequencemanager.h"
+#include "rosedebug.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
 #include "BaseProperties.h"
 #include "MidiTypes.h"
+#include "Selection.h"
+#include "Clipboard.h"
 
 
 using Rosegarden::Int;
@@ -179,6 +183,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     m_eventList = new KListView(getCentralFrame());
     m_eventList->setItemsRenameable(true);
+
     m_grid->addWidget(m_eventList, 2, 1);
 
     if (segments.size() == 1) {
@@ -200,7 +205,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
             SLOT(slotPopupEventEditor(QListViewItem*)));
 
     m_eventList->setAllColumnsShowFocus(true);
-    m_eventList->setSelectionMode(QListView::Single);
+    m_eventList->setSelectionMode(QListView::Extended);
 
     m_eventList->addColumn(i18n("Time  "));
     m_eventList->addColumn(i18n("Duration  "));
@@ -231,17 +236,25 @@ EventView::~EventView()
 bool
 EventView::applyLayout(int /*staffNo*/)
 {
-    // Remember list position if we've selected something
+    // If no selection has already been set then we copy what's
+    // already set and try to replicate this after the rebuild
+    // of the view.
     //
-    int lastTime = 0;
-    int lastDuration = 0;
-    bool lastEventSelected = false;
-
-    if (m_eventList->selectedItem())
+    if (m_listSelection.size() == 0)
     {
-        lastEventSelected = true;
-        lastTime = m_eventList->selectedItem()->text(0).toInt();
-        lastDuration = m_eventList->selectedItem()->text(1).toInt();
+        QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+
+        if (selection.count())
+        {
+            QPtrListIterator<QListViewItem> it(selection);
+            QListViewItem *listItem;
+
+            while((listItem = it.current()) != 0)
+            {
+                m_listSelection.push_back(m_eventList->itemIndex(*it));
+                ++it;
+            }
+        }
     }
 
     // Ok, recreate list
@@ -383,15 +396,6 @@ EventView::applyLayout(int /*staffNo*/)
                               velyStr,
 			      data1Str,
 			      data2Str);
-
-            // Select the same event as the one we had selected before
-            //
-            if (lastEventSelected &&
-                lastTime == eventTime &&
-                lastDuration == (*it)->getDuration())
-            {
-                m_eventList->setSelected(m_eventList->lastItem(), true);
-            }
         }
     }
 
@@ -407,7 +411,31 @@ EventView::applyLayout(int /*staffNo*/)
         m_eventList->setSelectionMode(QListView::NoSelection);
     }
     else
-        m_eventList->setSelectionMode(QListView::Single);
+    {
+        m_eventList->setSelectionMode(QListView::Extended);
+
+        // If no selection then select the first event
+        if (m_listSelection.size() == 0)
+            m_listSelection.push_back(0);
+    }
+
+    // Set a selection from a range of indexes
+    //
+    std::vector<int>::iterator sIt = m_listSelection.begin();
+    int index = 0;
+
+    for (; sIt != m_listSelection.end(); ++sIt)
+    {
+        index = *sIt;
+
+        while (index > 0 && !m_eventList->itemAtIndex(index))
+                index--;
+
+        m_eventList->setSelected(m_eventList->itemAtIndex(index), true);
+        m_eventList->setCurrentItem(m_eventList->itemAtIndex(index));
+    }
+
+    m_listSelection.clear();
 
     return true;
 }
@@ -417,6 +445,7 @@ EventView::refreshSegment(Rosegarden::Segment * /*segment*/,
                           Rosegarden::timeT /*startTime*/,
                           Rosegarden::timeT /*endTime*/)
 {
+    RG_DEBUG << "EventView::refreshSegment" << endl;
     applyLayout(0);
 }
 
@@ -429,22 +458,208 @@ EventView::updateView()
 void
 EventView::slotEditCut()
 {
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+
+    if (selection.count() == 0) return;
+
+    RG_DEBUG << "EventView::slotEditCut - cutting "
+             << selection.count() << " items" << endl;
+
+    QPtrListIterator<QListViewItem> it(selection);
+    QListViewItem *listItem;
+    EventViewItem *item;
+    Rosegarden::EventSelection *cutSelection = 0;
+    int itemIndex = -1;
+
+    while((listItem = it.current()) != 0)
+    {
+        item = dynamic_cast<EventViewItem*>((*it));
+
+        if (itemIndex == -1) itemIndex = m_eventList->itemIndex(*it);
+
+        if (item)
+        {
+            if (cutSelection == 0)
+                cutSelection = 
+                    new Rosegarden::EventSelection(*(item->getSegment()));
+
+            cutSelection->addEvent(item->getEvent());
+        }
+        ++it;
+    }
+
+    if (cutSelection)
+    {
+        if (itemIndex >= 0)
+        {
+            m_listSelection.clear();
+            m_listSelection.push_back(itemIndex);
+        }
+
+        addCommandToHistory(new CutCommand(*cutSelection,
+                            getDocument()->getClipboard()));
+    }
 }
 
 void
 EventView::slotEditCopy()
 {
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+
+    if (selection.count() == 0) return;
+
+    RG_DEBUG << "EventView::slotEditCopy - copying "
+             << selection.count() << " items" << endl;
+
+    QPtrListIterator<QListViewItem> it(selection);
+    QListViewItem *listItem;
+    EventViewItem *item;
+    Rosegarden::EventSelection *copySelection = 0;
+
+    // clear the selection for post modification updating
+    //
+    m_listSelection.clear();
+
+    while((listItem = it.current()) != 0)
+    {
+        item = dynamic_cast<EventViewItem*>((*it));
+
+        m_listSelection.push_back(m_eventList->itemIndex(*it));
+
+        if (item)
+        {
+            if (copySelection == 0)
+                copySelection = 
+                    new Rosegarden::EventSelection(*(item->getSegment()));
+
+            copySelection->addEvent(item->getEvent());
+        }
+        ++it;
+    }
+
+    if (copySelection)
+    {
+        addCommandToHistory(new CopyCommand(*copySelection,
+                            getDocument()->getClipboard()));
+    }
 }
 
 void
 EventView::slotEditPaste()
 {
+    if (getDocument()->getClipboard()->isEmpty()) 
+    {
+        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        return;
+    }
+
+    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), this);
+
+    Rosegarden::timeT insertionTime = 0;
+
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+    if (selection.count())
+    {
+        EventViewItem *item = dynamic_cast<EventViewItem*>(selection.at(0));
+
+        if (item)
+            insertionTime = item->getEvent()->getAbsoluteTime();
+        
+        // remember the selection
+        //
+        m_listSelection.clear();
+
+        QPtrListIterator<QListViewItem> it(selection);
+        QListViewItem *listItem;
+
+        while((listItem = it.current()) != 0)
+        {
+            m_listSelection.push_back(m_eventList->itemIndex(*it));
+            ++it;
+        }
+    }
+
+
+    PasteEventsCommand *command = new PasteEventsCommand
+        (*m_segments[0], getDocument()->getClipboard(),
+         insertionTime, PasteEventsCommand::MatrixOverlay);
+
+    if (!command->isPossible())
+    {
+        slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+    }
+    else
+        addCommandToHistory(command);
+
+    RG_DEBUG << "EventView::slotEditPaste - pasting "
+             << selection.count() << " items" << endl;
 }
+
+void
+EventView::slotEditDelete()
+{
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+    if (selection.count() == 0) return;
+
+    RG_DEBUG << "EventView::slotEditDelete - deleting "
+             << selection.count() << " items" << endl;
+
+    QPtrListIterator<QListViewItem> it(selection);
+    QListViewItem *listItem;
+    EventViewItem *item;
+    Rosegarden::EventSelection *deleteSelection = 0;
+    int itemIndex = -1;
+
+    while((listItem = it.current()) != 0)
+    {
+        item = dynamic_cast<EventViewItem*>((*it));
+
+        if (itemIndex == -1) itemIndex = m_eventList->itemIndex(*it);
+
+        if (item)
+        {
+            if (deleteSelection == 0)
+                deleteSelection = 
+                    new Rosegarden::EventSelection(*(item->getSegment()));
+
+            deleteSelection->addEvent(item->getEvent());
+        }
+        ++it;
+    }
+
+    if (deleteSelection)
+    {
+
+        if (itemIndex >= 0)
+        {
+            m_listSelection.clear();
+            m_listSelection.push_back(itemIndex);
+        }
+
+        addCommandToHistory(new EraseCommand(*deleteSelection));
+
+    }
+}
+
+void
+EventView::slotEditInsert()
+{
+    RG_DEBUG << "EventView::slotEditInsert" << endl;
+}
+
 
 void
 EventView::setupActions()
 {
     EditViewBase::setupActions("eventlist.rc");
+
+    new KAction(i18n("&Delete"), Key_Delete, this,
+                SLOT(slotEditDelete()), actionCollection(),
+                "delete");
+
+    new KAction(i18n("&Insert Event"), 0, this,
+                SLOT(slotEditInsert()), actionCollection(),
+                "insert");
 
     createGUI(getRCFileName());
 }
