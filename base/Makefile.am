@@ -18,6 +18,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Event.C \
                      Instrument.C \
                      MidiDevice.C \
+                     MidiTypes.C \
 		     NotationTypes.C \
                      Property.C \
 		     PropertyMap.C \

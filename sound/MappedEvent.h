@@ -38,13 +38,20 @@
 //
 // MappedEvents can also represent instructions for playback of audio
 // samples - if the m_type is Audio then the sequencer will attempt to
-// map the Pitch (m_data1) to the audio id.
+// map the Pitch (m_data1) to the audio id.  Note that this limits us
+// to 256 audio files in the Composition unless we use a different
+// parameter for storing these IDs.
 // 
 // The MappedEvent/Instrument relationship is interesting - we don't
 // want to duplicate the entire Instrument at the Sequencer level as
 // it'd be messy and unnecessary.  Instead we use a MappedInstrument
 // which is just a very cut down Sequencer-side version of an Instrument.
 //
+// Some of these Events are unidirectional, some are bidirectional -
+// that is they only have a meaning in one direction (they are still
+// legal at either end).  They are broadcast in both directions using
+// the "getSequencerSlice" and "processAsync/Recorded" interfaces on
+// which the control messages can piggyback and eventually stripped out.
 //
 
 namespace Rosegarden
@@ -60,8 +67,9 @@ public:
         MidiProgramChange,
         MidiKeyPressure,
         MidiChannelPressure,
-        MidiPitchWheel,
+        MidiPitchBend,
         MidiController,
+        MidiSystemExclusive,
         Audio,               // sent from the gui to play an audio file
         AudioCancel,         // sent from gui to stop playing an audio file
         AudioLevel,          // sent to the gui with audio level on Instrument

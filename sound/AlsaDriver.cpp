@@ -1219,7 +1219,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
             case SND_SEQ_EVENT_PITCHBEND:
                 {
                     MappedEvent *mE = new MappedEvent();
-                    mE->setType(MappedEvent::MidiPitchWheel);
+                    mE->setType(MappedEvent::MidiPitchBend);
                     mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.value >> 7);
                     mE->setData2(event->data.control.value & 0x7f);
@@ -1238,16 +1238,27 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                 }
                break;
 
+            case SND_SEQ_EVENT_SYSEX:
+               {
+                   std::cout  << "AlsaDriver::getMappedComposition - "
+                              << "System Exclusive message length = "
+                              << event->data.ext.len << std::endl;
+
+                   // data is in event->data.ext.ptr
+
+                   // Construct a bung of messages
+                   /*
+                   MappedEvent *mE = new MappedEvent();
+                   mE->setType(MappedEvent::MidiSystemExclusive);
+                   */
+               }
+
+               break;
             default:
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got unrecognised MIDI event" << std::endl;
                break;
 
-            case SND_SEQ_EVENT_SYSEX:
-                std::cout << "AlsaDriver - SYSTEM EXCLUSIVE EVENT not supported"
-                          << std::endl;
-
-                break;
 
         }
 
@@ -1371,7 +1382,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                          (*i)->getData1());
                 break;
 
-            case MappedEvent::MidiPitchWheel:
+            case MappedEvent::MidiPitchBend:
                 snd_seq_ev_set_pitchbend(event,
                                          channel,
                                          (*i)->getData1());

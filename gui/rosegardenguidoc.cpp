@@ -46,6 +46,7 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "NotationTypes.h"
+#include "MidiTypes.h"
 #include "XmlExportable.h"
 #include "segmentcommands.h"
 
@@ -647,7 +648,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
                    break;
 
-                case Rosegarden::MappedEvent::MidiPitchWheel:
+                case Rosegarden::MappedEvent::MidiPitchBend:
                    {
                        PitchBend *pB = new PitchBend((*i)->getData1(),
                                                      (*i)->getData2());

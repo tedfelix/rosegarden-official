@@ -3,9 +3,12 @@
 
 o Matrix Parameter Box [SKELETON]
 
-o Event list [SKELETON]
+o Event list [GETTING THERE]
 
 o Get Segment joining working
+
+o More MIDI events at Composition level. Sys Exs, Program Changes,
+  Controller changes etc. etc.
 
 o Audio volume faders - studio concept on sequencer
 
@@ -36,9 +39,6 @@ o sweep selection on Matrix
 o Matrix view auto scrolling
 
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
-
-o More MIDI events at Composition level. Sys Exs, Program Changes,
-  Controller changes etc. etc.
 
 
 Ideas for later on

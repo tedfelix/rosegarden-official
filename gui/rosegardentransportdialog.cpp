@@ -586,7 +586,7 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
             }
             break;
 
-        case MappedEvent::MidiPitchWheel:
+        case MappedEvent::MidiPitchBend:
             {
                 InDisplay->setText(i18n("PITCH WHEEL"));
             }
@@ -652,7 +652,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
             }
             break;
 
-        case MappedEvent::MidiPitchWheel:
+        case MappedEvent::MidiPitchBend:
             {
                 OutDisplay->setText(i18n("PITCH WHEEL"));
             }

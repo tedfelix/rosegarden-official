@@ -614,7 +614,7 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
                 event.command.data2 = (*i)->getData2();
                 break;
 
-            case MappedEvent::MidiPitchWheel:
+            case MappedEvent::MidiPitchBend:
                 event.command.status = Arts::mcsPitchWheel | channel;
                 event.command.data1 = (*i)->getData1();
                 event.command.data2 = (*i)->getData2();
@@ -879,7 +879,7 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
         case MIDI_PITCH_BEND:
             {
                 MappedEvent *mE = new MappedEvent();
-                mE->setType(MappedEvent::MidiPitchWheel);
+                mE->setType(MappedEvent::MidiPitchBend);
                 mE->setEventTime(guiTimeStamp);
                 mE->setData1(midiCommand.data1);
                 mE->setData2(midiCommand.data2);
