@@ -242,13 +242,14 @@ void NoteInserter::ready()
 
 void    
 NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
-                                    int height,
+                                    int,
                                     int staffNo,
 				    QMouseEvent* e,
 				    ViewElement*)
 {
     if (staffNo < 0) return;
-
+    computeLocationAndPreview(e);
+/*!!!
     Event *clef = 0, *key = 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
@@ -282,29 +283,27 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
     m_nParentView->previewNote(m_clickStaffNo, m_clickTime,
 			       m_clickPitch, m_clickHeight,
 			       Note(m_noteType, m_noteDots));
+*/
 }
 
 
 void
-NoteInserter::handleMouseMove(Rosegarden::timeT time,
-			      int height,
-			      QMouseEvent *)
+NoteInserter::handleMouseMove(Rosegarden::timeT,
+			      int,
+			      QMouseEvent *e)
 {
-    //!!! need to change notationview to pass time & height correctly here
-    if (m_clickHappened) {
-	m_nParentView->previewNote(m_clickStaffNo, m_clickTime,
-				   m_clickPitch, m_clickHeight,
-				   Note(m_noteType, m_noteDots));
-    }
+    if (!m_clickHappened) return;
+    computeLocationAndPreview(e);
 }
 
 
 void
 NoteInserter::handleMouseRelease(Rosegarden::timeT,
 				 int,
-				 QMouseEvent *)
+				 QMouseEvent *e)
 {
     if (!m_clickHappened) return;
+    computeLocationAndPreview(e);
     m_clickHappened = false;
 
     Note note(m_noteType, m_noteDots);
@@ -327,6 +326,72 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
     }
 }
 
+
+void
+NoteInserter::computeLocationAndPreview(QMouseEvent *e)
+{
+    double x = e->x();
+    int y = (int)e->y();
+
+    NotationStaff *staff = dynamic_cast<NotationStaff *>
+	(m_nParentView->getStaffForCanvasY(y));
+    if (!staff) return;
+
+    int staffNo = staff->getId();
+    int height = staff->getHeightAtCanvasY(y);
+
+    Event *clefEvt = 0, *keyEvt = 0;
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+
+    NotationElementList::iterator itr =
+	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+    if (itr == staff->getViewElementList()->end()) return;
+
+    timeT time = (*itr)->getAbsoluteTime();
+    double insertionX = (*itr)->getLayoutX();
+    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    if (keyEvt) key = Rosegarden::Key(*keyEvt);
+
+    kdDebug(KDEBUG_AREA) << "Time is " << time << endl;
+
+    if ((*itr)->isRest()) {
+	time += getOffsetWithinRest(staffNo, itr, x - (*itr)->getCanvasX());
+	//!!! adjust insertionX for offset
+    }
+
+    kdDebug(KDEBUG_AREA) << "Insertion time: " << time << endl;
+
+    int pitch =
+	Rosegarden::NotationDisplayPitch(height, m_accidental).
+        getPerformancePitch(clef, key);
+
+    bool changed = false;
+
+    if (m_clickHappened) {
+	if (time != m_clickTime ||
+	    pitch != m_clickPitch ||
+	    height != m_clickHeight ||
+	    staffNo != m_clickStaffNo) {
+	    changed = true;
+	}
+    } else {
+	m_clickHappened = true;
+	changed = true;
+    }
+
+    if (changed) {
+	m_clickTime = time;
+	m_clickPitch = pitch;
+	m_clickHeight = height;
+	m_clickStaffNo = staffNo;
+
+	m_nParentView->previewNote(m_clickStaffNo, insertionX,
+				   m_clickPitch, m_clickHeight,
+				   Note(m_noteType, m_noteDots));
+    }
+}
+    
 
 timeT
 NoteInserter::getOffsetWithinRest(int staffNo,

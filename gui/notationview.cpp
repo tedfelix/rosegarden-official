@@ -1017,7 +1017,7 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
     setCurrentSelection(selection);
 }
 
-void NotationView::previewNote(int staffNo, Rosegarden::timeT time,
+void NotationView::previewNote(int staffNo, double layoutX,
 			       int pitch, int height,
 			       const Rosegarden::Note &note)
 { 

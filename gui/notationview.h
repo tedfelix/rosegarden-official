@@ -123,7 +123,7 @@ public:
 				Rosegarden::Event *event);
 
     /// Show and sound the given note
-    void previewNote(int staffNo, Rosegarden::timeT time,
+    void previewNote(int staffNo, double layoutX,
 		     int pitch, int height,
 		     const Rosegarden::Note &note);
 

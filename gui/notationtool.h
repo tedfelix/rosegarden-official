@@ -179,6 +179,8 @@ protected:
 					    const Rosegarden::Note &,
 					    int pitch, Rosegarden::Accidental);
 
+    virtual void computeLocationAndPreview(QMouseEvent *e);
+
 protected slots:
     // RMB menu slots
     void slotNoAccidental();
