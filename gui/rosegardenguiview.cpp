@@ -735,7 +735,7 @@ void RosegardenGUIView::slotSetSelectedSegments(
     m_segmentParameterBox->useSegments(segments);
 
     emit stateChange("have_selection", true);
-    if (segments.hasAudioSegment())
+    if (!segments.hasNonAudioSegment())
         emit stateChange("audio_segment_selected", true);
 }
 
@@ -792,7 +792,7 @@ void RosegardenGUIView::slotSelectAllSegments()
 
     emit stateChange("have_selection", true);
 
-    if (segments.hasAudioSegment())
+    if (!segments.hasNonAudioSegment())
         emit stateChange("audio_segment_selected", true);
 
     // inform
@@ -908,7 +908,7 @@ RosegardenGUIView::slotSelectedSegments(const Rosegarden::SegmentSelection &segm
 
     if (segments.size()) {
         emit stateChange("have_selection", true);
-        if (segments.hasAudioSegment())
+        if (!segments.hasNonAudioSegment())
             emit stateChange("audio_segment_selected", true);
     } else
         emit stateChange("have_selection", false);

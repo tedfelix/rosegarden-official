@@ -163,7 +163,7 @@ protected:
 class SegmentSelection : public std::set<Segment *>
 {
 public:
-    bool hasAudioSegment() const;
+    bool hasNonAudioSegment() const;
 };
 
 

@@ -203,10 +203,10 @@ EventSelection::segmentDeleted(const Segment *s)
               */
 }
 
-bool SegmentSelection::hasAudioSegment() const
+bool SegmentSelection::hasNonAudioSegment() const
 {
     for(iterator i = begin(); i != end(); ++i) {
-        if ((*i)->getType() == Segment::Audio)
+        if ((*i)->getType() == Segment::Internal)
             return true;
     }
     return false;
