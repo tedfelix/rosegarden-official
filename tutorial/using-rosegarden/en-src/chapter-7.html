@@ -4,31 +4,65 @@
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
-	<META NAME="CREATED" CONTENT="20040613;312100">
-	<META NAME="CHANGED" CONTENT="20040613;15454000">
+	<META NAME="CREATED" CONTENT="20040613;312000">
+	<META NAME="CHANGED" CONTENT="20040620;16120800">
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1>Notation</H1>
-<P STYLE="margin-bottom: 0.2in">So far, we have largely ignored
-Rosegarden's notation editing capabilities. While Rosegarden's
-initial release lacks some key features that are necessary for
-full-fledge score editing, it is nevertheless a powerful and friendly
-notation editor.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><SPAN STYLE="font-style: normal"><FONT FACE="Arial">Rosegarden
-stores events in a format that's very notation friendly. Notation is
-such an integral part of the package that I like to think of the
-notation as the &quot;real&quot; data, though it is, of course, only
-one of the ways the data can be presented to you.</FONT></SPAN></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<BR><BR>
+<H1><A NAME="6"></A>You Don't Know JACK</H1>
+<P>In order to make use of Rosegarden's audio features, you will need
+to run JACK.</P>
+<P>JACK is short for the &ldquo;Jack Audio Connection Kit.&rdquo;
+This marvel is at the heart of Linux audio, and it allows for a level
+of interoperability between applications that's undreamt of in the
+world of proprietary software.  JACK is a flexible audio server that
+allows its client applications to share the audio hardware
+seamlessly, regardless of the sound driver used, and to share a
+common transport.  It is geared toward the audio professional who
+wants to get the lowest possible latency and the best possible
+performance out of his or her hardware.  The good news is that it
+works even if you're not a serious audio professional, and are too
+stupid to understand most of the concepts involved.  Like me.  :)</P>
+<H2>Starting and tweaking JACK</H2>
+<P>The simplest way to control your JACK server is to use <B>qjackctl</B>.
+It takes a lot of the sting out of the process, and presents you with
+a nice interface to show you how things are going. It is, of course,
+not a part of Rosegarden, and you will need to install it separately.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-overview.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=393 HEIGHT=78 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">In the above example, you
+see what it's <B>supposed</B> to look like. Sometimes getting it to
+play nice is no mean feat. Notice in particular that I am showing 0
+(0) where the xruns are reported. xruns are JACK's way of telling you
+that it isn't happy. They cause audio dropouts and bad performance.
+Your goal in tweaking JACK is to achieve the lowest latency possible
+while preventing xruns.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium">To change how your JACK
+server is configured, use the <B>Setup</B> button. Here you can see
+the settings that finally worked for me with my SB Live!. It's
+notable that I am running JACK strictly as a user, without real-time
+capabilities enabled. If you run JACK with real time turned on,
+you'll have to run qjackctl, JACK, and Rosegarden as root, or else
+you'll have to run a capabilities-enabled kernel so that you can run
+them with root privleges as your user.</P>
+<P ALIGN=LEFT STYLE="font-weight: medium"><I>I think. Actually, I
+don't know. If this is wrong, please correct me.</I></P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-silvan.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=290 HEIGHT=211 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">If you were running
+Rosegarden before starting JACK, you'll need to close Rosegarden and
+restart it in order to make its audio features available. I will
+cover the actual use of Rosegarden's features in Chapter 8. For now
+we are only concerned with how to get Rosegarden to cooperate with
+other JACK-enabled applications.</P>
+<H2>Using Rosegarden with a JACK-enabled Soft Synth</H2>
+<P>Now that JACK is running and Rosegarden has hopefully set up some
+default JACK connections for you, you can take advantage of
+Rosegarden's ability to record and play audio.</P>
+<P ALIGN=LEFT><BR><BR>
 </P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<FONT FACE="Arial">REMOVED</FONT></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<BR><BR>
+<P><BR><BR>
 </P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<FONT FACE="Arial">This chapter was completely out of date, and I
-haven't yet had time to write a new one.  It's next.  Sorry.</FONT></P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+</P>
 </BODY>
 </HTML>

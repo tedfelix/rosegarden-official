@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311000">
-	<META NAME="CHANGED" CONTENT="20040615;18430900">
+	<META NAME="CHANGED" CONTENT="20040620;16261500">
 	<STYLE>
 	<!--
 		A:link { color: #ba2c2c }
@@ -26,22 +26,46 @@ audio sequencer, and a notation editor into one convenient, easy to
 use package that provides users with a consistent and intuitive
 interface.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-Rosegarden is a native KDE application that can run on any system
-that has the KDE and QT libraries installed, and currently requires a
-minimum of KDE/QT 3.1 in order to run. Many of its features may only
-work on Linux systems, but it is designed to compile and run on any
-Unix-like platform capable of running KDE. (See the<A HREF="http://rosegardenmusic.com/faq.html">
-FAQ</A> for details on building for systems that can't run ALSA.)</P>
+<SPAN STYLE="font-style: normal">Rosegarden is one of many audio and
+MIDI applications and utilities for Linux, and it integrates well
+with related applications.  This relationship centers around two
+different Linux standards.  One the one hand, Rosegarden is closely
+tied to the Advanced Linux Sound Architecture (ALSA) MIDI
+infrastructure, and it works very well with other ALSA MIDI
+applications such as Qsynth, ZynAddSubFX and Hydrogen.  On the other
+hand Rosegarden is also tied to the Jack Audio Connection Kit (JACK),
+and it works well with other JACK applications.  Rosegarden can stand
+well on its own, but its true strength is in how well it combines
+with other applications as part of a total home studio solution.</SPAN></P>
 <H2 STYLE="border: none; padding: 0in">About This Guide</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-My goal in writing this guide is to help you explore Rosegarden, and
-to discover ways to use its features to solve real problems that you
-might encounter when creating your own music. Rosegarden is easy to
-use, once you come to understand its framework, but it's not quite
-like anything you are likely to have used in the past. As such, I
-wish to take you on a guided tour through Rosegarden, to demonstrate
-many of its capabilities, and to offer you a foundation from which
-your own creative projects can spring.</P>
+This guide is part manual, part tutorial. I attempt to showcase
+Rosegarden's most significant features, and give you suggestions for
+how to use (or work around) these features in order to achieve your
+musical goals.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+This guide is generally arranged to be read from cover to cover, and
+to proceed through Rosegarden's feature set window by window in a
+logical way. If you wish to home straight in on a specific topic, the
+table of contents is thorough, and the web version is fully
+hyperlinked.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+Each chapter is loosely divided into two parts. The first half
+details the mechanical side of making use of various controls in
+order to manipulate data in some way. The latter half focuses on
+demonstrating how to use these controls to achieve common musical
+goals.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+Menu options and references to some dialog pages or tabs are
+formatted in bold, with arrows indicating the progression through the
+layers of menus.  For example, if I say to use <B>File -&gt; Import
+-&gt; Import MIDI File</B><SPAN STYLE="font-weight: medium"> this
+means to begin at the &quot;File&quot; menu, find &quot;Import&quot;
+on this menu and hover on it until the submenu opens out, then click
+on &quot;Import MIDI File.&quot;</SPAN></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+Various personal tips and &quot;unofficial&quot; workarounds are
+scattered throughout, set off in italics.</P>
 <H2 STYLE="border: none; padding: 0in"><A NAME="1_3"></A>Version and
 System Requirements</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
@@ -49,97 +73,152 @@ This document describes Rosegarden4, the latest in this venerable
 line of applications; not to be confused with the older Rosegarden
 that was last updated in 1997.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-You should be running...</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-[This will probably require version 1.0 or later of everything
-involved, but at this pre-release writing everything except ALSA is
-still pre-release.  These requirements need to be edited and updated
-prior to final publication of this document.]</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-[I should talk about minimum acceptable hardware/RAM specs, and
-preferred minimum audio hardware and such like, but I haven't yet
-given any real thought to this, and don't have anything to put down
-just yet.]</P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_4"></A>The Author's
-Studio</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Obviously,
-what I can actually demonstrate is hardware dependent. I'd like you
-to bear in mind what is sitting in front of me as I write this, and
-thus I will share the details of my &quot;studio.&quot;</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I'm
-running a 2.0 GHz P4 with 512 MB of RAM; Debian Sarge, and KDE 3.2.3.
-I've compiled Debian's kerenel 2.4.26 source with Debian's pre-empt
-and low latency patches.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">My MIDI
-landscape centers around an SB Live! with an old joystick MIDI port
-box from Gravis. I have the MIDI out from a Fatar MIDI-72 controller
-keyboard attached to the MIDI in on the box, and the MIDI out on the
-box connects to the MIDI in on my Roland SC-33 Sound Canvas. I
-usually load the <A HREF="ftp://anonymous@tp://ftp.personalcopy.net/pub/PC51f.sf2.gz">PC51f.sf2</A>
-soundfont into the SB Live!, and rarely change it.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">In the
-way of other gear, I have a reasonably good electret microphone from
-Radio Shack, which I use to record my acoustic guitar, flute, and
-other traditional instruments. I have an electric guitar and a
-DigiTech RP-200 effects box for those times I want to play rock star.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I route
-all of this through my Sound Blaster's mixer. I can't currently have
-everything feeding into the soundcard at the same time, and I must
-swap cables around in order to feed either the Sound Canvas or the
-RP-200 into the &quot;line in&quot; jack.</P>
-<H2 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="1_5"></A>History</H2>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<U><B>Date Notes</B></U></P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
-12/10/02 Initial public draft</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
-12/15/02 Merged into CVS tree</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
-4/17/04 Major redesign and rewrite</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
-6/12/04 Pruned non-landmark entries from this history</P>
+The new Rosegarden is a native KDE application that can run on any
+system that has the KDE and QT libraries installed, and currently
+requires a minimum of KDE/QT 3.1 in order to run.  As of version 1.0,
+Rosegarden is closely tied to ALSA, and ALSA has not, to my
+knowledge, been ported to platforms like OS-X and FreeBSD.  Until
+such porting occurs, the majority of Rosegarden's features are
+limited to the Linux platform exclusively.  It should compile and run
+on other platforms, but most of its features will be disabled.</P>
+<H3>Linux Version</H3>
+<P>The more recent your distribution, the better.  Rosegarden and
+many related, interdependent applications are all very new.     We at
+Rosegarden suggest that you run the very latest release version of
+the distribution of your choice, at a minimum.  We further suggest
+that a distribution with special emphasis on Linux audio, such as
+<A HREF="http://www.agnula.org/">AGNULA</A> or <A HREF="http://ccrma.stanford.edu/planetccrma/software/introduction.html">Planet
+CCRMA</A> might well be worth your consideration if you find yourself
+having trouble getting all of these things to cooperate.  Linux audio
+is a bit of an arcane and complex area at the present, and these
+special distributions seek to remove much of the sting.  My personal
+recommendation would be to take a look at DeMuDi, AGNULA's
+Debian-based live CD distribution.  As a matter of personal
+preference, I try to stay as far away from Red Hat-based distros as
+possible, and I strongly prefer the Debian package management system.
+ <I>&Agrave; chaq'un son go&ucirc;t.</I></P>
+<H3>Minimum Computer Specs</H3>
+<P>If you wish to do MIDI only, and if you have a soundcard or
+external synthesizer capable of doing the work of playing music
+largely on its own, you can probably get by with as little as
+PII-233.  The more RAM the better.</P>
+<P>If you need to use a soft synth such as QSynth for MIDI
+production, I have found that an 800 MHz machine with 128 MB of RAM
+is the minimum spec box that I could get working acceptably.  This
+machine was completely useless when using JACK, so I had to run
+Rosegarden with its audio features disabled, and I had to play QSynth
+through the ALSA output, rather than the more usual JACK output.  (I
+will cover these topics in detail in &quot;You Don't Know JACK,&quot;
+so don't despair if you have no idea what I'm talking about.)</P>
+<P>To get the most out of Rosegarden with the least amount of kernel
+hacking and other tweaking, I've found a 2.0 GHz P4 with 512 MB of
+RAM delivers acceptable MIDI and audio performance using a standard,
+unpatched 2.4 kernel, running both JACK and Rosegarden with normal
+user <SPAN LANG="en-US">privileges, using a cheap Wal-Mart Sound
+Blaster Live!.</SPAN></P>
+<H3>Suggested Minimum Hardware</H3>
+<P>My <B>recommended</B><SPAN STYLE="font-weight: medium"> minimum
+soundcard is an emu101k-based card such as the venerable Sound
+Blaster Live! and its many descendants and clones.  This card can do
+in hardware most of what QSynth can do with software, so you have a
+decent internal synth for MIDI performance without the CPU penalties.
+ You can still run QSynth if you want (CPU performance allowing) to
+take advantage of its integrated LADSPA plugins for effects.  It has
+a joystick port MIDI adapter (additional Y-cable or interface box
+required) for interfacing with external MIDI devices, and it can just
+barely be coaxed into functioning with JACK without resorting to
+kernel hacking and arcane audio performance tweaking.  A $15 SB Live!
+and a $50 Wal-Mart home theater system make for a rather decent
+sounding home audio solution on the cheap.</SPAN></P>
+<P STYLE="font-weight: medium">For real performance, you will
+probably want to look at professional level soundcards.  The mAudio
+Audiophile 2426 comes highly recommended as a good entry level card. 
+It has a MIDI interface, but only sports a limited number of inputs
+and outputs.  Serious audio people will probably want to look beyond
+the Audiophile and get into serious money and performance territory. 
+Better solutions offer more inputs and outputs, and nice extras such
+as breakout boxes, but many do not offer MIDI ports, so you're stuck
+buying additional hardware if you want to use external MIDI hardware.</P>
+<P STYLE="font-weight: medium">In writing this document, I assume
+that most of my readers are weekend jammers like me, trying to make
+the best of  low quality hardware, and are too cheap or too broke to
+buy something better.  I focus on the SB Live! as the lowest common
+denominator, because dealing with that card has the greatest chance
+of being useful to the largest number of people, and because it's a
+decent, if inferior, all-in-one solution as the centerpiece of a home
+studio.  If you are attempting to use something even more pathetic,
+then I hope perhaps you can pop for $15 to upgrade to a slightly less
+crappy soundcard.</P>
+<P STYLE="font-weight: medium">If someone wants to buy me some pro
+gear, I'll be happy to change my perspective and focus on how to get
+the most out of the big dollar toys.  :)</P>
 <H2 STYLE="border: none; padding: 0in"><A NAME="1_6"></A>Getting This
 Document</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
-latest version of the <I>Using Rosegarden</I> is always available at<A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">
+latest HTML version of <I>Using Rosegarden</I> is always available
+at:</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">
 http://rosegarden.sourceforge.net/tutorial/using-rosegarden/ </A>
 </P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can
-also get it from CVS . It's part of Rosegarden, but it's a separate
-module, so you don't get it unless you specifically check out the
-&ldquo;tutorial&rdquo; module.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">cvs -Q
--z3
--d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden
-checkout tutorial</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Remember
-that anonymous CVS at SourceForge is still lagging behind, so updates
-might take a day or two to filter to the mirrors.</P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_7"></A>Copyright
-and License</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Copyright
-&copy; 2002-2004 by D. Michael McIntyre
-&lt;dmmcintyr@users.sourceforge.net&gt;</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><B><I>Using
-Rosegarden</I></B> is released, and its title and contents are
-protected under the terms of the GNU Free Documentation License, a
-copy of which is available at<A HREF="http://www.gnu.org/licenses/fdl.txt">
-http://www.gnu.org/licenses/fdl.txt</A></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I
-acknowledge that words like &quot;Roland,&quot; &quot;Yamaha,&quot;
-&quot;General MIDI,&quot; &quot;GS,&quot; &quot;XG,&quot; and
-numerous others that I haven't even considered, but should have, are
-owned by important, well-monied corporations and probably need to
-have cute little symbols in circles or superscript or something
-attached to their names. I have far better things to do than try to
-figure out which cute little symbols are supposed to go on which
-names, but if representatives from any of the corporations who own
-those words would be so kind as to inform me which little symbols
-need to be attached to them, I will attach such symbols forthwith.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
+latest printable PDF version (formatted for a &quot;universal&quot;
+paper size that should work equally well on US Letter or A4) can be
+found at:</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">English:</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><A HREF="http://users.adelphia.net/~silvan/using-rosegarden.pdf">http://users.adelphia.net/~silvan/using-rosegarden.pdf</A></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">German:</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><A HREF="http://users.adelphia.net/~silvan/arbeiten-mit-rosegarden.pdf">http://users.adelphia.net/~silvan/arbeiten-mit-rosegarden.pdf</A></P>
 <H2 STYLE="border: none; padding: 0in"><A NAME="1_8"></A>Translations</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Translations
-are under way. Availability information to be announced.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">German:
-Bernd Weber &lt;<A HREF="mailto:weber.freiburg@freenet.de">weber.freiburg@freenet.de</A>&gt;</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">A German
+translation is under way, but is out of date owing to the evolving
+nature of this document.  Other languages will probably follow after
+all the dust has settled.</P>
+<TABLE WIDTH=100% BORDER=0 CELLPADDING=0 CELLSPACING=0>
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>German</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P STYLE="border: none; padding: 0in">Bernd Weber
+			&lt;<A HREF="mailto:weber.freiburg@freenet.de">weber.freiburg@freenet.de</A>&gt;</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>TBA</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>tba</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>TBA</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>tba</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>TBA</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>tba</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=50%>
+			<P>TBA</P>
+		</TD>
+		<TD WIDTH=50%>
+			<P>tba</P>
+		</TD>
+	</TR>
+</TABLE>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+</P>
 </BODY>
 </HTML>

@@ -1,5 +1,5 @@
 #HTMLDOC 1.8.23
--t pdf13 -f /tmp/de-src/arbeiten-mit-rosegarden.pdf --book --toclevels 3 --numbered --toctitle "Inhaltsverzeichnis" --title --titleimage kapitel-0.html --textcolor #000000 --linkcolor #0000ff --linkstyle plain --bodycolor #ffffff --size Universal --left 1.00in --right 0.50in --top 0.50in --bottom 0.50in --header tc. --footer h.1 --nup 1 --tocheader .t. --tocfooter ..i --duplex --portrait --color --no-pscommands --no-xrxcomments --compression=9 --jpeg=90 --fontsize 12.0 --fontspacing 1.2 --headingfont Helvetica --bodyfont Helvetica --headfootsize 11.0 --headfootfont Helvetica --charset iso-8859-3 --links --no-embedfonts --pagemode outline --pagelayout single --firstpage p1 --pageeffect none --pageduration 10 --effectduration 1.0 --no-encryption --permissions all  --owner-password ""  --user-password "" --browserwidth 680
+-t pdf13 -f /tmp/de-src/arbeiten-mit-rosegarden.pdf --book --toclevels 4444 --numbered --toctitle "Inhaltsverzeichnis" --title --titleimage kapitel-0.html --textcolor #000000 --linkcolor #0000ff --linkstyle plain --bodycolor #ffffff --size Universal --left 1.00in --right 0.50in --top 0.50in --bottom 0.50in --header tc. --footer h.1 --nup 1 --tocheader .t. --tocfooter ..i --duplex --portrait --color --no-pscommands --no-xrxcomments --compression=9 --jpeg=90 --fontsize 12.0 --fontspacing 1.2 --headingfont Helvetica --bodyfont Helvetica --headfootsize 11.0 --headfootfont Helvetica --charset iso-8859-3 --links --no-embedfonts --pagemode outline --pagelayout single --firstpage p1 --pageeffect none --pageduration 10 --effectduration 1.0 --no-encryption --permissions all  --owner-password ""  --user-password "" --browserwidth 680
 kapitel-1.html
 kapitel-2.html
 kapitel-3.html
@@ -10,3 +10,4 @@ kapitel-7.html
 kapitel-8.html
 kapitel-9.html
 kapitel-99.html
+kapitel-100.html

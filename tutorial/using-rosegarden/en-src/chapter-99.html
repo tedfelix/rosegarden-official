@@ -5,12 +5,173 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;281500">
-	<META NAME="CHANGED" CONTENT="20040613;305600">
+	<META NAME="CHANGED" CONTENT="20040620;15222900">
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1>Appendix</H1>
-<H2>MIDI Primer</H2>
-<P>Some users have been asking questions that reveal a fundamental
-lack of understanding</P>
+<H1>Additional Information</H1>
+<H2>My Studio</H2>
+<P>I have been surprised at some of the questions I have been asked
+since I began writing this document in 2002. I've been doing the
+whole PC soundcard thing since the very earliest beginnings of the
+technology, and I've been playing with MIDI in one form or another
+since the '80s. I had assumed that the archetypal Rosegarden user
+would be someone like me. Perhaps someone who grew up using Cakewalk,
+or some other high quality MIDI sequencer package, and needed only to
+understand how to translate familiar concepts to a new environment.
+It seems in retrospect that many of you are new to all of this, and
+that you're not quite sure what's even possible when it comes to
+setting up your studio. For this reason, I've decided to describe my
+own setup in some detail.</P>
+<P>Mine is not a pro studio by any stretch of the imagination. I'm
+not a pro musician. I just like to play around every once in a blue
+moon and have a bit of fun with music. I have an old Sound Canvas, an
+old clunky controller keyboard (a FATAR MIDI-72 with broken pitch and
+mod wheels), and a new but hardly exciting Sound Blaster Live! that I
+bought pretty much so I could experience it and write about it for my
+purposes here in this document.  It's not much of a studio, but it's
+really all I need for the kind of hack amateur work I do.</P>
+<H3>My Computer and Software</H3>
+<P>I have a 2.0 GHz Pentium 4 with 512 MB of RAM and 80 GB of disk
+space.  It is the server for my home network of  old computers that
+are now used as X terminals.  Everyone in my family runs KDE, and
+it's typical for everyone to leave a session running all the time, so
+I usually have four users and four instances of all the various KDE
+libs and applications running at any given time.</P>
+<P>I run Debian exclusively, and I can't really stand to use anything
+else.  Debian is my kind of distro in spades.  As I write this, I'm
+running Sid, but I expect to switch to the new Sarge and run Stable
+for a few months.  Due to the demands of the fast-paced world of
+Linux audio, and the glacial pace at which Debian shoots off stable
+releases, I don't imagine I will have the luxury of running a pure
+Sarge for very long.  I'll have to start using backports, or else go
+back to Sid.</P>
+<P>Since I'm a developer, I run Rosegarden from CVS.  I try to avoid
+running anything else from CVS, and I use the latest versions of
+support libraries and supplemental applications that Debian has to
+offer.  Unless I have a strong and immediate need, I tend to wait on
+Debian to get around to including or updating something rather than
+seeking out the source, or third-party packages.  This often means
+I'm using a version of KDE one later than everyone else in the world.</P>
+<P>As far as software I actually use, I love ZynAddSubFX.  It's
+<B>awesome</B>.  Hydrogen is pretty awesome too, and QSynth is, in my
+humble opinion, the best soft synth on the planet.  This is not to
+belittle all the other offerings out there by any stretch of the
+imagination.  There's a lot of great stuff in Linuxdom now, and it's
+all coming into its own as I write this.</P>
+<H3>How I Have it Hooked Up</H3>
+<P>The leg bone's connected to the thigh bone, the hip bone's
+connected to the...  This diagram attempts to explain how I have all
+the cabling routed.</P>
+<P>At the center of my studio is the SB Live!.  I use the on-board
+mixer to control the levels on various channels for recording and
+playback, and I use the MIDI  interface to connect my keyboard to
+Rosegarden, and to connect Rosegarden to my Sound Canvas.  The audio
+mixer output is routed through the orange jack on the card, through a
+digtial coaxial cable to a cheap $50 home theater system from
+Wal-Mart.</P>
+<P>On the internal MIDI side of things, the SB Live! offers four
+output ports of 16 channels each, and 64-voice polyphony using
+commonly-available soundfonts.  It has no effects processor, and no
+reverb or chorus, so the voices sound rather flat and lifeless. 
+However, the flexibility in choosing soundfonts means I can usually
+find a reasonably good approximation of whatever instrument I'm
+after.  On the external MIDI side, my Sound Canvas can receive on 16
+channels, and can play a maximum of 28 voices simultaneously.  It has
+excellent on-board effects, but the instruments are hit or miss. 
+Some sound quite good, while others are decidedly pitiful.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/my-studio.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=496 HEIGHT=517 BORDER=0></P>
+<P>On the audio side, I have a Radio Shack microphone plugged into
+the red jack on the SB Live!, and I share the blue jack between the
+audio output from my Sound Canvas and the audio output from my
+DigiTech RP-200 guitar effects processor.  This arrangement is
+inconvenient, since I can't play the Sound Canvas through my mixer
+while recording the guitar, but it's about all I can do without
+buying a real mixer.  I rigged a cable once to allow me to use the CD
+audio input on the card as an additional input channel, but the RF
+noise level on that channel was ghastly, and I scrapped the idea.</P>
+<H2>Who Are You?  Why Are You Writing This?</H2>
+<P>My name is D. Michael McIntyre, but most folks online know me as
+Silvan.  I have a BA in foreign languages, but my life took an
+unexpected turn in my senior year of college, and I found myself in
+the position of having to get a job NOW instead of finishing my
+education.  I was going to do a PhD in linguistics or something, but
+I got married and had children instead.  That changed my perspective
+in life, and killed any desire I had to ever leave my birthplace in
+southwestern Virginia.  My career choices centered around finding
+something that could deliver an acceptable amount of income without
+finishing my education, and without having to move to find work. 
+I've been driving a truck for the last seven years.  It's certainly
+not what I imagined I'd do when I grew up, but it's a stable
+profession with ample employment opportunities, and work is readily
+available based close to home.  I travel for a living, but my family
+doesn't have to move around to chase the next big promotion.</P>
+<P> I evolved into being Silvan at around the same time I discovered
+Linux.  It's a long and boring story, but the Silvan persona
+developed as my Linux ability developed.  I started off on a
+non-Linux newsgroup complaining that Linux was a bunch of &quot;hacked
+together slapware&quot; and that people running it were wasting their
+time with a bunch of inferior, dead-end junk.  I had this opinion
+even though I hadn't actually looked at Linux since the days when it
+was some weird thing Computer Science hackers at school were passing
+around on a single floppy disk.  &quot;Why do you want to run UNIX on
+your PC anyway?  What's the point of that?&quot;  I tried to get away
+from Windows once by switching to OS/2 Warp, but there were never
+really any applications for it.  I assumed that Linux would be more
+of the same, and that it would be just like that old single floppy
+version; a command line where DOS commands didn't work, and not much
+more.</P>
+<P>Someone told me to try it or shut up about it, and he mailed me a
+copy of Mandrake 8.1.  Silvan was born.  I tried it, I liked it, but
+it didn't quite work right.  Some part of me that had been put to
+sleep by too many years of Windows was reawakened with a vengeance. 
+I quickly evolved from asking stupid questions to answering rather
+complicated questions, and I developed a whole brand of Linux newbie
+helpfulness around the Silvan brand name.  Regulars on
+alt.os.linux.mandrake still remember me to this day.</P>
+<P>The next step in my evolution came when I  posted the fateful
+message on the Linux Audio Users list, or LAU.  I asked if there were
+&quot;any MIDI apps for Linux that don't suck?&quot;  I proceded to
+flay every project on the planet as not good enough.  One thing lead
+to another.  My Linux mentor slapped me in the head for being such an
+unappreciative jerk in public, and Chris Cannam, one of the lead
+Rosegarden developers came quickly onto the scene to address my
+complaints.</P>
+<P>Having thus had my frame of mind altered, we concluded that many
+of the issues I whined about were mostly a matter of my not
+understanding how to <B>use</B> Rosegarden, rather than it being the
+case that Rosegarden was actually as broken and useless as I
+perceived it to be.  Chris pointed out that the manual was quite
+incomplete, and he suggested that someone ought to supplement the
+manual with a user-friendly tutorial to show people how to use
+Rosegarden on its own terms.</P>
+<P><I>Using Rosegarden</I><SPAN STYLE="font-style: normal"> was born
+soon thereafter.  I presented the initial draft to them and they
+added it to the project.  Not long after, I grew weary of waiting for
+someone else to fix all of the legitimate and attitude-adjusted
+problems Rosegarden still had.  I put off looking at the source code
+for a long time, but I eventually stepped in to fix some glaring
+accidental spelling  problems with the Lilypond export.  I've been
+contributing small bits and pieces ever since, doing mostly scut work
+that any imbecile could do, but the real developers are too busy
+working on fundamental problems to have much time for such things. 
+I've added icons, toolbars, reorganized the menu structure,
+significantly improved the Lilypond export, added a new event
+selection filter, fixed the display of accidentals in all keys in the
+notation editor by completely rewriting a rather fundamental and
+important bit of code from scratch.  I've even managed to fix a bug
+or two along the way.  None of my contributions have been great, but
+I've done enough to marginally qualify to call myself a Rosegarden
+developer.</SPAN></P>
+<P STYLE="font-style: normal">And so it was that from a pair pissy
+messages a monumental undertaking was born.  I hope you have
+benefited from this document, and I hope you have benefited from my
+contributions to the larger Rosegarden project and to the greater
+Linux community as a whole.</P>
+<P STYLE="font-style: normal">Christiansburg, VA</P>
+<P STYLE="font-style: normal">June 20, 2004</P>
+<P><BR><BR>
+</P>
+<H2 STYLE="border: none; padding: 0in"><BR><BR>
+</H2>
 </BODY>
 </HTML>

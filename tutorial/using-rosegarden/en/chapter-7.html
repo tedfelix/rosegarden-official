@@ -21,30 +21,68 @@ A { text-decoration: none }
 <A HREF="chapter-6.html">Previous</A>
 <A HREF="chapter-8.html">Next</A>
 <HR>
-<H1><A NAME="7">7 Notation</A></H1>
-<P STYLE="margin-bottom: 0.2in">So far, we have largely ignored
- Rosegarden's notation editing capabilities. While Rosegarden's initial
- release lacks some key features that are necessary for full-fledge
- score editing, it is nevertheless a powerful and friendly notation
- editor.</P>
+<H1>7 <A NAME="6"></A>You Don't Know JACK</H1>
+<P>In order to make use of Rosegarden's audio features, you will need to
+ run JACK.</P>
+<P>JACK is short for the Jack Audio Connection Kit. This marvel is at
+ the heart of Linux audio, and it allows for a level of interoperability
+ between applications that's undreamt of in the world of proprietary
+ software. JACK is a flexible audio server that allows its client
+ applications to share the audio hardware seamlessly, regardless of the
+ sound driver used, and to share a common transport. It is geared toward
+ the audio professional who wants to get the lowest possible latency and
+ the best possible performance out of his or her hardware. The good news
+ is that it works even if you're not a serious audio professional, and
+ are too stupid to understand most of the concepts involved. Like me. :)</P>
+<H2><A NAME="7_1">7.1 Starting and tweaking JACK</A></H2>
+<P>The simplest way to control your JACK server is to use<B> qjackctl</B>
+. It takes a lot of the sting out of the process, and presents you with
+ a nice interface to show you how things are going. It is, of course,
+ not a part of Rosegarden, and you will need to install it separately.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="78" NAME="Graphic1"
+SRC="../pixmaps/qjackctl-overview.png" WIDTH="393"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">In the above example, you
+ see what it's<B> supposed</B> to look like. Sometimes getting it to
+ play nice is no mean feat. Notice in particular that I am showing 0 (0)
+ where the xruns are reported. xruns are JACK's way of telling you that
+ it isn't happy. They cause audio dropouts and bad performance. Your
+ goal in tweaking JACK is to achieve the lowest latency possible while
+ preventing xruns.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
+ server is configured, use the<B> Setup</B> button. Here you can see the
+ settings that finally worked for me with my SB Live!. It's notable that
+ I am running JACK strictly as a user, without real-time capabilities
+ enabled. If you run JACK with real time turned on, you'll have to run
+ qjackctl, JACK, and Rosegarden as root, or else you'll have to run a
+ capabilities-enabled kernel so that you can run them with root
+ privleges as your user.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>I think. Actually, I
+ don't know. If this is wrong, please correct me.</I></P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="211" NAME="Graphic2"
+SRC="../pixmaps/qjackctl-silvan.png" WIDTH="290"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If you were running
+ Rosegarden before starting JACK, you'll need to close Rosegarden and
+ restart it in order to make its audio features available. I will cover
+ the actual use of Rosegarden's features in Chapter 8. For now we are
+ only concerned with how to get Rosegarden to cooperate with other
+ JACK-enabled applications.</P>
+<H2><A NAME="7_2">7.2 Using Rosegarden with a JACK-enabled Soft Synth</A>
+</H2>
+<P>Now that JACK is running and Rosegarden has hopefully set up some
+ default JACK connections for you, you can take advantage of
+ Rosegarden's ability to record and play audio.</P>
+<P ALIGN="LEFT">
+<BR>
+<BR></P>
+<P>
+<BR>
+<BR></P>
+<P>
+<BR>
+<BR></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<!--SPAN STYLE="font-style: normal"-->
-<FONT FACE="arial">
-Rosegarden stores events in a format that's very notation friendly.
- Notation is such an integral part of the package that I like to think
- of the notation as the &quot;real&quot; data, though it is, of course, only one
- of the ways the data can be presented to you.</FONT></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 <BR>
 <BR></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<FONT FACE="arial"> REMOVED</FONT></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<BR>
-<BR></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<FONT FACE="arial"> This chapter was completely out of date, and I
- haven't yet had time to write a new one. It's next. Sorry.</FONT></P>
 <HR>
 <A HREF="index.html">Contents</A>
 <A HREF="chapter-6.html">Previous</A>
