@@ -89,6 +89,8 @@ public:
 
 class PropertyStoreBase {
 public:
+    virtual ~PropertyStoreBase();
+
     virtual PropertyType getType() = 0;
     virtual string getTypeName() = 0;
     virtual PropertyStoreBase *clone() = 0;
@@ -103,16 +105,14 @@ public:
     PropertyStore(const PropertyStore<P> &p) : m_data(p.m_data) { }
     PropertyStore &operator=(const PropertyStore<P> &p);
 
-    virtual PropertyType getType() { return P; }
-    virtual string getTypeName() { return PropertyDefn<P>::name(); }
+    virtual PropertyType getType();
+    virtual string getTypeName();
 
-    virtual PropertyStoreBase *clone() {
-	return new PropertyStore<P>(*this);
-    }
+    virtual PropertyStoreBase* clone();
+    
 
-    virtual string unparse() {
-	return PropertyDefn<P>::unparse(m_data);
-    }
+    virtual string unparse();
+    
 
     PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
@@ -127,6 +127,35 @@ PropertyStore<P>::operator=(const PropertyStore<P> &p) {
     if (this != &p) m_data = p.m_data;
     return *this;
 }
+
+template <PropertyType P>
+PropertyType
+PropertyStore<P>::getType()
+{
+    return P;
+}
+
+template <PropertyType P>
+string
+PropertyStore<P>::getTypeName()
+{
+    return PropertyDefn<P>::name();
+}
+
+template <PropertyType P>
+PropertyStoreBase*
+PropertyStore<P>::clone()
+{
+    return new PropertyStore<P>(*this);
+}
+
+template <PropertyType P>
+string
+PropertyStore<P>::unparse()
+{
+    return PropertyDefn<P>::unparse(m_data);
+}
+
 
 
 class Element2

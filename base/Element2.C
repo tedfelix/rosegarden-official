@@ -1,5 +1,10 @@
 #include "Element2.h"
 
+PropertyStoreBase::~PropertyStoreBase()
+{
+}
+
+
 Element2::Element2()
 { }
 
