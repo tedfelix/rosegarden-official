@@ -545,7 +545,9 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
               "This does not affect playback, and does not affect "
               "editing in any of the views except notation."));
 
-    m_cfg->writeEntry("quantizetype", 2);
+    // force to default of 2 if not used before
+    int quantizeType = m_cfg->readNumEntry("quantizetype", 2);
+    m_cfg->writeEntry("quantizetype", quantizeType);
     m_cfg->writeEntry("quantizenotationonly", true);
 
     m_quantizeFrame = new RosegardenQuantizeParameters
