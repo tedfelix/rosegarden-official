@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
-"POT-Creation-Date: 2003-04-25 16:36+0200\n"
+"POT-Creation-Date: 2003-04-25 18:04+0200\n"
 "PO-Revision-Date: 2003-02-20 14:40+0000\n"
 "Last-Translator: Chris Cannam <cannam@all-day-breakfast.com>\n"
 "Language-Team: None\n"
@@ -82,447 +82,6 @@ msgstr ""
 
 #: main.cpp:380
 msgid "Rosegarden"
-msgstr ""
-
-#: mocs/audiomanagerdialog.moc.cpp:34 mocs/audiomanagerdialog.moc.cpp:42
-msgid "Rosegarden::AudioManagerDialog"
-msgstr ""
-
-#: mocs/audioplugindialog.moc.cpp:34 mocs/audioplugindialog.moc.cpp:42
-msgid "Rosegarden::PluginControl"
-msgstr ""
-
-#: mocs/audioplugindialog.moc.cpp:147 mocs/audioplugindialog.moc.cpp:155
-msgid "Rosegarden::AudioPluginDialog"
-msgstr ""
-
-#: mocs/bankeditor.moc.cpp:34 mocs/bankeditor.moc.cpp:42
-msgid "MidiProgramsEditor"
-msgstr ""
-
-#: mocs/bankeditor.moc.cpp:131 mocs/bankeditor.moc.cpp:139
-msgid "BankEditorDialog"
-msgstr ""
-
-#: mocs/bankeditor.moc.cpp:272 mocs/bankeditor.moc.cpp:280
-msgid "RemapInstrumentDialog"
-msgstr ""
-
-#: mocs/bankeditor.moc.cpp:363 mocs/bankeditor.moc.cpp:371
-msgid "ImportDeviceDialog"
-msgstr ""
-
-#: mocs/barbuttons.moc.cpp:34 mocs/barbuttons.moc.cpp:42
-msgid "BarButtons"
-msgstr ""
-
-#: mocs/chordnameruler.moc.cpp:34 mocs/chordnameruler.moc.cpp:42
-msgid "ChordNameRuler"
-msgstr ""
-
-#: mocs/controlruler.moc.cpp:34 mocs/controlruler.moc.cpp:42
-msgid "ControlRuler"
-msgstr ""
-
-#: mocs/controlruler.moc.cpp:121 mocs/controlruler.moc.cpp:129
-msgid "ControlBox"
-msgstr ""
-
-#: mocs/deviceeditor.moc.cpp:34 mocs/deviceeditor.moc.cpp:42
-msgid "DeviceEditorDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:34 mocs/dialogs.moc.cpp:42
-msgid "TimeSignatureDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:128 mocs/dialogs.moc.cpp:136
-msgid "KeySignatureDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:225 mocs/dialogs.moc.cpp:233
-msgid "PasteNotationDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:307 mocs/dialogs.moc.cpp:315
-msgid "TupletDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:404 mocs/dialogs.moc.cpp:412
-msgid "TextEventDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:495 mocs/dialogs.moc.cpp:503
-msgid "EventEditDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:625 mocs/dialogs.moc.cpp:633
-msgid "TempoDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:748 mocs/dialogs.moc.cpp:756
-msgid "ClefDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:833 mocs/dialogs.moc.cpp:841
-msgid "QuantizeDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:906 mocs/dialogs.moc.cpp:914
-msgid "RescaleDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:997 mocs/dialogs.moc.cpp:1005
-msgid "FileLocateDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1070 mocs/dialogs.moc.cpp:1078
-msgid "AudioPlayingDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1143 mocs/dialogs.moc.cpp:1151
-msgid "AudioSplitDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1228 mocs/dialogs.moc.cpp:1236
-msgid "LyricEditDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1301 mocs/dialogs.moc.cpp:1309
-msgid "EventParameterDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1386 mocs/dialogs.moc.cpp:1394
-msgid "CompositionLengthDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1459 mocs/dialogs.moc.cpp:1467
-msgid "SplitByPitchDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1544 mocs/dialogs.moc.cpp:1552
-msgid "InterpretDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1626 mocs/dialogs.moc.cpp:1634
-msgid "ShowSequencerStatusDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1699 mocs/dialogs.moc.cpp:1707
-msgid "CountdownBar"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1772 mocs/dialogs.moc.cpp:1780
-msgid "CountdownDialog"
-msgstr ""
-
-#: mocs/diskspace.moc.cpp:34 mocs/diskspace.moc.cpp:42
-msgid "Rosegarden::DiskSpace"
-msgstr ""
-
-#: mocs/editviewbase.moc.cpp:34 mocs/editviewbase.moc.cpp:42
-msgid "EditViewBase"
-msgstr ""
-
-#: mocs/editview.moc.cpp:34 mocs/editview.moc.cpp:42
-msgid "EditView"
-msgstr ""
-
-#: mocs/eventview.moc.cpp:34 mocs/eventview.moc.cpp:42
-msgid "EventView"
-msgstr ""
-
-#: mocs/instrumentlabel.moc.cpp:34 mocs/instrumentlabel.moc.cpp:42
-msgid "InstrumentLabel"
-msgstr ""
-
-#: mocs/instrumentparameterbox.moc.cpp:34
-#: mocs/instrumentparameterbox.moc.cpp:42
-msgid "InstrumentParameterBox"
-msgstr ""
-
-#: mocs/instrumentparameterbox.moc.cpp:209
-#: mocs/instrumentparameterbox.moc.cpp:217
-msgid "InstrumentParameterPanel"
-msgstr ""
-
-#: mocs/instrumentparameterbox.moc.cpp:297
-#: mocs/instrumentparameterbox.moc.cpp:305
-msgid "AudioInstrumentParameterPanel"
-msgstr ""
-
-#: mocs/instrumentparameterbox.moc.cpp:530
-#: mocs/instrumentparameterbox.moc.cpp:538
-msgid "MIDIInstrumentParameterPanel"
-msgstr ""
-
-#: mocs/kstartuplogo.moc.cpp:34 mocs/kstartuplogo.moc.cpp:42
-msgid "KStartupLogo"
-msgstr ""
-
-#: mocs/loopruler.moc.cpp:34 mocs/loopruler.moc.cpp:42
-msgid "LoopRuler"
-msgstr ""
-
-#: mocs/matrixcanvasview.moc.cpp:34 mocs/matrixcanvasview.moc.cpp:42
-msgid "MatrixCanvasView"
-msgstr ""
-
-#: mocs/matrixparameterbox.moc.cpp:34 mocs/matrixparameterbox.moc.cpp:42
-msgid "MatrixParameterBox"
-msgstr ""
-
-#: mocs/matrixtool.moc.cpp:34 mocs/matrixtool.moc.cpp:42
-msgid "MatrixPainter"
-msgstr ""
-
-#: mocs/matrixtool.moc.cpp:107 mocs/matrixtool.moc.cpp:115
-msgid "MatrixSelector"
-msgstr ""
-
-#: mocs/matrixview.moc.cpp:34 mocs/matrixview.moc.cpp:42
-msgid "MatrixView"
-msgstr ""
-
-#: mocs/midifilter.moc.cpp:34 mocs/midifilter.moc.cpp:42
-msgid "MidiFilterDialog"
-msgstr ""
-
-#: mocs/multiviewcommandhistory.moc.cpp:34
-#: mocs/multiviewcommandhistory.moc.cpp:42
-msgid "MultiViewCommandHistory"
-msgstr ""
-
-#: mocs/notationcanvasview.moc.cpp:34 mocs/notationcanvasview.moc.cpp:42
-msgid "NotationCanvasView"
-msgstr ""
-
-#: mocs/notationtool.moc.cpp:34 mocs/notationtool.moc.cpp:42
-msgid "NoteInserter"
-msgstr ""
-
-#: mocs/notationtool.moc.cpp:170 mocs/notationtool.moc.cpp:178
-msgid "RestInserter"
-msgstr ""
-
-#: mocs/notationtool.moc.cpp:255 mocs/notationtool.moc.cpp:263
-msgid "NotationEraser"
-msgstr ""
-
-#: mocs/notationtool.moc.cpp:343 mocs/notationtool.moc.cpp:351
-msgid "NotationSelector"
-msgstr ""
-
-#: mocs/notationview.moc.cpp:34 mocs/notationview.moc.cpp:42
-msgid "NotationView"
-msgstr ""
-
-#: mocs/pianokeyboard.moc.cpp:34 mocs/pianokeyboard.moc.cpp:42
-msgid "PianoKeyboard"
-msgstr ""
-
-#: mocs/progressreporter.moc.cpp:34 mocs/progressreporter.moc.cpp:42
-msgid "ProgressReporter"
-msgstr ""
-
-#: mocs/qdeferscrollview.moc.cpp:34 mocs/qdeferscrollview.moc.cpp:42
-msgid "QDeferScrollView"
-msgstr ""
-
-#: mocs/rawnoteruler.moc.cpp:34 mocs/rawnoteruler.moc.cpp:42
-msgid "RawNoteRuler"
-msgstr ""
-
-#: mocs/rosegardencanvasview.moc.cpp:34 mocs/rosegardencanvasview.moc.cpp:42
-msgid "RosegardenCanvasView"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:34
-#: mocs/rosegardenconfigurationpage.moc.cpp:42
-msgid "Rosegarden::ConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:107
-#: mocs/rosegardenconfigurationpage.moc.cpp:115
-msgid "Rosegarden::TabbedConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:180
-#: mocs/rosegardenconfigurationpage.moc.cpp:188
-msgid "Rosegarden::GeneralConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:290
-#: mocs/rosegardenconfigurationpage.moc.cpp:298
-msgid "Rosegarden::NotationConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:375
-#: mocs/rosegardenconfigurationpage.moc.cpp:383
-msgid "Rosegarden::MatrixConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:448
-#: mocs/rosegardenconfigurationpage.moc.cpp:456
-msgid "Rosegarden::LatencyConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:542
-#: mocs/rosegardenconfigurationpage.moc.cpp:550
-msgid "Rosegarden::DocumentMetaConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:627
-#: mocs/rosegardenconfigurationpage.moc.cpp:635
-msgid "Rosegarden::AudioConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:712
-#: mocs/rosegardenconfigurationpage.moc.cpp:720
-msgid "Rosegarden::SequencerConfigurationPage"
-msgstr ""
-
-#: mocs/rosegardenconfiguredialog.moc.cpp:34
-#: mocs/rosegardenconfiguredialog.moc.cpp:42
-msgid "Rosegarden::ConfigureDialogBase"
-msgstr ""
-
-#: mocs/rosegardenconfiguredialog.moc.cpp:125
-#: mocs/rosegardenconfiguredialog.moc.cpp:133
-msgid "Rosegarden::ConfigureDialog"
-msgstr ""
-
-#: mocs/rosegardenguidoc.moc.cpp:34 mocs/rosegardenguidoc.moc.cpp:42
-msgid "RosegardenGUIDoc"
-msgstr ""
-
-#: mocs/rosegardengui.moc.cpp:34 mocs/rosegardengui.moc.cpp:42
-msgid "RosegardenGUIApp"
-msgstr ""
-
-#: mocs/rosegardenguiview.moc.cpp:34 mocs/rosegardenguiview.moc.cpp:42
-msgid "RosegardenGUIView"
-msgstr ""
-
-#: mocs/rosegardentransportdialog.moc.cpp:34
-#: mocs/rosegardentransportdialog.moc.cpp:42
-msgid "Rosegarden::RosegardenTransportDialog"
-msgstr ""
-
-#: mocs/segmentcanvas.moc.cpp:34 mocs/segmentcanvas.moc.cpp:42
-msgid "SegmentCanvas"
-msgstr ""
-
-#: mocs/segmentparameterbox.moc.cpp:34 mocs/segmentparameterbox.moc.cpp:42
-msgid "SegmentParameterBox"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:34 mocs/segmenttool.moc.cpp:42
-msgid "SegmentTool"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:135 mocs/segmenttool.moc.cpp:143
-msgid "SegmentPencil"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:208 mocs/segmenttool.moc.cpp:216
-msgid "SegmentEraser"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:281 mocs/segmenttool.moc.cpp:289
-msgid "SegmentMover"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:354 mocs/segmenttool.moc.cpp:362
-msgid "SegmentResizer"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:427 mocs/segmenttool.moc.cpp:435
-msgid "SegmentSelector"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:518 mocs/segmenttool.moc.cpp:526
-msgid "SegmentSplitter"
-msgstr ""
-
-#: mocs/segmenttool.moc.cpp:591 mocs/segmenttool.moc.cpp:599
-msgid "SegmentJoiner"
-msgstr ""
-
-#: mocs/sequencemanager.moc.cpp:34 mocs/sequencemanager.moc.cpp:42
-msgid "Rosegarden::SequenceManager"
-msgstr ""
-
-#: mocs/studiowidgets.moc.cpp:34 mocs/studiowidgets.moc.cpp:42
-msgid "AudioFaderWidget"
-msgstr ""
-
-#: mocs/temporuler.moc.cpp:34 mocs/temporuler.moc.cpp:42
-msgid "TempoRuler"
-msgstr ""
-
-#: mocs/textruler.moc.cpp:34 mocs/textruler.moc.cpp:42
-msgid "TextRuler"
-msgstr ""
-
-#: mocs/trackbuttons.moc.cpp:34 mocs/trackbuttons.moc.cpp:42
-msgid "TrackButtons"
-msgstr ""
-
-#: mocs/trackeditor.moc.cpp:34 mocs/trackeditor.moc.cpp:42
-msgid "TrackEditor"
-msgstr ""
-
-#: mocs/tracklabel.moc.cpp:34 mocs/tracklabel.moc.cpp:42
-msgid "TrackLabel"
-msgstr ""
-
-#: mocs/vumeter.moc.cpp:34 mocs/vumeter.moc.cpp:42
-msgid "VUMeter"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:34 mocs/widgets.moc.cpp:42
-msgid "RosegardenTristateCheckBox"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:107 mocs/widgets.moc.cpp:115
-msgid "RosegardenComboBox"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:180 mocs/widgets.moc.cpp:188
-msgid "RosegardenLabel"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:268 mocs/widgets.moc.cpp:276
-msgid "RosegardenSpinBox"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:341 mocs/widgets.moc.cpp:349
-msgid "RosegardenParameterBox"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:414 mocs/widgets.moc.cpp:422
-msgid "RosegardenProgressDialog"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:514 mocs/widgets.moc.cpp:522
-msgid "RosegardenProgressBar"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:587 mocs/widgets.moc.cpp:595
-msgid "CurrentProgressDialog"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:669 mocs/widgets.moc.cpp:677
-msgid "RosegardenFader"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:790 mocs/widgets.moc.cpp:798
-msgid "RosegardenRotary"
-msgstr ""
-
-#: mocs/widgets.moc.cpp:900 mocs/widgets.moc.cpp:908
-msgid "RosegardenQuantizeParameters"
 msgstr ""
 
 #: notationvlayout.cpp:144
@@ -2904,6 +2463,461 @@ msgstr ""
 
 #: trackeditor.cpp:629
 msgid "Turn Repeating Segments into Real Copies"
+msgstr ""
+
+#: tmpmocfiles/audiomanagerdialog.moc.cpp:34
+#: tmpmocfiles/audiomanagerdialog.moc.cpp:42
+msgid "Rosegarden::AudioManagerDialog"
+msgstr ""
+
+#: tmpmocfiles/audioplugindialog.moc.cpp:34
+#: tmpmocfiles/audioplugindialog.moc.cpp:42
+msgid "Rosegarden::PluginControl"
+msgstr ""
+
+#: tmpmocfiles/audioplugindialog.moc.cpp:147
+#: tmpmocfiles/audioplugindialog.moc.cpp:155
+msgid "Rosegarden::AudioPluginDialog"
+msgstr ""
+
+#: tmpmocfiles/bankeditor.moc.cpp:34 tmpmocfiles/bankeditor.moc.cpp:42
+msgid "MidiProgramsEditor"
+msgstr ""
+
+#: tmpmocfiles/bankeditor.moc.cpp:131 tmpmocfiles/bankeditor.moc.cpp:139
+msgid "BankEditorDialog"
+msgstr ""
+
+#: tmpmocfiles/bankeditor.moc.cpp:272 tmpmocfiles/bankeditor.moc.cpp:280
+msgid "RemapInstrumentDialog"
+msgstr ""
+
+#: tmpmocfiles/bankeditor.moc.cpp:363 tmpmocfiles/bankeditor.moc.cpp:371
+msgid "ImportDeviceDialog"
+msgstr ""
+
+#: tmpmocfiles/barbuttons.moc.cpp:34 tmpmocfiles/barbuttons.moc.cpp:42
+msgid "BarButtons"
+msgstr ""
+
+#: tmpmocfiles/chordnameruler.moc.cpp:34 tmpmocfiles/chordnameruler.moc.cpp:42
+msgid "ChordNameRuler"
+msgstr ""
+
+#: tmpmocfiles/controlruler.moc.cpp:34 tmpmocfiles/controlruler.moc.cpp:42
+msgid "ControlRuler"
+msgstr ""
+
+#: tmpmocfiles/controlruler.moc.cpp:121 tmpmocfiles/controlruler.moc.cpp:129
+msgid "ControlBox"
+msgstr ""
+
+#: tmpmocfiles/deviceeditor.moc.cpp:34 tmpmocfiles/deviceeditor.moc.cpp:42
+msgid "DeviceEditorDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:34 tmpmocfiles/dialogs.moc.cpp:42
+msgid "TimeSignatureDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:128 tmpmocfiles/dialogs.moc.cpp:136
+msgid "KeySignatureDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:225 tmpmocfiles/dialogs.moc.cpp:233
+msgid "PasteNotationDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:307 tmpmocfiles/dialogs.moc.cpp:315
+msgid "TupletDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:404 tmpmocfiles/dialogs.moc.cpp:412
+msgid "TextEventDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:495 tmpmocfiles/dialogs.moc.cpp:503
+msgid "EventEditDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:625 tmpmocfiles/dialogs.moc.cpp:633
+msgid "TempoDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:748 tmpmocfiles/dialogs.moc.cpp:756
+msgid "ClefDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:833 tmpmocfiles/dialogs.moc.cpp:841
+msgid "QuantizeDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:906 tmpmocfiles/dialogs.moc.cpp:914
+msgid "RescaleDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:997 tmpmocfiles/dialogs.moc.cpp:1005
+msgid "FileLocateDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1070 tmpmocfiles/dialogs.moc.cpp:1078
+msgid "AudioPlayingDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1143 tmpmocfiles/dialogs.moc.cpp:1151
+msgid "AudioSplitDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1228 tmpmocfiles/dialogs.moc.cpp:1236
+msgid "LyricEditDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1301 tmpmocfiles/dialogs.moc.cpp:1309
+msgid "EventParameterDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1386 tmpmocfiles/dialogs.moc.cpp:1394
+msgid "CompositionLengthDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1459 tmpmocfiles/dialogs.moc.cpp:1467
+msgid "SplitByPitchDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1544 tmpmocfiles/dialogs.moc.cpp:1552
+msgid "InterpretDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1626 tmpmocfiles/dialogs.moc.cpp:1634
+msgid "ShowSequencerStatusDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1699 tmpmocfiles/dialogs.moc.cpp:1707
+msgid "CountdownBar"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1772 tmpmocfiles/dialogs.moc.cpp:1780
+msgid "CountdownDialog"
+msgstr ""
+
+#: tmpmocfiles/diskspace.moc.cpp:34 tmpmocfiles/diskspace.moc.cpp:42
+msgid "Rosegarden::DiskSpace"
+msgstr ""
+
+#: tmpmocfiles/editviewbase.moc.cpp:34 tmpmocfiles/editviewbase.moc.cpp:42
+msgid "EditViewBase"
+msgstr ""
+
+#: tmpmocfiles/editview.moc.cpp:34 tmpmocfiles/editview.moc.cpp:42
+msgid "EditView"
+msgstr ""
+
+#: tmpmocfiles/eventview.moc.cpp:34 tmpmocfiles/eventview.moc.cpp:42
+msgid "EventView"
+msgstr ""
+
+#: tmpmocfiles/instrumentlabel.moc.cpp:34
+#: tmpmocfiles/instrumentlabel.moc.cpp:42
+msgid "InstrumentLabel"
+msgstr ""
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:34
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:42
+msgid "InstrumentParameterBox"
+msgstr ""
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:209
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:217
+msgid "InstrumentParameterPanel"
+msgstr ""
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:297
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:305
+msgid "AudioInstrumentParameterPanel"
+msgstr ""
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:530
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:538
+msgid "MIDIInstrumentParameterPanel"
+msgstr ""
+
+#: tmpmocfiles/kstartuplogo.moc.cpp:34 tmpmocfiles/kstartuplogo.moc.cpp:42
+msgid "KStartupLogo"
+msgstr ""
+
+#: tmpmocfiles/loopruler.moc.cpp:34 tmpmocfiles/loopruler.moc.cpp:42
+msgid "LoopRuler"
+msgstr ""
+
+#: tmpmocfiles/matrixcanvasview.moc.cpp:34
+#: tmpmocfiles/matrixcanvasview.moc.cpp:42
+msgid "MatrixCanvasView"
+msgstr ""
+
+#: tmpmocfiles/matrixparameterbox.moc.cpp:34
+#: tmpmocfiles/matrixparameterbox.moc.cpp:42
+msgid "MatrixParameterBox"
+msgstr ""
+
+#: tmpmocfiles/matrixtool.moc.cpp:34 tmpmocfiles/matrixtool.moc.cpp:42
+msgid "MatrixPainter"
+msgstr ""
+
+#: tmpmocfiles/matrixtool.moc.cpp:107 tmpmocfiles/matrixtool.moc.cpp:115
+msgid "MatrixSelector"
+msgstr ""
+
+#: tmpmocfiles/matrixview.moc.cpp:34 tmpmocfiles/matrixview.moc.cpp:42
+msgid "MatrixView"
+msgstr ""
+
+#: tmpmocfiles/midifilter.moc.cpp:34 tmpmocfiles/midifilter.moc.cpp:42
+msgid "MidiFilterDialog"
+msgstr ""
+
+#: tmpmocfiles/multiviewcommandhistory.moc.cpp:34
+#: tmpmocfiles/multiviewcommandhistory.moc.cpp:42
+msgid "MultiViewCommandHistory"
+msgstr ""
+
+#: tmpmocfiles/notationcanvasview.moc.cpp:34
+#: tmpmocfiles/notationcanvasview.moc.cpp:42
+msgid "NotationCanvasView"
+msgstr ""
+
+#: tmpmocfiles/notationtool.moc.cpp:34 tmpmocfiles/notationtool.moc.cpp:42
+msgid "NoteInserter"
+msgstr ""
+
+#: tmpmocfiles/notationtool.moc.cpp:170 tmpmocfiles/notationtool.moc.cpp:178
+msgid "RestInserter"
+msgstr ""
+
+#: tmpmocfiles/notationtool.moc.cpp:255 tmpmocfiles/notationtool.moc.cpp:263
+msgid "NotationEraser"
+msgstr ""
+
+#: tmpmocfiles/notationtool.moc.cpp:343 tmpmocfiles/notationtool.moc.cpp:351
+msgid "NotationSelector"
+msgstr ""
+
+#: tmpmocfiles/notationview.moc.cpp:34 tmpmocfiles/notationview.moc.cpp:42
+msgid "NotationView"
+msgstr ""
+
+#: tmpmocfiles/pianokeyboard.moc.cpp:34 tmpmocfiles/pianokeyboard.moc.cpp:42
+msgid "PianoKeyboard"
+msgstr ""
+
+#: tmpmocfiles/progressreporter.moc.cpp:34
+#: tmpmocfiles/progressreporter.moc.cpp:42
+msgid "ProgressReporter"
+msgstr ""
+
+#: tmpmocfiles/qdeferscrollview.moc.cpp:34
+#: tmpmocfiles/qdeferscrollview.moc.cpp:42
+msgid "QDeferScrollView"
+msgstr ""
+
+#: tmpmocfiles/rawnoteruler.moc.cpp:34 tmpmocfiles/rawnoteruler.moc.cpp:42
+msgid "RawNoteRuler"
+msgstr ""
+
+#: tmpmocfiles/rosegardencanvasview.moc.cpp:34
+#: tmpmocfiles/rosegardencanvasview.moc.cpp:42
+msgid "RosegardenCanvasView"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:34
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:42
+msgid "Rosegarden::ConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:107
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:115
+msgid "Rosegarden::TabbedConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:180
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:188
+msgid "Rosegarden::GeneralConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:290
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:298
+msgid "Rosegarden::NotationConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:375
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:383
+msgid "Rosegarden::MatrixConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:448
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:456
+msgid "Rosegarden::LatencyConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:542
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:550
+msgid "Rosegarden::DocumentMetaConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:627
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:635
+msgid "Rosegarden::AudioConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:712
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:720
+msgid "Rosegarden::SequencerConfigurationPage"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:34
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:42
+msgid "Rosegarden::ConfigureDialogBase"
+msgstr ""
+
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:125
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:133
+msgid "Rosegarden::ConfigureDialog"
+msgstr ""
+
+#: tmpmocfiles/rosegardenguidoc.moc.cpp:34
+#: tmpmocfiles/rosegardenguidoc.moc.cpp:42
+msgid "RosegardenGUIDoc"
+msgstr ""
+
+#: tmpmocfiles/rosegardengui.moc.cpp:34 tmpmocfiles/rosegardengui.moc.cpp:42
+msgid "RosegardenGUIApp"
+msgstr ""
+
+#: tmpmocfiles/rosegardenguiview.moc.cpp:34
+#: tmpmocfiles/rosegardenguiview.moc.cpp:42
+msgid "RosegardenGUIView"
+msgstr ""
+
+#: tmpmocfiles/rosegardentransportdialog.moc.cpp:34
+#: tmpmocfiles/rosegardentransportdialog.moc.cpp:42
+msgid "Rosegarden::RosegardenTransportDialog"
+msgstr ""
+
+#: tmpmocfiles/segmentcanvas.moc.cpp:34 tmpmocfiles/segmentcanvas.moc.cpp:42
+msgid "SegmentCanvas"
+msgstr ""
+
+#: tmpmocfiles/segmentparameterbox.moc.cpp:34
+#: tmpmocfiles/segmentparameterbox.moc.cpp:42
+msgid "SegmentParameterBox"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:34 tmpmocfiles/segmenttool.moc.cpp:42
+msgid "SegmentTool"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:135 tmpmocfiles/segmenttool.moc.cpp:143
+msgid "SegmentPencil"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:208 tmpmocfiles/segmenttool.moc.cpp:216
+msgid "SegmentEraser"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:281 tmpmocfiles/segmenttool.moc.cpp:289
+msgid "SegmentMover"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:354 tmpmocfiles/segmenttool.moc.cpp:362
+msgid "SegmentResizer"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:427 tmpmocfiles/segmenttool.moc.cpp:435
+msgid "SegmentSelector"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:518 tmpmocfiles/segmenttool.moc.cpp:526
+msgid "SegmentSplitter"
+msgstr ""
+
+#: tmpmocfiles/segmenttool.moc.cpp:591 tmpmocfiles/segmenttool.moc.cpp:599
+msgid "SegmentJoiner"
+msgstr ""
+
+#: tmpmocfiles/sequencemanager.moc.cpp:34
+#: tmpmocfiles/sequencemanager.moc.cpp:42
+msgid "Rosegarden::SequenceManager"
+msgstr ""
+
+#: tmpmocfiles/studiowidgets.moc.cpp:34 tmpmocfiles/studiowidgets.moc.cpp:42
+msgid "AudioFaderWidget"
+msgstr ""
+
+#: tmpmocfiles/temporuler.moc.cpp:34 tmpmocfiles/temporuler.moc.cpp:42
+msgid "TempoRuler"
+msgstr ""
+
+#: tmpmocfiles/textruler.moc.cpp:34 tmpmocfiles/textruler.moc.cpp:42
+msgid "TextRuler"
+msgstr ""
+
+#: tmpmocfiles/trackbuttons.moc.cpp:34 tmpmocfiles/trackbuttons.moc.cpp:42
+msgid "TrackButtons"
+msgstr ""
+
+#: tmpmocfiles/trackeditor.moc.cpp:34 tmpmocfiles/trackeditor.moc.cpp:42
+msgid "TrackEditor"
+msgstr ""
+
+#: tmpmocfiles/tracklabel.moc.cpp:34 tmpmocfiles/tracklabel.moc.cpp:42
+msgid "TrackLabel"
+msgstr ""
+
+#: tmpmocfiles/vumeter.moc.cpp:34 tmpmocfiles/vumeter.moc.cpp:42
+msgid "VUMeter"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:34 tmpmocfiles/widgets.moc.cpp:42
+msgid "RosegardenTristateCheckBox"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:107 tmpmocfiles/widgets.moc.cpp:115
+msgid "RosegardenComboBox"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:180 tmpmocfiles/widgets.moc.cpp:188
+msgid "RosegardenLabel"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:268 tmpmocfiles/widgets.moc.cpp:276
+msgid "RosegardenSpinBox"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:341 tmpmocfiles/widgets.moc.cpp:349
+msgid "RosegardenParameterBox"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:414 tmpmocfiles/widgets.moc.cpp:422
+msgid "RosegardenProgressDialog"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:514 tmpmocfiles/widgets.moc.cpp:522
+msgid "RosegardenProgressBar"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:587 tmpmocfiles/widgets.moc.cpp:595
+msgid "CurrentProgressDialog"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:669 tmpmocfiles/widgets.moc.cpp:677
+msgid "RosegardenFader"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:790 tmpmocfiles/widgets.moc.cpp:798
+msgid "RosegardenRotary"
+msgstr ""
+
+#: tmpmocfiles/widgets.moc.cpp:900 tmpmocfiles/widgets.moc.cpp:908
+msgid "RosegardenQuantizeParameters"
 msgstr ""
 
 #: multiviewcommandhistory.cpp:285

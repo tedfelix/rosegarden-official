@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
-"POT-Creation-Date: 2003-04-25 16:36+0200\n"
+"POT-Creation-Date: 2003-04-25 18:04+0200\n"
 "PO-Revision-Date: 2003-04-25 10:48+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -113,544 +113,6 @@ msgstr ""
 #: main.cpp:380
 msgid "Rosegarden"
 msgstr "Rosegarden"
-
-#: mocs/audiomanagerdialog.moc.cpp:34 mocs/audiomanagerdialog.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::AudioManagerDialog"
-msgstr "Менеджер аудиофайлов Rosegarden"
-
-#: mocs/audioplugindialog.moc.cpp:34 mocs/audioplugindialog.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::PluginControl"
-msgstr "Менеджер аудиофайлов Rosegarden"
-
-#: mocs/audioplugindialog.moc.cpp:147 mocs/audioplugindialog.moc.cpp:155
-#, fuzzy
-msgid "Rosegarden::AudioPluginDialog"
-msgstr "Менеджер аудиофайлов Rosegarden"
-
-#: mocs/bankeditor.moc.cpp:34 mocs/bankeditor.moc.cpp:42
-msgid "MidiProgramsEditor"
-msgstr ""
-
-#: mocs/bankeditor.moc.cpp:131 mocs/bankeditor.moc.cpp:139
-#, fuzzy
-msgid "BankEditorDialog"
-msgstr "Открыть редактор &лирики"
-
-#: mocs/bankeditor.moc.cpp:272 mocs/bankeditor.moc.cpp:280
-#, fuzzy
-msgid "RemapInstrumentDialog"
-msgstr "&Перераспределить инструменты..."
-
-#: mocs/bankeditor.moc.cpp:363 mocs/bankeditor.moc.cpp:371
-#, fuzzy
-msgid "ImportDeviceDialog"
-msgstr "Темп"
-
-#: mocs/barbuttons.moc.cpp:34 mocs/barbuttons.moc.cpp:42
-#, fuzzy
-msgid "BarButtons"
-msgstr "Кнопка Panic"
-
-#: mocs/chordnameruler.moc.cpp:34 mocs/chordnameruler.moc.cpp:42
-#, fuzzy
-msgid "ChordNameRuler"
-msgstr "Показывать линейку с именами а&ккордов"
-
-#: mocs/controlruler.moc.cpp:34 mocs/controlruler.moc.cpp:42
-#, fuzzy
-msgid "ControlRuler"
-msgstr "Controller"
-
-#: mocs/controlruler.moc.cpp:121 mocs/controlruler.moc.cpp:129
-#, fuzzy
-msgid "ControlBox"
-msgstr "Controller"
-
-#: mocs/deviceeditor.moc.cpp:34 mocs/deviceeditor.moc.cpp:42
-#, fuzzy
-msgid "DeviceEditorDialog"
-msgstr "Открыть редактор &лирики"
-
-#: mocs/dialogs.moc.cpp:34 mocs/dialogs.moc.cpp:42
-#, fuzzy
-msgid "TimeSignatureDialog"
-msgstr "Размер"
-
-#: mocs/dialogs.moc.cpp:128 mocs/dialogs.moc.cpp:136
-#, fuzzy
-msgid "KeySignatureDialog"
-msgstr "Тональность"
-
-#: mocs/dialogs.moc.cpp:225 mocs/dialogs.moc.cpp:233
-msgid "PasteNotationDialog"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:307 mocs/dialogs.moc.cpp:315
-#, fuzzy
-msgid "TupletDialog"
-msgstr "Группа"
-
-#: mocs/dialogs.moc.cpp:404 mocs/dialogs.moc.cpp:412
-#, fuzzy
-msgid "TextEventDialog"
-msgstr "Группа"
-
-#: mocs/dialogs.moc.cpp:495 mocs/dialogs.moc.cpp:503
-#, fuzzy
-msgid "EventEditDialog"
-msgstr "Параметры сегмента"
-
-#: mocs/dialogs.moc.cpp:625 mocs/dialogs.moc.cpp:633
-#, fuzzy
-msgid "TempoDialog"
-msgstr "Темп"
-
-#: mocs/dialogs.moc.cpp:748 mocs/dialogs.moc.cpp:756
-#, fuzzy
-msgid "ClefDialog"
-msgstr "Группа"
-
-#: mocs/dialogs.moc.cpp:833 mocs/dialogs.moc.cpp:841
-#, fuzzy
-msgid "QuantizeDialog"
-msgstr "Квантизация"
-
-#: mocs/dialogs.moc.cpp:906 mocs/dialogs.moc.cpp:914
-#, fuzzy
-msgid "RescaleDialog"
-msgstr "Перемасштабировать"
-
-#: mocs/dialogs.moc.cpp:997 mocs/dialogs.moc.cpp:1005
-#, fuzzy
-msgid "FileLocateDialog"
-msgstr "Перемасштабировать"
-
-#: mocs/dialogs.moc.cpp:1070 mocs/dialogs.moc.cpp:1078
-#, fuzzy
-msgid "AudioPlayingDialog"
-msgstr "Аудиоплагин"
-
-#: mocs/dialogs.moc.cpp:1143 mocs/dialogs.moc.cpp:1151
-#, fuzzy
-msgid "AudioSplitDialog"
-msgstr "Автоматически разделять аудио"
-
-#: mocs/dialogs.moc.cpp:1228 mocs/dialogs.moc.cpp:1236
-#, fuzzy
-msgid "LyricEditDialog"
-msgstr "Открыть редактор &лирики"
-
-#: mocs/dialogs.moc.cpp:1301 mocs/dialogs.moc.cpp:1309
-#, fuzzy
-msgid "EventParameterDialog"
-msgstr "Параметры сегмента"
-
-#: mocs/dialogs.moc.cpp:1386 mocs/dialogs.moc.cpp:1394
-#, fuzzy
-msgid "CompositionLengthDialog"
-msgstr "Изменить продолжительность композиции"
-
-#: mocs/dialogs.moc.cpp:1459 mocs/dialogs.moc.cpp:1467
-#, fuzzy
-msgid "SplitByPitchDialog"
-msgstr "Разделить по высоте тона"
-
-#: mocs/dialogs.moc.cpp:1544 mocs/dialogs.moc.cpp:1552
-#, fuzzy
-msgid "InterpretDialog"
-msgstr "Интерпретировать"
-
-#: mocs/dialogs.moc.cpp:1626 mocs/dialogs.moc.cpp:1634
-#, fuzzy
-msgid "ShowSequencerStatusDialog"
-msgstr "Статус секвенсера"
-
-#: mocs/dialogs.moc.cpp:1699 mocs/dialogs.moc.cpp:1707
-msgid "CountdownBar"
-msgstr ""
-
-#: mocs/dialogs.moc.cpp:1772 mocs/dialogs.moc.cpp:1780
-#, fuzzy
-msgid "CountdownDialog"
-msgstr "Квантизация"
-
-#: mocs/diskspace.moc.cpp:34 mocs/diskspace.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::DiskSpace"
-msgstr "Rosegarden"
-
-#: mocs/editviewbase.moc.cpp:34 mocs/editviewbase.moc.cpp:42
-#, fuzzy
-msgid "EditViewBase"
-msgstr "Правка"
-
-#: mocs/editview.moc.cpp:34 mocs/editview.moc.cpp:42
-#, fuzzy
-msgid "EditView"
-msgstr "Правка"
-
-#: mocs/eventview.moc.cpp:34 mocs/eventview.moc.cpp:42
-#, fuzzy
-msgid "EventView"
-msgstr "Фильтры событий"
-
-#: mocs/instrumentlabel.moc.cpp:34 mocs/instrumentlabel.moc.cpp:42
-#, fuzzy
-msgid "InstrumentLabel"
-msgstr "Инструмент"
-
-#: mocs/instrumentparameterbox.moc.cpp:34
-#: mocs/instrumentparameterbox.moc.cpp:42
-#, fuzzy
-msgid "InstrumentParameterBox"
-msgstr "Параметры инструмента"
-
-#: mocs/instrumentparameterbox.moc.cpp:209
-#: mocs/instrumentparameterbox.moc.cpp:217
-#, fuzzy
-msgid "InstrumentParameterPanel"
-msgstr "Параметры инструмента"
-
-#: mocs/instrumentparameterbox.moc.cpp:297
-#: mocs/instrumentparameterbox.moc.cpp:305
-#, fuzzy
-msgid "AudioInstrumentParameterPanel"
-msgstr "Параметры инструмента"
-
-#: mocs/instrumentparameterbox.moc.cpp:530
-#: mocs/instrumentparameterbox.moc.cpp:538
-#, fuzzy
-msgid "MIDIInstrumentParameterPanel"
-msgstr "Параметры инструмента"
-
-#: mocs/kstartuplogo.moc.cpp:34 mocs/kstartuplogo.moc.cpp:42
-msgid "KStartupLogo"
-msgstr ""
-
-#: mocs/loopruler.moc.cpp:34 mocs/loopruler.moc.cpp:42
-#, fuzzy
-msgid "LoopRuler"
-msgstr "Петля"
-
-#: mocs/matrixcanvasview.moc.cpp:34 mocs/matrixcanvasview.moc.cpp:42
-#, fuzzy
-msgid "MatrixCanvasView"
-msgstr "Матрица"
-
-#: mocs/matrixparameterbox.moc.cpp:34 mocs/matrixparameterbox.moc.cpp:42
-#, fuzzy
-msgid "MatrixParameterBox"
-msgstr "Параметры сетки"
-
-#: mocs/matrixtool.moc.cpp:34 mocs/matrixtool.moc.cpp:42
-#, fuzzy
-msgid "MatrixPainter"
-msgstr "Матрица"
-
-#: mocs/matrixtool.moc.cpp:107 mocs/matrixtool.moc.cpp:115
-#, fuzzy
-msgid "MatrixSelector"
-msgstr "Снять выделение"
-
-#: mocs/matrixview.moc.cpp:34 mocs/matrixview.moc.cpp:42
-#, fuzzy
-msgid "MatrixView"
-msgstr "Матрица"
-
-#: mocs/midifilter.moc.cpp:34 mocs/midifilter.moc.cpp:42
-#, fuzzy
-msgid "MidiFilterDialog"
-msgstr "Открыть редактор &лирики"
-
-#: mocs/multiviewcommandhistory.moc.cpp:34
-#: mocs/multiviewcommandhistory.moc.cpp:42
-msgid "MultiViewCommandHistory"
-msgstr ""
-
-#: mocs/notationcanvasview.moc.cpp:34 mocs/notationcanvasview.moc.cpp:42
-#, fuzzy
-msgid "NotationCanvasView"
-msgstr "Нотная партитура"
-
-#: mocs/notationtool.moc.cpp:34 mocs/notationtool.moc.cpp:42
-#, fuzzy
-msgid "NoteInserter"
-msgstr "Вставить ноту"
-
-#: mocs/notationtool.moc.cpp:170 mocs/notationtool.moc.cpp:178
-#, fuzzy
-msgid "RestInserter"
-msgstr "Вставить ноту"
-
-#: mocs/notationtool.moc.cpp:255 mocs/notationtool.moc.cpp:263
-#, fuzzy
-msgid "NotationEraser"
-msgstr "Нотная партитура"
-
-#: mocs/notationtool.moc.cpp:343 mocs/notationtool.moc.cpp:351
-#, fuzzy
-msgid "NotationSelector"
-msgstr "Нотная партитура"
-
-#: mocs/notationview.moc.cpp:34 mocs/notationview.moc.cpp:42
-#, fuzzy
-msgid "NotationView"
-msgstr "Нотная партитура"
-
-#: mocs/pianokeyboard.moc.cpp:34 mocs/pianokeyboard.moc.cpp:42
-msgid "PianoKeyboard"
-msgstr ""
-
-#: mocs/progressreporter.moc.cpp:34 mocs/progressreporter.moc.cpp:42
-msgid "ProgressReporter"
-msgstr ""
-
-#: mocs/qdeferscrollview.moc.cpp:34 mocs/qdeferscrollview.moc.cpp:42
-msgid "QDeferScrollView"
-msgstr ""
-
-#: mocs/rawnoteruler.moc.cpp:34 mocs/rawnoteruler.moc.cpp:42
-#, fuzzy
-msgid "RawNoteRuler"
-msgstr "Показывать &обычную нотную линейку"
-
-#: mocs/rosegardencanvasview.moc.cpp:34 mocs/rosegardencanvasview.moc.cpp:42
-#, fuzzy
-msgid "RosegardenCanvasView"
-msgstr "Rosegarden"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:34
-#: mocs/rosegardenconfigurationpage.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::ConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:107
-#: mocs/rosegardenconfigurationpage.moc.cpp:115
-#, fuzzy
-msgid "Rosegarden::TabbedConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:180
-#: mocs/rosegardenconfigurationpage.moc.cpp:188
-#, fuzzy
-msgid "Rosegarden::GeneralConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:290
-#: mocs/rosegardenconfigurationpage.moc.cpp:298
-#, fuzzy
-msgid "Rosegarden::NotationConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:375
-#: mocs/rosegardenconfigurationpage.moc.cpp:383
-#, fuzzy
-msgid "Rosegarden::MatrixConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:448
-#: mocs/rosegardenconfigurationpage.moc.cpp:456
-#, fuzzy
-msgid "Rosegarden::LatencyConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:542
-#: mocs/rosegardenconfigurationpage.moc.cpp:550
-#, fuzzy
-msgid "Rosegarden::DocumentMetaConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:627
-#: mocs/rosegardenconfigurationpage.moc.cpp:635
-#, fuzzy
-msgid "Rosegarden::AudioConfigurationPage"
-msgstr "Менеджер аудиофайлов Rosegarden"
-
-#: mocs/rosegardenconfigurationpage.moc.cpp:712
-#: mocs/rosegardenconfigurationpage.moc.cpp:720
-#, fuzzy
-msgid "Rosegarden::SequencerConfigurationPage"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfiguredialog.moc.cpp:34
-#: mocs/rosegardenconfiguredialog.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::ConfigureDialogBase"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenconfiguredialog.moc.cpp:125
-#: mocs/rosegardenconfiguredialog.moc.cpp:133
-#, fuzzy
-msgid "Rosegarden::ConfigureDialog"
-msgstr "Основные настройки"
-
-#: mocs/rosegardenguidoc.moc.cpp:34 mocs/rosegardenguidoc.moc.cpp:42
-#, fuzzy
-msgid "RosegardenGUIDoc"
-msgstr "Rosegarden"
-
-#: mocs/rosegardengui.moc.cpp:34 mocs/rosegardengui.moc.cpp:42
-#, fuzzy
-msgid "RosegardenGUIApp"
-msgstr "Rosegarden"
-
-#: mocs/rosegardenguiview.moc.cpp:34 mocs/rosegardenguiview.moc.cpp:42
-#, fuzzy
-msgid "RosegardenGUIView"
-msgstr "Rosegarden"
-
-#: mocs/rosegardentransportdialog.moc.cpp:34
-#: mocs/rosegardentransportdialog.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::RosegardenTransportDialog"
-msgstr "Транспорт Rosegarden"
-
-#: mocs/segmentcanvas.moc.cpp:34 mocs/segmentcanvas.moc.cpp:42
-#, fuzzy
-msgid "SegmentCanvas"
-msgstr "Сегментов:"
-
-#: mocs/segmentparameterbox.moc.cpp:34 mocs/segmentparameterbox.moc.cpp:42
-#, fuzzy
-msgid "SegmentParameterBox"
-msgstr "Параметры сегмента"
-
-#: mocs/segmenttool.moc.cpp:34 mocs/segmenttool.moc.cpp:42
-#, fuzzy
-msgid "SegmentTool"
-msgstr "Се&гменты"
-
-#: mocs/segmenttool.moc.cpp:135 mocs/segmenttool.moc.cpp:143
-#, fuzzy
-msgid "SegmentPencil"
-msgstr "Се&гменты"
-
-#: mocs/segmenttool.moc.cpp:208 mocs/segmenttool.moc.cpp:216
-#, fuzzy
-msgid "SegmentEraser"
-msgstr "Сегментов:"
-
-#: mocs/segmenttool.moc.cpp:281 mocs/segmenttool.moc.cpp:289
-#, fuzzy
-msgid "SegmentMover"
-msgstr "Се&гменты"
-
-#: mocs/segmenttool.moc.cpp:354 mocs/segmenttool.moc.cpp:362
-#, fuzzy
-msgid "SegmentResizer"
-msgstr "Се&гменты"
-
-#: mocs/segmenttool.moc.cpp:427 mocs/segmenttool.moc.cpp:435
-#, fuzzy
-msgid "SegmentSelector"
-msgstr "Параметры сегмента"
-
-#: mocs/segmenttool.moc.cpp:518 mocs/segmenttool.moc.cpp:526
-#, fuzzy
-msgid "SegmentSplitter"
-msgstr "Параметры сегмента"
-
-#: mocs/segmenttool.moc.cpp:591 mocs/segmenttool.moc.cpp:599
-#, fuzzy
-msgid "SegmentJoiner"
-msgstr "Се&гменты"
-
-#: mocs/sequencemanager.moc.cpp:34 mocs/sequencemanager.moc.cpp:42
-#, fuzzy
-msgid "Rosegarden::SequenceManager"
-msgstr "Менеджер аудиофайлов Rosegarden"
-
-#: mocs/studiowidgets.moc.cpp:34 mocs/studiowidgets.moc.cpp:42
-msgid "AudioFaderWidget"
-msgstr ""
-
-#: mocs/temporuler.moc.cpp:34 mocs/temporuler.moc.cpp:42
-#, fuzzy
-msgid "TempoRuler"
-msgstr "Показывать ли&нейку темпа"
-
-#: mocs/textruler.moc.cpp:34 mocs/textruler.moc.cpp:42
-#, fuzzy
-msgid "TextRuler"
-msgstr "Текст"
-
-#: mocs/trackbuttons.moc.cpp:34 mocs/trackbuttons.moc.cpp:42
-#, fuzzy
-msgid "TrackButtons"
-msgstr "Кнопка Panic"
-
-#: mocs/trackeditor.moc.cpp:34 mocs/trackeditor.moc.cpp:42
-#, fuzzy
-msgid "TrackEditor"
-msgstr "Кнопка Panic"
-
-#: mocs/tracklabel.moc.cpp:34 mocs/tracklabel.moc.cpp:42
-#, fuzzy
-msgid "TrackLabel"
-msgstr "Показывать м&етки дорожек"
-
-#: mocs/vumeter.moc.cpp:34 mocs/vumeter.moc.cpp:42
-#, fuzzy
-msgid "VUMeter"
-msgstr "Индикатор уровня для аудио"
-
-#: mocs/widgets.moc.cpp:34 mocs/widgets.moc.cpp:42
-#, fuzzy
-msgid "RosegardenTristateCheckBox"
-msgstr "Транспорт Rosegarden"
-
-#: mocs/widgets.moc.cpp:107 mocs/widgets.moc.cpp:115
-#, fuzzy
-msgid "RosegardenComboBox"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:180 mocs/widgets.moc.cpp:188
-#, fuzzy
-msgid "RosegardenLabel"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:268 mocs/widgets.moc.cpp:276
-#, fuzzy
-msgid "RosegardenSpinBox"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:341 mocs/widgets.moc.cpp:349
-#, fuzzy
-msgid "RosegardenParameterBox"
-msgstr "Параметры сегмента"
-
-#: mocs/widgets.moc.cpp:414 mocs/widgets.moc.cpp:422
-#, fuzzy
-msgid "RosegardenProgressDialog"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:514 mocs/widgets.moc.cpp:522
-#, fuzzy
-msgid "RosegardenProgressBar"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:587 mocs/widgets.moc.cpp:595
-#, fuzzy
-msgid "CurrentProgressDialog"
-msgstr "Интерпретировать"
-
-#: mocs/widgets.moc.cpp:669 mocs/widgets.moc.cpp:677
-#, fuzzy
-msgid "RosegardenFader"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:790 mocs/widgets.moc.cpp:798
-#, fuzzy
-msgid "RosegardenRotary"
-msgstr "Rosegarden"
-
-#: mocs/widgets.moc.cpp:900 mocs/widgets.moc.cpp:908
-#, fuzzy
-msgid "RosegardenQuantizeParameters"
-msgstr "Параметры сегмента"
 
 #: notationvlayout.cpp:144
 msgid ""
@@ -3092,6 +2554,558 @@ msgstr "Превратить повторение сегмента в его н�
 #: trackeditor.cpp:629
 msgid "Turn Repeating Segments into Real Copies"
 msgstr "Превратить повторение сегментов в их настоящие копии"
+
+#: tmpmocfiles/audiomanagerdialog.moc.cpp:34
+#: tmpmocfiles/audiomanagerdialog.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::AudioManagerDialog"
+msgstr "Менеджер аудиофайлов Rosegarden"
+
+#: tmpmocfiles/audioplugindialog.moc.cpp:34
+#: tmpmocfiles/audioplugindialog.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::PluginControl"
+msgstr "Менеджер аудиофайлов Rosegarden"
+
+#: tmpmocfiles/audioplugindialog.moc.cpp:147
+#: tmpmocfiles/audioplugindialog.moc.cpp:155
+#, fuzzy
+msgid "Rosegarden::AudioPluginDialog"
+msgstr "Менеджер аудиофайлов Rosegarden"
+
+#: tmpmocfiles/bankeditor.moc.cpp:34 tmpmocfiles/bankeditor.moc.cpp:42
+msgid "MidiProgramsEditor"
+msgstr ""
+
+#: tmpmocfiles/bankeditor.moc.cpp:131 tmpmocfiles/bankeditor.moc.cpp:139
+#, fuzzy
+msgid "BankEditorDialog"
+msgstr "Открыть редактор &лирики"
+
+#: tmpmocfiles/bankeditor.moc.cpp:272 tmpmocfiles/bankeditor.moc.cpp:280
+#, fuzzy
+msgid "RemapInstrumentDialog"
+msgstr "&Перераспределить инструменты..."
+
+#: tmpmocfiles/bankeditor.moc.cpp:363 tmpmocfiles/bankeditor.moc.cpp:371
+#, fuzzy
+msgid "ImportDeviceDialog"
+msgstr "Темп"
+
+#: tmpmocfiles/barbuttons.moc.cpp:34 tmpmocfiles/barbuttons.moc.cpp:42
+#, fuzzy
+msgid "BarButtons"
+msgstr "Кнопка Panic"
+
+#: tmpmocfiles/chordnameruler.moc.cpp:34 tmpmocfiles/chordnameruler.moc.cpp:42
+#, fuzzy
+msgid "ChordNameRuler"
+msgstr "Показывать линейку с именами а&ккордов"
+
+#: tmpmocfiles/controlruler.moc.cpp:34 tmpmocfiles/controlruler.moc.cpp:42
+#, fuzzy
+msgid "ControlRuler"
+msgstr "Controller"
+
+#: tmpmocfiles/controlruler.moc.cpp:121 tmpmocfiles/controlruler.moc.cpp:129
+#, fuzzy
+msgid "ControlBox"
+msgstr "Controller"
+
+#: tmpmocfiles/deviceeditor.moc.cpp:34 tmpmocfiles/deviceeditor.moc.cpp:42
+#, fuzzy
+msgid "DeviceEditorDialog"
+msgstr "Открыть редактор &лирики"
+
+#: tmpmocfiles/dialogs.moc.cpp:34 tmpmocfiles/dialogs.moc.cpp:42
+#, fuzzy
+msgid "TimeSignatureDialog"
+msgstr "Размер"
+
+#: tmpmocfiles/dialogs.moc.cpp:128 tmpmocfiles/dialogs.moc.cpp:136
+#, fuzzy
+msgid "KeySignatureDialog"
+msgstr "Тональность"
+
+#: tmpmocfiles/dialogs.moc.cpp:225 tmpmocfiles/dialogs.moc.cpp:233
+msgid "PasteNotationDialog"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:307 tmpmocfiles/dialogs.moc.cpp:315
+#, fuzzy
+msgid "TupletDialog"
+msgstr "Группа"
+
+#: tmpmocfiles/dialogs.moc.cpp:404 tmpmocfiles/dialogs.moc.cpp:412
+#, fuzzy
+msgid "TextEventDialog"
+msgstr "Группа"
+
+#: tmpmocfiles/dialogs.moc.cpp:495 tmpmocfiles/dialogs.moc.cpp:503
+#, fuzzy
+msgid "EventEditDialog"
+msgstr "Параметры сегмента"
+
+#: tmpmocfiles/dialogs.moc.cpp:625 tmpmocfiles/dialogs.moc.cpp:633
+#, fuzzy
+msgid "TempoDialog"
+msgstr "Темп"
+
+#: tmpmocfiles/dialogs.moc.cpp:748 tmpmocfiles/dialogs.moc.cpp:756
+#, fuzzy
+msgid "ClefDialog"
+msgstr "Группа"
+
+#: tmpmocfiles/dialogs.moc.cpp:833 tmpmocfiles/dialogs.moc.cpp:841
+#, fuzzy
+msgid "QuantizeDialog"
+msgstr "Квантизация"
+
+#: tmpmocfiles/dialogs.moc.cpp:906 tmpmocfiles/dialogs.moc.cpp:914
+#, fuzzy
+msgid "RescaleDialog"
+msgstr "Перемасштабировать"
+
+#: tmpmocfiles/dialogs.moc.cpp:997 tmpmocfiles/dialogs.moc.cpp:1005
+#, fuzzy
+msgid "FileLocateDialog"
+msgstr "Перемасштабировать"
+
+#: tmpmocfiles/dialogs.moc.cpp:1070 tmpmocfiles/dialogs.moc.cpp:1078
+#, fuzzy
+msgid "AudioPlayingDialog"
+msgstr "Аудиоплагин"
+
+#: tmpmocfiles/dialogs.moc.cpp:1143 tmpmocfiles/dialogs.moc.cpp:1151
+#, fuzzy
+msgid "AudioSplitDialog"
+msgstr "Автоматически разделять аудио"
+
+#: tmpmocfiles/dialogs.moc.cpp:1228 tmpmocfiles/dialogs.moc.cpp:1236
+#, fuzzy
+msgid "LyricEditDialog"
+msgstr "Открыть редактор &лирики"
+
+#: tmpmocfiles/dialogs.moc.cpp:1301 tmpmocfiles/dialogs.moc.cpp:1309
+#, fuzzy
+msgid "EventParameterDialog"
+msgstr "Параметры сегмента"
+
+#: tmpmocfiles/dialogs.moc.cpp:1386 tmpmocfiles/dialogs.moc.cpp:1394
+#, fuzzy
+msgid "CompositionLengthDialog"
+msgstr "Изменить продолжительность композиции"
+
+#: tmpmocfiles/dialogs.moc.cpp:1459 tmpmocfiles/dialogs.moc.cpp:1467
+#, fuzzy
+msgid "SplitByPitchDialog"
+msgstr "Разделить по высоте тона"
+
+#: tmpmocfiles/dialogs.moc.cpp:1544 tmpmocfiles/dialogs.moc.cpp:1552
+#, fuzzy
+msgid "InterpretDialog"
+msgstr "Интерпретировать"
+
+#: tmpmocfiles/dialogs.moc.cpp:1626 tmpmocfiles/dialogs.moc.cpp:1634
+#, fuzzy
+msgid "ShowSequencerStatusDialog"
+msgstr "Статус секвенсера"
+
+#: tmpmocfiles/dialogs.moc.cpp:1699 tmpmocfiles/dialogs.moc.cpp:1707
+msgid "CountdownBar"
+msgstr ""
+
+#: tmpmocfiles/dialogs.moc.cpp:1772 tmpmocfiles/dialogs.moc.cpp:1780
+#, fuzzy
+msgid "CountdownDialog"
+msgstr "Квантизация"
+
+#: tmpmocfiles/diskspace.moc.cpp:34 tmpmocfiles/diskspace.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::DiskSpace"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/editviewbase.moc.cpp:34 tmpmocfiles/editviewbase.moc.cpp:42
+#, fuzzy
+msgid "EditViewBase"
+msgstr "Правка"
+
+#: tmpmocfiles/editview.moc.cpp:34 tmpmocfiles/editview.moc.cpp:42
+#, fuzzy
+msgid "EditView"
+msgstr "Правка"
+
+#: tmpmocfiles/eventview.moc.cpp:34 tmpmocfiles/eventview.moc.cpp:42
+#, fuzzy
+msgid "EventView"
+msgstr "Фильтры событий"
+
+#: tmpmocfiles/instrumentlabel.moc.cpp:34
+#: tmpmocfiles/instrumentlabel.moc.cpp:42
+#, fuzzy
+msgid "InstrumentLabel"
+msgstr "Инструмент"
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:34
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:42
+#, fuzzy
+msgid "InstrumentParameterBox"
+msgstr "Параметры инструмента"
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:209
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:217
+#, fuzzy
+msgid "InstrumentParameterPanel"
+msgstr "Параметры инструмента"
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:297
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:305
+#, fuzzy
+msgid "AudioInstrumentParameterPanel"
+msgstr "Параметры инструмента"
+
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:530
+#: tmpmocfiles/instrumentparameterbox.moc.cpp:538
+#, fuzzy
+msgid "MIDIInstrumentParameterPanel"
+msgstr "Параметры инструмента"
+
+#: tmpmocfiles/kstartuplogo.moc.cpp:34 tmpmocfiles/kstartuplogo.moc.cpp:42
+msgid "KStartupLogo"
+msgstr ""
+
+#: tmpmocfiles/loopruler.moc.cpp:34 tmpmocfiles/loopruler.moc.cpp:42
+#, fuzzy
+msgid "LoopRuler"
+msgstr "Петля"
+
+#: tmpmocfiles/matrixcanvasview.moc.cpp:34
+#: tmpmocfiles/matrixcanvasview.moc.cpp:42
+#, fuzzy
+msgid "MatrixCanvasView"
+msgstr "Матрица"
+
+#: tmpmocfiles/matrixparameterbox.moc.cpp:34
+#: tmpmocfiles/matrixparameterbox.moc.cpp:42
+#, fuzzy
+msgid "MatrixParameterBox"
+msgstr "Параметры сетки"
+
+#: tmpmocfiles/matrixtool.moc.cpp:34 tmpmocfiles/matrixtool.moc.cpp:42
+#, fuzzy
+msgid "MatrixPainter"
+msgstr "Матрица"
+
+#: tmpmocfiles/matrixtool.moc.cpp:107 tmpmocfiles/matrixtool.moc.cpp:115
+#, fuzzy
+msgid "MatrixSelector"
+msgstr "Снять выделение"
+
+#: tmpmocfiles/matrixview.moc.cpp:34 tmpmocfiles/matrixview.moc.cpp:42
+#, fuzzy
+msgid "MatrixView"
+msgstr "Матрица"
+
+#: tmpmocfiles/midifilter.moc.cpp:34 tmpmocfiles/midifilter.moc.cpp:42
+#, fuzzy
+msgid "MidiFilterDialog"
+msgstr "Открыть редактор &лирики"
+
+#: tmpmocfiles/multiviewcommandhistory.moc.cpp:34
+#: tmpmocfiles/multiviewcommandhistory.moc.cpp:42
+msgid "MultiViewCommandHistory"
+msgstr ""
+
+#: tmpmocfiles/notationcanvasview.moc.cpp:34
+#: tmpmocfiles/notationcanvasview.moc.cpp:42
+#, fuzzy
+msgid "NotationCanvasView"
+msgstr "Нотная партитура"
+
+#: tmpmocfiles/notationtool.moc.cpp:34 tmpmocfiles/notationtool.moc.cpp:42
+#, fuzzy
+msgid "NoteInserter"
+msgstr "Вставить ноту"
+
+#: tmpmocfiles/notationtool.moc.cpp:170 tmpmocfiles/notationtool.moc.cpp:178
+#, fuzzy
+msgid "RestInserter"
+msgstr "Вставить ноту"
+
+#: tmpmocfiles/notationtool.moc.cpp:255 tmpmocfiles/notationtool.moc.cpp:263
+#, fuzzy
+msgid "NotationEraser"
+msgstr "Нотная партитура"
+
+#: tmpmocfiles/notationtool.moc.cpp:343 tmpmocfiles/notationtool.moc.cpp:351
+#, fuzzy
+msgid "NotationSelector"
+msgstr "Нотная партитура"
+
+#: tmpmocfiles/notationview.moc.cpp:34 tmpmocfiles/notationview.moc.cpp:42
+#, fuzzy
+msgid "NotationView"
+msgstr "Нотная партитура"
+
+#: tmpmocfiles/pianokeyboard.moc.cpp:34 tmpmocfiles/pianokeyboard.moc.cpp:42
+msgid "PianoKeyboard"
+msgstr ""
+
+#: tmpmocfiles/progressreporter.moc.cpp:34
+#: tmpmocfiles/progressreporter.moc.cpp:42
+msgid "ProgressReporter"
+msgstr ""
+
+#: tmpmocfiles/qdeferscrollview.moc.cpp:34
+#: tmpmocfiles/qdeferscrollview.moc.cpp:42
+msgid "QDeferScrollView"
+msgstr ""
+
+#: tmpmocfiles/rawnoteruler.moc.cpp:34 tmpmocfiles/rawnoteruler.moc.cpp:42
+#, fuzzy
+msgid "RawNoteRuler"
+msgstr "Показывать &обычную нотную линейку"
+
+#: tmpmocfiles/rosegardencanvasview.moc.cpp:34
+#: tmpmocfiles/rosegardencanvasview.moc.cpp:42
+#, fuzzy
+msgid "RosegardenCanvasView"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:34
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::ConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:107
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:115
+#, fuzzy
+msgid "Rosegarden::TabbedConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:180
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:188
+#, fuzzy
+msgid "Rosegarden::GeneralConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:290
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:298
+#, fuzzy
+msgid "Rosegarden::NotationConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:375
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:383
+#, fuzzy
+msgid "Rosegarden::MatrixConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:448
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:456
+#, fuzzy
+msgid "Rosegarden::LatencyConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:542
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:550
+#, fuzzy
+msgid "Rosegarden::DocumentMetaConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:627
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:635
+#, fuzzy
+msgid "Rosegarden::AudioConfigurationPage"
+msgstr "Менеджер аудиофайлов Rosegarden"
+
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:712
+#: tmpmocfiles/rosegardenconfigurationpage.moc.cpp:720
+#, fuzzy
+msgid "Rosegarden::SequencerConfigurationPage"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:34
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::ConfigureDialogBase"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:125
+#: tmpmocfiles/rosegardenconfiguredialog.moc.cpp:133
+#, fuzzy
+msgid "Rosegarden::ConfigureDialog"
+msgstr "Основные настройки"
+
+#: tmpmocfiles/rosegardenguidoc.moc.cpp:34
+#: tmpmocfiles/rosegardenguidoc.moc.cpp:42
+#, fuzzy
+msgid "RosegardenGUIDoc"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/rosegardengui.moc.cpp:34 tmpmocfiles/rosegardengui.moc.cpp:42
+#, fuzzy
+msgid "RosegardenGUIApp"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/rosegardenguiview.moc.cpp:34
+#: tmpmocfiles/rosegardenguiview.moc.cpp:42
+#, fuzzy
+msgid "RosegardenGUIView"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/rosegardentransportdialog.moc.cpp:34
+#: tmpmocfiles/rosegardentransportdialog.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::RosegardenTransportDialog"
+msgstr "Транспорт Rosegarden"
+
+#: tmpmocfiles/segmentcanvas.moc.cpp:34 tmpmocfiles/segmentcanvas.moc.cpp:42
+#, fuzzy
+msgid "SegmentCanvas"
+msgstr "Сегментов:"
+
+#: tmpmocfiles/segmentparameterbox.moc.cpp:34
+#: tmpmocfiles/segmentparameterbox.moc.cpp:42
+#, fuzzy
+msgid "SegmentParameterBox"
+msgstr "Параметры сегмента"
+
+#: tmpmocfiles/segmenttool.moc.cpp:34 tmpmocfiles/segmenttool.moc.cpp:42
+#, fuzzy
+msgid "SegmentTool"
+msgstr "Се&гменты"
+
+#: tmpmocfiles/segmenttool.moc.cpp:135 tmpmocfiles/segmenttool.moc.cpp:143
+#, fuzzy
+msgid "SegmentPencil"
+msgstr "Се&гменты"
+
+#: tmpmocfiles/segmenttool.moc.cpp:208 tmpmocfiles/segmenttool.moc.cpp:216
+#, fuzzy
+msgid "SegmentEraser"
+msgstr "Сегментов:"
+
+#: tmpmocfiles/segmenttool.moc.cpp:281 tmpmocfiles/segmenttool.moc.cpp:289
+#, fuzzy
+msgid "SegmentMover"
+msgstr "Се&гменты"
+
+#: tmpmocfiles/segmenttool.moc.cpp:354 tmpmocfiles/segmenttool.moc.cpp:362
+#, fuzzy
+msgid "SegmentResizer"
+msgstr "Се&гменты"
+
+#: tmpmocfiles/segmenttool.moc.cpp:427 tmpmocfiles/segmenttool.moc.cpp:435
+#, fuzzy
+msgid "SegmentSelector"
+msgstr "Параметры сегмента"
+
+#: tmpmocfiles/segmenttool.moc.cpp:518 tmpmocfiles/segmenttool.moc.cpp:526
+#, fuzzy
+msgid "SegmentSplitter"
+msgstr "Параметры сегмента"
+
+#: tmpmocfiles/segmenttool.moc.cpp:591 tmpmocfiles/segmenttool.moc.cpp:599
+#, fuzzy
+msgid "SegmentJoiner"
+msgstr "Се&гменты"
+
+#: tmpmocfiles/sequencemanager.moc.cpp:34
+#: tmpmocfiles/sequencemanager.moc.cpp:42
+#, fuzzy
+msgid "Rosegarden::SequenceManager"
+msgstr "Менеджер аудиофайлов Rosegarden"
+
+#: tmpmocfiles/studiowidgets.moc.cpp:34 tmpmocfiles/studiowidgets.moc.cpp:42
+msgid "AudioFaderWidget"
+msgstr ""
+
+#: tmpmocfiles/temporuler.moc.cpp:34 tmpmocfiles/temporuler.moc.cpp:42
+#, fuzzy
+msgid "TempoRuler"
+msgstr "Показывать ли&нейку темпа"
+
+#: tmpmocfiles/textruler.moc.cpp:34 tmpmocfiles/textruler.moc.cpp:42
+#, fuzzy
+msgid "TextRuler"
+msgstr "Текст"
+
+#: tmpmocfiles/trackbuttons.moc.cpp:34 tmpmocfiles/trackbuttons.moc.cpp:42
+#, fuzzy
+msgid "TrackButtons"
+msgstr "Кнопка Panic"
+
+#: tmpmocfiles/trackeditor.moc.cpp:34 tmpmocfiles/trackeditor.moc.cpp:42
+#, fuzzy
+msgid "TrackEditor"
+msgstr "Кнопка Panic"
+
+#: tmpmocfiles/tracklabel.moc.cpp:34 tmpmocfiles/tracklabel.moc.cpp:42
+#, fuzzy
+msgid "TrackLabel"
+msgstr "Показывать м&етки дорожек"
+
+#: tmpmocfiles/vumeter.moc.cpp:34 tmpmocfiles/vumeter.moc.cpp:42
+#, fuzzy
+msgid "VUMeter"
+msgstr "Индикатор уровня для аудио"
+
+#: tmpmocfiles/widgets.moc.cpp:34 tmpmocfiles/widgets.moc.cpp:42
+#, fuzzy
+msgid "RosegardenTristateCheckBox"
+msgstr "Транспорт Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:107 tmpmocfiles/widgets.moc.cpp:115
+#, fuzzy
+msgid "RosegardenComboBox"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:180 tmpmocfiles/widgets.moc.cpp:188
+#, fuzzy
+msgid "RosegardenLabel"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:268 tmpmocfiles/widgets.moc.cpp:276
+#, fuzzy
+msgid "RosegardenSpinBox"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:341 tmpmocfiles/widgets.moc.cpp:349
+#, fuzzy
+msgid "RosegardenParameterBox"
+msgstr "Параметры сегмента"
+
+#: tmpmocfiles/widgets.moc.cpp:414 tmpmocfiles/widgets.moc.cpp:422
+#, fuzzy
+msgid "RosegardenProgressDialog"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:514 tmpmocfiles/widgets.moc.cpp:522
+#, fuzzy
+msgid "RosegardenProgressBar"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:587 tmpmocfiles/widgets.moc.cpp:595
+#, fuzzy
+msgid "CurrentProgressDialog"
+msgstr "Интерпретировать"
+
+#: tmpmocfiles/widgets.moc.cpp:669 tmpmocfiles/widgets.moc.cpp:677
+#, fuzzy
+msgid "RosegardenFader"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:790 tmpmocfiles/widgets.moc.cpp:798
+#, fuzzy
+msgid "RosegardenRotary"
+msgstr "Rosegarden"
+
+#: tmpmocfiles/widgets.moc.cpp:900 tmpmocfiles/widgets.moc.cpp:908
+#, fuzzy
+msgid "RosegardenQuantizeParameters"
+msgstr "Параметры сегмента"
 
 #: multiviewcommandhistory.cpp:285
 msgid "Nothing to undo"

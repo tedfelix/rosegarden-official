@@ -1,0 +1,28 @@
+#!/bin/sh -x
+
+# check that we're started from a Rosegarden dir
+
+if ! ( [ -d "gui" ] && [ -d "base" ] && [ -d "sound" ] && [ -d "sequencer" ] )
+then
+    echo "This script must be started from the top-level dir of your rosegarden source tree"
+    exit 1
+fi
+
+# move away all the moc files in 'sound', 'sequencer' and 'gui' dirs.
+
+TMPMOCDIR="tmpmocfiles"
+
+for dir in sound sequencer gui
+do
+( cd $dir && mkdir $TMPMOCDIR && mv *.moc.* $TMPMOCDIR )
+done
+
+# exit
+
+make package-messages
+
+# restore the moc files
+for dir in sound sequencer gui
+do
+( cd $dir && mv $TMPMOCDIR/* . && rmdir $TMPMOCDIR )
+done
