@@ -33,7 +33,8 @@ namespace Rosegarden
 class DummyDriver : public SoundDriver
 {
 public:
-    DummyDriver():SoundDriver(std::string("DummyDriver - no sound")) {;}
+    DummyDriver(MappedStudio *studio):
+        SoundDriver(studio, std::string("DummyDriver - no sound")) {;}
     DummyDriver(const std::string & name):
         SoundDriver(std::string("DummyDriver: " + name)) {;}
     virtual ~DummyDriver() {;}

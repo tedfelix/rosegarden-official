@@ -40,13 +40,8 @@
 namespace Rosegarden
 {
 
-typedef enum
-{
-    Studio,
-    AudioFader,
-    AudioPluginManager
+class PluginManager;
 
-} MappedObjectType;
 
 typedef unsigned int MappedObjectId;
 typedef unsigned int MappedObjectParameter;
@@ -58,6 +53,17 @@ typedef unsigned int MappedObjectParameter;
 class MappedObject
 {
 public:
+
+    // The object we can create
+    //
+    typedef enum
+    {
+        Studio,
+        AudioFader,
+        AudioPluginManager
+    
+    } MappedObjectType;
+
     MappedObject(const std::string &name,
                  MappedObjectType type,
                  MappedObjectId id):
@@ -84,6 +90,69 @@ protected:
     bool             m_static;
     std::string      m_name;
 };
+
+
+// Works as a factory and virtual plug-board for all our other
+// objects whether they be MIDI or audio.
+//
+//
+//
+class MappedStudio : public MappedObject
+{
+public:
+    MappedStudio();
+    ~MappedStudio();
+
+    // Create a new slider of a certain type for a certain
+    // type of device.
+    //
+    MappedObject* createObject(MappedObjectType type);
+
+    // Connect an Instrument to a MappedStudioObject
+    //
+    bool connectInstrument(InstrumentId iId, MappedObjectId mId);
+    bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
+
+    // Destroy a MappedStudio item
+    //
+    bool destroyItem(MappedObjectId id);
+
+    // Get an object
+    //
+    MappedObject* getObject(MappedObjectId);
+
+    // Get an object of a certain type - to see if any exist
+    //
+    MappedObject* getObjectOfType(MappedObjectType type);
+
+    // Empty the studio of everything
+    //
+    void clear();
+
+    // DCOP streaming
+    //
+    friend QDataStream& operator>>(QDataStream &dS, MappedStudio *mS);
+    friend QDataStream& operator<<(QDataStream &dS, MappedStudio *mS);
+    friend QDataStream& operator>>(QDataStream &dS, MappedStudio &mS);
+    friend QDataStream& operator<<(QDataStream &dS, const MappedStudio &mS);
+
+protected:
+
+private:
+
+    // We give everything we create a unique MappedObjectId for
+    // this session.  So store the running total in here.
+    //
+    MappedObjectId             m_runningObjectId;
+
+    // All of our mapped (virtual) studio resides in this vector -
+    // probably eventually want to make this more efficient.
+    //
+    //
+    std::vector<MappedObject*> m_objects;
+};
+
+
 
 // Audio fader
 //
@@ -118,69 +187,16 @@ protected:
 class MappedAudioPluginManager : public MappedObject
 {
 public:
-    MappedAudioPluginManager(MappedObjectId id):
-        MappedObject("MappedAudioPluginManager",
-                     AudioPluginManager,
-                     id,
-                     true) {;}
+    MappedAudioPluginManager(MappedObjectId id);
+    ~MappedAudioPluginManager();
 
-    ~MappedAudioPluginManager() {;}
+    PluginManager* getPluginManager() { return m_pM; }
 
 protected:
 
+    PluginManager *m_pM;
 };
 
-
-// Works as a factory and virtual plug-board for all our other
-// objects whether they be MIDI or audio.
-//
-//
-//
-class MappedStudio : public MappedObject
-{
-public:
-    MappedStudio();
-
-    // Create a new slider of a certain type for a certain
-    // type of device.
-    //
-    MappedObjectId createObject(MappedObjectType type);
-
-    // Connect an Instrument to a MappedStudioObject
-    //
-    bool connectInstrument(InstrumentId iId, MappedObjectId mId);
-    bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
-
-    // Destroy a MappedStudio item
-    //
-    bool destroyItem(MappedObjectId id);
-
-    // Empty the studio of everything
-    //
-    void clear();
-
-    // DCOP streaming
-    //
-    friend QDataStream& operator>>(QDataStream &dS, MappedStudio *mS);
-    friend QDataStream& operator<<(QDataStream &dS, MappedStudio *mS);
-    friend QDataStream& operator>>(QDataStream &dS, MappedStudio &mS);
-    friend QDataStream& operator<<(QDataStream &dS, const MappedStudio &mS);
-
-protected:
-
-private:
-
-    // We give everything we create a unique MappedObjectId for
-    // this session.  So store the running total in here.
-    //
-    MappedObjectId             m_runningObjectId;
-
-    // All of our mapped (virtual) studio resides in this vector -
-    // probably eventually want to make this more efficient.
-    //
-    //
-    std::vector<MappedObject*> m_objects;
-};
 
 }
 

@@ -91,7 +91,7 @@ typedef std::pair<int, int> ClientPortPair;
 class AlsaDriver : public SoundDriver
 {
 public:
-    AlsaDriver();
+    AlsaDriver(MappedStudio *studio);
     virtual ~AlsaDriver();
 
     virtual void initialiseMidi();

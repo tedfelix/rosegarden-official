@@ -57,12 +57,12 @@ namespace Rosegarden
 {
 
 class MappedInstrument;
+class MappedStudio;
 
 class Sequencer
 {
 public:
-
-    Sequencer();
+    Sequencer(MappedStudio *studio);
     ~Sequencer();
 
     // Control playback - initialisePlayback starts us playing

@@ -23,6 +23,7 @@
 
 #include "config.h"
 #include "Sequencer.h"
+#include "MappedStudio.h"
 
 #include "config.h"
 
@@ -51,15 +52,15 @@ using std::endl;
 // Initialisation of the driver is performed at construction
 //
 //
-Sequencer::Sequencer()
+Sequencer::Sequencer(MappedStudio *studio)
 {
 #ifdef NO_SOUND
-    m_soundDriver = new DummyDriver();
+    m_soundDriver = new DummyDriver(studio);
 #else
 #ifdef HAVE_ALSA
-    m_soundDriver = new AlsaDriver();
+    m_soundDriver = new AlsaDriver(studio);
 #else
-    m_soundDriver = new ArtsDriver();
+    m_soundDriver = new ArtsDriver(studio);
 #endif
 #endif
 

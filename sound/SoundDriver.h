@@ -199,10 +199,12 @@ private:
 };
 
 
+class MappedStudio;
+
 class SoundDriver
 {
 public:
-    SoundDriver(const std::string &name);
+    SoundDriver(MappedStudio *studio, const std::string &name);
     virtual ~SoundDriver();
 
     virtual void initialiseMidi() = 0;
@@ -320,6 +322,11 @@ public:
     //
     void cancelAudioFile(InstrumentId instrumentId, AudioFileId audioFileId);
 
+    // Studio linkage
+    //
+    MappedStudio* getMappedStudio() { return m_studio; }
+    void setMappedStudio(MappedStudio *studio) { m_studio = studio; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -383,6 +390,10 @@ protected:
     //
     RealTime                     m_audioPlayLatency;
     RealTime                     m_audioRecordLatency;
+
+    // Virtual studio hook
+    //
+    MappedStudio                *m_studio;
 
 };
 

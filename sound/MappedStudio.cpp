@@ -20,6 +20,7 @@
 */
 
 #include "MappedStudio.h"
+#include "PluginManager.h"
 
 namespace Rosegarden
 {
@@ -32,16 +33,52 @@ MappedStudio::MappedStudio():MappedObject("MappedStudio",
 {
 }
 
-// Create a MIDI or Audio slider and return a unique id -
-// the slider can then be connected to an Instrument.
-//
-// 
-MappedObjectId
-MappedStudio::createObject(MappedObjectType /*type*/)
+MappedStudio::~MappedStudio()
 {
-    MappedObjectId id = m_runningObjectId++;
-    return id;
+    clear();
 }
+
+
+// Object factory
+// 
+MappedObject*
+MappedStudio::createObject(MappedObjectType type)
+{
+    MappedObject *mO = 0;
+
+    if (type == MappedObject::AudioPluginManager)
+    {
+        // Check for existence and if it does exists already
+        // we can't create a new one.
+        // 
+        if ((mO = getObjectOfType(type)))
+            return 0;
+
+        mO = new MappedAudioPluginManager(m_runningObjectId);
+    }
+    else if (type == MappedObject::AudioFader)
+    {
+        mO = new MappedAudioFader(m_runningObjectId,
+                                  2); // channels
+    }
+
+    // If we've got a new object increase the running id
+    //
+    if (mO) m_runningObjectId++;
+
+    return mO;
+}
+
+MappedObject*
+MappedStudio::getObjectOfType(MappedObjectType type)
+{
+    std::vector<MappedObject*>::iterator it;
+    for (it = m_objects.begin(); m_objects.end(); it++)
+        if ((*it)->getType() == type)
+            return (*it);
+    return 0;
+}
+
 
 
 bool
@@ -68,13 +105,26 @@ void
 MappedStudio::clear()
 {
     std::vector<MappedObject*>::iterator it;
-
     for (it = m_objects.begin(); m_objects.end(); it++)
         delete (*it);
 
     m_objects.erase(m_objects.begin(), m_objects.end());
 
 }
+
+MappedObject*
+MappedStudio::getObject(MappedObjectId id)
+{
+    std::vector<MappedObject*>::iterator it;
+
+    for (it = m_objects.begin(); m_objects.end(); it++)
+        if ((*it)->getId() == id)
+            return (*it);
+
+    return 0;
+}
+
+
 
 
 MappedObjectParameter
@@ -118,6 +168,23 @@ operator<<(QDataStream &dS, const MappedStudio &mS)
     // not implemented
     return dS;
 }
+
+
+MappedAudioPluginManager::MappedAudioPluginManager(MappedObjectId id)
+    :MappedObject("MappedAudioPluginManager",
+                  AudioPluginManager,
+                  id,
+                  true)
+{
+    m_pM = new PluginManager();
+    m_pM->discoverPlugins();
+}
+
+MappedAudioPluginManager::~MappedAudioPluginManager()
+{
+    delete m_pM;
+}
+
 
 
 }

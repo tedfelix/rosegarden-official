@@ -104,8 +104,9 @@ static const float  _16bitSampleMax = (float)(0xffff/2);
 //
 AudioFile *_recordFile;
 
-AlsaDriver::AlsaDriver():
-    SoundDriver(std::string("alsa-lib version ") + std::string(SND_LIB_VERSION_STR)),
+AlsaDriver::AlsaDriver(MappedStudio *studio):
+    SoundDriver(studio, std::string("alsa-lib version ") +
+                        std::string(SND_LIB_VERSION_STR)),
     m_client(-1),
     m_port(-1),
     m_queue(-1),

@@ -21,6 +21,7 @@
 
 #include "SoundDriver.h"
 #include "WAVAudioFile.h"
+#include "MappedStudio.h"
 
 
 namespace Rosegarden
@@ -141,7 +142,7 @@ PlayableAudioFile::getBitsPerSample()
 
 
 
-SoundDriver::SoundDriver(const std::string &name):
+SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_name(name),
     m_driverStatus(NO_DRIVER),
     m_playStartPosition(0, 0),
@@ -153,7 +154,8 @@ SoundDriver::SoundDriver(const std::string &name):
     m_deviceRunningId(0),
     m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase),
     m_audioPlayLatency(0, 0),
-    m_audioRecordLatency(0, 0)
+    m_audioRecordLatency(0, 0),
+    m_studio(studio)
 {
 }
 

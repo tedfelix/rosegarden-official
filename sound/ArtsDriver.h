@@ -45,7 +45,7 @@ namespace Rosegarden
 class ArtsDriver : public SoundDriver
 {
 public:
-    ArtsDriver();
+    ArtsDriver(MappedStudio *studio);
     virtual ~ArtsDriver();
 
     virtual void initialiseMidi();

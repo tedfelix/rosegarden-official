@@ -42,8 +42,8 @@ using std::endl;
 namespace Rosegarden
 {
 
-ArtsDriver::ArtsDriver():
-    SoundDriver(std::string("Arts ") + std::string(ARTS_VERSION)),
+ArtsDriver::ArtsDriver(MappedStudio *studio):
+    SoundDriver(studio, std::string("Arts ") + std::string(ARTS_VERSION)),
     m_artsPlayStartTime(0, 0),
     m_artsRecordStartTime(0, 0)
 {

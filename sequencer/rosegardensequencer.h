@@ -258,6 +258,10 @@ public:
     bool clearToSend() { return m_clearToSend; }
     void setClearToSend(bool value) { m_clearToSend = value; }
 
+    // Initialise the virtual studio at this end of the link
+    //
+    void initialiseStudio();
+
 private:
 
     // get events whilst handling loop

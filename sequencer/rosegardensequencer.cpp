@@ -63,12 +63,11 @@ RosegardenSequencerApp::RosegardenSequencerApp():
         close();
     }
 
-    // creating this object also initialises the Rosegarden
-    // aRTS interface for both playback and recording.  We
-    // will fall over at this point if the sequencer can't
-    // initialise.
+    // Creating this object also initialises the Rosegarden aRts or
+    // ALSA(JACK) interface for both playback and recording.  This
+    // has got to work.
     //
-    m_sequencer = new Rosegarden::Sequencer();
+    m_sequencer = new Rosegarden::Sequencer(&m_studio);
 
     if (!m_sequencer)
     {
@@ -79,6 +78,9 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // set this here and now so we can accept async midi events
     //
     m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
+
+    // initialise the MappedStudio
+    initialiseStudio();
 
 }
 
@@ -920,6 +922,52 @@ RosegardenSequencerApp::getAudioRecordLatency()
 {
     return Rosegarden::MappedRealTime(m_sequencer->getAudioRecordLateny());
 }
+
+// Initialise the virtual studio with a few audio faders and
+// create a plugin manager.  For the moment this is pretty
+// arbitrary but eventually we'll drive this from the gui
+// and rg file "Studio" entries.
+//
+void
+RosegardenSequencerApp::initialiseStudio()
+{
+    // clear down the studio before we start adding anything
+    //
+    m_studio.clear();
+
+    // Create a plugin manager
+    //
+    Rosegarden::MappedAudioPluginManager *pM =
+      dynamic_cast<Rosegarden::MappedAudioPluginManager*>(
+        m_studio.createObject(Rosegarden::MappedObject::AudioPluginManager));
+
+    if (pM)
+    {
+        std::cout << "RosegardenSequencer - "
+                  << "got plugin manager" << std::endl;
+    }
+
+    // Create a random number of audio faders
+    //
+    std::vector<Rosegarden::MappedObjectId> audioFaders;
+    for (unsigned int i = 0; i < 8; i++)
+    {
+        Rosegarden::MappedAudioFader *aF =
+          dynamic_cast<Rosegarden::MappedAudioFader*>(
+              m_studio.createObject(Rosegarden::MappedObject::AudioFader));
+
+        if (aF)
+        {
+            std::cout << "RosegardenSequencer - "
+                      << "adding Audio Fader (object id = "
+                      << aF->getId() << ")" << std::endl;
+
+            audioFaders.push_back(aF->getId());
+        }
+    }
+
+}
+
 
 
 
