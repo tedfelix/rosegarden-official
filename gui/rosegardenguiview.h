@@ -46,6 +46,7 @@ namespace Rosegarden {
     class SegmentSelection;
 }
 
+class QVBoxLayout;
 class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
@@ -146,6 +147,11 @@ public:
     
     bool haveSelection();
     Rosegarden::SegmentSelection getSelection();
+
+    /*
+     * Get the box that holds the Segment and Instrument parameter boxes
+     */
+    QVBoxLayout* getParameterBox() { return m_vboxLayout; }
 
 public slots:
     void slotEditSegment(Rosegarden::Segment*);
@@ -267,8 +273,10 @@ protected:
     Rosegarden::SimpleRulerScale  *m_rulerScale;
     TrackEditor			  *m_trackEditor;
 
+    QVBoxLayout                   *m_vboxLayout;
     SegmentParameterBox		  *m_segmentParameterBox;
     InstrumentParameterBox	  *m_instrumentParameterBox;
+
 
 };
 

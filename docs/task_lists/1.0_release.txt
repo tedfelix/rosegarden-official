@@ -10,7 +10,7 @@ Features for 1.0 - updated 20030923
   o ringbuffer  [DONE]
   o mp3 support
   o libsndfile support
-  o drag and drop [PARTIALLY DONE]
+  o drag and drop [DONE]
 
 - banks/variations [cc]
 

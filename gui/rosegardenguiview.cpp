@@ -93,19 +93,19 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
     QHBox *hbox = new QHBox(this);
     QFrame *vbox = new QFrame(hbox);
-    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
+    m_vboxLayout = new QVBoxLayout(vbox, 5);
 
     // Segment and Instrument Parameter Boxes [rwb]
     //
     m_segmentParameterBox = new SegmentParameterBox(this, vbox);
-    vboxLayout->addWidget(m_segmentParameterBox);
+    m_vboxLayout->addWidget(m_segmentParameterBox);
 
     connect(m_segmentParameterBox, SIGNAL(documentModified()),
             doc, SLOT(slotDocumentModified()));
 
     m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), vbox);
-    vboxLayout->addWidget(m_instrumentParameterBox);
-    vboxLayout->addStretch();
+    m_vboxLayout->addWidget(m_instrumentParameterBox);
+    m_vboxLayout->addStretch();
 
     // Construct the trackEditor first so we can then
     // query it for placement information
@@ -1083,11 +1083,6 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
     s >> trackId;
     s >> time;
 
-    RG_DEBUG << "RosegardenGUIView::slotDroppedNewAudio("
-             << "filename = " << audioFile 
-             << ", trackid = " << trackId
-             << ", time = " << time << endl;
-
     RosegardenGUIApp *app = dynamic_cast<RosegardenGUIApp*>(parent());
     Rosegarden::AudioFileManager &aFM = getDocument()->getAudioFileManager();
     
@@ -1133,9 +1128,14 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 
         if (aF)
         {
-            std::cout << "Adding dropped audio file = " << audioFile << std::endl;
-            //slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
-            slotAddAudioSegment(audioFileId, 0, 0, Rosegarden::RealTime(0, 0), Rosegarden::RealTime(2, 0));
+            slotAddAudioSegment(audioFileId, trackId, time, 
+                                Rosegarden::RealTime(0, 0), aF->getLength());
+
+            RG_DEBUG << "RosegardenGUIView::slotDroppedNewAudio("
+                     << "filename = " << audioFile 
+                     << ", trackid = " << trackId
+                     << ", time = " << time << endl;
+
         }
     }
 }

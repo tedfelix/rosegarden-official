@@ -52,7 +52,9 @@
 #include "barbuttons.h"
 #include "trackbuttons.h"
 #include "loopruler.h"
+#include "segmenttool.h"
 #include "qdeferscrollview.h"
+#include "rosegardenguiview.h"
 
 #include "rosedebug.h"
 
@@ -603,8 +605,7 @@ TrackEditor::slotDeleteSelectedSegments()
 void
 TrackEditor::slotTurnRepeatingSegmentToRealCopies()
 {
-    std::cout << "TrackEditor::slotTurnRepeatingSegmentToRealCopies"
-              << std::endl;
+    RG_DEBUG << "TrackEditor::slotTurnRepeatingSegmentToRealCopies" << endl;
 
     Rosegarden::SegmentSelection segments =
             m_segmentCanvas->getSelectedSegments();
@@ -653,6 +654,21 @@ void TrackEditor::dropEvent(QDropEvent* event)
     QStrList uri;
     QString text;
 
+    int heightAdjust = 0;
+    int widthAdjust = 0;
+
+    // Adjust any drop event height position by visible rulers
+    //
+    if (m_topBarButtons && m_topBarButtons->isVisible()) heightAdjust += m_topBarButtons->height();
+    if (m_tempoRuler && m_tempoRuler->isVisible()) heightAdjust += m_tempoRuler->height();
+    if (m_chordNameRuler && m_chordNameRuler->isVisible()) heightAdjust += m_chordNameRuler->height();
+
+    // And width by visible buttons and features
+    //
+    RosegardenGUIView *view = dynamic_cast<RosegardenGUIView*>(parent());
+    if (m_trackButtons && m_trackButtons->isVisible()) widthAdjust += m_trackButtons->width();
+    if (view) widthAdjust += view->getParameterBox()->geometry().width();
+
     if (QUriDrag::decode(event, uri)) {
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
                              << uri.first() << endl;
@@ -662,21 +678,39 @@ void TrackEditor::dropEvent(QDropEvent* event)
             emit droppedDocument(uriPath);
         } else {
 
+            QStringList files;
+            QUriDrag::decodeLocalFiles(event, files);
+            QString filePath = files.first();
+
+            RG_DEBUG << "TrackEditor::dropEvent() : got filename: "
+                     << filePath << endl;
+
             int trackPos = m_segmentCanvas->grid().
                 getYBin(event->pos().y() + 
-                        m_segmentCanvas->verticalScrollBar()->value());
+                        m_segmentCanvas->verticalScrollBar()->value() - heightAdjust);
 
             Rosegarden::timeT time = 
                 m_segmentCanvas->grid().getRulerScale()->
-                getTimeForX(event->pos().y() + 
-                            m_segmentCanvas->horizontalScrollBar()->value());
+                getTimeForX(event->pos().x() + 
+                            m_segmentCanvas->horizontalScrollBar()->value() - widthAdjust);
+
+            RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
+                     << trackPos
+                     << ", time = "
+                     << time 
+                     /*
+                     << ", X = "
+                     << event->pos().x()
+                     << ", SCROLL = "
+                     << m_segmentCanvas->horizontalScrollBar()->value() */
+                     << endl;
 
             if (m_doc->getComposition().getTrackById(trackPos))
             {
                 QString audioText;
                 QTextOStream t(&audioText);
 
-                t << uriPath << "\n";
+                t << filePath << "\n";
                 t << trackPos << "\n";
                 t << time << "\n";
 
@@ -711,23 +745,30 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
             int trackPos = m_segmentCanvas->grid().
                 getYBin(event->pos().y() + 
-                        m_segmentCanvas->verticalScrollBar()->value());
+                        m_segmentCanvas->verticalScrollBar()->value() - heightAdjust);
 
             Rosegarden::timeT time = 
                 m_segmentCanvas->grid().getRulerScale()->
-                getTimeForX(event->pos().y() + 
-                            m_segmentCanvas->horizontalScrollBar()->value());
-
-            RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
-                     << trackPos
-                     << ", time = "
-                     << time << endl;
+                getTimeForX(event->pos().x() + 
+                            m_segmentCanvas->horizontalScrollBar()->value() - widthAdjust);
 
             // Drop this audio segment if we have a valid track number
             // (could also check for time limits too)
             //
             if (m_doc->getComposition().getTrackById(trackPos))
             {
+
+                RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
+                         << trackPos
+                         << ", time = "
+                         << time 
+                         /*
+                         << ", X = "
+                         << event->pos().x()
+                         << ", SCROLL = "
+                         << m_segmentCanvas->horizontalScrollBar()->value() */
+                         << endl;
+
                 QString audioText;
                 QTextOStream t(&audioText);
                 t << audioFileId << "\n";
@@ -742,5 +783,6 @@ void TrackEditor::dropEvent(QDropEvent* event)
             }
         }
     }
-    
+
+    if (m_segmentCanvas) m_segmentCanvas->slotSetTool(SegmentSelector::ToolName);
 }
