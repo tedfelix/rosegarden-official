@@ -48,7 +48,7 @@
 #include "rosedebug.h"
 
 #include "NotationTypes.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 #include "Quantizer.h"
 #include "staffline.h"
 #include "staffruler.h"
@@ -412,7 +412,7 @@ void NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
 
     //
-    // Edition tools (at the moment, there's only an eraser)
+    // Edition tools (eraser, selector...)
     //
     noteAction = new KRadioAction(i18n("Erase"), "eraser", 0,
                                   this, SLOT(slotEraseSelected()),
@@ -852,8 +852,17 @@ bool NotationView::applyLayout(int staffNo)
 void NotationView::setCurrentSelectedNote(const char *pixmapName,
                                           bool rest, Note::Type n, int dots)
 {
-    if (rest) setTool(new RestInserter(n, dots, this));
-    else      setTool(new NoteInserter(n, dots, this));
+    NoteInserter* inserter = 0;
+
+    if (rest)
+        inserter = dynamic_cast<NoteInserter*>(RestInserter::getInstance(this));
+    else
+        inserter = dynamic_cast<NoteInserter*>(NoteInserter::getInstance(this));
+
+    inserter->setNote(n);
+    inserter->setDots(dots);
+
+    setTool(inserter);
 
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap(pixmapName));
@@ -889,7 +898,6 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
 
 void NotationView::setTool(NotationTool* tool)
 {
-    delete m_tool;
     m_tool = tool;
     m_tool->finalize();
 }
@@ -1457,28 +1465,36 @@ void NotationView::slotTrebleClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
-    setTool(new ClefInserter(Clef::Treble, this));
+    setTool(ClefInserter::getInstance(this));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Treble);
 }
 
 void NotationView::slotTenorClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
-    setTool(new ClefInserter(Clef::Tenor, this));
+    setTool(ClefInserter::getInstance(this));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Tenor);
 }
 
 void NotationView::slotAltoClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
-    setTool(new ClefInserter(Clef::Alto, this));
+    setTool(ClefInserter::getInstance(this));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
 }
 
 void NotationView::slotBassClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
-    setTool(new ClefInserter(Clef::Bass, this));
+    setTool(ClefInserter::getInstance(this));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Bass);
 }
 
 
@@ -1494,13 +1510,13 @@ void NotationView::slotBassClef()
 void NotationView::slotEraseSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
-    setTool(new NotationEraser(this));
+    setTool(NotationEraser::getInstance(this));
 }
 
 void NotationView::slotSelectSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotSelectSelected()\n";
-    setTool(new NotationSelector(this));
+    setTool(NotationSelector::getInstance(this));
 }
 
 //----------------------------------------------------------------------
@@ -1509,6 +1525,10 @@ void NotationView::itemPressed(int height, int staffNo,
                                QMouseEvent* e,
                                NotationElement* el)
 {
+    kdDebug(KDEBUG_AREA) << "NotationView::itemPressed(height = "
+                         << height << ", staffNo = " << staffNo
+                         << ")\n";
+
     ButtonState btnState = e->state();
 
     if (btnState & ShiftButton) { // on shift-click, set cursor position

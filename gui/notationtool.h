@@ -45,19 +45,15 @@ class QPopupMenu;
  *
  * A NotationTool represents one of the items on the notation toolbars
  * (notes, rests, clefs, eraser, etc...). It handle mouse click events
- * for the NotationView (classic 'State' design pattern)
+ * for the NotationView ('State' design pattern).
+ *
+ * This class is a singleton
  *
  * @see NotationView#setTool()
  */
 class NotationTool : public QObject, public KXMLGUIClient
 {
 public:
-    /**
-     * Create a new NotationTool
-     *
-     * \a menuName : the name of the menu defined in the XML rc file
-     */
-    NotationTool(const QString& menuName, NotationView*);
     virtual ~NotationTool();
 
     /**
@@ -116,7 +112,16 @@ public:
      */
     virtual void showMenu();
 
+    void setParentView(NotationView*);
+
 protected:
+    /**
+     * Create a new NotationTool
+     *
+     * \a menuName : the name of the menu defined in the XML rc file
+     */
+    NotationTool(const QString& menuName, NotationView*);
+
     void createMenu(const QString& rcFileName);
 
     const QString m_menuName;
@@ -124,6 +129,8 @@ protected:
     NotationView* m_parentView;
 
     QPopupMenu* m_menu;
+
+    static NotationTool* m_instance;
 };
 
 namespace Rosegarden { class SegmentNotationHelper; }
@@ -136,10 +143,10 @@ class NoteInserter : public NotationTool
     Q_OBJECT
 
 public:
-    NoteInserter(Rosegarden::Note::Type, unsigned int dots,
-                 NotationView*);
+    static NotationTool* getInstance(NotationView*);
+
     ~NoteInserter();
-    
+
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
                                        NotationElement* el);
@@ -147,13 +154,26 @@ public:
     virtual void finalize();
 
 public slots:
+    /// Set the type of note (quaver, breve...) which will be inserted
+    void setNote(Rosegarden::Note::Type);
+
+    /// Set the nb of dots the inserted note will have
+    void setDots(unsigned int dots);
+ 
     /// Set the accidental for the notes which will be inserted
     void setAccidental(Rosegarden::Accidental);
- 
+
+    /**
+     * Set the accidental for the notes which will be inserted
+     * and put the parent view toolbar in sync
+     */
+    void setAccidentalSync(Rosegarden::Accidental);
+
 protected:
+    NoteInserter(NotationView*);
+
     /// this ctor is used by RestInserter
-    NoteInserter(Rosegarden::Note::Type, unsigned int dots,
-                 const QString& menuName, NotationView*);
+    NoteInserter(const QString& menuName, NotationView*);
 
     virtual Rosegarden::Event *doInsert(Rosegarden::SegmentNotationHelper&,
                                         Rosegarden::timeT absTime,
@@ -169,6 +189,9 @@ protected slots:
     void slotDoubleFlat();
     void slotToggleDot();
 
+    void slotEraseSelected();
+    void slotSelectSelected();
+
 protected:
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
@@ -176,6 +199,7 @@ protected:
     Rosegarden::Accidental m_accidental;
 
     static const char* m_actionsAccidental[][4];
+    static NotationTool* m_instance;
 };
 
 /**
@@ -184,14 +208,16 @@ protected:
 class RestInserter : public NoteInserter
 {
 public:
-    RestInserter(Rosegarden::Note::Type, unsigned int dots,
-                 NotationView*);
-    
+    static NotationTool* getInstance(NotationView*);
+
 protected:
+    RestInserter(NotationView*);
+
     virtual Rosegarden::Event *doInsert(Rosegarden::SegmentNotationHelper&,
                                         Rosegarden::timeT absTime,
                                         const Rosegarden::Note&, int pitch,
                                         Rosegarden::Accidental);
+    static NotationTool* m_instance;
 };
 
 /**
@@ -200,13 +226,21 @@ protected:
 class ClefInserter : public NotationTool
 {
 public:
-    ClefInserter(std::string clefType, NotationView*);
-    
+    static NotationTool* getInstance(NotationView*);
+
+    void setClef(std::string clefType);
+
+    virtual void finalize();
+
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
                                        NotationElement* el);
 protected:
+    ClefInserter(NotationView*);
+    
     Rosegarden::Clef m_clef;
+
+    static NotationTool* m_instance;
 };
 
 
@@ -217,7 +251,9 @@ class NotationEraser : public NotationTool
 {
     Q_OBJECT
 public:
-    NotationEraser(NotationView*);
+    static NotationTool* getInstance(NotationView*);
+
+    virtual void finalize();
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
@@ -227,8 +263,11 @@ public slots:
     void toggleRestCollapse();
     
 protected:
+    NotationEraser(NotationView*);
 
     bool m_collapseRest;
+
+    static NotationTool* m_instance;
 };
 
 /**
@@ -239,7 +278,8 @@ class NotationSelector : public NotationTool
     Q_OBJECT
 
 public:
-    NotationSelector(NotationView*);
+    static NotationTool* getInstance(NotationView*);
+
     ~NotationSelector();
     
     virtual void handleLeftButtonPress(int height, int staffNo,
@@ -261,15 +301,17 @@ public:
     EventSelection* getSelection();
 
 public slots:
-/**
- * Hide the selection rectangle
- *
- * Should be called after a cut or a copy has been
- * performed
- */
-void hideSelection();
+    /**
+     * Hide the selection rectangle
+     *
+     * Should be called after a cut or a copy has been
+     * performed
+     */
+    void hideSelection();
     
 protected:
+    NotationSelector(NotationView*);
+
     /**
      * Set the current selection on the parent NotationView
      */
@@ -280,6 +322,8 @@ protected:
 
     int m_clickedStaff;
     NotationElement *m_clickedElement;
+
+    static NotationTool* m_instance;
 };
 
 
@@ -289,8 +333,8 @@ protected:
 class NotationSelectionPaster : public NotationTool
 {
 public:
-    NotationSelectionPaster(EventSelection&,
-                            NotationView*);
+    static NotationTool* getInstance(NotationView*);
+
     ~NotationSelectionPaster();
     
     virtual void handleLeftButtonPress(int height, int staffNo,
@@ -298,7 +342,12 @@ public:
                                        NotationElement* el);
 
 protected:
+    NotationSelectionPaster(EventSelection&,
+                            NotationView*);
+
     EventSelection& m_selection;
+
+    static NotationTool* m_instance;
 };
 
 #endif

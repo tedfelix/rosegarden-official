@@ -27,7 +27,7 @@
 
 #include "Event.h"
 #include "NotationTypes.h"
-#include "TrackNotationHelper.h"
+#include "SegmentNotationHelper.h"
 
 #include "eventselection.h"
 #include "rosegardenguidoc.h"
@@ -52,7 +52,7 @@ using Rosegarden::timeT;
 //////////////////////////////////////////////////////////////////////
 
 NotationTool::NotationTool(const QString& menuName, NotationView* view)
-    : QObject(view),
+    : QObject(0),
       m_menuName(menuName),
       m_parentView(view),
       m_menu(0)
@@ -63,10 +63,17 @@ NotationTool::NotationTool(const QString& menuName, NotationView* view)
 
 NotationTool::~NotationTool()
 {
+    kdDebug(KDEBUG_AREA) << "NotationTool::~NotationTool()\n";
+
+//     delete m_menu;
+//     m_parentView->factory()->removeClient(this);
+//    m_instance = 0;
 }
 
 void NotationTool::finalize()
 {
+    m_parentView->setCanvasCursor(Qt::arrowCursor);
+    m_parentView->setPositionTracking(false);
 }
 
 void NotationTool::createMenu(const QString& rcFileName)
@@ -83,15 +90,25 @@ void NotationTool::handleMousePress(int height, int staffNo,
                                     QMouseEvent* e,
                                     NotationElement* el)
 {
+    kdDebug(KDEBUG_AREA) << "NotationTool::handleMousePress : mouse button = "
+                         << e->button() << endl;
+
     switch (e->button()) {
+
     case Qt::LeftButton:
         handleLeftButtonPress(height, staffNo, e, el);
         break;
+
     case Qt::RightButton:
         handleRightButtonPress(height, staffNo, e, el);
         break;
+
     case Qt::MidButton:
         handleMidButtonPress(height, staffNo, e, el);
+        break;
+
+    default:
+        kdDebug(KDEBUG_AREA) << "NotationTool::handleMousePress : no button mouse press\n";
         break;
     }
 }
@@ -129,16 +146,22 @@ void NotationTool::showMenu()
 {
     if (m_menu)
         m_menu->exec(QCursor::pos());
+    else
+        kdDebug(KDEBUG_AREA) << "NotationTool::showMenu() : no menu to show\n";
 }
+
+void NotationTool::setParentView(NotationView* view)
+{
+    m_parentView = view;
+}
+
 
 //------------------------------
 
-NoteInserter::NoteInserter(Rosegarden::Note::Type type,
-                           unsigned int dots,
-                           NotationView* view)
+NoteInserter::NoteInserter(NotationView* view)
     : NotationTool("NoteInserter", view),
-      m_noteType(type),
-      m_noteDots(dots),
+      m_noteType(Rosegarden::Note::Quaver),
+      m_noteDots(0),
       m_accidental(Rosegarden::NoAccidental)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
@@ -156,22 +179,40 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
     }
 
     new KToggleAction(i18n("Toggle Dot"), 0, this,
-                      SLOT(toggleDot()), actionCollection(),
+                      SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
+
+    new KAction(i18n("Select"), 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Erase"), 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
 
     createMenu("noteinserter.rc");
 }
 
-NoteInserter::NoteInserter(Rosegarden::Note::Type type,
-                           unsigned int dots,
-                           const QString& menuName,
+NoteInserter::NoteInserter(const QString& menuName,
                            NotationView* view)
     : NotationTool(menuName, view),
-      m_noteType(type),
-      m_noteDots(dots)
+      m_noteType(Rosegarden::Note::Quaver),
+      m_noteDots(0),
+      m_accidental(Rosegarden::NoAccidental)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
 }
+
+NotationTool* NoteInserter::getInstance(NotationView* view)
+{
+    if (!m_instance)
+        m_instance = new NoteInserter(view);
+
+    m_instance->setParentView(view);
+
+    return m_instance;
+}
+
 
 NoteInserter::~NoteInserter()
 {
@@ -179,8 +220,16 @@ NoteInserter::~NoteInserter()
 
 void NoteInserter::finalize()
 {
+    // disconnect previous signals, which were connected to a wrong
+    // parentView
+    //
+    disconnect();
+    
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this, SLOT(setAccidental(Rosegarden::Accidental)));
+
+    m_parentView->setCanvasCursor(Qt::crossCursor);
+    m_parentView->setPositionTracking(true);
 }
 
 void    
@@ -240,9 +289,26 @@ Event *NoteInserter::doInsert(SegmentNotationHelper& nt,
     }
 }
 
+void NoteInserter::setNote(Rosegarden::Note::Type nt)
+{
+    m_noteType = nt;
+}
+
+void NoteInserter::setDots(unsigned int dots)
+{
+    m_noteDots = dots;
+}
+
 void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
 {
     m_accidental = accidental;
+}
+
+void NoteInserter::setAccidentalSync(Rosegarden::Accidental accidental)
+{
+    setAccidental(accidental);
+
+    // Get the parent view toolbar in sync - check the corresponding action
     KAction* action =
         actionCollection()->action(m_actionsAccidental[accidental][2]);
 
@@ -286,7 +352,18 @@ void NoteInserter::slotDoubleFlat()
 
 void NoteInserter::slotToggleDot()
 {
+    // TODO : sync. this with the NotationView toolbars
     m_noteDots = (m_noteDots) ? 0 : 1;
+}
+
+void NoteInserter::slotEraseSelected()
+{
+    m_parentView->actionCollection()->action("erase")->activate();
+}
+
+void NoteInserter::slotSelectSelected()
+{
+    m_parentView->actionCollection()->action("select")->activate();
 }
 
 const char* NoteInserter::m_actionsAccidental[][4] = 
@@ -301,11 +378,19 @@ const char* NoteInserter::m_actionsAccidental[][4] =
 
 //------------------------------
 
-RestInserter::RestInserter(Rosegarden::Note::Type type,
-                           unsigned int dots,
-                           NotationView* view)
-    : NoteInserter(type, dots, "RestInserter", view)
+RestInserter::RestInserter(NotationView* view)
+    : NoteInserter("RestInserter", view)
 {
+}
+
+NotationTool* RestInserter::getInstance(NotationView* view)
+{
+    if (!m_instance)
+        m_instance = new RestInserter(view);
+
+    m_instance->setParentView(view);
+
+    return m_instance;
 }
 
 Event *RestInserter::doInsert(SegmentNotationHelper& nt,
@@ -324,13 +409,33 @@ Event *RestInserter::doInsert(SegmentNotationHelper& nt,
 
 //------------------------------
 
-ClefInserter::ClefInserter(std::string clefType, NotationView* view)
+ClefInserter::ClefInserter(NotationView* view)
     : NotationTool("ClefInserter", view),
-      m_clef(clefType)
+      m_clef(Rosegarden::Clef::Treble)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
 }
+
+void ClefInserter::finalize()
+{
+    m_parentView->setCanvasCursor(Qt::crossCursor);
+}
+
+NotationTool* ClefInserter::getInstance(NotationView* view)
+{
+    if (!m_instance)
+        m_instance = new ClefInserter(view);
+
+    m_instance->setParentView(view);
+
+    return m_instance;
+}
     
+void ClefInserter::setClef(std::string clefType)
+{
+    m_clef = clefType;
+}
+
 void ClefInserter::handleLeftButtonPress(int, int staffNo,
                                         QMouseEvent* e,
                                         NotationElement*)
@@ -376,6 +481,21 @@ NotationEraser::NotationEraser(NotationView* view)
                       "toggle_rest_collapse");
 
     createMenu("notationeraser.rc");
+}
+
+void NotationEraser::finalize()
+{
+    m_parentView->setCanvasCursor(Qt::pointingHandCursor);
+}
+
+NotationTool* NotationEraser::getInstance(NotationView* view)
+{
+    if (!m_instance)
+        m_instance = new NotationEraser(view);
+
+    m_instance->setParentView(view);
+
+    return m_instance;
 }
 
 void NotationEraser::handleLeftButtonPress(int, int staffNo,
@@ -440,6 +560,16 @@ NotationSelector::~NotationSelector()
 {
     delete m_selectionRect;
     m_parentView->canvas()->update();
+}
+
+NotationTool* NotationSelector::getInstance(NotationView* view)
+{
+    if (!m_instance)
+        m_instance = new NotationSelector(view);
+
+    m_instance->setParentView(view);
+
+    return m_instance;
 }
 
 void NotationSelector::handleLeftButtonPress(int, int staffNo,
@@ -655,4 +785,11 @@ void NotationSelectionPaster::handleLeftButtonPress(int, int staffNo,
     //m_parentView->slotStatusHelpMsg(i18n("Ready."));
 
 }
+
+NotationTool* NotationTool::m_instance = 0;
+NotationTool* NoteInserter::m_instance = 0;
+NotationTool* RestInserter::m_instance = 0;
+NotationTool* ClefInserter::m_instance = 0;
+NotationTool* NotationEraser::m_instance = 0;
+NotationTool* NotationSelector::m_instance = 0;
 
