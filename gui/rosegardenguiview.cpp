@@ -40,12 +40,11 @@
 #include "matrixview.h"
 #include "trackbuttons.h"
 #include "barbuttons.h"
+#include "rulerscale.h"
 
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     : QVBox(parent),
-      m_notationView(0),
-      m_matrixView(0),
       m_trackEditorScrollView(0)
 {
     RosegardenGUIDoc* doc = getDocument();
@@ -100,10 +99,27 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
     barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
+/*!!!
     BarButtons *barButtons = new BarButtons(doc,
                                             tracksEditor->getHHeader()->sectionSize(0),
                                             tracksEditor->getVHeader()->sectionSize(0),
                                             barButtonsView);
+*/
+
+    // we assume the hheader has a size judged to be appropriate for a
+    // 4/4 bar -- not sure why we should, but we do
+
+    double unitsPerPixel = Rosegarden::TimeSignature(4, 4).getBarDuration() /
+	tracksEditor->getHHeader()->sectionSize(0);
+
+    m_rulerScale = new SimpleRulerScale(&doc->getComposition(),
+					0, unitsPerPixel);
+
+    BarButtons *barButtons = new BarButtons
+	(doc,
+	 m_rulerScale,
+	 tracksEditor->getHHeader()->sectionSize(0),
+	 barButtonsView);
 
     // set a plain frame for the scrollview
     //
@@ -232,6 +248,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
 RosegardenGUIView::~RosegardenGUIView()
 {
+    delete m_rulerScale;
     kdDebug(KDEBUG_AREA) << "~RosegardenGUIView()\n";
 }
 
@@ -297,8 +314,8 @@ void RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
-    m_notationView = new NotationView(this, segmentsToEdit, this);
-    m_notationView->show();
+    NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+    notationView->show();
 }
 
 void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
@@ -306,8 +323,8 @@ void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
-    m_matrixView = new MatrixView(getDocument(), segmentsToEdit, this);
-    m_matrixView->show();
+    MatrixView *matrixView = new MatrixView(getDocument(), segmentsToEdit, this);
+    matrixView->show();
 }
 
 void RosegardenGUIView::editSegmentAudio(Rosegarden::Segment* p)
@@ -358,8 +375,8 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
         segmentsToEdit.push_back(*i);
     }
 
-    m_notationView = new NotationView(this, segmentsToEdit, this);
-    m_notationView->show();
+    NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+    notationView->show();
 }
 
 void RosegardenGUIView::setPointerPosition(const Rosegarden::timeT &position)

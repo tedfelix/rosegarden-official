@@ -38,9 +38,8 @@ namespace Rosegarden { class Composition; class MappedComposition; }
 
 class QScrollView;
 class RosegardenGUIDoc;
-class NotationView;
-class MatrixView;
 class TrackEditor;
+class RulerScale;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -209,9 +208,8 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
 
-    NotationView* m_notationView;
-    MatrixView*   m_matrixView;
-
+    RulerScale *m_rulerScale;
+    
     QScrollView* m_trackEditorScrollView;
 };
 

@@ -662,7 +662,7 @@ Composition::getTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 TimeSignature
 Composition::getTimeSignatureInBar(int barNo, bool &isNew) const
 {
-    if (barNo > m_barSegment.size()) barNo = m_barSegment.size() - 1;
+    if (barNo >= m_barSegment.size()) barNo = m_barSegment.size() - 1;
     if (barNo < 0) {
 	isNew = false;
 	return TimeSignature();

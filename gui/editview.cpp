@@ -38,6 +38,7 @@
 #include "ktmpstatusmsg.h"
 #include "staffruler.h"
 #include "barbuttons.h"
+#include "rulerscale.h"
 
 //----------------------------------------------------------------------
 const unsigned int EditView::ID_STATUS_MSG = 1;
@@ -73,13 +74,18 @@ EditView::EditView(RosegardenGUIDoc *doc,
     label->setMinimumHeight(25);//!!!
     label->setMaximumHeight(25);//!!!
 
+    m_rulerScale = new SimpleRulerScale
+	(&doc->getComposition(),
+	 0, Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration() / 20),
+
     m_barButtonsView = new QScrollView(topSplit);
     m_barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
     m_barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
     BarButtons *barButtons = new BarButtons
 	(doc,
-	 25, 100, //!!! x2
+	 m_rulerScale,
+	 25, 
 	 m_barButtonsView);
 
 //    m_barButtonsView->setFrameStyle(Plain);
@@ -101,6 +107,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
 EditView::~EditView()
 {
+    delete m_rulerScale;
     getCommandHistory()->detachView(actionCollection());
 }
 

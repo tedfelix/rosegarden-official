@@ -40,6 +40,8 @@ namespace Rosegarden { class Composition; }
 class RulerScale
 {
 public:
+    virtual ~RulerScale() { }
+
     /**
      * Return the number of the first visible bar.
      */
@@ -82,7 +84,6 @@ public:
 
 protected:
     RulerScale() { }
-    virtual ~RulerScale() { }
 };
 
 
@@ -91,7 +92,7 @@ protected:
  * a strict proportional correspondence between x-coordinate and time.
  */
 
-class SimpleRulerScale
+class SimpleRulerScale : public RulerScale
 {
 public:
     /**
@@ -100,7 +101,7 @@ public:
      * 10 means that one pixel equals 10 time units.)
      */
     SimpleRulerScale(Rosegarden::Composition *composition,
-		     double origin, double ratio);
+		     double origin, double unitsPerPixel);
     virtual ~SimpleRulerScale();
 
     virtual double getBarPosition(int n);

@@ -26,6 +26,8 @@
 #include <qheader.h>
 #include "rosegardenguidoc.h"
 
+class RulerScale;
+
 
 class BarButtons : public QHBox
 {
@@ -33,7 +35,7 @@ class BarButtons : public QHBox
 
 public:
     BarButtons(RosegardenGUIDoc* doc,
-               int baseBarWidth,
+	       RulerScale *rulerScale,
                int buttonHeight,
                QWidget* parent = 0,
                const char* name = 0,
@@ -42,7 +44,6 @@ public:
     ~BarButtons();
 
 signals:
-
     // Passed through from LoopRuler
     //
     void setPointerPosition(Rosegarden::timeT position);
@@ -74,11 +75,13 @@ private:
     void drawButtons();
 
     int m_barHeight;
-    int m_baseBarWidth;
     int m_offset;
-    int m_bars;
+
+    int m_firstBar;
+    int m_lastBar;
+
     RosegardenGUIDoc *m_doc;
-    
+    RulerScale *m_rulerScale;
 };
 
 

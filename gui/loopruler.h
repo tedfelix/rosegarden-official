@@ -27,6 +27,8 @@
 #include "Event.h"
 #include "rosegardenguidoc.h"
 
+class RulerScale;
+
 
 // Creates a canvas widget that reacts to mouse clicks and
 // sends relevant signals to modify position pointer and
@@ -44,7 +46,7 @@ class LoopRuler : public QWidget
 
 public:
     LoopRuler(RosegardenGUIDoc *doc,
-              int baseWidth = 0,
+	      RulerScale *rulerScale,
               int height = 0,
               QWidget* parent = 0,
               const char *name = 0);
@@ -53,7 +55,8 @@ public:
 
     virtual void paintEvent(QPaintEvent*);
 
-    void calculateBarDivisions();
+//!!!    void calculateBarDivisions();
+    void calculateExtents();
 
 public slots:
     void setLoopingMode(bool value) { m_loop = value; }
@@ -83,29 +86,26 @@ signals:
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
 private:
-
     void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions
 
     // Get drawing position from pointer position and vice versa
     //
-    int getXPosition(Rosegarden::timeT pos);
-    Rosegarden::timeT getPointerPosition(int xPos);
+//!!!    int getXPosition(Rosegarden::timeT pos);
+//!!!    Rosegarden::timeT getPointerPosition(int xPos);
 
     int m_height;
     int m_snap;            // snap the loop to the nearest
-    int m_baseBarWidth;
-    int m_bars;
+
+    int m_firstBar;
+    int m_lastBar;
 
     RosegardenGUIDoc *m_doc;
-   
+    RulerScale *m_rulerScale;
     
     bool m_loop;
     Rosegarden::timeT m_startLoop;
     Rosegarden::timeT m_endLoop;
-
-    std::vector<int> m_barWidthMap;
-
 };
 
 #endif // _LOOPRULER_H_

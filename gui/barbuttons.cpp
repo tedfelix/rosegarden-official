@@ -21,6 +21,7 @@
 
 #include "barbuttons.h"
 #include "loopruler.h"
+#include "rulerscale.h"
 #include "colours.h"
 #include <qvbox.h>
 #include <qlabel.h>
@@ -28,15 +29,15 @@
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
-                       int baseBarWidth,
+		       RulerScale *rulerScale,
                        int barHeight,
                        QWidget* parent,
                        const char* name,
                        WFlags /*f*/):
     QHBox(parent, name),
     m_barHeight(barHeight),
-    m_baseBarWidth(baseBarWidth),
-    m_doc(doc)
+    m_doc(doc),
+    m_rulerScale(rulerScale)
 {
     m_offset = 4;
 
@@ -44,8 +45,9 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     setMaximumHeight(m_barHeight);
 
     Rosegarden::Composition &comp = doc->getComposition();
-    m_bars = comp.getBarNumber(comp.getEndMarker() -
-                                   comp.getStartMarker(), false);
+
+    m_firstBar = comp.getBarNumber(comp.getStartMarker(), false);
+    m_lastBar  = comp.getBarNumber(comp.getEndMarker(),   false);
 
     drawButtons();
 }
@@ -58,8 +60,7 @@ void
 BarButtons::drawButtons()
 {
     if (!m_doc) return;
-
-    Rosegarden::Composition &comp = m_doc->getComposition();
+//!!!    Rosegarden::Composition &comp = m_doc->getComposition();
 
     // Create a horizontal spacing label to jog everything
     // up with the main SegmentCanvas
@@ -78,11 +79,13 @@ BarButtons::drawButtons()
 
     // First bar width by which others are judged
     //
+
+/*!!!
     std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
         comp.getBarRange(0, false); 
 
     int firstBarWidth = fTimes.second - fTimes.first;
- 
+*/ 
 /*
     int buttonBarWidth = m_baseBarWidth *
                          comp.getBarRange(m_bars, false).second
@@ -98,7 +101,7 @@ BarButtons::drawButtons()
     //
     //
     LoopRuler *loopRuler = new LoopRuler(m_doc,
-                                         m_baseBarWidth,
+                                         m_rulerScale,
                                          loopBarHeight,
                                          buttonBar);
 
@@ -121,21 +124,14 @@ BarButtons::drawButtons()
     //
     QHBox *hButtonBar = new QHBox(buttonBar);
 
-    for (int i = 0; i < m_bars; i++)
+    for (int i = m_firstBar; i <= m_lastBar; i++)
     {
         bar = new QVBox(hButtonBar);
         bar->setSpacing(0);
 
-        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-            comp.getBarRange(i, false);
-
-        // Normalise this bar width to a ratio of the first
-        //
-        int barWidth =  m_baseBarWidth * (times.second - times.first) /
-                                     firstBarWidth;
-
-        bar->setMinimumSize(barWidth, m_barHeight - loopBarHeight);
-        bar->setMaximumSize(barWidth, m_barHeight - loopBarHeight);
+	double width = m_rulerScale->getBarWidth(i);
+	bar->setMinimumSize(width, m_barHeight - loopBarHeight);
+	bar->setMaximumSize(width, m_barHeight - loopBarHeight);
 
         // attempt a style
         //
@@ -149,9 +145,7 @@ BarButtons::drawButtons()
         label->setIndent(4);
         label->setMinimumHeight(m_barHeight - loopBarHeight - 2);
         label->setMaximumHeight(m_barHeight - loopBarHeight - 2);
-
     }
-
 }
 
 
