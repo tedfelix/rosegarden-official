@@ -114,6 +114,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_parameterBox = new MatrixParameterBox(getCentralFrame());
     m_grid->addWidget(m_parameterBox, 2, 0);
+    m_parameterBox->hide();
 
     m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToUnit);
 
@@ -932,7 +933,7 @@ void MatrixView::processDeselections()
         SelectedElements::iterator it = m_selectedElements.begin();
         for (; it != m_selectedElements.end(); it++)
         {
-            if (*dQ = *it)
+            if (*dQ == *it)
             {
                 m_selectedElements.erase(it);
                 break;

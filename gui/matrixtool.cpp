@@ -924,7 +924,11 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
         // before we execute make sure we remove all references to
         // the old events by clearing the selection
         //
+        /*
         SelectedElements selection = m_mParentView->getSelectedElements();
+        m_mParentView->setCurrentSelection(0);
+        */
+
         m_mParentView->setSelectedElements(SelectedElements());
 
         m_mParentView->addCommandToHistory(command);
@@ -960,6 +964,10 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
         // to the old events by clearing the selection.
         //
         m_mParentView->setSelectedElements(SelectedElements());
+    
+        /*
+        m_mParentView->setCurrentSelection(0);
+        */
 
         m_mParentView->addCommandToHistory(macro);
 
