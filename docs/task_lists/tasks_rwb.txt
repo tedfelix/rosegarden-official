@@ -3,7 +3,9 @@
 
 o basic JACK audio
   - click on sample start
-  - multiple sample (Segments problem?)
+  - multiple sample (Segments problem?) [FIXED]
+
+o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
 
 o "Revert file" option
 

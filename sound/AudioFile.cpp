@@ -271,7 +271,7 @@ std::string
 AudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
 {
     // sanity
-    if (m_file == 0) return std::string("");
+    if (file == 0) return std::string("");
 
     // Bytes per sample already takes into account the number
     // of channels we're using
@@ -286,7 +286,7 @@ std::string
 AudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (m_file == 0) return std::string("");
+    if (file == 0) return std::string("");
 
     long totalSamples = m_sampleRate * time.sec +
                         ( ( m_sampleRate * time.usec ) / 1000000 );

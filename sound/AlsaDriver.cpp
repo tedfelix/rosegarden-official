@@ -607,19 +607,19 @@ AlsaDriver::initialiseAudio()
               << _jackSampleRate << std::endl;
 
     m_audioInputPort = jack_port_register(m_audioClient,
-                                          "input",
+                                          "Rosegarden input",
                                           JACK_DEFAULT_AUDIO_TYPE,
-                                          JackPortIsInput,
+                                          JackPortIsInput|JackPortIsTerminal,
                                           0);
 
     m_audioOutputPortLeft = jack_port_register(m_audioClient,
-                                               "output",
+                                               "Rosegarden output 1",
                                                JACK_DEFAULT_AUDIO_TYPE,
                                                JackPortIsOutput,
                                                0);
 
     m_audioOutputPortRight = jack_port_register(m_audioClient,
-                                                "output",
+                                                "Rosegarden output 2",
                                                 JACK_DEFAULT_AUDIO_TYPE,
                                                 JackPortIsOutput,
                                                 0);
@@ -650,15 +650,6 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver::initialiseAudio - "
               << "initialised JACK audio subsystem"
               << std::endl;
-
-
-    /*
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "JACK read latency  = "
-              << jack_port_get_latency(m_audioInputPort) 
-              << std::endl;
-              */
-
 
     /*
     // View all available ports
@@ -705,32 +696,20 @@ AlsaDriver::initialiseAudio()
     }
 
     // now input
-    /*
-    if (jack_connect(m_audioClient, jack_port_name(m_audioInputPort),
-                     "alsa_pcm:in_1"))
+    if (jack_connect(m_audioClient, "alsa_pcm:in_1",
+                     jack_port_name(m_audioInputPort)))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
-
-        if (m_driverStatus == MIDI_AND_AUDIO_OK)
-            m_driverStatus = MIDI_OK;
-        else if (m_driverStatus == AUDIO_OK)
-            m_driverStatus = NO_DRIVER;
-
-        return;
     }
-    */
 
 
-    /*
     // Get write latency now we're connected
     //
     std::cout << "AlsaDriver::initialiseAudio - "
               << "JACK write latency = "
-              << jack_port_get_latency(m_audioOutputPort) 
+              << jack_port_get_latency(m_audioOutputPortLeft) 
               << std::endl;
-              */
-
     /*
     cout << "CONNECTED = " << jack_port_connected(m_audioOutputPort) << endl;
     std::cout << "JACK ports = " << jack_get_ports(m_audioClient, NULL, NULL,
@@ -1322,18 +1301,41 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         m_playing = true;
     }
 
+    AudioFile *audioFile = 0;
+
     // insert audio events if we find them
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
         if ((*i)->getType() == MappedEvent::Audio)
         {
-            PlayableAudioFile *audioFile =
+            // Check for existence of file - if the sequencer has died
+            // and been restarted then we're not always loaded up with
+            // the audio file references we should have.  In the future
+            // we could make this just get the gui to reload our files
+            // when (or before) this fails.
+            //
+            audioFile = getAudioFile((*i)->getAudioID());
+
+            if (audioFile)
+            { 
+                PlayableAudioFile *audioFile =
                     new PlayableAudioFile(getAudioFile((*i)->getAudioID()),
                                           (*i)->getEventTime(),
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
 
-            queueAudio(audioFile);
+                queueAudio(audioFile);
+            }
+            else
+            {
+                std::cerr << "AlsaDriver::processEventsOut - "
+                          << "can't find audio file reference" 
+                          << std::endl;
+
+                std::cerr << "AlsaDriver::processEventsOut - "
+                          << "try reloading the current Rosegarden file"
+                          << std::endl;
+            }
         }
     }
 
@@ -1497,7 +1499,7 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 
     if (inst)
     {
-        // Get output buffer
+        // Get output buffers
         //
         sample_t *leftBuffer = static_cast<sample_t*>
             (jack_port_get_buffer(inst->getJackOutputPortLeft(),
@@ -1505,6 +1507,20 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         sample_t *rightBuffer = static_cast<sample_t*>
             (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
+
+
+        // Are we recording?
+        //
+        if (inst->getRecordStatus() == RECORD_AUDIO)
+        {
+            // Get input buffer
+            //
+            sample_t *inputBuffer = static_cast<sample_t*>
+                (jack_port_get_buffer(inst->getJackInputPort(),
+                                      nframes));
+            std::cout << "AlsaDriver::jackProcess - recording audio"
+                      << std::endl;
+        }
 
         // Return if we're not playing yet
         //

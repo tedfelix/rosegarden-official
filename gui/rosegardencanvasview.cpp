@@ -46,6 +46,10 @@ void RosegardenCanvasView::slotUpdate()
 
     canvas()->update();
 
+    // for the moment remove the hack so we get clean playback
+    //
+    return;
+
     // Ugly hack needed for Qt3 : otherwise we get dummy min/max
     // values from horizontalScrollBar()
     //
