@@ -112,6 +112,9 @@ public:
     LayoutEngine* getHorizontalLayoutEngine() { return m_hlayout; }
     LayoutEngine* getVerticalLayoutEngine()   { return m_vlayout; }
 
+    /// Return the number of staffs
+    int getStaffCount() { return m_staffs.size(); }
+
     /// Return a pointer to the staff at the specified index
     Staff* getStaff(int i) { return m_staffs[i]; }
 
@@ -340,17 +343,23 @@ protected:
                   NotationElementList::iterator to);
 
     /**
+     * find the Staff whose Y coord range includes y, and return the
+     * index of that Staff in m_staffs.  If no Staff is suitable,
+     * return -1.
+     */
+    int findClosestStaff(double y);
+
+    /**
      * find the NotationElement which X coord is closest to x
      *
      * If the closest event is further than \a proximityThreshold,
      * (in pixels), end() is returned;
      */
-//!!! This currently always returns on staff 0
     NotationElementList::iterator findClosestNote(double x,
                                                   Rosegarden::Event *&timeSignature,
                                                   Rosegarden::Event *&clef,
                                                   Rosegarden::Event *&key,
-                                                  int &staffNo,
+                                                  int staffNo,
                                                   unsigned int proximityThreshold = 10);
 
     /**

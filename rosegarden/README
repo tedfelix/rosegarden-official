@@ -1,9 +1,48 @@
-How to compile :
 
-- edit the 'gl_configure' script (you just need to change the Qt and
-KDE2 install paths according to your setup).
+Rosegarden-4 v0.1
+=================
 
-- run it
+Rosegarden-4 is a new sequencer and musical notation editor
+application.  This is an early release of the application, intended
+for potential developers and other interested parties.  It is not an
+application that is usable by real users yet.
 
-- make
+Note that Rosegarden-4 is not based on Rosegarden-2.1 code and is not
+yet a solution for people who find Rosegarden-2.1 in any way
+unreliable or limiting.  This program is far more unreliable and far
+more limiting.
 
+
+Build requirements
+------------------
+
+The big requirement is KDE.  This program depends on KDE 2.1.1
+(including the kdemultimedia package) and Qt 2.2.
+
+
+To compile:
+-----------
+
+You probably won't be able to just run "configure"; instead you should
+edit one of the developers' configure scripts such as "gl_configure"
+script (you just need to change the Qt and KDE2 install paths
+according to your setup) and run that.
+
+Then run "make" and, if the compile succeeds, "make install".  (The
+pixmaps need to be installed to the global KDE directories before the
+application will run correctly.)
+
+
+To run:
+-------
+
+Just run the rosegardengui application (found in the KDE bin directory
+after installation, and also in the gui/ directory of the source tree).
+
+To get the sequencer working properly, you need to use artsd and run
+the separate rosegardensequencer process.  Please read
+docs/howtos/artsd-mcop-notes for instructions.
+
+
+
+Guillaume Laurent, Chris Cannam, Richard Bown

@@ -84,7 +84,7 @@ public:
      */
     unsigned int getBarMargin() const { return m_resolution * 2; }
 
-    /// Return the total height of a staff
+    /// Return the total height of a staff.
     unsigned int getStaffHeight() const {
 	return m_resolution * nbLines + linesOffset * 2 + 1;
     }

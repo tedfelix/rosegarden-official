@@ -151,7 +151,7 @@ void Track::calculateBarPositions()
 
         if (absoluteTime - barStartTime >= barDuration) {
             addNewBar(absoluteTime, false, barStartTime, timeSignature);
-            barStartTime += barDuration;  //= absoluteTime;
+            barStartTime += barDuration;
         }
 
         if (e->isa(TimeSignature::EventType)) {
@@ -343,6 +343,7 @@ Track::iterator Track::findTime(timeT t)
 {
     Event dummy;
     dummy.setAbsoluteTime(t);
+    dummy.setSubOrdering(-100000);
     return lower_bound(&dummy);
 }
 

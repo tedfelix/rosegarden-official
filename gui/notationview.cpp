@@ -664,7 +664,9 @@ bool NotationView::showBars(int staffNo,
 	} else {
 	    kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
 				 << " at pos " << it->x << endl;
-	    staff->insertBar(it->x, barPositions[it->barNo].correct);
+	    if (it->barNo >= 0) {
+		staff->insertBar(it->x, barPositions[it->barNo].correct);
+	    }
 	}
     }
     
@@ -1167,21 +1169,29 @@ void NotationView::slotEraseSelected()
 void NotationView::itemClicked(int height, const QPoint &eventPos,
                                NotationElement* el)
 {
-    //!!! Locate element on a staff, and pass staff number
     m_tool->handleClick(height, eventPos, el);
 }
 
+int
+NotationView::findClosestStaff(double eventY)
+{
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	int top = m_staffs[i]->getStaffHeight() * i;
+	int bottom = top + m_staffs[i]->getStaffHeight() + 15;
+	if (eventY >= top && eventY < bottom) return i;
+    }
+    return -1;
+}
+
+
 NotationElementList::iterator
 NotationView::findClosestNote(double eventX, Event *&timeSignature,
-			      Event *&clef, Event *&key, int &staffNo,
+			      Event *&clef, Event *&key, int staffNo,
 			      unsigned int proximityThreshold)
 {
     double minDist = 10e9,
         prevDist = 10e9;
 
-    //!!! Must be made to work for multiple staffs, but this depends
-    // somewhat on ability to render multiple staffs first...
-    staffNo = 0;
     NotationElementList *notes = m_staffs[staffNo]->getNotationElementList();
 
     NotationElementList::iterator it, res;
@@ -1195,16 +1205,13 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
             if ((*it)->event()->isa(Clef::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
                                      << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
-		//          clef = Clef(*(*it)->event());
 		clef = (*it)->event();
             } else if ((*it)->event()->isa(TimeSignature::EventType)) {
-	      kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
-	      //          tsig = TimeSignature(*(*it)->event());
-	        timeSignature = (*it)->event();
+		kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
+		timeSignature = (*it)->event();
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
                                      << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
-		//          key = Rosegarden::Key(*(*it)->event());
 		key = (*it)->event();
             }
             continue;
@@ -1324,7 +1331,9 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
                           NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
-    int staffNo = 0;
+
+    int staffNo = m_parentView.findClosestStaff(eventPos.y());
+    if (staffNo < 0) return;
 
     NotationElementList::iterator closestNote =
         m_parentView.findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
@@ -1401,7 +1410,9 @@ void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
                                NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
-    int staffNo = 0;
+
+    int staffNo = m_parentView.findClosestStaff(eventPos.y());
+    if (staffNo < 0) return;
 
     NotationElementList::iterator closestNote =
         m_parentView.findClosestNote
@@ -1432,12 +1443,21 @@ void NotationEraser::handleClick(int, const QPoint&,
                                  NotationElement* element)
 {
     bool needLayout = false;
-    int staffNo = 0; //!!!
+    if (!element) return;
 
-    if (!element) { 
-	//!!! Beep or something
-	return;
+    // discover (slowly) which staff contains element
+    int staffNo = -1;
+    for (int i = 0; i < m_parentView.getStaffCount(); ++i) {
+
+	NotationElementList *nel =
+	    m_parentView.getStaff(i)->getNotationElementList(); 
+
+	if (nel->findSingle(element) != nel->end()) {
+	    staffNo = i;
+	    break;
+	}
     }
+    if (staffNo == -1) return;
 
     TrackNotationHelper nt
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());

@@ -718,7 +718,7 @@ MidiFile::convertToRosegarden()
 
       notationTrack.autoBeam
           (rosegardenTrack->begin(), rosegardenTrack->end(),
-           "beamed"); // probably shouldn't be hardcoded!
+           "beamed"); //!!! probably shouldn't be hardcoded!
     }
   }
 

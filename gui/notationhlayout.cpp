@@ -185,7 +185,7 @@ NotationHLayout::preparse(Staff &staff,
     
     for (int barNo = firstBar; barNo <= lastBar; ++barNo) {
 
-        kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << endl;
+        kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << " with start time " << barPositions[barNo].start << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;
@@ -193,6 +193,16 @@ NotationHLayout::preparse(Staff &staff,
 
         NotationElementList::iterator from =
             notes->findTime(barPositions[barNo].start);
+
+	if (barPositions[barNo].start == 0 &&
+	    from != notes->begin()) {
+	    kdDebug(KDEBUG_AREA) << "preparse: bar starts at time 0, but position is not at start of list!  Elts from start:" << endl;
+	    for (NotationElementList::iterator ii(notes->begin());
+		 ii != from; ++ii) {
+		(*ii)->event()->dump(std::cout);
+	    }
+	}
+	    
 
         NotationElementList::iterator to;
         if (barNo < (int)barPositions.size() - 1) {
@@ -349,7 +359,7 @@ NotationHLayout::addNewBar(Staff &staff,
 			   int barNo,  NotationElementList::iterator start,
                            int width, int fwidth)
 {
-    m_barData[&staff].push_back(BarData(barNo, start, -1, width, fwidth));
+   m_barData[&staff].push_back(BarData(barNo, start, -1, width, fwidth));
 }
 
 
@@ -421,6 +431,15 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
 void
 NotationHLayout::reconcileBars()
 {
+    // Scoot through the staffs, prepending fake bars to the start of
+    // the bar list for any staff that doesn't begin right at the
+    // start of the composition
+
+    
+    
+	
+
+
     // Ensure that concurrent bars on all staffs have the same width,
     // which for now we make the maximum width required for this bar
     // on any staff

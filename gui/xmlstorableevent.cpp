@@ -50,7 +50,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
         } else if (attrName == "subordering") {
 
             bool isNumeric = true;
-            int o = attrVal.toUInt(&isNumeric);
+            int o = attrVal.toInt(&isNumeric);
 
             if (!isNumeric) {
                 kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Bad subordering: " << attrVal << endl;
@@ -61,7 +61,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
         } else if (attrName == "duration") {
 
             bool isNumeric = true;
-            timeT d = attrVal.toUInt(&isNumeric);
+            timeT d = attrVal.toInt(&isNumeric);
 
             if (!isNumeric) {
 		try {
