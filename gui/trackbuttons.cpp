@@ -37,6 +37,7 @@
 #include "tracklabel.h"
 #include "AudioPluginInstance.h"
 #include "PluginIdentifier.h"
+#include "AudioLevel.h"
 
 #include "segmentcommands.h"
 #include "rosestrings.h"
@@ -659,13 +660,17 @@ TrackButtons::slotRenameTrack(QString newName, Rosegarden::TrackId trackId)
 
 
 void
-TrackButtons::slotSetTrackMeter(double value, int position)
+TrackButtons::slotSetTrackMeter(float value, int position)
 {
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Studio &studio = m_doc->getStudio();
+    Rosegarden::Track *track;
+
     for (unsigned int i = 0; i < m_trackMeters.size(); ++i)
     {
         if (i == ((unsigned int)position))
         {
-            m_trackMeters[i]->setLevel(value);
+	    m_trackMeters[i]->setLevel(value);
             return;
         }
     }
@@ -676,25 +681,20 @@ TrackButtons::slotSetTrackMeter(double value, int position)
 // equate that to the Instrument we're setting.
 //
 void
-TrackButtons::slotSetMetersByInstrument(double value,
+TrackButtons::slotSetMetersByInstrument(float value,
                                         Rosegarden::InstrumentId id)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::Track *track;
 
     for (unsigned int i = 0; i < m_trackMeters.size(); ++i)
     {
         track = comp.getTrackByPosition(i);
 
-        if (track !=0 && track->getInstrument() == id)
+        if (track != 0 && track->getInstrument() == id)
         {
-            m_trackMeters[i]->setLevel(value);
-
-            /*
-            RG_DEBUG << "TrackButtons::slotSetMetersByInstrument - "
-                     << "setting level = " << value 
-                     << " on instrument " << id << endl;
-                     */
+	    m_trackMeters[i]->setLevel(value);
         }
     }
 }

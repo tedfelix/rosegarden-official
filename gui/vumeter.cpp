@@ -471,7 +471,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
 	    paint->drawRect(0, 0, width(), height());
 
             int x = (m_levelLeft * width()) / m_maxLevel;
-            paint->drawRect(0, 0, x, height());
+	    if (x > 0) paint->drawRect(0, 0, x, height());
 
             if (m_showPeakLevel)
             {
@@ -520,7 +520,7 @@ VUMeter::drawMeterLevel(QPainter* paint)
         else
         {
             int x = (m_levelLeft * width()) / m_maxLevel;
-	    drawColouredBar(paint, 0, 0, 0, x, height());
+	    if (x > 0) drawColouredBar(paint, 0, 0, 0, x, height());
 
 	    paint->setPen(m_background);
 	    paint->setBrush(m_background);

@@ -185,8 +185,8 @@ public slots:
     void slotToggleMutedTrack(int mutedTrack);
     void slotUpdateTracks();
     void slotRenameTrack(QString newName, Rosegarden::TrackId trackId);
-    void slotSetTrackMeter(double value, int position);
-    void slotSetMetersByInstrument(double value, Rosegarden::InstrumentId id);
+    void slotSetTrackMeter(float value, int position);
+    void slotSetMetersByInstrument(float value, Rosegarden::InstrumentId id);
 
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);

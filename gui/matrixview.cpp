@@ -49,6 +49,7 @@
 #include "BaseProperties.h"
 #include "Profiler.h"
 #include "Property.h"
+#include "AudioLevel.h"
 
 #include "matrixview.h"
 #include "matrixstaff.h"
@@ -2602,6 +2603,30 @@ MatrixView::slotStepByStepTargetRequested(QObject *obj)
 	return;
     }
     action->setChecked(obj == this);
+}
+
+void
+MatrixView::slotInstrumentLevelsChanged(Rosegarden::InstrumentId id,
+					const Rosegarden::LevelInfo &info)
+{
+    if (!m_parameterBox) return;
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+
+    Rosegarden::Track *track =
+        comp.getTrackById(m_staffs[0]->getSegment().getTrack());
+    if (!track || track->getInstrument() != id) return;
+
+    Rosegarden::Instrument *instr = getDocument()->getStudio().
+        getInstrumentById(track->getInstrument());
+    if (!instr || instr->getType() != Rosegarden::Instrument::SoftSynth) return;
+
+    float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	(info.level, 127, Rosegarden::AudioLevel::LongFader);
+    float dBright = Rosegarden::AudioLevel::fader_to_dB
+	(info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+    
+    m_parameterBox->setAudioMeter(dBleft, dBright);
 }
 
 void

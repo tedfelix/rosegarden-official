@@ -34,6 +34,7 @@
 #include "Quantizer.h"
 #include "MappedInstrument.h"
 #include "PropertyName.h"
+#include "SequencerDataBlock.h" // for LevelInfo
 
 #include "editview.h"
 #include "matrixcanvasview.h"
@@ -436,6 +437,9 @@ public slots:
 
     /// The given QObject has originated a step-by-step-editing request
     void slotStepByStepTargetRequested(QObject *);
+
+    void slotInstrumentLevelsChanged(Rosegarden::InstrumentId,
+				     const Rosegarden::LevelInfo &);
 
 protected slots:
      void slotCanvasBottomWidgetHeightChanged(int newHeight);

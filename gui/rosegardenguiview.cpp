@@ -566,6 +566,12 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 	    matrixView, SLOT(slotCompositionStateUpdate()));
     connect(this, SIGNAL(compositionStateUpdate()),
 	    matrixView, SLOT(slotCompositionStateUpdate()));
+    connect(this,
+	    SIGNAL(instrumentLevelsChanged(Rosegarden::InstrumentId,
+					   const Rosegarden::LevelInfo &)),
+	    matrixView,
+	    SLOT(slotInstrumentLevelsChanged(Rosegarden::InstrumentId,
+					     const Rosegarden::LevelInfo &)));
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view
@@ -1027,22 +1033,34 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 void
 RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 {
-    std::set<Rosegarden::InstrumentId> doneInstruments;
+    const int unknownState = 0, oldState = 1, newState = 2;
+
+    typedef std::map<Rosegarden::InstrumentId, int> StateMap;
+    static StateMap states;
+
+    typedef std::map<Rosegarden::InstrumentId, Rosegarden::LevelInfo> LevelMap;
+    static LevelMap levels;
+
+    for (StateMap::iterator i = states.begin(); i != states.end(); ++i) {
+	i->second = unknownState;
+    }
 
     for (Rosegarden::Composition::trackcontainer::iterator i =
 	     getDocument()->getComposition().getTracks().begin();
 	 i != getDocument()->getComposition().getTracks().end(); ++i) {
 
 	Rosegarden::Track *track = i->second;
-
-	Rosegarden::LevelInfo info;
-	bool isNew = mapper->getInstrumentLevel(track->getInstrument(), info);
+	if (!track) continue;
 
 	Rosegarden::InstrumentId instrumentId = track->getInstrument();
-	if (doneInstruments.find(instrumentId) != doneInstruments.end()) {
-	    continue;
+
+	if (states[instrumentId] == unknownState) {
+	    bool isNew =
+		mapper->getInstrumentLevel(instrumentId, levels[instrumentId]);
+	    states[instrumentId] = (isNew ? newState : oldState);
 	}
-	doneInstruments.insert(instrumentId);
+
+	if (states[instrumentId] == oldState) continue;
 
 	Rosegarden::Instrument *instrument =
 	    getDocument()->getStudio().getInstrumentById(instrumentId);
@@ -1056,8 +1074,8 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	}
         */
 
-	if (!isNew) continue;
-	
+	Rosegarden::LevelInfo &info = levels[instrumentId];
+
 	if (instrument->getType() == Rosegarden::Instrument::Audio ||
 	    instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 
@@ -1077,13 +1095,8 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 		m_instrumentParameterBox->setAudioMeter(dBleft, dBright);
 	    }
 
-	    if (instrument->getAudioChannels() > 1) {
-		m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		    ((info.level + info.levelRight) / 254.0, track->getId());
-	    } else {
-		m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		    ((info.level + info.levelRight) / 127.0, track->getId());
-	    }
+	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
+		((info.level + info.levelRight) / 254.0, track->getId());
 
 	} else {
 
@@ -1098,6 +1111,12 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
 	    m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
 		(info.level / 127.0, instrumentId);
+	}
+    }
+
+    for (StateMap::iterator i = states.begin(); i != states.end(); ++i) {
+	if (i->second == newState) {
+	    emit instrumentLevelsChanged(i->first, levels[i->first]);
 	}
     }
 }    

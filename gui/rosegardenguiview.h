@@ -37,7 +37,8 @@
 #include "AudioFile.h"
 #include "MappedCommon.h"
 #include "Track.h"
-#include "Event.h" // for timeT
+#include "Event.h" // for time
+#include "SequencerDataBlock.h" // for LevelInfo
 
 namespace Rosegarden { 
     class Composition; 
@@ -302,6 +303,9 @@ signals:
     void addAudioFile(Rosegarden::AudioFileId);
 
     void checkTrackAssignments();
+
+    void instrumentLevelsChanged(Rosegarden::InstrumentId,
+				 const Rosegarden::LevelInfo &);
 
 protected:
 
