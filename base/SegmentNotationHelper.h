@@ -137,7 +137,7 @@ public:
      * Deletes a note, doing all the clever split/merge stuff as
      * appropriate.  Requires up-to-date bar position list.
      */
-    void deleteNote(Event *e);
+    void deleteNote(Event *e, bool collapseRest = false);
 
     /**
      * Deletes a rest, doing all the clever split/merge stuff as

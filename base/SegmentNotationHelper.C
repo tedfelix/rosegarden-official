@@ -551,7 +551,7 @@ void TrackNotationHelper::insertClef(timeT absoluteTime, Clef clef)
 }
 
 
-void TrackNotationHelper::deleteNote(Event *e)
+void TrackNotationHelper::deleteNote(Event *e, bool collapseRest)
 {
     iterator i = track().findSingle(e);
 
@@ -568,10 +568,12 @@ void TrackNotationHelper::deleteNote(Event *e)
 	insert(newRest);
 	erase(i);
 
-	//!!! not convinced -- cc
 	// collapse the new rest
-//        bool collapseForward;
-//	collapse(newRest, collapseForward);
+        if (collapseRest) {
+            bool dummy;
+            collapse(newRest, dummy);
+        }
+
     }
 }
 
