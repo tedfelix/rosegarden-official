@@ -18,11 +18,13 @@
 #include "notationvlayout.h"
 
 NotationVLayout::NotationVLayout()
+    : m_pitchToHeight(PitchToHeight::instance())
 {
 }
 
 void
 NotationVLayout::layout(Element2 *el)
 {
-    el->set<Int>("Notation::Y", 10);
+    unsigned int pitch = el->get<Int>("pitch");
+    el->set<Int>("Notation::Y", m_pitchToHeight[pitch]);
 }

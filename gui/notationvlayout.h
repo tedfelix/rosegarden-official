@@ -18,7 +18,8 @@
 #ifndef NOTATIONVLAYOUT_H
 #define NOTATIONVLAYOUT_H
 
-#include <layoutengine.h>
+#include "layoutengine.h"
+#include "pitchtoheight.h"
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
@@ -29,6 +30,8 @@ public:
     NotationVLayout();
 protected:
     virtual void layout(Element2*);
+
+    PitchToHeight& m_pitchToHeight;
 };
 
 #endif
