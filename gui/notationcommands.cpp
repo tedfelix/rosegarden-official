@@ -252,7 +252,8 @@ EraseCommand::modifySegment()
 	helper.deleteRest(m_event);
 	return;
 	
-    } else if (eventType == Clef::EventType) {
+    } else if (eventType == Rosegarden::Clef::EventType ||
+	       eventType == Rosegarden::Key::EventType) {
 
 	helper.segment().eraseSingle(m_event);
 	m_relayoutEndTime = helper.segment().getEndTime();

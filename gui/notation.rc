@@ -86,6 +86,16 @@ etc
   <Action name="dotted_32nd_rest" />
 </Menu>
 
+<Menu noMerge="1" name="Clefs">
+  <text>&amp;Clefs</text>
+  <Action name="treble_clef" />
+  <Action name="tenor_clef" />
+  <Action name="alto_clef" />
+  <Action name="bass_clef" />
+</Menu>
+
+<Separator/>
+
 <Menu noMerge="1" name="Accidentals">
   <text>&amp;Accidentals</text>
   <Action name="no_accidental" />
@@ -94,14 +104,6 @@ etc
   <Action name="natural_accidental" />
   <Action name="double_sharp_accidental" />
   <Action name="double_flat_accidental" />
-</Menu>
-
-<Menu noMerge="1" name="Clefs">
-  <text>&amp;Clefs</text>
-  <Action name="treble_clef" />
-  <Action name="tenor_clef" />
-  <Action name="alto_clef" />
-  <Action name="bass_clef" />
 </Menu>
 
 </Menu>
