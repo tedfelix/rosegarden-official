@@ -1644,7 +1644,7 @@ SequencerConfigurationPage::apply()
     // if needed.
     //
     Rosegarden::Studio &studio = m_doc->getStudio();
-    Rosegarden::MidiMetronome *metronome = studio.
+    const Rosegarden::MidiMetronome *metronome = studio.
         getMetronomeFromDevice(studio.getMetronomeDevice());
 
     if (metronome)
