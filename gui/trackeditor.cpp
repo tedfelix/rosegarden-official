@@ -398,6 +398,7 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks)
     for (unsigned int i = 0; i < nbNewTracks; ++i) {
         Track* track = new Rosegarden::Track;
         track->setID(i + currentNbTracks);
+        track->setPosition(i + currentNbTracks);
 
         composition.addTrack(track);
     }
