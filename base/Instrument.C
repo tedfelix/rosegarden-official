@@ -84,13 +84,24 @@ Instrument::~Instrument()
 }
 
 // Implementation of the virtual method to output this class
-// as XML
+// as XML.  We don't send out the name as it's redundant in
+// the file - that is driven from the sequencer.
 //
 //
 std::string
 Instrument::toXmlString()
 {
+
     std::stringstream instrument;
+
+    // We don't send system Instruments out this way -
+    // only user Instruments.
+    //
+    if (m_id < AudioInstrumentBase)
+    {
+        instrument << std::ends;
+        return instrument.str();
+    } 
 
     // only export if there's anything worth sending
     //
@@ -125,30 +136,30 @@ Instrument::toXmlString()
             break;
     }
 
-    instrument << "\" name=\"" << m_name << "\">" << std::endl;
+    instrument << "\">" << std::endl;
 
     if (m_sendBankSelect)
     {
-        instrument << "        <bank msb=\"" << (int)m_msb;
+        instrument << "            <bank msb=\"" << (int)m_msb;
         instrument << "\" lsb=\"" << (int)m_lsb << "\"/>" << std::endl;
     }
 
     if (m_sendProgramChange)
     {
-        instrument << "        <program id=\""
+        instrument << "            <program id=\""
                    << (int)m_programChange << "\"/>"
                    << std::endl;
     }
     
     if (m_sendPan)
     {
-        instrument << "        <pan value=\""
+        instrument << "            <pan value=\""
                    << (int)m_pan << "\"/>" << std::endl;
     }
 
     if (m_sendVelocity)
     {
-        instrument << "        <velocity value=\""
+        instrument << "            <velocity value=\""
                    << (int)m_velocity << "\"/>" << std::endl;
     }
 

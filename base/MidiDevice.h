@@ -62,8 +62,15 @@ public:
     //
     StringList getBankList();
 
+    // Add either
+    //
     void addProgram(MidiProgram *program);
     void addBank(MidiBank *bank);
+
+    // Clear down both banks and programs
+    //
+    void clearBankList();
+    void clearProgramList();
 
     // Retreive some stuff
     //
@@ -76,7 +83,6 @@ public:
     virtual InstrumentList& getPresentationInstruments();
 
 private:
-    void clearProgramList();
     void generatePresentationList();
 
     // Brief (probably incorrect) synopsis of bank select 

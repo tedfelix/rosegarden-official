@@ -106,10 +106,11 @@ protected:
 
     QString m_errorString;
 
-    RosegardenFileSection m_section;
-    Rosegarden::Device *m_device;
-    Rosegarden::MidiByte m_msb;
-    Rosegarden::MidiByte m_lsb;
+    RosegardenFileSection   m_section;
+    Rosegarden::Device     *m_device;
+    Rosegarden::MidiByte    m_msb;
+    Rosegarden::MidiByte    m_lsb;
+    Rosegarden::Instrument *m_instrument;
 
 };
 

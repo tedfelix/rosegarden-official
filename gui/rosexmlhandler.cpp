@@ -65,7 +65,8 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_section(NoSection),
       m_device(0),
       m_msb(0),
-      m_lsb(0)
+      m_lsb(0),
+      m_instrument(0)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbSegments()
@@ -182,11 +183,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        // Only clear the Studio if we're loading a new one
+        // In the Studio we clear down everything apart from Devices and
+        // Instruments before we reload.  Instruments are derived from
+        // the Sequencer, the bank/program information is loaded from
+        // the file we're currently examining.
         //
-        //m_studio.clear();
-
-        m_section = InStudio;
+        //
+        m_studio.clearMidiBanksAndPrograms();
+        m_section = InStudio; // set top level section
 
     } else if (lcName == "timesignature") {
 
@@ -526,7 +530,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         QString type = (atts.value("type")).lower();
         QString idString = atts.value("id");
             
-        if (idString == "")
+        if (idString.isNull())
         {
             m_errorString = i18n("No ID on Device tag");
             return false;
@@ -547,9 +551,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (m_device) // only if we have a device
         {
-            if (m_section != InStudio)
+            if (m_section != InStudio && m_section != InInstrument)
             {
-                m_errorString = i18n("Found Bank outside Studio");
+                m_errorString = i18n("Found Bank outside Studio or Instrument");
                 return false;
             }
 
@@ -557,17 +561,32 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_msb = (atts.value("msb")).toInt();
             m_lsb = (atts.value("lsb")).toInt();
 
-            // Create a new bank
-            Rosegarden::MidiBank *bank = new Rosegarden::MidiBank();
-            bank->msb = m_msb;
-            bank->lsb = m_lsb;
-            bank->name = std::string(nameStr.data());
-    
-            if (m_device->getType() == Rosegarden::Device::Midi)
+            // To actually create a bank
+            //
+            if (m_section == InStudio)
             {
-                // Insert the bank
-                //
-                dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addBank(bank);
+                // Create a new bank
+                Rosegarden::MidiBank *bank = new Rosegarden::MidiBank();
+                bank->msb = m_msb;
+                bank->lsb = m_lsb;
+                bank->name = std::string(nameStr.data());
+    
+                if (m_device->getType() == Rosegarden::Device::Midi)
+                {
+                    // Insert the bank
+                    //
+                    dynamic_cast<Rosegarden::MidiDevice*>(m_device)->addBank(bank);
+                }
+            }
+            else // otherwise we're referencing it in an instrument
+            if (m_section == InInstrument)
+            {
+                if (m_instrument)
+                {
+                    m_instrument->setMSB(m_msb);
+                    m_instrument->setLSB(m_lsb);
+                    m_instrument->setSendBankSelect(true);
+                }
             }
         }
 
@@ -598,7 +617,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             }
             else if (m_section == InInstrument)
             {
-                Rosegarden::MidiByte id = atts.value("id").toInt();
+                if (m_instrument)
+                {
+                    Rosegarden::MidiByte id = atts.value("id").toInt();
+                    m_instrument->setProgramChange(id);
+                    m_instrument->setSendProgramChange(true);
+                }
             }
             else
             {
@@ -606,6 +630,38 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                     i18n("Found Program outside Studio and Instrument");
                 return false;
             }
+        }
+
+    } else if (lcName == "pan") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Pan outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+        {
+            m_instrument->setPan(value);
+            m_instrument->setSendPan(true);
+        }
+
+    } else if (lcName == "velocity") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Pan outside Instrument");
+            return false;
+        }
+
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+        {
+            m_instrument->setVelocity(value);
+            m_instrument->setSendVelocity(true);
         }
 
     } else if (lcName == "metronome") {
@@ -659,27 +715,23 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
             
-        std::string name = std::string(atts.value("name").data());
+        // Try and match an Instrument in the file with one in
+        // our studio
+        //
+        Rosegarden::Instrument *instrument = m_studio.getInstrumentById(id);
 
-        // This code should only try to match the Instrument and
-        // import relevant settings if a match is made.  If not
-        // we ignore the Instrument in the file.
+        // If we've got an instrument and the types match then
+        // we use it from now on.
         //
-        //
-        if (m_device) // only if we have a device
+        if (instrument && instrument->getType() == type)
         {
-            // Create the instrument
-            /*
-            Rosegarden::Instrument *inst =
-                new Rosegarden::Instrument(id,
-                                           type,
-                                           name,
-                                           m_device);
+            m_instrument = instrument;
 
-            // and insert into the current device
-            m_device->addInstrument(inst);
-            */
-
+            // We can also get the channel from this tag
+            //
+            Rosegarden::MidiByte channel =
+                    (Rosegarden::MidiByte)atts.value("channel").toInt();
+            m_instrument->setMidiChannel(channel);
         }
 
     } else {
@@ -733,6 +785,8 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     } else if (lcName == "instrument") {
 
         m_section = InStudio;
+        m_instrument = 0;
+
     } else if (lcName == "device") {
 
         m_device = 0;

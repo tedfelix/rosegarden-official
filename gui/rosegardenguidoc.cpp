@@ -535,7 +535,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     if (mC.size() > 0)
     { 
         Rosegarden::MappedComposition::iterator i;
-        Rosegarden::Event *rEvent;
+        Rosegarden::Event *rEvent = 0;
         timeT duration, absTime;
 
         // process all the incoming MappedEvents
@@ -596,6 +596,11 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    continue;
                    break;
             }
+
+            // sanity check
+            //
+            if (rEvent == 0)
+                continue;
 
             // Set the start index and then insert into the Composition
             // (if we haven't before)

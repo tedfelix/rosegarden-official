@@ -63,24 +63,15 @@ MidiDevice::~MidiDevice()
 void
 MidiDevice::createInstruments()
 {
-    /*
-    char instNum[100];
+    // initialise metronome
+    m_metronome->instrument = 0;
+    m_metronome->msb = 0;
+    m_metronome->lsb = 0;
+    m_metronome->program = 0;
+    m_metronome->pitch = 0;
 
-    for (InstrumentId i = 0; i < 16; i++)
-    {
-        sprintf(instNum, "%d", i);
-        std::string name = m_name.c_str()+
-                           std::string(" #") +std::string(instNum);
-
-        m_instruments.push_back(
-            new Instrument(i + MidiInstrumentBase,        // id
-                           Instrument::Midi,              // type
-                           name,                          // name
-                           (MidiByte)i,                   // channel
-                           dynamic_cast<Device*>(this))); // parent device 
-    }
-    */
-
+    // Create metronome instrument
+    //
     m_instruments.push_back(
         new Instrument(SystemInstrumentBase + 1,      // Metronome ID
                        Instrument::Midi,              // type
@@ -293,6 +284,21 @@ MidiDevice::getProgramName(MidiByte msb, MidiByte lsb, MidiByte program)
 
     return std::string("");
 }
+
+
+// Clear down banks
+//
+void
+MidiDevice::clearBankList()
+{
+    std::vector<MidiBank*>::iterator it;
+
+    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
+        delete(*it);
+
+    m_bankList->erase(m_bankList->begin(), m_bankList->end());
+}
+
 
 }
 

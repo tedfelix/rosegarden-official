@@ -80,6 +80,13 @@ public:
     //
     void unassignAllInstruments();
 
+    // Clear down all MIDI banks and programs on all MidiDevices
+    // prior to reloading.  The Instruments and Devices are generated
+    // at the Sequencer - the Banks and Programs are loaded from the
+    // RG4 file.
+    //
+    void clearMidiBanksAndPrograms();
+
     // Clear down
     void clear();
 

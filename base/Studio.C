@@ -361,6 +361,24 @@ Studio::unassignAllInstruments()
     }
 }
 
+void
+Studio::clearMidiBanksAndPrograms()
+{
+    MidiDevice *midiDevice;
+    std::vector<Device*>::iterator it;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+        {
+            midiDevice->clearProgramList();
+            midiDevice->clearBankList();
+        }
+    }
+}
+
 Device*
 Studio::getDevice(DeviceId id)
 {
