@@ -1458,6 +1458,10 @@ void RosegardenGUIApp::slotSaveOptions()
     kapp->config()->writeEntry("Show Previews",                m_viewPreviews->isChecked());
     kapp->config()->writeEntry("Show Parameters",              m_dockLeft->isVisible());
 
+#ifdef SETTING_LOG_DEBUG
+    RG_DEBUG << "SHOW PARAMETERS = " << m_dockLeft->isVisible() << endl;
+#endif
+
     m_fileRecent->saveEntries(kapp->config());
 
     saveMainWindowSettings(kapp->config(), RosegardenGUIApp::MainWindowConfigGroup);
@@ -1599,6 +1603,7 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 
 bool RosegardenGUIApp::queryClose()
 {
+    RG_DEBUG << "RosegardenGUIApp::queryClose" << endl;
 #ifdef SETTING_LOG_DEBUG
     _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(m_transport->isExpanded()));
     _settingLog(QString("SETTING 1 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
@@ -1617,13 +1622,17 @@ bool RosegardenGUIApp::queryClose()
                    this, SLOT(slotCloseTransport()));
     }
 
+    // Don't do this in queryExit
+    //
+    if (m_actionsSetup) slotSaveOptions();
+
     return canClose;
 
 }
 
 bool RosegardenGUIApp::queryExit()
 {
-    if (m_actionsSetup) slotSaveOptions();
+    RG_DEBUG << "RosegardenGUIApp::queryExit" << endl;
     return true;
 }
 
