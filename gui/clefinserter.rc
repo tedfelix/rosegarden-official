@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::NotationTool" version="099">
+<kpartgui name="Rosegarden::NotationTool" version="0991">
 
 <Menu noMerge="1" name="ClefInserter">
   <Action name="select" />

@@ -141,10 +141,10 @@ void RosegardenCanvasView::doAutoScroll()
     if (m_scrollDirectionConstraint & FollowVertical) {
         if ( p.y() < m_autoScrollYMargin ) {
             dy = -(int(m_minDeltaScroll));
-            scrollDirection = Left;
+            scrollDirection = Top;
         } else if ( p.y() > visibleHeight() - m_autoScrollYMargin ) {
             dy = +(int(m_minDeltaScroll));
-            scrollDirection = Right;
+            scrollDirection = Bottom;
         }
     }
     bool startDecelerating = false;
@@ -154,15 +154,15 @@ void RosegardenCanvasView::doAutoScroll()
 		startDecelerating = true;
 	        m_minDeltaScroll /= ScrollAccelValue;
 	    }
-            scrollDirection = Top;
             dx = -(int(m_minDeltaScroll));
+            scrollDirection = Left;
         } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
 	    if ( dp.x() < 0 ) {
 		startDecelerating = true;
 	        m_minDeltaScroll /= ScrollAccelValue;
 	    }
-            scrollDirection = Bottom;
             dx = +(int(m_minDeltaScroll));
+            scrollDirection = Right;
         }
     }
     

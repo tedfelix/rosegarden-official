@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="BankEditor" version="099">
+<kpartgui name="BankEditor" version="0991">
 
 <MenuBar>
   <Menu name="file">

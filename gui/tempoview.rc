@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::TempoView" version="099">
+<kpartgui name="Rosegarden::TempoView" version="0991">
 
 <MenuBar>
 
