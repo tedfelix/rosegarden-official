@@ -702,6 +702,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                          qstrtostr(file),
                                          id.toInt()) == false)
         {
+            // Freeze the progress dialog
+            CurrentProgressDialog::freeze();
+
             // Create a locate file dialog - give it the file name
             // and the AudioFileManager path that we've already
             // tried.  If we manually locate the file then we reset
@@ -711,7 +714,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             QString newFilename = "";
             QString newPath = "";
-
+            
             do
             {
 
@@ -739,6 +742,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 getAudioFileManager().setAudioPath(qstrtostr(newPath));
 
             getAudioFileManager().print();
+
+            // Restore progress dialog's normal state
+            CurrentProgressDialog::thaw();
+
         }
         
     } else if (lcName == "audiopath") {
