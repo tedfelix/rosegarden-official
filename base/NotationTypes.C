@@ -534,6 +534,22 @@ Text::~Text()
     // nothing
 }
 
+std::vector<std::string>
+Text::getUserStyles()
+{
+    std::vector<std::string> v;
+
+    v.push_back(UnspecifiedType);
+    v.push_back(Dynamic);
+    v.push_back(Lyric);
+    v.push_back(Direction);
+    v.push_back(LocalDirection);
+    v.push_back(Tempo);
+    v.push_back(LocalTempo);
+
+    return v;
+}
+
 Event *
 Text::getAsEvent(timeT absoluteTime) const
 {

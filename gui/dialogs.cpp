@@ -908,3 +908,93 @@ TupletDialog::slotTupledChanged(const QString &)
     updateTimingDisplays();
 }
 
+
+
+TextEventDialog::TextEventDialog(QWidget *parent,
+				 NotePixmapFactory *npf,
+				 std::string defaultText,
+				 std::string defaultType,
+				 int maxLength) :
+    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel),
+    m_notePixmapFactory(npf)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *entryBox = new QGroupBox
+	(1, Horizontal, i18n("Text specification"), vbox);
+    QGroupBox *exampleBox = new QGroupBox
+	(1, Horizontal, i18n("Example"), vbox);
+
+    QGrid *entryGrid = new QGrid(2, QGrid::Horizontal, entryBox);
+
+    new QLabel(i18n("Text:"), entryGrid);
+    m_text = new QLineEdit(entryGrid);
+    m_text->setText(defaultText.c_str());
+    if (maxLength > 0) m_text->setMaxLength(maxLength);
+
+    new QLabel(i18n("Style:"), entryGrid);
+    m_typeCombo = new QComboBox(false, entryGrid);
+    std::vector<std::string> styles = Rosegarden::Text::getUserStyles();
+    for (unsigned int i = 0; i < styles.size(); ++i) {
+	m_typeCombo->insertItem(styles[i].c_str());
+	if (styles[i] == defaultType) {
+	    m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
+	}
+    }
+
+    QVBox *exampleVBox = new QVBox(exampleBox);
+    m_staffAboveLabel = new QLabel(i18n("Staff"), exampleVBox);
+    m_textExampleLabel = new QLabel(i18n("Example"), exampleVBox);
+    m_staffBelowLabel = new QLabel(i18n("Staff"), exampleVBox);
+ 
+    QObject::connect(m_text, SIGNAL(textChanged(const QString &)),
+		     this, SLOT(slotTextChanged(const QString &)));
+    QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotTypeChanged(const QString &)));
+
+    m_text->setFocus();
+    slotTypeChanged(getTextType().c_str());
+}
+
+std::string
+TextEventDialog::getTextType() const
+{
+    return std::string(m_typeCombo->currentText().latin1());
+}
+
+std::string
+TextEventDialog::getText() const
+{
+    return std::string(m_text->text().latin1());
+}
+
+void
+TextEventDialog::slotTextChanged(const QString &text)
+{
+    std::string type(getTextType());
+    Rosegarden::Text rtext(text.latin1(), type);
+    m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
+}
+
+void
+TextEventDialog::slotTypeChanged(const QString &qtype)
+{
+    std::string type(qtype.latin1());
+    Rosegarden::Text rtext(getText(), type);
+    m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
+
+    if (type == Rosegarden::Text::Dynamic ||
+	type == Rosegarden::Text::LocalDirection ||
+	type == Rosegarden::Text::UnspecifiedType ||
+	type == Rosegarden::Text::Lyric) {
+
+	m_staffAboveLabel->show();
+	m_staffBelowLabel->hide();
+
+    } else {
+
+	m_staffAboveLabel->hide();
+	m_staffBelowLabel->show();
+    }
+}
+

@@ -17,8 +17,8 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Equation.C \
 		     Event.C \
                      Instrument.C \
-		     NotationTypes.C \
                      MidiDevice.C \
+		     NotationTypes.C \
                      Property.C \
 		     PropertyName.C \
 		     Quantizer.C \

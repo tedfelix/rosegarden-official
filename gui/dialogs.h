@@ -224,4 +224,34 @@ public slots:
 };
 
 
+class TextEventDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    TextEventDialog(QWidget *parent,
+		    NotePixmapFactory *npf,
+		    std::string defltText = "",
+		    std::string defltType = Rosegarden::Text::UnspecifiedType,
+		    int maxLength = -1); // for Qt default
+    
+    std::string getTextType() const;
+    std::string getText() const;
+
+protected:
+    QLineEdit *m_text;
+    QComboBox *m_typeCombo;
+
+    QLabel *m_staffAboveLabel;
+    QLabel *m_textExampleLabel;
+    QLabel *m_staffBelowLabel;
+
+    NotePixmapFactory *m_notePixmapFactory;
+
+public slots:
+    void slotTextChanged(const QString &);
+    void slotTypeChanged(const QString &);
+};
+
+
 #endif
