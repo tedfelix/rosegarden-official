@@ -55,7 +55,6 @@ You may be missing the kdemultimedia package (and associated -devel
 package, if appropriate to your distribution).  Note that you need
 this even if you're building --with-alsa.
 
-
 "Cannot convert a null image" and other errors at startup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

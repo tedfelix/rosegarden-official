@@ -70,10 +70,10 @@ public:
     }
 
     /// returns the x pos of the associated canvas item
-    double getCanvasX() throw (NoCanvasItem);
+    double getCanvasX();
 
     /// returns the y pos of the associated canvas item
-    double getCanvasY() throw (NoCanvasItem);
+    double getCanvasY();
 
     /**
      * Sets the X coordinate which was computed by the layout engine
