@@ -1386,7 +1386,10 @@ MatrixView::slotChangeHorizontalZoom(int)
     if (barButtons) barButtons->setHScaleFactor(value);
 
     for (unsigned int i = 0; i < m_controlRulers.size(); ++i)
+    {
         m_controlRulers[i].first->setHScaleFactor(value);
+        m_controlRulers[i].first->repaint();
+    }
 
 //     for (unsigned int i = 0; i < m_staffs.size(); ++i)
 //     {

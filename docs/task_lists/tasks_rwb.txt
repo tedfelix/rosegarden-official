@@ -14,8 +14,6 @@ o Matrix Hypereditor [HALF COMPLETED]
 
 o FEATURE - double/half speed event selection in Matrix
 
-o FEATURE - set EventSelection velocities/other params.
-
 o FEATURE - turn repeats to real segments
 
 o BUG - Matrix width bug [HALF COMPLETED]
@@ -93,6 +91,8 @@ o selection of ALSA recording device
 
 Completed for 0.3(?)
 ====================
+
+o FEATURE - set EventSelection velocities [DONE]
 
 o Recording controller changes through StudioControl - remove
   the ugly signal paths for sendMappedStuff [DONE]
