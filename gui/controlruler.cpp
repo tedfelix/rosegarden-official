@@ -109,10 +109,6 @@ public:
 
 protected:
 
-    virtual int valueToHeight(long);
-    virtual long heightToValue(int);
-    virtual QColor valueToColor(int);
-
     //--------------- Data members ---------------------------------
 
     long m_value;
@@ -122,12 +118,10 @@ protected:
 
     static const unsigned int BorderThickness;
     static const unsigned int DefaultWidth;
-    static const int MinHeight;
 };
 
-const unsigned int ControlItem::BorderThickness = 2;
+const unsigned int ControlItem::BorderThickness = 1;
 const unsigned int ControlItem::DefaultWidth    = 20;
-const int ControlItem::MinHeight                = -5;
 
 ControlItem::ControlItem(ControlRuler* ruler, ViewElement *el,
                          ViewElement *nextEl)
@@ -148,27 +142,9 @@ ControlItem::ControlItem(ControlRuler* ruler, ViewElement *el,
 
 void ControlItem::setValue(long v)
 {
-//     std::cerr << "ControlItem::setValue(" << v << ") x = " << x() << std::endl;
+//     RG_DEBUG << "ControlItem::setValue(" << v << ") x = " << x() << endl;
 
     m_value = v;
-}
-
-int ControlItem::valueToHeight(long val)
-{
-    int res = std::min(int(-val), MinHeight);
-    RG_DEBUG << "ControlItem::valueToHeight : height = " << res;
-    return res;
-}
-
-long ControlItem::heightToValue(int h)
-{
-    return -h;
-}
-
-QColor ControlItem::valueToColor(int val)
-{
-    QColor b = Qt::blue;
-    return b.light(100 + val);
 }
 
 void ControlItem::updateValue()
@@ -179,38 +155,47 @@ void ControlItem::updateValue()
 void ControlItem::updateFromValue()
 {
     if (m_viewElement->event()->get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, m_value)) {
-        setHeight(valueToHeight(m_value));
+        setHeight(m_controlRuler->valueToHeight(m_value));
     }
 }
 
 void ControlItem::draw(QPainter &painter)
 {
-    setBrush(valueToColor(m_value));
+    setBrush(m_controlRuler->valueToColor(m_value));
 
     QCanvasRectangle::draw(painter);
 }
 
-void ControlItem::handleMouseButtonPress(QMouseEvent *e)
+void ControlItem::handleMouseButtonPress(QMouseEvent*)
 {
 }
 
-void ControlItem::handleMouseButtonRelease(QMouseEvent *e)
+void ControlItem::handleMouseButtonRelease(QMouseEvent*)
 {
 }
 
-void ControlItem::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
+void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
 {
-    // qDebug("ControlItem::handleMouseMove(x = %g) %p", x(), this);
+    // height is always negative
+    //
 
     m_controlRuler->applyTool(x(), deltaY);
 
-    setHeight(getHeight() + deltaY);
-    setValue(heightToValue(getHeight()));
+    int absNewHeight = -(getHeight() + deltaY);
+
+    // Make sure height is within bounds
+    if (absNewHeight > ControlRuler::MaxItemHeight)
+        absNewHeight = ControlRuler::MaxItemHeight;
+    else if (absNewHeight < ControlRuler::MinItemHeight)
+        absNewHeight = ControlRuler::MinItemHeight;
+    
+    setHeight(-absNewHeight);
+    setValue(m_controlRuler->heightToValue(getHeight()));
     updateValue();
     canvas()->update();
 }
 
-void ControlItem::handleMouseWheel(QWheelEvent *e)
+void ControlItem::handleMouseWheel(QWheelEvent*)
 {
 }
 
@@ -258,8 +243,6 @@ ControlSelector::ControlSelector(ControlRuler* parent)
 
 void ControlSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    qDebug("ControlSelector::handleMouseButtonPress(%d, %d)", e->x(), e->y());
-    
     getSelectionRectangle()->setX(e->x());
     getSelectionRectangle()->setY(e->y());
     getSelectionRectangle()->setSize(0,0);
@@ -268,14 +251,13 @@ void ControlSelector::handleMouseButtonPress(QMouseEvent *e)
     m_ruler->canvas()->update();
 }
 
-void ControlSelector::handleMouseButtonRelease(QMouseEvent *e)
+void ControlSelector::handleMouseButtonRelease(QMouseEvent*)
 {
-    qDebug("ControlSelector::handleMouseButtonRelease");
     getSelectionRectangle()->hide();
     m_ruler->canvas()->update();
 }
 
-void ControlSelector::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
+void ControlSelector::handleMouseMove(QMouseEvent *e, int, int)
 {
     int w = int(e->x() - getSelectionRectangle()->x());
     int h = int(e->y() - getSelectionRectangle()->y());
@@ -291,6 +273,12 @@ void ControlSelector::handleMouseMove(QMouseEvent *e, int deltaX, int deltaY)
 
 using Rosegarden::ViewElementList;
 
+const int ControlRuler::DefaultRulerHeight = 75;
+const int ControlRuler::MinItemHeight = 5;
+const int ControlRuler::MaxItemHeight = 64 + 5;
+const int ControlRuler::ItemHeightRange = 64;
+
+
 ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
                            Rosegarden::RulerScale* rulerScale,
                            QScrollBar* hsb,
@@ -302,6 +290,7 @@ ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
     m_currentItem(0),
     m_tool(0),
     m_currentX(0.0),
+    m_maxPropertyValue(127),
     m_selecting(false),
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas()))
@@ -309,6 +298,8 @@ ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
     m_viewElementList->addObserver(this);
     setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
+
+    setFixedHeight(sizeHint().height());
 
     init();
 }
@@ -424,6 +415,7 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
     if (m_selecting) {
         updateSelection();
         m_selector->handleMouseMove(e, deltaX, deltaY);
+        slotScrollHorizSmallSteps(e->pos().x());
         return;
     }
 
@@ -477,6 +469,37 @@ void ControlRuler::clear()
 	    delete *it;
     }
 }
+
+int ControlRuler::valueToHeight(long val)
+{
+    long scaleVal = val * (ItemHeightRange);
+    
+    int res = -(int(scaleVal / getMaxPropertyValue()) + MinItemHeight);
+    RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
+             << " - scaleVal = " << scaleVal << endl;
+    return res;
+}
+
+long ControlRuler::heightToValue(int h)
+{
+    long val = -h;
+    val -= MinItemHeight;
+    val *= getMaxPropertyValue();
+    val /= (ItemHeightRange);
+    val = std::min(val, long(getMaxPropertyValue()));
+
+    RG_DEBUG << "ControlRuler::heightToValue : height = " << h << " - val = " << val << endl;
+
+    return val;
+}
+
+QColor ControlRuler::valueToColor(int val)
+{
+    QColor b = Qt::blue;
+    return b.light(100 - val);
+}
+
+
 
 int ControlRuler::applyTool(double x, int val)
 {

@@ -159,10 +159,11 @@ ControlRuler* EditView::makeControlRuler(Rosegarden::ViewElementList* viewElemen
 
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
-    controlRulerCanvas->resize(viewSize.width(), 50); // TODO - keep it in sync with main canvas size
+    controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
     m_controlRuler = new ControlRuler(viewElementList, rulerScale,
                                       m_horizontalScrollBar,
                                       controlRulerCanvas, getCentralFrame());
+
     m_bottomBox->addWidget(m_controlRuler);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),

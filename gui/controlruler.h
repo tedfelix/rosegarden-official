@@ -54,6 +54,8 @@ class ControlRuler : public RosegardenCanvasView, public Rosegarden::ViewElement
 {
     Q_OBJECT
 
+    friend class ControlItem;
+
 public:
     ControlRuler(Rosegarden::ViewElementList*,
                  Rosegarden::RulerScale*,
@@ -70,9 +72,18 @@ public:
 
     QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
 
+
+    void setMaxPropertyValue(int val) { m_maxPropertyValue = val; }
+    int getMaxPropertyValue()         { return m_maxPropertyValue; }
+
     // ViewElementListObserver interface
-    virtual void elementAdded(Rosegarden::ViewElement *);
-    virtual void elementRemoved(Rosegarden::ViewElement *);
+    virtual void elementAdded(Rosegarden::ViewElement*);
+    virtual void elementRemoved(Rosegarden::ViewElement*);
+
+    static const int DefaultRulerHeight;
+    static const int MinItemHeight;
+    static const int MaxItemHeight;
+    static const int ItemHeightRange;
 
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
@@ -83,6 +94,10 @@ protected:
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsWheelEvent(QWheelEvent*);
+
+    int valueToHeight(long val);
+    long heightToValue(int height);
+    QColor valueToColor(int);
 
     void init();
     void clearSelectedItems();
@@ -98,6 +113,8 @@ private:
     ControlTool *m_tool;
 
     double m_currentX;
+
+    int m_maxPropertyValue;
 
     QPoint m_lastEventPos;
 
