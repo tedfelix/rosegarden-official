@@ -70,6 +70,13 @@ Post-0.1.4 task list
 
 17. Give timesigs more room before the following note [DONE]
 
+18. We have this "Auto-Beam after Insert" option now, but actually
+    what we want is not just on/off but on/off/sometimes.  The
+    sometimes case, which should be the default, would be to auto-
+    beam if we're inserting into a bar that has no beamed groups 
+    following the insertion point and that has no tuplet groups at
+    all. [DONE except that we've now lost the "on" case]
+
 
 20020301 task list (based on outstanding items from post-0.1.3 list below)
 ==================

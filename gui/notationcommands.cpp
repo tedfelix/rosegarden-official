@@ -79,13 +79,35 @@ NoteInsertionCommand::~NoteInsertionCommand()
 void
 NoteInsertionCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
+    Segment &segment(getSegment());
+    SegmentNotationHelper helper(segment);
 
     Segment::iterator i =
         helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
-    if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+    if (i != segment.end()) m_lastInsertedEvent = *i;
 
     if (m_autoBeam) {
+
+	// We auto-beam the bar if it contains no beamed groups
+	// after the insertion point and if it contains no tupled
+	// groups at all.
+
+	timeT barStartTime = segment.getBarStartForTime(m_insertionTime);
+	timeT barEndTime   = segment.getBarEndForTime(m_insertionTime);
+
+	for (Segment::iterator j = i;
+	     j != segment.end() && (*j)->getAbsoluteTime() < barEndTime;
+	     ++j) {
+	    if ((*j)->has(BEAMED_GROUP_ID)) return;
+	}
+
+	for (Segment::iterator j = i;
+	     j != segment.end() && (*j)->getAbsoluteTime() >= barStartTime;
+	     --j) {
+	    if ((*j)->has(BEAMED_GROUP_TUPLET_BASE)) return;
+	    if (j == segment.begin()) break;
+	}
+
 	helper.autoBeam(m_insertionTime, m_insertionTime, GROUP_TYPE_BEAMED);
     }
 }

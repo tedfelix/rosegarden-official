@@ -155,7 +155,7 @@ NoteInserter::NoteInserter(NotationView* view)
     QIconSet icon;
 
     KToggleAction *autoBeamAction =
-	new KToggleAction(i18n("Auto-Beam after insert"), 0, this,
+	new KToggleAction(i18n("Intelligent Auto-Beam"), 0, this,
 			  SLOT(slotToggleAutoBeam()), actionCollection(),
 			  "toggle_auto_beam");
     autoBeamAction->setChecked(true);

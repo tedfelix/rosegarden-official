@@ -63,16 +63,27 @@ timeT
 SegmentNotationHelper::getNotationDuration(iterator i)
 {
     if ((*i)->has(TUPLET_NOMINAL_DURATION)) {
+
 	return legatoQuantizer().quantizeDuration
 	    ((*i)->get<Int>(TUPLET_NOMINAL_DURATION));
+
     } else if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-	cerr << "ERROR: SegmentNotationHelper::getNotationDuration: This "
-	    "method (and most other\n  methods of SegmentNotationHelper) "
-	    "requires SegmentNotationHelper::quantize()\n  to have been "
-	    "called, to provide non-destructive legato quantization.\n  "
-	    "Ignoring error and returning incorrect value" << endl;
-	assert((*i)->has(TUPLET_NOMINAL_DURATION));
-	return legatoQuantizer().getQuantizedDuration(*i);
+
+	// Code duplicated with SegmentNotationHelper::quantize().
+	// This is intended to deal with the case where two edits
+	// happen in a row and some events inserted by the first
+	// have not been quantized before the second.  We'd be
+	// in trouble if the entire segment had not been quantized
+	// yet...
+
+	int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
+	int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+	assert(tcount != 0);
+	timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
+	nominalDuration = legatoQuantizer().quantizeDuration(nominalDuration);
+	(*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, nominalDuration);
+	return nominalDuration;
+
     } else {
 	return legatoQuantizer().getQuantizedDuration(*i);
     }
@@ -701,7 +712,8 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 	    }
 
 	    return;
-	}
+
+	} else if ((*i)->isa(Note::EventRestType)) return;
 
 	++i;
     }
@@ -829,7 +841,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 
     for (iterator i = segment().findTime(t); i != end(); ++i) {
 
-	if ((*i)->getAbsoluteTime() > t + (untupled * unit)) break;
+	if ((*i)->getAbsoluteTime() >= t + (untupled * unit)) break;
 
 	timeT offset = (*i)->getAbsoluteTime() - t;
 	Event *e = new Event(**i,
