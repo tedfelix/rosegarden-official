@@ -1,19 +1,64 @@
+Current 0.2 TO-DOs [update 14.1.2001]
+==================
+
+o Bar lines widget (similar to TrackButtons).
+  Implementation to allow for:
+
+o Looping
+
+o Start and End Markers and allow for Composition
+  growth and shrinkage
+
+o Allow negative time on segment canvas and transport etc.
+
+o Track addition/deletion and moving
+
+o Segment colouring [low priority obviously!]
+
+o Complete segment edit shortcuts (click/copy/multiple
+  segment drag)
+
+o MIDI recording
+
+o Audio.  Still.
+  Most likely wait until all the above has been implemented
+  before tackling audio.
+
+
+Work for further down the line
+------------------------------
+
+o Segment modifiers - looping of Segments, quantisation
+
+o Instrument display - aRTS environment, MIDI/Audio assignable
+  parameters
+
+o More MIDI events at Composition level. Sys Exs, Program Changes,
+  Controller changes etc. etc.
+
+
+
+
+
+
+
 Post 0.1 TO-DOs
 ===============
 
-o Transport GUI with time, buttons and more features
+o Transport GUI with time, buttons and more features [DONE]
 
 o Recording mechanism
-  - mute and record buttons on tracks
-  - arm tracks for record
+  - mute and record buttons on tracks   [DONE]
+  - arm tracks for record               [DONE]
 
 
-o Audio 
+o Audio [See above]
 
 o Handle Meta Events at the Editor and Midi levels - write then out to file
+    [HANDLED - but more work eventually required]
 
 o Meaningful Sys Ex handling
-
+    [See above]
 
 
 
