@@ -406,11 +406,11 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // Ensure a minimum of 64 tracks
     //
-    int nbTracks = m_composition.getNbTracks();
+    unsigned int nbTracks = m_composition.getNbTracks();
     Rosegarden::TrackId maxTrackId = m_composition.getMaxTrackId();
     Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
 
-    for(int i = nbTracks; i < MinNbOfTracks; ++i) {
+    for(unsigned int i = nbTracks; i < MinNbOfTracks; ++i) {
 
         Rosegarden::Track *track;
 
@@ -687,7 +687,7 @@ bool RosegardenGUIDoc::isSequencerRunning()
 {
     RosegardenGUIApp* parentApp = dynamic_cast<RosegardenGUIApp*>(parent());
     if (!parentApp) {
-        RG_DEBUG << "RosegardenGUIDoc::isSequencerRunning() : parentApp == 0\n!";
+        RG_DEBUG << "RosegardenGUIDoc::isSequencerRunning() : parentApp == 0\n";
         return false;
     }
     
