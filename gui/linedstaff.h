@@ -25,7 +25,13 @@
 
 #include "Staff.h"
 #include "LayoutEngine.h"
-#include "qcanvasgroupableitem.h"
+#include "FastVector.h"
+
+#include <string>
+#include <vector>
+
+#include "qcolor.h"
+#include "qcanvas.h"
 
 /**
  * LinedStaff is a base class for implementations of Staff that
@@ -37,6 +43,15 @@
  * but y-coordinates as integers because of the requirement that
  * staff lines be a precise integral distance apart.
  */
+
+//!!! This is a rather unsatisfactory arrangement.  Using Staff as a
+// base-class for LinedStaff is obvious and vaguely helpful, but it
+// means LinedStaff must be a template class, which means we end up
+// with this very heavy header class, long compile times, serious
+// dependencies, and an excess of generated code.  Almost nothing in
+// LinedStaff actually depends on the type of T, so we should probably
+// reorganise in some way (for example, we could require that the
+// subclass of LinedStaff also inherit separately from Staff).
 
 template <class T>
 class LinedStaff : public Rosegarden::Staff<T>
@@ -308,6 +323,10 @@ protected:
 	return std::pair<double, int>(cc.first - x, cc.second - y);
     }
     
+    void resizeStaffLines(double startLayoutX, double endLayoutX);
+    void clearStaffLineRow(int row);
+    void resizeStaffLineRow(int row, double offset, double length);
+
 protected:
     QCanvas *m_canvas;
 
@@ -321,6 +340,17 @@ protected:
     bool     m_pageMode;
     double   m_pageWidth;
     int	     m_rowSpacing;
+
+    typedef FastVector<QCanvasLine *> LineList;
+    typedef std::vector<LineList> LineMatrix;
+    LineMatrix m_staffLines;
+    LineList m_staffConnectingLines;
+
+    typedef std::pair<int, QCanvasLine *> BarLine; // layout-x, line
+    typedef FastVector<BarLine> BarLineList;
+    static bool compareBars(const BarLine &, const BarLine &);
+    static bool compareBarToLayoutX(const BarLine &, int);
+    BarLineList m_barLines;
 };
 
 
@@ -423,6 +453,170 @@ LinedStaff<T>::getHeightOfRow() const
 //bool
 //LinedStaff<T>::containsY(int y) const
 
+
+template <class T>
+void
+LinedStaff<T>::resizeStaffLines(double startLayoutX, double endLayoutX)
+{
+    int firstRow = getRowForLayoutX(startLayoutX);
+    int  lastRow = getRowForLayoutX(endLayoutX);
+    
+    int i;
+
+    while ((int)m_staffLines.size() <= lastRow) {
+	m_staffLines.push_back(LineList());
+	m_staffConnectingLines.push_back(0);
+    }
+
+    // Remove all the staff lines that precede the start of the staff
+
+    for (i = 0; i < firstRow; ++i) clearStaffLineRow(i);
+
+    // now i == firstRow
+
+    while (i <= lastRow) {
+
+	double x0 = 0;
+	double x1 = m_pageWidth;
+
+	if (i == firstRow) {
+	    x0 = getXForLayoutX(startLayoutX);
+	}
+
+	if (i == lastRow) {
+	    x1 = getXForLayoutX(endLayoutX);
+	}
+
+	resizeStaffLineRow(i, x0, x1 - x0);
+
+	++i;
+    }
+
+    // now i == lastRow + 1
+
+    while (i < (int)m_staffLines.size()) clearStaffLineRow(i++);
+}
+
+
+// m_staffLines[row] must already exist (although it may be empty)
+
+template <class T>
+void
+LinedStaff<T>::clearStaffLineRow(int row)
+{
+    for (int h = 0; h < (int)m_staffLines[row].size(); ++h) {
+	delete m_staffLines[row][h];
+    }
+    m_staffLines[row].clear();
+
+    delete m_staffConnectingLines[row];
+    m_staffConnectingLines[row] = 0;
+}
+
+
+// m_staffLines[row] must already exist (although it may be empty)
+
+template <class T>
+void
+LinedStaff<T>::resizeStaffLineRow(int row, double offset, double length)
+{
+//    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLineRow: row "
+//			 << row << ", offset " << offset << ", length " 
+//			 << length << ", pagewidth " << getPageWidth() << endl;
+
+
+    // If the resolution is 8 or less, we want to reduce the blackness
+    // of the staff lines somewhat to make them less intrusive
+
+    int level = 0;
+    int z = 1;
+    if (m_resolution < 6) {
+        z = -1;
+        level = (9 - m_resolution) * 32;
+        if (level > 200) level = 200;
+    }
+
+    QColor lineColour(level, level, level);
+
+    int h, j;
+/*
+    if (m_pageMode && row > 0 && offset == 0.0) {
+	offset = (double)m_npf->getBarMargin() / 2;
+	length -= offset;
+    }
+*/
+    QCanvasLine *line;
+    double lx;
+    int ly;
+
+    delete m_staffConnectingLines[row];
+    line = 0;
+/*
+    if (m_pageMode && m_connectingLineHeight > 0.1) {
+	line = new QCanvasLine(m_canvas);
+	lx = (int)x() + getRowLeftX(row) + offset + length - 1;
+	ly = (int)y() + getTopLineOffsetForRow(row);
+	line->setPoints(lx, ly, lx,
+			ly + getBarLineHeight() + m_connectingLineHeight);
+	line->setPen
+	    (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
+	line->setZ(-2);
+	line->show();
+    }
+*/
+    m_staffConnectingLines[row] = line;
+
+    while ((int)m_staffLines[row].size() <= getLineCount() * m_lineThickness) {
+	m_staffLines[row].push_back(0);
+    }
+
+    int lineIndex = 0;
+
+    for (h = 0; h < getLineCount(); ++h) {
+
+	for (j = 0; j < m_lineThickness; ++j) {
+
+	    if (m_staffLines[row][lineIndex] != 0) {
+		line = m_staffLines[row][lineIndex];
+	    } else {
+		line = new QCanvasLine(m_canvas);
+	    }
+
+	    lx = getCanvasXForLeftOfRow(row) + offset;
+	    ly = getTopOfStaffForRow(row) + getYOfHeight(2 * h) + j; //!!!
+/*
+	    lx = (int)x() + getRowLeftX(row) + offset;
+	    ly = (int)y() + getTopOfStaffForRow(row) +
+		getYOfHeight(2 * h) + j; //!!!
+*/
+//	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
+//				 << "; setting line points to ("
+//				 << lx << "," << ly << ") -> ("
+//				 << (lx+length-1) << "," << ly << ")" << endl;
+
+	    line->setPoints(lx, ly, lx + length - 1, ly);
+
+//	    if (j > 0) line->setSignificant(false);
+
+	    line->setPen(QPen(lineColour, 1));
+	    line->setZ(z);
+
+	    if (m_staffLines[row][lineIndex] == 0) {
+		m_staffLines[row][lineIndex] = line;
+	    }
+
+	    line->show();
+
+	    ++lineIndex;
+	}
+    }
+
+    while (lineIndex < (int)m_staffLines[row].size()) {
+	delete m_staffLines[row][lineIndex];
+	m_staffLines[row][lineIndex] = 0;
+	++lineIndex;
+    }
+}    
 
 
 #endif

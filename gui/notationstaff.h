@@ -32,6 +32,7 @@
 #include "StaffLayout.h"
 
 #include "linedstaff.h"
+#include "qcanvasgroupableitem.h"
 
 class QCanvasSimpleSprite;
 class EventSelection;
@@ -260,8 +261,6 @@ public:
     static const int NoHeight;
 
 protected:
-
-    enum RefreshType { FullRefresh, PositionRefresh, SelectionRefresh };
 
     /** 
      * Assign a suitable sprite to the given element (the clef is
