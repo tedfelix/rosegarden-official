@@ -425,6 +425,9 @@ TrackButtons::setRecordButtonDown(int recordTrack)
 
     m_recordButtonGroup->find(recordTrack)->setPalette
 	(QPalette(RosegardenGUIColours::ActiveRecordTrack));
+    dynamic_cast<QPushButton*>(
+            m_recordButtonGroup->find(recordTrack))->setOn(true);
+
     m_lastID = recordTrack;
 }
 

@@ -447,13 +447,35 @@ void RosegardenGUIView::setZoomSize(double size)
 
 
 // Select a track label and segments (when we load a file or
-// move up a 
+// move up a track).   Also change record track if the one
+// we're moving from is MIDI.
 //
 //
 void RosegardenGUIView::selectTrack(int trackId)
 {
     m_trackEditor->getTrackButtons()->slotLabelSelected(trackId);
     slotSelectTrackSegments(trackId);
+
+    // Select track for recording if the current one is MIDI
+    // and the one we're going to is MIDI.
+    //
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Track *track = comp.getTrackByIndex(comp.getRecordTrack());
+    Rosegarden::Instrument *instr = studio.getInstrumentById(track->getInstrument());
+
+    if (instr->getType() == Rosegarden::Instrument::Midi)
+    {
+        track = comp.getTrackByIndex(trackId);
+        instr = studio.getInstrumentById(track->getInstrument());
+
+        if (instr->getType() == Rosegarden::Instrument::Midi)
+        {
+            comp.setRecordTrack(trackId);
+            getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+        }
+    }
+    
 }
 
 
@@ -481,6 +503,26 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     slotSetSelectedSegments(segments);
 
+    // Select track for recording if the current one is MIDI
+    // and the one we're going to is MIDI.
+    //
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Track *track = comp.getTrackByIndex(comp.getRecordTrack());
+    Rosegarden::Instrument *instr =
+        studio.getInstrumentById(track->getInstrument());
+
+    if (instr->getType() == Rosegarden::Instrument::Midi)
+    {
+        track = comp.getTrackByIndex(trackId);
+        instr = studio.getInstrumentById(track->getInstrument());
+
+        if (instr->getType() == Rosegarden::Instrument::Midi)
+        {
+            comp.setRecordTrack(trackId);
+            getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+        }
+    }
+    
     // inform
     emit segmentsSelected(segments);
 }
