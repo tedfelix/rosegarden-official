@@ -7,6 +7,10 @@ jackd -d alsa -p 4096 -n 3
 
 I find with my SBLive the following setting works:
 
-jackd -d alsa -p 4096 -n 2
+$ jackd -d alsa -p 4096 -n 2
 
+Note that there is inline help for each driver but it's non-obvious
+how to get at it.  For complete help on the alsa driver do this:
+
+$ jackd -d alsa --help
 

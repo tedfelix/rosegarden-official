@@ -770,6 +770,10 @@ public slots:
                            const Rosegarden::RealTime &);
     void slotSelectSegment(Rosegarden::Segment *);
     void slotDeleteSegment(Rosegarden::Segment*);
+    void slotInsertAudioSegment(unsigned int,
+                                Rosegarden::TrackId,
+                                const Rosegarden::RealTime &,
+                                const Rosegarden::RealTime &);
 
 private:
 

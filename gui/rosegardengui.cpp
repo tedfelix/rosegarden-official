@@ -2652,6 +2652,16 @@ RosegardenGUIApp::slotAudioManager()
                 SIGNAL(deleteSegment(Rosegarden::Segment*)),
                 SLOT(slotDeleteSegment(Rosegarden::Segment*)));
 
+        connect(m_audioManagerDialog,
+                SIGNAL(insertAudioSegment(unsigned int,
+                                          Rosegarden::TrackId,
+                                          const Rosegarden::RealTime&,
+                                          const Rosegarden::RealTime&)),
+                SLOT(slotInsertAudioSegment(unsigned int,
+                                            Rosegarden::TrackId,
+                                            const Rosegarden::RealTime&,
+                                            const Rosegarden::RealTime&)));
+
         m_audioManagerDialog->show();
     }
 }
@@ -2798,5 +2808,15 @@ RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
     slotSelectSegment(segment);
     slotDeleteSelectedSegments();
 }
+
+void
+RosegardenGUIApp::slotInsertAudioSegment(unsigned int id,
+                                         Rosegarden::TrackId trackId,
+                                         const Rosegarden::RealTime &startTime,
+                                         const Rosegarden::RealTime &endTime)
+{
+    //cout << "ID = " << id << endl;
+}
+
 
 

@@ -29,6 +29,7 @@
 #include "AudioFileManager.h"
 #include "rosegardenguidoc.h"
 #include "Segment.h"
+#include "Track.h"
 
 // This dialog presents and allows editing of the Audio files that
 // are in the Composition.  We edit the AudioFileManager directly
@@ -129,6 +130,8 @@ public:
     //
     void setSelected(unsigned int id, Rosegarden::Segment *segment);
 
+    MultiViewCommandHistory *getCommandHistory();
+
 public slots:
     void slotAdd();
     void slotDelete();
@@ -145,6 +148,10 @@ public slots:
     //
     void slotPopulateFileList();
 
+    // Commands
+    //
+    void slotCommandExecuted(KCommand *);
+
 signals:
 
     // Control signals so we can tell the sequencer about our changes
@@ -160,6 +167,10 @@ signals:
     //
     void segmentSelected(Rosegarden::Segment *);
     void deleteSegment(Rosegarden::Segment *);
+    void insertAudioSegment(unsigned int,
+                            Rosegarden::TrackId,
+                            const Rosegarden::RealTime &,
+                            const Rosegarden::RealTime &);
 
 protected:
     virtual void closeEvent(QCloseEvent *e);

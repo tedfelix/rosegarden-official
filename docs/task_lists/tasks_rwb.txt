@@ -5,7 +5,7 @@ o Sync audio and MIDI [PARTIAL]
 
 o Get first fetch audio working - partial segments
 
-o Fix Audio Segment splitting
+o Fix Audio Segment splitting [PARTIAL]
 
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop
@@ -14,11 +14,18 @@ o Fix/Complete repeating Segments
 
 o Get Segment joining working
 
+o Audio volume faders - studio concept on sequencer
+
 o Segment previews still buggy
 
 o Realtime downsampling buggy (8 bit)
 
 o Prove and improve simultaneous audio and MIDI track performance
+  Improve performance:
+   - file access
+   - maths in JACK and MIDI loops
+   - memory usage and access
+   - build without debug and test
 
 o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're

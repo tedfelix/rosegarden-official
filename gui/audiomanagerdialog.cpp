@@ -32,6 +32,7 @@
 #include "audiomanagerdialog.h"
 #include "widgets.h"
 #include "Progress.h"
+#include "multiviewcommandhistory.h"
 
 using std::cout;
 using std::cerr;
@@ -112,6 +113,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                SLOT(slotDelete()));
 
     slotPopulateFileList();
+
+    // Connect command history for updates
+    //
+    connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+                        this, SLOT(slotCommandExecuted(KCommand *)));
 }
 
 AudioManagerDialog::~AudioManagerDialog()
@@ -463,6 +469,10 @@ void
 AudioManagerDialog::slotInsert()
 {
     std::cout << "AudioManagerDialog::slotInsert" << std::endl;
+
+    // find selected audio file and guess a track
+    emit insertAudioSegment(0, 0, Rosegarden::RealTime(0, 0),
+                                  Rosegarden::RealTime(0, 0));
 }
 
 void
@@ -517,9 +527,12 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
     AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
     // If we're on a segment then send a "select" signal
+    // and enable appropriate buttons.
     //
     if (aItem && aItem->getSegment())
+    {
         emit segmentSelected(aItem->getSegment());
+    }
 }
 
 
@@ -534,28 +547,68 @@ AudioManagerDialog::setSelected(unsigned int id, Rosegarden::Segment *segment)
 
     while (it)
     {
-        if (it->childCount() > 0)
-            chIt = it->firstChild();
-        
-        while (chIt)
+        // If we're looking for a top level audio file
+        if (segment == 0)
         {
-            aItem = dynamic_cast<AudioListItem*>(chIt);
+            aItem = dynamic_cast<AudioListItem*>(it);
 
-            if (aItem)
+            if (aItem->getId() == id)
             {
-                if (aItem->getId() == id && aItem->getSegment() == segment)
-                {
-                    m_fileList->ensureItemVisible(chIt);
-                    m_fileList->setSelected(chIt, true);
-                    emit segmentSelected(segment);
-                    return;
-                }
+                m_fileList->ensureItemVisible(it);
+                m_fileList->setSelected(it, true);
+                return;
             }
-            chIt = chIt->nextSibling();
+        }
+        else // look for a child
+        {
+            if (it->childCount() > 0)
+                chIt = it->firstChild();
+        
+            while (chIt)
+            {
+                aItem = dynamic_cast<AudioListItem*>(chIt);
+    
+                if (aItem)
+                {
+                    if (aItem->getId() == id && aItem->getSegment() == segment)
+                    {
+                        m_fileList->ensureItemVisible(chIt);
+                        m_fileList->setSelected(chIt, true);
+                        emit segmentSelected(segment);
+                        return;
+                    }
+                }
+                chIt = chIt->nextSibling();
+            }
         }
 
         it = it->nextSibling();
     }
+
+}
+
+MultiViewCommandHistory*
+AudioManagerDialog::getCommandHistory()
+{
+        return m_doc->getCommandHistory();
+}
+
+// May eventually predicate this on some subset of Segment only
+// commands - but we may not want to or need to.
+//
+void
+AudioManagerDialog::slotCommandExecuted(KCommand * /*command */)
+{
+    AudioListItem *item =
+            dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
+    unsigned int id = item->getId();
+    Rosegarden::Segment *segment = item->getSegment();
+
+    // repopulate
+    slotPopulateFileList();
+
+    // set selected
+    setSelected(id, segment);
 
 }
 
