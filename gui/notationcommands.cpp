@@ -548,6 +548,80 @@ GroupMenuTupletCommand::modifySegment()
     helper.makeTupletGroup(getStartTime(), m_untupled, m_tupled, m_unit);
 }
 
+/*!!!
+GroupMenuUnTupletCommand::GroupMenuUnTupletCommand(Rosegarden::Segment &segment,
+						   timeT startTime) :
+    BasicCommand(getGlobalName(), segment, startTime, findEndTime(startTime))
+{
+    // nothing else
+}
+
+Rosegarden::timeT
+GroupMenuUnTupletCommand::findEndTime(Rosegarden::Segment &segment,
+				      timeT startTime)
+{
+    if (!segment.isBeforeEndMarker(i)) return startTime;
+    
+    bool haveGroupId = false;
+
+    for (Segment::iterator i = segment.findTime(startTime);
+	 segment.isBeforeEndMarker(i); ++i) {
+	
+	if ((*i)->getAbsoluteTime() > startTime) break;
+
+	if ((*i)->has(BEAMED_GROUP_TYPE) &&
+	    (*i)->get<String>(BEAMED_GROUP_TYPE) == GROUP_TYPE_TUPLED) {
+	    if ((*i)->get<Int>(BEAMED_GROUP_ID, m_groupId)) {
+		haveGroupId = true;
+		break;
+	    }
+	}
+    }
+
+    if (!haveGroupId) return startTime;
+    else return (segment.isBeforeEndMarker(i) ? (*i)->getAbsoluteTime() :
+		 segment.getEndMarkerTime());
+}
+*/
+
+void
+GroupMenuUnTupletCommand::modifySegment()
+{
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	(*i)->unset(BEAMED_GROUP_ID);
+	(*i)->unset(BEAMED_GROUP_TYPE);
+	(*i)->unset(BEAMED_GROUP_TUPLET_BASE);
+	(*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
+	(*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
+	(*i)->unset(TUPLET_NOMINAL_DURATION);
+    }
+/*!!!
+    for (Segment::iterator i = getSegment().findTime(getStartTime());
+	 getSegment().isBeforeEndMarker(i); ++i) {
+	
+	if ((*i)->has(BEAMED_GROUP_TYPE) &&
+	    (*i)->get<String>(BEAMED_GROUP_TYPE) == GROUP_TYPE_TUPLED) {
+
+	    long myGroupId = m_groupId - 1;
+
+	    if ((*i)->get<Int>(BEAMED_GROUP_ID, myGroupId) &&
+		myGroupId == m_groupId) {
+
+		(*i)->unset(BEAMED_GROUP_ID);
+		(*i)->unset(BEAMED_GROUP_TYPE);
+		(*i)->unset(BEAMED_GROUP_TUPLET_BASE);
+		(*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
+		(*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
+		(*i)->unset(TUPLET_NOMINAL_DURATION);
+	    }
+	}
+    }
+*/
+}
+
 
 
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 

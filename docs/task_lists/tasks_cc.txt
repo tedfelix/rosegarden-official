@@ -82,7 +82,10 @@
 32. "Delete Tracks" and "Rename Tracks" on menu in main view (latter
     kind of a dup with "make it a command"
 
-33. Thoroughly scan all following task lists to find more stuff to do...
+33. We _really_ need Un-Tuplet, you can't actually carry out the operation
+    at all without it.
+
+34. Thoroughly scan all following task lists to find more stuff to do...
 
 
 Post-0.1.5-and-a-bit task list

@@ -1098,6 +1098,9 @@ void NotationView::setupActions()
     new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
+    new KAction(i18n(GroupMenuUnTupletCommand::getGlobalName()), 0, this,
+                SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
+
     (new KToggleAction(i18n("Tri&plet Insert Mode"), Key_G,
 		       this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->

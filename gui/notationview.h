@@ -347,6 +347,7 @@ public slots:
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
+    void slotGroupUnTuplet();
     void slotGroupGrace();
     void slotGroupUnGrace();
     void slotGroupSlur();

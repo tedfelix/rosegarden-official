@@ -804,6 +804,15 @@ void NotationView::slotGroupTuplet(bool simple)
 			(*segment, t, unit, untupled, tupled));
 }
 
+void NotationView::slotGroupUnTuplet()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Untupleting..."), this);
+
+    addCommandToHistory(new GroupMenuUnTupletCommand
+                        (*m_currentEventSelection));
+}
+
 void NotationView::slotGroupGrace()
 {
     if (!m_currentEventSelection) return;
