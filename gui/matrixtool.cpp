@@ -395,8 +395,8 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
 
     m_clickedElement = dynamic_cast<MatrixElement*>(element);
 
-    m_selectionRect->setX(m_currentStaff->snapX(e->x()));
-    m_selectionRect->setY(m_currentStaff->snapY(e->y()));
+    m_selectionRect->setX(e->x());
+    m_selectionRect->setY(e->y());
     m_selectionRect->setSize(0,0);
 
     m_selectionRect->show();
@@ -434,8 +434,8 @@ void MatrixSelector::handleMouseMove(timeT, int,
 {
     if (!m_updateRect) return;
 
-    int w = int(m_currentStaff->snapX(e->x()) - m_selectionRect->x());
-    int h = int(m_currentStaff->snapY(e->y()) - m_selectionRect->y());
+    int w = int(e->x() - m_selectionRect->x());
+    int h = int(e->y() - m_selectionRect->y());
 
     // Qt rectangle dimensions appear to be 1-based
     if (w > 0) ++w; else --w;
