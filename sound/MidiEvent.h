@@ -60,7 +60,7 @@ namespace Rosegarden
 
     void print();
 
-    unsigned int time() { return _deltaTime; }
+    unsigned int time() const { return _deltaTime; }
     unsigned int addTime(const unsigned int &time);
     void setTime(const unsigned int &time) { _deltaTime = time; }
 
@@ -85,6 +85,9 @@ namespace Rosegarden
         { _duration = duration; }
 
     const unsigned int& duration() { return _duration; }
+
+    friend bool operator<(const MidiEvent &a, const MidiEvent &b);
+
 
   private:
 

@@ -239,4 +239,11 @@ MidiEvent::addTime(const unsigned int &time)
 }
 
 
+bool
+operator<(const Rosegarden::MidiEvent &a, const Rosegarden::MidiEvent &b)
+{
+  return a.time() < b.time();
+}
+
+
 }

@@ -870,6 +870,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   //
   _numberOfTracks = trackNumber;
 
+
   // Now gnash through the MIDI events and turn the absolute times
   // into delta times.
   //
@@ -880,6 +881,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   for (unsigned int i = 0; i < _numberOfTracks; i++)
   {
     lastMidiTime = 0;
+
+    // First sort the list
+    //
+    _midiComposition[i].sort();
+
     for ( midiEventIt = (_midiComposition[i].begin());
           midiEventIt != (_midiComposition[i].end()); midiEventIt++ )
     {

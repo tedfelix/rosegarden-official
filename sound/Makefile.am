@@ -1,5 +1,5 @@
 # ensure our path is correct
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core -DMIDI_DEBUG
+INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
 
 COMPILE_FIRST = libRosegardenSound
 
