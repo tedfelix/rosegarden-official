@@ -883,7 +883,10 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
 		long pitch;
 		if ((*i)->get<Rosegarden::Int>
 		    (Rosegarden::BaseProperties::PITCH, pitch)) {
-		    playNote(s->getSegment(), pitch);
+		    long velocity = -1;
+		    (void)((*i)->get<Rosegarden::Int>
+			   (Rosegarden::BaseProperties::VELOCITY, velocity));
+		    playNote(s->getSegment(), pitch, velocity);
 		}
 	    }
 	}
@@ -1560,7 +1563,8 @@ void MatrixView::playNote(Rosegarden::Event *event)
 }
 
 
-void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
+void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch,
+			  int velocity)
 {
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Studio &studio = getDocument()->getStudio();
@@ -1575,12 +1579,14 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
     if (ins == 0)
         return;
 
+    if (velocity < 0) velocity = Rosegarden::MidiMaxValue;
+
     // Send out note of half second duration
     //
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
                                pitch,
-                               Rosegarden::MidiMaxValue,
+                               velocity,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 500000000),
                                Rosegarden::RealTime::zeroTime);

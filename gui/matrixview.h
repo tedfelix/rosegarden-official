@@ -155,7 +155,7 @@ public:
     /**
      * Play a preview (same as above but a simpler interface)
      */
-    void playNote(const Rosegarden::Segment &segment, int pitch);
+    void playNote(const Rosegarden::Segment &segment, int pitch, int velocity = -1);
 
     /**
      * Get the SnapGrid

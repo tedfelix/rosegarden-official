@@ -2425,7 +2425,11 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 	    if (!(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH,
 					    pitch)) continue;
 
-	    playNote(s->getSegment(), pitch);
+	    long velocity = -1;
+	    (void)(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY,
+					     velocity);
+
+	    playNote(s->getSegment(), pitch, velocity);
 	}
 
 	if (!foundNewEvent) {
@@ -2553,7 +2557,7 @@ bool NotationView::canPreviewAnotherNote()
     return true;
 }
 
-void NotationView::playNote(Rosegarden::Segment &s, int pitch)
+void NotationView::playNote(Rosegarden::Segment &s, int pitch, int velocity)
 {
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Studio &studio = getDocument()->getStudio();
@@ -2568,12 +2572,14 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
 
     if (!canPreviewAnotherNote()) return;
 
+    if (velocity < 0) velocity = Rosegarden::MidiMaxValue;
+
     // Send out note of half second duration
     //
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
                                pitch,
-                               Rosegarden::MidiMaxValue,
+                               velocity,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 500000000),
                                Rosegarden::RealTime::zeroTime);
@@ -2583,10 +2589,11 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
 
 void NotationView::showPreviewNote(int staffNo, double layoutX,
 				   int pitch, int height,
-				   const Rosegarden::Note &note)
+				   const Rosegarden::Note &note,
+				   int velocity)
 { 
     m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
-    playNote(m_staffs[staffNo]->getSegment(), pitch);
+    playNote(m_staffs[staffNo]->getSegment(), pitch, velocity);
 }
 
 void NotationView::clearPreviewNote()

@@ -202,13 +202,14 @@ public:
     /// Show and sound the given note
     void showPreviewNote(int staffNo, double layoutX,
                          int pitch, int height,
-                         const Rosegarden::Note &note);
+                         const Rosegarden::Note &note,
+			 int velocity = -1);
 
     /// Remove any visible preview note
     void clearPreviewNote();
 
     /// Sound the given note
-    void playNote(Rosegarden::Segment &segment, int pitch);
+    void playNote(Rosegarden::Segment &segment, int pitch, int velocity = -1);
 
     /// Switches between page- and linear- layout modes
     void setPageMode(LinedStaff::PageMode mode);
