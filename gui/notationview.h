@@ -315,7 +315,8 @@ public slots:
     void slotSelectSelected();
 
     /// Canvas actions slots
-    void itemClicked(int height, int staffNo, const QPoint&, NotationElement*);
+    void itemPressed(int height, int staffNo, const QPoint&,
+                     QCanvasItem*, NotationElement*);
     void mouseMove(QMouseEvent*);
     void mouseRelease(QMouseEvent*);
 
@@ -560,7 +561,8 @@ public:
 
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
-                                  NotationElement* el) = 0;
+                                  QCanvasItem* pressedItem,
+                                  NotationElement*) = 0;
 
     /// does nothing by default
     virtual void handleMouseMove(QMouseEvent*);
@@ -585,6 +587,7 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
+                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 
     /// Set the accidental for the notes which will be inserted
@@ -627,6 +630,7 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
+                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 protected:
     Rosegarden::Clef m_clef;
@@ -643,6 +647,7 @@ public:
 
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
+                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 };
 
@@ -659,6 +664,7 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
+                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 
     virtual void handleMouseMove(QMouseEvent*);
@@ -703,6 +709,7 @@ public:
     
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
+                                  QCanvasItem* pressedItem,
                                   NotationElement* el);
 
 protected:

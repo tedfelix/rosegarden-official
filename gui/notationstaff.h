@@ -112,7 +112,7 @@ public:
      * so they know on which staff a mouse event occurred
      *
      * @see NotationTool#handleMousePress
-     * @see NotationView#itemClicked
+     * @see NotationView#itemPressed
      */
     unsigned int getId() { return m_id; }
 

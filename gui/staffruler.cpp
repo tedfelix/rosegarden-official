@@ -157,6 +157,8 @@ PositionCursor::PositionCursor(QCanvas* c, QObject* parent)
     m_grip->setBrush(magenta);
     m_line->setPoints(0, 0, 0, canvas()->height());
     m_line->setPen(magenta);
+
+    setActive(true);
 }
 
 void PositionCursor::setPosition(unsigned int pos)

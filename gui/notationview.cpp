@@ -226,8 +226,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setCentralWidget(m_canvasView);
 
     QObject::connect
-        (m_canvasView, SIGNAL(itemClicked(int, int, const QPoint&, NotationElement*)),
-         this,         SLOT  (itemClicked(int, int, const QPoint&, NotationElement*)));
+        (m_canvasView, SIGNAL(itemPressed(int, int, const QPoint&, QCanvasItem*, NotationElement*)),
+         this,         SLOT  (itemPressed(int, int, const QPoint&, QCanvasItem*, NotationElement*)));
 
     QObject::connect
         (m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
@@ -1432,11 +1432,12 @@ void NotationView::slotSelectSelected()
 
 //----------------------------------------------------------------------
 
-void NotationView::itemClicked(int height, int staffNo,
+void NotationView::itemPressed(int height, int staffNo,
                                const QPoint &eventPos,
+                               QCanvasItem* item,
                                NotationElement* el)
 {
-    m_tool->handleMousePress(height, staffNo, eventPos, el);
+    m_tool->handleMousePress(height, staffNo, eventPos, item, el);
 }
 
 void NotationView::mouseMove(QMouseEvent *e)
@@ -1666,6 +1667,7 @@ NoteInserter::~NoteInserter()
 void    
 NoteInserter::handleMousePress(int height, int staffNo,
                                const QPoint &eventPos,
+                               QCanvasItem*,
                                NotationElement*)
 {
     if (height == StaffLine::NoHeight || staffNo < 0) return;
@@ -1744,8 +1746,9 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
 {
 }
     
-void ClefInserter::handleMousePress(int /*height*/, int staffNo,
+void ClefInserter::handleMousePress(int, int staffNo,
                                     const QPoint &eventPos,
+                                    QCanvasItem*,
                                     NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
@@ -1780,8 +1783,9 @@ NotationEraser::NotationEraser(NotationView& view)
 {
 }
 
-void NotationEraser::handleMousePress(int /*height*/, int staffNo,
-                                      const QPoint& /*eventPos*/,
+void NotationEraser::handleMousePress(int, int staffNo,
+                                      const QPoint&,
+                                      QCanvasItem*,
                                       NotationElement* element)
 {
     bool needLayout = false;
@@ -1839,8 +1843,9 @@ NotationSelector::~NotationSelector()
     m_parentView.setCursor(Qt::arrowCursor);
 }
 
-void NotationSelector::handleMousePress(int /*height*/, int /*staffNo*/,
+void NotationSelector::handleMousePress(int, int,
                                         const QPoint& p,
+                                        QCanvasItem*,
                                         NotationElement*)
 {
     m_selectionRect->setX(p.x());
@@ -1947,9 +1952,10 @@ NotationSelectionPaster::~NotationSelectionPaster()
     m_parentView.setCursor(Qt::arrowCursor);
 }
 
-void NotationSelectionPaster::handleMousePress(int /*height*/, int staffNo,
+void NotationSelectionPaster::handleMousePress(int, int staffNo,
                                                const QPoint &eventPos,
-                                               NotationElement* /*el*/)
+                                               QCanvasItem*,
+                                               NotationElement*)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelectionPaster::handleMousePress : staffNo = "
                          << staffNo

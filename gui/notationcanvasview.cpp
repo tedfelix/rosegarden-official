@@ -91,7 +91,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
                 unsigned int elAbsoluteTime = noteSprite->getNotationElement().getAbsoluteTime();
                 emit hoveredOverAbsoluteTimeChange(elAbsoluteTime);
             }
-            
+
         }
     }
 
@@ -118,7 +118,8 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     QCanvasItemList::Iterator it;
-    QCanvasNotationSprite *sprite = 0;
+    QCanvasNotationSprite* sprite = 0;
+    QCanvasItem* pressedItem = 0;
 
     // Get the pitch were the click occurred
     Rosegarden::Key key;
@@ -130,6 +131,9 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
         QCanvasItem *item = *it;
+
+        if (item->active()) pressedItem = item;
+
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
             NotationElement &el = sprite->getNotationElement();
 
@@ -163,9 +167,11 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     if (sprite)
         handleMousePress(m_currentHighlightedLine, staffNo,
-                         e->pos(), &(sprite->getNotationElement()));
+                         e->pos(), pressedItem,
+                         &(sprite->getNotationElement()));
     else
-        handleMousePress(m_currentHighlightedLine, staffNo, e->pos());
+        handleMousePress(m_currentHighlightedLine, staffNo, e->pos(),
+                         pressedItem);
 }
 
 
@@ -189,13 +195,14 @@ void
 NotationCanvasView::handleMousePress(const StaffLine *line,
                                      int staffNo,
                                      const QPoint &pos,
+                                     QCanvasItem* item,
                                      NotationElement *el)
 {
     int h = line ? line->getHeight() : StaffLine::NoHeight;
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << h << endl;
 
-    emit itemClicked(h, staffNo, pos, el);
+    emit itemPressed(h, staffNo, pos, item, el);
 }
 
 bool

@@ -82,8 +82,10 @@ signals:
      * \a point is set to the coordinates of the click event
      * \a el points to the NotationElement which was clicked on, if any
      */
-    void itemClicked(int pitch, int staffNo,
-                     const QPoint& point, NotationElement* el);
+    void itemPressed(int pitch, int staffNo,
+                     const QPoint& point,
+                     QCanvasItem* item,
+                     NotationElement* el);
 
     /**
      * Emitted when the mouse cursor moves to a different height
@@ -115,7 +117,8 @@ signals:
 protected:
 
     void handleMousePress(const StaffLine*, int staffNo,
-                          const QPoint&, NotationElement* = 0);
+                          const QPoint&, QCanvasItem* pressedItem = 0,
+                          NotationElement* pressedNotationElement = 0);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
 
