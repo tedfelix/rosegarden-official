@@ -259,6 +259,7 @@ protected:
     virtual int getLegerLineCount() const    { return m_legerLineCount; }
     virtual int getBottomLineHeight() const  { return 0; }
     virtual int getHeightPerLine() const     { return 2; }
+    virtual int showBarNumbersEvery() const  { return 5; }
 
     /** 
      * Assign a suitable sprite to the given element (the clef is

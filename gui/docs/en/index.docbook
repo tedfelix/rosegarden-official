@@ -99,7 +99,7 @@
     <abstract>
       <para>
 
-	Rosegarden is a &MIDI; and audio sequencer and musical notation
+	Rosegarden is an audio and &MIDI; sequencer and musical notation
 	editor.  This Handbook describes how to use it.
 
       </para>
@@ -281,11 +281,11 @@
 	</para>
 	<para>
 	  An instrument can be understood as a single channel on a
-	  &MIDI; device, or as an audio output: tracks containing note
-	  data should be assigned to &MIDI; instruments, and those
-	  containing audio to audio instruments.  You can assign more
-	  than one track to the same instrument, in which case the
-	  multiple tracks will always use the same sounds.
+	  &MIDI; device, or as an audio output.  Tracks containing
+	  note data should be assigned to &MIDI; instruments, and
+	  those containing audio to audio instruments.  You can assign
+	  more than one track to the same instrument, in which case
+	  the multiple tracks will use the same sounds.
 	</para>
 	<para>
 	  You can change various properties of the instrument
@@ -305,10 +305,10 @@
       <sect2 id="segment-view-creating">
 	<title>Creating segments</title>
 	<para>
-	  To create an empty segment, in preparation for composing a
-	  new part, you need to use the pencil tool.  Click on the
-	  pencil on the toolbar, and then click at the point where you
-	  want the segment to start (at the correct height for the
+	  To create an empty segment, in order to begin composing
+	  something new, you need to use the pencil tool.  Click on
+	  the pencil on the toolbar, and then click at the point where
+	  you want the segment to start (at the correct height for the
 	  track you want the segment to be on, and at a distance
 	  across the editor window corresponding to the correct time)
 	  and drag rightwards until the segment is the right number of
@@ -331,10 +331,10 @@
 	</para>
 
 	<para>
-	  Note that if you are intending to record from a MIDI device
-	  or audio input, you don't need to create a new segment to
-	  record into first -- each recording always goes into its own
-	  new segment, created automatically during recording.
+	  If you are intending to record from a MIDI device or audio
+	  input, you don't need to create a new segment to record into
+	  first -- each separate recording always goes into a new
+	  segment, created automatically during recording.
 	</para>
 	</sect2>
 
@@ -868,22 +868,152 @@
       <sect2 id="matrix-insertion">
 	<title>Inserting notes</title>
 	<para>
+	  The simplest way to enter a note in the matrix view is to
+	  use the mouse.  To do this, select the pencil tool on the
+	  toolbar, and then click and drag on the matrix editor.  The
+	  note will be entered at the time and pitch corresponding to
+	  the point you click at, and will have a duration
+	  corresponding to the distance you drag before releasing the
+	  mouse button.</para>
+
+	<para>By default, the time and duration are snapped to a
+	particular grid unit, according to the Grid setting on the
+	View menu or the toolbar.  You can prevent this effect by
+	holding down Shift while clicking and dragging.
 	</para>
+
 	<sect3 id="matrix-insertion-keyboard">
-	  <title>Typing notes using the PC keyboard</title>
-	  <para>
-	  </para>
+	  <title>Typing notes with the PC keyboard</title>
+
+	  <sect4>
+	    <title>Duration</title>
+
+	    <para>The durations of notes entered from the keyboard are
+	    controlled by the Grid setting on the View menu or
+	    toolbar.  You can set this using the number keys:</para>
+
+	    <itemizedlist>
+	      <listitem><para><keycap>5</keycap> &ndash; Whole bar</para></listitem>
+	      <listitem><para><keycap>1</keycap> &ndash; Beat</para></listitem>
+	      <listitem><para><keycap>2</keycap> &ndash; Half note (minim)</para></listitem>
+	      <listitem><para><keycap>4</keycap> &ndash; Quarter note (crotchet)</para></listitem>
+	      <listitem><para><keycap>8</keycap> &ndash; Eighth note (quaver)</para></listitem>
+	      <listitem><para><keycap>6</keycap> &ndash; Sixteenth note (semiquaver)</para></listitem>
+	      <listitem><para><keycap>3</keycap> &ndash; Thirty-second note (demisemiquaver)</para></listitem>
+	      <listitem><para><keycap>0</keycap> &ndash; Sixty-fourth note (hemidemisemiquaver)</para></listitem>
+	    </itemizedlist>
+	    
+	  </sect4>
+
+	  <sect4>
+	    <title>Pitch</title>
+
+	    <para>Once the correct duration is selected in the Grid
+	    menu, you can insert a note at the current position of the
+	    <link linkend="nv-rulers">insert cursor</link> by pressing
+	    one of the pitch keys:</para>
+
+	    <itemizedlist>
+	      <listitem><para><keycap>A</keycap> &ndash; Do (the tonic of the current key in the current clef)<!-- !!! FIXME: no clef in matrix view --></para></listitem>
+	      <listitem><para><keycap>S</keycap> &ndash; Re</para></listitem>
+	      <listitem><para><keycap>D</keycap> &ndash; Mi</para></listitem>
+	      <listitem><para><keycap>F</keycap> &ndash; Fa</para></listitem>
+	      <listitem><para><keycap>J</keycap> &ndash; So</para></listitem>
+	      <listitem><para><keycap>K</keycap> &ndash; La</para></listitem>
+	      <listitem><para><keycap>L</keycap> &ndash; Ti</para></listitem>
+	    </itemizedlist>
+
+	    <para>Holding <keycap>Shift</keycap> while pressing a key
+	      will sharpen the note (except for Mi and Ti, which don't
+	      have sharpened versions) and holding <keycap>Shift</keycap>
+	      and <keycap>Ctrl</keycap> together will flatten it (except
+	      for Fa and Do).</para>
+
+	    <para>To enter notes an octave higher, use the corresponding
+	      keys on the next row up: <keycap>Q</keycap>,
+	      <keycap>W</keycap>, <keycap>E</keycap>, <keycap>R</keycap>,
+	      <keycap>U</keycap>, <keycap>I</keycap>, and
+	      <keycap>O</keycap>.  Likewise to enter notes an octave
+	      lower, use <keycap>Z</keycap>, <keycap>X</keycap>,
+	      <keycap>C</keycap>, <keycap>V</keycap>, <keycap>B</keycap>,
+	      <keycap>N</keycap> and <keycap>M</keycap>.</para>
+
+	    </sect4>
+
+	  <sect4>
+	    <title>Other remarks</title>
+
+	    <para>All of the insertion commands are also available on a
+	      submenu of the Tools menu.  It's unlikely you'd ever want to
+	      navigate the menus just to insert a single note, but the
+	      menus show the keyboard shortcuts and so provide a useful
+	      reference in case you forget which key is which.</para>
+
+	    <para>The keyboard shortcuts are currently designed for use
+	      with a QWERTY-layout keyboard.  There is not yet any way to
+	      remap the keys for another layout, short of reassigning each
+	      key individually using the "Configure Shortcuts..." option
+	      on the Settings menu.</para>
+
+	  </sect4>
+
 	</sect3>
+
 	<sect3 id="matrix-insertion-midi">
 	  <title>Entering notes using a MIDI keyboard</title>
+
 	  <para>
+	    You can enter notes into the matrix editor one at a time
+	    using a MIDI keyboard or other MIDI control device.  The
+	    matrix editor uses the pitches you play on the keyboard,
+	    but the durations you have selected in the Grid setting of
+	    the editor itself.  This is known as "step recording".
+	  </para>
+
+	  <para>
+	    To start entering notes from a MIDI keyboard, first make
+	    sure the keyboard is configured as your default MIDI
+	    record device.  Then make sure you have the right Grid
+	    setting in the View menu or toolbar, as this controls the
+	    note duration.  Then press the <!-- !!!  image of button
+	    --> step recording button on the matrix editor's toolbar,
+	    or select Step Recording from the Tools menu.  From that
+	    point on all notes pressed on the MIDI keyboard will be
+	    inserted at the current insertion time in that window,
+	    until step recording is switched off again or activated in
+	    a different window or the window is closed.
+	  </para>
+
+	  <para>
+	    You can change the Grid setting while step recording is in
+	    progress, in order to insert notes of different durations.
 	  </para>
 	</sect3>
       </sect2>
 
       <sect2 id="matrix-selection">
-	<title>Selecting notes</title>
+	<title>Selecting notes</title> <para>To select notes in the
+	matrix editor, switch to the Select (arrow) tool and then
+	outline a rectangular area containing the notes you want to
+	select.  The selected events will then be highlighted in blue.
+	If you instead click on a single event, just that event will
+	be selected.
+
+	</para><para>If you hold <keycap>Shift</keycap> while dragging
+	out a rectangle or clicking on a note, the new selection will
+	be added to any existing selection instead of replacing it.
+	</para>
+
 	<para>
+	  To clear a selection, click in an empty space on the matrix
+	  editor, or hit the Escape key.</para>
+	
+	<para>You can also select all of the notes of a given pitch,
+	by shift-clicking on a key in the piano keyboard down the left
+	side of the matrix editor.  You can also shift-click and drag
+	to select a range of pitches.  This selection is added to any
+	existing selection you have, so if you want a clean new
+	selection, clear the old one first.
 	</para>
       </sect2>
 
@@ -1163,7 +1293,8 @@
 		on a single event, just that event will be selected <footnote> 
 		<para> You can also double-click on a single event to open an
 		editing dialog for that event, but that's got nothing to
-		do with selections.</para> </footnote>). If you hold 
+		do with selections.</para> </footnote>).
+	      </para><para>If you hold 
 		<keycap>Shift</keycap> while dragging
 		out a rectangle, its contents will be added to any
 		existing selection instead of replacing it.
@@ -3817,12 +3948,146 @@
       <title>Configuring custom notation fonts</title>
 
       <para>If you have a notation font that is not currently
-      supported by Rosegarden, you can create your own mapping file to
-      describe the font's character map and metrics in a way
+      supported by Rosegarden, you can create your own mapping XML
+      file to describe the font's character map and metrics in a way
       Rosegarden can use.  These files are installed in the
       fonts/mappings subdirectory of the Rosegarden installation
       directory, and a number of samples are included with the
-	distribution.</para>
+      distribution.</para>
+
+      <sect2 id="developers-note-fonts-mapping-format">
+	<title>Notation font mapping XML format</title>
+
+	<para>Here is a summary of the XML elements that may be used
+	in the font mapping file format.</para>
+
+	<sect3 id="developers-note-fonts-mapping-format-font-encoding">
+	  <title>rosegarden-font-encoding</title>
+
+	  <para>This element must exist in every mapping file, and
+	  should contain all the other elements.  The only attribute
+	  is "name", which contains the font's name as shown in the
+	  font selection dropdown.  Although the file format will
+	  permit any name to be used here, Rosegarden will only pick
+	  up the font corectly if the XML file has the same name as
+	  the contents of this attribute (except that the XML file
+	  should be named in lower-case and should end in ".xml").
+	  </para>
+	</sect3>
+
+	<sect3 id="developers-note-fonts-mapping-format-font-information">
+	  <title>font-information</title>
+
+	  <para>This should normally be the first child element of
+	  "rosegarden-font-encoding".  It may have the following
+	  attributes:
+
+	    <variablelist>
+	      <varlistentry>
+		<term>origin</term>
+		<listitem>
+		  <para>A textual description of the likely origin of
+		  the mapped font (not the origin of the mapping
+		  file).</para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>copyright</term>
+		<listitem>
+		  <para>A textual description of the likely copyright
+		  status of the mapped font (not the copyright status
+		  of the mapping file).  Note that because the mapping
+		  file contains information such as origin and
+		  copyright of the font itself, it is usually
+		  advisable to make separate mapping files for
+		  separate fonts where practical, even if the fonts
+		  share other mapping data.</para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>mapped-by</term>
+		<listitem>
+		  <para>The name of the creator of the mapping file
+		  (i.e. you, presumably).</para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>type</term>
+		<listitem>
+		  <para>The type of the font.  This attribute should
+		  contain one of the values "pixmap" or "scalable".
+		  Fonts that are loaded into the windowing system and
+		  are available to Rosegarden as standard system fonts
+		  have type "scalable"; fonts that need to be loaded
+		  from pixmap files corresponding to individual sizes
+		  of pixmap (such as the feta and rg21 fonts included
+		  with Rosegarden) have type "pixmap".</para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>smooth</term>
+		<listitem>
+		  <para>A boolean attribute indicating whether the
+		  font is antialiased (smooth) or not.  Should have
+		  the value "true" or "false".  If the font is smooth,
+		  other display elements such as beams and slurs that
+		  are not generated from the font will also be
+		  antialiased.</para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>autocrop</term>
+		<listitem>
+		  <para>Only relevant for scalable (system) fonts.
+		  Rosegarden usually expects the metrics for a font to
+		  contain the vertically smallest bounding boxes for
+		  elements such as note heads and accents, rather than
+		  including empty space above or below these elements
+		  for alignment purposes.  Most fonts do not do what
+		  Rosegarden expects.  Therefore for these fonts you
+		  should set the autocrop attribute to "true"; then
+		  Rosegarden will crop any unnecessary space from the
+		  top and bottom of these elements when rendering
+		  them.</para>
+		</listitem>
+	      </varlistentry>
+
+	    </variablelist>
+
+	  </para>
+	</sect3>
+
+	<sect3 id="developers-note-fonts-mapping-format-font-requirements">
+	  <title>font-requirements</title>
+	  <para>
+	  </para>
+	</sect3>
+
+	<sect3 id="developers-note-fonts-mapping-format-font-sizes">
+	  <title>font-sizes</title>
+	  <para>
+	  </para>
+	</sect3>
+
+	<sect3 id="developers-note-fonts-mapping-format-font-symbol-map">
+	  <title>font-symbol-map</title>
+	  <para>
+	  </para>
+	</sect3>
+
+	<sect3 id="developers-note-fonts-mapping-format-font-hotspots">
+	  <title>font-hotspots</title>
+	  <para>
+	  </para>
+	</sect3>
+
+      </sect2>
+      
     </sect1>
     
     <sect1 id="developers-note-styles">

@@ -827,6 +827,8 @@ void NotationView::positionStaffs()
 	accumulatedHeight = 0;
 	int maxTrackHeight = 0;
 
+	trackHeights.clear();
+
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
 	    m_staffs[i]->setLegerLineCount(legerLines);
@@ -884,31 +886,30 @@ void NotationView::positionStaffs()
 
 	    if (rowsPerPage < 1) {
 
-		if (haveRowGap) haveRowGap = false;
+		if (legerLines > 6) --legerLines;
+		else if (haveRowGap) haveRowGap = false;
 		else if (legerLines > 4) --legerLines;
 		else if (m_printSize > 3) --m_printSize;
 		else { // just accept that we'll have to overflow
 		    rowsPerPage = 1;
 		    done = true;
-		    continue;
 		}
 
-	    } else if (rowsPerPage == 1/* &&
-					  2 * accumulatedHeight <= 1.3 * staffPageHeight*/) {
+	    } else if (staffPageHeight - (rowsPerPage * accumulatedHeight) >
+		       accumulatedHeight * 2 / 3) {
 
-		// we can perhaps accommodate two rows, with care
-		if (haveRowGap) haveRowGap = false;
+		// we can perhaps accommodate another row, with care
+		if (legerLines > 6) --legerLines;
+		else if (haveRowGap) haveRowGap = false;
 		else if (legerLines > 4) --legerLines;
 		else { // no, we can't
 		    haveRowGap = true;
 		    legerLines = 8;
 		    done = true;
-		    continue;
 		}
 
 	    } else {
 		done = true;
-		continue;
 	    }
 	}
     }
@@ -926,7 +927,8 @@ void NotationView::positionStaffs()
         }
         
 	m_staffs[i]->setX(20);
-	m_staffs[i]->setY(trackCoords[track] + (topMargin * 3) / 2);
+	m_staffs[i]->setY((m_pageMode == LinedStaff::MultiPageMode ? 20 : 0) +
+			  trackCoords[track] + topMargin);
 	m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
 	m_staffs[i]->setRowsPerPage(rowsPerPage);
         m_staffs[i]->setPageMode(m_pageMode);
@@ -996,9 +998,9 @@ void NotationView::positionPages()
 	for (int page = 0; page < maxPageCount; ++page) {
 
 	    int x = 20 + pageWidth * page + leftMargin/4;
-	    int y = topMargin / 2;
+	    int y = 20;
 	    int w = pageWidth - leftMargin/2;
-	    int h = pageHeight + topMargin;
+	    int h = pageHeight;
 
 	    QCanvasRectangle *rect = new QCanvasRectangle(x, y, w, h, canvas());
 	    if (haveBackground) rect->setBrush(QBrush(Qt::white, background));
@@ -2702,6 +2704,9 @@ void NotationView::readjustCanvasSize()
 
 	PRINT_ELAPSED("NotationView::readjustCanvasSize checkpoint");
     }
+
+    NOTATION_DEBUG << "NotationView::readjustCanvasSize: maxHeight is "
+		   << maxHeight << ", page height is " << getPageHeight() << endl;
 
     if (maxWidth  < getPageWidth()  + 40) maxWidth  = getPageWidth()  + 40;
     if (maxHeight < getPageHeight() + 40) maxHeight = getPageHeight() + 40;

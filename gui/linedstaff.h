@@ -186,6 +186,16 @@ protected:
 	return false;
     }
 
+    /**
+     * Returns the number of bars between bar-line numbers, or zero if
+     * bar lines should not be numbered.  For example, if this
+     * function returns 5, every 5th bar (starting at bar 5) will be
+     * numbered.
+     */
+    virtual int showBarNumbersEvery() const {
+	return 0;
+    }
+
 protected:
     /// Subclass may wish to expose this
     virtual void setResolution(int resolution);
@@ -527,7 +537,8 @@ protected:
 
     virtual void deleteBars();
     virtual void insertBar(double layoutX, double width, bool isCorrect,
-			   const Rosegarden::TimeSignature &);
+			   const Rosegarden::TimeSignature &,
+			   int barNo);
 
     // The default implementations of the following two are empty.
     virtual void deleteTimeSignatures();
@@ -568,10 +579,10 @@ protected:
 
     bool     m_current;
 
-    typedef std::vector<QCanvasItem *> LineList;
-    typedef std::vector<LineList> LineMatrix;
-    LineMatrix m_staffLines;
-    LineList m_staffConnectingLines;
+    typedef std::vector<QCanvasItem *> ItemList;
+    typedef std::vector<ItemList> ItemMatrix;
+    ItemMatrix m_staffLines;
+    ItemList m_staffConnectingLines;
 
     typedef std::pair<double, QCanvasItem *> BarLine; // layout-x, line
     typedef FastVector<BarLine> BarLineList;
@@ -580,6 +591,7 @@ protected:
     BarLineList m_barLines;
     BarLineList m_beatLines;
     BarLineList m_barConnectingLines;
+    ItemList m_barNumbers;
 
     QCanvasLine *m_pointer;
     QCanvasLine *m_insertCursor;

@@ -531,11 +531,16 @@ LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
 
 	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
+	int displayBarNo = 0;
+	if (showBarNumbersEvery() > 0 &&
+	    ((barNo + 1) % showBarNumbersEvery()) == 0) displayBarNo = barNo + 1;
+
 	insertBar(x,
 		  ((barNo == lastBar) ? 0 :
 		   (layout.getBarPosition(barNo + 1) - x)),
 		  layout.isBarCorrectOnStaff(*this, barNo - 1),
-		  currentTimeSignature);
+		  currentTimeSignature,
+		  displayBarNo);
     }
 
     m_startLayoutX = xleft;
@@ -563,14 +568,20 @@ LinedStaff::deleteBars()
         delete i->second;
     }
 
+    for (ItemList::iterator i = m_barNumbers.begin();
+         i != m_barNumbers.end(); ++i) {
+        delete *i;
+    }
+
     m_barLines.clear();
     m_beatLines.clear();
     m_barConnectingLines.clear();
+    m_barNumbers.clear();
 }
 
 void
 LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
-		      const Rosegarden::TimeSignature &timeSig)
+		      const Rosegarden::TimeSignature &timeSig, int barNo)
 {
 //    RG_DEBUG << "insertBar: " << layoutX << ", " << width
 //			 << ", " << isCorrect << endl;
@@ -618,6 +629,22 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     BarLineList::iterator insertPoint = lower_bound
 	(m_barLines.begin(), m_barLines.end(), barLine, compareBars);
     m_barLines.insert(insertPoint, barLine);
+
+    if (barNo > 0) {
+
+	QFont font;
+	font.setPixelSize(m_resolution * 2);
+	QFontMetrics metrics(font);
+	QString text = QString("%1").arg(barNo);
+
+	QCanvasItem *barNoText = new QCanvasText(text, font, m_canvas);
+	barNoText->setX(x);
+	barNoText->setY(y - metrics.height() - m_resolution * 2);
+	barNoText->setZ(-1);
+	barNoText->show();
+
+	m_barNumbers.push_back(barNoText);
+    }
 
     if (showBeatLines()) {
 
@@ -720,7 +747,7 @@ LinedStaff::resizeStaffLines()
     
     int i;
     while ((int)m_staffLines.size() <= lastRow) {
-        m_staffLines.push_back(LineList());
+        m_staffLines.push_back(ItemList());
         m_staffConnectingLines.push_back(0);
     }
 
