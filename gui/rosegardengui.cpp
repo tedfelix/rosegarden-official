@@ -5875,7 +5875,7 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
     //!!! much code duplicated here from RosegardenGUIDoc::initialiseStudio
     
     inst->setConfigurationValue
-	(Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY,
+	(qstrtostr(Rosegarden::PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
 	 m_doc->getAudioFileManager().getAudioPath());
 
     // Set opaque string configuration data (e.g. for DSSI plugin)
@@ -6090,7 +6090,7 @@ RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instru
 	// instance group
 
 	Rosegarden::AudioPlugin *pl =
-	    m_pluginManager->getPluginByIdentifier(inst->getIdentifier());
+	    m_pluginManager->getPluginByIdentifier(strtoqstr(inst->getIdentifier()));
 
 	if (pl && pl->isGrouped()) {
 
