@@ -39,6 +39,7 @@
 #include "staff.h"
 #include "chord.h"
 #include "notepixmapfactory.h"
+#include "qcanvassimplesprite.h"
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     : QCanvasView(new QCanvas(parent->width(), parent->height()),
@@ -51,6 +52,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
     setBackgroundMode(PaletteBase);
 
+    test();
 
 }
 
@@ -195,28 +197,31 @@ RosegardenGUIView::test()
 
 
     NotePixmapFactory npf;
-#if 0
+
     for(unsigned int i = 0; i < 7; ++i) {
 
 
         QPixmap note(npf.makeNotePixmap(i, true, true));
 
-        QList<QPixmap> pixlist;
+//         QList<QPixmap> pixlist;
 
-        pixlist.append(&note);
+//         pixlist.append(&note);
 
-        QList<QPoint> spotlist;
-        spotlist.append(new QPoint(0,0));
+//         QList<QPoint> spotlist;
+//         spotlist.append(new QPoint(0,0));
 
-        QCanvasPixmapArray *notePixmap2 = new QCanvasPixmapArray(pixlist,
-                                                                 spotlist);
+//         QCanvasPixmapArray *notePixmap2 = new QCanvasPixmapArray(pixlist,
+//                                                                  spotlist);
 
-        QCanvasSprite *noteSprite = new QCanvasSprite(notePixmap2, canvas());
+//         QCanvasSprite *noteSprite = new QCanvasSprite(notePixmap2, canvas());
+
+        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
 
         noteSprite->move(50 + i * 20, 100);
 
     }
 
+#if 0
 
     for(unsigned int i = 0; i < 7; ++i) {
 
@@ -304,35 +309,3 @@ RosegardenGUIView::applyVerticalLayout()
     return m_vlayout->status();
 }
 
-
-LayoutEngine::LayoutEngine()
-    : m_status(0)
-{
-}
-
-LayoutEngine::~LayoutEngine()
-{
-}
-
-NotationHLayout::NotationHLayout(unsigned int barWidth)
-    : m_barWidth(barWidth),
-      m_lastPos(0)
-{
-}
-
-void
-NotationHLayout::layout(Element2 *el)
-{
-    el->set<Int>("Notation::Y", m_lastPos + 15);
-    m_lastPos += 15;
-}
-
-NotationVLayout::NotationVLayout()
-{
-}
-
-void
-NotationVLayout::layout(Element2 *el)
-{
-    el->set<Int>("Notation::X", 10);
-}

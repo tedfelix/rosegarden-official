@@ -24,7 +24,6 @@
 #include "staff.h"
 #include "pitchtoheight.h"
 
-
 NotePixmapFactory::NotePixmapFactory()
     : m_generatedPixmapHeight(0),
       m_noteBodyHeight(0),

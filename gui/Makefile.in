@@ -169,12 +169,12 @@ x_libraries = @x_libraries@
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 bin_PROGRAMS = rosegardengui 
-rosegardengui_SOURCES = staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp chord.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
-rosegardengui_LDADD = -Lcore -lcore -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+rosegardengui_SOURCES = notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp chord.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
+rosegardengui_LDADD = -Lrosegarden_core -lcore -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs 
 
-EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm chord.cpp chord.h notepixmapfactory.cpp notepixmapfactory.h pitchtoheight.cpp pitchtoheight.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h 
+EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm chord.cpp chord.h notepixmapfactory.cpp notepixmapfactory.h pitchtoheight.cpp pitchtoheight.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h 
 
 ####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
@@ -210,12 +210,14 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-#>- rosegardengui_OBJECTS =  staff.o qcanvasspritegroupable.o \
+#>- rosegardengui_OBJECTS =  notationvlayout.o notationhlayout.o \
+#>- layoutengine.o qcanvassimplesprite.o staff.o qcanvasspritegroupable.o \
 #>- qcanvaslinegroupable.o qcanvasitemgroup.o qcanvasgroupableitem.o \
 #>- pitchtoheight.o notepixmapfactory.o chord.o rosegardenguiview.o \
 #>- rosegardenguidoc.o rosegardengui.o main.o
-#>+ 7
-@KDE_USE_FINAL_FALSE@rosegardengui_OBJECTS = staff.o qcanvasspritegroupable.o \
+#>+ 8
+@KDE_USE_FINAL_FALSE@rosegardengui_OBJECTS = notationvlayout.o notationhlayout.o \
+layoutengine.o qcanvassimplesprite.o staff.o qcanvasspritegroupable.o \
 qcanvaslinegroupable.o qcanvasitemgroup.o qcanvasgroupableitem.o \
 pitchtoheight.o notepixmapfactory.o chord.o rosegardenguiview.o \
 rosegardenguidoc.o rosegardengui.o main.o\
@@ -235,17 +237,21 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-#>- DEP_FILES =  .deps/chord.P .deps/main.P .deps/notepixmapfactory.P \
-#>- .deps/pitchtoheight.P .deps/qcanvasgroupableitem.P \
-#>- .deps/qcanvasitemgroup.P .deps/qcanvaslinegroupable.P \
+#>- DEP_FILES =  .deps/chord.P .deps/layoutengine.P .deps/main.P \
+#>- .deps/notationhlayout.P .deps/notationvlayout.P \
+#>- .deps/notepixmapfactory.P .deps/pitchtoheight.P \
+#>- .deps/qcanvasgroupableitem.P .deps/qcanvasitemgroup.P \
+#>- .deps/qcanvaslinegroupable.P .deps/qcanvassimplesprite.P \
 #>- .deps/qcanvasspritegroupable.P .deps/rosegardengui.P \
 #>- .deps/rosegardenguidoc.P .deps/rosegardenguiview.P .deps/staff.P
 
-#>+ 7
+#>+ 9
 DEP_FILES =  .deps/rosegardenguiview.moc.P .deps/rosegardenguidoc.moc.P .deps/rosegardengui.moc.P .deps/rosegardengui.all_cpp.P \
-  .deps/chord.P .deps/main.P .deps/notepixmapfactory.P \
-.deps/pitchtoheight.P .deps/qcanvasgroupableitem.P \
-.deps/qcanvasitemgroup.P .deps/qcanvaslinegroupable.P \
+  .deps/chord.P .deps/layoutengine.P .deps/main.P \
+.deps/notationhlayout.P .deps/notationvlayout.P \
+.deps/notepixmapfactory.P .deps/pitchtoheight.P \
+.deps/qcanvasgroupableitem.P .deps/qcanvasitemgroup.P \
+.deps/qcanvaslinegroupable.P .deps/qcanvassimplesprite.P \
 .deps/qcanvasspritegroupable.P .deps/rosegardengui.P \
 .deps/rosegardenguidoc.P .deps/rosegardenguiview.P .deps/staff.P
 SOURCES = $(rosegardengui_SOURCES)
@@ -652,11 +658,11 @@ force-reedit:
 
 
 #>+ 11
-rosegardengui.all_cpp.cpp: $(srcdir)/Makefile.in $(srcdir)/staff.cpp $(srcdir)/qcanvasspritegroupable.cpp $(srcdir)/qcanvaslinegroupable.cpp $(srcdir)/qcanvasitemgroup.cpp $(srcdir)/qcanvasgroupableitem.cpp $(srcdir)/pitchtoheight.cpp $(srcdir)/notepixmapfactory.cpp $(srcdir)/chord.cpp $(srcdir)/rosegardenguiview.cpp $(srcdir)/rosegardenguidoc.cpp $(srcdir)/rosegardengui.cpp $(srcdir)/main.cpp  rosegardenguiview.moc.cpp rosegardenguidoc.moc.cpp rosegardengui.moc.cpp
+rosegardengui.all_cpp.cpp: $(srcdir)/Makefile.in $(srcdir)/notationvlayout.cpp $(srcdir)/notationhlayout.cpp $(srcdir)/layoutengine.cpp $(srcdir)/qcanvassimplesprite.cpp $(srcdir)/staff.cpp $(srcdir)/qcanvasspritegroupable.cpp $(srcdir)/qcanvaslinegroupable.cpp $(srcdir)/qcanvasitemgroup.cpp $(srcdir)/qcanvasgroupableitem.cpp $(srcdir)/pitchtoheight.cpp $(srcdir)/notepixmapfactory.cpp $(srcdir)/chord.cpp $(srcdir)/rosegardenguiview.cpp $(srcdir)/rosegardenguidoc.cpp $(srcdir)/rosegardengui.cpp $(srcdir)/main.cpp  rosegardenguiview.moc.cpp rosegardenguidoc.moc.cpp rosegardengui.moc.cpp
 	@echo 'creating rosegardengui.all_cpp.cpp ...'; \
 	rm -f rosegardengui.all_cpp.files rosegardengui.all_cpp.final; \
 	echo "#define KDE_USE_FINAL 1" >> rosegardengui.all_cpp.final; \
-	for file in staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp chord.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp  rosegardenguiview.moc.cpp rosegardenguidoc.moc.cpp rosegardengui.moc.cpp; do \
+	for file in notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp chord.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp  rosegardenguiview.moc.cpp rosegardenguidoc.moc.cpp rosegardengui.moc.cpp; do \
 	  echo "#include \"$$file\"" >> rosegardengui.all_cpp.files; \
 	  test ! -f $(srcdir)/$$file || egrep '^#pragma +implementation' $(srcdir)/$$file >> rosegardengui.all_cpp.final; \
 	done; \

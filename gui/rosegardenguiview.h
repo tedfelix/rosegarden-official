@@ -25,49 +25,12 @@
 // include files for Qt
 #include <qcanvas.h>
 
-// Layout stuff
-#include <algorithm>
-#include <Element2.h>
+#include <notationhlayout.h>
+#include <notationvlayout.h>
 
 #define KDEBUG_AREA 1010
 
-class HLayoutEngine;
-class VLayoutEngine;
 
-class LayoutEngine : public unary_function<Element2, void>
-{
-public:
-    LayoutEngine();
-    virtual ~LayoutEngine();
-
-    unsigned int status() const { return m_status; }
-    
-    void operator() (Element2 *el) { layout(el); }
-protected:
-    virtual void layout(Element2*) = 0;
-
-    unsigned int m_status;
-};
-
-class NotationHLayout : public LayoutEngine
-{
-public:
-    NotationHLayout(unsigned int barWidth);
-protected:
-    virtual void layout(Element2*);
-
-    unsigned int m_barWidth;
-    unsigned int m_lastPos;
-};  
-
-class NotationVLayout : public LayoutEngine
-{
-public:
-    NotationVLayout();
-protected:
-    virtual void layout(Element2*);
-};  
-    
 class RosegardenGUIDoc;
 
 /** The RosegardenGUIView class provides the view widget for the RosegardenGUIApp instance.	
