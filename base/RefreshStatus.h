@@ -32,7 +32,7 @@ public:
     RefreshStatus() : m_needsRefresh(true) {}
 
     bool needsRefresh() { return m_needsRefresh; }
-    bool setNeedsRefresh(bool s) { m_needsRefresh = s; }
+    void setNeedsRefresh(bool s) { m_needsRefresh = s; }
 
 protected:
     bool m_needsRefresh;

@@ -156,7 +156,7 @@ void Segment::erase(iterator pos)
 
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
-    updateRefreshStatuses(e->getAbsoluteTime(), getEndTime());
+    updateRefreshStatuses(e->getAbsoluteTime(), e->getAbsoluteTime() + e->getDuration());//!!! getEndTime());
     delete e;
 }
 
@@ -173,7 +173,7 @@ Segment::iterator Segment::insert(Event *e)
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
-    updateRefreshStatuses(e->getAbsoluteTime(), getEndTime());
+    updateRefreshStatuses(e->getAbsoluteTime(), e->getAbsoluteTime() + e->getDuration());//!!! getEndTime());
     return i;
 }
 
