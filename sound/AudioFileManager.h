@@ -82,9 +82,13 @@ public:
     //
     bool removeFile(AudioFileId id);
 
-    // does a specific file id exist?
+    // Does a specific file id exist?
     //
     bool fileExists(AudioFileId id);
+
+    // Does a specific file path exist?  Return ID or -1.
+    //
+    int fileExists(const std::string &path);
 
     // get audio file by id
     //

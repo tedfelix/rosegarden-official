@@ -75,6 +75,10 @@ AudioFileManager::addFile(const std::string &filePath)
     QString ext =
         QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
 
+    // Check for file existing already in manager by path
+    //
+    int check = fileExists(filePath);
+    if (check != -1) return AudioFileId(check);
 
     // prepare for audio file
     AudioFile *aF = 0;
@@ -354,6 +358,25 @@ AudioFileManager::getFileInPath(const std::string &file)
     return rS;
 }
 
+
+// Check for file path existence
+//
+int
+AudioFileManager::fileExists(const std::string &path)
+{
+    std::vector<AudioFile*>::iterator it;
+
+    for (it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         ++it)
+    {
+        if ((*it)->getFilename() == path)
+            return (*it)->getId();
+    }
+
+    return -1;
+
+}
 
 // Does a specific file id exist on the manager?
 //
