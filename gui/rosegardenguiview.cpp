@@ -828,23 +828,6 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     slotSetSelectedSegments(segments);
 
-    // Select track for recording if the current one is MIDI
-    // and the one we're going to is MIDI.
-    //
-    Rosegarden::Studio &studio = getDocument()->getStudio();
-
-    if (track)
-    {
-        Rosegarden::Instrument *instr =
-            studio.getInstrumentById(track->getInstrument());
-
-        if (instr && instr->getType() == Rosegarden::Instrument::Midi)
-        {
-            getTrackEditor()->getTrackButtons()->
-                slotSetRecordTrack(track->getPosition());
-        }
-    }
-    
     // inform
     emit segmentsSelected(segments);
 }
