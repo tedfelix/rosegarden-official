@@ -141,8 +141,6 @@ AlsaDriver::generateInstruments()
 
     bool duplex = false;
 
-    int synthCount = 0;
-
     // Use these to store ONE input (duplex) port
     // which we push onto the Instrument list last
     //
@@ -152,15 +150,13 @@ AlsaDriver::generateInstruments()
 
     // Get only the client ports we're interested in 
     //
-    while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0
-            && synthCount < 2)
+    while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
     {
         client = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
-        while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0
-                && synthCount < 2)
+        while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
         {
             cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
 
@@ -204,8 +200,6 @@ AlsaDriver::generateInstruments()
                             snd_seq_port_info_get_client(pinfo),
                             snd_seq_port_info_get_port(pinfo),
                             false);
-
-                synthCount++;
 
                 std::cout << std::endl;
             }
@@ -594,6 +588,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
     snd_seq_event_t *event = new snd_seq_event_t();
 
     ClientPortPair outputDevice;
+    RealTime offTime;
 
     // prepare the event
     snd_seq_ev_clear(event);
@@ -612,8 +607,10 @@ AlsaDriver::processNotesOff(const RealTime &time)
                                 outputDevice.first,
                                 outputDevice.second);
 
-            snd_seq_real_time_t time = { (*i)->getRealTime().sec,
-                                         (*i)->getRealTime().usec * 1000 };
+            offTime = (*i)->getRealTime(); // + m_alsaPlayStartTime;
+
+            snd_seq_real_time_t time = { offTime.sec,
+                                         offTime.usec * 1000 };
 
             snd_seq_ev_schedule_real(event, m_queue, 0, &time);
             snd_seq_ev_set_noteoff(event,

@@ -21,6 +21,7 @@
 
 #include <iostream>
 
+#include "config.h"
 #include "Sequencer.h"
 
 #ifdef HAVE_ALSA
