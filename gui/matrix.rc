@@ -1,6 +1,6 @@
  <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Matrix" version="1">
+<kpartgui name="Rosegarden::Matrix" version="085">
   
   <MenuBar>
 
@@ -117,7 +117,7 @@
   <Action name="playback_pointer_to_cursor" />
   <Action name="cursor_to_playback_pointer" />
 <Separator />
-  <Action name="solo"/>
+  <Action name="toggle_solo"/>
 </ToolBar>
 
 <ToolBar name="actionsToolBar">

@@ -5,6 +5,8 @@ Updated: 3rd October 2002
 Main steps
 ==========
 
+0. Set the new version number in all the .rc files
+
 1. Get a fresh set of source from CVS
 
 2. Build the Tarball
@@ -17,6 +19,17 @@ Main steps
 
 6. Announce the release once the Tarball has become available
 
+
+
+0. Set the new version number in all the .rc files
+-------------------------------------
+
+All .rc files have a version="" attribute in the <kpartgui>
+element. This version number is checked when the file is read, so that
+only the more recent version is taken into account. This is because it
+is possible for a user to have its own local version of any rc file,
+which normally overrides the installed version, except if the version
+number is lower.
 
 1. Get a fresh set of course from CVS
 -------------------------------------
