@@ -22,9 +22,6 @@
 #include <config.h>
 #endif 
 
-// Std
-#include <list>
-
 // include files for QT
 #include <qobject.h>
 #include <qstring.h>
@@ -52,8 +49,6 @@ class RosegardenGUIDoc : public QObject
     Q_OBJECT
 public:
 
-    typedef list<Element2*> ElementList;
-
     /** Constructor for the fileclass of the application */
     RosegardenGUIDoc(QWidget *parent, const char *name=0);
     /** Destructor for the fileclass of the application */
@@ -64,9 +59,9 @@ public:
     /** removes a view from the list of currently connected views */
     void removeView(RosegardenGUIView *view);
     /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
-    void setModified(bool _m=true){ modified=_m; };
+    void setModified(bool _m=true){ m_modified=_m; };
     /** returns if the document is modified or not. Use this to determine if your document needs saving by the user on closing.*/
-    bool isModified(){ return modified; };
+    bool isModified(){ return m_modified; };
     /** "save modified" - asks the user for saving if the document is modified */
     bool saveModified();	
     /** deletes the document's contents */
@@ -88,6 +83,9 @@ public:
     /** returns the title of the document */
     const QString &getTitle() const;
 
+    /** deletes the document views */
+    void deleteViews();
+
     ElementList&       getElements()       { return m_elements; }
     const ElementList& getElements() const { return m_elements; }
 
@@ -107,9 +105,9 @@ public:
 
 private:
     /** the modified flag of the current document */
-    bool modified;
-    QString title;
-    QString absFilePath;
+    bool m_modified;
+    QString m_title;
+    QString m_absFilePath;
 
     QDomDocument m_doc;
     ElementList m_elements;

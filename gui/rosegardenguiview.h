@@ -50,8 +50,11 @@ class RosegardenGUIView : public QCanvasView
     /** Destructor for the main view */
     ~RosegardenGUIView();
 
-    /** returns a pointer to the document connected to the view instance. Mind that this method requires a RosegardenGUIApp instance as a parent
-     * widget to get to the window document pointer by calling the RosegardenGUIApp::getDocument() method.
+    /**
+     * returns a pointer to the document connected to the view
+     * instance. Mind that this method requires a RosegardenGUIApp
+     * instance as a parent widget to get to the window document
+     * pointer by calling the RosegardenGUIApp::getDocument() method.
      *
      * @see RosegardenGUIApp#getDocument
      */
@@ -59,14 +62,10 @@ class RosegardenGUIView : public QCanvasView
 
     /** contains the implementation for printing functionality */
     void print(QPrinter *pPrinter);
-	
-protected:
-    /** Callback for a mouse button press event in the canvas */
-    virtual void contentsMousePressEvent (QMouseEvent *e);
-    /** Callback for a mouse button release event in the canvas */
-    virtual void contentsMouseReleaseEvent (QMouseEvent *e);
-    /** Callback for a mouse move event in the canvas */
-    virtual void contentsMouseMoveEvent (QMouseEvent *e);
+
+    /// draw all elements
+    virtual bool showElements(ElementList::iterator from,
+                              ElementList::iterator to);
 
     /// Normally calls applyHorizontalLayout() then applyVerticalLayout()
     virtual bool applyLayout();
@@ -83,6 +82,14 @@ protected:
     LayoutEngine* getHorizontalLayoutEngine() { return m_hlayout; }
     LayoutEngine* getVerticalLayoutEngine()   { return m_vlayout; }
 
+	
+protected:
+    /** Callback for a mouse button press event in the canvas */
+    virtual void contentsMousePressEvent (QMouseEvent *e);
+    /** Callback for a mouse button release event in the canvas */
+    virtual void contentsMouseReleaseEvent (QMouseEvent *e);
+    /** Callback for a mouse move event in the canvas */
+    virtual void contentsMouseMoveEvent (QMouseEvent *e);
 
     void perfTest();
     void test();

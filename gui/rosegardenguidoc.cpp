@@ -61,22 +61,22 @@ void RosegardenGUIDoc::removeView(RosegardenGUIView *view)
 
 void RosegardenGUIDoc::setAbsFilePath(const QString &filename)
 {
-    absFilePath=filename;
+    m_absFilePath=filename;
 }
 
 const QString &RosegardenGUIDoc::getAbsFilePath() const
 {
-    return absFilePath;
+    return m_absFilePath;
 }
 
 void RosegardenGUIDoc::setTitle(const QString &_t)
 {
-    title=_t;
+    m_title=_t;
 }
 
 const QString &RosegardenGUIDoc::getTitle() const
 {
-    return title;
+    return m_title;
 }
 
 void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
@@ -97,43 +97,39 @@ bool RosegardenGUIDoc::saveModified()
 {
     bool completed=true;
 
-    if(modified)
-        {
-            RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-            int want_save = KMessageBox::warningYesNoCancel(win, i18n("Warning"),
-                                                            i18n("The current file has been modified.\n"
-                                                                 "Do you want to save it?"));
-            switch(want_save)
-                {
-                case 1:
-                    if (title == i18n("Untitled"))
-                        {
-                            win->slotFileSaveAs();
-                        }
-                    else
-                        {
-                            saveDocument(getAbsFilePath());
-                        };
+    if(m_modified) {
+        RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
+        int want_save = KMessageBox::warningYesNoCancel(win, i18n("Warning"),
+                                                        i18n("The current file has been modified.\n"
+                                                             "Do you want to save it?"));
+        switch(want_save)
+            {
+            case 1:
+                if (m_title == i18n("Untitled")) {
+                    win->slotFileSaveAs();
+                } else {
+                    saveDocument(getAbsFilePath());
+                };
 
-                    deleteContents();
-                    completed=true;
-                    break;
+                deleteContents();
+                completed=true;
+                break;
 
-                case 2:
-                    setModified(false);
-                    deleteContents();
-                    completed=true;
-                    break;	
+            case 2:
+                setModified(false);
+                deleteContents();
+                completed=true;
+                break;	
 
-                case 3:
-                    completed=false;
-                    break;
+            case 3:
+                completed=false;
+                break;
 
-                default:
-                    completed=false;
-                    break;
-                }
-        }
+            default:
+                completed=false;
+                break;
+            }
+    }
 
     return completed;
 }
@@ -148,9 +144,9 @@ bool RosegardenGUIDoc::newDocument()
     /////////////////////////////////////////////////
     // TODO: Add your document initialization code here
     /////////////////////////////////////////////////
-    modified=false;
-    absFilePath=QDir::homeDirPath();
-    title=i18n("Untitled");
+    m_modified=false;
+    m_absFilePath=QDir::homeDirPath();
+    m_title=i18n("Untitled");
 
     return true;
 }
@@ -161,8 +157,8 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
         return false;
 
     QFileInfo fileInfo(filename);
-    title=fileInfo.fileName();
-    absFilePath=fileInfo.absFilePath();	
+    m_title=fileInfo.fileName();
+    m_absFilePath=fileInfo.absFilePath();	
 
     QFile file(filename);
 
@@ -187,7 +183,7 @@ bool RosegardenGUIDoc::openDocument(const QString &filename, const char *format 
     delete[] buffer;
 
     if (xmlParse(res)) {
-        modified=false;
+        m_modified=false;
         return true;
     }
 
@@ -200,17 +196,25 @@ bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format 
     // TODO: Add your document saving code here
     /////////////////////////////////////////////////
 
-    modified=false;
+    m_modified=false;
     return true;
 }
 
 void RosegardenGUIDoc::deleteContents()
 {
+    deleteViews();
+
     for(ElementList::iterator i = m_elements.begin(); i != m_elements.end(); ++i) {
         delete *i;
     }
 
     m_elements.clear();
+}
+
+void RosegardenGUIDoc::deleteViews()
+{
+    // auto-deletion is enabled : GUIViews will be deleted
+    pViewList->clear();
 }
 
 
@@ -224,8 +228,6 @@ void RosegardenGUIDoc::deleteContents()
 //          192 units =  48 clocks = 1 minim
 //          384 units =  96 clocks = 1 semibreve
 //          768 units = 192 clocks = 1 breve
-
-
 
 bool
 RosegardenGUIDoc::xmlParseElement(const QDomElement &base)

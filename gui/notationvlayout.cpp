@@ -24,5 +24,5 @@ NotationVLayout::NotationVLayout()
 void
 NotationVLayout::layout(Element2 *el)
 {
-    el->set<Int>("Notation::X", 10);
+    el->set<Int>("Notation::Y", 10);
 }

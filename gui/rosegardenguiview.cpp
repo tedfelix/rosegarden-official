@@ -46,18 +46,30 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
                   parent, name),
     m_movingItem(0),
     m_draggingItem(false),
-    m_hlayout(0),
-    m_vlayout(0)
+    m_hlayout(new NotationHLayout(20)),
+    m_vlayout(new NotationVLayout())
 {
 
     setBackgroundMode(PaletteBase);
 
-    test();
+    if (!applyLayout()) {
 
+        // Show all elements
+        ElementList& elements(getDocument()->getElements());
+
+        showElements(elements.begin(), elements.end());
+
+    } else {
+        KMessageBox::sorry(0, "Couldn't apply layout");
+    }
+    
+    // test();
 }
 
 RosegardenGUIView::~RosegardenGUIView()
 {
+    delete m_hlayout;
+    delete m_vlayout;
 }
 
 RosegardenGUIDoc *RosegardenGUIView::getDocument() const
@@ -267,6 +279,24 @@ RosegardenGUIView::test()
    
 }
 
+bool
+RosegardenGUIView::showElements(ElementList::iterator from,
+                                ElementList::iterator to)
+{
+    static NotePixmapFactory npf;
+
+    for(ElementList::iterator it = from; it != to; ++it) {
+        
+        // TODO : Extract element pitch (among other things :-)
+        QPixmap note(npf.makeNotePixmap(4, true, true));
+        QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
+        noteSprite->move((*it)->get<Int>("Notation::X"),
+                         (*it)->get<Int>("Notation::Y"));
+        
+    }
+
+    return true;
+}
 
 bool
 RosegardenGUIView::applyLayout()
@@ -286,7 +316,7 @@ RosegardenGUIView::applyHorizontalLayout()
         return false;
     }
 
-    RosegardenGUIDoc::ElementList& elements(getDocument()->getElements());
+    ElementList& elements(getDocument()->getElements());
     
     for_each(elements.begin(), elements.end(), *m_hlayout);
     
@@ -302,7 +332,7 @@ RosegardenGUIView::applyVerticalLayout()
         return false;
     }
 
-    RosegardenGUIDoc::ElementList& elements(getDocument()->getElements());
+    ElementList& elements(getDocument()->getElements());
     
     for_each(elements.begin(), elements.end(), *m_vlayout);
     
