@@ -23,10 +23,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_LADSPA
-#include "LADSPAPluginInstance.h"
-#endif
-
+#include "RunnablePluginInstance.h"
 #include "PlayableAudioFile.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
@@ -642,23 +639,12 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
 	if (instance && instance->isOK()) {
 	    m_plugins[id][position] = instance;
-
-#ifdef HAVE_LADSPA
-	    LADSPAPluginInstance *ladspaInstance =
-		dynamic_cast<LADSPAPluginInstance *>(instance);
-	    if (ladspaInstance) ladspaInstance->activate();
-#endif
+	    instance->activate();
 	}
     }
 
     if (oldInstance) {
-
-#ifdef HAVE_LADSPA
-	LADSPAPluginInstance *ladspaInstance =
-	    dynamic_cast<LADSPAPluginInstance *>(oldInstance);
-	if (ladspaInstance) ladspaInstance->deactivate();
-#endif
-
+	oldInstance->deactivate();
 	delete oldInstance;
     }
 
@@ -676,13 +662,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 	RunnablePluginInstance *instance = i->second;
 
 	if (instance) {
-
-#ifdef HAVE_LADSPA
-	    LADSPAPluginInstance *ladspaInstance =
-		dynamic_cast<LADSPAPluginInstance *>(instance);
-	    if (ladspaInstance) ladspaInstance->deactivate();
-#endif
-
+	    instance->deactivate();
 	    delete instance;
 	}
 
@@ -710,13 +690,7 @@ AudioInstrumentMixer::removeAllPlugins()
 	    RunnablePluginInstance *instance = i->second;
 
 	    if (instance) {
-
-#ifdef HAVE_LADSPA
-		LADSPAPluginInstance *ladspaInstance =
-		    dynamic_cast<LADSPAPluginInstance *>(instance);
-		if (ladspaInstance) ladspaInstance->deactivate();
-#endif
-
+		instance->deactivate();
 		delete instance;
 	    }
 
@@ -783,16 +757,9 @@ AudioInstrumentMixer::resetAllPlugins()
 	    RunnablePluginInstance *instance = i->second;
 
 	    if (instance) {
-
-#ifdef HAVE_LADSPA
-		LADSPAPluginInstance *ladspaInstance =
-		    dynamic_cast<LADSPAPluginInstance *>(instance);
-		if (ladspaInstance) {
-		    ladspaInstance->deactivate();
-		    ladspaInstance->updateIdealChannelCount(m_sampleRate, channels);
-		    ladspaInstance->activate();
-		}
-#endif
+		instance->deactivate();
+		instance->setIdealChannelCount(m_sampleRate, channels);
+		instance->activate();
 	    }
 	}
     }

@@ -54,6 +54,9 @@ public:
 
     virtual QString getIdentifier() const = 0;
 
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
+
     virtual void run() = 0;
     
     virtual size_t getBufferSize() = 0;
@@ -68,6 +71,9 @@ public:
 
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
+
+    virtual void setIdealChannelCount(unsigned long sampleRate,
+				      int channels) = 0; // may re-instantiate
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 

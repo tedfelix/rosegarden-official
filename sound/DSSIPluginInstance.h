@@ -60,16 +60,14 @@ public:
     virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
     virtual sample_t **getAudioOutputBuffers() { return m_outputBuffers; }
 
-    // Plugin control
-    //
-    void activate();
-    void deactivate();
+    virtual void activate();
+    virtual void deactivate();
 
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
-    void updateIdealChannelCount(unsigned long sampleRate,
-				 int channels); // may re-instantiate
+    virtual void setIdealChannelCount(unsigned long sampleRate,
+				      int channels); // may re-instantiate
 
 protected:
     // To be constructed only by DSSIPluginFactory

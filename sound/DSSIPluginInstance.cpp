@@ -132,7 +132,7 @@ DSSIPluginInstance::init()
 }
 
 void
-DSSIPluginInstance::updateIdealChannelCount(unsigned long sampleRate, int channels)
+DSSIPluginInstance::setIdealChannelCount(unsigned long sampleRate, int channels)
 {
     if (channels == m_idealChannelCount) return;
     m_idealChannelCount = channels;
