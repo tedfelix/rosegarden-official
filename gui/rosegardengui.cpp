@@ -82,7 +82,9 @@ RosegardenGUIApp::RosegardenGUIApp()
     readOptions();
 
     m_selectDefaultTool->activate();
-    
+
+    launchSequencer();
+
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
 //     disableCommand(ID_FILE_SAVE);
@@ -1132,10 +1134,7 @@ bool RosegardenGUIApp::launchSequencer()
     if (!res) {
         KMessageBox::error(0, i18n("Couldn't start the sequencer"));
         kdDebug(KDEBUG_AREA) << "Couldn't start the sequencer\n";
-    } else {
-        // TODO: This is fugly
-        kapp->processEvents(2 * 1000);
-        sleep(1); // sleep 1 second to allow the sequencer do its connections
+        m_sequencerProcess = 0;
     }
 
     return res;
