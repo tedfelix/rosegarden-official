@@ -1256,20 +1256,10 @@ SequenceManager::reinitialiseSequencerStudio()
         }
     }
 
-    // Setup JACK audio inputs and outputs
+    // Toggle JACK audio ports appropriately
     //
-    int jackAudioInputs = config->readNumEntry("audioinputs", 2);
-    int audioSubmasters = config->readNumEntry("audiosubmasters", 4);
     bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
     bool faderOuts = config->readBoolEntry("audiofaderouts", false);
-
-    Rosegarden::MappedEvent mEportCounts
-	(Rosegarden::MidiInstrumentBase, // InstrumentId
-	 Rosegarden::MappedEvent::SystemAudioPortCounts,
-	 Rosegarden::MidiByte(jackAudioInputs),
-	 Rosegarden::MidiByte(audioSubmasters));
-
-    Rosegarden::StudioControl::sendMappedEvent(mEportCounts);
 
     Rosegarden::MidiByte ports = 0;
     if (faderOuts) {
