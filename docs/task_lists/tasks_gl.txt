@@ -9,7 +9,7 @@ Current Task list
 
 - look if note pixmaps gain from being turned into real QCanvasItems
 
-- check KIO gzip filter (we normally don't have to call zlib directly)
+- use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
 
 Task list from 18/19th August meetings
 ======================================
