@@ -20,10 +20,6 @@ o Tidy up AudioFiles:
 
 o selection of ALSA recording device [HALF COMPLETE]
 
-o ALSA client detection bug on laptop - going from no clients
-  to one client causes big loop of death.  Appear that alive()
-  is getting sent twice from the GUI..?
-
 o Toggle record mode for punch in/out [Half complete]
 
 o audio/MIDI looping and start position (performance)
@@ -38,6 +34,13 @@ o Multiple Document Interface - at least internally capable
   - more complete "swap()" that works at Document level
   - full MDI interface internals
 
+
+Fixed for next release
+----------------------
+
+o ALSA client detection bug on laptop - going from no clients
+  to one client causes big loop of death.  Appear that alive()
+  is getting sent twice from the GUI..? [FIXED]
 
 
 Smaller stuff

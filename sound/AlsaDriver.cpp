@@ -1119,16 +1119,26 @@ AlsaDriver::allNotesOff()
                             outputDevice.second);
 
 
+        /*
         snd_seq_real_time_t alsaOffTime = { offTime.sec,
                                             offTime.usec * 1000 };
 
         snd_seq_ev_schedule_real(event, m_queue, 0, &alsaOffTime);
+        */
+
         snd_seq_ev_set_noteoff(event,
                                (*it)->getChannel(),
                                (*it)->getPitch(),
                                127);
         //snd_seq_event_output(m_midiHandle, event);
-        snd_seq_event_output_direct(m_midiHandle, event);
+        int error = snd_seq_event_output_direct(m_midiHandle, event);
+
+        if (error < 0)
+        {
+            std::cout << "AlsaDriver::allNotesOff - "
+                      << "can't send event" << std::endl;
+        }
+
         delete(*it);
     }
     
@@ -1284,17 +1294,22 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
     if (m_audioMeterSent == false)
         m_recordComposition.clear();
 
-
     if (m_recordStatus != RECORD_MIDI &&
         m_recordStatus != RECORD_AUDIO &&
         m_recordStatus != ASYNCHRONOUS_MIDI &&
         m_recordStatus != ASYNCHRONOUS_AUDIO)
-           return &m_recordComposition;
+    {
+        m_audioMeterSent = false; // reset this always
+        return &m_recordComposition;
+    }
 
     // If the input port hasn't connected we shouldn't poll it
     //
     if(m_midiInputPortConnected == false)
+    {
+        m_audioMeterSent = false; // reset this always
         return &m_recordComposition;
+    }
 
     Rosegarden::RealTime eventTime(0, 0);
 
@@ -1495,8 +1510,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
         snd_seq_free_event(event);
     }
 
-    // reset this whatever
-    //
+    // reset this always
     m_audioMeterSent = false;
 
     return &m_recordComposition;
@@ -1688,6 +1702,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             case MappedEvent::AudioCancel:
             case MappedEvent::AudioLevel:
             case MappedEvent::AudioStopped:
+            case MappedEvent::SystemUpdateInstruments:
             case MappedEvent::SystemJackTransport:
             case MappedEvent::SystemMMCTransport:
             case MappedEvent::SystemMIDIClock:
