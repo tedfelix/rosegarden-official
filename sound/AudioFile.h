@@ -141,7 +141,7 @@ public:
 
     // Offset to start of sample data
     //
-    virtual streampos getDataOffset() = 0;
+    virtual std::streampos getDataOffset() = 0;
 
     // Return the peak file name
     //

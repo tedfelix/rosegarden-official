@@ -99,7 +99,7 @@ protected:
     void writeHeader();
 
     std::string    m_riffFileName;
-    streampos      m_dataChunk;
+    std::streampos      m_dataChunk;
     unsigned int   m_bitsPerSample;
     unsigned int   m_channels;
     unsigned short m_updatePercentage;  // how often we send updates 

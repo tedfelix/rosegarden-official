@@ -285,7 +285,7 @@ WAVAudioFile::getPreview(const RealTime &resolution)
 
 */
 
-streampos
+std::streampos
 WAVAudioFile::getDataOffset()
 {
     return 0;

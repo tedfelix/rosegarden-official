@@ -68,7 +68,7 @@ public:
 
     // Offset to start of sample data
     //
-    virtual streampos getDataOffset();
+    virtual std::streampos getDataOffset();
 
     // Peak file name
     //
