@@ -245,15 +245,10 @@ JackDriver::initialise()
 	(m_alsaDriver, m_instrumentMixer, m_sampleRate, m_bufferSize);
     m_instrumentMixer->setBussMixer(m_bussMixer);
 
+    // We run the file reader whatever, but we only run the other
+    // threads (instrument mixer, buss mixer, file writer) when we
+    // actually need them.  (See updateAudioData and createRecordFile.)
     m_fileReader->run();
-//!!!    m_fileWriter->run();
-//    m_instrumentMixer->run();
-
-    //!!! experimentally avoid running buss mixer at all if not wanted
-    if (m_bussMixer->getBussCount() > 0) {
-	m_bussMixer->run();
-	m_instrumentMixer->run();//!!!
-    }
 
     // Create and connect the default numbers of ports.  We always create
     // one stereo pair each of master and monitor outs, and then we create
@@ -747,12 +742,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 	    if (!m_haveSoftSynthAsyncEvent) {
 #ifdef DEBUG_JACK_PROCESS
-	    std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
+		std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
-		//!!! We don't actually want to be doing the instrument
-		// mix malarkey when stopped, unless there is some work to
-		// do -- perhaps the instrument mixer could report whether
-		// it's had any async events lately?
 		return jackProcessEmpty(nframes);
 	    }
 	}
@@ -947,8 +938,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    sdb->setInstrumentLevel(id, info);
 	}
     }
-
-//!!!    if (allSynthsDormant) m_haveSoftSynthAsyncEvent = false;
 
     // Get master fader levels.  There's no pan on the master.
     float gain = AudioLevel::dB_to_multiplier(m_masterLevel);
@@ -1534,13 +1523,10 @@ JackDriver::prebufferAudio()
     RealTime sliceStart = getNextSliceStart(m_alsaDriver->getSequencerTime());
 
     m_fileReader->fillBuffers(sliceStart);
+    m_instrumentMixer->fillBuffers(sliceStart);
 
-    //!!! tidy
     if (m_bussMixer->getBussCount() > 0) {
-	m_instrumentMixer->fillBuffers(sliceStart);
 	m_bussMixer->fillBuffers(sliceStart);
-    } else {
-	m_instrumentMixer->fillBuffers(sliceStart);
     }
 }
 
@@ -1935,7 +1921,6 @@ JackDriver::getSynthPlugin(InstrumentId id)
     else return 0;
 }
 
-//!!! and these
 bool
 JackDriver::createRecordFile(const std::string &filename)
 {

@@ -608,11 +608,11 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	    frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
 	}
 
-//#ifdef DEBUG_DSSI_PROCESS
+#ifdef DEBUG_DSSI_PROCESS
 	std::cerr << "DSSIPluginInstance::run: evTime " << evTime << ", blockTime " << blockTime << ", frameOffset " << frameOffset
 		  << ", blockSize " << m_blockSize << std::endl;
 	std::cerr << "Type: " << int(ev->type) << ", pitch: " << int(ev->data.note.note) << ", velocity: " << int(ev->data.note.velocity) << std::endl;
-//#endif
+#endif
 
 	if (frameOffset >= int(m_blockSize)) break;
 	if (frameOffset < 0) frameOffset = 0;
