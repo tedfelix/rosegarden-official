@@ -57,6 +57,7 @@ using Rosegarden::Segment;
 using Rosegarden::Event;
 using Rosegarden::timeT;
 using Rosegarden::PropertyName;
+using Rosegarden::ControlParameter;
 using Rosegarden::ViewElement;
 using Rosegarden::EventSelection;
 
@@ -256,6 +257,7 @@ const unsigned int ControlItem::DefaultWidth    = 20;
 ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
                          int xx, int width)
     : QCanvasRectangle(ruler->canvas()),
+      m_value(0),
       m_controlRuler(ruler),
       m_elementAdapter(elementAdapter)
 {
@@ -291,13 +293,16 @@ void ControlItem::updateValue()
 void ControlItem::updateFromValue()
 {
     if (m_elementAdapter->getValue(m_value)) {
-        RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;
+//         RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;
         setHeight(m_controlRuler->valueToHeight(m_value));
     }
 }
 
 void ControlItem::draw(QPainter &painter)
 {
+    if (!selected())
+        updateFromValue();
+
     setBrush(m_controlRuler->valueToColor(m_value));
 
     QCanvasRectangle::draw(painter);
@@ -588,6 +593,7 @@ void ControlRuler::slotUpdate()
 {
     RG_DEBUG << "ControlRuler::slotUpdate()\n";
     canvas()->update();
+    repaint();
 }
 
 void ControlRuler::slotUpdateElementsHPos()
@@ -966,7 +972,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
                                              EditViewBase* parentView,
                                              QCanvas* c,
                                              QWidget* parent,
-                                             Rosegarden::ControlParameter *controller,
+                                             ControlParameter *controller,
                                              const char* name, WFlags f)
     : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
       m_segmentDeleted(false),
@@ -979,7 +985,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
     // Make a copy of the ControlParameter if we have one
     //
     if (controller)
-        m_controller = new Rosegarden::ControlParameter(*controller);
+        m_controller = new ControlParameter(*controller);
     else
         m_controller = 0;
 
@@ -1485,3 +1491,94 @@ PropertyBox::paintEvent(QPaintEvent *e)
     paint.drawText(10, 2 * m_height / 3, m_label);
 }
 
+// ----------------------------- ControlRulerCanvasRepository -------------------------------
+//
+
+
+void ControlRulerCanvasRepository::clear()
+{
+    segmentpropertycanvasmap& segmentPropertyMap = getInstance()->m_segmentPropertyCanvasMap;
+
+    for(segmentpropertycanvasmap::iterator i = segmentPropertyMap.begin();
+        i != segmentPropertyMap.end(); ++i) {
+
+        delete i->second;
+    }
+
+    segmentcontrollercanvasmap& segmentControllerMap = getInstance()->m_segmentControllerCanvasMap;
+
+    for(segmentcontrollercanvasmap::iterator i = segmentControllerMap.begin();
+        i != segmentControllerMap.end(); ++i) {
+
+        delete i->second;
+    }
+    
+}
+
+QCanvas* ControlRulerCanvasRepository::getCanvas(Rosegarden::Segment* segment,
+                                                 PropertyName propertyName,
+                                                 QSize viewSize)
+{
+    segmentpropertycanvasmap& segmentPropertyMap = getInstance()->m_segmentPropertyCanvasMap;
+
+    // first fetch the propertymap for this segment,
+    // create it if it doesn't exist
+    //
+    propertycanvasmap* propCanvasMap = segmentPropertyMap[segment];
+    if (propCanvasMap == 0) {
+        propCanvasMap = new propertycanvasmap;
+        segmentPropertyMap[segment] = propCanvasMap;
+    }
+
+    // look up the map if the canvas is there, otherwise create it
+    //
+    QCanvas* canvas = (*propCanvasMap)[propertyName];
+    if (!canvas) {
+        canvas = new QCanvas(getInstance());
+        (*propCanvasMap)[propertyName] = canvas;
+        canvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight);
+    }
+    
+    return canvas;
+}
+
+QCanvas* ControlRulerCanvasRepository::getCanvas(Rosegarden::Segment* segment,
+                                                 ControlParameter* controller,
+                                                 QSize viewSize)
+{
+    segmentcontrollercanvasmap& segmentControllerMap = getInstance()->m_segmentControllerCanvasMap;
+
+    // first fetch the controllermap for this segment,
+    // create it if it doesn't exist
+    //
+    controllercanvasmap* controllerCanvasMap = segmentControllerMap[segment];
+    if (controllerCanvasMap == 0) {
+        controllerCanvasMap = new controllercanvasmap;
+        segmentControllerMap[segment] = controllerCanvasMap;
+    }
+
+    // look up the map if the canvas is there, otherwise create it
+    //
+    QCanvas* canvas = (*controllerCanvasMap)[*controller];
+    if (!canvas) {
+        canvas = new QCanvas(getInstance());
+        (*controllerCanvasMap)[*controller] = canvas;
+        canvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight);
+    }
+    
+    return canvas;
+}
+
+ControlRulerCanvasRepository* ControlRulerCanvasRepository::getInstance()
+{
+    if (!m_instance)
+        m_instance = new ControlRulerCanvasRepository();
+    
+    return m_instance;
+}
+
+ControlRulerCanvasRepository::ControlRulerCanvasRepository()
+{
+}
+
+ControlRulerCanvasRepository* ControlRulerCanvasRepository::m_instance = 0;

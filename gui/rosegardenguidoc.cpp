@@ -58,6 +58,7 @@
 #include "Profiler.h"
 #include "Midi.h"
 
+#include "controlruler.h"
 #include "rgapplication.h"
 #include "constants.h"
 #include "editviewbase.h"
@@ -131,6 +132,9 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
     m_beingDestroyed = true;
 
     deleteEditViews();
+
+    ControlRulerCanvasRepository::clear();
+
     delete m_commandHistory; // must be deleted before the Composition is
 }
 

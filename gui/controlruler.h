@@ -239,8 +239,8 @@ protected:
 };
 
 /**
- * PropertyViewRuler is a widget that shows a range of Property values
- * for a set of Rosegarden Events.
+ * PropertyViewRuler is a widget that shows a range of Property
+ * (velocity, typically) values for a set of Rosegarden Events.
  */
 class PropertyViewRuler : public QWidget, public HZoomable
 {
@@ -318,6 +318,39 @@ protected:
     int     m_width;
     int     m_height;
 };
+
+/**
+ * A repository for QCanvas objects used by control rulers
+ *
+ * All control ruler for a given segment and property (or controller)
+ * should use the same canvas
+ */
+class ControlRulerCanvasRepository : public QObject
+{
+public:
+    static void clear();
+    static QCanvas* getCanvas(Rosegarden::Segment*, Rosegarden::PropertyName,
+                              QSize viewSize);
+    static QCanvas* getCanvas(Rosegarden::Segment*, Rosegarden::ControlParameter*,
+                              QSize viewSize);
+
+protected:
+    typedef std::map<Rosegarden::PropertyName, QCanvas*> propertycanvasmap;
+    typedef std::map<Rosegarden::ControlParameter, QCanvas*> controllercanvasmap;
+
+    typedef std::map<Rosegarden::Segment*, propertycanvasmap*> segmentpropertycanvasmap;
+    typedef std::map<Rosegarden::Segment*, controllercanvasmap*> segmentcontrollercanvasmap;
+    
+    ControlRulerCanvasRepository();
+    static ControlRulerCanvasRepository* getInstance();
+
+    static ControlRulerCanvasRepository* m_instance;
+    
+    segmentpropertycanvasmap   m_segmentPropertyCanvasMap;
+    segmentcontrollercanvasmap m_segmentControllerCanvasMap;
+    
+};
+
 
 #endif // _CONTROLRULER_H_
 

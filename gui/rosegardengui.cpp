@@ -4036,7 +4036,6 @@ void RosegardenGUIApp::slotEditKeys()
     KKeyDialog::configure(actionCollection());
 }
 
-
 void RosegardenGUIApp::slotEditToolbars()
 {
     KEditToolbar dlg(actionCollection(), "rosegardenui.rc");

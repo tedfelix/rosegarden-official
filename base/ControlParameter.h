@@ -43,10 +43,11 @@ public:
                      MidiByte controllerValue = 0,
                      unsigned int colour = 0,
                      int ipbPositon = -1);
-
     ControlParameter(const ControlParameter &control);
     ControlParameter& operator=(const ControlParameter &control);
     bool operator==(const ControlParameter &control);
+
+    friend bool operator<(const ControlParameter &a, const ControlParameter &b);
 
     // ControlParameter comparison on IPB position
     //
