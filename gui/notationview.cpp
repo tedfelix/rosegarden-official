@@ -174,21 +174,29 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
 					     false, width() - 50,
                                              m_fontName, m_fontSize));
-	staffHeights.push_back(m_staffs[i]->getStaffHeight());
+	staffHeights.push_back(m_staffs[i]->getHeightOfRow());
 	totalHeight += staffHeights[i];
     }
 
     int h = 0;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	m_staffs[i]->setLineBreakGap(totalHeight + staffHeights[i] / 7);
+	m_staffs[i]->setRowSpacing(totalHeight + staffHeights[i] / 7);
 	if (i < m_staffs.size() - 1) {
+/*!!! fix, along with other references to connecting line height in staff code
 	    m_staffs[i]->setConnectingLineHeight
 		(m_staffs[i]->getTopLineOffset() +
-		 (m_staffs[i+1]->getStaffHeight() -
+		 (m_staffs[i+1]->getHeightOfRow() -
 		  m_staffs[i+1]->getTopLineOffset()));
+*/
 	}
+	
+	m_staffs[i]->setX(20);
+	m_staffs[i]->setY(h + 45);
+
+/*
         m_staffs[i]->move(20, h + 45);
         m_staffs[i]->show();
+*/
 	h += staffHeights[i];
     }
     m_currentStaff = 0;
@@ -207,10 +215,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	    
             m_staffs[i]->renderElements();
 	    m_staffs[i]->positionElements();
-            showBars(i);
         }
+
+	updateRuler();
     }
 
     m_selectDefaultNote->activate();
@@ -725,10 +735,6 @@ NotationView::getCommandHistory()
     return getDocument()->getCommandHistory();
 }
 
-//!!! This should probably be unnecessary here and done in
-//NotationStaff instead (it should be intelligent enough to query the
-//notationhlayout itself)
-
 QSize NotationView::getViewSize()
 {
     return canvas()->size();
@@ -739,6 +745,14 @@ void NotationView::setViewSize(QSize s)
     canvas()->resize(s.width(), s.height());
 }
 
+//!!! This should probably be unnecessary here and done in
+//NotationStaff instead (it should be intelligent enough to query the
+//notationhlayout itself)
+
+/*!!!
+=======
+
+>>>>>>> 1.254
 void NotationView::showBars(int staffNo)
 {
     NotationStaff &staff = *m_staffs[staffNo];
@@ -764,7 +778,7 @@ void NotationView::showBars(int staffNo)
 
     updateRuler();
 }
-
+*/
 void NotationView::updateRuler()
 {
     if (m_lastFinishingStaff < 0 ||
@@ -777,7 +791,7 @@ void NotationView::updateRuler()
     
     for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
 
-        int x;
+        double x;
         Event *timeSigEvent = m_hlayout->getTimeSignatureInBar(staff, i, x);
         if (timeSigEvent) timeSignature = TimeSignature(*timeSigEvent);
 
@@ -800,7 +814,6 @@ NotationView::changeStretch(int n)
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->positionElements();
-        showBars(i);
     }
 
     canvas()->update();
@@ -819,7 +832,6 @@ void NotationView::changeLegato(int n)
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->positionElements();
-        showBars(i);
     }
 
     canvas()->update();
@@ -903,7 +915,7 @@ NotationView::changeFont(string newName, int newSize)
 // lineBreakGap correctly
 //!!!        m_staffs[i]->move(0, 0);
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
-//!!!        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
+//!!!        m_staffs[i]->move(20, m_staffs[i]->getHeightOfRow() * i + 45);
     }
 
     bool layoutApplied = applyLayout();
@@ -912,7 +924,6 @@ NotationView::changeFont(string newName, int newSize)
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->renderElements();
             m_staffs[i]->positionElements();
-            showBars(i);
         }
     }
 
@@ -930,7 +941,7 @@ NotationView::setPageMode(bool pageMode)
 //        m_staffs[i]->move(0, 0);
         m_staffs[i]->setPageMode(pageMode);
         m_staffs[i]->setPageWidth(width() - 50);
-//        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
+//        m_staffs[i]->move(20, m_staffs[i]->getHeightOfRow() * i + 45);
     }
 
     bool layoutApplied = applyLayout();
@@ -939,7 +950,6 @@ NotationView::setPageMode(bool pageMode)
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->renderElements();
             m_staffs[i]->positionElements();
-            showBars(i);
         }
     }
 
@@ -1854,14 +1864,18 @@ void NotationView::mouseRelease(QMouseEvent *e)
         m_tool->handleMouseRelease(e);
 }
 
+
 NotationStaff *
-NotationView::getStaffAtY(int y) const
+NotationView::getStaffForCanvasY(int y) const
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (m_staffs[i]->containsY(y)) return m_staffs[i];
+	if (m_staffs[i]->containsCanvasY(y)) return m_staffs[i];
     }
     return 0;
 }
+
+
+/*!!!
 
 int
 NotationView::getHeightAtY(int y) const
@@ -1898,25 +1912,7 @@ NotationView::getBarExtents(int x, int y,
     rw = extents.width();
     rh = extents.height();
 }
-
-string
-NotationView::getNoteNameAtCoordinates(int x, int y) const
-{
-    NotationStaff *staff = getStaffAtY(y);
-    if (!staff) return "";
-
-//!!! getting wrong results for clef here -- changes within staff
-// not being taken into account properly
-
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    staff->getClefAndKeyAt(x, y, clef, key);
-
-    return
-	Rosegarden::NotationDisplayPitch
-	(staff->getHeightAtY(y), m_currentAccidental).getAsString(clef, key);
-}
-
+*/
 
 
 
@@ -1975,7 +1971,7 @@ NotationView::findClosestNote(double eventX, double eventY,
             ydist = eventY - (*it)->getEffectiveY();
 
 	// bit of a hack to get the correct row in page layout:
-	if (ydist > m_staffs[staffNo]->getStaffHeight()/2) continue;
+	if (ydist > m_staffs[staffNo]->getHeightOfRow()/2) continue;
 
         if (xdist < minDist) {
             kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
@@ -2057,8 +2053,9 @@ void NotationView::redoLayoutAdvised(Segment *segment,
 	    m_staffs[i]->renderElements(starti, endi);
 	}
 	m_staffs[i]->positionElements(barStartTime, barEndTime);
-        showBars(i);
     }
+
+    updateRuler(); //!!! to staff
 
     PRINT_ELAPSED("NotationView::redoLayoutAdvised (without update/GC)");
 
@@ -2080,45 +2077,38 @@ void NotationView::readjustCanvasSize()
 {
     START_TIMING;
 
-    double totalHeight = 0.0, totalWidth = m_hlayout->getTotalWidth();
+    double maxWidth = 0.0;
+    int maxHeight = 0;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-        double xleft = 0, xright = totalWidth;
+	NotationStaff &staff = *m_staffs[i];
 
-        NotationStaff &staff = *m_staffs[i];
-        unsigned int barCount = m_hlayout->getBarLineCount(staff);
+	staff.sizeStaff(*m_hlayout);
 
-        for (unsigned int j = 0; j < barCount; ++j) {
-            if (m_hlayout->isBarLineVisible(staff, j)) {
-                xleft = m_hlayout->getBarLineX(staff, j);
-                break;
-            }
-        }
+	if (staff.getTotalWidth() + staff.getX() > maxWidth) {
+	    maxWidth = staff.getTotalWidth() + staff.getX();
+	}
 
-        if (barCount > 0) {
-            xright = m_hlayout->getBarLineX(staff, barCount - 1);
-        }
-
-        kdDebug(KDEBUG_AREA) << "Setting staff lines to " << xleft <<
-            " -> " << xright << endl;
-        staff.setLines(xleft, xright, (i == m_staffs.size() - 1));
-
-        totalHeight += staff.getStaffHeight() + 15;
+	if (staff.getTotalHeight() + staff.getY() > maxHeight) {
+	    maxHeight = staff.getTotalHeight() + staff.getY();
+	}
     }
-#ifdef NOT_DEFINED //!!!
+
+    //!!! Rather than tidying up this code, use EditView equivalent
+
     // We want to avoid resizing the canvas too often, so let's make
     // sure it's always an integer multiple of the view's dimensions
     
     int iWidth = (int)width(), iHeight = (int)height();
-    int widthMultiple = ((int)(totalWidth + 50) / iWidth) + 1;
-    int heightMultiple = ((int)(totalHeight + 50) / iHeight) + 1;
+    int widthMultiple = ((int)(maxWidth + 50) / iWidth) + 1;
+    int heightMultiple = ((int)(maxHeight + 50) / iHeight) + 1;
 
     if (canvas()->width() < (widthMultiple * iWidth) ||
 	canvas()->height() < (heightMultiple * iHeight)) {
 
 	cerr/*        kdDebug(KDEBUG_AREA)*/ << "NotationView::readjustCanvasWidth() to "
-					     << totalWidth << " (iWidth is " << iWidth << " so need width of " << (widthMultiple * iWidth) << ")" << endl;
+					     << maxWidth << " (iWidth is " << iWidth << " so need width of " << (widthMultiple * iWidth) << ")" << endl;
 
 	canvas()->resize(std::max(widthMultiple * iWidth,
 				  (int)canvas()->width()),
@@ -2128,7 +2118,6 @@ void NotationView::readjustCanvasSize()
 //        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
         m_ruler->resize();
     }
-#endif
 
     PRINT_ELAPSED("NotationView::readjustCanvasWidth total");
 }

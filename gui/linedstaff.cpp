@@ -20,12 +20,13 @@
 
 #include "linedstaff.h"
 #include "colours.h"
+#include "rosedebug.h"
 
 
 template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 			  int id, int resolution, int lineThickness) :
-    Rosegarden::Staff<T>(segment),
+    Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
     m_id(id),
     m_x(0.0),
@@ -43,7 +44,7 @@ template <class T>
 LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 			  int id, int resolution, int lineThickness,
 			  double pageWidth, int rowSpacing) :
-    Rosegarden::Staff<T>(segment),
+    Rosegarden::Staff<T>(*segment),
     m_canvas(canvas),
     m_id(id),
     m_x(0.0),
@@ -58,9 +59,28 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 }
 
 template <class T>
+LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+			  int id, int resolution, int lineThickness,
+			  bool pageMode, double pageWidth, int rowSpacing) :
+    Rosegarden::Staff<T>(*segment),
+    m_canvas(canvas),
+    m_id(id),
+    m_x(0.0),
+    m_y(0),
+    m_resolution(resolution),
+    m_lineThickness(lineThickness),
+    m_pageMode(pageMode),
+    m_pageWidth(pageWidth),
+    m_rowSpacing(rowSpacing)
+{
+    // nothing
+}
+
+template <class T>
 LinedStaff<T>::~LinedStaff()
 {
-    // nothing yet
+    deleteBars();
+    for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
 }
 
 template <class T>
@@ -113,10 +133,24 @@ LinedStaff<T>::setX(double x)
 }
 
 template <class T>
+double
+LinedStaff<T>::getX() const
+{
+    return m_x;
+}
+
+template <class T>
 void
 LinedStaff<T>::setY(int y)
 {
     m_y = y;
+}
+
+template <class T>
+int 
+LinedStaff<T>::getY() const
+{
+    return m_y;
 }
 
 template <class T>
@@ -147,7 +181,7 @@ LinedStaff<T>::getHeightOfRow() const
 
 template <class T>
 bool
-LinedStaff<T>::containsY(int y) const
+LinedStaff<T>::containsCanvasY(int y) const
 {
     if (m_pageMode) {
 
@@ -172,7 +206,7 @@ LinedStaff<T>::containsY(int y) const
 
 template <class T>
 int
-LinedStaff<T>::getCanvasYForHeight(int height, int baseY) const
+LinedStaff<T>::getCanvasYForHeight(int h, int baseY) const
 {
     int y;
     if (baseY >= 0) {
@@ -181,7 +215,16 @@ LinedStaff<T>::getCanvasYForHeight(int height, int baseY) const
 	y = getCanvasYForTopLine();
     }
 
-    y += ((getTopLineHeight() - h) * getLineSpacing()) / getHeightPerLine();
+    y += getLayoutYForHeight(h);
+
+    return y;
+}
+
+template <class T>
+int
+LinedStaff<T>::getLayoutYForHeight(int h) const
+{
+    int y = ((getTopLineHeight() - h) * getLineSpacing()) / getHeightPerLine();
     if (h < getTopLineHeight() && (h % getHeightPerLine() != 0)) ++y;
 
     return y;
@@ -240,7 +283,7 @@ LinedStaff<T>::getBarExtents(double x, int y) const
 {
     int row = getRowForCanvasY(y);
 
-    for (unsigned int i = 1; i < m_barLines.size(); ++i) {
+    for (int i = 1; i < m_barLines.size(); ++i) {
 
 	int layoutX = m_barLines[i].first;
 	int barRow = getRowForLayoutX(layoutX);
@@ -267,30 +310,31 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     deleteBars();
     deleteTimeSignatures();
 
-    unsigned int barCount = layout->getBarLineCount(*this);
+    unsigned int barCount = layout.getBarLineCount(*this);
 
-    int xleft = 0, xright = 0;
+    double xleft = 0, xright = 0;
     bool haveXLeft = false;
 
-    if (barCount > 0) xright = layout->getBarLineX(*this, barCount - 1);
-    else xright = layout->getTotalWidth();
+    if (barCount > 0) xright = layout.getBarLineX(*this, barCount - 1);
+    else xright = layout.getTotalWidth();
     
     for (unsigned int i = 0; i < barCount; ++i) {
 
-	if (layout->isBarLineVisible(*this, i)) {
+	if (layout.isBarLineVisible(*this, i)) {
 
-	    int x = layout->getBarLineX(*this, i);
+	    double x = layout.getBarLineX(*this, i);
 
-	    if (!haveXLeft && layout->isBarLineVisible(*this, i)) {
+	    if (!haveXLeft && layout.isBarLineVisible(*this, i)) {
 		xleft = x;
 		haveXLeft = true;
 	    }
 
-	    insertBar(x, layout->isBarLineCorrect(*this, i));
+	    insertBar(x, layout.isBarLineCorrect(*this, i));
 
-	    Event *timeSig = layout->getTimeSignatureInBar(*this, i, x);
+	    Rosegarden::Event *timeSig =
+		layout.getTimeSignatureInBar(*this, i, x);
 	    if (timeSig && i < barCount - 1) {
-		insertTimeSignature(x, TimeSignature(*timeSig));
+		insertTimeSignature(x, Rosegarden::TimeSignature(*timeSig));
 	    }
 	}
     }
@@ -336,7 +380,7 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
         line->moveBy
 	    (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
 
-        if (correct) line->setPen(QPen(RosegardenGUIColours::BarLine, 1));
+        if (isCorrect) line->setPen(QPen(RosegardenGUIColours::BarLine, 1));
         else line->setPen(QPen(RosegardenGUIColours::BarLineIncorrect, 1));
         line->show();
 	line->setZ(-1);
@@ -426,11 +470,11 @@ LinedStaff<T>::resizeStaffLines()
 	double x1 = m_pageWidth;
 
 	if (i == firstRow) {
-	    x0 = getXForLayoutX(m_startLayoutX);
+	    x0 = getCanvasXForLayoutX(m_startLayoutX);
 	}
 
 	if (i == lastRow) {
-	    x1 = getXForLayoutX(m_endLayoutX);
+	    x1 = getCanvasXForLayoutX(m_endLayoutX);
 	}
 
 	resizeStaffLineRow(i, x0, x1 - x0);
@@ -562,4 +606,20 @@ LinedStaff<T>::resizeStaffLineRow(int row, double offset, double length)
     }
 }    
 
+template <class T>
+void
+LinedStaff<T>::renderElements(Rosegarden::ViewElementList<T>::iterator,
+			      Rosegarden::ViewElementList<T>::iterator)
+{
+    // nothing -- we assume rendering will be done by the implementation
+    // of positionElements
+}
+
+template <class T>
+void
+LinedStaff<T>::renderElements()
+{
+    renderElements(getViewElementList()->begin(),
+		   getViewElementList()->end());
+}
 

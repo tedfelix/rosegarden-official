@@ -54,8 +54,9 @@ class MultiViewCommandHistory;
  * NotationVLayout and Staff data, as well as using rendering the
  * actual notes (using NotePixmapFactory to generate the pixmaps).
  */
+
 class NotationView : public EditView,
-		     public NotationStaffLayout
+		     public LinedStaffManager<NotationElement>
 {
     friend class NoteInserter;
     friend class ClefInserter;
@@ -148,15 +149,14 @@ public:
     }
 
     
+    /**
+     * From LinedStaffManager
+     */
+    virtual NotationStaff *getStaffForCanvasY(int y) const;
 
-    // StaffLayout methods.  These will be reworked soon.
-    // (So please don't bother de-inlining them, Guillaume;
-    // the nastier they are, the better, for now, 'cos it'll
-    // help remind me to deal with them.)   --cc
-
-    virtual NotationStaff *getStaffAtY(int y) const;
-
+/*!!!
     virtual int getHeightAtY(int y) const;
+*/
 /*!!!
     virtual Rosegarden::timeT getTimeAtCoordinates(int x, int y) const {
 	//!!! this is currently unused
@@ -170,6 +170,7 @@ public:
     }
 */
 
+/*!!!
     virtual int getYOfHeight(Rosegarden::Staff<NotationElement> *staff,
 			     int height, int baseY = -1) const;
 
@@ -177,8 +178,8 @@ public:
 
     virtual void getBarExtents(int x, int y, 
 			       int &rx, int &ry, int &rw, int &rh) const;
-
-    virtual std::string getNoteNameAtCoordinates(int x, int y) const;	
+*/
+//!!!    virtual std::string getNoteNameAtCoordinates(int x, int y) const;	
     
 
 
@@ -455,7 +456,7 @@ protected:
     /**
      * show bar lines
      */
-    void showBars(int staffNo);
+//!!!    void showBars(int staffNo);
 
     /**
      * update the top ruler according to bar lines

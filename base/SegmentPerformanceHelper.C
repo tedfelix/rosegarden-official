@@ -16,31 +16,31 @@ using namespace BaseProperties;
 SegmentPerformanceHelper::~SegmentPerformanceHelper() { }
 
 
-timeT
-SegmentPerformanceHelper::getSoundingDuration(iterator i)
+SegmentPerformanceHelper::iteratorcontainer
+SegmentPerformanceHelper::getTiedNotes(iterator i)
 {
-    Event *e = *i;
-    timeT d = getDurationWithTupling(e);
+    iteratorcontainer c;
+    c.push_back(i);
 
-    if (d == 0 || !e->isa(Note::EventType)) return d;
+    Event *e = *i;
+    if (!e->isa(Note::EventType)) return c;
 
     bool tiedBack = false, tiedForward = false;
     e->get<Bool>(TIED_BACKWARD, tiedBack);
     e->get<Bool>(TIED_FORWARD, tiedForward);
 
-    if (tiedBack) return 0;
-    else if (!tiedForward) return d;
+    if (tiedBack) return iteratorcontainer();
+    else if (!tiedForward) return c;
 
     timeT t = e->getAbsoluteTime();
-    if (!e->has(PITCH)) return d;
+    timeT d = e->getDuration();
+
+    if (!e->has(PITCH)) return c;
     int pitch = e->get<Int>(PITCH);
 
     for (;;) {
         i = segment().findContiguousNext(i);
-   
-        // Chris' own fix to stop this fux [rwb]
-        //
-        if (i == end()) return d;
+        if (i == end()) return c;
 
         e = *i;
 
@@ -53,16 +53,35 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
         if (!e->get<Bool>(TIED_BACKWARD, tiedBack) ||
             !tiedBack) break;
 
-        d += getDurationWithTupling(e);
+        d += e->getDuration();
         if (!e->get<Bool>(TIED_FORWARD, tiedForward) ||
-            !tiedForward) return d;
+            !tiedForward) return c;
+    }
+
+    return c;
+}
+
+
+timeT
+SegmentPerformanceHelper::getSoundingDuration(iterator i)
+{
+    if (!(*i)->has(TIED_FORWARD) && !(*i)->has(TIED_BACKWARD)) {
+	return (*i)->getDuration();
+    }
+
+    iteratorcontainer c(getTiedNotes(i));
+    timeT d = 0;
+
+    for (iteratorcontainer::iterator ci = c.begin(); ci != c.end(); ++ci) {
+	d += (**ci)->getDuration();
     }
 
     return d;
 }
 
 
-timeT SegmentPerformanceHelper::getDurationWithTupling(Event *e)
+timeT
+SegmentPerformanceHelper::getDurationWithTupling(Event *e)
 {
     timeT d = e->getDuration();
 
@@ -92,6 +111,29 @@ timeT SegmentPerformanceHelper::getDurationWithTupling(Event *e)
 */
 
     return d;
+}
+
+
+//!!! Refine this -- in theory we can do better with tuplets, because
+//real time has finer precision than timeT time
+RealTime
+SegmentPerformanceHelper::getRealAbsoluteTime(iterator i) 
+{
+    return segment().getComposition()->getElapsedRealTime
+	((*i)->getAbsoluteTime());
+}
+
+
+//!!! Refine this -- in theory we can do better with tuplets, because
+//real time has finer precision than timeT time.  Perhaps adding
+//some abstime->realtime conversion methods that accept double args
+//to Composition might be useful
+RealTime
+SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
+{
+    return segment().getComposition()->getRealTimeDifference
+	((*i)->getAbsoluteTime(),
+	 (*i)->getAbsoluteTime() + (*i)->getDuration());
 }
 
 

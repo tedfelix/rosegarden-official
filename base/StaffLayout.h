@@ -27,6 +27,9 @@ namespace Rosegarden {
 template <class T>
 class Staff;
 
+//!!!
+#ifdef NOT_DEFINED
+
 /**
  * Abstract base for classes that provide mappings from display
  * coordinates onto staffs and the elements on those staffs (and vice
@@ -121,6 +124,8 @@ public:
      */
     virtual std::string getNoteNameAtCoordinates(int x, int y) const = 0;
 };
+
+#endif
 
 }
 

@@ -143,7 +143,7 @@ public:
      * this bar, and if so also sets timeSigX to its x-coord
      */
     virtual Rosegarden::Event *getTimeSignatureInBar
-    (StaffType &staff, unsigned int barNo, int &timeSigX);
+    (StaffType &staff, unsigned int barNo, double &timeSigX);
 
 protected:
     /**

@@ -24,6 +24,7 @@
 #define _SEGMENT_PERFORMANCE_HELPER_H_
 
 #include "Segment.h"
+#include "Composition.h" // for RealTime
 
 namespace Rosegarden 
 {
@@ -33,6 +34,17 @@ class SegmentPerformanceHelper : protected SegmentHelper
 public:
     SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
     virtual ~SegmentPerformanceHelper();
+
+    typedef std::vector<iterator> iteratorcontainer;
+
+    /**
+     * Returns a sequence of iterators pointing to the note events
+     * that are tied with the given event.  If the given event is not
+     * a note event or is not tied, its iterator will be the only one
+     * in the sequence.  If the given event is tied but is not the
+     * first in the tied chain, the returned sequence will be empty.
+     */
+    iteratorcontainer getTiedNotes(iterator i);
 
     /**
      * Returns the duration of the note event pointed to by i, taking
@@ -55,6 +67,23 @@ public:
      * expected behaviour; don't create tied notes without pitches.
      */
     timeT getSoundingDuration(iterator i);
+
+    /**
+     * Returns the absolute time of the event pointed to by i,
+     * in microseconds elapsed since the start of the Composition.
+     * This method exploits the Composition's getElapsedRealTime
+     * method to take into account any tempo changes that appear
+     * in the section of the composition preceding i.
+     */
+    RealTime getRealAbsoluteTime(iterator i);
+
+    /**
+     * Returns the duration of the note event pointed to by i,
+     * in microseconds.  This takes into account the tempo in
+     * force at i's position within the composition, as well as
+     * any tempo changes occurring during the event at i.
+     */
+    RealTime getRealSoundingDuration(iterator i);
 
 private:
     timeT getDurationWithTupling(Event *e);

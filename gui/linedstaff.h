@@ -34,6 +34,25 @@
 #include "qcanvas.h"
 
 /**
+ * LinedStaffManager is a trivial abstract base for classes that own
+ * and position sets of LinedStaffs, as a convenient API to permit
+ * clients (such as canvas implementations) to discover which staff
+ * lies where.
+ * 
+ * LinedStaffManager is not used by LinedStaff.
+ */
+
+template <class T> class LinedStaff;
+
+template <class T>
+class LinedStaffManager
+{
+public:
+    virtual LinedStaff<T> *getStaffForCanvasY(int y) const = 0;
+};
+
+
+/**
  * LinedStaff is a base class for implementations of Staff that
  * display the contents of a Segment on a set of horizontal lines
  * with optional vertical bar lines plus a StaffRuler at the top.  
@@ -47,6 +66,9 @@
 template <class T>
 class LinedStaff : public Rosegarden::Staff<T>
 {
+public:
+    typedef std::pair<double, int> LinedStaffCoords;
+
 protected:
     /**
      * Create a new LinedStaff for the given Segment, with a
@@ -88,6 +110,14 @@ protected:
     LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
 	       int resolution, int lineThickness,
 	       double pageWidth, int rowSpacing);
+
+    /**
+     * Create a new LinedStaff for the given Segment, with
+     * either page or linear layout.
+     */
+    LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
+	       int resolution, int lineThickness,
+	       bool pageMode, double pageWidth, int rowSpacing);
 
 public:
     virtual ~LinedStaff();
@@ -161,12 +191,22 @@ public:
     virtual void setX(double x);
 
     /**
+     * Get the canvas x-coordinate of the left-hand end of the staff.
+     */
+    virtual double getX() const;
+
+    /**
      * Set the canvas y-coordinate of the top of the first staff row.
      * This does not move any canvas items that have already been
      * created; it should be called before the sizeStaff/positionElements
      * procedure begins.
      */
     virtual void setY(int y);
+
+    /**
+     * Get the canvas y-coordinate of the top of the first staff row.
+     */
+    virtual int getY() const;
 
     /**
      * Returns the width of the entire staff after layout.  Call
@@ -185,6 +225,14 @@ public:
     virtual int getTotalHeight() const;
 
     /**
+     * Returns the difference between the y coordinates of
+     * neighbouring visible staff lines.  Deliberately non-virtual
+     */
+    int getLineSpacing() const {
+	return m_resolution + m_lineThickness;
+    }
+
+    /**
      * Returns the total height of a single staff row
      */
     virtual int getHeightOfRow() const;
@@ -194,14 +242,21 @@ public:
      * (any of the rows of) this staff.  False if it falls in the
      * gap between two rows.
      */
-    virtual bool containsY(int canvasY) const; 
+    virtual bool containsCanvasY(int canvasY) const; 
 
     /**
      * Returns the canvas y coordinate of the specified line on the
      * staff.  baseY is a canvas y coordinate somewhere on the
      * correct row, or -1 for the default row.
      */
+    //!!! should be protected?
     virtual int getCanvasYForHeight(int height, int baseY = -1) const;
+
+    /**
+     * Returns the y coordinate of the specified line on the
+     * staff, relative to the top of the row.
+     */
+    virtual int getLayoutYForHeight(int height) const;
 
     /**
      * Returns the height-on-staff value nearest to the given
@@ -219,10 +274,12 @@ public:
      * Query the given horizontal layout object (which is assumed to
      * have just completed its layout procedure) to determine the
      * required extents of the staff and the positions of the bars,
-     * and create the bars and staff lines accordingly.  No bars or
-     * staff lines will be created until this method has been called.
-     * It may be called either before or after renderElements and/or
+     * and create the bars and staff lines accordingly.  It may be
+     * called either before or after renderElements and/or
      * positionElements.
+     * 
+     * No bars or staff lines will appear unless this method has
+     * been called.
      */
     virtual void sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout);
 
@@ -230,7 +287,7 @@ public:
      * Generate or re-generate sprites for all the elements between
      * from and to.  See subclasses for specific detailed comments.
      *
-     * A very simplistic staff implementation may choose not to
+     * A very simplistic staff subclass may choose not to
      * implement this (the default implementation is empty) and to
      * do all the rendering work in positionElements.  If rendering
      * elements is slow, however, it makes sense to do it here
@@ -252,15 +309,15 @@ public:
      *
      * The implementation is free to render any elements it
      * chooses in this method as well.
+     *
+     * The default of -1 for "from" should be taken to mean "the
+     * start of the staff" and for "to" should be taken to mean
+     * "the end of the staff".  Thus the default arguments should
+     * reposition the entire staff.
      */
-    virtual void positionElements(Rosegarden::timeT from,
-				  Rosegarden::timeT to) = 0;
+    virtual void positionElements(Rosegarden::timeT from = -1,
+				  Rosegarden::timeT to   = -1) = 0;
     
-    /**
-     * Call positionElements(from, to) on the whole staff.
-     */
-    virtual void positionElements();
-
 protected:
     // Methods that the subclass may (indeed, should) use to convert
     // between the layout coordinates of elements and their canvas
@@ -272,10 +329,6 @@ protected:
     // for this is that it seems to be more efficient from the QCanvas
     // perspective to create and manipulate many relatively short
     // canvas lines rather than a smaller number of very long ones.)
-   
-    int getLineSpacing() const {
-	return m_resolution + m_lineThickness;
-    }
 
     int getTopLineOffset() const {
 	return getLineSpacing() * getLegerLineCount();
@@ -290,7 +343,8 @@ protected:
     }
 
     int getRowForCanvasY(int y) const {
-	return ((y - m_y) / m_rowSpacing);
+	if (!m_pageMode) return 0;
+	else return ((y - m_y) / m_rowSpacing);
     }
 
     double getCanvasXForLayoutX(double x) const {
@@ -319,17 +373,17 @@ protected:
 	return getCanvasXForLeftOfRow(row) + m_pageWidth;
     }
 
-    std::pair<double, int>
+    LinedStaffCoords
     getCanvasCoordsForLayoutCoords(double x, int y) const {
 	int row = getRowForLayoutX(x);
-	return std::pair<double, int>
-	    (getCanvasXForLayoutX(x), getCanvasYForTopOfStaff(row) + y);
+	return LinedStaffCoords
+	    (getCanvasXForLayoutX(x), getCanvasYForTopLine(row) + y);
     }
 
-    std::pair<double, int>
+    LinedStaffCoords
     getCanvasOffsetsForLayoutCoords(double x, int y) const {
-	std::pair<double, int> cc = getCanvasCoordsForLayoutCoords(x, y);
-	return std::pair<double, int>(cc.first - x, cc.second - y);
+	LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
+	return LinedStaffCoords(cc.first - x, cc.second - y);
     }
 
 protected:

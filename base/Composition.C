@@ -611,6 +611,8 @@ Composition::calculateTempoTimestamps() const
     timeT base = 0;
     double tempo = m_defaultTempo;
 
+    cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << endl;
+
     for (Segment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
@@ -622,7 +624,9 @@ Composition::calculateTempoTimestamps() const
 	(*i)->setMaybe<Int>
 	    (TempoTimestampProperty,
 	     (long)time2RealTime((*i)->getAbsoluteTime(), tempo));
-	
+
+	(*i)->dump(cerr);
+
 	tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 	base = (*i)->getAbsoluteTime();
     }

@@ -562,10 +562,10 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     int   finalDX = (int)  (*finalNote)->getLayoutX() - initialX;
     int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
 
-    int   finalY  = staff.getYOfHeight(finalHeight);
-    int extremeY  = staff.getYOfHeight(extremeHeight);
+    int   finalY  = staff.getLayoutYForHeight(finalHeight);
+    int extremeY  = staff.getLayoutYForHeight(extremeHeight);
 
-    int c0 = staff.getYOfHeight(initialHeight), c1, c2;
+    int c0 = staff.getLayoutYForHeight(initialHeight), c1, c2;
     double dgrad = (double)beam.gradient / 100.0;
 
     Equation::solve(Equation::C, extremeY, dgrad, extremeDX, c1);
@@ -762,8 +762,8 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     int initialX = (int)(*initialNote)->getLayoutX();
     int   finalX = (int)(*  finalNote)->getLayoutX();
     
-    int initialY = staff.getYOfHeight(height(initialNote));
-    int   finalY = staff.getYOfHeight(height(  finalNote));
+    int initialY = staff.getLayoutYForHeight(height(initialNote));
+    int   finalY = staff.getLayoutYForHeight(height(  finalNote));
 /*
     int dist = (beam.startY - initialY) / 2;
     int startY = initialY - dist;

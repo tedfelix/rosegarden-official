@@ -108,9 +108,9 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
             int noteType = el->event()->get<Int>(NOTE_TYPE);
             if (noteType > Note::Minim) {
-                el->setLayoutY(staff.getYOfHeight(6));
+                el->setLayoutY(staff.getLayoutYForHeight(6));
             } else {
-                el->setLayoutY(staff.getYOfHeight(4));
+                el->setLayoutY(staff.getLayoutYForHeight(4));
             }
 
         } else if (el->isNote()) {
@@ -130,7 +130,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
 		el = *chord[j];
-		el->setLayoutY(staff.getYOfHeight(h[j]));
+		el->setLayoutY(staff.getLayoutYForHeight(h[j]));
 
 		// we can't only set this if it hasn't already been
 		// set, because we may have inserted more notes on the
@@ -157,8 +157,8 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
                 int stemLength = -1;
                 if (j != flaggedNote) {
-                    stemLength = staff.getYOfHeight(h[flaggedNote]) -
-                        staff.getYOfHeight(h[j]);
+                    stemLength = staff.getLayoutYForHeight(h[flaggedNote]) -
+                        staff.getLayoutYForHeight(h[j]);
                     if (stemLength < 0) stemLength = -stemLength;
                     kdDebug(KDEBUG_AREA) << "Setting stem length to "
                                          << stemLength << endl;
@@ -191,11 +191,11 @@ NotationVLayout::scanStaff(StaffType &staffBase)
                     height = 4;
                 }
 
-                el->setLayoutY(staff.getYOfHeight(height));
+                el->setLayoutY(staff.getLayoutYForHeight(height));
 
             } else if (el->event()->isa(Key::EventType)) {
 
-                el->setLayoutY(staff.getYOfHeight(12));
+                el->setLayoutY(staff.getLayoutYForHeight(12));
 
             } else if (el->event()->isa(Indication::EventType)) {
 
@@ -206,7 +206,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 		    getSlurList(staff).push_back(i);
 		}
 
-		el->setLayoutY(staff.getYOfHeight(-9));
+		el->setLayoutY(staff.getLayoutYForHeight(-9));
 	    }
         }
     }
@@ -352,8 +352,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	endHeight = endBottomHeight - 3;
     }
 
-    int y0 = staff.getYOfHeight(startHeight),
-	y1 = staff.getYOfHeight(endHeight);
+    int y0 = staff.getLayoutYForHeight(startHeight),
+	y1 = staff.getLayoutYForHeight(endHeight);
 
     // in some circumstances it pays to make the slur a bit less
     // slopey -- we don't always need to reach all the way to the
@@ -369,7 +369,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     }
 
     int length = endX - startX;
-    int diff = staff.getYOfHeight(0) - staff.getYOfHeight(2);
+    int diff = staff.getLayoutYForHeight(0) - staff.getLayoutYForHeight(2);
     if (length < diff*10) diff /= 2;
     if (length > diff*3) length -= diff/2;
     startX += diff;

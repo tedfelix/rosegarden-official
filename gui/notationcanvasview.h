@@ -25,11 +25,11 @@
 #include <qcanvas.h>
 #include <vector>
 
-#include "notationstaff.h" // for NotationStaffLayout typedef only (can't predeclare a typedef)
-
 class NotationElement;
 class QCanvasItemGroup;
 class QCanvasLineGroupable;
+template <class T> class LinedStaffManager;
+class NotationStaff;
 
 /**
  * Central widget for the NotationView window
@@ -48,7 +48,7 @@ class NotationCanvasView : public QCanvasView
     Q_OBJECT
 
 public:
-    NotationCanvasView(const NotationStaffLayout &staffLayout,
+    NotationCanvasView(const LinedStaffManager<NotationElement> &staffmgr,
 		       QCanvas *viewing=0, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
 
@@ -108,7 +108,7 @@ signals:
     
 protected:
 
-    const NotationStaffLayout &m_staffLayout;
+    const LinedStaffManager<NotationElement> &m_linedStaffManager;
 
     /**
      * Callback for a mouse button press event in the canvas

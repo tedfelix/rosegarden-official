@@ -139,6 +139,7 @@ void NotationTool::ready()
     m_nParentView->setPositionTracking(false);
 }
 
+
 //------------------------------
 
 
@@ -211,7 +212,7 @@ NoteInserter::handleLeftButtonPress(int height, int staffNo,
 				    QMouseEvent* e,
 				    ViewElement*)
 {
-    if (height == NotationStaff::NoHeight || staffNo < 0) return;
+    if (staffNo < 0) return;
 
     Event *tsig = 0, *clef = 0, *key = 0;
 
@@ -606,7 +607,8 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() <  3) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-    NotationStaff *staff = m_nParentView->getStaffAtY(int(middleY));
+    NotationStaff *staff = m_nParentView->getStaffForCanvasY(middleY);
+
     if (!staff) return 0;
     Segment& originalSegment = staff->getSegment();
     

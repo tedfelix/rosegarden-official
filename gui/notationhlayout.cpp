@@ -1185,10 +1185,10 @@ NotationHLayout::isBarLineCorrect(StaffType &staff, unsigned int i)
 }
 
 Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
-					      unsigned int i, int &timeSigX)
+					      unsigned int i, double &timeSigX)
 {
     BarData &bd(getBarData(staff)[i]);
-    timeSigX = bd.timeSigX;
+    timeSigX = (double)bd.timeSigX;
     return bd.timeSignature;
 }
 
