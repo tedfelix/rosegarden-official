@@ -481,16 +481,13 @@ void RosegardenGUIApp::initZoomToolbar()
     std::vector<double> zoomSizes; // in units-per-pixel
     double defaultBarWidth44 = 100.0;
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  0.1));
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  0.2));
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  0.5));
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  1.0));
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  2.0));
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  5.0));
-    zoomSizes.push_back(duration44 / (defaultBarWidth44 * 10.0));
+    static double factors[] = { 0.1, 0.2, 0.5, 1.0, 1.5, 2.5, 5.0 };
+    for (int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i) {
+	zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
+    }
 
     m_zoomSlider = new ZoomSlider<double>
-	(zoomSizes, -1.0, QSlider::Horizontal, zoomToolbar);
+	(zoomSizes, 1.0, QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
