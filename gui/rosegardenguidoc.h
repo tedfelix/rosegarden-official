@@ -34,6 +34,7 @@
 
 #include "rosegardendcop.h"
 #include "rosegardengui.h"
+#include "audiopreviewthread.h"
 
 #include "Composition.h"
 #include "MappedComposition.h"
@@ -246,6 +247,15 @@ public:
     Rosegarden::Studio& getStudio() { return m_studio;}
 
     const Rosegarden::Studio& getStudio() const { return m_studio;}
+
+    /*
+     * return the AudioPreviewThread
+     */
+    AudioPreviewThread& getAudioPreviewThread()
+        { return m_audioPreviewThread; }
+
+    const AudioPreviewThread& getAudioPreviewThread() const
+        { return m_audioPreviewThread; }
 
     /*
      * return the AudioFileManager
@@ -567,6 +577,11 @@ protected:
      * stores AudioFile mappings
      */
     Rosegarden::AudioFileManager m_audioFileManager;
+
+    /**
+     * calculates AudioFile previews
+     */
+    AudioPreviewThread m_audioPreviewThread;
 
     /**
      * a Segment onto which we can record events

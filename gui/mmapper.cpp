@@ -779,8 +779,8 @@ void AudioSegmentMmapper::dump()
         }
         else
         {
-            std::cout << "AudioSegmentMmapper::dump - "
-                      << "NO AUTOFADE SET ON SEGMENT" << std::endl;
+//            std::cout << "AudioSegmentMmapper::dump - "
+//                      << "NO AUTOFADE SET ON SEGMENT" << std::endl;
         }
 
         ++bufPos;

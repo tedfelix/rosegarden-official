@@ -167,7 +167,7 @@ QRect SegmentItemPreview::rect()
 }
 
 
-class SegmentAudioPreview : public SegmentItemPreview
+class SegmentAudioPreview : public QObject, public SegmentItemPreview
 {
 public:
     SegmentAudioPreview(SegmentItem& parent, Rosegarden::RulerScale* scale);
@@ -178,9 +178,19 @@ public:
 
 protected:
 
+    virtual bool event(QEvent *);
     virtual void updatePreview(const QWMatrix &matrix);
 
     //--------------- Data members ---------------------------------
+
+    enum State {
+	Changed,
+	Calculating,
+	Current
+    };
+
+    State                m_previewState;
+    int                  m_previewToken;
 
     std::vector<float>   m_values;
     bool                 m_showMinima;
@@ -190,8 +200,10 @@ protected:
 SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
                                          Rosegarden::RulerScale* scale)
     : SegmentItemPreview(parent, scale),
-    m_showMinima(false),
-    m_channels(0)
+      m_previewState(Changed),
+      m_previewToken(-1),
+      m_showMinima(false),
+      m_channels(0)
 {
 }
 
@@ -205,8 +217,6 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     //
     if (m_values.size() == 0)
         return;
-
-//    Rosegarden::Profiler profiler("SegmentAudioPreview::drawShape", true);
 
     painter.save();
     //painter.translate(rect().x(), rect().y());
@@ -377,17 +387,21 @@ void SegmentAudioPreview::clearPreview()
 {
     m_values.clear();
     m_previewIsCurrent = false;
+    m_previewState = Changed;
 }
 
 void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
 {
-    if (isPreviewCurrent()) return;
+    if (m_previewState == Calculating || m_previewState == Current) return;
+//    if (isPreviewCurrent()) return;
 
-//    Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
+    Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
+
+    m_values.clear();
 
     // Fetch vector of floats adjusted to our resolution
     //
-    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
+//!!!    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
 
     Rosegarden::Composition &comp = m_parent.getDocument()->getComposition();
 
@@ -398,6 +412,23 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
         comp.getElapsedRealTime(m_parent.getEndTime()) -
         comp.getElapsedRealTime(m_parent.getStartTime()) ;
 
+    RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
+	     << m_segment->getAudioFileId() << " requesting values" <<endl;
+
+    QRect tRect = matrix.map(rect());
+    QRect uRect = matrix.map(rect());
+    
+    AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
+    AudioPreviewThread::Request request;
+    request.audioFileId = m_segment->getAudioFileId();
+    request.audioStartTime = audioStartTime;
+    request.audioEndTime = audioEndTime;
+    request.width = tRect.width();
+    request.showMinima = m_showMinima;
+    request.notify = this;
+    m_previewToken = thread.requestPreview(request);
+
+/*!!!
     try
     {
         RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
@@ -427,20 +458,59 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
         
         m_values.clear();
     }
-
+*/
 
     // If we haven't inserted the audio file yet we're probably
     // just still recording it.
     //
+/*!!!
     if (m_values.size() == 0) {
         RG_DEBUG << "SegmentAudioPreview::updatePreview : no values\n";
         return;
     }
-
+*/
+    Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
     m_channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
-    setPreviewCurrent(true);
+    m_previewState = Calculating;
+//!!!    setPreviewCurrent(true);
 }
+
+bool
+SegmentAudioPreview::event(QEvent *e)
+{
+    if (e->type() == QEvent::User + 1) {
+	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
+	if (ev) {
+	    int token = (int)ev->data();
+	    AudioPreviewThread &thread = m_parent.getDocument()->getAudioPreviewThread();
+	    thread.getPreview(token, m_values);
+
+	    if (token >= m_previewToken) {
+		m_previewState = Current;
+		setPreviewCurrent(true);
+//!!!		m_parent.update();
+//!!!		if (m_parent.canvas()) m_parent.canvas()->update();
+
+		RG_DEBUG << "Calling recalculateRectangle!" << endl;
+
+		if (m_parent.canvas()) {
+		    m_parent.recalculateRectangle(true);
+		    m_parent.canvas()->update();
+		}
+
+	    } else {
+		// this one is out of date already
+		m_values.clear();
+	    }
+	    return true;
+	}
+    }
+
+    return QObject::event(e);
+}
+
+
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentNotationPreview

@@ -29,6 +29,7 @@
 #include "AudioFile.h"
 #include "Audio.h"
 #include "Sound.h"
+#include "Profiler.h"
 
 using std::cout;
 using std::cerr;

@@ -1,0 +1,73 @@
+// -*- c-basic-offset: 4 -*-
+
+/*
+    Rosegarden-4
+    A sequencer and musical notation editor.
+
+    This program is Copyright 2000-2004
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef AUDIOPREVIEWTHREAD_H
+#define AUDIOPREVIEWTHREAD_H
+
+#include <qthread.h>
+#include <qmutex.h>
+
+#include <vector>
+#include <map>
+
+#include "RealTime.h"
+
+namespace Rosegarden {
+    class AudioFileManager;
+}
+
+class AudioPreviewThread : public QThread
+{
+public:
+    AudioPreviewThread(Rosegarden::AudioFileManager *manager);
+    
+    virtual void run();
+    virtual void finish();
+    
+    struct Request {
+	int audioFileId;
+	Rosegarden::RealTime audioStartTime;
+	Rosegarden::RealTime audioEndTime;
+	int width;
+	bool showMinima;
+	QObject *notify;
+    };
+
+    virtual int requestPreview(const Request &request);
+    virtual void getPreview(int token, std::vector<float> &values);
+
+protected:
+    virtual void process();
+
+    Rosegarden::AudioFileManager *m_manager;
+    int m_nextToken;
+    bool m_exiting;
+
+    typedef std::map<int, Request> RequestQueue;
+    RequestQueue m_queue;
+
+    typedef std::map<int, std::vector<float> > ResultsQueue;
+    ResultsQueue m_results;
+
+    QMutex m_mutex;
+};
+
+#endif

@@ -106,6 +106,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     : QObject(parent, name),
       m_modified(false),
       m_autoSaved(false),
+      m_audioPreviewThread(&m_audioFileManager),
       m_recordSegment(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_pluginManager(pluginManager),
@@ -129,13 +130,17 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
     // now set it up as a "new document"
     newDocument();
-
+    
+    m_audioPreviewThread.start();
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
     RG_DEBUG << "~RosegardenGUIDoc()\n";
     m_beingDestroyed = true;
+
+    m_audioPreviewThread.finish();
+    m_audioPreviewThread.wait();
 
     deleteEditViews();
 
@@ -183,7 +188,7 @@ void RosegardenGUIDoc::deleteEditViews()
 
 void RosegardenGUIDoc::setAbsFilePath(const QString &filename)
 {
-    m_absFilePath=filename;
+    m_absFilePath = filename;
 }
 
 const QString &RosegardenGUIDoc::getAbsFilePath() const

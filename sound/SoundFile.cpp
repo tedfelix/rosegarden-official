@@ -20,6 +20,7 @@
 
 
 #include "SoundFile.h"
+#include "Profiler.h"
 
 
 //#define DEBUG_SOUNDFILE 1

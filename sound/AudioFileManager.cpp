@@ -24,6 +24,7 @@
 #include <string>
 #include <dirent.h> // for new recording file
 #include <cstdio>   // sprintf
+#include <pthread.h>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -49,8 +50,31 @@
 namespace Rosegarden
 {
 
+static pthread_mutex_t _audioFileManagerLock;
+
+class MutexLock {
+public:
+    MutexLock(pthread_mutex_t *mutex) : m_mutex(mutex) {
+	pthread_mutex_lock(m_mutex);
+    }
+    ~MutexLock() {
+	pthread_mutex_unlock(m_mutex);
+    }
+private:
+    pthread_mutex_t *m_mutex;
+};
+
 AudioFileManager::AudioFileManager()
 {
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+#ifdef PTHREAD_MUTEX_RECURSIVE
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+#else
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+#endif
+    pthread_mutex_init(&_audioFileManagerLock, &attr);
+
     // Set this through the set method so that the tilde gets
     // shaken out.
     //
@@ -72,13 +96,17 @@ AudioFileManager::~AudioFileManager()
 AudioFileId
 AudioFileManager::addFile(const std::string &filePath)
 {
+    MutexLock lock(&_audioFileManagerLock);
+    
     QString ext =
         QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
 
     // Check for file existing already in manager by path
     //
     int check = fileExists(filePath);
-    if (check != -1) return AudioFileId(check);
+    if (check != -1) {
+	return AudioFileId(check);
+    }
 
     // prepare for audio file
     AudioFile *aF = 0;
@@ -103,7 +131,9 @@ AudioFileManager::addFile(const std::string &filePath)
 
         // Ensure we have a valid file handle
         //
-        if (aF == 0) throw i18n("Unsupported audio file type."); 
+        if (aF == 0) {
+	    throw i18n("Unsupported audio file type."); 
+	}
 
         // Add file type on extension
         try
@@ -193,6 +223,8 @@ AudioFileId
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     // first try to expand any beginning tilde
     //
     std::string foundFileName = substituteTildeForHome(fileName);
@@ -234,6 +266,8 @@ AudioFileManager::insertFile(const std::string &name,
 bool
 AudioFileManager::removeFile(AudioFileId id)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
@@ -279,6 +313,8 @@ AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName,
                              AudioFileId id)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     // first try to expany any beginning tilde
     std::string foundFileName = substituteTildeForHome(fileName);
 
@@ -320,6 +356,8 @@ AudioFileManager::insertFile(const std::string &name,
 void
 AudioFileManager::setAudioPath(const std::string &path)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::string hPath = path;
 
     // add a trailing / if we don't have one
@@ -346,6 +384,8 @@ AudioFileManager::setAudioPath(const std::string &path)
 std::string
 AudioFileManager::getFileInPath(const std::string &file)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     QFileInfo info(file.c_str());
 
     if (info.exists())
@@ -372,6 +412,8 @@ AudioFileManager::getFileInPath(const std::string &file)
 int
 AudioFileManager::fileExists(const std::string &path)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
@@ -391,6 +433,8 @@ AudioFileManager::fileExists(const std::string &path)
 bool
 AudioFileManager::fileExists(AudioFileId id)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
@@ -408,6 +452,8 @@ AudioFileManager::fileExists(AudioFileId id)
 void
 AudioFileManager::clear()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
@@ -425,6 +471,8 @@ AudioFileManager::clear()
 std::string
 AudioFileManager::createRecordingAudioFile()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     AudioFileId newId = getFirstUnusedID();
     int audioFileNumber = 0;
 
@@ -496,6 +544,8 @@ AudioFileManager::createRecordingAudioFile()
 AudioFile*
 AudioFileManager::getLastAudioFile()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::vector<AudioFile*>::iterator it = m_audioFiles.begin();
     AudioFile* audioFile = 0;
 
@@ -553,6 +603,8 @@ AudioFileManager::substituteTildeForHome(const std::string &path)
 std::string
 AudioFileManager::toXmlString()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::stringstream audioFiles;
     std::string audioPath = substituteHomeForTilde(m_audioPath);
 
@@ -609,6 +661,8 @@ AudioFileManager::toXmlString()
 void
 AudioFileManager::generatePreviews()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
 #ifdef DEBUG_AUDIOFILEMANAGER
     std::cout << "AudioFileManager::generatePreviews - "
               << "for " << m_audioFiles.size() << " files"
@@ -631,6 +685,8 @@ AudioFileManager::generatePreviews()
 void
 AudioFileManager::stopPreview()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     m_peakManager.stopPreview();
 }
 
@@ -644,6 +700,8 @@ AudioFileManager::stopPreview()
 bool
 AudioFileManager::generatePreview(AudioFileId id)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     AudioFile *audioFile = getAudioFile(id);
     
     if (audioFile == 0)
@@ -658,6 +716,8 @@ AudioFileManager::generatePreview(AudioFileId id)
 AudioFile*
 AudioFileManager::getAudioFile(AudioFileId id)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     std::vector<AudioFile*>::iterator it;
 
     for (it = m_audioFiles.begin();
@@ -677,6 +737,8 @@ AudioFileManager::getPreview(AudioFileId id,
                              int width,
                              bool withMinima)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     AudioFile *audioFile = getAudioFile(id);
     
     if (audioFile == 0) {
@@ -699,6 +761,8 @@ AudioFileManager::drawPreview(AudioFileId id,
                               const RealTime &endTime,
                               QPixmap *pixmap)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     AudioFile *audioFile = getAudioFile(id);
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
@@ -772,6 +836,8 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
                                          const RealTime &highlightEnd,
                                          QPixmap *pixmap)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     AudioFile *audioFile = getAudioFile(id);
 
     if (!m_peakManager.hasValidPeaks(audioFile))
@@ -833,6 +899,8 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 void
 AudioFileManager::print()
 {
+    MutexLock lock(&_audioFileManagerLock);
+
 #ifdef DEBUG_AUDIOFILEMANAGER
     std::cout << "AudioFileManager - " << m_audioFiles.size() << " entr";
 
@@ -859,6 +927,8 @@ AudioFileManager::getSplitPoints(AudioFileId id,
                                  int threshold,
                                  const RealTime &minTime)
 {
+    MutexLock lock(&_audioFileManagerLock);
+
     AudioFile *audioFile = getAudioFile(id);
 
     if (audioFile == 0) return std::vector<SplitPointPair>();
