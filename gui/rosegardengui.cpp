@@ -5611,6 +5611,11 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    SLOT(slotPluginProgramChanged(Rosegarden::InstrumentId, int, QString)));
     
     connect(dialog,
+	    SIGNAL(pluginConfigurationChanged(Rosegarden::InstrumentId, int, QString, QString)),
+	    this,
+	    SLOT(slotPluginConfigurationChanged(Rosegarden::InstrumentId, int, QString, QString)));
+    
+    connect(dialog,
 	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
 	    this,
 	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
@@ -5855,6 +5860,8 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
 
     if (inst)
     {
+	inst->setProgram(qstrtostr(program));
+
         Rosegarden::StudioControl::
             setStudioObjectProperty(inst->getMappedId(),
 				    Rosegarden::MappedPluginSlot::Program,
@@ -5870,17 +5877,6 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
 	    (*portIt)->value = value;
 	}
     
-/*!!!            
-	bool update = false;
-                    
-	if (inst->getProgram() != qstrtostr(program)) {
-	    update = true;
-*/
-	    inst->setProgram(qstrtostr(program));
-//!!!	}
-
-	
-
         RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
                  << "setting plugin program ("
 		 << inst->getMappedId() << ") to "
@@ -5889,19 +5885,14 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
         // Set modified
         m_doc->slotDocumentModified();
 
-//!!!	if (update) {
-	    // This modification came from The Outside!
-	    int key = (pluginIndex << 16) + instrumentId;
-	    if (m_pluginDialogs[key]) {
-		m_pluginDialogs[key]->updatePluginProgramControl();
-	    }
+	int key = (pluginIndex << 16) + instrumentId;
+	if (m_pluginDialogs[key]) {
+	    m_pluginDialogs[key]->updatePluginProgramControl();
+	}
 #ifdef HAVE_LIBLO
-//	} else {
-	    // This modification came from our own plugin dialog
-	    if (m_pluginGUIManager) m_pluginGUIManager->updateProgram(instrumentId,
-								      pluginIndex);
+	if (m_pluginGUIManager) m_pluginGUIManager->updateProgram(instrumentId,
+								  pluginIndex);
 #endif
-//	}
     }
 }
 

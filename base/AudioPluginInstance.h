@@ -138,6 +138,7 @@ public:
     void setMappedId(int value) { m_mappedId = value; }
 
     typedef std::map<std::string, std::string> ConfigMap;
+    void clearConfiguration() { m_config.clear(); }
     const ConfigMap &getConfiguration() { return m_config; }
     std::string getConfigurationValue(std::string k) const;
     void setConfigurationValue(std::string k, std::string v);

@@ -19,6 +19,8 @@
 */
 
 #include <vector>
+#include <map>
+#include <string>
 
 #include <qstring.h>
 #include <qcolor.h>
@@ -52,6 +54,7 @@ typedef std::vector<PluginPort*>::iterator PortIterator;
 struct AudioPluginClipboard
 {
     int                 m_pluginNumber;
+    std::map<std::string, std::string> m_configuration;
     std::string         m_program;
     std::vector<float>  m_controlValues;
 };

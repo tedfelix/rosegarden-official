@@ -627,7 +627,6 @@ AudioPluginOSCGUIManager::dispatch()
 	    RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
 		     << ")" << endl;
 
-
 	    m_app->slotPluginConfigurationChanged(instrument, position, key, value);
 
 	} else if (method == "midi") {

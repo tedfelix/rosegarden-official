@@ -56,8 +56,6 @@
 namespace Rosegarden
 {
 
-AudioPluginClipboard _pluginClipboard;
-
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
 #ifdef HAVE_LIBLO
@@ -629,6 +627,13 @@ AudioPluginDialog::slotCopy()
 
         clipboard->m_pluginNumber = number;
 
+	AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+	if (inst) {
+	    clipboard->m_configuration = inst->getConfiguration();
+	} else {
+	    clipboard->m_configuration.clear();
+	}
+
         std::cout << "AudioPluginDialog::slotCopy - plugin number = " << number
                   << std::endl;
 
@@ -675,6 +680,17 @@ AudioPluginDialog::slotPaste()
         //
 	m_pluginList->setCurrentItem(count);
 	slotPluginSelected(count);
+
+	// set configuration data
+	//
+	for (std::map<std::string, std::string>::const_iterator i =
+		 clipboard->m_configuration.begin();
+	     i != clipboard->m_configuration.end(); ++i) {
+	    emit pluginConfigurationChanged(m_instrument->getId(),
+					    m_index,
+					    strtoqstr(i->first),
+					    strtoqstr(i->second));
+	}
 
 	// and set the program
 	//
