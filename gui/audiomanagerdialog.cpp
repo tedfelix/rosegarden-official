@@ -162,13 +162,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
 
-    if (m_doc == 0)
-    {
-        KMessageBox::sorry(this,
-                           i18n("No RosegardenGUIDoc - internal error"));
-        delete this;
-    }
-
     // create widgets
     m_addButton       = new QPushButton(i18n("Add Audio File"), v);
     m_deleteButton    = new QPushButton(i18n("Remove Audio FIle"), v);
@@ -239,6 +232,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
 AudioManagerDialog::~AudioManagerDialog()
 {
+    RG_DEBUG << "~AudioManagerDialog()\n";
     m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
 }
 

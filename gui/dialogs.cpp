@@ -76,7 +76,7 @@ using Rosegarden::EventSelection;
 
 
 SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
-    KDialogBase(parent, "", true, i18n("Text"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel)
 {
     QHBox *w = makeHBoxMainWidget();
     new QLabel(i18n("Text:"), w);
@@ -110,7 +110,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 					 Rosegarden::TimeSignature sig,
 					 int barNo, bool atStartOfBar,
 					 QString explanatoryText) :
-    KDialogBase(parent, "", true, i18n("Time Signature"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel),
     m_timeSignature(sig),
     m_explanatoryLabel(0),
     m_commonTimeButton(0),
@@ -321,7 +321,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 				       bool showApplyToAll,
 				       bool showConversionOptions,
 				       QString explanatoryText) :
-    KDialogBase(parent, "", true, i18n("Key Change"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_key(defaultKey),
     m_clef(clef),
@@ -611,7 +611,7 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
 
 PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 					 PasteEventsCommand::PasteType defaultType) :
-    KDialogBase(parent, "", true, i18n("Paste"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel),
     m_defaultType(defaultType)
 {
     QVBox *vbox = makeVBoxMainWidget();
@@ -670,7 +670,7 @@ PasteNotationDialog::slotPasteTypeChanged()
 
 TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 			   timeT maxDuration) :
-    KDialogBase(parent, "", true, i18n("Tuplet"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Tuplet"), Ok | Cancel),
     m_maxDuration(maxDuration)
 {
     QVBox *vbox = makeVBoxMainWidget();
@@ -941,7 +941,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 				 NotePixmapFactory *npf,
 				 Text defaultText,
 				 int maxLength) :
-    KDialogBase(parent, "", true, i18n("Text"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_styles(Text::getUserStyles())
 {
@@ -1091,7 +1091,7 @@ TextEventDialog::slotTypeChanged(const QString &)
 EventEditDialog::EventEditDialog(QWidget *parent,
 				 const Event &event,
 				 bool editable) :
-    KDialogBase(parent, "", true, i18n(editable ? "Edit Event" : "View Event"),
+    KDialogBase(parent, 0, true, i18n(editable ? "Edit Event" : "View Event"),
 		(editable ? (Ok | Cancel) : Ok)),
     m_durationDisplay(0),
     m_durationDisplayAux(0),
@@ -1561,7 +1561,7 @@ private:
 
 
 TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
-    KDialogBase(parent, "", true, i18n("Tempo"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Tempo"), Ok | Cancel),
     m_doc(doc),
     m_tempoTime(0),
     m_tempoValue(0.0)
@@ -1825,7 +1825,7 @@ ClefDialog::ClefDialog(QWidget *parent,
 		       NotePixmapFactory *npf,
 		       Rosegarden::Clef defaultClef,
 		       bool showConversionOptions) :
-    KDialogBase(parent, "", true, i18n("Clef"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_clef(defaultClef)
 {
@@ -1946,7 +1946,7 @@ ClefDialog::redrawClefPixmap()
 
 
 QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
-    KDialogBase(parent, "", true, i18n("Quantize"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -1961,7 +1961,7 @@ QuantizeDialog::getQuantizer() const
 }
 
 RescaleDialog::RescaleDialog(QWidget *parent) :
-    KDialogBase(parent, "", true, i18n("Rescale"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Rescale"), Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -2041,7 +2041,7 @@ RescaleDialog::slotToChanged(int i)
 FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
                                    const QString & /*path*/):
-    KDialogBase(parent, "", true,
+    KDialogBase(parent, 0, true,
                 i18n("Locate audio file"),
                 User1|User2,
                 Ok,
@@ -2089,7 +2089,7 @@ FileLocateDialog::slotUser1()
 
 AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
                                        const QString &name):
-                                       KDialogBase(parent, "", true,
+                                       KDialogBase(parent, 0, true,
                                        i18n("Playing audio file"),
                                        Cancel)
 {
@@ -2108,7 +2108,7 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
 AudioSplitDialog::AudioSplitDialog(QWidget *parent,
                                    Segment *segment,
                                    RosegardenGUIDoc *doc):
-            KDialogBase(parent, "", true,
+            KDialogBase(parent, 0, true,
                         i18n("Autosplit Audio Segment"), Ok|Cancel),
             m_doc(doc),
             m_segment(segment),
@@ -2423,7 +2423,7 @@ AudioSplitDialog::slotThresholdChanged(int threshold)
 
 LyricEditDialog::LyricEditDialog(QWidget *parent,
 				 Segment *segment) :
-    KDialogBase(parent, "", true, i18n("Edit Lyrics"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Edit Lyrics"), Ok | Cancel),
     m_segment(segment)
 {    
     QVBox *vbox = makeVBoxMainWidget();
@@ -2523,7 +2523,7 @@ EventParameterDialog::EventParameterDialog(
         const QString &name,
         const Rosegarden::PropertyName &property,
         int startValue):
-            KDialogBase(parent, "", true, name, Ok | Cancel),
+            KDialogBase(parent, 0, true, name, Ok | Cancel),
             m_property(property)
 {
     QVBox *vBox = makeVBoxMainWidget();
@@ -2664,7 +2664,7 @@ EventParameterDialog::getValue2()
 CompositionLengthDialog::CompositionLengthDialog(
         QWidget *parent,
         Rosegarden::Composition *composition):
-        KDialogBase(parent, "", true, i18n("Change Composition Length"),
+        KDialogBase(parent, 0, true, i18n("Change Composition Length"),
                     Ok | Cancel),
         m_composition(composition)
 {
@@ -2705,7 +2705,7 @@ CompositionLengthDialog::getEndMarker()
 
 
 SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
-    KDialogBase(parent, "", true, i18n("Split by Pitch"))
+    KDialogBase(parent, 0, true, i18n("Split by Pitch"))
 {
     QVBox *vBox = makeVBoxMainWidget();
 

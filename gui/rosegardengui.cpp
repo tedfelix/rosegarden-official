@@ -3244,18 +3244,16 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 {
     RG_DEBUG << "RosegardenGUIApp::slotEditTempo\n";
 
-    TempoDialog *tempoDlg = new TempoDialog(parent, m_doc);
+    TempoDialog tempoDlg(parent, m_doc);
 
-    connect(tempoDlg,
+    connect(&tempoDlg,
             SIGNAL(changeTempo(Rosegarden::timeT,
                                double, TempoDialog::TempoDialogAction)),
             SLOT(slotChangeTempo(Rosegarden::timeT,
                                double, TempoDialog::TempoDialogAction)));
 
-    tempoDlg->setTempoPosition(m_doc->getComposition().getPosition());
-    tempoDlg->show();
-
-
+    tempoDlg.setTempoPosition(m_doc->getComposition().getPosition());
+    tempoDlg.exec();
 }
 
 void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
@@ -3529,13 +3527,10 @@ RosegardenGUIApp::createNewAudioFile()
 void
 RosegardenGUIApp::slotAudioManager()
 {
-    if (m_audioManagerDialog == 0)
-    {
+    if (!m_audioManagerDialog) {
+        
         m_audioManagerDialog =
-          new Rosegarden::AudioManagerDialog(this, m_doc);
-
-        connect(m_audioManagerDialog, SIGNAL(closeClicked()),
-                SLOT(slotAudioManagerClosed()));
+            new Rosegarden::AudioManagerDialog(this, m_doc);
 
         connect(m_audioManagerDialog,
                 SIGNAL(playAudioFile(Rosegarden::AudioFileId,
@@ -3579,23 +3574,15 @@ RosegardenGUIApp::slotAudioManager()
                 SIGNAL(deleteAllAudioFiles()),
                 SLOT(slotDeleteAllAudioFiles()));
 
-        m_audioManagerDialog->setAudioSubsystemStatus(
-                m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
+        m_audioManagerDialog->setAudioSubsystemStatus(m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
 
 
         plugAccelerators(m_audioManagerDialog,
                          m_audioManagerDialog->getAccelerators());
-        m_audioManagerDialog->show();
     }
+    
+    m_audioManagerDialog->show();
 }
-
-void
-RosegardenGUIApp::slotAudioManagerClosed()
-{
-    if (m_audioManagerDialog)
-        m_audioManagerDialog = 0;
-}
-
 
 void
 RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
@@ -3821,10 +3808,9 @@ RosegardenGUIApp::slotChangeCompositionLength()
 void
 RosegardenGUIApp::slotEditBanks()
 {
-    BankEditorDialog *dialog =
-        new BankEditorDialog(this, m_doc);
+    BankEditorDialog dialog(this, m_doc);
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
         RG_DEBUG << "slotEditBanks - accepted" << endl;
     }
@@ -3859,14 +3845,13 @@ void
 RosegardenGUIApp::slotRemapInstruments()
 {
     RG_DEBUG << "RosegardenGUIApp::slotRemapInstruments" << endl;
-    RemapInstrumentDialog *dialog =
-        new RemapInstrumentDialog(this, m_doc);
+    RemapInstrumentDialog dialog(this, m_doc);
 
-    connect(dialog, SIGNAL(applyClicked()),
+    connect(&dialog, SIGNAL(applyClicked()),
             m_view->getTrackEditor()->getTrackButtons(),
             SLOT(slotSynchroniseWithComposition()));
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
         RG_DEBUG << "slotRemapInstruments - accepted" << endl;
     }
@@ -3879,10 +3864,9 @@ RosegardenGUIApp::slotModifyMIDIFilters()
 {
     RG_DEBUG << "RosegardenGUIApp::slotModifyMIDIFilters" << endl;
 
-    MidiFilterDialog *dialog =
-        new MidiFilterDialog(this, m_doc);
+    MidiFilterDialog dialog(this, m_doc);
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
         RG_DEBUG << "slotModifyMIDIFilters - accepted" << endl;
     }

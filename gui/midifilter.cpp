@@ -30,7 +30,7 @@
 
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
-    KDialogBase(parent, "", true, i18n("Modify MIDI filters..."),
+    KDialogBase(parent, 0, true, i18n("Modify MIDI filters..."),
                 Ok | Apply | Cancel),
     m_doc(doc),
     m_modified(true)

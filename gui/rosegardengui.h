@@ -917,7 +917,6 @@ public slots:
      * View the audio file manager - and some associated actions
      */
     void slotAudioManager();
-    void slotAudioManagerClosed();
 
     void slotAddAudioFile(Rosegarden::AudioFileId);
     void slotDeleteAudioFile(Rosegarden::AudioFileId);
