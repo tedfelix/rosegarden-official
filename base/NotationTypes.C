@@ -219,6 +219,12 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
 }
 
 
+static inline unsigned int absmod(int height, int mod)
+{
+    return (height > 0) ? (height % mod) : ((mod - (-height % mod)) % mod);
+}
+
+
 // Derived from RG2.1's MidiPitchToVoice in editor/src/Methods.c,
 // InitialiseAccidentalTable in Format.c, and PutItemListInClef in
 // MidiIn.c.  Converts performance pitch to height on staff + correct
@@ -265,16 +271,10 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
     if (modified && !sharp) ++height; // because the modifier has become a flat
 
-    int absheight = height;
-    while (absheight < 0) absheight += 7;
-
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
 
-	int iheight = *i;
-	while (iheight < 0) iheight += 7;
-	
-        if ((iheight % 7) == (absheight % 7)) {
+        if (absmod(*i, 7) == absmod(height, 7)) {
             // the key has an accidental at the same height as this note, so
             // undo the note's accidental if there is one, or make explicit
             // if there isn't
@@ -321,16 +321,10 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
     bool sharp = key.isSharp();
 
-    int absheight = height;
-    while (absheight < 0) absheight += 7;
-
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
 
-	int iheight = *i;
-	while (iheight < 0) iheight += 7;
-	
-        if ((iheight % 7) == (absheight % 7)) {
+        if (absmod(*i, 7) == absmod(height, 7)) {
             // the key has an accidental at the same height as this note
             if (accidental == Natural) accidental = NoAccidental;
             else if (accidental == NoAccidental) accidental = sharp ? Sharp : Flat;
