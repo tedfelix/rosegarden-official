@@ -492,7 +492,7 @@ LilypondExporter::write()
     baseName.replace(QRegExp("\""), "");
 
     // cat back together
-    tmpName = dirName + baseName;
+    tmpName = dirName + '/' + baseName;
             
     if (illegalFilename) {
         CurrentProgressDialog::freeze();
