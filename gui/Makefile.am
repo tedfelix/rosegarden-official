@@ -114,12 +114,12 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/feta/12/*.xpm \
 	pixmaps/toolbar/*.xpm \
 	pixmaps/transport/*.xpm \
-	pixmaps/splash.png \
+	pixmaps/*.png \
         pixmaps/misc/*.xpm \
 	testfiles/*.rg \
         testfiles/audio/*.wav \
 	testfiles/*.rose \
-	devices/*.rgd
+	library/*.rgd
 
 # Where pixmaps for notes, clefs, etc... will be installed
 data_dirname = rosegarden
