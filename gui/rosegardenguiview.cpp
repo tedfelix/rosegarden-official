@@ -424,6 +424,8 @@ RosegardenGUIView::setShift(const bool &value)
     m_trackEditor->slotSetSelectAdd(value);
     m_trackEditor->getTopBarButtons()->getLoopRuler()->
 	slotSetLoopingMode(value);
+    m_trackEditor->getBottomBarButtons()->getLoopRuler()->
+	slotSetLoopingMode(value);
     m_trackEditor->slotSetFineGrain(value);
 } 
 

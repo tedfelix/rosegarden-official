@@ -421,6 +421,7 @@ void
 TrackEditor::slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end)
 {
     getTopBarButtons()->getLoopRuler()->slotSetLoopMarker(start, end);
+    getBottomBarButtons()->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
 void

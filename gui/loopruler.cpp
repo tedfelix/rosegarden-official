@@ -188,6 +188,9 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
             if (m_endLoop == m_startLoop)
             {
                 m_endLoop = m_startLoop = 0;
+
+                // to clear any other loop rulers
+                emit setLoop(m_startLoop, m_endLoop);
                 update();
             }
 
@@ -235,9 +238,6 @@ void LoopRuler::slotSetLoopingMode(bool value)
 void LoopRuler::slotSetLoopMarker(Rosegarden::timeT startLoop,
 				  Rosegarden::timeT endLoop)
 {
-    if (startLoop == endLoop) 
-        return;
-
     m_startLoop = startLoop;
     m_endLoop = endLoop;
 
