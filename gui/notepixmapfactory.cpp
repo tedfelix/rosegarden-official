@@ -285,6 +285,8 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_resolution(resolution),
     m_pixmapDirectory(QString("pixmaps/%1").arg(resolution)),
     m_generatedPixmapHeight(0),
+    m_timeSigFont("new century schoolbook", 20), // TODO: size depends on resolution
+    m_timeSigFontMetrics(m_timeSigFont),
     m_noteBodyFilled(m_pixmapDirectory + "/note-bodyfilled.xpm"),
     m_noteBodyEmpty(m_pixmapDirectory + "/note-bodyempty.xpm"),
     m_accidentalSharp(m_pixmapDirectory + "/notemod-sharp.xpm"),
@@ -520,7 +522,39 @@ NotePixmapFactory::makeKeyPixmap(string type, string cleftype)
         return QCanvasPixmap(m_pixmapDirectory + "/blank.xpm");
     }
 }
-        
+
+QCanvasPixmap
+NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
+{
+    int numerator = sig.getNumerator(),
+        denominator = sig.getDenominator();
+
+    char numC = numerator + '0',
+        denomC = denominator + '0';
+    
+    QRect r = m_timeSigFontMetrics.boundingRect(numC);
+
+    createPixmapAndMask(r.width(), r.height() * 2);
+
+    m_p.setFont(m_timeSigFont);
+    m_pm.setFont(m_timeSigFont);
+
+    m_p.drawText(0, r.height(),     QString(QChar(numC)));
+    m_p.drawText(0, r.height() * 2, QString(QChar(denomC)));
+
+    m_pm.drawText(0, r.height(),     QString(QChar(numC)));
+    m_pm.drawText(0, r.height() * 2, QString(QChar(denomC)));
+
+    QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
+    QBitmap m(*m_generatedMask);
+    p.setMask(m);
+
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return p;
+}
+
 
 void
 NotePixmapFactory::createPixmapAndMask(int width, int height)

@@ -130,6 +130,7 @@ public:
     QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
     QCanvasPixmap makeClefPixmap(Clef clef) const;
     QCanvasPixmap makeKeyPixmap(string type, string cleftype);
+    QCanvasPixmap makeTimeSigPixmap(const TimeSignature& sig);
     QCanvasPixmap makeUnknownPixmap();
 
     int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }
@@ -146,8 +147,6 @@ public:
     }
 
 protected:
-    int m_resolution;
-    QString m_pixmapDirectory;
 
     const QPixmap* tailUp(Note::Type note) const;
     const QPixmap* tailDown(Note::Type note) const;
@@ -157,8 +156,16 @@ protected:
     void drawDot();
 
     void createPixmapAndMask(int width = -1, int height = -1);
+
+    int m_resolution;
+    QString m_pixmapDirectory;
+
     NotePixmapOffsets m_offsets;
     unsigned int m_generatedPixmapHeight;
+
+    QFont m_timeSigFont;
+    QFontMetrics m_timeSigFontMetrics;
+
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
     QPainter m_p;
