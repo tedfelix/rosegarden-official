@@ -39,6 +39,9 @@ public:
                           const char *name=0);
     ~RosegardenTempoDialog();
 
+    void resetFont(QWidget *w);
+    void resetFonts();
+
 public slots:
     void slotOK();
     void slotCancel();

@@ -19,6 +19,10 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qstring.h>
+#include <qspinbox.h>
+#include <qlabel.h>
+
 #include "rosegardentempodialog.h"
 #include "rosegardenguidoc.h"
 
@@ -32,11 +36,24 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
     RosegardenTempo(parent, name, true), // modal
     m_doc(doc)
 {
+    resetFonts();
+
     connect((QObject*)OKButton, SIGNAL(released()),
             this, SLOT(slotOK()));
 
     connect((QObject*)CancelButton, SIGNAL(released()),
             this, SLOT(slotCancel()));
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::timeT currentPos = comp.getPosition();
+    double tempo = comp.getTempoAt(currentPos);
+    RealTime currentTime = comp.getElapsedRealTime(currentPos);
+
+    QString tempoString;
+    tempoString.sprintf("%4.3f", tempo);
+
+    TempoSpin->setSpecialValueText(tempoString);
+    PositionValue->setText(QString("%1.%2 s").arg(currentTime.sec).arg(currentTime.usec));
 }
 
 RosegardenTempoDialog::~RosegardenTempoDialog()
@@ -54,6 +71,24 @@ RosegardenTempoDialog::slotCancel()
 {
     delete this;
 }
+
+void
+RosegardenTempoDialog::resetFont(QWidget *w)
+{
+    QFont font = w->font();
+    font.setPixelSize(10);
+    w->setFont(font);
+}
+
+void
+RosegardenTempoDialog::resetFonts()
+{
+    resetFont(TempoLabel);
+    resetFont(TempoSpin);
+    resetFont(PositionLabel);
+    resetFont(PositionValue);
+}
+
 
 }
  
