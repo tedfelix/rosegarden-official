@@ -41,12 +41,7 @@
 namespace Rosegarden
 {
 
-Configuration::Configuration():
-        m_fetchLatency(0, 50000),     // to fetch and queue new events
-        m_metronomePitch(37),
-        m_metronomeBarVelocity(120),
-        m_metronomeBeatVelocity(80),
-        m_metronomeDuration(0, 10000)
+Configuration::Configuration()
 {
     set<Int>("metronomepitch", 37);
     set<Int>("metronomebarvelocity", 120);
@@ -65,11 +60,26 @@ Configuration::~Configuration()
 std::string
 Configuration::toXmlString()
 {
+    using std::endl;
+
     std::stringstream config;
 
-    config << std::endl;
-    config << "<configuration>" << std::endl;
-    config << "</configuration>" << std::endl << std::ends;
+    config << endl
+           << "<configuration>" << endl
+    
+           << "<metronomepitch>"        << get<Int>("metronomepitch") << "</metronomepitch>" << endl
+           << "<metronomebarvelocity>"  << get<Int>("metronomebarvelocity") << "</metronomebarvelocity>" << endl
+           << "<metronomebeatvelocity>" << get<Int>("metronomebeatvelocity") << "</metronomebeatvelocity>" << endl;
+
+    RealTime r = get<RealTimeT>("fetchlatency");
+    
+    config << "<fetchLatency>" << r.sec << "," << r.usec << "</fetchlatency>" << endl;
+
+    r =  get<RealTimeT>("metronomeduration");
+
+    config << "<metronomeduration>" << r.sec << "," << r.usec << "</metronomeduration>" << endl;
+
+    config << "</configuration>" << endl << std::ends;
 
     return config.str();
 }

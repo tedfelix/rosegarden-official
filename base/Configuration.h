@@ -65,39 +65,12 @@ public:
     template <PropertyType P>
     typename PropertyDefn<P>::basic_type get(const PropertyName &name) const;
 
-//     void setFetchLatency(const RealTime &value) { m_fetchLatency = value; }
-//     RealTime getFetchLatency() const { return m_fetchLatency; }
-
-//     void setMetronomePitch(MidiByte value) { m_metronomePitch = value; }
-//     MidiByte getMetronomePitch() const { return m_metronomePitch; }
-
-//     void setMetronomeBarVelocity(MidiByte value)
-//         { m_metronomeBarVelocity = value; }
-//     MidiByte getMetronomeBarVelocity() const { return m_metronomeBarVelocity; }
-
-//     void setMetronomeBeatVelocity(MidiByte value)
-//         { m_metronomeBeatVelocity = value; }
-//     MidiByte getMetronomeBeatVelocity() const {return m_metronomeBeatVelocity;}
-
-//     void setMetronomeDuration(const RealTime &value)
-//         { m_metronomeDuration = value; }
-//     RealTime getMetronomeDuration() const { return m_metronomeDuration; }
-
     // for exporting
     //
     virtual std::string toXmlString();
 
 private:
 
-    RealTime     m_fetchLatency;
-
-    MidiByte     m_metronomePitch;
-    MidiByte     m_metronomeBarVelocity;
-    MidiByte     m_metronomeBeatVelocity;
-    RealTime     m_metronomeDuration;
-
-//     DoubleClickClient   m_client;
-    
 };
 
 template <PropertyType P>
