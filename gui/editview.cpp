@@ -81,7 +81,7 @@ void EditView::setCanvasView(QCanvasView *canvasView)
 {
     delete m_canvasView;
     m_canvasView = canvasView;
-    m_grid->addWidget(m_canvasView, 1, 0);
+    m_grid->addWidget(m_canvasView, 2, 0);
     m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
 
     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
@@ -101,7 +101,7 @@ void EditView::setTopBarButtons(QWidget* w)
 {
     delete m_topBarButtons;
     m_topBarButtons = w;
-    m_grid->addWidget(w, 0, 0);
+    m_grid->addWidget(w, 1, 0);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
@@ -125,7 +125,7 @@ void EditView::setTextRuler(QWidget* w)
 {
     delete m_textRuler;
     m_textRuler = w;
-    m_grid->addWidget(w, 2, 0);
+    m_grid->addWidget(w, 0, 0);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_textRuler, SLOT(slotScrollHoriz(int)));
