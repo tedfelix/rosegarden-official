@@ -113,7 +113,8 @@ namespace RosegardenGUIColours
     const QColor MatrixKeyboardFocus = QColor(224, 112, 8);
 
 //    const QColor RotaryPlugin = QColor(185, 255, 248);
-    const QColor RotaryPlugin = QColor(185, 185, 185);
+    const QColor RotaryPlugin = QColor(185, 200, 248);
+//    const QColor RotaryPlugin = QColor(185, 185, 185);
 
     const QColor RotaryMeter = QColor(255, 100, 0);
 

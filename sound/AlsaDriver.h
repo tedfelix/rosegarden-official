@@ -38,6 +38,7 @@
 #include "Instrument.h"
 #include "Device.h"
 #include "AlsaPort.h"
+#include "Scavenger.h"
 #include "RunnablePluginInstance.h"
 
 #ifdef HAVE_LIBJACK
@@ -195,6 +196,8 @@ public:
 #endif
     }
 
+    virtual void claimUnwantedPlugin(void *plugin);
+
     virtual bool checkForNewClients();
 
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd);
@@ -343,6 +346,8 @@ private:
 #ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
 #endif
+
+    Scavenger<RunnablePluginInstance> m_pluginScavenger;
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;

@@ -118,14 +118,18 @@ AudioThread::run()
     int rv = pthread_create(&m_thread, &attr, staticThreadRun, this);
 
     if (rv != 0 && priority > 0) {
+#ifdef DEBUG_THREAD_CREATE_DESTROY
 	std::cerr << m_name << "::run: WARNING: unable to start RT thread;"
 		  << "\ntrying again with normal scheduling" << std::endl;
+#endif
 	pthread_attr_init(&attr);
 	rv = pthread_create(&m_thread, &attr, staticThreadRun, this);
     }
 
     if (rv != 0) {
+	// This is quite fatal.
 	std::cerr << m_name << "::run: ERROR: failed to start thread!" << std::endl;
+	::exit(1);
     }	
 
     m_running = true;
@@ -632,10 +636,39 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
     m_bussMixer(0),
     m_blockSize(blockSize)
 {
+    // Pregenerate empty plugin slots
+
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+
+	InstrumentId id;
+	if (i < audioInstruments) id = audioInstrumentBase + i;
+	else id = synthInstrumentBase + (i - audioInstruments);
+
+	PluginList &list = m_plugins[id];
+	for (int j = 0; j < int(Instrument::PLUGIN_COUNT); ++j) {
+	    list.push_back(0);
+	}
+
+	if (i >= audioInstruments) {
+	    m_synths[id] = 0;
+	}
+    }
+
     // Leave the buffer map and process buffer list empty for now.
     // The number of channels per fader can change between plays, so
     // we always examine the buffers in fillBuffers and are prepared
     // to regenerate from scratch if necessary.
+
+    //!!! actually we always have 2 channels per instrument, so we
+    // _could_ generate them here
 }
 
 AudioInstrumentMixer::~AudioInstrumentMixer()
@@ -662,8 +695,6 @@ AudioInstrumentMixer::BufferRec::~BufferRec()
 void
 AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifier)
 {
-    getLock();
-
     std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
 
     int channels = 2;
@@ -698,169 +729,108 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
     } else {
 
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-	    oldInstance = i->second;
+	PluginList &list = m_plugins[id];
+	if (position < (int)list.size()) {
+	    oldInstance = list[position];
+	    list[position] = instance;
 	}
-
-	m_plugins[id][position] = instance;
     }
 
     if (oldInstance) {
-	delete oldInstance;
+	m_driver->claimUnwantedPlugin(oldInstance);
     }
-
-    releaseLock();
 }
     
 void 
 AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
-    getLock();
+    RunnablePluginInstance *oldInstance = 0;
 
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
 	if (m_synths[id]) {
-	    delete m_synths[id];
+	    oldInstance = m_synths[id];
 	    m_synths[id] = 0;
 	}
 
     } else {
 
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-
-	    RunnablePluginInstance *instance = i->second;
-
-	    if (instance) {
-		delete instance;
-	    }
-
-	    m_plugins[id].erase(i);
-	    releaseLock();
-	    return;
+	PluginList &list = m_plugins[id];
+	if (position < (int)list.size()) {
+	    oldInstance = list[position];
+	    list[position] = 0;
 	}
     }
 
-    releaseLock();
+    if (oldInstance) {
+	m_driver->claimUnwantedPlugin(oldInstance);
+    }
 }
 
 void
 AudioInstrumentMixer::removeAllPlugins()
 {
-    getLock();
-
     for (SynthPluginMap::iterator i = m_synths.begin();
 	 i != m_synths.end(); ++i) {
 	if (i->second) {
-	    delete i->second;
+	    RunnablePluginInstance *instance = i->second;
+	    i->second = 0;
+	    m_driver->claimUnwantedPlugin(instance);
 	}
     }
-    m_synths.clear();
 
     for (PluginMap::iterator j = m_plugins.begin();
 	 j != m_plugins.end(); ++j) {
 
-	InstrumentId id = j->first;
+	PluginList &list = j->second;
 
-	for (PluginList::iterator i = m_plugins[id].begin();
-	     i != m_plugins[id].end();) {
-
-	    RunnablePluginInstance *instance = i->second;
-
-	    if (instance) {
-		delete instance;
-	    }
-
-	    PluginList::iterator k = i;
-	    ++k;
-	    m_plugins[id].erase(i);
-	    i = k;
+	for (PluginList::iterator i = list.begin(); i != list.end(); ++i) {
+	    RunnablePluginInstance *instance = *i;
+	    *i = 0;
+	    m_driver->claimUnwantedPlugin(instance);
 	}
     }
+}
 
-    releaseLock();
+
+RunnablePluginInstance *
+AudioInstrumentMixer::getPluginInstance(InstrumentId id, int position)
+{
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+	return m_synths[id];
+    } else {
+	PluginList &list = m_plugins[id];
+	if (position < int(list.size())) return list[position];
+    }
+    return 0;
 }
 
 
 void
 AudioInstrumentMixer::setPluginPortValue(InstrumentId id, int position,
-			       unsigned int port, float value)
+					 unsigned int port, float value)
 {
-    //!!! surely we don't need a lock for something like this?
-    getLock();
-    
-    RunnablePluginInstance *instance = 0;
-
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-	
-	instance = m_synths[id];
-
-    } else {
-
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-	    instance = i->second;
-	}
-    }
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
 
     if (instance) {
 	std::cerr << "Setting plugin port " << port << " to value " << value << std::endl;
 	instance->setPortValue(port, value);
     }
-    
-    releaseLock();
 }
 
 void
 AudioInstrumentMixer::setPluginBypass(InstrumentId id, int position, bool bypass)
 {
-    getLock();
-    
-    RunnablePluginInstance *instance = 0;
-
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-	
-	instance = m_synths[id];
-
-    } else {
-
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-	    instance = i->second;
-	}
-    }
-    
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) instance->setBypassed(bypass);
-    
-    releaseLock();
 }
 
 QStringList
 AudioInstrumentMixer::getPluginPrograms(InstrumentId id, int position)
 {
     QStringList programs;
-
-    getLock();
-    
-    RunnablePluginInstance *instance = 0;
-
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-	
-	instance = m_synths[id];
-
-    } else {
-
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-	    instance = i->second;
-	}
-    }
-    
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) programs = instance->getPrograms();
-    
-    releaseLock();
-
     return programs;
 }
 
@@ -868,57 +838,25 @@ QString
 AudioInstrumentMixer::getPluginProgram(InstrumentId id, int position)
 {
     QString program;
-
-    getLock();
-    
-    RunnablePluginInstance *instance = 0;
-
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-	
-	instance = m_synths[id];
-
-    } else {
-
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-	    instance = i->second;
-	}
-    }
-    
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) program = instance->getCurrentProgram();
-    
-    releaseLock();
-
     return program;
 }
 
 void
 AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString program)
 {
-    getLock();
-    
-    RunnablePluginInstance *instance = 0;
-
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-	
-	instance = m_synths[id];
-
-    } else {
-
-	PluginList::iterator i = m_plugins[id].find(position);
-	if (i != m_plugins[id].end()) {
-	    instance = i->second;
-	}
-    }
-    
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
     if (instance) instance->selectProgram(program);
-    
-    releaseLock();
 }
 
 void
 AudioInstrumentMixer::resetAllPlugins()
 {
+    //!!! lock still required here to protect against calling
+    // activate/deactivate at the same time as run()... what can
+    // we do about that? anything?
+
     getLock();
 
     std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
@@ -954,7 +892,7 @@ AudioInstrumentMixer::resetAllPlugins()
 	for (PluginList::iterator i = m_plugins[id].begin();
 	     i != m_plugins[id].end(); ++i) {
 
-	    RunnablePluginInstance *instance = i->second;
+	    RunnablePluginInstance *instance = *i;
 
 	    if (instance) {
 		std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on plugin for instrument " << id << std::endl;
@@ -1158,8 +1096,16 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 	InstrumentId id = i->first;
 	BufferRec &rec = i->second;
 
-	rec.empty = (m_plugins[id].empty() && m_synths[id] == 0 &&
-		     !queue->haveFilesForInstrument(id));
+	rec.empty = (m_synths[id] == 0 && !queue->haveFilesForInstrument(id));
+	if (rec.empty) {
+	    for (PluginList::iterator j = m_plugins[id].begin();
+		 j != m_plugins[id].end(); ++j) {
+		if (*j != 0) {
+		    rec.empty = false;
+		    break;
+		}
+	    }
+	}
 
 	// For a while we were setting empty to true if the volume on
 	// the track was zero, but that breaks continuity if there is
@@ -1297,9 +1243,6 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     }
 
     PluginList &plugins = m_plugins[id];
-#ifdef DEBUG_MIXER
-    if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
-#endif
 
 #ifdef DEBUG_MIXER
     if ((id % 100) == 0 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
@@ -1428,7 +1371,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     for (PluginList::iterator pli = plugins.begin();
 	 pli != plugins.end(); ++pli) {
 
-	RunnablePluginInstance *plugin = pli->second;
+	RunnablePluginInstance *plugin = *pli;
 	if (!plugin || plugin->isBypassed()) continue;
 
 	unsigned int ch = 0;

@@ -69,6 +69,9 @@ class Device;
 class Instrument : public XmlExportable
 {
 public:
+    static const unsigned int PLUGIN_COUNT; // for non-synth plugins
+    static const unsigned int SYNTH_PLUGIN_POSITION;
+
     enum InstrumentType { Midi, Audio, SoftSynth };
 
     Instrument(InstrumentId id,
@@ -191,7 +194,6 @@ public:
 
     // Plugin management
     //
-    static const unsigned int SYNTH_PLUGIN_POSITION;
     void addPlugin(AudioPluginInstance *instance);
     bool removePlugin(unsigned int position);
     void clearPlugins();

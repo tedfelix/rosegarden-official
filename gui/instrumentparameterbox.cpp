@@ -235,7 +235,8 @@ void
 InstrumentParameterBox::setMute(bool value)
 {
     if (m_selectedInstrument && 
-            m_selectedInstrument->getType() == Instrument::Audio)
+	(m_selectedInstrument->getType() == Instrument::Audio ||
+	 m_selectedInstrument->getType() == Instrument::SoftSynth))
     {
         m_audioInstrumentParameters->slotSetMute(value);
     }
@@ -248,7 +249,8 @@ void
 InstrumentParameterBox::setRecord(bool value)
 {
     if (m_selectedInstrument &&
-	m_selectedInstrument->getType() == Instrument::Audio)
+	(m_selectedInstrument->getType() == Instrument::Audio ||
+	 m_selectedInstrument->getType() == Instrument::SoftSynth))
     {
         m_audioInstrumentParameters->slotSetRecord(value);
     }
@@ -258,7 +260,8 @@ void
 InstrumentParameterBox::setSolo(bool value)
 {
     if (m_selectedInstrument &&
-	m_selectedInstrument->getType() == Instrument::Audio)
+	(m_selectedInstrument->getType() == Instrument::Audio ||
+	 m_selectedInstrument->getType() == Instrument::SoftSynth))
     {
         m_audioInstrumentParameters->slotSetSolo(value);
     }
@@ -315,7 +318,8 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
     std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioLevel("
 	      << dB << ")" << std::endl;
 
-    if (m_selectedInstrument->getType() == Instrument::Audio)
+    if (m_selectedInstrument->getType() == Instrument::Audio ||
+	m_selectedInstrument->getType() == Instrument::SoftSynth)
     {
 	m_selectedInstrument->setLevel(dB);
 
@@ -337,6 +341,8 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
 
     std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
 	      << dB << ")" << std::endl;
+
+    //!!! nb shouldn't have a record level fader at all on soft synth box
 
     if (m_selectedInstrument->getType() == Instrument::Audio)
     {
@@ -1709,7 +1715,8 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     if (controllerNumber == int(Rosegarden::MIDI_CONTROLLER_PAN))
     {
         float adjValue = value;
-        if (m_selectedInstrument->getType() == Instrument::Audio)
+        if (m_selectedInstrument->getType() == Instrument::Audio ||
+	    m_selectedInstrument->getType() == Instrument::SoftSynth)
             value += 100;
 
         m_selectedInstrument->setPan(Rosegarden::MidiByte(adjValue));

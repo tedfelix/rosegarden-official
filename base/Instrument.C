@@ -35,6 +35,7 @@
 namespace Rosegarden
 {
 
+const unsigned int Instrument::PLUGIN_COUNT = 5;
 const unsigned int Instrument::SYNTH_PLUGIN_POSITION = 999;
 
 
@@ -65,8 +66,7 @@ Instrument::Instrument(InstrumentId id,
     {
         // Add a number of plugin place holders (unassigned)
         //
-        unsigned int defaultPlugins = 5;
-        for (unsigned int i = 0; i < defaultPlugins; i++)
+        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
             addPlugin(new AudioPluginInstance(i));
 
         // In an audio instrument we use the m_channel attribute to
@@ -115,8 +115,7 @@ Instrument::Instrument(InstrumentId id,
     {
         // Add a number of plugin place holders (unassigned)
         //
-        unsigned int defaultPlugins = 5;
-        for (unsigned int i = 0; i < defaultPlugins; i++)
+        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
             addPlugin(new AudioPluginInstance(i));
 
         // In an audio instrument we use the m_channel attribute to
@@ -175,8 +174,7 @@ Instrument::Instrument(const Instrument &ins):
     {
         // Add a number of plugin place holders (unassigned)
         //
-        unsigned int defaultPlugins = 5;
-        for (unsigned int i = 0; i < defaultPlugins; i++)
+        for (unsigned int i = 0; i < PLUGIN_COUNT; i++)
             addPlugin(new AudioPluginInstance(i));
 
         // In an audio instrument we use the m_channel attribute to

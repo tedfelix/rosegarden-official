@@ -5511,6 +5511,8 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    this,
 	    SLOT(slotPluginDialogDestroyed(Rosegarden::InstrumentId, int)));
 
+    connect(this, SIGNAL(documentAboutToChange()), dialog, SLOT(close()));
+
     m_pluginDialogs[key] = dialog;
     m_pluginDialogs[key]->show();
 

@@ -254,9 +254,13 @@ protected:
     AudioBussMixer   *m_bussMixer;
     unsigned int      m_blockSize;
 
-    typedef std::map<int, RunnablePluginInstance *> PluginList;
+    // The plugin data structures will all be pre-sized and so of
+    // fixed size during normal run time; this will allow us to add
+    // and edit plugins without locking.
+    typedef std::vector<RunnablePluginInstance *> PluginList;
     typedef std::map<InstrumentId, PluginList> PluginMap;
     typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
+    RunnablePluginInstance *getPluginInstance(InstrumentId, int);
     PluginMap m_plugins;
     SynthPluginMap m_synths;
 

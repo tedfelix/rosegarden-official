@@ -285,6 +285,12 @@ public:
     virtual void getAudioInstrumentNumbers(InstrumentId &, int &) = 0;
     virtual void getSoftSynthInstrumentNumbers(InstrumentId &, int &) = 0;
 
+    // Plugin management -- SoundDrivers should maintain a plugin
+    // scavenger which the audio process code can use for defunct
+    // plugins.  Ownership of plugin is passed to the SoundDriver.
+    //
+    virtual void claimUnwantedPlugin(void *plugin) = 0;
+
     // Handle audio file references
     //
     void clearAudioFiles();
@@ -316,6 +322,8 @@ public:
     virtual RealTime getAudioPlayLatency() { return RealTime(0, 0); }
     virtual RealTime getAudioRecordLatency() { return RealTime(0, 0); }
 
+    // Buffer sizes
+    //
     void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
 			     int smallFileSize) {
 	m_audioMixBufferLength = mix;

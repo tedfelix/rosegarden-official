@@ -2315,7 +2315,9 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 	if (now) t = getSequencerTime();
 	else t = t + m_playStartPosition - m_alsaPlayStartTime;
 
+#ifdef DEBUG_ALSA
 	std::cerr << "AlsaDriver::processSoftSynthEventOut: time " << t << std::endl;
+#endif
 
 	synthPlugin->sendEvent(t, ev);
     }
@@ -3021,6 +3023,8 @@ AlsaDriver::processPending()
 	processNotesOff(getAlsaTime());
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processPending(): draining");
     }
+
+    m_pluginScavenger.scavenge();
 }
 
 void
@@ -3601,6 +3605,14 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendSystemQueued(): draining");
     }
 }
+
+
+void
+AlsaDriver::claimUnwantedPlugin(void *plugin)
+{
+    m_pluginScavenger.claim((RunnablePluginInstance *)plugin);
+}
+
 
 QString
 AlsaDriver::getStatusLog()
