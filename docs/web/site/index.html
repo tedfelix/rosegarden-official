@@ -45,7 +45,7 @@
       completion and beta testing following two and a half years of
       sustained active development.</p>
 
-      <p><i><b>Latest news:</b></i> Rosegarden-4-0.9 is now available
+      <p><i><b>Latest news:</b></i> Rosegarden-4-0.9.1 is now available
       for <a href="download.html">immediate download</a>!</p>
 
       <div align="center" style="margin:1em" valign="center">
@@ -58,11 +58,7 @@
 
       <p><i><b>Other news:</b></i></p>
       <ul>
-      <li>Richard Bown will be giving a talk on Rosegarden to the 
-      <a href="http://www.affs.org.uk/affsac.html">Association For Free Software</a> at Aston University, Birmingham, UK on Saturday 17th May 2003.
-      </li>
-
-      <li>Rosegarden will also be making an appearance at the
+      <li>Rosegarden will be making an appearance at the
       <a href="http://www.linuxuserexpo.com">Linux User and Developer Expo</a>
       in Birmingham, UK on the 24th-26th June 2003.  Registration for the Expo
       is free so if you're in the area then please come along and have a talk
@@ -70,9 +66,14 @@
       <a href="http://www.bownie.com/rosegarden/expo.shtml">last October</a>.
       <!--<a href="/rosegarden/expo.shtml">last October</a>.-->
       </li>
-      <li>Rosegarden-4 was recently featured in
-      the February 2003 issue of <a href="http://www.sospubs.co.uk">Sound
-      on Sound</a>, the UK's top professional recording magazine.
+
+      <li>Richard Bown gave a talk on Rosegarden to the 
+      <a href="http://www.affs.org.uk/affsac.html">Association For Free Software</a> at Aston University, Birmingham, UK on Saturday 17th May 2003.  The talk is available in PDF form from <a href="http://www.bownie.com/rosegarden/rg-affs-presentation-200305.pdf">here</a>.
+      </li>
+
+      <li>Rosegarden-4 was featured in the February 2003 issue of 
+      <a href="http://www.sospubs.co.uk">Sound on Sound</a>, 
+      the UK's top professional recording magazine.
       </li>
       </ul>
       
@@ -86,8 +87,8 @@
       </div>
       -->
 
-      <p>The latest release of Rosegarden is Version 4, Release 0.9
-      released on 29th April 2003.  Have a look at some <a
+      <p>The latest release of Rosegarden is Version 4, Release 0.9.1
+      released on 31st May 2003.  Have a look at some <a
       href="pictures.html">pictures</a> of it in use, <a
       href="download.html">download it</a>, or <a
       href="faq.html">read the Frequently Asked Questions</a> page.
@@ -107,80 +108,49 @@
       <li class="close">Shareable Device (.rgd) files to ease MIDI portability</a>
       </ul>
     
-      <p>Changes since the previous Rosegarden-4-0.8.5 release include:</p>
-<ul>
+      <p>This is mainly a bugfix release.  It is recommended that anyone
+      using Rosegarden-4-0.9 upgrade to this latest release immediately
+      to take advantage of improved quality and stability.</p>
 
- <li class="close">Significant improvements in rendering and editing notation from performance MIDI data</li>
+      <p>New features:<p>
+      <ul>
+        <li class="close">Mup export</li>
+        <li class="close">Step recording in Notation and Matrix views</li>
+        <li class="close">Convert single repeat to real segmentM</li>
+      </ul>
 
- <li class="close">Ability to quantize for notation without changing performance</li>
+      <p>Bugs fixed (including Sourceforge tracker IDs where appropriate):</p>
 
- <li class="close">Performance interpretation of dynamics and accent stresses</li>
-
- <li class="close">Corrected display of all accidentals in (or against) every key</li>
-
- <li class="close">Marks and Group toolbars</li>
-
- <li class="close">Bank Editor dialog reworked - many fixes and new apply/reset methodology.  Device "librarians" - increased number of pre-supported patchsets.</li>
-
- <li class="close">Split-by-pitch with ranging split point</li>
-
- <li class="close">Tip of the Day</li>
-
- <li class="close">"Revert file" option</li>
-
- <li class="close">Studio-> Save Current Document as Default Studio to make short work of saving your own autoload.rg</li>
-
- <li class="close">Tracks toolbar</li>
-
- <li class="close">Detailed sequencer status information available in Configure dialog</li>
-
- <li class="close">Document autosaving and recovery</li>
-
- <li class="close">More complete Right Mouse Button menu in tracks canvas</li>
-
- <li class="close">Document loading rework</li>
-
- <li class="close">Better progress reporting for long operations</li>
-
- <li class="close">Segment labelling</li>
-
- <li class="close">Floating value help when moving rotaries/sliders</li>
-
- <li class="close">Tracks can be moved up and down in the Composition [buggy]</li>
-
- <li class="close">Better handling of the sequencer process</li>
-
- <li class="close">Lots of translations - Russian, Spanish, French, German</li>
-
- <li class="close"><a href="http://rosegarden.sourceforge.net/tutorial/">Rosegarden Tutorial</a> (including a PDF) thanks to Michael McIntyre</li>
-
- <li class="close">A lot of audio improvments - stereo recording, panning, audio faders.</li>
-
- <li class="close">MIDI synchronisation infrastructure</li>
-
- <li class="close">ALSA client dynamic detection.  ALSA recording device selectin.</li>
-
- <li class="close">Import of Banks/Programs from .rgd files and standard Soundfont (sf2) files</li>
-
- <li class="close">Library of premapped MIDI devices in .rgd files</li>
-
- <li class="close">Many Lilypond export improvements</a>
-
-
-<!--
- <li class="close">Improved MIDI file I/O (better support for banks and merging in import, better support for delay, transpose etc in export)</li>
-
-<li class="close">Banks/Programs editor dialog (including importing/exporting of Studios)</li>
-<li class="close">MIDI Panic Button (for clearing down stuck notes)</li>
-<li class="close">Added some keyboard controls (though not yet enough) to matrix</li>
-<li class="close">Added real-time segment delays</li>
-<li class="close">progress display completely overhauled</li>
-<li class="close">ALSA clients can be added dynamically (you can start iiwusynth after you've started Rosegarden and it'll appear in the Instruments list)</li>
-<li class="close">MIDI events filter dialog for MIDI THRU and MIDI record</li>
-<li class="close">MIDI/ALSA recording bug fixed (stopping after so many recorded events)</li>
-<li class="close">many bugs, tweaks and performance improvements</li>
--->
-</ul>
+      <ul>
+        <li class="close">739544 crash when clicking Mute</li>
+        <li class="close">740848 Bank import file dlg : set default filter to all supp. files</li>
+        <li class="close">742303 can't paste at a clef</li>
+        <li class="close">706335 Crash when loading .rg file that has audio tracks</li>
+        <li class="close">678428 MIDI file export ignores instrument parameter settings</li>
+        <li class="close">674731 MIDI sysex events badly encoded (partially fixed)</li>
+        <li class="close">632964 No recording of MIDI Aftertouch data</li>
+        <li class="close">711889 Import of Pitch Bend</li>
+        <li class="close">729376 rests hanging around at start of notation view</li>
+        <li class="close">740273 Juan's big list -- two crashes and one other bug fixed</li>
+        <li class="close">743147 connections not saved</li>
+        <li class="close">743205 bank editor device mismanagement</li>
+        <li class="close">743206 getClefAndKey too slow</li>
+        <li class="close">745162 loading banks doesn't set names correctly</li>
+        <li class="close">730011 memory leak after recording?</li>
+        <li class="close">727809 can't create segments after deleting tracks</li>
+        <li class="close">729989 trickery necessary to record audio</li>
+        <li class="close">742439 Moving notes in matrix gives wrong visual feedback</li>
+        <li class="close">742301 undo "insert note" undoes "insert clef" too</li>
+        <li class="close">739059 track ID mismanagement when performing deletion</li>
+        <li class="close">729455 selecting record button on added track</li>
+        <li class="close">661575 Drag event image offset in matrix editor</li>
+        <li class="close">727806 delete tracks, add tracks, numbers are incorrect</li>
+        <li class="close">728508 Save Settings does not save zoom/transport toolbars status</li>
+        <li class="close">709485 settings amnesia déjà vu</li>
+        <li class="close">729039 audio recording bug</li>
+        <li class="close">728466 crash on tracks -> remap instruments</li>
+        <li class="close">------ non-iso-8859-1 characters now saved correctly</li>
+      </ul>
 
       <p>Rosegarden-4 is Free Software under the GNU GPL.  It is a KDE
       application, which means to build it you need the KDE 3.x
