@@ -1187,9 +1187,9 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	    return false;
 	}
 	
-	found = new QPixmap(systemFont->renderChar(glyph,
-						   code + charBase,
-						   m_fontMap.shouldAutocrop()));
+	found = new QPixmap(systemFont->renderChar(charName,
+						   glyph,
+						   code + charBase));
 	add(charName, inverted, found);
 	pixmap = *found;
 	return true;
@@ -1467,14 +1467,14 @@ public:
     SystemFontQt(QFont &font) : m_font(font) { }
     virtual ~SystemFontQt() { }
 
-    virtual QPixmap renderChar(int glyph, int code, bool autocrop);
+    virtual QPixmap renderChar(CharName charName, int glyph, int code);
 
 private:
     QFont m_font;
 };
 
 QPixmap
-SystemFontQt::renderChar(int glyph, int code, bool autocrop)
+SystemFontQt::renderChar(CharName charName, int glyph, int code)
 {
     if (code < 0) {
 	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << "), need a code point" << endl;
@@ -1483,15 +1483,19 @@ SystemFontQt::renderChar(int glyph, int code, bool autocrop)
 
     QFontMetrics metrics(m_font);
     QChar qc(code);
-    QRect bounding = metrics.boundingRect(qc);
+//!!!    QRect bounding = metrics.boundingRect(qc);
 
     QPixmap map;
 
+/*!!! non-autocrop no longer supported
     if (autocrop) {
 	map = QPixmap(bounding.width(), bounding.height() + 1);
     } else {
+*/
 	map = QPixmap(metrics.width(qc), metrics.height());
+/*
     }
+*/
     
     map.fill();
     QPainter painter;
@@ -1499,14 +1503,17 @@ SystemFontQt::renderChar(int glyph, int code, bool autocrop)
     painter.setFont(m_font);
     painter.setPen(Qt::black);
     
-    NOTATION_DEBUG << "SystemFontQt::renderChar: Drawing character code "
-		   << code << " (string " << QString(qc) << ")" << endl;
-    
+    NOTATION_DEBUG << "NoteFont: Drawing character code "
+		   << code << " for " << charName.getName()
+		   << " using QFont" << endl;
+
+/*!!!    
     if (autocrop) {
 	painter.drawText(-bounding.left(), -bounding.top(), qc);
     } else {
+*/
 	painter.drawText(0, metrics.ascent(), qc);
-    }
+//!!!    }
     
     painter.end();
     map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
@@ -1522,7 +1529,7 @@ public:
     SystemFontXft(Display *dpy, XftFont *font) : m_dpy(dpy), m_font(font) { }
     virtual ~SystemFontXft() { if (m_font) XftFontClose(m_dpy, m_font); }
     
-    virtual QPixmap renderChar(int glyph, int code, bool autocrop);
+    virtual QPixmap renderChar(CharName charName, int glyph, int code);
 
 private:
     Display *m_dpy;
@@ -1530,7 +1537,7 @@ private:
 };
 
 QPixmap
-SystemFontXft::renderChar(int glyph, int code, bool)
+SystemFontXft::renderChar(CharName charName, int glyph, int code)
 {
     if (glyph < 0 && code < 0) {
 	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point, can't render" << endl;
@@ -1569,13 +1576,16 @@ SystemFontXft::renderChar(int glyph, int code, bool)
     col.color.alpha = 0xffff;
     col.pixel = pen.pixel();
 
-    NOTATION_DEBUG << "SystemFontXft::renderChar: rendering character code "
-		   << code << endl;
-
     if (glyph >= 0) {
+	NOTATION_DEBUG << "NoteFont: drawing raw character glyph "
+		       << glyph << " for " << charName.getName()
+		       << " using Xft" << endl;
 	FT_UInt ui(glyph);
 	XftDrawGlyphs(draw, &col, m_font, extents.x, extents.y, &ui, 1);
     } else {
+	NOTATION_DEBUG << "NoteFont: drawing character code "
+		       << code << " for " << charName.getName()
+		       << " using Xft" << endl;
 	FcChar32 char32(code);
 	XftDrawString32(draw, &col, m_font, extents.x, extents.y, &char32, 1);
     }

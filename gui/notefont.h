@@ -41,7 +41,7 @@ typedef std::pair<QString, int> SystemFontSpec;
 class SystemFont
 {
 public:
-    virtual QPixmap renderChar(int glyph, int code, bool autocrop) = 0;
+    virtual QPixmap renderChar(CharName charName, int glyph, int code) = 0;
 
     static SystemFont *loadSystemFont(const SystemFontSpec &spec);
 };
