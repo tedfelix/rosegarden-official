@@ -74,8 +74,8 @@ using std::set;
 
 EventSelection::EventSelection(Track& t)
     : m_originalTrack(t),
-      m_beginTime(0),
-      m_endTime(0)
+      m_beginTime(-1),
+      m_endTime(-1)
 {
 }
 
@@ -106,18 +106,16 @@ void EventSelection::cut()
     for(eventcontainer::iterator i = m_trackEvents.begin();
         i != m_trackEvents.end(); ++i) {
 
-        // store copy of Event
         m_ownEvents.push_back(new Event(*(*i)));
 
         // delete Event from Track
         nt.deleteEvent(*i);
     }
 
-    eventcontainer::iterator iter = m_trackEvents.begin();
-    
-    m_beginTime = (*iter)->getAbsoluteTime();
-    iter = m_trackEvents.end(); --iter;
-    m_endTime = (*iter)->getAbsoluteTime();
+    sort(m_ownEvents.begin(), m_ownEvents.end(),
+         Event::EventCmp());
+
+    updateBeginEndTime();
 
     m_trackEvents.clear();
 }
@@ -131,14 +129,56 @@ void EventSelection::copy()
         // store copy of Event
         m_ownEvents.push_back(new Event(*(*i)));
     }
+
+    updateBeginEndTime();
+
+    m_trackEvents.clear();
 }
 
-void EventSelection::pasteToTrack(Track* t)
+void EventSelection::pasteToTrack(Track& t, timeT atTime)
 {
+    TrackNotationHelper nt(t);
+
+    nt.removeRests(atTime, getTotalDuration());
+
+    timeT offsetTime = atTime - (*(m_ownEvents.begin()))->getAbsoluteTime();
+
     for(eventcontainer::iterator i = m_ownEvents.begin();
         i != m_ownEvents.end(); ++i) {
-        t->insert(new Event(*(*i)));
+
+        Event* e = new Event(*(*i));
+
+        e->setAbsoluteTime(e->getAbsoluteTime() + offsetTime);
+
+        t.insert(e);
     }
+}
+
+timeT EventSelection::getTotalDuration() const
+{
+    eventcontainer::const_iterator last = m_ownEvents.end();
+    --last;
+
+    kdDebug(KDEBUG_AREA) << "EventSelection::getTotalDuration() : "
+                         << m_endTime - m_beginTime + (*last)->getDuration() << endl;
+
+    return m_endTime - m_beginTime + (*last)->getDuration();
+}
+
+void EventSelection::updateBeginEndTime() const
+{
+    if ((m_beginTime != -1) && (m_endTime != -1))
+        // this has already been calculated
+        return;
+
+    eventcontainer::const_iterator iter = m_ownEvents.begin();
+    
+    m_beginTime = (*iter)->getAbsoluteTime();
+    iter = m_ownEvents.end(); --iter;
+    m_endTime = (*iter)->getAbsoluteTime();
+
+    kdDebug(KDEBUG_AREA) << "EventSelection::updateBeginEndTime() : begin : "
+                         << m_beginTime << ", end : " << m_endTime << endl;
 }
 
 
@@ -896,6 +936,9 @@ void NotationView::slotEditCut()
                m_currentEventSelection->getEndTime());
 
     canvas()->update();
+
+    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
+                         << m_currentEventSelection->getTotalDuration() << endl;
     
 }
 
@@ -911,8 +954,15 @@ void NotationView::slotEditCopy()
 
 void NotationView::slotEditPaste()
 {
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
+    if (!m_currentEventSelection) {
+        slotQuarter();
+        return;
+    }
+
+    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
+
+    kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste() : selection duration = "
+                         << m_currentEventSelection->getTotalDuration() << endl;
 
     setTool(new NotationSelectionPaster(*this, *m_currentEventSelection));
 }
@@ -1607,6 +1657,9 @@ void ClefInserter::handleMousePress(int /*height*/, int staffNo,
     timeT time = (*closestNote)->getAbsoluteTime();
     TrackNotationHelper nt
         (m_parentView.getStaff(staffNo)->getTrack());
+
+    m_parentView.getDocument()->setModified();
+
     nt.insertClef(time, m_clef);
 
     m_parentView.redoLayout(staffNo, time, time + 1);
@@ -1650,8 +1703,10 @@ void NotationEraser::handleMousePress(int /*height*/, int staffNo,
 
     }
     
-    if (needLayout)
+    if (needLayout) {
+        m_parentView.getDocument()->setModified();
         m_parentView.redoLayout(staffNo, absTime, absTime);
+    }
 }
 
 //------------------------------
@@ -1768,9 +1823,40 @@ NotationSelectionPaster::NotationSelectionPaster(NotationView& parent,
 {
 }
     
-void NotationSelectionPaster::handleMousePress(int height, int staffNo,
+void NotationSelectionPaster::handleMousePress(int /*height*/, int staffNo,
                                                const QPoint &eventPos,
-                                               NotationElement* el)
+                                               NotationElement* /*el*/)
 {
+    kdDebug(KDEBUG_AREA) << "NotationSelectionPaster::handleMousePress : staffNo = "
+                         << staffNo
+                         << "event pos : "
+                         << eventPos.x() << "," << eventPos.y() << endl;
+
+    if (staffNo < 0) return;
+
+    Event *tsig = 0, *clef = 0, *key = 0;
+
+    NotationElementList::iterator closestNote =
+        m_parentView.findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
+
+    if (closestNote ==
+        m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
+        return;
+    }
+
+    timeT time = (*closestNote)->getAbsoluteTime();
+
+    Track& track = m_parentView.getStaff(staffNo)->getTrack();
+
+    m_selection.pasteToTrack(track, time);
+
+    m_parentView.redoLayout(staffNo,
+                            0,
+                            time + m_selection.getTotalDuration() + 1);
+
+    m_parentView.canvas()->update();
+
+    //m_parentView.slotStatusHelpMsg(i18n("Ready."));
+
 }
 

@@ -49,7 +49,6 @@ class EventSelection
 {
 public:
     typedef std::vector<Rosegarden::Event*> eventcontainer;
-    typedef std::vector<Rosegarden::Track::iterator> iteratorcontainer;
     
     EventSelection(Rosegarden::Track&);
 
@@ -71,7 +70,7 @@ public:
     /**
      * Copy the selected Events to the specified track
      */
-    void pasteToTrack(Rosegarden::Track*);
+    void pasteToTrack(Rosegarden::Track&, Rosegarden::timeT);
 
     void push_back(Rosegarden::Event* e) { m_trackEvents.push_back(e); }
 
@@ -79,12 +78,17 @@ public:
     // something; I'm not quite sure why it isn't
     bool contains(Rosegarden::Event *e) const;
 
-    Rosegarden::timeT getBeginTime() const { return m_beginTime; }
-    Rosegarden::timeT getEndTime()   const { return m_endTime; }
+    Rosegarden::timeT getBeginTime()       const { return m_beginTime; }
+    Rosegarden::timeT getEndTime()         const { return m_endTime; }
+    Rosegarden::timeT getTotalDuration()   const;
 
     const Rosegarden::Track &getTrack() const { return m_originalTrack; }
     
+private:
+    EventSelection(const EventSelection&);
+
 protected:
+    void updateBeginEndTime() const;
 
     Rosegarden::Track& m_originalTrack;
 
@@ -97,8 +101,8 @@ protected:
      */
     eventcontainer m_ownEvents;
 
-    Rosegarden::timeT m_beginTime;
-    Rosegarden::timeT m_endTime;
+    mutable Rosegarden::timeT m_beginTime;
+    mutable Rosegarden::timeT m_endTime;
 };
 
 
@@ -117,6 +121,7 @@ class NotationView : public KMainWindow
     friend class NoteInserter;
     friend class ClefInserter;
     friend class NotationEraser;
+    friend class NotationSelectionPaster;
 
     Q_OBJECT
 
