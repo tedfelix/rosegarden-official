@@ -162,7 +162,9 @@ MusicXmlExporter::writeNote(Event *e, bool isFlatKeySignature, std::ofstream &st
     // Incomplete: will RG ever use this?
     str << "\t\t\t\t<voice>" << "1" << "</voice>" << std::endl;
     Note tmpNote = Note::getNearestNote(e->getDuration(), MAX_DOTS);
-    str << "\t\t\t\t<type>" << tmpNote.getShortName() << "</type>" << std::endl;
+    // Incomplete: getReferenceName probably is not the list of valid
+    // MusicXML types (need to convert)
+    str << "\t\t\t\t<type>" << tmpNote.getReferenceName() << "</type>" << std::endl;
     // could also do <stem>down</stem> if you wanted
     str << "\t\t\t\t</note>" << std::endl;
 }
