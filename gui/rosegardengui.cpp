@@ -428,7 +428,8 @@ void RosegardenGUIApp::initZoomToolbar()
     }
 
     m_zoomSlider = new ZoomSlider<double>
-	(zoomSizes, 1.0, QSlider::Horizontal, zoomToolbar);
+	(zoomSizes, duration44 / defaultBarWidth44,
+         QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
 
