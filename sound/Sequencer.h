@@ -221,7 +221,7 @@ public:
     // Process MappedComposition into MIDI and Audio events and send
     // to aRTS
     //
-    void processEventsOut(Rosegarden::MappedComposition mC,
+    void processEventsOut(const Rosegarden::MappedComposition &mC,
                           const Rosegarden::RealTime &playLatency);
 
     // Process the audio queue
@@ -296,7 +296,7 @@ private:
     void initialiseMidi();
     void initialiseAudio();
 
-    void processMidiOut(Rosegarden::MappedComposition mC,
+    void processMidiOut(const Rosegarden::MappedComposition &mC,
                         const Rosegarden::RealTime &playLatency);
 
     // get a vector of recorded events from aRTS

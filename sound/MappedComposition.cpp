@@ -35,9 +35,10 @@ using std::endl;
 MappedComposition::~MappedComposition()
 {
     for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
-        this->erase((*it));
-}
+        delete (*it);
 
+    this->clear();
+}
 
 
 // Turn a MappedComposition into a QDataStream
@@ -125,20 +126,34 @@ MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
 }
 
 
-MappedComposition
-MappedComposition::operator+(const MappedComposition &c)
+// Concatenate MappedComposition
+//
+MappedComposition&
+MappedComposition::operator+(const MappedComposition &mC)
 {
-    for (MappedCompositionIterator it = c.begin(); it != c.end(); it++)
-    {
-        this->insert((*it));
-    }
+    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
+        this->insert(new MappedEvent(**it)); // deep copy
 
     return *this;
 }
 
+// Assign (clear and deep copy)
+//
+MappedComposition&
+MappedComposition::operator=(const MappedComposition &mC)
+{
+    // clear down
+    for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
+        delete (*it);
 
+    this->clear();
 
+    // deep copy
+    for (MappedCompositionIterator it = mC.begin(); it != mC.end(); it++)
+        this->insert(new MappedEvent(**it));
 
+    return *this;
+}
 
 
 }

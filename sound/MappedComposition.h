@@ -62,7 +62,8 @@ public:
     //
     void moveStartTime(const Rosegarden::RealTime &mT);
 
-    MappedComposition operator+(const MappedComposition &c);
+    MappedComposition& operator+(const MappedComposition &mC);
+    MappedComposition& operator=(const MappedComposition &mC);
 
     // This section is used for serialising this class over DCOP
     //

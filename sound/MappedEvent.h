@@ -122,6 +122,18 @@ public:
          m_type(Audio),
          m_instrument(instrument),
          m_track(track) {;}
+
+    // Copy
+    //
+    MappedEvent(const MappedEvent &mE):
+        m_pitch(mE.getPitch()),
+        m_eventTime(mE.getEventTime()),
+        m_duration(getDuration()),
+        m_audioStartMarker(getAudioStartMarker()),
+        m_velocity(getVelocity()),
+        m_type(getType()),
+        m_instrument(getInstrument()),
+        m_track(getTrack()) {;}
                 
     ~MappedEvent() {;}
 

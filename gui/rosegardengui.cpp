@@ -1730,13 +1730,9 @@ RosegardenGUIApp::record()
 
     // Adjust backwards by the bar count in
     //
-    cout << "BEFORE PP = " << comp.getPosition() << endl;
     int startBar = comp.getBarNumber(comp.getPosition(), false);
     startBar -= comp.getCountInBars();
     setPointerPosition(comp.getBarRange(startBar, false).first);
-
-    cout << "AFTER PP = " << comp.getPosition() << endl;
-    cout << "START BAR = " << startBar<< endl;
 
 
     // Some locals

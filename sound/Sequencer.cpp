@@ -404,9 +404,18 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 
 void
-Sequencer::processEventsOut(Rosegarden::MappedComposition mC,
+Sequencer::processEventsOut(const Rosegarden::MappedComposition &mC,
                             const Rosegarden::RealTime &playLatency)
 {
+    // Start playback if it isn't already
+    //
+    if (m_startPlayback)
+    {
+        m_artsPlayStartTime = m_midiPlayPort.time();
+        m_startPlayback = false;
+        m_playing = true;
+    }
+
     // Queue up any audio events that are pending and connect them
     // to the relevant audio out object
     //
@@ -491,7 +500,7 @@ Sequencer::processAudioQueue()
 }
 
 void
-Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
+Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
                           const Rosegarden::RealTime &playLatency)
 {
     Arts::MidiEvent event;
@@ -513,19 +522,12 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
     Rosegarden::RealTime midiRelativeTime;
     Rosegarden::RealTime midiRelativeStopTime;
 
-    // get current port time at start of playback
-    if (m_startPlayback)
-    {
-        m_artsPlayStartTime = m_midiPlayPort.time();
-        m_startPlayback = false;
-        m_playing = true;
-    }
-
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
         // sort out the correct TimeStamp for playback
         assert((*i)->getEventTime() >= m_playStartPosition);
+
 
         // check the type we're processing
         if ((*i)->getType() != MappedEvent::Internal)
