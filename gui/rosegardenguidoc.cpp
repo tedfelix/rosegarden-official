@@ -503,11 +503,13 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
 bool
 RosegardenGUIDoc::writeToFile(const QString &file, const QString &text)
 {
+    std::string stext = qstrtostr(text);
+    const char *ctext = stext.c_str();
+    size_t csize = strlen(ctext);
+
     gzFile fd = gzopen(qstrtostr(file).c_str(), "wb");
     if (!fd) return false;
-    
-    const char *ctext = qstrtostr(text).c_str();
-    size_t csize = strlen(ctext);
+
     int actual = gzwrite(fd, (void *)ctext, csize);
     gzclose(fd);
 
