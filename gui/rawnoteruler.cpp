@@ -346,6 +346,8 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 void
 RawNoteRuler::paintEvent(QPaintEvent* e)
 {
+    if (!m_segment || !m_segment->getComposition()) return;
+    
     START_TIMING;
 
     QPainter paint(this);
