@@ -15,7 +15,12 @@
     <br>
     <h2>How to get Rosegarden</h2>
 
-    <p>During this pre-1.0-release development phase, we are only making Rosegarden available in source code form to be compiled after download.  There are some binary packages listed below, but they are all provided by third parties.  We hope to make it easier to obtain Rosegarden when 1.0 is released later this year.</p>
+    <p>During this pre-1.0-release development phase, we are only
+    making Rosegarden available in source code form to be compiled
+    after download.  There are some binary packages listed below, but
+    they are all provided by third parties.  Making it easier to
+    obtain and install Rosegarden is a priority as we approach 1.0, so
+    there may be some improvements to this process soon.</p>
 
     <h2>Downloads</h2>
 

@@ -23,9 +23,13 @@
       and editing environment</b>.</p><p>Rosegarden is an
       easy-to-learn, attractive application that runs on Linux, ideal
       for composers, musicians, music students, and small studio or
-      home recording environments.  It is currently in formal beta
-      testing, feature complete for a full 1.0 release a little later
-      in the year.</p>
+      home recording environments.
+
+	<p><b>Now in beta!</b> With the release of 0.9.9, we're now
+	feature complete for 1.0 and in formal beta testing. We need
+	<a href="/support/lists/">your feedback</a>!  This release is
+	not bug-free yet, but only with your help can we ensure 1.0 is
+	the highest-quality release possible.</p>
 
       <p><a href="tour/">Take our tour</a> &ndash; and see what Rosegarden can
       do for you!</p>

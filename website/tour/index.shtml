@@ -24,8 +24,9 @@
 	<p><a href="/tour/midi">2. MIDI</a> &ndash; Managing your MIDI ports, banks, programs and controllers without having to remember any numbers.</p>
 	<p><a href="/tour/notation">3. Notation</a> &ndash; Entering, editing and printing score.</p>
 	<p><a href="/tour/audio">4. Audio</a> &ndash; Recording, mixing, and using samples and effects.</p>
-	<p><a href="/tour/languages">5. Languages</a> &ndash; The international state of Rosegarden.</p>
-	<p><a href="/tour/integration">6. Integration</a> &ndash; How Rosegarden works together with other software.</p>
+	<p><a href="/tour/synths">5. Synths</a> &ndash; Playing your MIDI tracks through hosted synths, for more accurate control.</p>
+	<p><a href="/tour/languages">6. Languages</a> &ndash; The international state of Rosegarden.</p>
+	<p><a href="/tour/integration">7. Integration</a> &ndash; How Rosegarden works together with other software.</p>
 
 	<br>
 	    <p><b>Next: <a href="/tour/editing/">Editing</a></b></p>
