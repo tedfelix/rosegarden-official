@@ -58,22 +58,25 @@ public:
           const std::string &label,
           bool muted);
 
+    // Copy constructor
+    Track(const Track &);
+
     ~Track();
 
     void setId(TrackId id) { m_id = id; }
     TrackId getId() const { return m_id; }
 
     void setMuted(bool muted) { m_muted = muted; }
-    bool isMuted() { return m_muted; }
+    bool isMuted() const { return m_muted; }
 
     void setPosition(TrackId position) { m_position = position; }
-    TrackId getPosition() { return m_position; }
+    TrackId getPosition() const { return m_position; }
 
     void setLabel(const std::string &label) { m_label = label; }
-    std::string const getLabel() { return m_label; }
+    std::string getLabel() const { return m_label; }
 
     void setInstrument(InstrumentId instrument) { m_instrument = instrument; }
-    InstrumentId getInstrument() { return m_instrument; }
+    InstrumentId getInstrument() const { return m_instrument; }
 
     // Implementation of virtual
     //

@@ -21,13 +21,22 @@ o Tidy up AudioFiles:
 o selection of ALSA recording device [HALF COMPLETE]
 
 o ALSA client detection bug on laptop - going from no clients
-  to one client causes big loop of death.
+  to one client causes big loop of death.  Appear that alive()
+  is getting sent twice from the GUI..?
 
 o Toggle record mode for punch in/out [Half complete]
 
 o audio/MIDI looping and start position (performance)
 
 o MIDI export broken for key sig and SysExs [CC?]
+
+o "Revert file" option [HALF COMPLETED]
+
+o Multiple Document Interface - at least internally capable
+  of handling multiple documents.   Two phases:
+
+  - more complete "swap()" that works at Document level
+  - full MDI interface internals
 
 
 
@@ -37,8 +46,6 @@ Smaller stuff
 o Fix segment audio drag and drop
 
 o Drum bank selects and different MIDI drums
-
-o "Revert file" option [HALF COMPLETED]
 
 o Matrix tools - cut and join 
 

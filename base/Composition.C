@@ -79,6 +79,20 @@ Composition::ReferenceSegment::~ReferenceSegment()
     clear();
 }
 
+Composition::ReferenceSegment&
+Composition::ReferenceSegment::operator=(const ReferenceSegment &seg)
+{
+    clear();
+
+    for (iterator i = begin(); i != end(); ++i)
+	this->push_back(new Event(**i));
+
+    m_eventType = seg.getEventType();
+
+    return (*this);
+}
+
+
 void
 Composition::ReferenceSegment::clear()
 {
@@ -265,11 +279,35 @@ Composition::Composition(const Composition &comp):
 Composition&
 Composition::operator=(const Composition &comp)
 {
+
+    m_tracks.clear();
+    m_segments.clear();
+
+    // Copy track information
+    //
+    trackcontainer *tracks = comp.getTracks();
+    for (trackcontainer::iterator i = tracks->begin(); i != tracks->end(); ++i) 
+	m_tracks[i->first] = new Track(*(i->second));
+
+    // Copy segments
+    //
+    segmentcontainer segments = comp.getSegments();
+    for (segmentcontainer::iterator i = segments.begin();
+         i != segments.end(); ++i)
+	m_segments.insert(new Segment(**i));
+
+    for (segmentcontainer::iterator i = this->m_segments.begin();
+	 i != this->m_segments.end(); ++i) {
+	(*i)->setComposition(this);
+    }
+
     m_recordTrack = comp.getRecordTrack();
     m_solo = comp.isSolo();
     m_selectedTrack = comp.getSelectedTrack();
+
     m_timeSigSegment = comp.getTimeSigSegment();
     m_tempoSegment = comp.getTempoSegment();
+
     m_basicQuantizer = *comp.getBasicQuantizer();
     m_noteQuantizer = *comp.getNoteQuantizer();
     m_legatoQuantizer = *comp.getLegatoQuantizer();
@@ -281,21 +319,14 @@ Composition::operator=(const Composition &comp)
     m_loopEnd = comp.getLoopEnd();
     m_barPositionsNeedCalculating = true;
     m_tempoTimestampsNeedCalculating = true;
-    m_copyright = comp.getCopyrightNote();
+
+    // causes crash at the mo
+    //m_copyright = comp.getCopyrightNote();
+
+    m_metadata = comp.getMetadata();
     m_playMetronome = comp.usePlayMetronome();
     m_recordMetronome = comp.useRecordMetronome();
     m_needsRefresh = true;
-
-    m_tracks.clear();
-    m_segments.clear();
-
-    m_tracks = *(comp.getTracks());
-    m_segments = comp.getSegments();
-
-    for (segmentcontainer::iterator i = this->m_segments.begin();
-	 i != this->m_segments.end(); ++i) {
-	(*i)->setComposition(this);
-    }
 
     return *this;
 }

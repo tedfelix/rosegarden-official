@@ -216,7 +216,9 @@ Studio::getInstrumentFromList(int index)
 
 
 
-// Clear down the devices and the Instruments
+// Clear down the devices  - the devices will clear down their
+// own Instruments.
+//
 void
 Studio::clear()
 {
@@ -228,17 +230,7 @@ Studio::clear()
     // Append lists
     //
     for (it = m_devices.begin(); it != m_devices.end(); it++)
-    {
-        // get sub list
-        list = (*it)->getAllInstruments();
-
-        for (iit = list.begin(); iit != list.end(); iit++)
-            delete(*iit);
-
-        list.erase(list.begin(), list.end());
-
         delete *it;
-    }
 
     m_devices.erase(m_devices.begin(), m_devices.end());
 }

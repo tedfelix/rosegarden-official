@@ -54,6 +54,18 @@ Track::Track(TrackId id,
    m_instrument(instrument)
 {
 }
+
+Track::Track(const Track &track):
+   XmlExportable(),
+   m_id(track.getId()),
+   m_muted(track.isMuted()),
+   m_label(track.getLabel()),
+   m_position(track.getPosition()),
+   m_instrument(track.getInstrument())
+{
+}
+
+
    
 
 Track::~Track()

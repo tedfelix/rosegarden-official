@@ -59,6 +59,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
     Device(dev.getId(), dev.getName(), dev.getType()),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
+    m_metronome(0),
     m_duplex(isDuplex())
 {
     // Device
@@ -66,12 +67,11 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
 
     // Create and assign a metronome if required
     //
-    if (m_metronome)
+    if (dev.getMetronome())
     {
-        MidiMetronome *metronome = new MidiMetronome();
-        metronome->pitch = m_metronome->pitch;
-        metronome->instrument = m_metronome->instrument;
-        m_metronome = metronome;
+        m_metronome = new MidiMetronome();
+        m_metronome->pitch = dev.getMetronome()->pitch;
+        m_metronome->instrument = dev.getMetronome()->instrument;
     }
 
     std::vector<MidiProgram> programs = dev.getPrograms();

@@ -172,11 +172,11 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_startUpSync = true;
     m_autoSaveTimer = new QTimer(this);
 
-    m_composition = doc.getComposition();
     m_audioFileManager = doc.getAudioFileManager();
     m_studio = doc.getStudio();
-
     m_config = doc.getConfiguration();
+
+    m_composition = doc.getComposition();
 
     return *this;
 }

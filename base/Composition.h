@@ -586,6 +586,8 @@ public:
     public:
 	ReferenceSegment(std::string eventType);
 	virtual ~ReferenceSegment();
+
+        ReferenceSegment& operator=(const ReferenceSegment &);
 	
 	typedef Impl::iterator iterator;
 	typedef Impl::size_type size_type;
@@ -607,6 +609,8 @@ public:
 
 	iterator findRealTime(RealTime time);
 	iterator findNearestRealTime(RealTime time);
+
+        std::string getEventType() const { return m_eventType; }
 
     private:
   	iterator find(Event *e);
