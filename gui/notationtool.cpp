@@ -1307,8 +1307,6 @@ NotationSelector::getStaffForElement(NotationElement *elt)
 }
 
 
-bool NotationSelector::m_greedy = true;
-
 //------------------------------
 
 const QString NoteInserter::ToolName     = "noteinserter";

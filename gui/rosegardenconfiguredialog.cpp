@@ -125,7 +125,6 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
       m_countIn(0),
       m_midiPitchOctave(0),
       m_externalAudioEditorPath(0),
-      m_selectorGreedyMode(0),
       m_nameStyle(0)
 {
     m_cfg->setGroup(Rosegarden::GeneralOptionsConfigGroup);
@@ -178,8 +177,6 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
                                  frame), 0, 0);
-    layout->addWidget(new QLabel(i18n("Selector greedy mode"),
-                                 frame), 1, 0);
     layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
                                  frame), 2, 0);
 
@@ -190,12 +187,6 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     m_client->setCurrentItem(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
     
     layout->addWidget(m_client, 0, 1);
-
-    m_selectorGreedyMode = new QCheckBox(frame);
-    layout->addWidget(m_selectorGreedyMode, 1, 1);
-
-    m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
-                                                          true));
 
     m_countIn = new QSpinBox(frame);
     m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 2));
@@ -284,12 +275,6 @@ void GeneralConfigurationPage::apply()
 
     int namestyle = getNoteNameStyle();
     m_cfg->writeEntry("notenamestyle", namestyle);
-
-    bool greedyMode = m_selectorGreedyMode->isChecked();
-    MatrixSelector::setGreedyMode(greedyMode);
-    NotationSelector::setGreedyMode(greedyMode);
-    SegmentSelector::setGreedyMode(greedyMode);
-    m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
 
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
 

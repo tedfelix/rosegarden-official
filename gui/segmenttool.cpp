@@ -913,9 +913,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 {
                     if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
                     {
-                        if (!isGreedy() &&
-                            !rect.contains(item->rect())) continue;
-
                         segCount++;
                         slotSelectSegmentItem(item);
                         newSelection.insert(item->getSegment());
@@ -1058,9 +1055,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     return FollowHorizontal | FollowVertical;
 }
-
-bool SegmentSelector::m_greedy = true;
-
 
 //////////////////////////////
 //

@@ -1089,11 +1089,6 @@ void RosegardenGUIApp::readOptions()
 
     m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
-    opt = m_config->readBoolEntry("selectorgreedymode", true);
-    MatrixSelector::setGreedyMode(opt);
-    NotationSelector::setGreedyMode(opt);
-    SegmentSelector::setGreedyMode(opt);
-
     opt = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(opt);
     slotToggleTransport();

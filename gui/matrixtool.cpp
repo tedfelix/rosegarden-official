@@ -533,7 +533,6 @@ EventSelection* MatrixSelector::getSelection()
 
     Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
     EventSelection* selection = new EventSelection(originalSegment);
-    QRect normalizedSelectionRect = m_selectionRect->rect().normalize();
 
     // get the selections
     //
@@ -549,13 +548,6 @@ EventSelection* MatrixSelector::getSelection()
             if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
             {
 
-                // If selector is not greedy, check if the element's rect
-                // is actually included in the selection rect.
-                //
-                if (!isGreedy() &&
-                    !normalizedSelectionRect.contains(matrixRect->rect()))
-                    continue;
-
                 MatrixElement *mE = &matrixRect->getMatrixElement();
                 selection->addEvent(mE->event());
             }
@@ -564,8 +556,6 @@ EventSelection* MatrixSelector::getSelection()
 
     return (selection->getAddedEvents() > 0) ? selection : 0;
 }
-
-bool MatrixSelector::m_greedy = true;
 
 //------------------------------
 
