@@ -1380,6 +1380,14 @@ MidiFile::clearMidiComposition()
 
 }
 
+// Doesn't do anything yet - doesn't need to.  We need to satisfy
+// the pure virtual function in the base class.
+//
+void
+MidiFile::close()
+{
+}
+
 
 
 }

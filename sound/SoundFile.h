@@ -22,11 +22,10 @@
 #ifndef _SOUNDFILE_H_
 #define _SOUNDFILE_H_
 
-// SoundFile is an abstract base class - both MidiFile and AudioFile
-// are derived from this class and have to implement the open() and
-// write() methods.
+// SoundFile is an abstract base class defining behaviour for both
+// MidiFiles and AudioFiles.  The getBytes routine is buffered into
+// suitably sized chunks to prevent excessive file reads.
 // 
-// [rwb]
 //
 
 #include <iostream>
@@ -42,11 +41,13 @@ typedef unsigned char FileByte;
 class SoundFile
 {
 public:
-    SoundFile(const std::string &fileName):m_fileName(fileName) {;}
-    virtual ~SoundFile() {;}
+    SoundFile(const std::string &fileName);
+    virtual ~SoundFile();
 
+    // All files should be able open, write and close
     virtual bool open() = 0;
     virtual bool write() = 0;
+    virtual void close() = 0;
 
     std::string getShortFilename();
     std::string getFilename() { return m_fileName; }
@@ -61,6 +62,12 @@ protected:
     // write some bytes to an output stream
     void putBytes(std::ofstream *file,
                   const std::string outputString);
+
+    // Read buffering - define chunk size and buffer file reading
+    //
+    int         m_readChunkPtr;
+    int         m_readChunkSize;
+    std::string m_readBuffer;
 
 };
 

@@ -15,6 +15,32 @@ You're missing the kdemultimedia package (and associated -devel
 package, if appropriate to your distribution).
 
 
+The Composition View
+--------------------
+
+How do I set a loop?
+~~~~~~~~~~~~~~~~~~~~
+
+While holding down Shift and and the left mouse button sweep out a loop
+region in the ruler at the top or bottom of the main composition window.  
+The loop icon in the transport will become enabled and playback will 
+always occur within this loop until you disable it.  Youu can disable
+the loop by clicking on the loop icon or shift+left clicking in either
+loop ruler.
+
+
+How do I view the track labels?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On the main window got to Setting->View Track Labels
+
+
+How do I change the instrument for a track?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Click and hold the left mouse button on the track/instrument label.
+A pop-up will appear from which you can choose a new instrument for
+the track.
 
 Notation and matrix editing
 ---------------------------

@@ -132,9 +132,6 @@ protected:
 
     unsigned int   m_bytesPerSecond;
     unsigned int   m_bytesPerSample;
-
-    std::ifstream *m_inFile;
-    std::ofstream *m_outFile;
 };
 
 }

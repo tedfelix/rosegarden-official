@@ -56,17 +56,6 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
 
 RIFFAudioFile::~RIFFAudioFile()
 {
-    if (m_inFile)
-    {
-        m_inFile->close();
-        delete m_inFile;
-    }
-
-    if (m_outFile)
-    {
-        m_outFile->close();
-        delete m_outFile;
-    }
 }
 
 

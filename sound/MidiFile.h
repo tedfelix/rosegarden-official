@@ -92,6 +92,7 @@ public:
     //
     virtual bool open();
     virtual bool write();
+    virtual void close();
 
     const int& timingDivision() { return m_timingDivision; }
     const MIDIFileFormatType& format() { return m_format; }

@@ -28,6 +28,7 @@
 #include <qpixmap.h>
 #include <qinputdialog.h>
 
+#include "WAVAudioFile.h"
 #include "audiomanagerdialog.h"
 
 using std::cout;
@@ -293,10 +294,11 @@ AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
     pixmap->fill(Qt::blue);
     QPainter audioPainter(pixmap);
 
-    std::vector<float> values = m_audioFileManager->getPreview(aF->getId(),
-                                                               RealTime(0, 0),
-                                                               aF->getLength(),
-                                                               previewWidth);
+    std::vector<float> values = m_audioFileManager->getPreview(
+            dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getId(),
+            RealTime(0, 0),
+            dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getLength(),
+            previewWidth);
 }
 
 
