@@ -430,7 +430,7 @@ MidiFile::parseHeader(const string &midiHeader)
 //
 //
 bool
-MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
+MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 {
     MidiByte midiByte, metaEventCode, data1, data2;
     MidiByte eventCode = 0x80;
@@ -453,10 +453,13 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
     // This is used to store the last absolute time found on each channel,
     // allowing us to modify delta-times correctly when separating events
     // out from one to multiple tracks
-    std::vector<unsigned long> channelTimeMap(16, 0);
+    std::vector<unsigned long> trackTimeMap(16, 0);
+
+    // Meta-events don't have a channel, so we place them in a fixed
+    // track number instead
+    TrackId metaTrack = lastTrackNum;
 
     bool firstTrack = true;
-    int defaultChannel = -1;
 
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
     {
@@ -485,25 +488,22 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
             messageLength = getNumberFromMidiBytes(midiFile);
             metaMessage = getMidiBytes(midiFile, messageLength);
 
-            MidiEvent *e = new MidiEvent(deltaTime,
-                                         MIDI_FILE_META_EVENT,
-                                         metaEventCode,
-                                         metaMessage);
-
 	    if (metaEventCode == MIDI_TIME_SIGNATURE ||
 		metaEventCode == MIDI_SET_TEMPO) {
 		m_containsTimeChanges = true;
 	    }
 
-	    if (defaultChannel >= 0) {
-		long gap = accumulatedTime - channelTimeMap[defaultChannel];
-		accumulatedTime += deltaTime;
-		deltaTime += gap;
-		channelTimeMap[defaultChannel] = accumulatedTime;
-		m_midiComposition[channelTrackMap[defaultChannel]].push_back(e);
-	    } else {
-		m_midiComposition[trackNum].push_back(e);
-	    }
+	    long gap = accumulatedTime - trackTimeMap[metaTrack];
+	    accumulatedTime += deltaTime;
+	    deltaTime += gap;
+	    trackTimeMap[metaTrack] = accumulatedTime;
+
+            MidiEvent *e = new MidiEvent(deltaTime,
+                                         MIDI_FILE_META_EVENT,
+                                         metaEventCode,
+                                         metaMessage);
+
+	    m_midiComposition[metaTrack].push_back(e);
         }
         else // the rest
         {
@@ -513,18 +513,20 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
 
 	    int channel = (eventCode & MIDI_CHANNEL_NUM_MASK);
 	    if (channelTrackMap[channel] == -1) {
-		if (!firstTrack) ++trackNum;
-		else {
-		    defaultChannel = channel;
-		    firstTrack = false;
-		}
-		channelTrackMap[channel] = trackNum;
+		if (!firstTrack) ++lastTrackNum;
+		else firstTrack = false;
+		channelTrackMap[channel] = lastTrackNum;
 	    }
+
+	    TrackId trackNum = channelTrackMap[channel];
 	    
-	    long gap = accumulatedTime - channelTimeMap[channel];
+	    // accumulatedTime is abs time of last event on any track;
+	    // trackTimeMap[trackNum] is that of last event on this track
+	    
+	    long gap = accumulatedTime - trackTimeMap[trackNum];
 	    accumulatedTime += deltaTime;
 	    deltaTime += gap;
-	    channelTimeMap[channel] = accumulatedTime;
+	    trackTimeMap[trackNum] = accumulatedTime;
 
             switch (eventCode & MIDI_MESSAGE_TYPE_MASK)
             {
@@ -538,8 +540,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
-                m_midiComposition[channelTrackMap[channel]].push_back
-		    (midiEvent);
+                m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
             case MIDI_PITCH_BEND:
@@ -549,8 +550,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
-                m_midiComposition[channelTrackMap[channel]].push_back
-		    (midiEvent);
+                m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
             case MIDI_PROG_CHANGE:
@@ -559,8 +559,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
 
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1);
-                m_midiComposition[channelTrackMap[channel]].push_back
-		    (midiEvent);
+                m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
@@ -582,8 +581,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &trackNum)
                 midiEvent = new MidiEvent(deltaTime,
                                           MIDI_SYSTEM_EXCLUSIVE,
                                           metaMessage);
-                m_midiComposition[channelTrackMap[channel]].push_back
-		    (midiEvent);
+                m_midiComposition[trackNum].push_back(midiEvent);
                 break;
 
             case MIDI_END_OF_EXCLUSIVE:
@@ -869,6 +867,8 @@ MidiFile::convertToRosegarden(Composition *composition,
 
                 endOfLastNote = rosegardenTime + rosegardenDuration;
 
+		std::cerr << "MidiFile::convertToRosegarden: note at " << rosegardenTime << ", midi time " << (*midiEvent)->getTime() << std::endl;
+
                 // create and populate event
                 rosegardenEvent = new Event(Note::EventType,
                                             rosegardenTime,
@@ -1100,7 +1100,6 @@ MidiFile::convertToMidi(Composition &comp)
 
     // Insert tempo events
     //
-    //
     for (int i = 0; i < comp.getTempoChangeCount(); i++)
     {
         std::pair<timeT, long> tempo = comp.getRawTempoChange(i);
@@ -1125,7 +1124,6 @@ MidiFile::convertToMidi(Composition &comp)
     }
 
     // Insert time signatures
-    //
     //
     for (int i = 0; i < comp.getTimeSignatureCount(); i++)
     {
@@ -1826,7 +1824,8 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
 
             for (nOE = mE; nOE != m_midiComposition[track].end(); nOE++)
             {
-                if (((*mE)->getChannelNumber() == (*nOE)->getChannelNumber()) &&
+                if (((*nOE)->getChannelNumber() == (*mE)->getChannelNumber()) &&
+		    ((*nOE)->getPitch() == (*mE)->getPitch()) &&
                     ((*nOE)->getMessageType() == MIDI_NOTE_OFF ||
                     ((*nOE)->getMessageType() == MIDI_NOTE_ON &&
                      (*nOE)->getVelocity() == 0x00)))
@@ -1844,8 +1843,10 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
             // If no matching NOTE OFF has been found then set
             // Event duration to length of Segment
             //
-            if (noteOffFound == false)
+            if (noteOffFound == false) {
+		--nOE; // avoid crash due to nOE == track.end()
                 (*mE)->setDuration((*nOE)->getTime() - (*mE)->getTime());
+	    }
         }
     }
 
