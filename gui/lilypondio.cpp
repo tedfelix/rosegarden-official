@@ -297,18 +297,20 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
     std::string inStr = "", outStr = "";
     std::string prefix = (stemUp) ? "_" : "^";
     
-    // shoot text mark straight through unless it's sf, rf or tr
+    // shoot text mark straight through unless it's sf or rf
     if (Marks::isTextMark(eventMark)) {
         inStr = Marks::getTextFromMark(eventMark);
+        
         if (inStr == "sf") {
             inStr = "#\'((bold italic) \"sf\")"; // sf in bold/italic
         } else if (inStr == "rf") {
             inStr = "#\'((bold italic) \"rf\")"; // rf in bold/italic
-        } else if (inStr == "tr") {
-            inStr = "\\trill";                   // Lilypond \trill is prettier
-        } else {
-            outStr = prefix + "\"" + inStr + "\"";
+        } else {        
+            inStr = "\"" + inStr + "\"";
         }
+
+        outStr = prefix + inStr;
+        
     } else {
 //        outStr = prefix;
         outStr = "-";  // let Lilypond decide, since stemUp is unpredictable
@@ -326,6 +328,8 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
             outStr += "\\staccatissimo";
         } else if (eventMark == Marks::Marcato) {
             outStr += "\\marcato";
+        } else if (eventMark == Marks::Trill) {
+            outStr += "\\trill";
         } else if (eventMark == Marks::Turn) {
             outStr += "\\turn";
         } else if (eventMark == Marks::Pause) {
@@ -340,9 +344,6 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
                       << eventMark << std::endl;
         }
     }
-
-/* WIP     std::cout << "mark handler:  inStr: " << inStr << " outStr: " << outStr <<
-            "stemUp: " << ((stemUp) ? "true" : "false") << std::endl; */
 
     return outStr;
 }
