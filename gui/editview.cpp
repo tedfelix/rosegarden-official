@@ -87,7 +87,7 @@ void EditView::paintEvent(QPaintEvent* e)
         QLayoutItem *child;
         while ( (child = it.current()) != 0 ) {
             if (child->widget()) child->widget()->update();
-            it++;
+            ++it;
         }
 
     } else {
@@ -570,7 +570,6 @@ EditView::getPitchFromNoteInsertAction(QString name)
 
 	Rosegarden::Clef clef;
 	Rosegarden::Key key;
-	Rosegarden::timeT time = getInsertionTime(clef, key);
 
 	int pitch =
 	    key.getTonicPitch() + 60 + 12*(octave + clef.getOctave()) + modify;
