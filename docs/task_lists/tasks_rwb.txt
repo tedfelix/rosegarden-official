@@ -8,10 +8,14 @@ o basic JACK audio
   - saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
   - partial/overlapping audio files playback/start index movement [DONE]
   - audio file selection dialog
+  - audio preview on Segments
+  - audio Segment splitting
+  - "split silence" function to automatically split up an audio segment
+     into a number of segments when the amplitude falls below a given
+     threshold.
+  - audio VU meters
 
 o Create WAV files [DONE]
-
-o Audio previews
 
 o Some state we're getting into with mute buttons and file saving
 
@@ -65,8 +69,6 @@ o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
 
 o Segment Zooming - (midi and audio previews of Segments)
-
-o Audio output VU meters
 
 For later releases
 ------------------

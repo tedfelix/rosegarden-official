@@ -1808,8 +1808,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                             break;
 
                         case 3: // for 24-bit samples
-                            break;
-
                         default:
                             std::cerr << "jackProcess() - sample size "
                                       << "not supported" << std::endl;

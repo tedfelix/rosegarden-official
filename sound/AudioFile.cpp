@@ -22,6 +22,7 @@
 #include "Audio.h"
 #include "AudioFile.h"
 #include "RealTime.h"
+#include "Sound.h"
 
 using std::cout;
 using std::cerr;
@@ -349,6 +350,25 @@ AudioFile::writeHeader()
     putBytes(m_outFile, outString);
 }
 
+// scan on from a descriptor position
+bool
+AudioFile::scanForward(std::ifstream *file, const RealTime &time)
+{
+    // sanity
+    if (file == 0) return false;
+
+    unsigned int totalSamples = m_sampleRate * time.sec +
+                        ( ( m_sampleRate * time.usec ) / 1000000 );
+    unsigned int totalBytes = totalSamples * m_channels * m_bytesPerSample;
+
+    // do the seek
+    file->seekg(totalBytes, std::ios::cur);
+
+    if (file->get() == EOF)
+        return false;
+
+    return true;
+}
 
 bool
 AudioFile::scanTo(std::ifstream *file, const RealTime &time)
@@ -460,6 +480,77 @@ AudioFile::close()
     delete m_outFile;
 
 }
+
+// Get a normalised (-1.0 to +1.0 float) preview of the audio file
+// at a certain resolution - don't use a small resolution on a large
+// file or you could be waiting for a while.  Until this has been
+// optimised.
+//
+vector<float>
+AudioFile::getPreview(const RealTime &resolution)
+{
+    vector<float> preview;
+
+     std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
+                                                   std::ios::in |
+                                                   std::ios::binary);
+    // move past header to beginning of the data
+    scanTo(previewFile, RealTime(0, 0));
+
+    unsigned int totalSample, totalBytes;
+    std::string samples;
+    char *samplePtr;
+    float meanValue;
+
+    // Read sample data at given resolution and push the results
+    // onto the result vector.
+    do
+    {
+        meanValue = 0.0f; // reset
+
+        samples = getBytes(previewFile, m_bytesPerSample * m_channels);
+        samplePtr = (char *)samples.c_str();
+
+        for (unsigned int i = 0; i < m_channels; i++)
+        {
+
+            // get the whole frame
+            switch(m_bytesPerSample)
+            {
+                case 1: // 8 bit
+                    meanValue += (*((unsigned char *)samplePtr))
+                                 / SAMPLE_MAX_8BIT;
+                    samplePtr++;
+                    break;
+
+                case 2: // 16 bit
+                    meanValue += (*((short*)samplePtr)) / SAMPLE_MAX_16BIT;
+                    samplePtr += 2;
+                    break;
+
+                case 3: // 24 bit
+                default:
+                    std::cerr << "AudioFile::getPreview - "
+                              << "unsupported bit depth"
+                              << std::endl;
+                    break;
+            }
+        }
+
+        meanValue /= ((float)m_channels);
+
+        // store
+        preview.push_back(meanValue);
+    }
+    while(scanForward(previewFile, resolution));
+
+    // clear up
+    previewFile->close();
+    delete previewFile;
+    
+    return preview;
+}
+
 
 }
 

@@ -26,13 +26,21 @@
 
 namespace Rosegarden
 {
-    typedef enum
-    {
-        MIDI_AND_AUDIO_SUBSYS_OK,  // Everything's OK
-        MIDI_SUBSYS_OK,            // MIDI's OK
-        AUDIO_SUBSYS_OK,           // AUDIO's OK
-        NO_SEQUENCE_SUBSYS         // Nothing's OK
-    } SoundSystemStatus;
+
+
+typedef enum
+{
+    MIDI_AND_AUDIO_SUBSYS_OK,  // Everything's OK
+    MIDI_SUBSYS_OK,            // MIDI's OK
+    AUDIO_SUBSYS_OK,           // AUDIO's OK
+    NO_SEQUENCE_SUBSYS         // Nothing's OK
+} SoundSystemStatus;
+
+const float SAMPLE_MAX_8BIT  = (float)(0xff/2);
+const float SAMPLE_MAX_16BIT = (float)(0xffff/2);
+const float SAMPLE_MAX_24BIT = (float)(0xffffff/2);
+
+
 
 };
 

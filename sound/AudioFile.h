@@ -24,6 +24,8 @@
 #define _AUDIOFILE_H_
 
 #include <string>
+#include <vector>
+
 #include "SoundFile.h"
 #include "RealTime.h"
 
@@ -75,6 +77,13 @@ public:
 
     ~AudioFile();
 
+    // Return a normalised representation of the audio file waveform
+    // at the required resolution - don't use this for a high
+    // definition view of the waveform - just for overviews.  Could
+    // in future be optimised with a local data file no doubt.
+    // 
+    vector<float> getPreview(const RealTime &resolution);
+
     std::string getName() const { return m_name; }
     unsigned int getId() const { return m_id; }
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
@@ -106,6 +115,10 @@ public:
     // scan time was valid and successful.
     // 
     bool scanTo(std::ifstream *file, const RealTime &time);
+
+    // Scan forward in a file by a certain amount of time
+    //
+    bool scanForward(std::ifstream *file, const RealTime &time);
 
     // Return a number of samples - caller will have to
     // de-interleave n-channel samples themselves.
