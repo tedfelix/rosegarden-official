@@ -216,6 +216,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     {
         std::cerr << "SegmentAudioPreview::drawShape - m_channels == 0 "
                  << "problem with audio file" <<std::endl;
+	painter.restore();
         return;
     }
 
@@ -689,8 +690,10 @@ void SegmentItem::drawShape(QPainter& painter)
 
         // Don't show label if we're showing the preview
         //
-        if (m_showPreview && m_segment->getType() == Rosegarden::Segment::Audio)
+        if (m_showPreview && m_segment->getType() == Rosegarden::Segment::Audio) {
+	    painter.restore();
             return;
+	}
 
         // Store the current transform matrix in something local
         //
