@@ -294,7 +294,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 		m_npf->getTimeSigWidth(timeSignature);
 	}
 
-	setBarBasicData(staff, barNo, from, true, false, timeSigEvent);
+	setBarBasicData(staff, barNo, from, true, timeSigEvent);
 
 	if (barTimes.second >= startTime) {
 	    // we're confident this isn't end() after setBarBasicData above
@@ -426,7 +426,6 @@ NotationHLayout::setBarBasicData(StaffType &staff,
 				 int barNo,
 				 NotationElementList::iterator start,
 				 bool correct,
-				 bool fake,
 				 Rosegarden::Event *timeSig)
 {
     kdDebug(KDEBUG_AREA) << "setBarBasicData for " << barNo << endl;
@@ -436,7 +435,7 @@ NotationHLayout::setBarBasicData(StaffType &staff,
     BarDataList::iterator i(bdl.find(barNo));
     if (i == bdl.end()) {
 	NotationElementList::iterator endi = staff.getViewElementList()->end();
-	bdl.insert(BarDataPair(barNo, BarData(endi, true, true, 0)));
+	bdl.insert(BarDataPair(barNo, BarData(endi, true, 0)));
 	i = bdl.find(barNo);
     }
 
@@ -446,7 +445,6 @@ NotationHLayout::setBarBasicData(StaffType &staff,
 
     i->second.basicData.start = start;
     i->second.basicData.correct = correct;
-    i->second.basicData.fake = fake;
     i->second.basicData.timeSignature = timeSig;
 }
 
@@ -465,7 +463,7 @@ NotationHLayout::setBarSizeData(StaffType &staff,
     BarDataList::iterator i(bdl.find(barNo));
     if (i == bdl.end()) {
 	NotationElementList::iterator endi = staff.getViewElementList()->end();
-	bdl.insert(BarDataPair(barNo, BarData(endi, true, true, 0)));
+	bdl.insert(BarDataPair(barNo, BarData(endi, true, 0)));
 	i = bdl.find(barNo);
     }
 
@@ -631,8 +629,14 @@ NotationHLayout::reconcileBarsLinear()
 
 	StaffType *widest = getStaffWithWidestBar(barNo);
 
-//!!! this is no longer necessarily true: might be a genuine gap
-	if (!widest) break; // reached end of piece
+	if (!widest) {
+	    // have we reached the end of the piece?
+	    if (barNo >= getLastVisibleBar()) break; // yes
+	    else {
+		++barNo;
+		continue;
+	    }
+	}
 
 	double maxWidth = m_barData[widest].find(barNo)->second.sizeData.idealWidth;
 	if (m_pageWidth > 0.1 && maxWidth > m_pageWidth) {
@@ -681,8 +685,8 @@ NotationHLayout::reconcileBarsPage()
 {
     START_TIMING;
 
-    unsigned int barNo = getFirstVisibleBar();
-    unsigned int barNoThisRow = 0;
+    int barNo = getFirstVisibleBar();
+    int barNoThisRow = 0;
     
     // pair of the recommended number of bars with those bars'
     // original total width, for each row
@@ -696,8 +700,15 @@ NotationHLayout::reconcileBarsPage()
     for (;;) {
 	
 	StaffType *widest = getStaffWithWidestBar(barNo);
-//!!! this is no longer necessarily true: might be a genuine gap
-	if (!widest) break; // reached end of piece
+
+	if (!widest) {
+	    // have we reached the end of the piece?
+	    if (barNo >= getLastVisibleBar()) break; // yes
+	    else {
+		++barNo;
+		continue;
+	    }
+	}
 
 	double maxWidth = m_barData[widest].find(barNo)->second.sizeData.idealWidth;
 
@@ -780,8 +791,15 @@ NotationHLayout::reconcileBarsPage()
 	    bool finalRow = (row == rowData.size()-1);
 
 	    StaffType *widest = getStaffWithWidestBar(barNo);
-//!!! this is no longer necessarily true: might be a genuine gap
-	    if (!widest) break; // reached end of piece (shouldn't happen)
+
+	    if (!widest) {
+		// have we reached the end of the piece? (shouldn't happen)
+		if (barNo >= getLastVisibleBar()) break; // yes
+		else {
+		    ++barNo;
+		    continue;
+		}
+	    }
 
 	    if (finalRow && (stretchFactor > 1.0)) stretchFactor = 1.0;
 	    double maxWidth = 
@@ -980,7 +998,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             kdDebug(KDEBUG_AREA) << "Start is to" << endl;
         }
 
-        if ((!isFullLayout) && !bdi->second.basicData.fake &&
+        if (!isFullLayout &&
 	    (from == notes->end() ||
 	     (*from)->event()->getAbsoluteTime() > endTime)) {
 
@@ -989,7 +1007,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             // Find how far to move everything if necessary
             if (!haveSimpleOffset) {
-                simpleOffset = barX/*!!! + getPreBarMargin()*/ - bdi->second.layoutData.x;
+                simpleOffset = barX - bdi->second.layoutData.x;
                 haveSimpleOffset = true;
             }
 
@@ -1022,14 +1040,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    timeSigToPlace = true;
 	}
 
-	//!!! Need to make sure we cope if every staff has lots of
-	// fake bars (i.e. we're not displaying any segments that
-	// are anywhere near the start of the composition)
-
-        if (bdi->second.basicData.fake) {
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): fake bar " << endl;
-            continue;
-        }
         if (!bdi->second.layoutData.needsLayout) {
             //!!! clef and key may not be right
             // need a better way to find them than keeping track through the

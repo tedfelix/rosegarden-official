@@ -195,8 +195,6 @@ protected:
 
 	    NotationElementList::iterator start; // i.e. event following barline
 	    bool correct; // bar preceding barline has correct duration
-//!!! lose:
-	    bool fake;    // bar doesn't actually exist in this staff
 	    Rosegarden::Event *timeSignature; // null if no new one in this bar
 
 	} basicData;
@@ -220,11 +218,9 @@ protected:
 	} layoutData;
         
         BarData(NotationElementList::iterator i,
-		bool correct, bool fake,
-		Rosegarden::Event *timeSig) {
+		bool correct, Rosegarden::Event *timeSig) {
             basicData.start = i;
 	    basicData.correct = correct;
-	    basicData.fake = fake;
 	    basicData.timeSignature = timeSig;
 	    sizeData.idealWidth = 0;
 	    sizeData.fixedWidth = 0;
@@ -252,8 +248,7 @@ protected:
      */
     void setBarBasicData(StaffType &staff, int barNo,
 			 NotationElementList::iterator start,
-			 bool correct, bool fake,
-			 Rosegarden::Event *timeSig);
+			 bool correct, Rosegarden::Event *timeSig);
 
     /**
      * Set the size data for the given barNo.  If barNo is
