@@ -326,7 +326,7 @@ void StaffRuler::makeStep(int stepValue,
     QCanvasText* label = new QCanvasText(labelText, m_canvas);
     label->setX(stepPos + m_xPos);
     label->setY(m_yPos + 4);
-    if (stepPos != 0) label->setTextFlags(Qt::AlignHCenter);
+    label->setTextFlags(Qt::AlignHCenter);
 
     // Prepare StepElement
     StepElement stepEl(stepLine, label);
