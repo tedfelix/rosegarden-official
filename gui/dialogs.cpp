@@ -2060,3 +2060,79 @@ QuantizeDialog::slotLegatoChanged()
     //...
 }
 
+
+RescaleDialog::RescaleDialog(QWidget *parent) :
+    KDialogBase(parent, "", true, i18n("Rescale"), Ok | Cancel),
+    m_from(Note::Crotchet),
+    m_to(Note::Crotchet)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *ratioBox = new QGroupBox
+	(1, Horizontal, i18n("Rescale ratio"), vbox);
+
+    QHBox *notesBox = new QHBox(ratioBox);
+
+    new QLabel(i18n("From:"), notesBox);
+    QComboBox *fromCombo = new QComboBox(false, notesBox);
+
+    new QLabel(i18n("To:"), notesBox);
+    QComboBox *toCombo = new QComboBox(false, notesBox);
+
+    NotePixmapFactory npf;
+
+    for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
+	Note note(t);
+	QPixmap pmap = npf.makeToolbarPixmap
+	    (strtoqstr((std::string("menu-") + note.getReferenceName())));
+	fromCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
+	toCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
+	if (t == Note::Crotchet) {
+	    fromCombo->setCurrentItem(fromCombo->count() - 1);
+	    toCombo->setCurrentItem(toCombo->count() - 1);
+	}
+    }
+
+    QObject::connect(fromCombo, SIGNAL(activated(int)),
+		     this, SLOT(slotFromChanged(int)));
+    QObject::connect(toCombo, SIGNAL(activated(int)),
+		     this, SLOT(slotToChanged(int)));
+
+}
+
+int
+RescaleDialog::getMultiplier()
+{
+    return 1; //!!!
+}
+
+int
+RescaleDialog::getDivisor()
+{
+    return 1; //!!!
+}
+
+void
+RescaleDialog::slotFromChanged(int i)
+{
+    Note::Type t = Note::Shortest;
+    while (t <= Note::Longest) {
+	if (i-- == 0) break;
+	++t;
+    }
+    assert(t <= Note::Longest);
+    m_from = Note(t);
+}
+
+void
+RescaleDialog::slotToChanged(int i)
+{
+    Note::Type t = Note::Shortest;
+    while (t <= Note::Longest) {
+	if (i-- == 0) break;
+	++t;
+    }
+    assert(t <= Note::Longest);
+    m_to = Note(t);
+}
+

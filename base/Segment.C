@@ -134,20 +134,6 @@ Segment::getEndTime() const
     return m_endTime;
 }
 
-/*!!!
-    //!!! This isn't strictly the right thing, is it?  It should be
-    // the end time of the event that ends last, not the one that
-    // starts last.  Perhaps store this in m_endTime and update with
-    // insert/erase
-
-    const_iterator i = end();
-    if (i == begin()) return getStartTime();
-    --i;
-
-    return (*i)->getAbsoluteTime() + (*i)->getDuration();
-}
-*/
-
 void
 Segment::setStartTime(timeT t)
 {
@@ -170,6 +156,7 @@ Segment::setStartTime(timeT t)
 
     erase(begin(), end());
     if (m_endMarkerTime) *m_endMarkerTime += dt;
+    m_endTime += dt;
     m_startTime = t;
 
     for (int i = 0; i < events.size(); ++i) {
@@ -184,6 +171,7 @@ Segment::setEndMarkerTime(timeT t)
 {
     timeT endTime = getEndTime();
     if (t < m_startTime) t = m_startTime;
+    bool shorten = (t < getEndMarkerTime());
 
     if (m_type == Audio) {
 	if (m_composition) {
@@ -202,6 +190,7 @@ Segment::setEndMarkerTime(timeT t)
 
     if (m_endMarkerTime) *m_endMarkerTime = t;
     else m_endMarkerTime = new timeT(t);
+    if (m_type != Audio) notifyEndMarkerChange(shorten);
 }
 
 void
@@ -218,6 +207,7 @@ Segment::setEndTime(timeT t)
 	    endTime = getEndTime();
 	    if (m_endMarkerTime && endTime < *m_endMarkerTime) {
 		*m_endMarkerTime = endTime;
+		notifyEndMarkerChange(true);
 	    }
 	} else if (t > endTime) {
 	    fillWithRests(endTime, t);
@@ -226,7 +216,7 @@ Segment::setEndTime(timeT t)
 }
 
 Segment::iterator 
-Segment::getEndMarker()
+Segment::getEndMarker() const
 {
     if (m_endMarkerTime) {
 	return findTime(*m_endMarkerTime);
@@ -236,7 +226,7 @@ Segment::getEndMarker()
 }
 
 bool
-Segment::isBeforeEndMarker(iterator i)
+Segment::isBeforeEndMarker(iterator i) const
 { 
     if (i == end()) return false;
     return ((*i)->getAbsoluteTime() < getEndMarkerTime());
@@ -247,6 +237,7 @@ Segment::clearEndMarker()
 {
     delete m_endMarkerTime;
     m_endMarkerTime = 0;
+    if (m_type != Audio) notifyEndMarkerChange(false);
 }
 
 
@@ -703,6 +694,16 @@ Segment::notifyRemove(Event *e) const
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
+    }
+}
+ 
+
+void
+Segment::notifyEndMarkerChange(bool shorten) const
+{
+    for (ObserverSet::iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->endMarkerTimeChanged(this, shorten);
     }
 }
 

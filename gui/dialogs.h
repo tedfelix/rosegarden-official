@@ -477,6 +477,27 @@ protected:
     QCheckBox *m_rebeamButton;
 
 };
+
+
+class RescaleDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    RescaleDialog(QWidget *parent);
+
+    int getMultiplier();
+    int getDivisor();
+
+public slots:
+    void slotFromChanged(int);
+    void slotToChanged(int);
+
+protected:
+    Rosegarden::Note m_from;
+    Rosegarden::Note m_to;
+};
+    
   
 
 #endif

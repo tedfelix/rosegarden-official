@@ -1180,13 +1180,12 @@ void RosegardenGUIApp::slotRescaleSelection()
     if (!m_view->haveSelection()) return;
 
     //!!! this should all be in rosegardenguiview
-/*!!! or should it?
 
     RescaleDialog *dialog = new RescaleDialog(m_view);
     if (dialog->exec() != QDialog::Accepted) return;
 
     Rosegarden::SegmentSelection selection = m_view->getSelection();
-    
+    /*!!!
     KMacroCommand *command = new KMacroCommand
 	(SegmentRescaleCommand::getGlobalName());
 
@@ -1196,9 +1195,8 @@ void RosegardenGUIApp::slotRescaleSelection()
                             (*i, dialog->getMultiplier(),
 			          dialog->getDivisor());
     }
-
     m_view->slotAddCommandToHistory(command);
-*/
+    */
 }
 
 void RosegardenGUIApp::slotAutoSplitSelection()

@@ -609,7 +609,7 @@ NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
 
 bool
 NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
-                            int hue, bool inverted) const
+                            int hue, int minValue, bool inverted) const
 {
     CharName charName(getNameWithColour(baseCharName, hue));
 
@@ -622,26 +622,26 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     QPixmap basePixmap;
     bool ok = getPixmap(baseCharName, basePixmap, inverted);
 
-    found = recolour(basePixmap, hue);
+    found = recolour(basePixmap, hue, minValue);
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
 }
 
 QPixmap
-NoteFont::getColouredPixmap(CharName charName, int hue, bool inverted) const
+NoteFont::getColouredPixmap(CharName charName, int hue, int minValue, bool inverted) const
 {
     QPixmap p;
-    (void)getColouredPixmap(charName, p, hue, inverted);
+    (void)getColouredPixmap(charName, p, hue, minValue, inverted);
     return p;
 }
 
 QCanvasPixmap
-NoteFont::getColouredCanvasPixmap(CharName charName, int hue,
+NoteFont::getColouredCanvasPixmap(CharName charName, int hue, int minValue,
                                   bool inverted) const
 {
     QPixmap p;
-    (void)getColouredPixmap(charName, p, hue, inverted);
+    (void)getColouredPixmap(charName, p, hue, minValue, inverted);
 
     int x, y;
     (void)getHotspot(charName, x, y, inverted);
@@ -656,7 +656,7 @@ NoteFont::getNameWithColour(CharName base, int hue) const
 }
 
 QPixmap *
-NoteFont::recolour(QPixmap in, int hue) const
+NoteFont::recolour(QPixmap in, int hue, int minValue) const
 {
     // assumes pixmap is currently in shades of grey; maps black ->
     // solid colour and greys -> shades of colour
@@ -689,7 +689,7 @@ NoteFont::recolour(QPixmap in, int hue) const
             image.setPixel
                 (x, y, QColor(hue,
                               255 - v,
-                              v > 220 ? v : 220,
+                              v > minValue ? v : minValue,
                               QColor::Hsv).rgb());
         }
     }

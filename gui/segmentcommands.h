@@ -237,6 +237,8 @@ private:
     Rosegarden::Composition *m_composition;
     std::vector<Rosegarden::Segment *> m_newSegments;
     bool m_detached;
+
+    bool isBarEmpty(int barNo);
 };
 
 

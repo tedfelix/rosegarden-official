@@ -109,7 +109,7 @@ public:
     // SegmentObserver methods
     virtual void eventAdded(const Segment *, Event *) { }
     virtual void eventRemoved(const Segment *, Event *);
-    virtual void endMarkerTimeChanged(const Segment *) { }
+    virtual void endMarkerTimeChanged(const Segment *, bool) { }
     
 private:
     EventSelection(const EventSelection&);

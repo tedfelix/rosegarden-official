@@ -207,7 +207,7 @@ public:
      * Return an iterator pointing to the nominal end of the
      * Segment.  This may be earlier than the end() iterator.
      */
-    iterator getEndMarker();
+    iterator getEndMarker() const;
 
     /**
      * Return true if the given iterator points earlier in the
@@ -230,7 +230,7 @@ public:
      * value is already beyond the end marker.  (Also takes the
      * Composition's end marker into account.)
      */
-    bool isBeforeEndMarker(iterator);
+    bool isBeforeEndMarker(iterator) const;
 
     /**
      * Remove the end marker, thus making the Segment end
@@ -531,6 +531,7 @@ private: // stuff to support SegmentObservers
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
+    void notifyEndMarkerChange(bool shorten) const;
 
 private: // assignment operator not provided
 
@@ -557,7 +558,7 @@ public:
      * Called after the segment's end marker time has been
      * changed
      */
-    virtual void endMarkerTimeChanged(const Segment *) = 0;
+    virtual void endMarkerTimeChanged(const Segment *, bool shorten) = 0;
 };
 
 

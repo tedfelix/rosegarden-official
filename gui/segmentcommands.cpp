@@ -335,10 +335,6 @@ SegmentReconfigureCommand::unexecute()
 void
 SegmentReconfigureCommand::swap()
 {
-    //!!! NB this won't actually _work_ for changes to duration
-    // that make segments shorter, for the simple reason that
-    // Segment::setDuration is not yet implemented for this case!
-
     for (SegmentRecSet::iterator i = m_records.begin();
 	 i != m_records.end(); ++i) {
 
@@ -346,7 +342,7 @@ SegmentReconfigureCommand::swap()
 	// previous values back in to the record for use in the
 	// next iteration of the execute/unexecute cycle
 
-	timeT currentEndTime = i->segment->getEndTime();
+	timeT currentEndTime = i->segment->getEndMarkerTime();
 	timeT currentStartTime = i->segment->getStartTime();
 	TrackId currentTrack = i->segment->getTrack();
 
@@ -523,6 +519,8 @@ SegmentAutoSplitCommand::execute()
 {
     std::vector<AutoSplitPoint> splitPoints;
 
+//!!! WORK IN BARS, USE isBarEmpty
+
     Rosegarden::Clef clef;
     Rosegarden::Key key;
     timeT segmentStart = m_segment->getStartTime();
@@ -580,8 +578,10 @@ SegmentAutoSplitCommand::execute()
 		 lastSoundTime &&
 		 lastSoundTime > segmentStart)) {
 
-		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
-						     clef, key));
+		splitPoints.push_back
+		    (AutoSplitPoint
+		     (m_composition->getBarStartForTime(myTime), lastSoundTime,
+		      clef, key));
 		lastSplitTime = myTime;
 	    }
 	}
@@ -632,6 +632,17 @@ SegmentAutoSplitCommand::unexecute()
     m_detached = false;
 }
 
+bool
+SegmentAutoSplitCommand::isBarEmpty(int barNo)
+{
+    std::pair<timeT, timeT> barRange = m_composition->getBarRange(barNo);
+    Segment::iterator i = m_segment->findTime(barRange.first);
+    Segment::iterator j = m_segment->findTime(barRange.second);
+    while (i != j && i != m_segment->end()) {
+	if (!(*i)->isa(Rosegarden::Note::EventRestType)) return false;
+    }
+    return true;
+}
 
 
 SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq) :

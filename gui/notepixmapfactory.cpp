@@ -511,13 +511,19 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     CharName charName(m_style->getNoteHeadCharName(params.m_noteType));
     if (m_selected || params.m_selected) {
 	body = m_font->getColouredPixmap
-	    (charName, RosegardenGUIColours::SelectedElementHue);
+	    (charName,
+	     RosegardenGUIColours::SelectedElementHue,
+	     RosegardenGUIColours::SelectedElementMinValue);
     } else if (params.m_highlighted) {
 	body = m_font->getColouredPixmap
-	    (charName, RosegardenGUIColours::HighlightedElementHue);
+	    (charName,
+	     RosegardenGUIColours::HighlightedElementHue,
+	     RosegardenGUIColours::HighlightedElementMinValue);
     } else if (params.m_quantized) {
 	body = m_font->getColouredPixmap
-	    (charName, RosegardenGUIColours::QuantizedNoteHue);
+	    (charName,
+	     RosegardenGUIColours::QuantizedNoteHue,
+	     RosegardenGUIColours::QuantizedNoteMinValue);
     } else {
 	body = m_font->getPixmap(charName);
     }
@@ -1122,10 +1128,14 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 
     if (m_selected || params.m_selected) {
         pixmap = m_font->getColouredPixmap
-	    (charName, RosegardenGUIColours::SelectedElementHue);
+	    (charName,
+	     RosegardenGUIColours::SelectedElementHue,
+	     RosegardenGUIColours::SelectedElementMinValue);
     } else if (params.m_quantized) {
         pixmap = m_font->getColouredPixmap
-	    (charName, RosegardenGUIColours::QuantizedNoteHue);
+	    (charName,
+	     RosegardenGUIColours::QuantizedNoteHue,
+	     RosegardenGUIColours::QuantizedNoteMinValue);
     } else {
         pixmap = m_font->getPixmap(charName);
     }
@@ -1178,7 +1188,8 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef) const
     if (m_selected) {
         return m_font->getColouredCanvasPixmap
 	    (m_style->getClefCharName(clef),
-	     RosegardenGUIColours::SelectedElementHue);
+	     RosegardenGUIColours::SelectedElementHue,
+	     RosegardenGUIColours::SelectedElementMinValue);
     } else {
         return m_font->getCanvasPixmap(m_style->getClefCharName(clef));
     }
@@ -1190,7 +1201,8 @@ NotePixmapFactory::makeUnknownPixmap()
     if (m_selected) {
         return m_font->getColouredCanvasPixmap
 	    (NoteCharacterNames::UNKNOWN,
-	     RosegardenGUIColours::SelectedElementHue);
+	     RosegardenGUIColours::SelectedElementHue,
+	     RosegardenGUIColours::SelectedElementMinValue);
     } else {
         return m_font->getCanvasPixmap(NoteCharacterNames::UNKNOWN);
     }
@@ -1215,7 +1227,9 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
     QPixmap accidentalPixmap;
     if (m_selected) {
         accidentalPixmap = m_font->getColouredPixmap
-	    (charName, RosegardenGUIColours::SelectedElementHue);
+	    (charName,
+	     RosegardenGUIColours::SelectedElementHue,
+	     RosegardenGUIColours::SelectedElementMinValue);
     } else {
         accidentalPixmap = m_font->getPixmap(charName);
     }

@@ -269,15 +269,17 @@ public:
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getColouredPixmap(CharName charName, QPixmap &pixmap,
-                           int hue, bool inverted = false) const;
+                           int hue, int minValue,
+			   bool inverted = false) const;
 
     /// Ignores problems, returning blank pixmap if necessary
-    QPixmap getColouredPixmap(CharName charName, int hue,
+    QPixmap getColouredPixmap(CharName charName, int hue, int minValue,
                               bool inverted = false) const;
 
     /// Ignores problems, returning blank canvas pixmap if necessary
     QCanvasPixmap getColouredCanvasPixmap
-    (CharName charName, int hue, bool inverted = false) const;
+    (CharName charName, int hue, int minValue,
+     bool inverted = false) const;
 
 
 
@@ -311,7 +313,7 @@ private:
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
     CharName getNameWithColour(CharName origName, int hue) const;
-    QPixmap *recolour(QPixmap in, int hue) const;
+    QPixmap *recolour(QPixmap in, int hue, int minValue) const;
 
     typedef std::pair<QPixmap *, QPixmap *>
             PixmapPair;

@@ -228,7 +228,8 @@ NotationHLayout::legatoQuantize(Segment &segment)
 {
     m_legatoQuantizer->quantize(&segment, segment.begin(), segment.end());
 
-    for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
+    for (Segment::iterator i = segment.begin();
+	 segment.isBeforeEndMarker(i); ++i) {
 
 	timeT duration = m_legatoQuantizer->getQuantizedDuration(*i);
 
@@ -268,16 +269,16 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     bool allDone = false; // used in partial scans
 
     int barNo = getComposition()->getBarNumber(segment.getStartTime());
-    int endBarNo = getComposition()->getBarNumber(segment.getEndTime());
+    int endBarNo = getComposition()->getBarNumber(segment.getEndMarkerTime());
     if (endBarNo > barNo &&
-	getComposition()->getBarStart(endBarNo) == segment.getEndTime()) {
+	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
 	--endBarNo;
     }
 
     if (isFullScan) {
 	clearBarList(staff);
 	startTime = segment.getStartTime();
-	endTime = segment.getEndTime();
+	endTime = segment.getEndMarkerTime();
     } else {
 	while (barList.begin() != barList.end() &&
 	       barList.begin()->first < barNo) {
@@ -309,7 +310,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
         NotationElementList::iterator to =
 	    getStartOfQuantizedSlice(notes, barTimes.second);
 
-	if (barTimes.second >= segment.getEndTime()) {
+	if (barTimes.second >= segment.getEndMarkerTime()) {
 	    to = notes->end();
 	}
 
@@ -342,7 +343,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    continue;
 	}
 
-	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
+	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getAbsoluteTime()) << endl;
 
         NotationElementList::iterator shortest = notes->end();
         int shortCount = 0;

@@ -84,7 +84,7 @@ public:
      * SegmentObserver method - called after the segment's end marker
      * time has been changed
      */
-    virtual void endMarkerTimeChanged(const Segment *);
+    virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
 protected:
     Staff(Segment &);
@@ -204,12 +204,33 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
 
 template <class T>
 void
-Staff<T>::endMarkerTimeChanged(const Segment *s)
+Staff<T>::endMarkerTimeChanged(const Segment *s, bool shorten)
 {
     assert(s == &m_segment);
-    m_viewElementList->erase
-	(m_viewElementList->findTime(s->getEndMarkerTime()),
-	 m_viewElementList->end());
+
+    if (shorten) {
+
+	m_viewElementList->erase
+	    (m_viewElementList->findTime(s->getEndMarkerTime()),
+	     m_viewElementList->end());
+
+    } else {
+
+	timeT myLastEltTime = s->getStartTime();
+	if (m_viewElementList->end() != m_viewElementList->begin()) {
+	    typename ViewElementList<T>::iterator i = m_viewElementList->end();
+	    myLastEltTime = (*--i)->getAbsoluteTime();
+	}
+	
+	for (Segment::iterator j = s->findTime(myLastEltTime);
+	     s->isBeforeEndMarker(j); ++j) {
+	    
+	    typename ViewElementList<T>::iterator newi = findEvent(*j);
+	    if (newi == m_viewElementList->end()) {
+		m_viewElementList->insert(new T(*j));
+	    }
+	}
+    }
 }
 
 }
