@@ -320,6 +320,11 @@ public:
      */
     SegmentItem* getSegmentItem(Rosegarden::Segment *segment);
 
+    /*
+     * get the selection rectangle
+     */
+    QCanvasRectangle* getSelectionRectangle();
+
 
 public slots:
 
@@ -420,6 +425,10 @@ private:
     RosegardenGUIDoc *m_doc;
     
     KConfig* m_config;
+
+    // selection bounding box for sweep selections
+    //
+    QCanvasRectangle* m_selectionRect;
 };
 
 //////////////////////////////////////////////////////////////////////

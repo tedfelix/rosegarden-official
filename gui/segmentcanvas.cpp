@@ -787,16 +787,28 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_fineGrain(false),
     m_showPreviews(true),
     m_doc(doc),
-    m_config(kapp->config())
+    m_config(kapp->config()),
+    m_selectionRect(0)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
+    // prepare selection rectangle
+    m_selectionRect = new QCanvasRectangle(canvas());
+    m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
+    m_selectionRect->hide();
 }
 
 SegmentCanvas::~SegmentCanvas()
 {
     // nothing here - canvas items are deleted by the Track Editor
 }
+
+QCanvasRectangle*
+SegmentCanvas::getSelectionRectangle()
+{
+    return m_selectionRect;
+}
+
 
 void SegmentCanvas::slotSetTool(ToolType t)
 {
@@ -1740,11 +1752,24 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     } else {
 
+        /*
 	if (!m_segmentAddMode) {
 	    m_dispatchTool = new SegmentPencil(m_canvas, m_doc);
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
 	}
+        else {
+        */
+            // do a bounding box
+            QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
+
+            if (rect) {
+                rect->show();
+                rect->setX(e->x());
+                rect->setY(e->y());
+                rect->setSize(0, 0);
+            }
+        //}
     }
  
     // Tell the RosegardenGUIView that we've selected some new Segments -
@@ -1796,7 +1821,16 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	return;
     }
 
-    if (!m_currentItem) return;
+    if (!m_currentItem) {
+        QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
+
+        if (rect) {
+            rect->hide();
+	    m_canvas->canvas()->update();
+        }
+        return;
+    }
+
     m_canvas->setCursor(Qt::arrowCursor);
 
     if (m_currentItem->isSelected())
@@ -1853,7 +1887,46 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	return m_dispatchTool->handleMouseMove(e);
     }
 
-    if (!m_currentItem) return false;
+    if (!m_currentItem)  {
+
+        // do a bounding box
+        QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
+
+        if (rect) {
+            rect->show();
+
+            // same as for notation view
+            int w = int(e->x() - rect->x());
+            int h = int(e->y() - rect->y());
+            if (w > 0) ++w; else --w;
+            if (h > 0) ++h; else --h;
+
+            rect->setSize(w, h);
+	    m_canvas->canvas()->update();
+
+            // Get collisions and do selection
+            //
+            QCanvasItemList l = rect->collisions(true); // exact collisions
+            int segCount = 0;
+
+            if (l.count()) {
+                for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+                {
+                    if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
+                    {
+                        segCount++;
+                        slotSelectSegmentItem(item);
+                    }
+                }
+            }
+            if (segCount)
+            {
+                emit selectedSegments(getSelectedSegments());
+            }
+        }
+        return false;
+    }
+
     m_canvas->setCursor(Qt::sizeAllCursor);
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone)
