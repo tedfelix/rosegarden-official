@@ -27,6 +27,7 @@ rosegarden_SOURCES = \
         eventcommands.cpp \
 	eventfilter.cpp \
         eventview.cpp \
+        hydrogenio.cpp \
 	importdevicedialog.cpp \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \

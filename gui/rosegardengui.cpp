@@ -72,6 +72,7 @@
 #include "rosegardenconfiguredialog.h"
 #include "rosegardentransportdialog.h"
 #include "rg21io.h"
+#include "hydrogenio.h"
 #include "mupio.h"
 #include "csoundio.h"
 #include "lilypondio.h"
@@ -351,6 +352,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Import &Rosegarden 2.1 file..."), 0, 0, this,
                 SLOT(slotImportRG21()), actionCollection(),
                 "file_import_rg21");
+
+    new KAction(i18n("Import &Hydrogen file..."), 0, 0, this,
+                SLOT(slotImportHydrogen()), actionCollection(),
+                "file_import_hydrogen");
 
     new KAction(i18n("Merge &File..."), 0, 0, this,
                 SLOT(slotMerge()), actionCollection(),
@@ -1284,6 +1289,8 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
             importType = ImportRG4;
         else if (filePath.endsWith(".rose"))
             importType = ImportRG21;
+        else if (filePath.endsWith(".h2song"))
+            importType = ImportHydrogen;
     }
     
 
@@ -1293,6 +1300,9 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
         break;
     case ImportRG21:
         doc = createDocumentFromRG21File(filePath);
+        break;
+    case ImportHydrogen:
+        doc = createDocumentFromHydrogenFile(filePath);
         break;
     default:
         doc = createDocumentFromRGFile(filePath);
@@ -3007,6 +3017,78 @@ RosegardenGUIApp::createDocumentFromRG21File(QString file)
 	CurrentProgressDialog::freeze();
 	KMessageBox::error(this,
 			   i18n("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
+	delete newDoc;
+	return 0;
+    }
+
+    // Set modification flag
+    //
+    newDoc->slotDocumentModified();
+
+    // Set the caption and add recent
+    //
+    newDoc->setTitle(QFileInfo(file).fileName());
+    newDoc->setAbsFilePath(QFileInfo(file).absFilePath());
+
+    return newDoc;
+
+}
+
+void
+RosegardenGUIApp::slotImportHydrogen()
+{
+    if (!m_doc->saveIfModified()) return;
+
+    KURL url = KFileDialog::getOpenURL
+        (
+#if KDE_VERSION >= 306
+         ":HYDROGEN",
+#else
+         QString::null,
+#endif
+         i18n("*.h2song|Hydrogen files\n*|All files"), this,
+         i18n("Open Hydrogen File"));
+    if (url.isEmpty()) { return; }
+
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
+    openFile(tmpfile, ImportHydrogen);
+
+    KIO::NetAccess::removeTempFile(tmpfile);
+}
+
+RosegardenGUIDoc*
+RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
+{
+    KStartupLogo::hideIfStillThere();
+    RosegardenProgressDialog progressDlg(
+            i18n("Importing Hydrogen file..."), 100, this);
+
+    CurrentProgressDialog::set(&progressDlg);
+
+    // Inherent autoload
+    //
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
+
+    HydrogenLoader hydrogenLoader(&newDoc->getStudio());
+
+    // TODO: make RG21Loader to actually emit these signals
+    //
+    connect(&hydrogenLoader, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&hydrogenLoader, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
+    // "your starter for 40%" - helps the "freeze" work
+    //
+    progressDlg.progressBar()->advance(40);
+
+    if (!hydrogenLoader.load(file, newDoc->getComposition()))
+    {
+	CurrentProgressDialog::freeze();
+	KMessageBox::error(this,
+			   i18n("Can't load Hydrogen file.  It appears to be corrupted."));
 	delete newDoc;
 	return 0;
     }

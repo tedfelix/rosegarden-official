@@ -172,9 +172,13 @@ class MidiMixerWindow : public MixerWindow
 public:
     MidiMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
 
-    void addTab(QWidget *tab, const QString &title);
+    /**
+     * Setup the tabs on the Mixer according to the Studio
+     */
+    void setupTabs();
 
 protected:
+    void addTab(QWidget *tab, const QString &title);
 
     QTabWidget    *m_tabWidget;
 

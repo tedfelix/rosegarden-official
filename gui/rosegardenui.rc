@@ -9,6 +9,7 @@
     <Menu name="import" append="new_merge"><text>&amp;Import</text>
       <Action name="file_import_midi" />
       <Action name="file_import_rg21" />
+      <Action name="file_import_hydrogen" />
     </Menu>
     <Menu name="merge" append="new_merge"><text>&amp;Merge</text>
       <Action name="file_merge" />

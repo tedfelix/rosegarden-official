@@ -123,7 +123,7 @@ public:
      */ 
     RosegardenGUIDoc *getDocument() const;      
 
-    enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportCheckType };
+    enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportHydrogen, ImportCheckType };
 
     /**
      * open a Rosegarden file
@@ -302,6 +302,11 @@ protected:
      * Create document from RG21 file
      */
     RosegardenGUIDoc* createDocumentFromRG21File(QString filePath);
+
+    /**
+     * Create document from Hydrogen drum machine file
+     */
+    RosegardenGUIDoc* createDocumentFromHydrogenFile(QString filePath);
 
     /**/
     /**/
@@ -501,6 +506,11 @@ public slots:
      * Let the user select a Rosegarden 2.1 file for import 
      */
     void slotImportRG21();
+
+    /**
+     * Select a Hydrogen drum machine file for import
+     */
+    void slotImportHydrogen();
 
     /**
      * Let the user select a MIDI file for merge

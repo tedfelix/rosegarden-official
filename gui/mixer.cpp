@@ -26,6 +26,7 @@
 #include "studiocontrol.h"
 #include "constants.h"
 #include "audiopluginmanager.h"
+#include "rosestrings.h"
 
 #include "Studio.h"
 #include "AudioLevel.h"
@@ -36,6 +37,8 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+
+#include <iostream>
 
 #include <qlayout.h>
 #include <qpopupmenu.h>
@@ -236,7 +239,7 @@ AudioMixerWindow::populate()
     QGridLayout *mainLayout = new QGridLayout
 	(m_mainBox, (instruments.size() + busses.size() + 1) * 3, 7);
 
-    setCaption(i18n("Mixer"));
+    setCaption(i18n("Audio Mixer"));
 
     int count = 1;
     int col = 0;
@@ -1298,9 +1301,69 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
     m_tabWidget = new QTabWidget(this);
     vlay->addWidget(m_tabWidget);
+    m_tabWidget->setTabPosition(QTabWidget::Bottom);
+    setCaption(i18n("MIDI Mixer"));
 
-    QFrame *frame = new QFrame(m_tabWidget);
-    addTab(frame, i18n("Device 1"));
+    // Initial setup
+    //
+    setupTabs();
+}
+
+void 
+MidiMixerWindow::setupTabs()
+{
+    Rosegarden::DeviceListConstIterator it;
+    Rosegarden::MidiDevice *dev = 0;
+    Rosegarden::InstrumentList instruments;
+    Rosegarden::InstrumentList::const_iterator iIt;
+
+    for (it = m_studio->begin(); it != m_studio->end(); ++it)
+    {
+        dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev)
+        {
+            instruments = dev->getPresentationInstruments();
+
+            QFrame *frame = new QFrame(m_tabWidget);
+
+            QGridLayout *mainLayout = new QGridLayout
+                (frame, instruments.size(), 7);
+
+            int posCount = 0;
+            int firstInstrument = -1;
+
+            for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt)
+            {
+
+                // Store the first ID
+                //
+                if (firstInstrument == -1) firstInstrument = (*iIt)->getId();
+
+                // Label
+                //
+	        QLabel *idLabel = new QLabel(QString("%1").
+                        arg((*iIt)->getId() - firstInstrument + 1), frame, "idLabel");
+                mainLayout->addWidget(idLabel, 6, posCount, Qt::AlignCenter);
+
+                // Pan rotary
+                //
+                RosegardenRotary *pan = new RosegardenRotary
+                    (frame, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
+                pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+                mainLayout->addWidget(pan, 2, posCount, Qt::AlignCenter);
+
+                // Volume fader
+                //
+                RosegardenFader *fader = new RosegardenFader(0, 127, 100, 20, 80, frame);
+                mainLayout->addWidget(fader, 3, posCount, Qt::AlignCenter);
+
+                posCount++;
+            }
+
+            addTab(frame, strtoqstr(dev->getName()));
+        }
+    }
 }
 
 void 
