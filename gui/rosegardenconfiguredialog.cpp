@@ -560,20 +560,20 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     m_readAhead->setMinValue(20);
     layout->addWidget(new QLabel("20", frame), 2, 1);
 
-    m_readAhead->setMaxValue(120);
-    layout->addWidget(new QLabel("120", frame), 2, 3);
+    m_readAhead->setMaxValue(500);
+    layout->addWidget(new QLabel("300", frame), 2, 3);
 
-    int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 40000) / 1000;
+    int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
     m_readAhead->setValue(readAheadValue);
     m_readAhead->setTickmarks(QSlider::Below);
     layout->addWidget(m_readAhead, 2, 2);
 
-    QLabel *readAheadLabel = new QLabel(QString("%1").arg(readAheadValue),
-                                        frame);
-    layout->addWidget(readAheadLabel, 1, 2, Qt::AlignHCenter);
+    m_readAheadLabel = new QLabel(QString("%1").arg(readAheadValue), frame);
+    layout->addWidget(m_readAheadLabel, 1, 2, Qt::AlignHCenter);
 
-    connect(m_readAhead, SIGNAL(valueChanged(int)),
-            readAheadLabel, SLOT(setNum(int)));
+    connect(m_readAhead,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotReadAheadChanged(int)));
 
     m_playback = new QSlider(Horizontal, frame);
 
@@ -581,22 +581,21 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel("20", frame), 4, 1);
 
     m_playback->setMaxValue(500);
-    layout->addWidget(new QLabel("500", frame), 4, 3);
+    layout->addWidget(new QLabel("300", frame), 4, 3);
 
-    int playbackValue = m_cfg->readLongNumEntry("playbacklatencyusec", 100000)
+    int playbackValue = m_cfg->readLongNumEntry("playbacklatencyusec", 120000)
                         / 1000;
     m_playback->setValue(playbackValue);
     m_playback->setTickmarks(QSlider::Below);
     layout->addWidget(m_playback, 4, 2);
 
-    QLabel *playbackLabel = new QLabel(QString("%1").arg(playbackValue),
-                                       frame);
-    layout->addWidget(playbackLabel, 3, 2, Qt::AlignHCenter);
-    connect(m_playback, SIGNAL(valueChanged(int)),
-            playbackLabel, SLOT(setNum(int)));
+    m_playbackLabel = new QLabel(QString("%1").arg(playbackValue), frame);
+    layout->addWidget(m_playbackLabel, 3, 2, Qt::AlignHCenter);
+    connect(m_playback,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotPlaybackChanged(int)));
 
     addTab(frame, i18n("Latency"));
-
 
 #ifdef HAVE_LIBJACK
     frame = new QFrame(m_tabWidget, i18n("JACK latency"));
@@ -710,6 +709,34 @@ void LatencyConfigurationPage::slotFetchLatencyValues()
                           m_doc->getAudioRecordLatency().sec * 1000;
     m_jackRecord->setValue(jackRecordValue);
 }
+
+// With these two slots just make sure that read ahead isn't 
+// greater than the total playback latency.
+//
+void LatencyConfigurationPage::slotReadAheadChanged(int value)
+{
+    m_readAheadLabel->setNum(value);
+
+    if (value > m_playback->value())
+    {
+        m_playback->setValue(value);
+        m_playbackLabel->setNum(value);
+    }
+}
+
+void LatencyConfigurationPage::slotPlaybackChanged(int value)
+{
+    m_playbackLabel->setNum(value);
+
+    if (value < m_readAhead->value())
+    {
+        m_readAhead->setValue(value);
+        m_readAheadLabel->setNum(value);
+    }
+
+}
+
+
 
 
 

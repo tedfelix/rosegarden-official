@@ -329,6 +329,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     if (instrument->sendsVelocity())
     {
         m_velocityValue->setDisabled(false);
+        m_velocityValue->setCurrentItem(instrument->getVelocity());
     }
     else
     {

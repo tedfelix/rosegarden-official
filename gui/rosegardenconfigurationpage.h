@@ -260,12 +260,20 @@ protected slots:
     //
     void slotFetchLatencyValues();
 
+
+    // To ensure that read ahead is never less than playback
+    //
+    void slotReadAheadChanged(int);
+    void slotPlaybackChanged(int);
+
 protected:
 
     //--------------- Data members ---------------------------------
 
     QSlider* m_readAhead;
     QSlider* m_playback;
+    QLabel*  m_readAheadLabel;
+    QLabel*  m_playbackLabel;
 
     QSlider* m_jackPlayback;
     QSlider* m_jackRecord;
