@@ -1006,22 +1006,55 @@ NotationView::insertNote(int height, const QPoint &eventPos)
                              << (*closestNote)->getAbsoluteTime()
                              << endl;
 
-        /*
-         * Alter inserted note's duration if needed
-         */
-        if ((*closestNote)->event()->getDuration() < insertedEvent->getDuration()) {
-            // new note is being chorded with notes which are shorter
-            // shorten its duration to same one as other notes
-            newNotationElement->setNote((*closestNote)->getNote());
 
-        } else if ((*closestNote)->event()->getDuration() > insertedEvent->getDuration()) {
+        //
+        // Chording a note of a different time
+        //
+        Rosegarden::Event* closestEvent = (*closestNote)->event();
 
-            // new note is being chorded with notes which are longer
-            // for the moment, do the same as in other case
-            newNotationElement->setNote((*closestNote)->getNote());
-            
+        if (closestEvent->getDuration() != insertedEvent->getDuration()) {
+
+            // Try expanding either the inserted event or the events
+            // in the track
+            //
+            Rosegarden::Track::iterator start, end;
+            Rosegarden::Track &track = getTrack();
+            track.getTimeSlice((*closestNote)->event()->getAbsoluteTime(),
+                               start, end);
+            /*
+             * Alter inserted note's duration if needed
+             */
+            if (closestEvent->getDuration() < insertedEvent->getDuration()) {
+                // new note is being chorded with notes which are shorter
+                // shorten its duration to same one as other notes
+                    newNotationElement->setNote((*closestNote)->getNote());
+
+            } else if (closestEvent->getDuration() > insertedEvent->getDuration()) {
+
+                Rosegarden::Track::iterator newEnd;
+
+                // new note is being chorded with notes which are longer
+                // for the moment, do the same as in other case
+                if (!track.expandIntoGroup(start, end,
+                                           insertedEvent->getDuration(),
+                                           newEnd)) {
+                    // expansion is not possible, so force the inserted note
+                    // to the duration of the one already present
+                newNotationElement->setNote((*closestNote)->getNote());
+
+                } else {
+
+                    // put NotationElements around the newly created events
+
+                    ++newEnd; // insertNewEvents works on a [from,to[ range
+                    // and we need to wrap this last event
+                    m_viewElementsManager->insertNewEvents(start, newEnd);
+
+                }
+
+            }
         }
-
+        
         newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
         // m_notationElements->insert(newNotationElement);
 

@@ -84,6 +84,8 @@ public:
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
+    Rosegarden::Track& getTrack() { return m_viewElementsManager->getTrack(); }
+
     void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type);
 
 /*!!!
