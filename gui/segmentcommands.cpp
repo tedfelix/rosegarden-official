@@ -339,9 +339,16 @@ SegmentSplitCommand::execute()
     // Resize left hand Segment
     //
     //!!! should we be dividing any events that are extant during the
-    // split?  Certainly we should be truncating rests, shouldn't we?
+    // split?
     m_segment->erase(m_segment->findTime(m_splitTime), m_segment->end());
     m_segment->setDuration(m_splitTime - m_segment->getStartTime());
+
+    // Look for a final rest and shrink it
+    Segment::iterator it = m_segment->end();
+
+    if ((*(--it))->isa("rest"))
+        (*it)->setDuration(m_splitTime - (*it)->getAbsoluteTime());
+
 
     if (!m_newSegment->getComposition()) {
 	m_segment->getComposition()->addSegment(m_newSegment);
