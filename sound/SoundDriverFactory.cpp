@@ -49,6 +49,8 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
     driver = new ArtsDriver(studio);
 #endif
 #endif
+
+    driver->initialise();
 	
     return driver;
 }
