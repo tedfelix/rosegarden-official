@@ -531,7 +531,7 @@ void NotationView::initFontToolbar()
     for (int s = 1; s < 10; ++s) stretches.push_back(s);
     QSlider *stretchSlider = new ZoomSlider(stretches, 5,
                                             QSlider::Horizontal, fontToolbar);
-    stretchSlider->setTracking(true);
+//    stretchSlider->setTracking(true);
     connect(stretchSlider, SIGNAL(valueChanged(int)),
             this,            SLOT(changeStretch(int)));
 }
