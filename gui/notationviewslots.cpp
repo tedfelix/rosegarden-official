@@ -525,12 +525,12 @@ void NotationView::slotToggleClefsToolBar()
 
 void NotationView::slotToggleMarksToolBar()
 {
-    toggleNamedToolBar("marksToolBar");
+    toggleNamedToolBar("Marks Toolbar");
 }
 
 void NotationView::slotToggleGroupToolBar()
 {
-    toggleNamedToolBar("groupToolBar");
+    toggleNamedToolBar("Group Toolbar");
 }
 
 void NotationView::slotToggleFontToolBar()

@@ -478,7 +478,6 @@ LilypondExporter::write() {
 
     unsigned int paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
     unsigned int fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
-//!!!    unsigned int restType = cfg->readUnsignedNumEntry("lilyresttype");
     bool exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
     bool exportHeaders = cfg->readBoolEntry("lilyexportheaders", true);
     bool exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
@@ -683,11 +682,11 @@ LilypondExporter::write() {
             timeT prevTime = 0;
             int curTupletNotesRemaining = 0;
             int accidentalCount = 0; 
-    // WIP       int timeSignatureIterator = 0;
 
             // declare these outside the scope of the coming for loop
             std::string lilyText = "";      // text events
             std::ostringstream lilyLyrics;  // stream to collect/hold lyric events
+            std::string prevStyle = "";     // track note styles 
             
             // Write out all events for this Segment
             for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
@@ -700,42 +699,25 @@ LilypondExporter::write() {
                 // new bar
                 bool multipleTimeSignatures = ((m_composition->getTimeSignatureCount ()) > 1);
                 
-    /*  WIP       long timeSignatureCount = m_composition->getTimeSignatureCount();
-                bool multipleTimeSignatures = (timeSignatureCount > 1);
-
-                if (multipleTimeSignatures) {
-                    timeSignatureIterator++;
-                    timeSignature = m_composition->getTimeSignatureChange(timeSignatureIterator);
-                    */
-                
                 if (j == (*i)->begin() ||
                     (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
 
                     // bar check, for debugging measures that don't count out
                     // make this a toggle...
-/*                    if (prevTime <= m_composition->getBarStartForTime(absoluteTime)) {
+                    if (prevTime <= m_composition->getBarStartForTime(absoluteTime)) {
                         str << " | ";
-                    }
+                    } /*
 good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no good...
 */
 
-                    
                     // end the line for the current measure
                     str << std::endl << indent(col);
                     
-                    // DMM - this is really pretty much an ugly hack, but it works...
                     // check time signature against previous one; if different,
                     // write new one here at bar line...
-                    // FIXME - rewrite this to getTimeSignatureChange for time
-                    // sig. 1, look at "now" to see if it's time to write it, and
-                    // when we get to that point, ++ the time sig iterator to grab
-                    // the next change and be looking for that, etc. until out of
-                    // events.  Probably much less ugly and worth doing, but the
-                    // existing implementation works well enough to put off doing
-                    // that until some day when I run out of more exciting
-                    // things to do...
-                    //
-                    // (WIP)
+                    // Incomplete:  this is a lazy, wasteful way to implement
+                    // this, and it really should just grab the changes in
+                    // advance and act on them accordingly
                     TimeSignature prevTimeSignature = timeSignature;
                     if (multipleTimeSignatures) {
                         timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
@@ -838,6 +820,36 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
                     std::string lilyMark = "";
 
                     if ((*j)->isa(Note::EventType)) {
+                        // handle various note styles before opening any chord
+                        // brackets
+                        std::string style = "";
+                        (*j)->get<String>(NotationProperties::NOTE_STYLE, style);
+
+                        // Lilypond can't do anything more than these four
+                        // without extreme black magic
+                        const std::string styleMensural = "Mensural";
+                        const std::string styleTriangle = "Triangle";
+                        const std::string styleCross = "Cross";
+                        const std::string styleClassical = "Classical"; 
+
+                        // catch/change style if it differs from before, or is
+                        // unspecified (prevStyle is initialized as
+                        // "Classical")
+                        if (style != prevStyle) {
+                            if (style == styleMensural) {
+                                style = "mensural";
+                            } else if (style == styleTriangle) {
+                                style = "triangle";
+                            } else if (style == styleCross) {
+                                style = "cross";
+                            } else {
+                                style = "default"; // failsafe default or explicit
+                            }
+                            str << std::endl << indent(col)
+                                << "\\property Voice.NoteHead \\set #'style = #'"
+                                << style << std::endl << indent(col);
+                        }
+
                         // Algorithm for writing chords:
                         // 1) Close the old chord
                         //   - if there is one
@@ -893,7 +905,7 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
 
                         lilyNote = convertPitchToLilyNote(pitch, isFlatKeySignature,
                                                       accidentalCount, accidental);
-
+                        
                         str << lilyNote;
 
                         // generate and write octave marks
@@ -937,6 +949,7 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
                     } else { // it's a rest
 
                         closeChordWriteTie(addTie, currentlyWritingChord, str);
+                        str << "isarest" << std::endl;
 
                         if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
@@ -1031,6 +1044,7 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
                     // in various other places.
                     if (!currentlyWritingChord && addTie) {
                         str << "~ ";
+                        str << "tie not in chord" << std::endl;
                         addTie = false;
                     }
 

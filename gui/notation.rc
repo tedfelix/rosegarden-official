@@ -379,7 +379,7 @@
     <Action name="add_text_mark"/>
 </ToolBar>
 
-<ToolBar name="Groups Toolbar">
+<ToolBar name="Group Toolbar">
   <Action name="beam"/>
   <Action name="break_group"/>
   <Separator/>

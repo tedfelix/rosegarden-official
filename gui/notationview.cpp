@@ -710,8 +710,8 @@ void NotationView::readOptions()
     getToggleAction("show_notes_toolbar")      ->setChecked(!toolBar("Notes Toolbar")      ->isHidden());
     getToggleAction("show_rests_toolbar")      ->setChecked(!toolBar("Rests Toolbar")      ->isHidden());
     getToggleAction("show_clefs_toolbar")      ->setChecked(!toolBar("Clefs Toolbar")      ->isHidden());
-    getToggleAction("show_group_toolbar")      ->setChecked(!toolBar("Group ToolBar")      ->isHidden());
-    getToggleAction("show_marks_toolbar")       ->setChecked(!toolBar("Marks ToolBar")     ->isHidden());
+    getToggleAction("show_group_toolbar")      ->setChecked(!toolBar("Group Toolbar")      ->isHidden());
+    getToggleAction("show_marks_toolbar")       ->setChecked(!toolBar("Marks Toolbar")     ->isHidden());
     getToggleAction("show_font_toolbar")       ->setChecked(!toolBar("Font Toolbar")       ->isHidden());
     getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("Transport Toolbar")  ->isHidden());
     getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("Accidentals Toolbar")->isHidden());
