@@ -235,7 +235,7 @@ RosegardenGUIView::test()
         for(unsigned int i = 0; i < 7; ++i) {
 
 
-            QPixmap note(npf.makeNotePixmap(i, true, true));
+            QPixmap note(npf.makeNotePixmap(Note(i), true, true));
 
             QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note,
                                                                       canvas());
@@ -265,7 +265,7 @@ RosegardenGUIView::test()
     pitches.push_back(4);
     pitches.push_back(0);
 
-    QPixmap chord(npf.makeChordPixmap(pitches, 6, true, false));
+    QPixmap chord(npf.makeChordPixmap(pitches, Note(6), true, false));
 
     QCanvasSprite *chordSprite = new QCanvasSimpleSprite(&chord, canvas());
 
@@ -300,7 +300,7 @@ RosegardenGUIView::showElements(EventList::iterator from,
         // TODO : Extract note duration
         unsigned int duration = (*it)->getDuration();
         
-        QPixmap note(npf.makeNotePixmap(duration, true, true));
+        QPixmap note(npf.makeNotePixmap(Whole/*duration*/, true, true));
         QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
         noteSprite->move(dxoffset + (*it)->get<Int>("Notation::X"),
                          dyoffset + (*it)->get<Int>("Notation::Y"));
