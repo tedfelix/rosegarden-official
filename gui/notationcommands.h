@@ -222,11 +222,15 @@ protected:
 // Transforms menu commands
 
 
-class TransformsMenuNormalizeRestsCommand : public BasicSelectionCommand
+class TransformsMenuNormalizeRestsCommand : public BasicCommand
 {
 public:
-    TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection) { }
+    TransformsMenuNormalizeRestsCommand(Rosegarden::Segment &s,
+					Rosegarden::timeT beginTime,
+					Rosegarden::timeT endTime) :
+	BasicCommand(name(), s, beginTime, endTime) { }
+
+    TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection);
 
     static QString name() { return "&Normalize Rests"; }
 
@@ -235,11 +239,15 @@ protected:
 };
 
 
-class TransformsMenuCollapseRestsCommand : public BasicSelectionCommand
+class TransformsMenuCollapseRestsCommand : public BasicCommand
 {
 public:
-    TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection) { }
+    TransformsMenuCollapseRestsCommand(Rosegarden::Segment &s,
+				       Rosegarden::timeT beginTime,
+				       Rosegarden::timeT endTime) :
+	BasicCommand(name(), s, beginTime, endTime) { }
+
+    TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection);
 
     static QString name() { return "&Collapse Rests"; }
 

@@ -54,10 +54,10 @@ Work required to fix existing stuff
     palettes etc.  kind of obvious
 
 9.  Selection global to entire composition, and selection updated
-    correctly throughout all views on (e.g.) note insert
+    correctly throughout all views on (e.g.) note insert [DONEish]
     
 10. Implement undo for cut/copy/paste, and for the track
-    insert/delete/resize tools
+    insert/delete/resize tools [DONE]
 
 11. Composition to become container for multiset of Segments
     instead of just set? - DONE
@@ -67,7 +67,7 @@ Work required to fix existing stuff
 New features suitable for 0.2
 -----------------------------
 
-1.  selection and cut, copy, paste
+1.  selection and cut, copy, paste [DONE mostly]
 
 2.  dynamics, such as slurs and hairpins [DONE]
 
@@ -85,14 +85,14 @@ New features suitable for 0.2
 
 8.  Transport GUI - play, rwd buttons etc - timer. [DONE]
 
-9.  Looping.
+9.  Looping. [DONE]
 
-10. Position pointers in notation client.
+10. Position pointers in notation client. [DONE]
 
 11. Track canvas and client that follow playback (playback follow mode). [DONE]
 
 12. Piano-roll view, but only if someone other than us steps up
-    to implement it in parallel with the stuff we're doing?
+    to implement it in parallel with the stuff we're doing? [DONEsque]
 
 13. Event editor (possible hyper editor type i/f for velocities)
 

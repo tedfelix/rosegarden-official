@@ -72,9 +72,18 @@ public:
     
 
 TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
-					 Rosegarden::TimeSignature sig) :
+					 Rosegarden::TimeSignature sig,
+					 int barNo, bool atStartOfBar) :
     KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel),
-    m_timeSignature(sig)
+    m_timeSignature(sig),
+    m_commonTimeButton(0),
+    m_hideSignatureButton(0),
+    m_normalizeRestsButton(0),
+    m_asGivenButton(0),
+    m_startOfBarButton(0),
+    m_startOfCompositionButton(0),
+    m_barNo(barNo),
+    m_atStartOfBar(atStartOfBar)
 {
     static QFont *timeSigFont = 0;
 
@@ -110,7 +119,75 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QObject::connect(numUp,     SIGNAL(pressed()), this, SLOT(slotNumUp()));
     QObject::connect(denomDown, SIGNAL(pressed()), this, SLOT(slotDenomDown()));
     QObject::connect(denomUp,   SIGNAL(pressed()), this, SLOT(slotDenomUp()));
+
+    groupBox = new QButtonGroup(1, Horizontal, i18n("Scope"), vbox);
+
+    if (!m_atStartOfBar) {
+
+	// let's forget about start-of-composition for the moment
+	QString scopeText;
+	if (m_barNo != 0 || !m_atStartOfBar) {
+	    if (m_atStartOfBar) {
+		scopeText = QString
+		    (i18n("Insertion point is at start of bar %1."))
+		    .arg(m_barNo);
+	    } else {
+		scopeText = QString
+		    (i18n("Insertion point is in the middle of bar %1."))
+		    .arg(m_barNo);
+	    }
+	} else {
+	    scopeText = QString
+		(i18n("Insertion point is at start of composition."));
+	}
+	
+	new QLabel(scopeText, groupBox);
+	m_asGivenButton = new QRadioButton
+	    (i18n("Start bar %1 here").arg(barNo + 1), groupBox);
+	m_asGivenButton->setChecked(true);
+	if (!m_atStartOfBar && m_barNo != 0) {
+	    m_startOfBarButton = new QRadioButton
+		(i18n("Change time from start of bar %1")
+		 .arg(m_barNo), groupBox);
+	}
+	if (!(m_atStartOfBar && m_barNo == 0)) {
+	    m_startOfCompositionButton = new QRadioButton
+		(i18n("Change time from start of composition"), groupBox);
+	}
+    } else {
+	new QLabel(i18n("Time change will take effect at the start of bar %1.")
+		   .arg(barNo), groupBox);
+    }
+
+    groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
+    m_hideSignatureButton = new QCheckBox
+	(i18n("Change time without showing the signature"), groupBox);
+    m_hideSignatureButton->setChecked(false);
+    m_commonTimeButton = new QCheckBox
+	(i18n("Show as common time"), groupBox);
+    m_commonTimeButton->setChecked(true);
+    m_normalizeRestsButton = new QCheckBox
+	(i18n("Normalize subsequent rests"), groupBox);
+    m_normalizeRestsButton->setChecked(true);
+    QObject::connect(m_hideSignatureButton, SIGNAL(released()), this,
+		     SLOT(slotUpdateCommonTimeButton()));
+    slotUpdateCommonTimeButton();
 }
+
+Rosegarden::TimeSignature
+TimeSignatureDialog::getTimeSignature() const
+{
+    TimeSignature ts(m_timeSignature.getNumerator(),
+		     m_timeSignature.getDenominator(),
+		     (m_commonTimeButton &&
+		      m_commonTimeButton->isEnabled() &&
+		      m_commonTimeButton->isChecked()),
+		     (m_hideSignatureButton &&
+		      m_hideSignatureButton->isEnabled() &&
+		      m_hideSignatureButton->isChecked()));
+    return ts;
+}
+
 
 void
 TimeSignatureDialog::slotNumDown()
@@ -120,6 +197,7 @@ TimeSignatureDialog::slotNumDown()
 	m_timeSignature = TimeSignature(n, m_timeSignature.getDenominator());
 	m_numLabel->setText(QString("%1").arg(n));
     }
+    slotUpdateCommonTimeButton();
 }
 
 void
@@ -130,6 +208,7 @@ TimeSignatureDialog::slotNumUp()
 	m_timeSignature = TimeSignature(n, m_timeSignature.getDenominator());
 	m_numLabel->setText(QString("%1").arg(n));
     }
+    slotUpdateCommonTimeButton();
 }
 
 void
@@ -140,6 +219,7 @@ TimeSignatureDialog::slotDenomDown()
 	m_timeSignature = TimeSignature(m_timeSignature.getNumerator(), n);
 	m_denomLabel->setText(QString("%1").arg(n));
     }
+    slotUpdateCommonTimeButton();
 }
 
 void
@@ -150,6 +230,48 @@ TimeSignatureDialog::slotDenomUp()
 	m_timeSignature = TimeSignature(m_timeSignature.getNumerator(), n);
 	m_denomLabel->setText(QString("%1").arg(n));
     }
+    slotUpdateCommonTimeButton();
+}
+
+void
+TimeSignatureDialog::slotUpdateCommonTimeButton()
+{
+    if (!m_hideSignatureButton || !m_hideSignatureButton->isChecked()) {
+	if (m_timeSignature.getDenominator() == m_timeSignature.getNumerator()) {
+	    if (m_timeSignature.getNumerator() == 4) {
+		m_commonTimeButton->setText(i18n("Display as common time"));
+		m_commonTimeButton->setEnabled(true);
+		return;
+	    } else if (m_timeSignature.getNumerator() == 2) {
+		m_commonTimeButton->setText(i18n("Display as cut common time"));
+		m_commonTimeButton->setEnabled(true);
+		return;
+	    }
+	}
+    }
+    m_commonTimeButton->setEnabled(false);
+}
+
+
+TimeSignatureDialog::Location
+TimeSignatureDialog::getLocation() const
+{
+    if (m_asGivenButton && m_asGivenButton->isChecked()) {
+	return AsGiven;
+    } else if (m_startOfBarButton && m_startOfBarButton->isChecked()) {
+	return StartOfBar;
+    } else if (m_startOfCompositionButton &&
+	       m_startOfCompositionButton->isChecked()) {
+	return StartOfComposition;
+    }
+    return AsGiven;
+}
+
+bool
+TimeSignatureDialog::shouldNormalizeRests() const
+{
+    return (m_normalizeRestsButton && m_normalizeRestsButton->isEnabled() &&
+	    m_normalizeRestsButton->isChecked());
 }
 
 

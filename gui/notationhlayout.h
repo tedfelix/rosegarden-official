@@ -161,8 +161,8 @@ public:
     virtual bool isBarCorrectOnStaff(StaffType &staff, int barNo);
 
     /**
-     * Returns a pointer to a time signature event if there is one in
-     * this bar, and if so also sets timeSigX to its x-coord
+     * Returns a pointer to a time signature event if there is one
+     * visible in this bar, and if so also sets timeSigX to its x-coord
      */
     virtual Rosegarden::Event *getTimeSignaturePosition
     (StaffType &staff, int barNo, double &timeSigX);

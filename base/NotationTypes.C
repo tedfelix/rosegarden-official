@@ -926,11 +926,18 @@ const string TimeSignature::EventType = "timesignature";
 const int TimeSignature::EventSubOrdering = -10;
 const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
 const PropertyName TimeSignature::DenominatorPropertyName = "denominator";
+const PropertyName TimeSignature::ShowAsCommonTimePropertyName = "common";
+const PropertyName TimeSignature::IsHiddenPropertyName = "hidden";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
 
-TimeSignature::TimeSignature(int numerator, int denominator)
+TimeSignature::TimeSignature(int numerator, int denominator,
+			     bool preferCommon, bool hidden)
     // throw (BadTimeSignature)
-    : m_numerator(numerator), m_denominator(denominator)
+    : m_numerator(numerator), m_denominator(denominator),
+      m_common(preferCommon &&
+	       (m_denominator == m_numerator &&
+		(m_numerator == 2 || m_numerator == 4))),
+      m_hidden(hidden)
 {
     if (numerator < 1 || denominator < 1) throw BadTimeSignature();
 }
@@ -943,6 +950,13 @@ TimeSignature::TimeSignature(const Event &e)
     }
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
+
+    m_common = false;
+    e.get<Bool>(ShowAsCommonTimePropertyName, m_common);
+
+    m_hidden = false;
+    e.get<Bool>(IsHiddenPropertyName, m_hidden);
+
     if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
 }
 
@@ -951,6 +965,8 @@ TimeSignature& TimeSignature::operator=(const TimeSignature &ts)
     if (&ts == this) return *this;
     m_numerator = ts.m_numerator;
     m_denominator = ts.m_denominator;
+    m_common = ts.m_common;
+    m_hidden = ts.m_hidden;
     return *this;
 }
 
@@ -989,6 +1005,8 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<Int>(NumeratorPropertyName, m_numerator);
     e->set<Int>(DenominatorPropertyName, m_denominator);
+    e->set<Bool>(ShowAsCommonTimePropertyName, m_common);
+    e->set<Bool>(IsHiddenPropertyName, m_hidden);
     return e;
 }
 

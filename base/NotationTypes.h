@@ -740,14 +740,26 @@ public:
     static const int EventSubOrdering;
     static const PropertyName NumeratorPropertyName;
     static const PropertyName DenominatorPropertyName;
+    static const PropertyName ShowAsCommonTimePropertyName;
+    static const PropertyName IsHiddenPropertyName;
     static const TimeSignature DefaultTimeSignature;
     struct BadTimeSignature { };
 
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),
-        m_denominator(DefaultTimeSignature.m_denominator) { }
+        m_denominator(DefaultTimeSignature.m_denominator),
+	m_common(false), m_hidden(false) { }
 
-    TimeSignature(int numerator, int denominator)
+    /**
+     * Construct a TimeSignature object describing a time signature
+     * with the given numerator and denominator.  If preferCommon
+     * is true and the time signature is a common or cut-common
+     * time, the constructed object will return true for isCommon;
+     * if hidden is true, the time signature is intended not to
+     * be displayed and isHidden will return true.
+     */
+    TimeSignature(int numerator, int denominator,
+		  bool preferCommon = false, bool hidden = false)
         /* throw (BadTimeSignature) */;
 
     TimeSignature(const Event &e)
@@ -755,7 +767,9 @@ public:
     
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
-        m_denominator(ts.m_denominator) { }
+        m_denominator(ts.m_denominator),
+	m_common(ts.m_common),
+	m_hidden(ts.m_hidden) { }
 
     ~TimeSignature() { }
 
@@ -763,6 +777,10 @@ public:
 
     int getNumerator()     const { return m_numerator; }
     int getDenominator()   const { return m_denominator; }
+    
+    bool isCommon()        const { return m_common; }
+    bool isHidden()	   const { return m_hidden; }
+
     timeT getBarDuration() const;
 
     /**
@@ -829,6 +847,9 @@ public:
 private:
     int m_numerator;
     int m_denominator;
+
+    bool m_common;
+    bool m_hidden;
 
     mutable int  m_barDuration;
     mutable int  m_beatDuration;

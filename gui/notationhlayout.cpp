@@ -247,9 +247,6 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     TimeSignature timeSignature;
 
     bool isFullScan = (startTime == endTime);
-//!!! Having too much trouble with this optimisation in the real world --
-// disabling it for 0.1.4
-//    bool isFullScan = true;
 
     bool allDone = false; // used in partial scans
 
@@ -338,7 +335,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	bool newTimeSig = false;
 	timeSignature = getComposition()->getTimeSignatureInBar(barNo, newTimeSig);
 
-	if (newTimeSig) {
+	if (newTimeSig && !timeSignature.isHidden()) {
 	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
 	    fixedWidth += getFixedItemSpacing() +
 		m_npf->getTimeSigWidth(timeSignature);
@@ -1028,9 +1025,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     TimeSignature timeSignature;
 
     bool isFullLayout = (startTime == endTime);
-//!!! Having too much trouble with this optimisation in the real world --
-// disabling it for 0.1.4
-//    bool isFullLayout = true;
 
     // these two are for partial layouts:
     bool haveSimpleOffset = false;

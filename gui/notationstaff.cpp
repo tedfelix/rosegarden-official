@@ -86,7 +86,7 @@ NotationStaff::changeFont(string fontName, int resolution)
 
 void
 NotationStaff::insertTimeSignature(double layoutX,
-					const TimeSignature &timeSig)
+				   const TimeSignature &timeSig)
 {
     m_npf->setSelected(false);
     QCanvasPixmap *pixmap =
@@ -167,6 +167,9 @@ NotationStaff::getClosestElementToLayoutX(double x,
 
     NotationElementList *notes = getViewElementList();
     NotationElementList::iterator it, result;
+
+    //!!! Doesn't handle time signature correctly -- needs to get 
+    // from composition
 
     // TODO: this is grossly inefficient
 

@@ -1589,6 +1589,7 @@ void NotationView::slotTransformsAddTimeSignature()
 
 	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
 	Segment &segment = staff->getSegment();
+	Rosegarden::Composition &composition = *segment.getComposition();
 
 	NotationElementList::iterator i = staff->getClosestElementToLayoutX
 	    (layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
@@ -1601,12 +1602,58 @@ void NotationView::slotTransformsAddTimeSignature()
 	TimeSignature timeSig;
 	if (timeSigEvt) timeSig = TimeSignature(*timeSigEvt);
 
-	TimeSignatureDialog *dialog = new TimeSignatureDialog(this, timeSig);
+	int barNo = composition.getBarNumber(insertionTime);
+	bool atStartOfBar = (insertionTime == composition.getBarStart(barNo));
+
+	TimeSignatureDialog *dialog = new TimeSignatureDialog
+	    (this, timeSig, barNo, atStartOfBar);
+
+	TimeSignatureDialog::Location location = dialog->getLocation();
+	switch (location) {
+	case TimeSignatureDialog::StartOfBar:
+	    insertionTime = composition.getBarStartForTime(insertionTime);
+	    break;
+	case TimeSignatureDialog::StartOfSegment:
+	    insertionTime = segment.getStartTime();
+	    break;
+	case TimeSignatureDialog::StartOfComposition:
+	    insertionTime = 0;
+	    break;
+	default:
+	    break;
+	}
+
 	if (dialog->exec() == QDialog::Accepted) {
-	    addCommandToHistory
-		(new AddTimeSignatureCommand
-		 (m_staffs[m_currentStaff]->getSegment().getComposition(),
-		  insertionTime, dialog->getTimeSignature()));
+
+	    Command *command = new AddTimeSignatureCommand
+		(m_staffs[m_currentStaff]->getSegment().getComposition(),
+		 insertionTime,
+		 dialog->getTimeSignature());
+
+	    if (dialog->shouldNormalizeRests()) {
+
+		MacroCommand *macroCommand =
+		    new MacroCommand(command->name());
+		macroCommand->addCommand(command);
+
+		//!!! Ideally should only normalise up to the next time sig --
+		// bit complicated to do, though
+
+		for (Rosegarden::Composition::iterator i = composition.begin();
+		     i != composition.end(); ++i) {
+		    if ((*i)->getEndTime() > insertionTime) {
+			macroCommand->addCommand
+			    (new TransformsMenuNormalizeRestsCommand
+			     (**i, 
+			      std::max((*i)->getStartTime(), insertionTime),
+			      (*i)->getEndTime()));
+		    }
+		}
+
+		command = macroCommand;
+	    }
+		
+	    addCommandToHistory(command);
 	}
 	delete dialog;
     }

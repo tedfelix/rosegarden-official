@@ -65,21 +65,39 @@ class TimeSignatureDialog : public KDialogBase
 public:
     TimeSignatureDialog(QWidget *parent,
 			Rosegarden::TimeSignature defaultSig =
-			Rosegarden::TimeSignature::DefaultTimeSignature);
-    Rosegarden::TimeSignature getTimeSignature() const {
-	return m_timeSignature;
-    }
+			Rosegarden::TimeSignature::DefaultTimeSignature,
+			int barNo = 0, bool atStartOfBar = true);
+
+    Rosegarden::TimeSignature getTimeSignature() const;
+
+    enum Location {
+	AsGiven, StartOfBar, StartOfSegment, StartOfComposition
+    };
+
+    Location getLocation() const;
+    bool shouldNormalizeRests() const;
 
 protected:
     Rosegarden::TimeSignature m_timeSignature;
     QLabel *m_numLabel;
     QLabel *m_denomLabel;
 
+    QCheckBox *m_commonTimeButton;
+    QCheckBox *m_hideSignatureButton;
+    QCheckBox *m_normalizeRestsButton;
+    QRadioButton *m_asGivenButton;
+    QRadioButton *m_startOfBarButton;
+    QRadioButton *m_startOfCompositionButton;
+
+    int m_barNo;
+    bool m_atStartOfBar;
+
 public slots:
     void slotNumUp();
     void slotNumDown();
     void slotDenomUp();
     void slotDenomDown();
+    void slotUpdateCommonTimeButton();
 };
 
 

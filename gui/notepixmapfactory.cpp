@@ -1279,40 +1279,70 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 QCanvasPixmap
 NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 {
-    int numerator = sig.getNumerator(),
-        denominator = sig.getDenominator();
+    if (sig.isCommon()) {
 
-    QString numS, denomS;
+	QString c("c");
+	QRect r = m_timeSigFontMetrics.boundingRect(c);
 
-    numS.setNum(numerator);
-    denomS.setNum(denominator);
+	createPixmapAndMask(r.width(), r.height() + 4);
 
-    QRect numR = m_timeSigFontMetrics.boundingRect(numS);
-    QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);
-    int width = std::max(numR.width(), denomR.width()) + 2;
-    int x;
+	if (m_selected) {
+	    m_p.setPen(RosegardenGUIColours::SelectedElement);
+	}
+	
+	m_p.setFont(m_timeSigFont);
+	m_pm.setFont(m_timeSigFont);
 
-    createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());
+	m_p.drawText(0, r.height() + 2, c);
+	m_pm.drawText(0, r.height() + 2, c);
 
-    m_p.setFont(m_timeSigFont);
-    m_pm.setFont(m_timeSigFont);
+	if (sig.getNumerator() == 2) { // cut common
+	    m_p.drawLine(r.width()/2 - 1, 0, r.width()/2 - 1, r.height() - 1);
+	    m_pm.drawLine(r.width()/2 - 1, 0, r.width()/2 - 1, r.height() - 1);
+	    m_p.drawLine(r.width()/2, 0, r.width()/2, r.height() - 1);
+	    m_pm.drawLine(r.width()/2, 0, r.width()/2, r.height() - 1);
+	}
 
-    if (m_selected) {
-        m_p.setPen(RosegardenGUIColours::SelectedElement);
+	m_p.setPen(Qt::black);
+	return makeCanvasPixmap(QPoint(0, r.height()/2));
+
+    } else {
+
+	int numerator = sig.getNumerator(),
+	    denominator = sig.getDenominator();
+
+	QString numS, denomS;
+
+	numS.setNum(numerator);
+	denomS.setNum(denominator);
+
+	QRect numR = m_timeSigFontMetrics.boundingRect(numS);
+	QRect denomR = m_timeSigFontMetrics.boundingRect(denomS);
+	int width = std::max(numR.width(), denomR.width()) + 2;
+	int x;
+
+	createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());
+	
+	if (m_selected) {
+	    m_p.setPen(RosegardenGUIColours::SelectedElement);
+	}
+
+	m_p.setFont(m_timeSigFont);
+	m_pm.setFont(m_timeSigFont);
+
+	x = (width - numR.width()) / 2 - 1;
+	m_p.drawText(x, denomR.height(), numS);
+	m_pm.drawText(x, denomR.height(), numS);
+
+	x = (width - denomR.width()) / 2 - 1;
+	m_p.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
+	m_pm.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
+	
+	m_p.setPen(Qt::black);
+	
+	return makeCanvasPixmap(QPoint(0, denomR.height() +
+				       (getNoteBodyHeight()/4) - 1));
     }
-
-    x = (width - numR.width()) / 2 - 1;
-    m_p.drawText(x, denomR.height(), numS);
-    m_pm.drawText(x, denomR.height(), numS);
-
-    x = (width - denomR.width()) / 2 - 1;
-    m_p.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
-    m_pm.drawText(x, denomR.height() * 2 + (getNoteBodyHeight()/2) - 1, denomS);
-
-    m_p.setPen(Qt::black);
-
-    return makeCanvasPixmap(QPoint(0, denomR.height() +
-				   (getNoteBodyHeight()/4) - 1));
 }
 
 

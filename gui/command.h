@@ -80,6 +80,9 @@ public:
 
     /**
      * @return the name of this command
+     * Doesn't have to be internationalised; the command history object
+     * should take care of that when it creates the associated menus and
+     * buttons.
      */
     QString name() const { return m_name; }
 

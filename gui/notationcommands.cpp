@@ -327,10 +327,29 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
     return QString(n.c_str());
 }
 
+TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
+(Rosegarden::EventSelection &selection) :
+    BasicCommand(name(),
+		 selection.getSegment(),
+		 selection.getBeginTime(),
+		 selection.getEndTime())
+{
+    // nothing else
+}
 
 void TransformsMenuNormalizeRestsCommand::modifySegment()
 {
     getSegment().normalizeRests(getBeginTime(), getEndTime());
+}
+
+TransformsMenuCollapseRestsCommand::TransformsMenuCollapseRestsCommand
+(Rosegarden::EventSelection &selection) :
+    BasicCommand(name(),
+		 selection.getSegment(),
+		 selection.getBeginTime(),
+		 selection.getEndTime())
+{
+    // nothing else
 }
 
 void TransformsMenuCollapseRestsCommand::modifySegment()
