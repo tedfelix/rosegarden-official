@@ -60,6 +60,40 @@ ViewElementsManager::notationElementList(Track::iterator from,
 }
 
 void
+ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
+                                     Rosegarden::Track::iterator to)
+{
+    bool eventHasViewElement = false;
+    
+    for (Track::iterator i = from; i != to; ++i) {
+
+        if ((*i)->hasViewElement()) {
+            kdDebug(KDEBUG_AREA) << "ViewElementsManager::insertNewEvents() : event "
+                                 << (*i)->getType() << " at time "
+                                 << (*i)->getAbsoluteTime() << " already has a ViewElement\n";
+
+            eventHasViewElement = true;
+            continue;
+        }
+
+        NotationElement *el = new NotationElement(*i);
+
+        //         kdDebug(KDEBUG_AREA) << "ViewElementsManager::notationElementList() : inserting "
+        //                              << (*i)->getType() << " of duration "
+        //                              << (*i)->getDuration() << " at time " 
+        //                              << (*i)->getAbsoluteTime() << endl;
+
+        m_notationElements->insert(el);
+    }
+
+    if (eventHasViewElement) {
+        // be lenient about it
+        //KMessageBox::error(0, "ViewElementsManager::insertNewEvents() : tried wrapping events which already had ViewElements");
+    }
+
+}
+
+void
 ViewElementsManager::insert(NotationElement *e)
 {
 //     kdDebug(KDEBUG_AREA) << "ViewElementsManager::insert("

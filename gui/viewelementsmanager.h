@@ -35,17 +35,31 @@ public:
     ViewElementsManager(Rosegarden::Track&);
     ~ViewElementsManager();
 
+    /**
+     * Create a new NotationElementList wrapping Events in the
+     * [from, to[ interval or return the previously created one
+     * (even if passed new arguments)
+     */
     NotationElementList* notationElementList(Rosegarden::Track::iterator from,
                                              Rosegarden::Track::iterator to);
+
+    /**
+     * Scan [from, to[ for events which aren't wrapped in ViewElements
+     * and wrap them
+     */
+    void insertNewEvents(Rosegarden::Track::iterator from,
+                         Rosegarden::Track::iterator to);
 
     // overload these for each ViewElement type
     void insert(NotationElement*);
     void erase(NotationElementList::iterator);
 
+    Rosegarden::Track& getTrack() { return m_track; }
+
 protected:
 
-    Rosegarden::Track               &m_track;
-    NotationElementList *m_notationElements;
+    Rosegarden::Track    &m_track;
+    NotationElementList* m_notationElements;
     
 };
 
