@@ -54,9 +54,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
       m_widgetStack(new QWidgetStack(this)),
-      m_noInstrumentParameters(new QVBox(this)),
-      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(this)),
-      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
+      m_noInstrumentParameters(new QVBox(m_widgetStack)),
+      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(m_widgetStack)),
+      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, m_widgetStack)),
       m_selectedInstrument(0),
       m_doc(doc)
 {
@@ -75,12 +75,16 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
         instrumentParamBoxes.push_back(this);
 
     QLabel *label = new QLabel(i18n("<no instrument>"), m_noInstrumentParameters);
-
+    label->setAlignment(label->alignment() | Qt::AlignHCenter);
+    
     m_widgetStack->addWidget(m_midiInstrumentParameters);
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
-    
+    m_midiInstrumentParameters->adjustSize();
+    m_audioInstrumentParameters->adjustSize();
+    m_noInstrumentParameters->adjustSize();
+
     connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
     
