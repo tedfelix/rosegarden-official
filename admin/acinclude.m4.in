@@ -4269,3 +4269,20 @@ Syntax Error
   AC_SUBST(JVMLIBS)
 fi
 ])
+
+AC_DEFUN(AC_SOUND,
+[
+  AC_ARG_ENABLE(with-alsa,
+      [  --with-alsa             enable ALSA support],
+      enable_alsa_support=$enableval,
+      enable_alsa_support=no)
+
+  ALSA_SUPPORT=0
+
+  AM_PATH_ALSA(0.9.0, [
+    if test "x$enable_alsa_support" != "xno"; then
+      ALSA_SUPPORT=1
+    fi
+  ])
+
+])

@@ -10,10 +10,12 @@ o Sequencer's getMappedComposition for sync and async is
 
 o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
-  - MIDI recording timestamps
+  - MIDI recording timestamps [DONE]
   - first pass Audio
   - latencies
   - hanging notes on stop [DONE - VOICES_OFF type controller call]
+  - configure
+  - start-up bug
 
 o MappedDevice transmission is breaking occasionally [HOPEFULLY FIXED
   in MappedDevice itself]
