@@ -21,11 +21,8 @@
 
 #ifndef ROSEGARDENGUI_H
 #define ROSEGARDENGUI_H
- 
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "config.h"
 
 #include <qstrlist.h>
 #include <qcursor.h>

@@ -30,9 +30,11 @@
 #include "progressreporter.h"
 #include "NotationTypes.h"
 
-class Rosegarden::Studio;
-class Rosegarden::Composition;
-class Rosegarden::Segment;
+namespace Rosegarden {
+    class Studio;
+    class Composition;
+    class Segment;
+}
 
 /**
  * Rosegarden 2.1 file import
