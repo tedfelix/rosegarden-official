@@ -199,8 +199,8 @@ AudioManagerDialog::slotAdd()
 
     KFileDialog *fileDialog =
         new KFileDialog(QString(m_audioFileManager->getLastAddPath().c_str()),
-                        QString("WAV files (*.wav *.WAV)"),
-                        this, "Select an Audio File", true);
+                        QString(i18n("WAV files (*.wav *.WAV)")),
+                        this, i18n("Select an Audio File"), true);
 
     if (fileDialog->exec() == QDialog::Accepted)
     {
@@ -218,7 +218,7 @@ AudioManagerDialog::slotAdd()
         {
             id = m_audioFileManager->addFile(std::string(newFilePath.data()));
         }
-        catch(string e)
+        catch(std::string e)
         {
             QString errorString =
                 i18n("Can't add File.  WAV file body invalid.\n\"") +
