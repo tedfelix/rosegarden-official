@@ -355,7 +355,7 @@ AudioPluginOSCGUIManager::updateConfiguration(InstrumentId instrument, int posit
     AudioPluginInstance *pluginInstance = i->getPlugin(position);
     if (!pluginInstance) return;
 
-    QString value = strtoqstr(pluginInstance->getConfigurationValue(key));
+    QString value = strtoqstr(pluginInstance->getConfigurationValue(qstrtostr(key)));
 
     RG_DEBUG << "AudioPluginOSCGUIManager::updatePort(" << instrument << ","
 	     << position <<  "," << key << "): value " << value << endl;
