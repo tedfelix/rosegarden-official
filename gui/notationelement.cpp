@@ -46,6 +46,12 @@ NotationElement::isRest() const
     return event()->type() == "rest";
 }
 
+bool
+NotationElement::isNote() const
+{
+    return event()->type() == "note";
+}
+
 void
 NotationElement::setCanvasItem(QCanvasItem *e)
 {

@@ -43,6 +43,7 @@ public:
     void setY(double y) { m_y = y; }
 
     bool isRest() const;
+    bool isNote() const;
 
     /// The object takes ownership of its canvas item
     void setCanvasItem(QCanvasItem *e);
