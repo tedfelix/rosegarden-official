@@ -2671,8 +2671,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
     if (updateRequired) {
 
-	if ((endA >= startB && endB >= startA) &&
-	    (!s || !oldSelection ||
+	if (!s || !oldSelection ||
+	    (endA >= startB && endB >= startA &&
 	     oldSelection->getSegment() == s->getSegment())) {
 	    
 	    // the regions overlap: use their union and just do one refresh
