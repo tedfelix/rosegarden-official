@@ -495,13 +495,18 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
 
             int beats;
 
-            if (m_snapGrid)
+            // If the snap time is zero we default to beat markers
+            //
+            if (m_snapGrid && m_snapGrid->getSnapTime(x))
                 beats = timeSig.getBarDuration() /
                             m_snapGrid->getSnapTime(x);
             else
                 beats = timeSig.getBeatsPerBar();
 
 	    double dx = width / beats;
+
+            // ensure minimum useful scaling
+            while (dx > 0.0 && dx < 3.0) dx += dx;
 
 	    for (int beat = 1; beat < beats; ++beat) {
 

@@ -34,6 +34,7 @@
 
 class RosegardenComboBox;
 class QCheckBox;
+class QSlider;
 
 class MatrixParameterBox : public RosegardenParameterBox
 {

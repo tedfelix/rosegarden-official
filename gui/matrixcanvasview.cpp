@@ -179,8 +179,5 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
     if (bs & getSmoothModifier())
         m_snapGrid.setSnapTime(SnapGrid::NoSnap);
     else
-    {
         m_snapGrid.setSnapTime(m_lastSnap);
-    }
-
 }

@@ -46,6 +46,7 @@ MatrixParameterBox::MatrixParameterBox(QWidget *parent):
     m_quantizations(
             Rosegarden::StandardQuantization::getStandardQuantizations())
 {
+    setFrameStyle(NoFrame);
     initBox();
 }
 
@@ -63,7 +64,7 @@ MatrixParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 5, 2, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 20, 2, 8, 1);
 
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize positions"), this);
     quantizeLabel->setFont(font);
@@ -100,7 +101,7 @@ MatrixParameterBox::initBox()
     // default to last item
     m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1);
 
-    QLabel *snapGridLabel = new QLabel(i18n("Snap grid"), this);
+    QLabel *snapGridLabel = new QLabel(i18n("Snap division"), this);
     snapGridLabel->setFont(font);
 
     m_snapGridCombo = new RosegardenComboBox(false, false, this);
@@ -165,6 +166,9 @@ MatrixParameterBox::initBox()
     }
 
     connect(m_snapGridCombo, SIGNAL(activated(int)),
+            this, SLOT(slotSetSnap(int)));
+
+    connect(m_snapGridCombo, SIGNAL(propagate(int)),
             this, SLOT(slotSetSnap(int)));
 
     // Insert everything

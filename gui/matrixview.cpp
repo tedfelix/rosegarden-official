@@ -1066,6 +1066,10 @@ MatrixView::slotSetSnap(Rosegarden::timeT snapTime)
 {
     MATRIX_DEBUG << "MatrixView::slotSetSnap: time is " << snapTime << endl;;
     m_snapGrid.setSnapTime(snapTime);
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i)
+        m_staffs[i]->sizeStaff(m_hlayout);
+
     updateView();
 }
 
