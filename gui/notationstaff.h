@@ -25,7 +25,7 @@
 #include <vector>
 #include <string>
 
-#include "qcanvasitemgroup.h"
+#include "qcanvasgroupableitem.h"
 #include "notepixmapfactory.h"
 #include "notationelement.h"
 

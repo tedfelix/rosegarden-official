@@ -22,7 +22,6 @@
 #include "notationcanvasview.h"
 #include "notationelement.h"
 #include "qcanvasgroupableitem.h"
-#include "qcanvasitemgroup.h"
 #include "qcanvassimplesprite.h"
 #include "staffline.h"
 #include "NotationTypes.h"

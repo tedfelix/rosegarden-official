@@ -22,8 +22,7 @@
 #ifndef QCANVASGROUPABLEITEM_H
 #define QCANVASGROUPABLEITEM_H
 
-class QCanvasItemGroup;
-class QCanvasItem;
+#include <qcanvas.h>
 
 /**
  * This class is meant to be inherited by QCanvasItem children to make
@@ -73,7 +72,7 @@ protected:
     /**
      * Detach item from the item group - called by QCanvasItemGroup only
      *
-     * Set m_group to 0, so that on desctruction the item won't try to
+     * Set m_group to 0, so that on destruction the item won't try to
      * remove itself from the group
      */
     void detach();
@@ -82,6 +81,115 @@ private:
     QCanvasItemGroup* m_group;
     QCanvasItem*      m_item;
 
+};
+
+
+/**
+ * This class implements QCanvasItem groups
+ *
+ * An item group will keep its items in a fixed relative position when
+ * moved, just like in a drawing program where you can "bind" several
+ * items together so that they'll behave as a single item.
+ *
+ * Proper behavior requires collaboration from the QCanvasView,
+ * though. When about to move an item, the QCanvasView object should
+ * first check if it's not a groupable item, and if so fetch its
+ * QCanvasItemGroup and move it instead.
+ */
+class QCanvasItemGroup : public QCanvasItem
+{
+public: 
+    QCanvasItemGroup(QCanvas *);
+    virtual ~QCanvasItemGroup();
+
+    virtual void moveBy(double dx, double dy);
+    virtual void advance(int stage);
+    virtual bool collidesWith(const QCanvasItem*) const;
+    virtual void draw(QPainter&);
+    virtual void setVisible(bool yes);
+    virtual void setSelected(bool yes);
+    virtual void setEnabled(bool yes);
+    virtual void setActive(bool yes);
+    virtual int rtti() const;
+    virtual QRect boundingRect() const;
+    virtual QRect boundingRectAdvanced() const;
+
+    /**
+     * Add a new item to this group.
+     *
+     * The item's coordinates are kept as is.
+     *
+     * @see addItemWithRelativeCoords()
+     */
+    virtual void addItem(QCanvasItem *);
+
+    /**
+     * Add a new item to this group.
+     *
+     * The item's coordinates are considered relative to the group.
+     * For example, suppose you have a QCanvasItemGroup which coords
+     * are 10,10. If you call addItemWithRelativeCoords() with an item
+     * which coords are 5,5, the item is moved so that it's coords
+     * will be 5,5 relative to the group (e.g. 15,15).
+     *
+     * @see addItem()
+     */
+    virtual void addItemWithRelativeCoords(QCanvasItem *);
+
+    /**
+     * Remove the specified item from the group
+     */
+    virtual void removeItem(QCanvasItem*);
+
+private:
+    virtual bool collidesWith(const QCanvasSprite*,
+                              const QCanvasPolygonalItem*,
+                              const QCanvasRectangle*,
+                              const QCanvasEllipse*,
+                              const QCanvasText* ) const;
+
+protected:
+    QCanvasItemList m_items;
+};
+
+
+/**
+ * A QCanvasLine which can be put in a QCanvasGroup
+ */
+class QCanvasLineGroupable : public QCanvasLine, public QCanvasGroupableItem
+{
+public: 
+    QCanvasLineGroupable(QCanvas *c, QCanvasItemGroup *g);
+};
+
+/**
+ * A QCanvasRectangle which can be put in a QCanvasGroup
+ */
+class QCanvasRectangleGroupable : public QCanvasRectangle, public QCanvasGroupableItem
+{
+public: 
+    QCanvasRectangleGroupable(QCanvas *c, QCanvasItemGroup *g);
+};
+
+/**
+ * A QCanvasText which can be put in a QCanvasGroup
+ */
+class QCanvasTextGroupable : public QCanvasText, public QCanvasGroupableItem
+{
+public: 
+    QCanvasTextGroupable(QCanvas *c, QCanvasItemGroup *g);
+    QCanvasTextGroupable(const QString&, QCanvas *c, QCanvasItemGroup *g);
+};
+
+/**
+ * A QCanvasSprite that can be put in a QCanvasGroup
+ */
+class QCanvasSpriteGroupable : public QCanvasSprite, public QCanvasGroupableItem
+{
+public:
+    QCanvasSpriteGroupable(QCanvasPixmapArray*,
+                           QCanvas*,
+                           QCanvasItemGroup*);
 };
 
 #endif

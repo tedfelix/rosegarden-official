@@ -22,7 +22,7 @@
 #ifndef STAFFLINE_H
 #define STAFFLINE_H
 
-#include "qcanvaslinegroupable.h"
+#include "qcanvasgroupableitem.h"
 
 /**
  * A staff line

@@ -23,7 +23,6 @@
 
 #include "notationstaff.h"
 #include "staffline.h"
-#include "qcanvasspritegroupable.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
 #include "notationview.h" // for EventSelection

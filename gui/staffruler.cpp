@@ -4,8 +4,7 @@
 
 #include "staffruler.h"
 
-#include "qcanvaslinegroupable.h"
-#include "qcanvasrectanglegroupable.h"
+#include "qcanvasgroupableitem.h"
 
 // ActiveItem::ActiveItem(QCanvasItem* item)
 // {
@@ -148,7 +147,7 @@ void StaffRuler::makeStep(int stepValue,
     QString labelText;
     labelText.setNum(stepValue);
 
-    QCanvasText* label = new QCanvasText(labelText, canvas());
+    QCanvasText* label = new QCanvasTextGroupable(labelText, canvas(), this);
     label->setX(stepPos + m_xPos);
     label->setY(m_mainLinePos + 4);
     label->setTextFlags(Qt::AlignHCenter);

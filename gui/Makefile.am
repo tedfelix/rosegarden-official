@@ -16,12 +16,8 @@ rosegarden_SOURCES = \
 	notefont.cpp \
 	notepixmapfactory.cpp \
 	qcanvasgroupableitem.cpp \
-	qcanvasitemgroup.cpp \
-	qcanvaslinegroupable.cpp \
-	qcanvasrectanglegroupable.cpp \
 	qcanvassimplesprite.cpp \
 	qcanvasspline.cpp \
-	qcanvasspritegroupable.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
 	rosegardengui.cpp \

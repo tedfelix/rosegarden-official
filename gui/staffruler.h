@@ -25,7 +25,7 @@
 #include <vector>
 #include <qcanvas.h>
 
-#include "qcanvasitemgroup.h"
+#include "qcanvasgroupableitem.h"
 
 class QCanvasRectangleGroupable;
 class QCanvasLineGroupable;

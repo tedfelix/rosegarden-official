@@ -40,7 +40,6 @@
 
 #include "notationstaff.h"
 #include "notepixmapfactory.h"
-#include "qcanvaslinegroupable.h"
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
 
@@ -202,7 +201,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
-    m_ruler(new StaffRuler(20, 15, canvas())),
+    m_ruler(new StaffRuler(20, 0, canvas())),
     m_activeItem(0),
     m_hlayout(0),
     m_vlayout(0),
