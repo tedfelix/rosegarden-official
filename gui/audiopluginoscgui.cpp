@@ -709,7 +709,7 @@ AudioPluginOSCGUI::quit()
 }
 
 void
-AudioPluginOSCGUI::sendProgram()
+AudioPluginOSCGUI::sendProgram(QString program)
 {
     OSCMessage *m = new OSCMessage;
     m->setMethod("program");
@@ -746,11 +746,11 @@ AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
 					     key.length()),
 				    value.length()));
     
-    strcpy(&arg.s, key.data());
-    m->addArg('s', &arg);
+    strcpy(&arg->s, key.data());
+    m->addArg('s', arg);
 
-    strcpy(&arg.s, value.data());
-    m->addArg('s', &arg);
+    strcpy(&arg->s, value.data());
+    m->addArg('s', arg);
 
     send(m);
 }
