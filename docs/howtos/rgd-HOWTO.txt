@@ -54,8 +54,8 @@ Rosegarden stores this information in the *.rgd file.
 
 There are several ways you can tell Rosegarden what voices are available:
 
- 1. Use Rosegarden itself, via the Studio -> Manage MIDI Devices menu
-    However consider that only the GM bank contains already 128 voices
+ 1. Use Rosegarden itself, via the Studio -> Manage MIDI Banks and Programs
+    menu. However consider that only the GM bank contains already 128 voices
     and most keyboards or sound cards may well contain in excess of 500
     voices. So entering by hand is a very tedious process.
 
@@ -169,7 +169,7 @@ Step Three: Verify And Adjust
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once you have generated the *.rgd file try to load it into Rosegarden, via
-Studio -> Manage MIDI Devices -> Import Device
+Studio -> Manage MIDI Banks and Programs -> Import Banks
 
 If it loads then you are basically done. It is likely that you may see
 some bank names as "000-112". This means the the script could not find
@@ -177,7 +177,7 @@ a suitable name for the bank (the script tries to name the banks following
 the XG scheme).
 
 You can rename that bank by double-clicking on its name. When you are done
-click on the "Export Device" button.
+click on the "Export Bank" button.
 
 Once you are done and satisfied consider sharing it. There may be other
 users with the same keyboard/soundcard and they shouldn't duplicate the work.
