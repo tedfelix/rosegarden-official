@@ -35,6 +35,7 @@
 namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
+class MatrixStaff;
 
 class MatrixElement : public Rosegarden::ViewElement
 {
@@ -95,12 +96,39 @@ protected:
 
 class MatrixCanvasView : public QCanvasView
 {
+    Q_OBJECT
+
 public:
-    MatrixCanvasView(QCanvas *viewing=0, QWidget *parent=0,
+    MatrixCanvasView(MatrixStaff&, QCanvas *viewing=0, QWidget *parent=0,
                      const char *name=0, WFlags f=0);
 
     ~MatrixCanvasView();
 
+signals:
+
+    void itemPressed(Rosegarden::timeT time, int pitch);
+
+    void itemReleased(Rosegarden::timeT time);
+
+protected:
+    /**
+     * Callback for a mouse button press event in the canvas
+     */
+    virtual void contentsMousePressEvent(QMouseEvent*);
+
+    /**
+     * Callback for a mouse button release event in the canvas
+     */
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+
+    /**
+     * Callback for a mouse move event in the canvas
+     */
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+
+    //--------------- Data members ---------------------------------
+
+    MatrixStaff& m_staff;
 };
 
 //------------------------------------------------------------
@@ -108,8 +136,7 @@ public:
 class MatrixVLayout : public Rosegarden::VerticalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixVLayout(unsigned int pitchScaleFactor = defaultPitchScaleFactor,
-                  unsigned int staffIdScaleFactor = 100);
+    MatrixVLayout();
 
     virtual ~MatrixVLayout();
 
@@ -139,18 +166,10 @@ public:
      */
     virtual void finishLayout();
 
-    void setPitchScaleFactor(unsigned int f) { m_pitchScaleFactor = f; }
-    unsigned int getPitchScaleFactor()       { return m_pitchScaleFactor; }
-
-    void setStaffIdScaleFactor(unsigned int f) { m_staffIdScaleFactor = f; }
-    unsigned int getStaffIdScaleFactor()       { return m_staffIdScaleFactor; }
-
-    static const unsigned int defaultPitchScaleFactor;
     static const unsigned int maxMIDIPitch;
 
 protected:
-    unsigned int m_pitchScaleFactor;
-    unsigned int m_staffIdScaleFactor;
+
 };
 
 //------------------------------
@@ -161,7 +180,8 @@ typedef std::vector<double> BarData;
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout(float durationScaleFactor = 0.25);
+    MatrixHLayout();
+
     virtual ~MatrixHLayout();
 
     /**
@@ -208,15 +228,11 @@ public:
      */
     virtual void finishLayout();
 
-    void setDurationScaleFactor(float f) { m_durationScaleFactor = f; }
-    float getDurationScaleFactor()       { return m_durationScaleFactor; }
-
 protected:
     BarData m_barData;
     HLineList m_hlines;
 
     double m_totalWidth;
-    float m_durationScaleFactor;
 };
 
 //------------------------------------------------------------
@@ -229,7 +245,7 @@ class MatrixStaff : public Rosegarden::Staff<MatrixElement>
 
 public:
     MatrixStaff(QCanvas*, Rosegarden::Segment*, unsigned int id,
-                unsigned int pitchScaleFactor = MatrixVLayout::defaultPitchScaleFactor);
+                unsigned int pitchScaleFactor = defaultPitchScaleFactor);
 
     ~MatrixStaff();
 
@@ -246,16 +262,26 @@ public:
     void setPitchScaleFactor(unsigned int f) { m_pitchScaleFactor = f; }
     unsigned int getPitchScaleFactor()       { return m_pitchScaleFactor; }
 
+    void setTimeScaleFactor(float f) { m_timeScaleFactor = f; }
+    float getTimeScaleFactor()       { return m_timeScaleFactor; }
+
+    void setTimeResolution(float f) { m_timeResolution = f; }
+    float getTimeResolution()       { return m_timeResolution; }
+
     /**
      * This must be called each time the canvas is resized
      */
     void resizeStaffHLines();
 
-    static const unsigned int nbHLines;
-
     void setBarData(const BarData& bd) { m_barData = bd; }
 
-    bool isBarLine(double x);
+    Rosegarden::timeT xToTime(double x);
+
+    int yToPitch(double y);
+
+    static const unsigned int nbHLines;
+
+    static const unsigned int defaultPitchScaleFactor;
 
 protected:
 
@@ -278,8 +304,12 @@ protected:
     unsigned int m_id;
 
     unsigned int m_pitchScaleFactor;
+    float m_timeScaleFactor;
+    float m_timeResolution;
 
     BarData m_barData;
+
+    unsigned int m_currentBarLength;
 };
 
 
