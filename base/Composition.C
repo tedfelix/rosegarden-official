@@ -311,7 +311,7 @@ Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int trac
 {
     iterator i = m_segments.find(s);
     if (i == end()) {
-        std::cerr << "Composition::setSegmentTrack() : couldn't find segment " << s
+        std::cerr << "Composition::setSegmentStartIndexAndTrack() : couldn't find segment " << s
                   << endl;
         return false;
     }
@@ -324,10 +324,10 @@ Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int trac
     std::pair<iterator, bool> res = m_segments.insert(s);
 
     if (res.second)
-        std::cerr << "Composition::setSegmentTrack: re-added segment, now have "
+        std::cerr << "Composition::setSegmentStartIndexAndTrack: re-added segment, now have "
                   << m_segments.size() << " segments" << endl;
     else
-        std::cerr << "Composition::setSegmentStartIndex: re-added segment failed\n";
+        std::cerr << "Composition::setSegmentStartIndexAndTrack: re-added segment failed\n";
 
     // actually only true if we changed the effective end of the composition:
     m_barPositionsNeedCalculating = true;
