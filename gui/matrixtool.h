@@ -142,6 +142,12 @@ public:
                                        QMouseEvent *event,
                                        Rosegarden::ViewElement*);
 
+    virtual void handleMidButtonPress(Rosegarden::timeT,
+                                      int height,
+                                      int staffNo,
+                                      QMouseEvent *event,
+                                      Rosegarden::ViewElement*);
+
     /**
      * Set the duration of the element
      */
@@ -203,6 +209,9 @@ protected:
     MatrixStaff* m_currentStaff;
 
     MatrixElement* m_clickedElement;
+
+    // tool to delegate to
+    EditTool*    m_dispatchTool;
 };
 
 

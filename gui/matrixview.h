@@ -103,7 +103,7 @@ public:
     //
     SelectedElements& getSelectedElements() { return m_selectedElements; }
     void setSelectedElements(const SelectedElements &eS);
-    void addElementToSelection(MatrixElement *mE);
+    bool addElementToSelection(MatrixElement *mE);
     void removeElementFromSelection(MatrixElement *mE);
 
 signals:    

@@ -482,7 +482,8 @@ MatrixSelector::MatrixSelector(MatrixView* view)
       m_selectionRect(0),
       m_updateRect(false),
       m_currentStaff(0),
-      m_clickedElement(0)
+      m_clickedElement(0),
+      m_dispatchTool(0)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
@@ -500,21 +501,33 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
 
     m_clickedElement = dynamic_cast<MatrixElement*>(element);
 
-    m_selectionRect->setX(e->x());
-    m_selectionRect->setY(e->y());
-    m_selectionRect->setSize(0,0);
-
-    m_selectionRect->show();
-    m_updateRect = true;
-
-    // Play the Note if we have one
-    /*
-    if (m_clickedElement && m_clickedElement->event()->
-                                           isa(Rosegarden::Note::EventType))
+    if (m_clickedElement)
+    {
         m_mParentView->playNote(m_clickedElement->event());
-        */
+    }
+    else
+    {
+        m_selectionRect->setX(e->x());
+        m_selectionRect->setY(e->y());
+        m_selectionRect->setSize(0,0);
+
+        m_selectionRect->show();
+        m_updateRect = true;
+    }
 
     //m_parentView->setCursorPosition(p.x());
+}
+
+void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
+                                          int height,
+                                          int staffNo,
+                                          QMouseEvent* e,
+                                          Rosegarden::ViewElement *element)
+{
+    m_dispatchTool = m_parentView->
+        getToolBox()->getTool(MatrixPainter::ToolName);
+
+    m_dispatchTool->handleLeftButtonPress(time, height, staffNo, e, element);
 }
 
 // void MatrixSelector::handleMouseDblClick(Rosegarden::timeT,
@@ -541,9 +554,15 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
 //     return;
 // }
 
-bool MatrixSelector::handleMouseMove(timeT, int,
-                                     QMouseEvent* e)
+bool MatrixSelector::handleMouseMove(timeT time, int height,
+                                     QMouseEvent *e)
 {
+    if (m_dispatchTool)
+    {
+        m_dispatchTool->handleMouseMove(time, height, e);
+        return true;
+    }
+
     if (!m_updateRect) return false;
 
     int w = int(e->x() - m_selectionRect->x());
@@ -576,7 +595,11 @@ bool MatrixSelector::handleMouseMove(timeT, int,
                 MatrixElement *mE = &matrixRect->getMatrixElement();
                 mE->setColour(RosegardenGUIColours::SelectedElement);
                 m_mParentView->canvas()->update();
-                m_mParentView->addElementToSelection(mE);
+                if (m_mParentView->addElementToSelection(mE))
+                {
+                    // hear the preview of all added events
+                    m_mParentView->playNote(mE->event());
+                }
                 newElements.push_back(mE);
             }
         }
@@ -621,14 +644,52 @@ bool MatrixSelector::handleMouseMove(timeT, int,
     return true;
 }
 
-void MatrixSelector::handleMouseRelease(timeT, int, QMouseEvent*)
+void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMouseRelease" << endl;
-    m_updateRect = false;
-    setViewCurrentSelection();
 
-    if (m_selectionRect)
+    if (m_dispatchTool)
     {
+        m_dispatchTool->handleMouseRelease(time, height, e);
+
+        // don't delete the tool as it's still part of the toolbox
+        m_dispatchTool = 0;
+
+        return;
+    }
+
+    m_updateRect = false;
+
+    if (m_clickedElement)
+    {
+        SelectedElements elements = m_mParentView->getSelectedElements();
+        for(SelectedElements::iterator it = elements.begin();
+                it != elements.end(); it++)
+        {
+            m_mParentView->removeElementFromSelection(*it);
+
+            using Rosegarden::BaseProperties::VELOCITY;
+            long velocity = 127;
+            if ((*it)->event()->has(VELOCITY))
+                (*it)->event()->get<Rosegarden::Int>(VELOCITY, velocity);
+
+            (*it)->setColour(m_mParentView->
+                getStaff(0)->getVelocityColour()->getColour(velocity));
+        }
+
+        // add in clicked element
+        m_clickedElement->setColour(RosegardenGUIColours::SelectedElement);
+        m_mParentView->addElementToSelection(m_clickedElement);
+
+        // translate the segment items in an Event selection
+        setViewCurrentSelection();
+
+        m_mParentView->canvas()->update();
+        m_clickedElement = 0;
+    }
+    else if (m_selectionRect)
+    {
+        setViewCurrentSelection();
         m_selectionRect->hide();
         m_mParentView->canvas()->update();
     }
@@ -692,11 +753,6 @@ void MatrixSelector::setViewCurrentSelection()
 
 EventSelection* MatrixSelector::getSelection()
 {
-    // If selection rect is not visible or too small,
-    // return 0
-    //
-    if (!m_selectionRect->visible()) return 0;
-
     Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
     EventSelection* selection = new EventSelection(originalSegment);
 

@@ -119,6 +119,12 @@ public:
 	return m_viewLocalPropertyPrefix;
     }
 
+    /*
+     * So that other people can create tools against our view
+     *
+     */
+    EditToolBox* getToolBox() { return m_toolBox; }
+
 public slots:
     /**
      * close window

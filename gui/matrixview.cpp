@@ -860,7 +860,7 @@ void MatrixView::setSelectedElements(const SelectedElements &eS)
         m_selectedElements.push_back(*it);
 }
 
-void MatrixView::addElementToSelection(MatrixElement *mE)
+bool MatrixView::addElementToSelection(MatrixElement *mE)
 {
     SelectedElements::iterator it = m_selectedElements.begin();
 
@@ -868,11 +868,13 @@ void MatrixView::addElementToSelection(MatrixElement *mE)
     {
         // if this element already exists then don't add it again
         if (*it == mE)
-            return;
+            return false;
     }
 
     // otherwise add it in
     m_selectedElements.push_back(mE);
+
+    return true;
 }
 
 void MatrixView::removeElementFromSelection(MatrixElement *mE)
