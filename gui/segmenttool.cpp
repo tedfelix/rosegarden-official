@@ -211,8 +211,11 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_canvas->setSnapGrain(false);
 
     int trackPosition = m_canvas->grid().getYBin(e->pos().y());
-    TrackId track = m_doc->getComposition().
-        getTrackByPosition(trackPosition)->getId();
+    Rosegarden::Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
+
+    if (!t) return;
+    
+    TrackId track = t->getId();
 
     // Don't do anything if the user clicked beyond the track buttons
     //

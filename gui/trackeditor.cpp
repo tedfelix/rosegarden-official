@@ -318,7 +318,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,
 					   Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
- 
+
     // create the position pointer
     m_pointer = new QCanvasRectangle(canvas);
     m_pointer->setPen(RosegardenGUIColours::Pointer);
@@ -341,9 +341,11 @@ void TrackEditor::slotReadjustCanvasSize()
     m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
                           m_rulerScale->getBarWidth(lastBar));
 
-    int canvasHeight = getTrackCellHeight() * std::max(40, comp.getNbTracks());
+    int canvasHeight = getTrackCellHeight() * comp.getNbTracks();
     
     m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
+
+    m_pointer->setSize(3, canvasHeight);
 }
 
 
@@ -480,6 +482,7 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
 
     AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id); 
     addCommandToHistory(command);
+    slotReadjustCanvasSize();
 }
 
 void TrackEditor::slotDeleteTracks(std::vector<Rosegarden::TrackId> tracks)
