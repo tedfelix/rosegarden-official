@@ -237,6 +237,11 @@ void RosegardenGUIApp::initStatusBar()
 
 void RosegardenGUIApp::initDocument()
 {
+    // For the moment we show the Transport all the time
+    //
+    m_rosegardenTransport = new RosegardenTransport(this);
+    m_rosegardenTransport->show();
+
     m_doc = new RosegardenGUIDoc(this);
     m_doc->newDocument();
 }

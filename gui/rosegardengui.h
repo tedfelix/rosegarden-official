@@ -37,6 +37,7 @@
 
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
+#include "RosegardenTransport.h"
 
 // the sequencer interface
 //
@@ -460,6 +461,10 @@ private:
     TransportStatus m_transportStatus;
 
     KProcess* m_sequencerProcess;
+
+    // transport dialog pointer
+    //
+    RosegardenTransport *m_rosegardenTransport;
 };
  
 #endif // ROSEGARDENGUI_H

@@ -1,3 +1,22 @@
+Post 0.1 TO-DOs
+===============
+
+o Transport GUI with time, buttons and more features
+
+o Recording mechanism
+  - mute and record buttons on tracks
+  - arm tracks for record
+
+
+o Audio 
+
+o Handle Meta Events at the Editor and Midi levels - write then out to file
+
+o Meaningful Sys Ex handling
+
+
+
+
 Task list from 18/19th August meetings (and a few more added since)
 ===================================================================
 
@@ -52,14 +71,4 @@ Fixed Bugs
    and getting all out of shape]
 
 
-Post 0.1 TO-DOs
-===============
-
-o Handle Meta Events at the Editor and Midi levels - write then out to file
-
-o Meaningful Sys Ex handling
-
-o Recording mechanism
-
-o Transport GUI with time, buttons and more features
 
