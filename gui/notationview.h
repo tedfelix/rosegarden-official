@@ -43,6 +43,7 @@ class NotationTool;
 class NotationView : public KMainWindow
 {
     friend class NoteInserter;
+    friend class ClefInserter;
     friend class NotationEraser;
 
     Q_OBJECT
@@ -242,13 +243,17 @@ protected:
                   NotationElementList::iterator to);
 
     /**
-     * find the NotationElement which X is closest to eventX
+     * find the NotationElement which X coord is closest to x
+     *
+     * If the closest event is further than \a proximityThreshold,
+     * (in pixels), end() is returned;
      */
     NotationElementList::iterator findClosestNote
-      (double eventX,
+      (double x,
        Rosegarden::Event *&timeSignature,
        Rosegarden::Event *&clef,
-       Rosegarden::Event *&key);
+       Rosegarden::Event *&key,
+       unsigned int proximityThreshold = 10);
 
     QCanvasSimpleSprite *makeNoteSprite(NotationElementList::iterator);
 
@@ -329,6 +334,17 @@ protected:
     virtual void doInsert(Rosegarden::TrackNotationHelper&,
                           Rosegarden::timeT absTime,
                           const Rosegarden::Note&, int pitch);
+};
+
+class ClefInserter : public NotationTool
+{
+public:
+    ClefInserter(std::string clefType, NotationView&);
+    
+    virtual void handleClick(int height, const QPoint &eventPos,
+                             NotationElement* el);
+protected:
+    Rosegarden::Clef m_clef;
 };
 
 

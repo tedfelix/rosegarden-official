@@ -987,18 +987,22 @@ void NotationView::slotDottedR64th()
 //----------------------------------------
 void NotationView::slotTrebleClef()
 {
+    setTool(new ClefInserter(Clef::Treble, *this));
 }
 
 void NotationView::slotTenorClef()
 {
+    setTool(new ClefInserter(Clef::Tenor, *this));
 }
 
 void NotationView::slotAltoClef()
 {
+    setTool(new ClefInserter(Clef::Alto, *this));
 }
 
 void NotationView::slotBassClef()
 {
+    setTool(new ClefInserter(Clef::Bass, *this));
 }
 
 
@@ -1024,62 +1028,11 @@ void NotationView::itemClicked(int height, const QPoint &eventPos,
     m_tool->handleClick(height, eventPos, el);
 }
 
-// void NotationView::deleteNote(NotationElement* element)
-// {
-//     bool needLayout = false;
-//     TrackNotationHelper nt(getTrack());
-
-//     if (element->isNote()) {
-        
-// 	nt.deleteNote(element->event());
-// 	needLayout = true;
-
-//     } else if (element->isRest()) {
-
-// 	nt.deleteRest(element->event());
-// 	needLayout = true;
-
-//     } else {
-//         // we don't know what it is
-//         KMessageBox::sorry(0, "Not Implemented Yet");
-
-//     }
-    
-//     if (needLayout) // TODO : be more subtle
-//         redoLayout(m_notationElements->begin());
-// }
-
-// void NotationView::insertNote(NotationElementList::iterator closestNote,
-// 			      Event *timesig, int pitch)
-// {
-//     kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
-//                          << pitch << endl;
-
-
-//     // We are going to modify the document so mark it as such
-//     //
-//     getDocument()->setModified();
-
-//     Note note(m_currentSelectedNoteType, m_currentSelectedNoteDots);
-//     TrackNotationHelper nt(getTrack());
-
-//     if (m_currentSelectedNoteIsRest) {
-// 	nt.insertRest((*closestNote)->event()->getAbsoluteTime(), note);
-//     } else {
-// 	nt.insertNote((*closestNote)->event()->getAbsoluteTime(), note, pitch);
-//     }
-
-//     redoLayout(m_notationElements->begin()); // for now
-//     return;
-// }
-
-
 NotationElementList::iterator
 NotationView::findClosestNote(double eventX, Event *&timeSignature,
-			      Event *&clef, Event *&key)
+			      Event *&clef, Event *&key,
+                               unsigned int proximityThreshold)
 {
-    static const unsigned int proximityThreshold = 10; // in pixels
-
     double minDist = 10e9,
         prevDist = 10e9;
 
@@ -1216,6 +1169,8 @@ NotationTool::~NotationTool()
 {
 }
 
+//------------------------------
+
 NoteInserter::NoteInserter(Rosegarden::Note::Type type,
                            unsigned int dots,
                            NotationView& view)
@@ -1224,7 +1179,6 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
       m_noteDots(dots)
 {
 }
-
     
 void    
 NoteInserter::handleClick(int height, const QPoint &eventPos,
@@ -1256,8 +1210,9 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     TrackNotationHelper nt(m_parentView.getTrack());
 
     doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch);
-    
-    m_parentView.redoLayout(m_parentView.getNotationElements()->begin()); // for now
+
+    // TODO: be less silly
+    m_parentView.redoLayout(m_parentView.getNotationElements()->begin());
 
 }
 
@@ -1268,6 +1223,7 @@ void NoteInserter::doInsert(TrackNotationHelper& nt,
     nt.insertNote(absTime, note, pitch);
 }
 
+//------------------------------
 
 RestInserter::RestInserter(Rosegarden::Note::Type type,
                            unsigned int dots, NotationView& view)
@@ -1275,13 +1231,52 @@ RestInserter::RestInserter(Rosegarden::Note::Type type,
 {
 }
 
-
 void RestInserter::doInsert(TrackNotationHelper& nt,
                             Rosegarden::timeT absTime,
                             const Note& note, int)
 {
     nt.insertRest(absTime, note);
 }
+
+//------------------------------
+
+ClefInserter::ClefInserter(std::string clefType, NotationView& view)
+    : NotationTool(view),
+      m_clef(clefType)
+{
+}
+    
+void ClefInserter::handleClick(int height, const QPoint &eventPos,
+                               NotationElement* el)
+{
+    Event *tsig = 0, *clef = 0, *key = 0;
+    NotationElementList::iterator closestNote =
+        m_parentView.findClosestNote(eventPos.x(), tsig, clef, key,
+                                     100);
+
+    if (closestNote == m_parentView.getNotationElements()->end()) {
+        return;
+    }
+
+    Rosegarden::timeT absTime = (*closestNote)->getAbsoluteTime();
+    double closestNoteX = (*closestNote)->getEffectiveX();
+    
+//     if (closestNoteX < eventPos.x() &&
+//         (eventPos.x() - closestNoteX) >  {
+//         // closest note is before click, so add note duration
+//         absTime += (*closestNote)->getDuration();
+//     }
+
+    TrackNotationHelper nt(m_parentView.getTrack());
+    nt.insertClef(absTime, m_clef);
+
+    // TODO: be less silly
+    m_parentView.redoLayout(m_parentView.getNotationElements()->begin());
+
+}
+
+
+//------------------------------
 
 NotationEraser::NotationEraser(NotationView& view)
     : NotationTool(view)
@@ -1313,4 +1308,3 @@ void NotationEraser::handleClick(int, const QPoint&,
     if (needLayout) // TODO : be more subtle
         m_parentView.redoLayout(m_parentView.getNotationElements()->begin());
 }
-
