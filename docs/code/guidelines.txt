@@ -1,0 +1,34 @@
+Rosegarden4 Coding Guidelines
+
+Style and naming conventions
+
+- indent 4 spaces
+- data member names begin with 'm_'.
+- names are capitalized (HereIsAnExample)
+- class names begin with an upper case (class MyClass)
+- method and variable names names begin with a lower case (int myMethod())
+
+Language issues
+
+- malloc()/free() and C-style arrays (that includes char*) are
+explicitely forbidden except when there are no alternatives (some
+external API requires it).
+
+- C-style casts are forbidden. The only near-exception is to shut up
+signed/unsigned or int/double conversion warnings, which should be
+treated like this : type(value) (e.g. int(foo), unsigned(bar)...)
+
+- When given the choice, prefer STL containers to Qt ones.
+
+- Use std::string whenever possible (e.g. in core), QString only when
+you need to deal with Qt widgets, or need some of its features (like
+regexps).
+
+- public data members are forbidden except in very trivial
+classes. Provide accessors.
+
+- use 'protected' instead of 'private'.
+
+
+
+
