@@ -1484,7 +1484,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 					(finalTime - eventTime));
 	    duration = finalTime + (*lastEvent)->getDuration() - time;
 	    segment().erase(lastEvent);
-	    lastEvent = segment().insert(newEvent);
+	    to = lastEvent = segment().insert(newEvent);
 	    checkLastRest = true;
 	}
     }
