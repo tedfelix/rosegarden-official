@@ -31,6 +31,8 @@
 #include "TrackNotationHelper.h"
 #include "TrackPerformanceHelper.h"
 
+//!!! [cc] Timing code for debugging purposes
+
 #ifndef NO_TIMING
 
 #include <iostream>
@@ -529,7 +531,10 @@ MidiFile::convertToRosegarden()
 //    timingFactor = (float) Note(Note::Crotchet).getDuration() /
 //                   (float) m_timingDivision;
 
+//!!! [cc] Timing code for debugging purposes
   START_TIMING;
+  int fwrTime = 0;
+  int mvTime = 0;
 
   for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
   {
@@ -628,8 +633,16 @@ MidiFile::convertToRosegarden()
         {
           // insert rests if we need them
           //
-          if (endOfLastNote < rosegardenTime )
-	      rosegardenTrack->fillWithRests(rosegardenTime);
+          if (endOfLastNote < rosegardenTime ) {
+//!!! [cc] Timing code for debugging purposes
+            START_TIMING;
+
+            rosegardenTrack->fillWithRests(rosegardenTime);
+
+//!!! [cc] Timing code for debugging purposes
+            fwrTime += ELAPSED_TIME;
+          }
+              
 
           endOfLastNote = rosegardenTime + rosegardenDuration;
         }
@@ -734,7 +747,13 @@ MidiFile::convertToRosegarden()
 
               // cc -- a bit of an experiment
               if (!notationTrack.isViable(rosegardenEvent)) {
-                   notationTrack.makeNoteViable(loc);
+//!!! [cc] Timing code for debugging purposes
+                START_TIMING;
+
+                notationTrack.makeNoteViable(loc);
+
+//!!! [cc] Timing code for debugging purposes
+                mvTime += ELAPSED_TIME;
               }
             }
 
@@ -766,7 +785,11 @@ MidiFile::convertToRosegarden()
         }
       }
 
+//!!! [cc] Timing code for debugging purposes
       PRINT_ELAPSED("Converting track to Rosegarden format");
+      std::cout << "(Fill with rests: " << fwrTime << "; make viable: "
+                << mvTime << ")" << endl;
+      
 
       // cc
 

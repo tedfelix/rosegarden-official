@@ -348,15 +348,13 @@ timeT Track::findBarEndTime(timeT t) const
 Track::iterator Track::findStartOfBar(timeT t) const
 {
     t = findBarStartTime(t);
-/*    if (t < 0) return end();
-      else */ return findTime(t);
+    return findTime(t);
 }
 
 Track::iterator Track::findStartOfNextBar(timeT t) const
 {
     t = findBarEndTime(t);
-/*    if (t < 0) return end();
-      else */ return findTime(t);
+    return findTime(t);
 }
 
 
