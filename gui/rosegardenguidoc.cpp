@@ -1141,6 +1141,8 @@ RosegardenGUIDoc::syncDevices()
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                  << "Sequencer alive - Instruments synced" << endl;
 
+    //!!! need to force an update on the instrument parameter box if
+    //necessary -- how?
 }
 
 
@@ -1190,20 +1192,23 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         if (mD->getType() == Rosegarden::Device::Midi)
         {
-	    Rosegarden::MidiDevice *midiDevice =
-		new Rosegarden::MidiDevice(id, mD->getName());
-
 	    //!!! oops -- converting from PortDirection (sound/MappedCommon.h)
 	    // to MidiDevice::DeviceDirection by just assuming they're the same
-	    midiDevice->setDirection(Rosegarden::MidiDevice::DeviceDirection
-				     (mD->getDirection()));
 
-	    device = midiDevice;
+	    device =
+		new Rosegarden::MidiDevice
+		(id,
+		 qstrtostr(QString("MIDI device %1").arg(id+1)),
+		 mD->getName(),
+		 Rosegarden::MidiDevice::DeviceDirection(mD->getDirection()));
+
             m_studio.addDevice(device);
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding MIDI Device \""
-                          << device->getName() << "\" id = " << id << endl;
+                          << device->getName() << "\" id = " << id
+			  << " label=\"" << device->getUserLabel() << "\""
+			  << endl;
         }
         else if (mD->getType() == Rosegarden::Device::Audio)
         {
@@ -1248,6 +1253,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 	}
 
 	if (!haveInstrument) {
+	    SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice: new instr " << (*it)->getId() << endl;
 	    instrument = new Rosegarden::Instrument((*it)->getId(),
 						    (*it)->getType(),
 						    (*it)->getName(),
@@ -1255,19 +1261,6 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 						    device);
 	    device->addInstrument(instrument);
 	}
-/*!!!
-        // set the Direction
-        if (device->getType() == Rosegarden::Device::Midi)
-        {
-            Rosegarden::MidiDevice *midiDevice =
-                dynamic_cast<Rosegarden::MidiDevice*>(device);
-
-            if (midiDevice)
-                midiDevice->setDirection(
-                        Rosegarden::MidiDevice::DeviceDirection(
-                            (*it)->getDirection()));
-        }
-*/
     }
 
 }

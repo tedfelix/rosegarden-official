@@ -58,7 +58,7 @@ Studio::addDevice(const std::string &name,
     switch(type)
     {
         case Device::Midi:
-            m_devices.push_back(new MidiDevice(id, name));
+            m_devices.push_back(new MidiDevice(id, name, MidiDevice::Duplex));
             break;
 
         case Device::Audio:

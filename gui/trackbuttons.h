@@ -84,6 +84,7 @@ public:
      * an actual program name rather than a meaningless
      * device number and midi channel
      */
+
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
     // Select a label from outside this class by position
@@ -133,7 +134,7 @@ protected:
      * Precalculate the Instrument popup so we don't have to every
      * time it appears
      */
-    void populateInstrumentPopup();
+    void populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr = 0);
 
     /**
      * Populate the track buttons themselves with Instrument information

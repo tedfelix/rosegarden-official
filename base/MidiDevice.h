@@ -50,15 +50,19 @@ public:
     MidiDevice();
     MidiDevice(DeviceId id,
                const std::string &name,
-               DeviceDirection dir = WriteOnly);
+               DeviceDirection dir);
+    MidiDevice(DeviceId id,
+               const std::string &name,
+	       const std::string &label,
+               DeviceDirection dir);
     virtual ~MidiDevice();
 
     // Copy constructor
     MidiDevice(const MidiDevice &);
 
     // Assignment
-    MidiDevice operator=(const MidiDevice &);
- 
+    MidiDevice &operator=(const MidiDevice &);
+
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 

@@ -1696,12 +1696,10 @@ SequenceManager::reinitialiseSequencerStudio()
     config->setGroup("Sequencer Options");
 
     QString recordDeviceStr = config->readEntry("midirecorddevice");
-    QString recordPortStr = config->readEntry("midirecordport");
 
     if (recordDeviceStr)
     {
         int recordDevice = recordDeviceStr.toInt();
-        int recordPort = recordPortStr.toInt();
 
         if (recordDevice >= 0)
         {
@@ -1709,8 +1707,7 @@ SequenceManager::reinitialiseSequencerStudio()
                 new Rosegarden::MappedEvent(
                     Rosegarden::MidiInstrumentBase, // InstrumentId
                     Rosegarden::MappedEvent::SystemRecordDevice,
-                    Rosegarden::MidiByte(recordDevice),
-                    Rosegarden::MidiByte(recordPort));
+                    Rosegarden::MidiByte(recordDevice));
 
             Rosegarden::StudioControl::sendMappedEvent(mE);
             SEQMAN_DEBUG << "set MIDI record device to "

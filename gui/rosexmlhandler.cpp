@@ -903,7 +903,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_device = getStudio().getDevice(id);
 
             if (m_device && m_device->getType() == Rosegarden::Device::Midi) {
-                m_device->setUserLabel(qstrtostr(nameStr));
+		if (nameStr && nameStr != "") {
+		    m_device->setUserLabel(qstrtostr(nameStr));
+		}
 	    } else if (nameStr && nameStr != "") {
 		//!!! add device
 	    }

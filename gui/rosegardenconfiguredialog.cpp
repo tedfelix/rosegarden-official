@@ -1145,7 +1145,6 @@ SequencerConfigurationPage::apply()
 
     Rosegarden::MappedEvent *mE;
     unsigned int device = 0;
-    int port = 0;
 
     if (m_devices.size())
     {
@@ -1155,8 +1154,7 @@ SequencerConfigurationPage::apply()
         mE= new Rosegarden::MappedEvent(
                     Rosegarden::MidiInstrumentBase, // InstrumentId
                     Rosegarden::MappedEvent::SystemRecordDevice,
-                    Rosegarden::MidiByte(device),
-                    Rosegarden::MidiByte(port));
+                    Rosegarden::MidiByte(device));
 
         Rosegarden::StudioControl::sendMappedEvent(mE);
     }

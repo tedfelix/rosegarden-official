@@ -246,12 +246,12 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
 
 }
 
-// m_deviceRunningId should carry the id of the last allocated device
+// m_deviceRunningId should carry the id after that of the last allocated device
 //
 unsigned int
 SoundDriver::getDevices()
 {
-    return m_deviceRunningId + 1;
+    return m_deviceRunningId;
 }
 
 MappedDevice
@@ -272,20 +272,6 @@ SoundDriver::getMappedDevice(DeviceId id)
         if ((*it)->getDevice() == id)
             retDevice.push_back(*it);
     }
-/*!!!
-    std::vector<MappedDevice*>::iterator dIt = m_devices.begin();
-    for (; dIt != m_devices.end(); dIt++)
-    {
-        if ((*dIt)->getId() == id)
-        {
-            retDevice.setId(id);
-            retDevice.setName((*dIt)->getName());
-            retDevice.setType((*dIt)->getType());
-	    retDevice.setConnection((*dIt)->getConnection());
-            break;
-        }
-    }
-*/
 
     std::cout << "SoundDriver::getMappedDevice - "
               << "name = \"" << retDevice.getName() 

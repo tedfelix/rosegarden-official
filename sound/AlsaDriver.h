@@ -76,15 +76,6 @@ public:
     
     virtual bool record(const RecordStatus& recordStatus);
 
-    void addInstrumentsForPort(Instrument::InstrumentType type,
-                               std::string name, 
-			       std::string connectionName,
-                               int client,
-                               int port,
-                               PortDirection direction);
-
-    void addInstrumentsForDevice(MappedDevice *device);
-
     virtual void processEventsOut(const MappedComposition &mC,
                                   const Rosegarden::RealTime &playLatency, 
                                   bool now);
@@ -225,11 +216,20 @@ public:
 
 
 protected:
+    typedef std::vector<AlsaPortDescription *> AlsaPortList;
+
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
 
-
+    /**
+     * Bring m_alsaPorts up-to-date; if newPorts is non-null, also
+     * return the new ports (not previously in m_alsaPorts) through it
+     */
+    virtual void generatePortList(AlsaPortList *newPorts = 0);
     virtual void generateInstruments();
+    void addInstrumentsForDevice(MappedDevice *device);
+    MappedDevice *createMidiDevice(AlsaPortDescription *);
+
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
                                 bool now);
@@ -267,8 +267,7 @@ private:
                               MidiByte byte1,
                               MidiByte byte2);
 
-
-    std::vector<AlsaPortDescription *> m_alsaPorts;
+    AlsaPortList m_alsaPorts;
 
 
     // ALSA MIDI/Sequencer stuff
@@ -341,8 +340,8 @@ private:
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
 
-    ClientPortPair parseConnectionName(std::string name);
-    std::string unparseConnectionName(ClientPortPair port);
+    std::string getPortName(ClientPortPair port);
+    ClientPortPair getPortByName(std::string name);
 };
 
 }

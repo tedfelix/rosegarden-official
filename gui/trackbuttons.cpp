@@ -21,6 +21,9 @@
 
 
 #include <klocale.h>
+#include <kapp.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -769,14 +772,11 @@ TrackButtons::slotInstrumentSelection(int trackId)
     QString instrumentName;
     Rosegarden::Track *track = comp.getTrackByPosition(position);
 
+    Rosegarden::Instrument *instrument = 0;
     if (track != 0)
-    {
-        Rosegarden::Instrument *ins = studio.
-                getInstrumentById(track->getInstrument());
-	instrumentName = getPresentationName(ins);
-    }
-    else
-        instrumentName = getPresentationName(0);
+	instrument = studio.getInstrumentById(track->getInstrument());
+    instrumentName = getPresentationName(instrument);
+
     //
     // populate this instrument widget
     m_instrumentLabels[position]->setText(instrumentName);
@@ -808,11 +808,10 @@ TrackButtons::slotInstrumentSelection(int trackId)
             break;
     }
 
-    //!!!
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
     //
-    populateInstrumentPopup();
+    populateInstrumentPopup(instrument);
 
     m_instrumentPopup->popup(menuPos);
 
@@ -823,8 +822,35 @@ TrackButtons::slotInstrumentSelection(int trackId)
 }
 
 void
-TrackButtons::populateInstrumentPopup()
+TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
 {
+    static QPixmap     connectedPixmap, unconnectedPixmap,
+	           connectedUsedPixmap, unconnectedUsedPixmap,
+	       connectedSelectedPixmap, unconnectedSelectedPixmap;
+    static bool havePixmaps = false;
+
+    if (!havePixmaps) {
+
+	QString pixmapDir =
+	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
+
+	connectedPixmap.load
+	    (QString("%1/misc/connected.xpm").arg(pixmapDir));
+	connectedUsedPixmap.load
+	    (QString("%1/misc/connected-used.xpm").arg(pixmapDir));
+	connectedSelectedPixmap.load
+	    (QString("%1/misc/connected-selected.xpm").arg(pixmapDir));
+	unconnectedPixmap.load
+	    (QString("%1/misc/unconnected.xpm").arg(pixmapDir));
+	unconnectedUsedPixmap.load
+	    (QString("%1/misc/unconnected-used.xpm").arg(pixmapDir));
+	unconnectedSelectedPixmap.load
+	    (QString("%1/misc/unconnected-selected.xpm").arg(pixmapDir));
+	
+	havePixmaps = true;
+    }
+    
+    Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
 
     // clear the popup
@@ -844,7 +870,7 @@ TrackButtons::populateInstrumentPopup()
     Rosegarden::InstrumentList list = studio.getPresentationInstruments();
     Rosegarden::InstrumentList::iterator it;
     int currentDevId = -1;
-    int groupBase = -1;
+    bool deviceUsedByAnyone = false;
 
     for (it = list.begin(); it != list.end(); it++) {
 
@@ -852,17 +878,56 @@ TrackButtons::populateInstrumentPopup()
 
 	QString iname(getPresentationName(*it));
 	QString pname(strtoqstr((*it)->getProgramName()));
-        Rosegarden::DeviceId devId = (*it)->getDevice()->getId();
+	Rosegarden::Device *device = (*it)->getDevice();
+        Rosegarden::DeviceId devId = device->getId();
+
+	bool instrUsedByMe = false;
+	bool instrUsedByAnyone = false;
+
+	if (thisTrackInstr && thisTrackInstr->getId() == (*it)->getId()) {
+	    instrUsedByMe = true;
+	    instrUsedByAnyone = true;
+	}
 
 	if (devId != (Rosegarden::DeviceId)(currentDevId)) {
+	
+	    deviceUsedByAnyone = false;
+
+	    if (instrUsedByMe) deviceUsedByAnyone = true;
+	    else {
+		for (Rosegarden::Composition::trackcontainer::iterator tit =
+			 comp.getTracks().begin();
+		     tit != comp.getTracks().end(); ++tit) {
+
+		    if (tit->second->getInstrument() == (*it)->getId()) {
+			instrUsedByAnyone = true;
+			deviceUsedByAnyone = true;
+			break;
+		    }
+
+		    Rosegarden::Instrument *instr =
+			studio.getInstrumentById(tit->second->getInstrument());
+		    if (instr && (instr->getDevice()->getId() == devId)) {
+			deviceUsedByAnyone = true;
+		    }
+		}
+	    }
+
+	    QIconSet iconSet
+		(device->getConnection() == "" ?
+		 (deviceUsedByAnyone ? 
+		  unconnectedUsedPixmap : unconnectedPixmap) :
+		 (deviceUsedByAnyone ? 
+		  connectedUsedPixmap : connectedPixmap));
 
             currentDevId = int(devId);
 
 	    QPopupMenu *subMenu = new QPopupMenu(this);
-	    m_instrumentPopup->
-		insertItem(strtoqstr((*it)->getDevice()->getUserLabel()),
-			   subMenu);
 	    
+	    QString deviceName = strtoqstr(device->getUserLabel());
+	    if (deviceName == "") deviceName = strtoqstr(device->getName());
+
+	    m_instrumentPopup->insertItem(iconSet, deviceName, subMenu);
 	    m_instrumentSubMenu.push_back(subMenu);
 	    
 	    // Connect up the submenu
@@ -872,22 +937,35 @@ TrackButtons::populateInstrumentPopup()
 	    
 	    connect(subMenu, SIGNAL(aboutToHide()),
 		    SLOT(slotInstrumentPopupHiding()));
-	    groupBase = -1;
+
+	} else if (!instrUsedByMe) {
+	
+	    for (Rosegarden::Composition::trackcontainer::iterator tit =
+		     comp.getTracks().begin();
+		 tit != comp.getTracks().end(); ++tit) {
+
+		if (tit->second->getInstrument() == (*it)->getId()) {
+		    instrUsedByAnyone = true;
+		    break;
+		}
+	    }
 	}
+
+	QIconSet iconSet
+	    (device->getConnection() == "" ?
+	     (instrUsedByAnyone ? 
+	      instrUsedByMe ?
+	      unconnectedSelectedPixmap :
+	      unconnectedUsedPixmap : unconnectedPixmap) :
+	     (instrUsedByAnyone ? 
+	      instrUsedByMe ?
+	      connectedSelectedPixmap :
+	      connectedUsedPixmap : connectedPixmap));
 
 	if (pname != "") iname += " (" + pname + ")";
 
-        if (groupBase == -1)
-        {
-	    m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->
-                insertItem(iname, i++);
-        }
-        else
-        {
-	    m_instrumentSubMenu[groupBase]->
-                insertItem(iname, i++);
-        }
-
+	m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->
+	    insertItem(iconSet, iname, i++);
     }
 
 }

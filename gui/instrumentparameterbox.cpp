@@ -995,7 +995,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
       m_attackRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
       m_releaseRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20))
 {
-    
 
     /*
     for (int i = -Rosegarden::MidiMidValue;
@@ -1219,8 +1218,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     //
     if (instrument->getDevice()) {
 	//!!! we should call this the connection label, I guess
-	m_deviceLabel->setText(i18n("Connection: %1").arg(strtoqstr(instrument->getDevice()->getConnection())));
-
+	std::string connection(instrument->getDevice()->getConnection());
+	if (connection == "") {
+	    m_deviceLabel->setText(i18n("No connection"));
+	} else {
+	    m_deviceLabel->setText(i18n("Connection: %1").
+				   arg(strtoqstr(connection)));
+	}
     } else {
 	m_deviceLabel->setText("");
     }

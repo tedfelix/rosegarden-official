@@ -445,9 +445,12 @@ protected:
     // free and only index each other - the Devices hold information only like
     // name, id and if the device is duplex capable.
     //
-    //
-    std::vector<MappedInstrument*>              m_instruments;
-    std::vector<MappedDevice*>                  m_devices;
+    typedef std::vector<MappedInstrument*> MappedInstrumentList;
+    MappedInstrumentList m_instruments;
+
+    typedef std::vector<MappedDevice*> MappedDeviceList;
+    MappedDeviceList m_devices;
+
     Rosegarden::DeviceId                        m_midiRecordDevice;
 
     //

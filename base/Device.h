@@ -51,6 +51,11 @@ public:
     Device(DeviceId id, const std::string &name, DeviceType type):
         m_name(name), m_label(""), m_type(type), m_id(id) { }
 
+    Device(DeviceId id,
+	   const std::string &name, const std::string &label,
+	   DeviceType type):
+        m_name(name), m_label(label), m_type(type), m_id(id) { }
+
     virtual ~Device() 
     {
         InstrumentList::iterator it = m_instruments.begin();
