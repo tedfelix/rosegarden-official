@@ -33,6 +33,9 @@
 #include <sstream>
 #endif
 
+using std::cerr;
+using std::endl;
+
 
 namespace Rosegarden
 {
@@ -64,7 +67,7 @@ Studio::addDevice(const std::string &name,
 
         default:
             std::cerr << "Studio::addDevice() - unrecognised device"
-                      << std::endl;
+                      << endl;
             break;
     }
 }
@@ -211,7 +214,7 @@ Studio::toXmlString()
 
     studio << "<studio thrufilter=\"" << m_midiThruFilter
            << "\" recordfilter=\"" << m_midiRecordFilter
-           << "\">" << std::endl << std::endl;
+           << "\">" << endl << endl;
 
     std::vector<Device*>::iterator it;
     InstrumentList list;
@@ -222,13 +225,13 @@ Studio::toXmlString()
     {
         // Sends Devices to XML
         //
-        studio << (*it)->toXmlString() << std::endl << std::endl;
+        studio << (*it)->toXmlString() << endl << endl;
     }
 
 #if (__GNUC__ < 3)
-    studio << "</studio>" << std::endl << std::ends;
+    studio << "</studio>" << endl << std::ends;
 #else
-    studio << "</studio>" << std::endl;
+    studio << "</studio>" << endl;
 #endif
 
     return studio.str();
