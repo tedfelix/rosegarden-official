@@ -11,7 +11,7 @@ def check_stray_sequencer
 
   if (processes.length == 1)
     # Check if the lone process is the sequencer
-    pid, ppid, processName = processes[0].split.indexes(2, 3, 12)
+    pid, ppid, processName = processes[0].split.values_at(2, 3, 12)
     #puts "processName : #{processName} - pid : #{pid} - ppid #{ppid}"
 
     if processName =~ /sequencer/ && ppid.to_i == 1
@@ -56,7 +56,7 @@ end
 
 ### And now for something completely different...
 
-while 1
+while true
 
   Dir.chdir $RG_DIR
 
