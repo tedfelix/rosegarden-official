@@ -110,9 +110,9 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // G#
     m_pitchToHeight[pitch + 4] = y - lineWidth;     // A
 
-    // Intermediate invisible line just below this one
+    // Intermediate invisible line just above this one
     //
-    makeInvisibleLine(y - lineWidth / 2, 16); // E
+    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // G
     
     // Line 1 : D - pitch 14
     //
@@ -129,7 +129,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 1] = y; // D#
     m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // E
     
-    makeInvisibleLine(y - lineWidth / 2, 12); // C
+    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // E
 
     // Line 2 : B - pitch 11
     //
@@ -146,7 +146,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 1] = y - lineWidth / 2; // C
     m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // C#
     
-    makeInvisibleLine(y - lineWidth / 2, 9); // A
+    makeInvisibleLine(y - lineWidth / 2, pitch + 1); // C
 
     // Line 3 : G - pitch 7
     //
@@ -164,7 +164,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // A
     m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // A#
     
-    makeInvisibleLine(y - lineWidth / 2, 5); // F
+    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // A
 
     // Line 4 : E - pitch 4
     //
@@ -181,7 +181,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 1] = y - lineWidth / 2; // F
     m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // F#
 
-    makeInvisibleLine(y - lineWidth / 2, 2); // D
+    makeInvisibleLine(y - lineWidth / 2, pitch + 1); // F
 
     // Line 5 : middle C - pitch 0 (not actually displayed)
     //
@@ -195,7 +195,7 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
     m_pitchToHeight[pitch + 2] = y - lineWidth / 2; // D
     m_pitchToHeight[pitch + 3] = y - lineWidth / 2; // D#
     
-    makeInvisibleLine(y - lineWidth / 2, -2);
+    makeInvisibleLine(y - lineWidth / 2, pitch + 2); // D
 
     //
     // Add vertical lines
@@ -228,11 +228,11 @@ Staff::Staff(QCanvas *canvas, Staff::Clef clef)
 int
 Staff::pitchYOffset(int pitch) const
 {
-    if (pitch <= 17)
+    if (pitch >= 0 && pitch <= 21)
         return m_pitchToHeight[pitch];
     else {
         kdDebug(KDEBUG_AREA) << "Staff::pitchYOffset(" << pitch << ") : pitch too high\n";
-        return m_pitchToHeight[pitch % 18];
+        return m_pitchToHeight[pitch % 22];
     }
 }
 
