@@ -23,6 +23,7 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qvalidator.h>
+#include <qaccel.h>
 
 #include "rosegardentempodialog.h"
 #include "rosegardenguidoc.h"
@@ -40,12 +41,24 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
 {
     resetFonts();
 
+    /*
+    QPalette pal; 
+    pal.setColor(QColorGroup::Foreground, Qt::black);
+    TempoSpin->setPalette(pal);
+    */
 
     connect((QObject*)OKButton, SIGNAL(released()),
             this, SLOT(slotOK()));
 
     connect((QObject*)CancelButton, SIGNAL(released()),
             this, SLOT(slotCancel()));
+
+    // bind Return key to OK button
+    //
+    QAccel *a = new QAccel(this);
+    a->connectItem(a->insertItem(Key_Return),
+                   this,
+                   SLOT(slotOK()));
 
     TempoSpin->setFrameShadow(QFrame::Plain);
     TempoSpin->setMinValue(1);
@@ -84,9 +97,12 @@ RosegardenTempoDialog::showPosition()
     Rosegarden::timeT currentPos = comp.getPosition();
     RealTime currentTime = comp.getElapsedRealTime(currentPos);
 
+    QString milliSeconds;
+    milliSeconds.sprintf("%03d", currentTime.usec/1000);
+
     PositionValue->setText(QString("%1.%2 s").
             arg(currentTime.sec).
-            arg(currentTime.usec));
+            arg(milliSeconds));
 }
 
 
@@ -120,7 +136,6 @@ RosegardenTempoDialog::resetFonts()
     resetFont(PositionLabel);
     resetFont(PositionValue);
 }
-
 
 }
  

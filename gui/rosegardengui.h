@@ -600,7 +600,7 @@ public slots:
      */
     void slotEditTempo();
     void slotEditTempo(QWidget *parent);
-        
+
 private:
 
     //--------------- Data members ---------------------------------

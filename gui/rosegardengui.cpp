@@ -2004,11 +2004,12 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
     Rosegarden::RosegardenTempoDialog *tempoDlg = 
         new Rosegarden::RosegardenTempoDialog(m_doc, parent);
 
+    // Update display when the dialog closes
+    //
+    connect(tempoDlg, SIGNAL(destroyed()), SLOT(slotRefreshTimeDisplay()));
+
     tempoDlg->show();
 
-    // Apply feedback when the dialog closes
-    //
-    connect(tempoDlg, SIGNAL(destroyed()), SLOT(slotEditTempo()));
 }
 
 
