@@ -500,7 +500,7 @@ bool MatrixView::applyLayout(int /*staffNo*/)
         }
     }
 
-    readjustViewSize(QSize(int(maxWidth), int(maxHeight)));
+    readjustViewSize(QSize(int(maxWidth), int(maxHeight)), true);
     
     return true;
 }
