@@ -50,10 +50,20 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // set to some state which says it's ok to parse the rest
 
     } else if (lcName == "track") {
-        if (m_currentTrack)
+        int trackNb = -1;
+        QString trackNbStr = atts.value("nb");
+        if (trackNbStr) {
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track nb attr = " << trackNbStr << endl;
+            trackNb = trackNbStr.toInt();
+        }
+        
+        m_currentTrack = new EventList;
+
+        if (trackNb > 0)
+            m_composition.addTrack(m_currentTrack, trackNb);
+        else
             m_composition.addTrack(m_currentTrack);
     
-        m_currentTrack = new EventList;
 
     } else if (lcName == "event") {
 
@@ -81,7 +91,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_inGroup = true;
         
     } else {
-        kdDebug(KDEBUG_AREA) << "Don't know how to parse this : " << qName << endl;
+        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
 
     return true;
