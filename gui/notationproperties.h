@@ -27,8 +27,8 @@
 
 #define  P_QUANTIZED_DURATION    "QuantizedDuration"
 
-#define  P_NOTE_TYPE             "NoteType"
-#define  P_NOTE_DOTS             "NoteDots"
+// #define  P_NOTE_TYPE             "NoteType"
+// #define  P_NOTE_DOTS             "NoteDots"
 
 #define  P_HEIGHT_ON_STAFF       "HeightOnStaff"
 #define  P_MIN_WIDTH             "MinWidth"

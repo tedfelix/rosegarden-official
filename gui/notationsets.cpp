@@ -453,7 +453,7 @@ NotationGroup::calculateBeam(Staff &staff)
     using std::max;
     using std::min;
     long shortestNoteType = Note::Quaver;
-    if (!(*getShortestElement())->event()->get<Int>(P_NOTE_TYPE,
+    if (!(*getShortestElement())->event()->get<Int>(Rosegarden::Note::NoteType,
                                                     shortestNoteType)) {
         kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
     }
@@ -569,7 +569,7 @@ NotationGroup::applyBeam(Staff &staff)
             // the next iteration.
 
             int tailCount = Note(el->event()->get<Int>
-                                 (P_NOTE_TYPE)).getTailCount();
+                                 (Rosegarden::Note::NoteType)).getTailCount();
 
 	    if (prev != getList().end()) {
 
@@ -584,7 +584,7 @@ NotationGroup::applyBeam(Staff &staff)
 		    (P_BEAM_NEXT_TAIL_COUNT, tailCount);
 
                 int prevTailCount = Note(prevEl->event()->get<Int>
-                                         (P_NOTE_TYPE)).getTailCount();
+                                         (Rosegarden::Note::NoteType)).getTailCount();
                 if (tailCount >= prevTailCount) {
                     prevEl->event()->setMaybe<Bool>
                         (P_BEAM_THIS_PART_TAILS, false);

@@ -95,7 +95,7 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
     }
 
     int smin = getMinWidth(npf, **shortest);
-    if (!(*shortest)->event()->get<Int>(P_NOTE_DOTS)) { //!!! double-dot?
+    if (!(*shortest)->event()->get<Int>(Rosegarden::Note::NoteDots)) { //!!! double-dot?
         smin += npf.getDotWidth()/2;
     }
 
@@ -104,7 +104,7 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
     if (shortCount < 3) smin -= 3 - shortCount;
 
     int gapPer = 
-        getComfortableGap(npf, (*shortest)->event()->get<Int>(P_NOTE_TYPE)) +
+        getComfortableGap(npf, (*shortest)->event()->get<Int>(Rosegarden::Note::NoteType)) +
         smin;
 
     kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
@@ -645,7 +645,7 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
 
         w += npf.getNoteBodyWidth();
         long dots;
-        if (e.event()->get<Int>(P_NOTE_DOTS, dots)) {
+        if (e.event()->get<Int>(Rosegarden::Note::NoteDots, dots)) {
             w += npf.getDotWidth() * dots;
         }
         long accidental;

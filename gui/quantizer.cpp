@@ -72,8 +72,8 @@ Quantizer::quantize(Event *el)
 
     Note note = Note::getNearestNote(qd);
 
-    el->setMaybe<Int>(P_NOTE_TYPE, note.getNoteType());
-    el->setMaybe<Int>(P_NOTE_DOTS, note.getDots());
+    el->setMaybe<Int>(Rosegarden::Note::NoteType, note.getNoteType());
+    el->setMaybe<Int>(Rosegarden::Note::NoteDots, note.getDots());
     el->setMaybe<Int>(P_QUANTIZED_DURATION, qd);
 
     kdDebug(KDEBUG_AREA) << "Quantized to duration : "
