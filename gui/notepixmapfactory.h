@@ -184,6 +184,7 @@ public:
     }
 
 protected:
+    QString getPixmapDirectory(int resolution);
 
     const QPixmap* tailUp(Rosegarden::Note::Type note) const;
     const QPixmap* tailDown(Rosegarden::Note::Type note) const;

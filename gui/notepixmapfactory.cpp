@@ -23,7 +23,8 @@
 #include <algorithm>
 
 #include <kmessagebox.h>
-
+#include <kglobal.h>
+#include <kstddirs.h>
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
 #include "notepixmapfactory.h"
@@ -331,7 +332,7 @@ void NotePixmapOffsets::setDotSize(QSize size)
 
 NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_resolution(resolution),
-    m_pixmapDirectory(QString("pixmaps/%1").arg(resolution)),
+    m_pixmapDirectory(getPixmapDirectory(resolution)),
     m_generatedPixmapHeight(0),
     m_timeSigFont("new century schoolbook", 8),
     m_timeSigFontMetrics(m_timeSigFont),
@@ -384,6 +385,16 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_offsets.setAccidentalHeight(m_accidentalSharp.height());
     
     m_offsets.setDotSize(m_dot.size());
+}
+
+QString NotePixmapFactory::getPixmapDirectory(int resolution)
+{
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    
+    QString res = QString("%1/%2").arg(pixmapDir).arg(resolution);
+    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::getPixmapDirectory() : "
+                         << res << " - pixmapDir : " << pixmapDir << endl;
+    return res;
 }
 
 NotePixmapFactory::~NotePixmapFactory()

@@ -36,6 +36,9 @@ SUBDIRS = docs
 
 EXTRA_DIST = main.cpp notationproperties.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h rosegardenguiiface.h rosegardenguiiface.cpp trackseditoriface.cpp qcanvasspline.cpp qcanvasspline.h
 
+# Where pixmaps for notes, clefs, etc... will be installed
+data_dirname = rosegardengui
+
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
 	$(INSTALL_DATA) $(srcdir)/rosegardengui.desktop $(kde_appsdir)/Applications/rosegardengui.desktop
@@ -43,11 +46,17 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/rosegardengui.xpm $(kde_icondir)/medium/locolor/apps/rosegardengui.xpm
 	$(mkinstalldirs) $(kde_icondir)/small/locolor/apps/
 	$(INSTALL_DATA) $(srcdir)/mini-rosegardengui.xpm $(kde_icondir)/small/locolor/apps/rosegardengui.xpm
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/5
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/9
+	$(INSTALL_DATA) $(srcdir)/pixmaps/5/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/5
+	$(INSTALL_DATA) $(srcdir)/pixmaps/9/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/9
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/rosegardengui.desktop
 	-rm -f $(kde_icondir)/medium/locolor/apps/rosegardengui.xpm
 	-rm -f $(kde_icondir)/small/locolor/apps/rosegardengui.xpm
+	-rm -f $(kde_datadir)/rosegarden/pixmaps
 
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
@@ -66,7 +75,6 @@ uninstall-local:
 INCLUDES= $(all_includes) -I../core -I../sound
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
-bin_PROGRAMS = rosegardengui 
 
 rosegardengui_METASOURCES = AUTO
 
