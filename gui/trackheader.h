@@ -37,10 +37,10 @@ public:
                           QWidget *parent=0,
                           const char *name=0 ):
                             QHeader(number, parent, name) {;}
-    ~TrackHeader() {;}
+    ~TrackHeader();
 
 protected:
-    //virtual void paintEvent(QPaintEvent *pe);
+    virtual void paintEvent(QPaintEvent *pe);
 
 
 private:

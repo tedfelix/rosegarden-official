@@ -19,22 +19,43 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qpainter.h>
 
 #include "trackheader.h"
 
 namespace Rosegarden
 {
 
-
-/*
-// ach
-//
-void
-TrackHeader::paintEvent(QPaintEvent *pe)
+TrackHeader::~TrackHeader()
 {
 }
 
-*/
+
+// ach
+//
+void
+TrackHeader::paintEvent(QPaintEvent *e)
+{
+    QPainter p( this );
+    p.setPen( colorGroup().buttonText() );
+    int pos = (orientation() == Horizontal)
+        ? e->rect().left()
+        : e->rect().top();
+    int id = mapToIndex( sectionAt( pos + offset() ) );
+    if ( id < 0 )
+	if ( pos > 0 )
+	    return;
+	else
+	    id = 0;
+    for ( int i = id; i < count(); i++ ) {
+	QRect r = sRect( i );
+	paintSection( &p, i, r );
+	if ( orientation() == Horizontal && r. right() >= e->rect().right() ||
+	     orientation() == Vertical && r. bottom() >= e->rect().bottom() )
+	    return;
+    }
+
+}
 
 }
 
