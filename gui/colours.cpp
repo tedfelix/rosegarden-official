@@ -61,6 +61,10 @@ namespace RosegardenGUIColours
 
     const QColor MatrixElementBorder = Qt::black;
     const QColor MatrixElementBlock = QColor(98, 128, 232);
+
+    const QColor LoopRulerBackground = QColor(120, 120, 120);
+    const QColor LoopRulerForeground = Qt::white;
+    const QColor LoopHighlight = Qt::black;
   
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = QColor(211, 0, 31);

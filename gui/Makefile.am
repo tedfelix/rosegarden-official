@@ -11,6 +11,7 @@ rosegarden_SOURCES = \
 	eventselection.cpp \
 	ktmpstatusmsg.cpp \
 	kstartuplogo.cpp \
+        loopruler.cpp \
 	main.cpp \
 	matrixview.cpp \
 	multiviewcommandhistory.cpp \

@@ -20,8 +20,11 @@
 */
 
 #include "barbuttons.h"
+#include "loopruler.h"
+#include "colours.h"
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qcanvas.h>
 
 
 BarButtons::BarButtons(RosegardenGUIDoc* doc,
@@ -71,9 +74,15 @@ BarButtons::drawButtons()
 
     // The loop bar is where we're going to be defining our loops
     //
-    QLabel *loopBar = new QLabel(buttonBar);
-    loopBar->setMinimumSize(m_cellWidth * m_bars, loopBarHeight);
-    loopBar->setMaximumSize(m_cellWidth * m_bars, loopBarHeight);
+    QCanvas *canvas = new QCanvas(buttonBar);
+    canvas->resize(m_cellWidth * m_bars, loopBarHeight);
+    canvas->setBackgroundColor(RosegardenGUIColours::LoopRulerBackground);
+
+    LoopRuler *loopRuler = new LoopRuler(canvas,
+                                         buttonBar,
+                                         m_bars,
+                                         m_cellWidth,
+                                         loopBarHeight);
 
     // Need another horizontal layout box - makes a bit of a 
     // mockery of what this class is derived from!
