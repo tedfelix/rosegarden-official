@@ -369,11 +369,14 @@ NotationView::showElements(NotationElementList::iterator from,
                     accident = Accidental(acc);
                 }
 
+                bool up = true;
+                (void)((*it)->event()->get<Bool>("computed-stalk-up", up));
+
 		kdDebug(KDEBUG_AREA) << "NotationElement::showElements(): found a note of type " << note << " with accidental " << accident << endl;
                 
                 QCanvasPixmap notePixmap(npf.makeNotePixmap(note, dotted,
                                                             accident,
-                                                            true, false));
+                                                            true, up));
                 sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->isRest()) {

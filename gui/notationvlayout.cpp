@@ -52,14 +52,9 @@ NotationVLayout::layout(NotationElementList::iterator from,
     i = m_elements.findPrevious(Key::EventPackage, Key::EventType, from);
     if (i != m_elements.end()) key = Key(*(*i)->event());
 
-    int lookedAt = 0;//!!!
-
     for (i = from; i != to; ++i) {
 
         NotationElement *el = (*i);
-
-	kdDebug(KDEBUG_AREA) << "looking at an element" << endl;
-	++lookedAt;
 
         if (el->isRest()) {
 
@@ -73,9 +68,11 @@ NotationVLayout::layout(NotationElementList::iterator from,
                 int pitch = el->event()->get<Int>("pitch");
                 kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
                 NotationDisplayPitch p(pitch, clef, key);
-                el->setY(m_staff.yCoordOfHeight(p.getHeightOnStaff()));
+                int h = p.getHeightOnStaff();
+                el->setY(m_staff.yCoordOfHeight(h));
                 el->event()->set<Int>("Notation::Accidental",
                                       (int)p.getAccidental());
+                el->event()->set<Bool>("computed-stalk-up", h <= 4); 
                 kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : "
                                      << pitch << " - y : " << el->y() << endl;
             } catch (Event::NoData) {
@@ -96,8 +93,5 @@ NotationVLayout::layout(NotationElementList::iterator from,
             }
         }
     }
-
-    
-    kdDebug(KDEBUG_AREA) << "vlayout: looked at " << lookedAt << " elements" << endl;
 }
 
