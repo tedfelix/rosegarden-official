@@ -473,14 +473,29 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 
 #ifdef HAVE_LADSPA
 
-LADSPA_Handle
-MappedStudio::createPluginInstance(unsigned long sampleRate)
+const LADSPA_Descriptor*
+MappedStudio::createPluginInstance(unsigned long uniqueId)
 {
-    LADSPA_Handle handle;
+    std::cout << "MappedStudio::createPluginInstance of id = "
+              << uniqueId << std::endl;
 
-    std::cout << "MappedStudio::createPluginInstance" << std::endl;
-
-    return handle;
+    // Get the pluginmanager
+    //
+    MappedAudioPluginManager *pm =
+        dynamic_cast<MappedAudioPluginManager*>
+            (getObjectOfType(AudioPluginManager));
+    if (pm)
+    {
+        std::cout << "MappedStudio::createPluginInstance - "
+                  << "getting plugin descriptor" << std::endl;
+        return pm->getPluginDescriptor(uniqueId);
+    }
+    else
+    {
+        std::cout << "MappedStudio::createPluginInstance - "
+                  << "plugin manager not found" << std::endl;
+        return 0;
+    }
 }
 
 #endif // HAVE_LADSPA
@@ -786,14 +801,85 @@ MappedAudioPluginManager::addLADSPAPath(const std::string &path)
     m_path += path;
 }
 
-LADSPA_Descriptor*
+void
+MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
+{
+}
+
+void
+MappedAudioPluginManager::closeAllPlugins()
+{
+}
+
+
+const LADSPA_Descriptor*
+MappedAudioPluginManager::getDescriptorFromHandle(unsigned long uniqueId,
+                                                  void *pluginHandle)
+{
+    LADSPA_Descriptor_Function descrFn = 0;
+
+    descrFn = (LADSPA_Descriptor_Function)
+                    dlsym(pluginHandle, "ladspa_descriptor");
+    if (descrFn)
+    {
+        const LADSPA_Descriptor *descriptor;
+
+        int index = 0;
+
+        do
+        {
+            descriptor = descrFn(index);
+                                                                                            if (descriptor)
+            {
+                if (descriptor->UniqueID == uniqueId)
+                    return descriptor;
+            }
+
+            index++;
+
+        } while (descriptor);
+    }
+
+    return 0;
+}
+
+
+const LADSPA_Descriptor*
 MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
 {
-    // go through all the plugins and match on uniqueId
+    // Check if we have the handle
+    //
+    LADSPAIterator it = m_pluginHandles.begin();
+    for (; it != m_pluginHandles.end(); it++)
+    {
+        if (it->first == uniqueId)
+        {
+            return getDescriptorFromHandle(uniqueId, it->second);
+        }
+    }
+    
+    // Otherwise we have to create the handle to make the descriptor.
+    // First find the plugin class.
+    //
+    MappedLADSPAPlugin *plugin =
+                dynamic_cast<MappedLADSPAPlugin*>(getReadOnlyPlugin(uniqueId));
 
-    // then find the plugin file and load it and generate the descriptor
+    if (plugin)
+    {
+        // Now create the handle and store it
+        //
+        void *pluginHandle =
+            dlopen(plugin->getLibraryName().c_str(), RTLD_LAZY);
 
-    // then log the loaded plugin so that we automatically unload later
+        std::pair<unsigned long, void*> pluginHandlePair(uniqueId,
+                                                         pluginHandle);
+        m_pluginHandles.push_back(pluginHandlePair);
+
+        // now generate the descriptor
+        return getDescriptorFromHandle(uniqueId, pluginHandle);
+    }
+    else
+        return 0;
 }
 
 #endif // HAVE_LADSPA
@@ -991,6 +1077,8 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
         if (m_uniqueId == ((unsigned long)value))
             return;
 
+        m_uniqueId = (unsigned long)value;
+
         // Get the studio and the sequencer
         //
         MappedStudio *studio =
@@ -1020,8 +1108,9 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
         roPlugin->clone(this);
 
         // now create the new instance
-        seq->setPluginInstance(((unsigned long)value),
-                               m_instrument, m_position);
+        seq->setPluginInstance(m_instrument,
+                               ((unsigned long)(value)),
+                               m_position);
 
     }
 

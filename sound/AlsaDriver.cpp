@@ -1817,15 +1817,35 @@ AlsaDriver::setPluginInstance(InstrumentId id,
                               int position)
 {
 #ifdef HAVE_LADSPA
-    std::cout << "AlsaDriver::setPluginInstance" << std::endl;
-    PluginIterator it = m_pluginInstances.begin();
+    std::cout << "AlsaDriver::setPluginInstance id = " << pluginId << std::endl;
 
     // first shut down any running instance
     removePluginInstance(id, position);
 
-    m_pluginInstances.push_back(
-            new LADSPAPluginInstance(id, pluginId, position));
-    // stop a
+    // Get a descriptor - if this fails we can't initialise anyway
+    const LADSPA_Descriptor *des = m_studio->createPluginInstance(pluginId);
+
+    if (des)
+    {
+        // create and store
+        LADSPAPluginInstance *instance =
+            new LADSPAPluginInstance(id, pluginId, position, des);
+        m_pluginInstances.push_back(instance);
+
+        // activate and connect
+        std::cout << "AlsaDriver::setPluginInstance - "
+                  << "activate and connect plugin" << std::endl;
+
+        //cout << "INSTANTIATE AT " << getSampleRate() << endl;
+        instance->instantiate(getSampleRate());
+        //cout << "ACTIVATE" << endl;
+        //instance->activate();
+
+    }
+    else
+        std::cerr << "AlsaDriver::setPluginInstance - "
+                  << "can't initialise plugin descriptor" << std::endl;
+
 #endif // HAVE_LADSPA
 
 }
@@ -1863,6 +1883,55 @@ AlsaDriver::getSampleRate() const
    return 0;
 #endif
 }
+
+// ------------ LADSPAPluginInstance ------------
+//
+//
+
+#ifdef HAVE_LADSPA
+
+void
+LADSPAPluginInstance::instantiate(unsigned long sampleRate)
+{
+    m_instanceHandle = m_descriptor->instantiate(m_descriptor, sampleRate);
+}
+
+void
+LADSPAPluginInstance::activate()
+{
+    if (m_instanceHandle)
+        m_descriptor->activate(m_instanceHandle);
+}
+
+void
+LADSPAPluginInstance::connect_port(unsigned long Port,
+                                   LADSPA_Data * dataLocation)
+{
+    m_descriptor->connect_port(m_instanceHandle,
+                               Port,
+                               dataLocation);
+}
+
+void
+LADSPAPluginInstance::run(unsigned long sampleCount)
+{
+    m_descriptor->run(m_instanceHandle, sampleCount);
+}
+
+void
+LADSPAPluginInstance::deactivate()
+{
+    m_descriptor->deactivate(m_instanceHandle);
+}
+
+void
+LADSPAPluginInstance::cleanup()
+{
+    m_descriptor->cleanup(m_instanceHandle);
+    m_instanceHandle = 0;
+}
+
+#endif // HAVE_LADSPA
 
 
 

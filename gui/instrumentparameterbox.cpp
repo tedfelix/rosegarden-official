@@ -741,8 +741,11 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 // unassign, destory and recreate
                 //cout << "MODIFY assigned " << inst->getMappedId() << endl;
                 std::cout << "InstrumentParameterBox::slotPluginSelected - "
-                          << "modifying MappedObjectId = "
-                          << inst->getMappedId() << std::endl;
+                          << "MappedObjectId = "
+                          << inst->getMappedId()
+                          << " - UniqueId = " << plgn->getUniqueId()
+                          << std::endl;
+
 
 #ifdef HAVE_LADSPA
                 Rosegarden::StudioControl::setStudioObjectProperty

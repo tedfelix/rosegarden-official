@@ -254,7 +254,7 @@ public:
 
     // Create a plugin instance
     //
-    LADSPA_Handle createPluginInstance(unsigned long sampleRate);
+    const LADSPA_Descriptor* createPluginInstance(unsigned long uniqueId);
 
 #endif // HAVE_LADSPA
 
@@ -443,7 +443,7 @@ protected:
 
 };
 
-#endif
+#endif // HAVE_LADSPA
 
 
 // MappedPluginManager locates and lists plugins and
@@ -457,6 +457,12 @@ protected:
 // we have the energy or patience to change it.
 //
 //
+
+#ifdef HAVE_LADSPA
+typedef std::vector<std::pair<unsigned long, void*> > LADSPAPluginHandles;
+typedef std::vector<std::pair<unsigned long, void*> >::iterator LADSPAIterator;
+#endif // HAVE_LADSPA
+
 class MappedAudioPluginManager : public MappedObject
 {
 public:
@@ -497,7 +503,16 @@ public:
     // can then use the descriptor to create and control a plugin 
     // instance.
     //
-    LADSPA_Descriptor* getPluginDescriptor(unsigned long unique);
+    const LADSPA_Descriptor* getPluginDescriptor(unsigned long uniqueId);
+
+    // Using this method we unload a plugin from the list of pluginHandles
+    // and we check to see if we can unload the file completely.
+    //
+    void unloadPlugin(unsigned long uniqueId);
+
+    // Close down all plugins
+    //
+    void closeAllPlugins();
 
 #endif
 
@@ -510,7 +525,19 @@ protected:
     //
     void enumeratePlugin(MappedStudio *studio, const std::string& path);
 
+#ifdef HAVE_LADSPA
+    const LADSPA_Descriptor* getDescriptorFromHandle(unsigned long uniqueId,
+                                                     void *pluginHandle);
+
+
+    // Keep a track of plugin handles
+    //
+    LADSPAPluginHandles m_pluginHandles;
+
+#endif // HAVE_LADSPA
+
     std::string m_path;
+
 };
 
 }

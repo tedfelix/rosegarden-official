@@ -52,24 +52,42 @@ class LADSPAPluginInstance
 public:
     LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
                          unsigned long ladspaId,
-                         int position):
+                         int position,
+                         const LADSPA_Descriptor* descriptor):
         m_instrument(instrument),
         m_ladspaId(ladspaId),
-        m_position(position) {;}
+        m_position(position),
+        m_instanceHandle(0),
+        m_descriptor(descriptor) {;}
 
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
     unsigned long getLADSPAId() const { return m_ladspaId; }
     int getPosition() const { return m_position; }
 
-    LADSPA_Handle getHandle() { return m_handle; }
+    //const LADSPA_Descriptor* getDescriptor() { return m_descriptor; }
+
+    //LADSPA_Handle getHandle() { return m_handle; }
+
+    // plugin functions
+    //
+    void instantiate(unsigned long sampleRate);
+    void activate();
+    void connect_port(unsigned long Port,
+                      LADSPA_Data * dataLocation);
+    void run(unsigned long sampleCount);
+
+    void deactivate();
+    void cleanup();
+
+
 
 protected:
     
     Rosegarden::InstrumentId  m_instrument;
     unsigned long             m_ladspaId;
     int                       m_position;
-    LADSPA_Handle             m_handle;
-    LADSPA_Descriptor         m_desciptor;
+    LADSPA_Handle             m_instanceHandle;
+    const LADSPA_Descriptor  *m_descriptor;
 
 };
 
