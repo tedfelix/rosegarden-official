@@ -31,6 +31,7 @@
 #include "Segment.h"
 #include "Quantizer.h"
 #include "Track.h"
+#include "Configuration.h"
 #include "XmlExportable.h"
 
 namespace Rosegarden 
@@ -484,13 +485,19 @@ public:
 
     // Who's making this racket?
     //
-    std::string getCopyrightNote() const { return m_copyright; }
-    void setCopyrightNote(const std::string &cr) { m_copyright = cr; }
-
-//     // Recording count-in
-//     //
-//     int getCountInBars() const { return m_countInBars; }
-//     void setCountInBars(int countInBars) { m_countInBars = countInBars; }
+    Configuration &getMetadata() {
+	return m_metadata;
+    }
+    const Configuration &getMetadata() const {
+	return m_metadata;
+    }
+    
+    std::string getCopyrightNote() const { 
+	return m_metadata.get<String>(CompositionMetadataKeys::Copyright);
+    }
+    void setCopyrightNote(const std::string &cr) {
+	m_metadata.set<String>(CompositionMetadataKeys::Copyright, cr);
+    }
 
 
     // We can have the metronome on or off while playing or
@@ -606,8 +613,6 @@ protected:
     static const PropertyName BarNumberProperty;
     static const PropertyName TempoTimestampProperty;
 
-    static const unsigned int DefaultCountInBars;
-
 
     struct ReferenceSegmentEventCmp
     {
@@ -678,8 +683,8 @@ protected:
     RealTime time2RealTime(timeT time, double tempo) const;
     timeT realTime2Time(RealTime rtime, double tempo) const;
 
+    Configuration m_metadata;
     std::string m_copyright;
-//     unsigned int m_countInBars;
 
     bool m_playMetronome;
     bool m_recordMetronome;

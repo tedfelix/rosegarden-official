@@ -41,48 +41,65 @@ namespace Rosegarden
 class Configuration : public PropertyMap
 {
 public:
-
-    Configuration(); // defaults
-    ~Configuration();
-
     struct NoData { };
     struct BadType { };
 
     template <PropertyType P>
-    void set(const PropertyName &name,
-             typename PropertyDefn<P>::basic_type value);
+    void
+    set(const PropertyName &name,
+	typename PropertyDefn<P>::basic_type value);
 
     /**
      * get() with a default value
      */
     template <PropertyType P>
-    typename PropertyDefn<P>::basic_type get(const PropertyName &name,
-                                             typename PropertyDefn<P>::basic_type defaultVal) const;
+    typename PropertyDefn<P>::basic_type
+    get(const PropertyName &name,
+	typename PropertyDefn<P>::basic_type defaultVal) const;
 
     /**
-     * regulat get()
+     * regular get()
      */
     template <PropertyType P>
     typename PropertyDefn<P>::basic_type get(const PropertyName &name) const;
 
-    // for exporting
+    // for exporting -- doesn't write the <configuration> part of
+    // the element in case you want to write it into another element
     //
     virtual std::string toXmlString();
-
-    // Property names
-    static const char* const MetronomePitch;
-    static const char* const MetronomeBarVelocity;
-    static const char* const MetronomeBeatVelocity;
-    static const char* const FetchLatency;
-    static const char* const MetronomeDuration;
-    static const char* const SequencerOptions;
-
-    static const char* const PluginTaxonomyFile;
-    static const char* const PluginDescriptionsFile;
-
 private:
 
 };
+
+namespace CompositionMetadataKeys
+{
+    extern const PropertyName Copyright;
+    extern const PropertyName Composer;
+    extern const PropertyName Notes;
+}
+
+class DocumentConfiguration : public Configuration
+{
+public:
+    DocumentConfiguration();
+
+    // for exporting -- doesn't write the <configuration> part of
+    // the element in case you want to write it into another element
+    // 
+    virtual std::string toXmlString();
+
+    // Property names
+    static const PropertyName MetronomePitch;
+    static const PropertyName MetronomeBarVelocity;
+    static const PropertyName MetronomeBeatVelocity;
+    static const PropertyName FetchLatency;
+    static const PropertyName MetronomeDuration;
+    static const PropertyName SequencerOptions;
+
+    static const PropertyName PluginTaxonomyFile;
+    static const PropertyName PluginDescriptionsFile;
+};
+
 
 template <PropertyType P>
 void

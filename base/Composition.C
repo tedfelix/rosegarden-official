@@ -1025,7 +1025,6 @@ std::string Composition::toXmlString()
         composition << "\" solo=\"" << m_solo;
 
     composition << "\" selected=\"" << m_selectedTrack;
-    composition << "\" copyright=\"" << encode(m_copyright);
 
     composition << "\">" << endl << endl;
 
@@ -1076,6 +1075,10 @@ std::string Composition::toXmlString()
     }
 
     composition << endl;
+
+    composition << "<metadata>" << endl
+		<< m_metadata.toXmlString() << endl
+		<< "</metadata>" << endl;
 
 #if (__GNUC__ < 3)
     composition << "</composition>" << std::ends;

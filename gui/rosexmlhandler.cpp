@@ -92,7 +92,8 @@ XmlSubHandler::~XmlSubHandler()
 class ConfigurationXmlSubHandler : public XmlSubHandler
 {
 public:
-    ConfigurationXmlSubHandler(RosegardenGUIDoc* doc);
+    ConfigurationXmlSubHandler(const QString &elementName,
+			       Rosegarden::Configuration *configuration);
     
     virtual bool startElement(const QString& namespaceURI,
                               const QString& localName,
@@ -108,14 +109,17 @@ public:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc* m_doc;
+    Rosegarden::Configuration *m_configuration;
 
+    QString m_elementName;
     QString m_propertyName;
     QString m_propertyType;
 };
 
-ConfigurationXmlSubHandler::ConfigurationXmlSubHandler(RosegardenGUIDoc* doc)
-    : m_doc(doc)
+ConfigurationXmlSubHandler::ConfigurationXmlSubHandler(const QString &elementName,
+						       Rosegarden::Configuration *configuration)
+    : m_configuration(configuration),
+      m_elementName(elementName)
 {
 }
 
@@ -140,7 +144,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
         long i = ch.toInt();
         RG_DEBUG << "\"" << m_propertyName << "\" "
                  << "value = " << i << endl;
-        m_doc->getConfiguration().set<Int>(qstrtostr(m_propertyName), i);
+        m_configuration->set<Int>(qstrtostr(m_propertyName), i);
 
         return true;
     }
@@ -155,7 +159,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
         RG_DEBUG << "\"" << m_propertyName << "\" "
                  << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
 
-        m_doc->getConfiguration().set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
+        m_configuration->set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
 
         return true;
     }
@@ -167,7 +171,16 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
                   chLc == "1"    ||
                   chLc == "on");
         
-        m_doc->getConfiguration().set<Rosegarden::Bool>(qstrtostr(m_propertyName), b);
+        m_configuration->set<Rosegarden::Bool>(qstrtostr(m_propertyName), b);
+
+        return true;
+    }
+
+    if (!m_propertyType ||
+	m_propertyType == "String") {
+        
+        m_configuration->set<Rosegarden::String>(qstrtostr(m_propertyName),
+						 qstrtostr(ch));
 
         return true;
     }
@@ -184,7 +197,7 @@ ConfigurationXmlSubHandler::endElement(const QString&,
 {
     m_propertyName = "";
     m_propertyType = "";
-    finished = (lcName == "configuration");
+    finished = (lcName == m_elementName);
     return true;
 }
 
@@ -540,7 +553,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "track") {
 
-        if (m_inComposition == false)
+        if (m_section != InComposition)
         {
             m_errorString = i18n("Track object found outside Composition");
             return false;
@@ -1272,7 +1285,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "configuration") {
 
-        setSubHandler(new ConfigurationXmlSubHandler(m_doc));
+        setSubHandler(new ConfigurationXmlSubHandler
+		      (lcName, &m_doc->getConfiguration()));
+
+    } else if (lcName == "metadata") {
+	
+	if (m_section != InComposition) {
+            m_errorString = i18n("Found Metadata outside Composition");
+            return false;
+        }
+
+        setSubHandler(new ConfigurationXmlSubHandler
+		      (lcName, &getComposition().getMetadata()));
 
     } else {
         RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
@@ -1338,6 +1362,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     } else if (lcName == "bar-segment" || lcName == "tempo-segment") {
 	
 	m_currentSegment = 0;
+
     } else if (lcName == "composition") {
         m_inComposition = false;
         m_section = NoSection;

@@ -531,9 +531,7 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
 	} else {
 	    m_fontTypeLabel->setText(strtoqstr(map.getType() + " (jaggy)"));
 	}
-    } catch (NoteFont::BadFont f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
-    } catch (NoteFontMap::MappingFileReadFailed f) {
+    } catch (Rosegarden::Exception f) {
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }
 }

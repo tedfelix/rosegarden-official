@@ -206,7 +206,7 @@ public:
     /*
      * return the Configuration object
      */
-    Rosegarden::Configuration& getConfiguration() { return m_config; }
+    Rosegarden::DocumentConfiguration& getConfiguration() { return m_config; }
 
     /**
      * returns the cut/copy/paste clipboard
@@ -460,7 +460,7 @@ private:
      * A configuration object
      *
      */
-    Rosegarden::Configuration m_config;
+    Rosegarden::DocumentConfiguration m_config;
 
     // do we need to send the start up sync? i.e. has the sequencer
     // already requested a sync?

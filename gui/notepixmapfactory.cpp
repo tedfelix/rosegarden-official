@@ -165,10 +165,7 @@ NotePixmapFactory::init(std::string fontName, int size)
 
     try {
         m_font = new NoteFont(fontName, size);
-    } catch (NoteFontMap::MappingFileReadFailed f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
-        throw;
-    } catch (NoteFont::BadFont f) {
+    } catch (Rosegarden::Exception f) {
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
         throw;
     }

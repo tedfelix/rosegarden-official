@@ -20,7 +20,7 @@
 */
 
 
-// Class to hold extraenous bits of configuration which
+// Class to hold extraneous bits of configuration which
 // don't sit inside the Composition itself - sequencer
 // and other general stuff that we want to keep separate.
 //
@@ -41,16 +41,51 @@
 namespace Rosegarden
 {
 
+std::string
+Configuration::toXmlString()
+{
+    using std::endl;
+    std::stringstream config;
+
+    // This simple implementation just assumes everything's a string.
+    // Override it if you want something fancier (or reimplement it to
+    // support the whole gamut -- the reader in rosexmlhandler.cpp
+    // already can)
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+	config <<  "<" << i->first.getName() << ">"
+	       << encode(get<String>(i->first))
+	       << "</" << i->first.getName() << ">" << endl;	
+    }
+
+#if (__GNUC__ < 3)
+    config << endl << std::ends;
+#else
+    config << endl;
+#endif
+
+    return config.str();
+}
+
+
+namespace CompositionMetadataKeys
+{
+    const PropertyName Copyright = "copyright";
+    const PropertyName Composer = "composer";
+    const PropertyName Notes = "notes";
+}
+
+
 // Keep these in lower case
-const char* const Configuration::MetronomePitch        = "metronomepitch";
-const char* const Configuration::MetronomeBarVelocity  = "metronomebarvelocity";
-const char* const Configuration::MetronomeBeatVelocity = "metronomebeatvelocity";
-const char* const Configuration::FetchLatency          = "fetchlatency";
-const char* const Configuration::MetronomeDuration     = "metronomeduration";
-const char* const Configuration::SequencerOptions      = "sequenceroptions";
+const PropertyName DocumentConfiguration::MetronomePitch        = "metronomepitch";
+const PropertyName DocumentConfiguration::MetronomeBarVelocity  = "metronomebarvelocity";
+const PropertyName DocumentConfiguration::MetronomeBeatVelocity = "metronomebeatvelocity";
+const PropertyName DocumentConfiguration::FetchLatency          = "fetchlatency";
+const PropertyName DocumentConfiguration::MetronomeDuration     = "metronomeduration";
+const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
 
 
-Configuration::Configuration()
+DocumentConfiguration::DocumentConfiguration()
 {
     set<Int>(MetronomePitch, 37);
     set<Int>(MetronomeBarVelocity, 120);
@@ -58,24 +93,19 @@ Configuration::Configuration()
     set<RealTimeT>(FetchLatency,      RealTime(0, 50000));    
     set<RealTimeT>(MetronomeDuration, RealTime(0, 10000));    
 }
-
-Configuration::~Configuration()
-{
-}
+    
 
 
 // Convert to XML string for export
 //
 std::string
-Configuration::toXmlString()
+DocumentConfiguration::toXmlString()
 {
     using std::endl;
 
     std::stringstream config;
 
     config << endl
-           << "<configuration>" << endl
-    
            << "<" << MetronomePitch        << " type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
            << "<" << MetronomeBarVelocity  << " type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
            << "<" << MetronomeBeatVelocity << " type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
@@ -89,9 +119,9 @@ Configuration::toXmlString()
     config << "<" << MetronomeDuration << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
 
 #if (__GNUC__ < 3)
-    config << "</configuration>" << endl << std::ends;
+    config << endl << std::ends;
 #else
-    config << "</configuration>" << endl;
+    config << endl;
 #endif
 
     return config.str();
