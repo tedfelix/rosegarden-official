@@ -136,7 +136,9 @@ namespace Marks
 	long markCount = 0;
 	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
 	e.set<Int>(BaseProperties::MARK_COUNT, markCount + 1);
-	e.set<String>(BaseProperties::getMarkPropertyName(markCount), mark);
+
+	PropertyName markProperty = BaseProperties::getMarkPropertyName(markCount);
+	e.set<String>(markProperty, mark);
     }
 
     bool removeMark(Event &e, const Mark &mark) {
@@ -157,6 +159,7 @@ namespace Marks
 		    pn = npn;
 		    ++j;
 		}
+		e.set<Int>(BaseProperties::MARK_COUNT, markCount - 1);
 		return true;
 	    }
 	}

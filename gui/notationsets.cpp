@@ -867,11 +867,11 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
 	    if (beam.aboveNotes) {
 		startY -= nh; endY -= nh;
+		finalX += nh;
 	    } else {
 		startY += nh; endY += nh;
+		finalX -= nh;
 	    }
-
-	    finalX += nh;
 
 	} else { // adjust to place close to note heads
 

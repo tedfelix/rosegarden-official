@@ -707,10 +707,16 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	    y = m_above - getLegerLineThickness();
 	} else {
 	    // note above staff
-	    y = m_above + m_noteBodyHeight - getLegerLineThickness();
+	    y = m_above + m_noteBodyHeight + 1;
 	}
     } else {
-	y = m_above + m_noteBodyHeight / 2;
+	if (below) {
+	    // note below staff
+	    y = m_above + m_noteBodyHeight / 2;
+	} else {
+	    // note above staff
+	    y = m_above + m_noteBodyHeight / 2;
+	}
     }
     
     bool first = true;
@@ -1171,7 +1177,9 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     if (startY == endY) ++thickness;
 
-    int tickOffset = (params.m_tuplingLineY < 0) ? 3 : -3;
+    int tickOffset = m_noteBodyHeight/2 - thickness;
+    if (params.m_tuplingLineY >= 0) tickOffset = -tickOffset;
+
 /*
     RG_DEBUG << "adjusted params.m_tuplingLineWidth = "
 			 << tlw
