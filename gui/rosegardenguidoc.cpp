@@ -60,7 +60,6 @@
 #include "xmlstorableevent.h"
 #include "rosegardendcop.h"
 
-const Rosegarden::PropertyName DOUBLEPOINT = "doublepoint";
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 

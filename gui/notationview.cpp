@@ -580,23 +580,23 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(TransformsMenuTransposeOneStepCommand::getGlobalName(true), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(1), 0, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
                 "transpose_up");
 
-    new KAction(TransformsMenuTransposeOctaveCommand::getGlobalName(true), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(12), 0, this,
                 SLOT(slotTransformsTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
-    new KAction(TransformsMenuTransposeOneStepCommand::getGlobalName(false), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(-1), 0, this,
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
 
-    new KAction(TransformsMenuTransposeOctaveCommand::getGlobalName(false), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(-12), 0, this,
                 SLOT(slotTransformsTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
-    new KAction(TransformsMenuTransposeCommand::getGlobalName(), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(0), 0, this,
                 SLOT(slotTransformsTranspose()), actionCollection(),
                 "general_transpose");
 
@@ -607,32 +607,36 @@ void NotationView::setupActions()
     { Accent, Tenuto, Staccato, Sforzando, Rinforzando,
       Trill, Turn, Pause, UpBow, DownBow };
     static const char *markSlots[] = 
-    { "1slotTransformsAddAccent()",      "1slotTransformsAddTenuto()",
-      "1slotTransformsAddStaccato()",    "1slotTransformsAddSforzando()",
-      "1slotTransformsAddRinforzando()", "1slotTransformsAddTrill()",
-      "1slotTransformsAddTurn()",        "1slotTransformsAddPause()",
-      "1slotTransformsAddUpBow()",       "1slotTransformsAddDownBow()" };
+    { "1slotMarksAddAccent()",      "1slotMarksAddTenuto()",
+      "1slotMarksAddStaccato()",    "1slotMarksAddSforzando()",
+      "1slotMarksAddRinforzando()", "1slotMarksAddTrill()",
+      "1slotMarksAddTurn()",        "1slotMarksAddPause()",
+      "1slotMarksAddUpBow()",       "1slotMarksAddDownBow()" };
 
     for (unsigned int i = 0; i < 10; ++i) {
-        new KAction(TransformsMenuAddMarkCommand::getGlobalName(marks[i]), 0, this,
+        new KAction(MarksMenuAddMarkCommand::getGlobalName(marks[i]), 0, this,
                     markSlots[i], actionCollection(),
                     QString("add_%1").arg(marks[i].c_str()));
     }
 
-    new KAction(TransformsMenuAddTextMarkCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsAddTextMark()), actionCollection(),
+    new KAction(MarksMenuAddTextMarkCommand::getGlobalName(), 0, this,
+                SLOT(slotMarksAddTextMark()), actionCollection(),
                 "add_text_mark");
 
-    new KAction(TransformsMenuRemoveMarksCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsRemoveMarks()), actionCollection(),
+    new KAction(MarksMenuRemoveMarksCommand::getGlobalName(), 0, this,
+                SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
 
+    new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
+                SLOT(slotEditAddTempo()), actionCollection(),
+                "add_tempo");
+
     new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsAddTimeSignature()), actionCollection(),
+                SLOT(slotEditAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
     new KAction(KeyInsertionCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsAddKeySignature()), actionCollection(),
+                SLOT(slotEditAddKeySignature()), actionCollection(),
                 "add_key_signature");
 
     // setup Settings menu
@@ -1542,8 +1546,8 @@ void NotationView::slotTransformsTransposeUp()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing up one semitone..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuTransposeOneStepCommand
-                        (true, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuTransposeCommand
+                        (1, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeUpOctave()
@@ -1551,8 +1555,8 @@ void NotationView::slotTransformsTransposeUpOctave()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing up one octave..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuTransposeOctaveCommand
-                        (true, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuTransposeCommand
+                        (12, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeDown()
@@ -1560,8 +1564,8 @@ void NotationView::slotTransformsTransposeDown()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing down one semitone..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuTransposeOneStepCommand
-                        (false, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuTransposeCommand
+                        (-1, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTransposeDownOctave()
@@ -1569,100 +1573,123 @@ void NotationView::slotTransformsTransposeDownOctave()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Transposing down one octave..."), statusBar());
 
-    addCommandToHistory(new TransformsMenuTransposeOctaveCommand
-                        (false, *m_currentEventSelection));
+    addCommandToHistory(new TransformsMenuTransposeCommand
+                        (-12, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddAccent()
+void NotationView::slotMarksAddAccent()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Accent, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddTenuto()
+void NotationView::slotMarksAddTenuto()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Tenuto, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddStaccato()
+void NotationView::slotMarksAddStaccato()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Staccato, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddSforzando()
+void NotationView::slotMarksAddSforzando()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Sforzando, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddRinforzando()
+void NotationView::slotMarksAddRinforzando()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Rinforzando, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddTrill()
+void NotationView::slotMarksAddTrill()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Trill, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddTurn()
+void NotationView::slotMarksAddTurn()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Turn, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddPause()
+void NotationView::slotMarksAddPause()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (Pause, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddUpBow()
+void NotationView::slotMarksAddUpBow()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (UpBow, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddDownBow()
+void NotationView::slotMarksAddDownBow()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddMarkCommand
+        addCommandToHistory(new MarksMenuAddMarkCommand
                             (DownBow, *m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddTextMark()
+void NotationView::slotMarksAddTextMark()
 {
     if (m_currentEventSelection) {
 	SimpleTextDialog *dialog = new SimpleTextDialog(this, 20);
 	if (dialog->exec() == QDialog::Accepted) {
-	    addCommandToHistory(new TransformsMenuAddTextMarkCommand
+	    addCommandToHistory(new MarksMenuAddTextMarkCommand
 				(dialog->getText(), *m_currentEventSelection));
 	}
 	delete dialog;
     }
 }
 
-void NotationView::slotTransformsRemoveMarks()
+void NotationView::slotMarksRemoveMarks()
 {
     if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuRemoveMarksCommand
+        addCommandToHistory(new MarksMenuRemoveMarksCommand
                             (*m_currentEventSelection));
 }
 
-void NotationView::slotTransformsAddTimeSignature()
+void NotationView::slotEditAddTempo()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    double layoutX = staff->getLayoutXOfInsertCursor();
+    if (layoutX >= 0) {
+
+	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+
+	TempoDialog *tempoDlg = new TempoDialog(this, m_document);
+
+	connect(tempoDlg,
+		SIGNAL(changeTempo(Rosegarden::timeT,
+				   double, TempoDialog::TempoDialogAction)),
+		this,
+		SIGNAL(changeTempo(Rosegarden::timeT,
+				   double, TempoDialog::TempoDialogAction)));
+	
+	tempoDlg->setTempoPosition(insertionTime);
+	tempoDlg->show();
+    }
+}
+
+void NotationView::slotEditAddTimeSignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
@@ -1707,7 +1734,7 @@ void NotationView::slotTransformsAddTimeSignature()
     }
 }			
 
-void NotationView::slotTransformsAddKeySignature()
+void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();

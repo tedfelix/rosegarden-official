@@ -60,7 +60,7 @@ Post-0.1.4 task list
 
 15. Work out why clicking on a segment with the SegmentSelector or
     SegmentMover without moving it still causes a move command to
-    happen, and stop it
+    happen, and stop it [DONE]
 
 16. The NormalizeRestsCommand in notationcommands.cpp has the wrong
     undo/redo extents, because the normalization function may modify

@@ -74,7 +74,6 @@ using std::endl;
 using std::cout;
 using Rosegarden::timeT;
 
-static Rosegarden::MappedComposition mappComp;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),

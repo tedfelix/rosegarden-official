@@ -494,8 +494,6 @@ TransformsMenuRestoreStemsCommand::modifySegment()
     }
 }
 
-//!!! bleah -- merge these three classes 
-
 void
 TransformsMenuTransposeCommand::modifySegment()
 {
@@ -516,53 +514,9 @@ TransformsMenuTransposeCommand::modifySegment()
     }
 }
 
-void
-TransformsMenuTransposeOneStepCommand::modifySegment()
-{
-    SegmentNotationHelper helper(getSegment());
-    EventSelection::eventcontainer::iterator i;
-
-    int offset = m_up ? 1 : -1;
-
-    for (i  = m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ++i) {
-
-	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(PITCH);
-	    pitch += offset;
-	    if (pitch < 0) pitch = 0;
-	    if (pitch > 127) pitch = 127;
-	    (*i)->set<Int>(PITCH, pitch); 
-	    (*i)->unset(ACCIDENTAL);
-	}
-    }
-}
-
-void
-TransformsMenuTransposeOctaveCommand::modifySegment()
-{
-    SegmentNotationHelper helper(getSegment());
-    EventSelection::eventcontainer::iterator i;
-
-    int offset = m_up ? 12 : -12;
-
-    for (i  = m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ++i) {
-
-	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(PITCH);
-	    pitch += offset;
-	    if (pitch < 0) pitch = 0;
-	    if (pitch > 127) pitch = 127;
-	    (*i)->set<Int>(PITCH, pitch); 
-	    (*i)->unset(ACCIDENTAL);
-	}
-    }
-}
-
 
 QString
-TransformsMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
+MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 {
     std::string m = markType;
 
@@ -578,7 +532,7 @@ TransformsMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 }
 
 void
-TransformsMenuAddMarkCommand::modifySegment()
+MarksMenuAddMarkCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
@@ -595,7 +549,7 @@ TransformsMenuAddMarkCommand::modifySegment()
 }
 
 void
-TransformsMenuAddTextMarkCommand::modifySegment()
+MarksMenuAddTextMarkCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
@@ -612,7 +566,7 @@ TransformsMenuAddTextMarkCommand::modifySegment()
 }
 
 void
-TransformsMenuRemoveMarksCommand::modifySegment()
+MarksMenuRemoveMarksCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;

@@ -232,6 +232,14 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     connect(notationView, SIGNAL(notePlayed(Rosegarden::MappedEvent*)),
             this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
 
+    // For tempo changes (ugh -- it'd be nicer to make a tempo change
+    // command that could interpret all this stuff from the dialog)
+    //
+    connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT, double,
+					     TempoDialog::TempoDialogAction)),
+	    par, SLOT(slotChangeTempo(Rosegarden::timeT, double,
+				      TempoDialog::TempoDialogAction)));
+
     notationView->show();
 }
 

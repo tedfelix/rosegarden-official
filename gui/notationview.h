@@ -26,6 +26,7 @@
 #include <kmainwindow.h>
 
 #include "editview.h"
+#include "dialogs.h" // for TempoDialog::TempoDialogAction
 #include "notationelement.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
@@ -281,21 +282,22 @@ public slots:
     void slotTransformsTransposeDown();
     void slotTransformsTransposeDownOctave();
 
-    void slotTransformsAddAccent();
-    void slotTransformsAddTenuto();
-    void slotTransformsAddStaccato();
-    void slotTransformsAddSforzando();
-    void slotTransformsAddRinforzando();
-    void slotTransformsAddTrill();
-    void slotTransformsAddTurn();
-    void slotTransformsAddPause();
-    void slotTransformsAddUpBow();
-    void slotTransformsAddDownBow();
-    void slotTransformsAddTextMark();
-    void slotTransformsRemoveMarks();
+    void slotMarksAddAccent();
+    void slotMarksAddTenuto();
+    void slotMarksAddStaccato();
+    void slotMarksAddSforzando();
+    void slotMarksAddRinforzando();
+    void slotMarksAddTrill();
+    void slotMarksAddTurn();
+    void slotMarksAddPause();
+    void slotMarksAddUpBow();
+    void slotMarksAddDownBow();
+    void slotMarksAddTextMark();
+    void slotMarksRemoveMarks();
 
-    void slotTransformsAddTimeSignature();
-    void slotTransformsAddKeySignature();
+    void slotEditAddTempo();
+    void slotEditAddTimeSignature();
+    void slotEditAddKeySignature();
 
     void slotDebugDump();
 
@@ -371,6 +373,10 @@ signals:
     void usedSelection();
 
     void notePlayed(Rosegarden::MappedEvent *);
+
+    void changeTempo(Rosegarden::timeT,  // tempo change time
+                     double,             // tempo value
+                     TempoDialog::TempoDialogAction); // tempo action
 
 protected:
     /**

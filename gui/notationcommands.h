@@ -357,11 +357,20 @@ private:
 class TransformsMenuTransposeCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuTransposeCommand(int semitones, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
+    TransformsMenuTransposeCommand(int semitones,
+				   Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(semitones), selection, true),
 	m_selection(&selection), m_semitones(semitones) { }
 
-    static QString getGlobalName() { return "&Transpose..."; }
+    static QString getGlobalName(int semitones = 0) {
+	switch (semitones) {
+	case   1: return "&Up a Semitone";
+	case  -1: return "&Down a Semitone";
+	case  12: return "Up an &Octave";
+	case -12: return "Down an Octa&ve";
+	default:  return "&Transpose...";
+	}
+    }
 
 protected:
     virtual void modifySegment();
@@ -372,51 +381,11 @@ private:
 };
 
 
-class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
+class MarksMenuAddMarkCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuTransposeOneStepCommand(bool up, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(up), selection, true),
-	m_selection(&selection), m_up(up) { }
-
-    static QString getGlobalName(bool up) {
-	return up ? "&Up a Semitone" : "&Down a Semitone";
-    }
-
-protected:
-    virtual void modifySegment();
-
-private:
-    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    bool m_up;
-};
-
-
-class TransformsMenuTransposeOctaveCommand : public BasicSelectionCommand
-{
-public:
-    TransformsMenuTransposeOctaveCommand(bool up, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(up), selection, true),
-	m_selection(&selection), m_up(up) { }
-
-    static QString getGlobalName(bool up) {
-	return up ? "Up an &Octave" : "Down an Octa&ve";
-    }
-
-protected:
-    virtual void modifySegment();
-
-private:
-    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    bool m_up;
-};
-
-
-class TransformsMenuAddMarkCommand : public BasicSelectionCommand
-{
-public:
-    TransformsMenuAddMarkCommand(Rosegarden::Mark mark,
-				 Rosegarden::EventSelection &selection) :
+    MarksMenuAddMarkCommand(Rosegarden::Mark mark,
+			    Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(mark), selection, true),
 	m_selection(&selection), m_mark(mark) { }
 
@@ -431,11 +400,11 @@ private:
 };
 
 
-class TransformsMenuAddTextMarkCommand : public BasicSelectionCommand
+class MarksMenuAddTextMarkCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuAddTextMarkCommand(std::string text,
-				     Rosegarden::EventSelection &selection) :
+    MarksMenuAddTextMarkCommand(std::string text,
+				Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_text(text) { }
 
@@ -450,10 +419,10 @@ private:
 };
 
 
-class TransformsMenuRemoveMarksCommand : public BasicSelectionCommand
+class MarksMenuRemoveMarksCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuRemoveMarksCommand(Rosegarden::EventSelection &selection) :
+    MarksMenuRemoveMarksCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 

@@ -472,12 +472,7 @@ SegmentParameterBox::slotQuantizeSelected(int qLevel)
 	command->addSegment(*it);
     }
 
-    //!!! okay, what to do with the command -- got to get the 
-    // command history from the document -- do it here or emit
-    // signal & do it elsewhere?
-    //
     addCommandToHistory(command);
-    
 }
 
 
