@@ -922,7 +922,7 @@ RosegardenSequencerApp::keepPlaying()
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
 
-    return isEndOfCompReached();
+    return true; // isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
 // Return current Sequencer time in GUI compatible terms
