@@ -25,18 +25,21 @@
 #define _TRACKBUTTONS_H_
 
 #include <vector>
-#include "Instrument.h"
-#include "Track.h"
 
 #include <qframe.h>
 #include <qpopupmenu.h>
 
+#include "Instrument.h"
+#include "Track.h"
+
+#include "tracklabel.h"
+
 class QVBoxLayout;
 class QButtonGroup;
 class TrackVUMeter;
-class TrackLabel;
 class RosegardenGUIDoc;
 class InstrumentLabel;
+class QSignalMapper;
 
 // This class creates a list of mute and record buttons
 // based on the rosegarden document and a specialisation
@@ -49,13 +52,6 @@ class TrackButtons : public QFrame
 {
     Q_OBJECT
 public:
-
-    typedef enum
-    {
-        ShowTrack,
-        ShowInstrument,
-        ShowBoth
-    } InstrumentTrackLabels;
 
     TrackButtons(RosegardenGUIDoc* doc,
                  unsigned int trackCellHeight,
@@ -77,7 +73,7 @@ public:
     /// Return a vector of highlighted tracks
     std::vector<int> getHighlightedTracks();
 
-    void changeTrackInstrumentLabels(InstrumentTrackLabels label);
+    void changeTrackInstrumentLabels(TrackLabel::InstrumentTrackLabels label);
 
     /**
      * Change the instrument label to something else like
@@ -132,7 +128,6 @@ public slots:
 
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);
-    void slotInstrumentPopupHiding();
 
     // ensure track buttons match the Composition
     //
@@ -173,6 +168,8 @@ protected:
     QFrame* makeButton(Rosegarden::TrackId trackId);
     QString getPresentationName(Rosegarden::Instrument *);
 
+    void setButtonMapping(QObject*, Rosegarden::TrackId);
+
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc                 *m_doc;
@@ -183,11 +180,13 @@ protected:
 
     std::vector<TrackLabel *>         m_trackLabels;
     std::vector<TrackVUMeter *>       m_trackMeters;
-    std::vector<InstrumentLabel *>    m_instrumentLabels;
+//     std::vector<InstrumentLabel *>    m_instrumentLabels;
     std::vector<QFrame *>             m_trackHBoxes;
 
     QPopupMenu                       *m_instrumentPopup;
     std::vector<QPopupMenu*>          m_instrumentSubMenu;
+    QSignalMapper                    *m_clickedSigMapper;
+    QSignalMapper                    *m_instListSigMapper;
 
     // Number of tracks on our view
     //
@@ -209,8 +208,8 @@ protected:
     int                               m_trackLabelWidth;
     int                               m_popupItem;
 
-    InstrumentTrackLabels             m_trackInstrumentLabels;
-
+    TrackLabel::InstrumentTrackLabels             m_trackInstrumentLabels;
+    int m_lastSelected;
 };
 
 

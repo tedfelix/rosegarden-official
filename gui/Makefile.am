@@ -26,7 +26,6 @@ rosegarden_SOURCES = \
         eventcommands.cpp \
 	eventfilter.cpp \
         eventview.cpp \
-        instrumentlabel.cpp \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \

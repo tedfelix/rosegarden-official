@@ -19,18 +19,16 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <qbuttongroup.h>
+#include <qsignalmapper.h>
 
 #include <klocale.h>
 #include <kapp.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qbuttongroup.h>
-
-#include <cassert>
 
 #include "trackbuttons.h"
 #include "Track.h"
@@ -38,27 +36,12 @@
 #include "colours.h"
 #include "tracklabel.h"
 #include "trackvumeter.h"
-#include "instrumentlabel.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
 
 using Rosegarden::TrackId;
-
-QString
-TrackButtons::getPresentationName(Rosegarden::Instrument *instr)
-{
-    if (!instr) {
-	return i18n("<no instrument>");
-    } else if (instr->getType() == Rosegarden::Instrument::Audio) {
-	return strtoqstr(instr->getName());
-    } else {
-	return strtoqstr(instr->getDevice()->getName() + " " + 
-			 instr->getName());
-    }
-}
-
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
@@ -74,22 +57,24 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
       m_muteButtonGroup(new QButtonGroup(this)),
       m_layout(new QVBoxLayout(this)),
       m_instrumentPopup(new QPopupMenu(this)),
+      m_clickedSigMapper(new QSignalMapper(this)),
+      m_instListSigMapper(new QSignalMapper(this)),
       m_tracks(doc->getComposition().getNbTracks()),
       m_offset(4),
       m_cellSize(trackCellHeight),
       m_borderGap(1),
       m_lastID(-1),
       m_trackLabelWidth(trackLabelWidth),
-      m_popupItem(0)
-
+      m_popupItem(0),
+      m_lastSelected(-1)
 {
     setFrameStyle(Plain);
 
     // when we create the widget, what are we looking at?
     if (showTrackLabels)
-        m_trackInstrumentLabels = ShowTrack;
+        m_trackInstrumentLabels = TrackLabel::ShowTrack;
     else
-        m_trackInstrumentLabels = ShowInstrument;
+        m_trackInstrumentLabels = TrackLabel::ShowInstrument;
 
     // Set the spacing between vertical elements
     //
@@ -114,6 +99,13 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
     connect(m_muteButtonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotToggleMutedTrack(int)));
+
+    // connect signal mappers
+    connect(m_instListSigMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotInstrumentSelection(int)));
+
+    connect(m_clickedSigMapper, SIGNAL(mapped(int)),
+            this, SIGNAL(trackSelected(int)));
 
     // Populate instrument popup menu just once at start-up
     //
@@ -189,7 +181,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     TrackVUMeter *vuMeter = 0;
     TrackLabel *trackLabel = 0;
-    InstrumentLabel *instrumentLabel = 0;
 
     int vuWidth = 20;
     int vuSpacing = 2;
@@ -242,15 +233,16 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     mute->setFlat(true);
     record->setFlat(true);
 
-    // Create a label
+    //
+    // Track label
     //
     trackLabel = new TrackLabel(trackId, track->getPosition(), trackHBox);
     hblayout->addWidget(trackLabel);
 
     if (track->getLabel() == std::string(""))
-        trackLabel->setText(i18n("<untitled>"));
+        trackLabel->getTrackLabel()->setText(i18n("<untitled>"));
     else
-        trackLabel->setText(strtoqstr(track->getLabel()));
+        trackLabel->getTrackLabel()->setText(strtoqstr(track->getLabel()));
 
     trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
@@ -264,44 +256,27 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     m_trackLabels.push_back(trackLabel);
 
     // Connect it
-    connect(trackLabel, SIGNAL(released(int)), SIGNAL(trackSelected(int)));
+    setButtonMapping(trackLabel, trackId);
 
+    connect(trackLabel, SIGNAL(changeToInstrumentList()),
+            m_instListSigMapper, SLOT(map()));
+    connect(trackLabel, SIGNAL(clicked()),
+            m_clickedSigMapper, SLOT(map()));
+
+    //
     // instrument label
+    //
     Rosegarden::Instrument *ins =
         m_doc->getStudio().getInstrumentById(track->getInstrument());
 
     QString instrumentName(getPresentationName(ins));
 
-    instrumentLabel = new InstrumentLabel(instrumentName,
-                                          trackId,
-                                          trackHBox);
-
-    instrumentLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
-    instrumentLabel->setFixedHeight(m_cellSize - buttonGap);
-    instrumentLabel->setIndent(7);
-    hblayout->addWidget(instrumentLabel);
-
     // Set label to program change if it's being sent
     //
     if (ins != 0 && ins->sendsProgramChange())
-        instrumentLabel->slotSetAlternativeLabel(
-                QString(strtoqstr(ins->getProgramName())));
+        trackLabel->setAlternativeLabel(strtoqstr(ins->getProgramName()));
 
-    if (m_trackInstrumentLabels == ShowInstrument)
-        trackLabel->hide();
-    else
-        instrumentLabel->hide();
-
-    connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
-            this, SLOT(slotInstrumentSelection(int)));
-
-    connect(instrumentLabel, SIGNAL(changeToInstrumentList(int)),
-            this, SLOT(slotInstrumentSelection(int)));
-
-    // insert label
-    m_instrumentLabels.push_back(instrumentLabel);
-
-    connect(instrumentLabel, SIGNAL(released(int)), SIGNAL(trackSelected(int)));
+    trackLabel->showLabel(m_trackInstrumentLabels);
 
     // Insert the buttons into groups
     //
@@ -324,6 +299,26 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     return trackHBox;
 }
+
+QString
+TrackButtons::getPresentationName(Rosegarden::Instrument *instr)
+{
+    if (!instr) {
+	return i18n("<no instrument>");
+    } else if (instr->getType() == Rosegarden::Instrument::Audio) {
+	return strtoqstr(instr->getName());
+    } else {
+	return strtoqstr(instr->getDevice()->getName() + " " + 
+			 instr->getName());
+    }
+}
+
+void TrackButtons::setButtonMapping(QObject* obj, Rosegarden::TrackId trackId)
+{
+    m_clickedSigMapper->setMapping(obj, trackId);
+    m_instListSigMapper->setMapping(obj, trackId);
+}
+
 
 
 // Return the track that's currently set for recording
@@ -370,25 +365,24 @@ TrackButtons::populateButtons()
 
             // reset track tokens
             m_trackLabels[i]->setId(track->getId());
+            setButtonMapping(m_trackLabels[i], track->getId());
             m_trackLabels[i]->setPosition(i);
-            m_instrumentLabels[i]->setId(track->getId());
         }
 
         if (ins)
         {
-            m_instrumentLabels[i]->setText(getPresentationName(ins));
+            m_trackLabels[i]->getInstrumentLabel()->setText(getPresentationName(ins));
             if (ins->sendsProgramChange())
             {
-                m_instrumentLabels[i]->
-                    slotSetAlternativeLabel(strtoqstr(ins->getProgramName()));
+                m_trackLabels[i]->setAlternativeLabel(strtoqstr(ins->getProgramName()));
             }
 
         }
         else
         {
-            m_instrumentLabels[i]->setText(i18n("<no instrument>"));
+            m_trackLabels[i]->getInstrumentLabel()->setText(i18n("<no instrument>"));
         }
-        m_instrumentLabels[i]->update();
+
         m_trackLabels[i]->update();
     }
 
@@ -435,9 +429,9 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
 void
 TrackButtons::removeButtons(unsigned int position)
 {
-    std::cerr << "TrackButtons::removeButtons - "
-              << "deleting track button at position "
-              << position << std::endl;
+    RG_DEBUG << "TrackButtons::removeButtons - "
+             << "deleting track button at position "
+             << position << endl;
 
     unsigned int i = 0;
     std::vector<QFrame*>::iterator it;
@@ -449,21 +443,6 @@ TrackButtons::removeButtons(unsigned int position)
 
     if (it != m_trackHBoxes.end())
         m_trackHBoxes.erase(it);
-
-    i = 0;
-    std::vector<InstrumentLabel*>::iterator iit;
-    for (iit = m_instrumentLabels.begin();
-         iit != m_instrumentLabels.end(); ++iit)
-    {
-        if (i == position) break;
-        i++;
-    }
-
-    if (iit != m_instrumentLabels.end())
-    {
-        //delete (*iit);
-        m_instrumentLabels.erase(iit);
-    }
 
     i = 0;
     std::vector<TrackLabel*>::iterator tit;
@@ -546,8 +525,8 @@ TrackButtons::slotUpdateTracks()
                 }
             }
             else
-                std::cerr << "TrackButtons::slotUpdateTracks - "
-                          << "can't find TrackId for position " << i << std::endl;
+                RG_DEBUG << "TrackButtons::slotUpdateTracks - "
+                         << "can't find TrackId for position " << i << endl;
         }
     }
 
@@ -559,15 +538,13 @@ TrackButtons::slotUpdateTracks()
         {
             track = comp.getTrackByPosition(i);
 
-            if (track)
+            if (track) {
                 m_trackLabels[i]->setId(track->getId());
+                setButtonMapping(m_trackLabels[i], track->getId());
+            }
+            
         }
 
-        if (m_instrumentLabels[i] != (*m_instrumentLabels.end()))
-        {
-            if (track) m_instrumentLabels[i]->setId(track->getId());
-
-        }
     }
     m_tracks = newNbTracks;
 
@@ -628,54 +605,11 @@ TrackButtons::setRecordButtonDown(int position)
 void
 TrackButtons::selectLabel(int position)
 {
-    bool update = false;
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
-    {
-        update = false;
+    if (m_lastSelected >= 0)
+        m_trackLabels[m_lastSelected]->setSelected(false);
+    m_trackLabels[position]->setSelected(true);
 
-        if (i == ((unsigned int)position))
-        {
-            if (!m_instrumentLabels[i]->isSelected())
-            {
-                update = true;
-                m_trackLabels[i]->setSelected(true);
-            }
-        }
-        else
-        {
-            if (m_instrumentLabels[i]->isSelected())
-            {
-                update = true;
-                m_trackLabels[i]->setSelected(false);
-            }
-        }
-
-        if (update) m_trackLabels[i]->update();
-    }
-
-    for (unsigned int i = 0; i < m_instrumentLabels.size(); ++i)
-    {
-        update = false;
-
-        if (i == ((unsigned int)position))
-        {
-            if (!m_instrumentLabels[i]->isSelected())
-            {
-                update = true;
-                m_instrumentLabels[i]->setSelected(true);
-            }
-        }
-        else
-        {
-            if (m_instrumentLabels[i]->isSelected())
-            {
-                update = true;
-                m_instrumentLabels[i]->setSelected(false);
-            }
-        }
-
-        if (update) m_instrumentLabels[i]->update();
-    }
+    m_lastSelected = position;
 }
 
 
@@ -707,7 +641,7 @@ TrackButtons::slotRenameTrack(QString newName, int trackNumber)
     {
         if (i == ((unsigned int)trackNumber))
         {
-            m_trackLabels[i]->setText(newName);
+            m_trackLabels[i]->getTrackLabel()->setText(newName);
             emit widthChanged();
             return;
         }
@@ -755,6 +689,8 @@ TrackButtons::slotSetMetersByInstrument(double value,
 void
 TrackButtons::slotInstrumentSelection(int trackId)
 {
+    RG_DEBUG << "TrackButtons::slotInstrumentSelection(" << trackId << ")\n";
+
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
 
@@ -770,46 +706,23 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     //
     // populate this instrument widget
-    m_instrumentLabels[position]->setText(instrumentName);
+    m_trackLabels[position]->getInstrumentLabel()->setText(instrumentName);
 
-    // Hide the track label if we're in Track only mode
-    if (m_trackInstrumentLabels == ShowTrack)
-    {
-       m_trackLabels[position]->hide();
-       m_instrumentLabels[position]->show();
-    }
-
-    // Show the popup at the mouse click positon stored in
-    // the track label
-    //
-    QPoint menuPos;
-
-    // Get the correct menu position according to what's switched on
-    //
-    switch(m_trackInstrumentLabels)
-    {
-        case ShowInstrument:
-            menuPos = m_instrumentLabels[position]->getPressPosition();
-            break;
-
-        case ShowTrack:
-        case ShowBoth:
-        default:
-            menuPos = m_trackLabels[position]->getPressPosition();
-            break;
-    }
-
+    // Ensure the instrument name is shown
+    m_trackLabels[position]->showLabel(TrackLabel::ShowInstrument);
+    
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
     //
     populateInstrumentPopup(instrument);
 
-    m_instrumentPopup->popup(menuPos);
-
+    m_instrumentPopup->exec(QCursor::pos());
     // Store the popup item position
     //
     m_popupItem = position;
 
+    // Restore the label back to what it was showing
+    m_trackLabels[position]->showLabel(m_trackInstrumentLabels);
 }
 
 void
@@ -923,9 +836,6 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
 	    connect(subMenu, SIGNAL(activated(int)),
 		    SLOT(slotInstrumentPopupActivated(int)));
 	    
-	    connect(subMenu, SIGNAL(aboutToHide()),
-		    SLOT(slotInstrumentPopupHiding()));
-
 	} else if (!instrUsedByMe) {
 	
 	    for (Rosegarden::Composition::trackcontainer::iterator tit =
@@ -984,18 +894,17 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             // select instrument
             emit instrumentSelected((int)inst->getId());
 
-            m_instrumentLabels[m_popupItem]->
+            m_trackLabels[m_popupItem]->getInstrumentLabel()->
                     setText(getPresentationName(inst));
 
             // reset the alternative label
-            m_instrumentLabels[m_popupItem]->clearAlternativeLabel();
+            m_trackLabels[m_popupItem]->clearAlternativeLabel();
 
             // Now see if the program is being shown for this instrument
             // and if so reset the label
             //
             if (inst->sendsProgramChange())
-                m_instrumentLabels[m_popupItem]->slotSetAlternativeLabel(
-                             QString(strtoqstr(inst->getProgramName())));
+                m_trackLabels[m_popupItem]->setAlternativeLabel(strtoqstr(inst->getProgramName()));
 
             // Ensure that we set a record track properly
             //
@@ -1004,56 +913,24 @@ TrackButtons::slotInstrumentPopupActivated(int item)
 
         }
         else
-            std::cerr << "slotInstrumentPopupActivated() - can't find item!" << std::endl;
+            RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";
     }
     else
-        std::cerr << "slotInstrumentPopupActivated() - can't find item!" << std::endl;
+        RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";
 
 }
-
-// Swap back the labels
-void
-TrackButtons::slotInstrumentPopupHiding()
-{
-    changeTrackInstrumentLabels(m_trackInstrumentLabels);
-}
-
 
 // Hide and show Tracks and Instruments
 //
 void
-TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
+TrackButtons::changeTrackInstrumentLabels(TrackLabel::InstrumentTrackLabels label)
 {
     // Set new label
     m_trackInstrumentLabels = label;
 
     // update and reconnect with new value
-    for (int i = 0; i < (int)m_tracks; i++)
-    {
-        switch(label)
-        {
-            case ShowInstrument:
-                m_trackLabels[i]->hide();
-                m_trackLabels[i]->blockSignals(true);
-                m_instrumentLabels[i]->show();
-                m_instrumentLabels[i]->blockSignals(false);
-                break;
-    
-            case ShowBoth:
-                m_trackLabels[i]->show();
-                m_trackLabels[i]->blockSignals(false);
-                m_instrumentLabels[i]->show();
-                m_instrumentLabels[i]->blockSignals(false);
-                break;
-    
-            case ShowTrack:
-            default:
-                m_trackLabels[i]->show();
-                m_trackLabels[i]->blockSignals(false);
-                m_instrumentLabels[i]->hide();
-                m_instrumentLabels[i]->blockSignals(true);
-                break;
-        }
+    for (int i = 0; i < (int)m_tracks; i++) {
+        m_trackLabels[i]->showLabel(label);
     }
 }
 
@@ -1072,7 +949,7 @@ TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
         track = comp.getTrackByPosition(i);
 
         if(track && track->getInstrument() == id)
-            m_instrumentLabels[i]->slotSetAlternativeLabel(label);
+            m_trackLabels[i]->setAlternativeLabel(label);
     }
 }
 
@@ -1103,7 +980,7 @@ TrackButtons::slotSynchroniseWithComposition()
 
 	    instrumentName = getPresentationName(ins);
 
-            m_instrumentLabels[i]->setText(instrumentName);
+            m_trackLabels[i]->getInstrumentLabel()->setText(instrumentName);
         }
     }
 

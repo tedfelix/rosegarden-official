@@ -77,6 +77,7 @@
 #include "Selection.h"
 #include "sequencemanager.h"
 #include "trackbuttons.h"
+#include "tracklabel.h"
 #include "trackeditor.h"
 #include "dialogs.h"
 #include "editcommands.h"
@@ -2002,12 +2003,12 @@ void RosegardenGUIApp::slotToggleTrackLabels()
     if (m_viewTrackLabels->isChecked())
     {
         m_view->getTrackEditor()->getTrackButtons()->
-            changeTrackInstrumentLabels(TrackButtons::ShowTrack);
+            changeTrackInstrumentLabels(TrackLabel::ShowTrack);
     }
     else
     {
         m_view->getTrackEditor()->getTrackButtons()->
-            changeTrackInstrumentLabels(TrackButtons::ShowInstrument);
+            changeTrackInstrumentLabels(TrackLabel::ShowInstrument);
     }
 }
 

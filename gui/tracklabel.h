@@ -22,21 +22,30 @@
 #define _TRACK_LABEL_H_
 
 #include <qstring.h>
-#include <qlabel.h>
+#include <qwidgetstack.h>
 
 #include "Track.h"
 
 class QTimer;
+class QLabel;
 
 /**
  * Specialises QLabel to create in effect a toggleable and hence
  * selectable label/label list.  In conjunction with TrackButtons
  * provides a framework for Track selection on the TrackCanvas.
  */
-class TrackLabel : public QLabel
+class TrackLabel : public QWidgetStack
 {
 Q_OBJECT
 public:
+
+    enum InstrumentTrackLabels
+    {
+        ShowTrack,
+        ShowInstrument,
+        ShowBoth
+    };
+
     TrackLabel(Rosegarden::TrackId id,
                int position,
                QWidget *parent,
@@ -44,6 +53,15 @@ public:
                WFlags f=0);
 
     ~TrackLabel();
+
+    // QLabel API delegation - applies on both labels
+    void setIndent(int);
+
+    QLabel* getInstrumentLabel() { return m_instrumentLabel; }
+    QLabel* getTrackLabel()      { return m_trackLabel; }
+    void setAlternativeLabel(const QString &label);
+    void clearAlternativeLabel();
+    void showLabel(InstrumentTrackLabels);
 
     // Encapsulates setting the label to highlighted or not
     //
@@ -56,21 +74,14 @@ public:
     int getPosition() const { return m_position; }
     void setPosition(int position) { m_position = position; }
 
-    QPoint getPressPosition() const { return m_pressPosition; }
-
-public slots:
-    void slotChangeToInstrumentList();
-    
 signals:
-    // Our version of released() has an int id associated with it
-    //
-    void released(int); // TODO : rename this to 'clicked(int)'
+    void clicked();
 
     // We emit this once we've renamed a track
     //
     void renameTrack(QString, int);
 
-    void changeToInstrumentList(int);
+    void changeToInstrumentList();
 
 protected:
 
@@ -78,13 +89,19 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
+    QLabel* getVisibleLabel();
+
+    //--------------- Data members ---------------------------------
+
+    QLabel              *m_instrumentLabel;
+    QLabel              *m_trackLabel;
+    QString              m_alternativeLabel;
+
     Rosegarden::TrackId  m_id;
     int                  m_position;
     bool                 m_selected;
 
     QTimer              *m_pressTimer;
-    QPoint               m_pressPosition;
-
 };
 
 #endif // _TRACK_LABEL_H_
