@@ -4,6 +4,10 @@
 
 <MenuBar>
 
+<Menu name="edit" append="new_merge">
+  <Action name="select_all"/>
+</Menu>
+
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>

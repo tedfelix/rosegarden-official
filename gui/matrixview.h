@@ -273,6 +273,12 @@ public slots:
      */
     void slotChangeHorizontalZoom(int);
 
+    /*
+     * Select all
+     *
+     */
+    void slotSelectAll();
+
 protected:
 
     virtual void keyPressEvent(QKeyEvent *event);

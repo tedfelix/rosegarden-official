@@ -428,6 +428,10 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n("Select All"), 0, this,
+                SLOT(slotSelectAll()), actionCollection(),
+                "select_all");
+
     new KAction(i18n("&Delete"), Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
@@ -1435,5 +1439,21 @@ MatrixView::removeControlRuler(unsigned int number)
 
     return true;
 }
+
+
+void
+MatrixView::slotSelectAll()
+{
+    Rosegarden::Segment *segment = m_segments[0];
+    Rosegarden::Segment::iterator it = segment->begin();
+    EventSelection *selection = new EventSelection(*segment);
+
+    for (; it != segment->end(); it++)
+        if ((*it)->isa(Rosegarden::Note::EventType))
+            selection->addEvent(*it);
+
+    setCurrentSelection(selection, false);
+}
+
 
 
