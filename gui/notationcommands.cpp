@@ -381,8 +381,8 @@ TransformsMenuAddMarkCommand::name(Rosegarden::Mark markType)
 
     // Gosh, lots of collisions
     if (markType == Rosegarden::Marks::Sforzando) m = "S&forzando";
-    else if (markType == Rosegarden::Marks::Tenuto) m = "T&enuto";
     else if (markType == Rosegarden::Marks::Rinforzando) m = "R&inforzando";
+    else if (markType == Rosegarden::Marks::Tenuto) m = "T&enuto";
     else if (markType == Rosegarden::Marks::Trill) m = "Tri&ll";
     else m = std::string("&") + (char)toupper(m[0]) + m.substr(1);
 

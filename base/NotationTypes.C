@@ -70,7 +70,7 @@ namespace Marks
     const Mark DownBow = "down-bow";
 
     string getTextMark(string text) {
-	return string("text ") + text;
+	return string("text_") + text;
     }
 }
 

@@ -136,8 +136,8 @@ etc
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
     <Action name="add_staccato"/>
-    <Action name="add_sforzando"/>
-    <Action name="add_rinforzando"/>
+    <Action name="add_text_sf"/>
+    <Action name="add_text_rf"/>
     <Action name="add_trill"/>
     <Action name="add_turn"/>
     <Action name="add_pause"/>

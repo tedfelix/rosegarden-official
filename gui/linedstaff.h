@@ -24,6 +24,7 @@
 #define LINED_STAFF_H
 
 #include "Staff.h"
+#include "LayoutEngine.h"
 #include "qcanvasgroupableitem.h"
 
 /**
@@ -116,21 +117,53 @@ protected:
     virtual void setLineBreakGap(int lineBreakGap);
 
 public:
-
     /**
      * Return the id of the staff.  This is only useful to external
      * agents, it isn't used by the LinedStaff itself.
      */
-    virtual int getId();
+    virtual int getId() const;
 
     /**
-     * Returns the total height of a staff row
+     * Set the canvas x-coordinate of the left-hand end of the staff.
+     * This does not move any canvas items that have already been
+     * created; it should be called before the sizeStaff/positionElements
+     * procedure begins.
      */
-    virtual int getStaffHeight() const;
+    virtual void setX(double x);
+
+    /**
+     * Set the canvas y-coordinate of the top of the first staff row.
+     * This does not move any canvas items that have already been
+     * created; it should be called before the sizeStaff/positionElements
+     * procedure begins.
+     */
+    virtual void setY(int y);
+
+    /**
+     * Returns the width of the entire staff after layout.  Call
+     * this only after you've done the full sizeStaff/positionElements
+     * procedure.
+     */
+    virtual double getTotalWidth() const;
+
+    /**
+     * Returns the height of the entire staff after layout.  Call
+     * this only after you've done the full sizeStaff/positionElements
+     * procedure.  If there are multiple rows, this will be the
+     * height of all rows, including any space between rows that
+     * is used to display other staffs.
+     */
+    virtual int getTotalHeight() const;
+
+    /**
+     * Returns the total height of a single staff row
+     */
+    virtual int getHeightOfRow() const;
     
     /**
      * Returns true if the given y-coordinate falls within (any of
-     * the rows of) this staff.
+     * the rows of) this staff.  False if it falls in the gap
+     * between two rows.
      */
     virtual bool containsY(int y) const; 
 
@@ -153,6 +186,17 @@ public:
      * the given cooordinates.
      */
     virtual QRect getBarExtents(int x, int y) const;
+
+    /**
+     * Query the given horizontal layout object (which is assumed to
+     * have just completed its layout procedure) to determine the
+     * required extents of the staff and the positions of the bars,
+     * and create the bars and staff lines accordingly.  No bars or
+     * staff lines will be created until this method has been called.
+     * It may be called either before or after renderElements and/or
+     * positionElements.
+     */
+    virtual void sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout);
 
     /**
      * Generate or re-generate sprites for all the elements between
