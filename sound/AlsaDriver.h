@@ -74,8 +74,10 @@ public:
     virtual void stopClocks();
     virtual bool areClocksRunning() const { return m_queueRunning; }
 
+    virtual void processEventsOut(const MappedComposition &mC);
     virtual void processEventsOut(const MappedComposition &mC,
-                                  bool now);
+				  const RealTime &sliceStart,
+				  const RealTime &sliceEnd);
 
     // Return the sample rate
     //
@@ -252,7 +254,8 @@ protected:
 				   MidiDevice::DeviceDirection);
 
     virtual void processMidiOut(const MappedComposition &mC,
-                                bool now);
+				const RealTime &sliceStart,
+				const RealTime &sliceEnd);
 
     virtual void processSoftSynthEventOut(InstrumentId id,
 					  const snd_seq_event_t *event,

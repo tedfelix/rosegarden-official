@@ -143,7 +143,6 @@ public:
     virtual void stopPlayback() = 0;
     virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position) = 0;
     virtual void allNotesOff() = 0;
-    virtual void processNotesOff(const RealTime &time) = 0;
     
     virtual RealTime getSequencerTime() = 0;
 
@@ -152,8 +151,17 @@ public:
     virtual void startClocks() { }
     virtual void stopClocks() { }
 
+    // Process some asynchronous events
+    //
+    virtual void processEventsOut(const MappedComposition &mC) = 0;
+
+    // Process some scheduled events on the output queue.  The
+    // slice times are here so that the driver can interleave
+    // note-off events as appropriate.
+    //
     virtual void processEventsOut(const MappedComposition &mC,
-                                  bool now) = 0;
+				  const RealTime &sliceStart,
+				  const RealTime &sliceEnd) = 0;
 
     // Activate a recording state
     //
@@ -365,7 +373,8 @@ protected:
     // Helper functions to be implemented by subclasses
     //
     virtual void processMidiOut(const MappedComposition &mC,
-                                bool now) = 0;
+                                const RealTime &sliceStart,
+				const RealTime &sliceEnd) = 0;
     virtual void generateInstruments() = 0;
 
     // Audio

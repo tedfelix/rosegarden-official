@@ -241,7 +241,7 @@ DSSIPluginFactory::getPluginPath()
 
     std::string::size_type index = 0, newindex = 0;
 
-    while ((newindex = path.find(':', index)) >= 0 && newindex < path.size()) {
+    while ((newindex = path.find(':', index)) < path.size()) {
 	pathList.push_back(path.substr(index, newindex - index).c_str());
 	index = newindex + 1;
     }
@@ -307,7 +307,8 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 
 	const LADSPA_Descriptor *ladspaDescriptor = descriptor->LADSPA_Plugin;
 	if (!ladspaDescriptor) {
-	    std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: No LADSPA descriptor for plugin in " << soName << std::endl;
+	    std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: No LADSPA descriptor for plugin " << index << " in " << soName << std::endl;
+	    ++index;
 	    continue;
 	}
 

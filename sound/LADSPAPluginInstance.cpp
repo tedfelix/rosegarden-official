@@ -139,7 +139,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
 }
 
 void
-LADSPAPluginInstance::setIdealChannelCount(int channels)
+LADSPAPluginInstance::setIdealChannelCount(size_t channels)
 {
     if (m_audioPortsIn.size() != 1) return;
     if (channels == m_instanceCount) return;

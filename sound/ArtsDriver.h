@@ -126,6 +126,12 @@ public:
 	audioInstrumentBase = AudioInstrumentBase;
 	audioInstrumentCount = 16;
     }
+ 
+    virtual void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
+					       int &ssInstrumentCount) {
+	ssInstrumentBase = SoftSynthInstrumentBase;
+	ssInstrumentCount = 0;
+    }
 
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles() 
         { return std::vector<PlayableAudioFile*>(); }

@@ -177,8 +177,8 @@ template <typename T, int N>
 void
 RingBuffer<T, N>::reset()
 {
-    for (int i = 0; i < N; ++i) m_readers[i] = 0;
     m_writer = 0;
+    for (int i = 0; i < N; ++i) m_readers[i] = 0;
 }
 
 template <typename T, int N>

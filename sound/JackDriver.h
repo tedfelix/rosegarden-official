@@ -204,7 +204,8 @@ protected:
     AlsaDriver                  *m_alsaDriver;
 
     float                        m_masterLevel;
-    unsigned long                m_directMasterInstruments; // bitmap
+    unsigned long                m_directMasterAudioInstruments; // bitmap
+    unsigned long                m_directMasterSynthInstruments;
 
     int                          m_recordInput;
     int                          m_recordInputChannel; // -1 -> stereo

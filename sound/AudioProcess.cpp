@@ -646,6 +646,12 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 					      m_sampleRate,
 					      m_blockSize,
 					      channels);
+	if (instance && !instance->isOK()) {
+	    std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position
+		      << ": instance is not OK" << std::endl;
+	    delete instance;
+	    instance = 0;
+	}
     }
 
     RunnablePluginInstance *oldInstance = 0;
@@ -665,7 +671,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 	m_plugins[id][position] = instance;
     }
 
-    if (instance && instance->isOK()) {
+    if (instance) {
 	instance->activate();
     }
 
@@ -791,7 +797,7 @@ AudioInstrumentMixer::resetAllPlugins()
 
     for (SynthPluginMap::iterator j = m_synths.begin();
 	 j != m_synths.end(); ++j) {
-	
+
 	InstrumentId id = j->first;
 
 	int channels = 2;
@@ -1015,6 +1021,11 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 	    m_driver->getMappedStudio()->getAudioFader(id);
 
 	if (!fader) {
+#ifdef DEBUG_MIXER
+//	    if ((id % 100) == 0) {
+//		std::cerr << "No fader for instrument " << id << ", setting gains to zero" << std::endl;
+//	    }
+#endif
 	    rec.gainLeft  = 0.0;
 	    rec.gainRight = 0.0;
 	    rec.volume    = 0.0;
@@ -1035,6 +1046,14 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 		volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
 	    
 	    rec.volume = volume;
+
+#ifdef DEBUG_MIXER
+//	    if ((id % 100) == 0) {
+//		std::cerr << "Setting gains for instrument " << id << " to "
+//			  << rec.gainLeft << " : " << rec.gainRight << " ("
+//			  << rec.volume << ")" << std::endl;
+//	    }
+#endif
 	}
 
 	// For a while we were setting empty to true if the volume on
@@ -1139,7 +1158,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying()) {
-	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): buffer time is " << bufferTime << std::endl;
+	if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): buffer time is " << bufferTime << std::endl;
     }
 #endif
 
@@ -1148,7 +1167,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
     if (channels == 0) {
 #ifdef DEBUG_MIXER
-	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): nominal channels " << rec.channels << ", ring buffers " << rec.buffers.size() << ", process buffers " << m_processBuffers.size() << std::endl;
+	if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): nominal channels " << rec.channels << ", ring buffers " << rec.buffers.size() << ", process buffers " << m_processBuffers.size() << std::endl;
 #endif
 	return false; // buffers just haven't been set up yet
     }
@@ -1164,7 +1183,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 	    if (minWriteSpace < m_blockSize) {
 #ifdef DEBUG_MIXER
 		if (m_driver->isPlaying()) {
-		    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
+		    if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
 		}
 #endif
 		return false;
@@ -1174,19 +1193,19 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
     PluginList &plugins = m_plugins[id];
 #ifdef DEBUG_MIXER
-    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
+    if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): have " << plugins.size() << " plugin(s)" << std::endl;
 #endif
 
 #ifdef DEBUG_MIXER
-    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
+    if ((id % 100) == 0 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
 #else
 #ifdef DEBUG_MIXER_LIGHTWEIGHT
-    if (id == 1000 && m_driver->isPlaying()) std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
+    if ((id % 100) == 0 && m_driver->isPlaying()) std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
 #endif
 #endif
 
 #ifdef DEBUG_MIXER
-    if (id == 1000 && audioQueue.size() > 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): " << audioQueue.size() << " audio file(s) to consider" << std::endl;
+    if ((id % 100) == 0 && audioQueue.size() > 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): " << audioQueue.size() << " audio file(s) to consider" << std::endl;
 #endif
 
     bool haveBlock = true;
@@ -1206,14 +1225,14 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 	    (frames >= m_blockSize * 2)) {
 	    
 #ifdef DEBUG_MIXER
-	    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): will be asking for more" << std::endl;
+	    if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): will be asking for more" << std::endl;
 #endif
 	    
 	    haveMore = true;
 	}
 
 #ifdef DEBUG_MIXER
-	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): file has " << frames << " frames available" << std::endl;
+	if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): file has " << frames << " frames available" << std::endl;
 #endif
 
 	if (!acceptable) {
@@ -1231,7 +1250,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
 #ifdef DEBUG_MIXER
     if (!haveMore) {
-	if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): won't be asking for more" << std::endl;
+	if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): won't be asking for more" << std::endl;
     }
 #endif
 
@@ -1414,7 +1433,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     }
 
 #ifdef DEBUG_MIXER
-    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): setting dormant to " << dormant << std::endl;
+    if ((id % 100) == 0 && m_driver->isPlaying()) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): setting dormant to " << dormant << std::endl;
 #endif
 
     rec.dormant = dormant;
@@ -1424,7 +1443,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     rec.filledTo = bufferTime;
 
 #ifdef DEBUG_MIXER
-    if (id == 1000) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): done, returning " << haveMore << std::endl;
+    if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id <<"): done, returning " << haveMore << std::endl;
 #endif
 
     return haveMore;

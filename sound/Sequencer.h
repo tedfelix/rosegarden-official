@@ -101,9 +101,12 @@ public:
     // Process MappedComposition into MIDI and audio events at
     // the driver level and queue for output.
     //
+    void processEventsOut(const Rosegarden::MappedComposition &mC)
+        { m_soundDriver->processEventsOut(mC); }
     void processEventsOut(const Rosegarden::MappedComposition &mC,
-                          bool now) // send everything immediately
-        { m_soundDriver->processEventsOut(mC, now); }
+			  const Rosegarden::RealTime &sliceStart,
+			  const Rosegarden::RealTime &sliceEnd)
+        { m_soundDriver->processEventsOut(mC, sliceStart, sliceEnd); }
 
     // Return the sequencer time
     //
@@ -119,8 +122,6 @@ public:
     //
     void allNotesOff()
         { m_soundDriver->allNotesOff(); }
-    void processNotesOff(const Rosegarden::RealTime &time)
-        { m_soundDriver->processNotesOff(time); }
 
     // Get playback start position
     //

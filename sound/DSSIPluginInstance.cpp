@@ -26,7 +26,7 @@
 
 #ifdef HAVE_DSSI
 
-#define DEBUG_DSSI 1
+//#define DEBUG_DSSI 1
 
 namespace Rosegarden
 {
@@ -148,11 +148,11 @@ DSSIPluginInstance::init()
 #endif
     }
 
-    m_outputBufferCount = std::max(m_idealChannelCount, int(m_audioPortsOut.size()));
+    m_outputBufferCount = std::max(m_idealChannelCount, m_audioPortsOut.size());
 }
 
 void
-DSSIPluginInstance::setIdealChannelCount(int channels)
+DSSIPluginInstance::setIdealChannelCount(size_t channels)
 {
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::setIdealChannelCount: channel count "
@@ -243,6 +243,7 @@ DSSIPluginInstance::activate()
 #endif
 
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->activate) return;
+    m_eventBuffer.reset();
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
 }
 
@@ -306,6 +307,8 @@ void
 DSSIPluginInstance::sendEvent(const RealTime &eventTime,
 			      const snd_seq_event_t *event)
 {
+    //!!! how to ensure events are ordered in the target buffer?
+
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::sendEvent at " << eventTime << std::endl;
 #endif
@@ -327,13 +330,30 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
     int evCount = 0;
 
+#ifdef DEBUG_DSSI
+    if (m_eventBuffer.getReadSpace() > 0) {
+	std::cerr << "DSSIPluginInstance::run: event buffer has "
+		  << m_eventBuffer.getReadSpace() << " event(s) in it" << std::endl;
+    }
+#endif
+
     while (m_eventBuffer.getReadSpace() > 0) {
 
 	snd_seq_event_t *ev = localEventBuffer + evCount;
 	*ev = m_eventBuffer.peek();
 
 	RealTime evTime(ev->time.time.tv_sec, ev->time.time.tv_nsec);
-	int frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
+
+	int frameOffset = 0;
+	if (evTime > blockTime) {
+	    frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
+	}
+
+#ifdef DEBUG_DSSI
+	std::cerr << "DSSIPluginInstance::run: evTime " << evTime << ", frameOffset " << frameOffset
+		  << ", block size " << m_blockSize << std::endl;
+#endif
+
 	if (frameOffset >= int(m_blockSize)) break;
 	if (frameOffset < 0) frameOffset = 0;
 
@@ -342,8 +362,20 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	if (++evCount >= EVENT_BUFFER_SIZE) break;
     }
 
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::run: running with " << evCount << " events"
+	      << std::endl;
+#endif
+
     m_descriptor->run_synth(m_instanceHandle, m_blockSize,
 			    localEventBuffer, evCount);
+
+#ifdef DEBUG_DSSI
+//    for (int i = 0; i < m_blockSize; ++i) {
+//	std::cout << m_outputBuffers[0][i] << " ";
+//	if (i % 8 == 0) std::cout << std::endl;
+//    }
+#endif
 
     if (m_idealChannelCount < m_audioPortsOut.size()) {
 	if (m_idealChannelCount == 1) {

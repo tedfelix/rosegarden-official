@@ -67,7 +67,7 @@ public:
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
-    virtual void setIdealChannelCount(int channels); // may re-instantiate
+    virtual void setIdealChannelCount(size_t channels); // may re-instantiate
 
 protected:
     // To be constructed only by LADSPAPluginFactory
@@ -107,7 +107,7 @@ protected:
     Rosegarden::InstrumentId   m_instrument;
     int                        m_position;
     std::vector<LADSPA_Handle> m_instanceHandles;
-    int                        m_instanceCount;
+    size_t                     m_instanceCount;
     const LADSPA_Descriptor   *m_descriptor;
 
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsIn;

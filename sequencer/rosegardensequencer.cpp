@@ -275,7 +275,7 @@ RosegardenSequencerApp::startPlaying()
     // process whether we need to or not as this also processes
     // the audio queue for us
     //
-    m_sequencer->processEventsOut(m_mC, false);
+    m_sequencer->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
 
     std::vector<Rosegarden::MappedEvent> audioEvents;
     m_metaIterator->getAudioEvents(audioEvents);
@@ -306,13 +306,16 @@ RosegardenSequencerApp::keepPlaying()
     }
     if (fetchEnd > m_lastFetchSongPosition) {
 	fetchEvents(m_mC, m_lastFetchSongPosition, fetchEnd, false);
-	m_lastFetchSongPosition = fetchEnd;
     }
 
     // Again, process whether we need to or not to keep
     // the Sequencer up-to-date with audio events
     //
-    m_sequencer->processEventsOut(m_mC, false);
+    m_sequencer->processEventsOut(m_mC, m_lastFetchSongPosition, fetchEnd);
+
+    if (fetchEnd > m_lastFetchSongPosition) {
+	m_lastFetchSongPosition = fetchEnd;
+    }
     
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
@@ -357,7 +360,7 @@ RosegardenSequencerApp::updateClocks()
 	m_mC.clear();
 	fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
 
-	m_sequencer->processEventsOut(m_mC, false);
+	m_sequencer->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
 
 	m_sequencer->startClocks();
     }
@@ -438,7 +441,7 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
     // process whether we need to or not as this also processes
     // the audio queue for us
     //
-    m_sequencer->processEventsOut(m_mC, false);
+    m_sequencer->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
 
 //!!!    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
 //!!!    ::sleep(1);
@@ -470,7 +473,7 @@ RosegardenSequencerApp::processRecordedMidi()
     m_sequencerMapper.updateRecordingBuffer(mC);
 
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
-    m_sequencer->processEventsOut(*mC, true);
+    m_sequencer->processEventsOut(*mC);
 }
 
 
@@ -527,7 +530,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     arg << mC;
 
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
-    m_sequencer->processEventsOut(*mC, true);
+    m_sequencer->processEventsOut(*mC);
 
     SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
 
@@ -1033,7 +1036,7 @@ RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
 {
     // Use the "now" API
     //
-    m_sequencer->processEventsOut(mC, true);
+    m_sequencer->processEventsOut(mC);
 }
 
 void
@@ -1060,7 +1063,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     Rosegarden::MappedComposition mC;
 
-    SEQUENCER_DEBUG << "processMappedEvent(data) - sending out single event at time " << mE->getEventTime() << endl;
+//    SEQUENCER_DEBUG << "processMappedEvent(data) - sending out single event at time " << mE->getEventTime() << endl;
 
     /*
     std::cout << "ID = " << mE->getInstrument() << std::endl;
@@ -1071,7 +1074,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     mC.insert(mE);
 
-    m_sequencer->processEventsOut(mC, true);
+    m_sequencer->processEventsOut(mC);
 }
 
 void
@@ -1081,7 +1084,7 @@ RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
     mC.insert(new MappedEvent(mE));
     SEQUENCER_DEBUG << "processMappedEvent(ev) - sending out single event at time " << mE.getEventTime() << endl;
 
-    m_sequencer->processEventsOut(mC, true);
+    m_sequencer->processEventsOut(mC);
 }
 
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)

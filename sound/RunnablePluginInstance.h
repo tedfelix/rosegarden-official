@@ -77,13 +77,13 @@ public:
 
     virtual void setPortValue(unsigned int port, float value) = 0;
 
-    virtual void sendEvent(const RealTime &eventTime,
-			   const snd_seq_event_t *event) { }
+    virtual void sendEvent(const RealTime & /* eventTime */,
+			   const snd_seq_event_t * /* event */) { }
 
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
 
-    virtual void setIdealChannelCount(int channels) = 0; // may re-instantiate
+    virtual void setIdealChannelCount(size_t channels) = 0; // may re-instantiate
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 

@@ -59,7 +59,8 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_fileWriter(0),
     m_alsaDriver(alsaDriver),
     m_masterLevel(1.0),
-    m_directMasterInstruments(0L),
+    m_directMasterAudioInstruments(0L),
+    m_directMasterSynthInstruments(0L),
     m_recordInput(1000),
     m_recordInputChannel(-1),
     m_recordLevel(0.0),
@@ -710,9 +711,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    InstrumentId instrumentBase;
-    int instruments;
-    m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_alsaDriver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
     bool doneRecord = false;
 
@@ -791,20 +796,22 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     std::cerr << "JackDriver::jackProcess: have " << instruments << " instruments" << std::endl;
 #endif
 
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instruments; ++id) {
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 	
+	InstrumentId id;
+	if (i < audioInstruments) id = audioInstrumentBase + i;
+	else id = synthInstrumentBase + (i - audioInstruments);
+
 	if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
 
 	sample_t *instrument[2] = { 0, 0 };
 	sample_t peak[2] = { 0.0, 0.0 };
 
-	unsigned int index = id - instrumentBase;
-	if (m_outputInstruments.size() > index * 2 + 1) {
+	if (int(m_outputInstruments.size()) > i * 2 + 1) {
 	    instrument[0] = static_cast<sample_t *>
-		(jack_port_get_buffer(m_outputInstruments[index * 2], nframes));
+		(jack_port_get_buffer(m_outputInstruments[i * 2], nframes));
 	    instrument[1] = static_cast<sample_t *>
-		(jack_port_get_buffer(m_outputInstruments[index * 2 + 1], nframes));
+		(jack_port_get_buffer(m_outputInstruments[i * 2 + 1], nframes));
 	}
 
 	if (!instrument[0]) instrument[0] = m_tempOutBuffer;
@@ -818,12 +825,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    // the master, then we also need to mix from it.  (We have
 	    // that information cached courtesy of updateAudioData.)
 
-	    bool directToMaster =
-		(m_directMasterInstruments & (1 << (id - instrumentBase)));
+	    bool directToMaster = false;
+	    if (i < audioInstruments) {
+		directToMaster = (m_directMasterAudioInstruments & (1 << i));
+	    } else {
+		directToMaster = (m_directMasterSynthInstruments &
+				  (1 << (i - audioInstruments)));
+	    }
 
 #ifdef DEBUG_JACK_PROCESS
-	    if (id == 1000) {
-		std::cerr << "JackDriver::jackProcess: instrument id " << id << ", base " << instrumentBase << ", direct masters " << m_directMasterInstruments << ": " << directToMaster << std::endl;
+	    if (id == 1000 || id == 10000) {
+		std::cerr << "JackDriver::jackProcess: instrument id " << id << ", base " << instrumentBase << ", direct masters " << m_directMasterAudioInstruments << ": " << directToMaster << std::endl;
 	    }
 #endif
 
@@ -832,7 +844,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 	    if (!rb || m_instrumentMixer->isInstrumentDormant(id)) {
 #ifdef DEBUG_JACK_PROCESS
-		if (id == 1000) {
+		if (id == 1000 || id == 10000) {
 		    if (rb) {
 			std::cerr << "JackDriver::jackProcess: instrument " << id << " dormant" << std::endl;
 		    } else {
@@ -855,10 +867,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		if (actual < nframes) {
 		    reportFailure(Rosegarden::MappedEvent::FailureMixUnderrun);
 		}
-		for (size_t i = 0; i < nframes; ++i) {
-		    sample_t sample = instrument[ch][i];
+		for (size_t f = 0; f < nframes; ++f) {
+		    sample_t sample = instrument[ch][f];
 		    if (sample > peak[ch]) peak[ch] = sample;
-		    if (directToMaster) master[ch][i] += sample;
+		    if (directToMaster) master[ch][f] += sample;
 		}
 	    }
 
@@ -1511,20 +1523,27 @@ JackDriver::updateAudioData()
 	m_masterLevel = level;
     }
 
-    InstrumentId instrumentBase;
-    int instruments;
-    m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
-    unsigned long directMasterInstruments = 0L;
+    unsigned long directMasterAudioInstruments = 0L;
+    unsigned long directMasterSynthInstruments = 0L;
 
-    for (int i = 0; i < instruments; ++i) {
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_alsaDriver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
 
-	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->
-	    getAudioFader(instrumentBase + i);
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+
+	InstrumentId id;
+	if (i < audioInstruments) id = audioInstrumentBase + i;
+	else id = synthInstrumentBase + (i - audioInstruments);
+
+	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->getAudioFader(id);
 	if (!fader) continue;
 
-	if (instrumentBase + i ==
-	    m_alsaDriver->getAudioMonitoringInstrument()) {
+	if (id == m_alsaDriver->getAudioMonitoringInstrument()) {
 
 	    float f = 2;
 	    (void)fader->getProperty(MappedAudioFader::Channels, f);
@@ -1555,7 +1574,7 @@ JackDriver::updateAudioData()
 	    if (connections.empty()) {
 		
 		std::cerr << "No connections in for record instrument "
-			  << (instrumentBase + i) << " (mapped id " << fader->getId() << ")" << std::endl;
+			  << (id) << " (mapped id " << fader->getId() << ")" << std::endl;
 
 		// oh dear.
 		m_recordInput = 1000;
@@ -1592,11 +1611,16 @@ JackDriver::updateAudioData()
 	    (MappedConnectableObject::Out);
 
 	if (connections.empty() || (*connections.begin() == mbuss->getId())) {
-	    directMasterInstruments |= (1 << i);
+	    if (i < audioInstruments) {
+		directMasterAudioInstruments |= (1 << i);
+	    } else {
+		directMasterSynthInstruments |= (1 << (i - audioInstruments));
+	    }		
 	}
     }
 
-    m_directMasterInstruments = directMasterInstruments;
+    m_directMasterAudioInstruments = directMasterAudioInstruments;
+    m_directMasterSynthInstruments = directMasterSynthInstruments;
     
     int inputs = m_alsaDriver->getMappedStudio()->
 	getObjectCount(MappedObject::AudioInput);
