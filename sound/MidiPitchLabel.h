@@ -52,7 +52,7 @@ public:
             // We convert the pitch to a string as follows
             //
             int octave = (int)(((float)pitch)/12.0) - 2;
-            m_midiNote.sprintf("  %s%d", notes[pitch%12].c_str(), octave);
+            m_midiNote.sprintf("%s%d", notes[pitch%12].c_str(), octave);
         }
     }
     ~MidiPitchLabel();
