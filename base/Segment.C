@@ -99,29 +99,9 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
             Event *e = new Event("rest");
             e->setDuration(*i);
             e->setAbsoluteTime(acc);
+            insert(e);
             acc += *i;
         }
-
-#ifdef NOT_DEFINED
-
-        TimeSignature::EventsSet *eventsToAdd = signatureAtEnd.getTimeIntervalAsRests(newElTime, nbTimeSteps - currentNbTimeSteps);
-
-        for (TimeSignature::EventsSet::iterator i = eventsToAdd->begin();
-             i != eventsToAdd->end(); ++i) {
-
-            insert(*i);
-
-//             Event *e = new Event;
-//             e->setType("rest");
-//             e->setDuration(barDuration); // TODO : get rid of this magic number
-//             e->setAbsoluteTime(newElTime);
-//             insert(e);
-            
-        }
-
-        delete eventsToAdd;
-        
-#endif
 
     } else { // shrink
 

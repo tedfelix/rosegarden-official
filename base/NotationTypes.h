@@ -424,21 +424,6 @@ public:
                                     int intervalDuration,
                                     int startOffset = 0) const;
 
-
-#ifdef NOT_DEFINED
-    typedef std::list<Event*> EventsSet;
-
-    /**
-     * The caller should delete the returned list
-     */
-    EventsSet* getTimeIntervalAsRests(int startTime, int duration) const;
-
-    /**
-     * The caller should delete the returned list
-     */
-    EventsSet* getBarAsRests(int startTime) const;
-#endif
-
 private:
     int m_numerator;
     int m_denominator;
