@@ -126,6 +126,8 @@ public:
      */ 
     RosegardenGUIDoc *getDocument() const;      
 
+    RosegardenGUIView* getView() { return m_view; }
+
     enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportHydrogen, ImportCheckType };
 
     /**
@@ -283,6 +285,12 @@ public:
      * Plug a widget into our common accelerators
      */
     void plugAccelerators(QWidget *widget, QAccel *accel);
+
+    /**
+     * Override from QWidget
+     * Toolbars and docks need special treatment
+     */
+    virtual void setCursor(const QCursor&);
 
 protected:
 
@@ -1410,7 +1418,9 @@ public:
     ~SetWaitCursor();
 
 protected:
+    RosegardenGUIApp* m_guiApp;
     QCursor m_currentCursor;
+    QCursor m_currentSegmentCanvasCursor;
 };
  
 #endif // ROSEGARDENGUI_H

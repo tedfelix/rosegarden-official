@@ -29,6 +29,7 @@
 #include <qlayout.h>
 
 // include files for KDE
+#include <kcursor.h>
 #include <kprocess.h>
 #include <kstdaccel.h>
 #include <kiconloader.h>
@@ -148,20 +149,61 @@ static void _settingLog(QString msg)
 #endif
 
 
+// Too broad : the cursor is also shown on progress dialogs
+//
+
+#ifdef RG_WAIT_CURSOR_OVERRIDE
 SetWaitCursor::SetWaitCursor()
 {
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+    QApplication::setOverrideCursor(KCursor::waitCursor());
 }
 
 SetWaitCursor::~SetWaitCursor()
 {
     QApplication::restoreOverrideCursor();
 }
+#else
+SetWaitCursor::SetWaitCursor()
+    : m_guiApp(dynamic_cast<RosegardenGUIApp*>(kapp->mainWidget()))
+{
+    if (m_guiApp) {
+        
+        // play it safe, so we can use this class at anytime even very early in the app init
+        if ((m_guiApp->getView() &&
+             m_guiApp->getView()->getTrackEditor() &&
+             m_guiApp->getView()->getTrackEditor()->getSegmentCanvas() &&
+             m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
+            
+            m_currentSegmentCanvasCursor = m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport()->cursor();
 
-//!!!    SetWaitCursor() : m_currentCursor(kapp->mainWidget()->cursor())
-//    { kapp->mainWidget()->setCursor(QCursor(Qt::waitCursor)); }
-//    ~SetWaitCursor() { kapp->mainWidget()->setCursor(m_currentCursor); }
+        }
 
+        RG_DEBUG << "SetWaitCursor::SetWaitCursor() : setting waitCursor\n";
+        m_currentCursor = m_guiApp->cursor();
+
+        m_guiApp->setCursor(KCursor::waitCursor());
+    }
+}
+
+SetWaitCursor::~SetWaitCursor()
+{
+    if (m_guiApp) {
+
+        RG_DEBUG << "SetWaitCursor::SetWaitCursor() : restoring normal cursor\n";
+
+        m_guiApp->setCursor(m_currentCursor);
+
+        if ((m_guiApp->getView() &&
+             m_guiApp->getView()->getTrackEditor() &&
+             m_guiApp->getView()->getTrackEditor()->getSegmentCanvas() &&
+             m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
+             
+            m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport()->setCursor(m_currentSegmentCanvasCursor);
+        }
+
+    }
+}
+#endif
 
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
@@ -4924,6 +4966,37 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
                 SLOT(slotRefreshTimeDisplay()));
     }
 }
+
+void
+RosegardenGUIApp::setCursor(const QCursor& cursor)
+{
+    KDockMainWindow::setCursor(cursor);
+
+    // play it safe, so we can use this class at anytime even very early in the app init
+    if ((getView() &&
+         getView()->getTrackEditor() &&
+         getView()->getTrackEditor()->getSegmentCanvas() &&
+         getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
+            
+        getView()->getTrackEditor()->getSegmentCanvas()->viewport()->setCursor(cursor);
+    }
+
+    // view, main window...
+    //
+    getView()->setCursor(cursor);
+
+    // toolbars...
+    //
+    QPtrListIterator<KToolBar> tbIter = toolBarIterator();
+    KToolBar* tb = 0;
+    while ((tb = tbIter.current()) != 0) {
+        tb->setCursor(cursor);
+        ++tbIter;
+    }
+
+    m_dockLeft->setCursor(cursor);
+}
+
 
 // Return the path to a new audio file as a QString (DCOP friendly)
 //
