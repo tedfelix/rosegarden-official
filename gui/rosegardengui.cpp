@@ -1016,6 +1016,17 @@ void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusHelpMsg(i18n("Opening file..."));
 
+    if (m_doc) {
+        
+        if (!m_doc->saveIfModified()) {
+            return;
+        
+        } else {
+            m_doc->closeDocument();
+        }
+    
+    }
+
     KURL url = KFileDialog::getOpenURL(QString::null, "*.rg", this,
                                        i18n("Open File"));
     if ( url.isEmpty() ) { return; }
@@ -1026,18 +1037,18 @@ void RosegardenGUIApp::slotFileOpen()
 void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
 {
     KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
-	
-//     if (!doc->saveIfModified()) {
-//         // here saving wasn't successful
-//     } else {
-//         doc->closeDocument();
-//         doc->openDocument(recentFiles.at(id_));
-//         QString caption=kapp->caption();	
-//         setCaption(caption+": "+doc->getTitle());
-//     }
 
-//     initView();
-
+    if (m_doc) {
+        
+        if (!m_doc->saveIfModified()) {
+            return;
+        
+        } else {
+            m_doc->closeDocument();
+        }
+    
+    }
+    
     openURL(url);
 }
 
