@@ -1908,13 +1908,7 @@ void RosegardenGUIApp::slotFileOpen()
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
-    if (m_doc) {
-        
-        if (!m_doc->saveIfModified()) {
-            return;
-        
-        }
-    }
+    if (m_doc && !m_doc->saveIfModified()) return;
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Last File Opened Version", VERSION);
@@ -3103,6 +3097,8 @@ void RosegardenGUIApp::slotRevertToSaved()
 
 void RosegardenGUIApp::slotImportMIDI()
 {
+    if (m_doc && !m_doc->saveIfModified()) return;
+
     KURL url = KFileDialog::getOpenURL
         (":MIDI",
          "audio/x-midi", this,
@@ -3264,7 +3260,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
 
 void RosegardenGUIApp::slotImportRG21()
 {
-    if (!m_doc->saveIfModified()) return;
+    if (m_doc && !m_doc->saveIfModified()) return;
 
     KURL url = KFileDialog::getOpenURL
         (":ROSEGARDEN21",
@@ -3346,7 +3342,7 @@ RosegardenGUIApp::createDocumentFromRG21File(QString file)
 void
 RosegardenGUIApp::slotImportHydrogen()
 {
-    if (!m_doc->saveIfModified()) return;
+    if (m_doc && !m_doc->saveIfModified()) return;
 
     KURL url = KFileDialog::getOpenURL
         (":HYDROGEN",
