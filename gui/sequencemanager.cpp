@@ -394,7 +394,9 @@ SequenceManager::stop()
     //
     m_transportStatus = STOPPED;
 
-    resetControllers();
+    // We don't reset controllers at this point - what happens with static controllers
+    // the next time we play otherwise?  [rwb]
+    //resetControllers();
 }
 
 // Jump to previous bar
