@@ -117,12 +117,14 @@ protected:
     QCheckBox          *m_velocityCheckBox;
     RosegardenFader    *m_volumeFader;
     QLabel             *m_volumeValue;
+    QLabel             *m_volumeLabel;
+    QLabel             *m_pluginLabel;
 
-    QPushButton        *m_pluginButton;
+    std::vector<PluginButton*>       m_pluginButtons;
 
-    Rosegarden::Instrument *m_selectedInstrument;
+    Rosegarden::Instrument          *m_selectedInstrument;
 
-    Rosegarden::AudioPluginManager *m_pluginManager;
+    Rosegarden::AudioPluginManager  *m_pluginManager;
 
 };
 

@@ -379,3 +379,17 @@ RosegardenFader::setFader(int value)
     setValue(value);
 }
 
+//   ------------- PluginButton ----------------
+//
+PluginButton::PluginButton(QWidget *parent, int index):
+    QPushButton(parent), m_index(index)
+{
+}
+
+void
+PluginButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    emit released(m_index);
+    setDown(false);
+}
+

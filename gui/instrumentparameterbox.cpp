@@ -66,7 +66,8 @@ InstrumentParameterBox::InstrumentParameterBox(
       m_velocityCheckBox(new QCheckBox(this)),
       m_volumeFader(new RosegardenFader(this)),
       m_volumeValue(new QLabel(this)),
-      m_pluginButton(new QPushButton(this)),
+      m_volumeLabel(new QLabel(i18n("Volume"), this)),
+      m_pluginLabel(new QLabel(i18n("Plugins"), this)),
       m_selectedInstrument(0),
       m_pluginManager(pluginManager)
 {
@@ -99,12 +100,16 @@ InstrumentParameterBox::~InstrumentParameterBox()
             break;
         }
     }
+
+    for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+        delete m_pluginButtons[i];
+    m_pluginButtons.erase(m_pluginButtons.begin(), m_pluginButtons.end());
 }
 
 void
 InstrumentParameterBox::initBox()
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 12, 3, 8, 1);
 
     m_instrumentLabel->setFont(getFont());
 
@@ -125,15 +130,23 @@ InstrumentParameterBox::initBox()
     m_volumeFader->setMaxValue(127);
     m_volumeFader->setMinValue(0);
     m_volumeValue->setFont(getFont());
+    m_volumeLabel->setFont(getFont());
+    m_pluginLabel->setFont(getFont());
 
-    m_pluginButton->setFont(getFont());
-    m_pluginButton->setText(i18n("<no plugin>"));
+    unsigned int defaultPlugins = 5;
+    for (unsigned int i = 0; i < defaultPlugins; i++)
+    {
+        PluginButton *pb = new PluginButton(this, i);
+        pb->setFont(getFont());
+        pb->setText(i18n("<no plugin>"));
+        m_pluginButtons.push_back(pb);
+    }
 
+    // Some top space
     gridLayout->addRowSpacing(0, 8);
-
     gridLayout->addRowSpacing(1, 30);
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 1, 1, 0, 2, AlignCenter);
 
+    gridLayout->addMultiCellWidget(m_instrumentLabel, 1, 1, 0, 2, AlignCenter);
     gridLayout->addWidget(m_bankLabel,    2, 0, AlignLeft);
     gridLayout->addWidget(m_bankCheckBox, 2, 1);
     gridLayout->addWidget(m_bankValue,    2, 2, AlignRight);
@@ -154,10 +167,19 @@ InstrumentParameterBox::initBox()
     gridLayout->addWidget(m_velocityCheckBox, 6, 1);
     gridLayout->addWidget(m_velocityValue,    6, 2, AlignRight);
 
-    gridLayout->addMultiCellWidget(m_volumeFader, 7, 9, 0, 0,  AlignCenter);
-    gridLayout->addWidget(m_volumeValue, 10, 0, AlignCenter);
+    gridLayout->addWidget(m_volumeLabel, 7, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_pluginLabel, 7, 7, 1, 2, AlignCenter);
+    gridLayout->addMultiCellWidget(m_volumeFader, 8, 10, 0, 0,  AlignCenter);
+    gridLayout->addWidget(m_volumeValue, 11, 0, AlignCenter);
 
-    gridLayout->addMultiCellWidget(m_pluginButton, 7, 7, 1, 2, AlignCenter);
+    for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+    {
+        gridLayout->addMultiCellWidget(m_pluginButtons[i],
+                                       8 + i, 8 + i, 1, 2, AlignCenter);
+        connect(m_pluginButtons[i], SIGNAL(released(int)),
+                this, SLOT(slotSelectPlugin(int)));
+
+    }
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
@@ -245,9 +267,6 @@ InstrumentParameterBox::initBox()
     connect(m_channelValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectChannel(int)));
 
-    connect(m_pluginButton, SIGNAL(released()),
-            this, SLOT(slotSelectPlugin(int)));
-
 
     // don't select any of the options in any dropdown
     m_panValue->setCurrentItem(-1);
@@ -296,24 +315,30 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
         m_volumeFader->show();
         m_volumeValue->show();
+        m_volumeLabel->show();
+        m_pluginLabel->show();
         m_volumeFader->setFader(instrument->getVelocity());
-        m_pluginButton->show();
 
-        Rosegarden::AudioPluginInstance *inst = 
-            m_selectedInstrument->getPlugin(0);
-
-        if (inst && inst->isAssigned())
+        for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
         {
-            Rosegarden::AudioPlugin *pluginClass 
-                = m_pluginManager->getPlugin(
-                        m_pluginManager->getPositionByUniqueId(inst->getId()));
+            m_pluginButtons[i]->show();
 
-            if (pluginClass)
-                m_pluginButton->setText(pluginClass->getLabel());
+            Rosegarden::AudioPluginInstance *inst = 
+                m_selectedInstrument->getPlugin(i);
+
+            if (inst && inst->isAssigned())
+            {
+                Rosegarden::AudioPlugin *pluginClass 
+                    = m_pluginManager->getPlugin(
+                            m_pluginManager->
+                                getPositionByUniqueId(inst->getId()));
+    
+                if (pluginClass)
+                    m_pluginButtons[i]->setText(pluginClass->getLabel());
+            }
+            else
+                m_pluginButtons[i]->setText(i18n("<no plugin>"));
         }
-        else
-            m_pluginButton->setText(i18n("<no plugin>"));
-
 
         return; // for the moment
     }
@@ -337,7 +362,12 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
         m_volumeFader->hide();
         m_volumeValue->hide();
-        m_pluginButton->hide();
+        m_volumeLabel->hide();
+        m_pluginLabel->hide();
+
+        for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+            m_pluginButtons[i]->hide();
+
     }
 
     // Set instrument name
@@ -705,24 +735,28 @@ InstrumentParameterBox::updateAllBoxes()
 
 
 void
-InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
+InstrumentParameterBox::slotSelectPlugin(int index)
 {
-    int index = 0;
+    // only create a dialog if we've got a plugin instance
+    Rosegarden::AudioPluginInstance *inst = 
+        m_selectedInstrument->getPlugin(index);
 
-    Rosegarden::AudioPluginDialog *aPD = 
-        new Rosegarden::AudioPluginDialog(this,
-                                          m_pluginManager,
-                                          m_selectedInstrument,
-                                          index);
+    if (inst)
+    {
+        Rosegarden::AudioPluginDialog *aPD = 
+            new Rosegarden::AudioPluginDialog(this,
+                                              m_pluginManager,
+                                              m_selectedInstrument,
+                                              index);
 
-    connect(aPD, SIGNAL(pluginSelected(int, int)),
-            this, SLOT(slotPluginSelected(int, int)));
+        connect(aPD, SIGNAL(pluginSelected(int, int)),
+                this, SLOT(slotPluginSelected(int, int)));
 
-    connect(aPD, SIGNAL(pluginPortChanged(int, int, float)),
-            this, SLOT(slotPluginPortChanged(int, int, float)));
+        connect(aPD, SIGNAL(pluginPortChanged(int, int, float)),
+                this, SLOT(slotPluginPortChanged(int, int, float)));
 
-    aPD->show();
-
+        aPD->show();
+    }
 }
 
 void
@@ -742,15 +776,10 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
             // Destroy plugin instance
             Rosegarden::StudioControl::destroyStudioObject(inst->getMappedId());
             inst->setAssigned(false);
-            m_pluginButton->setText(i18n("<no plugin>"));
+            m_pluginButtons[index]->setText(i18n("<no plugin>"));
         }
         else
         {
-            /*
-            std::cout << "InstrumentParameterBox::slotPluginSelected" 
-                      << std::endl;
-                      */
-
             Rosegarden::AudioPlugin *plgn = 
                 m_pluginManager->getPlugin(plugin);
 
@@ -818,7 +847,7 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 = m_pluginManager->getPlugin(plugin);
 
             if (pluginClass)
-                m_pluginButton->setText(pluginClass->getLabel());
+                m_pluginButtons[index]->setText(pluginClass->getLabel());
         }
     }
     else

@@ -28,6 +28,7 @@
 #include <qfont.h>
 #include <qprogressdialog.h>
 #include <qprogressbar.h>
+#include <qpushbutton.h>
 #include <qslider.h>
 #include <qvbox.h>
 
@@ -264,6 +265,28 @@ signals:
 
 protected:
 };
+
+// Like a QPushButton in a QButtonGroup but just supplying
+// an index number.
+//
+class PluginButton : public QPushButton
+{
+    Q_OBJECT
+public:
+    PluginButton(QWidget *parent, int index);
+
+    void setIndex(int index) { m_index = index; }
+    int getIndex() const { return m_index; }
+
+signals:
+    void released(int); // with an index number
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *e);
+
+    int m_index;
+};
+
 
 
 #endif // _WIDGETS_H_

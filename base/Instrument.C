@@ -55,11 +55,13 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_mappedId(0)
 
 {
-    // Add a number of plugin place holders (unassigned)
-    //
     if (it == Audio)
     {
-        addPlugin(new AudioPluginInstance(0));
+        // Add a number of plugin place holders (unassigned)
+        //
+        unsigned int defaultPlugins = 5;
+        for (unsigned int i = 0; i < defaultPlugins; i++)
+            addPlugin(new AudioPluginInstance(i));
     }
 
 }
@@ -91,7 +93,11 @@ Instrument::Instrument(InstrumentId id,
     //
     if (it == Audio)
     {
-        addPlugin(new AudioPluginInstance(0));
+        // Add a number of plugin place holders (unassigned)
+        //
+        unsigned int defaultPlugins = 5;
+        for (unsigned int i = 0; i < defaultPlugins; i++)
+            addPlugin(new AudioPluginInstance(i));
     }
 }
 

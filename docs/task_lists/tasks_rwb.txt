@@ -5,11 +5,15 @@ o Performance
 
 o Make AlsaDriver send NoteOn(0)s as well as NoteOffs
 
+o Make RG a jack mixer (transport, control client)
+
+o JACK connection management - stereo, panning
+
 o Repeating segments and composition end marker
 
 o AudioManager and AudioFile commands
 
-o Matrix Hypereditor [STARTED]
+o Matrix Hypereditor [HALF COMPLETED]
 
 o Fix segment audio drag and drop
 
@@ -32,7 +36,7 @@ o MIDI export broken for key sig and SysExs
 Post 0.2
 ========
 
-o LADSPA raltime plugin support [DONE]
+o LADSPA realtime plugin support [DONE]
 
 o Audio volume faders - studio concept on sequencer [DONE]
 
