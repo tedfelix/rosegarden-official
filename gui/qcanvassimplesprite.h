@@ -75,10 +75,18 @@ protected:
     NotationElement& m_notationElement;
 };
 
+class QCanvasNonElementSprite : public QCanvasSimpleSprite
+{
+public:
+    QCanvasNonElementSprite(QPixmap *, QCanvas *);
+    QCanvasNonElementSprite(QCanvasPixmap *, QCanvas *);
+    virtual ~QCanvasNonElementSprite();
+};
+
 /**
  * A QCanvasSprite used for a time signature
  */
-class QCanvasTimeSigSprite : public QCanvasSimpleSprite
+class QCanvasTimeSigSprite : public QCanvasNonElementSprite
 {
 public:
     QCanvasTimeSigSprite(double layoutX, QPixmap *, QCanvas *);
@@ -95,7 +103,7 @@ protected:
 /**
  * A QCanvasSprite used for a staff name
  */
-class QCanvasStaffNameSprite : public QCanvasSimpleSprite
+class QCanvasStaffNameSprite : public QCanvasNonElementSprite
 {
 public:
     QCanvasStaffNameSprite(QPixmap *, QCanvas *);

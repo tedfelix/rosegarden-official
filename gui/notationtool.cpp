@@ -950,6 +950,8 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 	Event *event = command->getLastInsertedEvent();
 	if (event) m_nParentView->setSingleSelectedEvent(staffNo, event);
     }
+
+    delete dialog;
 }
 
 
@@ -1035,6 +1037,9 @@ NotationSelector::NotationSelector(NotationView* view)
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
 
+    connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
+	    m_parentView, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
+
     QIconSet icon
 	(NotePixmapFactory::toQPixmap(NotePixmapFactory::
 	 makeToolbarPixmap("crotchet")));
@@ -1070,7 +1075,7 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
 
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
-    if (e->state() && ShiftButton) {
+    if (e->state() & ShiftButton) {
 	selectionToMerge = m_nParentView->getCurrentSelection();
     }
     m_selectionToMerge =
@@ -1111,20 +1116,11 @@ void NotationSelector::handleMouseDoubleClick(Rosegarden::timeT,
     if (!staff) return;
     m_selectedStaff = staff;
 
+    bool advanced = (e->state() & ShiftButton);
+
     if (m_clickedElement) {
 
-	EventEditDialog dialog(m_nParentView, *m_clickedElement->event(), true);
-
-	if (dialog.exec() == QDialog::Accepted &&
-	    dialog.isModified()) {
-
-	    EventEditCommand *command = new EventEditCommand
-		(staff->getSegment(),
-		 m_clickedElement->event(),
-		 dialog.getEvent());
-
-	    m_nParentView->addCommandToHistory(command);
-	}
+	emit editElement(staff, m_clickedElement, advanced);
 
     } else {
 

@@ -116,6 +116,20 @@ protected:
     Rosegarden::Event *m_lastInsertedEvent;
 };
 
+class TextChangeCommand : public BasicCommand
+{
+public:
+    TextChangeCommand(Rosegarden::Segment &segment,
+		      Rosegarden::Event *event,
+		      Rosegarden::Text text);
+    virtual ~TextChangeCommand();
+
+protected:
+    virtual void modifySegment();
+    Rosegarden::Event *m_event; // only used first time through
+    Rosegarden::Text m_text;
+};
+
 class KeyInsertionCommand : public BasicCommand
 {
 public:

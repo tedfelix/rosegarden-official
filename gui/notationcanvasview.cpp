@@ -191,11 +191,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         QCanvasNotationSprite *sprite =
 	    dynamic_cast<QCanvasNotationSprite*>(*it);
 	if (!sprite) {
-	    // bit too much inside information here
-	    if (dynamic_cast<QCanvasTimeSigSprite *>(*it) ||
-		dynamic_cast<QCanvasStaffNameSprite *>(*it)) {
-		NOTATION_DEBUG << "not a notation sprite: emitting nonNotationItemPressed"
-			       << endl;
+	    if (dynamic_cast<QCanvasNonElementSprite *>(*it)) {
 		emit nonNotationItemPressed(e, *it);
 		return;
 	    }

@@ -140,10 +140,26 @@ QCanvasNotationSprite::~QCanvasNotationSprite()
 }
 
 
+QCanvasNonElementSprite::QCanvasNonElementSprite(QPixmap *pixmap,
+					       QCanvas *canvas) :
+    QCanvasSimpleSprite(pixmap, canvas)
+{
+}
+
+QCanvasNonElementSprite::QCanvasNonElementSprite(QCanvasPixmap *pixmap,
+					       QCanvas *canvas) :
+    QCanvasSimpleSprite(pixmap, canvas)
+{
+}
+
+QCanvasNonElementSprite::~QCanvasNonElementSprite()
+{
+}
+
 QCanvasTimeSigSprite::QCanvasTimeSigSprite(double layoutX,
 					   QPixmap *pixmap,
 					   QCanvas *canvas) :
-    QCanvasSimpleSprite(pixmap, canvas),
+    QCanvasNonElementSprite(pixmap, canvas),
     m_layoutX(layoutX)
 {
 }
@@ -151,7 +167,7 @@ QCanvasTimeSigSprite::QCanvasTimeSigSprite(double layoutX,
 QCanvasTimeSigSprite::QCanvasTimeSigSprite(double layoutX,
 					   QCanvasPixmap *pixmap,
 					   QCanvas *canvas) :
-    QCanvasSimpleSprite(pixmap, canvas),
+    QCanvasNonElementSprite(pixmap, canvas),
     m_layoutX(layoutX)
 {
 }
@@ -163,13 +179,13 @@ QCanvasTimeSigSprite::~QCanvasTimeSigSprite()
 
 QCanvasStaffNameSprite::QCanvasStaffNameSprite(QPixmap *pixmap,
 					       QCanvas *canvas) :
-    QCanvasSimpleSprite(pixmap, canvas)
+    QCanvasNonElementSprite(pixmap, canvas)
 {
 }
 
 QCanvasStaffNameSprite::QCanvasStaffNameSprite(QCanvasPixmap *pixmap,
 					       QCanvas *canvas) :
-    QCanvasSimpleSprite(pixmap, canvas)
+    QCanvasNonElementSprite(pixmap, canvas)
 {
 }
 

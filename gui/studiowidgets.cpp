@@ -352,7 +352,7 @@ void
 RosegardenFader::wheelEvent(QWheelEvent *e)
 {
     int buttonPosition = value_to_position(m_value);
-    if (e->state() && ShiftButton) {
+    if (e->state() & ShiftButton) {
 	if (e->delta() > 0) buttonPosition += 10;
 	else buttonPosition -= 10;
     } else {

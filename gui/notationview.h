@@ -460,6 +460,7 @@ public slots:
 
     void slotEditAddClef();
     void slotEditAddKeySignature();
+    void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotDebugDump();
 

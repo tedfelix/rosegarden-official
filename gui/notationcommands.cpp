@@ -239,7 +239,19 @@ ClefInsertionCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
     Clef oldClef(getSegment().getClefAtTime(getStartTime()));
 
-    Segment::iterator i = helper.insertClef(getStartTime(), m_clef);
+    Segment::iterator i = getSegment().findTime(getStartTime());
+    while (getSegment().isBeforeEndMarker(i)) {
+	if ((*i)->getAbsoluteTime() > getStartTime()) {
+	    break;
+	}
+	if ((*i)->isa(Clef::EventType)) {
+	    getSegment().erase(i);
+	    break;
+	}
+	++i;
+    }
+
+    i = helper.insertClef(getStartTime(), m_clef);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
 
     if (m_clef != oldClef) {
@@ -293,6 +305,30 @@ TextInsertionCommand::modifySegment()
 }
 
 
+TextChangeCommand::TextChangeCommand(Segment &segment,
+				     Event *event,
+				     Text text) :
+    BasicCommand(i18n("Edit Text"), segment,
+		 event->getAbsoluteTime(), event->getAbsoluteTime() + 1,
+		 true), // bruteForceRedo
+    m_event(event),
+    m_text(text)
+{
+    // nothing
+}
+
+TextChangeCommand::~TextChangeCommand()
+{
+}
+
+void
+TextChangeCommand::modifySegment()
+{
+    m_event->set<String>(Text::TextTypePropertyName, m_text.getTextType());
+    m_event->set<String>(Text::TextPropertyName, m_text.getText());
+}
+
+
 KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 					 Rosegarden::Key key,
 					 bool convert,
@@ -321,7 +357,19 @@ KeyInsertionCommand::modifySegment()
 	oldKey = getSegment().getKeyAtTime(getStartTime());
     }
 
-    Segment::iterator i = helper.insertKey(getStartTime(), m_key);
+    Segment::iterator i = getSegment().findTime(getStartTime());
+    while (getSegment().isBeforeEndMarker(i)) {
+	if ((*i)->getAbsoluteTime() > getStartTime()) {
+	    break;
+	}
+	if ((*i)->isa(Rosegarden::Key::EventType)) {
+	    getSegment().erase(i);
+	    break;
+	}
+	++i;
+    }
+
+    i = helper.insertKey(getStartTime(), m_key);
 
     if (i != helper.segment().end()) {
 

@@ -425,6 +425,9 @@ public:
 
     static const QString ToolName;
 
+signals:
+    void editElement(NotationStaff *, NotationElement *, bool advanced);
+
 public slots:
     /**
      * Hide the selection rectangle
