@@ -1576,6 +1576,7 @@ JackDriver::jackShutdown(void *arg)
     inst->m_kickedOutAt = time(0);
 
     inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
+    if (inst->m_instrumentMixer) inst->m_instrumentMixer->resetAllPlugins();
 }
 
 int
