@@ -61,9 +61,23 @@ LoopRuler::~LoopRuler()
 
 void LoopRuler::scrollHoriz(int x)
 {
-    m_currentXOffset = int(double(-x)/getHScaleFactor());
+    int w = width(), h = height();
+    x = int(double(x)/getHScaleFactor());
+    int dx = x - (-m_currentXOffset);
+    m_currentXOffset = -x;
 
-    repaint();
+    if (dx > w*3/4 || dx < -w*3/4) {
+	update();
+	return;
+    }
+
+    if (dx > 0) { // moving right, so the existing stuff moves left
+	bitBlt(this, 0, 0, this, dx, 0, w-dx, h);
+	repaint(w-dx, 0, dx, h);
+    } else {      // moving left, so the existing stuff moves right
+	bitBlt(this, -dx, 0, this, 0, 0, w+dx, h);
+	repaint(0, 0, -dx, h);
+    }
 }
 
 QSize LoopRuler::sizeHint() const

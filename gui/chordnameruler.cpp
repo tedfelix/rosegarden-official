@@ -64,7 +64,9 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_currentSegment(0),
     m_fontMetrics(m_boldFont),
     TEXT_FORMAL_X("TextFormalX"),
-    TEXT_ACTUAL_X("TextActualX")
+    TEXT_ACTUAL_X("TextActualX"),
+    m_labelSegment(0),
+    m_needRecalc(true)
 {
     m_font.setPointSize(11);
     m_font.setPixelSize(12);
@@ -77,13 +79,68 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
 ChordNameRuler::~ChordNameRuler()
 {
+    if (m_currentSegment) {
+	m_currentSegment->removeObserver(this);
+    }
+}
+
+void
+ChordNameRuler::setComposition(Rosegarden::Composition *composition)
+{
+    if (m_currentSegment) {
+	m_currentSegment->removeObserver(this);
+    }
+    m_composition = composition;
+    m_currentSegment = 0;
+}
+
+void
+ChordNameRuler::setCurrentSegment(Rosegarden::Segment *segment)
+{
+    if (m_currentSegment) {
+	m_currentSegment->removeObserver(this);
+    }
+    m_currentSegment = segment;
+    m_currentSegment->addObserver(this);
+}
+
+void
+ChordNameRuler::eventAdded(const Segment *s, Rosegarden::Event *)
+{
+    if (s == m_currentSegment) m_needRecalc = true;
+}
+
+void
+ChordNameRuler::eventRemoved(const Segment *s, Rosegarden::Event *)
+{
+    if (s == m_currentSegment) m_needRecalc = true;
+}
+
+void
+ChordNameRuler::endMarkerTimeChanged(const Segment *s, bool)
+{
+    if (s == m_currentSegment) m_needRecalc = true;
 }
 
 void
 ChordNameRuler::slotScrollHoriz(int x)
 {
+    int w = width(), h = height();
+    int dx = x - (-m_currentXOffset);
     m_currentXOffset = -x;
-    repaint();
+
+    if (dx > w*3/4 || dx < -w*3/4) {
+	update();
+	return;
+    }
+
+    if (dx > 0) { // moving right, so the existing stuff moves left
+	bitBlt(this, 0, 0, this, dx, 0, w-dx, h);
+	repaint(w-dx, 0, dx, h);
+    } else {      // moving left, so the existing stuff moves right
+	bitBlt(this, -dx, 0, this, 0, 0, w+dx, h);
+	repaint(0, 0, -dx, h);
+    }
 }
 
 QSize
@@ -126,35 +183,49 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 100);
 
-    CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
-    Segment segment;
+//!!! This optimisation doesn't work -- it'd demand that we were
+//notified each time anything in any segment changed (as we might not
+//have a current segment and in any case show chords from across all
+//segments) -- remove segment observer stuff from this class unless 
+//a cleverer way turns up
+//   if (m_needRecalc || !m_labelSegment) {
 
-    // Populate the segment with the current clef and key at the
-    // time at which analysis starts, taken from the "current segment"
-    // if we have one.  If we don't have one, use the first segment
-    // that contains our start time
+    if (true) {
 
-    Segment *clefKeySegment = m_currentSegment;
-    if (!clefKeySegment) {
-	for (Composition::iterator ci = m_composition->begin();
-	     ci != m_composition->end(); ++ci) {
-	    if ((*ci)->getStartTime() <= from &&
-		(*ci)->getEndMarkerTime() >= from) {
-		clefKeySegment = *ci;
-		break;
+	if (m_labelSegment) m_labelSegment->clear();
+	else m_labelSegment = new Segment();
+
+	CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
+
+	// Populate the segment with the current clef and key at the
+	// time at which analysis starts, taken from the "current segment"
+	// if we have one.  If we don't have one, use the first segment
+	// that contains our start time
+
+	Segment *clefKeySegment = m_currentSegment;
+	if (!clefKeySegment) {
+	    for (Composition::iterator ci = m_composition->begin();
+		 ci != m_composition->end(); ++ci) {
+		if ((*ci)->getStartTime() <= from &&
+		    (*ci)->getEndMarkerTime() >= from) {
+		    clefKeySegment = *ci;
+		    break;
+		}
 	    }
+	    if (!clefKeySegment) return;
 	}
-	if (!clefKeySegment) return;
+	
+	Rosegarden::Clef clef = clefKeySegment->getClefAtTime(from);
+	m_labelSegment->insert(clef.getAsEvent(from - 1));
+	
+	Rosegarden::Key key = clefKeySegment->getKeyAtTime(from);
+	m_labelSegment->insert(key.getAsEvent(from - 1));
+	
+	AnalysisHelper helper;
+	helper.labelChords(adapter, *m_labelSegment);
+
+	m_needRecalc = false;
     }
-
-    Rosegarden::Clef clef = clefKeySegment->getClefAtTime(from);
-    segment.insert(clef.getAsEvent(from - 1));
-
-    Rosegarden::Key key = clefKeySegment->getKeyAtTime(from);
-    segment.insert(key.getAsEvent(from - 1));
-
-    AnalysisHelper helper;
-    helper.labelChords(adapter, segment);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();
@@ -164,8 +235,10 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT keyAt = from - 1;
     std::string keyText;
 
-    for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
-
+    for (Segment::iterator i = m_labelSegment->findTime(from);
+	 i != m_labelSegment->findTime(to) &&
+	     m_labelSegment->isBeforeEndMarker(i); ++i) {
+	
 	if (!(*i)->isa(Text::EventType)) continue;
 
 	std::string text((*i)->get<String>(Text::TextPropertyName));
@@ -191,7 +264,9 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	prevX = x + width;
     }
 
-    for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
+    for (Segment::iterator i = m_labelSegment->findTime(from);
+	 i != m_labelSegment->findTime(to) &&
+	     m_labelSegment->isBeforeEndMarker(i); ++i) {
 	
 	if (!(*i)->isa(Text::EventType)) continue;
 	std::string text((*i)->get<String>(Text::TextPropertyName));

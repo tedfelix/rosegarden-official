@@ -26,11 +26,11 @@
 #include <qwidget.h>
 
 #include "PropertyName.h"
+#include "Segment.h"
 
 namespace Rosegarden {
     class RulerScale;
     class Composition;
-    class Segment;
 }
 
 class QFont;
@@ -42,7 +42,7 @@ class QFontMetrics;
  * describing the chords in a composition.
  */
 
-class ChordNameRuler : public QWidget
+class ChordNameRuler : public QWidget, public Rosegarden::SegmentObserver
 {
     Q_OBJECT
 
@@ -61,18 +61,17 @@ public:
 
     ~ChordNameRuler();
 
-    void setComposition(Rosegarden::Composition *composition) {
-	m_composition = composition;
-    }
-
-    void setCurrentSegment(Rosegarden::Segment *segment) {
-	m_currentSegment = segment;
-    }
+    void setComposition(Rosegarden::Composition *composition);
+    void setCurrentSegment(Rosegarden::Segment *segment);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
     void setMinimumWidth(int width) { m_width = width; }
+
+    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool);
 
 public slots:
     void slotScrollHoriz(int x);
@@ -96,6 +95,9 @@ private:
 
     const Rosegarden::PropertyName TEXT_FORMAL_X;
     const Rosegarden::PropertyName TEXT_ACTUAL_X;
+
+    Rosegarden::Segment *m_labelSegment;
+    bool m_needRecalc;
 };
 
 #endif // _LOOPRULER_H_

@@ -64,6 +64,19 @@ Post-0.9 task list
 26. Chord-name ruler, raw-note ruler, etc: cache calculations in a
     segment or something
 
+27. Notation needs a plain "collapse ties" that reverts tied notes to
+    their performance durations
+
+28. Also "remove all indications"
+
+29. Need rapid select-all and quantize from toolbar in notation view
+
+30. Selecting sth in notation view should make that staff current
+
+31. Quantize dialog must remember last thing you asked it to do
+
+32. Can't ctrl-click to place cursor anywhere beyond start in
+harpsichord upper in dido.rg -- why?
 
 Priorities for 0.9
 ==================
