@@ -154,17 +154,23 @@ public:
     //
     virtual void removeDevice(unsigned int id) = 0;
 
-    // Return the number of permissible connections for a particular device.
-    // Returns zero if the device is non-reconnectable
-    // (i.e. if canReconnect(type) would return false when given the
-    // type of the supplied device).
+    // Return the number of permissible connections for a device of
+    // the given type and direction (corresponding to MidiDevice::
+    // DeviceDirection enum).
+    // Returns zero if devices of this type are non-reconnectable
+    // (i.e. if canReconnect(type) would return false).
+//!!! oops -- direction not used unless type == midi -- fix api please
     //
-    virtual unsigned int getConnections(unsigned int deviceId) = 0;
+    virtual unsigned int getConnections(int type, unsigned int direction) = 0;
 
-    // Return one of the set of permissible connections for a particular
-    // device.  Returns the empty string for invalid parameters.
+    // Return one of the set of permissible connections for a device of
+    // the given type and direction (corresponding to MidiDevice::
+    // DeviceDirection enum).
+    // Returns the empty string for invalid parameters.
+//!!! oops -- direction not used unless type == midi -- fix api please
     // 
-    virtual QString getConnection(unsigned int deviceId,
+    virtual QString getConnection(int type,
+				  unsigned int direction,
 				  unsigned int connectionNo) = 0;
 
     // Reconnect a particular device.

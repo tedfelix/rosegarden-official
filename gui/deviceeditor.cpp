@@ -25,15 +25,18 @@
 #include <qvbox.h>
 #include <qhbox.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
 
 #include <kapp.h>
 #include <klocale.h>
 #include <dcopclient.h>
+#include <kmessagebox.h>
 
 #include "rosegardenguidoc.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardendcop.h"
+#include "studiocommands.h"
 
 #include "Studio.h"
 #include "Device.h"
@@ -45,22 +48,22 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     KDialogBase(parent, "deviceeditordialog", true,
 		i18n("Manage MIDI Devices"), Ok | Apply | Close, Ok, true),
     m_document(document),
-    m_studio(&document->getStudio())
+    m_studio(&document->getStudio()),
+    m_modified(false)
 {
     QVBox *mainBox = makeVBoxMainWidget();
 
     Rosegarden::DeviceList *devices = m_studio->getDevices();
     Rosegarden::DeviceListIterator it;
 
-    Rosegarden::DeviceList validDevices;
     for (it = devices->begin(); it != devices->end(); ++it) {
 	if ((*it)->getType() == Rosegarden::Device::Midi) {
 	    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(*it);
-	    validDevices.push_back(md);
+	    m_devices.push_back(md);
 	}
     }
 
-    m_table = new QTable(validDevices.size(), 4, mainBox);
+    m_table = new QTable(m_devices.size(), 4, mainBox);
     m_table->setSorting(false);
     m_table->setRowMovingEnabled(false);
     m_table->setColumnMovingEnabled(false);
@@ -76,94 +79,64 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     m_table->setColumnReadOnly(0, true);
     m_table->setColumnReadOnly(2, true);
 
+    makeConnectionList((unsigned int)Rosegarden::MidiDevice::Play,
+		       m_playConnections);
+    makeConnectionList((unsigned int)Rosegarden::MidiDevice::Record,
+		       m_recordConnections);
+
     int deviceCount = 0;
 
-    for (it = validDevices.begin(); it != validDevices.end(); ++it) {
+#define NAME_COL 0
+#define LABEL_COL 1
+#define DIRECTION_COL 2
+#define CONNECTION_COL 3
 
-	// we know we only put MidiDevices in the valid device list above
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
+
+	// we know we only put MidiDevices in m_devices
 	Rosegarden::MidiDevice *md = static_cast<Rosegarden::MidiDevice *>(*it);
 
-	Rosegarden::DeviceId id = md->getId();
+	// if you change this string ("Device %1"), change test in slotApply
 	QString deviceName = i18n("Device %1").arg(md->getId() + 1);
 	QString deviceLabel = strtoqstr(md->getName());
 	QString connectionName = strtoqstr(md->getConnection());
 
-	QStringList connectionList;
-	
-	QByteArray data;
-	QByteArray replyData;
-	QCString replyType;
-	QDataStream arg(data, IO_WriteOnly);
-	arg << (unsigned int)id;
-
-	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-				      "getConnections(unsigned int)",
-				      data, replyType, replyData, false)) {
-	    RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
-	    continue;
-	}
-
-	QDataStream reply(replyData, IO_ReadOnly);
-	unsigned int connections = 0;
-	if (replyType == "unsigned int") reply >> connections;
-	int currentConnectionIndex = -1;
-
-	for (unsigned int i = 0; i < connections; ++i) {
-
-	    QByteArray data;
-	    QByteArray replyData;
-	    QCString replyType;
-	    QDataStream arg(data, IO_WriteOnly);
-	    arg << (unsigned int)id;
-	    arg << i;
-	    
-	    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-					  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-					  "getConnection(unsigned int, unsigned int)",
-					  data, replyType, replyData, false)) {
-		RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
-		continue;
-	    }
-	    
-	    QDataStream reply(replyData, IO_ReadOnly);
-	    QString connection;
-	    if (replyType == "QString") {
-		reply >> connection;
-		connectionList.append(connection);
-		if (connection == connectionName) currentConnectionIndex = i;
-	    }
-	}
-
-	connectionList.append(i18n("No connection"));
-	if (currentConnectionIndex == -1)
-	    currentConnectionIndex = connections;
-
-	m_table->setText(deviceCount, 0, deviceName);
-	m_table->setText(deviceCount, 1, deviceLabel);
-	m_table->setText(deviceCount, 2,
+	m_table->setText(deviceCount, NAME_COL, deviceName);
+	m_table->setText(deviceCount, LABEL_COL, deviceLabel);
+	m_table->setText(deviceCount, DIRECTION_COL,
 			 (md->getDirection() == Rosegarden::MidiDevice::Play ?
 			  i18n("Play") : i18n("Record")));
 
-	QComboTableItem *item = new QComboTableItem(m_table, connectionList, false);
+	QStringList &list(md->getDirection() == Rosegarden::MidiDevice::Play ?
+			  m_playConnections : m_recordConnections);
+	int currentConnectionIndex = list.size() - 1;
+	for (unsigned int i = 0; i < list.size(); ++i) {
+	    if (list[i] == connectionName) currentConnectionIndex = i;
+	}
+
+	QComboTableItem *item = new QComboTableItem(m_table, list, false);
 	item->setCurrentItem(currentConnectionIndex);
-	m_table->setItem(deviceCount, 3, item);
+	m_table->setItem(deviceCount, CONNECTION_COL, item);
 
 	m_table->adjustRow(deviceCount);
 	++deviceCount;
     }
 
-    m_table->adjustColumn(0);
-    if (m_table->columnWidth(0) < 120) m_table->setColumnWidth(0, 120);
+    m_table->adjustColumn(NAME_COL);
+    if (m_table->columnWidth(NAME_COL) < 80)
+	m_table->setColumnWidth(NAME_COL, 80);
 
-    m_table->adjustColumn(1);
-    if (m_table->columnWidth(1) < 120) m_table->setColumnWidth(1, 120);
+    m_table->adjustColumn(LABEL_COL);
+    if (m_table->columnWidth(LABEL_COL) < 120)
+	m_table->setColumnWidth(LABEL_COL, 120);
 
-    m_table->adjustColumn(2);
-    if (m_table->columnWidth(2) < 80) m_table->setColumnWidth(2, 80);
+    m_table->adjustColumn(DIRECTION_COL);
+    if (m_table->columnWidth(DIRECTION_COL) < 100)
+	m_table->setColumnWidth(DIRECTION_COL, 100);
 
-    m_table->adjustColumn(3);
-    if (m_table->columnWidth(3) < 200) m_table->setColumnWidth(3, 200);
+    m_table->adjustColumn(CONNECTION_COL);
+    if (m_table->columnWidth(CONNECTION_COL) < 250)
+	m_table->setColumnWidth(CONNECTION_COL, 250);
 
     QHBox *hbox = new QHBox(mainBox);
     QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox);
@@ -174,30 +147,212 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
 
     setMinimumHeight(250);
+
+    enableButtonOK(false);
+    enableButtonApply(false);
+}
+
+
+void
+DeviceEditorDialog::makeConnectionList(unsigned int direction,
+				       QStringList &list)
+{
+    QByteArray data;
+    QByteArray replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+    arg << (int)Rosegarden::Device::Midi;
+    arg << direction;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+				  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+				  "getConnections(int, unsigned int)",
+				  data, replyType, replyData, false)) {
+	RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
+	return;
+    }
+
+    QDataStream reply(replyData, IO_ReadOnly);
+    unsigned int connections = 0;
+    if (replyType == "unsigned int") reply >> connections;
+
+    for (unsigned int i = 0; i < connections; ++i) {
+
+	QByteArray data;
+	QByteArray replyData;
+	QCString replyType;
+	QDataStream arg(data, IO_WriteOnly);
+	arg << (int)Rosegarden::Device::Midi;
+	arg << direction;
+	arg << i;
+	    
+	if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+				      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+				      "getConnection(int, unsigned int, unsigned int)",
+				      data, replyType, replyData, false)) {
+	    RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
+	    return;
+	}
+	    
+	QDataStream reply(replyData, IO_ReadOnly);
+	QString connection;
+	if (replyType == "QString") {
+	    reply >> connection;
+	    list.append(connection);
+	}
+    }
+
+    list.append(i18n("No connection"));
+}
+
+
+void
+DeviceEditorDialog::setModified(bool m)
+{
+    if (m_modified == m) return;
+    enableButtonOK(m);
+    enableButtonApply(m);
+    m_modified = m;
+}
+
+
+void
+DeviceEditorDialog::slotOk()
+{
+    slotApply();
+    accept();
+}
+
+
+void
+DeviceEditorDialog::slotClose()
+{
+    if (m_modified) {
+	
+        int reply = KMessageBox::questionYesNo(this,
+                                               i18n("Apply pending changes?"));
+	
+        if (reply == KMessageBox::Yes) slotApply();
+    } 
+
+    reject();
+}
+
+
+void
+DeviceEditorDialog::slotApply()
+{
+    KMacroCommand *command = new KMacroCommand("Edit Devices");
+    
+    // first delete deleted devices
+
+    for (Rosegarden::DeviceListIterator i = m_devices.begin();
+	 i != m_devices.end(); ++i) {
+
+	if (m_deletedDevices.find((*i)->getId()) != m_deletedDevices.end()) {
+	    command->addCommand(new DeleteDeviceCommand(m_studio,
+						       (*i)->getId()));
+	}
+    }
+    
+    // create the new devices, and rename all the rest, because we
+    // haven't bothered to record which ones have changed -- the extra
+    // renaming doesn't matter much as it doesn't involve a trip to
+    // the sequencer (unlike create and delete)
+
+    for (int i = 0; i < m_table->numRows(); ++i) {
+	int deviceId = getDeviceIdAt(i);
+	if (deviceId < 0) { // new device
+	    command->addCommand(new CreateDeviceCommand
+			       (m_studio,
+				qstrtostr(m_table->text(i, LABEL_COL)),
+				Rosegarden::Device::Midi,
+				m_table->text(i, DIRECTION_COL) == "Play" ?
+				Rosegarden::MidiDevice::Play :
+				Rosegarden::MidiDevice::Record));
+	} else { // existing device
+	    command->addCommand(new RenameDeviceCommand
+			       (m_studio,
+				deviceId,
+				qstrtostr(m_table->text(i, LABEL_COL))));
+	}
+    }
+
+    m_document->getCommandHistory()->addCommand(command);
+
+    //!!! Set connections!
+
+    setModified(false);
+}
+
+
+int
+DeviceEditorDialog::getDeviceIdAt(int row) // -1 for new device w/o an id yet
+{
+    QString t(m_table->text(row, 0));
+
+    QRegExp re("^.*(\\d+).*$");
+    re.search(t);
+
+    QString number = re.cap(1);
+    int id = -1;
+
+    if (number && number != "") {
+	id = number.toInt();
+    }
+
+    return id;
 }
 
 
 void
 DeviceEditorDialog::slotAddPlayDevice()
 {
-    //...
+    int n = m_table->numRows();
+    m_table->insertRows(n, 1);
+    m_table->setText(n, 0, i18n("<new device>"));
+    m_table->setText(n, 1, i18n("New Device"));
+    m_table->setText(n, 2, i18n("Play"));
+    
+    QComboTableItem *item =
+	new QComboTableItem(m_table, m_playConnections, false);
+    item->setCurrentItem(m_playConnections.size() - 1);
+    m_table->setItem(n, 3, item);
+    m_table->adjustRow(n);
+
+    setModified(true);
 }
 
 void
 DeviceEditorDialog::slotAddRecordDevice()
 {
-    //...
+    int n = m_table->numRows();
+    m_table->insertRows(n, 1);
+    m_table->setText(n, 0, i18n("<new device>"));
+    m_table->setText(n, 1, i18n("New Device"));
+    m_table->setText(n, 2, i18n("Record"));
+    
+    QComboTableItem *item =
+	new QComboTableItem(m_table, m_recordConnections, false);
+    item->setCurrentItem(m_recordConnections.size() - 1);
+    m_table->setItem(n, 3, item);
+    m_table->adjustRow(n);
+
+    setModified(true);
 }
 
 void
 DeviceEditorDialog::slotDeleteDevice()
 {
-    //...
+    int n = m_table->currentRow();
+    m_deletedDevices.insert(getDeviceIdAt(n));
+    m_table->removeRow(n);
+    setModified(true);
 }
 
 void
-DeviceEditorDialog::slotValueChanged(int row, int column)
+DeviceEditorDialog::slotValueChanged(int, int)
 {
-    //...
+    setModified(true);
 }
 

@@ -196,16 +196,20 @@ public:
 
     // Get total number of permissible connections for a given device
     //
-    unsigned int getConnections(unsigned int deviceId)
+    unsigned int getConnections(int type, unsigned int direction)
     {
-	return m_soundDriver->getConnections(deviceId);
+	return m_soundDriver->getConnections(Rosegarden::Device::DeviceType(type),
+					     Rosegarden::MidiDevice::DeviceDirection(direction));
     }
 
     // Get a single connection for a given device
     //
-    QString getConnection(unsigned int deviceId, unsigned int connectionNo)
+    QString getConnection(int type, unsigned int direction,
+			  unsigned int connectionNo)
     {
-	return m_soundDriver->getConnection(deviceId, connectionNo);
+	return m_soundDriver->getConnection(Rosegarden::Device::DeviceType(type),
+					    Rosegarden::MidiDevice::DeviceDirection(direction),
+					    connectionNo);
     }
 
     void setConnection(unsigned int deviceId, QString connection)

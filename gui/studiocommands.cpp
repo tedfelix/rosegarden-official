@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -248,7 +249,39 @@ ModifyInstrumentMappingCommand::unexecute()
 }
 
         
+void
+CreateDeviceCommand::execute()
+{
+    //!!! implement
+}
 
+void
+CreateDeviceCommand::unexecute()
+{
+    //!!! implement
+}
 
+void
+DeleteDeviceCommand::unexecute()
+{
+    //!!! implement
+}
+        
+void
+DeleteDeviceCommand::execute()
+{
+    //!!! implement
+}
+        
+void
+RenameDeviceCommand::execute()
+{
+    //!!! implement
+}
 
+void
+RenameDeviceCommand::unexecute()
+{
+    //!!! implement
+}
 

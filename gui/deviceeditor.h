@@ -25,9 +25,13 @@
 
 #include <kdialogbase.h>
 
+#include "Device.h"
+#include "Studio.h"
+
+#include <set>
+
 class RosegardenGUIDoc;
 class QTable;
-namespace Rosegarden { class Studio; }
 
 
 class DeviceEditorDialog : public KDialogBase
@@ -36,7 +40,13 @@ class DeviceEditorDialog : public KDialogBase
 public:
     DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
 
+    void setModified(bool value);
+
 protected slots:
+    void slotOk();
+    void slotApply();
+    void slotClose();
+
     void slotAddPlayDevice();
     void slotAddRecordDevice();
     void slotDeleteDevice();
@@ -45,9 +55,18 @@ protected slots:
 private:
     RosegardenGUIDoc *m_document;
     Rosegarden::Studio *m_studio;
+
+    QStringList m_playConnections;
+    QStringList m_recordConnections;
+    void makeConnectionList(unsigned int direction, QStringList &list);
     
     QTable *m_table;
+
+    Rosegarden::DeviceList m_devices;
+    std::set<Rosegarden::DeviceId> m_deletedDevices;
+    int getDeviceIdAt(int row); // -1 for new device without an id yet
     
+    bool m_modified;
 };
 
 #endif

@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -25,6 +26,7 @@
 
 #include "Instrument.h"
 #include "Device.h"
+#include "MidiDevice.h"
 
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
@@ -120,7 +122,11 @@ class RenameDeviceCommand : public KNamedCommand
 public:
     RenameDeviceCommand(Rosegarden::Studio *studio,
 			Rosegarden::DeviceId deviceId,
-			std::string name);
+			std::string name) :
+	KNamedCommand(getGlobalName()),
+	m_studio(studio),
+	m_deviceId(deviceId),
+	m_name(name) { }
 
     static QString getGlobalName() { return i18n("Rename Device"); }
 
@@ -133,4 +139,49 @@ protected:
     std::string m_name;
 };
 
+
+class DeleteDeviceCommand : public KNamedCommand
+{
+public:
+    DeleteDeviceCommand(Rosegarden::Studio *studio,
+			Rosegarden::DeviceId deviceId) :
+	KNamedCommand(getGlobalName()),
+	m_studio(studio),
+	m_deviceId(deviceId) { }
+    
+    static QString getGlobalName() { return i18n("Delete Device"); }
+    
+    virtual void execute();
+    virtual void unexecute();
+    
+protected:
+    Rosegarden::Studio *m_studio;
+    Rosegarden::DeviceId m_deviceId;
+};
+
+
+class CreateDeviceCommand : public KNamedCommand
+{
+public:
+    CreateDeviceCommand(Rosegarden::Studio *studio,
+			std::string name,
+			Rosegarden::Device::DeviceType type,
+			Rosegarden::MidiDevice::DeviceDirection direction) :
+	KNamedCommand(getGlobalName()),
+	m_studio(studio),
+	m_name(name),
+	m_type(type),
+	m_direction(direction) { }
+    
+    static QString getGlobalName() { return i18n("Create Device"); }
+    
+    virtual void execute();
+    virtual void unexecute();
+    
+protected:
+    Rosegarden::Studio *m_studio;
+    std::string m_name;
+    Rosegarden::Device::DeviceType m_type;
+    Rosegarden::MidiDevice::DeviceDirection m_direction;
+};
 

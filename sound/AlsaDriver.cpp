@@ -377,9 +377,31 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 		sprintf(portId, "%d:%d ", client, port);
 
                 std::string fullClientName = 
+                    std::string(snd_seq_client_info_get_name(cinfo));
+
+                std::string fullPortName = 
                     std::string(snd_seq_port_info_get_name(pinfo));
 
-                std::string name = portId + fullClientName;
+		std::string name;
+
+		// if the client name is the same as the start of the port
+		// name, just use the port name.  otherwise concatenate
+
+		if (fullPortName.length() >= fullClientName.length() &&
+		    fullPortName.substr(0, fullClientName.length()) ==
+		    fullClientName) {
+		    name = portId + fullPortName;
+		} else {
+		    name = portId + fullClientName + ": " + fullPortName;
+		}
+
+		if (direction == WriteOnly) {
+		    name += " (write)";
+		} else if (direction == ReadOnly) {
+		    name += " (read)";
+		} else if (direction == Duplex) {
+		    name += " (duplex)";
+		}
 
                 AlsaPortDescription *portDescription = 
                     new AlsaPortDescription(
@@ -415,7 +437,6 @@ AlsaDriver::generateInstruments()
 {
     // Reset these before each Instrument hunt
     //
-    m_deviceRunningId = 0;
     m_addedMetronome = false;
     m_audioRunningId = AudioInstrumentBase;
     m_midiRunningId = MidiInstrumentBase;
@@ -466,6 +487,8 @@ AlsaDriver::generateInstruments()
     char number[100];
     std::string audioName;
 
+    DeviceId audioDeviceId = getSpareDeviceId();
+
     if (m_driverStatus & AUDIO_OK)
     {
         for (int channel = 0; channel < 16; ++channel)
@@ -476,7 +499,7 @@ AlsaDriver::generateInstruments()
                                          channel,
                                          m_audioRunningId,
                                          audioName,
-                                         m_deviceRunningId);
+                                         audioDeviceId);
             m_instruments.push_back(instr);
 
             // Create a fader with a matching id - this is the starting
@@ -497,12 +520,10 @@ AlsaDriver::generateInstruments()
         // Create audio device
         //
         MappedDevice *device =
-                        new MappedDevice(m_deviceRunningId,
+                        new MappedDevice(audioDeviceId,
                                          Device::Audio,
                                          "JACK Audio");
         m_devices.push_back(device);
-
-	++m_deviceRunningId;
     }
 
 #endif
@@ -530,6 +551,8 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
     const int SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
 
+    DeviceId deviceId = getSpareDeviceId();
+
     if (port) {
 
 	if (requestedDirection == MidiDevice::Record &&
@@ -550,8 +573,8 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 		    ++counters[type][requestedDirection]);
 	}
 
-	m_devicePortMap[m_deviceRunningId] = ClientPortPair(port->m_client,
-							    port->m_port);
+	m_devicePortMap[deviceId] = ClientPortPair(port->m_client,
+						   port->m_port);
 
 	connectionName = port->m_name;
 
@@ -560,15 +583,25 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	sprintf(clientId, "Anonymous MIDI device %d", ++unknownCounter);
     }
 	
-    //!!! should reuse any unused ids instead of using m_deviceRunningId
-
-    MappedDevice *device = new MappedDevice(m_deviceRunningId,
+    MappedDevice *device = new MappedDevice(deviceId,
 					    Device::Midi,
 					    clientId,
 					    connectionName);
     device->setDirection(requestedDirection);
-    ++m_deviceRunningId;
     return device;
+}
+
+DeviceId
+AlsaDriver::getSpareDeviceId()
+{
+    std::set<DeviceId> ids;
+    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+	ids.insert(m_devices[i]->getId());
+    }
+
+    DeviceId id = 0;
+    while (ids.find(id) != ids.end()) ++id;
+    return id;
 }
 
 void
@@ -682,56 +715,39 @@ AlsaDriver::getPortName(ClientPortPair port)
     
 
 unsigned int
-AlsaDriver::getConnections(DeviceId id)
+AlsaDriver::getConnections(Device::DeviceType type,
+			   MidiDevice::DeviceDirection direction)
 {
-    // return connections of the correct direction
-    
-    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+    if (type != Device::Midi) return 0;
 
-	if (m_devices[i]->getId() == id) {
-
-	    MidiDevice::DeviceDirection direction = m_devices[i]->getDirection();
-
-	    int count = 0;
-	    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
-		if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
-		    (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
-		    ++count;
-		}
-	    }
-
-	    return count;
+    int count = 0;
+    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
+	if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
+	    (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
+	    ++count;
 	}
     }
-
-    return 0;
+    
+    return count;
 }
 
 QString
-AlsaDriver::getConnection(DeviceId id, unsigned int connectionNo)
+AlsaDriver::getConnection(Device::DeviceType type,
+			  MidiDevice::DeviceDirection direction,
+			  unsigned int connectionNo)
 {
-    // return connections of the correct direction
+    if (type != Device::Midi) return "";
     
-    for (unsigned int i = 0; i < m_devices.size(); ++i) {
-
-	if (m_devices[i]->getId() == id) {
-
-	    MidiDevice::DeviceDirection direction = m_devices[i]->getDirection();
-
-	    AlsaPortList tempList;
-	    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
-		if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
-		    (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
-		    tempList.push_back(m_alsaPorts[j]);
-		}
-	    }
-
-	    if (connectionNo >= 0 && connectionNo < tempList.size()) {
-		return tempList[connectionNo]->m_name.c_str();
-	    } else {
-		return "";
-	    }
+    AlsaPortList tempList;
+    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
+	if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
+	    (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
+	    tempList.push_back(m_alsaPorts[j]);
 	}
+    }
+    
+    if (connectionNo < tempList.size()) {
+	return tempList[connectionNo]->m_name.c_str();
     }
 
     return "";
@@ -937,6 +953,8 @@ AlsaDriver::initialiseMidi()
 void
 AlsaDriver::createJackInputPorts(unsigned int totalPorts)
 {
+    if (!m_audioClient) return;
+
     // Unregister any we already have connected
     //
     for (unsigned int i = 0; i < m_jackInputPorts.size(); ++i)

@@ -938,16 +938,16 @@ RosegardenSequencerApp::removeDevice(unsigned int deviceId)
 }
 
 unsigned int
-RosegardenSequencerApp::getConnections(unsigned int deviceId)
+RosegardenSequencerApp::getConnections(int type, unsigned int direction)
 {
-    return m_sequencer->getConnections(deviceId);
+    return m_sequencer->getConnections(type, direction);
 }
 
 QString
-RosegardenSequencerApp::getConnection(unsigned int deviceId,
+RosegardenSequencerApp::getConnection(int type, unsigned int direction,
 				      unsigned int connectionNo)
 {
-    return m_sequencer->getConnection(deviceId, connectionNo);
+    return m_sequencer->getConnection(type, direction, connectionNo);
 }
 
 void

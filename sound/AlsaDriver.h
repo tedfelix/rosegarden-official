@@ -163,8 +163,10 @@ public:
 
     // Get available connections per device
     // 
-    virtual unsigned int getConnections(DeviceId deviceId);
-    virtual QString getConnection(DeviceId deviceId,
+    virtual unsigned int getConnections(Device::DeviceType type,
+					MidiDevice::DeviceDirection direction);
+    virtual QString getConnection(Device::DeviceType type,
+				  MidiDevice::DeviceDirection direction,
 				  unsigned int connectionNo);
     virtual void setConnection(DeviceId deviceId, QString connection);
 
@@ -347,6 +349,8 @@ private:
 
     std::string getPortName(ClientPortPair port);
     ClientPortPair getPortByName(std::string name);
+
+    DeviceId getSpareDeviceId();
 };
 
 }

@@ -320,8 +320,11 @@ public:
     }
     virtual void removeDevice(DeviceId) { }
 
-    virtual unsigned int getConnections(DeviceId) { return 0; }
-    virtual QString getConnection(DeviceId, unsigned int) { return ""; }
+    virtual unsigned int getConnections(Device::DeviceType,
+					MidiDevice::DeviceDirection) { return 0; }
+    virtual QString getConnection(Device::DeviceType,
+				  MidiDevice::DeviceDirection,
+				  unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
 
     // Return the audio play queue
@@ -462,7 +465,6 @@ protected:
 
     InstrumentId                                m_midiRunningId;
     InstrumentId                                m_audioRunningId;
-    DeviceId                                    m_deviceRunningId;
 
     // Audio files - both real and the playing abstraction
     //

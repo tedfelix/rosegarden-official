@@ -183,8 +183,8 @@ public:
     virtual int canReconnect(int deviceType);
     virtual unsigned int addDevice(int type, unsigned int direction);
     virtual void removeDevice(unsigned int id);
-    virtual unsigned int getConnections(unsigned int deviceId);
-    virtual QString getConnection(unsigned int deviceId,
+    virtual unsigned int getConnections(int type, unsigned int direction);
+    virtual QString getConnection(int type, unsigned int direction,
 				  unsigned int connectionNo);
     virtual void setConnection(unsigned int deviceId, QString connection);
 

@@ -1523,6 +1523,9 @@ RoseXmlHandler::addMIDIDevice(QString name)
 	return;
     }
 
+    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+		 << " added device " << deviceId << endl;
+
     // add the device, so we can set our pointer to it -- instruments
     // will be sync'd later in the natural course of things
     getStudio().addDevice(qstrtostr(name), deviceId, Device::Midi);

@@ -153,7 +153,6 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
-    m_deviceRunningId(0),
     m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase),
     m_audioPlayLatency(0, 0),
     m_audioRecordLatency(0, 0),
@@ -246,12 +245,10 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
 
 }
 
-// m_deviceRunningId should carry the id after that of the last allocated device
-//
 unsigned int
 SoundDriver::getDevices()
 {
-    return m_deviceRunningId;
+    return m_devices.size();
 }
 
 MappedDevice
