@@ -131,6 +131,13 @@ public:
      */
     timeT getNoteQuantizedDuration(Rosegarden::Event *el) const;
 
+    /**
+     * Removes the quantization properties from an event.  This is
+     * necessary if you should change the duration of an event but
+     * don't want to take the time to requantize it straight away.
+     */
+    void unquantize(Rosegarden::Event *el) const;
+
 protected:
     Note requantizeByNote(timeT &unitQuantizedDuration) const;
 

@@ -137,7 +137,6 @@ public:
      * Returned value will only be correct if calculateBarPositions
      * has been called since the track was last modified.
      */
-    //!!! Untested.
     int getBarNumber(const iterator &i) const;
     int getBarNumber(const Event *e) const;
 
@@ -237,24 +236,6 @@ public:
      */
     iterator expandIntoTie(iterator i, timeT baseDuration);
 
-    /**
-     * Same as expandIntoTie(), but for an Event which hasn't
-     * been inserted into a track yet. It will be expanded and
-     * inserted along with the new generated event.
-     * lastInsertedEvent will point to the 2nd event (the generated
-     * one)
-     *
-     * Note that even if the expansion is not possible, the
-     * Event will still be inserted.
-     */
-
-    /*!!! Currently unused.
-
-    bool expandAndInsertEvent(Event*, timeT baseDuration,
-                              iterator& lastInsertedEvent);
-
-    */
-
 
     /**
      * Returns true if Events of durations a and b can reasonably be
@@ -273,22 +254,13 @@ public:
      *
      * collapseForward is set to true if the collapse was with the
      * following element, false if it was with the previous one
-     *
-     * collapsedEvent will point to the deleted Event (so we can
-     * easily find the corresponding ViewElements to delete), or null
-     * if no event was deleted
      */
-
-    //!!! we can probably remove collapsedEvent now that
-    //ViewElementsManager is a TrackObserver.  Besides, surely the
-    //event would have been deleted (by erase()) before the code that
-    //called this method was able to look at it?
 
     //!!! maybe needs a more specific name -- doesn't always collapse,
     //only if the collapsed notes make a single note of meaningful
     //duration
 
-    bool collapse(Event*, bool& collapseForward, Event*& collapsedEvent);
+    bool collapse(Event*, bool& collapseForward);
 
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
@@ -334,8 +306,12 @@ public:
     /**
      * Deletes a rest, doing all the clever split/merge stuff as
      * appropriate.  Requires up-to-date bar position list.
+     *
+     * @return whether the rest could be deleted -- a rest can only
+     * be deleted if there's a suitable rest next to it to merge it
+     * with.
      */
-    void deleteRest(Event *e);
+    bool deleteRest(Event *e);
 
     /**
      * The compare class used by Composition

@@ -24,12 +24,14 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <list>
 
 namespace Rosegarden 
 {
 using std::cerr;
 using std::endl;
 using std::string;
+using std::list;
 
 const PropertyName Track::BeamedGroupIdPropertyName   = "BGroupId";
 const PropertyName Track::BeamedGroupTypePropertyName = "BGroupType";
@@ -126,44 +128,9 @@ void Track::setDuration(timeT d)
 
     if (d == currentDuration) return; // nothing to do
     
-    if (d > currentDuration) { // fill up with rests
+    if (d > currentDuration) {
 
 	fillWithRests(d);
-
-/*!!!
-        timeT absTimeOfSig = 0;
-        TimeSignature signatureAtEnd = getTimeSigAtEnd(absTimeOfSig);
-
-        cerr << "Found time sig at end : " << signatureAtEnd.getNumerator()
-             << "/" << signatureAtEnd.getDenominator() << endl;
-        
-        iterator lastEl = end();
-        --lastEl;
-        unsigned int newElTime =
-            (*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration();
-
-        // The startOffset argument to getDurationListForInterval is
-        // supposed to be the elapsed time since the start of any
-        // arbitrary previous bar, provided that the time signature
-        // has not changed during that elapsed time.  Since a time
-        // signature event always starts a new bar, the elapsed time
-        // since the previous time signature event should be fine.
-
-        DurationList dlist;
-        signatureAtEnd.getDurationListForInterval
-            (dlist,
-             d - currentDuration,  // interval duration
-             newElTime - absTimeOfSig);         // start offset
-
-        timeT acc = newElTime;
-        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
-            Event *e = new Event("rest");
-            e->setDuration(*i);
-            e->setAbsoluteTime(acc);
-            insert(e);
-            acc += *i;
-        }
-*/
 
     } else { // shrink
 
@@ -228,7 +195,7 @@ void Track::calculateBarPositions()
         } else if (e->isa(Note::EventType) || e->isa(Note::EventRestType)) {
 
             bool hasDuration = true;
-            timeT d = m_quantizer->quantizeByNote(e);
+            timeT d = m_quantizer->getNoteQuantizedDuration(e);
 
             if (e->isa(Note::EventType)) {
                 iterator i0(i);
@@ -300,16 +267,12 @@ Track::iterator Track::insert(Event *e)
 
 void Track::erase(iterator from, iterator to)
 {
-//    for (Track::iterator i = from; i != to; ++i)
-//        delete *i;
-//    
-//    std::multiset<Event*, Event::EventCmp>::erase(from, to);
-
     //!!! not very efficient, but without an observer event for
     //multiple erase we can't do any better:
 
     for (Track::iterator i = from; i != to; ++i) erase(i);
 }
+
 
 bool Track::eraseSingle(Event* e)
 {
@@ -324,10 +287,10 @@ bool Track::eraseSingle(Event* e)
     
 }
 
-bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
-{
-    collapsedEvent = 0;
 
+bool Track::collapse(Event* e, bool& collapseForward)
+{
+    bool success = false;
     iterator elPos = findSingle(e);
 
     if (elPos == end()) return false;
@@ -345,15 +308,16 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
 
 
 	//!!! no, absolutely not -- we should re-quantize
-
+/*
         Note n = Note::getNearestNote(e->getDuration());
         
         e->set<Int>(Note::NoteType, n.getNoteType());
         e->set<Int>(Note::NoteDots, n.getDots());
+*/
+        m_quantizer->unquantize(e);
 
 
-        
-        collapsedEvent = *nextEvent;
+        success = true;
         collapseForward = true;
 
         erase(nextEvent);
@@ -370,21 +334,22 @@ bool Track::collapse(Event* e, bool& collapseForward, Event*& collapsedEvent)
 
 
 	//!!! no, absolutely not -- we should re-quantize
-
+/*
         Note n = Note::getNearestNote((*previousEvent)->getDuration());
         
         (*previousEvent)->set<Int>(Note::NoteType, n.getNoteType());
         (*previousEvent)->set<Int>(Note::NoteDots, n.getDots());
+*/
+        m_quantizer->unquantize(*previousEvent);
 
 
-
-        collapsedEvent = e;
-        erase(elPos);
+        success = true;
         collapseForward = false;
+
+        erase(elPos);
     }
     
-    
-    return collapsedEvent != 0;
+    return success;
 }
 
 Track::iterator Track::findContiguousNext(Track::iterator el)
@@ -427,6 +392,8 @@ Track::iterator Track::findContiguousNext(Track::iterator el)
 
 Track::iterator Track::findContiguousPrevious(Track::iterator el)
 {
+    if (el == begin()) return end();
+
     std::string elType = (*el)->getType(),
         reject, accept;
      
@@ -444,6 +411,7 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el)
     bool success = false;
 
     iterator i = --el;
+
     for(; i != begin(); --i) {
         std::string iType = (*i)->getType();
 
@@ -493,21 +461,16 @@ int Track::getNextGroupId() const
 
 bool Track::isCollapseValid(timeT a, timeT b)
 {
-//    timeT ad = m_quantizer->getQuantizedNoteDuration(*a);
-//    timeT bd = m_quantizer->getQuantizedNoteDuration(*b);
-    
-//    if (ad > bd) {
-//        durationMax = ad;
-//        durationMin = bd;
-//    } else {
-//        durationMax = bd;
-//        durationMin = ad;
-//    }
+    // experimental:
+    return (isViable(a + b));
+
+/*
     timeT durationMax = std::max(a, b);
     timeT durationMin = std::min(a, b);
 
     return ((durationMax == durationMin) ||
             (durationMax == (2 * durationMin)));
+*/
     // TODO : and some test on not fucking up bar count
 }
 
@@ -544,6 +507,11 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
     //!!! not getDuration, and where does baseDuration come from --
     //same quantization problem?
 
+    // actually no, this could be okay -- so long as we do the
+    // quantization checks for validity before calling this method, we
+    // should be fine splitting precise times in this method. only
+    // problem is deciding not to split something if its duration is
+    // very close to requested duration
 
     timeT eventDuration = (*from)->getDuration();
     timeT baseTime = (*from)->getAbsoluteTime();
@@ -557,7 +525,7 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
         cerr << "WARNING: Track::expandIntoTie() : baseDuration > eventDuration\n";
         return end();
     }
-    
+
     long firstGroupId = -1;
     (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
 
@@ -568,6 +536,7 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
     }
 
     iterator last = end();
+    list<Event *> toInsert;
           
     // Expand all the events in range [from, to[
     //
@@ -577,13 +546,13 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	    // no way to really cope with an error, because at this
 	    // point we may already have expanded some events. Best to
 	    // skip this event
-	    cerr << "WARNING: Track::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime\n";
+	    cerr << "WARNING: Track::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime (baseTime is " << baseTime << ", event time is " << (*i)->getAbsoluteTime() << ")\n";
 	    continue;
 	}
 
 	// set the initial event's duration to base
 	(*i)->setDuration(baseDuration);
-	m_quantizer->quantizeByNote((*i));
+	m_quantizer->unquantize(*i);
             
 	// Add 2nd event
 	Event* ev = new Event(*(*i));
@@ -621,83 +590,23 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	    ev->unset(BeamedGroupTypePropertyName);
 	}
 
-	m_quantizer->quantizeByNote(ev);
-	last = insert(ev);
+	m_quantizer->unquantize(ev);
+
+        // We don't want to do the insert yet, as we'd find ourselves
+        // iterating over the new event unexpectedly (symptom: we see
+        // the WARNING above, even though the to-iterator was fine
+        // when we entered the function).  Not quite clear why, though
+        toInsert.push_back(ev);
+    }
+
+    // now insert the new events
+    for (list<Event *>::iterator i = toInsert.begin();
+         i != toInsert.end(); ++i) {
+        last = insert(*i);
     }
 
     return last;
 }
-
-
-/*!!! Commented out while I establish whether we need something like this
-
-bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
-                                 iterator& lastInsertedEvent)
-{
-    insert(baseEvent);
-
-
-    //!!! not getDuration, and where does baseDuration come from --
-    //same quantization problem?
-
-
-    timeT eventDuration = baseEvent->getDuration();
-    timeT baseTime = baseEvent->getAbsoluteTime();
-
-    if (baseDuration == eventDuration) {
-        return true;
-    }
-    
-    timeT maxDuration = 0,
-        minDuration = 0;
-    
-    if (baseDuration > eventDuration) {
-        maxDuration = baseDuration;
-        minDuration = eventDuration;
-    } else {
-        maxDuration = eventDuration;
-        minDuration = baseDuration;
-    }
-
-    if (checkExpansionValid(maxDuration, minDuration)) {
-
-        baseEvent->setDuration(minDuration);
-
-        // Add 2nd event
-        Event* ev = new Event(*baseEvent);
-        ev->setDuration(maxDuration - minDuration);
-        ev->setAbsoluteTime(baseTime + minDuration);       
-
-        // we only want to tie Note events:
-
-        if (baseEvent->isa(Note::EventType)) {
-
-            // if the first event was already tied forward, the second
-            // one will now be marked as tied forward (which is good).
-            // set up the relationship between the original (now
-            // shorter) event and the new one.
-        
-                   ev->set<Bool>(Note::TiedBackwardPropertyName, true);
-            baseEvent->set<Bool>(Note:: TiedForwardPropertyName, true);
-        }
-
-        // we won't bother with the group tests that we do in
-        // expandIntoTie, because there is no "following" event to
-        // compare with yet.  (In theory we could do the tests, but
-        // we're lazy -- let's wait and see whether the behaviour
-        // seems okay in practice first)
-
-        lastInsertedEvent = insert(ev);
-
-        return true;
-    } else {
-        // expansion is not possible - only the base event has been inserted
-        return false;
-    }
-    
-}
-
-*/
 
 
 bool Track::isViable(timeT duration)
@@ -740,7 +649,7 @@ Track::iterator Track::collapseRestsForInsert(iterator i,
     if (d >= desiredDuration || j == end()) return ++i;
 
     (*i)->setDuration(d + (*j)->getDuration());
-    m_quantizer->quantizeByNote(*i);
+    m_quantizer->unquantize(*i);
     erase(j);
 
     return collapseRestsForInsert(i, desiredDuration);
@@ -768,16 +677,10 @@ void Track::makeRestViable(iterator i)
 	cerr << "Track::makeRestViable: Inserting rest of duration "
 	     << duration << " at time " << absTime << endl;
 
-	if (duration == 0) {
-	    cerr << "WARNING: duration zero; skipping" << endl;
-	    continue;
-	}
-
 	Event *e = new Event(Note::EventRestType);
 	e->setDuration(duration);
 	e->setAbsoluteTime(absTime);
 	e->setMaybe<String>("Name", "INSERTED_REST"); //!!!
-//	m_quantizer->quantizeByNote(e);
 
 	insert(e);
 	absTime += duration;
@@ -881,6 +784,8 @@ void Track::insertSomething(iterator i, int duration, int pitch,
     } else if (duration < existingDuration) {
 
 	if ((*i)->isa(Note::EventType)) {
+
+            //!!! should be quantized durations
 
 	    if (!isExpandValid((*i)->getDuration(), duration)) {
 
@@ -993,14 +898,12 @@ void Track::deleteNote(Event *e)
 }
 
 
-void Track::deleteRest(Event *e)
+bool Track::deleteRest(Event *e)
 {
-    //!!! streamline
+    //!!! can we do anything useful with collapseForward? should we return it?
 
     bool collapseForward;
-    Event *deletedEvent;
-
-    (void)collapse(e, collapseForward, deletedEvent);
+    return collapse(e, collapseForward);
 }
 
 

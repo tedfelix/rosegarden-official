@@ -685,30 +685,6 @@ int TimeSignature::getBeatDuration() const
 }
 
 
-void TimeSignature::getDurationListForBar(DurationList &dlist) const
-{
-    // mostly just a bunch of special-cases, for now
-
-    if (m_numerator < 3) {
-        // A single long rest should be okay for all the common 2/x
-        // timesigs, probably even tolerable for freaks like 2/1
-        dlist.push_back(getBarDuration());
-        return;
-    }
-
-    if (m_numerator == 4 && m_denominator > 2) {
-        //        dlist.push_back(getBarDuration() / 2);
-        //        dlist.push_back(getBarDuration() / 2);
-        dlist.push_back(getBarDuration());
-        return;
-    }
-
-    for (int i = 0; i < getBeatsPerBar(); ++i) {
-        dlist.push_back(getBeatDuration());
-    }
-}
-
-
 void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                int duration,
                                                int startOffset) const
@@ -724,19 +700,24 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
     int barDuration = getBarDuration();
     int acc = 0;
 
+    cerr << "TimeSignature::getDurationListForInterval: Desired duration is " << duration << " with startOffset " << startOffset << " and bar duration " << barDuration << endl;
+
     toNextBar = barDuration - (startOffset % barDuration);
 
-    if (toNextBar > 0 && toNextBar < barDuration) {
+    if (toNextBar > 0 && toNextBar <= duration && toNextBar < barDuration) {
+        cerr << "TimeSignature::getDurationListForInterval: filling to next bar (duration " << toNextBar << ")" << endl;
         getDurationListForShortInterval(dlist, toNextBar, startOffset);
         acc = toNextBar;
     }
 
     while (duration - acc >= barDuration) {
+        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling a bar" << endl;
         getDurationListForBar(dlist);
         acc += barDuration;
     }
     
     if (duration > acc) {
+        cerr << "TimeSignature::getDurationListForInterval: acc is " << acc << ", filling the remaining " << (duration-acc) << endl;
         getDurationListForShortInterval(dlist, duration - acc, 0);
     }
 
@@ -768,6 +749,33 @@ Desired duration is 96 with startOffset 96, returned duration list is:
 }
 
 
+void TimeSignature::getDurationListForBar(DurationList &dlist) const
+{
+    // mostly just a bunch of special-cases, for now
+
+    if (m_numerator < 3) {
+        cerr << "TimeSignature::getDurationListForBar: adding 2/* whole bar " << getBarDuration() << endl;
+        // A single long rest should be okay for all the common 2/x
+        // timesigs, probably even tolerable for freaks like 2/1
+        dlist.push_back(getBarDuration());
+        return;
+    }
+
+    if (m_numerator == 4 && m_denominator > 2) {
+        cerr << "TimeSignature::getDurationListForBar: adding whole-bar " << getBarDuration() << endl;
+        //        dlist.push_back(getBarDuration() / 2);
+        //        dlist.push_back(getBarDuration() / 2);
+        dlist.push_back(getBarDuration());
+        return;
+    }
+
+    for (int i = 0; i < getBeatsPerBar(); ++i) {
+        cerr << "TimeSignature::getDurationListForBar: adding beat " << getBeatDuration() << endl;
+        dlist.push_back(getBeatDuration());
+    }
+}
+
+
 // Derived from RG2's MidiMakeRestList in editor/src/MidiIn.c.
 
 // Create a list of durations, totalling (as close as possible) the
@@ -787,6 +795,10 @@ void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
     int beatDuration = getBeatDuration();
 
     toNextBeat = beatDuration - (startOffset % beatDuration);
+
+    cerr << "TimeSignature::getDurationListForShortInterval: duration is "
+         << duration << ", toNextBeat " << toNextBeat << ", startOffset "
+         << startOffset << ", beatDuration " << beatDuration << endl;
                
     if (toNextBeat > duration) {
         getDurationListAux(dlist, duration);
@@ -806,10 +818,15 @@ void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
 void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
     // (we append to dlist, it's expected to have stuff in it already)
 {
-    assert(t >= 0);
+    cerr << "TimeSignature::getDurationListAux: duration is " << t << endl;
+    
+    if (t == 0) return;
+    assert(t > 0);
+
     int shortestTime = Note(Note::Shortest).getDuration();
 
     if (t < shortestTime) {
+        cerr << "pushing [1] " << t << endl;
 	// we want to divide the time exactly, even if it means we
 	// can't represent everything quite right in note durations
 	dlist.push_back(t);
@@ -818,6 +835,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
     int current;
 
     if ((current = (isDotted() ? m_dottedCrotchetTime : m_crotchetTime)) <= t) {
+        cerr << "pushing [2] " << current << endl;
         dlist.push_back(current);
         getDurationListAux(dlist, t - current);
         return;
@@ -827,6 +845,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
     for (int tag = Note::Shortest + 1; tag <= Note::Crotchet; ++tag) {
         int next = Note(tag).getDuration();
         if (next > t) {
+            cerr << "pushing [3] " << current << endl;
             dlist.push_back(current);
             getDurationListAux(dlist, t - current);
             return;
@@ -838,6 +857,7 @@ void TimeSignature::getDurationListAux(DurationList &dlist, int t) const
     // crotchet and dotted crotchet:
 
     current = m_crotchetTime;
+    cerr << "pushing [4] " << current << endl;
     dlist.push_back(current);
     getDurationListAux(dlist, t - current);
 }

@@ -189,8 +189,8 @@ void ViewElementsManager::tryCollapse(NotationElement* el)
 
     Rosegarden::Event* deletedEvent = 0;
   
-    if (m_track.collapse(el->event(), collapseForward, deletedEvent)) {
 /*!!!
+    if (m_track.collapse(el->event(), collapseForward, deletedEvent)) {
         if (collapseForward) {
             
             // dumb implementation
@@ -209,8 +209,8 @@ void ViewElementsManager::tryCollapse(NotationElement* el)
             else
                 m_notationElements->erase(elPos);
         }
-*/
     }
+*/
 
 }
 

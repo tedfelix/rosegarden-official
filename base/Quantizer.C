@@ -137,4 +137,15 @@ Quantizer::getNoteQuantizedDuration(Event *e) const
 }
 
 
+void Quantizer::unquantize(Event *e) const
+{
+    e->unset(DurationProperty);
+    e->unset(NoteDurationProperty);
+
+    // should we do this?  not entirely sure, but probably
+    e->unset(Note::NoteType);
+    e->unset(Note::NoteDots);
+}
+
+
 }
