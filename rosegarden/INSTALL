@@ -11,7 +11,8 @@ and now you can configure and make as usual:
   % make
 
 NOTE: due to some build configuration issues you might also need to add
-the additional option "--with-exceptions=yes" to your configure line.
+the additional option "--with-exceptions=yes" to your configure line if
+you have problems building the gui/ directory.
 
 
 ALSA 0.9.0 support, JACK and LADSPA
