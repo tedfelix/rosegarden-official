@@ -190,6 +190,8 @@ protected slots:
     void slotCheckShow(int);
 
 protected:
+    virtual void hideEvent(QHideEvent*);
+
     void installFilter();
     void removeFilter();
     

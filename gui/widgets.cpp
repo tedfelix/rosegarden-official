@@ -240,9 +240,24 @@ void
 RosegardenProgressDialog::polish()
 {
     KProgressDialog::polish();
-    setCursor(Qt::ArrowCursor);
+
+    if (allowCancel())
+        setCursor(Qt::ArrowCursor);
+    else
+        QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+
     installFilter();
 }
+
+void RosegardenProgressDialog::hideEvent(QHideEvent* e)
+{
+    if (!allowCancel())
+        QApplication::restoreOverrideCursor();
+    
+    KProgressDialog::hideEvent(e);
+}
+
+
 
 bool
 RosegardenProgressDialog::eventFilter(QObject *watched, QEvent *e)
