@@ -206,7 +206,7 @@ public:
 
     // Process anything that's pending
     //
-    virtual void processPending() = 0;
+    virtual void processPending(const RealTime &playLatency) = 0;
 
     // Mapped Instruments
     //

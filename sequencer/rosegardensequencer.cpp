@@ -473,7 +473,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
 
     // Process any pending events (Note Offs) as part of same procedure
     //
-    m_sequencer->processPending();
+    m_sequencer->processPending(m_playLatency);
 }
 
 

@@ -114,6 +114,10 @@ public:
     void getSystemInfo();
     void showQueueStatus(int queue);
 
+    // Process pending
+    //
+    virtual void processPending(const RealTime &playLatency);
+
 protected:
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
@@ -125,7 +129,6 @@ protected:
                                 bool now);
 
     virtual void processAudioQueue();
-    virtual void processPending();
 
 private:
     RealTime getAlsaTime();

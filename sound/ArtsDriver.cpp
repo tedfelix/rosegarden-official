@@ -27,6 +27,8 @@
 #include <arts/connect.h>
 
 #include <cstdio> // for sprintf
+#include <unistd.h> // for usleep
+
 
 // RG
 //
@@ -68,9 +70,25 @@ ArtsDriver::~ArtsDriver()
 void
 ArtsDriver::generateInstruments()
 {
-    std::string name("aRts Audio");
+    std::string name("aRts MIDI");
     std::string channelName;
     char number[100];
+
+    for (int channel = 0; channel < 16; channel++)
+    {
+        sprintf(number, " %d", channel);
+        channelName = name + std::string(number);
+
+        MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
+                                                       channel,
+                                                       m_midiRunningId++,
+                                                       channelName,
+                                                       m_deviceRunningId);
+        m_instruments.push_back(instr);
+    }
+
+    m_deviceRunningId++;
+    name = "aRts Audio";
 
     for (int channel = 0; channel < 16; channel++)
     {
@@ -80,22 +98,6 @@ ArtsDriver::generateInstruments()
         MappedInstrument *instr = new MappedInstrument(Instrument::Audio,
                                                        channel,
                                                        m_audioRunningId++,
-                                                       channelName,
-                                                       m_deviceRunningId);
-        m_instruments.push_back(instr);
-    }
-
-    m_deviceRunningId++;
-
-    name = "aRts MIDI";
-    for (int channel = 0; channel < 16; channel++)
-    {
-        sprintf(number, " %d", channel);
-        channelName = name + std::string(number);
-
-        MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
-                                                       channel,
-                                                       m_midiRunningId++,
                                                        channelName,
                                                        m_deviceRunningId);
         m_instruments.push_back(instr);
@@ -292,6 +294,14 @@ ArtsDriver::stopPlayback()
 {
     allNotesOff();
     m_playing = false;
+
+    // Wait for a tenth of a second and then flush off every device
+    //
+    usleep(100000);
+
+    // Tell all MIDI devices to stop playing
+    //
+    sendDeviceController(MIDI_CONTROLLER_SOUNDS_OFF, 0);
 }
 
 
@@ -935,11 +945,42 @@ ArtsDriver::record(const RecordStatus& recordStatus)
 }
 
 void
-ArtsDriver::processPending()
+ArtsDriver::processPending(const RealTime &playLatency)
 {
-    processNotesOff(getSequencerTime());
+    if (m_playing)
+    {
+        Arts::TimeStamp artsTime = aggregateTime(m_artsPlayStartTime,
+                                                 m_midiPlayPort.time());
+        processNotesOff(Rosegarden::RealTime(artsTime.sec, artsTime.usec) +
+                        playLatency);
+    }
 }
 
+
+// Send out a controller to all channels on the MIDI device
+void
+ArtsDriver::sendDeviceController(MidiByte controller,
+                                 MidiByte value)
+{
+    Arts::MidiEvent event;
+    Arts::TimeStamp timeNow = m_midiPlayPort.time();
+
+    event.time.sec = timeNow.sec;
+    event.time.usec = timeNow.usec;
+
+    for (int channel = 0; channel < 16; channel++)
+    {
+        event.command.status = Arts::mcsParameter | channel;
+        event.command.data1 = controller;
+        event.command.data2 = value;
+
+        // send it out
+        //
+        m_midiPlayPort.processEvent(event);
+    }
+
+
+}
 
 
 }

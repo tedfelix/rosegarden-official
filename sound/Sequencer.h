@@ -170,7 +170,8 @@ public:
     // Process anything that needs to go on in the background 
     // (NoteOffs etc).
     //
-    void processPending() { m_soundDriver->processPending(); }
+    void processPending(const RealTime &playLatency)
+        { m_soundDriver->processPending(playLatency); }
     
 protected:
     std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);

@@ -1208,9 +1208,12 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
 }
 
 void
-AlsaDriver::processPending()
+AlsaDriver::processPending(const RealTime &playLatency)
 {
-    processNotesOff(getSequencerTime());
+    if (m_playing)
+    {
+        processNotesOff(getAlsaTime() + m_playStartPosition + playLatency);
+    }
 }
 
 

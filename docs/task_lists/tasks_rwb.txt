@@ -9,9 +9,12 @@ o ALSA audio
 
 o Starting playback in middle of long Events should actually play them
 
-o Velocity-coloured Matrix Events [DONE - not sure if it's in the right place]
+o MidiNote sending from Matrix view
+
+o Matrix view scrolling
 
 o Segment labelling
+  [HMM, first cut in but much more involved than first appears]
 
 o Last Note seems broken again
 
@@ -67,6 +70,8 @@ o Audio output VU meters
 
 Completed POST 0.1.4
 ====================
+- Velocity-coloured Matrix Events [DONE - not sure if it's in the right place]
+
 - Saving the Studio to XML [DONE]
 
 - Solo [DONE]

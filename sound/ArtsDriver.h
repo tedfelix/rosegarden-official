@@ -68,7 +68,7 @@ public:
 
     virtual void record(const RecordStatus& recordStatus);
 
-    virtual void processPending();
+    virtual void processPending(const RealTime &playLatency);
 
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp,
@@ -97,6 +97,8 @@ protected:
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &playLatency,
                                 bool now);
+
+    void sendDeviceController(MidiByte controller, MidiByte value);
 
 private:
     // aRts sound server reference
