@@ -210,7 +210,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_totalElements(elementCount),
       m_elementsSoFar(0),
       m_subHandler(0),
-      m_deprecation(false)
+      m_deprecation(false),
+      m_cancelled(false)
 {
 }
 
@@ -244,6 +245,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                              const QString& localName,
                              const QString& qName, const QXmlAttributes& atts)
 {
+    // First check if user pressed cancel button on the progress
+    // dialog
+    //
+    if (isOperationCancelled()) {
+        m_cancelled = true;
+        return false;
+    }
+
     QString lcName = qName.lower();
 
     if (getSubHandler()) {

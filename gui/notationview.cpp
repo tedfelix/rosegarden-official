@@ -301,7 +301,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
         progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
                                                    100, this);
-	progressDlg->setAutoClose(false);
+	//progressDlg->setAutoClose(false);
         progressDlg->setAutoReset(true);
         progressDlg->setMinimumDuration(1000);
         setupProgress(progressDlg);

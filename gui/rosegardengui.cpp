@@ -815,13 +815,13 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     // Stop if playing
     //
     if (m_seqManager && m_seqManager->getTransportStatus() == PLAYING)
-      slotStop();
+        slotStop();
 
     m_doc->closeDocument();
     slotEnableTransport(false);
 
     if (m_doc->openDocument(filePath)) {
-        
+
         initView();
         
         // Ensure the sequencer knows about any audio files
@@ -839,10 +839,16 @@ void RosegardenGUIApp::openFile(const QString& filePath)
         m_doc->setModified(false);
 
     } else {
-        // since we closed the previous document, create a new one
+        // Create a new document
 
-//         kapp->processEvents(); // or else we get a crash
-//         slotFileNew();
+        if(!performAutoload())
+            {
+                m_doc->newDocument();
+
+                QString caption=kapp->caption();	
+                setCaption(caption+": "+m_doc->getTitle());
+                initView();
+            }
     }
 
 }

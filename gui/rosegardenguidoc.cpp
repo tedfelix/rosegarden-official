@@ -286,17 +286,18 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                                          (QWidget*)parent());
     progressDlg.setMinimumDuration(500);
     progressDlg.setAutoReset(true); // we're re-using it for the preview generation
-
     m_absFilePath = fileInfo.absFilePath();	
 
     QString errMsg;
     QString fileContents;
+    bool cancelled = false;
+
     bool okay = readFromFile(filename, fileContents);
     if (!okay) errMsg = "Couldn't read from file";
     else {
 
         // parse xml file
-	okay = xmlParse(fileContents, errMsg, &progressDlg);
+	okay = xmlParse(fileContents, errMsg, &progressDlg, cancelled);
 
     }
 
@@ -307,6 +308,11 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         
         KMessageBox::sorry(0, msg);
 
+        return false;
+
+    } else if (cancelled) {
+        closeDocument();
+        newDocument();
         return false;
     }
 
@@ -539,8 +545,11 @@ void RosegardenGUIDoc::deleteViews()
 
 bool
 RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
-                           RosegardenProgressDialog *progress)
+                           RosegardenProgressDialog *progress,
+                           bool &cancelled)
 {
+    cancelled = false;
+
     unsigned int elementCount = 0;
     for (size_t i = 0; i < fileContents.length() - 1; ++i) {
 	if (fileContents[i] == '<' && fileContents[i+1] != '/') {
@@ -553,6 +562,9 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
             progress->progressBar(), SLOT(setValue(int)));
     connect(&handler, SIGNAL(incrementProgress(int)),
             progress->progressBar(), SLOT(advance(int)));
+    connect(progress, SIGNAL(cancelClicked()),
+            &handler, SLOT(slotCancel()));
+
     
     QXmlInputSource source;
     source.setData(fileContents);
@@ -564,8 +576,17 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
     bool ok = reader.parse(source);
     PRINT_ELAPSED("RosegardenGUIDoc::xmlParse (reader.parse())");
 
-    if (!ok) errMsg = handler.errorString();
-    else if (handler.isDeprecated()) {
+    if (!ok) {
+
+        if (handler.isCancelled()) {
+            RG_DEBUG << "File Loading Cancelled\n";
+            KMessageBox::information(0, i18n("File Loading Cancelled"));
+            cancelled = true;
+            return true;
+        } else
+            errMsg = handler.errorString();
+
+    } else if (handler.isDeprecated()) {
 
         // hide the progress dialog
         progress->hide();

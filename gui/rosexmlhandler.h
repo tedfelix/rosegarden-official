@@ -81,6 +81,8 @@ public:
 
     bool isDeprecated() { return m_deprecation; }
 
+    bool isCancelled() { return m_cancelled; }
+
     /// Return the error string set during the parsing (if any)
     QString errorString();
 
@@ -139,6 +141,7 @@ protected:
 
     XmlSubHandler                    *m_subHandler;
     bool		              m_deprecation;
+    bool                              m_cancelled;
 };
 
 #endif

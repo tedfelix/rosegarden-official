@@ -340,7 +340,8 @@ protected:
      * @see RoseXmlHandler
      */
     bool xmlParse(QString& fileContents, QString &errMsg,
-                  RosegardenProgressDialog *progress);
+                  RosegardenProgressDialog *progress,
+                  bool &cancelled);
 
     /**
      * Write the given string to the given file, compressed.
