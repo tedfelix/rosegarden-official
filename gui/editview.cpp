@@ -23,6 +23,7 @@
 #include <qtabwidget.h>
 #include <qpopupmenu.h>
 #include <qinputdialog.h>
+#include <qobjectlist.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -176,6 +177,41 @@ void EditView::setBottomBarButtons(BarButtons* w)
         connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
                 m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
     }
+}
+
+void EditView::setRewFFwdToAutoRepeat()
+{
+    QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
+
+    if (transportToolbar) {
+        QObjectList *l = transportToolbar->queryList();
+        QObjectListIt it(*l); // iterate over the buttons
+        QObject *obj;
+
+        while ( (obj = it.current()) != 0 ) {
+            // for each found object...
+            ++it;
+//             RG_DEBUG << "EditView::setRewFFwdToAutoRepeat() : obj name : " << obj->name() << endl;
+            QString objName = obj->name();
+            
+            if (objName.endsWith("playback_pointer_back_bar") || objName.endsWith("playback_pointer_forward_bar")) {
+                QButton* btn = dynamic_cast<QButton*>(obj);
+                if (!btn) {
+                    RG_DEBUG << "Very strange - found widgets in Transport Toolbar which aren't buttons\n";
+                    
+                    continue;
+                }
+                btn->setAutoRepeat(true);
+            }
+            
+            
+        }
+        delete l;
+
+    } else {
+        RG_DEBUG << "transportToolbar == 0\n";
+    }
+ 
 }
 
 void EditView::addRuler(QWidget* w)

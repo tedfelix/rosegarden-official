@@ -647,6 +647,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setupControllerTabs();
 
     setupAddControlRulerMenu();
+    setRewFFwdToAutoRepeat();
     
     NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }
@@ -1863,7 +1864,7 @@ void NotationView::setupActions()
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
-    createGUI(getRCFileName());
+    createGUI(getRCFileName(), false);
 }
 
 bool

@@ -59,6 +59,7 @@ class ChordNameRuler;
 class PropertyViewRuler;
 class PropertyBox;
 
+class QDeferScrollView;
 class QMouseEvent;
 class QLabel;
 class QWidget;
@@ -194,6 +195,8 @@ public:
      * Scrolls the view such that the given time is centered
      */
     void scrollToTime(Rosegarden::timeT t);
+
+    virtual void polish();
 
 signals:    
     /**
@@ -482,7 +485,7 @@ protected:
     int m_previousEvPitch;
 
     MatrixCanvasView    *m_canvasView;
-    QScrollView         *m_pianoView;
+    QDeferScrollView    *m_pianoView;
     PianoKeyboard       *m_pianoKeyboard;
 
     // The last note we sent in case we're swooshing up and

@@ -205,6 +205,12 @@ protected:
     void setBottomBarButtons(BarButtons*);
 
     /**
+     * Set the 'Rewind' and 'Fast Forward' buttons in the transport
+     * toolbar to AutoRepeat
+     */
+    void setRewFFwdToAutoRepeat();
+
+    /**
      * Locate the given widget right above the top bar-buttons and
      * connect up its scrolling signals.
      * The widget has to have a slotScrollHoriz(int) slot

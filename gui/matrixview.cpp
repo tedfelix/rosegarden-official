@@ -341,7 +341,22 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     readOptions();
     setOutOfCtor();
     setupControllerTabs();
+
+    m_pianoView->setBottomMargin(m_bottomBox->sizeHint().height() +
+                                 m_canvasView->horizontalScrollBar()->height());
+
+    setRewFFwdToAutoRepeat();
 }
+
+void MatrixView::polish()
+{
+    EditView::polish();
+//     m_pianoView->setBottomMargin(m_bottomBox->height() +
+//                                  m_canvasView->horizontalScrollBar()->height());
+    
+}
+
+
 
 MatrixView::~MatrixView()
 {
@@ -623,7 +638,7 @@ void MatrixView::setupActions()
                       SLOT(slotToggleTempoRuler()),
                       actionCollection(), "show_tempo_ruler");
 
-    createGUI(getRCFileName());
+    createGUI(getRCFileName(), false);
 
     if (getSegmentsOnlyRests())
         actionCollection()->action("draw")->activate();

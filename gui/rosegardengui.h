@@ -313,6 +313,12 @@ protected:
     /**/
     /***********************************************************************/
 
+    /**
+     * Set the 'Rewind' and 'Fast Forward' buttons in the transport
+     * toolbar to AutoRepeat
+     */
+    void setRewFFwdToAutoRepeat();
+
     static const void* SequencerExternal;
 
     /// Raise the transport along

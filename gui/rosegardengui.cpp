@@ -741,7 +741,7 @@ void RosegardenGUIApp::setupActions()
 
     // create main gui
     //
-    createGUI("rosegardenui.rc");
+    createGUI("rosegardenui.rc", false);
 
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
@@ -773,8 +773,44 @@ void RosegardenGUIApp::setupActions()
     } else {
         RG_DEBUG << "RosegardenGUIApp::setupActions() : couldn't find set_track_instrument menu - check rosegardenui.rcn\n";
     }
+
+    setRewFFwdToAutoRepeat();
 }
 
+void RosegardenGUIApp::setRewFFwdToAutoRepeat()
+{
+    QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
+
+    if (transportToolbar) {
+        QObjectList *l = transportToolbar->queryList();
+        QObjectListIt it(*l); // iterate over the buttons
+        QObject *obj;
+
+        while ( (obj = it.current()) != 0 ) {
+            // for each found object...
+            ++it;
+            // RG_DEBUG << "obj name : " << obj->name() << endl;
+            QString objName = obj->name();
+            
+            if (objName.endsWith("rewind") || objName.endsWith("fast_forward")) {
+                QButton* btn = dynamic_cast<QButton*>(obj);
+                if (!btn) {
+                    RG_DEBUG << "Very strange - found widgets in transport_toolbar which aren't buttons\n";
+                    
+                    continue;
+                }
+                btn->setAutoRepeat(true);
+            }
+            
+            
+        }
+        delete l;
+
+    } else {
+        RG_DEBUG << "transportToolbar == 0\n";
+    }
+ 
+}
 
 void RosegardenGUIApp::initZoomToolbar()
 {
