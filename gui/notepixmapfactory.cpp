@@ -267,11 +267,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     Rosegarden::Profiler profiler("NotePixmapFactory::makeNotePixmap");
     clock_t startTime = clock();
 
-    //!!! This function is far too long, and it'd be fairly
-    // straightforward to take many of the conditional blocks out
-    // into other functions.  Might possibly improve performance too
-    // (because the compiler could optimise better).
-
     bool drawFlag = params.m_drawFlag;
     int stemLength = params.m_stemLength;
 
@@ -323,36 +318,12 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
     
     if (isStemmed && params.m_drawStem) {
-        if (params.m_stemGoesUp) {
-            m_above = std::max
-                (m_above, stemLength - m_noteBodyHeight/2);
-        } else {
-            m_below = std::max
-                (m_below, stemLength - m_noteBodyHeight/2);
-        }
+	makeRoomForStemAndFlags(drawFlag ? flagCount : 0, stemLength, params);
+    }
 
-        if (params.m_beamed) {
-
-            int beamSpacing = (int)(params.m_width * params.m_gradient);
-
-            if (params.m_stemGoesUp) {
-
-                beamSpacing = -beamSpacing;
-                if (beamSpacing < 0) beamSpacing = 0;
-                m_above += beamSpacing + 1;
-
-                // allow a bit extra in case the h fixpoint is non-normal
-                m_right = std::max(m_right, params.m_width + m_noteBodyWidth);
-
-            } else {
-
-                if (beamSpacing < 0) beamSpacing = 0;
-                m_below += beamSpacing + 1;
-
-                m_right = std::max(m_right, params.m_width);
-            }
-        }
-    }            
+    if (isStemmed && params.m_drawStem && params.m_beamed) {
+	makeRoomForBeams(params);
+    }
 
     if (slashCount > 0) {
 	m_left = std::max(m_left, m_noteBodyWidth / 2);
@@ -362,27 +333,9 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     if (params.m_tupletCount > 0) {
 	makeRoomForTuplingLine(params);
     }
-						 
 
-    if (params.m_legerLines < 0) {
-        m_above = std::max(m_above,
-                           (m_noteBodyHeight + 1) *
-                           (-params.m_legerLines / 2));
-    } else if (params.m_legerLines > 0) {
-        m_below = std::max(m_below,
-                           (m_noteBodyHeight + 1) *
-                           (params.m_legerLines / 2));
-    }
     if (params.m_legerLines != 0) {
-        m_left  = std::max(m_left,  getStaffLineThickness() + 1);
-        m_right = std::max(m_right, getStaffLineThickness() + 1);
-    }
-
-    if (drawFlag && flagCount > 0) {
-        if (params.m_stemGoesUp) {
-            m_right += m_font->getWidth
-		(m_style->getFlagCharName(flagCount));
-        }
+	makeRoomForLegerLines(params);
     }
 
     m_right = std::max(m_right, params.m_dots * dot.width() + dot.width()/2);
@@ -409,94 +362,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
-
-    QPoint s0, s1;
-    unsigned int stemThickness = 1;
-    m_font->getStemThickness(stemThickness);
-
-    if (isStemmed && params.m_drawStem) {
-
-	NoteStyle::HFixPoint hfix;
-	NoteStyle::VFixPoint vfix;
-	m_style->getStemFixPoints(params.m_noteType, hfix, vfix);
-
-	switch (hfix) {
-
-	case NoteStyle::Normal:
-	case NoteStyle::Reversed:
-	    if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
-		s0.setX(m_left + m_noteBodyWidth - stemThickness);
-	    } else {
-		s0.setX(m_left);
-	    }
-	    break;
-
-	case NoteStyle::Central:
-	    if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
-		s0.setX(m_left + m_noteBodyWidth/2 + 1);
-	    } else {
-		s0.setX(m_left + m_noteBodyWidth/2);
-	    }
-	    break;
-	}
-
-	switch (vfix) {
-
-	case NoteStyle::Near:
-	case NoteStyle::Far:
-	    if (params.m_stemGoesUp ^ (vfix == NoteStyle::Far)) {
-		s0.setY(m_above);
-	    } else {
-		s0.setY(m_above + m_noteBodyHeight);
-	    }
-	    if (vfix == NoteStyle::Near) {
-		stemLength -= m_noteBodyHeight/2;
-	    } else {
-		stemLength += m_noteBodyHeight/2;
-	    }		
-	    break;
-
-	case NoteStyle::Middle:
-	    s0.setY(m_above + m_noteBodyHeight/2);
-	    break;
-	}	    
-
-        if (params.m_stemGoesUp) {
-            s1.setY(s0.y() - stemLength);
-        } else {
-            s1.setY(s0.y() + stemLength);
-        }
-
-        s1.setX(s0.x());
-
-        if (flagCount > 0) {
-
-            if (drawFlag) {
-
-                QPixmap flags = m_font->getPixmap
-                    (m_style->getFlagCharName(flagCount),
-		     !params.m_stemGoesUp);
-
-                if (params.m_stemGoesUp) {
-                    m_p.drawPixmap(s1.x() - m_origin.x(),
-                                   s1.y(), flags);
-                    m_pm.drawPixmap(s1.x() - m_origin.x(),
-                                    s1.y(), *(flags.mask()));
-                } else {
-                    m_p.drawPixmap(s1.x() - m_origin.x(),
-                                   s1.y() - flags.height(), flags);
-                    m_pm.drawPixmap(s1.x() - m_origin.x(),
-                                    s1.y() - flags.height(), *(flags.mask()));
-                }
-            } else if (params.m_beamed) {
-                drawBeams(s1, params, flagCount);
-            }
-        }
-
-	if (slashCount > 0) {
-	    drawSlashes(s0, params, slashCount);
-	}
-    }
 
     if (params.m_tupletCount > 0) {
 	drawTuplingLine(params);
@@ -562,56 +427,27 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     if (isStemmed && params.m_drawStem) {
-        for (unsigned int i = 0; i < stemThickness; ++i) {
-            m_p.drawLine(s0, s1);
-            m_pm.drawLine(s0, s1);
-            ++s0.rx();
-            ++s1.rx();
+
+	QPoint startPoint, endPoint;
+
+	drawStemAndFlags(drawFlag ? flagCount : 0, stemLength, params,
+			 startPoint, endPoint);
+
+	if (flagCount > 0 && !drawFlag && params.m_beamed) {
+	    drawBeams(endPoint, params, flagCount);
         }
-    }        
+
+	if (slashCount > 0) {
+	    drawSlashes(startPoint, params, slashCount);
+	}
+    }
 
     if (params.m_marks.size() > 0) {
 	drawMarks(isStemmed, params);
     }
 
     if (params.m_legerLines != 0) {
-
-        s0.setX(m_left - getStemThickness());
-        s1.setX(m_left + m_noteBodyWidth + getStemThickness());
-
-        s0.setY(m_above + m_noteBodyHeight / 2);
-        s1.setY(s0.y());
-
-        int offset = m_noteBodyHeight + 1;
-        int legerLines = params.m_legerLines;
-
-        if (legerLines < 0) {
-            legerLines = -legerLines;
-            offset = -offset;
-        }
-
-        bool first = true;
-
-        for (int i = legerLines - 1; i >= 0; --i) {
-            if (i % 2 == 1) {
-                m_p.drawLine(s0, s1);
-                m_pm.drawLine(s0, s1);
-                s0.ry() += offset;
-                s1.ry() += offset;
-                if (first) {
-                    ++s0.rx();
-                    --s1.rx();
-                    first = false;
-                }
-            } else if (first) {
-                s0.ry() += offset/2;
-                s1.ry() += offset/2;
-                if (legerLines < 0) {
-                    --s0.ry();
-                    --s1.ry();
-                }
-            }                
-        }
+	drawLegerLines(params);
     }
 
     if (params.m_tied) {
@@ -619,30 +455,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
             
     QPoint hotspot(m_left, m_above + m_noteBodyHeight/2);
-
-//#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
-#ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
-    m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
-
-    m_p.drawLine(0,0,0,m_generatedPixmap->height() - 1);
-    m_p.drawLine(m_generatedPixmap->width() - 1, 0, 
-                 m_generatedPixmap->width() - 1,
-                 m_generatedPixmap->height() - 1);
-
-    m_pm.drawLine(0,0,0,m_generatedPixmap->height() - 1);
-    m_pm.drawLine(m_generatedPixmap->width() - 1, 0,
-                  m_generatedPixmap->width() - 1,
-                  m_generatedPixmap->height() - 1);
-
-    {
-	int hsx = hotspot.x();
-	int hsy = hotspot.y();
-	m_p.drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
-	m_pm.drawLine(hsx - 2, hsy - 2, hsx + 2, hsy + 2);
-	m_p.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
-	m_pm.drawLine(hsx - 2, hsy + 2, hsx + 2, hsy - 2);
-    }
-#endif
 
     clock_t endTime = clock();
     makeNotesTime += (endTime - startTime);
@@ -756,6 +568,200 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    m_pm.drawText(x, y, text);
 	    dy += bounds.height() + 1;
 	}
+    }
+}
+
+void
+NotePixmapFactory::makeRoomForLegerLines(const NotePixmapParameters &params)
+{
+    if (params.m_legerLines < 0) {
+        m_above = std::max(m_above,
+                           (m_noteBodyHeight + 1) *
+                           (-params.m_legerLines / 2));
+    } else if (params.m_legerLines > 0) {
+        m_below = std::max(m_below,
+                           (m_noteBodyHeight + 1) *
+                           (params.m_legerLines / 2));
+    }
+    if (params.m_legerLines != 0) {
+        m_left  = std::max(m_left,  getStaffLineThickness() + 1);
+        m_right = std::max(m_right, getStaffLineThickness() + 1);
+    }
+}
+
+void
+NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
+{
+    QPoint s0, s1;
+
+    if (params.m_legerLines == 0) return;
+
+    s0.setX(m_left - getStemThickness());
+    s1.setX(m_left + m_noteBodyWidth + getStemThickness());
+    
+    s0.setY(m_above + m_noteBodyHeight / 2);
+    s1.setY(s0.y());
+    
+    int offset = m_noteBodyHeight + 1;
+    int legerLines = params.m_legerLines;
+    
+    if (legerLines < 0) {
+	legerLines = -legerLines;
+	offset = -offset;
+    }
+    
+    bool first = true;
+    
+    for (int i = legerLines - 1; i >= 0; --i) {
+	if (i % 2 == 1) {
+	    m_p.drawLine(s0, s1);
+	    m_pm.drawLine(s0, s1);
+	    s0.ry() += offset;
+	    s1.ry() += offset;
+	    if (first) {
+		++s0.rx();
+		--s1.rx();
+		first = false;
+	    }
+	} else if (first) {
+	    s0.ry() += offset/2;
+	    s1.ry() += offset/2;
+	    if (legerLines < 0) {
+		--s0.ry();
+		--s1.ry();
+	    }
+	}                
+    }
+}
+
+void
+NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
+					   const NotePixmapParameters &params)
+{
+    if (params.m_stemGoesUp) {
+	m_above = std::max
+	    (m_above, stemLength - m_noteBodyHeight/2);
+    } else {
+	m_below = std::max
+	    (m_below, stemLength - m_noteBodyHeight/2);
+    }
+
+    if (flagCount > 0) {
+	if (params.m_stemGoesUp) {
+	    m_right += m_font->getWidth
+		(m_style->getFlagCharName(flagCount));
+	}
+    }
+}
+
+void
+NotePixmapFactory::drawStemAndFlags(int flagCount, int stemLength,
+				    const NotePixmapParameters &params,
+				    QPoint &s0, QPoint &s1)
+{
+    unsigned int stemThickness = 1;
+    m_font->getStemThickness(stemThickness);
+
+    NoteStyle::HFixPoint hfix;
+    NoteStyle::VFixPoint vfix;
+    m_style->getStemFixPoints(params.m_noteType, hfix, vfix);
+    
+    switch (hfix) {
+	
+    case NoteStyle::Normal:
+    case NoteStyle::Reversed:
+	if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
+	    s0.setX(m_left + m_noteBodyWidth - stemThickness);
+	} else {
+	    s0.setX(m_left);
+	}
+	break;
+	
+    case NoteStyle::Central:
+	if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
+	    s0.setX(m_left + m_noteBodyWidth/2 + 1);
+	} else {
+	    s0.setX(m_left + m_noteBodyWidth/2);
+	}
+	break;
+    }
+    
+    switch (vfix) {
+	
+    case NoteStyle::Near:
+    case NoteStyle::Far:
+	if (params.m_stemGoesUp ^ (vfix == NoteStyle::Far)) {
+	    s0.setY(m_above);
+	} else {
+	    s0.setY(m_above + m_noteBodyHeight);
+	}
+	if (vfix == NoteStyle::Near) {
+	    stemLength -= m_noteBodyHeight/2;
+	} else {
+	    stemLength += m_noteBodyHeight/2;
+	}		
+	break;
+
+    case NoteStyle::Middle:
+	s0.setY(m_above + m_noteBodyHeight/2);
+	break;
+    }	    
+
+    if (params.m_stemGoesUp) {
+	s1.setY(s0.y() - stemLength);
+    } else {
+	s1.setY(s0.y() + stemLength);
+    }
+
+    s1.setX(s0.x());
+
+    if (flagCount > 0) {
+
+	QPixmap flags = m_font->getPixmap
+	    (m_style->getFlagCharName(flagCount),
+	     !params.m_stemGoesUp);
+	
+	if (params.m_stemGoesUp) {
+	    m_p.drawPixmap(s1.x() - m_origin.x(),
+			   s1.y(), flags);
+	    m_pm.drawPixmap(s1.x() - m_origin.x(),
+			    s1.y(), *(flags.mask()));
+	} else {
+	    m_p.drawPixmap(s1.x() - m_origin.x(),
+			   s1.y() - flags.height(), flags);
+	    m_pm.drawPixmap(s1.x() - m_origin.x(),
+			    s1.y() - flags.height(), *(flags.mask()));
+	}
+    }
+
+    for (unsigned int i = 0; i < stemThickness; ++i) {
+	m_p.drawLine(s0, s1);
+	m_pm.drawLine(s0, s1);
+	++s0.rx();
+	++s1.rx();
+    }
+}
+
+void
+NotePixmapFactory::makeRoomForBeams(const NotePixmapParameters &params)
+{
+    int beamSpacing = (int)(params.m_width * params.m_gradient);
+    
+    if (params.m_stemGoesUp) {
+	
+	beamSpacing = -beamSpacing;
+	if (beamSpacing < 0) beamSpacing = 0;
+	m_above += beamSpacing + 1;
+	
+	// allow a bit extra in case the h fixpoint is non-normal
+	m_right = std::max(m_right, params.m_width + m_noteBodyWidth);
+	
+    } else {
+	
+	if (beamSpacing < 0) beamSpacing = 0;
+	m_below += beamSpacing + 1;
+	
+	m_right = std::max(m_right, params.m_width);
     }
 }
 

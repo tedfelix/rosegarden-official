@@ -206,7 +206,17 @@ protected:
 
     void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params);
     void drawMarks(bool isStemmed, const NotePixmapParameters &params);
-    
+
+    void makeRoomForLegerLines(const NotePixmapParameters &params);
+    void drawLegerLines(const NotePixmapParameters &params);
+
+    void makeRoomForStemAndFlags(int flagCount, int stemLength,
+				 const NotePixmapParameters &params);
+    void drawStemAndFlags(int flagCount, int stemLength,
+			  const NotePixmapParameters &params,
+			  QPoint &startPoint, QPoint &endPoint);
+
+    void makeRoomForBeams(const NotePixmapParameters &params);
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
                    int beamCount);
 

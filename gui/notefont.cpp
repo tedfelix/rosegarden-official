@@ -30,6 +30,7 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 
 #include <iostream>
 
@@ -73,11 +74,11 @@ NoteFontMap::NoteFontMap(string name) :
 	if (!mapFileLowerInfo.isReadable()) {
 	    if (mapFileLowerName != mapFileMixedName) {
 		throw MappingFileReadFailed
-		    (qstrtostr(i18n("Can't open mapping file %1 or %2").
+		    (qstrtostr(i18n("Can't open font mapping file %1 or %2").
 			       arg(mapFileMixedName).arg(mapFileLowerName)));
 	    } else {
 		throw MappingFileReadFailed
-		    (qstrtostr(i18n("Can't open mapping file %1").
+		    (qstrtostr(i18n("Can't open font mapping file %1").
 			       arg(mapFileMixedName)));
 	    }
 	} else {
@@ -114,8 +115,8 @@ NoteFontMap::characters(QString &chars)
     return true;
 }
 
-static int
-toSize(int baseSize, double factor, bool limitAtOne)
+int 
+NoteFontMap::toSize(int baseSize, double factor, bool limitAtOne)
 {
     double dsize = factor * baseSize;
     dsize += 0.5;
@@ -175,7 +176,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
         int noteHeight = s.toInt();
 
-        SizeData sizeData;
+        SizeData &sizeData = m_sizes[noteHeight];
 
         s = attributes.value("staff-line-thickness");
         if (s) sizeData.setStaffLineThickness(s.toInt());
@@ -194,8 +195,6 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("font-height");
         if (s) sizeData.setFontHeight(s.toInt());
-
-        m_sizes[noteHeight] = sizeData;
 
     } else if (lcName == "font-scale") {
 	
@@ -252,20 +251,26 @@ NoteFontMap::startElement(const QString &, const QString &,
 	}
 
 	for (int sz = 2; sz <= 80; sz += (sz < 8 ? 1 : 2)) {
-	    
-	    if (m_sizes.find(sz) != m_sizes.end()) { // specialised already
-		continue;
+
+	    SizeData &sizeData = m_sizes[sz];
+	    unsigned int temp, temp1;
+
+	    if (sizeData.getStaffLineThickness(temp) == false)
+		sizeData.setStaffLineThickness(toSize(sz, staffLineThickness, true));
+
+	    if (sizeData.getStemThickness(temp) == false)
+		sizeData.setStemThickness(toSize(sz, stemThickness, true));
+
+	    if (sizeData.getBeamThickness(temp) == false)
+		sizeData.setBeamThickness(toSize(sz, beamThickness, true));
+
+	    if (sizeData.getBorderThickness(temp, temp1) == false) {
+		sizeData.setBorderX(toSize(sz, borderX, false));
+		sizeData.setBorderY(toSize(sz, borderY, false));
 	    }
 
-	    SizeData sizeData;
-	    sizeData.setStaffLineThickness(toSize(sz, staffLineThickness, true));
-	    sizeData.setStemThickness(toSize(sz, stemThickness, true));
-	    sizeData.setBeamThickness(toSize(sz, beamThickness, true));
-	    sizeData.setBorderX(toSize(sz, borderX, true));
-	    sizeData.setBorderY(toSize(sz, borderY, true));
-	    sizeData.setFontHeight(toSize(sz, fontHeight, true));
-
-	    m_sizes[sz] = sizeData;
+	    if (sizeData.getFontHeight(temp) == false)
+		sizeData.setFontHeight(toSize(sz, fontHeight, true));
 	}
 
     } else if (lcName == "font-symbol-map") {
@@ -340,6 +345,32 @@ NoteFontMap::startElement(const QString &, const QString &,
             return false;
         }
         m_hotspotCharName = qstrtostr(s.upper());
+
+    } else if (lcName == "scaled") {
+
+        if (m_hotspotCharName == "") {
+            m_errorString = i18n("scaled-element must be in hotspot-element");
+            return false;
+        }
+
+	QString s = attributes.value("x");
+	double x = 0.0;
+	if (s) x = s.toDouble();
+
+	s = attributes.value("y");
+	if (!s) {
+	    m_errorString = i18n("y is a required attribute of scaled");
+	    return false;
+	}
+	double y = s.toDouble();
+	
+        HotspotDataMap::iterator i = m_hotspots.find(m_hotspotCharName);
+        if (i == m_hotspots.end()) {
+            m_hotspots[m_hotspotCharName] = HotspotData();
+            i = m_hotspots.find(m_hotspotCharName);
+        }
+
+	i->second.setScaledHotspot(x, y);
 
     } else if (lcName == "when") {
 
@@ -682,11 +713,11 @@ void
 NoteFontMap::dump() const
 {
     // debug code
-    //!!! add code/font stuff
 
     cout << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
          << "\nCopyright: " << getCopyright() << "\nMapped by: "
-         << getMappedBy() << endl;
+         << getMappedBy() << "\nType: " << getType() << "\nAutocrop: "
+	 << shouldAutocrop() << "\nSmooth: " << isSmooth() << endl;
 
     set<int> sizes = getSizes();
     set<CharName> names = getCharNames();
@@ -697,6 +728,8 @@ NoteFontMap::dump() const
         cout << "\nSize: " << *sizei << "\n" << endl;
 
         unsigned int t = 0;
+	unsigned int bx = 0, by = 0;
+	QFont f;
 
         if (getStaffLineThickness(*sizei, t)) {
             cout << "Staff line thickness: " << t << endl;
@@ -706,13 +739,21 @@ NoteFontMap::dump() const
             cout << "Stem thickness: " << t << endl;
         }
 
+        if (getBeamThickness(*sizei, t)) {
+            cout << "Beam thickness: " << t << endl;
+        }
+
+        if (getBorderThickness(*sizei, bx, by)) {
+            cout << "Border thickness: " << bx << "x" << by << endl;
+        }
+
         for (set<CharName>::iterator namei = names.begin();
              namei != names.end(); ++namei) {
 
             cout << "\nCharacter: " << namei->c_str() << endl;
 
             string s;
-            int x, y;
+            int x, y, c;
 
             if (getSrc(*sizei, *namei, s)) {
                 cout << "Src: " << s << endl;
@@ -720,6 +761,14 @@ NoteFontMap::dump() const
 
             if (getInversionSrc(*sizei, *namei, s)) {
                 cout << "Inversion src: " << s << endl;
+            }
+            
+            if (getCode(*sizei, *namei, c)) {
+                cout << "Code: " << c << endl;
+            }
+
+            if (getInversionCode(*sizei, *namei, c)) {
+                cout << "Inversion code: " << c << endl;
             }
             
             if (getHotspot(*sizei, *namei, x, y)) {
@@ -994,7 +1043,9 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	return true;
     }
 
-    pixmap = *m_blankPixmap;
+    found = new QPixmap(*m_blankPixmap);
+    add(charName, inverted, found);
+    pixmap = *found;
     return false;
 }
 
@@ -1123,7 +1174,12 @@ NoteFont::getHotspot(CharName charName, bool inverted) const
 std::set<std::string>
 NoteFontFactory::getFontNames()
 {
-    return NoteFont::getAvailableFontNames();
+    try {
+	return NoteFont::getAvailableFontNames();
+    } catch (Rosegarden::Exception e) {
+	KMessageBox::error(0, strtoqstr(e.getMessage()));
+	throw;
+    }
 }
 
 std::vector<int>
@@ -1163,9 +1219,14 @@ NoteFontFactory::getFont(std::string fontName, int size)
 	m_fonts.find(std::pair<std::string, int>(fontName, size));
 
     if (i == m_fonts.end()) {
-	NoteFont *font = new NoteFont(fontName, size);
-	m_fonts[std::pair<std::string, int>(fontName, size)] = font;
-	return font;
+	try {
+	    NoteFont *font = new NoteFont(fontName, size);
+	    m_fonts[std::pair<std::string, int>(fontName, size)] = font;
+	    return font;
+	} catch (Rosegarden::Exception e) {
+	    KMessageBox::error(0, strtoqstr(e.getMessage()));
+	    throw;
+	}
     } else {
 	return i->second;
     }
@@ -1177,8 +1238,9 @@ NoteFontFactory::getDefaultFontName()
     std::set<std::string> fontNames = getFontNames();
     if (fontNames.find("Feta") != fontNames.end()) return "Feta";
     else if (fontNames.size() == 0) {
-	throw NoFontsAvailable
-	    (qstrtostr(i18n("Can't obtain a default font -- no fonts found")));
+	QString message = i18n("Can't obtain a default font -- no fonts found");
+	KMessageBox::error(0, message);
+	throw NoFontsAvailable(qstrtostr(message));
     }
     else return *fontNames.begin();
 }

@@ -93,6 +93,9 @@ public:
 
     void dump() const;
 
+    // want this to be private, but need access from HotspotData
+    static int toSize(int baseSize, double factor, bool limitAtOne);
+
 private:
     class SymbolData
     {
@@ -133,19 +136,29 @@ private:
     {
     private:
         typedef std::pair<int, int> Point;
+        typedef std::pair<double, double> ScaledPoint;
         typedef std::map<int, Point> DataMap;
 
     public:
-        HotspotData() { }
+        HotspotData() : m_scaled(-1.0, -1.0) { }
         ~HotspotData() { }
         
         void addHotspot(int size, int x, int y) {
             m_data[size] = Point(x, y);
         }
 
+	void setScaledHotspot(double x, double y) {
+	    m_scaled = ScaledPoint(x, y);
+	}
+
         bool getHotspot(int size, int &x, int &y) const {
             DataMap::const_iterator i = m_data.find(size);
-            if (i == m_data.end()) return false;
+            if (i == m_data.end()) {
+		x = 0;
+		if (m_scaled.first  >= 0) x = toSize(size, m_scaled.first,  false);
+		if (m_scaled.second >= 0) y = toSize(size, m_scaled.second, false);
+		else return false;
+	    }
             x = i->second.first;
             y = i->second.second;
             return true;
@@ -153,6 +166,7 @@ private:
 
     private:
         DataMap m_data;
+	ScaledPoint m_scaled;
     };
 
     class SizeData
