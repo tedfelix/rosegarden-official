@@ -174,13 +174,15 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-                             3, 2, // nbrow, nbcol
+                             4, 2, // nbrow, nbcol
                              10, 5);
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
                                  frame), 0, 0);
     layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
                                  frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Always use default studio when loading files"),
+		                 frame), 2, 0);
 
     m_client = new KComboBox(frame);
     m_client->insertItem(i18n("Notation"));
@@ -196,6 +198,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_countIn->setMinValue(0);
     layout->addWidget(m_countIn, 1, 1);
 
+    m_studio = new QCheckBox(frame);
+    m_studio->setChecked(m_cfg->readBoolEntry("alwaysusedefaultstudio", false));
+    layout->addWidget(m_studio, 2, 1);
 
     addTab(frame, i18n("Behaviour"));
 
@@ -272,6 +277,9 @@ void GeneralConfigurationPage::apply()
 
     int client = getDblClickClient();
     m_cfg->writeEntry("doubleclickclient", client);
+
+    bool studio = getUseDefaultStudio();
+    m_cfg->writeEntry("alwaysusedefaultstudio", studio);
 
     int octave = m_midiPitchOctave->value();
     m_cfg->writeEntry("midipitchoctave", octave);

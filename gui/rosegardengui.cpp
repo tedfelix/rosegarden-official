@@ -611,6 +611,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSaveDefaultStudio()),
                 actionCollection(), "save_default_studio");
 
+    new KAction(i18n("&Import Studio from File..."), 0, this,
+	        SLOT(slotImportStudio()),
+		actionCollection(), "load_studio");
+
     // Transport controls [rwb]
     //
     // We set some default key bindings - with numlock off
@@ -4421,6 +4425,12 @@ RosegardenGUIApp::slotSaveDefaultStudio()
     
     SetWaitCursor waitCursor;
     m_doc->saveDocument(autoloadFile);
+}
+
+void
+RosegardenGUIApp::slotImportStudio()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotImportStudio()\n";
 }
 
 void

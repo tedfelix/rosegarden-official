@@ -24,6 +24,7 @@
 
 #include <qspinbox.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qslider.h>
 #include <qlineedit.h>
 
@@ -169,6 +170,7 @@ public:
 
     int getCountInSpin()            { return m_countIn->value(); }
     int getDblClickClient()         { return m_client->currentItem(); }
+    bool getUseDefaultStudio()      { return m_studio->isChecked(); }
     QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
     int getNoteNameStyle() { return m_nameStyle->currentItem(); }
 
@@ -186,6 +188,7 @@ protected:
 
     QComboBox* m_client;
     QSpinBox*  m_countIn;
+    QCheckBox* m_studio;
     QSpinBox*  m_midiPitchOctave;
     QLineEdit* m_externalAudioEditorPath;
     QCheckBox* m_backgroundTextures;

@@ -682,6 +682,11 @@ public slots:
     void slotSaveDefaultStudio();
 
     /**
+     * Import Studio from File
+     */
+    void slotImportStudio();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();

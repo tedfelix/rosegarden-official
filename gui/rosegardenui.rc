@@ -75,6 +75,7 @@
         <Action name="manage_controls"/>
         <Separator/>
         <Action name="save_default_studio"/>
+	<Action name="load_studio"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>
