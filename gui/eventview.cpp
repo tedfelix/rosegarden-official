@@ -355,7 +355,9 @@ EventView::readOptions()
 {
     m_config->setGroup("EventList Options");
     EditViewBase::readOptions();
+#ifdef RGKDE3
     m_eventList->restoreLayout(m_config, LayoutConfigGroupName);
+#endif
 }
 
 const char* const EventView::LayoutConfigGroupName = "EventList Layout";
@@ -363,7 +365,9 @@ const char* const EventView::LayoutConfigGroupName = "EventList Layout";
 void
 EventView::slotSaveOptions()
 {
+#ifdef RGKDE3
     m_eventList->saveLayout(m_config, LayoutConfigGroupName);
+#endif
 }
 
 void 

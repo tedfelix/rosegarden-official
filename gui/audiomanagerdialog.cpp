@@ -195,7 +195,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(6, Qt::AlignHCenter);
 
+#ifdef RGKDE3
     m_fileList->restoreLayout(kapp->config(), m_listViewLayoutName);
+#endif
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -236,7 +238,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
 AudioManagerDialog::~AudioManagerDialog()
 {
+#ifdef RGKDE3
     m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
+#endif
 }
 
 // Scan the AudioFileManager and populate the m_fileList
@@ -529,7 +533,13 @@ AudioManagerDialog::slotAdd()
                                                    QString(i18n("*.wav|WAV files (*.wav)")),
                                                    this, i18n("Select one or more Audio Files"));
 
-    for (KURL::List::iterator it = kurlList.begin(); it != kurlList.end(); ++it)
+#ifdef RGKDE3
+    KURL::List::iterator it;
+#else
+    KURL::List::Iterator it;
+#endif
+
+    for (it = kurlList.begin(); it != kurlList.end(); ++it)
         addFile(*it);
 }
 
