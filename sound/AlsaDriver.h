@@ -253,6 +253,8 @@ private:
     void sendDeviceController(const ClientPortPair &device,
                               MidiByte byte1,
                               MidiByte byte2);
+			      
+    int checkAlsaError(int rc, const char *message);
 
     AlsaPortList m_alsaPorts;
 

@@ -97,6 +97,22 @@ AlsaDriver::~AlsaDriver()
     }
 }
 
+int
+AlsaDriver::checkAlsaError(int rc, const char *message)
+{
+#ifdef DEBUG_ALSA
+    if (rc < 0) 
+    {
+	std::cerr << "AlsaDriver::"
+		  << message
+		  << ": " << rc
+		  << " (" << snd_strerror(rc) << ")" 
+		  << std::endl;
+    }
+#endif
+    return rc;
+}
+
 void
 AlsaDriver::shutdown()
 {
@@ -115,7 +131,8 @@ AlsaDriver::shutdown()
         std::cerr << "AlsaDriver::shutdown - closing MIDI client" << std::endl;
 #endif
 
-        snd_seq_stop_queue(m_midiHandle, m_queue, 0);
+        checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, 0), "shutdown(): stopping queue");
+	checkAlsaError(snd_seq_drain_output(m_midiHandle), "shutdown(): drain output");
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::shutdown - stopped queue" << std::endl;
 #endif
@@ -1053,14 +1070,17 @@ AlsaDriver::setCurrentTimer(QString timer)
     // thing if we're currently playing and on the JACK transport.
 
     m_queueRunning = false;
-    snd_seq_stop_queue(m_midiHandle, m_queue, NULL);
+    checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "setCurrentTimer(): stopping queue");
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to stop queue");
+    
     snd_seq_event_t event;
     snd_seq_ev_clear(&event);
     snd_seq_real_time_t z = { 0, 0 };
     snd_seq_ev_set_queue_pos_real(&event, m_queue, &z);
-    snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
-			  0, &event);
-    snd_seq_drain_output(m_midiHandle);
+    snd_seq_ev_set_direct(&event);
+    checkAlsaError(snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
+					  0, &event), "setCurrentTimer(): control queue");
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to control queue");
     m_alsaPlayStartTime = RealTime::zeroTime;
 
     for (unsigned int i = 0; i < m_timers.size(); ++i) {
@@ -1102,7 +1122,8 @@ AlsaDriver::setCurrentTimer(QString timer)
     if (m_jackDriver) m_jackDriver->prebufferAudio();
 #endif
 
-    snd_seq_continue_queue(m_midiHandle, m_queue, NULL);
+    checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, NULL), "checkAlsaError(): continue queue");
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to continue queue");
     m_queueRunning = true;
 }
 
@@ -1275,23 +1296,17 @@ AlsaDriver::initialiseMidi()
     generateTimerList();
     setCurrentTimer(AUTO_TIMER_NAME);
 
-    int result;
-
     // Start the timer
-    if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
+    if (checkAlsaError(snd_seq_start_queue(m_midiHandle, m_queue, NULL), 
+                       "initialiseMidi(): couldn't start queue") < 0)
     {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::initialiseMidi - couldn't start queue - "
-                  << snd_strerror(result)
-                  << std::endl;
-#endif
         exit(EXIT_FAILURE);
     }
 
     m_queueRunning = true;
 
     // process anything pending
-    snd_seq_drain_output(m_midiHandle);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "initialiseMidi(): couldn't drain output");
 
     audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
               << std::endl << std::endl;
@@ -1576,7 +1591,7 @@ AlsaDriver::allNotesOff()
               */
 
     // flush
-    snd_seq_drain_output(m_midiHandle);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "allNotesOff(): draining");
 }
 
 void
@@ -1622,7 +1637,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
 
     // and flush them
     if (m_queueRunning) {
-	snd_seq_drain_output(m_midiHandle);
+	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processNotesOff(): draining");
     }
 
     /*
@@ -2253,7 +2268,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     }
 
     if (m_queueRunning || now) {
-	snd_seq_drain_output(m_midiHandle);
+	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
     }
 }
 
@@ -2367,7 +2382,7 @@ AlsaDriver::startClocks()
     }
 
     // process pending MIDI events
-    snd_seq_drain_output(m_midiHandle);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocks(): draining");
 }
 
 void
@@ -2394,23 +2409,20 @@ AlsaDriver::startClocksApproved()
     //!!! too slow, guess we need the off-by-1 trick
 
     // process pending MIDI events
-    snd_seq_drain_output(m_midiHandle);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocksApproved(): draining");
 }
 
 void
 AlsaDriver::stopClocks()
 {
-    int result;
-    
     std::cerr << "AlsaDriver::stopClocks" << std::endl;
 
-    if ((result = snd_seq_stop_queue(m_midiHandle, m_queue, NULL)) < 0) {
-	//!!! bit excessive?
-#ifdef DEBUG_ALSA
-	std::cerr << "AlsaDriver::stopClocks - couldn't stop queue - "
-		  << snd_strerror(result)
-		  << std::endl;
-#endif
+    if (checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "stopClocks(): stopping queue") < 0) 
+    {
+	exit(EXIT_FAILURE);
+    }
+    if (checkAlsaError(snd_seq_drain_output(m_midiHandle), "stopClocks(): draining output to stop queue") < 0) 
+    {
 	exit(EXIT_FAILURE);
     }
 
@@ -2424,11 +2436,11 @@ AlsaDriver::stopClocks()
     snd_seq_ev_clear(&event);
     snd_seq_real_time_t z = { 0, 0 };
     snd_seq_ev_set_queue_pos_real(&event, m_queue, &z);
-    snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
-			  0, &event);
-
+    snd_seq_ev_set_direct(&event);
+    checkAlsaError(snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
+					 0, &event), "stopClocks(): setting zpos to queue");
     // process that
-    snd_seq_drain_output(m_midiHandle);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "stopClocks(): draining output to zpos queue");
 
     std::cerr << "AlsaDriver::stopClocks: ALSA time now is " << getAlsaTime() << std::endl;
 
@@ -2926,7 +2938,7 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
     }
 
     // we probably don't need this:
-    snd_seq_drain_output(m_midiHandle);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendDSeviceController(): draining");
 }
 
 // We only process note offs in this section
@@ -3434,8 +3446,8 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
         }
     }
 
-    // we probably don't need this here
-    snd_seq_drain_output(m_midiHandle);
+    // we probably don't need this here, but probably yes.
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendSystemDirect(): draining");
 }
 
 
@@ -3507,7 +3519,7 @@ AlsaDriver::sendSystemQueued(MidiByte command,
     }
 
     if (m_queueRunning) {
-	snd_seq_drain_output(m_midiHandle);
+	checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendSystemQueued(): draining");
     }
 }
 
