@@ -105,7 +105,9 @@ public:
 
     EventList*         getTrack(int trackNb)        { return m_composition[trackNb]; }
     const EventList*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
-        
+
+    unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
+    unsigned int getNbBars()   const { return m_composition.getNbBars(); }
 
     ViewElementsManager*       getViewElementsManager()       { return m_viewElementsManager; }
     const ViewElementsManager* getViewElementsManager() const { return m_viewElementsManager; }
