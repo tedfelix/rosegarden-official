@@ -227,7 +227,7 @@ KDE_DIST=cc_linux_configure Makefile.dist configure.in.in cc_gcc3_configure cc_b
 DISTFILES= $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST) $(KDE_DIST)
 
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 #>- all: all-redirect
 #>+ 1
@@ -411,17 +411,6 @@ distdir: $(DISTFILES)
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu ./Makefile
-#>- 	@for file in $(DISTFILES); do \
-#>- 	  d=$(srcdir); \
-#>- 	  if test -d $$d/$$file; then \
-#>- 	    cp -pr $$/$$file $(distdir)/$$file; \
-#>- 	  else \
-#>- 	    test -f $(distdir)/$$file \
-#>- 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-#>- 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-#>- 	  fi; \
-#>- 	done
-#>+ 10
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
