@@ -457,11 +457,7 @@ void
 SegmentCanvas::addToSelection(Segment *segment)
 {
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
-    if (!selTool) {
-	slotSetTool(Selector);
-	selTool = dynamic_cast<SegmentSelector*>(m_tool);
-	if (!selTool) return;
-    }
+    if (!selTool) return;
     selTool->addToSelection(segment);
 }
 

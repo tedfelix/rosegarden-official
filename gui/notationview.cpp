@@ -99,15 +99,15 @@ class NoteActionData
 public:
     NoteActionData();
     NoteActionData(const QString& _title,
-               const char* _actionName,
-               const char* _pixmapName,
-               bool _rest,
-               Note::Type _noteType,
-               int _dots);
+		   QString _actionName,
+		   QString _pixmapName,
+		   bool _rest,
+		   Note::Type _noteType,
+		   int _dots);
     
     QString title;
-    const char* actionName;
-    const char* pixmapName;
+    QString actionName;
+    QString pixmapName;
     bool rest;
     Note::Type noteType;
     int dots;
@@ -124,11 +124,11 @@ NoteActionData::NoteActionData()
 
 
 NoteActionData::NoteActionData(const QString& _title,
-                       const char* _actionName,
-                       const char* _pixmapName,
-                       bool _rest,
-                       Note::Type _noteType,
-                       int _dots)
+			       QString _actionName,
+			       QString _pixmapName,
+			       bool _rest,
+			       Note::Type _noteType,
+			       int _dots)
     : title(i18n(_title)),
       actionName(_actionName),
       pixmapName(_pixmapName),
@@ -361,23 +361,25 @@ void NotationView::setupActions()
     // setup Notes menu & toolbar
     QIconSet icon;
  
-    for(NoteActionDataMap::Iterator actionDataIter = m_noteActionDataMap->begin();
-        actionDataIter != m_noteActionDataMap->end();
-        ++actionDataIter) {
+    for (NoteActionDataMap::Iterator actionDataIter = m_noteActionDataMap->begin();
+	 actionDataIter != m_noteActionDataMap->end();
+	 ++actionDataIter) {
 
         NoteActionData noteActionData = *actionDataIter;
         
-	string iconName = Note(noteActionData.noteType).getReferenceName();
         icon = QIconSet
-	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
+	    (m_toolbarNotePixmapFactory.makeToolbarPixmap
+	     (noteActionData.pixmapName));
         noteAction = new KRadioAction(noteActionData.title, icon, 0, this,
                                       SLOT(slotNoteAction()),
-                                      actionCollection(), noteActionData.actionName);
+                                      actionCollection(),
+				      noteActionData.actionName);
         noteAction->setExclusiveGroup("notes");
 
-        if (QString(noteActionData.actionName) == "quarter")
-            m_selectDefaultNote = noteAction; // quarter is the default selected note
-
+        if (noteActionData.noteType == Note::Crotchet &&
+	    noteActionData.dots == 0 && !noteActionData.rest) {
+            m_selectDefaultNote = noteAction;
+	}
     }
     
     //
@@ -1017,9 +1019,9 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
     setCurrentSelection(selection);
 }
 
-void NotationView::previewNote(int staffNo, double layoutX,
-			       int pitch, int height,
-			       const Rosegarden::Note &note)
+void NotationView::showPreviewNote(int staffNo, double layoutX,
+				   int pitch, int height,
+				   const Rosegarden::Note &note)
 { 
     m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
 
@@ -1050,6 +1052,12 @@ void NotationView::previewNote(int staffNo, double layoutX,
     emit notePlayed(mE);
 }
 
+void NotationView::clearPreviewNote()
+{
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	m_staffs[i]->clearPreviewNote();
+    }
+}
 
 void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 {
@@ -2147,50 +2155,30 @@ void NotationView::initNoteActionDataMap()
 
     m_noteActionDataMap = new NoteActionDataMap;
 
-    // Regular Notes
-    //
-    m_noteActionDataMap->insert("breve",      NoteActionData("Breve",   "breve",      "breve",        false, Note::Breve, 0));
-    m_noteActionDataMap->insert("whole_note", NoteActionData("Whole",   "whole_note", "semibreve",    false, Note::WholeNote, 0));
-    m_noteActionDataMap->insert("half",       NoteActionData("Half",    "half",       "minim",        false, Note::HalfNote, 0));
-    m_noteActionDataMap->insert("quarter",    NoteActionData("Quarter", "quarter",    "crotchet",     false, Note::QuarterNote, 0));
-    m_noteActionDataMap->insert("8th",        NoteActionData("8th",     "8th",        "quaver",       false, Note::EighthNote, 0));
-    m_noteActionDataMap->insert("16th",       NoteActionData("16th",    "16th",       "semiquaver",   false, Note::SixteenthNote, 0));
-    m_noteActionDataMap->insert("32nd",       NoteActionData("32nd",    "32nd",       "demisemi",     false, Note::ThirtySecondNote, 0));
-    m_noteActionDataMap->insert("64th",       NoteActionData("64th",    "64th",       "hemidemisemi", false, Note::SixtyFourthNote, 0));
+    for (int rest = 0; rest < 2; ++rest) {
+	for (int dots = 0; dots < 2; ++dots) {
+	    for (int type = Note::Longest; type >= Note::Shortest; --type) {
+		if (dots && (type == Note::Longest)) continue;
 
-    // Dotted Notes
-    //
-    m_noteActionDataMap->insert("dotted_breve",      NoteActionData("Dotted Breve",   "dotted_breve",      "dotted-breve",        false, Note::Breve, 1));
-    m_noteActionDataMap->insert("dotted_whole_note", NoteActionData("Dotted Whole",   "dotted_whole_note", "dotted-semibreve",    false, Note::WholeNote, 1));
-    m_noteActionDataMap->insert("dotted_half",       NoteActionData("Dotted Half",    "dotted_half",       "dotted-minim",        false, Note::HalfNote, 1));
-    m_noteActionDataMap->insert("dotted_quarter",    NoteActionData("Dotted Quarter", "dotted_quarter",    "dotted-crotchet",     false, Note::QuarterNote, 1));
-    m_noteActionDataMap->insert("dotted_8th",        NoteActionData("Dotted 8th",     "dotted_8th",        "dotted-quaver",       false, Note::EighthNote, 1));
-    m_noteActionDataMap->insert("dotted_16th",       NoteActionData("Dotted 16th",    "dotted_16th",       "dotted-semiquaver",   false, Note::SixteenthNote, 1));
-    m_noteActionDataMap->insert("dotted_32nd",       NoteActionData("Dotted 32nd",    "dotted_32nd",       "dotted-demisemi",     false, Note::ThirtySecondNote, 1));
-    m_noteActionDataMap->insert("dotted_64th",       NoteActionData("Dotted 64th",    "dotted_64th",       "dotted-hemidemisemi", false, Note::SixtyFourthNote, 1));
+		Note note(type, dots);
 
+		QString refName(note.getReferenceName(rest).c_str());
+		QString shortName(note.getShortName().c_str());
+		QString titleName(note.getAmericanName().c_str());
 
-    // Rests
-    //
-    m_noteActionDataMap->insert("breve_rest",      NoteActionData("Breve Rest",   "breve_rest",      "rest-breve",        true, Note::Breve, 0));
-    m_noteActionDataMap->insert("whole_note_rest", NoteActionData("Whole Rest",   "whole_note_rest", "rest-semibreve",    true, Note::WholeNote, 0));
-    m_noteActionDataMap->insert("half_rest",       NoteActionData("Half Rest",    "half_rest",       "rest-minim",        true, Note::HalfNote, 0));
-    m_noteActionDataMap->insert("quarter_rest",    NoteActionData("Quarter Rest", "quarter_rest",    "rest-crotchet",     true, Note::QuarterNote, 0));
-    m_noteActionDataMap->insert("8th_rest",        NoteActionData("8th Rest",     "8th_rest",        "rest-quaver",       true, Note::EighthNote, 0));
-    m_noteActionDataMap->insert("16th_rest",       NoteActionData("16th Rest",    "16th_rest",       "rest-semiquaver",   true, Note::SixteenthNote, 0));
-    m_noteActionDataMap->insert("32nd_rest",       NoteActionData("32nd Rest",    "32nd_rest",       "rest-demisemi",     true, Note::ThirtySecondNote, 0));
-    m_noteActionDataMap->insert("64th_rest",       NoteActionData("64th Rest",    "64th_rest",       "rest-hemidemisemi", true, Note::SixtyFourthNote, 0));
+		shortName.replace(QRegExp(" "), "_");
 
-    // Dotted rests
-    //
-    m_noteActionDataMap->insert("dotted_breve_rest",      NoteActionData("Dotted Breve Rest",   "dotted_breve_rest",      "dotted-rest-breve",        true, Note::Breve, 1));
-    m_noteActionDataMap->insert("dotted_whole_note_rest", NoteActionData("Dotted Whole Rest",   "dotted_whole_note_rest", "dotted-rest-semibreve",    true, Note::WholeNote, 1));
-    m_noteActionDataMap->insert("dotted_half_rest",       NoteActionData("Dotted Half Rest",    "dotted_half_rest",       "dotted-rest-minim",        true, Note::HalfNote, 1));
-    m_noteActionDataMap->insert("dotted_quarter_rest",    NoteActionData("Dotted Quarter Rest", "dotted_quarter_rest",    "dotted-rest-crotchet",     true, Note::QuarterNote, 1));
-    m_noteActionDataMap->insert("dotted_8th_rest",        NoteActionData("Dotted 8th Rest",     "dotted_8th_rest",        "dotted-rest-quaver",       true, Note::EighthNote, 1));
-    m_noteActionDataMap->insert("dotted_16th_rest",       NoteActionData("Dotted 16th Rest",    "dotted_16th_rest",       "dotted-rest-semiquaver",   true, Note::SixteenthNote, 1));
-    m_noteActionDataMap->insert("dotted_32nd_rest",       NoteActionData("Dotted 32nd Rest",    "dotted_32nd_rest",       "dotted-rest-demisemi",     true, Note::ThirtySecondNote, 1));
-    m_noteActionDataMap->insert("dotted_64th_rest",       NoteActionData("Dotted 64th Rest",    "dotted_64th_rest",       "dotted-rest-hemidemisemi", true, Note::SixtyFourthNote, 1));
+		if (rest) {
+		    shortName += "_rest";
+		    titleName.replace(QRegExp("note"), "rest");
+		}
+
+		m_noteActionDataMap->insert
+		    (shortName, NoteActionData
+		     (titleName, shortName, refName, rest > 0, type, dots));
+	    }
+	}
+    }
 }
 
     

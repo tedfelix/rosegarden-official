@@ -269,8 +269,10 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
 				 QMouseEvent *e)
 {
     if (!m_clickHappened) return;
-    computeLocationAndPreview(e);
+    bool okay = computeLocationAndPreview(e);
     m_clickHappened = false;
+    if (!okay) return;
+    clearPreview();
 
     Note note(m_noteType, m_noteDots);
     timeT endTime = m_clickTime + note.getDuration();
@@ -293,7 +295,7 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
 }
 
 
-void
+bool
 NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 {
     double x = e->x();
@@ -301,9 +303,18 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     NotationStaff *staff = dynamic_cast<NotationStaff *>
 	(m_nParentView->getStaffForCanvasY(y));
-    if (!staff) return;
+    if (!staff) {
+	clearPreview();
+	return false;
+    }
 
     int staffNo = staff->getId();
+    if (m_clickHappened && staffNo != m_clickStaffNo) {
+	// abandon
+	clearPreview();
+	return false;
+    }
+
     int height = staff->getHeightAtCanvasY(y);
 
     Event *clefEvt = 0, *keyEvt = 0;
@@ -312,10 +323,13 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     NotationElementList::iterator itr =
 	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
-    if (itr == staff->getViewElementList()->end()) return;
+    if (itr == staff->getViewElementList()->end()) {
+	clearPreview();
+	return false;
+    }
 
     timeT time = (*itr)->getAbsoluteTime();
-    double insertionX = (*itr)->getLayoutX();
+    m_clickInsertX = (*itr)->getLayoutX();
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
 
@@ -323,7 +337,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     if ((*itr)->isRest()) {
 	time += getOffsetWithinRest(staffNo, itr, x - (*itr)->getCanvasX());
-	//!!! adjust insertionX for offset
+	//!!! adjust m_clickInsertX for offset
     }
 
     kdDebug(KDEBUG_AREA) << "Insertion time: " << time << endl;
@@ -351,11 +365,23 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 	m_clickPitch = pitch;
 	m_clickHeight = height;
 	m_clickStaffNo = staffNo;
+	
+	showPreview();
+    }
 
-	m_nParentView->previewNote(m_clickStaffNo, insertionX,
+    return true;
+}
+
+void NoteInserter::showPreview()
+{
+    m_nParentView->showPreviewNote(m_clickStaffNo, m_clickInsertX,
 				   m_clickPitch, m_clickHeight,
 				   Note(m_noteType, m_noteDots));
-    }
+}
+
+void NoteInserter::clearPreview()
+{
+    m_nParentView->clearPreviewNote();
 }
     
 
@@ -584,6 +610,12 @@ RestInserter::RestInserter(NotationView* view)
                 "notes");
 
     createMenu("restinserter.rc");
+}
+
+void
+RestInserter::showPreview()
+{
+    // no preview available for now
 }
 
 Event *

@@ -123,9 +123,12 @@ public:
 				Rosegarden::Event *event);
 
     /// Show and sound the given note
-    void previewNote(int staffNo, double layoutX,
-		     int pitch, int height,
-		     const Rosegarden::Note &note);
+    void showPreviewNote(int staffNo, double layoutX,
+			 int pitch, int height,
+			 const Rosegarden::Note &note);
+
+    /// Remove any visible preview note
+    void clearPreviewNote();
 
     /// Changes the font of the staffs on the view
     void slotChangeFont(std::string newFont);

@@ -231,7 +231,6 @@ public:
 
     /**
      * Add the given Segment to the selection, if we know anything about it
-     * (This will also switch to the selector tool if necessary)
      */
     void addToSelection(Rosegarden::Segment *);
 

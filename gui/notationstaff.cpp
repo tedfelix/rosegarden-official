@@ -886,6 +886,12 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     m_canvas->update();
 } 
 
+void
+NotationStaff::clearPreviewNote()
+{
+    delete m_previewSprite;
+    m_previewSprite = 0;
+}
 
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)

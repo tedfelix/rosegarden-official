@@ -217,6 +217,11 @@ public:
 				 const Rosegarden::Note &note);
 
     /**
+     * Remove any visible preview note.
+     */
+    virtual void clearPreviewNote();
+
+    /**
      * Overridden from Rosegarden::Staff<T>.
      * We want to avoid wrapping really short rests
      */

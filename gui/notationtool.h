@@ -179,7 +179,9 @@ protected:
 					    const Rosegarden::Note &,
 					    int pitch, Rosegarden::Accidental);
 
-    virtual void computeLocationAndPreview(QMouseEvent *e);
+    virtual bool computeLocationAndPreview(QMouseEvent *e);
+    virtual void showPreview();
+    virtual void clearPreview();
 
 protected slots:
     // RMB menu slots
@@ -209,6 +211,7 @@ protected:
     int m_clickPitch;
     int m_clickHeight;
     int m_clickStaffNo;
+    double m_clickInsertX;
 
     Rosegarden::Accidental m_accidental;
 
@@ -236,6 +239,7 @@ protected:
 					    Rosegarden::timeT endTime,
 					    const Rosegarden::Note &,
 					    int pitch, Rosegarden::Accidental);
+    virtual void showPreview();
 
 protected slots:
     void slotNotesSelected();
