@@ -15,25 +15,7 @@
     <br>
     <h2>How to get Rosegarden</h2>
 
-    <h3>Coming soon: Buy it boxed!</h3>
-
-    <p>Rosegarden will reach 1.0 this summer, and then we intend to
-    make box sets available.  (We're old-fashioned like that, and
-    we've had quite a bit of interest in the prospect.)</p>
-
-    <p>The box will
-    include Rosegarden binary packages for the major Linux
-    distributions, as well as a bootable version that you can run
-    direct from CD, plus plenty of other goodies including a number of
-    other audio applications and plugins and a Windows VST adapter.
-    With a printed manual and support included, this box set should
-    be pretty exciting value.</p>
-
-    <p>What's more, because Rosegarden will always be Free Software
-    licensed under the GNU General Public License, you can depend
-    on the same friendly licensing as always and the right to enjoy
-    your software without intrusive activation schemes or other
-    annoyances.  We see users as allies, not enemies.</p>
+    <p>During this pre-1.0-release development phase, we are only making Rosegarden available in source code form to be compiled after download.  There are some binary packages listed below, but they are all provided by third parties.  We hope to make it easier to obtain Rosegarden when 1.0 is released later this year.</p>
 
     <h2>Downloads</h2>
 
@@ -59,11 +41,11 @@ mailing list.</li></ul>
 
     <h3>Binary packages</h3>
 
-    <p>These are available are all maintained by other people, so it
+    <p>These are all maintained by other people, so it
     may take a short while before they are brought up-to-date with
     each new release of Rosegarden and there's no guarantee of their
     completeness.  Please take a moment to check whether you are
-    really getting the latest release (currently Rosegarden-0.9.6)
+    really getting the latest release (currently Rosegarden-4-0.9.6)
     before you download a binary package.</p>
 
 <h3>Rosegarden for Mandrake</h3>

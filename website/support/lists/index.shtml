@@ -19,21 +19,31 @@
     <p>Much discussion about using, developing and generally living
     with Rosegarden goes on in our two mailing lists.  </p>
 
-    <ul><li>For any discussion about installing or using Rosegarden or
-    about music made with Rosegarden, please use the <a
-    href="http://lists.sourceforge.net/lists/listinfo/rosegarden-user">rosegarden-user
-    mailing list</a>.  Check out the <a
-    href="http://sourceforge.net/mailarchive/forum.php?forum_id=11769">rosegarden-user
-    archives</a> too.  If you're concerned about a problem you're
-    having with Rosegarden, make sure you check the <a
-    href="/support/faq/">Frequently Asked Questions</a> page as well.</li>
+	<h3>User list</h3>
 
-    <li>If you're a developer interested in finding out more about the
-    development of our project and perhaps even joining in, the <a
-    href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">rosegarden-devel
-    mailing list</a> is for you.  There's usually some lively
-    discussion going on.
-    </li></ul>
+    <p>The rosegarden-user list is for any discussion about installing or using Rosegarden, about integrating Rosegarden with other audio software, or about music made with Rosegarden.</p>
+
+    <ul><li><a
+    href="http://lists.sourceforge.net/lists/listinfo/rosegarden-user">rosegarden-user info and subscription</a></li>
+
+    <li><a
+    href="http://sourceforge.net/mailarchive/forum.php?forum=rosegarden-user">rosegarden-user
+    archives</a> at sourceforge.net</li>
+
+    <li><a href="http://news.gmane.org/gmane.comp.audio.rosegarden.user/">rosegarden-user archives</a> at gmane.org.   It's also possible to read and post to rosegarden-user using the GMANE mail-to-NNTP service; the group name is gmane.comp.audio.rosegarden.user.</li></ul>
+
+      <p>Be sure to check the <a
+    href="/resources/faq/">Frequently Asked Questions</a> before posting to rosegarden-user about problems with installation or use.</p>
+
+    <h3>Developer list</h3>
+    <p>The rosegarden-devel list is for developers interested in finding out more about the project and helping out with it, and for any users who simply want to be involved in the development process.  There's usually some lively discussion going on.
+
+    <ul><li><a
+    href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">rosegarden-devel info and subscription</a></li>
+
+    <li><a
+    href="http://sourceforge.net/mailarchive/forum.php?forum=rosegarden-devel">rosegarden-devel
+    archives</a> at sourceforge.net.</li></ul>
 
     </div>
 
