@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<reference-track>
+<reference-segment>
         <event type="timesignature" numerator="6" denominator="8"/>
 	<resync time="400"/>
         <event type="timesignature" numerator="4" denominator="4"/>
-</reference-track>
-<track instrument="1" start="0">
+</reference-segment>
+<segment instrument="1" start="0">
         <group type="beamed">
         <event type="note" duration="quaver" pitch="64"/>
         <event type="note" duration="quaver" pitch="64"/>
@@ -50,5 +50,5 @@
         <event type="note" duration="demisemiquaver" pitch="66"/>
         <event type="note" duration="demisemiquaver" pitch="64"/>
         </group>
-</track>
+</segment>
 </rosegarden-data>

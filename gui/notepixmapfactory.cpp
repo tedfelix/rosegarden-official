@@ -99,7 +99,9 @@ NotePixmapParameters::~NotePixmapParameters()
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
-    m_timeSigFontMetrics(m_timeSigFont)
+    m_timeSigFontMetrics(m_timeSigFont),
+    m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
+    m_tupledCountFontMetrics(m_tupledCountFont)
 {
     if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
     if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);
@@ -115,8 +117,12 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     }
 
     // 8 => 20, 4 => 10
-    m_timeSigFont.setPixelSize((size) * 5 / 2);
+    m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
+
+    // 8 => 12, 4 => 6
+    m_tupledCountFont.setPixelSize(size * 3 / 2);
+    m_tupledCountFontMetrics = QFontMetrics(m_tupledCountFont);
 
     unsigned int x, y;
     m_font->getBorderThickness(x, y);
@@ -252,6 +258,30 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }            
 
+    if (params.m_tupledCount > 0) {
+
+	int lineSpacing =
+	    (int)(params.m_tuplingLineWidth * params.m_tuplingLineGradient);
+	int th = m_tupledCountFontMetrics.height();
+
+	if (params.m_tuplingLineY < 0) {
+
+	    lineSpacing = -lineSpacing;
+	    if (lineSpacing < 0) lineSpacing = 0;
+	    m_above = std::max(m_above, -params.m_tuplingLineY + th/2);
+	    m_above += lineSpacing + 1;
+
+	} else {
+
+	    if (lineSpacing < 0) lineSpacing = 0;
+	    m_below = std::max(m_below, params.m_tuplingLineY + th/2);
+	    m_below += lineSpacing + 1;
+	}
+
+	m_right = std::max(m_right, params.m_tuplingLineWidth);
+    }
+						 
+
     if (params.m_legerLines < 0) {
         m_above = std::max(m_above,
                            (m_noteBodyHeight + 1) *
@@ -335,6 +365,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
                 drawBeams(s1, params, flagCount);
             }
         }
+    }
+
+    if (params.m_tupledCount > 0) {
+	drawTuplingLine(params);
     }
 
     if (params.m_accidental != NoAccidental) {
@@ -643,6 +677,68 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         }
     }
 }
+
+void
+NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
+{
+    int thickness = getStaffLineThickness() * 3 / 2;
+    int countSpace = thickness * 2;
+
+    QString count;
+    count.setNum(params.m_tupledCount);
+    QRect cr = m_tupledCountFontMetrics.boundingRect(count);
+
+    int w = (params.m_tuplingLineWidth - cr.width())/2 - countSpace;
+
+    int startX = m_left + m_noteBodyWidth / 2;
+    int endX = startX + w;
+
+    int startY = params.m_tuplingLineY + m_above + m_noteBodyHeight / 2;
+    int endY = startY + (int)(params.m_tuplingLineGradient * w);
+
+    if (startY == endY) ++thickness;
+
+    int tickOffset = (params.m_tuplingLineY < 0) ? 3 : -3;
+
+    kdDebug(KDEBUG_AREA) << "params.m_tuplingLineWidth = "
+			 << params.m_tuplingLineWidth
+			 << ", cr.width = " << cr.width()
+			 << ", tickOffset = " << tickOffset << endl;
+    kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("
+			 << endX << "," << endY << ")" << endl;
+
+    m_p.drawLine(startX, startY, startX, startY + tickOffset);
+    m_pm.drawLine(startX, startY, startX, startY + tickOffset);
+
+    drawShallowLine(startX, startY, endX, endY, thickness, true);
+
+    m_p.setFont(m_tupledCountFont);
+    m_pm.setFont(m_tupledCountFont);
+
+    int textX = endX + countSpace;
+    int textY = endY + cr.height()/2;
+    kdDebug(KDEBUG_AREA) << "text: (" << textX << "," << textY << ")" << endl;
+
+    m_p.drawText(textX, textY, count);
+    m_pm.drawText(textX, textY, count);
+
+    startX += params.m_tuplingLineWidth - w;
+    endX = startX + w;
+
+    startY += (int)(params.m_tuplingLineGradient *
+		    (params.m_tuplingLineWidth - w));
+    endY = startY + (int)(params.m_tuplingLineGradient * w);
+
+    kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("
+			 << endX << "," << endY << ")" << endl;
+
+
+    drawShallowLine(startX, startY, endX, endY, thickness, true);
+
+    m_p.drawLine(endX, endY, endX, endY + tickOffset);
+    m_pm.drawLine(endX, endY, endX, endY + tickOffset);
+}
+
 
 void
 NotePixmapFactory::drawTie(bool above, int length) 

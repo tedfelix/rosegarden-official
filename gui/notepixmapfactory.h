@@ -159,6 +159,7 @@ protected:
     void drawAccidental(Rosegarden::Accidental);
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
                    int beamCount);
+    void drawTuplingLine(const NotePixmapParameters &params);
     void drawShallowLine(int x0, int y0, int x1, int y1, int thickness,
                          bool smooth);
     void drawTie(bool above, int length);
@@ -169,6 +170,9 @@ protected:
 
     QFont m_timeSigFont;
     QFontMetrics m_timeSigFontMetrics;
+
+    QFont m_tupledCountFont;
+    QFontMetrics m_tupledCountFontMetrics;
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;

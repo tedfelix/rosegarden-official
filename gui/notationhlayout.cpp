@@ -892,6 +892,7 @@ NotationHLayout::positionNote(StaffType &staff,
 
         NotationGroup group(*staff.getViewElementList(), itr, clef, key);
         group.applyBeam(notationStaff);
+        group.applyTuplingLine(notationStaff);
     }
     
     return delta;

@@ -101,6 +101,7 @@ public:
     unsigned int      getAddedEvents()     const { return m_segmentEvents.size(); }
 
     const Rosegarden::Segment &getSegment() const { return m_originalSegment; }
+    Rosegarden::Segment &getSegment() { return m_originalSegment; }
     
 private:
     EventSelection(const EventSelection&);

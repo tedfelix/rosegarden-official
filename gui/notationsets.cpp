@@ -311,13 +311,21 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     
     if ((i = getInitialElement()) != getList().end()) {
 
+	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
+
         try {
             std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
-            if (strcasecmp(t.c_str(), "beamed")) {
+
+	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
+
+            if (!strcasecmp(t.c_str(), "beamed")) {
+	    kdDebug(KDEBUG_AREA) << "(beamed)" << endl;
                 m_type = Beamed;
-            } else if (strcasecmp(t.c_str(), "tupled")) {
+            } else if (!strcasecmp(t.c_str(), "tupled")) {
+	    kdDebug(KDEBUG_AREA) << "(tupled)" << endl;
                 m_type = Tupled;
-            } else if (strcasecmp(t.c_str(), "grace")) {
+            } else if (!strcasecmp(t.c_str(), "grace")) {
+	    kdDebug(KDEBUG_AREA) << "(grace)" << endl;
                 m_type = Grace;
             } else {
                 kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
@@ -513,11 +521,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     if (beam.aboveNotes) {
         beam.startY = min(min(c0 - sl, c1 - nh*2), c2 - sl);
         if (shortestNoteType < Note::Quaver)
-            beam.startY -= nh * (Note::Quaver - shortestNoteType) / 2;
+            beam.startY -= nh * (Note::Quaver - shortestNoteType);
     } else {
         beam.startY = max(max(c0 + sl, c1 + nh*2), c2 + sl);
         if (shortestNoteType < Note::Quaver)
-	    beam.startY += nh * (Note::Quaver - shortestNoteType) / 2;
+	    beam.startY += nh * (Note::Quaver - shortestNoteType);
     }  
 
 /*
@@ -676,9 +684,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
 void 
 NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
-    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << endl;
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
 
     if (m_type != Tupled) return;
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: line is necessary" << endl;
 
     Beam beam(calculateBeam(staff));
 
@@ -687,11 +697,30 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     int initialX = (int)(*initialNote)->getLayoutX();
     int   finalX = (int)(*  finalNote)->getLayoutX();
+    
     int initialY = staff.yCoordOfHeight(height(initialNote));
+    int   finalY = staff.yCoordOfHeight(height(  finalNote));
+/*
+    int dist = (beam.startY - initialY) / 2;
+    int startY = initialY - dist;
+*/
     int   startY = initialY - (beam.startY - initialY);
+    int     endY =
+	startY + (int)((finalX - initialX) * ((double)beam.gradient / 100.0));
 
-    (*initialNote)->event()->set<Int>(TUPLING_LINE_MY_Y, startY);
-    (*initialNote)->event()->set<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
-    (*initialNote)->event()->set<Int>(TUPLING_LINE_GRADIENT, beam.gradient);
+    int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
+    if (startY < initialY) {
+	if (initialY - startY > nh * 3) startY  = initialY - nh * 3;
+	if (  finalY -   endY < nh * 2) startY -= nh * 2 - (finalY - endY);
+    } else {
+	if (startY - initialY > nh * 3) startY  = initialY + nh * 3;
+	if (  endY -   finalY < nh * 2) startY += nh * 2 - (endY - finalY);
+    }	
+    
+    (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_MY_Y, startY);
+    (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
+    (*initialNote)->event()->setMaybe<Int>(TUPLING_LINE_GRADIENT, beam.gradient);
+
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine: my-y: " << startY << ", width: " << (finalX - initialX) << ", gradient: " << beam.gradient << endl;
 }
 
