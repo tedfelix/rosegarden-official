@@ -2412,10 +2412,11 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
 	    beats = dialog.getQuantity(); // beats (or bars)
 	    if (dialog.getMode() == 1)    // bars  (multiply by time sig)
 		beats *= timeSig.getBeatsPerBar();
-/*	    std::cout << "RosegardenGUIApp::slotTempoToSegmentLength - beats = " << beats
-		     << " mode = " << ((dialog.getMode() == 0) ? "bars" : "beats") << std::endl
-		     << " beats per bar = " << timeSig.getBeatsPerBar() << " user quantity = "
-		     << dialog.getQuantity() << " user mode = " << dialog.getMode() << std::endl;*/
+// 	    RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength - beats = " << beats
+//                      << " mode = " << ((dialog.getMode() == 0) ? "bars" : "beats") << endl
+//                      << " beats per bar = " << timeSig.getBeatsPerBar()
+//                      << " user quantity = " << dialog.getQuantity()
+//                      << " user mode = " << dialog.getMode() << endl;
         }
         else
         {

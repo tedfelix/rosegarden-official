@@ -994,8 +994,10 @@ protected:
     KComboBox                *m_adjustTime;
 };
 
-// ask the user to give us information about the selected audio segment for
-// Tempo calculations
+/**
+ * ask the user to give us information about the selected audio segment for
+ * Tempo calculations
+ */
 class BeatsBarsDialog : public KDialogBase
 {
     Q_OBJECT
@@ -1003,23 +1005,13 @@ class BeatsBarsDialog : public KDialogBase
 public:
     BeatsBarsDialog();
     BeatsBarsDialog(QWidget *parent);
-//    ~BeatsBarsDialog();
 
-    int getQuantity() { return m_number; }
-    int getMode()     { return m_item;   } 
+    int getQuantity() { return m_spinBox->value(); }
+    int getMode()     { return m_comboBox->currentItem();   } 
 
 protected:
     QSpinBox  *m_spinBox;
     KComboBox *m_comboBox;
-
-    // see the implementation for commentary about why the remainder of this
-    // class was necessary
-    int m_number;
-    int m_item;
-
-protected slots:
-    void slotSpinChanged(int value);
-    void slotComboChanged(int item);
 };
 
 #endif
