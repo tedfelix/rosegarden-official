@@ -153,3 +153,36 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
     return rmap;
 }
 
+void
+PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
+				  int x0, int y0,
+				  const QPixmap &src)
+{
+    QImage idp(dest.convertToImage());
+    QImage idm(destMask.convertToImage());
+    QImage isp(src.convertToImage());
+    QImage ism(src.mask()->convertToImage());
+
+    for (int y = 0; y < isp.height(); ++y) {
+        for (int x = 0; x < isp.width(); ++x) {
+
+	    if (x >= ism.width()) continue;
+	    if (y >= ism.height()) continue;
+	    
+	    if (ism.depth() == 1 && ism.pixel(x, y) == 0) continue;
+	    if (ism.pixel(x, y) == Qt::white.rgb()) continue;
+
+	    int x1 = x + x0;
+	    int y1 = y + y0;
+	    if (x1 < 0 || x1 >= idp.width()) continue;
+	    if (y1 < 0 || y1 >= idp.height()) continue;
+	    
+	    idp.setPixel(x1, y1, isp.pixel(x, y));
+	    idm.setPixel(x1, y1, 1);
+	}
+    }
+
+    dest.convertFromImage(idp);
+    destMask.convertFromImage(idm);
+}
+

@@ -67,6 +67,19 @@ public:
 
     /// Return a QPixmap that is a mirror image of map (including mask)
     static QPixmap flipHorizontal(const QPixmap &map);
+
+    /**
+     * Using QPainter::drawPixmap to draw one pixmap on another does
+     * not appear to take the mask into account properly.  Background
+     * pixels in the second pixmap erase foreground pixels in the
+     * first one, regardless of whether they're masked or not.  This
+     * function does what I expect.
+     *
+     * Note that the source pixmap _must_ have a mask.
+     */
+    static void drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
+				 int x, int y,
+				 const QPixmap &source);
 };
 
 #endif

@@ -408,6 +408,7 @@ CharName
 NoteStyle::getFlagCharName(int flagCount)
 {
     switch (flagCount) {
+    case 0:  return NoteCharacterNames::FLAG_0; // combining flag
     case 1:  return NoteCharacterNames::FLAG_1;
     case 2:  return NoteCharacterNames::FLAG_2;
     case 3:  return NoteCharacterNames::FLAG_3;

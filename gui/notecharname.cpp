@@ -44,6 +44,11 @@ const CharName TRIANGLE_NOTEHEAD_UP_BLACK = "MUSICAL SYMBOL TRIANGLE NOTEHEAD UP
 const CharName SQUARE_NOTEHEAD_WHITE = "MUSICAL SYMBOL SQUARE NOTEHEAD WHITE";
 const CharName SQUARE_NOTEHEAD_BLACK = "MUSICAL SYMBOL SQUARE NOTEHEAD BLACK";
 
+// FLAG_0 is not a valid Unicode name.  It describes a flag that should
+// be used to add flags to multi-flag notes, rather than used on its own.
+// Unicode has no code point for this, but it's common in real fonts.
+const CharName FLAG_0 = "MUSICAL SYMBOL COMBINING FLAG-0";
+
 const CharName FLAG_1 = "MUSICAL SYMBOL COMBINING FLAG-1";
 const CharName FLAG_2 = "MUSICAL SYMBOL COMBINING FLAG-2";
 const CharName FLAG_3 = "MUSICAL SYMBOL COMBINING FLAG-3";

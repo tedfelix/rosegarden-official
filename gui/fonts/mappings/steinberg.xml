@@ -103,13 +103,13 @@
      and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
-		<scaled y="2.0"/>
+		<scaled y="1.8"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
 		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.8"/>
+		<scaled y="4.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
 		<scaled y="1.1"/>

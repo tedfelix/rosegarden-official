@@ -245,7 +245,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
-
     //!!! TESTING
     {
 /*!!!
@@ -638,6 +637,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     std::vector<int> sizes = NoteFontFactory::getAllSizes(m_fontName);
     m_fontSize = sizes[sizes.size()-1];
 
+    delete m_notePixmapFactory;
+    m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
+    m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
+    
     setBackgroundMode(PaletteBase);
 
     QPaintDeviceMetrics pdm(printer);
@@ -648,7 +651,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
 
-    unsigned int scaleFactor = 3;//!!! need to know
+    double staffGapPt = 8.0;
+    double staffGapPx = staffGapPt * (double)printer->resolution() / 72.0;
+    double scaleFactor = staffGapPx / (double)m_fontSize;
+
     tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
@@ -2227,8 +2233,9 @@ void NotationView::print(KPrinter* printer)
         return;
     }
 
-    //!!! need to know the printer resolution, I guess?
-    unsigned int scaleFactor = 3;
+    double staffGapPt = 8.0; //!!! for now
+    double staffGapPx = staffGapPt * (double)printer->resolution() / 72.0;
+    double scaleFactor = staffGapPx / (double)m_fontSize;
 
     QPaintDeviceMetrics pdm(printer);
 

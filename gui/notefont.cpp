@@ -236,7 +236,16 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("border-y");
 	if (s) borderY = s.toDouble();
 
-	for (int sz = 2; sz <= 80; sz += (sz < 8 ? 1 : 2)) {
+	//!!! need to be able to calculate max size -- checkFont needs
+	//to take a size argument; unfortunately Qt doesn't seem to be
+	//able to report to us when a scalable font was loaded in the
+	//wrong size, so large sizes might be significantly inaccurate
+	//as it just stops scaling up any further at somewhere around
+	//120px.  We could test whether the metric for the black
+	//notehead is noticeably smaller than the notehead should be,
+	//and reject if so?
+	
+	for (int sz = 2; sz <= 50; sz += (sz < 8 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
 	    unsigned int temp, temp1;
@@ -668,6 +677,12 @@ NoteFontMap::getFont(int size, CharName charName, QFont &font, int &charBase)
     font = fi->second;
     font.setPixelSize(fontHeight);
 
+    QFontInfo info(font);
+
+    NOTATION_DEBUG << "NoteFontMap::getFont: loaded font at pixel size "
+		   << fontHeight << ", returned font has pixel size "
+		   << info.pixelSize() << endl;
+
     CharBaseMap::const_iterator bi = m_bases.find(fontId);
     if (bi == m_bases.end()) charBase = 0;
     else charBase = bi->second;
@@ -978,8 +993,13 @@ NoteFont::lookup(CharName charName, bool inverted, QPixmap *&pixmap) const
 {
     PixmapMap::iterator i = m_map->find(charName);
     if (i != m_map->end()) {
-        if (inverted) pixmap = i->second.second;
-        else pixmap = i->second.first;
+        if (inverted) {
+	    pixmap = i->second.second;
+	    if (!pixmap && i->second.first) return false;
+	} else {
+	    pixmap = i->second.first;
+	    if (!pixmap && i->second.second) return false;
+	}
 	return true;
     }
     pixmap = 0;

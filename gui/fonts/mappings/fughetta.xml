@@ -2,29 +2,24 @@
 <!DOCTYPE rosegarden-font-encoding>
 
 <!-- The name here must match the filename in everything except case -->
-<rosegarden-font-encoding name="Petrucci">
+<rosegarden-font-encoding name="Fughetta">
 
 <!-- !!! check copyright -->
 <font-information
-        origin="Petrucci is part of Finale, but other fonts use the same mappings."
-	copyright="Copyright Coda Inc"
+        origin="Created by Blake Hodgetts; freely redistributable.  See http://www.efh.org/~bch/aboutfonts.html"
+	copyright="Copyright 1995-1999 Blake Hodgetts"
         mapped-by="Chris Cannam"
         type="scalable"
 	autocrop="yes"
         smooth="true"/>
 
 <font-requirements>
-	<font-requirement font-id="0" names="petrucci"/>
+	<font-requirement font-id="0" names="fughetta"/>
 	<font-requirement font-id="1" name="times new roman"/> <!-- text font -->
 </font-requirements>
 
 <font-sizes>
 	<font-scale font-height="4.0" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
-        <font-size note-height="4" font-height="16" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="6" font-height="24" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="8" font-height="32" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="10" font-height="40" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="0" border-y="0"/>
-        <font-size note-height="12" font-height="48" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="0" border-y="0"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -45,24 +40,20 @@
 
         <symbol name="MUSICAL SYMBOL BREVE" font-id="0" code="87"/>
         <symbol name="MUSICAL SYMBOL WHOLE NOTE" font-id="0" code="119"/>
-        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" code="250"/>
+        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" code="243"/>
         <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" code="207"/>
 
-	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" code="192"/>
+	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" code="224"/>
 
-<!--	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" font-id="0" code="85"/> -->
-<!--	<symbol name="MUSICAL SYMBOL BREVIS" font-id="0" code="71"/> -->
-<!--	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" font-id="0" code=""/> -->
-<!--
-	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" font-id="0" code="noteheads-2mensural"/>
--->
-	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" font-id="0" code="121"/>
-	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="209"/>
+	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" font-id="0" code="88"/>
+	<symbol name="MUSICAL SYMBOL BREVIS" font-id="0" code="221"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" font-id="0" code="77"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" font-id="0" code="75"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" font-id="0" code="141"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="143"/>
 
         <!-- There's only one Unicode point for each flag; I guess
              you're expected to invert them yourself -->
-        <symbol name="MUSICAL SYMBOL COMBINING FLAG-0"
-                font-id="0" code="75" inversion-code="239"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
                 font-id="0" code="106" inversion-code="74"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
@@ -84,7 +75,7 @@
         <symbol name="MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH REST" font-id="0" code="229"/>
 
         <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" font-id="0" code="46"/>
-
+<!-- ???
 	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" font-id="0" code="62"/>
 	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" font-id="0" code="45"/>
 	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" font-id="0" code="46"/>
@@ -94,12 +85,14 @@
                 font-id="0" code="94" inversion-code="118"/>
 	<symbol name="MUSICAL SYMBOL FERMATA"
 	        font-id="0" code="85" inversion-code="117"/>
+-->
 <!--
 	<symbol name="MUSICAL SYMBOL TR" font-id="0" code="107"/>
 	<symbol name="MUSICAL SYMBOL TURN" font-id="0" code="106"/>
--->
 	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" font-id="0" code="178"/>
 	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" font-id="0" code="179"/>
+-->
+
         <!-- Unicode (and Lilypond) just have a single G clef, they
              don't distinguish between alto and tenor.  We'll have to
              use the same clef with an offset. -->
@@ -112,16 +105,16 @@
      and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
-		<scaled y="1.92"/>
+		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
 		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.3"/>
+		<scaled y="4.8"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-		<scaled y="0.96"/>
+		<scaled y="1.1"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
 		<scaled y="0"/>

@@ -2,11 +2,11 @@
 <!DOCTYPE rosegarden-font-encoding>
 
 <!-- The name here must match the filename in everything except case -->
-<rosegarden-font-encoding name="Petrucci">
+<rosegarden-font-encoding name="Maestro">
 
 <!-- !!! check copyright -->
 <font-information
-        origin="Petrucci is part of Finale, but other fonts use the same mappings."
+        origin="Maestro is part of Finale, but other fonts use the same mappings."
 	copyright="Copyright Coda Inc"
         mapped-by="Chris Cannam"
         type="scalable"
@@ -14,7 +14,7 @@
         smooth="true"/>
 
 <font-requirements>
-	<font-requirement font-id="0" names="petrucci"/>
+	<font-requirement font-id="0" names="maestro"/>
 	<font-requirement font-id="1" name="times new roman"/> <!-- text font -->
 </font-requirements>
 
@@ -61,8 +61,6 @@
 
         <!-- There's only one Unicode point for each flag; I guess
              you're expected to invert them yourself -->
-        <symbol name="MUSICAL SYMBOL COMBINING FLAG-0"
-                font-id="0" code="75" inversion-code="239"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
                 font-id="0" code="106" inversion-code="74"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
@@ -112,16 +110,16 @@
      and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
-		<scaled y="1.92"/>
+		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
 		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.3"/>
+		<scaled y="4.8"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-		<scaled y="0.96"/>
+		<scaled y="1.1"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
 		<scaled y="0"/>
