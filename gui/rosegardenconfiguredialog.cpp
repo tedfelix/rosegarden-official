@@ -2020,8 +2020,7 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 4, 3,
-                                          10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
     layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
     m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
     layout->addWidget(m_path, 0, 1);
@@ -2062,16 +2061,6 @@ AudioConfigurationPage::calculateStats()
             this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
                                            unsigned long)));
     job->readDF(mountPoint);
-
-    // Work out minutes of recordable stereo from centralised sample rate value
-    //
-    Rosegarden::AudioPluginManager *apm = m_doc->getPluginManager();
-
-    if (apm == 0 || apm->getSampleRate() == 0)
-    {
-        m_minutesAtStereo->setText(i18n("<sample rate not available>"));
-        return;
-    }
 }
 
 void
@@ -2088,15 +2077,23 @@ AudioConfigurationPage::slotFoundMountPoint(const QString&,
 
     Rosegarden::AudioPluginManager *apm = m_doc->getPluginManager();
 
+    int sampleRate = 48000;
+    QCString replyType;
+    QByteArray replyData;
+
+    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
+
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        unsigned int result;
+        streamIn >> result;
+        sampleRate = result;
+    }
+
     // Work out total bytes and divide this by the sample rate times the
     // number of channels (2) times the number of bytes per sample (2)
     // times 60 seconds.
     //
-    int sampleRate = apm->getSampleRate();
-    if (sampleRate == 0) // yes, this can happen
-        sampleRate = 44 * 1000; // more sensible default here ?
-    
-    float stereoMins = ( float(kBAvail) ) / 
+    float stereoMins = ( float(kBAvail) * 1024.0 ) / 
                        ( float(sampleRate) * 2.0 * 2.0 * 60.0 );
     QString minsStr;
     minsStr.sprintf("%8.1f", stereoMins);
