@@ -44,7 +44,7 @@ enum Note {
     LastNote = WholeDotted 
 };
 
-enum Accident { NoAccident, Sharp, Flat, Natural };
+enum Accidental { NoAccidental, Sharp, Flat, Natural };
 
 
 /**
@@ -61,7 +61,7 @@ public:
     NotePixmapOffsets();
 
     void offsetsFor(Note,
-                    Accident,
+                    Accidental,
                     bool drawTail,
                     bool stalkGoesUp);
     
@@ -69,18 +69,18 @@ public:
     const QSize&       pixmapSize()     { return m_pixmapSize; }
     const QPoint&      hotSpot()        { return m_hotSpot; }
     const stalkpoints& stalkPoints()    { return m_stalkPoints; }
-    const QPoint&      accidentOffset() { return m_accidentOffset; }
+    const QPoint&      accidentalOffset() { return m_accidentalOffset; }
 
     void setNoteBodySizes(QSize empty, QSize filled);
     void setTailWidth(unsigned int);
-    void setAccidentsWidth(unsigned int sharp,
+    void setAccidentalsWidth(unsigned int sharp,
                            unsigned int flat,
                            unsigned int natural);
 
 protected:
 
     void computePixmapSize();
-    void computeAccidentAndStalkSize();
+    void computeAccidentalAndStalkSize();
     void computeBodyOffset();
 
     QSize m_noteBodyEmptySize;
@@ -92,17 +92,17 @@ protected:
     unsigned int m_naturalWidth;
 
     Note m_note;
-    Accident m_accident;
+    Accidental m_accidental;
     bool m_drawTail;
     bool m_stalkGoesUp;
     bool m_noteHasStalk;
 
     QPoint m_bodyOffset;
     QPoint m_hotSpot;
-    QPoint m_accidentOffset;
+    QPoint m_accidentalOffset;
     QSize m_bodySize;
     QSize m_pixmapSize;
-    QSize m_accidentStalkSize;
+    QSize m_accidentalStalkSize;
     
     stalkpoints m_stalkPoints;
 };
@@ -131,7 +131,7 @@ public:
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
     QCanvasPixmap makeNotePixmap(Note note,
-                                 Accident accident = NoAccident,
+                                 Accidental accidental = NoAccidental,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true);
 
@@ -153,7 +153,7 @@ protected:
     const QPixmap* tailDown(Note note) const;
 
     void drawStalk(Note note, bool drawTail, bool stalkGoesUp);
-    void drawAccident(Accident, bool stalkGoesUp);
+    void drawAccidental(Accidental, bool stalkGoesUp);
 
     void createPixmapAndMask();
 
@@ -172,9 +172,9 @@ protected:
     QPixmap m_noteBodyFilled;
     QPixmap m_noteBodyEmpty;
 
-    QPixmap m_accidentSharp;
-    QPixmap m_accidentFlat;
-    QPixmap m_accidentNatural;
+    QPixmap m_accidentalSharp;
+    QPixmap m_accidentalFlat;
+    QPixmap m_accidentalNatural;
 
     vector<QPixmap*> m_tailsUp;
     vector<QPixmap*> m_tailsDown;

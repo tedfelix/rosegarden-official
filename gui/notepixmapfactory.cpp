@@ -33,52 +33,52 @@ NotePixmapOffsets::NotePixmapOffsets()
 
 void
 NotePixmapOffsets::offsetsFor(Note note,
-                              Accident accident,
+                              Accidental accidental,
                               bool drawTail,
                               bool stalkGoesUp)
 {
     m_note = note;
-    m_accident = accident;
+    m_accidental = accidental;
     m_drawTail = drawTail;
     m_stalkGoesUp = stalkGoesUp;
     m_noteHasStalk = note < Whole;
 
     m_bodyOffset.setX(0);     m_bodyOffset.setY(0);
     m_hotSpot.setX(0);        m_hotSpot.setY(0);
-    m_accidentOffset.setX(0); m_accidentOffset.setY(0);
+    m_accidentalOffset.setX(0); m_accidentalOffset.setY(0);
     
     if (note > QuarterDotted)
         m_bodySize = m_noteBodyEmptySize;
     else
         m_bodySize = m_noteBodyFilledSize;
 
-    computeAccidentAndStalkSize();
+    computeAccidentalAndStalkSize();
     computePixmapSize();
     computeBodyOffset();
 }
 
 void
-NotePixmapOffsets::computeAccidentAndStalkSize()
+NotePixmapOffsets::computeAccidentalAndStalkSize()
 {
     unsigned int tailOffset = (m_note < Quarter && m_stalkGoesUp) ? m_tailWidth : 0;
     unsigned int totalXOffset = tailOffset,
         totalYOffset = 0;
     
-    if (m_accident == Sharp) {
+    if (m_accidental == Sharp) {
         totalXOffset += m_sharpWidth + 1;
         totalYOffset = 3;
     }
-    else if (m_accident == Flat) {
+    else if (m_accidental == Flat) {
         totalXOffset += m_flatWidth + 1;
         if (!m_noteHasStalk || !m_stalkGoesUp) totalYOffset = 4;
     }
-    else if (m_accident == Natural) {
+    else if (m_accidental == Natural) {
         totalXOffset += m_naturalWidth + 1;
         totalYOffset = 3;
     }
 
-    m_accidentStalkSize.setWidth(totalXOffset);
-    m_accidentStalkSize.setHeight(totalYOffset);
+    m_accidentalStalkSize.setWidth(totalXOffset);
+    m_accidentalStalkSize.setHeight(totalYOffset);
 }
 
 
@@ -86,13 +86,13 @@ NotePixmapOffsets::computeAccidentAndStalkSize()
 void
 NotePixmapOffsets::computePixmapSize()
 {
-    m_pixmapSize.setWidth(m_bodySize.width() + m_accidentStalkSize.width());
+    m_pixmapSize.setWidth(m_bodySize.width() + m_accidentalStalkSize.width());
 
     if (m_noteHasStalk) {
 
         m_pixmapSize.setHeight(m_bodySize.height() / 2 +
                                Staff::stalkLen +
-                               m_accidentStalkSize.height());
+                               m_accidentalStalkSize.height());
 
         if (m_note < Quarter) {
 
@@ -111,13 +111,13 @@ NotePixmapOffsets::computePixmapSize()
         
     }
     else {
-        m_pixmapSize.setHeight(m_bodySize.height() + m_accidentStalkSize.height());
+        m_pixmapSize.setHeight(m_bodySize.height() + m_accidentalStalkSize.height());
     }
 
 
-    switch (m_accident) {
+    switch (m_accidental) {
         
-    case NoAccident:
+    case NoAccidental:
         break;
         
     case Sharp:
@@ -139,7 +139,7 @@ NotePixmapOffsets::computePixmapSize()
 void
 NotePixmapOffsets::computeBodyOffset()
 {
-    // Simple case : no accident - Y coord is valid for all cases
+    // Simple case : no accidental - Y coord is valid for all cases
     //
     if (m_stalkGoesUp) {
 
@@ -160,9 +160,9 @@ NotePixmapOffsets::computeBodyOffset()
         m_stalkPoints.second.setY(m_pixmapSize.height());
     }   
 
-    switch (m_accident) {
+    switch (m_accidental) {
         
-    case NoAccident:
+    case NoAccidental:
         break;
         
     case Sharp:
@@ -179,7 +179,7 @@ NotePixmapOffsets::computeBodyOffset()
             m_stalkPoints.first.ry() += 3;
         }
 
-        m_accidentOffset.setY(m_bodyOffset.y() - 3);
+        m_accidentalOffset.setY(m_bodyOffset.y() - 3);
         break;
         
     case Flat:
@@ -192,7 +192,7 @@ NotePixmapOffsets::computeBodyOffset()
             m_stalkPoints.first.ry() += 4;
         }
 
-        m_accidentOffset.setY(m_bodyOffset.y() - 5);
+        m_accidentalOffset.setY(m_bodyOffset.y() - 5);
         break;
         
     case Natural:
@@ -209,12 +209,12 @@ NotePixmapOffsets::computeBodyOffset()
             m_stalkPoints.first.ry() += 3;
         }
 
-        m_accidentOffset.setY(m_bodyOffset.y() - 3);
+        m_accidentalOffset.setY(m_bodyOffset.y() - 3);
         break;
 
     }
 
-    if (m_accident != NoAccident)
+    if (m_accidental != NoAccidental)
         m_hotSpot.setX(m_bodyOffset.x());
     
 
@@ -242,7 +242,7 @@ NotePixmapOffsets::setTailWidth(unsigned int s)
 }
 
 void
-NotePixmapOffsets::setAccidentsWidth(unsigned int sharp,
+NotePixmapOffsets::setAccidentalsWidth(unsigned int sharp,
                                      unsigned int flat,
                                      unsigned int natural)
 {
@@ -260,9 +260,9 @@ NotePixmapFactory::NotePixmapFactory()
       m_tailWidth(0),
       m_noteBodyFilled("pixmaps/note-bodyfilled.xpm"),
       m_noteBodyEmpty("pixmaps/note-bodyempty.xpm"),
-      m_accidentSharp("pixmaps/notemod-sharp.xpm"),
-      m_accidentFlat("pixmaps/notemod-flat.xpm"),
-      m_accidentNatural("pixmaps/notemod-natural.xpm")
+      m_accidentalSharp("pixmaps/notemod-sharp.xpm"),
+      m_accidentalFlat("pixmaps/notemod-flat.xpm"),
+      m_accidentalNatural("pixmaps/notemod-natural.xpm")
 {
     // Yes, this is not a mistake. Don't ask me why - Chris named those
     QString pixmapTailUpFileName("pixmaps/tail-up-%1.xpm"),
@@ -294,9 +294,9 @@ NotePixmapFactory::NotePixmapFactory()
                                m_noteBodyFilled.size());
 
     m_offsets.setTailWidth(m_tailsUp[0]->width());
-    m_offsets.setAccidentsWidth(m_accidentSharp.width(),
-                                m_accidentFlat.width(),
-                                m_accidentNatural.width());
+    m_offsets.setAccidentalsWidth(m_accidentalSharp.width(),
+                                m_accidentalFlat.width(),
+                                m_accidentalNatural.width());
     
 }
 
@@ -316,12 +316,12 @@ NotePixmapFactory::~NotePixmapFactory()
 
 QCanvasPixmap
 NotePixmapFactory::makeNotePixmap(Note note,
-                                  Accident accident,
+                                  Accidental accidental,
                                   bool drawTail,
                                   bool stalkGoesUp)
 {
 
-    m_offsets.offsetsFor(note, accident, drawTail, stalkGoesUp);
+    m_offsets.offsetsFor(note, accidental, drawTail, stalkGoesUp);
 
 
     if (note > LastNote) {
@@ -348,10 +348,10 @@ NotePixmapFactory::makeNotePixmap(Note note,
     if (noteHasStalk)
         drawStalk(note, drawTail, stalkGoesUp);
 
-    // paint accident (if needed)
+    // paint accidental (if needed)
     //
-    if (accident != NoAccident)
-        drawAccident(accident, stalkGoesUp);
+    if (accidental != NoAccidental)
+        drawAccidental(accidental, stalkGoesUp);
     
     //#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
 #ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
@@ -535,39 +535,39 @@ NotePixmapFactory::drawStalk(Note note,
 }
 
 void
-NotePixmapFactory::drawAccident(Accident accident, bool stalkGoesUp)
+NotePixmapFactory::drawAccidental(Accidental accidental, bool stalkGoesUp)
 {
-    const QPixmap *accidentPixmap = 0;
+    const QPixmap *accidentalPixmap = 0;
 
-    switch (accident) {
+    switch (accidental) {
 
-    case NoAccident:
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawAccident() called with NoAccident"
+    case NoAccidental:
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawAccidental() called with NoAccidental"
                              << endl;
-        KMessageBox::error(0, "NotePixmapFactory::drawAccident() called with NoAccident");
+        KMessageBox::error(0, "NotePixmapFactory::drawAccidental() called with NoAccidental");
         return;
         break;
         
     case Sharp:
-        accidentPixmap = &m_accidentSharp;
+        accidentalPixmap = &m_accidentalSharp;
         break;
 
     case Flat:
-        accidentPixmap = &m_accidentFlat;
+        accidentalPixmap = &m_accidentalFlat;
         break;
 
     case Natural:
-        accidentPixmap = &m_accidentNatural;
+        accidentalPixmap = &m_accidentalNatural;
         break;
     }
 
-    m_p.drawPixmap(m_offsets.accidentOffset().x(),
-                   m_offsets.accidentOffset().y(),
-                   *accidentPixmap);
+    m_p.drawPixmap(m_offsets.accidentalOffset().x(),
+                   m_offsets.accidentalOffset().y(),
+                   *accidentalPixmap);
 
-    m_pm.drawPixmap(m_offsets.accidentOffset().x(),
-                    m_offsets.accidentOffset().y(),
-                    *(accidentPixmap->mask()));
+    m_pm.drawPixmap(m_offsets.accidentalOffset().x(),
+                    m_offsets.accidentalOffset().y(),
+                    *(accidentalPixmap->mask()));
     
 }
 
