@@ -134,8 +134,8 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
             // aligned with the line above the middle line; the rest
             // are aligned with the middle line
 
-            int noteType = el->event()->get<Int>(NOTE_TYPE);
-            if (noteType > Note::Minim) {
+            if (el->event()->has(NOTE_TYPE) &&
+		el->event()->get<Int>(NOTE_TYPE) > Note::Minim) {
                 el->setLayoutY(staff.getLayoutYForHeight(6) + displacedY);
             } else {
                 el->setLayoutY(staff.getLayoutYForHeight(4) + displacedY);
@@ -268,8 +268,8 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
 	    } else if (el->event()->isa(Text::EventType)) {
 
-		std::string type =
-		    el->event()->get<String>(Text::TextTypePropertyName);
+		std::string type = Text::UnspecifiedType;
+		el->event()->get<String>(Text::TextTypePropertyName, type);
 
 		if (type == Text::Dynamic ||
 		    type == Text::LocalDirection ||
@@ -284,20 +284,24 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
             } else if (el->event()->isa(Indication::EventType)) {
 
-		std::string indicationType =
-		    el->event()->get<String>(Indication::IndicationTypePropertyName);
+		try {
+		    std::string indicationType =
+			el->event()->get<String>(Indication::IndicationTypePropertyName);
 
-		if (indicationType == Indication::Slur ||
-		    indicationType == Indication::PhrasingSlur) {
-		    getSlurList(staff).push_back(i);
-		}
-
-		if (indicationType == Indication::OttavaUp ||
-		    indicationType == Indication::QuindicesimaUp) {
-		    el->setLayoutY(staff.getLayoutYForHeight(15) + displacedY);
-		} else {
+		    if (indicationType == Indication::Slur ||
+			indicationType == Indication::PhrasingSlur) {
+			getSlurList(staff).push_back(i);
+		    }
+		    
+		    if (indicationType == Indication::OttavaUp ||
+			indicationType == Indication::QuindicesimaUp) {
+			el->setLayoutY(staff.getLayoutYForHeight(15) + displacedY);
+		    } else {
+			el->setLayoutY(staff.getLayoutYForHeight(-9) + displacedY);
+		    }
+		} catch (...) {
 		    el->setLayoutY(staff.getLayoutYForHeight(-9) + displacedY);
-		}
+		}		    
 	    }
         }
     }

@@ -435,7 +435,9 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	NOTATION_DEBUG << "type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime()
 		  << endl;
 
-	if (!(*i)->isa(Text::EventType)) continue;
+	if (!(*i)->isa(Text::EventType) ||
+	    !(*i)->has(Text::TextPropertyName) ||
+	    !(*i)->has(Text::TextTypePropertyName)) continue;
 
 	std::string text((*i)->get<String>(Text::TextPropertyName));
 

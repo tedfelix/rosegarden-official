@@ -310,7 +310,8 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     if (heightPer < 2) heightPer = 2;
 
     double myOrigin = yorigin + (heightPer * above);
-    int myPitch = (*node->node)->get<Int>(PITCH);
+    long myPitch = 60;
+    (*node->node)->get<Int>(PITCH, myPitch);
 
     long velocity = 100;
     (*node->node)->get<Int>(Rosegarden::BaseProperties::VELOCITY, velocity);
@@ -370,10 +371,10 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     for (EventTreeNode::NodeList::iterator i = node->children.begin();
 	 i != node->children.end(); ++i) {
 
-	//!!! need to ensure nothing goes in the tree that doesn't
-	// have a pitch, or else make these calls safe
+	long nodePitch = myPitch;
+	(*(*i)->note)->get<Int>(PITCH, nodePitch);
 
-	if ((*(*i)->node)->get<Int>(PITCH) < myPitch) {
+	if (nodePitch < myPitch) {
 
 	    drawNode(paint, vc, *i,
 		     height - heightPer - myOrigin, myOrigin + heightPer);
