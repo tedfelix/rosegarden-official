@@ -444,8 +444,9 @@ Composition::calculateBarPositions() const
 	bool haveTimeSig = (s > 0 || section0isTimeSig);
 
 	for (time = start; time < finish; time += sectionTimes[s]) {
-	    addNewBar(time, sectionTimes[s],
-		      barNo++, haveTimeSig);
+	    timeT thisBar = sectionTimes[s];
+	    if (time + thisBar > finish) thisBar = finish - time;
+	    addNewBar(time, thisBar, barNo++, haveTimeSig);
 	    haveTimeSig = false;
 #ifdef DEBUG_BAR_STUFF
 //            std::cerr << "added bar at " << time << std::endl;
