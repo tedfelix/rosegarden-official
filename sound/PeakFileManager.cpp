@@ -257,6 +257,12 @@ PeakFileManager::getPreview(AudioFile *audioFile,
 {
     std::vector<float> rV;
 
+    // If we've got no channels then the audio file hasn't
+    // completed (recording) - so don't generate a preview
+    //
+    if (audioFile->getChannels() == 0)
+        return rV;
+
     if (audioFile->getType() == WAV)
     {
         PeakFile *peakFile = getPeakFile(audioFile);

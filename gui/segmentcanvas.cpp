@@ -178,7 +178,15 @@ SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
 
 void SegmentAudioPreview::drawShape(QPainter& painter)
 {
+    // Fetch new set of values
+    //
     updatePreview();
+
+    // If there's nothing to draw then don't draw it
+    //
+    if (m_values.size() == 0)
+        return;
+
     painter.save();
 
     painter.translate(rect().x(), rect().y());
@@ -259,6 +267,12 @@ void SegmentAudioPreview::updatePreview()
                        audioStartTime,
                        audioEndTime,
                        rect().width());
+
+    // If we haven't inserted the audio file yet we're probably
+    // just still recording it.
+    //
+    if (m_values.size() == 0)
+        return;
 
     m_channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
@@ -841,14 +855,20 @@ void SegmentCanvas::updateAllSegmentItems()
         if (item) {
             Segment* segment = item->getSegment();
 
-            if (!segment->getComposition()) { // this segment has been deleted
-		removeFromSelection(segment);
-                delete item;
-                foundOneSegmentDeleted = true;
-            }
-            else {
-                item->recalculateRectangle(true);
-                currentSegments.push_back(segment);
+            // Sometimes we have SegmentItems without Segments - while
+            // recording for example.
+            //
+            if (segment) {
+                if (!segment->getComposition()) {
+                    // this segment has been deleted
+		    removeFromSelection(segment);
+                    delete item;
+                    foundOneSegmentDeleted = true;
+                }
+                else {
+                    item->recalculateRectangle(true);
+                    currentSegments.push_back(segment);
+                }
             }
         }
     }

@@ -545,8 +545,10 @@ AudioFileManager::generatePreviews(Progress *progress)
     //
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
         if (!m_peakManager.hasValidPeaks(*it))
             m_peakManager.generatePeaks(*it, progress,  1);
+    }
 }
 
 

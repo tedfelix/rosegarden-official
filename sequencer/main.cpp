@@ -221,6 +221,11 @@ int main(int argc, char *argv[])
                         // and return it to the gui
                         //
                         roseSeq->processRecordedAudio();
+
+                        // Still process these so we can send up
+                        // audio levels as MappedEvents
+                        //
+                        roseSeq->processAsynchronousEvents();
                     }
                     break;
 
