@@ -58,7 +58,8 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_sendAlive(true),
     m_guiCount(0),       // how many GUIs have we known?
     m_clearToSend(false),
-    m_studio(new Rosegarden::MappedStudio())
+    m_studio(new Rosegarden::MappedStudio()),
+    m_oldSliceSize(0, 0)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -92,6 +93,8 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     //
     m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
 
+    m_sliceTimer = new QTimer(this);
+    connect(m_sliceTimer, SIGNAL(timeout()), this, SLOT(slotRevertSliceSize()));
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
@@ -206,8 +209,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     // Loop timing
     //
-    //QTime t;
-    //t.start();
+    QTime t;
+    t.start();
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
@@ -223,7 +226,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     }
     else
     {
-        //cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
+        cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
 
         QDataStream reply(replyData, IO_ReadOnly);
         if (replyType == "Rosegarden::MappedComposition")
@@ -1140,17 +1143,55 @@ RosegardenSequencerApp::checkForNewClients()
 void
 RosegardenSequencerApp::setSliceSize(long timeSec, long timeUSec)
 {
-    SEQUENCER_DEBUG << "set slice size = " << timeSec << "secs" << endl;
+    int msecs = (timeSec * 1000) + (timeUSec / 1000);
+    SEQUENCER_DEBUG << "set slice size = " << msecs << "ms" << endl;
+
     Rosegarden::RealTime newReadAhead(timeSec, timeUSec);
 
+    m_readAhead = newReadAhead;
+
+    /*
     if (newReadAhead > m_readAhead)
-        m_readAhead = newReadAhead; // extending slice
     else // shrinking slice, we have to refetch sooner
     {
         // for the moment we just keep it simple
         m_readAhead = newReadAhead;
     }
+    */
 }
 
+// Set temporary slice size.  The timer reverts slice size half way
+// through this slice.
+//
+void
+RosegardenSequencerApp::setTemporarySliceSize(long timeSec, long timeUSec)
+{
+    Rosegarden::RealTime newReadAhead(timeSec, timeUSec);
+    int msecs = (timeSec * 1000) + (timeUSec / 1000);
+
+    if (m_sliceTimer->isActive())
+    {
+        m_readAhead = newReadAhead;
+        m_sliceTimer->changeInterval(msecs / 2);
+        SEQUENCER_DEBUG << "set temporary slice size = "
+                        << msecs << "ms" << endl;
+    }
+    else
+    {
+        m_oldSliceSize = m_readAhead;
+        m_readAhead = newReadAhead;
+        m_sliceTimer->start(msecs / 2, true);
+        SEQUENCER_DEBUG << "set temporary slice size = "
+                        << msecs << "ms" << endl;
+    }
+}
+
+void
+RosegardenSequencerApp::slotRevertSliceSize()
+{
+    SEQUENCER_DEBUG << "revert temporary slice size" << endl;
+    m_readAhead = m_oldSliceSize;
+    m_oldSliceSize = Rosegarden::RealTime(0, 0);
+}
 
 

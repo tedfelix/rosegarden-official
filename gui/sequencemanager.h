@@ -132,6 +132,7 @@ public:
     // completed.
     //
     void setSequencerSliceSize(const RealTime &time);
+    void setTemporarySequencerSliceSize(const RealTime &time);
 
     // Slice fetched
     //

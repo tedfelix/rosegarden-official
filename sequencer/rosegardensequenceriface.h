@@ -193,6 +193,11 @@ public:
     //
     virtual void setSliceSize(long timeSec, long timeUSec) = 0;
 
+    // Set the sequencer slice size temporarily (only for the length)
+    // of the new slice before reverting.
+    //
+    virtual void setTemporarySliceSize(long timeSec, long timeUSec) = 0;
+
 
 };
 

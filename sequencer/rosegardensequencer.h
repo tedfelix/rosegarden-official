@@ -43,6 +43,8 @@
 #include <kmainwindow.h>
 #include <kaccel.h>
 
+#include <qtimer.h>
+
 #include "Composition.h"
 #include "rosegardendcop.h"
 #include "rosegardensequenceriface.h"
@@ -231,6 +233,10 @@ public:
     //
     virtual void setSliceSize(long timeSec, long timeUSec);
 
+    // Temporarily set slice size (for length of this slice)
+    //
+    virtual void setTemporarySliceSize(long timeSec, long timeUSec);
+
     //
     //
     //
@@ -306,7 +312,10 @@ public:
     //
     bool checkForNewClients();
 
-private:
+public slots:
+    void slotRevertSliceSize();
+
+protected:
 
     // get events whilst handling loop
     //
@@ -381,6 +390,10 @@ private:
     //
     Rosegarden::MappedStudio *m_studio;
 
+    // Slice revert storage
+    //
+    Rosegarden::RealTime      m_oldSliceSize;
+    QTimer                   *m_sliceTimer;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

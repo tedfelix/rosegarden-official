@@ -315,7 +315,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	return;
     }
 
-    // Tell the sequencer to take a big suck
+    // Tell the sequencer to take a big suck of events
+    //
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
     sM->setSequencerSliceSize(Rosegarden::RealTime(5, 0));
 
@@ -396,6 +397,11 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	return;
     }
 
+    // Tell the sequencer to take a big suck of events
+    //
+    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
+    sM->setSequencerSliceSize(Rosegarden::RealTime(5, 0));
+
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
                                             this);
@@ -432,6 +438,10 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
         matrixView->updateView();
     }
     matrixView->show();
+
+    // Revert slice size
+    //
+    sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 }
 
 void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
@@ -457,6 +467,11 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 	return;
     }
 
+    // Tell the sequencer to take a big suck of events
+    //
+    Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
+    sM->setSequencerSliceSize(Rosegarden::RealTime(2, 0));
+
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
@@ -469,6 +484,10 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
         par->plugAccelerators(eventView, eventView->getAccelerators());
 
     eventView->show();
+
+    // Revert slice size
+    //
+    sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 }
 
 void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)

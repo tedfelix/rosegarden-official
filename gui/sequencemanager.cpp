@@ -91,7 +91,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     m_mC.setEndTime(sliceEnd);
 
     if (m_transportStatus == STOPPING)
-      return &m_mC; // return empty
+    {
+        if (!m_sliceFetched) m_sliceFetched = true;
+        return &m_mC; // return empty
+    }
 
     timeT sliceStartElapsed =
               comp.getElapsedTimeForRealTime(m_mC.getStartTime());
@@ -1843,13 +1846,14 @@ SequenceManager::setSequencerSliceSize(const RealTime &time)
             return;
         }
 
-        SEQMAN_DEBUG << "set sequencer slice = " << time.sec
-                     << "s + " << time.usec << "us" << endl;
-
         // Ok, set this token and wait for the sequencer to fetch a
         // new slice.
         //
         m_sliceFetched = false;
+
+        int msecs = (time.sec * 1000) + (time.usec / 1000);
+        SEQMAN_DEBUG << "set sequencer slice = " << msecs
+                     << "ms" << endl;
 
         // Spin until the sequencer has got the next slice
         //
@@ -1858,6 +1862,60 @@ SequenceManager::setSequencerSliceSize(const RealTime &time)
     }
 }
 
+// Set a temporary slice size.  Wait until this slice is fetched
+// before continuing.  The sequencer will then revert slice size 
+// to original value for subsequent fetches.
+//
+void
+SequenceManager::setTemporarySequencerSliceSize(const RealTime &time)
+{
+    if (m_transportStatus == PLAYING ||
+        m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO )
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        KConfig* config = kapp->config();
+        config->setGroup("Latency Options");
+
+        if (time == RealTime(0, 0)) // reset to default values
+        {
+            streamOut << config->readLongNumEntry("readaheadsec", 0);
+            streamOut << config->readLongNumEntry("readaheadusec", 40000);
+        }
+        else
+        {
+            streamOut << time.sec;
+            streamOut << time.usec;
+        }
+
+
+        if (!kapp->dcopClient()->
+                send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                     ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                     "setTemporarySliceSize(long int, long int)",
+                     data))
+        {
+            SEQMAN_DEBUG << "couldn't set temporary sequencer slice" << endl;
+            return;
+        }
+
+        // Ok, set this token and wait for the sequencer to fetch a
+        // new slice.
+        //
+        m_sliceFetched = false;
+
+        int msecs = (time.sec * 1000) + (time.usec / 1000);
+        SEQMAN_DEBUG << "set temporary sequencer slice = " << msecs
+                     << "ms" << endl;
+
+        // Spin until the sequencer has got the next slice
+        //
+        while (m_sliceFetched == false)
+            kapp->processEvents();
+    }
+}
 
 }
 
