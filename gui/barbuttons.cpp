@@ -157,22 +157,22 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
     QPainter painter(this);
     painter.setFont(*m_barFont);
 
-    int firstBar = m_rulerScale->getFirstVisibleBar(),
-	 lastBar = m_rulerScale->getLastVisibleBar();
+    QRect clipRect = visibleRect();
+
+    int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
+    int  lastBar = m_rulerScale->getLastVisibleBar();
 
     painter.drawLine(m_currentXOffset, 0, visibleRect().width(), 0);
-
-    QRect clipRect = visibleRect();
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
 	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
-	if (x > clipRect.x() + clipRect.width()) continue;
+	if (x > clipRect.x() + clipRect.width()) break;
 
-        double width = m_rulerScale->getBarWidth(i);
-        if (width == 0) continue;
+//        double width = m_rulerScale->getBarWidth(i);
+//        if (width == 0) continue;
 
-	if (x + width < clipRect.x()) continue;
+//	if (x + width < clipRect.x()) continue;
 
 	painter.drawLine(x, 0, x, m_barHeight);
 	painter.drawText(x + 4, 12, QString("%1").arg(i));
