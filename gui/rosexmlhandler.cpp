@@ -427,6 +427,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         else // for the moment we default
             m_currentSegment = new Segment(Rosegarden::Segment::Internal);
     
+        QString repeatStr = atts.value("repeat");
+        if (repeatStr.lower() == "true") {
+            m_currentSegment->setRepeating(true);
+        }
+
         // fill in the label
         QString labelStr = atts.value("label");
         if (labelStr)

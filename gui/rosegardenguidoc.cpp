@@ -376,6 +376,9 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         outStream << "label=\"" <<
 	    strtoqstr(Rosegarden::XmlExportable::encode(segment->getLabel()));
 
+        if (segment->isRepeating())
+            outStream << "\" repeat=\"true";
+
 	const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
 	if (endMarker) {
 	    outStream << "\" endmarker=\"" << *endMarker;
