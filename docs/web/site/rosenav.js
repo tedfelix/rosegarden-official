@@ -8,7 +8,6 @@ var zones = [
 { "v":"4", "name":"history",     "label":"history",      "url":"history.html" },
 { "v":"4", "name":"development", "label":"development",  "url":"development.html" },
 { "v":"4", "name":"faq",         "label":"faq",          "url":"faq.html" },
-{ "v":"4", "name":"tutorial",    "label":"tutorial",          "url":"http://rosegarden.sourceforge.net/tutorial/rosegarden-tutor.html" },
 { "v":"4", "name":"list",        "label":"mailing-list", "url":"list.html" },
 { "v":"4", "name":"contact",         "label":"contact",          "url":"authors.html" },
 { "v":"2.1", "name":"index",       "label":"home",         "url":"index.html" },
