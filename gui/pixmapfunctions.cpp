@@ -23,6 +23,7 @@
 #include "rosedebug.h"
 
 #include <qimage.h>
+#include <qpainter.h>
 #include <iostream>
 
 
@@ -153,6 +154,41 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
 
     return rmap;
 }
+
+std::pair<QPixmap, QPixmap>
+PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
+{
+    QPixmap left(x, pixmap.height(), pixmap.depth());
+    QBitmap leftMask(left.width(), left.height());
+    
+    QPixmap right(pixmap.width() - x, pixmap.height(), pixmap.depth());
+    QBitmap rightMask(right.width(), right.height());
+    
+    QPainter paint;
+    
+    paint.begin(&left);
+    paint.drawPixmap(0, 0, pixmap, 0, 0, left.width(), left.height());
+    paint.end();
+    
+    paint.begin(&leftMask); 
+    paint.drawPixmap(0, 0, *pixmap.mask(), 0, 0, left.width(), left.height());
+    paint.end();
+    
+    left.setMask(leftMask);
+    
+    paint.begin(&right);
+    paint.drawPixmap(0, 0, pixmap, left.width(), 0, right.width(), right.height());
+    paint.end();
+    
+    paint.begin(&rightMask); 
+    paint.drawPixmap(0, 0, *pixmap.mask(), left.width(), 0, right.width(), right.height());
+    paint.end();
+    
+    right.setMask(rightMask);
+
+    return std::pair<QPixmap, QPixmap>(left, right);
+}
+
 
 void
 PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,

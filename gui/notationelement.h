@@ -90,22 +90,30 @@ public:
     /**
      * Sets the canvas item representing this notation element on screen.
      *
-     * The canvas item will have its coords set to the ones of the
-     * notation element (as set by the H/V layout) + the offset
-     *
      * NOTE: The object takes ownership of its canvas item.
      */
-    void setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset);
+    void setCanvasItem(QCanvasItem *e, double canvasX, double canvasY);
 
+    /**
+     * Add an extra canvas item associated with this element, for
+     * example where an element has been split across two or more
+     * staff rows.
+     * 
+     * The element will take ownership of these canvas items and
+     * delete them when it deletes the main canvas item.
+     */
+    void addCanvasItem(QCanvasItem *e, double canvasX, double canvasY);
+
+    /**
+     * Remove the main canvas item and any additional ones.
+     */
     void removeCanvasItem();
 
     /**
      * Reset the position of the canvas item (which is assumed to
-     * exist already) to the stored x and y coordinates with the given
-     * offset.  For use when x and y have changed, as well as when
-     * the offset has changed.
+     * exist already).
      */
-    void reposition(double dxoffset, double dyoffset);
+    void reposition(double canvasX, double canvasY);
 
     /**
      * Return true if setCanvasItem has been called more recently
@@ -129,6 +137,9 @@ protected:
     bool m_recentlyRegenerated;
 
     QCanvasItem *m_canvasItem;
+
+    typedef std::vector<QCanvasItem *> ItemList;
+    ItemList *m_extraItems;
 };
 
 typedef Rosegarden::ViewElementList NotationElementList;

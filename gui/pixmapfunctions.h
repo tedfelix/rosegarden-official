@@ -24,6 +24,7 @@
 
 #include <qpixmap.h>
 #include <qbitmap.h>
+#include <utility> // pair
 
 class PixmapFunctions
 {
@@ -67,6 +68,9 @@ public:
 
     /// Return a QPixmap that is a mirror image of map (including mask)
     static QPixmap flipHorizontal(const QPixmap &map);
+
+    /// Return left and right parts of the QPixmap
+    static std::pair<QPixmap, QPixmap> splitPixmap(const QPixmap &original, int x);
 
     /**
      * Using QPainter::drawPixmap to draw one pixmap on another does

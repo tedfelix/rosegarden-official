@@ -43,7 +43,8 @@ using Rosegarden::timeT;
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
       m_recentlyRegenerated(false),
-      m_canvasItem(0)
+      m_canvasItem(0),
+      m_extraItems(0)
 {
 //     NOTATION_DEBUG << "new NotationElement "
 //                          << this << " wrapping " << event << endl;
@@ -51,10 +52,7 @@ NotationElement::NotationElement(Event *event)
 
 NotationElement::~NotationElement()
 {
-//     NOTATION_DEBUG << "NotationElement " << this << "::~NotationElement() wrapping "
-//                          << event() << endl;
-
-    delete m_canvasItem;
+    removeCanvasItem();
 }
 
 Rosegarden::timeT
@@ -98,7 +96,7 @@ NotationElement::getCanvasY()
 bool
 NotationElement::isRest() const
 {
-    return event()->isa("rest");
+    return event()->isa(Note::EventRestType);
 }
 
 bool
@@ -121,28 +119,65 @@ NotationElement::isGrace() const
 }
 
 void
-NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
+NotationElement::setCanvasItem(QCanvasItem *e, double canvasX, double canvasY)
 {
+    removeCanvasItem();
     m_recentlyRegenerated = true;
-    delete m_canvasItem;
     m_canvasItem = e;
-    e->move(getLayoutX() + dxoffset, getLayoutY() + dyoffset);
+    e->move(canvasX, canvasY);
+}
+
+void
+NotationElement::addCanvasItem(QCanvasItem *e, double canvasX, double canvasY)
+{
+    if (!m_canvasItem) {
+	std::cerr << "ERROR: Attempt to add extra canvas item to element without main canvas item:";
+	event()->dump(std::cerr);
+        throw NoCanvasItem("No canvas item for notation element of type " +
+			   event()->getType(), __FILE__, __LINE__);
+    }
+    if (!m_extraItems) {
+	m_extraItems = new ItemList;
+    }
+    e->move(canvasX, canvasY);
+    m_extraItems->push_back(e);
 }
 
 void
 NotationElement::removeCanvasItem()
 {
     m_recentlyRegenerated = false;
+
     delete m_canvasItem;
     m_canvasItem = 0;
+
+    if (m_extraItems) {
+
+	for (ItemList::iterator i = m_extraItems->begin();
+	     i != m_extraItems->end(); ++i) delete *i;
+	m_extraItems->clear();
+
+	delete m_extraItems;
+	m_extraItems = 0;
+    }
 }
 
 void
-NotationElement::reposition(double dxoffset, double dyoffset)
+NotationElement::reposition(double canvasX, double canvasY)
 {
     m_recentlyRegenerated = false;
     if (!m_canvasItem) return;
-    m_canvasItem->move(getLayoutX() + dxoffset, getLayoutY() + dyoffset);
+
+    double dx = canvasX - m_canvasItem->x();
+    double dy = canvasY - m_canvasItem->y();
+    m_canvasItem->move(canvasX, canvasY);
+
+    if (m_extraItems) {
+	for (ItemList::iterator i = m_extraItems->begin();
+	     i != m_extraItems->end(); ++i) {
+	    (*i)->moveBy(dx, dy);
+	}
+    }
 }
 
 bool

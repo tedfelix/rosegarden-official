@@ -380,6 +380,13 @@ protected:
      */
     virtual bool elementShiftedOnly(NotationElementList::iterator);
 
+    /**
+     * Set a single pixmap to a notation element, or split it into
+     * bits if it overruns the end of a row and set the bits
+     * separately.
+     */
+    virtual void setPixmap(NotationElement *, QCanvasPixmap *, int z);
+
     bool isSelected(NotationElementList::iterator);
 
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;

@@ -38,6 +38,7 @@
 #include "notationsets.h"
 #include "widgets.h"
 #include "notefont.h"
+#include "pixmapfunctions.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -592,9 +593,10 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    currentKey = Rosegarden::Key(*el->event());
 	}
 
-	LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
+	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
 	    (el->getLayoutX(), (int)el->getLayoutY());
 	el->reposition(coords.first, (double)coords.second);
+
 	el->setSelected(selected);
 
 	if ((to > from) &&
@@ -1010,35 +1012,30 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	    }
 	}
 
-	if (!canvasItem && pixmap) {
-	    canvasItem = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
-	    canvasItem->setZ(z);
-	}
+	// Show the result, one way or another
 
-	// Show the sprite
-	//
-	if (canvasItem) {
+	if (!canvasItem && pixmap) {
+
+	    setPixmap(elt, pixmap, z);
+
+	} else if (canvasItem) {
+
+	    // This branch should only be used for note sprites,
+	    // so we can safely assume they won't need to be split
+	    // across a row boundary (as may happen in setPixmap).
+
+	    canvasItem->setZ(z);
 
 	    double layoutX = elt->getLayoutX();
 	    int layoutY = (int)elt->getLayoutY();
 
 	    LinedStaffCoords coords =
-		getCanvasOffsetsForLayoutCoords(layoutX, layoutY);
+		getCanvasCoordsForLayoutCoords(layoutX, layoutY);
 
 	    elt->setCanvasItem
 		(canvasItem, coords.first, (double)coords.second);
 
 	    canvasItem->show();
-
-	    // Test whether this item overruns the end of a row
-	    if (m_pageMode != LinearMode && pixmap) {
-		int row = getRowForLayoutX(layoutX);
-		double right = getCanvasXForRightOfRow(row);
-		double extent = layoutX + coords.first + pixmap->width();
-		if (extent > right) {
-		    NOTATION_DEBUG << "Pixmap overlaps border (at " << right << ") by " << (extent - right) << "px" << endl;
-		}
-	    }
 
 	} else {
 	    elt->removeCanvasItem();
@@ -1052,6 +1049,105 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	elt->event()->dump(std::cerr);
     }
 }
+
+void
+NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z)
+{
+    double layoutX = elt->getLayoutX();
+    int layoutY = (int)elt->getLayoutY();
+
+    elt->removeCanvasItem();
+
+    while (1) {
+    
+	LinedStaffCoords coords =
+	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+
+	double canvasX = coords.first;
+	int canvasY = coords.second;
+	
+	QCanvasItem *item = 0;
+
+	NOTATION_DEBUG << "NotationStaff::setPixmap: layout " << layoutX << "," << layoutY << ", canvas " << canvasX << "," << canvasY << endl;
+
+	if (m_pageMode != LinearMode) {
+
+	    int row = getRowForLayoutX(layoutX);
+	    double rightMargin = getCanvasXForRightOfRow(row);
+	    double extent = canvasX + pixmap->width();
+
+	    NOTATION_DEBUG << "NotationStaff::setPixmap: row " << row << ", right margin " << rightMargin << ", extent " << extent << endl;
+
+	    if (extent > rightMargin + m_notePixmapFactory->getNoteBodyWidth()) {
+
+		NOTATION_DEBUG << "splitting at " << (rightMargin-canvasX) << endl;
+
+		std::pair<QPixmap, QPixmap> split =
+		    PixmapFunctions::splitPixmap(*pixmap,
+						 int(rightMargin - canvasX));
+
+		QCanvasPixmap *leftCanvasPixmap = new QCanvasPixmap
+		    (split.first, QPoint(pixmap->offsetX(), pixmap->offsetY()));
+
+		QCanvasPixmap *rightCanvasPixmap = new QCanvasPixmap
+		    (split.second, QPoint(0, pixmap->offsetY()));
+
+		item = new QCanvasNotationSprite(*elt, leftCanvasPixmap, m_canvas);
+		item->setZ(z);
+
+		if (elt->getCanvasItem()) {
+		    elt->addCanvasItem(item, canvasX, canvasY);
+		} else {
+		    elt->setCanvasItem(item, canvasX, canvasY);
+		}
+		    
+		item->show();
+		
+		delete pixmap;
+		pixmap = rightCanvasPixmap;
+
+		layoutX += rightMargin - canvasX + 0.01; // ensure flip to next row
+
+		continue;
+
+	    } else {
+		item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
+	    }
+	} else {
+	    item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
+	}
+
+	item->setZ(z);
+	if (elt->getCanvasItem()) {
+	    elt->addCanvasItem(item, canvasX, canvasY);
+	} else {
+	    elt->setCanvasItem(item, canvasX, canvasY);
+	}
+	item->show();
+	break;
+    }
+
+/*
+    QCanvasItem *canvasItem = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
+    canvasItem->setZ(z);
+    
+    elt->setCanvasItem
+	(canvasItem, coords.first, (double)coords.second);
+    
+    canvasItem->show();
+
+    // Test whether this item overruns the end of a row
+    if (m_pageMode != LinearMode && pixmap) {
+	int row = getRowForLayoutX(layoutX);
+	double right = getCanvasXForRightOfRow(row);
+	double extent = layoutX + coords.first + pixmap->width();
+	if (extent > right) {
+	    NOTATION_DEBUG << "Pixmap overlaps border (at " << right << ") by " << (extent - right) << "px" << endl;
+	}
+    }
+*/
+}
+    
 
 QCanvasSimpleSprite *
 NotationStaff::makeNoteSprite(Rosegarden::ViewElementList::iterator &vli)
