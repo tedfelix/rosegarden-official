@@ -21,9 +21,10 @@
 #include <vector>
 
 #include <kdialogbase.h>
-#include <qlineedit.h>
 
 class RosegardenComboBox;
+class QLineEdit;
+
 namespace Rosegarden { class Studio; }
 
 #ifndef _BANKEDITOR_H_
@@ -39,6 +40,7 @@ public:
 
 protected:
 
+    //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
 
     RosegardenComboBox      *m_msb;

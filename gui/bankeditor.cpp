@@ -22,6 +22,7 @@
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qlineedit.h>
 
 #include "bankeditor.h"
 #include "widgets.h"
