@@ -1118,6 +1118,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     if (m_doc == newDocument) return;
 
     emit documentAboutToChange();
+    kapp->processEvents(); // to make sure all opened dialogs (mixer, midi devices...) are closed
 
     // Take care of all subparts which depend on the document
 
