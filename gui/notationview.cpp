@@ -208,6 +208,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_tupletMode(false),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
+    m_progressDlg(0),
     m_documentDestroyed(false)
 {
     initActionDataMaps(); // does something only the 1st time it's called
@@ -271,12 +272,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
 
-    RosegardenProgressDialog *progressDlg = 0;
     if (showProgressive) {
 	show();
-	progressDlg = new RosegardenProgressDialog
-	    (kapp, i18n("Laying out score..."), i18n("Cancel"), 100, this);
-	kapp->processEvents();
+	m_progressDlg = new RosegardenProgressDialog
+	    (kapp, i18n("Starting..."), i18n("Cancel"), 100, this,
+	     i18n("Notation progress"), true);
+	m_progressDlg->setAutoClose(false);
     }
     m_chordNameRuler->setComposition(&doc->getComposition());
 
@@ -302,12 +303,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
             
 	    if (showProgressive) {
 		if (m_staffs.size() == 1) {
-		    progressDlg->setLabelText(i18n("Rendering..."));
+		    m_progressDlg->setLabelText(i18n("Rendering..."));
 		} else {
-		    progressDlg->setLabelText
+		    m_progressDlg->setLabelText
 			(i18n("Rendering staff %1...").arg(i + 1));
 		}
-		m_staffs[i]->setProgressDialog(progressDlg);
+		m_staffs[i]->setProgressDialog(m_progressDlg);
 	    }
 
             m_staffs[i]->renderAllElements();
@@ -315,12 +316,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	    if (showProgressive) {
 		m_staffs[i]->setProgressDialog(0);
 		if (m_staffs.size() == 1) {
-		    progressDlg->setLabelText(i18n("Positioning..."));
+		    m_progressDlg->setLabelText(i18n("Positioning..."));
 		} else {
-		    progressDlg->setLabelText
+		    m_progressDlg->setLabelText
 			(i18n("Positioning staff %1...").arg(i + 1));
 		}
-		progressDlg->processEvents();
+		m_progressDlg->processEvents();
 	    }
 
             m_staffs[i]->positionAllElements();
@@ -332,7 +333,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
 
     if (showProgressive) {
-	delete progressDlg;
+	delete m_progressDlg;
+	m_progressDlg = 0;
     }
 
     //
@@ -1216,24 +1218,49 @@ NotationView::setPageMode(bool pageMode)
 }   
 
 
+#define UPDATE_PROGRESS(n) \
+	progressCount += (n); \
+	if (m_progressDlg && (progressTotal > 0)) { \
+	    m_progressDlg->setCompleted(progressCount * 100 / progressTotal); \
+	    m_progressDlg->processEvents(); \
+	}
+
+
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
+    if (m_progressDlg) {
+	m_progressDlg->setLabelText(i18n("Laying out score..."));
+	m_progressDlg->processEvents();
+    }
+
     START_TIMING;
     unsigned int i;
+
+    int progressTotal = m_staffs.size() * 3 + 5;
+    int progressCount = 0;
 
     for (i = 0; i < m_staffs.size(); ++i) {
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
         m_hlayout.resetStaff(*m_staffs[i], startTime, endTime);
+	UPDATE_PROGRESS(2);
+
         m_vlayout.resetStaff(*m_staffs[i], startTime, endTime);
+	UPDATE_PROGRESS(1);
 
         m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
+	UPDATE_PROGRESS(2);
+
         m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
+	UPDATE_PROGRESS(1);
     }
 
     m_hlayout.finishLayout(startTime, endTime);
+    UPDATE_PROGRESS(3);
+
     m_vlayout.finishLayout(startTime, endTime);
+    UPDATE_PROGRESS(2);
 
     // find the last finishing staff for future use
 
@@ -2741,11 +2768,20 @@ void NotationView::readjustCanvasSize()
     double maxWidth = 0.0;
     int maxHeight = 0;
 
+    if (m_progressDlg) {
+	m_progressDlg->setLabelText(i18n("Sizing and allocating canvas..."));
+	m_progressDlg->processEvents();
+    }
+
+    int progressTotal = m_staffs.size() + 2;
+    int progressCount = 0;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         NotationStaff &staff = *m_staffs[i];
 
         staff.sizeStaff(m_hlayout);
+	UPDATE_PROGRESS(1);
 
         if (staff.getTotalWidth() + staff.getX() > maxWidth) {
             maxWidth = staff.getTotalWidth() + staff.getX() + 1;
@@ -2760,6 +2796,7 @@ void NotationView::readjustCanvasSize()
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(int(maxWidth), maxHeight));
+    UPDATE_PROGRESS(2);
 
     PRINT_ELAPSED("NotationView::readjustCanvasSize total");
 }

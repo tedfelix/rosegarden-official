@@ -130,9 +130,14 @@ SegmentPerformanceHelper::getRealAbsoluteTime(iterator i)
 RealTime
 SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 {
-    return segment().getComposition()->getRealTimeDifference
-	(getSoundingAbsoluteTime(i),
-	 getSoundingAbsoluteTime(i) + getSoundingDuration(i));
+    timeT t0 = getSoundingAbsoluteTime(i);
+    timeT t1 = t0 + getSoundingDuration(i);
+
+    if (t1 > segment().getEndMarkerTime()) {
+	t1 = segment().getEndMarkerTime();
+    }
+
+    return segment().getComposition()->getRealTimeDifference(t0, t1);
 }
 
 

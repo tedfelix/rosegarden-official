@@ -29,6 +29,11 @@ Post-0.1.5-and-a-bit task list
     until the Segment's moveable start/end markers are implemented.  Look
     into this.
 
+    TO FIX:
+
+    -- Undo doesn't work for Split Segment
+    
+
  8. Add origin to start of hlayout, so that first bar is indented on both
     ruler and staff (preceded by staff name perhaps) [DONE]
 
@@ -86,7 +91,7 @@ Post-0.1.5-and-a-bit task list
 
 20. Find a neato way of getting an eggtimer cursor after a command has
     taken a certain amount of time to run (e.g. notationview et al
-    add a timer callback in addCommandToHistory)
+    add a timer callback in addCommandToHistory) [DONE by RWB]
 
 21. Implement view-local properties in NotationElement [DONE but see 23]
 
@@ -222,6 +227,8 @@ Post-0.1.5-and-a-bit task list
     g. Auto-beam on insert
 
     h. Collapse rests after erase
+    
+    i. Default style
 
 37. Add Show/Hide Annotations; make it easier to edit an annotation,
     and possible to move and resize them

@@ -129,7 +129,7 @@ public:
     SegmentInsertCommand(RosegardenGUIDoc *doc,
                          Rosegarden::TrackId track,
                          Rosegarden::timeT startTime,
-                         Rosegarden::timeT duration);
+                         Rosegarden::timeT endTime);
     virtual ~SegmentInsertCommand();
 
     virtual void execute();
@@ -141,7 +141,7 @@ private:
     Rosegarden::Segment     *m_segment;
     int                      m_track;
     Rosegarden::timeT        m_startTime;
-    Rosegarden::timeT        m_duration;
+    Rosegarden::timeT        m_endTime;
     bool m_detached;
 };
 
@@ -182,14 +182,14 @@ public:
     struct SegmentRec {
         Rosegarden::Segment *segment;
         Rosegarden::timeT startTime;
-        Rosegarden::timeT duration;
+        Rosegarden::timeT endTime;
         Rosegarden::TrackId track;
     };
     typedef std::vector<SegmentRec> SegmentRecSet;
 
     void addSegment(Rosegarden::Segment *segment,
                     Rosegarden::timeT startTime,
-                    Rosegarden::timeT duration,
+                    Rosegarden::timeT endTime,
                     Rosegarden::TrackId track);
 
     void addSegments(const SegmentRecSet &records);

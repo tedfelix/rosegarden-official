@@ -77,7 +77,8 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
     m_previewSprite(0),
     m_staffName(0),
     m_legatoQuantizer(legatoQuantizer),
-    m_properties(properties)
+    m_properties(properties),
+    m_progressDlg(0)
 {
     changeFont(fontName, resolution);
 }

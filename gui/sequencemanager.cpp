@@ -96,7 +96,8 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
     {
 	timeT segmentStartTime = (*it)->getStartTime();
-	timeT segmentDuration = (*it)->getEndTime() - segmentStartTime;
+	timeT segmentEndTime = (*it)->getEndMarkerTime();
+	timeT segmentDuration = segmentEndTime - segmentStartTime;
 
         track = comp.getTrackByIndex((*it)->getTrack());
 
@@ -122,8 +123,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
 	// Skip the Segment if it ends too early to be of
 	// interest and it's not repeating.
-	if (segmentStartTime + segmentDuration <= sliceStartElapsed &&
-	    !(*it)->isRepeating())
+	if (segmentEndTime <= sliceStartElapsed && !(*it)->isRepeating())
 	    continue;
 
         if ((*it)->getType() == Rosegarden::Segment::Audio)
@@ -242,7 +242,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	//
         for (Segment::iterator j = i0; ; ++j)
         {
-	    if (j == (*it)->end())
+	    if (!(*it)->isBeforeEndMarker(j))
 	    {
 		// Wrap around if we're repeating, abandon otherwise
 		//

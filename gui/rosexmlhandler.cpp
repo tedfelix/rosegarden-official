@@ -799,7 +799,7 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
     //
     if (m_progress &&
 	(m_totalElements > m_elementsSoFar) &&
-	(++m_elementsSoFar % 50 == 0)) {
+	(++m_elementsSoFar % 100 == 0)) {
 	m_progress->setCompleted
 	    (int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
 	m_progress->processEvents();

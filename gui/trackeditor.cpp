@@ -563,14 +563,10 @@ TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
     // Show recording SegmentItem from recording start point to
     // current point position
     //
-    timeT duration = comp.getPosition() - startTime;
-
-    // Alternatively show it to the last recorded event
-    //
-    //timeT duration = segment->getDuration();
+    timeT endTime = comp.getPosition();
 
     m_segmentCanvas->showRecordingSegmentItem(segment->getTrack(),
-                                              startTime, duration);
+                                              startTime, endTime);
 
     emit needUpdate();
 }

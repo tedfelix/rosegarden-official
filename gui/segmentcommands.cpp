@@ -183,14 +183,14 @@ SegmentQuickCopyCommand::unexecute()
 SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
                                            TrackId track,
                                            timeT startTime,
-                                           timeT duration):
+                                           timeT endTime):
     XKCommand("Create Segment"),
     m_composition(&(doc->getComposition())),
     m_studio(&(doc->getStudio())),
     m_segment(0),
     m_track(track),
     m_startTime(startTime),
-    m_duration(duration),
+    m_endTime(endTime),
     m_detached(false)
 {
 }
@@ -213,7 +213,7 @@ SegmentInsertCommand::execute()
         m_segment->setTrack(m_track);
         m_segment->setStartTime(m_startTime);
 	m_composition->addSegment(m_segment);
-	m_segment->setEndTime(m_duration + m_startTime);
+	m_segment->setEndTime(m_endTime);
 
         // Do our best to label the Segment with whatever is currently
         // showing against it.
@@ -301,13 +301,13 @@ SegmentReconfigureCommand::~SegmentReconfigureCommand()
 void
 SegmentReconfigureCommand::addSegment(Segment *segment,
 				      timeT startTime,
-				      timeT duration,
+				      timeT endTime,
 				      TrackId track)
 {
     SegmentRec record;
     record.segment = segment;
     record.startTime = startTime;
-    record.duration = duration;
+    record.endTime = endTime;
     record.track = track;
     m_records.push_back(record);
 }
@@ -350,15 +350,18 @@ SegmentReconfigureCommand::swap()
 	timeT currentStartTime = i->segment->getStartTime();
 	TrackId currentTrack = i->segment->getTrack();
 
-	if (currentEndTime - currentStartTime != i->duration) {
-	    i->segment->setEndTime(i->duration + currentStartTime);
-	    i->duration = currentEndTime - currentStartTime;
+	if (currentStartTime != i->startTime) {
+	    i->segment->setStartTime(i->startTime);
+	    i->startTime = currentStartTime;
 	}
 
-	if (currentStartTime != i->startTime || currentTrack != i->track) {
-	    i->segment->setStartTime(i->startTime);
+	if (currentEndTime != i->endTime) {
+	    i->segment->setEndMarkerTime(i->endTime);
+	    i->endTime = currentEndTime;
+	}
+
+	if (currentTrack != i->track) {
 	    i->segment->setTrack(i->track);
-	    i->startTime = currentStartTime;
 	    i->track = currentTrack;
 	}
     }
@@ -447,7 +450,7 @@ SegmentSplitCommand::execute()
     //!!! should we be dividing any events that are extant during the
     // split?
     m_segment->erase(m_segment->findTime(m_splitTime), m_segment->end());
-    m_segment->setEndTime(m_splitTime);
+    m_segment->setEndMarkerTime(m_splitTime);
 
     // Look for a final rest and shrink it
     Segment::iterator it = m_segment->end();

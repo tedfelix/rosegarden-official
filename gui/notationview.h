@@ -47,6 +47,7 @@ class ActiveItem;
 class NoteActionData;
 class MarkActionData;
 class ChordNameRuler;
+class RosegardenProgressDialog;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -633,6 +634,7 @@ protected:
     typedef QMap<QString, MarkActionData> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;
 
+    RosegardenProgressDialog *m_progressDlg;
     bool m_documentDestroyed;
 };
 

@@ -51,7 +51,8 @@ public:
      * Create a new segment item without an associated segment (yet)
      */
     SegmentItem(Rosegarden::TrackId track,
-		Rosegarden::timeT startTime, Rosegarden::timeT duration,
+		Rosegarden::timeT startTime,
+		Rosegarden::timeT endTime,
 		bool showPreview,
 		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas,
                 RosegardenGUIDoc *doc);
@@ -76,9 +77,9 @@ public:
     void setStartTime(Rosegarden::timeT t);
     Rosegarden::timeT getStartTime() const { return m_startTime; }
 
-    /// Update duration of the rectangle (doesn't modify underlying segment)
-    void setDuration(Rosegarden::timeT d);
-    Rosegarden::timeT getDuration() const { return m_duration; }
+    /// Update end time of the rectangle (doesn't modify underlying segment)
+    void setEndTime(Rosegarden::timeT d);
+    Rosegarden::timeT getEndTime() const { return m_endTime; }
 
     /// Update track of the rectangle (doesn't modify underlying segment)
     void setTrack(Rosegarden::TrackId track);
@@ -96,9 +97,9 @@ public:
     void recalculateRectangle(bool inheritFromSegment = true);
     
     /**
-     * Modify start time and duration so as to maintain dimensions
-     * while ensuring duration is positive.  (Negative duration is
-     * fine for a SegmentItem but not for a Segment.)  Should only
+     * Modify start and end time so as to maintain dimensions
+     * while ensuring duration is positive.  (End time before start
+     * is fine for a SegmentItem but not for a Segment.)  Should only
      * be called on a SegmentItem that has no Segment yet.
      */
     void normalize();
@@ -144,7 +145,7 @@ protected:
     // associated Segments
     Rosegarden::TrackId m_track;
     Rosegarden::timeT m_startTime;
-    Rosegarden::timeT m_duration;
+    Rosegarden::timeT m_endTime;
 
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
@@ -237,7 +238,7 @@ public:
      */
     SegmentItem* addSegmentItem(Rosegarden::TrackId track,
 				Rosegarden::timeT startTime,
-				Rosegarden::timeT duration);
+				Rosegarden::timeT endTime);
 
     /**
      * Add a SegmentItem for the given underlying Segment
@@ -304,7 +305,7 @@ public:
      */
     void showRecordingSegmentItem(Rosegarden::TrackId track,
 				  Rosegarden::timeT startTime,
-				  Rosegarden::timeT duration);
+				  Rosegarden::timeT endTime);
     void deleteRecordingSegmentItem();
 
     /// Return the selected Segments if we're currently using a "Selector"
@@ -458,7 +459,7 @@ protected:
     bool m_newRect;
     Rosegarden::TrackId m_track;
     Rosegarden::timeT m_startTime;
-    Rosegarden::timeT m_duration;
+    Rosegarden::timeT m_endTime;
 };
 
 class SegmentEraser : public SegmentTool

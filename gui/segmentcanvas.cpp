@@ -96,7 +96,7 @@ QFont *SegmentItem::m_font = 0;
 QFontMetrics *SegmentItem::m_fontMetrics = 0;
 int SegmentItem::m_fontHeight = 0;
 
-SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
+SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT endTime,
 			 bool showPreview,
                          SnapGrid *snapGrid, QCanvas *canvas,
                          RosegardenGUIDoc *doc) :
@@ -105,7 +105,7 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_doc(doc),
     m_track(track),
     m_startTime(startTime),
-    m_duration(duration),
+    m_endTime(endTime),
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0),
@@ -258,9 +258,10 @@ void SegmentItem::drawShape(QPainter& painter)
                 //
                 QRect p = m_previewInfo[i];
                 if (p.x() >= viewportRect.x() &&
-                    p.x() <= (viewportRect.x() + viewportRect.width()))
+                    p.x() <= (viewportRect.x() + viewportRect.width())) {
+		    if (p.width() > 0) p.setWidth(p.width()-1);
                     painter.drawRect(p);
-                
+		}
             }
 
             painter.restore();
@@ -287,13 +288,13 @@ void SegmentItem::updatePreview()
     m_previewInfo.clear();
 
     Segment::iterator start = m_segment->begin();
-    Segment::iterator end = m_segment->end();
+//    Segment::iterator end = m_segment->end();
     // if (start == m_segment->end()) start = m_segment->begin();
     //else start = m_segment->findTime((*start)->getAbsoluteTime());
 
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
 
-    for (Segment::iterator i = start; i != end; ++i) {
+    for (Segment::iterator i = start; m_segment->isBeforeEndMarker(i); ++i) {
 
         long pitch = 0;
         if (!(*i)->isa(Rosegarden::Note::EventType) ||
@@ -302,12 +303,15 @@ void SegmentItem::updatePreview()
             continue;
         }
 
-        double x0 = rulerScale->getXForTime((*i)->getAbsoluteTime()) - rect().x();
-        double x1 = rulerScale->getXForTime((*i)->getAbsoluteTime() +
-                                            (*i)->getDuration()) - rect().x();
+	timeT eventStart = (*i)->getAbsoluteTime();
+	timeT eventEnd = eventStart + (*i)->getDuration();
+	if (eventEnd > m_segment->getEndMarkerTime()) {
+	    eventEnd = m_segment->getEndMarkerTime();
+	}
+        double x0 = rulerScale->getXForTime(eventStart) - rect().x();
+        double x1 = rulerScale->getXForTime(eventEnd) - rect().x();
 
         int width = (int)(x1 - x0);
-        if (width > 0) --width;
         if (width > 0) --width;
 
         double y0 = 0; // rect().y();
@@ -336,7 +340,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
-	m_duration = m_segment->getEndTime() - m_startTime;
+	m_endTime = m_segment->getEndMarkerTime();
         m_label = strtoqstr(m_segment->getLabel());
 
 	if (m_segment->isRepeating()) {
@@ -344,7 +348,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
             if (!m_repeatRectangle)
                 m_repeatRectangle = new QCanvasRepeatRectangle(canvas());
 
-	    timeT repeatStart = m_startTime + m_duration;
+	    timeT repeatStart = m_endTime;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
 
 	    m_repeatRectangle->setX
@@ -373,7 +377,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
     int h = m_snapGrid->getYSnap();
     double w = m_snapGrid->getRulerScale()->getWidthForDuration
-	(m_startTime, m_duration); 
+	(m_startTime, m_endTime - m_startTime);
 
     setSize(int(w) + 1, h);
 
@@ -418,9 +422,9 @@ void SegmentItem::setStartTime(timeT t)
     recalculateRectangle(false);
 }
 
-void SegmentItem::setDuration(timeT d)
+void SegmentItem::setEndTime(timeT t)
 {
-    m_duration = d;
+    m_endTime = t;
     recalculateRectangle(false);
 }
 
@@ -432,9 +436,10 @@ void SegmentItem::setTrack(TrackId track)
 
 void SegmentItem::normalize()
 {
-    if (m_duration < 0) {
-	m_duration = -m_duration;
-	m_startTime -= m_duration;
+    if (m_endTime < m_startTime) {
+	timeT temp = m_endTime;
+	m_endTime = m_startTime;
+	m_startTime = temp;
 	recalculateRectangle(false);
     }
 }
@@ -804,10 +809,10 @@ void SegmentCanvas::slotExternalWheelEvent(QWheelEvent* e)
 
 
 SegmentItem *
-SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)
+SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT endTime)
 {
     SegmentItem *newItem = new SegmentItem
-	(track, startTime, duration, m_showPreviews, &m_grid, canvas(), m_doc);
+	(track, startTime, endTime, m_showPreviews, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
@@ -832,17 +837,17 @@ SegmentCanvas::addSegmentItem(Segment *segment)
 }
 
 void SegmentCanvas::showRecordingSegmentItem(TrackId track,
-                                             timeT startTime, timeT duration)
+                                             timeT startTime, timeT endTime)
 {
     if (m_recordingSegment) {
 
 	m_recordingSegment->setStartTime(startTime);
-	m_recordingSegment->setDuration(duration);
+	m_recordingSegment->setEndTime(endTime);
 	m_recordingSegment->setTrack(track);
 
     } else {
 	
-	m_recordingSegment = addSegmentItem(track, startTime, duration);
+	m_recordingSegment = addSegmentItem(track, startTime, endTime);
 	m_recordingSegment->
             setPen(RosegardenGUIColours::RecordingSegmentBorder);
         m_recordingSegment->
@@ -1067,7 +1072,7 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
       m_newRect(false),
       m_track(0),
       m_startTime(0),
-      m_duration(0)
+      m_endTime(0)
 {
     m_canvas->setCursor(Qt::ibeamCursor);
     kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
@@ -1096,7 +1101,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
     
-    m_currentItem = m_canvas->addSegmentItem(track, time, duration);
+    m_currentItem = m_canvas->addSegmentItem(track, time, time + duration);
     m_newRect = true;
     
     m_canvas->slotUpdate();
@@ -1112,7 +1117,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
             new SegmentInsertCommand(m_doc,
                                      m_currentItem->getTrack(),
                                      m_currentItem->getStartTime(),
-                                     m_currentItem->getDuration());
+                                     m_currentItem->getEndTime());
 
         addCommandToHistory(command);
     }
@@ -1131,11 +1136,29 @@ bool SegmentPencil::handleMouseMove(QMouseEvent *e)
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
     if (e->pos().x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
 
-    timeT time = m_canvas->grid().snapX(e->pos().x(), direction);
-    timeT duration = time - m_currentItem->getStartTime();
-
     timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
+
+    timeT time = m_canvas->grid().snapX(e->pos().x(), direction);
+    timeT startTime = m_currentItem->getStartTime();
+
+    if (time >= startTime) {
+	if ((time - startTime) < snap) {
+	    time = startTime + snap;
+	}
+    } else {
+	if ((startTime - time) < snap) {
+	    time = startTime - snap;
+	}
+    }
+
+    if (direction == SnapGrid::SnapLeft) {
+	time += std::max(m_currentItem->getEndTime() -
+			 m_currentItem->getStartTime(), timeT(0));
+    }
+
+/*!!!
+    timeT duration = time - m_currentItem->getStartTime();
 
     if ((duration >= 0 && duration <  snap) ||
 	(duration <  0 && duration > -snap)) {
@@ -1146,7 +1169,10 @@ bool SegmentPencil::handleMouseMove(QMouseEvent *e)
 	duration += std::max(m_currentItem->getDuration(), timeT(0));
     }
 
-    m_currentItem->setDuration(duration);
+    m_currentItem->setEndTime(m_currentItem->getStartTime() + duration);
+*/
+    m_currentItem->setEndTime(time);
+
     m_canvas->slotUpdate();
     return true;
 }
@@ -1219,7 +1245,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 
         command->addSegment(m_currentItem->getSegment(),
                             m_currentItem->getStartTime(),
-                            m_currentItem->getDuration(),
+                            m_currentItem->getEndTime(),
                             m_currentItem->getTrack());
         addCommandToHistory(command);
         m_currentItem->showRepeatRect(true);
@@ -1235,8 +1261,10 @@ bool SegmentMover::handleMouseMove(QMouseEvent *e)
 	m_canvas->setSnapGrain(true);
 
 	int x = e->pos().x() - m_clickPoint.x();
-	m_currentItem->setStartTime(m_canvas->grid().snapX
-				    (m_currentItemStartX + x));
+	timeT newStartTime = m_canvas->grid().snapX(m_currentItemStartX + x);
+	m_currentItem->setEndTime(m_currentItem->getEndTime() + newStartTime -
+				  m_currentItem->getStartTime());
+	m_currentItem->setStartTime(newStartTime);
 
 	TrackId track = m_canvas->grid().getYBin(e->pos().y());
         m_currentItem->setTrack(track);
@@ -1282,7 +1310,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 
     command->addSegment(m_currentItem->getSegment(),
                         m_currentItem->getStartTime(),
-                        m_currentItem->getDuration(),
+                        m_currentItem->getEndTime(),
                         m_currentItem->getTrack());
     addCommandToHistory(command);
 
@@ -1303,9 +1331,11 @@ bool SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     if ((duration > 0 && duration <  snap) ||
 	(duration < 0 && duration > -snap)) {
-	m_currentItem->setDuration(duration < 0 ? -snap : snap);
+	m_currentItem->setEndTime((duration < 0 ? -snap : snap) +
+				  m_currentItem->getStartTime());
     } else {
-	m_currentItem->setDuration(duration);
+	m_currentItem->setEndTime(duration +
+				  m_currentItem->getStartTime());
     }
 
     m_canvas->canvas()->update();
@@ -1315,7 +1345,7 @@ bool SegmentResizer::handleMouseMove(QMouseEvent *e)
 bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e,
 					       int edgeThreshold)
 {
-    return ( abs(p->rect().x() + p->rect().width() - e->x()) < edgeThreshold);
+    return (abs(p->rect().x() + p->rect().width() - e->x()) < edgeThreshold);
 }
 
 //////////////////////////////
@@ -1495,13 +1525,12 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	    SegmentItem *item = it->second;
 
 	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
-		item->getDuration()  != (item->getSegment()->getEndTime() -
-					 item->getSegment()->getStartTime()) ||
+		item->getEndTime()   != item->getSegment()->getEndMarkerTime() ||
 		item->getTrack()     != item->getSegment()->getTrack()) {
 
 		command->addSegment(item->getSegment(),
 				    item->getStartTime(),
-				    item->getDuration(),
+				    item->getEndTime(),
 				    item->getTrack());
 
 		haveChange = true;
@@ -1572,7 +1601,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	{
 	    int x = e->pos().x() - m_clickPoint.x(),
 		y = e->pos().y() - m_clickPoint.y();
-	    it->second->setStartTime(m_canvas->grid().snapX(it->first.x() + x));
+
+	    timeT newStartTime = m_canvas->grid().snapX(it->first.x() + x);
+	    it->second->setEndTime(it->second->getEndTime() + newStartTime -
+				   it->second->getStartTime());
+	    it->second->setStartTime(newStartTime);
 
 	    TrackId track = m_canvas->grid().getYBin(it->first.y() + y);
 
