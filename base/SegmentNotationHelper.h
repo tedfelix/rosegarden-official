@@ -476,10 +476,11 @@ public:
      * start time is before the the given limit.  Does not care
      * whether the resulting note is viable.
      *
-     * Returns true if a collapse happened, false if no collapse
-     * or event not found
+     * Returns an iterator pointing to the event that replaced the
+     * original one if a collapse happened, segment.end() if no
+     * collapse or event not found
      */
-    bool collapseNoteAggressively(Event *, timeT rangeEnd);
+    iterator collapseNoteAggressively(Event *, timeT rangeEnd);
 
     
 protected:

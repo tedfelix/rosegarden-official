@@ -33,13 +33,16 @@ value, which is used to order events that have the same
 absolute time (it defaults to, and most usually is, zero; but
 for some things like clef events it's a small negative number
 so as to ensure they get processed and displayed before any
-notes that appear at the same time).
+notes that appear at the same time).  Unlike properties, the
+time and subordering values can only be set once, when you
+create the event -- to modify them you must copy the event and
+pass new values into the copy constructor (see the header file
+for details, and see iterators.txt for discussion of how this
+affects Segment iterators that may be pointing at those events).
 
 All you have to do to create a cow and insert it in a segment is
 
-  Event *e = new Event("cow");
-  e->setAbsoluteTime(1000); // has to have one
-  e->setDuration(0);        // likewise, even if it's zero
+  Event *e = new Event("cow", 1000, 0); // abs time, duration
   e->set<String>("MooType", "Low");
   e->set<Bool>("isBull", true);
   segment->insert(e);

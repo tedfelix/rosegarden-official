@@ -625,18 +625,25 @@ void
 TransformsMenuCollapseNotesCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-
-    EventSelection::eventcontainer::iterator i;
     timeT endTime = getEndTime();
-    
+
     // We go in reverse order, because collapseNoteAggressively
     // may delete the event following the one it's passed, but
     // never deletes anything before it
 
-    i = m_selection->getSegmentEvents().end();
+    EventSelection::eventcontainer::iterator i =
+	m_selection->getSegmentEvents().end();
 
-    while (i-- != m_selection->getSegmentEvents().begin()) {
-	helper.collapseNoteAggressively((*i), endTime);
+    //!!! aargh. we can't go in forward direction using the j-itr
+    //trick because collapseNoteAggressively may erase the following
+    //itr as well as the preceding one. we can't go backward naively
+    //like this any more because collapseNoteAggressively erases i
+    //from the EventSelection now that it's a SegmentObserver. we need
+    //both techniques at once.
+
+    while (i != m_selection->getSegmentEvents().begin()) {
+        --i;
+	helper.collapseNoteAggressively(*i, endTime);
     }
 }
 
@@ -695,11 +702,10 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 	     m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ) {
 
-	// problem here is makeNoteViable erases the event
-	// from the segment & thus from the selection (which
-	// is a segment observer), so we have to use the j-
-	// iterator trick to increment i (which is the one
-	// that will have been erased).
+	// makeNoteViable erases the event from the segment & thus
+	// from the selection (which is a segment observer), so we
+	// have to use the j-iterator trick to increment i (which is
+	// the one that will have been erased).
 
 	EventSelection::eventcontainer::iterator j = i;
 	++j;
@@ -709,10 +715,6 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 
 	i = j;
     }
-
-// oh no, shouldn't be necessary
-//    segment.normalizeRests
-//	(m_selection->getStartTime(), m_selection->getEndTime());
 }
 
 void

@@ -729,6 +729,56 @@
 
       <!-- Keys, Clefs and Time Signatures -->
 
+      <sect2 id="nv-signatures">
+	<title>Clefs, Keys, Tempo and Time Signatures</title>
+	
+	<para>The first thing to know about the way Rosegarden handles
+	these is that time-related changes (tempos and time
+	signatures) are treated entirely differently from clefs and
+	keys.  In order to simplify managing playback and recording as
+	well as notation, Rosegarden requires that when the tempo or
+	time signature changes, it does so in all staffs at once.  You
+	can't have one staff in 3/4 and another in 4/4 simultaneously,
+	or one staff playing at 120 to the beat and another at 90.
+	This applies only to time: there is no such restriction on the
+	use of clef and key changes.</para>
+
+	<para>To change the clef, key, tempo or time signature within
+	a notation editor window, position the <link
+	linkend="nv-rulers">insert cursor</link> at the point where
+	you want the change to happen, and use one of the Edit menu's
+	<link linkend="commands-nv-menu-edit-add-clef">Add Clef
+	Change...</link>, <link linkend="commands-nv-menu-edit-add-key-signature">Add Key
+	Change...</link>, <link linkend="commands-nv-menu-edit-add-tempo">Add
+	Tempo Change...</link> and <link
+	linkend="commands-nv-menu-edit-add-time-signature">Add Time Signature
+	Change...</link> functions.  You will then see a dialog box in
+	which you can choose the particular clef, key, tempo or time
+	signature setting you want to apply, as follows.</para>
+
+	<sect3 id="nv-signatures-clef">
+	  <title>Clef</title>
+	  <para></para>
+	</sect3>
+	
+	<sect3 id="nv-signatures-key">
+	  <title>Key</title>
+	  <para></para>
+	</sect3>
+	
+	<sect3 id="nv-signatures-tempo">
+	  <title>Tempo</title>
+	  <!-- Should be in general section, not notation -->
+	  <para></para>
+	</sect3>
+	
+	<sect3 id="nv-signatures-time-signature">
+	  <title>Time Signature</title>
+	  <!-- Should be in general section, not notation -->
+	  <para></para>
+	</sect3>
+      </sect2>
+
       <!-- Text -->
 
       <sect2 id="nv-text">
@@ -874,13 +924,14 @@
       <!-- Stem direction, slashes etc -->
 
       <sect2 id="nv-note-qualities">
-	<title>Note Stems</title>
+	<title>Note Stems and Slashes</title>
 
 	<para>You can set the stem direction of any selected notes
 	(provided they are a sort that have stems) using the three
 	Stem Direction options on the Notes menu.  The options allow
 	you to either fix the stems up or down, or revert to the stem
-	direction that Rosegarden would otherwise have chosen.</para>
+	direction that Rosegarden would otherwise have chosen.  See
+	also <link linkend="nv-beamed-groups">Beams</link>.</para>
 
 	<para>The Notes menu also contains options for adding slashes
 	across note stems, for example to indicate short repeated
@@ -1543,6 +1594,24 @@
 	    </varlistentry>
 
 
+	    <varlistentry id="commands-nv-menu-edit-clear-selection">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Esc</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Clear Selection</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Unselects all events.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
 	    <varlistentry id="commands-nv-menu-edit-add-tempo">
 	      <term><menuchoice>
 		  <guimenu>Edit</guimenu>
@@ -1771,6 +1840,190 @@
 		</para>
 	      </listitem>
 	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-group-grace">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Make Grace Notes</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Converts the selected notes into grace notes.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+
+	    <varlistentry id="commands-nv-menu-group-ungrace">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Ungrace</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Converts any grace notes in the selection to
+		    normal notes.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+
+	    <varlistentry id="commands-nv-menu-group-slur">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Slur</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Adds a slur across the selected notes.
+		  </action>
+		  To remove the slur, click on it
+		  with the erase tool just as you would for a note.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+
+	    <varlistentry id="commands-nv-menu-group-crescendo">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Crescendo</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Adds a crescendo (opening hairpin) indication
+		    across the selected notes.
+		  </action>
+		  To remove the crescendo indication, click on it
+		  with the erase tool just as you would for a note.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+
+	    <varlistentry id="commands-nv-menu-group-decrescendo">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Decrescendo</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Adds a decrescendo (closing hairpin) indication
+		    across the selected notes.
+		  </action>
+		  To remove the decrescendo indication, click on it
+		  with the erase tool just as you would for a note.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+<!--
+
+	    <varlistentry id="commands-nv-menu-group-remove-indications">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Remove Indications</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+-->
+
+	    <varlistentry id="commands-nv-menu-notes-">
+	      <term><menuchoice>
+		  <guimenu>Notes</guimenu>
+		  <guimenuitem></guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-notes-style-actionmenu">
+	      <term><menuchoice>
+		  <guimenu>Notes</guimenu>
+		  <guimenuitem>Note Style</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Change the note style of the selected notes.
+		  </action>
+		  This submenu contains an entry for each of the <link
+		  linkend="nv-note-styles">note
+		  styles</link> that are currently available.  Choosing one
+		  will change the note style of the selected notes to
+		  that style.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-notes-stems">
+	      <term><menuchoice>
+		  <guimenu>Notes</guimenu>
+		  <guimenuitem>Stem Direction</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Change the stem
+		    direction of the selected notes.
+		  </action>
+		  This submenu allows you to specify that all the
+		  <link linkend="nv-note-qualities">stems</link> of
+		  the selected notes should point up or down, plus an
+		  entry to reset the stem directions to those that
+		  Rosegarden originally chose for the notes.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-notes-slashes">
+	      <term><menuchoice>
+		  <guimenu>Notes</guimenu>
+		  <guimenuitem>Slashes</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Add diagonal
+		    slashes across the selected notes' stems.
+		  </action>
+		  This submenu allows you to choose a number of
+		  diagonal strokes or <link linkend="nv-note-qualities">slashes</link> to be drawn across the
+		  stems of each of the selected notes.  These may be
+		  used, for example, to indicate repetition or rolls
+		  to a human reader.  They do not (yet) affect
+		  performance using Rosegarden.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
 
 
 	  </variablelist>

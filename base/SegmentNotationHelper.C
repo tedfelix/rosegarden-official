@@ -1674,15 +1674,15 @@ SegmentNotationHelper::mergeContiguousRests(timeT startTime,
 }
 
 
-bool
+Segment::iterator
 SegmentNotationHelper::collapseNoteAggressively(Event *note,
 						timeT rangeEnd)
 {
     iterator i = segment().findSingle(note);
-    if (i == end()) return false;
+    if (i == end()) return end();
 
     iterator j = getNextAdjacentNote(i, true, true);
-    if (j == end() || (*j)->getAbsoluteTime() >= rangeEnd) return false;
+    if (j == end() || (*j)->getAbsoluteTime() >= rangeEnd) return end();
 
     timeT iEnd = (*i)->getAbsoluteTime() + (*i)->getDuration();
     timeT jEnd = (*j)->getAbsoluteTime() + (*j)->getDuration();
@@ -1696,8 +1696,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
 
     segment().erase(i);
     segment().erase(j);
-    segment().insert(newEvent);
-    return true;
+    return segment().insert(newEvent);
 }
 
 

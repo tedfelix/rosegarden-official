@@ -43,3 +43,143 @@ Note that the capability to adapt only a subset of the Composition
 (such as a single track, or a set of segments) was added to
 CompositionTimeSliceAdapter between the 0.1.5 and 0.1.6 releases.
 
+
+Modifying events while iterating over them
+==========================================
+
+The absolute time, duration and subordering of an Event can only be
+set when the Event is created; they can't be modified after creation.
+(This is so as to avoid causing problems with containers in which the
+time values are used to make an ordering relationship, and to ensure
+that non-persistent properties that may need recalculating from the
+new values are discarded.)
+
+This means that to alter the time or duration of an Event in a
+Segment, you must erase the original Event and insert a new copy.  But
+erasing an Event invalidates any iterator pointing at it.  Thus, code
+such as the following (where s is a Segment and i a Segment iterator):
+
+     for (i = s.begin(); i != s.end(); ++i) {
+	 // double the duration of the event at i
+	 Event *e = new Event(**i, (*i)->getAbsoluteTime(),
+				   (*i)->getDuration * 2);
+         s.insert(e);
+	 s.erase(i);
+     }
+
+will not work, because the iterator i is invalidated by the erase
+immediately before the attempt to increment it for the loop counter.
+
+Fortunately, the iterator pointing at the event that was erased is
+the only one to be invalidated by the erase.  This gives us several
+possible workarounds.  One fairly simple one is:
+
+     for (i = s.begin(); i != s.end(); ) {
+	 Segment::iterator j = i;
+	 ++j;
+	 // double the duration of the event at i
+	 Event *e = new Event(**i, (*i)->getAbsoluteTime(),
+				   (*i)->getDuration * 2);
+         s.insert(e);
+	 s.erase(i);
+	 i = j;
+     }
+
+where we effectively increment the loop counter before erasing the
+event at its pre-increment position.  We use this quite a lot.
+
+This sort of hack takes some confidence that j will not be
+accidentally compromised, and a safer approach, particularly if the
+body of the loop is long, is to use an intermediate temporary
+container or two:
+
+     std::vector<Segment::iterator> toErase;
+     std::vector<Event *> toInsert;
+
+     for (i = s.begin(); i != s.end(); ++i) {
+	 // double the duration of the event at i
+	 Event *e = new Event(**i, (*i)->getAbsoluteTime(),
+				   (*i)->getDuration * 2);
+         toInsert.push_back(e);
+	 toErase.push_back(i);
+     }
+
+     for (unsigned int j = 0; j < toErase.size(); ++j) {
+	 s.erase(toErase[j]);
+     }
+
+     for (unsigned int j = 0; j < toInsert.size(); ++j) {
+	 s.insert(toInsert[j]);
+     }
+
+But even this can only work if we have access within the loop to every
+iterator that we might be erasing.  For example, we have some code in
+which we call SegmentNotationHelper::collapseNoteAggressively for each
+event -- a function which may erase multiple events on each call.  In
+a situation like that, it's good if we can rely on the function we
+call to return us an iterator we can rely on.  If we can't, then we
+have to do some weird shit -- for example, if we knew that our
+function might erase any event at or after the iterator passed to it
+but was guaranteed not to erase any event before it, we could do
+
+     i = s.end();
+     Segment::iterator j = i;
+     bool thisOne = false;
+
+     while (i != s.begin()) {
+
+         --j;
+
+	 if (thisOne) {
+	     helper.collapseNoteAggressively(i);
+	 }
+
+	 // rather than "true" one could perform a test to see
+	 // whether j pointed to a candidate for collapsing:
+	 thisOne = true;
+
+	 i = j;
+     }
+     
+     if (thisOne) {
+	 helper.collapseNoteAggressively(i);
+     }
+
+This is, of course, disgusting code.  And the situation becomes even
+worse where the container we're iterating over is not a Segment but an
+EventSelection, which contains pointers to Events within a Segment.
+The EventSelection keeps itself up-to-date when Events are deleted
+from the Segment; if the deleted Events were in a selection, they will
+be removed from it as well as deleted from the Segment and destroyed.
+
+This means that the following code will not work (where sel is an
+EventSelection):
+
+     for (EventSelection::eventcontainer::iterator ci =
+	  sel.getSegmentEvents().begin();
+	  ci != sel.getSegmentEvents().end(); ++ci) {
+
+	 // double the duration of the event at ci
+	 Event *e = new Event(**ci, (*ci)->getAbsoluteTime(),
+				    (*ci)->getDuration * 2);
+
+         Segment::iterator i = sel.getSegment().findSingle(*ci);
+         sel.getSegment().insert(e);
+	 sel.getSegment().erase(i);
+     }
+
+because the erase will not only invalidate the Segment iterator i but
+also cause the Event at *ci to be deleted from the EventSelection,
+this invalidating the EventSelection::eventcontainer iterator ci as
+well.  Most of the same tricks can be used to work around this, though
+not all.
+
+We desperately need a nicer set of iterators; one possibility is to
+use some sort of vector class instead of the multiset and impose our
+own preferred behaviour on the iterators (in particular, erasing an
+Event and immediately inserting a new one in its place should be
+guaranteed not to invalidate any iterators).  We may also end up
+providing iterators that are based on a particular time (and thus
+effectively re-seek themselves after the Segment changes),
+particularly for use in a future scripting API.
+
