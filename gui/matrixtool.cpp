@@ -36,6 +36,7 @@
 #include "matrixcommands.h"
 #include "notationcommands.h"
 #include "velocitycolour.h"
+#include "zoomslider.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -441,6 +442,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
       m_clickedElement(0),
       m_dispatchTool(0),
       m_justSelectedBar(false),
+      m_matrixView(view),
       m_selectionToMerge(0)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
@@ -552,8 +554,31 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
     }
     else
     {
-        m_selectionRect->setX(p.x());
-        m_selectionRect->setY(p.y());
+	// Workaround for #930420 Positional error in sweep-selection box
+	// boundary
+	int zoomValue = (int)m_matrixView->m_hZoomSlider->getCurrentSize();
+	MatrixStaff *staff = m_mParentView->getStaff(staffNo);
+	int pitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
+	int pitchCentreHeight = staff->getTotalHeight() -
+				pitch * staff->getLineSpacing() - 2; // 2 or ?
+	int pitchLineHeight = pitchCentreHeight + staff->getLineSpacing()/2;
+	int drawHeight = p.y();
+	if (drawHeight <= pitchLineHeight + 1 &&
+	    drawHeight >= pitchLineHeight - 1) {
+	    if (drawHeight == pitchLineHeight)
+		drawHeight += 2;
+	    else
+		drawHeight += 2 * (drawHeight - pitchLineHeight);
+	}
+	MATRIX_DEBUG << "#### MatrixSelector::handleLeftButtonPress() : zoom "
+		<< zoomValue
+		<< " pitch " << pitch
+		<< " pitchCentreHeight " << pitchCentreHeight
+		<< " pitchLineHeight " << pitchLineHeight
+		<< " lineSpacing " << staff->getLineSpacing()
+		<< " drawHeight " << drawHeight << endl;
+        m_selectionRect->setX(int(p.x()/4)*4); // more workaround for #930420
+        m_selectionRect->setY(drawHeight);
         m_selectionRect->setSize(0,0);
 
         m_selectionRect->show();
@@ -722,8 +747,15 @@ int MatrixSelector::handleMouseMove(timeT time, int height,
     if (w > 0) ++w; else --w;
     if (h > 0) ++h; else --h;
 
-    m_selectionRect->setSize(w,h);
+    // Workaround for #930420 Positional error in sweep-selection box boundary
+    int wFix = (w > 0) ? 3 : 0;
+    int hFix = (h > 0) ? 3 : 0;
+    int xFix = (w < 0) ? 3 : 0;
+    m_selectionRect->setSize(w-wFix,h-hFix);
+    m_selectionRect->setX(m_selectionRect->x()+xFix);
     setViewCurrentSelection();
+    m_selectionRect->setSize(w,h);
+    m_selectionRect->setX(m_selectionRect->x()-xFix);
     m_mParentView->canvas()->update();
 
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;

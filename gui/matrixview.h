@@ -76,6 +76,9 @@ typedef std::vector<MatrixElement*> SelectedElements;
 class MatrixView : public EditView
 {
     Q_OBJECT
+
+    friend class MatrixSelector;
+
 public:
     MatrixView(RosegardenGUIDoc *doc,
                std::vector<Rosegarden::Segment *> segments,

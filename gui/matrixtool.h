@@ -277,6 +277,8 @@ protected:
 
     bool m_justSelectedBar;
 
+    MatrixView * m_matrixView;
+
     Rosegarden::EventSelection *m_selectionToMerge;
 };
 
