@@ -873,7 +873,9 @@ void RosegardenGUIApp::openFile(const QString& filePath)
             canRecover = false;
     }
 
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(m_doc);
+    // Create a new blank document
+    //
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
     if (newDoc->openDocument(effectiveFilePath)) {
 
