@@ -28,6 +28,10 @@ using std::string;
 using std::vector;
 using std::cout;
 using std::endl;
+
+//////////////////////////////////////////////////////////////////////
+// Clef
+//////////////////////////////////////////////////////////////////////
     
 const string Clef::EventType = "clefchange";
 const string Clef::ClefPropertyName = "clef";
@@ -38,8 +42,13 @@ const string Clef::Bass = "bass";
 
 const Clef Clef::DefaultClef = Clef("treble");
 
+Clef::Clef()
+    : m_clef(DefaultClef.m_clef)
+{
+}
+
 Clef::Clef(const Event &e)
-//     throw (Event::NoData, Event::BadType, BadClefName)
+    //     throw (Event::NoData, Event::BadType, BadClefName)
 {
     if (e.getType() != EventType) {
         throw Event::BadType();
@@ -52,7 +61,7 @@ Clef::Clef(const Event &e)
 }        
 
 Clef::Clef(const std::string &s)
-//     throw (BadClefName)
+    //     throw (BadClefName)
 {
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
         throw BadClefName();
@@ -60,14 +69,56 @@ Clef::Clef(const std::string &s)
     m_clef = s;
 }
 
+Clef::Clef(const Clef &c)
+    : m_clef(c.m_clef)
+{
+}
+
+Clef& Clef::operator=(const Clef &c)
+{
+    if (this != &c) m_clef = c.m_clef;
+    return *this;
+}
+
+Clef::~Clef()
+{
+}
+
+int Clef::getOctave() const
+{
+    if (m_clef == Treble) return 0;
+    else if (m_clef == Bass) return -2;
+    else return -1;
+}
+
+int Clef::getPitchOffset() const
+{
+    if (m_clef == Treble) return 0;
+    else if (m_clef == Tenor) return 1;
+    else if (m_clef == Alto) return -1;
+    else return -2;
+}
+
+//////////////////////////////////////////////////////////////////////
+// Key
+//////////////////////////////////////////////////////////////////////
+
 const string Key::EventType = "keychange";
 const string Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
 
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
+Key::Key()
+    : m_name(DefaultKey.m_name),
+      m_accidentalHeights(0)
+{
+    checkMap();
+}
+
+
 Key::Key(const Event &e)
-//     throw (Event::NoData, Event::BadType, BadKeyName)
+    //     throw (Event::NoData, Event::BadType, BadKeyName)
     : m_accidentalHeights(0)
 {
     checkMap();
@@ -81,7 +132,7 @@ Key::Key(const Event &e)
 }
 
 Key::Key(const std::string &name)
-//     throw (BadKeyName)
+    //     throw (BadKeyName)
     : m_name(name), m_accidentalHeights(0)
 {
     checkMap();
@@ -89,6 +140,24 @@ Key::Key(const std::string &name)
         throw BadKeyName();
     }
 }    
+
+Key::Key(const Key &kc)
+    : m_name(kc.m_name), m_accidentalHeights(0)
+{
+}
+
+Key::~Key()
+{
+    delete m_accidentalHeights;
+}
+
+Key& Key::operator=(const Key &kc)
+{
+    m_name = kc.m_name;
+    m_accidentalHeights = 0;
+    return *this;
+}
+
 
 std::vector<Key> Key::getKeys(bool minor)
 {
@@ -117,7 +186,7 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
 }
 
 vector<int> Key::getAccidentalHeights(const Clef &clef) const
-    {
+{
     // staff positions of accidentals
     checkAccidentalHeights();
     vector<int> v(*m_accidentalHeights);
@@ -142,6 +211,14 @@ void Key::checkAccidentalHeights() const {
         else       { pitch += 3; if (pitch > 7) pitch -= 7; }
     }
 }
+
+Event Key::getAsEvent() const
+{
+    Event e(EventType);
+    e.set<String>(KeyPropertyName, m_name);
+    return e;
+}
+
 
 void Key::checkMap() {
     if (!m_keyDetailMap.empty()) return;
@@ -178,6 +255,35 @@ void Key::checkMap() {
     m_keyDetailMap["Eb minor"] = KeyDetails(false, true,  6, "Gb major", "Gb maj / Eb min");
 }
 
+
+Key::KeyDetails::KeyDetails()
+    : m_sharps(false), m_minor(false), m_sharpCount(0),
+      m_equivalence(""), m_rg2name("")
+{
+}
+
+Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
+                            std::string equivalence, std::string rg2name)
+    : m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
+      m_equivalence(equivalence), m_rg2name(rg2name)
+{
+}
+
+Key::KeyDetails::KeyDetails(const Key::KeyDetails &d)
+    : m_sharps(d.m_sharps), m_minor(d.m_minor),
+      m_sharpCount(d.m_sharpCount), m_equivalence(d.m_equivalence),
+      m_rg2name(d.m_rg2name)
+{
+}
+
+Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
+{
+    if (&d == this) return *this;
+    m_sharps = d.m_sharps; m_minor = d.m_minor;
+    m_sharpCount = d.m_sharpCount; m_equivalence = d.m_equivalence;
+    m_rg2name = d.m_rg2name;
+    return *this;
+}
 
 //////////////////////////////////////////////////////////////////////
 // NotationDisplayPitch
@@ -369,7 +475,7 @@ const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
 
 Note::Note(Type type, int dots)
-//     throw (BadType, TooManyDots)
+    //     throw (BadType, TooManyDots)
     : m_type(type), m_dots(dots)
 {
     //!!! having exceptions here may really bugger up compiler
@@ -383,11 +489,11 @@ Note::Note(Type type, int dots)
     // hemi).  And if we got to double-dotted hemis, triple-dotted
     // demis etc, we couldn't even represent their durations in
     // our duration units
-//!!!    if (m_dots > m_type) throw TooManyDots();
+    //!!!    if (m_dots > m_type) throw TooManyDots();
 }
 
 Note::Note(const string &n)
-//     throw (BadType)
+    //     throw (BadType)
     : m_type(-1), m_dots(0)
 {
     string name(n);
@@ -407,11 +513,41 @@ Note::Note(const string &n)
     if (m_type == -1) throw BadType(name);
 }
 
+Note::Note(const Note &n)
+    : m_type(n.m_type), m_dots(n.m_dots)
+{
+}
+
+Note::~Note()
+{
+}
+
+Note& Note::operator=(const Note &n)
+{
+    if (&n == this) return *this;
+    m_type = n.m_type;
+    m_dots = n.m_dots;
+    return *this;
+}
+
+int Note::getDuration() const
+{
+    //!!! may be able to tighten this up a bit so it can remain inline
+    int duration = m_shortestTime * (1 << m_type);
+    int extra = duration / 2;
+    for (int dots = m_dots; dots > 0; --dots) {
+        duration += extra;
+        extra /= 2;
+    }
+    return duration;
+}
+
+
 string Note::getEnglishName(Type type, int dots) const {
     static const string names[] = {
         "hemidemisemiquaver", "demisemiquaver", "semiquaver",
-            "quaver", "crotchet", "minim", "semibreve", "breve"
-            };
+        "quaver", "crotchet", "minim", "semibreve", "breve"
+    };
     if (type < 0) { type = m_type; dots = m_dots; }
     //!!! double-dots etc
     return dots ? ("dotted " + names[type]) : names[type];
@@ -420,9 +556,9 @@ string Note::getEnglishName(Type type, int dots) const {
 string Note::getAmericanName(Type type, int dots) const {
     static const string names[] = {
         "sixty-fourth note", "thirty-second note", "sixteenth note",
-            "eighth note", "quarter note", "half note", "whole note",
-            "double whole note"
-            };
+        "eighth note", "quarter note", "half note", "whole note",
+        "double whole note"
+    };
     if (type < 0) { type = m_type; dots = m_dots; }
     //!!! double-dots etc
     return dots ? ("dotted " + names[type]) : names[type];
@@ -431,8 +567,8 @@ string Note::getAmericanName(Type type, int dots) const {
 string Note::getShortName(Type type, int dots) const {
     static const string names[] = {
         "64th", "32nd", "16th", "8th", "quarter", "half", "whole",
-            "double whole"
-            };
+        "double whole"
+    };
     if (type < 0) { type = m_type; dots = m_dots; }
     //!!! double-dots etc
     return dots ? ("dotted " + names[type]) : names[type];
@@ -477,14 +613,14 @@ TimeSignature::TimeSignature()
 }
 
 TimeSignature::TimeSignature(int numerator, int denominator)
-//     throw (BadTimeSignature)
+    //     throw (BadTimeSignature)
     : m_numerator(numerator), m_denominator(denominator)
 {
     if (numerator < 1 || denominator < 1) throw BadTimeSignature();
 }
 
 TimeSignature::TimeSignature(const Event &e)
-//     throw (Event::NoData, Event::BadType, BadTimeSignature)
+    //     throw (Event::NoData, Event::BadType, BadTimeSignature)
 {
     if (e.getType() != EventType) {
         throw Event::BadType();
@@ -559,8 +695,8 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
     }
 
     if (m_numerator == 4 && m_denominator > 2) {
-//        dlist.push_back(getBarDuration() / 2);
-//        dlist.push_back(getBarDuration() / 2);
+        //        dlist.push_back(getBarDuration() / 2);
+        //        dlist.push_back(getBarDuration() / 2);
         dlist.push_back(getBarDuration());
         return;
     }

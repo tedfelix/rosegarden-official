@@ -50,31 +50,20 @@ public:
     static const std::string Alto;
     static const std::string Bass;
 
-    Clef() : m_clef(DefaultClef.m_clef) { }
+    Clef();
     Clef(const Event &e); // throw (Event::NoData, Event::BadType, BadClefName);
     Clef(const std::string &s); // throw (BadClefName);
-    Clef(const Clef &c) : m_clef(c.m_clef) { }
+    Clef(const Clef &c);
 
-    Clef &operator=(const Clef &c) {
-        if (this != &c) m_clef = c.m_clef;
-        return *this;
-    }
-    virtual ~Clef() { }
+    Clef &operator=(const Clef &c);
+
+    virtual ~Clef();
 
     std::string getClefType() const { return m_clef; }
 
-    int getOctave() const {
-        if (m_clef == Treble) return 0;
-        else if (m_clef == Bass) return -2;
-        else return -1;
-    }
+    int getOctave() const;
 
-    int getPitchOffset() const {
-        if (m_clef == Treble) return 0;
-        else if (m_clef == Tenor) return 1;
-        else if (m_clef == Alto) return -1;
-        else return -2;
-    }
+    int getPitchOffset() const;
 
 private:
     std::string m_clef;
@@ -96,17 +85,13 @@ public:
     static const Key DefaultKey;
     struct BadKeyName { };
 
-    Key() : m_name(DefaultKey.m_name), m_accidentalHeights(0) { checkMap(); }
+    Key();
     Key(const Event &e); // throw (Event::NoData, Event::BadType, BadKeyName);
     Key(const std::string &name); // throw (BadKeyName);
-    Key(const Key &kc) : m_name(kc.m_name), m_accidentalHeights(0) { }
-    virtual ~Key() { delete m_accidentalHeights; }
+    Key(const Key &kc);
+    virtual ~Key();
 
-    Key &operator=(const Key &kc) {
-        m_name = kc.m_name;
-        m_accidentalHeights = 0;
-        return *this;
-    }
+    Key &operator=(const Key &kc);
 
     bool isMinor() const {
         return m_keyDetailMap[m_name].m_minor;
@@ -143,11 +128,7 @@ public:
 	return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
     }
 
-    Event getAsEvent() const {
-        Event e(EventType);
-        e.set<String>(KeyPropertyName, m_name);
-        return e;
-    }
+    Event getAsEvent() const;
 
     static std::vector<Key> getKeys(bool minor = false);
 
@@ -162,27 +143,14 @@ private:
         std::string m_equivalence;
         std::string m_rg2name;
 
-        KeyDetails() : // ctor needed in order to live in a hash_map
-            m_sharps(false), m_minor(false), m_sharpCount(0),
-            m_equivalence(""), m_rg2name("") { }
+        KeyDetails(); // ctor needed in order to live in a hash_map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
-                   std::string equivalence, std::string rg2name) :
-            m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
-            m_equivalence(equivalence), m_rg2name(rg2name) { }
+                   std::string equivalence, std::string rg2name);
 
-        KeyDetails(const KeyDetails &d) :
-            m_sharps(d.m_sharps), m_minor(d.m_minor),
-            m_sharpCount(d.m_sharpCount), m_equivalence(d.m_equivalence),
-            m_rg2name(d.m_rg2name) { }
+        KeyDetails(const KeyDetails &d);
 
-        KeyDetails &operator=(const KeyDetails &d) {
-            if (&d == this) return *this;
-            m_sharps = d.m_sharps; m_minor = d.m_minor;
-            m_sharpCount = d.m_sharpCount; m_equivalence = d.m_equivalence;
-            m_rg2name = d.m_rg2name;
-            return *this;
-        }
+        KeyDetails &operator=(const KeyDetails &d);
     };
 
     typedef std::hash_map<std::string, KeyDetails, hashstring, eqstring>
@@ -312,15 +280,10 @@ public:
 
     Note(Type type, int dots = 0); // throw (BadType, TooManyDots);
     Note(const std::string &s); // throw (BadType);
-    Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
-    virtual ~Note() { }
+    Note(const Note &);
+    virtual ~Note();
 
-    Note &operator=(const Note &n) {
-        if (&n == this) return *this;
-        m_type = n.m_type;
-        m_dots = n.m_dots;
-        return *this;
-    }
+    Note &operator=(const Note &n);
 
     Type getNoteType()  const { return m_type; }
 
@@ -330,21 +293,13 @@ public:
     int  getTailCount() const {
 	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
-    int  getDuration()  const {
-	//!!! may be able to tighten this up a bit so it can remain inline
-	int duration = m_shortestTime * (1 << m_type);
-	int extra = duration / 2;
-	for (int dots = m_dots; dots > 0; --dots) {
-	    duration += extra;
-	    extra /= 2;
-	}
-	return duration;
-    }
+
+    int  getDuration()  const;
 
     // these default to whatever I am:
-    std::string getEnglishName(Type type = -1, int dots = 0)  const;
+    std::string getEnglishName (Type type = -1, int dots = 0) const;
     std::string getAmericanName(Type type = -1, int dots = 0) const;
-    std::string getShortName(Type type = -1, int dots = 0)    const;
+    std::string getShortName   (Type type = -1, int dots = 0) const;
 
     static Note getNearestNote(int duration, int maxDots = 2);
   
