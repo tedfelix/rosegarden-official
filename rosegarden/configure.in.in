@@ -42,7 +42,7 @@ if test "$with_alsa" = "yes"; then
 fi
 
 dnl check whether user wants to use JACK
-AC_ARG_WITH(jack, [  --with-jack             enable JACK support (must have ALSA support as well)],
+AC_ARG_WITH(jack, [  --with-jack             enable JACK support (requires ALSA)],
 [
    if test $withval = "yes"; then
      with_jack=yes
