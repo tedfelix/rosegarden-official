@@ -1086,10 +1086,10 @@ RosegardenGUIDoc::alive()
 
     for (unsigned int i = 0; i < devices; i++)
     {
-        /*
+        
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - i = "
                      << i << endl;
-                     */
+
         getMappedDevice(i);
     }
 
@@ -1154,7 +1154,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding MIDI Device \""
-                          << device->getName() << "\"\n";
+                          << device->getName() << "\" id = " << id << endl;
         }
         else if (mD->getType() == Rosegarden::Device::Audio)
         {
@@ -1163,7 +1163,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                           << "adding audio Device \""
-                          << device->getName() << "\"\n";
+                          << device->getName() << "\" id = " << id << endl;
         }
         else
         {
