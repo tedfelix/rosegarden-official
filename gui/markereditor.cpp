@@ -165,6 +165,7 @@ MarkerEditorDialog::updatePosition()
     // again only update if needed
     if (m_barTime->text() != barTime) m_barTime->setText(barTime);
 
+    /*
     // Don't allow us to add another marker if there's already one
     // at the current position.
     //
@@ -173,6 +174,7 @@ MarkerEditorDialog::updatePosition()
         m_addButton->setEnabled(false);
     else
         m_addButton->setEnabled(true);
+        */
 }
 
 
@@ -346,13 +348,15 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
     RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
 
     MarkerModifyDialog *dialog = 
-        new MarkerModifyDialog(this, i->text(1), i->text(2));
+        new MarkerModifyDialog(this, i->text(0).toInt(),
+                               i->text(1), i->text(2));
 
     if (dialog->exec() == QDialog::Accepted)
     {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),
-                                    i->text(0).toInt(),
+                                    dialog->getOriginalTime(),
+                                    dialog->getTime(),
                                     qstrtostr(dialog->getName()),
                                     qstrtostr(dialog->getDescription()));
 
@@ -383,9 +387,11 @@ MarkerEditorDialog::setDocument(RosegardenGUIDoc *doc)
 
 
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
+                                       int time,
                                        const QString &name,
                                        const QString &des):
-    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel),
+    m_originalTime(time)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -396,13 +402,23 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
 
     QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
 
-    layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
-    m_nameEdit = new QLineEdit(name, frame);
-    layout->addWidget(m_nameEdit, 0, 1);
+    layout->addWidget(new QLabel(i18n("Absolute Time:"), frame), 0, 0);
+    m_timeEdit = new QSpinBox(frame);
+    layout->addWidget(m_timeEdit, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Description:"), frame), 1, 0);
+    m_timeEdit->setMinValue(INT_MIN);
+    m_timeEdit->setMaxValue(INT_MAX);
+    m_timeEdit->setLineStep(
+            Rosegarden::Note(Rosegarden::Note::Shortest).getDuration());
+    m_timeEdit->setValue(time);
+
+    layout->addWidget(new QLabel(i18n("Name:"), frame), 1, 0);
+    m_nameEdit = new QLineEdit(name, frame);
+    layout->addWidget(m_nameEdit, 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
     m_desEdit = new QLineEdit(des, frame);
-    layout->addWidget(m_desEdit, 1, 1);
+    layout->addWidget(m_desEdit, 2, 1);
 }
 
 const char* const MarkerEditorDialog::MarkerEditorConfigGroup = "Marker Editor";

@@ -30,13 +30,13 @@
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qlineedit.h>
+#include <qspinbox.h>
 
 #include "Composition.h"
 
 class RosegardenGUIDoc;
 class KCommand;
 class MultiViewCommandHistory;
-class QSpinBox;
 class RosegardenComboBox;
 class QLabel;
 class QAccel;
@@ -46,18 +46,23 @@ class MarkerModifyDialog : public KDialogBase
     Q_OBJECT
 public:
     MarkerModifyDialog(QWidget *parent,
+                       int time,
                        const QString &name,
                        const QString &des);
 
     QString getName() const { return m_nameEdit->text(); }
     QString getDescription() const { return m_desEdit->text(); }
+    int getTime() const { return m_timeEdit->value(); }
+    int getOriginalTime() const { return m_originalTime; }
 
 protected:
     RosegardenGUIDoc             *m_doc;
 
+    QSpinBox                     *m_timeEdit;
     QLineEdit                    *m_nameEdit;
     QLineEdit                    *m_desEdit;
 
+    int                           m_originalTime;
 };
 
 

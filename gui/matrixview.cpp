@@ -261,7 +261,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-    BarButtons *topBarButtons = new BarButtons(&m_hlayout, int(xorigin), 25,
+    BarButtons *topBarButtons = new BarButtons(getDocument(),
+                                               &m_hlayout, int(xorigin), 25,
                                                false, getCentralFrame());
     setTopBarButtons(topBarButtons);
 
@@ -273,7 +274,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
-    BarButtons *bottomBarButtons = new BarButtons(&m_hlayout, 0, 25,
+    BarButtons *bottomBarButtons = new BarButtons(getDocument(),
+                                                  &m_hlayout, 0, 25,
                                                   true, getCentralFrame());
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);

@@ -1112,16 +1112,15 @@ AddMarkerCommand::execute()
 void
 AddMarkerCommand::unexecute()
 {
-    m_composition->detachMarker(m_marker->getTime());
+    m_composition->detachMarker(m_marker);
 }
 
 
 RemoveMarkerCommand::RemoveMarkerCommand(Rosegarden::Composition *comp,
-                                         Rosegarden::timeT time):
+                                         Rosegarden::Marker *marker):
     KNamedCommand(getGlobalName()),
     m_composition(comp),
-    m_marker(0),
-    m_removeTime(time)
+    m_marker(marker)
 {
 }
 
@@ -1139,10 +1138,9 @@ RemoveMarkerCommand::execute()
 
     for (; it != markers.end(); ++it)
     {
-        if ((*it)->getTime() == m_removeTime)
+        if (*it== m_marker)
         {
-            m_marker = *it;
-            m_composition->detachMarker(m_removeTime);
+            m_composition->detachMarker(m_marker);
             return;
         }
     }
@@ -1156,11 +1154,13 @@ RemoveMarkerCommand::unexecute()
 
 ModifyMarkerCommand::ModifyMarkerCommand(Rosegarden::Composition *comp,
                                          Rosegarden::timeT time,
+                                         Rosegarden::timeT newTime,
                                          const std::string &name,
                                          const std::string &des):
     KNamedCommand(getGlobalName()),
     m_composition(comp),
     m_time(time),
+    m_newTime(newTime),
     m_name(name),
     m_description(des),
     m_oldName(""),
@@ -1190,6 +1190,7 @@ ModifyMarkerCommand::execute()
 
             (*it)->setName(m_name);
             (*it)->setDescription(m_description);
+            (*it)->setTime(m_newTime);
             return;
         }
     }
@@ -1205,10 +1206,11 @@ ModifyMarkerCommand::unexecute()
 
     for (; it != markers.end(); ++it)
     {
-        if ((*it)->getTime() == m_time)
+        if ((*it)->getTime() == m_newTime)
         {
             (*it)->setName(m_oldName);
             (*it)->setDescription(m_oldDescription);
+            (*it)->setTime(m_time);
         }
     }
 }

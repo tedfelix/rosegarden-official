@@ -1215,6 +1215,7 @@ void breakpoint()
 void 
 Composition::addMarker(Rosegarden::Marker *marker)
 {
+    /*
     markeriterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
@@ -1226,42 +1227,24 @@ Composition::addMarker(Rosegarden::Marker *marker)
             return;
         }
     }
+    */
     m_markers.push_back(marker);
 }
 
 bool
-Composition::detachMarker(Rosegarden::timeT time)
+Composition::detachMarker(Rosegarden::Marker *marker)
 {
     markeriterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
     {
-        if ((*it)->getTime() == time)
+        if (*it == marker)
         {
             m_markers.erase(it);
             return true;
         }
     }
 
-    return false;
-}
-
-bool
-Composition::modifyMarker(Rosegarden::timeT time,
-                          const std::string &name,
-                          const std::string &des)
-{
-    markeriterator it = m_markers.begin();
-
-    for (; it != m_markers.end(); ++it)
-    {
-        if ((*it)->getTime() == time)
-        {
-            (*it)->setName(name);
-            (*it)->setDescription(des);
-            return true;
-        }
-    }
     return false;
 }
 

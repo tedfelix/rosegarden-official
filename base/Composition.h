@@ -176,16 +176,10 @@ public:
     markercontainer& getMarkers() { return m_markers; }
     const markercontainer& getMarkers() const { return m_markers; }
 
-    // Markers are unique in absolute time so use that as a key
+    // Convenience stuff for markers
     //
     void addMarker(Rosegarden::Marker *marker);
-    bool detachMarker(Rosegarden::timeT time);
-    bool modifyMarker(Rosegarden::timeT time,
-                      const std::string &name,
-                      const std::string &des);
-
-    // Is there a marker at given time?
-    //
+    bool detachMarker(Rosegarden::Marker *marker);
     bool isMarkerAtPosition(Rosegarden::timeT time) const;
 
     //////

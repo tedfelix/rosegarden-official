@@ -23,6 +23,7 @@
 #include "loopruler.h"
 #include "RulerScale.h"
 #include "colours.h"
+#include "rosegardenguidoc.h"
 
 #include <qcanvas.h>
 #include <qpainter.h>
@@ -37,7 +38,8 @@ using Rosegarden::RulerScale;
 class BarButtonsWidget : public QWidget, public HZoomable
 {
 public:
-    BarButtonsWidget(Rosegarden::RulerScale *rulerScale,
+    BarButtonsWidget(RosegardenGUIDoc *doc,
+                     Rosegarden::RulerScale *rulerScale,
                      int buttonHeight,
 		     double xorigin = 0.0,
                      QWidget* parent = 0,
@@ -64,12 +66,14 @@ protected:
 
     QFont *m_barFont;
 
+    RosegardenGUIDoc       *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
 
 };
 
 
-BarButtons::BarButtons(RulerScale *rulerScale,
+BarButtons::BarButtons(RosegardenGUIDoc *doc,
+                       RulerScale *rulerScale,
 		       double xorigin,
                        int barHeight,
 		       bool invert,
@@ -80,6 +84,7 @@ BarButtons::BarButtons(RulerScale *rulerScale,
     m_invert(invert),
     m_loopRulerHeight(10),
     m_currentXOffset(0),
+    m_doc(doc),
     m_rulerScale(rulerScale),
     m_hButtonBar(0)
 {
@@ -88,7 +93,7 @@ BarButtons::BarButtons(RulerScale *rulerScale,
 
     if (!m_invert) {
 	m_hButtonBar = new BarButtonsWidget
-	    (m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
+	    (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
 
     m_loopRuler = new LoopRuler
@@ -96,7 +101,7 @@ BarButtons::BarButtons(RulerScale *rulerScale,
 
     if (m_invert) {
 	m_hButtonBar = new BarButtonsWidget
-	    (m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
+	    (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
 }
 
@@ -156,7 +161,8 @@ void BarButtons::paintEvent(QPaintEvent *e)
 //----------------------------------------------------------------------
 
 
-BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
+BarButtonsWidget::BarButtonsWidget(RosegardenGUIDoc *doc, 
+                                   RulerScale *rulerScale,
                                    int barHeight,
 				   double xorigin,
                                    QWidget* parent,
@@ -167,6 +173,7 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
       m_xorigin(xorigin),
       m_currentXOffset(0),
       m_width(-1),
+      m_doc(doc),
       m_rulerScale(rulerScale)
 {
 //    m_barFont = new QFont("helvetica", 12);
@@ -274,5 +281,27 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 
         painter.setWorldXForm(enableXForm);
 
+    }
+
+    if (m_doc)
+    {
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::Composition::markercontainer markers = comp.getMarkers();
+        Rosegarden::Composition::markerconstiterator it;
+
+        for (it = markers.begin(); it != markers.end(); ++it)
+        {
+            if ((*it)->getTime() >= comp.getBarStart(firstBar) &&
+                (*it)->getTime() < comp.getBarEnd(lastBar))
+            {
+                //cout << "show marker at " << (*it)->getTime() << endl;
+                int x = m_rulerScale->getXForTime((*it)->getTime());
+                painter.fillRect(x, 0, x + 50, m_barHeight, QBrush(Qt::red));
+
+                painter.setWorldXForm(false);
+                painter.drawText(x, m_barHeight, strtoqstr((*it)->getName()));
+                painter.setWorldXForm(true);
+            }
+        }
     }
 }

@@ -38,7 +38,8 @@ class BarButtons : public QVBox
     Q_OBJECT
 
 public:
-    BarButtons(Rosegarden::RulerScale *rulerScale,
+    BarButtons(RosegardenGUIDoc *doc,
+               Rosegarden::RulerScale *rulerScale,
 	       double xorigin,
                int buttonHeight,
 	       bool invert = false, // draw upside-down
@@ -72,6 +73,7 @@ private:
     int m_loopRulerHeight;
     int m_currentXOffset;
 
+    RosegardenGUIDoc       *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
 
     BarButtonsWidget *m_hButtonBar;

@@ -140,7 +140,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Top Bar Buttons
     //
-    m_topBarButtons = new BarButtons(m_rulerScale,
+    m_topBarButtons = new BarButtons(m_doc,
+                                     m_rulerScale,
 				     0,
                                      barButtonsHeight,
                                      false,
@@ -168,7 +169,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Bottom Bar Buttons
     //
-    m_bottomBarButtons = new BarButtons(m_rulerScale,
+    m_bottomBarButtons = new BarButtons(m_doc,
+                                        m_rulerScale,
 					0, 
                                         barButtonsHeight,
                                         true,

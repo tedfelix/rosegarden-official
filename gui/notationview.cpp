@@ -265,7 +265,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
-    setTopBarButtons(new BarButtons(m_hlayout, 20.0, 25,
+    setTopBarButtons(new BarButtons(getDocument(),
+                                    m_hlayout, 20.0, 25,
 				    false, getCentralFrame()));
 
     m_topBarButtons->getLoopRuler()->setBackgroundColor
@@ -295,7 +296,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     readOptions();
 
 
-    setBottomBarButtons(new BarButtons(m_hlayout, 20.0, 25,
+    setBottomBarButtons(new BarButtons(getDocument(), m_hlayout, 20.0, 25,
 				       true, getCentralFrame()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
