@@ -913,6 +913,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     delete m_view;
     initView();
 
+    newDocument->syncDevices();
     newDocument->clearModifiedStatus();
 
     emit documentChanged(newDocument);

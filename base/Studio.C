@@ -128,6 +128,8 @@ Studio::getPresentationInstruments()
     {
         midiDevice = dynamic_cast<MidiDevice*>(*it);
 
+	std::cerr << "Studio::getPresentationInstruments: checking out device " << (*it)->getId() << std::endl;
+	
         if (midiDevice)
 	{
 	    // skip read-only devices

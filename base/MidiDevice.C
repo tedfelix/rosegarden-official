@@ -457,7 +457,7 @@ MidiDevice::getAllInstruments() const
 InstrumentList
 MidiDevice::getPresentationInstruments() const
 {
-    std::cerr<<"MidiDevice::getPresentationInstruments: we have " << m_presentationInstrumentList.size() << ", as follows:" << std::endl;
+    std::cerr<<"MidiDevice::getPresentationInstruments(" << getId() << "): we have " << m_presentationInstrumentList.size() << ", as follows:" << std::endl;
     for (InstrumentList::const_iterator it = m_presentationInstrumentList.begin();
 	 it != m_presentationInstrumentList.end(); ++it) {
 	std::cerr << (void *)(*it) << " (id " << (*it ? (*it)->getId() : -1) << ")" << std::endl;
