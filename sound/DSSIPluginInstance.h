@@ -34,6 +34,7 @@
 #include <dssi.h>
 #include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
+#include "Scavenger.h"
 
 namespace Rosegarden
 {
@@ -112,6 +113,8 @@ protected:
     void deactivate();
     void connectPorts();
 
+    bool handleController(snd_seq_event_t *ev);
+    void setPortValueFromController(unsigned int portNumber, int controlValue);
     void selectProgramAux(QString program, bool backupPortValues);
 
     void initialiseGroupMembership();
@@ -125,7 +128,9 @@ protected:
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsIn;
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsOut;
 
-    std::vector<LADSPA_Data> m_backupControlPortsIn;
+    std::vector<LADSPA_Data>  m_backupControlPortsIn;
+
+    std::map<int, int>        m_controllerMap;
 
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
@@ -135,7 +140,7 @@ protected:
 	int lsb;
 	int program;
     };
-    ProgramControl m_pendingProgram;
+    ProgramControl m_pending;
 
     RingBuffer<snd_seq_event_t> m_eventBuffer;
 
@@ -157,6 +162,13 @@ protected:
     static GroupMap m_groupMap;
     static snd_seq_event_t **m_groupLocalEventBuffers;
     static size_t m_groupLocalEventBufferCount;
+
+    struct ScavengerWrapper {
+	ScavengerWrapper(snd_seq_event_t **arr) : m_arr(arr) { }
+	~ScavengerWrapper() { delete[] m_arr; }
+	snd_seq_event_t **m_arr;
+    };
+    static Scavenger<ScavengerWrapper> m_bufferScavenger;
 };
 
 };

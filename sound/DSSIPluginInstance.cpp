@@ -24,6 +24,14 @@
 
 #include "DSSIPluginInstance.h"
 
+
+    //!!! Missing bits of DSSI:
+    // 
+    // configure return value is not yet returned to RG GUI -- needs to be shown
+    // to user
+
+
+
 #ifdef HAVE_DSSI
 
 #define DEBUG_DSSI 1
@@ -37,6 +45,7 @@ namespace Rosegarden
 DSSIPluginInstance::GroupMap DSSIPluginInstance::m_groupMap;
 snd_seq_event_t **DSSIPluginInstance::m_groupLocalEventBuffers = 0;
 size_t DSSIPluginInstance::m_groupLocalEventBufferCount = 0;
+Scavenger<DSSIPluginInstance::ScavengerWrapper> DSSIPluginInstance::m_bufferScavenger(2, 10);
 
 
 DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
@@ -77,7 +86,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 
     m_ownBuffers = true;
 
-    m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+    m_pending.lsb = m_pending.msb = m_pending.program = -1;
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -117,7 +126,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 
     init();
 
-    m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+    m_pending.lsb = m_pending.msb = m_pending.program = -1;
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -146,19 +155,32 @@ DSSIPluginInstance::init()
     {
         if (LADSPA_IS_PORT_AUDIO(descriptor->PortDescriptors[i]))
         {
-            if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i]))
+            if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i])) {
                 m_audioPortsIn.push_back(i);
-            else
+	    } else {
                 m_audioPortsOut.push_back(i);
+	    }
         }
         else
         if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]))
         {
 	    if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i])) {
+
 		LADSPA_Data *data = new LADSPA_Data(0.0);
-		m_controlPortsIn.push_back(
-                    std::pair<unsigned long, LADSPA_Data*>(i, data));
+
+		m_controlPortsIn.push_back(std::pair<unsigned long, LADSPA_Data*>
+					   (i, data));
+
 		m_backupControlPortsIn.push_back(0.0);
+
+		if (m_descriptor->get_midi_controller_for_port) {
+		    int controller = m_descriptor->get_midi_controller_for_port
+			(m_instanceHandle, i);
+		    if (controller != 0 && controller != 32 && DSSI_IS_CC(controller)) {
+			m_controllerMap[DSSI_CC_NUMBER(controller)] = i;
+		    }
+		}
+
 	    } else {
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsOut.push_back(
@@ -249,18 +271,23 @@ DSSIPluginInstance::initialiseGroupMembership()
 
     if (++pluginsInGroup > m_groupLocalEventBufferCount) {
 
-	snd_seq_event_t **eventLocalBuffers = new snd_seq_event_t *[pluginsInGroup];
+	size_t nextBufferCount = pluginsInGroup * 2;
+
+	snd_seq_event_t **eventLocalBuffers = new snd_seq_event_t *[nextBufferCount];
+
 	for (size_t i = 0; i < m_groupLocalEventBufferCount; ++i) {
 	    eventLocalBuffers[i] = m_groupLocalEventBuffers[i];
 	}
-	for (size_t i = m_groupLocalEventBufferCount; i < pluginsInGroup; ++i) {
+	for (size_t i = m_groupLocalEventBufferCount; i < nextBufferCount; ++i) {
 	    eventLocalBuffers[i] = new snd_seq_event_t[EVENT_BUFFER_SIZE];
 	}
 
-	m_groupLocalEventBuffers = eventLocalBuffers;
-	m_groupLocalEventBufferCount = pluginsInGroup;
+	if (m_groupLocalEventBuffers) {
+	    m_bufferScavenger.claim(new ScavengerWrapper(m_groupLocalEventBuffers));
+	}
 
-	//!!! need to scavenge old event buffer thingy
+	m_groupLocalEventBuffers = eventLocalBuffers;
+	m_groupLocalEventBufferCount = nextBufferCount;
     }
 
     m_grouped = true;
@@ -445,9 +472,9 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
     if (!found) return;
     m_program = program;
 
-    m_pendingProgram.msb = bankNo / 128;
-    m_pendingProgram.lsb = bankNo % 128;
-    m_pendingProgram.program = programNo;
+    m_pending.msb = bankNo / 128;
+    m_pending.lsb = bankNo % 128;
+    m_pending.program = programNo;
 
     if (backupPortValues) {
 
@@ -473,7 +500,7 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 	    // screw it: if a run() hasn't happened by now, then
 	    // evidently we aren't running at all -- call
 	    // select_program ourselves
-	    m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+	    m_pending.lsb = m_pending.msb = m_pending.program = -1;
 	    m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
 	}
 
@@ -481,23 +508,6 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 	    m_backupControlPortsIn[i] = *m_controlPortsIn[i].second;
 	}
     }
-
-    //!!! Missing bits of DSSI:
-    // 
-    // select_program (below) should be called from audio thread -- simple enough
-    //
-    // configure return value is not yet returned to RG GUI -- needs to be shown
-    // to user
-    //
-    // port-controller mappings
-    //
-    // proper handling of MIDI program changes and other such
-/*!!!
-    if (found) {
-	//!!! no -- must be scheduled for call from audio context, with run()
-	m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
-    }
-*/
 }
 
 void
@@ -586,6 +596,41 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
     }
 }
 
+void
+DSSIPluginInstance::setPortValueFromController(unsigned int port, int cv)
+{
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::setPortValueFromController(" << port << ") to " << cv << std::endl;
+#endif
+
+    const LADSPA_Descriptor *p = m_descriptor->LADSPA_Plugin;
+    LADSPA_PortRangeHintDescriptor d = p->PortRangeHints[port].HintDescriptor;
+    LADSPA_Data lb = p->PortRangeHints[port].LowerBound;
+    LADSPA_Data ub = p->PortRangeHints[port].UpperBound;
+
+    float value = (float)cv;
+
+    if (!LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
+	if (!LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	    /* unbounded: might as well leave the value alone. */
+	} else {
+	    /* bounded above only. just shift the range. */
+	    value = ub - 127.0f + value;
+	}
+    } else {
+	if (!LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	    /* bounded below only. just shift the range. */
+	    value = lb + value;
+	} else {
+	    /* bounded both ends.  more interesting. */
+	    /* XXX !!! todo: fill in logarithmic, sample rate &c */
+	    value = lb + ((ub - lb) * value / 127.0f);
+	}
+    }
+
+    setPortValue(port, value);
+}
+
 float
 DSSIPluginInstance::getPortValue(unsigned int portNumber)
 {
@@ -636,6 +681,32 @@ DSSIPluginInstance::sendEvent(const RealTime &eventTime,
     m_eventBuffer.write(&ev, 1);
 }
 
+bool
+DSSIPluginInstance::handleController(snd_seq_event_t *ev)
+{
+    int controller = ev->data.control.param;
+
+    if (controller == 0) { // bank select MSB
+	
+	m_pending.msb = ev->data.control.value;
+
+    } else if (controller == 32) { // bank select LSB
+
+	m_pending.lsb = ev->data.control.value;
+
+    } else if (controller > 0 && controller < 128) {
+	
+	if (m_controllerMap.find(controller) != m_controllerMap.end()) {
+	    int port = m_controllerMap[controller];
+	    setPortValueFromController(port, ev->data.control.value);
+	} else {
+	    return true; // pass through to plugin
+	}
+    }
+
+    return false;
+}
+
 void
 DSSIPluginInstance::run(const RealTime &blockTime)
 {
@@ -669,6 +740,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 
 	snd_seq_event_t *ev = localEventBuffer + evCount;
 	*ev = m_eventBuffer.peek();
+	bool accept = true;
 
 	RealTime evTime(ev->time.time.tv_sec, ev->time.time.tv_nsec);
 
@@ -688,13 +760,23 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 
 	ev->time.tick = frameOffset;
 	m_eventBuffer.skip(1);
-	if (++evCount >= EVENT_BUFFER_SIZE) break;
+
+	if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
+	    accept = handleController(ev);
+	} else if (ev->type == SND_SEQ_EVENT_PGMCHANGE) {
+	    m_pending.program = ev->data.control.value;
+	    accept = false;
+	}
+
+	if (accept) {
+	    if (++evCount >= EVENT_BUFFER_SIZE) break;
+	}
     }
 
-    if (m_pendingProgram.program >= 0 && m_descriptor->select_program) {
-	int program = m_pendingProgram.program;
-	int bank = m_pendingProgram.lsb + 128 * m_pendingProgram.msb;
-	m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+    if (m_pending.program >= 0 && m_descriptor->select_program) {
+	int program = m_pending.program;
+	int bank = m_pending.lsb + 128 * m_pending.msb;
+	m_pending.lsb = m_pending.msb = m_pending.program = -1;
 	m_descriptor->select_program(m_instanceHandle, bank, program);
     }
 
@@ -794,10 +876,20 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 	std::cerr << "DSSIPluginInstance::runGrouped(" << blockTime << "): running " << instance << std::endl;
 #endif
 
+	if (instance->m_pending.program >= 0 &&
+	    instance->m_descriptor->select_program) {
+	    int program = instance->m_pending.program;
+	    int bank = instance->m_pending.lsb + 128 * instance->m_pending.msb;
+	    instance->m_pending.lsb = instance->m_pending.msb = instance->m_pending.program = -1;
+	    instance->m_descriptor->select_program
+		(instance->m_instanceHandle, bank, program);
+	}
+
 	while (instance->m_eventBuffer.getReadSpace() > 0) {
 
 	    snd_seq_event_t *ev = m_groupLocalEventBuffers[index] + counts[index];
 	    *ev = instance->m_eventBuffer.peek();
+	    bool accept = true;
 
 	    RealTime evTime(ev->time.time.tv_sec, ev->time.time.tv_nsec);
 
@@ -816,19 +908,17 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 
 	    ev->time.tick = frameOffset;
 	    instance->m_eventBuffer.skip(1);
-	    if (++counts[index] >= EVENT_BUFFER_SIZE) break;
-	}
 
-	if (instance->m_pendingProgram.program >= 0 &&
-	    instance->m_descriptor->select_program) {
-	    int program = instance->m_pendingProgram.program;
-	    int bank = instance->m_pendingProgram.lsb +
-		128 * instance->m_pendingProgram.msb;
-	    instance->m_pendingProgram.lsb =
-		instance->m_pendingProgram.msb =
-		instance->m_pendingProgram.program = -1;
-	    instance->m_descriptor->select_program
-		(instance->m_instanceHandle, bank, program);
+	    if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
+		accept = instance->handleController(ev);
+	    } else if (ev->type == SND_SEQ_EVENT_PGMCHANGE) {
+		instance->m_pending.program = ev->data.control.value;
+		accept = false;
+	    }
+
+	    if (accept) {
+		if (++counts[index] >= EVENT_BUFFER_SIZE) break;
+	    }
 	}
 
 	++index;
@@ -858,6 +948,8 @@ DSSIPluginInstance::deactivate()
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::deactivate " << m_identifier << " done" << std::endl;
 #endif
+
+    m_bufferScavenger.scavenge();
 }
 
 void
