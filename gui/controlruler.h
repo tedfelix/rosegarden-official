@@ -57,7 +57,7 @@ class ControlRuler : public RosegardenCanvasView, public Rosegarden::ViewElement
     friend class ControlItem;
 
 public:
-    ControlRuler(Rosegarden::ViewElementList*,
+    ControlRuler(Rosegarden::Staff*,
                  Rosegarden::RulerScale*,
                  QScrollBar* hsb,
                  QCanvas*,
@@ -104,8 +104,8 @@ protected:
     void updateSelection();
 
 private:
-    Rosegarden::ViewElementList* m_viewElementList;
-    Rosegarden::RulerScale*      m_rulerScale;
+    Rosegarden::Staff*      m_staff;
+    Rosegarden::RulerScale* m_rulerScale;
 
     ControlItem* m_currentItem;
     QCanvasItemList m_selectedItems;

@@ -33,7 +33,7 @@
 #include "Event.h"
 #include "Selection.h"
 
-namespace Rosegarden { class Segment; class ViewElementList; class RulerScale; }
+namespace Rosegarden { class Segment; class Staff; class RulerScale; }
 
 class QCanvasItem;
 class QScrollView;
@@ -193,7 +193,7 @@ protected:
     /**
      * Add control ruler
      */
-    ControlRuler* makeControlRuler(Rosegarden::ViewElementList* viewElementList,
+    ControlRuler* makeControlRuler(Rosegarden::Staff* staff,
                                    Rosegarden::RulerScale* rulerScale);
 
     /**

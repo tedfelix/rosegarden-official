@@ -316,7 +316,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Same, but editable
     //
-    makeControlRuler(m_staffs[0]->getViewElementList(), &m_hlayout);
+    makeControlRuler(m_staffs[0], &m_hlayout);
     slotShowControlRuler(true);
 
     // Scroll view to centre middle-C and warp to pointer position

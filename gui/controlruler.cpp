@@ -29,6 +29,7 @@
 #include <qhbox.h>
 #include <qframe.h>
 
+#include "Staff.h"
 #include "BaseProperties.h"
 #include "controlruler.h"
 #include "colours.h"
@@ -82,7 +83,8 @@ class ControlItem : public QCanvasRectangle
 {
 public:
     ControlItem(ControlRuler* controlRuler,
-                ViewElement* el, ViewElement* nextEl = 0);
+                ViewElement* el,
+                int x, int width = DefaultWidth);
 
     ViewElement* getViewElement() { return m_viewElement; }
 
@@ -124,16 +126,16 @@ const unsigned int ControlItem::BorderThickness = 1;
 const unsigned int ControlItem::DefaultWidth    = 20;
 
 ControlItem::ControlItem(ControlRuler* ruler, ViewElement *el,
-                         ViewElement *nextEl)
+                         int xx, int width)
     : QCanvasRectangle(ruler->canvas()),
       m_controlRuler(ruler),
       m_viewElement(el)
 {
-    setWidth(nextEl ? int(nextEl->getLayoutX() - el->getLayoutX()) : DefaultWidth);
+    setWidth(width);
     setPen(QPen(Qt::black, BorderThickness));
     setBrush(Qt::blue);
 
-    setX(el->getLayoutX());
+    setX(xx);
     setY(canvas()->height());
     updateFromValue();
     RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << endl;
@@ -271,6 +273,7 @@ void ControlSelector::handleMouseMove(QMouseEvent *e, int, int)
 
 //////////////////////////////////////////////////////////////////////
 
+using Rosegarden::Staff;
 using Rosegarden::ViewElementList;
 
 const int ControlRuler::DefaultRulerHeight = 75;
@@ -279,13 +282,13 @@ const int ControlRuler::MaxItemHeight = 64 + 5;
 const int ControlRuler::ItemHeightRange = 64;
 
 
-ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
+ControlRuler::ControlRuler(Staff* staff,
                            Rosegarden::RulerScale* rulerScale,
                            QScrollBar* hsb,
                            QCanvas* c, QWidget* parent,
                            const char* name, WFlags f) :
     RosegardenCanvasView(hsb, c, parent, name, f),
-    m_viewElementList(viewElementList),
+    m_staff(staff),
     m_rulerScale(rulerScale),
     m_currentItem(0),
     m_tool(0),
@@ -295,7 +298,7 @@ ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas()))
 {
-    m_viewElementList->addObserver(this);
+    m_staff->getViewElementList()->addObserver(this);
     setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
 
@@ -307,28 +310,34 @@ ControlRuler::ControlRuler(Rosegarden::ViewElementList* viewElementList,
 
 ControlRuler::~ControlRuler()
 {
-    m_viewElementList->removeObserver(this);
+    m_staff->getViewElementList()->removeObserver(this);
 }
 
 void ControlRuler::init()
 {
     ViewElementList::iterator j;
+    ViewElementList* viewElementList = m_staff->getViewElementList();
 
-    for(ViewElementList::iterator i = m_viewElementList->begin();
-        i != m_viewElementList->end(); ++i) {
+    for(ViewElementList::iterator i = viewElementList->begin();
+        i != viewElementList->end(); ++i) {
 
-        j = i; ++j;
-        // also pass next element if there's one
-        //
-        ControlItem* controlItem = new ControlItem(this,
-                                                   *i, j != m_viewElementList->end() ? *j : 0);
+ 	double x = m_rulerScale->getXForTime((*i)->getViewAbsoluteTime());
+ 	new ControlItem(this, *i, int(x),
+                        int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
+                                                      (*i)->getViewDuration()) - x));
+
     }
 }
 
 void ControlRuler::elementAdded(ViewElement *el)
 {
     RG_DEBUG << "ControlRuler::elementAdded()\n";
-    new ControlItem(this, el);
+
+    double x = m_rulerScale->getXForTime(el->getViewAbsoluteTime());
+
+    new ControlItem(this, el, int(x),
+                    int(m_rulerScale->getXForTime(el->getViewAbsoluteTime() +
+                                                  el->getViewDuration()) - x));
 }
 
 void ControlRuler::elementRemoved(ViewElement *el)
@@ -475,8 +484,8 @@ int ControlRuler::valueToHeight(long val)
     long scaleVal = val * (ItemHeightRange);
     
     int res = -(int(scaleVal / getMaxPropertyValue()) + MinItemHeight);
-    RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
-             << " - scaleVal = " << scaleVal << endl;
+//     RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
+//              << " - scaleVal = " << scaleVal << endl;
     return res;
 }
 
@@ -488,7 +497,7 @@ long ControlRuler::heightToValue(int h)
     val /= (ItemHeightRange);
     val = std::min(val, long(getMaxPropertyValue()));
 
-    RG_DEBUG << "ControlRuler::heightToValue : height = " << h << " - val = " << val << endl;
+//     RG_DEBUG << "ControlRuler::heightToValue : height = " << h << " - val = " << val << endl;
 
     return val;
 }

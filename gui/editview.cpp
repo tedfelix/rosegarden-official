@@ -152,7 +152,7 @@ void EditView::addPropertyBox(QWidget *w)
     m_controlBox->addWidget(w);
 }
 
-ControlRuler* EditView::makeControlRuler(Rosegarden::ViewElementList* viewElementList,
+ControlRuler* EditView::makeControlRuler(Rosegarden::Staff* staff,
                                          Rosegarden::RulerScale* rulerScale)
 {
     if (m_controlRuler) return m_controlRuler;
@@ -160,7 +160,7 @@ ControlRuler* EditView::makeControlRuler(Rosegarden::ViewElementList* viewElemen
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    m_controlRuler = new ControlRuler(viewElementList, rulerScale,
+    m_controlRuler = new ControlRuler(staff, rulerScale,
                                       m_horizontalScrollBar,
                                       controlRulerCanvas, getCentralFrame());
 
