@@ -478,10 +478,10 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
 bool
 RosegardenGUIDoc::writeToFile(const QString &file, const QString &text)
 {
-    gzFile fd = gzopen(file.latin1(), "wb");
+    gzFile fd = gzopen(qstrtostr(file).c_str(), "wb");
     if (!fd) return false;
     
-    const char *ctext = text.latin1();
+    const char *ctext = qstrtostr(text).c_str();
     size_t csize = strlen(ctext);
     int actual = gzwrite(fd, (void *)ctext, csize);
     gzclose(fd);
@@ -493,13 +493,13 @@ bool
 RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
 {
     text = "";
-    gzFile fd = gzopen(file.latin1(), "rb");
+    gzFile fd = gzopen(qstrtostr(file).c_str(), "rb");
     if (!fd) return false;
 
     static char buffer[1000];
 
     while (gzgets(fd, buffer, 1000)) {
-	text.append(buffer);
+	text.append(strtoqstr(std::string(buffer)));
 	if (gzeof(fd)) {
 	    gzclose(fd);
 	    return true;

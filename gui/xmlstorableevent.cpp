@@ -53,7 +53,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
         } else if (attrName == "type") {
 
-            setType(attrVal.latin1());
+            setType(qstrtostr(attrVal));
 
         } else if (attrName == "subordering") {
 
@@ -73,7 +73,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
             if (!isNumeric) {
 		try {
-		    Note n(attrVal.latin1());
+		    Note n(qstrtostr(attrVal));
 		    setDuration(n.getDuration());
 		} catch (Note::BadType b) {
                     kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (Note choked on \"" << b.type << "\")" << endl;
@@ -117,17 +117,17 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
-                set<Bool>(attrName.latin1(), valLowerCase == "true");
+                set<Bool>(qstrtostr(attrName), valLowerCase == "true");
 
             } else {
 
                 // Not a bool, check if integer val
                 numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
-                    set<Int>(attrName.latin1(), numVal);
+                    set<Int>(qstrtostr(attrName), numVal);
                 } else {
                     // not an int either, default to string
-                    set<String>(attrName.latin1(), attrVal.latin1());
+                    set<String>(qstrtostr(attrName), qstrtostr(attrVal));
                 }
             }
         }
@@ -162,16 +162,16 @@ XmlStorableEvent::setPropertiesFromAttributes(const QXmlAttributes &attributes)
             kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
             continue;
         } else if (attrName == "bool") {
-            set<Bool>(name.latin1(), attrVal.lower() == "true");
+            set<Bool>(qstrtostr(name), attrVal.lower() == "true");
             have = true;
         } else if (attrName == "int") {
-            set<Int>(name.latin1(), attrVal.toInt());
+            set<Int>(qstrtostr(name), attrVal.toInt());
             have = true;
         } else if (attrName == "string") {
-            set<String>(name.latin1(), attrVal.latin1());
+            set<String>(qstrtostr(name), qstrtostr(attrVal));
             have = true;
         } else {
-            kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: unknown attribute name \"" << name.latin1() << "\", ignoring" << endl;
+            kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring" << endl;
         }
     }
 

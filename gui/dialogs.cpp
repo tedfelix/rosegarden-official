@@ -68,7 +68,7 @@ SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
 std::string
 SimpleTextDialog::getText() const
 {
-    return m_lineEdit->text().latin1();
+    return qstrtostr(m_lineEdit->text());
 }
 
 
@@ -564,7 +564,7 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
     QString u((s.length() >= 1) ? (s.left(1).upper() + s.right(s.length() - 1))
 			        :  s);
     
-    std::string name(u.latin1());
+    std::string name(qstrtostr(u));
     name = name + " " + (minor ? "minor" : "major");
     return name;
 }
@@ -1025,14 +1025,14 @@ TextEventDialog::getTextType() const
 std::string
 TextEventDialog::getTextString() const
 {
-    return std::string(m_text->text().latin1());
+    return std::string(qstrtostr(m_text->text()));
 }
 
 void
 TextEventDialog::slotTextChanged(const QString &qtext)
 {
     std::string type(getTextType());
-    std::string text(qtext.latin1());
+    std::string text(qstrtostr(qtext));
 
     if (text == "") text = "Sample";
     if (text.length() > 20) {
@@ -1259,7 +1259,7 @@ EventEditDialog::getEvent() const
 void
 EventEditDialog::slotEventTypeChanged(const QString &type)
 {
-    std::string t(type.latin1());
+    std::string t(qstrtostr(type));
     if (t != m_type) {
 	m_modified = true;
 	m_type = t;
@@ -1318,7 +1318,7 @@ EventEditDialog::slotIntPropertyChanged(int value)
 
     m_modified = true;
     QString propertyName = spinBox->name();
-    m_event.set<Rosegarden::Int>(propertyName.latin1(), value);
+    m_event.set<Rosegarden::Int>(qstrtostr(propertyName), value);
 }
 
 void
@@ -1332,7 +1332,7 @@ EventEditDialog::slotBoolPropertyChanged()
     QString propertyName = checkBox->name();
     bool checked = checkBox->isChecked();
 
-    m_event.set<Rosegarden::Bool>(propertyName.latin1(), checked);
+    m_event.set<Rosegarden::Bool>(qstrtostr(propertyName), checked);
 }
 
 void
@@ -1344,7 +1344,7 @@ EventEditDialog::slotStringPropertyChanged(const QString &value)
     
     m_modified = true;
     QString propertyName = lineEdit->name();
-    m_event.set<Rosegarden::String>(propertyName.latin1(), value.latin1());
+    m_event.set<Rosegarden::String>(qstrtostr(propertyName), qstrtostr(value));
 }
 
 void
@@ -1373,7 +1373,7 @@ EventEditDialog::slotPropertyDeleted()
     }
     delete list;
     
-    m_event.unset(propertyName.latin1());
+    m_event.unset(qstrtostr(propertyName));
 }
 
 void
@@ -1403,32 +1403,32 @@ EventEditDialog::slotPropertyMadePersistent()
     delete list;
 
     m_modified = true;
-    addPersistentProperty(propertyName.latin1());
+    addPersistentProperty(qstrtostr(propertyName));
 
     Rosegarden::PropertyType type =
-	m_originalEvent.getPropertyType(propertyName.latin1());
+	m_originalEvent.getPropertyType(qstrtostr(propertyName));
 
     switch (type) {
 
     case Rosegarden::Int:
 	m_event.set<Rosegarden::Int>
-	    (propertyName.latin1(),
+	    (qstrtostr(propertyName),
 	     m_originalEvent.get<Rosegarden::Int>
-	     (propertyName.latin1()));
+	     (qstrtostr(propertyName)));
 	break;
 
     case Rosegarden::Bool:
 	m_event.set<Rosegarden::Bool>
-	    (propertyName.latin1(),
+	    (qstrtostr(propertyName),
 	     m_originalEvent.get<Rosegarden::Bool>
-	     (propertyName.latin1()));
+	     (qstrtostr(propertyName)));
 	break;
 
     case Rosegarden::String:
 	m_event.set<Rosegarden::String>
-	    (propertyName.latin1(),
+	    (qstrtostr(propertyName),
 	     m_originalEvent.get<Rosegarden::String>
-	     (propertyName.latin1()));
+	     (qstrtostr(propertyName)));
 	break;
     }
 }

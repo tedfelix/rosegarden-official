@@ -56,8 +56,8 @@ NoteFontMap::NoteFontMap(string name) :
     QFileInfo mapFileInfo(mapFileName);
 
     if (!mapFileInfo.isReadable()) {
-        throw MappingFileReadFailed((i18n("Can't open mapping file ") +
-                                     mapFileName).latin1());
+        throw MappingFileReadFailed(qstrtostr((i18n("Can't open mapping file ") +
+                                     mapFileName)));
     }
 
     QFile mapFile(mapFileName);
@@ -70,7 +70,7 @@ NoteFontMap::NoteFontMap(string name) :
     mapFile.close();
 
     if (!ok) {
-        throw MappingFileReadFailed(m_errorString.latin1());
+        throw MappingFileReadFailed(qstrtostr(m_errorString));
     }
 }
 
@@ -83,7 +83,7 @@ bool
 NoteFontMap::characters(QString &chars)
 {
     if (!m_characterDestination) return true;
-    *m_characterDestination += chars.latin1();
+    *m_characterDestination += qstrtostr(chars);
     return true;
 }
 
@@ -104,22 +104,22 @@ NoteFontMap::startElement(const QString &, const QString &,
         
     } else if (lcName == "font-information") { 
 
-        const char *s;
+	QString s;
 
-        s = attributes.value("origin").latin1();
-        if (s) m_origin = s;
+        s = attributes.value("origin");
+        if (s) m_origin = qstrtostr(s);
 
-        s = attributes.value("copyright").latin1();
-        if (s) m_copyright = s;
+        s = attributes.value("copyright");
+        if (s) m_copyright = qstrtostr(s);
 
-        s = attributes.value("mapped-by").latin1();
-        if (s) m_mappedBy = s;
+        s = attributes.value("mapped-by");
+        if (s) m_mappedBy = qstrtostr(s);
 
-        s = attributes.value("type").latin1();
-        if (s) m_type = s;
+        s = attributes.value("type");
+        if (s) m_type = qstrtostr(s);
 
-        s = attributes.value("smooth").latin1();
-        if (s) m_smooth = (QString(s).lower() == "true");
+        s = attributes.value("smooth");
+        if (s) m_smooth = (s.lower() == "true");
 
     } else if (lcName == "font-sizes") {
 
@@ -168,12 +168,12 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         SymbolData symbolData;
-        symbolData.setSrc(src.latin1());
+        symbolData.setSrc(qstrtostr(src));
 
         QString inversionSrc = attributes.value("inversion-src");
-        if (inversionSrc) symbolData.setInversion(inversionSrc.latin1());
+        if (inversionSrc) symbolData.setInversion(qstrtostr(inversionSrc));
 
-        m_data[symbolName.upper().latin1()] = symbolData;
+        m_data[qstrtostr(symbolName.upper())] = symbolData;
 
     } else if (lcName == "font-hotspots") {
 
@@ -184,7 +184,7 @@ NoteFontMap::startElement(const QString &, const QString &,
             m_errorString = i18n("name is a required attribute of hotspot");
             return false;
         }
-        m_hotspotCharName = s.upper().latin1();
+        m_hotspotCharName = qstrtostr(s.upper());
 
     } else if (lcName == "when") {
 
@@ -261,7 +261,7 @@ NoteFontMap::checkFile(int size, string &src) const
         .arg(strtoqstr(m_name))
         .arg(size)
         .arg(strtoqstr(src));
-    src = pixmapFileName.latin1();
+    src = qstrtostr(pixmapFileName);
 
     QFileInfo pixmapFileInfo(pixmapFileName);
 
@@ -406,15 +406,15 @@ NoteFont::NoteFont(string fontName, int size) :
     if (sizes.size() > 0) {
         m_currentSize = *sizes.begin();
     } else {
-        throw BadFont(QString("No sizes listed for font \"%1\"")
-                      .arg(strtoqstr(fontName)).latin1());
+        throw BadFont(qstrtostr(QString("No sizes listed for font \"%1\"")
+                      .arg(strtoqstr(fontName))));
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadFont(QString("Font \"%1\" not available in size %2")
+            throw BadFont(qstrtostr(QString("Font \"%1\" not available in size %2")
                           .arg(strtoqstr(fontName))
-                          .arg(size).latin1());
+                          .arg(size)));
         } else {
             m_currentSize = size;
         }
@@ -433,9 +433,9 @@ NoteFont::NoteFont(string fontName, int size) :
 
     // Locate our font's pixmap map in the font map, create if necessary
 
-    string fontKey = QString("__%1__%2__")
+    string fontKey = qstrtostr(QString("__%1__%2__")
         .arg(strtoqstr(m_fontMap.getName()))
-        .arg(m_currentSize).latin1();
+        .arg(m_currentSize));
 
     FontPixmapMap::iterator i = m_fontPixmapMap->find(fontKey);
     if (i == m_fontPixmapMap->end()) {
@@ -469,7 +469,7 @@ NoteFont::getAvailableFontNames()
     for (QStringList::Iterator i = subDirs.begin(); i != subDirs.end(); ++i) {
         QFileInfo mapFile(QString("%1/%2/mapping.xml").arg(fontDir).arg(*i));
         if (mapFile.exists() && mapFile.isReadable()) {
-            names.insert((*i).latin1());
+            names.insert(qstrtostr((*i)));
         }
     }
 
@@ -652,7 +652,7 @@ NoteFont::getColouredCanvasPixmap(CharName charName, int hue,
 CharName
 NoteFont::getNameWithColour(CharName base, int hue) const
 {
-    return QString("%1__%2").arg(hue).arg(strtoqstr(base)).latin1();
+    return qstrtostr(QString("%1__%2").arg(hue).arg(strtoqstr(base)));
 }
 
 QPixmap *

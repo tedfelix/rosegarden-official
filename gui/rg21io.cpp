@@ -331,7 +331,7 @@ bool RG21Loader::parseIndicationStart()
     if (m_tokens.count() < 4) return false;
    
     unsigned int indicationId = m_tokens[2].toUInt();
-    std::string indicationType = m_tokens[3].lower().latin1();
+    std::string indicationType = qstrtostr(m_tokens[3].lower());
 
 //    kdDebug(KDEBUG_AREA) << "Indication start: type is \"" << indicationType << "\"" << endl;
 
@@ -569,7 +569,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 
     try {
 
-        Rosegarden::Note n(durationString.latin1());
+        Rosegarden::Note n(qstrtostr(durationString));
         return n.getDuration();
 
     } catch (Rosegarden::Note::BadType b) {
@@ -592,7 +592,7 @@ void RG21Loader::closeSegmentOrComposition()
 
 	Rosegarden::Track *track = new Rosegarden::Track
 	    (trackId, m_currentInstrumentId, trackId,
-	     m_currentStaffName.latin1(), false); 
+	     qstrtostr(m_currentStaffName), false); 
 	m_currentInstrumentId = (++m_currentInstrumentId) % 16;
 
 	m_composition->addTrack(track);

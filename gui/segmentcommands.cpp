@@ -93,7 +93,7 @@ SegmentQuickCopyCommand::execute()
 {
     m_segment = new Segment(*m_segmentToCopy);
     m_segment->setLabel
-	(m_segment->getLabel() + " " + i18n("(copied)").latin1());
+	(m_segment->getLabel() + " " + qstrtostr(i18n("(copied)")));
     m_composition->addSegment(m_segment);
     m_detached = false;
 }

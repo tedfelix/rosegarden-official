@@ -1650,7 +1650,7 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
 {
     SetWaitCursor waitCursor;
 
-    CsoundExporter e(&m_doc->getComposition(), file.latin1());
+    CsoundExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Csound file has not been exported."));
     }
