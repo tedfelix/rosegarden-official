@@ -502,7 +502,7 @@ AudioPluginOSCGUIManager::dispatch()
 	    
 	    OSCMessage *showMessage = new OSCMessage;
 	    showMessage->setMethod("show");
-	    gui->sendToGUI(showMessage);
+	    gui->send(showMessage);
 
 	} else if (method == "configure") {
 
@@ -625,7 +625,7 @@ AudioPluginOSCGUI::~AudioPluginOSCGUI()
 {
     OSCMessage *showMessage = new OSCMessage;
     showMessage->setMethod("quit");
-    sendToGUI(showMessage);
+    send(showMessage);
 }
 
 QString
@@ -759,7 +759,7 @@ void
 AudioPluginOSCGUI::send(OSCMessage *message)
 {
     if (!m_address) {
-	RG_DEBUG << "AudioPluginOSCGUI::sendToGUI: no address available for GUI"
+	RG_DEBUG << "AudioPluginOSCGUI::send: no address available for GUI"
 		 << endl;
 	delete message;
 	return;
@@ -771,7 +771,7 @@ AudioPluginOSCGUI::send(OSCMessage *message)
     size_t count = message->getArgCount();
 
     if (count > 5) {
-	RG_DEBUG << "AudioPluginOSCGUI::sendToGUI: message has too many args ("
+	RG_DEBUG << "AudioPluginOSCGUI::send: message has too many args ("
 		 << count << ", max is 5)" << endl;
 	delete message;
 	return;
