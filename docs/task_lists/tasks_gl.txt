@@ -1,6 +1,8 @@
 Current Task list
 ======================================
 
+- RPM building.
+
 - look at lazy note pixmap rendering again (see
 gui/qcanvassimplesprite.h r1.18, qcanvassimplesprite.cpp r1.20,
 notationstaff.cpp r1.146).
@@ -11,7 +13,7 @@ notationstaff.cpp r1.146).
 
 - fix toolbar pos. saving - ALMOST DONE - toolbar visibility is not saved in notation view.
 
-- fix wait cursors
+- fix wait cursors - DONE (upgrade to Qt 3.0.5)
 
 - AA text on canvas
 
