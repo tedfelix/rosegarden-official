@@ -1199,6 +1199,7 @@ SegmentNotationHelper::hasEffectiveDuration(iterator i)
     if ((*i)->isa(Note::EventType)) {
 	iterator i0(i);
 	if (++i0 != end() &&
+	    (*i0)->isa(Note::EventType) &&
 	    (*i0)->getNotationAbsoluteTime() == 
 	     (*i)->getNotationAbsoluteTime()) {
 	    // we're in a chord or something
@@ -1409,6 +1410,33 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 	std::pair<timeT, timeT> barRange = comp->getBarRange(barNo);
 	iterator barStart = segment().findTime(barRange.first);
 	iterator barEnd   = segment().findTime(barRange.second);
+
+	// Make sure we're examining the notes defined to be within
+	// the bar in notation terms rather than raw terms
+	
+	while (barStart != segment().end() &&
+	       (*barStart)->getNotationAbsoluteTime() < barRange.first) ++barStart;
+
+	iterator scooter = barStart;
+	if (barStart != segment().end()) {
+	    while (scooter != segment().begin()) {
+		--scooter;
+		if ((*scooter)->getNotationAbsoluteTime() < barRange.first) break;
+		barStart = scooter;
+	    }
+	}
+
+	while (barEnd != segment().end() &&
+	       (*barEnd)->getNotationAbsoluteTime() < barRange.second) ++barEnd;
+
+	scooter = barEnd;
+	if (barEnd != segment().end()) {
+	    while (scooter != segment().begin()) {
+		--scooter;
+		if ((*scooter)->getNotationAbsoluteTime() < barRange.second) break;
+		barEnd = scooter;
+	    }
+	}
 
 	TimeSignature timeSig =
 	    segment().getComposition()->getTimeSignatureAt(barRange.first);
