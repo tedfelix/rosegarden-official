@@ -461,9 +461,9 @@ public:
 
     /**
      * Note-quantize the Segment and set the NoteType and NoteDots
-     * properties on note and rest events, from the given quantizer.
+     * properties on note and rest events.
      */
-    void quantize(Quantizer *);
+    void quantize();
 
     
 protected:
