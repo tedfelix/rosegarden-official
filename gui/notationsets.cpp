@@ -189,6 +189,17 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
     return false;
 }
 
+int
+NotationChord::getMaxAccidentalShift() const
+{
+    return 0; //!!! 
+}
+
+int
+NotationChord::getAccidentalShift(const Iterator &itr) const
+{
+    return 0; //!!!
+}
 
 
 //////////////////////////////////////////////////////////////////////

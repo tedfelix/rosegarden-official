@@ -492,12 +492,12 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     timeT restDuration = endTime - startTime;
     if (restDuration <= 0) return;
 
-/*
+//!!!
     cerr << "Segment(" << this << ")::fillWithRests: endTime "
 	 << endTime << ", startTime " << startTime << ", composition "
 	 << (getComposition() ? "exists" : "does not exist") << ", sigTime "
 	 << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration << endl;
-*/  
+
     DurationList dl;
     ts.getDurationListForInterval(dl, restDuration, startTime - sigTime);
 

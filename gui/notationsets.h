@@ -54,8 +54,13 @@ public:
 
     virtual bool hasStem() const;
     virtual bool hasStemUp() const;
+
     virtual bool hasNoteHeadShifted() const;
     virtual bool isNoteHeadShifted(const NotationElementList::iterator &itr)
+	const;
+
+    virtual int getMaxAccidentalShift() const;
+    virtual int getAccidentalShift(const NotationElementList::iterator &itr)
 	const;
 
 private:
