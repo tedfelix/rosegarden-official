@@ -41,7 +41,7 @@
 namespace Rosegarden 
 {
 
-typedef int timeT;
+typedef long timeT;
 
 /**
  * The Event class represents an event with some basic attributes and
