@@ -1811,9 +1811,31 @@ RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 }
 
 
+// Find and load the autoload file to set up a default Studio
+//
+//
 void
 RosegardenGUIApp::performAutoload()
 {
+    QString autoloadFile =
+        KGlobal::dirs()->findResource("appdata", "autoload.rg");
+
+    cout << "AUTOLOAD = " << autoloadFile << endl;
+
+    QFileInfo autoloadFileInfo(autoloadFile);
+
+    if (!autoloadFileInfo.isReadable())
+    {
+        std::cerr << "Can't find autoload file - no default Studio loaded"
+                  << endl;
+        return;
+    }
+
+    // Else we try to open it
+    //
+    openDocumentFile(autoloadFile.data());
+
+
 }
 
 
