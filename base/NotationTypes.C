@@ -892,7 +892,8 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                      accidental = DoubleFlat;
                  } else {
                      height = C;                                        // C or C-Natural
-                     accidental = (keyHasSharpC ||(keyHasSharpB &&
+                     accidental = (keyHasFlatC || keyHasSharpC ||
+                                   (keyHasSharpB &&
                                   userAccidental == Natural)) ? Natural : NoAccidental;
                  }
                  break;
@@ -947,7 +948,9 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                      accidental = DoubleSharp;
                  } else {                                              // E or E-Natural
                      height = E;
-                     accidental = (keyHasSharpE || keyHasFlatE) ? Natural : NoAccidental;
+                     accidental = (keyHasSharpE || keyHasFlatE ||
+                                   (keyHasFlatF && userAccidental==Natural)) ?
+                                    Natural : NoAccidental;
                  }
                  break;
         case 5 : 
@@ -960,7 +963,9 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                      accidental = DoubleFlat;
                  } else {                                              // F or F-Natural
                      height = F;
-                     accidental = (keyHasSharpF || keyHasFlatF) ? Natural : NoAccidental;
+                     accidental = (keyHasSharpF || keyHasFlatF ||
+                                   (keyHasSharpE && userAccidental==Natural))?
+                                    Natural : NoAccidental;
                  }
                  break;
         case 6 : 
@@ -1038,7 +1043,9 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                      accidental = (keyHasFlatC) ? NoAccidental : Flat;
                  } else {                                             // B or B-Natural
                      height = B;
-                     accidental = (keyHasSharpB || keyHasFlatB) ? Natural : NoAccidental;
+                     accidental = (keyHasSharpB || keyHasFlatB ||
+                                   (keyHasFlatC && userAccidental==Natural)) ?
+                                    Natural : NoAccidental;
                  }
     }
 
