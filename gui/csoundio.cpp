@@ -34,7 +34,7 @@ using Rosegarden::Composition;
 using Rosegarden::Segment;
 using Rosegarden::Note;
 using Rosegarden::Int;
-using Rosegarden::BaseProperties;
+//using Rosegarden::BaseProperties;
 using Rosegarden::timeT;
 
 
@@ -94,10 +94,10 @@ CsoundExporter::write()
 	    if ((*j)->isa(Note::EventType)) {
 		
 		long pitch = 0;
-		(*j)->get<Int>(BaseProperties::PITCH, pitch);
+		(*j)->get<Int>(Rosegarden::BaseProperties::PITCH, pitch);
 
 		long velocity = 127;
-		(*j)->get<Int>(BaseProperties::VELOCITY, velocity);
+		(*j)->get<Int>(Rosegarden::BaseProperties::VELOCITY, velocity);
 
 		str << "   i"
 		    << (*i)->getTrack() << "\t"
