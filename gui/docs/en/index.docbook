@@ -93,11 +93,21 @@
       <holder>Richard Bown, Chris Cannam, Guillaume Laurent</holder>
     </copyright>
 
-    <date>2003-04-26</date>
-    <releaseinfo>0.9</releaseinfo>
+    <date>2003-11-26</date>
+    <releaseinfo>0.9.5</releaseinfo>
 
     <abstract>
       <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-mainwindow.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
 
 	Rosegarden is an audio and &MIDI; sequencer and musical notation
 	editor.  This Handbook describes how to use it.
@@ -173,6 +183,12 @@
       <para>
 	<itemizedlist>
 	  <listitem><para>
+	      0.9.5 &ndash; November 2003: a great many stuff
+	  </para></listitem>
+	  <listitem><para>
+	      0.9.1 &ndash; May 2003: step recording, Mup export, many many bug fixes
+	  </para></listitem>
+	  <listitem><para>
 	      0.9 &ndash; April 2003: many notation improvements, improved bank editor, audio enhancements and refinements, translations
 	  </para></listitem>
 	  <listitem><para>
@@ -233,7 +249,7 @@
 
 
     <sect1 id="file-operations">
-      <title>Files and Documents</title>
+      <title>Basic Stuff about Files and Documents</title>
       <para>
 	&rosegarden; stores each composition in its own document,
 	using its own internal format.  When you save a document it
@@ -248,7 +264,7 @@
 	  When &rosegarden; starts up, it does so with a new document,
 	  containing an "empty" composition ready to start editing.
 	  To put something in that composition, you must either record
-	  something, or create some "blank" lengths of music (referred
+	  something, or create some blank lengths of music (referred
 	  to as "segments") that you can then fill in using the
 	  various editing facilities.
 	</para>
@@ -300,14 +316,14 @@
       <sect2 id="file-printing">
 	<title>Printing</title>
 	<para>
-	  You can print out a composition in the form of a
-	  musical score, using the "Print" function on the File menu.
+	  You can print out a composition in the form of a musical
+	  score, using the "Print" function on the File menu.
 	</para>
 
 	<para>
-	  Producing a score from performance data is a hard task,
-	  however, and in most cases it's unreasonable to expect the
-	  default printout to be very readable.  You should use the
+	  Producing a score from performance data is a hard task, and
+	  in most cases it's unreasonable to expect a default printout
+	  based on MIDI data to be very readable.  You should use the
 	  <link linkend="notation-view">notation editor</link> to tidy
 	  up the score before printing.  (See also <link
 	  linkend="nv-quantization">Notation from performance
@@ -315,20 +331,17 @@
 	</para>
 
 	<para>
-	  With care &rosegarden; is capable of producing very
-	  readable scores, particularly if you have high-quality
-	  scalable notation fonts available.
-	</para>
-
-	<para>Even so, &rosegarden; is designed to be a screen editor
-	and not primarily a typesetter.  If you want to produce true
-	print-quality scores, you should consider using <ulink
-	url="http://www.lilypond.org">Lilypond</ulink> in conjunction
-	with &rosegarden;.  Lilypond is music typesetting software
-	that reads a specialised text file format and produces
-	high-quality typeset scores.  &rosegarden; is capable of
-	writing Lilypond files using the "Export Lilypond"
-	function on the Export submenu of the File menu.
+	  With care &rosegarden; is capable of producing very readable
+	  scores.  Even so, it is designed to be a screen editor and
+	  not primarily a typesetter.  If you want to produce true
+	  print-quality scores, you should consider using <ulink
+	  url="http://www.lilypond.org">Lilypond</ulink> in
+	  conjunction with &rosegarden;.  Lilypond is music
+	  typesetting software that reads a specialised text file
+	  format and produces high-quality typeset scores.
+	  &rosegarden; is capable of writing Lilypond files using the
+	  "Export Lilypond" function on the Export submenu of the File
+	  menu.
 	</para>
       </sect2>
 
@@ -629,6 +642,16 @@
 		  (choose the Colour page on the document properties
 		  dialog).  The modified colour palette will be saved
 		  with the composition in the Rosegarden file.
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-colours.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s colour manager</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
 		</para>
       </listitem>
      </varlistentry>
@@ -874,9 +897,8 @@
 
 	<para>
 	  The Record devices listed here represent possible sources
-	  for recording MIDI.  These constitute the set of devices
-	  that you can select for recording in the Configuration
-	  dialog.
+	  for recording MIDI.  One of them may be current at a time,
+	  as shown in this dialog.
 	</para>
 
       </sect2>
@@ -990,6 +1012,17 @@
 	</para>
 
 	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-metronome.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s metronome configuration dialog</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
+
 	  To configure the metronomes, use the "Manage Metronomes"
 	  option on the Studio menu to bring up the metronome dialog.
 	  Here you can select a MIDI instrument for the metronome and
@@ -1063,6 +1096,17 @@
       </para>
 
       <para>
+
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-gridquantizer.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s quantize dialog</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
 	For more control, use the Quantize function on the Segments
 	menu of the main window, or on the Transforms menu of the
 	matrix or notation editors.  This shows you a dialog in which
@@ -1085,6 +1129,16 @@
 	block in a grid, at a height corresponding to the pitch.
       </para>
       <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-matrixview.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s matrix editor</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
 	Each matrix editor window shows a single segment.  To edit a
 	segment, just right-click on it in the main canvas and select
 	the matrix editor from the menu.  Alternatively, you can
@@ -1283,6 +1337,16 @@
 
 	</para><para>
 
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-notationview.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s notation editor</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
 	  &rosegarden; aims to present scores with the best possible
 	  layout compatible with its primary focus as a sequencer
 	  application.  This means that although the editor supports
@@ -1417,7 +1481,18 @@
 	should be fairly close if you happen to be using A4
 	paper.</para>
 
-	<para>Most, but not all, of the display and editing functions
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-notationview-multipage.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s notation editor in Multiple Page layout</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+        Most, but not all, of the display and editing functions
 	work in the page layout modes as well as in linear layout.
 	</para>
 
@@ -1782,24 +1857,68 @@
 
 	<sect3 id="nv-signatures-clef">
 	  <title>Clef</title>
-	  <para></para>
+	  <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-clefdialog.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s clef dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	  </para>
 	</sect3>
 	
 	<sect3 id="nv-signatures-key">
 	  <title>Key</title>
-	  <para></para>
+	  <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-keysigdialog.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s key signature dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	  </para>
 	</sect3>
 	
 	<sect3 id="nv-signatures-tempo">
 	  <title>Tempo</title>
 	  <!-- Should be in general section, not notation -->
-	  <para></para>
+	  <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-tempodialog.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s tempo dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	  </para>
 	</sect3>
 	
 	<sect3 id="nv-signatures-time-signature">
 	  <title>Time signature</title>
 	  <!-- Should be in general section, not notation -->
-	  <para></para>
+	  <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-timesigdialog.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s time signature dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	  </para>
 	</sect3>
       </sect2>
 
@@ -2036,6 +2155,19 @@
 	
 	<!-- Then discuss general tuplet dialog... -->
 
+	  <para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-tupletdialog.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s general tuplet dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	  </para>
+
 	<para>To specify a general tuplet group, we need to know what
 	the base note is (for example, if we play three crotchets in
 	the time of two then the base is a crotchet) and the ratio of
@@ -2064,7 +2196,19 @@
 	  Close</link> functions.
 	</para>
 
-	<para>The types of Paste operation are:</para>
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-pastedialog.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s paste-type dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+
+	The types of Paste operation are:</para>
 
 	<variablelist>
 
@@ -2227,6 +2371,17 @@
 	</para>
 
 	<para>
+
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-notationquantizer.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s notation quantize dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
 	  If the quantization &rosegarden; has used is not suitable,
 	  either for the entire score or for a selection of notes, you
 	  can choose to use a different level of quantization or none
@@ -2395,6 +2550,16 @@
 	  single segment in a raw form, and enables you to edit the
 	  precise properties of those events individually.
 
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-eventlisteditor.png" format="PNG"/>
+              </imageobject>
+	      <textobject>
+	      <phrase>&rosegarden;'s event list editor</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
 	</para>
       </sect2>
     </sect1>

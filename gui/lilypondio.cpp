@@ -440,7 +440,9 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 
     QString tmpStr = strtoqstr(inStr);
 
-    tmpStr.replace(QRegExp("_"), " ");
+//    tmpStr.replace(QRegExp("_"), " ");
+    tmpStr.replace(QRegExp("_"), "\\_");
+
     tmpStr.replace(QRegExp("&"), "\\&");
     tmpStr.replace(QRegExp("\\^"), "\\^");
     tmpStr.replace(QRegExp("#"), "\\#");
@@ -456,7 +458,8 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 //    tmpStr.replace(QRegExp("\\)"), "");
     tmpStr.replace(QRegExp("\""), "");
     tmpStr.replace(QRegExp("'"), "");
-    tmpStr.replace(QRegExp("-"), "\\-");
+
+//    tmpStr.replace(QRegExp("-"), "\\-");
 
     // [cc] Convert to latin1, which is what Lilypond expects.
     // I have no idea whether, or how, non-latin1 characters can be
@@ -572,12 +575,14 @@ LilypondExporter::write()
 
         // default tagline/footer
         if (!userTagline) {
-            str << indent(col) << "tagline = \"" << "Exported by Rosegarden " << VERSION 
+            str << indent(col) << "tagline = \""
+		<< "Exported by Rosegarden " << protectIllegalChars(VERSION)
                 << "\"" << std::endl;
         }
 
         if (!userFooter) {
-            str << indent(col) << "footer = \"" << "Rosegarden " << VERSION
+            str << indent(col) << "footer = \"" << "Rosegarden "
+		<< protectIllegalChars(VERSION)
                 << "\"" << std::endl;
         }
                 
