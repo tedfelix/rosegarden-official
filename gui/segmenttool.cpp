@@ -1199,7 +1199,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (!m_currentItem)  {
 
-	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item" << endl;
+// 	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item" << endl;
 
         // do a bounding box
         QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
