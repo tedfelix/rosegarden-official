@@ -484,7 +484,7 @@ NotationHLayout::reconcileBars()
 
 	    BarDataList &list = i->second;
 
-	    if (list.size() > barNo) {
+	    if ((int)list.size() > barNo) {
 
 		reachedEnd = false;
 
@@ -498,7 +498,7 @@ NotationHLayout::reconcileBars()
 
 	    BarDataList &list = i->second;
 
-	    if (list.size() > barNo) {
+	    if ((int)list.size() > barNo) {
 
 		BarData &bd(list[barNo]);
 

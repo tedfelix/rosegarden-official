@@ -91,7 +91,7 @@ void Segment::setDuration(timeT d)
 
     } else { // shrink
 
-        //!!! NOT IMPLEMENTED YET : move an internal marker
+        //!!! TODO : NOT IMPLEMENTED YET : move an internal marker
 
 //         if (nbBars == 0) { // no fuss
 //             erase(begin(), end());
@@ -132,14 +132,14 @@ Segment::iterator Segment::insert(Event *e)
 
 void Segment::erase(iterator from, iterator to)
 {
-    //!!! not very efficient, but without an observer event for
-    //multiple erase we can't do any better:
+    // Not very efficient, but without an observer event for
+    // multiple erase we can't do any better.
 
     // We can't do this :
     //
-    //for (Segment::iterator i = from; i != to; ++i) erase(i);
+    // for (Segment::iterator i = from; i != to; ++i) { ... erase(i); }
     //
-    // because erasing an iterator invalidates it
+    // because erasing an iterator invalidates it.
 
     // So, gather the events which we'll have to delete
     // call notifyRemove() for each of them,

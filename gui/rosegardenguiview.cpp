@@ -168,5 +168,7 @@ RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 void
 RosegardenGUIView::setPointerPosition(const int &position)
 {
-  emit setPositionPointer(position);
+//    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::setPointerPosition" << endl;
+
+    emit setPositionPointer(position);
 }

@@ -48,6 +48,7 @@ class Composition : public SegmentObserver
     
 public:
     static const std::string BarEventType;
+    static const PropertyName BarNumberProperty;
 
     typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
 
@@ -126,6 +127,14 @@ public:
     timeT getBarEnd(timeT t);
 
     /**
+     * Return the starting and ending times of the bar that contains
+     * time t.  Unlike getBarRange, this will only work for bars 
+     * that actually exist and will stop working at the end of the
+     * composition.  It's much, much quicker though.
+     */
+    std::pair<timeT, timeT> getBarStartAndEnd(timeT t);
+
+    /**
      * Return the time range of bar n.  Relatively inefficient.
      * If truncate is true, will stop at end of segment and return last
      * real bar if n is out of range; otherwise will happily return
@@ -167,7 +176,7 @@ protected:
     Segment m_timeReference;
 
     // called from calculateBarPositions
-    Segment::iterator addNewBar(timeT time);
+    Segment::iterator addNewBar(timeT time, int barNo);
 
     Quantizer m_quantizer;
 

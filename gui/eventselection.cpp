@@ -115,22 +115,8 @@ bool EventSelection::pasteToSegment(Segment& t, timeT atTime)
 
 timeT EventSelection::getTotalDuration() const
 {
-    //!!! with the marked mod to updateBeginEndTime, this seems
-    //reasonable I think?
     updateBeginEndTime();
     return getEndTime() - getBeginTime();
-
-
-
-    if (m_ownEvents.empty()) return 0;
-
-    eventcontainer::const_iterator last = m_ownEvents.end();
-    --last;
-
-    kdDebug(KDEBUG_AREA) << "EventSelection::getTotalDuration() : "
-                         << m_endTime - m_beginTime + (*last)->getDuration() << endl;
-
-    return m_endTime - m_beginTime + (*last)->getDuration();
 }
 
 void EventSelection::updateBeginEndTime() const
@@ -150,10 +136,7 @@ void EventSelection::updateBeginEndTime() const
     
     m_beginTime = (*iter)->getAbsoluteTime();
     iter = selectedEvents->end(); --iter;
-    m_endTime = (*iter)->getAbsoluteTime();
-
-    //!!! I think we almost always want this, don't we?
-    m_endTime += (*iter)->getDuration();
+    m_endTime = (*iter)->getAbsoluteTime() + (*iter)->getDuration();
 
     kdDebug(KDEBUG_AREA) << "EventSelection::updateBeginEndTime() : begin : "
                          << m_beginTime << ", end : " << m_endTime << endl;

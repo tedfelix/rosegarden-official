@@ -1050,6 +1050,11 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
     // modifier method for changing composition time we can probably
     // get away with it.
 
+//    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::setPointerPosition" << endl;
+
+    // cc -- this seems like a good idea, but is it safe?
+    if (m_doc->getComposition().getPosition() == position) return;
+
     // set the composition time
     m_doc->getComposition().setPosition((timeT) position);
 

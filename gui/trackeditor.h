@@ -98,7 +98,7 @@ public slots:
     /**
      * Set the position pointer during playback
      */
-    void setPointerPosition(Rosegarden::timeT position);
+    void setPointerPosition(int position);
 
 protected slots:
     void segmentOrderChanged(int section, int fromIdx, int toIdx);

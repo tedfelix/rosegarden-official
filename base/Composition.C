@@ -30,6 +30,7 @@ namespace Rosegarden
 {
 
 const std::string Composition::BarEventType = "bar";
+const PropertyName Composition::BarNumberProperty = "BarNumber";
 
 
 Composition::Composition()
@@ -147,11 +148,12 @@ Composition::clear()
 }
 
 Segment::iterator
-Composition::addNewBar(timeT time)
+Composition::addNewBar(timeT time, int barNo)
 {
 //    std::cerr << "Composition::addNewBar" << std::endl;
     Event *e = new Event(BarEventType);
     e->setAbsoluteTime(time);
+    e->set<Int>(BarNumberProperty, barNo);
     return m_timeReference.insert(e);
 }
 
@@ -195,22 +197,27 @@ Composition::calculateBarPositions()
     timeT duration = getDuration();
     segments.push_back(duration);
 
+    int barNo = 0;
+
     for (int s = 0; s < segments.size() - 1; ++s) {
 
 	timeT start = segments[s], finish = segments[s+1];
 	timeT time;
 
-	if (s > 0 || segment0isTimeSig) start += segmentTimes[s];
+	if (s > 0 || segment0isTimeSig) {
+	    start += segmentTimes[s];
+	    ++barNo;
+	}
 
 	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
 
 	for (time = start; time < finish; time += segmentTimes[s]) {
-	    addNewBar(time);
+	    addNewBar(time, barNo++);
 //            std::cerr << "added bar at " << time << std::endl;
 	}
 
 	if (s == segments.size() - 1 && time != duration) {
-            addNewBar(time);
+            addNewBar(time, barNo++);
             std::cerr << "added final bar at " << time << std::endl;
         }            
     }
@@ -230,7 +237,30 @@ Composition::getBarNumber(timeT t)
     calculateBarPositions();
 
     Segment::iterator i = m_timeReference.findTime(t);
-    return distance(m_timeReference.begin(), i);
+    long n = 0;
+
+    if (i == m_timeReference.end()) n = m_timeReference.size() - 1;
+    else {
+
+	int slack = 0;
+	if ((*i)->getAbsoluteTime() != t) slack = -1;
+
+	while (!(*i)->isa(BarEventType)) {
+	    if (i == m_timeReference.begin()) break;
+	    ++slack;
+	    --i;
+	}
+
+	(*i)->get<Int>(BarNumberProperty, n);
+	n += slack;
+    }
+
+    return (int)n;
+    
+//    int n = distance(m_timeReference.begin(), i);
+//    if (i != m_timeReference.end() && (*i)->getAbsoluteTime() == t) return n;
+//    else if (n > 0) return n - 1;
+//    else return n;
 }
 
 timeT
@@ -239,6 +269,7 @@ Composition::getBarStart(timeT t)
     calculateBarPositions();
 
     Segment::iterator i = m_timeReference.findTime(t);
+    if (i != m_timeReference.end() && (*i)->getAbsoluteTime() == t) return t;
     if (i != m_timeReference.begin()) --i;
     if (i == m_timeReference.end()) return 0;
 
@@ -254,7 +285,42 @@ Composition::getBarEnd(timeT t)
     if (i == m_timeReference.end() || ++i == m_timeReference.end()) {
         return m_timeReference.getDuration();
     }
+
     return (*i)->getAbsoluteTime();
+}
+
+std::pair<timeT, timeT>
+Composition::getBarStartAndEnd(timeT t)
+{
+    calculateBarPositions();
+
+    timeT start, finish;
+
+    Segment::iterator i = m_timeReference.findTime(t);
+    Segment::iterator j(i);
+    ++j;
+
+    if (i != m_timeReference.end() && (*i)->getAbsoluteTime() == t) {
+
+	// t is itself the start of a bar
+	start = t;
+
+    } else {
+
+	// t is in the middle of a bar, so rewind to its start
+	if (i != m_timeReference.begin()) { --i; --j; }
+
+	if (i == m_timeReference.end()) {
+	    start = 0; 
+	} else {
+	    start = (*i)->getAbsoluteTime();
+	}
+    }
+
+    if (j == m_timeReference.end()) finish = m_timeReference.getDuration();
+    else finish = (*j)->getAbsoluteTime();
+
+    return std::pair<timeT, timeT>(start, finish);
 }
 
 
@@ -309,21 +375,33 @@ Composition::getBarRange(int n, bool truncate)
 }
 
 
-void Composition::eventAdded(const Segment *t, Event *e)
+void Composition::eventAdded(const Segment *s, Event *e)
 {
-    // in theory this should only be true if we insert something after
-    // the former end of the composition -- or add a time sig to the
+    // we only need to recalculate if we insert something after the
+    // former end of the composition, or add a time sig to the
     // reference segment
-    m_barPositionsNeedCalculating = true;
+
+    if (s == &m_timeReference ||
+	(e->getAbsoluteTime() + e->getDuration() >
+	 m_timeReference.getDuration())) {
+
+	m_barPositionsNeedCalculating = true;
+    }
 }
 
 
-void Composition::eventRemoved(const Segment *t, Event *e)
+void Composition::eventRemoved(const Segment *s, Event *e)
 {
-    // in theory this should only be true if we remove something at
-    // the very end of the composition -- or remove a time sig from
-    // the reference segment
-    m_barPositionsNeedCalculating = true;
+    // we only need to recalculate if we insert something after the
+    // former end of the composition, or add a time sig to the
+    // reference segment
+
+    if (s == &m_timeReference ||
+	(e->getAbsoluteTime() + e->getDuration() >=
+	 m_timeReference.getDuration())) {
+
+	m_barPositionsNeedCalculating = true;
+    }
 }
 
 

@@ -502,9 +502,9 @@ protected:
 
     NotationCanvasView* m_canvasView;
 
-    int m_currentStaff;
-
     std::vector<NotationStaff*> m_staffs;
+    int m_currentStaff;
+    int m_lastFinishingStaff;
 
     StaffRuler* m_ruler;
     ActiveItem* m_activeItem;

@@ -898,7 +898,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 
     int x = 0;
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() - 2*m_origin.x(); //!!!
+    int delta = accidentalPixmap.width() - 2*m_origin.x();
 
     createPixmapAndMask(delta * ah.size() + 2*m_origin.x(), lw * 8 + 1);
 

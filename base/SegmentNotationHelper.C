@@ -24,7 +24,7 @@ using namespace BaseProperties;
 SegmentNotationHelper::~SegmentNotationHelper() { }
 
 
-bool SegmentNotationHelper::collapse(Event* e, bool& collapseForward)
+bool SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 {
     iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
@@ -169,11 +169,6 @@ Segment::iterator SegmentNotationHelper::expandIntoTie(iterator from, iterator t
 	// group.  otherwise, it should inherit the grouping info
 	// from the first event (as it already does, because it
 	// was created using the copy constructor).
-
-	//!!! Note that the whole division principle collapses if
-	//tuplets are involved.  That might be an acceptable
-	//behaviour, though, as the user can hardly expect an
-	//exact division where tuplets are present.
 
 	if (firstGroupId != -1 && nextGroupId != firstGroupId) {
 	    ev->unset(BEAMED_GROUP_ID);
@@ -575,7 +570,7 @@ void SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 	// collapse the new rest
         if (collapseRest) {
             bool dummy;
-            collapse(newRest, dummy);
+            collapseIfValid(newRest, dummy);
         }
 
     }
@@ -583,10 +578,8 @@ void SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 
 bool SegmentNotationHelper::deleteRest(Event *e)
 {
-    //!!! can we do anything useful with collapseForward? should we return it?
-
     bool collapseForward;
-    return collapse(e, collapseForward);
+    return collapseIfValid(e, collapseForward);
 }
 
 bool SegmentNotationHelper::deleteEvent(Event *e)
@@ -639,7 +632,7 @@ SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
 
 void
 SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
-					string type)
+					  string type)
 {
     int groupId = segment().getNextId();
     
@@ -1080,10 +1073,10 @@ void SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
 	}
     }
 
-    for (int ei = 0; ei < erasable.size(); ++ei)
+    for (unsigned int ei = 0; ei < erasable.size(); ++ei)
 	segment().erase(erasable[ei]);
 
-    for (int ii = 0; ii < insertable.size(); ++ii)
+    for (unsigned int ii = 0; ii < insertable.size(); ++ii)
 	segment().insert(insertable[ii]);
 }
 

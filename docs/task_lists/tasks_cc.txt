@@ -10,10 +10,6 @@ Post-0.1.1 task list
  attempt to get the LegatoDuration property on an event that doesn't
  have it.  Why?
 
- !! Restore the position pointer in trackeditor.cpp
-
- !! Restore the current-time indicator in the notation view status bar
-
  1. Sort out true legato quantization [DONE]
 
  2. Display real bar numbers and proportional bar durations on track
@@ -34,6 +30,12 @@ Post-0.1.1 task list
 
  9. Speed up MIDI import, particularly for files with lots of short rests
  [DONE]
+
+10. Finish notationcanvasview stuff -- leger line position marker,
+    setting up the correct dimensions for the markers from the staff
+
+11. Complete the plugging-in and testing of the notationview
+    position-pointer stuff
 
 
 

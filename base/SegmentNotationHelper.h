@@ -77,7 +77,7 @@ public:
     /**
      * Returns true if Events of durations a and b can reasonably be
      * collapsed into a single one of duration a+b, for some
-     * definition of "reasonably".
+     * definition of "reasonably".  For use by collapseIfValid
      *
      * You should pass note-quantized durations into this method
      */
@@ -87,17 +87,12 @@ public:
      * If possible, collapses the event with the following or previous
      * one.
      *
-     * @return true if collapse was done
+     * @return true if collapse was done, false if it wasn't reasonable
      *
      * collapseForward is set to true if the collapse was with the
      * following element, false if it was with the previous one
      */
-
-    //!!! maybe needs a more specific name -- doesn't always collapse,
-    //only if the collapsed notes make a single note of meaningful
-    //duration
-
-    bool collapse(Event*, bool& collapseForward);
+    bool collapseIfValid(Event*, bool& collapseForward);
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as

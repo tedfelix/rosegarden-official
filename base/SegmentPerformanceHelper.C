@@ -66,16 +66,16 @@ timeT SegmentPerformanceHelper::getDurationWithTupling(Event *e)
 {
     timeT d = e->getDuration();
 
-/*!!! No, we're now storing the performance duration as the event's
-  primary duration.  This is fine for triplets (as our base duration
-  is divisible by 3) but may not be suitable for other tuplets where
-  our performer's resolution is higher than the Rosegarden base
-  resolution.  In such a case, this method could use the tupling data
-  and the event's nominal-duration property to calculate a more
-  precise duration for the performer than the Rosegarden units will
-  permit, but to do so we'd have to know the performer's resolution
-  and the point at which this method is currently called (when
-  creating a MappedEvent) is not a point at which we know that.
+/* No, we're now storing the performance duration as the event's
+   primary duration.  This is fine for triplets (as our base duration
+   is divisible by 3) but may not be suitable for other tuplets where
+   our performer's resolution is higher than the Rosegarden base
+   resolution.  In such a case, this method could use the tupling data
+   and the event's nominal-duration property to calculate a more
+   precise duration for the performer than the Rosegarden units will
+   permit, but to do so we'd have to know the performer's resolution
+   and the point at which this method is currently called (when
+   creating a MappedEvent) is not a point at which we know that.
 
     long tupledLength;
     if (e->get<Int>(BEAMED_GROUP_TUPLED_LENGTH, tupledLength)) {

@@ -316,19 +316,19 @@ void TrackEditor::setupHorizontalHeader()
 
 // Move the position pointer
 void
-TrackEditor::setPointerPosition(timeT position)
+TrackEditor::setPointerPosition(int position)
 {
+//    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
 
     Composition &comp = m_document->getComposition();
-    int barNo = comp.getBarNumber(position);
-    pair<timeT, timeT> times = comp.getBarRange(barNo);
 
-    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
+    int barNo = comp.getBarNumber(position);
+    pair<timeT, timeT> times = comp.getBarStartAndEnd(position);
 
     int canvasPosition = m_hHeader->sectionPos(barNo);
 
-    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is " << canvasPosition << endl;
+//    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is " << canvasPosition << "; range is (" << times.first << "," << times.second << "); barno is " << barNo << "; section size is " << m_hHeader->sectionSize(barNo) << endl;
 
     if (times.first != times.second) {
 	canvasPosition +=
@@ -336,10 +336,17 @@ TrackEditor::setPointerPosition(timeT position)
 	    (times.second - times.first);
     }
 
-    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is now " << canvasPosition << endl;
+//    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is now " << canvasPosition << endl;
 
-    m_pointer->setX(canvasPosition);
-    emit needUpdate();
+    //??? I'm having to do the distance check because it seems to be
+    //lagging otherwise -- not quite sure why
+
+    double distance = (double)canvasPosition - m_pointer->x();
+    if (distance < 0.0) distance = -distance;
+    if (distance >= 1.0) {
+	m_pointer->setX(canvasPosition);
+	emit needUpdate();
+    }
 }
 
 

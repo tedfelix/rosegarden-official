@@ -204,17 +204,8 @@ void
 Staff<T>::eventAdded(const Segment *t, Event *e)
 {
     assert(t == &m_segment);
-
-    // If it isn't already wrapped, wrap it.  The already-wrapped test
-    // is rather slow, and if all goes according to plan we should
-    // eventually be able to lose it.
-
-    //!!! [Note to self: Lose this eventually]
-
-//expt    if (findEvent(e) == m_viewElementList->end()) {
-        T *el = new T(e);
-        m_viewElementList->insert(el);
-//expt    }
+    T *el = new T(e);
+    m_viewElementList->insert(el);
 }
 
 template <class T>

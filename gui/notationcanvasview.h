@@ -140,6 +140,8 @@ protected:
 	on the given line (x-coord needed to take clef/key into account) */
     QString getNoteNameForLine(const StaffLine *line, int x);
 
+    NotationElement *getElementAtXCoord(QMouseEvent *e);
+
     /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;
 

@@ -66,9 +66,6 @@ BasicCommand::beginExecute()
 	 i != m_segment.findTime(m_endTime); ++i) {
 	m_savedEvents.insert(new Event(**i));
     }
-
-    //!!! handle through command history stuff
-//    m_view->getDocument()->setModified();
 }
 
 void

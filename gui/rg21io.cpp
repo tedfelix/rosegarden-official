@@ -256,12 +256,10 @@ void RG21Loader::closeGroup()
     if (m_groupType == GROUP_TYPE_TUPLED) {
 
 	Segment::iterator i = m_currentSegment->end();
-//	Segment::iterator final = i;
 
 	if (i != m_currentSegment->begin()) {
 
 	    --i;
-//	    if (final == m_currentSegment->end()) final = i;
 	    long groupId;
 	    timeT prev = m_groupStartTime + m_groupTupledLength;
 
@@ -291,8 +289,6 @@ void RG21Loader::closeGroup()
 		(*i)->setDuration(prev - (*i)->getAbsoluteTime());
 		prev = (*i)->getAbsoluteTime();
 
-//		(*i)->setDuration(duration * m_groupTupledLength /
-//				  m_groupUntupledLength);
 		(*i)->set<Int>(TUPLET_NOMINAL_DURATION, duration);
 
 		if (i == m_currentSegment->begin()) break;
@@ -301,13 +297,6 @@ void RG21Loader::closeGroup()
 	}
 
 	m_currentSegmentTime = m_groupStartTime + m_groupTupledLength;
-/*
-	if (final != m_currentSegment->end()) {
-	    //!!! problematic if the final note is actually a chord
-	    (*final)->setDuration(m_currentSegmentTime -
-				  (*final)->getAbsoluteTime());
-	}
-*/
     }
 
     m_inGroup = false;

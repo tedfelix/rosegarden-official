@@ -104,7 +104,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_tool(0),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
-    m_pointer(0)
+    m_pointer(0),
+    m_lastFinishingStaff(-1)
 {
     assert(segments.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -676,14 +677,10 @@ void NotationView::showBars(int staffNo)
 
 void NotationView::updateRuler()
 {
-    int staffNo = 0; //!!! get the longest staff from the hlayout
-    //!!! cc: Strictly we don't want the longest staff, we just want
-    // the one that ends last.  (No need to worry about bars that
-    // precede the start of that staff, because they exist in all
-    // staffs, it's just that they're invisible when a staff has yet
-    // to begin.)
+    if (m_lastFinishingStaff < 0 ||
+	m_lastFinishingStaff >= m_staffs.size()) return;
 
-    NotationStaff &staff = *m_staffs[staffNo];
+    NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
     TimeSignature timeSignature;
 
     m_ruler->clearSteps();
@@ -840,8 +837,9 @@ NotationView::changeFont(string newName, int newSize)
 bool NotationView::applyLayout(int staffNo)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : entering; we have " << m_staffs.size() << " staffs" << endl;
+    unsigned int i;
 
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+    for (i = 0; i < m_staffs.size(); ++i) {
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
@@ -854,6 +852,19 @@ bool NotationView::applyLayout(int staffNo)
 
     m_hlayout->finishLayout();
     m_vlayout->finishLayout();
+
+    // find the last finishing staff for future use
+
+    timeT endTime = -1;
+    m_lastFinishingStaff = -1;
+
+    for (i = 0; i < m_staffs.size(); ++i) {
+	timeT thisEndTime = m_staffs[i]->getSegment().getEndIndex();
+	if (thisEndTime > endTime) {
+	    endTime = thisEndTime;
+	    m_lastFinishingStaff = i;
+	}
+    }
 
     readjustCanvasSize();
 
@@ -1173,10 +1184,47 @@ void NotationView::slotStatusHelpMsg(const QString &text)
 // (i.e. where is the nearest note) and also if indeed
 // it should be currently shown at all for this view
 // (is it within scope)
+//!!! No consideration of scope yet
 // 
 void
-NotationView::setPositionPointer(const int& /*position*/)
+NotationView::setPositionPointer(const int& position)
 {
+    if (m_lastFinishingStaff < 0 ||
+	m_lastFinishingStaff >= m_staffs.size()) return;
+
+    kdDebug(KDEBUG_AREA) << "NotationView::setPositionPointer: position is "
+			 << position << endl;
+
+    Rosegarden::Composition &comp = m_document->getComposition();
+
+    int barNo = comp.getBarNumber(position);
+    pair<timeT, timeT> times = comp.getBarStartAndEnd(position);
+
+    double canvasPosition = m_hlayout->getTotalWidth();
+
+    NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
+
+    if (barNo < m_hlayout->getBarLineCount(staff)) {
+
+	canvasPosition = m_hlayout->getBarLineX(staff, barNo);
+
+	if (times.first != times.second) {
+
+	    double barWidth;
+	    if (barNo + 1 < m_hlayout->getBarLineCount(staff)) {
+		barWidth =
+		    m_hlayout->getBarLineX(staff, barNo + 1) - canvasPosition;
+	    } else {
+		barWidth = m_hlayout->getTotalWidth() - canvasPosition;
+	    }
+
+	    canvasPosition += barWidth * (position - times.first) /
+		(times.second - times.first);
+	}
+    }
+
+    m_pointer->setX(canvasPosition);
+    canvas()->update();
 }
 
 //////////////////////////////////////////////////////////////////////
