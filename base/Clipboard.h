@@ -72,6 +72,15 @@ public:
     bool isSingleSegment() const;
 
     /**
+     * Return true if the clipboard contains at least one segment
+     * that originated as only part of another segment.  If a
+     * paste is made from a clipboard with isPartial true, the
+     * paste command will generally want to be sure to normalize
+     * rests etc on the pasted region afterwards.
+     */
+    bool isPartial() const;
+
+    /**
      * Return the single segment contained by the clipboard.
      * If the clipboard is empty or contains more than one segment,
      * returns null.  (Use the iterator accessors begin()/end() to
@@ -112,6 +121,7 @@ public:
 
 private:
     segmentcontainer m_segments;
+    bool m_partial;
 };
 
 }

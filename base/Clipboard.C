@@ -24,12 +24,14 @@
 namespace Rosegarden
 {
 
-Clipboard::Clipboard()
+Clipboard::Clipboard() :
+    m_partial(false)
 {
     // nothing
 }
 
-Clipboard::Clipboard(const Clipboard &c) 
+Clipboard::Clipboard(const Clipboard &c) :
+    m_partial(false)
 {
     copyFrom(&c);
 }
@@ -53,6 +55,7 @@ Clipboard::clear()
 	delete *i;
     }
     m_segments.clear();
+    m_partial = false;
 }
 
 bool
@@ -74,11 +77,18 @@ Clipboard::getSingleSegment() const
     else return 0;
 }
 
+bool
+Clipboard::isPartial() const
+{
+    return m_partial;
+}
+
 Segment *
 Clipboard::newSegment()
 {
     Segment *s = new Segment();
     m_segments.insert(s);
+    // don't change m_partial
     return s;
 }
 
@@ -87,6 +97,7 @@ Clipboard::newSegment(const Segment *copyFrom)
 {
     Segment *s = new Segment(*copyFrom);
     m_segments.insert(s);
+    // don't change m_partial
     return s;
 }
 
@@ -98,6 +109,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
 
     if (from == s->getStartTime() && to == s->getEndTime()) {
 	m_segments.insert(s);
+	// don't change m_partial
 	return s;
     }
 
@@ -111,6 +123,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     }
 
     m_segments.insert(s);
+    m_partial = true;
     return s;
 }
 
@@ -128,6 +141,7 @@ Clipboard::newSegment(const EventSelection *copyFrom)
     }
 
     m_segments.insert(s);
+    m_partial = true;
     return s;
 }
 
@@ -140,6 +154,8 @@ Clipboard::copyFrom(const Clipboard *c)
     for (Clipboard::iterator i = c->begin(); i != c->end(); ++i) {
 	newSegment(*i);
     }
+
+    m_partial = c->m_partial;
 }
 
 }

@@ -55,7 +55,7 @@ MatrixStaff::~MatrixStaff()
 }
 
 int  MatrixStaff::getLineCount()        const { return MatrixVLayout::
-						      maxMIDIPitch + 1; }
+						       maxMIDIPitch + 1; }
 int  MatrixStaff::getLegerLineCount()   const { return 0; }
 int  MatrixStaff::getBottomLineHeight() const { return 0; }
 int  MatrixStaff::getHeightPerLine()    const { return 1; }

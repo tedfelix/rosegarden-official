@@ -1892,8 +1892,12 @@ SegmentSplitByPitchCommand::execute()
 	    }
 	}
 
-	m_newSegmentA->fillWithRests(m_segment->getEndMarkerTime());
-	m_newSegmentB->fillWithRests(m_segment->getEndMarkerTime());
+//!!!	m_newSegmentA->fillWithRests(m_segment->getEndMarkerTime());
+//	m_newSegmentB->fillWithRests(m_segment->getEndMarkerTime());
+	m_newSegmentA->normalizeRests(m_segment->getStartTime(),
+				      m_segment->getEndMarkerTime());
+	m_newSegmentB->normalizeRests(m_segment->getStartTime(),
+				      m_segment->getEndMarkerTime());
     }
 
     m_composition->addSegment(m_newSegmentA);
@@ -1925,8 +1929,8 @@ SegmentSplitByPitchCommand::execute()
 	     (m_newSegmentB->getStartTime()));
     }
     
-    m_composition->getNotationQuantizer()->quantize(m_newSegmentA);
-    m_composition->getNotationQuantizer()->quantize(m_newSegmentB);
+//!!!    m_composition->getNotationQuantizer()->quantize(m_newSegmentA);
+//    m_composition->getNotationQuantizer()->quantize(m_newSegmentB);
     helperA.autoBeam(m_newSegmentA->begin(), m_newSegmentA->end(),
 		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
     helperB.autoBeam(m_newSegmentB->begin(), m_newSegmentB->end(),

@@ -68,6 +68,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_width(-1),
     m_rulerScale(rulerScale),
     m_composition(&doc->getComposition()),
+    m_regetSegmentsOnChange(true),
     m_currentSegment(0),
     m_studio(0),
     m_chordSegment(0),
@@ -87,6 +88,48 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 		     this, SLOT(update()));
+}
+
+ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
+			       RosegardenGUIDoc *doc,
+			       std::vector<Rosegarden::Segment *> &segments,
+			       double xorigin,
+			       int height,
+			       QWidget *parent,
+			       const char *name) :
+    QWidget(parent, name),
+    m_xorigin(xorigin),
+    m_height(height),
+    m_currentXOffset(0),
+    m_width(-1),
+    m_rulerScale(rulerScale),
+    m_composition(&doc->getComposition()),
+    m_regetSegmentsOnChange(false),
+    m_currentSegment(0),
+    m_studio(0),
+    m_chordSegment(0),
+    m_fontMetrics(m_boldFont),
+    TEXT_FORMAL_X("TextFormalX"),
+    TEXT_ACTUAL_X("TextActualX")
+{
+    m_font.setPointSize(11);
+    m_font.setPixelSize(12);
+    m_boldFont.setPointSize(11);
+    m_boldFont.setPixelSize(12);
+    m_boldFont.setBold(true);
+    m_fontMetrics = QFontMetrics(m_boldFont);
+    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
+
+    m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
+
+    QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+		     this, SLOT(update()));
+
+    for (std::vector<Rosegarden::Segment *>::iterator i = segments.begin();
+	 i != segments.end(); ++i) {
+	m_segments.insert(SegmentRefreshMap::value_type
+			  (*i, (*i)->getNewRefreshStatusId()));
+    }
 }
 
 ChordNameRuler::~ChordNameRuler()

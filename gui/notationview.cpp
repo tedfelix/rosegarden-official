@@ -236,6 +236,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout->setSpacing(defaultSpacing);
 
+    delete m_notePixmapFactory;
+    m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
+    m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
+    
     setupActions();
     initLayoutToolbar();
     initStatusBar();
@@ -442,7 +446,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(m_hlayout, doc, 20.0, 20, getCentralFrame());
+	(m_hlayout, doc, segments, 20.0, 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
 

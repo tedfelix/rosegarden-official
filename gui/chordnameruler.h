@@ -62,6 +62,19 @@ public:
 		   QWidget* parent = 0,
 		   const char *name = 0);
 
+    /**
+     * Construct a ChordNameRuler that displays the chords in the
+     * given Segments at positions calculated by the given
+     * RulerScale.
+     */
+    ChordNameRuler(Rosegarden::RulerScale *rulerScale,
+		   RosegardenGUIDoc *doc,
+		   std::vector<Rosegarden::Segment *> &segments,
+		   double xorigin = 0.0,
+		   int height = 0,
+		   QWidget* parent = 0,
+		   const char *name = 0);
+
     ~ChordNameRuler();
 
     // may have one of these; can be changed at any time (to any in given composition):
@@ -96,6 +109,7 @@ private:
 
     typedef std::map<Rosegarden::Segment *, int> SegmentRefreshMap;
     SegmentRefreshMap m_segments; // map to refresh status id
+    bool m_regetSegmentsOnChange;
 
     Rosegarden::Segment *m_currentSegment;
     Rosegarden::Studio *m_studio;

@@ -605,12 +605,14 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     QCanvasRectangle *line = new QCanvasRectangle
 	(0, 0, barThickness, getBarLineHeight(), m_canvas);
-
+/*!!!
     if (elementsInSpaces()) {
 	line->moveBy(x, y - (getLineSpacing()/2 + 1));
     } else {
 	line->moveBy(x, y);
     }
+*/
+    line->moveBy(x, y);
 
     if (isCorrect) {
 	line->setPen(RosegardenGUIColours::BarLine);
@@ -664,12 +666,14 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
 	    line = new QCanvasRectangle
 		(0, 0, barThickness, getBarLineHeight(), m_canvas);
-	    
+/*!!!	    
 	    if (elementsInSpaces()) {
 		line->moveBy(x + beat * dx, y - (getLineSpacing()/2 + 1));
 	    } else {
 		line->moveBy(x + beat * dx, y);
 	    }
+*/
+	    line->moveBy(x + beat * dx, y);
 		
 	    line->setPen(RosegardenGUIColours::BeatLine);
 	    line->setBrush(RosegardenGUIColours::BeatLine);
@@ -686,12 +690,15 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	line = new QCanvasRectangle
 	    (0, 0, barThickness, m_connectingLineLength, m_canvas);
 	
+/*!!!	    
 	if (elementsInSpaces()) {
 	    line->moveBy(x, y - (getLineSpacing()/2 + 1));
 	} else {
 	    line->moveBy(x, y);
 	}
-	
+*/	
+	line->moveBy(x, y);
+
 	line->setPen(RosegardenGUIColours::StaffConnectingLine);
 	line->setBrush(RosegardenGUIColours::StaffConnectingLine);
 	line->setZ(-3);

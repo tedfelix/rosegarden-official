@@ -1050,7 +1050,7 @@ RosegardenGUIApp::openFile(const QString &filePath)
     if (doc)
     {
         setDocument(doc);
-        m_fileRecent->addURL(filePath);
+        m_fileRecent->addURL(QFileInfo(filePath).absFilePath());
     }
 }
 

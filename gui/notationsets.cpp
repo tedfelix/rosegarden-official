@@ -846,29 +846,32 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 	int initialY = staff.getLayoutYForHeight(height(initialNote));
 	int   finalY = staff.getLayoutYForHeight(height(  finalNote));
 
-	// if we have a beam, place the tupling number over it (that is,
-	// make the tupling line follow the beam and say so); otherwise
-	// make the line follow the gradient a beam would have, but on
-	// the other side of the notes
-	int   startY = (beam.necessary ? beam.startY :
+	// if we have a beam and both end-points of it are notes,
+	// place the tupling number over it (that is, make the tupling
+	// line follow the beam and say so); otherwise make the line
+	// follow the gradient a beam would have, but on the other
+	// side of the notes
+	bool followBeam =
+	    (beam.necessary &&
+	     (*initialNoteOrRest)->event()->isa(Note::EventType) &&
+	     (finalNote == finalElement));
+
+	int   startY = (followBeam ? beam.startY :
 			initialY - (beam.startY - initialY));
 	int     endY = startY + (int)((finalX - initialX) *
 				      ((double)beam.gradient / 100.0));
 
 	int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
 
-	//!!! should also check that the _final_ note-or-rest is a note:
-	bool followBeam =
-	    (beam.necessary &&
-	     (*initialNoteOrRest)->event()->isa(Note::EventType));
-
-	if (beam.necessary) { // adjust to move text slightly away from beam
+	if (followBeam) { // adjust to move text slightly away from beam
 
 	    if (beam.aboveNotes) {
 		startY -= nh; endY -= nh;
 	    } else {
 		startY += nh; endY += nh;
 	    }
+
+	    finalX += nh;
 
 	} else { // adjust to place close to note heads
 
@@ -885,7 +888,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 	e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y, startY);
 	e->setMaybe<Int>(m_properties.TUPLING_LINE_WIDTH, finalX - initialX);
 	e->setMaybe<Int>(m_properties.TUPLING_LINE_GRADIENT, beam.gradient);
-	e->setMaybe<Bool>(m_properties.TUPLING_LINE_FOLLOWS_BEAM, beam.necessary);
+	e->setMaybe<Bool>(m_properties.TUPLING_LINE_FOLLOWS_BEAM, followBeam);
     }
 }
 

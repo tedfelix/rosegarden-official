@@ -267,6 +267,8 @@ PasteSegmentsCommand::execute()
 	segment->setStartTime(segment->getStartTime() + offset);
         segment->setTrack(newTrackId);
         m_composition->addSegment(segment);
+	if (m_clipboard->isPartial()) segment->normalizeRests(segment->getStartTime(),
+							      segment->getEndTime());
 	m_addedSegments.push_back(segment);
     }
 

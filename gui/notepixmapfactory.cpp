@@ -125,7 +125,7 @@ NotePixmapParameters::~NotePixmapParameters()
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
-    m_tupletCountFont("times", 8, QFont::Bold, true),
+    m_tupletCountFont("times", 8, QFont::Bold),
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont("times", 8, QFont::Bold, true),
     m_textMarkFontMetrics(m_textMarkFont),
