@@ -119,7 +119,9 @@ void EditView::paintEvent(QPaintEvent* e)
         
         if (refreshStatus.needsRefresh() && isCompositionModified()) {
 
-            // TODO : if composition is also modified, relayout everything
+            // if composition is also modified, relayout everything
+            refreshSegment(0);
+            break;
             
         } else if (refreshStatus.needsRefresh()) {
 
