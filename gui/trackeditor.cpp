@@ -128,6 +128,7 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     m_pointer = new QCanvasLine(canvas);
     m_pointer->setPen(Qt::darkBlue);
     m_pointer->setPoints(0, 0, 0, canvas->height());
+    m_pointer->setZ(10);
     m_pointer->show();
 
 }

@@ -250,6 +250,7 @@ TracksCanvas::addPartItem(int x, int y, unsigned int nbSteps)
     newPartItem->setPen(m_pen);
     newPartItem->setBrush(m_brush);
     newPartItem->setVisible(true);     
+    newPartItem->setZ(1);           // Track at Z=1, Pointer at Z=10 [rwb]
 
     return newPartItem;
 }
@@ -324,6 +325,7 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
         m_currentItem->setPen(m_canvas->pen());
         m_currentItem->setBrush(m_canvas->brush());
         m_currentItem->setVisible(true);
+        m_currentItem->setZ(1);          // Track at Z=1, Pointer at Z=10 [rwb]
 
         m_newRect = true;
 
