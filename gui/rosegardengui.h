@@ -103,7 +103,7 @@ public:
     /**
      * open a file
      */
-    virtual void openFile(const QString& url);
+    void openFile(const QString& url);
 
     /**
      * Works like openFile but is able to open remote files
@@ -113,17 +113,17 @@ public:
     /**
      * imports a Rosegarden 2.1 file
      */
-    virtual void importRG21File(const QString &url);
+    void importRG21File(const QString &url);
 
     /**
      * imports a MIDI file
      */
-    virtual void importMIDIFile(const QString &url);
+    void importMIDIFile(const QString &url);
 
     /**
      * export a MIDI file
      */
-    virtual void exportMIDIFile(const QString &url);
+    void exportMIDIFile(const QString &url);
 
     /**
      * The Sequencer calls this method to get a MappedCompositon
