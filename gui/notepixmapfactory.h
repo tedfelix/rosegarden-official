@@ -65,11 +65,11 @@ public:
                     bool drawTail,
                     bool stalkGoesUp);
     
-    const QPoint&      bodyOffset()  { return m_bodyOffset; }
-    const QSize&       pixmapSize()  { return m_pixmapSize; }
-    const QPoint&      hotSpot()     { return m_hotSpot; }
-    const stalkpoints& stalkPoints() { return m_stalkPoints; }
-
+    const QPoint&      bodyOffset()     { return m_bodyOffset; }
+    const QSize&       pixmapSize()     { return m_pixmapSize; }
+    const QPoint&      hotSpot()        { return m_hotSpot; }
+    const stalkpoints& stalkPoints()    { return m_stalkPoints; }
+    const QPoint&      accidentOffset() { return m_accidentOffset; }
 
     void setNoteBodySizes(QSize empty, QSize filled);
     void setTailWidth(unsigned int);
@@ -99,10 +99,11 @@ protected:
 
     QPoint m_bodyOffset;
     QPoint m_hotSpot;
+    QPoint m_accidentOffset;
     QSize m_bodySize;
     QSize m_pixmapSize;
     QSize m_accidentStalkSize;
-
+    
     stalkpoints m_stalkPoints;
 };
 

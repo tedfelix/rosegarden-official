@@ -113,6 +113,26 @@ NotePixmapOffsets::computePixmapSize()
         m_pixmapSize.setHeight(m_bodySize.height() + m_accidentStalkSize.height());
     }
 
+
+    switch (m_accident) {
+        
+    case NoAccident:
+        break;
+        
+    case Sharp:
+    case Natural:
+
+        m_pixmapSize.rheight() += 3;
+        break;
+        
+    case Flat:
+
+        if (!m_stalkGoesUp) {
+            m_pixmapSize.rheight() += 4;
+        }
+
+        break;
+    }
 }
 
 void
@@ -153,11 +173,12 @@ NotePixmapOffsets::computeBodyOffset()
             m_bodyOffset.ry() -= 3;
             m_hotSpot.ry() -= 3;
             m_stalkPoints.first.ry() -= 3;
-            
+            m_accidentOffset.setY(m_bodyOffset.y() - 3);
         } else {
             m_bodyOffset.ry() += 3;
             m_hotSpot.ry() += 3;
             m_stalkPoints.first.ry() += 3;
+            m_accidentOffset.setY(m_bodyOffset.y() + 3);
         }
 
         break;
@@ -170,6 +191,9 @@ NotePixmapOffsets::computeBodyOffset()
             m_bodyOffset.ry() += 4;
             m_hotSpot.ry() += 4;
             m_stalkPoints.first.ry() += 4;
+            m_accidentOffset.setY(m_bodyOffset.y() + 4);
+        } else {
+            m_accidentOffset.setY(m_bodyOffset.y() - 5);
         }
 
         break;
@@ -182,10 +206,12 @@ NotePixmapOffsets::computeBodyOffset()
             m_bodyOffset.ry() -= 3;
             m_hotSpot.ry() -= 3;
             m_stalkPoints.first.ry() -= 3;
+            m_accidentOffset.setY(m_bodyOffset.y() - 3);
         } else {
             m_bodyOffset.ry() += 3;
             m_hotSpot.ry() += 3;
             m_stalkPoints.first.ry() += 3;
+            m_accidentOffset.setY(m_bodyOffset.y() + 3);
         }
 
         break;
@@ -199,14 +225,6 @@ NotePixmapOffsets::computeBodyOffset()
     m_stalkPoints.first.setX(m_bodyOffset.x() + m_bodySize.width() - 2);
 
     m_stalkPoints.second.setX(m_stalkPoints.first.x());
-
-    kdDebug(KDEBUG_AREA) << "NotePixmapOffsets::computeBodyOffset() : bodyOffset = "
-                         << m_bodyOffset.x() << ","
-                         << m_bodyOffset.y()
-                         << " - stalkPoints : "
-                         << m_stalkPoints.first.x() << "," << m_stalkPoints.first.y() << " - "
-                         << m_stalkPoints.second.x() << "," << m_stalkPoints.second.y()
-                         << endl;
 
 }
 
@@ -529,16 +547,19 @@ NotePixmapFactory::drawAccident(Accident accident, bool stalkGoesUp)
 
     case Flat:
         accidentPixmap = &m_accidentFlat;
+        break;
 
     case Natural:
         accidentPixmap = &m_accidentNatural;
         break;
     }
 
-    m_p.drawPixmap(0, m_offsets.bodyOffset().y(),
+    m_p.drawPixmap(m_offsets.accidentOffset().x(),
+                   m_offsets.accidentOffset().y(),
                    *accidentPixmap);
 
-    m_pm.drawPixmap(0, m_offsets.bodyOffset().y(),
+    m_pm.drawPixmap(m_offsets.accidentOffset().x(),
+                    m_offsets.accidentOffset().y(),
                     *(accidentPixmap->mask()));
     
 }
