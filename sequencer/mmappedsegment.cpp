@@ -495,7 +495,12 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
 		    c->insert(evt);
 
-                } else if (evt->getType() == MappedEvent::MidiSystemMessage) {
+                } else if (evt->getType() == MappedEvent::MidiSystemMessage &&
+
+			   // #1048388:
+			   // Ensure sysex heeds mute status, but ensure
+			   // clocks etc still get through
+			   evt->getData1() != Rosegarden::MIDI_SYSTEM_EXCLUSIVE) {
 
                     c->insert(evt);
 
