@@ -21,72 +21,75 @@
 // TEST APPLICATION - this is only used for testing out
 // bits and bobs of the sound system from time to time.
 //
-// [rwb]
 
 #include <iostream>
-#include <arts/artsmidi.h>
-#include <arts/soundserver.h>
-#include "MidiArts.h"
-
-#include "MidiFile.h"
-#include "Composition.h"
-#include "Segment.h"
-#include "Event.h"
-#include "MidiRecord.h"
-#include "Sequencer.h"
-
+#include "AlsaDriver.h"
+#include "ArtsDriver.h"
 
 using std::vector;
 using std::endl;
 using std::cout;
-
+using Rosegarden::AlsaDriver;
+using Rosegarden::ArtsDriver;
 
 int
-main(int argc, char **argv)
+main(int /*argc*/, char ** /*argv*/)
 {
-    Rosegarden::Sequencer sequencer;
-    //Rosegarden::Sequencer sequencer2;
+    AlsaDriver *alsaDriver = new AlsaDriver();
+    ArtsDriver *artsDriver = new ArtsDriver();
 
-    // turn MIDI recording on
-    //
-    sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
+    /*
+    snd_seq_client_info_t *cinfo;
+    snd_seq_port_info_t *pinfo;
+    snd_seq_system_info_t *sysinfo;
+    int  client;
+    int  port;
+    int  err;
+    unsigned int cap;
+    snd_seq_t *handle;
 
+    err = snd_seq_open(&handle,
+                       "hw",   // why hw always?
+                       SND_SEQ_OPEN_INPUT,
+                       SND_SEQ_NONBLOCK);
 
-    int i;
-    int count;
-
-    Arts::MidiEvent event;
-
-    while(true)
+    if (err < 0)
     {
-        // pause - to keep things in check
-        for (i = 0; i < 10000000; i++);
-
-        // the recording section
-        switch(sequencer.recordStatus())
-        {
-            case Rosegarden::Sequencer::RECORD_MIDI:
-                count = sequencer.getMappedComposition().size();
-                if (count > 0)
-                    std::cout << "Got " << count << " MIDI events" << endl;
-                break;
-
-            case Rosegarden::Sequencer::ASYNCHRONOUS_MIDI:
-                // send asynchronous MIDI events up to the GUI
-                break;
-
-            default:
-                break;
-        }
-
-        event.time.sec = 0;
-        event.time.usec = 0;
-
-        event.command.status = Arts::mcsNoteOn; // channel 0
-        event.command.data1 = 70;
-        event.command.data2 = 127;
-
-        sequencer.playMidiPort()->processEvent(event);
+        std::cout << "Could not open sequencer - " << snd_strerror(errno)
+                  << std::endl;
     }
 
+    //snd_seq_drop_output(handle);
+
+    snd_seq_client_info_alloca(&cinfo);
+    snd_seq_client_info_set_client(cinfo, -1);
+
+    while (snd_seq_query_next_client(handle, cinfo) >= 0)
+    {
+        client = snd_seq_client_info_get_client(cinfo);
+        snd_seq_port_info_alloca(&pinfo);
+        snd_seq_port_info_set_client(pinfo, client);
+
+        snd_seq_port_info_set_port(pinfo, -1);
+        while (snd_seq_query_next_port(handle, pinfo) >= 0)
+        {
+            int cap;
+            cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
+
+            if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap)
+            {
+                std::cout << snd_seq_port_info_get_client(pinfo) << " : "
+                          << snd_seq_port_info_get_port(pinfo) << " : "
+                          << snd_seq_client_info_get_name(cinfo) << " : "
+                          << snd_seq_port_info_get_name(pinfo) 
+                          << std::endl;
+            }
+        }
+    }
+
+
+    // close the handle
+    //
+    snd_seq_close(handle);
+    */
 }
