@@ -1113,10 +1113,11 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 	getDocument()->getComposition().getElapsedRealTime(t);
     long ms = rt.usec / 1000;
 
-    QString message;
-    QString format("%ld (%ld.%03lds)");
-    format = i18n("Time: %1").arg(format);
-    message.sprintf(format, t, rt.sec, ms);
+    // At the advice of doc.trolltech.com/3.0/qstring.html#sprintf
+    // we replaced this    QString format("%ld (%ld.%03lds)");
+    // to support Unicode
+    QString msString=QString("%1").arg(ms);
+    QString message = i18n("Time: %1 (%2.%3s)").arg(t).arg(rt.sec).arg(msString.rightJustify(3,'0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
