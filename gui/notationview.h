@@ -36,7 +36,7 @@
 
 class QCanvasItem;
 namespace Rosegarden { class Segment; }
-class RosegardenGUIView;
+class RosegardenGUIDoc;
 class NotationTool;
 class NotationToolBox;
 class PositionCursor;
@@ -64,7 +64,7 @@ class NotationView : public EditView,
     Q_OBJECT
 
 public:
-    NotationView(RosegardenGUIView *view,
+    NotationView(RosegardenGUIDoc *doc,
                  std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent);
     ~NotationView();

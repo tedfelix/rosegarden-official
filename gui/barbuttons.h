@@ -38,15 +38,22 @@ class BarButtons : public QVBox
     Q_OBJECT
 
 public:
-    BarButtons(RosegardenGUIDoc* doc,
-	       Rosegarden::RulerScale *rulerScale,
+    BarButtons(Rosegarden::RulerScale *rulerScale,
                int buttonHeight,
-	       bool invert = false,
+	       bool invert = false, // draw upside-down
                QWidget* parent = 0,
                const char* name = 0,
                WFlags f=0);
 
     LoopRuler* getLoopRuler() { return m_loopRuler; }
+
+    /**
+     * Make connections from the LoopRuler to the document's
+     * position pointer -- the standard use for a LoopRuler.
+     * If you don't call this, you'll have to connect the
+     * LoopRuler's signals up to something yourself.
+     */
+    void connectRulerToDocPointer(RosegardenGUIDoc *doc);
     
     void setMinimumWidth(int width);
 
@@ -60,7 +67,6 @@ private:
     int m_offset;
     int m_currentXOffset;
     
-    RosegardenGUIDoc *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
 
     BarButtonsWidget *m_hButtonBar;

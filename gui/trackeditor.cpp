@@ -124,11 +124,11 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     int barButtonsHeight = 25;
     int barButtonsOffset = 0;//!!!2;
 
-    m_topBarButtons = new BarButtons(m_document,
-                                     m_rulerScale,
+    m_topBarButtons = new BarButtons(m_rulerScale,
                                      barButtonsHeight,
                                      false,
                                      this);
+    m_topBarButtons->connectRulerToDocPointer(m_document);
 
     grid->addWidget(m_topBarButtons, 0, 1);
 
@@ -144,12 +144,12 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     grid->addWidget(m_segmentCanvas, 1, 1);
 
-    m_bottomBarButtons = new BarButtons(m_document,
-                                        m_rulerScale,
+    m_bottomBarButtons = new BarButtons(m_rulerScale,
                                         barButtonsHeight,
                                         true,
                                         this);
-
+    m_bottomBarButtons->connectRulerToDocPointer(m_document);
+    
     grid->addWidget(m_bottomBarButtons, 2, 1);
 
     m_horizontalScrollBar->setRange(m_segmentCanvas->horizontalScrollBar()->minValue(),

@@ -208,6 +208,10 @@ public slots:
     void slotDocumentModified();
     void slotDocumentRestored();
 
+    void slotSetPointerPosition(Rosegarden::timeT t) { setPointerPosition(t); }
+    void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
+    void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
+
 signals:
     void pointerPositionChanged(Rosegarden::timeT);
     void playPositionChanged(Rosegarden::timeT);

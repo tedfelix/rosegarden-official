@@ -65,8 +65,7 @@ protected:
 };
 
 
-BarButtons::BarButtons(RosegardenGUIDoc* doc,
-		       RulerScale *rulerScale,
+BarButtons::BarButtons(RulerScale *rulerScale,
                        int barHeight,
 		       bool invert,
                        QWidget* parent,
@@ -77,7 +76,6 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     m_loopRulerHeight(10),
     m_offset(4),
     m_currentXOffset(0),
-    m_doc(doc),
     m_rulerScale(rulerScale),
     m_hButtonBar(0)
 {
@@ -90,7 +88,7 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     }
 
     m_loopRuler = new LoopRuler
-	(doc, m_rulerScale, m_loopRulerHeight, m_invert, this);
+	(m_rulerScale, m_loopRulerHeight, m_invert, this);
 
     if (m_invert) {
 	m_hButtonBar = new BarButtonsWidget
@@ -98,6 +96,21 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     }
 }
 
+
+void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
+{
+    QObject::connect
+	(m_loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 doc, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    QObject::connect
+	(m_loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),
+	 doc, SLOT(slotSetPlayPosition(Rosegarden::timeT)));
+
+    QObject::connect
+	(m_loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+	 doc, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+}
 
 void BarButtons::slotScrollHoriz(int x)
 {

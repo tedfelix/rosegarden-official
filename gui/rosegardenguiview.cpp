@@ -127,7 +127,7 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
         segmentsToEdit.push_back(*i);
     }
 
-    NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+    NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
     notationView->setPageMode(true);
 //     notationView->show();
     notationView->print(&printpainter);
@@ -146,7 +146,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
-    NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+    NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
     notationView->show();
 }
 
@@ -208,7 +208,7 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
         segmentsToEdit.push_back(*i);
     }
 
-    NotationView *notationView = new NotationView(this, segmentsToEdit, this);
+    NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
     notationView->show();
 }
 /*!!!

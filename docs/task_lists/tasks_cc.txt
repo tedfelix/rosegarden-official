@@ -24,6 +24,10 @@ Post-0.1.3 task list (superseding older ones)
  
  7b. Refresh for segment commands in edit views
 
+ 7c. Things like Split Segment and Resize Segment won't work correctly
+    until the Segment's moveable start/end markers are implemented.  Look
+    into this.
+
  8. Bring LoopRuler into NotationView
 
 8a. Rework SegmentItem so as to make its bar units align with LoopRuler [DONE]
@@ -66,7 +70,7 @@ Post-0.1.3 task list (superseding older ones)
     bar numbers (with getFirstVisibleBar() and getLastVisibleBar())
     then we may be able to simplify things significantly in the end. [DONE]
 
-13. Deal with potential infinite loop in notationstaff.cpp:303 and on
+13. Deal with potential infinite loop in notationstaff.cpp:303 and on [DONE]
 
 Post-0.1.1 task list
 ====================

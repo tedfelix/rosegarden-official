@@ -87,11 +87,10 @@ using namespace Rosegarden::BaseProperties;
 
 //////////////////////////////////////////////////////////////////////
 
-//!!! We only use rgView to get the document, so pass the document instead
-NotationView::NotationView(RosegardenGUIView* rgView,
+NotationView::NotationView(RosegardenGUIDoc *doc,
                            vector<Segment *> segments,
                            QWidget *parent) :
-    EditView(rgView->getDocument(), segments, parent),
+    EditView(doc, segments, parent),
     m_currentEventSelection(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -100,7 +99,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
-    m_hlayout(new NotationHLayout(&rgView->getDocument()->getComposition(),
+    m_hlayout(new NotationHLayout(&doc->getComposition(),
 				  *m_notePixmapFactory)),
     m_vlayout(new NotationVLayout()),
     m_topBarButtons(0),
@@ -160,7 +159,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
          this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
-	(rgView->getDocument(), SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     //
@@ -170,15 +169,14 @@ NotationView::NotationView(RosegardenGUIView* rgView,
 
     if (segments.size() == 1) {
         setCaption(QString("%1 - Segment Track #%2")
-                   .arg(rgView->getDocument()->getTitle())
+                   .arg(doc->getTitle())
                    .arg(segments[0]->getTrack()));
-    } else if (segments.size() ==
-	       rgView->getDocument()->getComposition().getNbSegments()) {
+    } else if (segments.size() == doc->getComposition().getNbSegments()) {
         setCaption(QString("%1 - All Segments")
-                   .arg(rgView->getDocument()->getTitle()));
+                   .arg(doc->getTitle()));
     } else {
         setCaption(QString("%1 - %2-Segment Partial View")
-                   .arg(rgView->getDocument()->getTitle())
+                   .arg(doc->getTitle())
                    .arg(segments.size()));
     }
 
@@ -203,12 +201,13 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     }
 
     m_topBarButtons = new BarButtons
-	(rgView->getDocument(), m_hlayout, 25, false, m_topBarButtonsView);
+	(m_hlayout, 25, false, m_topBarButtonsView);
+    m_topBarButtons->connectRulerToDocPointer(doc);
     m_topBarButtons->setMinimumWidth(canvas()->width());
     m_topBarButtonsView->addChild(m_topBarButtons);
 
     m_bottomBarButtons = new BarButtons
-	(rgView->getDocument(), m_hlayout, 25, true, m_bottomBarButtonsView);
+	(m_hlayout, 25, true, m_bottomBarButtonsView);
     m_bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(m_bottomBarButtons);
 

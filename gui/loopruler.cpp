@@ -29,8 +29,7 @@
 
 using Rosegarden::RulerScale;
 
-LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
-		     RulerScale *rulerScale,
+LoopRuler::LoopRuler(RulerScale *rulerScale,
                      int height,
 		     bool invert,
                      QWidget *parent,
@@ -41,7 +40,6 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
       m_lastXPaint(0),
       m_currentXOffset(0),
       m_width(-1),
-      m_doc(doc),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
       m_loop(false),
@@ -171,7 +169,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         if (m_loop)
             m_endLoop = m_startLoop = m_grid.snapX(mE->pos().x());
         else
-	    m_doc->setPointerPosition(m_rulerScale->getTimeForX(mE->pos().x()));
+	    emit setPointerPosition(m_rulerScale->getTimeForX(mE->pos().x()));
     }
 }
 
@@ -196,9 +194,9 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
             // emit with the args around the right way
             //
             if (m_endLoop < m_startLoop)
-                m_doc->setLoop(m_endLoop, m_startLoop);
+                emit setLoop(m_endLoop, m_startLoop);
             else
-                m_doc->setLoop(m_startLoop, m_endLoop);
+                emit setLoop(m_startLoop, m_endLoop);
         }
     }
 }
@@ -210,7 +208,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
     if (position < 0) position = 0;
     
     if (mE->button() == LeftButton && !m_loop)
-        m_doc->setPlayPosition(m_rulerScale->getTimeForX(position));
+        emit setPlayPosition(m_rulerScale->getTimeForX(position));
 }
 
 void
@@ -226,7 +224,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 
     }
     else
-        m_doc->setPointerPosition(m_rulerScale->getTimeForX(position));
+        emit setPointerPosition(m_rulerScale->getTimeForX(position));
 }
 
 void LoopRuler::slotSetLoopingMode(bool value)

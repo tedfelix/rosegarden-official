@@ -122,11 +122,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     }
 
     BarButtons *topBarButtons = new BarButtons
-	(doc, m_hlayout, 25, false, m_topBarButtonsView);
+	(m_hlayout, 25, false, m_topBarButtonsView);
+    topBarButtons->connectRulerToDocPointer(doc);
+    topBarButtons->setMinimumWidth(canvas()->width());
     m_topBarButtonsView->addChild(topBarButtons);
 
     BarButtons *bottomBarButtons = new BarButtons
-	(doc, m_hlayout, 25, true, m_bottomBarButtonsView);
+	(m_hlayout, 25, true, m_bottomBarButtonsView);
+    bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(bottomBarButtons);
 }
 
