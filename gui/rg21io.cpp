@@ -112,13 +112,15 @@ bool RG21Loader::parseChordItem()
         long pitch = (*i).toInt();
         ++i;
         int noteMods = (*i).toInt();
+        pitch = convertRG21Pitch(pitch, noteMods);
 
         Event *noteEvent = new Event(Note::EventType);
         noteEvent->setDuration(duration);
         noteEvent->setAbsoluteTime(m_currentTrackTime);
         noteEvent->set<Int>("pitch", pitch);
 
-        kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note at pitch " << pitch << endl;
+        kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
+                             << " at time " << m_currentTrackTime << endl;
 
         m_currentTrack->insert(noteEvent);
     }
@@ -139,6 +141,46 @@ void RG21Loader::closeTrackOrComposition()
         // ??
     }
 }
+
+long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
+{
+  long rtn = 0;
+  int octave = 5;
+
+  while (pitch < 0) { octave -= 1; pitch += 7; }
+  while (pitch > 7) { octave += 1; pitch -= 7; }
+
+  if (pitch > 4) ++octave;
+
+  switch(pitch) {
+
+  case 0: rtn =  4; break;	/* bottom line, treble clef: E */
+  case 1: rtn =  5; break;	/* F */
+  case 2: rtn =  7; break;	/* G */
+  case 3: rtn =  9; break;	/* A, in next octave */
+  case 4: rtn = 11; break;	/* B, likewise*/
+  case 5: rtn =  0; break;	/* C, moved up an octave (see above) */
+  case 6: rtn =  2; break;	/* D, likewise */
+  case 7: rtn =  4; break;	/* E, likewise */
+  }
+
+  if (noteModifier & ModSharp) ++ rtn;
+  if (noteModifier & ModFlat)  -- rtn;
+
+  switch(m_currentClef) {
+
+  case  TrebleClef: break;
+  case   TenorClef: octave -= 1; break;
+  case    AltoClef: octave -= 1; break;
+  case    BassClef: octave -= 2; break;
+  case InvalidClef: break;
+  }
+
+  rtn += 12 * octave;
+
+  return rtn;
+}
+
 
 bool RG21Loader::parse()
 {

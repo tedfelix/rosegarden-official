@@ -111,7 +111,11 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      * Works like openFile but is able to open remote files
      */
     int openURL(const KURL& url, int mode);
-    
+
+    /**
+     * imports a Rosegarden 2.1 file
+     */
+    virtual int importRG21File(const QString &url);
 
     // the Sequencer accesses this method via DCOP
     //
@@ -166,11 +170,6 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      * @see KTMainWindow#readProperties
      */
     virtual void readProperties(KConfig *_cfg);
-
-    /**
-     * Works like openFile but is able to open remote files
-     */
-//     void openURL( const KURL& _url, int _mode );
 
   public slots:
     /** open a new application window by creating a new instance of RosegardenGUIApp */

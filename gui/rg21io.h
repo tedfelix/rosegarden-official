@@ -38,10 +38,20 @@ public:
 
 protected:
 
+    // RG21 note mods
+    enum { ModSharp   = (1<<0),
+           ModFlat    = (1<<1),
+           ModNatural = (1<<2)
+    };
+
+    enum { TrebleClef, TenorClef, AltoClef, BassClef, InvalidClef };
+
     bool parse();
     bool parseClef();
     bool parseChordItem();
     void closeTrackOrComposition();
+
+    long convertRG21Pitch(long rg21pitch, int nodeModifier);
 
     QFile m_file;
     QTextStream *m_stream;
@@ -50,6 +60,7 @@ protected:
     Rosegarden::Track* m_currentTrack;
     unsigned int m_currentTrackTime;
     unsigned int m_currentTrackNb;
+    unsigned int m_currentClef;
 
     QString m_currentLine;
     QString m_currentStaffName;

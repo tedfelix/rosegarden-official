@@ -445,7 +445,7 @@ void RosegardenGUIApp::fileOpen()
 
         QString tmpfile;
         KIO::NetAccess::download( url, tmpfile );
-        int result = openFile( tmpfile, 0 );
+        int result = openFile(tmpfile, 0);
         KIO::NetAccess::removeTempFile( tmpfile );
 
         if (result == OK) {
@@ -766,10 +766,15 @@ void RosegardenGUIApp::importRG21()
   QString tmpfile;
   KIO::NetAccess::download(url, tmpfile);
 
-  RG21Loader rg21Loader(tmpfile);
+  importRG21File(tmpfile);
 
   KIO::NetAccess::removeTempFile(tmpfile);
+}
 
+int RosegardenGUIApp::importRG21File(const QString &file)
+{
+  RG21Loader rg21Loader(file);
+    
   m_doc->closeDocument();
   m_doc->newDocument();
   Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
@@ -779,5 +784,6 @@ void RosegardenGUIApp::importRG21()
   delete tmpComp;
 
   initView();
-}
 
+  return OK;
+}
