@@ -377,6 +377,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     readOptions();
     setOutOfCtor();
+
+    // Property and Control Rulers
+    //
+    if (getCurrentSegment()->getViewFeatures()) slotShowVelocityControlRuler();
     setupControllerTabs();
 
     setRewFFwdToAutoRepeat();

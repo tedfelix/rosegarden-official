@@ -185,11 +185,16 @@ public slots:
     void slotJogLeft();
     void slotJogRight();
 
-    /// Control ruler actions
+    // Control ruler actions
+    //
     void slotInsertControlRulerItem();
     void slotEraseControlRulerItem();
     void slotClearControlRulerItem();
     void slotStartControlLineItem();
+
+    // Property ruler actions
+    //
+    void slotDrawPropertyLine();
 
     // add control ruler
     void slotAddControlRuler(int);

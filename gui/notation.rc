@@ -468,6 +468,11 @@
    <Action name="start_control_line_item"/>
 </Menu>
 
+<Menu noMerge="1" name="property_ruler_menu">
+   <Text>Property Ruler actions</Text>
+   <Action name="draw_property_line"/>
+</Menu>
+
 <!--     Application States           -->
 
 <State name="note_insert_tool_current">

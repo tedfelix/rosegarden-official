@@ -655,6 +655,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setConfigDialogPageIndex(1);
     setOutOfCtor();
+
+    // Property and Control Rulers
+    //
+    if (getCurrentSegment()->getViewFeatures()) slotShowVelocityControlRuler();
     setupControllerTabs();
 
     setupAddControlRulerMenu();

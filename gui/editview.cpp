@@ -734,12 +734,9 @@ EditView::setupActions()
 		SLOT(slotStartControlLineItem()), actionCollection(),
 		"start_control_line_item");
 
-    /*
-    // Show the Velocity ruler if it's marker in the first segment
-    //
-    if (getCurrentSegment()->getViewFeatures() & FeatureShowVelocity)
-        slotShowVelocityControlRuler();
-        */
+    new KAction(i18n("Draw property line"), 0, this,
+                SLOT(slotDrawPropertyLine()), actionCollection(),
+                "draw_property_line");
 }
 
 void
@@ -898,7 +895,17 @@ void EditView::slotRemoveControlRuler(QWidget* w)
                          << endl;
 
         }
-    } // else it's probably a velocity ruler
+    } else { // else it's probably a velocity ruler
+        PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>(w);
+
+        if (propertyRuler) {
+            Rosegarden::Segment &seg = getCurrentStaff()->getSegment();
+            seg.setViewFeatures(0); // for the moment we only have one view feature so
+                                    // we can just blank it out
+
+            RG_DEBUG << "slotRemoveControlRuler : removed velocity ruler" << endl;
+        }
+    }
     
     delete w;
 
@@ -1304,6 +1311,17 @@ EditView::slotStartControlLineItem()
     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
     if (ruler) ruler->startControlLine();
 }
+
+void
+EditView::slotDrawPropertyLine()
+{
+    int index = 0;
+    PropertyControlRuler* ruler = dynamic_cast<PropertyControlRuler*>
+        (findRuler(Rosegarden::BaseProperties::VELOCITY, index));
+
+    if (ruler) ruler->startPropertyLine();
+}
+
 
 void
 EditView::slotClearControlRulerItem()

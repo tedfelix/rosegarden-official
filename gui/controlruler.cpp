@@ -1043,11 +1043,59 @@ PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName
                                            const char* name, WFlags f) :
     ControlRuler(staff->getSegment(), rulerScale, parentView, c, parent, name, f),
     m_propertyName(propertyName),
-    m_staff(staff)
+    m_staff(staff),
+    m_propertyLine(new QCanvasLine(canvas())),
+    m_propertyLineShowing(false),
+    m_propertyLineX(0),
+    m_propertyLineY(0)
 {
     m_staff->addObserver(this);
+
+    setMenuName("property_ruler_menu");
+    drawBackground();
     init();
 }
+
+void
+PropertyControlRuler::drawBackground()
+{
+    // Draw some minimum and maximum controller value guide lines
+    //
+    QCanvasLine *topLine = new QCanvasLine(canvas());
+    QCanvasLine *topQLine = new QCanvasLine(canvas());
+    QCanvasLine *midLine = new QCanvasLine(canvas());
+    QCanvasLine *botQLine = new QCanvasLine(canvas());
+    QCanvasLine *bottomLine = new QCanvasLine(canvas());
+    //m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
+    int cHeight = canvas()->height();
+    int cWidth = canvas()->width();
+
+    topLine->setPen(QColor(127, 127, 127));
+    topLine->setPoints(0, 0, cWidth, 0);
+    topLine->setZ(-10);
+    topLine->show();
+
+    topQLine->setPen(QColor(192, 192, 192));
+    topQLine->setPoints(0, cHeight/4, cWidth, cHeight/4);
+    topQLine->setZ(-10);
+    topQLine->show();
+
+    midLine->setPen(QColor(127, 127, 127));
+    midLine->setPoints(0, cHeight/2, cWidth, cHeight/2);
+    midLine->setZ(-10);
+    midLine->show();
+
+    botQLine->setPen(QColor(192, 192, 192));
+    botQLine->setPoints(0, 3*cHeight/4, cWidth, 3*cHeight/4);
+    botQLine->setZ(-10);
+    botQLine->show();
+
+    bottomLine->setPen(QColor(127, 127, 127));
+    bottomLine->setPoints(0, cHeight - 1, cWidth, cHeight - 1);
+    bottomLine->setZ(-10);
+    bottomLine->show();
+}
+
 
 PropertyControlRuler::~PropertyControlRuler()
 {
@@ -1121,6 +1169,48 @@ void PropertyControlRuler::computeStaffOffset()
     if (lStaff)
         m_staffOffset = lStaff->getX();
 }
+
+void PropertyControlRuler::startPropertyLine()
+{
+    RG_DEBUG << "PropertyControlRuler::startPropertyLine" << endl;
+    m_propertyLineShowing = true;
+    this->setCursor(Qt::pointingHandCursor);
+}
+
+void
+PropertyControlRuler::contentsMousePressEvent(QMouseEvent*)
+{
+    RG_DEBUG << "PropertyControlRuler::contentsMousePressEvent" << endl;
+}
+
+void 
+PropertyControlRuler::contentsMouseReleaseEvent(QMouseEvent*)
+{
+    RG_DEBUG << "PropertyControlRuler::contentsMouseReleaseEvent" << endl;
+
+    if (m_propertyLineShowing)
+    {
+        this->setCursor(Qt::arrowCursor);
+        m_propertyLineShowing = false;
+        canvas()->update();
+    }
+}
+
+void 
+PropertyControlRuler::contentsMouseMoveEvent(QMouseEvent*)
+{
+    RG_DEBUG << "PropertyControlRuler::contentsMouseMoveEvent" << endl;
+}
+
+void 
+PropertyControlRuler::drawPropertyLine(Rosegarden::timeT startTime,
+                                       Rosegarden::timeT endTime,
+                                       int startValue,
+                                       int endValue)
+{
+}
+
+
 
 //----------------------------------------
 ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,

@@ -166,16 +166,33 @@ public:
     virtual void elementAdded(const Rosegarden::Staff *, Rosegarden::ViewElement*);
     virtual void elementRemoved(const Rosegarden::Staff *, Rosegarden::ViewElement*);
     virtual void staffDeleted(const Rosegarden::Staff *);
+    virtual void startPropertyLine();
 
 protected:
 
+    virtual void contentsMousePressEvent(QMouseEvent*);
+    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+    virtual void contentsMouseMoveEvent(QMouseEvent*);
+
+    void drawPropertyLine(Rosegarden::timeT startTime,
+                          Rosegarden::timeT endTime,
+                          int startValue,
+                          int endValue);
+
     void init();
+    void drawBackground();
     virtual void computeStaffOffset();
 
     //--------------- Data members ---------------------------------
 
-    Rosegarden::PropertyName m_propertyName;
-    Rosegarden::Staff*       m_staff;
+    Rosegarden::PropertyName       m_propertyName;
+    Rosegarden::Staff*             m_staff;
+
+    QCanvasLine                   *m_propertyLine;
+    
+    bool                           m_propertyLineShowing;
+    int                            m_propertyLineX;
+    int                            m_propertyLineY;
 };
 
 
