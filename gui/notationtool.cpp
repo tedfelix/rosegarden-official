@@ -1187,6 +1187,8 @@ void NotationSelector::handleMouseDoubleClick(Rosegarden::timeT,
 
     return;
 }
+
+
 void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
 					      int height,
 					      int staffNo,

@@ -291,6 +291,22 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	    this,
 	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
 
+    // relay this through our own signal so that others can use it too
+    connect(m_instrumentParameterBox,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    this,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
+
+    connect(this,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    m_instrumentParameterBox,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
+    connect(this,
+	    SIGNAL(pluginBypassed(Rosegarden::InstrumentId, int, bool)),
+	    m_instrumentParameterBox,
+	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
+
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
@@ -1119,7 +1135,7 @@ void RosegardenGUIApp::initView()
     connect(m_view, SIGNAL(stateChange(QString, bool)),
             this,   SLOT  (slotStateChanged(QString, bool)));
 
-    connect(m_instrumentParameterBox, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+    connect(this, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_view, SLOT(slotUpdateAudioPreviews(Rosegarden::InstrumentId)));
 
     // We only check for the SequenceManager to make sure
@@ -5199,12 +5215,6 @@ RosegardenGUIApp::slotManageSynths()
 	    this,
 	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
 
-    // connect up to the instrument parameter box so it can update its label
-    connect(m_synthManager,
-	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
-	    m_instrumentParameterBox,
-	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
-
     connect(m_synthManager,
 	    SIGNAL(showPluginDialog(QWidget *, Rosegarden::InstrumentId, int)),
 	    this,
@@ -5214,14 +5224,6 @@ RosegardenGUIApp::slotManageSynths()
 	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
 	    this,
 	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
-
-    // and to the mixer, if we have it
-    if (m_audioMixer) {
-	connect(m_synthManager,
-		SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
-		m_audioMixer,
-		SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
-    }
 
     m_synthManager->show();
 }
@@ -5241,6 +5243,16 @@ RosegardenGUIApp::slotOpenAudioMixer()
 
     connect(m_audioMixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
+
+    connect(this,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    m_audioMixer,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
+    connect(this,
+	    SIGNAL(pluginBypassed(Rosegarden::InstrumentId, int, bool)),
+	    m_audioMixer,
+	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
 
     connect(this, SIGNAL(documentAboutToChange()),
             m_audioMixer, SLOT(close()));
@@ -5526,31 +5538,6 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
     //
     plugAccelerators(dialog, dialog->getAccelerators());
 
-    // connect up to the instrument parameter box so it can update its label
-    connect(dialog,
-	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
-	    m_instrumentParameterBox,
-	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
-
-    connect(dialog,
-	    SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
-	    m_instrumentParameterBox,
-	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
-
-    // and to the mixer, if we have it
-    if (m_audioMixer) {
-	connect(dialog,
-		SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
-		m_audioMixer,
-		SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
-
-	connect(dialog,
-		SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
-		m_audioMixer,
-		SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
-    }
-    
-    // and to us so we can keep the sequencer informed
     connect(dialog,
 	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
 	    this,
@@ -5740,6 +5727,8 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	m_synthManager->updatePlugin(instrumentId, plugin);
     }
 
+    emit pluginSelected(instrumentId, index, plugin);
+
     // Set modified
     m_doc->slotDocumentModified();
 }
@@ -5890,6 +5879,8 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
         // Set modified
         m_doc->slotDocumentModified();
     }
+
+    emit pluginBypassed(instrumentId, pluginIndex, bp);
 }
 
 void

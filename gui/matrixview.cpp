@@ -76,6 +76,7 @@
 #include "velocitycolour.h"
 #include "widgets.h"
 #include "zoomslider.h"
+#include "rosegardengui.h"
 #include "notepixmapfactory.h"
 #include "controlruler.h"
 #include "studiocontrol.h"
@@ -184,6 +185,24 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 //    m_parameterBox = new MatrixParameterBox(getDocument(), m_dockLeft, "matrixparameterbox");
     m_parameterBox = new InstrumentParameterBox(getDocument(), m_dockLeft);
     m_dockLeft->setWidget(m_parameterBox);
+
+    RosegardenGUIApp *app = RosegardenGUIApp::self();
+    connect(app,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    m_parameterBox,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+    connect(app,
+	    SIGNAL(pluginBypassed(Rosegarden::InstrumentId, int, bool)),
+	    m_parameterBox,
+	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
+    connect(app,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_parameterBox,
+	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+    connect(m_parameterBox,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    app,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
     // Set the instrument we're using on this segment
     //
