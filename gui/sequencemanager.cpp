@@ -564,7 +564,7 @@ SequenceManager::record(bool toggled)
 
             // Send Record to the Sequencer to signal it to drop out of record mode
             //
-            if (!rgapp->sequencerCall("record(long int, long int, long int, long int, int)",
+            if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
                                   replyType, replyData, data))
             {
                 m_transportStatus = STOPPED;
