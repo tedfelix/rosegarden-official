@@ -36,7 +36,6 @@
 #include "qcanvasspritegroupable.h"
 #include "qcanvaslinegroupable.h"
 #include "staff.h"
-#include "chord.h"
 #include "notepixmapfactory.h"
 #include "qcanvassimplesprite.h"
 #include "quantizer.h"
@@ -220,14 +219,6 @@ RosegardenGUIView::test()
         note->move(20,14);
         note->moveBy(40 + i * 20, staff->pitchYOffset(i));
     }
-
-    //     Chord *chord = new Chord(canvas());
-    //     chord->addNote(0);
-    //     chord->addNote(4);
-    //     chord->addNote(6);
-
-    //     chord->move(50,50);
-
 
     NotePixmapFactory npf;
 
