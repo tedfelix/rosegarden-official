@@ -85,7 +85,8 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     QGridLayout *grid = new QGridLayout(this, 2, 2);
 
     grid->addWidget(m_hHeader = new QHeader(nbBars, this), 0, 1);
-    grid->addWidget(m_vHeader = new QHeader(nbTracks, this), 1, 0);
+    grid->addWidget(m_vHeader =
+         new Rosegarden::TrackHeader(nbTracks, this), 1, 0);
     m_vHeader->setOrientation(Qt::Vertical);
 
     setupHorizontalHeader();

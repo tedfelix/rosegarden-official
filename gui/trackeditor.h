@@ -26,6 +26,7 @@
 #include <qwidget.h>
 #include <qheader.h>
 #include <qcanvas.h>
+#include "trackheader.h"
 
 #include "trackseditoriface.h"
 
@@ -143,7 +144,8 @@ protected:
     RosegardenGUIDoc* m_document;
 
     TracksCanvas *m_tracksCanvas;
-    QHeader *m_hHeader, *m_vHeader;
+    QHeader *m_hHeader;
+    Rosegarden::TrackHeader *m_vHeader;
 
     unsigned int m_timeStepsResolution;
 

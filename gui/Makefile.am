@@ -33,7 +33,8 @@ rosegarden_SOURCES = \
 	trackseditoriface.skel \
 	xmlstorableevent.cpp \
         rosegardentransport.ui \
-        rosegardentransportdialog.cpp
+        rosegardentransportdialog.cpp \
+        trackheader.cpp
 
 rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
