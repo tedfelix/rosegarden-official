@@ -2215,6 +2215,8 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     QVBoxLayout *vlay = 0;
     ConfigurationPage* page = 0;
 
+    setWFlags(WDestructiveClose);
+
     // General Page
     //
     pageWidget = addPage(GeneralConfigurationPage::iconLabel(),

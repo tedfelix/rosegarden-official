@@ -88,6 +88,14 @@ void RosegardenApplication::sfxLoadExited(KProcess *proc)
     
 }
 
+void
+RosegardenApplication::refreshGUI(int maxTime)
+{
+    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
+			       QEventLoop::ExcludeSocketNotifiers,
+			       maxTime);
+}
+
 RosegardenApplication* RosegardenApplication::rgApp()
 {
     return dynamic_cast<RosegardenApplication*>(kApplication());

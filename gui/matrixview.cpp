@@ -2233,9 +2233,34 @@ MatrixView::slotToggleTempoRuler()
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
 
+void
+MatrixView::paintEvent(QPaintEvent* e)
+{
+    //!!! There's a lot of code shared between matrix and notation for
+    // dealing with step recording (the insertable note event stuff).
+    // It should probably be factored out into a base class, but I'm
+    // not sure I wouldn't rather wait until the functionality is all
+    // sorted in both matrix and notation so we can be sure how much
+    // of it is actually common.
+
+    EditView::paintEvent(e);
+    
+    // now deal with any backlog of insertable notes that appeared
+    // during paint (because it's not safe to modify a segment from
+    // within a sub-event-loop in a processEvents call from a paint)
+    if (!m_pendingInsertableNotes.empty()) {
+	std::vector<std::pair<int, int> > notes = m_pendingInsertableNotes;
+	m_pendingInsertableNotes.clear();
+	for (unsigned int i = 0; i < notes.size(); ++i) {
+	    slotInsertableNoteEventReceived(notes[i].first, notes[i].second, true);
+	}
+    }
+}
+
+
 // Ignore velocity for the moment -- we need the option to use or ignore it
 void
-MatrixView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
+MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
     if (!noteOn) return;
 
@@ -2246,6 +2271,11 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int, bool noteOn)
 	return;
     }
     if (!action->isChecked()) return;
+
+    if (m_inPaintEvent) {
+	m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+	return;
+    }
 
     Segment &segment = *getCurrentSegment();
 

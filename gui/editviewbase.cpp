@@ -79,6 +79,8 @@ protected:
 const unsigned int EditViewBase::ID_STATUS_MSG = 1;
 const unsigned int EditViewBase::NbLayoutRows = 6;
 
+bool EditViewBase::m_inPaintEvent = false;
+
 EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
                            std::vector<Rosegarden::Segment *> segments,
                            unsigned int cols,
@@ -99,7 +101,6 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_needUpdate(false),
     m_pendingPaintEvent(0),
     m_havePendingPaintEvent(false),
-    m_inPaintEvent(false),
     m_accelerators(0),
     m_configDialogPageIndex(0),
     m_shiftDown(false),
@@ -302,7 +303,7 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     // responsive.  If that happens, we remember the events that came
     // in in the middle of one paintEvent call and process their union
     // again at the end of the call.
-
+/*
     if (m_inPaintEvent) {
 	NOTATION_DEBUG << "EditViewBase::paintEvent: in paint event already" << endl;
 	if (e) {
@@ -320,7 +321,8 @@ void EditViewBase::paintEvent(QPaintEvent* e)
 	m_havePendingPaintEvent = true;
 	return;
     }
-    m_inPaintEvent = true;
+*/
+//!!!    m_inPaintEvent = true;
 
     if (isCompositionModified()) {
       
@@ -410,23 +412,16 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     // any time signatures have changed)
     setCompositionModified(false);
 
-    m_inPaintEvent = false;
-
+//!!!    m_inPaintEvent = false;
+/*
     if (m_havePendingPaintEvent) {
-
-	//!!! I don't see this ever being called, so I don't think it's
-	// actually a problem after all -- except in step recording, and
-	// the real problem there is that DCOP events are being received
-	// and processed during the processEvents call in a paint event,
-	// not other paint events.
-	assert(0);
-
 	e = m_pendingPaintEvent;
 	m_havePendingPaintEvent = false;
 	m_pendingPaintEvent = 0;
 	paintEvent(e);
 	delete e;
     }
+*/
 }
 
 void EditViewBase::closeEvent(QCloseEvent* e)

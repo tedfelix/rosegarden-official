@@ -48,7 +48,7 @@ public:
      */
     virtual int newInstance();
 
-    void refreshGUI(int maxTime) { eventLoop()->processEvents(QEventLoop::ExcludeUserInput, maxTime); }
+    void refreshGUI(int maxTime);
 
     bool isSequencerRegistered();
     bool sequencerSend(QCString dcopCall, QByteArray params = Empty);

@@ -2248,8 +2248,6 @@ NotationView::paintEvent(QPaintEvent *e)
 {
     NOTATION_DEBUG << "NotationView::paintEvent: m_hlayout->isPageMode() returns " << m_hlayout->isPageMode() << endl;
 
-    // EditViewBase::paintEvent will also set this true again on entry
-    // and ultimately set it false on exit:
     m_inPaintEvent = true;
 
     // relayout if the window width changes significantly in continuous page mode
@@ -2259,6 +2257,7 @@ NotationView::paintEvent(QPaintEvent *e)
 	if (diff < -10 || diff > 10) {
 	    setPageMode(m_pageMode);
 	    refreshSegment(0, 0, 0);
+	    // return here?
 	}
     }
 
@@ -2270,11 +2269,10 @@ NotationView::paintEvent(QPaintEvent *e)
 	}
     }
 
-    m_inPaintEvent = false; // to be set true shortly!
+    m_inPaintEvent = false;
 
     EditView::paintEvent(e);
 
-    // now just to be sure:
     m_inPaintEvent = false;
 
     // now deal with any backlog of insertable notes that appeared

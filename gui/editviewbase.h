@@ -338,7 +338,7 @@ protected:
 
     QPaintEvent *m_pendingPaintEvent;
     bool         m_havePendingPaintEvent;
-    bool         m_inPaintEvent;
+    static bool  m_inPaintEvent; // true if _any_ edit view is in a paint event
 
     QAccel      *m_accelerators;
 

@@ -492,6 +492,8 @@ protected:
      */
     bool canPreviewAnotherNote();
 
+    virtual void paintEvent(QPaintEvent* e);
+
     //--------------- Data members ---------------------------------
 
     std::vector<MatrixStaff*> m_staffs;
@@ -554,6 +556,7 @@ protected:
     ChordNameRuler *m_chordNameRuler;
     QWidget        *m_tempoRuler;
 
+    std::vector<std::pair<int, int> > m_pendingInsertableNotes;
 };
 
 // Commented this out - was a MatrixView inner class, but we get a warning

@@ -2096,14 +2096,6 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 void
 NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
-    if (m_inPaintEvent) {
-	NOTATION_DEBUG << "NotationView::slotInsertableNoteEventReceived: in paint event already" << endl;
-	if (noteOn) {
-	    m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
-	}
-	return;
-    }
-
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
     if (!action) {
@@ -2118,6 +2110,14 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
     if (!noteInserter) {
 	KMessageBox::sorry(this, i18n("Can't insert note: No note duration selected"));
         return;
+    }
+
+    if (m_inPaintEvent) {
+	NOTATION_DEBUG << "NotationView::slotInsertableNoteEventReceived: in paint event already" << endl;
+	if (noteOn) {
+	    m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+	}
+	return;
     }
 
 //    KTmpStatusMsg msg(i18n("Inserting note"), this);
