@@ -908,7 +908,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		direction == "" ||
 		direction == "play") { // ignore inputs
 
-		MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+		Rosegarden::MidiDevice *md =
+		    dynamic_cast<Rosegarden::MidiDevice *>(m_device);
 		    
 		if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
 		    if (nameStr && nameStr != "") {
