@@ -1081,6 +1081,11 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     KDialogBase(parent, 0, true, i18n(editable ? "Edit Event" : "View Event"),
 		(editable ? (Ok | Cancel) : Ok)),
     m_notePixmapFactory(npf),
+    m_durationDisplay(0),
+    m_durationDisplayAux(0),
+    m_persistentGrid(0),
+    m_nonPersistentGrid(0),
+    m_nonPersistentView(0),
     m_originalEvent(event),
     m_event(event),
     m_type(event.getType()),
@@ -1163,9 +1168,16 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     new QLabel(i18n("These are cached values, lost if the event is modified."),
 	       nonPersistentBox);
 
+    m_nonPersistentView = new QScrollView(nonPersistentBox);
+    //m_nonPersistentView->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_nonPersistentView->setResizePolicy(QScrollView::AutoOneFit);
+
     m_nonPersistentGrid = new QGrid
-	(4, QGrid::Horizontal, nonPersistentBox);
+	(4, QGrid::Horizontal, m_nonPersistentView->viewport());
+    m_nonPersistentView->addChild(m_nonPersistentGrid);
+
     m_nonPersistentGrid->setSpacing(4);
+    m_nonPersistentGrid->setMargin(5);
 
     label = new QLabel(i18n("Name       "), m_nonPersistentGrid);
     label->setFont(font);
@@ -1190,8 +1202,8 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 	QObject::connect(button, SIGNAL(clicked()),
 			 this, SLOT(slotPropertyMadePersistent()));
     }
+  
 }
-
 
 void
 EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)

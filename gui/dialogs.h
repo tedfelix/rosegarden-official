@@ -83,7 +83,17 @@ public:
     Location getLocation() const;
     bool shouldNormalizeRests() const;
 
+public slots:
+    void slotNumUp();
+    void slotNumDown();
+    void slotDenomUp();
+    void slotDenomDown();
+    void slotUpdateCommonTimeButton();
+
 protected:
+
+    //--------------- Data members ---------------------------------
+
     Rosegarden::TimeSignature m_timeSignature;
     QLabel *m_numLabel;
     QLabel *m_denomLabel;
@@ -96,13 +106,6 @@ protected:
 
     int m_barNo;
     bool m_atStartOfBar;
-
-public slots:
-    void slotNumUp();
-    void slotNumDown();
-    void slotDenomUp();
-    void slotDenomDown();
-    void slotUpdateCommonTimeButton();
 };
 
 
@@ -131,7 +134,20 @@ public:
     bool shouldApplyToAll() const;
     ConversionType getConversionType() const;
 
+public slots:
+    void slotKeyUp();
+    void slotKeyDown();
+    void slotKeyNameChanged(const QString &);
+    void slotMajorMinorChanged(const QString &);
+
 protected:
+
+    void redrawKeyPixmap();
+    void regenerateKeyCombo();
+    void setValid(bool valid);
+
+    //--------------- Data members ---------------------------------
+
     NotePixmapFactory *m_notePixmapFactory;
 
     Rosegarden::Key m_key;
@@ -149,16 +165,7 @@ protected:
     QRadioButton *m_convertButton;
     QRadioButton *m_transposeButton;
 
-    void redrawKeyPixmap();
-    void regenerateKeyCombo();
-    void setValid(bool valid);
     std::string getKeyName(const QString &s, bool minor);
-
-public slots:
-    void slotKeyUp();
-    void slotKeyDown();
-    void slotKeyNameChanged(const QString &);
-    void slotMajorMinorChanged(const QString &);
 };
 
 
@@ -173,7 +180,13 @@ public:
     PasteEventsCommand::PasteType getPasteType() const;
     bool setAsDefault() const;
 
+public slots:
+    void slotPasteTypeChanged();
+
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QRadioButton *m_restrictedButton;
     QRadioButton *m_simpleButton;
     QRadioButton *m_openAndPasteButton;
@@ -183,9 +196,6 @@ protected:
     QCheckBox *m_setAsDefaultButton;
 
     PasteEventsCommand::PasteType m_defaultType;
-
-public slots:
-    void slotPasteTypeChanged();
 };
 
 
@@ -202,7 +212,19 @@ public:
     int getUntupledCount() const;
     int getTupledCount() const;
 
+public slots:
+    void slotUnitChanged(const QString &);
+    void slotUntupledChanged(const QString &);
+    void slotTupledChanged(const QString &);
+
 protected:
+
+    void updateUntupledCombo();
+    void updateTupledCombo();
+    void updateTimingDisplays();
+
+    //--------------- Data members ---------------------------------
+
     QComboBox *m_unitCombo;
     QComboBox *m_untupledCombo;
     QComboBox *m_tupledCombo;
@@ -217,16 +239,7 @@ protected:
     QLabel *m_unchangedDurationCalculationDisplay;
     QLabel *m_unchangedDurationDisplay;
 
-    void updateUntupledCombo();
-    void updateTupledCombo();
-    void updateTimingDisplays();
-
     Rosegarden::timeT m_maxDuration;
-
-public slots:
-    void slotUnitChanged(const QString &);
-    void slotUntupledChanged(const QString &);
-    void slotTupledChanged(const QString &);
 };
 
 
@@ -244,7 +257,14 @@ public:
 	return Rosegarden::Text(getTextString(), getTextType());
     }
 
+public slots:
+    void slotTextChanged(const QString &);
+    void slotTypeChanged(const QString &);
+
 protected:
+
+    //--------------- Data members ---------------------------------
+
     QLineEdit *m_text;
     QComboBox *m_typeCombo;
 
@@ -257,10 +277,6 @@ protected:
 
     std::string getTextType() const;
     std::string getTextString() const;
-
-public slots:
-    void slotTextChanged(const QString &);
-    void slotTypeChanged(const QString &);
 };
 
 
@@ -284,25 +300,6 @@ public:
     bool isModified() const { return m_modified; }
     Rosegarden::Event getEvent() const;
 
-protected:
-    NotePixmapFactory *m_notePixmapFactory;
-
-    const Rosegarden::Event &m_originalEvent;
-    Rosegarden::Event m_event;
-
-    QLabel *m_durationDisplay;
-    QLabel *m_durationDisplayAux;
-
-    QGrid *m_persistentGrid;
-    QGrid *m_nonPersistentGrid;
-
-    std::string m_type;
-    Rosegarden::timeT m_absoluteTime;
-    Rosegarden::timeT m_duration;
-    int m_subOrdering;
-
-    bool m_modified;
-
 public slots:
     void slotEventTypeChanged(const QString &);
     void slotAbsoluteTimeChanged(int value);
@@ -318,6 +315,27 @@ public slots:
 
 protected:
     void addPersistentProperty(const Rosegarden::PropertyName &);
+
+    //--------------- Data members ---------------------------------
+    NotePixmapFactory *m_notePixmapFactory;
+
+    QLabel *m_durationDisplay;
+    QLabel *m_durationDisplayAux;
+
+    QGrid *m_persistentGrid;
+    QGrid *m_nonPersistentGrid;
+
+    QScrollView *m_nonPersistentView;
+
+    const Rosegarden::Event &m_originalEvent;
+    Rosegarden::Event m_event;
+
+    std::string m_type;
+    Rosegarden::timeT m_absoluteTime;
+    Rosegarden::timeT m_duration;
+    int m_subOrdering;
+
+    bool m_modified;
 };
 
 class TempoDialog : public KDialogBase
@@ -353,6 +371,9 @@ signals:
 
 protected:
     void populateTempo();
+    void updateBeatLabels(double newTempo);
+
+    //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc   *m_doc;
     Rosegarden::timeT   m_tempoTime;
@@ -373,8 +394,6 @@ protected:
     QRadioButton       *m_tempoChangeStartOfBar;
     QRadioButton       *m_tempoChangeGlobal;
     QCheckBox          *m_defaultBox;
-
-    void updateBeatLabels(double newTempo);
 };
 
 
@@ -397,7 +416,15 @@ public:
     Rosegarden::Clef getClef() const;
     ConversionType getConversionType() const;
 
+public slots:
+    void slotClefUp();
+    void slotClefDown();
+
 protected:
+    void redrawClefPixmap();
+
+    //--------------- Data members ---------------------------------
+
     NotePixmapFactory *m_notePixmapFactory;
     Rosegarden::Clef m_clef;
     
@@ -406,13 +433,7 @@ protected:
 
     QRadioButton *m_noConversionButton;
     QRadioButton *m_changeOctaveButton;
-    QRadioButton *m_transposeButton;
-    
-    void redrawClefPixmap();
-    
-public slots:
-    void slotClefUp();
-    void slotClefDown();
+    QRadioButton *m_transposeButton;   
 };
 
 
@@ -427,7 +448,15 @@ public:
     
     Rosegarden::Quantizer getQuantizer() const;
     
+public slots:
+    void slotTypeChanged(int);
+    void slotUnitChanged(int);
+    void slotDotsChanged(int);
+    void slotLegatoChanged();
+
 protected:
+
+    //--------------- Data members ---------------------------------
     std::string m_source;
     std::string m_target;
 
@@ -442,11 +471,6 @@ protected:
     QCheckBox *m_makeViableButton;
     QCheckBox *m_rebeamButton;
 
-public slots:
-    void slotTypeChanged(int);
-    void slotUnitChanged(int);
-    void slotDotsChanged(int);
-    void slotLegatoChanged();
 };
   
 
