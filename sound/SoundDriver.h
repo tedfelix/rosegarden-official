@@ -270,6 +270,15 @@ public:
     //
     virtual bool checkForNewClients() = 0;
 
+    // Set a loop position at the driver (used for transport)
+    //
+    virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd)
+        = 0;
+
+    // Set the record device
+    //
+    virtual void setRecordDevice(Rosegarden::DeviceId id) = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);
@@ -375,6 +384,16 @@ public:
     Rosegarden::DeviceId getMIDIRecordDevice() const 
         { return m_midiRecordDevice; }
 
+    // Set MMC state
+    //
+    bool isMMCEnabled() const { return m_mmcEnabled; }
+    void enableMMC(bool mmc) { m_mmcEnabled = mmc; }
+
+    // Set MMC master/slave
+    //
+    bool isMMCMaster() const { return m_mmcMaster; }
+    void setMasterMMC(bool mmc) { m_mmcMaster = mmc; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -447,6 +466,12 @@ protected:
     MappedStudio                *m_studio;
 
     std::vector<std::string>     m_args;
+
+    // MMC control
+    //
+    bool                         m_mmcEnabled;
+    bool                         m_mmcMaster;
+
 
 };
 

@@ -18,6 +18,7 @@ o MIDI export broken for key sig and SysExs [CC?]
 
 o multi-threaded base/
 
+o selection of ALSA recording device
 
 
 Smaller stuff
@@ -75,9 +76,8 @@ o Audio noise eliminator - recording
 
 o Segment colouring
 
-o selection of ALSA recording device
 
-Post 0.8 completed
+0.8.5 completed
 =================
 
 o MIDI Panic button [DONE cc/rwb]

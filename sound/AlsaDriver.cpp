@@ -132,6 +132,9 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_midiInputPortConnected(false),
     m_alsaPlayStartTime(0, 0),
     m_alsaRecordStartTime(0, 0),
+    m_loopStartTime(0, 0),
+    m_loopEndTime(0, 0),
+    m_looping(false),
     m_currentPair(-1, -1),
     m_addedMetronome(false),
     m_audioMeterSent(false)
@@ -139,6 +142,9 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 #ifdef HAVE_LIBJACK
     ,m_audioClient(0)
+    ,m_jackTransportEnabled(false)
+    ,m_jackTransportMaster(false)
+    ,m_transportPosition(0)
 #endif
 
 {
@@ -194,6 +200,21 @@ AlsaDriver::~AlsaDriver()
     }
 
 #endif // HAVE_LIBJACK
+}
+
+void
+AlsaDriver::setLoop(const RealTime &loopStart, const RealTime &loopEnd)
+{
+    m_loopStartTime = loopStart;
+    m_loopEndTime = loopEnd;
+
+    // currently we use this simple test for looping - it might need
+    // to get more sophisticated in the future.
+    //
+    if (m_loopStartTime != m_loopEndTime)
+        m_looping = true;
+    else
+        m_looping = false;
 }
 
 void
@@ -692,7 +713,7 @@ AlsaDriver::initialiseMidi()
     //
     snd_seq_port_subscribe_set_time_update(subs, 1);
 
-    // set so we realtime timestamps
+    // set so we get realtime timestamps
     //
     snd_seq_port_subscribe_set_time_real(subs, 1);
 
@@ -709,7 +730,7 @@ AlsaDriver::initialiseMidi()
     else
         m_midiInputPortConnected = true;
 
-    // Erm?
+    // Set the input queue size
     //
     if (snd_seq_set_client_pool_output(m_midiHandle, 200) < 0 ||
         snd_seq_set_client_pool_input(m_midiHandle, 20) < 0 ||
@@ -1796,6 +1817,25 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             cancelAudioFile(Rosegarden::InstrumentId((*i)->getInstrument()),
                              Rosegarden::AudioFileId((*i)->getData1()));
         }
+
+#ifdef HAVE_LIBJACK
+
+        // Set the JACK transport 
+        if ((*i)->getType() == MappedEvent::SystemJackMaster)
+        {
+            if (((int)(*i)->getData1()) == 1)
+            {
+                m_jackTransportMaster = true;
+                m_jackTransportEnabled = true;
+            }
+            else
+            {
+                m_jackTransportMaster = false;
+                m_jackTransportEnabled = false;
+            }
+        }
+#endif // HAVE_LIBJACK
+
     }
 
     // Process Midi and Audio
@@ -1821,8 +1861,8 @@ AlsaDriver::record(const RecordStatus& recordStatus)
         createAudioFile(m_recordingFilename);
         m_recordStatus = RECORD_AUDIO;
 #else
-	std::cerr << "AlsaDriver::record - can't record audio without JACK"
-		  << std::endl;
+        std::cerr << "AlsaDriver::record - can't record audio without JACK"
+                  << std::endl;
 #endif
 
     }
@@ -2944,6 +2984,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
     }
 
+    // Send the current transport status
+    inst->sendJACKTransportState();
 
     return 0;
 }
@@ -3098,11 +3140,78 @@ AlsaDriver::appendToAudioFile(const std::string &buffer)
     _recordFile->appendSamples(buffer);
 }
 
+ 
+// Get a JACK frame from a RealTime
+//
+jack_nframes_t
+AlsaDriver::getJACKFrame(const RealTime &time)
+{
+    jack_nframes_t frame =
+        (jack_nframes_t)(((float(time.sec)) +
+                           float(time.usec)/1000000.0) *
+                           float(_jackSampleRate));
+    return frame;
+}
+
+// Check out the current transport state and update the JACK
+// server with our current position and playing state if we're
+// the master timing source.
+//
+void
+AlsaDriver::sendJACKTransportState()
+{
+    if (!m_jackTransportMaster || !m_jackTransportEnabled) return;
+
+    jack_transport_info_t info;
+
+    // Only reset the position if we're playing
+    if (m_playing == true)
+    {
+        m_transportPosition = getJACKFrame(getSequencerTime());
+    }
+
+    info.position = m_transportPosition;
+
+    // Get the transport position directly from the ALSA Sequencer 
+    // - hopefully this is the right one allowing for all those
+    // latencies etc.
+    // 
+    //info.position = getJACKFrame(getSequencerTime());
+
+    if (m_playing)
+    {
+        if (m_looping)
+        {
+            cout << "LOOPING (frame = " << info.position << ")" << endl;
+            info.state = JackTransportLooping;
+            info.loop_start = getJACKFrame(m_loopStartTime);
+            info.loop_end = getJACKFrame(m_loopEndTime);
+            info.valid = jack_transport_bits_t(JackTransportPosition |
+                                               JackTransportState |
+                                               JackTransportLoop);
+        }
+        else
+        {
+            cout << "PLAYING (frame = " << info.position << ")" << endl;
+            info.state = JackTransportRolling;
+            info.valid = jack_transport_bits_t(JackTransportPosition |
+                                               JackTransportState);
+        }
+    }
+    else
+    {
+        cout << "STOPPED (frame = " << info.position << ")" << endl;
+        info.state = JackTransportStopped;
+        info.valid = jack_transport_bits_t(JackTransportPosition |
+                                           JackTransportState);
+    }
+
+    jack_set_transport_info(m_audioClient, &info);
+}
 
 
 
-
-#endif
+#endif // HAVE_LIBJACK
 
 
 // At some point make this check for just different numbers of clients
@@ -3188,6 +3297,76 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 }
 
 
+void
+AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
+{
+    Rosegarden::DeviceId countId = 0;
+
+    if (id >= m_alsaPorts.size())
+    { 
+        cout << "NO RECORD DEVICE FOUND" << endl;
+        return;
+    }
+
+    snd_seq_addr_t sender, dest;
+
+    dest.client = m_client;
+    dest.port = m_port;
+
+    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    for (; it != m_alsaPorts.end(); ++it)
+    {
+        sender.port = (*it)->m_client;
+        sender.port = (*it)->m_port;
+
+        if (countId == id) break;
+
+        // Increment on new client/device - not on a new port
+        //
+        if ((*it)->m_port == 0) countId++;
+    }
+
+    if ((*it)->m_duplex != true)
+    {
+        cout << "ATTEMPTING TO SET RECORD DEVICE TO NON-DUPLEX DEVICE" << endl;
+        return;
+    }
+
+    snd_seq_port_subscribe_t *subs;
+    snd_seq_port_subscribe_alloca(&subs);
+
+    dest.client = m_client;
+    dest.port = m_port;
+
+    // Set destinations and senders
+    //
+    snd_seq_port_subscribe_set_sender(subs, &sender);
+    snd_seq_port_subscribe_set_dest(subs, &dest);
+    snd_seq_port_subscribe_set_queue(subs, m_queue);
+
+    // enable time-stamp-update mode 
+    //
+    snd_seq_port_subscribe_set_time_update(subs, 1);
+
+    // set so we get realtime timestamps
+    //
+    snd_seq_port_subscribe_set_time_real(subs, 1);
+
+    if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
+    {
+        std::cerr << "AlsaDriver::initialiseMidi - "
+                  << "can't subscribe input client/port"
+                  << std::endl;
+        // Not the end of the world if this fails but we
+        // have to flag it internally.
+        //
+        m_midiInputPortConnected = false;
+    }
+    else
+        m_midiInputPortConnected = true;
 }
+
+}
+
 
 #endif // HAVE_ALSA

@@ -114,6 +114,11 @@ public:
                                          bool /*value*/) {;}
 
     virtual bool checkForNewClients() { return false; }
+    
+    virtual void setLoop(const RealTime &/*loopStart*/,
+                         const RealTime &/*loopEnd*/) {;}
+
+    virtual void setRecordDevice(Rosegarden::DeviceId /*id*/) {;}
 
 protected:
     virtual void generateInstruments();

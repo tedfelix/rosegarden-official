@@ -63,27 +63,34 @@ class MappedEvent
 public:
     typedef enum
     {
-        MidiNote                = 0x0001,
-        MidiNoteOneShot         = 0x0002,  // doesn't need NOTE OFFs
-        MidiProgramChange       = 0x0004,
-        MidiKeyPressure         = 0x0008,
-        MidiChannelPressure     = 0x0010,
-        MidiPitchBend           = 0x0020,
-        MidiController          = 0x0040,
-        MidiSystemExclusive     = 0x0080,
-        // sent from the gui to play an audio file
-        Audio                   = 0x0100,
-        // sent from gui to stop playing an audio file
-        AudioCancel             = 0x0200,
-        // sent to the gui with audio level on Instrument
-        AudioLevel              = 0x0400,
-        // sent to the gui to inform an audio file stopped
-        AudioStopped            = 0x0800,
-        // the gui is clear to generate a preview for a new audio file
-        AudioGeneratePreview    = 0x1000,
-
-        // update Instruments
-        SystemUpdateInstruments = 0x2000
+        MidiNote                = 0x000001,
+        MidiNoteOneShot         = 0x000002,  // doesn't need NOTE OFFs
+        MidiProgramChange       = 0x000004,
+        MidiKeyPressure         = 0x000008,
+        MidiChannelPressure     = 0x000010,
+        MidiPitchBend           = 0x000020,
+        MidiController          = 0x000040,
+        MidiSystemExclusive     = 0x000080,
+        // Sent from the gui to play an audio file
+        Audio                   = 0x000100,
+        // Sent from gui to cancel playing an audio file
+        AudioCancel             = 0x000200,
+        // Sent to the gui with audio level on Instrument
+        AudioLevel              = 0x000400,
+        // Sent to the gui to inform an audio file stopped
+        AudioStopped            = 0x000800,
+        // The gui is clear to generate a preview for a new audio file
+        AudioGeneratePreview    = 0x001000,
+        // Update Instruments - new ALSA client detected
+        SystemUpdateInstruments = 0x002000,
+        // Set RG as JACK master
+        SystemJackMaster        = 0x004000,
+        // Set RG as MMC master
+        SystemMMCMaster         = 0x008000,
+        // Set Record device
+        SystemRecordDevice      = 0x010000,
+        // Set Metronome device
+        SystemMetronomeDevice   = 0x020000
 
     } MappedEventType;
 

@@ -259,6 +259,16 @@ public:
 
     virtual bool checkForNewClients();
 
+    virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd);
+
+    // Set the record device
+    //
+    virtual void setRecordDevice(Rosegarden::DeviceId id);
+
+
+    // ----------------------- End of Virtuals ----------------------
+
+
 #ifdef HAVE_LADSPA
 
     LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
@@ -305,6 +315,11 @@ public:
     bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
 
+    // Set JACK transport slave/master
+    //
+    void setJackTransportMaster(bool value) { m_jackTransportMaster = value; }
+    void setJackTransportEnabled(bool value) { m_jackTransportEnabled = value; }
+
 #endif
 
 
@@ -320,6 +335,20 @@ protected:
 
     virtual void processAudioQueue(const RealTime &playLatency,
                                    bool now);
+
+#ifdef HAVE_LIBJACK
+
+    // Gathers JACK transport information from current driver
+    // status and informs JACK server.
+    //
+    void sendJACKTransportState();
+
+    // Get a JACk frame from a RealTime
+    //
+    jack_nframes_t getJACKFrame(const RealTime &time);
+
+#endif // HAVE_LIBJACK
+
 
 private:
     RealTime getAlsaTime();
@@ -359,6 +388,9 @@ private:
     RealTime                     m_alsaPlayStartTime;
     RealTime                     m_alsaRecordStartTime;
 
+    RealTime                     m_loopStartTime;
+    RealTime                     m_loopEndTime;
+    bool                         m_looping;
 
     // used when deciding what device number we're on
     // (multiple ports for a client)
@@ -387,6 +419,12 @@ private:
     jack_port_t                 *m_audioOutputPortLeft;
     jack_port_t                 *m_audioOutputPortRight;
 
+    // Jack transport controls
+    //
+    bool                         m_jackTransportEnabled;
+    bool                         m_jackTransportMaster;
+
+    jack_nframes_t               m_transportPosition;
 
 #endif // HAVE_LIBJACK
 

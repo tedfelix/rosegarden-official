@@ -748,6 +748,8 @@ RosegardenSequencerApp::setLoop(const Rosegarden::RealTime &loopStart,
 {
     m_loopStart = loopStart;
     m_loopEnd = loopEnd;
+
+    m_sequencer->setLoop(loopStart, loopEnd);
 }
 
 

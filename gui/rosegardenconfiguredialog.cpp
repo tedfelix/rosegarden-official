@@ -56,6 +56,7 @@
 #include "notationtool.h"
 #include "segmenttool.h"
 #include "editcommands.h"
+#include "studiocontrol.h"
 
 namespace Rosegarden
 {
@@ -831,6 +832,15 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
     m_sendControllersAtPlay->setChecked(sendControllers);
 
+    label = new QLabel("Make Rosegarden Master for JACK transport", frame);
+    layout->addWidget(label, 2, 0);
+
+    m_jackTransportMaster = new QCheckBox(frame);
+    layout->addWidget(m_jackTransportMaster, 2, 1);
+
+    bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
+    m_jackTransportMaster->setChecked(jackMaster);
+
     layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
                                3, 3,
                                0, 1);
@@ -852,7 +862,31 @@ SequencerConfigurationPage::apply()
 {
     m_cfg->setGroup("Sequencer Options");
     m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
-    m_cfg->writeEntry("alwayssendcontrollers", m_sendControllersAtPlay->isChecked());
+    m_cfg->writeEntry("alwayssendcontrollers",
+                       m_sendControllersAtPlay->isChecked());
+
+    // Send the JACK master control
+    //
+    if (m_jackTransportMaster->isChecked() !=
+        m_cfg->readBoolEntry("jackmaster", false))
+    {
+        try
+        {
+            Rosegarden::MappedEvent *mE =
+                new Rosegarden::MappedEvent(
+                    0, // InstrumentId
+                    Rosegarden::MappedEvent::SystemJackMaster,
+                    Rosegarden::MidiByte(m_jackTransportMaster->isChecked()));
+
+            Rosegarden::StudioControl::sendMappedEvent(mE);
+        }
+        catch(...) {;}
+    }
+
+    // Write the JACK entry
+    //
+    m_cfg->writeEntry("jackmaster", m_jackTransportMaster->isChecked());
+
 }
 
 // ---

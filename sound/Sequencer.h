@@ -247,6 +247,25 @@ public:
     bool checkForNewClients()
         { return m_soundDriver->checkForNewClients(); }
 
+    // Set a loop at the driver level
+    //
+    void setLoop(const RealTime &loopStart, const RealTime &loopEnd)
+       { m_soundDriver->setLoop(loopStart, loopEnd); }
+
+
+    // Set the record device
+    //
+    void setRecordDevice(Rosegarden::DeviceId id)
+        { m_soundDriver->setRecordDevice(id); }
+
+    // Set and get MMC states - enabled and whether or not we're master
+    // or slave.
+    //
+    void enableMMC(bool mmc) { m_soundDriver->enableMMC(mmc); }
+    bool isMMCEnabled() const { return m_soundDriver->isMMCEnabled(); }
+
+    void setMasterMMC(bool mmc) { m_soundDriver->setMasterMMC(mmc); }
+    bool isMMCMaster() const { return m_soundDriver->isMMCMaster(); }
 
 protected:
 
