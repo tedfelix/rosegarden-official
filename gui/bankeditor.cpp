@@ -912,16 +912,17 @@ ProgramLine::slotNewText(const QString &label)
 //
 RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
                                              RosegardenGUIDoc *doc):
-    KDialogBase(parent, "", true, i18n("Remap Instruments and Devices..."),
+    KDialogBase(parent, "", true, i18n("Remap Instrument assigments..."),
                 Ok | Apply | Cancel),
     m_doc(doc)
 {
     QVBox *vBox = makeVBoxMainWidget();
 
     m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
-                                     i18n("Remap by Device or Instrument"),
+                                     i18n("Device or Instrument"),
                                      vBox);
 
+    new QLabel(i18n("Remap Tracks by all Instruments on a Device or by single Instrument"), m_buttonGroup);
     m_deviceButton = new QRadioButton(i18n("Device"), m_buttonGroup);
     m_instrumentButton = new QRadioButton(i18n("Instrument"), m_buttonGroup);
 
@@ -930,7 +931,8 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
             this, SLOT(slotRemapReleased(int)));
 
     QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
-                                        i18n("What mapping?"), vBox);
+                                        i18n("Choose Source and Destination"),
+                                        vBox);
 
     new QLabel(i18n("From"), groupBox);
     new QLabel(i18n("To"), groupBox);
@@ -1034,6 +1036,8 @@ RemapInstrumentDialog::slotApply()
 
         addCommandToHistory(command);
     }
+
+    emit applyClicked();
 }
 
 void

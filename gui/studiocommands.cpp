@@ -132,23 +132,35 @@ ModifyDeviceMappingCommand::execute()
                 // store "to" and "from" values
                 //
                 m_mapping.push_back(
-                        std::pair<Rosegarden::InstrumentId,
+                        std::pair<Rosegarden::TrackId,
                                   Rosegarden::InstrumentId>
                                   (it->first,
                                    instr->getId()));
 
                 it->second->setInstrument((*dIt)->getId());
             }
-            else
+            else // audio is involved in the mapping - use indexes
             {
                 // assign by index numbers
+                Rosegarden::InstrumentList destList = m_studio->
+                    getDevice(m_toDevice)->getPresentationInstruments();
+
+                // skip if we can't match
+                //
+                if (index > destList.size() - 1)
+                    continue;
+
+                m_mapping.push_back(
+                        std::pair<Rosegarden::TrackId,
+                                  Rosegarden::InstrumentId>
+                                  (it->first,
+                                   instr->getId()));
+
+                it->second->setInstrument(destList[index]->getId());
             }
 
-            Rosegarden::InstrumentList sourceList = 
-                m_studio->getDevice(m_fromDevice)->getPresentationInstruments();
-
+            index++;
         }
-        index++;
     }
 
 }

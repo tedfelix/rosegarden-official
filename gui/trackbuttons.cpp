@@ -792,7 +792,9 @@ void
 TrackButtons::slotSynchroniseWithComposition()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::Track *track;
+    QString instrumentName;
 
     for (int i = 0; i < (int)m_tracks; i++)
     {
@@ -806,6 +808,16 @@ TrackButtons::slotSynchroniseWithComposition()
             else
                 dynamic_cast<QPushButton*>(
                         m_muteButtonGroup->find(i))->setOn(false);
+
+            Rosegarden::Instrument *ins = studio.
+                getInstrumentById(track->getInstrument());
+
+            if (ins == 0)
+                instrumentName = QString("<no instrument>");
+            else
+                instrumentName = QString(strtoqstr(ins->getName()));
+
+            m_instrumentLabels[i]->setText(instrumentName);
         }
     }
 

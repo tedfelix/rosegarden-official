@@ -50,11 +50,11 @@
 	<Action name="add_tracks"/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
+        <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Studio">
         <text>&amp;Studio</text>
         <Action name="modify_banks"/>
-        <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>

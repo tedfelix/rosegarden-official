@@ -478,7 +478,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
 
-    new KAction(i18n("&Remap Instruments and Devices..."), 0, this,
+    new KAction(i18n("&Remap Instruments..."), 0, this,
                 SLOT(slotRemapInstruments()),
                 actionCollection(), "remap_instruments");
 
@@ -3363,10 +3363,15 @@ RosegardenGUIApp::slotRemapInstruments()
     RemapInstrumentDialog *dialog =
         new RemapInstrumentDialog(this, m_doc);
 
+    connect(dialog, SIGNAL(applyClicked()),
+            m_view->getTrackEditor()->getTrackButtons(),
+            SLOT(slotSynchroniseWithComposition()));
+
     if (dialog->exec() == QDialog::Accepted)
     {
         RG_DEBUG << "slotRemapInstruments - accepted" << endl;
     }
+
 }
 
 
