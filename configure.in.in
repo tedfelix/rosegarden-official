@@ -152,9 +152,8 @@ else
       fi
      ], with_dssi=yes)
 
-    dnl only use DSSI when dssi.h is found
     if test "$with_dssi" = "yes"; then
-      AC_CHECK_HEADERS(dssi.h,,[with_dssi=no])
+      PKG_CHECK_MODULES(DSSI,dssi >= 0.4,,[with_dssi="no"])
     fi
 
     if test "$with_dssi" = "yes"; then
