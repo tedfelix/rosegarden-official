@@ -190,6 +190,7 @@ AudioSegmentInsertCommand::AudioSegmentInsertCommand(
     XKCommand("Create Segment"),
     m_composition(&(doc->getComposition())),
     m_studio(&(doc->getStudio())),
+    m_audioFileManager(&(doc->getAudioFileManager())),
     m_segment(0),
     m_track(track),
     m_startTime(startTime),
@@ -220,6 +221,7 @@ AudioSegmentInsertCommand::execute()
 	m_composition->addSegment(m_segment);
         m_segment->setAudioStartTime(m_audioStartTime);
         m_segment->setAudioEndTime(m_audioEndTime);
+        m_segment->setAudioFileId(m_audioFileId);
 
         // Calculate end time
         //
@@ -233,25 +235,19 @@ AudioSegmentInsertCommand::execute()
 
 	m_segment->setEndTime(endTimeT);
 
-        // Do our best to label the Segment with whatever is currently
-        // showing against it.
+        // Label by audio file name
         //
-        Rosegarden::Track *track = m_composition->getTrackByIndex(m_track);
-        std::string label;
+        std::string label = "";
 
-        if (track)
-        {
-            // try to get a reasonable Segment name by Instrument
-            //
-            label = m_studio->getSegmentName(track->getInstrument());
+        Rosegarden::AudioFile *aF =
+                m_audioFileManager->getAudioFile(m_audioFileId);
 
-            // if not use the track label
-            //
-            if (label == "")
-                label = track->getLabel();
+        if (aF)
+            label = aF->getName() + std::string(" (inserted)");
+        else
+            label = std::string("unknown audio file");
 
-            m_segment->setLabel(label);
-        }
+        m_segment->setLabel(label);
 
     }
     else

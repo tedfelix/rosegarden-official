@@ -28,6 +28,7 @@
 #include "Composition.h"
 #include "NotationTypes.h"
 #include "rosegardenguidoc.h"
+#include "AudioFileManager.h"
 
 #ifdef RGKDE3
 typedef KNamedCommand XKCommand;
@@ -138,15 +139,16 @@ public:
     virtual void unexecute();
     
 private:
-    Rosegarden::Composition *m_composition;
-    Rosegarden::Studio      *m_studio;
-    Rosegarden::Segment     *m_segment;
-    int                      m_track;
-    Rosegarden::timeT        m_startTime;
-    Rosegarden::AudioFileId  m_audioFileId;
-    Rosegarden::RealTime     m_audioStartTime;
-    Rosegarden::RealTime     m_audioEndTime;
-    bool m_detached;
+    Rosegarden::Composition      *m_composition;
+    Rosegarden::Studio           *m_studio;
+    Rosegarden::AudioFileManager *m_audioFileManager;
+    Rosegarden::Segment          *m_segment;
+    int                           m_track;
+    Rosegarden::timeT             m_startTime;
+    Rosegarden::AudioFileId       m_audioFileId;
+    Rosegarden::RealTime          m_audioStartTime;
+    Rosegarden::RealTime          m_audioEndTime;
+    bool                          m_detached;
 };
 
 class SegmentInsertCommand : public XKCommand
