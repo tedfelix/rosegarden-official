@@ -186,6 +186,11 @@ public:
     virtual void setAudioMonitoring(bool value);
     virtual void setAudioMonitoringInstrument(unsigned int id);
 
+    // Audio latencies
+    //
+    virtual Rosegarden::MappedRealTime getAudioPlayLatency();
+    virtual Rosegarden::MappedRealTime getAudioRecordLatency();
+
     //
     //
     //

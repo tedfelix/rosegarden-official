@@ -905,3 +905,17 @@ RosegardenSequencerApp::setAudioMonitoringInstrument(unsigned int id)
 }
 
 
+Rosegarden::MappedRealTime
+RosegardenSequencerApp::getAudioPlayLatency()
+{
+    return Rosegarden::MappedRealTime(m_sequencer->getAudioPlayLateny());
+}
+
+Rosegarden::MappedRealTime
+RosegardenSequencerApp::getAudioRecordLatency()
+{
+    return Rosegarden::MappedRealTime(m_sequencer->getAudioRecordLateny());
+}
+
+
+

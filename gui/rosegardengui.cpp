@@ -138,6 +138,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     readOptions();
 
+    // Now fetch the audio latencies from the sequencer
+    //
+    m_seqManager->getAudioLatencies();
+
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
 //     disableCommand(ID_FILE_SAVE);
@@ -2382,7 +2386,7 @@ void RosegardenGUIApp::slotConfigure()
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure\n";
 
     Rosegarden::ConfigureDialog *configDlg = 
-        new Rosegarden::ConfigureDialog(m_config, this);
+        new Rosegarden::ConfigureDialog(m_doc, m_config, this);
 
     configDlg->show();
 }
@@ -2925,5 +2929,6 @@ RosegardenGUIApp::slotSegmentsSelected(
     if (m_audioManagerDialog)
         m_audioManagerDialog->slotSegmentSelection(segments);
 }
+
 
 

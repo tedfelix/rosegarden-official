@@ -264,6 +264,19 @@ public:
     void progressDialogDead();
 
 
+    // Audio play and record latencies - should be set initially
+    // from the sequencer.
+    //
+    void setAudioPlayLatency(const Rosegarden::RealTime &latency)
+        { m_audioPlayLatency = latency; }
+    Rosegarden::RealTime getAudioPlayLatency()
+        { return m_audioPlayLatency; }
+
+    void setAudioRecordLatency(const Rosegarden::RealTime &latency)
+        { m_audioRecordLatency = latency; }
+    Rosegarden::RealTime getAudioRecordLatency()
+        { return m_audioRecordLatency; }
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -399,6 +412,12 @@ private:
     // by a subordinate.
     //
     bool m_progressDialogDead;
+
+    // Audio latencies stored here - we don't make these persistent though
+    // 
+    Rosegarden::RealTime m_audioPlayLatency;
+    Rosegarden::RealTime m_audioRecordLatency;
+
 };
 
 #endif // ROSEGARDENGUIDOC_H

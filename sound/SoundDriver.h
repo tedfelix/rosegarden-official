@@ -308,6 +308,13 @@ public:
     void setAudioMonitoringInstrument(Rosegarden::InstrumentId id)
         { m_audioMonitoringInstrument = id; }
 
+    // Latencies
+    //
+    void setAudioPlayLatency(const RealTime &l) { m_audioPlayLatency = l; }
+    RealTime getAudioPlayLatency() { return  m_audioPlayLatency; }
+
+    void setAudioRecordLatency(const RealTime &l) { m_audioRecordLatency = l; }
+    RealTime getAudioRecordLatency() { return m_audioRecordLatency; }
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -367,6 +374,12 @@ protected:
     std::string                                 m_recordingFilename;
 
     Rosegarden::InstrumentId                    m_audioMonitoringInstrument;
+
+    // Audio latencies
+    //
+    RealTime                     m_audioPlayLatency;
+    RealTime                     m_audioRecordLatency;
+
 };
 
 }

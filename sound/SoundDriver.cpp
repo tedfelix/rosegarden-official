@@ -38,6 +38,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_file(0),
         m_audioFile(audioFile),
         m_instrumentId(instrumentId)
+
 {
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
                                std::ios::in | std::ios::binary);
@@ -150,7 +151,9 @@ SoundDriver::SoundDriver(const std::string &name):
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
     m_deviceRunningId(0),
-    m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase)
+    m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase),
+    m_audioPlayLatency(0, 0),
+    m_audioRecordLatency(0, 0)
 {
 }
 

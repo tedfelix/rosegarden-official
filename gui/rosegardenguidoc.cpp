@@ -90,7 +90,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
       m_useSequencer(useSequencer),
-      m_progressDialogDead(false)
+      m_progressDialogDead(false),
+      m_audioPlayLatency(0, 0),
+      m_audioRecordLatency(0, 0)
 {
     // Try to tell the sequencer that we're alive only if the
     // sequencer hasn't already forced us to sync

@@ -746,21 +746,30 @@ AlsaDriver::initialiseAudio()
                   << "cannot connect to JACK input port" << std::endl;
     }
 
-    /*
-    // Get write latency now we're connected
+    // Get the latencies from JACK and set them as RealTime
     //
-    std::cout << "AlsaDriver::initialiseAudio - "
-              << "JACK write latency = "
-              << jack_port_get_latency(m_audioOutputPortLeft) 
-              << std::endl;
+    jack_nframes_t outputLatency =
+        jack_port_get_total_latency(m_audioClient, m_audioOutputPortLeft);
 
-    // Get write latency now we're connected
+    jack_nframes_t inputLatency = 
+        jack_port_get_total_latency(m_audioClient, m_audioInputPort);
+
+    double latency = double(outputLatency) / double(_jackSampleRate);
+
+    // Set the audio latencies ready for collection by the GUI
     //
+    m_audioPlayLatency = RealTime(int(latency), int(latency * 1000000.0));
+
+    latency = double(inputLatency) / double(_jackSampleRate);
+
+    m_audioRecordLatency = RealTime(int(latency), int(latency * 1000000.0));
+
     std::cout << "AlsaDriver::initialiseAudio - "
-              << "JACK read latency = "
-              << jack_port_get_latency(m_audioInputPort) 
-              << std::endl;
-              */
+              << "JACK playback latency " << m_audioPlayLatency << std::endl;
+
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "JACK record latency " << m_audioRecordLatency << std::endl;
+
 
 #endif
 }
@@ -2091,6 +2100,8 @@ AlsaDriver::shutdownAudio()
 {
     if (m_audioClient)
     {
+        std::cout << "AlsaDriver::shutdownAudio - "
+                  << "shutting down JACK client" << std::endl;
         jack_deactivate(m_audioClient);
 
         // Hmm, this sometimes just hangs our subsequent JACK calls -
@@ -2104,7 +2115,7 @@ AlsaDriver::shutdownAudio()
 int
 AlsaDriver::jackGraphOrder(void *)
 {
-    std::cout << "AlsaDriver::jackGraphOrder" << std::endl;
+    //std::cout << "AlsaDriver::jackGraphOrder" << std::endl;
     return 0;
 }
 

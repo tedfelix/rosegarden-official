@@ -28,6 +28,7 @@
 #include "MappedEvent.h"
 #include "Instrument.h"
 #include "MappedDevice.h"
+#include "MappedRealTime.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -137,6 +138,12 @@ public:
     //
     virtual void setAudioMonitoring(bool value) = 0;
     virtual void setAudioMonitoringInstrument(unsigned int id) = 0;
+
+    // Fetch audio play latencies
+    //
+    virtual Rosegarden::MappedRealTime getAudioPlayLatency() = 0;
+    virtual Rosegarden::MappedRealTime getAudioRecordLatency() = 0;
+
 
 };
 

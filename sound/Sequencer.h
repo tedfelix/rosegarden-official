@@ -199,6 +199,15 @@ public:
     Rosegarden::InstrumentId getAudioMonitoringInstrument()
         { return m_soundDriver->getAudioMonitoringInstrument(); }
     
+
+    // Audio latenices from audio driver
+    //
+    RealTime getAudioPlayLateny()
+        { return m_soundDriver->getAudioPlayLatency(); }
+
+    RealTime getAudioRecordLateny()
+        { return m_soundDriver->getAudioRecordLatency(); }
+
 private:
 
     SoundDriver                                *m_soundDriver;

@@ -199,9 +199,12 @@ protected:
  */
 class LatencyConfigurationPage : public TabbedConfigurationPage
 {
+    Q_OBJECT
+
 public:
-    LatencyConfigurationPage(KConfig *cfg,
-                              QWidget *parent=0, const char *name=0);
+    LatencyConfigurationPage(RosegardenGUIDoc *doc,
+                             KConfig *cfg,
+                             QWidget *parent=0, const char *name=0);
 
     virtual void apply();
 
@@ -214,12 +217,21 @@ public:
     int getJACKPlaybackValue() { return m_jackPlayback->value(); }
     int getJACKRecordValue() { return m_jackRecord->value(); }
 
+public slots:
+    // Get the latest latency values from the sequencer
+    //
+    void slotFetchLatencyValues();
+
 protected:
     QSlider* m_readAhead;
     QSlider* m_playback;
 
     QSlider* m_jackPlayback;
     QSlider* m_jackRecord;
+
+    QPushButton* m_fetchLatencyValues;
+
+    RosegardenGUIDoc *m_doc;
 };
 
 

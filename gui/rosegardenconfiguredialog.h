@@ -58,9 +58,12 @@ protected:
 class ConfigureDialog : public ConfigureDialogBase
 {
 public:
-    ConfigureDialog(KConfig* cfg,
+    ConfigureDialog(RosegardenGUIDoc *doc,
+                    KConfig* cfg,
                     QWidget *parent=0,
                     const char *name=0);
+protected:
+    RosegardenGUIDoc *m_doc;
 };
 
 class DocumentConfigureDialog : public ConfigureDialogBase

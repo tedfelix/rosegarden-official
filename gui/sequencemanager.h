@@ -124,6 +124,10 @@ public:
     //
     void sendAudioLevel(Rosegarden::MappedEvent *mE);
 
+    // Fetch audio latencies from the sequencer
+    //
+    void getAudioLatencies();
+
 public slots:
     // Empty the m_clearToSend flag
     //
@@ -151,8 +155,9 @@ private:
     //
     // Note the positioning of relative elements in the sequencer
     // are deliberate to give us a good chance to get the stop()
-    // call in before another fetch.
-    //
+    // call in before another fetch.  Actually, now the chance of
+    // the two calls interracting is virtually zero - I've not 
+    // seen any resulting hangs recently (24.07.2002)
     //
     bool    m_sendStop;
 

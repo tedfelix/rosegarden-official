@@ -353,12 +353,14 @@ NotationConfigurationPage::apply()
 
 
 
-LatencyConfigurationPage::LatencyConfigurationPage(KConfig *cfg,
-                                                     QWidget *parent,
-                                                     const char *name)
+LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
+                                                   KConfig *cfg,
+                                                   QWidget *parent,
+                                                   const char *name)
     : TabbedConfigurationPage(cfg, parent, name),
       m_readAhead(0),
-      m_playback(0)
+      m_playback(0),
+      m_doc(doc)
 {
 //     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup("Latency Options");
@@ -428,10 +430,14 @@ LatencyConfigurationPage::LatencyConfigurationPage(KConfig *cfg,
     layout->addWidget(new QLabel(i18n("JACK playback latency (in ms)"), frame), 1, 0);
     layout->addWidget(new QLabel(i18n("JACK record latency (in ms)"), frame), 3, 0);
 
+    /*
     int jackPlaybackValue = (m_cfg->readLongNumEntry(
                                  "jackplaybacklatencyusec", 0)/1000) +
                             (m_cfg->readLongNumEntry(
                                  "jackplaybacklatencysec", 0) * 1000);
+                                 */
+    int jackPlaybackValue = m_doc->getAudioPlayLatency().usec / 1000 +
+                            m_doc->getAudioPlayLatency().sec * 1000;
 
     m_jackPlayback = new QSlider(Horizontal, frame);
     m_jackPlayback->setValue(jackPlaybackValue);
@@ -450,10 +456,14 @@ LatencyConfigurationPage::LatencyConfigurationPage(KConfig *cfg,
     m_jackPlayback->setMaxValue(1000);
     layout->addWidget(new QLabel("1000", frame), 2, 3);
 
+    /*
     int jackRecordValue = (m_cfg->readLongNumEntry(
                               "jackrecordlatencyusec", 0)/1000) +
                           (m_cfg->readLongNumEntry(
                               "jackrecordlatencysec", 0) * 1000);
+                              */
+    int jackRecordValue = m_doc->getAudioRecordLatency().usec / 1000 +
+                          m_doc->getAudioRecordLatency().sec * 1000;
 
     m_jackRecord = new QSlider(Horizontal, frame);
     m_jackRecord->setValue(jackRecordValue);
@@ -506,6 +516,11 @@ void LatencyConfigurationPage::apply()
 #endif  // HAVE_JACK
 
 }
+
+void LatencyConfigurationPage::slotFetchLatencyValues()
+{
+}
+
 
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
@@ -669,10 +684,11 @@ ConfigureDialogBase::slotCancelOrClose()
 {
 }
 
-ConfigureDialog::ConfigureDialog(KConfig* cfg,
+ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
+                                 KConfig* cfg,
                                  QWidget *parent,
                                  const char *name)
-    : ConfigureDialogBase(parent, name)
+    : ConfigureDialogBase(parent, name), m_doc(doc)
 {
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
@@ -705,7 +721,7 @@ ConfigureDialog::ConfigureDialog(KConfig* cfg,
                          LatencyConfigurationPage::title(),
                          loadIcon(LatencyConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new LatencyConfigurationPage(cfg, pageWidget);
+    page = new LatencyConfigurationPage(doc, cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
