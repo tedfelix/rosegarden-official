@@ -20,6 +20,8 @@
 #include "segmentcommands.h"
 
 
+// --------- Erase Segment --------
+//
 SegmentEraseCommand::SegmentEraseCommand(Rosegarden::Segment *segment) :
     KCommand("Erase Segment"),
     m_composition(segment->getComposition()),
@@ -52,6 +54,76 @@ SegmentEraseCommand::unexecute()
 }
 
 
+// --------- Insert Segment --------
+//
+SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
+                                           Rosegarden::TrackId track,
+                                           Rosegarden::timeT startTime,
+                                           Rosegarden::timeT duration):
+    KCommand("Insert Segment"),
+    m_document(doc),
+    m_track(track),
+    m_startTime(startTime),
+    m_duration(duration)
+{
+}
+
+SegmentInsertCommand::~SegmentInsertCommand()
+{
+    if (!m_segment->getComposition()) {
+	delete m_segment;
+    }
+}
+
+void
+SegmentInsertCommand::execute()
+{
+    m_segment = new Rosegarden::Segment();
+    m_segment->setTrack(m_track);
+    m_segment->setStartTime(m_startTime);
+    m_document->getComposition().addSegment(m_segment);
+    m_segment->setDuration(m_duration);
+}
+
+void
+SegmentInsertCommand::unexecute()
+{
+    // delete the Segment item
+    m_document->deleteSegmentItem(m_segment);
+
+    // and now the Segment
+    m_document->getComposition().deleteSegment(m_segment);
+}
+
+// --------- Move Segment --------
+//
+SegmentMoveCommand::SegmentMoveCommand(Rosegarden::Segment *segment):
+    KCommand("Move Segment"),
+    m_composition(segment->getComposition()),
+    m_segment(segment)
+{
+}
+
+SegmentMoveCommand::~SegmentMoveCommand()
+{
+    if (!m_segment->getComposition()) {
+	delete m_segment;
+    }
+}
+
+void
+SegmentMoveCommand::execute()
+{
+}
+
+void
+SegmentMoveCommand::unexecute()
+{
+}
+
+
+// --------- Add Time Signature --------
+// 
 void
 AddTimeSignatureCommand::execute()
 {

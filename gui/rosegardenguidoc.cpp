@@ -45,6 +45,7 @@
 #include "Event.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
+#include "segmentcommands.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
@@ -456,16 +457,11 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     
 
 void
-RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
+RosegardenGUIDoc::createNewSegment(SegmentItem *p, Rosegarden::TrackId track)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment(item : "
                          << p << ")\n";
 
-    Segment *newSegment = new Segment();
-    newSegment->setTrack(track);
-
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() new segment = "
-                         << newSegment << endl;
 /*!!!
     int startBar = p->getStartBar();
     int barCount = p->getItemNbBars();
@@ -480,34 +476,41 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 	m_composition.getBarRange(startBar + barCount, false).first -
 	startTime;
 */
-
-    timeT startTime = p->getStartTime();
-    timeT duration = p->getDuration();
-
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startTime = " 
-			 << startTime << ", duration = " << duration << endl;
-
-    // We can safely call this here because the segment is not in
-    // its composition yet
-    // 
-    newSegment->setStartTime(startTime);
-
-    // Now we can add the segment to the right place in the composition
-    //
-    m_composition.addSegment(newSegment);
-
-    // And we can set its duration, because it's been added to the
-    // composition
-    //
-    newSegment->setDuration(duration);
-
     // store ptr to new segment in segment part item
     //
-    p->setSegment(newSegment);
+    SegmentInsertCommand *segmentInsert =
+        new SegmentInsertCommand(this,
+                                 track,
+                                 p->getStartTime(),
+                                 p->getDuration());
+
+    // Into the undo/redo command history which executes()
+    // the command and creates the Segment
+    //
+    getCommandHistory()->addCommand(segmentInsert);
+
+    // Now we can safely access the Segment
+    p->setSegment(segmentInsert->getSegment());
 
     setModified();
+}
+
+
+void
+RosegardenGUIDoc::deleteSegmentItem(Rosegarden::Segment *segment)
+{
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+                w->destroySegmentItem(segment);
+        }
+    }
 
 }
+
+
 
 // Take a MappedComposition from the Sequencer and turn it into an
 // Event-rich, Composition-inserted, mouthwateringly-ripe Segment.

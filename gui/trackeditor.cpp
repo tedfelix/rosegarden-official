@@ -20,6 +20,7 @@
 */
 
 #include <algorithm>
+#include <kcommand.h>
 
 #include "trackeditor.h"
 #include "segmentcanvas.h"
@@ -28,6 +29,8 @@
 #include "Track.h"
 #include "colours.h"
 #include "NotationTypes.h"
+#include "multiviewcommandhistory.h"
+#include "segmentcommands.h"
 
 #include "rosedebug.h"
 
@@ -226,7 +229,7 @@ TrackEditor::addSegment(SegmentItem *p)
 {
     // first find track for segment, as it is used for indexing
     //
-    int track = m_vHeader->sectionAt(static_cast<int>(p->y()));
+    Rosegarden::TrackId track = static_cast<Rosegarden::TrackId>(m_vHeader->sectionAt(static_cast<int>(p->y())));
 
     emit createNewSegment(p, track);
 }
@@ -382,6 +385,33 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
 
 }
 
+void
+TrackEditor::deleteSegmentItem(Rosegarden::Segment *segment)
+{
+    QCanvasItemList itemList = canvas()->canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        QCanvasItem *item = *it;
+        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
+
+        if (segmentItem)
+        {
+            if (segmentItem->getSegment() == segment)
+            {
+                cout << "DEED" << endl;
+                delete segmentItem;
+                //canvas()->canvas()->erase(it);
+                break;
+            }
+        }
+    }
+
+    emit needUpdate();
+}
+
+
+
 // Show a Segment as its being recorded
 //
 void
@@ -412,6 +442,21 @@ TrackEditor::destroyRecordingSegmentItem()
     m_segmentCanvas->destroyRecordingSegmentItem();
     emit needUpdate();
 }
+
+
+MultiViewCommandHistory*
+TrackEditor::getCommandHistory()
+{
+    return m_document->getCommandHistory();
+}
+
+
+void
+TrackEditor::addCommandToHistory(KCommand *command)
+{
+    getCommandHistory()->addCommand(command);
+}
+
 
 
 

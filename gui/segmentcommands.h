@@ -25,23 +25,11 @@
 #include "Segment.h"
 #include "Composition.h"
 #include "NotationTypes.h"
+#include "rosegardenguidoc.h"
 
-
-/*!!! shouldn't need a command just for selection -- you don't undo selection
-
-class SegmentSelectionCommand : public KCommand
-{
-public:
-    virtual ~SegmentSelectionCommand()
-
-protected:
-    SegmentSelectionCommand(const QString &name, SegmentSelection &selection,
-                            bool bruteForceRedoRequired = false);
-}
-*/
 
 class SegmentEraseCommand : public KCommand,
-			    public SegmentCommand
+                            public SegmentCommand
 {
 public:
     SegmentEraseCommand(Rosegarden::Segment *segment);
@@ -55,35 +43,62 @@ private:
     Rosegarden::Segment *m_segment;
 };
 
-/*!!! to be implemented
 class SegmentInsertCommand : public KCommand,
-			     public SegmentCommand
+                             public SegmentCommand
 {
+public:
+    SegmentInsertCommand(RosegardenGUIDoc *doc,
+                         Rosegarden::TrackId track,
+                         Rosegarden::timeT startTime,
+                         Rosegarden::timeT duration);
+    virtual ~SegmentInsertCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    Rosegarden::Segment* getSegment() const { return m_segment; }
+
+private:
+    RosegardenGUIDoc    *m_document;
+    Rosegarden::Segment *m_segment;
+    int                  m_track;
+    Rosegarden::timeT    m_startTime;
+    Rosegarden::timeT    m_duration;
+
 };
 
-//!!! combined change-start-time-and-track command?
 class SegmentMoveCommand : public KCommand,
-			   public SegmentCommand
+                           public SegmentCommand
 {
+public:
+    SegmentMoveCommand(Rosegarden::Segment *segment);
+    virtual ~SegmentMoveCommand();
+
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Segment *m_segment;
 };
-*/
 
 
 class AddTimeSignatureCommand : public KCommand,
-				public TimeAndTempoChangeCommand
+                                public TimeAndTempoChangeCommand
 {
 public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
-			    Rosegarden::timeT time,
-			    Rosegarden::TimeSignature timeSig) :
-	KCommand(name()),
-	m_composition(composition),
-	m_time(time),
-	m_timeSignature(timeSig) { }
+                            Rosegarden::timeT time,
+                            Rosegarden::TimeSignature timeSig) :
+    KCommand(name()),
+    m_composition(composition),
+    m_time(time),
+    m_timeSignature(timeSig) { }
     virtual ~AddTimeSignatureCommand() { }
 
     static QString name() {
-	return "Add &Time Signature Change...";
+    return "Add &Time Signature Change...";
     }
 
     virtual void execute();

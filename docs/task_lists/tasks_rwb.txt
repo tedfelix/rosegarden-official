@@ -20,7 +20,7 @@ o tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
 
 o smooth position pointer [attempted moved readahead component to gui control]
 
-o Finish vu meters - colours and peak hold
+o Finish vu meters - colours and peak hold [DONE PEAK HOLD]
 
 
 ==

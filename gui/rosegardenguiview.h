@@ -144,6 +144,11 @@ public:
      */
     void createSegmentItem(Rosegarden::Segment* segment);
 
+    /*
+     * Destroy a SegmentItem
+     */
+    void destroySegmentItem(Rosegarden::Segment* segment);
+
     /**
      * Show a Segment as it records - remove the SegmentItem
      * when no longer needed
@@ -208,6 +213,7 @@ signals:
     void signalSetFineGrain(bool);
 
     void addSegmentItem(Rosegarden::Segment*);
+    void deleteSegmentItem(Rosegarden::Segment*);
     void signalShowRecordingSegmentItem(Rosegarden::Segment*);
     void signalDestroyRecordingSegmentItem();
 

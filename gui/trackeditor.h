@@ -29,8 +29,10 @@
 #include "trackheader.h"
 
 #include "trackseditoriface.h"
+#include "multiviewcommandhistory.h"
 
 #include "Event.h" // for timeT
+#include "Track.h"
 
 namespace Rosegarden { class Segment; }
 class SegmentItem;
@@ -88,6 +90,12 @@ public:
     Rosegarden::TrackHeader* getVHeader() { return m_vHeader; }
     QHeader *getHHeader() { return m_hHeader; }
 
+    /**
+     * Manage command history
+     */
+    MultiViewCommandHistory *getCommandHistory();
+    void addCommandToHistory(KCommand *command);
+
 
 public slots:
     /**
@@ -100,6 +108,11 @@ public slots:
      *
      */
     void addSegmentItem(Rosegarden::Segment *segment);
+
+    /*
+     * Delete a SegmentItem
+     */
+    void deleteSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * Show a Segment as it records
@@ -157,12 +170,13 @@ signals:
      *
      * @see RosegardenGUIDoc::createNewSegment()
      */
-    void createNewSegment(SegmentItem* item, int instrument);
+    void createNewSegment(SegmentItem* item, Rosegarden::TrackId instrument);
 
 protected:
 
     void init(unsigned int nbTracks, int firstBar, int lastBar);
     void setupHorizontalHeader(int firstBar, int lastBar);
+
 
     //--------------- Data members ---------------------------------
 

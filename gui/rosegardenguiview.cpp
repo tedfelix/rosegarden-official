@@ -201,8 +201,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
             SLOT(editSegmentAudio(Rosegarden::Segment*)));
 
 
-    connect(trackEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
-            getDocument(), SLOT  (createNewSegment(SegmentItem*,int)));
+    connect(trackEditor,  SIGNAL(createNewSegment(SegmentItem*, Rosegarden::TrackId)),
+            getDocument(), SLOT  (createNewSegment(SegmentItem*, Rosegarden::TrackId)));
 
     connect(trackEditor,  SIGNAL(scrollHorizTo(int)),
             SLOT(scrollTrackEditorHoriz(int)));
@@ -216,8 +216,11 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this, SIGNAL(selectSegments(std::list<Rosegarden::Segment*>)),
             trackEditor->canvas(), SLOT(selectSegments(std::list<Rosegarden::Segment*>)));
 
-    connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
+    connect(this,        SIGNAL(addSegmentItem(Rosegarden::Segment*)),
             trackEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
+
+    connect(this,        SIGNAL(deleteSegmentItem(Rosegarden::Segment*)),
+            trackEditor, SLOT(deleteSegmentItem(Rosegarden::Segment*)));
 
     connect(this,         SIGNAL(signalShowRecordingSegmentItem(Rosegarden::Segment*)),
             trackEditor, SLOT(updateRecordingSegmentItem(Rosegarden::Segment*)));
@@ -425,6 +428,11 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
 void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
 {
     emit addSegmentItem(segment);
+}
+
+void RosegardenGUIView::destroySegmentItem(Rosegarden::Segment* segment)
+{
+    emit deleteSegmentItem(segment);
 }
 
 // Show a segment as it records

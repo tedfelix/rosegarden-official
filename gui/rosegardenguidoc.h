@@ -205,7 +205,12 @@ public slots:
      * Create a new segment according to the data in the specified
      * SegmentItem, and set the segment's track to \a track
      */
-    void createNewSegment(SegmentItem*, int tractrack);
+    void createNewSegment(SegmentItem*, Rosegarden::TrackId track);
+
+    /*
+     * Remove a SegmentItem from the Canvas
+     **/
+    void deleteSegmentItem(Rosegarden::Segment *segment);
 
     void documentModified();
     void documentRestored();
