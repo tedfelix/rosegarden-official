@@ -314,6 +314,7 @@ etc
     <Action name="edit_copy"/>
     <Action name="delete"/>
     <Action name="cut_and_close"/>
+    <Action name="debug_dump"/>
     <Action name="beam"/>
     <Action name="auto_beam"/>
     <Action name="break_group"/>
@@ -372,6 +373,13 @@ etc
   <enable>
     <Action name="edit_paste"/>
     <Action name="general_paste"/>
+  </enable>
+</State>
+
+<State name="have_multiple_staffs>
+  <enable>
+    <Action name="cursor_up_staff"/>
+    <Action name="cursor_down_staff"/>
   </enable>
 </State>
 

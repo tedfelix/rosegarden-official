@@ -221,7 +221,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setupActions();
 
-    initFontToolbar(m_legatoQuantizer->getUnit());
+    initFontToolbar(m_legatoQuantizer->getUnit(), segments.size() > 1);
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -371,6 +371,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotTestClipboard()));
 
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_multiple_staffs",
+		 (m_staffs.size() > 1 ? KXMLGUIClient::StateNoReverse :
+		                        KXMLGUIClient::StateReverse));
     slotTestClipboard();
 #endif
 
@@ -987,7 +990,7 @@ NotationView::getStaff(const Segment &segment)
     return 0;
 }
 
-void NotationView::initFontToolbar(int legatoUnit)
+void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 {
     KToolBar *fontToolbar = toolBar("fontToolBar");
 
@@ -1000,6 +1003,17 @@ void NotationView::initFontToolbar(int legatoUnit)
         return;
     }
 
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+
+    m_fontName = qstrtostr(config->readEntry
+			   ("notefont",
+			    strtoqstr(NotePixmapFactory::getDefaultFont())));
+
+    m_fontSize = config->readUnsignedNumEntry
+	((multiStaff ? "multistaffnotesize" : "singlestaffnotesize"),
+	 NotePixmapFactory::getDefaultSize(m_fontName));
+
     new QLabel(i18n("  Font:  "), fontToolbar);
 
     QComboBox *fontCombo = new QComboBox(fontToolbar);
@@ -1009,11 +1023,19 @@ void NotationView::initFontToolbar(int legatoUnit)
     vector<string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
+    bool foundFont = false;
     for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
         fontCombo->insertItem(strtoqstr(*i));
         if (*i == m_fontName) {
             fontCombo->setCurrentItem(fontCombo->count() - 1);
+	    foundFont = true;
         }
+    }
+    if (!foundFont) {
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown font \"%1\", using default")).arg
+	     (strtoqstr(m_fontName)));
+	m_fontName = NotePixmapFactory::getDefaultFont();
     }
 
     connect(fontCombo, SIGNAL(activated(const QString &)),
@@ -1047,6 +1069,8 @@ void NotationView::initFontToolbar(int legatoUnit)
         (m_legatoDurations, legatoUnit, QSlider::Horizontal, fontToolbar);
     connect(quantizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeLegato(int)));
+
+    slotChangeFont(m_fontName, m_fontSize);
 }
 
 void NotationView::initStatusBar()

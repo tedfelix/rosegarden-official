@@ -28,10 +28,13 @@
 
 #include <klocale.h>
 
+#include <string>
+
 class RosegardenGUIDoc;
 class QTabWidget;
 class QLineEdit;
 class QPushButton;
+class QLabel;
 
 namespace Rosegarden
 {
@@ -153,6 +156,8 @@ protected:
  */
 class NotationConfigurationPage : public TabbedConfigurationPage
 {
+    Q_OBJECT;
+
 public:
     NotationConfigurationPage(KConfig *cfg,
 			      QWidget *parent = 0, const char *name=0);
@@ -162,7 +167,19 @@ public:
     static QString iconLabel() { return i18n("Notation"); }
     static QString title()     { return i18n("Notation"); }
 
+public slots:
+    void slotFontComboChanged(const QString &);
+
 protected:
+    QComboBox *m_font;
+    QComboBox *m_singleStaffSize;
+    QComboBox *m_multiStaffSize;
+    QLabel *m_fontOriginLabel;
+    QLabel *m_fontCopyrightLabel;
+    QLabel *m_fontMappedByLabel;
+    QLabel *m_fontTypeLabel;
+
+    void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
 
 

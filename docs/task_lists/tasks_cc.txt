@@ -31,7 +31,7 @@ Post-0.1.5-and-a-bit task list
 
     TO FIX:
 
-    -- Undo doesn't work for Split Segment
+    -- Undo doesn't work for Split Segment [DONE?]
     
 
  8. Add origin to start of hlayout, so that first bar is indented on both

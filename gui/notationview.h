@@ -517,7 +517,7 @@ protected:
     /**
      * setup the "zoom" toolbar
      */
-    void initFontToolbar(int legatoUnit);
+    void initFontToolbar(int legatoUnit, bool multiStaff);
 
     /**
      * Helper function to toggle a toolbar given its name

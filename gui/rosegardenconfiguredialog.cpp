@@ -36,6 +36,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
 
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
@@ -45,6 +46,7 @@
 #include "Configuration.h"
 #include "RealTime.h"
 #include "rosedebug.h"
+#include "notepixmapfactory.h"
 
 namespace Rosegarden
 {
@@ -155,12 +157,134 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     TabbedConfigurationPage(cfg, parent, name)
 {
     m_cfg->setGroup("Notation Options");
+
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame,
+                                          4, 2, // nbrow, nbcol
+                                          10, 5);
+
+    layout->addWidget
+	(new QLabel(i18n("Notation font"), frame), 0, 0);
+    layout->addWidget
+	(new QLabel(i18n("Font size for single-staff views"), frame),
+	 2, 0);
+    layout->addWidget
+	(new QLabel(i18n("Font size for multi-staff views"), frame),
+	 3, 0);
+
+    QFrame *subFrame = new QFrame(frame);
+    QGridLayout *subLayout = new QGridLayout(subFrame,
+					     4, 2, // nbrow, nbcol
+					     );
+
+    subLayout->addWidget(new QLabel(i18n("Origin:"), subFrame), 0, 0);
+    subLayout->addWidget(new QLabel(i18n("Copyright:"), subFrame), 1, 0);
+    subLayout->addWidget(new QLabel(i18n("Mapped by:"), subFrame), 2, 0);
+    subLayout->addWidget(new QLabel(i18n("Type:"), subFrame), 3, 0);
+    m_fontOriginLabel = new QLabel(subFrame);
+    m_fontCopyrightLabel = new QLabel(subFrame);
+    m_fontCopyrightLabel->setAlignment(Qt::WordBreak);
+    m_fontCopyrightLabel->setMinimumWidth(300);
+    m_fontMappedByLabel = new QLabel(subFrame);
+    m_fontTypeLabel = new QLabel(subFrame);
+    subLayout->addWidget(m_fontOriginLabel, 0, 1);
+    subLayout->addWidget(m_fontCopyrightLabel, 1, 1);
+    subLayout->addWidget(m_fontMappedByLabel, 2, 1);
+    subLayout->addWidget(m_fontTypeLabel, 3, 1);
+
+    layout->addMultiCellWidget(subFrame,
+                               1, 1,
+                               0, 1);
+
+    m_font = new QComboBox(frame);
+    m_font->setEditable(false);
+
+    QString defaultFont = m_cfg->readEntry
+	("notefont", strtoqstr(NotePixmapFactory::getDefaultFont()));
+
+    set<string> fs(NotePixmapFactory::getAvailableFontNames());
+    vector<string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+
+    for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
+	QString s(strtoqstr(*i));
+        m_font->insertItem(s);
+	if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
+    }
+    QObject::connect(m_font, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotFontComboChanged(const QString &)));
+    layout->addWidget(m_font, 0, 1);
+
+    m_singleStaffSize = new QComboBox(frame);
+    m_singleStaffSize->setEditable(false);
+
+    m_multiStaffSize = new QComboBox(frame);
+    m_multiStaffSize->setEditable(false);
+
+    slotFontComboChanged(defaultFont);
+
+    layout->addWidget(m_singleStaffSize, 2, 1);
+    layout->addWidget(m_multiStaffSize, 3, 1);
+
+    addTab(frame, i18n("Font"));
+}
+
+void
+NotationConfigurationPage::slotFontComboChanged(const QString &font)
+{
+    std::string fontStr = qstrtostr(font);
+
+    populateSizeCombo(m_singleStaffSize, fontStr,
+		      m_cfg->readUnsignedNumEntry
+		      ("singlestaffnotesize",
+		       NotePixmapFactory::getDefaultSize(fontStr)));
+    populateSizeCombo(m_multiStaffSize, fontStr,
+		      m_cfg->readUnsignedNumEntry
+		      ("multistaffnotesize",
+		       NotePixmapFactory::getDefaultSize(fontStr)));
+
+    try {
+	NoteFont noteFont(fontStr);
+	const NoteFontMap &map(noteFont.getNoteFontMap());
+	m_fontOriginLabel->setText(strtoqstr(map.getOrigin()));
+	m_fontCopyrightLabel->setText(strtoqstr(map.getCopyright()));
+	m_fontMappedByLabel->setText(strtoqstr(map.getMappedBy()));
+	if (map.isSmooth()) {
+	    m_fontTypeLabel->setText(strtoqstr(map.getType() + " (smooth)"));
+	} else {
+	    m_fontTypeLabel->setText(strtoqstr(map.getType() + " (jaggy)"));
+	}
+    } catch (NoteFont::BadFont f) {
+        KMessageBox::error(0, i18n(strtoqstr(f.reason)));
+    } catch (NoteFontMap::MappingFileReadFailed f) {
+        KMessageBox::error(0, i18n(strtoqstr(f.reason)));
+    }
+}
+
+void
+NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
+					     std::string font,
+					     int defaultSize)
+{
+    vector<int> sizes = NotePixmapFactory::getAvailableSizes(font);
+    combo->clear();
+    
+    for (vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
+        combo->insertItem(QString("%1").arg(*i));
+	if (*i == defaultSize) combo->setCurrentItem(combo->count() - 1);
+    }
 }
 
 void
 NotationConfigurationPage::apply()
 {
     m_cfg->setGroup("Notation Options");
+
+    m_cfg->writeEntry("notefont", m_font->currentText());
+    m_cfg->writeEntry("singlestaffnotesize",
+		      m_singleStaffSize->currentText().toUInt());
+    m_cfg->writeEntry("multistaffnotesize",
+		      m_multiStaffSize->currentText().toUInt());
 
 }
 
