@@ -35,6 +35,7 @@ using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
+using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -84,7 +85,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "timesignature") {
 
-	Rosegarden::timeT t = 0;
+	timeT t = 0;
 	QString timeStr = atts.value("time");
 	if (timeStr) t = timeStr.toInt();
 
@@ -101,7 +102,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "tempo") {
 
-	Rosegarden::timeT t = 0;
+	timeT t = 0;
 	QString timeStr = atts.value("time");
 	if (timeStr) t = timeStr.toInt();
 	
@@ -276,21 +277,24 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
 	    }
         }
+
+	timeT duration = m_currentEvent->getDuration();
         
         if (!m_inChord) {
 
-            m_currentTime += m_currentEvent->getDuration();
+            m_currentTime = m_currentEvent->getAbsoluteTime() + duration;
 
 //            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
 
-        } else if (m_chordDuration == 0 &&
-                   m_currentEvent->getDuration() != 0) {
+        } else if (duration != 0) {
 
-            // set chord duration to the duration of the 1st element
-            // with a non-null duration (if no such elements, leave it
-            // to 0).
+            // set chord duration to the duration of the shortest
+            // element with a non-null duration (if no such elements,
+            // leave it as 0).
 
-            m_chordDuration = m_currentEvent->getDuration();
+	    if (m_chordDuration == 0 || duration < m_chordDuration) {
+		m_chordDuration = duration;
+	    }
         }
         
     } else if (lcName == "resync") {

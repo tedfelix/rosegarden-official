@@ -479,6 +479,8 @@ NotationSelector::NotationSelector(NotationView* view)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(hideSelection()));
+
+    createMenu("notationselector.rc");
 }
 
 void NotationSelector::handleLeftButtonPress(Rosegarden::timeT,

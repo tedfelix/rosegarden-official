@@ -285,6 +285,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
         long currentGroup = -1;
 	bool inChord = false;
+	timeT chordStart = 0, chordDuration = 0;
 	timeT expectedTime = segment->getStartIndex();
 
         for (Segment::iterator i = segment->begin();
@@ -326,7 +327,13 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 		!inChord) {
 		outStream << "<chord>" << endl;
 		inChord = true;
+		chordStart = absTime;
+		chordDuration = 0;
 	    }
+
+	    if (inChord && (*i)->getDuration() > 0)
+		if (chordDuration == 0 || (*i)->getDuration() < chordDuration)
+		    chordDuration = (*i)->getDuration();
 
 	    outStream << '\t'
 		<< XmlStorableEvent(**i).toXmlString(expectedTime) << endl;
@@ -336,9 +343,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 		inChord) {
 		outStream << "</chord>" << endl;
 		inChord = false;
-	    }
-
-	    if (inChord) {
+		expectedTime = chordStart + chordDuration;
+	    } else if (inChord) {
 		expectedTime = absTime;
 	    } else {
 		expectedTime = absTime + (*i)->getDuration();

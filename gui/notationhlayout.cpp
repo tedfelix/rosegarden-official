@@ -222,6 +222,8 @@ NotationHLayout::scanStaff(StaffType &staff)
     SegmentNotationHelper nh(t);
     nh.quantize();
 
+    PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
+
     addNewBar(staff, barCounter, notes->begin(), 0, 0, 0, true, 0); 
     ++barCounter;
 
