@@ -876,7 +876,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     (void)elt->event()->get<String>(properties.DISPLAY_ACCIDENTAL, accidental);
 
     bool up = true;
-    (void)(elt->event()->get<Bool>(properties.STEM_UP, up));
+    (void)(elt->event()->get<Bool>(STEM_UP, up));
 
     bool flag = true;
     (void)(elt->event()->get<Bool>(properties.DRAW_FLAG, flag));

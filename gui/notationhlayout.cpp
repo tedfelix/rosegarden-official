@@ -591,7 +591,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   int &shortCount,
 			   NotationElementList::iterator &to)
 {
-    Chord chord(*notes, itr, m_legatoQuantizer, m_properties);
+    NotationChord chord(*notes, itr, m_legatoQuantizer, m_properties);
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
@@ -1409,7 +1409,7 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
 
 timeT
 NotationHLayout::getSpacingDuration(StaffType &staff,
-				    const Chord &chord)
+				    const NotationChord &chord)
 {
     SegmentNotationHelper helper(staff.getSegment());
 
@@ -1433,8 +1433,8 @@ NotationHLayout::positionChord(StaffType &staff,
 			       TieMap &tieMap, 
 			       NotationElementList::iterator &to)
 {
-    Chord chord(*staff.getViewElementList(), itr, m_legatoQuantizer,
-		m_properties, clef, key);
+    NotationChord chord(*staff.getViewElementList(), itr, m_legatoQuantizer,
+			m_properties, clef, key);
     double baseX = (*itr)->getLayoutX();
 
     // To work out how much space to allot a note (or chord), start

@@ -39,11 +39,12 @@ public:
     NotationProperties(const std::string &prefix);
 
     // These are only of interest to notation views, but are the
-    // same across all notation views
+    // same across all notation views.  One of these (STEM_UP)
+    // has already moved to BaseProperties -- perhaps we should
+    // move the rest as well
 
-    static const Rosegarden::PropertyName NOTE_STYLE;
     static const Rosegarden::PropertyName HEIGHT_ON_STAFF;
-    static const Rosegarden::PropertyName STEM_UP;
+    static const Rosegarden::PropertyName NOTE_STYLE;
     static const Rosegarden::PropertyName BEAMED;
     static const Rosegarden::PropertyName SLASHES;
 

@@ -35,7 +35,7 @@
 
 class NotationProperties;
 class NotationGroup;
-class Chord;
+class NotationChord;
 namespace Rosegarden { class Progress; }
 
 /**
@@ -344,7 +344,7 @@ protected:
 
     /// Difference between absolute time of chord and of first event not in it
     Rosegarden::timeT getSpacingDuration
-    (StaffType &staff, const Chord &);
+    (StaffType &staff, const NotationChord &);
 
     int getMinWidth(NotationElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;

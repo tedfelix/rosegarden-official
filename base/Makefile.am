@@ -35,6 +35,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \
 		     Selection.C \
+		     Sets.C \
 		     SnapGrid.C \
 		     StringHash.C \
                      Studio.C \

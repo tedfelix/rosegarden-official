@@ -48,6 +48,7 @@ using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
 
+#ifdef OLD_STYLE_NOTATION_SETS
 
 NotationSet::NotationSet(const NotationElementList &nel, NELIterator i,
 			 const Quantizer *q, const NotationProperties &p) :
@@ -138,7 +139,7 @@ NotationSet::getInitialNote() const
         ++i;
     }
 
-    return getList().end();
+    return getContainer().end();
 }
 
 NotationSet::NELIterator
@@ -154,7 +155,7 @@ NotationSet::getFinalNote() const
         --i;
     }
 
-    return getList().end();
+    return getContainer().end();
 }
 
 
@@ -227,7 +228,7 @@ Chord::sample(const NELIterator &i)
     // the same group, or have stems pointing in different directions
     // by design, count as separate chords
 
-    if (m_baseIterator != getList().end()) {
+    if (m_baseIterator != getContainer().end()) {
 
 	Rosegarden::Event *e0 = (*m_baseIterator)->event();
 	Rosegarden::Event *e1 = (*i)->event();
@@ -247,14 +248,14 @@ Chord::sample(const NELIterator &i)
 	    }
 	}
 
-	if (e0->has(NotationProperties::STEM_UP) &&
-	    e0->isPersistent<Bool>(NotationProperties::STEM_UP) &&
+	if (e0->has(STEM_UP) &&
+	    e0->isPersistent<Bool>(STEM_UP) &&
 
-	    e1->has(NotationProperties::STEM_UP) &&
-	    e1->isPersistent<Bool>(NotationProperties::STEM_UP) &&
+	    e1->has(STEM_UP) &&
+	    e1->isPersistent<Bool>(STEM_UP) &&
 
-	    e0->get<Bool>(NotationProperties::STEM_UP) !=
-	    e1->get<Bool>(NotationProperties::STEM_UP)) {
+	    e0->get<Bool>(STEM_UP) !=
+	    e1->get<Bool>(STEM_UP)) {
 
 	    return false;
 	}
@@ -307,11 +308,11 @@ bool Chord::hasStemUp() const
     // believe whatever's recorded in the first note, if it's
     // persistent or if it was apparently set by the beaming algorithm
 
-    if ((*initialNote)->event()->has(NotationProperties::STEM_UP) &&
-	((*initialNote)->event()->isPersistent<Bool>(NotationProperties::STEM_UP) ||
+    if ((*initialNote)->event()->has(STEM_UP) &&
+	((*initialNote)->event()->isPersistent<Bool>(STEM_UP) ||
 	 ((*initialNote)->event()->has(NotationProperties::BEAMED) &&
 	  ((*initialNote)->event()->get<Bool>(NotationProperties::BEAMED))))) {
-	return (*initialNote)->event()->get<Bool>(NotationProperties::STEM_UP);
+	return (*initialNote)->event()->get<Bool>(STEM_UP);
     }
 
     int high = height(getHighestNote()), low = height(getLowestNote());
@@ -400,6 +401,168 @@ std::vector<Mark> Chord::getMarksForChord() const
     return marks;
 }
 		    
+#endif
+
+
+namespace Rosegarden {
+
+template <>
+Event *
+GenericSet<NotationElement, NotationElementList>::getAsEvent(const NotationElementList::iterator &i)
+{
+    return (*i)->event();
+}
+
+}
+
+NotationChord::NotationChord(const NotationElementList &c,
+			     NotationElementList::iterator i,
+			     const Rosegarden::Quantizer *quantizer,
+			     const NotationProperties &properties,
+			     const Rosegarden::Clef &clef,
+			     const Rosegarden::Key &key) :
+    Rosegarden::GenericChord<NotationElement, NotationElementList>(c, i, quantizer,
+							    clef, key),
+    m_properties(properties)
+{
+    // nothing else 
+}
+
+int
+NotationChord::getHeight(const Iterator &i) const
+{
+    //!!! We use HEIGHT_ON_STAFF in preference to the passed clef/key,
+    //but what if the clef/key changed since HEIGHT_ON_STAFF was
+    //written?  Who updates the properties then?  Check this.
+
+    long h;
+    if (getAsEvent(i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF, h)) {
+	return h;
+    }
+
+    int pitch = getAsEvent(i)->get<Int>(PITCH);
+    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
+    h = p.getHeightOnStaff();
+
+    // set non-persistent, not setMaybe, as we know the property is absent:
+    getAsEvent(i)->set<Int>(NotationProperties::HEIGHT_ON_STAFF, h, false);
+    return h;
+}
+
+bool
+NotationChord::hasStem() const
+{
+    // true if any of the notes is stemmed
+    
+    Iterator i(getInitialNote());
+    for (;;) {
+	Note::Type note = getAsEvent(i)->get<Int>(m_properties.NOTE_TYPE);
+	if (NoteStyleFactory::getStyleForEvent(getAsEvent(i))->hasStem(note))
+	    return true;
+	if (i == getFinalNote()) return false;
+	++i;
+    }
+    return false;
+}
+
+bool
+NotationChord::hasStemUp() const
+{
+    Iterator initialNote(getInitialNote());
+
+    // believe whatever's recorded in the first note, if it's
+    // persistent or if it was apparently set by the beaming algorithm
+
+    Event *initialEvent = getAsEvent(initialNote);
+
+    if (initialEvent->has(STEM_UP) &&
+	(initialEvent->isPersistent<Bool>(STEM_UP) ||
+	 (initialEvent->has(NotationProperties::BEAMED) &&
+	  (initialEvent->get<Bool>(NotationProperties::BEAMED))))) {
+	return initialEvent->get<Bool>(STEM_UP);
+    }
+
+    int high = getHeight(getHighestNote()), low = getHeight(getLowestNote());
+
+    if (high > 4) {
+        if (low > 4) return false;
+        else return ((high - 4) < (5 - low));
+    } else return true;
+}
+
+bool
+NotationChord::hasNoteHeadShifted() const
+{
+    int ph = 10000;
+
+    for (unsigned int i = 0; i < size(); ++i) {
+        int h = getHeight((*this)[i]);
+        if (h == ph + 1) return true;
+        ph = h;
+    }
+
+    return false;
+}
+
+bool
+NotationChord::isNoteHeadShifted(const Iterator &itr) const
+{
+    unsigned int i;
+    for (i = 0; i < size(); ++i) {
+        if ((*this)[i] == itr) break;
+    }
+
+    if (i == size()) {
+        std::cerr << "NotationChord::isNoteHeadShifted: Warning: Unable to find note head " << getAsEvent(itr) << std::endl;
+        return false;
+    }
+
+    int h = getHeight((*this)[i]);
+
+    if (hasStemUp()) {
+        if ((i > 0) && (h == getHeight((*this)[i-1]) + 1)) {
+            return (!isNoteHeadShifted((*this)[i-1]));
+        }
+    } else {
+        if ((i < size()-1) && (h == getHeight((*this)[i+1]) - 1)) {
+            return (!isNoteHeadShifted((*this)[i+1]));
+        }
+    }
+
+    return false;
+}
+
+std::vector<Mark>
+NotationChord::getMarksForChord() const
+{
+    std::vector<Mark> marks;
+
+    for (unsigned int i = 0; i < size(); ++i) {
+
+	long markCount = 0;
+	const Iterator &itr((*this)[i]);
+	getAsEvent(itr)->get<Int>(MARK_COUNT, markCount);
+
+	if (markCount == 0) continue;
+
+	for (long j = 0; j < markCount; ++j) {
+
+	    Mark mark(Marks::NoMark);
+	    (void)getAsEvent(itr)->get<String>(getMarkPropertyName(j), mark);
+
+	    unsigned int k;
+	    for (k = 0; k < marks.size(); ++i) {
+		if (marks[k] == mark) break;
+	    }
+	    if (k == marks.size()) {
+		marks.push_back(mark);
+	    }
+	}
+    }
+
+    return marks;
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -409,7 +572,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 			     std::pair<timeT, timeT> barRange,
 			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :
-    NotationSet(nel, i, q, p),
+    Rosegarden::GenericSet<NotationElement, NotationElementList>(nel, i, q),
     m_barRange(barRange),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
@@ -417,7 +580,8 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     m_weightAbove(0),
     m_weightBelow(0),
     m_userSamples(false),
-    m_type(Beamed)
+    m_type(Beamed),
+    m_properties(p)
 {
     if (!(*i)->event()->get<Rosegarden::Int>
         (BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
@@ -427,7 +591,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     /*
     NOTATION_DEBUG << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
-    while (i != getList().end()) {
+    while (i != getContainer().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
         NOTATION_DEBUG << "Found element with group id "
@@ -442,7 +606,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 			     const Quantizer *q,
 			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :
-    NotationSet(nel, nel.end(), q, p),
+    Rosegarden::GenericSet<NotationElement, NotationElementList>(nel, nel.end(), q),
     m_barRange(0, 0),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
@@ -451,7 +615,8 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     m_weightBelow(0),
     m_userSamples(true),
     m_groupNo(-1),
-    m_type(Beamed)
+    m_type(Beamed),
+    m_properties(p)
 {
     //...
 }
@@ -476,7 +641,7 @@ bool NotationGroup::test(const NELIterator &i)
 bool
 NotationGroup::sample(const NELIterator &i)
 {
-    if (m_baseIterator == getList().end()) {
+    if (m_baseIterator == getContainer().end()) {
 	m_baseIterator = i;
 	if (m_userSamples) m_initial = i;
     }
@@ -511,7 +676,7 @@ NotationGroup::sample(const NELIterator &i)
 
 //    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
-    NotationSet::sample(i);
+    Rosegarden::GenericSet<NotationElement, NotationElementList>::sample(i);
 
     // If the sum of the distances from the middle line to the notes
     // above the middle line exceeds the sum of the distances from the
@@ -575,14 +740,14 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     NELIterator initialNote(getInitialNote()),
                   finalNote(  getFinalNote());
 
-    if (initialNote == getList().end() ||
+    if (initialNote == getContainer().end() ||
         initialNote == finalNote) {
         return beam; // no notes, no case to answer
     }
 
-    if ((*initialNote)->event()->has(NotationProperties::STEM_UP) &&
-	(*initialNote)->event()->isPersistent<Bool>(NotationProperties::STEM_UP)) {
-	beam.aboveNotes = (*initialNote)->event()->get<Bool>(NotationProperties::STEM_UP);
+    if ((*initialNote)->event()->has(STEM_UP) &&
+	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+	beam.aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
     }
 
     timeT crotchet = Note(Note::Crotchet).getDuration();
@@ -598,10 +763,10 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     // if (!beam.necessary) return beam;
 
-    Chord initialChord(getList(), initialNote, &getQuantizer(),
-		       m_properties, m_clef, m_key),
-            finalChord(getList(),   finalNote, &getQuantizer(),
-		       m_properties, m_clef, m_key);
+    NotationChord initialChord(getContainer(), initialNote, &getQuantizer(),
+			       m_properties, m_clef, m_key),
+                    finalChord(getContainer(),   finalNote, &getQuantizer(),
+			       m_properties, m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -710,7 +875,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) {
-	for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
+	for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
 	    (*i)->event()->unset(NotationProperties::BEAMED);
 	    if (i == getFinalNote()) break;
 	}
@@ -745,20 +910,20 @@ NotationGroup::applyBeam(NotationStaff &staff)
     // indicate that they aren't part of the beam-drawing process and
     // don't need to draw a stem.
 
-    NELIterator prev = getList().end(), prevprev = getList().end();
+    NELIterator prev = getContainer().end(), prevprev = getContainer().end();
     double gradient = (double)beam.gradient / 100.0;
 
 //    NOTATION_DEBUG << "NotationGroup::applyBeam starting for group "<< this << endl;
 
-    for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
+    for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
 
         if ((*i)->isNote() &&
 	    (*i)->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet &&
 	    (*i)->event()->has(BEAMED_GROUP_ID) &&
 	    (*i)->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
 
-	    Chord chord(getList(), i, &getQuantizer(), 
-			m_properties, m_clef, m_key);
+	    NotationChord chord(getContainer(), i, &getQuantizer(), 
+				m_properties, m_clef, m_key);
 	    unsigned int j;
 
 //            NOTATION_DEBUG << "NotationGroup::applyBeam: Found chord" << endl;
@@ -767,7 +932,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		NotationElement *el = (*chord[j]);
 
 		el->event()->setMaybe<Bool>
-		    (NotationProperties::STEM_UP, beam.aboveNotes);
+		    (STEM_UP, beam.aboveNotes);
 
 		el->event()->setMaybe<Bool>
 		    (m_properties.CHORD_PRIMARY_NOTE, false);
@@ -813,7 +978,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
             // have THIS_PART_BEAMS set, until possibly unset again on
             // the next iteration.
 
-	    if (prev != getList().end()) {
+	    if (prev != getContainer().end()) {
 
                 NotationElement *prevEl = (*prev);
 		int secWidth = x - (int)prevEl->getLayoutX();
@@ -840,7 +1005,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		if (beamCount >= prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
                         (m_properties.BEAM_THIS_PART_BEAMS, false);
-                    if (prevprev != getList().end()) {
+                    if (prevprev != getContainer().end()) {
                         (*prevprev)->event()->setMaybe<Bool>
                             (m_properties.BEAM_NEXT_PART_BEAMS, false);
                     }
@@ -872,9 +1037,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
         } else if ((*i)->isNote()) {
 	    
 	    if (i == initialNote || i == finalNote) {
-		(*i)->event()->setMaybe<Bool>(m_properties.STEM_UP, beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
 	    } else {
-		(*i)->event()->setMaybe<Bool>(m_properties.STEM_UP, !beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(STEM_UP, !beam.aboveNotes);
 	    }
 	}
 

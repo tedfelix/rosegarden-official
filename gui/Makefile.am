@@ -113,7 +113,8 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
         pixmaps/misc/*.xpm \
 	testfiles/*.rg \
         testfiles/audio/*.wav \
-	testfiles/*.rose
+	testfiles/*.rose \
+	devices/*.rgd
 
 # Where pixmaps for notes, clefs, etc... will be installed
 data_dirname = rosegarden
@@ -143,6 +144,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/transport
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/library
 	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
 	$(INSTALL_DATA) $(srcdir)/pixmaps/misc/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/misc
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/rg21
@@ -158,6 +160,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
+	$(INSTALL_DATA) $(srcdir)/library/*.rgd    	$(kde_datadir)/$(data_dirname)/library
 	perl -ne 'print "$$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h >$(kde_datadir)/$(data_dirname)/version.txt
 
 
@@ -176,6 +179,7 @@ uninstall-local:
 	-rm -rf $(kde_datadir)/$(data_dirname)/styles
 	-rm -rf $(kde_datadir)/$(data_dirname)/pixmaps
 	-rm -f $(kde_datadir)/$(data_dirname)/autoload.rg
+	-rm -rf $(kde_datadir)/$(data_dirname)/library
 
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)

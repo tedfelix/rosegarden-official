@@ -132,7 +132,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
         } else if (el->isNote()) {
 
-            Chord chord(*notes, i, m_legatoQuantizer, m_properties);
+            NotationChord chord(*notes, i, m_legatoQuantizer, m_properties);
             if (chord.size() == 0) continue;
 
             std::vector<int> h;
@@ -164,8 +164,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 		// notationhlayout after notationvlayout)... or else
 		// introduce two separate properties (beamed stem up
 		// and non-beamed stem up)
-                el->event()->setMaybe<Bool>
-		    (m_properties.STEM_UP, stemUp);
+                el->event()->setMaybe<Bool>(STEM_UP, stemUp);
 
 		bool primary =
 		    ((stemmed && stemUp) ? (j == 0) : (j == chord.size()-1));
@@ -310,7 +309,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	    }
 
 	    bool stemUp = (h <= 4);
-	    (*scooter)->event()->get<Bool>(m_properties.STEM_UP, stemUp);
+	    (*scooter)->event()->get<Bool>(STEM_UP, stemUp);
 	    
 	    bool beamed = false;
 	    (*scooter)->event()->get<Bool>(m_properties.BEAMED, beamed);
@@ -320,8 +319,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	    if ((*scooter)->event()->get<Bool>
 		(m_properties.CHORD_PRIMARY_NOTE, primary) && primary) {
 
-		Chord chord(*(staff.getViewElementList()), scooter,
-			    m_legatoQuantizer, m_properties);
+		NotationChord chord(*(staff.getViewElementList()), scooter,
+				    m_legatoQuantizer, m_properties);
 
 		if (beamed) {
 		    if (stemUp) beamAbove = true;
@@ -374,8 +373,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	(above ? &stemUpNotes : &stemDownNotes);
 
     for (unsigned int wsi = 0; wsi < wrongStemNotes->size(); ++wsi) {
-	(*wrongStemNotes)[wsi]->setMaybe<Bool>
-	    (m_properties.STEM_UP, !above);
+	(*wrongStemNotes)[wsi]->setMaybe<Bool>(STEM_UP, !above);
     }
 
     // now choose the actual y-coord of the slur based on the side

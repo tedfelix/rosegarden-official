@@ -81,6 +81,13 @@ PropertyName getMarkPropertyName(int markNo)
 const PropertyName TIED_BACKWARD	= "tiedback";
 const PropertyName TIED_FORWARD		= "tiedforward";
 
+// capitalised for back-compatibility (used to be in NotationProperties)
+const PropertyName STEM_UP		= "NoteStemUp";
+const PropertyName HEIGHT_ON_STAFF      = "HeightOnStaff";
+const PropertyName NOTE_STYLE		= "NoteStyle";
+const PropertyName BEAMED		= "Beamed";
+const PropertyName SLASHES		= "Slashes";
+
 const PropertyName BEAMED_GROUP_ID               = "groupid";
 const PropertyName BEAMED_GROUP_TYPE		 = "grouptype";
 
