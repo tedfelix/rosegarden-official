@@ -752,6 +752,14 @@ Segment::setRepeating(bool value)
     if (m_composition) m_composition->updateRefreshStatuses();
 }
 
+void
+Segment::setLabel(const std::string &label)
+{
+    m_label = label; 
+    if (m_composition) m_composition->updateRefreshStatuses();
+}
+
+
 
 timeT
 Segment::getRepeatEndTime() const

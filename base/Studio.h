@@ -64,6 +64,10 @@ private:
     Studio& operator=(const Studio &);
 public:
 
+    // Copy another Studio into this one
+    //
+    void copy(const Studio &);
+
     void addDevice(const std::string &name,
                    DeviceId id,
                    Device::DeviceType type);

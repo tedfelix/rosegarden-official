@@ -126,7 +126,7 @@ public:
 
     // label
     //
-    void setLabel(const std::string &label) { m_label = label; }
+    void setLabel(const std::string &label);
     std::string getLabel() const { return m_label; }
 
     /**

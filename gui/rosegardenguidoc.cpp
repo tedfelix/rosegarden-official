@@ -1746,4 +1746,14 @@ RosegardenGUIDoc::clearAllPlugins()
 }
 
 
+// Deep-copy the studio from another source.
+//
+void
+RosegardenGUIDoc::copyStudio(const Rosegarden::Studio &studio)
+{
+    m_studio.copy(studio);
+}
+
+
+
 

@@ -217,6 +217,11 @@ public:
     const Rosegarden::Studio& getStudio() const { return m_studio;}
 
     /*
+     * Copy the Studio from somewhere else
+     */
+    void copyStudio(const Rosegarden::Studio &);
+
+    /*
      * return the AudioFileManager
      */
     Rosegarden::AudioFileManager& getAudioFileManager()

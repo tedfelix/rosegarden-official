@@ -2048,6 +2048,10 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
+    // Copy the Studio from the current document
+    //
+    newDoc->copyStudio(m_doc->getStudio());
+
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
                                         &newDoc->getStudio());
 
@@ -2252,6 +2256,11 @@ void RosegardenGUIApp::importRG21File(const QString &file)
                                          this);
 
     RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
+
+    // Copy the Studio from the current document
+    //
+    newDoc->copyStudio(m_doc->getStudio());
+
     RG21Loader rg21Loader(file, &newDoc->getStudio());
 
     // TODO: makde RG21Loader to actually emit these signals
