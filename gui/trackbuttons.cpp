@@ -654,16 +654,29 @@ TrackButtons::populateInstrumentPopup()
     // Get the list
     Rosegarden::InstrumentList list = studio.getPresentationInstruments();
     Rosegarden::InstrumentList::iterator it;
+    Rosegarden::DeviceId currentDevId = -1;
 
-    for (it = list.begin(); it != list.end(); it++)
-    {
-//!!! m_instrumentPopup->insertItem(strtoqstr((*it)->getName()), i++);
+    for (it = list.begin(); it != list.end(); it++) {
+
+        if (! (*it)) continue; // sanity check
+
+        //!!! m_instrumentPopup->insertItem(strtoqstr((*it)->getName()), i++);
 	std::string iname((*it)->getName());
 	std::string pname((*it)->getProgramName());
         Rosegarden::DeviceId devId = (*it)->getDevice()->getId();
 
-	if (devId >= m_instrumentSubMenu.size()) 
-        {
+        RG_DEBUG << "TrackButtons::populateInstrumentPopup - inst. name : '"
+                 << iname.c_str()
+                 << "' - prog. name : '" << pname << "' - devId : " << devId
+                 << " - device name : '" << (*it)->getDevice()->getName().c_str()
+                 << "' - dev. addr : " << (*it)->getDevice()
+                 << endl;
+
+	if (devId != currentDevId) {
+            // this is another device, create a new submenu for it
+            //
+            currentDevId = devId;
+
             QPopupMenu *subMenu = new QPopupMenu(this);
             m_instrumentPopup->
                 insertItem(strtoqstr((*it)->getDevice()->getName()), subMenu);
@@ -680,16 +693,16 @@ TrackButtons::populateInstrumentPopup()
 	}
 	if (pname != "") iname += " (" + pname + ")";
 
-	m_instrumentSubMenu[devId]->insertItem(strtoqstr(iname), i++);
+	m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->insertItem(strtoqstr(iname), i++);
     }
 
     /*
-    QPopupMenu *subMenu = new QPopupMenu(this);
-    m_instrumentPopup->insertItem(i18n("Sub Menu"), subMenu);
+      QPopupMenu *subMenu = new QPopupMenu(this);
+      m_instrumentPopup->insertItem(i18n("Sub Menu"), subMenu);
 
-    subMenu->insertItem(QString("Thing"), 0);
-    subMenu->insertItem(QString("Thing 2"), 1);
-    subMenu->insertItem(QString("Thing 3"), 2);
+      subMenu->insertItem(QString("Thing"), 0);
+      subMenu->insertItem(QString("Thing 2"), 1);
+      subMenu->insertItem(QString("Thing 3"), 2);
     */
 }
 
