@@ -1,12 +1,14 @@
 #!/usr/bin/perl -w
 
+# contributed by Brendon Oliver <brendon.oliver@redsheriff.com>
+
 use strict;
 
 undef $/;
 
 while (<>) {
-        s|(<IMG.*)WIDTH\s*=\s*["']?\d+["']?\s(\s*.*?>)|$1$2|gis;
-        s|(<IMG.*)HEIGHT\s*=\s*["']?\d+["']?\s(\s*.*?>)|$1$2|gis;
+        s|(<IMG\s+.*?)WIDTH\s*=\s*["']?\d+['"]?\s?((:?.*?)?>)|$1$2|gis;
+        s|(<IMG\s+.*?)HEIGHT\s*=\s*["']?\d+['"]?\s?((:?.*?)?>)|$1$2|gis;
 
         print;
 }

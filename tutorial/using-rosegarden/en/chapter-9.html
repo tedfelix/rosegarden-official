@@ -21,7 +21,19 @@ A { text-decoration: none }
 <A HREF="chapter-8.html">Previous</A>
 <A HREF="chapter-7.html">Next</A>
 <HR>
-<H1><A NAME="11">11 Appendix A: MIDI Primer</A></H1>
+<H1 STYLE="font-weight: medium"><A NAME="9">9 The A-Maze-Ing Composition</A>
+</H1>
+<P>
+<!--SPAN STYLE="font-weight: medium"-->
+You've been working with compositions all along, and you might not
+ have realized just how many different things are packed into each and
+ every<B> .rg</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ file. This diagram really only covers the highlights.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic1" SRC="../pixmaps/rosegarden-composition-master-drawing.jpg"
+></P>
+<H1><A NAME="10">10 Appendix A: MIDI Primer</A></H1>
 <P>MIDI stands for Musical Instrument Digital Interface. It is a simple
  serial protocol that electronic instruments and computers can use to
  talk to each other. MIDI-capable instruments vary enormously in their
@@ -31,7 +43,7 @@ A { text-decoration: none }
 <P>MIDI-capable instruments aren't required to have much in common, but
  there are a several categories of characteristics that most of them
  share.</P>
-<H2><A NAME="11_1">11.1 Channels</A></H2>
+<H2><A NAME="10_1">10.1 Channels</A></H2>
 <P>If you have a cable TV, you can receive more than one television
  channel over the same wire. MIDI channels behave in a similar fashion.
  Any one MIDI cable can be used to carry up to 16 channels of
@@ -44,7 +56,7 @@ A { text-decoration: none }
  are transmitted on channel 3. Channels are similarly useful for playing
  different instruments at the same time, over the same cable, or for
  playing using different voices on a single instrument.</P>
-<H2><A NAME="11_2">11.2 Programs</A></H2>
+<H2><A NAME="10_2">10.2 Programs</A></H2>
 <P>Most common MIDI instruments are polyphonic and multi-timbral. This
  means that they can play more than one note at the same time, and they
  can play notes using different voices. Many instruments try to simulate
@@ -57,7 +69,7 @@ A { text-decoration: none }
  The GM specification dictates that channel 10 will play drum sounds,
  and it defines a standard arrangement of keys on the keyboard to
  represent different drums.</P>
-<H2><A NAME="11_3">11.3 Banks</A></H2>
+<H2><A NAME="10_3">10.3 Banks</A></H2>
 <P>Beyond the GM standard, many instruments have banks of additional
  programs. Each bank can contain an additional 127 programs. The MIDI
  specification allows for a monumental number of different banks, but
@@ -69,7 +81,7 @@ A { text-decoration: none }
  are Least Significant Byte (LSB) and Most Significant Byte (MSB). The
  standard GM bank on every GM-compliant synth has an LSB/MSB address of
  0 0.</P>
-<H2><A NAME="11_4">11.4 Controllers</A></H2>
+<H2><A NAME="10_4">10.4 Controllers</A></H2>
 <P>MIDI allows for 127 controllers. These controllers typically work at
  a channel level, and are used to control things such as pan (how far to
  the left or right the sound will play), volume (the overall maximum
@@ -84,7 +96,7 @@ A { text-decoration: none }
  (or software synth) supports if you are to configure Rosegarden to make
  use of them, though it does come out of the box aware of a very limited
  subset of the most common controllers.</P>
-<H2><A NAME="11_5">11.5 Hardware vs. Software; soundfonts</A></H2>
+<H2><A NAME="10_5">10.5 Hardware vs. Software; soundfonts</A></H2>
 <P>So far I have dealt primarily with &quot;real&quot; MIDI equipment. Where do
  soundcards and soft synths fit in?</P>
 <P>Some soundcards such as the Sound Blaster Live! and its relatives
@@ -109,7 +121,7 @@ A { text-decoration: none }
  drums, but only works on channel 10. Rosegarden can read most of this
  information from soundfonts, so soundfont users will have less to worry
  about when it comes time to set up their studio.</P>
-<H2><A NAME="11_6">11.6 The Odd Ducks</A></H2>
+<H2><A NAME="10_6">10.6 The Odd Ducks</A></H2>
 <P STYLE="font-style: normal; font-weight: medium">A great deal of the
  equipment out there falls into none of these categories. Pipe organs
  are especially bizarre creatures from what I hear. Older synths from

@@ -21,267 +21,306 @@ A { text-decoration: none }
 <A HREF="chapter-4.html">Previous</A>
 <A HREF="chapter-6.html">Next</A>
 <HR>
-<H1 STYLE="border: none; padding: 0in">7 <A NAME="5"></A>A Different
- View</H1>
-<P STYLE="border: none; padding: 0in">So far, we've only looked at the
- main window, and have not really edited anything. Rosegarden provides
- three different editors, each with its own unique view of the data. You
- can view the raw Rosegarden events with the Event List Editor, you can
- work with a piano roll metaphor with the Matrix Editor, or you can see
- your data as notation with the Notation Editor. Each of these editors
- works on a segment level, so you must have at least one segment
- selected in order to open one. If you wish to start with an editor from
- scratch, you must first create an empty segment with the pencil tool,
- as I described in chapter 2, and then select it.</P>
-<H2><A NAME="7_1">7.1 The Event List Editor</A></H2>
-<P STYLE="border: none; padding: 0in">The event list editor is for
- editing the composition at the event level. This is the most raw of the
- three edit views, and the most difficult editor to use.</P>
-<H3><A NAME="7_1_1">7.1.1 Events and Properties</A></H3>
-<P>Rosegarden is not a pure MIDI sequencer, and it does not store raw
- MIDI events; instead, it uses its own internal format, which is both
- more powerful and more flexible. There are many kinds of events in
- Rosegarden. As you would expect, MIDI notes, controllers and the like
- are events, but so are hairpins, dynamics, performance directions,
- clefs and key signatures, etc. Each class of event has its own set of
- unique properties.</P>
-<P>Here are just a few examples of types of events with a few their
- properties. All of these can be edited from here in the event list
- editor, although you probably will find little occasion to tear an
- event apart and rearrange its insides.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="251" NAME="Graphic25"
-SRC="../pixmaps/some-events-diagram.jpg" WIDTH="418"></P>
-<P STYLE="border: none; padding: 0in">Out of the box, the notation
- editor is the default, but that editor is a chapter unto itself. For
- the moment, let us begin with the simplest of the three. Pick a
- segment, and then right click on it. Choose &quot;Open in Event List Editor&quot;
- from the resulting context menu.</P>
-<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="244" NAME="Graphic1" SRC="../pixmaps/open-in-event-editor.png" WIDTH="196"></P>
-<P ALIGN="LEFT" STYLE="border: none; padding: 0in">If you've started
- with a blank segment, as I did, there's not much to see here:</P>
-<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="227" NAME="Graphic2" SRC="../pixmaps/event-editor.png" WIDTH="358"></P>
-<P ALIGN="LEFT" STYLE="border: none; padding: 0in">The truly brave among
- you might want to experiment with creating something entirely from
- scratch by clicking on the &quot;New Event&quot; icon. You'll be presented with a
- dialog like this that allows you to make your own event out of whole
- cloth:</P>
-<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="213" NAME="Graphic3" SRC="../pixmaps/insert-event.png" WIDTH="185"></P>
-<P ALIGN="LEFT" STYLE="border: none; padding: 0in">Explaining its use is
- definitely best reserved for the future 500-page deluxe edition of this
- book. For the moment, let us move on to something more useful.</P>
-<H3><A NAME="7_1_2">7.1.2 Suggested Uses</A></H3>
-<H4><A NAME="7_1_2_1">7.1.2.1 Inserting a Mid-Composition Program Change</A>
-</H4>
-<P>One thing that can only be done from the event editor is the
- insertion of a mid-track program change. This might be useful, for
- example, if you wish to switch a string part from playing normally to
- playing pizzicato and back without having to write the parts on
- different tracks to assign them to different instruments.</P>
-<P>In version 1.0 of Rosegarden, the facility for entering program
- changes is rather crude and unwieldy. It may see improvement in future
- versions, but for the moment, the only mechanism provided is the entry
- of program changes by number. This means you may not change the bank,
- so you are limited to whatever bank is assigned to the instrument to
- which the track you are writing for is assigned.</P>
+<H1><A NAME="5">5 Managing Instruments (under construction)</A></H1>
+<P>You want to play a particular track using a hammered dulcimer, or
+ else you've got an audio track that needs some EQ. In either case, you
+ need an introduction to the<B> instrument</B>. Instruments are
+ configured with the<B> Instrument Parameters</B> box, and any number of
+ tracks can be assigned to play via the same instrument.</P>
+<H2><A NAME="5_1">5.1 Instruments</A></H2>
+<P>The previous chapter introduced you to the device, which is a
+ construct Rosegarden uses to encapsulate information about what lies on
+ the other side of a play or record connection, and make the
+ capabilities of that equipment available to you. Hand in hand with the
+ device is the<B> instrument</B>
+<!--SPAN STYLE="font-weight: medium"-->
+.</P>
+<P>Every device has 16 instruments numbered #1 through #16. When working
+ with MIDI playback devices, each of these instruments encapsulates a
+ MIDI output channel (the same channel as the number of the instrument
+ by default, although this relationship is not fixed), a
+ bank/program/variation assignment, and any initial controllers you wish
+ to affect the associated channel. These instruments allow you to
+ assemble up to 16 collections of programs/controllers per device and
+ assign these combinations to any number of tracks. If your JACK server
+ is running, you should have both an &quot;Audio&quot; device and a &quot;Synth plugin&quot;
+ device in addition to however few or many MIDI devices you have
+ available. Each and every one of these has 16 instruments.</P>
+<P>When working with audio and synth plugins, these instruments serve
+ the same purpose as MIDI channels, allowing you to configure up to 16
+ different combinations of LADSPA plugins, volume and pan settings,
+ programs (for synth plugins) and so forth, and then apply these
+ combinations to any number of different tracks.</P>
+<P>I'll try to illustrate the point with some diagrams depicting the
+ three general types of instruments. Here we have a sample MIDI
+ instrument that will play using a hammered dulcimer program. All tracks
+ assigned to play via this instrument will play using the first output
+ port on the Sound Blaster Live!, using program 16 from bank 0 0, with
+ an initial volume of 100, and an initial reverb level of 97. This
+ instrument will show up as &quot;Sound Blaster Live! (1) #12 (Hammered
+ Dulcimer)&quot; on the menu.</P>
+<P><I>NOTE: While the instrument number and channel do coincide by
+ default, it's possible to change this relationship. I have done so in
+ this example. Instrument #12 plays using channel 6.</I></P>
+<P><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic10" SRC="../pixmaps/instrument-diagram.jpg"
+></P>
+<P ALIGN="LEFT">This is a typical synth plugin instrument. The sound it
+ makes will depend on the synth plugin used, but all tracks assigned to
+ play via this instrument will make the same sound. Its output will be
+ piped through the EQ and Reverb plugins, and this instrument will show
+ up as &quot;Synth plugin #12&quot; on the menu.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic11"
+SRC="../pixmaps/plugin-instrument-diagram.jpg" ></P>
+<P ALIGN="LEFT">This is a typical audio instrument. Any audio tracks
+ assigned to play via this instrument will have their output piped
+ through the EQ and Reverb plugins, and this instrument will show up as
+ &quot;Audio #12&quot; on the menu.</P>
+<P ALIGN="RIGHT"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic12"
+SRC="../pixmaps/jack-instrument-diagram.jpg" ></P>
+<P ALIGN="LEFT">
+<BR>
+<BR></P>
+<P ALIGN="LEFT">Notice that all of the above examples were &quot;instrument
+ #12,&quot; and yet all three of them will produce quite different results,
+ because each of them is the &quot;instrument #12&quot; of a completely different
+ device.</P>
+<H2><A NAME="5_2">5.2 Routing a Track to a Device and Instrument</A></H2>
+<P>The first step in the assignment process is to route a track to a
+ particular device. The device you use will determine whether you can
+ play audio or MIDI data on this track. In order to make this device
+ assignment, begin by clicking the mouse cursor in this area, and
+ holding a moment until a context menu appears.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic3" SRC="../pixmaps/click-and-hold.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ You should be presented with a series of two menus that allow you to
+ choose first the device and then the instrument for this track.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ In this case, I chose to route it to my &quot;Roland SC-33&quot; device, which is
+ ultimately connected through my Rosegarden studio to play through ALSA
+ port 64:0, and thus the Roland Sound Canvas I have plugged into the box
+ physically attached to my computer.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Then I assigned it to that device's instrument #6. Prior to taking this
+ snapshot, I had already configured this instrument to play using the
+ &quot;Piano 1&quot; program with the<B> Instrument Parameters</B> box (more on
+ that in a bit), and so that name appeared in parenthesis in the second
+ menu. If an instrument hasn't already been directed to make use of a
+ particular program, only the instrument number will appear on this
+ menu, as is the case for most of the other instruments depicted.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic4" SRC="../pixmaps/select-midi.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Notice also that instrument #10 has (D) in parenthesis, indicating that
+ this instrument is normally used for playing drums. (Whether it
+ actually plays drums depends on the capabilities of the MIDI equipment
+ or software synth represented by this &quot;device,&quot; and probably depends on
+ this instrument continuing to remain at the default channel assignment
+ of 10.) In this example, I arranged beforehand for this instrument to
+ play using the &quot;Power&quot; drum kit.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ The remaining &quot;instruments&quot; are not assigned to anything in particular
+ yet, and on most General MIDI-compliant equipment (or software synths)
+ these &quot;instruments&quot; will probably play using a factory default piano
+ program, with volume and other controllers set to neutral default
+ values. Some equipment may not actually produce any noise until you
+ explicitly assign a program to any instruments you use.</P>
+<H2><A NAME="5_3">5.3 MIDI Instrument Parameters</A></H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that the
+ track has had its output routed to a MIDI output device and instrument,
+ and is therefore a MIDI track, the<B> Instrument Parameters</B> box
+ will display controls similar to these.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic2" SRC="../pixmaps/instrument-parameters-midi-ins.png"
+></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">They allow
+ you to reassign the channel for this &quot;instrument,&quot; and to dial in a
+ program. In this case, you can see Roland's variation system in action.
+ The program is set to &quot;20. Churg Org. 1&quot; and the variation to &quot;17.
+ Church Org. 3&quot; so this &quot;instrument,&quot; and any tracks routed through it,
+ will play using a pipe organ sound that isn't part of the basic set of
+ General MIDI programs.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You may
+ change the default controller values by adjusting the knobs. The
+ tooltip explains how to use them just as well as I could.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic14" SRC="../pixmaps/instrument-parameters-knobs.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<I> NOTE: If your knobs do not have a crisp, clear appearance like the
+ ones above, you might need to increase your KDE color contrast to a
+ higher setting. Low contrast produces rather fuzzy, indistinct knobs.
+ Adjust this with KDE's Control Panel (kcontrol), under<B> Appearance &amp;
+ Themes -&gt; Colors</B>
+<!--SPAN STYLE="font-weight: medium"-->
+. Non-KDE users may be stuck with whatever they
+ get.</I></P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic15" SRC="../pixmaps/kde-adjust-contrast.png"
+></P>
+<H3><A NAME="5_3_1">5.3.1 Setting Initial Track Volume and Other
+ Parameters</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">These
+ initial controllers here inside the instrument provide the mechanism
+ whereby you configure initial volume, pan, and similar settings for the
+ track. Any tracks that are routed to play through this instrument will
+ share this instrument's parameters.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
+ controllers displayed here for you to adjust will be those which were
+ defined for the device while configuring the studio, or those you got
+ for free from the original default studio. The particular values you
+ set here will be bound up with this particular instrument on this
+ particular channel. They are initial values only, and any of these
+ controllers may be adjusted in the middle of a composition by inserting
+ controller events, as we shall see in the next chapter.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>NOTE: If
+ you notice that your initial controllers are not taking effect, as can
+ sometimes be the case when you have changed a controller value in the
+ middle of a composition, and have rewound it to the beginning, you may
+ need to check<B> Settings -&gt; Configure Rosegarden -&gt; Sequencer -&gt; Send
+ all MIDI Controllers at start of playback [x]</B></I></P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic13" SRC="../pixmaps/document-transmit-controllers.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<I>
+<!--SPAN STYLE="font-weight: medium"-->
+ NOTE: The controllers here in this box are initial values only. If
+ you have the playback pointer aimed somewhere in the middle of the
+ document, and then adjust one of these knobs, do not expect the
+ controller adjustment to take place at the location of the playback
+ pointer. If you wish to make such adjustments, you should use one of
+ the control rulers from one of the edit views, as I will discuss in the
+ next chapter.</I></P>
+<H3><A NAME="5_3_2">5.3.2 Selecting a GS Drum Kit</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you want
+ to select a GS-style drum kit, your<B> Instrument Parameters</B> box
+ should look something like this. The GS drum kits are in the same bank
+ 0 0 as the Capital Tones/General MIDI programs. The checkbox allows you
+ to toggle which set of programs you see, so you can use the Program
+ combo box to more effectively change drum kits.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic6" SRC="../pixmaps/instrument-parameters-midi.png"
+></P>
+<H2><A NAME="5_4">5.4 Synth Plugin Instrument Parameters</A></H2>
+<P>As mentioned in the introduction, Rosegarden is the first sequencer
+ for Linux to employ the new DSSI plugin architecture. If you have your
+ JACK server running, you should have a &quot;Synth plugin&quot; device available.</P>
 <P>
 <BR>
 <BR></P>
-<H2><A NAME="7_2">7.2 The Matrix Editor</A></H2>
-<P>The Matrix editor is based around the familiar piano roll metaphor
- you have probably seen in other packages. It is useful for taking a
- hands on approach to tweaking notes where their performance is more
- important than their visual appearance as notation. I find myself using
- the Matrix most often for two main purposes. It's my preferred method
- of sequencing percussion parts, and I use it to knock notes out of
- precise alignment on purpose; for example, when sequencing rolled
- chords in order to make a MIDI guitar sound more credible.</P>
-<H3><A NAME="7_2_1">7.2.1 Special Considerations of Performance vs.
- Display</A></H3>
-<P STYLE="font-style: normal">It is important to note that Rosegarden is
- not purely a MIDI sequencer, and at no time can you ever directly edit
- raw MIDI events. It stores events using an internal meta format that
- includes quite a bit of information about each note. Rosegarden's
- events do of course cover the fundamentals of pitch, velocity and
- duration, but they also include such attributes as stem direction, beam
- state, accidental state, ties, slurs, slashes, accents and so forth. Of
- special note, every Rosegarden event maintains independent duration
- values for performance and display. This makes it possible to create a
- composition that looks good printed on paper, and yet preserves all of
- the slight human imperfections that give a performance its character.</P>
-<P STYLE="font-style: normal">In version 1.0, the Matrix can only edit<B>
- performance</B> attributes. This can create interesting challenges both
- for performance and notation. If you are working on a human
- performance, and you draw notes to their full length here in the
- Matrix, you may damage the character of the performance slightly. On
- the other hand, if you draw slightly long or short notes here, or knock
- the timing off the grid lines intentionally, you will create ugly
- notation in the process. In either case, you can make adjustments to
- massage away these differences from the Notation Editor, as I will
- explain in the next chapter.</P>
-<P STYLE="font-style: normal; font-weight: medium">One particularly
- noteworthy side effect of the way Rosegarden stores events is that tied
- notes are a series of discrete dashes here on the Matrix. It is really
- not possible to determine whether a series of notes at the same pitch
- will sound as one note or several without looking at the affected area
- from the Notation Editor.</P>
-<H3><A NAME="7_2_2">7.2.2 Overview</A></H3>
-<P>Let's start with an empty segment one measure long, and I'll show you
- the basics. Draw your segment, select it, and then right click on it
- and choose &quot;Open in Matrix Editor&quot; from the resulting context menu.
- You'll see something like this:</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="371" NAME="Graphic4"
-SRC="../pixmaps/matrix-overview.png" WIDTH="477"></P>
-<H3><A NAME="7_2_3">7.2.3 Entering New Notes</A></H3>
-<P>Now let's do a little one bar loop for demonstration purposes. Just
- like on the main view, the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic65"
-SRC="../pixmaps/using-rosegarden_html_4c452e31.png" WIDTH="27"> cursor is used to
- create something new from scratch. In this case, of course, we're
- entering a note. Let's pepper this thing with a few well placed random
- pitches:</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="128" NAME="Graphic5"
-SRC="../pixmaps/matrix-new-notes.png" WIDTH="200"></P>
-<P ALIGN="LEFT">You may have noticed that those came out as quarter
- notes. In order to control the default length of new notes, you must
- change the grid setting. Let's enter eight 8<SUP>th</SUP> notes. First
- dial in the 8<SUP>th</SUP> note on the grid button:</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="190" NAME="Graphic6"
-SRC="../pixmaps/matrix-dial-grid.png" WIDTH="115"></P>
-<P ALIGN="LEFT">Now new notes you enter will take this duration by
- default:</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="141" NAME="Graphic7"
-SRC="../pixmaps/matrix-8th-notes.png" WIDTH="217"></P>
-<P>It's obviously a bit tedious, but you can enter an entire composition
- this way if you desire.</P>
-<H3><A NAME="7_2_4">7.2.4 Adjusting Existing Notes</A></H3>
-<P>You can move notes around with the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="29"
-NAME="Graphic8" SRC="../pixmaps/matrix-move-cursor.png" WIDTH="27"> cursor.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="158" NAME="Graphic9"
-SRC="../pixmaps/matrix-move-notes.png" WIDTH="213"></P>
-<P ALIGN="LEFT">You can resize notes with the <IMG ALIGN="BOTTOM" BORDER="0"
-HEIGHT="26" NAME="Graphic11" SRC="../pixmaps/matrix-resize-cursor.png" WIDTH="29">
- cursor, by clicking on a note and dragging it.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="142" NAME="Graphic10"
-SRC="../pixmaps/matrix-resize-notes.png" WIDTH="210"></P>
-<P ALIGN="LEFT">By default, resize operations snap to grid lines. If you
- wish to drag the note to some arbitrary length, do so by holding the
- shift key while dragging the note.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="113" NAME="Graphic12"
-SRC="../pixmaps/matrix-arbitrary-resize.png" WIDTH="212"></P>
-<H3><A NAME="7_2_5">7.2.5 Selecting and Acting on Multiple Notes</A></H3>
-<P>All of these operations can be performed on more than one note at a
- time. In order to do so, you need to make a selection. You can use the <IMG
-ALIGN="BOTTOM" BORDER="0" HEIGHT="27" NAME="Graphic13" SRC="../pixmaps/matrix-arrow-cursor.png"
-WIDTH="27"> cursor to select individual notes one by one while holding
- down the shift key.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="158" NAME="Graphic14"
-SRC="../pixmaps/matrix-select-individual-notes.png" WIDTH="200"></P>
-<P ALIGN="LEFT">If you wish to select a broad range of notes, you can
- select every note of a given pitch by selecting the arrow cursor and
- shift clicking on the individual notes on the piano keyboard. Each
- click will select every note of the desired pitch, and you can select
- any number of pitches in this fashion.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="136" NAME="Graphic15"
-SRC="../pixmaps/matrix-select-pitch.png" WIDTH="203"></P>
-<P ALIGN="LEFT">It is also possible to select a band or several bands of
- notes by sweeping the arrow cursor across the keys while holding shift.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="138" NAME="Graphic16"
-SRC="../pixmaps/matrix-sweep-selection.png" WIDTH="205"></P>
-<P ALIGN="LEFT">Finally, you can use my selection event filter to cull
- events from your selection. Start by making a broad selection, and then
- click on the filter icon to summon my dialog. You can then dial in
- various criteria for the notes you wish to remain selected after the
- filter is applied. I will cover various uses for this in more depth
- later on, in the Notation chapter.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="254" NAME="Graphic17"
-SRC="../pixmaps/matrix-event-filter.png" WIDTH="263"></P>
-<P ALIGN="LEFT"><I>(Yes,<B> my</B> selection event filter. I'm not just
- an author, I also pretend to know C++ on occasion. Please do let me
- know if you find it useful, or if there's anything you'd like added to
- it, or removed from it.)</I></P>
-<H3><A NAME="7_2_6">7.2.6 Velocity</A></H3>
-<P>Velocity is a MIDI parameter that describes how hard a note was hit
- on the keyboard or other device. It allows for finer expression of
- volume than what can be accomplished merely by adjusting the volume
- parameter for the MIDI channel. If you have a velocity sensitive
- keyboard, this parameter will be recorded as you play. Under certain
- other circumstances, you may end up with events that have no velocity
- property at all, or a default velocity of 100. Regardless of how it did
- (or didn't) get there, it's a simple matter to tweak it to suit your
- needs.</P>
-<H4><A NAME="7_2_6_1">7.2.6.1 Showing the Velocity Ruler</A></H4>
-<P>If the events you're editing have velocity properties, you can edit
- them with the Velocity Ruler. If it's not visible, turn it on from the
- View menu with<B> View -&gt; Show Velocity Property Ruler</B>.</P>
-<P STYLE="font-weight: medium">In this example, all the events have a
- velocity of 100, and they show up as orange bars on the ruler.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="266" NAME="Graphic19"
-SRC="../pixmaps/matrix-default-velocity-ruler.png" WIDTH="214"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">They can be changed by
- dragging them up and down, and the bars change colors to reflect their
- value. Here I've arranged them so that you can see each bar. Notice
- that the notes on the Matrix itself change to reflect these same
- colors.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="112" NAME="Graphic20"
-SRC="../pixmaps/matrix-arranged-velocity.png" WIDTH="167"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium"><I>NOTE: It can indeed be
- somewhat tricky to know which note you're adjusting if there are
- several notes of the same duration at the same time. I truthfully have
- no idea if there is some trick to this to make managing the process
- more foolproof. If anyone knows, email me, and I will mention in the
- next edition.</I></P>
-<H4><A NAME="7_2_6_2">7.2.6.2 What If There's No Velocity Property?</A></H4>
-<P>Sometimes note events are created without velocity properties. In
- that case, there will be nothing to see or do on the Velocity Ruler
- until you add some velocities. You'll need to select a range of notes
- and then use<B> Adjust -&gt; Velocity -&gt; Set Event Velocities</B> to
- create some. This presents you with a dialog box that offers you
- several different options for how to set these up. The Value ranges
- from 0, which is the softest possible key strike, to 127, which is the
- most forceful.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="115" NAME="Graphic18"
-SRC="../pixmaps/matrix-adjust-velocities.png" WIDTH="381"></P>
-<H4><A NAME="7_2_6_3">7.2.6.3 
+<H2><A NAME="5_5">5.5 Audio Instrument Parameters</A></H2>
+<P>If you want to use a track for audio, you'll need to make it a JACK
+ track by routing it to the &quot;Audio&quot; device. (If you do not have an
+ &quot;Audio&quot; device available, please ensure that your JACK server is
+ running.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic5" SRC="../pixmaps/select-jack.png"
+></P>
+<H2><A NAME="5_6">5.6 JACK Instrument Parameters</A></H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">JACK
+ &quot;instruments&quot; have different controls available in the<B> Instrument
+ Parameters</B> box.. They allow you to control the routing of the audio
+ [In: Out: I have no clue what these are actually good for. This is what
+ I mean by &quot;routing of the audio.&quot;], and to add layers of plugins. There
+ are redundant Mute, Solo and Record toggles, as well as volume sliders
+ for left and right</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
+ channels, and a mono/stereo toggle. (<IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8" SRC="../pixmaps/audio-mono.png" > <IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" >).</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic7" SRC="../pixmaps/instrument-parameters-audio.png"
+></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you wish
+ to assign LADSPA plugins to the track, you may use one of the &quot;&lt;no
+ plugin&gt;&quot; buttons to summon a dialog similar to this one. You can narrow
+ in on what you want using the<B> Category:</B> selector, and then dial
+ in a particular plugin with the<B> Plugin:</B> selector. As you dial
+ through these, the knobs in the bottom half of this dialog box will
+ change to reflect the controls that are available for this particular
+ plugin; ranging from one knob to a screen full of them. You can layer
+ up to five plugins for each instrument in the &quot;JACK Audio&quot; device,
+ hardware allowing. Some plugins are particularly expensive in their use
+ of your system's resources, so using too many may cause performance
+ problems.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1" SRC="../pixmaps/JACK-plugins.png"
+></P>
+<H2><A NAME="5_7">5.7 What Do Those Black Boxes Mean?</A></H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The column
+ of small boxes to the left of the channel provide a concise way of
+ showing information about the status of these connections. In the
+ examples above, you might have noticed that they were in several
+ different states.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ These boxes convey the following information:</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic38" SRC="../pixmaps/using-rosegarden_html_72a37f4e.png"
+> This instrument or device isn't very useful to you right
+ now. It is is<B> not in use</B> by a track, and it is<B> not connected</B>
+ to any active output path.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic79" SRC="../pixmaps/using-rosegarden_html_3dc467bd.png"
+> This instrument or device could provide a valid output path,
+ and all you need to do from here is attach it to a track and begin
+ making use of it. It<B> is connected</B> to an active output path, but
+ it is<B> not being used</B> by any track.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic81" SRC="../pixmaps/using-rosegarden_html_1e7e4e7a.png"
+> A track or tracks are connected to this &quot;device,&quot; but this
+ is not currently a valid output path, and the events on any tracks that
+ are routed through this device don't have anywhere to go. This
+ instrument or device is<B> in use</B> by a track, but is<B> not
+ connected</B> to an active output path.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic80" SRC="../pixmaps/using-rosegarden_html_e634bf.png"
+> This instrument or device provides a valid output path, and
+ that path is in use by at least one track. It<B> has a valid connection</B>
+ to an output path, and that connection is<B> in use</B> by a track.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ In addition, the instrument in use by the current track will have an
+ extra black outline around either a black filled or black outlined box,
+ depending on whether or not the path is connected to a valid output:</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic82" SRC="../pixmaps/using-rosegarden_html_500c240c.png"
+> The active track is connected to an output that is<B> also
+ connected</B>. If you play this track, you can expect the device you've
+ hooked up to make some noise.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic83" SRC="../pixmaps/using-rosegarden_html_5204c333.png"
+> The active track is connected to an output that is<B> not
+ connected</B>. This track, on the other hand, won't make any noise
+ until you assign a different device to it or enable the device that
+ isn't currently working.</P>
+<H1><A NAME="6">6 Recording Basics</A></H1>
+<P STYLE="margin-bottom: 0.2in">There are three different ways to record
+ with Rosegarden. If you come from a MIDI background, the most obvious
+ thing to do is plug in your MIDI keyboard and hit the record button to
+ record a MIDI segment in the currently-selected track. If audio is your
+ aim, you'll want to set your mixer recording source and get to work. On
+ the other hand, if you have all the keyboard skill of a paraplegic
+ chipmunk, like I do, you might be more interested in step recording.</P>
+<P STYLE="margin-bottom: 0.2in">I will cover step recording later on.
+ For now my focus is on recording operations that can be performed from
+ the main window.</P>
+<H2><A NAME="6_1">6.1 Recording MIDI</A></H2>
+<H2><A NAME="6_2">6.2 Recording Audio</A></H2>
+<P>
 <BR>
-<BR></A></H4>
-<H3><A NAME="7_2_7">7.2.7 Controllers</A></H3>
-<P>It's possible to transmit controllers from here in the matrix with
- the various Control Rulers. Let's add a Modulation ruler. Choose<B>
- View -&gt; Add Event Ruler -&gt; Modulation Controller</B> and you should now
- have a new tab at the bottom of your Matrix.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="121" NAME="Graphic21"
-SRC="../pixmaps/matrix-mod-ruler.png" WIDTH="296"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">If you right click on the
- ruler you can insert a controller event, or even an entire line of
- them.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="84" NAME="Graphic22"
-SRC="../pixmaps/matrix-mod-ruler-line.png" WIDTH="145"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">In this example, I have
- elected to insert a line of controllers. It's impossible to capture X
- cursors, and I'm far too lazy to try to draw that little pointing
- finger, so I will instead describe what I did. After making the
- selection from the menu, the cursor changed to a pointing finger. I
- picked a start point with this finger, and continued to hold the button
- down while dragging the resulting line up and to the right. After I
- released the button, it produced this line of controllers:</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="112" NAME="Graphic23"
-SRC="../pixmaps/matrix-line-of-mods.png" WIDTH="152"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">You can move individual
- controllers up and down, or you can select and move them in groups.
- It's rather less obvious than selections elsewhere, but if you look
- closely, you can see that selected controller bars are each outlined in
- red.</P>
-<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="75" NAME="Graphic24"
-SRC="../pixmaps/matrix-selected-controllers.png" WIDTH="139"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">If you hold down shift and
- drag these up and down as a group, they all move at once.</P>
-<H2><A NAME="7_3">7.3 Controlling the Local Transport</A></H2>
-<P>Coming soon... Or maybe appearing in the Notation chapter...</P>
-<H2><A NAME="7_4">7.4 Suggested Uses</A></H2>
-<H3><A NAME="7_4_1">7.4.1 Rolling a Chord</A></H3>
-<H3><A NAME="7_4_2">7.4.2 Entering a Percussion Part</A></H3>
+<BR></P>
+<P>boneyard:</P>
+<P>
+<BR>
+<BR></P>
+<P STYLE="border: none; padding: 0in">If you route the track to a MIDI
+ device, (including the &quot;Synth plugin&quot; device, if available), then the
+ track will become a MIDI track, and it can only be used to play MIDI
+ segments. If you drag an audio segment onto this track by mistake, the
+ audio will not play. Conversely, if you route a track to the &quot;JACK
+ Audio&quot; device, it will become an audio track, and it will not play any
+ MIDI segments you happen to drag here by mistake.</P>
 <HR>
 <A HREF="chapter-0.html">Contents</A>
 <A HREF="chapter-4.html">Previous</A>

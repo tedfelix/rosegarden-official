@@ -5,16 +5,375 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;312100">
-	<META NAME="CHANGED" CONTENT="20040807;20533200">
+	<META NAME="CHANGED" CONTENT="20040808;14581700">
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1>Notation (under construction)</H1>
-<P STYLE="margin-bottom: 0.2in">So far, we have largely ignored
-Rosegarden's notation editing capabilities. While Rosegarden's
-initial release lacks a few  features that are necessary for
-full-fledged score editing, it is nevertheless a powerful and
-friendly notation editor.</P>
+<H1 STYLE="font-style: normal"><FONT FACE="Arial">A Different View</FONT></H1>
+<P STYLE="border: none; padding: 0in">So far, we've only looked at
+the main window, and have not really edited anything. Rosegarden
+provides three different editors, each with its own unique view of
+the data. You can view the raw Rosegarden events with the Event List
+Editor, you can work with a piano roll metaphor with the Matrix
+Editor, or you can see your data as notation with the Notation
+Editor. Each of these editors works on a segment level, so you must
+have at least one segment selected in order to open one. If you wish
+to start with an editor from scratch, you must first create an empty
+segment with the pencil tool, as I described in chapter 2, and then
+select it.</P>
+<H2>The Event List Editor</H2>
+<P STYLE="border: none; padding: 0in">The event list editor is for
+editing the composition at the event level.  This is the most raw of
+the three edit views, and the most difficult editor to use.</P>
+<H3>Events and Properties</H3>
+<P>Rosegarden is not a pure MIDI sequencer, and it does not store raw
+MIDI events; instead, it uses its own internal format, which is both
+more powerful and more flexible. There are many kinds of events in
+Rosegarden. As you would expect, MIDI notes, controllers and the like
+are events, but so are hairpins, dynamics, performance directions,
+clefs and key signatures, etc. Each class of event has its own set of
+unique properties.</P>
+<P>Here are just a few examples of types of events with a few their
+properties. All of these can be edited from here in the event list
+editor, although you probably will find little occasion to tear an
+event apart and rearrange its insides.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/some-events-diagram.jpg" NAME="Graphic25" ALIGN=BOTTOM WIDTH=418 HEIGHT=251 BORDER=0></P>
+<H4>Opening and Event List View</H4>
+<P STYLE="border: none; padding: 0in">Out of the box, the notation
+editor is the default, but that editor is a chapter unto itself. For
+the moment, let us begin with the simplest of the three. Pick a
+segment, and then right click on it. Choose &quot;Open in Event List
+Editor&quot; from the resulting context menu.</P>
+<P ALIGN=CENTER STYLE="border: none; padding: 0in"><IMG SRC="../pixmaps/open-in-event-editor.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=196 HEIGHT=244 BORDER=0></P>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">If you've started
+with a blank segment, as I did, there's not much to see here:</P>
+<P ALIGN=CENTER STYLE="border: none; padding: 0in"><IMG SRC="../pixmaps/event-editor.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=358 HEIGHT=227 BORDER=0></P>
+<H4>Changing the Time Base</H4>
+<P>You can change the way Rosegarden displays the timing of events
+using the 
+<IMG SRC="../pixmaps/event-list-change-time-base.png" NAME="Graphic43" ALIGN=BOTTOM WIDTH=91 HEIGHT=33 BORDER=0>
+buttons, displaying time as Musical, Real, or Raw.</P>
+<H4>Filtering Events from View</H4>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">If you have a more
+complex segment than the one depicted above, you may wish to use
+filters to focus in on the classes of events that most interest you. 
+Simply check or uncheck boxes from the <B>Event filters</B><SPAN STYLE="font-weight: medium">
+box.</SPAN></P>
+<P ALIGN=CENTER STYLE="border: none; padding: 0in; font-weight: medium">
+<IMG SRC="../pixmaps/event-list-event-filters.png" NAME="Graphic34" ALIGN=BOTTOM WIDTH=114 HEIGHT=229 BORDER=0></P>
+<H4>Filtering Events out of a Selection</H4>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in; font-weight: medium">
+You can also use the selection event filter 
+<IMG SRC="../pixmaps/event-list-filter-selection.png" NAME="Graphic41" ALIGN=BOTTOM WIDTH=30 HEIGHT=27 BORDER=0>.
+ Make a selection of events, then use the filter to weed out unwanted
+events from the selection.  Everything the filter misses will still
+be selected after it has been applied.</P>
+<P ALIGN=CENTER STYLE="border: none; padding: 0in; font-weight: medium">
+<IMG SRC="../pixmaps/matrix-event-filter.png" NAME="Graphic42" ALIGN=BOTTOM WIDTH=263 HEIGHT=254 BORDER=0></P>
+<H4>Creating a New Event</H4>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">The truly brave
+among you might want to experiment with creating something entirely
+from scratch.</P>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">If you click on the
+<IMG SRC="../pixmaps/event-list-new-event.png" NAME="Graphic35" ALIGN=BOTTOM WIDTH=21 HEIGHT=19 BORDER=0>
+ icon, you'll be presented with a dialog like this that allows you to
+make your own event out of whole cloth:</P>
+<P ALIGN=CENTER STYLE="border: none; padding: 0in"><IMG SRC="../pixmaps/insert-event.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=185 HEIGHT=213 BORDER=0></P>
+<H4>Editing Existing Events</H4>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">You may edit
+existing events using either the simple 
+<IMG SRC="../pixmaps/event-list-simple-editor.png" NAME="Graphic36" ALIGN=BOTTOM WIDTH=26 HEIGHT=28 BORDER=0>
+editor...</P>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in"><IMG SRC="../pixmaps/event-list-simple-edit.png" NAME="Graphic39" ALIGN=BOTTOM WIDTH=228 HEIGHT=280 BORDER=0></P>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">..or the advanced 
+<IMG SRC="../pixmaps/event-list-advanced-editor.png" NAME="Graphic37" ALIGN=BOTTOM WIDTH=28 HEIGHT=28 BORDER=0>
+editor.</P>
+<P ALIGN=RIGHT STYLE="border: none; padding: 0in"><IMG SRC="../pixmaps/event-list-advanced-edit.png" NAME="Graphic40" ALIGN=BOTTOM WIDTH=418 HEIGHT=474 BORDER=0></P>
+<P ALIGN=LEFT STYLE="border: none; padding: 0in">You may delete
+events using the 
+<IMG SRC="../pixmaps/event-list-delete-event.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=27 HEIGHT=22 BORDER=0>
+icon.</P>
+<H3>Example Uses</H3>
+<P>I have elected to demonstrate only those uses which I judge are
+most difficult for you to figure out on your own.  While I am only
+covering a select few types of events, the process for creating (or
+changing) all of them is similar.</P>
+<H4>Inserting a Mid-Composition Program Change</H4>
+<P>One thing that can only be done from the event editor is the
+insertion of a mid-track program change.  This might be useful, for
+example, if you wish to switch a string part from playing normally to
+playing pizzicato and back without having to write the parts on
+different tracks to assign them to different instruments.</P>
+<P>In version 1.0 of Rosegarden, the facility for entering program
+changes is rather crude and unwieldy.  It may see improvement in
+future versions, but for the moment, the only mechanism provided is
+the entry of program changes by number.  There is no facility for
+changing the bank anywhere except at the instrument level, so any
+program changes you insert directly into segments will be done within
+the same bank the track's instrument uses.</P>
+<P>If you want to change a &quot;strings&quot; instrument to play
+using a &quot;pizzicato&quot; program at a particular point...</P>
+<H5>Determine the Insertion Point</H5>
+<P>The easiest thing to do is move the playback pointer to the
+desired insertion point.  In this example, I've done it using the
+transport in beat:bar mode to ensure I'm in exactly the desired spot
+to insert a program change at bar 2, beat 1, tick 0.</P>
+<P>Remember that the 
+<IMG SRC="../pixmaps/transport-switch-modes.png" NAME="Graphic30" ALIGN=BOTTOM WIDTH=27 HEIGHT=25 BORDER=0>
+button changes display modes on the transport.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/event-list-add-program-change-set-insert-point.png" NAME="Graphic26" ALIGN=BOTTOM WIDTH=380 HEIGHT=183 BORDER=0></P>
+<H5>Open the Editor, Create an Event</H5>
+<P>If you right click on this segment and choose to open it in the
+event list view, your cursor should already be at the right spot to
+insert a program change at the desired time.  In this sample, there
+happens to already be a note at that particular time, but that will
+not prevent you from inserting a program change event here at the
+same time.  In fact, if you are inserting a program change into
+otherwise empty space, you will have to set its time manually.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/event-list-add-program-change-open-editor.png" NAME="Graphic27" ALIGN=BOTTOM WIDTH=456 HEIGHT=296 BORDER=0></P>
+<P>Click on the 
+<IMG SRC="../pixmaps/event-list-new-event.png" NAME="Graphic28" ALIGN=BOTTOM WIDTH=21 HEIGHT=19 BORDER=0>
+icon to insert a new event.  The dialog will open out to a default
+event type of &quot;note.&quot;  You want to dial &quot;programchange&quot;
+into the &quot;Event type&quot; combo box to make this event into a
+program change.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/event-list-new-event-dialog.png" NAME="Graphic29" ALIGN=BOTTOM WIDTH=228 HEIGHT=274 BORDER=0></P>
+<H5>Create the Program Change</H5>
+<P>Now you should have a dialog like this.  Except, of course, I have
+already twiddled the settings in this particular example.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/event-list-new-program.png" NAME="Graphic32" ALIGN=BOTTOM WIDTH=228 HEIGHT=239 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-style: normal; font-weight: medium">Now you
+need to dial in the program change by number.  Unlike the numbers
+used elsewhere in Rosegarden (which appear out beside the name when
+changing programs in the <B>Instrument Parameters</B> box, for
+example), these are zero-based, rather than one-based.  If the
+program &quot;Acoustic Grand Piano&quot; shows up as program 1 in
+your studio, you'll have to subtract one from that and use 0.  I've
+included a zero-based list of General MIDI program numbers in
+<A HREF="../chapter-100.html">Appendix C</A> for your convenience. 
+In this case, &quot;Pizzicato&quot; is program number 45.</P>
+<H5>Changing an Event Time</H5>
+<P>You may have some occasion to change the time of the event.</P>
+<P>Click on the<B> </B><SPAN STYLE="font-weight: medium"> 
+<IMG SRC="../pixmaps/dot-dot-dot-button.png" NAME="Graphic31" ALIGN=BOTTOM WIDTH=83 HEIGHT=35 BORDER=0>
+button out beside &quot;Absolute time&quot; and you will be presented
+with a dialog that allows you to re-assert the fact that you want
+this event at 2:1:0.  You'll need to dial in the Measure (2) beat (1)
+and 64ths (0) to get the event to come in at the desire time.  If
+this does become necessary, at least you already know what time to
+aim for, having used the playback pointer and transport to get the
+&quot;address&quot; of this particular moment in time.</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/event-list-add-program-change-time.png" NAME="Graphic33" ALIGN=BOTTOM WIDTH=304 HEIGHT=121 BORDER=0></P>
+<P STYLE="font-style: normal; font-weight: medium"><BR><BR>
+</P>
+<H4>Managing System Exclusive Data</H4>
+<P>I don't have time to do a proper job of discussing this rather
+involved and arcane subject at the moment, and I may remove this
+before publishing the final draft of this book.  In the meantime,
+here is a message from Pedro Lopez Cabanillas, author of most of
+these features, on the subject of sysex in Rosegarden:</P>
+<P>&gt; Would you mind giving me a rundown?</P>
+<P>About your question: System Exclusive messages can be recorded,
+played, exported to Standard MIDI Files and imported from them as any
+other MIDI event. It's not worth to mention that, IMO, as that's what
+everybody expects from a MIDI sequencer. But you know that was a hard
+way to reach this place.</P>
+<P>You need to use the Event List editor for any editing on System
+Exclusive events.</P>
+<P>To create a new SysEx event from scratch:</P>
+<OL>
+	<LI><P>insert Event (star button, or menu Edit-&gt;insert event)</P>
+	<LI><P>select &quot;systemexclusive&quot; in the event type combo.</P>
+</OL>
+<P>3. fill the &quot;Data&quot; field, write some Hex values starting
+with &quot;F0&quot; and ending with &quot;F7&quot;. Alternatively,
+you can use the &quot;Load Data&quot; button to import the payload
+from a &quot;SYX&quot; file.</P>
+<P>The load function only imports the first sysex block from the
+file, if there is more than one. SYX Files created with Cakewalk can
+be loaded into RG.</P>
+<P>Use the &quot;Save Data&quot; button to store the payload of an
+existing SysEx event into an external &quot;SYX&quot; file.</P>
+<H2>The Matrix Editor</H2>
+<P>The Matrix editor is based around the familiar piano roll metaphor
+you have probably seen in other packages. It is useful for taking a
+hands on approach to tweaking notes where their performance is more
+important than their visual appearance as notation. I find myself
+using the Matrix most often for two main purposes. It's my preferred
+method of sequencing percussion parts, and I use it to knock notes
+out of precise alignment on purpose; for example, when sequencing
+rolled chords in order to make a MIDI guitar sound more credible.</P>
+<H3>Special Considerations of Performance vs. Display</H3>
+<P STYLE="font-style: normal">It is important to note that Rosegarden
+is not purely a MIDI sequencer, and at no time can you ever directly
+edit raw MIDI events. It stores events using an internal meta format
+that includes quite a bit of information about each note.
+Rosegarden's events do of course cover the fundamentals of pitch,
+velocity and duration, but they also include such attributes as stem
+direction, beam state, accidental state, ties, slurs, slashes,
+accents and so forth. Of special note, every Rosegarden event
+maintains independent duration values for performance and display.
+This makes it possible to create a composition that looks good
+printed on paper, and yet preserves all of the slight human
+imperfections that give a performance its character.</P>
+<P STYLE="font-style: normal">In version 1.0, the Matrix can only
+edit <B>performance</B> attributes. This can create interesting
+challenges both for performance and notation. If you are working on a
+human performance, and you draw notes to their full length here in
+the Matrix, you may damage the character of the performance slightly.
+On the other hand, if you draw slightly long or short notes here, or
+knock the timing off the grid lines intentionally, you will create
+ugly notation in the process. In either case, you can make
+adjustments to massage away these differences from the Notation
+Editor, as I will explain in the next chapter.</P>
+<P STYLE="font-style: normal; font-weight: medium">One particularly
+noteworthy side effect of the way Rosegarden stores events is that
+tied notes are a series of discrete dashes here on the Matrix. It is
+really not possible to determine whether a series of notes at the
+same pitch will sound as one note or several without looking at the
+affected area from the Notation Editor.</P>
+<H3>Overview</H3>
+<P>Let's start with an empty segment one measure long, and I'll show
+you the basics. Draw your segment, select it, and then right click on
+it and choose &quot;Open in Matrix Editor&quot; from the resulting
+context menu. You'll see something like this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-overview.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=477 HEIGHT=371 BORDER=0></P>
+<H3>Entering New Notes</H3>
+<P>Now let's do a little one bar loop for demonstration purposes.
+Just like on the main view, the 
+<IMG SRC="../pixmaps/using-rosegarden_html_4c452e31.png" NAME="Graphic65" ALIGN=BOTTOM WIDTH=27 HEIGHT=26 BORDER=0>
+cursor is used to create something new from scratch. In this case, of
+course, we're entering a note. Let's pepper this thing with a few
+well placed random pitches:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-new-notes.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=200 HEIGHT=128 BORDER=0></P>
+<P ALIGN=LEFT>You may have noticed that those came out as quarter
+notes. In order to control the default length of new notes, you must
+change the grid setting. Let's enter eight 8<SUP>th</SUP> notes.
+First dial in the 8<SUP>th</SUP> note on the grid button:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-dial-grid.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=115 HEIGHT=190 BORDER=0></P>
+<P ALIGN=LEFT>Now new notes you enter will take this duration by
+default:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-8th-notes.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=217 HEIGHT=141 BORDER=0></P>
+<P>It's obviously a bit tedious, but you can enter an entire
+composition this way if you desire.</P>
+<H3>Adjusting Existing Notes</H3>
+<P>You can move notes around with the 
+<IMG SRC="../pixmaps/matrix-move-cursor.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=27 HEIGHT=29 BORDER=0>
+cursor.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-move-notes.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=213 HEIGHT=158 BORDER=0></P>
+<P ALIGN=LEFT>You can resize notes with the 
+<IMG SRC="../pixmaps/matrix-resize-cursor.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=29 HEIGHT=26 BORDER=0>
+cursor, by clicking on a note and dragging it.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-resize-notes.png" NAME="Graphic10" ALIGN=BOTTOM WIDTH=210 HEIGHT=142 BORDER=0></P>
+<P ALIGN=LEFT>By default, resize operations snap to grid lines. If
+you wish to drag the note to some arbitrary length, do so by holding
+the shift key while dragging the note.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-arbitrary-resize.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=212 HEIGHT=113 BORDER=0></P>
+<H3>Selecting and Acting on Multiple Notes</H3>
+<P>All of these operations can be performed on more than one note at
+a time. In order to do so, you need to make a selection. You can use
+the 
+<IMG SRC="../pixmaps/matrix-arrow-cursor.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=27 HEIGHT=27 BORDER=0>
+cursor to select individual notes one by one while holding down the
+shift key.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-select-individual-notes.png" NAME="Graphic14" ALIGN=BOTTOM WIDTH=200 HEIGHT=158 BORDER=0></P>
+<P ALIGN=LEFT>If you wish to select a broad range of notes, you can
+select every note of a given pitch by selecting the arrow cursor and
+shift clicking on the individual notes on the piano keyboard. Each
+click will select every note of the desired pitch, and you can select
+any number of pitches in this fashion.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-select-pitch.png" NAME="Graphic15" ALIGN=BOTTOM WIDTH=203 HEIGHT=136 BORDER=0></P>
+<P ALIGN=LEFT>It is also possible to select a band or several bands
+of notes by sweeping the arrow cursor across the keys while holding
+shift.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-sweep-selection.png" NAME="Graphic16" ALIGN=BOTTOM WIDTH=205 HEIGHT=138 BORDER=0></P>
+<P ALIGN=LEFT>Finally, you can use the selection event filter to cull
+events from your selection. Start by making a broad selection, and
+then click on the filter icon to summon my dialog. You can then dial
+in various criteria for the notes you wish to remain selected after
+the filter is applied.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-event-filter.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=263 HEIGHT=254 BORDER=0></P>
+<P ALIGN=LEFT><I>(The event selection filter is an example of how
+different developers on Open Source projects have different ideas how
+things should work, and they implement parallel ways of accomplishing
+the same thing.  I put a considerable amount of effort into
+developing the event selection filter, but once I discovered the ways
+to make selections using the matrix keyboard, I never actually use
+the fruit of my own labor.  I don't even feel like it's important
+enough to bother documenting its use in detail.  Ironic, isn't it? 
+At least I can laugh at myself.)</I></P>
+<H3>Velocity</H3>
+<P>Velocity is a MIDI parameter that describes how hard a note was
+hit on the keyboard or other device. It allows for finer expression
+of volume than what can be accomplished merely by adjusting the
+volume parameter for the MIDI channel. If you have a velocity
+sensitive keyboard, this parameter will be recorded as you play.
+Under certain other circumstances, you may end up with events that
+have no velocity property at all, or a default velocity of 100.
+Regardless of how it did (or didn't) get there, it's a simple matter
+to tweak it to suit your needs.</P>
+<H4>Showing the Velocity Ruler</H4>
+<P>If the events you're editing have velocity properties, you can
+edit them with the Velocity Ruler. If it's not visible, turn it on
+from the View menu with <B>View -&gt; Show Velocity Property Ruler</B>.</P>
+<P STYLE="font-weight: medium">In this example, all the events have a
+velocity of 100, and they show up as orange bars on the ruler.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-default-velocity-ruler.png" NAME="Graphic19" ALIGN=BOTTOM WIDTH=214 HEIGHT=266 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">They can be changed by
+dragging them up and down, and the bars change colors to reflect
+their value. Here I've arranged them so that you can see each bar.
+Notice that the notes on the Matrix itself change to reflect these
+same colors.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-arranged-velocity.png" NAME="Graphic20" ALIGN=BOTTOM WIDTH=167 HEIGHT=112 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium"><I>NOTE: It can indeed be
+somewhat tricky to know which note you're adjusting if there are
+several notes of the same duration at the same time. I truthfully
+have no idea if there is some trick to this to make managing the
+process more foolproof. If anyone knows, email me, and I will mention
+in the next edition.</I></P>
+<H4>What If There's No Velocity Property?</H4>
+<P>Sometimes note events are created without velocity properties. In
+that case, there will be nothing to see or do on the Velocity Ruler
+until you add some velocities. You'll need to select a range of notes
+and then use <B>Adjust -&gt; Velocity -&gt; Set Event Velocities</B>
+to create some. This presents you with a dialog box that offers you
+several different options for how to set these up. The Value ranges
+from 0, which is the softest possible key strike, to 127, which is
+the most forceful.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-adjust-velocities.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=381 HEIGHT=115 BORDER=0></P>
+<H4><BR><BR>
+</H4>
+<H3>Controllers</H3>
+<P>It's possible to transmit controllers from here in the matrix with
+the various Control Rulers. Let's add a Modulation ruler. Choose <B>View
+-&gt; Add Event Ruler -&gt; Modulation Controller</B> and you should
+now have a new tab at the bottom of your Matrix.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-mod-ruler.png" NAME="Graphic21" ALIGN=BOTTOM WIDTH=296 HEIGHT=121 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">If you right click on the
+ruler you can insert a controller event, or even an entire line of
+them.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-mod-ruler-line.png" NAME="Graphic22" ALIGN=BOTTOM WIDTH=145 HEIGHT=84 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">In this example, I have
+elected to insert a line of controllers. It's impossible to capture X
+cursors, and I'm far too lazy to try to draw that little pointing
+finger, so I will instead describe what I did. After making the
+selection from the menu, the cursor changed to a pointing finger. I
+picked a start point with this finger, and continued to hold the
+button down while dragging the resulting line up and to the right.
+After I released the button, it produced this line of controllers:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-line-of-mods.png" NAME="Graphic23" ALIGN=BOTTOM WIDTH=152 HEIGHT=112 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">You can move individual
+controllers up and down, or you can select and move them in groups.
+It's rather less obvious than selections elsewhere, but if you look
+closely, you can see that selected controller bars are each outlined
+in red.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-selected-controllers.png" NAME="Graphic24" ALIGN=BOTTOM WIDTH=139 HEIGHT=75 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">If you hold down shift and
+drag these up and down as a group, they all move at once.</P>
+<H2>Controlling the Local Transport</H2>
+<P>Coming soon... Or maybe appearing in the Notation chapter...</P>
+<H2>Suggested Uses</H2>
+<H3>Rolling a Chord</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-<FONT FACE="Arial">This chapter will be written next.</FONT></P>
+<FONT FACE="Arial">Entering a Percussion Part</FONT></P>
 </BODY>
 </HTML>

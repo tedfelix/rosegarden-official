@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311700">
-	<META NAME="CHANGED" CONTENT="20040807;18575800">
+	<META NAME="CHANGED" CONTENT="20040808;12150900">
 	<STYLE>
 	<!--
 		@page { size: 8.5in 11in }
@@ -13,231 +13,446 @@
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H1>Managing Instruments (under construction)</H1>
-<P>You want to play a particular track using a hammered dulcimer, or
-else you've got an audio track that needs some EQ. In either case,
-you need an introduction to the <B>instrument</B>. Instruments are
-configured with the <B>Instrument Parameters</B> box, and any number
-of tracks can be assigned to play via the same instrument. 
+<H1>The Studio</H1>
+<P>Now that you have a general idea how Rosegarden works, now is a
+good time to think about telling Rosegarden something about the MIDI
+equipment you wish to use.  People who intend to use Rosegarden
+purely for audio work are free to skip this chapter entirely.</P>
+<P>Before we get started, some of you might need some basic
+background information so that you can dive into this with some
+understanding of the concepts I am about to explain. If you are new
+to MIDI, or if anything in this chapter leaves you scratching your
+head, you might want to read through my MIDI Primer in Appendix A.</P>
+<H2>What is a Studio?</H2>
+<P>Every native Rosegarden composition (<B>.rg</B>) file contains a
+studio definition in addition to all the nuts and bolts stuff of
+music.   The studio is a definition of every MIDI device Rosegarden
+can detect during the course of editing the composition.  (Everything
+that was there at the start, plus any new devices that become
+available during the course of editing; as when starting something
+like ZynAddSubFX in the middle of working on a composition, for
+example.)  It comprises information about the device itself, and
+about how data is routed into or out of it.</P>
+<H3>What is a Connection?</H3>
+<P>Rosegarden has an integrated MIDI router to manage the flow of raw
+MIDI events into and out of ports provided by the underlying ALSA
+infrastructure.  You can think of this as something like the sort of
+router often used to share a broadband internet connection.  Unlike
+ethernet, however, MIDI is not bidirectional over the same cable.  As
+a consequence of this, all connections in Rosegarden are
+unidrectional; even if both connections belong to the same physical
+piece of hardware.  Connections will be displayed as one of &quot;read,&quot;
+&quot;write,&quot; or &quot;duplex.&quot;  In this diagram,
+connections are represented by black arrows that point in the
+direction data will flow through them.  Rosegarden's MIDI router
+allows you to rearrange these connections as you require, to change
+what is connected where.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-diagram-midi-router.jpg" NAME="Graphic14" ALIGN=BOTTOM WIDTH=456 HEIGHT=179 BORDER=0></P>
+<H3>What is a  Device?</H3>
+<P>A device is a sort of virtual model of an individual piece of MIDI
+equipment.  Equipment, in this sense, can be full-fledged external
+MIDI hardware, internal hardware like the Sound Blaster Live!, or
+virtual hardware like QSynth or VKeybd. Each device encapsulates
+information about the capabilities of a piece of equipment, and
+allows you to make use of those capabilities from within Rosegarden. 
+In effect, the better the job you do of describing a particular
+device in Rosegarden, the better control you will have over that
+device.</P>
+<P>For example, if you have a nice keyboard attached to your
+computer, but you accept Rosegarden's default General MIDI device
+definition for it, you will be unable to make use of any of the
+keyboard's advanced features from within Rosegarden until you make
+your device definition more accurate.  Conversely, telling Rosegarden
+you have a Roland JV-88 does not make it so, and if you assign any
+<B>instruments</B> to programs that are not actually available on the
+connected equipment, you will hear no sound.  (More about instruments
+in the next chapter.)</P>
+<P>A device like the following is typical of either QSynth or a Sound
+Blaster Live! after loading an uncomplicated soundfont.  It includes
+a basic set of controllers (which are dependent on the capabilities
+of either QSynth or the Sound Blaster, both of which do support a
+limited number of controllers, and actually have nothing to do with
+the soundfont per se), a set of standard General MIDI programs loaded
+into bank 0 0, and a set of Roland GS-style extra drum kits loaded
+into bank 1 0.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-diagram-play-device.jpg" NAME="Graphic15" ALIGN=BOTTOM WIDTH=456 HEIGHT=408 BORDER=0></P>
+<H3>Putting Connections and Devices Together</H3>
+<P>A studio can consist of just one device, and perhaps for many of
+you that is all the complexity you will ever need.  The real power,
+however, lies with Rosegarden's ability to manage numerous devices
+simultaneously.  A studio is, in effect, a collection of device
+descriptions and a routing table ensuring that the right devices are
+connected to the right MIDI equipment on the other end.</P>
+<H4>A Simple Sound Blaster Live! Studio</H4>
+<P>Even on the comparatively simple and very inexpensive end of the
+hardware spectrum, it is quite possible to have more than one device
+to manage.  The Sound Blaster Live! falls into this category, with
+four separate write connections available, and four separate play
+devices.  (Actually, there are five write connections once you
+include the duplex external MIDI port, but that is not depicted
+here.)  They all share the same soundfont on the hardware side, but
+Rosegarden doesn't know that until you configure the studio that way,
+by loading programs out of the soundfont into each of the four play
+devices.  (More on that last point in a moment.)</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-diagram-sb-live.jpg" NAME="Graphic13" ALIGN=BOTTOM WIDTH=456 HEIGHT=426 BORDER=0></P>
+<H4>A Typical QSynth Studio</H4>
+<P>Another typical, simple setup involves using QSynth for MIDI
+playback and VKeybd for input.  You can start either of these after
+starting Rosegarden, and Rosegarden will detect them and make a play
+connection and a record connection available, along with an empty
+play device.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-diagram-simple.jpg" NAME="Graphic12" ALIGN=BOTTOM WIDTH=456 HEIGHT=461 BORDER=0></P>
+<H4>A More Complex Studio</H4>
+<P>This is what my own studio looks like when I have QSynth,
+Hydrogen, and ZynAddSubFX running, along with my Roland Sound Canvas
+and my Sound Blaster Live!.  It looks horribly complex on paper, and
+it would look even worse if I drew out every single bank of GS
+variations, and did a better job of representing the fact that, while
+the same soundfont happens to be loaded into both the Sound Blaster
+and QSynth, that doesn't <I>have</I><SPAN STYLE="font-style: normal">
+to be the case.  No matter how it looks, this is actually quite
+simple to use day to day, believe it or not.  Rosegarden makes this
+easy.</SPAN></P>
+<P STYLE="font-style: normal">Notice that I have controllers for the
+Sound Blaster, for QSynth, and for the Roland (the &quot;External
+MIDI GS Synth&quot;), but I do not have any controllers defined for
+Hydrogen or ZynAddSubFX.  That's because, to the best of my
+knowledge, neither of those soft synths knows how to do anything with
+controllers.  They both have their own control panels that must be
+twiddled manually, and that sort of thing can't be automated from
+within Rosegarden.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-diagram-complex.jpg" NAME="Graphic11" ALIGN=BOTTOM WIDTH=456 HEIGHT=590 BORDER=0></P>
+<H2>Enough Theory Already!  How Do I Configure <I>MY</I><SPAN STYLE="font-style: normal">
+Studio?</SPAN></H2>
+<P><SPAN STYLE="font-style: normal">I'm glad you asked.  </SPAN>The
+first step in this process is to open the main Studio dialog.
+<B>Composition -&gt; Studio -&gt; Manage MIDI Devices...</B> 
 </P>
-<H2>Instruments</H2>
-<P>Rosegarden has yet another layer of abstraction between you and
-your MIDI equipment, called the instrument. Every device has 16
-instruments numbered #1 through #16. When working with MIDI playback
-devices, each of these instruments encapsulates a MIDI output channel
-(the same channel as the number of the instrument by default,
-although this relationship is not fixed), a bank/program/variation
-assignment, and any initial controllers you wish to affect the
-associated channel. These instruments allow you to assemble up to 16
-collections of programs/controllers per device and assign these
-combinations to any number of tracks.</P>
-<P>When working with audio and synth plugins, these instruments serve
-the same purpose as MIDI channels, allowing you to configure up to 16
-different combinations of LADSPA plugins, volume and pan settings,
-programs (for synth plugins) and so forth, and then apply these
-combinations to any number of different tracks.</P>
-<P><IMG SRC="../pixmaps/instrument-diagram.jpg" NAME="Graphic10" ALIGN=BOTTOM WIDTH=223 HEIGHT=255 BORDER=0></P>
-<P>A hammered dulcimer instrument. All tracks assigned to play via
-this instrument will play using the first output port on the Sound
-Blaster Live!, using program 16 from bank 0 0, with an initial volume
-of 100, and an initial reverb level of 97. <I>(Notice that the
-instrument number and the channel number do not have to coincide.)</I>
-This instrument will show up as &quot;Sound Blaster Live! (1) #12
-(Hammered Dulcimer)&quot; on the menu.</P>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/plugin-instrument-diagram.jpg" NAME="Graphic11" ALIGN=BOTTOM WIDTH=372 HEIGHT=205 BORDER=0></P>
-<P ALIGN=LEFT>This is a typical synth plugin instrument. The sound it
-makes will depend on the synth plugin used, but all tracks assigned
-to play via this instrument will make the same sound. Its output will
-be piped through the EQ and Reverb plugins, and this instrument will
-show up as &quot;Synth plugin #12&quot; on the menu.</P>
-<P ALIGN=RIGHT><IMG SRC="../pixmaps/jack-instrument-diagram.jpg" NAME="Graphic12" ALIGN=BOTTOM WIDTH=264 HEIGHT=175 BORDER=0></P>
-<P ALIGN=LEFT>This is a typical audio instrument. Any audio tracks
-assigned to play via this instrument will have their output piped
-through the EQ and Reverb plugins, and this instrument will show up
-as &quot;Audio #12&quot; on the menu.</P>
-<P ALIGN=LEFT>Notice that all of the above examples were &quot;instrument
-#12,&quot; and yet all three of them will produce quite different
-results, because each of them is the &quot;instrument #12&quot; of a
-completely different device.</P>
-<H2>Routing a Track to a Device and Instrument</H2>
-<P>The first step in the assignment process is to route a track to a
-particular device. The device you use will determine whether you can
-play audio or MIDI data on this track. In order to make this device
-assignment, begin by clicking the mouse cursor in this area, and
-holding a moment until a context menu appears.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+or by clicking on the 
+<IMG SRC="../pixmaps/studio-icon.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=31 HEIGHT=24 BORDER=0>
+icon.</P>
+<P>You'll be presented with a dialog that resembles this one, except,
+of course, that this one has already largely been configured to suit
+my own default studio. It is divided into two sections; one for play
+devices, and one for record devices, and their associated
+connections. It also shows you how each of these devices is connected
+to internal, external, and software synths. In this example, I have a
+device named &quot;Roland SC-33&quot; connected to &quot;64:0 EMU101K
+MPU-401 (UART) (duplex)&quot; and four &quot;SB Live (?)&quot;
+devices connected to each of 65:0 through 65:3, which are the four
+output ports on my SB Live!, with their associated write connections.
+I also have three generic spots reserved for soft synths, named &quot;Soft
+Synth 1&quot; through &quot;Soft Synth 3&quot;, one of which is
+currently connected to KAMix, an ALSA mixer client that can be
+controlled via MIDI.  These are empty devices that I created with the
+<B>New</B><SPAN STYLE="font-weight: medium"> button.</SPAN></P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/click-and-hold.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=231 HEIGHT=51 BORDER=0></P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-You should be presented with a series of two menus that allow you to
-choose first the device and then the instrument for this track.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-In this case, I chose to route it to my &quot;Roland SC-33&quot;
-device, which is ultimately connected through my Rosegarden studio to
-play through ALSA port 64:0, and thus the Roland Sound Canvas I have
-plugged into the box physically attached to my computer.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-Then I assigned it to that device's instrument #6. Prior to taking
-this snapshot, I had already configured this instrument to play using
-the &quot;Piano 1&quot; program with the &quot;Instrument Parameters&quot;
-box (more on that in a bit), and so that name appeared in parenthesis
-in the second menu.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-Notice also that instrument #10 has (D) in parenthesis, indicating
-that this instrument is normally used for playing drums. (Whether it
-actually plays drums depends on the capabilities of the MIDI
-equipment or software synth represented by this &quot;device,&quot;
-and probably depends on this instrument continuing to remain at the
-default channel assignment of 10.) In this example, I arranged
-beforehand for this instrument to play using the &quot;Power&quot;
-drum kit.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-The remaining &quot;instruments&quot; are not assigned to anything in
-particular yet, and on most General MIDI -compliant equipment (or
-software synths) these &quot;instruments&quot; will probably play
-using a factory default piano program, with volume and other
-controllers set to neutral default values.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/select-midi.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=253 HEIGHT=215 BORDER=0>
+<IMG SRC="../pixmaps/manage-devices-dialog.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=469 HEIGHT=307 BORDER=0></P>
+<H3>Connections</H3>
+<P>The reality of Rosegarden's MIDI router is a bit less intuitive
+than the diagram I presented earlier.  Here is that same diagram with
+the ALSA port numbers included.</P>
+<P><I>NOTE:  The diagram does not exactly represent the same set of
+devices and connections depicted in the dialog box snapshot above.</I></P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-diagram-midi-router-with-ports.jpg" NAME="Graphic16" ALIGN=BOTTOM WIDTH=456 HEIGHT=179 BORDER=0></P>
+<P><BR><BR>
 </P>
-<H2>MIDI Instrument Parameters</H2>
+<P>You might wonder about the strange names and numbers.  ALSA
+assigns numbers to ports in three ranges. 64: means it is an external
+MIDI port on the first soundcard, which might be connected to a MIDI
+keyboard, sound module, or other noise producing gadget through some
+sort of cable. 65: means it is a virtual port with a supported
+internal synth such as the Sound Blaster Live! on the other side.
+Software synths like Hydrogen, ZynAddSubFX and the like will take
+numbers at the time they're started, on a first-come, first served
+basis starting at 128:. In addition to the number, most of these will
+have some kind of vaguely descriptive text component, such as
+&quot;Emu10k1 Port 0 (write).&quot; These names are provided by the
+underlying kernel driver, and don't always make a lot of sense.
+That's why Rosegarden allows you give your devices a proper name.</P>
+<H3>Record Devices</H3>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+Record devices are MIDI keyboards, virtual keyboards, MIDI guitars
+and the like. As record devices are rather less complicated, I will
+cover them first. With a record device, you have no capabilities to
+describe. The only thing Rosegarden can do is read data from it, or
+not. You may name these if you wish, but the <B>Record devices</B>
+section of this dialog is the only place where you will see the
+names, and I never bother to name mine.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+Rosegarden can record from any number of inputs simultaneously.  It
+will create a record device for every read connection it detects. 
+Each of these can be set to be an active record device by toggling
+the associated checkbox.  Rosegarden keeps track of which port the
+recorded data came from, and what channel was used to transmit the
+data, but it does not currently do anything with this information.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+In this example, I have both a hardware record device and a software
+record device.  These devices were created spontaneously when
+Rosegarden detected the associated duplex read and virtual read
+connections.  I have marked both of them &quot;Current&quot; and I
+can record events from either one of them, or both of them at the
+same time.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<IMG SRC="../pixmaps/studio-record-devices.png" NAME="Graphic17" ALIGN=BOTTOM WIDTH=380 HEIGHT=77 BORDER=0></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+<I>NOTE:  Rosegarden does not always automatically mark a record
+device as &quot;Current.&quot;  If you have a keyboard or similar
+device, and Rosegarden isn't recording anything, this dialog is the
+first place to look for troubleshooting the problem.</I></P>
+<H3><B>Play Devices</B></H3>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<SPAN STYLE="font-weight: medium">Play devices are where all the fun,
+and all the complexity is.  As I have mentioned elsewhere, they can
+be MIDI keyboards, sound modules, software synths, samplers, and
+pretty well anything else that can take MIDI input, such as KAMix. 
+(Synth plugins are somewhat different.  There is a single synth
+plugin device into which any and all plugins are plugged, and it is
+not a MIDI play device.  I will cover synth plugins in the next
+chapter.)</SPAN></P>
+<H4>The Easy Road (General MIDI Only)</H4>
+<P>If you have only one play device, and it only uses straight
+General MIDI programs, then you are probably ready to go out of the
+box.  If you start Rosegarden with no file to open, it opens a
+default blank document, called <B>autoload.rg</B>. Initially, this
+will be the system default that was installed with Rosegarden.  It
+will load a set of basic General MIDI programs and controllers, and
+will route output from this device to the first available play
+connection.  The device a the top of the list is always the default
+device.</P>
+<P>Typically this play connection will be routed to the correct
+destination for your MIDI data.  If not, all you should have to do is
+adjust the routing table by dialing appropriate connections into the
+associated combo boxes.  For example, if Rosegarden defaults to
+routing your output to &quot;64:0 (duplex)&quot; and you do not have
+any external equipment attached to your computer, you probably want
+to change this to point to either 65:0 or something like 128:0 as
+appropriate.</P>
+<H4>The Harder Road (Loading Device Definitions from the Library)</H4>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+If you have some need beyond the simplest one-device, only-General
+MIDI scenario, you will have to use the bank editor; even if you do
+not intend to edit any banks directly.  <SPAN STYLE="font-weight: medium">To
+load or create a device click on the <B>Banks...</B> button to pop up
+the bank editor dialog.</SPAN></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ In this example, you can see that I have already imported some
+programs from the soundfont I use on my SB Live!, and I have named
+the four devices &quot;SB Live! (1)&quot; through &quot;SB Live! (4)&quot;
+for my own convenience. This soundfont has programs available in four
+banks, which are displayed as the branches of the tree. The LSB
+column is not visible in this snapshot, but the bank names tell most
+of the tale. I named the last one &quot;Percussion&quot; to set it
+apart, because that is where this soundfont stores the drum kits.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+You can also see that I have a device called &quot;Soft Synth 2&quot;
+highlighted, and I'm looking at the empty list of programs that make
+up Rosegarden's virtual model for this device. Unlike internal and
+external MIDI equipment, Rosegarden assigns connections to soft
+synths on a first-come, first serve basis, based on the order in
+which the applications are started. It is very easy to wind up with
+something named &quot;Hydrogen&quot; that is actually connected to
+QSynth. I find I prefer to give these things generic names and assign
+the connections manually as required, because I start and stop soft
+synths as I need them.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/studio-bank-editor.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=356 HEIGHT=340 BORDER=0></P>
+<H4>Loading a Device from the Library</H4>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you're
+lucky, the growing Rosegarden Library already contains a set of bank
+and program definitions to suit your hardware. To try your luck,
+click the <B>Import...</B> button. You will initially be presented
+with a list of <B>.rgd</B> files from the Library, which was
+installed along with Rosegarden itself, but you can, of course,
+browse to other locations. You can import banks from both regular
+Rosegarden Composition (<B>.rg)</B> files, and from Rosegarden Device
+(<B>.rgd)</B> files. If you don't find anything suitable, you will
+probably have to start from scratch, as I will explain later on.</P>
+<H4>Turning a SoundFont into a Device</H4>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">&quot;Soft
+Synth 2&quot; in the above example is a soundfont based card or soft
+synth.  The simplest, most accurate way to create a device model for
+a synth of this type is to load the programs directly out of the
+soundfont's <B>.sf2</B> file itself. Simply set the &quot;Filter:&quot;
+to &quot;Soundfont&quot; and browse to the location of the soundfont
+you've loaded into your synth.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>NOTE: 
+Creating a device by loading programs out of a soundfont is in no way
+related to actually loading that soundfont into either a Sound
+Blaster Live! or into QSynth.  You are merely reading the directory
+inside the file that describes how the various samples are arranged
+into banks, and importing that textual information into Rosegarden. 
+It saves a great deal of typing, and delivers fast, accurate results.</I></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/studio-import-soundfont.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=356 HEIGHT=211 BORDER=0>
+</P>
+<H4>Once You've Made Your Choice</H4>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Regardless
+of whether you elected to load a stock device from the Library, or
+loaded the programs out of a <B>.sf2</B><SPAN STYLE="font-weight: medium">
+file, you will need to make a few decision</SPAN>s how to procede.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/studio-import-options.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=196 HEIGHT=124 BORDER=0></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If the
+file contains models of more than one device, you can choose which
+one to import. You also have various choices about which bits to
+import, and whether to merge new banks into existing ones or replace
+them completely.  Everything should be self-evident after a little
+experimentation.</P>
+<H4><A NAME="2_5_4"></A>The Hardest Road: Creating a List of Programs
+from Scratch</H4>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+If none of the device models in the library are suitable, and you
+can't turn the program names from a soundfont into a device, then you
+will need to get to work creating your own.  You can use an existing
+file from the library as a starting point, or you can create a new
+device definition completely from scratch.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+Even if you have no real need to start from scratch, you may wish to
+read through this material anyway, in order to better understand how
+some of the devices in the Library are put together.</P>
+<H5>Naming the Device</H5>
+<P>So that you can avoid confusion, you probably want to replace
+Rosegarden's default &quot;Anonymous MIDI Device 3&quot; type name
+with something more meaningful. Simply double click on the existing
+name and give your virtual model a more descriptive one.</P>
+<P>Now that your &quot;Anonymous External Device&quot; has become a
+&quot;Roland SC-33&quot; or what have you, you probably want add a
+description of its available programs and controllers to Rosegarden's
+model.</P>
+<H5>Why Name Programs and Controllers?</H5>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+Depending on the capabilities of this device, it might not matter
+whether you define named program changes or not. However, if you do
+intend to transmit programs, bank changes or controllers to the
+equipment--even if you only want to use numbers--you need to define
+<I>something </I>here. Rosegarden's model of your equipment will only
+include what you define here, and anything you leave empty will not
+be available for your use. If you don't let Rosegarden know that
+program number 97 can play something, it will never allow you set a
+track to use that program number.</P>
+<H5>Gathering Information</H5>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+The key to success here is having as much information about the
+equipment as possible. You need to know what programs it can use, and
+how the banks are numbered. If you have no idea, you may have to try
+loading &quot;raw-numbers.rgd&quot; from the Library, which I created
+as a way of providing a generic everything to everyone placeholder
+just to fill up the slots and allow program changes to be
+transmitted. Beyond the essential fact that you must understand your
+equipment to describe it, there are really only two special cases
+worth mentioning here.</P>
+<H5>Variations</H5>
+<P>Some equipment uses a method of sorting programs into banks in
+such a way that the programs in bank 0 0 are the standard General
+MIDI instruments, and the programs in the remaining banks are
+variations on those instruments. Roland's GS standard is a prime
+example of this. Bank 0 0, program 1 is &quot;Piano 1&quot; and bank
+0 8, program 1 is &quot;Piano 1w.&quot; In order to make it easy to
+take advantage of this relationship, Rosegarden offers the ability to
+display programs in secondary banks as variations. You may choose to
+enable this, and to show the variation list based on either the LSB
+or MSB value.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-variations.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=261 HEIGHT=52 BORDER=0></P>
+<H5>The Percussion Checkbox</H5>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+Finally, you may have noticed that Rosegarden only allows you one set
+of program changes per bank address. The exception to this rule is
+that you may define a parallel set of program changes if the [x]
+Percussion box is checked. For example, if you have a synth that
+interprets standard program changes in bank 0 0 on channel 10 as drum
+kit changes (like GS) then you can tell Rosegarden how to use them.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+The process is a bit fiddly. First you have to use the <B>Add </B>button
+to create a new, empty bank. It will take a number other than 0 0
+because 0 0 is already in use. Check the [x] Percussion box for this
+new bank, and then dial its LSB and MSB values back down to 0 0 (or
+wherever they need to be for your implementation) and enter the names
+of drum kits as programs.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/studio-percussion-box.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=227 HEIGHT=47 BORDER=0></P>
+<H5>Send in Your Device Descriptions</H5>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+Once you've defined the names for your program changes, you can save
+the device definition to disk with the <B>Export... </B>button.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
+think anyone else might benefit from having the instrument
+definition, you can mail it to me at<A HREF="mailto:mmcintyr@swva.net">
+<B>dmmcintyr@users.sourceforge.net</B></A> and I will add it to our
+growing collection of user contributions.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+New contributions are most welcome. We pioneers must do all the work
+so that future generations can be lazy. Just remember that I had to
+do the SC-33 device from scratch too, and it was very tedious and
+time-consuming. Especially since this stuff was a lot more buggy and
+incomprehensible back then. ;)</P>
+<H2>Custom Controllers</H2>
+<P>Rosegarden should create a few basic default controllers for you.
+If you have special requirements, or if some of these controllers
+don't function on the piece of equipment for which you're defining
+the device, you may wish to edit these defaults by clicking the
+<B>Control Events</B> button.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/control-events.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=345 HEIGHT=259 BORDER=0></P>
+<P ALIGN=LEFT>If your equipment can't use any of these controllers,
+you probably want to delete them. If there are controllers missing,
+you can add them one by one. Use the <B>Add</B> button. This will
+create a new entry using default values. Double click it, and you
+should be presented with a dialog similar to this one.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/studio-controller-editor.png" NAME="Graphic10" ALIGN=BOTTOM WIDTH=273 HEIGHT=228 BORDER=0></P>
+<P ALIGN=LEFT STYLE="font-weight: medium">Most of these parameters
+should be obvious to you based on the particular needs of the
+equipment you're describing, but the last two bear special mention.
+The <B>Color: </B>parameter is the color this controller's knob will
+have on the <B>Instrument Parameters Box</B> in the main window, and
+the <B>position:</B> determines whether this controller will show up,
+and how it will be arranged relative to the other controllers. 
+</P>
+<H2>Default Document Properties</H2>
+<P>Before you make this document your default, you might want to have
+a look at some other document-specific settings. These aren't a part
+of the Studio, but they're saved in <B>autoload.rg</B>, and any new
+documents you create will start life with these defaults. To edit
+them, use <B>Composition -&gt; Edit -&gt; Document Properties</B>.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/document-properties.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=339 HEIGHT=186 BORDER=0></P>
+<H3>Lilypond Headers</H3>
+<P ALIGN=LEFT STYLE="font-weight: medium">The About tab starts off
+with some default properties. You can modify or delete these, and you
+can add new properties. The four defaults will be translated into
+Lilypond during an export. If you wish to use any other strings in
+your Lilypond headers, you can add them here by creating properties
+of that name, then binding your custom strings with them.. For
+example, &quot;instrument,&quot; &quot;dedication,&quot; or &quot;poet.&quot;</P>
+<H3>Audio Directory</H3>
+<P>From the Audio tab, you can configure a new directory for audio
+files. Rosegarden will use this path for recording new files, and
+it's the first place it will look when you import audio segments. By
+default, this is ~/rosegarden. If this path doesn't exist, you won't
+be able to record audio, so either create that directory or configure
+Rosegarden to look somewhere else here.</P>
+<P>You should get in the habit of creating a new audio directory for
+each document you create in which you intend to use audio segments,
+as I will detail in another chapter.</P>
+<H3>Custom Colors</H3>
+<P>Rosegarden can colorize segments and controllers. Custom colors
+are defined here.</P>
+<H2><A NAME="2_5_5"></A>Saving Your Studio as the Default</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that
-the track has been throuth a MIDI output device and &quot;instrument,&quot;
-and is therefore a MIDI track, the <B>Instrument Parameters</B> box
-will display controls similar to these.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-midi-ins.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=260 HEIGHT=235 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">They
-allow you to reassign the channel for this &quot;instrument,&quot;
-and to dial in a program. In this case, you can see Roland's
-variation system in action. The program is set to &quot;20. Churg
-Org. 1&quot; and the variation to &quot;17. Church Org. 3&quot; so
-this &quot;instrument,&quot; and any tracks routed through it, will
-play using a pipe organ sound that isn't part of the basic set of
-General MIDI programs.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
-want to select a GS-style drum kit, your <B>Instrument Parameters</B>
-box should look something like this:</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-midi.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=213 HEIGHT=191 BORDER=0></P>
-<H2>Synth Plugin Tracks</H2>
-<P>[Waiting for this bleeding edge new feature to settle into
-something stable before I mention it in any detail... See
-rosegarden-devel for more detalis. Basically, these use plugins to
-play MIDI using JACK for audio output. They're hybrids, allowing you
-to create sound with a synth plugin and then layer LADSPA plugins on
-top to alter the sound. They take MIDI segments, but their instrument
-parameters are more like those of audio tracks, and they can't be
-assigned to use programs in the same fashion as conventional MIDI
-tracks; rather each synth plugin has its own mechanism to allow it to
-be dialed to use whatever it's capable of doing. More or less. More
-to follow.]</P>
-<H2>JACK Tracks</H2>
-<P>If you want to use a track for audio, you'll need to make it a
-JACK track by routing it to the &quot;JACK Audio&quot; device. (If
-you do not have a &quot;JACK Audio&quot; device available, please
-ensure that your JACK server is running. If you have problems with
-this, see &quot;Starting and Routing Audio Through JACK&quot; later
-on in this guide.)</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/select-jack.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=252 HEIGHT=284 BORDER=0></P>
-<H2>JACK Instrument Parameters</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">JACK
-&quot;instruments&quot; have different controls available in the
-<B>Instrument Parameters</B> box.. They allow you to control the
-routing of the audio [In: Out: I have no clue what these are actually
-good for. This is what I mean by &quot;routing of the audio.&quot;],
-and to add layers of plugins. There are redundant Mute, Solo and
-Record toggles, as well as volume sliders for left and right</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
-channels, and a mono/stereo toggle. (<IMG SRC="../pixmaps/audio-mono.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=24 HEIGHT=24 BORDER=0>
-<IMG SRC="../pixmaps/audio-stereo.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=24 HEIGHT=25 BORDER=0>).</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=258 HEIGHT=282 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
-wish to assign LADSPA plugins to the track, you may use one of the
-&quot;&lt;no plugin&gt;&quot; buttons to summon a dialog similar to
-this one. You can narrow in on what you want using the <B>Category:</B>
-selector, and then dial in a particular plugin with the <B>Plugin:</B>
-selector. As you dial through these, the knobs in the bottom half of
-this dialog box will change to reflect the controls that are
-available for this particular plugin; ranging from one knob to a
-screen full of them. You can layer up to five plugins for each
-instrument in the &quot;JACK Audio&quot; device, hardware allowing.
-Some plugins are particularly expensive in their use of your system's
-resources, so using too many may cause performance problems.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/JACK-plugins.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=360 HEIGHT=278 BORDER=0></P>
-<H2>What Do Those Black Boxes Mean?</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
-column of small boxes to the left of the channel provide a concise
-way of showing information about the status of these connections. In
-the examples above, you might have noticed that they were in several
-different states.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-These boxes convey the following information:</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_72a37f4e.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
-This instrument or device isn't very useful to you right now. It is
-is <B>not in use</B> by a track, and it is <B>not connected</B> to
-any active output path. 
+you've gotten your studio configured, you'll want to make it your
+default, so that you can avoid having to go through this entire
+ordeal every time you start a new composition. 
 </P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_3dc467bd.png" NAME="Graphic79" ALIGN=BOTTOM WIDTH=15 HEIGHT=12 BORDER=0>
-This instrument or device could provide a valid output path, and all
-you need to do from here is attach it to a track and begin making use
-of it. It <B>is connected</B> to an active output path, but it is <B>not
-being used</B> by any track. 
-</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_1e7e4e7a.png" NAME="Graphic81" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
-A track or tracks are connected to this &quot;device,&quot; but this
-is not currently a valid output path, and the events on any tracks
-that are routed through this device don't have anywhere to go. This
-instrument or device is <B>in use</B> by a track, but is <B>not
-connected</B> to an active output path.</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_e634bf.png" NAME="Graphic80" ALIGN=BOTTOM WIDTH=14 HEIGHT=16 BORDER=0>
-This instrument or device provides a valid output path, and that path
-is in use by at least one track. It <B>has a valid connection</B> to
-an output path, and that connection is <B>in use</B> by a track.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-In addition, the instrument in use by the current track will have an
-extra black outline around either a black filled or black outlined
-box, depending on whether or not the path is connected to a valid
-output:</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/using-rosegarden_html_500c240c.png" NAME="Graphic82" ALIGN=BOTTOM WIDTH=18 HEIGHT=18 BORDER=0>
-The active track is connected to an output that is <B>also connected</B>.
-If you play this track, you can expect the device you've hooked up to
-make some noise.</P>
-<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/using-rosegarden_html_5204c333.png" NAME="Graphic83" ALIGN=BOTTOM WIDTH=18 HEIGHT=18 BORDER=0>
-The active track is connected to an output that is <B>not connected</B>.
-This track, on the other hand, won't make any noise until you assign
-a different device to it or enable the device that isn't currently
-working.</P>
-<H1>Recording Basics</H1>
-<P STYLE="margin-bottom: 0.2in">There are three different ways to
-record with Rosegarden. If you come from a MIDI background, the most
-obvious thing to do is plug in your MIDI keyboard and hit the record
-button to record a MIDI segment in the currently-selected track. If
-audio is your aim, you'll want to set your mixer recording source and
-get to work. On the other hand, if you have all the keyboard skill of
-a paraplegic chipmunk, like I do, you might be more interested in
-step recording.</P>
-<P STYLE="margin-bottom: 0.2in">I will cover step recording later on.
-For now my focus is on recording operations that can be performed
-from the main window.</P>
-<H2>Recording MIDI</H2>
-<H2>Recording Audio</H2>
-<P><BR><BR>
-</P>
-<P>boneyard:</P>
-<P><BR><BR>
-</P>
-<P>If you route the track to a MIDI device, (including the &quot;Synth
-plugin&quot; device, if available), then the track will become a MIDI
-track, and it can only be used to play MIDI segments. If you drag an
-audio segment onto this track by mistake, the audio will not play.
-Conversely, if you route a track to the &quot;JACK Audio&quot;
-device, it will become an audio track, and it will not play any MIDI
-segments you happen to drag here by mistake. 
-</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><B>Composition
+-&gt; Studio -&gt; Save Current Document as Default Studio</B> will
+save the current document as your local <B>autoload.rg</B> file. This
+becomes the default for all new documents you create, but  it will
+have no effect on documents that you've already created, or documents
+you load from other sources.  The studio belongs to each individual
+composition.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><SPAN STYLE="font-weight: medium">This
+default studio is just like any ordinary <B>.rg</B> file, and that
+means any segments, track labels, instrument assignments, etc. that
+you have in the current document will be saved, and will subsequently
+be loaded each time you create a new document.</SPAN></P>
 </BODY>
 </HTML>
