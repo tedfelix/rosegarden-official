@@ -536,7 +536,7 @@ protected:
     BarLineList m_barConnectingLines;
 
     QCanvasRectangle *m_pointer;
-    QCanvasLine *m_insertCursor;
+    QCanvasRectangle *m_insertCursor;
 };
 
 #include "linedstaff.cpp"

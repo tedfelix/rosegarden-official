@@ -219,8 +219,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_chordNameRuler = new ChordNameRuler
 	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
     addRuler(m_chordNameRuler);
-    m_chordNameRuler->hide();
-    m_chordNamesVisible = false;
+    m_chordNameRuler->show();
+    m_chordNamesVisible = true;
 
     m_tempoRuler = new TempoRuler
 	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
@@ -301,6 +301,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     m_selectDefaultNote->activate();
+    slotSetInsertCursorPosition(0);
+    slotSetPointerPosition(doc->getComposition().getPosition());
 }
 
 NotationView::~NotationView()
@@ -1144,8 +1146,7 @@ NotationCanvasView* NotationView::getCanvasView()
 timeT
 NotationView::getInsertionTime()
 {
-    Rosegarden::Event *clef, *key;
-    return getInsertionTime(clef, key);
+    return m_insertionTime;
 }
 
 
@@ -1153,29 +1154,18 @@ timeT
 NotationView::getInsertionTime(Event *&clefEvt,
 			       Event *&keyEvt)
 {
+    // This fuss is solely to recover the clef and key: we already
+    // set m_insertionTime to the right value when we first placed
+    // the insert cursor
+
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX < 0) layoutX = 0;
 
-    //!!! hang on. don't we want airspace here rather than closest element?
-    // point is it should be unambiguous.  not sure
     NotationElementList::iterator i = staff->getElementUnderLayoutX
 	(layoutX, clefEvt, keyEvt);
-//    NotationElementList::iterator i = staff->getClosestElementToLayoutX
-//	(layoutX, clefEvt, keyEvt, false, -1);
 
     return m_insertionTime;
-
-/*!!!
-    timeT insertionTime = segment.getEndTime();
-    if (i != staff->getViewElementList()->end()) {
-	insertionTime = (*i)->getAbsoluteTime();
-    }
-
-    return insertionTime;
-*/
 }
 
 
@@ -1720,164 +1710,150 @@ void NotationView::slotMarksRemoveMarks()
 void NotationView::slotEditAddClef()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX >= 0) {
+    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+    Segment &segment = staff->getSegment();
+    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
-	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-	Segment &segment = staff->getSegment();
-	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
-
-	Rosegarden::Clef clef;
-	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
-
-	ClefDialog *dialog = new ClefDialog(this, m_notePixmapFactory, clef);
-
-	if (dialog->exec() == QDialog::Accepted) {
-
-	    ClefDialog::ConversionType conversion = dialog->getConversionType();
-
-	    bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
-	    bool shouldTranspose = (conversion == ClefDialog::Transpose);
-	    
-	    addCommandToHistory
-		(new ClefInsertionCommand
-		 (segment, insertionTime, dialog->getClef(),
-		  shouldChangeOctave, shouldTranspose));
-	}
-
-	delete dialog;
+    Rosegarden::Clef clef;
+    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    
+    ClefDialog *dialog = new ClefDialog(this, m_notePixmapFactory, clef);
+    
+    if (dialog->exec() == QDialog::Accepted) {
+	
+	ClefDialog::ConversionType conversion = dialog->getConversionType();
+	
+	bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+	bool shouldTranspose = (conversion == ClefDialog::Transpose);
+	
+	addCommandToHistory
+	    (new ClefInsertionCommand
+	     (segment, insertionTime, dialog->getClef(),
+	      shouldChangeOctave, shouldTranspose));
     }
+    
+    delete dialog;
 }			
 
 void NotationView::slotEditAddTempo()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX >= 0) {
+    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
-	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+    TempoDialog *tempoDlg = new TempoDialog(this, m_document);
 
-	TempoDialog *tempoDlg = new TempoDialog(this, m_document);
-
-	connect(tempoDlg,
-		SIGNAL(changeTempo(Rosegarden::timeT,
-				   double, TempoDialog::TempoDialogAction)),
-		this,
-		SIGNAL(changeTempo(Rosegarden::timeT,
-				   double, TempoDialog::TempoDialogAction)));
+    connect(tempoDlg,
+	    SIGNAL(changeTempo(Rosegarden::timeT,
+			       double, TempoDialog::TempoDialogAction)),
+	    this,
+	    SIGNAL(changeTempo(Rosegarden::timeT,
+			       double, TempoDialog::TempoDialogAction)));
 	
-	tempoDlg->setTempoPosition(insertionTime);
-	tempoDlg->show();
-    }
+    tempoDlg->setTempoPosition(insertionTime);
+    tempoDlg->show();
 }
 
 void NotationView::slotEditAddTimeSignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX >= 0) {
+    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+    Segment &segment = staff->getSegment();
+    Rosegarden::Composition &composition = *segment.getComposition();
+    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
-	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-	Segment &segment = staff->getSegment();
-	Rosegarden::Composition &composition = *segment.getComposition();
-	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+    int barNo = composition.getBarNumber(insertionTime);
+    bool atStartOfBar = (insertionTime == composition.getBarStart(barNo));
+    TimeSignature timeSig = composition.getTimeSignatureAt(insertionTime);
 
-	int barNo = composition.getBarNumber(insertionTime);
-	bool atStartOfBar = (insertionTime == composition.getBarStart(barNo));
-	TimeSignature timeSig = composition.getTimeSignatureAt(insertionTime);
+    TimeSignatureDialog *dialog = new TimeSignatureDialog
+	(this, timeSig, barNo, atStartOfBar);
+    
+    if (dialog->exec() == QDialog::Accepted) {
 
-	TimeSignatureDialog *dialog = new TimeSignatureDialog
-	    (this, timeSig, barNo, atStartOfBar);
-
-	if (dialog->exec() == QDialog::Accepted) {
-
-	    TimeSignatureDialog::Location location = dialog->getLocation();
-	    if (location == TimeSignatureDialog::StartOfBar) {
-		insertionTime = composition.getBarStartForTime(insertionTime);
-	    }
-
-	    if (dialog->shouldNormalizeRests()) {
-		
-		addCommandToHistory(new AddTimeSignatureAndNormalizeCommand
-				    (segment.getComposition(),
-				     insertionTime,
-				     dialog->getTimeSignature()));
-
-	    } else {
-
-		addCommandToHistory(new AddTimeSignatureCommand
-				    (segment.getComposition(),
-				     insertionTime,
-				     dialog->getTimeSignature()));
-	    }
+	TimeSignatureDialog::Location location = dialog->getLocation();
+	if (location == TimeSignatureDialog::StartOfBar) {
+	    insertionTime = composition.getBarStartForTime(insertionTime);
 	}
-
-	delete dialog;
+	
+	if (dialog->shouldNormalizeRests()) {
+	    
+	    addCommandToHistory(new AddTimeSignatureAndNormalizeCommand
+				(segment.getComposition(),
+				 insertionTime,
+				 dialog->getTimeSignature()));
+	    
+	} else {
+	    
+	    addCommandToHistory(new AddTimeSignatureCommand
+				(segment.getComposition(),
+				 insertionTime,
+				 dialog->getTimeSignature()));
+	}
     }
+    
+    delete dialog;
 }			
 
 void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX >= 0) {
-
-	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-	Segment &segment = staff->getSegment();
-	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
-
+    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+    Segment &segment = staff->getSegment();
+    timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+    
 /*!!!
 	Rosegarden::Key key;
 	if (keyEvt) key = Rosegarden::Key(*keyEvt);
 */
-	//!!! experimental:
-	Rosegarden::CompositionTimeSliceAdapter adapter
-	    (&m_document->getComposition(), insertionTime,
-	     m_document->getComposition().getDuration());
-	Rosegarden::AnalysisHelper helper;
-	Rosegarden::Key key = helper.guessKey(adapter);
 
-	Rosegarden::Clef clef;
-	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+    //!!! experimental:
+    Rosegarden::CompositionTimeSliceAdapter adapter
+	(&m_document->getComposition(), insertionTime,
+	 m_document->getComposition().getDuration());
+    Rosegarden::AnalysisHelper helper;
+    Rosegarden::Key key = helper.guessKey(adapter);
 
-	KeySignatureDialog *dialog =
-	    new KeySignatureDialog(this, m_notePixmapFactory, clef, key);
+    Rosegarden::Clef clef;
+    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
 
-	if (dialog->exec() == QDialog::Accepted &&
-	    dialog->isValid()) {
-
-	    KeySignatureDialog::ConversionType conversion =
-		dialog->getConversionType();
-
-	    bool applyToAll = dialog->shouldApplyToAll();
-
-	    if (applyToAll) {
-		addCommandToHistory
-		    (new MultiKeyInsertionCommand
-		     (m_document->getComposition(),
-		      insertionTime, dialog->getKey(),
-		      conversion == KeySignatureDialog::Convert,
-		      conversion == KeySignatureDialog::Transpose));
-	    } else {
-		addCommandToHistory
-		    (new KeyInsertionCommand
-		     (segment,
-		      insertionTime, dialog->getKey(),
-		      conversion == KeySignatureDialog::Convert,
-		      conversion == KeySignatureDialog::Transpose));
-	    }
+    KeySignatureDialog *dialog =
+	new KeySignatureDialog(this, m_notePixmapFactory, clef, key);
+    
+    if (dialog->exec() == QDialog::Accepted &&
+	dialog->isValid()) {
+	
+	KeySignatureDialog::ConversionType conversion =
+	    dialog->getConversionType();
+	
+	bool applyToAll = dialog->shouldApplyToAll();
+	
+	if (applyToAll) {
+	    addCommandToHistory
+		(new MultiKeyInsertionCommand
+		 (m_document->getComposition(),
+		  insertionTime, dialog->getKey(),
+		  conversion == KeySignatureDialog::Convert,
+		  conversion == KeySignatureDialog::Transpose));
+	} else {
+	    addCommandToHistory
+		(new KeyInsertionCommand
+		 (segment,
+		  insertionTime, dialog->getKey(),
+		  conversion == KeySignatureDialog::Convert,
+		  conversion == KeySignatureDialog::Transpose));
 	}
-
-	delete dialog;
     }
+
+    delete dialog;
 }			
 
 
 void NotationView::slotDebugDump()
 {
     if (m_currentEventSelection) {
-	EventSelection::eventcontainer &ec = m_currentEventSelection->getSegmentEvents();
+	EventSelection::eventcontainer &ec =
+	    m_currentEventSelection->getSegmentEvents();
 	int n = 0;
 	for (EventSelection::eventcontainer::iterator i = ec.begin();
 	     i != ec.end(); ++i) {
@@ -1946,15 +1922,30 @@ void
 NotationView::slotSetInsertCursorPosition(timeT t)
 {
     m_insertionTime = t;
-
     NotationStaff *staff = m_staffs[m_currentStaff];
+
     NotationElementList::iterator i = 
 	staff->getViewElementList()->findNearestTime(t);
 
     if (i == staff->getViewElementList()->end()) {
 	staff->setInsertCursorPosition(m_hlayout, t);
     } else {
-	staff->setInsertCursorPosition((*i)->getCanvasX(), (*i)->getCanvasY());
+
+	// prefer a note or rest, if there is one, to a non-spacing event
+	if (!(*i)->isNote() && !(*i)->isRest()) {
+	    NotationElementList::iterator j = i;
+	    while (j != staff->getViewElementList()->end()) {
+		if ((*j)->getAbsoluteTime() != (*i)->getAbsoluteTime()) break;
+		if ((*j)->isNote() || (*j)->isRest()) {
+		    i = j;
+		    break;
+		}
+		++j;
+	    }
+	}
+
+	staff->setInsertCursorPosition
+	    ((*i)->getCanvasX() - 2, (*i)->getCanvasY());
     }
 
     updateView();

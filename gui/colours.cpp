@@ -44,7 +44,7 @@ namespace RosegardenGUIColours
     const QColor TextRulerBackground = Qt::white;
     const QColor TextRulerForeground = Qt::black;
 
-    const QColor ChordNameRulerBackground = Qt::white;
+    const QColor ChordNameRulerBackground = QColor(230, 230, 230);
     const QColor ChordNameRulerForeground = Qt::black;
 
     const QColor LevelMeterGreen = QColor(0, 200, 0);

@@ -56,7 +56,7 @@ public:
 
     ~NotationCanvasView();
 
-    void setPositionTracking(bool t);
+    void setHeightTracking(bool t);
 
     /**
      * Render segments on printing painter
@@ -149,7 +149,7 @@ protected:
 
     int getLegerLineCount(int height, bool &offset);
 
-    void setPositionMarkerHeight(QMouseEvent *e);
+    void setHeightMarkerHeight(QMouseEvent *e);
 
     NotationElement *getElementAtXCoord(QMouseEvent *e);
 
@@ -162,13 +162,13 @@ protected:
     NotationStaff *m_currentStaff;
     int m_currentHeight;
 
-    QCanvasItemGroup *m_positionMarker;
+    QCanvasItemGroup *m_heightMarker;
     QCanvasLineGroupable *m_vert1;
     QCanvasLineGroupable *m_vert2;
     std::vector<QCanvasLineGroupable *> m_legerLines;
     bool m_legerLineOffset;
 
-    bool m_positionTracking;
+    bool m_heightTracking;
 };
 
 

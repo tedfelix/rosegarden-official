@@ -143,7 +143,7 @@ NotationTool::~NotationTool()
 void NotationTool::ready()
 {
     m_nParentView->setCanvasCursor(Qt::arrowCursor);
-    m_nParentView->setPositionTracking(false);
+    m_nParentView->setHeightTracking(false);
 }
 
 
@@ -236,7 +236,7 @@ void NoteInserter::ready()
 {
     m_clickHappened = false;
     m_nParentView->setCanvasCursor(Qt::crossCursor);
-    m_nParentView->setPositionTracking(true);
+    m_nParentView->setHeightTracking(true);
 }
 
 
@@ -645,7 +645,7 @@ ClefInserter::ClefInserter(NotationView* view)
 void ClefInserter::ready()
 {
     m_nParentView->setCanvasCursor(Qt::crossCursor);
-    m_nParentView->setPositionTracking(false);
+    m_nParentView->setHeightTracking(false);
 }
 
 void ClefInserter::setClef(std::string clefType)
@@ -693,7 +693,7 @@ TextInserter::TextInserter(NotationView* view)
 void TextInserter::ready()
 {
     m_nParentView->setCanvasCursor(Qt::crossCursor);
-    m_nParentView->setPositionTracking(false);
+    m_nParentView->setHeightTracking(false);
 }
 
 void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
@@ -786,7 +786,7 @@ NotationEraser::NotationEraser(NotationView* view)
 void NotationEraser::ready()
 {
     m_nParentView->setCanvasCursor(Qt::pointingHandCursor);
-    m_nParentView->setPositionTracking(false);
+    m_nParentView->setHeightTracking(false);
 }
 
 void NotationEraser::handleLeftButtonPress(Rosegarden::timeT,
@@ -974,7 +974,7 @@ void NotationSelector::ready()
     m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
 
     m_nParentView->setCanvasCursor(Qt::arrowCursor);
-    m_nParentView->setPositionTracking(false);
+    m_nParentView->setHeightTracking(false);
 }
 
 void NotationSelector::stow()

@@ -89,8 +89,8 @@ public:
 	getCanvasView()->viewport()->setCursor(cursor);
     }
 
-    void setPositionTracking(bool t) {
-	getCanvasView()->setPositionTracking(t);
+    void setHeightTracking(bool t) {
+	getCanvasView()->setHeightTracking(t);
     }
 
     /**

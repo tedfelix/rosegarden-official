@@ -45,13 +45,15 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_current(false),
     m_currentRow(0),
     m_pointer(new QCanvasRectangle(canvas)),
-    m_insertCursor(new QCanvasLine(canvas))
+    m_insertCursor(new QCanvasRectangle(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setBrush(RosegardenGUIColours::Pointer);
     m_pointer->setSize(pointerWidth, 0);
 
     m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setBrush(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setSize(pointerWidth, 0);
 }
 
 template <class T>
@@ -74,13 +76,15 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_current(false),
     m_currentRow(0),
     m_pointer(new QCanvasRectangle(canvas)),
-    m_insertCursor(new QCanvasLine(canvas))
+    m_insertCursor(new QCanvasRectangle(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setBrush(RosegardenGUIColours::Pointer);
     m_pointer->setSize(pointerWidth, 0);
 
     m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setBrush(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setSize(pointerWidth, 0);
 }
 
 template <class T>
@@ -103,13 +107,15 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_current(false),
     m_currentRow(0),
     m_pointer(new QCanvasRectangle(canvas)),
-    m_insertCursor(new QCanvasLine(canvas))
+    m_insertCursor(new QCanvasRectangle(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setBrush(RosegardenGUIColours::Pointer);
     m_pointer->setSize(pointerWidth, 0);
 
     m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setBrush(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setSize(pointerWidth, 0);
 }
 
 template <class T>
@@ -758,7 +764,8 @@ LinedStaff<T>::setPointerPosition(double canvasX, int canvasY)
     canvasY = getCanvasYForTopOfStaff(row);
     m_pointer->setX(int(canvasX));
     m_pointer->setY(int(canvasY));
-    m_pointer->setSize(pointerWidth, canvasY + getHeightOfRow() - 1);
+    m_pointer->setZ(-30); // behind everything else
+    m_pointer->setSize(pointerWidth, getHeightOfRow() - 1);
     m_pointer->show();
 }
 
@@ -792,8 +799,10 @@ LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
     }
 
     canvasY = getCanvasYForTopOfStaff(row);
-    m_insertCursor->move(int(canvasX), canvasY);
-    m_insertCursor->setPoints(0, 0, 0, canvasY + getHeightOfRow() - 1);
+    m_insertCursor->setX(int(canvasX));
+    m_insertCursor->setY(int(canvasY));
+    m_insertCursor->setZ(-28); // behind everything else except playback pointer
+    m_insertCursor->setSize(pointerWidth, getHeightOfRow() - 1);
     m_insertCursor->show();
 }
 

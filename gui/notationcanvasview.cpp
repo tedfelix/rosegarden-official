@@ -41,7 +41,7 @@ NotationCanvasView::NotationCanvasView(const LinedStaffManager<NotationElement> 
     m_currentStaff(0),
     m_currentHeight(-1000),
     m_legerLineOffset(false),
-    m_positionTracking(false)
+    m_heightTracking(false)
 {
 // -- switching mandolin-sonatina first staff to page mode:
 // default params (I think 16,100): render 1000ms position 1070ms
@@ -54,17 +54,17 @@ NotationCanvasView::NotationCanvasView(const LinedStaffManager<NotationElement> 
 
     viewport()->setMouseTracking(true);
 
-    m_positionMarker = new QCanvasItemGroup(viewing);
+    m_heightMarker = new QCanvasItemGroup(viewing);
 
-    m_vert1 = new QCanvasLineGroupable(viewing, m_positionMarker);
+    m_vert1 = new QCanvasLineGroupable(viewing, m_heightMarker);
     m_vert1->setPoints(0, 0, 0, 8);
     m_vert1->setPen(QPen(QColor(64, 64, 64), 1));
 
-    m_vert2 = new QCanvasLineGroupable(viewing, m_positionMarker);
+    m_vert2 = new QCanvasLineGroupable(viewing, m_heightMarker);
     m_vert2->setPoints(17, 0, 17, 8);
     m_vert2->setPen(QPen(QColor(64, 64, 64), 1));
 
-    m_positionMarker->hide();
+    m_heightMarker->hide();
 }
 
 NotationCanvasView::~NotationCanvasView()
@@ -73,11 +73,11 @@ NotationCanvasView::~NotationCanvasView()
 }
 
 void
-NotationCanvasView::setPositionTracking(bool t)
+NotationCanvasView::setHeightTracking(bool t)
 {
-    m_positionTracking = t;
+    m_heightTracking = t;
     if (!t) {
-	m_positionMarker->hide();
+	m_heightMarker->hide();
 	canvas()->update();
     }
 }
@@ -102,7 +102,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
 	emit hoveredOverNoteChanged(QString::null);
 	if (prevStaff) {
-	    m_positionMarker->hide();
+	    m_heightMarker->hide();
 	    canvas()->update();
 	}
 
@@ -111,15 +111,15 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 	m_currentHeight = m_currentStaff->getHeightAtCanvasY(e->y());
 
 	int x = e->x() - 8; // magic based on mouse cursor size
-	bool needUpdate = (m_positionTracking && (m_positionMarker->x() != x));
-	m_positionMarker->setX(x);
+	bool needUpdate = (m_heightTracking && (m_heightMarker->x() != x));
+	m_heightMarker->setX(x);
 
 	if (prevStaff  != m_currentStaff ||
 	    prevHeight != m_currentHeight) {
 
-	    if (m_positionTracking) {
-		setPositionMarkerHeight(e);
-		m_positionMarker->show();
+	    if (m_heightTracking) {
+		setHeightMarkerHeight(e);
+		m_heightMarker->show();
 		needUpdate = true;
 	    }
 
@@ -294,7 +294,7 @@ NotationCanvasView::getLegerLineCount(int height, bool &offset)
 }
 
 void
-NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
+NotationCanvasView::setHeightMarkerHeight(QMouseEvent *e)
 {
     NotationStaff *staff = dynamic_cast<NotationStaff *>
 	(m_linedStaffManager.getStaffForCanvasY(e->y()));
@@ -302,7 +302,7 @@ NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
     int height = staff->getHeightAtCanvasY(e->y());
     int lineY = staff->getCanvasYForHeight(height, e->y());
 
-//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::setPositionMarkerHeight: "
+//    kdDebug(KDEBUG_AREA) << "NotationCanvasView::setHeightMarkerHeight: "
 //			 << e->y() << " snapped to line -> " << lineY
 //			 << " (height " << height << ")" << endl;
 
@@ -311,7 +311,7 @@ NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
     m_staffLineThreshold = spacing;
     m_vert1->setPoints(0, -spacing/2, 0, spacing/2);
     m_vert2->setPoints(17, -spacing/2, 17, spacing/2); // magic based on mouse cursor size
-    m_positionMarker->setY(lineY);
+    m_heightMarker->setY(lineY);
 
     bool legerLineOffset = false;
     int  legerLineCount = getLegerLineCount(height, legerLineOffset);
@@ -334,13 +334,13 @@ NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
 	for (i = 0; i < legerLineCount; ++i) {
 
 	    QCanvasLineGroupable *line = 
-		new QCanvasLineGroupable(canvas(), m_positionMarker);
+		new QCanvasLineGroupable(canvas(), m_heightMarker);
 
 	    line->setPen(QPen(QColor(64, 64, 64), 1));
 
-	    int y = (int)m_positionMarker->y() +
+	    int y = (int)m_heightMarker->y() +
 		(above ? -1 : 1) * (i * (spacing + 1));
-	    int x = (int)m_positionMarker->x() + 1;
+	    int x = (int)m_heightMarker->x() + 1;
 
 	    if (legerLineOffset) {
 		if (above) y -= spacing/2 + 1;
