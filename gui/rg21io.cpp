@@ -91,7 +91,7 @@ bool RG21Loader::parseClef()
 {
     if (m_tokens.count() != 3 || !m_currentSegment) return false;
     
-    std::string clefName = m_tokens[2].lower().data();
+    std::string clefName = qstrtostr(m_tokens[2].lower());
 
     m_currentClef = Clef(clefName);
     Event *clefEvent = m_currentClef.getAsEvent(m_currentSegmentTime);
@@ -118,7 +118,7 @@ bool RG21Loader::parseKey()
         .arg(keyBase)
         .arg(m_tokens[3].lower());
 
-    m_currentKey = Rosegarden::Key(std::string(keyName.data()));
+    m_currentKey = Rosegarden::Key(qstrtostr(keyName));
     Event *keyEvent = m_currentKey.getAsEvent(m_currentSegmentTime);
     m_currentSegment->insert(keyEvent);
 
@@ -227,7 +227,7 @@ bool RG21Loader::parseText()
     std::string s;
     for (unsigned int i = 1; i < m_tokens.count(); ++i) {
 	if (i > 1) s += " ";
-	s += m_tokens[i].data();
+	s += qstrtostr(m_tokens[i]);
     }
 
     if (!readNextLine() ||

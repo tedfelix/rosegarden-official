@@ -70,6 +70,12 @@ std::string Track::toXmlString()
 {
     std::stringstream track;
 
+    cerr << "Track::toXmlString: label is \"" << m_label << "\", bytes are:\n";
+    for (int i = 0; i < m_label.length(); ++i) {
+	cerr << (int)m_label[i] << " ";
+    }
+    cerr << endl;
+
     track << "<track id=\"" << m_id;
     track << "\" label=\"" << encode(m_label);
     track << "\" position=\"" << m_position;

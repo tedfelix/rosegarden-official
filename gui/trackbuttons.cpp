@@ -490,7 +490,7 @@ void
 TrackButtons::slotRenameTrack(QString newName, int trackNumber)
 {
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNumber);
-    track->setLabel(std::string(newName.data()));
+    track->setLabel(qstrtostr(newName));
 
     std::vector<TrackLabel*>::iterator it = m_trackLabels.begin();
     for (; it != m_trackLabels.end(); it++)

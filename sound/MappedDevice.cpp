@@ -21,7 +21,6 @@
 
 #include "MappedDevice.h"
 #include "MappedInstrument.h"
-
 #include <iostream>
 
 namespace Rosegarden
@@ -98,7 +97,7 @@ operator>>(QDataStream &dS, MappedDevice *mD)
         mD->push_back(new MappedInstrument((Instrument::InstrumentType)type,
                                            (MidiByte)channel,
                                            (InstrumentId)id,
-                                           std::string(name.data()),
+                                           name.utf8().data(),
                                            (DeviceId)device));
 
         instruments--;
@@ -134,7 +133,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
         mD.push_back(new MappedInstrument((Instrument::InstrumentType)type,
                                           (MidiByte)channel,
                                           (InstrumentId)id,
-                                          std::string(name.data()),
+                                          name.utf8().data(),
                                           (DeviceId)device));
 
         instruments--;

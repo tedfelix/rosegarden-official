@@ -60,7 +60,7 @@ public:
 
     // Return the string as we like
     //
-    std::string getString() const { return std::string(m_midiNote.data()); }
+    std::string getString() const { return std::string(m_midiNote.utf8().data()); }
     QString getQString() const { return m_midiNote; }
 
 private:

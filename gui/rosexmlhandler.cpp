@@ -337,7 +337,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         QString labelStr = atts.value("label");
         if (labelStr) {
-            label = std::string(labelStr.data());
+            label = qstrtostr(labelStr);
         }
 
         QString mutedStr = atts.value("muted");
@@ -420,7 +420,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // fill in the label
         QString labelStr = atts.value("label");
         if (labelStr)
-            m_currentSegment->setLabel(std::string(labelStr.data()));
+            m_currentSegment->setLabel(qstrtostr(labelStr));
         
         m_currentSegment->setTrack(track);
         m_currentSegment->setStartTime(startTime);
@@ -456,8 +456,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // (this checks the integrity of the file at the
         // same time)
         //
-        if(m_audioFileManager.insertFile(std::string(label.data()),
-                                         std::string(file.data()),
+        if(m_audioFileManager.insertFile(qstrtostr(label),
+                                         qstrtostr(file),
                                          id.toInt()) == false)
         {
             m_errorString = i18n("Couldn't find audio file " + file);
@@ -480,7 +480,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_audioFileManager.addSearchPath(std::string(search.data()));
+        m_audioFileManager.addSearchPath(qstrtostr(search));
 
     } else if (lcName == "begin") {
         int marker = atts.value("marker").toInt();
@@ -575,7 +575,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 Rosegarden::MidiBank *bank = new Rosegarden::MidiBank();
                 bank->msb = m_msb;
                 bank->lsb = m_lsb;
-                bank->name = std::string(nameStr.data());
+                bank->name = qstrtostr(nameStr);
     
                 if (m_device->getType() == Rosegarden::Device::Midi)
                 {
@@ -607,7 +607,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
                 // Create a new program
                 Rosegarden::MidiProgram *program = new Rosegarden::MidiProgram();
-                program->name = std::string(nameStr.data());
+                program->name = qstrtostr(nameStr);
                 program->program = pc;
                 program->msb = m_msb;
                 program->lsb = m_lsb;
@@ -708,7 +708,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_section = InInstrument;
 
         Rosegarden::InstrumentId id = atts.value("id").toInt();
-        std::string stringType = std::string(atts.value("type").data());
+        std::string stringType = qstrtostr(atts.value("type"));
         Rosegarden::Instrument::InstrumentType type;
 
         if (stringType == "midi")

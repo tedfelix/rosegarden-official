@@ -1286,7 +1286,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
     Rosegarden::MidiFile *midiFile;
 
-    midiFile = new Rosegarden::MidiFile(file.data(), &m_doc->getStudio());
+    midiFile = new Rosegarden::MidiFile(qstrtostr(file), &m_doc->getStudio());
 
     if (!midiFile->open())
     {
@@ -1589,7 +1589,7 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
     SetWaitCursor waitCursor;
 
-    Rosegarden::MidiFile midiFile(file.data(), &m_doc->getStudio());
+    Rosegarden::MidiFile midiFile(qstrtostr(file), &m_doc->getStudio());
 
     midiFile.convertToMidi(m_doc->getComposition());
 
@@ -2023,7 +2023,7 @@ bool RosegardenGUIApp::performAutoload()
     kdDebug(KDEBUG_AREA)
         << "RosegardenGUIApp::performAutoload() - autoloading\n";
 
-    bool res = openDocumentFile(autoloadFile.data());
+    bool res = openDocumentFile(autoloadFile.utf8().data());
 
     // So we don't get the "autoload" title
     //

@@ -647,7 +647,7 @@ RosegardenSequencerApp::getSoundSystemStatus()
 int
 RosegardenSequencerApp::addAudioFile(const QString &fileName, int id)
 {
-    return((int)m_sequencer->addAudioFile(std::string(fileName.data()), id));
+    return((int)m_sequencer->addAudioFile(fileName.utf8().data(), id));
 }
 
 int
