@@ -493,35 +493,48 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 	time0 = getComposition().getBarEndForTime(getComposition().getDuration());
     }
 
-    int myTracks = getComposition().getMaxTrackId();
-    int theirTracks = doc->getComposition().getMaxTrackId();
+    int myMinTrack = getComposition().getMinTrackId();
+    int myMaxTrack = getComposition().getMaxTrackId();
     
-    int track0 = getComposition().getMinTrackId();
+    int yrMinTrack = doc->getComposition().getMinTrackId();
+    int yrMaxTrack = doc->getComposition().getMaxTrackId();
+    int yrNrTracks = yrMaxTrack - yrMinTrack + 1;
+    
     if (options & MERGE_IN_NEW_TRACKS) {
-	track0 = getComposition().getMaxTrackId() + 1;
-	//!!! worry about instruments and other studio stuff later
+
+	//!!! worry about instruments and other studio stuff later... if at all
 	command->addCommand(new AddTracksCommand
 			    (&getComposition(),
-			     theirTracks + 1,
+			     yrNrTracks,
 			     Rosegarden::MidiInstrumentBase));
-    } else if (theirTracks > myTracks) {
+
+    } else if (yrMaxTrack > myMaxTrack) {
+
 	command->addCommand(new AddTracksCommand
 			    (&getComposition(),
-			     theirTracks - myTracks,
+			     yrMaxTrack - myMaxTrack,
 			     Rosegarden::MidiInstrumentBase));
     }
 
-    int trackNo(track0);
-
     for (Composition::iterator i = doc->getComposition().begin();
 	 i != doc->getComposition().end(); ++i) {
+
 	Segment *s = *i;
+
+	int yrTrack = s->getTrack();
+	int myTrack = yrTrack;
+
+	if (options & MERGE_IN_NEW_TRACKS) {
+	    myTrack = yrTrack - yrMinTrack + myMaxTrack + 1;
+	}
+
 	doc->getComposition().detachSegment(s);
+
 	if (options & MERGE_AT_END) {
 	    s->setStartTime(s->getStartTime() + time0);
 	}
-	command->addCommand(new SegmentInsertCommand(&getComposition(), s, trackNo));
-	++trackNo;
+
+	command->addCommand(new SegmentInsertCommand(&getComposition(), s, myTrack));
     }
 
     if (!(options & MERGE_KEEP_OLD_TIMINGS)) {
