@@ -212,9 +212,15 @@ protected:
 
     /**
      * Return true if the element has a canvas item that is already
-     * at the correct layout coordinates
+     * at the correct coordinates
      */
     virtual bool elementNotMoved(NotationElement *);
+
+    /**
+     * Return true if the element has a canvas item that is already
+     * at the correct y-coordinate
+     */
+    virtual bool elementNotMovedInY(NotationElement *);
 
     /**
      * Returns true if the item at the given iterator appears to have

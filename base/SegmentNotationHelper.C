@@ -43,14 +43,87 @@ using namespace BaseProperties;
 SegmentNotationHelper::~SegmentNotationHelper() { }
 
 
-bool SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
+Segment::iterator
+SegmentNotationHelper::getNextAdjacentNote(iterator i,
+					   bool matchPitch,
+					   bool allowOverlap)
+{
+    iterator j(i);
+    if (i == end()) return i;
+    if (!(*i)->isa(Note::EventType)) return end();
+
+    timeT iEnd = quantizer().quantizeByUnit((*i)->getAbsoluteTime() +
+					    (*i)->getDuration());
+    long ip = 0, jp = 0;
+    if (!(*i)->get<Int>(PITCH, ip) && matchPitch) return end();
+
+    while (true) {
+	if (j == end() || ++j == end()) return j;
+	if (!(*j)->isa(Note::EventType)) continue;
+
+	timeT jStart = quantizer().quantizeByUnit((*j)->getAbsoluteTime());
+	if (jStart > iEnd) return end();
+
+	if (matchPitch) {
+	    if (!(*j)->get<Int>(PITCH, jp) || (jp != ip)) continue;
+	}
+
+	if (allowOverlap || (jStart == iEnd)) return j;
+    }
+}
+
+   
+Segment::iterator
+SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
+					       timeT rangeStart,
+					       bool matchPitch,
+					       bool allowOverlap)
+{ 
+    iterator j(i);
+    if (i == end()) return i;
+    if (!(*i)->isa(Note::EventType)) return end();
+
+    timeT iStart = quantizer().quantizeByUnit((*i)->getAbsoluteTime());
+    timeT iEnd   = quantizer().quantizeByUnit((*i)->getAbsoluteTime() +
+					      (*i)->getDuration());
+    long ip = 0, jp = 0;
+    if (!(*i)->get<Int>(PITCH, ip) && matchPitch) return end();
+
+    while (true) {
+	if (j == begin()) return end(); else --j;
+	if (!(*j)->isa(Note::EventType)) continue;
+	if ((*j)->getAbsoluteTime() < rangeStart) return end();
+
+	timeT jEnd = quantizer().quantizeByUnit((*j)->getAbsoluteTime() +
+						(*j)->getDuration());
+
+	// don't consider notes that end after i ends or before i begins
+
+	if (jEnd > iEnd || jEnd < iStart) continue;
+
+	if (matchPitch) {
+	    if (!(*j)->get<Int>(PITCH, jp) || (jp != ip)) continue;
+	}
+
+	if (allowOverlap || (jEnd == iStart)) return j;
+    }
+}
+
+
+bool
+SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 {
     iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
-    timeT   myDuration = quantizer().getNoteQuantizedDuration(*elPos);
+    timeT myDuration = quantizer().getNoteQuantizedDuration(*elPos);
+
     iterator nextEvent = segment().findContiguousNext(elPos),
-         previousEvent = segment().findContiguousPrevious(elPos);
+	 previousEvent = segment().findContiguousPrevious(elPos);
+
+    //!!! This method fails for notes -- fortunately it's not used for
+    // notes at the moment.   (findContiguousXXX is inadequate for
+    // notes, we need to check adjacency using e.g. getNextAdjacentNote)
 
     // collapse to right if (a) not at end...
     if (nextEvent != end() &&
@@ -94,19 +167,22 @@ bool SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 }
 
 
-bool SegmentNotationHelper::isCollapseValid(timeT a, timeT b)
+bool
+SegmentNotationHelper::isCollapseValid(timeT a, timeT b)
 {
     return (isViable(a + b));
 }
 
 
-bool SegmentNotationHelper::isExpandValid(timeT a, timeT b)
+bool
+SegmentNotationHelper::isExpandValid(timeT a, timeT b)
 {
     return (isViable(a) && isViable(b));
 }
 
 
-Segment::iterator SegmentNotationHelper::expandIntoTie(iterator i, timeT baseDuration)
+Segment::iterator
+SegmentNotationHelper::expandIntoTie(iterator i, timeT baseDuration)
 {
     if (i == end()) return end();
     iterator i2;
@@ -114,7 +190,8 @@ Segment::iterator SegmentNotationHelper::expandIntoTie(iterator i, timeT baseDur
     return expandIntoTie(i, i2, baseDuration);
 }
 
-Segment::iterator SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDuration)
+Segment::iterator
+SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 {
     // so long as we do the quantization checks for validity before
     // calling this method, we should be fine splitting precise times
@@ -214,7 +291,8 @@ Segment::iterator SegmentNotationHelper::expandIntoTie(iterator from, iterator t
     return last;
 }
 
-bool SegmentNotationHelper::isViable(timeT duration, int dots)
+bool
+SegmentNotationHelper::isViable(timeT duration, int dots)
 {
     bool viable;
     duration = quantizer().quantizeByUnit(duration);
@@ -229,13 +307,13 @@ bool SegmentNotationHelper::isViable(timeT duration, int dots)
 }
 
 
-void SegmentNotationHelper::makeRestViable(iterator i)
+void
+SegmentNotationHelper::makeRestViable(iterator i)
 {
     DurationList dl;
     timeT absTime = (*i)->getAbsoluteTime(); 
 
     TimeSignature timeSig;
-//!!!    timeT sigTime = segment().findTimeSignatureAt(absTime, timeSig);
     timeT sigTime = segment().getComposition()->getTimeSignatureAt
 	(absTime, timeSig);
 
@@ -263,7 +341,8 @@ void SegmentNotationHelper::makeRestViable(iterator i)
 }
 
 
-void SegmentNotationHelper::makeNoteViable(iterator i)
+void
+SegmentNotationHelper::makeNoteViable(iterator i)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
@@ -314,7 +393,7 @@ void SegmentNotationHelper::makeNoteViable(iterator i)
 
 Segment::iterator
 SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
-				Accidental explicitAccidental)
+				  Accidental explicitAccidental)
 {
     iterator i, j;
     segment().getTimeSlice(absoluteTime, i, j);
@@ -345,7 +424,7 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 
 Segment::iterator
 SegmentNotationHelper::collapseRestsForInsert(iterator i,
-					    timeT desiredDuration)
+					      timeT desiredDuration)
 {
     // collapse at most once, then recurse
 
@@ -568,7 +647,8 @@ SegmentNotationHelper::insertClef(timeT absoluteTime, Clef clef)
 }
 
 
-void SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
+void
+SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {
     iterator i = segment().findSingle(e);
 
@@ -594,13 +674,15 @@ void SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     }
 }
 
-bool SegmentNotationHelper::deleteRest(Event *e)
+bool
+SegmentNotationHelper::deleteRest(Event *e)
 {
     bool collapseForward;
     return collapseIfValid(e, collapseForward);
 }
 
-bool SegmentNotationHelper::deleteEvent(Event *e)
+bool
+SegmentNotationHelper::deleteEvent(Event *e)
 {
     bool res = true;
 
@@ -616,7 +698,8 @@ bool SegmentNotationHelper::deleteEvent(Event *e)
 }
 
 
-bool SegmentNotationHelper::hasEffectiveDuration(iterator i)
+bool
+SegmentNotationHelper::hasEffectiveDuration(iterator i)
 {
     bool hasDuration = ((*i)->getDuration() > 0);
 
@@ -692,12 +775,14 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
   
 */
 
-void SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
+void
+SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 {
     autoBeam(segment().findTime(from), segment().findTime(to), type);
 }
 
-void SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
+void
+SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 {
     // This can only manage whole bars at a time, and it will expand
     // the from-to range out to encompass the whole bars in which they
@@ -739,7 +824,8 @@ void SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
   
 */
 
-void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
+void
+SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
                                       TimeSignature tsig, string type)
 {
     int num = tsig.getNumerator();
@@ -779,9 +865,10 @@ void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 }
 
 
-void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
-                                      timeT average, timeT minimum,
-                                      timeT maximum, string type)
+void
+SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
+				   timeT average, timeT minimum,
+				   timeT maximum, string type)
 {
     timeT accumulator = 0;
     timeT crotchet    = Note(Note::Crotchet).getDuration();
@@ -901,7 +988,8 @@ void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
 // based on Rosegarden 2.1's GuessItemListClef in editor/src/MidiIn.c
 
-Clef SegmentNotationHelper::guessClef(iterator from, iterator to)
+Clef
+SegmentNotationHelper::guessClef(iterator from, iterator to)
 {
     long totalHeight = 0;
     int noteCount = 0;
@@ -928,7 +1016,9 @@ Clef SegmentNotationHelper::guessClef(iterator from, iterator to)
     else                   return Clef(Clef::Treble);
 }
 
-bool SegmentNotationHelper::removeRests(timeT time, timeT duration)
+
+bool
+SegmentNotationHelper::removeRests(timeT time, timeT duration)
 {
     Event dummy;
     
@@ -1026,22 +1116,31 @@ SegmentNotationHelper::quantize()
 }
 
 
-void SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
+void
+SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 {
+    //!!! This method should also check for places where rests are
+    // absent but necessary (i.e. no notes are sounding -- trickier
+    // than it looks), or present but unwanted, or present but simply
+    // wrong.  In fact it should probably regenerate the rests
+    // completely within the given range...
+
     reorganizeRests(startTime, endTime,
 		    &SegmentNotationHelper::normalizeContiguousRests);
 }
 
-void SegmentNotationHelper::collapseRestsAggressively(timeT startTime,
-						      timeT endTime)
+void
+SegmentNotationHelper::collapseRestsAggressively(timeT startTime,
+						 timeT endTime)
 {
     reorganizeRests(startTime, endTime,
 		    &SegmentNotationHelper::mergeContiguousRests);
 }
 
 
-void SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
-					    Reorganizer reorganizer)
+void
+SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
+				       Reorganizer reorganizer)
 {
     iterator ia = segment().findTime(startTime);
     iterator ib = segment().findTime(endTime);
@@ -1097,10 +1196,10 @@ void SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
 }
 
 
-void SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
-						     timeT duration,
-						     std::vector<Event *> &
-						         toInsert)
+void
+SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
+						timeT duration,
+						std::vector<Event *> &toInsert)
 {
     TimeSignature ts;
     timeT sigTime =
@@ -1125,10 +1224,10 @@ void SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
 }
 
 
-void SegmentNotationHelper::mergeContiguousRests(timeT startTime,
-						 timeT duration,
-						 std::vector<Event *> &
-						     toInsert)
+void
+SegmentNotationHelper::mergeContiguousRests(timeT startTime,
+					    timeT duration,
+					    std::vector<Event *> &toInsert)
 {
     while (duration > 0) {
 
@@ -1142,6 +1241,30 @@ void SegmentNotationHelper::mergeContiguousRests(timeT startTime,
 	startTime += d;
 	duration -= d;
     }
+}
+
+
+bool
+SegmentNotationHelper::collapseNoteAggressively(Event *note,
+						timeT rangeEnd)
+{
+    iterator i = segment().findSingle(note);
+    if (i == end()) return false;
+
+    iterator j = getNextAdjacentNote(i, true, true);
+    if (j == end() || (*j)->getAbsoluteTime() >= rangeEnd) return false;
+
+    timeT iEnd = (*i)->getAbsoluteTime() + (*i)->getDuration();
+    timeT jEnd = (*j)->getAbsoluteTime() + (*j)->getDuration();
+
+    (*i)->setDuration(std::max(iEnd, jEnd) - (*i)->getAbsoluteTime());
+    (*i)->unset(TIED_BACKWARD);
+    (*i)->unset(TIED_FORWARD);
+    quantizer().unquantize(*i);
+    //!!! TUPLET_NOMINAL_DURATION?
+
+    segment().erase(j);
+    return true;
 }
 
 

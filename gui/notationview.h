@@ -271,6 +271,7 @@ public slots:
     void slotTransformsLabelChords();
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseRests();
+    void slotTransformsCollapseNotes();
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();

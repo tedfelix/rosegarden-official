@@ -532,6 +532,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
+    new KAction(TransformsMenuCollapseNotesCommand::name(), 0, this,
+                SLOT(slotTransformsCollapseNotes()), actionCollection(),
+                "collapse_notes");
+
     new KAction(TransformsMenuChangeStemsCommand::name(true), 0, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
@@ -1307,6 +1311,15 @@ void NotationView::slotTransformsCollapseRests()
     KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
 
     addCommandToHistory(new TransformsMenuCollapseRestsCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsCollapseNotes()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Collapsing notes..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuCollapseNotesCommand
                         (*m_currentEventSelection));
 }
 

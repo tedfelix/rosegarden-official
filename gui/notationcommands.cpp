@@ -227,6 +227,26 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
 
 
 void
+TransformsMenuCollapseNotesCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    EventSelection::eventcontainer::iterator i;
+    timeT endTime = getEndTime();
+    
+    // We go in reverse order, because collapseNoteAggressively
+    // may delete the event following the one it's passed, but
+    // never deletes anything before it
+
+    i = m_selection->getSegmentEvents().end();
+
+    while (i-- != m_selection->getSegmentEvents().begin()) {
+
+	helper.collapseNoteAggressively((*i), endTime);
+//	helper.makeNoteViable(helper.segment().findSingle(*i));
+    }
+}
+
+
+void
 TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &)
 {
     EventSelection::eventcontainer::iterator i;

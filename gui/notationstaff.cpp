@@ -354,20 +354,31 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 	} else if ((*it)->isNote()) {
 
-	    // If the event is a beamed or tied-forward note, then we
-	    // might need a new sprite if the distance from this note
-	    // to the next has changed (because the beam or tie is
-	    // part of the note's sprite).
-
-	    bool spanning = false;
-	    (void)((*it)->event()->get<Bool>(BEAMED, spanning));
-	    if (!spanning)
-		(void)((*it)->event()->get<Bool>(TIED_FORWARD, spanning));
+	    // If the note's y-coordinate has changed, we should
+	    // redraw it -- its stem direction may have changed, or it
+	    // may need leger lines.  This will happen e.g. if the
+	    // user inserts a new clef; unfortunately this means
+	    // inserting clefs is rather slow.
 	    
-	    if (spanning) {
-		needNewSprite = needNewSprite || 
-		    ((*it)->getAbsoluteTime() < nextBarTime ||
-		     !elementShiftedOnly(it));
+	    needNewSprite = needNewSprite || !elementNotMovedInY(*it);
+	    
+	    if (!needNewSprite) {
+
+		// If the event is a beamed or tied-forward note, then
+		// we might need a new sprite if the distance from
+		// this note to the next has changed (because the beam
+		// or tie is part of the note's sprite).
+
+		bool spanning = false;
+		(void)((*it)->event()->get<Bool>(BEAMED, spanning));
+		if (!spanning)
+		    (void)((*it)->event()->get<Bool>(TIED_FORWARD, spanning));
+	    
+		if (spanning) {
+		    needNewSprite =
+			((*it)->getAbsoluteTime() < nextBarTime ||
+			 !elementShiftedOnly(it));
+		}
 	    }
 
 	} else if ((*it)->event()->isa(Indication::EventType)) {
@@ -405,14 +416,34 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 	(int)(elt->getCanvasX()) == (int)(coords.first) &&
 	(int)(elt->getCanvasY()) == (int)(coords.second);
 
-    kdDebug(KDEBUG_AREA)
-	<< "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
-	", ok is " << ok << endl;
 
     if (!ok) {
+	kdDebug(KDEBUG_AREA)
+	    << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
+	    ", ok is " << ok << endl;
 	cerr << "(cf " << (int)(elt->getCanvasX()) << " vs "
 	     << (int)(coords.first) << ", "
 	     << (int)(elt->getCanvasY()) << " vs "
+	     << (int)(coords.second) << ")" << endl;
+    }
+    return ok;
+}
+
+bool
+NotationStaff::elementNotMovedInY(NotationElement *elt)
+{
+    if (!elt->getCanvasItem()) return false;
+
+    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+	(elt->getLayoutX(), (int)elt->getLayoutY());
+
+    bool ok = (int)(elt->getCanvasY()) == (int)(coords.second);
+
+    if (!ok) {
+	kdDebug(KDEBUG_AREA)
+	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
+	    ", ok is " << ok << endl;
+	cerr << "(cf " << (int)(elt->getCanvasY()) << " vs "
 	     << (int)(coords.second) << ")" << endl;
     }
     return ok;

@@ -224,6 +224,24 @@ protected:
 };
 
 
+class TransformsMenuCollapseNotesCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuCollapseNotesCommand(EventSelection &selection) :
+	BasicSelectionCommand(name(), selection, true),
+	m_selection(&selection) { }
+    virtual ~TransformsMenuCollapseNotesCommand() { }
+
+    static QString name() { return "&Collapse Equal-Pitch Notes"; }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+    
+  
 class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:

@@ -36,6 +36,47 @@ public:
 
     SegmentHelper::segment;
 
+    
+    /**
+     * Looks for another note immediately following the one pointed to
+     * by the given iterator, and (if matchPitch is true) of the same
+     * pitch, and returns an iterator pointing to that note.  Returns
+     * end() if there is no such note.
+     * 
+     * The notes are considered "adjacent" if the quantized start
+     * time of one matches the quantized end time of the other, unless
+     * allowOverlap is true in which case overlapping notes are also
+     * considered adjacent so long as one does not completely enclose
+     * the other.
+     */
+    iterator getNextAdjacentNote(iterator i,
+				 bool matchPitch = true,
+				 bool allowOverlap = true);
+
+
+    /**
+     * Looks for another note immediately preceding the one pointed to
+     * by the given iterator, and (if matchPitch is true) of the same
+     * pitch, and returns an iterator pointing to that note.  Returns
+     * end() if there is no such note.
+     *
+     * rangeStart gives a bound to the distance that will be scanned
+     * to find events -- no event with starting time earlier than that
+     * will be considered.  (This method has no other way to know when
+     * to stop scanning; potentially the very first note in the segment
+     * could turn out to be adjacent to the very last one.)
+     * 
+     * The notes are considered "adjacent" if the quantized start
+     * time of one matches the quantized end time of the other, unless
+     * allowOverlap is true in which case overlapping notes are also
+     * considered adjacent so long as one does not completely enclose
+     * the other.
+     */
+    iterator getPreviousAdjacentNote(iterator i,
+				     timeT rangeStart = 0,
+				     bool matchPitch = true,
+				     bool allowOverlap = true);
+
 
     /**
      * Checks whether it's reasonable to expand (split) a single event
@@ -96,7 +137,7 @@ public:
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as
-     * appropriate.  Requires up-to-date bar position list.  Returns
+     * appropriate.  Requires segment to be in a composition.  Returns
      * iterator pointing to last event inserted (there may be more
      * than one, as note may have had to be split)
      *
@@ -108,7 +149,7 @@ public:
 
     /**
      * Inserts a rest, doing all the clever split/merge stuff as
-     * appropriate.  Requires up-to-date bar position list.
+     * appropriate.  Requires segment to be in a composition.  
      * Returns iterator pointing to last event inserted (there
      * may be more than one, as rest may have had to be split)
      *
@@ -125,13 +166,13 @@ public:
 
     /**
      * Deletes a note, doing all the clever split/merge stuff as
-     * appropriate.  Requires up-to-date bar position list.
+     * appropriate.  Requires segment to be in a composition.  
      */
     void deleteNote(Event *e, bool collapseRest = false);
 
     /**
      * Deletes a rest, doing all the clever split/merge stuff as
-     * appropriate.  Requires up-to-date bar position list.
+     * appropriate.  Requires segment to be in a composition.  
      *
      * @return whether the rest could be deleted -- a rest can only
      * be deleted if there's a suitable rest next to it to merge it
@@ -217,7 +258,7 @@ public:
      * Divide the notes between the start of the bar containing
      * from and the end of the bar containing to up into sensible
      * beamed groups and give each group the right group properties
-     * using makeBeamedGroup.  Requires up-to-date bar position list.
+     * using makeBeamedGroup.  Requires segment to be in a composition.
      */
     void autoBeam(timeT from, timeT to, std::string type);
 
@@ -225,7 +266,7 @@ public:
      * Divide the notes between the start of the bar containing
      * from and the end of the bar containing to up into sensible
      * beamed groups and give each group the right group properties
-     * using makeBeamedGroup.  Requires up-to-date bar position list.
+     * using makeBeamedGroup.  Requires segment to be in a composition.
      */
     void autoBeam(iterator from, iterator to, std::string type);
 
@@ -280,6 +321,18 @@ public:
      * rest plus the remainder
      */
     void collapseRestsAggressively(timeT startTime, timeT endTime);
+
+
+    /**
+     * Locate the given event and, if it's a note, collapse it with
+     * any following adjacent note of the same pitch, so long as its
+     * start time is before the the given limit.  Does not care
+     * whether the resulting note is viable.
+     *
+     * Returns true if a collapse happened, false if no collapse
+     * or event not found
+     */
+    bool collapseNoteAggressively(Event *, timeT rangeEnd);
 
 
     /**

@@ -311,14 +311,15 @@ int Segment::getNextId() const
 
 
 
-void Segment::fillWithRests(timeT endTime, bool permitQuantize)
+void Segment::fillWithRests(timeT endTime, bool permitQuantize,
+			    timeT startTime)
 {
-    timeT duration = getDuration();
+    if (startTime < 0) startTime = getDuration();
     TimeSignature ts;
     timeT sigTime = 0;
 
     if (getComposition()) {
-	sigTime = getComposition()->getTimeSignatureAt(duration, ts);
+	sigTime = getComposition()->getTimeSignatureAt(startTime, ts);
     }
 
     //!!! Since the rests are only used for notation, it may well
@@ -328,21 +329,21 @@ void Segment::fillWithRests(timeT endTime, bool permitQuantize)
     // than called from setDuration?  Let's try this, and see how
     // it looks
 
-    timeT restDuration = endTime - duration;
+    timeT restDuration = endTime - startTime;
 
     if (permitQuantize) {
 	restDuration = getQuantizer()->quantizeByUnit(restDuration);
     }
 
     cerr << "Segment(" << this << ")::fillWithRests: endTime "
-	 << endTime << ", duration " << duration << ", composition "
+	 << endTime << ", startTime " << startTime << ", composition "
 	 << (getComposition() ? "exists" : "does not exist") << ", sigTime "
 	 << sigTime << ", timeSig duration " << ts.getBarDuration() << endl;
     
     DurationList dl;
-    ts.getDurationListForInterval(dl, restDuration, duration - sigTime);
+    ts.getDurationListForInterval(dl, restDuration, startTime - sigTime);
 
-    timeT acc = getStartIndex() + duration;
+    timeT acc = getStartIndex() + startTime;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
 	Event *e = new Event(Note::EventRestType);

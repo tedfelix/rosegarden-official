@@ -182,6 +182,9 @@ NoteInserter::NoteInserter(NotationView* view)
                 "erase");
 
     createMenu("noteinserter.rc");
+
+    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
+            this,         SLOT(setAccidental(Rosegarden::Accidental)));
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -260,6 +263,10 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental);
     m_nParentView->addCommandToHistory(command);
+    
+    kdDebug(KDEBUG_AREA) << "NoteInserter::doAddCommand: accidental is "
+			 << accidental << endl;
+
     return command->getLastInsertedEvent();
 } 
 
@@ -275,11 +282,15 @@ void NoteInserter::setDots(unsigned int dots)
 
 void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
 {
+    kdDebug(KDEBUG_AREA) << "NoteInserter::setAccidental: accidental is "
+			 << accidental << endl;
     m_accidental = accidental;
 }
 
 void NoteInserter::setAccidentalSync(Rosegarden::Accidental accidental)
 {
+    kdDebug(KDEBUG_AREA) << "NoteInserter::setAccidentalSync: accidental is "
+			 << accidental << endl;
     setAccidental(accidental);
 
     int i;
@@ -296,7 +307,7 @@ void NoteInserter::setAccidentalSync(Rosegarden::Accidental accidental)
     if ((tAction = dynamic_cast<KToggleAction*>(action)))
         tAction->setChecked(true);
     else
-        KMessageBox::error(0, "NoteInserter::setAccidental : couldn't find action");
+        KMessageBox::error(0, "NoteInserter::setAccidentalSync : couldn't find action");
 }
 
 void NoteInserter::slotNoAccidental()

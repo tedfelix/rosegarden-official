@@ -189,6 +189,15 @@ public:
      *
      * (for instance if the argument points to a note and the next
      * element is a rest, end() will be returned)
+     *
+     * Note that if the iterator points to a note, the "contiguous"
+     * iterator returned may point to a note that follows the first
+     * one, overlaps with it, shares a starting time (i.e. they're
+     * both in the same chord) or anything else.  "Contiguous" refers
+     * only to their locations in the segment's event container,
+     * which normally means what you expect for rests but not notes.
+     * 
+     * See also SegmentNotationHelper::getNextAdjacentNote.
      */
     iterator findContiguousNext(iterator) const;
 
@@ -199,6 +208,15 @@ public:
      *
      * (for instance if the argument points to a note and the previous
      * element is a rest, end() will be returned)
+     *
+     * Note that if the iterator points to a note, the "contiguous"
+     * iterator returned may point to a note that precedes the first
+     * one, overlaps with it, shares a starting time (i.e. they're
+     * both in the same chord) or anything else.  "Contiguous" refers
+     * only to their locations in the segment's event container,
+     * which normally means what you expect for rests but not notes.
+     * 
+     * See also SegmentNotationHelper::getPreviousAdjacentNote.
      */
     iterator findContiguousPrevious(iterator) const;
     
@@ -241,7 +259,8 @@ public:
      * with, in the forward direction if goForwards or back otherwise.
      * Returns end() if none.
      *
-     * Untested
+     * Untested and probably marked-for-expiry -- prefer
+     * SegmentPerformanceHelper::getTiedNotes
      */
     iterator getNoteTiedWith(Event *note, bool goForwards) const;
 
@@ -256,8 +275,16 @@ public:
      * resulting score when (for example) interpreting a MIDI file.
      * permitQuantize should not be used if the precise duration of
      * the track will subsequently be of interest.
+     *
+     * If startTime is supplied, this can be used to fill up a
+     * section within a segment (should you have a pathological
+     * segment that contains notes already but not rests).  This
+     * is likely to be dangerous unless you're quite careful 
+     * about making sure the given range doesn't overlap any notes.
+     * The default is to fill from the current end of the segment.
      */
-    void fillWithRests(timeT endTime, bool permitQuantize = false);
+    void fillWithRests(timeT endTime, bool permitQuantize = false,
+		       timeT startTime = -1);
 
     /**
      * The compare class used by Composition
