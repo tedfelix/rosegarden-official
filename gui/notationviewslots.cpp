@@ -60,6 +60,8 @@
 
 #include "ktmpstatusmsg.h"
 
+#include <sys/time.h>
+
 using Rosegarden::timeT;
 using Rosegarden::Segment;
 using Rosegarden::Event;
@@ -2534,11 +2536,27 @@ void NotationView::slotMouseMoved(QMouseEvent *e)
     } else {
         int follow = m_tool->handleMouseMove(0, 0, // unknown time and height
                                              e);
-        if (follow & EditTool::FollowHorizontal)
-            getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
 
-        if (follow & EditTool::FollowVertical)
-            getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+	// #988164: Matrix: Auto-scrolling so fast you can't see sweep
+	// distance -- restrict number of scrolls (also relevant to
+	// notation)
+	static struct timeval tv = { 0, 0 };
+	struct timeval now;
+	gettimeofday(&now, 0);
+
+	if (now.tv_sec != tv.tv_sec ||
+	    now.tv_usec > tv.tv_usec + 50000) {
+        
+	    if (follow & EditTool::FollowHorizontal) {
+		getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+	    }
+
+	    if (follow & EditTool::FollowVertical) {
+		getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+	    }
+
+	    tv = now;
+	}
     }
 }
 

@@ -1247,12 +1247,26 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
     else 
     {
         int follow = m_tool->handleMouseMove(time, pitch, e);
-        
-        if (follow & EditTool::FollowHorizontal)
-	    getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
 
-        if (follow & EditTool::FollowVertical)
-	    getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+	// #988164: Matrix: Auto-scrolling so fast you can't see sweep
+	// distance -- restrict number of scrolls
+	static struct timeval tv = { 0, 0 };
+	struct timeval now;
+	gettimeofday(&now, 0);
+
+	if (now.tv_sec != tv.tv_sec ||
+	    now.tv_usec > tv.tv_usec + 50000) {
+        
+	    if (follow & EditTool::FollowHorizontal) {
+		getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+	    }
+
+	    if (follow & EditTool::FollowVertical) {
+		getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
+	    }
+
+	    tv = now;
+	}
 	    
         // play a preview
         if (pitch != m_previousEvPitch)

@@ -1438,11 +1438,26 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     
     if (follow != SegmentTool::NoFollow) {
 
-        if (follow & SegmentTool::FollowHorizontal)
-            slotScrollHorizSmallSteps(e->pos().x());
+	// #988164: Matrix: Auto-scrolling so fast you can't see sweep
+	// distance -- restrict number of scrolls (also relevant to
+	// segment canvas)
+	static struct timeval tv = { 0, 0 };
+	struct timeval now;
+	gettimeofday(&now, 0);
 
-        if (follow & SegmentTool::FollowVertical)
-            slotScrollVertSmallSteps(e->pos().y());
+	if (now.tv_sec != tv.tv_sec ||
+	    now.tv_usec > tv.tv_usec + 50000) {
+        
+	    if (follow & EditTool::FollowHorizontal) {
+		slotScrollHorizSmallSteps(e->pos().x());
+	    }
+
+	    if (follow & EditTool::FollowVertical) {
+		slotScrollVertSmallSteps(e->pos().y());
+	    }
+
+	    tv = now;
+	}
     }
 }
 
