@@ -39,6 +39,8 @@ template <class T>
 class LayoutEngine
 {
 public: 
+    typedef Staff<T> StaffType;
+
     LayoutEngine();
     virtual ~LayoutEngine();
 
@@ -50,7 +52,7 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(Staff<T> &staff) = 0;
+    virtual void resetStaff(StaffType &staff) = 0;
 
     /**
      * Precomputes layout data for a single staff, updating any
@@ -58,7 +60,7 @@ public:
      * any layout-related properties in the events on the staff's
      * segment.
      */
-    virtual void scanStaff(Staff<T> &staff) = 0;
+    virtual void scanStaff(StaffType &staff) = 0;
 
     /**
      * Computes any layout data that may depend on the results of
@@ -82,6 +84,8 @@ public:
     HorizontalLayoutEngine();
     virtual ~HorizontalLayoutEngine();
 
+    typedef Staff<T> StaffType;
+
     /**
      * Returns the total length of all elements once layout is done.
      * This is the x-coord of the end of the last element on the
@@ -92,26 +96,26 @@ public:
     /**
      * Returns the total number of bar lines on the given staff
      */
-    virtual unsigned int getBarLineCount(Staff<T> &staff) = 0;
+    virtual unsigned int getBarLineCount(StaffType &staff) = 0;
 
     /**
      * Returns the x-coordinate of the given bar number (zero-based)
      * on the given staff
      */
-    virtual double getBarLineX(Staff<T> &staff, unsigned int barNo) = 0;
+    virtual double getBarLineX(StaffType &staff, unsigned int barNo) = 0;
 
     /**
      * Returns the number that should be displayed next to the
      * specified bar line, if we're showing numbers
      */
-    virtual int getBarLineDisplayNumber(Staff<T> &, unsigned int barNo) {
+    virtual int getBarLineDisplayNumber(StaffType &, unsigned int barNo) {
         return (int)barNo;
     }
 
     /**
      * Returns true if the specified bar line should be drawn
      */
-    virtual bool isBarLineVisible(Staff<T> &staff, unsigned int barNo) {
+    virtual bool isBarLineVisible(StaffType &staff, unsigned int barNo) {
         return getBarLineDisplayNumber(staff, barNo) >= 0;
     }
 
@@ -119,7 +123,7 @@ public:
      * Returns true if the specified bar line is in the right place,
      * i.e. if the bar preceding it has the correct length
      */
-    virtual bool isBarLineCorrect(Staff<T> &, unsigned int) {
+    virtual bool isBarLineCorrect(StaffType &, unsigned int) {
         return true;
     }
 };
