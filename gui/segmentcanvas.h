@@ -281,6 +281,11 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
+    virtual void setHBarGeometry(QScrollBar &hbar,
+                                 int x, int y, int w, int h);
+    virtual void setVBarGeometry(QScrollBar &vbar,
+                                 int x, int y, int w, int h);
+    
 protected slots:
 
     /**
