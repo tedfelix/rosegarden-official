@@ -897,6 +897,50 @@ MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
 using Rosegarden::Event;
 using Rosegarden::Note;
 
+#include "basiccommand.h"
+
+class MatrixInsertionCommand : public BasicCommand
+{
+public:
+    MatrixInsertionCommand(Rosegarden::Segment &segment,
+                           timeT time,
+                           timeT endTime,
+                           MatrixStaff*,
+                           Rosegarden::Event *event);
+
+protected:
+    virtual void modifySegment();
+
+    MatrixStaff* m_staff;
+    Rosegarden::Event* m_event;
+};
+
+MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
+                                               timeT time,
+                                               timeT endTime,
+                                               MatrixStaff* staff,
+                                               Event *event) :
+    BasicCommand("Insert Note", segment, time, endTime),
+    m_staff(staff),
+    m_event(event)
+{
+    // nothing
+}
+
+void
+MatrixInsertionCommand::modifySegment()
+{
+    Rosegarden::SegmentMatrixHelper helper(getSegment());
+
+    m_staff->setWrapAddedEvents(false);
+    helper.insertNote(m_event); // this DOES NOT create a new MatrixElement
+    m_staff->setWrapAddedEvents(true);
+}
+
+
+//------------------------------
+
+
 MatrixPainter::MatrixPainter(MatrixView* parent)
     : MatrixTool("MatrixPainter", parent),
       m_currentElement(0),
@@ -992,9 +1036,21 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
         Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
         kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
 
-        m_currentStaff->setWrapAddedEvents(false);
-        helper.insertNote(m_currentElement->event()); // this DOES NOT create a new MatrixElement
-        m_currentStaff->setWrapAddedEvents(true);
+        //         m_currentStaff->setWrapAddedEvents(false);
+        //         helper.insertNote(m_currentElement->event());
+        //         m_currentStaff->setWrapAddedEvents(true);
+
+        timeT time = m_currentElement->getAbsoluteTime();
+        timeT endTime = time + m_currentElement->getDuration();
+
+        MatrixInsertionCommand* command = 
+            new MatrixInsertionCommand(m_currentStaff->getSegment(),
+                                       time, endTime,
+                                       m_currentStaff,
+                                       m_currentElement->event());
+
+
+        m_mParentView->addCommandToHistory(command);
 
         m_currentStaff->getViewElementList()->insert(m_currentElement);
 
