@@ -1434,6 +1434,11 @@ void NotationEraser::handleClick(int, const QPoint&,
     bool needLayout = false;
     int staffNo = 0; //!!!
 
+    if (!element) { 
+	//!!! Beep or something
+	return;
+    }
+
     TrackNotationHelper nt
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
 
