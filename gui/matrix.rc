@@ -123,6 +123,7 @@
   <Separator/>
   <Action name="toggle_step_by_step"/>
   <Action name="filter_selection"/>
+  <Action name="quantize"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">

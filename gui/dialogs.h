@@ -504,7 +504,7 @@ public:
     
     /// Returned quantizer object is on heap -- caller must delete
     Rosegarden::Quantizer *getQuantizer() const;
-    
+
 protected:
     RosegardenQuantizeParameters *m_quantizeFrame;
 };

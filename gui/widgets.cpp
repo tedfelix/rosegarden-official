@@ -773,7 +773,10 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_standardQuantizations
         (Rosegarden::BasicQuantizer::getStandardQuantizations())
 {
-    m_mainLayout = new QGridLayout(this, preamble ? 3 : 4, 2, 10, 5);
+    m_mainLayout = new QGridLayout(this,
+				   preamble ? 3 : 4, 2,
+				   preamble ? 10 : 0,
+				   preamble ? 5 : 4);
 
     int zero = 0;
     if (preamble) {
@@ -932,8 +935,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 				   defaultQuantizer == Notation));
 	m_articulate->setChecked
 	    (config->readBoolEntry("quantizearticulate", true));
-	if (showAdvancedButton) 
-	    advanced = config->readBoolEntry("quantizeshowadvanced", false);
+	advanced = config->readBoolEntry("quantizeshowadvanced", false);
     } else {
 	defaultType = (defaultQuantizer == Notation) ? 2 : 0;
 	m_notationTarget->setChecked(defaultQuantizer == Notation);
@@ -944,10 +946,10 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	m_makeViable->setChecked(defaultQuantizer == Notation);
 	m_deCounterpoint->setChecked(defaultQuantizer == Notation);
 	m_articulate->setChecked(true);
-	if (showAdvancedButton) advanced = false;
+	advanced = false;
     }
 
-    if (!showAdvancedButton || advanced) {
+    if (preamble || advanced) {
 	m_postProcessingBox->show();
     } else {
 	m_postProcessingBox->hide();

@@ -2847,7 +2847,7 @@ ClefDialog::redrawClefPixmap()
 
 
 QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
-    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel | User1)
+    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel | Details)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -2857,9 +2857,13 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
 	                    RosegardenQuantizeParameters::Grid,
 	 true, false, 0);
 
-    setButtonText(User1, i18n("Advanced"));
-    connect(this, SIGNAL(user1Clicked()),
-	    m_quantizeFrame, SLOT(slotAdvancedChanged()));
+    setButtonText(Details, i18n("Advanced"));
+    setDetailsWidget(m_quantizeFrame->getAdvancedWidget());
+    m_quantizeFrame->getAdvancedWidget()->hide();
+
+    m_quantizeFrame->adjustSize();
+    vbox->adjustSize();
+    adjustSize();
 }
 
 Quantizer *

@@ -548,7 +548,8 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
 
-    new KAction(i18n("&Quantize..."), 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/quantize.xpm"));
+    new KAction(i18n("&Quantize..."), icon, 0, this,
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
 

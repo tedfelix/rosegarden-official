@@ -443,7 +443,8 @@ void MatrixView::setupActions()
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
 
-    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/quantize.xpm"));
+    new KAction(EventQuantizeCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 

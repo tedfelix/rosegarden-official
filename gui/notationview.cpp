@@ -1604,7 +1604,11 @@ void NotationView::setupActions()
 		SLOT(slotRespellRestore()), actionCollection(),
                 "respell_restore");
 
-    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("quantize")));
+
+    new KAction(EventQuantizeCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 

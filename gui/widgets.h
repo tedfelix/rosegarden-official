@@ -411,6 +411,8 @@ public:
      */
     Rosegarden::Quantizer *getQuantizer() const;
 
+    QWidget *getAdvancedWidget() { return m_postProcessingBox; }
+
     bool shouldRebeam() const { return m_rebeam; }
     bool shouldDeCounterpoint() const { return m_deCounterpoint; }
     bool shouldMakeViable() const { return m_makeViable; }
