@@ -2398,11 +2398,13 @@ void RosegardenGUIApp::slotToggleTrackLabels()
 {
     if (m_viewTrackLabels->isChecked())
     {
+        _settingLog("toggle track labels on");
         m_view->getTrackEditor()->getTrackButtons()->
             changeTrackInstrumentLabels(TrackLabel::ShowTrack);
     }
     else
     {
+        _settingLog("toggle track labels off");
         m_view->getTrackEditor()->getTrackButtons()->
             changeTrackInstrumentLabels(TrackLabel::ShowInstrument);
     }
