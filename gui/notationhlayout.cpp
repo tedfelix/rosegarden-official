@@ -991,7 +991,7 @@ NotationHLayout::reconcileBarsPage()
 
     // Now we need to actually apply the widths
 
-    barNo = 0;
+    barNo = getFirstVisibleBar();
 
     for (unsigned int row = 0; row < rowData.size(); ++row) {
 
