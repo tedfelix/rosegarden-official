@@ -66,8 +66,10 @@ public:
     std::string getClefType() const { return m_clef; }
 
     int getOctave() const;
-
     int getPitchOffset() const;
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
 
 private:
     std::string m_clef;
@@ -101,12 +103,15 @@ public:
     static const PropertyName KeyPropertyName;
     static const Key DefaultKey;
     struct BadKeyName { };
+    struct BadKeySpec { };
 
     Key();
     Key(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadKeyName) */;
     Key(const std::string &name)
         /* throw (BadKeyName) */;
+    Key(int accidentalCount, bool isSharp, bool isMinor)
+        /* throw (BadKeySpec) */;
     Key(const Key &kc);
 
     ~Key() {
@@ -141,16 +146,17 @@ public:
 
     Accidental getAccidentalAtHeight(int height, const Clef &clef) const;
 
-    // staff positions of accidentals
+    /// staff positions of accidentals
     std::vector<int> getAccidentalHeights(const Clef &clef) const;
 
-    // to permit comparison of one height with another irrespective of
-    // octave, for key/accidental calculations &c
+    /** to permit comparison of one height with another irrespective of
+        octave, for key/accidental calculations &c */
     static inline unsigned int canonicalHeight(int height) {
 	return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
     }
 
-    Event getAsEvent() const;
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
 
     static std::vector<Key> getKeys(bool minor = false);
 
@@ -339,6 +345,12 @@ public:
     std::string getShortName   (Type type = -1, int dots = 0) const;
 
     static Note getNearestNote(int duration, int maxDots = 2);
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsNoteEvent(int pitch, timeT absoluteTime) const;
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsRestEvent(timeT absoluteTime) const;
   
 private:
     Type m_type;
@@ -403,6 +415,9 @@ public:
     int getBeatsPerBar()  const {
         return getBarDuration() / getBeatDuration();
     }
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
 
     // get the "optimal" list of rest durations to make up a bar of
     // this time signature

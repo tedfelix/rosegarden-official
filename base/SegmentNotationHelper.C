@@ -536,8 +536,9 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
     }
 }
 
-Track::iterator TrackNotationHelper::insertSingleSomething(iterator i, int duration, int pitch,
-					     bool isRest, bool tiedBack)
+Track::iterator
+TrackNotationHelper::insertSingleSomething(iterator i, int duration,
+                                           int pitch, bool isRest, bool tiedBack)
 {
     timeT time;
 
@@ -604,7 +605,8 @@ bool TrackNotationHelper::hasEffectiveDuration(iterator i)
 }
 
 
-void TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
+void
+TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
 {
     int groupId = track().getNextId();
     iterator dummy;

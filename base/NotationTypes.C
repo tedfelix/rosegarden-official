@@ -93,6 +93,14 @@ int Clef::getPitchOffset() const
     else return -2;
 }
 
+Event *Clef::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType);
+    e->set<String>(ClefPropertyName, m_clef);
+    e->setAbsoluteTime(absoluteTime);
+    return e;
+}
+
 //////////////////////////////////////////////////////////////////////
 // Key
 //////////////////////////////////////////////////////////////////////
@@ -134,6 +142,24 @@ Key::Key(const std::string &name)
         throw BadKeyName();
     }
 }    
+
+Key::Key(int accidentalCount, bool isSharp, bool isMinor)
+    // throw (BadKeySpec)
+    : m_accidentalHeights(0)
+{
+    checkMap();
+    for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
+         i != m_keyDetailMap.end(); ++i) {
+        if ((*i).second.m_sharpCount == accidentalCount &&
+            (*i).second.m_sharps == isSharp &&
+            (*i).second.m_minor == isMinor) {
+            m_name = (*i).first;
+            return;
+        }
+    }
+    throw BadKeySpec();
+}
+    
 
 Key::Key(const Key &kc)
     : m_name(kc.m_name), m_accidentalHeights(0)
@@ -201,10 +227,11 @@ void Key::checkAccidentalHeights() const {
     }
 }
 
-Event Key::getAsEvent() const
+Event *Key::getAsEvent(timeT absoluteTime) const
 {
-    Event e(EventType);
-    e.set<String>(KeyPropertyName, m_name);
+    Event *e = new Event(EventType);
+    e->set<String>(KeyPropertyName, m_name);
+    e->setAbsoluteTime(absoluteTime);
     return e;
 }
 
@@ -600,6 +627,25 @@ Note Note::getNearestNote(int duration, int maxDots)
     else return Note(tag, std::max(maxDots, tag));
 } 
 
+Event *Note::getAsNoteEvent(timeT absoluteTime, int pitch) const
+{
+    Event *e = new Event(EventType);
+    e->set<Int>("pitch", pitch);
+    e->setAbsoluteTime(absoluteTime);
+    e->setDuration(getDuration());
+    return e;
+}
+
+Event *Note::getAsRestEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventRestType);
+    e->setAbsoluteTime(absoluteTime);
+    e->setDuration(getDuration());
+    return e;
+}
+
+
+///////////////////////////////////////////////////////////////////////
 
 const string TimeSignature::EventType = "timesignature";
 const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
@@ -666,6 +712,15 @@ int TimeSignature::getBeatDuration() const
     }
 }
 
+Event *TimeSignature::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType);
+    e->set<Int>(NumeratorPropertyName, m_numerator);
+    e->set<Int>(DenominatorPropertyName, m_denominator);
+    e->setAbsoluteTime(absoluteTime);
+    return e;
+}
+
 
 void TimeSignature::getDurationListForInterval(DurationList &dlist,
                                                int duration,
@@ -703,22 +758,12 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
         getDurationListForShortInterval(dlist, duration - acc, 0);
     }
 
-    // Testing:
+    //!!! Solely for testing.  This obviously slows things down...
+
     int d = 0;
     for (DurationList::iterator di = dlist.begin(); di != dlist.end(); ++di) {
 	d += *di;
     }
-
-    /*!!! Got this error just now:
-ERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:
-Desired duration is 96 with startOffset 96, returned duration list is: 
--=> 96
--=> 0
--=> 96
--=> 96
--=> 0
-(end)
-*/
 
     if (d != duration) {
 	cerr << "\n\nERROR: TimeSignature::getDurationListForInterval: returned duration list sums to incorrect total:" << endl << "Desired duration is " << duration << " with startOffset " << startOffset << ", returned duration list is: " << endl;
@@ -728,6 +773,8 @@ Desired duration is 96 with startOffset 96, returned duration list is:
 	cerr << "(end)" << endl;
 	assert(0);
     }
+
+    //!!! End of testing code
 }
 
 
