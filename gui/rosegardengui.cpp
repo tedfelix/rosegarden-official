@@ -256,6 +256,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
             this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
 
+    bool visible = kapp->config()->readBoolEntry("Show Parameters", true);
+    if (!visible) m_mainDockWidget->hide();
+
     stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
@@ -1450,12 +1453,13 @@ void RosegardenGUIApp::slotSaveOptions()
 #endif
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
-    kapp->config()->writeEntry("Expanded Transport",           m_transport->isExpanded());
+    kapp->config()->writeEntry("Expanded Transport",           m_transport ? m_transport->isExpanded() : false);
     kapp->config()->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
     kapp->config()->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
     kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     kapp->config()->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
     kapp->config()->writeEntry("Show Previews",                m_viewPreviews->isChecked());
+    kapp->config()->writeEntry("Show Parameters",              m_dockLeft->isVisible());
 
     m_fileRecent->saveEntries(kapp->config());
 
@@ -1597,10 +1601,13 @@ bool RosegardenGUIApp::queryClose()
 
     bool canClose = m_doc->saveIfModified();
 
-    if (canClose) {
-        // or else the closing of the transport will toggle off the 'view transport' action,
-        // and its state will be saved as 'off'
+    if (canClose && m_transport) {
+
+        // or else the closing of the transport will toggle off the 
+        // 'view transport' action, and its state will be saved as 
+        // 'off'
         //
+
         disconnect(m_transport, SIGNAL(closed()),
                    this, SLOT(slotCloseTransport()));
     }
@@ -3852,6 +3859,7 @@ void
 RosegardenGUIApp::slotCloseTransport()
 {
     m_viewTransport->setChecked(false);
+    m_transport = 0;
 }
 
 // We use this slot to active a tool mode on the GUI
