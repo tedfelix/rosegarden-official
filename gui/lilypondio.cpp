@@ -704,10 +704,9 @@ LilypondExporter::write() {
 
                     // bar check, for debugging measures that don't count out
                     // make this a toggle...
-                    if (prevTime <= m_composition->getBarStartForTime(absoluteTime)) {
+/*                    if (prevTime == m_composition->getBarStartForTime(absoluteTime)) {
                         str << " | ";
                     } /*
-good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no good...
 */
 
                     // end the line for the current measure
@@ -863,16 +862,18 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
                              (nextNoteIsInChord && lastChordTime != absoluteTime))) {
                             closeChordWriteTie(addTie, currentlyWritingChord, str);
                         }
-                        if (curTupletNotesRemaining > 0) {
+
+                        if (ucount == curTupletNotesRemaining &&
+                            ucount != 0) {
+                            str << "\\times " << tcount << "/" << ucount << " { ";
+                            curTupletNotesRemaining--; // hack to close bracket at right time
+                        } else if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
                             if (curTupletNotesRemaining == 0) {
                                 str << "} ";
                             }
                         }
-                        if (ucount == curTupletNotesRemaining &&
-                            ucount != 0) {
-                            str << "\\times " << tcount << "/" << ucount << " { ";
-                        }
+                        
                         if (nextNoteIsInChord && !currentlyWritingChord) {
                             currentlyWritingChord = true;
                             str << "< ";
@@ -949,7 +950,7 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
                     } else { // it's a rest
 
                         closeChordWriteTie(addTie, currentlyWritingChord, str);
-                        str << "isarest" << std::endl;
+// debugging odd problem                        str << "isarest" << std::endl;
 
                         if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
@@ -1044,7 +1045,7 @@ good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no go
                     // in various other places.
                     if (!currentlyWritingChord && addTie) {
                         str << "~ ";
-                        str << "tie not in chord" << std::endl;
+// debug odd problem                        str << "tie not in chord" << std::endl;
                         addTie = false;
                     }
 
