@@ -1335,11 +1335,14 @@ PropertyControlRuler::selectAllProperties()
         if (!m_eventSelection->contains(*i)) m_eventSelection->addEvent(*i);
     */
 
+    clearSelectedItems();
+
     QCanvasItemList l=canvas()->allItems();
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) 
     {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
         {
+            m_selectedItems << item;
             (*it)->setSelected(true);
             ElementAdapter* adapter = item->getElementAdapter();
             m_eventSelection->addEvent(adapter->getEvent());
