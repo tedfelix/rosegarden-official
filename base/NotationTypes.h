@@ -71,10 +71,18 @@ public:
     virtual ~Clef() { }
 
     string getName() const { return m_clef; }
+
     int getOctave() const {
         if (m_clef == Treble) return 0;
         else if (m_clef == Bass) return -2;
         else return -1;
+    }
+
+    int getPitchOffset() const {
+        if (m_clef == Treble) return 0;
+        else if (m_clef == Tenor) return 1;
+        else if (m_clef == Alto) return -1;
+        else return -2;
     }
 
 private:
@@ -155,11 +163,8 @@ public:
         return m_keyDetailMap[m_name].m_rg2name;
     }
 
-    vector<int> getAccidentalHeights() const {
-        // staff positions of accidentals, if we're in the treble clef
-        checkAccidentalHeights();
-        return *m_accidentalHeights;
-    }
+    // staff positions of accidentals
+    vector<int> getAccidentalHeights(const Clef &clef) const;
 
     Event getAsEvent() const {
         Event e(EventPackage, EventType);

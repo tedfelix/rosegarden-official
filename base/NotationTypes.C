@@ -37,6 +37,16 @@ const Key Key::DefaultKey = Key("C major");
 
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
+vector<int> Key::getAccidentalHeights(const Clef &clef) const {
+    // staff positions of accidentals
+    checkAccidentalHeights();
+    vector<int> v(*m_accidentalHeights);
+    for (unsigned int i = 0; i < v.size(); ++i) {
+        v[i] += clef.getPitchOffset();
+    }
+    return v;
+}
+
 void Key::checkAccidentalHeights() const {
 
     if (m_accidentalHeights) return;
@@ -44,11 +54,12 @@ void Key::checkAccidentalHeights() const {
   
     bool sharp = isSharp();
     int accidentals = getAccidentalCount();
-    int accPitch = sharp ? 8 : 4;
+    int pitch = sharp ? 8 : 4;
   
     for (int i = 0; i < accidentals; ++i) {
-        m_accidentalHeights->push_back(accPitch % 7);
-        accPitch += (sharp ? -3 : 3);
+        m_accidentalHeights->push_back(pitch);
+        if (sharp) { pitch -= 3; if (pitch < 3) pitch += 7; }
+        else       { pitch += 3; if (pitch > 7) pitch -= 7; }
     }
 }
 
@@ -131,8 +142,8 @@ void NotationDisplayPitch::rawPitchToDisplayPitch
     accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
     if (modified && !sharp) ++height; // because the modifier has become a flat
 
-    for (vector<int>::const_iterator i = key.getAccidentalHeights().begin();
-         i != key.getAccidentalHeights().end(); ++i) {
+    vector<int> ah(key.getAccidentalHeights(clef));
+    for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
         if (*i == (height % 7)) {
             // the key has an accidental at the same height as this note, so
             // undo the note's accidental if there is one, or make explicit
@@ -177,8 +188,8 @@ void NotationDisplayPitch::displayPitchToRawPitch
 
     bool sharp = key.isSharp();
 
-    for (vector<int>::const_iterator i = key.getAccidentalHeights().begin();
-         i != key.getAccidentalHeights().end(); ++i) {
+    vector<int> ah(key.getAccidentalHeights(clef));
+    for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
         if (*i == (height % 7)) {
             // the key has an accidental at the same height as this note
             if (accidental == Natural) accidental = NoAccidental;
