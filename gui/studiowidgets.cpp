@@ -344,6 +344,7 @@ RosegardenFader::wheelEvent(QWheelEvent *e)
 	else buttonPosition -= 1;
     }
     setFader(position_to_value(buttonPosition));
+    showFloatText();
 }
 
 void

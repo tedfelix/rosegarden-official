@@ -786,8 +786,8 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
 void
 AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
 {
-    std::cerr << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
-	      << "," << dBright << ")" << std::endl;
+    RG_DEBUG << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
+	     << "," << dBright << ")" << endl;
     
     if (m_selectedInstrument)
     {
