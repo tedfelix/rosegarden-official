@@ -53,12 +53,17 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     setBackgroundMode(PaletteBase);
 
 #ifndef TEST_CANVAS
+
+    // Add a new staff
+    Staff *staff = new Staff(canvas());
+    staff->move(20, 15);
+
     if (!applyLayout()) {
 
-        // Show all elements
+        // Show all elements in the staff
         ElementList& elements(getDocument()->getElements());
 
-        showElements(elements.begin(), elements.end());
+        showElements(elements.begin(), elements.end(), staff);
 
     } else {
         KMessageBox::sorry(0, "Couldn't apply layout");
@@ -259,20 +264,37 @@ bool
 RosegardenGUIView::showElements(ElementList::iterator from,
                                 ElementList::iterator to)
 {
+    return showElements(from, to, 0, 0);
+}
+
+bool
+RosegardenGUIView::showElements(ElementList::iterator from,
+                                ElementList::iterator to,
+                                QCanvasItem *item)
+{
+    return showElements(from, to, item->x(), item->y());
+}
+
+bool
+RosegardenGUIView::showElements(ElementList::iterator from,
+                                ElementList::iterator to,
+                                double dxoffset, double dyoffset)
+{
     static NotePixmapFactory npf;
 
     for(ElementList::iterator it = from; it != to; ++it) {
         
-        // TODO : Extract element pitch (among other things :-)
+        // TODO : Extract note duration
         QPixmap note(npf.makeNotePixmap(4, true, true));
         QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note, canvas());
-        noteSprite->move((*it)->get<Int>("Notation::X"),
-                         (*it)->get<Int>("Notation::Y"));
+        noteSprite->move(dxoffset + (*it)->get<Int>("Notation::X"),
+                         dyoffset + (*it)->get<Int>("Notation::Y"));
         
     }
 
     return true;
 }
+
 
 bool
 RosegardenGUIView::applyLayout()

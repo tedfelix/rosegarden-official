@@ -67,6 +67,16 @@ class RosegardenGUIView : public QCanvasView
     virtual bool showElements(ElementList::iterator from,
                               ElementList::iterator to);
 
+    /// same, with dx,dy offset
+    virtual bool showElements(ElementList::iterator from,
+                              ElementList::iterator to,
+                              double dxoffset, double dyoffset);
+
+    /// same, relative to the specified item
+    virtual bool showElements(ElementList::iterator from,
+                              ElementList::iterator to,
+                              QCanvasItem*);
+
     /// Normally calls applyHorizontalLayout() then applyVerticalLayout()
     virtual bool applyLayout();
 
