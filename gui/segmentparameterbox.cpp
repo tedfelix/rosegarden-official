@@ -32,6 +32,8 @@
 #include "notepixmapfactory.h"
 #include "segmentcommands.h"
 
+using Rosegarden::Note;
+
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
                                          WFlags f) :
@@ -180,9 +182,22 @@ SegmentParameterBox::initBox()
     // initial delay values as function of sequencer resolution
     for(int i = 0; i < 4; i++)
     {
-        m_delayValue->insertItem(QString("%1").
-                arg(Rosegarden::Note(Rosegarden::Note::Crotchet, false).
-                    getDuration() * i));
+	// this could be anything
+	Rosegarden::timeT time = Note(Note::Crotchet).getDuration() * i;
+	
+	// check if it's a valid note duration (it will be for the
+	// time defn above, but if we were basing it on the sequencer
+	// resolution it might not be) & include a note pixmap if so
+	// 
+	Note nearestNote = Note::getNearestNote(time);
+	if (nearestNote.getDuration() == time) {
+	    std::string noteName = nearestNote.getReferenceName(); 
+	    noteName = "menu-" + noteName;
+	    QPixmap pmap = npf.makeToolbarPixmap(noteName.c_str());
+	    m_delayValue->insertItem(pmap, QString("%1").arg(time));
+	} else {
+	    m_delayValue->insertItem(QString("%1").arg(time));
+	}	    
     }
 
     // set delay blank initially
@@ -484,6 +499,18 @@ SegmentParameterBox::slotDelayTextChanged(const QString &text)
         return;
 
     int delayValue = text.toInt();
+
+    NotePixmapFactory npf;
+    QPixmap pmap = npf.makeToolbarPixmap("menu-no-note");
+    Note nearestNote = Note::getNearestNote(delayValue);
+    if (nearestNote.getDuration() == delayValue) {
+	std::string noteName = nearestNote.getReferenceName(); 
+	noteName = "menu-" + noteName;
+	pmap = npf.makeToolbarPixmap(noteName.c_str());
+    }
+    //!!! Now, how to get pmap into the pixmap part of the text field?
+
+
 
     std::vector<Rosegarden::Segment*>::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++)

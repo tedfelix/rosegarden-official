@@ -348,7 +348,8 @@ int main(int argc, char **argv)
         ev->set<Int>("pitch", 60);
         t.insert(ev);
 
-        nh.expandIntoTie(t.begin(), 384/2);
+	Segment::iterator sb(t.begin());
+        nh.expandIntoTie(sb, 384/2);
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -360,7 +361,8 @@ int main(int argc, char **argv)
         
         cout << "Expanding 192 -> (48 + 144) : \n";
 
-        nh.expandIntoTie(t.begin(), 48);
+	sb = t.begin();
+        nh.expandIntoTie(sb, 48);
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -378,6 +380,10 @@ int main(int argc, char **argv)
                      << " - duration : " << (*i)->getDuration()
                      << " - performance duration : " <<
                     ph.getSoundingDuration(i) << endl;
+
+		cout << endl;
+		(*i)->dump(cout);
+		cout << endl;
         }
 
 	t.insert(TimeSignature(2,4).getAsEvent(0));

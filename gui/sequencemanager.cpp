@@ -111,7 +111,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
 	// Skip the Segment if it ends too early to be of
 	// interest and it's not repeating.
-	if (segmentStartTime + segmentDuration < sliceStartElapsed &&
+	if (segmentStartTime + segmentDuration <= sliceStartElapsed &&
 	    !(*it)->isRepeating())
 	    continue;
 
@@ -179,20 +179,36 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	// start we should use the segment's start instead.  (We
 	// already know sliceEndElapsed >= segmentStartTime.)
 	//
-	if (sliceStartElapsed < segmentStartTime)
-	    sliceStartElapsed = segmentStartTime;
+	timeT seekStartTime =
+	    (sliceStartElapsed < segmentStartTime) ? segmentStartTime :
+						     sliceStartElapsed;
 
 	// Need to know how many times we've repeated to get here,
 	// so we can adjust the performance times again later
 	//
-	int repeatNo =
-	    (sliceStartElapsed - segmentStartTime) / segmentDuration; 
+	int repeatNo = (seekStartTime - segmentStartTime) / segmentDuration; 
 
 	// Locate a suitable starting iterator
 	//
-	Segment::iterator i0 = (*it)->findTime
-	    (segmentStartTime +
-	     ((sliceStartElapsed - segmentStartTime) % segmentDuration));
+	seekStartTime = seekStartTime - repeatNo * segmentDuration;
+	Segment::iterator i0 = (*it)->findTime(seekStartTime);
+
+	// Now, we end at the slice's end, except where we're a
+	// repeating segment followed by another segment on the same
+	// track when we end at that other segment's start time
+	// 
+	timeT seekEndTime = sliceEndElapsed;
+
+	if ((*it)->isRepeating())
+	{
+	    Composition::iterator scooter(it);
+	    if (++scooter != comp.end() &&
+		(*scooter)->getTrack() == (*it)->getTrack()) {
+		//!!! What if the following segment starts before this one
+		// ends?  Do we want to ignore it and keep going?
+		seekEndTime = (*scooter)->getStartTime();
+	    }
+	}
 
 	// No ending condition -- we do all that in the initial
 	// conditional within the loop, and subsequent breaks
@@ -224,6 +240,11 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    timeT playTime =
 		helper.getSoundingAbsoluteTime(j) + repeatNo * segmentDuration;
 
+	    // All over when we hit the end of the slice (the most
+	    // usual break condition for long or repeating segments)
+	    // 
+	    if (playTime >= seekEndTime) break;
+
 	    // Convert to real-time
 	    // 
             eventTime = comp.getElapsedRealTime(playTime);
@@ -234,10 +255,9 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    if (eventTime < m_mC.getStartTime())
 		continue;
 
-            // Escape if we're beyond the slice (this is the most usual
-	    // break condition for long or repeating segments)
+            // Escape if we're beyond the slice (again, can happen)
 	    // 
-            if (eventTime > m_mC.getEndTime())
+            if (eventTime >= m_mC.getEndTime())
                 break;
 
 	    // Add any performance delay.  Note that simply adding
