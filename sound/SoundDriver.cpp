@@ -99,6 +99,8 @@ PlayableAudioFile::initialise()
 
     m_ringBufferThreshold = size / 4;
 
+    // hard code to output buffer size initialy
+    initialSize = m_playBufferSize * 2;
     fillRingBuffer(initialSize);
 
     // ensure we can't do this again
@@ -193,6 +195,9 @@ PlayableAudioFile::fillRingBuffer()
         int fetchSize = m_ringBuffer->getSize() / 8 + 
             int(double(m_ringBuffer->getSize()) / 4.0 * double(rand()) / double(RAND_MAX));
 
+        // just a fixed small size for now
+        fetchSize =  m_playBufferSize;
+
         if (fetchSize > int(m_ringBuffer->writeSpace()))
         {
             fetchSize = m_ringBuffer->writeSpace();
@@ -200,6 +205,11 @@ PlayableAudioFile::fillRingBuffer()
         }
 
         fillRingBuffer(fetchSize);
+
+        /*
+        std::cerr << "PlayableAudioFile::fillRingBuffer - buffer size = " << m_ringBuffer->readSpace()
+                  << std::endl;
+                  */
     }
 }
 

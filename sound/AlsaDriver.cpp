@@ -230,7 +230,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     //
     for (unsigned int i = 0; i < 24; ++i)
     {
-        RingBuffer *ringBuffer  = new RingBuffer(32767);
+        RingBuffer *ringBuffer  = new RingBuffer(65535);
         ringBuffer->lock(); // lock the ringbuffer into physical memory
         _ringBuffer.push_back(std::pair<bool, RingBuffer*>(false, ringBuffer));
     }
@@ -1752,7 +1752,11 @@ AlsaDriver::stopPlayback()
 
     // free all RingBuffers
     //
-    for (unsigned int j = 0; j < _ringBuffer.size(); ++j) _ringBuffer[j].first = false;
+    for (unsigned int j = 0; j < _ringBuffer.size(); ++j)
+    {
+        _ringBuffer[j].first = false;
+        _ringBuffer[j].second->reset();
+    }
 
 #endif
 
