@@ -26,6 +26,7 @@
 #include <assert.h>
 #include "Track.h"
 #include "colours.h"
+#include "tracklabel.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
@@ -120,6 +121,8 @@ TrackButtons::drawButtons()
     m_muteButtonGroup = new QButtonGroup();
     m_muteButtonGroup->setExclusive(false);
 
+    TrackLabel *trackLabel;
+
     // Populate the widgets
     //
     for (int i = 0; i < m_tracks; i++)
@@ -145,8 +148,7 @@ TrackButtons::drawButtons()
 
         // Create a label
         //
-        label = new QLabel(track);
-
+        trackLabel = new TrackLabel(i, track);
 
         // Set the label from the Track object on the Composition
         //
@@ -156,13 +158,20 @@ TrackButtons::drawButtons()
         //
         assert(track != 0);
 
-        label->setText(QString(track->getLabel().c_str()));
+        trackLabel->setText(QString(track->getLabel().c_str()));
         //label->setText(QString(m_doc->getComposition().getTracks()[i].getLabel().c_str()));
         //label->setText(QString("Track %1").arg(i));
 
-        label->setMinimumSize(80, m_cellSize - buttonGap);
-        label->setMaximumSize(80, m_cellSize - buttonGap);
-        label->setIndent(7);
+        trackLabel->setMinimumSize(80, m_cellSize - buttonGap);
+        trackLabel->setMaximumSize(80, m_cellSize - buttonGap);
+        trackLabel->setIndent(7);
+
+        // Store the TrackLabel pointer
+        //
+        m_trackLabels.push_back(trackLabel);
+
+        connect((QObject *)trackLabel, SIGNAL(released(int)),
+                                       SLOT(labelSelected(int)));
 
         // Insert the buttons into groups
         //
@@ -290,5 +299,45 @@ TrackButtons::setRecordTrack(int recordTrack)
 }
 
 
+// Connected to the released(int) callback of the TrackLabels
+//
+void
+TrackButtons::labelSelected(int id)
+{
+    list<TrackLabel *>::iterator tlpIt;
+
+    for (tlpIt = m_trackLabels.begin();
+         tlpIt != m_trackLabels.end();
+         tlpIt++)
+    {
+        
+        if ((*tlpIt)->id() != id &&
+            (*tlpIt)->isSelected())
+        {
+            (*tlpIt)->setLabelHighlight(false);
+        }
+    }
+
+}
+
+// Return a list of highlighted tracks by querying the TrackLabels
+// for highlight state.
+//
+list<int>
+TrackButtons::getHighLightedTracks()
+{
+    list<int> retList;
+    list<TrackLabel *>::iterator tlpIt;
+
+    for (tlpIt = m_trackLabels.begin();
+         tlpIt != m_trackLabels.end();
+         tlpIt++)
+    {
+        if ((*tlpIt)->isSelected())
+            retList.push_back((*tlpIt)->id());
+    }
+
+    return retList;
+}
 
 

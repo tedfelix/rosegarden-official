@@ -29,6 +29,7 @@
 
 #include <list>
 
+#include "tracklabel.h"
 #include "trackheader.h"
 #include "rosegardenguidoc.h"
 
@@ -69,6 +70,9 @@ public:
     //
     list<int> mutedTracks();
 
+    // Return a list of highlighted tracks
+    //
+    list<int> getHighLightedTracks();
 
 public slots:
 
@@ -77,6 +81,7 @@ public slots:
     //
     void setRecordTrack(int id);
     void toggleMutedTrack(int mutedTrack);
+    void labelSelected(int id);
 
 
 private:
@@ -92,6 +97,8 @@ private:
 
     QButtonGroup *m_recordButtonGroup;
     QButtonGroup *m_muteButtonGroup;
+
+    list<TrackLabel *> m_trackLabels;
 
     int m_tracks;
     int m_offset;
