@@ -24,7 +24,7 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 
-#include <time.h>
+#include <unistd.h>
 #include <sys/time.h>
 #include <pthread.h> // for mutex
 
@@ -407,10 +407,12 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
 void
 SoundDriver::sleep(const RealTime &rt)
 {
-    struct timespec reg;
-    reg.tv_sec = rt.sec;
-    reg.tv_nsec = rt.nsec;
-    nanosleep(&reg, 0);
+    // The usleep man page says it's deprecated and we should use
+    // nanosleep.  And that's what we did.  But it seems quite a few
+    // people don't have nanosleep, so we're reverting to usleep.
+
+    unsigned long usec = rt.sec * 1000000 + rt.usec();
+    usleep(usec);
 }
 
 void

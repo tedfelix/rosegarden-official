@@ -31,7 +31,6 @@ using Rosegarden::MappedEvent;
 MmappedSegment::MmappedSegment(const QString filename)
     : m_fd(-1),
       m_mmappedSize(0),
-//      m_nbMappedEvents(0),
       m_mmappedRegion(0),
       m_mmappedEventBuffer((MappedEvent*)0),
       m_filename(filename)
@@ -57,7 +56,6 @@ void MmappedSegment::map()
     }
 
     m_mmappedSize = fInfo.size();
-//    m_nbMappedEvents = 0;
 
     m_fd = ::open(m_filename.latin1(), O_RDWR);
 
@@ -71,7 +69,7 @@ void MmappedSegment::map()
         throw Rosegarden::Exception("mmap failed");
     }
 
-    m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
+    m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
 
     SEQUENCER_DEBUG << "MmappedSegment::map() : "
                     << (void*)m_mmappedRegion << "," << m_mmappedSize << endl;
@@ -89,11 +87,32 @@ void MmappedSegment::unmap()
     ::close(m_fd);
 }
 
+size_t
+MmappedSegment::getNbMappedEvents() const
+{
+    if (m_mmappedRegion || !m_mmappedSize) {
+	
+	// The shared memory area consists of one size_t giving the
+	// number of following mapped events, followed by the mapped
+	// events themselves.  
+
+	// So this is the number of mapped events that we expect:
+	size_t nominal = *(size_t *)m_mmappedRegion;
+
+	// But we want to be sure not to read off the end of the
+	// shared memory area, so just in case, this is the number of
+	// events that can actually be accommodated in the memory area
+	// as we see it:
+	size_t actual = (m_mmappedSize - sizeof(size_t)) /
+	    sizeof(MappedEvent);
+
+	return std::min(nominal, actual);
+
+    } else return 0;
+}
+
 bool MmappedSegment::remap(size_t newSize)
 {
-//    QFileInfo fInfo(m_filename);
-//    size_t newSize = fInfo.size();
-/*!!!
     SEQUENCER_DEBUG << "remap() from " << m_mmappedSize << " to "
                     << newSize << endl;
 
@@ -105,18 +124,18 @@ bool MmappedSegment::remap(size_t newSize)
     }
 
 #ifdef linux
-	void *oldBuffer = m_mmappedBuffer;
-    m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
-	if (m_mmappedBuffer != oldBuffer) {
-	    SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
-		" to " << (void *)m_mmappedBuffer << endl;
-	}
+    void *oldBuffer = m_mmappedRegion;
+    m_mmappedRegion = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
+    if (m_mmappedRegion != oldBuffer) {
+	SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
+	    " to " << (void *)m_mmappedRegion << endl;
+    }
 #else
-    ::munmap(m_mmappedBuffer, m_mmappedSize);
-    m_mmappedBuffer = (MappedEvent*)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
+    ::munmap(m_mmappedRegion, m_mmappedSize);
+    m_mmappedRegion = (MappedEvent*)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
 #endif
 
-    if (m_mmappedBuffer == (void*)-1) {
+    if (m_mmappedRegion == (void*)-1) {
 
             SEQUENCER_DEBUG << QString("mremap failed : (%1) %2\n").
                 arg(errno).arg(strerror(errno));
@@ -124,11 +143,10 @@ bool MmappedSegment::remap(size_t newSize)
             throw Rosegarden::Exception("mremap failed");
     }
     
+    m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
     m_mmappedSize = newSize;
-    m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
 
     return true;
-*/
 }
 
 MmappedSegment::iterator::iterator(MmappedSegment* s)
@@ -219,7 +237,8 @@ MappedEvent MmappedSegment::iterator::operator*()
 
 bool MmappedSegment::iterator::atEnd() const
 {
-    return (m_currentEvent == 0) || (m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1));
+    return (m_currentEvent == 0) ||
+	(m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1));
 }
 
 // Ew ew ew - move this to base

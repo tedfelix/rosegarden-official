@@ -976,9 +976,24 @@ AlsaDriver::setCurrentTimer(QString timer)
 {
     Audit audit;
 
+    if (timer == getCurrentTimer()) return;
+
     std::string name(timer.data());
 
-    stopClocks();
+    // Stop and restart the queue around the timer change.  We don't
+    // call stopClocks/startClocks here because they do the wrong
+    // thing if we're currently playing and on the JACK transport.
+
+    m_queueRunning = false;
+    snd_seq_stop_queue(m_midiHandle, m_queue, NULL);
+    snd_seq_event_t event;
+    snd_seq_ev_clear(&event);
+    snd_seq_real_time_t z = { 0, 0 };
+    snd_seq_ev_set_queue_pos_real(&event, m_queue, &z);
+    snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
+			  0, &event);
+    snd_seq_drain_output(m_midiHandle);
+    m_alsaPlayStartTime = RealTime::zeroTime;
 
     for (unsigned int i = 0; i < m_timers.size(); ++i) {
 	if (m_timers[i].name == name) {
@@ -1005,8 +1020,13 @@ AlsaDriver::setCurrentTimer(QString timer)
 	    break;
 	}
     }
+    
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) m_jackDriver->prebufferAudio();
+#endif
 
-    startClocks();
+    snd_seq_continue_queue(m_midiHandle, m_queue, NULL);
+    m_queueRunning = true;
 }
 
 void

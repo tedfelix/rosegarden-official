@@ -350,7 +350,12 @@ RosegardenSequencerApp::updateClocks()
 
         // Reset playback using this jump
         //
-        m_sequencer->resetPlayback(m_loopStart);
+        m_sequencer->resetPlayback(m_songPosition);
+
+	m_mC.clear();
+	m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
+
+	m_sequencer->processEventsOut(m_mC, false);
 
 	m_sequencer->startClocks();
     }

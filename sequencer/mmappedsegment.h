@@ -67,11 +67,7 @@ public:
     bool isMetronome();
     MappedEvent* getBuffer() { return m_mmappedEventBuffer; }
     size_t getSize() const { return m_mmappedSize; }
-    unsigned int getNbMappedEvents() const {
-	if (m_mmappedRegion) {
-	    return *(size_t *)m_mmappedRegion;
-	} else return 0;
-    }
+    size_t getNbMappedEvents() const;
 
     class iterator 
     {

@@ -235,7 +235,7 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
 
 void SegmentMmapper::init()
 {
-    m_mmappedSize = computeMmappedSize();
+    m_mmappedSize = computeMmappedSize() + sizeof(size_t);
 
     if (m_mmappedSize > 0) {
         setFileSize(m_mmappedSize);
@@ -278,7 +278,7 @@ bool SegmentMmapper::refresh()
 {
     bool res = false;
 
-    size_t newMmappedSize = computeMmappedSize();
+    size_t newMmappedSize = computeMmappedSize() + sizeof(size_t);
 
     SEQMAN_DEBUG << "SegmentMmapper::refresh() - " << getFileName()
                  << " - m_mmappedRegion = " << (void*)m_mmappedRegion
@@ -381,7 +381,7 @@ void SegmentMmapper::remap(size_t newsize)
 	void *oldBuffer = m_mmappedRegion;
         m_mmappedRegion = (MappedEvent*)::mremap(m_mmappedRegion, m_mmappedSize,
 						 newsize, MREMAP_MAYMOVE);
-	m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
+	m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
 
 	if (m_mmappedRegion != oldBuffer) {
 	    SEQMAN_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
@@ -392,7 +392,7 @@ void SegmentMmapper::remap(size_t newsize)
 	m_mmappedRegion = ::mmap(0, newsize,
 				 PROT_READ|PROT_WRITE,
 				 MAP_SHARED, m_fd, 0);
-	m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
+	m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
 #endif
     
         if (m_mmappedRegion == (void*)-1) {
@@ -412,7 +412,7 @@ void SegmentMmapper::doMmap()
     m_mmappedRegion = ::mmap(0, m_mmappedSize,
 			     PROT_READ|PROT_WRITE,
 			     MAP_SHARED, m_fd, 0);
-    m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
+    m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
 
     if (m_mmappedRegion == (void*)-1) {
         SEQMAN_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
@@ -713,7 +713,7 @@ size_t CompositionMmapper::getSegmentFileSize(Segment* s)
     SegmentMmapper* mmapper = m_segmentMmappers[s];
     
     if (mmapper)
-        return mmapper->computeMmappedSize();
+        return mmapper->getFileSize();
     else
         return 0;
 }

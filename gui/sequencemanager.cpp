@@ -1486,7 +1486,6 @@ void SequenceManager::segmentModified(Segment* s)
 
         rgapp->sequencerSend("remapSegment(QString, size_t)", data);
     }
-    
 }
 
 void SequenceManager::segmentAdded(const Composition*, Segment* s)

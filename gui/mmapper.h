@@ -99,13 +99,15 @@ public:
     bool refresh();
 
     QString getFileName() { return m_fileName; }
+    size_t getFileSize() const { return m_mmappedSize; }
 
     virtual unsigned int getSegmentRepeatCount();
-    virtual size_t computeMmappedSize();
 
 protected:
     SegmentMmapper(RosegardenGUIDoc*, Rosegarden::Segment*,
                    const QString& fileName);
+
+    virtual size_t computeMmappedSize();
 
     /// actual setup, must be called after ctor, calls virtual methods
     virtual void init();
@@ -144,12 +146,11 @@ class AudioSegmentMmapper : public SegmentMmapper
 {
     friend class SegmentMmapperFactory;
 
-public:
-    virtual size_t computeMmappedSize();
-
 protected:
     AudioSegmentMmapper(RosegardenGUIDoc*, Rosegarden::Segment*,
                         const QString& fileName);
+
+    virtual size_t computeMmappedSize();
 
     /// dump all segment data in the file
     virtual void dump();
@@ -169,10 +170,11 @@ public:
 
     // overrides from SegmentMmapper
     virtual unsigned int getSegmentRepeatCount();
-    virtual size_t computeMmappedSize();
 
 protected:
     MetronomeMmapper(RosegardenGUIDoc* doc);
+
+    virtual size_t computeMmappedSize();
 
     void sortTicks();
     QString createFileName();
@@ -212,16 +214,13 @@ class TempoSegmentMmapper : public SpecialSegmentMmapper
 {
     friend class SegmentMmapperFactory;
 
-public:
-
-    // overrides from SegmentMmapper
-    virtual size_t computeMmappedSize();
-
 protected:
     TempoSegmentMmapper(RosegardenGUIDoc* doc,
                         QString baseFileName)
         : SpecialSegmentMmapper(doc, baseFileName) {}
 
+    // overrides from SegmentMmapper
+    virtual size_t computeMmappedSize();
 
     // override from SegmentMmapper
     virtual void dump();
@@ -235,13 +234,13 @@ class TimeSigSegmentMmapper : public SpecialSegmentMmapper
 
 public:
 
-    // overrides from SegmentMmapper
-    virtual size_t computeMmappedSize();
-
 protected:
     TimeSigSegmentMmapper(RosegardenGUIDoc* doc,
                           QString baseFileName)
         : SpecialSegmentMmapper(doc, baseFileName) {}
+
+    // overrides from SegmentMmapper
+    virtual size_t computeMmappedSize();
 
     // override from SegmentMmapper
     virtual void dump();

@@ -3867,7 +3867,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     new QLabel(i18n("Start Bar"), startBox);
     m_startMarkerSpinBox = new QSpinBox(startBox);
     m_startMarkerSpinBox->setMinValue(-10);
-    m_startMarkerSpinBox->setMaxValue(1000);
+    m_startMarkerSpinBox->setMaxValue(10000);
     m_startMarkerSpinBox->setValue(
             m_composition->getBarNumber(m_composition->getStartMarker()));
 
@@ -3875,7 +3875,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     new QLabel(i18n("End Bar"), endBox);
     m_endMarkerSpinBox = new QSpinBox(endBox);
     m_endMarkerSpinBox->setMinValue(-10);
-    m_endMarkerSpinBox->setMaxValue(1000);
+    m_endMarkerSpinBox->setMaxValue(10000);
     m_endMarkerSpinBox->setValue(
             m_composition->getBarNumber(m_composition->getEndMarker()));
 
