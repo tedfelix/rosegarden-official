@@ -109,9 +109,13 @@ public:
 
 signals:
 
-    void itemPressed(Rosegarden::timeT time, int pitch);
+    void itemPressed(Rosegarden::timeT time, int pitch,
+                     QMouseEvent*,
+                     MatrixElement*);
 
-    void itemReleased(Rosegarden::timeT time);
+    void itemReleased(Rosegarden::timeT time, QMouseEvent*);
+
+    void itemResized(Rosegarden::timeT time, QMouseEvent*);
 
 protected:
     /**
@@ -128,6 +132,12 @@ protected:
      * Callback for a mouse move event in the canvas
      */
     virtual void contentsMouseMoveEvent(QMouseEvent*);
+
+    /**
+     * Compute the time and pitch corresponding to the event's
+     * location
+     */
+    void eventTimePitch(QMouseEvent*, Rosegarden::timeT&, int& pitch);
 
     //--------------- Data members ---------------------------------
 
@@ -416,6 +426,61 @@ protected:
     MatrixVLayout* m_vlayout;
 };
 
+//////////////////////////////////////////////////////////////////////
+//                     MatrixToolBox
+//////////////////////////////////////////////////////////////////////
 
+#include "edittool.h"
+
+class MatrixToolBox : public EditToolBox
+{
+public:
+    MatrixToolBox(MatrixView* parent);
+
+protected:
+
+    virtual EditTool* createTool(const QString& toolName) = 0;
+
+    //--------------- Data members ---------------------------------
+
+    MatrixView* m_mParentView;
+};
+
+//////////////////////////////////////////////////////////////////////
+//                     MatrixTools
+//////////////////////////////////////////////////////////////////////
+
+class MatrixTool : public EditTool
+{
+public:
+//     virtual void ready();
+
+protected:
+    MatrixTool(const QString& menuName, MatrixView*);
+
+    //--------------- Data members ---------------------------------
+
+    MatrixView* m_mParentView;
+};
+
+class MatrixPainter : public MatrixTool
+{
+    friend MatrixToolBox;
+
+public:
+
+    virtual void handleLeftButtonPress(int height,
+                                       Rosegarden::timeT,
+                                       int staffNo,
+                                       QMouseEvent *event,
+                                       Rosegarden::ViewElement*);
+
+//     virtual void handleMouseRelease(QMouseEvent*);
+
+    static const QString ToolName;
+
+protected:
+    MatrixPainter(MatrixView*);
+};
 
 #endif

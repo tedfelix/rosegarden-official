@@ -57,22 +57,53 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    QPoint eventPos = e->pos();
-    
-    timeT evTime = m_staff.xToTime(eventPos.x());
-    int evPitch = m_staff.yToPitch(eventPos.y());
+    timeT evTime = 0;
+    int evPitch = 0;
+    eventTimePitch(e, evTime, evPitch);
 
+    
     kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at time "
                          << evTime << ", pitch " << evPitch << endl;
 
+    //     QCanvasItemList itemList = canvas()->collisions(e->pos());
+    //     QCanvasItemList::Iterator it;
+    //     for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+    //         QCanvasItem *item = *it;
+    //         MatrixElement* mel;
+        
+    //     }
+
+    emit itemPressed(evTime, evPitch, e, 0);
+    
 }
 
-void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent*)
+void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    timeT evTime = 0;
+    int evPitch = 0;
+    eventTimePitch(e, evTime, evPitch);
+
+    emit itemReleased(evTime, e);
 }
 
-void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent*)
+void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
+    timeT evTime = 0;
+    int evPitch = 0;
+    eventTimePitch(e, evTime, evPitch);
+
+    emit itemResized(evTime, e);
+}
+
+void MatrixCanvasView::eventTimePitch(QMouseEvent* e,
+                                      Rosegarden::timeT& evTime,
+                                      int& pitch)
+{
+    QPoint eventPos = e->pos();
+    
+    evTime = m_staff.xToTime(eventPos.x());
+    pitch = m_staff.yToPitch(eventPos.y());
 }
 
 //----------------------------------------------------------------------
@@ -497,6 +528,9 @@ void MatrixView::setViewSize(QSize s)
 
 void MatrixView::slotPaintSelected()
 {
+    MatrixPainter* painter = dynamic_cast<MatrixPainter*>(m_toolBox->getTool(MatrixPainter::ToolName));
+
+    setTool(painter);
 }
 
 void MatrixView::slotEraseSelected()
@@ -542,3 +576,65 @@ void MatrixView::slotEditPaste()
 {
 }
 
+
+//////////////////////////////////////////////////////////////////////
+//                     MatrixToolBox
+//////////////////////////////////////////////////////////////////////
+
+MatrixToolBox::MatrixToolBox(MatrixView* parent)
+    : EditToolBox(parent),
+      m_mParentView(parent)
+{
+}
+
+EditTool* MatrixToolBox::createTool(const QString& toolName)
+{
+    MatrixTool* tool = 0;
+
+    QString toolNamelc = toolName.lower();
+    
+    if (toolNamelc == MatrixPainter::ToolName)
+
+        tool = new MatrixPainter(m_mParentView);
+
+    else {
+        KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+                           .arg(toolName).arg(toolNamelc));
+        return 0;
+    }
+
+    m_tools.insert(toolName, tool);
+
+    return tool;
+    
+}
+
+//////////////////////////////////////////////////////////////////////
+//                     MatrixTools
+//////////////////////////////////////////////////////////////////////
+
+MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
+    : EditTool(menuName, parent),
+      m_mParentView(parent)
+{
+}
+
+
+using Rosegarden::Event;
+
+MatrixPainter::MatrixPainter(MatrixView* parent)
+    : MatrixTool("MatrixPainter", parent)
+{
+}
+
+void MatrixPainter::handleLeftButtonPress(int pitch,
+                                          Rosegarden::timeT time,
+                                          int staffNo,
+                                          QMouseEvent *event,
+                                          Rosegarden::ViewElement*)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleLeftButtonPress : pitch = "
+                         << pitch << ", time : " << time << endl;
+}
+
+const QString MatrixPainter::ToolName = "painter";
