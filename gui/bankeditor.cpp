@@ -103,18 +103,22 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                               2); // margin
  
 
+
     /*
     gridLayout->addWidget(new QLabel(i18n("Bank Name"), m_mainFrame),
-                          0, 1, AlignLeft);
+                          0, 0, AlignLeft);
                           */
+    QFont boldFont = m_bankName->font();
+    boldFont.setBold(true);
+    m_bankName->setFont(boldFont);
 
-    gridLayout->addMultiCellWidget(m_bankName, 0, 0, 3, 4, AlignRight);
+    gridLayout->addWidget(m_bankName, 0, 0, AlignLeft);
 
     gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
-                          1, 4, AlignLeft);
+                          1, 0, AlignLeft);
     m_msb->setMinValue(0);
     m_msb->setMaxValue(127);
-    gridLayout->addWidget(m_msb, 1, 5, AlignRight);
+    gridLayout->addWidget(m_msb, 1, 1, AlignLeft);
 
     QToolTip::add(m_msb,
             i18n("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
@@ -126,13 +130,31 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             this, SLOT(slotNewMSB(int)));
 
     gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame),
-                          2, 4, AlignLeft);
+                          2, 0, AlignLeft);
     m_lsb->setMinValue(0);
     m_lsb->setMaxValue(127);
-    gridLayout->addWidget(m_lsb, 2, 5, AlignRight);
+    gridLayout->addWidget(m_lsb, 2, 1, AlignLeft);
 
     connect(m_lsb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewLSB(int)));
+
+    // Librarian
+    //
+    QGroupBox *groupBox = new QGroupBox(2,
+                                        Qt::Horizontal,
+                                        i18n("Librarian"),
+                                        m_mainFrame);
+    gridLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
+
+
+    new QLabel(i18n("Name"), groupBox);
+    m_librarian = new QLabel(groupBox);
+
+    new QLabel(i18n("Email"), groupBox);
+    m_librarianEmail = new QLabel(groupBox);
+
+    QToolTip::add(groupBox,
+                  i18n("The librarian maintains the generic Bank and Program information for this device.\nIf you've made modifications to a Bank to suit your own device it might be worth\nliasing with the librarian in order to publish your Bank information for the benefit\nof others."));
 
     QTabWidget* tab = new QTabWidget(this);
 
@@ -248,6 +270,8 @@ MidiProgramsEditor::clearAll()
     m_bankName->clear();
     m_msb->setValue(0);
     m_lsb->setValue(0);
+    m_librarian->setText("");
+    m_librarianEmail->setText("");
     m_currentBank = 0;
     setEnabled(false);
 
@@ -280,6 +304,12 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
     // set the bank values
     m_msb->setValue(m_currentBank->msb);
     m_lsb->setValue(m_currentBank->lsb);
+
+    // Librarian details
+    //
+    m_librarian->setText(strtoqstr(device->getLibrarianName()));
+    m_librarianEmail->setText(strtoqstr(device->getLibrarianEmail()));
+
     MidiProgramContainer programSubset = getBankSubset(m_currentBank->msb,
                                                        m_currentBank->lsb);
     MidiProgramContainer::iterator it;
@@ -722,15 +752,21 @@ BankEditorDialog::checkModified()
                 command = new ModifyDeviceCommand(m_studio,
                                                   m_lastDevice,
                                                   m_deviceList[m_lastDevice],
+                                                  device->getLibrarianName(),
+                                                  device->getLibrarianEmail(),
                                                   tempBank,
                                                   tempProg,
                                                   true); // overwrite
             }
             else
             {
+                Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+
                 command = new ModifyDeviceCommand(m_studio,
                                                   m_lastDevice,
                                                   m_deviceList[m_lastDevice],
+                                                  device->getLibrarianName(),
+                                                  device->getLibrarianEmail(),
                                                   m_bankList,
                                                   m_programList,
                                                   true);
@@ -822,18 +858,26 @@ BankEditorDialog::slotApply()
         command = new ModifyDeviceCommand(m_studio,
                                           m_lastDevice,
                                           m_deviceList[m_lastDevice],
+                                          device->getLibrarianName(),
+                                          device->getLibrarianEmail(),
                                           tempBank,
                                           tempProg,
                                           true);
     }
     else
     {
+        /*
         MidiProgramsEditor::MidiProgramContainer::iterator it =
             m_programList.begin();
+            */
+
+        Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
 
         command = new ModifyDeviceCommand(m_studio,
                                           m_lastDevice,
                                           m_deviceList[m_lastDevice],
+                                          device->getLibrarianName(),
+                                          device->getLibrarianEmail(),
                                           m_bankList,
                                           m_programList,
                                           true);
@@ -1307,6 +1351,7 @@ BankEditorDialog::slotImport()
                     bool found = false;
                     std::vector<Rosegarden::MidiBank> banks;
                     std::vector<Rosegarden::MidiProgram> programs;
+                    std::string librarianName, librarianEmail;
 
                     for (it = list->begin(); it != list->end(); ++it)
                     {
@@ -1319,6 +1364,8 @@ BankEditorDialog::slotImport()
                             {
                                 banks = device->getBanks();
                                 programs = device->getPrograms();
+                                librarianName = device->getLibrarianName();
+                                librarianEmail = device->getLibrarianEmail();
                                 found = true;
                                 break;
                             }
@@ -1341,6 +1388,8 @@ BankEditorDialog::slotImport()
                                         m_studio,
                                         deviceItem->getDevice(),
                                         qstrtostr(importList[res]),
+                                        librarianName,
+                                        librarianEmail,
                                         banks,
                                         programs,
                                         overwrite);

@@ -29,6 +29,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         Rosegarden::Studio *studio,
         int device,
         const std::string &name,
+        const std::string &librarianName,
+        const std::string &librarianEmail,
         std::vector<Rosegarden::MidiBank> bankList,
         std::vector<Rosegarden::MidiProgram> programList,
         bool overwrite):
@@ -36,6 +38,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     m_studio(studio),
     m_device(device),
     m_name(name),
+    m_librarianName(librarianName),
+    m_librarianEmail(librarianEmail),
     m_bankList(bankList),
     m_programList(programList),
     m_overwrite(overwrite)
@@ -50,13 +54,15 @@ ModifyDeviceCommand::execute()
     m_oldName = device->getName();
     m_oldBankList = device->getBanks();
     m_oldProgramList = device->getPrograms();
-
+    m_oldLibrarianName = device->getLibrarianName();
+    m_oldLibrarianEmail = device->getLibrarianEmail();
 
     if (m_overwrite)
     {
         device->replaceBankList(m_bankList);
         device->replaceProgramList(m_programList);
         device->setName(m_name);
+        device->setLibrarian(m_librarianName, m_librarianEmail);
     }
     else
     {
@@ -77,6 +83,7 @@ ModifyDeviceCommand::unexecute()
     device->setName(m_oldName);
     device->replaceBankList(m_oldBankList);
     device->replaceProgramList(m_oldProgramList);
+    device->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
 
 }
 

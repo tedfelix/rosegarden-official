@@ -143,6 +143,9 @@ protected:
     QSpinBox                 *m_msb;
     QSpinBox                 *m_lsb;
 
+    QLabel                   *m_librarian;
+    QLabel                   *m_librarianEmail;
+
     Rosegarden::MidiBank     *m_currentBank;
     MidiBankContainer        &m_bankList;
     MidiProgramContainer     &m_programList;

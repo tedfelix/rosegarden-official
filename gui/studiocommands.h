@@ -38,6 +38,8 @@ public:
     ModifyDeviceCommand(Rosegarden::Studio *studio,
                         int device,
                         const std::string &name,
+                        const std::string &librarianName,
+                        const std::string &librarianEmail,
                         std::vector<Rosegarden::MidiBank> bankList,
                         std::vector<Rosegarden::MidiProgram> programList,
                         bool overwrite);
@@ -52,12 +54,16 @@ protected:
     Rosegarden::Studio                    *m_studio;
     int                                    m_device;
     std::string                            m_name;
+    std::string                            m_librarianName;
+    std::string                            m_librarianEmail;
     std::vector<Rosegarden::MidiBank>      m_bankList;
     std::vector<Rosegarden::MidiProgram>   m_programList;
 
     std::string                            m_oldName;
     std::vector<Rosegarden::MidiBank>      m_oldBankList;
     std::vector<Rosegarden::MidiProgram>   m_oldProgramList;
+    std::string                            m_oldLibrarianName;
+    std::string                            m_oldLibrarianEmail;
 
     bool                                   m_overwrite;
 

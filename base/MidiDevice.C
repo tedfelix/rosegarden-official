@@ -41,7 +41,7 @@ MidiDevice::MidiDevice():
     m_bankList(new BankList()),
     m_metronome(0),
     m_duplex(false),
-    m_librarian(std::pair<std::string, std::string>("none", "none"))
+    m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     createInstruments();
 }
@@ -52,7 +52,7 @@ MidiDevice::MidiDevice(DeviceId id, const std::string &name, bool duplex):
     m_bankList(new BankList()),
     m_metronome(0),
     m_duplex(duplex),
-    m_librarian(std::pair<std::string, std::string>("none", "none"))
+    m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     createInstruments();
 }
@@ -381,6 +381,10 @@ MidiDevice::toXmlString()
     midiDevice << "    <device id=\""  << m_id 
                << "\" name=\""         << m_name 
                << "\" type=\"midi\">" << std::endl << std::endl;
+
+    midiDevice << "        <librarian name=\"" << encode(m_librarian.first)
+               << "\" email=\"" << encode(m_librarian.second) << std::endl
+               << "\"/>" << std::endl;
 
     if (m_metronome)
     {
