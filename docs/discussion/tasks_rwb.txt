@@ -6,15 +6,19 @@ Aim: "working sequencer, framework for instrument management".
 
 References in round brackets are to 0.1_planned_features.txt.
 
- 1. MIDI file writing (A10)
+ 1. MIDI file writing (A10) - waiting for stable MIDI import
+    to base export model upon
 
- 2. Decenet DCOP API for sequencer process
-     - getSlice           [DONE]
-     - stop/start/play/record
+ 2. DCOP API for sequencer process
+     - getSlice (MappedEvents)          [DONE]
+     - stop/start/play/record           [IN PROGRESS]
 
- 3. Basic MIDI File writing & reading (A11 etc) 
+ 3. Componentising Sequencer application from earlier
+    prototypes (fleshing out the basic features)     [IN PROGRESS]
 
- 4. Skeleton Transport controls and possible dialog
+ 3. Skeleton Transport controls and first keyboard mappings. [IN PROGRESS]
+
+ 4. Position pointer on GUI trackseditor. [DONE]
 
  5. Remove MappedComposition from core/ and put
-    into RosegardenSound     [DONE]
+    into RosegardenSound lib  [DONE]
