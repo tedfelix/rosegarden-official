@@ -66,7 +66,7 @@ inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
 
 inline kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::RealTime&) { return s; }
+operator<<(kdbgstream &s, const Rosegarden::RealTime&) { return s; }
 
 #endif
 
