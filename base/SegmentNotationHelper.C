@@ -693,7 +693,7 @@ SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
 	acc = (*i)->getNotationAbsoluteTime();
 	Event *e = new Event(*(*i));
 
-	bool lastTiedForward;
+	bool lastTiedForward = false;
 	e->get<Bool>(TIED_FORWARD, lastTiedForward);
 	
 	e->set<Bool>(TIED_FORWARD, true);
@@ -1514,7 +1514,9 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
     timeT crotchet    = Note(Note::Crotchet).getDuration();
     timeT semiquaver  = Note(Note::Semiquaver).getDuration();
 
-    for (iterator i = from; i != to; ++i) {
+    iterator e = end();
+
+    for (iterator i = from; i != to && i != e; ++i) {
 
         // only look at one note in each chord, and at rests
         if (!hasEffectiveDuration(i)) continue;

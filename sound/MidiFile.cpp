@@ -209,7 +209,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     // update a progress dialog if we have one
     //
     bytesGot += numberOfBytes;
-    if (bytesGot > 1000) {
+    if (bytesGot > 2000) {
 
         emit setProgress((int)(double(midiFile->tellg())/
 			       double(m_fileSize) * 20.0));
@@ -333,7 +333,7 @@ MidiFile::open()
             {
 
 #ifdef MIDI_DEBUG
-                std::std::cerr << "Parsing Track " << j << endl;
+		std::cerr << "Parsing Track " << j << endl;
 #endif
 
                 if(!skipToNextTrack(midiFile))
@@ -347,7 +347,7 @@ MidiFile::open()
                 }
 
 #ifdef MIDI_DEBUG
-		std::std::cerr << "Track has " << m_trackByteCount << " bytes" << std::endl;
+		std::cerr << "Track has " << m_trackByteCount << " bytes" << std::endl;
 #endif
 
                 // Run through the events taking them into our internal
@@ -576,7 +576,7 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
 
                 /*
-		std::std::cerr << "MIDI event for channel " << channel << " (track "
+		std::cerr << "MIDI event for channel " << channel << " (track "
 			  << trackNum << ")" << std::endl;
 		midiEvent->print();
                           */
@@ -651,6 +651,22 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
     return(true);
 }
 
+// borrowed from ALSA pcm_timer.c
+//
+static unsigned long gcd(unsigned long a, unsigned long b)
+{
+	unsigned long r;
+	if (a < b) {
+		r = a;
+		a = b;
+		b = r;
+	}
+	while ((r = a % b) != 0) {
+		a = b;
+		b = r;
+	}
+	return b;
+}
 
 // If we wanted to abstract the MidiFile class to make it more useful to
 // other applications (and formats) we'd make this method and its twin
@@ -708,8 +724,16 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     // [cc] -- attempt to avoid floating-point rounding errors
     timeT crotchetTime = Note(Note::Crotchet).getDuration();
     int divisor = m_timingDivision ? m_timingDivision : 96;
-    bool haveTimeSignatures = false;
 
+    unsigned long multiplier = crotchetTime;
+    int g = (int)gcd(crotchetTime, divisor);
+    multiplier /= g;
+    divisor /= g;
+    
+    timeT maxRawTime = LONG_MAX;
+    if (multiplier > divisor) maxRawTime = (maxRawTime / multiplier) * divisor;
+
+    bool haveTimeSignatures = false;
     InstrumentId compInstrument = MidiInstrumentBase;
 
     // Clear down the assigned Instruments we already have
@@ -778,12 +802,20 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         {
 	    rosegardenEvent = 0;
 
-            // [cc] -- avoid floating-point
-            rosegardenTime = origin +
-                timeT(((*midiEvent)->getTime() * crotchetTime) / divisor);
-            rosegardenDuration =
-                timeT(((*midiEvent)->getDuration() * crotchetTime) / divisor);
-	    if (rosegardenTime + rosegardenDuration > maxTime) {
+            // [cc] -- avoid floating-point where possible
+
+	    timeT rawTime = (*midiEvent)->getTime();
+
+	    if (rawTime < maxRawTime) {
+		rosegardenTime = origin +
+		    timeT((rawTime * multiplier) / divisor);
+	    } else {
+		rosegardenTime = origin +
+		    timeT((double(rawTime) * multiplier) / double(divisor) + 0.01);
+	    }
+
+	    rosegardenDuration =
+		timeT(((*midiEvent)->getDuration() * multiplier) / divisor);
 
 #ifdef MIDI_DEBUG
 		std::cerr << "MIDI file import: origin " << origin
@@ -791,9 +823,15 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 			  << ", duration " << rosegardenDuration
 			  << ", event type " << (int)(*midiEvent)->getMessageType()
 			  << ", previous max time " << maxTime
-			  << ", new max time " << (rosegardenTime + rosegardenDuration) << std::endl;
+			  << ", potential max time " << (rosegardenTime + rosegardenDuration)
+			  << ", ev raw time " << (*midiEvent)->getTime()
+			  << ", crotchet " << crotchetTime
+			  << ", multiplier " << multiplier
+			  << ", divisor " << divisor
+			  << std::endl;
 #endif
 
+	    if (rosegardenTime + rosegardenDuration > maxTime) {
 		maxTime = rosegardenTime + rosegardenDuration;
 	    }
 
@@ -1177,6 +1215,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 						     segmentStartTime);
 		}
 	    }
+
+#ifdef MIDI_DEBUG
+	    std::cerr << "MIDI import: adding segment with start time " << rosegardenSegment->getStartTime() << " and end time " << rosegardenSegment->getEndTime() << std::endl;
+#endif
 
 	    // add the Segment to the Composition and increment the
 	    // Rosegarden segment number
