@@ -195,12 +195,16 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 	// seconds) -- adjust x-coord for shifted note head
 
 	double cx = el.getCanvasX();
-	int nbw = staff->getNotePixmapFactory(false).getNoteBodyWidth();
-	bool shifted = false;
+	int nbw = 10;
 
-	if (el.event()->get<Rosegarden::Bool>
-	    (staff->getProperties().NOTE_HEAD_SHIFTED, shifted) && shifted) {
-	    cx += nbw;
+	if (staff) {
+	    nbw = staff->getNotePixmapFactory(false).getNoteBodyWidth();
+	    bool shifted = false;
+
+	    if (el.event()->get<Rosegarden::Bool>
+		(staff->getProperties().NOTE_HEAD_SHIFTED, shifted) && shifted) {
+		cx += nbw;
+	    }
 	}
 
 	if (el.isNote() && haveClickHeight) {
