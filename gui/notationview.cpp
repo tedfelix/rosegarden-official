@@ -2998,8 +2998,8 @@ void NotationView::print(bool previewOnly)
 
 	QRect pageRect(m_leftGutter + leftMargin + pageWidth * page,
 		       topMargin,
-		       pageWidth - leftMargin*2,
-		       pageHeight - topMargin*2);
+		       pageWidth - leftMargin,
+		       pageHeight - topMargin);
 	
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
