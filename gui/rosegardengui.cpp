@@ -673,6 +673,8 @@ void RosegardenGUIApp::openFile(const QString& url)
     // on the marker on SegmentCanvas and clients
     //
     m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
+
+    m_doc->setModified(false);
 }
 
 
