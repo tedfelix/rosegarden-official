@@ -26,11 +26,16 @@
 #include "matrixelement.h"
 
 class VelocityColour;
+class MatrixView;
 
 class MatrixStaff : public LinedStaff<MatrixElement>
 {
 public:
-    MatrixStaff(QCanvas *, Rosegarden::Segment *, int id, int vResolution);
+    MatrixStaff(QCanvas *canvas,
+                Rosegarden::Segment *segment, 
+                int id, 
+                int vResolution,
+                MatrixView *view);
     virtual ~MatrixStaff();
 
 protected:
@@ -71,6 +76,7 @@ private:
     double m_scaleFactor;
 
     VelocityColour *m_elementColour;
+    MatrixView     *m_view;
 
 };
 

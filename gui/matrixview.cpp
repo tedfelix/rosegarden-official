@@ -93,9 +93,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
-        m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
-                                           8 //!!! so random, so rare
-	    ));
+        m_staffs.push_back(new MatrixStaff(tCanvas, 
+                                           segments[i],
+                                           i,
+                                           8, //!!! so random, so rare
+                                           this));
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 

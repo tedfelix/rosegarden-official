@@ -89,6 +89,8 @@ public:
     virtual void updateView();
 
     void setCurrentSelection(Rosegarden::EventSelection* s);
+    Rosegarden::EventSelection* getCurrentSelection()
+        { return m_currentEventSelection; }
 
     // Play a Note Event using the keyPressed() signal
     //

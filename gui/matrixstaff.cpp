@@ -24,21 +24,27 @@
 #include "matrixstaff.h"
 #include "matrixvlayout.h"
 #include "velocitycolour.h"
+#include "matrixview.h"
 
 #include "Segment.h"
 #include "BaseProperties.h"
 #include "Composition.h"
+#include "Selection.h"
 
 
 using Rosegarden::Segment;
 using Rosegarden::timeT;
 
-MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
-			 int id, int vResolution) :
+MatrixStaff::MatrixStaff(QCanvas *canvas,
+                         Segment *segment,
+			 int id,
+                         int vResolution,
+                         MatrixView *view) :
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
     m_scaleFactor
         (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
-    m_elementColour(0)
+    m_elementColour(0),
+    m_view(view)
 {
 
     // Create a velocity colouring object
@@ -118,6 +124,11 @@ void MatrixStaff::positionElement(MatrixElement* el)
         el->setColour(RosegardenGUIColours::SelectedElement);
     else*/
 
+    Rosegarden::EventSelection *selection = m_view->getCurrentSelection();
+
+    if (selection && selection->contains(el->event()))
+        el->setColour(RosegardenGUIColours::SelectedElement);
+    else
         el->setColour(m_elementColour->getColour(velocity));
 
     el->setCanvasX(coords.first);
