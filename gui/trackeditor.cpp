@@ -293,12 +293,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     // create the position pointer
-    m_pointer = new QCanvasLine(canvas);
-    QPen pen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::Pointer));
-    pen.setWidth(int(PointerWidth));
-    m_pointer->setPen(pen);
-    m_pointer->setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::Pointer));
-    m_pointer->setPoints(0, 0, 0, canvas->height());
+    m_pointer = new CanvasCursor(canvas, int(PointerWidth));
+    m_pointer->updateHeight();
     m_pointer->setX(-2);
     m_pointer->setY(0);
     m_pointer->setZ(10);
@@ -335,7 +331,7 @@ void TrackEditor::slotReadjustCanvasSize()
     int width = int(rint((PointerWidth * sRuler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
     width = int(PointerWidth);
 
-    m_pointer->setPoints(0, 0, 0, m_segmentCanvas->canvas()->height());
+    m_pointer->updateHeight();
 
     RG_DEBUG << "TrackEditor::slotReadjustCanvasSize - done" << endl;
 }
@@ -527,7 +523,7 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     int width = int(rint((PointerWidth * ruler->getUnitsPerPixel())/ m_initialUnitsPerPixel));
     width = int(PointerWidth);
 
-    m_pointer->setPoints(0, 0, 0, m_segmentCanvas->canvas()->height());
+    m_pointer->updateHeight();
 
     double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
     double distance = pos - m_pointer->x();

@@ -237,7 +237,7 @@ protected:
     BarButtons              *m_bottomBarButtons;
     TrackButtons            *m_trackButtons;
     SegmentCanvas           *m_segmentCanvas;
-    QCanvasLine             *m_pointer;
+    CanvasCursor            *m_pointer;
     QDeferScrollView        *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;

@@ -166,6 +166,17 @@ protected:
 
 };
 
+class CanvasCursor : public QCanvasRectangle
+{
+public:
+    CanvasCursor(QCanvas*, int width);
+    void updateHeight();
+//     virtual QRect boundingRect() const;
+protected:
+    int m_width;
+};
+
+
 
 /**
  * A pseudo GC in which CanvasItems whose ownership isn't clear cut

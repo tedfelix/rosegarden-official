@@ -23,6 +23,7 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
+#include "colours.h"
 #include "rosestrings.h"
 #include "rosegardencanvasview.h"
 
@@ -198,7 +199,7 @@ bool RosegardenCanvasView::isTimeForSmoothScroll()
         int ta = m_scrollAccelerationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
 
-	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
+// 	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
 
         if (t < m_smoothScrollTimeInterval) {
 
@@ -410,6 +411,35 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
              << "-" << horizontalScrollBar()->maxValue() << endl;
     
 }
+
+//----------------------------------------------------------------------
+
+CanvasCursor::CanvasCursor(QCanvas* c, int width)
+    : QCanvasRectangle(c),
+      m_width(width)
+{
+    QPen pen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::Pointer));
+//     pen.setWidth(width);
+    setPen(pen);
+    setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::Pointer));
+}
+
+void CanvasCursor::updateHeight()
+{
+    setSize(m_width, canvas()->height());
+//     setPoints(0, 0, 0, canvas()->height());
+}
+
+// QRect CanvasCursor::boundingRect() const
+// {
+// //     return QCanvasLine::boundingRect();
+    
+//     QRect res(startPoint(), endPoint());
+//     int pw = pen().width() * 2;
+
+//     res.setLeft(res.left() - pw);
+//     res.setRight(res.right() + pw);
+// }
 
 //----------------------------------------------------------------------
 
