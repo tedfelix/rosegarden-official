@@ -23,6 +23,7 @@
 #define _REAL_TIME_H_
 
 #include <iostream>
+#include <string>
 
 
 namespace Rosegarden 
