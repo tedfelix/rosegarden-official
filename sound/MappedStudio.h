@@ -246,8 +246,17 @@ public:
     // Set the sequencer object so that we can do things like
     // initialise plugins etc.
     //
-    void setSequencer(Rosegarden::Sequencer *sequencer);
     Rosegarden::Sequencer* getSequencer() { return m_sequencer; }
+    void setSequencer(Rosegarden::Sequencer *sequencer)
+        { m_sequencer = sequencer; }
+
+#ifdef HAVE_LADSPA
+
+    // Create a plugin instance
+    //
+    LADSPA_Handle createPluginInstance(unsigned long sampleRate);
+
+#endif // HAVE_LADSPA
 
 protected:
 
@@ -483,6 +492,12 @@ public:
     std::string getLADSPAPath() { return m_path; }
     void setLADSPAPath(const std::string &path);
     void addLADSPAPath(const std::string &path);
+
+    // Locate and load a plugin from its uniqueId.  The caller
+    // can then use the descriptor to create and control a plugin 
+    // instance.
+    //
+    LADSPA_Descriptor* getPluginDescriptor(unsigned long unique);
 
 #endif
 

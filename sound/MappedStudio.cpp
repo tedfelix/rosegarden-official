@@ -471,11 +471,19 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 
 }
 
-void
-MappedStudio::setSequencer(Rosegarden::Sequencer *sequencer)
+#ifdef HAVE_LADSPA
+
+LADSPA_Handle
+MappedStudio::createPluginInstance(unsigned long sampleRate)
 {
-    m_sequencer = sequencer;
+    LADSPA_Handle handle;
+
+    std::cout << "MappedStudio::createPluginInstance" << std::endl;
+
+    return handle;
 }
+
+#endif // HAVE_LADSPA
 
 
 // ------------ MappedAudioFader ----------------
@@ -777,6 +785,17 @@ MappedAudioPluginManager::addLADSPAPath(const std::string &path)
 {
     m_path += path;
 }
+
+LADSPA_Descriptor*
+MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
+{
+    // go through all the plugins and match on uniqueId
+
+    // then find the plugin file and load it and generate the descriptor
+
+    // then log the loaded plugin so that we automatically unload later
+}
+
 #endif // HAVE_LADSPA
 
 

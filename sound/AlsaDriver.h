@@ -69,6 +69,7 @@ protected:
     unsigned long             m_ladspaId;
     int                       m_position;
     LADSPA_Handle             m_handle;
+    LADSPA_Descriptor         m_desciptor;
 
 };
 
