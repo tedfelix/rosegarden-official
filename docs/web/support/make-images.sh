@@ -30,3 +30,6 @@ $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/21
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-contact.png Contact
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-demos.png Demos
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-requirements.png Requirements
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-documents.png Documents
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-tutorial.png Tutorial
+
