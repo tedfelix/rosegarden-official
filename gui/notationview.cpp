@@ -92,7 +92,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
             kdDebug(KDEBUG_AREA) << "Elements after layout : "
                                  << *m_notationElements << endl;
             showElements(m_notationElements->begin(), m_notationElements->end(), m_mainStaff);
-            showBars(m_notationElements->begin(), m_notationElements->end());
+//             showBars(m_notationElements->begin(), m_notationElements->end());
 
         } else {
             KMessageBox::sorry(0, "Couldn't apply layout");
