@@ -1578,24 +1578,29 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	} else {
 	    bw = m_npf->getRestWidth(Note(noteType, dots));
 	}
-/*
-	double multipliers[8][] = {
+
+	double multipliers[][8] = {
 	    { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 },
 	    { 0.4, 0.6, 0.8, 1.0, 1.4, 2.0, 2.7, 4.0 },
-	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
-	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
-	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
-	    { 0.2, 0.2, 0.5, 0.9, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 },
+	    { 0.2, 0.2, 0.5, 1.0, 1.5, 3.0, 4.5, 7.0 }
 	};
-*/
-	double gap = 0;
 
-	// disregard dots here
-	timeT duration = Note(noteType).getDuration();
-
-	gap = duration * m_proportion * m_npf->getNoteBodyWidth() / Note(Note::Quaver).getDuration() / 100;
-	
-	NOTATION_DEBUG << "duration " << duration << ", proportion " << m_proportion << ", gap is " << gap << endl;
+	int proportionIndex = m_proportion / 20;
+	if (proportionIndex < 0) proportionIndex = 0;
+	if (proportionIndex > 5) proportionIndex = 5;
+	if (noteType < 0) noteType = 0;
+	if (noteType > 7) noteType = 7;
+	double multiplier = multipliers[proportionIndex][noteType];
+	if (noteType < 7 && dots > 0) {
+	    multiplier += multipliers[proportionIndex][noteType+1];
+	    multiplier /= 2;
+	}
+	double gap = m_npf->getNoteBodyWidth(noteType) * multiplier;
+	gap = gap * m_spacing / 100.0;
+	return bw + gap;
 
 /*!!!
 	//!!! This is where we plug in different spacings...
@@ -1610,7 +1615,7 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 	case Note::Breve:              gap = bw * 7;     break;
 	}
 */
-	return bw + m_spacing * gap / 100;
+//	return bw + m_spacing * gap / 100;
 
     } else {
 

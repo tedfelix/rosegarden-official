@@ -381,8 +381,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	}
     }
 
-    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements: "
-			 << elementCount << " elements rendered" << endl;
+//    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements: "
+//			 << elementCount << " elements rendered" << endl;
 }	
 
 void
@@ -517,11 +517,11 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
     }
 
-    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
-                         << from << " -> " << to << ": "
-			 << elementsPositioned << " elements positioned, "
-			 << elementsRendered << " re-rendered"
-			 << endl;
+//    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
+//                         << from << " -> " << to << ": "
+//			 << elementsPositioned << " elements positioned, "
+//			 << elementsRendered << " re-rendered"
+//			 << endl;
 
     NotePixmapFactory::dumpStats(std::cerr);
 }

@@ -146,12 +146,14 @@ NotationView::slotChangeSpacing(int spacing)
             << std::endl;
     }
 
+    positionStaffs();
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	m_staffs[i]->markChanged();
     }
 
+    positionPages();
     updateView();
 }
 
@@ -200,12 +202,14 @@ NotationView::slotChangeProportion(int proportion)
             << std::endl;
     }
 
+    positionStaffs();
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	m_staffs[i]->markChanged();
     }
 
+    positionPages();
     updateView();
 }
 

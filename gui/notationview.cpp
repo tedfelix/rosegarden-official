@@ -1202,7 +1202,7 @@ void NotationView::setupActions()
     actionCollection()->insert(spacingActionMenu);
     
     KActionMenu *proportionActionMenu =
-	new KActionMenu(i18n("Note P&roportion"), this, "proportion_actionmenu");
+	new KActionMenu(i18n("Du&ration Factor"), this, "proportion_actionmenu");
 
     int defaultProportion = m_hlayout->getProportion();
     std::vector<int> proportions = NotationHLayout::getAvailableProportions();
@@ -1212,7 +1212,6 @@ void NotationView::setupActions()
 	
 	QString name = QString("%1%").arg(*i);
 	if (*i == 0) name = i18n("None");
-	else if (*i == 100) name = i18n("Full");
 
 	KToggleAction *proportionAction =
 	    new KToggleAction

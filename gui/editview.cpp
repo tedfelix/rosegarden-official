@@ -612,7 +612,9 @@ EditView::setupActions()
 		SLOT(slotInsertControlRulerItem()), actionCollection(),
 		"insert_control_ruler_item");
 
-    new KAction(i18n("Erase selected items"), Key_Delete, this,
+    // This was on Key_Delete, but that conflicts with existing Delete commands
+    // on individual edit views
+    new KAction(i18n("Erase selected items"), 0, this,
 		SLOT(slotEraseControlRulerItem()), actionCollection(),
 		"erase_control_ruler_item");
 
