@@ -386,7 +386,8 @@ string Note::getEnglishName(Type type, bool dotted) const {
 string Note::getAmericanName(Type type, bool dotted) const {
     static const string names[] = {
         "sixty-fourth note", "thirty-second note", "sixteenth note",
-            "eighth note", "quarter note", "half note", "whole note", "breve"
+            "eighth note", "quarter note", "half note", "whole note",
+            "double whole note"
             };
     if (type < 0) { type = m_type; dotted = m_dotted; }
     return dotted ? ("dotted " + names[type]) : names[type];
@@ -394,7 +395,8 @@ string Note::getAmericanName(Type type, bool dotted) const {
 
 string Note::getShortName(Type type, bool dotted) const {
     static const string names[] = {
-        "64th", "32nd", "16th", "8th", "quarter", "half", "whole", "breve"
+        "64th", "32nd", "16th", "8th", "quarter", "half", "whole",
+            "double whole"
             };
     if (type < 0) { type = m_type; dotted = m_dotted; }
     return dotted ? ("dotted " + names[type]) : names[type];

@@ -279,6 +279,7 @@ public:
         QuarterNote         = 4,
         HalfNote            = 5,
         WholeNote           = 6,
+        DoubleWholeNote     = 7,
 
         Hemidemisemiquaver  = 0,
         Demisemiquaver      = 1,
