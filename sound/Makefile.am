@@ -1,8 +1,8 @@
-kde_includes=/opt/kde2-gcc3/include
+kde_includes=/opt/arts-0.5.4/include
 
 # we define it here but make sometimes ignores it
-LIBTOOL=/usr/bin/libtool
-MCOPIDL=/usr/bin/mcopidl
+LIBTOOL=libtool
+MCOPIDL=mcopidl
 
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
@@ -44,6 +44,9 @@ MidiRecord.cpp: MidiArts.h
 # our executable
 
 bin_PROGRAMS = sound
-sound_SOURCES = MidiFile.cpp MidiEvent.cpp sound.cpp
+sound_METASOURCES = AUTO
+sound_SOURCES = MidiFile.cpp MidiEvent.cpp Sequencer.cpp sound.cpp
 sound_LDFLAGS =
 sound_LDADD = libMidiArts.la -lsoundserver_idl ../core/libcore.a
+
+DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
