@@ -24,6 +24,7 @@
 
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
+#include "Clipboard.h"
 #include "notationproperties.h"
 
 #include "rosedebug.h"
@@ -197,9 +198,9 @@ KeyInsertionCommand::modifySegment()
 }
 
 
-EraseCommand::EraseCommand(Segment &segment,
-			   Event *event,
-			   bool collapseRest) :
+EraseEventCommand::EraseEventCommand(Segment &segment,
+				     Event *event,
+				     bool collapseRest) :
     BasicCommand(makeName(event->getType()).c_str(), segment,
 		 event->getAbsoluteTime(),
 		 event->getAbsoluteTime() + event->getDuration(),
@@ -211,13 +212,13 @@ EraseCommand::EraseCommand(Segment &segment,
     // nothing
 }
 
-EraseCommand::~EraseCommand()
+EraseEventCommand::~EraseEventCommand()
 {
     // nothing
 }
 
 string
-EraseCommand::makeName(string e)
+EraseEventCommand::makeName(string e)
 {
     string n = "Erase ";
     n += (char)toupper(e[0]);
@@ -226,41 +227,148 @@ EraseCommand::makeName(string e)
 }
 
 timeT
-EraseCommand::getRelayoutEndTime()
+EraseEventCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }
 
 void
-EraseCommand::modifySegment()
+EraseEventCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
-    string eventType = m_event->getType();
-
-    if (eventType == Note::EventType) {
-
-	helper.deleteNote(m_event, m_collapseRest);
-	return;
-
-    } else if (eventType == Note::EventRestType) {
-
-	helper.deleteRest(m_event);
-	return;
-	
-    } else if (eventType == Rosegarden::Clef::EventType ||
-	       eventType == Rosegarden::Key::EventType) {
-
-	helper.segment().eraseSingle(m_event);
+    if (m_event->isa(Rosegarden::Clef::EventType) ||
+	m_event->isa(Rosegarden::Key ::EventType)) {
 	m_relayoutEndTime = helper.segment().getEndTime();
-	return;
-	
-    } else {
-	    
-	helper.segment().eraseSingle(m_event);
-	return;
+    }
+
+    helper.deleteEvent(m_event, m_collapseRest);
+}
+
+
+
+CutSelectionCommand::CutSelectionCommand(EventSelection &selection,
+					 Rosegarden::Clipboard *clipboard) :
+    CompoundCommand(name())
+{
+    addCommand(new CopySelectionCommand(selection, clipboard));
+    addCommand(new EraseSelectionCommand(selection));
+}
+
+CopySelectionCommand::CopySelectionCommand(EventSelection &selection,
+					   Rosegarden::Clipboard *clipboard) :
+    KCommand(name()),
+    m_targetClipboard(clipboard)
+{
+    m_sourceClipboard = new Rosegarden::Clipboard;
+    Segment *s = m_sourceClipboard->newSegment();
+
+    for (EventSelection::eventcontainer::iterator i =
+	     selection.getSegmentEvents().begin();
+	 i != selection.getSegmentEvents().end(); ++i) {
+	s->insert(new Event(**i));
     }
 }
+
+CopySelectionCommand::~CopySelectionCommand()
+{
+    delete m_sourceClipboard;
+}
+
+void
+CopySelectionCommand::execute()
+{
+    Rosegarden::Clipboard temp(*m_targetClipboard);
+    m_targetClipboard->copyFrom(m_sourceClipboard);
+    m_sourceClipboard->copyFrom(&temp);
+}
+
+void
+CopySelectionCommand::unexecute()
+{
+    Rosegarden::Clipboard temp(*m_sourceClipboard);
+    m_sourceClipboard->copyFrom(m_targetClipboard);
+    m_targetClipboard->copyFrom(&temp);
+}
+
+PasteCommand::PasteCommand(Rosegarden::Segment &segment,
+			   Rosegarden::Clipboard *clipboard,
+			   Rosegarden::timeT pasteTime) :
+    BasicCommand(name(), segment, pasteTime,
+		 (clipboard->isSingleSegment() ?
+		  (pasteTime +
+		   clipboard->getSingleSegment()->getEndTime() -
+		   clipboard->getSingleSegment()->getFirstEventTime()) :
+		  (pasteTime + 1))),
+    m_clipboard(clipboard)
+{
+    // nothing else
+}
+
+void
+PasteCommand::modifySegment()
+{
+    if (!m_clipboard->isSingleSegment()) return;
+
+    Segment *source = m_clipboard->getSingleSegment();
+
+    timeT pasteTime = getBeginTime();
+    timeT origin = source->getFirstEventTime();
+    timeT duration = source->getDuration() - origin;
+
+    SegmentNotationHelper helper(getSegment());
+
+    if (!helper.removeRests(pasteTime, duration)) return;
+
+    //!!! paste clef or key -> relayout to end
+    //!!! even otherwise, need to relayout a bit longer depending
+    // on where the removeRests call ended
+
+    for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
+	Event *e = new Event(**i);
+	e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
+	getSegment().insert(e);
+    }
+}
+
+
+EraseSelectionCommand::EraseSelectionCommand(EventSelection &selection) :
+    BasicSelectionCommand(name(), selection, true),
+    m_selection(&selection),
+    m_relayoutEndTime(getEndTime())
+{
+    // nothing else
+}
+
+void
+EraseSelectionCommand::modifySegment()
+{
+    std::vector<Event *> eventsToErase;
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	if ((*i)->isa(Rosegarden::Clef::EventType) ||
+	    (*i)->isa(Rosegarden::Key ::EventType)) {
+	    m_relayoutEndTime = getSegment().getEndTime();
+	}
+
+	eventsToErase.push_back(*i);
+    }
+
+    SegmentNotationHelper helper(getSegment());
+    for (unsigned int j = 0; j < eventsToErase.size(); ++j) {
+	helper.deleteEvent(eventsToErase[j], false);
+    }
+}
+
+timeT
+EraseSelectionCommand::getRelayoutEndTime()
+{
+    return m_relayoutEndTime;
+}
+
 
 void GroupMenuBeamCommand::modifySegment()
 {

@@ -28,8 +28,7 @@
 #include "rosegardenguidoc.h"
 
 
-class SegmentEraseCommand : public KCommand,
-                            public SegmentCommand
+class SegmentEraseCommand : public SegmentCommand
 {
 public:
     SegmentEraseCommand(Rosegarden::Segment *segment);
@@ -46,8 +45,7 @@ private:
 };
 
 
-class SegmentInsertCommand : public KCommand,
-                             public SegmentCommand
+class SegmentInsertCommand : public SegmentCommand
 {
 public:
     SegmentInsertCommand(Rosegarden::Composition *composition,
@@ -77,8 +75,7 @@ private:
  * correctly, and it provides the ability to undo recording.  (The
  * unexecute does remove the segment, it doesn't just pretend to.)
  */
-class SegmentRecordCommand : public KCommand,
-			     public SegmentCommand
+class SegmentRecordCommand : public SegmentCommand
 {
 public:
     SegmentRecordCommand(Rosegarden::Segment *segment);
@@ -99,8 +96,7 @@ private:
  * SegmentReconfigureCommand is a general-purpose command for
  * moving, resizing or changing the track of one or more segments
  */
-class SegmentReconfigureCommand : public KCommand,
-				  public SegmentCommand
+class SegmentReconfigureCommand : public SegmentCommand
 {
 public:
     SegmentReconfigureCommand(QString name);
@@ -129,8 +125,7 @@ private:
 };
 
 
-class SegmentSplitCommand : public KCommand,
-			    public SegmentCommand
+class SegmentSplitCommand : public SegmentCommand
 {
 public:
     SegmentSplitCommand(Rosegarden::Segment *segment,
@@ -149,17 +144,16 @@ private:
 };
 
 
-class AddTimeSignatureCommand : public KCommand,
-                                public TimeAndTempoChangeCommand
+class AddTimeSignatureCommand : public TimeAndTempoChangeCommand
 {
 public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
                             Rosegarden::timeT time,
                             Rosegarden::TimeSignature timeSig) :
-    KCommand(name()),
-    m_composition(composition),
-    m_time(time),
-    m_timeSignature(timeSig) { }
+	TimeAndTempoChangeCommand(name()),
+	m_composition(composition),
+	m_time(time),
+	m_timeSignature(timeSig) { }
     virtual ~AddTimeSignatureCommand() { }
 
     static QString name() {

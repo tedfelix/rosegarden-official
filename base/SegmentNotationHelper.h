@@ -195,7 +195,7 @@ public:
      *
      * @see deleteRest, deleteNote
      */
-    bool deleteEvent(Event *e);
+    bool deleteEvent(Event *e, bool collapseRest = false);
 
     /**
      * Check whether a note or rest event has a duration that can be

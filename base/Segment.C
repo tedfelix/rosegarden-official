@@ -77,6 +77,14 @@ void Segment::setStartTime(timeT idx)
 }
 
 
+timeT Segment::getFirstEventTime() const
+{
+    iterator i = begin();
+    if (i == end()) return getEndTime();
+    return (*i)->getAbsoluteTime();
+}
+
+
 timeT Segment::getDuration() const
 {
     const_iterator lastEl = end();

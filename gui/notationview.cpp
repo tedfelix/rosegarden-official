@@ -516,7 +516,7 @@ void NotationView::setupActions()
          actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
-    KToggleAction *labelChordsAction = new KToggleAction
+    new KToggleAction
 	(i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
 	 actionCollection(), "label_chords");
 
@@ -1097,23 +1097,28 @@ void NotationView::setHLayout(NotationHLayout* l)
 //
 void NotationView::slotEditCut()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut()\n";
+//    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut()\n";
 
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 
-    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : cutting selection\n";
+//    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : cutting selection\n";
 
-    m_currentEventSelection->cut();
+    
+    addCommandToHistory(new CutSelectionCommand(*m_currentEventSelection,
+						m_document->getClipboard()));
 
-    emit usedSelection();
+//!!!
+//    m_currentEventSelection->cut();
 
-    refreshSegment(&m_currentEventSelection->getSegment(),
-		   m_currentEventSelection->getBeginTime(),
-		   m_currentEventSelection->getEndTime());
+//    emit usedSelection();
 
-    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
-                         << m_currentEventSelection->getTotalDuration() << endl;
+//    refreshSegment(&m_currentEventSelection->getSegment(),
+//		   m_currentEventSelection->getBeginTime(),
+//		   m_currentEventSelection->getEndTime());
+
+//    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
+//                         << m_currentEventSelection->getTotalDuration() << endl;
 }
 
 void NotationView::slotEditCopy()
@@ -1121,7 +1126,10 @@ void NotationView::slotEditCopy()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
-    m_currentEventSelection->copy();
+    addCommandToHistory(new CopySelectionCommand(*m_currentEventSelection,
+						 m_document->getClipboard()));
+
+//!!!    m_currentEventSelection->copy();
 
     emit usedSelection();
 }
@@ -1130,7 +1138,7 @@ void NotationView::slotEditPaste()
 {
     if (!m_currentEventSelection) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
-        slotQuarter();
+        slotQuarter(); //!!!why?
         return;
     }
 
@@ -1161,6 +1169,11 @@ void NotationView::slotEditPaste()
 	insertionTime = (*i)->getAbsoluteTime();
     }
 
+    //!!! how to identify if paste failed
+    addCommandToHistory(new PasteCommand(segment, m_document->getClipboard(),
+					 insertionTime));
+
+/*
     if (m_currentEventSelection->pasteToSegment(segment, insertionTime)) {
 
 	refreshSegment
@@ -1171,6 +1184,7 @@ void NotationView::slotEditPaste()
         
         slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     }
+*/
 }
 
 void NotationView::slotEditSelectFromStart()

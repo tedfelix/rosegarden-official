@@ -41,7 +41,6 @@ class NotationTool;
 class NotationToolBox;
 class PositionCursor;
 class ActiveItem;
-class BasicCommand;
 
 /**
  * NotationView is a view for one or more Staff objects, each of

@@ -33,7 +33,6 @@
  * otherwise have put in execute() into modifySegment().
  */
 
-#include <kcommand.h>
 #include "command.h"
 #include "Segment.h"
 
@@ -48,7 +47,7 @@ class EventSelection;
  * modified by the command, ready to be restored verbatim on undo.
  */
 
-class BasicCommand : public KCommand, public IntraSegmentCommand
+class BasicCommand : public IntraSegmentCommand
 {
 public:
     virtual ~BasicCommand();

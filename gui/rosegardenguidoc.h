@@ -33,6 +33,7 @@
 #include <qxml.h>
 
 #include "Composition.h"
+#include "Clipboard.h"
 #include "MappedComposition.h"
 #include "multiviewcommandhistory.h"
 #include "AudioFileManager.h"
@@ -160,8 +161,20 @@ public:
      */
     void deleteViews();
 
+    /**
+     * returns the composition (the principal constituent of the document)
+     */
     Rosegarden::Composition&       getComposition()       { return m_composition; }
+
+    /**
+     * returns the composition (the principal constituent of the document)
+     */
     const Rosegarden::Composition& getComposition() const { return m_composition; }
+
+    /**
+     * returns the cut/copy/paste clipboard
+     */
+    Rosegarden::Clipboard *getClipboard() { return m_clipboard; }
 
     /**
      * insert some recorded MIDI events into our recording Segment
@@ -284,6 +297,8 @@ private:
     Rosegarden::timeT m_endOfLastRecordedNote;  // we use this for rest filling
 
     MultiViewCommandHistory m_commandHistory;
+
+    Rosegarden::Clipboard *m_clipboard;
 };
 
 #endif // ROSEGARDENGUIDOC_H

@@ -43,6 +43,7 @@
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 #include "Event.h"
+#include "Clipboard.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "segmentcommands.h"
@@ -62,7 +63,8 @@ using namespace Rosegarden::BaseProperties;
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
     : QObject(parent, name),
-      m_recordSegment(0), m_endOfLastRecordedNote(0)
+      m_recordSegment(0), m_endOfLastRecordedNote(0),
+      m_clipboard(new Rosegarden::Clipboard)
 {
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();

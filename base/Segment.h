@@ -91,6 +91,13 @@ public:
     void setStartTime(timeT i);
 
     /**
+     * Get the time of the first actual event on the Segment.
+     * Returns the end time (which should be the same as the start
+     * time) if there are no events.
+     */
+    timeT getFirstEventTime() const;
+
+    /**
      * Return the effective duration of the segment.  This is the
      * time at which the final event ends relative to the start time
      * of the segment.

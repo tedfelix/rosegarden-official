@@ -478,10 +478,10 @@ void NotationEraser::handleLeftButtonPress(Rosegarden::timeT,
 {
     if (!element || staffNo < 0) return;
 
-    EraseCommand *command =
-	new EraseCommand(m_nParentView->getStaff(staffNo)->getSegment(),
-			 element->event(),
-			 m_collapseRest);
+    EraseEventCommand *command =
+	new EraseEventCommand(m_nParentView->getStaff(staffNo)->getSegment(),
+			      element->event(),
+			      m_collapseRest);
 
     m_nParentView->addCommandToHistory(command);
 }
@@ -785,17 +785,22 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
 
     Segment& segment = staff->getSegment();
 
-    //!!! should be using a command here
 
-    if (m_selection.pasteToSegment(segment, time)) {
+    //!!! how to identify if paste failed
+    m_parentView->addCommandToHistory
+	(new PasteCommand(segment, m_parentView->getDocument()->getClipboard(),
+			  time));
 
-        m_nParentView->refreshSegment
-	    (&segment, 0, time + m_selection.getTotalDuration() + 1);
 
-    } else {
+//    if (m_selection.pasteToSegment(segment, time)) {
+
+//        m_nParentView->refreshSegment
+//	    (&segment, 0, time + m_selection.getTotalDuration() + 1);
+
+//    } else {
         
-        m_parentView->slotStatusHelpMsg(i18n("Couldn't paste at this point"));
-    }
+//        m_parentView->slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+//    }
     
     //m_parentView->slotStatusHelpMsg(i18n("Ready."));
 

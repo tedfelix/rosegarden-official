@@ -7,6 +7,7 @@ rosegarden_SOURCES = \
 	basiccommand.cpp \
 	chordnameruler.cpp \
 	colours.cpp \
+	command.cpp \
 	dialogs.cpp \
 	edittool.cpp \
 	editview.cpp \

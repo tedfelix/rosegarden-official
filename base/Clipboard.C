@@ -28,9 +28,20 @@ Clipboard::Clipboard()
     // nothing
 }
 
+Clipboard::Clipboard(const Clipboard &c) 
+{
+    copyFrom(&c);
+}
+
+Clipboard &
+Clipboard::operator=(const Clipboard &c)
+{
+    copyFrom(&c);
+}
+
 Clipboard::~Clipboard()
 {
-    // nothing
+    clear();
 }
 
 void
@@ -96,6 +107,17 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     }
 
     return s;
+}
+
+void
+Clipboard::copyFrom(const Clipboard *c)
+{
+    if (c == this) return;
+    clear();
+
+    for (Clipboard::iterator i = c->begin(); i != c->end(); ++i) {
+	newSegment(*i);
+    }
 }
 
 }

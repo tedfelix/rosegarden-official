@@ -28,12 +28,12 @@
 #include "Segment.h"
 
 /**
- * A set of simple abstract base-classes for commands, to be mixed
- * in (via multiple inheritance) with KCommand.
+ * A set of simple abstract base-classes for commands, to sit
+ * between KCommand and your command's concrete implementation.
  *
  * Although you can execute any KCommand in Rosegarden's command
  * history, the various GUI views will only be able to refresh
- * correctly if all commands also subclass from the appropriate one of
+ * correctly if all commands are subclassed from the appropriate one of
  * these bases.  (Please don't attempt to do the refresh yourself --
  * it's much easier to support multiple views using this technique!)
  */
@@ -46,7 +46,7 @@
  * segments.
  */
 
-class SegmentCommand
+class SegmentCommand : public KCommand
 {
 public:
     typedef std::set<Rosegarden::Segment *> SegmentSet;
@@ -59,7 +59,7 @@ public:
     virtual void getSegments(SegmentSet &) = 0;
 
 protected:
-    SegmentCommand() { }
+    SegmentCommand(const QString &name) : KCommand(name) { }
 };
 
 
@@ -69,10 +69,10 @@ protected:
  * and tempo data.
  */
 
-class TimeAndTempoChangeCommand
+class TimeAndTempoChangeCommand : public KCommand
 {
 protected:
-    TimeAndTempoChangeCommand() { }
+    TimeAndTempoChangeCommand(const QString &name) : KCommand(name) { }
 };
 
 
@@ -84,7 +84,7 @@ protected:
  * specialised subclasses of IntraSegmentCommand.
  */
 
-class IntraSegmentCommand
+class IntraSegmentCommand : public KCommand
 {
 public:
     /**
@@ -93,7 +93,54 @@ public:
     virtual Rosegarden::Segment &getSegment() = 0;
 
 protected:
-    IntraSegmentCommand() { }
+    IntraSegmentCommand(const QString &name) : KCommand(name) { }
+};
+
+
+/**
+ * Somewhat like a KMacroCommand, but commands can only be added by a
+ * subclass (i.e. it's not intended for user-created macros) and it
+ * has accessors for the contained commands.
+ * 
+ * Not derived from KMacroCommand for implementation reasons.
+ */
+
+class CompoundCommand : public KCommand
+{
+public:
+    virtual ~CompoundCommand();
+
+    /**
+     * Return the number of contained commands
+     */
+    virtual int getCommandCount() const;
+
+    /**
+     * Return a contained command by index.  The index is zero-based
+     * and interpreted in the order in which the contained commands
+     * were last executed or unexecuted -- so if the last thing that
+     * happened was an unexecute, you'll get them in reverse order
+     * (which is usually what you want).
+     */
+    virtual KCommand *getCommand(int n);
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    CompoundCommand(const QString &name) :
+	KCommand(name),
+	m_lastWasUnexecute(false) { }
+
+    /**
+     * Add a command.  Must have been allocated via new;
+     * the CompoundCommand assumes ownership.
+     */
+    void addCommand(KCommand *command);
+
+private:
+    std::vector<KCommand *> m_commands;
+    bool m_lastWasUnexecute;
 };
 
 

@@ -274,6 +274,15 @@ void EditView::slotCommandExecuted(KCommand *command)
         return;
     }
 
+    CompoundCommand *compoundCommand =
+	dynamic_cast<CompoundCommand *>(command);
+    if (compoundCommand) {
+	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
+	    slotCommandExecuted(compoundCommand->getCommand(i));
+	}
+	return;
+    }
+
     kdDebug(KDEBUG_AREA)
         << "Warning: EditView::slotCommandExecuted:\n"
         << "Unknown sort of KCommand, don't know how to refresh"

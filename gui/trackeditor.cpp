@@ -323,31 +323,42 @@ void TrackEditor::slotCommandExecuted(KCommand *command)
     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted" << endl;
 
     SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
-    if (!segmentCommand) {
-	kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a segment command" << endl;
+    if (segmentCommand) {
+	
+	SegmentCommand::SegmentSet segments;
+	segmentCommand->getSegments(segments);
+
+	Composition &composition = m_document->getComposition();
+
+	for (SegmentCommand::SegmentSet::iterator i = segments.begin();
+	     i != segments.end(); ++i) {
+
+	    if (composition.contains(*i)) {
+		kdDebug(KDEBUG_AREA) << "Existing segment" << endl;
+	
+		m_segmentCanvas->updateSegmentItem(*i);
+	    } else {
+		kdDebug(KDEBUG_AREA) << "Defunct segment" << endl;
+		
+		m_segmentCanvas->removeSegmentItem(*i);
+	    }
+	}
+
+	m_segmentCanvas->slotUpdate();
 	return;
     }
-	
-    SegmentCommand::SegmentSet segments;
-    segmentCommand->getSegments(segments);
 
-    Composition &composition = m_document->getComposition();
-
-    for (SegmentCommand::SegmentSet::iterator i = segments.begin();
-	 i != segments.end(); ++i) {
-
-	if (composition.contains(*i)) {
-	    kdDebug(KDEBUG_AREA) << "Existing segment" << endl;
-	
-	    m_segmentCanvas->updateSegmentItem(*i);
-	} else {
-	    kdDebug(KDEBUG_AREA) << "Defunct segment" << endl;
-	
-	    m_segmentCanvas->removeSegmentItem(*i);
+    CompoundCommand *compoundCommand =
+	dynamic_cast<CompoundCommand *>(command);
+    if (compoundCommand) {
+	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
+	    slotCommandExecuted(compoundCommand->getCommand(i));
 	}
+	return;
     }
 
-    m_segmentCanvas->slotUpdate();
+    kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a presently-supported command type" << endl;
+    return;
 }
 
 

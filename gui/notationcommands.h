@@ -26,6 +26,10 @@
 
 #include "basiccommand.h"
 
+namespace Rosegarden {
+    class Clipboard;
+}
+
 
 // Insertion commands
 
@@ -113,13 +117,13 @@ protected:
 };
 
 
-class EraseCommand : public BasicCommand
+class EraseEventCommand : public BasicCommand
 {
 public:
-    EraseCommand(Rosegarden::Segment &segment,
-		 Rosegarden::Event *event,
-		 bool collapseRest);
-    virtual ~EraseCommand();
+    EraseEventCommand(Rosegarden::Segment &segment,
+		      Rosegarden::Event *event,
+		      bool collapseRest);
+    virtual ~EraseEventCommand();
 
     virtual Rosegarden::timeT getRelayoutEndTime();
 
@@ -132,6 +136,67 @@ protected:
     Rosegarden::timeT m_relayoutEndTime;
     std::string makeName(std::string);
 };
+
+
+// Cut, copy, paste, erase selection
+
+class CutSelectionCommand : public CompoundCommand
+{
+public:
+    CutSelectionCommand(EventSelection &selection,
+			Rosegarden::Clipboard *clipboard);
+
+    static QString name() { return "Cu&t"; }
+};
+
+class CopySelectionCommand : public KCommand // no refresh needed
+{
+public:
+    CopySelectionCommand(EventSelection &selection,
+			 Rosegarden::Clipboard *clipboard);
+    virtual ~CopySelectionCommand();
+
+    static QString name() { return "&Copy"; }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Clipboard *m_sourceClipboard;
+    Rosegarden::Clipboard *m_targetClipboard;
+};
+
+class PasteCommand : public BasicCommand
+{
+public:
+    PasteCommand(Rosegarden::Segment &segment,
+		 Rosegarden::Clipboard *clipboard,
+		 Rosegarden::timeT pasteTime);
+
+    static QString name() { return "&Paste"; }
+    
+protected:
+    virtual void modifySegment();
+    Rosegarden::Clipboard *m_clipboard;
+};
+
+class EraseSelectionCommand : public BasicSelectionCommand
+{
+public:
+    EraseSelectionCommand(EventSelection &selection);
+
+    static QString name() { return "&Erase"; }
+
+    virtual Rosegarden::timeT getRelayoutEndTime();
+
+protected:
+    virtual void modifySegment();
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::timeT m_relayoutEndTime;
+};
+
 
 
 // Group menu commands

@@ -31,7 +31,7 @@ using Rosegarden::TrackId;
 // --------- Erase Segment --------
 //
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
-    KCommand("Erase Segment"),
+    SegmentCommand("Erase Segment"),
     m_composition(segment->getComposition()),
     m_segment(segment)
 {
@@ -76,7 +76,7 @@ SegmentInsertCommand::SegmentInsertCommand(Composition *c,
                                            TrackId track,
                                            timeT startTime,
                                            timeT duration):
-    KCommand("Create Segment"),
+    SegmentCommand("Create Segment"),
     m_composition(c),
     m_segment(0),
     m_track(track),
@@ -130,7 +130,7 @@ SegmentInsertCommand::unexecute()
 //
 
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
-    KCommand("Record"),
+    SegmentCommand("Record"),
     m_composition(s->getComposition()),
     m_segment(s)
 {
@@ -168,7 +168,7 @@ SegmentRecordCommand::getSegments(SegmentSet &segments)
 //
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-    KCommand(name)
+    SegmentCommand(name)
 {
 }
 
@@ -255,7 +255,7 @@ SegmentReconfigureCommand::swap()
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
 					 timeT splitTime) :
-    KCommand("Split Segment"),
+    SegmentCommand("Split Segment"),
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime)

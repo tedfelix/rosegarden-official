@@ -654,6 +654,7 @@ void
 SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {
     iterator i = segment().findSingle(e);
+    if (i == end()) return;
 
     if (segment().noteIsInChord(e)) {
 
@@ -685,16 +686,16 @@ SegmentNotationHelper::deleteRest(Event *e)
 }
 
 bool
-SegmentNotationHelper::deleteEvent(Event *e)
+SegmentNotationHelper::deleteEvent(Event *e, bool collapseRest)
 {
     bool res = true;
 
-    if (e->isa(Note::EventType)) deleteNote(e);
+    if (e->isa(Note::EventType)) deleteNote(e, collapseRest);
     else if (e->isa(Note::EventRestType)) res = deleteRest(e);
     else {
         // just plain delete
         iterator i = segment().findSingle(e);
-        erase(i);
+	if (i != end()) erase(i);
     }
 
     return res;    
