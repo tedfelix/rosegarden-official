@@ -491,6 +491,7 @@ NoteInserter::getOffsetWithinRest(int staffNo,
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
     NotationElement* el = static_cast<NotationElement*>(*i);
+    if (!el->getCanvasItem()) return 0;
     double offset = canvasX - el->getCanvasX();
 
     if (offset < 0) return 0;
@@ -1400,7 +1401,7 @@ void NotationSelector::drag(int x, int y, bool final)
 	dragTime = elt->getViewAbsoluteTime();
 	layoutX  = elt->getLayoutX();
 
-	if (elt->isRest() && duration > 0) {
+	if (elt->isRest() && duration > 0 && elt->getCanvasItem()) {
 
 	    double restX = 0, restWidth = 0;
 	    elt->getCanvasAirspace(restX, restWidth);
