@@ -964,9 +964,8 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     // into delta times.
     //
     //
-    MidiTrackIterator midiEventIt;
-    int lastMidiTime;
-    int endOfSegmentTime;
+    MidiTrackIterator it;
+    Rosegarden::timeT deltaTime, lastMidiTime;
 
     for (Rosegarden::TrackId i = 0; i < m_numberOfTracks; i++)
     {
@@ -974,26 +973,24 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
         // First sort the list
         //
-        m_midiComposition[i].sort();
+        //m_midiComposition[i].sort();
 
         // insert end of track event
-        MidiTrackIterator lastEvent = (m_midiComposition[i].end());
-        --lastEvent;
-        endOfSegmentTime  = (*lastEvent)->getTime();
 
-        midiEvent = new MidiEvent(endOfSegmentTime, MIDI_FILE_META_EVENT,
+        for (it = m_midiComposition[i].begin();
+             it != m_midiComposition[i].end();
+             it++)
+        {
+            deltaTime = (*it)->getTime() - lastMidiTime;
+            lastMidiTime = (*it)->getTime();
+            (*it)->setTime(deltaTime);
+        }
+
+        midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT,
                                   MIDI_END_OF_TRACK, "");
 
         m_midiComposition[i].push_back(midiEvent);
 
-        for (midiEventIt = m_midiComposition[i].begin();
-             midiEventIt != m_midiComposition[i].end();
-             midiEventIt++)
-        {
-            midiEventAbsoluteTime = (*midiEventIt)->getTime() - lastMidiTime;
-            lastMidiTime = (*midiEventIt)->getTime();
-            (*midiEventIt)->setTime(midiEventAbsoluteTime);
-        }
     }
 
     return;
@@ -1308,6 +1305,7 @@ MidiFile::clearMidiComposition()
     }
 
 }
+
 
 
 }
