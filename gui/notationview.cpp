@@ -1808,7 +1808,7 @@ void NotationView::setupActions()
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                                  ("transport-tracking")));
-    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, 0, this,
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(m_playTracking);
 
@@ -2158,8 +2158,8 @@ NotationView::getPageMargins(int &left, int &top)
 	
 	double printSizeMm = 25.4 * ((double)m_printSize / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
-	left = (int)(20.0 / mmPerPixel);
-	top  = (int)(15.0 / mmPerPixel);
+	left = (int)(15.0 / mmPerPixel);
+	top  = (int)(10.0 / mmPerPixel);
     }
 }
 
@@ -2218,7 +2218,7 @@ NotationView::paintEvent(QPaintEvent *e)
     }
 
     int topMargin = 0, leftMargin = 0;
-    getPageMargins(topMargin, leftMargin);
+    getPageMargins(leftMargin, topMargin);
 
     if (m_pageMode == LinedStaff::ContinuousPageMode) {
 	// relayout if the window width changes significantly in continuous page mode
@@ -2961,7 +2961,7 @@ void NotationView::readjustCanvasSize()
     }
 
     int topMargin = 0, leftMargin = 0;
-    getPageMargins(topMargin, leftMargin);
+    getPageMargins(leftMargin, topMargin);
 
     int pageWidth = getPageWidth();
     int pageHeight = getPageHeight();

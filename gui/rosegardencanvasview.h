@@ -88,6 +88,12 @@ public slots:
     void slotScrollVertSmallSteps(int vpos);
 
     /**
+     * Scroll vertically so as to place the given position
+     * somewhere near the top of the viewport.
+     */
+    void slotScrollVertToTop(int vpos);
+
+    /**
      * Set the x and y scrollbars to a particular position
      */
     void slotSetScrollPos(const QPoint &);

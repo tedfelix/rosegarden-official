@@ -1080,24 +1080,33 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
 {
     painter->save();
 
-//    NOTATION_DEBUG << "NotationStaff::setPainterWindow: lx " << lx << ", dx " << dx << ", w " << w << endl;
+//    NOTATION_DEBUG << "NotationStaff::setPainterClipping: lx " << lx << ", dx " << dx << ", w " << w << endl;
 
     coords = getCanvasCoordsForLayoutCoords(lx + dx, ly);
     int row = getRowForLayoutX(lx + dx);
     double rightMargin = getCanvasXForRightOfRow(row);
     double available = rightMargin - coords.first;
 
-//    NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
+//    NOTATION_DEBUG << "NotationStaff::setPainterClipping: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
 
     switch (policy) {
 
     case SplitToFit:
     {
-	QRect clip(int(coords.first), coords.second - getRowSpacing()/2,
-		   int(available), getRowSpacing());
-	painter->setClipRect(clip, QPainter::CoordPainter);
-	coords.first -= dx;
-	if (w - dx <= available + m_notePixmapFactory->getNoteBodyWidth()) {
+	bool fit = (w - dx <= available + m_notePixmapFactory->getNoteBodyWidth());
+	if (dx > 0.01 || !fit) {
+	    int clipLeft = int(coords.first), clipWidth = int(available);
+	    if (dx < 0.01) {
+		// never clip the left side of the first part of something
+		clipWidth += clipLeft;
+		clipLeft = 0;
+	    }
+	    QRect clip(clipLeft, coords.second - getRowSpacing()/2,
+		       clipWidth, getRowSpacing());
+	    painter->setClipRect(clip, QPainter::CoordPainter);
+	    coords.first -= dx;
+	}
+	if (fit) {
 	    return 0.0;
 	}
 	return available;

@@ -635,7 +635,7 @@ void MatrixView::setupActions()
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                                  ("transport-tracking")));
-    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, 0, this,
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(m_playTracking);
 

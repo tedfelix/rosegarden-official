@@ -967,6 +967,13 @@ LinedStaff::getLayoutXOfPointer() const
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
 }
 
+void
+LinedStaff::getPointerPosition(double &cx, int &cy) const
+{
+    cx = m_pointer->x();
+    cy = getCanvasYForTopOfStaff(getRowForCanvasCoords(cx, int(m_pointer->y())));
+}
+
 double
 LinedStaff::getLayoutXOfInsertCursor() const
 {
@@ -974,6 +981,18 @@ LinedStaff::getLayoutXOfInsertCursor() const
     double x = m_insertCursor->x();
     int row = getRowForCanvasCoords(x, int(m_insertCursor->y()));
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
+}
+
+void
+LinedStaff::getInsertCursorPosition(double &cx, int &cy) const
+{
+    if (!m_current) {
+	cx = -1;
+	cy = -1;
+	return;
+    }
+    cx = m_insertCursor->x();
+    cy = getCanvasYForTopOfStaff(getRowForCanvasCoords(cx, int(m_insertCursor->y())));
 }
 
 void

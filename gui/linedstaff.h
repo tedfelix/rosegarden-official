@@ -384,6 +384,12 @@ public:
     virtual double getLayoutXOfPointer() const;
 
     /**
+     * Returns the canvas coordinates of the top of the playback
+     * pointer.
+     */
+    virtual void getPointerPosition(double &x, int &y) const;
+
+    /**
      * Hide the playback pointer.
      */
     virtual void hidePointer();
@@ -407,6 +413,12 @@ public:
      * is not current or there is some other problem.
      */
     virtual double getLayoutXOfInsertCursor() const;
+
+    /**
+     * Return the canvas coordinates of the top of the insert
+     * cursor.
+     */
+    virtual void getInsertCursorPosition(double &x, int &y) const;
 
     /**
      * Hide the insert cursor.
@@ -468,7 +480,6 @@ public:
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
     //!!! fix NotationView::doDeferredCursorMove
-    double getCanvasXForLayoutX(double x) const;
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
@@ -482,9 +493,9 @@ public:
     // protected methods below -- but we have some code that needs
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
-    //!!! fix NotationView::doDeferredCursorMove
+    //!!! fix NotationView::scrollToTime
     LinedStaffCoords
-    getCanvasCoordsForLayoutCoords(double x, int y) const;
+    getCanvasCoordsForLayoutCoords(double x, int y) const;//!!!
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
@@ -494,7 +505,6 @@ public:
     int getRowSpacing() { return m_rowSpacing; }
 
 protected:
-
     // Methods that the subclass may (indeed, should) use to convert
     // between the layout coordinates of elements and their canvas
     // coordinates.  These are deliberately not virtual.
@@ -537,6 +547,8 @@ protected:
 	LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
 	return LinedStaffCoords(cc.first - x, cc.second - y);
     }
+
+    double getCanvasXForLayoutX(double x) const;
 
     int getRowsPerPage() const {
 	return m_rowsPerPage;

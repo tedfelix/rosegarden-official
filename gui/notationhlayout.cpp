@@ -1792,6 +1792,7 @@ NotationHLayout::getXForTimeByEvent(Rosegarden::timeT time)
 		if (vli == staff->getViewElementList()->end()) break;
 		NotationElement *element = static_cast<NotationElement *>(*vli);
 		if (element->getCanvasItem()) {
+//!!!		    && (element->isNote() || element->isRest())) {
 		    x = element->getLayoutX();
 		    double temp;
 		    element->getLayoutAirspace(temp, dx);

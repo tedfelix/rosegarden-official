@@ -1551,16 +1551,34 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
 
     double layoutX = m_hlayout->getXForTimeByEvent(time);
 
+    int minCy = 0;
+    double cx = 0;
+    bool haveMinCy = false;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
             barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
             m_staffs[i]->hidePointer();
         } else {
+
             m_staffs[i]->setPointerPosition(layoutX);
+
+	    int cy;
+	    m_staffs[i]->getPointerPosition(cx, cy);
+
+	    if (!haveMinCy || cy < minCy) {
+		minCy = cy;
+		haveMinCy = true;
+	    }
         }
     }
 
-    if (scroll) getCanvasView()->slotScrollHoriz(int(layoutX));
+    if (scroll && haveMinCy) {
+	getCanvasView()->slotScrollHoriz(cx);
+	getCanvasView()->slotScrollVertToTop(minCy);
+    }
+
+// getCanvasView()->slotScrollHoriz(int(layoutX));
     updateView();
 }
 
@@ -1771,8 +1789,13 @@ NotationView::doDeferredCursorMove()
         staff->setInsertCursorPosition(*m_hlayout, t);
 
         if (type == CursorMoveAndMakeVisible) {
-            getCanvasView()->slotScrollHoriz(int(staff->getCanvasXForLayoutX
-						 (m_hlayout->getXForTime(t))));
+//!!!            getCanvasView()->slotScrollHoriz(int(staff->getCanvasXForLayoutX
+//						 (m_hlayout->getXForTime(t))));
+	    double cx;
+	    int cy;
+	    staff->getInsertCursorPosition(cx, cy);
+	    getCanvasView()->slotScrollHoriz(cx);
+	    getCanvasView()->slotScrollVertSmallSteps(cy);
         }
 
     } else {

@@ -168,6 +168,13 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
     }
 }
 
+void RosegardenCanvasView::slotScrollVertToTop(int vpos)
+{
+    QScrollBar* vbar = verticalScrollBar();
+    if (vpos < visibleHeight() / 3) vbar->setValue(0);
+    else vbar->setValue(vpos - visibleHeight() / 5);
+}
+
 void RosegardenCanvasView::slotSetScrollPos(const QPoint &pos)
 {
     horizontalScrollBar()->setValue(pos.x());
