@@ -25,6 +25,7 @@
 #include <qvalidator.h>
 #include <qaccel.h>
 
+#include "segmentcommands.h"
 #include "rosegardentempodialog.h"
 #include "rosegardenguidoc.h"
 #include "widgets.h"
@@ -52,6 +53,9 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
 
     connect((QObject*)CancelButton, SIGNAL(released()),
             this, SLOT(slotCancel()));
+
+    connect(getCommandHistory(), SIGNAL(commandExecuted(Command *)),
+            this, SLOT(slotCommandExecuted(Command *)));
 
     // bind Return key to OK button
     //
@@ -110,7 +114,14 @@ void
 RosegardenTempoDialog::slotOK()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
-    comp.addTempo(comp.getPosition(), TempoSpin->getDoubleValue());
+
+    AddTempoChangeCommand *command = 
+        new AddTempoChangeCommand(&comp,
+                                  comp.getPosition(),
+                                  TempoSpin->getDoubleValue());
+
+    addCommandToHistory(command);
+
     slotCancel();
 }
 
@@ -135,6 +146,30 @@ RosegardenTempoDialog::resetFonts()
     resetFont(TempoSpin);
     resetFont(PositionLabel);
     resetFont(PositionValue);
+}
+
+void 
+RosegardenTempoDialog::addCommandToHistory(Command *command)
+{
+    getCommandHistory()->addCommand(command);
+}
+
+MultiViewCommandHistory*
+RosegardenTempoDialog::getCommandHistory()
+{
+    return m_doc->getCommandHistory();
+}
+
+void
+RosegardenTempoDialog::slotCommandExecuted(Command *command)
+{
+     AddTempoChangeCommand *tempoCommand =
+         dynamic_cast<AddTempoChangeCommand *>(command);
+
+     if (tempoCommand)
+     {
+         cout << "RosegardenTempoDialog::slotCommandExecuted - SHOULD UPDATE" << endl;;
+     }
 }
 
 }

@@ -199,5 +199,32 @@ protected:
     int m_timeSigIndex; // for undo
 };    
 
+class AddTempoChangeCommand : public TimeAndTempoChangeCommand
+{
+public:
+    AddTempoChangeCommand(Rosegarden::Composition *composition,
+                          Rosegarden::timeT time,
+                          double tempo):
+        TimeAndTempoChangeCommand(name()),
+        m_composition(composition),
+        m_time(time),
+        m_tempo(tempo) {}
+    virtual ~AddTempoChangeCommand() {}
+
+    static QString name()
+    {
+        return "Add Tempo Change...";
+    }
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::timeT m_time;
+    double m_tempo;
+};
+
+
+
 
 #endif  // _SEGMENTCOMMANDS_H_

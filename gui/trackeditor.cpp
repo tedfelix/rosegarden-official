@@ -383,6 +383,14 @@ void TrackEditor::slotCommandExecuted(Command *command)
 	return;
     }
 
+    AddTempoChangeCommand *tempoCommand =
+                 dynamic_cast<AddTempoChangeCommand *>(command);
+
+    if (tempoCommand)
+    {
+        return;
+    }
+
     kdDebug(KDEBUG_AREA) << "TrackEditor::commandExecuted: not a presently-supported command type" << endl;
     return;
 }

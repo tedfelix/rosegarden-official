@@ -477,3 +477,16 @@ AddTimeSignatureCommand::unexecute()
     m_composition->removeTimeSignature(m_timeSigIndex);
 }
 
+
+void
+AddTempoChangeCommand::execute()
+{
+    m_composition->addTempo(m_time, m_tempo);
+}
+
+void
+AddTempoChangeCommand::unexecute()
+{
+    int num = m_composition->getTempoChangeNumberAt(m_time);
+    m_composition->removeTempoChange(num);
+}

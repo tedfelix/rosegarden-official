@@ -24,9 +24,13 @@
 
 #include "Event.h"
 #include "rosegardentempo.h"
+#include "multiviewcommandhistory.h"
 
 class RosegardenGUIDoc;
 
+// Modifies the tempo at a position in time
+//
+//
 
 namespace Rosegarden
 {
@@ -46,9 +50,15 @@ public:
     void showTempo();
     void showPosition();
 
+    MultiViewCommandHistory* getCommandHistory();
+    void addCommandToHistory(Command *command);
+
 public slots:
     void slotOK();
     void slotCancel();
+
+    void slotCommandExecuted(Command *command);
+
 
 private:
     RosegardenGUIDoc   *m_doc;
