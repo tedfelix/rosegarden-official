@@ -56,13 +56,16 @@ class AudioVUMeter : public VUMeter
 {
 public:
     AudioVUMeter(QWidget *parent = 0,
-                 VUMeterType type = Plain,
-                 int width = 0,
-                 int height = 0,
+                 bool stereo = false,
+                 VUMeterType type = VUMeter::AudioPeakHold,
+                 int width = 12,
+                 int height = 140,
                  const char *name = 0);
 protected:
     virtual void meterStart();
     virtual void meterStop();
+
+    bool m_stereo;
 };
 
 

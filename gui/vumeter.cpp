@@ -111,15 +111,22 @@ VUMeter::paintEvent(QPaintEvent*)
 {
     QPainter paint(this);
 
-    if (m_fallTimer.isActive())
+    if (m_type == VUMeter::AudioPeakHold)
     {
         drawMeterLevel(&paint);
     }
     else
     {
-        meterStop();
-        drawFrame(&paint);
-        drawContents(&paint);
+        if (m_fallTimer.isActive())
+        {
+            drawMeterLevel(&paint);
+        }
+        else
+        {
+            meterStop();
+            drawFrame(&paint);
+            drawContents(&paint);
+         }
     }
 }
 

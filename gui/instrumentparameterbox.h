@@ -38,6 +38,7 @@ class RosegardenComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
 class AudioVUMeter;
+class AudioFaderWidget;
 
 namespace Rosegarden
 {
@@ -131,34 +132,27 @@ public:
     virtual void setupForInstrument(Rosegarden::Instrument*);
 
 public slots:
-    // select a plugin to go at an index number
+    // From AudioFaderWidget
     //
     void slotSelectPlugin(int index);
     void slotSelectAudioLevel(int index);
-    void slotPluginSelected(int index, int plugin);
+    void slotAudioChannelToggle();
+    void slotMute();
+    void slotSolo();
+    void slotSetPan(float pan);
 
-    // and for the signals that come back
+    // From Plugin dialog
     //
+    void slotPluginSelected(int index, int plugin);
     void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
     void slotBypassed(int pluginIndex, bool bp);
-
     void slotPluginDialogDestroyed(int index);
-
-    void slotAudioChannelToggle();
 
 protected:
     //--------------- Data members ---------------------------------
 
-    RosegardenFader    *m_audioLevelFader;
-    QLabel             *m_audioLevelValue;
-    QLabel             *m_pluginLabel;
+    AudioFaderWidget   *m_audioFader; // audio fader
 
-    std::vector<QPushButton*>                     m_pluginButtons;
-    RosegardenRotary                             *m_panRotary;
-    QPushButton                                  *m_channelButton;
-    AudioVUMeter                                 *m_audioMeter;
-
-    QSignalMapper                                *m_signalMapper;
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
 
     Rosegarden::AudioPluginManager               *m_pluginManager;

@@ -38,17 +38,19 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
 {
     QGridLayout *grid = new QGridLayout(this,
                                         7, 2,
-                                        1, 1);
+                                        6, 6);
     // Plugin box
     //
     QPushButton *plugin;
     QVBox *vbox = new QVBox(this);
+    vbox->setSpacing(2);
+
     grid->addMultiCellWidget(vbox, 0, 0, 0, 1, AlignCenter);
 
     for (int i = 0; i < 5; i++)
     {
         plugin = new QPushButton(vbox);
-        plugin->setText(i18n("<plugin>"));
+        plugin->setText(i18n("<no plugin>"));
         m_plugins.push_back(plugin);
         m_signalMapper->setMapping(plugin, i);
         connect(plugin, SIGNAL(clicked()),
@@ -58,12 +60,14 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     // VU meter and fader
     //
     m_vuMeter = new AudioVUMeter(this);
-    m_fader = new QSlider(Qt::Vertical, this);
+    m_fader = new RosegardenFader(this);
+
     m_fader->setTickmarks(QSlider::Right);
-    m_fader->setTickInterval(100);
+    m_fader->setTickInterval(10);
+    m_fader->setPageStep(10);
     m_fader->setMinValue(0);
-    m_fader->setMaxValue(1000);
-    m_fader->setFixedHeight(140);
+    m_fader->setMaxValue(127);
+    m_fader->setFixedHeight(m_vuMeter->height());
 
     grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
     grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
@@ -76,7 +80,8 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
 
     m_pan = new RosegardenRotary(this);
     m_stereoButton = new QPushButton(this);
-    m_stereoButton->setPixmap(m_stereoPixmap);
+    m_stereoButton->setPixmap(m_monoPixmap);
+    m_stereoButton->setFixedSize(22, 22);
 
     grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
     grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
@@ -88,6 +93,11 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
 
     grid->addMultiCellWidget(m_muteButton, 3, 3, 0, 0, AlignCenter);
     grid->addMultiCellWidget(m_soloButton, 3, 3, 1, 1, AlignCenter);
+
+    m_recordButton = new QPushButton(this);
+    m_recordButton->setText("R");
+
+    grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
 }
 
 

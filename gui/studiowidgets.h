@@ -54,10 +54,11 @@ public:
 
     std::vector<QPushButton*>  m_plugins;
     AudioVUMeter              *m_vuMeter;
-    QSlider                   *m_fader;
+    RosegardenFader           *m_fader;
     QPushButton               *m_muteButton;
     QPushButton               *m_soloButton;
     QPushButton               *m_stereoButton;
+    QPushButton               *m_recordButton;
     RosegardenRotary          *m_pan;
 
     QPixmap                    m_monoPixmap;

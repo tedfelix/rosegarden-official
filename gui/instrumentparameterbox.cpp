@@ -315,7 +315,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
         // stupid QSliders mean we have to invert this value so that
         // the top of the slider is max, the bottom min.
         //
-        m_audioLevelValue->setNum(int(value));
+        //m_audioLevelValue->setNum(int(value));
 
         Rosegarden::StudioControl::setStudioObjectProperty
             (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
@@ -512,7 +512,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
             }
 
             inst->setAssigned(false);
-            m_pluginButtons[index]->setText(i18n("<no plugin>"));
+            m_audioFader->m_plugins[index]->setText(i18n("<no plugin>"));
         }
         else
         {
@@ -583,7 +583,8 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
                 = m_pluginManager->getPlugin(plugin);
 
             if (pluginClass)
-                m_pluginButtons[index]->setText(pluginClass->getLabel());
+                m_audioFader->m_plugins[index]->
+                    setText(pluginClass->getLabel());
         }
     }
     else
@@ -642,13 +643,23 @@ AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
         // Set the bypass colour on the plugin button
         if (bp)
         {
-            m_pluginButtons[pluginIndex]->setPaletteForegroundColor(kapp->palette().color(QPalette::Active, QColorGroup::Button));
-            m_pluginButtons[pluginIndex]->setPaletteBackgroundColor(kapp->palette().color(QPalette::Active, QColorGroup::ButtonText));
+            m_audioFader->m_plugins[pluginIndex]->
+                setPaletteForegroundColor(kapp->palette().
+                        color(QPalette::Active, QColorGroup::Button));
+
+            m_audioFader->m_plugins[pluginIndex]->
+                setPaletteBackgroundColor(kapp->palette().
+                        color(QPalette::Active, QColorGroup::ButtonText));
         }
         else
         {
-            m_pluginButtons[pluginIndex]->setPaletteForegroundColor(kapp->palette().color(QPalette::Active, QColorGroup::ButtonText));
-            m_pluginButtons[pluginIndex]->setPaletteBackgroundColor(kapp->palette().color(QPalette::Active, QColorGroup::Button));
+            m_audioFader->m_plugins[pluginIndex]->
+                setPaletteForegroundColor(kapp->palette().
+                        color(QPalette::Active, QColorGroup::ButtonText));
+
+            m_audioFader->m_plugins[pluginIndex]->
+                setPaletteBackgroundColor(kapp->palette().
+                        color(QPalette::Active, QColorGroup::Button));
         }
 
         // Set the bypass on the instance
@@ -810,99 +821,52 @@ InstrumentParameterPanel::InstrumentParameterPanel(QWidget* parent)
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
     : InstrumentParameterPanel(parent),
-      m_audioLevelFader(new RosegardenFader(this)),
-      m_audioLevelValue(new QLabel(this)),
-      m_channelButton(0),
-      m_signalMapper(new QSignalMapper(this)),
+      m_audioFader(new AudioFaderWidget(this)),
       m_pluginManager(doc->getPluginManager())
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 10, 4);
-
-    QLabel* audioLevelLabel = new QLabel(i18n("Level"), this);
-    QLabel* pluginLabel = new QLabel(i18n("Plugins"), this);
-    QLabel *panLabel = new QLabel(i18n("Pan"), this);
-
-    m_audioLevelFader->setLineStep(1);
-
-    //m_volumeFader->setPageStep(1);
-    m_audioLevelFader->setMaxValue(127);
-    m_audioLevelFader->setMinValue(0);
-    
-    unsigned int defaultPlugins = 5;
-    for (unsigned int i = 0; i < defaultPlugins; i++)
-    {
-        QPushButton *pb = new QPushButton(this);
-        pb->setText(i18n("<no plugin>"));
-        m_pluginButtons.push_back(pb);
-    }
+    QGridLayout *gridLayout = new QGridLayout(this, 10, 6, 5, 5);
 
     // Instrument label : first row, all cols
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
+    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 5, AlignCenter);
 
-    // Fader column (col. 0)
-    gridLayout->addMultiCellWidget(m_audioLevelFader, 2, 4, 1, 1, AlignLeft);
+    // fader and connect it
+    gridLayout->addMultiCellWidget(m_audioFader, 1, 9, 2, 3);
 
-    m_audioMeter = new AudioVUMeter(this,
-                                    VUMeter::AudioPeakHold,
-                                    20,
-                                    m_audioLevelFader->height());
-    gridLayout->addMultiCellWidget(m_audioMeter, 2, 4, 0, 0, AlignCenter);
-                                 
-    gridLayout->addWidget(audioLevelLabel,   5, 0, AlignLeft);
-    gridLayout->addWidget(m_audioLevelValue, 5, 1, AlignCenter);
-
-    m_panRotary = new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    m_channelButton = new QPushButton(this);
-
-    QLabel *channelButtonLabel = new QLabel(i18n("Channel"), this);
-
-    // Plugins column (col. 1)
-    gridLayout->addWidget(pluginLabel, 1, 2, AlignCenter);
-
-    for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
-    {
-        gridLayout->addWidget(m_pluginButtons[i],
-                              2 + i, 2, AlignCenter);
-        m_signalMapper->setMapping(m_pluginButtons[i], i);
-
-        connect(m_pluginButtons[i], SIGNAL(clicked()),
-                m_signalMapper, SLOT(map()));
-    }
-
-    gridLayout->addWidget(panLabel,       6, 0, AlignLeft);
-    gridLayout->addWidget(m_panRotary,    6, 1, AlignCenter);
-
-    // Frig that G will sort out?!  I hate these fooking GridLayouts - 
-    // they always waste _so_ much of my time.
-    //
-    gridLayout->addRowSpacing(7, m_pluginButtons[0]->height());
-    gridLayout->addWidget(channelButtonLabel,   7, 0, AlignLeft);
-    gridLayout->addWidget(m_channelButton, 7, 1, AlignCenter);
-
-    // get the mono and stereo pixmaps
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
-    m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
-
-    m_channelButton->setPixmap(m_monoPixmap);
-    m_channelButton->setFixedSize(40, 20);
-
-    connect(m_signalMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotSelectPlugin(int)));
-
-    connect(m_audioLevelFader, SIGNAL(faderChanged(int)),
-            this, SLOT(slotSelectAudioLevel(int)));
-
-    // Gather the number of audio channels
-    //
-    connect(m_channelButton, SIGNAL(released()),
+    connect(m_audioFader->m_stereoButton, SIGNAL(released()),
             this, SLOT(slotAudioChannelToggle()));
 
-    /*
-    AudioFaderWidget *afW = new AudioFaderWidget(this);
-    gridLayout->addMultiCellWidget(afW, 0, 9, 0, 3);
-    */
+    connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotSelectPlugin(int)));
+
+    connect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
+            this, SLOT(slotSelectAudioLevel(int)));
+
+    connect(m_audioFader->m_muteButton, SIGNAL(clicked()),
+            this, SLOT(slotMute()));
+
+    connect(m_audioFader->m_soloButton, SIGNAL(clicked()),
+            this, SLOT(slotSolo()));
+
+    connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSetPan(float)));
+
 }
+
+void
+AudioInstrumentParameterPanel::slotMute()
+{
+}
+
+void
+AudioInstrumentParameterPanel::slotSolo()
+{
+}
+
+void
+AudioInstrumentParameterPanel::slotSetPan(float /*pan*/)
+{
+}
+
 
 void
 AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instrument)
@@ -910,11 +874,11 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
     m_selectedInstrument = instrument;
 
     m_instrumentLabel->setText(strtoqstr(instrument->getName()));
-    m_audioLevelFader->setFader(instrument->getVelocity());
+    m_audioFader->m_fader->setFader(instrument->getVelocity());
 
-    for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+    for (unsigned int i = 0; i < m_audioFader->m_plugins.size(); i++)
     {
-        m_pluginButtons[i]->show();
+        m_audioFader->m_plugins[i]->show();
 
         Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(i);
 
@@ -926,20 +890,21 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
                             getPositionByUniqueId(inst->getId()));
 
             if (pluginClass)
-                m_pluginButtons[i]->setText(pluginClass->getLabel());
+                m_audioFader->m_plugins[i]->
+                    setText(pluginClass->getLabel());
         }
         else
-            m_pluginButtons[i]->setText(i18n("<no plugin>"));
+            m_audioFader->m_plugins[i]->setText(i18n("<no plugin>"));
     }
 
     switch (instrument->getAudioChannels())
     {
         case 1:
-            if (m_channelButton) m_channelButton->setPixmap(m_monoPixmap);
+            m_audioFader->m_stereoButton->setPixmap(m_monoPixmap);
             break;
 
         case 2:
-            if (m_channelButton) m_channelButton->setPixmap(m_stereoPixmap);
+            m_audioFader->m_stereoButton->setPixmap(m_stereoPixmap);
             break;
 
         default:
@@ -954,16 +919,15 @@ AudioInstrumentParameterPanel::slotAudioChannelToggle()
 {
     RG_DEBUG << "AudioInstrumentParameterPanel::slotAudioChannelToggle" << endl;
 
-
     switch(m_selectedInstrument->getAudioChannels())
     {
         case 1:
-            if (m_channelButton) m_channelButton->setPixmap(m_stereoPixmap);
+            m_audioFader->m_stereoButton->setPixmap(m_stereoPixmap);
             m_selectedInstrument->setAudioChannels(2);
             break;
 
         case 2:
-            if (m_channelButton) m_channelButton->setPixmap(m_monoPixmap);
+            m_audioFader->m_stereoButton->setPixmap(m_monoPixmap);
             m_selectedInstrument->setAudioChannels(1);
             break;
 

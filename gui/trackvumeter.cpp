@@ -57,13 +57,15 @@ TrackVUMeter::meterStop()
 }
 
 //  ------------------  AudioVUMeter ---------------------
-
+//
 AudioVUMeter::AudioVUMeter(QWidget *parent,
+                           bool stereo,
                            VUMeterType type,
                            int width,
                            int height,
                            const char *name):
-    VUMeter(parent, type, width, height, VUMeter::Vertical, name)
+    VUMeter(parent, type, width, height, VUMeter::Vertical, name),
+    m_stereo(stereo)
 {
 }
 
