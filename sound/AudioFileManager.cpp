@@ -193,14 +193,21 @@ AudioFileId
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName)
 {
-    // first try to expany any beginning tilde
+    // first try to expand any beginning tilde
+    //
     std::string foundFileName = substituteTildeForHome(fileName);
 
-    // if we've expanded and there's no absolute path available
+    // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
     //
-    if (foundFileName.substr(0,1) != std::string("/"))
-       foundFileName = getFileInPath(foundFileName);
+    QFileInfo info(foundFileName.c_str());
+    if (!info.exists()) foundFileName = getFileInPath(foundFileName);
+
+#ifdef DEBUG_AUDIOFILEMANAGER_INSERT_FILE
+    std::cout << "AudioFileManager::insertFile - "
+              << "expanded fileName = \"" 
+              << foundFileName << "\"" << std::endl;
+#endif
 
     // bail if we haven't found any reasonable filename
     if (foundFileName == "")
@@ -274,11 +281,17 @@ AudioFileManager::insertFile(const std::string &name,
     // first try to expany any beginning tilde
     std::string foundFileName = substituteTildeForHome(fileName);
 
-    // if we've expanded and there's no absolute path available
+    // If we've expanded and we can't find the file
     // then try to find it in audio file directory.
     //
-    if (foundFileName.substr(0,1) != std::string("/"))
-       foundFileName = getFileInPath(foundFileName);
+    QFileInfo info(foundFileName.c_str());
+    if (!info.exists()) foundFileName = getFileInPath(foundFileName);
+
+#ifdef DEBUG_AUDIOFILEMANAGER_INSERT_FILE
+    std::cout << "AudioFileManager::insertFile - "
+              << "expanded fileName = \"" 
+              << foundFileName << "\"" << std::endl;
+#endif
 
     // If no joy here then we can't find this file
     if (foundFileName == "")
@@ -332,30 +345,24 @@ AudioFileManager::setAudioPath(const std::string &path)
 std::string
 AudioFileManager::getFileInPath(const std::string &file)
 {
-    std::string search;
-    std::string rS;
-    std::ifstream *fd; // check our file can be found
+    QFileInfo info(file.c_str());
 
-    rS = "";
-
-    // if we lead with a '/' then assume we have an
-    // absolute path already
-    //
-    if (file[0] == '/')
+    if (info.exists())
         return file;
 
-    //std::vector<std::string>::iterator it;
-
-    search = m_audioPath + file;
-
-    // Check we can open the file and return the full path if we can
+    // Build the search filename from the audio path and
+    // the file basename.
     //
-    fd = new std::ifstream(search.c_str(), std::ios::in | std::ios::binary);
-    if (*fd)
-        rS = search;
-    fd->close();
+    QString searchFile = QString(m_audioPath.c_str()) + info.fileName();
+    QFileInfo searchInfo(searchFile);
 
-    return rS;
+    if (searchInfo.exists())
+        return searchFile;
+
+    std::cout << "AudioFileManager::getFileInPath - "
+              << "searchInfo = " << searchFile << std::endl;
+
+    return "";
 }
 
 
@@ -793,7 +800,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
     //
     for (int i = 0; i < pixmap->width(); ++i)
     {
-	if ((i * channels + (channels - 1)) >= values.size()) break;
+	if ((i * channels + (channels - 1)) >= int(values.size())) break;
 
         // Always get two values for our pixmap no matter how many
         // channels in AudioFile as that's all we can display.
