@@ -119,9 +119,9 @@ public:
     bool saveIfModified();	
 
     /**
-     * sets the autosave interval in minutes
+     * sets the autosave interval in seconds
      */
-    void setAutoSavePeriod(unsigned int minutes);
+    void setAutoSavePeriod(unsigned int seconds);
 
     /**
      * deletes the document's contents

@@ -128,10 +128,10 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
     KConfig* config = kapp->config();
     config->setGroup("General Options");
-    unsigned int autosaveMinutes =
+    unsigned int autosaveSeconds =
 	config->readUnsignedNumEntry("autosaveinterval", 20);
 
-    setAutoSavePeriod(autosaveMinutes);
+    setAutoSavePeriod(autosaveSeconds);
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -226,12 +226,12 @@ void RosegardenGUIDoc::slotAutoSave()
     saveDocument(autoSaveFileName, 0, true);
 }
 
-void RosegardenGUIDoc::setAutoSavePeriod(unsigned int minutes)
+void RosegardenGUIDoc::setAutoSavePeriod(unsigned int seconds)
 {
     m_autoSaveTimer->stop();
 
-    if (minutes > 0)
-        m_autoSaveTimer->start(minutes /* * 60 */ * 1000);
+    if (seconds > 0)
+        m_autoSaveTimer->start(seconds * 1000);
 }
 
 
