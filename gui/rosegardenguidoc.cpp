@@ -731,9 +731,9 @@ RosegardenGUIDoc::alive()
     while(!kapp->dcopClient()->
            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
-        std::cout << "SequenceManager::alive() - "
-                  << "waiting for Sequencer to come up"
-                  << std::endl;
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::alive() - "
+                             << "waiting for Sequencer to come up"
+                             << std::endl;
 
         kapp->processEvents(1000);
         sleep(1); // 1s
@@ -745,8 +745,8 @@ RosegardenGUIDoc::alive()
                                   "alive()",
                                   data))
     {
-        std::cerr << "SequenceManager::alive() - "
-                  << "can't call the Sequencer" << std::endl;
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::alive() - "
+                             << "can't call the Sequencer" << std::endl;
         return;
     }
 
@@ -759,8 +759,8 @@ RosegardenGUIDoc::alive()
                                   "getMappedDevice()",
                                   data, replyType, replyData, true))
     {
-        std::cerr << "SequenceManager::alive() - "
-                  << "can't call Sequencer" << std::endl;
+        kdDebug(KDEBUG_AREA) << "SequenceManager::alive() - "
+                             << "can't call Sequencer" << std::endl;
         return;
     }
 
@@ -769,15 +769,15 @@ RosegardenGUIDoc::alive()
 
     if (replyType == "Rosegarden::MappedDevice")
     {
-        std::cout << "SequenceManager::alive() - "
-                  << "got Rosegarden::MappedDevice" << std::endl;
+        kdDebug(KDEBUG_AREA)  << "SequenceManager::alive() - "
+                              << "got Rosegarden::MappedDevice" << std::endl;
 
         // unfurl
         reply >> mD;
     }
 
-    std::cout << std::endl
-              << "SequenceManager::alive() - MappedDevices" << std::endl;
+    kdDebug(KDEBUG_AREA) << std::endl
+                         << "SequenceManager::alive() - MappedDevices" << std::endl;
 
     // Clear and recreate the studio from the initialisation data
     // sent up from the SoundDriver.  If we've got Midi then we
