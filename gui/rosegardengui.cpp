@@ -256,14 +256,21 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotImportMIDI()), actionCollection(),
                 "file_import_midi");
 
-    new KAction(i18n("Merge &MIDI file..."), 0, 0, this,
-                SLOT(slotMergeMIDI()), actionCollection(),
-                "file_merge_midi");
-
     new KAction(i18n("Import &Rosegarden 2.1 file..."), 0, 0, this,
                 SLOT(slotImportRG21()), actionCollection(),
                 "file_import_rg21");
 
+    new KAction(i18n("Merge &File..."), 0, 0, this,
+                SLOT(slotMerge()), actionCollection(),
+                "file_merge");
+
+    new KAction(i18n("Merge &MIDI file..."), 0, 0, this,
+                SLOT(slotMergeMIDI()), actionCollection(),
+                "file_merge_midi");
+
+    new KAction(i18n("Merge &Rosegarden 2.1 file..."), 0, 0, this,
+                SLOT(slotMergeRG21()), actionCollection(),
+                "file_merge_rg21");
 
     new KAction(i18n("Export &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
@@ -1384,9 +1391,10 @@ void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusHelpMsg(i18n("Opening file..."));
 
-
-    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg|Rosegarden-4 files\n*|All files", this,
-                                       i18n("Open File"));
+    KURL url = KFileDialog::getOpenURL
+	(":ROSEGARDEN",
+	 i18n("*.rg|Rosegarden-4 files\n*|All files"), this,
+	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
     if (m_doc) {
@@ -1398,6 +1406,28 @@ void RosegardenGUIApp::slotFileOpen()
     }
 
     openURL(url);
+}
+
+void RosegardenGUIApp::slotMerge()
+{
+    KURL url = KFileDialog::getOpenURL
+	(":ROSEGARDEN",
+	 i18n("*.rg|Rosegarden-4 files\n*|All files"), this,
+	 i18n("Open File"));
+    if ( url.isEmpty() ) { return; }
+
+    
+    QString target;
+
+    if (KIO::NetAccess::download(url, target) == false) {
+        KMessageBox::error(this, QString(i18n("Cannot download file %1"))
+                           .arg(url.prettyURL()));
+        return;
+    }
+
+    mergeFile(target);
+
+    KIO::NetAccess::removeTempFile( target );
 }
 
 void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
@@ -2349,19 +2379,7 @@ void RosegardenGUIApp::slotMergeMIDI()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-
-    RosegardenGUIDoc *doc = createDocument(tmpfile);
-
-    if (doc)
-    {
-        RosegardenGUIDoc *mergeDoc = mergeDocuments(m_doc, doc);
-
-        if (mergeDoc)
-        {
-            setDocument(mergeDoc);
-        }
-        delete doc;
-    }
+    mergeFile(tmpfile);
 
     KIO::NetAccess::removeTempFile( tmpfile );
 }
@@ -2555,6 +2573,21 @@ void RosegardenGUIApp::slotImportRG21()
     KIO::NetAccess::removeTempFile(tmpfile);
 }
 
+void RosegardenGUIApp::slotMergeRG21()
+{
+    KURL url = KFileDialog::getOpenURL
+        (":ROSEGARDEN21",
+         i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
+         i18n("Open Rosegarden 2.1 File"));
+    if (url.isEmpty()) { return; }
+
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
+    mergeFile(tmpfile);
+
+    KIO::NetAccess::removeTempFile( tmpfile );
+}
+
 RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromRG21File(const QString &file)
 {
@@ -2609,27 +2642,55 @@ RosegardenGUIApp::mergeFile(const QString &filePath)
 {
     RosegardenGUIDoc *doc = createDocument(filePath);
 
-    if (doc)
-    {
-        RosegardenGUIDoc *mergeDoc = mergeDocuments(m_doc, doc);
+    if (doc) {
+	if (m_doc) {
 
-        if (mergeDoc)
-        {
-            setDocument(mergeDoc);
-        }
-        delete doc;
+	    bool timingsDiffer = false;
+	    Rosegarden::Composition &c1 = m_doc->getComposition();
+	    Rosegarden::Composition &c2 =   doc->getComposition();
+
+	    // compare tempos and time sigs in the two -- rather laborious
+
+	    if (c1.getTimeSignatureCount() != c2.getTimeSignatureCount()) {
+		timingsDiffer = true;
+	    } else {
+		for (int i = 0; i < c1.getTimeSignatureCount(); ++i) {
+		    std::pair<timeT, Rosegarden::TimeSignature> t1 =
+			c1.getTimeSignatureChange(i);
+		    std::pair<timeT, Rosegarden::TimeSignature> t2 =
+			c2.getTimeSignatureChange(i);
+		    if (t1.first != t2.first || t1.second != t2.second) {
+			timingsDiffer = true;
+			break;
+		    }
+		}
+	    }
+
+	    if (c1.getTempoChangeCount() != c2.getTempoChangeCount()) {
+		timingsDiffer = true;
+	    } else {
+		for (int i = 0; i < c1.getTempoChangeCount(); ++i) {
+		    std::pair<timeT, long> t1 = c1.getRawTempoChange(i);
+		    std::pair<timeT, long> t2 = c2.getRawTempoChange(i);
+		    if (t1.first != t2.first || t1.second != t2.second) {
+			timingsDiffer = true;
+			break;
+		    }
+		}
+	    }
+
+	    FileMergeDialog *dialog = new FileMergeDialog(this, filePath, timingsDiffer);
+	    if (dialog->exec() == QDialog::Accepted) {
+		m_doc->mergeDocument(doc, dialog->getMergeOptions());
+	    }
+
+	    delete doc;
+
+	} else {
+	    setDocument(doc);
+	}
     }
 }
-
-
-RosegardenGUIDoc*
-RosegardenGUIApp::mergeDocuments(RosegardenGUIDoc *doc1,
-                                 RosegardenGUIDoc *doc2)
-{
-    //RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
-    return doc2;
-}
-
 
 void RosegardenGUIApp::setPointerPosition(long posSec,
                                           long posUsec,

@@ -194,6 +194,9 @@ public:
                          Rosegarden::TrackId track,
                          Rosegarden::timeT startTime,
                          Rosegarden::timeT endTime);
+    SegmentInsertCommand(Rosegarden::Composition *composition,
+			 Rosegarden::Segment *segment,
+			 Rosegarden::TrackId track);
     virtual ~SegmentInsertCommand();
 
     Rosegarden::Segment *getSegment() const; // after invocation

@@ -320,15 +320,9 @@ protected:
     RosegardenGUIDoc* createDocumentFromMIDIFile(const QString &filePath);
 
     /**
-     * Create docuemnt from RG21 file
+     * Create document from RG21 file
      */
     RosegardenGUIDoc* createDocumentFromRG21File(const QString &filePath);
-
-    /**
-     * Merge documents - creates a new document and returns it.
-     */
-    RosegardenGUIDoc*  mergeDocuments(RosegardenGUIDoc *doc1,
-                                      RosegardenGUIDoc *doc2);
 
     /**/
     /**/
@@ -514,11 +508,6 @@ public slots:
     void slotImportMIDI();
 
     /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMergeMIDI();
-
-    /**
      * Revert to last loaded file
      */
     void slotRevertToSaved();
@@ -528,6 +517,20 @@ public slots:
      */
     void slotImportRG21();
 
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMerge();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeMIDI();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeRG21();
 
     /**
      * Let the user enter a MIDI file to export to

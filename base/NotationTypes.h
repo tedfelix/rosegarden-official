@@ -905,6 +905,13 @@ public:
 
     TimeSignature &operator=(const TimeSignature &ts);
 
+    bool operator==(const TimeSignature &ts) const {
+	return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
+    }
+    bool operator!=(const TimeSignature &ts) const {
+	return !operator==(ts);
+    }
+
     int getNumerator()     const { return m_numerator; }
     int getDenominator()   const { return m_denominator; }
     

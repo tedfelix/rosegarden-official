@@ -530,6 +530,21 @@ protected:
 };
     
 
+class FileMergeDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    FileMergeDialog(QWidget *parent, QString fileName, bool timingsDiffer);
+
+    int getMergeOptions();
+    
+private:
+    RosegardenComboBox *m_choice;
+    QCheckBox *m_useTimings;
+};
+
+
 // Locate a file
 //
 class FileLocateDialog : public KDialogBase
@@ -684,17 +699,12 @@ public:
     bool getShouldDuplicateNonNoteEvents();
     int getClefHandling(); // actually SegmentSplitByPitchCommand::ClefHandling
 
-//!!!protected slots:
-//!!!    void slotPitchChanged(int);
-
 private:
     RosegardenPitchChooser *m_pitch;
 
-//    QSpinBox *m_pitch;
     QCheckBox *m_range;
     QCheckBox *m_duplicate;
     KComboBox *m_clefs;
-//    QLabel *m_pitchLabel;
 };
 
 

@@ -443,6 +443,20 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 {
 }
 
+SegmentInsertCommand::SegmentInsertCommand(Rosegarden::Composition *composition,
+					   Rosegarden::Segment *segment,
+                                           TrackId track):
+    KNamedCommand(i18n("Create Segment")),
+    m_composition(composition),
+    m_studio(0),
+    m_segment(segment),
+    m_track(track),
+    m_startTime(0),
+    m_endTime(0),
+    m_detached(false)
+{
+}
+
 SegmentInsertCommand::~SegmentInsertCommand()
 {
     if (m_detached) {
@@ -491,6 +505,7 @@ SegmentInsertCommand::execute()
     }
     else
     {
+	m_segment->setTrack(m_track);
         m_composition->addSegment(m_segment);
     }
 

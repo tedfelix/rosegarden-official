@@ -462,6 +462,73 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     return true;
 }
 
+void 
+RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
+				int options)
+{
+    KMacroCommand *command = new KMacroCommand(i18n("Merge"));
+
+    timeT time0 = 0;
+    if (options & MERGE_AT_END) {
+	time0 = getComposition().getBarEndForTime(getComposition().getDuration());
+    }
+
+    int myTracks = getComposition().getMaxTrackId();
+    int theirTracks = doc->getComposition().getMaxTrackId();
+    
+    int track0 = getComposition().getMinTrackId();
+    if (options & MERGE_IN_NEW_TRACKS) {
+	track0 = getComposition().getMaxTrackId() + 1;
+	//!!! worry about instruments and other studio stuff later
+	command->addCommand(new AddTracksCommand
+			    (&getComposition(),
+			     theirTracks + 1,
+			     Rosegarden::MidiInstrumentBase));
+    } else if (theirTracks > myTracks) {
+	command->addCommand(new AddTracksCommand
+			    (&getComposition(),
+			     theirTracks - myTracks,
+			     Rosegarden::MidiInstrumentBase));
+    }
+
+    int trackNo(track0);
+
+    for (Composition::iterator i = doc->getComposition().begin();
+	 i != doc->getComposition().end(); ++i) {
+	Segment *s = *i;
+	doc->getComposition().detachSegment(s);
+	if (options & MERGE_AT_END) {
+	    s->setStartTime(s->getStartTime() + time0);
+	}
+	command->addCommand(new SegmentInsertCommand(&getComposition(), s, trackNo));
+	++trackNo;
+    }
+
+    if (!(options & MERGE_KEEP_OLD_TIMINGS)) {
+	for (int i = getComposition().getTimeSignatureCount() - 1; i >= 0; --i) {
+	    getComposition().removeTimeSignature(i);
+	}
+	for (int i = getComposition().getTempoChangeCount() - 1; i >= 0; --i) {
+	    getComposition().removeTempoChange(i);
+	}
+    }
+
+    if (options & MERGE_KEEP_NEW_TIMINGS) {
+	for (int i = 0; i < doc->getComposition().getTimeSignatureCount(); ++i) {
+	    std::pair<timeT, Rosegarden::TimeSignature> ts =
+		doc->getComposition().getTimeSignatureChange(i);
+	    getComposition().addTimeSignature(ts.first, ts.second);
+	}
+	for (int i = 0; i < doc->getComposition().getTempoChangeCount(); ++i) {
+	    std::pair<timeT, long> t = doc->getComposition().getRawTempoChange(i);
+	    getComposition().addRawTempo(t.first, t.second);
+	}
+    }
+
+    m_commandHistory->addCommand(command);
+}
+
+
 void RosegardenGUIDoc::clearStudio()
 {
     QByteArray data;

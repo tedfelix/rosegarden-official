@@ -59,7 +59,7 @@ Post-0.9 task list
 
 24. Generic file merge -- important feature
 
-25. Chord computations: don't include percussion tracks
+25. Chord computations: don't include percussion tracks [DONE]
 
 26. Chord-name ruler, raw-note ruler, etc: cache calculations in a
     segment or something [DONE -- more general optimisation found too]

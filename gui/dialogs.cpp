@@ -2360,7 +2360,7 @@ SimpleEventEditDialog::slotVelocityChanged(int value)
 }
 
 void
-SimpleEventEditDialog::slotMetaChanged(const QString &string)
+SimpleEventEditDialog::slotMetaChanged(const QString &)
 {
     m_modified = true;
 }
@@ -2922,6 +2922,46 @@ RescaleDialog::slotToChanged(int i)
 		       arg(perTenThou/100).
 		       arg(perTenThou%100));
 }
+
+
+FileMergeDialog::FileMergeDialog(QWidget *parent,
+				 QString fileName,
+				 bool timingsDiffer) :
+    KDialogBase(parent, 0, true, i18n("Merge File"), Ok | Cancel)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QHBox *hbox = new QHBox(vbox);
+    new QLabel(i18n("Merge new file  "), hbox);
+
+    m_choice = new RosegardenComboBox(hbox);
+    m_choice->insertItem(i18n("At start of existing composition"));
+    m_choice->insertItem(i18n("From end of existing composition"));
+    m_useTimings = 0;
+
+    if (timingsDiffer) {
+	new QLabel(i18n("The file has different time signatures or tempos."), vbox);
+	m_useTimings = new QCheckBox(i18n("Import these as well"), vbox);
+	m_useTimings->setChecked(false);
+    }
+}
+
+int
+FileMergeDialog::getMergeOptions()
+{
+    int options = MERGE_KEEP_OLD_TIMINGS | MERGE_IN_NEW_TRACKS;
+
+    if (m_choice->currentItem() == 1) {
+	options |= MERGE_AT_END;
+    }
+
+    if (m_useTimings && m_useTimings->isChecked()) {
+	options |= MERGE_KEEP_NEW_TIMINGS;
+    }
+
+    return options;
+}
+
 
 FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
@@ -3620,18 +3660,10 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     m_duplicate->setChecked(true);
     m_clefs->setCurrentItem(2);
 }
-/*!!!
-void
-SplitByPitchDialog::slotPitchChanged(int pitch)
-{
-    Rosegarden::MidiPitchLabel pl(pitch);
-    m_pitchLabel->setText("  " + pl.getQString());
-}
-*/
+
 int
 SplitByPitchDialog::getPitch()
 {
-//!!!    return m_pitch->value();
     return m_pitch->getPitch();
 }
 
