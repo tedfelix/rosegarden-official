@@ -60,9 +60,20 @@ public:
     AudioFile* getCurrentSelection();
 
 public slots:
+    void slotAdd();
     void slotDeleteSelected();
     void slotPlayPreview();
-    void slotAdd();
+
+    void slotEnableButtons();
+
+signals:
+
+    // Control signals so we can tell the sequencer about our changes
+    // or actions.
+    //
+    void addAudioFile(unsigned int);
+    void deleteAudioFile(unsigned int);
+    void playAudioFile(unsigned int);
 
 protected:
     virtual void closeEvent(QCloseEvent *e);

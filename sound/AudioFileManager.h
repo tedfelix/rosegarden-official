@@ -53,8 +53,14 @@ public:
     AudioFileManager();
     ~AudioFileManager();
 
-    // insert an audio file into the AudioFileManager and get the
-    // first allocated id for it.
+    // Create an audio file from an absolute path - we use this interface
+    // to add an actual file.
+    //
+    unsigned int addFile(const std::string &filePath);
+
+    // Insert an audio file into the AudioFileManager and get the
+    // first allocated id for it.  Used from the RG file as we already
+    // have both name and filename/path.
     //
     unsigned int insertFile(const std::string &name,
                             const std::string &fileName);
@@ -93,6 +99,12 @@ public:
     std::string getAudioPath() { return m_audioPath; }
     void setAudioPath(const std::string &path);
 
+    // Last add audio file path - used to remember where we last
+    // looked for audio files.
+    //
+    std::string getLastAddPath() { return m_lastAddPath; }
+    void setLastAddPath(const std::string &path);
+
     // Get a new audio filename at the audio record path
     //
     std::string createRecordingAudioFile();
@@ -122,6 +134,14 @@ public:
                                   const RealTime &endIndex,
                                   int x);                      // x length
 
+    // Get a short file name from a long one (with '/'s)
+    //
+    std::string getShortFilename(const std::string &fileName);
+
+    // Get a directory from a full file path
+    //
+    std::string getDirectory(const std::string &path);
+
 private:
     std::string getFileInPath(const std::string &file);
 
@@ -129,6 +149,7 @@ private:
 
     std::vector<AudioFile*>                       m_audioFiles;
     std::string                                   m_audioPath;
+    std::string                                   m_lastAddPath;
     std::map<unsigned int, std::vector<float> >   m_previewMap;
     Rosegarden::RealTime                          m_previewResolution;
 

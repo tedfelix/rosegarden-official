@@ -476,11 +476,27 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (search.isEmpty())
         {
-            m_errorString = i18n("Audiopath has no search parameter");
+            m_errorString = i18n("Audiopath has no value");
             return false;
         }
 
         m_audioFileManager.setAudioPath(qstrtostr(search));
+
+    } else if (lcName == "audiolastaddpath") {
+        if (m_section != InAudio)
+        {
+            m_errorString = i18n("AudioLastAddPath object found outside AudioFiles section");
+            return false;
+        }
+
+        QString path(atts.value("value"));
+
+        if (path.isEmpty())
+        {
+            m_errorString = i18n("AudioLastAddPath has no value");
+        }
+
+        m_audioFileManager.setLastAddPath(qstrtostr(path));
 
     } else if (lcName == "begin") {
         int marker = atts.value("index").toInt();

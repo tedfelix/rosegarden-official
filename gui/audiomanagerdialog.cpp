@@ -19,6 +19,7 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 
 #include <qhbox.h>
 #include <qvbuttongroup.h>
@@ -33,11 +34,12 @@ namespace Rosegarden
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        AudioFileManager *aFM):
-    KDialogBase(parent, "", false, i18n("Audio Manager Dialog"), Close),
+    KDialogBase(parent, "", false,
+                i18n("Rosegarden Audio File Manager"), Close),
     m_audioFileManager(aFM)
 {
     QHBox *h = makeHBoxMainWidget();
-    QVButtonGroup *v = new QVButtonGroup(h);
+    QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
 
     if (m_audioFileManager == 0)
     {
@@ -46,13 +48,22 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         delete this;
     }
 
-    m_addButton    = new QPushButton(i18n("Add"), v);
-    m_deleteButton = new QPushButton(i18n("Delete"), v);
-    m_playButton   = new QPushButton(i18n("Play"), v);
+    // create widgets
+    m_addButton    = new QPushButton(i18n("Add File"), v);
+    m_deleteButton = new QPushButton(i18n("Delete File"), v);
+    m_playButton   = new QPushButton(i18n("Play File"), v);
     m_fileList     = new QListBox(h);
 
-    // connect Delete button
+    // a minimum width for the list box
+    m_fileList->setMinimumWidth(300);
+
+    // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDeleteSelected()));
+    connect(m_addButton, SIGNAL(released()), SLOT(slotAdd()));
+    connect(m_playButton, SIGNAL(released()), SLOT(slotPlayPreview()));
+
+    // connect selection mechanism
+    connect(m_fileList, SIGNAL(selectionChanged()), SLOT(slotEnableButtons()));
 
     populateFileList();
 }
@@ -68,7 +79,10 @@ AudioManagerDialog::populateFileList()
     // create pixmap of given size
     QPixmap *audioPixmap = new QPixmap(80, 20);
 
+    // clear file list and disable associated action buttons
     m_fileList->clear();
+    m_deleteButton->setDisabled(true);
+    m_playButton->setDisabled(true);
 
     if (m_audioFileManager->begin() == m_audioFileManager->end())
     {
@@ -78,6 +92,10 @@ AudioManagerDialog::populateFileList()
         return;
     }
 
+    // enable selection
+    m_fileList->setSelectionMode(QListBox::Single);
+
+
     for (it = m_audioFileManager->begin();
          it != m_audioFileManager->end();
          it++)
@@ -86,11 +104,15 @@ AudioManagerDialog::populateFileList()
         audioPixmap->fill(Qt::blue);
         QPainter audioPainter(audioPixmap);
 
+        QString label = QString((*it)->getShortFilename().c_str()) + " (" +
+                        QString((*it)->getName().c_str()) + ")";
+             
         // this inserts the list item at the same time as creating
         listBoxPixmap = new QListBoxPixmap(m_fileList,
                                            *audioPixmap,
-                                           QString((*it)->getName().c_str()));
+                                           label);
     }
+
 }
 
 AudioFile*
@@ -122,18 +144,89 @@ AudioManagerDialog::slotDeleteSelected()
     if (audioFile == 0)
         return;
 
-    m_audioFileManager->removeFile(audioFile->getId());
+    QString question = i18n("Really delete \"") +
+                       QString(audioFile->getFilename().c_str()) +
+                       QString("\" ?");
+
+    // Ask the question
+    int reply = KMessageBox::questionYesNo(this, question);
+
+    if (reply != KMessageBox::Yes)
+        return;
+
+    unsigned int id = audioFile->getId();
+    m_audioFileManager->removeFile(id);
     populateFileList();
+
+    // tell the sequencer
+    emit deleteAudioFile(id);
 }
 
 void
 AudioManagerDialog::slotPlayPreview()
 {
+    AudioFile *audioFile = getCurrentSelection();
+
+    if (audioFile == 0)
+        return;
+
+    // tell the sequencer
+    emit playAudioFile(audioFile->getId());
 }
 
+// Add a file to the audio file manager - allow previews and
+// enforce file types.
+//
 void
 AudioManagerDialog::slotAdd()
 {
+    unsigned int id = 0;
+
+    KFileDialog *fileDialog =
+        new KFileDialog(QString(m_audioFileManager->getLastAddPath().c_str()),
+                        QString("WAV files (*.wav *.WAV)"),
+                        this, "Select an Audio File", true);
+
+    if (fileDialog->exec() == QDialog::Accepted)
+    {
+        QString newFilePath = fileDialog->selectedFile().data();
+        unsigned int id;
+
+        // Now set the "last add" path so that next time we use "file add"
+        // we start looking in the same place.
+        //
+        std::string newLastAddPath =
+            m_audioFileManager->getDirectory(std::string(newFilePath.data()));
+        m_audioFileManager->setLastAddPath(newLastAddPath);
+
+        try
+        {
+            id = m_audioFileManager->addFile(std::string(newFilePath.data()));
+        }
+        catch(string e)
+        {
+            QString errorString =
+                i18n("Can't add File.  WAV file body invalid.\n\"") +
+                                  QString(e.c_str()) + "\"";
+            KMessageBox::sorry(this, errorString);
+        }
+
+        populateFileList();
+
+    }
+
+    delete fileDialog;
+
+    // tell the sequencer
+    emit addAudioFile(id);
+}
+
+// Enable these action buttons
+void
+AudioManagerDialog::slotEnableButtons()
+{
+    m_deleteButton->setDisabled(false);
+    m_playButton->setDisabled(false);
 }
 
 

@@ -3,7 +3,9 @@
 
 o Saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
 
-o Audio file selection dialog
+o Saving RG files should always append .rg extension [DONE]
+
+o Audio file selection dialog [DONE]
 
 o Audio preview on Segments [HALF COMPLETE]
 
@@ -27,7 +29,7 @@ o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
 
 o "Revert file" option
 
-o Get recent file list working
+o Get recent file list working [it is - just not for me?]
 
 o Fix configure to omit aRts when building for ALSA and
   vice versa (proper substiutions in Makefile.am not with

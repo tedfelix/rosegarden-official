@@ -95,5 +95,19 @@ SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
 }
 
 
+// Clip off any path from the filename
+std::string
+SoundFile::getShortFilename()
+{
+    std::string rS = m_fileName;
+    unsigned int pos = rS.find_last_of("/");
+
+    if (pos > 0 && ( pos + 1 ) < rS.length())
+        rS = rS.substr(pos + 1, rS.length());
+
+    return rS;
+}
+
+
 }
 

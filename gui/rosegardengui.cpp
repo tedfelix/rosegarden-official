@@ -311,7 +311,7 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
-    new KAction(i18n("&Audio Manager"),
+    new KAction(i18n("&Audio File Manager"),
                 0, 
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
@@ -988,6 +988,14 @@ void RosegardenGUIApp::slotFileSaveAs()
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
                                                  i18n("*.rg"), this, i18n("Save as..."));
     if (!newName.isEmpty()) {
+
+        // Append .rg extension if we don't have one
+        //
+        QRegExp rgFile("\\.rg$");
+        if (rgFile.match(newName) == -1) {
+            newName += ".rg";
+        }
+
 	SetWaitCursor waitCursor;
         QFileInfo saveAsInfo(newName);
         m_doc->setTitle(saveAsInfo.fileName());

@@ -51,9 +51,59 @@ AudioFileManager::AudioFileManager():
 
 AudioFileManager::~AudioFileManager()
 {
+    clear();
 }
 
-// Create a new AudioFile with unique ID and label
+// Add a file from an absolute path
+//
+unsigned int
+AudioFileManager::addFile(const std::string &filePath)
+{
+    unsigned int id = getFirstUnusedID();
+
+    AudioFile *aF = new AudioFile(id, getShortFilename(filePath), filePath);
+
+    if (aF->open() == false)
+    {
+        delete aF;
+        throw("AudioFileManager::addFile - can't open file");
+    }
+
+    m_audioFiles.push_back(aF);
+
+    return id;
+}
+
+// Convert long filename to shorter version
+std::string
+AudioFileManager::getShortFilename(const std::string &fileName)
+{
+    std::string rS = fileName;
+    unsigned int pos = rS.find_last_of("/");
+
+    if (pos > 0 && ( pos + 1 ) < rS.length())
+        rS = rS.substr(pos + 1, rS.length());
+
+    return rS;
+}
+
+// Turn a long path into a directory ending with a slash
+//
+std::string
+AudioFileManager::getDirectory(const std::string &path)
+{
+    std::string rS = path;
+    unsigned int pos = rS.find_last_of("/");
+
+    if (pos > 0 && pos < rS.length())
+        rS = rS.substr(0, pos);
+
+    return rS;
+}
+
+
+// Create a new AudioFile with unique ID and label - insert from
+// our RG4 file
 //
 unsigned int
 AudioFileManager::insertFile(const std::string &name,
@@ -171,7 +221,29 @@ AudioFileManager::setAudioPath(const std::string &path)
     }
 
     m_audioPath = hPath;
+
+    // Set the lastAddPath if it's currently empty
+    //
+    if (m_lastAddPath == "")
+        m_lastAddPath = m_audioPath;
 }
+
+// Set the last "add" path so that the UI remembers where we
+// last searched for an audio file.
+//
+void
+AudioFileManager::setLastAddPath(const std::string &path)
+{
+    std::string hPath = path;
+
+    // add a trailing / if we don't have one
+    //
+    if (hPath[hPath.size() - 1] != '/')
+        hPath += std::string("/");
+
+    m_lastAddPath = hPath;
+}
+
 
 
 // See if we can find a given file in our search path
@@ -332,9 +404,11 @@ AudioFileManager::toXmlString()
     std::stringstream audioFiles;
 
     audioFiles << "<audiofiles>" << std::endl;
-    audioFiles << "    <audiopath value=\""
+    audioFiles << "    <audioPath value=\""
                << m_audioPath << "\"/>" << std::endl;
 
+    audioFiles << "    <audioLastAddPath value =\""
+               << m_lastAddPath << "\"/>" << std::endl;
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
     {

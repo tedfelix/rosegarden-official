@@ -56,7 +56,8 @@ public:
     virtual bool open() = 0;
     virtual bool write() = 0;
 
-    const std::string& getFilename() { return m_fileName; }
+    std::string getShortFilename();
+    std::string getFilename() { return m_fileName; }
     void setFilename(const std::string &fileName) { m_fileName = fileName; }
 
     int getIntegerFromLittleEndian(const std::string &s);
