@@ -374,7 +374,7 @@ SequenceManager::stop()
         m_transport->MetronomeButton()->
             setOn(m_doc->getComposition().usePlayMetronome());
 
-        // Remove the countdown dialog and stop the timer (if being used)
+        // Remove the countdown dialog and stop the timer
         //
         m_countdownDialog->hide();
         m_countdownTimer->stop();
@@ -779,52 +779,52 @@ punchin:
             // completed successfully 
             m_transportStatus = recordType;
 
-            if (recordType == STARTING_TO_RECORD_AUDIO) {
-                // Create the countdown timer dialog for limiting the
-                // audio recording time.
-                //
-                KConfig* config = kapp->config();
-                config->setGroup(SequencerOptionsConfigGroup);
+	    // Create the countdown timer dialog to show recording time
+	    // remaining.  (Note (dmm) this has changed, and it now reports
+	    // the time remaining during both MIDI and audio recording.)
+	    //	
+	    Rosegarden::timeT p = comp.getPosition(); 
+	    Rosegarden::timeT d = comp.getEndMarker();
+	    // end marker less current position == available duration 
+	    d -= p;
+	    
+	    // set seconds to total possible time, initially
+	    Rosegarden::RealTime rtd = comp.getElapsedRealTime(d);
+	    int seconds = rtd.sec;
 
-                int seconds = 60 * 
-                    (config->readNumEntry("audiorecordminutes", 5));
+	    // if we're recording audio, and if the audio recording limit is
+	    // less than the total available time, adjust the time down to the
+	    // audio limit
+	    if (recordType == STARTING_TO_RECORD_AUDIO) {
+		KConfig* config = kapp->config();
+		config->setGroup(SequencerOptionsConfigGroup);
 
-		// DMM
-		// adjust recording time down if document is shorter than
-		// user-specified record time, or not enough time remains
-		// before the end marker for a full recording
-		// 
-		Rosegarden::timeT p = comp.getPosition();
-		Rosegarden::timeT d = comp.getEndMarker();
-		// end marker less current position = available duration 
-		d -= p;
-		
-		Rosegarden::RealTime rtd = comp.getElapsedRealTime(d);
-		if (rtd.sec < seconds) seconds = rtd.sec;
+		int s = 60 * 
+		    (config->readNumEntry("audiorecordminutes", 5));
+		if (s < seconds) seconds = s;
+	    }
 
-                // re-initialise
-                m_countdownDialog->setTotalTime(seconds);
+	    // re-initialise
+	    m_countdownDialog->setTotalTime(seconds);
 
-                connect(m_countdownDialog, SIGNAL(stopped()),
-                        this, SLOT(slotCountdownCancelled()));
+	    connect(m_countdownDialog, SIGNAL(stopped()),
+		    this, SLOT(slotCountdownCancelled()));
 
-                connect(m_countdownDialog, SIGNAL(completed()),
-                        this, SLOT(slotCountdownStop()));
+	    connect(m_countdownDialog, SIGNAL(completed()),
+		    this, SLOT(slotCountdownStop()));
 
-                // Create the timer
-                //
-                m_recordTime->start();
+	    // Create the timer
+	    //
+	    m_recordTime->start();
 
-                // Start an elapse timer for updating the dialog -
-                // it will fire every second.
-                //
-                m_countdownTimer->start(1000);
+	    // Start an elapse timer for updating the dialog -
+	    // it will fire every second.
+	    //
+	    m_countdownTimer->start(1000);
 
-                // Pop-up the dialog (don't use exec())
-                //
-                m_countdownDialog->show();
-
-            }
+	    // Pop-up the dialog (don't use exec())
+	    //
+	    m_countdownDialog->show();
         } else {
             // Stop immediately - turn off buttons in parent
             //

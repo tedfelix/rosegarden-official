@@ -59,6 +59,8 @@
 
 #include "rosedebug.h"
 
+//#define DEBUG_PITCH
+
 using namespace Rosegarden::BaseProperties;
 using Rosegarden::Bool;
 using Rosegarden::Clef;
@@ -332,13 +334,16 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 
     // leave this in to see if there are any _other_ problems that are going
     // to break this method...
-//    if (lilyNote == "") {   //!! force extra debugging
-        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
+#ifdef DEBUG_PITCH
+//!! DMM - ugly WIP debugging stuff
+//    if (lilyNote == "") { 
+//        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
+          std::cerr << "LilypondExporter::cPTLN() chewing on: "
                   << std::endl << "pitch = " << pitchNote << "\tkey sig. = "
                   << ((isFlatKeySignature) ? "flat" : "sharp") << "\tno. of accidentals = "
                   << accidentalCount << "\textra accidental = \"" << accidental << "\""
                   << std::endl;
-        
+#endif        
 //    }
 
     //!!! Alternative implementation in test:

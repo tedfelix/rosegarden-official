@@ -4162,7 +4162,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     m_progressBarHeight(15)
 {
     QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
-    setCaption(i18n("Recording audio"));
+    setCaption(i18n("Recording..."));
 
     QHBox *hBox = new QHBox(this);
     m_label = new QLabel(hBox);
@@ -4170,7 +4170,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
 
     layout->addWidget(hBox, 0, AlignCenter);
 
-    m_label->setText(i18n("Audio recording time left:  "));
+    m_label->setText(i18n("Recording time remaining:  "));
     m_progressBar =
         new CountdownBar(this, m_progressBarWidth, m_progressBarHeight);
 

@@ -518,7 +518,7 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsRepeatQuantize()), actionCollection(),
                 "repeat_quantize");
     
-    new KAction(AdjustMenuCollapseNotesCommand::getGlobalName(), Key_Equal + SHIFT, this,
+    new KAction(AdjustMenuCollapseNotesCommand::getGlobalName(), Key_Equal + CTRL, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                "collapse_notes");
 

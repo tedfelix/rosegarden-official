@@ -34,6 +34,9 @@
 #include <sstream>
 #endif
 
+//dmm This will make everything excruciatingly slow if defined:
+//#define DEBUG_PITCH
+
 namespace Rosegarden 
 {
 using std::string;
@@ -1123,13 +1126,16 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     }
 
     // Failsafe...  If this ever executes, there's trouble to fix...
-    /*
-    if (accidental == "") {
-        std::cerr << "rawPitchToDisplayPitch(): error! returning null accidental for"
+// WIP - bug fix in progress; ignore the untidiness    
+//    if (accidental == "") {
+#ifdef DEBUG_PITCH
+//      std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
+        std::cerr << "Pitch::rawPitchToDisplayPitch performing calculation for:"      
                   << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct " << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
-    }
-    */
+#endif
+//    }
+    
     
     // 6.  "Recenter" height in case it's been changed:
     height = ((height + 2) % 7) - 2;
@@ -1319,6 +1325,7 @@ Pitch::getNoteInScale(const Key &key) const
 char
 Pitch::getNoteName(const Key &key) const
 {
+    // DMM - get height w/o accidental? 
     int index = (getHeightOnStaff(Clef(Clef::Treble), key) + 72) % 7;
     return getNoteForIndex(index);
 }
@@ -1327,6 +1334,7 @@ int
 Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
 {
     int heightOnStaff;
+    // DMM - accidental coming in from m_accidental; where is that?
     Accidental accidental(m_accidental);
     rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental);
     return heightOnStaff;
