@@ -48,8 +48,13 @@ EditView::~EditView()
 {
 }
 
-void EditView::readjustViewSize(QSize requestedSize)
+void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {
+    if (exact) {
+        setViewSize(requestedSize);
+        return;
+    }
+
     QSize currentSize = getViewSize();
     
     int requestedWidth = requestedSize.width(),

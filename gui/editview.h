@@ -53,8 +53,10 @@ public:
      * If the new size is larger, enlarge to that size plus a margin
      * If it is smaller, only shrink if the reduction is significant
      * (e.g. new size is less than 75% of the old one)
+     *
+     * @arg exact if true, then set to newSize exactly
      */
-    virtual void readjustViewSize(QSize newSize);
+    virtual void readjustViewSize(QSize newSize, bool exact = false);
 
 public slots:
     /**
