@@ -129,7 +129,7 @@ protected:
 
     RosegardenGUIDoc           *m_doc;
 
-    Rosegarden::MidiByte        m_tranposeRange;
+    Rosegarden::MidiByte        m_transposeRange;
 };
 
 

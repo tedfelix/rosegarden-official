@@ -47,7 +47,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
     : RosegardenParameterBox(i18n("Segment Parameters"), parent),
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_doc(doc),
-      m_tranposeRange(24)
+      m_transposeRange(24)
 {
     initBox();
 
@@ -202,9 +202,9 @@ SegmentParameterBox::initBox()
 
     // populate the transpose combo
     //
-    for(int i = -m_tranposeRange; i < m_tranposeRange + 1; i++)
+    for(int i = -m_transposeRange; i < m_transposeRange + 1; i++)
     {
-        m_transposeValue->insertItem(QString("%1").arg(i));
+        m_transposeValue->insertItem(noMap, QString("%1").arg(i));
 	if (i == 0) m_transposeValue->setCurrentItem(m_transposeValue->count() - 1);
     }
 
