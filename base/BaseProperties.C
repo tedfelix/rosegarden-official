@@ -36,13 +36,19 @@ namespace BaseProperties
 // Some of the most basic property names are defined in individual
 // classes in NotationTypes.h -- those are the ones that are used to
 // store the value of a clef/key/timesig event, whereas things like
-// notes have their values calculated from the duration property
+// notes have their values calculated from the duration property.
 
-const PropertyName NOTE_TYPE            = "NoteType";
-const PropertyName NOTE_DOTS            = "NoteDots";
+// We mostly define persistent properties with lower-case names and
+// non-persistent ones with mixed-case.  That's just because lower-
+// case looks nicer in XML, whereas mixed-case is friendlier for the
+// sorts of long names sometimes found in cached calculations.
+
 const PropertyName PITCH		= "pitch";
 const PropertyName VELOCITY		= "velocity";
 const PropertyName ACCIDENTAL		= "accidental";
+
+const PropertyName NOTE_TYPE            = "NoteType";
+const PropertyName NOTE_DOTS            = "NoteDots";
 
 const PropertyName SELECTED		= "selected";
 
@@ -71,11 +77,22 @@ PropertyName getMarkPropertyName(int markNo)
     return markPropertyName.str();
 }
 
-const PropertyName TIED_BACKWARD	= "TiedBackward";
-const PropertyName TIED_FORWARD		= "TiedForward";
+const PropertyName TIED_BACKWARD	= "tiedback";
+const PropertyName TIED_FORWARD		= "tiedforward";
 
-const PropertyName BEAMED_GROUP_ID               = "BGroupId";
-const PropertyName BEAMED_GROUP_TYPE		 = "BGroupType";
+const PropertyName BEAMED_GROUP_ID               = "groupid";
+const PropertyName BEAMED_GROUP_TYPE		 = "grouptype";
+
+const PropertyName BEAMED_GROUP_TUPLET_BASE	 = "tupletbase";
+const PropertyName BEAMED_GROUP_TUPLED_COUNT	 = "tupledcount";
+const PropertyName BEAMED_GROUP_UNTUPLED_COUNT	 = "untupledcount";
+
+// non-persistent, calculated from the performance data + counts, with some
+// rounding -- unless otherwise specified
+const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
+
+
+/*!!!
 const PropertyName BEAMED_GROUP_TUPLED_LENGTH	 = "BGroupTupledLength";
 const PropertyName BEAMED_GROUP_TUPLED_COUNT	 = "BGroupTupledCount";
 const PropertyName BEAMED_GROUP_UNTUPLED_LENGTH	 = "BGroupUntupledLength";
@@ -84,6 +101,7 @@ const PropertyName BEAMED_GROUP_UNTUPLED_LENGTH	 = "BGroupUntupledLength";
 // for each event in a group:
 
 const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
+*/
 
 const std::string GROUP_TYPE_BEAMED		 = "beamed";
 const std::string GROUP_TYPE_TUPLED		 = "tupled";

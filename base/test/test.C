@@ -346,7 +346,7 @@ int main(int argc, char **argv)
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
-        cout << "Testing Segment::expandIntoTie() - expanding 384 -> 2*192\n";
+        cout << "Testing Segment::splitIntoTie() - splitting 384 -> 2*192\n";
 
 	Composition c;
 	Segment *ht = new Segment();
@@ -360,7 +360,7 @@ int main(int argc, char **argv)
         t.insert(ev);
 
 	Segment::iterator sb(t.begin());
-        nh.expandIntoTie(sb, 384/2);
+        nh.splitIntoTie(sb, 384/2);
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -370,10 +370,10 @@ int main(int argc, char **argv)
 
         Segment::iterator half2 = t.begin(); ++half2;
         
-        cout << "Expanding 192 -> (48 + 144) : \n";
+        cout << "Splitting 192 -> (48 + 144) : \n";
 
 	sb = t.begin();
-        nh.expandIntoTie(sb, 48);
+        nh.splitIntoTie(sb, 48);
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
@@ -381,9 +381,9 @@ int main(int argc, char **argv)
                      << endl;
         }
         
-        cout << "Expanding 192 -> (144 + 48) : \n";
+        cout << "Splitting 192 -> (144 + 48) : \n";
 
-        nh.expandIntoTie(half2, 144);
+        nh.splitIntoTie(half2, 144);
 
 
         for(Segment::iterator i = t.begin(); i != t.end(); ++i) {

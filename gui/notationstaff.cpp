@@ -833,8 +833,10 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 	double tuplingLineGradient =
 	    (double)(elt->event()->get<Int>(TUPLING_LINE_GRADIENT)) / 100.0;
 
+	//!!! should be "tupletCount"
+
 	long tupledCount;
-	if (elt->event()->get<Int>(BEAMED_GROUP_TUPLED_COUNT, tupledCount)) {
+	if (elt->event()->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupledCount)) {
 	    params.setTupledCount(tupledCount);
 	    params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
 	    params.setTuplingLineWidth(tuplingLineWidth);

@@ -113,6 +113,7 @@ protected:
     int m_groupTupledLength;
     int m_groupTupledCount;
     int m_groupUntupledLength;
+    int m_groupUntupledCount;
 
     int m_tieStatus; // 0 -> none, 1 -> tie started, 2 -> seen one note
 

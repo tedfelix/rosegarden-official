@@ -10,6 +10,11 @@ Post-0.1.4 task list
 
  4. Tuplet GUI -- but how?
 
+ 4a. Decide how we want to manage quantization of segments containing
+     tuplets, and quantization to tuplet units
+
+ 4b. Find some way to identify tuplets in MIDI import
+
  5. See why accidentals appear to be wrong when not in treble clef (see paper)
 
  6. Things like Split Segment and Resize Segment won't work correctly
@@ -51,6 +56,7 @@ Post-0.1.4 task list
     at 1280 after a 4/4 time sig, and it returns 1,7,7,7,7,7,7,7,7,
     7,7,7,7,15,60.  Why?  We need to make it avoid returning values
     less than 60 (shortest note) where at all possible.  See test.C.
+    [DONE kinda]
 
 15. Work out why clicking on a segment with the SegmentSelector or
     SegmentMover without moving it still causes a move command to

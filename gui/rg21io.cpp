@@ -192,11 +192,6 @@ void RG21Loader::setGroupProperties(Event *e)
 	e->set<Int>(BEAMED_GROUP_ID, m_groupId);
 	e->set<String>(BEAMED_GROUP_TYPE, m_groupType);
 
-	if (m_groupType == GROUP_TYPE_TUPLED) {
-	    e->set<Int>(BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
-	    e->set<Int>(BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
-	}
-
 	m_groupUntupledLength += e->getDuration();
     }
 }
@@ -215,9 +210,18 @@ bool RG21Loader::parseGroupStart()
         
     } else if (m_groupType == GROUP_TYPE_TUPLED) {
 
+	// RG2.1 records two figures A and B, of which A is a time
+	// value indicating the total duration of the group _after_
+	// tupling (which we would call the tupled length), and B is
+	// the count that appears above the group (which we call the
+	// untupled count).  We need to know C, the total duration of
+	// the group _before_ tupling; then we can calculate the
+	// tuplet base (C / B) and tupled count (A * B / C).
+
 	m_groupTupledLength = m_tokens[1].toUInt() *
 	    Note(Note::Hemidemisemiquaver).getDuration();
-	m_groupTupledCount = m_tokens[2].toUInt();
+	
+	m_groupUntupledCount = m_tokens[2].toUInt();
 	m_groupUntupledLength = 0;
 
     } else {
@@ -334,32 +338,37 @@ void RG21Loader::closeGroup()
 	    while ((*i)->get<Int>(BEAMED_GROUP_ID, groupId) &&
 		   groupId == m_groupId) {
 
-		(*i)->set<Int>
-		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
-
-		timeT duration = (*i)->getDuration();
 		timeT absoluteTime = (*i)->getAbsoluteTime();
 		timeT offset = absoluteTime - m_groupStartTime;
 		timeT intended =
 		    (offset * m_groupTupledLength) / m_groupUntupledLength;
-/*
+
 		kdDebug(KDEBUG_AREA)
 		    << "RG21Loader::closeGroup:"
 		    << " m_groupStartTime = " << m_groupStartTime
 		    << ", m_groupTupledLength = " << m_groupTupledLength
+		    << ", m_groupUntupledCount = " << m_groupUntupledCount
 		    << ", m_groupUntupledLength = " << m_groupUntupledLength
 		    << ", absoluteTime = " << (*i)->getAbsoluteTime()
 		    << ", offset = " << offset
 		    << ", intended = " << intended
-		    << ", new absolute time = " <<
-		    ((*i)->getAbsoluteTime() + intended - offset) << endl;
-*/
-		Event *e(new Event(**i,
-				   absoluteTime + intended - offset,
-				   prev - absoluteTime));
+		    << ", new absolute time = "
+		    << (absoluteTime + intended - offset)
+		    << ", new duration = "
+		    << (prev - absoluteTime)
+		    << endl;
+
+		absoluteTime = absoluteTime + intended - offset;
+		Event *e(new Event(**i, absoluteTime, prev - absoluteTime));
 		prev = absoluteTime;
 
-		e->set<Int>(TUPLET_NOMINAL_DURATION, duration);
+		// See comment in parseGroupStart
+		e->set<Int>(BEAMED_GROUP_TUPLET_BASE,
+			    m_groupUntupledLength / m_groupUntupledCount);
+		e->set<Int>(BEAMED_GROUP_TUPLED_COUNT,
+			    m_groupTupledLength * m_groupUntupledCount /
+			    m_groupUntupledLength);
+		e->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, m_groupUntupledCount);
 		
 		// To change the time of an event, we need to erase &
 		// re-insert it.  But erasure will delete the event, and

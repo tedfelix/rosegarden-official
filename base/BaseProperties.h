@@ -44,11 +44,19 @@ extern const PropertyName TIED_FORWARD;
 
 extern const PropertyName BEAMED_GROUP_ID;
 extern const PropertyName BEAMED_GROUP_TYPE;
+
+extern const PropertyName BEAMED_GROUP_TUPLET_BASE;
+extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
+extern const PropertyName BEAMED_GROUP_UNTUPLED_COUNT;
+extern const PropertyName TUPLET_NOMINAL_DURATION;
+
+/*!!!
 extern const PropertyName BEAMED_GROUP_TUPLED_LENGTH;
 extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
 extern const PropertyName BEAMED_GROUP_UNTUPLED_LENGTH;
-
 extern const PropertyName TUPLET_NOMINAL_DURATION;
+
+*/
 
 extern const std::string GROUP_TYPE_BEAMED;
 extern const std::string GROUP_TYPE_TUPLED;

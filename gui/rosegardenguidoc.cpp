@@ -311,11 +311,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                     outStream << "<group type=\"" << type.c_str() << "\"";
 		    if (type == GROUP_TYPE_TUPLED) {
 			outStream
-			    << " length=\""
-			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_LENGTH)
+			    << " base=\""
+			    << (*i)->get<Int>(BEAMED_GROUP_TUPLET_BASE)
 			    << "\" untupled=\""
-			    << (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_LENGTH)
-			    << "\" count=\""
+			    << (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT)
+			    << "\" tupled=\""
 			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT)
 			    << "\"";
 		    }

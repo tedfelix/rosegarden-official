@@ -97,9 +97,9 @@ protected:
     bool m_inComposition;
     std::string m_groupType;
     int m_groupId;
-    int m_groupTupledLength;
+    int m_groupTupletBase;
     int m_groupTupledCount;
-    int m_groupUntupledLength;
+    int m_groupUntupledCount;
 
     bool m_foundTempo;
 

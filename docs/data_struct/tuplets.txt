@@ -17,13 +17,54 @@ note as performed (e.g. two-thirds of a quaver).
 
 Rosegarden 2.1 stored tuplets with their nominal type and duration,
 plus some information that could be used to calculate the effective
-duration.  For Rosegarden 4, in which each event has a starting time
-as well as a duration (RG2.1's events were just a contiguous series,
-and didn't store a starting time) it makes more sense to ensure that
-the starting times of the tuplets and of the first event after the
-tupled group are consistent with the stored durations.  For this
-reason, Rosegarden 4 stores the effective duration of each tuplet, and
-records the nominal duration separately in an event property.
+duration.
+
+For Rosegarden 4, in which each event has a starting time as well as a
+duration (RG2.1's events were just a contiguous series, and didn't
+store a starting time) it makes more sense to ensure that the starting
+times of the tuplets and of the first event after the tupled group are
+consistent with the stored durations.  For this reason, Rosegarden 4
+stores the effective duration of each tuplet, and records the nominal
+duration separately in an event property.
+
+The complete set of properties associated with a tupled note or rest:
+
+ -- Event's normal absolute time and duration
+
+    These store the performance time and duration, so for example
+    the duration is 2/3 of a quaver's duration if the group is
+    made up of quaver triplets.
+
+    The absolute time would be slightly complicated to calculate
+    from the other properties, but the duration could be calculated
+    from the nominal duration and the tupled and untupled lengths
+    of the group.
+
+ -- BaseProperties::BEAMED_GROUP_ID
+    BaseProperties::BEAMED_GROUP_TYPE
+
+    Indicate membership of the group.
+
+ -- BaseProperties::TUPLET_NOMINAL_DURATION
+
+    The "display" duration of the event, for example the duration
+    of a quaver if the group is made up of quaver triplets.
+
+    This could be calculated from the duration of the event and
+    the tupled and untupled lengths of the group -- although there
+    may be some rounding error.
+
+ -- BaseProperties::BEAMED_GROUP_TUPLED_LENGTH
+    The total duration of the group as performed, for example the
+    duration of a crotchet if the group is made up of quaver triplets.
+
+ -- BaseProperties::BEAMED_GROUP_UNTUPLED_LENGTH
+    The total duration of the group as displayed, for example the
+    duration of a dotted crotchet if the group is made up of quaver
+    triplets.
+
+ -- BaseProperties::BEAMED_GROUP_TUPLED_COUNT
+    Number to be drawn on the tupling line.
 
 (The effective duration is not necessarily exact, although for
 triplets it will be.  Our base unit of time was originally 6 units to
