@@ -176,7 +176,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
             i18n("Add an audio file to this manager dialog."));
 
     QToolTip::add(m_deleteButton,
-            i18n("Remove and audio file from this manager dialog."));
+            i18n("Remove an audio file from this manager dialog."));
 
     QToolTip::add(m_playButton,
             i18n("Hear a preview of the currently selected audio file."));
