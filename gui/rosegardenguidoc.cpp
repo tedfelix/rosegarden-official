@@ -822,6 +822,8 @@ RosegardenGUIDoc::alive()
                                              (*it)->getChannel(),
                                              audioDevice);
             audioDevice->addInstrument(instrument);
+            std::cout << "ADDING " << (*it)->getName() 
+                      << " - " << (*it)->getId() << std::endl;
         }
         else
         {

@@ -233,20 +233,20 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
                                           Rosegarden::InstrumentId(trackId),
                                           trackHBox);
 
-    instrumentLabel->setFixedWidth(trackLabel->width());
-    instrumentLabel->setFixedHeight(trackLabel->height());
-    instrumentLabel->setMargin(3);
+    instrumentLabel->setMinimumSize(80, m_cellSize - buttonGap);
+    instrumentLabel->setFixedHeight(m_cellSize - buttonGap);
+    instrumentLabel->setIndent(7);
     hblayout->addWidget(instrumentLabel);
 
     if (m_trackInstrumentLabels == ShowTrack)
-        {
-            instrumentLabel->hide();
-        }
+    {
+        instrumentLabel->hide();
+    }
     else
-        {
-            connect(instrumentLabel, SIGNAL(changeToInstrumentList(int)),
-                    this, SLOT(slotInstrumentSelection(int)));
-        }
+    {
+        connect(instrumentLabel, SIGNAL(changeToInstrumentList(int)),
+                this, SLOT(slotInstrumentSelection(int)));
+    }
 
     // insert label
     m_instrumentLabels.push_back(instrumentLabel);

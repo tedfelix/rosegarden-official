@@ -128,7 +128,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
-    int trackLabelWidth = 156;
+    int trackLabelWidth = 200;
 //     int trackLabelOffset = 0;//!!!3;
 
     int barButtonsHeight = 25;

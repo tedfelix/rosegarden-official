@@ -93,9 +93,12 @@ AudioDevice::toXmlString()
 }
 
 
+// Add to instrument list
+//
 void
-AudioDevice::addInstrument(Instrument*)
+AudioDevice::addInstrument(Instrument *instrument)
 {
+    m_instruments.push_back(instrument);
 }
 
 
