@@ -456,9 +456,6 @@ void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
 {
     if (isPreviewCurrent()) return;
 
-    //RG_DEBUG << "SegmentNotationItem::updatePreview() "
-                         //<< this << endl;
-
     if (!m_haveSegmentRefreshStatus) {
 	m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
 	m_haveSegmentRefreshStatus = true;
@@ -474,10 +471,7 @@ void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
 	  toTime = m_segment->getEndMarkerTime();
     }
 
-    int fromX = (int)m_rulerScale->getXForTime(fromTime) - rect().x();
-    int   toX = (int)m_rulerScale->getXForTime(  toTime) - rect().x();
-
-    QRect fromRect(fromX, 0, 10, 10), toRect(toX, 0, 10, 10);
+    QRect fromRect(fromTime, 0, 10, 10), toRect(toTime, 0, 10, 10);
     RectList::iterator fromi = m_previewInfo.lower_bound(fromRect);
     RectList::iterator   toi = m_previewInfo.lower_bound(  toRect);
     m_previewInfo.erase(fromi, toi);
