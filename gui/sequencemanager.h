@@ -70,6 +70,16 @@ public:
                                          const RealTime &sliceEnd,
                                          bool firstFetch);
 
+    /**
+     * Replaces the internal document
+     */
+    void setDocument(RosegardenGUIDoc*);
+
+    /**
+     * Return the current internal document
+     */
+    RosegardenGUIDoc* getDocument();
+
     // Transport controls
     void play();
 

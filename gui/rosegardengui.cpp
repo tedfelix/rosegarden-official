@@ -140,12 +140,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
     //
-    emit startupStatusMessage(i18n("Initialising..."));
-    initStatusBar();
-    // not necessarily true this one, but if it is, it's noticeable
-    emit startupStatusMessage(i18n("Waiting for sequencer..."));
-    initDocument();
     emit startupStatusMessage(i18n("Initialising view..."));
+    initStatusBar();
     setupActions();
     iFaceDelayedInit(this);
     initZoomToolbar();
@@ -154,6 +150,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         initView();
 
     emit startupStatusMessage(i18n("Starting sequence manager..."));
+
+    // transport is created by setupActions()
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
     // Make sure we get the sequencer status now
@@ -656,21 +654,6 @@ void RosegardenGUIApp::initStatusBar()
     statusBar()->addWidget(m_progressBar);
 }
 
-void RosegardenGUIApp::initDocument()
-{
-    m_doc = new RosegardenGUIDoc(this, m_pluginManager);
-    m_doc->newDocument();
-    m_doc->getCommandHistory()->attachView(actionCollection());
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
-	    SLOT(update()));
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
-	    SLOT(slotTestClipboard()));
-
-    // connect and start the autosave timer
-    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-    m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
-}
-
 void RosegardenGUIApp::initView()
 { 
     ////////////////////////////////////////////////////////////////////
@@ -702,7 +685,7 @@ void RosegardenGUIApp::initView()
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
             SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
 
-    m_doc->addView(m_view);
+    m_doc->attachView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
 
@@ -791,7 +774,6 @@ void RosegardenGUIApp::initView()
 
     slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
 
-    // Create a sequence manager
     stateChanged("new_file");
 
     // Refresh the audioManagerDialog if it's hanging around
@@ -802,6 +784,42 @@ void RosegardenGUIApp::initView()
 
 void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 {
+    // Take care of all subparts which depend on the document
+
+    // reset AudioManagerDialog
+    //
+    delete m_audioManagerDialog;
+    m_audioManagerDialog = 0;
+
+    RosegardenGUIDoc* oldDoc = m_doc;
+
+    m_doc = newDocument;
+
+    if (m_seqManager) // when we're called at startup, the seq. man. isn't created yet
+        m_seqManager->setDocument(m_doc);
+
+    // this will delete all edit views
+    //
+    delete oldDoc;
+    
+    // copied from initDocument();
+    // connect needed signals
+    //
+    m_doc->getCommandHistory()->attachView(actionCollection());
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	    SLOT(update()));
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	    SLOT(slotTestClipboard()));
+
+    // connect and start the autosave timer
+    connect(m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    m_autoSaveTimer->start(m_doc->getAutoSavePeriod() * 1000);
+
+    // finally recreate the main view
+    //
+    delete m_view;
+    initView();
+
     emit documentChanged(newDocument);
 }
 
@@ -897,9 +915,10 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
     if (newDoc->openDocument(effectiveFilePath)) {
 
-        (*m_doc) = (*newDoc);
+        // (*m_doc) = (*newDoc);
+        setDocument(newDoc);
 
-        initView();
+        // initView();
         
         // Ensure the sequencer knows about any audio files
         // we've loaded as part of the new Composition
@@ -937,7 +956,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
             }
     }
 
-    delete newDoc;
+    //delete newDoc;
 
 }
 

@@ -318,13 +318,6 @@ protected:
     void initStatusBar();
 
     /**
-     * initializes the document object of the main window that is
-     * connected to the view in initView().
-     * @see initView();
-     */
-    void initDocument();
-
-    /**
      * creates the centerwidget of the KTMainWindow instance and sets
      * it as the view
      */

@@ -49,6 +49,7 @@ class RosegardenGUIView;
 class ViewElementsManager;
 class SegmentItem;
 class RosegardenProgressDialog;
+class EditViewBase;
 
 namespace Rosegarden
 {
@@ -96,12 +97,32 @@ public:
      * adds a view to the document which represents the document
      * contents. Usually this is your main view.
      */
-    void addView(RosegardenGUIView *view);
+    void attachView(RosegardenGUIView *view);
 
     /**
      * removes a view from the list of currently connected views
      */
-    void removeView(RosegardenGUIView *view);
+    void detachView(RosegardenGUIView *view);
+
+    /**
+     * deletes the document views
+     */
+    void deleteViews();
+
+    /**
+     * adds an Edit View (notation, matrix, event list)
+     */
+    void attachEditView(EditViewBase*);
+
+    /**
+     * removes a view from the list of currently connected edit views
+     */
+    void detachEditView(EditViewBase*);
+
+    /**
+     * delete all Edit Views
+     */
+    void deleteEditViews();
 
     /**
      * sets the modified flag for the document after a modifying
@@ -185,11 +206,6 @@ public:
     MultiViewCommandHistory *getCommandHistory() {
 	return m_commandHistory;
     }
-
-    /**
-     * deletes the document views
-     */
-    void deleteViews();
 
     /**
      * returns the composition (the principal constituent of the document)
@@ -341,7 +357,7 @@ public:
     /**
      * return the list of the views currently connected to the document
      */
-    QList<RosegardenGUIView>* getViewList() { return m_viewList; }
+    QList<RosegardenGUIView>& getViewList() { return m_viewList; }
 
 public slots:
     /**
@@ -438,7 +454,12 @@ protected:
     /**
      * the list of the views currently connected to the document
      */
-    QList<RosegardenGUIView>* m_viewList;	
+    QList<RosegardenGUIView> m_viewList;	
+
+    /**
+     * the list of the edit views currently editing a part of this document
+     */
+    QList<EditViewBase> m_editViewList;
 
     /**
      * the modified flag of the current document

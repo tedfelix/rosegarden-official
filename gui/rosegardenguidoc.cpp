@@ -59,6 +59,7 @@
 #include "Studio.h"
 #include "Midi.h"
 
+#include "editviewbase.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
@@ -94,7 +95,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    Rosegarden::AudioPluginManager *pluginManager,
                                    const char *name)
     : QObject(parent, name),
-      m_viewList(new QList<RosegardenGUIView>()),
       m_modified(false),
       m_autoSaved(false),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
@@ -104,7 +104,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 {
     syncDevices();
 
-//     m_viewList->setAutoDelete(true);
+    m_viewList.setAutoDelete(true);
+    m_editViewList.setAutoDelete(false);
 
     connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(slotDocumentModified()));
@@ -115,7 +116,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
 RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     : QObject(doc->parent(), doc->name()),
-      m_viewList(new QList<RosegardenGUIView>()),
       m_modified(doc->isModified()),
       m_autoSaved(doc->isAutoSaved()),
       m_recordSegment(0),
@@ -132,7 +132,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     m_config = doc->getConfiguration();
     m_composition = doc->getComposition();
 
-//     m_viewList->setAutoDelete(true);
+    m_viewList.setAutoDelete(true);
+    m_editViewList.setAutoDelete(false);
 
     connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
 	    this, SLOT(slotDocumentModified()));
@@ -170,9 +171,9 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
     RG_DEBUG << "~RosegardenGUIDoc()\n";
+    deleteEditViews();
     delete m_commandHistory; // must be deleted before the Composition is
     delete m_clipboard;
-    delete m_viewList;
 }
 
 unsigned int
@@ -183,14 +184,39 @@ RosegardenGUIDoc::getAutoSavePeriod() const
     return config->readUnsignedNumEntry("autosaveinterval", 60);
 }
 
-void RosegardenGUIDoc::addView(RosegardenGUIView *view)
+void RosegardenGUIDoc::attachView(RosegardenGUIView *view)
 {
-    m_viewList->append(view);
+    m_viewList.append(view);
 }
 
-void RosegardenGUIDoc::removeView(RosegardenGUIView *view)
+void RosegardenGUIDoc::detachView(RosegardenGUIView *view)
 {
-    m_viewList->remove(view);
+    m_viewList.remove(view);
+}
+
+void RosegardenGUIDoc::deleteViews()
+{
+    // auto-deletion is enabled : GUIViews will be deleted
+    m_viewList.clear();
+}
+
+void RosegardenGUIDoc::attachEditView(EditViewBase *view)
+{
+    m_editViewList.append(view);
+}
+
+void RosegardenGUIDoc::detachEditView(EditViewBase *view)
+{
+    // auto-deletion is disabled, as
+    // the editview detaches itself when being deleted
+    m_editViewList.remove(view);
+}
+
+void RosegardenGUIDoc::deleteEditViews()
+{
+    // enabled auto-deletion : edit views will be deleted
+    m_editViewList.setAutoDelete(true);
+    m_editViewList.clear();
 }
 
 void RosegardenGUIDoc::setAbsFilePath(const QString &filename)
@@ -216,15 +242,11 @@ const QString& RosegardenGUIDoc::getTitle() const
 void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 {
     RosegardenGUIView *w;
-    if(m_viewList)
-        {
-            for(w=m_viewList->first(); w!=0; w=m_viewList->next())
-                {
-                    if(w!=sender)
-                        w->repaint();
-                }
-        }
 
+    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+            if(w!=sender)
+                w->repaint();
+    }
 }
 
 void RosegardenGUIDoc::setModified(bool m)
@@ -680,19 +702,14 @@ void RosegardenGUIDoc::deleteContents()
 {
     RG_DEBUG << "RosegardenGUIDoc::deleteContents()\n";
 
+    deleteEditViews();
     deleteViews();
-
+    
     m_commandHistory->clear();
 
     m_composition.clear();
     m_audioFileManager.clear();
     m_studio.unassignAllInstruments();
-}
-
-void RosegardenGUIDoc::deleteViews()
-{
-    // auto-deletion is enabled : GUIViews will be deleted
-    m_viewList->clear();
 }
 
 bool RosegardenGUIDoc::isSequencerRunning()
@@ -818,8 +835,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     // Make sure we don't recreate the m_recordSegment if it's already
     // freed.
     //
-    if (m_recordSegment == 0 && status == RECORDING_MIDI)
-    {
+    if (m_recordSegment == 0 && status == RECORDING_MIDI) {
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
@@ -830,19 +846,15 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             m_composition.getTrackByIndex(m_composition.getRecordTrack());
         std::string label = "";
 
-        if (track)
-        {
-            if (track->getLabel() == "")
-            {
+        if (track) {
+            if (track->getLabel() == "") {
                 Rosegarden::Instrument *instr =
                     m_studio.getInstrumentById(track->getInstrument());
 
-                if (instr)
-                {
+                if (instr) {
                     label = instr->getName() + std::string(" ");
                 }
-            }
-            else
+            } else
                 label = track->getLabel() + std::string(" ");
 
             label += std::string("(recorded)");
@@ -852,157 +864,149 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     }
 
 
-    if (mC.size() > 0)
-    { 
-        Rosegarden::MappedComposition::iterator i;
-        Rosegarden::Event *rEvent = 0;
-        timeT duration, absTime;
+    if (mC.size() > 0) { 
+            Rosegarden::MappedComposition::iterator i;
+            Rosegarden::Event *rEvent = 0;
+            timeT duration, absTime;
 
-        // process all the incoming MappedEvents
-        //
-        for (i = mC.begin(); i != mC.end(); ++i)
-        {
-            absTime = m_composition.
-                          getElapsedTimeForRealTime((*i)->getEventTime());
+            // process all the incoming MappedEvents
+            //
+            for (i = mC.begin(); i != mC.end(); ++i) {
+                    absTime = m_composition.
+                        getElapsedTimeForRealTime((*i)->getEventTime());
 
-	    /* This is incorrect, unless the tempo at absTime happens to
-	       be the same as the tempo at zero and there are no tempo
-	       changes within the given duration after either zero or
-	       absTime
+                    /* This is incorrect, unless the tempo at absTime happens to
+                       be the same as the tempo at zero and there are no tempo
+                       changes within the given duration after either zero or
+                       absTime
 
-            duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
-	    */
-	    duration = m_composition.
-		getElapsedTimeForRealTime((*i)->getEventTime() +
-					  (*i)->getDuration())
-		- absTime;
+                       duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+                    */
+                    duration = m_composition.
+                        getElapsedTimeForRealTime((*i)->getEventTime() +
+                                                  (*i)->getDuration())
+                        - absTime;
 
-            rEvent = 0;
+                    rEvent = 0;
 
-            switch((*i)->getType())
-            {
-	    case Rosegarden::MappedEvent::MidiNote:
-		if ((*i)->getDuration() < Rosegarden::RealTime(0, 0))
-		    duration = -1;
+                    switch((*i)->getType()) {
+                        case Rosegarden::MappedEvent::MidiNote:
+                            if ((*i)->getDuration() < Rosegarden::RealTime(0, 0))
+                                duration = -1;
 		    
-		rEvent = new Event(Rosegarden::Note::EventType,
-				   absTime,
-				   duration);
+                            rEvent = new Event(Rosegarden::Note::EventType,
+                                               absTime,
+                                               duration);
 
-		rEvent->set<Int>(PITCH, (*i)->getPitch());
-		rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                            rEvent->set<Int>(PITCH, (*i)->getPitch());
+                            rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
-		break;
+                            break;
 
-	    case Rosegarden::MappedEvent::MidiPitchBend:
-		rEvent = Rosegarden::PitchBend
-		    ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-		break;
+                        case Rosegarden::MappedEvent::MidiPitchBend:
+                            rEvent = Rosegarden::PitchBend
+                                ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                            break;
 
-	    case Rosegarden::MappedEvent::MidiController:
-		rEvent = Rosegarden::Controller
-		    ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-		break;
+                        case Rosegarden::MappedEvent::MidiController:
+                            rEvent = Rosegarden::Controller
+                                ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                            break;
 
-	    case Rosegarden::MappedEvent::MidiProgramChange:
-		SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-			     << "got Program Change (unsupported)"
-			     << endl;
-		break;
+                        case Rosegarden::MappedEvent::MidiProgramChange:
+                            SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                                         << "got Program Change (unsupported)"
+                                         << endl;
+                            break;
 
-	    case Rosegarden::MappedEvent::MidiKeyPressure:
-		rEvent = Rosegarden::KeyPressure
-		    ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-		break;
+                        case Rosegarden::MappedEvent::MidiKeyPressure:
+                            rEvent = Rosegarden::KeyPressure
+                                ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                            break;
 
-	    case Rosegarden::MappedEvent::MidiChannelPressure:
-		rEvent = Rosegarden::ChannelPressure
-		    ((*i)->getData1()).getAsEvent(absTime);
-		break;
+                        case Rosegarden::MappedEvent::MidiChannelPressure:
+                            rEvent = Rosegarden::ChannelPressure
+                                ((*i)->getData1()).getAsEvent(absTime);
+                            break;
 
-	    case Rosegarden::MappedEvent::MidiSystemExclusive:
-		rEvent = Rosegarden::SystemExclusive
-		    ((*i)->getDataBlock()).getAsEvent(absTime);
-		break;
+                        case Rosegarden::MappedEvent::MidiSystemExclusive:
+                            rEvent = Rosegarden::SystemExclusive
+                                ((*i)->getDataBlock()).getAsEvent(absTime);
+                            break;
 		    
-	    case Rosegarden::MappedEvent::MidiNoteOneShot:
-		SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-			     << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
-			     << endl;
-		break;
+                        case Rosegarden::MappedEvent::MidiNoteOneShot:
+                            SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                                         << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
+                                         << endl;
+                            break;
 		
-	    // Audio control signals - ignore these
-	    case Rosegarden::MappedEvent::Audio:
-	    case Rosegarden::MappedEvent::AudioCancel:
-	    case Rosegarden::MappedEvent::AudioLevel:
-	    case Rosegarden::MappedEvent::AudioStopped:
-	    case Rosegarden::MappedEvent::AudioGeneratePreview:
-	    case Rosegarden::MappedEvent::SystemUpdateInstruments:
-		break;
+                            // Audio control signals - ignore these
+                        case Rosegarden::MappedEvent::Audio:
+                        case Rosegarden::MappedEvent::AudioCancel:
+                        case Rosegarden::MappedEvent::AudioLevel:
+                        case Rosegarden::MappedEvent::AudioStopped:
+                        case Rosegarden::MappedEvent::AudioGeneratePreview:
+                        case Rosegarden::MappedEvent::SystemUpdateInstruments:
+                            break;
 
-	    default:
-		SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-			     << "GOT UNSUPPORTED MAPPED EVENT"
-			     << endl;
-		break;
-            }
+                        default:
+                            SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                                         << "GOT UNSUPPORTED MAPPED EVENT"
+                                         << endl;
+                            break;
+                        }
 
-            // sanity check
-            //
-            if (rEvent == 0)
-                continue;
+                    // sanity check
+                    //
+                    if (rEvent == 0)
+                        continue;
 
-            // Set the start index and then insert into the Composition
-            // (if we haven't before)
-            //
-            if (m_recordSegment->size() == 0 &&
-               !m_composition.contains(m_recordSegment))
-            {
-                m_endOfLastRecordedNote = m_composition.getPosition();
-                m_composition.addSegment(m_recordSegment);
-            }
-            // If there was a gap between the last note and this one
-            // then fill it with rests
-            //
-            if (absTime > m_endOfLastRecordedNote)
-                m_recordSegment->fillWithRests(absTime + duration);
+                    // Set the start index and then insert into the Composition
+                    // (if we haven't before)
+                    //
+                    if (m_recordSegment->size() == 0 &&
+                        !m_composition.contains(m_recordSegment))
+                        {
+                            m_endOfLastRecordedNote = m_composition.getPosition();
+                            m_composition.addSegment(m_recordSegment);
+                        }
+                    // If there was a gap between the last note and this one
+                    // then fill it with rests
+                    //
+                    if (absTime > m_endOfLastRecordedNote)
+                        m_recordSegment->fillWithRests(absTime + duration);
 
-            // Now insert the new event
-            //
-            /*Segment::iterator loc = */ m_recordSegment->insert(rEvent);
+                    // Now insert the new event
+                    //
+                    /*Segment::iterator loc = */ m_recordSegment->insert(rEvent);
 
-            // And now fiddle with it
-            //
+                    // And now fiddle with it
+                    //
 
-	    /*!!! cc-- I don't think this is a good idea any more anyway,
-	      and I've already removed similar code from MidiFile import,
-	      but also I think it's screwing things up for us
+                    /*!!! cc-- I don't think this is a good idea any more anyway,
+                      and I've already removed similar code from MidiFile import,
+                      but also I think it's screwing things up for us
 
-            SegmentNotationHelper helper(*m_recordSegment);
-            if (!helper.isViable(rEvent))
-                helper.makeNoteViable(loc);
-	    */
+                      SegmentNotationHelper helper(*m_recordSegment);
+                      if (!helper.isViable(rEvent))
+                      helper.makeNoteViable(loc);
+                    */
 
-            // Update our counter
-            //
-            m_endOfLastRecordedNote = absTime + duration;
+                    // Update our counter
+                    //
+                    m_endOfLastRecordedNote = absTime + duration;
 
+                }
         }
-    }
 
     // Only update gui if we're still recording - otherwise we
     // can get a recording SegmentItem hanging around.
     //
-    if (status == RECORDING_MIDI)
-    {
+    if (status == RECORDING_MIDI) {
         // update this segment on the GUI
         RosegardenGUIView *w;
-        if(m_viewList)
-        {
-            for(w=m_viewList->first(); w!=0; w=m_viewList->next())
-            {
-                w->showRecordingSegmentItem(m_recordSegment);
-            }
+        for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+            w->showRecordingSegmentItem(m_recordSegment);
         }
     }
 }
@@ -1021,12 +1025,8 @@ RosegardenGUIDoc::stopRecordingMidi()
     // otherwise do something with it
     //
     RosegardenGUIView *w;
-    if(m_viewList)
-    {
-        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
-        {
-            w->deleteRecordingSegmentItem();
-        }
+    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+        w->deleteRecordingSegmentItem();
     }
 
     // Roll out any NOTE ON/NOTE OFFs we've had to insert.
@@ -1456,12 +1456,8 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
 
     // update this segment on the GUI
     RosegardenGUIView *w;
-    if(m_viewList)
-    {
-        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
-        {
-            w->showRecordingSegmentItem(m_recordSegment);
-        }
+    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+        w->showRecordingSegmentItem(m_recordSegment);
     }
 }
 
@@ -1479,12 +1475,8 @@ RosegardenGUIDoc::stopRecordingAudio()
         return;
 
     RosegardenGUIView *w;
-    if(m_viewList)
-    {
-        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
-        {
-            w->deleteRecordingSegmentItem();
-        }
+    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+        w->deleteRecordingSegmentItem();
     }
 
     // set the audio end time
@@ -1561,13 +1553,9 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     // Update preview
     //
     RosegardenGUIView *w;
-    if(m_viewList)
-    {
-        for(w=m_viewList->first(); w!=0; w=m_viewList->next())
-        {
-            w->getTrackEditor()->
-                getSegmentCanvas()->updateSegmentItem(m_recordSegment);
-        }
+    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+        w->getTrackEditor()->
+            getSegmentCanvas()->updateSegmentItem(m_recordSegment);
     }
 
     // update views

@@ -73,6 +73,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 {
     initSegmentRefreshStatusIds();
 
+    m_doc->attachEditView(this);
+    
     setCentralWidget(m_centralFrame);
 
     m_centralFrame->setMargin(0);
@@ -95,6 +97,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 
 EditViewBase::~EditViewBase()
 {
+    m_doc->detachEditView(this);
+
     getCommandHistory()->detachView(actionCollection());
     m_viewNumberPool.erase(m_viewNumber);
     slotSaveOptions();

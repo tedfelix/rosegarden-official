@@ -66,6 +66,18 @@ SequenceManager::~SequenceManager()
 {
 } 
 
+void SequenceManager::setDocument(RosegardenGUIDoc* doc)
+{
+    m_doc = doc;
+}
+
+RosegardenGUIDoc* SequenceManager::getDocument()
+{
+    return m_doc;
+}
+
+
+
 void
 SequenceManager::setTransportStatus(const TransportStatus &status)
 {
@@ -528,14 +540,11 @@ SequenceManager::play()
     {
         comp.setDefaultTempo(120.0);
 
-        cout << "SequenceManager::play()"
-             << " - setting Tempo to Default value of 120.000"
-             << endl;
+        SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
     }
     else
     {
-        cout << "SequenceManager::play() - starting to play"
-             <<  endl;
+        SEQMAN_DEBUG << "SequenceManager::play() - starting to play\n";
     }
 
     // set the tempo in the transport
@@ -627,8 +636,7 @@ SequenceManager::stopping()
         return;
     }
 
-    std::cout << "SequenceManager::stopping() - preparing to stop"
-              << std::endl;
+    SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop\n";
 
     m_sendStop = true;
 }
@@ -693,21 +701,19 @@ SequenceManager::stop()
     if (m_transportStatus == RECORDING_MIDI)
     {
         m_doc->stopRecordingMidi();
-        std::cout << "SequenceManager::stop() - stopped recording MIDI"
-                  << std::endl;
+        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording MIDI\n";
     }
 
     if (m_transportStatus == RECORDING_AUDIO)
     {
         m_doc->stopRecordingAudio();
-        std::cout << "SequenceManager::stop() - stopped recording audio"
-                  << std::endl;
+        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording audio\n";
     }
 
     // always untoggle the play button at this stage
     //
     m_transport->PlayButton()->setOn(false);
-    std::cout << "SequenceManager::stop() - stopped playing" << std::endl;
+    SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing\n";
 
     // ok, we're stopped
     //
@@ -857,8 +863,7 @@ SequenceManager::record(bool toggled)
     {
         if (m_transportStatus == RECORDING_ARMED)
         {
-            std::cout << "SequenceManager::record - "
-                      << "unarming record" << std::endl;
+            SEQMAN_DEBUG << "SequenceManager::record - unarming record\n";
             m_transportStatus = STOPPED;
 
             // Toggle the buttons
@@ -870,8 +875,7 @@ SequenceManager::record(bool toggled)
 
         if (m_transportStatus == STOPPED)
         {
-            std::cout << "SequenceManager::record - "
-                      << "armed record" << std::endl;
+            SEQMAN_DEBUG << "SequenceManager::record - armed record\n";
             m_transportStatus = RECORDING_ARMED;
 
             // Toggle the buttons
@@ -884,15 +888,13 @@ SequenceManager::record(bool toggled)
         if (m_transportStatus == RECORDING_MIDI ||
             m_transportStatus == RECORDING_AUDIO)
         {
-            std::cout << "SequenceManager::record - "
-                      << "stop recording and keep playing" << std::endl;
+            SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
             return;
         }
 
         if (m_transportStatus == PLAYING)
         {
-            std::cout << "SequenceManager::record - "
-                      << "punch in recording" << std::endl;
+            SEQMAN_DEBUG << "SequenceManager::record - punch in recording\n";
             return;
         }
 
@@ -955,20 +957,16 @@ SequenceManager::record(bool toggled)
         {
             case Rosegarden::Instrument::Midi:
                 recordType = STARTING_TO_RECORD_MIDI;
-                cout << "SequenceManager::record() - starting to record MIDI"
-                     << endl;
+                SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
                 break;
 
             case Rosegarden::Instrument::Audio:
                 recordType = STARTING_TO_RECORD_AUDIO;
-                cout << "SequenceManager::record() - starting to record Audio"
-                     << endl;
+                SEQMAN_DEBUG << "SequenceManager::record() - starting to record Audio\n";
                 break;
 
             default:
-                cout << "SequenceManager::record() - "
-                     << "unrecognised instrument type"
-                     << endl;
+                SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type\n";
                 return;
                 break;
         }
@@ -983,14 +981,12 @@ SequenceManager::record(bool toggled)
 
         if (comp.getTempo() == 0)
         {
-            cout << "SequenceManager::play() - "
-                 << "setting Tempo to Default value of 120.000"
-                 << endl;
+            SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
             comp.setDefaultTempo(120.0);
         }
         else
         {
-            cout << "SequenceManager::record() - starting to record" << endl;
+            SEQMAN_DEBUG << "SequenceManager::record() - starting to record\n";
         }
 
         // set the tempo in the transport
@@ -1146,13 +1142,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 if ((*i)->getType() == Rosegarden::MappedEvent::AudioStopped)
                 {
                     /*
-                    cout << "AUDIO FILE ID = "
-                         << int((*i)->getData1())
-                         << " - FILE STOPPED - " 
-                         << "INSTRUMENT = "
-                         << (*i)->getInstrument()
-                         << endl;
-                         */
+                    SEQMAN_DEBUG << "AUDIO FILE ID = "
+                                 << int((*i)->getData1())
+                                 << " - FILE STOPPED - " 
+                                 << "INSTRUMENT = "
+                                 << (*i)->getInstrument()
+                                 << endl;
+                    */
 
                     if (audioManagerDialog && (*i)->getInstrument() == 
                             m_doc->getStudio().getAudioPreviewInstrument())
@@ -1226,7 +1222,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 void
 SequenceManager::rewindToBeginning()
 {
-    cout << "SequenceManager::rewindToBeginning()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::rewindToBeginning()\n";
     m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
 }
 
@@ -1234,7 +1230,7 @@ SequenceManager::rewindToBeginning()
 void
 SequenceManager::fastForwardToEnd()
 {
-    cout << "SequenceManager::fastForwardToEnd()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::fastForwardToEnd()\n";
 
     Composition &comp = m_doc->getComposition();
     m_doc->setPointerPosition(comp.getDuration());
@@ -1524,9 +1520,9 @@ void
 SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
 {
     RosegardenGUIView *v;
-    QList<RosegardenGUIView>* viewList = m_doc->getViewList();
+    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
 
-    for (v = viewList->first(); v != 0; v = viewList->next())
+    for (v = viewList.first(); v != 0; v = viewList.next())
     {
         v->showVisuals(mE);
     }
@@ -1536,7 +1532,7 @@ SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
 void
 SequenceManager::resetControllers()
 {
-    std::cout << "SequenceManager::resetControllers - resetting" << std::endl;
+    SEQMAN_DEBUG << "SequenceManager::resetControllers - resetting\n";
     Rosegarden::MappedComposition mC;
 
     // Should do all Midi Instrument - not just guess like this is doing
@@ -1600,7 +1596,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
                                          author,
                                          copyright);
 
-        //cout << "PLUGIN = \"" << name << "\"" << endl;
+        // SEQMAN_DEBUG << "PLUGIN = \"" << name << "\"" << endl;
 
         for (unsigned int j = 0; j < portCount; j++)
         {
@@ -1614,8 +1610,8 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
             Rosegarden::PortData upperBound = seqPlugins[i++].toFloat();
 	    Rosegarden::PortData defaultValue = seqPlugins[i++].toFloat();
 
-	    //cout << "DEFAULT =  " << defaultValue << endl;
-            //cout << "ADDED PORT = \"" << name << "\"" << endl;
+	    // SEQMAN_DEBUG << "DEFAULT =  " << defaultValue << endl;
+            // SEQMAN_DEBUG << "ADDED PORT = \"" << name << "\"" << endl;
             aP->addPort(id,
                         name,
                         type,
@@ -1626,14 +1622,14 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 
         }
 
-        //cout << " = " << seqPlugins[i] << endl;
+        // SEQMAN_DEBUG << " = " << seqPlugins[i] << endl;
 
         /*
         Rosegarden::MappedObjectPropertyList author =
             getSequencerPropertyList(seqPluginIds[i].toInt(), "author");
 
         if (author.size() == 1)
-            cout << "PLUGIN AUTHOR = \"" << author[0] << "\"" << std::endl;
+            SEQMAN_DEBUG << "PLUGIN AUTHOR = \"" << author[0] << "\"" << std::endl;
             */
     }
 }
@@ -1657,7 +1653,7 @@ SequenceManager::reinitialiseSequencerStudio()
         return;
     }
 
-    SEQMAN_DEBUG << "reinitialised studio" << endl;
+    SEQMAN_DEBUG << "reinitialised studio\n";
 
     // Now set up the audio faders for each audio instrument
     //
@@ -1730,7 +1726,7 @@ SequenceManager::reinitialiseSequencerStudio()
 void
 SequenceManager::panic()
 {
-    SEQMAN_DEBUG << "panic button" << endl;
+    SEQMAN_DEBUG << "panic button\n";
 
     Studio &studio = m_doc->getStudio();
 
@@ -1779,12 +1775,12 @@ void
 SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
 {
     RosegardenGUIView *v;
-    QList<RosegardenGUIView>* viewList = m_doc->getViewList();
+    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
 
     MappedComposition::iterator it = mC.begin();
     for (; it != mC.end(); it++)
     {
-        for (v = viewList->first(); v != 0; v = viewList->next())
+        for (v = viewList.first(); v != 0; v = viewList.next())
         {
             //v->showVisuals(*it);
             m_transport->setMidiOutLabel(*it);
