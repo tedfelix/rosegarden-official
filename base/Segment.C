@@ -491,8 +491,7 @@ Track::getNoteTiedWith(Event *note, bool forwards) const
             continue;
         }
 
-        int pitch;
-        if ((*i)->get<Int>("pitch") == pitch) return i;
+        if ((*i)->get<Int>("pitch") == myPitch) return i;
     }
 
     return end();

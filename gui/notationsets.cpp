@@ -271,7 +271,7 @@ bool Chord::hasNoteHeadShifted() const
 {
     int ph = 999;
 
-    for (int i = 0; i < size(); ++i) {
+    for (unsigned int i = 0; i < size(); ++i) {
         int h = height((*this)[i]);
         if (h == ph + 1) return true;
         ph = h;

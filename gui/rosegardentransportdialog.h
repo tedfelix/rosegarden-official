@@ -72,7 +72,7 @@ private:
   double m_tempo;
   double m_ppq;
 
-  int m_microSeconds;
+  unsigned long long m_microSeconds;
 
 };
 

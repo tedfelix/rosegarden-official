@@ -363,6 +363,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             if ((*it)->isNote()) {
 
                 sprite = makeNoteSprite(it);
+              pixmap = (QCanvasPixmap *)0;    // to supress warning only
 
             } else if ((*it)->isRest()) {
 

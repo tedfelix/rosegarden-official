@@ -105,7 +105,7 @@ RosegardenTransportDialog::displayTime(const int &position)
 {
     // work out the current time in seconds
     //
-    m_microSeconds = (unsigned int)(((double)60000000.0*(double)position)/
+    m_microSeconds = (unsigned long long)(((double)60000000.0*(double)position)/
                                        ((double)m_ppq * (double)m_tempo));
 
     m_tenThousandths = ( m_microSeconds / 100 ) % 10;
@@ -119,8 +119,8 @@ RosegardenTransportDialog::displayTime(const int &position)
     m_unitMinutes = (m_microSeconds / 60000000) % 10;
     m_tenMinutes = (m_microSeconds / 600000000) % 6;
     
-    m_unitHours = ((unsigned int)m_microSeconds / 3600000000L) % 10;
-    m_unitHours = ((unsigned int)m_microSeconds / 36000000000L) % 24;
+    m_unitHours = ((unsigned int)m_microSeconds / 3600000000LL) % 10;
+    m_tenHours = ((unsigned int)m_microSeconds / 36000000000LL) % 24;
 
     if (m_tenThousandths != m_lastTenThousandths)
     {
