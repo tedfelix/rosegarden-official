@@ -61,7 +61,7 @@ AudioPluginManager::removePlugin(MappedObjectId id)
 {
     std::vector<AudioPlugin*>::iterator it = m_plugins.begin();
 
-    for (; it != m_plugins.end(); it++)
+    for (; it != m_plugins.end(); ++it)
     {
         if ((*it)->getId() == id)
         {
@@ -81,7 +81,7 @@ AudioPluginManager::getPluginNames()
 
     PluginIterator it = m_plugins.begin();
 
-    for (; it != m_plugins.end(); it++)
+    for (; it != m_plugins.end(); ++it)
         names.push_back((*it)->getName());
 
     return names;
@@ -101,7 +101,7 @@ AudioPluginManager::getPositionByUniqueId(unsigned long uniqueId)
 {
     int pos = 0;
     PluginIterator it = m_plugins.begin();
-    for (; it != m_plugins.end(); it++)
+    for (; it != m_plugins.end(); ++it)
     {
         if ((*it)->getUniqueId() == uniqueId)
             return pos;
@@ -116,7 +116,7 @@ AudioPlugin*
 AudioPluginManager::getPluginByUniqueId(unsigned long uniqueId)
 {
     PluginIterator it = m_plugins.begin();
-    for (; it != m_plugins.end(); it++)
+    for (; it != m_plugins.end(); ++it)
     {
         if ((*it)->getUniqueId() == uniqueId)
             return (*it);

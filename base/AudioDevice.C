@@ -86,7 +86,7 @@ AudioDevice::toXmlString()
                 << "\" name=\""         << m_name
                 << "\" type=\"audio\">" << std::endl;
 
-    for (iit = m_instruments.begin(); iit != m_instruments.end(); iit++)
+    for (iit = m_instruments.begin(); iit != m_instruments.end(); ++iit)
         audioDevice << (*iit)->toXmlString();
 
     audioDevice << "    </device>"

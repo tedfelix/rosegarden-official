@@ -86,7 +86,7 @@ ArtsDriver::generateInstruments()
     std::string channelName;
     char number[100];
 
-    for (int channel = 0; channel < 16; channel++)
+    for (int channel = 0; channel < 16; ++channel)
     {
         sprintf(number, " %d", channel);
         channelName = name + std::string(number);
@@ -102,7 +102,7 @@ ArtsDriver::generateInstruments()
     m_deviceRunningId++;
     name = "aRts Audio";
 
-    for (int channel = 0; channel < 16; channel++)
+    for (int channel = 0; channel < 16; ++channel)
     {
         sprintf(number, " %d", channel);
         channelName = name + std::string(number);
@@ -332,7 +332,7 @@ ArtsDriver::resetPlayback(const RealTime &position,
     modifyNoteOff = modifyNoteOff - m_playStartPosition + artsPlayStartTime;
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
-                                i != m_noteOffQueue.end(); i++)
+                                i != m_noteOffQueue.end(); ++i)
     {
         // if we're fast forwarding then we bring the note off closer
         if (modifyNoteOff <= RealTime(0, 0))
@@ -993,7 +993,7 @@ ArtsDriver::sendDeviceController(MidiByte controller,
     event.time.sec = timeNow.sec;
     event.time.usec = timeNow.usec;
 
-    for (int channel = 0; channel < 16; channel++)
+    for (int channel = 0; channel < 16; ++channel)
     {
         event.command.status = Arts::mcsParameter | channel;
         event.command.data1 = controller;

@@ -1044,7 +1044,7 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
 
     if (scroll)
 #ifdef RGKDE3
-        getCanvasView()->slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
+        getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
 #else
         getCanvasView()->slotScrollHoriz(m_hlayout.getXForTime(time));
 #endif
@@ -1062,7 +1062,7 @@ MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
 
     if (scroll) {
 #ifdef RGKDE3
-        getCanvasView()->slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
+        getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
 #else
         getCanvasView()->slotScrollHoriz(m_hlayout.getXForTime(time));
 #endif

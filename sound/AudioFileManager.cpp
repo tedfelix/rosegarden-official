@@ -184,7 +184,7 @@ AudioFileManager::removeFile(AudioFileId id)
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
-         it++)
+         ++it)
     {
         if ((*it)->getId() == id)
         {
@@ -208,7 +208,7 @@ AudioFileManager::getFirstUnusedID()
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
-         it++)
+         ++it)
     {
         if (rI < (*it)->getId())
             rI = (*it)->getId();
@@ -321,7 +321,7 @@ AudioFileManager::fileExists(AudioFileId id)
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
-         it++)
+         ++it)
     {
         if ((*it)->getId() == id)
             return true;
@@ -338,7 +338,7 @@ AudioFileManager::clear()
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
-         it++)
+         ++it)
         delete(*it);
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
@@ -487,7 +487,7 @@ AudioFileManager::toXmlString()
     std::string fileName;
     std::vector<AudioFile*>::iterator it;
 
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it)
     {
         fileName = (*it)->getFilename();
 
@@ -518,7 +518,7 @@ AudioFileManager::toXmlString()
 #if (__GNUC__ < 3)
     audioFiles << std::ends;
 #else
-    audioFiles;
+    audioFiles << std::endl;
 #endif
 
     return audioFiles.str();
@@ -538,7 +538,7 @@ AudioFileManager::generatePreviews(QObject *progress)
     // Generate peaks if we need to
     //
     std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it)
     {
         if (!m_peakManager.hasValidPeaks(*it))
             m_peakManager.generatePeaks(*it, progress,  1);
@@ -664,8 +664,8 @@ AudioFileManager::drawPreview(AudioFileId id,
             ch2Value = values[i * channels + 1];
         }
 
-        painter.drawLine(i, yStep + ch1Value * yStep,
-                         i, yStep - ch2Value * yStep);
+        painter.drawLine(i, static_cast<int>(yStep + ch1Value * yStep),
+                         i, static_cast<int>(yStep - ch2Value * yStep));
     }
 }
 
@@ -704,7 +704,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 
     // Render pixmap
     //
-    for (int i = 0; i < pixmap->width(); i++)
+    for (int i = 0; i < pixmap->width(); ++i)
     {
         // Always get two values for our pixmap no matter how many
         // channels in AudioFile as that's all we can display.
@@ -727,8 +727,8 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
             painter.setPen(kapp->palette().color(QPalette::Active,
                                                  QColorGroup::Dark));
 
-        painter.drawLine(i, yStep + ch1Value * yStep,
-                         i, yStep - ch2Value * yStep);
+        painter.drawLine(i, static_cast<int>(yStep + ch1Value * yStep),
+                         i, static_cast<int>(yStep - ch2Value * yStep));
     }
 }
 
@@ -746,7 +746,7 @@ AudioFileManager::print()
     std::cout << std::endl << std::endl;
 
     std::vector<AudioFile*>::iterator it;
-    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it)
     {
         std::cout << (*it)->getId() << " : " << (*it)->getName()
                   << " : \"" << (*it)->getFilename() << "\"" << std::endl;

@@ -312,7 +312,7 @@ AudioManagerDialog::slotPopulateFileList()
     std::vector<Rosegarden::Segment*>::const_iterator iit;
 
     for (Composition::iterator it = m_doc->getComposition().begin();
-             it != m_doc->getComposition().end(); it++)
+             it != m_doc->getComposition().end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Segment::Audio)
             segments.push_back(*it);
@@ -324,7 +324,7 @@ AudioManagerDialog::slotPopulateFileList()
     for (std::vector<AudioFile*>::const_iterator
              it = m_doc->getAudioFileManager().begin();
              it != m_doc->getAudioFileManager().end();
-             it++)
+             ++it)
     {
         try
         {
@@ -463,7 +463,7 @@ AudioManagerDialog::getCurrentSelection()
 
     for (it = m_doc->getAudioFileManager().begin();
          it != m_doc->getAudioFileManager().end();
-         it++)
+         ++it)
     {
         // If we match then return the valid AudioFile
         //
@@ -547,7 +547,7 @@ AudioManagerDialog::slotDelete()
     Rosegarden::SegmentSelection selection;
     Composition &comp = m_doc->getComposition();
 
-    for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
+    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Segment::Audio &&
             (*it)->getAudioFileId() == id)
@@ -651,7 +651,7 @@ AudioManagerDialog::slotInsert()
 
     // Hmm, creative use of vectors and iterators there - *sigh*
     //
-    for (it = devices->begin(); it != devices->end(); it++)
+    for (it = devices->begin(); it != devices->end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Device::Audio)
         {
@@ -659,7 +659,7 @@ AudioManagerDialog::slotInsert()
             //
             instruments = (*it)->getAllInstruments();
 
-            for (iit = instruments.begin(); iit != instruments.end(); iit++)
+            for (iit = instruments.begin(); iit != instruments.end(); ++iit)
             {
                 if (instr == 0)
                 {
@@ -700,7 +700,7 @@ AudioManagerDialog::slotDeleteAll()
     Rosegarden::SegmentSelection selection;
     Composition &comp = m_doc->getComposition();
 
-    for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
+    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Segment::Audio)
             selection.insert(*it);
@@ -878,7 +878,7 @@ AudioManagerDialog::slotSegmentSelection(
     Rosegarden::Segment *segment = 0;
 
     for (SegmentSelection::iterator it = segments.begin();
-                                    it != segments.end(); it++)
+                                    it != segments.end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Segment::Audio) 
         {

@@ -165,7 +165,7 @@ LoopRuler::drawLoopMarker(QPainter* paint)
     paint->save();
     paint->setBrush(RosegardenGUIColours::LoopHighlight);
     paint->setPen(RosegardenGUIColours::LoopHighlight);
-    paint->drawRect(x1, 0, x2 - x1, m_height);
+    paint->drawRect(static_cast<int>(x1), 0, static_cast<int>(x2 - x1), m_height);
     paint->restore();
 
 }

@@ -204,7 +204,7 @@ QSize BarButtonsWidget::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
 
-    return QSize(firstBarWidth, m_barHeight);
+    return QSize(static_cast<int>(firstBarWidth), m_barHeight);
 }
 
 void BarButtonsWidget::paintEvent(QPaintEvent*)
@@ -224,7 +224,7 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 	firstBar = m_rulerScale->getFirstVisibleBar();
     }
 
-    painter.drawLine(m_currentXOffset, 0, visibleRect().width() / getHScaleFactor(), 0);
+    painter.drawLine(m_currentXOffset, 0, static_cast<int>(visibleRect().width() / getHScaleFactor()), 0);
 
     float minimumWidth = 25.0;
     float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
@@ -261,13 +261,13 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
             count = 0;
         }
 
-        // adjust count for first bar line
+        // adjust count for first bar line    
         if (every == firstBar) count++;
 
-	painter.drawLine(x, 0, x, m_barHeight);
+	painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
 
         // disable worldXForm for text
-        QPoint textDrawPoint = painter.xForm(QPoint(x+4, 12));
+        QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x+4), 12));
         
         bool enableXForm = painter.hasWorldXForm();
         painter.setWorldXForm(false);

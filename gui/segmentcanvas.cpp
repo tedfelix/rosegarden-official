@@ -207,9 +207,9 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
             painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
 
             painter.drawLine(i,
-                             halfRectHeight + h1 * height,
+                             static_cast<int>(halfRectHeight + h1 * height),
                              i,
-                             halfRectHeight - h2 * height);
+                             static_cast<int>(halfRectHeight - h2 * height));
 
             /*
             painter.setPen(Qt::white);

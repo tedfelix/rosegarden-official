@@ -108,7 +108,7 @@ AudioPluginInstance::removePort(unsigned int id)
 {
     PortInstanceIterator it = m_ports.begin();
 
-    for (; it != m_ports.end(); it++)
+    for (; it != m_ports.end(); ++it)
     {
         if ((*it)->id == id)
         {
@@ -127,7 +127,7 @@ AudioPluginInstance::getPort(unsigned int id)
 {
     PortInstanceIterator it = m_ports.begin();
 
-    for (; it != m_ports.end(); it++)
+    for (; it != m_ports.end(); ++it)
     {
         if ((*it)->id == id)
             return *it;
@@ -140,7 +140,7 @@ void
 AudioPluginInstance::clearPorts()
 {
     PortInstanceIterator it = m_ports.begin();
-    for (; it != m_ports.end(); it++)
+    for (; it != m_ports.end(); ++it)
         delete (*it);
     m_ports.erase(m_ports.begin(), m_ports.end());
 

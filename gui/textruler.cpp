@@ -130,7 +130,7 @@ TextRuler::paintEvent(QPaintEvent* e)
 
 	int y = height()/2 + bounds.height()/2;
 
-	paint.drawText(x, y, strtoqstr(text));
+	paint.drawText(static_cast<int>(x), y, strtoqstr(text));
     }
 }
 

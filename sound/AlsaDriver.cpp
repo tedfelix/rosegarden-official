@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cstdio>
 
 #ifdef HAVE_ALSA
 
@@ -193,12 +194,6 @@ AlsaDriver::~AlsaDriver()
     }
 
 #endif // HAVE_LIBJACK
-
-/*
-
-            */
-
-
 }
 
 void
@@ -209,11 +204,11 @@ AlsaDriver::getSystemInfo()
 
     snd_seq_system_info_alloca(&sysinfo);
 
-    if ((err = snd_seq_system_info(m_midiHandle, sysinfo))<0)
+    if ((err = snd_seq_system_info(m_midiHandle, sysinfo)) < 0)
     {
         std::cerr << "System info error: " <<  snd_strerror(err)
                   << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     m_maxQueues = snd_seq_system_info_get_queues(sysinfo); 
@@ -232,7 +227,7 @@ AlsaDriver::showQueueStatus(int queue)
     min = queue < 0 ? 0 : queue;
     max = queue < 0 ? m_maxQueues : queue + 1;
 
-    for (idx = min; idx < max; idx++)
+    for (idx = min; idx < max; ++idx)
     {
         if ((err = snd_seq_get_queue_status(m_midiHandle, idx, status))<0)
         {
@@ -241,7 +236,7 @@ AlsaDriver::showQueueStatus(int queue)
 
             std::cerr << "Client " << idx << " info error: "
                       << snd_strerror(err) << std::endl;
-            exit(0);
+            exit(EXIT_FAILURE);
         }
 
         std::cout << "Queue " << snd_seq_queue_status_get_queue(status)
@@ -408,7 +403,7 @@ AlsaDriver::generateInstruments()
     char number[100];
     std::string audioName;
 
-    for (int channel = 0; channel < 16; channel++)
+    for (int channel = 0; channel < 16; ++channel)
     {
         sprintf(number, " #%d", channel);
         audioName = "Audio" + std::string(number);
@@ -486,7 +481,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 
             m_alsaPorts.push_back(alsaInstr);
 
-            for (int channel = 0; channel < 16; channel++)
+            for (int channel = 0; channel < 16; ++channel)
             {
                 sprintf(number, " #%d", channel);
                 channelName = "Metronome" + std::string(number);
@@ -512,7 +507,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 
         m_alsaPorts.push_back(alsaInstr);
 
-        for (int channel = 0; channel < 16; channel++)
+        for (int channel = 0; channel < 16; ++channel)
         {
             // Create MappedInstrument for export to GUI
             //
@@ -693,7 +688,7 @@ AlsaDriver::initialiseMidi()
         std::cerr << "AlsaDriver::initialiseMidi - couldn't start queue - "
                   << snd_strerror(result)
                   << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // process anything pending
@@ -914,7 +909,7 @@ AlsaDriver::stopPlayback()
     // send sounds-off to all client port pairs
     //
     std::vector<AlsaPort*>::iterator it;
-    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
+    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
         sendDeviceController(ClientPortPair((*it)->m_client,
                                             (*it)->m_port),
@@ -1011,7 +1006,7 @@ AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
     // playStartPosition terms.
     //
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
-                                i != m_noteOffQueue.end(); i++)
+                                i != m_noteOffQueue.end(); ++i)
     {
 
         // if we're fast forwarding then we bring the note off closer
@@ -1044,7 +1039,7 @@ AlsaDriver::allNotesOff()
     offTime = getAlsaTime();
 
     for (NoteOffQueue::iterator it = m_noteOffQueue.begin();
-                                it != m_noteOffQueue.end(); it++)
+                                it != m_noteOffQueue.end(); ++it)
     {
         // Set destination according to instrument mapping to port
         //
@@ -1374,7 +1369,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                    //
                    std::string data;
                    char *ptr = (char*)(event->data.ext.ptr);
-                   for (unsigned int i = 0; i < event->data.ext.len; i++)
+                   for (unsigned int i = 0; i < event->data.ext.len; ++i)
                        data += *(ptr++);
 
                    MappedEvent *mE = new MappedEvent();
@@ -1624,7 +1619,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             bool extended = false;
             NoteOffQueue::iterator it;
 
-            for (it = m_noteOffQueue.begin(); it != m_noteOffQueue.end(); it++)
+            for (it = m_noteOffQueue.begin(); it != m_noteOffQueue.end(); ++it)
             {
                 if ((*it)->getPitch() == (*i)->getPitch() &&
                     (*it)->getChannel() == channel &&
@@ -1808,7 +1803,7 @@ AlsaDriver::getFirstDestination(bool duplex)
     ClientPortPair destPair(-1, -1);
     std::vector<AlsaPort*>::iterator it;
 
-    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
+    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
         destPair.first = (*it)->m_client;
         destPair.second = (*it)->m_port;
@@ -1845,7 +1840,7 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
 
     std::vector<AlsaPort*>::iterator it;
 
-    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
+    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
         if (id >= (*it)->m_startId && id <= (*it)->m_endId)
         {
@@ -1978,7 +1973,7 @@ AlsaDriver::removePluginInstance(InstrumentId id, int position)
     std::cout << "AlsaDriver::removePluginInstance" << std::endl;
 
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         if ((*it)->getInstrument() == id &&
             (*it)->getPosition() == position)
@@ -2016,7 +2011,7 @@ AlsaDriver::setPluginInstancePortValue(InstrumentId id,
     */
 
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         if ((*it)->getInstrument() == id &&
             (*it)->getPosition() == position)
@@ -2060,7 +2055,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
 {
     // Discover ports numbers and identities
     //
-    for (unsigned long i = 0; i < descriptor->PortCount; i++)
+    for (unsigned long i = 0; i < descriptor->PortCount; ++i)
     {
         if (LADSPA_IS_PORT_AUDIO(descriptor->PortDescriptors[i]))
         {
@@ -2092,7 +2087,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
 
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
-    for (unsigned int i = 0; i < m_controlPorts.size(); i++)
+    for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
         delete m_controlPorts[i].second;
 
     m_controlPorts.erase(m_controlPorts.begin(), m_controlPorts.end());
@@ -2134,7 +2129,7 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
     // choices.
     //
     LADSPA_Data *dataIn = dataIn1;
-    for (unsigned int i = 0; i < m_audioPortsIn.size(); i++)
+    for (unsigned int i = 0; i < m_audioPortsIn.size(); ++i)
     {
         m_descriptor->connect_port(m_instanceHandle,
                                    m_audioPortsIn[i],
@@ -2144,7 +2139,7 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
     }
 
     LADSPA_Data *dataOut = dataOut1;
-    for (unsigned int i = 0; i < m_audioPortsOut.size(); i++)
+    for (unsigned int i = 0; i < m_audioPortsOut.size(); ++i)
     {
         m_descriptor->connect_port(m_instanceHandle,
                                    m_audioPortsOut[i],
@@ -2156,7 +2151,7 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
 
     // Connect all control ports
     //
-    for (unsigned int i = 0; i < m_controlPorts.size(); i++)
+    for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
     {
         m_descriptor->connect_port(m_instanceHandle,
                                    m_controlPorts[i].first,
@@ -2168,7 +2163,7 @@ LADSPAPluginInstance::connectPorts(LADSPA_Data *dataIn1,
 void
 LADSPAPluginInstance::setPortValue(unsigned long portNumber, LADSPA_Data value)
 {
-    for (unsigned int i = 0; i < m_controlPorts.size(); i++)
+    for (unsigned int i = 0; i < m_controlPorts.size(); ++i)
     {
         if (m_controlPorts[i].first == portNumber)
         {
@@ -2227,7 +2222,7 @@ LADSPAPluginInstance*
 AlsaDriver::getPlugin(InstrumentId id, int position)
 {
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         if ((*it)->getInstrument() == id &&
             (*it)->getPosition() == position)
@@ -2246,7 +2241,7 @@ AlsaDriver::getUnprocessedPlugins()
 {
     PluginInstances list;
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         if (!(*it)->hasBeenProcessed() && !(*it)->isBypassed())
             list.push_back(*it);
@@ -2261,7 +2256,7 @@ AlsaDriver::getInstrumentPlugins(InstrumentId id)
 {
     OrderedPluginList orderedList;
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         if ((*it)->getInstrument() == id)
             orderedList.insert(*it);
@@ -2269,7 +2264,7 @@ AlsaDriver::getInstrumentPlugins(InstrumentId id)
 
     PluginInstances list;
     OrderedPluginIterator oIt = orderedList.begin();
-    for (; oIt != orderedList.end(); oIt++)
+    for (; oIt != orderedList.end(); ++oIt)
         list.push_back(*oIt);
 
     return list;
@@ -2280,7 +2275,7 @@ void
 AlsaDriver::setAllPluginsToUnprocessed()
 {
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
         (*it)->setProcessed(false);
 }
 
@@ -2290,7 +2285,7 @@ void
 AlsaDriver::resetAllPlugins()
 {
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         (*it)->deactivate();
         (*it)->activate();
@@ -2356,9 +2351,9 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             //
             std::string buffer;
             unsigned char b1, b2;
-            float inputLevel = 0.0;
+            float inputLevel = 0.0f;
 
-            for (unsigned int i = 0; i < nframes; i++)
+            for (unsigned int i = 0; i < nframes; ++i)
             {
                 b2 = (unsigned char)((long)
                         (inputBufferLeft[i] * _16bitSampleMax)& 0xff);
@@ -2406,7 +2401,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         // Clear temporary buffers
         //
-        for (unsigned int i = 0 ; i < nframes; i++)
+        for (unsigned int i = 0 ; i < nframes; ++i)
         {
             _tempOutBuffer1[i] = 0.0f;
             _tempOutBuffer2[i] = 0.0f;
@@ -2436,7 +2431,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         std::vector<float> peakLevels;
         float peakLevel;
 
-        for (it = audioQueue.begin(); it != audioQueue.end(); it++)
+        for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
             // Another thread could've cleared down all the
             // PlayableAudioFiles already.  As we've already
@@ -2568,7 +2563,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 char *origSamplePtr = samplePtr;
                 float outBytes;
 
-                peakLevel = 0.0;
+                peakLevel = 0.0f;
 
                 // Get the volume of the audio fader and set a modifier
                 // accordingly.
@@ -2705,13 +2700,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     //int c = 0;
 
                     PluginIterator pIt = list.begin();
-                    for (; pIt != list.end(); pIt++)
+                    for (; pIt != list.end(); ++pIt)
                     {
                         // Bypass
                         //
                         if ((*pIt)->isBypassed())
                         {
-                            for (unsigned int i = 0; i < nframes; i++)
+                            for (unsigned int i = 0; i < nframes; ++i)
                             {
                                 _pluginBufferOut1[i] = _pluginBufferIn1[i];
                                 _pluginBufferOut2[i] = _pluginBufferIn2[i];
@@ -2730,7 +2725,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                         // Now mix the signal
                         //
-                        for (unsigned int i = 0; i < nframes; i++)
+                        for (unsigned int i = 0; i < nframes; ++i)
                         {
                             _tempOutBuffer1[i] += _pluginBufferOut1[i];
                             
@@ -2750,7 +2745,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         // 
                         if ((*pIt) != list.back())
                         {
-                            for (unsigned int i = 0; i < nframes; i++)
+                            for (unsigned int i = 0; i < nframes; ++i)
                             {
                                 _pluginBufferIn1[i] = _pluginBufferOut1[i];
                                 _pluginBufferIn2[i] = _pluginBufferOut2[i];
@@ -2763,7 +2758,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 #endif // HAVE_LADSPA
                 else // straight through without plugins
                 {
-                    for (unsigned int i = 0; i < nframes; i++)
+                    for (unsigned int i = 0; i < nframes; ++i)
                     {
                         _tempOutBuffer1[i] += _pluginBufferIn1[i];
                         _tempOutBuffer2[i] += _pluginBufferIn2[i];
@@ -2784,7 +2779,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             {
 
                 // Clear plugin input buffers to silence
-                for (unsigned int i = 0; i < nframes; i++)
+                for (unsigned int i = 0; i < nframes; ++i)
                 {
                     _pluginBufferIn1[i] = 0.0f;
                     _pluginBufferIn2[i] = 0.0f;
@@ -2792,7 +2787,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 // Process plugins
                 PluginIterator it = list.begin();
-                for (; it != list.end(); it++)
+                for (; it != list.end(); ++it)
                 {
                     float volume = 1.0f;
     
@@ -2820,7 +2815,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                     // Now mix the signal in from the plugin output
                     //
-                    for (unsigned int i = 0; i < nframes; i++)
+                    for (unsigned int i = 0; i < nframes; ++i)
                     {
                         _tempOutBuffer1[i] += _pluginBufferOut1[i] * volume;
                             
@@ -2842,7 +2837,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         // Transfer the sum of the samples
         //
-        for (unsigned int i = 0 ; i < nframes; i++)
+        for (unsigned int i = 0 ; i < nframes; ++i)
         {
             *(leftBuffer++) = _tempOutBuffer1[i];
             *(rightBuffer++) = _tempOutBuffer2[i];
@@ -2859,7 +2854,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         if (audioQueue.size() > 0 && _passThroughCounter++ > 5)
         {
             int i = 0;
-            for (it = audioQueue.begin(); it != audioQueue.end(); it++)
+            for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
             {
                 if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
                 {
@@ -3078,7 +3073,7 @@ AlsaDriver::checkForNewClients()
     snd_seq_client_info_set_client(cinfo, -1);
 
     std::vector<MappedDevice*>::iterator it = m_devices.begin();
-    for (; it != m_devices.end(); it++)
+    for (; it != m_devices.end(); ++it)
     {
         if ((*it)->getType() == Rosegarden::Device::Midi)
             oldClientCount++;
@@ -3177,7 +3172,7 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 #ifdef HAVE_LADSPA
 
     PluginIterator it = m_pluginInstances.begin();
-    for (; it != m_pluginInstances.end(); it++)
+    for (; it != m_pluginInstances.end(); ++it)
     {
         if ((*it)->getInstrument() == id &&
             (*it)->getPosition() == position)

@@ -463,7 +463,7 @@ public slots:
 
     void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
 					double cx, double cy) {
-	slotSetInsertCursorAndRecentre(position, cx, cy, true);
+	slotSetInsertCursorAndRecentre(position, cx, static_cast<int>(cy), true);
     }
 /*!!!
     /// Step back one event with the insert cursor position

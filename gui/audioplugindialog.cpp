@@ -83,7 +83,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     std::vector<QString> names = m_pluginManager->getPluginNames();
     std::vector<QString>::iterator it = names.begin();
 
-    for (; it != names.end(); it++)
+    for (; it != names.end(); ++it)
     {
         m_pluginList->insertItem(*it);
     }
@@ -178,7 +178,7 @@ AudioPluginDialog::slotPluginSelected(int number)
         // if we've got more than 10 control ports then opt for a slider
         // model so they fit on the screen
 
-        for (; it != plugin->end(); it++)
+        for (; it != plugin->end(); ++it)
         {
 //             if (((float(count))/2.0) == (float(count/2)))
 //             {
@@ -355,7 +355,7 @@ PluginControl::PluginControl(QWidget *parent,
         //setStretchFactor(low, 1);
 
         m_multiplier = 200.0 / (upperBound - lowerBound);
-        float step = 1.0;
+        float step = 1.0f;
 
         //cout << "MULT = " << m_multiplier << endl;
         //cout << "STEP = " << step << endl;

@@ -388,7 +388,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     NotationElementList::iterator endAt = findUnchangedBarEnd(to, nextBarTime);
     if (beginAt == getViewElementList()->end()) return;
 
-    truncateClefsAndKeysAt((*beginAt)->getLayoutX());
+    truncateClefsAndKeysAt(static_cast<int>((*beginAt)->getLayoutX()));
 
     Clef currentClef; // used for rendering key sigs
     bool haveCurrentClef = false;

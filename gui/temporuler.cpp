@@ -166,7 +166,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	double x0, x1;
 	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
 	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
-        paint.drawRect(x0, 0, x1 - x0, height());
+        paint.drawRect(static_cast<int>(x0), 0, static_cast<int>(x1 - x0), height());
 
 	if (i == timePoints.end()) break;
     }
@@ -193,9 +193,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    QRect denBounds = m_fontMetrics.boundingRect(denStr);
 
 	    paint.setFont(m_boldFont);
-	    paint.drawText(x - numBounds.width()/2,
+	    paint.drawText(static_cast<int>(x - numBounds.width()/2),
 			   numBounds.height(), numStr);
-	    paint.drawText(x - denBounds.width()/2,
+	    paint.drawText(static_cast<int>(x - denBounds.width()/2),
 			   numBounds.height() + denBounds.height(), denStr);
 	}
 
@@ -224,7 +224,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    paint.setFont(m_font);
 	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
 	    if (prevEndX >= x - 3) x = prevEndX + 3;
-	    paint.drawText(x, textY, tempoString);
+	    paint.drawText(static_cast<int>(x), textY, tempoString);
 	    prevEndX = x + bounds.width();
 	}
     }
