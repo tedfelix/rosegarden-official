@@ -1,9 +1,10 @@
 // -*- c-file-style:  "bsd" -*-
 
-// This does some rather shoddy tests on the Event and Track class.
+// This does some rather shoddy tests on a small selection of core classes.
 
 #include "Event.h"
 #include "Track.h"
+#include "NotationTypes.h"
 
 #include <cstdio>
 
@@ -145,6 +146,8 @@ int main(int argc, char **argv)
 
         return 0;
 #endif
+
+#ifdef NOT_DEFINED
         cout << "Testing track shrinking\n";
         
         Track track(5, 0);
@@ -167,6 +170,73 @@ int main(int argc, char **argv)
         if (nbBars != 3) {
                 cerr << "%%%ERROR : track new nbBars should be 3\n";
         }
+#endif
 
+        cout << "Testing duration-list stuff\n";
+
+        cout << "2/4..." << endl;
+        TimeSignature ts(2,4);
+        DurationList dlist;
+        ts.getDurationListForInterval
+            (dlist, 1206,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+        int acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            cout << "duration: " << *i << endl;
+            acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
+        cout << "6/8..." << endl;
+        ts = TimeSignature(6,8);
+        dlist = DurationList();
+        ts.getDurationListForInterval
+            (dlist, 1206,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+        acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            cout << "duration: " << *i << endl;
+            acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
+        cout << "3/4..." << endl;
+        ts = TimeSignature(3,4);
+        dlist = DurationList();
+        ts.getDurationListForInterval
+            (dlist, 1206,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+        acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            cout << "duration: " << *i << endl;
+            acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
+        cout << "4/4..." << endl;
+        ts = TimeSignature(4,4);
+        dlist = DurationList();
+        ts.getDurationListForInterval
+            (dlist, 1206,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+        acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            cout << "duration: " << *i << endl;
+            acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
+        cout << "3/8..." << endl;
+        ts = TimeSignature(3,8);
+        dlist = DurationList();
+        ts.getDurationListForInterval
+            (dlist, 1206,
+             ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
+        acc = 0;
+        for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
+            cout << "duration: " << *i << endl;
+            acc += *i;
+        }
+        cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 };
 

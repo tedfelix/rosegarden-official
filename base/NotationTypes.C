@@ -519,16 +519,28 @@ Note::Type TimeSignature::getUnit() const
 
 bool TimeSignature::isDotted() const
 {
+    // Is 3/8 dotted time?  This will report that it isn't, because of
+    // the check for m_numerator > 3 -- but otherwise we'd get a false
+    // positive with 3/4
+
     return (m_numerator % 3 == 0 &&
+            m_numerator > 3 &&
             getBarDuration() >= Note(Note::Crotchet, true).getDuration());
 }
 
 int TimeSignature::getBeatDuration() const
 {
     if (isDotted()) {
-        return (getUnitDuration() * 3) / 2; //!!! is this always correct?
+        // this is surprisingly difficult to work out, I got it badly
+        // wrong first time and I'm still not certain about it
+        int u = getUnitDuration();
+        if (u * 3 >= getBarDuration()) {
+            return (u * 3) / 2;
+        } else {
+            return (u * 3);
+        }
     } else {
-        return  getUnitDuration();
+        return getUnitDuration();
     }
 }
 
@@ -544,9 +556,10 @@ void TimeSignature::getDurationListForBar(DurationList &dlist) const
         return;
     }
 
-    if (m_numerator == 4 && m_denominator > 1) {
-        dlist.push_back(getBarDuration() / 2);
-        dlist.push_back(getBarDuration() / 2);
+    if (m_numerator == 4 && m_denominator > 2) {
+//        dlist.push_back(getBarDuration() / 2);
+//        dlist.push_back(getBarDuration() / 2);
+        dlist.push_back(getBarDuration());
         return;
     }
 
