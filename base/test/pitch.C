@@ -29,7 +29,7 @@ int testNote(Accidental &acc, Key &key, int octave, int note)
     int nis = pitch.getNoteInScale(key);
     if (nis != note) {
 	cout << "testNote: " << note << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
-	     << "note in scale is " << nis << endl;
+	     << "note in scale is " << nis << " (not " << note << ")" << endl;
 	rv = 1;
     }
 
@@ -80,7 +80,6 @@ int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
     int rv = 0;
     
     Pitch pitch(height, clef, key, acc);
-
     NotationDisplayPitch ndp(height, acc);
 
     int ppp = pitch.getPerformancePitch();
@@ -88,14 +87,14 @@ int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
 
     if (ppp != npp) {
 	cout << "testHeight: " << height << " " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
-	     << "pitch is " << ppp << ", NotationDisplayPitch says " << npp << endl;
+	     << "pitch " << ppp << " (ndp returns " << npp << ")" << endl;
 	rv = 1;
     }
 
     int h = pitch.getHeightOnStaff(clef, key);
     if (h != ndp.getHeightOnStaff() || h != height) {
 	cout << "testHeight: " << height << " " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
-	     << "height returned is " << h << " (ndp returns " << ndp.getHeightOnStaff() << ")" << endl;
+	     << "height " << h << " (ndp returns " << ndp.getHeightOnStaff() << ")" << endl;
 	rv = 1;
     }
 
@@ -103,7 +102,7 @@ int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
     Accidental pacc = pitch.getAccidental(key.isSharp());
     if (nacc != pacc) {
 	cout << "testHeight: " << height << " " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
-	    "acc " << pacc << " differs from ndp's " << nacc << endl;
+	    "acc " << pacc << " (ndp returns " << nacc << ")" << endl;
 	rv = 1;
     }
 

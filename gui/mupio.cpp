@@ -257,10 +257,13 @@ MupExporter::writePitch(std::ofstream &str, Rosegarden::TrackId trackNo,
 
     Rosegarden::Pitch p(pitch, accidental);
     Rosegarden::Accidental acc(p.getAccidental(ck.second.isSharp()));
-    int noteInScale(p.getNoteInScale(ck.second));
+    char note(p.getNoteName(ck.second));
     int octave(p.getOctave());
 
-    str << "cdefgab"[noteInScale];
+    // just to avoid assuming that the note names returned by Pitch are in
+    // the same set as those expected by Mup -- in practice they are the same
+    // letters but this changes the case
+    str << "cdefgab"[Rosegarden::Pitch::getIndexForNote(note)];
     
     if (accidental == Rosegarden::Accidentals::DoubleFlat) str << "&&";
     else if (accidental == Rosegarden::Accidentals::Flat) str << "&";

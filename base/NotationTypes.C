@@ -69,6 +69,14 @@ namespace Accidentals
         }
         return v;
     }
+
+    int getPitchOffset(const Accidental &acc) {
+	if (acc == DoubleSharp) return 2;
+	else if (acc == Sharp) return 1;
+	else if (acc == Flat) return -1;
+	else if (acc == DoubleFlat) return -2;
+	else return 0;
+    }
 }
 
 using namespace Accidentals;
@@ -1125,6 +1133,10 @@ Pitch::Pitch(int noteInScale, int octave, const Key &key,
     if (key.isMinor()) m_pitch += minor_harmonic[noteInScale];
     else m_pitch += major[noteInScale];
 
+    m_pitch += Accidentals::getPitchOffset(m_accidental);
+
+    //!!! natural?
+
     //!!!
 
 //    NotationDisplayPitch ndp(noteInScale - 2, explicitAccidental);
@@ -1173,8 +1185,17 @@ Pitch::getDisplayAccidental(const Key &key) const
 int
 Pitch::getNoteInScale(const Key &key) const
 {
-    //!!!
-    return (getHeightOnStaff(Clef(Clef::Treble), key) + 72) % 7;
+    int p = m_pitch;
+    p -= key.getTonicPitch();
+    p -= Accidentals::getPitchOffset(m_accidental);
+    p += 24; // in case these calculations made it -ve
+    p %= 12;
+
+    static int major[]          = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
+    static int minor_harmonic[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 5, 6 };
+
+    if (key.isMinor()) return minor_harmonic[p];
+    else return major[p];
 }
 
 char

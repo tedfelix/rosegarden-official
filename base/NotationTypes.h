@@ -97,6 +97,15 @@ namespace Accidentals
      * in their defined order.
      */
     extern AccidentalList getStandardAccidentals();
+
+    /**
+     * Get the change in pitch resulting from an accidental: -1 for
+     * flat, 2 for double-sharp, 0 for natural or NoAccidental etc.
+     * This is not as useful as it may seem, as in reality the
+     * effect of an accidental depends on the key as well -- see
+     * the Key and Pitch classes.
+     */
+    extern int getPitchOffset(const Accidental &accidental);
 }
 
 
