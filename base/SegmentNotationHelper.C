@@ -1194,12 +1194,28 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 {
     // First stage: erase all existing rests in this range.
 
-    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
-	 << endTime << endl;
+//    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
+//	 << endTime << endl;
 
     iterator ia = segment().findTime(startTime);
     iterator ib = segment().findTime(endTime);
     timeT segmentEndTime = segment().getEndTime();
+
+    // If there's a rest preceding the start time, with no notes
+    // between us and it, and if it doesn't have precisely the
+    // right duration, then we need to normalize it too
+    iterator scooter = ia;
+    while (scooter-- != begin()) {
+	if ((*scooter)->isa(Note::EventRestType)) {
+	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
+		startTime) {
+		ia = scooter;
+	    }
+	    break;
+	} else if ((*scooter)->getDuration() > 0) {
+	    break;
+	}
+    }
     
     if (ia == end()) return;
 
@@ -1238,20 +1254,14 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 			   (lastNoteEnds,
 			    thisNoteStarts - lastNoteEnds));
 	}
-	lastNoteEnds = thisNoteStarts;
+	lastNoteEnds = thisNoteStarts + (*i)->getDuration();
     }
 
     if (endTime > lastNoteEnds) {
 	gaps.push_back(std::pair<timeT, timeT>
 		       (lastNoteEnds, endTime - lastNoteEnds));
     }
-/*!!!
-    if (i == end() && segmentEndTime > lastEventEnds) {
-	gaps.push_back(std::pair<timeT, timeT>
-		       (lastEventEnds,
-			segmentEndTime - lastEventEnds));
-    }
-*/
+
     timeT duration;
 
     for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
@@ -1274,8 +1284,8 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 	    Event *e = new Event(Note::EventRestType);
 	    e->setDuration(*di);
 	    e->setAbsoluteTime(acc);
-	    cerr<<"inserting:\n"<<endl;
-	    e->dump(cerr);
+//	    cerr<<"inserting:\n"<<endl;
+//	    e->dump(cerr);
 	    segment().insert(e);
 	    acc += *di;
 	}
