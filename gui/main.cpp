@@ -337,9 +337,9 @@ void testInstalledVersion()
 	KMessageBox::detailedError
 	    (0,
 	     i18n("Installation contains the wrong version of Rosegarden."),
-	     i18n(" The wrong versions of Rosegarden's data files were\n"
+	     QString(i18n(" The wrong versions of Rosegarden's data files were\n"
 		  " found in the standard KDE installation directories.\n"
-		  " (I am " + QString(VERSION) + ", but the installed files are for version " + installedVersion + ".)\n\n"
+		  " (I am %1, but the installed files are for version %2.)\n\n"
 		  " This may mean one of the following:\n\n"
 		  " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
 		  "     installed.  If you compiled it yourself, check that you have\n"
@@ -348,7 +348,7 @@ void testInstalledVersion()
 		  " 2. The upgrade was installed in a non-standard directory,\n"
 		  "     and an old version was found in a standard directory.  If so,\n"
 		  "     you will need to add the correct directory to your KDEDIRS\n"
-		  "     environment variable before you can run it."),
+		  "     environment variable before you can run it.")).arg(VERSION).arg(installedVersion),
 	     i18n("Installation problem"));
 	
     } else {

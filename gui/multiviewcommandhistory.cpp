@@ -282,12 +282,12 @@ MultiViewCommandHistory::updateButton(const QString &text,
 
 	if (stack.empty()) {
 	    action->setEnabled(false);
-	    action->setText(i18n("Nothing to " + text));
+	    action->setText(QString(i18n("Nothing to %1")).arg(text));
 	} else {
 	    action->setEnabled(true);
 	    QString commandName = stack.top()->name();
 	    commandName.replace(QRegExp("&"), "");
-	    action->setText(i18n(text + " " + commandName));
+	    action->setText(text + " " + commandName);
 	}
     }
 }
@@ -323,7 +323,7 @@ MultiViewCommandHistory::updateMenu(const QString &text,
 	    QString commandName = command->name();
 	    commandName.replace(QRegExp("&"), "");
 
-	    menu->insertItem(i18n(text + " %1").arg(commandName), j++);
+	    menu->insertItem(QString("%1 %2").arg(text).arg(commandName), j++);
 	}
 
 	while (!tempStack.empty()) {
