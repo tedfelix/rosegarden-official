@@ -49,8 +49,8 @@ namespace Rosegarden
                  const unsigned int &pitch,
                  const Rosegarden::MidiByte &status):
                   _midiTime(midiTime),
-                  _status(status),
-                  _pitch(pitch) {;}
+                  _pitch(pitch),
+                  _status(status) {;}
     ~NoteOffEvent() {;}
 
     struct NoteOffEventCmp

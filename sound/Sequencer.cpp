@@ -31,16 +31,16 @@ namespace Rosegarden
 {
 
 Sequencer::Sequencer():
-                       _playing(false),
-                       _recordStatus(ASYNCHRONOUS_MIDI),
-                       _ppq(960),
-                       _recordTrack(0),
                        _songPosition(0),
                        _songPlayPosition(0),
                        _songRecordPosition(0),
                        _lastFetchPosition(0),
                        _playStartTime(0, 0),
-                       _recordStartTime(0, 0)
+                       _recordStartTime(0, 0),
+                       _recordStatus(ASYNCHRONOUS_MIDI),
+                       _playing(false),
+                       _ppq(960),
+                       _recordTrack(0)
 {
   initializeMidi();
 }
@@ -234,7 +234,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 {
   Rosegarden::MidiByte channel;
   Rosegarden::MidiByte message;
-  Rosegarden::Event *event;
+  //Rosegarden::Event *event;
 
   if (_recordTrack == 0)
   {
@@ -253,7 +253,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
   // we use a map of Notes and this is the key
   unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
-  double absoluteSecs;
+  //double absoluteSecs;
   int duration;
 
   // scan for our event
@@ -317,7 +317,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 void
 Sequencer::updateSongPosition()
 {
-  unsigned int deltaPosition = convertToMidiTime(
+  int deltaPosition = (int) convertToMidiTime(
                                     deltaTime(_midiPlayPort.time(),
                                               _playStartTime));
   assert(deltaPosition >= 0);
@@ -363,7 +363,7 @@ Sequencer::processMidiOut(Rosegarden::Composition *composition)
 
    cout << "ABS = " << (*i)->getAbsoluteTime() << " : POS = " << _songPosition << endl;
     // sort out the correct TimeStamp for playback
-    assert((*i)->getAbsoluteTime() >= _songPosition);
+    assert((unsigned int)(*i)->getAbsoluteTime() >= _songPosition);
 
     midiPlayPosition = (*i)->getAbsoluteTime() - _songPosition;
     
