@@ -1526,10 +1526,30 @@ MatrixView::slotSetVelocities()
 {
     if (!m_currentEventSelection) return;
 
+    int avVely = 0;
+    int count = 0;
+
+    for (EventSelection::eventcontainer::iterator i =
+         m_currentEventSelection->getSegmentEvents().begin();
+         i != m_currentEventSelection->getSegmentEvents().end(); ++i)
+    {
+
+        if ((*i)->has(Rosegarden::BaseProperties::VELOCITY))
+        {
+            avVely += (*i)->
+                get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY);
+            count++;
+        }
+    }
+
+    if (count > 0) avVely = int(double(avVely)/double(count));
+    else avVely = 100;
+	
     EventParameterDialog *dialog
         = new EventParameterDialog(this,
                                    i18n("Set Event Velocities"),
-                                   Rosegarden::BaseProperties::VELOCITY);
+                                   Rosegarden::BaseProperties::VELOCITY,
+                                   avVely);
 
     if (dialog->exec() == QDialog::Accepted) {
 	KTmpStatusMsg msg(i18n("Setting Velocities..."), this);

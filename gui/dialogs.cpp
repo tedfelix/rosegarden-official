@@ -2642,7 +2642,8 @@ LyricEditDialog::getLyricData()
 EventParameterDialog::EventParameterDialog(
         QWidget *parent,
         const QString &name,
-        const Rosegarden::PropertyName &property):
+        const Rosegarden::PropertyName &property,
+        int startValue):
             KDialogBase(parent, "", true, name, Ok | Cancel),
             m_property(property)
 {
@@ -2700,6 +2701,10 @@ EventParameterDialog::EventParameterDialog(
     m_value1Combo->setCurrentItem(127);
 
     slotPatternSelected(0);
+
+    // start value
+    m_value1Combo->setCurrentItem(startValue);
+    m_value2Combo->setCurrentItem(startValue);
 
 }
 

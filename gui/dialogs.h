@@ -605,8 +605,9 @@ class EventParameterDialog : public KDialogBase
 
 public:
     EventParameterDialog(QWidget *parent,
-                         const QString &name,                       // name
-                         const Rosegarden::PropertyName &property); // property
+                         const QString &name,                      // name
+                         const Rosegarden::PropertyName &property, // property
+                         int startValue);                          // start
 
     int getValue1();
     int getValue2();
