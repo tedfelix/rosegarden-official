@@ -286,8 +286,7 @@ Segment::insert(Event *e)
     timeT t1 = t0 + e->getDuration();
 
     if (t0 < m_startTime ||
-	begin() == end() ||
-	(*begin())->getAbsoluteTime() > t0) {
+	(begin() == end() && t0 > m_startTime)) {
 
 	Composition *c = m_composition;
 	if (c) c->detachSegment(this); // sets m_composition to 0
@@ -335,7 +334,10 @@ Segment::erase(iterator pos)
     updateRefreshStatuses(t0, t1);
 
     if (t0 == m_startTime && begin() != end()) {
+	Composition *c = m_composition;
+	if (c) c->detachSegment(this); // sets m_composition to 0
 	m_startTime = (*begin())->getAbsoluteTime();
+	if (c) c->addSegment(this);
     }
     if (t1 == m_endTime) {
 	updateEndTime();
@@ -369,7 +371,10 @@ Segment::erase(iterator from, iterator to)
     }
 
     if (startTime == m_startTime && begin() != end()) {
+	Composition *c = m_composition;
+	if (c) c->detachSegment(this); // sets m_composition to 0
 	m_startTime = (*begin())->getAbsoluteTime();
+	if (c) c->addSegment(this);
     }
 
     if (endTime == m_endTime) {

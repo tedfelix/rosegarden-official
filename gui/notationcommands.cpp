@@ -551,41 +551,6 @@ GroupMenuTupletCommand::modifySegment()
     helper.makeTupletGroup(getStartTime(), m_untupled, m_tupled, m_unit);
 }
 
-/*!!!
-GroupMenuUnTupletCommand::GroupMenuUnTupletCommand(Rosegarden::Segment &segment,
-						   timeT startTime) :
-    BasicCommand(getGlobalName(), segment, startTime, findEndTime(startTime))
-{
-    // nothing else
-}
-
-Rosegarden::timeT
-GroupMenuUnTupletCommand::findEndTime(Rosegarden::Segment &segment,
-				      timeT startTime)
-{
-    if (!segment.isBeforeEndMarker(i)) return startTime;
-    
-    bool haveGroupId = false;
-
-    for (Segment::iterator i = segment.findTime(startTime);
-	 segment.isBeforeEndMarker(i); ++i) {
-	
-	if ((*i)->getAbsoluteTime() > startTime) break;
-
-	if ((*i)->has(BEAMED_GROUP_TYPE) &&
-	    (*i)->get<String>(BEAMED_GROUP_TYPE) == GROUP_TYPE_TUPLED) {
-	    if ((*i)->get<Int>(BEAMED_GROUP_ID, m_groupId)) {
-		haveGroupId = true;
-		break;
-	    }
-	}
-    }
-
-    if (!haveGroupId) return startTime;
-    else return (segment.isBeforeEndMarker(i) ? (*i)->getAbsoluteTime() :
-		 segment.getEndMarkerTime());
-}
-*/
 
 void
 GroupMenuUnTupletCommand::modifySegment()
@@ -601,28 +566,6 @@ GroupMenuUnTupletCommand::modifySegment()
 	(*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
 	(*i)->unset(TUPLET_NOMINAL_DURATION);
     }
-/*!!!
-    for (Segment::iterator i = getSegment().findTime(getStartTime());
-	 getSegment().isBeforeEndMarker(i); ++i) {
-	
-	if ((*i)->has(BEAMED_GROUP_TYPE) &&
-	    (*i)->get<String>(BEAMED_GROUP_TYPE) == GROUP_TYPE_TUPLED) {
-
-	    long myGroupId = m_groupId - 1;
-
-	    if ((*i)->get<Int>(BEAMED_GROUP_ID, myGroupId) &&
-		myGroupId == m_groupId) {
-
-		(*i)->unset(BEAMED_GROUP_ID);
-		(*i)->unset(BEAMED_GROUP_TYPE);
-		(*i)->unset(BEAMED_GROUP_TUPLET_BASE);
-		(*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
-		(*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
-		(*i)->unset(TUPLET_NOMINAL_DURATION);
-	    }
-	}
-    }
-*/
 }
 
 
@@ -734,28 +677,6 @@ TransformsMenuCollapseNotesCommand::modifySegment()
     if (thisOne) {
 	helper.collapseNoteAggressively(*i, endTime);
     }
-
-/*!!!
-
-    // We go in reverse order, because collapseNoteAggressively
-    // may delete the event following the one it's passed, but
-    // never deletes anything before it
-
-    EventSelection::eventcontainer::iterator i =
-	m_selection->getSegmentEvents().end();
-
-    //!!! aargh. we can't go in forward direction using the j-itr
-    //trick because collapseNoteAggressively may erase the following
-    //itr as well as the preceding one. we can't go backward naively
-    //like this any more because collapseNoteAggressively erases i
-    //from the EventSelection now that it's a SegmentObserver. we need
-    //both techniques at once.
-
-    while (i != m_selection->getSegmentEvents().begin()) {
-        --i;
-	helper.collapseNoteAggressively(*i, endTime);
-    }
-*/
 }
 
 
@@ -820,29 +741,6 @@ TransformsMenuMakeNotesViableCommand::modifySegment()
 	helper.makeNotesViable(getStartTime(), getEndTime());
 	segment.normalizeRests(getStartTime(), getEndTime());
     }
-
-/*!!!
-    Segment &segment(getSegment());
-    SegmentNotationHelper helper(segment);
-
-    for (EventSelection::eventcontainer::iterator i =
-	     m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ) {
-
-	// makeNoteViable erases the event from the segment & thus
-	// from the selection (which is a segment observer), so we
-	// have to use the j-iterator trick to increment i (which is
-	// the one that will have been erased).
-
-	EventSelection::eventcontainer::iterator j = i;
-	++j;
-
-	Segment::iterator si = segment.findSingle(*i);
-	if (si != segment.end()) helper.makeNoteViable(si, true);
-
-	i = j;
-    }
-*/
 }
 
 void
@@ -862,82 +760,6 @@ TransformsMenuDeCounterpointCommand::modifySegment()
 	helper.deCounterpoint(getStartTime(), getEndTime());
 	segment.normalizeRests(getStartTime(), getEndTime());
     }
-
-/*!!!
-    //!!! move to SegmentNotationHelper?
-
-    for (EventSelection::eventcontainer::iterator i =
-	     m_selection->getSegmentEvents().begin();
-	 i != m_selection->getSegmentEvents().end(); ) {
-
-	// again, we have to use the j-iterator trick to increment i
-	// (which will have been erased by a split).
-
-	EventSelection::eventcontainer::iterator j = i;
-	++j;
-	if (!(*i)->isa(Note::EventType)) {
-	    i = j;
-	    continue;
-	}
-
-	Segment::iterator si = segment.findSingle(*i);
-	if (si == segment.end()) { // can happen if sj erased below
-	    i = j;
-	    continue;
-	}
-	timeT ti = helper.getNotationAbsoluteTime(*si);
-	timeT di = helper.getNotationDuration(*si);
-
-	// find next event that's also in selection but is either at
-	// a different time or (if a note) has a different duration
-	Segment::iterator sj = si;
-	while (sj != segment.end()) {
-	    if (m_selection->contains(*sj)) {
-		if (helper.getNotationAbsoluteTime(*sj) > ti) break;
-		if ((*sj)->isa(Note::EventType) &&
-		    helper.getNotationDuration(*sj) != di) break;
-	    }
-	    ++sj;
-	}
-
-	if (sj == segment.end()) break; // no split, no more notes
-	timeT tj = helper.getNotationAbsoluteTime(*sj);
-	timeT dj = helper.getNotationDuration(*sj);
-
-	Event *e1 = 0, *e2 = 0;
-	Segment::iterator toGo = segment.end();
-
-	if (tj == ti && dj != di) {
-	    // do the same-time-different-durations case
-	    if (di > dj) { // split *si
-		e1 = new Event(**si, ti, dj);
-		e2 = new Event(**si, ti + dj, di - dj);
-		toGo = si;
-	    } else { // split *sj
-		e1 = new Event(**sj, ti, di);
-		e2 = new Event(**sj, ti + di, dj - di);
-		toGo = sj;
-	    }
-	} else if (tj - ti > 0 && tj - ti < di) { // split *si
-	    e1 = new Event(**si, ti, tj - ti);
-	    e2 = new Event(**si, tj, di - (tj - ti));
-	    toGo = si;
-	}
-	
-	if (e1 && e2) { // e2 is the new note
-	    e1->set<Bool>(TIED_FORWARD, true);
-	    e2->set<Bool>(TIED_BACKWARD, true);
-	    segment.insert(e1);
-	    segment.insert(e2);
-	    // so that e2 is itself a candidate for splitting later:
-	    m_selection->addEvent(e2);
-	    if (*toGo == *j) ++j; // avoid stepping on just-erased 2nd event
-	    if (toGo != segment.end()) segment.erase(toGo);
-	}
-
-	i = j;
-    }
-*/
 }
 
 
@@ -1534,11 +1356,13 @@ TransformsMenuInterpretCommand::articulate()
 	    }
 	}
 
-	//!!! things can get inserted twice into toErase because this
-	// assignment doesn't work -- itr is not what we're iterating
-	// with -- hence crash
-
-//!!!	itr = chord.getFinalElement();
+	// what we want to do here is jump our iterator to the final
+	// element in the chord -- but that doesn't work because we're
+	// iterating through the selection, not the segment.  So for
+	// now we just accept the fact that notes in chords might be
+	// processed multiple times (slow) and added into the toErase
+	// set more than once (hence the nasty tests in the loop just
+	// after the close of this loop).
     }
 
     for (std::set<Event *>::iterator j = toErase.begin(); j != toErase.end(); ++j) {

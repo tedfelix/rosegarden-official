@@ -1722,10 +1722,7 @@ MatrixView::initActionsToolbar()
 
     connect(m_snapGridCombo, SIGNAL(activated(int)),
             this, SLOT(slotSetSnapFromIndex(int)));
-/*!!!
-    connect(m_snapGridCombo, SIGNAL(propagate(int)),
-            this, SLOT(slotSetSnapFromIndex(int)));
-*/
+
     // Quantize combo
     //
     QLabel *qLabel = new QLabel(i18n("Quantize"), actionsToolbar);
@@ -1746,13 +1743,6 @@ MatrixView::initActionsToolbar()
 
     connect(m_quantizeCombo, SIGNAL(activated(int)),
             this, SLOT(slotQuantizeSelection(int)));
-
-    // mouse wheel
-/*!!!
-    connect(m_quantizeCombo, SIGNAL(propagate(int)),
-            this, SLOT(slotQuantizeSelection(int)));
-*/
-
 }
 
 void

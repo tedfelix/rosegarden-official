@@ -378,9 +378,7 @@ RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
         e->type() == QEvent::DragMove            ||
         e->type() == QEvent::DragLeave           ||
         e->type() == QEvent::Drop                ||
-        e->type() == QEvent::DragResponse       // ||
-//	e->type() == QEvent::Paint //!!! prevent nested paints in the active window?
-	)
+        e->type() == QEvent::DragResponse)
 
         return true;
 
@@ -703,8 +701,6 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     QFrame *typeFrame = new QFrame(quantizerBox);
 
     QGridLayout *layout = new QGridLayout(typeFrame, 1, 1, 5, 3);
-
-//!!!    layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
     m_typeCombo = new RosegardenComboBox(false, typeFrame);
     m_typeCombo->insertItem(i18n("Grid quantizer"));
     m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));

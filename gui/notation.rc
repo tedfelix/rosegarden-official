@@ -487,6 +487,7 @@
     <Action name="make_notes_viable"/>
     <Action name="de_counterpoint"/>
     <Action name="quantize"/>
+    <Action name="interpret"/>
 <!--    <Action name="fix_smoothing"/>
 -->
     <Action name="transpose_up"/>

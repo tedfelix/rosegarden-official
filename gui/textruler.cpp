@@ -75,8 +75,6 @@ TextRuler::slotScrollHoriz(int x)
 QSize
 TextRuler::sizeHint() const
 {
-    //!!! could be improved upon
-
     double width =
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
 	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());

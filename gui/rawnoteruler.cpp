@@ -273,9 +273,6 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     (*node->node)->get<Int>(BaseProperties::VELOCITY, velocity);
     QColor colour = vc.getColour(velocity);
     
-    //!!! need separate getQuantizedExtents / getUnquantizedExtents 
-    // or whatever
-    
     timeT start = (*node->node)->getAbsoluteTime();
     timeT   end = (*node->node)->getDuration() + start;
     
@@ -422,7 +419,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     Segment::iterator i = m_segment->findNearestTime(from);
     if (i == m_segment->end()) i = m_segment->begin();
 
-    //!!! experimental
+    // somewhat experimental, as is this whole class
     Segment::iterator j = m_segment->findTime(to);
     buildForest(m_segment, i, j);
 

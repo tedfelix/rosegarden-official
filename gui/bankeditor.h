@@ -24,12 +24,14 @@
 #define _BANKEDITOR_H_
 
 #include <vector>
+#include <map>
 
 #include <kcompletion.h>
 #include <kdialogbase.h>
 #include <qlistview.h>
 #include <qvgroupbox.h>
 
+#include "Device.h"
 #include "Instrument.h"
 
 class RosegardenComboBox;
@@ -51,25 +53,25 @@ namespace Rosegarden { class Studio; class MidiDevice; }
 class MidiDeviceListViewItem : public QListViewItem
 {
 public:
-    MidiDeviceListViewItem(int deviceNb,
+    MidiDeviceListViewItem(Rosegarden::DeviceId id,
                            QListView* parent, QString name);
 
-    MidiDeviceListViewItem(int deviceNb,
+    MidiDeviceListViewItem(Rosegarden::DeviceId id,
                            QListViewItem* parent, QString name,
                            QString msb, QString lsb);
 
-    int getDevice()   { return m_deviceNb; }
+    Rosegarden::DeviceId getDevice() const { return m_deviceId; }
 
 protected:
 
     //--------------- Data members ---------------------------------
-    int m_deviceNb;
+    Rosegarden::DeviceId m_deviceId;
 };
 
 class MidiBankListViewItem : public MidiDeviceListViewItem
 {
 public:
-    MidiBankListViewItem(int deviceNb,
+    MidiBankListViewItem(Rosegarden::DeviceId deviceId,
                          int bankNb,
                          QListViewItem* parent, QString name,
                          QString msb, QString lsb);
@@ -173,7 +175,7 @@ public:
 
     // Get a MidiDevice from an index number
     //
-    Rosegarden::MidiDevice* getMidiDevice(int);
+    Rosegarden::MidiDevice* getMidiDevice(Rosegarden::DeviceId);
     Rosegarden::MidiDevice* getMidiDevice(QListViewItem*);
     Rosegarden::MidiDevice* getCurrentMidiDevice();
     MidiProgramsEditor::MidiBankContainer&      getBankList()     { return m_bankList; }
@@ -190,7 +192,7 @@ public:
 
     // Select a device/bank combination
     //
-    void selectDeviceBankItem(int device, int bank);
+    void selectDeviceBankItem(Rosegarden::DeviceId device, int bank);
 
 public slots:
     void slotPopulateDevice(QListViewItem*);
@@ -234,9 +236,9 @@ protected:
 
     QPushButton             *m_copyPrograms;
     QPushButton             *m_pastePrograms;
-    std::pair<int, int>      m_copyBank;
+    std::pair<Rosegarden::DeviceId, int> m_copyBank;
 
-    std::vector<std::string>                     m_deviceList;
+    std::map<Rosegarden::DeviceId, std::string>  m_deviceNameMap;
     MidiProgramsEditor::MidiBankContainer        m_bankList;
     MidiProgramsEditor::MidiProgramContainer     m_programList;
 
@@ -244,7 +246,7 @@ protected:
     bool                     m_keepBankList;
     bool                     m_deleteAll;
 
-    int                      m_lastDevice;
+    Rosegarden::DeviceId     m_lastDevice;
     int                      m_lastMSB;
     int                      m_lastLSB;
 };

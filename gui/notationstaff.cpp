@@ -333,7 +333,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     emit setProgress(0);
     kapp->processEvents();
 
-    throwIfCancelled();//!!!
+    throwIfCancelled();
 
     Clef currentClef; // default is okay to start with
 
@@ -365,7 +365,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
 	    kapp->processEvents();
-	    throwIfCancelled();//!!!
+	    throwIfCancelled();
 	}
     }
 
@@ -385,7 +385,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
     kapp->processEvents();
-    throwIfCancelled();//!!!
+    throwIfCancelled();
 
     const NotationProperties &properties(m_notationView->getProperties());
 
@@ -488,7 +488,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - from) * 100 / (to - from));
 	    kapp->processEvents();
-	    throwIfCancelled();//!!!
+	    throwIfCancelled();
 	}
     }
 
@@ -701,49 +701,15 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
-//!!! need better way to get these properties out
-	    /*!!!	    
-	    timeT absTime = 
-		getSegment().getComposition()->getNotationQuantizer()->
-		getQuantizedAbsoluteTime(elt->event());
-	    timeT duration =
-		getSegment().getComposition()->getNotationQuantizer()->
-		getQuantizedDuration(elt->event());
+	    Note::Type note =
+		elt->event()->get<Int>(properties.NOTE_TYPE);
+	    int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
+	    restParams.setNoteType(note);
+	    restParams.setDots(dots);
+	    setTuplingParameters(elt, restParams);
+	    restParams.setQuantized(false);
+	    pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
 
-	    bool ignoreRest = false;
-	    elt->event()->get<Bool>(properties.REST_TOO_SHORT, ignoreRest);
-
-	    bool ignoreRest = (duration == 0);
-	    if (!ignoreRest) {
-		if (nextElt) {
-		    timeT nextTime =
-			m_notationView->getLegatoQuantizer()->
-			getQuantizedAbsoluteTime(nextElt->event());
-		    if (nextTime - absTime
-			< Note(Note::Shortest).getDuration()) {
-			ignoreRest = true;
-		    }
-		}
-	    }
-
-	    if (!ignoreRest) {
-*/
-		Note::Type note =
-		    elt->event()->get<Int>(properties.NOTE_TYPE);
-		int dots = elt->event()->get<Int>(properties.NOTE_DOTS);
-		restParams.setNoteType(note);
-		restParams.setDots(dots);
-		setTuplingParameters(elt, restParams);
-//!!!		bool quantized = (absTime != elt->getAbsoluteTime() ||
-//				  duration != elt->getDuration());
-		restParams.setQuantized(false);
-//!!!		if (quantized) z = 2;
-		pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
-/*!!!
-	    } else {
-		NOTATION_DEBUG << "Omitting too-short rest" << endl;
-	    }
-*/
 	} else if (elt->event()->isa(Clef::EventType)) {
 
 	    pixmap = m_notePixmapFactory->makeClefPixmap
@@ -761,9 +727,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		(Rosegarden::Text::TextTypePropertyName) ==
 		Rosegarden::Text::Annotation &&
 		!m_notationView->areAnnotationsVisible()) {
-		
-		//!!! what? we should probably show somewhere that
-		// annotations are switched off
+
+		// nothing I guess
 
 	    } else {
 
@@ -912,17 +877,6 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     bool quantized = false;
     if (m_colourQuantize && !elt->isTuplet()) {
-
-	//!!! as above, need better way
-/*!!!
-	    timeT absTime = 
-		getSegment().getComposition()->getNotationQuantizer()->
-		getQuantizedAbsoluteTime(elt->event());
-	    timeT duration =
-		getSegment().getComposition()->getNotationQuantizer()->
-		getQuantizedDuration(elt->event());
-*/
-
 	quantized =
 	    (elt->getViewAbsoluteTime() != elt->event()->getAbsoluteTime() ||
 	     elt->getViewDuration()     != elt->event()->getDuration());

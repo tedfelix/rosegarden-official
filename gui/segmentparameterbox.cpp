@@ -111,12 +111,6 @@ SegmentParameterBox::initBox()
     connect(m_quantizeValue, SIGNAL(activated(int)),
             SLOT(slotQuantizeSelected(int)));
 
-    // handle quantize changes from mouse wheel
-/*!!!
-    connect(m_quantizeValue, SIGNAL(propagate(int)),
-            SLOT(slotQuantizeSelected(int)));
-*/
-
     // reversing motif style read-write combo
     m_transposeValue = new RosegardenComboBox(true, true, this);
     m_transposeValue->setFont(font);
@@ -125,12 +119,6 @@ SegmentParameterBox::initBox()
     // handle transpose combo changes
     connect(m_transposeValue, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
-
-    // handle transpose combo changes
-/*!!!
-    connect(m_transposeValue, SIGNAL(propagate(int)),
-            SLOT(slotTransposeSelected(int)));
-*/
 
     // and text changes
     connect(m_transposeValue, SIGNAL(textChanged(const QString&)),

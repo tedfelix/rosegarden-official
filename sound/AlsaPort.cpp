@@ -46,39 +46,19 @@
 namespace Rosegarden
 {
 
-#ifdef NOT_DEFINED
-// --------- AlsaPort ------------
-//
-AlsaPort::AlsaPort(InstrumentId startId,
-                   InstrumentId endId,
-                   const std::string &name,
-                   int client,
-                   int port,
-                   PortDirection direction):
-        m_startId(startId),
-        m_endId(endId),
-        m_name(name),
-        m_client(client),
-        m_port(port),
-        m_direction(direction),
-        m_type(0)
-{
-}
-
-AlsaPort::~AlsaPort()
-{
-}
-#endif
-
 AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
                                          const std::string &name,
                                          int client,
                                          int port,
+					 unsigned int clientType,
+					 unsigned int capability,
                                          PortDirection direction):
         m_type(type),
         m_name(name),
         m_client(client),
         m_port(port),
+	m_clientType(clientType),
+	m_capability(capability),
         m_direction(direction)
 {
 }

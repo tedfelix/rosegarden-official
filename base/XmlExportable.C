@@ -40,6 +40,8 @@ std::string XmlExportable::encode(const std::string &s0)
 	default:
 	    // We're exporting to utf-8, so values outside these ranges are invalid:
 	    if (c >= 32 && !(c >= 128 && c < 160)) s1 += c;
+	    // convert these special cases to plain whitespace:
+	    else if (c == 0x9 || c == 0xa || c == 0xd) s1 += ' ';
 	    break;
 	}
     }

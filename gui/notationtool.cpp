@@ -1243,13 +1243,6 @@ EventSelection* NotationSelector::getSelection()
 
     if (!m_selectedStaff) return 0;
 	
-/*!!!
-    NotationStaff *staff = dynamic_cast<NotationStaff*>
-	(m_nParentView->getStaffForCanvasCoords(int(m_selectionRect->x()),
-						int(middleY)));
-
-    if (!staff) return 0;
-*/
     Segment& originalSegment = m_selectedStaff->getSegment();
     EventSelection* selection = new EventSelection(originalSegment);
 

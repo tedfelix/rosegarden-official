@@ -86,7 +86,6 @@ public:
     /**
      * Lays out all staffs that have been scanned
      */
-    //!!! shouldn't need these args, should we?
     virtual void finishLayout(Rosegarden::timeT startTime = 0,
 			      Rosegarden::timeT endTime = 0);
 
@@ -373,7 +372,6 @@ protected:
 
     int m_timePerProgressIncrement;
     int m_staffCount; // purely for progress reporting
-//!!!    bool m_showUnknowns;
 };
 
 #endif

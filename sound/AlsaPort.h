@@ -48,13 +48,17 @@ public:
                         const std::string &name,
                         int client,
                         int port,
+			unsigned int clientType,
+			unsigned int capability,
                         PortDirection direction);
 
     Instrument::InstrumentType m_type;
     std::string                m_name;
     int                        m_client;
     int                        m_port;
-    PortDirection              m_direction;
+    unsigned int               m_clientType;
+    unsigned int               m_capability;
+    PortDirection              m_direction; // or can deduce from capability
 
     bool isReadable()  { return m_direction == ReadOnly ||
 			        m_direction == Duplex; }

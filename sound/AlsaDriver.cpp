@@ -325,7 +325,6 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
     {
-
         client = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
@@ -337,27 +336,28 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
         {
-            if (((snd_seq_port_info_get_capability(pinfo) & writeCap)
-                    == writeCap) ||
-                ((snd_seq_port_info_get_capability(pinfo) & readCap)
-                 == readCap))
+	    unsigned int type = snd_seq_client_info_get_type(cinfo);
+	    unsigned int capability = snd_seq_port_info_get_capability(pinfo);
+	    int client = snd_seq_port_info_get_client(pinfo);
+	    int port = snd_seq_port_info_get_port(pinfo);
+
+            if (((capability & writeCap) == writeCap) ||
+                ((capability &  readCap) ==  readCap))
             {
                 std::cout << "    "
-                          << snd_seq_port_info_get_client(pinfo) << ","
-                          << snd_seq_port_info_get_port(pinfo) << " - ("
+                          << client << ","
+                          << port << " - ("
                           << snd_seq_client_info_get_name(cinfo) << ", "
                           << snd_seq_port_info_get_name(pinfo) << ")";
 
                 PortDirection direction;
 
-                if (snd_seq_port_info_get_capability(pinfo) &
-                    SND_SEQ_PORT_CAP_DUPLEX)
+                if (capability & SND_SEQ_PORT_CAP_DUPLEX)
                 {
                     direction = Duplex;
                     std::cout << "\t\t\t(DUPLEX)";
                 }
-                else if (snd_seq_port_info_get_capability(pinfo) &
-                         SND_SEQ_PORT_CAP_WRITE)
+                else if (capability & SND_SEQ_PORT_CAP_WRITE)
                 {
                     direction = WriteOnly;
                     std::cout << "\t\t(WRITE ONLY)";
@@ -370,9 +370,6 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
                 // Generate a unique name using the client id
                 //
-		int client = snd_seq_port_info_get_client(pinfo);
-		int port   = snd_seq_port_info_get_port(pinfo);
-		
 		char portId[40];
 		sprintf(portId, "%d:%d ", client, port);
 
@@ -407,8 +404,10 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                     new AlsaPortDescription(
                             Instrument::Midi,
                             name,
-                            snd_seq_port_info_get_client(pinfo),
-                            snd_seq_port_info_get_port(pinfo),
+                            client,
+			    port,
+			    type,
+			    capability,
                             direction);
 
 		if (newPorts &&
@@ -540,19 +539,32 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
     std::string connectionName("");
 
     static int unknownCounter;
+
     static int counters[3][2]; // [system/hardware/software][out/in]
+    const int SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
     static const char *firstNames[3][2] = {
 	{ "MIDI output system device", "MIDI input system device" },
-	{ "MIDI hardware synth", "MIDI hardware input device" },
-	{ "MIDI soft synth", "MIDI software input" }
+	{ "MIDI external synth", "MIDI hardware input device" },
+	{ "MIDI software device", "MIDI software input" }
     };
     static const char *countedNames[3][2] = {
 	{ "MIDI output system device %d", "MIDI input system device %d" },
-	{ "MIDI hardware synth %d", "MIDI hardware input device %d" },
-	{ "MIDI soft synth %d", "MIDI software input %d" }
+	{ "MIDI external synth %d", "MIDI hardware input device %d" },
+	{ "MIDI software device %d", "MIDI software input %d" }
     };
 
-    const int SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
+    static int specificCounters[3][2];
+    const int GM = 0, SYNTH = 1, SAMPLE = 2;
+    static const char *specificNames[3][2] = {
+	{ "General MIDI synth", "General MIDI soft synth" },
+	{ "MIDI soundcard synth", "MIDI soft synth" },
+	{ "MIDI hardware sampler", "MIDI software sampler" }
+    };
+    static const char *specificCountedNames[3][2] = {
+	{ "General MIDI synth %d", "General MIDI soft synth %d" },
+	{ "MIDI soundcard synth %d", "MIDI soft synth %d" },
+	{ "MIDI hardware sampler %d", "MIDI software sampler %d" }
+    };
 
     DeviceId deviceId = getSpareDeviceId();
 
@@ -564,16 +576,43 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	if (requestedDirection == MidiDevice::Play &&
 	    !port->isWriteable()) return 0;
 
-	int type = (port->m_client <  64 ? SYSTEM :
-		    port->m_client < 128 ? HARDWARE : SOFTWARE);
+	int category = (port->m_client <  64 ? SYSTEM :
+			port->m_client < 128 ? HARDWARE : SOFTWARE);
 
-	if (counters[type][requestedDirection] == 0) {
-	    sprintf(clientId, firstNames[type][requestedDirection]);
-	    ++counters[type][requestedDirection];
-	} else {
-	    sprintf(clientId,
-		    countedNames[type][requestedDirection],
-		    ++counters[type][requestedDirection]);
+	bool haveName = false;
+
+	if ((category == HARDWARE || category == SOFTWARE) &&
+	    requestedDirection == MidiDevice::Play) {
+	    
+	    int type =
+		((port->m_clientType & SND_SEQ_PORT_TYPE_SYNTH) ? SYNTH :
+		 ((port->m_clientType & SND_SEQ_PORT_TYPE_DIRECT_SAMPLE) ||
+		  (port->m_clientType & SND_SEQ_PORT_TYPE_SAMPLE)) ? SAMPLE :
+		 (port->m_clientType & SND_SEQ_PORT_TYPE_MIDI_GM) ? GM : -1);
+
+	    if (type > 0) {
+		category = (category == SOFTWARE ? 1 : 0);
+		if (specificCounters[type][category] == 0) {
+		    sprintf(clientId, specificNames[type][category]);
+		    ++specificCounters[type][category];
+		} else {
+		    sprintf(clientId,
+			    specificCountedNames[type][category],
+			    ++specificCounters[type][category]);
+		}
+		haveName = true;
+	    }
+	}
+
+	if (!haveName) {
+	    if (counters[category][requestedDirection] == 0) {
+		sprintf(clientId, firstNames[category][requestedDirection]);
+		++counters[category][requestedDirection];
+	    } else {
+		sprintf(clientId,
+			countedNames[category][requestedDirection],
+			++counters[category][requestedDirection]);
+	    }
 	}
 
 	m_devicePortMap[deviceId] = ClientPortPair(port->m_client,
@@ -689,20 +728,23 @@ AlsaDriver::addDevice(Device::DeviceType type,
 void
 AlsaDriver::removeDevice(DeviceId id)
 {
-    //!!! fix -- currently erases element it's iterating over
-    //!!! also remove from deviceportmap
+    //!!! test
 
-    for (MappedDeviceList::iterator i = m_devices.begin();
-	 i != m_devices.end(); ++i) {
+    for (MappedDeviceList::iterator i = m_devices.end();
+	 i != m_devices.begin(); ) {
 	
+	--i;
+
 	if ((*i)->getId() == id) {
 	    delete *i;
 	    m_devices.erase(i);
 	}
     }
 
-    for (MappedInstrumentList::iterator i = m_instruments.begin();
-	 i != m_instruments.end(); ++i) {
+    for (MappedInstrumentList::iterator i = m_instruments.end();
+	 i != m_instruments.begin(); ) {
+
+	--i;
 	
 	if ((*i)->getDevice() == id) {
 	    delete *i;
@@ -862,11 +904,10 @@ AlsaDriver::initialiseMidi()
     // Create a port
     //
     m_port = snd_seq_create_simple_port(m_midiHandle,
-                                        NULL,
+					"Rosegarden",
                                         SND_SEQ_PORT_CAP_WRITE |
-                                        SND_SEQ_PORT_CAP_SUBS_WRITE |
-                                        SND_SEQ_PORT_CAP_READ |
-                                        SND_SEQ_PORT_CAP_SUBS_READ,
+                                        SND_SEQ_PORT_CAP_READ  |
+					SND_SEQ_PORT_CAP_NO_EXPORT,
                                         SND_SEQ_PORT_TYPE_APPLICATION);
     if (m_port < 0)
     {
@@ -3809,9 +3850,8 @@ AlsaDriver::unsetRecordDevices()
     }
 }
 
-// We send 
 void
-AlsaDriver::sendMMC(MidiByte deviceId,
+AlsaDriver::sendMMC(MidiByte deviceArg,
                     MidiByte instruction,
                     bool isCommand,
                     const std::string &data)
@@ -3819,6 +3859,42 @@ AlsaDriver::sendMMC(MidiByte deviceId,
     MappedComposition mC;
     MappedEvent *mE;
 
+    Rosegarden::DeviceId deviceId = Rosegarden::Device::NO_DEVICE;
+    
+    for (MappedInstrumentList::iterator i = m_instruments.begin();
+	 i != m_instruments.end(); ++i) {
+
+	if ((*i)->getDevice() == deviceId) continue;
+	deviceId = (*i)->getDevice();
+
+	if ((*i)->getType() != Rosegarden::Instrument::Midi) continue;
+
+	// Create a plain SysEx
+	//
+	mE = new MappedEvent((*i)->getId(),
+			     MappedEvent::MidiSystemExclusive);
+
+	// Make it a RealTime SysEx
+	mE->addDataByte(MIDI_SYSEX_RT);
+	
+	// Add the destination
+	mE->addDataByte(deviceArg);
+	
+	// Add the command type
+	if (isCommand)
+	    mE->addDataByte(MIDI_SYSEX_RT_COMMAND);
+	else
+	    mE->addDataByte(MIDI_SYSEX_RT_RESPONSE);
+	
+	// Add the command
+	mE->addDataByte(instruction);
+	
+	// Add any data
+	mE->addDataString(data);
+    
+	mC.insert(mE);
+
+#ifdef NOT_DEFINED
     AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
@@ -3860,6 +3936,7 @@ AlsaDriver::sendMMC(MidiByte deviceId,
 
             mC.insert(mE);
         }
+#endif
     }
 
     processMidiOut(mC, RealTime(0, 0), true);

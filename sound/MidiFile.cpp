@@ -1034,18 +1034,6 @@ MidiFile::convertToRosegarden(Composition *composition,
 	}
     }
 
-    // if we have no time signatures at all, try to guess one
-    //!!! should also be in rosegardengui.cpp
-    //!!! and now is
-/*!!!
-    if (!haveTimeSignatures && !preexisting)
-    {
-        CompositionTimeSliceAdapter adapter(composition);
-        AnalysisHelper analysisHelper;
-        TimeSignature timeSig = analysisHelper.guessTimeSignature(adapter);
-        composition->addTimeSignature(0, timeSig);
-    }
-*/
     return composition;
 }
 
@@ -1364,9 +1352,6 @@ MidiFile::convertToMidi(Composition &comp)
 		    }
 		    else if ((*el)->isa(Controller::EventType))
 		    {
-			//!!! Any of these MidiTypes constructors could
-			// throw exceptions
-		    
 			Controller c(**el);
 			midiEvent =
 			    new MidiEvent(midiEventAbsoluteTime,

@@ -654,10 +654,6 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
 
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
-/*!!!
-    m_cfg->writeEntry("smoothing",
-                      m_smoothing->currentItem() + Note::Shortest);
-*/
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("style", m_noteStyle->currentText());

@@ -163,13 +163,6 @@ public:
     QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
 				     Rosegarden::timeT &errorReturn);
 
-/*!!!
-    QString makeNoteMenuLabel(Rosegarden::timeT duration,
-			      bool brief,
-			      Rosegarden::timeT &errorReturn,
-			      bool plural = false);
-*/
-    
     int getNoteBodyWidth (Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;
 

@@ -333,25 +333,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
         setPageMode(layoutMode == 1); // also renders the staffs!
 
-/*!!!
-        bool layoutApplied = applyLayout();
-        if (!layoutApplied) {
-            KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-        } else {
-            for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-
-                m_staffs[i]->renderAllElements();
-                m_staffs[i]->positionAllElements();
-                m_staffs[i]->getSegment().getRefreshStatus
-                    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-		
-                canvas()->update();
-
-            }
-        }
-
-	refreshSegment(0, 0, 0);
-*/
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->getSegment().getRefreshStatus
 		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
@@ -441,11 +422,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_inhibitRefresh = false;
 
     setConfigDialogPageIndex(1);
-
-    if (m_annotationsVisible) {
-	// oops
-//!!!	refreshSegment(0, 0, 0);
-    }
 
     NOTATION_DEBUG << "NotationView ctor exiting\n";
 }
@@ -557,23 +533,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	    m_staffs[i]->getSegment().getRefreshStatus
 		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
 	}
-
-/*!!!
-	bool layoutApplied = applyLayout();
-	if (!layoutApplied) {
-	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-	} else {
-	    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-		
-		m_staffs[i]->renderAllElements();
-		m_staffs[i]->positionAllElements();
-		m_staffs[i]->getSegment().getRefreshStatus
-		    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-		
-		canvas()->update();
-	    }
-	}
-*/
 
 	m_ok = true;
 
@@ -1161,7 +1120,7 @@ void NotationView::setupActions()
     new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
-/*!!!
+/*!!! need updated version of this
     new KAction(TransformsMenuFixSmoothingCommand::getGlobalName(), 0,
 		this, SLOT(slotTransformsFixSmoothing()), actionCollection(),
                 "fix_smoothing");

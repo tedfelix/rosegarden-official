@@ -45,7 +45,6 @@ public:
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
 
-    //!!! not especially keen on virtual!
     virtual timeT getViewAbsoluteTime() const  { return event()->getAbsoluteTime(); }
     virtual timeT getViewDuration() const      { return event()->getDuration();     }
 

@@ -154,7 +154,7 @@ NotationHLayout::getBarData(StaffType &staff) const
 // -- We should never make the bar narrower than a certain minimum
 //    (dependent on the current spacing setting, as is most of the rest)
 
-//!!! The algorithm below does not implement most of these rules; it
+// The algorithm below does not implement most of these rules; it
 // can probably be improved dramatically without too much work
 
 // Arguments to this method:
@@ -257,8 +257,6 @@ NotationHLayout::setNotationData(Segment &segment)
 // or should be in SegmentNotationHelper::getNotationDuration which
 // should probably be used in this class in preference to the quantizer's
 // getQuantizedDuration
-
-//!!!    m_notationQuantizer->quantize(&segment, segment.begin(), segment.end());
 
     bool justSeenGraceNote = false;
     timeT graceNoteStart = 0;
@@ -621,7 +619,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
     bool grace = false;
-/*!!!
+/*
     NOTATION_DEBUG << "NotationHLayout::scanChord: "
 		   << chord.size() << "-voice chord at "
 		   << (*itr)->event()->getAbsoluteTime()
@@ -1500,19 +1498,8 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
 
     if (j != e) {
 	d = (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
-/*!!!
-	NOTATION_DEBUG << "getSpacingDuration: stopped by elt at "
-		       << (*j)->getViewAbsoluteTime() << ", d = "
-		       << (*j)->getViewDuration() << ", type "
-		       << (*j)->event()->getType() << endl;
-*/
     }
-/*!!!
-    NOTATION_DEBUG << "getSpacingDuration for elt at "
-		   << (*i)->getViewAbsoluteTime() << ", d = "
-		   << (*i)->getViewDuration() << ": returning "
-		   << d << endl;
-*/
+
     return d;
 }
 
@@ -1808,7 +1795,7 @@ NotationHLayout::getFirstVisibleBar()
 	}
     }
 
-//!!!    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBar: returning " << bar << endl;
+//    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBar: returning " << bar << endl;
 
     return bar;
 }
@@ -1821,7 +1808,7 @@ NotationHLayout::getFirstVisibleBarOnStaff(StaffType &staff)
     int bar = 0;
     if (bdl.begin() != bdl.end()) bar = bdl.begin()->first;
 
-//!!!    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBarOnStaff: returning " << bar << endl;
+//    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBarOnStaff: returning " << bar << endl;
 
     return bar;
 }
@@ -1841,7 +1828,7 @@ NotationHLayout::getLastVisibleBar()
 	}
     }
 
-//!!!    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBar: returning " << bar << endl;
+//    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBar: returning " << bar << endl;
 
     return bar;
 }
@@ -1857,7 +1844,7 @@ NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
 	bar = ((--i)->first) + 1; // last visible bar_line_
     }
 
-//!!!    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBarOnStaff: returning " << bar << endl;
+//    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBarOnStaff: returning " << bar << endl;
 
     return bar;
 }
@@ -1886,7 +1873,7 @@ NotationHLayout::getBarPosition(int bar)
 	}
     }
 
-//!!!    NOTATION_DEBUG << "NotationHLayout::getBarPosition: returning " << position << " for bar " << bar << endl;
+//    NOTATION_DEBUG << "NotationHLayout::getBarPosition: returning " << position << " for bar " << bar << endl;
 
     return position;
 }

@@ -26,6 +26,7 @@
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
 #include "segmentcommands.h"
+#include "notationcommands.h"
 #include "widgets.h"
 #include "midipitchlabel.h"
 
@@ -1350,25 +1351,6 @@ EventEditDialog::slotDurationChanged(int value)
 	m_durationDisplayAux->setText(" ");
     }
 
-/*!!!
-    Note nearestNote = Note::getNearestNote(timeT(value), 1);
-    std::string noteName = nearestNote.getReferenceName();
-    noteName = "menu-" + noteName;
-    QPixmap map = m_notePixmapFactory.makeToolbarPixmap(strtoqstr(noteName));
-
-    m_durationDisplay->setPixmap(map);
-
-    timeT nearestDuration = nearestNote.getDuration();
-    if (timeT(value) >= nearestDuration * 2) {
-	m_durationDisplayAux->setText("++ ");
-    } else if (timeT(value) > nearestDuration) {
-	m_durationDisplayAux->setText("+ ");
-    } else if (timeT(value) < nearestDuration) {
-	m_durationDisplayAux->setText("- ");
-    } else {
-	m_durationDisplayAux->setText(" ");
-    }
-*/
     if (timeT(value) == m_duration) return;
 
     m_modified = true;
@@ -1755,12 +1737,7 @@ TempoDialog::updateBeatLabels(double tempo)
 	m_tempoBeatLabel->setText(" (");
 
 	NotePixmapFactory npf;
-/*!!!
-	Note beatNote = Note::getNearestNote(beat);
-	std::string beatName = beatNote.getReferenceName();
-	m_tempoBeat->setPixmap(npf.makeToolbarPixmap
-			       (strtoqstr("menu-" + beatName)));
-*/
+
 	timeT error = 0;
 	m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(beat, error)));
 	if (error) m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap(npf.makeUnknownPixmap()));
@@ -2006,18 +1983,6 @@ RescaleDialog::getDivisor()
 {
     return m_from;
 }
-
-/*!!!
-static Note getNoteForIndex(int index)
-{
-    for (Note::Type t = Note::Shortest + 1; t < Note::Longest; ++t) {
-	for (int dots = 0; dots <= 1; ++dots) {
-	    if (index-- == 0) return Note(t, dots);
-	}
-    }
-    return Note(Note::Crotchet);
-}
-*/
 
 void
 RescaleDialog::slotFromChanged(int i)
@@ -2461,7 +2426,8 @@ LyricEditDialog::unparse()
 	 m_segment->isBeforeEndMarker(i); ++i) {
 
 	//!!! should ignore tied-back notes, here and in parse()
-
+	// (and are we doing the right thing with chords yet?)
+	
 	bool isNote = (*i)->isa(Note::EventType);
 	bool isLyric = false;
 	
@@ -2557,10 +2523,7 @@ EventParameterDialog::EventParameterDialog(
 
     connect(m_patternCombo, SIGNAL(activated(int)),
             this, SLOT(slotPatternSelected(int)));
-/*!!!
-    connect(m_patternCombo, SIGNAL(propagate(int)),
-            this, SLOT(slotPatternSelected(int)));
-*/
+
     QHBox *value1Box = new QHBox(vBox);
     m_value1Label = new QLabel(i18n("Value"), value1Box);
     m_value1Combo = new RosegardenComboBox(true, value1Box);
@@ -2783,4 +2746,84 @@ SplitByPitchDialog::getClefHandling()
     default: return (int)SegmentSplitByPitchCommand::UseTrebleAndBassClefs;
     }
 }
+
+
+
+InterpretDialog::InterpretDialog(QWidget *parent) :
+    KDialogBase(parent, 0, true, i18n("Interpret"), Ok | Cancel)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    QGroupBox *groupBox = new QGroupBox
+	(1, Horizontal, i18n("Interpretations to apply"), vbox);
+
+    m_applyTextDynamics = new QCheckBox
+	(i18n("Apply text dynamics (p, mf, ff etc)"), groupBox);
+    m_applyHairpins = new QCheckBox
+	(i18n("Apply hairpin dynamics"), groupBox);
+    m_stressBeats = new QCheckBox
+	(i18n("Stress beats"), groupBox);
+    m_articulate = new QCheckBox
+	(i18n("Articulate slurs, staccato, legato etc"), groupBox);
+    m_allInterpretations = new QCheckBox
+	(i18n("All available interpretations"), groupBox);
+
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    
+    m_allInterpretations->setChecked
+	(config->readBoolEntry("interpretall", true));
+    m_applyTextDynamics->setChecked
+	(config->readBoolEntry("interprettextdynamics", true));
+    m_applyHairpins->setChecked
+	(config->readBoolEntry("interprethairpins", true));
+    m_stressBeats->setChecked
+	(config->readBoolEntry("interpretstressbeats", true));
+    m_articulate->setChecked
+	(config->readBoolEntry("interpretarticulate", true));
+
+    connect(m_allInterpretations,
+	    SIGNAL(clicked()), this, SLOT(slotAllBoxChanged()));
+
+    slotAllBoxChanged();
+}
+
+void
+InterpretDialog::slotAllBoxChanged()
+{
+    bool all = m_allInterpretations->isChecked();
+    m_applyTextDynamics->setEnabled(!all);
+    m_applyHairpins->setEnabled(!all);
+    m_stressBeats->setEnabled(!all);
+    m_articulate->setEnabled(!all);
+}
+
+int
+InterpretDialog::getInterpretations()
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    
+    config->writeEntry("interpretall", m_allInterpretations->isChecked());
+    config->writeEntry("interprettextdynamics", m_applyTextDynamics->isChecked());
+    config->writeEntry("interprethairpins", m_applyHairpins->isChecked());
+    config->writeEntry("interpretstressbeats", m_stressBeats->isChecked());
+    config->writeEntry("interpretarticulate", m_articulate->isChecked());
+
+    if (m_allInterpretations->isChecked()) {
+	return TransformsMenuInterpretCommand::AllInterpretations;
+    } else {
+	int in = 0;
+	if (m_applyTextDynamics->isChecked())
+	    in |= TransformsMenuInterpretCommand::ApplyTextDynamics;
+	if (m_applyHairpins->isChecked())
+	    in |= TransformsMenuInterpretCommand::ApplyHairpins;
+	if (m_stressBeats->isChecked()) 
+	    in |= TransformsMenuInterpretCommand::StressBeats;
+	if (m_articulate->isChecked()) {
+	    in |= TransformsMenuInterpretCommand::Articulate;
+	}
+	return in;
+    }
+}
+
 

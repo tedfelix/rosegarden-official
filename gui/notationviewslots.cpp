@@ -620,12 +620,7 @@ void NotationView::slotGroupTuplet(bool simple)
     int untupled = 3;
     Segment *segment = 0;
 
-/*!!! nah -- selection rectangle is never visible now
-    NotationSelector *selector = dynamic_cast<NotationSelector *>
-        (m_toolBox->getTool(NotationSelector::ToolName));
-*/
-    if (m_currentEventSelection /*!!! &&
-  selector && selector->isRectangleVisible() */ ) {
+    if (m_currentEventSelection) {
 
         t = m_currentEventSelection->getStartTime();
 
@@ -1024,14 +1019,17 @@ void NotationView::slotTransformsQuantize()
 
 void NotationView::slotTransformsInterpret()
 {
-    //!!! dialog
-
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
-    addCommandToHistory(new TransformsMenuInterpretCommand
-                        (*m_currentEventSelection,
-                         getDocument()->getComposition().getNotationQuantizer(),
-                         TransformsMenuInterpretCommand::AllInterpretations));
+
+    InterpretDialog *dialog = new InterpretDialog(this);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
+	addCommandToHistory(new TransformsMenuInterpretCommand
+			    (*m_currentEventSelection,
+			     getDocument()->getComposition().getNotationQuantizer(),
+			     dialog->getInterpretations()));
+    }
 }
     
 
@@ -1161,16 +1159,10 @@ void NotationView::slotEditAddTimeSignature()
 void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-//    Event *clefEvt = 0, *keyEvt = 0;
     Segment &segment = staff->getSegment();
     Rosegarden::Clef clef;
     Rosegarden::Key key;
     timeT insertionTime = getInsertionTime(clef, key);
-    
-/*!!!
-        Rosegarden::Key key;
-        if (keyEvt) key = Rosegarden::Key(*keyEvt);
-*/
 
     //!!! experimental:
     Rosegarden::CompositionTimeSliceAdapter adapter
@@ -1178,9 +1170,6 @@ void NotationView::slotEditAddKeySignature()
          getDocument()->getComposition().getDuration());
     Rosegarden::AnalysisHelper helper;
     key = helper.guessKey(adapter);
-
-//    Rosegarden::Clef clef;
-//    if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
 
     KeySignatureDialog *dialog =
         new KeySignatureDialog

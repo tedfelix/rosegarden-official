@@ -524,17 +524,6 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 	std::pair<Event *, Event *> split =
 	    splitPreservingPerformanceTimes(*i, baseDuration);
 
-	/*!!!
-
-	// set the initial event's duration to base
-	Event *eva = new Event(*(*i), (*i)->getAbsoluteTime(),
-				   baseDuration);
-            
-	// Add 2nd event
-	Event* evb = new Event(*(*i), (*i)->getAbsoluteTime() + baseDuration,
-			       eventDuration - baseDuration);
-	*/
-
 	Event *eva = split.first;
 	Event *evb = split.second;
 
@@ -939,7 +928,6 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 	    while (i != end() &&
 		   (getNotationAbsoluteTime(*i) <
 		    (insertedTime + existingDuration))) ++i;
-//!!!            i = segment().findTime((*i)->getAbsoluteTime() + existingDuration);
 
 	    return insertSomething
 		(i, duration - existingDuration, modelEvent, true);
@@ -1007,9 +995,7 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
     e->unset(BEAMED_GROUP_ID);
     e->unset(BEAMED_GROUP_TYPE);
 
-    //!!! use isBeforeEndMarker?
-
-    while (i != end()) {
+    while (isBeforeEndMarker(i)) {
 
 	if ((*i)->has(BEAMED_GROUP_ID)) {
 
@@ -1070,8 +1056,6 @@ void
 SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {
     iterator i = segment().findSingle(e);
-
-    //!!! use isBeforeEndMarker?
 
     if (i == end()) return;
 
@@ -1155,8 +1139,6 @@ bool
 SegmentNotationHelper::hasEffectiveDuration(iterator i)
 {
     bool hasDuration = ((*i)->getDuration() > 0);
-
-    //!!! use isBeforeEndMarker?
 
     if ((*i)->isa(Note::EventType)) {
 	iterator i0(i);
@@ -1860,12 +1842,7 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
     e1->setNotationDuration(q1);
     e2->setNotationAbsoluteTime(qt + q1);
     e2->setNotationDuration(qd - q1);
-/*!!!
-    e1->set<Int>("NotationAbsoluteTimeTarget", qt);//!!!
-    e1->set<Int>("NotationDurationTarget", q1);//!!!
-    e2->set<Int>("NotationAbsoluteTimeTarget", qt + q1);//!!!
-    e2->set<Int>("NotationDurationTarget", qd - q1);//!!!
-*/
+
     e1->set<Bool>(TIED_FORWARD, true);
     e1->set<Bool>(TIED_BACKWARD, true);
 
@@ -1882,8 +1859,6 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
     // also, if m starts at the same time as n but has a different
     // duration, we should split the longer of n and m at the shorter
     // one's duration.
-
-//!!!    Segment::iterator to = segment().findTime(endTime);
 
     for (Segment::iterator i = segment().findTime(startTime);
 	 segment().isBeforeEndMarker(i); ) {
@@ -1927,27 +1902,18 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	    if (di > dk) { // split *i
 		std::cerr << "splitting i into " << dk << " and "<< (di-dk) << std::endl;
 		splits = splitPreservingPerformanceTimes(*i, dk);
-/*!!!
-		e1 = new Event(**i, ti, dk);
-		e2 = new Event(**i, ti + dk, di - dk);
-*/
+
 		toGo = i;
 	    } else { // split *k
 		std::cerr << "splitting k into " << di << " and "<< (dk-di) << std::endl;
 		splits = splitPreservingPerformanceTimes(*k, di);
-/*!!!
-		e1 = new Event(**k, ti, di);
-		e2 = new Event(**k, ti + di, dk - di);
-*/
+
 		toGo = k;
 	    }
 	} else if (tk - ti > 0 && tk - ti < di) { // split *i
 	    std::cerr << "splitting i[*] into " << (tk-ti) << " and "<< (di-(tk-ti)) << std::endl;
 	    splits = splitPreservingPerformanceTimes(*i, tk - ti);
-/*!!!
-	    e1 = new Event(**i, ti, tk - ti);
-	    e2 = new Event(**i, tk, di - (tk - ti));
-*/
+
 	    toGo = i;
 	}
 	

@@ -191,7 +191,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 //                                         << stemLength << endl;
                 } else {
 		    if (h[j] < -2 && stemUp) {
-			//!!! needs tuning, & applying for stems too
+			//!!! needs tuning, & applying for beamed stems too
 			stemLength = staff.getLayoutYForHeight(h[j]) -
 			    staff.getLayoutYForHeight(4);
 		    } else if (h[j] > 10 && !stemUp) {

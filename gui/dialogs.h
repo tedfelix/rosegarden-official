@@ -644,4 +644,25 @@ private:
 };
 
 
+class InterpretDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    InterpretDialog(QWidget *parent);
+
+    // an OR from TransformsMenuInterpretCommand's constants
+    int getInterpretations();
+
+protected slots:
+    void slotAllBoxChanged();
+
+private:
+    QCheckBox *m_allInterpretations;
+    QCheckBox *m_applyTextDynamics;
+    QCheckBox *m_applyHairpins;
+    QCheckBox *m_stressBeats;
+    QCheckBox *m_articulate;
+};
+
+
 #endif
