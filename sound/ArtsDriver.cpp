@@ -129,7 +129,7 @@ ArtsDriver::initialiseMidi()
         cerr << "ArtsDriver - can't create aRts MidiRecorder"
              << endl << endl;
         cerr << "Most likely this is because you've not updated your "
-             << "~/.mcopc file yet." << endl
+             << "~/.mcoprc file yet." << endl
              << "Please look in :" << endl
              << "  rosegarden/docs/howtos/artsd-mcop-notes" << endl << endl;
         exit(1);
