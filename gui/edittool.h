@@ -59,7 +59,7 @@ protected:
  * handling by a BaseToolBox
  * 
  */
-class BaseTool : public QObject, public KXMLGUIClient
+class BaseTool : public QObject
 {
     friend class BaseToolBox;
 
@@ -95,8 +95,6 @@ public:
      */
     virtual void showMenu();
 
-    virtual void setRCFileName(QString rcfilename) { m_rcFileName = rcfilename; }
-
 protected:
     /**
      * Create a new BaseTool
@@ -105,14 +103,11 @@ protected:
      */
     BaseTool(const QString& menuName, KXMLGUIFactory*, QObject* parent);
 
-    virtual void createMenu();
-    virtual void createMenu(QString rcFileName);
+    virtual void createMenu() = 0;
 
     //--------------- Data members ---------------------------------
 
     QString m_menuName;
-    QString m_rcFileName;
-
     QPopupMenu* m_menu;
 
     KXMLGUIFactory* m_parentFactory;
@@ -141,7 +136,7 @@ protected:
  * @see EditView#setTool()
  * @see EditToolBox
  */
-class EditTool : public BaseTool
+class EditTool : public BaseTool, public KXMLGUIClient
 {
     friend class EditToolBox;
 
@@ -217,10 +212,15 @@ protected:
      */
     EditTool(const QString& menuName, EditView*);
 
+    void setRCFileName(QString rcfilename) { m_rcFileName = rcfilename; }
+
+    virtual void createMenu();
+    virtual void createMenu(QString rcFileName);
+
     //--------------- Data members ---------------------------------
+    QString m_rcFileName;
 
     EditView* m_parentView;
-
 };
 
 /**

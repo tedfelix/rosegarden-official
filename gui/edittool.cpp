@@ -95,30 +95,6 @@ void BaseTool::stow()
 {
 }
 
-void BaseTool::createMenu()
-{
-    RG_DEBUG << "BaseTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
-
-    setXMLFile(m_rcFileName);
-    m_parentFactory->addClient(this);
-
-    QWidget* tmp =  m_parentFactory->container(m_menuName, this);
-
-    if (!tmp)
-        RG_DEBUG << "BaseTool::createMenu(" << m_rcFileName
-                 << ") : menu creation failed (name : "
-                 << m_menuName << ")\n";
-
-    m_menu = dynamic_cast<QPopupMenu*>(tmp);
-}
-
-void BaseTool::createMenu(QString rcFileName)
-{
-    setRCFileName(rcFileName);
-    createMenu();
-}
-
-
 void BaseTool::showMenu()
 {
     if (!m_menu) createMenu();
@@ -126,7 +102,7 @@ void BaseTool::showMenu()
     if (m_menu)
         m_menu->exec(QCursor::pos());
     else
-        RG_DEBUG << "EditTool::showMenu() : no menu to show\n";
+        RG_DEBUG << "BaseTool::showMenu() : no menu to show\n";
 }
 
 //////////////////////////////////////
@@ -205,4 +181,27 @@ int EditTool::handleMouseMove(Rosegarden::timeT, int, QMouseEvent*)
 
 void EditTool::handleMouseRelease(Rosegarden::timeT, int, QMouseEvent*)
 {
+}
+
+void EditTool::createMenu(QString rcFileName)
+{
+    setRCFileName(rcFileName);
+    createMenu();
+}
+
+void EditTool::createMenu()
+{
+    RG_DEBUG << "BaseTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
+
+    setXMLFile(m_rcFileName);
+    m_parentFactory->addClient(this);
+
+    QWidget* tmp =  m_parentFactory->container(m_menuName, this);
+
+    if (!tmp)
+        RG_DEBUG << "BaseTool::createMenu(" << m_rcFileName
+                 << ") : menu creation failed (name : "
+                 << m_menuName << ")\n";
+
+    m_menu = dynamic_cast<QPopupMenu*>(tmp);
 }
