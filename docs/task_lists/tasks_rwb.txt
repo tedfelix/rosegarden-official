@@ -7,6 +7,10 @@ o Event list [JUST ABOUT COMPLETE]
 
 o Get Segment joining working
 
+o admin directories and INSTALL scripts should tally
+
+o aRts 1.0.0 support
+
 o Fix segment audio drag and drop
 
 o Toggle record mode for punch in/out [Half complete]
