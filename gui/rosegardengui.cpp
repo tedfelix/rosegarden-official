@@ -185,6 +185,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             // If no connection to JACK
             // try to launch JACK - if the configuration wants us to.
             if (!launchJack()) {
+                KStartupLogo::hideIfStillThere();
                 KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
             }
         } else {
