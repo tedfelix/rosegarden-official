@@ -83,6 +83,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     initStatusBar();
 
+    readOptions();
+
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
@@ -225,6 +227,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
+    saveOptions();
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         delete m_staffs[i]; // this will erase all "notes" canvas items
     }
@@ -264,9 +268,6 @@ void MatrixView::saveOptions()
                                                       // toolbar in the future
     toolBar("toolsToolBar")->saveSettings(m_config,
                                           "Matrix Options toolsToolbar");
-    
-//     m_config->writeEntry("Tools ToolBarPos",
-//                          (int) toolBar("toolsToolBar")->barPos());
 }
 
 void MatrixView::readOptions()
@@ -277,15 +278,11 @@ void MatrixView::readOptions()
     bool opt;
 
     opt = m_config->readBoolEntry("Show Tools Toolbar", true);
+    // at the moment we always show this toolbar - the view isn't of
+    // much use without it
 
-    KToolBar::BarPosition pos;
-    
     toolBar("toolsToolBar")->applySettings(m_config,
                                            "Matrix Options toolsToolbar");
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("Tools ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar("toolsToolBar")->setBarPos(pos);
 }
 
 void MatrixView::setupActions()
@@ -331,6 +328,15 @@ void MatrixView::setupActions()
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
+
+    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
+    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
+
+    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
+    KStdAction::preferences(this, SLOT(customize()), actionCollection());
+
+    KStdAction::keyBindings(this, SLOT(editKeys()), actionCollection());
+    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
 
     createGUI("matrix.rc");
 
