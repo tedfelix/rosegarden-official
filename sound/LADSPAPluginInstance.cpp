@@ -18,6 +18,8 @@
   COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+
 #include "LADSPAPluginInstance.h"
 
 #ifdef HAVE_LADSPA
