@@ -1076,6 +1076,12 @@ public slots:
      */
     void slotMarkerEditorClosed();
 
+
+    /**
+     * when AudioManagerDialog is being closed
+     */
+    void slotAudioManagerClosed();
+
 private:
 
     //--------------- Data members ---------------------------------

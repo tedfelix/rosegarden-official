@@ -144,11 +144,15 @@ signals:
     void insertAudioSegment(Rosegarden::AudioFileId,
                             const Rosegarden::RealTime &,
                             const Rosegarden::RealTime &);
+
+    void closing();
+
 protected:
     bool addFile(const KURL& kurl);
 
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent*);
+    virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
 

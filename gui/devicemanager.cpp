@@ -232,7 +232,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
-    std::cerr << "DeviceManagerDialog dtor" << std::endl;
+    RG_DEBUG << "DeviceManagerDialog dtor" << endl;
 }
 
 void

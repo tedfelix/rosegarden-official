@@ -1055,6 +1055,13 @@ AudioManagerDialog::dropEvent(QDropEvent *event)
 }
 
 void
+AudioManagerDialog::closeEvent(QCloseEvent *e)
+{
+    emit closing();
+    KDialogBase::closeEvent(e);
+}
+
+void
 AudioManagerDialog::setAudioSubsystemStatus(bool ok)
 {
     // We can do something more fancy in the future but for the moment
@@ -1070,7 +1077,6 @@ AudioManagerDialog::addAudioFile(const QString &filePath)
 {
     return addFile(QFileInfo(filePath).absFilePath());
 }
-
 
 
 }

@@ -974,10 +974,10 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     QString caption= kapp->caption();   
     setCaption(caption + ": " + newDocument->getTitle());
 
-    // reset AudioManagerDialog
-    //
-    delete m_audioManagerDialog; // TODO : replace this with a connection to documentAboutToChange() sig.
-    m_audioManagerDialog = 0;
+//     // reset AudioManagerDialog
+//     //
+//     delete m_audioManagerDialog; // TODO : replace this with a connection to documentAboutToChange() sig.
+//     m_audioManagerDialog = 0;
 
     RosegardenGUIDoc* oldDoc = m_doc;
 
@@ -4169,6 +4169,17 @@ RosegardenGUIApp::slotAudioManager()
                 SIGNAL(deleteAllAudioFiles()),
                 SLOT(slotDeleteAllAudioFiles()));
 
+        // Make sure we know when the audio man. dialog is closing
+        //
+        connect(m_audioManagerDialog,
+                SIGNAL(closing()),
+                SLOT(slotAudioManagerClosed()));
+
+        // And that it goes away when the current document is changing
+        //
+        connect(this, SIGNAL(documentAboutToChange()),
+                m_audioManagerDialog, SLOT(close()));
+
         m_audioManagerDialog->setAudioSubsystemStatus(m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
 
 
@@ -4548,6 +4559,19 @@ RosegardenGUIApp::slotDeviceManagerClosed()
     }
     
     m_deviceManager = 0;
+}
+
+void
+RosegardenGUIApp::slotAudioManagerClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotAudioManagerClosed()\n";
+
+    if (m_doc->isModified()) {
+        if (m_view)
+            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+    }
+    
+    m_audioManagerDialog = 0;
 }
 
 void
