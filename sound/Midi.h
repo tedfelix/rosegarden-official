@@ -111,6 +111,7 @@ const MidiByte MIDI_CONTROLLER_BANK_MSB    = 0x00;
 const MidiByte MIDI_CONTROLLER_BANK_LSB    = 0x20;
 const MidiByte MIDI_CONTROLLER_MODULATION  = 0x01;
 const MidiByte MIDI_CONTROLLER_PAN         = 0x0A;
+const MidiByte MIDI_CONTROLLER_SOUNDS_OFF  = 0x78;
 
 
 // MIDI percussion channel

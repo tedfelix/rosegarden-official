@@ -26,6 +26,7 @@
 
 #include "AlsaDriver.h"
 #include "MappedInstrument.h"
+#include "Midi.h"
 
 
 namespace Rosegarden
@@ -33,9 +34,9 @@ namespace Rosegarden
 
 AlsaDriver::AlsaDriver():
     SoundDriver(std::string("ALSA ") + std::string(SND_LIB_VERSION_STR)),
-    m_midiClient(-1),
-    m_midiPort(-1),
-    m_midiQueue(-1),
+    m_client(-1),
+    m_port(-1),
+    m_queue(-1),
     m_maxClients(-1),
     m_maxPorts(-1),
     m_maxQueues(-1),
@@ -301,7 +302,7 @@ AlsaDriver::initialiseMidi()
 
     // Create a queue
     //
-    if((m_midiQueue = snd_seq_alloc_named_queue(m_midiHandle,
+    if((m_queue = snd_seq_alloc_named_queue(m_midiHandle,
                                                 "Rosegarden queue")) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi() - can't allocate queue"
@@ -314,7 +315,7 @@ AlsaDriver::initialiseMidi()
     // Create a client
     //
     snd_seq_set_client_name(m_midiHandle, "Rosegarden sequencer");
-    if((m_midiClient = snd_seq_client_id(m_midiHandle)) < 0)
+    if((m_client = snd_seq_client_id(m_midiHandle)) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi() - can't create client"
                   << std::endl;
@@ -324,14 +325,14 @@ AlsaDriver::initialiseMidi()
 
     // Create a port
     //
-    m_midiPort = snd_seq_create_simple_port(m_midiHandle,
+    m_port = snd_seq_create_simple_port(m_midiHandle,
                                         NULL,
                                         SND_SEQ_PORT_CAP_WRITE |
                                         SND_SEQ_PORT_CAP_SUBS_WRITE |
                                         SND_SEQ_PORT_CAP_READ |
                                         SND_SEQ_PORT_CAP_SUBS_READ,
                                         SND_SEQ_PORT_TYPE_MIDI_GENERIC);
-    if (m_midiPort < 0)
+    if (m_port < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi() - can't create port"
                   << std::endl;
@@ -356,9 +357,9 @@ AlsaDriver::initialiseMidi()
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
     {
         if (snd_seq_connect_to(m_midiHandle,
-                               m_midiPort,
-                               (*it)->m_midiClient,
-                               (*it)->m_midiPort) < 0)
+                               m_port,
+                               (*it)->m_client,
+                               (*it)->m_port) < 0)
         {
             std::cerr << "AlsaDriver::initialiseMidi() - "
                       << "can't subscribe output client/port"
@@ -369,7 +370,7 @@ AlsaDriver::initialiseMidi()
     // Connect from the input port
     //
     if (snd_seq_connect_from(m_midiHandle,
-                             m_midiPort,
+                             m_port,
                              inputDevice.first,
                              inputDevice.second) < 0)
     {
@@ -421,7 +422,7 @@ AlsaDriver::initialiseMidi()
     snd_seq_queue_timer_set_type(queueTimer, SND_SEQ_TIMER_ALSA);
     snd_seq_queue_timer_set_resolution(queueTimer, 960);
 
-    if (snd_seq_set_queue_timer(m_midiHandle, m_midiQueue, queueTimer) < 0)
+    if (snd_seq_set_queue_timer(m_midiHandle, m_queue, queueTimer) < 0)
     {
         std::cerr << "AlsaDriver::initialisePlayback - "
                   << "can't assign queue timer"
@@ -520,7 +521,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     m_startPlayback = true;
 
     // Start the timer
-    if ((result = snd_seq_start_queue(m_midiHandle, m_midiQueue, NULL)) < 0)
+    if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
     {
         std::cerr << "AlsaDriver::initialisePlayback - couldn't start queue - "
                   << snd_strerror(result)
@@ -536,9 +537,21 @@ void
 AlsaDriver::stopPlayback()
 {
     allNotesOff();
-    snd_seq_stop_queue(m_midiHandle, m_midiQueue, 0);
     snd_seq_drain_output(m_midiHandle);
+    snd_seq_stop_queue(m_midiHandle, m_queue, 0);
     m_playing = false;
+
+    // send sounds-off to all client port pairs
+    //
+    std::vector<AlsaPort*>::iterator it;
+    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
+    {
+        sendDeviceController(ClientPortPair((*it)->m_client,
+                                            (*it)->m_port),
+                             MIDI_CONTROLLER_SOUNDS_OFF,
+                             0);
+    }
+
 }
 
 
@@ -555,12 +568,12 @@ void
 AlsaDriver::allNotesOff()
 {
     snd_seq_event_t *event = new snd_seq_event_t();
-    Rosegarden::RealTime now = getSequencerTime() + RealTime(0, 100);
+    Rosegarden::RealTime now = getAlsaTime();
     ClientPortPair outputDevice;
 
     // prepare the event
     snd_seq_ev_clear(event);
-    snd_seq_ev_set_source(event, m_midiPort);
+    snd_seq_ev_set_source(event, m_port);
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
                                 i != m_noteOffQueue.end(); ++i)
@@ -576,13 +589,13 @@ AlsaDriver::allNotesOff()
         snd_seq_real_time_t time = { now.sec,
                                      now.usec * 1000 };
 
-        snd_seq_ev_schedule_real(event, m_midiQueue, 0, &time);
+        snd_seq_ev_schedule_real(event, m_queue, 0, &time);
         snd_seq_ev_set_noteoff(event,
                                (*i)->getChannel(),
                                (*i)->getPitch(),
                                127);
-        // send note off
-        snd_seq_event_output(m_midiHandle, event);
+        // send note off directly
+        snd_seq_event_output_direct(m_midiHandle, event);
 
         delete(*i);
         m_noteOffQueue.erase(i);
@@ -591,10 +604,10 @@ AlsaDriver::allNotesOff()
     // drop - does this work?
     //
     snd_seq_drop_output(m_midiHandle);
+    snd_seq_drop_output_buffer(m_midiHandle);
 
     // and flush them
     snd_seq_drain_output(m_midiHandle);
-
 }
 
 void
@@ -606,7 +619,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
 
     // prepare the event
     snd_seq_ev_clear(event);
-    snd_seq_ev_set_source(event, m_midiPort);
+    snd_seq_ev_set_source(event, m_port);
 
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
                       i != m_noteOffQueue.end(); ++i)
@@ -624,7 +637,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
             snd_seq_real_time_t time = { (*i)->getRealTime().sec,
                                          (*i)->getRealTime().usec * 1000 };
 
-            snd_seq_ev_schedule_real(event, m_midiQueue, 0, &time);
+            snd_seq_ev_schedule_real(event, m_queue, 0, &time);
             snd_seq_ev_set_noteoff(event,
                                    (*i)->getChannel(),
                                    (*i)->getPitch(),
@@ -658,8 +671,7 @@ AlsaDriver::getSequencerTime()
 
 // Gets the time of the ALSA queue
 //
-const
-RealTime&
+RealTime
 AlsaDriver::getAlsaTime()
 {
     RealTime sequencerTime(0, 0);
@@ -667,7 +679,7 @@ AlsaDriver::getAlsaTime()
     snd_seq_queue_status_t *status;
     snd_seq_queue_status_malloc(&status);
 
-    if (snd_seq_get_queue_status(m_midiHandle, m_midiQueue, status) < 0)
+    if (snd_seq_get_queue_status(m_midiHandle, m_queue, status) < 0)
     {
         std::cerr << "AlsaDriver::getSequencerTime - can't get queue status"
                   << std::endl;
@@ -834,7 +846,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     // These won't change in this slice
     //
     snd_seq_ev_clear(event);
-    snd_seq_ev_set_source(event, m_midiPort);
+    snd_seq_ev_set_source(event, m_port);
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
@@ -868,7 +880,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                   << (int)event->dest.port << endl;
         */
 
-        snd_seq_ev_schedule_real(event, m_midiQueue, 0, &time);
+        snd_seq_ev_schedule_real(event, m_queue, 0, &time);
         instrument = getMappedInstrument((*i)->getInstrument());
 
         // set the stop time for Note Off
@@ -953,7 +965,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
          << endl;
          */
 
-    //showQueueStatus(m_midiQueue);
+    //showQueueStatus(m_queue);
     snd_seq_drain_output(m_midiHandle); // the new "flush" it seems
     //snd_seq_sync_output_queue(m_midiHandle);
 
@@ -1018,8 +1030,8 @@ AlsaDriver::getFirstDestination(bool duplex)
 
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
     {
-        destPair.first = (*it)->m_midiClient;
-        destPair.second = (*it)->m_midiPort;
+        destPair.first = (*it)->m_client;
+        destPair.second = (*it)->m_port;
 
         // If duplex port is required then choose first one
         //
@@ -1057,13 +1069,46 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
     {
         if (id >= (*it)->m_startId && id <= (*it)->m_endId)
         {
-            matchPair.first = (*it)->m_midiClient;
-            matchPair.second = (*it)->m_midiPort;
+            matchPair.first = (*it)->m_client;
+            matchPair.second = (*it)->m_port;
             return matchPair;
         }
     }
 
     return matchPair;
+}
+
+// Send a direct controller to the specified port/client
+//
+void
+AlsaDriver::sendDeviceController(const ClientPortPair &device,
+                                 MidiByte controller,
+                                 MidiByte value)
+{
+    snd_seq_event_t *event = new snd_seq_event_t();
+
+
+    // These won't change in this slice
+    //
+    snd_seq_ev_clear(event);
+    snd_seq_ev_set_source(event, m_port);
+
+    snd_seq_ev_set_dest(event,
+                        device.first,
+                        device.second);
+
+    for (int i = 0; i < 16; i++)
+    {
+        snd_seq_ev_set_controller(event,
+                                  i,
+                                  controller,
+                                  value);
+        snd_seq_event_output_direct(m_midiHandle, event);
+    }
+
+    snd_seq_drain_output(m_midiHandle);
+
+    delete event;
 }
 
 }

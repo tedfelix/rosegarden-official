@@ -54,8 +54,8 @@ public:
         m_startId(startId),
         m_endId(endId),
         m_name(name),
-        m_midiClient(client),
-        m_midiPort(port),
+        m_client(client),
+        m_port(port),
         m_duplex(duplex),
         m_type(0) {;}
 
@@ -64,8 +64,8 @@ public:
     InstrumentId m_startId;
     InstrumentId m_endId;
     std::string  m_name;
-    int          m_midiClient;
-    int          m_midiPort;
+    int          m_client;
+    int          m_port;
     bool         m_duplex;   // is an input port as well?
     unsigned int m_type;     // MIDI, synth or what?
 };
@@ -123,7 +123,14 @@ protected:
     virtual void processAudioQueue();
 
 private:
-    const RealTime& getAlsaTime();
+    RealTime getAlsaTime();
+
+    // Locally convenient to control our devices
+    //
+    void sendDeviceController(const ClientPortPair &device,
+                              MidiByte byte1,
+                              MidiByte byte2);
+
 
     std::vector<AlsaPort*>       m_alsaPorts;
 
@@ -131,9 +138,9 @@ private:
     // ALSA MIDI/Sequencer stuff
     //
     snd_seq_t                   *m_midiHandle;
-    int                          m_midiClient;
-    int                          m_midiPort;
-    int                          m_midiQueue;
+    int                          m_client;
+    int                          m_port;
+    int                          m_queue;
     int                          m_maxClients;
     int                          m_maxPorts;
     int                          m_maxQueues;
