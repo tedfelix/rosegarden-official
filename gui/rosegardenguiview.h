@@ -126,14 +126,6 @@ public slots:
     void slotEditSegmentMatrix(Rosegarden::Segment*);
     void slotEditSegmentAudio(Rosegarden::Segment*);
 
-    /**
-     * Scroll the TrackEditor horizontally to the specified
-     * position
-     *
-     * @see TrackEditor#scrollHorizTo(int)
-     */
-    void slotScrollTrackEditorHoriz(int hpos);
-
     // Called by signal from Track selection routine to highlight
     // all available Segments on a Track
     //

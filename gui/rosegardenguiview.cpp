@@ -83,9 +83,6 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(slotEditSegmentAudio(Rosegarden::Segment*)));
 
-    connect(m_trackEditor,  SIGNAL(scrollHorizTo(int)),
-            SLOT(slotScrollTrackEditorHoriz(int)));
-
     if (doc)
         m_trackEditor->setupSegments();
 }
@@ -163,37 +160,6 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment* p)
 {
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - got segment" << endl;
-}
-
-
-// This scrolling model pages the SegmentCanvas across the screen
-//
-//
-void RosegardenGUIView::slotScrollTrackEditorHoriz(int hpos)
-{
-    QScrollView* scrollView = m_trackEditor->getSegmentCanvas();
-    
-    if (hpos == 0) { // If returning to zero
-
-        scrollView->ensureVisible(0,
-                                  scrollView->contentsY() +
-                                  scrollView->visibleHeight()/2);
-
-    } else { // if moving off the right hand side of the view
-
-        if (hpos >  ( scrollView->contentsX() + 
-                      scrollView->visibleWidth() * 0.9 ) ) { 
-               
-            scrollView->scrollBy(int(scrollView->visibleWidth() * 0.8), 0);
-
-        } else // if moving off the left hand side
-
-            if (hpos < ( scrollView->contentsX() +
-                         scrollView->visibleWidth() * 0.1 ) ) {
-
-                scrollView->scrollBy(int(-scrollView->visibleWidth() * 0.8), 0);
-            }
-    }
 }
 
 void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
