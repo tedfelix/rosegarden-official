@@ -21,6 +21,10 @@ exit 5
 
 perl -i -p -e 's@http://chapter@chapter@g' chapter-2.html
 
+REMEMBER: something is putting a html/ in...  probably fixlinks
+
+Fix it when you get ack from work
+
 
 for file in $1/*.html;do
     sed s@http://chapter@chapter@g $file > /tmp/$(basename $file)||exit 1
