@@ -37,13 +37,14 @@ using std::string;
     
 
 
-Segment::Segment(SegmentType segmentType, timeT startIdx) :
+Segment::Segment(SegmentType segmentType, timeT startTime) :
     std::multiset<Event*, Event::EventCmp>(),
-    m_startIdx(startIdx),
-    m_track(0),
-    m_id(0),
     m_composition(0),
+    m_startTime(startTime),
+    m_track(0),
     m_type(segmentType),
+    m_label("untitled"),
+    m_id(0),
     m_audioFileID(0),
     m_audioStartIdx(0),
     m_audioEndIdx(0),
@@ -51,8 +52,7 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_quantizer(new Quantizer("SegmentQ", Quantizer::RawEventData)),
     m_quantize(false),
     m_transpose(0),
-    m_delay(0),
-    m_label("untitled")
+    m_delay(0)
 {
     // nothing
 }
@@ -68,7 +68,7 @@ Segment::~Segment()
 
 void Segment::setStartTime(timeT idx)
 {
-    int idxDiff = idx - m_startIdx;
+    int idxDiff = idx - m_startTime;
 
     // reset the time of all events.  can't just setAbsoluteTime on these,
     // partly 'cos we're not allowed, partly 'cos it might screw up the
@@ -88,7 +88,7 @@ void Segment::setStartTime(timeT idx)
 	insert(events[i]);
     }
         
-    m_startIdx = idx;
+    m_startTime = idx;
 }
 
 
