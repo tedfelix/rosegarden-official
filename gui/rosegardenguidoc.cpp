@@ -360,10 +360,13 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
-    outStream << QString(strtoqstr(m_composition.toXmlString()))
+    outStream << QString(strtoqstr(getComposition().toXmlString()))
               << endl << endl;
 
-    outStream << QString(strtoqstr(m_audioFileManager.toXmlString()))
+    outStream << QString(strtoqstr(getAudioFileManager().toXmlString()))
+              << endl << endl;
+
+    outStream << QString(strtoqstr(getConfiguration().toXmlString()))
               << endl << endl;
 
     QString time;
