@@ -38,24 +38,38 @@ RosegardenCanvasView::RosegardenCanvasView(QScrollBar* hsb, QCanvas* canvas,
 void RosegardenCanvasView::polish()
 {
     QCanvasView::polish();
+    RG_DEBUG << "RosegardenCanvasView::polish()\n";
+    m_canvasCurrentWidth = 0; // force readjustment of the scrollbar
     slotUpdate();
 }
 
 
 void RosegardenCanvasView::slotUpdate()
 {
+    RG_DEBUG << "RosegardenCanvasView::slotUpdate()\n";
+
     CanvasItemGC::gc();
 
     canvas()->update();
 
     if (canvas()->width() != m_canvasCurrentWidth) {
-        
+
+        RG_DEBUG << "RosegardenCanvasView::slotUpdate() - readjusting hscrollbar from "
+                 << m_canvasCurrentWidth << " to "
+                 << canvas()->width() << endl;
+
         // Ugly hack needed for Qt3 : otherwise we get dummy min/max
         // values from horizontalScrollBar()
         //
         setHScrollBarMode(Auto);
         updateScrollBars();
         /// end of ugly hack
+
+            RG_DEBUG << "RosegardenCanvasView::slotUpdate() - scrollbar range from ("
+                     << m_horizontalScrollBar->minValue() << ","
+                     << m_horizontalScrollBar->maxValue() << ") to ("
+                     << horizontalScrollBar()->minValue() << ","
+                     << horizontalScrollBar()->maxValue() << ")\n";
 
         m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
                                         horizontalScrollBar()->maxValue());
