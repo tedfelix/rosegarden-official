@@ -55,10 +55,10 @@ Quantizer::computeNoteDurations()
     m_durationTable[ThirtySecondDotted] = m_durationTable[ThirtySecond] + m_durationTable[SixtyFourth];
     m_durationTable[SixtyFourthDotted]  = m_durationTable[SixtyFourth] + m_durationTable[SixtyFourth] / 2;
 
-    for(unsigned int i = 0; i < m_durationTable.size(); ++i) {
-        kdDebug(KDEBUG_AREA) << "m_durationTable[" << i << "] = "
-                             << m_durationTable[i] << endl;
-    }
+//     for(unsigned int i = 0; i < m_durationTable.size(); ++i) {
+//         kdDebug(KDEBUG_AREA) << "m_durationTable[" << i << "] = "
+//                              << m_durationTable[i] << endl;
+//     }
 }
 
 
@@ -92,7 +92,7 @@ Quantizer::quantizeToNoteType(Event::duration drt)
     //
     Note note = WholeDotted;
 
-    kdDebug(KDEBUG_AREA) << "quantizeToNoteType : duration " << drt << endl;
+//     kdDebug(KDEBUG_AREA) << "quantizeToNoteType : duration " << drt << endl;
 
     // Find which note the event's duration is closest to
     //
@@ -105,7 +105,7 @@ Quantizer::quantizeToNoteType(Event::duration drt)
         // linked together, or actually broken down in several events,
         // themselves linked together... big TODO here
         note = WholeDotted;
-        kdDebug(KDEBUG_AREA) << "quantizeToNoteType : lb == m_durationTable.begin()" << endl;
+//         kdDebug(KDEBUG_AREA) << "quantizeToNoteType : lb == m_durationTable.begin()" << endl;
 
     } else {
 
@@ -127,8 +127,8 @@ Quantizer::quantizeToNoteType(Event::duration drt)
         Event::duration highDuration = *lb,
             lowDuration = *(lb - 1);
 
-        kdDebug(KDEBUG_AREA) << "highDuration : " << highDuration
-                             << " - lowDuration : " << lowDuration << "\n";
+//         kdDebug(KDEBUG_AREA) << "highDuration : " << highDuration
+//                              << " - lowDuration : " << lowDuration << "\n";
 
         if ((highDuration - drt) > (drt - lowDuration)) {
             note = Note(distance(m_durationTable.begin(), lb - 1));
@@ -137,7 +137,7 @@ Quantizer::quantizeToNoteType(Event::duration drt)
         }
     }
 
-    kdDebug(KDEBUG_AREA) << "Quantized to note : " << note << "\n";
+//     kdDebug(KDEBUG_AREA) << "Quantized to note : " << note << "\n";
 
     return note;
 }
