@@ -449,7 +449,7 @@ NotationHLayout::layout()
 		// this chord that need accidentalTable to be the same
 		// as it is for this one)
 
-		Accidental acc(el->event()->get<Int>(P_ACCIDENTAL));
+		Accidental acc(Accidental(el->event()->get<Int>(P_ACCIDENTAL)));
 		int height(el->event()->get<Int>(P_HEIGHT_ON_STAFF));
 		
 		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
