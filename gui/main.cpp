@@ -34,11 +34,11 @@
 #include "kstartuplogo.h"
 
 /*! \mainpage Rosegarden-4 global design
- *
- * Rosegarden is split into 3 main parts:
- *
- * \section base Base
- *
+
+Rosegarden is split into 3 main parts:
+
+\section base Base
+
 The base library holds all of the fundamental "music handling"
 structures, of which the primary ones are Event, Segment, Track,
 Instrument and Composition.  It also contains a selection of utility
@@ -139,7 +139,9 @@ The base directory also contains various music-related helper classes:
  - BaseProperties.[Ch] contains a set of "standard"-ish Event
     property names that are not basic enough to go in NotationTypes.
 
- - SegmentNotationHelper and SegmentPerformanceHelper do tasks that
+ - \link Rosegarden::SegmentNotationHelper SegmentNotationHelper\endlink
+    and \link Rosegarden::SegmentPerformanceHelper SegmentPerformanceHelper\endlink
+    do tasks that
     may be useful to notation-type code and performer code
     respectively.  For example, SegmentNotationHelper is used to
     manage rests when inserting and deleting notes in a score editor,
@@ -150,14 +152,14 @@ The base directory also contains various music-related helper classes:
     on-the-fly for use on the events in a given Segment and then
     discarded after use.
 
- - Quantizer is used to quantize event timings and set quantized
+ - \link Rosegarden::Quantizer Quantizer\endlink is used to quantize event timings and set quantized
     timing properties on those events.  Note that quantization is
     non-destructive, as it takes advantage of the ability to set new
     Event properties to simply assign the quantized values as separate
     properties from the original absolute time and duration.
 
 
-\subsection gui GUI
+\section gui GUI
 
 The GUI directory builds into a KDE/Qt application. Like most KDE
 applications, it follows a document/view model. The document (class
