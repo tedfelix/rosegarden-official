@@ -1354,7 +1354,7 @@ void NotationView::setupActions()
 		SLOT(slotEditSelectToEnd()), actionCollection(),
 		"select_to_end");
 
-    new KAction(i18n("Select Whole St&aff"), 0, this,
+    new KAction(i18n("Select Whole St&aff"), Key_A + CTRL, this,
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),
 		"select_whole_staff");
 
@@ -1890,7 +1890,7 @@ void NotationView::setupActions()
 //    QString pixmapDir =
 //	KGlobal::dirs()->findResource("appdata", "pixmaps/");
 //    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", 0, this,
+    new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 

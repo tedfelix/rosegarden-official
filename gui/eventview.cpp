@@ -1010,7 +1010,7 @@ EventView::setupActions()
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
-    new KAction(i18n("Select &All"), 0, this,
+    new KAction(i18n("Select &All"), Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 

@@ -409,7 +409,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotExportMup()), actionCollection(),
                 "file_export_mup");
 
-    new KAction(i18n("Playlist"), 0, 0, this,
+    new KAction(i18n("Play&list"), 0, 0, this,
                 SLOT(slotPlayList()), actionCollection(),
                 "file_show_playlist");
 
@@ -466,7 +466,7 @@ void RosegardenGUIApp::setupActions()
 
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
-    m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), 0, this,
+    m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), Key_T, this,
                                         SLOT(slotToggleTransport()),
                                         actionCollection(),
                                         "show_transport");
@@ -496,7 +496,7 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
-    new KAction(i18n("Show Se&gment and Instrument Parameters"), 0, this,
+    new KAction(i18n("Show Se&gment and Instrument Parameters"), Key_P, this,
                 SLOT(slotDockParametersBack()),
                 actionCollection(),
                 "show_inst_segment_parameters");
@@ -600,7 +600,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotDeleteSelectedSegments()), actionCollection(),
                 "delete");
 
-    new KAction(i18n("Select &All Segments"), 0, this,
+    new KAction(i18n("Select &All Segments"), Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
@@ -614,7 +614,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeCompositionLength()),
                 actionCollection(), "change_composition_length");
 
-    new KAction(i18n("Edit Mar&kers..."), 0, this,
+    new KAction(i18n("Edit Mar&kers..."), Key_K + CTRL, this,
                 SLOT(slotEditMarkers()),
                 actionCollection(), "edit_markers");
 
@@ -631,17 +631,17 @@ void RosegardenGUIApp::setupActions()
                 "edit_default");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/matrix.xpm"));
-    new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
+    new KAction(i18n("Open in Matri&x Editor"), icon, Key_M, this,
                 SLOT(slotEditInMatrix()), actionCollection(),
                 "edit_matrix");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/notation.xpm"));
-    new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
+    new KAction(i18n("Open in &Notation Editor"), icon, Key_N, this,
                 SLOT(slotEditAsNotation()), actionCollection(),
                 "edit_notation");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventlist.xpm"));
-    new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
+    new KAction(i18n("Open in &Event List Editor"), icon, Key_E, this,
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
 
@@ -688,7 +688,7 @@ void RosegardenGUIApp::setupActions()
 		"set_segment_duration");
 
     new KAction(SegmentMergeCommand::getGlobalName(),
-                0,
+                Key_J + CTRL,
                 this, SLOT(slotJoinSegments()),
                 actionCollection(), "join_segments");
 
@@ -703,7 +703,7 @@ void RosegardenGUIApp::setupActions()
 
 //    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/manage-audio-segments.xpm"));
     new KAction(i18n("Manage A&udio Segments"), "folder_sound",
-                0, 
+                Key_U + CTRL, 
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
 

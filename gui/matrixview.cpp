@@ -533,7 +533,7 @@ void MatrixView::setupActions()
                 SLOT(slotSetVelocities()), actionCollection(),
                 "set_velocities");
 
-    new KAction(i18n("Select &All"), 0, this,
+    new KAction(i18n("Select &All"), Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
@@ -652,7 +652,7 @@ void MatrixView::setupActions()
 		"clear_selection");
 
 //    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", 0, this,
+    new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
 	    	SLOT(slotFilterSelection()), actionCollection(),
 		"filter_selection");
     
