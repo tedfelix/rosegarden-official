@@ -204,9 +204,7 @@ signals:
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
-#ifdef RGKDE3
     void stateChange(const QString&, bool);
-#endif
 
 protected:
     //--------------- Data members ---------------------------------

@@ -719,13 +719,11 @@ public slots:
     void slotDocumentModified();
 
 
-#ifdef RGKDE3
     /**
      * Get rid of this eventually
      * - will be in KMainWindow
      */
     void slotStateChanged(const QString&, bool);
-#endif
 
     /**
      * View the audio file manager

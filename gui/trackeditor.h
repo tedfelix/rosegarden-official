@@ -163,12 +163,10 @@ signals:
      */
     void needUpdate();
 
-#ifdef RGKDE3
     /**
      * sent back to RosegardenGUI
      */
     void stateChange(const QString&, bool);
-#endif
 
 protected:
     
