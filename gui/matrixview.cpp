@@ -65,6 +65,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0)
 {
+    kdDebug(KDEBUG_AREA) << "MatrixView ctor\n";
+
     m_toolBox = new MatrixToolBox(this);
 
     setupActions();
@@ -87,10 +89,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QScrollView *pianoView = new QScrollView(getCentralFrame());
     pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
     pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-    pianoView->setMinimumWidth(pianoView->contentsWidth());
 
     m_pianoKeyboard = new PianoKeyboard(QSize(60, 30), pianoView);
     pianoView->addChild(m_pianoKeyboard);
+    pianoView->setFixedWidth(pianoView->contentsWidth());
     m_grid->addWidget(pianoView, 2, 0);
 
     MatrixCanvasView *canvasView =
