@@ -504,6 +504,7 @@ LilypondExporter::write()
     bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted", false);
     bool exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     bool exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
+    bool oldStyle = (cfg->readUnsignedNumEntry("lilylanguage", 1) == 0);
 
     // enable "point and click" debugging via xdvi to make finding the
     // unfortunately inevitable errors easier
@@ -513,7 +514,11 @@ LilypondExporter::write()
     }
 
     // Lilypond \header block
-    str << "\\version \"1.6.0\"" << std::endl;
+    if (oldStyle) {
+	str << "\\version \"1.6.0\"" << std::endl;
+    } else {
+	str << "\\version \"2.0\"" << std::endl;
+    }
 
     // set indention level to make future changes to horizontal layout less
     // tedious, ++col to indent a new level, --col to de-indent
@@ -602,7 +607,11 @@ LilypondExporter::write()
    
     // open \score section
     str << "\\score {" << std::endl;
-    str << indent(++col) << "\\notes <" << std::endl;  // indent+
+    if (oldStyle) {
+	str << indent(++col) << "\\notes <" << std::endl;  // indent+
+    } else {
+	str << indent(++col) << "\\notes <<" << std::endl;  // indent+
+    }	
 
     // Make chords offset colliding notes by default
     str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;
@@ -641,7 +650,11 @@ LilypondExporter::write()
             if ((int) (*i)->getTrack() != lastTrackIndex) {
                 if (lastTrackIndex != -1) {
                     // close the old track (Staff context)
-                    str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
+		    if (oldStyle) {
+			str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
+		    } else {
+			str << std::endl << indent(--col) << ">> % Staff" << std::endl;  // indent-
+		    }
                 }
                 lastTrackIndex = (*i)->getTrack();
 
@@ -659,7 +672,12 @@ LilypondExporter::write()
                 
                 str << std::endl
 		    << indent(col) << "\\context Staff = \"" << staffName.str()
-                    << " " << (voiceCounter +1) << "\" < " << std::endl;
+                    << " " << (voiceCounter +1) << "\" ";
+		if (oldStyle) {
+		    str << "< " << std::endl;
+		} else {
+		    str << "<< " << std::endl;
+		}
 
                 str << indent(++col)<< "\\property Staff.instrument = \""  // indent+
                     << staffName.str() <<"\"" << std::endl;
@@ -735,13 +753,21 @@ LilypondExporter::write()
     
     // close the last track (Staff context)
     if (voiceCounter > 0) {
-        str << std::endl << indent(--col) << "> % Staff (final)";  // indent-
+	if (oldStyle) {
+	    str << std::endl << indent(--col) << "> % Staff (final)";  // indent-
+	} else {
+	    str << std::endl << indent(--col) << ">> % Staff (final)";  // indent-
+	}
     } else {
         str << indent(--col) << "% (All staffs were muted.)" << std::endl;
     }
     
     // close \notes section
-    str << std::endl << indent(--col) << "> % notes" << std::endl;; // indent-
+    if (oldStyle) {
+	str << std::endl << indent(--col) << "> % notes" << std::endl;; // indent-
+    } else {
+	str << std::endl << indent(--col) << ">> % notes" << std::endl;; // indent-
+    }
 
     // write user-specified paper type in \paper block
     std::string paper = "papersize = \"";
@@ -868,8 +894,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationView::ConfigGroup);
     bool exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    bool prefixArticulations =
-	(cfg->readUnsignedNumEntry("lilylanguage", 1) == 0);
+    bool oldStyle = (cfg->readUnsignedNumEntry("lilylanguage", 1) == 0);
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
     timeT barStart = m_composition->getBarStart(barNo);
@@ -1023,31 +1048,33 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    if (chord.size() > 1) str << "< ";
-	    if (prefixArticulations) handleEndingEvents(eventsInProgress, i, str);
+	    if (oldStyle) handleEndingEvents(eventsInProgress, i, str);
 
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
 		if ((*i)->isa(Text::EventType)) {
 
-		    handleText(*i, lilyText, lilyLyrics);
+		    if (oldStyle) { //!!! work this out for lily 2.x
+			handleText(*i, lilyText, lilyLyrics);
+		    }
 
 		} else if ((*i)->isa(Note::EventType)) {
 
 		    writeStyle(*i, prevStyle, col, str);
 		    writePitch(*i, key, str);
-		    if (duration != prevDuration) {
-			writeDuration(duration, str);
-			prevDuration = duration;
-		    }
-		    writtenDuration += soundingDuration;
 
-		    if (lilyText != "") {
-			str << lilyText;
-			lilyText = "";
+		    if (oldStyle) { // Lily 1.x: durations in simultaneous section
+			if (duration != prevDuration) {
+			    writeDuration(duration, str);
+			    prevDuration = duration;
+			}
+			if (lilyText != "") {
+			    str << lilyText;
+			    lilyText = "";
+			}
+			writeSlashes(*i, str);
 		    }
 
-		    writeSlashes(*i, str);
-		    
 		    bool noteTiedForward = false;
 		    (*i)->get<Bool>(TIED_FORWARD, noteTiedForward);
 		    if (noteTiedForward) tiedForward = true;
@@ -1062,6 +1089,21 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		if (i == chord.getFinalElement()) break;
 	    }
 
+	    if (!oldStyle) {
+		if (chord.size() > 1) str << "> ";
+		if (duration != prevDuration) {
+		    writeDuration(duration, str);
+		    str << " ";
+		    prevDuration = duration;
+		}
+		if (lilyText != "") {
+		    str << lilyText;
+		    lilyText = "";
+		}
+		writeSlashes(*i, str);
+	    }
+	    writtenDuration += soundingDuration;
+
 	    std::vector<Mark> marks(chord.getMarksForChord());
 	    // problem here: this will never be set if the note has never been notated
 	    bool stemUp = true;
@@ -1071,13 +1113,17 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 	    if (marks.size() > 0) str << " ";
 
-	    if (prefixArticulations) handleStartingEvents(eventsToStart, str);
-	    if (chord.size() > 1) str << "> ";
+	    if (!oldStyle) handleEndingEvents(eventsInProgress, i, str);
+	    handleStartingEvents(eventsToStart, str);
+	    if (oldStyle) {
+		if (chord.size() > 1) str << "> ";
+	    }
+
 	    if (tiedForward) str << "~ ";
 
 	} else if ((*i)->isa(Note::EventRestType)) {
 
-	    if (prefixArticulations) handleEndingEvents(eventsInProgress, i, str);
+	    if (oldStyle) handleEndingEvents(eventsInProgress, i, str);
 
 	    str << "r";
 	    if (duration != prevDuration) {
@@ -1092,7 +1138,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    str << " ";
-	    if (prefixArticulations) handleStartingEvents(eventsToStart, str);
+	    if (!oldStyle) handleEndingEvents(eventsInProgress, i, str);
+	    handleStartingEvents(eventsToStart, str);
 
 	} else if ((*i)->isa(Clef::EventType)) {
 	    
@@ -1139,12 +1186,9 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	} else if ((*i)->isa(Text::EventType)) {
 	    
-	    handleText(*i, lilyText, lilyLyrics);
-	}
-
-	if (!prefixArticulations) {
-	    handleEndingEvents(eventsInProgress, i, str);
-	    handleStartingEvents(eventsToStart, str);
+	    if (oldStyle) { //!!! work this out for lily 2.x
+		handleText(*i, lilyText, lilyLyrics);
+	    }
 	}
 
 	if ((*i)->isa(Indication::EventType)) {
