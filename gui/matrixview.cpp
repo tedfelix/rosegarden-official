@@ -93,8 +93,8 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
-    kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMouseMoveEvent() at time "
-                         << evTime << endl;
+//    kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMouseMoveEvent() at time "
+//                         << evTime << endl;
 
     if (evTime != m_previousEvTime) {
         emit hoveredOverAbsoluteTimeChanged(evTime);
@@ -282,6 +282,8 @@ MatrixElement::MatrixElement(Rosegarden::Event *event) :
 
 MatrixElement::~MatrixElement()
 {
+    kdDebug(KDEBUG_AREA) << "MatrixElement::~MatrixElement()" << endl;
+
     m_canvasRect->hide();
     delete m_canvasRect;
 }

@@ -600,10 +600,10 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
     if (performancePitch < 0) performancePitch = 0;
 
     int pitch  = performancePitch % 12;
-	int octave = performancePitch / 12;
+    int octave = performancePitch / 12;
 
-	if (!inclOctave)
-		return key.isSharp() ? noteNamesSharps[pitch] : noteNamesFlats[pitch];
+    if (!inclOctave)
+	return key.isSharp() ? noteNamesSharps[pitch] : noteNamesFlats[pitch];
 
     char tmp[1024];
 

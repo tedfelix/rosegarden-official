@@ -239,9 +239,13 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
 
     // If we have it, lose it
 
+    cerr << "Staff " << this << "::eventRemoved" << endl;
+
     ViewElementList<T>::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
         m_viewElementList->erase(i);
+    cerr << "Found and removed" << endl;
+
         return;
     }
 }

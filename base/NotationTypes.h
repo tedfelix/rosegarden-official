@@ -390,11 +390,11 @@ public:
     /**
      * Return the stored pitch as a string (C4, Bb2, etc...)
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
-	 *
-	 * If inclOctave is false, this will return C, Bb, etc.
+     *
+     * If inclOctave is false, this will return C, Bb, etc.
      */
     std::string getAsString(const Clef &clef, const Key &key,
-					 bool inclOctave=true) const;
+			    bool inclOctave=true) const;
 
 private:
     int m_heightOnStaff;
