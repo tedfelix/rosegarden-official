@@ -18,11 +18,13 @@
 */
 
 
-#include "Midi.h"
-#include "MidiFile.h"
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Midi.h"
+#include "MidiFile.h"
+#include "Track.h"
+#include "NotationTypes.h"
 
 namespace Rosegarden
 {
@@ -384,14 +386,19 @@ const Rosegarden::Composition
 MidiFile::convertToRosegarden()
 {
   MidiTrackIterator midiTrack, noteOffSearch;
+  Rosegarden::Track *rosegardenTrack;
+  Rosegarden::Event *rosegardenEvent;
   unsigned long trackTime;
+  unsigned int compositionTrack = 0;
   bool noteOffFound;
+  bool notesOnTrack;
 
   Rosegarden::Composition composition(_numberOfTracks);
 
   for ( unsigned int i = 0; i < _numberOfTracks; i++ )
   {
     trackTime = 0;
+    notesOnTrack = false;
 
     // Convert the deltaTime to an absolute time since
     // the start of the track.  The addTime method 
@@ -405,21 +412,23 @@ MidiFile::convertToRosegarden()
       trackTime = midiTrack->addTime(trackTime);
     }
 
-
     // Consolidate NOTE ON and NOTE OFF events into a
     // NOTE ON with a duration and delete the NOTE OFFs.
     //
     for ( midiTrack = (_midiComposition[i].begin());
           midiTrack != (_midiComposition[i].end());
-          ++midiTrack )
+          midiTrack++ )
     {
       if (midiTrack->messageType() == MIDI_NOTE_ON)
       {
+        // flag that we've found notes on this track
+        if (!notesOnTrack) notesOnTrack = true;
+
         noteOffFound = false;
 
         for ( noteOffSearch = midiTrack; 
               noteOffSearch != (_midiComposition[i].end());
-              ++noteOffSearch )
+              noteOffSearch++ )
         {
           if ( ( midiTrack->channelNumber() == noteOffSearch->channelNumber() )
                 && ( ( noteOffSearch->messageType() == MIDI_NOTE_OFF ) ||
@@ -441,7 +450,45 @@ MidiFile::convertToRosegarden()
       }
     }
 
-    // Create Track on Composition object
+    if (notesOnTrack)
+    {
+      // Create Track on Composition object
+      rosegardenTrack = new Track;
+      rosegardenTrack->setInstrument(compositionTrack);
+      rosegardenTrack->setStartIndex(0);
+
+      for ( midiTrack = (_midiComposition[i].begin());
+            midiTrack != (_midiComposition[i].end());
+            midiTrack++ )
+      {
+        switch(midiTrack->messageType())
+        {
+          case MIDI_NOTE_ON:
+            // create and populate event
+            rosegardenEvent = new Event;
+            rosegardenEvent->setAbsoluteTime(midiTrack->time());
+            rosegardenEvent->setType(Note::EventType);
+            rosegardenEvent->set<Int>("pitch", midiTrack->note());
+            rosegardenEvent->setDuration(midiTrack->duration());
+
+            // insert into Track
+            rosegardenTrack->insert(rosegardenEvent);
+
+            break;
+
+          default:
+            //cout << "Can't create Rosegarden event for unknown MIDI event"
+            //<< endl;
+            break;
+        }
+
+        // add the Track to the Composition and increment the
+        // Rosegarden track number
+        //
+        composition.addTrack(rosegardenTrack);
+        compositionTrack++;
+      }
+    }
   }
 
   return(composition);

@@ -39,21 +39,13 @@ main(int argc, char **argv)
   //
   Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("glazunov.mid");
 
-  // Create a Rosegarden composition
-  Rosegarden::Composition comp;
-  //comp.addTrack();
-
-
-  /////  OK, test the MIDI file opens and parses
-
   // open the MIDI file
   midiFile->open();
 
-  // and return the Rosegarden Composition
-  comp = midiFile->convertToRosegarden();
+  // Create a Rosegarden composition
+  Rosegarden::Composition comp = midiFile->convertToRosegarden();
 
-
-  // Create and initialize MIDI
+  // initialize MIDI and audio subsystems
   //
   Rosegarden::Sequencer sequencer;
 
@@ -72,9 +64,6 @@ main(int argc, char **argv)
   //
   sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
 
-  Arts::TimeStamp timeStamp;
-  Arts::MidiCommand midiCommand;
-
   while(sequencer.isPlaying())
   {
 
@@ -89,20 +78,14 @@ main(int argc, char **argv)
            midiQueueIt != midiQueue->end();
            midiQueueIt++)
       {
-        // get the timestamp
-        timeStamp = sequencer.recordTime(midiQueueIt->time);
-
-        // and the command
-        midiCommand = midiQueueIt->command;
-
         // want to send the event both ways - to the track and to the GUI
-        sequencer.processMidi(midiCommand, timeStamp);
-
-        //cout << "Data1 = " << (Rosegarden::MidiByte) midiQueueIt->command.data1 << endl;
-        //cout << "Data2 = " << (Rosegarden::MidiByte) midiQueueIt->command.data2 << endl << endl;
-        //cout << "MIDI EVENT @ " << timeStamp.sec << "s + "
-             //<< timeStamp.usec << "ms" 
-             //<< " ( " << midiQueueIt->time.sec << " ) " << endl;
+        // so we process the midi commands individually from the small clump
+        // we've received back in the queue.  Dependent on performance
+        // this may allow us to update our GUI and keep reading in the
+        // events from a single thread.
+        //
+        sequencer.processMidi(midiQueueIt->command,
+                              sequencer.recordTime(midiQueueIt->time));
       }
    }
 

@@ -286,9 +286,9 @@ Sequencer::processMidi(const Arts::MidiCommand &midiCommand,
         _recordTrack->insert(_noteOnMap[chanNoteKey]);
 
         // tell us about it
-        cout << "INSERTED NOTE @ " 
+        cout << "INSERTED NOTE at time " 
              << _noteOnMap[chanNoteKey]->getAbsoluteTime()
-             << " of "
+             << " of duration "
              << _noteOnMap[chanNoteKey]->getDuration() << endl;
 
         // reset the reference
@@ -305,9 +305,4 @@ Sequencer::processMidi(const Arts::MidiCommand &midiCommand,
   }
 }
 
-void
-Sequencer::processMidi(const Rosegarden::MidiEvent &midiEvent)
-{
 }
-
-};

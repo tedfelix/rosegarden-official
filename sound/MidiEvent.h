@@ -77,6 +77,8 @@ namespace Rosegarden
     void duration(const unsigned long& duration)
         { _duration = duration; }
 
+    const unsigned long& duration() { return _duration; }
+
   private:
     unsigned long _deltaTime;
     unsigned long _duration;
