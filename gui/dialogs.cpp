@@ -19,6 +19,7 @@
 
 #include "dialogs.h"
 #include "notepixmapfactory.h"
+#include "rosedebug.h"
 
 #include <qwidget.h>
 #include <qlineedit.h>
@@ -175,6 +176,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     
     QObject::connect(keyUp, SIGNAL(pressed()), this, SLOT(slotKeyUp()));
     QObject::connect(keyDown, SIGNAL(pressed()), this, SLOT(slotKeyDown()));
+    QObject::connect(m_keyCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotKeyNameChanged(const QString &)));
+    QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotMajorMinorChanged(const QString &)));
 }
 
 bool
@@ -219,12 +224,6 @@ KeySignatureDialog::slotKeyDown()
     redrawKeyPixmap();
 }
 
-bool
-KeySignatureDialog::isMinor() const
-{
-    return m_majorMinorCombo->currentItem() != 0;
-}
-
 struct KeyNameComparator
 {
     bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) {
@@ -235,7 +234,7 @@ struct KeyNameComparator
 void
 KeySignatureDialog::regenerateKeyCombo()
 {
-    Rosegarden::Key::KeySet keys(Rosegarden::Key::getKeys(isMinor()));
+    Rosegarden::Key::KeySet keys(Rosegarden::Key::getKeys(m_key.isMinor()));
     m_keyCombo->clear();
 
     std::sort(keys.begin(), keys.end(), KeyNameComparator());
@@ -269,19 +268,20 @@ KeySignatureDialog::redrawKeyPixmap()
 }
 
 void
-KeySignatureDialog::slotKeyComboActivated(const QString &s)
+KeySignatureDialog::slotKeyNameChanged(const QString &s)
 {
     std::string name(s.latin1());
-    name = name + " " + (isMinor() ? "minor" : "major");
+    name = name + " " + (m_key.isMinor() ? "minor" : "major");
     m_key = Rosegarden::Key(name);
+    redrawKeyPixmap();
 }
 
 void
-KeySignatureDialog::slotMajorMinorChanged(const QString &)
+KeySignatureDialog::slotMajorMinorChanged(const QString &s)
 {
     m_key = Rosegarden::Key(m_key.getAccidentalCount(),
 			    m_key.isSharp(),
-			    isMinor());
+			    (s == "Minor"));
     regenerateKeyCombo();
     redrawKeyPixmap();
 }

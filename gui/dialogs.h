@@ -108,12 +108,11 @@ protected:
 
     void redrawKeyPixmap();
     void regenerateKeyCombo();
-    bool isMinor() const;
     
 public slots:
     void slotKeyUp();
     void slotKeyDown();
-    void slotKeyComboActivated(const QString &);
+    void slotKeyNameChanged(const QString &);
     void slotMajorMinorChanged(const QString &);
 };
 

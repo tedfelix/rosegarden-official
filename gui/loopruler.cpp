@@ -65,10 +65,11 @@ void LoopRuler::scrollHoriz(int x)
 
 QSize LoopRuler::sizeHint() const
 {
-    int nbBars = m_rulerScale->getLastVisibleBar() - m_rulerScale->getFirstVisibleBar();
-    int firstBarWidth = m_rulerScale->getBarWidth(0);
+    double width = m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
+	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) -
+	m_rulerScale->getBarPosition(m_rulerScale->getFirstVisibleBar());
 
-    return QSize(nbBars * firstBarWidth, m_height);
+    return QSize(int(width), m_height);
 }
 
 QSize LoopRuler::minimumSizeHint() const
@@ -100,80 +101,47 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
 
     QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
 
-    if (rightwards) {
-        
-        double x = m_rulerScale->getBarPosition(firstBar) + m_currentXOffset;
-        for (int i = firstBar; i <= lastBar; ++i) {
+    std::vector<int> bars, beats;
 
-            double width = m_rulerScale->getBarWidth(i);
-	    if (width == 0) continue;
+    rightwards = true;//!!!
 
-            if (x >= clipRect.x() &&
-                x <= (clipRect.x() + width + clipRect.width())) {
+    for (int i = firstBar; i <= lastBar; ++i) {
 
-                if (m_invert) {
-                    paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
-                } else {
-                    paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
-                }
+	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
+	if (x > clipRect.x() + clipRect.width()) continue;
+	    
+	double width = m_rulerScale->getBarWidth(i);
+	if (width == 0) continue;
+	    
+	if (x + width < clipRect.x()) continue;
+		
+	bars.push_back((int)x);
 
-                double beatAccumulator = m_rulerScale->getBeatWidth(i);
-                double inc = beatAccumulator;
-		if (inc == 0) continue;
+	double beatAccumulator = m_rulerScale->getBeatWidth(i);
+	double inc = beatAccumulator;
+	if (inc == 0) continue;
+	
+	for (; beatAccumulator < width; beatAccumulator += inc) {
+	    beats.push_back((int)(x + beatAccumulator));
+	}
+    }
 
-                for (; beatAccumulator < width; beatAccumulator += inc) {
-
-                    if (m_invert) {
-                        paint->drawLine((int)(x + beatAccumulator), 0,
-                                        (int)(x + beatAccumulator), 2 * m_height / 7);
-                    } else {
-                        paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
-                                        (int)(x + beatAccumulator), m_height);
-                    }
-                }
-
-            }
-        
-            x += width;
-        
-        }
-    } else { // draw leftwards
-        double x = m_rulerScale->getBarPosition(lastBar) + m_currentXOffset;
-
-        for (int i = lastBar; i >= firstBar; --i) {
-
-            double width = m_rulerScale->getBarWidth(i);
-	    if (width == 0) continue;
-
-            if (x >= clipRect.x() &&
-                x <= (clipRect.x() + width + clipRect.width())) {
-
-                if (m_invert) {
-                    paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
-                } else {
-                    paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
-                }
-
-                double beatAccumulator = width - m_rulerScale->getBeatWidth(i);
-                double dec = m_rulerScale->getBeatWidth(i);
-		if (dec == 0) continue;
-
-                for (; beatAccumulator >= dec; beatAccumulator -= dec) {
-
-                    if (m_invert) {
-                        paint->drawLine((int)(x - beatAccumulator), 0,
-                                        (int)(x - beatAccumulator), 2 * m_height / 7);
-                    } else {
-                        paint->drawLine((int)(x - beatAccumulator), 5 * m_height / 7,
-                                        (int)(x - beatAccumulator), m_height);
-                    }
-                }
-
-            }
-        
-            x -= width;
-        
-        }
+    for (int i = 0; i < bars.size(); ++i) {
+	int n = (rightwards ? i : (bars.size() - i - 1));
+	if (m_invert) {
+	    paint->drawLine(bars[n], 0, bars[n], 5*m_height / 7);
+	} else {
+	    paint->drawLine(bars[n], 2*m_height / 7, bars[n], m_height);
+	}
+    }
+    
+    for (int i = 0; i < beats.size(); ++i) {
+	int n = (rightwards ? i : (beats.size() - i - 1));
+	if (m_invert) {
+	    paint->drawLine(beats[n], 0, beats[n], 2*m_height / 7);
+	} else {
+	    paint->drawLine(beats[n], 5*m_height / 7, beats[n], m_height);
+	}
     }
 }
 

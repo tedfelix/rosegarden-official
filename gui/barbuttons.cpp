@@ -148,25 +148,21 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
 
-    int x = m_currentXOffset;
-
-    painter.drawLine(x, 0, visibleRect().width(), 0);
+    painter.drawLine(m_currentXOffset, 0, visibleRect().width(), 0);
 
     QRect clipRect = visibleRect();
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
+	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
+	if (x > clipRect.x() + clipRect.width()) continue;
+
         double width = m_rulerScale->getBarWidth(i);
         if (width == 0) continue;
 
-        if (x >= clipRect.x() &&
-            x <= (clipRect.x() + width + clipRect.width())) {
+	if (x + width < clipRect.x()) continue;
 
-            painter.drawLine(x, 0, x, m_barHeight);
-            painter.drawText(x + 4, m_barHeight / 2, QString("%1").arg(i));
-        }
-
-        x += width;
-        
+	painter.drawLine(x, 0, x, m_barHeight);
+	painter.drawText(x + 4, m_barHeight / 2, QString("%1").arg(i));
     }
 }
