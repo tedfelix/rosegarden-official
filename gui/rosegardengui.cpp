@@ -244,13 +244,6 @@ void RosegardenGUIApp::setupActions()
 
     m_recordTransport->setGroup("transportcontrols");
 
-    m_pauseTransport = new KAction(i18n("&Pause"), 0, Key_Delete, this,
-                                  SLOT(pause()), actionCollection(),
-                                  "pause");
-
-    m_pauseTransport->setGroup("transportcontrols");
-
-
     m_rewindEndTransport = new KAction(i18n("Rewind to Beginning"), 0, 0, this,
                                   SLOT(rewindToBeginning()), actionCollection(),
                                   "rewindtobeginning");
@@ -321,14 +314,6 @@ void RosegardenGUIApp::setupActions()
     a->connectItem(a->insertItem(Key_Space),
                    this,
                    SLOT(record()));
-
-    connect((QObject *) m_transport->PauseButton,
-             SIGNAL(released()),
-             SLOT(pause()));
-
-    a->connectItem(a->insertItem(Key_Delete),
-                   this,
-                   SLOT(pause()));
 
     connect((QObject *) m_transport->RewindEndButton,
              SIGNAL(released()),
@@ -1919,24 +1904,6 @@ RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &m
             m_transport->setMidiInLabel(*i);
         }
     }
-}
-
-
-// Tell the sequencer to pause
-//
-void
-RosegardenGUIApp::pause()
-{
-    // We can only pause if we're playing or recording
-    //
-    if (m_transportStatus == STOPPED)
-    {
-        if (m_transport->PauseButton->state() == QButton::On)
-            m_transport->PauseButton->toggle();
-        return;
-    }
-       
-    cout << "RosegardenGUIApp::pause()" << endl;
 }
 
 

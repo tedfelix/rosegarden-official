@@ -446,7 +446,6 @@ public slots:
     void rewind();
     void fastforward();
     void record();
-    void pause();
     void rewindToBeginning();
     void fastForwardToEnd();
 
@@ -535,7 +534,6 @@ private:
     KAction *m_stopTransport;
     KAction *m_rewindTransport;
     KAction *m_ffwdTransport; 
-    KAction *m_pauseTransport;
     KAction *m_recordTransport;
     KAction *m_rewindEndTransport;
     KAction *m_ffwdEndTransport;

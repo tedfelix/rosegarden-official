@@ -77,7 +77,6 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     //
     PlayButton->setToggleButton(true);
     RecordButton->setToggleButton(true);
-    PauseButton->setToggleButton(true);
 
     // read only tempo
     //
