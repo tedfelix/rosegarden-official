@@ -1018,8 +1018,15 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (!m_tool) return;
 
-    if (m_tool->handleMouseMove(e)) {
-        emit scrollTo(e->pos().x());
+    int follow = m_tool->handleMouseMove(e);
+    
+    if (follow != SegmentTool::NoFollow) {
+
+        if (follow & SegmentTool::FollowHorizontal)
+            emit hScrollTo(e->pos().x());
+
+        if (follow & SegmentTool::FollowVertical)
+            emit vScrollTo(e->pos().y());
     }
 }
 
@@ -1385,9 +1392,9 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
     m_newRect = false;
 }
 
-bool SegmentPencil::handleMouseMove(QMouseEvent *e)
+int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_currentItem) return false;
+    if (!m_currentItem) return NoFollow;
 
     m_canvas->setSnapGrain(false);
 
@@ -1418,7 +1425,7 @@ bool SegmentPencil::handleMouseMove(QMouseEvent *e)
     m_currentItem->setEndTime(time);
 
     m_canvas->slotUpdate();
-    return true;
+    return FollowHorizontal;
 }
 
 //////////////////////////////
@@ -1451,9 +1458,9 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem = 0;
 }
 
-bool SegmentEraser::handleMouseMove(QMouseEvent*)
+int SegmentEraser::handleMouseMove(QMouseEvent*)
 {
-    return false;
+    return NoFollow;
 }
 
 //////////////////////////////
@@ -1530,7 +1537,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem = 0;
 }
 
-bool SegmentMover::handleMouseMove(QMouseEvent *e)
+int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
 
@@ -1552,10 +1559,10 @@ bool SegmentMover::handleMouseMove(QMouseEvent *e)
 
         m_canvas->canvas()->update();
 
-	return true;
+	return FollowHorizontal | FollowVertical;
     }
 
-    return false;
+    return NoFollow;
 }
 
 //////////////////////////////
@@ -1603,9 +1610,9 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem = 0;
 }
 
-bool SegmentResizer::handleMouseMove(QMouseEvent *e)
+int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_currentItem) return false;
+    if (!m_currentItem) return NoFollow;
 
     m_canvas->setSnapGrain(true);
 
@@ -1628,7 +1635,7 @@ bool SegmentResizer::handleMouseMove(QMouseEvent *e)
     m_currentItem->getPreview()->setPreviewCurrent(false);
 
     m_canvas->canvas()->update();
-    return true;
+    return FollowHorizontal;
 }
 
 bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e,
@@ -1912,7 +1919,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 // In Select mode we implement movement on the Segment
 // as movement _of_ the Segment - as with SegmentMover
 //
-bool
+int
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (m_dispatchTool) {
@@ -1992,7 +1999,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 emit selectedSegments(getSelectedSegments());
             }
         }
-        return false;
+        return NoFollow;
     }
 
     m_canvas->setCursor(Qt::sizeAllCursor);
@@ -2087,7 +2094,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	m_canvas->canvas()->update();
     }
 
-    return true;
+    return FollowHorizontal | FollowVertical;
 }
 
 bool SegmentSelector::m_greedy = true;
@@ -2162,7 +2169,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 }
 
 
-bool
+int
 SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
@@ -2171,13 +2178,13 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
     {
         m_canvas->setCursor(Qt::blankCursor);
         drawSplitLine(e);
-	return true;
+	return FollowHorizontal;
     }
     else
     {
         m_canvas->setCursor(Qt::splitHCursor);
         m_canvas->slotHideSplitLine();
-	return false;
+	return NoFollow;
     }
 }
 
@@ -2234,10 +2241,10 @@ SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
 }
 
 
-bool
+int
 SegmentJoiner::handleMouseMove(QMouseEvent*)
 {
-    return false;
+    return NoFollow;
 }
 
 void
