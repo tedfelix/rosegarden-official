@@ -1903,6 +1903,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     KConfig* config = kapp->config();
     config->setGroup(NotationView::ConfigGroup);
     QFont octaveFont = config->readFontEntry("textfont", &defaultOctaveFont);
+    octaveFont.setPixelSize(getLineSpacing() * 3 / 2);
     QFontMetrics octaveFontMetrics(octaveFont);
     QString text = QString("%1").arg(8 * (oct < 0 ? -oct : oct));
     QRect rect = octaveFontMetrics.boundingRect(text);
