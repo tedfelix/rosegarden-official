@@ -1375,7 +1375,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // Don't do anything if the user clicked beyond the track buttons
     //
-    if (track >= m_doc->getComposition().getNbTracks()) return;
+    if (track >= TrackId(m_doc->getComposition().getNbTracks())) return;
 
     timeT time = m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft);
     timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
@@ -1845,7 +1845,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         //
         addCommandToHistory(command);
 
-        Rosegarden::Segment *newSegment = command->getCopy();
+//        Rosegarden::Segment *newSegment = command->getCopy();
 
         // generate SegmentItem
         //
@@ -1887,8 +1887,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             // not allow it in the first place, or we automatically
             // create new tracks - might make undo very tricky though
             //
-            if (track >= m_doc->getComposition().getNbTracks()) 
-                track = m_doc->getComposition().getNbTracks() - 1;
+            if (track >= TrackId(m_doc->getComposition().getNbTracks())) 
+                track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
 	    it->second->setTrack(track);
 	}

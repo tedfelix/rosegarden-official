@@ -92,7 +92,7 @@
     ItemizedList here. -->
 
     <sect1 id="rosegarden-revhistory">
-      <title>Rosegarden Handbook Revision History</title>
+      <title>Revision History</title>
       <para>
 	<itemizedlist>
 	  <listitem><para>
@@ -181,6 +181,15 @@
 
 
 
+<!--
+  **********************************
+ 
+   PART I:
+   Discussion and tutorial material
+
+  **********************************
+  -->
+
 
   <chapter id="using-rosegarden">
     <title>Using Rosegarden</title>
@@ -230,8 +239,28 @@
       <para></para>
     </sect1>
 
+    <sect1 id="matrix-editor">
+      <title>The Matrix editor</title>
+      <para></para>
+    </sect1>
+
     <sect1 id="notation-view">
       <title>The Notation editor</title>
+
+      <!-- Introduction, purpose -->
+      <!-- Single and multiple staffs, and "current staff" -->
+      <!-- Linear and page layouts -->
+      <!-- Display conventions (annotated picture with some selected notes,
+           some quantized notes, a bar of incorrect length etc) -->
+      <!-- Selection -->
+      <!-- Insertion: notes, auto-ties, accidentals -->
+      <!-- Rulers -->
+      <!-- Quantization, smoothing, and display of quantized notes -->
+      <!-- Text -->
+      <!-- Indications -->
+      <!-- Beamed groups, including overlapping and nesting them -->
+      <!-- Tuplets -->
+      <!-- Grace notes -->
 
       <sect2 id="nv-paste-types">
 	<title>Paste types</title>
@@ -333,7 +362,7 @@
 	<para>
 	  A set of standard styles (Classical, Cross, Triangle and
 	  Mensural) is provided, and you can change the style used for
-	  individual notes using the <!-- link
+	  individual notes using the <!-- !!! link
 	  linkend="commands-nv-menu-notes-notestyle" -->Note Style<!-- /link -->
 	  menu options.  Each note remembers which style has been
 	  chosen for it, and this information is saved as part of the
@@ -346,22 +375,27 @@
 	  defined this way: the only reason the editor knows that a
 	  Classical semiquaver has a tilted oval filled head, a stem,
 	  two flags, etc., is that the description in Classical.xml
-	  says so.)  See the <!-- link
+	  says so.)  See the <!-- !!! link
 	  linkend="developers-note-styles" -->Developers Guide<!-- /link --> for
 	  more information.
 	</para>
       </sect2>
     </sect1>
 
-    <sect1 id="matrix-editor">
-      <title>The Matrix editor</title>
-      <para></para>
-    </sect1>
-
 
   </chapter>
 
 
+
+
+<!--
+  **********************************
+ 
+   PART II:
+   Command reference
+
+  **********************************
+  -->
 
 
   <chapter id="commands">
@@ -425,6 +459,13 @@
     <sect1 id="commands-nv">
       <title>The Notation View</title>
       <para></para>
+
+      <!-- Tools -->
+         <!-- Note insertion tools -->
+         <!-- Rest insertion tools -->
+         <!-- Clef insertion tools -->
+         <!-- Text tool -->
+         <!-- Eraser -->
 
       <sect2 id="commands-nv-menu-file">
 	<title>The File Menu</title>
@@ -506,7 +547,7 @@
 		  <action>
 
 		    Removes the selected events from the composition
-		    and places them in the clipboard, replacing any
+		    and places them in the clipboard to replace any
 		    contents the clipboard previously had.
 
 		  </action>
@@ -526,8 +567,8 @@
 		<para>
 		  <action>
 		    
-		    Copies the selected events to the clipboard,
-		    replacing any contents the clipboard previously had.
+		    Copies the selected events to the clipboard
+		    to replace any contents the clipboard previously had.
 
 		  </action>
 		</para>
@@ -575,7 +616,7 @@
 		  <action>
 		    
 		    Removes the selected events from the composition
-		    and places them in the clipboard, replacing any
+		    and places them in the clipboard to replace any
 		    contents the clipboard previously had, and closes
 		    the gap left behind by moving all subsequent
 		    events towards the beginning of the composition.
@@ -609,6 +650,253 @@
 	      </listitem>
 	    </varlistentry>
 
+
+	    <varlistentry id="commands-nv-menu-edit-delete">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Del</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Delete</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Removes the selected events from the composition
+		    and throws them away.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-select-from-start">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Select from Start</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Extends the current selection by selecting
+		    all events from the start of the staff up to the
+		    current selection (or up to the insert cursor,
+		    if no events are currently selected).
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-select-to-end">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Select to End</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Extends the current selection by selecting
+		    all events from the end of the current selection
+		    (or from the insert cursor, if no events are
+		    currently selected) up to the end of the staff.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-select-whole-staff">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Select Whole Staff</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Selects all the events on the current staff.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-add-tempo">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Add Tempo Change...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Invokes a tempo change dialog.
+		  </action>
+		  This offers a
+		    selection of ways to change the tempo of the
+		    composition, including changing the tempo from the
+		    insert cursor position onwards, from the last
+		    tempo change onwards, or for the entire
+		    composition.  See <!-- !!!link linkend="segment-tempo-changes" -->Changing the Tempo<!-- /link --> for more information.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-add-time-signature">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Add Time Signature Change...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Invokes a time-signature change dialog.
+		  </action>
+		  This offers a
+		    selection of ways to change the tempo of the
+		    composition, including changing the time signature
+		  from the insert cursor position onwards or from the
+		  start of the current bar.  See <!-- !!!link linkend="segment-tempo-changes" -->Changing the Time Signature<!-- /link --> for more information.
+
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-add-clef">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Add Clef Change...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Invokes a clef selection dialog, and inserts the
+		    chosen clef at the current insert cursor position.
+
+		  </action>
+
+		  The dialog allows you to choose a clef, but also
+		  to choose how you want the clef to be applied, in
+		  cases where there are already some notes following
+		  the point where the clef is to be inserted.  You
+		  must choose one of the following:
+
+		  <variablelist>
+
+		    <varlistentry>
+		      <term>Maintain current pitches</term>
+		      <listitem>
+			<para>
+			  Any notes following the clef will keep
+			  their current performance pitches.
+			</para>
+			<para>
+			  For example, inserting a
+			  tenor clef in the middle of a previously
+			  treble-clef section will cause the notes following
+			  the clef to be moved an octave
+			  higher up the staff, because they will still have
+			  their treble-clef pitches.
+			</para>
+		      </listitem>
+		    </varlistentry>
+
+		    <varlistentry>
+		      <term>Transpose into appropriate octave</term>
+		      <listitem>
+			<para>
+			  Any notes following the clef will
+			  retain their pitch within the octave, but
+			  may be moved into a different octave to
+			  match the new clef, and therefore will play
+			  at a new pitch.
+			</para>
+			<para>
+			  For example, inserting a tenor clef in the
+			  middle of a previously treble-clef section
+			  will cause the notes following the clef to
+			  move by one staff line only to adjust to the new
+			  clef, but to play an octave lower than before.
+			</para>
+		      </listitem>
+		    </varlistentry>
+
+		  </variablelist>
+
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-edit-add-key-signature">
+	      <term><menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Add Key Change...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-group-beam">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Beam Group</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Makes the selected notes into a beamed group.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-group-auto-beam">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Auto-Beam</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+		    Scans the area covered by the selection and attempts
+		    to group short notes into plausible beamed groups.
+		  </action>
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-group-break-group">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Unbeam</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Removes the selected notes from any beamed groups
+		    they may be part of, leaving them as separate
+		    individuals.
+
+		  </action>
+		  If part of a beamed group is selected, the unselected
+		  part of the group will remain beamed.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
 	  </variablelist>
 	</para>
 
@@ -620,6 +908,15 @@
 
 
 
+
+<!--
+  **********************************
+ 
+   PART III:
+   Technical material
+
+  **********************************
+  -->
 
 
   <chapter id="developers">
@@ -809,32 +1106,72 @@
 
   <chapter id="credits">
 
-    <!-- Include credits for the programmers, documentation writers, and
-    contributors here. The license for your software should then be included below
-    the credits with a reference to the appropriate license file included in the KDE
-    distribution. -->
-
     <title>Credits and License</title>
 
     <para>
       <application>Rosegarden</application>
     </para>
     <para>
-      Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
-    </para>
-    <para>
-      Contributors:
       <itemizedlist>
-	<listitem><para>Konqui the KDE Dragon <email>konqui@kde.org</email></para>
+	<listitem>
+	  <para>
+
+	    Rosegarden-4 is Copyright 2000-2002 Guillaume Laurent,
+	    Chris Cannam and Richard Bown.  The moral rights of
+	    Guillaume Laurent, Chris Cannam and Richard Bown to be
+	    identified as the authors of this work have been asserted.
+
+	  </para>
 	</listitem>
-	<listitem><para>Tux the Linux Penguin <email>tux@linux.org</email></para>
+
+	<listitem>
+	  <para>
+
+	    Parts of Rosegarden-4 are derived from Rosegarden 2.1,
+	    which is Copyright 1994 - 2001 Chris Cannam, Andrew Green,
+	    Richard Bown and Guillaume Laurent.
+
+	  </para>
 	</listitem>
+
+	<listitem>
+	  <para>
+
+	    For musical notation display Rosegarden-4 uses pixmaps
+	    derived from the Feta font, part of the <ulink
+	    url="http://lilypond.org/">Lilypond</ulink> software,
+	    which is Copyright 1997 - 2001 Jan Nieuwenhuizen and
+	    Han-Wen Nienhuys.
+
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+
+	    Other major contributors include Randall Farmer, Ron
+	    Kuris, and Hans Kieserman.
+
+	  </para>
+	</listitem>
+
+	<listitem>
+	  <para>
+
+	    The Rosegarden splash-screen image is from a 1900 postcard
+	    of Thornden Park at Syracuse University, Syracuse, NY,
+	    used with thanks to the staff of Syracuse University.
+
+	  </para>
+	</listitem>
+
       </itemizedlist>
     </para>
 
     <para>
-      Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
+      Documentation copyright 2002 Chris Cannam, Richard Bown, Guillaume Laurent
     </para>
+<!--
     <para>
       Translations done by:
       <itemizedlist>
@@ -843,7 +1180,7 @@
 	</listitem>
       </itemizedlist>
     </para>
-
+-->
     <!-- For URL links to common stuff like the one below,
     always use paths like "common/gpl-licence".
     In this path, "common" will be a symbolic link built at "make install" time.

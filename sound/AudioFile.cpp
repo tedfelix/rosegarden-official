@@ -65,6 +65,8 @@ AudioFile::getModificationDateTime()
 {
     if (m_fileInfo)
         return m_fileInfo->lastModified();
+    else 
+	return QDateTime();
 }
 
 

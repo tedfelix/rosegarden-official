@@ -53,8 +53,6 @@ public:
     double getTimeScaleFactor() const { return m_scaleFactor; }
     void setTimeScaleFactor(double f) { m_scaleFactor = f; }
 
-    Rosegarden::timeT getTimeForCanvasX(double x); // assuming one row only
-
     int getElementHeight() { return m_resolution; }
 
     virtual void positionElements(Rosegarden::timeT from,

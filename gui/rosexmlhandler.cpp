@@ -958,7 +958,7 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 }
 
 bool
-RoseXmlHandler::characters(const QString& string)
+RoseXmlHandler::characters(const QString&)
 {
     return true;
 }

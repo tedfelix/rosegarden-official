@@ -62,7 +62,7 @@ public:
 
     virtual Rosegarden::Segment &getSegment();
 
-    Rosegarden::timeT getStartTime() { return m_savedEvents.getStartTime(); }
+    Rosegarden::timeT getStartTime() { return m_startTime; }
     Rosegarden::timeT getEndTime() { return m_endTime; }
     virtual Rosegarden::timeT getRelayoutEndTime();
 
@@ -82,7 +82,7 @@ protected:
      */
     BasicCommand(const QString &name,
 		 Rosegarden::Segment &segment,
-		 Rosegarden::timeT begin, Rosegarden::timeT end,
+		 Rosegarden::timeT start, Rosegarden::timeT end,
 		 bool bruteForceRedoRequired = false);
 
     virtual void modifySegment() = 0;
@@ -97,6 +97,8 @@ private:
 
     Rosegarden::Segment &m_segment;
     Rosegarden::Segment m_savedEvents;
+
+    Rosegarden::timeT m_startTime;
     Rosegarden::timeT m_endTime;
 
     bool m_doBruteForceRedo;

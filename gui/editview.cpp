@@ -353,14 +353,14 @@ void EditView::slotScrollHorizSmallSteps(int hpos)
 	// returning to zero
         hbar->setValue(0);
 
-    } else if ((diff = hpos - (scrollView->contentsX() + 
-			       scrollView->visibleWidth() * 0.9)) > 0) {
+    } else if ((diff = int(hpos - (scrollView->contentsX() + 
+				   scrollView->visibleWidth() * 0.9))) > 0) {
 
 	// moving off the right hand side of the view   
 	hbar->setValue(hbar->value() + diff);
 
-    } else if ((diff = hpos - (scrollView->contentsX() +
-			       scrollView->visibleWidth() * 0.1)) < 0) {
+    } else if ((diff = int(hpos - (scrollView->contentsX() +
+				   scrollView->visibleWidth() * 0.1))) < 0) {
 
 	// moving off the left
 	hbar->setValue(hbar->value() + diff);

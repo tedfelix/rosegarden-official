@@ -390,8 +390,6 @@ void TrackEditor::setCompositionModified(bool c)
 
 void TrackEditor::paintEvent(QPaintEvent* e)
 {
-    Composition &composition = m_document->getComposition();
-
     if (isCompositionModified()) {
         m_segmentCanvas->updateAllSegmentItems();
 
@@ -403,6 +401,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
                                           */
 
 #ifdef RGKDE3
+	Composition &composition = m_document->getComposition();
 
         if (composition.getNbSegments() == 0) {
             emit stateChange("have_segments", true); // no segments : reverse state
@@ -437,7 +436,6 @@ void TrackEditor::addSegment(int track, int time, unsigned int duration)
 {
     if (!m_document) return; // sanity check
 
-    Composition &comp = m_document->getComposition();
     SegmentInsertCommand *command =
 	new SegmentInsertCommand(m_document, track, time, duration);
 
@@ -548,14 +546,14 @@ void TrackEditor::slotScrollHorizSmallSteps(int hpos)
 	// returning to zero
         hbar->setValue(0);
 
-    } else if ((diff = hpos - (scrollView->contentsX() + 
-			       scrollView->visibleWidth() * 0.9)) > 0) {
+    } else if ((diff = int(hpos - (scrollView->contentsX() + 
+				   scrollView->visibleWidth() * 0.9))) > 0) {
 
 	// moving off the right hand side of the view   
 	hbar->setValue(hbar->value() + diff);
 
-    } else if ((diff = hpos - (scrollView->contentsX() +
-			       scrollView->visibleWidth() * 0.1)) < 0) {
+    } else if ((diff = int(hpos - (scrollView->contentsX() +
+				   scrollView->visibleWidth() * 0.1))) < 0) {
 
 	// moving off the left
 	hbar->setValue(hbar->value() + diff);

@@ -295,7 +295,7 @@ SnapGrid::snapX(double x, SnapDirection direction) const
 
     if (m_snapTime == SnapToBeat) {
 	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
-    } else if (m_snapTime == SnapToBeat) {
+    } else if (m_snapTime == SnapToUnit) {
 	snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
     } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
 	snapTime = m_snapTime;

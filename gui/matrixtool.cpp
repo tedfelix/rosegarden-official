@@ -34,6 +34,7 @@
 #include "rosedebug.h"
 
 using Rosegarden::EventSelection;
+using Rosegarden::SnapGrid;
 
 //////////////////////////////////////////////////////////////////////
 //                     MatrixToolBox
@@ -106,7 +107,7 @@ class MatrixInsertionCommand : public BasicCommand
 public:
     MatrixInsertionCommand(Rosegarden::Segment &segment,
                            timeT time,
-                           timeT endTime,
+                           timeT duration,
                            MatrixStaff*,
                            Rosegarden::Event *event);
 
@@ -124,15 +125,16 @@ MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
                                                timeT endTime,
                                                MatrixStaff* staff,
                                                Event *event) :
-    BasicCommand(i18n("Insert Note"), segment, time, endTime, true),
+    BasicCommand(i18n("Insert Note"), segment, time, endTime),
     m_staff(staff),
-    m_event(new Event(*event, event->getAbsoluteTime(), endTime - time))
+    m_event(new Event(*event, time, endTime - time))
 {
     // nothing
 }
 
 MatrixInsertionCommand::~MatrixInsertionCommand()
 {
+    delete m_event;
 }
 
 void MatrixInsertionCommand::modifySegment()
@@ -140,7 +142,7 @@ void MatrixInsertionCommand::modifySegment()
     kdDebug(KDEBUG_AREA) << "MatrixInsertionCommand::modifySegment()\n";
 
     Rosegarden::SegmentMatrixHelper helper(getSegment());
-    helper.insertNote(m_event);
+    helper.insertNote(new Event(*m_event));
 }
 
 //------------------------------
@@ -226,7 +228,8 @@ MatrixMoveCommand::MatrixMoveCommand(Rosegarden::Segment &segment,
     : BasicCommand(i18n("Move Note"),
                    segment,
                    std::min(newTime, event->getAbsoluteTime()), 
-                   std::max(newTime + event->getDuration(), event->getAbsoluteTime() + event->getDuration()),
+                   std::max(newTime + event->getDuration(),
+			    event->getAbsoluteTime() + event->getDuration()),
                    true),
     m_newTime(newTime),
     m_oldTime(event->getAbsoluteTime()),
@@ -327,199 +330,101 @@ void MatrixChangeDurationCommand::modifySegment()
 MatrixPainter::MatrixPainter(MatrixView* parent)
     : MatrixTool("MatrixPainter", parent),
       m_currentElement(0),
-      m_currentStaff(0),
-      m_resolution(Note::QuarterNote),
-      m_basicDuration(0)
+      m_currentStaff(0)
 {
-    Note tmpNote(m_resolution);
-
-    m_basicDuration = tmpNote.getDuration();
 }
 
 MatrixPainter::MatrixPainter(QString name, MatrixView* parent)
     : MatrixTool(name, parent),
       m_currentElement(0),
-      m_currentStaff(0),
-      m_resolution(Note::QuarterNote),
-      m_basicDuration(0)
+      m_currentStaff(0)
 {
-    Note tmpNote(m_resolution);
-
-    m_basicDuration = tmpNote.getDuration();
 }
 
 void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
                                           int pitch,
                                           int staffNo,
-                                          QMouseEvent*,
-                                          Rosegarden::ViewElement*)
+                                          QMouseEvent *e,
+                                          Rosegarden::ViewElement *)
 {
     kdDebug(KDEBUG_AREA) << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
 
-    Note newNote(m_resolution);
-
     // Round event time to a multiple of resolution
-    timeT noteDuration = newNote.getDuration();
-    time = (time / noteDuration) * noteDuration;
+    SnapGrid grid(m_mParentView->getSnapGrid());
 
-    // get staff and attempt to get segment start time
     m_currentStaff = m_mParentView->getStaff(staffNo);
-    Rosegarden::timeT barStart = 0;
 
-    if (m_currentStaff->getSegment().getComposition())
-    {
-        Rosegarden::Composition *comp =
-            m_currentStaff->getSegment().getComposition();
-
-        barStart = comp->getBarStart(
-                       comp->getBarNumber(
-                           m_currentStaff->getSegment().getStartTime()));
-    }
-
-    Event* el = newNote.getAsNoteEvent(time, pitch);
-
-    time -= barStart;
-
-    // set a default velocity
-    using Rosegarden::BaseProperties::VELOCITY;
-    el->set<Rosegarden::Int>(VELOCITY, 100);
+    Event *el = new Event(Note::EventType, time, grid.getSnapTime(e->x()));
+    el->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
+    el->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
     m_currentElement = new MatrixElement(el);
 
-    int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
+    int y = m_currentStaff->getLayoutYForHeight(pitch) -
+	m_currentStaff->getElementHeight() / 2;
 
     m_currentElement->setLayoutY(y);
-    m_currentElement->setLayoutX(time * m_currentStaff->getTimeScaleFactor());
+    m_currentElement->setLayoutX(grid.getRulerScale()->getXForTime(time));
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
-    double width = noteDuration * m_currentStaff->getTimeScaleFactor();
+    double width = el->getDuration() * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width));
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
 }
 
-bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
+bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
                                     int pitch,
-                                    QMouseEvent*)
+                                    QMouseEvent *)
 {
     // sanity check
     if (!m_currentElement) return false;
 
+    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : pitch = "
+                         << pitch << ", time : " << time << endl;
+
     using Rosegarden::BaseProperties::PITCH;
 
-/*
-    if (pitch == m_currentElement->event()->get<Rosegarden::Int>(PITCH))
-    {
-*/
-        //!!! Rather than using m_basicDuration as the unit for painting,
-        // we should probably be using a Rosegarden::SnapGrid with an
-        // appropriate snap time (SnapToUnit as a default, for example).
-            // SnapGrid requires a RulerScale -- but we have one of those, as
-        // HorizontalLayout subclasses RulerScale.  Apart from anything
-        // else, using SnapGrid will ensure that time-signature changes
-        // are handled correctly (at least if MatrixHLayout handles them,
-        // which it presently doesn't but needs to be made to anyway)
-
-        newTime = (newTime / m_basicDuration) * m_basicDuration;
-
-        if (newTime == m_currentElement->getAbsoluteTime()) return false;
-
-        timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
-
-        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : new time = "
-                             << newTime << ", old time = "
-                             << m_currentElement->getAbsoluteTime()
-                             << ", new duration = "
-                             << newDuration
-                             << ", pitch = "
-                             << m_currentElement->event()->get<Rosegarden::Int>(PITCH)
-                             << endl;
-
-//!!!        m_currentElement->setDuration(newDuration);
-
-        double width = newDuration * m_currentStaff->getTimeScaleFactor();
-        m_currentElement->setWidth(int(width));
+    double width = (time - m_currentElement->event()->getAbsoluteTime())
+	* m_currentStaff->getTimeScaleFactor();
+    m_currentElement->setWidth(int(width));
     
-	//cc:
-	if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
-	    m_currentElement->event()->set<Rosegarden::Int>(PITCH, pitch);
-	    int y = m_currentStaff->getLayoutYForHeight(pitch) -
-		m_currentStaff->getElementHeight() / 2;
-	    m_currentElement->setLayoutY(y);
-	    m_currentStaff->positionElement(m_currentElement);
-	}/*!!! else {
-	    m_mParentView->canvas()->update();
-	    }*/
-
-	m_mParentView->update();
-
-/* This is ridiculous behaviour --cc
+    if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
+	m_currentElement->event()->set<Rosegarden::Int>(PITCH, pitch);
+	int y = m_currentStaff->getLayoutYForHeight(pitch) -
+	    m_currentStaff->getElementHeight() / 2;
+	m_currentElement->setLayoutY(y);
+	m_currentStaff->positionElement(m_currentElement);
     }
-    else
-    {
-
-        // destroy and recreate event on the same staff as we used above
-        // but for a different pitch
-        delete m_currentElement;
-
-        Note newNote(m_resolution);
-
-        // Round event time to a multiple of resolution
-        timeT noteDuration = newNote.getDuration();
-    
-        newTime = (newTime / noteDuration) * noteDuration;
-
-        Event* el = newNote.getAsNoteEvent(newTime, pitch);
-
-        // set a default velocity
-        using Rosegarden::BaseProperties::VELOCITY;
-        el->set<Rosegarden::Int>(VELOCITY, 100);
-
-        m_currentElement = new MatrixElement(el);
-
-        //m_currentStaff = m_mParentView->getStaff(staffNo);
-
-        int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
-
-        m_currentElement->setLayoutY(y);
-        m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
-        m_currentElement->setHeight(m_currentStaff->getElementHeight());
-
-        double width = noteDuration * m_currentStaff->getTimeScaleFactor();
-        m_currentElement->setWidth(int(width));
-
-        m_currentStaff->positionElement(m_currentElement);
-        m_mParentView->update();
-    }
-*/
+    m_mParentView->update();
 
     return true;
 }
 
 void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
                                        int,
-                                       QMouseEvent*)
+                                       QMouseEvent *)
 {
-    // This can happen in case of screen/window capture - we only get a mouse release,
-    // the window snapshot tool got the mouse down
+    // This can happen in case of screen/window capture -
+    // we only get a mouse release, the window snapshot tool
+    // got the mouse down
     if (!m_currentElement) return;
 
     // Insert element if it has a non null duration,
     // discard it otherwise
     //
     timeT time = m_currentElement->getAbsoluteTime();
-    endTime = (endTime / m_basicDuration) * m_basicDuration;
-    if (endTime == time) endTime = time + m_basicDuration;
-    if (endTime  < time) endTime = time + (time - endTime);
+    if (endTime == time) endTime = time + m_currentElement->getDuration();
 
     Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
     kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
 
     MatrixInsertionCommand* command = 
 	new MatrixInsertionCommand(m_currentStaff->getSegment(),
-				   time, endTime,
+				   std::min(time, endTime),
+				   std::max(time, endTime),
 				   m_currentStaff,
 				   m_currentElement->event());
     
@@ -531,16 +436,6 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
 
     m_mParentView->update();
     m_currentElement = 0;
-
-}
-
-void MatrixPainter::slotSetResolution(Rosegarden::Note::Type note)
-{
-    m_resolution = note;
-
-    Note tmpNote(m_resolution);
-
-    m_basicDuration = tmpNote.getDuration();
 }
 
 //------------------------------
@@ -831,9 +726,6 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
     m_currentElement->setLayoutY(y);
     m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
 
-//     m_currentStaff->positionElement(m_currentElement);
-//     m_mParentView->canvas()->update();
-
     MatrixMoveCommand* command = new MatrixMoveCommand(m_currentStaff->getSegment(),
                                                        newTime, newHeight,
                                                        m_currentStaff,
@@ -846,7 +738,9 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 
 //------------------------------
 MatrixResizer::MatrixResizer(MatrixView* parent)
-    : MatrixPainter("MatrixResizer", parent)
+    : MatrixTool("MatrixResizer", parent),
+      m_currentElement(0),
+      m_currentStaff(0)
 {
 }
 
@@ -867,14 +761,9 @@ void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
 
 bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
                                     int,
-                                    QMouseEvent*)
+                                    QMouseEvent *)
 {
     if (!m_currentElement || !m_currentStaff) return false;
-
-    newTime = (newTime / m_basicDuration) * m_basicDuration;
-
-    // if (newTime == m_currentElement->getAbsoluteTime()) // what to do ? erase element ?
-
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
 
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
@@ -886,15 +775,19 @@ bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
 
 void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
                                        int,
-                                       QMouseEvent*)
+                                       QMouseEvent *e)
 {
     if (!m_currentElement || !m_currentStaff) return;
-
-    newTime = (newTime / m_basicDuration) * m_basicDuration;
-
-    // if (newTime == m_currentElement->getAbsoluteTime()) // what to do ? erase element ?
-
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
+
+    //!!! This isn't correct.  If newDuration < 0 we want to swap
+    // the start and end times, which may mean issuing a compound
+    // command of move-event and change-duration
+
+    if (newDuration < 0) newDuration = -newDuration;
+    else if (newDuration == 0) {
+	newDuration = m_mParentView->getSnapGrid().getSnapTime(e->x());
+    }
 
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width));
@@ -904,7 +797,6 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
                                         newDuration,
                                         m_currentStaff,
                                         m_currentElement->event());
-
 
     m_mParentView->addCommandToHistory(command);
 

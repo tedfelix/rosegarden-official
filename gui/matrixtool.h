@@ -95,22 +95,12 @@ public:
 
     static const QString ToolName;
 
-public slots:
-    /**
-     * Set the shortest note which can be "painted"
-     * on the matrix
-     */
-    void slotSetResolution(Rosegarden::Note::Type);
-
 protected:
     MatrixPainter(MatrixView*);
     MatrixPainter(QString name, MatrixView*);
 
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
-
-    Rosegarden::Note::Type m_resolution;
-    Rosegarden::timeT m_basicDuration;
 };
 
 
@@ -251,7 +241,7 @@ protected:
 };
 
 
-class MatrixResizer : public MatrixPainter
+class MatrixResizer : public MatrixTool
 {
     friend class MatrixToolBox;
 
@@ -280,6 +270,9 @@ public:
 
 protected:
     MatrixResizer(MatrixView*);
+
+    MatrixElement* m_currentElement;
+    MatrixStaff* m_currentStaff;
 };
 
 

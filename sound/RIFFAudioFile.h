@@ -112,6 +112,12 @@ public:
     virtual unsigned int getBytesPerFrame() { return m_bytesPerSample; }
     unsigned int getBytesPerSecond() { return m_bytesPerSecond; }
 
+    // Return a vector of splitpoint pairs - splitting to a
+    // given linear audio level.
+    //
+    std::vector<std::pair<RealTime, RealTime> >
+        getSplitPoints(unsigned int threshold);
+
 
 protected:
     //virtual void parseHeader(const std::string &header);

@@ -238,8 +238,8 @@ RIFFAudioFile::getLength()
     double frames = ( m_fileSize - 44 ) / m_bytesPerSample;
     double seconds = frames / ((double)m_sampleRate);
 
-    int secs = seconds;
-    int usecs = ( seconds - secs ) * 1000000;
+    int secs = int( seconds );
+    int usecs = int( ( seconds - secs ) * 1000000 );
 
     return RealTime(secs, usecs);
 }
@@ -319,7 +319,7 @@ RIFFAudioFile::readFormatChunk()
     if (length != m_fileSize)
     {
         char value[80];
-        sprintf(value, "(read %ld when size is %ld)", length, m_fileSize);
+        sprintf(value, "(read %u when size is %u)", length, m_fileSize);
         throw(std::string("\"" + m_fileName +
               "\" corrupted (wrong length) - " +
               std::string(value)));
@@ -450,6 +450,12 @@ RIFFAudioFile::writeFormatChunk()
     putBytes(m_outFile, outString);
 }
 
+
+
+std::vector<std::pair<RealTime, RealTime> >
+RIFFAudioFile::getSplitPoints(unsigned int threshold)
+{
+}
 
 
 

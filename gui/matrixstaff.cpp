@@ -95,8 +95,8 @@ MatrixStaff::positionElements(timeT from, timeT to)
 
 void MatrixStaff::positionElement(MatrixElement* el)
 {
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(el->getLayoutX(),
-                                                             int(el->getLayoutY()));
+    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+	(el->getLayoutX(), int(el->getLayoutY()));
 
     // get velocity for colouring
     using Rosegarden::BaseProperties::VELOCITY;
@@ -109,20 +109,6 @@ void MatrixStaff::positionElement(MatrixElement* el)
     el->setCanvasY((double)coords.second);
 }
 
-
-timeT MatrixStaff::getTimeForCanvasX(double x)
-{
-    double layoutX = x - m_x;
-    Rosegarden::Composition *comp = m_segment.getComposition();
-    Rosegarden::timeT firstBarTime = 0;
-
-    if (comp)
-    {
-        firstBarTime = comp->getBarStart(comp->getBarNumber(m_segment.getStartTime()));
-    }
-
-    return (timeT)((layoutX / m_scaleFactor) + firstBarTime);
-}
 
 QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
 {

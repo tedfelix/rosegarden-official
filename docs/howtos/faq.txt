@@ -103,8 +103,8 @@ Can I edit all the segments at once in the matrix editor?
 No.  A matrix editor shows a single segment only.
 
 
-Notation rendering is rather slow.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Notation rendering is rather slow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Yes, it can be.  Unlike most other notation applications (including
 Rosegarden 2.1), we render the full length of each segment to a canvas
@@ -184,7 +184,9 @@ Start up iiwusynth something like this:
 
 Then start Rosegarden and assign some Tracks to the "Synth input port"
 Instrument.  By default RG will choose the onboard synth first so
-you'll have to manually reassign these Tracks.
+you'll have to manually reassign these Tracks (unless you have no
+onboard synth; users of i810 devices without onboard MIDI synth may
+find soft synths particularly valuable).
 
 For Timidity use the -iA switch:
 
@@ -220,6 +222,13 @@ SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2,
 
 For more fun with soundfonts including how to create them for yourself
 have a look at the Smurf/Swami project: <URL:http://smurf.sourceforge.net/>.
+
+The other classic problem for new users of ALSA is that the mixer
+settings are either zero or muted.  Run alsamixer and check that your
+levels are okay and unmuted.  (Muting is displayed and changed
+separately from the levels themselves: you can be on 100% but still
+muted.)
+
 
 I've followed all your instructions but I still don't hear any sound
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -257,7 +266,8 @@ for an SBLive! should look something like this:
     AlsaDriver::jackGraphOrder
     RosegardenSequencer - started OK
 
-
 Note the ALSA device list shows the external MIDI port and the
-wavetable on-board synth devices.  All of these will be available
-in the drop-down Instrument list inside Rosegarden.
+wavetable on-board synth devices.  If you're using a soft synth, you
+should see it here too.  All of these will be available in the
+drop-down Instrument list inside Rosegarden.
+

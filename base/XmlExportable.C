@@ -26,7 +26,7 @@ std::string XmlExportable::encode(const std::string &s0)
 {
     std::string s1;
     
-    for (int i = 0; i < s0.length(); ++i) {
+    for (unsigned int i = 0; i < s0.length(); ++i) {
 
 	char c = s0[i];
 

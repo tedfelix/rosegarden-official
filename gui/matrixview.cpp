@@ -69,6 +69,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_currentEventSelection(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
+      m_snapGrid(&m_hlayout),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
       m_previousEvPitch(0),
@@ -110,7 +111,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, 2, 0);
 
-    m_canvasView = new MatrixCanvasView(*m_staffs[0], m_horizontalScrollBar,
+    m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToUnit);
+
+    m_canvasView = new MatrixCanvasView(*m_staffs[0], m_snapGrid,
+					m_horizontalScrollBar,
                                         tCanvas, getCentralFrame());
     setCanvasView(m_canvasView);
 
@@ -524,17 +528,10 @@ void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
     kdDebug(KDEBUG_AREA) << "MatrixView::mousePressed at pitch "
                          << pitch << ", time " << time << endl;
 
-    Rosegarden::Segment &segment = m_staffs[0]->getSegment();
-    Rosegarden::Composition *composition = segment.getComposition();
-    Rosegarden::timeT firstBar =
-        composition->getBarStart(composition->
-                getBarNumber(segment.getStartTime()));
-
     m_tool->handleMousePress(time, pitch, 0, e, el);
 
     // play a preview
     playPreview(pitch);
-
 }
 
 void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* e)
@@ -545,13 +542,7 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
     }
     else 
     {
-        Rosegarden::Segment &segment = m_staffs[0]->getSegment();
-        Rosegarden::Composition *composition = segment.getComposition();
-        Rosegarden::timeT firstBar =
-            composition->getBarStart(composition->
-                    getBarNumber(segment.getStartTime()));
-
-        if (m_tool->handleMouseMove(time - firstBar, pitch, e)) {
+        if (m_tool->handleMouseMove(time, pitch, e)) {
 	    slotScrollHorizSmallSteps(e->pos().x());
 	}
 	    

@@ -28,6 +28,7 @@
 #include <kmainwindow.h>
 
 #include "Staff.h"
+#include "RulerScale.h"
 
 #include "editview.h"
 #include "matrixcanvasview.h"
@@ -92,6 +93,8 @@ public:
     // Play a preview (same as above but a simpler interface)
     //
     void playPreview(int pitch);
+
+    Rosegarden::SnapGrid &getSnapGrid() { return m_snapGrid; }
 
 signals:    
     /**
@@ -235,6 +238,7 @@ protected:
 
     MatrixHLayout m_hlayout;
     MatrixVLayout m_vlayout;
+    Rosegarden::SnapGrid m_snapGrid;
 
     // Status bar elements
     QLabel* m_hoveredOverAbsoluteTime;

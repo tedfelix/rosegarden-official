@@ -19,21 +19,20 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Segment.h"
-
 #include "matrixcanvasview.h"
 #include "matrixstaff.h"
 #include "matrixelement.h"
 
-using Rosegarden::Segment;
 using Rosegarden::timeT;
 
 MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
+				   Rosegarden::SnapGrid &snapGrid,
                                    QScrollBar* hsb,
                                    QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
     : RosegardenCanvasView(hsb, viewing, parent, name, f),
       m_staff(staff),
+      m_snapGrid(snapGrid),
       m_previousEvTime(0),
       m_previousEvPitch(0),
       m_mouseWasPressed(false),
@@ -48,9 +47,11 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    timeT evTime = m_staff.getTimeForCanvasX(e->x());
+    timeT evTime = m_snapGrid.snapX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
+    timeT emTime = m_staff.getSegment().getEndMarkerTime();
+    if (evTime > emTime) evTime = emTime;
     
 //     kdDebug(KDEBUG_AREA) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //                          << evPitch << ", time " << evTime << endl;
@@ -96,8 +97,11 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
     if (m_ignoreClick) return;
 
-    timeT evTime = m_staff.getTimeForCanvasX(e->x());
+    timeT evTime = m_snapGrid.snapX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
+
+    timeT emTime = m_staff.getSegment().getEndMarkerTime();
+    if (evTime > emTime) evTime = emTime;
 
     if (evTime != m_previousEvTime) {
         emit hoveredOverAbsoluteTimeChanged(evTime);
@@ -129,8 +133,11 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    timeT evTime = m_staff.getTimeForCanvasX(e->x());
+    timeT evTime = m_snapGrid.snapX(e->x());
     int evPitch = m_staff.getHeightAtCanvasY(e->y());
+
+    timeT emTime = m_staff.getSegment().getEndMarkerTime();
+    if (evTime > emTime) evTime = emTime;
 
     emit mouseReleased(evTime, evPitch, e);
     m_mouseWasPressed = false;

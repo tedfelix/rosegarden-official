@@ -163,7 +163,7 @@ ChordLabel::ChordLabel()
     checkMap();
 }
 
-ChordLabel::ChordLabel(Key key, int mask, int bass) :
+ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
     m_data()
 {
     AnalysisHelper ah;
@@ -454,7 +454,7 @@ AnalysisHelper::cp_less::operator()(ChordPossibility l, ChordPossibility r)
 
 
 void
-AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
+AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                                        HarmonyGuessList &l, Segment &segment)
 {
     // (Fetch the piece's starting key from the key guesser)

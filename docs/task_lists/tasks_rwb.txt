@@ -7,6 +7,11 @@ o Audio volume faders - studio concept on sequencer
 
 o Segment previews still buggy [BETTER but still a glitch]
 
+o Tidy up AudioFiles:
+   - hardcoded format segment values
+   - BWF format writing/reading
+   - exceptions and return values
+
 o Realtime downsampling buggy (8 bit)
 
 o Prove and improve simultaneous audio and MIDI track performance

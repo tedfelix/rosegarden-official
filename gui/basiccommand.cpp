@@ -33,16 +33,18 @@ using Rosegarden::Event;
 using Rosegarden::timeT;
 
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
-			   timeT begin, timeT end, bool bruteForceRedo) :
+			   timeT start, timeT end, bool bruteForceRedo) :
     XKCommand(name),
     m_segment(segment),
-    m_savedEvents(segment.getType(), begin),
+    m_savedEvents(segment.getType(), start),
+    m_startTime(start),
     m_endTime(end),
     m_doBruteForceRedo(false),
     m_redoEvents(0)
 {
-    if (bruteForceRedo)
-        m_redoEvents = new Segment(segment.getType(), begin);
+    if (bruteForceRedo) {
+        m_redoEvents = new Segment(segment.getType(), start);
+    }
 }
 
 BasicCommand::~BasicCommand()
@@ -100,10 +102,15 @@ BasicCommand::unexecute()
 void
 BasicCommand::copyTo(Rosegarden::Segment *events)
 {
-    Segment::iterator from = m_segment.findTime(events->getStartTime());
+//    kdDebug(KDEBUG_AREA) << "BasicCommand::copyTo: range (" 
+//			 << m_startTime << "," << m_endTime
+//			 << ")" << endl;
+
+    Segment::iterator from = m_segment.findTime(m_startTime);
     Segment::iterator to   = m_segment.findTime(m_endTime);
 
     for (Segment::iterator i = from; i != m_segment.end() && i != to; ++i) {
+//	kdDebug(KDEBUG_AREA) << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
 	events->insert(new Event(**i));
     }
 }
@@ -111,10 +118,15 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 void
 BasicCommand::copyFrom(Rosegarden::Segment *events)
 {
-    m_segment.erase(m_segment.findTime(events->getStartTime()),
+//    kdDebug(KDEBUG_AREA) << "BasicCommand::copyFrom: range (" 
+//			 << m_startTime << "," << m_endTime
+//			 << ")" << endl;
+
+    m_segment.erase(m_segment.findTime(m_startTime),
 		    m_segment.findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
+//	kdDebug(KDEBUG_AREA) << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
 	m_segment.insert(new Event(**i));
     }
 
