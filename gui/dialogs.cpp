@@ -1556,13 +1556,13 @@ TempoDialog::populateTempo()
     m_tempoTimeLabel->setText(i18n("%1.%2 s").arg(tempoTime.sec)
 			      .arg(milliSeconds));
 
-    int barNo = comp.getBarNumber(m_tempoTime) + 1;
+    int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
 	m_tempoBarLabel->setText
-	    (i18n("(at the start of bar %1)").arg(barNo));
+	    (i18n("(at the start of bar %1)").arg(barNo+1));
     } else {
 	m_tempoBarLabel->setText(
-	    i18n("(in the middle of bar %1)").arg(barNo));
+	    i18n("(in the middle of bar %1)").arg(barNo+1));
     }
 
     int tempoChangeNo = comp.getTempoChangeNumberAt(m_tempoTime);
@@ -1575,10 +1575,10 @@ TempoDialog::populateTempo()
 	Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
 	QString lastms;
 	lastms.sprintf("%03ld", lastRT.usec / 1000);
-	int lastBar = comp.getBarNumber(lastTempoTime) + 1;
+	int lastBar = comp.getBarNumber(lastTempoTime);
 	m_tempoChangeBeforeAt->setText
 	    (i18n("    (at %1.%2 s, in bar %3)").arg(lastRT.sec)
-	     .arg(lastms).arg(lastBar));
+	     .arg(lastms).arg(lastBar+1));
 
 	m_tempoChangeBefore->show();
 	m_tempoChangeBeforeAt->show();

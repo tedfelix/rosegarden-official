@@ -123,11 +123,14 @@ etc
   </Menu>
   <Separator/>
   <Menu name="Noteheads">
-    <text>Note &amp;heads</text>
+    <text>Note&amp;heads</text>
     <Action name="noteheads_classical"/>
     <Action name="noteheads_x"/>
     <Action name="noteheads_triangle"/>
     <Action name="noteheads_mensural"/>
+    <Separator/>
+    <Action name="noteheads_black"/>
+    <Action name="noteheads_white"/>
   </Menu>
   <Separator/>
   <Action name="tie"/>

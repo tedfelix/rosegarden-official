@@ -123,6 +123,23 @@ Post-0.1.5-and-a-bit task list
 25. Work out why inter1.mid renders incorrectly in notation [DONE -- rests
     too short to display but still allocated space in the layout pass]
 
+26. Tempo dialog:
+
+    a. Flatten out so as not to use QButtonGroup (need to change usage
+       of selected()) but put buttons directly in parent QGroupBox with
+       the labels
+
+    b. Add explanatory "There are no {previous,other} tempo changes"
+       label, and make unavailable options disabled rather than hidden
+
+    c. Add "Change tempo from start of this bar" option
+
+    d. Rework texts
+
+27. Event quantize command needs to be able to be constructed with
+    an EventSelection argument, and to operate by quantizing in
+    turn each of the contiguous sequences of events in that selection
+
 
 Post-0.1.4 task list
 ====================
