@@ -76,9 +76,9 @@ type=DATA
 
 [Workspace_1]
 browser_file=file:/home/glaurent/.kde/share/apps/kdevelop/KDE-Documentation//kab/KabAPI.html
-cpp_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosedebug.cpp
-header_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationhlayout.h
-openfiles=Untitled.h,Untitled.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/layoutengine.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/layoutengine.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationcanvasview.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationcanvasview.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationelement.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationhlayout.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationhlayout.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/scale.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/scale.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationelement.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/qcanvassimplesprite.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationvlayout.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosedebug.cpp
+cpp_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/notepixmapfactory.cpp
+header_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardenguidoc.h
+openfiles=Untitled.h,Untitled.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notationvlayout.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notepixmapfactory.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/notepixmapfactory.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/qcanvasgroupableitem.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/staff.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardenguidoc.h
 show_outputview=true
 show_treeview=true
 
