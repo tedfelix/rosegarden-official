@@ -1155,6 +1155,14 @@ DocumentMetaConfigurationPage::apply()
         comp.setCopyrightNote(qstrtostr(copyright));
     }
 */
+
+    Rosegarden::Configuration &metadata = m_doc->getComposition().getMetadata();
+
+    for(QListViewItem *item = m_metadata->firstChild();
+        item != 0; item = item->nextSibling()) {
+        metadata.set<String>(qstrtostr(item->text(0)),
+                             qstrtostr(item->text(1)));
+    }
 }
 
 
