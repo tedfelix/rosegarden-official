@@ -189,7 +189,7 @@ void PlayList::slotOpenFiles()
 #else
                                  QString::null,
 #endif
-                                 i18n("*.rg|Rosegarden-4 files\n*|All files"),
+                                 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21",
                                  this,
                                  i18n("Select one or more Rosegarden files"));
 
@@ -349,7 +349,13 @@ void PlayListDialog::restore()
 void PlayListDialog::closeEvent(QCloseEvent *e)
 {
     save();
-
     emit closing();
     KDialogBase::closeEvent(e);
+}
+
+void PlayListDialog::slotClose()
+{
+    save();
+    emit closing();
+    KDialogBase::slotClose();
 }

@@ -57,7 +57,7 @@ protected slots:
     void slotClear();
     void slotCurrentItemChanged(QListViewItem*);
     void slotDropped(QDropEvent*, QListViewItem*);
- 
+
 protected:
     void save();
     void restore();
@@ -84,6 +84,9 @@ public:
     PlayListDialog(QString caption, QWidget* parent = 0, const char* name = 0);
 
     PlayList* getPlayList() { return m_playList; }
+
+public slots:
+    void slotClose();
 
 signals:
     void closing();
