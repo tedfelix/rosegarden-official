@@ -26,10 +26,17 @@
 #include <qstring.h>
 #include <string>
 
+
+// Just a little helper class to turn MIDI note values into text.
+// Relying on QStrings I know but what the hey.
+//
+
+
 namespace Rosegarden
 {
 
-static map<int, char> midiTextMap;
+static string notes[] = { "C",  "C#", "D",  "D#", "E",  "F",
+                          "F#", "G",  "G#", "A",  "A#", "B"  };
 
 class MidiPitchLabel
 {
@@ -42,69 +49,17 @@ public:
         }
         else
         {
+            // We convert the pitch to a string as follows
+            //
             int octave = (int)(((float)pitch)/12.0) - 2;
-            string note;
-
-            switch(pitch%12)
-            {
-                case 0:
-                    note = "C";
-                    break;
-
-                case 1:
-                    note = "C#";
-                    break;
-
-                case 2:
-                    note = "D";
-                    break;
-
-                case 3:
-                    note = "D#";
-                    break;
-
-                case 4:
-                    note = "E";
-                    break;
-
-                case 5:
-                    note = "F";
-                    break;
-
-                case 6:
-                    note = "F#";
-                    break;
-
-                case 7:
-                    note = "G";
-                    break;
-
-                case 8:
-                    note = "G#";
-                    break;
-
-                case 9:
-                    note = "A";
-                    break;
-
-                case 10:
-                    note = "A#";
-                    break;
-
-                case 11:
-                    note = "B";
-                    break;
-
-                default:
-                    note = "";
-                    break;
-            }
-
-            m_midiNote.sprintf("  %s%d", note.c_str(), octave);
+            m_midiNote.sprintf("  %s%d", notes[pitch%12].c_str(), octave);
         }
     }
     ~MidiPitchLabel();
 
+
+    // Return the string as we like
+    //
     string getString() const { return string(m_midiNote.data()); }
     QString getQString() const { return m_midiNote; }
 
