@@ -25,13 +25,27 @@ namespace Rosegarden
 {
 
 Track::Track():
-   m_number(0),
+   m_id(0),
    m_muted(false),
    m_type(Midi),
-   m_name("untitled")
+   m_label("untitled"),
+   m_position(0),
+   m_instrument(0)
 {
 }
 
+Track::Track(const int &id, const bool &muted, 
+             const TrackType &tt, const string &label,
+             const int &position, const int &instrument):
+   m_id(id),
+   m_muted(muted),
+   m_type(tt),
+   m_label(label),
+   m_position(position),
+   m_instrument(instrument)
+{
+}
+   
 
 Track::~Track()
 {

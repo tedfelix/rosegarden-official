@@ -1,4 +1,3 @@
-// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4 v0.1
@@ -85,6 +84,9 @@ public:
     segmentcontainer& getSegments() { return m_segments; }
     const segmentcontainer& getSegments() const { return m_segments; }
 
+    trackcontainer getTracks() { return m_tracks; }
+    instrumentcontainer getInstruments() { return m_instruments; }
+
     unsigned int getNbSegments() const { return m_segments.size(); }
 
     /**
@@ -92,6 +94,18 @@ public:
      * The inserted Segment is owned by the Composition object
      */
     iterator addSegment(Segment*);
+
+    
+    /**
+     * Insert a new Instrument
+     */
+    void addInstrument(const Instrument &inst);
+
+
+    /**
+     * Insert a new Track
+     */
+    void addTrack(const Track &track);
 
     /**
      * Delete the segment pointed to by the specified iterator
@@ -220,9 +234,9 @@ public:
     virtual void eventRemoved(const Segment *, Event *);
 
 protected:
-    trackcontainer *m_tracks;
+    trackcontainer m_tracks;
     segmentcontainer m_segments;
-    instrumentcontainer *m_instruments;
+    instrumentcontainer m_instruments;
 
     /// Contains time signature and new-bar events.
     mutable Segment m_referenceSegment;

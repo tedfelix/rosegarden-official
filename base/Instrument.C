@@ -25,9 +25,18 @@ namespace Rosegarden
 {
 
 Instrument::Instrument():
-    m_number(0),
+    m_id(0),
     m_name("untitled"),
     m_type(Midi)
+{
+}
+
+Instrument::Instrument(const int &id,
+                       const InstrumentType &it,
+                       const string &name):
+    m_id(id),
+    m_name(name),
+    m_type(it)
 {
 }
 

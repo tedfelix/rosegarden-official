@@ -166,14 +166,6 @@ TrackButtons::drawButtons()
         record->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
         record->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
 
-/*
-        label = new QLabel(this);
-        label->setText(QString(""));
-        label->setBackgroundMode(PaletteDark);
-        label->setMinimumHeight(1);
-        label->setMaximumHeight(1);
-*/
-        
     }
 
     // Create a blank label at the bottom just to keep
@@ -251,9 +243,8 @@ TrackButtons::setMutedTrack(const int &mutedTrack)
 }
 
 
-// Set a newly selected record button to a shocking red
-// palette, and unset any old record buttons we're jumping
-// from.
+// Set a newly selected record button to a shocking red palette and
+// unset the palette on the record buttons we're jumping from.
 //
 //
 void

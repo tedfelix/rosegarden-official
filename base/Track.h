@@ -46,18 +46,23 @@ public:
     enum TrackType { Midi, Audio };
 
     Track();
+    Track(const int &id, const bool &muted,
+          const TrackType &tt, const string &label,
+          const int &position, const int &instrument);
     ~Track();
 
+    int getID() const { return m_id; }
     bool isMuted() { return m_muted; }
-    bool getNumber() { return m_number; }
     
 
 private:
 
-    int  m_number;
-    bool m_muted;
+    int       m_id;
+    bool      m_muted;
     TrackType m_type;
-    string m_name;
+    string    m_label;
+    int       m_position;
+    int       m_instrument;
 
 };
 

@@ -38,11 +38,12 @@ public:
     enum InstrumentType { Midi, Audio };
 
     Instrument();
+    Instrument(const int &id, const InstrumentType &it, const string &name);
     ~Instrument();
 
     string getName() { return m_name; }
     InstrumentType getInstrumentType() { return m_type; }
-    int getNumber() { return m_number; }
+    int getID() const { return m_id; }
 
     int getMidiChannel() { return m_midiChannel; }
     int getMidiTranspose() { return m_midiTranspose; }
@@ -52,7 +53,7 @@ public:
 
 private:
 
-    int m_number;
+    int m_id;
     string m_name;
     InstrumentType m_type;
     

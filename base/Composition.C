@@ -43,7 +43,6 @@ Composition::Composition()
       m_defaultTempo(120.0),
       m_barPositionsNeedCalculating(true)
 {
-    // empty
 }
 
 Composition::~Composition()
@@ -71,8 +70,8 @@ void Composition::swap(Composition& c)
 
     // swap tracks and instruments
     //
-    m_tracks->swap(*(c.m_tracks));
-    m_instruments->swap(*(c.m_instruments));
+    m_tracks.swap(c.m_tracks);
+    m_instruments.swap(c.m_instruments);
 
     for (segmentcontainer::iterator i = that->m_segments.begin();
 	 i != that->m_segments.end(); ++i) {
@@ -548,5 +547,29 @@ void Composition::eventRemoved(const Segment *s, Event *e)
 }
 
 
+// Insert an Instrument into the Composition
+//
+//
+void Composition::addInstrument(const Instrument &inst)
+{
+    // For the moment just insert it - but we should probably
+    // check indexes first.
+    //
+    // 
+    m_instruments[inst.getID()] = inst;
+    std::cerr << "ADDED INSTRUMENT OBJECT" << endl;
 
 }
+
+void Composition::addTrack(const Track &track)
+{
+    m_tracks[track.getID()] = track;
+    std::cerr << "ADDED TRACK OBJECT" << endl;
+}
+
+
+
+
+}
+
+

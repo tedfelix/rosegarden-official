@@ -24,6 +24,8 @@
 #include "xmlstorableevent.h"
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
+#include "Instrument.h"
+#include "Track.h"
 
 #include <klocale.h>
 
@@ -89,6 +91,84 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	QString tempoString = atts.value("value");
 	m_composition.setDefaultTempo(tempoString.toInt());
 	m_foundTempo = true;
+
+    } else if (lcName == "instrument") {
+        int id = -1;
+        string name;
+        Rosegarden::Instrument::InstrumentType it;
+
+        QString instrNbStr = atts.value("id");
+        if (instrNbStr) {
+            id = instrNbStr.toInt();
+        }
+
+        QString nameStr = atts.value("name");
+        if (nameStr) {
+            name = string(nameStr.data());
+        }
+
+        QString instrTypeStr = atts.value("type");
+        if (instrTypeStr) {
+            it = (Rosegarden::Instrument::InstrumentType)instrTypeStr.toInt();
+        }
+
+        // Create and insert the Instrument
+        //
+        //
+        Rosegarden::Instrument *instrument =
+                new Rosegarden::Instrument(id, it, name);
+        m_composition.addInstrument(*instrument);
+
+    } else if (lcName == "track") {
+        int id = -1;
+        int position = -1;
+        int instrument = -1;
+        string label;
+        bool muted;
+        Rosegarden::Track::TrackType tt;
+
+        QString trackNbStr = atts.value("id");
+        if (trackNbStr) {
+            id = trackNbStr.toInt();
+        }
+
+        QString labelStr = atts.value("label");
+        if (labelStr) {
+            label = string(labelStr.data());
+        }
+
+        QString mutedStr = atts.value("muted");
+        if (mutedStr) {
+            if (mutedStr == "true")
+                muted = true;
+            else
+                muted = false;
+        }
+
+        QString trackTypeStr = atts.value("type");
+        if (trackTypeStr) {
+            if (trackTypeStr == "Midi")
+                tt = Rosegarden::Track::Midi;
+            else if (trackTypeStr == "Audio")
+                tt = Rosegarden::Track::Audio;
+        }
+
+        QString positionStr = atts.value("position");
+        if (positionStr) {
+            position = positionStr.toInt();
+        }
+
+        QString instrumentStr = atts.value("instrument");
+        if (instrumentStr) {
+            instrument = instrumentStr.toInt();
+        }
+       
+        Rosegarden::Track *track = new Rosegarden::Track(id, muted, tt,
+                                                         label, position,
+                                                         instrument);
+
+        m_composition.addTrack(*track);
+
 
     } else if (lcName == "segment") {
 
