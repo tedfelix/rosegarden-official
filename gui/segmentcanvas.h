@@ -119,6 +119,8 @@ public:
 
     virtual void drawShape(QPainter&);
 
+    SegmentItemPreview* getPreview() { return m_preview; }
+
 protected:
 
     void setPreview();

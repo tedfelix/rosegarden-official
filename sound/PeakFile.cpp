@@ -675,7 +675,6 @@ PeakFile::getPreview(const RealTime &startTime,
 
     double startPeak = getPeak(startTime);
     double endPeak = getPeak(endTime);
-    double sampleEndPeak = getPeak(m_audioFile->getLength() - startTime);
 
     // Sanity check
     if (startPeak > endPeak)
@@ -683,7 +682,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
     // Actual possible sample length in RealTime
     //
-    double step = double(sampleEndPeak - startPeak) / double(width);
+    double step = double(endPeak - startPeak) / double(width);
     std::string peakData;
     int peakNumber;
     float hiValue = 0.0f;
@@ -714,20 +713,21 @@ PeakFile::getPreview(const RealTime &startTime,
 
     for (int i = 0; i < width; i++)
     {
-        peakNumber = int(startPeak + (i * step));
+        peakNumber = int(startPeak + int(double(i) * step));
 
         // Seek to value
         //
         if (scanToPeak(peakNumber) == false)
             ret.push_back(0.0f);
 
-        hiValue = 0.0f;
-        loValue = 0.0f;
-
         // Get peak value over channels
         //
         for (int j = 0; j < m_channels; j++)
         {
+
+            hiValue = 0.0f;
+            loValue = 0.0f;
+
             try
             {
                 peakData = getBytes(m_inFile, m_format * m_pointsPerValue);

@@ -165,8 +165,8 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    std::vector<float> m_values;
-    unsigned int       m_channels;
+    std::vector<float>   m_values;
+    unsigned int         m_channels;
 };
 
 SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
@@ -189,39 +189,30 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     std::vector<float>::iterator it;
 
     // perhaps antialias this somehow at some point
-    int x = 0;
     int height = rect().height()/2 - 3;
     int halfRectHeight = rect().height()/2;
-
-    QRect viewportRect = painter.xFormDev(painter.viewport());
 
     int width = m_values.size() / m_channels;
     it = m_values.begin();
     float h1, h2;
 
     for (int i = 0; i < width; i++)
-        {
-            if (x > (viewportRect.x() + viewportRect.width())) break; 
-            if (x >= viewportRect.x()) {
+    {
 
-                if (m_channels == 1)
-                {
-                    h1 = *(it++);
-                    h2 = h1;
-                }
-                else
-                {
-                    h1 = *(it++);
-                    h2 = *(it++);
-                }
-
-                painter.drawLine(x,
-                                 halfRectHeight + h1 * height,
-                                 x,
-                                 halfRectHeight - h2 * height);
-                ++x;
+            if (m_channels == 1) {
+                h1 = *(it++);
+                h2 = h1;
             }
-        }
+            else {
+                h1 = *(it++);
+                h2 = *(it++);
+            }
+
+            painter.drawLine(i,
+                             halfRectHeight + h1 * height,
+                             i,
+                             halfRectHeight - h2 * height);
+    }
 
     // perhaps draw an XOR'd label at some point
     /*
@@ -246,24 +237,18 @@ void SegmentAudioPreview::updatePreview()
 
     Rosegarden::Composition &comp = m_parent.getDocument()->getComposition();
 
-    // Calculate fraction of actual possible audio length that we
-    // can show.
+    // Get sample start and end times and work out duration
     //
-    Rosegarden::RealTime audioDuration =  aFM.
-        getAudioFile(m_segment->getAudioFileId())->getLength();
-    Rosegarden::RealTime segmentStartTime = comp.getElapsedRealTime(
-            m_segment->getStartTime());
-    Rosegarden::RealTime segmentEndTime = comp.getElapsedRealTime(
-            m_segment->getEndTime());
+    Rosegarden::RealTime audioStartTime = m_segment->getAudioStartTime();
+    Rosegarden::RealTime audioEndTime = audioStartTime +
+        comp.getElapsedRealTime(m_parent.getEndTime()) -
+        comp.getElapsedRealTime(m_parent.getStartTime()) ;
 
-    double fraction = (audioDuration - 
-                       m_segment->getAudioStartTime()) /
-                      (segmentEndTime - segmentStartTime);
     m_values =
         aFM.getPreview(m_segment->getAudioFileId(),
-                       m_segment->getAudioStartTime(),
-                       m_segment->getAudioEndTime(),
-                       int(rect().width() * fraction));
+                       audioStartTime,
+                       audioEndTime,
+                       rect().width());
 
     m_channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
@@ -1562,6 +1547,10 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
                         m_currentItem->getTrack());
     addCommandToHistory(command);
 
+    // update preview
+    m_currentItem->getPreview()->setPreviewCurrent(false);
+    m_canvas->canvas()->update();
+
     m_currentItem = 0;
 }
 
@@ -1585,6 +1574,9 @@ bool SegmentResizer::handleMouseMove(QMouseEvent *e)
 	m_currentItem->setEndTime(duration +
 				  m_currentItem->getStartTime());
     }
+
+    // update preview
+    m_currentItem->getPreview()->setPreviewCurrent(false);
 
     m_canvas->canvas()->update();
     return true;
