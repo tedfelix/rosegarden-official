@@ -52,7 +52,6 @@ void NotationSet::initialise()
 
 void NotationSet::sample(const NELIterator &i)
 {
-    kdDebug(KDEBUG_AREA) << "NotationSet::sample called" << endl;
     if (m_longest == m_nel.end() ||
         duration(i, m_quantized) > duration(m_longest, m_quantized)) {
         m_longest = i;
@@ -129,21 +128,6 @@ Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
     }
 }
 
-bool Chord::test(const NELIterator &i)
-{
-    bool r = ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
-    kdDebug(KDEBUG_AREA) << "Chord::test called on a " << (*i)->event()->getType() << ", returning " << r << endl;
-    return r;
-    
-}
-
-void Chord::sample(const NELIterator &i)
-{
-    kdDebug(KDEBUG_AREA) << "Chord::sample called" << endl;
-    NotationSet::sample(i);
-    push_back(i);
-}
-
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i) :
@@ -177,19 +161,8 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 void
 NotationGroup::sample(const NELIterator &i)
 {
-    kdDebug(KDEBUG_AREA) << "NotationGroup::sample called" << endl;
-
     NotationSet::sample(i);
     
-}
-
-bool NotationGroup::test(const NELIterator &i)
-{
-    long n;
-    bool r = ((*i)->event()->get<Rosegarden::Int>("GroupNo", n) &&
-              n == m_groupNo);
-    kdDebug(KDEBUG_AREA) << "NotationGroup::test returning " << r << endl;
-    return r;
 }
 
 int

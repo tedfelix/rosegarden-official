@@ -99,8 +99,13 @@ public:
     virtual ~Chord() { }
 
 protected:
-    virtual void sample(const NELIterator &i);
-    virtual bool test(const NELIterator &i);
+    virtual bool test(const NELIterator &i) {
+        return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
+    }
+    virtual void sample(const NELIterator &i) {
+        NotationSet::sample(i);
+        push_back(i);
+    }
 
 private:
     Rosegarden::Event::timeT m_time;
@@ -140,8 +145,12 @@ public:
                        int width);
 
 protected:
+    virtual bool test(const NELIterator &i) {
+        long n;
+        return ((*i)->event()->get<Rosegarden::Int>("GroupNo", n) &&
+                n == m_groupNo);
+    }
     virtual void sample(const NELIterator &i);
-    virtual bool test(const NELIterator &i);
 
 private:
     int height(const NELIterator&,
