@@ -149,8 +149,8 @@ public slots:
     void slotExtendSelectionBackward(bool bar);
     void slotExtendSelectionForward(bool bar);
 
-    void slotStepBackward();
-    void slotStepForward();
+    virtual void slotStepBackward(); // default is event-by-event
+    virtual void slotStepForward(); // default is event-by-event
     void slotJumpBackward();
     void slotJumpForward();
     void slotJumpToStart();

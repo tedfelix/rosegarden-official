@@ -730,6 +730,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         endOfLastNote = 0;
 
 	int msb = -1, lsb = -1; // for bank selects
+	Instrument *instrument = 0;
 
         for (midiEvent = m_midiComposition[i].begin();
              midiEvent != m_midiComposition[i].end();
@@ -772,8 +773,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     break;
                     
                 case MIDI_TRACK_NAME:
-                    if (track)
-                        track->setLabel((*midiEvent)->getMetaMessage());
+		    track->setLabel((*midiEvent)->getMetaMessage());
                     break;
 
                 case MIDI_END_OF_TRACK:
@@ -896,20 +896,20 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 break;
 
             case MIDI_PROG_CHANGE:
-                {
-                    // Attempt to turn the prog change we've found into an
-                    // Instrument.  Send the program number and whether or
-                    // not we're on the percussion channel.
-		    // 
-		    // Note that we make no attempt to do the right thing
-		    // with program changes during a track.
-		    // We just set this track's program to the one found
-		    // in the last program change on the track.
-                    //
-                    Instrument *instr = 0;
-
+		// Attempt to turn the prog change we've found into an
+		// Instrument.  Send the program number and whether or
+		// not we're on the percussion channel.
+		// 
+		// Note that we make no attempt to do the right
+		// thing with program changes during a track -- we
+		// just save them as events.  Only the first is
+		// used to select the instrument.  If it's at time
+		// zero, it's not saved as an event.
+		//
+		if (!instrument) {
+		    
 		    if (msb >= 0 || lsb >= 0) {
-                        instr = m_studio->assignMidiProgramToInstrument
+			instrument = m_studio->assignMidiProgramToInstrument
 			    ((*midiEvent)->getData1(),
 			     (msb >= 0 ? msb : 0),
 			     (lsb >= 0 ? lsb : 0),
@@ -918,30 +918,50 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 			msb = -1;
 			lsb = -1;
 		    } else {
-                        instr = m_studio->assignMidiProgramToInstrument
+                        instrument = m_studio->assignMidiProgramToInstrument
 			    ((*midiEvent)->getData1(),
 			     (*midiEvent)->getChannelNumber() == 
 			     MIDI_PERCUSSION_CHANNEL);
 		    }			
-
+		    
                     // assign it here
-                    if (instr != 0) {
+                    if (instrument) {
                         
-                        if (track)
-                            track->setInstrument(instr->getId());
+			track->setInstrument(instrument->getId());
 
                         // give the Segment a name based on the the Instrument
                         //
 			rosegardenSegment->setLabel
-			    (m_studio->getSegmentName(instr->getId()));
+			    (m_studio->getSegmentName(instrument->getId()));
+
+			if ((*midiEvent)->getTime() == 0) break; // no insert
                     }
                 }
+
+		// did we have a bank select? if so, insert that too
+
+		if (msb >= 0) {
+		    rosegardenSegment->insert
+			(Controller(MIDI_CONTROLLER_BANK_MSB, msb).
+			 getAsEvent(rosegardenTime));
+		}
+		if (lsb >= 0) {
+		    rosegardenSegment->insert
+			(Controller(MIDI_CONTROLLER_BANK_LSB, msb).
+			 getAsEvent(rosegardenTime));
+		}
+
+		rosegardenEvent =
+		    ProgramChange((*midiEvent)->getData1()).
+		    getAsEvent(rosegardenTime);
+		rosegardenSegment->insert(rosegardenEvent);
                 break;
 
             case MIDI_CTRL_CHANGE:
 
-		// If it's a bank select, interpret it instead of just
-		// inserting it as a Rosegarden event
+		// If it's a bank select, interpret it (or remember
+		// for later insertion) instead of just inserting it
+		// as a Rosegarden event
 
 		if ((*midiEvent)->getData1() == MIDI_CONTROLLER_BANK_MSB) {
 		    msb = (*midiEvent)->getData2();
@@ -951,6 +971,46 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		if ((*midiEvent)->getData1() == MIDI_CONTROLLER_BANK_LSB) {
 		    lsb = (*midiEvent)->getData2();
 		    break;
+		}
+
+		// If it's something we can use as an instrument
+		// parameter, and it's at time zero, and we already
+		// have an instrument, then apply it to the instrument
+		// instead of inserting
+
+		if (instrument && (*midiEvent)->getTime() == 0) {
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_VOLUME) {
+			instrument->setVolume((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_PAN) {
+			instrument->setPan((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_ATTACK) {
+			instrument->setAttack((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_RELEASE) {
+			instrument->setRelease((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_FILTER) {
+			instrument->setFilter((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_RESONANCE) {
+			instrument->setResonance((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_CHORUS) {
+			instrument->setChorus((*midiEvent)->getData2());
+			break;
+		    }
+		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_REVERB) {
+			instrument->setReverb((*midiEvent)->getData2());
+			break;
+		    }
 		}
 
 		rosegardenEvent =
@@ -1536,11 +1596,16 @@ MidiFile::convertToMidi(Composition &comp)
     {
         lastMidiTime = 0;
 
-        // First sort the track with the MidiEvent comparator
+        // First sort the track with the MidiEvent comparator.  Use
+        // stable_sort so that events with equal times are maintained
+        // in their current order (important for e.g. bank-program
+        // pairs, or the controllers at the start of the track which
+        // should follow the program so we can treat them correctly
+        // when re-reading).
         //
-        sort(m_midiComposition[i].begin(),
-             m_midiComposition[i].end(),
-             MidiEventCmp());
+        std::stable_sort(m_midiComposition[i].begin(),
+			 m_midiComposition[i].end(),
+			 MidiEventCmp());
 
         for (it = m_midiComposition[i].begin();
              it != m_midiComposition[i].end();

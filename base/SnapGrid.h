@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -88,6 +89,19 @@ public:
      * will be returned.
      */
     timeT snapX(double x, SnapDirection d = SnapEither) const;
+
+    /**
+     * Snap a given time to the nearest time on the grid.
+     * Unlike snapX, this is not useful in NoSnap mode.
+     * If the snap time is greater than the bar duration
+     * at this point, the bar duration will be used instead.
+     *
+     * If d is SnapLeft or SnapRight, a time to the left or
+     * right respectively of the given coordinate will be
+     * returned; otherwise the nearest time on either side
+     * will be returned.
+     */
+    timeT snapTime(timeT t, SnapDirection d = SnapEither) const;
 
     /**
      * Snap a given y-coordinate to the nearest lower

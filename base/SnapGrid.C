@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -85,7 +86,12 @@ SnapGrid::getSnapTime(timeT time) const
 timeT
 SnapGrid::snapX(double x, SnapDirection direction) const
 {
-    timeT time = m_rulerScale->getTimeForX(x);
+    return snapTime(m_rulerScale->getTimeForX(x), direction);
+}
+
+timeT
+SnapGrid::snapTime(timeT time, SnapDirection direction) const
+{
     if (m_snapTime == NoSnap) return time;
 
     Rosegarden::Composition *composition = m_rulerScale->getComposition();

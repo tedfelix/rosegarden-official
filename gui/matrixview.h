@@ -235,6 +235,9 @@ public slots:
      */
     void slotEditDelete();
 
+    virtual void slotStepBackward(); // override from EditView
+    virtual void slotStepForward(); // override from EditView
+
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();

@@ -1936,6 +1936,24 @@ MatrixView::getInsertionTime()
 }
 
 void
+MatrixView::slotStepBackward()
+{
+    Rosegarden::timeT time(getInsertionTime());
+    slotSetInsertCursorPosition(Rosegarden::SnapGrid(&m_hlayout).snapTime
+				(time-1,
+				 Rosegarden::SnapGrid::SnapLeft));
+}
+
+void
+MatrixView::slotStepForward()
+{
+    Rosegarden::timeT time(getInsertionTime());
+    slotSetInsertCursorPosition(Rosegarden::SnapGrid(&m_hlayout).snapTime
+				(time+1,
+				 Rosegarden::SnapGrid::SnapRight));
+}
+
+void
 MatrixView::slotJumpCursorToPlayback()
 {
     slotSetInsertCursorPosition(getDocument()->getComposition().getPosition());

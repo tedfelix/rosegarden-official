@@ -270,7 +270,7 @@ EditView::slotStepBackward()
     Rosegarden::Segment::iterator i = segment->findTime(time);
 
     while (i != segment->begin() &&
-	   (i == segment->end() || (*i)->getAbsoluteTime() == time)) --i;
+	   (i == segment->end() || (*i)->getAbsoluteTime() >= time)) --i;
 
     if (i != segment->end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
 }
@@ -284,7 +284,7 @@ EditView::slotStepForward()
     Rosegarden::Segment::iterator i = segment->findTime(time);
 
     while (segment->isBeforeEndMarker(i) &&
-	   (*i)->getAbsoluteTime() == time) ++i;
+	   (*i)->getAbsoluteTime() <= time) ++i;
 
     if (!segment->isBeforeEndMarker(i)) {
 	slotSetInsertCursorPosition(segment->getEndMarkerTime());
