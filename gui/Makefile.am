@@ -14,6 +14,7 @@ rosegarden_SOURCES = \
 	ktmpstatusmsg.cpp \
         loopruler.cpp \
 	main.cpp \
+	matrixelement.cpp \
 	matrixview.cpp \
 	multiviewcommandhistory.cpp \
 	notationcanvasview.cpp \

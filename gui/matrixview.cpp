@@ -302,44 +302,6 @@ void MatrixHLayout::finishLayout()
 
 //----------------------------------------------------------------------
 
-MatrixElement::MatrixElement(Rosegarden::Event *event) :
-    Rosegarden::ViewElement(event),
-    m_canvasRect(new QCanvasMatrixRectangle(*this, 0)),
-    m_layoutX(0.0),
-    m_layoutY(0.0)
-{
-//     kdDebug(KDEBUG_AREA) << "new MatrixElement "
-//                          << this << " wrapping " << event << endl;
-}
-
-MatrixElement::~MatrixElement()
-{
-//     kdDebug(KDEBUG_AREA) << "MatrixElement " << this << "::~MatrixElement() wrapping "
-//                          << event() << endl;
-
-    m_canvasRect->hide();
-    delete m_canvasRect;
-}
-
-void MatrixElement::setCanvas(QCanvas* c)
-{
-    if (!m_canvasRect->canvas()) {
-        
-        m_canvasRect->setCanvas(c);
-        m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
-        m_canvasRect->setPen(RosegardenGUIColours::MatrixElementBorder);
-        m_canvasRect->show();
-    }
-}
-
-bool MatrixElement::isNote() const
-{
-    return event()->isa(Rosegarden::Note::EventType);
-}
-
-
-//----------------------------------------------------------------------
-
 
 MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
 			 int id, int vResolution) :
