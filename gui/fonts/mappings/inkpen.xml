@@ -14,7 +14,7 @@
 
 <font-requirements>
 	<font-requirement font-id="0" names="inkpen2,inkpen"/>
-	<font-requirement font-id="1" names="inkpen2 text,comic sans ms,times new roman"/> <!-- text font -->
+	<font-requirement font-id="1" names="inkpen2 text,comic sans ms,times new roman,times,DEFAULT"/> <!-- text font -->
 </font-requirements>
 
 <font-sizes>

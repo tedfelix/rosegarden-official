@@ -11,7 +11,7 @@
 
 <font-requirements>
 	<font-requirement font-id="0" names="feta,mscore20"/>
-	<font-requirement font-id="1" name="times new roman"/> <!-- text font -->
+	<font-requirement font-id="1" names="times new roman,times,DEFAULT"/> <!-- text font -->
 </font-requirements>
 
 <font-sizes>

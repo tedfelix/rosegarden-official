@@ -584,6 +584,12 @@ NoteFontMap::checkFont(QString name, int size, QFont &font) const
 {
     NOTATION_DEBUG << "NoteFontMap::checkFont: name is " << name << ", size " << size << endl;
 
+    if (name == "DEFAULT") {
+	font = QFont();
+	font.setPixelSize(size);
+	return true;
+    }
+
     font = QFont(name, size, QFont::Normal);
     font.setPixelSize(size);
 

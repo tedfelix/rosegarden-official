@@ -4316,7 +4316,8 @@ AlsaDriver::checkForNewClients()
 	    if ((*i)->isReadable()) {
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
-		    if ((*j)->getConnection() == "" &&
+		    if ((*j)->getType() == Rosegarden::Device::Midi &&
+			(*j)->getConnection() == "" &&
 			(*j)->getDirection() == MidiDevice::Record) {
 			AUDIT_STREAM << "(Reusing record device " << (*j)->getId()
 				  << ")" << std::endl;
@@ -4333,7 +4334,8 @@ AlsaDriver::checkForNewClients()
 	    if ((*i)->isWriteable()) {
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
-		    if ((*j)->getConnection() == "" &&
+		    if ((*j)->getType() == Rosegarden::Device::Midi &&
+			(*j)->getConnection() == "" &&
 			(*j)->getDirection() == MidiDevice::Play) {
 			AUDIT_STREAM << "(Reusing play device " << (*j)->getId()
 				  << ")" << std::endl;
