@@ -28,6 +28,7 @@
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 #include "notationsets.h"
+#include "widgets.h"
 #include "Quantizer.h"
 #include "Composition.h"
 #include "SegmentNotationHelper.h"
@@ -69,7 +70,9 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_spacing(1.0),
     m_npf(npf),
     m_legatoQuantizer(legatoQuantizer),
-    m_properties(properties)
+    m_properties(properties),
+    m_progressDlg(0),
+    m_staffCount(0)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -178,12 +181,13 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
         smin += m_npf->getDotWidth()/2;
     }
 
-    /* if there aren't many of the shortest notes, we don't want to
-       allow so much space to accommodate them */
+    // if there aren't many of the shortest notes, we don't want to
+    // allow so much space to accommodate them 
     if (shortCount < 3) smin -= 3 - shortCount;
 
-    int gapPer = 
-        getComfortableGap((*shortest)->event()->get<Int>(m_properties.NOTE_TYPE)) +
+    int gapPer =
+	getComfortableGap((*shortest)->event()->get<Int>
+			  (m_properties.NOTE_TYPE)) +
         smin;
 
     kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
@@ -249,8 +253,6 @@ NotationHLayout::legatoQuantize(Segment &segment)
 
 	    if ((*i)->isa(Note::EventType)) {
 		
-		timeT graceNoteOffset = 0;
-
 		if ((*i)->has(IS_GRACE_NOTE) &&
 		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
 
@@ -379,7 +381,6 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	// for partial scans where this bar turns out to precede the scan start
 	bool leaveSizesAlone = false;
 
-        timeT apparentBarDuration = 0;
 	timeT actualBarEnd = barTimes.first;
 
 	AccidentalTable accTable(key, clef);
@@ -426,17 +427,15 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 		++totalCount;
 		
-		apparentBarDuration +=
-		    scanChord(notes, itr, clef, key, accTable,
-			      fixedWidth, baseWidth, shortest, shortCount, to);
+		scanChord(notes, itr, clef, key, accTable,
+			  fixedWidth, baseWidth, shortest, shortCount, to);
 
 	    } else if (el->isRest()) {
 
 		++totalCount;
 
-		apparentBarDuration +=
-		    scanRest(notes, itr,
-			     fixedWidth, baseWidth, shortest, shortCount);
+		scanRest(notes, itr,
+			 fixedWidth, baseWidth, shortest, shortCount);
 
 	    } else if (el->event()->isa(Indication::EventType)) {
 
@@ -454,8 +453,8 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
             el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
 	}
 
-	barCorrect = (actualBarEnd == barTimes.first + apparentBarDuration);
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
+	barCorrect = (actualBarEnd == barTimes.second);
 
 	if (!leaveSizesAlone) {
 	    double idealWidth = 
@@ -467,6 +466,11 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 			   actualBarEnd - barTimes.first);
 	}
 
+	if (m_progressDlg && (endTime > startTime)) {
+	    m_progressDlg->setCompleted
+		((barTimes.second - startTime) * 95 / (endTime - startTime));
+	    m_progressDlg->processEvents();
+	}
 	++barNo;
     }
 
@@ -539,7 +543,7 @@ NotationHLayout::setBarSizeData(StaffType &staff,
 }
 
  
-timeT
+void
 NotationHLayout::scanChord(NotationElementList *notes,
 			   NotationElementList::iterator &itr,
 			   const Rosegarden::Clef &clef,
@@ -606,7 +610,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     if (grace) {
 	fixedWidth += m_npf->getNoteBodyWidth();
-	return 0;
+	return;
     }
 
     NotationElementList::iterator myShortest = chord.getShortestElement();
@@ -630,10 +634,10 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
-    return d;
+    return;
 }
 
-timeT
+void
 NotationHLayout::scanRest
 (NotationElementList *notes, NotationElementList::iterator &itr,
  int &, int &baseWidth,
@@ -659,7 +663,7 @@ NotationHLayout::scanRest
 	}
     }
 
-    return d;
+    return;
 }
 
 NotationHLayout::StaffType *
@@ -1033,9 +1037,19 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 
     if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
     else reconcileBarsLinear();
+
+    int staffNo = 0;
       
-    for (BarDataMap::iterator i(m_barData.begin()); i != m_barData.end(); ++i) {
+    for (BarDataMap::iterator i(m_barData.begin());
+	 i != m_barData.end(); ++i) {
+	
+	if (m_progressDlg) {
+	    m_progressDlg->setCompleted(50 + 50 * staffNo / m_barData.size());
+	    m_progressDlg->processEvents();
+	}
+
 	layout(i, startTime, endTime);
+	++staffNo;
     }
 }
 
@@ -1263,18 +1277,19 @@ NotationHLayout::positionRest(StaffType &staff,
 		        bdi->second.sizeData.fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
+
     rest->setLayoutAirspace(rest->getLayoutX(), delta);
 
     // Situate the rest somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
 
-    int baseWidth = m_npf->getRestWidth
+    int justRestWidth = m_npf->getRestWidth
 	(Note(rest->event()->get<Int>(m_properties.NOTE_TYPE),
 	      rest->event()->get<Int>(m_properties.NOTE_DOTS)));
 
-    if (delta > 2 * baseWidth) {
-        int shift = (delta - 2 * baseWidth) / 4;
-        shift = std::min(shift, (baseWidth * 3));
+    if (delta > 2 * justRestWidth) {
+        int shift = (delta - 2 * justRestWidth) / 4;
+        shift = std::min(shift, (justRestWidth * 3));
         rest->setLayoutX(rest->getLayoutX() + shift);
     }
  
@@ -1306,7 +1321,7 @@ NotationHLayout::getSpacingDuration(StaffType &staff,
     SegmentNotationHelper helper(staff.getSegment());
 
     NotationElementList::iterator i = chord.getShortestElement();
-    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
+//    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
     timeT d(helper.getNotationDuration((*i)->event()));
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
@@ -1342,7 +1357,6 @@ NotationHLayout::positionChord(StaffType &staff,
 
     timeT barDuration = bdi->second.sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
-
     long delta = (((int)bdi->second.sizeData.idealWidth -
 		        bdi->second.sizeData.fixedWidth) *
 		  getSpacingDuration(staff, chord)) /

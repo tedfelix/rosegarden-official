@@ -105,6 +105,15 @@
 
   <!-- cc: I think we should omit the Installation chapter -->
 
+      <!-- List any special requirements for your application
+      here. This should include: .Libraries or other software that is
+      not included in kdesupport, kdelibs, or kdebase.  .Hardware
+      requirements like amount of RAM, disk space, graphics card
+      capabilities, screen resolution, special expansion cards, etc.
+      .Operating systems the app will run on. If your app is designed
+      only for a specific OS, (you wrote a graphical LILO configurator
+      for example) put this information here.  -->
+<!--
   <chapter id="installation">
     <title>Installation</title>
 
@@ -118,15 +127,6 @@
 
     <sect1 id="requirements">
       <title>Requirements</title>
-
-      <!-- List any special requirements for your application
-      here. This should include: .Libraries or other software that is
-      not included in kdesupport, kdelibs, or kdebase.  .Hardware
-      requirements like amount of RAM, disk space, graphics card
-      capabilities, screen resolution, special expansion cards, etc.
-      .Operating systems the app will run on. If your app is designed
-      only for a specific OS, (you wrote a graphical LILO configurator
-      for example) put this information here.  -->
 
       <para>
 
@@ -178,7 +178,7 @@
     </sect1>
 
   </chapter>
-
+-->
 
 
 <!--
@@ -248,14 +248,232 @@
       <title>The Notation editor</title>
 
       <!-- Introduction, purpose -->
+
+      <sect2 id="nv-introduction">
+	<title>Introduction</title>
+
+	<para>
+
+	  The Rosegarden notation editor enables you to view and edit
+	  one or more staffs in traditional score notation.
+
+	</para><para>
+
+	  Rosegarden aims to present scores with the best possible
+	  layout compatible with its primary focus as a sequencer
+	  application.  This means that although the editor supports
+	  chords, overlapping and nested beamed groups, triplets and
+	  arbitrary tuplets, grace notes, dynamics, accents, text and
+	  so on, it does not provide as much fine control over layout
+	  (especially in contrapuntal music) as a dedicated score
+	  editing program might.  Rosegarden does not aim to produce
+	  typeset-quality score, although it can <link
+	  linkend="commands-main-file-export-lilypond">write Lilypond
+	  files</link> which may form a good basis for typesetting.
+
+	</para>
+      </sect2>
+
       <!-- Single and multiple staffs, and "current staff" -->
+
+      <sect2 id="nv-staffs">
+	<title>Single and Multiple Staffs</title>
+
+	<para>
+	  There are two ways to open a notation editor from the
+	  Rosegarden main window:
+
+	  <variablelist>
+
+	    <varlistentry>
+	      <term>Double-clicking on segments</term>
+	      <listitem>
+		
+		<para>The most obvious way is just to double-click on
+		a segment in the main canvas.  So long as you haven't
+		reconfigured <!-- !!!link --> Rosegarden to use the
+		matrix editor as a default, double-clicking a segment
+		will open it as a single staff in a notation editor
+		window.</para>
+		
+		<para>You can also open a multi-staff editor this way:
+		holding down the Shift key, select (with a single
+		mouse click) each of the segments on the main view
+		that you want to open, but double-click on the last
+		one.  All of the selected segments will then be opened
+		together in a single notation window.</para>
+
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>The Open in Notation Editor menu functions</term>
+	      <listitem>
+
+		<para>Alternatively, you can use the main window's <!-- !!! link linkend="commands-main-segments-notation" -->Open in Notation Editor<!-- /link --> menu function, either on the Segments menu or on the right-button popup menu on a segment in the canvas.  Select the segments you want to edit (by shift-clicking as above, or by using the <!-- !!! link linkend="commands-main-edit-select-all-segments" -->Select All Segments<!-- /link --> function) and then select <!-- !!! link linkend="commands-main-segments-notation" -->Open in Notation Editor<!-- /link -->.</para>
+	      </listitem>
+	      
+	    </varlistentry>
+	  </variablelist>
+
+	</para>
+
+	<para>
+	  If you have more than one staff visible in the notation
+	  editor, only one of them can be "current" at once.  The
+	  current staff can be distinguished because it has the insert
+	  cursor on it (see <link linkend="nv-rulers">Rulers and
+	  Cursors</link>), and this is the staff on which any editing
+	  operations that use the insert cursor will take place.  The
+	  topmost staff is the current one by default, but you can
+	  switch to a different staff by shift-clicking on it <!--- !!! check this --> or by using the <!-- link linkend="commands-nv-move-cursor-up-staff" -->Move Cursor Up Staff<!-- /link --> and  <!-- link linkend="commands-nv-move-cursor-up-staff" -->Move Cursor Down Staff<!-- /link --> menu functions.
+	</para>
+
+      </sect2>
+
       <!-- Linear and page layouts -->
+
+      <sect2 id="nv-layout">
+	<title>Linear and Page Layout</title>
+
+	<para>
+	  The usual way the notation editor displays staffs is known
+	  as Linear layout: one staff on top of another, with each
+	  staff as a single, horizontally scrollable long line.  Some
+	  of the functions of the editor (such as the <link
+	  linkend="nv-rulers">Rulers</link>) are only available in
+	  Linear layout.
+	</para>
+
+	<para>
+	  However, you can also display staffs in Page layout, in
+	  which each staff breaks at the end of a line, starting a new
+	  line below the remaining staffs.  This is essentially the
+	  same layout as found in printed music (except that it isn't
+	  actually divided into physical pages).  Most, but not all,
+	  of the display and editing functions work in Page layout as
+	  well as in Linear layout.
+	</para>
+
+	<para>
+	  To switch between the two, use the <!-- !!!link linkend="commands-nv-view-linear" -->Linear Layout<!-- /link --> and <!-- !!!link linkend="commands-nv-view-linear" -->Page Layout<!-- /link --> menu functions.
+	</para>
+      </sect2>
+
+      <!-- Rulers and Cursors -->
+
+      <sect2 id="nv-rulers">
+	<title>Rulers and Cursors</title>
+
+	<para>
+	  The Rosegarden notation editor window includes two rulers
+	  and two cursors.  The rulers are the horizontal strips
+	  divided up with tickmarks at top and bottom of the main
+	  notation canvas, and the cursors are the coloured vertical
+	  lines shown initially at the start of the top staff in the
+	  editor.  <!-- !!! screenshot -->
+	</para>
+
+	<para>
+	  The purple cursor is the insert cursor.  It shows the point
+	  at which operations such as paste will take place.  It can
+	  be repositioned by clicking or dragging on the top ruler,
+	  although it can only ever be positioned between two events
+	  on its staff.
+	</para>
+
+	<para>
+	  The blue cursor is the playback pointer.  Just like the
+	  similar cursors in the main window and the matrix views,
+	  this shows the location of the current playback or record
+	  position.  It can be repositioned using the bottom ruler.
+	</para>
+
+	<para>
+	  Note that the rulers are only shown in <link
+	  linkend="nv-layout">Linear layout</link> mode.
+	</para>
+
+      </sect2>
+
       <!-- Display conventions (annotated picture with some selected notes,
            some quantized notes, a bar of incorrect length etc) -->
+
       <!-- Selection -->
+
       <!-- Insertion: notes, auto-ties, accidentals -->
-      <!-- Rulers -->
       <!-- Quantization, smoothing, and display of quantized notes -->
+
+      <sect2 id="nv-quantization">
+	<title>Quantization and smoothing</title>
+
+	<para>
+	  Rosegarden is a multi-purpose program: it is a notation
+	  editor, but it is primarily a sequencer and editor for
+	  performed music.  And in performance, of course, the times
+	  and durations of notes are rarely as precise as they are on
+	  a printed score.  This means that Rosegarden often has to do
+	  a lot of rounding (for which we loosely use the term
+	  quantization) of the basic note times and durations when
+	  attempting to make meaningful notes to show in the notation
+	  editor.  This initial quantization is normally done only for
+	  notation display: it doesn't affect the notes that play, or
+	  edit in other views such as the matrix.
+	</para>
+
+	<para>
+	  You can see which
+	  notes have required quantization (either of start time or
+	  duration) because they are shown in green on the score.  It
+	  is also possible to increase the quantization level in various
+	  ways:
+	</para>
+
+	<variablelist>
+
+	  <varlistentry>
+	    <term>Smoothing</term>
+	    <listitem>
+	      <para>
+		Smoothing is a mechanism by which Rosegarden tries to
+		make sensible guesses about the intended durations of
+		notes, with the sole aim of making them look better in
+		score notation.  For example, a note that is
+		apparently a little "too short", followed by a short
+		rest, will often be rounded up to fill the rest -- but
+		the same note followed by a short note instead will
+		be left as it is.
+	      </para>
+	      <para>
+		You can increase the level of smoothing with the
+		smoothing slider on the layout toolbar.  Smoothing
+		does not affect the underlying notes, only the display.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term>Selective quantization</term>
+	    <listitem>
+	      <para>
+		If you really do want to quantize the underlying
+		notes, you can use the <!-- !!!link linkend="commands-nv-transforms-quantize" -->Quantize<!-- /link --> menu function, which operates on a selection of notes (see <!-- !!! link linkend="nv-selection" -->Selection<!-- /link -->).
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term></term>
+	    <listitem>
+	      <para>
+	      </para>
+	    </listitem>
+	  </varlistentry>
+
+	</variablelist>
+
+      </sect2>
+
       <!-- Text -->
       <!-- Indications -->
       <!-- Beamed groups, including overlapping and nesting them -->
@@ -419,7 +637,8 @@
 	<title>The File Menu</title>
 	<para>
 	  <variablelist>
-	    <varlistentry>
+
+	    <varlistentry id="commands-main-file-new">
 	      <term><menuchoice>
 		  <shortcut>
 		    <keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
@@ -427,9 +646,87 @@
 		  <guimenu>File</guimenu>
 		  <guimenuitem>New</guimenuitem>
 		</menuchoice></term>
-	      <listitem><para><action>Creates a new document</action></para></listitem>
+	      <listitem><para><action>Creates a new composition.</action></para></listitem>
 	    </varlistentry>
-	    <varlistentry>
+
+	    <varlistentry id="commands-main-file-open">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>o</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Open</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Opens an existing composition from a Rosegarden-4 (.rg) file.</action></para></listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-main-file-import">
+	      <term><menuchoice>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Import</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para>This submenu contains functions for importing compositions from other file formats.</para>
+
+		<variablelist>
+
+		  <varlistentry id="commands-main-file-import-midi">
+		    <term><menuchoice>
+			<guimenu>Import</guimenu>
+			<guimenuitem>Import MIDI file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Creates a new composition from the contents of an existing MIDI (.mid) file.</action></para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-import-rg21">
+		    <term><menuchoice>
+			<guimenu>Import</guimenu>
+			<guimenuitem>Import Rosegarden 2.1 file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Creates a new composition from the contents of an existing Rosegarden 2.1 (.rose) file.</action></para></listitem>
+		  </varlistentry>
+
+		</variablelist>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-main-file-export">
+	      <term><menuchoice>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Export</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para>This submenu contains functions for exporting the contents of compositions to other file formats.</para>
+
+		<variablelist>
+
+		  <varlistentry id="commands-main-file-export-midi">
+		    <term><menuchoice>
+			<guimenu>Export</guimenu>
+			<guimenuitem>Export MIDI file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Saves the contents of the current composition into a new MIDI file.</action>  Note that not all data in the Rosegarden composition necessarily can or will be saved in the MIDI format.</para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-export-csound">
+		    <term><menuchoice>
+			<guimenu>Export</guimenu>
+			<guimenuitem>Export Csound score file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Saves the contents of the current composition into a new Csound score file.</action>  Together with a suitable orchestra file (not supplied), this can be used to play the composition through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all data in the Rosegarden composition necessarily can or will be saved in the Csound format.</para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-export-lilypond">
+		    <term><menuchoice>
+			<guimenu>Export</guimenu>
+			<guimenuitem>Export Lilypond file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Saves the contents of the current composition into a new Lilypond file.</action>  This can then be processed by the <ulink url="http://www.lilypond.org/">Lilypond</ulink> system to produce typeset-quality music, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Lilypond format.</para></listitem>
+		  </varlistentry>
+
+		</variablelist>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-main-file-save">
 	      <term><menuchoice>
 		  <shortcut>
 		    <keycombo><keycap>Ctrl</keycap><keycap>s</keycap></keycombo>
@@ -437,9 +734,40 @@
 		  <guimenu>File</guimenu>
 		  <guimenuitem>Save</guimenuitem>
 		</menuchoice></term>
-	      <listitem><para><action>Saves the document</action></para></listitem>
+	      <listitem><para><action>Saves the composition.</action></para></listitem>
 	    </varlistentry>
-	    <varlistentry>
+
+	    <varlistentry id="commands-main-file-save-as">
+	      <term><menuchoice>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Save As...</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Saves the composition with a new filename.</action></para></listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-main-file-close">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>w</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Close</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Closes the current composition.</action></para></listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-main-file-print">
+	      <term><menuchoice>
+		  <shortcut>
+		    <keycombo><keycap>Ctrl</keycap><keycap>p</keycap></keycombo>
+		  </shortcut>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Print</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para><action>Prints the current composition.</action> At the time of writing, the print function is incomplete.  We recommend using the <link linkend="commands-main-file-export-lilypond">Export Lilypond file</link> function and printing with Lilypond instead.</para></listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-main-file-quit">
 	      <term><menuchoice>
 		  <shortcut>
 		    <keycombo><keycap>Ctrl</keycap><keycap>q</keycap></keycombo>
@@ -449,6 +777,7 @@
 		</menuchoice></term>
 	      <listitem><para><action>Quits &rosegarden;</action></para></listitem>
 	    </varlistentry>
+
 	  </variablelist>
 	</para>
 
@@ -475,7 +804,7 @@
 	    <varlistentry id="commands-nv-menu-file-close">
 	      <term><menuchoice>
 		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
+		    <keycombo><keycap>Ctrl</keycap><keycap>w</keycap></keycombo>
 		  </shortcut>
 		  <guimenu>File</guimenu>
 		  <guimenuitem>Close</guimenuitem>
@@ -1064,18 +1393,19 @@
 
   <!-- cc: I also think we should omit this chapter, but link to the online FAQ from the handbook's introduction -->
 
+    <!-- (OPTIONAL but recommended) This chapter should include all of
+    the silly (and not-so-silly) newbie questions that fill up your
+    mailbox. This chapter should be reserved for BRIEF questions and
+    answers! If one question uses more than a page or so then it
+    should probably be part of the "Using this Application" chapter
+    instead. You should use links to cross-reference questions to the
+    parts of your documentation that answer them.  This is also a
+    great place to provide pointers to other FAQ's if your users must
+    do some complicated configuration on other programs in order for
+    your application work. -->
+<!--
   <chapter id="faq">
     <title>Questions and Answers</title>
-
-    <!-- (OPTIONAL but recommended) This chapter should include all of the silly
-    (and not-so-silly) newbie questions that fill up your mailbox. This chapter
-    should be reserved for BRIEF questions and answers! If one question uses more
-    than a page or so then it should probably be part of the
-    "Using this Application" chapter instead. You should use links to
-    cross-reference questions to the parts of your documentation that answer them.
-    This is also a great place to provide pointers to other FAQ's if your users
-    must do some complicated configuration on other programs in order for your
-    application work. -->
 
     <para></para>
 
@@ -1100,8 +1430,7 @@
       </qandaentry>
     </qandaset>
   </chapter>
-
-
+-->
 
 
   <chapter id="credits">

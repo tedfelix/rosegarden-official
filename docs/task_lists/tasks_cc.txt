@@ -27,7 +27,7 @@ Post-0.1.5-and-a-bit task list
 
  7. Things like Split Segment and Resize Segment won't work correctly
     until the Segment's moveable start/end markers are implemented.  Look
-    into this.
+    into this. [DONE]
 
     TO FIX:
 

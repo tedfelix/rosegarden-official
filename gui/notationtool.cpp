@@ -21,6 +21,7 @@
 
 #include <qpopupmenu.h>
 #include <qtimer.h>
+#include <qregexp.h>
 #include <qapplication.h>
 
 #include <kmessagebox.h>
@@ -477,6 +478,10 @@ void NoteInserter::slotSetNote(Rosegarden::Note::Type nt)
 void NoteInserter::slotSetDots(unsigned int dots)
 {
     m_noteDots = dots;
+
+    KToggleAction *dotsAction = dynamic_cast<KToggleAction *>
+	(actionCollection()->action("toggle_dot"));
+    if (dotsAction) dotsAction->setChecked(dots > 0);
 }
 
 void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental)
@@ -546,8 +551,11 @@ void NoteInserter::slotDoubleFlat()
 
 void NoteInserter::slotToggleDot()
 {
-    // TODO : sync. this with the NotationView toolbars
     m_noteDots = (m_noteDots) ? 0 : 1;
+    Note note(m_noteType, m_noteDots);
+    QString actionName(strtoqstr(note.getShortName()));
+    actionName.replace(QRegExp(" "), "_");
+    m_parentView->actionCollection()->action(actionName)->activate();
 }
 
 void NoteInserter::slotToggleAutoBeam()
@@ -567,7 +575,11 @@ void NoteInserter::slotSelectSelected()
 
 void NoteInserter::slotRestsSelected()
 {
-    //!!! Implement!
+    Note note(m_noteType, m_noteDots);
+    QString actionName(strtoqstr(note.getShortName()));
+    actionName.replace(QRegExp(" "), "_");
+    actionName += "_rest";
+    m_parentView->actionCollection()->action(actionName)->activate();
 }
 
 const char* NoteInserter::m_actionsAccidental[][5] = 
@@ -636,9 +648,22 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     return command->getLastInsertedEvent();
 } 
 
+void RestInserter::slotToggleDot()
+{
+    m_noteDots = (m_noteDots) ? 0 : 1;
+    Note note(m_noteType, m_noteDots);
+    QString actionName(strtoqstr(note.getShortName()));
+    actionName.replace(QRegExp(" "), "_");
+    actionName += "_rest";
+    m_parentView->actionCollection()->action(actionName)->activate();
+}
+
 void RestInserter::slotNotesSelected()
 {
-    //!!! Implement!
+    Note note(m_noteType, m_noteDots);
+    QString actionName(strtoqstr(note.getShortName()));
+    actionName.replace(QRegExp(" "), "_");
+    m_parentView->actionCollection()->action(actionName)->activate();
 }
 
 

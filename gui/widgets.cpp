@@ -217,6 +217,12 @@ RosegardenProgressDialog::setCompleted(int value)
 }
 
 void
+RosegardenProgressDialog::incrementCompletion(int value)
+{
+    setCompleted(m_value + value);
+}
+
+void
 RosegardenProgressDialog::processEvents()
 {
     kapp->processEvents(50);

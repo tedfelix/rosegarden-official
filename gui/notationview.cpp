@@ -245,7 +245,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) {
 	show();
 	m_progressDlg = new RosegardenProgressDialog
-	    (i18n("Starting..."), i18n("Cancel"), 100, this,
+	    (i18n("Starting..."), 0, 100, this,
 	     i18n("Notation progress"), true);
 	m_progressDlg->setAutoClose(false);
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -709,11 +709,11 @@ void NotationView::setupActions()
                 SLOT(slotTransformsUntieNotes()), actionCollection(),
                 "untie_notes");
 
-    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)), 0, this,
+    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)), 0,Key_Up + CTRL, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
 
-    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(false)), 0, this,
+    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(false)), 0, Key_Down + CTRL, this,
                 SLOT(slotTransformsStemsDown()), actionCollection(),
                 "stems_down");
 
@@ -1102,12 +1102,18 @@ NotationView::setPageMode(bool pageMode)
 }   
 
 
-#define UPDATE_PROGRESS(n) \
-	progressCount += (n); \
-	if (m_progressDlg && (progressTotal > 0)) { \
-	    m_progressDlg->setCompleted(progressCount * 100 / progressTotal); \
-	    m_progressDlg->processEvents(); \
+void
+NotationView::paintEvent(QPaintEvent *e)
+{
+    if (m_hlayout.isPageMode()) {
+	int diff = width() - 50 - m_hlayout.getPageWidth();
+	if (diff > -10 && diff < 10) {
+	    m_hlayout.setPageWidth(width() - 50);
+	    refreshSegment(0, 0, 0);
 	}
+    }
+    EditView::paintEvent(e);
+}
 
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
@@ -1115,36 +1121,26 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     if (m_progressDlg) {
 	m_progressDlg->setLabelText(i18n("Laying out score..."));
 	m_progressDlg->processEvents();
+	m_hlayout.setProgressDialog(m_progressDlg);
+	m_hlayout.setStaffCount(m_staffs.size());
     }
 
     START_TIMING;
     unsigned int i;
-
-    int progressTotal = m_staffs.size() * 3 + 5;
-    int progressCount = 0;
 
     for (i = 0; i < m_staffs.size(); ++i) {
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
         m_hlayout.resetStaff(*m_staffs[i], startTime, endTime);
-	UPDATE_PROGRESS(2);
-
         m_vlayout.resetStaff(*m_staffs[i], startTime, endTime);
-	UPDATE_PROGRESS(1);
-
         m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
-	UPDATE_PROGRESS(2);
-
         m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
-	UPDATE_PROGRESS(1);
     }
 
     m_hlayout.finishLayout(startTime, endTime);
-    UPDATE_PROGRESS(3);
-
     m_vlayout.finishLayout(startTime, endTime);
-    UPDATE_PROGRESS(2);
+    m_hlayout.setProgressDialog(0);
 
     // find the last finishing staff for future use
 
@@ -1383,7 +1379,7 @@ void NotationView::refreshSegment(Segment *segment,
     bool ownProgressDlg = false;
     if (!m_progressDlg) {
 	m_progressDlg = new RosegardenProgressDialog
-	    (i18n("Updating..."), i18n("Cancel"), 100, this,
+	    (i18n("Updating..."), 0, 100, this,
 	     i18n("Notation progress"), true);
 	m_progressDlg->setAutoClose(false);
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1448,6 +1444,15 @@ void NotationView::refreshSegment(Segment *segment,
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }
 
+
+
+#define UPDATE_PROGRESS(n) \
+	progressCount += (n); \
+	if (m_progressDlg && (progressTotal > 0)) { \
+	    m_progressDlg->setCompleted(progressCount * 100 / progressTotal); \
+	    m_progressDlg->processEvents(); \
+	}
+
 void NotationView::readjustCanvasSize()
 {
     START_TIMING;
@@ -1497,7 +1502,8 @@ void NotationView::slotNoteAction()
 {
     const QObject* sigSender = sender();
 
-    NoteActionDataMap::Iterator noteAct = m_noteActionDataMap->find(sigSender->name());
+    NoteActionDataMap::Iterator noteAct =
+	m_noteActionDataMap->find(sigSender->name());
     
     if (noteAct != m_noteActionDataMap->end())
         setCurrentSelectedNote(*noteAct);

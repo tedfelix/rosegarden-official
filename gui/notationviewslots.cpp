@@ -1347,7 +1347,7 @@ void NotationView::slotPageMode()
 
 void NotationView::slotLabelChords()
 {
-    if (m_hlayout.getPageMode()) return;
+    if (m_hlayout.isPageMode()) return;
     m_chordNamesVisible = !m_chordNamesVisible;
 
     if (!m_chordNamesVisible) {
@@ -1359,7 +1359,7 @@ void NotationView::slotLabelChords()
 
 void NotationView::slotShowTempos()
 {
-    if (m_hlayout.getPageMode()) return;
+    if (m_hlayout.isPageMode()) return;
     m_temposVisible = !m_temposVisible;
 
     if (!m_temposVisible) {

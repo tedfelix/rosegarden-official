@@ -444,14 +444,25 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
     int barThickness = m_resolution / 5;
     if (barThickness < 1) barThickness = 1;
 
-    for (int i = 0; i < barThickness; ++i) {
+    int testRow = getRowForLayoutX(layoutX);
+    double testX = getCanvasXForLayoutX(layoutX);
+    int starti = 0;
+
+    if (testX < m_x + 2 && testRow > 1) {
+	// first bar on new row
+	starti = -barThickness;
+    }
+
+    for (int i = starti; i < barThickness; ++i) {
+
+	int row = getRowForLayoutX(layoutX + i);
+	double x = getCanvasXForLayoutX(layoutX + i);
+	int y = getCanvasYForTopLine(row);
 
         QCanvasLine *line = new QCanvasLine(m_canvas);
-        int row = getRowForLayoutX(layoutX);
 
         line->setPoints(0, 0, 0, getBarLineHeight());
-        line->moveBy
-            (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
+        line->moveBy(x + i, y);
 
 	if (elementsInSpaces()) {
 	    line->moveBy(0, -(getLineSpacing()/2 + 1));
@@ -469,7 +480,7 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
             (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
         m_barLines.insert(insertPoint, barLine);
 
-	if (showBeatLines()) {
+	if (showBeatLines() && i == 0) {
 
 	    int beats = timeSig.getBeatsPerBar();
 	    double dx = width / beats;
@@ -502,7 +513,7 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
             
             line->setPoints(0, 0, 0, m_connectingLineLength);
             line->moveBy
-                (getCanvasXForLayoutX(layoutX) + i,
+                (getCanvasXForLayoutX(layoutX + i),
                  getCanvasYForTopLine(row));
 
 	    if (elementsInSpaces()) {

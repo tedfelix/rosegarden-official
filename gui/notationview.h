@@ -482,6 +482,9 @@ signals:
     void jumpPlaybackTo(Rosegarden::timeT);
 
 protected:
+
+    virtual void paintEvent(QPaintEvent* e);
+
     /**
      * init the action maps for notes, marks etc
      */

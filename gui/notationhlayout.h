@@ -35,6 +35,7 @@
 class NotationProperties;
 class NotationGroup;
 class Chord;
+class RosegardenProgressDialog;
 
 /**
  * Horizontal notation layout
@@ -94,7 +95,7 @@ public:
     /**
      * Get the page mode setting
      */
-    virtual bool getPageMode() { return m_pageMode; }
+    virtual bool isPageMode() { return m_pageMode; }
 
     /**
      * Set a page width
@@ -171,6 +172,15 @@ public:
      */
     virtual Rosegarden::Event *getTimeSignaturePosition
     (StaffType &staff, int barNo, double &timeSigX);
+
+    void setProgressDialog(RosegardenProgressDialog *dialog) {
+	m_progressDlg = dialog;
+    }
+
+    /// purely optional, used only for progress reporting
+    void setStaffCount(int staffCount) {
+	m_staffCount = staffCount;
+    }
 
 protected:
     class AccidentalTable
@@ -298,14 +308,14 @@ protected:
     NotationElementList::iterator getStartOfQuantizedSlice 
     (const NotationElementList *, Rosegarden::timeT t) const;
 
-    Rosegarden::timeT scanChord
+    void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,
      const Rosegarden::Clef &, const Rosegarden::Key &, AccidentalTable &,
      int &fixedWidth, int &baseWidth,
      NotationElementList::iterator &shortest, int &shortCount,
      NotationElementList::iterator &to);
 
-    Rosegarden::timeT scanRest
+    void scanRest
     (NotationElementList *notes, NotationElementList::iterator &i,
      int &fixedWidth, int &baseWidth,
      NotationElementList::iterator &shortest, int &shortCount);
@@ -361,6 +371,8 @@ protected:
 
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
+    RosegardenProgressDialog *m_progressDlg;
+    int m_staffCount; // purely for progress reporting
 };
 
 #endif

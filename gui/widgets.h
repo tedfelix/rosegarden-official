@@ -164,6 +164,10 @@ public:
     //
     virtual void setCompleted(int value);
 
+    // Add to the progress
+    //
+    virtual void incrementCompletion(int value);
+
     // Process some X events - gets called by the file access (say) class
     // to ensure our gui is still working.
     //

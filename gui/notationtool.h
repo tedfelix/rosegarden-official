@@ -242,6 +242,7 @@ protected:
     virtual void showPreview();
 
 protected slots:
+    void slotToggleDot();
     void slotNotesSelected();
 };
 
