@@ -111,9 +111,30 @@ PropertyStoreBase::~PropertyStoreBase()
 
 template <>
 size_t
+PropertyStore<Int>::getStorageSize() const
+{
+    return sizeof(*this);
+}
+
+template <>
+size_t
 PropertyStore<String>::getStorageSize() const
 {
     return sizeof(*this) + m_data.size();
+}
+
+template <>
+size_t
+PropertyStore<Bool>::getStorageSize() const
+{
+    return sizeof(*this);
+}
+
+template <>
+size_t
+PropertyStore<RealTimeT>::getStorageSize() const
+{
+    return sizeof(*this);
 }
  
 }

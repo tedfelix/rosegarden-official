@@ -29,7 +29,11 @@ namespace Rosegarden
 {
 using std::string;
 
-PropertyMap::PropertyMap(const PropertyMap &pm)
+PropertyMap::PropertyMap(const PropertyMap &pm) :
+    __HASH_NS::hash_map<PropertyName,
+			PropertyStoreBase *,
+			PropertyNameHash,
+			PropertyNamesEqual>()
 {
     clear();
     

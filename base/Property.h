@@ -149,7 +149,7 @@ public:
     typename PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(typename PropertyDefn<P>::basic_type data) { m_data = data; }
 
-    virtual size_t getStorageSize() const { return sizeof(*this); }
+    virtual size_t getStorageSize() const;
 
 #ifndef NDEBUG
     void dump(std::ostream&) const;
