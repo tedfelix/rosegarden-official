@@ -32,9 +32,7 @@
 // jack includes
 //
 #ifdef HAVE_JACK
-
 #include <jack/jack.h>
-
 #endif
 
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
@@ -48,9 +46,6 @@
 
 namespace Rosegarden
 {
-
-
-
 
 
 // An AlsaPort represents one or more (usually 16) MappedInstruments.
@@ -129,6 +124,16 @@ public:
     //
     virtual void processPending(const RealTime &playLatency);
 
+#ifdef HAVE_JACK
+
+    //static void setBufferSize(nframes_t bSize) { m_bufferSize = bSize; }
+    //static nframes_t getBufferSize() { return m_bufferSize; }
+
+    //static nframes_t             m_bufferSize;
+
+#endif
+
+
 protected:
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
@@ -190,15 +195,15 @@ private:
 
 #ifdef HAVE_JACK
 
-    static int jackProcess(nframes_t nframes, void *arg);
-    static int jackBufferSize(nframes_t nframes, void *arg);
-    static int jackSampleRate(nframes_t nframes, void *arg);
+    static int  jackProcess(nframes_t nframes, void *arg);
+    static int  jackBufferSize(nframes_t nframes, void *arg);
+    static int  jackSampleRate(nframes_t nframes, void *arg);
     static void jackShutdown(void *arg);
-
 
     jack_client_t               *m_audioClient;
     jack_port_t                 *m_audioInputPort;
     jack_port_t                 *m_audioOutputPort;
+
 #endif
 
 };

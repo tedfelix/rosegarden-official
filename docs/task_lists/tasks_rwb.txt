@@ -1,37 +1,11 @@
-0.15 urgent tasks for w/e 5.05.02
-=================================
-
-updated 29.04.2002
-
-o KDE3 bug fixes
-  - track height [DONE]
-  - track button update [DONE]
-  - record button colour
-
-o KDE2 compatability checking with Mandrake 8.1
-
-o ALSA and ARTS testing on both KDE platforms
-
-o stabilise and bug fix
-
-o update README and INSTALL with latest instructions/features
-
-BUGS:
-
-o Splitting recorded Segment and Moving Segments (Segment::erase())
-
-
-
-
-
---
-
 0.2 tasks for completion by 28.05.02
 ====================================
 
-o selection of ALSA recording device
-
 o basic JACK audio
+
+o Instrument name when pop down instrument list
+
+o selection of ALSA recording device
 
 o sweep selection on Matrix
 
@@ -41,7 +15,7 @@ o Event playback on selection movement
 
 o Changing Composition length
 
-o Deactivating blank tracks
+o stop crashing on Segment movement to blank tracks
 
 o Matrix view auto scrolling
 
@@ -58,10 +32,6 @@ o Segment start and end markers
 o Segment paramters and modifiers - looping of Segments, quantisation
   [GETTING THERE]
 
-
-Lower priority pending
-----------------------
-
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
 o Segment colouring
@@ -74,13 +44,17 @@ o More MIDI events at Composition level. Sys Exs, Program Changes,
 
 o Segment Zooming - (midi and audio previews of Segments)
 
-o Audio noise eliminator - recording
-
 o Audio output VU meters
 
+For later releases
+------------------
 
-Completed POST 0.1.4
-====================
+o Audio noise eliminator - recording
+
+--
+
+Completed for 0.1.5
+===================
 - Velocity-coloured Matrix Events [DONE - not sure if it's in the right place]
 
 - Saving the Studio to XML [DONE]
@@ -171,9 +145,21 @@ Completed POST 0.1.4
 - Starting playback in middle of long Events should actually play them
   ["firstFetch" DONE]
 
+bug fixing
 
+o KDE3 bug fixes
+  - track height [DONE]
+  - track button update [DONE]
+  - record button colour
 
---
+o KDE2 compatability checking with Mandrake 8.1 [DONE]
+
+o ALSA and ARTS testing on both KDE platforms [DONE]
+
+o update README and INSTALL with latest instructions/features [DONE]
+
+o Splitting recorded Segment and Moving Segments (Segment::erase()) [FIXED cc]
+
 
 Completed for 0.1.4
 ===================

@@ -31,9 +31,20 @@
 #include "MappedInstrument.h"
 #include "Midi.h"
 
+// This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
+// sequencer interface.
+//
+// We use JACK (http://jackit.sourceforge.net/) for audio.  It's complicated
+// by the fact there's no simple app-level documentation to explain what's
+// going on.
+//
+//
 
 namespace Rosegarden
 {
+
+static nframes_t _jackBufferSize;
+
 
 AlsaDriver::AlsaDriver():
     SoundDriver(std::string("alsa-lib version ") + std::string(SND_LIB_VERSION_STR)),
@@ -50,6 +61,7 @@ AlsaDriver::AlsaDriver():
     m_addedMetronome(false)
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
+    _jackBufferSize = 0;
 }
 
 AlsaDriver::~AlsaDriver()
@@ -594,6 +606,14 @@ AlsaDriver::initialiseAudio()
                                            JackPortIsOutput,
                                            0);
 
+
+    // Get the initial buffer size before we activate the client
+    //
+    _jackBufferSize = jack_get_buffer_size(m_audioClient);
+    std::cout << "JACK buffer size = " << _jackBufferSize << std::endl;
+
+    // Activate the client
+    //
     if (jack_activate(m_audioClient))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
@@ -610,6 +630,67 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver::initialiseAudio - "
               << "initialised JACK audio subsystem"
               << std::endl;
+
+
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "JACK read latency  = "
+              << jack_port_get_latency(m_audioInputPort) 
+              << std::endl;
+
+
+    const char **ports = jack_get_ports(m_audioClient, NULL, NULL, 0);
+
+    int count = 0;
+    while (ports[count] != NULL)
+    {
+        std::cout << "PORT " << count << " = \"" << ports[count] <<
+                     "\"" << std::endl;
+        count++;
+    }
+
+    // connect our client up to the ALSA ports - first output
+    //
+    if (jack_connect(m_audioClient, jack_port_name( m_audioOutputPort),
+                     "alsa_pcm:out_1"))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot connect to JACK output port" << std::endl;
+
+        if (m_driverStatus == MIDI_AND_AUDIO_OK)
+            m_driverStatus = MIDI_OK;
+        else if (m_driverStatus == AUDIO_OK)
+            m_driverStatus = NO_DRIVER;
+
+        return;
+    }
+
+    // now input
+    if (jack_connect(m_audioClient, jack_port_name( m_audioInputPort),
+                     "alsa_pcm:in_1"))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot connect to JACK input port" << std::endl;
+
+        if (m_driverStatus == MIDI_AND_AUDIO_OK)
+            m_driverStatus = MIDI_OK;
+        else if (m_driverStatus == AUDIO_OK)
+            m_driverStatus = NO_DRIVER;
+
+        return;
+    }
+
+
+    // Get write latency now we're connected
+    //
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "JACK write latency = "
+              << jack_port_get_latency(m_audioOutputPort) 
+              << std::endl;
+
+    cout << "CONNECTED = " << jack_port_connected(m_audioInputPort) << endl;
+
+    std::cout << "JACK ports = " << jack_get_ports(m_audioClient, NULL, NULL,
+            JackPortIsPhysical|JackPortIsInput) << endl;
 
 #endif
 }
@@ -1300,29 +1381,38 @@ AlsaDriver::processPending(const RealTime &playLatency)
 // ------------ JACK callbacks -----------
 //
 //
+
 #ifdef HAVE_JACK
 int
-AlsaDriver::jackProcess(nframes_t nframes, void *arg)
+AlsaDriver::jackProcess(nframes_t /*nframes*/, void * /*arg*/)
 {
     return 0;
 }
 
+// Pick up any change of buffer size
+//
 int
-AlsaDriver::jackBufferSize(nframes_t nframes, void *arg)
+AlsaDriver::jackBufferSize(nframes_t nframes, void * /*arg*/)
 {
+    //AlsaDriver::setBufferSize(nframes);
+    _jackBufferSize = nframes;
+
     return 0;
 }
 
+// Sample rate change
+//
 int
-AlsaDriver::jackSampleRate(nframes_t nframes, void *arg)
+AlsaDriver::jackSampleRate(nframes_t /*nframes*/, void * /*arg*/)
 {
     return 0;
 }
 
 void
-AlsaDriver::jackShutdown(void *arg)
+AlsaDriver::jackShutdown(void * /*arg*/)
 {
 }
+
 #endif
 
 

@@ -31,12 +31,15 @@
 // we handle is the .wav
 //
 // Our "open" call in this case only examines the header and
-// populates useful information/checks for erros.  We don't
+// populates useful information/checks for errors.  We don't
 // yet attempt to scan the body of the file as it could be
 // potentially very big.
 //
-// [rwb]
-// 
+// When it comes to writing this file out we may need to get
+// chunks of data from the file itself depending on what driver
+// we're using.  For JACK/ALSA we do have to fill the output
+// buffer ourselves in this manner.
+//
 
 namespace Rosegarden
 {
