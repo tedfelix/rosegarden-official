@@ -719,12 +719,12 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 {
     static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
 
-    if (midiFile.match(filePath) != -1) {
+    if (midiFile.match(filePath.lower()) != -1) {
 
         importMIDIFile(filePath);
         return;
 
-    } else if (rg21File.match(filePath) != -1) {
+    } else if (rg21File.match(filePath.lower()) != -1) {
 
         importRG21File(filePath);
         return;

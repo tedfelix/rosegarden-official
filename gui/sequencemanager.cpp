@@ -95,14 +95,8 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     timeT sliceEndElapsed =
               comp.getElapsedTimeForRealTime(m_mC.getEndTime());
 
-    KConfig* config = kapp->config();
-    config->setGroup("Latency Options");
-    int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
-    int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
-    RealTime jackPlaybackLatency(jackSec, jackUSec);
-
-    timeT jackPlaybackLatencyTimeT = comp.getElapsedTimeForRealTime(sliceStart)
-        - comp.getElapsedTimeForRealTime(sliceStart - jackPlaybackLatency);
+    timeT jackPlaybackLatency = comp.getElapsedTimeForRealTime(sliceStart)
+        - comp.getElapsedTimeForRealTime(sliceStart - m_playbackAudioLatency);
 
     // Place metronome clicks in the MappedComposition
     // if they're required
@@ -170,7 +164,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
             // Adjust for JACK latency for Audio segments
             //
-            segmentStartTime -= jackPlaybackLatencyTimeT;
+            segmentStartTime -= jackPlaybackLatency;
 
 
             Rosegarden::RealTime segmentStart =
@@ -224,7 +218,8 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                     audioDuration = audioDuration - moveTime;
 
                 }
-                else if (segmentStart < sliceEnd)
+                else if (segmentStart < sliceEnd ||
+                         segmentStart == sliceStart)
                 {
                     ; // play
                 }
@@ -323,11 +318,14 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	// Locate a suitable starting iterator
 	//
 	seekStartTime = seekStartTime - repeatNo * segmentDuration;
-	Segment::iterator i0 = (*it)->findTime(seekStartTime);
+	Segment::iterator i0;
 
-        // start from the beginning if it's the first fetch
+        // Start from the beginning if it's the first fetch
+        //
         if (firstFetch)
             i0 = (*it)->begin();
+        else 
+            i0 = (*it)->findTime(seekStartTime);
 
 	// Now, we end at the slice's end, except where we're a
 	// repeating segment followed by another segment on the same
@@ -412,15 +410,17 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                 // testing there finish time is greater than the start
                 // of the slice.
                 //
-                if (playTime <= sliceStartElapsed &&
-                    playTime + helper.getSoundingDuration(j)
-                                                    >= sliceStartElapsed)
+                if (playTime < sliceStartElapsed)
                 {
-                    duration = duration - (sliceStart - eventTime);
-                    eventTime = sliceStart;
+                    if (playTime + helper.getSoundingDuration(j)
+                                                        >= sliceStartElapsed)
+                    {
+                        duration = duration - (sliceStart - eventTime);
+                        eventTime = sliceStart;
+                    }
+                    else
+                        continue;
                 }
-                else
-                    continue;
             }
 
 
@@ -1472,6 +1472,15 @@ SequenceManager::preparePlayback()
 
     // Send the MappedComposition if it's got anything in it
     sendMappedComposition(mC);
+
+    // Set up the audio playback latency
+    //
+    KConfig* config = kapp->config();
+    config->setGroup("Latency Options");
+
+    int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
+    int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
+    m_playbackAudioLatency = Rosegarden::RealTime(jackSec, jackUSec);
 
 }
 

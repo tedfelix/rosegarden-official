@@ -171,7 +171,9 @@ private:
     // A hangover from the blocking stop() which we haven't yet
     // removed.
     //
-    bool    m_sendStop;
+    bool                       m_sendStop;
+
+    RealTime                   m_playbackAudioLatency;
 
 };
 

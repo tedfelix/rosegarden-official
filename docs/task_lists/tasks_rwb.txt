@@ -8,6 +8,8 @@ o Performance
 
 o Make AlsaDriver send NoteOn(0)s as well as NoteOffs [WAITING FOR FEEDBACK]
 
+o Splitting Segments isn't clearing out the original
+
 o Make RG a jack mixer (transport, control client)
 
 o JACK connection management - stereo, panning
