@@ -21,7 +21,7 @@
 #ifndef _SEGMENTCOMMANDS_H_
 #define _SEGMENTCOMMANDS_H_
 
-#include "basiccommand.h"
+#include "command.h"
 #include "Segment.h"
 #include "Composition.h"
 #include "NotationTypes.h"

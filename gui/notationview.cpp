@@ -572,10 +572,6 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-//    new KAction(TransformsMenuLabelChordsCommand::name(), 0, this,
-//                SLOT(slotTransformsLabelChords()), actionCollection(),
-//                "label_chords");
-
     new KAction(TransformsMenuTransposeOneStepCommand::name(true), 0, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
                 "transpose_up");
@@ -1402,15 +1398,6 @@ void NotationView::slotTransformsStemsDown()
     addCommandToHistory(new TransformsMenuChangeStemsCommand
                         (false, *m_currentEventSelection));
 
-}
-
-void NotationView::slotTransformsLabelChords()
-{
-    if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Labelling chords..."), statusBar());
-
-    addCommandToHistory(new TransformsMenuLabelChordsCommand
-                        (*m_currentEventSelection));
 }
 
 void NotationView::slotTransformsRestoreStems()

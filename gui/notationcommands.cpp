@@ -22,9 +22,7 @@
 #include "notationview.h"
 #include "rosegardenguidoc.h"
 
-#include "CompositionTimeSliceAdapter.h"
-#include "AnalysisTypes.h"
-
+#include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 #include "notationproperties.h"
 
@@ -527,20 +525,5 @@ TransformsMenuRemoveMarksCommand::modifySegment()
 	    (*i)->unset(Rosegarden::BaseProperties::getMarkPropertyName(j));
 	}
     }
-}
-
-void
-TransformsMenuLabelChordsCommand::modifySegment()
-{
-    if (m_selection->getSegmentEvents().empty()) return;
-
-    SegmentNotationHelper helper(getSegment());
-
-    AnalysisHelper ah;
-    CompositionTimeSliceAdapter ca
-	(helper.segment().getComposition(),
-	 m_selection->getBeginTime(), m_selection->getEndTime());
-
-    ah.labelChords(ca, helper.segment());
 }
 

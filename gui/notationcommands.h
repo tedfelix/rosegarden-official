@@ -406,24 +406,4 @@ private:
 };
 
 
-
-class TransformsMenuLabelChordsCommand : public BasicSelectionCommand
-{
-public:
-    TransformsMenuLabelChordsCommand(EventSelection &selection) :
-	BasicSelectionCommand(name(), selection, true),
-	m_selection(&selection) { }
-
-    static QString name() {
-	return "Label &Chords";
-    }
-
-protected:
-    virtual void modifySegment();
-
-private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-};
-
-
 #endif

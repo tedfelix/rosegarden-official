@@ -27,7 +27,6 @@
 #include "rosedebug.h"
 
 using Rosegarden::Segment;
-using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::timeT;
 
