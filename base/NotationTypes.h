@@ -296,7 +296,7 @@ public:
 
     Note(Type type, bool dotted = false) throw (BadType) :
         m_type(type), m_dotted(dotted) {
-        // this may really bugger up compiler optimisations for simple
+        //!!! this may really bugger up compiler optimisations for simple
         // uses of Note (e.g. "int d = Note(Crotchet, true).getDuration()"):
         if (m_type < Shortest || m_type > Longest) throw BadType();
     }

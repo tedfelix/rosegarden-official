@@ -54,6 +54,8 @@ Quantizer::quantize(Event *el)
 {
     Event::timeT drt = el->getDuration();
 
+    //!!! inefficient (work duplicated in the two quantize methods)
+
     kdDebug(KDEBUG_AREA) << "Quantizer applying to event of duration " << drt << endl;
 
     int high, low;

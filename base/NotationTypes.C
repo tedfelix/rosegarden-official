@@ -411,7 +411,7 @@ Note Note::getNearestNote(int duration)
     //!!! too short -- reconsider?
     if (duration < d) return Note(Shortest);
 
-    for (int tag = Shortest + 1; tag <= Longest; ++tag) {
+    for (int tag = Shortest + 1; tag <= Longest + 1; ++tag) {
         if (d + d/2 > duration) {
 	    n = Note(tag-1); break;
         }
@@ -424,9 +424,9 @@ Note Note::getNearestNote(int duration)
     //!!! too long -- should subdivide
 //    n = Note(Longest, true);
 #ifndef NDEBUG
-    cout << "Note::getNearestNote(): duration was " << duration
+    cout << "Note::getNearestNote(): duration " << duration
 	 << ", returning note (" << n.getNoteType() << ", " << n.isDotted()
-	 << ")" << endl;
+	 << ") (duration is " << n.getDuration() << ")" << endl;
 #endif
     return n;
 }

@@ -2,21 +2,21 @@
 static char *magick[] = {
 /* columns rows colors chars-per-pixel */
 "6 14 2 1",
-"  c Gray0",
-". c None",
+"x c Gray0",
+"  c None",
 /* pixels */
-".... .",
-". .. .",
-". ..  ",
-".     ",
-"     .",
-"  .. .",
-". .. .",
-". .. .",
-". ..  ",
-".     ",
-"     .",
-"  .. .",
-". .. .",
-". ...."
+"    x ",
+" x  x ",
+" x  xx",
+" xxxxx",
+"xxxxx ",
+"xx  x ",
+" x  x ",
+" x  x ",
+" x  xx",
+" xxxxx",
+"xxxxx ",
+"xx  x ",
+" x  x ",
+" x    "
 };

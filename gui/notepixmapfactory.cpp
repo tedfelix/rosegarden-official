@@ -38,6 +38,8 @@ using Rosegarden::Note;
 using Rosegarden::TimeSignature;
 using Rosegarden::Sharp;
 using Rosegarden::Flat;
+using Rosegarden::DoubleSharp;
+using Rosegarden::DoubleFlat;
 using Rosegarden::Natural;
 
 NotePixmapOffsets::NotePixmapOffsets()
@@ -103,8 +105,16 @@ NotePixmapOffsets::computeAccidentalAndStalkSize()
         totalXOffset += m_sharpWidth + 1;
         totalYOffset = 3;
     }
+    if (m_accidental == DoubleSharp) {
+        totalXOffset += m_doubleSharpWidth + 1;
+        totalYOffset = 3;
+    }
     else if (m_accidental == Flat) {
         totalXOffset += m_flatWidth + 1;
+        if (!m_noteHasStalk || !m_stalkGoesUp) totalYOffset = 4;
+    }
+    else if (m_accidental == DoubleFlat) {
+        totalXOffset += m_doubleFlatWidth + 1;
         if (!m_noteHasStalk || !m_stalkGoesUp) totalYOffset = 4;
     }
     else if (m_accidental == Natural) {
@@ -142,6 +152,7 @@ NotePixmapOffsets::computePixmapSize()
         break;
         
     case Sharp:
+    case DoubleSharp:
     case Natural:
 
         m_pixmapSize.rheight() += 
@@ -149,6 +160,7 @@ NotePixmapOffsets::computePixmapSize()
         break;
         
     case Flat:
+    case DoubleFlat:
 
         if (!m_stalkGoesUp) {
             m_pixmapSize.rheight() += 2 +
@@ -186,6 +198,7 @@ NotePixmapOffsets::computeBodyOffset()
         break;
         
     case Sharp:
+    case DoubleSharp:
 
         m_bodyOffset.setX(m_sharpWidth + 1);
 
@@ -203,6 +216,7 @@ NotePixmapOffsets::computeBodyOffset()
         break;
         
     case Flat:
+    case DoubleFlat:
 
         // flat is the same height as sharp and natural, but has a
         // different "centre"
@@ -288,11 +302,15 @@ NotePixmapOffsets::setExtraBeamSpacing(unsigned int bs)
 
 void
 NotePixmapOffsets::setAccidentalsWidth(unsigned int sharp,
-                                     unsigned int flat,
-                                     unsigned int natural)
+				       unsigned int flat,
+				       unsigned int doublesharp,
+				       unsigned int doubleflat,
+				       unsigned int natural)
 {
     m_sharpWidth = sharp;
     m_flatWidth = flat;
+    m_doubleSharpWidth = doublesharp;
+    m_doubleFlatWidth = doubleflat;
     m_naturalWidth = natural;
 }
 
@@ -313,6 +331,8 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_breve(m_pixmapDirectory + "/note-breve.xpm"),
     m_accidentalSharp(m_pixmapDirectory + "/notemod-sharp.xpm"),
     m_accidentalFlat(m_pixmapDirectory + "/notemod-flat.xpm"),
+    m_accidentalDoubleSharp(m_pixmapDirectory + "/notemod-doublesharp.xpm"),
+    m_accidentalDoubleFlat(m_pixmapDirectory + "/notemod-doubleflat.xpm"),
     m_accidentalNatural(m_pixmapDirectory + "/notemod-natural.xpm"),
     m_dot(m_pixmapDirectory + "/dot.xpm"),
     m_clefWidth(-1)
@@ -349,6 +369,8 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_offsets.setStalkLength(getStalkLength());
     m_offsets.setAccidentalsWidth(m_accidentalSharp.width(),
                                   m_accidentalFlat.width(),
+                                  m_accidentalDoubleSharp.width(),
+                                  m_accidentalDoubleFlat.width(),
                                   m_accidentalNatural.width());
     m_offsets.setAccidentalHeight(m_accidentalSharp.height());
     
@@ -437,6 +459,28 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     //
     if (accidental != NoAccidental)
         drawAccidental(accidental, stalkGoesUp);
+
+//#define ROSE_XDEBUG_NOTE_PIXMAP_FACTORY
+#ifdef ROSE_XDEBUG_NOTE_PIXMAP_FACTORY
+    m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
+    m_p.drawLine(0,0,0,m_generatedPixmap->height() - 1);
+    m_p.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+    m_pm.drawLine(0,0,0,m_generatedPixmap->height() - 1);
+    m_pm.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+/*
+    m_p.drawPoint(0,0);
+    m_p.drawPoint(0,m_offsets.getHotSpot().y());
+    m_p.drawPoint(0,m_generatedPixmap->height() - 1);
+    m_p.drawPoint(m_generatedPixmap->width() - 1,0);
+    m_p.drawPoint(m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+
+    m_pm.drawPoint(0,0);
+    m_pm.drawPoint(0,m_offsets.getHotSpot().y());
+    m_pm.drawPoint(0,m_generatedPixmap->height() -1);
+    m_pm.drawPoint(m_generatedPixmap->width() -1,0);
+    m_pm.drawPoint(m_generatedPixmap->width() -1,m_generatedPixmap->height()-1);
+*/
+#endif
     
     //#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
 #ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
@@ -1010,16 +1054,22 @@ NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
     case Sharp:
         accidentalPixmap = &m_accidentalSharp;
         break;
+        
+    case DoubleSharp:
+        accidentalPixmap = &m_accidentalDoubleSharp;
+        break;
 
     case Flat:
+        accidentalPixmap = &m_accidentalFlat;
+        break;
+
+    case DoubleFlat:
         accidentalPixmap = &m_accidentalFlat;
         break;
 
     case Natural:
         accidentalPixmap = &m_accidentalNatural;
         break;
- 
-        //!!! double sharp, double flat
     }
 
     m_p.drawPixmap(m_offsets.getAccidentalOffset().x(),

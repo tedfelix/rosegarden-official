@@ -62,6 +62,8 @@ public:
     void setStalkLength(unsigned int);
     void setAccidentalsWidth(unsigned int sharp,
                              unsigned int flat,
+			     unsigned int doublesharp,
+			     unsigned int doubleflat,
                              unsigned int natural);
     void setAccidentalHeight(unsigned int height);
     void setDotSize(QSize size);
@@ -80,6 +82,8 @@ protected:
     unsigned int m_tailWidth;
     unsigned int m_sharpWidth;
     unsigned int m_flatWidth;
+    unsigned int m_doubleSharpWidth;
+    unsigned int m_doubleFlatWidth;
     unsigned int m_naturalWidth;
     unsigned int m_accidentalHeight;
     unsigned int m_stalkLength;
@@ -201,6 +205,8 @@ protected:
 
     QPixmap m_accidentalSharp;
     QPixmap m_accidentalFlat;
+    QPixmap m_accidentalDoubleSharp;
+    QPixmap m_accidentalDoubleFlat;
     QPixmap m_accidentalNatural;
 
     QPixmap m_dot;
