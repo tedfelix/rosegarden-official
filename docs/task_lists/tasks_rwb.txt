@@ -47,7 +47,11 @@ o Split/Join
 
 o Segment start and end markers
 
-o smooth position pointer
+o bigger position pointer
+  [DONE]
+
+o trackbuttons and segmentcanvas tied scrolling
+  [DONE]
 
 o Segment paramters and modifiers - looping of Segments, quantisation
   [GETTING THERE]

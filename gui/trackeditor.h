@@ -37,7 +37,7 @@ class BarButtons;
 class TrackButtons;
 class MultiViewCommandHistory;
 class KCommand;
-class QCanvasLine;
+class QCanvasRectangle;
 class QScrollView;
 
 /**
@@ -164,6 +164,11 @@ protected slots:
 
     void slotDeleteSelectedSegments();
 
+    // to handle vertical scrolling properly
+    //
+    void slotVerticalScrollSegmentCanvas(int x, int y);
+    void slotVerticalScrollTrackButtons(int y);
+
 signals:
     /**
      * Emitted when the represented data changed and the SegmentCanvas
@@ -217,7 +222,7 @@ protected:
     TrackButtons            *m_trackButtons;
     QScrollBar              *m_horizontalScrollBar;
     SegmentCanvas           *m_segmentCanvas;
-    QCanvasLine             *m_pointer;
+    QCanvasRectangle        *m_pointer;
     QScrollView             *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;

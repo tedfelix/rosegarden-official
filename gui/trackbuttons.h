@@ -60,6 +60,7 @@ public:
                  unsigned int trackCellHeight,
                  unsigned int trackLabelWidth,
                  bool showTrackLabels,
+                 int overallHeight,
                  QWidget* parent = 0,
                  const char* name = 0,
                  WFlags f=0);

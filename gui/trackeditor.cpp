@@ -124,7 +124,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
                           m_rulerScale->getBarWidth(lastBar));
 
-    canvas->resize(m_canvasWidth, getTrackCellHeight() * nbTracks);
+    int segmentCanvasHeight = getTrackCellHeight() * 40;
+
+    canvas->resize(m_canvasWidth, segmentCanvasHeight);
 
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
@@ -195,6 +197,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                                       getTrackCellHeight(),
                                       trackLabelWidth,
                                       m_showTrackLabels,
+                                      segmentCanvasHeight,
                                       m_trackButtonScroll->viewport());
     m_trackButtonScroll->addChild(m_trackButtons);
     m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
@@ -210,14 +213,17 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
             SIGNAL(instrumentSelected(int)));
 
-    //grid->addWidget(m_trackButtons, 1, 0);
-
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            m_trackButtonScroll->verticalScrollBar(), SIGNAL(valueChanged(int)));
+            this, SLOT(slotVerticalScrollTrackButtons(int)));
+
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_trackButtonScroll->verticalScrollBar(), SIGNAL(sliderMoved(int)));
+            this, SLOT(slotVerticalScrollTrackButtons(int)));
+
+    // scrolling with mouse wheel
+    connect(m_trackButtonScroll, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotVerticalScrollSegmentCanvas(int, int)));
 
     // Connect horizontal scrollbar
     //
@@ -297,9 +303,12 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                    SLOT(slotDeleteSelectedSegments()));
 
     // create the position pointer
-    m_pointer = new QCanvasLine(canvas);
+    m_pointer = new QCanvasRectangle(canvas);
     m_pointer->setPen(RosegardenGUIColours::Pointer);
-    m_pointer->setPoints(0, 0, 0, canvas->height());
+    m_pointer->setBrush(RosegardenGUIColours::Pointer);
+    m_pointer->setSize(3, canvas->height());
+    m_pointer->setX(-2);
+    m_pointer->setY(0);
     m_pointer->setZ(10);
     m_pointer->show();
 
@@ -367,8 +376,10 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
         m_trackButtons->slotUpdateTracks();
 
+        /*
         m_segmentCanvas->canvas()->resize(m_canvasWidth,
                                           getTrackCellHeight() * m_document->getComposition().getNbTracks());
+                                          */
 
         setCompositionModified(false);
     }
@@ -476,7 +487,7 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     if (distance < 0.0) distance = -distance;
     if (distance >= 1.0) {
 
-	m_pointer->setX(canvasPosition);
+	m_pointer->setX(canvasPosition - 2);
         slotScrollHoriz((int)canvasPosition);
 	emit needUpdate();
     }
@@ -618,3 +629,93 @@ TrackEditor::slotDeleteSelectedSegments()
     addCommandToHistory(macro);
 
 }
+
+// Scroll the main SegmentCanvas along with the trackbuttons -
+// and do it safely without signal feedback, hence the disconnects
+// and reconnects
+//
+void
+TrackEditor::slotVerticalScrollSegmentCanvas(int x, int y)
+{
+    // disconnect
+    //
+    disconnect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(valueChanged(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    disconnect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(sliderMoved(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    disconnect(m_trackButtonScroll,
+               SIGNAL(contentsMoving(int, int)),
+               this,
+               SLOT(slotVerticalScrollSegmentCanvas(int, int)));
+
+    //scroll amount
+    //
+    m_segmentCanvas->setContentsPos(x, y);
+
+    // reconnect
+    //
+    connect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(valueChanged(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    connect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(sliderMoved(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    connect(m_trackButtonScroll,
+            SIGNAL(contentsMoving(int, int)),
+            this,
+            SLOT(slotVerticalScrollSegmentCanvas(int, int)));
+}
+
+void
+TrackEditor::slotVerticalScrollTrackButtons(int y)
+{
+    // disconnect
+    //
+    disconnect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(valueChanged(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    disconnect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(sliderMoved(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    disconnect(m_trackButtonScroll,
+               SIGNAL(contentsMoving(int, int)),
+               this,
+               SLOT(slotVerticalScrollSegmentCanvas(int, int)));
+
+    // movement
+    //
+    m_trackButtonScroll->setContentsPos(0, y);
+
+    // reconnect
+    //
+    connect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(valueChanged(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    connect(m_segmentCanvas->verticalScrollBar(),
+               SIGNAL(sliderMoved(int)),
+               this,
+               SLOT(slotVerticalScrollTrackButtons(int)));
+
+    connect(m_trackButtonScroll,
+            SIGNAL(contentsMoving(int, int)),
+            this,
+            SLOT(slotVerticalScrollSegmentCanvas(int, int)));
+
+}
+

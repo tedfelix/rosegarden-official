@@ -44,6 +44,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
                            bool showTrackLabels,
+                           int overallHeight,
                            QWidget* parent,
                            const char* name,
                            WFlags f)
@@ -105,6 +106,10 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     // Populate instrument popup menu just once at start-up
     //
     populateInstrumentPopup();
+
+    // We have to force the height for the moment
+    //
+    setMinimumHeight(overallHeight);
 
 }
 
