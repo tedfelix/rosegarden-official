@@ -897,6 +897,12 @@ void Track::insertSomething(iterator i, int duration, int pitch,
 	} else {
 	    cerr << "Found rest, splitting" << endl;
 	    iterator last = expandIntoTie(i, duration);
+
+	    //!!! In theory, we can do better here -- sometimes the rest
+	    // _is_ viable but the duration-list equivalent would still
+	    // be better.  Unfortunately I'm not currently quite sure how
+	    // to tell.
+
 	    if (last != end() && !isViable(*last)) makeRestViable(last);
 	}
 
