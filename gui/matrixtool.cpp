@@ -157,8 +157,6 @@ public:
                        MatrixStaff*,
                        Rosegarden::Event *event);
 
-    virtual ~MatrixEraseCommand();
-    
     virtual Rosegarden::timeT getRelayoutEndTime();
 
 protected:
@@ -167,13 +165,12 @@ protected:
     MatrixStaff* m_staff;
     Rosegarden::Event *m_event; // only used on 1st execute (cf bruteForceRedo)
     Rosegarden::timeT m_relayoutEndTime;
-    std::string makeName(std::string);
 };
 
 MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
                                        MatrixStaff* staff,
                                        Event *event) :
-    BasicCommand(makeName(event->getType()).c_str(),
+    BasicCommand("Erase Note",
                  segment,
 		 event->getAbsoluteTime(),
 		 event->getAbsoluteTime() + event->getDuration(),
@@ -183,20 +180,6 @@ MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
     m_relayoutEndTime(getEndTime())
 {
     // nothing
-}
-
-MatrixEraseCommand::~MatrixEraseCommand()
-{
-    // nothing
-}
-
-string
-MatrixEraseCommand::makeName(string e)
-{
-    string n = "Erase ";
-    n += (char)toupper(e[0]);
-    n += e.substr(1);
-    return n;
 }
 
 timeT
@@ -357,9 +340,6 @@ void MatrixPainter::setResolution(Rosegarden::Note::Type note)
 
 //------------------------------
 
-using Rosegarden::Event;
-using Rosegarden::Note;
-
 MatrixEraser::MatrixEraser(MatrixView* parent)
     : MatrixTool("MatrixEraser", parent),
       m_currentStaff(0)
@@ -379,8 +359,11 @@ void MatrixEraser::handleLeftButtonPress(Rosegarden::timeT,
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
-    Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-    helper.deleteEvent(el->event());
+    MatrixEraseCommand* command =
+        new MatrixEraseCommand(m_currentStaff->getSegment(),
+                               m_currentStaff, el->event());
+
+    m_mParentView->addCommandToHistory(command);
 
     m_mParentView->update();
 }
