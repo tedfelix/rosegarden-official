@@ -613,15 +613,40 @@ void Composition::deleteInstrument(const int &instrument)
      m_instruments.erase(iiterator);
 }
 
+// Export the Composition as XML, also iterates through
+// Instruments, Tracks and any further sub-objects
+//
+//
 string Composition::toXmlString()
 {
-     stringstream composition;
+    stringstream composition;
 
-     composition << "<recordtrack id=\"";
-     composition << m_recordTrack;
-     composition << "\"/>";
+    composition << "<composition recordtrack=\"";
+    composition << m_recordTrack;
+    composition << "\" pointer=\"" << m_position;
+    composition << "\" tempo=\"" << m_currentTempo;
+    composition << "\">" << endl << endl;
 
-     return composition.str();
+    for (instrumentiterator iit = getInstruments()->begin();
+                            iit != getInstruments()->end();
+                            iit++ )
+    {
+        composition << "  " << (*iit).second.toXmlString() << endl;
+    }
+
+    composition << endl;
+
+    for (trackiterator tit = getTracks()->begin();
+                        tit != getTracks()->end();
+                        tit++ )
+    {
+        composition << "  " << (*tit).second.toXmlString() << endl;
+    }
+
+    composition << endl;
+    composition << "</composition>" << ends;
+
+    return composition.str();
 }
 
 

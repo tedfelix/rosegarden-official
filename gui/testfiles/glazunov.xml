@@ -5,19 +5,19 @@
 <event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
 </reference-segment>
 
+<composition recordtrack="3" pointer="0" tempo="120">
 
-<recordtrack id="3"/>
+  <instrument id="0" type="midi" name="Piano"/>
+  <instrument id="1" type="midi" name="Piano"/>
+  <instrument id="2" type="midi" name="Piano"/>
+  <instrument id="3" type="midi" name="Audio Samples"/>
 
-<instrument id="0" type="midi" name="Piano"/>
-<instrument id="1" type="midi" name="Piano"/>
-<instrument id="2" type="midi" name="Piano"/>
-<instrument id="3" type="audio" name="Audio Samples"/>
+  <track id="0" type="unknown" label="XML Trk 0" position="0" muted="false" instrument="0"/>
+  <track id="1" type="unknown" label="XML Trk 1" position="1" muted="false" instrument="0"/>
+  <track id="2" type="unknown" label="XML Trk 2" position="2" muted="false" instrument="0"/>
+  <track id="3" type="unknown" label="XML Trk 3" position="2" muted="true" instrument="0"/>
 
-<track id="0" type="midi" position="0" instrument="0" label="XML Trk 0" muted="false"/>
-<track id="1" type="midi" position="1" instrument="0" label="XML Trk 1" muted="false"/>
-<track id="2" type="midi" position="2" instrument="0" label="XML Trk 2" muted="false"/>
-<track id="3" type="midi" position="2" instrument="0" label="XML Trk 3" muted="true"/>
-
+</composition>
 
 <segment track="0" start="0">
 <chord>
@@ -321,12 +321,12 @@
 <event type="note" duration="24"><property name="pitch" int="62"/></event>
 </group>
 <group type="tupled" length="96" untupled="144" count="6">
-<event type="note" duration="16"><property name="pitch" int="61"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="59"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="61"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="62"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="64"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="66"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="61"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="59"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="61"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="62"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="64"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="66"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
 </group>
 <event type="note" duration="48"><property name="pitch" int="68"/></event>
 <event type="rest" duration="24"></event>
@@ -345,12 +345,12 @@
 <event type="note" duration="24"><property name="pitch" int="68"/></event>
 </group>
 <group type="tupled" length="96" untupled="144" count="6">
-<event type="note" duration="16"><property name="pitch" int="66"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="64"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="66"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="68"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="69"/><property name="TupletNominalDuration" int="24"/></event>
-<event type="note" duration="16"><property name="pitch" int="71"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="66"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="64"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="66"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="68"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="69"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
+<event type="note" duration="16"><property name="pitch" int="71"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="6"/><property name="BGroupUntupledLength" int="144"/><property name="TupletNominalDuration" int="24"/></event>
 </group>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="73"/></event>
@@ -1325,17 +1325,17 @@
 <event type="rest" duration="96"></event>
 <group type="tupled" length="96" untupled="108" count="9">
 <chord>
-	<event type="indication" subordering="-8"><property name="indicationtype" string="slur"/><property name="indicationduration" int="144"/><property name="TupletNominalDuration" int="0"/></event>
-	<event type="note" duration="10"><property name="pitch" int="78"/><property name="TupletNominalDuration" int="12"/></event>
+	<event type="indication" subordering="-8"><property name="indicationtype" string="slur"/><property name="indicationduration" int="144"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="0"/></event>
+	<event type="note" duration="10"><property name="pitch" int="78"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
 </chord>
-<event type="note" duration="11"><property name="pitch" int="76"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="74"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="10"><property name="pitch" int="73"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="71"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="73"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="10"><property name="pitch" int="74"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="76"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="78"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="76"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="74"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="10"><property name="pitch" int="73"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="71"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="73"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="10"><property name="pitch" int="74"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="76"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="78"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
 </group>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="80"/></event>
@@ -1360,17 +1360,17 @@
 <event type="rest" duration="96"></event>
 <group type="tupled" length="96" untupled="108" count="9">
 <chord>
-	<event type="indication" subordering="-8"><property name="indicationtype" string="slur"/><property name="indicationduration" int="144"/><property name="TupletNominalDuration" int="0"/></event>
-	<event type="note" duration="10"><property name="pitch" int="83"/><property name="TupletNominalDuration" int="12"/></event>
+	<event type="indication" subordering="-8"><property name="indicationtype" string="slur"/><property name="indicationduration" int="144"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="0"/></event>
+	<event type="note" duration="10"><property name="pitch" int="83"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
 </chord>
-<event type="note" duration="11"><property name="pitch" int="81"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="80"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="10"><property name="pitch" int="78"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="76"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="78"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="10"><property name="pitch" int="80"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="81"/><property name="TupletNominalDuration" int="12"/></event>
-<event type="note" duration="11"><property name="pitch" int="83"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="81"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="80"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="10"><property name="pitch" int="78"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="76"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="78"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="10"><property name="pitch" int="80"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="81"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
+<event type="note" duration="11"><property name="pitch" int="83"/><property name="BGroupTupledLength" int="96"/><property name="BGroupTupledCount" int="9"/><property name="BGroupUntupledLength" int="108"/><property name="TupletNominalDuration" int="12"/></event>
 </group>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="85"/></event>

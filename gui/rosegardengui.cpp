@@ -1062,10 +1062,16 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
 //    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::setPointerPosition" << endl;
 
     // cc -- this seems like a good idea, but is it safe?
-    if (m_doc->getComposition().getPosition() == position) return;
+    //
+    // rwb - it's not safe if you want initView to refresh the
+    //       pointer position after a document load, so for the
+    //       moment we lose this
+    //
+    //if (m_doc->getComposition().getPosition() == position) return;
 
     // set the composition time
     m_doc->getComposition().setPosition((timeT) position);
+
 
     // and the gui time
     m_view->setPointerPosition(position);

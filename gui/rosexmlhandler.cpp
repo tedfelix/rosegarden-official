@@ -123,15 +123,40 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 new Rosegarden::Instrument(id, it, name);
         m_composition.addInstrument(*instrument);
 
-    } else if (lcName == "recordtrack") {
-        int id = -1;
-        QString idNbStr = atts.value("id");
+    } else if (lcName == "composition") {
 
-        if (idNbStr) {
-            id = idNbStr.toInt();
+        // Get and set the record track
+        //
+        int recordTrack = -1;
+        QString recordStr = atts.value("recordtrack");
+
+        if (recordStr) {
+            recordTrack = recordStr.toInt();
         }
 
-        m_composition.setRecordTrack(id);
+        m_composition.setRecordTrack(recordTrack);
+
+        // Get and ste the position pointer
+        //
+        int position = 0;
+        QString positionStr = atts.value("pointer");
+        if (positionStr) {
+            position = positionStr.toInt();
+        }
+
+        m_composition.setPosition(position);
+
+
+        // Get and (eventually) set the tempo
+        //
+        double tempo;
+        QString tempoStr = atts.value("tempo");
+        if (tempoStr) {
+            tempo = tempoStr.toDouble();
+        }
+
+        //m_composition.setTempo(tempo);
+        
 
     } else if (lcName == "track") {
         int id = -1;

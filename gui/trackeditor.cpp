@@ -322,6 +322,7 @@ void TrackEditor::setupHorizontalHeader()
 void
 TrackEditor::setPointerPosition(int position)
 {
+
 //    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
 
