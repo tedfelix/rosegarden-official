@@ -5,7 +5,7 @@ o Repeating segments and composition end marker
 
 o AudioManager and AudioFile commands
 
-o Matrix Hypereditor
+o Matrix Hypereditor [STARTED]
 
 o Fix segment audio drag and drop
 

@@ -32,6 +32,7 @@
 #include "SnapGrid.h"
 #include "Quantizer.h"
 #include "MappedInstrument.h"
+#include "PropertyName.h"
 
 #include "editview.h"
 #include "matrixcanvasview.h"
@@ -52,6 +53,7 @@ class PianoKeyboard;
 class MatrixParameterBox;
 class RosegardenComboBox;
 template <class T> class ZoomSlider;
+class ControlRuler;
 
 class QMouseEvent;
 class QLabel;
@@ -129,6 +131,17 @@ public:
      */
     Rosegarden::SnapGrid getSnapGrid() { return *m_snapGrid; }
 
+    /**
+     * Add a ruler that allows control of a single property -
+     * return the number of the added ruler
+     * 
+     */
+    unsigned int addControlRuler(const Rosegarden::PropertyName &property);
+
+    /**
+     * Remove a control ruler - return true if it's a valid ruler number
+     */
+    bool removeControlRuler(unsigned int number);
 
 signals:    
     /**
@@ -365,6 +378,8 @@ protected:
     //
     std::vector<Rosegarden::StandardQuantization> m_quantizations;
     std::vector<Rosegarden::timeT>                m_snapValues;
+
+    std::vector<ControlRuler*>                    m_controlRulers;
 };
 
 #endif

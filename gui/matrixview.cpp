@@ -40,9 +40,11 @@
 #include "Composition.h"
 #include "Event.h"
 #include "Quantizer.h"
-
+#include "Property.h"
 #include "BaseProperties.h"
 #include "Profiler.h"
+#include "Property.h"
+
 #include "matrixview.h"
 #include "matrixstaff.h"
 #include "matrixhlayout.h"
@@ -59,10 +61,10 @@
 #include "qdeferscrollview.h"
 #include "matrixparameterbox.h"
 #include "velocitycolour.h"
-#include "Property.h"
 #include "widgets.h"
 #include "zoomslider.h"
 #include "notepixmapfactory.h"
+#include "controlruler.h"
 
 #include "rosedebug.h"
 
@@ -278,6 +280,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
+    // Add a velocity ruler
+    //
+    addControlRuler(Rosegarden::BaseProperties::VELOCITY);
+
     // Scroll view to half way up and warp to pointer position
     //
     m_canvasView->center(0, m_canvasView->contentsHeight()/2);
@@ -296,6 +302,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // default zoom
     slotChangeHorizontalZoom(-1);
+
 }
 
 MatrixView::~MatrixView()
@@ -1312,12 +1319,71 @@ MatrixView::slotChangeHorizontalZoom(int)
         m_staffs[i]->sizeStaff(m_hlayout);
     }
 
-
     if (m_topBarButtons) m_topBarButtons->repaint();
     if (m_bottomBarButtons) m_bottomBarButtons->repaint();
 
+    /*
+
+    // If you do adjust the viewsize then please remember to 
+    // either re-center() or remember old scrollbar position
+    // and restore.
+    //
+
+    Rosegarden::timeT length = m_segments[0]->getEndTime() -
+                               m_segments[0]->getStartTime();
+
+    int height = m_canvasView->visibleHeight();
+
+    //setViewSize(QSize(int(m_hlayout.getXForTime(length)), height));
+    //cout << "WIDTH = " << m_hlayout.getXForTime(length) << endl;
+
+    readjustViewSize(QSize(int(m_hlayout.getXForTime(length)), height), true);
+
+    */
+
+    m_canvasView->slotUpdate();
     refreshSegment(0, 0, 0);
     updateView();
+}
+
+unsigned int
+MatrixView::addControlRuler(const Rosegarden::PropertyName &property)
+{
+    // Try and find this controller if it exists
+    //
+    for (unsigned int i = 0; i != m_controlRulers.size(); i++)
+    {
+        if (m_controlRulers[i]->getPropertyName() == property)
+            return i;
+    }
+
+    ControlRuler *newRuler = new ControlRuler(&m_hlayout,
+	                                      m_segments[0],
+                                              property,
+                                              0,
+                                              20,
+                                              getCentralFrame());
+
+    addRuler(newRuler);
+    m_controlRulers.push_back(newRuler);
+                             
+    return m_controlRulers.size() - 1;
+}
+
+
+bool
+MatrixView::removeControlRuler(unsigned int number)
+{
+    if (number > m_controlRulers.size() - 1)
+        return false;
+
+    std::vector<ControlRuler*>::iterator it = m_controlRulers.begin();
+    while(number--) it++;
+
+    delete (*it);
+    m_controlRulers.erase(it);
+
+    return true;
 }
 
 

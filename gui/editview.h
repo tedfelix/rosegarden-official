@@ -149,7 +149,7 @@ protected:
     /**
      * Locate the given widget right above the top bar-buttons and
      * connect up its scrolling signals.
-     * The widget has to have a slotScrolllHoriz(int) slot
+     * The widget has to have a slotScrollHoriz(int) slot
      */
     void addRuler(QWidget*);
 
