@@ -50,7 +50,7 @@ public:
     unsigned int barLineHeight() const { return m_barLineHeight; }
 
     void insertBar(unsigned int barPos);
-    void deleteBars(unsigned int fromPos, unsigned int toPos);
+    void deleteBars(unsigned int fromPos);
     void deleteBars();
 
     static const unsigned int noteHeight;

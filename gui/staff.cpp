@@ -298,40 +298,23 @@ Staff::insertBar(unsigned int barPos)
 }
 
 void
-Staff::deleteBars(unsigned int fromPos, unsigned int toPos)
+Staff::deleteBars(unsigned int fromPos)
 {
-    if (fromPos == toPos)
-        return;
-
-    if (fromPos > toPos) {
-        kdDebug(KDEBUG_AREA) << "%% Staff::deleteBars inconsistent parameters : fromPos ("
-                             << fromPos
-                             << ") > toPos (" << toPos << ")\n";
-        throw -1;
-    }
-    
-    kdDebug(KDEBUG_AREA) << "Staff::deleteBars from " << fromPos << " to "
-                         << toPos << endl;
+    kdDebug(KDEBUG_AREA) << "Staff::deleteBars from " << fromPos << endl;
 
     barlines::iterator startDeletePoint = lower_bound(m_barLines.begin(),
                                                       m_barLines.end(),
                                                       fromPos, compareBarToPos);
 
-    barlines::iterator endDeletePoint = lower_bound(startDeletePoint,
-                                                    m_barLines.end(),
-                                                    toPos, compareBarToPos);
-
-    if (startDeletePoint != m_barLines.end() && endDeletePoint != m_barLines.end())
-        kdDebug(KDEBUG_AREA) << "startDeletePoint pos : " << (*startDeletePoint)->x()
-                             << " - endDeletePoint : " << (*endDeletePoint)->x() << endl;
-    else
-        kdDebug(KDEBUG_AREA) << "startDeletePoint pos or endDeletePoint = end\n";
+    if (startDeletePoint != m_barLines.end())
+        kdDebug(KDEBUG_AREA) << "startDeletePoint pos : "
+                             << (*startDeletePoint)->x() << endl;
 
     // delete the canvas lines
-    for (barlines::iterator i = startDeletePoint; i != endDeletePoint; ++i)
+    for (barlines::iterator i = startDeletePoint; i != m_barLines.end(); ++i)
         delete (*i);
 
-    m_barLines.erase(startDeletePoint, endDeletePoint);
+    m_barLines.erase(startDeletePoint, m_barLines.end());
 }
 
 void

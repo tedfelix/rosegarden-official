@@ -351,7 +351,7 @@ NotationView::showBars(NotationElementList::iterator from,
 //                          << " - lastElement->x = " << (*lastElement)->x() << endl
 //                          << "lastElement : " << *(*lastElement) << endl;
     
-    m_currentStaff->deleteBars((*from)->x(), (*lastElement)->x());
+    m_currentStaff->deleteBars((*from)->x());
         
     
     for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
@@ -640,6 +640,9 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
         showElements(m_notationElements->begin(),
                      m_notationElements->end(),
                      m_currentStaff);
+
+    showBars(m_notationElements->begin(),
+             m_notationElements->end());
 }
 
 
