@@ -857,8 +857,8 @@ void RosegardenGUIDoc::initialiseStudio()
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
-    bool faderOuts = config->readEntry("audiofaderouts", false);
-    bool submasterOuts = config->readEntry("audiosubmasterouts", false);
+    bool faderOuts = config->readBoolEntry("audiofaderouts", false);
+    bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
 
     Rosegarden::MidiByte ports = 0;
     if (faderOuts) {
