@@ -1210,7 +1210,7 @@ BankEditorDialog::slotImport()
         return;
     }
 
-    RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, false, 0);
+    RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0);
 
     // Add some dummy devices for bank population when we open the document.
     // We guess that the file won't have more than 8 devices.
