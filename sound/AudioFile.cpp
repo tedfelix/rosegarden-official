@@ -181,8 +181,10 @@ AudioFile::open()
     catch(string s)
     {  
         cout << "EXCEPTION : " << s << endl;
+        return false;
     }
 
+    m_type = AUDIO_WAV;
     return true;
 }
 

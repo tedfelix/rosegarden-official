@@ -25,6 +25,7 @@
 #include <qxml.h>
 #include "Composition.h"
 #include "Event.h"
+#include "AudioFileManager.h"
 
 class XmlStorableEvent;
 
@@ -39,7 +40,8 @@ public:
      * Construct a new RoseXmlHandler which will put the data extracted
      * from the XML file into the specified composition
      */
-    RoseXmlHandler(Rosegarden::Composition &composition);
+    RoseXmlHandler(Rosegarden::Composition &composition,
+                   Rosegarden::AudioFileManager &audioFileManager);
 
     virtual ~RoseXmlHandler();
 
@@ -72,6 +74,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     Rosegarden::Composition &m_composition;
+    Rosegarden::AudioFileManager &m_audioFileManager;
     Rosegarden::Segment *m_currentSegment;
     XmlStorableEvent *m_currentEvent;
 

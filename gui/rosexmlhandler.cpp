@@ -40,8 +40,10 @@ using Rosegarden::timeT;
 using namespace Rosegarden::BaseProperties;
 
 
-RoseXmlHandler::RoseXmlHandler(Composition &composition)
+RoseXmlHandler::RoseXmlHandler(Composition &composition,
+                               Rosegarden::AudioFileManager &audioFileManager)
     : m_composition(composition),
+      m_audioFileManager(audioFileManager),
       m_currentSegment(0),
       m_currentEvent(0),
       m_currentTime(0),

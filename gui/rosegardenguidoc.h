@@ -35,6 +35,7 @@
 #include "Composition.h"
 #include "MappedComposition.h"
 #include "multiviewcommandhistory.h"
+#include "AudioFileManager.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
@@ -254,6 +255,11 @@ private:
      * the composition this document is wrapping
      */
     Rosegarden::Composition m_composition;
+
+    /**
+     * stores AudioFile mappings
+     */
+    Rosegarden::AudioFileManager m_audioFileManager;
 
     /**
      * a Segment onto which we can record events

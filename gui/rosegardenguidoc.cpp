@@ -58,7 +58,8 @@ using namespace Rosegarden::BaseProperties;
 
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
-    : QObject(parent, name), m_recordSegment(0), m_endOfLastRecordedNote(0)
+    : QObject(parent, name),
+      m_recordSegment(0), m_endOfLastRecordedNote(0)
 {
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
@@ -398,7 +399,7 @@ bool
 RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
 {
     // parse xml file
-    RoseXmlHandler handler(m_composition);
+    RoseXmlHandler handler(m_composition, m_audioFileManager);
 
     QXmlInputSource source;
     source.setData(fileContents);

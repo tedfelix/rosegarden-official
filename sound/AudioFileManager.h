@@ -53,16 +53,16 @@ public:
     // first allocated id for it.
     // 
     //
-    unsigned int addFile(const std::string &name, const std::string &fileName);
+    int addFile(const std::string &name, const std::string &fileName);
 
     // And insert an AudioFile and specify an id
     //
-    void addFile(const std::string &name, const std::string &fileName,
+    bool addFile(const std::string &name, const std::string &fileName,
                  const unsigned int &id);
 
     // Remove a file from the AudioManager by id
     //
-    void removeFile(const unsigned int &id);
+    bool removeFile(const unsigned int &id);
 
 private:
     unsigned int getFirstUnusedID();

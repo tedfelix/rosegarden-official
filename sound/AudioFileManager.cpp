@@ -36,20 +36,29 @@ AudioFileManager::~AudioFileManager()
 
 // Create a new AudioFile with unique ID and label
 //
-unsigned int
+int
 AudioFileManager::addFile(const std::string &name,
                           const std::string &fileName)
 {
     unsigned int id = getFirstUnusedID();
 
     AudioFile *aF = new AudioFile(id, name, fileName);
+
+    // if we don't recognise the file then don't add it
+    //
+    if (aF->open() == false)
+    {
+        delete aF;
+        return -1;
+    }
+
     m_audioFiles.push_back(aF);
 
-    return id;
+    return (int)id;
 }
 
 
-void
+bool
 AudioFileManager::removeFile(const unsigned int &id)
 {
     vector<AudioFile*>::iterator it;
@@ -59,8 +68,13 @@ AudioFileManager::removeFile(const unsigned int &id)
          it++)
     {
         if ((*it)->getID() == id)
+        {
             m_audioFiles.erase(it);
+            return true;
+        }
     }
+
+    return false;
 }
 
 unsigned int
@@ -85,7 +99,7 @@ AudioFileManager::getFirstUnusedID()
     return rI;
 }
 
-void
+bool
 AudioFileManager::addFile(const std::string &name,
                           const std::string &fileName,
                           const unsigned int &id)
@@ -95,7 +109,15 @@ AudioFileManager::addFile(const std::string &name,
 
     // and insert
     AudioFile *aF = new AudioFile(id, name, fileName);
+
+    if (aF->open() == false)
+    {
+        delete aF;
+        return false;
+    }
+
     m_audioFiles.push_back(aF);
+    return true;
 }
 
 
