@@ -348,7 +348,12 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     throwIfCancelled();
 
-    Clef currentClef; // default is okay to start with
+    // These are only used when rendering keys, and we don't have the
+    // right start data here so we choose not to render keys at all in
+    // this method (see below) so that we can pass bogus clef and key
+    // data to renderSingleElement
+    Clef currentClef;
+    Rosegarden::Key currentKey;
 
     int elementCount = 0;
     timeT endTime =
@@ -361,8 +366,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	
 	++nextIt;
 
-	if ((*it)->event()->isa(Clef::EventType)) {
-	    currentClef = Clef(*(*it)->event());
+	if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+	    // force rendering in positionElements instead
+	    NotationElement* el = static_cast<NotationElement*>(*it);
+	    el->removeCanvasItem();
+	    continue;
 	}
 
 	bool selected = isSelected(it);
@@ -370,14 +378,13 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 //			     << " (selected = " << selected << ")" << endl;
 
 	renderSingleElement(*it, (nextIt == to ? 0 : *nextIt),
-			    currentClef, selected);
+			    currentClef, currentKey, selected);
 
 	if ((endTime > startTime) &&
 	    (++elementCount % 200 == 0)) {
 
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
-//!!!	    kapp->processEvents();
 	    throwIfCancelled();
 	}
     }
@@ -395,7 +402,6 @@ NotationStaff::positionElements(timeT from, timeT to)
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
-//!!!    kapp->processEvents();
     throwIfCancelled();
 
     const NotationProperties &properties(m_notationView->getProperties());
@@ -406,13 +412,6 @@ NotationStaff::positionElements(timeT from, timeT to)
     Rosegarden::Composition *composition = getSegment().getComposition();
 
     timeT nextBarTime = composition->getBarEndForTime(to);
-
-/*
-    NotationElementList::iterator beginAt =
-	findUnchangedBarStart(from, usePreciseEndTimes);
-    NotationElementList::iterator endAt =
-	findUnchangedBarEnd(to, nextBarTime, usePreciseEndTimes);
-*/
 
     NotationElementList::iterator beginAt =
 	getViewElementList()->findTime(composition->getBarStartForTime(from));
@@ -426,6 +425,9 @@ NotationStaff::positionElements(timeT from, timeT to)
 
     Clef currentClef; // used for rendering key sigs
     bool haveCurrentClef = false;
+
+    Rosegarden::Key currentKey;
+    bool haveCurrentKey = false;
 
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
 	 it != endAt; it = nextIt) {
@@ -451,6 +453,12 @@ NotationStaff::positionElements(timeT from, timeT to)
 		currentClef = getSegment().getClefAtTime
 		    ((*it)->event()->getAbsoluteTime());
 		haveCurrentClef = true;
+	    }
+
+	    if (!haveCurrentKey) { // stores the key _before_ this one
+		currentKey = getSegment().getKeyAtTime
+		    ((*it)->event()->getAbsoluteTime() - 1);
+		haveCurrentKey = true;
 	    }
 	}
 
@@ -504,8 +512,13 @@ NotationStaff::positionElements(timeT from, timeT to)
 
 	if (needNewSprite) {
 	    renderSingleElement(*it, (nextIt == endAt ? 0 : *nextIt),
-				currentClef, selected);
+				currentClef, currentKey, selected);
 	    ++elementsRendered;
+	}
+
+	if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+	    // update currentKey after rendering, not before
+	    currentKey = Rosegarden::Key(*(*it)->event());
 	}
 
 	LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
@@ -517,7 +530,6 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    (++elementsPositioned % 300 == 0)) {
 	    timeT myTime = (*it)->getViewAbsoluteTime();
 	    emit setProgress((myTime - from) * 100 / (to - from));
-//!!!	    kapp->processEvents();
 	    throwIfCancelled();
 	}
     }
@@ -692,6 +704,7 @@ void
 NotationStaff::renderSingleElement(ViewElement *velt,
 				   ViewElement * /* vnextElt */,
 				   const Rosegarden::Clef &currentClef,
+				   const Rosegarden::Key &currentKey,
 				   bool selected)
 {
     const NotationProperties &properties(m_notationView->getProperties());
@@ -753,8 +766,15 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 	} else if (elt->event()->isa(Rosegarden::Key::EventType)) {
 
-	    pixmap = m_notePixmapFactory->makeKeyPixmap
-		 (Rosegarden::Key(*elt->event()), currentClef);
+	    Rosegarden::Key key(*elt->event());
+
+	    if (key.getAccidentalCount() == 0) { // need cancellation
+		pixmap = m_notePixmapFactory->makeKeyPixmap
+		    (currentKey, currentClef, true);
+	    } else {
+		pixmap = m_notePixmapFactory->makeKeyPixmap
+		    (key, currentClef);
+	    }
 
 	} else if (elt->event()->isa(Rosegarden::Text::EventType)) {
 

@@ -280,6 +280,7 @@ int main(int argc, char *argv[])
 	roseSeq->sleep(sleepTime);
     }
 
-    return app.exec();
-
+    int rv = app.exec();
+    delete roseSeq;
+    return rv;
 }

@@ -459,7 +459,6 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 //    tmpStr.replace(QRegExp("\\("), "");
 //    tmpStr.replace(QRegExp("\\)"), "");
     tmpStr.replace(QRegExp("\""), "");
-    tmpStr.replace(QRegExp("'"), "");
 
 //    tmpStr.replace(QRegExp("-"), "\\-");
 
@@ -644,11 +643,7 @@ LilypondExporter::write()
     str << indent(col) << "\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator() << "" << std::endl;
-/*
-    if (exportLyrics) {
-	str << indent(col) << "\\addlyrics" << std::endl;
-    }
-*/
+
     int lastTrackIndex = -1;
     int voiceCounter = 0;
     int trackNo = 0;
@@ -715,7 +710,10 @@ LilypondExporter::write()
             std::ostringstream voiceNumber, lyricNumber;
             voiceNumber << "voice " << voiceCounter;
             lyricNumber << "lyric " << voiceCounter++;
-            
+
+            if (exportLyrics && !oldStyle) {
+		str << indent(col) <<  "\\addlyrics" << std::endl;
+	    }
             str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                 << "\" {"; // indent+
 
@@ -738,6 +736,7 @@ LilypondExporter::write()
             std::string lilyText = "";      // text events
             std::string lilyLyrics = "";    // lyric events
             std::string prevStyle = "";     // track note styles 
+	    bool note_ended_with_a_lyric = true;
 
 	    Rosegarden::Key key;
 
@@ -749,19 +748,22 @@ LilypondExporter::write()
 
 		writeBar(*i, barNo, col, key,
 			 lilyText, lilyLyrics,
-			 prevStyle, eventsInProgress, str);
+			 prevStyle, eventsInProgress, str, note_ended_with_a_lyric);
 
 		if (exportBarChecks) {
 		    str << " |";
 		}
 	    }
 
+	    // closing bar
+	    str << std::endl << indent(col) << " \\bar \"|.\"";
+
             // close Voice context
             str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
             
             // write accumulated lyric events to the Lyric context, if user
             // desires
-            if (exportLyrics && (lilyLyrics != "")) {
+            if (exportLyrics) {
                 str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str()
                     << "\" \\lyrics  { " << std::endl;
                 str << indent(++col) << lilyLyrics << " " << std::endl;
@@ -908,7 +910,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			   std::string &lilyLyrics,
 			   std::string &prevStyle,
 			   eventendlist &eventsInProgress,
-			   std::ofstream &str)
+			   std::ofstream &str,
+			   bool &note_ended_with_a_lyric)
 {
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationView::ConfigGroup);
@@ -1073,9 +1076,12 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 		if ((*i)->isa(Text::EventType)) {
 
-		    if (oldStyle) { //!!! work this out for lily 2.x
-			handleText(*i, lilyText, lilyLyrics);
-		    }
+		    std::string textType;
+		    if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+			textType == Text::Lyric)
+			note_ended_with_a_lyric = true;
+
+		    handleText(*i, lilyText, lilyLyrics);
 
 		} else if ((*i)->isa(Note::EventType)) {
 
@@ -1097,6 +1103,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    bool noteTiedForward = false;
 		    (*i)->get<Bool>(TIED_FORWARD, noteTiedForward);
 		    if (noteTiedForward) tiedForward = true;
+
+		    if (!noteTiedForward) {
+			if (!note_ended_with_a_lyric) lilyLyrics += "_ ";
+			note_ended_with_a_lyric = false;
+		    }
 
 		    str << " ";
 
@@ -1204,10 +1215,13 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	} else if ((*i)->isa(Text::EventType)) {
-	    
-	    if (oldStyle) { //!!! work this out for lily 2.x
-		handleText(*i, lilyText, lilyLyrics);
-	    }
+
+	    std::string textType;
+	    if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+		textType == Text::Lyric)
+		note_ended_with_a_lyric = true;
+
+	    handleText(*i, lilyText, lilyLyrics);
 	}
 
 	if ((*i)->isa(Indication::EventType)) {
@@ -1307,7 +1321,7 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 
 	} else if (text.getTextType() == Text::Lyric) {
 
-	    lilyLyrics += s + " ";
+	    lilyLyrics += "\"" + s + "\" ";
 
 	} else if (text.getTextType() == Text::Dynamic) {
 

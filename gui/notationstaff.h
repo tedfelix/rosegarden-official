@@ -117,10 +117,7 @@ public:
      * (by renderElements) or before (by the previous renderElements
      * call, if the sprites are unchanged but have moved) -- so
      * neither the layout nor renderElements can authoritatively set
-     * their final positions.  Also, this operates on the entire staff
-     * so that it can update its record of key and clef changes during
-     * the course of the staff, which is needed to support the
-     * getClefAndKeyAtCanvasCoords() method.
+     * their final positions.
      *
      * This method also updates the selected-ness of any elements it
      * sees (i.e. it turns the selected ones blue and the unselected
@@ -308,6 +305,7 @@ protected:
     virtual void renderSingleElement(Rosegarden::ViewElement *elt, 
 				     Rosegarden::ViewElement *nextElt,
 				     const Rosegarden::Clef &,
+				     const Rosegarden::Key &,
 				     bool selected);
 
     void setTuplingParameters(NotationElement *, NotePixmapParameters &);

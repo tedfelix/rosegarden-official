@@ -291,7 +291,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 //		NOTATION_DEBUG << "Found clef" << endl;
 		chunks.push_back(Chunk(el->event()->getSubOrdering(),
-				       getLayoutWidth(*el)));
+				       getLayoutWidth(*el, key)));
 		
                 clef = Clef(*el->event());
 
@@ -303,7 +303,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 //		NOTATION_DEBUG << "Found key" << endl;
 		chunks.push_back(Chunk(el->event()->getSubOrdering(),
-				       getLayoutWidth(*el)));
+				       getLayoutWidth(*el, key)));
 
                 key = Rosegarden::Key(*el->event());
 
@@ -333,7 +333,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 		chunks.push_back(Chunk(el->getViewDuration(),
 				       el->event()->getSubOrdering(),
 				       0,
-				       getLayoutWidth(*el)));
+				       getLayoutWidth(*el, key)));
 
 	    } else if (el->event()->isa(Indication::EventType)) {
 
@@ -345,7 +345,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 		
 		NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
 		chunks.push_back(Chunk(el->event()->getSubOrdering(),
-				       getLayoutWidth(*el)));
+				       getLayoutWidth(*el, key)));
 	    }
 
 	    actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
@@ -552,7 +552,8 @@ NotationHLayout::scanChord(NotationElementList *notes,
     NOTATION_DEBUG << "Lyric width is " << lyricWidth << endl;
 
     chunks.push_back(Chunk(d, 0, extraWidth,
-			   std::max(layoutExtra + getLayoutWidth(**myLongest),
+			   std::max(layoutExtra +
+				    getLayoutWidth(**myLongest, key),
 				    lyricWidth)));
 
     lyricWidth = 0;
@@ -1477,7 +1478,8 @@ NotationHLayout::positionChord(Staff &staff,
 
 
 float
-NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
+NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve,
+				const Rosegarden::Key &previousKey) const
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
 
@@ -1519,7 +1521,13 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 
 	} else if (e.event()->isa(Rosegarden::Key::EventType)) {
 
-	    w += m_npf->getKeyWidth(Rosegarden::Key(*e.event()));
+	    Rosegarden::Key key(*e.event());
+
+	    if (key.getAccidentalCount() == 0) {
+		w += m_npf->getKeyWidth(previousKey, true);
+	    } else {
+		w += m_npf->getKeyWidth(key);
+	    }
 
 	} else if (e.event()->isa(Indication::EventType) ||
 		   e.event()->isa(Text::EventType)) {

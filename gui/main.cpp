@@ -20,7 +20,8 @@
 */
 
 #include <qtimer.h>
-#include <ctime>
+#include <sys/time.h>
+#include "RealTime.h"
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -312,8 +313,10 @@ I18N_NOOP("Rosegarden - A sequencer and musical notation editor");
 
 static KCmdLineOptions options[] =
 {
-    { "nosplash", I18N_NOOP("don't show splash screen"), 0 },
-    { "nosequencer", I18N_NOOP("don't use an external sequencer"), 0 },
+    { "nosequencer", I18N_NOOP("Don't use the sequencer (support editing only)"), 0 },
+    { "nosplash", I18N_NOOP("Don't show the splash screen"), 0 },
+    { "nofork", I18N_NOOP("Don't automatically run in the background"), 0 },
+    { "existingsequencer", I18N_NOOP("Attach to a running sequencer process, if found"), 0 },
     { "+[File]", I18N_NOOP("file to open"), 0 },
     { 0, 0, 0 }
 };
@@ -467,7 +470,8 @@ int main(int argc, char *argv[])
         startLogo->show();
     }
 
-    clock_t logoShowTime = clock();
+    struct timeval logoShowTime;
+    gettimeofday(&logoShowTime, 0);
 
     //
     // Start application
@@ -491,8 +495,9 @@ int main(int argc, char *argv[])
 #else
 	app.setNoSequencerMode(true);
 #endif // NO_SOUND
-
+	
         rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(),
+					     args->isSet("existingsequencer"),
                                              startLogo);
 
         app.setMainWidget(rosegardengui);
@@ -529,7 +534,7 @@ int main(int argc, char *argv[])
     //
     try
     {
-        rosegardengui->launchSequencer();
+        rosegardengui->launchSequencer(args->isSet("existingsequencer"));
     }
     catch(std::string e)
     {
@@ -546,10 +551,16 @@ int main(int argc, char *argv[])
         // length of time, just 'cos it looks a bit silly to show it
         // and remove it immediately
 
-        int visibleFor = (clock() - logoShowTime) * 1000 / CLOCKS_PER_SEC;
+	struct timeval now;
+	gettimeofday(&now, 0);
 
-        if (visibleFor < 2000) {
-            QTimer::singleShot(2500 - visibleFor, startLogo, SLOT(close()));
+	Rosegarden::RealTime visibleFor =
+	    Rosegarden::RealTime(now.tv_sec, now.tv_usec) -
+	    Rosegarden::RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec);
+
+        if (visibleFor < Rosegarden::RealTime(2, 0)) {
+	    int waitTime = visibleFor.sec * 1000 + visibleFor.usec / 1000;
+            QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
         } else {
             startLogo->close();
         }

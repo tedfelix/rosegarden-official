@@ -1509,14 +1509,18 @@ NotePixmapFactory::makeNoteMenuPixmap(Rosegarden::timeT duration,
 
 
 QCanvasPixmap*
-NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
+NotePixmapFactory::makeKeyPixmap(const Key &key,
+				 const Clef &clef,
+				 bool cancellation)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
     if (ah.size() == 0) return 0;
 
-    CharName charName = (key.isSharp() ?
-                         NoteCharacterNames::SHARP :
-                         NoteCharacterNames::FLAT);
+    CharName charName;
+
+    if (cancellation) charName = NoteCharacterNames::NATURAL;
+    else if (key.isSharp()) charName = NoteCharacterNames::SHARP;
+    else charName = NoteCharacterNames::FLAT;
 
     QPixmap accidentalPixmap;
     if (m_selected) {
@@ -1531,7 +1535,10 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 
     int x = 0;
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() - hotspot.x(); // - accidentalPixmap.width()/4 ;
+    int delta = accidentalPixmap.width() - hotspot.x();
+    
+    // naturals need more space:
+    if (cancellation) delta += accidentalPixmap.width()/4;
 
     createPixmapAndMask(delta * ah.size() + accidentalPixmap.width()/4, lw * 8 + 1);
 
@@ -1597,9 +1604,8 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
     QPoint hotspot(m_font->getHotspot(charName));
 
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() + accidentalPixmap.width()/4;
-    int width = 11 * getAccidentalWidth(Rosegarden::Accidentals::Sharp) +
-	clefPixmap->width();
+    int delta = accidentalPixmap.width() - hotspot.x();
+    int width = clefPixmap->width() + 5 * delta + 7 * delta;
     int x = clefPixmap->width() + 3 * delta;
 
     createPixmapAndMask(width, lw * 10 + 1);
@@ -2294,11 +2300,19 @@ int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
         + (restType.getDots() * getDotWidth());
 }
 
-int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key) const {
-    int w = getAccidentalWidth(key.isSharp() ? Sharp : Flat);
-    return w/4 + (key.getAccidentalCount() *
-		  (getAccidentalWidth(key.isSharp() ? Sharp : Flat) -
-		   w/4));
+int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key,
+				   bool cancellation) const
+{
+    CharName charName;
+
+    if (cancellation) charName = NoteCharacterNames::NATURAL;
+    else if (key.isSharp()) charName = NoteCharacterNames::SHARP;
+    else charName = NoteCharacterNames::FLAT;
+
+    int w = m_font->getWidth(charName);
+    int hx = m_font->getHotspot(charName).x();
+
+    return w/4 + (key.getAccidentalCount() * (w - hx));
 }
 
 int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {

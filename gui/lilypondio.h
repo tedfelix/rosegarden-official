@@ -58,7 +58,7 @@ protected:
     void writeBar(Rosegarden::Segment *, int barNo, int col,
 		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
 		  std::string &prevStyle, eventendlist &eventsInProgress,
-		  std::ofstream &str);
+		  std::ofstream &str, bool &note_ended_with_a_lyric);
     
     Rosegarden::timeT calculateDuration(Rosegarden::Segment *s,
 					const Rosegarden::Segment::iterator &i,

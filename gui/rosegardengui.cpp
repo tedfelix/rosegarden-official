@@ -125,6 +125,7 @@ using Rosegarden::timeT;
 using Rosegarden::RosegardenTransportDialog;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
+				   bool useExistingSequencer,
                                    QObject *startupStatusMessageReceiver)
     : DCOPObject("RosegardenIface"), RosegardenIface(this), KDockMainWindow(0), 
       m_actionsSetup(false),
@@ -174,7 +175,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif // HAVE_LIBJACK
 
         emit startupStatusMessage(i18n("Starting sequencer..."));
-        launchSequencer();
+        launchSequencer(useExistingSequencer);
 
     } else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
 
@@ -3112,7 +3113,7 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
 // Sequencer auxiliary process management
 //
 //
-bool RosegardenGUIApp::launchSequencer()
+bool RosegardenGUIApp::launchSequencer(bool useExisting)
 {
     if (!isUsingSequencer()) {
         RG_DEBUG << "RosegardenGUIApp::launchSequencer() - not using seq. - returning\n";
@@ -3132,34 +3133,53 @@ bool RosegardenGUIApp::launchSequencer()
     //
     // User mode should clear down sequencer processes.
     //
-    KConfig *config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    bool cleardown = config->readBoolEntry("sequencercleardown", false);
-
-    if (cleardown)
-    {
-        KProcess *proc = new KProcess;
-        *proc << "/usr/bin/killall";
-        *proc << "-9";
-        *proc << "lt-rosegardensequencer";
-        *proc << "rosegardensequencer";
-
-        proc->start(KProcess::Block, KProcess::All);
-
-        if (proc->exitStatus())
-            RG_DEBUG << "couldn't kill any sequencer processes" << endl;
-        else
-            RG_DEBUG << "killed old sequencer processes" << endl;
-    }
-    else if (kapp->dcopClient()->isApplicationRegistered(
+    if (kapp->dcopClient()->isApplicationRegistered(
                 QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
         RG_DEBUG << "RosegardenGUIApp::launchSequencer() - "
-                 << "already DCOP registered - returning\n";
+                 << "existing DCOP registered sequencer found\n";
 
-        if (m_seqManager) m_seqManager->checkSoundDriverStatus();
-        m_sequencerProcess = (KProcess*)SequencerExternal;
-        return true;
+	if (useExisting) {
+	    if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+	    m_sequencerProcess = (KProcess*)SequencerExternal;
+	    return true;
+	}
+
+        KProcess *proc = new KProcess;
+        *proc << "/usr/bin/killall";
+        *proc << "rosegardensequencer";
+        *proc << "lt-rosegardensequencer";
+
+        proc->start(KProcess::Block, KProcess::All);
+
+        if (proc->exitStatus()) {
+            RG_DEBUG << "couldn't kill any sequencer processes" << endl;
+	}
+	delete proc;
+
+	sleep(1);
+	
+	if (kapp->dcopClient()->isApplicationRegistered(
+                QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+	{
+	    RG_DEBUG << "RosegardenGUIApp::launchSequencer() - "
+		     << "failed to kill existing sequencer\n";
+
+	    KProcess *proc = new KProcess;
+	    *proc << "/usr/bin/killall";
+	    *proc << "-9";
+	    *proc << "rosegardensequencer";
+	    *proc << "lt-rosegardensequencer";
+
+	    proc->start(KProcess::Block, KProcess::All);
+
+	    if (proc->exitStatus()) {
+		RG_DEBUG << "couldn't kill any sequencer processes" << endl;
+	    }
+	    delete proc;
+
+	    sleep(1);
+	}
     }
 
     //
@@ -3694,7 +3714,7 @@ RosegardenGUIApp::slotRecord()
 
         // Try to launch sequencer and return if we fail
         //
-        if (!launchSequencer())
+        if (!launchSequencer(false))
             return;
     }
 
@@ -3744,7 +3764,7 @@ void
 RosegardenGUIApp::slotToggleRecord()
 {
     if (!isUsingSequencer() ||
-        (!isSequencerRunning() && !launchSequencer()))
+        (!isSequencerRunning() && !launchSequencer(false)))
         return;
 
     try
@@ -3801,7 +3821,7 @@ void RosegardenGUIApp::slotPlay()
 
         // Try to launch sequencer and return if it fails
         //
-        if (!launchSequencer())
+        if (!launchSequencer(false))
             return;
     }
 

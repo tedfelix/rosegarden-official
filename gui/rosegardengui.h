@@ -103,6 +103,7 @@ public:
      * @see initMenuBar initToolBar
      */
     RosegardenGUIApp(bool useSequencer = true,
+		     bool useExistingSequencer = false,
                      QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenGUIApp();
@@ -204,7 +205,7 @@ public:
      *
      * @see slotSequencerExited()
      */
-    bool launchSequencer();
+    bool launchSequencer(bool useExistingSequencer);
 
 #ifdef HAVE_LIBJACK
     /*

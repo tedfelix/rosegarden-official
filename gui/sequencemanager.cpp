@@ -101,6 +101,9 @@ SequenceManager::~SequenceManager()
     delete m_compositionMmapper;
     delete m_controlBlockMmapper;
     delete m_metronomeMmapper;
+    delete m_tempoSegmentMmapper;
+    delete m_timeSigSegmentMmapper;
+    delete m_sequencerMapper;
 }
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)

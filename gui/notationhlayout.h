@@ -352,7 +352,8 @@ protected:
     Rosegarden::timeT getSpacingDuration
     (Rosegarden::Staff &staff, const NotationChord &);
 
-    float getLayoutWidth(Rosegarden::ViewElement &) const;
+    float getLayoutWidth(Rosegarden::ViewElement &,
+			 const Rosegarden::Key &) const;
 
     int getBarMargin() const;
     int getPreBarMargin() const;
