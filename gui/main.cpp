@@ -419,8 +419,9 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Pedro Lopez-Cabanillas", "Spanish translatio\nALSA research", "plcl@bigfoot.com");
     aboutData.addCredit("JÃ¶rg Schumann", "German translation", "jrschumann@gmx.de");
     aboutData.addCredit("Kevin Donnelly", "Welsh translation");
-    aboutData.addCredit("Didier Burli", "French translation");
-    aboutData.addCredit("Daniele Medri", "Italian translation");
+    aboutData.addCredit("Didier Burli", "French translation", "didierburli@hotmail.com");
+    aboutData.addCredit("Daniele Medri", "Italian translation", "madrid@linuxmeeting.net");
+    aboutData.addCredit("Stefan Asserhäll", "Swedish translation", "stefan.asserhall@comhem.se");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     

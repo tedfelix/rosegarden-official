@@ -51,6 +51,11 @@ Didier Burli
 Daniele Medri
     * Italian translation
 
+Daniele Medri
+    * Italian translation
+
+Stefan Asserhäll
+    * Swedish translation
 
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
