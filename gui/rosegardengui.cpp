@@ -1672,6 +1672,12 @@ void RosegardenGUIApp::slotResizeSelected()
 
 void RosegardenGUIApp::slotJoinSelected()
 {
+    KMessageBox::information(this,
+        i18n("The join tool isn't implemented yet.  Instead please highlight "
+             "the segments you want to join and then use the menu option:\n\n"
+             "        Segments->Collapse Segments.\n"),
+        i18n("Join tool not yet implemented"));
+                 
     m_view->selectTool(SegmentCanvas::Joiner);
 }
 

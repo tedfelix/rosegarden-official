@@ -32,6 +32,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -1340,6 +1341,49 @@ BankEditorDialog::slotPaste()
 void
 BankEditorDialog::slotExport()
 {
+    QString extension = "rg";
+
+    QString name =
+        KFileDialog::getSaveFileName(":ROSEGARDEN",
+               (extension.isEmpty() ? QString("*") : ("*." + extension)),
+               this,
+               i18n("Export Device as..."));
+
+    // Append extension if we don't have one
+    //
+    if (!extension.isEmpty())
+    {
+        QRegExp rgFile("\\." + extension + "$");
+        if (rgFile.match(name) == -1)
+        {
+            name += "." + extension;
+        }
+    }
+
+    QFileInfo info(name);
+
+    if (info.isDir())
+    {
+        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        return;
+    }
+
+    if (info.exists())
+    {
+        int overwrite = KMessageBox::questionYesNo
+            (this, i18n("The specified file exists.  Overwrite?"));
+
+        if (overwrite != KMessageBox::Yes) return;
+
+    }
+
+    // Check for the existence of the name
+    if (name.isEmpty()) return;
+
+
+    //std::cout << "GOT FILENAME = " << name << std::endl;
+
+
 }
 
 

@@ -1104,7 +1104,7 @@ void NotationView::slotTranspose()
     bool ok = false;
     int semitones = QInputDialog::getInteger
 	(i18n("Transpose"),
-	 i18n("Enter the number of semitones to transpose up by:"),
+	 i18n("Enter the number of semitones to transpose by:"),
 	 0, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
 
