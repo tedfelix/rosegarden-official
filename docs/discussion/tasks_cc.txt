@@ -34,7 +34,8 @@ References in round brackets are to 0.1_planned_features.txt.
  avoiding splitting rests when they're inserted over shorter notes,
  improving duration-list code to place the rests it suggests in a
  better order (e.g. after a quaver note, use quaver + crotchet rather
- than crotchet + quaver), avoid using dotted rests in most cases
+ than crotchet + quaver) [DONE in general], avoid using dotted rests
+ in most cases [DONE avoiding double-dots anyway]
  
  Throughout: Code documentation
 
