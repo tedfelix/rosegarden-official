@@ -1,0 +1,17 @@
+To compile:
+
+- try a plain ./configure
+
+- cross your fingers
+
+The configure isn't set up at all well but it sometimes
+works - sometimes complains about LIBTOOL - just try the
+make again!  Dependencies seem to be OK but we're currently
+checking for way too much stuff.
+
+If it compiles it creates a test executable (script to a libtool'd
+executable) called "sound" that'll read in a MIDI file and attempt
+to get an aRts Midi Manager connection and read some events from
+the MIDI IN.
+
+RB 20.6.2001
