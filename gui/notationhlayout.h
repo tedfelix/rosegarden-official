@@ -18,7 +18,6 @@
     COPYING included with this distribution for more information.
 */
 
-
 #ifndef NOTATIONHLAYOUT_H
 #define NOTATIONHLAYOUT_H
 
