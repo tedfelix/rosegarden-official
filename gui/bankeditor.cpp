@@ -38,10 +38,21 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
    QHBox *bankHBox = new QHBox(vBox);
    new QLabel(i18n("Bank"), bankHBox);
    new QLabel(i18n("MSB"), bankHBox);
-   m_msb = new RosegardenComboBox(true, bankHBox);
+   m_msb = new QSpinBox(bankHBox);
    new QLabel(i18n("LSB"), bankHBox);
-   m_lsb = new RosegardenComboBox(true, bankHBox);
+   m_lsb = new QSpinBox(bankHBox);
 
+   QHBox *progHBox = new QHBox(vBox);
+
+   QVBox *vbox1 = new QVBox(progHBox);
+
+   QFont font;
+   font.setPointSize(6);
+   for (unsigned int i = 0; i < 32; i++)
+   {
+       m_programNames.push_back(new QLineEdit(vbox1));
+       m_programNames[i]->setFont(font);
+   }
 
 }
 

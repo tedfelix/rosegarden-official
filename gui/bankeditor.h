@@ -21,6 +21,7 @@
 #include <vector>
 
 #include <kdialogbase.h>
+#include <qspinbox.h>
 
 class RosegardenComboBox;
 class QLineEdit;
@@ -43,8 +44,8 @@ protected:
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
 
-    RosegardenComboBox      *m_msb;
-    RosegardenComboBox      *m_lsb;
+    QSpinBox                *m_msb;
+    QSpinBox                *m_lsb;
     std::vector<QLineEdit*>  m_programNames;
 };
 
