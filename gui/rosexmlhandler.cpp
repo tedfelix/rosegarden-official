@@ -735,6 +735,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setSnapGridSize(snapGridSizeStr.toInt());
         }
 
+        QString viewFeaturesStr = atts.value("viewfeatures");
+        if (viewFeaturesStr) {
+            m_currentSegment->setViewFeatures(viewFeaturesStr.toInt());
+        }
+
 	m_currentTime = startTime;
         getComposition().addSegment(m_currentSegment);
         getComposition().setSegmentStartTime(m_currentSegment, startTime);

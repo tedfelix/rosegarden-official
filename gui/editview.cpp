@@ -72,6 +72,11 @@ const unsigned int EditView::TOPBARBUTTONS_ROW    = RULERS_ROW + 1;
 const unsigned int EditView::CANVASVIEW_ROW       = TOPBARBUTTONS_ROW + 1;
 const unsigned int EditView::CONTROLRULER_ROW     = CANVASVIEW_ROW + 1;
 
+// Just some simple features we might want to show - make them bit maskable
+//
+static int FeatureShowVelocity = 0x00001; // show the velocity ruler
+
+
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
                    unsigned int cols,
@@ -105,6 +110,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
     
     m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
+
 }
 
 EditView::~EditView()
@@ -710,6 +716,13 @@ EditView::setupActions()
     new KAction(i18n("Insert line of controllers"), 0, this,
 		SLOT(slotStartControlLineItem()), actionCollection(),
 		"start_control_line_item");
+
+    /*
+    // Show the Velocity ruler if it's marker in the first segment
+    //
+    if (getCurrentSegment()->getViewFeatures() & FeatureShowVelocity)
+        slotShowVelocityControlRuler();
+        */
 }
 
 void
@@ -741,6 +754,7 @@ EditView::setupAddControlRulerMenu()
         connect(addControlRulerMenu, SIGNAL(activated(int)),
                 SLOT(slotAddControlRuler(int)));
     }
+
 }
 
 void
@@ -1140,7 +1154,6 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
 
         PropertyControlRuler* controlRuler = makePropertyControlRuler(propertyName);
         addControlRuler(controlRuler);
-
     }
     
     if (!m_controlRulers->isVisible()) {
@@ -1158,6 +1171,9 @@ ControlRuler* EditView::getCurrentControlRuler()
 void EditView::slotShowVelocityControlRuler()
 {
     showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
+
+    Rosegarden::Segment &seg = getCurrentStaff()->getSegment();
+    seg.setViewFeatures(seg.getViewFeatures() | FeatureShowVelocity);
 }
 
 /* 

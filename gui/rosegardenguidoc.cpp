@@ -850,6 +850,10 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
         outStream << "\" snapgridsize=\"" << segment->getSnapGridSize();
     }
 
+    if (segment->getViewFeatures() != 0) {
+        outStream << "\" viewfeatures=\"" << segment->getViewFeatures();
+    }
+
     const Rosegarden::timeT *endMarker = segment->getRawEndMarkerTime();
     if (endMarker) {
         outStream << "\" endmarker=\"" << *endMarker;

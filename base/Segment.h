@@ -481,8 +481,15 @@ public:
     //
     int getRuntimeId() const { return m_runtimeSegmentId; }
     
+    // Grid size for matrix view (and others probably)
+    //
     void setSnapGridSize(int size) { m_snapGridSize = size; }
     int getSnapGridSize() const { return m_snapGridSize; }
+
+    // Other view features we might want to set on this Segment
+    //
+    void setViewFeatures(int features) { m_viewFeatures = features; }
+    int getViewFeatures() const { return m_viewFeatures; }
 
     /**
      * The compare class used by Composition
@@ -595,6 +602,10 @@ private: // assignment operator not provided
     // Remember the last used snap grid size for this segment
     //
     int     m_snapGridSize;
+
+    // Switch for other view-specific features we want to remember in the segment
+    //
+    int     m_viewFeatures;
 
 };
 
