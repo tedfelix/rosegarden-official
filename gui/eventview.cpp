@@ -705,7 +705,8 @@ EventView::slotEditInsert()
     event->set<Int>(Rosegarden::BaseProperties::PITCH, 70);
     event->set<Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
-    SimpleEventEditDialog *dialog = new SimpleEventEditDialog(this, *event);
+    SimpleEventEditDialog *dialog =
+        new SimpleEventEditDialog(this, getDocument(), *event, true);
 
     if (dialog->exec() == QDialog::Accepted)
     {
@@ -732,7 +733,7 @@ EventView::slotEditEvent()
         {
             Rosegarden::Event *event = item->getEvent();
             SimpleEventEditDialog *dialog = 
-                new SimpleEventEditDialog(this, *event);
+                new SimpleEventEditDialog(this, getDocument(), *event, false);
 
             if (dialog->exec() == QDialog::Accepted && dialog->isModified())
             {
@@ -1041,14 +1042,13 @@ EventView::setButtonsToFilter()
 void
 EventView::slotPopupEventEditor(QListViewItem *item)
 {
-    //Rosegarden::Composition &comp = m_doc->getComposition();
-
     EventViewItem *eItem = dynamic_cast<EventViewItem*>(item);
 
     if (eItem)
     {
 	Rosegarden::Event *event = eItem->getEvent();
-        SimpleEventEditDialog *dialog = new SimpleEventEditDialog(this, *event);
+        SimpleEventEditDialog *dialog = 
+            new SimpleEventEditDialog(this, getDocument(), *event, false);
 
         if (dialog->exec() == QDialog::Accepted && dialog->isModified())
         {
@@ -1105,7 +1105,7 @@ EventView::slotMenuActivated(int value)
         {
 	    Rosegarden::Event *event = eItem->getEvent();
             SimpleEventEditDialog *dialog =
-                new SimpleEventEditDialog(this, *event);
+                new SimpleEventEditDialog(this, getDocument(), *event, false);
 
             if (dialog->exec() == QDialog::Accepted && dialog->isModified())
             {

@@ -80,24 +80,9 @@ const int Controller::EventSubOrdering = -5;
 
 const PropertyName Controller::NUMBER = "number";
 const PropertyName Controller::VALUE  = "value";
-const PropertyName Controller::TYPE   = "type";
-
-const std::string Controller::UnspecifiedType = "unspecified";
-const std::string Controller::Modulation = "modulation";
-const std::string Controller::Pan = "pan";
-
-Controller::Controller(const std::string &type,
-                       Rosegarden::MidiByte number,
-                       Rosegarden::MidiByte value):
-    m_type(type),
-    m_number(number),
-    m_value(value)
-{
-}
 
 Controller::Controller(Rosegarden::MidiByte number,
                        Rosegarden::MidiByte value):
-    m_type(""),
     m_number(number),
     m_value(value)
 {
@@ -108,7 +93,6 @@ Controller::Controller(const Event &e)
     if (e.getType() != EventType) {
         throw Event::BadType("Controller model event", EventType, e.getType());
     }
-    e.get<String>(TYPE, m_type);
     m_number = getByte(e, NUMBER);
     m_value = getByte(e, VALUE);
 }
@@ -121,7 +105,6 @@ Event*
 Controller::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    if (m_type != "") e->set<String>(TYPE, m_type);
     e->set<Int>(NUMBER, (long)m_number);
     e->set<Int>(VALUE, (long)m_value);
     return e;

@@ -26,6 +26,7 @@
 #include "Device.h"
 #include "MidiProgram.h"
 #include "MidiTypes.h"
+#include "ControlParameter.h"
 
 // The Studio is where Midi and Audio devices live.  We can query
 // them for a list of Instruments, connect them together or to
@@ -51,9 +52,9 @@ typedef std::vector<Device*> DeviceList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
 typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
-typedef std::vector<Controller*> ControllerList;
-typedef std::vector<Controller*>::iterator ControllerListIterator;
-typedef std::vector<Controller*>::const_iterator ControllerListConstIterator;
+typedef std::vector<ControlParameter*> ControlList;
+typedef std::vector<ControlParameter*>::iterator ControlListIterator;
+typedef std::vector<ControlParameter*>::const_iterator ControlListConstIterator;
 
 class MidiDevice;
 
@@ -168,12 +169,12 @@ public:
     // Studio for mapping Controller names to values for use in the
     // InstrumentParameterBoxes (IPBs) and Control rulers.
     //
-    ControllerListConstIterator beginControllers() const
-        { return m_controllers.begin(); }
-    ControllerListConstIterator endControllers() const
-        { return m_controllers.end(); }
+    ControlListConstIterator beginControllers() const
+        { return m_controls.begin(); }
+    ControlListConstIterator endControllers() const
+        { return m_controls.end(); }
 
-    ControllerList* getControllers() { return &m_controllers; }
+    ControlList* getControllers() { return &m_controls; }
 
     void addController(Controller *con);
 
@@ -184,7 +185,7 @@ private:
     MidiFilter        m_midiThruFilter;
     MidiFilter        m_midiRecordFilter;
 
-    ControllerList    m_controllers;
+    ControlList       m_controls;
 };
 
 }

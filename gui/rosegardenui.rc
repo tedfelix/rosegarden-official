@@ -72,6 +72,8 @@
         <Action name="modify_banks"/>
         <Action name="modify_midi_filters"/>
         <Separator/>
+        <Action name="manage_controls"/>
+        <Separator/>
         <Action name="save_default_studio"/>
   </Menu>
   <Menu name="Transport">

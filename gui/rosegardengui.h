@@ -662,6 +662,11 @@ public slots:
     void slotEditBanks();
 
     /**
+     * Edit Control Parameters
+     */
+    void slotEditControlParameters();
+
+    /**
      * Remap instruments
      */
     void slotRemapInstruments();

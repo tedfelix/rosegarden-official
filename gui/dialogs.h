@@ -341,8 +341,9 @@ class SimpleEventEditDialog : public KDialogBase
     Q_OBJECT
 public:
     SimpleEventEditDialog(QWidget *parent,
+                          RosegardenGUIDoc *doc,
 		          const Rosegarden::Event &event,
-		          bool editable = true);
+		          bool inserting = false); // inserting or editing
 
     bool isModified() const { return m_modified; }
     Rosegarden::Event getEvent() const;
@@ -362,6 +363,7 @@ protected:
 
     const Rosegarden::Event &m_originalEvent;
     Rosegarden::Event        m_event;
+    RosegardenGUIDoc        *m_doc;
 
     std::string              m_type;
     Rosegarden::timeT        m_absoluteTime;

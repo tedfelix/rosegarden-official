@@ -95,6 +95,7 @@
 #include "SegmentNotationHelper.h"
 #include "Clipboard.h"
 #include "Configuration.h"
+#include "controleditor.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -593,6 +594,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Manage MIDI &Banks and Programs..."), 0, this,
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
+
+    new KAction(i18n("Manage Control Parameters..."), 0, this,
+                SLOT(slotEditControlParameters()),
+                actionCollection(), "manage_controls");
 
     new KAction(i18n("Modify MIDI &Filters..."), 0, this,
                 SLOT(slotModifyMIDIFilters()),
@@ -4338,6 +4343,15 @@ RosegardenGUIApp::slotEditBanks()
     stateChanged("bankeditor_shown");    
     bankEditor->show();
 }
+
+void
+RosegardenGUIApp::slotEditControlParameters()
+{
+    ControlEditorDialog *controlEditor = new ControlEditorDialog(this, m_doc);
+
+    controlEditor->show();
+}
+
 
 void
 RosegardenGUIApp::slotBankEditorClosed()

@@ -1542,12 +1542,14 @@ EventEditDialog::slotPropertyMadePersistent()
 //
 //
 SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
+                                            RosegardenGUIDoc *doc,
 				            const Event &event,
-				            bool editable) :
-    KDialogBase(parent, 0, true, i18n(editable ? "Edit Event" : "View Event"),
-    (editable ? (Ok | Cancel) : Ok)),
+				            bool inserting) :
+    KDialogBase(parent, 0, true, 
+                i18n(inserting ? "Insert Event" : "Edit Event"), Ok | Cancel),
     m_originalEvent(event),
     m_event(event),
+    m_doc(doc),
     m_type(event.getType()),
     m_absoluteTime(event.getAbsoluteTime()),
     m_duration(event.getDuration()),

@@ -82,17 +82,8 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
 
-    static const PropertyName NUMBER; // controller number
-    static const PropertyName VALUE;  // and value
-    static const PropertyName TYPE;   // description of controller number
-
-    static const std::string UnspecifiedType;
-    static const std::string Modulation;
-    static const std::string Pan;
-
-    Controller(const std::string &type,
-               MidiByte number,
-               MidiByte value);
+    static const PropertyName NUMBER;  // controller number
+    static const PropertyName VALUE;   // and value
 
     Controller(MidiByte number,
                MidiByte value);
@@ -100,7 +91,6 @@ public:
     Controller(const Event &);
     ~Controller();
 
-    std::string getType() const { return m_type; }
     MidiByte getNumber() const { return m_number; }
     MidiByte getValue() const { return m_value; }
 
@@ -108,9 +98,9 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    std::string m_type;
-    MidiByte m_number;
-    MidiByte m_value;
+    MidiByte    m_number;
+    MidiByte    m_value;
+
 };
 
 
