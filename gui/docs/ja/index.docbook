@@ -405,7 +405,7 @@
 	<para>
 	  楽器というものは、&MIDI;デバイス上の1つのチャネル、あるいは
 	  1つのオーディオ出力として理解することができる。トラックには
-	  &MIDI; 楽器に割り当てられなければならないノートデータを含み、
+	  &MIDI; 楽器に割り当てられなければならない音符データを含み、
 	  それらは、音から音へのinstrumentを含んでいる。1つ以上のトラックに
 	  同じ楽器を割り当てることができ、その場合、複数のトラックは
 	  同じ音を使う。
@@ -601,7 +601,7 @@
        <listitem>
 		<para>
 		選択されたセグメントのquantizationを表示する。
-		すべてのそれらのノートの開始時間を簡単にquantize
+		すべてのそれらの音符の開始時間を簡単にquantize
 		するために、これを変更することができる。
 		より詳細なquantizationはセグメントメニュー上の
 		Quantize機能を使う。 <link
@@ -617,7 +617,7 @@
        <para>
 	選択されたセグメントに現在適用されているtransposition(in semitones)
 	を表示する。このtranspositionはセグメントが演奏されるときに適用され、
-	マトリクス、notationまたはイベントリストエディタ内で表示されるノート
+	マトリクス、notationまたはイベントリストエディタ内で表示される音符
 	では見えない。楽曲全部または一部分のピッチを簡単に変更するために、
 	これを使うことができる。</para>
       </listitem>
@@ -631,7 +631,7 @@
 	演奏するために、後で書くより、セグメント全体にさせるために、
 	ここでディレイを設定することができる。このディレイはセグメントが
 	演奏されるときに適用されるが、マトリクス、notationまたはイベント
-	リストエディタ内で表示されるノートでは見えない。
+	リストエディタ内で表示される音符では見えない。
        </para>
 		<para>
 		  You can set a delay either in musical time (by
@@ -1018,7 +1018,7 @@
 	<para>
           Rosegarden は内蔵の2ツのメトロノームを持っていて、その1つは
           録音中に使い、もう一つは通常の再生中にスイッチすることができる。
-          それら輪MIDI楽器にノートを送ることによって動作し、両方の
+          それらはMIDI楽器にノートを送ることによって動作し、両方の
           メトロノームは同じ楽器、ピッチとベロシティ情報を使う。
 	</para>
 
@@ -1085,7 +1085,7 @@
     <sect1 id="quantization">
       <title>Quantization</title>
       <para>
-	"Quantization" はノートの再ポジショニングのプロセスとその他の
+	"Quantization" は音符の再ポジショニングのプロセスとその他の
         イベントであり、 so that they start or finish on exact beat divisions.
 	It is traditionally used to make an approximate performance
 	into a precise but rather mechanical-sounding one, either
@@ -1133,7 +1133,7 @@
       <title>マトリクスエディタ</title>
       <para>
         &rosegarden;のマトリクスエディタは、クリヤで論理的な形式で
-        音楽を表示し、編集することを可能にする。それぞれのノートは
+        音楽を表示し、編集することを可能にする。それぞれの音符は
         グリッド中のブロックとして表わされ、高さはピッチに関連する。
       </para>
       <para>
@@ -1155,12 +1155,12 @@
       </para>
 
       <sect2 id="matrix-insertion">
-	<title>ノートの挿入</title>
+	<title>音符の挿入</title>
 	<para>
           マトリクスビューにノートを挿入する一番簡単な方法は、マウスを
           使うことである。これを行なうために、ツールバー上で鉛筆ツール
           を選択し、マトリクスエディタ上にクリックしドラッグする。
-          ノートと、そこでクリックした点に関連するピッチが入力され、
+          音符と、そこでクリックした点に関連するピッチが入力され、
           マウスボタンをリリースする前に関連した距離に関連するduration
           を持つだろう。
          </para>
@@ -1323,7 +1323,7 @@
       </sect2>
 
       <sect2 id="matrix-editing">
-	<title>ノートの移動とコピー</title>
+	<title>音符の移動とコピー</title>
 	<para>
           移動ツールと共にクリックしてドラッグするか、選択の後
           選択ツールと共にドラッグするかをマトリクスエディタで
@@ -1332,7 +1332,7 @@
 	</para>
 	<para>
           ノートをコピーするためには、まず選択し、標準のコピーと
-          貼り付け機能を使う。貼り付け後、張り付けられたノートは
+          貼り付け機能を使う。貼り付け後、張り付けられた音符は
           代わりに選択され、必要なところにどこにもドラッグすることが
           できる。
 	</para>
@@ -1636,7 +1636,7 @@
                 キャンバス上のいくつかのイベントを選択するために、
                 選択(矢印)ツールに切り替え、選択したいイベントを含む
                 矩形領域を囲む。選択されたイベントは、青にハイライト
-                される。おしも1つのイベント上でクリックすると、
+                される。もしも1つのイベント上でクリックすると、
                 そのイベントのみが選択される。
                 <footnote><para>
                 そのイベントのために編集ダイアログをオープンするために
@@ -1707,27 +1707,27 @@
       so as not to do the split at all.</para>
 
       <para>
-      もしも、異なったduration(すなわち同じピッチ)の存在するノートの
-      上に正確にノートを追加するならば、存在するノートのdurationは新しい
+      もしも、異なったduration(すなわち同じピッチ)の存在する音符の
+      上に正確に音符を追加するならば、存在する音符のdurationは新しい
       ものによって変更される。
       </para>
 
       <para>
-      もしも存在するノートと同じような時間のrestを追加するならば、
-      ノートは、おそらくそれと共に削除されるか、短くされるか、
+      もしも存在する音符と同じような時間の休符を追加するならば、
+      音符は、おそらくそれと共に削除されるか、短くされるか、
       restのdurationのために、封じられる。
       If you add a rest at the same time as an existing note,
       the note will be silenced for the duration of the rest,
       shortening or possibly removing it altogether.</para>
 
 	<sect3 id="nv-insertion-keyboard">
-	  <title>PCキーボードによるノートとrestの入力</title>
+	  <title>PCキーボードによる音符と休符の入力</title>
 
 	  <sect4>
 	    <title>Duration</title>
 
 	    <para>
-              最初に、挿入したいときにノート(又はrest)のdurationを
+              最初に、挿入したいときに音符(又は休符)のdurationを
               表示するためにnotationツールを選択することを確実にすること。
               以下の数字キーを使うことによって色々なノートタイプを選択できる:
             </para>
@@ -1759,7 +1759,7 @@
 	    <para>
               notationツールが選択されると、以下のピッチキーのどれかを
               押すことによって<link linkend="nv-rulers">カーソルの挿入
-              </link> で現在の位置にnoteを挿入することができる。</para>
+              </link> で現在の位置に音符を挿入することができる。</para>
 
 	    <itemizedlist>
 	      <listitem><para><keycap>A</keycap> &ndash; ド (the tonic of the current key in the current clef)</para></listitem>
@@ -1777,11 +1777,11 @@
               半音低くなる(ファとドを除く)
 	    </para>
 
-	    <para>一オクターブ高いnoteを入力するためには、以下にあるキーを
+	    <para>一オクターブ高い音符を入力するためには、以下にあるキーを
               使う。<keycap>Q</keycap>,
 	      <keycap>W</keycap>, <keycap>E</keycap>, <keycap>R</keycap>,
 	      <keycap>U</keycap>, <keycap>I</keycap>と
-	      <keycap>O</keycap>。同様に、オクターブ下のnoteを入力する
+	      <keycap>O</keycap>。同様に、オクターブ下の音符を入力する
               ためには、 <keycap>Z</keycap>, <keycap>X</keycap>,
 	      <keycap>C</keycap>, <keycap>V</keycap>, <keycap>B</keycap>,
 	      <keycap>N</keycap> と<keycap>M</keycap>を使う。</para>
@@ -1789,9 +1789,9 @@
 	    </sect4>
 
 	  <sect4>
-	    <title>Rests</title>
+	    <title>休符</title>
 	    
-	    <para>ノートの代わりにrestを挿入するためには、
+	    <para>音符の代わりに休符を挿入するためには、
 	      <keycap>P</keycap>を使う。その代わりに、現在のツールを
               切り替えてrestツールに、また、noteツールに再度戻すために、
 	      <keycap>T</keycap> と <keycap>Y</keycap>を使うことができる。
@@ -1803,8 +1803,8 @@
 	    <title>Chords</title>
 
 	    <para>
-              既定値のnotationエディタの動作は、noteの挿入後に挿入
-              カーソルを次に進め、メロディ中でその後に別のnoteを
+              既定値のnotationエディタの動作は、音符の挿入後に挿入
+              カーソルを次に進め、メロディ中でその後に別の音符を
               挿入できるようになる。これは、<keycap>H</keycap>キーを、
               chordモードに切り替えるために使うことによって、変更する
               ことができ、最後のものの同じ時間に続く挿入が起きるchord
@@ -1839,11 +1839,11 @@
 	</sect3>
 
 	<sect3 id="nv-insertion-midi">
-	  <title>MIDIキーボードを使ったnoteの挿入</title>
+	  <title>MIDIキーボードを使った音符の挿入</title>
 
 	  <para>
             MIDIキーボード又はその他のMIDI制御デバイスを使うことで
-            マトリクスエディタ中にノートを入力することができる。
+            マトリクスエディタ中に音符を入力することができる。
             notationエディタはキーボード上で演奏したピッチを使うが、
             durationsはエディタそれ自身でのグリッドの設定中で選択したもの
             をつかう。これは"ステップ録音"として知られている。
@@ -2180,7 +2180,7 @@
       <!-- Tuplets -->
 
       <sect2 id="nv-tuplets">
-	<title>Triplets and other tuplets</title>
+	<title>三連符とその他の連符</title>
 
 	<para>A triplet group consists of three notes or chords played
 	in the time of two.  (More precisely, it consists of notes
@@ -2346,28 +2346,29 @@
       </sect2>
 
       <sect2 id="nv-note-styles">
-	<title>Noteのスタイル</title>
+	<title>音符のスタイル</title>
 
 	<para>
-          &rosegarden;は、たとえば、noteの頭の選択、tailの数を、noteが
-          埋まっているか埋まっていないかにかかわらず、描画されたnoteの
+          &rosegarden;は、たとえば、音符の頭の選択、tailの数を、音符が
+          埋まっているか埋まっていないかにかかわらず、描画された音符の
           色々なタイプの色々な描画方法を変更することができる。
 	</para>
 
 	<para>
           標準のスタイル(クラシック、クロス、三角とMensual)が提供され、
-          noteスタイルメニューオプションを、選択した個別のnoteのために
-          スタイルを変更することができる。それぞれのnoteはそれに対して
+          音符スタイルメニューオプションを、選択した個別の音符のために
+          スタイルを変更することができる。それぞれの音符はそれに対して
           ドのスタイルが選択されたかを憶えていて、この情報は楽曲情報
           の中に格納される。<guimenu>設定</guimenu>メニュー中の
           <guimenuitem>Rosegardenの構成...</guimenuitem>オプションを
-          使うことによって新しいnotesの既定値のスタイルを
+          使うことによって新しい音符の既定値のスタイルを
           変更することができる。
          </para>
 
 	<para>
-	  It is also possible to create your own note styles by
-	  describing them in <acronym>XML</acronym> files.  (Even the standard styles are
+          <acronym>XML</acronym>ファイル中に音符のスタイルを記述する
+          ことによって固有の音符スタイルを作成することができる。
+          (Even the standard styles are
 	  defined this way: the only reason the editor knows that a
 	  Classical semiquaver has a tilted oval filled head, a stem,
 	  two flags, etc., is that the description in Classical.xml
@@ -2378,7 +2379,7 @@
       </sect2>
 
       <sect2 id="nv-note-fonts">
-	<title>Noteフォント</title>
+	<title>音符フォント</title>
 	<para>
 	  &rosegarden; は、Lilypondプロジェクトによって開発された、
           Fetaフォントという1つのスケーラブルなnotationフォントを提供
@@ -2400,7 +2401,7 @@
         いるならば、それは、notationエディタのフォントメニューに
         現われる</para>
 
-	<para>敢然又は部分的なサポートは以下のフォントで提供されて
+	<para>完全又は部分的なサポートは以下のフォントで提供されて
         いる:Blake HodgettsによるFughetta; "オリジナル" Finale
         フォントのPetrucci;"新しい"Finale"フォントのMaestro;
         SibeliusフォントのOpus;Sibelius ジャズフォントのInkpen;
