@@ -188,6 +188,20 @@ public:
     int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
     void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
 
+    // Auto fading of a playable audio file
+    //
+    bool isAutoFading() const { return m_autoFade; }
+    void setAutoFade(bool value) { m_autoFade = value; }
+
+    RealTime getFadeInTime() const { return m_fadeInTime; }
+    void setFadeInTime(const Rosegarden::RealTime &time) 
+        { m_fadeInTime = time; }
+
+    RealTime getFadeOutTime() const { return m_fadeOutTime; }
+    void setFadeOutTime(const Rosegarden::RealTime &time) 
+        { m_fadeOutTime = time; }
+
+
 protected: 
     void initialise(size_t bufferSize);
     void checkSmallFileCache();
@@ -240,6 +254,10 @@ protected:
     std::vector<RingBuffer<sample_t> *> m_ringBuffers; // one per channel
 
     size_t                m_totalFrames;  // total frames
+
+    bool                  m_autoFade;
+    Rosegarden::RealTime  m_fadeInTime;
+    Rosegarden::RealTime  m_fadeOutTime;
 
 private:
     PlayableAudioFile(const PlayableAudioFile &pAF); // not provided

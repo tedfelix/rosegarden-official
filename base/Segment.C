@@ -63,7 +63,10 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_clefKeyList(0),
     m_runtimeSegmentId(_runtimeSegmentId++),
     m_snapGridSize(-1),
-    m_viewFeatures(0)
+    m_viewFeatures(0),
+    m_autoFade(false),
+    m_fadeInTime(Rosegarden::RealTime::zeroTime),
+    m_fadeOutTime(Rosegarden::RealTime::zeroTime)
 {
 }
 
@@ -92,7 +95,10 @@ Segment::Segment(const Segment &segment):
     m_clefKeyList(0),
     m_runtimeSegmentId(_runtimeSegmentId++),
     m_snapGridSize(-1),
-    m_viewFeatures(0)
+    m_viewFeatures(0),
+    m_autoFade(segment.isAutoFading()),
+    m_fadeInTime(segment.getFadeInTime()),
+    m_fadeOutTime(segment.getFadeOutTime())
 {
     for (iterator it = segment.begin();
 	 segment.isBeforeEndMarker(it); ++it) {

@@ -468,6 +468,17 @@ public:
     RealTime getAudioStartTime() const { return m_audioStartTime; }
     RealTime getAudioEndTime() const { return m_audioEndTime; }
 
+    bool isAutoFading() const { return m_autoFade; }
+    void setAutoFade(bool value) { m_autoFade = value; }
+
+    RealTime getFadeInTime() const { return m_fadeInTime; }
+    void setFadeInTime(const Rosegarden::RealTime &time)
+        { m_fadeInTime = time; }
+
+    RealTime getFadeOutTime() const { return m_fadeOutTime; }
+    void setFadeOutTime(const Rosegarden::RealTime &time)
+        { m_fadeOutTime = time; }
+
     //////
     //
     // MISCELLANEOUS
@@ -619,6 +630,12 @@ private: // assignment operator not provided
     // Switch for other view-specific features we want to remember in the segment
     //
     int     m_viewFeatures;
+
+    // Audio autofading
+    //
+    bool                  m_autoFade;
+    Rosegarden::RealTime  m_fadeInTime;
+    Rosegarden::RealTime  m_fadeOutTime;
 
 };
 

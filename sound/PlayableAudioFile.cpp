@@ -56,7 +56,10 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_isSmallFile(false),
     m_workBuffer(0),
     m_workBufferSize(0),
-    m_totalFrames(0)
+    m_totalFrames(0),
+    m_autoFade(false),
+    m_fadeInTime(RealTime::zeroTime),
+    m_fadeOutTime(RealTime::zeroTime)
 {
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
@@ -762,7 +765,7 @@ RecordableAudioFile::~RecordableAudioFile()
 void 
 RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
 {
-    if (channel >= m_ringBuffers.size()) {
+    if (channel >= int(m_ringBuffers.size())) {
 	std::cerr << "RecordableAudioFile::buffer: No such channel as "
 		  << channel << std::endl;
 	return;

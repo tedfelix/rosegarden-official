@@ -46,7 +46,10 @@ MappedEvent::MappedEvent(InstrumentId id,
     m_audioStartMarker(0, 0),
     m_dataBlockId(0),
     m_isPersistent(false),
-    m_runtimeSegmentId(-1)
+    m_runtimeSegmentId(-1),
+    m_autoFade(false),
+    m_fadeInTime(Rosegarden::RealTime::zeroTime),
+    m_fadeOutTime(Rosegarden::RealTime::zeroTime)
 {
     try {
 
@@ -168,11 +171,16 @@ MappedEvent::operator=(const MappedEvent &mE)
     m_audioStartMarker = mE.getAudioStartMarker();
     m_dataBlockId = mE.getDataBlockId();
     m_runtimeSegmentId = mE.getRuntimeSegmentId();
+    m_autoFade = mE.isAutoFading();
+    m_fadeInTime = mE.getFadeInTime();
+    m_fadeOutTime = mE.getFadeOutTime();
 
     return *this;
 }
 
-const size_t MappedEvent::streamedSize = 12 * sizeof(unsigned int);
+// Do we use this?  It looks dangerous so just commenting it out - rwb
+//
+//const size_t MappedEvent::streamedSize = 12 * sizeof(unsigned int);
 
 QDataStream&
 operator<<(QDataStream &dS, MappedEvent *mE)
@@ -190,6 +198,11 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getAudioStartMarker().nsec;
     dS << (unsigned long)mE->getDataBlockId();
     dS << mE->getRuntimeSegmentId();
+    dS << (unsigned int)mE->isAutoFading();
+    dS << (unsigned int)mE->getFadeInTime().sec;
+    dS << (unsigned int)mE->getFadeInTime().nsec;
+    dS << (unsigned int)mE->getFadeOutTime().sec;
+    dS << (unsigned int)mE->getFadeOutTime().nsec;
 
     return dS;
 }
@@ -210,6 +223,11 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
     dS << (unsigned int)mE.getAudioStartMarker().nsec;
     dS << (unsigned long)mE.getDataBlockId();
     dS << mE.getRuntimeSegmentId();
+    dS << (unsigned int)mE.isAutoFading();
+    dS << (unsigned int)mE.getFadeInTime().sec;
+    dS << (unsigned int)mE.getFadeInTime().nsec;
+    dS << (unsigned int)mE.getFadeOutTime().sec;
+    dS << (unsigned int)mE.getFadeOutTime().nsec;
 
     return dS;
 }
@@ -223,6 +241,8 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     std::string dataBlock;
     unsigned long dataBlockId = 0;
     int runtimeSegmentId = -1;
+    unsigned int autoFade = 0, 
+        fadeInSec = 0, fadeInNsec = 0, fadeOutSec = 0, fadeOutNsec = 0;
 
     dS >> trackId;
     dS >> instrument;
@@ -237,6 +257,11 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> audioNsec;
     dS >> dataBlockId;
     dS >> runtimeSegmentId;
+    dS >> autoFade;
+    dS >> fadeInSec;
+    dS >> fadeInNsec;
+    dS >> fadeOutSec;
+    dS >> fadeOutNsec;
 
     mE->setTrackId((TrackId)trackId);
     mE->setInstrument((InstrumentId)instrument);
@@ -248,6 +273,9 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setAudioStartMarker(RealTime(audioSec, audioNsec));
     mE->setDataBlockId(dataBlockId);
     mE->setRuntimeSegmentId(runtimeSegmentId);
+    mE->setAutoFade(autoFade);
+    mE->setFadeInTime(RealTime(fadeInSec, fadeInNsec));
+    mE->setFadeOutTime(RealTime(fadeOutSec, fadeOutNsec));
 
     return dS;
 }
@@ -261,6 +289,8 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     std::string dataBlock;
     unsigned long dataBlockId = 0;
     int runtimeSegmentId = -1;
+    unsigned int autoFade = 0, 
+        fadeInSec = 0, fadeInNsec = 0, fadeOutSec = 0, fadeOutNsec = 0;
          
     dS >> trackId;
     dS >> instrument;
@@ -275,6 +305,11 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> audioNsec;
     dS >> dataBlockId;
     dS >> runtimeSegmentId;
+    dS >> autoFade;
+    dS >> fadeInSec;
+    dS >> fadeInNsec;
+    dS >> fadeOutSec;
+    dS >> fadeOutNsec;
 
     mE.setTrackId((TrackId)trackId);
     mE.setInstrument((InstrumentId)instrument);
@@ -286,6 +321,9 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setAudioStartMarker(RealTime(audioSec, audioNsec));
     mE.setDataBlockId(dataBlockId);
     mE.setRuntimeSegmentId(runtimeSegmentId);
+    mE.setAutoFade(autoFade);
+    mE.setFadeInTime(RealTime(fadeInSec, fadeInNsec));
+    mE.setFadeOutTime(RealTime(fadeOutSec, fadeOutNsec));
 
     return dS;
 }

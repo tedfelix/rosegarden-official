@@ -174,7 +174,10 @@ public:
                    m_audioStartMarker(0, 0),
                    m_dataBlockId(0),
                    m_isPersistent(false),
-                   m_runtimeSegmentId(-1) {}
+                   m_runtimeSegmentId(-1),
+                   m_autoFade(false),
+                   m_fadeInTime(Rosegarden::RealTime::zeroTime),
+                   m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -204,7 +207,10 @@ public:
         m_audioStartMarker(RealTime(0,0)),
         m_dataBlockId(0),
         m_isPersistent(false),
-        m_runtimeSegmentId(-1) {}
+        m_runtimeSegmentId(-1),
+        m_autoFade(false),
+        m_fadeInTime(Rosegarden::RealTime::zeroTime),
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -225,7 +231,10 @@ public:
         m_audioStartMarker(audioStartMarker),
         m_dataBlockId(0),
         m_isPersistent(false),
-        m_runtimeSegmentId(-1) {}
+        m_runtimeSegmentId(-1),
+        m_autoFade(false),
+        m_fadeInTime(Rosegarden::RealTime::zeroTime),
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -244,7 +253,10 @@ public:
          m_audioStartMarker(audioStartMarker),
          m_dataBlockId(0),
          m_isPersistent(false),
-         m_runtimeSegmentId(-1) {}
+         m_runtimeSegmentId(-1),
+         m_autoFade(false),
+         m_fadeInTime(Rosegarden::RealTime::zeroTime),
+         m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -263,7 +275,10 @@ public:
          m_audioStartMarker(RealTime(0, 0)),
          m_dataBlockId(0),
          m_isPersistent(false),
-         m_runtimeSegmentId(-1) {}
+         m_runtimeSegmentId(-1),
+         m_autoFade(false),
+         m_fadeInTime(Rosegarden::RealTime::zeroTime),
+         m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -278,7 +293,10 @@ public:
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlockId(0),
         m_isPersistent(false),
-        m_runtimeSegmentId(-1) {}
+        m_runtimeSegmentId(-1),
+        m_autoFade(false),
+        m_fadeInTime(Rosegarden::RealTime::zeroTime),
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
 
     // Construct SysExs say
@@ -295,7 +313,10 @@ public:
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlockId(0),
         m_isPersistent(false),
-        m_runtimeSegmentId(-1) {}
+        m_runtimeSegmentId(-1),
+        m_autoFade(false),
+        m_fadeInTime(Rosegarden::RealTime::zeroTime),
+        m_fadeOutTime(Rosegarden::RealTime::zeroTime) {}
 
     // Copy constructor
     //
@@ -311,7 +332,10 @@ public:
         m_audioStartMarker(mE.getAudioStartMarker()),
         m_dataBlockId(mE.getDataBlockId()),
         m_isPersistent(false),
-        m_runtimeSegmentId(mE.getRuntimeSegmentId()) {}
+        m_runtimeSegmentId(mE.getRuntimeSegmentId()),
+        m_autoFade(mE.isAutoFading()),
+        m_fadeInTime(mE.getFadeInTime()),
+        m_fadeOutTime(mE.getFadeOutTime()) {}
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
@@ -326,7 +350,10 @@ public:
         m_audioStartMarker(mE->getAudioStartMarker()),
         m_dataBlockId(mE->getDataBlockId()),
         m_isPersistent(false),
-        m_runtimeSegmentId(mE->getRuntimeSegmentId()) {}
+        m_runtimeSegmentId(mE->getRuntimeSegmentId()),
+        m_autoFade(mE->isAutoFading()),
+        m_fadeInTime(mE->getFadeInTime()),
+        m_fadeOutTime(mE->getFadeOutTime()) {}
 
     // Construct perhaps without initialising, for placement new or equivalent
     MappedEvent(bool initialise) {
@@ -430,6 +457,17 @@ public:
     int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
     void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
 
+    bool isAutoFading() const { return m_autoFade; }
+    void setAutoFade(bool value) { m_autoFade = value; }
+
+    RealTime getFadeInTime() const { return m_fadeInTime; }
+    void setFadeInTime(const Rosegarden::RealTime &time)
+            { m_fadeInTime = time; }
+
+    RealTime getFadeOutTime() const { return m_fadeOutTime; }
+    void setFadeOutTime(const Rosegarden::RealTime &time)
+            { m_fadeOutTime = time; }
+
 private:
     TrackId          m_trackId;
     InstrumentId     m_instrument;
@@ -454,6 +492,13 @@ private:
     // Id of the segment that this (audio) event is derived from
     //
     int              m_runtimeSegmentId;
+
+    // Audio autofading
+    //
+    bool                  m_autoFade;
+    Rosegarden::RealTime  m_fadeInTime;
+    Rosegarden::RealTime  m_fadeOutTime;
+
 };
 
 

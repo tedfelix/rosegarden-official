@@ -1429,6 +1429,9 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
     //
     if (!m_midiClockEnabled) return;
 
+    if (false)  // don't remove any events quite yet
+    {
+
     // Remove all queued events (although we should filter this
     // down to just the clock events.
     //
@@ -1436,15 +1439,13 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
     snd_seq_remove_events_alloca(&info);
 
     //if (snd_seq_type_check(SND_SEQ_EVENT_CLOCK, SND_SEQ_EVFLG_CONTROL))
-    //{
-        //snd_seq_remove_events_set_event_type(info, 
-        snd_seq_remove_events_set_event_type(info, SND_SEQ_EVFLG_CONTROL);
-        std::cout << "AlsaDriver::setMIDIClockInterval - "
-                  << "MIDI CLOCK TYPE IS CONTROL" << std::endl;
-    //}
-
+    //snd_seq_remove_events_set_event_type(info, 
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
+    snd_seq_remove_events_set_event_type(info, SND_SEQ_EVFLG_CONTROL);
+    std::cout << "AlsaDriver::setMIDIClockInterval - "
+              << "MIDI CLOCK TYPE IS CONTROL" << std::endl;
     snd_seq_remove_events(m_midiHandle, info);
+    }
 
     // Resend clocks at new interval
     //
@@ -1901,8 +1902,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
                            m_alsaPlayStartTime;
 
+#ifdef DEBUG_PROCESS_MIDI_OUT
 	RealTime alsaTimeNow = getAlsaTime();
 	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;
+#endif
 
 #ifdef HAVE_LIBJACK
 	if (m_jackDriver) {
@@ -1910,7 +1913,9 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	    size_t elapsed = frameCount - _debug_jack_frame_count;
 	    RealTime rt = RealTime::frame2RealTime(elapsed, m_jackDriver->getSampleRate());
 	    rt = rt - getAlsaTime();
+#ifdef DEBUG_PROCESS_MIDI_OUT
 	    std::cerr << "processMidiOut[" << now << "]: JACK time is " << rt << " ahead of ALSA time" << std::endl;
+#endif 
 	}
 #endif
 
@@ -1929,8 +1934,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         outputDevice = getPairForMappedInstrument((*i)->getInstrument());
 	if (outputDevice.first < 0 && outputDevice.second < 0) continue;
 
+#ifdef DEBUG_PROCESS_MIDI_OUT
 	std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << " -> output device " << outputDevice.first << ":" << outputDevice.second << std::endl;
 	std::cout << "pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration() << std::endl;
+#endif
 
         snd_seq_ev_set_dest(&event,
                             outputDevice.first,
@@ -2389,11 +2396,13 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 		    bufferFrames *= m_jackDriver->getBufferSize();
 		}
 
-/*
+#define DEBUG_PLAYING_AUDIO
+#ifdef DEBUG_PLAYING_AUDIO
 		std::cout << "Creating playable audio file: id " << aF->getId() << ", event time " << adjustedEventTime << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels <<  std::endl;
 
 		std::cout << "Read buffer length is " << bufferLength << " (" << RealTime::realTime2Frame(bufferLength, m_jackDriver->getSampleRate()) << " frames)" << std::endl;
-*/
+#endif
+
                 PlayableAudioFile *audioFile =
                     new PlayableAudioFile((*i)->getInstrument(),
                                           aF,
