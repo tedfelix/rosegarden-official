@@ -239,7 +239,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     m_tempo = tempo;
 
     QString tempoString;
-    tempoString.sprintf("%4.4f", tempo);
+    tempoString.sprintf("%4.3f", tempo);
     TempoDisplay->setText(tempoString);
 }
 

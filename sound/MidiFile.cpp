@@ -146,7 +146,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
         stringRet = "";
         cerr << "Attempt to read past file end - got " << stringRet.length() <<
             " bytes out of " << numberOfBytes << endl;
-        throw(std::string("Attempt to read part MIDI file end"));
+        throw(std::string("Attempt to read past MIDI file end"));
     }
 
     // decrement the byte count
@@ -444,7 +444,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
                 break;
 
             default:
-                std::cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << endl;
+                std::cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << (eventCode & MIDI_MESSAGE_TYPE_MASK) << endl;
                 break;
             } 
         }

@@ -144,15 +144,6 @@ public:
     }
 
     /**
-     * Returns true if the specified bar line is at the very start
-     * of a row, in a page view (may mean different visual treatment)
-     */
-    //!!! not implemented in NotationHLayout; do we really want it?
-    virtual bool isBarLineAtRowStart(StaffType &, unsigned int) {
-        return false;
-    }
-
-    /**
      * Returns a pointer to a time signature event if there is one in
      * this bar, and if so also sets timeSigX to its x-coord
      */
