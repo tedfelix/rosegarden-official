@@ -1722,6 +1722,10 @@ MappedAudioPluginManager::getDescriptorFromHandle(unsigned long uniqueId,
 const LADSPA_Descriptor*
 MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
 {
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedAudioPluginManager::getPluginDescriptor - "
+              << "getting read-only plugin" << std::endl;
+#endif
     // Find the plugin
     //
     MappedLADSPAPlugin *plugin =
@@ -2054,6 +2058,12 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
 #ifdef HAVE_LADSPA
     pthread_mutex_lock(&_mappedObjectContainerLock);
 
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedAudioPluginManager::getPluginInstance - "
+              << "got container lock - progressing with " 
+              << m_children.size() << " children" << std::endl;
+#endif
+
     std::vector<MappedObject*>::iterator it = m_children.begin();
 
     for(; it != m_children.end(); it++)
@@ -2065,12 +2075,18 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
                 dynamic_cast<MappedLADSPAPlugin*>(*it);
 
             if (plugin->getUniqueId() == uniqueId) {
+                std::cerr << "MappedAudioPluginManager::getPluginInstance - "
+                          << "completed with success" << std::endl;
 		pthread_mutex_unlock(&_mappedObjectContainerLock);
                 return *it;
 	    }
         }
     }
 
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedAudioPluginManager::getPluginInstance - "
+              << "completed with failure" << std::endl;
+#endif
     pthread_mutex_unlock(&_mappedObjectContainerLock);
 
 #endif // HAVE_LADSPA

@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -849,51 +850,73 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                          qstrtostr(file),
                                          id.toInt()) == false)
         {
-            // Freeze the progress dialog
-            CurrentProgressDialog::freeze();
-
-	    // Hide splash screen if present on startup
-	    KStartupLogo::hideIfStillThere();
-
-            // Create a locate file dialog - give it the file name
-            // and the AudioFileManager path that we've already
-            // tried.  If we manually locate the file then we reset
-            // the audiofilepath to the new value and see if this
-            // helps us locate the rest of the files.
+            // Ok, now attempt to use the KFileDialog saved default
+            // value for the AudioPath.
             //
+            QString thing;
+            KURL url = KFileDialog::getStartURL(QString(":WAVS"), thing);
+            getAudioFileManager().setAudioPath(url.path());
 
-            QString newFilename = "";
-            QString newPath = "";
-            
-            do
+            /*
+            RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
+                << url.path() << endl;
+                */
+
+            if(getAudioFileManager().
+                    insertFile(qstrtostr(label), 
+                        qstrtostr(file), id.toInt()) == false)
             {
 
-                FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
-				    file,
-				    QString(getAudioFileManager().getAudioPath().c_str()));
+                // Freeze the progress dialog
+                CurrentProgressDialog::freeze();
 
-                if (fL.exec() == QDialog::Accepted)
+	        // Hide splash screen if present on startup
+	        KStartupLogo::hideIfStillThere();
+
+                // Create a locate file dialog - give it the file name
+                // and the AudioFileManager path that we've already
+                // tried.  If we manually locate the file then we reset
+                // the audiofilepath to the new value and see if this
+                // helps us locate the rest of the files.
+                //
+
+                QString newFilename = "";
+                QString newPath = "";
+            
+                do
                 {
-                    newFilename = fL.getFilename();
-                    newPath = fL.getDirectory();
-                }
-                else
-                {
-                    // just skip the file
-                    break;
-                }
 
-            } while(getAudioFileManager().insertFile(qstrtostr(label),
-                                            qstrtostr(newFilename),
-                                            id.toInt()) == false);
+                    FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
+				        file,
+				        QString(getAudioFileManager().getAudioPath().c_str()));
 
-            if (newPath != "")
-                getAudioFileManager().setAudioPath(qstrtostr(newPath));
+                    if (fL.exec() == QDialog::Accepted)
+                    {
+                        newFilename = fL.getFilename();
+                        newPath = fL.getDirectory();
+                    }
+                    else
+                    {
+                        // just skip the file
+                        break;
+                    }
+    
+                } while(getAudioFileManager().insertFile(qstrtostr(label),
+                                                qstrtostr(newFilename),
+                                                id.toInt()) == false);
 
-            getAudioFileManager().print();
+                if (newPath != "")
+                    getAudioFileManager().setAudioPath(qstrtostr(newPath));
 
-            // Restore progress dialog's normal state
-            CurrentProgressDialog::thaw();
+                getAudioFileManager().print();
+
+                // Restore progress dialog's normal state
+                CurrentProgressDialog::thaw();
+            }
+            else
+            {
+                RG_DEBUG << "LOCATED IN FILE DIALOG PATH" << endl;
+            }
 
         }
         
