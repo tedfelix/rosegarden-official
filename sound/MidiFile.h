@@ -108,7 +108,7 @@ private:
 
     // Internal counters
     //
-    unsigned long         m_trackByteCount;
+    long                  m_trackByteCount;
     bool                  m_decrementCount;
 
     // Internal MidiComposition
@@ -131,9 +131,10 @@ private:
     // Internal convenience functions
     //
     const unsigned int midiBytesToInt(const std::string& bytes);
-    const unsigned long midiBytesToLong(const std::string& bytes);
+    const long midiBytesToLong(const std::string& bytes);
     const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
-    const std::string getMidiBytes(std::ifstream* midiFile, const unsigned int &bytes);
+    const std::string getMidiBytes(std::ifstream* midiFile,
+                                   const unsigned long &bytes);
     bool skipToNextTrack(std::ifstream *midiFile);
     void intToMidiBytes(std::ofstream* midiFile, int number);
     void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);

@@ -83,16 +83,17 @@ MidiFile::~MidiFile()
 // of the STL strings.
 //
 //
-const unsigned long
+const long
 MidiFile::midiBytesToLong(const string& bytes)
 {
     assert(bytes.length() == 4);
-    long longRet = ((long)(((MidiByte)bytes[0]) << 24)) |
-        ((long)(((MidiByte)bytes[1]) << 16)) |
-        ((short)(((MidiByte)bytes[2]) << 8)) |
-        ((short)((MidiByte)(bytes[3])));
 
-    return(longRet);
+    long longRet = ((long)(((MidiByte)bytes[0]) << 24)) |
+                   ((long)(((MidiByte)bytes[1]) << 16)) |
+                   ((long)(((MidiByte)bytes[2]) << 8)) |
+                   ((long)((MidiByte)(bytes[3])));
+
+    return longRet;
 }
 
 const unsigned int
@@ -113,26 +114,34 @@ MidiFile::midiBytesToInt(const string& bytes)
 //
 //
 const string
-MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
+MidiFile::getMidiBytes(ifstream* midiFile, const unsigned long &numberOfBytes)
 {
     string stringRet;
     char fileMidiByte;
 
-    if (m_decrementCount && (numberOfBytes > (unsigned int)m_trackByteCount))
+    if (m_decrementCount && (numberOfBytes > (unsigned long)m_trackByteCount))
     {
-        cerr << "Attempt to get more bytes than allowed on Track - ( " <<
-            numberOfBytes << " > " << m_trackByteCount << " )" << endl;
+        cerr << "Attempt to get more bytes than allowed on Track - ( "
+             << numberOfBytes
+             << " > "
+             << m_trackByteCount
+             << " )" << endl;
+
         throw(std::string("Attempt to get more bytes than allowed on Track"));
     }
 
     if (midiFile->eof())
     {
-        cerr << "MIDI file EOF - got " << stringRet.length() << " bytes out of "
+        cerr << "MIDI file EOF - got "
+             << stringRet.length() << " bytes out of "
              << numberOfBytes << endl;
+
         throw(std::string("MIDI EOF encountered while reading"));
+
     }
 
-    while((stringRet.length() < numberOfBytes) && midiFile->read(&fileMidiByte, 1))
+    while(stringRet.length() < numberOfBytes &&
+           midiFile->read(&fileMidiByte, 1))
     {
         stringRet += fileMidiByte;
 #ifdef MIDI_DEBUG
@@ -147,9 +156,12 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
     if (stringRet.length() < numberOfBytes)
     {
         stringRet = "";
-        cerr << "Attempt to read past file end - got " << stringRet.length() <<
-            " bytes out of " << numberOfBytes << endl;
+        cerr << "Attempt to read past file end - got "
+             << stringRet.length() << " bytes out of "
+             << numberOfBytes << endl;
+
         throw(std::string("Attempt to read past MIDI file end"));
+
     }
 
     // decrement the byte count
@@ -361,13 +373,16 @@ MidiFile::parseHeader(const string &midiHeader)
 bool
 MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
 {
-    MidiByte midiByte, eventCode, data1, data2;
+    MidiByte midiByte, metaEventCode, data1, data2;
+    MidiByte eventCode = 0x80;
     unsigned int messageLength;
     unsigned long deltaTime;
     string metaMessage;
 
     while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
     {
+        assert(eventCode >= 0x80);
+
         deltaTime = getNumberFromMidiBytes(midiFile);
 
         // Get a single byte
@@ -383,13 +398,13 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
 
         if (eventCode == MIDI_FILE_META_EVENT)
         { 
-            eventCode = getMidiBytes(midiFile,1)[0];
+            metaEventCode = getMidiBytes(midiFile,1)[0];
             messageLength = getNumberFromMidiBytes(midiFile);
             metaMessage = getMidiBytes(midiFile, messageLength);
 
             MidiEvent *e = new MidiEvent(deltaTime,
                                          MIDI_FILE_META_EVENT,
-                                         eventCode,
+                                         metaEventCode,
                                          metaMessage);
 
             m_midiComposition[trackNum].push_back(e);
@@ -428,7 +443,9 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
                 break;
 
             default:
-                std::cerr << "MidiFile::parseTrack - Unsupported MIDI Event" << (eventCode & MIDI_MESSAGE_TYPE_MASK) << endl;
+                std::cerr << "MidiFile::parseTrack()" 
+                          << " - Unsupported MIDI Event Code:  "
+                          << (eventCode & MIDI_MESSAGE_TYPE_MASK) << endl;
                 break;
             } 
         }
