@@ -237,15 +237,13 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_canvas->setSnapGrain(false);
 
     int trackPosition = m_canvas->grid().getYBin(e->pos().y());
-    Rosegarden::Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
-
-    if (!t) return;
-    
-    TrackId track = t->getId();
 
     // Don't do anything if the user clicked beyond the track buttons
     //
-    if (track >= TrackId(m_doc->getComposition().getNbTracks())) return;
+    if (trackPosition >= m_doc->getComposition().getNbTracks()) return;
+
+    Rosegarden::Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
+    if (!t) return;
 
     timeT time = int(nearbyint(m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft)));
     timeT duration = int(nearbyint(m_canvas->grid().getSnapTime(double(e->pos().x()))));
@@ -569,7 +567,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
             int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
             // Make sure we don't set a non-existing track
             if (newY < 0) { newY = 0; }
-            TrackId track = m_canvas->grid().getYBin(newY);
+            int trackPos = m_canvas->grid().getYBin(newY);
 
 //             RG_DEBUG << "SegmentMover::handleMouseMove: orig y " 
 //                      << (*it)->savedRect().y()
@@ -581,10 +579,10 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
             // not allow it in the first place, or we automatically
             // create new tracks - might make undo very tricky though
             //
-            if (track >= TrackId(m_doc->getComposition().getNbTracks()))
-                track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
+            if (trackPos >= m_doc->getComposition().getNbTracks())
+                trackPos  = m_doc->getComposition().getNbTracks() - 1;
 
-            newY = m_canvas->grid().getYBinCoordinate(track);
+            newY = m_canvas->grid().getYBinCoordinate(trackPos);
 
 //             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
 //                      << newX << "," << newY << endl;
@@ -1129,7 +1127,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
             // Make sure we don't set a non-existing track
             if (newY < 0) { newY = 0; }
-            TrackId track = m_canvas->grid().getYBin(newY);
+            TrackId trackPos = m_canvas->grid().getYBin(newY);
 
 // 	    RG_DEBUG << "SegmentSelector::handleMouseMove: orig y " << (*it)->rect().y()
 // 		     << ", dy " << dy << ", newY " << newY << ", track " << track << endl;
@@ -1139,10 +1137,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             // not allow it in the first place, or we automatically
             // create new tracks - might make undo very tricky though
             //
-            if (track >= TrackId(m_doc->getComposition().getNbTracks()))
-                track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
+            if (trackPos >= m_doc->getComposition().getNbTracks())
+                trackPos  = m_doc->getComposition().getNbTracks() - 1;
 
-            newY = m_canvas->grid().getYBinCoordinate(track);
+            newY = m_canvas->grid().getYBinCoordinate(trackPos);
 
             (*it)->moveTo(newX, newY);
             setChangeMade(true);

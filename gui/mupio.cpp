@@ -84,7 +84,8 @@ MupExporter::write()
 
     for (int barNo = -1; barNo < c->getNbBars(); ++barNo) {
 
-	for (Rosegarden::TrackId trackNo = 0; trackNo < c->getNbTracks(); ++trackNo) {
+	for (Rosegarden::TrackId trackNo = c->getMinTrackId();
+	     trackNo <= c->getMaxTrackId(); ++trackNo) {
 
 	    if (barNo < 0) {
 		writeClefAndKey(str, trackNo);
