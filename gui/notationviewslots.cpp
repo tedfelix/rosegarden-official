@@ -2593,7 +2593,11 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
+	static bool showingError = false;
+	if (showingError) return;
+	showingError = true;
 	KMessageBox::sorry(this, i18n("Can't insert note: No note duration selected"));
+	showingError = false;
         return;
     }
 

@@ -2447,6 +2447,15 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     }
     Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
 
+    if (endTime <= time) {
+	static bool showingError = false;
+	if (showingError) return;
+	showingError = true;
+	KMessageBox::sorry(this, i18n("Can't insert note: No grid duration selected"));
+	showingError = false;
+        return;
+    }
+
     MatrixInsertionCommand* command = 
 	new MatrixInsertionCommand(segment, time, endTime, &modelEvent);
 
