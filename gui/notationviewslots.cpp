@@ -2456,17 +2456,13 @@ void NotationView::slotTextItemPressed(QMouseEvent *e, QCanvasItem *it)
     if (e->type() != QEvent::MouseButtonDblClick) return;
 
     if (it == m_title) {
-	NOTATION_DEBUG << "Title double-clicked" << endl;
-	emit editMetadata("title");
+	emit editMetadata(strtoqstr(Rosegarden::CompositionMetadataKeys::Title.getName()));
     } else if (it == m_subtitle) {
-	NOTATION_DEBUG << "Subtitle double-clicked" << endl;
-	emit editMetadata("subtitle");
+	emit editMetadata(strtoqstr(Rosegarden::CompositionMetadataKeys::Subtitle.getName()));
     } else if (it == m_composer) {
-	NOTATION_DEBUG << "Composer double-clicked" << endl;
-	emit editMetadata("composer");
+	emit editMetadata(strtoqstr(Rosegarden::CompositionMetadataKeys::Composer.getName()));
     } else if (it == m_copyright) {
-	NOTATION_DEBUG << "Copyright double-clicked" << endl;
-	emit editMetadata("copyright");
+	emit editMetadata(strtoqstr(Rosegarden::CompositionMetadataKeys::Copyright.getName()));
     } else {
 	return;
     }

@@ -747,8 +747,9 @@ void NotationView::positionStaffs()
 	font.setPixelSize(m_fontSize * 5);
 	QFontMetrics metrics(font);
 
-	if (metadata.has("title")) {
-	    QString title(strtoqstr(metadata.get<Rosegarden::String>("title")));
+	if (metadata.has(Rosegarden::CompositionMetadataKeys::Title)) {
+	    QString title(strtoqstr(metadata.get<Rosegarden::String>
+				    (Rosegarden::CompositionMetadataKeys::Title)));
 	    m_title = new QCanvasText(title, font, canvas());
 	    m_title->setX(m_leftGutter + pageWidth/2 - metrics.width(title)/2);
 	    m_title->setY(20 + topMargin/4 + metrics.ascent());
@@ -759,8 +760,9 @@ void NotationView::positionStaffs()
 	font.setPixelSize(m_fontSize * 3);
 	metrics = QFontMetrics(font);
 
-	if (metadata.has("subtitle")) {
-	    QString subtitle(strtoqstr(metadata.get<Rosegarden::String>("subtitle")));
+	if (metadata.has(Rosegarden::CompositionMetadataKeys::Subtitle)) {
+	    QString subtitle(strtoqstr(metadata.get<Rosegarden::String>
+				       (Rosegarden::CompositionMetadataKeys::Subtitle)));
 	    m_subtitle = new QCanvasText(subtitle, font, canvas());
 	    m_subtitle->setX(m_leftGutter + pageWidth/2 - metrics.width(subtitle)/2);
 	    m_subtitle->setY(20 + titleHeight + metrics.ascent());
@@ -768,8 +770,9 @@ void NotationView::positionStaffs()
 	    titleHeight += metrics.height() * 3/2;
 	}
 
-	if (metadata.has("composer")) {
-	    QString composer(strtoqstr(metadata.get<Rosegarden::String>("composer")));
+	if (metadata.has(Rosegarden::CompositionMetadataKeys::Composer)) {
+	    QString composer(strtoqstr(metadata.get<Rosegarden::String>
+				       (Rosegarden::CompositionMetadataKeys::Composer)));
 	    m_composer = new QCanvasText(composer, font, canvas());
 	    m_composer->setX(m_leftGutter + pageWidth - metrics.width(composer) - leftMargin);
 	    m_composer->setY(20 + titleHeight + metrics.ascent());
@@ -780,8 +783,9 @@ void NotationView::positionStaffs()
 	font.setPixelSize(m_fontSize * 2);
 	metrics = QFontMetrics(font);
 
-	if (metadata.has("copyright")) {
-	    QString copyright(strtoqstr(metadata.get<Rosegarden::String>("copyright")));
+	if (metadata.has(Rosegarden::CompositionMetadataKeys::Copyright)) {
+	    QString copyright(strtoqstr(metadata.get<Rosegarden::String>
+					(Rosegarden::CompositionMetadataKeys::Copyright)));
 	    m_copyright = new QCanvasText(copyright, font, canvas());
 	    m_copyright->setX(m_leftGutter + leftMargin);
 	    m_copyright->setY(20 + pageHeight - topMargin - metrics.descent());

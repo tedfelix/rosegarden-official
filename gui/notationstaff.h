@@ -428,7 +428,9 @@ protected:
 
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;
-    SpriteSet m_repeatedClefsAndKeys;
+
+    typedef std::set<QCanvasItem *> ItemSet;
+    ItemSet m_repeatedClefsAndKeys;
 
     typedef std::pair<int, Rosegarden::Clef> ClefChange;
     FastVector<ClefChange> m_clefChanges;

@@ -179,7 +179,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
     Rosegarden::Key key = getSegment().getKeyAtTime(barStart, t);
     if (t < barStart) needKey = true;
 
-    layoutX += m_notePixmapFactory->getBarMargin() / 2;
+    double dx = m_notePixmapFactory->getBarMargin() / 2;
 
     if (!m_notationView->isInPrintMode()) m_notePixmapFactory->setShaded(true);
 
@@ -188,7 +188,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
 	int layoutY = getLayoutYForHeight(clef.getAxisHeight());
 
 	LinedStaffCoords coords =
-	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+	    getCanvasCoordsForLayoutCoords(layoutX + dx, layoutY);
     
 	QCanvasPixmap *pixmap = m_notePixmapFactory->makeClefPixmap(clef);
 
@@ -199,7 +199,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
 	sprite->show();
 	m_repeatedClefsAndKeys.insert(sprite);
 
-	layoutX += pixmap->width() + m_notePixmapFactory->getNoteBodyWidth() * 2 / 3;
+	dx += pixmap->width() + m_notePixmapFactory->getNoteBodyWidth() * 2 / 3;
     }
 
     if (needKey) {
@@ -207,7 +207,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
 	int layoutY = getLayoutYForHeight(12);
 
 	LinedStaffCoords coords =
-	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+	    getCanvasCoordsForLayoutCoords(layoutX + dx, layoutY);
     
 	QCanvasPixmap *pixmap = m_notePixmapFactory->makeKeyPixmap(key, clef);
 
@@ -217,7 +217,30 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
 	sprite->move(coords.first, coords.second);
 	sprite->show();
 	m_repeatedClefsAndKeys.insert(sprite);
+
+	dx += pixmap->width();
     }
+
+/* attempt to blot out things like slurs & ties that overrun this area: doesn't work
+
+    if (m_notationView->isInPrintMode() && (needClef || needKey)) {
+
+	int layoutY = getLayoutYForHeight(14);
+	int h = getLayoutYForHeight(-8) - layoutY;
+
+	LinedStaffCoords coords =
+	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+    
+	QCanvasRectangle *rect = new QCanvasRectangle(coords.first, coords.second,
+						      dx, h, m_canvas);
+	rect->setPen(Qt::black);
+	rect->setBrush(Qt::white);
+	rect->setZ(1);
+	rect->show();
+
+	m_repeatedClefsAndKeys.insert(rect);
+    }
+*/
 
     m_notePixmapFactory->setShaded(false);
 }	
@@ -225,7 +248,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
 void
 NotationStaff::deleteRepeatedClefsAndKeys()
 {
-    for (SpriteSet::iterator i = m_repeatedClefsAndKeys.begin();
+    for (ItemSet::iterator i = m_repeatedClefsAndKeys.begin();
 	 i != m_repeatedClefsAndKeys.end(); ++i) {
 	delete *i;
     }

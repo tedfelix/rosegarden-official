@@ -177,6 +177,7 @@ install-data-local:
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-16x16.png $(DESTDIR)$(kde_icondir)/hicolor/16x16/apps/rosegarden.png
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi16-rosegarden.png $(DESTDIR)$(kde_icondir)/hicolor/16x16/mimetypes/x-rosegarden.png
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/mm-mime-hi16-rosegarden.png $(DESTDIR)$(kde_icondir)/locolor/16x16/mimetypes/x-rosegarden.png
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/examples
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/misc
@@ -194,6 +195,9 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/12
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/library
+	$(INSTALL_DATA) $(srcdir)/testfiles/glazunov.rg $(kde_datadir)/$(data_dirname)/examples
+	$(INSTALL_DATA) $(srcdir)/testfiles/notation-for-string-orchestra-in-D-minor.rg $(kde_datadir)/$(data_dirname)/examples
+	$(INSTALL_DATA) $(srcdir)/testfiles/ravel-pc-gmaj-adagio.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
 	$(INSTALL_DATA) $(srcdir)/fonts/*.pfa $(kde_datadir)/$(data_dirname)/fonts
 	$(INSTALL_DATA) $(srcdir)/fonts/mappings/*.xml $(kde_datadir)/$(data_dirname)/fonts/mappings

@@ -125,7 +125,19 @@ namespace CompositionMetadataKeys
 {
     const PropertyName Copyright = "copyright";
     const PropertyName Composer = "composer";
-    const PropertyName Notes = "notes";
+    const PropertyName Title = "title";
+    const PropertyName Subtitle = "subtitle";
+    const PropertyName Arranger = "arranger";
+
+    std::vector<PropertyName> getFixedKeys() {
+	std::vector<PropertyName> keys;
+	keys.push_back(Copyright);
+	keys.push_back(Composer);
+	keys.push_back(Title);
+	keys.push_back(Subtitle);
+	keys.push_back(Arranger);
+	return keys;
+    }
 }
 
 

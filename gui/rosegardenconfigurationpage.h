@@ -352,6 +352,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
+    KListView *m_fixed;
     KListView *m_metadata;
 };
 

@@ -101,9 +101,13 @@ private:
 
 namespace CompositionMetadataKeys
 {
-    extern const PropertyName Copyright;
     extern const PropertyName Composer;
-    extern const PropertyName Notes;
+    extern const PropertyName Title;
+    extern const PropertyName Subtitle;
+    extern const PropertyName Arranger;
+    extern const PropertyName Copyright;
+
+    std::vector<PropertyName> getFixedKeys();
 }
 
 class DocumentConfiguration : public Configuration
@@ -122,9 +126,6 @@ public:
 
     // Property names
     static const PropertyName SequencerOptions;
-
-    static const PropertyName PluginTaxonomyFile;
-    static const PropertyName PluginDescriptionsFile;
 
     static const PropertyName ZoomLevel;
 };
