@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2004
+    This program is Copyright 2000-2005
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <cmath>
 #include "notationvlayout.h"
 #include "notationstaff.h"
 #include "rosestrings.h"
@@ -134,8 +135,9 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
             // aligned with the line above the middle line; the rest
             // are aligned with the middle line
 
-            if (el->event()->has(NOTE_TYPE) &&
-		el->event()->get<Int>(NOTE_TYPE) > Note::Minim) {
+	    long noteType;
+	    bool hasNoteType = el->event()->get<Int>(NOTE_TYPE, noteType);
+            if (hasNoteType && noteType > Note::Minim) {
                 el->setLayoutY(staff.getLayoutYForHeight(6) + displacedY);
             } else {
                 el->setLayoutY(staff.getLayoutYForHeight(4) + displacedY);
@@ -143,24 +145,68 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
 	    // Fix for bug 1090767 Rests outside staves have wrong glyphs
 	    // by William <rosegarden4c AT orthoset.com>
-	    // We use a "rest-outside-stave" glyph for any minim or semibreve
+	    // We use a "rest-outside-stave" glyph for any minim/semibreve/breve
 	    // rest that has been displaced vertically e.g. by fine-positioning
-	    // even if the rest is still inside the stave. Strictly, the
-	    // "rest-outside-stave" glyphs should not be used if the rests are
-	    // inside a stave but we do use them because the typography in such
-	    // cases is hard to get right. The glyphs correspond to character
-	    // numbers 1D13B and 1D13C in the Unicode 4.0 standard.
+	    // outside the stave. For small vertical displacements that keep
+	    // the rest inside the stave, we use the "rest-inside-stave" glyph
+	    // and also discretise the displacement into multiples of the
+	    // stave-line spacing. The outside-stave glyphs match the character
+	    // numbers 1D13A, 1D13B and 1D13C in the Unicode 4.0 standard.
 
-	    if (displacedY != 0 &&
-		((el->event()->get<Int>(NOTE_TYPE) == Note::HalfNote) ||
-		 (el->event()->get<Int>(NOTE_TYPE) == Note::WholeNote))) {
-		el->event()->setMaybe<Bool>(m_properties.REST_OUTSIDE_STAVE,
-					    true);
-		NOTATION_DEBUG << "REST_OUTSIDE_STAVE : displacedY : "
+	    if (hasNoteType && (displacedY > 0.1 || displacedY < -0.1)) {
 
-				<< displacedY
-				<< " time : " << (el->getViewAbsoluteTime())
-				<< endl;
+		// a fiddly check for transition from inside to outside:
+		
+		int min = -1, max = 1;
+
+		switch (noteType) {
+		case Note::Breve:              min = -1; max = 2; break;
+		case Note::Semibreve:          min = -1; max = 3; break;
+		case Note::Minim:              min = -2; max = 2; break;
+		case Note::Crotchet:           min = -1; max = 3; break;
+		case Note::Quaver:             min = -2; max = 3; break;
+		case Note::Semiquaver:         min = -3; max = 3; break;
+		case Note::Demisemiquaver:     min = -3; max = 4; break;
+		case Note::Hemidemisemiquaver: min = -4; max = 4; break;
+		}
+
+		bool outside = false;
+
+		if (noteType == Note::Breve) {
+		    if (nearbyint(displacedY) < min * m_npf->getLineSpacing() ||
+			nearbyint(displacedY) > max * m_npf->getLineSpacing()) {
+			outside = true;
+		    }
+		} else {
+		    if ((int)displacedY < min * m_npf->getLineSpacing() ||
+			(int)displacedY > max * m_npf->getLineSpacing()) {
+		        outside = true;
+  		    }
+	        }
+
+	        el->event()->setMaybe<Bool>(m_properties.REST_OUTSIDE_STAVE,
+					    outside);
+
+		if (!outside) {
+		    displacedY = (double)m_npf->getLineSpacing() *
+			(int(nearbyint((double)displacedY /
+				       m_npf->getLineSpacing())));
+                    if (noteType > Note::Minim)
+		        el->setLayoutY(staff.getLayoutYForHeight(6)+displacedY);
+		    else
+		        el->setLayoutY(staff.getLayoutYForHeight(4)+displacedY);
+		}
+
+//		if (displacedY != 0.0)
+//		    NOTATION_DEBUG << "REST_OUTSIDE_STAVE AFTER "
+//			       << " : displacedY : " << displacedY
+//			       << " line-spacing : " << m_npf->getLineSpacing()
+//			       << " time : " << (el->getViewAbsoluteTime())
+//			       << endl;
+	    }
+	    else {
+	        el->event()->setMaybe<Bool>(m_properties.REST_OUTSIDE_STAVE,
+					    false);
 	    }
 
         } else if (el->isNote()) {
