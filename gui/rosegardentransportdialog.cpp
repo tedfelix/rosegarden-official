@@ -332,7 +332,7 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
     m_tenMinutes = ( st.sec / 600 ) % 6;
     
     m_unitHours = ( st.sec / 3600 ) % 10;
-    m_tenHours = (st.sec / 36000 ) % 24;
+    m_tenHours = (st.sec / 36000 ) % 10;
     
     updateTimeDisplay();
 }
@@ -370,7 +370,8 @@ RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
     m_tenThousandths =
 	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 1000000 ) % 10;
     m_thousandths =
-	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 10000000 ) % 10;
+	(( st.usec * m_framesPerSecond * m_bitsPerFrame) / 10000000 ) % 
+	(m_bitsPerFrame / 10);
     m_hundreths =
 	(( st.usec * m_framesPerSecond) / 1000000 ) % 10;
     m_tenths = 
@@ -383,7 +384,7 @@ RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
     m_tenMinutes = ( st.sec / 600 ) % 6;
     
     m_unitHours = ( st.sec / 3600 ) % 10;
-    m_tenHours = (st.sec / 36000 ) % 24;
+    m_tenHours = ( st.sec / 36000 ) % 10;
     
     updateTimeDisplay();
 }
