@@ -3,6 +3,10 @@ FAQ for Rosegarden-4
 ====================
 
 
+As there is not yet any user documentation provided for Rosegarden-4,
+this FAQ includes a number of bits of useful information that would
+normally (and will in the future) be found there instead.
+
 
 Compilation or installation errors
 ----------------------------------
@@ -24,7 +28,7 @@ How do I set a loop?
 While holding down Shift and and the left mouse button sweep out a loop
 region in the ruler at the top or bottom of the main composition window.  
 The loop icon in the transport will become enabled and playback will 
-always occur within this loop until you disable it.  Youu can disable
+always occur within this loop until you disable it.  You can disable
 the loop by clicking on the loop icon or shift+left clicking in either
 loop ruler.
 
@@ -32,7 +36,7 @@ loop ruler.
 How do I view the track labels?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the main window got to Setting->View Track Labels
+On the main window go to Settings->View Track Labels
 
 
 How do I change the instrument for a track?

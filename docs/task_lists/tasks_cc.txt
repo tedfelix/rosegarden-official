@@ -121,7 +121,7 @@ Post-0.1.5-and-a-bit task list
 
     h. Make currently-static properties in NotationProperties also
        be view-local, and update culprits (mostly NotationSets) to
-       use the view-local versions
+       use the view-local versions [NOT GOING TO DO]
 
 24. Oops.. since I "fixed" the ChordNameRuler so it's not all squashed
     up, I've lost the other rulers in the notation view completely.
@@ -159,6 +159,37 @@ Post-0.1.5-and-a-bit task list
 
 30. More code documentation, including documenting the iterator-
     invalidation semantics of Segment and SegmentNotationHelper methods
+
+31. Finish Note Styles:
+
+    a. Remove "built-in" styles, remove the "Custom" from "CustomNoteStyle";
+       indeed, ideally switch from "NoteStyle and derived CustomNS" to
+       "NoteStyle and external XML parsing class".
+
+    b. Add capability to specify the charname for a note head directly
+       (using the Unicode-or-other name, not the pixmap file name)
+
+    c. Look up Unicode names for any other chars we have in the "standard"
+       shape list, see if they're in feta
+
+    d. Add capability to specify that the note head is rendered from text
+       found in a string or integer property; add "fingering" (or "fret"?)
+       notehead that gets its value from a specific hardcoded property;
+       add a menu option to set that property
+
+    e. Also add an option to show fingerings as marks instead of heads
+
+    f. GUI for all this...
+
+32. Add Slashes to notes menu -- 1, 2, 3, 4, or none.  Worry about
+    performance aspect later
+
+33. Consider YA menu reorganisation: stuff now in Groups to spread out
+    across Notes instead?  Or go for Groups and Notes instead of G, N
+    and Transforms?
+
+34. Add toolbars with note/transformation buttons duplicating stuff
+    on some of the above menus
 
 
 Post-0.1.4 task list
