@@ -69,11 +69,22 @@ protected:
 	   ModPause   = (1<<7)
     };
 
+    // RG21 text positions
+    enum { TextAboveStave = 0,
+	   TextAboveStaveLarge,
+	   TextAboveBarLine,
+	   TextBelowStave,
+	   TextBelowStaveItalic,
+	   TextChordName,
+	   TextDynamic
+    };
+
     bool parse();
     bool parseClef();
     bool parseKey();
     bool parseChordItem();
     bool parseRest();
+    bool parseText();
     bool parseGroupStart();
     bool parseIndicationStart();
     bool parseBarType();

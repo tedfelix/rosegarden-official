@@ -185,6 +185,62 @@ bool RG21Loader::parseRest()
     return true;
 }
 
+bool RG21Loader::parseText()
+{
+    if (!m_currentSegment) return false;
+
+    std::string s;
+    for (unsigned int i = 1; i < m_tokens.count(); ++i) {
+	if (i > 1) s += " ";
+	s += m_tokens[i].data();
+    }
+
+    if (!readNextLine() ||
+	m_tokens.count() != 2 || m_tokens[0].lower() != "position") {
+	return false;
+    }
+
+    int rg21posn = m_tokens[1].toInt();
+    std::string type = Rosegarden::Text::UnspecifiedType;
+
+    switch (rg21posn) {
+
+    case TextAboveStave:
+	type = Rosegarden::Text::LocalTempo;
+	break;
+
+    case TextAboveStaveLarge:
+	type = Rosegarden::Text::Tempo;
+	break;
+
+    case TextAboveBarLine:
+	type = Rosegarden::Text::Direction;
+	break;
+
+    case TextBelowStave:
+	type = Rosegarden::Text::Lyric; // perhaps
+	break;
+
+    case TextBelowStaveItalic:
+	type = Rosegarden::Text::LocalDirection;
+	break;
+
+    case TextChordName:
+	type = Rosegarden::Text::ChordName;
+	break;
+
+    case TextDynamic:
+	type = Rosegarden::Text::Dynamic;
+	break;
+    }
+
+    Rosegarden::Text text(s, type);
+    Event *textEvent = text.getAsEvent(m_currentSegmentTime);
+    m_currentSegment->insert(textEvent);
+
+    return true;
+}    
+
 void RG21Loader::setGroupProperties(Event *e)
 {
     if (m_inGroup) {
@@ -579,6 +635,12 @@ bool RG21Loader::parse()
 
             parseRest();
 
+	} else if (firstToken == "Text") {
+
+            if (!readNextLine()) break;
+
+	    parseText();
+
         } else if (firstToken == "Group") {
 
             if (!readNextLine()) break;
@@ -607,8 +669,10 @@ bool RG21Loader::parse()
             else
                 closeSegmentOrComposition();
             
-        }
-        
+        } else {
+
+	    kdDebug(KDEBUG_AREA) << "RG21Loader::parse: Unsupported element type \"" << firstToken << "\", ignoring" << endl;
+	}
     }
     
     return true;

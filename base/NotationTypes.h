@@ -463,7 +463,10 @@ public:
     static const std::string KeyName;
     static const std::string Lyric;
     static const std::string Dynamic;
+    static const std::string Direction;
+    static const std::string LocalDirection;
     static const std::string Tempo;
+    static const std::string LocalTempo;
 
     Text(const std::string &text,
 	 const std::string &textType = UnspecifiedType);

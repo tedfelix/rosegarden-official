@@ -505,9 +505,12 @@ const PropertyName Text::TextTypePropertyName = "type";
 const std::string Text::UnspecifiedType = "unspecified";
 const std::string Text::ChordName	= "chordname";
 const std::string Text::KeyName		= "keyname";
-const std::string Text::Lyric		= "lyric";
 const std::string Text::Dynamic		= "dynamic";
+const std::string Text::Lyric		= "lyric";
+const std::string Text::Direction	= "direction";
+const std::string Text::LocalDirection	= "local_direction";
 const std::string Text::Tempo		= "tempo";
+const std::string Text::LocalTempo	= "local_tempo";
 
 Text::Text(const std::string &s, const std::string &type) :
     m_text(s),
