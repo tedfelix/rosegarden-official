@@ -665,17 +665,60 @@ void TrackEditor::dropEvent(QDropEvent* event)
         }
             
     } else if (QTextDrag::decode(event, text)) {
-        RG_DEBUG << "TrackEditor::dropEvent() : got text info "
-                 << text << endl;
-
-        int trackPos = m_segmentCanvas->grid().getYBin(event->pos().y());
-        RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos " 
-                 << trackPos << endl;
+        RG_DEBUG << "TrackEditor::dropEvent() : got text info " << endl;
+        //<< text << endl;
 
         if (text.endsWith(".rg")) {
             emit droppedDocument(text);
         } else {
-            emit droppedAudio(text);
+
+            QTextIStream s(&text);
+
+            Rosegarden::AudioFileId audioFileId;
+            Rosegarden::InstrumentId instrumentId;
+            Rosegarden::RealTime startTime, endTime;
+
+            // read the audio info
+            s >> audioFileId;
+            s >> instrumentId;
+            s >> startTime.sec;
+            s >> startTime.usec;
+            s >> endTime.sec;
+            s >> endTime.usec;
+
+            // create a track and
+
+            int trackPos = m_segmentCanvas->grid().
+                getYBin(event->pos().y() + 
+                        m_segmentCanvas->verticalScrollBar()->value());
+
+            Rosegarden::timeT time = 
+                m_segmentCanvas->grid().getRulerScale()->
+                getTimeForX(event->pos().y() + 
+                            m_segmentCanvas->horizontalScrollBar()->value());
+
+            RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
+                     << trackPos
+                     << ", time = "
+                     << time << endl;
+
+            // Drop this audio segment if we have a valid track number
+            // (could also check for time limits too)
+            //
+            if (m_doc->getComposition().getTrackById(trackPos))
+            {
+                QString audioText;
+                QTextOStream t(&audioText);
+                t << audioFileId << "\n";
+                t << trackPos << "\n"; // track id
+                t << time << "\n"; // time on canvas
+                t << startTime.sec << "\n";
+                t << startTime.usec << "\n";
+                t << endTime.sec << "\n";
+                t << endTime.usec << "\n";
+
+                emit droppedAudio(audioText);
+            }
         }
     }
     

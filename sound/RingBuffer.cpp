@@ -157,7 +157,7 @@ RingBuffer::read(char *dest, size_t cnt)
     size_t n1, n2;
   
     if ((free_cnt = readSpace()) == 0) {
-      return 0;
+        return 0;
     }
 
     to_read = cnt > free_cnt ? free_cnt : cnt;
@@ -165,11 +165,11 @@ RingBuffer::read(char *dest, size_t cnt)
     cnt2 = m_readPtr + to_read;
 
     if (cnt2 > m_size) {
-      n1 = m_size - m_readPtr;
-      n2 = cnt2 & m_sizeMask;
+        n1 = m_size - m_readPtr;
+        n2 = cnt2 & m_sizeMask;
     } else {
-      n1 = to_read;
-      n2 = 0;
+        n1 = to_read;
+        n2 = 0;
     }
 
     memcpy (dest, &(m_buffer[m_readPtr]), n1);
@@ -177,9 +177,9 @@ RingBuffer::read(char *dest, size_t cnt)
     m_readPtr &= m_sizeMask;
   
     if (n2) {
-      memcpy (dest + n1, &(m_buffer[m_readPtr]), n2);
-      m_readPtr += n2;
-      m_readPtr &= m_sizeMask;
+        memcpy (dest + n1, &(m_buffer[m_readPtr]), n2);
+        m_readPtr += n2;
+        m_readPtr &= m_sizeMask;
     }
 
     return to_read;
@@ -198,7 +198,7 @@ RingBuffer::write(char *src, size_t cnt)
     size_t n1, n2;
 
     if ((free_cnt = writeSpace()) == 0) {
-      return 0;
+        return 0;
     }
 
     to_write = cnt > free_cnt ? free_cnt : cnt;
@@ -206,11 +206,11 @@ RingBuffer::write(char *src, size_t cnt)
     cnt2 = m_writePtr + to_write;
 
     if (cnt2 > m_size) {
-      n1 = m_size - m_writePtr;
-      n2 = cnt2 & m_sizeMask;
+        n1 = m_size - m_writePtr;
+        n2 = cnt2 & m_sizeMask;
     } else {
-      n1 = to_write;
-      n2 = 0;
+        n1 = to_write;
+        n2 = 0;
     }
 
     memcpy (&(m_buffer[m_writePtr]), src, n1);
@@ -218,9 +218,9 @@ RingBuffer::write(char *src, size_t cnt)
     m_writePtr &= m_sizeMask;
 
     if (n2) {
-      memcpy (&(m_buffer[m_writePtr]), src + n1, n2);
-      m_writePtr += n2;
-      m_writePtr &= m_sizeMask;
+        memcpy (&(m_buffer[m_writePtr]), src + n1, n2);
+        m_writePtr += n2;
+        m_writePtr &= m_sizeMask;
     }
 
     return to_write;
@@ -235,39 +235,39 @@ RingBuffer::write(char *src, size_t cnt)
 void
 RingBuffer::getReadVector(ringbuffer_data_t *vec)
 {
-  size_t free_cnt;
-  size_t cnt2;
-  size_t w, r;
+    size_t free_cnt;
+    size_t cnt2;
+    size_t w, r;
+  
+    w = m_writePtr;
+    r = m_readPtr;
 
-  w = m_writePtr;
-  r = m_readPtr;
+    if (w > r) {
+        free_cnt = w - r;
+    } else {
+        free_cnt = (w - r + m_size) & m_sizeMask;
+    }
 
-  if (w > r) {
-    free_cnt = w - r;
-  } else {
-    free_cnt = (w - r + m_size) & m_sizeMask;
-  }
+    cnt2 = r + free_cnt;
 
-  cnt2 = r + free_cnt;
+    if (cnt2 > m_size) {
 
-  if (cnt2 > m_size) {
+        /* Two part vector: the rest of the buffer after the current write
+           ptr, plus some from the start of the buffer. */
 
-    /* Two part vector: the rest of the buffer after the current write
-       ptr, plus some from the start of the buffer. */
+        vec[0].buf = &(m_buffer[r]);
+        vec[0].len = m_size - r;
+        vec[1].buf = m_buffer;
+        vec[1].len = cnt2 & m_sizeMask;
 
-    vec[0].buf = &(m_buffer[r]);
-    vec[0].len = m_size - r;
-    vec[1].buf = m_buffer;
-    vec[1].len = cnt2 & m_sizeMask;
+    } else {
 
-  } else {
+        /* Single part vector: just the rest of the buffer */
 
-    /* Single part vector: just the rest of the buffer */
-
-    vec[0].buf = &(m_buffer[r]);
-    vec[0].len = free_cnt;
-    vec[1].len = 0;
-  }
+        vec[0].buf = &(m_buffer[r]);
+        vec[0].len = free_cnt;
+        vec[1].len = 0;
+    }
 }
 
 // The non-copying data writer.  `vec' is an array of two places.  Set
@@ -278,37 +278,37 @@ RingBuffer::getReadVector(ringbuffer_data_t *vec)
 void 
 RingBuffer::getWriteVector(ringbuffer_data_t *vec)
 {
-  size_t free_cnt;
-  size_t cnt2;
-  size_t w, r;
+    size_t free_cnt;
+    size_t cnt2;
+    size_t w, r;
+  
+    w = m_writePtr;
+    r = m_readPtr;
 
-  w = m_writePtr;
-  r = m_readPtr;
+    if (w > r) {
+        free_cnt = ((r - w + m_size) & m_sizeMask) - 1;
+    } else if (w < r) {
+        free_cnt = (r - w) - 1;
+    } else {
+        free_cnt = m_size - 1;
+    }
 
-  if (w > r) {
-    free_cnt = ((r - w + m_size) & m_sizeMask) - 1;
-  } else if (w < r) {
-    free_cnt = (r - w) - 1;
-  } else {
-    free_cnt = m_size - 1;
-  }
+    cnt2 = w + free_cnt;
 
-  cnt2 = w + free_cnt;
+    if (cnt2 > m_size) {
 
-  if (cnt2 > m_size) {
+        /* Two part vector: the rest of the buffer after the current write
+           ptr, plus some from the start of the buffer. */
 
-    /* Two part vector: the rest of the buffer after the current write
-       ptr, plus some from the start of the buffer. */
-
-    vec[0].buf = &(m_buffer[w]);
-    vec[0].len = m_size - w;
-    vec[1].buf = m_buffer;
-    vec[1].len = cnt2 & m_sizeMask;
-  } else {
-    vec[0].buf = &(m_buffer[w]);
-    vec[0].len = free_cnt;
-    vec[1].len = 0;
-  }
+        vec[0].buf = &(m_buffer[w]);
+        vec[0].len = m_size - w;
+        vec[1].buf = m_buffer;
+        vec[1].len = cnt2 & m_sizeMask;
+    } else {
+        vec[0].buf = &(m_buffer[w]);
+        vec[0].len = free_cnt;
+        vec[1].len = 0;
+    }
 
 }
 

@@ -51,7 +51,8 @@ typedef enum
     UNKNOWN, // not yet known
     WAV,     // RIFF (Resource Interchange File Format) wav file 
     BWF,     // RIFF Broadcast Wave File
-    AIFF     // Audio Interchange File Format
+    AIFF,    // Audio Interchange File Format
+    MP3
 
 } AudioFileType;
 

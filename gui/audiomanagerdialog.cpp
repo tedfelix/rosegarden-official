@@ -135,6 +135,10 @@ QDragObject* AudioListView::dragObject()
        << item->getStartTime().usec << '\n'
        << item->getDuration().sec << '\n'
        << item->getDuration().usec << '\n';
+
+    RG_DEBUG << "AudioListView::dragObject - "
+             << "file id = " << item->getId()
+             << ", start time = " << item->getStartTime() << endl;
     
     return new QTextDrag(audioData, this);
 }
@@ -678,8 +682,8 @@ AudioManagerDialog::slotAdd()
 #else
                                  QString::null,
 #endif
-                                 QString(i18n("*.wav|WAV files (*.wav)")),
-                                 this, i18n("Select one or more Audio Files"));
+                                 i18n("*.wav|WAV files (*.wav)\n*.mp3|MP3 files (*.mp3)"),
+                                 this, i18n("Select one or more audio files"));
 
     KURL::List::iterator it;
 

@@ -201,6 +201,12 @@ public slots:
                                      const Rosegarden::RealTime &,
                                      const Rosegarden::RealTime &);
 
+    void slotAddAudioSegment(Rosegarden::AudioFileId audioId,
+                             Rosegarden::TrackId trackId,
+                             Rosegarden::timeT position,
+                             const Rosegarden::RealTime &startTime,
+                             const Rosegarden::RealTime &endTime);
+
     void slotDroppedAudio(QString audioDesc);
 
     /*

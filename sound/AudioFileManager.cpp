@@ -42,6 +42,7 @@
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
+#include "MP3AudioFile.h"
 
 namespace Rosegarden
 {
@@ -72,50 +73,79 @@ AudioFileManager::addFile(const std::string &filePath)
     QString ext =
         QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
 
-    if (ext != "wav")
-    {
-        throw(i18n("Unsupported audio file format"));
-    }
-
-    // identify file type
-    AudioFileType subType = RIFFAudioFile::identifySubType(filePath);
 
     // prepare for audio file
     AudioFile *aF = 0;
     AudioFileId id = getFirstUnusedID();
 
-    if (subType == BWF)
+    if (ext == "wav")
     {
-#ifdef DEBUG_AUDIOFILEMANAGER
-        std::cout << "FOUND BWF" << std::endl;
-#endif
-        aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
-    }
-    else if (subType == WAV)
-    {
-        aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
-    }
+        // identify file type
+        AudioFileType subType = RIFFAudioFile::identifySubType(filePath);
 
-    // Add file type on extension
-    try
-    { 
-        if (aF->open() == false)
+        if (subType == BWF)
         {
+#ifdef DEBUG_AUDIOFILEMANAGER
+            std::cout << "FOUND BWF" << std::endl;
+#endif
+            aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
+        }
+        else if (subType == WAV)
+        {
+            aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
+        }
+
+        // Add file type on extension
+        try
+        { 
+            if (aF->open() == false)
+            {
+                delete aF;
+                throw(i18n("Can't open audiofile"));
+            }
+        }
+        catch(std::string e)
+        {
+            // catch and rethrow
+            //
             delete aF;
-            throw(i18n("Can't open audiofile"));
+            throw(e);
         }
     }
-    catch(std::string e)
+#ifdef HAVE_LIBMAD
+    else if (ext == "mp3")
     {
-        // catch and rethrow
-        //
-        delete aF;
-        throw(e);
+        aF = new MP3AudioFile(id, getShortFilename(filePath), filePath);
+
+        try
+        { 
+            if (aF->open() == false)
+            {
+                delete aF;
+                throw(i18n("Problem opening MP3 file"));
+            }
+        }
+        catch(std::string e)
+        {
+            // catch and rethrow
+            //
+            delete aF;
+            throw(e);
+        }
+    }
+#endif // HAVE_LIBMAD
+    else
+    {
+        throw(i18n("Unsupported audio file format"));
     }
 
-    m_audioFiles.push_back(aF);
+    if (aF)
+    {
+        m_audioFiles.push_back(aF);
+        return id;
+    }
 
-    return id;
+    return 0;
 }
 
 // Convert long filename to shorter version

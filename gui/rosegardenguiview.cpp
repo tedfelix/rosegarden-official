@@ -1006,6 +1006,25 @@ RosegardenGUIView::slotChangeInstrumentLabel(Rosegarden::InstrumentId id,
     m_trackEditor->getTrackButtons()->changeInstrumentLabel(id, label);
 }
 
+
+void 
+RosegardenGUIView::slotAddAudioSegment(Rosegarden::AudioFileId audioId,
+                                       Rosegarden::TrackId trackId,
+                                       Rosegarden::timeT position,
+                                       const Rosegarden::RealTime &startTime,
+                                       const Rosegarden::RealTime &endTime)
+{
+    AudioSegmentInsertCommand *command = 
+                      new AudioSegmentInsertCommand(getDocument(),
+                                                    trackId,
+                                                    position,
+                                                    audioId,
+                                                    startTime,
+                                                    endTime);
+    slotAddCommandToHistory(command);
+}
+
+
 void
 RosegardenGUIView::slotAddAudioSegmentAndTrack(
                                        Rosegarden::AudioFileId audioFileId,
@@ -1054,12 +1073,14 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     QTextIStream s(&audioDesc);
 
     Rosegarden::AudioFileId audioFileId;
-    Rosegarden::InstrumentId instrumentId;
+    Rosegarden::TrackId trackId;
+    Rosegarden::timeT position;
     Rosegarden::RealTime startTime, endTime;
 
     // read the audio info
     s >> audioFileId;
-    s >> instrumentId;
+    s >> trackId;
+    s >> position;
     s >> startTime.sec;
     s >> startTime.usec;
     s >> endTime.sec;
@@ -1068,18 +1089,15 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     RG_DEBUG << "RosegardenGUIView::slotDroppedAudio("
                          //<< audioDesc
                          << ") : audioFileId = " << audioFileId
-                         << " - instrumentId = " << instrumentId
+                         << " - trackId = " << trackId
+                         << " - position = " << position
                          << " - startTime.sec = " << startTime.sec
                          << " - startTime.usec = " << startTime.usec
                          << " - endTime.sec = " << endTime.sec
                          << " - endTime.usec = " << endTime.usec
                          << endl;
 
-    if (instrumentId != 0)
-        slotAddAudioSegmentAndTrack(audioFileId, instrumentId,
-                                    startTime, endTime);
-    else
-        RG_DEBUG << "instrument id == 0" << endl;
+    slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
 
 void

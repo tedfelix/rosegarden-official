@@ -29,6 +29,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MappedStudio.cpp \
                                 MidiEvent.cpp \
                                 MidiFile.cpp \
+                                MP3AudioFile.cpp \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
                                 Plugins.cpp \

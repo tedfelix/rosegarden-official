@@ -8,6 +8,7 @@ Features for 1.0 - updated 20030923
   o ringbuffer
   o mp3 support
   o libsndfile support
+  o drag and drop
 
 - metronome [IN PROGRESS - rwb/cc]
 
