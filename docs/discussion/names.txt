@@ -18,6 +18,13 @@ Note-related representational innards
  -E- positional pointer		ItemList again	Iterator	Pointer, Marker
  : : ===========================================================================
 
+Winners:
+  A  Event
+  B  Track
+  C  Composition
+  D  
+  E  TrackPointer
+
 Arrangement-related representational innards
 --------------------------------------------
 
@@ -30,6 +37,11 @@ Arrangement-related representational innards
  -C- set of those			Arrangement, Environment
  : : ===========================================================================
 
+Winners:
+  A  Device
+  B  Channel
+  C  Channel set
+
 Program breakdown
 -----------------
 
@@ -41,6 +53,10 @@ Program breakdown
  : : ---------------------------------------------------------------------------
  -C- playback server    Sequencer/Mapper  Performer	
  : : ===========================================================================
+
+  A  Core
+  B  View
+  C  Performer
 
 Likely GUI bits
 ---------------
@@ -55,6 +71,11 @@ Likely GUI bits
  : : ---------------------------------------------------------------------------
  -D- note/channel overview	Arrange, Environment, er, Overview
  : : ===========================================================================
+
+  A  Transport
+  B  Matrix
+  C  EventList
+  D  
 
 Chris's preferences
 -------------------
