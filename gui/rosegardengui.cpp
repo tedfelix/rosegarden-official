@@ -48,6 +48,10 @@
 #include "rg21io.h"
 #include "rosegardendcop.h"
 
+using std::cout;
+using std::cerr;
+using std::endl;
+
 RosegardenGUIApp::RosegardenGUIApp()
     : KMainWindow(0), DCOPObject("RosegardenGUIIface"),
       m_config(kapp->config()),
