@@ -811,7 +811,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_percussionCheckBox = new QCheckBox(this);
 
     m_bankValue->setSizeLimit(20);
-    m_programValue->setSizeLimit(40);
+    m_programValue->setSizeLimit(30);
     m_variationValue->setSizeLimit(20);
 
     m_bankLabel = new QLabel(i18n("Bank"), this);
