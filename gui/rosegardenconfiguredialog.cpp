@@ -1019,63 +1019,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ------------------ Record tab ---------------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 2, 10, 5);
-
-    label = new QLabel(i18n("MIDI Record Device"), frame);
-    m_recordDevice = new KComboBox(frame);
-
-    layout->addWidget(label, 0, 0);
-    layout->addWidget(m_recordDevice, 0, 1);
-
-    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
-    Rosegarden::DeviceListIterator it;
-
-    m_devices.clear();
-
-    QString recordDeviceStr = m_cfg->readEntry("midirecorddevice");
-
-    Rosegarden::DeviceId recordDevice = 0;
-    if (recordDeviceStr) recordDevice = recordDeviceStr.toUInt();
-
-    for (it = devices->begin(); it != devices->end(); it++)
-    {
-        Rosegarden::MidiDevice *dev =
-            dynamic_cast<Rosegarden::MidiDevice*>(*it);
-
-        if (dev && dev->getDirection() == MidiDevice::Record)
-        {
-	    QString label = strtoqstr(dev->getName());
-	    label += " - " + strtoqstr(dev->getConnection());
-	    m_recordDevice->insertItem(label);
-	    m_devices.push_back(dev->getId());
-        }
-    }
-
-    // Set the active position
-    //
-    for (unsigned int i = 0; i < m_devices.size(); i++)
-    {
-        if (m_devices[i] == recordDevice)
-        {
-            m_recordDevice->setCurrentItem(i);
-        }
-    }
-
-    // If we have more than one input device then create an
-    // "all" inputs device - special case.
-    //
-    if (m_devices.size() > 1)
-    {
-        /*
-        m_recordDevice->insertItem(i18n("<all of the above>"));
-        m_devices.push_back(Device::ALL_DEVICES);
-	*/
-    }
-    else if (m_devices.size() == 0)
-    {
-        m_recordDevice->insertItem(i18n("<no record devices>"));
-        m_recordDevice->setEnabled(false);
-    }
+    layout = new QGridLayout(frame, 3, 2, 10, 5);
 
     int increment = 0;
 
@@ -1084,8 +1028,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     label = new QLabel(i18n("Number of JACK audio inputs"), frame);
     m_jackInputs = new QSpinBox(frame);
 
-    layout->addWidget(label,        1, 0);
-    layout->addWidget(m_jackInputs, 1, 1);
+    layout->addWidget(label,        0, 0);
+    layout->addWidget(m_jackInputs, 0, 1);
 
     int jackAudioInputs = m_cfg->readNumEntry("jackaudioinputs", 2);
 
@@ -1098,8 +1042,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     label = new QLabel(i18n("Minutes of audio recording"), frame);
     m_audioRecordMinutes = new QSpinBox(frame);
 
-    layout->addWidget(label,                1 + increment, 0);
-    layout->addWidget(m_audioRecordMinutes, 1 + increment, 1);
+    layout->addWidget(label,                0 + increment, 0);
+    layout->addWidget(m_audioRecordMinutes, 0 + increment, 1);
 
     int audioRecordMinutes = m_cfg->readNumEntry("audiorecordminutes", 5);
 
@@ -1210,51 +1154,6 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
     m_cfg->writeEntry("alwayssendcontrollers",
                        m_sendControllersAtPlay->isChecked());
-
-    // -------- Record device ---------
-    //
-
-    /*
-    // Match the device number in the list and write out the matching
-    // DeviceId.
-    //
-    int count = 0;
-    int deviceId = 0;
-    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
-    Rosegarden::DeviceListIterator it;
-
-    for (it = devices->begin(); it != devices->end(); it++)
-    {
-        Rosegarden::MidiDevice *dev =
-            dynamic_cast<Rosegarden::MidiDevice*>(*it);
-
-        if (dev && dev->getDirection() == MidiDevice::Duplex)
-        {
-            if (m_recordDevice->currentItem() == count)
-            {
-                deviceId = dev->getId();
-                break;
-            }
-            count++;
-        }
-    }
-    */
-
-    unsigned int device = 0;
-
-    if (m_devices.size())
-    {
-        device = m_devices[m_recordDevice->currentItem()];
-
-        // send the selected device to the sequencer
-        Rosegarden::MappedEvent mEdevice(Rosegarden::MidiInstrumentBase, // InstrumentId
-                                   Rosegarden::MappedEvent::SystemRecordDevice,
-                                   Rosegarden::MidiByte(device));
-
-        Rosegarden::StudioControl::sendMappedEvent(mEdevice);
-    }
-
-    m_cfg->writeEntry("midirecorddevice", device);
 
     // sequencer clear down
     //

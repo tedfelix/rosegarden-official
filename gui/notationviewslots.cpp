@@ -154,6 +154,7 @@ NotationView::slotChangeSpacing(int spacing)
     }
 
     positionPages();
+    updateControlRulers(true);
     updateView();
 }
 
@@ -209,6 +210,7 @@ NotationView::slotChangeProportion(int proportion)
     }
 
     positionPages();
+    updateControlRulers(true);
     updateView();
 }
 
