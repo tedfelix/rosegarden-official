@@ -35,7 +35,7 @@ std::string XmlExportable::encode(const std::string &s0)
 	case '<' : s1 += "&lt;";   break;
 	case '>' : s1 += "&gt;";   break;
         case '"' : s1 += "&quot;"; break;
-        case 0x27: s1 += "&apos;"; break;
+        case '\'': s1 += "&apos;"; break;
 	default  : s1 += c;        break;
 	}
     }
