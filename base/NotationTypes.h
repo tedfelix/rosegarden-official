@@ -41,6 +41,7 @@ enum Accidental {
 class Clef {
 public:
     static const std::string EventType;
+    static const int EventSubOrdering;
     static const PropertyName ClefPropertyName;
     static const Clef DefaultClef;
     struct BadClefName { };
@@ -100,6 +101,7 @@ std::hash<const char *> hashstring::_H;
 class Key {
 public:
     static const std::string EventType;
+    static const int EventSubOrdering;
     static const PropertyName KeyPropertyName;
     static const Key DefaultKey;
     struct BadKeyName { };
@@ -368,6 +370,7 @@ class TimeSignature
 {
 public:
     static const std::string EventType;
+    static const int EventSubOrdering;
     static const PropertyName NumeratorPropertyName;
     static const PropertyName DenominatorPropertyName;
     static const TimeSignature DefaultTimeSignature;

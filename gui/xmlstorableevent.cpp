@@ -47,6 +47,17 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 
             setType(attrVal.latin1());
 
+        } else if (attrName == "subordering") {
+
+            bool isNumeric = true;
+            int o = attrVal.toUInt(&isNumeric);
+
+            if (!isNumeric) {
+                kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Bad subordering: " << attrVal << endl;
+            } else {
+                if (o != 0) setSubOrdering(o);
+            }
+
         } else if (attrName == "duration") {
 
             bool isNumeric = true;
@@ -149,6 +160,10 @@ XmlStorableEvent::toXmlString() const
 
     if (getDuration() != 0) {
 	res += QString(" duration=\"%1\"").arg(getDuration());
+    }
+
+    if (getSubOrdering() != 0) {
+        res += QString(" subordering=\"%1\"").arg(getSubOrdering());
     }
 
     res += ">";

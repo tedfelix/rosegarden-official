@@ -29,6 +29,7 @@ using std::ostream;
 Event::Event()
     : m_duration(0),
       m_absoluteTime(0),
+      m_subOrdering(0),
       m_viewElementRefCount(0)
 {
 }
@@ -37,6 +38,7 @@ Event::Event(const std::string &type)
     : m_type(type),
       m_duration(0),
       m_absoluteTime(0),
+      m_subOrdering(0),
       m_viewElementRefCount(0)
 {
 }
@@ -46,6 +48,7 @@ Event::Event(const Event &e) :
     m_type(e.getType()),
     m_duration(e.getDuration()),
     m_absoluteTime(e.getAbsoluteTime()),
+    m_subOrdering(e.getSubOrdering()),
     m_viewElementRefCount(0) // because we do not copy the ViewElements,
 			     // since we can't access them
 {
@@ -61,6 +64,11 @@ Event&
 Event::operator=(const Event &e)
 {
     if (&e != this) {
+        m_type = e.getType();
+        m_duration = e.getDuration();
+        m_absoluteTime = e.getAbsoluteTime();
+        m_subOrdering = e.getSubOrdering();
+        m_viewElementRefCount = 0;
         copyFrom(e);
     }
     return *this;
@@ -133,6 +141,7 @@ Event::dump(ostream& out) const
 
     out << "\tDuration : " << m_duration
         << "\n\tAbsolute Time : " << m_absoluteTime
+        << "\n\tSub-ordering : " << m_subOrdering
         << "\n\tProperties : \n";
 
     for (PropertyMap::const_iterator i = m_properties.begin();
@@ -196,7 +205,10 @@ Event::getStorageSize() const
 bool
 operator<(const Event &a, const Event &b)
 {
-    return a.getAbsoluteTime() < b.getAbsoluteTime();
+    timeT at = a.getAbsoluteTime();
+    timeT bt = b.getAbsoluteTime();
+    if (at != bt) return at < bt;
+    else return a.getSubOrdering() < b.getSubOrdering();
 }
  
 }

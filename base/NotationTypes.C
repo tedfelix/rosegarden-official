@@ -42,6 +42,7 @@ using std::endl;
 //////////////////////////////////////////////////////////////////////
     
 const string Clef::EventType = "clefchange";
+const int Clef::EventSubOrdering = -30;
 const PropertyName Clef::ClefPropertyName = "clef";
 const string Clef::Treble = "treble";
 const string Clef::Tenor = "tenor";
@@ -98,6 +99,7 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
     Event *e = new Event(EventType);
     e->set<String>(ClefPropertyName, m_clef);
     e->setAbsoluteTime(absoluteTime);
+    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 
@@ -107,6 +109,7 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 //////////////////////////////////////////////////////////////////////
 
 const string Key::EventType = "keychange";
+const int Key::EventSubOrdering = -20;
 const PropertyName Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
 
@@ -233,6 +236,7 @@ Event *Key::getAsEvent(timeT absoluteTime) const
     Event *e = new Event(EventType);
     e->set<String>(KeyPropertyName, m_name);
     e->setAbsoluteTime(absoluteTime);
+    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 
@@ -649,6 +653,7 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 ///////////////////////////////////////////////////////////////////////
 
 const string TimeSignature::EventType = "timesignature";
+const int TimeSignature::EventSubOrdering = -10;
 const PropertyName TimeSignature::NumeratorPropertyName = "numerator";
 const PropertyName TimeSignature::DenominatorPropertyName = "denominator";
 const TimeSignature TimeSignature::DefaultTimeSignature = TimeSignature(4, 4);
@@ -719,6 +724,7 @@ Event *TimeSignature::getAsEvent(timeT absoluteTime) const
     e->set<Int>(NumeratorPropertyName, m_numerator);
     e->set<Int>(DenominatorPropertyName, m_denominator);
     e->setAbsoluteTime(absoluteTime);
+    e->setSubOrdering(EventSubOrdering);
     return e;
 }
 

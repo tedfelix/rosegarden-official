@@ -64,13 +64,16 @@ public:
     bool isa(const std::string &t) const  { return (m_type == t); }
 
     timeT getAbsoluteTime() const    { return m_absoluteTime; }
-    void setAbsoluteTime(timeT d)    { m_absoluteTime = d; }
-    void addAbsoluteTime(timeT d)    { m_absoluteTime += d; }
+    void  setAbsoluteTime(timeT d)   { m_absoluteTime = d; }
+    void  addAbsoluteTime(timeT d)   { m_absoluteTime += d; }
 
     timeT getDuration()     const    { return m_duration; }
-    void setDuration(timeT d)        { m_duration = d; }
+    void  setDuration(timeT d)       { m_duration = d; }
 
-    bool has(const PropertyName &name) const;
+    int   getSubOrdering()  const    { return m_subOrdering; }
+    void  setSubOrdering(int o)      { m_subOrdering = o; }
+
+    bool  has(const PropertyName &name) const;
 
     template <PropertyType P>
     PropertyDefn<P>::basic_type get(const PropertyName &name) const
@@ -156,6 +159,7 @@ private:
     std::string m_type;
     timeT m_duration;
     timeT m_absoluteTime;
+    int m_subOrdering;
 
     unsigned int m_viewElementRefCount;
 

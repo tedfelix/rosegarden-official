@@ -73,21 +73,9 @@ bool RG21Loader::parseClef()
     
     std::string clefName = m_tokens[2].lower().data();
 
-    Event *clefEvent = new Event(Rosegarden::Clef::EventType);
-    clefEvent->setAbsoluteTime(m_currentTrackTime);
-    clefEvent->set<String>(Rosegarden::Clef::ClefPropertyName,
-                           clefName);
-    
+    m_currentClef = Clef(clefName);
+    Event *clefEvent = m_currentClef.getAsEvent(m_currentTrackTime);
     m_currentTrack->insert(clefEvent);
-
-    if (clefName == "treble")
-        m_currentClef = Clef(Clef::Treble);
-    else if (clefName == "tenor")
-        m_currentClef = Clef(Clef::Tenor);
-    else if (clefName == "alto")
-        m_currentClef = Clef(Clef::Alto);
-    else if (clefName == "bass")
-        m_currentClef = Clef(Clef::Bass);
 
     return true;
 }
@@ -100,17 +88,9 @@ bool RG21Loader::parseKey()
         .arg(m_tokens[2].upper())
         .arg(m_tokens[3].lower());
 
-    Event *keyEvent = new Event(Rosegarden::Key::EventType);
-    keyEvent->setAbsoluteTime(m_currentTrackTime);
-    keyEvent->set<String>(Rosegarden::Key::KeyPropertyName,
-                          std::string(keyName.data()));
-    
+    m_currentKey = Rosegarden::Key(std::string(keyName.data()));
+    Event *keyEvent = m_currentKey.getAsEvent(m_currentTrackTime);
     m_currentTrack->insert(keyEvent);
-
-    m_currentKey = Rosegarden::Key(*keyEvent);
-
-//     kdDebug(KDEBUG_AREA) << "RG21Loader::parseKey() insert key event '"
-//                          << keyName << "' at " << m_currentTrackTime << endl;
 
     return true;
 }
