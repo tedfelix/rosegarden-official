@@ -33,6 +33,8 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 #include "bankeditor.h"
 #include "widgets.h"
@@ -528,6 +530,8 @@ BankEditorDialog::slotDeleteBank()
         m_programList = tempList;
 
         slotPopulateDeviceBank(m_deviceCombo->currentItem(), newBank);
+
+        setModified(true);
     }
 
     _newBank = false;
@@ -890,5 +894,26 @@ ProgramLine::slotNewText(const QString &label)
     if (_newBank == false)
     emit newText(label, m_id);
 }
+
+// ------------------------ RemapInstrumentDialog -----------------------
+//
+RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
+                                             RosegardenGUIDoc *doc):
+    KDialogBase(parent, "", true, i18n("Remap Instruments and Devices..."),
+                Ok | Apply | Cancel),
+    m_doc(doc)
+{
+    QVBox *vBox = makeVBoxMainWidget();
+
+    QButtonGroup *buttonGroup = new QButtonGroup(i18n("Remap"), vBox);
+
+    m_deviceButton = new QRadioButton(i18n("Devices"), vBox);
+    m_instrumentButton = new QRadioButton(i18n("Instruments"), vBox);
+
+    buttonGroup->insert(m_deviceButton);
+    buttonGroup->insert(m_instrumentButton);
+
+}
+
 
 

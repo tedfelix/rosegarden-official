@@ -567,6 +567,11 @@ public slots:
     void slotEditBanks();
 
     /**
+     * Remap instruments
+     */
+    void slotRemapInstruments();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();

@@ -54,6 +54,7 @@
   <Menu name="Studio">
         <text>&amp;Studio</text>
         <Action name="modify_banks"/>
+        <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>

@@ -30,6 +30,7 @@ class QPushButton;
 class QFrame;
 class QSpinBox;
 class QCheckBox;
+class QRadioButton;
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 class KCommand;
@@ -149,6 +150,28 @@ protected:
     int                      m_lastDevice;
     int                      m_lastMSB;
     int                      m_lastLSB;
+};
+
+// ----------------------- RemapInstrumentDialog ------------------------
+//
+//
+
+class RemapInstrumentDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    RemapInstrumentDialog(QWidget *parent,
+                          RosegardenGUIDoc *doc);
+
+protected:
+
+    RosegardenGUIDoc    *m_doc;
+
+    QRadioButton        *m_deviceButton;
+    QRadioButton        *m_instrumentButton;
+
+    RosegardenComboBox  *m_fromCombo;
+    RosegardenComboBox  *m_toCombo;
 };
 
 #endif // _BANKEDITOR_H_

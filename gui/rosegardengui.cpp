@@ -473,6 +473,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
 
+    new KAction(i18n("&Remap Instruments and Devices..."), 0, this,
+                SLOT(slotRemapInstruments()),
+                actionCollection(), "remap_instruments");
+
     // Transport controls [rwb]
     //
     // We set some default key bindings - with numlock off
@@ -3335,8 +3339,7 @@ RosegardenGUIApp::slotEditBanks()
 
     if (dialog->exec() == QDialog::Accepted)
     {
-        std::cout << "RosegardenGUIApp::slotEditBanks - "
-                  << "accepted" << std::endl;
+        RG_DEBUG << "slotEditBanks - accepted" << endl;
     }
 }
 
@@ -3354,5 +3357,20 @@ RosegardenGUIApp::slotPanic()
         delete progressDlg;
     }
 }
+
+void
+RosegardenGUIApp::slotRemapInstruments()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotRemapInstruments" << endl;
+    RemapInstrumentDialog *dialog =
+        new RemapInstrumentDialog(this, m_doc);
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        RG_DEBUG << "slotRemapInstruments - accepted" << endl;
+    }
+}
+
+
 
 
