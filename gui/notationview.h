@@ -37,6 +37,7 @@ class QCanvasItem;
 namespace Rosegarden { class Segment; }
 class RosegardenGUIDoc;
 class NotationTool;
+class NotationToolBox;
 class StaffRuler;
 class PositionCursor;
 class ActiveItem;
@@ -482,6 +483,10 @@ protected:
     ActiveItem* activeItem() { return m_activeItem; }
 
 
+    void redoLayoutAdvised(Rosegarden::Segment *segment,
+			   Rosegarden::timeT startTime,
+			   Rosegarden::timeT endTime); // -1 => end of staff
+
     //--------------- Data members ---------------------------------
 
     KConfig* m_config;
@@ -518,7 +523,8 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
-    NotationTool* m_tool;
+    NotationTool*    m_tool;
+    NotationToolBox* m_toolBox;
 
     template <class T>
     class ZoomSlider : public QSlider
@@ -546,9 +552,6 @@ protected:
     typedef std::set<NotationView *> NotationViewSet;
     static NotationViewSet m_viewsExtant;
 
-    void redoLayoutAdvised(Rosegarden::Segment *segment,
-			   Rosegarden::timeT startTime,
-			   Rosegarden::timeT endTime); // -1 => end of staff
 };
 
 #endif

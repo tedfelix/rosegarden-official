@@ -56,8 +56,65 @@ using Rosegarden::timeT;
 //               Notation Tools
 //////////////////////////////////////////////////////////////////////
 
+NotationToolBox::NotationToolBox(NotationView *parent)
+    : QObject(parent),
+      m_parentView(parent),
+      m_tools(17, false)
+{
+    //m_tools.setAutoDelete(true);
+}
+
+
+NotationTool* NotationToolBox::getTool(const QString& toolName)
+{
+    NotationTool* tool = m_tools[toolName];
+
+    if (!tool) tool = createTool(toolName);
+    
+    return tool;
+}
+
+
+NotationTool* NotationToolBox::createTool(const QString& toolName)
+{
+    NotationTool* tool = 0;
+
+    QString toolNamelc = toolName.lower();
+    
+    if (toolNamelc == NoteInserter::ToolName)
+
+        tool = new NoteInserter(m_parentView);
+
+    else if (toolNamelc == RestInserter::ToolName)
+
+        tool = new RestInserter(m_parentView);
+
+    else if (toolNamelc == ClefInserter::ToolName)
+
+        tool = new ClefInserter(m_parentView);
+
+    else if (toolNamelc == NotationEraser::ToolName)
+
+        tool = new NotationEraser(m_parentView);
+
+    else if (toolNamelc == NotationSelector::ToolName)
+
+        tool = new NotationSelector(m_parentView);
+
+    else {
+        KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+                           .arg(toolName).arg(toolNamelc));
+        return 0;
+    }
+
+    m_tools.insert(toolName, tool);
+
+    return tool;
+}
+
+
 NotationTool::NotationTool(const QString& menuName, NotationView* view)
-    : QObject(0),
+    : QObject(view),
       m_menuName(menuName),
       m_parentView(view),
       m_menu(0)
@@ -73,10 +130,14 @@ NotationTool::~NotationTool()
 //    m_instance = 0;
 }
 
-void NotationTool::finalize()
+void NotationTool::ready()
 {
     m_parentView->setCanvasCursor(Qt::arrowCursor);
     m_parentView->setPositionTracking(false);
+}
+
+void NotationTool::stow()
+{
 }
 
 void NotationTool::createMenu(const QString& rcFileName)
@@ -200,33 +261,17 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_noteDots(0),
       m_accidental(Rosegarden::NoAccidental)
 {
+    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
+            this,         SLOT(setAccidental(Rosegarden::Accidental)));
+
 }
-
-NotationTool* NoteInserter::getInstance(NotationView* view)
-{
-    if (!m_instance)
-        m_instance = new NoteInserter(view);
-
-    m_instance->setParentView(view);
-
-    return m_instance;
-}
-
 
 NoteInserter::~NoteInserter()
 {
 }
 
-void NoteInserter::finalize()
+void NoteInserter::ready()
 {
-    // disconnect previous signals, which were connected to a wrong
-    // parentView
-    //
-    disconnect();
-    
-    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
-            this, SLOT(setAccidental(Rosegarden::Accidental)));
-
     m_parentView->setCanvasCursor(Qt::crossCursor);
     m_parentView->setPositionTracking(true);
 }
@@ -383,16 +428,6 @@ RestInserter::RestInserter(NotationView* view)
 {
 }
 
-NotationTool* RestInserter::getInstance(NotationView* view)
-{
-    if (!m_instance)
-        m_instance = new RestInserter(view);
-
-    m_instance->setParentView(view);
-
-    return m_instance;
-}
-
 Event *
 RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int, Accidental)
@@ -412,22 +447,12 @@ ClefInserter::ClefInserter(NotationView* view)
 {
 }
 
-void ClefInserter::finalize()
+void ClefInserter::ready()
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
     m_parentView->setPositionTracking(false);
 }
 
-NotationTool* ClefInserter::getInstance(NotationView* view)
-{
-    if (!m_instance)
-        m_instance = new ClefInserter(view);
-
-    m_instance->setParentView(view);
-
-    return m_instance;
-}
-    
 void ClefInserter::setClef(std::string clefType)
 {
     m_clef = clefType;
@@ -476,20 +501,10 @@ NotationEraser::NotationEraser(NotationView* view)
     createMenu("notationeraser.rc");
 }
 
-void NotationEraser::finalize()
+void NotationEraser::ready()
 {
     m_parentView->setCanvasCursor(Qt::pointingHandCursor);
     m_parentView->setPositionTracking(false);
-}
-
-NotationTool* NotationEraser::getInstance(NotationView* view)
-{
-    if (!m_instance)
-        m_instance = new NotationEraser(view);
-
-    m_instance->setParentView(view);
-
-    return m_instance;
 }
 
 void NotationEraser::handleLeftButtonPress(int, int staffNo,
@@ -520,32 +535,13 @@ void NotationEraser::toggleRestCollapse()
 
 NotationSelector::NotationSelector(NotationView* view)
     : NotationTool("NotationSelector", view),
-      m_selectionRect(new QCanvasRectangle(m_parentView->canvas())),
+      m_selectionRect(0),
       m_updateRect(false),
       m_clickedStaff(-1),
       m_clickedElement(0)
 {
-    m_selectionRect->hide();
-    m_selectionRect->setPen(Qt::blue);
-
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(hideSelection()));
-}
-
-NotationSelector::~NotationSelector()
-{
-    delete m_selectionRect;
-    m_parentView->canvas()->update();
-}
-
-NotationTool* NotationSelector::getInstance(NotationView* view)
-{
-    if (!m_instance)
-        m_instance = new NotationSelector(view);
-
-    m_instance->setParentView(view);
-
-    return m_instance;
 }
 
 void NotationSelector::handleLeftButtonPress(int, int staffNo,
@@ -629,6 +625,22 @@ void NotationSelector::handleMouseRelease(QMouseEvent*)
     }
 }
 
+void NotationSelector::ready()
+{
+    m_selectionRect = new QCanvasRectangle(m_parentView->canvas());
+    
+    m_selectionRect->hide();
+    m_selectionRect->setPen(Qt::blue);
+}
+
+void NotationSelector::stow()
+{
+    delete m_selectionRect;
+    m_selectionRect = 0;
+    m_parentView->canvas()->update();
+}
+
+
 void NotationSelector::hideSelection()
 {
     m_selectionRect->hide();
@@ -708,6 +720,13 @@ void NotationSelector::setViewCurrentSelection()
 
 //------------------------------
 
+const QString NoteInserter::ToolName     = "noteinserter";
+const QString RestInserter::ToolName     = "restinserter";
+const QString ClefInserter::ToolName     = "clefinserter";
+const QString NotationEraser::ToolName   = "notationeraser";
+const QString NotationSelector::ToolName = "notationselector";
+
+
 //----------------------------------------------------------------------
 //               Unused
 //----------------------------------------------------------------------
@@ -765,11 +784,4 @@ void NotationSelectionPaster::handleLeftButtonPress(int, int staffNo,
     //m_parentView->slotStatusHelpMsg(i18n("Ready."));
 
 }
-
-NotationTool* NotationTool::m_instance = 0;
-NotationTool* NoteInserter::m_instance = 0;
-NotationTool* RestInserter::m_instance = 0;
-NotationTool* ClefInserter::m_instance = 0;
-NotationTool* NotationEraser::m_instance = 0;
-NotationTool* NotationSelector::m_instance = 0;
 

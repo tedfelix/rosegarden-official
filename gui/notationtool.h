@@ -41,6 +41,29 @@ class QPopupMenu;
 //               Notation Tools
 //////////////////////////////////////////////////////////////////////
 
+class NotationTool;
+
+/**
+ * NotationToolBox : maintains a single instance of each registered tool
+ *
+ * Tools are fetched from a name
+ */
+class NotationToolBox : public QObject
+{
+public:
+    NotationToolBox(NotationView* parent);
+
+    NotationTool* getTool(const QString& toolName);
+
+protected:
+    NotationTool* createTool(const QString& toolName);
+
+    NotationView* m_parentView;
+
+    QDict<NotationTool> m_tools;
+};
+
+
 /**
  * Notation tool base class.
  *
@@ -48,20 +71,39 @@ class QPopupMenu;
  * (notes, rests, clefs, eraser, etc...). It handle mouse click events
  * for the NotationView ('State' design pattern).
  *
- * This class is a singleton
+ * A NotationTool can have a menu, normally activated through a right
+ * mouse button click. This menu is defined in an XML file, see
+ * NoteInserter and noteinserter.rc for an example.
+ *
+ * This class is a "semi-singleton", that is, only one instance per
+ * NotationView window is created. This is because menu creation is
+ * slow, and the fact that a tool can trigger the setting of another
+ * tool through a menu choice). This is maintained with the
+ * NotationToolBox class This means we can't rely on the ctor/dtor to
+ * perform setting up, like mouse cursor changes for instance. Use the
+ * ready() and stow() method for this.
  *
  * @see NotationView#setTool()
+ * @see NotationToolBox
  */
 class NotationTool : public QObject, public KXMLGUIClient
 {
+    friend NotationToolBox;
+
 public:
     virtual ~NotationTool();
 
     /**
-     * Is called by NotationView after creation
-     * Add any signal/slot connection here
+     * Is called by NotationView when the tool is set as current
+     * Add any setup here
      */
-    virtual void finalize();
+    virtual void ready();
+
+    /**
+     * Is called by NotationView after the tool is not used
+     * Add any cleanup here
+     */
+    virtual void stow();
 
     /**
      * Dispatch the event to Left/Middle/Right MousePress
@@ -130,8 +172,6 @@ protected:
     NotationView* m_parentView;
 
     QPopupMenu* m_menu;
-
-    static NotationTool* m_instance;
 };
 
 namespace Rosegarden { class SegmentNotationHelper; }
@@ -143,16 +183,18 @@ class NoteInserter : public NotationTool
 {
     Q_OBJECT
 
-public:
-    static NotationTool* getInstance(NotationView*);
+    friend NotationToolBox;
 
+public:
     ~NoteInserter();
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
                                        NotationElement* el);
 
-    virtual void finalize();
+    virtual void ready();
+
+    static const QString ToolName;
 
 public slots:
     /// Set the type of note (quaver, breve...) which will be inserted
@@ -202,7 +244,6 @@ protected:
     Rosegarden::Accidental m_accidental;
 
     static const char* m_actionsAccidental[][4];
-    static NotationTool* m_instance;
 };
 
 /**
@@ -210,8 +251,11 @@ protected:
  */
 class RestInserter : public NoteInserter
 {
+    friend NotationToolBox;
+
 public:
-    static NotationTool* getInstance(NotationView*);
+
+    static const QString ToolName;
 
 protected:
     RestInserter(NotationView*);
@@ -222,7 +266,6 @@ protected:
 					    const Rosegarden::Note &,
 					    int pitch, Rosegarden::Accidental);
 
-    static NotationTool* m_instance;
 };
 
 /**
@@ -230,22 +273,22 @@ protected:
  */
 class ClefInserter : public NotationTool
 {
-public:
-    static NotationTool* getInstance(NotationView*);
+    friend NotationToolBox;
 
+public:
     void setClef(std::string clefType);
 
-    virtual void finalize();
+    virtual void ready();
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
                                        NotationElement* el);
+    static const QString ToolName;
+
 protected:
     ClefInserter(NotationView*);
     
     Rosegarden::Clef m_clef;
-
-    static NotationTool* m_instance;
 };
 
 
@@ -255,14 +298,17 @@ protected:
 class NotationEraser : public NotationTool
 {
     Q_OBJECT
-public:
-    static NotationTool* getInstance(NotationView*);
 
-    virtual void finalize();
+    friend NotationToolBox;
+
+public:
+
+    virtual void ready();
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
                                        NotationElement* el);
+    static const QString ToolName;
 
 public slots:
     void toggleRestCollapse();
@@ -272,7 +318,6 @@ protected:
 
     bool m_collapseRest;
 
-    static NotationTool* m_instance;
 };
 
 /**
@@ -282,11 +327,10 @@ class NotationSelector : public NotationTool
 {
     Q_OBJECT
 
-public:
-    static NotationTool* getInstance(NotationView*);
+    friend NotationToolBox;
 
-    ~NotationSelector();
-    
+public:
+
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
                                        NotationElement* el);
@@ -299,11 +343,28 @@ public:
                                      NotationElement*);
 
     /**
+     * Create the selection rect
+     *
+     * We need this because so NotationView deletes all QCanvasItems
+     * along with it. This happens before the NotationSelector is
+     * deleted, so we can't delete the selection rect in
+     * ~NotationSelector because that leads to double deletion.
+     */
+    virtual void ready();
+
+    /**
+     * Delete the selection rect.
+     */
+    virtual void stow();
+
+    /**
      * Returns the currently selected events
      *
      * The returned result is owned by the caller
      */
     EventSelection* getSelection();
+
+    static const QString ToolName;
 
 public slots:
     /**
@@ -328,17 +389,15 @@ protected:
     int m_clickedStaff;
     NotationElement *m_clickedElement;
 
-    static NotationTool* m_instance;
 };
 
 
 /**
- * Selection pasting
+ * Selection pasting - unused at the moment
  */
 class NotationSelectionPaster : public NotationTool
 {
 public:
-    static NotationTool* getInstance(NotationView*);
 
     ~NotationSelectionPaster();
     
@@ -352,7 +411,6 @@ protected:
 
     EventSelection& m_selection;
 
-    static NotationTool* m_instance;
 };
 
 #endif

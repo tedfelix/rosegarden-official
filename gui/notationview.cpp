@@ -103,6 +103,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_hlayout(0),
     m_vlayout(0),
     m_tool(0),
+    m_toolBox(new NotationToolBox(this)),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
     m_pointer(0)
@@ -679,7 +680,7 @@ void NotationView::showBars(int staffNo)
 void NotationView::updateRuler()
 {
     if (m_lastFinishingStaff < 0 ||
-	m_lastFinishingStaff >= m_staffs.size()) return;
+	unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
 
     NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
     TimeSignature timeSignature;
@@ -874,9 +875,9 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     NoteInserter* inserter = 0;
 
     if (rest)
-        inserter = dynamic_cast<NoteInserter*>(RestInserter::getInstance(this));
+        inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(RestInserter::ToolName));
     else
-        inserter = dynamic_cast<NoteInserter*>(NoteInserter::getInstance(this));
+        inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(NoteInserter::ToolName));
 
     inserter->setNote(n);
     inserter->setDots(dots);
@@ -922,8 +923,14 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
 
 void NotationView::setTool(NotationTool* tool)
 {
+    if (m_tool)
+        m_tool->stow();
+
     m_tool = tool;
-    m_tool->finalize();
+
+    if (m_tool)
+        m_tool->ready();
+
 }
 
 void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
@@ -1190,7 +1197,7 @@ void
 NotationView::setPositionPointer(const int& position)
 {
     if (m_lastFinishingStaff < 0 ||
-	m_lastFinishingStaff >= m_staffs.size()) return;
+	unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
 
     kdDebug(KDEBUG_AREA) << "NotationView::setPositionPointer: position is "
 			 << position << endl;
@@ -1204,14 +1211,14 @@ NotationView::setPositionPointer(const int& position)
 
     NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
 
-    if (barNo < m_hlayout->getBarLineCount(staff)) {
+    if (unsigned(barNo) < m_hlayout->getBarLineCount(staff)) {
 
 	canvasPosition = m_hlayout->getBarLineX(staff, barNo);
 
 	if (times.first != times.second) {
 
 	    double barWidth;
-	    if (barNo + 1 < m_hlayout->getBarLineCount(staff)) {
+	    if (unsigned(barNo) + 1 < m_hlayout->getBarLineCount(staff)) {
 		barWidth =
 		    m_hlayout->getBarLineX(staff, barNo + 1) - canvasPosition;
 	    } else {
@@ -1470,7 +1477,7 @@ void NotationView::slotTrebleClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
-    setTool(ClefInserter::getInstance(this));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Treble);
 }
@@ -1479,7 +1486,7 @@ void NotationView::slotTenorClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
-    setTool(ClefInserter::getInstance(this));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Tenor);
 }
@@ -1488,7 +1495,7 @@ void NotationView::slotAltoClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
-    setTool(ClefInserter::getInstance(this));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
 }
@@ -1497,7 +1504,7 @@ void NotationView::slotBassClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
-    setTool(ClefInserter::getInstance(this));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Bass);
 }
@@ -1515,13 +1522,13 @@ void NotationView::slotBassClef()
 void NotationView::slotEraseSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
-    setTool(NotationEraser::getInstance(this));
+    setTool(m_toolBox->getTool(NotationEraser::ToolName));
 }
 
 void NotationView::slotSelectSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotSelectSelected()\n";
-    setTool(NotationSelector::getInstance(this));
+    setTool(m_toolBox->getTool(NotationSelector::ToolName));
 }
 
 //----------------------------------------------------------------------
