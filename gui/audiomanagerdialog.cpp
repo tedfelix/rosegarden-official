@@ -77,11 +77,13 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->addColumn(i18n("File"));
     m_fileList->addColumn(i18n("Resolution"));
     m_fileList->addColumn(i18n("Channels"));
+    m_fileList->addColumn(i18n("Sample rate"));
 
     m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(2, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
+    m_fileList->setColumnAlignment(6, Qt::AlignHCenter);
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -165,7 +167,7 @@ AudioManagerDialog::slotPopulateFileList()
     m_fileList->setSelectionMode(QListView::Single);
 
     // for the sample file length
-    QString msecs;
+    QString msecs, sRate;
     RealTime length;
 
     // Create a vector of audio Segments only
@@ -228,6 +230,11 @@ AudioManagerDialog::slotPopulateFileList()
         // Channels
         //
         item->setText(5, QString("%1").arg((*it)->getChannels()));
+
+        // Sample rate
+        //
+        sRate.sprintf("%.1f KHz", float((*it)->getSampleRate())/ 1000.0);
+        item->setText(6, sRate);
 
         // Add children
         //

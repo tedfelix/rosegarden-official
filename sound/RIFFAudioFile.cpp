@@ -97,6 +97,8 @@ RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)
                         ( ( m_sampleRate * time.usec ) / 1000000 );
     unsigned int totalBytes = totalSamples * m_bytesPerSample;
 
+    m_loseBuffer = true;
+
     // do the seek
     file->seekg(totalBytes, std::ios::cur);
 
@@ -131,6 +133,10 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     // sanity
     if (file == 0) return false;
 
+    // whatever we do here we invalidate the read buffer
+    //
+    m_loseBuffer = true;
+
     // seek past header - don't hardcode this - use the file format
     // spec to get header length and then scoot to that.
     //
@@ -164,10 +170,9 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     // Now, how much do we scan forward?
     //
     unsigned int totalSamples = m_sampleRate * time.sec +
-                        ( ( m_sampleRate * time.usec ) / 1000000 );
+       ((unsigned int)((double(m_sampleRate) * double(time.usec)) / 1000000.0));
 
     unsigned int totalBytes = totalSamples * m_channels * m_bytesPerSample;
-
 
     // When using seekg we have to keep an eye on the boundaries ourselves
     //
@@ -256,6 +261,8 @@ RIFFAudioFile::readFormatChunk()
 {
     if (m_inFile == 0)
         return;
+
+    m_loseBuffer = true;
 
     // seek to beginning
     m_inFile->seekg(0, std::ios::beg);

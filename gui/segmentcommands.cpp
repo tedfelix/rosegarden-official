@@ -510,7 +510,7 @@ AudioSegmentSplitCommand::execute()
         // Set original end time
         //
         m_previousEndAudioTime = m_segment->getAudioEndTime();
-        m_segment->setAudioEndTime(m_segment->getAudioStartTime() + splitDiff);
+        m_segment->setAudioEndTime(m_newSegment->getAudioStartTime());
 
         // Set labels
         //

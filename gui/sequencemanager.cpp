@@ -211,6 +211,12 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                 }
             }
 
+            /*
+            cout << "EVENT TIME = "  << eventTime << endl;
+            cout << "AUDIO START = " << startTime << endl;
+            cout << "DURATION   = "  << duration << endl << endl;
+            */
+
             // Insert Audio event
             Rosegarden::MappedEvent *me =
                     new Rosegarden::MappedEvent(track->getInstrument(),

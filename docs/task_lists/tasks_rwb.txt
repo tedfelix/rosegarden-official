@@ -3,11 +3,7 @@
 
 o Sync audio and MIDI [PARTIAL - manual JACK sliders]
 
-o Get first fetch audio working - partial segments
-
-o Audio path fixing - dialog thing to remap paths
-
-o Fix Audio Segment splitting [WORKING BUT TIMING DODGY]
+o Get first fetch audio working - partial segments [HALF working]
 
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop
@@ -65,6 +61,11 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o Fix Audio Segment splitting [WORKING - also fixed a scanTo bug
+  as part of this]
+
+o Audio path fixing - dialog thing to remap paths [DONE]
 
 o Some state we're getting into with mute buttons and file saving
   [FIXED]
