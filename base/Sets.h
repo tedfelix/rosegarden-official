@@ -442,7 +442,8 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 
 	// Two notes that would otherwise be in a chord but are
 	// explicitly in different groups, or have stems pointing in
-	// different directions by design, count as separate chords.
+	// different directions by design, or have substantially
+	// different x displacements, count as separate chords.
 	
 	// Per #930473 ("Inserting notes into beamed chords is
 	// broken"), if one note is in a group and the other isn't,
@@ -466,6 +467,15 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 			m_firstReject = i;
 		    return false;
 		}
+	    }
+
+	    long dx0 = 0, dx1 = 0;
+	    get__Int(e0, BaseProperties::DISPLACED_X, dx0);
+	    get__Int(e1, BaseProperties::DISPLACED_X, dx1);
+	    if (abs(dx0 - dx1) >= 700) {
+		if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
+		    m_firstReject = i;
+		return false;
 	    }
 
 	    if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {

@@ -1356,6 +1356,10 @@ void NotationSelector::drag(int x, int y, bool final)
     long clickedPitch = 0;
     (void)m_clickedElement->event()->get<Rosegarden::Int>(PITCH, clickedPitch);
 
+    long clickedHeight = 0;
+    (void)m_clickedElement->event()->get<Rosegarden::Int>
+	(NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
+
     Event *clefEvt = 0, *keyEvt = 0;
     Rosegarden::Clef clef;
     Rosegarden::Key key;
@@ -1400,8 +1404,12 @@ void NotationSelector::drag(int x, int y, bool final)
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
     
     int height = targetStaff->getHeightAtCanvasCoords(x, y);
-    int pitch = Rosegarden::Pitch
-	(height, clef, key, clickedAccidental).getPerformancePitch();
+    int pitch = clickedPitch;
+
+    if (height != clickedHeight)
+	pitch = 
+	    Rosegarden::Pitch
+	    (height, clef, key, clickedAccidental).getPerformancePitch();
 
     if (pitch < clickedPitch) {
 	if (height < -10) {

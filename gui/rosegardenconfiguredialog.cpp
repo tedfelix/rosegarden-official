@@ -618,7 +618,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_accBarPolicy->insertItem(i18n("Affect only that bar"));
     m_accBarPolicy->insertItem(i18n("Require cautionary resets in following bar"));
     m_accBarPolicy->insertItem(i18n("Require explicit resets in following bar"));
-    int accBarMode = m_cfg->readNumEntry("accidentalbarmode", 1);
+    int accBarMode = m_cfg->readNumEntry("accidentalbarmode", 0);
     if (accBarMode >= 0 && accBarMode < 3) {
 	m_accBarPolicy->setCurrentItem(accBarMode);
     }

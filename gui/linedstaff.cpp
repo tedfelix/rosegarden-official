@@ -740,21 +740,25 @@ LinedStaff::deleteBars()
 {
     for (BarLineList::iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
+	(*i)->hide();
         delete *i;
     }
 
     for (LineRecList::iterator i = m_beatLines.begin();
 	 i != m_beatLines.end(); ++i) {
+	i->second->hide();
 	delete i->second;
     }
 
     for (LineRecList::iterator i = m_barConnectingLines.begin();
          i != m_barConnectingLines.end(); ++i) {
+	i->second->hide();
         delete i->second;
     }
 
     for (ItemList::iterator i = m_barNumbers.begin();
          i != m_barNumbers.end(); ++i) {
+	(*i)->hide();
         delete *i;
     }
 

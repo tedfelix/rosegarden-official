@@ -254,7 +254,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	 accOctaveMode == 1 ? Rosegarden::AccidentalTable::OctavesCautionary :
 	 Rosegarden::AccidentalTable::OctavesEquivalent);
 
-    int accBarMode = config->readNumEntry("accidentalbarmode", 1);
+    int accBarMode = config->readNumEntry("accidentalbarmode", 0);
     Rosegarden::AccidentalTable::BarResetType barResetType =
 	(accBarMode == 0 ? Rosegarden::AccidentalTable::BarResetNone :
 	 accBarMode == 1 ? Rosegarden::AccidentalTable::BarResetCautionary :
