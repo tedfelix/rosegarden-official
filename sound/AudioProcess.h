@@ -149,7 +149,8 @@ protected:
 
     struct BufferRec
     {
-	BufferRec() : dormant(true), buffers() { }
+	BufferRec() : dormant(true), buffers(), instruments(),
+		      gainLeft(0.0), gainRight(0.0) { }
 	~BufferRec();
 
 	bool dormant;
@@ -279,7 +280,8 @@ protected:
 
     struct BufferRec
     {
-	BufferRec() : empty(true), dormant(true), filledTo(RealTime::zeroTime),
+	BufferRec() : empty(true), dormant(true), zeroFrames(0),
+		      filledTo(RealTime::zeroTime), channels(2),
 		      buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0) { }
 	~BufferRec();
 
