@@ -77,7 +77,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
     int tracks = comp.getNbTracks();
 
-    // If we have no Track then create a default document with 10 of them
+    // If we have no Track then create a default document with 64 of them
     //
     if (tracks == 0)
     {
@@ -94,10 +94,15 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         Rosegarden::Track *track;
         for (int i = 0; i < tracks; i++)
         {
+            char tmp[256];
+            sprintf(tmp, "#%d", i);
+            std::string label = "untitled ";
+            label += tmp;
+
             track = new Rosegarden::Track(i,                       // id
                                           (i + instBase) % 16,     // instrument
                                           i,                       // position
-                                          std::string("untitled"), 
+                                          label, 
                                           false);                  // mute
 
             comp.addTrack(track);
