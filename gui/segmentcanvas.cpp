@@ -75,14 +75,8 @@ void QCanvasRepeatRectangle::drawShape(QPainter& painter)
         width = rect().width(),
         height = rect().height();
 
-    kdDebug(KDEBUG_AREA) << "drawShape : width = " << width
-                         << " repeat int. = " << m_repeatInterval
-                         << " x = " << x() << "rect.x() = "
-                         << rect().x() << "\n";
-    
-    while (pos < width) {
-        painter.drawLine(pos, 1, pos, height);
-        kdDebug(KDEBUG_AREA) << "drawShape : paint line at " << pos << "\n";
+    while (pos < (width + x())) {
+        painter.drawLine(pos, y(), pos, y() + height - 1);
         pos += m_repeatInterval;
     }
 }
