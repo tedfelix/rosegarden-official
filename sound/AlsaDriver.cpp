@@ -2098,7 +2098,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
     std::cerr << "AlsaDriver::processMidiOut(" << sliceStart << "," << sliceEnd
-	      << "), " << mC.size() << " events" << std::endl;
+	      << "), " << mC.size() << " events, now is " << now << std::endl;
 #endif
 
     // NB the MappedComposition is implicitly ordered by time (std::multiset)
@@ -2125,8 +2125,12 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	RealTime alsaTimeNow = getAlsaTime();
 	
-	if (now && !m_playing) {
-	    outputTime = alsaTimeNow;
+	if (now) {
+	    if (!m_playing) {
+		outputTime = alsaTimeNow;
+	    } else if (outputTime < alsaTimeNow) {
+		outputTime = alsaTimeNow + RealTime(0, 10000000);
+	    }
 	}
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
