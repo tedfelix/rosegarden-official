@@ -37,7 +37,7 @@ class Composition
 {
     
 public:
-    typedef vector<Track*> trackcontainer;
+    typedef std::vector<Track*> trackcontainer;
 
     typedef trackcontainer::iterator iterator;
     typedef trackcontainer::const_iterator const_iterator;
@@ -45,7 +45,7 @@ public:
     Composition(unsigned int nbTracks = 64);
     ~Composition();
 
-    vector<Track*>& tracks() { return m_tracks; }
+    std::vector<Track*>& tracks() { return m_tracks; }
 
     bool addTrack(Track *track = 0, int idx = -1);
     void deleteTrack(int idx);

@@ -29,11 +29,11 @@ namespace Rosegarden
 {
 
 class ViewElement; // defined below
-class ViewElements : public vector<ViewElement*>
+class ViewElements : public std::vector<ViewElement*>
 {
 public:
-    ViewElements() : vector<ViewElement*>() {}
-    ViewElements(const ViewElements &e) : vector<ViewElement*>(e) {}
+    ViewElements() : std::vector<ViewElement*>() {}
+    ViewElements(const ViewElements &e) : std::vector<ViewElement*>(e) {}
     ~ViewElements();
 };
 

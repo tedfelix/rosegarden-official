@@ -40,7 +40,7 @@ Composition::~Composition()
 
 
 bool
-Composition::addTrack(Track *track = 0, int idx = -1)
+Composition::addTrack(Track *track, int idx)
 {
 //     cerr << "Composition::addTrack(track = " << track << ", "
 //          << idx << ")\n";
@@ -53,7 +53,7 @@ Composition::addTrack(Track *track = 0, int idx = -1)
 
     } else {
 
-        if (idx >= m_tracks.size()) { // resize if needed
+        if (idx >= (int)m_tracks.size()) { // resize if needed
 
             m_tracks.resize(idx + 2);
 
@@ -74,7 +74,7 @@ Composition::addTrack(Track *track = 0, int idx = -1)
 void
 Composition::deleteTrack(int idx)
 {
-    if (idx < m_tracks.size()) {
+    if (idx < (int)m_tracks.size()) {
         delete m_tracks[idx];
         m_tracks[idx] = 0;
     }

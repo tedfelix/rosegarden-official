@@ -22,6 +22,7 @@
 
 namespace Rosegarden 
 {
+using std::string;
 
 Event::Event(const Event &e) :
     m_type(e.getType()),

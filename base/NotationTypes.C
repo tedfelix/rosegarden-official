@@ -262,10 +262,12 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
     }
 
     switch (accidental) {
-    case DoubleSharp: pitch += 2; break;
-    case       Sharp: pitch += 1; break;
-    case        Flat: pitch -= 1; break;
-    case  DoubleFlat: pitch -= 2; break;
+    case  DoubleSharp: pitch += 2; break;
+    case        Sharp: pitch += 1; break;
+    case         Flat: pitch -= 1; break;
+    case   DoubleFlat: pitch -= 2; break;
+    case      Natural: break;
+    case NoAccidental: break;
     }
 
     // 3. Adjust for clef

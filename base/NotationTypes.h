@@ -35,15 +35,15 @@ enum Accidental {
 
 class Clef {
 public:
-    static const string EventType;
-    static const string ClefPropertyName;
+    static const std::string EventType;
+    static const std::string ClefPropertyName;
     static const Clef DefaultClef;
     struct BadClefName { };
 
-    static const string Treble;
-    static const string Tenor;
-    static const string Alto;
-    static const string Bass;
+    static const std::string Treble;
+    static const std::string Tenor;
+    static const std::string Alto;
+    static const std::string Bass;
 
     Clef() : m_clef(DefaultClef.m_clef) { }
 
@@ -51,14 +51,14 @@ public:
         if (e.getType() != EventType) {
             throw Event::BadType();
         }
-        string s = e.get<String>(ClefPropertyName);
+        std::string s = e.get<String>(ClefPropertyName);
         if (s != Treble && s != Tenor && s != Alto && s != Bass) {
             throw BadClefName();
         }
         m_clef = s;
     }        
 
-    Clef(const string &s) throw (BadClefName) {
+    Clef(const std::string &s) throw (BadClefName) {
         if (s != Treble && s != Tenor && s != Alto && s != Bass) {
             throw BadClefName();
         }
@@ -72,7 +72,7 @@ public:
     }
     virtual ~Clef() { }
 
-    string getClefType() const { return m_clef; }
+    std::string getClefType() const { return m_clef; }
 
     int getOctave() const {
         if (m_clef == Treble) return 0;
@@ -88,7 +88,7 @@ public:
     }
 
 private:
-    string m_clef;
+    std::string m_clef;
 };
 
 
@@ -102,8 +102,8 @@ private:
 
 class Key {
 public:
-    static const string EventType;
-    static const string KeyPropertyName;
+    static const std::string EventType;
+    static const std::string KeyPropertyName;
     static const Key DefaultKey;
     struct BadKeyName { };
 
@@ -122,7 +122,7 @@ public:
         }
     }
 
-    Key(const string &name)
+    Key(const std::string &name)
         throw (BadKeyName)
         : m_name(name), m_accidentalHeights(0) {
         checkMap();
@@ -156,16 +156,16 @@ public:
         return Key(m_keyDetailMap[m_name].m_equivalence);
     }
 
-    string getName() const {
+    std::string getName() const {
         return m_name;
     }
 
-    string getRosegarden2Name() const {
+    std::string getRosegarden2Name() const {
         return m_keyDetailMap[m_name].m_rg2name;
     }
 
     // staff positions of accidentals
-    vector<int> getAccidentalHeights(const Clef &clef) const;
+    std::vector<int> getAccidentalHeights(const Clef &clef) const;
 
     Event getAsEvent() const {
         Event e(EventType);
@@ -173,9 +173,9 @@ public:
         return e;
     }
 
-    static vector<Key> getKeys(bool minor = false) {
+    static std::vector<Key> getKeys(bool minor = false) {
         checkMap();
-        vector<Key> result;
+        std::vector<Key> result;
         for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
              i != m_keyDetailMap.end(); ++i) {
             if ((*i).second.m_minor == minor) {
@@ -186,22 +186,22 @@ public:
     }
 
 private:
-    string m_name;
-    mutable vector<int> *m_accidentalHeights;
+    std::string m_name;
+    mutable std::vector<int> *m_accidentalHeights;
 
     struct KeyDetails {
         bool   m_sharps;
         bool   m_minor;
         int    m_sharpCount;
-        string m_equivalence;
-        string m_rg2name;
+        std::string m_equivalence;
+        std::string m_rg2name;
 
         KeyDetails() : // ctor needed in order to live in a hash_map
             m_sharps(false), m_minor(false), m_sharpCount(0),
             m_equivalence(""), m_rg2name("") { }
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
-                   string equivalence, string rg2name) :
+                   std::string equivalence, std::string rg2name) :
             m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
             m_equivalence(equivalence), m_rg2name(rg2name) { }
 
@@ -219,7 +219,7 @@ private:
         }
     };
 
-    typedef hash_map<string, KeyDetails, hashstring, eqstring> KeyDetailMap;
+    typedef std::hash_map<std::string, KeyDetails, hashstring, eqstring> KeyDetailMap;
     static KeyDetailMap m_keyDetailMap;
     static void checkMap();
     void checkAccidentalHeights() const;
@@ -303,13 +303,13 @@ class TimeSignature;
 class Note
 {
 public:
-    static const string EventType;
-    static const string NotePropertyName;
+    static const std::string EventType;
+    static const std::string NotePropertyName;
     
     typedef int Type; // not an enum, too much arithmetic at stake
     struct BadType {
-        string type;
-        BadType(string t = "") : type(t) { }
+        std::string type;
+        BadType(std::string t = "") : type(t) { }
     };
 
 
@@ -346,7 +346,7 @@ public:
         if (m_type < Shortest || m_type > Longest) throw BadType();
     }
 
-    Note(const string &s) throw (BadType);
+    Note(const std::string &s) throw (BadType);
 
     Note(const Note &n) : m_type(n.m_type), m_dotted(n.m_dotted) { }
     virtual ~Note() { }
@@ -372,19 +372,19 @@ public:
     }
 
     // these default to whatever I am:
-    string getEnglishName(Type type = -1, bool dotted = false)  const;
-    string getAmericanName(Type type = -1, bool dotted = false) const;
-    string getShortName(Type type = -1, bool dotted = false)    const;
+    std::string getEnglishName(Type type = -1, bool dotted = false)  const;
+    std::string getAmericanName(Type type = -1, bool dotted = false) const;
+    std::string getShortName(Type type = -1, bool dotted = false)    const;
 
     static Note getNearestNote(int duration);
-    static vector<int> getNoteDurationList(int start, int duration,
+    static std::vector<int> getNoteDurationList(int start, int duration,
                                            const TimeSignature &ts);
   
 private:
     Type m_type;
     bool m_dotted;
     static void makeTimeListSub(int time, bool dottedTime,
-                                vector<int> &timeList);
+                                std::vector<int> &timeList);
 
     // a time & effort saving device
     static const int m_shortestTime;
@@ -397,9 +397,9 @@ private:
 class TimeSignature
 {
 public:
-    static const string EventType;
-    static const string NumeratorPropertyName;
-    static const string DenominatorPropertyName;
+    static const std::string EventType;
+    static const std::string NumeratorPropertyName;
+    static const std::string DenominatorPropertyName;
     static const TimeSignature DefaultTimeSignature;
     struct BadTimeSignature { };
 

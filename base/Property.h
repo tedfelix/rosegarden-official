@@ -32,25 +32,25 @@ template <PropertyType P>
 class PropertyDefn
 {
 public:
-    static string name() { return "Undefined"; }
+    static std::string name() { return "Undefined"; }
     struct PropertyDefnNotDefined {
 	PropertyDefnNotDefined() { assert(0); }
     };
     typedef PropertyDefnNotDefined basic_type;
-    static basic_type parse(string);
-    static string unparse(basic_type);
+    static basic_type parse(std::string);
+    static std::string unparse(basic_type);
 
 };
 
 template <PropertyType P>
 PropertyDefn<P>::basic_type
-PropertyDefn<P>::parse(string)
+PropertyDefn<P>::parse(std::string)
 {
     assert(0);
 }
 
 template <PropertyType P>
-string 
+std::string 
 PropertyDefn<P>::unparse(PropertyDefn<P>::basic_type)
 {
     assert(0);
@@ -61,11 +61,11 @@ template <>
 class PropertyDefn<Int>
 {
 public:
-    static string name();
+    static std::string name();
     typedef long basic_type;
 
-    static basic_type parse(string s);
-    static string unparse(basic_type i);
+    static basic_type parse(std::string s);
+    static std::string unparse(basic_type i);
 };
 
 
@@ -73,22 +73,22 @@ template <>
 class PropertyDefn<String>
 {
 public:
-    static string name();
-    typedef string basic_type;
+    static std::string name();
+    typedef std::string basic_type;
 
-    static basic_type parse(string s);
-    static string unparse(basic_type i);
+    static basic_type parse(std::string s);
+    static std::string unparse(basic_type i);
 };
 
 template <>
 class PropertyDefn<Bool>
 {
 public:
-    static string name();
+    static std::string name();
     typedef bool basic_type;
 
-    static basic_type parse(string s);
-    static string unparse(basic_type i);
+    static basic_type parse(std::string s);
+    static std::string unparse(basic_type i);
 };
 
 
@@ -97,22 +97,22 @@ public:
     virtual ~PropertyStoreBase();
 
     virtual PropertyType getType() const = 0;
-    virtual string getTypeName() const = 0;
+    virtual std::string getTypeName() const = 0;
     virtual PropertyStoreBase *clone() = 0;
-    virtual string unparse() = 0;
+    virtual std::string unparse() = 0;
 
     virtual bool isPersistent() const = 0;
     virtual void setPersistence(bool) = 0;
 
 #ifndef NDEBUG
-    virtual void dump(ostream&) const = 0;
+    virtual void dump(std::ostream&) const = 0;
 #else
-    virtual void dump(ostream&) const { }
+    virtual void dump(std::ostream&) const { }
 #endif
 };
 
 #ifndef NDEBUG
-inline ostream& operator<<(ostream &out, PropertyStoreBase &e)
+inline std::ostream& operator<<(std::ostream &out, PropertyStoreBase &e)
 { e.dump(out); return out; }
 #endif
 
@@ -127,11 +127,11 @@ public:
     PropertyStore &operator=(const PropertyStore<P> &p);
 
     virtual PropertyType getType() const;
-    virtual string getTypeName() const;
+    virtual std::string getTypeName() const;
 
     virtual PropertyStoreBase* clone();
     
-    virtual string unparse();
+    virtual std::string unparse();
 
     PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
@@ -140,7 +140,7 @@ public:
     void setPersistence(bool p) { m_persistent = p; }
 
 #ifndef NDEBUG
-    void dump(ostream&) const;
+    void dump(std::ostream&) const;
 #endif
 
 private:
@@ -166,7 +166,7 @@ PropertyStore<P>::getType() const
 }
 
 template <PropertyType P>
-string
+std::string
 PropertyStore<P>::getTypeName() const
 {
     return PropertyDefn<P>::name();
@@ -180,7 +180,7 @@ PropertyStore<P>::clone()
 }
 
 template <PropertyType P>
-string
+std::string
 PropertyStore<P>::unparse()
 {
     return PropertyDefn<P>::unparse(m_data);
@@ -189,7 +189,7 @@ PropertyStore<P>::unparse()
 #ifndef NDEBUG
 template <PropertyType P>
 void
-PropertyStore<P>::dump(ostream &out) const
+PropertyStore<P>::dump(std::ostream &out) const
 {
     out << getTypeName() << " - " << m_data;
 }

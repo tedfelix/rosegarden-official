@@ -4,7 +4,7 @@ default: libcore.a
 all:	libcore.a
 
 CC	:= g++
-CPPFLAGS	:= -g
+CPPFLAGS	:= -g -Wall -pedantic
 SRCS	:= Property.C Event.C ViewElement.C Track.C Composition.C NotationTypes.C
 OBJS	:= Property.o Event.o ViewElement.o Track.o Composition.o NotationTypes.o
 

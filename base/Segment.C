@@ -23,7 +23,7 @@ namespace Rosegarden
 {
     
 Track::Track(unsigned int nbBars, unsigned int startIdx)
-    : multiset<Event*, EventCmp>(),
+    : std::multiset<Event*, EventCmp>(),
     m_startIdx(startIdx),
     m_nbBars(nbBars)
 {

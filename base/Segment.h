@@ -30,7 +30,7 @@ namespace Rosegarden
 /**
  * This class owns the Events its items are pointing at
  */
-class Track : public multiset<Event*, EventCmp>
+class Track : public std::multiset<Event*, EventCmp>
 {
 public:
     Track(unsigned int nbBars = 0, unsigned int startIdx = 0);
