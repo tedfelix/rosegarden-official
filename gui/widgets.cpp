@@ -167,11 +167,11 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    WFlags f):
     QProgressDialog(creator, name, modal, f),
     Rosegarden::Progress(100), // default to percent
+    m_timeoutSet(clock()),
     m_firstTimeout(true),
     m_shown(false)
 {
     setCaption(i18n("Processing..."));
-    QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
 }
 
 
@@ -191,11 +191,11 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 		    modal,
 		    f | WDestructiveClose),
     Rosegarden::Progress(totalSteps),
+    m_timeoutSet(clock()),
     m_firstTimeout(true),
     m_shown(false)
 {
     setCaption(i18n("Processing..."));
-    QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
 }
 
 void
@@ -218,21 +218,25 @@ RosegardenProgressDialog::setCompleted(int value)
 void
 RosegardenProgressDialog::processEvents()
 {
-    kapp->processEvents(50);
-}
+    if (m_shown) {
+	kapp->processEvents(50);
+	update();
+    } else {
 
-void
-RosegardenProgressDialog::slotTimerElapsed()
-{
-    // the logic is: if our first timeout has elapsed and the
-    // progress is already beyond 75%, set another timeout
-    // because we probably won't have to show at all.  (we
-    // still show if the second timeout has expired though.)
+	if (m_timeoutSet != 0) {
 
-    if (!m_firstTimeout || ((m_value * 4) < (m_max * 3))) slotShowMyself();
-    else {
-	m_firstTimeout = false;
-	QTimer::singleShot(500, this, SLOT(slotTimerElapsed()));
+	    clock_t now = clock();
+	    int msElapsed = (now - m_timeoutSet) * 1000 / CLOCKS_PER_SEC;
+	    
+	    if (msElapsed > 500) {
+		if (!m_firstTimeout || ((m_value * 4) < (m_max * 3))) {
+		    slotShowMyself();
+		} else {
+		    m_firstTimeout = false;
+		    m_timeoutSet = now;
+		}
+	    }
+	}
     }
 }
 

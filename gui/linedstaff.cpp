@@ -507,7 +507,12 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
 	    double dx = width / beats;
 
             // ensure minimum useful scaling
-            while (dx > 0.0 && dx < 2.0) dx += dx;
+	    // no! we can't do this, the canvas may scale differently
+	    // from how we see it so we don't actually know how far
+	    // apart the lines are (and the scale could change at any
+	    // time).  besides, if we did do this we'd have to do a
+	    // bit more work to reduce the number of beats as well
+//            while (dx > 0.0 && dx < 2.0) dx += dx;
 
 	    for (int beat = 1; beat < beats; ++beat) {
 

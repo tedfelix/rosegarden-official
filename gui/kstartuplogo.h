@@ -41,6 +41,9 @@ public:
 
     void setHideEnabled(bool bEnabled) { m_bReadyToHide = bEnabled; };
 
+public slots:
+    void slotShowStatusMessage(const QString &);
+
 protected:
 
     KStartupLogo(QWidget *parent=0, const char *name=0);
@@ -55,6 +58,7 @@ protected:
 
     static KStartupLogo* m_instance;
     static bool m_wasClosed;
+    QString m_statusMessage;
 };
 
 #endif

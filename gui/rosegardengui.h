@@ -90,7 +90,8 @@ public:
      * \arg useSequencer : if true, the sequencer is launched
      * @see initMenuBar initToolBar
      */
-    RosegardenGUIApp(bool useSequencer = true);
+    RosegardenGUIApp(bool useSequencer = true,
+		     QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenGUIApp();
 
@@ -356,6 +357,9 @@ protected:
      */
     QString getValidWriteFile(const QString &extension, const QString &label);
  
+signals:
+    void startupStatusMessage(const QString &message);
+
 public slots:
 
     /**

@@ -92,7 +92,8 @@
 using Rosegarden::timeT;
 
 
-RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
+RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
+				   QObject *startupStatusMessageReceiver)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
       m_config(kapp->config()),
       m_actionsSetup(false),
@@ -109,21 +110,32 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
       m_storedLoopEnd(0),
       m_useSequencer(useSequencer)
 {
+    if (startupStatusMessageReceiver) {
+	QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
+			 startupStatusMessageReceiver,
+			 SLOT(slotShowStatusMessage(const QString &)));
+    }
+
     // Try to start the sequencer - we need to launch here so that
     // the alive() call in initDocument() is eventually caught.
     //
-    if (m_useSequencer) launchSequencer();
-    else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
+    if (m_useSequencer) {
+	emit startupStatusMessage(i18n("Starting sequencer..."));
+	launchSequencer();
+    } else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
 
     // Plugin manager
     //
+    emit startupStatusMessage(i18n("Initialising plugin manager..."));
     m_pluginManager = new Rosegarden::AudioPluginManager();
 
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
     //
+    emit startupStatusMessage(i18n("Initialising..."));
     initStatusBar();
     initDocument();
+    emit startupStatusMessage(i18n("Initialising view..."));
     setupActions();
     iFaceDelayedInit(this);
     initZoomToolbar();
@@ -131,18 +143,22 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     if (!performAutoload())
         initView();
 
+    emit startupStatusMessage(i18n("Starting sequence manager..."));
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
     // Make sure we get the sequencer status now
     //
+    emit startupStatusMessage(i18n("Getting sound driver status..."));
     (void)m_seqManager->getSoundDriverStatus();
 
     // If we're restarting the gui then make sure any transient
     // studio objects are cleared away.
+    emit startupStatusMessage(i18n("Clearing studio data..."));
     m_seqManager->reinitialiseSequencerStudio();
 
     // Get the plugins available at the sequencer
     //
+    emit startupStatusMessage(i18n("Enumerating plugins..."));
     m_seqManager->getSequencerPlugins(m_pluginManager);
 
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
@@ -166,6 +182,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     // All toolbars should be created before this is called
     setAutoSaveSettings("MainView", true);
 
+    emit startupStatusMessage(i18n("Starting..."));
     readOptions();
 }
 

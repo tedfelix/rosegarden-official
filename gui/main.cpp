@@ -431,7 +431,8 @@ int main(int argc, char *argv[])
 
     } else {
 
-        rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"));
+        rosegardengui = new RosegardenGUIApp(args->isSet("sequencer"),
+					     startLogo);
         rosegardengui->show();
 
 	// raise start logo

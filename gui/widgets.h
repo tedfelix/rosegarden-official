@@ -182,19 +182,20 @@ public:
     virtual bool wasOperationCancelled() {
 	return QProgressDialog::wasCancelled();
     }
-
+    
 public slots:
     // After a timeout, judge whether we should show ourselves yet
     // and do so if so.
     // Hence we only appear for long operations.
     // 
-    void slotTimerElapsed();
+//!!!    void slotTimerElapsed();
     
     // Show ourselves.
     // 
     void slotShowMyself();
 
 private:
+    clock_t m_timeoutSet;
     bool m_firstTimeout;
     bool m_shown;
 };

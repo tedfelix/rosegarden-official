@@ -545,9 +545,8 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
     bool updateRequired = true;
 
+    if (s) {
 
-    if (s && preview)
-    {
         bool foundNewEvent = false;
 
         for (EventSelection::eventcontainer::iterator i =
@@ -559,11 +558,17 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
             foundNewEvent = true;
 
-            long pitch;
-            if (!(*i)->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH,
-                                            pitch)) continue;
+	    if (preview) {
+		long pitch;
+		if ((*i)->get<Rosegarden::Int>
+		    (Rosegarden::BaseProperties::PITCH, pitch)) {
+		    playNote(s->getSegment(), pitch);
+		}
+	    }
 
-            playNote(s->getSegment(), pitch);
+	    //!!! Need to calculate current-quantize-boundary so as
+	    // to work out the most coarse quantize level consistent
+	    // with all selected events and update the quantize combo
         }
 
         if (!foundNewEvent) {

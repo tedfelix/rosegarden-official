@@ -25,10 +25,13 @@
 #include "config.h"
 
 #include <qpainter.h>
+#include <qfontmetrics.h>
 
 #include "kstartuplogo.h"
 #include <kapp.h>
 #include <kstddirs.h>
+
+#include "rosedebug.h"
 
 #include <unistd.h>
 
@@ -55,16 +58,38 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 {
     // Print version number
     QPainter paint(this);
-    paint.setPen(Qt::black);
 
     QFont defaultFont;
     defaultFont.setPixelSize(12);
     paint.setFont(defaultFont);
 
+    QFontMetrics metrics(defaultFont);
+    int width = metrics.width(m_statusMessage) + 6;
+    if (width > 200) width = 200;
+
+    int y = m_pixmap.height() - 12;
+
+    paint.setPen(QColor(206,214,163));
+    paint.setBrush(QColor(206,214,163));
+    paint.drawRect(QRect(m_pixmap.width() - 220, y - 15, 220, 22));
+
+    paint.setPen(Qt::black);
+    paint.setBrush(Qt::black);
+
     paint.drawText(m_pixmap.width() - 60,
-                   m_pixmap.height() - 12,
-                   QString("r4 v") + VERSION);
+                   m_pixmap.height() - 28,
+                   QString("R4 v") + VERSION);
+
+    paint.drawText(m_pixmap.width() - (width + 10), y, m_statusMessage);
 }
+
+void KStartupLogo::slotShowStatusMessage(const QString &message)
+{
+    m_statusMessage = message;
+    paintEvent(0);
+    QApplication::flushX();
+}
+
 
 void KStartupLogo::mousePressEvent( QMouseEvent*)
 {
