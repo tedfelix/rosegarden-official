@@ -207,6 +207,8 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 
         } else if (el->isNote() || el->isRest()) {
 
+            bool hasDuration = true;
+
             if (el->isNote()) {
 
                 try {
@@ -226,24 +228,29 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                 }
 
                 Chord chord(m_notationElements, it);
-                if (chord.size() < 2 || it == chord.getFinalElement()) {
+                if (chord.size() >= 2 && it != chord.getFinalElement()) {
+                    // we're in a chord, but not at the end of it yet
+                    hasDuration = false;
+                }
+            }
 
-		    // either we're not in a chord, or the chord is
-		    // about to end: update the time accordingly
+            if (hasDuration) {
 
-                    int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
-                    nbTimeUnitsInCurrentBar += d;
+                // either we're not in a chord or the chord is about
+                // to end: update the time accordingly
 
-                    int sd = 0;
-                    if (shortest == m_notationElements.end() ||
-                        d <= (sd = (*shortest)->event()->get<Int>
-                              (P_QUANTIZED_DURATION))) {
-                        if (d == sd) ++shortCount;
-                        else {
-                            kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << nbTimeUnitsInCurrentBar << " time units)"<< endl;
-                            shortest = it;
-                            shortCount = 1;
-                        }
+                int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
+                nbTimeUnitsInCurrentBar += d;
+
+                int sd = 0;
+                if (shortest == m_notationElements.end() ||
+                    d <= (sd = (*shortest)->event()->get<Int>
+                          (P_QUANTIZED_DURATION))) {
+                    if (d == sd) ++shortCount;
+                    else {
+                        kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << nbTimeUnitsInCurrentBar << " time units)"<< endl;
+                        shortest = it;
+                        shortCount = 1;
                     }
                 }
             }
