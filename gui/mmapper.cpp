@@ -464,13 +464,13 @@ void SegmentMmapper::dump()
 	Segment::iterator *i = 0;
 
         for (Segment::iterator j = m_segment->begin();
-	     j != m_segment->end() || (i && *i != triggered->end()); ) {
+	     m_segment->isBeforeEndMarker(j) || (i && *i != triggered->end()); ) {
 
 	    bool usingi = false;
 	    Segment::iterator *k = &j;
 
 	    if (i && *i != triggered->end() &&
-		(j == m_segment->end() ||
+		(!m_segment->isBeforeEndMarker(j) ||
 		 (**i)->getAbsoluteTime() < (*j)->getAbsoluteTime())) {
 		k = i;
 		usingi = true;
@@ -514,7 +514,7 @@ void SegmentMmapper::dump()
 		    ++j; // whatever happens, we don't want to write this one
 
 		    if (i && *i != triggered->end() &&
-			(j == m_segment->end() ||
+			(!m_segment->isBeforeEndMarker(j) ||
 			 ((**i)->getAbsoluteTime() < (*j)->getAbsoluteTime()))) {
 			k = i;
 			usingi = true;
