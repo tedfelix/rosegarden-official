@@ -43,6 +43,9 @@ public:
 
     ~MatrixCanvasView();
 
+    void setSmoothModifier(Qt::ButtonState s) { m_smoothModifier = s; }
+    Qt::ButtonState getSmoothModifier()       { return m_smoothModifier; }
+
 signals:
 
     /**
@@ -104,6 +107,17 @@ protected:
      */
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
+    /**
+     * Update the value of snap grid according to the button's state
+     *
+     * If the button was pressed with the 'smooth' modifier, set the
+     * grid so it won't snap time. Snap to beat otherwise.
+     *
+     * @see #setSmoothModifier
+     * @see #getSmoothModifier
+     */
+    void updateGridSnap(QMouseEvent *e);
+
     //--------------- Data members ---------------------------------
 
     MatrixStaff& m_staff;
@@ -114,6 +128,8 @@ protected:
 
     bool m_mouseWasPressed;
     bool m_ignoreClick;
+
+    Qt::ButtonState m_smoothModifier;
 };
 
 
