@@ -86,6 +86,11 @@ public:
     //
     void setAudioSubsystemStatus(bool ok);
 
+    // Return the accelerator object
+    //
+    QAccel* getAccelerators() { return m_accelerators; }
+
+
 public slots:
     void slotAdd();
     void slotDelete();
@@ -135,7 +140,6 @@ signals:
                             Rosegarden::InstrumentId,
                             const Rosegarden::RealTime &,
                             const Rosegarden::RealTime &);
-
 protected:
     bool addFile(const KURL& kurl);
 
@@ -156,7 +160,7 @@ protected:
 
     RosegardenGUIDoc *m_doc;
 
-    QAccel           *m_accelerator;
+    QAccel           *m_accelerators;
 
     Rosegarden::AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;

@@ -103,7 +103,7 @@ public:
     RealTime getStartTime() const { return m_startTime; }
 
     void setDuration(const RealTime &time) { m_duration = time; }
-    RealTime getEndTime() const { return m_startTime + m_startIndex + m_duration; }
+    RealTime getEndTime() const { return m_startTime + m_duration; }
 
     void setStartIndex(const RealTime &time) { m_startIndex = time; }
     RealTime getStartIndex() const { return m_startIndex; }

@@ -221,13 +221,13 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // setup local accelerators
     //
-    m_accelerator = new QAccel(this);
+    m_accelerators = new QAccel(this);
 
     // delete
     //
-    m_accelerator->connectItem(m_accelerator->insertItem(Key_Delete),
-                               this,
-                               SLOT(slotDelete()));
+    m_accelerators->connectItem(m_accelerators->insertItem(Key_Delete),
+                                this,
+                                SLOT(slotDelete()));
 
     slotPopulateFileList();
 

@@ -174,8 +174,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             Rosegarden::RealTime segmentStart =
                 comp.getElapsedRealTime(segmentStartTime);
 
+            /*
             Rosegarden::RealTime segmentEnd =
                 comp.getElapsedRealTime(segmentEndTime);
+                */
 
             Rosegarden::RealTime audioStart = (*it)->getAudioStartTime();
             Rosegarden::RealTime audioDuration =
@@ -185,9 +187,8 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                             (*it)->getAudioStartTime() +
                                             segmentStart;
 
-            // If someone could explain this algorithm to me then
-            // I'd be very grateful.
-            //
+            // I wonder how this algorithm works?  It's taken a few months
+            // and a few rewrites to get it like this.  And now what?
             // 
             if (firstFetch)
             {
@@ -212,12 +213,14 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                             continue;
                     }
 
+                    // Reposition starting point within segment
+                    //
                     Rosegarden::RealTime moveTime =
-                        comp.getElapsedRealTime(
-                                sliceStartElapsed - segmentStartTime);
-
+                        sliceStart - segmentStart;
+                    segmentStart = sliceStart;
                     audioStart = audioStart + moveTime;
                     audioDuration = audioDuration - moveTime;
+
                 }
                 else if (segmentStart < sliceEnd)
                 {
@@ -259,13 +262,16 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             // Insert Audio event
             try
             {
-                Rosegarden::MappedEvent *me =
+                if (audioDuration > Rosegarden::RealTime(0, 0))
+                {
+                    Rosegarden::MappedEvent *me =
                         new Rosegarden::MappedEvent(track->getInstrument(),
                                                     (*it)->getAudioFileId(),
                                                     segmentStart,
                                                     audioDuration,
                                                     audioStart);
-                m_mC.insert(me);
+                    m_mC.insert(me);
+                }
             }
             catch(...) {;}
 

@@ -733,7 +733,7 @@ AudioSegmentAutoSplitCommand::execute()
 
     std::vector<Rosegarden::SplitPointPair>::iterator it;
     Rosegarden::timeT absStartTime, absEndTime;
-    std::vector<Rosegarden::timeT> endTimes;
+
     char splitNumber[10];
     int splitCount = 0;
 
@@ -757,20 +757,14 @@ AudioSegmentAutoSplitCommand::execute()
 
 	m_composition->addSegment(newSegment);
         newSegment->setStartTime(absStartTime);
-        newSegment->setEndMarkerTime(absEndTime);
-        //endTimes.push_back(absEndTime);
+        newSegment->setEndTime(absEndTime);
+        cout << "CREATING FROM " << newSegment->getAudioStartTime() << " TO "
+                                 << newSegment->getAudioEndTime() << endl;
 
 	m_newSegments.push_back(newSegment);
     }
 	    
     m_composition->detachSegment(m_segment);
-
-    /*
-    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
-	m_composition->addSegment(m_newSegments[i]);
-        m_newSegments[i]->setEndMarkerTime(endTimes[i]);
-    }
-    */
 
     m_detached = true;
 }

@@ -480,15 +480,21 @@ void RosegardenGUIApp::initZoomToolbar()
     std::vector<double> zoomSizes; // in units-per-pixel
     double defaultBarWidth44 = 100.0;
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
-    static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5, 1.0, 1.5, 2.5, 5.0 };
+    static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5, 1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i) {
 	zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
     }
 
+    // zoom labels
+    QString minZoom = QString("%1%").arg(factors[0] * 100.0);
+    QString maxZoom = QString("%1%").arg(factors[(sizeof(factors)/sizeof(factors[0])) - 1] * 100.0);
+
+    new QLabel(minZoom, zoomToolbar);
     m_zoomSlider = new ZoomSlider<double>
 	(zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
+    new QLabel(maxZoom, zoomToolbar);
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
 	    this, SLOT(slotChangeZoom(int)));
@@ -2868,6 +2874,9 @@ RosegardenGUIApp::slotAudioManager()
         m_audioManagerDialog->setAudioSubsystemStatus(
                 m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
 
+
+        plugAccelerators(m_audioManagerDialog,
+                         m_audioManagerDialog->getAccelerators());
         m_audioManagerDialog->show();
     }
 }
