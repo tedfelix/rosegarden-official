@@ -369,6 +369,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     slotSetPointerPosition(doc->getComposition().getPosition());
     m_chordNameRuler->repaint();
     m_inhibitRefresh = false;
+
+    setConfigDialogPageIndex(1);
 }
 
 NotationView::~NotationView()

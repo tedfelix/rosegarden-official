@@ -65,7 +65,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_mainCol(cols - 1),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
-    m_accelerators(0)    
+    m_accelerators(0),
+    m_configDialogPageIndex(0)
 {
     initSegmentRefreshStatusIds();
 
@@ -171,6 +172,7 @@ void EditViewBase::slotConfigure()
     Rosegarden::ConfigureDialog *configDlg = 
         new Rosegarden::ConfigureDialog(m_document, m_config, this);
 
+    configDlg->showPage(getConfigDialogPageIndex());
     configDlg->show();
 }
 

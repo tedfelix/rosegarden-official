@@ -223,6 +223,13 @@ protected:
     void setRCFileName(QString s) { m_rcFileName = s; }
     QString getRCFileName()       { return m_rcFileName; }
 
+    /**
+     * Set the page index of the config dialog which corresponds to
+     * this editview
+     */
+    void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
+    int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
+
     //--------------- Data members ---------------------------------
     QString m_rcFileName;
 
@@ -248,6 +255,8 @@ protected:
     bool         m_needUpdate;
 
     QAccel      *m_accelerators;
+
+    int          m_configDialogPageIndex;
 };
 
 #endif
