@@ -137,6 +137,8 @@ private:
 
 
 
+// Several sorts of "Beamed Group"
+
 class NotationGroup : public NotationSet
 {
 public:

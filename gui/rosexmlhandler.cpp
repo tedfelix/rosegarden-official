@@ -21,7 +21,8 @@
 #include "rosedebug.h"
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
-#include "notationproperties.h" //!!! Needed for group no & type, but we shouldn't be including notation* files in here
+#include "notationproperties.h" // for group no & type --
+                                // shouldn't really be including notation*.h
 
 #include <klocale.h>
 
@@ -109,8 +110,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_currentEvent->setAbsoluteTime(m_currentTime);
 
         if (m_inGroup) {
-            m_currentEvent->set<Int>(P_GROUP_NO, m_groupNo);
-            m_currentEvent->set<String>(P_GROUP_TYPE, m_groupType);
+            m_currentEvent->setMaybe<Int>(P_BEAMED_GROUP_NO, m_groupNo);
+            m_currentEvent->setMaybe<String>(P_BEAMED_GROUP_TYPE, m_groupType);
         }
         
         if (!m_inChord) {

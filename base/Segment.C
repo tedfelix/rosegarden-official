@@ -247,11 +247,11 @@ bool Track::expandIntoGroup(iterator from, iterator to,
 
             if (gid >= 0) { // we need to group both notes
                 cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
-                ev->set<Int>("GroupNo", gid);
-                ev->set<String>("GroupType", groupType);
+                ev->setMaybe<Int>("GroupNo", gid);
+                ev->setMaybe<String>("GroupType", groupType);
 
-                (*i)->set<Int>("GroupNo", gid);
-                (*i)->set<String>("GroupType", groupType);
+                (*i)->setMaybe<Int>("GroupNo", gid);
+                (*i)->setMaybe<String>("GroupType", groupType);
             }
             
 //             long pitch = 0;
@@ -318,11 +318,11 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
 
         if (gid >= 0) { // we need to group both notes
             cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
-            ev->set<Int>("GroupNo", gid);
-            ev->set<String>("GroupType", groupType);
+            ev->setMaybe<Int>("GroupNo", gid);
+            ev->setMaybe<String>("GroupType", groupType);
 
-            baseEvent->set<Int>("GroupNo", gid);
-            baseEvent->set<String>("GroupType", groupType);
+            baseEvent->setMaybe<Int>("GroupNo", gid);
+            baseEvent->setMaybe<String>("GroupType", groupType);
         }
 
         lastInsertedEvent = insert(ev);

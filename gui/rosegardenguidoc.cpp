@@ -29,6 +29,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include <string>
+
 // application specific includes
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
@@ -39,11 +41,16 @@
 #include "xmlstorableevent.h"
 #include "Event.h"
 
+#include "notationproperties.h" // for BEAMED_GROUP stuff, but we shouldn't
+                                // really be including notation headers here
+
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 using Rosegarden::Composition;
 using Rosegarden::Track;
 using Rosegarden::Event;
+using Rosegarden::Int;
+using Rosegarden::String;
 
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
@@ -232,23 +239,35 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // output all elements
     //
     // Iterate on tracks
-    for(Composition::iterator trks = m_composition.begin();
-        trks != m_composition.end(); ++trks) {
+    for (Composition::iterator trks = m_composition.begin();
+         trks != m_composition.end(); ++trks) {
 
         //--------------------------
         fileStream << QString("<Track instrument=\"%1\" start=\"%2\">")
             .arg((*trks)->getInstrument())
             .arg((*trks)->getStartIndex()) << endl;
 
-        for(Track::iterator i = (*trks)->begin();
-            i != (*trks)->end(); ++i) {
+        long currentGroup = -1;
+
+        for (Track::iterator i = (*trks)->begin();
+             i != (*trks)->end(); ++i) {
+
+            long group;
+            if ((*i)->get<Int>(P_BEAMED_GROUP_NO, group)) {
+                if (group != currentGroup) {
+                    if (currentGroup != -1) fileStream << "</group>" << endl;
+                    std::string type = (*i)->get<String>(P_BEAMED_GROUP_TYPE);
+                    fileStream << "<group type=\""
+                               << type.c_str() << "\">" << endl;
+                    currentGroup = group;
+                }
+            } else if (currentGroup != -1) {
+                fileStream << "</group>" << endl;
+                currentGroup = -1;
+            }
 
             Track::iterator nextEl = i;
             ++nextEl;
-
-	    //!!! need to deal with groups around here (i.e. don't
-	    //just want to write literal GroupNo stuff, but write
-	    //<group>..</group>)
 
             if (nextEl != (*trks)->end()) {
 

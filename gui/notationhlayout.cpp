@@ -483,7 +483,7 @@ NotationHLayout::layout()
 
                 long groupNo = -1;
 
-                if (el->event()->get<Int>(P_GROUP_NO, groupNo) &&
+                if (el->event()->get<Int>(P_BEAMED_GROUP_NO, groupNo) &&
                     groupNo != pGroupNo) {
                     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: entering group " << groupNo << endl;
                     startOfGroup = it;
@@ -494,7 +494,8 @@ NotationHLayout::layout()
                 ++it0;
                 if (groupNo > -1 &&
                     (it0 == m_notationElements.end() ||
-                     (!(*it0)->event()->get<Int>(P_GROUP_NO, nextGroupNo) ||
+                     (!(*it0)->event()->get<Int>(P_BEAMED_GROUP_NO,
+                                                 nextGroupNo) ||
                       nextGroupNo != groupNo))) {
                     kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: about to leave group " << groupNo << ", time to do the sums" << endl;
                 

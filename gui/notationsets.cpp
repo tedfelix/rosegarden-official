@@ -286,7 +286,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     m_weightBelow(0),
     m_type(Beamed)
 {
-    if (!(*i)->event()->get<Rosegarden::Int>(P_GROUP_NO, m_groupNo))
+    if (!(*i)->event()->get<Rosegarden::Int>(P_BEAMED_GROUP_NO, m_groupNo))
         m_groupNo = -1;
 
     initialise();
@@ -294,7 +294,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     if ((i = getInitialElement()) != getList().end()) {
 
         try {
-            std::string t = (*i)->event()->get<String>(P_GROUP_TYPE);
+            std::string t = (*i)->event()->get<String>(P_BEAMED_GROUP_TYPE);
             if (strcasecmp(t.c_str(), "beamed")) {
                 m_type = Beamed;
             } else if (strcasecmp(t.c_str(), "tupled")) {
@@ -317,7 +317,7 @@ NotationGroup::~NotationGroup()
 bool NotationGroup::test(const NELIterator &i)
 {
     long n;
-    return ((*i)->event()->get<Rosegarden::Int>(P_GROUP_NO, n) &&
+    return ((*i)->event()->get<Rosegarden::Int>(P_BEAMED_GROUP_NO, n) &&
             n == m_groupNo);
 }
 

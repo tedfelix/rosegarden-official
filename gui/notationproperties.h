@@ -40,8 +40,12 @@
 #define  P_NOTE_HEAD_SHIFTED     "NoteHeadShifted"
 #define  P_NOTE_NAME             "NoteName"
 
-#define  P_GROUP_NO              "GroupNo"
-#define  P_GROUP_TYPE            "GroupType"
+// Note that these should be non-persistent properties, because the
+// code that writes out XML converts them to <group>...</group>
+// instead of writing them as explicit properties of the events
+
+#define  P_BEAMED_GROUP_NO       "BGroupNo"
+#define  P_BEAMED_GROUP_TYPE     "BGroupType"
 
 // Set in applyBeam in notationsets.cpp:
 
