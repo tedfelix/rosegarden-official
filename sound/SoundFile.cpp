@@ -60,7 +60,13 @@ std::string
 SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 {
     if (file->eof())
+    {
+        // Reset the input stream so it's operational again
+        //
+        file->clear();
+
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
+    }
 
     std::string rS;
     char *fileBytes = new char[numberOfBytes];
@@ -92,7 +98,13 @@ SoundFile::getBytes(unsigned int numberOfBytes)
         throw(std::string("SoundFile::getBytes - no open file handle"));
 
     if (m_inFile->eof())
+    {
+        // Reset the input stream so it's operational again
+        //
+        m_inFile->clear();
+
         throw(std::string("SoundFile::getBytes() - EOF encountered"));
+    }
 
 
     // If this flag is set we dump the buffer and re-read it -
@@ -113,8 +125,8 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     {
         if (m_readChunkPtr == -1)
         {
-            // clear buffer and load it with new values
-            m_readBuffer.erase(0, m_readBuffer.length());
+            // clear buffer
+            m_readBuffer = "";
 
             // reset read pointer
             m_readChunkPtr = 0;
@@ -142,7 +154,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
             rS += m_readBuffer.substr(m_readChunkPtr,
                                       numberOfBytes - oldLength);
 
-            m_readChunkPtr += (numberOfBytes - oldLength);
+            m_readChunkPtr += rS.length() - oldLength;
         }
         else
         {
@@ -154,13 +166,12 @@ SoundFile::getBytes(unsigned int numberOfBytes)
             m_readChunkPtr = -1;
         }
 
-        // We've reached the end of the file if we can't read
-        // all of the required 
-        if (m_inFile->gcount() != (unsigned int) m_readChunkSize
-            || m_inFile->gcount() == 0)
+        // If we're EOF here we must've read and copied across everything
+        // we can do.  Reset and break out.
+        //
+        if (m_inFile->eof())
         {
-            //cout << "END OF FILE?? GCOUNT = " << m_inFile->gcount() << endl;
-            m_readChunkPtr = -1;
+            m_inFile->clear();
             break;
         }
 
@@ -174,6 +185,11 @@ SoundFile::getBytes(unsigned int numberOfBytes)
                   << std::endl;
 
     delete [] fileBytes;
+
+    // Reset and return if EOF
+    //
+    if (m_inFile->eof())
+        m_inFile->clear();
 
     return rS;
 }

@@ -273,15 +273,23 @@ PeakFileManager::getPreview(AudioFile *audioFile,
                             const RealTime &endIndex,
                             int resolution)
 {
-    std::vector<float> returnVector;
+    std::vector<float> rV;
 
     if (audioFile->getType() == WAV)
     {
         PeakFile *peakFile = getPeakFile(audioFile);
-        peakFile->open();
 
         // just write out a peak file
-        peakFile->getPreview(startIndex, endIndex, resolution);
+        try
+        {
+            peakFile->open();
+            rV = peakFile->getPreview(startIndex, endIndex, resolution);
+        }
+        catch(std::string e)
+        {
+            std::cout << "PeakFileManager::getPreview "
+                      << "\"" << e << "\"" << std::endl;
+        }
     }
     else if (audioFile->getType() == BWF)
     {
@@ -293,7 +301,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
                   << std::endl;
     }
 
-    return returnVector;
+    return rV;
 }
 
 }

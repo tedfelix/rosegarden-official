@@ -24,6 +24,7 @@
 #include "PeakFile.h"
 #include "AudioFile.h"
 #include "Audio.h"
+#include "Sound.h"
 
 namespace Rosegarden
 {
@@ -603,7 +604,9 @@ PeakFile::getPreview(const RealTime &startIndex,
     if (startPeak > endPeak)
         return ret;
 
-    float value = 0.0f;
+    float hiValue = 0.0f;
+    float loValue = 0.0f;
+
     std::string peakData;
 
     std::cout << "PeakFile::getPreview - getting preview for \""
@@ -614,29 +617,21 @@ PeakFile::getPreview(const RealTime &startIndex,
     std::cout << "START = " << startPeak << std::endl;
     std::cout << "END   = " << endPeak << std::endl;
 
-    /*
-    close();
-    if (open() == false)
+    float divisor = 0.0f;
+    switch(m_format)
     {
-        std::cout << "PeakFile::getPreview - can't open" << std::endl;
-        return ret;
+        case 1:
+            divisor = SAMPLE_MAX_8BIT;
+            break;
+
+        case 2:
+            divisor = SAMPLE_MAX_16BIT;
+
+        default:
+            std::cerr << "PeakFile::getPreview - unsupported peak length format"
+                      << std::endl;
+            return ret;
     }
-    */
-
-    /*
-    char t;
-    std::string thing = "";
-    m_inFile->seekg(0, std::ios::beg); 
-    for (int i = 0; i < 10; i++)
-    {
-        m_inFile->read(&t, 1);
-        thing += t;
-    }
-
-    std::cout << "STRING = " << thing << std::endl;
-
-    return ret;
-    */
 
     for (int i = startPeak; i < endPeak; i++)
     {
@@ -648,9 +643,8 @@ PeakFile::getPreview(const RealTime &startIndex,
                 return ret;
         }
 
-        //cout << "POS = " << m_inFile->tellg() << endl;
-
-        value = 0.0f;
+        hiValue = 0.0f;
+        loValue = 0.0f;
 
         // Get peak value
         for (int j = 0; j < m_channels; j++)
@@ -658,17 +652,52 @@ PeakFile::getPreview(const RealTime &startIndex,
             try
             {
                 peakData = getBytes(m_format * m_pointsPerValue);
-                std::cout << "PEAK DATA = \"" << peakData << "\"" << endl;
             }
             catch (std::string e)
             {
+                // Problem with the get - probably an EOF
+                // return the results so far.
+                //
                 std::cout << "PeakFile::getPreview - \"" << e << "\"\n"
                           << std::endl;
                 return ret;
             }
-            //cout << "VALUE = " << getIntegerFromLittleEndian(peakData) << endl;
+
+            if (peakData.length() == m_format * m_pointsPerValue)
+            {
+                hiValue += getIntegerFromLittleEndian(
+                               peakData.substr(0, m_format));
+
+                if (m_pointsPerValue == 2)
+                {
+                    loValue += getIntegerFromLittleEndian(
+                               peakData.substr(m_format, m_format));
+                }
+            }
+            else
+            {
+                // We didn't get the whole peak block - return what
+                // we've got so far
+                //
+                std::cerr << "PeakFile::getPreview - "
+                          << "failed to get complete peak block"
+                          << std::endl;
+                return ret;
+            }
         }
 
+        hiValue /= (float)m_channels;
+        loValue /= (float)m_channels;
+
+        hiValue /= divisor;
+        loValue /= divisor;
+
+        /*
+        cout << "HI = " << hiValue << endl;
+        cout << "LO = " << loValue << endl;
+        */
+
+        ret.push_back(hiValue);
     }
 
     return ret;
