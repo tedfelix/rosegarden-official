@@ -1557,7 +1557,7 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
       m_noteType(type),
       m_noteDots(dots)
 {
-    m_parentView.setCursor(Qt::ibeamCursor);
+    m_parentView.setCursor(Qt::arrowCursor);
 }
 
 NoteInserter::~NoteInserter()
