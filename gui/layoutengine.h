@@ -40,14 +40,14 @@ protected:
     unsigned int m_status;
 };
 
-class NotationLayout : public LayoutEngine, public unary_function<NotationElementList::iterator&, void>
+class NotationLayout : public LayoutEngine, public unary_function<NotationElement*, void>
 {
 public:
 
-    void operator() (NotationElementList::iterator &el) { layout(el); }
+    void operator() (NotationElement *el) { layout(el); }
 
 protected:
-    virtual void layout(NotationElementList::iterator&) = 0;
+    virtual void layout(NotationElement*) = 0;
 };
 
 #endif
