@@ -1028,6 +1028,16 @@ Event *Note::getAsRestEvent(timeT absoluteTime) const
 }
 
 
+
+namespace NoteHeadStyles
+{
+    const NoteHeadStyle Classical = "classical";
+    const NoteHeadStyle Cross     = "x";
+    const NoteHeadStyle Triangle  = "triangle";
+    const NoteHeadStyle Mensural  = "mensural";
+}
+
+
 ///////////////////////////////////////////////////////////////////////
 
 const string TimeSignature::EventType = "timesignature";

@@ -678,6 +678,30 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
+    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+		(Rosegarden::NoteHeadStyles::Classical),
+		0, this,
+		SLOT(slotTransformsClassicalNoteHeads()), actionCollection(),
+		"noteheads_classical");
+
+    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+		(Rosegarden::NoteHeadStyles::Cross),
+		0, this,
+		SLOT(slotTransformsCrossNoteHeads()), actionCollection(),
+		"noteheads_x");
+
+    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+		(Rosegarden::NoteHeadStyles::Mensural),
+		0, this,
+		SLOT(slotTransformsMensuralNoteHeads()), actionCollection(),
+		"noteheads_mensural");
+
+    new KAction(TransformsMenuChangeNoteHeadsCommand::getGlobalName
+		(Rosegarden::NoteHeadStyles::Triangle),
+		0, this,
+		SLOT(slotTransformsTriangleNoteHeads()), actionCollection(),
+		"noteheads_triangle");
+
     new KAction(TransformsMenuTransposeCommand::getGlobalName(1), 0,
 		Key_Up, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
@@ -1733,6 +1757,46 @@ void NotationView::slotTransformsRestoreStems()
 
     addCommandToHistory(new TransformsMenuRestoreStemsCommand
                         (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsClassicalNoteHeads()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Changing to Classical note heads..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+                        (Rosegarden::NoteHeadStyles::Classical,
+			 *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsCrossNoteHeads()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Changing to Cross note heads..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+                        (Rosegarden::NoteHeadStyles::Cross,
+			 *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTriangleNoteHeads()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Changing to Triangle note heads..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+                        (Rosegarden::NoteHeadStyles::Triangle,
+			 *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsMensuralNoteHeads()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Changing to Mensural note heads..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuChangeNoteHeadsCommand
+                        (Rosegarden::NoteHeadStyles::Mensural,
+			 *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsTranspose()

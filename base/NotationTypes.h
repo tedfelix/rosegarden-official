@@ -787,6 +787,17 @@ private:
 };
 
 
+typedef std::string NoteHeadStyle;
+
+namespace NoteHeadStyles
+{
+    extern const NoteHeadStyle Classical;
+    extern const NoteHeadStyle Cross;
+    extern const NoteHeadStyle Triangle;
+    extern const NoteHeadStyle Mensural;
+}
+
+
 /**
  * TimeSignature contains arithmetic methods relevant to time
  * signatures and bar durations, including code for splitting long

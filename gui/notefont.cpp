@@ -885,24 +885,24 @@ CharName NoteCharacterNameLookup::getFlagCharName(int flagCount)
 }
 
 CharName NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type,
-						      NoteHeadType head)
+						      const Rosegarden::NoteHeadStyle &head)
 {
-    if (head != ClassicalNoteHead) {
+    if (head != Rosegarden::NoteHeadStyles::Classical) {
 
 	if (type < Note::Minim) {
-	    if (head == XNoteHead)
+	    if (head == Rosegarden::NoteHeadStyles::Cross)
 		return NoteCharacterNames::X_NOTEHEAD;
-	    else if (head == TriangleNoteHead)
+	    else if (head == Rosegarden::NoteHeadStyles::Triangle)
 		return NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_BLACK;
-	    else if (head == MensuralNoteHead)
+	    else if (head == Rosegarden::NoteHeadStyles::Mensural)
 		return NoteCharacterNames::SEMIBREVIS_BLACK;
 	    else assert(0);
 	} else {
-	    if (head == XNoteHead) 
+	    if (head == Rosegarden::NoteHeadStyles::Cross)
 		return NoteCharacterNames::CIRCLE_X_NOTEHEAD;
-	    else if (head == TriangleNoteHead)
+	    else if (head == Rosegarden::NoteHeadStyles::Triangle)
 		return NoteCharacterNames::TRIANGLE_NOTEHEAD_UP_WHITE;
-	    else if (head == MensuralNoteHead)
+	    else if (head == Rosegarden::NoteHeadStyles::Mensural)
 		return NoteCharacterNames::SEMIBREVIS_WHITE;
 	    else assert(0);
 	}

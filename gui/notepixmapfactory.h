@@ -43,6 +43,7 @@ public:
     void setNoteType(Rosegarden::Note::Type type) { m_noteType = type; }
     void setDots(int dots) { m_dots = dots; }
     void setAccidental(Rosegarden::Accidental acc) { m_accidental = acc; }
+    void setNoteHeadStyle(Rosegarden::NoteHeadStyle style) { m_style = style; }
     
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
     void setDrawFlag(bool df)             { m_drawFlag         = df;        }
@@ -84,6 +85,7 @@ private:
     Rosegarden::Note::Type m_noteType;
     int m_dots;
     Rosegarden::Accidental m_accidental;
+    Rosegarden::NoteHeadStyle m_style;
 
     bool    m_shifted;
     bool    m_drawFlag;

@@ -785,6 +785,14 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
 
+    if (elt->event()->has(NOTE_HEAD_STYLE)) {
+	Rosegarden::NoteHeadStyle style =
+	    elt->event()->get<String>(NOTE_HEAD_STYLE);
+	params.setNoteHeadStyle(style);
+    } else {
+	params.setNoteHeadStyle(Rosegarden::NoteHeadStyles::Classical);
+    }
+
     if (elt->event()->get<Bool>(m_properties.CHORD_PRIMARY_NOTE)) {
 	long markCount = 0;
 	(void)(elt->event()->get<Int>(MARK_COUNT, markCount));

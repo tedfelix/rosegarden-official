@@ -388,12 +388,6 @@ extern const CharName F_CLEF;
 extern const CharName UNKNOWN;
 }
 
-enum NoteHeadType {
-    ClassicalNoteHead,
-    XNoteHead,
-    TriangleNoteHead,
-    MensuralNoteHead
-};
 
 class NoteCharacterNameLookup
 {
@@ -404,7 +398,8 @@ public:
     static CharName getRestCharName(const Rosegarden::Note::Type &);
     static CharName getFlagCharName(int flagCount);
     static CharName getNoteHeadCharName(const Rosegarden::Note::Type &,
-					NoteHeadType = ClassicalNoteHead);
+					const Rosegarden::NoteHeadStyle & =
+					Rosegarden::NoteHeadStyles::Classical);
 };
 
 

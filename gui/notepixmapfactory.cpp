@@ -75,6 +75,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_noteType(noteType),
     m_dots(dots),
     m_accidental(accidental),
+    m_style(Rosegarden::NoteHeadStyles::Classical),
     m_shifted(false),
     m_drawFlag(true),
     m_drawStem(true),
@@ -442,10 +443,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     QPixmap body;
     if (!m_selected && !params.m_selected && !params.m_highlighted) {
-        body = m_font->getPixmap(getNoteHeadCharName(params.m_noteType));
+        body = m_font->getPixmap(getNoteHeadCharName(params.m_noteType,
+						     params.m_style));
     } else {
         body = m_font->getColouredPixmap
-            (getNoteHeadCharName(params.m_noteType),
+            (getNoteHeadCharName(params.m_noteType, params.m_style),
 	     params.m_highlighted ? RosegardenGUIColours::HighlightedElementHue
 	                          : RosegardenGUIColours::   SelectedElementHue)
 	    ;

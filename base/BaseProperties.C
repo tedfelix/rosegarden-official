@@ -47,9 +47,6 @@ const PropertyName PITCH		= "pitch";
 const PropertyName VELOCITY		= "velocity";
 const PropertyName ACCIDENTAL		= "accidental";
 
-const PropertyName NOTE_TYPE            = "NoteType";
-const PropertyName NOTE_DOTS            = "NoteDots";
-
 const PropertyName MARK_COUNT		= "marks";
 
 PropertyName getMarkPropertyName(int markNo)
@@ -77,6 +74,8 @@ PropertyName getMarkPropertyName(int markNo)
 
 const PropertyName TIED_BACKWARD	= "tiedback";
 const PropertyName TIED_FORWARD		= "tiedforward";
+
+const PropertyName NOTE_HEAD_STYLE      = "notehead";
 
 const PropertyName BEAMED_GROUP_ID               = "groupid";
 const PropertyName BEAMED_GROUP_TYPE		 = "grouptype";

@@ -1,0 +1,147 @@
+
+A plain-text documentation format
+=================================
+
+This is a format that can be happily read in any text editor or
+printed properly on a line printer, avoiding explicit embedded codes
+as far as possible, but with sufficient information for a filter to
+take this documentation and turn it into basic HTML or TeX output.
+
+This document describes the documentation format and gives examples.
+It's also the test document for documentation filters, so the
+formatting is varied (to test the filters) rather than consistent (to
+be easy to read).
+
+
+In general
+----------
+
+Paragraph text should normally be written flush-left, without
+indenting the first line.  Leave a blank line between paragraphs, and
+also before and after headings, examples, list items and so on.
+Multiple blank lines are okay.
+
+
+Headings
+--------
+
+A heading can be no more than one line long.  It should be preceded by
+a blank line and followed by a line consisting only of "=", "-" or "~"
+characters, then optionally more blank lines.
+
+Headings underlined with "=" will be set as major section headings;
+those underlined with "-" will be second-level headings and those
+underlined with "~" will be minor, paragraph headings.
+
+
+Lists
+-----
+
+Bulleted and numbered lists are supported.  You don't need to start or
+end a list explicitly, just write the items.
+
+Bulleted lists
+~~~~~~~~~~~~~
+ * Bulleted items can look like this.
+
+ -  They can also look like this.
+
+ + You can use any non-alphanumeric character as the bullet; they'll
+   all come out the same after processing, so use whichever you think
+   looks best in the text version.  You can also leave as much space
+   before and after the bullet as you want, so long as there is some.
+
+ * Note that a paragraph is only an item if every line is indented.
+This paragraph is not an item, it's a weird undefined thing (it'll
+probably be set as a normal paragraph that begins with an asterisk,
+but don't rely on that either).
+
+ = Items can continue over more than one paragraph, so long as the
+   indentation continues.
+
+   This paragraph, for example, is part of the same item as the
+   previous one.
+
+Numbered lists
+~~~~~~~~~~~~~~
+ 1. Start each item with some whitespace, then a number, then a
+    non-alphanumeric character.
+
+    Remember to keep up the indentation.  Again, a list item may
+    contain more than one paragraph.
+
+ 2/ It doesn't matter _which_ non-alphanumeric character follows the
+    number.
+
+
+Preformatted blocks
+-------------------
+
+To make a preformatted block (for a code example, ASCII-art diagram or
+whatever), just indent the whole block _without_ a bulleted or
+numbered item specification on the first line.
+
+  ,---------------------------------------.
+  |  This is a simple ASCII-art diagram.  |
+  `---------------------------------------'
+
+	and this {
+	  is_a(rather);
+	  short block;		/* of code */
+	}
+
+You can only place a preformatted block directly after a list item if
+the first non-whitespace character in the preformatted block is a
+non-alphanumeric one, otherwise it'll be taken to be an extension of
+the list item.
+
+ * So ASCII-art diagrams can go in list items, although you can't
+   continue the list item text afterwards:
+
+          ,----------------------.
+    ,---------.    ,----------.   \
+    |  Start  |    |  Finish  |   |
+    `---------'    `----------'   /
+          ^----------------------'
+     
+ * But preformatted code samples generally can't:
+
+	if (x > y) {
+	  drop(y);
+	  promote(x);
+	}
+
+
+Cross-references
+----------------
+
+To quote a URL, prefix it with "<URL:" and suffix with ">".  For
+example, my homepage can be found at
+<URL:http://www.all-day-breakfast.com/cannam/>.  When processed into
+HTML, these will be converted to links.  There is currently no way to
+make the anchor text different from the text of the URL.
+
+To link to another documentation file, use a relative URL ending in
+.txt.  It will be converted to .html on the fly.  For an example,
+check out the documentation file <URL:txt2html.txt>.
+
+
+Random bits & pieces
+--------------------
+
+To italicise a word or phrase, _surround it with underscores_.
+Similarly you can *embolden* a word or phrase by surrounding it with
+asterisks.
+
+To place a phrase or single word in a fixed-width font, use the only
+explicit formatting rule that isn't also a sensible general rule when
+writing plain-text documentation: [surround it with square brackets].
+If you actually want square brackets, escape them \[like this\].
+
+A current implementation restriction with these facilities is that the
+open and close brackets, or the first and second underscores or
+asterisks, have to be on the same line of the text file; there can't
+be a newline in between.
+
+
+_Chris Cannam_

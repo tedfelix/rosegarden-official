@@ -53,7 +53,7 @@ etc
   </Menu>
   <Separator/>
   <Menu name="Noteheads">
-    <text>Note&amp;heads</text>
+    <text>Note &amp;Heads</text>
     <Action name="noteheads_classical"/>
     <Action name="noteheads_x"/>
     <Action name="noteheads_triangle"/>

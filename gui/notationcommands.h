@@ -403,21 +403,23 @@ private:
 class TransformsMenuChangeNoteHeadsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeNoteHeadsCommand(std::string headType,
+    TransformsMenuChangeNoteHeadsCommand(Rosegarden::NoteHeadStyle style,
 					 Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection), m_headType(headType) { }
+	BasicSelectionCommand(getGlobalName(style), selection, true),
+	m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-	return "Change Note &Head Type";
+	return "Change Note &Head Style";
     }
+
+    static QString getGlobalName(Rosegarden::NoteHeadStyle style);
 
 protected:
     virtual void modifySegment();
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    std::string m_headType;
+    Rosegarden::NoteHeadStyle m_style;
 };
 
 

@@ -297,6 +297,10 @@ public slots:
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
+    void slotTransformsClassicalNoteHeads();
+    void slotTransformsCrossNoteHeads();
+    void slotTransformsTriangleNoteHeads();
+    void slotTransformsMensuralNoteHeads();
     void slotTransformsTranspose();
     void slotTransformsTransposeUp();
     void slotTransformsTransposeUpOctave();
@@ -366,13 +370,19 @@ public slots:
      * happen on the next update.
      */
     void slotSetInsertCursorPosition(Rosegarden::timeT position,
-				     bool scroll = true,
-				     bool updateNow = true);
+				     bool scroll, bool updateNow);
+
+    void slotSetInsertCursorPosition(Rosegarden::timeT position) {
+	slotSetInsertCursorPosition(position, true, true);
+    }
 
     /// Set the insert cursor position from a mouse event location
     void slotSetInsertCursorPosition(double canvasX, int canvasY,
-				     bool scroll = true,
-				     bool updateNow = true);
+				     bool scroll, bool updateNow);
+
+    void slotSetInsertCursorPosition(double canvasX, int canvasY) {
+	slotSetInsertCursorPosition(canvasX, canvasY, true, true);
+    }
 
     /**
      * Set the insert cursor position and scroll so it's at given point.
@@ -383,6 +393,11 @@ public slots:
     void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
 					double cx, int cy,
 					bool updateNow = true);
+
+    void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
+					double cx, double cy) {
+	slotSetInsertCursorAndRecentre(position, cx, cy, true);
+    }
 
     /// Step back one event with the insert cursor position
     void slotStepBackward();

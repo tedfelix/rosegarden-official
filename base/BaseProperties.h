@@ -38,6 +38,8 @@ extern PropertyName getMarkPropertyName(int markNo);
 extern const PropertyName TIED_BACKWARD;
 extern const PropertyName TIED_FORWARD;
 
+extern const PropertyName NOTE_HEAD_STYLE;
+
 extern const PropertyName BEAMED_GROUP_ID;
 extern const PropertyName BEAMED_GROUP_TYPE;
 
