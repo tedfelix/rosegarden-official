@@ -1061,9 +1061,6 @@ AudioManagerDialog::dragEnterEvent(QDragEnterEvent *event)
 void
 AudioManagerDialog::dropEvent(QDropEvent *event)
 {
-    // this is a very simplistic implementation of a drop event.  we
-    // will only accept a dropped URL.  the Qt dnd code can do *much*
-    // much more, so please read the docs there
     QStrList uri;
 
     // see if we can decode a URI.. if not, just ignore it
