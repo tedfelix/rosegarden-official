@@ -404,9 +404,6 @@ signals:
 
     void selectedSegments(const Rosegarden::SegmentSelection &);
 
-    void hScrollTo(int);
-    void vScrollTo(int);
-
 private:
 
     SegmentItem *findSegmentItem(Rosegarden::Segment *segment); // slow

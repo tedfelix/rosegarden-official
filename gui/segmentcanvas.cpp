@@ -727,13 +727,6 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_selectionRect = new QCanvasRectangle(canvas());
     m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
     m_selectionRect->hide();
-
-    connect(this, SIGNAL(hScrollTo(int)),
-	    this, SLOT(slotScrollHorizSmallSteps(int)));
-
-    connect(this, SIGNAL(vScrollTo(int)),
-	    this, SLOT(slotScrollVertSmallSteps(int)));
-
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -1003,10 +996,10 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (follow != SegmentTool::NoFollow) {
 
         if (follow & SegmentTool::FollowHorizontal)
-            emit hScrollTo(e->pos().x());
+            slotScrollHorizSmallSteps(e->pos().x());
 
         if (follow & SegmentTool::FollowVertical)
-            emit vScrollTo(e->pos().y());
+            slotScrollVertSmallSteps(e->pos().y());
     }
 }
 
