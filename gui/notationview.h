@@ -37,6 +37,7 @@
 class QLabel;
 class QCanvasItem;
 class KActionMenu;
+class KComboBox;
 class KPrinter;
 class RosegardenGUIDoc;
 class NotationTool;
@@ -573,13 +574,13 @@ public slots:
     void slotChangeFontSizeFromAction();
 
     /// Changes the font size of the staffs on the view to the nth size in the available size list
-    void slotChangeFontSizeFromIndex(int n);
+    void slotChangeFontSizeFromIndex(const QString&);
 
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacing(int newSpacing);
 
     /// Changes the hlayout spacing of the staffs on the view
-    void slotChangeSpacingFromIndex(int newSpacingIndex);
+    void slotChangeSpacingFromIndex(const QString&);
 
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacingFromAction();
@@ -857,10 +858,10 @@ protected:
     typedef QMap<QString, MarkActionData> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;
 
-    QComboBox *m_fontCombo;
-    ZoomSlider<int> *m_fontSizeSlider;
-    ZoomSlider<int> *m_spacingSlider;
-    KActionMenu *m_fontSizeActionMenu;
+    KComboBox       *m_fontCombo;
+    KComboBox       *m_fontSizeCombo;
+    KComboBox       *m_spacingCombo;
+    KActionMenu     *m_fontSizeActionMenu;
     ScrollBoxDialog *m_pannerDialog;
     QTimer *m_renderTimer;
 

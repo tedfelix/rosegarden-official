@@ -202,8 +202,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_annotationsVisible(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
-    m_fontSizeSlider(0),
-    m_spacingSlider(0),
+    m_fontSizeCombo(0),
+    m_spacingCombo(0),
     m_fontSizeActionMenu(0),
     m_pannerDialog(new ScrollBoxDialog(this, ScrollBox::FixHeight)),
     m_renderTimer(0),
@@ -680,8 +680,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_annotationsVisible(false),
     m_selectDefaultNote(0),
     m_fontCombo(0),
-    m_fontSizeSlider(0),
-    m_spacingSlider(0),
+    m_fontSizeCombo(0),
+    m_spacingCombo(0),
     m_fontSizeActionMenu(0),
     m_pannerDialog(0),
     m_renderTimer(0),
@@ -1959,9 +1959,9 @@ void NotationView::initLayoutToolbar()
         return;
     }
 
-    new QLabel(i18n("  Font:  "), layoutToolbar, "kde toolbar widget");
+    new QLabel(i18n("  Font:  "), layoutToolbar, "font label");
 
-    m_fontCombo = new QComboBox(layoutToolbar);
+    m_fontCombo = new KComboBox(layoutToolbar);
     m_fontCombo->setEditable(false);
 
     std::set<std::string> fs(NoteFontFactory::getFontNames());
@@ -1991,22 +1991,47 @@ void NotationView::initLayoutToolbar()
     connect(m_fontCombo, SIGNAL(activated(const QString &)),
             this,        SLOT(slotChangeFont(const QString &)));
 
-    new QLabel(i18n("  Size:  "), layoutToolbar, "kde toolbar widget");
+    new QLabel(i18n("  Size:  "), layoutToolbar, "size label");
 
+    QString value;
+
+    //
+    // font size combo
+    //
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
-    m_fontSizeSlider = new ZoomSlider<int>
-        (sizes, m_fontSize, QSlider::Horizontal, layoutToolbar, "kde toolbar widget");
-    connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeFontSizeFromIndex(int)));
+    m_fontSizeCombo = new KComboBox(layoutToolbar, "font size combo");
 
-    new QLabel(i18n("  Spacing:  "), layoutToolbar, "kde toolbar widget");
+    for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
 
+        value.setNum(*i);
+        m_fontSizeCombo->insertItem(value);
+    }
+    value.setNum(m_fontSize);
+    m_fontSizeCombo->setCurrentText(value);
+
+    connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
+            this, SLOT(slotChangeFontSizeFromIndex(const QString&)));
+
+    new QLabel(i18n("  Spacing:  "), layoutToolbar, "spacing label");
+
+    //
+    // spacing combo
+    //
     int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
-    m_spacingSlider = new ZoomSlider<int>
-        (spacings, defaultSpacing, QSlider::Horizontal, layoutToolbar, "kde toolbar widget");
-    connect(m_spacingSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeSpacingFromIndex(int)));
+
+    m_spacingCombo = new KComboBox(layoutToolbar, "spacing combo");
+    for (std::vector<int>::iterator i = spacings.begin(); i != spacings.end(); ++i) {
+
+        value.setNum(*i);
+        m_spacingCombo->insertItem(value);
+    }
+    value.setNum(defaultSpacing);
+
+    m_spacingCombo->setCurrentText(value);
+    
+    connect(m_spacingCombo, SIGNAL(activated(const QString&)),
+            this, SLOT(slotChangeSpacingFromIndex(const QString&)));
 }
 
 void NotationView::initStatusBar()

@@ -103,11 +103,10 @@ NotationView::slotUpdateAnnotationsStatus()
 }
 
 void
-NotationView::slotChangeSpacingFromIndex(int n)
+NotationView::slotChangeSpacingFromIndex(const QString& spacingT)
 {
-    std::vector<int> spacings = m_hlayout->getAvailableSpacings();
-    if (n >= (int)spacings.size()) n = spacings.size() - 1;
-    slotChangeSpacing(spacings[n]);
+    int spacing = spacingT.toInt();
+    slotChangeSpacing(spacing);
 }
 
 void
@@ -134,7 +133,7 @@ NotationView::slotChangeSpacing(int spacing)
 
     m_hlayout->setSpacing(spacing);
     
-    m_spacingSlider->setSize(spacing);
+//     m_spacingSlider->setSize(spacing);
 
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action(QString("spacing_%1").arg(spacing)));
@@ -289,11 +288,10 @@ NotationView::slotChangeFontSize(int newSize)
 
 
 void
-NotationView::slotChangeFontSizeFromIndex(int n)
+NotationView::slotChangeFontSizeFromIndex(const QString& sizeT)
 {
-    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
-    if (n >= (int)sizes.size()) n = sizes.size()-1;
-    slotChangeFont(m_fontName, sizes[n]);
+    int size = sizeT.toInt();
+    slotChangeFont(m_fontName, size);
 }
 
 
@@ -341,7 +339,15 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     NOTATION_DEBUG << "about to reinitialise sizes" << endl;
 
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
-    m_fontSizeSlider->reinitialise(sizes, m_fontSize);
+    m_fontSizeCombo->clear();
+    QString value;
+    for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
+        value.setNum(*i);
+        m_fontSizeCombo->insertItem(value);
+    }
+    value.setNum(m_fontSize);
+    m_fontSizeCombo->setCurrentText(value);
+
     setupFontSizeMenu(oldName);
 
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
