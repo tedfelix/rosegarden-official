@@ -239,16 +239,21 @@ protected:
 protected slots:
 
     /**
-     * connected to the 'Edit as Score' items of the RMB popup menu -
+     * connected to the 'Edit as Notation' items of the RMB popup menu -
      * re-emits editSegmentNotation(Segment*)
      */
     void onEditNotation();
 
     /**
-     * connected to the 'Edit as PianoRoll' items of the RMB popup
+     * connected to the 'Edit as Matrix' items of the RMB popup
      * menu - re-emits editSegmentMatrix(Segment*)
      */
     void onEditMatrix();
+
+    /**
+     * connected to the 'Edit Audio' item of the RMB popup
+     */
+    void onEditAudio();
 
 signals:
     /**
@@ -276,6 +281,7 @@ signals:
 
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
+    void editSegmentAudio(Rosegarden::Segment*);
 
 private:
     //--------------- Data members ---------------------------------

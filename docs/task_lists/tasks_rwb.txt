@@ -2,13 +2,15 @@
 -----------------
 updated 30.1.2001
 
-Currently looking at BUGS:
+Currently looking at:
 
 - Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
-  o clearing down handles without crashing aRTS [PENDING]
+  o clearing down handles without crashing aRTS [PENDING - POSSIBLY ITERATORS]
 
 - Looping at the origin
+
+- Recording segments - trails
 
 ==
 

@@ -145,11 +145,6 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
     SegmentItem::setWidthToDurationRatio(m_grid.hstep());
     SegmentItem::setItemHeight(m_grid.vstep());
 
-    m_editMenu->insertItem(i18n("Edit as Notation"),
-                           this, SLOT(onEditNotation()));
-
-    m_editMenu->insertItem(i18n("Edit as Matrix"),
-                           this, SLOT(onEditMatrix()));
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -234,6 +229,24 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
             //             kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMousePressEvent() : edit m_currentItem = "
             //                                  << m_currentItem << endl;
 
+            if (m_currentItem->getSegment()->getType() == 
+                                             Rosegarden::Segment::Audio)
+            {
+                m_editMenu->clear();
+                m_editMenu->insertItem(i18n("Edit Audio"),
+                                       this, SLOT(onEditAudio()));
+
+            }
+            else
+            {
+                m_editMenu->clear();
+                m_editMenu->insertItem(i18n("Edit as Notation"),
+                                       this, SLOT(onEditNotation()));
+
+                m_editMenu->insertItem(i18n("Edit as Matrix"),
+                                       this, SLOT(onEditMatrix()));
+            }
+
             m_editMenu->exec(QCursor::pos());
         }
     }
@@ -246,7 +259,11 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
     if (item) {
         m_currentItem = item;
         // TODO : edit style should be user configurable
-        emit editSegmentNotation(m_currentItem->getSegment());
+
+        if (m_currentItem->getSegment()->getType() == Rosegarden::Segment::Audio)
+            emit editSegmentAudio(m_currentItem->getSegment());
+        else
+            emit editSegmentNotation(m_currentItem->getSegment());
     }
 }
 
@@ -307,6 +324,12 @@ void SegmentCanvas::onEditMatrix()
 {
     emit editSegmentMatrix(m_currentItem->getSegment());
 }
+
+void SegmentCanvas::onEditAudio()
+{
+    emit editSegmentAudio(m_currentItem->getSegment());
+}
+
 
 
 // Select a SegmentItem on the canvas according to a

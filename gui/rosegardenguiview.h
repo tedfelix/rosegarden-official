@@ -152,6 +152,7 @@ public:
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
+    void editSegmentAudio(Rosegarden::Segment*);
 
     /**
      * Scroll the TrackEditor horizontally to the specified

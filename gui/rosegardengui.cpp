@@ -1301,25 +1301,36 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
 
 void RosegardenGUIApp::setPointerPosition(timeT t)
 {
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
     if ( m_transportStatus == PLAYING ||
          m_transportStatus == RECORDING_MIDI ||
          m_transportStatus == RECORDING_AUDIO )
     {
-        sendSequencerJump(m_doc->getComposition().getElapsedRealTime(t));
+        if (t >= comp.getEndMarker())
+        {
+            stop();
+            t = comp.getEndMarker();
+        }
+
+        sendSequencerJump(comp.getElapsedRealTime(t));
         return;
     }
 
+    if (t >= comp.getEndMarker())
+        t = 0;
+
     // set the composition time
-    m_doc->getComposition().setPosition(t);
+    comp.setPosition(t);
 
     // and the gui time
     m_view->setPointerPosition(t);
 
     // and the time
-    m_transport->displayTime(m_doc->getComposition().getElapsedRealTime(t));
+    m_transport->displayTime(comp.getElapsedRealTime(t));
 
     // and the tempo
-    m_transport->setTempo(m_doc->getComposition().getTempoAt(t));
+    m_transport->setTempo(comp.getTempoAt(t));
 }
 
 void RosegardenGUIApp::play()

@@ -188,6 +188,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(tracksEditor->canvas(), SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
             SLOT(editSegmentMatrix(Rosegarden::Segment*)));
 
+    connect(tracksEditor->canvas(), SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
+            SLOT(editSegmentAudio(Rosegarden::Segment*)));
+
+
     connect(tracksEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
             getDocument(), SLOT  (createNewSegment(SegmentItem*,int)));
 
@@ -301,6 +305,12 @@ void RosegardenGUIView::editSegmentMatrix(Rosegarden::Segment* p)
     m_matrixView = new MatrixView(getDocument(), segmentsToEdit, this);
     m_matrixView->show();
 }
+
+void RosegardenGUIView::editSegmentAudio(Rosegarden::Segment* p)
+{
+    std::cout << "RosegardenGUIView::editSegmentAudio() - got segment" << endl;
+}
+
 
 // This scrolling model pages the SegmentCanvas across the screen
 //
