@@ -1021,7 +1021,7 @@ MatrixView::setSingleSelectedEvent(Rosegarden::Segment &segment,
 
     EventSelection *selection = new EventSelection(segment);
     selection->addEvent(event);
-    setCurrentSelection(selection, false);
+    setCurrentSelection(selection, true);
 }
 
 
