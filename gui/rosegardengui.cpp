@@ -578,7 +578,10 @@ void RosegardenGUIApp::initView()
     // to be selected.
     //
     actionCollection()->action("move")->activate();
-    actionCollection()->action("select")->activate();
+    if (m_doc->getComposition().getNbSegments() > 0)
+        actionCollection()->action("select")->activate();
+    else
+        actionCollection()->action("draw")->activate();
 
     //
     // Transport setup

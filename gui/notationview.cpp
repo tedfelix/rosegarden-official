@@ -367,7 +367,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     slotTestClipboard();
 #endif
 
-    m_selectDefaultNote->activate();
+    if (getSegmentsOnlyRests())
+        m_selectDefaultNote->activate();
+    else
+        actionCollection()->action("select")->activate();
+
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
     m_chordNameRuler->repaint();

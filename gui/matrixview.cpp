@@ -366,7 +366,10 @@ void MatrixView::setupActions()
 
     createGUI(getRCFileName());
 
-    actionCollection()->action("select")->activate();
+    if (getSegmentsOnlyRests())
+        actionCollection()->action("paint")->activate();
+    else
+        actionCollection()->action("select")->activate();
 }
 
 void MatrixView::initStatusBar()
