@@ -37,16 +37,13 @@ public:
     virtual ~QCanvasSimpleSprite();
 
 protected:
-    QCanvasPixmapArray *m_pixmapArray;
+    QCanvasPixmapArray* m_pixmapArray;
 
-    static QCanvasPixmapArray* makePixmapArray(QCanvasSimpleSprite*,
-                                               QPixmap *pixmap);
+    static QCanvasPixmapArray* makePixmapArray(QPixmap *pixmap);
 
-    static QCanvasPixmapArray* makePixmapArray(QCanvasSimpleSprite*,
-                                               QCanvasPixmap *pixmap);
+    static QCanvasPixmapArray* makePixmapArray(QCanvasPixmap *pixmap);
 
-    static QCanvasPixmapArray* makePixmapArray(QCanvasSimpleSprite*,
-                                               const QString &pixmapfile);
+    static QCanvasPixmapArray* makePixmapArray(const QString &pixmapfile);
 
 };
 
@@ -60,12 +57,28 @@ class QCanvasNotationSprite : public QCanvasSimpleSprite
 public:
     QCanvasNotationSprite(NotationElement&, QPixmap*, QCanvas*);
     QCanvasNotationSprite(NotationElement&, QCanvasPixmap*, QCanvas*);
+
+    virtual ~QCanvasNotationSprite();
     
     NotationElement& getNotationElement() { return m_notationElement; }
     
 protected:
     NotationElement& m_notationElement;
 
+};
+
+
+/**
+ * A GC for QCanvasPixmapArray which have to be deleted seperatly
+ */
+class PixmapArrayGC
+{
+public:
+    static void registerForDeletion(QCanvasPixmapArray*);
+    static void deleteAll();
+    
+protected:
+    static std::vector<QCanvasPixmapArray*> m_pixmapArrays;
 };
 
 

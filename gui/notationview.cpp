@@ -1466,6 +1466,8 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
                                   (staffNo >= 0 && (int)i != staffNo));
         showBars(i);
     }
+
+    PixmapArrayGC::deleteAll();
 }
 
 

@@ -19,72 +19,89 @@
     COPYING included with this distribution for more information.
 */
 
+#include <vector>
+
 #include "qcanvassimplesprite.h"
+#include "rosedebug.h"
 
 QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas)
-    : QCanvasSprite(makePixmapArray(this, pixmap), canvas)
+    : QCanvasSprite(0, canvas),
+      m_pixmapArray(0)
 {
+    m_pixmapArray = makePixmapArray(pixmap);
+    setSequence(m_pixmapArray);
 }
 
 QCanvasSimpleSprite::QCanvasSimpleSprite(QCanvasPixmap *pixmap, QCanvas *canvas)
-    : QCanvasSprite(makePixmapArray(this, pixmap), canvas)
+    : QCanvasSprite(0, canvas),
+      m_pixmapArray(0)
 {
+    m_pixmapArray = makePixmapArray(pixmap);
+    setSequence(m_pixmapArray);
 }
 
 QCanvasSimpleSprite::QCanvasSimpleSprite(const QString &pixmapfile,
                                          QCanvas *canvas)
-    : QCanvasSprite(makePixmapArray(this, pixmapfile), canvas)
+    : QCanvasSprite(0, canvas),
+      m_pixmapArray(0)
 {
+    m_pixmapArray = makePixmapArray(pixmapfile);
+    setSequence(m_pixmapArray);
 }
 
 QCanvasSimpleSprite::~QCanvasSimpleSprite()
 {
-    // don't delete m_pixmapArray or I get a core dump.
+    PixmapArrayGC::registerForDeletion(m_pixmapArray);
+    m_pixmapArray = 0;
 
-    // TODO: However it doesn't seems that the QCanvasSprite actually
-    // deletes it. Something fishy going on here.
+    // We can't delete m_pixmapArray or we get a core dump.
+    //
+    // The reason I think is that after the QCanvasSprite is deleted,
+    // it is removed from the QCanvas, which therefore needs the
+    // pixmaps to know how to update itself (the crash is in
+    // QCanvas::removeChunks(), usually).
+    //
+    // So instead we have to do this GCish
+    // thingy. PixmapArrayGC::deleteAll() is called by
+    // NotationView::redoLayout
 }
 
 QCanvasPixmapArray*
-QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
-                                     QPixmap *pixmap)
+QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
 {
     QList<QPixmap> pixlist;
-    pixlist.setAutoDelete(TRUE);
+    pixlist.setAutoDelete(true); // the QCanvasPixmapArray creates its
+                                 // own copies of the pixmaps, so we
+                                 // can delete the one we're passed
     pixlist.append(pixmap);
 
     QList<QPoint> spotlist;
-    spotlist.setAutoDelete(TRUE);
+    spotlist.setAutoDelete(true);
     spotlist.append(new QPoint(0,0));
 
-    self->m_pixmapArray = new QCanvasPixmapArray(pixlist, spotlist);
-
-    return self->m_pixmapArray;
+    return new QCanvasPixmapArray(pixlist, spotlist);
 }
 
 QCanvasPixmapArray*
-QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
-                                     QCanvasPixmap *pixmap)
+QCanvasSimpleSprite::makePixmapArray(QCanvasPixmap *pixmap)
 {
     QList<QPixmap> pixlist;
-    pixlist.setAutoDelete(TRUE);
+    pixlist.setAutoDelete(true); // the QCanvasPixmapArray creates its
+                                 // own copies of the pixmaps, so we
+                                 // can delete the one we're passed
     pixlist.append(pixmap);
 
     QList<QPoint> spotlist;
-    spotlist.setAutoDelete(TRUE);
+    spotlist.setAutoDelete(true);
     spotlist.append(new QPoint(pixmap->offsetX(),pixmap->offsetY()));
 
-    self->m_pixmapArray = new QCanvasPixmapArray(pixlist, spotlist);
-
-    return self->m_pixmapArray;
+    return  new QCanvasPixmapArray(pixlist, spotlist);
 }
 
 QCanvasPixmapArray*
-QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
-                                     const QString &pixmapfile)
+QCanvasSimpleSprite::makePixmapArray(const QString &pixmapfile)
 {
-    self->m_pixmapArray = new QCanvasPixmapArray(pixmapfile);
-    return self->m_pixmapArray;
+    return new QCanvasPixmapArray(pixmapfile);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -104,3 +121,27 @@ QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
       m_notationElement(n)
 {
 }
+
+QCanvasNotationSprite::~QCanvasNotationSprite()
+{
+}
+
+//////////////////////////////////////////////////////////////////////
+
+void PixmapArrayGC::registerForDeletion(QCanvasPixmapArray* array)
+{
+    m_pixmapArrays.push_back(array);
+}
+
+void PixmapArrayGC::deleteAll()
+{
+    kdDebug(KDEBUG_AREA) << "PixmapArrayGC::deleteAll() : "
+                         << m_pixmapArrays.size() << " pixmap arrays to delete\n";
+
+    for (unsigned int i = 0; i < m_pixmapArrays.size(); ++i)
+        delete m_pixmapArrays[i];
+    
+    m_pixmapArrays.clear();
+}
+
+std::vector<QCanvasPixmapArray*> PixmapArrayGC::m_pixmapArrays;
