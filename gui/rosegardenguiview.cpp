@@ -199,7 +199,14 @@ void RosegardenGUIView::print(KPrinter *printer, Composition* p)
     NotationView *notationView = new NotationView(getDocument(),
                                                   segmentsToEdit,
                                                   printer);
-    // For debug
+
+    if (!notationView->isOK()) {
+	RG_DEBUG << "RosegardenGUIView::print : operation cancelled\n";
+	delete notationView;
+	return;
+    }
+    
+    // For debug - show what's going to be printed
     notationView->show();
     kapp->processEvents();
     // For debug - end
@@ -328,6 +335,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	new NotationView(getDocument(), segmentsToEdit, this);
 
     if (!notationView->isOK()) {
+	RG_DEBUG << "slotEditSegmentNotation : operation cancelled\n";
         sM->setSequencerSliceSize(Rosegarden::RealTime(0, 0));
 	delete notationView;
 	return;

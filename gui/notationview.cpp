@@ -323,30 +323,41 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setPageMode(layoutMode == 1);
 
     try {
-	bool layoutApplied = applyLayout();
-	if (!layoutApplied) {
-	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-	} else {
-	    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        bool layoutApplied = applyLayout();
+        if (!layoutApplied) {
+            KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+        } else {
+            for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+                m_staffs[i]->renderAllElements();
+                m_staffs[i]->positionAllElements();
+                m_staffs[i]->getSegment().getRefreshStatus
+                    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
 		
-		m_staffs[i]->renderAllElements();
-		m_staffs[i]->positionAllElements();
-		m_staffs[i]->getSegment().getRefreshStatus
-		    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-		
-		canvas()->update();
-	    }
-	}
-	m_ok = true;
+                canvas()->update();
+
+            }
+        }
+
+        m_ok = true;
+
     } catch (ProgressReporter::Cancelled c) {
-	m_ok = false;
 	// when cancelled, m_ok is false -- checked by calling method
+        NOTATION_DEBUG << "NotationView ctor : layout Cancelled\n";
     }
+    
+    NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
+    
 
     //
     // Setup default progress (the progress bar in the status bar)
     //
     delete progressDlg;
+
+    // at this point we can return if operation was cancelled
+    if (!isOK()) return;
+
+    // otherwise, carry on
     setupDefaultProgress();
 
     //
@@ -428,6 +439,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	// oops
 	refreshSegment(0, 0, 0);
     }
+
+    NOTATION_DEBUG << "NotationView ctor exiting\n";
 }
 
 //
@@ -547,6 +560,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     } catch (ProgressReporter::Cancelled c) {
 	// when cancelled, m_ok is false -- checked by calling method
     }
+
+    if (!isOK()) return; // In case more core is added there later
+
 }
 
 
@@ -2336,7 +2352,7 @@ void NotationView::setupProgress(KProgress* bar)
                     bar,         SLOT(advance(int)));
         }
     }
-    
+
 }
 
 void NotationView::setupProgress(RosegardenProgressDialog* dialog)
@@ -2350,10 +2366,14 @@ void NotationView::setupProgress(RosegardenProgressDialog* dialog)
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             connect(m_staffs[i], SIGNAL(setOperationName(QString)),
                     dialog,      SLOT(slotSetOperationName(QString)));
+
+            connect(dialog, SIGNAL(cancelClicked()),
+                    m_staffs[i], SLOT(slotCancel()));
+                    
         }
     
         connect(this, SIGNAL(setOperationName(QString)),
-                dialog,      SLOT(slotSetOperationName(QString)));
+                dialog, SLOT(slotSetOperationName(QString)));
         m_progressDisplayer = PROGRESS_DIALOG;
     }
     

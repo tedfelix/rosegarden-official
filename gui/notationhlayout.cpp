@@ -292,6 +292,8 @@ NotationHLayout::legatoQuantize(Segment &segment)
 void
 NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 {
+    throwIfCancelled();
+
     START_TIMING;
     
     KConfig *config = kapp->config();
@@ -505,7 +507,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    kapp->processEvents(50);
 	}
 
-        if (isOperationCancelled()) throw Cancelled();
+        throwIfCancelled();
 	++barNo;
     }
 
@@ -1088,7 +1090,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
         emit setProgress(100 * staffNo / m_barData.size());
         kapp->processEvents(50);
 
-        if (isOperationCancelled()) throw Cancelled();
+        throwIfCancelled();
 
         timeT timeCovered = endTime - startTime;
 	    
@@ -1134,7 +1136,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     double x = 0, barX = 0;
     TieMap tieMap;
-    resetOperationCancelledState();
 
     timeT lastIncrement =
 	(isFullLayout && (notes->begin() != notes->end())) ?
@@ -1323,7 +1324,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		    lastIncrement +=
 			(sinceIncrement / m_timePerProgressIncrement)
 			* m_timePerProgressIncrement;
-		    if (isOperationCancelled()) throw Cancelled();
+		    throwIfCancelled();
 		}
 	    }
         }
@@ -1678,7 +1679,6 @@ NotationHLayout::reset()
     m_barData.clear();
     m_barPositions.clear();
     m_totalWidth = 0;
-    resetOperationCancelledState();
 }
 
 void

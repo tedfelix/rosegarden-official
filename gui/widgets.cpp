@@ -244,7 +244,6 @@ void RosegardenProgressDialog::slotCancel()
 {
     RG_DEBUG << "RosegardenProgressDialog::slotCancel()\n";
     KProgressDialog::slotCancel();
-    emit operationCancelled();
 }
 
 void RosegardenProgressDialog::slotCheckShow(int)

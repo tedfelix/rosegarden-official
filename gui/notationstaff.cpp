@@ -328,7 +328,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
     emit setProgress(0);
     kapp->processEvents();
-    if (isOperationCancelled()) throw Cancelled();//!!!
+
+    throwIfCancelled();//!!!
 
     Clef currentClef; // default is okay to start with
 
@@ -360,7 +361,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	    timeT myTime = (*it)->getAbsoluteTime();
 	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
 	    kapp->processEvents();
-	    if (isOperationCancelled()) throw Cancelled();//!!!
+	    throwIfCancelled();//!!!
 	}
     }
 
@@ -379,7 +380,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
     kapp->processEvents();
-    if (isOperationCancelled()) throw Cancelled();//!!!
+    throwIfCancelled();//!!!
 
     const NotationProperties &properties(m_notationView->getProperties());
 
@@ -482,7 +483,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    timeT myTime = (*it)->getAbsoluteTime();
 	    emit setProgress((myTime - from) * 100 / (to - from));
 	    kapp->processEvents();
-	    if (isOperationCancelled()) throw Cancelled();//!!!
+	    throwIfCancelled();//!!!
 	}
     }
 
