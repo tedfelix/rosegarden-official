@@ -97,8 +97,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
     emit mouseMove(e);
 }
 
-void
-NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
+void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
@@ -107,8 +106,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         return;
     }
     
-    kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
-                         << "(no longer relevant)" << endl;
+    kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note\n";
 
     // Check if we haven't actually clicked on a sprite
     //
