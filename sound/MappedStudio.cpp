@@ -206,12 +206,14 @@ MappedObject::destroyChildren()
     while (!dynamic_cast<MappedStudio*>(studioObject))
         studioObject = studioObject->getParent();
 
-    std::vector<MappedObject*>::iterator it = m_children.begin();
-    for (; it != m_children.end(); it++)
+    // see note in destroy() below
+    
+    std::vector<MappedObject *> children = m_children;
+    m_children.clear();
+
+    std::vector<MappedObject *>::iterator it = children.begin();
+    for (; it != children.end(); it++)
         (*it)->destroy(); // remove from studio and destroy
-
-    m_children.erase(m_children.begin(), m_children.end());
-
 }
 
 // Destroy this object and remove it from the studio and 
@@ -220,17 +222,30 @@ MappedObject::destroyChildren()
 void
 MappedObject::destroy()
 {
+    std::cerr << "MappedObject::destroy(" << this << ")" << std::endl;
+
     MappedObject *studioObject = getParent();
     while (!dynamic_cast<MappedStudio*>(studioObject))
         studioObject = studioObject->getParent();
 
     MappedStudio *studio = dynamic_cast<MappedStudio*>(studioObject);
+
+    // The destroy method on each child calls studio->clearObject,
+    // which calls back on the parent (in this case us) to remove the
+    // child.  (That's necessary for the case of destroying a plugin,
+    // where we need to remove it from its plugin manager -- etc.)  So
+    // we don't want to be iterating over m_children here, as it will
+    // change from under us.
+
+    std::vector<MappedObject *> children = m_children;
+    m_children.clear();
     
-    std::vector<MappedObject*>::iterator it = m_children.begin();
-    for (; it != m_children.end(); it++)
-    {
+    std::vector<MappedObject *>::iterator it = children.begin();
+    for (; it != children.end(); it++) {
         (*it)->destroy();
     }
+
+    std::cerr << "MappedObject::destroy(" << this << "): removing from studio and topping myself" << std::endl;
 
     (void)studio->clearObject(m_id);
     delete this;
@@ -374,6 +389,12 @@ MappedStudio::createObject(MappedObjectType type,
 
         // push to the plugin manager's child stack
         mLP->addChild(mO);
+
+	std::cerr << "Adding plugin object " << id << " to manager: its children now are: " << std::endl;
+	std::vector<MappedObject *> children = mLP->getChildObjects();
+	for (int i = 0; i < children.size(); ++i) {
+	    std::cerr << children[i]->getId() << std::endl;
+	}
     }
     else if (type == MappedObject::LADSPAPort)
     {
@@ -386,6 +407,8 @@ MappedStudio::createObject(MappedObjectType type,
     // Insert
     if (mO)
     {
+	std::cerr << "Adding object " << id << " to category " << type << std::endl;
+
         m_objects[type][id] = mO;
     }
 
@@ -530,6 +553,16 @@ MappedStudio::clearObject(MappedObjectId id)
 
 	MappedObjectCategory::iterator j = i->second.find(id);
 	if (j != i->second.end()) {
+	    std::cerr << "MappedStudio::clearObject: removing object "
+		      << id << " (address " << j->second << ") from category " << i->first << std::endl;
+
+	    // if the object has a parent other than the studio,
+	    // persuade that parent to abandon it
+	    MappedObject *parent = j->second->getParent();
+	    if (parent && !dynamic_cast<MappedStudio *>(parent)) {
+		parent->removeChild(j->second);
+	    }
+
 	    i->second.erase(j);
 	    rv = true;
 	    break;
@@ -641,6 +674,14 @@ MappedStudio::clearTemporaries()
 	    ++k;
 
 	    if (!j->second->isReadOnly()) {
+
+		// if the object has a parent other than the studio,
+		// persuade that parent to abandon it
+		MappedObject *parent = j->second->getParent();
+		if (parent && !dynamic_cast<MappedStudio *>(parent)) {
+		    parent->removeChild(j->second);
+		}
+
 		delete j->second;
 		i->second.erase(j);
 	    } else {
@@ -1501,6 +1542,8 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
               << "unloading plugin " << uniqueId << std::endl;
 #endif
 
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
     // Find the plugin
     //
     MappedLADSPAPlugin *plugin =
@@ -1512,6 +1555,7 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
         std::cerr << "MappedAudioPluginManager::unloadPlugin - "
                   << "can't find plugin to unload" << std::endl;
 #endif
+	pthread_mutex_unlock(&_mappedObjectContainerLock);
         return;
     }
 
@@ -1534,6 +1578,7 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
         std::cout << "MappedAudioPluginManager::unloadPlugin - "
                   << "can't find plugin library to unload" << std::endl;
 #endif
+	pthread_mutex_unlock(&_mappedObjectContainerLock);
         return;
     }
 
@@ -1542,14 +1587,18 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
     std::vector<unsigned long> list = getPluginsInLibrary(pluginHandle);
     std::vector<unsigned long>::iterator pIt = list.begin();
 
-//!!! locks here?
-
-    //std::cout << list.size() << " plugins in library" << std::endl;
+    std::cout << list.size() << " plugins in library" << std::endl;
 
     for (; pIt != list.end(); pIt++)
     {
-        if (getPluginInstance(*pIt, false))
+	std::cout << "inspecting one of 'em" << std::endl;
+
+        if (getPluginInstance(*pIt, false)) {
+	    std::cout << "still in use, returning" << std::endl;
+
+	    pthread_mutex_unlock(&_mappedObjectContainerLock);
             return;
+	}
     }
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1560,7 +1609,7 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
 
     dlclose(pluginHandle);
     m_pluginHandles.erase(it);
-
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
 }
 
 void
@@ -1771,6 +1820,8 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
                                             bool readOnly)
 {
 #ifdef HAVE_LADSPA
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
     std::vector<MappedObject*>::iterator it = m_children.begin();
 
     std::cerr << "MappedAudioPluginManager::getPluginInstance: looking for "
@@ -1784,10 +1835,17 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(*it);
 
-            if (plugin->getUniqueId() == uniqueId)
+	    std::cerr << "Looking at plugin at " << *it << " (type " << (*it)->getType() << ", id " << (*it)->getId() << ")" << std::endl;
+
+            if (plugin->getUniqueId() == uniqueId) {
+		pthread_mutex_unlock(&_mappedObjectContainerLock);
+		std::cerr << "it's the one" << std::endl;
                 return *it;
+	    }
         }
     }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
 
 #endif // HAVE_LADSPA
 
@@ -1831,11 +1889,11 @@ MappedAudioPluginManager::getPluginInstance(InstrumentId instrument,
 
 MappedLADSPAPlugin::~MappedLADSPAPlugin()
 {
+    std::cout << "MappedLADSPAPlugin::~MappedLADSPAPlugin (" << this << ")" << std::endl;
+
     /*
     MappedStudio *studio =
         dynamic_cast<MappedStudio*>(getParent()->getParent());
-
-    std::cout << "MappedLADSPAPlugin::~MappedLADSPAPlugin" << std::endl;
 
     if (studio)
     {
@@ -2243,21 +2301,38 @@ MappedObjectValue
 MappedLADSPAPort::getDefault() const
 {
     if (m_haveDefault) {
+	std::cerr << "MappedLADSPAPort::getDefault: have set default of " << m_default << std::endl;
 	return m_default;
     }
 
     LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
     LADSPA_Data min = getMinimum(), max = getMaximum();
 
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedLADSPAPort::getDefault: min is " << min
+	      << ", max is " << max << std::endl;
+#endif
+
     bool logarithmic = LADSPA_IS_HINT_LOGARITHMIC(d);
     
-    if (!LADSPA_IS_HINT_HAS_DEFAULT(d)) return min;
+    if (!LADSPA_IS_HINT_HAS_DEFAULT(d)) {
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedLADSPAPort::getDefault: no default" << std::endl;
+#endif
+	return min;
+    }
 
     if (LADSPA_IS_HINT_DEFAULT_MINIMUM(d)) {
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedLADSPAPort::getDefault: min default" << std::endl;
+#endif
 	return min;
     }
 
     if (LADSPA_IS_HINT_DEFAULT_LOW(d)) {
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedLADSPAPort::getDefault: low default" << std::endl;
+#endif
 	if (logarithmic) {
 	    return powf(10, log10(min) * 0.75 + log10(max) * 0.25);
 	} else {
@@ -2266,6 +2341,9 @@ MappedLADSPAPort::getDefault() const
     }
 
     if (LADSPA_IS_HINT_DEFAULT_MIDDLE(d)) {
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedLADSPAPort::getDefault: middle default" << std::endl;
+#endif
 	if (logarithmic) {
 	    return powf(10, log10(min) * 0.5 + log10(max) * 0.5);
 	} else {
@@ -2274,6 +2352,9 @@ MappedLADSPAPort::getDefault() const
     }
 
     if (LADSPA_IS_HINT_DEFAULT_HIGH(d)) {
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedLADSPAPort::getDefault: high default" << std::endl;
+#endif
 	if (logarithmic) {
 	    return powf(10, log10(min) * 0.25 + log10(max) * 0.75);
 	} else {
@@ -2282,6 +2363,9 @@ MappedLADSPAPort::getDefault() const
     }
 
     if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(d)) {
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "MappedLADSPAPort::getDefault: max default" << std::endl;
+#endif
 	return max;
     }
 

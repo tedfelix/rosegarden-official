@@ -326,8 +326,6 @@ private:
     typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
     MappedObjectMap m_objects;
     
-//    std::vector<MappedObject*> m_objects;
-
     // Sequencer object
     //
     Rosegarden::Sequencer     *m_sequencer;
