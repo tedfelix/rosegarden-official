@@ -434,7 +434,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");
 
-    new KAction(i18n("&Relabel Segments"),
+    new KAction(i18n("Re&label Segments"),
                 0,
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
