@@ -126,8 +126,14 @@ Some more observations
  * The name you give a Device and the banks and programs you assign to
    it are entirely between you, the GUI and the .rg file.  The sequencer
    never knows about them.  The sequencer provides default names on
-   startup, but autoload.rg and any other .rg file you load should
-   override them (if the devices in those files are actually named).
+   startup ("Hardware MIDI Device 2"), but autoload.rg and any other .rg
+   file you load should override them -- if the devices in those files are
+   actually named -- I'm inclined to think the default autoload.rg should
+   include several devices but not name them -- there's a complication
+   generally in how you deal with devices listed in autoload that
+   outnumber the available connections -- one possible hack might be to
+   show them only if they have names (and then without a connection). Ew.
+   Room for experimentation.
 
  * Adding and removing Devices _from the GUI_ needs to percolate through
    to the sequencer, which has to add and remove the Devices in its list

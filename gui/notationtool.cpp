@@ -916,7 +916,7 @@ void NotationEraser::slotToggleRestCollapse()
 void NotationEraser::slotInsertSelected()
 {
     //!!! wire up to reactivate the last note used
-    m_parentView->actionCollection()->action("quarter")->activate();
+    m_parentView->actionCollection()->action("crotchet")->activate();
 }
 
 void NotationEraser::slotSelectSelected()
@@ -1188,7 +1188,7 @@ void NotationSelector::slotHideSelection()
 void NotationSelector::slotInsertSelected()
 {
     //!!! wire up to reactivate the last note used
-    m_parentView->actionCollection()->action("quarter")->activate();
+    m_parentView->actionCollection()->action("crotchet")->activate();
 }
 
 void NotationSelector::slotEraseSelected()

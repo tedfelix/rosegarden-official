@@ -1,0 +1,52 @@
+// -*- c-basic-offset: 4 -*-
+
+/*
+    Rosegarden-4
+    A sequencer and musical notation editor.
+
+    This program is Copyright 2000-2002
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+
+#ifndef _DEVICEEDITOR_H_
+#define _DEVICEEDITOR_H_
+
+#include <kdialogbase.h>
+
+class RosegardenGUIDoc;
+class QTable;
+namespace Rosegarden { class Studio; }
+
+
+class DeviceEditorDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
+
+protected slots:
+    void slotAddDevice();
+    void slotDeleteDevice();
+    void slotValueChanged(int row, int col);
+
+private:
+    RosegardenGUIDoc *m_document;
+    Rosegarden::Studio *m_studio;
+    
+    QTable *m_table;
+    
+};
+
+#endif

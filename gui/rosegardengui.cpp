@@ -88,6 +88,7 @@
 #include "audiopluginmanager.h"
 #include "studiocontrol.h"
 #include "bankeditor.h"
+#include "deviceeditor.h"
 #include "midifilter.h"
 #include "SegmentNotationHelper.h"
 #include "Clipboard.h"
@@ -550,6 +551,10 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "edit_doc_properties");
 
     new KAction(i18n("Manage MIDI &Devices..."), 0, this,
+                SLOT(slotEditDevices()),
+                actionCollection(), "manage_devices");
+
+    new KAction(i18n("Manage MIDI &Banks and Programs..."), 0, this,
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
 
@@ -3987,6 +3992,23 @@ RosegardenGUIApp::slotChangeCompositionLength()
 }
 
  
+void
+RosegardenGUIApp::slotEditDevices()
+{
+    DeviceEditorDialog dialog(this, m_doc);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        RG_DEBUG << "slotEditDevices - accepted" << endl;
+    }
+
+    // Crudely force update
+    //
+//    if (m_view)
+//       m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+
+}
+
 void
 RosegardenGUIApp::slotEditBanks()
 {

@@ -67,6 +67,7 @@
   </Menu>
   <Menu name="Studio">
         <text>&amp;Studio</text>
+        <Action name="manage_devices"/>
         <Action name="modify_banks"/>
         <Action name="modify_midi_filters"/>
   </Menu>
@@ -225,10 +226,6 @@
 </State>
 
 <State name="got_midi_devices">
-     <disable>
-       <Action name="modify_banks"/>
-       <Action name="remap_instruments"/>
-     </disable>
      <enable>
        <Action name="modify_banks"/>
        <Action name="remap_instruments"/>

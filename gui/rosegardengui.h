@@ -616,6 +616,11 @@ public slots:
     void slotEditDocumentProperties();
 
     /**
+     * Edit Devices
+     */
+    void slotEditDevices();
+
+    /**
      * Edit Banks/Programs
      */
     void slotEditBanks();

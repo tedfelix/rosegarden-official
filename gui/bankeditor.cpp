@@ -546,7 +546,7 @@ MidiProgramsEditor::setBankName(const QString& s)
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
     KDialogBase(parent, "bankeditordialog", true,
-                i18n("Manage MIDI Devices..."),
+                i18n("Manage MIDI Banks and Programs"),
                 Ok | Apply | Close,
                 Ok, true),
     m_studio(&doc->getStudio()),
@@ -568,7 +568,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     //
     QVBox* leftPart = new QVBox(splitter);
     m_listView = new KListView(leftPart);
-    m_listView->addColumn(i18n("Midi Device"));
+    m_listView->addColumn(i18n("MIDI Device"));
     m_listView->addColumn(i18n("MSB"));
     m_listView->addColumn(i18n("LSB"));
     m_listView->setRootIsDecorated(true);
@@ -685,13 +685,11 @@ BankEditorDialog::initDialog()
         if ((*it)->getType() == Rosegarden::Device::Midi)
         {
             Rosegarden::MidiDevice* midiDevice = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+	    if (!midiDevice) continue;
             
-	    if (midiDevice)
-	    {
-		// skip read-only devices
-		if (midiDevice->getDirection() == Rosegarden::MidiDevice::ReadOnly)
-		    continue;
-	    }
+	    // skip read-only devices
+	    if (midiDevice->getDirection() == Rosegarden::MidiDevice::ReadOnly)
+		continue;
 
             m_deviceList.push_back(midiDevice->getName());
             QString itemName = strtoqstr(midiDevice->getName());

@@ -13,6 +13,7 @@ rosegarden_SOURCES = \
 	colours.cpp \
         controlruler.cpp \
 	csoundio.cpp \
+	deviceeditor.cpp \
 	dialogs.cpp \
 	editcommands.cpp \
 	edittool.cpp \

@@ -1212,8 +1212,10 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
             m_deviceLabel->setText(label);
         }
         else
-#endif
 	    m_deviceLabel->setText(strtoqstr(instrument->getDevice()->getName()));
+#else
+	m_deviceLabel->setText(i18n("Connection: %1").arg(strtoqstr(instrument->getDevice()->getConnection())));
+#endif
 
     } else {
 	m_deviceLabel->setText("");

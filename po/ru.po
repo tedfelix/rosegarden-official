@@ -190,7 +190,7 @@ msgid "Manage MIDI Devices..."
 msgstr "Настройка MIDI-устройств..."
 
 #: bankeditor.cpp:541
-msgid "Midi Device"
+msgid "MIDI Device"
 msgstr "MIDI-устройство"
 
 #: bankeditor.cpp:542

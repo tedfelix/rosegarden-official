@@ -332,7 +332,7 @@ AlsaDriver::generateInstruments()
     m_alsaPorts.clear();
 #ifdef EXPERIMENTAL_ALSA_DRIVER
     m_devicePortMap.clear();
-    int systemClientNo = 0, hardwareClientNo = 0, softwareClientNo = 0;
+    int systemClientNo = 1, hardwareClientNo = 1, softwareClientNo = 1;
 #endif
 
     std::cout << std::endl << "  ALSA Client information:"
@@ -645,6 +645,10 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 #ifdef EXPERIMENTAL_ALSA_DRIVER
 	cout << "AlsaDriver: connection is " << connectionName << endl;
 	device->setConnection(connectionName);
+	//!!! need to keep port map in sync with changes to this --
+	// or perhaps abandon port map & store alsa connection object with
+	// alsa port name capable of returning its synthesised connection
+	// name?
 #endif
         m_devices.push_back(device);
     }
