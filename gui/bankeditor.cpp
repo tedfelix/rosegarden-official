@@ -143,6 +143,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 
             KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
             lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
+            lineEdit->setCompletionObject(&m_completion);
             m_programNames.push_back(lineEdit);
 
             connect(m_programNames[labelId],
@@ -169,6 +170,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 
             KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
             lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
+            lineEdit->setCompletionObject(&m_completion);
             m_programNames.push_back(lineEdit);
 
             connect(m_programNames[labelId],
@@ -272,7 +274,9 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->program == i) {
-                m_programNames[i]->setText(strtoqstr(it->name));
+                QString programName = strtoqstr(it->name);
+                m_completion.addItem(programName);
+                m_programNames[i]->setText(programName);
                 break;
             }
         }

@@ -24,6 +24,7 @@
 
 #include <vector>
 
+#include <kcompletion.h>
 #include <kdialogbase.h>
 #include <qlistview.h>
 #include <qvgroupbox.h>
@@ -133,6 +134,7 @@ protected:
     //--------------- Data members ---------------------------------
     BankEditorDialog*        m_bankEditor;
 
+    KCompletion              m_completion;
     std::vector<KLineEdit*>  m_programNames;
 
     QFrame                   *m_mainFrame;
