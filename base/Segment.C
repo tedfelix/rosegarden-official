@@ -37,14 +37,14 @@ using std::string;
     
 
 
-Segment::Segment(timeT startIdx) :
+Segment::Segment(SegmentType segmentType, timeT startIdx) :
     std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
     m_track(0),
     m_id(0),
     m_composition(0),
-    m_wavFileName(""),
-    m_wavID(0)
+    m_type(segmentType),
+    m_audioFileID(0)
 {
     // nothing
 }

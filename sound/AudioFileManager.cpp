@@ -19,6 +19,10 @@
 */
 
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
 #include "AudioFile.h"
 #include "AudioFileManager.h"
 
@@ -40,9 +44,15 @@ int
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName)
 {
+    // see if we can find the file
+    std::string foundFileName = getFileInPath(fileName);
+
+    if (foundFileName == "")
+        return false;
+
     unsigned int id = getFirstUnusedID();
 
-    AudioFile *aF = new AudioFile(id, name, fileName);
+    AudioFile *aF = new AudioFile(id, name, foundFileName);
 
     // if we don't recognise the file then don't insert it
     //
@@ -104,11 +114,17 @@ AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName,
                              const unsigned int &id)
 {
+    std::string foundFileName = getFileInPath(fileName);
+
+    if (foundFileName == "")
+        return false;
+
     // make sure we don't have one hanging around already
     removeFile(id);
 
+
     // and insert
-    AudioFile *aF = new AudioFile(id, name, fileName);
+    AudioFile *aF = new AudioFile(id, name, foundFileName);
 
     if (aF->open() == false)
     {
@@ -132,8 +148,6 @@ AudioFileManager::addSearchPath(const std::string &path)
     if (hPath[hPath.size() - 1] != '/')
         hPath += std::string("/");
 
-    cout << "PATH = " << hPath << endl;
-
     m_audioSearchPath.push_back(hPath);
 }
 
@@ -145,13 +159,39 @@ AudioFileManager::addSearchPath(const std::string &path)
 std::string
 AudioFileManager::getFileInPath(const std::string &file)
 {
+    std::string search;
+    std::string rS;
+    std::ifstream *fd; // check our file can be found
+
+    rS = "";
+
+    // if we lead with a '/' then assume we have an
+    // absolute path already
+    //
+    if (file[0] == '/')
+        return file;
+
     std::vector<std::string>::iterator it;
+
     for (it = m_audioSearchPath.begin();
          it != m_audioSearchPath.end();
          it++)
     {
+        search = (*it) + file;
+
+        // Check we can open the file and return if we can
+        //
+        fd = new ifstream(search.c_str(), ios::in | ios::binary);
+        if (*fd)
+        {
+            rS = search;
+            fd->close();
+            break;
+        }
+        fd->close();
     }
-    return string("");
+
+    return rS;
 }
 
 

@@ -58,10 +58,20 @@ class Composition;
 class Segment : public std::multiset<Event*, Event::EventCmp>
 {
 public:
+
+    // A Segment contains either Internal representation or Audio
+    //
+    typedef enum {
+        Internal,
+        Audio
+    } SegmentType;
+
     /**
-     * Construct a Segment with a given formal starting time.
+     * Construct a Segment of a given type with a given formal starting time.
      */
-    Segment(timeT startIdx = 0);
+    Segment(SegmentType segmentType = Internal,
+            timeT startIdx = 0);
+
     virtual ~Segment();
 
     /**
@@ -279,17 +289,14 @@ public:
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
     void removeObserver(SegmentObserver *obs) { m_observers.erase (obs); }
 
-
-    // Get and set WAV file name
+    // Get and set Audio file ID (see the AudioFileManager)
     //
-    string getWavFileName() const { return m_wavFileName; }
-    void setWavFileName(const string &wavFileName) 
-        { m_wavFileName = wavFileName; }
+    unsigned int getAudioFile() const { return m_audioFileID; }
+    void setAudioFile(const unsigned int &id) { m_audioFileID = id; }
 
-    // Get and set WAV ID - identifies beyond filename
+    // Get the Segment type (Internal or Audio)
     //
-    int getWavID() const { return m_wavID; }
-    void setWavID(const int &id) { m_wavID = id; }
+    SegmentType getType() const { return m_type; }
 
 private:
     timeT m_startIdx;
@@ -309,8 +316,8 @@ private:
     Segment(const Segment &);
     Segment &operator=(const Segment &);
 
-    string m_wavFileName;          // name of a .wav file 
-    int    m_wavID;
+    unsigned int m_audioFileID; // audio file ID (see AudioFileManager)
+    SegmentType m_type;         // identifies Segment type
 };
 
 

@@ -344,7 +344,17 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             startIndex = startIdxStr.toInt();
         }
         
-        m_currentSegment = new Segment;
+        Rosegarden::Segment::SegmentType sT;
+
+        QString segmentType = (atts.value("type")).lower();
+        if (segmentType) {
+            if (segmentType == "audio")
+                sT = Rosegarden::Segment::Audio;
+            else
+                sT = Rosegarden::Segment::Internal;
+        }
+    
+        m_currentSegment = new Segment(sT);
         m_currentSegment->setTrack(track);
         m_currentSegment->setStartIndex(startIndex);
 	m_currentTime = startIndex;

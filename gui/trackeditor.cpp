@@ -211,7 +211,9 @@ void TrackEditor::addSegment(int track, int start,
 
     Composition &comp = m_document->getComposition();
 
-    Rosegarden::Segment* segment = new Rosegarden::Segment(start);
+    Rosegarden::Segment* segment =
+        new Rosegarden::Segment(Rosegarden::Segment::Internal, start);
+
     segment->setTrack(track);
     comp.addSegment(segment);
     segment->setDuration(nbTimeSteps);

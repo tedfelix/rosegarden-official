@@ -35,12 +35,13 @@ BasicCommand::BasicCommand(const QString &name, Segment &segment,
 			   timeT begin, timeT end, bool bruteForceRedo) :
     KCommand(name),
     m_segment(segment),
-    m_savedEvents(begin),
+    m_savedEvents(segment.getType(), begin),
     m_endTime(end),
     m_doBruteForceRedo(false),
     m_redoEvents(0)
 {
-    if (bruteForceRedo) m_redoEvents = new Segment(begin);
+    if (bruteForceRedo)
+        m_redoEvents = new Segment(segment.getType(), begin);
 }
 
 BasicCommand::~BasicCommand()
