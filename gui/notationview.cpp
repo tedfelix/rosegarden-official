@@ -548,6 +548,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this,            SLOT(slotCheckRendered(double, double)));
 
     QObject::connect
+	(this,            SIGNAL(renderComplete()),
+	 getCanvasView(), SLOT(slotRenderComplete()));
+
+    QObject::connect
 	(m_topBarButtons->getLoopRuler(),
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));

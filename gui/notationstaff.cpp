@@ -1188,16 +1188,17 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
     m_ready = true;
 }
 
-void
+bool
 NotationStaff::checkRendered(timeT from, timeT to)
 {
-    if (!m_ready) return;
+    if (!m_ready) return false;
     Rosegarden::Composition *composition = getSegment().getComposition();
 
 //    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
 
     int fromBar = composition->getBarNumber(from);
     int toBar   = composition->getBarNumber(to);
+    bool something = false;
 
     if (fromBar > toBar) std::swap(fromBar, toBar);
 
@@ -1216,6 +1217,8 @@ NotationStaff::checkRendered(timeT from, timeT to)
 	    positionElements
 		(composition->getBarStart(bar),
 		 composition->getBarEnd(bar));
+
+	    something = true;
 	    
 	case Positioned:
 	    break;
@@ -1225,4 +1228,5 @@ NotationStaff::checkRendered(timeT from, timeT to)
     }
 
     m_lastRenderCheck = std::pair<int, int>(fromBar, toBar);
+    return something;
 }

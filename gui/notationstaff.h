@@ -151,8 +151,10 @@ public:
      * you are going to use this rendering mechanism, it's generally
      * wise to avoid explicitly calling
      * renderElements/positionElements as well.
+     *
+     * Returns true if something needed re-rendering.
      */
-    virtual void checkRendered(Rosegarden::timeT from,
+    virtual bool checkRendered(Rosegarden::timeT from,
 			       Rosegarden::timeT to);
 
     /**

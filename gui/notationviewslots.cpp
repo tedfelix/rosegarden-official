@@ -1905,6 +1905,8 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 void
 NotationView::slotCheckRendered(double cx0, double cx1)
 {
+    bool something = false;
+
     for (size_t i = 0; i < m_staffs.size(); ++i) {
 
 	NotationStaff *staff = m_staffs[i];
@@ -1918,8 +1920,10 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 	timeT t0 = m_hlayout->getTimeForX(cc0.first);
 	timeT t1 = m_hlayout->getTimeForX(cc1.first);
 
-	staff->checkRendered(t0, t1);
+	if (staff->checkRendered(t0, t1)) something = true;
     }
+
+    if (something) emit renderComplete();
 
     doDeferredCursorMove();
 }

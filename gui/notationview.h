@@ -630,6 +630,8 @@ signals:
 
     void stepByStepTargetRequested(QObject *);
 
+    void renderComplete();
+
 protected:
 
     virtual Rosegarden::RulerScale* getHLayout();

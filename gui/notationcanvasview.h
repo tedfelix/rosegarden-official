@@ -111,6 +111,9 @@ signals:
      * be carried out.
      */
     void renderRequired(double cx0, double cx1);
+
+public slots:
+     void slotRenderComplete();
     
 protected:
 
@@ -168,6 +171,9 @@ protected:
     bool m_legerLineOffset;
 
     bool m_heightTracking;
+
+    QPainter *m_renderPainter;
+    QRect m_lastRender;
 };
 
 

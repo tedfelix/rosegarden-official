@@ -43,7 +43,8 @@ NotationCanvasView::NotationCanvasView(const LinedStaffManager &staffmgr,
     m_currentStaff(0),
     m_currentHeight(-1000),
     m_legerLineOffset(false),
-    m_heightTracking(false)
+    m_heightTracking(false),
+    m_renderPainter(0)
 {
 // -- switching mandolin-sonatina first staff to page mode:
 // default params (I think 16,100): render 1000ms position 1070ms
@@ -402,9 +403,21 @@ NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element
 void
 NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
-    emit renderRequired(std::min(contentsX(), cx),
-			std::max(contentsX() + visibleWidth(), cx + cw));
+    m_renderPainter = p;
+    m_lastRender = QRect(cx, cy, cw, ch);
 
     QCanvasView::drawContents(p, cx, cy, cw, ch);
+
+    emit renderRequired(std::min(contentsX(), cx),
+			std::max(contentsX() + visibleWidth(), cx + cw));
 }
 
+void
+NotationCanvasView::slotRenderComplete()
+{
+    QCanvasView::drawContents(m_renderPainter,
+			      m_lastRender.x(),
+			      m_lastRender.y(),
+			      m_lastRender.width(),
+			      m_lastRender.height());
+}
