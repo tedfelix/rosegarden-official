@@ -75,17 +75,17 @@ Configuration::toXmlString()
     config << endl
            << "<configuration>" << endl
     
-           << "<" << MetronomePitch        << "type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
-           << "<" << MetronomeBarVelocity  << "type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
-           << "<" << MetronomeBeatVelocity << "type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
+           << "<" << MetronomePitch        << " type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
+           << "<" << MetronomeBarVelocity  << " type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
+           << "<" << MetronomeBeatVelocity << " type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
 
     RealTime r = get<RealTimeT>(FetchLatency);
     
-    config << "<" << FetchLatency << "type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
+    config << "<" << FetchLatency << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
 
     r =  get<RealTimeT>(MetronomeDuration);
 
-    config << "<" << MetronomeDuration << "type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
+    config << "<" << MetronomeDuration << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
 
     config << "</configuration>" << endl << std::ends;
 
