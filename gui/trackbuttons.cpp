@@ -621,11 +621,14 @@ TrackButtons::setRecordButtonDown(int position)
 void
 TrackButtons::selectLabel(int position)
 {
-    if (m_lastSelected >= 0)
+    if (m_lastSelected >= 0 && m_lastSelected < m_trackLabels.size()) {
         m_trackLabels[m_lastSelected]->setSelected(false);
-    m_trackLabels[position]->setSelected(true);
+    }
 
-    m_lastSelected = position;
+    if (position >= 0 && position < m_trackLabels.size()) {
+	m_trackLabels[position]->setSelected(true);
+	m_lastSelected = position;
+    }
 }
 
 
@@ -954,7 +957,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             // Ensure that we set a record track properly
             //
             if (track->getId() == comp.getRecordTrack())
-                slotSetRecordTrack(track->getId());
+                slotSetRecordTrack(track->getPosition());
 
         }
         else
