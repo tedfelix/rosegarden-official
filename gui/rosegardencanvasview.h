@@ -26,7 +26,7 @@
 
 #include <qcanvas.h>
 #include <qwmatrix.h>
-
+#include <qdatetime.h>
 
 class QScrollBar;
 class QGridLayout;
@@ -61,6 +61,8 @@ public:
 
     /// Map a point with the inverse world matrix
     QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
+
+    void setSmoothScroll(bool s) { m_smoothScroll = s; }
 
 public slots:
     /// Update the RosegardenCanvasView after a change of content
@@ -112,6 +114,10 @@ protected:
 
     QWidget* m_bottomWidget;
     int m_currentBottomWidgetHeight;
+
+    bool m_smoothScroll;
+    QTime m_hScrollTimer;
+    QTime m_vScrollTimer;
 };
 
 
