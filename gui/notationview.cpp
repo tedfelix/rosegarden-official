@@ -1419,7 +1419,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	}
     }
 
-    //!!! NEED TO UPDATE THIS STUFF AFTER COMMAND TOO
+    //!!! dup with refreshSegment, move to other fn somewhere
 
 #ifdef RGKDE3
     // Clear states first, then enter only those ones that apply
@@ -1428,10 +1428,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
-#endif
 
     if (s) {
-#ifdef RGKDE3
 	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
 	if (s->contains(Rosegarden::Note::EventType)) {
 	    stateChanged("have_notes_in_selection",
@@ -1441,8 +1439,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	    stateChanged("have_rests_in_selection",
 			 KXMLGUIClient::StateNoReverse);
 	}
-#endif
     }
+#endif
 
     updateView();
 }
@@ -1635,6 +1633,33 @@ void NotationView::refreshSegment(Segment *segment,
     doDeferredCursorMove();
 //!!!    slotSetInsertCursorPosition(m_insertionTime, false);
     slotSetPointerPosition(m_document->getComposition().getPosition(), false);
+
+
+    //!!! dup with setCurrentSelection, move to other fn somewhere
+
+#ifdef RGKDE3
+    // Clear states first, then enter only those ones that apply
+    // (so as to avoid ever clearing one after entering another, in
+    // case the two overlap at all)
+    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+
+    if (m_currentEventSelection) {
+	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+	if (m_currentEventSelection->contains
+	    (Rosegarden::Note::EventType)) {
+	    stateChanged("have_notes_in_selection",
+			 KXMLGUIClient::StateNoReverse);
+	}
+	if (m_currentEventSelection->contains
+	    (Rosegarden::Note::EventRestType)) {
+	    stateChanged("have_rests_in_selection",
+			 KXMLGUIClient::StateNoReverse);
+	}
+    }
+#endif
+
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }
