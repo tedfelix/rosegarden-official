@@ -372,14 +372,22 @@ SequenceManager::stop()
     // restore
     QApplication::restoreOverrideCursor();
 
+    TransportStatus status = m_transportStatus;
+    
+    // set new transport status first, so that if we're stopping
+    // recording we don't risk the record segment being restored by a
+    // timer while the document is busy trying to do away with it
+    m_transportStatus = STOPPED;
+
     // if we're recording MIDI or Audio then tidy up the recording Segment
-    if (m_transportStatus == RECORDING_MIDI)
+    if (status == RECORDING_MIDI)
     {
         m_doc->stopRecordingMidi();
+
         SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording MIDI\n";
     }
 
-    if (m_transportStatus == RECORDING_AUDIO)
+    if (status == RECORDING_AUDIO)
     {
         m_doc->stopRecordingAudio();
         SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording audio\n";
@@ -389,10 +397,6 @@ SequenceManager::stop()
     //
     m_transport->PlayButton()->setOn(false);
     SEQMAN_DEBUG << "SequenceManager::stop() - stopped playing\n";
-
-    // ok, we're stopped
-    //
-    m_transportStatus = STOPPED;
 
     // We don't reset controllers at this point - what happens with static controllers
     // the next time we play otherwise?  [rwb]

@@ -289,12 +289,13 @@ Composition::findSegment(const Segment *s)
 {
     iterator i = m_segments.lower_bound(const_cast<Segment*>(s));
 
-    do {
-	if (i == end() || *i == s) return i;
+    while (i != end()) {
+	if (*i == s) break;
+	if ((*i)->getStartTime() > s->getStartTime()) return end();
 	++i;
-    } while ((*i)->getStartTime() <= s->getStartTime());
+    }
 
-    return end();
+    return i;
 }
 
 void Composition::setSegmentStartTime(Segment *segment, timeT startTime)

@@ -231,7 +231,9 @@ AudioBussMixer::emptyBuffers()
 	m_bufferMap[i].dormant = true;
 //	m_bufferMap[i].dormant = false;
 	for (int ch = 0; ch < 2; ++ch) {
-	    if (m_bufferMap[i].buffers[ch]) m_bufferMap[i].buffers[ch]->reset();
+	    if (m_bufferMap[i].buffers.size() > ch) {
+		m_bufferMap[i].buffers[ch]->reset();
+	    }
 	}
     }
 
