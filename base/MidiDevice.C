@@ -378,7 +378,9 @@ MidiDevice::toXmlString()
 
     midiDevice << "    <device id=\""  << m_id 
                << "\" name=\""         << m_name 
-               << "\" type=\"midi\">" << std::endl << std::endl;
+	       << "\" direction=\""    << (m_direction == Play ?
+					   "play" : "record")
+               << "\" type=\"midi\">"  << std::endl << std::endl;
 
     midiDevice << "        <librarian name=\"" << encode(m_librarian.first)
                << "\" email=\"" << encode(m_librarian.second) << std::endl

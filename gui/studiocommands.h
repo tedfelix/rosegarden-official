@@ -154,7 +154,8 @@ public:
 	m_name(name),
 	m_type(type),
 	m_direction(direction),
-	m_deviceId(Rosegarden::Device::NO_DEVICE) { }
+	m_deviceId(Rosegarden::Device::NO_DEVICE),
+	m_deviceCreated(false) { }
 
     // Deletion constructor
     CreateOrDeleteDeviceCommand(Rosegarden::Studio *studio,
@@ -168,11 +169,34 @@ public:
     virtual void unexecute() { execute(); }
     
 protected:
-    
     Rosegarden::Studio *m_studio;
     std::string m_name;
     Rosegarden::Device::DeviceType m_type;
     Rosegarden::MidiDevice::DeviceDirection m_direction;
     Rosegarden::DeviceId m_deviceId;
+    bool m_deviceCreated;
 };
 
+
+class ReconnectDeviceCommand : public KNamedCommand
+{
+public:
+    ReconnectDeviceCommand(Rosegarden::Studio *studio,
+			   Rosegarden::DeviceId deviceId,
+			   std::string newConnection) :
+	KNamedCommand(getGlobalName()),
+	m_studio(studio),
+	m_deviceId(deviceId),
+	m_newConnection(newConnection) { }
+
+    static QString getGlobalName() { return i18n("Reconnect Device"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Studio *m_studio;
+    Rosegarden::DeviceId m_deviceId;
+    std::string m_newConnection;
+    std::string m_oldConnection;
+};

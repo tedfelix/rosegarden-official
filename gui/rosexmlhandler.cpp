@@ -902,16 +902,20 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (type == "midi")
         {
             m_device = getStudio().getDevice(id);
+	    QString direction = atts.value("direction").lower();
 
-            if (m_device && m_device->getType() == Rosegarden::Device::Midi) {
-		if (nameStr && nameStr != "") {
-		    m_device->setName(qstrtostr(nameStr));
+	    if (direction.isNull() || direction == "play") { // ignore inputs
+
+		if (m_device && m_device->getType() == Rosegarden::Device::Midi) {
+		    if (nameStr && nameStr != "") {
+			m_device->setName(qstrtostr(nameStr));
+		    }
+		} else if (nameStr && nameStr != "") {
+		    addMIDIDevice(nameStr); // also sets m_device
 		}
-	    } else if (nameStr && nameStr != "") {
-		addMIDIDevice(nameStr); // also sets m_device
 	    }
-        }
-        else if (type == "audio")
+	}
+	else if (type == "audio")
         {
             m_device = getStudio().getDevice(id);
 
