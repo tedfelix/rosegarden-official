@@ -10,7 +10,7 @@
         type="scalable"/>
 
 <font-requirements>
-	<font-requirement font-id="0" names="feta,mscore20"/>
+	<font-requirement font-id="0" names="LilyPond-feta,Lilypond-feta,feta,mscore20"/>
 	<font-requirement font-id="1" names="times new roman,times,DEFAULT"/> <!-- text font -->
 </font-requirements>
 
