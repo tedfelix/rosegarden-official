@@ -1148,6 +1148,12 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
     {
         int value = startValue + int(step * double(time));
 
+        // hit the buffers
+        if (value < m_controller->getMin())
+            value = m_controller->getMin();
+        else if (value > m_controller->getMax())
+            value = m_controller->getMax();
+        
         ControllerEventInsertCommand* command = 
             new ControllerEventInsertCommand(time, m_controller->getControllerValue(), value, m_segment);
 
