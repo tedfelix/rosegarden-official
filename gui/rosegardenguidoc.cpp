@@ -329,7 +329,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                       << segment->getAudioFileID()
                       << "\">\n";
 
-            outStream << "    <begin index=\""
+            outStream << "   <begin index=\""
                       << segment->getAudioStartTime()
                       << "\"/>\n";
 
@@ -1055,17 +1055,27 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
     //
     if (m_recordSegment == 0)
     {
-        cout << "CREATED NEW SEGMENT" << endl;
         m_recordSegment = new Segment(Rosegarden::Segment::Audio);
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
+        m_recordSegment->setAudioStartTime(m_composition.getPosition());
+        m_recordSegment->setLabel("recorded audio");
 
         // new audio file will have been pushed to the back of the
         // AudioFileManager queue - fetch it out and get the 
         // AudioFileId
         //
-        m_recordSegment->
-            setAudioFileID(m_audioFileManager.getLastAudioFile()->getId());
+        Rosegarden::AudioFile *audioFile =
+            m_audioFileManager.getLastAudioFile();
+
+        if (audioFile)
+        {
+            m_recordSegment->setAudioFileID(audioFile->getId());
+        }
+        else
+        {
+            std::cerr << "NO AUDIO FILE" << endl;
+        }
 
         // always insert straight away for audio
         m_composition.addSegment(m_recordSegment);
@@ -1105,6 +1115,11 @@ RosegardenGUIDoc::stopRecordingAudio()
         }
     }
 
+
+    // set the audio end time
+    //
+    m_recordSegment->setAudioEndTime(m_composition.getPosition());
+
     // now add the Segment
     std::cout << "RosegardenGUIDoc::stopRecordingAudio - "
               << "got recorded segment" << std::endl;
@@ -1117,36 +1132,31 @@ RosegardenGUIDoc::stopRecordingAudio()
 
     // now tell the sequencer about the new file that it's just
     // finished recording
+    /*
     QCString replyType;
     QByteArray replyData;
+    */
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
     // Get the last added audio file - the one we've just recorded.
+    //
+    // We're playing fast and loose with DCOP here - we just send
+    // this request and carry on regardless otherwise the sequencer
+    // can just hang our request.  We don't risk a call() and we
+    // don't get a return type.  Ugly and hacky but it appears to
+    // work for me - so hey.
+    //
     Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getLastAudioFile();
-
     streamOut << QString(strtoqstr(newAudioFile->getFilename()));
     streamOut << newAudioFile->getId();
-
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "addAudioFile(QString, int)", data, replyType, replyData))
+                                  "addAudioFile(QString, int)", data))
     {
         std::cerr << "prepareAudio() - couldn't add audio file"
                   << std::endl;
         return;
-    }
-    else
-    {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-        if (!result)
-        {
-            std::cerr << "RosegardenGUIDoc::stopRecordingAudio - "
-                      << "failed to add file \"" 
-                      << newAudioFile->getFilename() << "\"" << endl;
-        }
     }
 }
 

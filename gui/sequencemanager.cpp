@@ -453,13 +453,11 @@ SequenceManager::stop()
     // response - then we can fiddle about with the audio file
     // without worrying about extraenous threads causing problems
     //
-    QCString replyType;
-    QByteArray replyData;
     QByteArray data;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "stop()", data, replyType, replyData))
+                                  "stop()", data))
     {
         // failed - pop up and disable sequencer options
         throw(i18n("Failed to contact Rosegarden sequencer"));
@@ -471,8 +469,6 @@ SequenceManager::stop()
 
     if (m_transportStatus == RECORDING_AUDIO)
         m_doc->stopRecordingAudio();
-
-
 
     // always untoggle the play button at this stage
     //

@@ -220,7 +220,7 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 1, 0);
 
     m_changePathButton =
-        new QPushButton(i18n(QString(afm.getAudioRecordPath().c_str())),
+        new QPushButton(i18n(QString(afm.getAudioPath().c_str())),
                         frame);
 
     layout->addWidget(m_changePathButton, 1, 1);
@@ -238,7 +238,7 @@ AudioConfigurationPage::slotFileDialog()
 
     QFileDialog *fileDialog = new QFileDialog(this, "file dialog", TRUE);
     fileDialog->setMode(QFileDialog::DirectoryOnly);
-    fileDialog->setDir(QString(afm.getAudioRecordPath().c_str()));
+    fileDialog->setDir(QString(afm.getAudioPath().c_str()));
 
     connect(fileDialog, SIGNAL(fileSelected(const QString&)),
             SLOT(slotFileSelected(const QString&)));
@@ -261,7 +261,7 @@ AudioConfigurationPage::apply()
 
     if (!m_newDirectory.isNull())
     {
-        afm.setAudioRecordPath(std::string(m_newDirectory.data()));
+        afm.setAudioPath(std::string(m_newDirectory.data()));
     }
 }
 

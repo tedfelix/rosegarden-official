@@ -49,12 +49,12 @@ AudioFile::AudioFile(const unsigned int &id,
 }
 
 AudioFile::AudioFile(const std::string &fileName,
-                     AudioFileType type,
-                     unsigned int channels,
-                     unsigned int sampleRate,
-                     unsigned int bytesPerSecond,
-                     unsigned int bytesPerSample,
-                     unsigned int bitsPerSample ):
+                     AudioFileType type = WAV,
+                     unsigned int channels = 1,
+                     unsigned int sampleRate = 48000,
+                     unsigned int bytesPerSecond = 6000,
+                     unsigned int bytesPerSample = 2,
+                     unsigned int bitsPerSample = 16):
     SoundFile(fileName), m_id(0), m_name(""),
     m_bitsPerSample(bitsPerSample),
     m_sampleRate(sampleRate),

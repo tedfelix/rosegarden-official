@@ -40,9 +40,12 @@
 namespace Rosegarden
 {
 
-AudioFileManager::AudioFileManager():
-    m_audioRecordPath("./") // current directory default
+AudioFileManager::AudioFileManager()
 {
+    // Set this through the set method so that the tilde gets
+    // shaken out.
+    //
+    setAudioPath("~/rosegarden");
 }
 
 AudioFileManager::~AudioFileManager()
@@ -150,7 +153,7 @@ AudioFileManager::insertFile(const std::string &name,
 // Add a given path to our sample search path
 //
 void
-AudioFileManager::addSearchPath(const std::string &path)
+AudioFileManager::setAudioPath(const std::string &path)
 {
     std::string hPath = path;
 
@@ -166,13 +169,7 @@ AudioFileManager::addSearchPath(const std::string &path)
         hPath = std::string(getenv("HOME")) + hPath;
     }
 
-    // If this is the first path we've added then set the record
-    // path to it.
-    //
-    if (m_audioSearchPath.size() == 0)
-         m_audioRecordPath = hPath;
-
-    m_audioSearchPath.push_back(hPath);
+    m_audioPath = hPath;
 }
 
 
@@ -197,23 +194,14 @@ AudioFileManager::getFileInPath(const std::string &file)
 
     std::vector<std::string>::iterator it;
 
-    for (it = m_audioSearchPath.begin();
-         it != m_audioSearchPath.end();
-         it++)
-    {
-        search = (*it) + file;
+    search = m_audioPath + file;
 
-        // Check we can open the file and return if we can
-        //
-        fd = new std::ifstream(search.c_str(), std::ios::in | std::ios::binary);
-        if (*fd)
-        {
-            rS = search;
-            fd->close();
-            break;
-        }
-        fd->close();
-    }
+    // Check we can open the file and return the full path if we can
+    //
+    fd = new std::ifstream(search.c_str(), std::ios::in | std::ios::binary);
+    if (*fd)
+        rS = search;
+    fd->close();
 
     return rS;
 }
@@ -258,7 +246,7 @@ AudioFileManager::createRecordingAudioFile()
     int audioFileNumber = 0;
 
     // search for used RG-AUDIO files in the record directory
-    DIR *dir = opendir(m_audioRecordPath.c_str());
+    DIR *dir = opendir(m_audioPath.c_str());
     std::string prefix = "RG-AUDIO-";
     std::string file;
 
@@ -298,7 +286,7 @@ AudioFileManager::createRecordingAudioFile()
     {
         std::cerr << "AudioFileManager::createRecordingAudioFile - "
                   << "can't access recording directory \'"
-                  << m_audioRecordPath << "\'" << std::endl;
+                  << m_audioPath << "\'" << std::endl;
     }
 
     // start from 1, not 0 if we've not found anything
@@ -313,22 +301,26 @@ AudioFileManager::createRecordingAudioFile()
     file = prefix + number + ".wav";
 
     // insert file into vector
-    AudioFile *aF = new AudioFile(newId, file, m_audioRecordPath + file);
+    AudioFile *aF = new AudioFile(newId, file, file);
     m_audioFiles.push_back(aF);
 
-    return file;
+    // what we return is the full path to the file
+    return m_audioPath + file;
 } 
 
 AudioFile*
 AudioFileManager::getLastAudioFile()
 {
-    std::vector<AudioFile*>::iterator it = m_audioFiles.end();
-    it--;
+    std::vector<AudioFile*>::iterator it = m_audioFiles.begin();
+    AudioFile* audioFile = 0;
 
-    if (it != m_audioFiles.begin())
-        return *it;
+    while (it != m_audioFiles.end())
+    {
+        audioFile = (*it);
+        it++;
+    }
 
-    return 0;
+    return audioFile;
 }
 
 
@@ -339,19 +331,10 @@ AudioFileManager::toXmlString()
     std::stringstream audioFiles;
 
     audioFiles << "<audiofiles>" << std::endl;
+    audioFiles << "    <audiopath value=\""
+               << m_audioPath << "\"/>" << std::endl;
 
     std::vector<AudioFile*>::iterator it;
-
-    std::vector<std::string>::iterator pit;
-
-    for (pit = m_audioSearchPath.begin();
-         pit != m_audioSearchPath.end();
-         pit++)
-    {
-        audioFiles << "    <audiopath value=\""
-                   << *pit << "\"/>" << std::endl;
-    }
-
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
     {
         audioFiles << "    <audio id=\""

@@ -67,10 +67,6 @@ public:
     //
     bool removeFile(unsigned int id);
 
-    // Add a directory to the search path
-    //
-    void addSearchPath(const std::string &path);
-
     // does a specific file id exist?
     //
     bool fileExists(unsigned int id);
@@ -89,9 +85,8 @@ public:
 
     // Get and set the record path
     //
-    std::string getAudioRecordPath() { return m_audioRecordPath; }
-    void setAudioRecordPath(const std::string &path)
-        { m_audioRecordPath = path; }
+    std::string getAudioPath() { return m_audioPath; }
+    void setAudioPath(const std::string &path);
 
     // Get a new audio filename at the audio record path
     //
@@ -111,9 +106,7 @@ private:
     unsigned int getFirstUnusedID();
 
     std::vector<AudioFile*> m_audioFiles;
-    std::vector<std::string> m_audioSearchPath;
-
-    std::string m_audioRecordPath;
+    std::string m_audioPath;
 
 };
 

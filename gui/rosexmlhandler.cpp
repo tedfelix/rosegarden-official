@@ -480,7 +480,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_audioFileManager.addSearchPath(qstrtostr(search));
+        m_audioFileManager.setAudioPath(qstrtostr(search));
 
     } else if (lcName == "begin") {
         int marker = atts.value("index").toInt();
