@@ -54,19 +54,28 @@ TrackItem::TrackItem(int x, int y,
 {
 }
 
-unsigned int TrackItem::getItemNbBars() const
+unsigned int TrackItem::getItemNbTimeSteps() const
 {
-    return rect().width() / m_widthToLengthRatio;
+    kdDebug(KDEBUG_AREA) << "TrackItem::getItemNbTimeSteps() : "
+                         << rect().width() / m_widthToLengthRatio
+                         << endl;
+
+    return rect().width() / m_widthToLengthRatio * m_timeStepsResolution;
 }
 
 unsigned int TrackItem::getStartIndex() const
 {
-    return rect().x() / m_widthToLengthRatio;
+    return rect().x() / m_widthToLengthRatio * m_timeStepsResolution;
 }
 
 void TrackItem::setWidthToLengthRatio(unsigned int r)
 {
     m_widthToLengthRatio = r;
+}
+
+void TrackItem::setTimeStepsResolution(unsigned int r)
+{
+    m_timeStepsResolution = r;
 }
 
 int TrackItem::getInstrument() const
@@ -81,6 +90,7 @@ void TrackItem::setInstrument(int i)
 
 
 unsigned int TrackItem::m_widthToLengthRatio = 1;
+unsigned int TrackItem::m_timeStepsResolution = 384;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -340,7 +350,7 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
         // readjust size of corresponding track
-        m_currentItem->getTrack()->setNbBars(m_currentItem->getItemNbBars());
+        m_currentItem->getTrack()->setNbTimeSteps(m_currentItem->getItemNbTimeSteps());
     }
 
     m_currentItem = 0;
@@ -459,12 +469,12 @@ void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void TrackResizer::handleMouseButtonRelase(QMouseEvent*)
 {
-    unsigned int newNbBars = m_currentItem->getItemNbBars();
+    unsigned int newNbTimeSteps = m_currentItem->getItemNbTimeSteps();
 
-    kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb bars to "
-                         << newNbBars << endl;
+    kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb time steps to "
+                         << newNbTimeSteps << endl;
     
-    m_currentItem->getTrack()->setNbBars(newNbBars);
+    m_currentItem->getTrack()->setNbTimeSteps(newNbTimeSteps);
 
     m_currentItem = 0;
 }

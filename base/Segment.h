@@ -26,14 +26,17 @@
 
 namespace Rosegarden 
 {
-    
+
+class TimeSignature;
+
 /**
  * This class owns the Events its items are pointing at
  */
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
-    Track(unsigned int nbBars = 0, unsigned int startIdx = 0);
+    Track(unsigned int nbTimeSteps = 384, unsigned int startIdx = 0,
+          unsigned int stepsPerBar = 384);
     ~Track();
 
     unsigned int getStartIndex() const         { return m_startIdx; }
@@ -42,8 +45,10 @@ public:
     unsigned int getInstrument() const         { return m_instrument; }
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
-    unsigned int getNbBars() const;
-    void setNbBars(unsigned int);
+    TimeSignature& getTimeSigAtEnd() const;
+
+    unsigned int getNbTimeSteps() const;
+    void setNbTimeSteps(unsigned int);
 
     struct TrackCmp
     {
@@ -58,7 +63,6 @@ public:
 
 protected:
     unsigned int m_startIdx;
-    unsigned int m_nbBars;
     unsigned int m_instrument;
 };
 
@@ -66,4 +70,3 @@ protected:
 
 
 #endif
-

@@ -633,5 +633,32 @@ int TimeSignature::getBeatDuration() const
         return  getUnitDuration();
     }
 }
- 
+
+TimeSignature::EventsSet*
+TimeSignature::getTimeIntervalAsRests(int startTime,
+                                      int duration) const
+{
+    EventsSet *events = new EventsSet;
+    
+    int time = startTime,
+        unitDuration = getUnitDuration();
+
+    for (int len = 0; len < duration; ++len, time += unitDuration) {
+        Event *e = new Event;
+        e->setType("rest");
+        e->setDuration(unitDuration);
+        e->setAbsoluteTime(time);
+        events->push_back(e);
+    }
+
+    return events;
 }
+
+TimeSignature::EventsSet*
+TimeSignature::getBarAsRests(int startTime) const
+{
+    return getTimeIntervalAsRests(startTime, getBarDuration());
+}
+
+
+} // close namespace

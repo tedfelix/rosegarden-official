@@ -21,6 +21,8 @@
 #ifndef _NOTATION_TYPES_H_
 #define _NOTATION_TYPES_H_
 
+#include <list>
+
 #include "Event.h"
 
 namespace Rosegarden 
@@ -412,6 +414,18 @@ public:
     int getBeatsPerBar() const {
         return getBarDuration() / getBeatDuration();
     }
+
+    typedef std::list<Event*> EventsSet;
+
+    /**
+     * The caller should delete the returned list
+     */
+    EventsSet* getTimeIntervalAsRests(int startTime, int duration) const;
+
+    /**
+     * The caller should delete the returned list
+     */
+    EventsSet* getBarAsRests(int startTime) const;
 
 private:
     int m_numerator;

@@ -39,7 +39,8 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
     : QWidget(parent, name),
       m_document(doc),
       m_tracksCanvas(0),
-      m_hHeader(0), m_vHeader(0)
+      m_hHeader(0), m_vHeader(0),
+      m_timeStepsResolution(384)
 {
     unsigned int docNbTracks = 0,
         docNbBars = 0;
@@ -62,7 +63,8 @@ TracksEditor::TracksEditor(unsigned int nbTracks,
     : QWidget(parent, name),
       m_document(0),
       m_tracksCanvas(0),
-      m_hHeader(0), m_vHeader(0)
+      m_hHeader(0), m_vHeader(0),
+      m_timeStepsResolution(384)
 {
     init(nbTracks, nbBars);
 }
@@ -80,14 +82,7 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     grid->addWidget(m_vHeader = new QHeader(nbTracks, this), 1, 0);
     m_vHeader->setOrientation(Qt::Vertical);
 
-    // set up horiz. header
-    QString num;
-
-    for (int i = 0; i < m_hHeader->count(); ++i) {
-
-        m_hHeader->resizeSection(i, 50);
-        m_hHeader->setLabel(i, num.setNum(i));
-    }
+    setupHorizontalHeader();
 
     // set up vert. header
     for (int i = 0; i < m_vHeader->count(); ++i) {
@@ -142,7 +137,7 @@ TracksEditor::setupTracks()
 
             kdDebug(KDEBUG_AREA) << "TracksEditor::setupTracks() add track"
                                  << " - start idx : " << (*i)->getStartIndex()
-                                 << " - nb bars : " << (*i)->getNbBars()
+                                 << " - nb time steps : " << (*i)->getNbTimeSteps()
                                  << " - instrument : " << (*i)->getInstrument()
                                  << endl;
 
@@ -152,31 +147,41 @@ TracksEditor::setupTracks()
             x = m_hHeader->sectionPos((*i)->getStartIndex());
 
             TrackItem *newItem = m_tracksCanvas->addPartItem(x, y,
-                                                             (*i)->getNbBars());    
+                                                             (*i)->getNbTimeSteps());    
             newItem->setTrack(*i);
         }
         
     }
 }
 
+unsigned int TracksEditor::getTimeStepsResolution() const
+{
+    return m_timeStepsResolution;
+}
 
-void
-TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
+void TracksEditor::setTimeStepsResolution(unsigned int res)
+{
+    m_timeStepsResolution = res;
+    TrackItem::setTimeStepsResolution(m_timeStepsResolution);
+    setupHorizontalHeader();
+}
+
+void TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 {
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::trackOrderChanged(section : %1, from %2, to %3)")
         .arg(section).arg(fromIdx).arg(toIdx) << endl;
 
-    if (moveTrack(section, fromIdx, toIdx))
-        emit needUpdate();
+    moveTrack(section, fromIdx, toIdx);
+    emit needUpdate();
 }
 
 void
 TracksEditor::addTrack(TrackItem *p)
 {
-    // find instrument for part
-    //
     emit createNewTrack(p);
 
+    // find instrument for part
+    //
     int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
     p->setInstrument(instrument);
 
@@ -186,8 +191,7 @@ TracksEditor::addTrack(TrackItem *p)
 
 }
 
-void
-TracksEditor::deleteTrack(Rosegarden::Track *p)
+void TracksEditor::deleteTrack(Rosegarden::Track *p)
 {
     Composition& composition = m_document->getComposition();
 
@@ -199,8 +203,7 @@ TracksEditor::deleteTrack(Rosegarden::Track *p)
     }
 }
 
-void
-TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
+void TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
 {
     int instrument = m_vHeader->sectionAt(int(i->y()));
     int startIndex = m_hHeader->sectionAt(int(i->x()));
@@ -213,8 +216,7 @@ TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
     i->getTrack()->setStartIndex(startIndex);
 }
 
-bool
-TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
+void TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 {
     QCanvasItemList itemList = canvas()->canvas()->allItems();
     QCanvasItemList::Iterator it;
@@ -229,8 +231,19 @@ TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
     }
 }
 
-void
-TracksEditor::clear()
+void TracksEditor::clear()
 {
     m_tracksCanvas->clear();
 }
+
+void TracksEditor::setupHorizontalHeader()
+{
+    QString num;
+
+    for (int i = 0; i < m_hHeader->count(); ++i) {
+        m_hHeader->resizeSection(i, 50);
+        m_hHeader->setLabel(i, num.setNum(i * m_timeStepsResolution));
+    }
+}
+
+

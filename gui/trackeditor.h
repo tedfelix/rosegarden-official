@@ -51,7 +51,7 @@ public:
 
     void clear();
 
-    bool moveTrack(int section, int fromIdx, int toIdx);
+    void moveTrack(int section, int fromIdx, int toIdx);
 
     TracksCanvas*       canvas()       { return m_tracksCanvas; }
     const TracksCanvas* canvas() const { return m_tracksCanvas; }
@@ -63,6 +63,18 @@ public:
      */
     void setupTracks();
 
+    /**
+     * Returns the horizontal resolution of the grid in MIDI timesteps
+     */
+    unsigned int getTimeStepsResolution() const;
+
+public slots:
+    /**
+     * Sets the horizontal resolution of the grid in MIDI timesteps
+     * (default is 384 - a whole note)
+     */
+    void setTimeStepsResolution(unsigned int);
+    
 protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
     void addTrack(TrackItem*);
@@ -76,13 +88,14 @@ signals:
 protected:
 
     void init(unsigned int nbTracks, unsigned int nbBars);
+    void setupHorizontalHeader();
 
     RosegardenGUIDoc* m_document;
 
     TracksCanvas *m_tracksCanvas;
     QHeader *m_hHeader, *m_vHeader;
 
-//     std::list<TrackPart*> m_trackParts;
+    unsigned int m_timeStepsResolution;
 };
 
 #endif

@@ -346,7 +346,7 @@ RosegardenGUIDoc::createNewTrack(TrackItem *p)
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(item : "
                          << p << ")\n";
 
-    Track *newTrack = new Track(p->getItemNbBars(), p->getStartIndex());
+    Track *newTrack = new Track(p->getItemNbTimeSteps(), p->getStartIndex());
 
     // store ptr to new track in track part item
     p->setTrack(newTrack);

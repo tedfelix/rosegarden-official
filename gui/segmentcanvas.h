@@ -33,7 +33,7 @@ public:
     TrackItem(const QRect &, QCanvas* canvas);
     TrackItem(int x, int y, int width, int height, QCanvas* canvas);
 
-    unsigned int getItemNbBars() const;
+    unsigned int getItemNbTimeSteps() const;
     unsigned int getStartIndex() const;
 
     int  getInstrument() const;
@@ -43,6 +43,7 @@ public:
     Rosegarden::Track* getTrack() const  { return m_track; }
 
     static void setWidthToLengthRatio(unsigned int);
+    static void setTimeStepsResolution(unsigned int);
 
 protected:
     int m_instrument;
@@ -50,6 +51,7 @@ protected:
     Rosegarden::Track* m_track;
 
     static unsigned int m_widthToLengthRatio;
+    static unsigned int m_timeStepsResolution;
 
 };
 

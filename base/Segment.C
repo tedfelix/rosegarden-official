@@ -18,23 +18,24 @@
 */
 
 #include "Track.h"
+#include "NotationTypes.h"
 
 namespace Rosegarden 
 {
 using std::cerr;
 using std::endl;
     
-Track::Track(unsigned int nbBars, unsigned int startIdx)
+Track::Track(unsigned int nbTimeSteps, unsigned int startIdx,
+             unsigned int stepsPerBar)
     : std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
-    m_nbBars(nbBars),
     m_instrument(0)
 {
     unsigned int initialTime = m_startIdx;
     
     // fill up with whole-note rests
     //
-    for (unsigned int i = 0; i < nbBars; ++i) {
+    for (unsigned int i = 0; i < nbTimeSteps; i += stepsPerBar) {
         Event *e = new Event;
         e->setType("rest");
         e->setDuration(384); // TODO : get rid of this magic number
@@ -51,68 +52,74 @@ Track::~Track()
         delete (*it);
 }
 
-unsigned int Track::getNbBars() const
+unsigned int Track::getNbTimeSteps() const
 {
-    //!!! No, not really!
-
     const_iterator lastEl = end();
     --lastEl;
     unsigned int nbBars = ((*lastEl)->getAbsoluteTime() +
-                           (*lastEl)->getDuration()) / 384;
+                           (*lastEl)->getDuration());
 
     return nbBars;
 }
 
 
-void Track::setNbBars(unsigned int nbBars)
+void Track::setNbTimeSteps(unsigned int nbTimeSteps)
 {
-    unsigned int currentNbBars = getNbBars();
+    TimeSignature &signatureAtEnd = getTimeSigAtEnd();
 
-    cerr << "Track::setNbBars() : current = " << currentNbBars
-         << " - new : " << nbBars << endl;
+    unsigned int currentNbTimeSteps = getNbTimeSteps();
 
-    if (nbBars == currentNbBars) return; // nothing to do
+    cerr << "Track::setNbBars() : current = " << currentNbTimeSteps
+         << " - new : " << nbTimeSteps << endl;
+
+    if (nbTimeSteps == currentNbTimeSteps) return; // nothing to do
     
-    if (nbBars > currentNbBars) { // fill up with rests
+    if (nbTimeSteps > currentNbTimeSteps) { // fill up with rests
         
         iterator lastEl = end();
         --lastEl;
         unsigned int newElTime = (*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration();
 
-        for (; currentNbBars < nbBars;
-             ++currentNbBars, newElTime+= 384) {
+        TimeSignature::EventsSet *eventsToAdd = signatureAtEnd.getTimeIntervalAsRests(newElTime, nbTimeSteps - currentNbTimeSteps);
 
-            Event *e = new Event;
-            e->setType("rest");
-            e->setDuration(384); // TODO : get rid of this magic number
-            e->setAbsoluteTime(newElTime);
-            insert(e);
+        for (TimeSignature::EventsSet::iterator i = eventsToAdd->begin();
+             i != eventsToAdd->end(); ++i) {
+
+            insert(*i);
+
+//             Event *e = new Event;
+//             e->setType("rest");
+//             e->setDuration(barDuration); // TODO : get rid of this magic number
+//             e->setAbsoluteTime(newElTime);
+//             insert(e);
             
         }
+
+        delete eventsToAdd;
         
     } else { // shrink
 
-        if (nbBars == 0) { // no fuss
-            erase(begin(), end());
-            return;
-        }
+        // NOT IMPLEMENTED YET : move an internal marker
 
-        unsigned int cutTime = ((nbBars-1) * 384) + getStartIndex();
+//         if (nbBars == 0) { // no fuss
+//             erase(begin(), end());
+//             return;
+//         }
 
-        iterator lastElToKeep = std::upper_bound(begin(), end(),
-                                                 cutTime,
-                                                 Event::compareTime2Event);
-        if (lastElToKeep == end()) {
-            cerr << "Track::setNbBars() : upper_bound returned end\n";
-            return;
-        }
+//         unsigned int cutTime = ((nbBars-1) * 384) + getStartIndex();
 
-        erase(lastElToKeep, end());
+//         iterator lastElToKeep = std::upper_bound(begin(), end(),
+//                                                  cutTime,
+//                                                  Event::compareTime2Event);
+//         if (lastElToKeep == end()) {
+//             cerr << "Track::setNbBars() : upper_bound returned end\n";
+//             return;
+//         }
+
+//         erase(lastElToKeep, end());
     }
     
 }
-
-
 
 void Track::setStartIndex(unsigned int idx)
 {
@@ -124,5 +131,14 @@ void Track::setStartIndex(unsigned int idx)
         
     m_startIdx = idx;
 }
+
+TimeSignature& Track::getTimeSigAtEnd() const
+{
+    // temporary dummy implementation
+    static TimeSignature sig44(4,4);
+
+    return sig44;
+}
+
  
 }
