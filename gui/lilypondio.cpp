@@ -13,6 +13,8 @@
         Hans Kieserman      <hkieserman@mail.com>
     with heavy lifting from csoundio as it was on 13/5/2002.
 
+    Alterations and additions by Michael McIntyre <dmmcintyr@users.sourceforge.net>
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
@@ -24,6 +26,7 @@
 */
 
 #include "lilypondio.h"
+#include "config.h"
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -118,6 +121,8 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
     }
 }
 
+//deeply rooted here and in musicxmlio.cpp, avoid touching
+//needlessly
 char
 convertPitchToName(int pitch, bool isFlatKeySignature)
 {
@@ -134,6 +139,13 @@ convertPitchToName(int pitch, bool isFlatKeySignature)
     pitch = pitch % 12;
 
     // compensate for no c-flat or f-flat
+    //
+    // DMM - FIXME
+    // there's just no way to resolve B/C E/F without key sig so you have to
+    // figure that out after all.  get number of accidentals for the key out
+    // somehow and if that number is > or < a threshold you can assume the Cb
+    // B# without actually having to calculate everything for the key sig
+    // probably - do the math
     if (pitch > 2) {
 	pitch++;
     }
@@ -144,6 +156,9 @@ convertPitchToName(int pitch, bool isFlatKeySignature)
     return pitchLetter;
 }
 
+//DMM - A note needs an accidental for Lilypond purposes if it is one of the
+//"black key" notes (C# D# F# G# A#) because these must be written out
+//with a manual spelling to suit the key signature/accidental
 bool
 needsAccidental(int pitch) {
     if (pitch > 4) {
@@ -162,15 +177,38 @@ LilypondExporter::write()
     }
 
     // Lilypond header information
+    // DMM - FIXME  we need to check for illegal characters inside user strings
+    // here (and elsewhere) and protect them...
     str << "\\version \"1.4.10\"\n";
     str << "\\header {\n";
-    str << "\ttitle = \"" << m_fileName << "\"\n";
-    str << "\tsubtitle = \"Written by Rosegarden-4\"\n";
-    if (m_composition->getCopyrightNote() != "") {
-	str << "\tcopyright = \""
-            //??? Incomplete: need to remove newlines from copyright note?
-	    << m_composition->getCopyrightNote() << "\"\n";
+    str << "\ttitle = \"" << "Title" << "\"\n";  // needs new variable
+    str << "\tsubtitle = \"" << "subtitle" << "\"\n"; // needs new variable
+    // DMM - TODO hook up new variables here when the GUI guys provide them:
+    // meta events like:
+    // <metadata>
+    //<copyright></copyright>
+    //</metadata>
+    // go look at how to get these then probably
+    // str them out with a while loop or something of the sort
+    //
+    // probably need help figuring out just what to do here
+
+    str << "\tfooter = \"Rosegarden " << VERSION << "\"\n";
+    //DMM - FIXME - read about string class stuff to figure out how to pretty
+    //up the filename  (basename)
+    str << "\ttagline = \"Exported from" << m_fileName << " by Rosegarden " << VERSION "\"\n";   
+/*    str << "\tcopyright = \"";
+    try {
+        if (m_composition->getCopyrightNote() != "") {
+            str << m_composition->getCopyrightNote();  //incomplete??  check illegal chars
+        }
     }
+    catch (...) {
+        //an exception occurred
+    }            
+             
+    str << "\"\n"; */
+    
     str << "}\n";
 
     // Lilypond music data!   Mapping:
@@ -178,6 +216,9 @@ LilypondExporter::write()
     // Lilypond Staff = Rosegarden Track
     // (not the cleanest output but maybe the most reliable)
     // Incomplete: add an option to cram it all into one grand staff
+    //
+    // DMM - possibly hook into dialog to allow export of selected tracks with
+    // toggle to render as grand staff
     str << "\\score {\n";
     str << "\t\\notes <\n";
 
@@ -211,7 +252,7 @@ LilypondExporter::write()
 	// if we are currently in a chord
 	bool addTie = false;
 
-	if ((*i)->getTrack() != lastTrackIndex) {
+	if ((*i)->getTrack() != lastTrackIndex) {  //cast to shut up warning? look at which is which
 	    if (lastTrackIndex != -1) {
 		// Close the old track (staff)
 		str << "\n\t\t>\n";
@@ -269,6 +310,13 @@ LilypondExporter::write()
 	    }
 	    prevTime = absoluteTime;
 
+        //DMM - TODO - text events probably go in here...
+        //->isa(Text::EventType) ????
+        //
+        //probably bind to the following note, so just grab the event and ++
+        //the iterator to get a new note...  or something, then figure out
+        //what kind of text we've got and format it accordingly
+        //
             timeT duration = (*j)->getDuration();
             if ((*j)->isa(Note::EventType) ||
                 (*j)->isa(Note::EventRestType)) {
@@ -331,29 +379,97 @@ LilypondExporter::write()
 		    // but for simplicity we always use absolute pitch
 		    // 60 is middle C, one unit is a half-step
 		    long pitch = 0;
+            Rosegarden::Accidental accidental; //DMM
+            std::string lilyAccidental;        //DMM
+            bool flatAccidental = false;       //DMM
+            bool doubleAccidental = false;     //DMM
+            char notename, lilynote;           //DMM
+
+
+            //DMM - allow intentional enharmonic variations to override the
+            //key...  BaseProperties::ACCIDENTAL will be set (by user) for an
+            //out-of-key variation, so we grab it and deal with it first
+            if ((*j)->get<String>(BaseProperties::ACCIDENTAL, accidental)) {
+                if (accidental == Rosegarden::Accidentals::Sharp) {
+                    lilyAccidental = "is";
+                    flatAccidental = false;
+                } else if (accidental == Rosegarden::Accidentals::DoubleSharp) {
+                    lilyAccidental = "isis";
+                    flatAccidental = false;
+                    doubleAccidental = true;
+                } else if (accidental == Rosegarden::Accidentals::Flat) {
+                    lilyAccidental = "es";
+                    flatAccidental = true;
+                } else if (accidental == Rosegarden::Accidentals::DoubleFlat) {
+                    lilyAccidental = "eses";
+                    flatAccidental = true;
+                    doubleAccidental = true;
+                }                
+            } else {               
+            //then we revert to the key (doubles will always be out of key
+            //because RG doesn't allow extreme key signatures)
+                if (isFlatKeySignature) {
+                    lilyAccidental = "es";
+                    flatAccidental = true;
+                } else {
+                    lilyAccidental = "is";
+                } 
+            }
+
+            //broken case:  E# comes out F-nat in G#m test scale  Will
+            //probably break for B# too...  bug in cPTN logic?
+            //
+            // no, see note in cPTN, need keg sig + num accidents
+            //
+            //broken case:  Bbb comes out 8va  - deal with octave break
+                
+            //get pitch letter and add necessary accidental
 		    (*j)->get<Int>(BaseProperties::PITCH, pitch);
-		    str << convertPitchToName(pitch % 12, isFlatKeySignature);
-		    if (needsAccidental(pitch % 12)) {
-			if (isFlatKeySignature) {
+            notename = convertPitchToName(pitch % 12, flatAccidental);
+            lilynote = notename;
+            if (doubleAccidental) {  //adjust note letter for x/bb w/o hacking on
+                                     //convertPitchToName and breaking tons of
+                                     //other code
+                if (flatAccidental) {
+                    if (++lilynote > 'g') lilynote = 'a';
+                } else {
+                    if (--lilynote < 'a') lilynote = 'g';
+                }
+            }
+		    str << lilynote;
+		    if (needsAccidental(pitch % 12)||doubleAccidental) {
+                str << lilyAccidental;
+            } 
+
+            //ugly, temporary debug stuff, ignore
+            std::cout << "lilypondio: pitch = " << pitch
+                    << " pitch%12 = " << (pitch % 12) 
+                    << " lilynote = " << lilynote
+                    << " notename = " << notename
+                    << " lilyAccidental = " << lilyAccidental
+                    << std::endl;
+                                
+/*			if (isFlatKeySignature) {  (Boy this sure was an easier way out. :)
 			    str << "es";
 			} else {
 			    str << "is";
 			}
-		    }
+*/
+            
 
-		    int octave = (int)(pitch / 12);
-		    if (octave < 4) {
-			for (; octave < 4; octave++) {
-			    str << ",";                    
-			}
-		    } else {
-			for (; octave > 4; octave--) {
-			    str << "\'";
-			}
-		    }
+            int octave = (int)(pitch / 12);
+            if (octave < 4) {
+                for (; octave < 4; octave++) {
+                    str << ",";
+                }
+            } else {
+                for (; octave > 4; octave--) {
+                    str << "\'";
+                }
+            }
                 } else { // it's a rest
-		    if (currentlyWritingChord) {
-			currentlyWritingChord = false;
+            if (currentlyWritingChord) {
+            currentlyWritingChord = false;
 			handleStartingEvents(eventsToStart, addTie, str);
 			str << "> ";
 		    }
@@ -446,6 +562,7 @@ LilypondExporter::write()
 		Key whichKey(**j);
 		isFlatKeySignature = !whichKey.isSharp();
 		str << convertPitchToName(whichKey.getTonicPitch(), isFlatKeySignature);
+
 		if (needsAccidental(whichKey.getTonicPitch())) {
 		    if (isFlatKeySignature) {
 			str << "es";
@@ -479,7 +596,7 @@ LilypondExporter::write()
     }
     // Close the last track (staff)
     str << "\n\t\t>\n";
-
+    
 //     int tempoCount = m_composition->getTempoChangeCount();
 
 //     if (tempoCount > 0) {
@@ -512,6 +629,9 @@ LilypondExporter::write()
     str << "\n\t>\n"; // close notes section
 
     // Incomplete: Add paper info?
+    //
+    // DMM - yes, should be in Lilypond Export Properties list or whatever,
+    // to set, eg. A4 vs. US letter and possibly other parameters
     str << "\\paper {}\n";
 
     str << "}\n" << std::endl; // close score section
