@@ -1605,15 +1605,16 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 
     int lw = getLineSpacing();
     int delta = accidentalPixmap.width() - hotspot.x();
-    int width = clefPixmap->width() + 5 * delta + 7 * delta;
-    int x = clefPixmap->width() + 3 * delta;
+    int maxDelta = getAccidentalWidth(Sharp);
+    int width = clefPixmap->width() + 5 * maxDelta + 7 * maxDelta;
+    int x = clefPixmap->width() + 5 * maxDelta / 2;
 
     createPixmapAndMask(width, lw * 10 + 1);
 
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
-    m_p.drawPixmap(2 * delta, y - clefPixmap->offsetY(), *clefPixmap);
-    m_pm.drawPixmap(2 * delta, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
+    m_p.drawPixmap(2 * maxDelta, y - clefPixmap->offsetY(), *clefPixmap);
+    m_pm.drawPixmap(2 * maxDelta, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
@@ -1628,8 +1629,8 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
-	m_p.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
-	m_pm.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
+	m_p.drawLine(maxDelta, y, m_generatedPixmap->width() - 2*maxDelta - 1, y);
+	m_pm.drawLine(maxDelta, y, m_generatedPixmap->width() - 2*maxDelta - 1, y);
     }
 
     delete clefPixmap;
