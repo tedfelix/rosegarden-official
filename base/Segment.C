@@ -66,7 +66,7 @@ Segment::Segment(const Segment &segment):
     m_type(segment.getType()),
     m_label(segment.getLabel()),
     m_endMarkerTime(segment.m_endMarkerTime ?
-		    new timeT(segment.m_endMarkerTime) : 0),
+		    new timeT(*segment.m_endMarkerTime) : 0),
     m_id(0),
     m_audioFileID(segment.getAudioFileID()),
     m_audioStartIdx(segment.getAudioStartTime()),
