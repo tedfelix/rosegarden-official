@@ -103,8 +103,18 @@ bool RG21Loader::parseKey()
 {
     if (m_tokens.count() < 3 || !m_currentSegment) return false;
     
+    QString keyBase = m_tokens[2];
+    if (keyBase.length() > 1) {
+	// Deal correctly with e.g. Bb major
+	keyBase =
+	    keyBase.left(1).upper() +
+	    keyBase.right(keyBase.length() - 1).lower();
+    } else {
+	keyBase = keyBase.upper();
+    }
+
     QString keyName = QString("%1 %2or")
-        .arg(m_tokens[2].upper())
+        .arg(keyBase)
         .arg(m_tokens[3].lower());
 
     m_currentKey = Rosegarden::Key(std::string(keyName.data()));
@@ -537,7 +547,7 @@ bool RG21Loader::parseStaveType()
 	if (track) {
 	    Rosegarden::Instrument *instr =
 		m_studio->assignMidiProgramToInstrument(programNo, false);
-	    track->setInstrument(instr->getID());
+	    if (instr) track->setInstrument(instr->getID());
 	} 
     }
 

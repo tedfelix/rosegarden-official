@@ -262,18 +262,13 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     if (!okay) errMsg = "Couldn't read from file";
     else okay = xmlParse(fileContents, errMsg);
 
-/*
-    QFile file(filename);
-    bool okay = xmlParse(file, errMsg);
-    file.close();   
-*/
-
     if (!okay) {
-        QString msg(i18n("Error when parsing file '%1' : %2")
+        QString msg(i18n("Error when parsing file '%1' : \"%2\"")
                     .arg(filename)
                     .arg(errMsg));
         
         KMessageBox::sorry(0, msg);
+	assert(0);//!!!
 
         return false;
     }
