@@ -109,10 +109,12 @@ public:
 /**
  * This class owns the NotationElements its items are pointing at
  */
-class NotationElementList : public multiset<NotationElement*, NotationElementCmp>
+class NotationElementList : public std::multiset<NotationElement*,
+                                                 NotationElementCmp>
 {
 public:
-    NotationElementList() : multiset<NotationElement*, NotationElementCmp>() {};
+    NotationElementList() : std::multiset<NotationElement*, 
+                                          NotationElementCmp>() {};
     ~NotationElementList();
 
     void erase(iterator pos);

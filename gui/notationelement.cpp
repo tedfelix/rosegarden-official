@@ -126,7 +126,7 @@ NotationElementList::erase(NotationElementList::iterator pos)
                          << *pos << endl;
 
     delete *pos;
-    multiset<NotationElement*, NotationElementCmp>::erase(pos);
+    std::multiset<NotationElement*, NotationElementCmp>::erase(pos);
 }
 
 void
@@ -136,8 +136,8 @@ NotationElementList::erase(NotationElementList::iterator from,
     for (NotationElementList::iterator i = from;
          i != to; ++i)
         delete *i;
-
-    multiset<NotationElement*, NotationElementCmp>::erase(from, to);
+    
+    std::multiset<NotationElement*, NotationElementCmp>::erase(from, to);
 }
 
 void
