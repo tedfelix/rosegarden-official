@@ -1596,7 +1596,7 @@ SequenceManager::setMappedProperty(
     if (!kapp->dcopClient()->
             send(ROSEGARDEN_SEQUENCER_APP_NAME,
                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setMappedProperty(unsigned int, const QString&, int)",
+                 "setMappedProperty(unsigned int, QString, int)",
                  data))
     {
         throw(i18n("Failed to contact Rosegarden sequencer"));

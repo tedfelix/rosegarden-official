@@ -986,7 +986,8 @@ RosegardenSequencerApp::setMappedProperty(unsigned int id,
                                           const QString &property,
                                           int value)
 {
-    SEQUENCER_DEBUG << "setProperty" << endl;
+    SEQUENCER_DEBUG << "setProperty: id = " << id
+                    << " : property = \"" << property << "\"" << endl;
 
     Rosegarden::MappedObject *object = m_studio.getObject(id);
 
@@ -995,7 +996,7 @@ RosegardenSequencerApp::setMappedProperty(unsigned int id,
 
     if (fader)
     {
-        if (property == i18n("value"))
+        if (property == QString("value"))
         {
             fader->setLevel(value);
             std::cout << "RosegardenSequencerApp::setProperty - "
