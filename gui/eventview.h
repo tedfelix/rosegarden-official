@@ -30,6 +30,7 @@
 #include <vector>
 
 #include <qlistview.h>
+#include <qpushbutton.h>
 
 #include "editviewbase.h"
 
@@ -38,6 +39,19 @@ class RosegardenGUIDoc;
 class EventView : public EditViewBase
 {
     Q_OBJECT
+
+    // Event filters
+    //
+    enum EventFilter
+    {
+        None           = 0x0000,
+        Note           = 0x0001,
+        Text           = 0x0002,
+        SysEx          = 0x0004,
+        Controller     = 0x0008,
+        ProgramChange  = 0x0010
+    };
+
 public:
     EventView(RosegardenGUIDoc *doc,
               std::vector<Rosegarden::Segment *> segments,
@@ -60,16 +74,31 @@ public:
     virtual QSize getViewSize(); 
     virtual void setViewSize(QSize);
 
+    // Set the button states to the current fileter positions
+    //
+    void setButtonsToFilter();
 
-signals:    
 public slots:
+    void slotNoteFilter(bool);
+    void slotProgramFilter(bool);
+    void slotControllerFilter(bool);
+    void slotSysExFilter(bool);
+    void slotTextFilter(bool);
+
 protected:
 
     virtual void readOptions();
 
 
     //--------------- Data members ---------------------------------
-    QListView *m_eventList;
+    QListView   *m_eventList;
+    int          m_eventFilter;
+
+    QPushButton *m_noteFilter;
+    QPushButton *m_textFilter;
+    QPushButton *m_sysExFilter;
+    QPushButton *m_programFilter;
+    QPushButton *m_controllerFilter;
 
 };
 

@@ -5,8 +5,6 @@ o Matrix Parameter Box [SKELETON]
 
 o Event list [SKELETON]
 
-o Audio file open dialog
-
 o Get Segment joining working
 
 o Audio volume faders - studio concept on sequencer
@@ -30,10 +28,6 @@ o Prove and improve simultaneous audio and MIDI track performance
 o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.
-
-o "Split silence" function to automatically split up an audio segment
-   into a number of segments when the amplitude falls below a given
-   threshold. [MADE A START]
 
 o "Revert file" option
 
@@ -129,6 +123,12 @@ o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
   [FIXED]
 
 o Instrument name when pop down instrument list [DONE]
+
+o "Split silence" function to automatically split up an audio segment
+   into a number of segments when the amplitude falls below a given
+   threshold. [DONE]
+
+o Audio file open dialog - with Guillaume's DnD [DONE]
 
 
 
