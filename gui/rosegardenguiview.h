@@ -187,9 +187,9 @@ public slots:
     //
     void slotSetSelectedSegments(const Rosegarden::SegmentSelection &segments);
 
-    void slotShowSegmentParameters(bool);
+//     void slotShowSegmentParameters(bool);
 
-    void slotShowInstrumentParameters(bool);
+//     void slotShowInstrumentParameters(bool);
 
     void slotShowRulers(bool);
 

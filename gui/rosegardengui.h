@@ -929,16 +929,6 @@ public slots:
     void slotToggleTrackLabels();
 
     /**
-     * Toggle the segment parameters box on the TrackEditor
-     */
-    void slotToggleSegmentParameters();
-
-    /**
-     * Toggle the instrument parameters box on the TrackEditor
-     */
-    void slotToggleInstrumentParameters();
-
-    /**
      * Toggle the rulers on the TrackEditor
      * (aka bar buttons)
      */
@@ -963,6 +953,16 @@ public slots:
      * Re-dock the parameters box to its initial position
      */
     void slotDockParametersBack();
+
+    /**
+     * The parameters box was closed
+     */
+    void slotParametersClosed();
+
+    /**
+     * The parameters box was docked back
+     */
+    void slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition);
 
     /**
      * Toggle everything except the Transport Toolbar simultaneously
@@ -1164,8 +1164,6 @@ private:
     KToggleAction* m_viewTransport;
     KToggleAction* m_viewTransportToolBar;
     KToggleAction* m_viewTrackLabels;
-    KToggleAction* m_viewSegmentParameters;
-    KToggleAction* m_viewInstrumentParameters;
     KToggleAction* m_viewRulers;
     KToggleAction* m_viewTempoRuler;
     KToggleAction* m_viewChordNameRuler;

@@ -209,6 +209,17 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                            KDockWidget::DockLeft, // dock site
                            20);                   // relation target/this (in percent)
 
+    connect(m_dockLeft, SIGNAL(iMBeingClosed()),
+            this, SLOT(slotParametersClosed()));
+    connect(m_dockLeft, SIGNAL(hasUndocked()),
+            this, SLOT(slotParametersClosed()));
+    // Apparently, hasUndocked() is emitted when the dock widget's
+    // 'close' button on the dock handle is clicked.
+    connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
+            this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
+
+    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
     QFrame* vbox = new QFrame(m_dockLeft);
@@ -408,16 +419,6 @@ void RosegardenGUIApp::setupActions()
                                           actionCollection(),
                                           "show_tracklabels");
 
-    m_viewSegmentParameters = new KToggleAction(i18n("Show &Segment Parameters"), 0, this,
-                                                SLOT(slotToggleSegmentParameters()),
-                                                actionCollection(),
-                                                "show_segment_parameters");
-
-    m_viewInstrumentParameters = new KToggleAction(i18n("Show &Instrument Parameters"), 0, this,
-                                                   SLOT(slotToggleInstrumentParameters()),
-                                                   actionCollection(),
-                                                   "show_instrument_parameters");
-
     m_viewRulers = new KToggleAction(i18n("Show R&ulers"), 0, this,
                                      SLOT(slotToggleRulers()),
                                      actionCollection(),
@@ -438,10 +439,10 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
-    new KAction(i18n("Dock parameters back"), 0, this,
+    new KAction(i18n("Show instrument & segment parameters"), 0, this,
                 SLOT(slotDockParametersBack()),
                 actionCollection(),
-                "dock_parameters_back");
+                "show_inst_segment_parameters");
 
     new KAction(i18n("Toggle &All of the Above"), 0, this,
                 SLOT(slotToggleAll()),
@@ -996,8 +997,6 @@ void RosegardenGUIApp::initView()
     if (m_seqManager != 0)
     {
         slotToggleChordNameRuler();
-        slotToggleSegmentParameters();
-        slotToggleInstrumentParameters();
         slotToggleRulers();
         slotToggleTempoRuler();
         slotTogglePreviews();
@@ -1329,8 +1328,8 @@ void RosegardenGUIApp::slotSaveOptions()
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
     kapp->config()->writeEntry("Expanded Transport",           m_transport->isExpanded());
     kapp->config()->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
-    kapp->config()->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
-    kapp->config()->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
+//     kapp->config()->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
+//     kapp->config()->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
     kapp->config()->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
     kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     kapp->config()->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
@@ -1372,16 +1371,6 @@ void RosegardenGUIApp::readOptions()
     opt = kapp->config()->readBoolEntry("Show Track labels", true);
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
-
-    opt = kapp->config()->readBoolEntry("Show Segment Parameters", true);
-    m_viewSegmentParameters->setChecked(opt);
-    slotToggleSegmentParameters();
-
-    RG_DEBUG << "RosegardenGUIApp::readOptions() : hasKey 'Show Segment Parameters' : " << kapp->config()->hasKey("Show Segment Parameters") << endl;
-
-    opt = kapp->config()->readBoolEntry("Show Instrument Parameters", true);
-    m_viewInstrumentParameters->setChecked(opt);
-    slotToggleInstrumentParameters();
 
     opt = kapp->config()->readBoolEntry("Show Rulers", true);
     m_viewRulers->setChecked(opt);
@@ -2269,16 +2258,6 @@ void RosegardenGUIApp::slotToggleTrackLabels()
     }
 }
 
-void RosegardenGUIApp::slotToggleSegmentParameters()
-{
-    m_view->slotShowSegmentParameters(m_viewSegmentParameters->isChecked());
-}
-
-void RosegardenGUIApp::slotToggleInstrumentParameters()
-{
-    m_view->slotShowInstrumentParameters(m_viewInstrumentParameters->isChecked());
-}
-
 void RosegardenGUIApp::slotToggleRulers()
 {
     m_view->slotShowRulers(m_viewRulers->isChecked());
@@ -2304,6 +2283,16 @@ void RosegardenGUIApp::slotDockParametersBack()
     m_dockLeft->dockBack();
 }
 
+void RosegardenGUIApp::slotParametersClosed()
+{
+    stateChanged("parametersbox_closed");
+}
+
+void RosegardenGUIApp::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosition)
+{
+    if (dw == m_dockLeft)
+        stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+}
 
 void RosegardenGUIApp::slotToggleAll()
 {
@@ -2315,8 +2304,6 @@ void RosegardenGUIApp::slotToggleAll()
     c += m_viewTempoRuler->isChecked();
     c += m_viewPreviews->isChecked();
     c += m_viewTrackLabels->isChecked();
-    c += m_viewSegmentParameters->isChecked();
-    c += m_viewInstrumentParameters->isChecked();
 
     bool state = false;
     
@@ -2339,12 +2326,6 @@ void RosegardenGUIApp::slotToggleAll()
     
     m_viewTrackLabels->setChecked(state);
     slotToggleTrackLabels();
-
-    m_viewSegmentParameters->setChecked(state);
-    slotToggleSegmentParameters();
-    
-    m_viewInstrumentParameters->setChecked(state);
-    slotToggleInstrumentParameters();
 }
 
 
