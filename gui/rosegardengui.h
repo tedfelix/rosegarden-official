@@ -718,6 +718,8 @@ public slots:
      */
     void slotAudioManager();
     void slotAudioManagerClosed();
+    bool m_actionsSetup;
+
 
 private:
 

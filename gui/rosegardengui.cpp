@@ -82,6 +82,7 @@ using Rosegarden::timeT;
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
       m_config(kapp->config()),
+      m_actionsSetup(false),
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
@@ -421,6 +422,7 @@ void RosegardenGUIApp::setupActions()
 
     // Handle loop setting and unsetting from the transport loop button
     //
+    
     connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
     connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
 
@@ -429,6 +431,8 @@ void RosegardenGUIApp::setupActions()
 
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
             SLOT(slotEditTimeSignature(QWidget*)));
+
+    m_actionsSetup = true;
 }
 
 
@@ -853,7 +857,7 @@ bool RosegardenGUIApp::queryClose()
 
 bool RosegardenGUIApp::queryExit()
 {
-    slotSaveOptions();
+    if (m_actionsSetup) slotSaveOptions();
     return true;
 }
 
@@ -1580,6 +1584,7 @@ bool RosegardenGUIApp::launchSequencer()
         KMessageBox::error(0, i18n("Couldn't start the sequencer"));
         kdDebug(KDEBUG_AREA) << "Couldn't start the sequencer\n";
         m_sequencerProcess = 0;
+	m_useSequencer = false; // otherwise we hang waiting for it
     }
 
     return res;

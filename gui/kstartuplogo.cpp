@@ -37,7 +37,9 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 	      WStyle_Dialog  | WStyle_StaysOnTop | WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose),
     m_bReadyToHide(false)
 {
-    m_pixmap.load(locate("appdata", "pixmaps/splash.png"));
+    QString pixmapFile = locate("appdata", "pixmaps/splash.png");
+    if (!pixmapFile) return;
+    m_pixmap.load(pixmapFile);
     setBackgroundPixmap(m_pixmap);
     setGeometry(QApplication::desktop()->width()/2-m_pixmap.width()/2,
                 QApplication::desktop()->height()/2-m_pixmap.height()/2,

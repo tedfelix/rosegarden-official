@@ -152,10 +152,10 @@ NotePixmapFactory::init(std::string fontName, int size)
     try {
         m_font = new NoteFont(fontName, size);
     } catch (NoteFontMap::MappingFileReadFailed f) {
-        KMessageBox::error(0, strtoqstr(f.reason));
+        KMessageBox::error(0, i18n(strtoqstr(f.reason)));
         throw;
     } catch (NoteFont::BadFont f) {
-        KMessageBox::error(0, strtoqstr(f.reason));
+        KMessageBox::error(0, i18n(strtoqstr(f.reason)));
         throw;
     }
 
@@ -200,7 +200,7 @@ NotePixmapFactory::getDefaultFont()
     set<string> fontNames = getAvailableFontNames();
     if (fontNames.find("feta") != fontNames.end()) return "feta";
     else if (fontNames.size() == 0) {
-	cerr << "ERROR: NotePixmapFactory::getDefaultFont: No font names available" << endl;
+        KMessageBox::error(0, i18n("No note font names available, aborting"));
 	throw -1;
     }
     else return *fontNames.begin();

@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <dcopclient.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
+#include <kstddirs.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -332,6 +334,27 @@ int main(int argc, char *argv[])
     app.dcopClient()->registerAs(app.name(), false);
     app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
 
+    // Quick test for whether we've been correctly installed or not:
+    // can we find the splash-screen?  (This is entirely independent
+    // of actually loading the splash-screen later on.)
+    QString splashLocation = locate("appdata", "pixmaps/splash.png");
+    if (!splashLocation) {
+	KMessageBox::detailedError
+	    (0,
+	     i18n("An installed resource could not be located."),
+	     i18n(" A data file that should have been installed could not be\n"
+		  " found in the standard KDE installation directories.\n\n"
+		  " This may mean one of the following:\n\n"
+		  " 1. Rosegarden has not been correctly installed.  If you compiled\n"
+		  "     it yourself, check that you have run \"make install\" and that\n"
+		  "     the procedure completed successfully.\n\n"
+		  " 2. Rosegarden has been installed in a non-standard directory,\n"
+		  "     and you need to add this directory to your KDEDIRS environment\n"
+		  "     variable before you can run it.  This may be the case if you\n"
+		  "     installed into $HOME or a local third-party package directory\n"
+		  "     like /usr/local or /opt."),
+	     i18n("Installation problem"));
+    }
 
     // Parse cmd line args
     //
