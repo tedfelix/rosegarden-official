@@ -18,9 +18,11 @@ o AudioManager and AudioFile commands
 
 o Matrix Hypereditor [HALF COMPLETED]
 
-o Fix segment audio drag and drop
+o Matrix width bug
 
-o Plugins - tidying up unused libraries [WORKS but maybe not COMPLETE]
+o Matrix auto-paging during playback
+
+o Fix segment audio drag and drop
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
@@ -38,6 +40,8 @@ o MIDI export broken for key sig and SysExs
 
 Post 0.2
 ========
+
+o Plugins - tidying up unused libraries [WORKS but maybe not COMPLETE]
 
 o Send ALSA notes() rather than using note offs [DONE]
 

@@ -130,7 +130,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     if (!performAutoload())
         initView();
 
-    // Create a sequence manager
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
     // Make sure we get the sequencer status now
@@ -548,6 +547,10 @@ void RosegardenGUIApp::initZoomToolbar()
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
 	    this, SLOT(slotChangeZoom(int)));
+
+    // set initial zoom - we might want to make this a config option
+    m_zoomSlider->setToDefault();
+
 }
 
 
@@ -662,9 +665,6 @@ void RosegardenGUIApp::initView()
     // set the highlighted track
     m_view->selectTrack(comp.getSelectedTrack());
 
-    // set zoom slider to default value
-    m_zoomSlider->setToDefault();
-
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
     // to send these toggles twice on initialisation.
@@ -701,8 +701,10 @@ void RosegardenGUIApp::initView()
     // make sure we show
     //
     m_view->show();
-    slotChangeZoom(-1);
 
+    slotChangeZoom(m_zoomSlider->getCurrentSize());
+
+    // Create a sequence manager
 #ifdef RGKDE3
     stateChanged("new_file");
 #endif
