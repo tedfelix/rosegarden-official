@@ -1,6 +1,6 @@
 #MIN_CONFIG
 
-AM_INIT_AUTOMAKE(rosegarden,4-1.1cvs)
+AM_INIT_AUTOMAKE(rosegarden,4-1.1_cvs)
 
 dnl These are common macros that you might or might not want to use
 
@@ -329,14 +329,14 @@ else
 	echo
     fi
     if test "$with_dssi" = "no"; then
-	echo "* Rosegarden supports DSSI soft synth plugins if available.  See"	
+	echo "* Rosegarden supports DSSI audio plugins if available.  See"	
 	echo "http://dssi.sf.net/ for more information about DSSI.  To"
 	echo "build DSSI support into Rosegarden, you need to make sure"
 	echo "you have dssi.h available on your system."
 	echo
     fi
     if test "$with_liblo" = "no"; then
-	echo "* Rosegarden supports custom GUIs for DSSI soft synth plugins using"
+	echo "* Rosegarden supports custom GUIs for DSSI (and LADSPA) plugins using"
 	echo "the Open Sound Control protocol, if the Lite OSC library liblo is"
 	echo "available.  Go to http://www.plugin.org.uk/liblo/ to obtain liblo"
 	echo "and http://dssi.sf.net/ for more information about DSSI GUIs."
