@@ -1,0 +1,60 @@
+Last modified: Richard Bown 18.6.2001
+
+Starting and stopping artsd
+---------------------------
+
+Artsd starts with your UID as you log into (say) KDE.
+When developing the MIDI stuff so far it's advisable to
+run artsd in the foreground in a space terminal to catch any
+messages its throwing out.  If you do restart artsd many client
+applications may not handle the new reference at all and crash.
+At the moment (6.2001) the aRts MIDI Manager (accessed through
+aRts Control) is one of these.
+
+Start artsd like this:
+
+ % artsd -F 10 -S 4096 -a oss
+
+When you restart artsd you'll need to recreate your midi connections.
+
+On a default installation create the OSS midi ports by trying either
+/dev/midi or /dev/midi00.
+
+Once Rosegarden starts up it'll create two new clients labelled
+Playback and Record that can be connected to OSS ports or whatever
+else is available in the Midi Manager.  Avoid infinite loops by
+connecting Rosegarden input to output.
+
+
+Registering the Rosegarden implementations with artsd
+-----------------------------------------------------
+
+To get artsd to work with the Rosegarden MCOP implementations
+we have to tweak your $HOME/.mcoprc file and restart artsd to
+pick up the changes.
+
+You need to add entries to the directory that holds these files:
+
+  RosegardenMidiRecord.mcopclass
+  libMidiArts.la
+
+A complete example file as follows:
+
+
+  # global port - we use the temp directory
+  #
+  #
+  GlobalComm=Arts::TmpGlobalComm
+
+  # rwb 06/01 - don't use spaces between the elements in this list
+  # as aRts won't pick them up.
+  #
+  #
+  ExtensionPath="/usr/lib","/usr/lib/mcop","/home/bownie/rosegarden/sound/"
+  TraderPath="/usr/lib/mcop","/home/bownie/rosegarden/sound/"
+
+
+See the note about the spaces between entries in the file!
+
+Then restart artsd.
+
