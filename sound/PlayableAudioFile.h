@@ -225,7 +225,6 @@ protected:
     //
     InstrumentId          m_instrumentId;
 
-//!!!    size_t                m_ringBufferThreshold;
     int                   m_targetChannels;
     int                   m_targetSampleRate;
 

@@ -46,7 +46,6 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_file(0),
     m_audioFile(audioFile),
     m_instrumentId(instrumentId),
-//    m_ringBufferThreshold(0),
     m_targetChannels(targetChannels),
     m_targetSampleRate(targetSampleRate),
     m_initialised(false),
@@ -143,12 +142,6 @@ PlayableAudioFile::initialise(size_t bufferSize)
     std::cerr << "PlayableAudioFile: created " << bufferSize << "-sample ring buffer" << std::endl;
 #endif
 
-//    m_ringBufferThreshold = 
-//	(double(rand()) * bufferSize) / (double(RAND_MAX) * 4)
-//	+ (bufferSize / 10);
-//!!!    m_ringBufferThreshold = bufferSize / 4;
-
-    m_totalFrames = 0;
     m_initialised = true;
 }
 
@@ -216,17 +209,28 @@ PlayableAudioFile::scanTo(const RealTime &time)
     m_fileEnded = false; // until we know otherwise -- this flag is an
 			 // optimisation, not a reliable record
 
+    bool ok = false;
+
     if (m_isSmallFile) {
+
 	size_t frames = RealTime::realTime2Frame
 	    (time, m_audioFile->getSampleRate());
 	m_smallFileIndex = frames * m_audioFile->getBytesPerFrame();
+	ok = true;
 
     } else {
-	if (m_audioFile) {
-	    return m_audioFile->scanTo(m_file, time);
-	}
+
+	ok = m_audioFile->scanTo(m_file, time);
     }
-    return false;
+
+    m_totalFrames = Rosegarden::RealTime::realTime2Frame
+	(time, m_audioFile->getSampleRate());
+
+#ifdef DEBUG_PLAYABLE
+    std::cerr << "PlayableAudioFile::scanTo(" << time << "): set m_totalFrames to " << m_totalFrames << std::endl;
+#endif
+
+    return ok;
 }
 
 
@@ -303,12 +307,12 @@ void
 PlayableAudioFile::fillBuffers()
 {
     if (!m_initialised) {
-	std::cerr << "PlayableAudioFile::fillRingBuffer() [async]: not initialised" << std::endl;
+	std::cerr << "PlayableAudioFile::fillBuffers() [async]: not initialised" << std::endl;
 	return;
     }
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::fillRingBuffer() [async] -- scanning to " << m_startIndex << std::endl;
+    std::cerr << "PlayableAudioFile::fillBuffers() [async] -- scanning to " << m_startIndex << std::endl;
 #endif
 
     checkSmallFileCache();
@@ -330,14 +334,13 @@ PlayableAudioFile::isBufferable(const RealTime &currentTime)
 	// Note that all ringbuffers have the same size and all are to be
 	// reset in fillBuffers, so we can just compare against the first here
 
-//!!!	if (gapFrames > m_ringBuffers[0]->getSize() - m_ringBufferThreshold) {
 	if (gapFrames > m_ringBuffers[0]->getSize()) {
 	    return false;
 	}
 
     } else {
 	RealTime gap = currentTime - m_startTime;
-	if (gap + m_startIndex >= m_duration) return false;
+	if (gap >= m_duration) return false;
     }
 
     return true;
@@ -347,22 +350,19 @@ bool
 PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 {
     if (!m_initialised) {
-	std::cerr << "PlayableAudioFile::fillRingBuffer() [timed]: not initialised" << std::endl;
+	std::cerr << "PlayableAudioFile::fillBuffers() [timed]: not initialised" << std::endl;
 	return false;
     }
 
     checkSmallFileCache();
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::fillRingBuffer(" << currentTime << ") -- my start time is " << m_startTime << std::endl;
+    std::cerr << "PlayableAudioFile::fillBuffers(" << currentTime << "): my start time " << m_startTime << ", start index " << m_startIndex << ", duration " << m_duration << std::endl;
 #endif
 
     // We don't bother doing this if we're so far ahead of the audio
     // file's start time that the first data would be after the end of
-    // the buffer
-//!!! less the buffer threshold.
-
-    //!!! merge in some of the isBufferable code
+    // the buffer.  This logic is much the same as isBufferable above.
 
     if (m_startTime >= currentTime) {
 
@@ -384,12 +384,11 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 	// Note that all ringbuffers have the same size and all are to be
 	// reset, so we can just compare against the first here
 
-//!!!	if (gapFrames > m_ringBuffers[0]->getSize() - m_ringBufferThreshold) {
 	if (gapFrames > m_ringBuffers[0]->getSize()) {
 	    return false;
 	} else {
 #ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::fillRingBuffer: zeroing " << gapFrames << " samples" << std::endl;
+	    std::cerr << "PlayableAudioFile::fillBuffers: zeroing " << gapFrames << " samples" << std::endl;
 #endif
 
 	    for (int ch = 0; ch < m_targetChannels; ++ch) {
@@ -404,10 +403,10 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
     } else {
 
 	RealTime gap = currentTime - m_startTime;
-	if (gap + m_startIndex >= m_duration) return false;
+	if (gap >= m_duration) return false;
 
 #ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::fillRingBuffer: scanning to " << m_startIndex + gap << std::endl;
+	    std::cerr << "PlayableAudioFile::fillBuffers: scanning to " << m_startIndex + gap << std::endl;
 #endif
 	
 	// skip to the right point in the file before writing from there
@@ -439,11 +438,9 @@ PlayableAudioFile::updateBuffers()
 	if (ch == 0 || writeSpace < frames) frames = writeSpace;
     }
 
-//!!!    if (frames < m_ringBufferThreshold) {
     if (frames == 0) {
 #ifdef DEBUG_PLAYABLE
-	std::cerr << "PlayableAudioFile::updateBuffers: " << frames << " == 0, ignoring" << std::endl;
-//	std::cerr << "PlayableAudioFile::updateBuffers: " << frames << " < " << m_ringBufferThreshold << ", ignoring" << std::endl;
+	std::cerr << "PlayableAudioFile::updateBuffers: frames == 0, ignoring" << std::endl;
 	return;
 #endif
     }
@@ -472,9 +469,14 @@ PlayableAudioFile::updateBuffers()
         Rosegarden::RealTime::frame2RealTime
             (m_totalFrames + fileFrames, sourceSampleRate);
 
+#ifdef DEBUG_PLAYABLE
+    std::cerr << "PlayableAudioFile::updateBuffers: total frames "
+	      << m_totalFrames << ", plus frames " << fileFrames << ": nextDuration " << nextDuration << ", m_duration " << m_duration << std::endl;
+#endif
+    
     // Test for file end marker and reset frames accodingly
     //
-    if (nextDuration > m_duration)
+    if (nextDuration > m_startIndex + m_duration)
     {
         RealTime diffTime = 
             m_duration - Rosegarden::RealTime::frame2RealTime
