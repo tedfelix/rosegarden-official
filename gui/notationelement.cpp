@@ -43,14 +43,14 @@ NotationElement::NotationElement(Event *event)
       m_y(0),
       m_canvasItem(0)
 {
-    kdDebug(KDEBUG_AREA) << "new NotationElement "
-                         << this << " wrapping " << event << endl;
+//     kdDebug(KDEBUG_AREA) << "new NotationElement "
+//                          << this << " wrapping " << event << endl;
 }
 
 NotationElement::~NotationElement()
 {
-    kdDebug(KDEBUG_AREA) << "NotationElement " << this << "::~NotationElement() wrapping "
-                         << event() << endl;
+//     kdDebug(KDEBUG_AREA) << "NotationElement " << this << "::~NotationElement() wrapping "
+//                          << event() << endl;
 
     delete m_canvasItem;
 }
