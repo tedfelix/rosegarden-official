@@ -35,7 +35,14 @@ NotationHLayout::NotationHLayout(unsigned int barWidth,
 {
     initNoteWidthTable();
     m_timeUnitsPerBar = m_quantizer.wholeNoteDuration();
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
+
+NotationHLayout::~NotationHLayout()
+{
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::~NotationHLayout()" << endl;
+}
+
 
 void
 NotationHLayout::layout(NotationElement *el)
@@ -54,15 +61,6 @@ NotationHLayout::layout(NotationElement *el)
 
     // kdDebug(KDEBUG_AREA) << "m_nbTimeUnitsInCurrentBar : " << m_nbTimeUnitsInCurrentBar << endl;
 
-    if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
-        kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
-        // TODO
-    } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
-        kdDebug(KDEBUG_AREA) << "start a new bar" << endl;
-        // TODO
-        m_nbTimeUnitsInCurrentBar = 0;
-    }    
-
     kdDebug(KDEBUG_AREA) << "set to m_currentPos = " << m_currentPos << endl;
     el->setX(m_currentPos);
 
@@ -72,10 +70,24 @@ NotationHLayout::layout(NotationElement *el)
     m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
 
     kdDebug(KDEBUG_AREA) << "m_currentPos pushed to = " << m_currentPos << endl;
+
+    // See if we've completed a bar
+    //
+    if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
+        kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
+        // TODO
+    } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
+        kdDebug(KDEBUG_AREA) << "start a new bar" << endl;
+        m_nbTimeUnitsInCurrentBar = 0;
+        addNewBar(m_currentPos + m_noteMargin);
+        m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
+        kdDebug(KDEBUG_AREA) << "m_currentPos (bar) pushed to = " << m_currentPos << endl;
+    }    
+
 }
 
 void
-NotationHLayout::initNoteWidthTable(void)
+NotationHLayout::initNoteWidthTable()
 {
     m_noteWidthTable[Whole]        = m_barWidth;
     m_noteWidthTable[Half]         = m_barWidth / 2;
@@ -123,3 +135,24 @@ NotationHLayout::initNoteWidthTable(void)
 //     return notes;
     
 // }
+
+void
+NotationHLayout::addNewBar(unsigned int barPos)
+{
+    m_barPositions.push_back(barPos);
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::addNewBar(" << barPos << ") - size : "
+                         << m_barPositions.size() << "\n";
+
+}
+
+NotationHLayout::barpositions&
+NotationHLayout::barPositions()
+{
+    return m_barPositions;
+}
+
+const NotationHLayout::barpositions&
+NotationHLayout::barPositions() const
+{
+    return m_barPositions;
+}

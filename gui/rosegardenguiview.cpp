@@ -44,6 +44,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     : QCanvasView(new QCanvas(parent->width() * 2, parent->height() * 2),
                   parent, name),
     m_mainStaff(new Staff(canvas())),
+    m_currentStaff(m_mainStaff),
     m_movingItem(0),
     m_draggingItem(false),
     m_hlayout(0),
@@ -303,6 +304,27 @@ RosegardenGUIView::showElements(NotationElementList::iterator from,
         
     }
 
+
+    // Display bars
+    const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
+
+    for(NotationHLayout::barpositions::const_iterator it = barPositions.begin();
+        it != barPositions.end(); ++it) {
+
+        unsigned int barPos = *it;
+
+        kdDebug(KDEBUG_AREA) << "Adding bar at pos " << barPos << endl;
+
+        QCanvasLineGroupable* barLine = new QCanvasLineGroupable(canvas(), m_currentStaff);
+
+        barLine->setPoints(0, Staff::linesOffset,
+                           0, m_currentStaff->barLineHeight() + Staff::linesOffset);
+        barLine->move(barPos + dxoffset,
+                      dyoffset);
+        barLine->show();
+    }
+    
+
     return true;
 }
 
@@ -325,8 +347,10 @@ RosegardenGUIView::applyHorizontalLayout()
         return false;
     }
 
-    for_each(m_notationElements->begin(), m_notationElements->end(), *m_hlayout);
-    
+    for (NotationElementList::iterator i = m_notationElements->begin();
+         i != m_notationElements->end(); ++i)
+        (*m_hlayout)(*i);
+
     return m_hlayout->status();
 }
 

@@ -39,15 +39,24 @@ public:
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
 
+    virtual ~NotationHLayout();
+
+    typedef list<unsigned int> barpositions;
+
+    barpositions& barPositions();
+    const barpositions& barPositions() const;
+
 protected:
-    /**
-     * Breaks down a note which doesn't fit in a bar into shorter notes
+    /*
+     * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
      */
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
     virtual void layout(NotationElement*);
 
     void initNoteWidthTable();
+
+    void addNewBar(unsigned int barPos);
 
     Quantizer m_quantizer;
 
@@ -66,6 +75,8 @@ protected:
 
     /// maps note types (Whole, Half, etc...) to the width they should take on the bar
     NoteWidthTable m_noteWidthTable;
+public:
+    barpositions m_barPositions;
 
 };
 

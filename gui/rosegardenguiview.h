@@ -105,6 +105,7 @@ protected:
     void test();
 
     Staff *m_mainStaff;
+    Staff *m_currentStaff;
 
     NotationElementList *m_notationElements;
     
