@@ -719,8 +719,13 @@ DSSIPluginInstance::sendEvent(const RealTime &eventTime,
     std::cerr << "DSSIPluginInstance::sendEvent at " << eventTime << std::endl;
 #endif
     snd_seq_event_t ev(*event);
+
     ev.time.time.tv_sec = eventTime.sec;
     ev.time.time.tv_nsec = eventTime.nsec;
+
+    // DSSI doesn't use MIDI channels, it uses run_multiple_synths instead.
+    ev.data.note.channel = 0;
+
     m_eventBuffer.write(&ev, 1);
 }
 
