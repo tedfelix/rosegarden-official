@@ -52,9 +52,14 @@ RIFFPeakChunkGenerator::~RIFFPeakChunkGenerator()
 {
 }
 
-// Generate the peak chunk into the out file stream.
-// This process will send updates of its progress by exception
-// every m_updatePercentage%
+// Generate the peak chunk into the out file stream.  This process will
+// send updates of its progress by exception every m_updatePercentage%.
+//
+// Might change this to actually use signals and generate Pixmaps for
+// us as well.
+//
+//
+
 void
 RIFFPeakChunkGenerator::generate()
 {

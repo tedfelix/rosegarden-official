@@ -21,10 +21,11 @@
 
 #include "trackbuttons.h"
 
+#include <klocale.h>
+
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <rosegardenguidoc.h>
 #include <qbuttongroup.h>
 
 #include <assert.h>
@@ -38,6 +39,7 @@
 
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "rosegardenguidoc.h"
 
 using Rosegarden::TrackId;
 
@@ -208,7 +210,10 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     //
     assert(track != 0);
 
-    trackLabel->setText(strtoqstr(track->getLabel()));
+    if (track->getLabel() == std::string(""))
+        trackLabel->setText(i18n("<untitled>"));
+    else
+        trackLabel->setText(strtoqstr(track->getLabel()));
 
     trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);

@@ -163,64 +163,12 @@ RIFFAudioFile::appendSamples(const std::string &buffer)
     return true;
 }
 
+/*
 void
 RIFFAudioFile::writeHeader()
 {
-    if (m_outFile == 0 || m_type != WAV)
-        return;
-
-    std::string outString;
-
-    // RIFF type is all we support for the moment
-    outString += "RIFF";
-
-    // Now write the total length of the file minus these first 8 bytes.
-    // We won't know this until we've finished recording the file.
-    //
-    outString += "0000";
-
-    // WAV file is all we support
-    //
-    outString += "WAVE";
-
-    // Begin the format chunk
-    outString += "fmt ";
-
-    // length
-    //cout << "LENGTH = " << getLittleEndianFromInteger(0x10, 4) << endl;
-    outString += getLittleEndianFromInteger(0x10, 4);
-
-    // "always one"
-    outString += getLittleEndianFromInteger(0x01, 2);
-
-    // channel
-    outString += getLittleEndianFromInteger(m_channels, 2);
-
-    // sample rate
-    outString += getLittleEndianFromInteger(m_sampleRate, 4);
-
-    // bytes per second
-    outString += getLittleEndianFromInteger(m_bytesPerSecond, 4);
-
-    // bytes per sample
-    outString += getLittleEndianFromInteger(m_bytesPerSample, 2);
-
-    // bits per sample
-    outString += getLittleEndianFromInteger(m_bitsPerSample, 2);
-
-    // Now mark the beginning of the "data" chunk and leave the file
-    // open for writing.
-    outString += "data";
-
-    // length of data to follow - again needs to be written after
-    // we've completed the file.
-    //
-    outString += "0000";
-
-    // write out
-    //
-    putBytes(m_outFile, outString);
 }
+*/
 
 // scan on from a descriptor position
 bool
@@ -372,19 +320,22 @@ RIFFAudioFile::close()
 // optimised.  Don't use to high a resolution or your data will
 // be meaningless of course.
 //
+/*
 std::vector<float>
 RIFFAudioFile::getPreview(const RealTime &resolution)
 {
     std::vector<float> preview;
 
-    std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
-                                                   std::ios::in |
-                                                   std::ios::binary);
+    if (m_inFile == 0)
+        return preview;
+    //std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
+                                                   //std::ios::in |
+                                                   //std::ios::binary);
     try
     {
 
     // move past header to beginning of the data
-    scanTo(previewFile, RealTime(0, 0));
+    scanTo(m_inFile, RealTime(0, 0));
 
     unsigned int totalSample, totalBytes;
     std::string samples;
@@ -403,7 +354,7 @@ RIFFAudioFile::getPreview(const RealTime &resolution)
     {
         meanValue = 0.0f; // reset
 
-        samples = getBytes(previewFile, m_bytesPerSample);
+        samples = getBytes(m_bytesPerSample); // buffered read
         samplePtr = (char *)samples.c_str();
 
         for (unsigned int i = 0; i < m_channels; i++)
@@ -439,11 +390,11 @@ RIFFAudioFile::getPreview(const RealTime &resolution)
         //preview.push_back(sinc(meanValue));
         preview.push_back(meanValue);
     }
-    while(scanForward(previewFile, resolution));
+    while(scanForward(m_inFile, resolution));
 
     // clear up
-    previewFile->close();
-    delete previewFile;
+    //previewFile->close();
+    //delete previewFile;
     
     }
     catch(std::string s)
@@ -454,6 +405,7 @@ RIFFAudioFile::getPreview(const RealTime &resolution)
 
     return preview;
 }
+*/
 
 RealTime
 RIFFAudioFile::getLength()
@@ -603,6 +555,60 @@ RIFFAudioFile::readFormatChunk()
 void
 RIFFAudioFile::writeFormatChunk()
 {
+    if (m_outFile == 0 || m_type != WAV)
+        return;
+
+    std::string outString;
+
+    // RIFF type is all we support for the moment
+    outString += "RIFF";
+
+    // Now write the total length of the file minus these first 8 bytes.
+    // We won't know this until we've finished recording the file.
+    //
+    outString += "0000";
+
+    // WAV file is all we support
+    //
+    outString += "WAVE";
+
+    // Begin the format chunk
+    outString += "fmt ";
+
+    // length
+    //cout << "LENGTH = " << getLittleEndianFromInteger(0x10, 4) << endl;
+    outString += getLittleEndianFromInteger(0x10, 4);
+
+    // "always one"
+    outString += getLittleEndianFromInteger(0x01, 2);
+
+    // channel
+    outString += getLittleEndianFromInteger(m_channels, 2);
+
+    // sample rate
+    outString += getLittleEndianFromInteger(m_sampleRate, 4);
+
+    // bytes per second
+    outString += getLittleEndianFromInteger(m_bytesPerSecond, 4);
+
+    // bytes per sample
+    outString += getLittleEndianFromInteger(m_bytesPerSample, 2);
+
+    // bits per sample
+    outString += getLittleEndianFromInteger(m_bitsPerSample, 2);
+
+    // Now mark the beginning of the "data" chunk and leave the file
+    // open for writing.
+    outString += "data";
+
+    // length of data to follow - again needs to be written after
+    // we've completed the file.
+    //
+    outString += "0000";
+
+    // write out
+    //
+    putBytes(m_outFile, outString);
 }
 
 

@@ -91,15 +91,60 @@ WAVAudioFile::open()
     return true;
 }
 
+// Open the file for writing, write out the header and move
+// to the data chunk to accept samples.  We fill in all the
+// totals when we close().
+//
 bool
 WAVAudioFile::write()
 {
+    // close if we're open
+    if (m_outFile)
+    {
+        m_outFile->close();
+        delete m_outFile;
+    }
+
+    // open for writing
+    m_outFile = new std::ofstream(m_fileName.c_str(),
+                                  std::ios::out | std::ios::binary);
+
+    if (!m_outFile )
+        return false;
+
+
+    // write out format header chunk and prepare for sample writing
+    //
+    writeFormatChunk();
+
     return true;
 }
 
 void
 WAVAudioFile::close()
 {
+    if (m_outFile == 0)
+        return;
+
+    m_outFile->seekp(0, std::ios::end);
+    unsigned int totalSize = m_outFile->tellp();
+
+    // seek to first length position
+    m_outFile->seekp(4, std::ios::beg);
+
+    // write complete file size minus 8 bytes to here
+    putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 8, 4));
+
+    // reseek from start forward 40
+    m_outFile->seekp(40, std::ios::beg);
+
+    // write the data chunk size to end
+    putBytes(m_outFile, getLittleEndianFromInteger(totalSize - 44, 4));
+
+    m_outFile->close();
+
+    delete m_outFile;
+    m_outFile = 0;
 }
 
 // Set the AudioFile meta data according to WAV file format specification.
@@ -117,10 +162,101 @@ WAVAudioFile::parseHeader()
     catch(std::string e)
     {
         std::cout << "WAVAudioFile::parseHeader - \"" << m_fileName
-                  << "\" isn't recognised as a wav file" << std::endl;
-
+                  << "\" isn't recognised as a wav file - EXCEPTION = \""
+                  << e << "\"" << std::endl;
     }
    
 }
+
+std::vector<float>
+WAVAudioFile::getPreview(const RealTime &resolution)
+{
+    std::vector<float> preview;
+
+    if (m_inFile == 0)
+        return preview;
+    /*
+    std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
+                                                   std::ios::in |
+                                                   std::ios::binary);
+                                                   */
+    try
+    {
+
+    // move past header to beginning of the data
+    scanTo(m_inFile, RealTime(0, 0));
+
+    unsigned int totalSample, totalBytes;
+    std::string samples;
+    char *samplePtr;
+    float meanValue;
+
+    // Read sample data at given resolution and push the results
+    // onto the result vector.
+  
+    // We need sinc interpolation:
+    //
+    //   sinc(x)
+    //      returns sin(pi*x)/(pi*x) at all points of array x.
+
+    do
+    {
+        meanValue = 0.0f; // reset
+
+        samples = getBytes(m_bytesPerSample); // buffered read
+        samplePtr = (char *)samples.c_str();
+
+        for (unsigned int i = 0; i < m_channels; i++)
+        {
+
+            // get the whole frame
+            switch(m_bitsPerSample)
+            {
+                case 8: // 8 bit
+                    meanValue += (*((unsigned char *)samplePtr))
+                                 / SAMPLE_MAX_8BIT;
+                    samplePtr++;
+                    break;
+
+                case 16: // 16 bit
+                    meanValue += (*((short*)samplePtr)) / SAMPLE_MAX_16BIT;
+                    samplePtr += 2;
+                    break;
+
+                case 24: // 24 bit
+                default:
+                    std::cerr << "RIFFAudioFile::getPreview - "
+                              << "unsupported bit depth of "
+                              << m_bitsPerSample
+                              << std::endl;
+                    break;
+            }
+        }
+
+        meanValue /= ((float)m_channels);
+
+        // store - only one value per whole sample frame
+        //preview.push_back(sinc(meanValue));
+        preview.push_back(meanValue);
+    }
+    while(scanForward(m_inFile, resolution));
+
+    /*
+    // clear up
+    previewFile->close();
+    delete previewFile;
+    */
+    
+    }
+    catch(std::string s)
+    {
+        std::cerr << "RIFFAudioFile::getPreview - EXCEPTION - \"" 
+                  << s << "\"" << std::endl;
+    }
+
+    return preview;
+
+}
+
 
 }

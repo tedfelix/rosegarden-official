@@ -2007,7 +2007,7 @@ AlsaDriver::createAudioFile(const std::string &fileName)
 
     // Write the header information out and prepare for writing samples
     //
-    _recordFile->writeHeader();
+    //_recordFile->writeHeader();
 
     return true;
 }

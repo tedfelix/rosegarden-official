@@ -105,16 +105,18 @@ public:
     //
     virtual RealTime getLength();
 
+    /*
     // Write the header
     //
     virtual void writeHeader();
+    */
 
     // Return a normalised representation of the audio file waveform
     // at the required resolution - don't use this for a high
     // definition view of the waveform - just for overviews.  Could
     // in future be optimised with a local data file no doubt.
     // 
-    virtual std::vector<float> getPreview(const RealTime &resolution);
+    virtual std::vector<float> getPreview(const RealTime &resolution) = 0;
 
 
 protected:

@@ -149,9 +149,11 @@ public:
     //
     virtual RealTime getLength() = 0;
 
+    /*
     // Must be accessible from the Driver
     //
     virtual void writeHeader() = 0;
+    */
 
     // Generate the preview
     //

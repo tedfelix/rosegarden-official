@@ -60,6 +60,10 @@ public:
     //
     void parseHeader();
 
+    //
+    // 
+    virtual std::vector<float> getPreview(const RealTime &resolution);
+
 protected:
 
 
