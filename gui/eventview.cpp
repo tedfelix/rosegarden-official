@@ -49,6 +49,7 @@
 #include "rosegardenguidoc.h"
 #include "rosestrings.h"
 #include "dialogs.h"
+#include "eventfilter.h"
 #include "editcommands.h"
 #include "matrixtool.h"
 #include "rosedebug.h"
@@ -795,6 +796,50 @@ EventView::slotEditEventAdvanced()
     }
 }
 
+void
+EventView::slotSelectAll()
+{
+    for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
+	m_eventList->setSelected(m_eventList->itemAtIndex(i), true);
+    }
+}
+
+void
+EventView::slotClearSelection()
+{
+    for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
+	m_eventList->setSelected(m_eventList->itemAtIndex(i), false);
+    }
+}
+
+void
+EventView::slotFilterSelection()
+{
+    QPtrList<QListViewItem> selection = m_eventList->selectedItems();
+    if (selection.count() == 0) return;
+
+    EventFilterDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+
+	QPtrListIterator<QListViewItem> it(selection);
+	QListViewItem *listItem;
+
+	while ((listItem = it.current()) != 0) {
+
+	    EventViewItem *item = dynamic_cast<EventViewItem*>(*it);
+	    if (!item) {
+		++it;
+		continue;
+	    }
+
+	    if (!dialog.keepEvent(item->getEvent())) {
+		m_eventList->setSelected(item, false);
+	    }
+
+	    ++it;
+	}
+    }
+}
 
 void
 EventView::setupActions()
@@ -825,6 +870,20 @@ EventView::setupActions()
     new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,
                 SLOT(slotEditEventAdvanced()), actionCollection(),
                 "edit_advanced");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+
+    new KAction(i18n("&Filter Selection"), icon, Key_F, this,
+                SLOT(slotFilterSelection()), actionCollection(),
+                "filter_selection");
+
+    new KAction(i18n("Select &All"), 0, this,
+                SLOT(slotSelectAll()), actionCollection(),
+                "select_all");
+
+    new KAction(i18n("Clear Selection"), Key_Escape, this,
+		SLOT(slotClearSelection()), actionCollection(),
+		"clear_selection");
 
     createGUI(getRCFileName());
 }

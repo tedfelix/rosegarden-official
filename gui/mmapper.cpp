@@ -727,7 +727,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         Rosegarden::TimeSignature sig = c.getTimeSignatureAt(t);
 	Rosegarden::timeT barDuration = sig.getBarDuration();
         std::vector<int> divisions;
-        if (depth > 0) divisions = sig.getDivisions(depth - 1);
+        if (depth > 0) sig.getDivisions(depth - 1, divisions);
         int ticks = 1;
         
         for (int i = -1; i < (int)divisions.size(); ++i) {

@@ -5,29 +5,31 @@
 <MenuBar>
 
 <Menu name="edit" append="new_merge">
+  <Action name="select_all"/>
+  <Action name="clear_selection"/>
+  <Action name="filter_selection"/>
+</Menu>
+
+<Menu name="event">
+  <text>E&amp;vent</text>
   <Action name="insert"/>
   <Action name="delete"/>
   <Action name="edit_simple"/>
   <Action name="edit_advanced"/>
-  <Separator/>
-  <Action name="select_all"/>
 </Menu>
 
 </MenuBar>
 
 <ToolBar name="Actions Toolbar">
-  <text>Tools Toolbar</text>
+  <text>Actions Toolbar</text>
   <Action name="insert"/>
   <Action name="delete"/>
   <Action name="edit_simple"/>
   <Action name="edit_advanced"/>
+  <Action name="filter_selection"/>
 </ToolBar>
 
-
 </kpartgui>
-
-
-
 
 <ToolBar name="Transport Toolbar">
   <text>Transport Toolbar</text>

@@ -231,8 +231,10 @@ private:
 };
 
 
-class EventQuantizeCommand : public BasicCommand
+class EventQuantizeCommand : public QObject, public BasicCommand
 {
+    Q_OBJECT
+
 public:
     /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Rosegarden::Segment &segment,
@@ -261,7 +263,11 @@ public:
     ~EventQuantizeCommand();
     
     static QString getGlobalName(Rosegarden::Quantizer *quantizer = 0);
-    
+    void setProgressTotal(int total) { m_progressTotal = total; }
+
+signals:
+    void incrementProgress(int);
+
 protected:
     virtual void modifySegment();
 
@@ -269,6 +275,7 @@ private:
     Rosegarden::Quantizer *m_quantizer; // I own this
     Rosegarden::EventSelection *m_selection;
     QString m_configGroup;
+    int m_progressTotal;
 
     /// Sets to m_quantizer as well as returning value
     Rosegarden::Quantizer *makeQuantizer(QString, std::string, bool);

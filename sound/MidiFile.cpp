@@ -39,6 +39,7 @@
 #include "Quantizer.h"
 #include "Studio.h"
 #include "MidiTypes.h"
+#include "Profiler.h"
 
 //#define MIDI_DEBUG 1
 
@@ -211,7 +212,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     if (bytesGot > 1000) {
 
         emit setProgress((int)(double(midiFile->tellg())/
-                                double(m_fileSize) * 20.0));
+			       double(m_fileSize) * 20.0));
         kapp->processEvents(50);
 
         bytesGot = 0;
@@ -658,6 +659,8 @@ MidiFile::parseTrack(ifstream* midiFile, TrackId &lastTrackNum)
 bool
 MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 {
+    Rosegarden::Profiler profiler("MidiFile::convertToRosegarden");
+
     MidiTrackIterator midiEvent;
     Segment *rosegardenSegment;
     Segment *conductorSegment = 0;

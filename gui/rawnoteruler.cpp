@@ -392,7 +392,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 	Rosegarden::TimeSignature timeSig =
 	    m_segment->getComposition()->getTimeSignatureInBar(barNo, isNew);
 	if (isNew || barNo == firstBar) {
-	    divisions = timeSig.getDivisions(3);
+	    timeSig.getDivisions(3, divisions);
 	    if (timeSig == Rosegarden::TimeSignature()) // special case for 4/4
 		divisions[0] = 2;
 	}

@@ -1960,15 +1960,21 @@ void MatrixView::slotFilterSelection()
     if (dialog.exec() == QDialog::Accepted) {
         RG_DEBUG << "slotFilterSelection- accepted" << endl;
 
+	bool haveEvent = false;
+
         EventSelection *newSelection = new EventSelection(*segment);
         EventSelection::eventcontainer &ec =
             existingSelection->getSegmentEvents();
         for (EventSelection::eventcontainer::iterator i =
              ec.begin(); i != ec.end(); ++i) {
-            if (dialog.keepEvent(*i)) newSelection->addEvent(*i);
+            if (dialog.keepEvent(*i)) {
+		haveEvent = true;
+		newSelection->addEvent(*i);
+	    }
         }
 
-        setCurrentSelection(newSelection);
+	if (haveEvent) setCurrentSelection(newSelection);
+	else setCurrentSelection(0);
     }
 }
 

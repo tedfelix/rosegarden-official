@@ -664,8 +664,9 @@ public:
 		       Segment::iterator) const;
 
     void quantizeAbsoluteTime(Segment *, Segment::iterator) const;
-    long scoreAbsoluteTimeForBase(Segment *, Segment::iterator,
-				  int depth, timeT base, timeT sigTime) const;
+    long scoreAbsoluteTimeForBase(Segment *, const Segment::iterator &,
+				  int depth, timeT base, timeT sigTime,
+				  timeT t, timeT d, int noteType) const;
     void quantizeDurationProvisional(Segment *, Segment::iterator) const;
     void quantizeDuration(Segment *, Chord &) const;
 
@@ -676,7 +677,7 @@ public:
     void scanTupletsAt(Segment *, Segment::iterator, int depth,
 		       timeT base, timeT barStart,
 		       timeT tupletStart, timeT tupletBase) const;
-    bool isValidTupletAt(Segment *, Segment::iterator,
+    bool isValidTupletAt(Segment *, const Segment::iterator &,
 			 int depth, timeT base, timeT sigTime,
 			 timeT tupletBase) const;
     
@@ -826,7 +827,8 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 
     int maxDepth = 8 - noteType;
     if (maxDepth < 4) maxDepth = 4;
-    std::vector<int> divisions = timeSig.getDivisions(maxDepth);
+    std::vector<int> divisions;
+    timeSig.getDivisions(maxDepth, divisions);
     if (timeSig == TimeSignature()) // special case for 4/4
 	divisions[0] = 2;
 
@@ -852,7 +854,8 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 
 	base /= divisions[depth];
 	if (base < m_unit) break;
-	long score = scoreAbsoluteTimeForBase(s, i, depth, base, sigTime);
+	long score = scoreAbsoluteTimeForBase(s, i, depth, base, sigTime,
+					      t, d, noteType);
 
 	if (depth == 0 || score < bestScore) {
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -892,21 +895,24 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 
 long
 NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *,
-						  Segment::iterator i,
+						  const Segment::iterator &i,
 						  int depth,
 						  timeT base,
-						  timeT sigTime)
+						  timeT sigTime,
+						  timeT t,
+						  timeT d,
+						  int noteType)
     const
 {
     Profiler profiler("NotationQuantizer::Impl::scoreAbsoluteTimeForBase");
 
-    int noteType = (*i)->get<Int>(m_provisionalNoteType);
+//    int noteType = (*i)->get<Int>(m_provisionalNoteType);
     bool right = false;
     
-    timeT t = m_q->getFromSource(*i, AbsoluteTimeValue);
-    timeT d = getProvisional(*i, DurationValue);
+//    timeT t = m_q->getFromSource(*i, AbsoluteTimeValue);
+//    timeT d = getProvisional(*i, DurationValue);
 
-    timeT shortTime = Note(Note::Shortest).getDuration();
+    static timeT shortTime = Note(Note::Shortest).getDuration();
 
     long distance = (t - sigTime) % base;
     if (distance > base / 2) { // nearer to the next multiple
@@ -1046,7 +1052,8 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
     int noteType = Note::getNearestNote(d).getNoteType();
     int maxDepth = 8 - noteType;
     if (maxDepth < 4) maxDepth = 4;
-    std::vector<int> divisions = timeSig.getDivisions(maxDepth);
+    std::vector<int> divisions;
+    timeSig.getDivisions(maxDepth, divisions);
 
     Segment::iterator nextNote = c.getNextNote();
     timeT nextNoteTime =
@@ -1395,7 +1402,7 @@ NotationQuantizer::Impl::scanTupletsAt(Segment *s,
 
 bool
 NotationQuantizer::Impl::isValidTupletAt(Segment *s,
-					 Segment::iterator i,
+					 const Segment::iterator &i,
 					 int depth,
 					 timeT /* base */,
 					 timeT sigTime,
@@ -1431,8 +1438,12 @@ NotationQuantizer::Impl::isValidTupletAt(Segment *s,
     long score = 0;
     if (!(*i)->get<Int>(m_provisionalScore, score)) return false;
 
+    timeT t = m_q->getFromSource(*i, AbsoluteTimeValue);
+    timeT d = getProvisional(*i, DurationValue);
+    int noteType = (*i)->get<Int>(m_provisionalNoteType);
+
     long tupletScore = scoreAbsoluteTimeForBase
-	(s, i, depth, tupletBase, sigTime);
+	(s, i, depth, tupletBase, sigTime, t, d, noteType);
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "\nNotationQuantizer::isValidTupletAt: score " << score
 	 << " vs tupletScore " << tupletScore << endl;
@@ -1527,14 +1538,15 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 
     if (m_maxTuplet >= 2) {
 
-	std::vector<int> divisions = comp->getTimeSignatureAt(wholeStart).getDivisions(7);
+	std::vector<int> divisions;
+	comp->getTimeSignatureAt(wholeStart).getDivisions(7, divisions);
 
 	for (int barNo = comp->getBarNumber(wholeStart);
 	     barNo <= comp->getBarNumber(wholeEnd); ++barNo) {
 
 	    bool isNew = false;
 	    TimeSignature timeSig = comp->getTimeSignatureInBar(barNo, isNew);
-	    if (isNew) divisions = timeSig.getDivisions(7);
+	    if (isNew) timeSig.getDivisions(7, divisions);
 	    scanTupletsInBar(s, comp->getBarStart(barNo),
 			     timeSig.getBarDuration(),
 			     wholeStart, wholeEnd, divisions);

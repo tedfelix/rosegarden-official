@@ -1227,10 +1227,7 @@ RosegardenGUIView::slotSynchroniseWithComposition()
 void
 RosegardenGUIView::initChordNameRuler()
 {
-    getTrackEditor()->getChordNameRuler()->recalculate
-	(0,
-	 m_rulerScale->getTimeForX
-	 (getTrackEditor()->getSegmentCanvas()->width()));
+    getTrackEditor()->getChordNameRuler()->setReady();
 }
 
 

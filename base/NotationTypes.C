@@ -1643,12 +1643,11 @@ int TimeSignature::getEmphasisForTime(timeT offset)
 }
 
 
-std::vector<int>
-TimeSignature::getDivisions(int depth) const
+void TimeSignature::getDivisions(int depth, std::vector<int> &divisions) const
 {
-    std::vector<int> divisions;
+    divisions.clear();
 
-    if (depth <= 0) return divisions;
+    if (depth <= 0) return;
     timeT base = getBarDuration(); // calls setInternalDurations
 /*
     if (m_numerator == 4 && m_denominator == 4) {
@@ -1657,13 +1656,13 @@ TimeSignature::getDivisions(int depth) const
         --depth;
     }
 */
-    if (depth <= 0) return divisions;
+    if (depth <= 0) return;
 
     divisions.push_back(base / m_beatDuration);
     base = m_beatDuration;
     --depth;
 
-    if (depth <= 0) return divisions;
+    if (depth <= 0) return;
 
     if (m_dotted) divisions.push_back(3);
     else divisions.push_back(2);
@@ -1674,7 +1673,7 @@ TimeSignature::getDivisions(int depth) const
         --depth;
     }
 
-    return divisions;
+    return;
 }
 
           

@@ -107,6 +107,10 @@ public slots:
     void slotEditEvent();
     void slotEditEventAdvanced();
 
+    void slotFilterSelection();
+    void slotSelectAll();
+    void slotClearSelection();
+
     // Show RMB menu
     //
     void slotPopupMenu(QListViewItem*, const QPoint&, int);

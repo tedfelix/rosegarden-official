@@ -66,6 +66,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_height(height),
     m_currentXOffset(0),
     m_width(-1),
+    m_ready(false),
     m_rulerScale(rulerScale),
     m_composition(&doc->getComposition()),
     m_regetSegmentsOnChange(true),
@@ -102,6 +103,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_height(height),
     m_currentXOffset(0),
     m_width(-1),
+    m_ready(false),
     m_rulerScale(rulerScale),
     m_composition(&doc->getComposition()),
     m_regetSegmentsOnChange(false),
@@ -135,6 +137,13 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 ChordNameRuler::~ChordNameRuler()
 {
     delete m_chordSegment;
+}
+
+void
+ChordNameRuler::setReady()
+{
+    m_ready = true;
+    update();
 }
 
 void
@@ -197,6 +206,8 @@ ChordNameRuler::minimumSizeHint() const
 void
 ChordNameRuler::recalculate(timeT from, timeT to)
 {
+    if (!m_ready) return;
+
     Rosegarden::Profiler profiler("ChordNameRuler::recalculate", true);
     NOTATION_DEBUG << "ChordNameRuler[" << this << "]::recalculate" << endl;
 
@@ -379,7 +390,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
 void
 ChordNameRuler::paintEvent(QPaintEvent* e)
 {
-    if (!m_composition) return;
+    if (!m_composition || !m_ready) return;
 
     NOTATION_DEBUG << "*** Chord Name Ruler: paintEvent" << endl;
 

@@ -740,8 +740,21 @@ EventQuantizeCommand::modifySegment()
     Segment &segment = getSegment();
     SegmentNotationHelper helper(segment);
 
-    if (m_selection) {
+    bool rebeam = false;
+    bool makeviable = false;
+    bool decounterpoint = false;
 
+    if (m_configGroup) {
+ //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
+	KConfig *config = kapp->config();
+	config->setGroup(m_configGroup);
+
+	bool rebeam = config->readBoolEntry("quantizerebeam", true);
+	bool makeviable = config->readBoolEntry("quantizemakeviable", false);
+	bool decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
+    }
+
+    if (m_selection) {
         m_quantizer->quantize(m_selection);
 
     } else {
@@ -750,44 +763,50 @@ EventQuantizeCommand::modifySegment()
 			      segment.findTime(getEndTime()));
     }
 
-    if (m_configGroup) {
-
-	KConfig *config = kapp->config();
-	config->setGroup(m_configGroup);
-
-	bool rebeam = config->readBoolEntry("quantizerebeam", true);
-	bool makeviable = config->readBoolEntry("quantizemakeviable", false);
-	bool decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
-
-	if (m_selection) {
-	    EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
-	    for (EventSelection::RangeTimeList::iterator i = ranges.begin();
-		 i != ranges.end(); ++i) {
-		if (makeviable) {
-		    helper.makeNotesViable(i->first, i->second, true);
-		}
-		if (decounterpoint) {
-		    helper.deCounterpoint(i->first, i->second);
-		}
-		if (rebeam) {
-		    helper.autoBeam(i->first, i->second, GROUP_TYPE_BEAMED);
-		}
-	    }
+    if (m_progressTotal > 0) {
+	if (rebeam || makeviable || decounterpoint) {
+	    emit incrementProgress(m_progressTotal / 2);
+	    kapp->processEvents(50);
 	} else {
+	    emit incrementProgress(m_progressTotal);
+	    kapp->processEvents(50);
+	}
+    }	    
+
+    if (m_selection) {
+	EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
+	for (EventSelection::RangeTimeList::iterator i = ranges.begin();
+	     i != ranges.end(); ++i) {
 	    if (makeviable) {
-		helper.makeNotesViable(getStartTime(), getEndTime(), true);
+		helper.makeNotesViable(i->first, i->second, true);
 	    }
 	    if (decounterpoint) {
-		helper.deCounterpoint(getStartTime(), getEndTime());
+		helper.deCounterpoint(i->first, i->second);
 	    }
 	    if (rebeam) {
-		helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
-//!!!
-		helper.autoSlur(getStartTime(), getEndTime(), true);
+		helper.autoBeam(i->first, i->second, GROUP_TYPE_BEAMED);
+		helper.autoSlur(i->first, i->second, true);
 	    }
 	}
-    } //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
-	
+    } else {
+	if (makeviable) {
+	    helper.makeNotesViable(getStartTime(), getEndTime(), true);
+	}
+	if (decounterpoint) {
+	    helper.deCounterpoint(getStartTime(), getEndTime());
+	}
+	if (rebeam) {
+	    helper.autoBeam(getStartTime(), getEndTime(), GROUP_TYPE_BEAMED);
+	    helper.autoSlur(getStartTime(), getEndTime(), true);
+	}
+    }
+
+    if (m_progressTotal > 0) {
+	if (rebeam || makeviable || decounterpoint) {
+	    emit incrementProgress(m_progressTotal / 2);
+	    kapp->processEvents(50);
+	}
+    }	    
 }
 
 Rosegarden::Quantizer *

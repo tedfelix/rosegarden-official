@@ -53,7 +53,8 @@ public:
     /**
      * Construct a ChordNameRuler that displays the chords in the
      * given Composition at positions calculated by the given
-     * RulerScale.
+     * RulerScale.  Be aware that it will not be refreshed until
+     * setReady is called (because the first refresh is expensive).
      */
     ChordNameRuler(Rosegarden::RulerScale *rulerScale,
 		   RosegardenGUIDoc *doc,
@@ -65,7 +66,8 @@ public:
     /**
      * Construct a ChordNameRuler that displays the chords in the
      * given Segments at positions calculated by the given
-     * RulerScale.
+     * RulerScale.  Be aware that it will not be refreshed until
+     * setReady is called (because the first refresh is expensive).
      */
     ChordNameRuler(Rosegarden::RulerScale *rulerScale,
 		   RosegardenGUIDoc *doc,
@@ -76,6 +78,9 @@ public:
 		   const char *name = 0);
 
     ~ChordNameRuler();
+
+    /// Indicate that the chord-name ruler should make itself ready and refresh
+    void setReady();
 
     // may have one of these; can be changed at any time (to any in given composition):
     void setCurrentSegment(Rosegarden::Segment *segment);
@@ -88,9 +93,6 @@ public:
 
     void setMinimumWidth(int width) { m_width = width; }
 
-    void recalculate(Rosegarden::timeT from = 0,
-		     Rosegarden::timeT to = 0);
-
 public slots:
     void slotScrollHoriz(int x);
 
@@ -98,10 +100,14 @@ protected:
     virtual void paintEvent(QPaintEvent *);
 
 private:
+    void recalculate(Rosegarden::timeT from = 0,
+		     Rosegarden::timeT to = 0);
+
     double m_xorigin;
     int    m_height;
     int    m_currentXOffset;
     int    m_width;
+    bool   m_ready;
 
     Rosegarden::RulerScale  *m_rulerScale;
 

@@ -978,7 +978,7 @@ public:
      * which is best subdivided into 3 subdivisions, each of which
      * divides most neatly into 2).
      */
-    std::vector<int> getDivisions(int depth) const;
+    void getDivisions(int depth, std::vector<int> &divisions) const;
 
 private:
     friend class Composition;

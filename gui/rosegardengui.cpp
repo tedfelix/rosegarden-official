@@ -898,11 +898,11 @@ void RosegardenGUIApp::initView()
     //
     if (m_seqManager != 0)
     {
+        slotToggleChordNameRuler();
         slotToggleSegmentParameters();
         slotToggleInstrumentParameters();
         slotToggleRulers();
         slotToggleTempoRuler();
-        slotToggleChordNameRuler();
         slotTogglePreviews();
 
         // Reset any loop on the sequencer
@@ -921,7 +921,6 @@ void RosegardenGUIApp::initView()
 
     }
 
-//    m_view->initChordNameRuler();
     m_view->show();
 
     delete oldView;
@@ -957,6 +956,13 @@ void RosegardenGUIApp::initView()
         m_audioManagerDialog->slotPopulateFileList();
 
     kapp->processEvents();
+    
+    if (m_viewChordNameRuler->isChecked()) {
+	SetWaitCursor swc;
+	m_view->initChordNameRuler();
+    } else {
+	m_view->initChordNameRuler();
+    }
 }
 
 void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
@@ -2510,10 +2516,6 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
 
     Rosegarden::Composition *comp = &newDoc->getComposition();
 
-    int progressPer = 100;
-    if (comp->getNbSegments() > 0)
-        progressPer = (int)(100.0 / (double(comp->getNbSegments() * 3)));
-
     for (Rosegarden::Composition::iterator i = comp->begin();
          i != comp->end(); ++i) {
 
@@ -2522,9 +2524,9 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
         segment.insert(helper.guessClef(segment.begin(),
                                         segment.getEndMarker()).getAsEvent
                        (segment.getStartTime()));
-
-        progressDlg.progressBar()->advance(progressPer);
     }
+
+    progressDlg.progressBar()->setProgress(100);
 
     for (Rosegarden::Composition::iterator i = comp->begin();
          i != comp->end(); ++i) {
@@ -2550,12 +2552,13 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
             segment.insert(helper.guessKey(adapter).getAsEvent
                            (segment.getStartTime()));
         }
-
-        progressDlg.progressBar()->advance(progressPer);
     }
 
+    int progressPer = 100;
+    if (comp->getNbSegments() > 0)
+        progressPer = (int)(100.0 / double(comp->getNbSegments()));
+
     KMacroCommand *command = new KMacroCommand(i18n("Calculate Notation"));
-    //int count = 0;
 
     for (Rosegarden::Composition::iterator i = comp->begin();
          i != comp->end(); ++i) {
@@ -2566,10 +2569,15 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
 
         RG_DEBUG << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
 
-        command->addCommand(new EventQuantizeCommand
-                            (segment, startTime, endTime, "Notation Options",
-                             Rosegarden::Quantizer::NotationPrefix, true));
-        progressDlg.progressBar()->advance(progressPer);
+	EventQuantizeCommand *subCommand = new EventQuantizeCommand
+	    (segment, startTime, endTime, "Notation Options",
+	     Rosegarden::Quantizer::NotationPrefix, true);
+
+	subCommand->setProgressTotal(progressPer + 1);
+	QObject::connect(subCommand, SIGNAL(incrementProgress(int)),
+			 progressDlg.progressBar(), SLOT(advance(int)));
+
+	command->addCommand(subCommand);
     }
 
     newDoc->getCommandHistory()->addCommand(command);
