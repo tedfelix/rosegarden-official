@@ -545,6 +545,9 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     m_pm.drawText(0, r.height(),     QString(QChar(numC)));
     m_pm.drawText(0, r.height() * 2, QString(QChar(denomC)));
 
+    m_p.end();
+    m_pm.end();
+
     QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
     QBitmap m(*m_generatedMask);
     p.setMask(m);

@@ -398,9 +398,8 @@ NotationView::showElements(NotationElementList::iterator from,
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
-                currentClef =
-                    (*it)->event()->get<String>(Clef::ClefPropertyName);
-                QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
+                QCanvasPixmap clefPixmap
+                    (npf.makeClefPixmap(Clef(*(*it)->event())));
                 sprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 
             } else if ((*it)->event()->isa(::Key::EventType)) {
@@ -411,6 +410,12 @@ NotationView::showElements(NotationElementList::iterator from,
                      ((*it)->event()->get<String>(::Key::KeyPropertyName),
                       currentClef));
                 sprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
+
+            } else if ((*it)->event()->isa(TimeSignature::EventType)) {
+
+                QCanvasPixmap timeSigPixmap
+                    (npf.makeTimeSigPixmap(TimeSignature(*(*it)->event())));
+                sprite = new QCanvasSimpleSprite(&timeSigPixmap, canvas());
 
             } else {
                     
