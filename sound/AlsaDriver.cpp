@@ -1616,12 +1616,22 @@ AlsaDriver::initialisePlayback(const RealTime &position,
         sendMMC(127, MIDI_MMC_PLAY, true, "");
     }
 
+#ifdef HAVE_LIBJACK
+    // stop transport master
+    if (_jackTransportMaster && _jackTransportEnabled)
+        jack_transport_start(m_audioClient);
+#endif
+
 }
 
 
 void
 AlsaDriver::stopPlayback()
 {
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver - stopPlayback" << std::endl;
+#endif
+
     allNotesOff();
     m_playing = false;
 
@@ -1688,6 +1698,10 @@ AlsaDriver::stopPlayback()
     // stop
 
 #ifdef HAVE_LIBJACK
+
+    // stop transport master
+    if (_jackTransportMaster && _jackTransportEnabled)
+        jack_transport_stop(m_audioClient);
 
     // Wait for the queue vector to become available so we can
     // clear it down.  We're careful with this sleep.
@@ -4118,12 +4132,11 @@ AlsaDriver::sendJACKTransportState()
 {
     if (!_jackTransportMaster || !_jackTransportEnabled) return;
 
-    jack_transport_info_t info;
-
     // Only reset the position if we're playing
     if (m_playing == true)
     {
         m_transportPosition = getJACKFrame(getSequencerTime());
+        jack_transport_locate(m_audioClient, m_transportPosition);
     }
 
     //info.position = m_transportPosition;
@@ -4132,10 +4145,12 @@ AlsaDriver::sendJACKTransportState()
     // - hopefully this is the right one allowing for all those
     // latencies etc.
     // 
-    //info.position = getJACKFrame(getSequencerTime());
 
+        /*
     if (m_playing)
     {
+    jack_transport_info_t info;
+
         if (m_looping)
         {
             //std::cout << "LOOPING (frame = " << info.position << ")" << endl;
@@ -4150,10 +4165,9 @@ AlsaDriver::sendJACKTransportState()
         {
             //std::cout << "PLAYING (frame = " << info.position << ")" << endl;
             //info.state = JackTransportRolling;
-            info.valid = jack_transport_bits_t(JackTransportPosition |
-                                               JackTransportState);
+            ////info.valid = jack_transport_bits_t(JackTransportPosition |
+                                               //JackTransportState);
         }
-    }
     else
     {
         //std::cout << "STOPPED (frame = " << info.position << ")" << endl;
@@ -4163,6 +4177,7 @@ AlsaDriver::sendJACKTransportState()
     }
 
     jack_set_transport_info(m_audioClient, &info);
+    */
 }
 
 
