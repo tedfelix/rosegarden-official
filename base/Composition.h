@@ -56,6 +56,8 @@ class CompositionObserver;
 
 class Composition : public XmlExportable
 {
+    friend class Track; // to call notifyTrackChanged()
+    
 public:
     typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
     typedef segmentcontainer::iterator iterator;
@@ -747,6 +749,7 @@ protected:
     void notifySegmentAdded(Segment *) const;
     void notifySegmentRemoved(Segment *) const;
     void notifyEndMarkerChange(bool shorten) const;
+    void notifyTrackChanged(Track*) const;
     void notifySourceDeletion() const;
 
     BasicQuantizer                   *m_basicQuantizer;
@@ -804,6 +807,11 @@ public:
      * changed
      */
     virtual void endMarkerTimeChanged(const Composition *, bool shorten) = 0;
+
+    /**
+     * Called when a track is changed (instrument id, muted status...)
+     */
+    virtual void trackChanged(const Composition *, Track*) = 0;
 
     /**
      * Called from the composition dtor

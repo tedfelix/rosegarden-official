@@ -188,11 +188,11 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
 QDataStream&
 operator>>(QDataStream &dS, MappedEvent *mE)
 {
-    unsigned int trackId, instrument, type, data1, data2;
-    long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
-         audioSec, audioUsec;
-    std::string dataBlock("");
-    unsigned int dataLength, dataElement;
+    unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
+    long eventTimeSec = 0, eventTimeUsec = 0, durationSec = 0, durationUsec = 0,
+         audioSec = 0, audioUsec = 0;
+    std::string dataBlock;
+    unsigned int dataLength = 0, dataElement = 0;
 
     dS >> trackId;
     dS >> instrument;
@@ -206,6 +206,8 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> audioSec;
     dS >> audioUsec;
     dS >> dataLength;
+
+    if (dS.atEnd()) return dS;
 
     for (unsigned int i = 0; i < dataLength; i++)
     {
@@ -229,11 +231,11 @@ operator>>(QDataStream &dS, MappedEvent *mE)
 QDataStream&
 operator>>(QDataStream &dS, MappedEvent &mE)
 {
-    unsigned int trackId, instrument, type, data1, data2;
-    long eventTimeSec, eventTimeUsec, durationSec, durationUsec,
-         audioSec, audioUsec;
-    std::string dataBlock("");
-    unsigned int dataLength, dataElement;
+    unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
+    long eventTimeSec = 0, eventTimeUsec = 0, durationSec = 0, durationUsec = 0,
+         audioSec = 0, audioUsec = 0;
+    std::string dataBlock;
+    unsigned int dataLength = 0, dataElement = 0;
          
     dS >> trackId;
     dS >> instrument;
@@ -247,6 +249,8 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> audioSec;
     dS >> audioUsec;
     dS >> dataLength;
+
+    if (dS.atEnd()) return dS;
 
     for (unsigned int i = 0; i < dataLength; i++)
     {

@@ -261,6 +261,7 @@ public:
     virtual void addSegment(const QString& filename);
     virtual void deleteSegment(const QString& filename);
     virtual void closeAllSegments();
+    virtual void remapControlBlock();
 
     // Set Quarter note length
     //

@@ -27,13 +27,14 @@
 #ifndef _TRACK_H_
 #define _TRACK_H_
 
-#include "XmlExportable.h"
-#include "Instrument.h"
 #include <string>
 
+#include "XmlExportable.h"
+#include "Instrument.h"
 
 namespace Rosegarden
 {
+class Composition;
 
 typedef unsigned int TrackId;
 
@@ -46,9 +47,9 @@ typedef unsigned int TrackId;
  * Instrument relationship.
  *
  */
-
 class Track : public XmlExportable
 {
+    friend class Composition;
 
 public:
     Track();
@@ -70,7 +71,7 @@ public:
 
     TrackId getId() const { return m_id; }
 
-    void setMuted(bool muted) { m_muted = muted; }
+    void setMuted(bool muted);
     bool isMuted() const { return m_muted; }
 
     void setPosition(int position) { m_position = position; }
@@ -79,14 +80,20 @@ public:
     void setLabel(const std::string &label) { m_label = label; }
     std::string getLabel() const { return m_label; }
 
-    void setInstrument(InstrumentId instrument) { m_instrument = instrument; }
+    void setInstrument(InstrumentId instrument);
     InstrumentId getInstrument() const { return m_instrument; }
 
     // Implementation of virtual
     //
     virtual std::string toXmlString();
 
+    Composition* getOwningComposition() { return m_owningComposition; }
+
+protected: // For Composition use only
+    void setOwningComposition(Composition* comp) { m_owningComposition = comp; }
+
 private:
+    //--------------- Data members ---------------------------------
 
     TrackId        m_id;
     bool           m_muted;
@@ -94,6 +101,7 @@ private:
     int            m_position;
     InstrumentId   m_instrument;
 
+    Composition*   m_owningComposition;
 };
 
 }

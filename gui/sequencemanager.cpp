@@ -77,10 +77,6 @@ public:
     QString getFileName() { return m_fileName; }
     void refresh();
 
-    // delegate ControlBlock's interface
-    void setInstrumentForTrack(unsigned int trackNb, InstrumentId);
-    InstrumentId getInstrumentForTrack(unsigned int trackNb);
-
 protected:
     void initControlBlock();
     void setFileSize(size_t);
@@ -196,19 +192,6 @@ void ControlBlockMmapper::setFileSize(size_t size)
     
 }
 
-void ControlBlockMmapper::setInstrumentForTrack(unsigned int trackNb, InstrumentId id)
-{
-    m_controlBlock->setInstrumentForTrack(trackNb, id);
-    refresh();
-}
-
-InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
-{
-    return m_controlBlock->getInstrumentForTrack(trackNb);
-}
-
-
-
 //----------------------------------------
 
 
@@ -313,11 +296,15 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 
     connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
+
+    m_doc->getComposition().addObserver(this);
 }
 
 
 SequenceManager::~SequenceManager()
 {
+    m_doc->getComposition().removeObserver(this);
+
     SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";   
     delete m_compositionMmapper;
     delete m_controlBlockMmapper;
@@ -325,6 +312,9 @@ SequenceManager::~SequenceManager()
 
 void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 {
+    m_doc->getComposition().removeObserver(this);
+    disconnect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()));
+    
     m_segments.clear();
     m_doc = doc;
 
@@ -347,6 +337,11 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     if (m_doc) {
 	m_compositionRefreshStatusId =
 	    m_doc->getComposition().getNewRefreshStatusId();
+        m_doc->getComposition().addObserver(this);
+
+        connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+                this, SLOT(update()));
+
     }
 
     resetCompositionMmapper();
@@ -451,9 +446,9 @@ SequenceManager::play()
                                   "play(long int, long int, long int, long int, long int, long int, long int, long int)",
                                   data, replyType, replyData))
     {
-        // failed - pop up and disable sequencer options
+        // failed
         m_transportStatus = STOPPED;
-        throw(i18n("Playback failed to contact Rosegarden sequencer"));
+        throw(Rosegarden::Exception("Playback failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -470,7 +465,7 @@ SequenceManager::play()
         else
         {
             m_transportStatus = STOPPED;
-            throw(i18n("Failed to start playback"));
+            throw(Rosegarden::Exception("Failed to start playback"));
         }
     }
 }
@@ -547,8 +542,8 @@ SequenceManager::stop()
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                   "stop()", data))
     {
-        // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer with stop command"));
+        // failed
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with stop command"));
     }
 
     // restore
@@ -671,9 +666,9 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
                                   "jumpTo(long int, long int)",
                                   data))
     {
-      // failed - pop up and disable sequencer options
+      // failed
       m_transportStatus = STOPPED;
-      throw(i18n("Failed to contact Rosegarden sequencer with jumpTo command"));
+      throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with jumpTo command"));
     }
 
     return;
@@ -711,7 +706,7 @@ SequenceManager::record(bool toggled)
         if (!instr || instr->getType() == Rosegarden::Instrument::Audio)
         {
             m_transport->RecordButton()->setOn(false);
-            throw(i18n("Audio subsystem is not available - can't record audio"));
+            throw(Rosegarden::Exception("Audio subsystem is not available - can't record audio"));
         }
     }
 
@@ -776,7 +771,7 @@ SequenceManager::record(bool toggled)
         if (studio.getInstrumentById(inst) == 0)
         {
             m_transport->RecordButton()->setDown(false);
-            throw(i18n("No Record instrument selected"));
+            throw(Rosegarden::Exception("No Record instrument selected"));
         }
 
 
@@ -921,9 +916,9 @@ SequenceManager::record(bool toggled)
                                       "record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
                                       data, replyType, replyData))
         {
-            // failed - pop up and disable sequencer options
+            // failed
             m_transportStatus = STOPPED;
-            throw(i18n("Failed to contact Rosegarden sequencer with record command"));
+            throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with record command"));
         }
         else
         {
@@ -980,11 +975,11 @@ SequenceManager::record(bool toggled)
 
                 if (recordType == STARTING_TO_RECORD_AUDIO)
                 {
-                    throw(i18n("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
+                    throw(Rosegarden::Exception("Couldn't start recording audio.  Ensure your audio record path is valid\nin Document Properties (Edit->Edit Document Properties->Audio)"));
                 }
                 else
                 {
-                    throw(i18n("Couldn't start recording MIDI"));
+                    throw(Rosegarden::Exception("Couldn't start recording MIDI"));
                 }
 
             }
@@ -1215,8 +1210,8 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
                  "setLoop(long int, long int, long int, long int)", data))
     {
-        // failed - pop up and disable sequencer options
-        throw(i18n("Failed to contact Rosegarden sequencer with setLoop command"));
+        // failed
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with setLoop command"));
     }
 }
 
@@ -1232,9 +1227,9 @@ SequenceManager::checkSoundDriverStatus()
                                   "getSoundDriverStatus()",
                                   data, replyType, replyData))
     {
-        // failed - pop up and disable sequencer options
+        // failed
 	m_soundDriverStatus = NO_DRIVER;
-        throw(i18n("Failed to contact Rosegarden sequencer with getSoundDriverStatus command"));
+        throw(Rosegarden::Exception("Failed to contact Rosegarden sequencer with getSoundDriverStatus command"));
     }
     else
     {
@@ -1244,14 +1239,14 @@ SequenceManager::checkSoundDriverStatus()
         m_soundDriverStatus = result;
 
         if (m_soundDriverStatus == NO_DRIVER)
-            throw(i18n("MIDI and Audio subsystems have failed to initialise"));
+            throw(Rosegarden::Exception("MIDI and Audio subsystems have failed to initialise"));
 
         if (!(m_soundDriverStatus & MIDI_OK))
-            throw(i18n("MIDI subsystem has failed to initialise"));
+            throw(Rosegarden::Exception("MIDI subsystem has failed to initialise"));
 
         /*
         if (!(m_soundDriverStatus & AUDIO_OK))
-            throw(i18n("Audio subsystem has failed to initialise"));
+            throw(Rosegarden::Exception("Audio subsystem has failed to initialise"));
         */
     }
 }
@@ -1903,7 +1898,10 @@ void CompositionMmapper::segmentAdded(Segment* segment)
 
 void CompositionMmapper::segmentDeleted(Segment* segment)
 {
+    SEQMAN_DEBUG << "CompositionMmapper::segmentDeleted(" << segment << ")\n";
     SegmentMmapper* mmapper = m_segmentMmappers[segment];
+    m_segmentMmappers.erase(segment);
+    SEQMAN_DEBUG << "CompositionMmapper::segmentDeleted() : deleting SegmentMmapper " << mmapper << endl;
 
     delete mmapper;
 }
@@ -1992,6 +1990,8 @@ SegmentMmapper::~SegmentMmapper()
         ::munmap(m_mmappedBuffer, m_mmappedSize);
 
     ::close(m_fd);
+    SEQMAN_DEBUG << "~SegmentMmapper : removing " << m_fileName << endl;
+
     QFile::remove(m_fileName);
 }
 
@@ -2245,56 +2245,65 @@ void SequenceManager::checkRefreshStatus()
 {
     SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()\n";
 
-    bool regetSegments = false;
+//     bool regetSegments = false;
     
-    if (m_segments.empty()) {
+//     if (m_segments.empty()) {
 
-	regetSegments = true;
+// 	regetSegments = true;
 
-    } else {
+//     } else {
 
-	Rosegarden::RefreshStatus &rs =
-	    m_doc->getComposition().getRefreshStatus
-	    (m_compositionRefreshStatusId);
+// 	Rosegarden::RefreshStatus &rs =
+// 	    m_doc->getComposition().getRefreshStatus
+// 	    (m_compositionRefreshStatusId);
 
-	if (rs.needsRefresh()) {
-	    rs.setNeedsRefresh(false);
-	    regetSegments = true;
-	}
+// 	if (rs.needsRefresh()) {
+// 	    rs.setNeedsRefresh(false);
+// 	    regetSegments = true;
+// 	}
+//     }
+
+//     if (regetSegments) { // check for added and deleted segments
+	
+// 	SegmentSelection ss;
+	
+// 	for (Composition::iterator ci = m_doc->getComposition().begin();
+// 	     ci != m_doc->getComposition().end(); ++ci) {
+// 	    ss.insert(*ci);
+// 	}
+
+// 	for (SegmentRefreshMap::iterator si = m_segments.begin();
+// 	     si != m_segments.end(); ++si) {
+
+// 	    if (ss.find(si->first) == ss.end()) {
+// 		m_segments.erase(si);
+// 		SEQMAN_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
+// 		segmentRemoved(&m_doc->getComposition(), si->first);
+// 	    }
+// 	}
+
+// 	for (SegmentSelection::iterator si = ss.begin();
+// 	     si != ss.end(); ++si) {
+
+// 	    if (m_segments.find(*si) == m_segments.end()) {
+// 		int id = (*si)->getNewRefreshStatusId();
+// 		m_segments.insert(SegmentRefreshMap::value_type(*si, id));
+// 		SEQMAN_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
+// 		segmentAdded(&m_doc->getComposition(), *si);
+// 		(*si)->getRefreshStatus(id).setNeedsRefresh(false);
+// 	    }
+// 	}
+//     }	    
+
+    std::vector<Segment*>::iterator i;
+
+    // Check removed segments first
+    for (i = m_removedSegments.begin(); i != m_removedSegments.end(); ++i) {
+        processRemovedSegment(*i);
     }
+    m_removedSegments.clear();
 
-    if (regetSegments) { // check for added and deleted segments
-	
-	SegmentSelection ss;
-	
-	for (Composition::iterator ci = m_doc->getComposition().begin();
-	     ci != m_doc->getComposition().end(); ++ci) {
-	    ss.insert(*ci);
-	}
-
-	for (SegmentRefreshMap::iterator si = m_segments.begin();
-	     si != m_segments.end(); ++si) {
-
-	    if (ss.find(si->first) == ss.end()) {
-		m_segments.erase(si);
-		SEQMAN_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
-		segmentRemoved(&m_doc->getComposition(), si->first);
-	    }
-	}
-
-	for (SegmentSelection::iterator si = ss.begin();
-	     si != ss.end(); ++si) {
-
-	    if (m_segments.find(*si) == m_segments.end()) {
-		int id = (*si)->getNewRefreshStatusId();
-		m_segments.insert(SegmentRefreshMap::value_type(*si, id));
-		SEQMAN_DEBUG << "Segment created, adding (now have " << m_segments.size() << " segments)" << endl;
-		segmentAdded(&m_doc->getComposition(), *si);
-		(*si)->getRefreshStatus(id).setNeedsRefresh(false);
-	    }
-	}
-    }	    
-
+    // then the ones which are still there
     for (SegmentRefreshMap::iterator i = m_segments.begin();
 	 i != m_segments.end(); ++i) {
 	if (i->first->getRefreshStatus(i->second).needsRefresh()) {
@@ -2302,8 +2311,13 @@ void SequenceManager::checkRefreshStatus()
 	    i->first->getRefreshStatus(i->second).setNeedsRefresh(false);
 	}
     }
-}
 
+    // then added ones
+    for (i = m_addedSegments.begin(); i != m_addedSegments.end(); ++i) {
+        processAddedSegment(*i);
+    }
+    m_addedSegments.clear();
+}
 
 void SequenceManager::segmentModified(Segment* s)
 {
@@ -2322,17 +2336,28 @@ void SequenceManager::segmentModified(Segment* s)
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                       "remapSegment(QString)",
                                       data)) {
-            // failed - pop up and disable sequencer options
+            // failed
             m_transportStatus = STOPPED;
-            throw(i18n("segmentModified failed to contact Rosegarden sequencer"));
+            throw(Rosegarden::Exception("segmentModified failed to contact Rosegarden sequencer"));
         }
     }
 }
 
-
-void SequenceManager::segmentAdded(const Composition *c, Segment* s)
+void SequenceManager::segmentAdded(const Composition*, Segment* s)
 {
-    if (!m_doc || &m_doc->getComposition() != c) return;
+    SEQMAN_DEBUG << "SequenceManager::segmentAdded(" << s << ")\n";
+    m_addedSegments.push_back(s);
+}
+
+void SequenceManager::segmentRemoved(const Composition *c, Segment* s)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s << ")\n";
+    m_removedSegments.push_back(s);
+}
+
+void SequenceManager::processAddedSegment(Segment* s)
+{
+    SEQMAN_DEBUG << "SequenceManager::processAddedSegment(" << s << ")\n";
 
     m_compositionMmapper->segmentAdded(s);
 
@@ -2347,16 +2372,21 @@ void SequenceManager::segmentAdded(const Composition *c, Segment* s)
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                       "addSegment(QString)",
                                       data)) {
-            // failed - pop up and disable sequencer options
+            // failed
             m_transportStatus = STOPPED;
-            throw(i18n("segmentAdded failed to contact Rosegarden sequencer"));
+            throw(Rosegarden::Exception("segmentAdded failed to contact Rosegarden sequencer"));
         }
     }
+
+    // Add to segments map
+    int id = s->getNewRefreshStatusId();
+    m_segments.insert(SegmentRefreshMap::value_type(s, id));
+
 }
 
-void SequenceManager::segmentRemoved(const Composition *c, Segment* s)
+void SequenceManager::processRemovedSegment(Segment* s)
 {
-    if (!m_doc || &m_doc->getComposition() != c) return;
+    SEQMAN_DEBUG << "SequenceManager::processRemovedSegment(" << s << ")\n";
 
     QString filename = m_compositionMmapper->getSegmentFileName(s);
     m_compositionMmapper->segmentDeleted(s);
@@ -2372,11 +2402,28 @@ void SequenceManager::segmentRemoved(const Composition *c, Segment* s)
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                       "deleteSegment(QString)",
                                       data)) {
-            // failed - pop up and disable sequencer options
+            // failed
             m_transportStatus = STOPPED;
-            throw(i18n("segmentDeleted failed to contact Rosegarden sequencer"));
+            throw(Rosegarden::Exception("segmentDeleted failed to contact Rosegarden sequencer"));
         }
     }
+
+    // Remove from segments map
+    m_segments.erase(s);
+}
+
+void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
+{
+    // do nothing
+}
+
+void SequenceManager::compositionDeleted(const Composition *)
+{
+    // do nothing
+}
+
+void SequenceManager::trackChanged(const Composition *, Track*)
+{
 }
 
 void

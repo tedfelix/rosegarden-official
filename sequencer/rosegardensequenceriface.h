@@ -272,6 +272,8 @@ public:
     virtual void deleteSegment(const QString& filename) = 0;
     /// Close all mmapped segments
     virtual void closeAllSegments() = 0;
+    /// Remap the control block
+    virtual void remapControlBlock() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

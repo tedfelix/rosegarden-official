@@ -61,7 +61,7 @@ class SegmentMmapper;
 class CompositionMmapper;
 class ControlBlockMmapper;
 
-class SequenceManager : public QObject
+class SequenceManager : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
@@ -190,12 +190,20 @@ public:
 
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
 
-    //---- mmap() related stuff -----
+
     void resetCompositionMmapper();
 
-    void segmentAdded(const Composition *c, Segment *s);
-    void segmentRemoved(const Composition *c, Segment *s);
-    void segmentModified(Segment* s);
+    // CompositionObserver interface
+    virtual void segmentAdded(const Composition *c, Segment *s);
+    virtual void segmentRemoved(const Composition *c, Segment *s);
+    virtual void endMarkerTimeChanged(const Composition *, bool shorten);
+    virtual void trackChanged(const Composition *, Track*);
+    virtual void compositionDeleted(const Composition*);
+
+    void processAddedSegment(Segment*);
+    void processRemovedSegment(Segment*);
+    void segmentModified(Segment*);
+    void controlBlockModified();
 
     virtual bool event(QEvent *e);
     
@@ -223,6 +231,9 @@ protected:
     RosegardenGUIDoc    *m_doc;
     CompositionMmapper  *m_compositionMmapper;
     ControlBlockMmapper *m_controlBlockMmapper;
+
+    std::vector<Segment*> m_addedSegments;
+    std::vector<Segment*> m_removedSegments;
 
     // statuses
     TransportStatus            m_transportStatus;

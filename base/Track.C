@@ -30,6 +30,7 @@
 #include <sstream>
 #endif
 
+#include "Composition.h"
 
 namespace Rosegarden
 {
@@ -38,7 +39,8 @@ Track::Track():
    m_id(0),
    m_muted(false),
    m_position(-1),
-   m_instrument(0)
+   m_instrument(0),
+   m_owningComposition(0)
 {
 }
 
@@ -51,13 +53,31 @@ Track::Track(TrackId id,
    m_muted(muted),
    m_label(label),
    m_position(position),
-   m_instrument(instrument)
+   m_instrument(instrument),
+   m_owningComposition(0)
 {
 }
 
 Track::~Track()
 {
 }
+
+void Track::setMuted(bool muted)
+{
+    m_muted = muted;
+
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+}
+
+void Track::setInstrument(InstrumentId instrument)
+{
+    m_instrument = instrument;
+
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+}
+
 
 // Our virtual method for exporting Xml.
 //

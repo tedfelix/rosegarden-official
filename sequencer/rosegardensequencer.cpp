@@ -1433,6 +1433,14 @@ void RosegardenSequencerApp::closeAllSegments()
     
 }
 
+void RosegardenSequencerApp::remapControlBlock()
+{
+    if (m_transportStatus != PLAYING) return;
+
+    SEQUENCER_DEBUG << "MmappedSegment::remapControlBlock()\n";
+
+    m_controlBlockMmapper->refresh();
+}
 
 // DCOP Wrapper for play(Rosegarden::RealTime,
 //                       Rosegarden::RealTime,

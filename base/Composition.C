@@ -984,6 +984,7 @@ void Composition::addTrack(Track *track)
     if (m_tracks.find(track->getId()) == m_tracks.end()) {
 
         m_tracks[track->getId()] = track;
+        track->setOwningComposition(this);
         updateRefreshStatuses();
 
     } else {
@@ -1030,6 +1031,8 @@ bool Composition::detachTrack(Rosegarden::Track *track)
         throw Exception("track id not found");
         return false;
     }
+
+    ((*it).second)->setOwningComposition(0);
 
     m_tracks.erase(it);
     updateRefreshStatuses();
@@ -1256,6 +1259,15 @@ Composition::notifyEndMarkerChange(bool shorten) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->endMarkerTimeChanged(this, shorten);
+    }
+}
+
+void
+Composition::notifyTrackChanged(Track *t) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->trackChanged(this, t);
     }
 }
 
