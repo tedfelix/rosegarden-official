@@ -18,8 +18,6 @@ o MIDI export broken for key sig and SysExs [CC?]
 
 o multi-threaded base/
 
-o re-poll ALSA clients every so often
-
 
 
 Smaller stuff
@@ -73,8 +71,6 @@ o Toggle record mode for punch in/out [Half complete]
 
 o aRts 1.0.0 support
 
-o realtime MIDI filtering - what events are forwarded
-
 o Audio noise eliminator - recording
 
 o Segment colouring
@@ -94,6 +90,11 @@ o ALSA seq bug on incoming events (infinite length) [FIXED]
 o MIDI Event filters [DONE]
 
 o Banks/Programs Editor Dialog [DONE]
+
+o re-poll ALSA clients every so often [DONE]
+
+o realtime MIDI filtering - what events are forwarded [DONE]
+
 
 
 Completed for 0.8
