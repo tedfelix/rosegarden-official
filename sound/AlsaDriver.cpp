@@ -2098,14 +2098,12 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         int error = 0;
         if (now || m_playing == false)
         {
-	    snd_seq_stop_queue(m_midiHandle, m_queue, NULL);//!!!
             RealTime nowTime = getAlsaTime();
             snd_seq_real_time_t outTime = { nowTime.sec,
                                             nowTime.nsec };
 	std::cerr << "processMidiOut[" << now << "]: rescheduled event to " << nowTime << std::endl;
             snd_seq_ev_schedule_real(&event, m_queue, 0, &outTime);
             error = snd_seq_event_output_direct(m_midiHandle, &event);
-	    snd_seq_continue_queue(m_midiHandle, m_queue, NULL);//!!!
 	}
         else
             error = snd_seq_event_output(m_midiHandle, &event);
