@@ -256,45 +256,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     fileStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
-/*!!!
-    // output bar reference segment
 
-    fileStream << "<bar-segment>" << endl;
-    Composition::ReferenceSegment *barSegment =
-	m_composition.getBarSegment();
-
-    for (Composition::ReferenceSegment::iterator i = barSegment->begin();
-	 i != barSegment->end(); ++i) {
-
-	if (!(*i)->isa(Composition::BarEventType)) {
-	    if ((*i)->getAbsoluteTime() > 0) {
-		fileStream << "<resync time=\"" << (*i)->getAbsoluteTime()
-			   << "\"/>" << endl;
-	    }
-	    fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
-	}
-    }
-
-    fileStream << "</bar-segment>" << endl << endl;
-
-    // output tempo reference segment
-
-    fileStream << "<tempo-segment>" << endl;
-    Composition::ReferenceSegment *tempoSegment =
-	m_composition.getTempoSegment();
-
-    for (Composition::ReferenceSegment::iterator i = tempoSegment->begin();
-	 i != tempoSegment->end(); ++i) {
-
-	if ((*i)->getAbsoluteTime() > 0) {
-	    fileStream << "<resync time=\"" << (*i)->getAbsoluteTime()
-		       << "\"/>" << endl;
-	}
-	fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
-    }
-
-    fileStream << "</tempo-segment>" << endl << endl;
-*/
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //

@@ -410,6 +410,8 @@ public:
     static RealTime getTempoTimestamp(const Event *e);
     static void setTempoTimestamp(Event *e, RealTime r);
 
+protected:
+
     class ReferenceSegment;
 
     /**
@@ -453,9 +455,6 @@ public:
   	iterator find(Event *e);
 	std::string m_eventType;
     };
-
-protected:
-
 
     static const std::string BarEventType;
     static const PropertyName BarNumberProperty;
