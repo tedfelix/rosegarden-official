@@ -195,6 +195,10 @@ AudioManagerDialog::slotPopulateFileList()
         msecs.sprintf("%03ld", length.usec / 1000);
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
+        // set start time and duration
+        item->setStartTime(Rosegarden::RealTime(0, 0));
+        item->setDuration(length);
+
         // Envelope pixmap
         //
         item->setPixmap(2, *audioPixmap);
@@ -226,6 +230,10 @@ AudioManagerDialog::slotPopulateFileList()
                 segmentDuration = (*iit)->getAudioEndTime() -
                                   (*iit)->getAudioStartTime();
 
+                // store the start time
+                //
+                childItem->setStartTime((*iit)->getAudioStartTime());
+                childItem->setDuration(segmentDuration);
 
                 // Write segment duration
                 //
@@ -305,12 +313,15 @@ void
 AudioManagerDialog::slotPlayPreview()
 {
     AudioFile *audioFile = getCurrentSelection();
+    AudioListItem *item =
+            dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
 
-    if (audioFile == 0)
-        return;
+    if (item == 0 || audioFile == 0) return;
 
     // tell the sequencer
-    emit playAudioFile(audioFile->getId());
+    emit playAudioFile(audioFile->getId(),
+                       item->getStartTime(),
+                       item->getDuration());
 }
 
 // Add a file to the audio file manager - allow previews and

@@ -621,7 +621,8 @@ AudioFileManager::drawPreview(unsigned int id,
     QPainter painter(pixmap);
     pixmap->fill(kapp->palette().color(QPalette::Active,
                                        QColorGroup::Base));
-    painter.setPen(Qt::black);
+    painter.setPen(kapp->palette().color(QPalette::Active,
+                                         QColorGroup::Dark));
 
     float yStep = pixmap->height() / 2;
     int channels = audioFile->getChannels();
@@ -699,9 +700,11 @@ AudioFileManager::drawHighlightedPreview(unsigned int id,
         }
 
         if (i < startWidth || i > endWidth)
-            painter.setPen(Qt::lightGray);
+            painter.setPen(kapp->palette().color(QPalette::Active,
+                                                 QColorGroup::Mid));
         else
-            painter.setPen(Qt::darkGray);
+            painter.setPen(kapp->palette().color(QPalette::Active,
+                                                 QColorGroup::Dark));
 
         painter.drawLine(i, yStep + ch1Value * yStep,
                          i, yStep - ch2Value * yStep);

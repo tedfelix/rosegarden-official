@@ -77,8 +77,20 @@ public:
 
     unsigned int getId() { return m_id; }
 
+    void setStartTime(const Rosegarden::RealTime &time)
+        { m_startTime = time; }
+    Rosegarden::RealTime getStartTime() { return m_startTime; }
+
+    void setDuration(const Rosegarden::RealTime &time)
+        { m_duration = time; }
+    Rosegarden::RealTime getDuration() { return m_duration; }
+
 protected:
     unsigned int m_id;
+
+    // for audio segments
+    Rosegarden::RealTime m_startTime;
+    Rosegarden::RealTime m_duration;
 
 };
 
@@ -121,7 +133,9 @@ signals:
     //
     void addAudioFile(unsigned int);
     void deleteAudioFile(unsigned int);
-    void playAudioFile(unsigned int);
+    void playAudioFile(unsigned int,
+                       const Rosegarden::RealTime &,
+                       const Rosegarden::RealTime &);
 
 protected:
     virtual void closeEvent(QCloseEvent *e);

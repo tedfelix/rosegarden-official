@@ -758,7 +758,9 @@ public slots:
 
     void slotAddAudioFile(unsigned int);
     void slotDeleteAudioFile(unsigned int);
-    void slotPlayAudioFile(unsigned int);
+    void slotPlayAudioFile(unsigned int,
+                           const Rosegarden::RealTime &,
+                           const Rosegarden::RealTime &);
 
 private:
 

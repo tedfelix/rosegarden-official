@@ -2704,8 +2704,13 @@ RosegardenGUIApp::slotAudioManager()
         connect(m_audioManagerDialog, SIGNAL(closeClicked()),
                 SLOT(slotAudioManagerClosed()));
 
-        connect(m_audioManagerDialog, SIGNAL(playAudioFile(unsigned int)),
-                SLOT(slotPlayAudioFile(unsigned int)));
+        connect(m_audioManagerDialog,
+                SIGNAL(playAudioFile(unsigned int,
+                                     const Rosegarden::RealTime &,
+                                     const Rosegarden::RealTime&)),
+                SLOT(slotPlayAudioFile(unsigned int,
+                                       const Rosegarden::RealTime &,
+                                       const Rosegarden::RealTime &)));
 
         connect(m_audioManagerDialog, SIGNAL(addAudioFile(unsigned int)),
                 SLOT(slotAddAudioFile(unsigned int)));
@@ -2726,7 +2731,9 @@ RosegardenGUIApp::slotAudioManagerClosed()
 
 
 void
-RosegardenGUIApp::slotPlayAudioFile(unsigned int id)
+RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
+                                    const Rosegarden::RealTime &startTime,
+                                    const Rosegarden::RealTime &duration)
 {
     Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().getAudioFile(id);
 
@@ -2737,9 +2744,9 @@ RosegardenGUIApp::slotPlayAudioFile(unsigned int id)
         new Rosegarden::MappedEvent(m_doc->getStudio().
                                         getAudioPreviewInstrument(),
                                     id,
-                                    Rosegarden::RealTime(0, 0),  // start 
-                                    aF->getLength(),             // duration
-                                    Rosegarden::RealTime(0, 0)); // start index
+                                    Rosegarden::RealTime(0, 0),  // event time
+                                    duration,                    // duration
+                                    startTime);                  // start index
 
     m_seqManager->sendMappedEvent(mE);
 }

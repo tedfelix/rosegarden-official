@@ -1,11 +1,16 @@
 0.2 tasks
 =========
 
-o Sync audio and MIDI
+o Sync audio and MIDI [PARTIAL]
 
 o Get first fetch audio working - partial segments
 
 o Fix Audio Segment splitting
+
+o Audio file playing feedback - async events and how to
+  operate outside the ALSA timing loop
+
+o Fix/Complete repeating Segments
 
 o Get Segment joining working
 
@@ -40,9 +45,6 @@ o sweep selection on Matrix
 o Matrix view auto scrolling
 
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
-
-o Track addition/deletion and moving on TrackButtons canvas
-  [gl PARTIALLY DONE]
 
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
@@ -99,6 +101,9 @@ o stop crashing on Segment movement to blank tracks [DONE]
 o Event playback on selection movement [DONE notation]
 
 o Changing Composition length [DONE]
+
+o Track addition/deletion and moving on TrackButtons canvas
+  [gl PARTIALLY DONE]
 
 
 
