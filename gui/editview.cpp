@@ -190,6 +190,19 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
     return controlRuler;
 }
 
+ControllerEventsRuler* EditView::makeControllerEventRuler()
+{
+    QCanvas* controlRulerCanvas = new QCanvas(this);
+    QSize viewSize = getViewSize();
+    controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
+    ControllerEventsRuler* controlRuler = new ControllerEventsRuler(getFirstStaff()->getSegment(), getHLayout(),
+                                                                    m_horizontalScrollBar,
+                                                                    this,
+                                                                    controlRulerCanvas, m_controlRulers);
+
+    return controlRuler;
+}
+
 void EditView::addControlRuler(ControlRuler* ruler)
 {
     m_controlRulers->addTab(ruler, ruler->getName());
@@ -516,9 +529,13 @@ EditView::setupActions()
                 SLOT(slotAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
-    new KAction(i18n("Add Velocity Control Ruler"), 0, this,
+    new KAction(i18n("Show Velocity Control Ruler"), 0, this,
                 SLOT(slotShowVelocityControlRuler()), actionCollection(),
-                "add_velocity_control_ruler");
+                "show_velocity_control_ruler");
+
+    new KAction(i18n("Show Controllers Events Ruler"), 0, this,
+                SLOT(slotShowControllerEventsRuler()), actionCollection(),
+                "show_controller_events_ruler");
 
     new KAction(i18n("Add Control Ruler..."), 0, this,
                 SLOT(slotShowPropertyControlRuler()), actionCollection(),
@@ -790,6 +807,16 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
 void EditView::slotShowVelocityControlRuler()
 {
     showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
+}
+
+void EditView::slotShowControllerEventsRuler()
+{
+    ControllerEventsRuler* controlRuler = makeControllerEventRuler();
+    addControlRuler(controlRuler);
+    
+     if (!m_controlRulers->isVisible()) {
+        m_controlRulers->show();
+    }
 }
 
 class QListBoxRGProperty : public QListBoxText

@@ -55,6 +55,7 @@ class BarButtons;
 class RosegardenCanvasView;
 class ControlRuler;
 class PropertyControlRuler;
+class ControllerEventsRuler;
 
 /**
  * An interface for canvas items which are capable of handling
@@ -163,6 +164,7 @@ public slots:
     void slotAddTimeSignature();
 
     virtual void slotShowVelocityControlRuler();
+    virtual void slotShowControllerEventsRuler();
     virtual void slotShowPropertyControlRuler();
 
 protected:
@@ -199,6 +201,11 @@ protected:
      * Make a control ruler for the given property,
      */
     PropertyControlRuler* makePropertyControlRuler(Rosegarden::PropertyName propertyName);
+
+    /**
+     * Make a ruler for controller events
+     */
+    ControllerEventsRuler* makeControllerEventRuler();
 
     /**
      * Add control ruler

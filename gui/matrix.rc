@@ -29,7 +29,8 @@
     <Action name="snap_bar"/>
   </Menu>
   <Separator/>
-    <Action name="add_velocity_control_ruler"/>
+    <Action name="show_velocity_control_ruler"/>
+    <Action name="show_controller_events_ruler"/>
     <Action name="add_control_ruler"/>
 </Menu> 
 

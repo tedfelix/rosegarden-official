@@ -26,13 +26,13 @@
 #include <qstring.h>
 
 #include "Staff.h"
-
+#include "Segment.h"
 #include "PropertyName.h"
 
 #include "rosegardencanvasview.h"
 #include "widgets.h"
 
-namespace Rosegarden { class RulerScale; class Segment; class EventSelection; }
+namespace Rosegarden { class RulerScale; class EventSelection; }
 
 class QFont;
 class QFontMetrics;
@@ -43,7 +43,7 @@ class ControlSelector;
 class EditViewBase;
 
 /**
- * Property Control Ruler : edit range of event properties
+ * ControlRuler : base class for Control Rulers
  */
 class ControlRuler : public RosegardenCanvasView
 {
@@ -119,6 +119,10 @@ protected:
     QCanvasRectangle* m_selectionRect;
 };
 
+/**
+ * PropertyControlRuler : edit a property on events on a staff (only
+ * events with a ViewElement attached, mostly notes)
+ */
 class PropertyControlRuler : public ControlRuler, public Rosegarden::StaffObserver
 {
 public:
@@ -151,6 +155,35 @@ protected:
     Rosegarden::Staff*       m_staff;
 };
 
+
+/**
+ * ControllerEventsRuler : edit Controller events
+ */
+class ControllerEventsRuler : public ControlRuler, public Rosegarden::SegmentObserver
+{
+public:
+    ControllerEventsRuler(Rosegarden::Segment&,
+                          Rosegarden::RulerScale*,
+                          QScrollBar* hsb,
+                          EditViewBase* parentView,
+                          QCanvas*,
+                          QWidget* parent=0, const char* name=0, WFlags f=0);
+
+    virtual ~ControllerEventsRuler();
+
+    virtual QString getName();
+
+    /// SegmentObserver interface
+    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool shorten);
+    virtual void segmentDeleted(const Rosegarden::Segment *);
+
+protected:
+    //--------------- Data members ---------------------------------
+    bool m_segmentDeleted;
+
+};
 
 /**
  * PropertyViewRuler is a widget that shows a range of Property values

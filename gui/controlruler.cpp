@@ -29,8 +29,10 @@
 #include <qhbox.h>
 #include <qframe.h>
 
+#include "MidiTypes.h"
 #include "Selection.h"
 #include "Staff.h"
+
 #include "controlruler.h"
 #include "colours.h"
 #include "rosestrings.h"
@@ -43,6 +45,7 @@
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
+using Rosegarden::Event;
 using Rosegarden::timeT;
 using Rosegarden::PropertyName;
 using Rosegarden::ViewElement;
@@ -81,6 +84,8 @@ int TestTool::operator()(double x, int val)
 
 //
 // ------------------
+//  Element Adapters
+// ------------------
 //
 
 class ElementAdapter
@@ -91,6 +96,8 @@ public:
     virtual bool getValue(long&) = 0;
     virtual void setValue(long)  = 0;
 };
+
+//////////////////////////////
 
 class ViewElementAdapter : public ElementAdapter
 {
@@ -126,8 +133,40 @@ void ViewElementAdapter::setValue(long val)
     m_viewElement->event()->set<Rosegarden::Int>(m_propertyName, val);
 }
 
+//////////////////////////////
 
+class ControllerEventAdapter : public ElementAdapter
+{
+public:
+    ControllerEventAdapter(Event* e) : m_event(e) {}
 
+    virtual bool getValue(long&);
+    virtual void setValue(long);
+
+    Event* getEvent() { return m_event; }
+
+protected:
+
+    //--------------- Data members ---------------------------------
+
+    Event* m_event;
+};
+
+bool ControllerEventAdapter::getValue(long& val)
+{
+    return m_event->get<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+}
+
+void ControllerEventAdapter::setValue(long val)
+{
+    m_event->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+}
+
+//
+// ------------------
+// ControlItem
+// ------------------
+//
 class ControlItem : public QCanvasRectangle
 {
 public:
@@ -189,7 +228,7 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
     setX(xx);
     setY(canvas()->height());
     updateFromValue();
-    RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << endl;
+    RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << " - width = " << width << endl;
     show();
 }
 
@@ -213,8 +252,10 @@ void ControlItem::updateValue()
 
 void ControlItem::updateFromValue()
 {
-    if (m_elementAdapter->getValue(m_value))
+    if (m_elementAdapter->getValue(m_value)) {
+        RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;
         setHeight(m_controlRuler->valueToHeight(m_value));
+    }
 }
 
 void ControlItem::draw(QPainter &painter)
@@ -655,6 +696,90 @@ void PropertyControlRuler::staffDeleted(const Rosegarden::Staff *)
 }
 
 //----------------------------------------
+ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
+                                             Rosegarden::RulerScale* rulerScale,
+                                             QScrollBar* hsb,
+                                             EditViewBase* parentView,
+                                             QCanvas* c,
+                                             QWidget* parent, const char* name, WFlags f)
+    : ControlRuler(segment, rulerScale, hsb, parentView, c, parent, name, f),
+      m_segmentDeleted(false)
+{
+    m_segment.addObserver(this);
+
+    for(Segment::iterator i = m_segment.begin();
+        i != m_segment.end(); ++i) {
+
+        // skip if not a ControllerEvent
+        if (!(*i)->isa(Rosegarden::Controller::EventType)) continue;
+        
+        RG_DEBUG << "ControllerEventsRuler: adding element\n";
+
+ 	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
+ 	new ControlItem(this, new ControllerEventAdapter(*i), int(x),
+                        int(m_rulerScale->getXForTime((*i)->getAbsoluteTime() +
+                                                      (*i)->getDuration()) - x));
+
+    }
+    
+}
+
+
+ControllerEventsRuler::~ControllerEventsRuler()
+{
+    if (!m_segmentDeleted)
+        m_segment.removeObserver(this);
+}
+
+
+QString ControllerEventsRuler::getName()
+{
+    return i18n("Controller Events");
+}
+
+void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
+{
+    if (!e->isa(Rosegarden::Controller::EventType)) return;
+
+    RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
+
+    double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
+
+    new ControlItem(this, new ControllerEventAdapter(e), int(x),
+                    int(m_rulerScale->getXForTime(e->getAbsoluteTime() +
+                                                  e->getDuration()) - x));
+}
+
+void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
+{
+    if (!e->isa(Rosegarden::Controller::EventType)) return;
+
+    QCanvasItemList allItems = canvas()->allItems();
+
+    for (QCanvasItemList::Iterator it=allItems.begin(); it!=allItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+            ControllerEventAdapter* adapter = dynamic_cast<ControllerEventAdapter*>(item->getElementAdapter());
+            if (adapter->getEvent() == e) {
+                delete item;
+                break;
+            }
+        }
+    }
+}
+
+void ControllerEventsRuler::endMarkerTimeChanged(const Segment*, bool)
+{
+    // nothing to do
+}
+
+void ControllerEventsRuler::segmentDeleted(const Segment*)
+{
+    m_segmentDeleted = false;
+}
+
+
+
+//----------------------------------------
 
 PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
                                      Segment *segment,
@@ -755,7 +880,7 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
         int x = int(m_rulerScale->getXForTime((*it)->getAbsoluteTime()))
             + m_currentXOffset + int(m_xorigin);
 
-        int xPos = x * getHScaleFactor();
+        int xPos = x * int(getHScaleFactor());
 
         if (xPos < clipRect.x()) continue;
 
