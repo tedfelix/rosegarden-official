@@ -36,6 +36,7 @@
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
 class ViewElementsManager;
+class TrackPartItem;
 
 /**	RosegardenGUIDoc provides a document object for a document-view model.
   *
@@ -105,8 +106,8 @@ public:
     Rosegarden::Composition&       getComposition()       { return m_composition; }
     const Rosegarden::Composition& getComposition() const { return m_composition; }
 
-    Rosegarden::Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
-    const Rosegarden::Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
+//     Rosegarden::Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
+//     const Rosegarden::Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
 
     unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getNbBars()   const { return m_composition.getNbBars(); }
@@ -120,9 +121,7 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
-    void createNewTrack(unsigned int trackNb,
-                        unsigned int nbBars,
-                        unsigned int startAt);
+    void createNewTrack(TrackPartItem*);
 
 protected:
     bool xmlParse(QFile &file);

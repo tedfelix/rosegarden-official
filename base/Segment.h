@@ -39,13 +39,29 @@ public:
     unsigned int getStartIndex() const         { return m_startIdx; }
     void         setStartIndex(unsigned int i) { m_startIdx = i; }
 
+    unsigned int getInstrument() const         { return m_instrument; }
+    void         setInstrument(unsigned int i) { m_instrument = i; }
+
     unsigned int getNbBars() const;
     
 protected:
     unsigned int m_startIdx;
     unsigned int m_nbBars;
+    unsigned int m_instrument;
 };
- 
+
+struct TrackCompare
+{
+    bool operator()(const Track* a, const Track* b) const 
+    {
+        if (a->getInstrument() == b->getInstrument())
+            return a->getStartIndex() < b->getStartIndex();
+
+        return a->getInstrument() < b->getInstrument();
+    }
+
+};
+
 }
 
 

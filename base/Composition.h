@@ -21,7 +21,7 @@
 #ifndef _COMPOSITION_H_
 #define _COMPOSITION_H_
 
-#include <vector>
+#include <set>
 
 #include "Track.h"
 
@@ -37,7 +37,7 @@ class Composition
 {
     
 public:
-    typedef std::vector<Track*> trackcontainer;
+    typedef std::set<Track*, TrackCompare> trackcontainer;
 
     typedef trackcontainer::iterator iterator;
     typedef trackcontainer::const_iterator const_iterator;
@@ -45,10 +45,12 @@ public:
     Composition(unsigned int nbTracks = 64);
     ~Composition();
 
-    std::vector<Track*>& tracks() { return m_tracks; }
+    trackcontainer& tracks() { return m_tracks; }
 
-    bool addTrack(Track *track = 0, int idx = -1);
-    void deleteTrack(int idx);
+    iterator addTrack(Track*);
+
+    void deleteTrack(iterator);
+    void deleteTrack(Track*);
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
     unsigned int getNbBars() const;
@@ -63,8 +65,8 @@ public:
     iterator       end()         { return m_tracks.end(); }
     const_iterator end() const   { return m_tracks.end(); }
 
-    Track*       operator[](int i)       { return m_tracks[i]; }
-    const Track* operator[](int i) const { return m_tracks[i]; }
+//     Track*       operator[](int i)       { return m_tracks[i]; }
+//     const Track* operator[](int i) const { return m_tracks[i]; }
 
 protected:
     trackcontainer m_tracks;

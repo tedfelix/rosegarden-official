@@ -25,8 +25,7 @@ namespace Rosegarden
 {
 
 Composition::Composition(unsigned int nbTracks)
-    : m_tracks(nbTracks),
-      m_nbTicksPerBar(384)
+    : m_nbTicksPerBar(384)
 {
 //     cerr << "Composition:(" << nbTracks << ") : this = "
 //          << this <<  " - size = "
@@ -39,44 +38,34 @@ Composition::~Composition()
 }
 
 
-bool
-Composition::addTrack(Track *track, int idx)
+Composition::iterator
+Composition::addTrack(Track *track)
 {
-//     cerr << "Composition::addTrack(track = " << track << ", "
-//          << idx << ")\n";
-
-    if (!track) track = new Track;
+    if (!track) return end();
     
-    if (idx < 0) {
+    pair<iterator, bool> res = m_tracks.insert(track);
 
-        m_tracks.push_back(track);
-
-    } else {
-
-        if (idx >= (int)m_tracks.size()) { // resize if needed
-
-            m_tracks.resize(idx + 2);
-
-        } else if (m_tracks[idx]) {
-//             cerr << "Composition::addTrack() : there's already a track at this index\n";
-            return false; // there's already a track at
-            // that index
-        }
-
-//         cerr << "Composition::addTrack() : adding track at idx "
-//              << idx << endl;
-        m_tracks[idx] = track;
-    }
-
-    return true;
+    return res.first;
 }
 
 void
-Composition::deleteTrack(int idx)
+Composition::deleteTrack(Composition::iterator i)
 {
-    if (idx < (int)m_tracks.size()) {
-        delete m_tracks[idx];
-        m_tracks[idx] = 0;
+    if (i == end()) return;
+
+    Track *p = (*i);
+    delete p;
+    m_tracks.erase(i);
+}
+
+void
+Composition::deleteTrack(Track *p)
+{
+    iterator i = find(begin(), end(), p);
+    
+    if (i != end()) {
+        delete p;
+        m_tracks.erase(i);
     }
 }
 
@@ -116,8 +105,9 @@ Composition::clear()
     for(trackcontainer::iterator i = m_tracks.begin();
         i != m_tracks.end(); ++i) {
         delete (*i);
-        (*i) = 0;
     }
+    m_tracks.erase(begin(), end());
+    
 }
  
 }

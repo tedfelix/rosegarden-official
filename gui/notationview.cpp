@@ -123,7 +123,7 @@ RestSplitter::m_baseRestDuration = 384; // whole note rest
 //////////////////////////////////////////////////////////////////////
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
-                           unsigned int trackNb,
+                           Track* t,
                            QWidget *parent,
                            int resolution) :
     KMainWindow(parent),
@@ -166,27 +166,10 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     readOptions();
 
-    if (!doc) {
-        kdDebug(KDEBUG_AREA) << "NotationView ctor : getDocument() returned 0" << endl;
-        KMessageBox::sorry(0, "No document");
-        throw -1;
-    }
+    setCaption(QString("%1 - Track Instrument #%2")
+               .arg(doc->getTitle())
+               .arg(t->getInstrument()));
 
-    setCaption(QString("%1 - Track #%2")
-               .arg(trackNb)
-               .arg(doc->getTitle()));
-
-    Track* t = doc->getTrack(trackNb);
-
-    if (!t) {
-        kdDebug(KDEBUG_AREA) << "NotationView ctor : getTrack("
-                             << trackNb
-                             << ") returned 0" << endl;
-        KMessageBox::sorry(0, QString("No track %1").arg(trackNb));
-            
-        throw -1;
-    }
-        
     Track &allEvents = *t;
 
     m_viewElementsManager = new ViewElementsManager(allEvents);

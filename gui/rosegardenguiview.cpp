@@ -55,16 +55,19 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     
     scrollView->addChild(tracksEditor);
 
-    connect(tracksEditor->canvas(), SIGNAL(editTrackPart(TrackPart*)),
-            SLOT(editTrackNotation(TrackPart*)));
-    connect(tracksEditor->canvas(), SIGNAL(editTrackPartSmall(TrackPart*)),
-            SLOT(editTrackNotationSmall(TrackPart*)));
+    connect(tracksEditor->canvas(), SIGNAL(editTrack(Rosegarden::Track*)),
+            SLOT(editTrackNotation(Rosegarden::Track*)));
+    connect(tracksEditor->canvas(), SIGNAL(editTrackSmall(Rosegarden::Track*)),
+            SLOT(editTrackNotationSmall(Rosegarden::Track*)));
 
-    connect(tracksEditor,  SIGNAL(createNewTrack(unsigned int, unsigned int, unsigned int)),
-            getDocument(), SLOT  (createNewTrack(unsigned int, unsigned int, unsigned int)));
+    connect(tracksEditor,  SIGNAL(createNewTrack(TrackPartItem*)),
+            getDocument(), SLOT  (createNewTrack(TrackPartItem*)));
 
     connect(this,                   SIGNAL(setTool(TracksCanvas::ToolType)),
             tracksEditor->canvas(), SLOT(setTool(TracksCanvas::ToolType)));
+
+    if (doc)
+        tracksEditor->setupTracks();
 
 //     if (getDocument()) {
         
@@ -133,25 +136,17 @@ void RosegardenGUIView::resizeSelected()
 
 
 void
-RosegardenGUIView::editTrackNotation(TrackPart* p)
+RosegardenGUIView::editTrackNotation(Rosegarden::Track* p)
 {
-    unsigned int trackNb = p->trackNb();
-    
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::editTrackNotation() : showing track " << trackNb << endl;
-
-    m_notationView = new NotationView(getDocument(), trackNb, this, 9);
+    m_notationView = new NotationView(getDocument(), p, this, 9);
  
     m_notationView->show();
 }
 
 void
-RosegardenGUIView::editTrackNotationSmall(TrackPart* p)
+RosegardenGUIView::editTrackNotationSmall(Rosegarden::Track* p)
 {
-    unsigned int trackNb = p->trackNb();
-    
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::editTrackNotationSmall() : showing track " << trackNb << endl;
-
-    m_notationView = new NotationView(getDocument(), trackNb, this, 5);
+    m_notationView = new NotationView(getDocument(), p, this, 5);
  
     m_notationView->show();
 }

@@ -335,19 +335,16 @@ RosegardenGUIDoc::xmlParse(QFile &file)
 
 
 void
-RosegardenGUIDoc::createNewTrack(unsigned int trackNb, unsigned int nbBars,
-                                 unsigned int startAt)
+RosegardenGUIDoc::createNewTrack(TrackPartItem *p)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(trackNb : "
-                         << trackNb << ", startAt : "
-                         << startAt << ", nbBars : " << nbBars
-                         << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(item : "
+                         << p << ")\n";
 
-    qDebug("RosegardenGUIDoc::createNewTrack(trackNb : %d, startAt : %d, nbBars : %d)",
-           trackNb, startAt, nbBars);
+    Track *newTrack = new Track(p->getLength(), p->getStartIndex());
 
-    Track *newTrack = new Track(nbBars, startAt);
+    // store ptr to new track in track part item
+    p->setTrack(newTrack);
     
-    m_composition.addTrack(newTrack, trackNb);
+    m_composition.addTrack(newTrack);
 }
 

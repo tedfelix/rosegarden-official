@@ -24,7 +24,7 @@
 #include <qwidget.h>
 #include <qcanvas.h>
 
-class TrackPart;
+namespace Rosegarden { class Track; }
 
 class TrackPartItem : public QCanvasRectangle
 {
@@ -33,14 +33,24 @@ public:
     TrackPartItem(const QRect &, QCanvas* canvas);
     TrackPartItem(int x, int y, int width, int height, QCanvas* canvas);
 
-    void setPart(TrackPart *p) { m_part = p; }
-    TrackPart* part()          { return m_part; }
+    unsigned int getLength() const;
+    unsigned int getStartIndex() const;
+
+    int  getInstrument() const { return m_instrument; }
+    void setInstrument(int i)  { m_instrument = i; }
+
+    void setTrack(Rosegarden::Track *p)  { m_track = p; }
+    Rosegarden::Track* getTrack() const  { return m_track; }
+
+    static void setWidthToLengthRatio(unsigned int);
 
 protected:
+    int m_instrument;
 
-    TrackPart* m_part;
+    Rosegarden::Track* m_track;
 
-    // add track data here
+    static unsigned int m_widthToLengthRatio;
+
 };
 
 class TrackTool;
@@ -110,11 +120,11 @@ protected slots:
     void onEditSmall();
 
 signals:
-    void addTrackPart(TrackPart*);
-    void deleteTrackPart(TrackPart*);
-    void resizeTrackPart(TrackPart*);
-    void editTrackPart(TrackPart*);
-    void editTrackPartSmall(TrackPart*);
+    void addTrack(TrackPartItem*);
+    void deleteTrack(Rosegarden::Track*);
+    void resizeTrack(Rosegarden::Track*);
+    void editTrack(Rosegarden::Track*);
+    void editTrackSmall(Rosegarden::Track*);
 
 private:
     ToolType m_toolType;
@@ -133,39 +143,9 @@ private:
     
 };
 
-
-class TrackPart
-{
-public:
-    TrackPart(TrackPartItem *r, unsigned int widthToLengthRatio);
-    ~TrackPart();
-
-    int trackNb() const { return m_trackNb; }
-    void setTrackNb(int nb) { m_trackNb = nb; }
-
-    unsigned int length() const { return m_length; }
-
-    void setStartTime(unsigned int start);
-    unsigned int getStartTime() const;
-
-    TrackPartItem* canvasPartItem() { return m_canvasPartItem; }
-
-    void updateLength();
-
-protected:
-    /// The track this part belongs to
-    int m_trackNb;
-    /// Part length
-    unsigned int m_length;
-
-    /// start time - not used yet
-    unsigned int m_startTime;
-
-    /// the rect. width / track length ratio
-    unsigned int m_widthToLengthRatio;
-
-    TrackPartItem *m_canvasPartItem;
-};
+//////////////////////////////////////////////////////////////////////
+//                 Track Tools
+//////////////////////////////////////////////////////////////////////
 
 class TrackTool : public QObject
 {
@@ -173,14 +153,18 @@ public:
     TrackTool(TracksCanvas*);
     virtual ~TrackTool();
 
-    virtual void handleMouseButtonPress(QMouseEvent*) = 0;
+    virtual void handleMouseButtonPress(QMouseEvent*)  = 0;
     virtual void handleMouseButtonRelase(QMouseEvent*) = 0;
-    virtual void handleMouseMove(QMouseEvent*) = 0;
+    virtual void handleMouseMove(QMouseEvent*)         = 0;
 
 protected:
     TracksCanvas*  m_canvas;
     TrackPartItem* m_currentItem;
 };
+
+//////////////////////////////
+// TrackPencil
+//////////////////////////////
 
 class TrackPencil : public TrackTool
 {
@@ -193,8 +177,9 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void addTrackPart(TrackPart*);
-    void deleteTrackPart(TrackPart*);
+    void addTrack(TrackPartItem*);
+    void resizeTrack(Rosegarden::Track*);
+    void deleteTrack(Rosegarden::Track*);
 
 protected:
     bool m_newRect;
@@ -211,7 +196,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void deleteTrackPart(TrackPart*);
+    void deleteTrack(Rosegarden::Track*);
 };
 
 class TrackMover : public TrackTool
@@ -225,7 +210,7 @@ public:
 };
 
 /**
- * TrackPart Resizer tool. Allows resizing only at the end of the track part
+ * Track Resizer tool. Allows resizing only at the end of the track part
  */
 class TrackResizer : public TrackTool
 {
@@ -238,15 +223,13 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void deleteTrackPart(TrackPart*);
-    void resizeTrackPart(TrackPart*);
+    void deleteTrack(Rosegarden::Track*);
+    void resizeTrack(Rosegarden::Track*);
 
 protected:
     bool cursorIsCloseEnoughToEdge(TrackPartItem*, QMouseEvent*);
 
     unsigned int m_edgeThreshold;
 };
-
-
 
 #endif

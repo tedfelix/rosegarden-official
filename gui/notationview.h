@@ -31,6 +31,7 @@
 #include "NotationTypes.h"
 
 class QCanvasItem;
+namespace Rosegarden { class Track; }
 class RosegardenGUIDoc;
 
 /**
@@ -42,7 +43,7 @@ class NotationView : public KMainWindow
     Q_OBJECT
 public:
 
-    NotationView(RosegardenGUIDoc* doc, unsigned int trackNb, QWidget *parent,
+    NotationView(RosegardenGUIDoc* doc, Rosegarden::Track*, QWidget *parent,
                  int resolution);
     ~NotationView();
 

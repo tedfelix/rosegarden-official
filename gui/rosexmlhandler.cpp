@@ -67,33 +67,27 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "track") {
         m_currentTime = 0;
-        int trackNb = -1;
-        QString trackNbStr = atts.value("nb");
-        if (trackNbStr) {
-            trackNb = trackNbStr.toInt();
-//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track nb = "
-//                                  << trackNb << endl;
+        int instrument = -1, startIndex = 0;
+        QString instrumentNbStr = atts.value("nb");
+        if (instrumentNbStr) {
+            instrument = instrumentNbStr.toInt();
+//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track instr. nb = "
+//                                  << instrumentNb << endl;
+        }
+
+        QString startIdxStr = atts.value("start");
+        if (startIdxStr) {
+            startIndex = startIdxStr.toInt();
+//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track start idx = "
+//                                  << startIndex << endl;
         }
         
         m_currentTrack = new Track;
-        bool rc = true;
-        
-//         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : composition size is now "
-//                              << m_composition.getNbTracks()
-//                              << endl;
-        if (trackNb > 0)
-            rc = m_composition.addTrack(m_currentTrack, trackNb);
-        else
-            rc = m_composition.addTrack(m_currentTrack);
-    
-        if (!rc)
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : addTrack failed"
-                                 << endl;
-        else
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : addTrack succeeded - composition size is now "
-                                 << m_composition.getNbTracks()
-                                 << endl;
+        m_currentTrack->setInstrument(instrument);
+        m_currentTrack->setStartIndex(startIndex);
 
+        m_composition.addTrack(m_currentTrack);
+    
     } else if (lcName == "event") {
 
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;

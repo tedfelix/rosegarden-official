@@ -25,7 +25,8 @@
 #include <qwidget.h>
 #include <qheader.h>
 
-class TrackPart;
+namespace Rosegarden { class Track; }
+class TrackPartItem;
 class TracksCanvas;
 class RosegardenGUIDoc;
 
@@ -52,38 +53,40 @@ public:
 
     bool moveTrack(int section, int fromIdx, int toIdx);
 
-    // called by parent view widget when reading a music file
-    bool addTrackPart(unsigned int trackNb,
-                      unsigned int start, unsigned int nbBars);
+    /// called by parent view widget when reading a music file
+    bool addTrack(unsigned int trackNb,
+                  unsigned int start, unsigned int nbBars);
     
-    TrackPart* getTrackAtIdx(int idx);
-
     TracksCanvas*       canvas()       { return m_tracksCanvas; }
     const TracksCanvas* canvas() const { return m_tracksCanvas; }
 
+    /**
+     * Must be called after construction and signal connection
+     * if a document was passed to ctor, otherwise tracks will
+     * be created but not registered in the main doc
+     */
+    void setupTracks();
+
 protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
-    void addTrackPart(TrackPart*);
-    void deleteTrackPart(TrackPart*);
-    void resizeTrackPart(TrackPart*);
+    void addTrack(TrackPartItem*);
+    void deleteTrack(Rosegarden::Track*);
+    void resizeTrack(Rosegarden::Track*); // TODO : get rid of this
 
 signals:
     void needUpdate();
-    void createNewTrack(unsigned int trackNb,
-                        unsigned int nbBars,
-                        unsigned int startAt);
+    void createNewTrack(TrackPartItem*);
 
 protected:
 
     void init(unsigned int nbTracks, unsigned int nbBars);
-    void setupTracks();
 
     RosegardenGUIDoc* m_document;
 
     TracksCanvas *m_tracksCanvas;
     QHeader *m_hHeader, *m_vHeader;
 
-    std::list<TrackPart*> m_trackParts;
+//     std::list<TrackPart*> m_trackParts;
 };
 
 #endif

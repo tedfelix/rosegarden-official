@@ -24,8 +24,11 @@
 #include <kmessagebox.h>
 
 #include "trackscanvas.h"
+#include "Track.h"
 
 #include "rosedebug.h"
+
+using Rosegarden::Track;
 
 //////////////////////////////////////////////////////////////////////
 //                TrackPartItem
@@ -33,13 +36,13 @@
 
 TrackPartItem::TrackPartItem(QCanvas* canvas)
     : QCanvasRectangle(canvas),
-      m_part(0)
+      m_track(0)
 {
 }
 
 TrackPartItem::TrackPartItem(const QRect &r, QCanvas* canvas)
     : QCanvasRectangle(r, canvas),
-      m_part(0)
+      m_track(0)
 {
 }
 
@@ -47,56 +50,26 @@ TrackPartItem::TrackPartItem(int x, int y,
                              int width, int height,
                              QCanvas* canvas)
     : QCanvasRectangle(x, y, width, height, canvas),
-      m_part(0)
+      m_track(0)
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-//                TrackPart
-//////////////////////////////////////////////////////////////////////
-
-
-TrackPart::TrackPart(TrackPartItem *r, unsigned int widthToLengthRatio)
-    : m_trackNb(0),
-      m_length(0),
-      m_startTime(0),
-      m_widthToLengthRatio(widthToLengthRatio),
-      m_canvasPartItem(r)
+unsigned int TrackPartItem::getLength() const
 {
-    if (m_canvasPartItem) {
-        m_length = m_canvasPartItem->width() / m_widthToLengthRatio;
-        m_startTime = m_canvasPartItem->x() /  m_widthToLengthRatio;
-        m_canvasPartItem->setPart(this);
-    }
-
-    kdDebug(KDEBUG_AREA) << "TrackPart::TrackPart : Length = "
-                         << m_length << ", start Time : " << m_startTime
-                         << endl;
-
+    return rect().width() / m_widthToLengthRatio;
 }
 
-TrackPart::~TrackPart()
+unsigned int TrackPartItem::getStartIndex() const
 {
-    delete m_canvasPartItem;
+    return rect().x() / m_widthToLengthRatio;
 }
 
-void TrackPart::updateLength()
+void TrackPartItem::setWidthToLengthRatio(unsigned int r)
 {
-    m_length = m_canvasPartItem->width() / m_widthToLengthRatio;
-    kdDebug(KDEBUG_AREA) << "TrackPart::updateLength : Length = "
-                         << m_length << endl;
+    m_widthToLengthRatio = r;
 }
 
-void TrackPart::setStartTime(unsigned int start)
-{
-    // TODO : more to do ?
-    m_startTime = start;
-}
-
-unsigned int TrackPart::getStartTime() const
-{
-    return m_startTime;
-}
+unsigned int TrackPartItem::m_widthToLengthRatio = 1;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -115,6 +88,8 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_pen(Qt::black),
     m_editMenu(new QPopupMenu(this))
 {
+    TrackPartItem::setWidthToLengthRatio(m_grid.hstep());
+
     m_editMenu->insertItem(I18N_NOOP("Edit"),
                            this, SLOT(onEdit()));
     m_editMenu->insertItem(I18N_NOOP("Edit Small"),
@@ -223,6 +198,7 @@ void TracksCanvas::clear()
     }
 }
 
+/// called when reading a music file
 TrackPartItem*
 TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
 {
@@ -241,13 +217,13 @@ TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
 void
 TracksCanvas::onEdit()
 {
-    emit editTrackPart(m_currentItem->part());
+    emit editTrack(m_currentItem->getTrack());
 }
 
 void
 TracksCanvas::onEditSmall()
 {
-    emit editTrackPartSmall(m_currentItem->part());
+    emit editTrackSmall(m_currentItem->getTrack());
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -273,10 +249,12 @@ TrackPencil::TrackPencil(TracksCanvas *c)
     : TrackTool(c),
       m_newRect(false)
 {
-    connect(this, SIGNAL(addTrackPart(TrackPart*)),
-            c,    SIGNAL(addTrackPart(TrackPart*)));
-    connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
-            c,    SIGNAL(deleteTrackPart(TrackPart*)));
+    connect(this, SIGNAL(addTrack(TrackPartItem*)),
+            c,    SIGNAL(addTrack(TrackPartItem*)));
+    connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
+            c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
+    connect(this, SIGNAL(resizeTrack(Rosegarden::Track*)),
+            c,    SIGNAL(resizeTrack(Rosegarden::Track*)));
 
     kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
 }
@@ -324,23 +302,20 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
     if (m_currentItem->width() == 0) {
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
                              << endl;
-        emit deleteTrackPart(m_currentItem->part());
+        emit deleteTrack(m_currentItem->getTrack());
         m_canvas->canvas()->update();
         m_currentItem = 0;
     }
 
     if (m_newRect) {
 
-        TrackPart *newPart = new TrackPart(m_currentItem,
-                                           m_canvas->gridHStep());
-
-        emit addTrackPart(newPart);
+        emit addTrack(m_currentItem);
 
     } else {
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
         // readjust size of corresponding track
-        m_currentItem->part()->updateLength();
+        emit resizeTrack(m_currentItem->getTrack());
     }
 
     m_currentItem = 0;
@@ -365,8 +340,8 @@ TrackEraser::TrackEraser(TracksCanvas *c)
 {
     m_canvas->setCursor(Qt::crossCursor);
 
-    connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
-            c,    SIGNAL(deleteTrackPart(TrackPart*)));
+    connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
+            c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
 
     kdDebug(KDEBUG_AREA) << "TrackEraser()\n";
 }
@@ -378,7 +353,7 @@ void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
 
 void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
 {
-    if (m_currentItem) emit deleteTrackPart(m_currentItem->part());
+    if (m_currentItem) emit deleteTrack(m_currentItem->getTrack());
     m_canvas->canvas()->update();
     
     m_currentItem = 0;
@@ -413,9 +388,9 @@ void TrackMover::handleMouseButtonPress(QMouseEvent *e)
 void TrackMover::handleMouseButtonRelase(QMouseEvent*)
 {
     if (m_currentItem) {
-        m_currentItem->part()->setStartTime(m_currentItem->x() / m_canvas->grid().hstep());
+        m_currentItem->getTrack()->setStartIndex(m_currentItem->x() / m_canvas->grid().hstep());
         kdDebug(KDEBUG_AREA) << "TrackMover::handleMouseButtonRelase() : set part start time to "
-                             << m_currentItem->part()->getStartTime() << endl;
+                             << m_currentItem->getTrack()->getStartIndex() << endl;
     }
 
     m_currentItem = 0;
@@ -439,10 +414,10 @@ TrackResizer::TrackResizer(TracksCanvas *c)
 {
     m_canvas->setCursor(Qt::sizeHorCursor);
 
-    connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
-            c,    SIGNAL(deleteTrackPart(TrackPart*)));
-    connect(this, SIGNAL(resizeTrackPart(TrackPart*)),
-            c,    SIGNAL(resizeTrackPart(TrackPart*)));
+    connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
+            c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
+    connect(this, SIGNAL(resizeTrack(Rosegarden::Track*)),
+            c,    SIGNAL(resizeTrack(Rosegarden::Track*)));
 
     kdDebug(KDEBUG_AREA) << "TrackResizer()\n";
 }

@@ -52,7 +52,6 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
 
     if (docNbTracks > 0 && docNbBars > 0) {
         init(docNbTracks, docNbBars);
-        setupTracks();
     }
     else
         init(64, 100);
@@ -120,14 +119,14 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     connect(this, SIGNAL(needUpdate()),
             m_tracksCanvas, SLOT(update()));
 
-    QObject::connect(m_tracksCanvas, SIGNAL(addTrackPart(TrackPart*)),
-                     this,           SLOT(addTrackPart(TrackPart*)));
+    QObject::connect(m_tracksCanvas, SIGNAL(addTrack(TrackPartItem*)),
+                     this,           SLOT(addTrack(TrackPartItem*)));
 
-    QObject::connect(m_tracksCanvas, SIGNAL(deleteTrackPart(TrackPart*)),
-                     this,           SLOT(deleteTrackPart(TrackPart*)));
+    QObject::connect(m_tracksCanvas, SIGNAL(deleteTrack(Rosegarden::Track*)),
+                     this,           SLOT(deleteTrack(Rosegarden::Track*)));
 
-    QObject::connect(m_tracksCanvas, SIGNAL(resizeTrackPart(TrackPart*)),
-                     this,           SLOT(resizeTrackPart(TrackPart*)));
+    QObject::connect(m_tracksCanvas, SIGNAL(resizeTrack(Rosegarden::Track*)),
+                     this,           SLOT(resizeTrack(Rosegarden::Track*)));
 
 }
 
@@ -152,9 +151,9 @@ TracksEditor::setupTracks()
                                  << " - nb bars : " << (*i)->getNbBars()
                                  << endl;
 
-            addTrackPart(trackNb,
-                         (*i)->getStartIndex(),
-                         (*i)->getNbBars());
+            addTrack(trackNb,
+                     (*i)->getStartIndex(),
+                     (*i)->getNbBars());
         }
         
     }
@@ -172,98 +171,88 @@ TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 }
 
 void
-TracksEditor::addTrackPart(TrackPart *p)
+TracksEditor::addTrack(TrackPartItem *p)
 {
     // find track nb for part
     //
-    QCanvasRectangle *r = p->canvasPartItem();
-    int trackNb = m_vHeader->sectionAt(static_cast<int>(r->y()));
-    p->setTrackNb(trackNb);
+    int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
+    p->setInstrument(instrument);
 
-    kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrackPart() : track nb is %1 at %2")
-        .arg(trackNb).arg(r->y())
+    kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrack() : track instr is %1 at %2")
+        .arg(instrument).arg(p->y())
                          << ", p = " << p << endl;
 
-    m_trackParts.push_back(p);
+//     m_trackParts.push_back(p);
 
-    unsigned int startAt = m_hHeader->sectionAt(static_cast<int>(r->x()));
+    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrack() emitting createNewTrack signal" << endl;
 
-    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrackPart() emitting createNewTrack signal" << endl;
-
-    emit createNewTrack(trackNb, p->length(), startAt);
+    emit createNewTrack(p);
 }
 
 void
-TracksEditor::deleteTrackPart(TrackPart *p)
+TracksEditor::deleteTrack(Rosegarden::Track *p)
 {
-    std::list<TrackPart*>::iterator iter = std::find(m_trackParts.begin(),
-                                                     m_trackParts.end(),
-                                                     p);
+    kdDebug(KDEBUG_AREA) << "TracksEditor::moveTrack() : not implemented\n";
 
-    if (iter != m_trackParts.end()) {
-        kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
-                             << p << " deleted" << endl;
-        TrackPart *p = *iter;
-        m_trackParts.erase(iter);
-        delete p;
+//     std::list<TrackPart*>::iterator iter = std::find(m_trackParts.begin(),
+//                                                      m_trackParts.end(),
+//                                                      p);
 
-    } else {
-        KMessageBox::error(0, QString("TracksEditor::deleteTrackPart() : part %1 not found").arg(long(p), 0, 16));
+//     if (iter != m_trackParts.end()) {
+//         kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
+//                              << p << " deleted" << endl;
+//         TrackPart *p = *iter;
+//         m_trackParts.erase(iter);
+//         delete p;
+
+//     } else {
+//         KMessageBox::error(0, QString("TracksEditor::deleteTrackPart() : part %1 not found").arg(long(p), 0, 16));
         
-        kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
-                             << p << " not found" << endl;
-    }
+//         kdDebug(KDEBUG_AREA) << "TracksEditor::deleteTrackPart() : part "
+//                              << p << " not found" << endl;
+//     }
 }
 
+// TODO : get rid of this
 void
-TracksEditor::resizeTrackPart(TrackPart *p)
+TracksEditor::resizeTrack(Rosegarden::Track *p)
 {
-
+    kdDebug(KDEBUG_AREA) << "TracksEditor::resizeTrack() : not implemented\n";
 }
 
 
 bool
 TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 {
-    // just reset every part's Y coordinate
-    for (std::list<TrackPart*>::iterator iter = m_trackParts.begin();
-         iter != m_trackParts.end(); ++iter) {
-        TrackPart* p = *iter;
-        int trackSection = p->trackNb();
-        QCanvasRectangle *r = p->canvasPartItem();
-        r->setY(m_vHeader->sectionPos(trackSection));
-    }
+    kdDebug(KDEBUG_AREA) << "TracksEditor::moveTrack() : not implemented\n";
+
+//     // just reset every part's Y coordinate
+//     for (std::list<TrackPart*>::iterator iter = m_trackParts.begin();
+//          iter != m_trackParts.end(); ++iter) {
+//         TrackPart* p = *iter;
+//         int trackSection = p->trackNb();
+//         QCanvasRectangle *r = p->canvasPartItem();
+//         r->setY(m_vHeader->sectionPos(trackSection));
+//     }
 
     return true;
 }
 
-TrackPart*
-TracksEditor::getTrackAtIdx(int section)
-{
-    for (std::list<TrackPart*>::iterator iter = m_trackParts.begin();
-         iter != m_trackParts.end(); ++iter) {
-        TrackPart* p = *iter;
-        if (p->trackNb() == section) return p;
-    }
-    return 0;
-}
 
-
-bool
-TracksEditor::addTrackPart(unsigned int trackNb,
-                           unsigned int start, unsigned int nbBars)
+/// called by parent view widget when reading a music file
+bool TracksEditor::addTrack(unsigned int trackNb,
+                            unsigned int start, unsigned int nbBars)
 {
     int x = 0, y = 0;
 
     y = m_vHeader->sectionPos(trackNb);
     // TODO : compute x according to track start
+    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrack(" << trackNb << ")\n";
 
-    TrackPartItem* newPartItem = m_tracksCanvas->addPartItem(x, y, nbBars);    
-    
-    TrackPart *newPart = new TrackPart(newPartItem,
-                                       m_tracksCanvas->gridHStep());
-    newPart->setTrackNb(trackNb);
-    m_trackParts.push_back(newPart);
+    TrackPartItem *newItem = m_tracksCanvas->addPartItem(x, y, nbBars);    
+
+    kdDebug(KDEBUG_AREA) << "TracksEditor::addTrack() emitting createNewTrack signal" << endl;
+    emit createNewTrack(newItem);
 
     return true;
 }

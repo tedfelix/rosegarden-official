@@ -96,8 +96,8 @@ public:
     void resizeSelected();
     
 public slots:
-    void editTrackNotation(TrackPart*);
-    void editTrackNotationSmall(TrackPart*);
+    void editTrackNotation(Rosegarden::Track*);
+    void editTrackNotationSmall(Rosegarden::Track*);
 
 signals:
     void setTool(TracksCanvas::ToolType);
