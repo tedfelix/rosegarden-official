@@ -247,22 +247,9 @@ void MatrixStaff::resizeStaffLines()
     }
 }
 
-void MatrixStaff::buildViewElementList(Segment::iterator from,
-                                       Segment::iterator to)
+bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 {
-    m_viewElementList = new Rosegarden::ViewElementList<MatrixElement>;
-
-    for (Segment::iterator i = from; i != to; ++i) {
-
-        if (! (*i)->isa(Rosegarden::Note::EventType))
-            continue; // skip non-notes events
-        
-        MatrixElement *el = new MatrixElement(*i);
-        m_viewElementList->insert(el);
-    }
-
-    m_segment.addObserver(this);
-
+    return e->isa(Rosegarden::Note::EventType);
 }
 
 void MatrixStaff::createLines()
@@ -285,12 +272,18 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent)
     : EditView(doc, segments, parent),
-      m_canvasView(new MatrixCanvasView(new QCanvas(width() * 2,
-                                                    height() * 2),
-                                        this)),
+      m_canvasView(0),
       m_hLayout(new MatrixHLayout),
       m_vLayout(new MatrixVLayout)
 {
+    QCanvas *tCanvas = new QCanvas(width() * 2,
+                                  // Try to guess approximate height
+                                  segments.size() *
+                                  MatrixVLayout::defaultPitchScaleFactor *
+                                  MatrixStaff::nbLines);
+    
+    m_canvasView = new MatrixCanvasView(tCanvas, this);
+
     setCentralWidget(m_canvasView);
 
     for (unsigned int i = 0; i < segments.size(); ++i)
@@ -341,8 +334,9 @@ void MatrixView::readOptions()
 void MatrixView::setupActions()
 {   
     // File menu
-    KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
+    KStdAction::close   (this, SLOT(closeWindow()),        actionCollection());
 
+    // Edit menu
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
@@ -362,6 +356,9 @@ bool MatrixView::applyLayout()
         m_vLayout->scanStaff(*m_staffs[i]);
     }
 
+    readjustViewSize(QSize(int(m_hLayout->getTotalWidth()),
+                           getViewSize().height()));
+    
     return true;
 }
 

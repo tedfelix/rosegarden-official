@@ -78,12 +78,12 @@ public:
     /**
      * Sets the width of the rectangle computed by the layout engine
      */
-    void setWidth(int w)   { m_canvasRect->setSize(m_canvasRect->height(), w); }
+    void setWidth(int w)   { m_canvasRect->setSize(w, m_canvasRect->height()); }
 
     /**
      * Sets the height of the rectangle computed by the layout engine
      */
-    void setHeight(int h)   { m_canvasRect->setSize(h, m_canvasRect->width()); }
+    void setHeight(int h)   { m_canvasRect->setSize(m_canvasRect->width(), h); }
 
     /// Returns true if the wrapped event is a note
     bool isNote() const;
@@ -155,7 +155,7 @@ protected:
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout(unsigned int durationScaleFactor = 2);
+    MatrixHLayout(unsigned int durationScaleFactor = 1);
     virtual ~MatrixHLayout();
 
     /**
@@ -240,14 +240,15 @@ public:
      */
     void resizeStaffLines();
 
+    static const unsigned int nbLines;
+
 protected:
 
     /**
      * Override from Rosegarden::Staff<T>
      * Don't wrap rests
      */
-    virtual void buildViewElementList(Rosegarden::Segment::iterator from,
-                                      Rosegarden::Segment::iterator to);
+    virtual bool wrapEvent(Rosegarden::Event*);
 
     /// Create staff's vertical lines
     void createLines();
@@ -262,8 +263,6 @@ protected:
     unsigned int m_id;
 
     unsigned int m_pitchScaleFactor;
-
-    static const unsigned int nbLines;
 };
 
 
