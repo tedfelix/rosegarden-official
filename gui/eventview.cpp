@@ -28,9 +28,10 @@
 
 #include <qvbox.h>
 #include <qlayout.h>
-#include <qlistview.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+
+#include <klistview.h>
 
 #include "eventview.h"
 #include "rosegardenguidoc.h"
@@ -93,7 +94,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     connect(m_restFilter, SIGNAL(toggled(bool)),
             SLOT(slotRestFilter(bool)));
 
-    m_eventList = new QListView(getCentralFrame());
+    m_eventList = new KListView(getCentralFrame());
     m_grid->addWidget(m_eventList, 2, 1);
 
     if (segments.size() == 1)
@@ -260,7 +261,15 @@ EventView::readOptions()
 {
     m_config->setGroup("EventList Options");
     EditViewBase::readOptions();
-    
+    m_eventList->restoreLayout(m_config, LayoutConfigGroupName);
+}
+
+const char* const EventView::LayoutConfigGroupName = "EventList Layout";
+
+void
+EventView::slotSaveOptions()
+{
+    m_eventList->saveLayout(m_config, LayoutConfigGroupName);
 }
 
 void

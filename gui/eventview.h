@@ -30,12 +30,11 @@
 
 #include <vector>
 
-#include <qlistview.h>
-#include <qpushbutton.h>
-
 #include "editviewbase.h"
 
 class RosegardenGUIDoc;
+class KListView;
+class QPushButton;
 
 class EventView : public EditViewBase
 {
@@ -88,13 +87,15 @@ public slots:
     void slotTextFilter(bool);
     void slotRestFilter(bool);
 
+protected slots:
+    virtual void slotSaveOptions();
+
 protected:
 
     virtual void readOptions();
 
-
     //--------------- Data members ---------------------------------
-    QListView   *m_eventList;
+    KListView   *m_eventList;
     int          m_eventFilter;
 
     QPushButton *m_noteFilter;
@@ -104,6 +105,7 @@ protected:
     QPushButton *m_controllerFilter;
     QPushButton *m_restFilter;
 
+    static const char* const LayoutConfigGroupName;
 };
 
 #endif
