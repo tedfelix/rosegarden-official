@@ -180,9 +180,6 @@ public:
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
 
 
-    void resetCompositionMmapper();
-    void resetMetronomeMmapper();
-
     // CompositionObserver interface
     virtual void segmentAdded        (const Composition*, Segment*);
     virtual void segmentRemoved      (const Composition*, Segment*);
@@ -219,6 +216,13 @@ protected slots:
     void slotCountdownStop();
 
 protected:
+
+    void resetCompositionMmapper();
+    void resetMetronomeMmapper();
+    void resetControlBlockMmapper();
+    
+    //--------------- Data members ---------------------------------
+
     Rosegarden::MappedComposition m_mC;
     RosegardenGUIDoc    *m_doc;
     CompositionMmapper  *m_compositionMmapper;

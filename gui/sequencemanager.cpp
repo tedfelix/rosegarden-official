@@ -1419,6 +1419,7 @@ void SequenceManager::resetCompositionMmapper()
     m_compositionMmapper = new CompositionMmapper(m_doc);
 
     resetMetronomeMmapper();
+    resetControlBlockMmapper();
 }
 
 void SequenceManager::resetMetronomeMmapper()
@@ -1427,6 +1428,13 @@ void SequenceManager::resetMetronomeMmapper()
 
     delete m_metronomeMmapper;
     m_metronomeMmapper = new MetronomeMmapper(m_doc);
+}
+
+void SequenceManager::resetControlBlockMmapper()
+{
+    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMmapper()\n";
+
+    m_controlBlockMmapper->setDocument(m_doc);
 }
 
 

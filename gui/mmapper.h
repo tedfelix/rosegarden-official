@@ -47,6 +47,7 @@ public:
     void updateMetronomeData(Rosegarden::InstrumentId instId,
                              bool playMetronome, bool recordMetronome);
     void updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
+    void setDocument(RosegardenGUIDoc*);
 
 protected:
     void initControlBlock();

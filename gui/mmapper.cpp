@@ -92,8 +92,6 @@ ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
                  << " at " << (void*)m_mmappedBuffer << endl;
 
     // Create new control block on file
-    m_controlBlock = new (m_mmappedBuffer) ControlBlock(doc->getComposition().getNbTracks());
-
     initControlBlock();
 }
 
@@ -146,9 +144,21 @@ void ControlBlockMmapper::updateSoloData(bool solo,
     m_needsRefresh = true;
 }
 
+void ControlBlockMmapper::setDocument(RosegardenGUIDoc* doc)
+{
+    SEQMAN_DEBUG << "ControlBlockMmapper::setDocument()\n";
+    m_doc = doc;
+    initControlBlock();
+}
+
+
 
 void ControlBlockMmapper::initControlBlock()
 {
+    SEQMAN_DEBUG << "ControlBlockMmapper::initControlBlock()\n";
+
+    m_controlBlock = new (m_mmappedBuffer) ControlBlock(m_doc->getComposition().getNbTracks());
+
     Composition& comp = m_doc->getComposition();
     
     for(Composition::trackiterator i = comp.getTracks().begin(); i != comp.getTracks().end(); ++i) {
