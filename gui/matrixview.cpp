@@ -410,14 +410,6 @@ void MatrixView::setupActions()
 {   
     EditView::setupActions("matrix.rc");
 
-    // File menu
-    KStdAction::close   (this, SLOT(slotCloseWindow()),    actionCollection());
-
-    // Edit menu
-    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
-
     //
     // Edition tools (eraser, selector...)
     //

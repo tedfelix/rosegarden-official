@@ -79,9 +79,6 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 
     m_centralFrame->setMargin(0);
 
-    // add undo and redo to edit menu and toolbar
-    getCommandHistory()->attachView(actionCollection());
-    
     QObject::connect
         (getCommandHistory(), SIGNAL(commandExecuted()),
          this,                  SLOT(update()));
@@ -118,6 +115,8 @@ void EditViewBase::setupActions(QString rcFileName)
 {
     setRCFileName(rcFileName);
 
+    // Actions all edit views will have
+
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
     KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
@@ -134,6 +133,29 @@ void EditViewBase::setupActions(QString rcFileName)
                                   SLOT(slotEditToolbars()),
                                   actionCollection());
 
+
+    // File menu
+    KStdAction::close (this, SLOT(slotCloseWindow()),      actionCollection());
+
+    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
+    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
+
+    new KToolBarPopupAction(i18n("Und&o"),
+                            "undo",
+                            KStdAccel::key(KStdAccel::Undo),
+                            actionCollection(),
+                            KStdAction::stdName(KStdAction::Undo));
+
+    new KToolBarPopupAction(i18n("Re&do"),
+                            "redo",
+                            KStdAccel::key(KStdAccel::Redo),
+                            actionCollection(),
+                            KStdAction::stdName(KStdAction::Redo));
+
+
+    // add undo and redo to edit menu and toolbar
+    getCommandHistory()->attachView(actionCollection());
     
 }
 

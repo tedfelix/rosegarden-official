@@ -62,48 +62,45 @@ MultiViewCommandHistory::attachView(KActionCollection *collection)
 
     RG_DEBUG << "MultiViewCommandHistory::attachView() : creating actions\n";
     
-    KToolBarPopupAction *undo = new KToolBarPopupAction
-	(i18n("Und&o"),
-	 "undo",
-	 KStdAccel::key(KStdAccel::Undo),
-	 this,
-	 SLOT(slotUndo()),
-	 collection,
-	 KStdAction::stdName(KStdAction::Undo));
+    KToolBarPopupAction *undo = dynamic_cast<KToolBarPopupAction*>(collection->action(KStdAction::stdName(KStdAction::Undo)));
 
-    connect
-	(undo->popupMenu(),
-	 SIGNAL(aboutToShow()),
-	 this,
-	 SLOT(slotUndoAboutToShow()));
+    if (undo) {
+        connect(undo, SIGNAL(activated()),
+                this, SLOT(slotUndo()));
 
-    connect
-	(undo->popupMenu(),
-	 SIGNAL(activated(int)),
-	 this,
-	 SLOT(slotUndoActivated(int)));
+        connect
+            (undo->popupMenu(),
+             SIGNAL(aboutToShow()),
+             this,
+             SLOT(slotUndoAboutToShow()));
 
-    KToolBarPopupAction *redo = new KToolBarPopupAction
-	(i18n("Re&do"),
-	 "redo",
-	 KStdAccel::key(KStdAccel::Redo),
-	 this,
-	 SLOT(slotRedo()),
-	 collection,
-	 KStdAction::stdName(KStdAction::Redo));
+        connect
+            (undo->popupMenu(),
+             SIGNAL(activated(int)),
+             this,
+             SLOT(slotUndoActivated(int)));
+    }
     
-    connect
-	(redo->popupMenu(),
-	 SIGNAL(aboutToShow()),
-	 this,
-	 SLOT(slotRedoAboutToShow()));
+    KToolBarPopupAction *redo = dynamic_cast<KToolBarPopupAction*>(collection->action(KStdAction::stdName(KStdAction::Redo)));
 
-    connect
-	(redo->popupMenu(),
-	 SIGNAL(activated(int)),
-	 this,
-	 SLOT(slotRedoActivated(int)));
+    if (redo) {
 
+        connect(redo, SIGNAL(activated()),
+                this, SLOT(slotRedo()));
+    
+        connect
+            (redo->popupMenu(),
+             SIGNAL(aboutToShow()),
+             this,
+             SLOT(slotRedoAboutToShow()));
+
+        connect
+            (redo->popupMenu(),
+             SIGNAL(activated(int)),
+             this,
+             SLOT(slotRedoActivated(int)));
+    }
+    
     m_views.insert(collection);
     updateButtons();
 

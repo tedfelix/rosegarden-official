@@ -1001,9 +1001,6 @@ void NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
     
 
-    // File menu
-    KStdAction::close (this, SLOT(slotCloseWindow()),      actionCollection());
-
     // Edit menu
     new KAction(i18n("Select from Sta&rt"), 0, this,
 		SLOT(slotEditSelectFromStart()), actionCollection(),
@@ -1028,10 +1025,6 @@ void NotationView::setupActions()
     new KAction(i18n("De&lete"), Key_Delete, this,
 		SLOT(slotEditDelete()), actionCollection(),
 		"delete");
-
-    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
-    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
     //
     // Settings menu

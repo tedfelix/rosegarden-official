@@ -269,6 +269,26 @@ void RosegardenGUIApp::setupActions()
     KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
 
+    //
+    // undo/redo actions are special in that they are connected to
+    // slots later on, when the current document is set up - see
+    // MultiViewCommandHistory::attachView
+    //
+    new KToolBarPopupAction(i18n("Und&o"),
+                            "undo",
+                            KStdAccel::key(KStdAccel::Undo),
+                            actionCollection(),
+                            KStdAction::stdName(KStdAction::Undo));
+
+    new KToolBarPopupAction(i18n("Re&do"),
+                            "redo",
+                            KStdAccel::key(KStdAccel::Redo),
+                            actionCollection(),
+                            KStdAction::stdName(KStdAction::Redo));
+    /////
+    
+
+
     // setup Settings menu
     //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
