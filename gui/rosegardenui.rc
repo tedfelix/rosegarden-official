@@ -3,7 +3,7 @@
 <kpartgui name="Rosegarden" version="085">
 
 <MenuBar>
-  <Menu name="file"><text>&amp;File</text>
+  <Menu name="file">
   <Action name="file_revert"/>
     <Menu name="import" append="new_merge"><text>&amp;Import</text>
       <Action name="file_import_midi" />
@@ -92,7 +92,7 @@
         <Action name="split"/>
         <Action name="join"/>
   </Menu>
-  <Menu  name="settings"><text>&amp;Settings</text>
+  <Menu  name="settings">
          <Action name="show_tracks_toolbar"        append="show_merge" />
          <Action name="show_editors_toolbar"       append="show_merge" />
          <Action name="show_transport_toolbar"     append="show_merge" />
