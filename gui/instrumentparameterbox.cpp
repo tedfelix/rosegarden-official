@@ -681,15 +681,15 @@ InstrumentParameterPanel::setDocument(RosegardenGUIDoc* doc)
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
     : InstrumentParameterPanel(doc, parent),
-      m_audioFader(new AudioFaderWidget(this, "instrumentAudioFader", false))
+      m_audioFader(new AudioFaderWidget(this, AudioFaderWidget::FaderBox))
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 10, 6, 5, 5);
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 1, 5, 5);
 
     // Instrument label : first row, all cols
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 5, AlignCenter);
+    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 0, AlignCenter);
 
     // fader and connect it
-    gridLayout->addMultiCellWidget(m_audioFader, 1, 9, 2, 3);
+    gridLayout->addMultiCellWidget(m_audioFader, 1, 1, 0, 0);
 
     connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
             this, SLOT(slotAudioChannels(int)));

@@ -113,20 +113,29 @@ protected:
     
 
 
-class AudioFaderWidget : public QWidget
+class AudioFaderWidget : public QFrame
 {
     Q_OBJECT
 
 public:
+    enum LayoutType {
+	FaderStrip,
+	FaderBox
+    };
+    
     AudioFaderWidget(QWidget *parent,
-                     const char *name=0,
-                     bool vertical=true);
+                     LayoutType type,
+                     const char *name = 0);
 
     void setAudioChannels(int);
 
     std::vector<QPushButton*>  m_plugins;
+
     AudioVUMeter              *m_vuMeter;
+
     RosegardenFader           *m_fader;
+    RosegardenFader           *m_recordFader;
+
     QPushButton               *m_muteButton;
     QPushButton               *m_soloButton;
     QPushButton               *m_recordButton;
@@ -138,7 +147,7 @@ public:
     QSignalMapper             *m_signalMapper;
 
     KComboBox                 *m_audioInput; 
-    //KComboBox                 *m_audioOutput; 
+    KComboBox                 *m_audioOutput; 
 
 signals:
     void audioChannelsChanged(int);
@@ -151,9 +160,6 @@ protected slots:
 protected:
     QPushButton               *m_stereoButton;
     bool                       m_isStereo;
-
-
-
 };
 
 

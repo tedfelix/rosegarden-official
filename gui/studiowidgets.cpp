@@ -206,7 +206,7 @@ RosegardenFader::value_to_position(float value)
 } 
 
 void
-RosegardenFader::paintEvent(QPaintEvent *e)
+RosegardenFader::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
     int position = value_to_position(m_value);
@@ -497,9 +497,9 @@ RosegardenFader::calculateButtonPixmap()
 //
 
 AudioFaderWidget::AudioFaderWidget(QWidget *parent,
-                                   const char *name,
-                                   bool vertical):
-    QWidget(parent, name),
+				   LayoutType type,
+                                   const char *name):
+    QFrame(parent, name),
     m_signalMapper(new QSignalMapper(this)),
     m_isStereo(false)
 {
@@ -514,8 +514,6 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
         plugin = new QPushButton(pluginVbox);
         plugin->setText(i18n("<no plugin>"));
 
-        // Force width
-        plugin->setFixedWidth(plugin->width());
         QToolTip::add(plugin, i18n("Audio plugin button"));
 
         m_plugins.push_back(plugin);
@@ -526,18 +524,27 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 
     // VU meter and fader
     //
-    m_vuMeter = new AudioVUMeter(this);
-    QToolTip::add(m_vuMeter, i18n("Audio VU Meter"));
+    if (type == FaderBox) {
+	m_vuMeter = new AudioVUMeter(this);
+    } else {
+	m_vuMeter = new AudioVUMeter(this,
+				     VUMeter::AudioPeakHold,
+				     true,
+				     14,
+				     240);
+    }
 
-    m_fader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
+    m_fader = new RosegardenFader(type == FaderBox ?
+				  Rosegarden::AudioLevel::ShortFader :
+				  Rosegarden::AudioLevel::LongFader,
 				  20, m_vuMeter->height(), this);
-//    m_fader->setTickmarks(QSlider::Right);
-//    m_fader->setTickInterval(10);
-//    m_fader->setPageStep(10);
-//    m_fader->setMinValue(0);
-//    m_fader->setMaxValue(127);
-//    m_fader->setFixedHeight(m_vuMeter->height());
-//    QToolTip::add(m_fader, i18n("Audio Fader"));
+    
+    if (type == FaderBox) {
+	m_recordFader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
+					    20, m_vuMeter->height(), this);
+    } else {
+	m_recordFader = 0;
+    }
 
     // Stereo, solo, mute and pan
     //
@@ -546,8 +553,12 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
     m_pan = new RosegardenRotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 24);
-    QToolTip::add(m_pan,
-                  i18n("Set the audio pan position in the stereo field"));
+
+    QLabel *panLabel = 0;
+
+    if (type == FaderBox) {
+//	panLabel = new QLabel(i18n("Pan"), this);
+    }
 
     // same as the knob colour on the MIDI pan
     m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
@@ -555,7 +566,6 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_stereoButton = new QPushButton(this);
     m_stereoButton->setPixmap(m_monoPixmap); // default is mono
     m_stereoButton->setFixedSize(24, 24);
-    QToolTip::add(m_stereoButton, i18n("Mono or Stereo Audio Instrument"));
 
     connect(m_stereoButton, SIGNAL(clicked()),
             this, SLOT(slotChannelStateChanged()));
@@ -564,76 +574,99 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_muteButton->setText("M");
     m_muteButton->setToggleButton(true);
 
-    QToolTip::add(m_muteButton, i18n("Mute the Track to which this Instrument is attached."));
-
     m_soloButton = new QPushButton(this);
     m_soloButton->setText("S");
     m_soloButton->setToggleButton(true);
-
-    QToolTip::add(m_soloButton, i18n("Solo the Track to which this Instrument is attached."));
 
     m_recordButton = new QPushButton(this);
     m_recordButton->setText("R");
     m_recordButton->setToggleButton(true);
 
-    QToolTip::add(m_recordButton,
-                  i18n("Arm recording for this audio Instrument"));
+    m_muteButton->setMaximumWidth(m_stereoButton->width());
+    m_soloButton->setMaximumWidth(m_stereoButton->width());
+    m_recordButton->setMaximumWidth(m_stereoButton->width());
 
-    QLabel *inputLabel = new QLabel(i18n("Audio Input"), this);
     m_audioInput = new KComboBox(this);
+    m_audioOutput = new KComboBox(this);
 
-    QLabel *panLabel = new QLabel(i18n("Pan"), this);
+    // Tooltips.  Use more verbose ones for the fader box than the
+    // strip.
+    if (type == FaderBox) {
+	QToolTip::add(m_pan, i18n("Set the audio pan position in the stereo field"));
+	QToolTip::add(m_recordButton, i18n("Arm recording for this audio Instrument"));
+	QToolTip::add(m_soloButton, i18n("Solo the Track to which this Instrument is attached."));
+	QToolTip::add(m_muteButton, i18n("Mute the Track to which this Instrument is attached."));
+	QToolTip::add(m_stereoButton, i18n("Mono or Stereo Audio Instrument"));
+	QToolTip::add(m_vuMeter, i18n("Audio Level Meter"));
+    } else {
+	QToolTip::add(m_pan, i18n("Pan"));
+	QToolTip::add(m_recordButton, i18n("Arm Record"));
+	QToolTip::add(m_soloButton, i18n("Solo"));
+	QToolTip::add(m_muteButton, i18n("Mute"));
+	QToolTip::add(m_stereoButton, i18n("Mono or Stereo"));
+	QToolTip::add(m_vuMeter, i18n("Audio Level"));
+    }
     
     // Sort out the layout accordingly
     //
     QGridLayout *grid;
    
-    if (vertical == true)
+    if (type == FaderStrip)
     {
-        grid = new QGridLayout(this, 7, 2, 6, 6);
+	setFrameStyle(Box | Sunken);
+	
+        grid = new QGridLayout(this, 10, 4, 0, 1);
 
-        grid->addMultiCellWidget(pluginVbox, 0, 0, 0, 1, AlignCenter);
+	grid->addMultiCellWidget(m_audioInput, 0, 0, 1, 3, AlignLeft);
+	
+	grid->addMultiCellWidget(m_audioOutput, 1, 1, 1, 3, AlignLeft);
 
-        grid->addWidget(m_vuMeter,           1, 0, AlignCenter);
-        grid->addWidget(m_fader,             1, 1, AlignCenter);
+	grid->addMultiCellWidget(m_fader, 2, 8, 1, 1, AlignRight);
+	grid->addMultiCellWidget(m_vuMeter, 2, 8, 2, 2, AlignCenter);
 
-        grid->addWidget(m_stereoButton,      2, 0, AlignCenter);
-        grid->addWidget(m_pan,               2, 1, AlignCenter);
-
-        grid->addWidget(m_muteButton,        3, 0, AlignCenter);
-        grid->addWidget(m_soloButton,        3, 1, AlignCenter);
-
-        grid->addWidget(m_recordButton,      4, 0, AlignCenter);
-
-        //grid->addWidget(inputLabel,          5, 0, AlignCenter);
-        grid->addWidget(m_audioInput,        4, 1, AlignCenter);
-        //grid->addWidget(m_audioOutput,       5, 1, AlignCenter);
+	grid->addWidget(m_muteButton, 3, 3, AlignLeft);
+	grid->addWidget(m_soloButton, 4, 3, AlignLeft);
+	grid->addWidget(m_recordButton, 5, 3, AlignLeft);	
+	grid->addWidget(m_pan, 6, 3, AlignLeft);
+	grid->addWidget(m_stereoButton, 7, 3, AlignLeft);
+	
+        grid->addMultiCellWidget(pluginVbox, 9, 9, 1, 3, AlignCenter);
     }
     else
     {
-        grid = new QGridLayout(this, 10, 5, 6, 10);
+        grid = new QGridLayout(this, 6, 6, 6, 6);
 
-        grid->addMultiCellWidget(pluginVbox,    0, 8, 0, 1, AlignCenter);
+        grid->addMultiCellWidget(pluginVbox,    2, 6, 0, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_vuMeter,     0, 8, 2, 2, AlignCenter);
-        grid->addMultiCellWidget(m_fader,       0, 8, 3, 3, AlignCenter);
+        grid->addMultiCellWidget(m_vuMeter,     2, 6, 3, 3, AlignCenter);
+        grid->addMultiCellWidget(m_fader,       2, 6, 2, 2, AlignCenter);
+        grid->addMultiCellWidget(m_recordFader, 2, 6, 4, 4, AlignCenter);
 
-        //grid->addWidget(m_pan,                  1, 4, AlignCenter);
+        grid->addWidget(m_muteButton,           2, 5, AlignLeft);
+        grid->addWidget(m_soloButton,           3, 5, AlignLeft);
 
-        grid->addWidget(m_muteButton,           2, 4, AlignCenter);
-        grid->addWidget(m_soloButton,           3, 4, AlignCenter);
+        grid->addWidget(m_recordButton,         4, 5, AlignLeft);
 
-        grid->addWidget(m_recordButton,         4, 4, AlignCenter);
-        grid->addWidget(m_stereoButton,         5, 4, AlignCenter);
+//        grid->addMultiCellWidget(panLabel,      8, 8, 0, 1, AlignCenter);
+        grid->addWidget(m_pan,                  5, 5, AlignLeft);
+        grid->addWidget(m_stereoButton,         6, 5, AlignLeft);
 
-        grid->addMultiCellWidget(panLabel,      8, 8, 0, 1, AlignCenter);
-        grid->addMultiCellWidget(m_pan,         8, 8, 2, 4, AlignCenter);
+	QLabel *inputLabel = new QLabel(i18n("In:"), this);
+        grid->addWidget(inputLabel,             0, 1, AlignRight);
+        grid->addMultiCellWidget(m_audioInput,  0, 0, 2, 5, AlignLeft);
 
-        grid->addWidget(inputLabel,             9, 0, AlignCenter);
-        grid->addMultiCellWidget(m_audioInput,  9, 9, 1, 4, AlignCenter);
+	QLabel *outputLabel = new QLabel(i18n("Out:"), this);
+        grid->addWidget(outputLabel,             1, 1, AlignRight);
+        grid->addMultiCellWidget(m_audioOutput,  1, 1, 2, 5, AlignLeft);
+    }
 
-        //grid->addWidget(outputLabel,            10, 0, AlignCenter);
-        //grid->addMultiCellWidget(m_audioOutput, 10, 10, 1, 4, AlignCenter);
+    for (int i = 0; i < 5; ++i) {
+        // Force width
+	if (type == FaderStrip) {
+	    m_plugins[i]->setMaximumWidth(70);
+	} else {
+	    m_plugins[i]->setFixedWidth(m_plugins[i]->width());
+	}
     }
 
 }
