@@ -69,7 +69,7 @@ public:
 
         // VALID
         //
-        MidiNote,
+        MidiNote = 0,
         MidiNoteOneShot,  // doesn't need NOTE OFFs
         MidiProgramChange,
         MidiKeyPressure,
@@ -77,6 +77,7 @@ public:
         MidiPitchBend,
         MidiController,
         MidiSystemExclusive,
+
         // Sent from the gui to play an audio file
         Audio = 40,
         // Sent from gui to cancel playing an audio file
@@ -87,6 +88,9 @@ public:
         AudioStopped,
         // The gui is clear to generate a preview for a new audio file
         AudioGeneratePreview,
+        // Number of audio channels on an audio MappedInstrument
+        AudioChannels,
+
         // Update Instruments - new ALSA client detected
         SystemUpdateInstruments = 80,
         // Set RG as JACK master/slave

@@ -144,6 +144,8 @@ public slots:
 
     void slotPluginDialogDestroyed(int index);
 
+    void slotAudioChannelToggle();
+
 protected:
     //--------------- Data members ---------------------------------
 
@@ -153,14 +155,19 @@ protected:
 
     std::vector<QPushButton*>                     m_pluginButtons;
     RosegardenRotary                             *m_panRotary;
-    QPushButton                                  *m_stereoButton;
-    QPushButton                                  *m_monoButton;
+    QPushButton                                  *m_channelButton;
     AudioVUMeter                                 *m_audioMeter;
 
     QSignalMapper                                *m_signalMapper;
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
 
     Rosegarden::AudioPluginManager               *m_pluginManager;
+
+private:
+
+    QPixmap                                      m_monoPixmap;
+    QPixmap                                      m_stereoPixmap;
+
 };
 
 class MIDIInstrumentParameterPanel : public InstrumentParameterPanel

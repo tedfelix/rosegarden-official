@@ -848,14 +848,13 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
                                     m_audioLevelFader->height());
     gridLayout->addMultiCellWidget(m_audioMeter, 2, 4, 0, 0, AlignCenter);
                                  
-    gridLayout->addWidget(audioLevelLabel,   5, 0, AlignCenter);
-    gridLayout->addWidget(m_audioLevelValue, 5, 1, AlignLeft);
+    gridLayout->addWidget(audioLevelLabel,   5, 0, AlignLeft);
+    gridLayout->addWidget(m_audioLevelValue, 5, 1, AlignCenter);
 
     m_panRotary = new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    m_stereoButton = new QPushButton(this);
-    m_stereoButton->setToggleButton(true);
-    m_monoButton = new QPushButton(this);
-    m_monoButton->setToggleButton(true);
+    m_channelButton = new QPushButton(this);
+
+    QLabel *channelButtonLabel = new QLabel(i18n("Channel"), this);
 
     // Plugins column (col. 1)
     gridLayout->addWidget(pluginLabel, 1, 2, AlignCenter);
@@ -870,31 +869,34 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
                 m_signalMapper, SLOT(map()));
     }
 
-    gridLayout->addWidget(panLabel,       6, 0, AlignCenter);
-    gridLayout->addWidget(m_panRotary,    6, 1, AlignLeft);
+    gridLayout->addWidget(panLabel,       6, 0, AlignLeft);
+    gridLayout->addWidget(m_panRotary,    6, 1, AlignCenter);
 
     // Frig that G will sort out?!  I hate these fooking GridLayouts - 
     // they always waste _so_ much of my time.
     //
     gridLayout->addRowSpacing(7, m_pluginButtons[0]->height());
-    gridLayout->addWidget(m_monoButton,   7, 0, AlignCenter);
-    gridLayout->addWidget(m_stereoButton, 7, 1, AlignLeft);
+    gridLayout->addWidget(channelButtonLabel,   7, 0, AlignLeft);
+    gridLayout->addWidget(m_channelButton, 7, 1, AlignCenter);
 
     // get the mono and stereo pixmaps
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QPixmap monoPixmap, stereoPixmap;
-    monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
-    stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
-    m_stereoButton->setPixmap(stereoPixmap);
-    m_stereoButton->setFixedSize(40, 20);
-    m_monoButton->setPixmap(monoPixmap);
-    m_monoButton->setFixedSize(40, 20);
+    m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
+    m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
+
+    m_channelButton->setPixmap(m_monoPixmap);
+    m_channelButton->setFixedSize(40, 20);
 
     connect(m_signalMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSelectPlugin(int)));
 
     connect(m_audioLevelFader, SIGNAL(faderChanged(int)),
             this, SLOT(slotSelectAudioLevel(int)));
+
+    // Gather the number of audio channels
+    //
+    connect(m_channelButton, SIGNAL(released()),
+            this, SLOT(slotAudioChannelToggle()));
 
 }
 
@@ -906,26 +908,72 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
     m_instrumentLabel->setText(strtoqstr(instrument->getName()));
     m_audioLevelFader->setFader(instrument->getVelocity());
 
-        for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+    for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
+    {
+        m_pluginButtons[i]->show();
+
+        Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(i);
+
+        if (inst && inst->isAssigned())
         {
-            m_pluginButtons[i]->show();
+            Rosegarden::AudioPlugin *pluginClass 
+                = m_pluginManager->getPlugin(
+                        m_pluginManager->
+                            getPositionByUniqueId(inst->getId()));
 
-            Rosegarden::AudioPluginInstance *inst = 
-                instrument->getPlugin(i);
-
-            if (inst && inst->isAssigned())
-            {
-                Rosegarden::AudioPlugin *pluginClass 
-                    = m_pluginManager->getPlugin(
-                            m_pluginManager->
-                                getPositionByUniqueId(inst->getId()));
-    
-                if (pluginClass)
-                    m_pluginButtons[i]->setText(pluginClass->getLabel());
-            }
-            else
-                m_pluginButtons[i]->setText(i18n("<no plugin>"));
+            if (pluginClass)
+                m_pluginButtons[i]->setText(pluginClass->getLabel());
         }
+        else
+            m_pluginButtons[i]->setText(i18n("<no plugin>"));
+    }
+
+    switch (instrument->getAudioChannels())
+    {
+        case 1:
+            m_channelButton->setPixmap(m_monoPixmap);
+            break;
+
+        case 2:
+            m_channelButton->setPixmap(m_stereoPixmap);
+            break;
+
+        default:
+            RG_DEBUG << "AudioInstrumentParameterPanel::setupForInstrument - "
+                     << "unsupported number of audio channels" << endl;
+            return;
+    }
+}
+
+void
+AudioInstrumentParameterPanel::slotAudioChannelToggle()
+{
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotAudioChannelToggle" << endl;
+
+
+    switch(m_selectedInstrument->getAudioChannels())
+    {
+        case 1:
+            m_channelButton->setPixmap(m_stereoPixmap);
+            m_selectedInstrument->setAudioChannels(2);
+            break;
+
+        case 2:
+            m_channelButton->setPixmap(m_monoPixmap);
+            m_selectedInstrument->setAudioChannels(1);
+            break;
+
+        default:
+            break;
+    }
+
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(
+                m_selectedInstrument->getId(),
+                Rosegarden::MappedEvent::AudioChannels,
+                Rosegarden::MidiByte(m_selectedInstrument->getAudioChannels()));
+
+    StudioControl::sendMappedEvent(mE);
 
 }
 

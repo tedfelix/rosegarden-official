@@ -119,6 +119,9 @@ public:
     void setMidiChannel(MidiByte mC) { m_channel = mC; }
     MidiByte getMidiChannel() const { return m_channel; }
 
+    void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
+    unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
+
     void setMidiTranspose(MidiByte mT) { m_transpose = mT; }
     MidiByte getMidiTranspose() const { return m_transpose; }
 

@@ -69,6 +69,12 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
         unsigned int defaultPlugins = 5;
         for (unsigned int i = 0; i < defaultPlugins; i++)
             addPlugin(new AudioPluginInstance(i));
+
+        // In an audio instrument we use the m_channel attribute to
+        // hold the number of audio channels this Instrument uses -
+        // not the MIDI channel number.  Default is 1 (mono).
+        //
+        m_channel = 1;
     }
 
 }
@@ -112,6 +118,12 @@ Instrument::Instrument(InstrumentId id,
         unsigned int defaultPlugins = 5;
         for (unsigned int i = 0; i < defaultPlugins; i++)
             addPlugin(new AudioPluginInstance(i));
+
+        // In an audio instrument we use the m_channel attribute to
+        // hold the number of audio channels this Instrument uses -
+        // not the MIDI channel number.  Default is 1 (mono).
+        //
+        m_channel = 1;
     }
 }
 
@@ -140,8 +152,23 @@ Instrument::Instrument(const Instrument &ins):
     m_sendVelocity(ins.sendsVelocity()),
     m_mappedId(ins.getMappedId()),
     m_subOrdering(ins.getSubOrdering())
-
 {
+    // Add a number of plugin place holders (unassigned)
+    //
+    if (ins.getType() == Audio)
+    {
+        // Add a number of plugin place holders (unassigned)
+        //
+        unsigned int defaultPlugins = 5;
+        for (unsigned int i = 0; i < defaultPlugins; i++)
+            addPlugin(new AudioPluginInstance(i));
+
+        // In an audio instrument we use the m_channel attribute to
+        // hold the number of audio channels this Instrument uses -
+        // not the MIDI channel number.  Default is 1 (mono).
+        //
+        m_channel = 1;
+    }
 }
 
 Instrument

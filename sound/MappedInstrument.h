@@ -84,6 +84,11 @@ public:
     void setSubOrdering(MappedInstrumentSubOrdering order) { m_subOrdering = order; }
     MappedInstrumentSubOrdering getSubOrdering() const { return m_subOrdering; }
 
+    // How many audio channels we've got on this audio MappedInstrument
+    //
+    unsigned int getAudioChannels() const { return m_audioChannels; }
+    void setAudioChannels(unsigned int channels) { m_audioChannels = channels; }
+
 private:
 
     Instrument::InstrumentType  m_type;
@@ -93,6 +98,11 @@ private:
     DeviceId                    m_device;
 
     MappedInstrumentSubOrdering m_subOrdering;
+
+    // If this is an audio MappedInstrument then how many channels
+    // are associated with it?
+    //
+    unsigned int                m_audioChannels;
 
 };
 
