@@ -21,6 +21,10 @@
 
 #include "editcommands.h"
 
+#include <qregexp.h>
+
+#include <kconfig.h>
+
 #include "NotationTypes.h"
 #include "Selection.h"
 #include "SegmentNotationHelper.h"
@@ -34,12 +38,7 @@
 
 #include "rosestrings.h"
 #include "rosedebug.h"
-#include <iostream>
-
-#include <qregexp.h>
-#include <qeventloop.h>
-#include <kconfig.h>
-#include <kapp.h>
+#include "rgapplication.h"
 
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
@@ -765,10 +764,10 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
 	if (rebeam || makeviable || decounterpoint) {
 	    emit incrementProgress(m_progressTotal / 2);
-	    kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+	    rgapp->refreshGUI(50);
 	} else {
 	    emit incrementProgress(m_progressTotal);
-	    kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+	    rgapp->refreshGUI(50);
 	}
     }	    
 
@@ -803,7 +802,7 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
 	if (rebeam || makeviable || decounterpoint) {
 	    emit incrementProgress(m_progressTotal / 2);
-	    kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+	    rgapp->refreshGUI(50);
 	}
     }	    
 }

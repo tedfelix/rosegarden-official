@@ -26,6 +26,7 @@
 
 #include "csoundio.h"
 
+#include "rgapplication.h"
 #include "Composition.h"
 #include "BaseProperties.h"
 
@@ -79,7 +80,7 @@ CsoundExporter::write()
 	 i != m_composition->end(); ++i) {
 
         emit setProgress(int(double(trackNo++)/double(m_composition->getNbTracks()) * 100.0));
-        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+        rgapp->refreshGUI(50);
 
 	str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
 	str << ";; on Track: \""

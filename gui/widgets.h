@@ -160,8 +160,6 @@ public:
 
     virtual void polish();
 
-    virtual bool eventFilter(QObject *watched, QEvent *e);
-
 public slots:
     void slotSetOperationName(QString);
     void slotCancel();
@@ -178,9 +176,6 @@ protected slots:
 protected:
     virtual void hideEvent(QHideEvent*);
 
-    void installFilter();
-    void removeFilter();
-    
     //--------------- Data members ---------------------------------
 
     QTime m_chrono;
@@ -201,7 +196,6 @@ public:
 			  const char *name = 0,
 			  WFlags f = 0);
 
-    virtual bool eventFilter(QObject *watched, QEvent *e);
 };
 
 class CurrentProgressDialog : public QObject

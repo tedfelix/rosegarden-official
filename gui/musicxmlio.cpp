@@ -25,19 +25,21 @@
 
 #include "musicxmlio.h"
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
 #include "Composition.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "Instrument.h"
 
+#include "rgapplication.h"
+
 #include "notationstrings.h"
 #include "rosedebug.h"
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <qeventloop.h>
 
 using Rosegarden::BaseProperties;
 using Rosegarden::Bool;
@@ -295,7 +297,7 @@ MusicXmlExporter::write() {
         str << "\t\t</score-part>" << std::endl;
 
         emit setProgress(int(double(trackNo++)/double(tracks.size()) * 20.0));
-        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+        rgapp->refreshGUI(50);
 
     } // end track iterator
     str << "\t</part-list>" << std::endl;
@@ -428,7 +430,7 @@ MusicXmlExporter::write() {
 
         emit setProgress(20 +
                          int(double(trackNo++)/double(tracks.size()) * 80.0));
-        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+        rgapp->refreshGUI(50);
     }
 
     str << "</score-partwise>" << std::endl;

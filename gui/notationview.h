@@ -784,8 +784,6 @@ protected:
     void setupProgress(RosegardenProgressDialog*);
     void setupDefaultProgress();
     void disconnectProgress();
-    void installProgressEventFilter();
-    void removeProgressEventFilter();
 
     /**
      * Test whether we've had too many preview notes recently
@@ -869,7 +867,6 @@ protected:
     enum { PROGRESS_NONE,
            PROGRESS_BAR,
            PROGRESS_DIALOG } m_progressDisplayer;
-    bool m_progressEventFilterInstalled;
 
     bool m_inhibitRefresh;
     bool m_ok;

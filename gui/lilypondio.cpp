@@ -28,23 +28,20 @@
     COPYING included with this distribution for more information.
 */
 
-#include <klocale.h> // i18n
-#include <kconfig.h> // KConfig
-#include <kapp.h>
-#include <kmessagebox.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 #include <qstring.h>
 #include <qregexp.h> // QT3.0 replace()
 #include <qtextcodec.h>
 #include <qfileinfo.h> // for filename name doctoring
-#include <qeventloop.h>
 
-#include "lilypondio.h"
-#include "config.h"
-#include "rosestrings.h" // strtoqstr
-#include "notationproperties.h"
-#include "notationview.h"
-#include "widgets.h"
+#include <klocale.h> // i18n
+#include <kconfig.h> // KConfig
+#include <kapp.h>
+#include <kmessagebox.h>
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -52,12 +49,15 @@
 #include "NotationTypes.h"
 #include "Sets.h"
 
-#include "rosedebug.h"
+#include "lilypondio.h"
+#include "config.h"
+#include "rosestrings.h" // strtoqstr
+#include "notationproperties.h"
+#include "notationview.h"
+#include "widgets.h"
+#include "rgapplication.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
+#include "rosedebug.h"
 
 using namespace Rosegarden::BaseProperties;
 using Rosegarden::Bool;
@@ -655,7 +655,7 @@ LilypondExporter::write()
 
         emit setProgress(int(double(trackNo++)/
                              double(m_composition->getNbTracks()) * 100.0));
-        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+        rgapp->refreshGUI(50);
 
         // do nothing if track is muted...  this provides a crude but easily implemented
         // method for users to selectively export tracks...

@@ -4,5 +4,5 @@ Comment[fr]=Fichier Rosegarden
 Hidden=false
 Icon=midi
 MimeType=audio/x-rosegarden
-Patterns=*.rg;*.rgd;*.RG;*.RGD
+Patterns=*.rg;*.RG
 Type=MimeType

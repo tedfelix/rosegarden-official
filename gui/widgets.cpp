@@ -35,11 +35,11 @@
 #include <qbitmap.h>
 #include <qeventloop.h>
 
-#include <kapp.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kcombobox.h>
 
+#include "rgapplication.h"
 #include "widgets.h"
 #include "rosedebug.h"
 #include "rosestrings.h"
@@ -200,8 +200,6 @@ RosegardenProgressDialog::polish()
         setCursor(Qt::ArrowCursor);
     else
         QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
-
-    installFilter();
 }
 
 void RosegardenProgressDialog::hideEvent(QHideEvent* e)
@@ -211,29 +209,6 @@ void RosegardenProgressDialog::hideEvent(QHideEvent* e)
     
     KProgressDialog::hideEvent(e);
     m_modalVisible = false;
-}
-
-bool
-RosegardenProgressDialog::eventFilter(QObject *watched, QEvent *e)
-{
-    if (e->type() == QEvent::MouseButtonPress    ||
-	e->type() == QEvent::MouseMove           ||
-        e->type() == QEvent::MouseButtonRelease  ||
-        e->type() == QEvent::MouseButtonDblClick ||
-        e->type() == QEvent::KeyPress            ||
-        e->type() == QEvent::KeyRelease          ||
-        e->type() == QEvent::DragEnter           ||
-        e->type() == QEvent::DragMove            ||
-        e->type() == QEvent::DragLeave           ||
-        e->type() == QEvent::Drop                ||
-        e->type() == QEvent::DragResponse        ||
-        e->type() == QEvent::Close)
-
-        return true;
-
-    else
-
-        return KProgressDialog::eventFilter(watched, e);
 }
 
 void
@@ -282,8 +257,6 @@ void RosegardenProgressDialog::slotFreeze()
 	hide();
     }
 
-    removeFilter();
-
     mShowTimer->stop();
     m_frozen = true;
 }
@@ -296,24 +269,11 @@ void RosegardenProgressDialog::slotThaw()
 	if (m_modal) m_modalVisible = true;
 	show();
     }
-    installFilter();
 
     // Restart timer
     mShowTimer->start(minimumDuration());
     m_frozen = false;
     m_chrono.restart();
-}
-
-void RosegardenProgressDialog::installFilter()
-{
-    if (kapp->mainWidget())
-        kapp->mainWidget()->installEventFilter(this);
-}
-
-void RosegardenProgressDialog::removeFilter()
-{
-    if (kapp->mainWidget())
-        kapp->mainWidget()->removeEventFilter(this);
 }
 
 void RosegardenProgressDialog::processEvents()
@@ -323,7 +283,7 @@ void RosegardenProgressDialog::processEvents()
     if (m_modalVisible) {
 	kapp->processEvents(50);
     } else {
-	kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+	rgapp->refreshGUI(50);
     }
 }
 
@@ -337,29 +297,6 @@ RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
 					     WFlags f) :
     KProgress(totalSteps, creator, name, f)
 {
-}
-
-bool
-RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
-{
-    if (e->type() == QEvent::MouseButtonPress    ||
-	e->type() == QEvent::MouseMove           ||
-        e->type() == QEvent::MouseButtonRelease  ||
-        e->type() == QEvent::MouseButtonDblClick ||
-        e->type() == QEvent::KeyPress            ||
-        e->type() == QEvent::KeyRelease          ||
-        e->type() == QEvent::DragEnter           ||
-        e->type() == QEvent::DragMove            ||
-        e->type() == QEvent::DragLeave           ||
-        e->type() == QEvent::Drop                ||
-        e->type() == QEvent::DragResponse        ||
-        e->type() == QEvent::Close)
-
-        return true;
-
-    else
-
-        return KProgress::eventFilter(watched, e);
 }
 
 //----------------------------------------

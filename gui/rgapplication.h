@@ -23,6 +23,8 @@
 #ifndef _RGAPPLICATION_H_
 #define _RGAPPLICATION_H_
 
+#include <qeventloop.h>
+
 #include <kuniqueapplication.h>
 
 /**
@@ -43,10 +45,7 @@ public:
      */
     virtual int newInstance();
 
-    void commitData(QSessionManager& sm)
-    {
-        KApplication::commitData( sm );
-    }
+    void refreshGUI(int maxTime) { eventLoop()->processEvents(QEventLoop::ExcludeUserInput, maxTime); }
 
     bool isSequencerRegistered();
     bool sequencerSend(QCString dcopCall, QByteArray params = Empty);

@@ -27,20 +27,21 @@
 #include <klocale.h>
 
 #include "ktmpstatusmsg.h"
+#include "rgapplication.h"
 
 KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KMainWindow* window, int id)
     : m_mainWindow(window),
       m_id(id)
 {
     m_mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), m_id);
-    qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+    rgapp->refreshGUI(50);
 }
 
 KTmpStatusMsg::~KTmpStatusMsg()
 {
     m_mainWindow->statusBar()->clear();
     m_mainWindow->statusBar()->changeItem(m_defaultMsg, m_id);
-    qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+    rgapp->refreshGUI(50);
 }
 
 

@@ -208,7 +208,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_pannerDialog(new ScrollBoxDialog(this, ScrollBox::FixHeight)),
     m_renderTimer(0),
     m_progressDisplayer(PROGRESS_NONE),
-    m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_ok(false),
     m_printMode(false),
@@ -687,7 +686,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_pannerDialog(0),
     m_renderTimer(0),
     m_progressDisplayer(PROGRESS_NONE),
-    m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_ok(false),
     m_printMode(true),
@@ -2295,8 +2293,6 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
     if (m_currentEventSelection == s) return;
     NOTATION_DEBUG << "XXX " << endl;
 
-    installProgressEventFilter();
-
     EventSelection *oldSelection = m_currentEventSelection;
     m_currentEventSelection = s;
 
@@ -2404,7 +2400,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
     delete oldSelection;
 
-    removeProgressEventFilter();
+    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(),
+			    KTmpStatusMsg::getDefaultId());
 
     if (s) {
 	int eventsSelected = s->getSegmentEvents().size();
@@ -2697,8 +2694,6 @@ void NotationView::refreshSegment(Segment *segment,
     NOTATION_DEBUG << "NotationView::refreshSegment(" << segment << "," << startTime << "," << endTime << ")" << endl;
     Rosegarden::Profiler foo("NotationView::refreshSegment");
 
-    installProgressEventFilter();
-
     emit usedSelection();
 
     if (segment) {
@@ -2717,7 +2712,8 @@ void NotationView::refreshSegment(Segment *segment,
 
     PixmapArrayGC::deleteAll();
 
-    removeProgressEventFilter();
+    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(),
+			    KTmpStatusMsg::getDefaultId());
 
     Event::dumpStats(std::cerr);
     slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
@@ -3043,36 +3039,6 @@ void NotationView::setupDefaultProgress()
         setupProgress(m_progressBar);
         m_progressDisplayer = PROGRESS_BAR;
     }
-}
-
-void NotationView::installProgressEventFilter()
-{
-    if (m_progressDisplayer == PROGRESS_BAR &&
-        !m_progressEventFilterInstalled) {
-        NOTATION_DEBUG << "NotationView::installProgressEventFilter()" << endl;
-        kapp->installEventFilter(m_progressBar);
-        m_progressEventFilterInstalled = true;
-    } else {
-        NOTATION_DEBUG << "NotationView::installProgressEventFilter() - skipping install : "
-                 << m_progressDisplayer << "," << PROGRESS_BAR << endl;
-    }
-}
-
-void NotationView::removeProgressEventFilter()
-{
-    if (m_progressDisplayer == PROGRESS_BAR &&
-        m_progressEventFilterInstalled) {
-        NOTATION_DEBUG << "NotationView::removeProgressEventFilter()" << endl;
-        kapp->removeEventFilter(m_progressBar);
-        m_progressBar->setValue(0);
-        m_progressEventFilterInstalled = false;
-    } else {
-        NOTATION_DEBUG << "NotationView::removeProgressEventFilter() - skipping remove : "
-                 << m_progressDisplayer << "," << PROGRESS_BAR << endl;
-    }
-
-    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(),
-			    KTmpStatusMsg::getDefaultId());
 }
 
 void
