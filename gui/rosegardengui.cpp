@@ -25,7 +25,7 @@
 #include <qregexp.h>
 #include <qlabel.h>
 
-#include <qmetaobject.h> // remove this
+//#include <qmetaobject.h> // remove this
 
 // include files for KDE
 #include <kstdaccel.h>
@@ -848,6 +848,10 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
         if (docFileInfo.lastModified() < autoSaveFileInfo.lastModified()) {
             RG_DEBUG << "RosegardenGUIApp::openFile : found a more recent autosave file\n";
+            // At this point the splash screen may still be there, hide it if
+            // it's the case
+            KStartupLogo* logo = KStartupLogo::getInstance();
+            if (logo) logo->hide();
 
             // It is, so ask the user if he wants to use the autosave file
             int reply = KMessageBox::questionYesNo(this,
@@ -1055,6 +1059,8 @@ void RosegardenGUIApp::paintEvent(QPaintEvent* e)
 
 void RosegardenGUIApp::showEvent(QShowEvent* e)
 {
+    RG_DEBUG << "RosegardenGUIApp::showEvent()\n";
+
     if (m_transport)
         m_transport->raise();
 
@@ -2433,7 +2439,7 @@ RosegardenGUIApp::slotCloseTransport()
 void
 RosegardenGUIApp::slotRaiseTransport()
 {
-    RG_DEBUG << "EditViewBase::showEvent()\n";
+    RG_DEBUG << "RosegardenGUIApp::slotRaiseTransport()\n";
     if (m_viewTransport->isChecked()) {
         m_transport->raise();
     }
