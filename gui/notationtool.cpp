@@ -1147,7 +1147,11 @@ EventSelection* NotationSelector::getSelection()
         
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
-            if (!rect.contains(int(item->x()), int(item->y()), true)) continue;
+            // If selector is not greedy, check if the element's rect
+            // is actually included in the selection rect.
+            //
+            if (!isGreedy() &&
+                !rect.contains(int(item->x()), int(item->y()), true)) continue;
             
             NotationElement &el = sprite->getNotationElement();
 
@@ -1168,6 +1172,8 @@ void NotationSelector::setViewCurrentSelection(bool preview)
     EventSelection* selection = getSelection();
     m_nParentView->setCurrentSelection(selection, preview);
 }
+
+bool NotationSelector::m_greedy = true;
 
 //------------------------------
 

@@ -125,6 +125,11 @@ public:
 protected:
 
     void setPreview();
+    void makeFont();
+
+private:
+    SegmentItem(const SegmentItem &);
+    SegmentItem &operator=(const SegmentItem &);
 
     //--------------- Data members ---------------------------------
 
@@ -151,11 +156,6 @@ protected:
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
     static int m_fontHeight;
-    void makeFont();
-
-private:
-    SegmentItem(const SegmentItem &);
-    SegmentItem &operator=(const SegmentItem &);
 };
 
 
@@ -173,6 +173,9 @@ public:
     void hideLine();
 
 private:
+
+    //--------------- Data members ---------------------------------
+
     Rosegarden::RulerScale *m_rulerScale;
     int m_height;
 
@@ -502,6 +505,9 @@ public:
     virtual bool handleMouseMove(QMouseEvent*);
 
 private:
+
+    //--------------- Data members ---------------------------------
+
     QPoint m_clickPoint;
     double m_currentItemStartX;
 };
@@ -565,6 +571,24 @@ public:
     //
     Rosegarden::SegmentSelection getSelectedSegments();
 
+    /**
+     * Sets the selector to "greedy" mode
+     *
+     * In greedy mode, elements which merely touch the edges of the
+     * selection rectangle are selected. Otherwise, elements have to
+     * actually be fully included in the rectangle to be selected.
+     *
+     * @see #isGreedy
+     */
+    static void setGreedyMode(bool s) { m_greedy = s; }
+
+    /**
+     * Returns whether the selector is in "greedy" mode
+     *
+     * @see #setGreedy
+     */
+    static bool isGreedy() { return m_greedy; }
+
 public slots:
     void slotSelectSegmentItem(SegmentItem *selectedItem);
 
@@ -574,6 +598,9 @@ signals:
 private:
     typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
     typedef std::vector<SegmentItemPair> SegmentItemList;
+
+    //--------------- Data members ---------------------------------
+
     SegmentItemList m_selectedItems;
 
     bool m_segmentAddMode;
@@ -583,6 +610,9 @@ private:
     bool m_passedInertiaEdge;
 
     SegmentTool *m_dispatchTool;
+
+    static bool m_greedy;
+
 };
 
 

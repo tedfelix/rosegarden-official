@@ -229,7 +229,6 @@ protected:
 
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
-    static bool m_greedy;
 
     int m_clickedStaff;
     MatrixStaff* m_currentStaff;
@@ -238,6 +237,8 @@ protected:
 
     // tool to delegate to
     EditTool*    m_dispatchTool;
+
+    static bool m_greedy;
 };
 
 

@@ -1898,23 +1898,24 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     if (!m_currentItem)  {
 
         // do a bounding box
-        QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
+        QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
+        QRect rect = selectionRect->rect().normalize();
 
-        if (rect) {
-            rect->show();
+        if (selectionRect) {
+            selectionRect->show();
 
             // same as for notation view
-            int w = int(e->x() - rect->x());
-            int h = int(e->y() - rect->y());
+            int w = int(e->x() - selectionRect->x());
+            int h = int(e->y() - selectionRect->y());
             if (w > 0) ++w; else --w;
             if (h > 0) ++h; else --h;
 
-            rect->setSize(w, h);
+            selectionRect->setSize(w, h);
 	    m_canvas->canvas()->update();
 
             // Get collisions and do selection
             //
-            QCanvasItemList l = rect->collisions(true); // exact collisions
+            QCanvasItemList l = selectionRect->collisions(true); // exact collisions
 
             // selection management
             SegmentSelection oldSelection = getSelectedSegments();
@@ -1927,6 +1928,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 {
                     if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
                     {
+                        if (!isGreedy() &&
+                            !rect.contains(item->rect())) continue;
+
                         segCount++;
                         slotSelectSegmentItem(item);
                         newSelection.insert(item->getSegment());
@@ -2039,6 +2043,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     return true;
 }
+
+bool SegmentSelector::m_greedy = true;
 
 
 //////////////////////////////
