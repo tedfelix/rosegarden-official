@@ -29,6 +29,7 @@
 #include "Instrument.h"
 #include "MappedDevice.h"
 #include "MappedRealTime.h"
+#include "MappedStudio.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -144,6 +145,9 @@ public:
     virtual Rosegarden::MappedRealTime getAudioPlayLatency() = 0;
     virtual Rosegarden::MappedRealTime getAudioRecordLatency() = 0;
 
+    virtual void setMappedObject(Rosegarden::MappedObjectId id,
+                                 Rosegarden::MappedObjectParameter param,
+                                 Rosegarden::MappedObjectValue value) = 0;
 
 };
 

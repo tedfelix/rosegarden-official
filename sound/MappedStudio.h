@@ -43,7 +43,8 @@ namespace Rosegarden
 
 
 typedef unsigned int MappedObjectId;
-typedef unsigned int MappedObjectParameter;
+typedef QString      MappedObjectParameter;
+typedef int          MappedObjectValue;
 
 // Every MappedStudio object derives from this class - if an
 // object is static then you're only allowed one per Studio
@@ -158,7 +159,7 @@ private:
 class MappedAudioFader : public MappedObject
 {
 public:
-    MappedAudioFader(MappedObjectId id, MappedObjectParameter channels):
+    MappedAudioFader(MappedObjectId id, MappedObjectValue channels):
         MappedObject("MappedAudioFader",
                      AudioFader,
                      id),
@@ -168,13 +169,13 @@ public:
     ~MappedAudioFader() {;}
 
     // level
-    MappedObjectParameter getLevel();
-    void setLevel(MappedObjectParameter param);
+    MappedObjectValue getLevel();
+    void setLevel(MappedObjectValue param);
 
 protected:
 
-    MappedObjectParameter m_level;
-    MappedObjectParameter m_channels;
+    MappedObjectValue m_level;
+    MappedObjectValue m_channels;
 
 };
 

@@ -192,6 +192,11 @@ public:
     virtual Rosegarden::MappedRealTime getAudioPlayLatency();
     virtual Rosegarden::MappedRealTime getAudioRecordLatency();
 
+    // Set a MappedObject 
+    virtual void setMappedObject(Rosegarden::MappedObjectId id,
+                                 Rosegarden::MappedObjectParameter param,
+                                 Rosegarden::MappedObjectValue value);
+
     //
     //
     //

@@ -127,14 +127,14 @@ MappedStudio::getObject(MappedObjectId id)
 
 
 
-MappedObjectParameter
+MappedObjectValue
 MappedAudioFader::getLevel()
 {
     return m_level;
 }
 
 void
-MappedAudioFader::setLevel(MappedObjectParameter param)
+MappedAudioFader::setLevel(MappedObjectValue param)
 {
     m_level = param;
 }

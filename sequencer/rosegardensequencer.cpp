@@ -299,16 +299,18 @@ RosegardenSequencerApp::keepPlaying()
             unsigned int slices = 
                 (gapLength/sliceSize == 0) ? 1 : gapLength/sliceSize;
 
+            QString plural = "";
+
+            if (slices > 1) plural = QString("S");
+
             SEQUENCER_DEBUG << "RosegardenSequencerApp::keepPlaying() - "
-                            << "GUI COULDN'T SERVICE SLICE REQUEST(S)" 
-                            << endl
+                            << "GUI COULDN'T SERVICE SLICE REQUEST(S)\n" 
                             << "                                        "
                             << "      -- DROPPED "
                             << slices
-                            << " SLICE";
-
-            if (slices > 1) SEQUENCER_DEBUG << "S";
-            SEQUENCER_DEBUG <<"! --" << endl;
+                            << " SLICE"
+                            << plural
+                            <<"! --\n";
 
             QByteArray data;
             QDataStream arg(data, IO_WriteOnly);
@@ -997,6 +999,15 @@ RosegardenSequencerApp::initialiseStudio()
 
     pM->discoverPlugins();
 
+}
+
+
+void
+RosegardenSequencerApp::setMappedObject(Rosegarden::MappedObjectId id,
+                                        Rosegarden::MappedObjectParameter param,
+                                        Rosegarden::MappedObjectValue value)
+{
+    SEQUENCER_DEBUG << "setMappedObject" << endl;
 }
 
 
