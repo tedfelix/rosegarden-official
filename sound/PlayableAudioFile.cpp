@@ -492,8 +492,6 @@ PlayableAudioFile::updateBuffers()
 
 	// get the frames
 
-	m_fileBuffer = "";
-
 	try {
 #ifdef DEBUG_PLAYABLE
 	    std::cerr << "PlayableAudioFile::updateBuffers: asking file for "
@@ -640,6 +638,8 @@ PlayableAudioFile::updateBuffers()
 	    m_ringBuffers[ch]->zero(frames);
 	}
     }
+
+    m_fileBuffer = "";
 }
 
 

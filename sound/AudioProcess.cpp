@@ -507,42 +507,12 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 	return;
     }
 
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instrumentCount; ++id) {
-
-	int blocksHere = 0;
-
-	if (m_bufferMap[id].empty) {
-	    blocksHere = canProcessEmptyBlocks(id);
-
-#ifdef DEBUG_MIXER
-	    if (m_driver->isPlaying()) {
-		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " empty blocks" << std::endl;
-	    }
-#endif
-
-	} else {
-	    blocksHere = canProcessBlocks(id, files[id], forceFill);
-
-#ifdef DEBUG_MIXER
-	    if (m_driver->isPlaying()) {
-		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " blocks" << std::endl;
-	    }
-#endif
-	}
-
-	if (id == instrumentBase || blocksHere < minBlocks) {
-	    minBlocks = blocksHere;
-	}
-    }
-
-    if (minBlocks == 0) {
-	waitingForFiles = true;
-	return;
-    }
-
     for (InstrumentId id = 0; id <= m_submasterCount; ++id) {
 	
+	    m_bufferMap[id].gainLeft  = 1.0;
+	    m_bufferMap[id].gainRight = 1.0;
+	    m_bufferMap[id].volume    = 1.0;
+
 	MappedAudioBuss *buss =
 	    m_driver->getMappedStudio()->getAudioBuss(id);
 
@@ -577,6 +547,10 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
 	
+	    m_bufferMap[id].gainLeft  = 1.0;
+	    m_bufferMap[id].gainRight = 1.0;
+	    m_bufferMap[id].volume    = 1.0;
+
 	MappedAudioFader *fader =
 	    m_driver->getMappedStudio()->getAudioFader(id);
 
@@ -604,11 +578,46 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 	}
     }
 
+    for (InstrumentId id = instrumentBase;
+	 id < instrumentBase + instrumentCount; ++id) {
+
+	int blocksHere = 0;
+
+	if (m_bufferMap[id].empty) {
+	    blocksHere = canProcessEmptyBlocks(id);
+
+#ifdef DEBUG_MIXER
+	    if (m_driver->isPlaying()) {
+		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " empty blocks" << std::endl;
+	    }
+#endif
+
+	} else {
+	    blocksHere = canProcessBlocks(id, files[id], forceFill);
+
+#ifdef DEBUG_MIXER
+	    if (m_driver->isPlaying()) {
+		if (id == 1000) std::cerr << "AudioMixer::processBlocks(" << id << "): can process " << blocksHere << " blocks" << std::endl;
+	    }
+#endif
+	}
+
+	if (id == instrumentBase || blocksHere < minBlocks) {
+	    minBlocks = blocksHere;
+	}
+    }
+
+    if (minBlocks == 0) {
+	waitingForFiles = true;
+	return;
+    }
+
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying()) {
 	std::cerr << "AudioMixer::processBlocks: planning to do " << minBlocks << " blocks" << std::endl;
     }
 #endif
+
     // Call the processBlock methods to process individual instruments,
     // and mix in to the submasters and master as we go along.
 
@@ -808,6 +817,14 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 	}
     }
 
+#ifdef DEBUG_MIXER
+    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
+#else
+#ifdef DEBUG_MIXER_LIGHTWEIGHT
+    if (id == 1000 && m_driver->isPlaying()) std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
+#endif
+#endif
+
     for (PlayableAudioFileList::iterator it = audioQueue.begin();
 	 it != audioQueue.end(); ++it) {
 	    
@@ -816,24 +833,34 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 	if (file->getStatus() == PlayableAudioFile::READY &&
 	    file->isBufferable(bufferTime)) {
 
-	    // This file should be playing, but the disc thread
-	    // hasn't got around to buffering it yet.  There's
-	    // nothing we can do in this situation.
+	    // This file should be playing, but the disc thread hasn't
+	    // got around to buffering it yet.  There's nothing
+	    // constructive to do in this situation.  The strictly
+	    // correct thing would be to block, returning zero, but
+	    // that may cause a substantial holdup in the main
+	    // processBlocks loop, which is silly since a new file
+	    // always has plenty of empty space at the start of its
+	    // buffer anyway.  So we just advance the file's ready
+	    // time to ensure that it gets buffered for the next block
+	    // instead, and ensure that we return no more than 1
+	    // available block.
 
+	    //!!! hm, this doesn't seem to produce enough of an
+	    //improvement to justify the cost in theoretical
+	    //correctness
+
+//	    file->setReadyTime(bufferTime + RealTime::frame2RealTime(m_blockSize,
+//								     m_sampleRate));
+//	    minWriteSpace = std::min(minWriteSpace, m_blockSize);
+
+//	    m_fileReader->signal();
 #ifdef DEBUG_MIXER
-	    if (id == 1000) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): some unbuffered files, can't continue with this instrument" << std::endl;
+	    if (id == 1000)
+		std::cerr << "AudioMixer::canProcessBlock(" << id <<"): some unbuffered files, can't continue with this instrument" << std::endl;
 #endif
 	    return 0;
 	}
     }
-
-#ifdef DEBUG_MIXER
-    if (id == 1000 && m_driver->isPlaying()) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): minWriteSpace is " << minWriteSpace << std::endl;
-#else
-#ifdef DEBUG_MIXER_LIGHTWEIGHT
-    if (id == 1000 && m_driver->isPlaying()) std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
-#endif
-#endif
 
 #ifdef DEBUG_MIXER
     if (id == 1000 && audioQueue.size() > 0) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): " << audioQueue.size() << " audio file(s) to consider" << std::endl;
@@ -1104,16 +1131,6 @@ AudioMixer::threadRun(void *arg)
 	RealTime t = inst->m_driver->getAudioMixBufferLength();
 	t = t / 2;
 
-//	if (t > RealTime(0, 20000000)) t = RealTime(0, 20000000);
-
-//	int sleepusec = bufferLength.usec() + bufferLength.sec * 1000000;
-//	sleepusec /= 4;
-//	if (sleepusec > 20000) sleepusec = 20000;
-
-	//!!! actually this is probably too demanding... we probably
-	// only want to do this every occasionally as before... restore
-	// a nanosleep or something here? ... but not in write thread.
-	
 	struct timeval now;
 	gettimeofday(&now, 0);
 	t = t + RealTime(now.tv_sec, now.tv_usec * 1000);

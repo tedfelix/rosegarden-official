@@ -549,13 +549,11 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
-    SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
-
     if (!m_mixer) {
 	return 0;
     }
 
-    bool wroteSomething = false;
+    SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     
 //    Rosegarden::Profiler profiler("JackProcess, clocks running");
 
@@ -597,69 +595,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
 	m_alsaDriver->areClocksRunning()) {
 
-	//!!! This absolutely should not be done here, as it involves
-	//taking out a pthread lock -- either do it in the record
-	//thread only, or cache it
-	MappedAudioFader *fader =
-	    m_alsaDriver->getMappedStudio()->
-	    getAudioFader(m_alsaDriver->getAudioMonitoringInstrument());
+	jackProcessRecord(nframes);
 
-	int channels = 1;
-	int connection = 0;
-
-	if (fader) {
-	    float f = 2;
-	    (void)fader->getProperty(MappedAudioFader::Channels, f);
-	    int channels = (int)f;
-	}
-
-	// Get input buffer
-	//
-	sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
-
-	inputBufferLeft = static_cast<sample_t*>
-	    (jack_port_get_buffer(m_inputPorts[connection * channels], nframes));
-	
-	if (channels == 2) {
-	    inputBufferRight = static_cast<sample_t*>
-		(jack_port_get_buffer(m_inputPorts[connection * channels + 1], nframes));
-	}
-	
-	//!!! want an actual instrument id
-	//!!! want file writer to apply volume from fader?
-
-	m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-			    inputBufferLeft, 0, nframes);
-
-	if (channels == 2) {
-	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				inputBufferLeft, 1, nframes);
-	}
-
-	wroteSomething = true;
-
-	sample_t totalLeft = 0.0, totalRight = 0.0;
-/*!!! monitoring
-	for (size_t i = 0; i < nframes; ++i) {
-	    leftBuffer[i] = inputBufferLeft[i];
-	    totalLeft += leftBuffer[i];
-	}
-
-	if (channels == 2) {
-	    for (size_t i = 0; i < nframes; ++i) {
-		rightBuffer[i] = inputBufferRight[i];
-		totalRight += rightBuffer[i];
-	    }
-	}
-*/
-	if (sdb) {
-	    Rosegarden::LevelInfo info;
-	    info.level = AudioLevel::multiplier_to_fader
-		(totalLeft / nframes, 127, AudioLevel::LongFader);
-	    info.levelRight = AudioLevel::multiplier_to_fader
-		(totalRight / nframes, 127, AudioLevel::LongFader);
-	    sdb->setRecordLevel(info);
-	}
     }
 
     for (InstrumentId id = 0;
@@ -685,14 +622,16 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    (jack_port_get_buffer(m_outputMasters[1],
 					  nframes));
 	    } else if (id < instrumentBase) { // submaster
-		left = static_cast<sample_t *>
-		    (jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2],
-					  nframes));
-		right = static_cast<sample_t *>
-		    (jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2 + 1],
-					  nframes));
+		if (m_outputSubmasters.size() > (id - 1) * 2 + 1) {
+		    left = static_cast<sample_t *>
+			(jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2],
+					      nframes));
+		    right = static_cast<sample_t *>
+			(jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2 + 1],
+					      nframes));
+		}
 	    } else { // instrument
-		if (m_outputInstruments.size() > id - instrumentBase) {
+		if (m_outputInstruments.size() > (id - instrumentBase) * 2 + 1) {
 		    left = static_cast<sample_t *>
 			(jack_port_get_buffer(m_outputInstruments
 					      [(id - instrumentBase) * 2],
@@ -769,11 +708,90 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    if (m_alsaDriver->isPlaying()) m_mixer->signal();
-    if (wroteSomething) m_fileWriter->signal();
+    if (m_alsaDriver->isPlaying()) {
+	m_mixer->signal();
+    }
 
     return 0;
 }
+
+int
+JackDriver::jackProcessRecord(jack_nframes_t nframes)
+{
+    SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
+    bool wroteSomething = false;
+
+    //!!! This absolutely should not be done here, as it involves
+    //taking out a pthread lock -- either do it in the record
+    //thread only, or cache it
+    MappedAudioFader *fader =
+	m_alsaDriver->getMappedStudio()->
+	getAudioFader(m_alsaDriver->getAudioMonitoringInstrument());
+    
+    int channels = 1;
+    int connection = 0;
+    
+    if (fader) {
+	float f = 2;
+	(void)fader->getProperty(MappedAudioFader::Channels, f);
+	int channels = (int)f;
+    }
+    
+    // Get input buffer
+    //
+    sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
+    
+    inputBufferLeft = static_cast<sample_t*>
+	(jack_port_get_buffer(m_inputPorts[connection * channels], nframes));
+    
+    if (channels == 2) {
+	inputBufferRight = static_cast<sample_t*>
+	    (jack_port_get_buffer(m_inputPorts[connection * channels + 1], nframes));
+    }
+    
+    //!!! want an actual instrument id
+    //!!! want file writer to apply volume from fader?
+    
+    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+			inputBufferLeft, 0, nframes);
+    
+    if (channels == 2) {
+	m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+			    inputBufferLeft, 1, nframes);
+    }
+    
+    wroteSomething = true;
+    
+    sample_t totalLeft = 0.0, totalRight = 0.0;
+/*!!! monitoring
+  for (size_t i = 0; i < nframes; ++i) {
+  leftBuffer[i] = inputBufferLeft[i];
+  totalLeft += leftBuffer[i];
+  }
+  
+  if (channels == 2) {
+  for (size_t i = 0; i < nframes; ++i) {
+  rightBuffer[i] = inputBufferRight[i];
+  totalRight += rightBuffer[i];
+  }
+  }
+*/
+    if (sdb) {
+	Rosegarden::LevelInfo info;
+	info.level = AudioLevel::multiplier_to_fader
+	    (totalLeft / nframes, 127, AudioLevel::LongFader);
+	info.levelRight = AudioLevel::multiplier_to_fader
+	    (totalRight / nframes, 127, AudioLevel::LongFader);
+	sdb->setRecordLevel(info);
+    }
+
+    if (wroteSomething) {
+	m_fileWriter->signal();
+    }
+
+    return 0;
+}
+
 
 int
 JackDriver::jackSyncCallback(jack_transport_state_t state,
