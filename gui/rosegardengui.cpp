@@ -48,6 +48,7 @@
 #include <kstdaction.h>
 
 // application specific includes
+#include "kstartuplogo.h"
 #include "rosestrings.h"
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
@@ -1554,6 +1555,9 @@ bool RosegardenGUIApp::launchSequencer()
 void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
     kdDebug(KDEBUG_AREA) << "Sequencer exited\n";
+
+    KStartupLogo* logo = KStartupLogo::getInstance();
+    if (logo) logo->close();
 
     KMessageBox::error(0, i18n("Sequencer exited"));
 
