@@ -286,6 +286,21 @@ signals:
 protected:
 };
 
+// A Text popup - a tooltip we can control.
+//
+class RosegardenTextFloat : public QWidget
+{
+    Q_OBJECT
+public:
+    RosegardenTextFloat(QWidget *parent);
+
+    void setText(const QString &text);
+
+protected:
+
+};
+
+
 class RosegardenRotary : public QWidget
 {
     Q_OBJECT
@@ -349,6 +364,8 @@ protected:
     int   m_lastX;
 
     QColor m_knobColour;
+
+    RosegardenTextFloat *m_float;
 };
 
 namespace Rosegarden { class Quantizer; }

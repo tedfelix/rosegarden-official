@@ -492,7 +492,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent):
     m_knobColour(0, 0, 0)
 {
     setFixedSize(m_size, m_size);
-    QToolTip::add(this, i18n("Click n' Drag - up and down or left to right"));
+    QToolTip::add(this, i18n("Click and drag.  Up and down or left to right to modify value."));
 }
 
 
@@ -514,10 +514,11 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
-    m_knobColour(0, 0, 0)
+    m_knobColour(0, 0, 0),
+    m_float(0)
 {
     setFixedSize(size, size);
-    QToolTip::add(this, i18n("Click n' Drag - up and down or left to right"));
+    QToolTip::add(this, i18n("Click and drag.  Up and down or left to right to modify value."));
 }
 
 
@@ -576,6 +577,15 @@ RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
         m_buttonPressed = false;
         m_lastY = 0;
         m_lastX = 0;
+
+        // Kill the float text if it's around
+        //
+        if (m_float)
+        {
+            delete m_float;
+            m_float = 0;
+        }
+
     }
 }
 
@@ -584,6 +594,8 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
 {
     if (m_buttonPressed)
     {
+        if (m_float == 0) m_float = new RosegardenTextFloat(this);
+
         // Dragging by x or y axis when clicked modifies value
         //
         float newValue = m_position +
@@ -606,6 +618,9 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
         drawPosition();
 
         emit valueChanged(m_position);
+
+        // draw on the float text
+        m_float->setText(QString("%1").arg(m_position));
     }
 }
 
@@ -956,3 +971,16 @@ RosegardenQuantizeParameters::slotTypeChanged(int index)
 	m_notationBox->show();
     }
 }
+
+// ---------- RosegardenTextFloat -----------
+//
+//
+RosegardenTextFloat::RosegardenTextFloat(QWidget *parent)
+{
+}
+
+void 
+RosegardenTextFloat::setText(const QString &text)
+{
+}
+
