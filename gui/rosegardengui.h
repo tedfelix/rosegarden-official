@@ -989,12 +989,9 @@ public slots:
     void slotUpdateAutoSaveInterval(unsigned int interval);
 
     /**
-     * BankEditor closed
-     *
-     * @param changesMade : true if some changes were made and the
-     * main GUI needs updating
+     * called when the BankEditor is being closed
      */
-    void slotBankEditorClosed(bool changesMade);
+    void slotBankEditorClosed();
 
 private:
 

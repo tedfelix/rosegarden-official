@@ -4115,8 +4115,8 @@ RosegardenGUIApp::slotEditBanks()
 {
     BankEditorDialog* bankEditor = new BankEditorDialog(this, m_doc);
     
-    connect(bankEditor, SIGNAL(closing(bool)),
-            this, SLOT(slotBankEditorClosed(bool)));
+    connect(bankEditor, SIGNAL(closing()),
+            this, SLOT(slotBankEditorClosed()));
 
     connect(this, SIGNAL(documentAboutToChange()),
             bankEditor, SLOT(slotFileClose()));
@@ -4126,11 +4126,11 @@ RosegardenGUIApp::slotEditBanks()
 }
 
 void
-RosegardenGUIApp::slotBankEditorClosed(bool changesMade)
+RosegardenGUIApp::slotBankEditorClosed()
 {
     RG_DEBUG << "RosegardenGUIApp::slotBankEditorClosed()\n";
 
-    if (changesMade) {
+    if (m_doc->isModified()) {
         if (m_view)
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
     }
