@@ -125,6 +125,9 @@ public:
     std::streampos getChunkStartPosition() const
         { return m_chunkStartPosition; }
 
+    bool isProcessingPeaks() const { return m_keepProcessing; }
+    void setProcessingPeaks(bool value) { m_keepProcessing = value; }
+
 signals:
     void setProgress(int);
     
@@ -167,14 +170,19 @@ protected:
 
     std::streampos m_chunkStartPosition;
 
-    // For cacheing of peak information in memory we use the last query parameters
-    // as our key to the cached data.
+    // For cacheing of peak information in memory we use the last query 
+    // parameters as our key to the cached data.
     //
     RealTime           m_lastPreviewStartTime;
     RealTime           m_lastPreviewEndTime;
     int                m_lastPreviewWidth;
     bool               m_lastPreviewShowMinima;
     std::vector<float> m_lastPreviewCache;
+
+    // Do we actually want to keep processing this peakfile?
+    // In case we get a cancel.
+    //
+    bool               m_keepProcessing;
     
 };
 

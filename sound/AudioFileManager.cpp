@@ -618,6 +618,15 @@ AudioFileManager::generatePreviews()
     }
 }
 
+// Attempt to stop a preview
+//
+void
+AudioFileManager::stopPreview()
+{
+    m_peakManager.stopPreview();
+}
+
+
 
 // Generate a preview for a specific audio file - say if
 // one has just been added to the AudioFileManager.

@@ -44,7 +44,8 @@ namespace Rosegarden
 
    
 PeakFileManager::PeakFileManager():
-    m_updatePercentage(0)
+    m_updatePercentage(0),
+    m_currentPeakFile(0)
 {
 }
 
@@ -184,14 +185,14 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 
     if (audioFile->getType() == WAV)
     {
-        PeakFile *peakFile = getPeakFile(audioFile);
+        m_currentPeakFile = getPeakFile(audioFile);
 
-        QObject::connect(peakFile, SIGNAL(setProgress(int)),
+        QObject::connect(m_currentPeakFile, SIGNAL(setProgress(int)),
                          this,     SIGNAL(setProgress(int)));
 
         // Just write out a peak file
         //
-        if(peakFile->write(updatePercentage) == false)
+        if(m_currentPeakFile->write(updatePercentage) == false)
         {
             std::string rS = std::string("Can't write peak file for \"") +
                              audioFile->getFilename() +
@@ -200,8 +201,8 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         }
 
         // close writes out important things
-        peakFile->close();
-        peakFile->disconnect();
+        m_currentPeakFile->close();
+        m_currentPeakFile->disconnect();
 
     }
     else if (audioFile->getType() == BWF)
@@ -216,6 +217,8 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 #endif
         return;
     }
+
+    m_currentPeakFile = 0;
 
 }
 
@@ -300,6 +303,21 @@ PeakFileManager::getSplitPoints(AudioFile *audioFile,
                                     threshold,
                                     minTime);
 
+}
+
+void
+PeakFileManager::stopPreview()
+{
+    if (m_currentPeakFile)
+    {
+        // Stop processing
+        //
+        m_currentPeakFile->setProcessingPeaks(false);
+        m_currentPeakFile->close();
+        m_currentPeakFile->disconnect();
+        //delete m_currentPeakFile;
+        //m_currentPeakFile = 0;
+    }
 }
 
 

@@ -139,6 +139,10 @@ public:
     // For audit purposes only.
     size_t getFramesProcessed() const { return m_framesProcessed; }
 
+    // Report back to GUI via the AlsaDriver
+    //
+    void reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType);
+
 protected:
 
     // static methods for JACK process thread:

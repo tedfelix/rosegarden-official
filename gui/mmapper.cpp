@@ -832,6 +832,11 @@ void MetronomeMmapper::dump()
 	default: velocity = m_metronome->getSubBeatVelocity(); break;
 	}
 
+        /*
+        SEQMAN_DEBUG << "MetronomeMmapper::dump: velocity = "
+                     << int(velocity) << endl;
+                     */
+
         eventTime = comp.getElapsedRealTime(i->first);
 
         new (bufPos) MappedEvent(m_metronome->getInstrument(),

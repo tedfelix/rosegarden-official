@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
 
 #include "rgapplication.h"
 #include "constants.h"
@@ -824,6 +825,8 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                                          Rosegarden::AudioManagerDialog
                                              *audioManagerDialog)
 {
+    static bool boolShowingWarning = false;
+
     if (m_doc == 0 || mC.size() == 0) return;
 
     Rosegarden::MappedComposition::iterator i;
@@ -889,6 +892,30 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		//
 		m_doc->syncDevices();
 	    }
+
+            if ((*i)->getType() == Rosegarden::MappedEvent::SystemXRuns
+                    && !boolShowingWarning)
+            {
+                boolShowingWarning = true;
+
+                KMessageBox::information(
+                    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                    i18n("JACK Audio subsystem is losing resolution."));
+
+                boolShowingWarning = false;
+            }
+
+            if ((*i)->getType() == Rosegarden::MappedEvent::SystemJackDied)
+            {
+                // Something horrible has happened to JACK or we got
+                // bumped out of the graph.  Either way stop playback.
+                //
+                stopping();
+
+                KMessageBox::error(
+                    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                    i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+            }
 	}
     }
     

@@ -193,6 +193,10 @@ public:
     //
     const PeakFileManager& getPeakFileManager() const { return m_peakManager; }
 
+    // Cancel a running preview
+    //
+    void stopPreview();
+
 signals:
     void setProgress(int);
 

@@ -105,6 +105,10 @@ public:
     std::vector<PeakFile*>::const_iterator end() const
                 { return m_peakFiles.end(); }
 
+    // Stop a preview during its build
+    //
+    void stopPreview();
+
 signals:
     void setProgress(int);
 
@@ -118,6 +122,10 @@ protected:
 
     std::vector<PeakFile*> m_peakFiles;
     unsigned short m_updatePercentage;  // how often we send updates 
+
+    // Whilst processing - the current PeakFile
+    //
+    PeakFile              *m_currentPeakFile;
 
 
 };

@@ -40,6 +40,7 @@
 #include "MappedStudio.h"
 #include "rosestrings.h"
 #include "MappedCommon.h"
+#include "MappedEvent.h"
 #include "Audit.h"
 
 #include <qregexp.h>
@@ -1423,6 +1424,10 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
     // Reset the value
     //
     SoundDriver::setMIDIClockInterval(interval);
+
+    // Return if the clock isn't enabled
+    //
+    if (!m_midiClockEnabled) return;
 
     // Remove all queued events (although we should filter this
     // down to just the clock events.
@@ -3461,6 +3466,13 @@ AlsaDriver::sleep(const RealTime &rt)
     struct pollfd *pfd = (struct pollfd *)alloca(npfd * sizeof(struct pollfd));
     snd_seq_poll_descriptors(m_midiHandle, pfd, npfd, POLLIN);
     poll(pfd, npfd, rt.sec * 1000 + rt.msec());
+}
+
+void 
+AlsaDriver::reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType)
+{
+    Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent(0, meType, 0, 0);
+    insertMappedEventForReturn(mE);
 }
 
 }

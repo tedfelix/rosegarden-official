@@ -220,6 +220,10 @@ public:
 
     virtual QString getStatusLog();
 
+    // Report a MappedEvent back to the GUI
+    //
+    void reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType);
+
 protected:
     typedef std::vector<AlsaPortDescription *> AlsaPortList;
 

@@ -462,6 +462,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
                      std::ofstream *file)
 {
     if(!file || !(*file)) return;
+    m_keepProcessing = true;
 
 #ifdef DEBUG_PEAKFILE
     cout << "PeakFile::writePeaks - calculating peaks" << endl;
@@ -495,7 +496,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
     m_bodyBytes = 0;
     m_positionPeakOfPeaks = 0;
 
-    while(true)
+    while(m_keepProcessing)
     {
         try
         {

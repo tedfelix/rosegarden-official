@@ -142,11 +142,15 @@ public:
         SystemAudioPortCounts    = 1 << 19,
 	// Set whether we create various Audio ports (data1 is an AudioOutMask)
 	SystemAudioPorts         = 1 << 20,
+        // JACK is having some xruns - warn the user maybe
+        SystemXRuns              = 1 << 21,
+        // JACK has died
+        SystemJackDied           = 1 << 22,
 
         // Time sig. event (from time sig. composition reference segment)
-        TimeSignature            = 1 << 21,
+        TimeSignature            = 1 << 23,
         // Tempo event (from tempo composition reference segment)
-        Tempo                    = 1 << 22
+        Tempo                    = 1 << 24
 
     } MappedEventType;
 

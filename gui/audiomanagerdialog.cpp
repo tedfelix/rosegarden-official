@@ -993,6 +993,11 @@ AudioManagerDialog::addFile(const KURL& kurl)
     RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
                                          100,
                                          this);
+    /*
+    connect(&progressDlg, SIGNAL(cancelClicked()), 
+            this, SLOT(slotAddCancel()));
+            */
+
     CurrentProgressDialog::set(&progressDlg);
 
     QString newFilePath;
@@ -1057,6 +1062,16 @@ AudioManagerDialog::addFile(const KURL& kurl)
 
     return true;
 }
+
+void
+AudioManagerDialog::slotAddCancel()
+{
+    RG_DEBUG << "AudioManagerDialog::slotAddCancel" << endl;
+    CurrentProgressDialog::freeze();
+    m_doc->getAudioFileManager().stopPreview();
+}
+
+
 
 void
 AudioManagerDialog::slotDropped(QDropEvent *event, QListViewItem*)

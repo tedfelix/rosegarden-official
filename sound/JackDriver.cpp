@@ -194,7 +194,7 @@ JackDriver::initialise()
     jack_set_sample_rate_callback(m_client, jackSampleRate, this);
     jack_on_shutdown(m_client, jackShutdown, this);
     jack_set_graph_order_callback(m_client, jackGraphOrder, this);
-    //jack_set_xrun_callback(m_client, jackXRun, this);
+    jack_set_xrun_callback(m_client, jackXRun, this);
     jack_set_sync_callback(m_client, jackSyncCallback, this);
 
     // get and report the sample rate and buffer size
@@ -1147,17 +1147,17 @@ JackDriver::jackSampleRate(jack_nframes_t nframes, void *arg)
 }
 
 void
-JackDriver::jackShutdown(void * /*arg*/)
+JackDriver::jackShutdown(void *arg)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "JackDriver::jackShutdown() - callback received - doing nothing yet" << std::endl;
+    std::cerr << "JackDriver::jackShutdown() - callback received - " 
+              << "informing GUI" << std::endl;
 #endif
 
-    /*
+    // Report to GUI
+    //
     JackDriver *inst = static_cast<JackDriver*>(arg);
-    if (inst) inst->shutdown();
-    delete inst;
-    */
+    inst->reportMappedEvent(Rosegarden::MappedEvent::SystemJackDied);
 }
 
 int
@@ -1168,11 +1168,17 @@ JackDriver::jackGraphOrder(void *)
 }
 
 int
-JackDriver::jackXRun(void *)
+JackDriver::jackXRun(void *arg)
 {
 #ifdef DEBUG_ALSA
     std::cerr << "JackDriver::jackXRun" << std::endl;
 #endif
+
+    // Report to GUI
+    //
+    JackDriver *inst = static_cast<JackDriver*>(arg);
+    inst->reportMappedEvent(Rosegarden::MappedEvent::SystemXRuns);
+
     return 0;
 }
 
@@ -1483,6 +1489,14 @@ JackDriver::closeRecordFile(AudioFileId &returnedId)
 	return m_fileWriter->closeRecordFile(m_alsaDriver->getAudioMonitoringInstrument(), returnedId);
     } else return false;
 }
+
+
+void 
+JackDriver::reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType)
+{ 
+    if (m_alsaDriver) m_alsaDriver->reportMappedEvent(meType); 
+}
+
 
 }
 
