@@ -234,7 +234,7 @@ private:
 
 public:
     typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
-    typedef unsigned int timeT;
+    typedef int timeT;
 
     struct NoData { };
     struct BadType { };
@@ -260,10 +260,10 @@ public:
         return (m_package == p && m_type == t);
     }
 
-    timeT absoluteTime() const         { return m_absoluteTime; }
-    timeT duration()     const         { return m_duration; }
-    void setTimeDuration(timeT d)      { m_duration = d; }
-    void setAbsoluteTime(timeT d)      { m_absoluteTime = d; }
+    timeT getAbsoluteTime() const  { return m_absoluteTime; }
+    timeT getDuration()     const  { return m_duration; }
+    void setAbsoluteTime(timeT d)  { m_absoluteTime = d; }
+    void setDuration(timeT d)      { m_duration = d; }
 
     bool has(const string &name) const;
 
@@ -502,10 +502,10 @@ public:
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
 
-    Event::timeT absoluteTime() const { return event()->absoluteTime(); }
-    void setAbsoluteTime(Event::timeT d)     { event()->setAbsoluteTime(d); }
+    Event::timeT getAbsoluteTime() const { return event()->getAbsoluteTime(); }
+    void setAbsoluteTime(Event::timeT d) { event()->setAbsoluteTime(d); }
 
-    void  dump(ostream&) const;
+    void dump(ostream&) const;
 
     friend bool operator<(const ViewElement&, const ViewElement&);
 

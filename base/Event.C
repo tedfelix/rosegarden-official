@@ -100,8 +100,8 @@ Event::Event(const string &package, const string &type)
 Event::Event(const Event &e)
     : m_package(e.package()),
       m_type(e.type()),
-      m_duration(e.duration()),
-      m_absoluteTime(e.absoluteTime())
+      m_duration(e.getDuration()),
+      m_absoluteTime(e.getAbsoluteTime())
 {
     copyFrom(e);
 }
@@ -174,7 +174,7 @@ Event::dump(ostream& out) const
 bool
 operator<(const Event &a, const Event &b)
 {
-    return a.absoluteTime() < b.absoluteTime();
+    return a.getAbsoluteTime() < b.getAbsoluteTime();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ Track::Track(unsigned int nbBars, unsigned int startIdx)
         Event *e = new Event;
         e->setType("rest");
         e->setPackage("core");
-        e->setTimeDuration(384); // TODO : get rid of this magic number
+        e->setDuration(384); // TODO : get rid of this magic number
         e->setAbsoluteTime(initialTime);
         insert(e);
         initialTime += 384; // btw, it comes from xmlstorableevent.cpp
@@ -222,7 +222,7 @@ Track::getNbBars() const
 {
     const_iterator lastEl = end();
     --lastEl;
-    unsigned int nbBars = ((*lastEl)->absoluteTime() + (*lastEl)->duration()) / 384;
+    unsigned int nbBars = ((*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration()) / 384;
 
     return nbBars;
 }
@@ -245,7 +245,7 @@ ViewElements::~ViewElements()
 bool
 operator<(const ViewElement &a, const ViewElement &b)
 {
-    return a.event()->absoluteTime() < b.event()->absoluteTime();
+    return a.event()->getAbsoluteTime() < b.event()->getAbsoluteTime();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -321,7 +321,7 @@ Composition::getNbBars() const
 
             Track::const_iterator lastEl = (*i)->end();
             --lastEl;
-            maxNbBars = ((*lastEl)->absoluteTime() + (*lastEl)->duration()) / getNbTicksPerBar();
+            maxNbBars = ((*lastEl)->getAbsoluteTime() + (*lastEl)->getDuration()) / getNbTicksPerBar();
 
 //             cerr << "Composition::getNbBars() : last el. abs.Time : "
 //                  << (*lastEl)->absoluteTime()
