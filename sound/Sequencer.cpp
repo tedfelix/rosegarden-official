@@ -40,8 +40,8 @@ using std::cout;
 using std::endl;
 
 Sequencer::Sequencer():
-    m_playStartTime(0, 0),
-    m_recordStartTime(0, 0),
+    m_artsPlayStartTime(0, 0),
+    m_artsRecordStartTime(0, 0),
     m_playStartPosition(0, 0),
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_startPlayback(true),
@@ -257,7 +257,7 @@ Sequencer::record(const RecordStatus& recordStatus)
         // Set status and the record start position
         //
         m_recordStatus = RECORD_MIDI;
-        m_recordStartTime = m_midiRecordPort.time();
+        m_artsRecordStartTime = m_midiRecordPort.time();
     }
     else
     if ( recordStatus == RECORD_AUDIO )
@@ -428,6 +428,7 @@ Sequencer::processAudioQueue()
     std::vector<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime();
 
+
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
         if ((*it)->getStartTime() >= currentTime &&
@@ -515,7 +516,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
     // get current port time at start of playback
     if (m_startPlayback)
     {
-        m_playStartTime = m_midiPlayPort.time();
+        m_artsPlayStartTime = m_midiPlayPort.time();
         m_startPlayback = false;
         m_playing = true;
     }
@@ -534,7 +535,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
         midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
             playLatency;
 
-        event.time = aggregateTime(m_playStartTime,
+        event.time = aggregateTime(m_artsPlayStartTime,
                   Arts::TimeStamp(midiRelativeTime.sec, midiRelativeTime.usec));
 
         midiRelativeStopTime = midiRelativeTime + (*i)->getDuration();
@@ -572,8 +573,8 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
         }
 
 #if 0
-        int secFromStart = event.time.sec - m_playStartTime.sec;
-        int usecFromStart = event.time.usec - m_playStartTime.usec;
+        int secFromStart = event.time.sec - m_artsPlayStartTime.sec;
+        int usecFromStart = event.time.usec - m_artsPlayStartTime.usec;
 
         if (usecFromStart < 0)
         {
@@ -603,8 +604,8 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
     if (midiRelativeTime.sec == 0 && midiRelativeTime.usec == 0)
     {
         Arts::TimeStamp now = m_midiPlayPort.time();
-        int sec = now.sec - m_playStartTime.sec;
-        int usec = now.usec - m_playStartTime.usec;
+        int sec = now.sec - m_artsPlayStartTime.sec;
+        int usec = now.usec - m_artsPlayStartTime.usec;
  
         if (usec < 0)
         {
@@ -641,7 +642,7 @@ Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
 
             // Conversion from RealTime to Arts::TimeStamp
             noteOff = (*i)->getRealTime();
-            event.time = aggregateTime(m_playStartTime,
+            event.time = aggregateTime(m_artsPlayStartTime,
                            Arts::TimeStamp(noteOff.sec, noteOff.usec));
 
             event.command.data1 = (*i)->getPitch();
@@ -676,7 +677,7 @@ Sequencer::allNotesOff()
         // Rather long way around of converting these two
         //
         noteOff = (*i)->getRealTime();
-        event.time = aggregateTime(m_playStartTime,
+        event.time = aggregateTime(m_artsPlayStartTime,
                        Arts::TimeStamp(noteOff.sec, noteOff.usec));
 
         event.command.data1 = (*i)->getPitch();
@@ -694,8 +695,8 @@ void
 Sequencer::initialisePlayback(const Rosegarden::RealTime &position)
 {
     m_startPlayback = true;
-    m_playStartTime.sec = 0;
-    m_playStartTime.usec = 0;
+    m_artsPlayStartTime.sec = 0;
+    m_artsPlayStartTime.usec = 0;
     m_playStartPosition = position;
 
     // reset the wav player object
@@ -713,7 +714,7 @@ Sequencer::resetPlayback(const Rosegarden::RealTime &position,
 {
     allNotesOff();
 
-    m_playStartTime = deltaTime(m_midiPlayPort.time(),
+    m_artsPlayStartTime = deltaTime(m_midiPlayPort.time(),
                                 Arts::TimeStamp(latency.sec, latency.usec));
     m_playStartPosition = position;
 
@@ -736,7 +737,7 @@ Sequencer::getSequencerTime()
 
         Rosegarden::RealTime internalRelativeTime =
             Rosegarden::RealTime(artsTimeNow.sec, artsTimeNow.usec) -
-            Rosegarden::RealTime(m_playStartTime.sec, m_playStartTime.usec);
+            Rosegarden::RealTime(m_artsPlayStartTime.sec, m_artsPlayStartTime.usec);
 
         return (m_playStartPosition + internalRelativeTime);
     }
@@ -859,12 +860,13 @@ Sequencer::queueAudio(const unsigned int &id, const RealTime startIndex,
     if (it == 0)
         return false;
 
-    std::cout << "processAudioOut() - queuing Audio event" << std::endl;
+    std::cout << "queueAudio() - queuing Audio event at time "
+              << startIndex + playLatency << std::endl;
 
     // register the AudioFile in the playback queue
     //
     PlayableAudioFile *newAF = new PlayableAudioFile(*it,
-                                                     startIndex - playLatency,
+                                                     startIndex + playLatency,
                                                      duration,
                                                      m_soundServer);
     m_audioPlayQueue.push_back(newAF);

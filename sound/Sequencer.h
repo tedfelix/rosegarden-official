@@ -202,15 +202,15 @@ public:
 
     // Get the time from the beginning of playback
     //
-    inline Arts::TimeStamp playTime(Arts::TimeStamp const &ts)
-               { return (deltaTime(ts, m_playStartTime)); }
+    inline Arts::TimeStamp artsTime(Arts::TimeStamp const &ts)
+               { return (deltaTime(ts, m_artsPlayStartTime)); }
 
     // Create a recording TimeStamp - take the current time from the
     // record start time and then add on any playStartPosition value.
     //
     //
     inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
-               { return (aggregateTime(deltaTime(ts, m_recordStartTime),
+               { return (aggregateTime(deltaTime(ts, m_artsRecordStartTime),
                             Arts::TimeStamp(m_playStartPosition.sec,
                                             m_playStartPosition.usec))); }
 
@@ -333,8 +333,8 @@ private:
     // of play or record.  These are for internal use when
     // calculating how to queue up playback.
     //
-    Arts::TimeStamp        m_playStartTime;
-    Arts::TimeStamp        m_recordStartTime;
+    Arts::TimeStamp        m_artsPlayStartTime;
+    Arts::TimeStamp        m_artsRecordStartTime;
     NoteOffQueue           m_noteOffQueue;
 
     // Absolute time playback start position

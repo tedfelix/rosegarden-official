@@ -5,8 +5,8 @@ updated 30.1.2001
 Currently looking at BUGS:
 
 - Playing Audio files
-  o synchronisation with MIDI
-  o clearing down handles without crashing aRTS
+  o synchronisation with MIDI [SITUATION IMPROVED]
+  o clearing down handles without crashing aRTS [PENDING]
 
 - Looping at the origin
 
