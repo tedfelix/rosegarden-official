@@ -859,9 +859,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
     m_midiComposition[trackNumber].push_back(*midiEvent);
 
-    // Insert tempo events - this isn't working yet!
-    // We're inserting these events wrongly but for the moment
-    // I can't see how.
+    // Insert tempo events
     //
     //
     std::pair<timeT, long> tempo;
@@ -876,15 +874,15 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
         tempoValue = 60000000 / tempoValue;
 
         string tempoString;
-        tempoString += (MidiByte) ( tempoValue & 0xFF0000 );
-        tempoString += (MidiByte) ( tempoValue & 0x00FF00 );
-        tempoString += (MidiByte) ( tempoValue & 0x0000FF );
+        tempoString += (MidiByte) ( tempoValue >> 16 & 0xFF );
+        tempoString += (MidiByte) ( tempoValue >> 8  & 0xFF );
+        tempoString += (MidiByte) ( tempoValue & 0xFF );
 
         midiEvent = new MidiEvent(midiEventAbsoluteTime,
                                   MIDI_FILE_META_EVENT,
                                   MIDI_SET_TEMPO,
                                   tempoString);
-        //m_midiComposition[trackNumber].push_back(*midiEvent);
+        m_midiComposition[trackNumber].push_back(*midiEvent);
     }
 
     // first track proper
