@@ -1250,6 +1250,7 @@ void RosegardenGUIApp::slotOpenDroppedURL(QString url)
 
 void RosegardenGUIApp::openURL(const QString& url)
 {
+    RG_DEBUG << "RosegardenGUIApp::openURL: QString " << url << endl;
     openURL(KURL(url));
 }
 
@@ -1257,8 +1258,8 @@ void RosegardenGUIApp::openURL(const KURL& url)
 {
     SetWaitCursor waitCursor;
 
-    QString netFile = url.url();
-    RG_DEBUG << "RosegardenGUIApp::openURL: " << netFile << endl;
+    QString netFile = url.prettyURL();
+    RG_DEBUG << "RosegardenGUIApp::openURL: KURL " << netFile << endl;
 
     if (url.isMalformed()) {
         QString string;
@@ -1275,6 +1276,8 @@ void RosegardenGUIApp::openURL(const KURL& url)
                            .arg(url.prettyURL()));
         return;
     }
+
+    RG_DEBUG << "RosegardenGUIApp::openURL: target : " << target << endl;
 
     openFile(target);
 
@@ -4107,16 +4110,13 @@ RosegardenGUIApp::slotEditBanks()
 {
     BankEditorDialog dialog(this, m_doc);
 
-    if (dialog.exec() == QDialog::Accepted)
-    {
+    if (dialog.exec() == QDialog::Accepted) {
         RG_DEBUG << "slotEditBanks - accepted\n";
+        // Crudely force bank update
+        //
+        if (m_view)
+            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
     }
-
-    // Crudely force bank update
-    //
-    if (m_view)
-       m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
-
 }
 
 void
