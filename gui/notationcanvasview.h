@@ -99,12 +99,12 @@ signals:
     /**
      * Emitted when the mouse cursor moves (used by the selection tool)
      */
-    void mouseMove(QMouseEvent*);
+    void mouseMoved(QMouseEvent*);
 
     /**
      * Emitted when the mouse button is released
      */
-    void mouseRelease(QMouseEvent*);
+    void mouseReleased(QMouseEvent*);
     
 protected:
 

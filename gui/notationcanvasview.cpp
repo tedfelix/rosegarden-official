@@ -76,7 +76,7 @@ NotationCanvasView::setPositionTracking(bool t)
 void
 NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    emit mouseRelease(e);
+    emit mouseReleased(e);
 }
 
 void
@@ -127,7 +127,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
     }
 
     // if(tracking) ??
-    emit mouseMove(e);
+    emit mouseMoved(e);
 }
 
 void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
@@ -246,7 +246,8 @@ NotationCanvasView::handleMousePress(int height,
                                      QMouseEvent *e,
                                      NotationElement *el)
 {
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << height << endl;
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height "
+                         << height << endl;
 
     emit itemPressed(height, staffNo, e, el);
 }
