@@ -58,6 +58,9 @@ using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 
+
+#ifdef NOT_DEFINED
+
 class RestSplitter
 {
 public:
@@ -118,6 +121,8 @@ timeT RestSplitter::nextBit()
 }
 
 timeT RestSplitter::m_baseRestDuration = 384; // whole note rest
+
+#endif
 
 //////////////////////////////////////////////////////////////////////
 
