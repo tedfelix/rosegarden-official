@@ -1,7 +1,7 @@
 <!DOCTYPE DCOP-IDL><DCOP-IDL>
 <SOURCE>./rosegardenguiiface.h</SOURCE>
 <INCLUDE>dcopobject.h</INCLUDE>
-<INCLUDE>MappedEvent.h</INCLUDE>
+<INCLUDE>MappedComposition.h</INCLUDE>
 <CLASS>
     <NAME>RosegardenGUIIface</NAME>
     <SUPER>DCOPObject</SUPER>

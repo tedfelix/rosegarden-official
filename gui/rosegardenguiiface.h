@@ -1,7 +1,7 @@
 #ifndef ROSEGARDENGUIIFACE_H
 #define ROSEGARDENGUIIFACE_H
 
-#include <MappedEvent.h>
+#include <MappedComposition.h>
 #include <dcopobject.h>
 
 class RosegardenGUIIface : virtual public DCOPObject
