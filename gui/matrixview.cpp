@@ -173,7 +173,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0],
                                         m_snapGrid,
-					m_horizontalScrollBar,
                                         tCanvas,
                                         getCentralFrame());
     setCanvasView(m_canvasView);
@@ -275,7 +274,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     BarButtons *bottomBarButtons = new BarButtons(getDocument(),
                                                   &m_hlayout, 0, 25,
-                                                  true, getCentralFrame());
+                                                  true, getBottomWidget());
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
 

@@ -39,7 +39,6 @@ class MatrixCanvasView : public RosegardenCanvasView
 public:
     MatrixCanvasView(MatrixStaff&,
 		     Rosegarden::SnapGrid *,
-		     QScrollBar* hsb,
                      QCanvas *viewing,
                      QWidget *parent=0, const char *name=0, WFlags f=0);
 

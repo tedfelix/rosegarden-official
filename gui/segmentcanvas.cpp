@@ -780,13 +780,12 @@ void SegmentSplitLine::hideLine()
 //                SegmentCanvas
 //////////////////////////////////////////////////////////////////////
 
-
 SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
-                             RulerScale *rulerScale, QScrollBar* hsb,
+                             RulerScale *rulerScale,
                              int vStep,
 			     QCanvas* c, QWidget* parent,
 			     const char* name, WFlags f) :
-    RosegardenCanvasView(hsb, c, parent, name, f),
+    RosegardenCanvasView(c, parent, name, f),
     m_tool(0),
     m_grid(rulerScale, vStep),
     m_currentItem(0),
@@ -799,7 +798,6 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_toolBox(0),
     m_selectionRect(0)
 {
-
     m_toolBox = new SegmentToolBox(this, m_doc);
 
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));

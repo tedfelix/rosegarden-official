@@ -412,7 +412,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view
-    if (m_trackEditor->getHorizontalScrollBar()->value() > 1) { // don't scroll unless we need to
+    if (m_trackEditor->getSegmentCanvas()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
         // first find the time at the center of the visible segment canvas
         int centerX = (int)(m_trackEditor->getSegmentCanvas()->contentsX() +
                             m_trackEditor->getSegmentCanvas()->visibleWidth() / 2);
@@ -491,7 +491,7 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view
-    if (m_trackEditor->getHorizontalScrollBar()->value() > 1) { // don't scroll unless we need to
+    if (m_trackEditor->getSegmentCanvas()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
         // first find the time at the center of the visible segment canvas
         int centerX = (int)(m_trackEditor->getSegmentCanvas()->contentsX());
         // Seems to work better for matrix view to scroll to left side

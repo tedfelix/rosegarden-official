@@ -26,6 +26,7 @@
 #include <vector>
 
 class QScrollBar;
+class QGridLayout;
 
 /**
  * A QCanvasView with an auxiliary horiz. scrollbar
@@ -38,16 +39,22 @@ class RosegardenCanvasView : public QCanvasView
 {
     Q_OBJECT
 public:
-    RosegardenCanvasView(QScrollBar*, QCanvas*,
+    RosegardenCanvasView(QCanvas*,
                          QWidget* parent=0, const char* name=0, WFlags f=0);
-
-    virtual void polish();
 
     /**
      * Sets the canvas width to be exactly the width needed to show
      * all the items
      */
     void fitWidthToContents();
+
+    /**
+     * Sets the widget which will be between the scrollable part of the view
+     * and the horizontal scrollbar
+     */
+    void setBottomFixedWidget(QWidget*);
+
+    void updateBottomWidgetGeometry();
 
 public slots:
     /// Update the RosegardenCanvasView after a change of content
@@ -81,11 +88,12 @@ public slots:
 
 protected:
     
+    virtual void resizeEvent(QResizeEvent*);
+    virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
+    
     //--------------- Data members ---------------------------------
 
-    QScrollBar* m_horizontalScrollBar;
-
-    int m_canvasCurrentWidth;
+    QWidget* m_bottomWidget;
 };
 
 

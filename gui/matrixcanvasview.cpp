@@ -33,10 +33,9 @@ using Rosegarden::SnapGrid;
 
 MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
 				   Rosegarden::SnapGrid *snapGrid,
-                                   QScrollBar* hsb,
                                    QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
-    : RosegardenCanvasView(hsb, viewing, parent, name, f),
+    : RosegardenCanvasView(viewing, parent, name, f),
       m_staff(staff),
       m_snapGrid(snapGrid),
       m_previousEvTime(0),

@@ -58,8 +58,6 @@ const unsigned int EditView::CONTROLS_ROW         = 0;
 const unsigned int EditView::RULERS_ROW           = CONTROLS_ROW + 1;
 const unsigned int EditView::TOPBARBUTTONS_ROW    = RULERS_ROW + 1;
 const unsigned int EditView::CANVASVIEW_ROW       = TOPBARBUTTONS_ROW + 1;
-const unsigned int EditView::BOTTOMBARBUTTONS_ROW = CANVASVIEW_ROW + 1;
-const unsigned int EditView::HSCROLLBAR_ROW       = BOTTOMBARBUTTONS_ROW + 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
@@ -69,23 +67,20 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_currentEventSelection(0),
     m_activeItem(0),
     m_canvasView(0),
-    m_horizontalScrollBar(new QScrollBar(Horizontal, getCentralFrame())),
     m_rulerBox(new QVBoxLayout), // top ruler box - added to grid later on
     m_controlBox(new QVBoxLayout), // top control ruler box - added to grid later on
-    m_bottomBox(new QVBoxLayout), // bottom box - added to grid later on
+    m_bottomBox(new QVBox(this, "bottomframe")), // bottom box - added to bottom of canvas view by setCanvasView()
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_controlRuler(0),
-    m_controlRulers(new QTabWidget(getCentralFrame()))
+    m_controlRulers(new QTabWidget(getBottomWidget() /*getCentralFrame()*/))
 {
-    m_grid->addWidget(m_horizontalScrollBar, HSCROLLBAR_ROW,       m_mainCol);
-    m_grid->addLayout(m_bottomBox,           BOTTOMBARBUTTONS_ROW, m_mainCol);
+    (dynamic_cast<QBoxLayout*>(m_bottomBox->layout()))->setDirection(QBoxLayout::BottomToTop);
 
     m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
     m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
 
-    m_bottomBox->addWidget(m_controlRulers);
     m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
 }
@@ -131,7 +126,6 @@ void EditView::updateControlRulers()
         ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(i));
         if (ruler) ruler->slotUpdate();
     }
-    
 }
 
 
@@ -141,10 +135,12 @@ void EditView::setTopBarButtons(BarButtons* w)
     m_topBarButtons = w;
     m_grid->addWidget(w, TOPBARBUTTONS_ROW, m_mainCol);
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_topBarButtons, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_topBarButtons, SLOT(slotScrollHoriz(int)));
+    if (m_canvasView) {
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+                m_topBarButtons, SLOT(slotScrollHoriz(int)));
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+                m_topBarButtons, SLOT(slotScrollHoriz(int)));
+    }
 }
 
 void EditView::setBottomBarButtons(BarButtons* w)
@@ -152,24 +148,27 @@ void EditView::setBottomBarButtons(BarButtons* w)
     delete m_bottomBarButtons;
     m_bottomBarButtons = w;
 
-    m_bottomBox->insertWidget(0, w);
+//     m_bottomBox->insertWidget(0, w);
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+    if (m_canvasView) {
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+                m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+                m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+    }
 }
 
 void EditView::addRuler(QWidget* w)
 {
     m_rulerBox->addWidget(w);
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            w, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            w, SLOT(slotScrollHoriz(int)));
+    if (m_canvasView) {
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+                w, SLOT(slotScrollHoriz(int)));
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+                w, SLOT(slotScrollHoriz(int)));
+    }
 }
-
 
 void EditView::addPropertyBox(QWidget *w)
 {
@@ -183,7 +182,6 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
     PropertyControlRuler* controlRuler = new PropertyControlRuler(propertyName,
                                                                   getFirstStaff(), getHLayout(),
-                                                                  m_horizontalScrollBar,
                                                                   this,
                                                                   controlRulerCanvas, m_controlRulers);
 
@@ -196,7 +194,6 @@ ControllerEventsRuler* EditView::makeControllerEventRuler()
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
     ControllerEventsRuler* controlRuler = new ControllerEventsRuler(getFirstStaff()->getSegment(), getHLayout(),
-                                                                    m_horizontalScrollBar,
                                                                     this,
                                                                     controlRulerCanvas, m_controlRulers);
 
@@ -207,12 +204,14 @@ void EditView::addControlRuler(ControlRuler* ruler)
 {
     m_controlRulers->addTab(ruler, ruler->getName());
     m_controlRulers->showPage(ruler);
-
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            ruler->horizontalScrollBar(), SIGNAL(valueChanged(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            ruler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
-
+    
+    if (m_canvasView) {
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+                ruler->horizontalScrollBar(), SIGNAL(valueChanged(int)));
+        connect(m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+                ruler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
+    }
+    
     stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
 }
 
@@ -255,17 +254,20 @@ void EditView::setCanvasView(RosegardenCanvasView *canvasView)
     delete m_canvasView;
     m_canvasView = canvasView;
     m_grid->addWidget(m_canvasView, CANVASVIEW_ROW, m_mainCol);
+    m_canvasView->setBottomFixedWidget(m_bottomBox);
 
-    m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
-                                    m_canvasView->horizontalScrollBar()->maxValue());
+    // TODO : connect canvas view's horiz. scrollbar to top/bottom bars and rulers
 
-    m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
-                                    m_canvasView->horizontalScrollBar()->pageStep());
+//     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
+//                                     m_canvasView->horizontalScrollBar()->maxValue());
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
+//     m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
+//                                     m_canvasView->horizontalScrollBar()->pageStep());
+
+//     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+//             m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)));
+//     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+//             m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
 }
 
@@ -818,9 +820,13 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
 
     }
     
-     if (!m_controlRulers->isVisible()) {
+    if (!m_controlRulers->isVisible()) {
         m_controlRulers->show();
     }
+
+    getBottomWidget()->layout()->invalidate();
+    getBottomWidget()->updateGeometry();
+    getCanvasView()->updateBottomWidgetGeometry();
 }
 
 ControlRuler* EditView::getCurrentControlRuler()
@@ -838,9 +844,13 @@ void EditView::slotShowControllerEventsRuler()
     ControllerEventsRuler* controlRuler = makeControllerEventRuler();
     addControlRuler(controlRuler);
     
-     if (!m_controlRulers->isVisible()) {
+    if (!m_controlRulers->isVisible()) {
         m_controlRulers->show();
     }
+
+    getBottomWidget()->layout()->invalidate();
+    getBottomWidget()->updateGeometry();
+    getCanvasView()->updateBottomWidgetGeometry();
 }
 
 class QListBoxRGProperty : public QListBoxText

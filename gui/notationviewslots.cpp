@@ -1507,7 +1507,7 @@ NotationView::doDeferredCursorMove()
             ccx = static_cast<NotationElement*>(*i)->getCanvasX();
         }
         
-        QScrollBar* hbar = m_horizontalScrollBar;
+        QScrollBar* hbar = getCanvasView()->horizontalScrollBar();
         hbar->setValue(int(hbar->value() - (m_deferredCursorScrollToX - ccx)));
     }
 

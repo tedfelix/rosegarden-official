@@ -32,10 +32,9 @@
 
 
 NotationCanvasView::NotationCanvasView(const LinedStaffManager &staffmgr,
-                                       QScrollBar *horizBar,
 				       QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f) :
-    RosegardenCanvasView(horizBar, viewing, parent, name, f),
+    RosegardenCanvasView(viewing, parent, name, f),
     m_linedStaffManager(staffmgr),
     m_lastYPosNearStaff(0),
     m_currentStaff(0),

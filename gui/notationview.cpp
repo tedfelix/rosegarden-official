@@ -419,8 +419,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
     
 
-    setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
-                                         tCanvas, getCentralFrame()));
+    setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralFrame()));
 
     if (segments.size() == 1) {
         setCaption(QString("%1 - Segment Track #%2 - Notation")
@@ -467,7 +466,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 
     setBottomBarButtons(new BarButtons(getDocument(), m_hlayout, 20.0, 25,
-				       true, getCentralFrame()));
+				       true, getBottomWidget()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff
@@ -575,7 +574,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 getCanvasView(), SLOT(slotSetScrollPos(const QPoint &)));
 
     QObject::connect
-	(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+	(getCanvasView()->horizontalScrollBar(), SIGNAL(valueChanged(int)),
 	 m_pannerDialog->scrollbox(), SLOT(setViewX(int)));
 
     QObject::connect
@@ -698,8 +697,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     tCanvas->resize(int(pdm.width()  / scaleFactor),
 		    int(pdm.height() / scaleFactor));
     
-    setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
-                                         tCanvas, getCentralFrame()));
+    setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralFrame()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap

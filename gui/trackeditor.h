@@ -83,7 +83,6 @@ public:
     BarButtons*    getTopBarButtons()       { return m_topBarButtons; }
     BarButtons*    getBottomBarButtons()    { return m_bottomBarButtons; }
     TrackButtons*  getTrackButtons()        { return m_trackButtons; }
-    QScrollBar*    getHorizontalScrollBar() { return m_horizontalScrollBar; }
     Rosegarden::RulerScale*    getRulerScale() { return m_rulerScale; }
 
     int getTrackCellHeight() const;
@@ -219,7 +218,6 @@ protected:
     BarButtons              *m_topBarButtons;
     BarButtons              *m_bottomBarButtons;
     TrackButtons            *m_trackButtons;
-    QScrollBar              *m_horizontalScrollBar;
     SegmentCanvas           *m_segmentCanvas;
     QCanvasRectangle        *m_pointer;
     QScrollView             *m_trackButtonScroll;

@@ -19,19 +19,20 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qlayout.h>
+
 #include "rosestrings.h"
 #include "rosegardencanvasview.h"
 
 #include "rosedebug.h"
 
-RosegardenCanvasView::RosegardenCanvasView(QScrollBar* hsb, QCanvas* canvas,
-                             QWidget* parent,
-                             const char* name, WFlags f)
+RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
+                                           QWidget* parent,
+                                           const char* name, WFlags f)
     : QCanvasView(canvas, parent, name, f),
-      m_horizontalScrollBar(hsb),
-      m_canvasCurrentWidth(canvas->width())
+      m_bottomWidget(0)
 {
-    setHScrollBarMode(AlwaysOff);
+
 }
 
 void RosegardenCanvasView::fitWidthToContents()
@@ -51,41 +52,20 @@ void RosegardenCanvasView::fitWidthToContents()
     resizeContents(allItemsBoundingRect.width(), currentSize.height());
 }
 
-void RosegardenCanvasView::polish()
+void RosegardenCanvasView::setBottomFixedWidget(QWidget* w)
 {
-    QCanvasView::polish();
-    RG_DEBUG << "RosegardenCanvasView::polish()\n";
-    m_canvasCurrentWidth = 0; // force readjustment of the scrollbar
-    slotUpdate();
+    m_bottomWidget = w;
+    if (m_bottomWidget) {
+        m_bottomWidget->reparent(this, 0, QPoint(0,0));
+        m_bottomWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        setMargins(0, 0, 0, m_bottomWidget->sizeHint().height());
+    }
 }
-
 
 void RosegardenCanvasView::slotUpdate()
 {
     CanvasItemGC::gc();
-
     canvas()->update();
-
-    if (canvas()->width() != m_canvasCurrentWidth) {
-
-        // Ugly hack needed for Qt3 : otherwise we get dummy min/max
-        // values from horizontalScrollBar()
-        //
-        setHScrollBarMode(Auto);
-        updateScrollBars();
-        /// end of ugly hack
-
-        m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
-                                        horizontalScrollBar()->maxValue());
-
-        m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
-                                        horizontalScrollBar()->pageStep());
-
-        setHScrollBarMode(AlwaysOff);
-
-        m_canvasCurrentWidth = canvas()->width();
-    }
-    
 }
 
 // This scrolling model pages the CanvasView across the screen
@@ -93,7 +73,7 @@ void RosegardenCanvasView::slotUpdate()
 //
 void RosegardenCanvasView::slotScrollHoriz(int hpos)
 {
-    QScrollBar* hbar = m_horizontalScrollBar;
+    QScrollBar* hbar = horizontalScrollBar();
 
     /* Lots of performance hitting debug
     RG_DEBUG << "RosegardenCanvasView::slotScrollHoriz: hpos is " << hpos
@@ -131,7 +111,7 @@ void RosegardenCanvasView::slotScrollHoriz(int hpos)
 
 void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 {
-    QScrollBar* hbar = m_horizontalScrollBar;
+    QScrollBar* hbar = horizontalScrollBar();
 
     int diff = 0;
 
@@ -183,8 +163,47 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 
 void RosegardenCanvasView::slotSetScrollPos(const QPoint &pos)
 {
-    m_horizontalScrollBar->setValue(pos.x());
+    horizontalScrollBar()->setValue(pos.x());
     verticalScrollBar()->setValue(pos.y());
+}
+
+void RosegardenCanvasView::resizeEvent(QResizeEvent* e)
+{
+    QCanvasView::resizeEvent(e);
+    if (!horizontalScrollBar()->isVisible())
+        updateBottomWidgetGeometry();
+    
+}
+
+void RosegardenCanvasView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
+{
+    QCanvasView::setHBarGeometry(hbar, x, y, w, h);
+    updateBottomWidgetGeometry();
+}
+
+void RosegardenCanvasView::updateBottomWidgetGeometry()
+{
+    if (!m_bottomWidget) return;
+
+    int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
+
+    RG_DEBUG << "RosegardenCanvasView::updateBottomWidgetGeometry() : bottomWidgetHeight = " << bottomWidgetHeight
+             << endl;
+    
+    setMargins(0, 0, 0, bottomWidgetHeight);
+    QRect r = frameRect();
+    int hScrollBarHeight = 0;
+    if (horizontalScrollBar()->isVisible())
+        hScrollBarHeight = horizontalScrollBar()->height();
+
+    int vScrollBarWidth = 0;
+    if (verticalScrollBar()->isVisible())
+        vScrollBarWidth = verticalScrollBar()->width();
+
+    m_bottomWidget->setGeometry(r.x(),
+                                r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
+                                r.width() - vScrollBarWidth,
+                                bottomWidgetHeight);
 }
 
 //----------------------------------------------------------------------

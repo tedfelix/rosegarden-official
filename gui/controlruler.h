@@ -55,7 +55,6 @@ class ControlRuler : public RosegardenCanvasView
 public:
     ControlRuler(Rosegarden::Segment&,
                  Rosegarden::RulerScale*,
-                 QScrollBar* hsb,
                  EditViewBase* parentView,
                  QCanvas*,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
@@ -140,7 +139,6 @@ public:
     PropertyControlRuler(Rosegarden::PropertyName propertyName,
                          Rosegarden::Staff*,
                          Rosegarden::RulerScale*,
-                         QScrollBar* hsb,
                          EditViewBase* parentView,
                          QCanvas*,
                          QWidget* parent=0, const char* name=0, WFlags f=0);
@@ -175,7 +173,6 @@ class ControllerEventsRuler : public ControlRuler, public Rosegarden::SegmentObs
 public:
     ControllerEventsRuler(Rosegarden::Segment&,
                           Rosegarden::RulerScale*,
-                          QScrollBar* hsb,
                           EditViewBase* parentView,
                           QCanvas*,
                           QWidget* parent=0, const char* name=0, WFlags f=0);

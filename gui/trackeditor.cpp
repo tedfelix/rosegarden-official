@@ -75,7 +75,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_trackButtons(0),
-    m_horizontalScrollBar(0),
     m_segmentCanvas(0),
     m_trackButtonScroll(0),
     m_showTrackLabels(showTrackLabels),
@@ -102,7 +101,7 @@ TrackEditor::~TrackEditor()
 void
 TrackEditor::init(QWidget* rosegardenguiview)
 {
-    QGridLayout *grid = new QGridLayout(this, 6, 2);
+    QGridLayout *grid = new QGridLayout(this, 4, 2);
 
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
@@ -145,26 +144,18 @@ TrackEditor::init(QWidget* rosegardenguiview)
 				     0,
                                      barButtonsHeight,
                                      false,
-                                     this);
+                                     this, "topbarbuttons");
     m_topBarButtons->connectRulerToDocPointer(m_doc);
 
     grid->addWidget(m_topBarButtons, 2, 1);
-
-    // Horizontal scrollbar - we need to create it now even though
-    // it's inserted in the layout later on, because we need to set it's
-    // range according to the segment canvas' one
-    m_horizontalScrollBar = new QScrollBar(Horizontal, this);
 
     //
     // Segment Canvas
     //
     m_segmentCanvas = new SegmentCanvas(m_doc,
                                         m_rulerScale,
-                                        m_horizontalScrollBar,
                                         getTrackCellHeight(),
                                         canvas, this);
-
-    grid->addWidget(m_segmentCanvas, 3, 1);
 
     //
     // Bottom Bar Buttons
@@ -174,21 +165,12 @@ TrackEditor::init(QWidget* rosegardenguiview)
 					0, 
                                         barButtonsHeight,
                                         true,
-                                        this);
+                                        m_segmentCanvas, "bottombarbuttons");
     m_bottomBarButtons->connectRulerToDocPointer(m_doc);
-    
-    grid->addWidget(m_bottomBarButtons, 4, 1);
 
-    //
-    // Horizontal Scrollbar
-    //
-    m_horizontalScrollBar->setRange(m_segmentCanvas->horizontalScrollBar()->minValue(),
-                                    m_segmentCanvas->horizontalScrollBar()->maxValue());
+    m_segmentCanvas->setBottomFixedWidget(m_bottomBarButtons);
 
-    m_horizontalScrollBar->setSteps(m_segmentCanvas->horizontalScrollBar()->lineStep(),
-                                    m_segmentCanvas->horizontalScrollBar()->pageStep());
-
-    grid->addWidget(m_horizontalScrollBar, 5, 1);
+    grid->addWidget(m_segmentCanvas, 3, 1);
 
   
     // Track Buttons
@@ -247,30 +229,25 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     // Connect horizontal scrollbar
     //
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_tempoRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_tempoRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
-
-    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
-            m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)));
-    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
-            m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
     connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdate()));
 

@@ -498,11 +498,10 @@ const int ControlRuler::ItemHeightRange = 64;
 
 ControlRuler::ControlRuler(Segment& segment,
                            Rosegarden::RulerScale* rulerScale,
-                           QScrollBar* hsb,                           
                            EditViewBase* parentView,
                            QCanvas* c, QWidget* parent,
                            const char* name, WFlags f) :
-    RosegardenCanvasView(hsb, c, parent, name, f),
+    RosegardenCanvasView(c, parent, name, f),
     m_parentEditView(parentView),
     m_rulerScale(rulerScale),
     m_eventSelection(new EventSelection(segment)),
@@ -516,6 +515,8 @@ ControlRuler::ControlRuler(Segment& segment,
     m_selectionRect(new QCanvasRectangle(canvas())),
     m_menu(0)    
 {
+    setHScrollBarMode(QScrollView::AlwaysOff);
+
     setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
 
@@ -752,11 +753,10 @@ int ControlRuler::applyTool(double x, int val)
 PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName,
                                            Staff* staff,
                                            Rosegarden::RulerScale* rulerScale,
-                                           QScrollBar* hsb,                           
                                            EditViewBase* parentView,
                                            QCanvas* c, QWidget* parent,
                                            const char* name, WFlags f) :
-    ControlRuler(staff->getSegment(), rulerScale, hsb, parentView, c, parent, name, f),
+    ControlRuler(staff->getSegment(), rulerScale, parentView, c, parent, name, f),
     m_propertyName(propertyName),
     m_staff(staff)
 {
@@ -828,11 +828,10 @@ void PropertyControlRuler::staffDeleted(const Rosegarden::Staff *)
 //----------------------------------------
 ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
                                              Rosegarden::RulerScale* rulerScale,
-                                             QScrollBar* hsb,
                                              EditViewBase* parentView,
                                              QCanvas* c,
                                              QWidget* parent, const char* name, WFlags f)
-    : ControlRuler(segment, rulerScale, hsb, parentView, c, parent, name, f),
+    : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
       m_segmentDeleted(false),
       m_defaultItemWidth(20)
 {

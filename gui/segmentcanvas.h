@@ -205,7 +205,7 @@ class SegmentCanvas : public RosegardenCanvasView
 
 public:
     SegmentCanvas(RosegardenGUIDoc *doc,
-                  Rosegarden::RulerScale *,QScrollBar*,  int vStep,
+                  Rosegarden::RulerScale *, int vStep,
                   QCanvas*,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
 
