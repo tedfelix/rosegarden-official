@@ -80,7 +80,7 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
 
     // read only tempo
     //
-    TempoLineEdit->setReadOnly(true);
+//    TempoLineEdit->setReadOnly(true);
 
     // fix and hold the size of the dialog
     //
@@ -240,7 +240,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
 
     QString tempoString;
     tempoString.sprintf("%4.4f", tempo);
-    TempoLineEdit->setText(tempoString);
+    TempoDisplay->setText(tempoString);
 }
 
 

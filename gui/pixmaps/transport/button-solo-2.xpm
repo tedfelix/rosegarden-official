@@ -1,0 +1,31 @@
+/* XPM */
+static char *button-solo-2[] = {
+/* width height num_colors chars_per_pixel */
+"    20    20       4            1",
+/* colors */
+". c #000000",
+"k c #585c58",
+"y c #c0c4c0",
+"B c None",
+/* pixels */
+"BBBBBBBBBBBBBBBBBBBB",
+"BBBBBBBBBBBBBBBBBBBB",
+"BBBByk..........kBBB",
+"BBBk.............BBB",
+"BBk..............BBB",
+"BB...............BBB",
+"BB....BBBBBBBBBBBBBB",
+"BB....BBBBBBBBBBBBBB",
+"BB............kyBBBB",
+"BBk.............kBBB",
+"BBBk.............kBB",
+"BBBByk............BB",
+"BBBBBBBBBBBBBB....BB",
+"BBBBBBBBBBBBBB....BB",
+"BB................BB",
+"BB...............kBB",
+"BB..............kBBB",
+"BBk...........kyBBBB",
+"BBBBBBBBBBBBBBBBBBBB",
+"BBBBBBBBBBBBBBBBBBBB"
+};
