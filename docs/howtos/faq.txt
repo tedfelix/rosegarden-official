@@ -106,8 +106,10 @@ And you should get a few lines of output finishing with:
   RosegardenSequencer - started OK
 
 If the sequencer is alright then try to start the main application
-with the command line switch "--nosequencer".  If that fails, see
-next question on how to obtain a stack trace
+with the command line switch "--nosequencer".  If that fails, see next
+question on how to obtain a stack trace, which you should provide as
+part of any bug report you submit.
+
 
 How to get a stack trace for a crash
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,8 +124,33 @@ is either named "core" or "core.<number>". Run gdb :
   $ gdb rosegarden <core_file>
 
 Then once you get the gdb prompt, use the command 'where' to get the
-stack trace, and mail to the authors or the Rosegarden development
-mailing list.
+stack trace, and mail to the authors or to the Rosegarden development
+mailing list, or include in a bug report.
+
+
+Crash at startup with LADSPA plugins enabled
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you find that Rosegarden segfaults immediately upon startup, and if
+when you run rosegardensequencer by itself as mentioned earlier in
+this FAQ you get the following output:
+
+  rosegardensequencer: created plugin manager
+  MappedAudioPluginManager::discoverPlugins - discovering plugins
+  Segmentation fault
+
+and if you have the Steve W. Harris LADSPA plugins (swh-plugins)
+installed, and have Rosegarden compiled with JACK and LADSPA support,
+then you may have hit Weird Plugin Startup Crash Bug That We Don't
+Understand #421.
+
+Check to see if you have the sfftw2 package for your distro installed.
+The versions of swh-plugins provided by some distros appear to require
+sfftw2 instead of fftw2 for some reason, but do not specify it as a
+dependency, resulting in a broken set of plugins.  If you find that
+installing sfftw2 fixes the problem, you might also want to submit a
+bug report to the maintainer of your distro's swh-plugins package.
+
 
 I'm having trouble building with Mandrake 8.2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
