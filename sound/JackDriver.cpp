@@ -574,13 +574,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     
-    Rosegarden::Profiler profiler("JackProcess, clocks running");
+//    Rosegarden::Profiler profiler("JackProcess, clocks running");
 
     jack_position_t position;
     if (m_jackTransportEnabled) {
 	jack_transport_state_t state = jack_transport_query(m_client, &position);
 
-	std::cout << "process: jack state is " << state << std::endl;
+//	std::cout << "process: jack state is " << state << std::endl;
 	if (state == JackTransportStopped) {
 	    if (m_alsaDriver->isPlaying() &&
 		m_alsaDriver->areClocksRunning()) {
