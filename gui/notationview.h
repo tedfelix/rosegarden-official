@@ -464,6 +464,7 @@ public slots:
     void slotAddMark();
     void slotMarksAddTextMark();
     void slotMarksAddFingeringMark();
+    void slotMarksAddFingeringMarkFromAction();
     void slotMarksRemoveMarks();
 
     void slotAddSlashes();

@@ -633,7 +633,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_text(text) { }
 
-    static QString getGlobalName() { return i18n("Add &Fingering..."); }
+    static QString getGlobalName(QString fingering = "");
 
 protected:
     virtual void modifySegment();

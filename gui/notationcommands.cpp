@@ -1103,6 +1103,14 @@ MarksMenuAddTextMarkCommand::modifySegment()
     }
 }
 
+QString
+MarksMenuAddFingeringMarkCommand::getGlobalName(QString fingering)
+{
+    if (fingering == "") return i18n("Add Other &Fingering...");
+    else if (fingering == "0") return i18n("Add Fingering &0 (Thumb)");
+    else return i18n("Add Fingering &%1").arg(fingering);
+}
+
 void
 MarksMenuAddFingeringMarkCommand::modifySegment()
 {

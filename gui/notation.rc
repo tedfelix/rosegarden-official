@@ -115,6 +115,17 @@
     <text>Mar&amp;ks</text>
     <Action name="remove_marks"/>
     <Separator/>
+    <Menu name="Fingering">
+    <text>Add &amp;Fingering</text>
+    <Action name="add_fingering_0"/>
+    <Action name="add_fingering_1"/>
+    <Action name="add_fingering_2"/>
+    <Action name="add_fingering_3"/>
+    <Action name="add_fingering_4"/>
+    <Action name="add_fingering_5"/>
+    <Action name="add_fingering_mark"/>
+    </Menu>
+    <Separator/>
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
     <Action name="add_staccato"/>
@@ -131,7 +142,6 @@
     <Action name="add_down-bow"/>
     <Separator/>
     <Action name="add_text_mark"/>
-    <Action name="add_fingering_mark"/>
   </Menu>
 
 <Menu name="Transforms">

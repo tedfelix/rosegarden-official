@@ -1596,6 +1596,30 @@ void NotationView::setupActions()
                 SLOT(slotMarksAddTextMark()), actionCollection(),
                 "add_text_mark");
 
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("0"), 0, Key_0 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_0");
+
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("1"), 0, Key_1 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_1");
+
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("2"), 0, Key_2 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_2");
+
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("3"), 0, Key_3 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_3");
+
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("4"), 0, Key_4 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_4");
+
+    new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName("5"), 0, Key_5 + ALT, this,
+                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
+                "add_fingering_5");
+
     new KAction(MarksMenuAddFingeringMarkCommand::getGlobalName(), 0, 0, this,
                 SLOT(slotMarksAddFingeringMark()), actionCollection(),
                 "add_fingering_mark");

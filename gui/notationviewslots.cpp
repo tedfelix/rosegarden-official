@@ -1333,6 +1333,21 @@ void NotationView::slotMarksAddFingeringMark()
     }
 }
 
+void NotationView::slotMarksAddFingeringMarkFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(14) == "add_fingering_") {
+	QString fingering = name.right(name.length() - 14);
+
+	if (m_currentEventSelection) {
+	    addCommandToHistory(new MarksMenuAddFingeringMarkCommand
+				(qstrtostr(fingering), *m_currentEventSelection));
+	}
+    }
+}
+
 void NotationView::slotMarksRemoveMarks()
 {
     if (m_currentEventSelection)
