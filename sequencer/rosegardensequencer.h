@@ -103,7 +103,7 @@ public:
 	       const Rosegarden::RealTime &audioRead,
 	       const Rosegarden::RealTime &audioWrite,
 	       long smallFileSize,
-               int recordMode);
+               long recordMode);
 
     // looping
     void setLoop(const Rosegarden::RealTime &loopStart,
@@ -137,7 +137,7 @@ public:
 		       long audioWriteSec,
 		       long audioWriteNsec,
 		       long smallFileSize,
-                       int recordMode);
+                       long recordMode);
 
     
     // Jump to a pointer in the playback (uses longs instead

@@ -594,7 +594,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                                const Rosegarden::RealTime &audioRead,
                                const Rosegarden::RealTime &audioWrite,
 			       long smallFileSize,
-                               int recordMode)
+                               long recordMode)
 {
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
@@ -971,7 +971,7 @@ RosegardenSequencerApp::record(long timeSec,
 			       long audioWriteSec,
 			       long audioWriteNsec,
 			       long smallFileSize,
-                               int recordMode)
+                               long recordMode)
 
 {
     return record(Rosegarden::RealTime(timeSec, timeNSec),

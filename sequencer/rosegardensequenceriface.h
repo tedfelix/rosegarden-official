@@ -72,7 +72,7 @@ public:
 		       long audioWriteSec,
 		       long audioWriteNsec,
 		       long smallFileSize,
-                       int recordMode) = 0;
+                       long recordMode) = 0;
 
     // stop the sequencer
     //

@@ -214,7 +214,7 @@ bool RosegardenCanvasView::isTimeForSmoothScroll()
         int ta = m_scrollAccelerationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
 
-	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
+//	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
 
         if (t < m_smoothScrollTimeInterval) {
 

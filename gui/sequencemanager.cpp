@@ -810,10 +810,10 @@ punchin:
 	}
 
         // record type
-        streamOut << (int)recordType;
+        streamOut << (long)recordType;
     
         // Send Play to the Sequencer
-        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, int)",
+        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
                                   replyType, replyData, data)) {
             // failed
             m_transportStatus = STOPPED;
