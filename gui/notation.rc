@@ -65,8 +65,16 @@
 <!--  <Action name="ungrace"/> -->
   <Separator/>
   <Action name="slur"/>
+  <Action name="glissando"/>
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
+  <Menu name="octaves">
+     <text>&amp;Octaves</text>
+     <Action name="octave_2up"/>
+     <Action name="octave_up"/>
+     <Action name="octave_down"/>
+     <Action name="octave_2down"/>
+  </Menu>
   <Action name="remove_indications"/>
 </Menu>
 
@@ -439,11 +447,15 @@
   <Action name="grace"/>
   <Separator/>
   <Action name="slur"/>
+  <Action name="glissando"/>
   <Action name="tie_notes"/>
   <Action name="de_counterpoint"/>
   <Separator/>
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
+  <Separator/>
+  <Action name="octave_up"/>
+  <Action name="octave_down"/>
 </ToolBar>
 
 <ToolBar name="Meta Toolbar" newline="true" hidden="true">

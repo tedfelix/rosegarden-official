@@ -864,23 +864,31 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	(1, Horizontal, i18n("Grid parameters"), parameterBox);
     QFrame *gridFrame = new QFrame(m_gridBox);
 
-    layout = new QGridLayout(gridFrame, 2, 2, 5, 3);
+    layout = new QGridLayout(gridFrame, 4, 2, 5, 3);
 
     layout->addWidget(new QLabel(i18n("Base grid unit:"), gridFrame), 0, 0);
     m_gridUnitCombo = new KComboBox(gridFrame);
     layout->addWidget(m_gridUnitCombo, 0, 1);
 
+    layout->addWidget(new QLabel(i18n("Swing:"), gridFrame), 1, 0);
+    m_swingCombo = new KComboBox(gridFrame);
+    layout->addWidget(m_swingCombo, 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Iterative amount:"), gridFrame), 2, 0);
+    m_iterativeCombo = new KComboBox(gridFrame);
+    layout->addWidget(m_iterativeCombo, 2, 1);
+
     m_durationCheckBox = new QCheckBox
 	(i18n("Quantize durations as well as start times"), gridFrame);
-    layout->addMultiCellWidget(m_durationCheckBox, 1, 1, 0, 1);
+    layout->addMultiCellWidget(m_durationCheckBox, 3, 3, 0, 1);
 
     m_postProcessingBox = new QGroupBox
 	(1, Horizontal, i18n("After quantization"), this);
 
     if (preamble) {
 	m_mainLayout->addMultiCellWidget(m_postProcessingBox,
-				       zero, zero + 1,
-				       1, 1);
+					 zero, zero + 1,
+					 1, 1);
     } else {
 	m_mainLayout->addWidget(m_postProcessingBox, zero + 3, 0);
     }
@@ -921,6 +929,9 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	else m_configCategory = "Quantize Dialog Grid";
     }
 
+    int defaultSwing = 0;
+    int defaultIterate = 100;
+
     if (m_configCategory) {
 	KConfig *config = kapp->config();
 	config->setGroup(m_configCategory);
@@ -931,6 +942,10 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 				 0);
 	defaultUnit =
 	    config->readNumEntry("quantizeunit", defaultUnit);
+	defaultSwing =
+	    config->readNumEntry("quantizeswing", defaultSwing);
+	defaultIterate =
+	    config->readNumEntry("quantizeiterate", defaultIterate);
 	m_notationTarget->setChecked
 	    (config->readBoolEntry("quantizenotationonly",
 				   defaultQuantizer == Notation));
@@ -999,20 +1014,39 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	}
     }
 
+    for (unsigned int i = 0; i <= 200; i += 20) {
+	m_swingCombo->insertItem(i == 0 ? i18n("None") : QString("%1%").arg(i));
+	if (i == defaultSwing)
+	    m_swingCombo->setCurrentItem(m_swingCombo->count()-1);
+    }
+
+    for (unsigned int i = 10; i <= 100; i += 10) {
+	m_iterativeCombo->insertItem(i == 100 ? i18n("Full quantize") :
+				     QString("%1%").arg(i));
+	if (i == defaultIterate)
+	    m_iterativeCombo->setCurrentItem(m_iterativeCombo->count()-1);
+    }
+
     switch (defaultType) {
     case 0: // grid
 	m_gridBox->show();
+	m_swingCombo->show();
+	m_iterativeCombo->show();
 	m_notationBox->hide();
 	m_durationCheckBox->show();
 	m_typeCombo->setCurrentItem(0);
 	break;
     case 1: // legato
 	m_gridBox->show();
+	m_swingCombo->hide();
+	m_iterativeCombo->hide();
 	m_notationBox->hide();
 	m_durationCheckBox->hide();
 	m_typeCombo->setCurrentItem(1);
     case 2: // notation
 	m_gridBox->hide();
+	m_swingCombo->hide();
+	m_iterativeCombo->hide();
 	m_notationBox->show();
 	m_typeCombo->setCurrentItem(2);
 	break;
@@ -1038,17 +1072,27 @@ RosegardenQuantizeParameters::getQuantizer() const
 
     Rosegarden::Quantizer *quantizer = 0;
 
+    int swing = m_swingCombo->currentItem();
+    swing *= 20;
+    
+    int iterate = m_iterativeCombo->currentItem();
+    iterate *= 10;
+    iterate += 10;
+
     if (type == 0) {
+	
 	if (m_notationTarget->isChecked()) {
 	    quantizer = new Rosegarden::BasicQuantizer
 		(Rosegarden::Quantizer::RawEventData,
 		 Rosegarden::Quantizer::NotationPrefix,
-		 unit, m_durationCheckBox->isChecked());
+		 unit, m_durationCheckBox->isChecked(),
+		 swing, iterate);
 	} else {
 	    quantizer = new Rosegarden::BasicQuantizer
 		(Rosegarden::Quantizer::RawEventData,
 		 Rosegarden::Quantizer::RawEventData,
-		 unit, m_durationCheckBox->isChecked());
+		 unit, m_durationCheckBox->isChecked(),
+		 swing, iterate);
 	}
     } else if (type == 1) {
 	if (m_notationTarget->isChecked()) {
@@ -1087,6 +1131,8 @@ RosegardenQuantizeParameters::getQuantizer() const
 	config->setGroup(m_configCategory);
 	config->writeEntry("quantizetype", type);
 	config->writeEntry("quantizeunit", unit);
+	config->writeEntry("quantizeswing", swing);
+	config->writeEntry("quantizeiterate", iterate);
 	config->writeEntry("quantizenotationonly",
 			   m_notationTarget->isChecked());
 	if (type == 0) {

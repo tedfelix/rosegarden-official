@@ -2328,6 +2328,31 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
     }
 }
 
+QCanvasPixmap*
+NotePixmapFactory::makeOttavoPixmap(int length, int octavesUp)
+{
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeOttavoPixmap");
+    drawOttavoAux(length, octavesUp, 0, 0, 0);
+    return makeCanvasPixmap(QPoint(0, m_generatedHeight-1));
+}
+
+void
+NotePixmapFactory::drawOttavo(int length, int octavesUp,
+			      QPainter &painter, int x, int y)
+{
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawOttavo");
+    m_inPrinterMethod = true;
+    drawOttavoAux(length, octavesUp, &painter, x, y);
+    m_inPrinterMethod = false;
+}
+
+void
+NotePixmapFactory::drawOttavoAux(int length, int octavesUp,
+				 QPainter *painter, int x, int y)
+{
+    // ...
+}
+
 void
 NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
 {

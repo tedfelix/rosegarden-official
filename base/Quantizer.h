@@ -249,9 +249,11 @@ class BasicQuantizer : public Quantizer
 public:
     // The default unit is the shortest note type.  A unit of
     // zero means do no quantization (rather pointlessly).
-    BasicQuantizer(timeT unit = -1, bool doDurations = false);
+    BasicQuantizer(timeT unit = -1, bool doDurations = false,
+		   int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(std::string source, std::string target,
-		   timeT unit = -1, bool doDurations = false);
+		   timeT unit = -1, bool doDurations = false,
+		   int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(const BasicQuantizer &);
     virtual ~BasicQuantizer();
 
@@ -261,6 +263,12 @@ public:
     void setDoDurations(bool doDurations) { m_durations = doDurations; }
     bool getDoDurations() const { return m_durations; }
 
+    void setSwing(int percent) { m_swing = percent; }
+    int getSwing() const { return m_swing; }
+
+    void setIterative(int percent) { m_iterate = percent; }
+    int getIterative() const { return m_iterate; }
+    
     /**
      * Return the standard quantization units in descending order of
      * unit duration
@@ -292,6 +300,8 @@ private:
 
     timeT m_unit;
     bool m_durations;
+    int m_swing;
+    int m_iterate;
 
     static std::vector<timeT> m_standardQuantizations;
     static void checkStandardQuantizations();

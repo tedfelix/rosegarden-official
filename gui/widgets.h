@@ -397,6 +397,8 @@ protected:
     QGroupBox *m_gridBox;
     QCheckBox *m_durationCheckBox;
     KComboBox *m_gridUnitCombo;
+    KComboBox *m_swingCombo;
+    KComboBox *m_iterativeCombo;
 
     QGroupBox *m_notationBox;
     QCheckBox *m_notationTarget;

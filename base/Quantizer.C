@@ -495,19 +495,25 @@ Quantizer::insertNewEvents(Segment *s) const
 }
 
 
-BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations) :
+BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
+			       int swing, int iterate) :
     Quantizer(RawEventData),
     m_unit(unit),
-    m_durations(doDurations)
+    m_durations(doDurations),
+    m_swing(swing),
+    m_iterate(iterate)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
 }
 
 BasicQuantizer::BasicQuantizer(std::string source, std::string target,
-			       timeT unit, bool doDurations) :
+			       timeT unit, bool doDurations,
+			       int swing, int iterate) :
     Quantizer(source, target),
     m_unit(unit),
-    m_durations(doDurations)
+    m_durations(doDurations),
+    m_swing(swing),
+    m_iterate(iterate)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
 }
@@ -515,7 +521,9 @@ BasicQuantizer::BasicQuantizer(std::string source, std::string target,
 BasicQuantizer::BasicQuantizer(const BasicQuantizer &q) :
     Quantizer(q.m_target),
     m_unit(q.m_unit),
-    m_durations(q.m_durations)
+    m_durations(q.m_durations),
+    m_swing(q.m_swing),
+    m_iterate(q.m_iterate)
 {
     // nothing else
 }
@@ -542,18 +550,55 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 
     timeT barStart = s->getBarStartForTime(t);
 
-    if (m_durations && d != 0) {
-	timeT low = (d / m_unit) * m_unit;
-	timeT high = low + m_unit;
-	d = ((low > 0 && (high - d > d - low)) ? low : high);
+    t -= barStart;
+
+    int n = t / m_unit;
+    timeT low = n * m_unit;
+    timeT high = low + m_unit;
+    timeT swingOffset = (m_unit * m_swing) / 300;
+
+    if (high - t > t - low) {
+	t = low;
+    } else {
+	t = high;
+	++n;
     }
 
-    t -= barStart;
-    timeT low = (t / m_unit) * m_unit;
-    timeT high = low + m_unit;
-    t = ((high - t > t - low) ? low : high);
-    t += barStart;
+    if (n % 2 == 1) t += swingOffset;
     
+    if (m_durations && d != 0) {
+
+	low = (d / m_unit) * m_unit;
+	high = low + m_unit;
+
+	if (low > 0 && (high - d > d - low)) {
+	    d = low;
+	} else {
+	    d = high;
+	}
+
+	int n1 = n + d / m_unit;
+
+	if (n % 2 == 0) { // start not swung
+	    if (n1 % 2 == 0) { // end not swung
+		// do nothing
+	    } else { // end swung
+		d += swingOffset;
+	    }
+	} else { // start swung
+	    if (n1 % 2 == 0) { // end not swung
+		d -= swingOffset;
+	    } else {
+		// do nothing
+	    }
+	}
+    }
+	
+    t += barStart;
+
+    t = (t - t0) * m_iterate / 100 + t0;
+    d = (d - d0) * m_iterate / 100 + d0;
+
     if (t0 != t || d0 != d) setToTarget(s, i, t, d);
 }
 

@@ -883,6 +883,21 @@ void NotationView::slotGroupSlur()
     setSingleSelectedEvent(m_currentEventSelection->getSegment(),
                            command->getLastInsertedEvent());
 } 
+
+void NotationView::slotGroupGlissando()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding glissando..."), this);
+
+    GroupMenuAddIndicationCommand *command =
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Glissando,
+                                          *m_currentEventSelection);
+    
+    addCommandToHistory(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+                           command->getLastInsertedEvent());
+} 
   
 void NotationView::slotGroupCrescendo()
 {
@@ -906,6 +921,66 @@ void NotationView::slotGroupDecrescendo()
 
     GroupMenuAddIndicationCommand *command =
         new GroupMenuAddIndicationCommand(Rosegarden::Indication::Decrescendo,
+                                          *m_currentEventSelection);
+    
+    addCommandToHistory(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+                           command->getLastInsertedEvent());
+} 
+
+void NotationView::slotGroupOctave2Up()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+
+    GroupMenuAddIndicationCommand *command =
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Ottavo2Up,
+                                          *m_currentEventSelection);
+    
+    addCommandToHistory(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+                           command->getLastInsertedEvent());
+} 
+
+void NotationView::slotGroupOctaveUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+
+    GroupMenuAddIndicationCommand *command =
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::OttavoUp,
+                                          *m_currentEventSelection);
+    
+    addCommandToHistory(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+                           command->getLastInsertedEvent());
+} 
+
+void NotationView::slotGroupOctaveDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+
+    GroupMenuAddIndicationCommand *command =
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::OttavoDown,
+                                          *m_currentEventSelection);
+    
+    addCommandToHistory(command);
+
+    setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+                           command->getLastInsertedEvent());
+} 
+
+void NotationView::slotGroupOctave2Down()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+
+    GroupMenuAddIndicationCommand *command =
+        new GroupMenuAddIndicationCommand(Rosegarden::Indication::Ottavo2Down,
                                           *m_currentEventSelection);
     
     addCommandToHistory(command);

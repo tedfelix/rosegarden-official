@@ -52,6 +52,7 @@
         <Separator/>
         <Action name="relabel_segment"/>
         <Action name="quantize_selection"/>
+	<Action name="repeat_iterative_quantize"/>
         <Action name="rescale"/>
 <!--    <Action name="harmonize_selection"/> -->
         <Action name="set_segment_start"/>
@@ -167,6 +168,7 @@
         <Action name="audio_mixer"/>
         <Action name="midi_mixer"/>
         <Action name="quantize_selection"/>
+	<Action name="repeat_iterative_quantize"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
@@ -202,6 +204,7 @@
    <Action name="join_segments"/>
    <Separator/>
    <Action name="quantize_selection"/>
+   <Action name="repeat_iterative_quantize"/>
    <Action name="relabel_segment"/>
    <Separator/>
    <Action name="select"/>
@@ -260,6 +263,7 @@
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
+        <Action name="repeat_iterative_quantize"/>
 <!--    <Action name="harmonize_selection"/> -->
         <Action name="rescale"/>
         <Action name="jog_left"/>

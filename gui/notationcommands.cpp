@@ -670,6 +670,14 @@ GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Rosegarden::Indication::Slur) {
 	return i18n("Add S&lur");
+    } else if (indicationType == Rosegarden::Indication::Ottavo2Up) {
+	return i18n("Add Double-Octave Up");
+    } else if (indicationType == Rosegarden::Indication::OttavoUp) {
+	return i18n("Add Octave &Up");
+    } else if (indicationType == Rosegarden::Indication::OttavoDown) {
+	return i18n("Add Octave &Down");
+    } else if (indicationType == Rosegarden::Indication::Ottavo2Down) {
+	return i18n("Add Double Octave Down");
     }
 
     QString n = i18n("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));

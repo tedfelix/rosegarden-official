@@ -619,6 +619,11 @@ const PropertyName Indication::IndicationDurationPropertyName = "indicationdurat
 const std::string Indication::Slur = "slur";
 const std::string Indication::Crescendo = "crescendo";
 const std::string Indication::Decrescendo = "decrescendo";
+const std::string Indication::Glissando = "glissando";
+const std::string Indication::Ottavo2Up = "ottavo2up";
+const std::string Indication::OttavoUp = "ottavoup";
+const std::string Indication::OttavoDown = "ottavodown";
+const std::string Indication::Ottavo2Down = "ottavo2down";
 
 Indication::Indication(const Event &e)
 {
@@ -626,7 +631,7 @@ Indication::Indication(const Event &e)
         throw Event::BadType("Indication model event", EventType, e.getType());
     }
     std::string s = e.get<String>(IndicationTypePropertyName);
-    if (s != Slur && s != Crescendo && s != Decrescendo) {
+    if (!isValid(s)) {
         throw BadIndicationName("No such indication as \"" + s + "\"");
     }
     m_indicationType = s;
@@ -635,7 +640,7 @@ Indication::Indication(const Event &e)
 
 Indication::Indication(const std::string &s, timeT indicationDuration)
 {
-    if (s != Slur && s != Crescendo && s != Decrescendo) {
+    if (!isValid(s)) {
         throw BadIndicationName("No such indication as \"" + s + "\"");
     }
     m_indicationType = s;
@@ -659,6 +664,14 @@ Indication::getAsEvent(timeT absoluteTime) const
     e->set<String>(IndicationTypePropertyName, m_indicationType);
     e->set<Int>(IndicationDurationPropertyName, m_duration);
     return e;
+}
+
+bool
+Indication::isValid(const std::string &s) const
+{
+    return
+	(s == Slur || s == Crescendo || s == Decrescendo || s == Glissando ||
+	 s == Ottavo2Up || s == OttavoUp || s == OttavoDown || s == Ottavo2Down);
 }
 
 

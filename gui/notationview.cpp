@@ -1568,6 +1568,14 @@ void NotationView::setupActions()
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+        ("group-glissando")));
+
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Glissando), icon, 0, this,
+                SLOT(slotGroupGlissando()), actionCollection(), "glissando");
+
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-crescendo")));
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
@@ -1581,6 +1589,30 @@ void NotationView::setupActions()
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
                 (Rosegarden::Indication::Decrescendo), icon, 0, this,
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
+
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Ottavo2Up), icon, 0, this,
+                SLOT(slotGroupOctave2Up()), actionCollection(), "octave_2up");
+
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+        ("group-octave-up")));
+
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::OttavoUp), icon, 0, this,
+                SLOT(slotGroupOctaveUp()), actionCollection(), "octave_up");
+
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+        ("group-octave-down")));
+
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::OttavoDown), icon, 0, this,
+                SLOT(slotGroupOctaveDown()), actionCollection(), "octave_down");
+
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Ottavo2Down), icon, 0, this,
+                SLOT(slotGroupOctave2Down()), actionCollection(), "octave_2down");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap

@@ -509,8 +509,8 @@ private:
 
 /**
  * Indication is a collective name for graphical marks that span a
- * series of events, such as slurs, ties, dynamic marks etc.  These
- * are stored in indication Events with a type and duration.  The
+ * series of events, such as slurs, dynamic marks etc.  These are
+ * stored in indication Events with a type and duration.  The
  * Indication class gives a basic set of indication types.
  */
 
@@ -526,6 +526,12 @@ public:
     static const std::string Slur;
     static const std::string Crescendo;
     static const std::string Decrescendo;
+    static const std::string Glissando;
+
+    static const std::string Ottavo2Up;
+    static const std::string OttavoUp;
+    static const std::string OttavoDown;
+    static const std::string Ottavo2Down;
 
     Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
@@ -546,6 +552,8 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
+    bool isValid(const std::string &s) const;
+
     std::string m_indicationType;
     timeT m_duration;
 };

@@ -419,9 +419,14 @@ public slots:
     void slotGroupGrace();
     void slotGroupUnGrace();
     void slotGroupSlur();
+    void slotGroupGlissando();
     void slotGroupCrescendo();
     void slotGroupDecrescendo();
     void slotGroupMakeChord();
+    void slotGroupOctave2Up();
+    void slotGroupOctaveUp();
+    void slotGroupOctaveDown();
+    void slotGroupOctave2Down();
 
     /// transforms slots
     void slotTransformsNormalizeRests();
