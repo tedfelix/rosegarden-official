@@ -211,6 +211,7 @@ public slots:
     void slot16th();
     void slot32nd();
     void slot64th();
+    void slotToggleTriplet();
 
     /// dotted note switch slots
     void slotDottedBreve();
@@ -482,6 +483,8 @@ protected:
     BarButtons *m_bottomBarButtons;
     QWidget *m_chordNameRuler;
     bool m_chordNamesVisible;
+
+    bool m_tupletMode;
 
     template <class T>
     class ZoomSlider : public QSlider

@@ -111,6 +111,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_vlayout(&doc->getComposition()),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
+    m_tupletMode(false),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0)
 {
@@ -360,6 +361,13 @@ void NotationView::setupActions()
         noteAction->setExclusiveGroup("notes");
 
     }
+
+    // Tuplets
+
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet"));
+    new KToggleAction(i18n("Triplet"), icon, 0,
+		      this, SLOT(slotToggleTriplet()),
+		      actionCollection(), "triplet");
 
     //
     // Rests
@@ -651,11 +659,6 @@ void NotationView::setupActions()
              this, actionsToolbars[i][1],
              actionCollection(), actionsToolbars[i][2]);
 
-/*
-        KToggleAction* toolbarAction = new KToggleAction(i18n(actionsToolbars[i][0]), 0,
-                                                         this, actionsToolbars[i][1],
-                                                         actionCollection(), actionsToolbars[i][2]);
-*/
         toolbarAction->setChecked(true);
     }
     
@@ -1868,6 +1871,12 @@ void NotationView::slotDotted64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDotted64th()\n";
     setCurrentSelectedNote("dotted-hemidemisemi", false, Note::SixtyFourthNote, 1);
+}
+
+void NotationView::slotToggleTriplet()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotToggleTriplet()\n";
+    m_tupletMode = !m_tupletMode;
 }
 
 //----------------------------------------

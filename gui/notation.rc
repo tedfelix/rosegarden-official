@@ -203,6 +203,8 @@ etc
   <Action name="dotted_8th" />
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
+
+  <Action name="triplet" />
 </ToolBar>
 
 <ToolBar name="restsToolBar">

@@ -104,7 +104,7 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
-    m_bigTimeSigFont("new century schoolbook", 12, QFont::Bold),
+    m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
     m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
     m_tupledCountFontMetrics(m_tupledCountFont),
