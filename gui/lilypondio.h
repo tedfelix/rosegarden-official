@@ -28,7 +28,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <set>
 #include <string>
 #include <vector>
@@ -56,13 +55,13 @@ protected:
     Rosegarden::Composition *m_composition;
     std::string m_fileName;
 
-    void writeBar(Rosegarden::Segment *, int barNo, int col,
-		  Rosegarden::Key &key, std::ostringstream &lilyLyrics,
+    void writeBar(Rosegarden::Segment *, int barNo, int col, Rosegarden::Key &key,
+		  std::string &lilyText, std::string &lilyLyrics,
 		  std::string &prevStyle, eventendlist &eventsInProgress,
 		  std::ofstream &str);
 
     void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
-    void handleEndingEvents(eventendlist &eventsInProgress, Rosegarden::Segment::iterator &j, std::ofstream &str);
+    void handleEndingEvents(eventendlist &eventsInProgress, Rosegarden::Segment::iterator &j, Rosegarden::timeT tupletStartTime, std::ofstream &str);
 
     // convert note event into Lilypond format note string using combination
     // of pitch, flat/sharp key signature, number of accidentals in key
@@ -86,17 +85,20 @@ protected:
 /*!!!
     void closeChordWriteTie(bool &addTie, bool &currentlyWritingChord, std::ofstream &str);
 */
+/*!!!
     // start/stop tuplet bracket
     void startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
                          const int &numerator, const int &denominator,
                          std::ofstream &str);
-
+*/
     void writeInventedRests(Rosegarden::TimeSignature &timeSig,
 			    Rosegarden::timeT offset,
 			    Rosegarden::timeT duration,
 			    std::ofstream &);
 
+    void handleText(Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
     void writePitch(Rosegarden::Event *note, Rosegarden::Key &key, std::ofstream &);
+    void writeStyle(Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
     void writeDuration(Rosegarden::timeT duration, std::ofstream &);
     void writeMarks(Rosegarden::Event *note, std::ofstream &);
     void writeSlashes(Rosegarden::Event *note, std::ofstream &);
