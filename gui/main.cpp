@@ -65,5 +65,7 @@ int main(int argc, char *argv[])
         args->clear();
     }
 
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+
     return app.exec();
 }  
