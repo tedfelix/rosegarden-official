@@ -1,0 +1,113 @@
+From paul@linuxaudiosystems.com Sat Feb 22 21:32:24 2003
+Return-Path: <jackit-devel-admin@lists.sourceforge.net>
+Received: from sc8-sf-list2.sourceforge.net (lists.sourceforge.net [66.35.250.206])
+	by swift3.swiftinter.net (8.11.6/8.11.6) with ESMTP id h1MLMk424066
+	for <bownie@bownie.com>; Sat, 22 Feb 2003 21:22:46 GMT
+Received: from sc8-sf-list1-b.sourceforge.net ([10.3.1.13] helo=sc8-sf-list1.sourceforge.net)
+	by sc8-sf-list2.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18mhF2-0006bf-00; Sat, 22 Feb 2003 13:31:28 -0800
+Received: from mail08.voicenet.com ([207.103.0.34])
+	by sc8-sf-list1.sourceforge.net with smtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18mhEK-0005ju-00
+	for <jackit-devel@lists.sourceforge.net>; Sat, 22 Feb 2003 13:30:44 -0800
+Received: (qmail 28897 invoked from network); 22 Feb 2003 21:30:41 -0000
+Received: from lata228-02-c204.lata228-c.voicenet.com (HELO dhin.linuxaudiosystems.com) (209.71.21.204)
+  by mail08.voicenet.com with SMTP; 22 Feb 2003 21:30:41 -0000
+To: Grant Monroe <gmonroe@ku.edu>
+cc: jackit-devel@lists.sourceforge.net
+Subject: Re: [Jackit-devel] Graphs and SubGraphs 
+In-reply-to: Your message of "Sat, 22 Feb 2003 14:32:21 CST."
+             <3E57DE55.9000406@ku.edu> 
+From: Paul Davis <paul@linuxaudiosystems.com>
+Message-Id: <E18mhEK-0005ju-00@sc8-sf-list1.sourceforge.net>
+Sender: jackit-devel-admin@lists.sourceforge.net
+Errors-To: jackit-devel-admin@lists.sourceforge.net
+X-BeenThere: jackit-devel@lists.sourceforge.net
+X-Mailman-Version: 2.0.9-sf.net
+Precedence: bulk
+List-Help: <mailto:jackit-devel-request@lists.sourceforge.net?subject=help>
+List-Post: <mailto:jackit-devel@lists.sourceforge.net>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/jackit-devel>,
+	<mailto:jackit-devel-request@lists.sourceforge.net?subject=subscribe>
+List-Id: Discussions about the development of JACK <jackit-devel.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/jackit-devel>,
+	<mailto:jackit-devel-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum=jackit-devel>
+X-Original-Date: Sat, 22 Feb 2003 16:32:24 -0500
+Date: Sat, 22 Feb 2003 16:32:24 -0500
+X-MailScanner: Found to be clean
+X-Spam-Status: No, hits=-4.0 required=6.0
+	tests=AWL,IN_REP_TO,KNOWN_MAILING_LIST,MONTH_TRIAL,
+	      SPAM_PHRASE_01_02
+	version=2.41
+X-Spam-Level: 
+X-UIDL: 2/1!!4Q6"!T7O!!&m[!!
+Status: R 
+X-Status: N
+
+>I am new to Jack development, and I am trying to get a handle on the 
+>conceptual design of the Jack engine. I have searched through the 
+>archives, but I haven't quite found anything that formalizes the concept 
+>of graphs and subgraphs. 
+
+"graphs" are an idea/abstraction that is widely used in DSP programming.
+
+a graph is a set of connected "nodes", each of which must be
+"executed" on a periodic basis. in the case of JACK, the graph is made
+up of JACK clients, and we need each one to have its process()
+function called in a specific order. the connections between each node
+may take any configuration whatsoever. JACK has to serialize the
+execution of each client so that the connections represented by the
+graph are honored (e.g. client A sends data to client B, so client A
+should execute before client B).
+
+subgraphs are a JACK specific term that cover portions of the overall
+graph. specifically, a part of the serialized execution order bounded
+by either of (i) one end of the serialized order or (ii) an in-process
+client. subgraphs are important in JACK because they represent out-of-
+process clients that will drive the execution of the next client in
+the subgraph. rather than switch to a client, then back to the server,
+and so on, we instead arrange the subgraph so that each client drives
+the execution of the next client till the last one returns control to
+the server. this is *much* more efficient than the
+out-and-back-per-client design.
+
+so, a moderately complex graph might look like:
+
+    A(I) 
+    B(O)  |  subgraph
+    C(O)  |    one
+    D(I)
+    E(O)  |
+    F(O)  |  subgraph
+    G(O)  |   two
+
+the (I) or (O) designates whether client A-G is in- or
+out-of-process. in this case, our execution pattern is like this:
+
+    A->process(); // direct function call 
+    start subgraph one by telling B to call its process function
+       B tells C
+       C returns to the server
+    D->process(); // direct function call
+    start subgraph two by telling E to call its process function
+       E tells F
+       F tells G
+       G returns to the server.
+
+i hope this makes things a bit clearer.
+
+--p
+
+
+-------------------------------------------------------
+This SF.net email is sponsored by: SlickEdit Inc. Develop an edge.
+The most comprehensive and flexible code editor you can use.
+Code faster. C/C++, C#, Java, HTML, XML, many more. FREE 30-Day Trial.
+www.slickedit.com/sourceforge
+_______________________________________________
+Jackit-devel mailing list
+Jackit-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/jackit-devel
+
+

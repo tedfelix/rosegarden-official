@@ -88,8 +88,6 @@ public:
         AudioStopped,
         // The gui is clear to generate a preview for a new audio file
         AudioGeneratePreview,
-        // Number of audio channels on an audio MappedInstrument
-        AudioChannels,
 
         // Update Instruments - new ALSA client detected
         SystemUpdateInstruments = 80,

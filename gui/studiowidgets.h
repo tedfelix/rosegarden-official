@@ -52,12 +52,13 @@ class AudioFaderWidget : public QWidget
 public:
     AudioFaderWidget(QWidget *parent, const char *name=0);
 
+    void setAudioChannels(int);
+
     std::vector<QPushButton*>  m_plugins;
     AudioVUMeter              *m_vuMeter;
     RosegardenFader           *m_fader;
     QPushButton               *m_muteButton;
     QPushButton               *m_soloButton;
-    QPushButton               *m_stereoButton;
     QPushButton               *m_recordButton;
     RosegardenRotary          *m_pan;
 
@@ -66,7 +67,19 @@ public:
 
     QSignalMapper             *m_signalMapper;
 
+signals:
+    void audioChannelsChanged(int);
+
+public slots:
+
+protected slots:
+    void slotChannelStateChanged();
+
 protected:
+    QPushButton               *m_stereoButton;
+    bool                       m_isStereo;
+
+
 
 };
 

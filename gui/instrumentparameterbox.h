@@ -143,7 +143,7 @@ public slots:
     //
     void slotSelectPlugin(int index);
     void slotSelectAudioLevel(int index);
-    void slotAudioChannelToggle();
+    void slotAudioChannels(int channels);
     void slotMute();
     void slotSolo();
     void slotSetPan(float pan);

@@ -513,9 +513,9 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
             if (Rosegarden::StudioControl::
                     destroyStudioObject(inst->getMappedId()))
             {
-                std::cout << "InstrumentParameterBox::slotPluginSelected - "
-                          << "cannot destroy Studio object "
-                          << inst->getMappedId() << std::endl;
+                RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
+                         << "cannot destroy Studio object "
+                         << inst->getMappedId() << endl;
             }
 
             inst->setAssigned(false);
@@ -533,11 +533,11 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
             {
                 // unassign, destory and recreate
                 //cout << "MODIFY assigned " << inst->getMappedId() << endl;
-                std::cout << "InstrumentParameterBox::slotPluginSelected - "
-                          << "MappedObjectId = "
-                          << inst->getMappedId()
-                          << " - UniqueId = " << plgn->getUniqueId()
-                          << std::endl;
+                RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
+                         << "MappedObjectId = "
+                         << inst->getMappedId()
+                         << " - UniqueId = " << plgn->getUniqueId()
+                         << endl;
 
 
 #ifdef HAVE_LADSPA
@@ -555,8 +555,8 @@ AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
                     Rosegarden::StudioControl::createStudioObject
                         (Rosegarden::MappedObject::LADSPAPlugin);
 
-                std::cout << "InstrumentParameterBox::slotPluginSelected - "
-                             " new MappedObjectId = " << newId << std::endl;
+                RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
+                         << " new MappedObjectId = " << newId << endl;
 
                 // set the new Mapped ID and that this instance
                 // is assigned
@@ -617,8 +617,8 @@ AudioInstrumentParameterPanel::slotPluginPortChanged(int pluginIndex,
                                 portIndex,
                                 value);
                                 
-        std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
-                  << "setting plugin port to " << value << std::endl;
+        RG_DEBUG << "InstrumentParameterBox::slotPluginPortChanged - "
+                 << "setting plugin port to " << value << endl;
 #endif // HAVE_LADSPA
     }
 
@@ -839,8 +839,8 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     // fader and connect it
     gridLayout->addMultiCellWidget(m_audioFader, 1, 9, 2, 3);
 
-    connect(m_audioFader->m_stereoButton, SIGNAL(released()),
-            this, SLOT(slotAudioChannelToggle()));
+    connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
+            this, SLOT(slotAudioChannels(int)));
 
     connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSelectPlugin(int)));
@@ -862,16 +862,26 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
 void
 AudioInstrumentParameterPanel::slotMute()
 {
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotMute" << endl;
 }
 
 void
 AudioInstrumentParameterPanel::slotSolo()
 {
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSolo" << endl;
 }
 
 void
-AudioInstrumentParameterPanel::slotSetPan(float /*pan*/)
+AudioInstrumentParameterPanel::slotSetPan(float pan)
 {
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSetPan - "
+             << "pan = " << pan << endl;
+
+    // convert the pan value to 0-127 for send to sequencer
+    Rosegarden::StudioControl::setStudioObjectProperty
+        (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+         Rosegarden::MappedAudioFader::Pan,
+         Rosegarden::MappedObjectValue(pan * 127));
 }
 
 void
@@ -910,44 +920,18 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
             m_audioFader->m_plugins[i]->setText(i18n("<no plugin>"));
     }
 
-    switch (instrument->getAudioChannels())
-    {
-        case 1:
-            m_audioFader->m_stereoButton->setPixmap(m_monoPixmap);
-            break;
-
-        case 2:
-            m_audioFader->m_stereoButton->setPixmap(m_stereoPixmap);
-            break;
-
-        default:
-            RG_DEBUG << "AudioInstrumentParameterPanel::setupForInstrument - "
-                     << "unsupported number of audio channels" << endl;
-            return;
-    }
+    // Set the number of channels on the fader widget
+    //
+    m_audioFader->setAudioChannels(instrument->getAudioChannels());
 }
 
 void
-AudioInstrumentParameterPanel::slotAudioChannelToggle()
+AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 {
-    RG_DEBUG << "AudioInstrumentParameterPanel::slotAudioChannelToggle" << endl;
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotAudioChannels - "
+             << "channels = " << channels << endl;
 
-    switch(m_selectedInstrument->getAudioChannels())
-    {
-        case 1:
-            m_audioFader->m_stereoButton->setPixmap(m_stereoPixmap);
-            m_selectedInstrument->setAudioChannels(2);
-            break;
-
-        case 2:
-            m_audioFader->m_stereoButton->setPixmap(m_monoPixmap);
-            m_selectedInstrument->setAudioChannels(1);
-            break;
-
-        default:
-            return;
-    }
-
+    m_selectedInstrument->setAudioChannels(channels);
     /*
     Rosegarden::MappedEvent *mE =
         new Rosegarden::MappedEvent(
@@ -961,7 +945,7 @@ AudioInstrumentParameterPanel::slotAudioChannelToggle()
     Rosegarden::StudioControl::setStudioObjectProperty
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
          Rosegarden::MappedAudioFader::Channels,
-         Rosegarden::MappedObjectValue(m_selectedInstrument->getAudioChannels()));
+         Rosegarden::MappedObjectValue(channels));
 
 }
 

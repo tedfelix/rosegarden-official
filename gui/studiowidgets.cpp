@@ -34,7 +34,8 @@
 
 AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     QWidget(parent, name),
-    m_signalMapper(new QSignalMapper(this))
+    m_signalMapper(new QSignalMapper(this)),
+    m_isStereo(false)
 {
     QGridLayout *grid = new QGridLayout(this,
                                         7, 2,
@@ -80,8 +81,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
 
     m_pan = new RosegardenRotary(this);
     m_stereoButton = new QPushButton(this);
-    m_stereoButton->setPixmap(m_monoPixmap);
-    //m_stereoButton->setFixedSize(22, 22);
+    m_stereoButton->setPixmap(m_monoPixmap); // default is mono
 
     grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
     grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
@@ -98,6 +98,48 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     m_recordButton->setText("R");
 
     grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
+
+    connect(m_stereoButton, SIGNAL(clicked()),
+            this, SLOT(slotChannelStateChanged()));
+
+}
+
+
+void
+AudioFaderWidget::setAudioChannels(int channels)
+{
+    switch (channels)
+    {
+        case 1:
+            m_stereoButton->setPixmap(m_monoPixmap);
+            m_isStereo = false;
+            break;
+
+        case 2:
+            m_stereoButton->setPixmap(m_stereoPixmap);
+            m_isStereo = true;
+            break;
+        default:
+            std::cerr << "AudioFaderWidget::setAudioChannels - "
+                      << "unsupported channel numbers (" << channels
+                      << ")" << endl;
+    }
+
+}
+
+void
+AudioFaderWidget::slotChannelStateChanged()
+{
+    if (m_isStereo)
+    {
+        setAudioChannels(1);
+        emit audioChannelsChanged(1);
+    }
+    else
+    {
+        setAudioChannels(2);
+        emit audioChannelsChanged(2);
+    }
 }
 
 
