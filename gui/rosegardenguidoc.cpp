@@ -334,7 +334,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         delete progressDlg;
         progressDlg = 0;
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-        KMessageBox::error(win, QString(e.c_str()));
+        KMessageBox::error(win, strtoqstr(e));
     }
 
     // Get rid of it - if the operation above has been quick enough
@@ -1368,7 +1368,7 @@ RosegardenGUIDoc::stopRecordingAudio()
         delete progressDlg;
         progressDlg = 0;
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-        KMessageBox::error(win, QString(e.c_str()));
+        KMessageBox::error(win, strtoqstr(e));
     }
 
     if (progressDlg) delete progressDlg;

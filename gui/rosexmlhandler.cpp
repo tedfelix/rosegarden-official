@@ -32,6 +32,7 @@
 #include "AudioDevice.h"
 #include "Instrument.h"
 #include "widgets.h"
+#include "rosestrings.h"
 #include "dialogs.h"
 
 #include <klocale.h>
@@ -129,7 +130,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& ch)
 {
     if (m_propertyType == "Int") {
         long i = ch.toInt();
-        m_doc->getConfiguration().set<Int>(m_propertyName.data(), i);
+        m_doc->getConfiguration().set<Int>(qstrtostr(m_propertyName), i);
 
         return true;
     }
@@ -143,7 +144,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& ch)
 
         RG_DEBUG << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
 
-        m_doc->getConfiguration().set<Rosegarden::RealTimeT>(m_propertyName.data(), rt);
+        m_doc->getConfiguration().set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
 
         return true;
     }
@@ -155,7 +156,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& ch)
                   chLc == "1"    ||
                   chLc == "on");
         
-        m_doc->getConfiguration().set<Rosegarden::Bool>(m_propertyName.data(), b);
+        m_doc->getConfiguration().set<Rosegarden::Bool>(qstrtostr(m_propertyName), b);
 
         return true;
     }

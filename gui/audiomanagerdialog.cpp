@@ -39,6 +39,7 @@
 #include "audiomanagerdialog.h"
 #include "widgets.h"
 #include "dialogs.h"
+#include "rosestrings.h"
 #include "Progress.h"
 #include "multiviewcommandhistory.h"
 
@@ -946,7 +947,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
 
         QString errorString =
             i18n("Can't add File.  WAV file body invalid.\n\"") +
-            QString(e.c_str()) + "\"";
+            strtoqstr(e) + "\"";
         KMessageBox::sorry(this, errorString);
         return false;
     }
@@ -967,7 +968,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
     {
         delete progressDlg;
         progressDlg = 0;
-        KMessageBox::error(this, QString(e.c_str()));
+        KMessageBox::error(this, strtoqstr(e));
         return false;
     }
 

@@ -2225,7 +2225,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     QVBox *w = makeVBoxMainWidget();
 
     new QLabel(i18n("AutoSplit Segment \"") +
-        QString(m_segment->getLabel().c_str()) + QString("\""), w);
+	       strtoqstr(m_segment->getLabel()) + QString("\""), w);
 
     m_canvas = new QCanvas(w);
     m_canvas->resize(m_canvasWidth, m_canvasHeight);

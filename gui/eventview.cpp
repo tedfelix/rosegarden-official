@@ -331,7 +331,7 @@ EventView::applyLayout(int /*staffNo*/)
                               m_eventList,
                               QString("%1").arg(eventTime),
                               QString("%1").arg((*it)->getDuration()),
-                              QString((*it)->getType().c_str()),
+                              strtoqstr((*it)->getType()),
                               pitchStr,
                               velyStr,
 			      data1Str,
@@ -625,14 +625,16 @@ EventView::slotPopupEventEditor(QListViewItem *item)
     {
         // For the moment just get one event
         //
-/*!!!
+
+/*!!! bad idea, very unreliable
+
         Rosegarden::Segment::iterator it = eItem->getSegment()->
             findTime(eItem->text(0).toInt());
 
         do
         {
             // if types don't match then return
-            if ((*it)->getType() != std::string(eItem->text(2).data()))
+            if ((*it)->getType() != qstrtostr(eItem->text(2)))
                 continue;
 
             // try to match durations
