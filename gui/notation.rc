@@ -62,6 +62,9 @@
   <Action name="add_clef"/>
   <Action name="add_key_signature"/>
   <Separator/>
+  <Action name="add_sustain_down"/>
+  <Action name="add_sustain_up"/>
+  <Separator/>
   <Action name="set_segment_start"/>
   <Action name="set_segment_duration"/>
 </Menu>
@@ -104,8 +107,10 @@
 		<Separator/>
 		<Action name="crescendo"/>
 		<Action name="decrescendo"/>
+<!--
 		<Separator/>
     		<Action name="remove_indications"/>
+-->
 	</Menu>
 	<Menu name="Marks">
 		<text>Mar&amp;ks</text>
@@ -118,23 +123,17 @@
 		<Action name="add_text_rf"/>
 		<Separator/>
 		<Action name="add_trill"/>
+		<Action name="add_long-trill"/>
+		<Action name="add_trill-line"/>
 		<Action name="add_turn"/>
-		<Action name="add_pause"/>
+		<Action name="add_mordent"/>
+		<Action name="add_mordent-inverted"/>
+		<Action name="add_mordent-long"/>
+		<Action name="add_mordent-long-inverted"/>
 		<Separator/>
 		<Action name="add_up-bow"/>
 		<Action name="add_down-bow"/>
-		<Separator/>
-		<Menu name="mordants">
-			<text>Mordants</text>
-			<Action name="add_mordant"/>
-			<Action name="add_mordant-inverted"/>
-			<Action name="add_mordant-long"/>
-			<Action name="add_mordant-long-inverted"/>
-			<Action name="add_mordant-downhook-long"/>
-			<Action name="add_mordant-uphook-long"/>
-			<Action name="add_mordant-downhook-long-inverted"/>
-			<Action name="add_mordant-uphook-long-inverted"/>
-		</Menu>
+		<Action name="add_pause"/>
 		<Separator/>
 		<Action name="add_text_mark"/>
 		<Separator/>
@@ -544,14 +543,16 @@
     <Action name="add_marcato"/>
     <Action name="add_text_sf"/>
     <Action name="add_text_rf"/>
-    <Separator/>
     <Action name="add_trill"/>
+    <Action name="add_long-trill"/>
     <Action name="add_turn"/>
     <Action name="add_pause"/>
-    <Separator/>
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
-    <Separator/>
+    <Action name="add_mordent"/>
+    <Action name="add_mordent-inverted"/>
+    <Action name="add_mordent-long"/>
+    <Action name="add_mordent-long-inverted"/>
     <Action name="add_text_mark"/>
 </ToolBar>
 
@@ -671,7 +672,7 @@
      <Action name="octave_up"/>
      <Action name="octave_down"/>
      <Action name="octave_2down"/>
-    <Action name="remove_indications"/>
+<!--    <Action name="remove_indications"/> -->
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
@@ -700,18 +701,16 @@
     <Action name="add_text_sf"/>
     <Action name="add_text_rf"/>
     <Action name="add_trill"/>
+    <Action name="add_long-trill"/>
+    <Action name="add_trill-line"/>
     <Action name="add_turn"/>
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
-	<Action name="add_mordant"/>
-	<Action name="add_mordant-inverted"/>
-	<Action name="add_mordant-long"/>
-	<Action name="add_mordant-long-inverted"/>
-	<Action name="add_mordant-downhook-long"/>
-	<Action name="add_mordant-uphook-long"/>
-	<Action name="add_mordant-downhook-long-inverted"/>
-	<Action name="add_mordant-uphook-long-inverted"/>
+    <Action name="add_mordent"/>
+    <Action name="add_mordent-inverted"/>
+    <Action name="add_mordent-long"/>
+    <Action name="add_mordent-long-inverted"/>
     <Action name="add_text_mark"/>
     <Action name="make_ornament"/>
     <Action name="remove_ornament"/>

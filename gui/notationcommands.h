@@ -181,6 +181,33 @@ public:
     }
 };
 
+class SustainInsertionCommand : public BasicCommand
+{
+public:
+    SustainInsertionCommand(Rosegarden::Segment &segment,
+			    Rosegarden::timeT time,
+			    bool down,
+			    int controllerNumber);
+    virtual ~SustainInsertionCommand();
+
+    static QString getGlobalName(bool down) {
+	if (down) {
+	    return i18n("Add Sustain Pedal &Press");
+	} else {
+	    return i18n("Add Sustain Pedal &Release");
+	}
+    }
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+protected:
+    virtual void modifySegment();
+
+    bool m_down;
+    int m_controllerNumber;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+
 
 class EraseEventCommand : public BasicCommand
 {

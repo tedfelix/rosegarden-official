@@ -435,6 +435,34 @@ MultiKeyInsertionCommand::~MultiKeyInsertionCommand()
     // nothing
 }
 
+
+SustainInsertionCommand::SustainInsertionCommand(Segment &segment, timeT time,
+						 bool down,
+						 int controllerNumber) :
+    BasicCommand(getGlobalName(down), segment, time, time),
+    m_down(down),
+    m_controllerNumber(controllerNumber),
+    m_lastInsertedEvent(0)
+{
+    // nothing
+}
+
+SustainInsertionCommand::~SustainInsertionCommand()
+{
+    // nothing
+}
+
+void
+SustainInsertionCommand::modifySegment()
+{
+    Event *e = new Event(Rosegarden::Controller::EventType, getStartTime(), 0,
+			 Rosegarden::Controller::EventSubOrdering);
+    e->set<Int>(Rosegarden::Controller::NUMBER, m_controllerNumber);
+    e->set<Int>(Rosegarden::Controller::VALUE, m_down ? 127 : 0);
+    m_lastInsertedEvent = *getSegment().insert(e);
+}
+
+
 EraseEventCommand::EraseEventCommand(Segment &segment,
 				     Event *event,
 				     bool collapseRest) :
@@ -1080,6 +1108,8 @@ NotesMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
     else if (markType == Rosegarden::Marks::Rinforzando) m = i18n("R&inforzando");
     else if (markType == Rosegarden::Marks::Tenuto) m = i18n("T&enuto");
     else if (markType == Rosegarden::Marks::Trill) m = i18n("Tri&ll");
+    else if (markType == Rosegarden::Marks::LongTrill) m = i18n("Trill &with Line");
+    else if (markType == Rosegarden::Marks::TrillLine) m = i18n("Trill Line");
     else if (markType == Rosegarden::Marks::Turn) m = i18n("&Turn");
     else if (markType == Rosegarden::Marks::Accent) m = i18n("&Accent");
     else if (markType == Rosegarden::Marks::Staccatissimo) m = i18n("&Staccatissimo");
@@ -1087,22 +1117,14 @@ NotesMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
     else if (markType == Rosegarden::Marks::Pause) m = i18n("&Pause");
     else if (markType == Rosegarden::Marks::UpBow) m = i18n("&Up-Bow");
     else if (markType == Rosegarden::Marks::DownBow) m = i18n("&Down-Bow");
-    else if (markType == Rosegarden::Marks::Mordant)
-	m = i18n("&Mordant");
-    else if (markType == Rosegarden::Marks::MordantInverted)
-	m = i18n("&Inverted Mordant");
-    else if (markType == Rosegarden::Marks::MordantLong)
-	m = i18n("&Long Mordant");
-    else if (markType == Rosegarden::Marks::MordantLongInverted)
-	m = i18n("Lon&g Inverted Mordant");
-    else if (markType == Rosegarden::Marks::MordantDownHookLong)
-	m = i18n("&Down-Hook Long Mordant");
-    else if (markType == Rosegarden::Marks::MordantUpHookLong)
-	m = i18n("&Up-Hook Long Mordant");
-    else if (markType == Rosegarden::Marks::MordantDownHookLongInverted)
-	m = i18n("Do&wn-Hook Long Inverted Mordant");
-    else if (markType == Rosegarden::Marks::MordantUpHookLongInverted)
-	m = i18n("U&p-Hook Long Inverted Mordant");
+    else if (markType == Rosegarden::Marks::Mordent)
+	m = i18n("Mo&rdent");
+    else if (markType == Rosegarden::Marks::MordentInverted)
+	m = i18n("Inverted Mordent");
+    else if (markType == Rosegarden::Marks::MordentLong)
+	m = i18n("Long Mordent");
+    else if (markType == Rosegarden::Marks::MordentLongInverted)
+	m = i18n("Lon&g Inverted Mordent");
     else m = i18n("&%1%2").arg(m[0].upper()).arg(m.right(m.length()-1));
     // FIXME: That last i18n has very little chance of working, unless
     // by some miracle the exact same string was translated elsewhere already

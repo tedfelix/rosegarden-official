@@ -577,7 +577,10 @@ protected:
     // shows staff lines, connecting lines (where appropriate) and bar
     // lines, but does not show time signatures.  To see time
     // signatures, override the deleteTimeSignatures and
-    // insertTimeSignature methods.
+    // insertTimeSignature methods.  For repeated clefs and keys at
+    // the start of each row, override deleteRepeatedClefsAndKeys
+    // and insertRepeatedClefAndKey, but note that your layout class
+    // will need to allot the space for them separately.
 
     virtual void resizeStaffLines();
     virtual void clearStaffLineRow(int row);
@@ -592,6 +595,10 @@ protected:
     virtual void deleteTimeSignatures();
     virtual void insertTimeSignature(double layoutX,
 				     const Rosegarden::TimeSignature &);
+
+    // The default implementations of the following two are empty.
+    virtual void deleteRepeatedClefsAndKeys();
+    virtual void insertRepeatedClefAndKey(double layoutX, int barNo);
 
     // The default implementation of the following is empty.  The
     // subclass is presumed to know what the staff's name is and

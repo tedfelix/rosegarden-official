@@ -4922,8 +4922,26 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     m_mark = new KComboBox(frame);
     layout->addWidget(m_mark, 0, 1);
     
-    m_mark->insertItem(i18n("Trill"));
-    m_mark->insertItem(i18n("Turn"));
+    m_marks.push_back(Rosegarden::Marks::Trill);
+    m_marks.push_back(Rosegarden::Marks::LongTrill);
+    m_marks.push_back(Rosegarden::Marks::TrillLine);
+    m_marks.push_back(Rosegarden::Marks::Turn);
+    m_marks.push_back(Rosegarden::Marks::Mordent);
+    m_marks.push_back(Rosegarden::Marks::MordentInverted);
+    m_marks.push_back(Rosegarden::Marks::MordentLong);
+    m_marks.push_back(Rosegarden::Marks::MordentLongInverted);
+
+    const QString markLabels[] = {
+	i18n("Trill"), i18n("Trill with line"), i18n("Trill line only"),
+	i18n("Turn"), i18n("Mordent"), i18n("Inverted mordent"),
+	i18n("Long mordent"), i18n("Long inverted mordent"),
+    };
+
+    for (size_t i = 0; i < m_marks.size(); ++i) {
+	m_mark->insertItem(NotePixmapFactory::toQPixmap
+			   (NotePixmapFactory::makeMarkMenuPixmap(m_marks[i])),
+			   markLabels[i]);
+    }
     m_mark->insertItem(i18n("Text mark"));
 
     connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
@@ -4986,14 +5004,16 @@ UseOrnamentDialog::setupFromConfig()
 	  strtoqstr(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
     bool retune = config->readBoolEntry("useornamentretune", true);
 
-    if (mark == Rosegarden::Marks::Trill) {
-	m_mark->setCurrentItem(0);
-	m_text->setEnabled(false);
-    } else if (mark == Rosegarden::Marks::Turn) {
-	m_mark->setCurrentItem(1);
-	m_text->setEnabled(false);
-    } else {
-	m_mark->setCurrentItem(2);
+    size_t i = 0;
+    for (i = 0; i < m_marks.size(); ++i) {
+	if (mark == m_marks[i]) {
+	    m_mark->setCurrentItem(i);
+	    m_text->setEnabled(false);
+	    break;
+	}
+    }
+    if (i >= m_marks.size()) {
+	m_mark->setCurrentItem(m_marks.size());
 	m_text->setEnabled(true);
 	m_text->setText(strtoqstr(Rosegarden::Marks::getTextFromMark(mark)));
     }
@@ -5032,13 +5052,9 @@ UseOrnamentDialog::getId() const
 Rosegarden::Mark
 UseOrnamentDialog::getMark() const
 {
-    if (m_mark->currentItem() == 0) {
-	return Rosegarden::Marks::Trill;
-    } else if (m_mark->currentItem() == 1) {
-	return Rosegarden::Marks::Turn;
-    } else {
-	return Rosegarden::Marks::getTextMark(qstrtostr(m_text->text()));
-    }
+    if (int(m_marks.size()) > m_mark->currentItem())
+	return m_marks[m_mark->currentItem()];
+    else return Rosegarden::Marks::getTextMark(qstrtostr(m_text->text()));
 }
 
 bool

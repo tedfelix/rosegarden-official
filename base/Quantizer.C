@@ -1117,7 +1117,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 
 long
 NotationQuantizer::Impl::scoreAbsoluteTimeForBase(Segment *s,
-						  const Segment::iterator &i,
+						  const Segment::iterator & /* i */,
 						  int depth,
 						  timeT base,
 						  timeT sigTime,

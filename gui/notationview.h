@@ -484,6 +484,9 @@ public slots:
 
     void slotEditAddClef();
     void slotEditAddKeySignature();
+    void slotEditAddSustainDown();
+    void slotEditAddSustainUp();
+    void slotEditAddSustain(bool down);
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotFinePositionLeft();

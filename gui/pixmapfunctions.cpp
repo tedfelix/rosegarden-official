@@ -122,6 +122,34 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minValue)
 }
 
 QPixmap
+PixmapFunctions::shadePixmap(const QPixmap &map)
+{
+    QImage image = map.convertToImage();
+
+    int h, s, v;
+
+    for (int y = 0; y < image.height(); ++y) {
+        for (int x = 0; x < image.width(); ++x) {
+
+            QColor pixel(image.pixel(x, y));
+
+            pixel.hsv(&h, &s, &v);
+
+            image.setPixel
+                (x, y, QColor(h,
+                              s,
+			      255 - ((255 - v) / 2),
+                              QColor::Hsv).rgb());
+        }
+    }
+
+    QPixmap rmap;
+    rmap.convertFromImage(image);
+    if (map.mask()) rmap.setMask(*map.mask());
+    return rmap;
+}
+
+QPixmap
 PixmapFunctions::flipVertical(const QPixmap &map)
 {
     QPixmap rmap;

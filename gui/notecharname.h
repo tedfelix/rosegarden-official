@@ -76,9 +76,18 @@ extern const CharName STACCATISSIMO;
 extern const CharName MARCATO;
 extern const CharName FERMATA;
 extern const CharName TRILL;
+extern const CharName TRILL_LINE;
 extern const CharName TURN;
 extern const CharName UP_BOW;
 extern const CharName DOWN_BOW;
+
+extern const CharName MORDENT;
+extern const CharName MORDENT_INVERTED;
+extern const CharName MORDENT_LONG;
+extern const CharName MORDENT_LONG_INVERTED;
+
+extern const CharName PEDAL_MARK;
+extern const CharName PEDAL_UP_MARK;
 
 extern const CharName C_CLEF;
 extern const CharName G_CLEF;

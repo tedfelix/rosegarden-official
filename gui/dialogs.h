@@ -966,6 +966,8 @@ public slots:
 protected:
     void setupFromConfig();
 
+    std::vector<Rosegarden::Mark> m_marks;
+
     Rosegarden::Composition  *m_composition;
     KComboBox                *m_ornament;
     KComboBox                *m_mark;

@@ -66,6 +66,7 @@ NoteFontMap::NoteFontMap(string name) :
     m_srcDirectory(name),
     m_characterDestination(0),
     m_hotspotCharName(""),
+    m_errorString(i18n("unknown error")),
     m_ok(true)
 {
     m_fontDirectory = KGlobal::dirs()->findResource("appdata", "fonts/");
@@ -639,20 +640,22 @@ NoteFontMap::startElement(const QString &, const QString &,
 bool
 NoteFontMap::error(const QXmlParseException& exception)
 {
-    m_errorString = QString("%1 at line %2, column %3")
+    m_errorString = QString("%1 at line %2, column %3: %4")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
-	.arg(exception.columnNumber());
+	.arg(exception.columnNumber())
+	.arg(m_errorString);
     return QXmlDefaultHandler::error(exception);
 }
 
 bool
 NoteFontMap::fatalError(const QXmlParseException& exception)
 {
-    m_errorString = QString("%1 at line %2, column %3")
+    m_errorString = QString("%1 at line %2, column %3: %4")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
-	.arg(exception.columnNumber());
+	.arg(exception.columnNumber())
+	.arg(m_errorString);
     return QXmlDefaultHandler::fatalError(exception);
 }
 
@@ -1494,10 +1497,49 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     return ok;
 }
 
+bool
+NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
+			  bool inverted) const
+{
+    CharName charName(getNameShaded(baseCharName));
+
+    QPixmap *found = 0;
+    bool ok = lookup(charName, inverted, found);
+    if (ok) {
+	if (found) {
+	    pixmap = *found;
+	    return true;
+	} else {
+	    pixmap = *m_blankPixmap;
+	    return false;
+	}
+    }
+
+    QPixmap basePixmap;
+    ok = getPixmap(baseCharName, basePixmap, inverted);
+
+    if (!ok) {
+	add(charName, inverted, 0);
+	pixmap = *m_blankPixmap;
+	return false;
+    }
+
+    found = new QPixmap(PixmapFunctions::shadePixmap(basePixmap));
+    add(charName, inverted, found);
+    pixmap = *found;
+    return ok;
+}
+
 CharName
 NoteFont::getNameWithColour(CharName base, int hue) const
 {
     return qstrtostr(QString("%1__%2").arg(hue).arg(strtoqstr(base)));
+}
+
+CharName
+NoteFont::getNameShaded(CharName base) const
+{
+    return qstrtostr(QString("shaded__%1").arg(strtoqstr(base)));
 }
 
 bool
@@ -1641,6 +1683,53 @@ NoteFont::getCharacterColoured(CharName charName,
 {
     NoteCharacter character;
     getCharacterColoured(charName, hue, minValue, character, type, inverted);
+    return character;
+}
+
+bool
+NoteFont::getCharacterShaded(CharName charName,
+			     NoteCharacter &character,
+			     CharacterType type,
+			     bool inverted)
+{
+    QPixmap pixmap;
+    if (!getShadedPixmap(charName, pixmap, inverted)) {
+	return false;
+    }
+
+    if (type == Screen) {
+
+	character = NoteCharacter(pixmap,
+				  getHotspot(charName, inverted),
+				  0);
+
+    } else {
+
+	// Get the pointer direct from cache (depends on earlier call
+	// to getPixmap to put it in the cache if available)
+
+	QPixmap *pmapptr = 0;
+	CharName cCharName(getNameShaded(charName));
+	bool found = lookup(cCharName, inverted, pmapptr);
+
+	NoteCharacterDrawRep *rep = 0;
+	if (found && pmapptr) rep = lookupDrawRep(pmapptr);
+
+	character = NoteCharacter(pixmap,
+				  getHotspot(charName, inverted),
+				  rep);
+    }
+
+    return true;
+}
+
+NoteCharacter
+NoteFont::getCharacterShaded(CharName charName,
+			     CharacterType type,
+			     bool inverted)
+{
+    NoteCharacter character;
+    getCharacterShaded(charName, character, type, inverted);
     return character;
 }
 

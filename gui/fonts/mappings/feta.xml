@@ -88,18 +88,18 @@
 	<symbol name="MUSICAL SYMBOL TR" font-id="0" code="107" glyph="68"/>
 	<symbol name="MUSICAL SYMBOL TURN" font-id="0" code="106" glyph="67"/>
 
-        <!-- The mordants are not Unicode names: -->
-	<symbol name="MUSICAL SYMBOL MORDANT" font-id="0" glyph="86"/>
-	<symbol name="MUSICAL SYMBOL INVERTED MORDANT" font-id="0" glyph="87"/>
-	<symbol name="MUSICAL SYMBOL LONG MORDANT" font-id="0" glyph="88"/>
-	<symbol name="MUSICAL SYMBOL LONG INVERTED MORDANT" font-id="0" glyph="89"/>
-	<symbol name="MUSICAL SYMBOL DOWN HOOK LONG MORDANT" font-id="0" glyph="90"/>
-	<symbol name="MUSICAL SYMBOL UP HOOK LONG MORDANT" font-id="0" glyph="91"/>
-	<symbol name="MUSICAL SYMBOL DOWN HOOK LONG INVERTED MORDANT" font-id="0" glyph="92"/>
-	<symbol name="MUSICAL SYMBOL UP HOOK LONG INVERTED MORDANT" font-id="0" glyph="93"/>
+        <!-- The mordents and trill line are not Unicode names: -->
+	<symbol name="MUSICAL SYMBOL COMBINING TRILL LINE" font-id="0" glyph="82"/>
+	<symbol name="MUSICAL SYMBOL MORDENT" font-id="0" glyph="87"/>
+	<symbol name="MUSICAL SYMBOL INVERTED MORDENT" font-id="0" glyph="86"/>
+	<symbol name="MUSICAL SYMBOL LONG MORDENT" font-id="0" glyph="89"/>
+	<symbol name="MUSICAL SYMBOL LONG INVERTED MORDENT" font-id="0" glyph="88"/>
 
 	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" font-id="0" code="103" glyph="64"/>
 	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" font-id="0" code="104" glyph="65"/>
+
+	<symbol name="MUSICAL SYMBOL PEDAL MARK" font-id="0" glyph="126"/>
+	<symbol name="MUSICAL SYMBOL PEDAL UP MARK" font-id="0" glyph="120"/>
 
         <symbol name="MUSICAL SYMBOL C CLEF" font-id="0" code="145" glyph="108"/>
         <symbol name="MUSICAL SYMBOL G CLEF" font-id="0" code="149" glyph="112"/>
@@ -168,6 +168,9 @@
         </hotspot>
         <hotspot name="MUSICAL SYMBOL SIXTY-FOURTH REST">
 		<scaled y="0.4"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL COMBINING TRILL LINE">
+		<scaled x="0.3" y="0.5"/>
         </hotspot>
 </font-hotspots>
 

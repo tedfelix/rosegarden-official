@@ -30,8 +30,8 @@
 #include <qpainter.h>
 
 #include "NotationTypes.h"
+#include "notefont.h"
 
-class NoteFont;
 class NoteStyle;
 class NotePixmapCache;
 
@@ -158,6 +158,9 @@ public:
     void setSelected(bool selected) { m_selected = selected; }
     bool isSelected() const { return m_selected; }
 
+    void setShaded(bool shaded) { m_shaded = shaded; }
+    bool isShaded() const { return m_shaded; }
+
     void setNoteStyle(NoteStyle *style) { m_style = style; }
     const NoteStyle *getNoteStyle() const { return m_style; } 
 
@@ -174,6 +177,8 @@ public:
     QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
     QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above, bool phrasing);
     QCanvasPixmap* makeOttavaPixmap(int length, int octavesUp);
+    QCanvasPixmap* makePedalDownPixmap();
+    QCanvasPixmap* makePedalUpPixmap();
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
 
@@ -194,9 +199,10 @@ public:
 
     // Other support methods for producing pixmaps for other contexts:
 
-    static QCanvasPixmap* makeToolbarPixmap(const char *name);
-    static QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
+    static QCanvasPixmap *makeToolbarPixmap(const char *name);
+    static QCanvasPixmap *makeNoteMenuPixmap(Rosegarden::timeT duration,
 					     Rosegarden::timeT &errorReturn);
+    static QCanvasPixmap *makeMarkMenuPixmap(Rosegarden::Mark);
 
     QCanvasPixmap* makePitchDisplayPixmap(int pitch,
 					  const Rosegarden::Clef &clef,
@@ -306,11 +312,25 @@ protected:
 			     int maskHeight = -1);
     QCanvasPixmap* makeCanvasPixmap(QPoint hotspot, bool generateMask = false);
 
+    enum ColourType {
+	PlainColour,
+	QuantizedColour,
+	HighlightedColour,
+	TriggerColour
+    };
+
+    /// draws selected/shaded status from m_selected/m_shaded:
+    NoteCharacter getCharacter(CharName name, ColourType type, bool inverted);
+
+    /// draws selected/shaded status from m_selected/m_shaded:
+    bool getCharacter(CharName name, NoteCharacter &ch, ColourType type, bool inverted);
+
     //--------------- Data members ---------------------------------
 
     NoteFont *m_font;
     NoteStyle *m_style;
     bool m_selected;
+    bool m_shaded;
 
     int m_noteBodyWidth, m_noteBodyHeight;
     int m_left, m_right, m_above, m_below;

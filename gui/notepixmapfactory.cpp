@@ -261,6 +261,8 @@ NotePixmapParameters::getNormalMarks() const
 	    *mi == Rosegarden::Marks::UpBow ||
 	    *mi == Rosegarden::Marks::DownBow ||
 	    *mi == Rosegarden::Marks::Trill ||
+	    *mi == Rosegarden::Marks::LongTrill ||
+	    *mi == Rosegarden::Marks::TrillLine ||
 	    *mi == Rosegarden::Marks::Turn ||
 	    Rosegarden::Marks::isFingeringMark(*mi)) continue;
 	
@@ -292,6 +294,8 @@ NotePixmapParameters::getAboveMarks() const
 	    *mi == Rosegarden::Marks::UpBow ||
 	    *mi == Rosegarden::Marks::DownBow ||
 	    *mi == Rosegarden::Marks::Trill ||
+	    *mi == Rosegarden::Marks::LongTrill ||
+	    *mi == Rosegarden::Marks::TrillLine ||
 	    *mi == Rosegarden::Marks::Turn) {
 	    marks.push_back(*mi);
 	}
@@ -302,6 +306,7 @@ NotePixmapParameters::getAboveMarks() const
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_selected(false),
+    m_shaded(false),
     m_tupletCountFont("times", 8, QFont::Bold),
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont("times", 8, QFont::Bold, true),
@@ -327,6 +332,7 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
 
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
+    m_shaded(false),
     m_tupletCountFont(npf.m_tupletCountFont),
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont(npf.m_textMarkFont),
@@ -355,6 +361,7 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 {
     if (&npf != this) {
 	m_selected = npf.m_selected;
+	m_shaded = npf.m_shaded;
 	m_timeSigFont = npf.m_timeSigFont;
 	m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
 	m_bigTimeSigFont = npf.m_bigTimeSigFont;
@@ -570,7 +577,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 			      params.m_accidentalExtra);
     }
 
-    NoteCharacter dot(m_font->getCharacter(NoteCharacterNames::DOT, charType));
+    NoteCharacter dot(getCharacter(NoteCharacterNames::DOT, PlainColour, charType));
     int dotWidth = dot.getWidth();
     if (dotWidth < getNoteBodyWidth()/2) dotWidth = getNoteBodyWidth()/2;
 
@@ -661,40 +668,16 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         drawAccidental(params.m_accidental, params.m_cautionary);
     }
 
-    NoteCharacter body;
     NoteStyle::CharNameRec charNameRec
 	(m_style->getNoteHeadCharName(params.m_noteType));
     CharName charName = charNameRec.first;
     bool inverted = charNameRec.second;
-
-    if (m_selected || params.m_selected) {
-	body = m_font->getCharacterColoured
-	    (charName,
-	     RosegardenGUIColours::SelectedElementHue,
-	     RosegardenGUIColours::SelectedElementMinValue,
-	     charType, inverted);
-    } else if (params.m_highlighted) {
-	body = m_font->getCharacterColoured
-	    (charName,
-	     RosegardenGUIColours::HighlightedElementHue,
-	     RosegardenGUIColours::HighlightedElementMinValue,
-	     charType, inverted);
-    } else if (params.m_quantized) {
-	body = m_font->getCharacterColoured
-	    (charName,
-	     RosegardenGUIColours::QuantizedNoteHue,
-	     RosegardenGUIColours::QuantizedNoteMinValue,
-	     charType, inverted);
-    } else if (params.m_trigger) {
-	body = m_font->getCharacterColoured
-	    (charName,
-	     RosegardenGUIColours::TriggerNoteHue,
-	     RosegardenGUIColours::TriggerNoteMinValue,
-	     charType, inverted);
-    } else {
-	body = m_font->getCharacter
-	    (charName, charType, inverted);
-    }
+    NoteCharacter body = getCharacter
+	(charName,
+	 params.m_highlighted ? HighlightedColour :
+	 params.m_quantized ? QuantizedColour :
+	 params.m_trigger ? TriggerColour : PlainColour,
+	 inverted);
 
     QPoint bodyLocation(m_left - m_borderX,
 			m_above - m_borderY + getStaffLineThickness()/2);
@@ -868,10 +851,8 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a,
 void
 NotePixmapFactory::drawAccidental(Accidental a, bool cautionary)
 {
-    NoteCharacter ac
-	(m_font->getCharacter
-	 (m_style->getAccidentalCharName(a),
-	  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen));
+    NoteCharacter ac = getCharacter
+	(m_style->getAccidentalCharName(a), PlainColour, false);
 
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
@@ -937,6 +918,11 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 
 	if (!Rosegarden::Marks::isFingeringMark(*i)) {
 
+	    if (*i == Rosegarden::Marks::LongTrill ||
+		*i == Rosegarden::Marks::TrillLine) {
+		m_right = std::max(m_right, params.m_width);
+	    }
+
 	    NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(*i)));
 	    height += character.getHeight() + gap;
 	    if (character.getWidth() > width) width = character.getWidth();
@@ -981,10 +967,9 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	if (!Rosegarden::Marks::isTextMark(*i)) {
 
-	    NoteCharacter character
-		(m_font->getCharacter(m_style->getMarkCharName(*i),
-		  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-		  !normalMarksAreAbove));
+	    NoteCharacter character = getCharacter
+		(m_style->getMarkCharName(*i), PlainColour, 
+		 !normalMarksAreAbove);
 
 	    int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
 	    int y = (normalMarksAreAbove ?
@@ -1024,18 +1009,42 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	if (!Rosegarden::Marks::isFingeringMark(*i)) {
 
-	    NoteCharacter character
-		(m_font->getCharacter
-		 (m_style->getMarkCharName(*i),
-		  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-		  false));
-	    
-	    int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
-	    int y = m_above - dy - character.getHeight() - 1;
-	    
-	    m_p->drawNoteCharacter(x, y, character);
-	    dy += character.getHeight() + gap;
+	    int x = m_left + m_noteBodyWidth/2;
+	    int y = m_above - dy - 1;
 
+	    if (*i != Rosegarden::Marks::TrillLine) {
+
+		NoteCharacter character
+		    (getCharacter
+		     (m_style->getMarkCharName(*i), PlainColour,
+		      false));
+	    
+		x -= character.getWidth()/2;
+		y -= character.getHeight();
+	    
+		m_p->drawNoteCharacter(x, y, character);
+
+		y += character.getHeight()/2;
+		x += character.getWidth();
+
+		dy += character.getHeight() + gap;
+	    }
+
+	    if (*i == Rosegarden::Marks::LongTrill ||
+		*i == Rosegarden::Marks::TrillLine) {
+		NoteCharacter extension;
+		if (getCharacter(NoteCharacterNames::TRILL_LINE, extension,
+				 PlainColour, false)) {
+		    while (x < m_left + params.m_width - extension.getWidth()) {
+			x -= extension.getHotspot().x();
+			m_p->drawNoteCharacter(x, y, extension);
+			x += extension.getWidth();
+		    }
+		}
+		if (*i == Rosegarden::Marks::TrillLine)
+		    dy += extension.getHeight() + gap;
+	    }
+			 
 	} else {
 	    QString text = strtoqstr(Rosegarden::Marks::getFingeringFromMark(*i));
 	    QRect bounds = m_fingeringFontMetrics.boundingRect(text);
@@ -1237,19 +1246,19 @@ NotePixmapFactory::drawFlags(int flagCount,
     if (flagCount < 1) return;
 
     NoteCharacter flagChar;
-    bool found = m_font->getCharacter(m_style->getFlagCharName(flagCount),
-				      flagChar,
-				      m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-				      !params.m_stemGoesUp);
+    bool found = getCharacter(m_style->getFlagCharName(flagCount),
+			      flagChar,
+			      PlainColour,
+			      !params.m_stemGoesUp);
     
     if (!found) {
 
 	// Handle fonts that don't have all the flags in separate characters
 
-	found = m_font->getCharacter(m_style->getPartialFlagCharName(false),
-				     flagChar,
-				     m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-				     !params.m_stemGoesUp);
+	found = getCharacter(m_style->getPartialFlagCharName(false),
+			     flagChar,
+			     PlainColour,
+			     !params.m_stemGoesUp);
 
 	if (!found) {
 	    std::cerr << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
@@ -1261,10 +1270,10 @@ NotePixmapFactory::drawFlags(int flagCount,
 	NoteCharacter oneFlagChar;
 	bool foundOne =
 	    (flagCount > 1 ?
-	     m_font->getCharacter(m_style->getPartialFlagCharName(true),
-				  oneFlagChar,
-				  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-				  !params.m_stemGoesUp) : false);
+	     getCharacter(m_style->getPartialFlagCharName(true),
+			  oneFlagChar,
+			  PlainColour,
+			  !params.m_stemGoesUp) : false);
 	
 	unsigned int flagSpace = m_noteBodyHeight;
 	(void)m_font->getFlagSpacing(flagSpace);
@@ -1751,9 +1760,9 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     CharName charName(m_style->getRestCharName(params.m_noteType));
     bool encache = false;
 
-    if (params.m_tupletCount == 0 && !m_selected) {
+    if (params.m_tupletCount == 0 && !m_selected && !m_shaded) {
 	if (params.m_dots == 0) {
-	    return m_font->getCharacter(charName).getCanvasPixmap();
+	    return getCharacter(charName, PlainColour, false).getCanvasPixmap();
 	} else {
 	    NotePixmapCache::iterator ci(m_dottedRestCache->find(charName));
 	    if (ci != m_dottedRestCache->end())
@@ -1791,24 +1800,13 @@ void
 NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
 			       QPoint &hotspot, QPainter *painter, int x, int y)
 {
-    NoteCharacter character;
     CharName charName(m_style->getRestCharName(params.m_noteType));
+    NoteCharacter character = getCharacter(charName,
+					   params.m_quantized ? QuantizedColour :
+					   PlainColour,
+					   false);
 
-    if (m_selected || params.m_selected) {
-	character = m_font->getCharacterColoured
-	    (charName, 
-	     RosegardenGUIColours::SelectedElementHue,
-	     RosegardenGUIColours::SelectedElementMinValue);
-    } else if (params.m_quantized) {
-	character = m_font->getCharacterColoured
-	    (charName,
-	     RosegardenGUIColours::QuantizedNoteHue,
-	     RosegardenGUIColours::QuantizedNoteMinValue);
-    } else {
-        character = m_font->getCharacter(charName);
-    }
-
-    NoteCharacter dot = m_font->getCharacter(NoteCharacterNames::DOT);
+    NoteCharacter dot = getCharacter(NoteCharacterNames::DOT, PlainColour, false);
 
     int dotWidth = dot.getWidth();
     if (dotWidth < getNoteBodyWidth()/2) dotWidth = getNoteBodyWidth()/2;
@@ -1861,16 +1859,8 @@ QCanvasPixmap*
 NotePixmapFactory::makeClefPixmap(const Clef &clef)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeClefPixmap");
-    NoteCharacter plain;
-
-    if (m_selected) {
-	plain = m_font->getCharacterColoured
-	    (m_style->getClefCharName(clef),
-	     RosegardenGUIColours::SelectedElementHue,
-	     RosegardenGUIColours::SelectedElementMinValue);
-    } else {
-	plain = m_font->getCharacter(m_style->getClefCharName(clef));
-    }
+    NoteCharacter plain = getCharacter(m_style->getClefCharName(clef),
+				       PlainColour, false);
 
     int oct = clef.getOctaveOffset();
     if (oct == 0) return plain.getCanvasPixmap();
@@ -1903,17 +1893,25 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 }
 
 QCanvasPixmap*
+NotePixmapFactory::makePedalDownPixmap()
+{
+    return getCharacter(NoteCharacterNames::PEDAL_MARK, PlainColour, false)
+	.getCanvasPixmap();
+}
+
+QCanvasPixmap*
+NotePixmapFactory::makePedalUpPixmap()
+{
+    return getCharacter(NoteCharacterNames::PEDAL_UP_MARK, PlainColour, false)
+	.getCanvasPixmap();
+}
+
+QCanvasPixmap*
 NotePixmapFactory::makeUnknownPixmap()
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeUnknownPixmap");
-    if (m_selected) {
-        return m_font->getCharacterColoured
-	    (NoteCharacterNames::UNKNOWN,
-	     RosegardenGUIColours::SelectedElementHue,
-	     RosegardenGUIColours::SelectedElementMinValue).getCanvasPixmap();
-    } else {
-        return m_font->getCharacter(NoteCharacterNames::UNKNOWN).getCanvasPixmap();
-    }
+    return getCharacter(NoteCharacterNames::UNKNOWN, PlainColour, false)
+	.getCanvasPixmap();
 }
 
 QCanvasPixmap*
@@ -1947,6 +1945,28 @@ NotePixmapFactory::makeNoteMenuPixmap(Rosegarden::timeT duration,
     return makeToolbarPixmap(noteName);
 }
 
+QCanvasPixmap *
+NotePixmapFactory::makeMarkMenuPixmap(Rosegarden::Mark mark)
+{
+    if (mark == Rosegarden::Marks::Sforzando ||
+	mark == Rosegarden::Marks::Rinforzando) {
+	return makeToolbarPixmap(mark.c_str());
+    } else {
+	NoteFont *font = 0;
+	try {
+	    font = NoteFontFactory::getFont
+		(NoteFontFactory::getDefaultFontName(), 6);
+	} catch (Rosegarden::Exception) {
+	    font = NoteFontFactory::getFont
+		(NoteFontFactory::getDefaultFontName(),
+		 NoteFontFactory::getDefaultSize(NoteFontFactory::getDefaultFontName()));
+	}
+	NoteCharacter character = font->getCharacter
+	    (NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle)->
+	     getMarkCharName(mark));
+	return character.getCanvasPixmap();
+    }
+}
 
 QCanvasPixmap*
 NotePixmapFactory::makeKeyPixmap(const Key &key,
@@ -1969,22 +1989,9 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
     NoteCharacter keyCharacter;
     NoteCharacter cancelCharacter;
 
-    if (m_selected) {
-        keyCharacter = m_font->getCharacterColoured
-	    (keyCharName,
-	     RosegardenGUIColours::SelectedElementHue,
-	     RosegardenGUIColours::SelectedElementMinValue);
-	if (cancelCount > 0) {
-	    cancelCharacter = m_font->getCharacterColoured
-		(NoteCharacterNames::NATURAL,
-		 RosegardenGUIColours::SelectedElementHue,
-		 RosegardenGUIColours::SelectedElementMinValue);
-	}
-    } else {
-        keyCharacter = m_font->getCharacter(keyCharName);
-	if (cancelCount > 0) {
-	    cancelCharacter = m_font->getCharacter(NoteCharacterNames::NATURAL);
-	}
+    keyCharacter = getCharacter(keyCharName, PlainColour, false);
+    if (cancelCount > 0) {
+	cancelCharacter = getCharacter(NoteCharacterNames::NATURAL, PlainColour, false);
     }
 
     int x = 0;
@@ -2005,7 +2012,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
 
 	// cancellation first
 
-	for (unsigned int i = 0; i < cancelCount; ++i) {
+	for (int i = 0; i < cancelCount; ++i) {
 	    
 	    int h = ah0[ah0.size() - cancelCount + i];
 	    int y = (lw * 2) + ((8 - h) * lw) / 2 - cancelCharacter.getHotspot().y();
@@ -2038,7 +2045,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
 	    x += between;
 	}
 
-	for (unsigned int i = 0; i < cancelCount; ++i) {
+	for (int i = 0; i < cancelCount; ++i) {
 	    
 	    int h = ah0[ah0.size() - cancelCount + i];
 	    int y = (lw * 2) + ((8 - h) * lw) / 2 - cancelCharacter.getHotspot().y();
@@ -2413,6 +2420,9 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 
 	    if (m_selected)
 		m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+	    else if (m_shaded) {
+		m_p->painter().setPen(Qt::gray);
+	    }
 	    havePixmap = true;
 	}
 /*
@@ -2522,6 +2532,9 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     if (m_selected) {
 	m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
 	pen.setColor(RosegardenGUIColours::SelectedElement);
+    } else if (m_shaded) {
+	m_p->painter().setPen(Qt::gray);
+	pen.setColor(Qt::gray);
     }
 
     m_p->painter().setFont(m_ottavaFont);
@@ -2628,8 +2641,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     if (sig.isCommon()) {
 
 	NoteCharacter character;
-	if (m_font->getCharacter(NoteCharacterNames::COMMON_TIME, character)) {
-	    //!!! selected?
+	if (getCharacter(NoteCharacterNames::COMMON_TIME, character,
+			 PlainColour, false)) {
 	    createPixmapAndMask(character.getWidth(), character.getHeight());
 	    m_p->drawNoteCharacter(0, 0, character);
 	    return makeCanvasPixmap(QPoint(0, character.getHeight()/2));
@@ -2643,6 +2656,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
 	if (m_selected) {
 	    m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+	} else if (m_shaded) {
+	    m_p->painter().setPen(Qt::gray);
 	}
 	
 	m_p->painter().setFont(m_bigTimeSigFont);
@@ -2673,8 +2688,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	denomS.setNum(denominator);
 
 	NoteCharacter character;
-	if (m_font->getCharacter(m_style->getTimeSignatureDigitName(0),
-				 character)) {
+	if (getCharacter(m_style->getTimeSignatureDigitName(0), character,
+			 PlainColour, false)) {
 
 	    // if the 0 digit exists, we assume 1-9 also all exist
 	    // and all have the same width
@@ -2687,13 +2702,12 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
 	    createPixmapAndMask(width, height);
 
-	    //!!! selected
-
 	    for (unsigned int i = 0; i < numS.length(); ++i) {
 		int x = width - (width - numW) / 2 - (i + 1) * character.getWidth();
 		int y = height/4 - (character.getHeight()/2);
-		NoteCharacter charCharacter = m_font->getCharacter
-		    (m_style->getTimeSignatureDigitName(numerator % 10));
+		NoteCharacter charCharacter = getCharacter
+		    (m_style->getTimeSignatureDigitName(numerator % 10),
+		     PlainColour, false);
 		m_p->drawNoteCharacter(x, y, charCharacter);
 		numerator /= 10;
 	    }
@@ -2701,8 +2715,9 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	    for (unsigned int i = 0; i < denomS.length(); ++i) {
 		int x = width - (width - denomW) / 2 - (i + 1) * character.getWidth();
 		int y = height - height/4 - (character.getHeight()/2);
-		NoteCharacter charCharacter = m_font->getCharacter
-		    (m_style->getTimeSignatureDigitName(denominator % 10));
+		NoteCharacter charCharacter = getCharacter
+		    (m_style->getTimeSignatureDigitName(denominator % 10),
+		     PlainColour, false);
 		m_p->drawNoteCharacter(x, y, charCharacter);
 		denominator /= 10;
 	    }
@@ -2719,6 +2734,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	
 	if (m_selected) {
 	    m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+	} else if (m_shaded) {
+	    m_p->painter().setPen(Qt::gray);
 	}
 
 	m_p->painter().setFont(m_timeSigFont);
@@ -2888,6 +2905,7 @@ NotePixmapFactory::drawTextAux(const Rosegarden::Text &text,
     }
     
     if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+    else if (m_shaded) m_p->painter().setPen(Qt::gray);
 
     m_p->painter().setFont(textFont);
     if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
@@ -2925,6 +2943,7 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
     createPixmapAndMask(pixmapWidth, pixmapHeight);
 
     if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+    else if (m_shaded) m_p->painter().setPen(Qt::gray);
 
     m_p->painter().setFont(textFont);
     if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
@@ -2990,6 +3009,63 @@ NotePixmapFactory::makeCanvasPixmap(QPoint hotspot, bool generateMask)
     delete m_generatedPixmap;
     delete m_generatedMask;
     return p;
+}
+
+NoteCharacter
+NotePixmapFactory::getCharacter(CharName name, ColourType type, bool inverted)
+{
+    NoteCharacter ch;
+    getCharacter(name, ch, type, inverted);
+    return ch;
+}
+
+bool
+NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
+				ColourType type, bool inverted)
+{
+    NoteFont::CharacterType charType =
+	m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen;
+
+    if (m_selected) {
+	return m_font->getCharacterColoured
+	    (name,
+	     RosegardenGUIColours::SelectedElementHue,
+	     RosegardenGUIColours::SelectedElementMinValue,
+	     ch, charType, inverted);
+    }
+
+    if (m_shaded) {
+	return m_font->getCharacterShaded(name, ch, charType, inverted);
+    }
+
+    switch (type) {
+
+    case PlainColour:
+	return m_font->getCharacter(name, ch, charType, inverted);
+	
+    case QuantizedColour:
+	return m_font->getCharacterColoured
+	    (name,
+	     RosegardenGUIColours::QuantizedNoteHue,
+	     RosegardenGUIColours::QuantizedNoteMinValue,
+	     ch, charType, inverted);
+
+    case HighlightedColour:
+	return m_font->getCharacterColoured
+	    (name,
+	     RosegardenGUIColours::HighlightedElementHue,
+	     RosegardenGUIColours::HighlightedElementMinValue,
+	     ch, charType, inverted);
+
+    case TriggerColour:
+	return m_font->getCharacterColoured
+	    (name,
+	     RosegardenGUIColours::TriggerNoteHue,
+	     RosegardenGUIColours::TriggerNoteMinValue,
+	     ch, charType, inverted);
+    }
+
+    return m_font->getCharacter(name, ch, charType, inverted);
 }
 
 QPoint

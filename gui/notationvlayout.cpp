@@ -126,7 +126,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 	el->event()->get<Int>(DISPLACED_Y, dyRaw);
 	displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
-        el->setLayoutY(0);
+        el->setLayoutY(staff.getLayoutYForHeight(-9));
 
         if (el->isRest()) {
 

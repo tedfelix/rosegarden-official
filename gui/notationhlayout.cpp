@@ -1704,8 +1704,9 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve,
 	    w = 0;
 
 	} else {
-	    NOTATION_DEBUG << "NotationHLayout::getLayoutWidth(): no case for event type " << e.event()->getType() << endl;
-	    w += 24;
+//	    NOTATION_DEBUG << "NotationHLayout::getLayoutWidth(): no case for event type " << e.event()->getType() << endl;
+//	    w += 24;
+	    w = 0;
 	}
 
 	return w;

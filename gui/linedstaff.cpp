@@ -681,6 +681,7 @@ LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
     Rosegarden::Profiler profiler("LinedStaff::sizeStaff", true);
 
     deleteBars();
+    deleteRepeatedClefsAndKeys();
     deleteTimeSignatures();
 
 //    RG_DEBUG << "LinedStaff::sizeStaff" << endl;
@@ -807,6 +808,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     BarStyle style = getBarStyle(barNo);
 
     if (style == RepeatBothBar && firstBarInRow) style = RepeatStartBar;
+
+    if (firstBarInRow) insertRepeatedClefAndKey(layoutX, barNo);
 
     BarLine *line = new BarLine(m_canvas, layoutX,
 				getBarLineHeight(), barThickness, getLineSpacing(),
@@ -950,6 +953,18 @@ LinedStaff::deleteTimeSignatures()
 
 void
 LinedStaff::insertTimeSignature(double, const Rosegarden::TimeSignature &)
+{
+    // default implementation is empty
+}
+
+void
+LinedStaff::deleteRepeatedClefsAndKeys()
+{
+    // default implementation is empty
+}
+
+void
+LinedStaff::insertRepeatedClefAndKey(double, int)
 {
     // default implementation is empty
 }

@@ -97,19 +97,17 @@ namespace Marks
     const Mark Sforzando = getTextMark("sf");
     const Mark Rinforzando = getTextMark("rf");
     const Mark Trill = "trill";
+    const Mark LongTrill = "long-trill";
+    const Mark TrillLine = "trill-line";
     const Mark Turn = "turn";
     const Mark Pause = "pause";
     const Mark UpBow = "up-bow";
     const Mark DownBow = "down-bow";
 
-    const Mark Mordant = "mordant";
-    const Mark MordantInverted = "mordant-inverted";
-    const Mark MordantLong = "mordant-long";
-    const Mark MordantLongInverted = "mordant-long-inverted";
-    const Mark MordantDownHookLong = "mordant-downhook-long";
-    const Mark MordantUpHookLong = "mordant-uphook-long";
-    const Mark MordantDownHookLongInverted = "mordant-downhook-long-inverted";
-    const Mark MordantUpHookLongInverted = "mordant-uphook-long-inverted";
+    const Mark Mordent = "mordent";
+    const Mark MordentInverted = "mordent-inverted";
+    const Mark MordentLong = "mordent-long";
+    const Mark MordentLongInverted = "mordent-long-inverted";
 
     string getTextMark(string text) {
         return string("text_") + text;
@@ -234,10 +232,9 @@ namespace Marks
 
         static Mark a[] = {
             NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato,
-            Sforzando, Rinforzando, Trill, Turn, Pause, UpBow, DownBow,
-	    Mordant, MordantInverted, MordantLong, MordantLongInverted,
-	    MordantDownHookLong, MordantUpHookLong, MordantDownHookLongInverted,
-	    MordantUpHookLongInverted
+            Sforzando, Rinforzando, Trill, LongTrill, TrillLine,
+	    Turn, Pause, UpBow, DownBow,
+	    Mordent, MordentInverted, MordentLong, MordentLongInverted
         };
 
         static std::vector<Mark> v;
@@ -1978,7 +1975,9 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 
     if (m_barReset != BarResetNone) {
 	if (acc == NoAccidental) {
-	    if (prevBarAcc != NoAccidental && prevBarAcc != keyAcc) {
+	    if (prevBarAcc != NoAccidental &&
+		prevBarAcc != keyAcc &&
+		!(prevBarAcc == Natural && keyAcc == NoAccidental)) {
 		cautionary = (m_barReset == BarResetCautionary);
 		if (keyAcc == NoAccidental) {
 		    acc = Natural;

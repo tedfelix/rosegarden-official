@@ -204,6 +204,16 @@ public:
      * Delete all time signatures
      */
     virtual void deleteTimeSignatures();
+    
+    /**
+     * Insert repeated clef and key at start of new line, at x-coordinate \a x.
+     */
+    virtual void insertRepeatedClefAndKey(double layoutX, int barNo);
+
+    /**
+     * Delete all repeated clefs and keys.
+     */
+    virtual void deleteRepeatedClefsAndKeys();
 
     /**
      * (Re)draw the staff name from the track's current name
@@ -418,6 +428,7 @@ protected:
 
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;
+    SpriteSet m_repeatedClefsAndKeys;
 
     typedef std::pair<int, Rosegarden::Clef> ClefChange;
     FastVector<ClefChange> m_clefChanges;

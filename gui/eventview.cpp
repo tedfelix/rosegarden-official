@@ -609,6 +609,23 @@ EventView::makeInitialSelection(Rosegarden::timeT time)
     EventViewItem *goodItem = 0;
     int goodItemNo = 0;
 
+    int i = 0;
+    
+    for (QListViewItem *child = m_eventList->firstChild(); 
+	 child;
+	 child = child->nextSibling()) {
+
+	EventViewItem *item = dynamic_cast<EventViewItem *>(child);
+
+	if (item) {
+	    if (item->getEvent()->getAbsoluteTime() > time) break;
+	    goodItem = item;
+	    goodItemNo = i;
+	}
+
+	++i;
+    }
+/*!!!
     for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
 
 	EventViewItem *item = dynamic_cast<EventViewItem *>
@@ -620,7 +637,7 @@ EventView::makeInitialSelection(Rosegarden::timeT time)
 	    goodItemNo = i;
 	}
     }
-
+*/
     if (goodItem) {
 	m_listSelection.push_back(goodItemNo);
 	m_eventList->setSelected(goodItem, true);

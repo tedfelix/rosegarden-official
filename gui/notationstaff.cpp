@@ -39,6 +39,7 @@
 #include "widgets.h"
 #include "notefont.h"
 #include "pixmapfunctions.h"
+#include "rosegardenguidoc.h" // for studio stuff that determines whether a controller is sustain or not
 
 #include "Event.h"
 #include "Segment.h"
@@ -50,6 +51,7 @@
 #include "Composition.h"
 #include "BaseProperties.h"
 #include "Profiler.h"
+#include "Studio.h" // for studio stuff that determines whether a controller is sustain or not
 
 using Rosegarden::timeT;
 using Rosegarden::Segment;
@@ -161,6 +163,74 @@ NotationStaff::deleteTimeSignatures()
     }
 
     m_timeSigs.clear();
+}
+
+void
+NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
+{
+    bool needClef = false, needKey = false;
+    timeT t;
+    
+    timeT barStart = getSegment().getComposition()->getBarStart(barNo);
+
+    Rosegarden::Clef clef = getSegment().getClefAtTime(barStart, t);
+    if (t < barStart) needClef = true;
+
+    Rosegarden::Key key = getSegment().getKeyAtTime(barStart, t);
+    if (t < barStart) needKey = true;
+
+    layoutX += m_notePixmapFactory->getBarMargin() / 2;
+
+    if (!m_notationView->isInPrintMode()) m_notePixmapFactory->setShaded(true);
+
+    if (needClef) {
+
+	int layoutY = getLayoutYForHeight(clef.getAxisHeight());
+
+	LinedStaffCoords coords =
+	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+    
+	QCanvasPixmap *pixmap = m_notePixmapFactory->makeClefPixmap(clef);
+
+	QCanvasNonElementSprite *sprite = 
+	    new QCanvasNonElementSprite(pixmap, m_canvas);
+
+	sprite->move(coords.first, coords.second);
+	sprite->show();
+	m_repeatedClefsAndKeys.insert(sprite);
+
+	layoutX += pixmap->width() + m_notePixmapFactory->getNoteBodyWidth() * 2 / 3;
+    }
+
+    if (needKey) {
+
+	int layoutY = getLayoutYForHeight(12);
+
+	LinedStaffCoords coords =
+	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+    
+	QCanvasPixmap *pixmap = m_notePixmapFactory->makeKeyPixmap(key, clef);
+
+	QCanvasNonElementSprite *sprite = 
+	    new QCanvasNonElementSprite(pixmap, m_canvas);
+
+	sprite->move(coords.first, coords.second);
+	sprite->show();
+	m_repeatedClefsAndKeys.insert(sprite);
+    }
+
+    m_notePixmapFactory->setShaded(false);
+}	
+
+void
+NotationStaff::deleteRepeatedClefsAndKeys()
+{
+    for (SpriteSet::iterator i = m_repeatedClefsAndKeys.begin();
+	 i != m_repeatedClefsAndKeys.end(); ++i) {
+	delete *i;
+    }
+
+    m_repeatedClefsAndKeys.clear();
 }
 
 void
@@ -824,6 +894,7 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	QCanvasPixmap *pixmap = 0;
 
 	m_notePixmapFactory->setSelected(selected);
+	m_notePixmapFactory->setShaded(invisible);
 	int z = selected ? 3 : 0;
 
 	// these are actually only used for the printer stuff
@@ -1067,6 +1138,62 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		NOTATION_DEBUG << "Bad indication!" << endl;
 	    }
 
+	} else if (elt->event()->isa(Rosegarden::Controller::EventType)) {
+
+	    bool isSustain = false;
+
+	    long controlNumber = 0;
+	    elt->event()->get<Int>(Rosegarden::Controller::NUMBER, controlNumber);
+
+	    Rosegarden::Studio *studio = &m_notationView->getDocument()->getStudio();
+	    Rosegarden::Track *track = getSegment().getComposition()->getTrackById
+		(getSegment().getTrack());
+
+	    if (track) {
+
+		Rosegarden::Instrument *instrument = studio->getInstrumentById
+		    (track->getInstrument());
+		if (instrument) {
+		    Rosegarden::MidiDevice *device = dynamic_cast<Rosegarden::MidiDevice *>
+			(instrument->getDevice());
+		    if (device) {
+			for (Rosegarden::ControlList::const_iterator i =
+				 device->getControlParameters().begin();
+			     i != device->getControlParameters().end(); ++i) {
+			    if (i->getType() == Rosegarden::Controller::EventType &&
+				i->getControllerValue() == controlNumber) {
+				if (i->getName() == "Sustain" ||
+				    strtoqstr(i->getName()) == i18n("Sustain")) {
+				    isSustain = true;
+				}
+				break;
+			    }
+			}
+		    } else if (instrument->getDevice() &&
+			       instrument->getDevice()->getType() == Rosegarden::Device::SoftSynth) {
+			if (controlNumber == 64) {
+			    isSustain = true;
+			}
+		    }
+		}
+	    }
+
+	    if (isSustain) {
+		long value = 0;
+		elt->event()->get<Int>(Rosegarden::Controller::VALUE, value);
+		if (value > 0) {
+		    pixmap = m_notePixmapFactory->makePedalDownPixmap();
+		} else {
+		    pixmap = m_notePixmapFactory->makePedalUpPixmap();
+		}
+
+	    } else {
+
+		if (m_showUnknowns) {
+		    pixmap = m_notePixmapFactory->makeUnknownPixmap();
+		}
+	    }		
+	    
 	} else {
 
 	    if (m_showUnknowns) {
@@ -1095,6 +1222,9 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		  << std::endl;
 	elt->event()->dump(std::cerr);
     }
+
+    m_notePixmapFactory->setSelected(false);
+    m_notePixmapFactory->setShaded(false);
 }
 
 double
@@ -1356,6 +1486,10 @@ NotationStaff::renderNote(Rosegarden::ViewElementList::iterator &vli)
     params.setAccidentalShift(accidentalShift);
     params.setAccExtraShift(accidentalExtra);
 
+    double airX, airWidth;
+    elt->getLayoutAirspace(airX, airWidth);
+    params.setWidth(int(airWidth));
+
     if (beamed) {
 
         if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
@@ -1407,6 +1541,7 @@ NotationStaff::renderNote(Rosegarden::ViewElementList::iterator &vli)
     if (elt->isGrace()) {
 	params.setLegerLines(0);
 	m_graceNotePixmapFactory->setSelected(m_notePixmapFactory->isSelected());
+	m_graceNotePixmapFactory->setShaded(m_notePixmapFactory->isShaded());
 	factory = m_graceNotePixmapFactory;
     }
 
@@ -1544,6 +1679,8 @@ NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
     bool wrap = true;
 
+/*!!! always wrap unknowns, just don't necessarily render them?
+
     if (!m_showUnknowns) {
 	std::string etype = e->getType();
 	if (etype != Rosegarden::Note::EventType &&
@@ -1555,6 +1692,7 @@ NotationStaff::wrapEvent(Rosegarden::Event *e)
 	    wrap = false;
 	}
     }
+*/
 
     if (wrap) wrap = Rosegarden::Staff::wrapEvent(e);
 

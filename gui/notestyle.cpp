@@ -363,10 +363,20 @@ NoteStyle::getMarkCharName(const Mark &mark)
     else if (mark == Rosegarden::Marks::Staccatissimo) return NoteCharacterNames::STACCATISSIMO;
     else if (mark == Rosegarden::Marks::Marcato)   return NoteCharacterNames::MARCATO;
     else if (mark == Rosegarden::Marks::Trill)     return NoteCharacterNames::TRILL;
+    else if (mark == Rosegarden::Marks::LongTrill) return NoteCharacterNames::TRILL;
+    else if (mark == Rosegarden::Marks::TrillLine) return NoteCharacterNames::TRILL_LINE;
     else if (mark == Rosegarden::Marks::Turn)      return NoteCharacterNames::TURN;
     else if (mark == Rosegarden::Marks::Pause)     return NoteCharacterNames::FERMATA;
     else if (mark == Rosegarden::Marks::UpBow)     return NoteCharacterNames::UP_BOW;
     else if (mark == Rosegarden::Marks::DownBow)   return NoteCharacterNames::DOWN_BOW;
+    else if (mark == Rosegarden::Marks::Mordent)
+	return NoteCharacterNames::MORDENT;
+    else if (mark == Rosegarden::Marks::MordentInverted)
+	return NoteCharacterNames::MORDENT_INVERTED;
+    else if (mark == Rosegarden::Marks::MordentLong)
+	return NoteCharacterNames::MORDENT_LONG;
+    else if (mark == Rosegarden::Marks::MordentLongInverted)
+	return NoteCharacterNames::MORDENT_LONG_INVERTED;
     // Things like "sf" and "rf" are generated from text fonts
     return NoteCharacterNames::UNKNOWN;
 }

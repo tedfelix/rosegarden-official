@@ -42,6 +42,7 @@
 #include "Clipboard.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "AnalysisTypes.h"
+#include "MidiTypes.h"
 
 #include "rosegardenguidoc.h"
 #include "notationtool.h"
@@ -1637,7 +1638,59 @@ void NotationView::slotEditAddKeySignature()
                   conversion == KeySignatureDialog::Transpose));
         }
     }
+}                      
+ 
+void NotationView::slotEditAddSustain(bool down)
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT insertionTime = getInsertionTime();
+        
+    Rosegarden::Studio *studio = &getDocument()->getStudio();
+    Rosegarden::Track *track = segment.getComposition()->getTrackById(segment.getTrack());
+
+    if (track) {
+
+	Rosegarden::Instrument *instrument = studio->getInstrumentById
+	    (track->getInstrument());
+	if (instrument) {
+	    Rosegarden::MidiDevice *device = dynamic_cast<Rosegarden::MidiDevice *>
+		(instrument->getDevice());
+	    if (device) {
+		for (Rosegarden::ControlList::const_iterator i =
+			 device->getControlParameters().begin();
+		     i != device->getControlParameters().end(); ++i) {
+
+		    if (i->getType() == Rosegarden::Controller::EventType &&
+			(i->getName() == "Sustain" ||
+			 strtoqstr(i->getName()) == i18n("Sustain"))) {
+
+			addCommandToHistory
+			    (new SustainInsertionCommand(segment, insertionTime, down,
+							 i->getControllerValue()));
+			return;
+		    }
+		}
+	    } else if (instrument->getDevice() &&
+		       instrument->getDevice()->getType() == Rosegarden::Device::SoftSynth) {
+		addCommandToHistory
+		    (new SustainInsertionCommand(segment, insertionTime, down, 64));
+	    }
+	}
+    }
+
+    KMessageBox::sorry(this, i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
 }                       
+ 
+void NotationView::slotEditAddSustainDown()
+{
+    slotEditAddSustain(true);
+}
+ 
+void NotationView::slotEditAddSustainUp()
+{
+    slotEditAddSustain(false);
+}
 
 void NotationView::slotEditElement(NotationStaff *staff,
 				   NotationElement *element, bool advanced)

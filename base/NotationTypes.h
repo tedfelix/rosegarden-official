@@ -128,6 +128,8 @@ namespace Marks //!!! This would be better as a class, these days
     extern const Mark Rinforzando;    // "rf"
 
     extern const Mark Trill;          // "tr"
+    extern const Mark LongTrill;      // with wiggly line
+    extern const Mark TrillLine;      // line on its own
     extern const Mark Turn;           // "~"
 
     extern const Mark Pause;          // aka "fermata"
@@ -135,14 +137,10 @@ namespace Marks //!!! This would be better as a class, these days
     extern const Mark UpBow;          // "v"
     extern const Mark DownBow;        // a square with the bottom side missing
 
-    extern const Mark Mordant;
-    extern const Mark MordantInverted;
-    extern const Mark MordantLong;
-    extern const Mark MordantLongInverted;
-    extern const Mark MordantDownHookLong;
-    extern const Mark MordantUpHookLong;
-    extern const Mark MordantDownHookLongInverted;
-    extern const Mark MordantUpHookLongInverted;
+    extern const Mark Mordent;
+    extern const Mark MordentInverted;
+    extern const Mark MordentLong;
+    extern const Mark MordentLongInverted;
 
     /**
      * Given a string, return a mark that will be recognised as a

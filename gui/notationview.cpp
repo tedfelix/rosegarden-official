@@ -150,23 +150,19 @@ public:
     MarkActionData() :
 	title(0),
 	actionName(0),
-	pixmapName(0),
 	keycode(0) { }
 
     MarkActionData(const QString &_title,
 		   QString _actionName,
-		   QString _pixmapName,
 		   int _keycode,
 		   Mark _mark) :
 	title(_title),
 	actionName(_actionName),
-	pixmapName(_pixmapName),
 	keycode(_keycode),
 	mark(_mark) { }
 
     QString title;
     QString actionName;
-    QString pixmapName;
     int keycode;
     Mark mark;
 };
@@ -1702,10 +1698,9 @@ void NotationView::setupActions()
 	 i != m_markActionDataMap->end(); ++i) {
 
         const MarkActionData &markActionData = *i;
-        
-        icon = QIconSet
-	    (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-	     (markActionData.pixmapName)));
+
+	icon = QIconSet(NotePixmapFactory::toQPixmap
+			(NotePixmapFactory::makeMarkMenuPixmap(markActionData.mark)));
 
 	new KAction(markActionData.title,
 		    icon,
@@ -1792,6 +1787,14 @@ void NotationView::setupActions()
     new KAction(KeyInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddKeySignature()), actionCollection(),
                 "add_key_signature");
+
+    new KAction(SustainInsertionCommand::getGlobalName(true), 0, this,
+                SLOT(slotEditAddSustainDown()), actionCollection(),
+                "add_sustain_down");
+
+    new KAction(SustainInsertionCommand::getGlobalName(false), 0, this,
+                SLOT(slotEditAddSustainUp()), actionCollection(),
+                "add_sustain_up");
 
     // setup Settings menu
     static QString actionsToolbars[][4] = 
@@ -3362,7 +3365,7 @@ void NotationView::initActionDataMaps()
 	m_markActionDataMap->insert
 	    (actionName, MarkActionData
 	     (NotesMenuAddMarkCommand::getGlobalName(mark),
-	      actionName, markName, 0, mark));
+	      actionName, 0, mark));
     }
 	     
 }
