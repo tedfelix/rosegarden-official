@@ -412,6 +412,10 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
              << " - m_composition->getDuration() : "
              << m_composition.getDuration() << endl;
 
+    if (m_composition.begin() != m_composition.end()) {
+	RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime() << endl;
+    }
+
     // Ensure a minimum of 64 tracks
     //
 //     unsigned int nbTracks = m_composition.getNbTracks();

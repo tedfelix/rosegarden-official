@@ -680,9 +680,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 m_currentSegment = new Segment(Rosegarden::Segment::Internal);
             }
 
-        }
-        else // for the moment we default
+        } else {
+	    // for the moment we default
             m_currentSegment = new Segment(Rosegarden::Segment::Internal);
+	}
     
         QString repeatStr = atts.value("repeat");
         if (repeatStr.lower() == "true") {

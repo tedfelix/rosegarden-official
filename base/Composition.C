@@ -287,7 +287,14 @@ Composition::contains(const Segment *s)
 Composition::iterator
 Composition::findSegment(const Segment *s)
 {
-    return m_segments.lower_bound(const_cast<Segment*>(s));
+    iterator i = m_segments.lower_bound(const_cast<Segment*>(s));
+
+    do {
+	if (i == end() || *i == s) return i;
+	++i;
+    } while ((*i)->getStartTime() <= s->getStartTime());
+
+    return end();
 }
 
 void Composition::setSegmentStartTime(Segment *segment, timeT startTime)

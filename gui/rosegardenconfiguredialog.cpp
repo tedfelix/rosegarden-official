@@ -1456,6 +1456,37 @@ SequencerConfigurationPage::apply()
 
 // ---
 
+/*
+static QString absTimeToString(Rosegarden::Composition &comp,
+			       Rosegarden::timeT absTime,
+			       Rosegarden::RealTime rt)
+{
+    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
+	.arg(rt.sec / 60).arg(rt.sec % 60)
+	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
+	.arg(absTime).arg(comp.getBarNumber(absTime) + 1);
+}
+*/
+static QString durationToString(Rosegarden::Composition &comp,
+				Rosegarden::timeT absTime,
+				Rosegarden::timeT duration,
+				Rosegarden::RealTime rt)
+{
+    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
+	.arg(rt.sec / 60).arg(rt.sec % 60)
+	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
+	.arg(duration).arg(comp.getBarNumber(absTime + duration) -
+			   comp.getBarNumber(absTime));
+}
+
+
+class SegmentDataItem : public QTableItem
+{
+public:
+    SegmentDataItem(QTable *t, QString s) :
+	QTableItem(t, QTableItem::Never, s) { }
+    virtual int alignment() const { return Qt::AlignCenter; }
+};
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
                                                              QWidget *parent,
@@ -1505,31 +1536,205 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     
     addTab(frame, i18n("Description"));
 
+    Rosegarden::Composition &comp = doc->getComposition();
+    std::set<Rosegarden::TrackId> usedTracks;
+    
+    int audioSegments = 0, internalSegments = 0;
+    for (Rosegarden::Composition::iterator ci = comp.begin();
+	 ci != comp.end(); ++ci) {
+	usedTracks.insert((*ci)->getTrack());
+	if ((*ci)->getType() == Rosegarden::Segment::Audio) ++audioSegments;
+	else ++internalSegments;
+    }
+
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-			     4, 2,
+			     6, 2,
 			     10, 5);
 
     layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
     layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Duration:"), frame), 1, 0);
-    Rosegarden::timeT d = doc->getComposition().getDuration();
-    Rosegarden::RealTime rtd = doc->getComposition().getElapsedRealTime(d);
-    layout->addWidget
-        (new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
-                    .arg(rtd.sec / 60).arg(rtd.sec % 60)
-                    .arg(rtd.msec() / 100).arg((rtd.msec() / 10) % 10)
-                    .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
-                    frame), 1, 1);
+    layout->addWidget(new QLabel(i18n("Formal duration (to end marker):"), frame), 1, 0);
+    Rosegarden::timeT d = comp.getEndMarker();
+    Rosegarden::RealTime rtd = comp.getElapsedRealTime(d);
+    layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 1, 1);
 
-    layout->addWidget(new QLabel(i18n("Segments:"), frame), 2, 0);
-    layout->addWidget(new QLabel(QString("%1 on %2 tracks")
-                                 .arg(doc->getComposition().getNbSegments())
-                                 .arg(doc->getComposition().getNbTracks()),
-                                 frame), 2, 1);
+    layout->addWidget(new QLabel(i18n("Playing duration:"), frame), 2, 0);
+    d = comp.getDuration();
+    rtd = comp.getElapsedRealTime(d);
+    layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 2, 1);
+
+    layout->addWidget(new QLabel(i18n("Tracks:"), frame), 3, 0);
+    layout->addWidget(new QLabel(i18n("%1 used, %2 total")
+				 .arg(usedTracks.size())
+                                 .arg(comp.getNbTracks()),
+                                 frame), 3, 1);
+
+    layout->addWidget(new QLabel(i18n("Segments:"), frame), 4, 0);
+    layout->addWidget(new QLabel(i18n("%1 MIDI, %2 audio, %3 total")
+				 .arg(internalSegments)
+				 .arg(audioSegments)
+                                 .arg(internalSegments + audioSegments),
+                                 frame), 4, 1);
     
     addTab(frame, i18n("Statistics"));
+
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 1, 1, 10, 5);
+
+    QTable *table = new QTable(1, 11, frame, "Segment Table");
+    table->setSelectionMode(QTable::NoSelection);
+    table->horizontalHeader()->setLabel(0, i18n("Type"));
+    table->horizontalHeader()->setLabel(1, i18n("Track"));
+    table->horizontalHeader()->setLabel(2, i18n("Label"));
+    table->horizontalHeader()->setLabel(3, i18n("Time"));
+    table->horizontalHeader()->setLabel(4, i18n("Duration"));
+    table->horizontalHeader()->setLabel(5, i18n("Events"));
+    table->horizontalHeader()->setLabel(6, i18n("Polyphony"));
+    table->horizontalHeader()->setLabel(7, i18n("Repeat"));
+    table->horizontalHeader()->setLabel(8, i18n("Quantize"));
+    table->horizontalHeader()->setLabel(9, i18n("Transpose"));
+    table->horizontalHeader()->setLabel(10, i18n("Delay"));
+    table->setNumRows(audioSegments + internalSegments);
+
+    table->setColumnWidth(0, 50);
+    table->setColumnWidth(1, 50);
+    table->setColumnWidth(2, 150);
+    table->setColumnWidth(3, 80);
+    table->setColumnWidth(4, 80);
+    table->setColumnWidth(5, 80);
+    table->setColumnWidth(6, 80);
+    table->setColumnWidth(7, 80);
+    table->setColumnWidth(8, 80);
+    table->setColumnWidth(9, 80);
+    table->setColumnWidth(10, 80);
+
+    int i = 0;
+
+    for (Rosegarden::Composition::iterator ci = comp.begin();
+	 ci != comp.end(); ++ci) {
+
+	Rosegarden::Segment *s = *ci;
+	
+	table->setItem(i, 0, new SegmentDataItem
+		       (table,
+			s->getType() == Rosegarden::Segment::Audio ?
+			i18n("Audio") : i18n("MIDI")));
+
+	table->setItem(i, 1, new SegmentDataItem
+		       (table,
+			QString("%1").arg(s->getTrack() + 1)));
+
+	QPixmap colourPixmap(16, 16);
+	Rosegarden::Colour colour =
+	    comp.getSegmentColourMap().getColourByIndex(s->getColourIndex());
+	colourPixmap.fill(RosegardenGUIColours::convertColour(colour));
+
+	table->setItem(i, 2,
+		       new QTableItem(table, QTableItem::Never,
+				      strtoqstr(s->getLabel()),
+				      colourPixmap));
+
+	table->setItem(i, 3, new SegmentDataItem
+		       (table,
+			QString("%1").arg(s->getStartTime())));
+
+	table->setItem(i, 4, new SegmentDataItem
+		       (table,
+			QString("%1").arg(s->getEndMarkerTime() -
+					  s->getStartTime())));
+
+	std::set<long> notesOn;
+	std::multimap<Rosegarden::timeT, long> noteOffs;
+	int events = 0, notes = 0, poly = 0, maxPoly = 0;
+
+	for (Rosegarden::Segment::iterator si = s->begin();
+	     s->isBeforeEndMarker(si); ++si) {
+	    ++events;
+	    if ((*si)->isa(Rosegarden::Note::EventType)) {
+		++notes;
+		Rosegarden::timeT startTime = (*si)->getAbsoluteTime();
+		Rosegarden::timeT endTime = startTime + (*si)->getDuration();
+		if (endTime == startTime) continue;
+		while (!noteOffs.empty() &&
+		       (startTime >= noteOffs.begin()->first)) {
+		    notesOn.erase(noteOffs.begin()->second);
+		    noteOffs.erase(noteOffs.begin());
+		}
+		long pitch = 0;
+		(*si)->get<Int>(Rosegarden::BaseProperties::PITCH, pitch);
+		notesOn.insert(pitch);
+		noteOffs.insert(std::multimap<Rosegarden::timeT, long>::value_type(endTime, pitch));
+		poly = notesOn.size();
+		if (poly > maxPoly) maxPoly = poly;
+	    }
+	}
+
+	table->setItem(i, 5, new SegmentDataItem
+		       (table,
+			QString("%1").arg(events)));
+
+	table->setItem(i, 6, new SegmentDataItem
+		       (table,
+			QString("%1").arg(maxPoly)));
+
+	table->setItem(i, 7, new SegmentDataItem
+		       (table,
+			s->isRepeating() ? i18n("Yes") : i18n("No")));
+
+	Rosegarden::timeT discard;
+
+	if (s->getQuantizer() && s->hasQuantization()) {
+	    Rosegarden::timeT unit = s->getQuantizer()->getUnit();
+	    table->setItem(i, 8, new SegmentDataItem
+			   (table, 
+			    NotationStrings::makeNoteMenuLabel
+			    (unit, true, discard, false)));
+	} else {
+	    table->setItem(i, 8, new SegmentDataItem
+			   (table, 
+			    i18n("Off")));
+	}
+
+	table->setItem(i, 9, new SegmentDataItem
+		       (table,
+			QString("%1").arg(s->getTranspose())));
+
+	if (s->getDelay() != 0) {
+	    if (s->getRealTimeDelay() != Rosegarden::RealTime::zeroTime) {
+		table->setItem(i, 10, new SegmentDataItem
+			       (table,
+				QString("%1 + %2 ms")
+				.arg(NotationStrings::makeNoteMenuLabel
+				     (s->getDelay(), true, discard, false))
+				.arg(s->getRealTimeDelay().sec * 1000 +
+				     s->getRealTimeDelay().msec())));
+	    } else {
+		table->setItem(i, 10, new SegmentDataItem
+			       (table, 
+				NotationStrings::makeNoteMenuLabel
+				(s->getDelay(), true, discard, false)));
+	    }
+	} else if (s->getRealTimeDelay() != Rosegarden::RealTime::zeroTime) {
+	    table->setItem(i, 10, new SegmentDataItem
+			   (table, 
+			    QString("%2 ms")
+			    .arg(s->getRealTimeDelay().sec * 1000 +
+				 s->getRealTimeDelay().msec())));
+	} else {
+	    table->setItem(i, 10, new SegmentDataItem
+			   (table,
+			    i18n("None")));
+	}
+
+	++i;
+    }
+
+    layout->addWidget(table, 0, 0);
+
+    addTab(frame, i18n("Segment Summary"));
+
 }
 
 void

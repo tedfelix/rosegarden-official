@@ -541,32 +541,27 @@ TrackButtons::slotUpdateTracks()
     //
     for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
     {
-        if (m_trackLabels[i] != (*m_trackLabels.end()))
-        {
-            track = comp.getTrackByPosition(i);
+	track = comp.getTrackByPosition(i);
 
-            if (track) {
-                m_trackLabels[i]->setId(track->getId());
-
-                QLabel *trackLabel = m_trackLabels[i]->getTrackLabel();
-
-                if (track->getLabel() == std::string("")) {
-                    Rosegarden::Instrument *ins =
-                        m_doc->getStudio().getInstrumentById(track->getInstrument());
-                    if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
-                        trackLabel->setText(i18n("<untitled audio>"));
-                    } else {
-                        trackLabel->setText(i18n("<untitled>"));
-                    }
-                }
-                else
-                    trackLabel->setText(strtoqstr(track->getLabel()));
-
-                setButtonMapping(m_trackLabels[i], track->getId());
-            }
-            
-        }
-
+	if (track) {
+	    m_trackLabels[i]->setId(track->getId());
+	    
+	    QLabel *trackLabel = m_trackLabels[i]->getTrackLabel();
+	    
+	    if (track->getLabel() == std::string("")) {
+		Rosegarden::Instrument *ins =
+		    m_doc->getStudio().getInstrumentById(track->getInstrument());
+		if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
+		    trackLabel->setText(i18n("<untitled audio>"));
+		} else {
+		    trackLabel->setText(i18n("<untitled>"));
+		}
+	    }
+	    else
+		trackLabel->setText(strtoqstr(track->getLabel()));
+	    
+	    setButtonMapping(m_trackLabels[i], track->getId());
+	}
     }
     m_tracks = newNbTracks;
 
