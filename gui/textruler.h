@@ -94,8 +94,8 @@ private:
     Rosegarden::Segment    *m_segment;
     Rosegarden::RulerScale *m_rulerScale;
 
-    QFont *m_font;
-    QFontMetrics *m_fontMetrics;
+    QFont m_font;
+    QFontMetrics m_fontMetrics;
 };
 
 #endif // _LOOPRULER_H_

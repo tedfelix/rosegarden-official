@@ -54,24 +54,16 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_width(-1),
     m_rulerScale(rulerScale),
     m_composition(composition),
-    m_segment(segment)
+    m_segment(segment),
+    m_font("helvetica", 12),
+    m_boldFont("helvetica", 12, QFont::Bold),
+    m_fontMetrics(m_boldFont)
 {
     setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
-
-    m_font = new QFont("helvetica", 12);
-    m_font->setPixelSize(12);
-
-    m_boldFont = new QFont("helvetica", 12);
-    m_boldFont->setBold(true);
-    m_boldFont->setPixelSize(12);
-    
-    m_fontMetrics = new QFontMetrics(*m_boldFont);
 }
 
 ChordNameRuler::~ChordNameRuler()
 {
-    delete m_fontMetrics;
-    delete m_font;
 }
 
 void
@@ -147,7 +139,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	}
 
 	QString label(text.c_str());
-	QRect labelBounds = m_fontMetrics->boundingRect(label);
+	QRect labelBounds = m_fontMetrics.boundingRect(label);
 
 	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
 	    m_currentXOffset /* - labelBounds.width()/2 */;
@@ -163,12 +155,12 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	QString noteName(label.left(1));
 	QString remainder(label.right(label.length() - 1));
 
-	paint.setFont(*m_boldFont);
+	paint.setFont(m_boldFont);
 	paint.drawText(x, y, noteName);
 	
-	QRect noteBounds = m_fontMetrics->boundingRect(noteName);
+	QRect noteBounds = m_fontMetrics.boundingRect(noteName);
 
-	paint.setFont(*m_font);
+	paint.setFont(m_font);
 	paint.drawText(x + noteBounds.width() + 1, y, remainder);
     }
 }

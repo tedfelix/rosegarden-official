@@ -80,9 +80,9 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment     *m_segment;
 
-    QFont *m_font;
-    QFont *m_boldFont;
-    QFontMetrics *m_fontMetrics;
+    QFont m_font;
+    QFont m_boldFont;
+    QFontMetrics m_fontMetrics;
 };
 
 #endif // _LOOPRULER_H_

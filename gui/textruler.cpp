@@ -47,15 +47,14 @@ TextRuler::TextRuler(RulerScale *rulerScale,
       m_currentXOffset(0),
       m_width(-1),
       m_segment(segment),
-      m_rulerScale(rulerScale)
+      m_rulerScale(rulerScale),
+      m_font("helvetica", 12),
+      m_fontMetrics(m_font)
 {
     m_mySegmentMaybe = (m_segment->getComposition() != 0);
     setBackgroundColor(RosegardenGUIColours::TextRulerBackground);
 
-    m_font = new QFont("helvetica", 12);
-    m_font->setPixelSize(10);
-    
-    m_fontMetrics = new QFontMetrics(*m_font);
+    m_font.setPixelSize(10);
 }
 
 TextRuler::~TextRuler()
@@ -63,9 +62,6 @@ TextRuler::~TextRuler()
     if (m_mySegmentMaybe && !m_segment->getComposition()) {
 	delete m_segment;
     }
-
-    delete m_fontMetrics;
-    delete m_font;
 }
 
 void
@@ -126,7 +122,7 @@ TextRuler::paintEvent(QPaintEvent* e)
 	    continue;
 	}
 
-	QRect bounds = m_fontMetrics->boundingRect(text.c_str());
+	QRect bounds = m_fontMetrics.boundingRect(text.c_str());
 
 	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
 	    m_currentXOffset - bounds.width()/2;
