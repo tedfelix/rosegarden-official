@@ -41,7 +41,7 @@
 //#define DEBUG_BUSS_MIXER 1
 //#define DEBUG_MIXER 1
 //#define DEBUG_MIXER_LIGHTWEIGHT 1
-#define DEBUG_LOCKS 1
+//#define DEBUG_LOCKS 1
 //#define DEBUG_READER 1
 //#define DEBUG_WRITER 1
 
@@ -1039,8 +1039,6 @@ AudioInstrumentMixer::destroyAllPlugins()
 size_t
 AudioInstrumentMixer::getPluginLatency(unsigned int id)
 {
-    getLock();
-
     size_t latency = 0;
 
     RunnablePluginInstance *synth = m_synths[id];
