@@ -362,7 +362,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
 
-    if (std::string(format) == std::string("deviceExport"))
+    if (format && std::string(format) == std::string("deviceExport"))
     {
         // Send out the studio - a self contained command
         //
