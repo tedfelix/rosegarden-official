@@ -174,6 +174,11 @@ public:
      */
     Rosegarden::Composition&       getComposition()       { return m_composition; }
 
+    /**
+     * returns the composition (the principal constituent of the document)
+     */
+    const Rosegarden::Composition& getComposition() const { return m_composition; }
+
     /*
      * return the Studio
      */
@@ -189,11 +194,6 @@ public:
      * return the Configuration object
      */
     Rosegarden::Configuration& getConfiguration() { return m_config; }
-
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    const Rosegarden::Composition& getComposition() const { return m_composition; }
 
     /**
      * returns the cut/copy/paste clipboard
