@@ -22,20 +22,21 @@
 // This file contains code borrowed from KDevelop 2.0
 // (c) The KDevelop Development Team
 
+#include <unistd.h>
+
 #include "config.h"
 
 #include <qpainter.h>
 #include <qfontmetrics.h>
 
-#include "kstartuplogo.h"
 #include <kapp.h>
 #include <kstddirs.h>
 #include <kconfig.h>
 #include <ktip.h>
 
+#include "kstartuplogo.h"
+#include "constants.h"
 #include "rosedebug.h"
-
-#include <unistd.h>
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
     : QWidget(parent,name,
@@ -108,14 +109,8 @@ void KStartupLogo::close()
 {
     if (!m_wasClosed && isVisible()) {
 
-	KConfig* config = KGlobal::config();
-    
-	config->setGroup("TipOfDay");
-	if (config->readBoolEntry("RunOnStart",true))
-	{
-	    RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
-	    KTipDialog::showTip(locate("data", "rosegarden/tips"), true);
-	}
+        RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
+        KTipDialog::showTip(locate("data", "rosegarden/tips"));
     }
 
     QWidget::close();

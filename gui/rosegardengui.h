@@ -879,14 +879,9 @@ public slots:
     void slotToggleAll();
 
     /**
-     * Toggle tips at startup
-     */
-    void slotToggleShowTipsOnStartup();
-
-    /**
      * Display tip-of-day dialog on demand
      */
-    void slotShowTips();
+    void slotShowTip();
 
     /*
      * Select Track up or down
@@ -1040,9 +1035,6 @@ private:
     KToggleAction* m_viewTempoRuler;
     KToggleAction* m_viewChordNameRuler;
     KToggleAction* m_viewPreviews;
-    KAction* m_viewAll;
-    KToggleAction* m_viewTipsOnStartup;
-    KAction* m_viewTipsNow;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

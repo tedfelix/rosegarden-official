@@ -807,6 +807,8 @@ RosegardenTransportDialog::slotEditTimeSignature()
     emit editTimeSignature(this);
 }
 
+const char* const RosegardenTransportDialog::ConfigGroup = "Transport Controls";
+
 }
 
 

@@ -23,5 +23,12 @@
 
 namespace Rosegarden 
 {
+
+//
+// KConfig group names
+//
 const char* const GeneralOptionsConfigGroup = "General Options";
+const char* const LatencyOptionsConfigGroup = "Latency Options";
+const char* const SequencerOptionsConfigGroup = "Sequencer Options";
+
 }

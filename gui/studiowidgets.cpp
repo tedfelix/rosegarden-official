@@ -32,7 +32,7 @@
 #include "Instrument.h"
 #include "studiowidgets.h"
 #include "colours.h"
-
+#include "constants.h"
 
 // ---------------- AudioFaderWidget ------------------
 //
@@ -202,7 +202,7 @@ AudioFaderWidget::setAudioChannels(int channels)
     // Populate audio inputs accordingly
     //
     KConfig* config = kapp->config();
-    config->setGroup("Sequencer Options");
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     int jackAudioInputs = config->readNumEntry("jackaudioinputs", 2);
     QString inputName;

@@ -571,7 +571,7 @@ SequenceManager::play()
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
     KConfig* config = kapp->config();
-    config->setGroup("Latency Options");
+    config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
     Rosegarden::Configuration& docConfig = m_doc->getConfiguration();
 
@@ -1003,7 +1003,7 @@ SequenceManager::record(bool toggled)
                     // Check the disk space available is within current
                     // audio recording limit
                     //
-                    config->setGroup("Sequencer Options");
+                    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
                     int audioRecordMinutes = config->
                         readNumEntry("audiorecordminutes", 5);
 
@@ -1059,7 +1059,7 @@ SequenceManager::record(bool toggled)
         streamOut << startPos.usec;
     
         // set group
-        config->setGroup("Latency Options");
+        config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
         // playback latency
         streamOut << config->readLongNumEntry("playbacklatencysec", 0);
@@ -1105,7 +1105,7 @@ SequenceManager::record(bool toggled)
                     // audio recording time.
                     //
                     KConfig* config = kapp->config();
-                    config->setGroup("Sequencer Options");
+                    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
                     int seconds = 60 * 
                         (config->readNumEntry("audiorecordminutes", 5));
@@ -1594,7 +1594,7 @@ SequenceManager::preparePlayback()
     // Set up the audio playback latency
     //
     KConfig* config = kapp->config();
-    config->setGroup("Latency Options");
+    config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
     int jackSec = config->readLongNumEntry("jackplaybacklatencysec", 0);
     int jackUSec = config->readLongNumEntry("jackplaybacklatencyusec", 0);
@@ -1787,7 +1787,7 @@ SequenceManager::reinitialiseSequencerStudio()
     // Send the MIDI recording device to the sequencer
     //
     KConfig* config = kapp->config();
-    config->setGroup("Sequencer Options");
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     QString recordDeviceStr = config->readEntry("midirecorddevice");
 
@@ -1926,7 +1926,7 @@ SequenceManager::setSequencerSliceSize(const RealTime &time)
         QDataStream streamOut(data, IO_WriteOnly);
 
         KConfig* config = kapp->config();
-        config->setGroup("Latency Options");
+        config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
         if (time == RealTime(0, 0)) // reset to default values
         {
@@ -1985,7 +1985,7 @@ SequenceManager::setTemporarySequencerSliceSize(const RealTime &time)
         QDataStream streamOut(data, IO_WriteOnly);
 
         KConfig* config = kapp->config();
-        config->setGroup("Latency Options");
+        config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
         if (time == RealTime(0, 0)) // reset to default values
         {
@@ -2032,7 +2032,7 @@ void
 SequenceManager::sendTransportControlStatuses()
 {
     KConfig* config = kapp->config();
-    config->setGroup("Sequencer Options");
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     // Get the config values
     //

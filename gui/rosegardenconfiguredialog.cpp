@@ -718,7 +718,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
       m_playback(0)
 {
 //     Rosegarden::Configuration &config = doc->getConfiguration();
-    m_cfg->setGroup("Latency Options");
+    m_cfg->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
     QFrame *frame = new QFrame(m_tabWidget, "general latency");
     QGridLayout *layout = new QGridLayout(frame, 6, 3,
@@ -844,7 +844,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
 void LatencyConfigurationPage::apply()
 {
-    m_cfg->setGroup("Latency Options");
+    m_cfg->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
 //     Rosegarden::Configuration &config = m_doc->getConfiguration();
 //     config.setReadAhead((RealTime(0, (readAhead * 1000))));
@@ -924,7 +924,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // set the document in the super class
     m_doc = doc;
 
-    m_cfg->setGroup("Sequencer Options");
+    m_cfg->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     // ---------------- General tab ------------------
     //
@@ -1156,7 +1156,7 @@ SequencerConfigurationPage::slotShowStatus()
 void
 SequencerConfigurationPage::apply()
 {
-    m_cfg->setGroup("Sequencer Options");
+    m_cfg->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     // ---------- General -----------
     //

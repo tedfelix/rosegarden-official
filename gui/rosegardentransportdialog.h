@@ -46,6 +46,8 @@ public:
                               WFlags flags = 0);
     ~RosegardenTransportDialog();
 
+    static const char* const ConfigGroup;
+
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode };
 
     TimeDisplayMode getCurrentMode() { return m_currentMode; }

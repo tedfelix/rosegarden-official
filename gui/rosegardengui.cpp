@@ -100,7 +100,7 @@
 #define ID_STATUS_MSG 1
 
 using Rosegarden::timeT;
-
+using Rosegarden::RosegardenTransportDialog;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver)
@@ -349,23 +349,19 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
-    m_viewAll = new KAction(i18n("Toggle &All of the Above"), 0, this,
-                                  SLOT(slotToggleAll()),
-                                  actionCollection(),
-                                  "toggle_all");
+    new KAction(i18n("Toggle &All of the Above"), 0, this,
+                SLOT(slotToggleAll()),
+                actionCollection(),
+                "toggle_all");
 
-    m_viewTipsOnStartup =
-        new KToggleAction(i18n("&Show Tips on Startup"), 0, this,
-                          SLOT(slotToggleShowTipsOnStartup()),
-                          actionCollection(),
-                          "show_tips_on_startup");
-
-    m_viewTipsNow =
-        new KAction(i18n("Show Tip of the &Day"), 0, this,
-                    SLOT(slotShowTips()),
-                    actionCollection(),
-                    "show_tips_now");
-
+#if KDE_VERSION >= 306 // KDE 3.1
+    KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
+#else
+    new KAction(i18n("Show Tip of the &Day"), 0, this,
+                SLOT(slotShowTips()),
+                actionCollection(),
+                "help_show_tip");
+#endif
 
     // Standard Actions 
     //
@@ -591,50 +587,50 @@ void RosegardenGUIApp::setupActions()
     m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
-    m_playTransport->setGroup("transportcontrols");
+    m_playTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-stop.xpm"));
     m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
-    m_stopTransport->setGroup("transportcontrols");
+    m_stopTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-ffwd.xpm"));
     m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Key_PageDown,
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
-    m_ffwdTransport->setGroup("transportcontrols");
+    m_ffwdTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-rewind.xpm"));
     m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
-    m_rewindTransport->setGroup("transportcontrols");
+    m_rewindTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
     m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "recordtoggle");
-    m_recordTransport->setGroup("transportcontrols");
+    m_recordTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
     m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
                                     SLOT(slotRecord()), actionCollection(),
                                     "record");
-    m_recordTransport->setGroup("transportcontrols");
+    m_recordTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-rewind-end.xpm"));
     m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
-    m_rewindEndTransport->setGroup("transportcontrols");
+    m_rewindEndTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-ffwd-end.xpm"));
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
-    m_ffwdEndTransport->setGroup("transportcontrols");
+    m_ffwdEndTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
     // create the Transport GUI and add the callbacks to the
     // buttons and keyboard accelerators
@@ -1137,10 +1133,6 @@ void RosegardenGUIApp::readOptions()
     if(!size.isEmpty()) {
         resize(size);
     }
-
-    m_config->setGroup("TipOfDay");
-    opt = m_config->readBoolEntry("RunOnStart", true);
-    m_viewTipsOnStartup->setChecked(opt);
 }
 
 void RosegardenGUIApp::saveProperties(KConfig *cfg)
@@ -2692,7 +2684,7 @@ bool RosegardenGUIApp::launchSequencer()
         // Command line arguments
         //
         KConfig *config = kapp->config();
-        config->setGroup("Sequencer Options");
+        config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
         QString options = config->readEntry("commandlineoptions");
         if (!options.isEmpty()) {
             (*m_sequencerProcess) << options;
@@ -3280,7 +3272,7 @@ void RosegardenGUIApp::slotPlay()
     // Send the controllers at start of playback if required
     //
     KConfig *config = kapp->config();
-    config->setGroup("Sequencer Options");
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
     bool sendControllers = config->readBoolEntry("alwayssendcontrollers", false);
 
     if (sendControllers)
@@ -4235,16 +4227,9 @@ RosegardenGUIApp::slotUpdateAutoSaveInterval(unsigned int interval)
 
 
 void
-RosegardenGUIApp::slotToggleShowTipsOnStartup()
+RosegardenGUIApp::slotShowTip()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotToggleShowTipsOnStartup" << endl;
-    KTipDialog::setShowOnStart(m_viewTipsOnStartup->isChecked());
-}
-
-void
-RosegardenGUIApp::slotShowTips()
-{
-    RG_DEBUG << "RosegardenGUIApp::slotShowTips" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotShowTip" << endl;
     KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true);
 }
 
