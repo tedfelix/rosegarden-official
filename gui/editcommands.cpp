@@ -441,8 +441,23 @@ EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
 					   Rosegarden::timeT beginTime,
 					   Rosegarden::timeT endTime,
 					   Rosegarden::Quantizer quantizer) :
-    BasicCommand(getGlobalName(&quantizer), segment, beginTime, endTime),
-    m_quantizer(quantizer)
+    BasicCommand(getGlobalName(&quantizer), segment, beginTime, endTime,
+		 true), // bruteForceRedo
+    m_quantizer(quantizer),
+    m_selection(0)
+{
+    // nothing else
+}
+
+EventQuantizeCommand::EventQuantizeCommand(Rosegarden::EventSelection &selection,
+					   Rosegarden::Quantizer quantizer) :
+    BasicCommand(getGlobalName(&quantizer),
+		 selection.getSegment(),
+		 selection.getBeginTime(),
+		 selection.getEndTime(),
+		 true), // bruteForceRedo
+    m_quantizer(quantizer),
+    m_selection(&selection)
 {
     // nothing else
 }
@@ -470,8 +485,28 @@ void
 EventQuantizeCommand::modifySegment()
 {
     Segment &segment = getSegment();
-    m_quantizer.quantize(&segment,
-			 segment.findTime(getBeginTime()),
-			 segment.findTime(getEndTime()));
+
+    if (m_selection) {
+
+	Segment::iterator i = segment.findTime(getBeginTime());
+	Segment::iterator j;
+	Segment::iterator k = segment.findTime(getEndTime());
+
+	while (j != k) {
+	
+	    for (j = i; j != k && m_selection->contains(*j); ++j);
+
+	    if (j != i) {
+		//!!! uh, I think this can break j because of rest normalization
+		m_quantizer.quantize(&segment, i, j);
+		i = j;
+	    }
+	}
+
+    } else {
+	m_quantizer.quantize(&segment,
+			     segment.findTime(getBeginTime()),
+			     segment.findTime(getEndTime()));
+    }
 }
 

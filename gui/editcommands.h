@@ -191,6 +191,9 @@ public:
 			 Rosegarden::timeT endTime,
 			 Rosegarden::Quantizer);
     
+    EventQuantizeCommand(Rosegarden::EventSelection &selection,
+			 Rosegarden::Quantizer);
+    
     static QString getGlobalName(Rosegarden::Quantizer *quantizer = 0);
     
 protected:
@@ -198,6 +201,7 @@ protected:
 
 private:
     Rosegarden::Quantizer m_quantizer;
+    Rosegarden::EventSelection *m_selection;
 };
 
 

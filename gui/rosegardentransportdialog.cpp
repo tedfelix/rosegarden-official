@@ -444,8 +444,6 @@ RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
 	m_tenSeconds = -1;
     }
 
-    bar += 1; // display bars are one-based, internal bars are zero-based
-    
     m_unitMinutes = ( bar ) % 10;
     m_tenMinutes = ( bar / 10 ) % 10;
     

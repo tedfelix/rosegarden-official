@@ -180,6 +180,9 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 
     timeT longTime = longNote.getDuration();
 
+    //!!! we should prefer to round up to a note with fewer dots rather
+    // than down to one with more, if the distances are about the same
+
     if (shortTime < unit || 
 	(longTime - duration < duration - shortTime)) {
 //	cerr << "returning(3) " << longTime << std::endl;
