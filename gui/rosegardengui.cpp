@@ -685,7 +685,7 @@ void RosegardenGUIApp::fileOpen()
 {
     statusHelpMsg(i18n("Opening file..."));
 
-    KURL url = KFileDialog::getOpenURL(QString::null, "*.xml", this,
+    KURL url = KFileDialog::getOpenURL(QString::null, "*.rg", this,
                                        i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -729,7 +729,7 @@ void RosegardenGUIApp::fileSaveAs()
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), statusBar());
 
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
-                                                 i18n("*.xml"), this, i18n("Save as..."));
+                                                 i18n("*.rg"), this, i18n("Save as..."));
     if (!newName.isEmpty()) {
         QFileInfo saveAsInfo(newName);
         m_doc->setTitle(saveAsInfo.fileName());

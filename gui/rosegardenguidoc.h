@@ -196,7 +196,20 @@ protected:
      * @return false if parsing failed
      * @see RoseXmlHandler
      */
-    bool xmlParse(QFile& file, QString &errMsg);
+    bool xmlParse(QString& fileContents, QString &errMsg);
+
+    /**
+     * Write the given string to the given file, compressed.
+     * @return false for failure
+     */
+    bool writeToFile(const QString &fileName, const QString &text);
+
+    /**
+     * Read the contents of the given string into the given text stream,
+     * uncompressing as you go.
+     * @return false for failure
+     */
+    bool readFromFile(const QString &fileName, QString &text);
  	
 public:	
     /**

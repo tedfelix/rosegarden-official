@@ -262,8 +262,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             delete m_currentEvent;
         }
 
-        m_currentEvent = new XmlStorableEvent(atts);
-        m_currentEvent->setAbsoluteTime(m_currentTime);
+        m_currentEvent = new XmlStorableEvent(atts, m_currentTime);
 
         if (m_inGroup) {
             m_currentEvent->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);

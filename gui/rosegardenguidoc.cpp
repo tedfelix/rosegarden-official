@@ -32,6 +32,8 @@
 
 #include <string>
 
+#include <zlib.h>
+
 // application specific includes
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
@@ -215,12 +217,20 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     
     m_absFilePath=fileInfo.absFilePath();	
 
-    QFile file(filename);
     QString errMsg;
-    bool fileParsedOk = xmlParse(file, errMsg);
-    file.close();   
 
-    if (!fileParsedOk) {
+    QString fileContents;
+    bool okay = readFromFile(filename, fileContents);
+    if (!okay) errMsg = "Couldn't read from file";
+    else okay = xmlParse(fileContents, errMsg);
+
+/*
+    QFile file(filename);
+    bool okay = xmlParse(file, errMsg);
+    file.close();   
+*/
+
+    if (!okay) {
         QString msg(i18n("Error when parsing file '%1' : %2")
                     .arg(filename)
                     .arg(errMsg));
@@ -246,46 +256,48 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
                          << filename << ")" << endl;
 
-    QFile file(filename);
-    file.open(IO_WriteOnly);
-
-    QTextStream fileStream(&file);
+    QString outText;
+    QTextStream outStream(&outText, IO_WriteOnly);
 
     // output XML header
     //
-    fileStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
 
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
-    fileStream << QString(m_composition.toXmlString().c_str()) << endl << endl;
+    outStream << QString(m_composition.toXmlString().c_str()) << endl << endl;
 
     // output all elements
     //
     // Iterate on segments
-    for (Composition::iterator trks = m_composition.begin();
-         trks != m_composition.end(); ++trks) {
+    for (Composition::iterator segitr = m_composition.begin();
+         segitr != m_composition.end(); ++segitr) {
+
+	Segment *segment = *segitr;
 
         //--------------------------
-        fileStream << QString("<segment track=\"%1\" start=\"%2\">")
-            .arg((*trks)->getTrack())
-            .arg((*trks)->getStartIndex()) << endl;
+        outStream << QString("<segment track=\"%1\" start=\"%2\">")
+            .arg(segment->getTrack())
+            .arg(segment->getStartIndex()) << endl;
 
         long currentGroup = -1;
+	bool inChord = false;
+	timeT expectedTime = 0;
 
-        for (Segment::iterator i = (*trks)->begin();
-             i != (*trks)->end(); ++i) {
+        for (Segment::iterator i = segment->begin();
+             i != segment->end(); ++i) {
 
             long group;
             if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
                 if (group != currentGroup) {
-                    if (currentGroup != -1) fileStream << "</group>" << endl;
+                    if (currentGroup != -1) outStream << "</group>" << endl;
                     std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
-                    fileStream << "<group type=\"" << type.c_str() << "\"";
+                    outStream << "<group type=\"" << type.c_str() << "\"";
 		    if (type == GROUP_TYPE_TUPLED) {
-			fileStream
+			outStream
 			    << " length=\""
 			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_LENGTH)
 			    << "\" untupled=\""
@@ -295,60 +307,67 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 			    << "\"";
 		    }
 			    
-		    fileStream << ">" << endl;
+		    outStream << ">" << endl;
                     currentGroup = group;
                 }
             } else if (currentGroup != -1) {
-                fileStream << "</group>" << endl;
+                outStream << "</group>" << endl;
                 currentGroup = -1;
             }
+
+	    timeT absTime = (*i)->getAbsoluteTime();
 
             Segment::iterator nextEl = i;
             ++nextEl;
 
-            if (nextEl != (*trks)->end()) {
+            if (nextEl != segment->end() &&
+                (*nextEl)->getAbsoluteTime() == absTime &&
+		(*i)->getDuration() != 0 &&
+		!inChord) {
+		outStream << "<chord>" << endl;
+		inChord = true;
+	    }
 
-                timeT absTime = (*i)->getAbsoluteTime();
-            
-                if ((*nextEl)->getAbsoluteTime() == absTime) {
+	    outStream << '\t'
+		<< XmlStorableEvent(**i).toXmlString(expectedTime) << endl;
 
-                    fileStream << "<chord>" << endl; //------
+	    if (nextEl != segment->end() &&
+		(*nextEl)->getAbsoluteTime() != absTime &&
+		inChord) {
+		outStream << "</chord>" << endl;
+		inChord = false;
+	    }
 
-                    while ((*i)->getAbsoluteTime() == absTime) {
-                        fileStream << '\t'
-                                   << XmlStorableEvent::toXmlString(*(*i))
-                                   << endl;
-                        ++i;
-                        if (i == (*trks)->end()) break;
-                    }
-
-                    fileStream << "</chord>" << endl; //-----
-
-                    if (i == (*trks)->end()) break;
-		    --i;
-		    continue;
-                }
-            }
-        
-            fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
+	    if (inChord) {
+		expectedTime = absTime;
+	    } else {
+		expectedTime = absTime + (*i)->getDuration();
+	    }
         }
+
+	if (inChord) {
+	    outStream << "</chord>" << endl;
+	}
 
         if (currentGroup != -1) {
-            fileStream << "</group>" << endl;
+            outStream << "</group>" << endl;
         }
 
-        fileStream << "</segment>" << endl; //-------------------------
+        outStream << "</segment>" << endl; //-------------------------
 
     }
     
     // close the top-level XML tag
     //
-    fileStream << "</rosegarden-data>\n";
+    outStream << "</rosegarden-data>\n";
+
+    bool okay = writeToFile(filename, outText);
+    if (!okay) return false;
 
     kdDebug(KDEBUG_AREA) << endl << "RosegardenGUIDoc::saveDocument() finished"
                          << endl;
 
-    m_modified=false;
+    m_modified = false;
     m_commandHistory.documentSaved();
     return true;
 }
@@ -370,12 +389,13 @@ void RosegardenGUIDoc::deleteViews()
 
 
 bool
-RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
+RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
 {
     // parse xml file
     RoseXmlHandler handler(m_composition);
 
-    QXmlInputSource source(file);
+    QXmlInputSource source;
+    source.setData(fileContents);
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
@@ -387,6 +407,42 @@ RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
     return ok;
 }
 
+
+bool
+RosegardenGUIDoc::writeToFile(const QString &file, const QString &text)
+{
+    gzFile fd = gzopen(file.latin1(), "wb");
+    if (!fd) return false;
+    
+    const char *ctext = text.latin1();
+    size_t csize = strlen(ctext);
+    int actual = gzwrite(fd, (void *)ctext, csize);
+    gzclose(fd);
+
+    return ((size_t)actual == csize);
+}
+
+bool
+RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
+{
+    text = "";
+    gzFile fd = gzopen(file.latin1(), "rb");
+    if (!fd) return false;
+
+    static char buffer[1000];
+
+    while (gzgets(fd, buffer, 1000)) {
+	text.append(buffer);
+	if (gzeof(fd)) {
+	    gzclose(fd);
+	    return true;
+	}
+    }
+	
+    // gzgets only returns false on error
+    return false;
+}    
+    
 
 void
 RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)

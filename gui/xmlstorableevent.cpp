@@ -33,11 +33,13 @@ using Rosegarden::String;
 using Rosegarden::timeT;
 
 
-XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
+XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
+				   timeT absoluteTime)
 {
     setDuration(0);
 
     for (int i = 0; i < attributes.length(); ++i) {
+
 	QString attrName(attributes.qName(i)),
             attrVal(attributes.value(i));
 
@@ -76,6 +78,28 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 		setDuration(d);
 	    }
 
+	} else if (attrName == "absoluteTime") {
+
+	    bool isNumeric = true;
+	    timeT t = attrVal.toInt(&isNumeric);
+
+	    if (!isNumeric) {
+		kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Bad absolute time: " << attrVal << endl;
+	    } else {
+		absoluteTime = t;
+	    }
+
+	} else if (attrName == "timeOffset") {
+
+	    bool isNumeric = true;
+	    timeT t = attrVal.toInt(&isNumeric);
+
+	    if (!isNumeric) {
+		kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Bad time offset: " << attrVal << endl;
+	    } else {
+		absoluteTime += t;
+	    }
+
         } else {
 
             // set generic property
@@ -102,10 +126,10 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
                     set<String>(attrName.latin1(), attrVal.latin1());
                 }
             }
-
         }
-
     }
+
+    setAbsoluteTime(absoluteTime);
 }
 
 XmlStorableEvent::XmlStorableEvent(const Event &e)
@@ -153,7 +177,7 @@ XmlStorableEvent::setPropertiesFromAttributes(const QXmlAttributes &attributes)
 
 
 QString
-XmlStorableEvent::toXmlString() const
+XmlStorableEvent::toXmlString(timeT expectedTime) const
 {
     QString res = "<event";
 
@@ -166,6 +190,13 @@ XmlStorableEvent::toXmlString() const
 
     if (getSubOrdering() != 0) {
         res += QString(" subordering=\"%1\"").arg(getSubOrdering());
+    }
+
+    if (expectedTime == 0) {
+	res += QString(" absoluteTime=\"%1\"").arg(getAbsoluteTime());
+    } else if (getAbsoluteTime() != expectedTime) {
+	res += QString(" timeOffset=\"%1\"").arg(getAbsoluteTime() -
+						 expectedTime);
     }
 
     res += ">";
@@ -189,8 +220,9 @@ XmlStorableEvent::toXmlString() const
     return res;
 }
 
+/*!!!
 QString
-XmlStorableEvent::toXmlString(const Event &e)
+XmlStorableEvent::toXmlString(const Event &e, timeT expectedTime)
 {
     QString res = "<event";
 
@@ -203,6 +235,10 @@ XmlStorableEvent::toXmlString(const Event &e)
 
     if (e.getSubOrdering() != 0) {
         res += QString(" subordering=\"%1\"").arg(e.getSubOrdering());
+    }
+
+    if (includeAbsoluteTime) {
+	res += QString(" absoluteTime=\"%1\"").arg(e.getAbsoluteTime());
     }
 
     res += ">";
@@ -225,3 +261,4 @@ XmlStorableEvent::toXmlString(const Event &e)
 //    res += "/>";
     return res;
 }
+*/

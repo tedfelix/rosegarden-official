@@ -66,7 +66,7 @@ New features suitable for 0.2
 
 1.  selection and cut, copy, paste
 
-2.  dynamics, such as slurs and hairpins
+2.  dynamics, such as slurs and hairpins [DONE]
 
 3.  text on the score (and MIDI import and export)
 

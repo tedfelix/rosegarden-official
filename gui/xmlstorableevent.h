@@ -36,9 +36,12 @@ class XmlStorableEvent : public Rosegarden::Event
 {
 public:
     /**
-     * Construct an XmlStorableEvent out of the XML attributes \a atts
+     * Construct an XmlStorableEvent out of the XML attributes \a atts.
+     * If the attributes do not include absoluteTime, use the given
+     * value plus the value of any timeOffset attribute.
      */
-    XmlStorableEvent(const QXmlAttributes& atts);
+    XmlStorableEvent(const QXmlAttributes& atts,
+		     Rosegarden::timeT absoluteTime);
 
     /**
      * Construct an XmlStorableEvent from the specified Event
@@ -51,14 +54,20 @@ public:
     void setPropertiesFromAttributes(const QXmlAttributes& atts);
 
     /**
-     * Get the XML string representing the object
+     * Get the XML string representing the object.  If the absolute
+     * time of the event differs from the given absolute time, include
+     * the difference between the two as a timeOffset attribute.
+     * If expectedTime == 0, include an absoluteTime attribute instead.
      */
-    QString        toXmlString() const;
+    QString toXmlString(Rosegarden::timeT expectedTime = 0) const;
 
     /**
-     * Get the XML string representing the specified Event
+     * Get the XML string representing the specified Event.  If the
+     * absolute time of the event differs from the given absolute
+     * time, include the difference between the two as a timeOffset
+     * attribute.
      */
-    static QString toXmlString(const Event&);
+//!!!    static QString toXmlString(const Event&, timeT expectedTime = 0);
 };
 
 #endif
