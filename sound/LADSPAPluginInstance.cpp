@@ -37,7 +37,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
         m_position(position),
         m_instanceHandle(0),
         m_descriptor(descriptor),
-        m_processed(false)
+        m_processed(false),
+        m_bypassed(false)
 {
     // Discover ports numbers and identities
     //

@@ -26,23 +26,27 @@ o Audio
    - countdown dialog for audio recording [DONE]
    - check disk space on audio record start [ALMOST DONE]
 
-   - plugins matching stereo/mono instruments??
+   - plugins matching stereo/mono instruments [FIXED]
    - seperate audio level sends for stereo monitoring [DONE]
    - improve Audio VU meter
    - get record fader level working at sequencer
 
    - get Studio reapplying working
 
+   - make outofspace.rg sound like something reasonable
+
 o Audio busses and routing
    - n jack input routes [DONE]
    - multiple audio record arm [HALF DONE - for 0.9.5]
+
+o Audio looping (doesn't work)
+
+o Audio/MIDI looping and start position (performance)
 
 o JACK autostart and process management  [SCRIPT?]
 o automatic Sequencer process management [SCRIPT?]
 
 o Toggle record mode for punch in/out [HALF COMPLETE]
-
-o audio/MIDI looping and start position (performance)
 
 o MIDI export broken for key sig and SysExs [CC?]
 
