@@ -662,12 +662,10 @@ void TrackEditor::dropEvent(QDropEvent* event)
     if (m_tempoRuler && m_tempoRuler->isVisible()) heightAdjust += m_tempoRuler->height();
     if (m_chordNameRuler && m_chordNameRuler->isVisible()) heightAdjust += m_chordNameRuler->height();
 
-    QPoint posInSegmentCanvas = m_segmentCanvas->mapFrom(this, event->pos());
-    int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y() +
-                                                   m_segmentCanvas->verticalScrollBar()->value());
+    QPoint posInSegmentCanvas = m_segmentCanvas->viewportToContents(m_segmentCanvas->viewport()->mapFrom(this, event->pos()));
+    int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y());
     Rosegarden::timeT time =
-        m_segmentCanvas->grid().getRulerScale()->getTimeForX(posInSegmentCanvas.x() +
-                                                             m_segmentCanvas->horizontalScrollBar()->value());
+        m_segmentCanvas->grid().getRulerScale()->getTimeForX(posInSegmentCanvas.x());
     
 
     if (QUriDrag::decode(event, uri)) {
