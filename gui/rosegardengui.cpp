@@ -438,9 +438,16 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     m_doc->saveIfModified();
     m_doc->closeDocument();
 
-    m_doc->openDocument(_cmdl);
+    if (m_doc->openDocument(_cmdl)) {
 
-    initView();
+        initView();
+
+        // See comment in RosegardenGUIApp::openURL()
+        // for an explanation on why we have to do this
+        actionCollection()->action("draw")->activate();
+        actionCollection()->action("move")->activate();
+    }
+
 }
 
 void RosegardenGUIApp::openFile(const QString& url)
