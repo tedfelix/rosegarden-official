@@ -25,6 +25,7 @@
 
 #include "Instrument.h"
 #include "Device.h"
+#include "PluginManager.h"
 
 #ifndef _MAPPEDSTUDIO_H_
 #define _MAPPEDSTUDIO_H_
@@ -39,8 +40,6 @@
 
 namespace Rosegarden
 {
-
-class PluginManager;
 
 
 typedef unsigned int MappedObjectId;
@@ -184,17 +183,14 @@ protected:
 // faders/Instruments.
 //
 //
-class MappedAudioPluginManager : public MappedObject
+class MappedAudioPluginManager : public MappedObject, public PluginManager
 {
 public:
     MappedAudioPluginManager(MappedObjectId id);
     ~MappedAudioPluginManager();
 
-    PluginManager* getPluginManager() { return m_pM; }
-
 protected:
 
-    PluginManager *m_pM;
 };
 
 

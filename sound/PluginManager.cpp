@@ -157,6 +157,19 @@ PluginManager::loadPlugin(const std::string &path)
 
 }
 
+Plugin*
+PluginManager::getPluginForId(PluginId id)
+{
+    PluginIterator it;
+    for (it = m_plugins.begin(); it != m_plugins.end(); it++)
+    {
+        if ((*it)->getId() == id)
+            return *it;
+    }
+    return 0;
+}
+
+
 };
 
 

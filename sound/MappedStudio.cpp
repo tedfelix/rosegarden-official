@@ -176,13 +176,10 @@ MappedAudioPluginManager::MappedAudioPluginManager(MappedObjectId id)
                   id,
                   true)
 {
-    m_pM = new PluginManager();
-    m_pM->discoverPlugins();
 }
 
 MappedAudioPluginManager::~MappedAudioPluginManager()
 {
-    delete m_pM;
 }
 
 

@@ -972,6 +972,9 @@ RosegardenSequencerApp::initialiseStudio()
         }
     }
 
+    pM->getenvLADSPAPath();
+    pM->discoverPlugins();
+
 }
 
 

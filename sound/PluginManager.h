@@ -107,6 +107,10 @@ public:
     // Load a given plugin
     void loadPlugin(const std::string &path);
 
+    // Return the plugin to load for a given id
+    //
+    Plugin* getPluginForId(PluginId id);
+
     // Clear list down
     //
     void clearPlugins();
@@ -121,7 +125,7 @@ protected:
     std::string m_path;
 
     std::vector<Plugin*> m_plugins;
-    PluginId        m_runningId;
+    PluginId             m_runningId;
 
 };
 
