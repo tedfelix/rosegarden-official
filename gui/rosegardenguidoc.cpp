@@ -94,6 +94,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    Rosegarden::AudioPluginManager *pluginManager,
                                    const char *name)
     : QObject(parent, name),
+      m_modified(false),
+      m_lastSaved(clock()),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
@@ -179,6 +181,16 @@ void RosegardenGUIDoc::setModified(bool m)
 
 void RosegardenGUIDoc::slotDocumentModified()
 {
+    clock_t now = clock();
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    unsigned int autosaveMinutes =
+	config->readUnsignedNumEntry("autosaveinterval", 5);
+
+    if (((now - m_lastSaved) * 1000 / CLOCKS_PER_SEC) > 60 * autosaveMinutes) {
+	autosave();
+    }
+
 //    RG_DEBUG << "RosegardenGUIDoc::slotDocumentModified()" << endl;
     setModified(true);
     emit documentModified();
@@ -346,7 +358,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 }
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
-                                    const char* format)
+                                    const char* format,
+				    bool autosave)
 {
     RG_DEBUG << "RosegardenGUIDoc::saveDocument("
                          << filename << ")\n";
@@ -541,9 +554,19 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
-    m_modified = false;
-    m_commandHistory->documentSaved();
+    if (!autosave) {
+	m_modified = false;
+	m_commandHistory->documentSaved();
+    }
+    m_lastSaved = clock();
     return true;
+}
+
+void RosegardenGUIDoc::autosave()
+{
+    QString filename = getAbsFilePath();
+    filename += "~";
+    saveDocument(filename, 0, true);
 }
 
 void RosegardenGUIDoc::deleteContents()

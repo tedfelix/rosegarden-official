@@ -32,6 +32,8 @@
 #include <qlist.h>
 #include <qxml.h>
 
+#include <ctime> // for clock_t
+
 #include "rosegardendcop.h"
 #include "rosegardengui.h"
 
@@ -142,7 +144,13 @@ public:
     /**
      * saves the document under filename and format.
      */	
-    bool saveDocument(const QString &filename, const char *format=0);
+    bool saveDocument(const QString &filename, const char *format=0,
+		      bool autosave = false);
+
+    /**
+     * saves the document to a suitably-named backup file
+     */
+    void autosave();
 
     /**
      *   sets the path to the file connected with the document
@@ -392,6 +400,11 @@ private:
      * the modified flag of the current document
      */
     bool m_modified;
+
+    /**
+     * when the document was last saved or autosaved
+     */
+    clock_t m_lastSaved;
 
     /**
      * the title of the current document

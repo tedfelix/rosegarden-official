@@ -110,7 +110,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          5, 2, // nbrow, nbcol
+                                          6, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
@@ -123,6 +123,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                  frame), 3, 0);
     layout->addWidget(new QLabel(i18n("Selector greedy mode"),
                                  frame), 4, 0);
+    layout->addWidget(new QLabel(i18n("Auto-save interval (in minutes)"),
+                                 frame), 5, 0);
 
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
@@ -157,6 +159,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
 
     m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
                                                           true));
+
+    m_autosaveInterval = new QSpinBox(frame);
+    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 5));
+    m_autosaveInterval->setMaxValue(120);
+    m_autosaveInterval->setMinValue(1);
+    layout->addWidget(m_autosaveInterval, 5, 1);
 
     addTab(frame, i18n("General"));
 
@@ -234,6 +242,9 @@ void GeneralConfigurationPage::apply()
     NotationSelector::setGreedyMode(greedyMode);
     SegmentSelector::setGreedyMode(greedyMode);
     m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
+
+    unsigned int autosaveInterval = m_autosaveInterval->value();
+    m_cfg->writeEntry("autosaveInterval", autosaveInterval);
 
     QString externalAudioEditor = getExternalAudioEditor();
 
