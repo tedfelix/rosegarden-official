@@ -206,6 +206,10 @@ public slots:
                                             const Rosegarden::RealTime &startTime,
                                             const Rosegarden::RealTime &endTime);
 
+    void slotAddAudioSegmentDefaultPosition(Rosegarden::AudioFileId,
+                                            const Rosegarden::RealTime &startTime,
+                                            const Rosegarden::RealTime &endTime);
+
     void slotAddAudioSegment(Rosegarden::AudioFileId audioId,
                              Rosegarden::TrackId trackId,
                              Rosegarden::timeT position,

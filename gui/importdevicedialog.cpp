@@ -157,7 +157,7 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, KURL url) :
     bool rename = config->readBoolEntry("importbanksrename", true);
     if (m_rename) m_rename->setChecked(rename);
 
-    bool overwrite = config->readBoolEntry("importbanksoverwrite", false);
+    bool overwrite = config->readBoolEntry("importbanksoverwrite", true);
     if (overwrite) m_buttonGroup->setButton(1);
     else m_buttonGroup->setButton(0);
 }

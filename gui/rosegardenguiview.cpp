@@ -1047,6 +1047,77 @@ RosegardenGUIView::slotAddAudioSegmentCurrentPosition(Rosegarden::AudioFileId au
 
 
 void
+RosegardenGUIView::slotAddAudioSegmentDefaultPosition(Rosegarden::AudioFileId audioFileId,
+                                                      const Rosegarden::RealTime &startTime,
+                                                      const Rosegarden::RealTime &endTime)
+{
+    // Add at current track if it's an audio track, otherwise at first
+    // empty audio track if there is one, otherwise at first audio track.
+    // This behaviour should be of no interest to proficient users (who
+    // should have selected the right track already, or be using drag-
+    // and-drop) but it should save beginners from inserting an audio
+    // segment and being quite unable to work out why it won't play
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+
+    Rosegarden::TrackId currentTrackId = comp.getSelectedTrack();
+    Rosegarden::Track *track = comp.getTrackById(currentTrackId);
+
+    if (track) {
+	Rosegarden::InstrumentId ii = track->getInstrument();
+	Rosegarden::Instrument *instrument = studio.getInstrumentById(ii);
+
+	if (instrument &&
+	    instrument->getType() == Rosegarden::Instrument::Audio) {
+	    slotAddAudioSegment(audioFileId, currentTrackId,
+				comp.getPosition(), startTime, endTime);
+	    return;
+	}
+    }
+
+    // current track is not an audio track, find a more suitable one
+
+    Rosegarden::TrackId bestSoFar = currentTrackId;
+
+    for (Rosegarden::Composition::trackcontainer::const_iterator
+	     ti = comp.getTracks().begin();
+	 ti != comp.getTracks().end(); ++ti) {
+
+	Rosegarden::InstrumentId ii = ti->second->getInstrument();
+	Rosegarden::Instrument *instrument = studio.getInstrumentById(ii);
+
+	if (instrument &&
+	    instrument->getType() == Rosegarden::Instrument::Audio) {
+
+	    if (bestSoFar == currentTrackId) bestSoFar = ti->first;
+	    bool haveSegment = false;
+
+	    for (Rosegarden::Composition::segmentcontainer::const_iterator si =
+		     comp.getSegments().begin();
+		 si != comp.getSegments().end(); ++si) {
+		if ((*si)->getTrack() == ti->first) {
+		    // there's a segment on this track
+		    haveSegment = true;
+		    break;
+		}
+	    }
+
+	    if (!haveSegment) { // perfect
+		slotAddAudioSegment(audioFileId, ti->first,
+				    comp.getPosition(), startTime, endTime);
+		return;
+	    }
+	}
+    }
+
+    slotAddAudioSegment(audioFileId, bestSoFar,
+			comp.getPosition(), startTime, endTime);
+    return;
+}
+
+
+void
 RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 {
     QTextIStream s(&audioDesc);

@@ -74,12 +74,6 @@ the notation editor?  Simply select the segments, then use <b>Edit -> Open in No
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that when you insert audio segments into your composition, they always
-insert at the bottom of the track list?</p>
-</html>
-</tip>
-<tip category="Rosegarden|General">
-<html>
 <p>...that you can toggle all the rulers, instrument parameters, and several
 other options simultaneously with <b>Settings -> Toggle All of the Above</b>?</p>
 </html>
@@ -141,8 +135,8 @@ from the US, Spain, Germany, Russia, and elsewhere... </p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that Rosegarden is available in Spanish, French, German and Russian
-translation?<br><br>
+<p>...that Rosegarden is available in Spanish, French, German, Russian and Welsh
+translations?<br><br>
 If you're interested in translating Rosegarden to another language, drop us a
 line at <b>rosegarden-devel@lists.sourceforge.net</b>.</p>
 </html>

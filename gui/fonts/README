@@ -1,0 +1,48 @@
+
+ABOUT THE LILYPOND FETA FONTS
+=============================
+
+This directory includes three PostScript Type-1 fonts from the GNU
+Lilypond musical notation typesetting project:
+
+	Lilypond-feta-design20.pfa
+	Lilypond-feta-nummer-design10.pfa
+	Lilypond-parmesan-design20.pfa
+
+These were generated from the METAFONT outlines in the Lilypond 2.1.0
+distribution.  A normal make in the Lilypond source distribution's mf/
+directory will create font files called (among others) feta20.pfa,
+feta-nummer10.pfa and parmesan20.pfa, and the supplied fonts are
+exactly those, renamed to make their origin clear.  (The font family
+names within the .pfa files have also been renamed, adding a
+-rosegarden suffix, so as to avoid any possible conflict with other
+versions of the same fonts installed as global system fonts.)
+
+Lilypond and the feta font are copyright 1997 to 2003 by Han-Wen
+Nienhuys and Jan Nieuwenhuizen and are distributed under the terms of
+the GNU General Public Licence, a copy of which may be found in the
+COPYING file in the top-level directory of this distribution.
+
+We would like to express our gratitude to the Lilypond project for
+taking the immense amount of time and effort to create one of the
+highest quality notation fonts available, and then making it free
+under the GPL.
+
+See http://www.lilypond.org/ for more information about Lilypond.
+
+
+GPL COMPLIANCE
+==============
+
+The supplied .pfa files are a compiled version, not the source code of
+these fonts.  Because we do not wish to incorporate significant parts
+of Lilypond source into the Rosegarden distribution, under the terms
+of the GPL we hereby offer to provide the standard Lilypond-2.1.0
+source distribution without charge (except for any necessary shipping
+or packaging fee) upon application to anyone who has received these
+.pfa fonts as part of the Rosegarden distribution.  Of course you
+would normally find it much easier to get the code direct from
+lilypond.org, but we are making this offer anyway so as to ensure
+formal compliance with the GPL.  To take up this offer, please contact
+Chris Cannam, cannam@all-day-breakfast.com.
+

@@ -4158,7 +4158,7 @@ RosegardenGUIApp::slotAudioManager()
                                           const Rosegarden::RealTime&,
                                           const Rosegarden::RealTime&)),
                 m_view,
-                SLOT(slotAddAudioSegmentCurrentPosition(Rosegarden::AudioFileId,
+                SLOT(slotAddAudioSegmentDefaultPosition(Rosegarden::AudioFileId,
                                                         const Rosegarden::RealTime&,
                                                         const Rosegarden::RealTime&)));
         connect(m_audioManagerDialog,
