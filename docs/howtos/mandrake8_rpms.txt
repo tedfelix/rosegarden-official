@@ -1,3 +1,5 @@
+Mandrake 8.0
+
 These are the extra RPMs I had to install to get rosegarden 4.0
 to build from an out-of-the-box full Mandrake 8.0 installation.
 These RPMs are all taken from the two CD Mandrake 8.0 set
@@ -14,5 +16,14 @@ to install more extra packages than this.  Make sure that you have
 all the "sound" or "multimedia" related packages and their -devel-
 equivalents if you're in any doubt.
 
-RB
-30.10.2001
+--
+
+Mandrake 8.1
+
+In addition to standard multimedia RPMs, also installed:
+
+  alsa-lib-devel-0.5.10-2mdk.i586.rpm
+  libarts2-devel-2.2.1-5mdk.i586.rpm
+
+
+RB last updated 3.12.2001
