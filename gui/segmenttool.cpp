@@ -588,7 +588,7 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 
 SegmentSelector::~SegmentSelector()
 {
-    delete m_dispatchTool;
+    //delete m_dispatchTool;
 }
 
 void SegmentSelector::stow()
@@ -826,7 +826,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     if (m_dispatchTool) {
 	m_dispatchTool->handleMouseButtonRelease(e);
-	delete m_dispatchTool;
+	//delete m_dispatchTool;
 	m_dispatchTool = 0;
 	m_canvas->setCursor(Qt::arrowCursor);
 	return;
