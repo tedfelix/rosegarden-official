@@ -1384,7 +1384,7 @@ void NotationView::setupActions()
     //
     // Edition tools (eraser, selector...)
     //
-    noteAction = new KRadioAction(i18n("&Erase"), "eraser", 0,
+    noteAction = new KRadioAction(i18n("&Erase"), "eraser", Key_F3,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");

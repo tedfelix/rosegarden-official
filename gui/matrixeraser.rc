@@ -7,6 +7,9 @@
   <Action name="move"/>
   <Action name="draw"/>
   <Action name="resize"/>
+  <Separator/>
+  <Action name="half_speed"/>
+  <Action name="double_speed"/>
 </Menu>
 
 </kpartgui>

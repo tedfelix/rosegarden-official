@@ -492,6 +492,14 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n("&Halve Speed"), 0, this,
+		SLOT(slotHalfSpeed()), actionCollection(),
+		"half_speed");
+
+    new KAction(i18n("&Double Speed"), 0, this,
+		SLOT(slotDoubleSpeed()), actionCollection(),
+		"double_speed");
+
     new KAction(RescaleCommand::getGlobalName(), 0, this,
 		SLOT(slotRescale()), actionCollection(),
 		"rescale");
@@ -1039,6 +1047,32 @@ void MatrixView::slotTransformsQuantize()
 			    (*m_currentEventSelection,
 			     dialog->getQuantizer()));
     }
+}
+
+void
+MatrixView::slotHalfSpeed()
+{
+    if (!m_currentEventSelection) return;
+
+    KTmpStatusMsg msg(i18n("Halving speed..."), this);
+
+    addCommandToHistory(
+            new RescaleCommand(*m_currentEventSelection,
+                m_currentEventSelection->getTotalDuration() * 2,
+                false));
+}
+
+void
+MatrixView::slotDoubleSpeed()
+{
+    if (!m_currentEventSelection) return;
+
+    KTmpStatusMsg msg(i18n("Doubling speed..."), this);
+
+    addCommandToHistory(
+            new RescaleCommand(*m_currentEventSelection,
+                m_currentEventSelection->getTotalDuration() / 2,
+                 false));
 }
 
 void

@@ -1146,11 +1146,13 @@ RescaleCommand::modifySegment()
     }
 
     for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end(); ++i) {
+        m_selection->removeEvent(*i); // remove from selection
 	segment.eraseSingle(*i);
     }
 
     for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
 	segment.insert(*i);
+        m_selection->addEvent(*i);  // add to selection
     }
 
     if (m_closeGap && diff > 0) {

@@ -270,6 +270,8 @@ public slots:
     /// transforms
     void slotTransformsQuantize();
     void slotRescale();
+    void slotDoubleSpeed();
+    void slotHalfSpeed();
     void slotVelocityUp();
     void slotVelocityDown();
 
