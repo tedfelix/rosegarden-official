@@ -232,7 +232,6 @@ LilypondExporter::write()
         // If the segment doesn't start at 0, add a "skip" to the start
         // No worries about overlapping segments, because Voices can overlap
         str << "\t\t\t\\context Voice {\n";
-        // [Perl|LISP] hackers unite!
         timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
         if (segmentStart > 0) {
             long curNote = long(Note(Note::WholeNote).getDuration());
@@ -245,7 +244,7 @@ LilypondExporter::write()
         }
 
 	timeT prevTime = 0;
-
+        int curTupletNotesRemaining = 0;
         // Write out all events for this Segment
         for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
 
@@ -261,11 +260,25 @@ LilypondExporter::write()
 	    }
 	    prevTime = absoluteTime;
 
+            timeT duration = (*j)->getDuration();
             if ((*j)->isa(Note::EventType) ||
                 (*j)->isa(Note::EventRestType)) {
-                  
-                Note tmpNote = Note::getNearestNote((*j)->getDuration(),
-                                                    MAX_DOTS);              
+                // Tuplet code from notationhlayout.cpp
+                int tcount = 0;
+                int ucount = 0;
+                if ((*j)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                    tcount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
+                    ucount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
+                    assert(tcount != 0);
+
+                    duration = ((*j)->getDuration() / tcount) * ucount;
+                    if (curTupletNotesRemaining == 0) {
+                        // +1 is a hack so we can close the tuplet bracket
+                        // at the right time
+                        curTupletNotesRemaining = ucount + 1;
+                    }
+                }
+                Note tmpNote = Note::getNearestNote(duration, MAX_DOTS);
 
                 if ((*j)->isa(Note::EventType)) {
 		    // Algorithm for writing chords:
@@ -282,6 +295,16 @@ LilypondExporter::write()
 			str << "> ";
 			currentlyWritingChord = false;
 		    }
+                    if (curTupletNotesRemaining > 0) {
+                        curTupletNotesRemaining--;
+                        if (curTupletNotesRemaining == 0) {
+                            str << "} ";
+                        }
+                    }
+                    if (ucount == curTupletNotesRemaining &&
+                        ucount != 0) {
+                        str << "\\times " << tcount << "/" << ucount << " { ";
+                    }
 		    if (nextNoteIsInChord && !currentlyWritingChord) {
 			currentlyWritingChord = true;
 			str << "< ";
@@ -325,6 +348,16 @@ LilypondExporter::write()
 			handleStartingEvents(eventsToStart, addTie, str);
 			str << "> ";
 		    }
+                    if (curTupletNotesRemaining > 0) {
+                        curTupletNotesRemaining--;
+                        if (curTupletNotesRemaining == 0) {
+                            str << "} ";
+                        }
+                    }
+                    if (ucount == curTupletNotesRemaining &&
+                        ucount != 0) {
+                        str << "\\times " << tcount << "/" << ucount << " { ";
+                    }
 		    handleEndingEvents(eventsInProgress, j, str);
 		    str << "r";
                 }
