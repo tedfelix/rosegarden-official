@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2004-10-03 11:09+0200\n"
-"PO-Revision-Date: 2004-11-10 21:52+0900\n"
+"PO-Revision-Date: 2004-11-18 22:48+0900\n"
 "Last-Translator: oota toshiya <ribbon@users.sourceforge.net>\n"
 "Language-Team: Japanese <ribbon@users.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -63,6 +63,21 @@ msgid ""
 "     you will need to add the correct directory to your KDEDIRS\n"
 "     environment variable before you can run it."
 msgstr ""
+" 間違ったバージョンのRosegardenのデータファイルが標準KDE\n"
+" インストールディレクトリ中に見付かった。(現在のものは%1だが\n"
+" インストールされていたファイルはバージョンが%2である)。\n"
+"\n"
+" これはおそらく以下の理由による:\n"
+"\n"
+" 1. 現在のものが新しいバージョンのRosegardenで、まだインス\n"
+"    トールされていない。もしもあなた自身でコンパイルしたな\n"
+"    らば、\"make install\"の実行と、完全に正しく完了したか\n"
+"     を確認する。\n"
+"\n"
+" 2. 非標準のディレクトリにアップデートがインストールされ、\n"
+"    標準のディレクトリに古いものが見付かった。もしもそうな\n"
+"    らば、実行する前に環境変数KDEDIRSに正しいディレクトリを\n"
+"    追加しなければならない。"
 
 #: main.cpp:382 main.cpp:400
 msgid "Installation problem"
@@ -89,7 +104,18 @@ msgid ""
 "     installed into $HOME or a local third-party package directory\n"
 "     like /usr/local or /opt."
 msgstr ""
-
+" 1つまたはそれ以上のRosegardenのデータファイルが標準のKDE\n"
+" インストールディレクトリに見当たらない。\n"
+"\n"
+" これはおそらく以下の理由による:\n"
+" 1. Rosegardenが完全にインストールされていない。もしもあなた\n"
+"    自身でコンパイルしたならば、\"make install\"の実行と、正しく\n"
+"    完了したかを確認する。\n"
+"\n"
+" 2. 非標準のディレクトリにアップデートがインストールされ、\n"
+"    実行する前に環境変数KDEDIRSにこのディレクトリを追加する\n"
+"    必要がある。これは、たとえば/usr/localや/optのようなサード\n"
+"    パーティ用ディレクトリか$HOMEにインストールする場合であろう。"
 #: main.cpp:411
 msgid "Rosegarden"
 msgstr ""
@@ -126,6 +152,8 @@ msgid ""
 "UI improvements\n"
 "bug fixes"
 msgstr ""
+"UI 改善\n"
+"バグ修正"
 
 #: main.cpp:426
 msgid ""
@@ -217,7 +245,7 @@ msgstr "コントローライベントの挿入"
 
 #: controlruler.cpp:632
 msgid "Erase Controller Event(s)"
-msgstr ""
+msgstr "コントローライベントの消去"
 
 #: controlruler.cpp:1647 editview.cpp:828
 msgid "Unsupported Event Type"
@@ -230,11 +258,11 @@ msgstr "ピッチベンド"
 
 #: controlruler.cpp:1665 eventfilter.cpp:201
 msgid "Controller Events"
-msgstr ""
+msgstr "コントローライベント"
 
 #: controlruler.cpp:1754
 msgid "Controller Event Number"
-msgstr ""
+msgstr "コントローライベント番号"
 
 #: controlruler.cpp:1955
 msgid "Add line of controllers"
@@ -629,6 +657,10 @@ msgid ""
 "<b>Composition -> Studio -> Save Current Document as Default Studio</b>.</"
 "p>\n"
 msgstr ""
+"<p>\n"
+"<b>Composition -> スタジオ -> 現在のスタジオを既定値のスタジオに\n"
+"保存</b>を使うことによって、現在のドキュメントを既定値のスタジオに"
+"セーブできます</p>\n"
 
 #: tips.cpp:27
 msgid ""
@@ -2041,11 +2073,11 @@ msgstr "セグメント開始時間"
 
 #: rosegardengui.cpp:2479
 msgid "Set Segment Start Times"
-msgstr ""
+msgstr "セグメントの開始時間を指定"
 
 #: rosegardengui.cpp:2480 editviewbase.cpp:646
 msgid "Set Segment Start Time"
-msgstr ""
+msgstr "セグメントの開始時間を指定"
 
 #: rosegardengui.cpp:2511 editviewbase.cpp:664
 msgid "Segment Duration"
@@ -2360,7 +2392,7 @@ msgstr ""
 
 #: dialogs.cpp:186 dialogs.cpp:399 dialogs.cpp:2766
 msgid "Scope"
-msgstr "スコープ"
+msgstr "範囲"
 
 #: dialogs.cpp:198
 msgid "Insertion point is at start of measure %1."
@@ -2424,7 +2456,7 @@ msgstr ""
 
 #: dialogs.cpp:413
 msgid "Flatten"
-msgstr ""
+msgstr "♭付加"
 
 #: dialogs.cpp:415
 msgid "Key"
@@ -2432,11 +2464,11 @@ msgstr ""
 
 #: dialogs.cpp:419
 msgid "Sharpen"
-msgstr ""
+msgstr "♯付加"
 
 #: dialogs.cpp:438
 msgid "Apply to current segment only"
-msgstr ""
+msgstr "現在のセグメントのみに適用"
 
 #: dialogs.cpp:441
 msgid "Apply to all segments at this time"
@@ -3504,7 +3536,7 @@ msgstr "音符の挿入"
 
 #: notationcommands.cpp:243
 msgid "Add Cle&f Change..."
-msgstr ""
+msgstr "音部記号の追加(&f)"
 
 #: notationcommands.cpp:306
 msgid "Insert Text"
@@ -4809,7 +4841,7 @@ msgstr "<プラグイン無し>"
 
 #: instrumentparameterbox.cpp:664
 msgid "Bank"
-msgstr ""
+msgstr "バンク"
 
 #: instrumentparameterbox.cpp:665
 msgid "Variation"
@@ -4817,11 +4849,11 @@ msgstr ""
 
 #: instrumentparameterbox.cpp:666
 msgid "Program"
-msgstr ""
+msgstr "プログラム"
 
 #: instrumentparameterbox.cpp:667
 msgid "Channel"
-msgstr ""
+msgstr "チャネル"
 
 #: instrumentparameterbox.cpp:779 instrumentparameterbox.cpp:785
 msgid "[ %1 ]"
@@ -5227,26 +5259,26 @@ msgstr ""
 #: matrixtool.cpp:177 matrixtool.cpp:354 matrixtool.cpp:417
 #: matrixtool.cpp:1073
 msgid "Switch to Move Tool"
-msgstr ""
+msgstr "移動ツールに切り替え"
 
 #: matrixtool.cpp:182 matrixtool.cpp:359 matrixtool.cpp:424 matrixtool.cpp:771
 msgid "Switch to Resize Tool"
-msgstr ""
+msgstr "リサイズツールに切り替え"
 
 #: matrixtool.cpp:186 matrixtool.cpp:363 matrixtool.cpp:428 matrixtool.cpp:775
 #: matrixtool.cpp:1077
 msgid "Half Speed"
-msgstr "半分のスピード"
+msgstr "半分の長さ"
 
 #: matrixtool.cpp:190 matrixtool.cpp:367 matrixtool.cpp:432 matrixtool.cpp:779
 #: matrixtool.cpp:1081
 msgid "Double Speed"
-msgstr "倍のスピード"
+msgstr "倍の長さ"
 
 #: matrixtool.cpp:350 matrixtool.cpp:409 matrixtool.cpp:762
 #: matrixtool.cpp:1065
 msgid "Switch to Draw Tool"
-msgstr "描画ツールに移動"
+msgstr "描画ツールに切り替え"
 
 #: matrixtool.cpp:1009
 msgid "Move Event"
