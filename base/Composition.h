@@ -68,10 +68,14 @@ public:
 //     Track*       operator[](int i)       { return m_tracks[i]; }
 //     const Track* operator[](int i) const { return m_tracks[i]; }
 
+    unsigned int getTempo() const { return m_tempo; }
+    void setTempo(const int &tempo) { m_tempo = tempo; }
+
 protected:
     trackcontainer m_tracks;
 
     unsigned int m_nbTicksPerBar;
+    unsigned int m_tempo;
 };
  
 }
