@@ -437,7 +437,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 6, 2, 10, 5);
+    layout = new QGridLayout(frame, 7, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
@@ -473,7 +473,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     layout->addWidget(m_spacing, 1, 1);
     
-    layout->addWidget(new QLabel(i18n("Default proportion"), frame), 2, 0);
+    layout->addWidget(new QLabel(i18n("Default duration factor"), frame), 2, 0);
 
     m_proportion = new KComboBox(frame);
     m_proportion->setEditable(false);
@@ -507,6 +507,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", false);
     m_colourQuantize->setChecked(defaultColourQuantize);
     layout->addWidget(m_colourQuantize, 4, 1);
+
+    m_showInvisibles = new QCheckBox
+        (i18n("Show \"invisible\" events in grey"), frame);
+    bool defaultShowInvisibles = m_cfg->readBoolEntry("showinvisibles", true);
+    m_showInvisibles->setChecked(defaultShowInvisibles);
+    layout->addWidget(m_showInvisibles, 5, 1);
 
     addTab(frame, i18n("Layout"));
 
@@ -756,6 +762,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
+    m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
     m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());

@@ -794,6 +794,15 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 
     NotationElement* elt = static_cast<NotationElement*>(*vli);
     
+    bool invisible = false;
+    if (elt->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
+	if (m_printPainter) return;
+	KConfig *config = kapp->config();
+	config->setGroup("Notation Options");
+	bool showInvisibles = config->readBoolEntry("showInvisibles", true);
+	if (!showInvisibles) return;
+    }
+
     try {
 	m_notePixmapFactory->setNoteStyle
 	    (NoteStyleFactory::getStyleForEvent(elt->event()));
@@ -1739,7 +1748,7 @@ NotationStaff::doRenderWork(timeT from, timeT to)
 LinedStaff::BarStyle
 NotationStaff::getBarStyle(int barNo) const
 {
-    Rosegarden::Segment *s = &getSegment();
+    const Rosegarden::Segment *s = &getSegment();
     Rosegarden::Composition *c = s->getComposition();
 
     int firstBar = c->getBarNumber(s->getStartTime());

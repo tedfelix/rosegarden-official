@@ -262,6 +262,7 @@ protected:
 	    float idealWidth;    // theoretical width of bar following barline
 	    float reconciledWidth;
 	    float fixedWidth;       // width of non-chunk items in bar
+	    int clefKeyWidth;
 	    Rosegarden::timeT actualDuration; // may exceed nominal duration
 
 	} sizeData;
@@ -283,7 +284,7 @@ protected:
 	    sizeData.idealWidth = 0;
 	    sizeData.reconciledWidth = 0;
 	    sizeData.fixedWidth = 0;
-//	    sizeData.baseWidth = 0;
+	    sizeData.clefKeyWidth = 0;
 	    sizeData.actualDuration = 0;
 	    layoutData.needsLayout = true;
 	    layoutData.x = -1;
@@ -328,6 +329,9 @@ protected:
 
     /// Find the staff in which bar "barNo" is widest
     Rosegarden::Staff *getStaffWithWidestBar(int barNo);
+
+    /// Find width of clef+key in the staff in which they're widest in this bar
+    int getMaxRepeatedClefAndKeyWidth(int barNo);
 
     /// For a single bar, makes sure synchronisation points align in all staves
     void preSquishBar(int barNo);

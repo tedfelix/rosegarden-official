@@ -584,9 +584,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     if (referenceView) {
 	m_hlayout->setSpacing(referenceView->m_hlayout->getSpacing());
+	m_hlayout->setProportion(referenceView->m_hlayout->getProportion());
     } else {
 	int defaultSpacing = m_config->readNumEntry("spacing", 100);
 	m_hlayout->setSpacing(defaultSpacing);
+	int defaultProportion = m_config->readNumEntry("proportion", 60);
+	m_hlayout->setProportion(defaultProportion);
     }
 
     delete m_notePixmapFactory;

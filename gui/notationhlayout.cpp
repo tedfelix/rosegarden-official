@@ -260,6 +260,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	 accBarMode == 1 ? Rosegarden::AccidentalTable::BarResetCautionary :
 	 Rosegarden::AccidentalTable::BarResetExplicit);
 
+    bool showInvisibles = config->readBoolEntry("showInvisibles", true);
+
     if (barResetType != Rosegarden::AccidentalTable::BarResetNone) {
 	//!!! very crude and expensive way of making sure we see the
 	// accidentals from previous bar:
@@ -338,6 +340,11 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 		    NOTATION_DEBUG << "reached end of ottava" << endl;
 		    ottavaShift = 0;
 		}
+	    }
+
+	    bool invisible = false;
+	    if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
+		if (!showInvisibles) continue;
 	    }
 
 	    if (el->event()->has(BEAMED_GROUP_ID)) {
@@ -507,6 +514,7 @@ NotationHLayout::setBarSizeData(Staff &staff,
     i->second.sizeData.actualDuration = actualDuration;
     i->second.sizeData.idealWidth = 0.0;
     i->second.sizeData.reconciledWidth = 0.0;
+    i->second.sizeData.clefKeyWidth = 0;
     i->second.sizeData.fixedWidth = fixedWidth;
 }
 
@@ -825,6 +833,40 @@ NotationHLayout::getStaffWithWidestBar(int barNo)
     return widest;
 }
 
+int
+NotationHLayout::getMaxRepeatedClefAndKeyWidth(int barNo)
+{
+    int max = 0;
+
+    timeT barStart = 0;
+
+    for (BarDataMap::iterator mi = m_barData.begin();
+	 mi != m_barData.end(); ++mi) {
+
+	Staff *staff = mi->first;
+	if (mi == m_barData.begin()) {
+	    barStart = staff->getSegment().getComposition()->getBarStart(barNo);
+	}
+
+	timeT t;
+	int w = 0;
+
+	Clef clef = staff->getSegment().getClefAtTime(barStart, t);
+	if (t < barStart) w += m_npf->getClefWidth(clef);
+
+	Rosegarden::Key key = staff->getSegment().getKeyAtTime(barStart, t);
+	if (t < barStart) w += m_npf->getKeyWidth(key);
+
+	if (w > max) max = w;
+    }
+
+    NOTATION_DEBUG << "getMaxRepeatedClefAndKeyWidth(" << barNo << "): " << max
+		   << endl;
+
+    if (max > 0) return max + getFixedItemSpacing() * 2;
+    else return 0;
+}
+
 void
 NotationHLayout::reconcileBarsLinear()
 {
@@ -998,8 +1040,24 @@ NotationHLayout::reconcileBarsPage()
 	    rowData.push_back(std::pair<int, double>(barNoThisRow,
 						     pageWidthSoFar));
 	    barNoThisRow = 1;
-	    pageWidthSoFar = maxWidth;
-	    stretchFactor = m_pageWidth / maxWidth;
+
+	    // When we start a new row, we always need to allow for the
+	    // repeated clef and key at the start of it.
+	    int maxClefKeyWidth = getMaxRepeatedClefAndKeyWidth(barNo);
+
+	    for (BarDataMap::iterator i = m_barData.begin();
+		 i != m_barData.end(); ++i) {
+		
+		BarDataList &list = i->second;
+		BarDataList::iterator bdli = list.find(barNo);
+		
+		if (bdli != list.end()) {
+		    bdli->second.sizeData.clefKeyWidth = maxClefKeyWidth;
+		}
+	    }
+
+	    pageWidthSoFar = maxWidth + maxClefKeyWidth;
+	    stretchFactor = m_pageWidth / pageWidthSoFar;
 	} else {
 	    ++barNoThisRow;
 	    pageWidthSoFar = nextPageWidth;
@@ -1039,16 +1097,17 @@ NotationHLayout::reconcileBarsPage()
 		if (barNo >= getLastVisibleBar()) break; // yes
 		else maxWidth = stretchFactor * (m_spacing / 3);
 	    } else {
-		maxWidth =
-		    (stretchFactor *
-		     m_barData[widest].find(barNo)->
-		     second.sizeData.idealWidth);
+		BarData &bd = m_barData[widest].find(barNo)->second;
+		maxWidth = (stretchFactor * bd.sizeData.idealWidth) +
+		    bd.sizeData.clefKeyWidth;
+		NOTATION_DEBUG << "setting maxWidth to " << (stretchFactor * bd.sizeData.idealWidth) << " + " << bd.sizeData.clefKeyWidth << " = " << maxWidth << endl;
 	    }
 
 	    if (barNoThisRow == finalBarThisRow) {
 		if (!finalRow ||
 		    (maxWidth > (m_pageWidth - pageWidthSoFar))) {
 		    maxWidth = m_pageWidth - pageWidthSoFar;
+		    NOTATION_DEBUG << "reset maxWidth to " << m_pageWidth << " - " << pageWidthSoFar << " = " << maxWidth << endl;
 		}
 	    }
 
@@ -1144,7 +1203,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	(isFullLayout && (notes->begin() != notes->end())) ?
 	(*notes->begin())->getViewAbsoluteTime() : startTime;
 
-    Rosegarden::Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);;
+    Rosegarden::Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);
     Clef clef = notationStaff.getSegment().getClefAtTime(lastIncrement);
     TimeSignature timeSignature;
 
@@ -1219,26 +1278,40 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    timeSignature = bdi->second.basicData.timeSignature;
 	    timeSigToPlace = !bdi->second.basicData.timeSignature.isHidden();
 	}
-
         if (timeSigToPlace) {
 	    NOTATION_DEBUG << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
+	}
+
+	bool repeatClefAndKey = false;
+	if (bdi->second.sizeData.clefKeyWidth > 0) {
+	    repeatClefAndKey = true;
+	}
+	if (repeatClefAndKey) {
+	    NOTATION_DEBUG << "NotationHLayout::layout(): need to repeat clef & key in this bar" << endl;
 	}
 
 	NotationElement *lastDynamicText = 0;
 	int count = 0;
 
+	double offset = 0.0;
+	double reconciledWidth = bdi->second.sizeData.reconciledWidth;
+
+	if (repeatClefAndKey) {
+	    offset = bdi->second.sizeData.clefKeyWidth;
+	    reconciledWidth -= offset;
+	}
+
+	offset += getPostBarMargin();
+
 	ChunkList &chunks = bdi->second.chunks;
 	ChunkList::iterator chunkitr = chunks.begin();
 	double reconcileRatio = 1.0;
 	if (bdi->second.sizeData.idealWidth > 0.0) {
-	    reconcileRatio =
-		bdi->second.sizeData.reconciledWidth /
-		bdi->second.sizeData.idealWidth;
+	    reconcileRatio = reconciledWidth / bdi->second.sizeData.idealWidth;
 	}
 
 	NOTATION_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio << endl;
 
-	double offset = getPostBarMargin();
 	double delta = 0;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
@@ -1246,7 +1319,12 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             NotationElement *el = static_cast<NotationElement*>(*it);
 	    delta = 0;
 	    float fixed = 0;
-
+/*!!!
+	    bool invisible = false;
+	    if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
+		if (!showInvisibles) continue;
+	    }
+*/
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
 	    if (chunkitr != chunks.end()) {
@@ -1258,13 +1336,13 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		if (++chunkscooter != chunks.end()) {
 		    delta = (*chunkscooter).x - (*chunkitr).x;
 		} else {
-		    delta = bdi->second.sizeData.reconciledWidth -
+		    delta = reconciledWidth -
 			bdi->second.sizeData.fixedWidth - (*chunkitr).x;
 		}
 		delta *= reconcileRatio;
 		++chunkitr;
 	    } else {
-		x = barX + bdi->second.sizeData.reconciledWidth - getPreBarMargin();
+		x = barX + reconciledWidth - getPreBarMargin();
 		delta = 0;
 	    }
 

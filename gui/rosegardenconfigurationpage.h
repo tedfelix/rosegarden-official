@@ -248,6 +248,7 @@ protected:
     QComboBox *m_proportion;
     QCheckBox *m_colourQuantize;
     QCheckBox *m_showUnknowns;
+    QCheckBox *m_showInvisibles;
     QComboBox *m_noteStyle;
     QComboBox *m_insertType;
     QCheckBox *m_autoBeam;

@@ -119,6 +119,8 @@ const PropertyName RECORDED_PORT		 = "recordedport";
 const PropertyName DISPLACED_X                   = "displacedx";
 const PropertyName DISPLACED_Y                   = "displacedy";
 
+const PropertyName INVISIBLE                     = "invisible";
+
 }
 
 }

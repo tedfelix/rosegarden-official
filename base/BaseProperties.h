@@ -70,6 +70,8 @@ extern const PropertyName RECORDED_PORT;
 extern const PropertyName DISPLACED_X;
 extern const PropertyName DISPLACED_Y;
 
+extern const PropertyName INVISIBLE;
+
 }
 
 }

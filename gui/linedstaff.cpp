@@ -845,8 +845,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	eline->show();
 
 	BarLineList::iterator insertPoint = lower_bound
-	    (m_barLines.begin(), m_barLines.end(), line, compareBars);
-	m_barLines.insert(insertPoint, line);
+	    (m_barLines.begin(), m_barLines.end(), eline, compareBars);
+	m_barLines.insert(insertPoint, eline);
     }
 
     if (showBarNo) {
