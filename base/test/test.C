@@ -15,7 +15,8 @@ int main(int argc, char **argv)
         clock_t st, et;
         struct tms spare;
 
-        cout << "Testing Event..." << endl;
+        cout << "Testing Event..." << endl
+             << "sizeof Event : " << sizeof(Event) << endl;
 
         Event e("note");
         e.set<Int>("duration", 20);
@@ -24,6 +25,8 @@ int main(int argc, char **argv)
         e.set<Bool>("someBoolProp", true);
         e.set<String>("someStringProp", "foobar");
 
+        cout << "sizeof event after some properties set : "
+             << sizeof e << endl;
 
         cout << "Testing debug dump : " << endl;
         e.dump(cout);
