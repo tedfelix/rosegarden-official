@@ -7,8 +7,8 @@ application.  This is an early release of the application, intended
 for potential developers and other interested parties.  It is not an
 application that is usable by real users yet.
 
-Note that Rosegarden-4 is not based on Rosegarden-2.1 code and is not
-yet a solution for people who find Rosegarden-2.1 in any way
+Note that Rosegarden-4 is largely not based on Rosegarden-2.1 code and
+is not yet a solution for people who find Rosegarden-2.1 in any way
 unreliable or limiting.  This program is far more unreliable and far
 more limiting.
 
@@ -97,5 +97,26 @@ starting-points include:
   docs/discussion/0.2_planned_tasks.txt -- ideas for what to do next
 
 
+Authors and copyright
+---------------------
 
-Guillaume Laurent, Chris Cannam, Richard Bown
+Rosegarden-4 is Copyright 2000 - 2001 Guillaume Laurent, Chris Cannam
+and Richard Bown.
+
+The moral right of Guillaume Laurent, Chris Cannam and Richard Bown to
+be identified as the authors of this work has been asserted.
+
+Parts of Rosegarden-4 are derived from Rosegarden 2.1, which is
+Copyright 1994 - 2001 Chris Cannam, Andrew Green, Richard Bown and
+Guillaume Laurent.
+
+For musical notation display Rosegarden-4 uses pixmaps derived from
+the Feta font, part of the Lilypond software (http://lilypond.org/)
+which is Copyright 1997 - 2001 Jan Nieuwenhuizen and Han-Wen Nienhuys.
+
+Rosegarden-4 is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.  See the file COPYING included with
+this distribution for more information.
+

@@ -666,10 +666,13 @@ NotationHLayout::positionRest(StaffType &,
     // Situate the rest somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
 
-    int noteBodyWidth = m_npf.getNoteBodyWidth();
-    if (delta > noteBodyWidth) {
-        int shift = (delta - noteBodyWidth) / 4;
-        shift = std::min(shift, (noteBodyWidth * 4));
+    int baseWidth = m_npf.getRestWidth
+	(Note(rest->event()->get<Int>(Note::NoteType),
+	      rest->event()->get<Int>(Note::NoteDots)));
+
+    if (delta > baseWidth) {
+        int shift = (delta - baseWidth) / 4;
+        shift = std::min(shift, (baseWidth * 4));
         rest->setLayoutX(rest->getLayoutX() + shift);
     }
                 

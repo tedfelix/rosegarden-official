@@ -414,7 +414,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
     if (colours.size() == 0) {
         colours.push_back(QColor(0, 0, 0));
         colours.push_back(QColor(64, 64, 64));
-        colours.push_back(QColor(128, 128, 128));
+	colours.push_back(QColor(128, 128, 128));
         colours.push_back(QColor(192, 192, 192));
     }
 
