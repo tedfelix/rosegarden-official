@@ -37,6 +37,7 @@
 #include "NotationTypes.h"
 #include "Equation.h"
 
+#include "colours.h"
 #include "notefont.h"
 #include "spline.h"
 
@@ -384,7 +385,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         body = m_font->getPixmap(getNoteHeadCharName(params.m_noteType));
     } else {
         body = m_font->getColouredPixmap
-            (getNoteHeadCharName(params.m_noteType), NoteFont::Blue);
+            (getNoteHeadCharName(params.m_noteType),
+	     RosegardenGUIColours::SelectedElementHue);
     }
 
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
@@ -858,7 +860,8 @@ NotePixmapFactory::makeRestPixmap(const Note &restType)
     if (!m_selected) {
         pixmap = m_font->getPixmap(charName);
     } else {
-        pixmap = m_font->getColouredPixmap(charName, NoteFont::Blue);
+        pixmap = m_font->getColouredPixmap
+	    (charName, RosegardenGUIColours::SelectedElementHue);
     }
     QPixmap dot = m_font->getPixmap(NoteCharacterNames::DOT);
 
@@ -891,8 +894,8 @@ QCanvasPixmap
 NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 {
     if (m_selected) {
-        return m_font->getColouredCanvasPixmap(getClefCharName(clef),
-                                               NoteFont::Blue);
+        return m_font->getColouredCanvasPixmap
+	    (getClefCharName(clef), RosegardenGUIColours::SelectedElementHue);
     } else {
         return m_font->getCanvasPixmap(getClefCharName(clef));
     }
@@ -902,8 +905,9 @@ QCanvasPixmap
 NotePixmapFactory::makeUnknownPixmap()
 {
     if (m_selected) {
-        return m_font->getColouredCanvasPixmap(NoteCharacterNames::UNKNOWN,
-                                               NoteFont::Blue);
+        return m_font->getColouredCanvasPixmap
+	    (NoteCharacterNames::UNKNOWN,
+	     RosegardenGUIColours::SelectedElementHue);
     } else {
         return m_font->getCanvasPixmap(NoteCharacterNames::UNKNOWN);
     }
@@ -927,7 +931,8 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 
     QPixmap accidentalPixmap;
     if (m_selected) {
-        accidentalPixmap = m_font->getColouredPixmap(charName,NoteFont::Blue);
+        accidentalPixmap = m_font->getColouredPixmap
+	    (charName, RosegardenGUIColours::SelectedElementHue);
     } else {
         accidentalPixmap = m_font->getPixmap(charName);
     }
@@ -1076,7 +1081,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	    createPixmapAndMask(bottomRight.x() - topLeft.x(),
 				bottomRight.y() - topLeft.y() + thickness - 1);
 	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
-	    if (m_selected) m_p.setPen(Qt::blue);
+	    if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
 	    havePixmap = true;
 	}
 
@@ -1134,7 +1139,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
     m_pm.setFont(m_timeSigFont);
 
     if (m_selected) {
-        m_p.setPen(Qt::blue);
+        m_p.setPen(RosegardenGUIColours::SelectedElement);
     }
 
     x = (width - numR.width()) / 2 - 1;

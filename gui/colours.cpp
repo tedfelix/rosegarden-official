@@ -12,10 +12,8 @@ namespace RosegardenGUIColours
 
     const QColor PositionCursor = Qt::magenta;
     const QColor SelectionRectangle = Qt::blue;
-
-    const QColor NoteFontRed   = QColor(0,   255, 255, QColor::Hsv);
-    const QColor NoteFontGreen = QColor(120, 255, 255, QColor::Hsv);
-    const QColor NoteFontBlue  = QColor(240, 255, 255, QColor::Hsv);
+    const QColor SelectedElement = Qt::blue;
+    const int SelectedElementHue = 240;
 }
 
 

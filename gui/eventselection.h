@@ -87,6 +87,9 @@ public:
     unsigned int      getNbEvents()        const { return m_ownEvents.size(); }
     unsigned int      getAddedEvents()     const { return m_segmentEvents.size(); }
 
+    const eventcontainer &getSegmentEvents() const { return m_segmentEvents; }
+    eventcontainer &getSegmentEvents()		   { return m_segmentEvents; }
+
     const Rosegarden::Segment &getSegment() const { return m_originalSegment; }
     Rosegarden::Segment &getSegment()             { return m_originalSegment; }
 

@@ -536,14 +536,10 @@ void NotationEraser::handleLeftButtonPress(int, int staffNo,
 {
     if (!element || staffNo < 0) return;
 
-    long pitch = 0;
-    (void)element->event()->get<Int>(Rosegarden::BaseProperties::PITCH, pitch);
-
     EraseCommand *command =
 	new EraseCommand(m_parentView->getStaff(staffNo)->getSegment(),
-			 element->getAbsoluteTime(),
-			 element->event()->getType(),
-			 (int)pitch, m_collapseRest);
+			 element->event(),
+			 m_collapseRest);
 
     m_parentView->getCommandHistory()->addCommand(command);
 }

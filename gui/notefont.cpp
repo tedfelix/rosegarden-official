@@ -606,9 +606,9 @@ NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
 
 bool
 NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
-                            PixmapColour colour, bool inverted) const
+                            int hue, bool inverted) const
 {
-    CharName charName(getNameWithColour(baseCharName, colour));
+    CharName charName(getNameWithColour(baseCharName, hue));
 
     QPixmap *found = lookup(charName, inverted);
     if (found != 0) {
@@ -619,27 +619,26 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     QPixmap basePixmap;
     bool ok = getPixmap(baseCharName, basePixmap, inverted);
 
-    found = recolour(basePixmap, colour);
+    found = recolour(basePixmap, hue);
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
 }
 
 QPixmap
-NoteFont::getColouredPixmap(CharName charName, PixmapColour colour,
-                            bool inverted) const
+NoteFont::getColouredPixmap(CharName charName, int hue, bool inverted) const
 {
     QPixmap p;
-    (void)getColouredPixmap(charName, p, colour, inverted);
+    (void)getColouredPixmap(charName, p, hue, inverted);
     return p;
 }
 
 QCanvasPixmap
-NoteFont::getColouredCanvasPixmap(CharName charName, PixmapColour colour,
+NoteFont::getColouredCanvasPixmap(CharName charName, int hue,
                                   bool inverted) const
 {
     QPixmap p;
-    (void)getColouredPixmap(charName, p, colour, inverted);
+    (void)getColouredPixmap(charName, p, hue, inverted);
 
     int x, y;
     (void)getHotspot(charName, x, y, inverted);
@@ -648,33 +647,20 @@ NoteFont::getColouredCanvasPixmap(CharName charName, PixmapColour colour,
 }
 
 CharName
-NoteFont::getNameWithColour(CharName base, PixmapColour colour) const
+NoteFont::getNameWithColour(CharName base, int hue) const
 {
-    string baseString = string("__") + base.c_str();
-    switch (colour) {
-    case Red:   return "red"   + baseString;
-    case Green: return "green" + baseString;
-    case Blue:  return "blue"  + baseString;
-    }
-    return "unknown" + baseString;
+    return QString("%1__%2").arg(hue).arg(base.c_str()).latin1();
 }
 
 QPixmap *
-NoteFont::recolour(QPixmap in, PixmapColour colour) const
+NoteFont::recolour(QPixmap in, int hue) const
 {
     // assumes pixmap is currently in shades of grey; maps black ->
     // solid colour and greys -> shades of colour
 
     QImage image = in.convertToImage();
 
-    int hue = 0, s, v;
-
-    switch (colour) {
-	//!!! Use colours.h stuff
-    case Red:   hue = 0;   break;
-    case Green: hue = 120; break;
-    case Blue:  hue = 240; break;
-    }
+    int s, v;
 
     bool warned = false;
     

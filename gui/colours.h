@@ -43,10 +43,8 @@ namespace RosegardenGUIColours
     
     extern const QColor PositionCursor;
     extern const QColor SelectionRectangle;
-
-    extern const QColor NoteFontRed;
-    extern const QColor NoteFontGreen;
-    extern const QColor NoteFontBlue;
+    extern const QColor SelectedElement;
+    extern const int SelectedElementHue;
 }
 
 #endif

@@ -55,9 +55,23 @@ public:
     virtual Rosegarden::timeT getRelayoutEndTime() { return getEndTime(); }
 
 protected:
+    /**
+     * You should pass "bruteForceRedoRequired = true" if your
+     * subclass's implementation of modifySegment uses discrete
+     * event pointers or segment iterators to determine which
+     * events to modify, in which case it won't work when
+     * replayed for redo because the pointers may no longer be
+     * valid.  In which case, BasicCommand will implement redo
+     * much like undo, and will only call your modifySegment 
+     * the very first time the command object is executed.
+     *
+     * It is always safe to pass bruteForceRedoRequired true,
+     * it's just normally a waste of memory.
+     */
     BasicCommand(const QString &name,
 		 Rosegarden::Segment &segment,
-		 Rosegarden::timeT begin, Rosegarden::timeT end);
+		 Rosegarden::timeT begin, Rosegarden::timeT end,
+		 bool bruteForceRedoRequired = false);
 
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &) = 0;
 
@@ -65,10 +79,15 @@ protected:
     virtual void finishExecute();
 
 private:
-    void deleteSavedEvents();
+    void copyTo(Rosegarden::Segment *);
+    void copyFrom(Rosegarden::Segment *);
+
     Rosegarden::Segment &m_segment;
     Rosegarden::Segment m_savedEvents;
     Rosegarden::timeT m_endTime;
+    
+    bool m_doBruteForceRedo;
+    Rosegarden::Segment *m_redoEvents;
 };
 
 
@@ -83,7 +102,8 @@ public:
     virtual ~BasicSelectionCommand();
 
 protected:
-    BasicSelectionCommand(const QString &name, EventSelection &selection);
+    BasicSelectionCommand(const QString &name, EventSelection &selection,
+			  bool bruteForceRedoRequired = false);
 };
 
 
@@ -153,9 +173,7 @@ class EraseCommand : public BasicCommand
 {
 public:
     EraseCommand(Rosegarden::Segment &segment,
-		 Rosegarden::timeT time,
-		 std::string eventType,
-		 int pitch,
+		 Rosegarden::Event *event,
 		 bool collapseRest);
     virtual ~EraseCommand();
 
@@ -164,11 +182,10 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
-    std::string m_eventType;
-    int m_pitch;
     bool m_collapseRest;
-    Rosegarden::timeT m_relayoutEndTime;
 
+    Rosegarden::Event *m_event; // only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::timeT m_relayoutEndTime;
     std::string makeName(std::string);
 };
 
@@ -290,7 +307,8 @@ class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuChangeStemsCommand(bool up, EventSelection &selection) :
-	BasicSelectionCommand(name(up), selection), m_up(up) { }
+	BasicSelectionCommand(name(up), selection, true),
+	m_selection(&selection), m_up(up) { }
     virtual ~TransformsMenuChangeStemsCommand() { }
 
     static QString name(bool up) {
@@ -301,6 +319,7 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
 
@@ -308,7 +327,8 @@ class TransformsMenuRestoreStemsCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuRestoreStemsCommand(EventSelection &selection) :
-	BasicSelectionCommand(name(), selection) { }
+	BasicSelectionCommand(name(), selection, true),
+	m_selection(&selection) { }
     virtual ~TransformsMenuRestoreStemsCommand() { }
 
     static QString name() {
@@ -317,13 +337,17 @@ public:
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
 class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuTransposeOneStepCommand(bool up, EventSelection &selection) :
-	BasicSelectionCommand(name(up), selection), m_up(up) { }
+	BasicSelectionCommand(name(up), selection, true),
+	m_selection(&selection), m_up(up) { }
     virtual ~TransformsMenuTransposeOneStepCommand() { }
 
     static QString name(bool up) {
@@ -334,6 +358,7 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
 

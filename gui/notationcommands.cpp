@@ -46,28 +46,28 @@ using std::endl;
 
 
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
-			   timeT begin, timeT end) :
+			   timeT begin, timeT end, bool bruteForceRedo) :
     KCommand(name),
     m_segment(segment),
     m_savedEvents(begin),
-    m_endTime(end)
+    m_endTime(end),
+    m_doBruteForceRedo(false),
+    m_redoEvents(0)
 {
-    // nothing
+    if (bruteForceRedo) m_redoEvents = new Segment(begin);
 }
 
 BasicCommand::~BasicCommand()
 {
-    deleteSavedEvents();
+    m_savedEvents.clear();
+    if (m_redoEvents) m_redoEvents->clear();
+    delete m_redoEvents;
 }
 
 void
 BasicCommand::beginExecute()
 {
-    for (Segment::iterator i = m_segment.findTime
-	     (m_savedEvents.getStartIndex());
-	 i != m_segment.findTime(m_endTime); ++i) {
-	m_savedEvents.insert(new Event(**i));
-    }
+    copyTo(&m_savedEvents);
 }
 
 void
@@ -80,41 +80,64 @@ BasicCommand::finishExecute()
 }
 
 void
-BasicCommand::deleteSavedEvents()
-{
-    m_savedEvents.erase(m_savedEvents.begin(), m_savedEvents.end());
-}
-
-void
 BasicCommand::execute()
 {
     beginExecute();
-    SegmentNotationHelper helper(m_segment);
-    modifySegment(helper);
+
+    if (!m_doBruteForceRedo) {
+
+	SegmentNotationHelper helper(m_segment);
+	modifySegment(helper);
+
+    } else {
+	copyFrom(m_redoEvents);
+    }
+
     finishExecute();
 }
 
 void
 BasicCommand::unexecute()
 {
-    m_segment.erase(m_segment.findTime(m_savedEvents.getStartIndex()),
-		    m_segment.findTime(m_endTime));
-
-    for (Segment::iterator i = m_savedEvents.begin();
-	 i != m_savedEvents.end(); ++i) {
-	m_segment.insert(new Event(**i));
+    if (m_redoEvents) {
+	copyTo(m_redoEvents);
+	m_doBruteForceRedo = true;
     }
 
-    deleteSavedEvents();
+    copyFrom(&m_savedEvents);
     finishExecute();
 }
     
+void
+BasicCommand::copyTo(Rosegarden::Segment *events)
+{
+    for (Segment::iterator i = m_segment.findTime(events->getStartIndex());
+	 i != m_segment.findTime(m_endTime); ++i) {
+	events->insert(new Event(**i));
+    }
+}
+   
+void
+BasicCommand::copyFrom(Rosegarden::Segment *events)
+{
+    m_segment.erase(m_segment.findTime(events->getStartIndex()),
+		    m_segment.findTime(m_endTime));
+
+    for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
+	m_segment.insert(new Event(**i));
+    }
+
+    events->clear();
+}
+
 BasicSelectionCommand::BasicSelectionCommand(const QString &name,
-					     EventSelection &selection) :
+					     EventSelection &selection,
+					     bool bruteForceRedo) :
     BasicCommand(name,
 		 selection.getSegment(),
 		 selection.getBeginTime(),
-		 selection.getEndTime())
+		 selection.getEndTime(),
+		 bruteForceRedo)
 {
     // nothing else
 }
@@ -202,14 +225,14 @@ ClefInsertionCommand::modifySegment(SegmentNotationHelper &helper)
 
 
 EraseCommand::EraseCommand(Segment &segment,
-			   timeT time,
-			   string eventType,
-			   int pitch,
+			   Event *event,
 			   bool collapseRest) :
-    BasicCommand(makeName(eventType).c_str(), segment, time, time + 1),
-    m_eventType(eventType),
-    m_pitch(pitch),
+    BasicCommand(makeName(event->getType()).c_str(), segment,
+		 event->getAbsoluteTime(),
+		 event->getAbsoluteTime() + event->getDuration(),
+		 true),
     m_collapseRest(collapseRest),
+    m_event(event),
     m_relayoutEndTime(getEndTime())
 {
     // nothing
@@ -238,39 +261,30 @@ EraseCommand::getRelayoutEndTime()
 void
 EraseCommand::modifySegment(SegmentNotationHelper &helper)
 {
-    Segment::iterator i = helper.segment().findTime(getBeginTime());
+    string eventType = m_event->getType();
 
-    for ( ; i != helper.segment().end() &&
-	      (*i)->getAbsoluteTime() == getBeginTime(); ++i) {
+    if (eventType == Note::EventType) {
 
-	if (!((*i)->isa(m_eventType))) continue;
+	helper.deleteNote(m_event, m_collapseRest);
+	return;
 
-	if (m_eventType == Note::EventType) {
+    } else if (eventType == Note::EventRestType) {
 
-	    if ((*i)->get<Int>(Rosegarden::BaseProperties::PITCH) == m_pitch) {
-		helper.deleteNote((*i), m_collapseRest);
-		return;
-	    }
+	helper.deleteRest(m_event);
+	return;
+	
+    } else if (eventType == Clef::EventType) {
 
-	} else if (m_eventType == Note::EventRestType) {
-
-	    helper.deleteRest((*i));
-	    return;
-
-	} else if (m_eventType == Clef::EventType) {
-
-	    helper.segment().erase(i);
-	    m_relayoutEndTime = helper.segment().getEndIndex();
-	    return;
-
-	} else {
+	helper.segment().eraseSingle(m_event);
+	m_relayoutEndTime = helper.segment().getEndIndex();
+	return;
+	
+    } else {
 	    
-	    helper.segment().erase(i);
-	    return;
-	}
+	helper.segment().eraseSingle(m_event);
+	return;
     }
 }
-
 
 
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
@@ -312,16 +326,14 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
 void
 TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &helper)
 {
-    Segment::iterator i = helper.segment().findTime(getBeginTime());
-    Segment::iterator j = helper.segment().findTime(getEndTime());
+    EventSelection::eventcontainer::iterator i;
 
-    while (i != j) {
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
 	    (*i)->set<Rosegarden::Bool>(NotationProperties::STEM_UP, m_up);
 	}
-
-	++i;
     }
 }
 
@@ -329,16 +341,14 @@ TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &helper)
 void
 TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &helper)
 {
-    Segment::iterator i = helper.segment().findTime(getBeginTime());
-    Segment::iterator j = helper.segment().findTime(getEndTime());
+    EventSelection::eventcontainer::iterator i;
 
-    while (i != j) {
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
 	    (*i)->unset(NotationProperties::STEM_UP);
 	}
-
-	++i;
     }
 }
 
@@ -346,12 +356,12 @@ TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &helper)
 void
 TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &helper)
 {
-    Segment::iterator i = helper.segment().findTime(getBeginTime());
-    Segment::iterator j = helper.segment().findTime(getEndTime());
+    EventSelection::eventcontainer::iterator i;
 
     int offset = m_up ? 1 : -1;
 
-    while (i != j) {
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
 	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
@@ -359,8 +369,6 @@ TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &help
 			   offset);
 	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
 	}
-
-	++i;
     }
 }
 
