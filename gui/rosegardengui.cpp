@@ -1021,8 +1021,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
             // Find the performance duration, i.e. taking into account any
             // ties etc that this note may have  --cc
             // 
-            duration = m_doc->getComposition().
-                          getElapsedRealTime(helper.getSoundingDuration(j));
+            duration = hepler.getRealSoundingDuration(j);
 
             // probably in a tied series, but not as first note
             //
