@@ -52,8 +52,11 @@ ALSA and aRts below.
 Does it support my language?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A translation is available for Russian.  Languages in progress include German, Spanish, and French.  If you can translate musical or technical documentation (no programming required), please let us know!
-See docs/howtos/i18n.txt in CVS if you are interested in the technical aspects of translation.
+Translations are included for Russian, German and Spanish, with French
+in progress.  If you can translate musical or technical documentation
+(no programming required), please let us know!  See
+docs/howtos/i18n.txt in CVS if you are interested in the technical
+aspects of translation.
 
 
 Compilation or installation problems
@@ -271,29 +274,16 @@ the near future).  So you have to split the segment onto multiple
 tracks, and then open a multi-segment notation editor (see the
 question above this one).
 
-However, there is also no simple split-by-pitch function yet (we know,
-we know, it's one of the most obvious omissions).  In versions up to
-and including 0.8.5, the way to do this is extremely laborious: open a
-Matrix view on the segment, set the zoom such that the whole segment
-is visible, and then rubber-band select all the notes below your split
-pitch.  Hit Cut, then return to the main view and Paste to create a
-new segment with those notes in it.  You will then have to open a
-notation view on the new segment, select the whole staff and use
-Normalize Rests (on the Transforms menu) because there's also a bug
-that means the rests don't get pasted properly when you paste the new
-segment.  Gack.
+Versions 0.9 and later include a split-by-pitch function (finally!) 
+which you can use to divide a segment into two parts.
 
-In CVS versions from 9th Jan 2003 onwards this situation's a little
-simpler, because there is a better way to select the events in the
-Matrix view: you can shift-click on a key in the piano keyboard to
-select all the notes of that pitch, and you can shift-click and drag
-to select a range of pitches.  The notes are added to any existing
-selection, so if you want a clean new selection, clear any old one
-first (by clicking in space with the select tool on the matrix or just
-hitting Esc).  That actually makes the whole operation very much
-easier -- probably easier to carry out than it is to describe.
-
-We should have a proper split-by-pitch in there soon, however.
+You can also select events within a certain pitch range in the Matrix
+view: you can shift-click on a key in the piano keyboard to select all
+the notes of that pitch, and you can shift-click and drag to select a
+range of pitches.  The notes are added to any existing selection, so
+if you want a clean new selection, clear any old one first (by
+clicking in space with the select tool on the matrix or just hitting
+Esc).
 
 
 Can I edit all the segments at once in the matrix editor?
@@ -524,6 +514,28 @@ application itself.  Go to:
 
   Settings->Configure Rosegarden->Sequencer->General->Show detailed status
 
+
+Playback is only happening once every second
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We haven't quite got to the bottom of this one yet, but it's been
+affecting people who build Rosegarden with optimisation using the
+gcc-3.3-pre compiler included with SuSE 8.2.  The effect is that all
+playback is neatly lined up on one-second boundaries -- all notes
+happening during a second are played at once at the end of the second.
+Very odd.
+
+If you configure with
+
+  $ CXXFLAGS='-O0' ./configure
+
+you should find this problem goes away (at the loss of some
+optimisation, obviously).
+
+Note that the Rosegarden-4 0.8.5 package included with the
+distribution itself is also affected by this problem: obviously nobody
+actually tested it.  (They also forgot to include the help file, icon
+etc -- it's not a very well-made package.)
 
 
 What if I see Rosegarden itself in the client list when I start the sequencer?
