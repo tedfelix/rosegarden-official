@@ -154,7 +154,7 @@ protected:
 
     bool m_showPreview;
     bool m_previewIsCurrent;
-    QPixmap m_preview;
+    std::vector<QRect> m_previewInfo;
 
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;

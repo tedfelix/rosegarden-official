@@ -162,6 +162,7 @@ void SegmentItem::drawShape(QPainter& painter)
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
 
+    // TODO : remove this...
     QRect previewRect =
 	painter.hasClipping() ?
 	painter.clipRegion().boundingRect() :
@@ -172,11 +173,12 @@ void SegmentItem::drawShape(QPainter& painter)
 
     previewRect = previewRect.intersect(rect());
 
-//    if (previewRect.width() <= 0 || previewRect.height() <= 0) return;
+   if (previewRect.width() <= 0 || previewRect.height() <= 0) return;
+   // ... up to here
 
-    timeT startTime = rulerScale->getTimeForX(previewRect.x());
-    timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
-					      previewRect.width());
+//     timeT startTime = rulerScale->getTimeForX(previewRect.x());
+//     timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
+// 					      previewRect.width());
 
     if (m_showPreview && m_segment &&
 	m_segment->getType() == Rosegarden::Segment::Audio)
@@ -247,7 +249,16 @@ void SegmentItem::drawShape(QPainter& painter)
     {
 	if (m_showPreview && m_segment) {
             updatePreview();
-            painter.drawPixmap(int(x()), int(y()), m_preview);
+            painter.save();
+            painter.translate(rect().x(), rect().y());
+            painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
+
+            for(unsigned int i = 0; i < m_previewInfo.size(); ++i) {
+                QRect p = m_previewInfo[i];
+                painter.drawRect(p);
+            }
+
+            painter.restore();
 	}
 
         // draw label
@@ -268,12 +279,7 @@ void SegmentItem::updatePreview()
     kdDebug(KDEBUG_AREA) << "SegmentItem::updatePreview() "
                          << this << endl;
 
-    QPainter painter(&m_preview);
-
-    m_preview.fill(black);
-
-    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
-    painter.setBrush(RosegardenGUIColours::SegmentBlock);
+    m_previewInfo.clear();
 
     Segment::iterator start = m_segment->begin();
     Segment::iterator end = m_segment->end();
@@ -305,13 +311,13 @@ void SegmentItem::updatePreview()
         if (y < y0) y = y0;
         if (y > y1-1) y = y1-1;
 		
-        painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
-        painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
+//         painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
+//         painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
 
+        QRect r((int)x0, (int)y, width, 2);
+        m_previewInfo.push_back(r);
     }
 
-    m_preview.setMask(m_preview.createHeuristicMask());
-    
     setPreviewCurrent(true);
 }
 
@@ -391,7 +397,6 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     if (dots) m_label += "...";
     canvas()->setChanged(rect());
 
-    m_preview.resize(rect().size());
     setPreviewCurrent(false);
 }
 
