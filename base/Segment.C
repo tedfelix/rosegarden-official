@@ -548,7 +548,21 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     }
 
     iterator ib = findTime(endTime);
-    if (ib != end()) endTime = (*ib)->getAbsoluteTime();
+    if (ib == end()) {
+	if (ib != begin()) {
+	    --ib;
+	    // if we're pointing at the real-end-time of the last event,
+	    // use its notation-end-time instead
+	    if (endTime == (*ib)->getAbsoluteTime() + (*ib)->getDuration()) {
+		endTime =
+		    (*ib)->getNotationAbsoluteTime() +
+		    (*ib)->getNotationDuration();
+	    }
+	    ++ib;
+	}
+    } else {
+	endTime = (*ib)->getNotationAbsoluteTime();
+    }
 
     // If there's a rest preceding the start time, with no notes
     // between us and it, and if it doesn't have precisely the
@@ -597,8 +611,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     std::vector<std::pair<timeT, timeT> > gaps;
 
-    //!!! use getNotationAbsoluteTime/getNotationDuration instead
-    const Quantizer *q(getComposition()->getNotationQuantizer());
     timeT lastNoteStarts = startTime;
     timeT lastNoteEnds = startTime;
     
@@ -609,7 +621,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	// already have good lastNoteStarts, lastNoteEnds
 	ia = begin();
     } else {
-	lastNoteStarts = q->getQuantizedAbsoluteTime(*ia);
+	lastNoteStarts = (*ia)->getNotationAbsoluteTime();
 	lastNoteEnds = lastNoteStarts;
     }
 
@@ -621,7 +633,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	// events that happen at the same unquantized time as a note
 	// event to the same as that of the note event... yeah, that's
 	// probably the right thing
-	endTime = q->getQuantizedAbsoluteTime(*ib);
+	endTime = (*ib)->getNotationAbsoluteTime();
 
 	// was this just a nasty hack?
 	++ib;
@@ -638,7 +650,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	    continue;
 	}
 
-	timeT thisNoteStarts = q->getQuantizedAbsoluteTime(*i);
+	timeT thisNoteStarts = (*i)->getNotationAbsoluteTime();
 
         /*
 	cerr << "scanning: thisNoteStarts " << thisNoteStarts
@@ -666,7 +678,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	}
 
 	lastNoteStarts = thisNoteStarts;
-	lastNoteEnds = thisNoteStarts + q->getQuantizedDuration(*i);
+	lastNoteEnds = thisNoteStarts + (*i)->getNotationDuration();
     }
 
     if (endTime > lastNoteEnds) {

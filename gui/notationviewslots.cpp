@@ -1642,10 +1642,8 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 }
 
 void
-NotationView::slotInsertableNoteOnReceived(int pitch)
+NotationView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 {
-    NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
-
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
     if (!action) {
@@ -1663,17 +1661,64 @@ NotationView::slotInsertableNoteOnReceived(int pitch)
     }
 
     KTmpStatusMsg msg(i18n("Inserting note"), this);
-        
-    NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
-    
-    noteInserter->insertNote(segment, getInsertionTime(), pitch,
-                             Rosegarden::Accidentals::NoAccidental);
+
+    // We need to ensure that multiple notes hit at once come out as
+    // chords, without imposing the interpretation that overlapping
+    // notes are always chords and without getting too involved with
+    // the actual absolute times of the notes (this is still step
+    // editing, not proper recording).
+
+    // First, if we're in chord mode, there's no problem.
+
+    if (isInChordMode()) {
+	if (!noteOn) return;
+	NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
+	noteInserter->insertNote(segment, getInsertionTime(), pitch,
+				 Rosegarden::Accidentals::NoAccidental);
+
+    } else {
+
+	if (noteOn) {
+
+	    // Rules:
+	    //
+	    // * If no other note event has turned up within half a
+	    //   second, insert this note and advance.
+	    // 
+	    // * Relatedly, if this note is within half a second of
+	    //   the previous one, they're chords.  Insert the previous
+	    //   one, don't advance, and use the same rules for this.
+	    // 
+	    // * If a note event turns up before that time has elapsed,
+	    //   we need to wait for the note-off events: if the second
+	    //   note happened less than half way through the first,
+	    //   it's a chord.
+
+	    // for now:
+	    noteInserter->insertNote(segment, getInsertionTime(), pitch,
+				     Rosegarden::Accidentals::NoAccidental);
+	    
+	}
+    }
+}
+
+void
+NotationView::slotInsertableNoteOnReceived(int pitch)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, true);
 }
 
 void
 NotationView::slotInsertableNoteOffReceived(int pitch)
 {
     NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, false);
+}
+
+void
+NotationView::slotInsertableTimerElapsed()
+{
 }
 
 void
