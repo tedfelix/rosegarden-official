@@ -328,6 +328,8 @@ public:
      */
     const NotationProperties &getProperties() const;
 
+    virtual double getBarInset(int barNo, bool isFirstBarInRow) const;
+
 protected:
 
     virtual Rosegarden::ViewElement* makeViewElement(Rosegarden::Event*);

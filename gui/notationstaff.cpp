@@ -1958,3 +1958,91 @@ NotationStaff::getBarStyle(int barNo) const
     else return PlainBar;
 }
 
+double
+NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
+{
+    LinedStaff::BarStyle style = getBarStyle(barNo);
+
+    NOTATION_DEBUG << "getBarInset(" << barNo << "," << isFirstBarInRow << ")" << endl;
+
+    if (!(style == RepeatStartBar || style == RepeatBothBar)) return 0.0;
+
+    const Rosegarden::Segment &s = getSegment();
+    Rosegarden::Composition *composition = s.getComposition();
+    timeT barStart = composition->getBarStart(barNo);
+
+    double inset = 0.0;
+
+    NOTATION_DEBUG << "ready" << endl;
+
+    bool haveKey = false, haveClef = false;
+    
+    Rosegarden::Key key;
+    Rosegarden::Key cancelKey;
+    Rosegarden::Clef clef;
+
+    for (Rosegarden::Segment::iterator i = s.findTime(barStart);
+	 s.isBeforeEndMarker(i) && ((*i)->getNotationAbsoluteTime() == barStart);
+	 ++i) {
+
+	NOTATION_DEBUG << "type " << (*i)->getType() << " at " << (*i)->getNotationAbsoluteTime() << endl;
+
+	if ((*i)->isa(Rosegarden::Key::EventType)) {
+
+	    key = Rosegarden::Key(**i); //!!! catch
+
+	    if (barNo > composition->getBarNumber(s.getStartTime())) {
+		cancelKey = s.getKeyAtTime(barStart - 1);
+	    }
+
+	    if (m_keySigCancelMode == 0) { // only when entering C maj / A min
+
+		if (key.getAccidentalCount() != 0) cancelKey = Rosegarden::Key();
+
+	    } else if (m_keySigCancelMode == 1) { // only when reducing acc count
+
+		if (!(key.isSharp() == cancelKey.isSharp() &&
+		      key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+		    cancelKey = Rosegarden::Key();
+		}
+	    }
+
+	    haveKey = true;
+
+	} else if ((*i)->isa(Rosegarden::Clef::EventType)) {
+
+	    clef = Rosegarden::Clef(**i); //!!! catch
+	    haveClef = true;
+	}
+    }
+
+    if (isFirstBarInRow) {
+	if (!haveKey) {
+	    key = s.getKeyAtTime(barStart);
+	    haveKey = true;
+	}
+	if (!haveClef) {
+	    clef = s.getClefAtTime(barStart);
+	    haveClef = true;
+	}
+    }
+
+    if (haveKey) {
+	inset += m_notePixmapFactory->getKeyWidth(key, cancelKey);
+    }
+    if (haveClef) {
+	inset += m_notePixmapFactory->getClefWidth(clef);
+    }
+    if (haveClef || haveKey) {
+	inset += m_notePixmapFactory->getBarMargin() / 3;
+    }
+    if (haveClef && haveKey) {
+	inset += m_notePixmapFactory->getNoteBodyWidth() / 2;
+    }
+
+    NOTATION_DEBUG << "getBarInset(" << barNo << "," << isFirstBarInRow << "): inset " << inset << endl;
+
+
+    return inset;
+}
+

@@ -1300,6 +1300,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    NOTATION_DEBUG << "NotationHLayout::layout(): need to repeat clef & key in this bar" << endl;
 	}
 
+	double barInset = notationStaff.getBarInset(barNo, repeatClefAndKey);
+
 	NotationElement *lastDynamicText = 0;
 	int count = 0;
 
@@ -1376,6 +1378,16 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		x += shift;
 		NOTATION_DEBUG << "and moving next elt to " << x << endl;
 		timeSigToPlace = false;
+	    }
+
+	    if (barInset >= 1.0) {
+		if (el->event()->isa(Rosegarden::Clef::EventType) ||
+		    el->event()->isa(Rosegarden::Key::EventType)) {
+		    NOTATION_DEBUG << "Pulling clef/key back by " << getPreBarMargin() << endl;
+		    x -= getPostBarMargin() * 2 / 3;
+		} else {
+		    barInset = 0.0;
+		}
 	    }
 
             NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << " (was " << el->getLayoutX() << ")" << endl;

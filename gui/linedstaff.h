@@ -214,6 +214,15 @@ protected:
 	return PlainBar;
     }
 
+    /**
+     * Returns the distance the opening (repeat) bar is inset from the
+     * nominal barline position.  This is to accommodate the situation
+     * where a repeat bar has to appear after the clef and key.
+     */
+    virtual double getBarInset(int /* barNo */, bool /* isFirstBarInRow */) const {
+	return 0;
+    }
+
 protected:
     /// Subclass may wish to expose this
     virtual void setResolution(int resolution);

@@ -42,12 +42,13 @@ class BarLine : public QCanvasPolygonalItem
 public:
     BarLine(QCanvas *canvas, double layoutX,
 	    int barLineHeight, int baseBarThickness, int lineSpacing,
-	    LinedStaff::BarStyle style) :
+	    int inset, LinedStaff::BarStyle style) :
 	QCanvasPolygonalItem(canvas),
 	m_layoutX(layoutX),
 	m_barLineHeight(barLineHeight),
 	m_baseBarThickness(baseBarThickness),
 	m_lineSpacing(lineSpacing),
+	m_inset(inset),
 	m_style(style) { }
 
     double getLayoutX() const { return m_layoutX; }
@@ -60,6 +61,7 @@ protected:
     int m_barLineHeight;
     int m_baseBarThickness;
     int m_lineSpacing;
+    int m_inset;
     LinedStaff::BarStyle m_style;
 };
 
@@ -102,6 +104,12 @@ BarLine::drawShape(QPainter &painter)
 	break;
 
     case LinedStaff::RepeatStartBar:
+
+	if (m_inset > 0) {
+	    painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	    bx += m_inset;
+	}
+
 	painter.drawRect(bx, by, m_baseBarThickness * 3, m_barLineHeight);
 	painter.drawRect(bx + m_baseBarThickness * 5, by,
 			 m_baseBarThickness, m_barLineHeight);
@@ -113,6 +121,12 @@ BarLine::drawShape(QPainter &painter)
 	break;
 
     case LinedStaff::RepeatBothBar:
+
+	if (m_inset > 0) {
+	    painter.drawRect(bx, by, m_baseBarThickness, m_barLineHeight);
+	    bx += m_inset;
+	}
+
 	bx -= m_baseBarThickness * 4 + m_lineSpacing * 2 / 3;
 	painter.drawEllipse(bx, by + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
 			    m_lineSpacing / 3, m_lineSpacing / 3);
@@ -165,12 +179,12 @@ BarLine::areaPoints() const
 	break;
 
     case LinedStaff::RepeatStartBar:
-	x1 = x0 + m_baseBarThickness * 6 + m_lineSpacing * 2 / 3;
+	x1 = x0 + m_baseBarThickness * 6 + m_lineSpacing * 2 / 3 + m_inset;
 	break;
 
     case LinedStaff::RepeatBothBar:
 	x0 -= m_baseBarThickness * 4 + m_lineSpacing * 2 / 3;
-	x1 = x0 + m_baseBarThickness * 9 + m_lineSpacing * 2 / 3;
+	x1 = x0 + m_baseBarThickness * 9 + m_lineSpacing * 2 / 3 + m_inset;
 	break;
 
     case LinedStaff::NoVisibleBar:
@@ -818,9 +832,14 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     bool hidden = false;
     if (style == PlainBar && timeSig.hasHiddenBars()) hidden = true;
 
+    double inset = 0.0;
+    if (style == RepeatStartBar || style == RepeatBothBar) {
+	inset = getBarInset(barNo, firstBarInRow);
+    }
+
     BarLine *line = new BarLine(m_canvas, layoutX,
 				getBarLineHeight(), barThickness, getLineSpacing(),
-				style);
+				(int)inset, style);
 
     line->moveBy(x, y);
 
@@ -850,7 +869,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
 	BarLine *eline = new BarLine(m_canvas, layoutX,
 				     getBarLineHeight(), barThickness, getLineSpacing(),
-				     style);
+				     0, style);
 	eline->moveBy(xe, y);
 
 	eline->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::BarLine));
