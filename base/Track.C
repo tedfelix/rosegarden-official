@@ -21,6 +21,7 @@
 
 #include "Track.h"
 #include <iostream>
+#include <cstdio>
 
 #if (__GNUC__ < 3)
 #include <strstream>

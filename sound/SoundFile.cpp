@@ -28,9 +28,9 @@ namespace Rosegarden
 // Read in a specified number of bytes and return them
 // as a string.
 //
-const std::string
+std::string
 SoundFile::getBytes(std::ifstream *file,
-                    const unsigned int &numberOfBytes)
+                    unsigned int numberOfBytes)
 {
     std::string rS;
     char fileByte;

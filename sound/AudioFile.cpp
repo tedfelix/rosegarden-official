@@ -250,6 +250,9 @@ AudioFile::scanTo(const RealTime &time)
 
     m_file->seekg(totalBytes,  std::ios::cur);
 
+
+    std::cout << "AudioFile::scanTo - seeking to " << time << std::endl;
+
     return true;
 }
 

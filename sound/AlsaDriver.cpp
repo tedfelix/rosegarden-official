@@ -644,7 +644,6 @@ AlsaDriver::initialiseAudio()
     // Get the initial buffer size before we activate the client
     //
     _jackBufferSize = jack_get_buffer_size(m_audioClient);
-    std::cout << "JACK buffer size = " << _jackBufferSize << std::endl;
 
     // Activate the client
     //
@@ -672,8 +671,10 @@ AlsaDriver::initialiseAudio()
               << std::endl;
 
 
+    /*
+    // View all available ports
+    //
     const char **ports = jack_get_ports(m_audioClient, NULL, NULL, 0);
-
     int count = 0;
     while (ports[count] != NULL)
     {
@@ -681,8 +682,8 @@ AlsaDriver::initialiseAudio()
                      "\"" << std::endl;
         count++;
     }
-
     free(ports);
+    */
 
     // connect our client up to the ALSA ports - first output
     //
@@ -718,12 +719,14 @@ AlsaDriver::initialiseAudio()
     */
 
 
+    /*
     // Get write latency now we're connected
     //
     std::cout << "AlsaDriver::initialiseAudio - "
               << "JACK write latency = "
               << jack_port_get_latency(m_audioOutputPort) 
               << std::endl;
+              */
 
     /*
     cout << "CONNECTED = " << jack_port_connected(m_audioOutputPort) << endl;
@@ -1478,7 +1481,7 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         //
         sample_t *outputBuffer = static_cast<sample_t*>
             (jack_port_get_buffer(inst->getJackOutputPort(),
-                                                      nframes));
+                                  nframes));
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
@@ -1491,14 +1494,87 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                 if (audioFile)
                 {
                     std::cout << "GET " << nframes << " FRAMES" << std::endl;
-                    std::string samples = audioFile->getSamples(nframes);
 
-                    for (unsigned int i = 0; i < samples.length(); i++)
+                    std::string samples;
+
+                    try
                     {
-                        *outputBuffer = (unsigned char)samples[i];
-                        outputBuffer++;
+                        samples =
+                            audioFile->getSamples(nframes);
+                    }
+                    catch(std::string es)
+                    {
+                        std::cout << "jackProcess() - reached file end"
+                                  << std::endl;
+                        continue;
                     }
 
+
+                    char *samplePtr = samples.c_str();
+
+                    int channels = audioFile->getChannels();
+                    int bytes = audioFile->getBitsPerSample() / 8;
+                    int i = 0;
+                    int j = 0;
+                    unsigned short twobytes;
+                    unsigned long  fourbytes;
+
+                    float outBytes;
+
+                    cout << "BYTES = " << bytes << endl;
+                    cout << "SIZE = " << sizeof(*outputBuffer) << endl;
+                    cout << "CHANNELS = " << channels << endl;
+
+
+                    /*
+                    memcpy(outputBuffer,
+                           samplePtr,
+                           nframes * sizeof(sample_t));
+                           */
+                    while (i < samples.length())
+                    {
+                        for (int j = 0; j < channels; j++)
+                        {
+                            // write based on sample resolution
+                            if (j == 0)
+                            {
+                            switch(bytes)
+                            {
+                                case 1:
+                                    *outputBuffer = *samplePtr;
+                                    outputBuffer += 1;
+                                    i += 1;
+                                    break;
+
+                                case 2:
+                                    outBytes = (*((short*)(samplePtr))) / 32767.0f;
+                                    // check the bounds of our float
+                                    //
+                                    assert(outBytes >= -1 && outBytes <= 1);
+                                    /*
+                                       outBytes = (*samplePtr +
+                                               ((*(samplePtr + 1))))
+                                               / 32767.0f;
+                                               */
+                                    //cout << "f = " << outBytes << endl;
+                                    (*outputBuffer) = outBytes;
+                                    outputBuffer++;
+                                    samplePtr += 2;
+                                    i += 2;
+                                    break;
+
+                                default:
+                                    std::cerr << "jackProcess() - sample size "
+                                              << "not supported" << std::endl;
+                                    break;
+                            }
+                            }
+                            else
+                            {
+                                i += bytes;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1533,7 +1609,6 @@ AlsaDriver::jackShutdown(void *arg)
 
     if (inst)
     {
-        cout << "SHUTDOWN" << endl << endl;
         // Shutdown audio references
         //
         inst->shutdownAudio();
@@ -1541,7 +1616,8 @@ AlsaDriver::jackShutdown(void *arg)
         // And then restart Audio
         //
         std::cout << "AlsaDriver::jackShutdown() - received, " 
-                  << "restarting........" << std::endl;
+                  << "restarting..." << std::endl;
+
         inst->initialiseAudio();
     }
 }
@@ -1549,8 +1625,6 @@ AlsaDriver::jackShutdown(void *arg)
 void
 AlsaDriver::shutdownAudio()
 {
-    std::cout << "AlsaDriver::shutdownAudio - shutting down" << std::endl;
-
     if (m_audioClient)
     {
         jack_deactivate(m_audioClient);

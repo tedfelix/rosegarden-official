@@ -5,7 +5,7 @@ o basic JACK audio
 
 o "Revert file" option
 
-o 
+o Get recent file list working again
 
 o Fix configure to omit aRts when building for ALSA and
   vice versa (proper substiutions in Makefile.am not with

@@ -28,6 +28,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <cstdio>
 
 namespace Rosegarden 
 {
