@@ -37,24 +37,14 @@
   * "pitch", "QuantizedDuration", "Notation::NoteType", "Notation:Accident"
   *
   */
-class XMLStorableEvent : public Event
+class XmlStorableEvent : public Event
 {
 public:
-    XMLStorableEvent(const QXmlAttributes& atts);
-    XMLStorableEvent(const Event&);
+    XmlStorableEvent(const QXmlAttributes& atts);
+    XmlStorableEvent(const Event&);
 
-    QString        toXMLString() const;
-    static QString toXMLString(const Event&);
-    
-protected:
-/*!
-    timeT noteName2Duration(const QString &noteName);
-    void initMap();
-
-    typedef hash_map<string, timeT, hashstring, eqstring> namedurationmap;
-
-    static namedurationmap m_noteName2DurationMap;
-*/
+    QString        toXmlString() const;
+    static QString toXmlString(const Event&);
 };
 
 #endif

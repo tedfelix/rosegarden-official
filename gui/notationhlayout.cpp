@@ -83,6 +83,7 @@ NotationHLayout::layout(NotationElementList::iterator from,
 
     if (from != m_notationElements.begin()) {
 
+#ifdef NOT_DEFINED
         // Adjust according to where we are in the NotationElementList
 
         NotationElementList::iterator prevTS = m_notationElements.findPrevious
@@ -108,6 +109,13 @@ NotationHLayout::layout(NotationElementList::iterator from,
         //!!! no, shouldn't be doing this
         m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
 /*!        setCurrentKey(getKeyAtPos(from)); */
+
+#else
+
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: from > m_notationElements.begin() case not handled yet, resetting from" << endl;
+        from = m_notationElements.begin();
+
+#endif
     }
 
     //!!! ugh, this sort of thing sounds like it'll interact badly

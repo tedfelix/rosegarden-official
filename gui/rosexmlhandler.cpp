@@ -89,7 +89,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
 
-        XMLStorableEvent *newEvent = new XMLStorableEvent(atts);
+        XmlStorableEvent *newEvent = new XmlStorableEvent(atts);
         newEvent->setAbsoluteTime(m_currentTime);
         
         if (!m_inChord) {

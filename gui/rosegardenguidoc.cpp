@@ -248,7 +248,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
                     while ((*i)->getAbsoluteTime() == absTime) {
                         fileStream << '\t'
-                                   << XMLStorableEvent::toXMLString(*(*i))
+                                   << XmlStorableEvent::toXmlString(*(*i))
                                    << endl;
                         ++i;
                     }
@@ -259,7 +259,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                 }
             }
         
-            fileStream << XMLStorableEvent::toXMLString(*(*i)) << endl;
+            fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
         }
 
         fileStream << "</Track>" << endl; //-------------------------

@@ -23,7 +23,7 @@
 
 #include "rosedebug.h"
 
-XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
+XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 {
     setPackage("core"); //!!! sensible default for storable events?
 
@@ -50,7 +50,7 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 		    Note n(attrVal.latin1());
 		    setDuration(n.getDuration());
 		} catch (Note::BadType b) {
-                    kdDebug(KDEBUG_AREA) << "XMLStorableEvent::XMLStorableEvent: Bad duration: " << attrVal << " (Note choked on \"" << b.type << "\")" << endl;
+                    kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (Note choked on \"" << b.type << "\")" << endl;
 		}
             } else {
 		setDuration(d);
@@ -88,14 +88,14 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
     }
 }
 
-XMLStorableEvent::XMLStorableEvent(const Event &e)
+XmlStorableEvent::XmlStorableEvent(const Event &e)
     : Event(e)
 {
 }
 
 
 QString
-XMLStorableEvent::toXMLString() const
+XmlStorableEvent::toXmlString() const
 {
     QString res = "<event";
 
@@ -122,7 +122,7 @@ XMLStorableEvent::toXMLString() const
 }
 
 QString
-XMLStorableEvent::toXMLString(const Event &e)
+XmlStorableEvent::toXmlString(const Event &e)
 {
     QString res = "<event";
 
@@ -147,63 +147,4 @@ XMLStorableEvent::toXMLString(const Event &e)
     res += "/>";
     return res;
 }
-/*!
-Event::timeT
-XMLStorableEvent::noteName2Duration(const QString &nn)
-{
-    if (m_noteName2DurationMap.empty())
-        initMap();
 
-    string noteName(nn.latin1());
-
-    namedurationmap::iterator it(m_noteName2DurationMap.find(noteName));
-
-    if (it == m_noteName2DurationMap.end()) {
-        // note name doesn't exist
-        kdDebug(KDEBUG_AREA) << "Bad note name : " << nn << endl;
-        return 0;
-    }
-
-
-    return it->second;
-}
-
-void
-XMLStorableEvent::initMap()
-{
-    if (! m_noteName2DurationMap.empty())
-        return;
-
-    m_noteName2DurationMap["64th"]               = 6;
-    m_noteName2DurationMap["hemidemisemiquaver"] = 6;
-
-    m_noteName2DurationMap["32nd"]               = 12;
-    m_noteName2DurationMap["demisemiquaver"]     = 12;
-
-    m_noteName2DurationMap["16th"]               = 24;
-    m_noteName2DurationMap["semiquaver"]         = 24;
-
-    m_noteName2DurationMap["8th"]                = 48;
-    m_noteName2DurationMap["quaver"]             = 48;
-
-    m_noteName2DurationMap["quarter"]            = 96;
-    m_noteName2DurationMap["crotchet"]           = 96;
-
-    m_noteName2DurationMap["half"]               = 192;
-    m_noteName2DurationMap["minim"]              = 192;
-
-    m_noteName2DurationMap["whole"]              = 384;
-    m_noteName2DurationMap["semibreve"]          = 384;
-
-    // what is the american name ??
-    m_noteName2DurationMap["breve"]              = 768;
-
-}
-
-
-
-XMLStorableEvent::namedurationmap
-XMLStorableEvent::m_noteName2DurationMap;
-
-
-*/
