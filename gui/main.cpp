@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qtimer.h>
+
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -116,9 +118,7 @@ int main(int argc, char *argv[])
     //
     rosegardengui->launchSequencer();
 
-    if (start_logo)
-        delete start_logo;
+    QTimer::singleShot(2*1000, start_logo, SLOT(close()));
 
     return app.exec();
-
 }  
