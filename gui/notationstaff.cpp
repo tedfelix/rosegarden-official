@@ -957,6 +957,10 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 			while (w != 0) {
 			    w = setPainterWindow(m_printPainter, elt->getLayoutX(),
 						 inc, length);
+			    coords = getCanvasCoordsForLayoutCoords
+				(elt->getLayoutX() + inc, int(elt->getLayoutY()));
+			    coords.first -= inc;
+			    NOTATION_DEBUG << "canvas coords: " << coords.first << "," << coords.second << endl;
 			    m_notePixmapFactory->drawHairpin
 				(length, indicationType == Indication::Crescendo,
 				 *m_printPainter, int(coords.first), coords.second);
@@ -1071,16 +1075,23 @@ NotationStaff::setPainterWindow(QPainter *painter, double lx, double dx, double 
 
     NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
 
+    if (dx > 0) {
+	LinedStaffCoords origCoords = getCanvasCoordsForLayoutCoords(lx, 0);
+	double x1 = coords.first - origCoords.first;
+	int y1 = coords.second - origCoords.second;
+//	painter->translate(x1, y1);
+//    NOTATION_DEBUG << "NotationStaff::setPainterWindow: translated by " << x1 << "," << y1 << endl;
+
+    }
+
+    painter->setClipRect(int(dx), 0, int(available), getRowSpacing(),
+			 QPainter::CoordPainter);
+
+    NOTATION_DEBUG << "NotationStaff::setPainterWindow: set window to " << dx << "," << 0 << ", " << available << "x" << getRowSpacing() << endl;
+
     if (w - dx < available + m_notePixmapFactory->getNoteBodyWidth()) {
 	return 0.0;
     }
-
-    painter->setWindow(int(dx), 0, int(available), getRowSpacing());
-
-    LinedStaffCoords origCoords = getCanvasCoordsForLayoutCoords(lx, 0);
-    double x1 = coords.first - origCoords.first;
-    int y1 = coords.second - origCoords.second;
-    painter->translate(x1, y1);
 
     return available;
 }
