@@ -146,7 +146,7 @@ namespace Rosegarden
 
     inline unsigned int convertToMidiTime(const Rosegarden::timeT &position)
     {
-      return ((unsigned int) position * 4);
+      return ((unsigned int) position * 6);
     }
 
     // We're leaving the calculations expanded for the moment
@@ -165,7 +165,7 @@ namespace Rosegarden
 
     inline Rosegarden::timeT convertToGuiTime(unsigned int &midiTime)
     {
-      return ((Rosegarden::timeT) midiTime);
+      return ((Rosegarden::timeT) midiTime / 6);
     }
 
     // process a raw aRTS MIDI event into internal representation
@@ -185,6 +185,10 @@ namespace Rosegarden
     bool isPlaying() { return _playing; }
 
     void stopPlayback();
+
+    // NOTE OFF control
+    void processNotesOff(unsigned int midiTime);
+    void allNotesOff();
 
   private:
 

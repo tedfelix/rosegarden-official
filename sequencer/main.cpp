@@ -186,6 +186,8 @@ int main(int argc, char *argv[])
 
   cout << "RosegardenSequencer - started OK" << endl;
 
+  TransportStatus lastSeqStatus = roseSeq->getStatus();
+
   while(true)
   {
     // process any pending events
@@ -229,6 +231,11 @@ int main(int argc, char *argv[])
           break;
       }
     }
+
+    if (lastSeqStatus != roseSeq->getStatus())
+      roseSeq->notifySequencerStatus();
+
+    lastSeqStatus = roseSeq->getStatus();
   }
 
   return app.exec();

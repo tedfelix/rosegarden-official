@@ -89,6 +89,9 @@ public slots:
   // Update internal clock and send GUI position pointer movement
   void updateClocks();
 
+  // Sends status changes up to GUI
+  void notifySequencerStatus();
+
 private:
   Rosegarden::MappedComposition fetchEvents(const Rosegarden::timeT &start,
                                             const Rosegarden::timeT &end);

@@ -29,7 +29,6 @@ using std::cerr;
 using std::endl;
 using std::cout;
 
-
 RosegardenSequencerApp::RosegardenSequencerApp():
     DCOPObject("RosegardenSequencerIface"),
     m_sequencer(0),
@@ -105,7 +104,12 @@ int
 RosegardenSequencerApp::stop()
 {
   // process pending NOTE OFFs and stop the Sequencer
+  m_sequencer->stopPlayback();
+
+  // set our state at this level to STOPPING (pending any
+  // unfinished NOTES)
   m_transportStatus = STOPPING;
+
   return true;
 }
 
@@ -211,4 +215,23 @@ RosegardenSequencerApp::updateClocks()
   }
 }
 
+void
+RosegardenSequencerApp::notifySequencerStatus()
+{
+  QByteArray data, replyData;
+  QCString replyType;
+  QDataStream arg(data, IO_WriteOnly);
+
+  arg << (int)m_transportStatus;
+
+  if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                ROSEGARDEN_GUI_IFACE_NAME,
+                                "notifySequencerStatus(int)",
+                                data, replyType, replyData))
+  {
+    cerr <<
+     "RosegardenSequencer::fetchEvents() - can't call RosegardenGUI client"
+         << endl;
+  }
+}
 

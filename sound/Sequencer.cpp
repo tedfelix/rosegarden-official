@@ -397,31 +397,41 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition *mappedComp,
 
     _noteOffQueue.insert(noteOffEvent);
 
-    // process any pending NOTE OFFs
-    for ( NoteOffQueue::iterator i = _noteOffQueue.begin();
-                                 i != _noteOffQueue.end(); ++i )
+    // Process NOTE OFFs for current time
+    processNotesOff(midiRelativeTime);
 
-    {
-      // If there's a NOTE OFF that should be sent then send it
-      if ((*i)->getMidiTime() <= midiRelativeTime)
-      {
-        event.time = aggregateTime(_playStartTime,
-                                   convertToArtsTimeStamp((*i)->getMidiTime()));
-        event.command.data1 = (*i)->getPitch();
-        event.command.data2 = 127;
-        event.command.status = Arts::mcsNoteOff | channel;
-        _midiPlayPort.processEvent(event);
-      }
-    }
   }
 
-  
-/*
-    event.time = aggregateTime(playPortTime,
-                  convertToArtsTimeStamp(midiPlayPosition + (*i)->getDuration()));
+}
 
-*/
 
+void
+Sequencer::processNotesOff(unsigned int midiTime)
+{
+  Arts::MidiEvent event;
+  MidiByte channel = 0;
+
+  // process any pending NOTE OFFs
+  for ( NoteOffQueue::iterator i = _noteOffQueue.begin();
+                               i != _noteOffQueue.end(); ++i )
+
+  {
+    // If there's a pregnant NOTE OFF around then send it
+    if ((*i)->getMidiTime() <= midiTime)
+    {
+      event.time = _midiPlayPort.time();
+      event.command.data1 = (*i)->getPitch();
+      event.command.data2 = 127;
+      event.command.status = Arts::mcsNoteOff | channel;
+      _midiPlayPort.processEvent(event);
+    }
+  }
+}
+
+void
+Sequencer::allNotesOff()
+{
+   processNotesOff(99999999); // big number
 }
 
 void 
@@ -436,6 +446,7 @@ Sequencer::initializePlayback(const timeT &position)
 void
 Sequencer::stopPlayback()
 {
+  allNotesOff();
   _playing = false;
 }
 
