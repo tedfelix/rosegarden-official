@@ -502,12 +502,13 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
                                            Accidental acc)
 {
     timeT time;
+    bool eraseI = false;
 
     if (i == end()) {
 	time = track().getDuration();
     } else {
 	time = (*i)->getAbsoluteTime();
-	if (isRest || (*i)->isa(Note::EventRestType)) erase(i);
+	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
     Event *e = new Event(isRest ? Note::EventRestType : Note::EventType);
@@ -526,6 +527,8 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
     if (tiedBack && !isRest) {
         e->set<Bool>(Note::TiedBackwardPropertyName, true);
     }
+
+    if (eraseI) erase(i);
 
     return insert(e);
 }
