@@ -139,12 +139,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                                 trackLabelWidth,
                                 getTrackCellHeight() * nbTracks + 5);
 
-    m_trackButtons->raise();
-
     m_barButtons->setGeometry(trackLabelWidth, 2,
-                              400,
+                              getSegmentCanvas()->viewport()->width(),
                               barButtonsHeight);
-    m_barButtons->raise();
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
@@ -175,6 +172,14 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_pointer->setZ(10);
     m_pointer->show();
 }
+
+void TrackEditor::resizeEvent(QResizeEvent*)
+{
+    m_barButtons->setGeometry(m_barButtons->x(), 2,
+                              getSegmentCanvas()->viewport()->width(),
+                              m_barButtons->height());
+}
+
 
 int TrackEditor::getTrackCellHeight() const
 {

@@ -194,7 +194,9 @@ signals:
     void splitSegment(Rosegarden::Segment*, Rosegarden::timeT);
 
 protected:
-
+    // overridden from QWidget
+    virtual void resizeEvent(QResizeEvent*);
+    
     void init(unsigned int nbTracks, int firstBar, int lastBar);
 
     //--------------- Data members ---------------------------------
