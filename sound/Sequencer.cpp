@@ -406,7 +406,8 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 void
 Sequencer::processEventsOut(const Rosegarden::MappedComposition &mC,
-                            const Rosegarden::RealTime &playLatency)
+                            const Rosegarden::RealTime &playLatency,
+                            bool now)
 {
     // Start playback if it isn't already
     //
@@ -431,7 +432,7 @@ Sequencer::processEventsOut(const Rosegarden::MappedComposition &mC,
     }
 
     // do MIDI events
-    processMidiOut(mC, playLatency);
+    processMidiOut(mC, playLatency, now);
 
     // do any audio events
     processAudioQueue();
@@ -505,7 +506,8 @@ Sequencer::processAudioQueue()
 
 void
 Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
-                          const Rosegarden::RealTime &playLatency)
+                          const Rosegarden::RealTime &playLatency,
+                          bool now)
 {
     Arts::MidiEvent event;
 
@@ -527,15 +529,14 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
 
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
-        // Sanity check
-        assert((*i)->getEventTime() >= m_playStartPosition);
-
         // Check that we're processing the right type
         //
-        /*
-        if ((*i)->getType() != MappedEvent::Internal)
+        if ((*i)->getType() == MappedEvent::Audio)
             continue;
-            */
+
+        // Sanity check when playing
+        if (!now)
+            assert((*i)->getEventTime() >= m_playStartPosition);
 
         // Relative to start of the piece including play latency
         //
@@ -572,26 +573,31 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
 
             case MappedEvent::MidiProgramChange:
                 event.command.status = Arts::mcsProgram | channel;
-                event.command.data1 = (*i)->getPitch();
-                cout << "PROGRAM CHANGE" << endl;
+                event.command.data1 = (*i)->getData1();
                 break;
 
             case MappedEvent::MidiKeyPressure:
                 event.command.status = Arts::mcsKeyPressure | channel;
+                event.command.data1 = (*i)->getData1();
+                event.command.data2 = (*i)->getData2();
                 break;
 
             case MappedEvent::MidiChannelPressure:
                 event.command.status = Arts::mcsChannelPressure | channel;
+                event.command.data1 = (*i)->getData1();
+                event.command.data2 = (*i)->getData2();
                 break;
 
             case MappedEvent::MidiPitchWheel:
                 event.command.status = Arts::mcsPitchWheel | channel;
+                event.command.data1 = (*i)->getData1();
+                event.command.data2 = (*i)->getData2();
                 break;
 
             case MappedEvent::MidiController:
                 event.command.status = Arts::mcsParameter | channel;
-                event.command.data1 = (*i)->getPitch();
-                event.command.data2 = (*i)->getVelocity();
+                event.command.data1 = (*i)->getData1();
+                event.command.data2 = (*i)->getData2();
                 break;
 
             default:
@@ -599,25 +605,37 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
                             << endl;
                  break;
         }
-        // Here's a little check to test out timing - I don't think it reports
-        // correctly at the moment
-        //
-        Arts::TimeStamp now = m_midiPlayPort.time();
 
-        int secAhead = event.time.sec - now.sec;
-        int uSecAhead = event.time.usec - now.usec;
+        Arts::TimeStamp timeNow = m_midiPlayPort.time();
 
-        // Adjust for negative
-        //
-        if (uSecAhead < 0) 
+        if(now)
         {
-            uSecAhead += 1000000;
-            secAhead++;
+            event.time.sec = timeNow.sec;
+            event.time.usec = timeNow.usec;
         }
-
-        if (secAhead < 0)
+        else
         {
-            std::cerr <<"Sequencer::processMidiOut: MIDI processing lagging by " << -secAhead << "s and " << uSecAhead << "us" << endl;
+            // Check event timing for lag
+            int secAhead = event.time.sec - timeNow.sec;
+            int uSecAhead = event.time.usec - timeNow.usec;
+
+            // Adjust for negative
+            //
+            if (uSecAhead < 0) 
+            {
+                uSecAhead += 1000000;
+                secAhead++;
+            }
+    
+            if (secAhead < 0)
+            {
+                std::cerr <<
+                    "Sequencer::processMidiOut: MIDI processing lagging by "
+                          << -secAhead
+                          << "s and "
+                          << uSecAhead
+                          << "us" << endl;
+            }
         }
 
         // Send the event out to the MIDI port
@@ -639,14 +657,17 @@ Sequencer::processMidiOut(const Rosegarden::MappedComposition &mC,
              << usecFromStart << "ms" << endl;
 #endif
 
-        // Log the Event onto the Note OFF stack
+        // Only create a NOTE OFF entry for a NOTE ON
         //
-        NoteOffEvent *noteOffEvent =
-            new NoteOffEvent(midiRelativeStopTime,
-                     (Rosegarden::MidiByte)event.command.data1,
-                     (Rosegarden::MidiByte)event.command.status);
+        if ((*i)->getType() == MappedEvent::MidiNote)
+        {
+            NoteOffEvent *noteOffEvent =
+                new NoteOffEvent(midiRelativeStopTime,
+                         (Rosegarden::MidiByte)event.command.data1,
+                         (Rosegarden::MidiByte)event.command.status);
 
-        m_noteOffQueue.insert(noteOffEvent);
+            m_noteOffQueue.insert(noteOffEvent);
+        }
 
     }
 
@@ -692,8 +713,6 @@ Sequencer::processNotesOff(const Rosegarden::RealTime &midiTime)
         // If there's a pregnant NOTE OFF around then send it
         if ((*i)->getRealTime() <= midiTime)
         {
-            //event.time = m_midiPlayPort.time();
-
             // Conversion from RealTime to Arts::TimeStamp
             noteOff = (*i)->getRealTime();
             event.time = aggregateTime(m_artsPlayStartTime,
@@ -987,18 +1006,40 @@ Sequencer::immediateProcessEventsOut(Rosegarden::MappedComposition &mC)
 {
     MappedComposition localMC;
     MappedComposition::iterator it = mC.begin();
-    MappedEvent mE;
+    MappedEvent *mE;
 
     for (; it != mC.end(); it++)
     {
+        /*
         cout << "SEQ INST = " << (int)(*it)->getInstrument() << endl;
         cout << "SEQ TYPE = " << (int)(*it)->getType()  << endl;
         cout << "SEQ D1 = " << (int)(*it)->getData1() << endl;
         cout << "SEQ D2 = " << (int)(*it)->getData2() << endl;
         cout << "SEQ TIME = " << (*it)->getEventTime() << endl;
         cout << "SEQ DUR = " << (*it)->getDuration() << endl;
-        cout << "SEQ AUD = " << (*it)->getAudioStartMarker() << endl;
+        cout << "SEQ AUD = " << (*it)->getAudioStartMarker() << endl << endl;
+        */
+
+        Arts::TimeStamp artsTimeNow = m_midiPlayPort.time();
+
+        Rosegarden::RealTime immediateTime = Rosegarden::RealTime(0,0);
+        mE = new Rosegarden::MappedEvent(
+                (*it)->getInstrument(),
+                (*it)->getType(),
+                (*it)->getData1(),
+                (*it)->getData2(),
+                (*it)->getEventTime(),
+                (*it)->getDuration(), 
+                (*it)->getAudioStartMarker());
+
+        localMC.insert(mE);
     }
+
+
+    // Send out the events
+    processEventsOut(localMC, Rosegarden::RealTime(0, 0), true);
+
+
 
 }
 

@@ -191,12 +191,19 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
     m_selectedInstrument = instrument;
 
-    // Activate all checkboxes
+    // Enable all check boxes
     //
     m_panCheckBox->setDisabled(false);
     m_velocityCheckBox->setDisabled(false);
     m_programCheckBox->setDisabled(false);
     m_bankCheckBox->setDisabled(false);
+
+    // Activate all checkboxes
+    //
+    m_panCheckBox->setChecked(m_selectedInstrument->sendsPan());
+    m_velocityCheckBox->setChecked(m_selectedInstrument->sendsVelocity());
+    m_programCheckBox->setChecked(m_selectedInstrument->sendsProgramChange());
+    m_bankCheckBox->setChecked(m_selectedInstrument->sendsBankSelect());
 
     // The MIDI channel
     m_channelValue->setCurrentItem((int)instrument->getMidiChannel());

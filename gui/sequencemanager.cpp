@@ -946,8 +946,7 @@ SequenceManager::preparePlayback()
 {
     Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::InstrumentList list = studio.getInstruments();
-
-    m_mC.clear();
+    Rosegarden::MappedComposition mC;
     Rosegarden::MappedEvent *mE;
 
     // Send the MappedInstruments (minimal Instrument information
@@ -978,14 +977,15 @@ SequenceManager::preparePlayback()
             {
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
+                                     (MidiByte)0,
                                      (*it)->getMSB());
-                m_mC.insert(mE);
+                mC.insert(mE);
 
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
-                                     32,
+                                     (MidiByte)32,
                                      (*it)->getLSB());
-                m_mC.insert(mE);
+                mC.insert(mE);
             }
 
             if ((*it)->sendsProgramChange())
@@ -993,52 +993,51 @@ SequenceManager::preparePlayback()
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiProgramChange,
                                      (*it)->getProgramChange());
-                /*
-                mE = new MappedEvent((Rosegarden::InstrumentId)0,
-
-                                     Rosegarden::MappedEvent::MidiProgramChange,
-                                     (Rosegarden::MidiByte)10,
-                                     (Rosegarden::MidiByte)0,
-                                     Rosegarden::RealTime(10,0),
-                                     Rosegarden::RealTime(0,0),
-                                     Rosegarden::RealTime(0,0));
-                                     */
-
-                m_mC.insert(mE);
+                mC.insert(mE);
             }
         }
     }
 
     // Send the MappedComposition if it's got anything in it
-    if (m_mC.size() > 0)
+    if (mC.size() > 0)
     {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
         QCString replyType;
         QByteArray replyData;
 
-        MappedComposition::iterator it = m_mC.begin();
+        MappedComposition::iterator it = mC.begin();
 
         // scan output MappedComposition
-        for (; it != m_mC.end(); it++)
+        for (; it != mC.end(); it++)
         {
+            QByteArray data;
+            QDataStream streamOut(data, IO_WriteOnly);
+
+            /*
             cout << "PC TYPE = " << (*it)->getType() << endl;
             cout << "PC ID = " << (*it)->getInstrument() << endl;
-            cout << "PC PC = " << (int)(*it)->getPitch() << endl;
+            cout << "PC PC = " << (int)(*it)->getPitch() << endl << endl;
+            */
+
+            streamOut << (*it)->getInstrument();
+            streamOut << (*it)->getType();
+            streamOut << (*it)->getData1();
+            streamOut << (*it)->getData2();
+            streamOut << (*it)->getEventTime().sec;
+            streamOut << (*it)->getEventTime().usec;
+            streamOut << (*it)->getDuration().sec;
+            streamOut << (*it)->getDuration().usec;
+            streamOut << (*it)->getAudioStartMarker().sec;
+            streamOut << (*it)->getAudioStartMarker().usec;
+
+            if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
+              "processMappedEvent(unsigned int, int, unsigned char, unsigned char, long int, long int, long int, long int, long int, long int)", data))
+            {
+                throw(i18n("Failed to contact Rosegarden sequencer"));
+            }
         }
 
-        streamOut << m_mC;
-
-        if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-          "processSequencerSlice(Rosegarden::MappedComposition)", data,
-          replyType, replyData))
-        {
-            throw(i18n("Failed to contact Rosegarden sequencer"));
-        }
     }
-
-    return m_mC;
 }
 
 

@@ -238,7 +238,7 @@ RosegardenSequencerApp::startPlaying()
 
     if (mC != 0)
     {
-        m_sequencer->processEventsOut(*mC, m_playLatency);
+        m_sequencer->processEventsOut(*mC, m_playLatency, false);
         delete mC;
     }
 
@@ -265,7 +265,7 @@ RosegardenSequencerApp::keepPlaying()
 
         if (mC != 0)
         {
-            m_sequencer->processEventsOut(*mC, m_playLatency);
+            m_sequencer->processEventsOut(*mC, m_playLatency, false);
             delete mC;
         }
 
@@ -647,5 +647,36 @@ RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
               << std:: endl;
     m_sequencer->immediateProcessEventsOut(mC);
 }
+
+void
+RosegardenSequencerApp::processMappedEvent(unsigned int id,
+                                           int type,
+                                           unsigned char pitch,
+                                           unsigned char velocity,
+                                           long absTimeSec,
+                                           long absTimeUsec,
+                                           long durationSec,
+                                           long durationUsec,
+                                           long audioStartMarkerSec,
+                                           long audioStartMarkerUSec)
+{
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(
+            (Rosegarden::InstrumentId)id,
+            (Rosegarden::MappedEvent::MappedEventType)type,
+            (Rosegarden::MidiByte)pitch,
+            (Rosegarden::MidiByte)velocity,
+            Rosegarden::RealTime(absTimeSec, absTimeUsec),
+            Rosegarden::RealTime(durationSec, durationUsec),
+            Rosegarden::RealTime(audioStartMarkerSec, audioStartMarkerUSec));
+
+    Rosegarden::MappedComposition mC;
+
+    mC.insert(mE);
+
+    m_sequencer->immediateProcessEventsOut(mC);
+}
+
+
 
 

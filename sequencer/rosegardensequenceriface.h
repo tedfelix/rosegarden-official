@@ -25,6 +25,8 @@
 #include "rosegardendcop.h"
 #include "Event.h"
 #include "MappedComposition.h"
+#include "MappedEvent.h"
+#include "Instrument.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -95,6 +97,21 @@ public:
     // of MappedEvents (Program Changes, SysExs, async Events etc).
     //
     virtual void processSequencerSlice(Rosegarden::MappedComposition mC) = 0;
+
+
+    // Horrible ugly ugly ugly interface for single MappedEvents
+    // just until we implement the proper MappedEvent interface
+    //
+    virtual void processMappedEvent(unsigned int id,
+                                    int type,
+                                    unsigned char pitch,
+                                    unsigned char velocity,
+                                    long absTimeSec,
+                                    long absTimeUsec,
+                                    long durationSec,
+                                    long durationUsec,
+                                    long audioStartMarkerSec,
+                                    long audioStartMarkerUSec) = 0;
 
 
 };

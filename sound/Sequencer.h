@@ -224,7 +224,8 @@ public:
     // to aRTS
     //
     void processEventsOut(const Rosegarden::MappedComposition &mC,
-                          const Rosegarden::RealTime &playLatency);
+                          const Rosegarden::RealTime &playLatency,
+                          bool now); // process everything immediately
 
     // Immediate processing - no queuing
     //
@@ -311,7 +312,8 @@ private:
     void initialiseAudio();
 
     void processMidiOut(const Rosegarden::MappedComposition &mC,
-                        const Rosegarden::RealTime &playLatency);
+                        const Rosegarden::RealTime &playLatency,
+                        bool now);
 
     // get a vector of recorded events from aRTS
     // (only for internal use)

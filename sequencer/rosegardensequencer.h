@@ -154,6 +154,19 @@ public slots:
     //
     virtual void processSequencerSlice(Rosegarden::MappedComposition mC);
 
+    // Yeuch!
+    //
+    virtual void processMappedEvent(unsigned int id,
+                                    int type,
+                                    unsigned char pitch,
+                                    unsigned char velocity,
+                                    long absTimeSec,
+                                    long absTimeUsec,
+                                    long durationSec,
+                                    long durationUsec,
+                                    long audioStartMarkerSec,
+                                    long audioStartMarkerUSec);
+
 public:
 
     void setStatus(TransportStatus status)
