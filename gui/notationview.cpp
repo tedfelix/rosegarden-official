@@ -637,6 +637,12 @@ NotationView::slot64th()
 void
 NotationView::insertNote(int pitch, const QPoint &eventPos)
 {
+    NotationElementList::iterator closestNote = findClosestNote(eventPos.x());
+
+    if (closestNote == m_notationElements->end()) {
+        return;
+    }
+
     // create new event
     //
     Event *insertedEvent = new Event;
@@ -659,49 +665,42 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
     newNotationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
     newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
-    NotationElementList::iterator closestNote = findClosestNote(eventPos.x());
-
     NotationElementList::iterator redoLayoutStart = closestNote;
     
-    if (closestNote != m_notationElements->end()) {
+    if ((*closestNote)->isRest()) {
 
-        if ((*closestNote)->isRest()) {
+        // replace rest (or part of it) with note
+        //
 
-            // replace rest (or part of it) with note
-            //
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : replacing rest with note"
+                             << endl;
 
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : replacing rest with note"
-                                 << endl;
-
-            if (!replaceRestWithNote(closestNote, newNotationElement))
-                return;
-            else
-                --redoLayoutStart;
+        if (!replaceRestWithNote(closestNote, newNotationElement))
+            return;
+        else
+            --redoLayoutStart;
             
-        } else {
+    } else { // it's a note : chord it
 
-            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
-                                 << (*closestNote)->absoluteTime()
-                                 << endl;
-
-            newNotationElement->setAbsoluteTime((*closestNote)->absoluteTime());
-            // m_notationElements->insert(newNotationElement);
-
-	    kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
-
-            m_viewElementsManager->insert(newNotationElement);
-            
+        // if closest note has the same pitch as the one we're
+        // inserting, bail out
+        if ( (*closestNote)->event()->get<Int>("pitch") == pitch ) {
+            delete insertedEvent; // this will also delete the NotationElement
+            return;
         }
-        
 
-    } else { // note is inserted at end (appended)
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
+                             << (*closestNote)->absoluteTime()
+                             << endl;
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : Couldn't find closest note" << endl;
-        KMessageBox::error(0, "Couldn't find closest note");
-        delete insertedEvent;
-        return;
+        newNotationElement->setAbsoluteTime((*closestNote)->absoluteTime());
+        // m_notationElements->insert(newNotationElement);
+
+        kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
+
+        m_viewElementsManager->insert(newNotationElement);
+            
     }
-
 
 //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
 //                          << endl << *m_notationElements << endl;
@@ -734,17 +733,21 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 NotationElementList::iterator
 NotationView::findClosestNote(double eventX)
 {
+    static const unsigned int proximityThreshold = 10; // in pixels
+
     double minDist = 10e9,
         prevDist = 10e9;
 
     NotationElementList::iterator it, res;
-    
+
+    // TODO: this is grossly inefficient
+    //
     for (it = m_notationElements->begin();
          it != m_notationElements->end(); ++it) {
 
         double dist;
         
-        if ( (*it)->x() >= eventX)
+        if ( (*it)->x() >= eventX )
             dist = (*it)->x() - eventX;
         else
             dist = eventX - (*it)->x();
@@ -756,6 +759,7 @@ NotationView::findClosestNote(double eventX)
             res = it;
         }
         
+        // not sure about this
         if (dist > prevDist) break; // we can stop right now
 
         prevDist = dist;
@@ -764,6 +768,12 @@ NotationView::findClosestNote(double eventX)
     kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote(" << eventX << ") : found "
                          << *(*res) << endl;
 
+    if (minDist > proximityThreshold) {
+        kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : element is too far away : "
+                             << minDist << endl;
+        return m_notationElements->end();
+    }
+        
     return res;
 }
 
