@@ -348,7 +348,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 }
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
-                                    const char* /*format*/ /*=0*/)
+                                    const char* format)
 {
     RG_DEBUG << "RosegardenGUIDoc::saveDocument("
                          << filename << ")\n";
@@ -361,6 +361,23 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
+
+    if (std::string(format) == std::string("deviceExport"))
+    {
+        // Send out the studio - a self contained command
+        //
+        outStream << QString(strtoqstr(m_studio.toXmlString())) << endl << endl;
+    
+        // close the top-level XML tag
+        //
+        outStream << "</rosegarden-data>\n";
+
+        bool okay = writeToFile(filename, outText);
+        if (!okay) return false;
+    
+        RG_DEBUG << endl << "RosegardenGUIDoc::deviceExport() finished\n";
+        return true;
+    }
 
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)

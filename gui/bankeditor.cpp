@@ -33,6 +33,7 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include <qregexp.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -493,16 +494,42 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                         i18n("Manage Banks..."),
                                         leftPart);
 
-    m_addBank        = new QPushButton(i18n("Add Bank"),                bankBox);
-    m_deleteBank     = new QPushButton(i18n("Delete Bank"),             bankBox);
+    m_addBank        = new QPushButton(i18n("Add Bank"), bankBox);
+    m_deleteBank     = new QPushButton(i18n("Delete Bank"), bankBox);
     m_deleteAllBanks = new QPushButton(i18n("Delete All Banks"), bankBox);
+
+    // Tips
+    //
+    QToolTip::add(m_addBank,
+                  i18n("Add a Bank to the current device"));
+
+    QToolTip::add(m_deleteBank,
+                  i18n("Delete the current Bank"));
+
+    QToolTip::add(m_deleteAllBanks,
+                  i18n("Delete all Banks from the current Device"));
 
     m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
     m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
     new QLabel(bankBox); // spacer
 
+    // Tips
+    //
+    QToolTip::add(m_importBanks,
+            i18n("Import Bank and Program data from a Rosegarden file to the current Device"));
+    QToolTip::add(m_exportBanks,
+            i18n("Export all Device and Bank information to a Rosegarden format  interchange file"));
+
     m_copyPrograms = new QPushButton(i18n("Copy Programs"), bankBox);
     m_pastePrograms = new QPushButton(i18n("Paste Programs"), bankBox);
+
+    // Tips
+    //
+    QToolTip::add(m_copyPrograms,
+            i18n("Copy all Program names from current Bank to clipboard"));
+
+    QToolTip::add(m_pastePrograms,
+            i18n("Paste Program names from clipboard to current Bank"));
 
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
@@ -1349,6 +1376,9 @@ BankEditorDialog::slotExport()
                this,
                i18n("Export Device as..."));
 
+    // Check for the existence of the name
+    if (name.isEmpty()) return;
+
     // Append extension if we don't have one
     //
     if (!extension.isEmpty())
@@ -1377,11 +1407,9 @@ BankEditorDialog::slotExport()
 
     }
 
-    // Check for the existence of the name
-    if (name.isEmpty()) return;
-
 
     //std::cout << "GOT FILENAME = " << name << std::endl;
+    m_doc->saveDocument(name, "deviceExport");
 
 
 }
