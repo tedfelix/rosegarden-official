@@ -4,7 +4,12 @@ Features for 1.0 - updated 20030923
 - integrate new JACK transport and synchronisation - also
   investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
 
-- metronome [IN PROGRESS - rwb]
+- audio threading for file r/w access [rwb]
+  o ringbuffer
+  o mp3 support
+  o libsndfile support
+
+- metronome [IN PROGRESS - rwb/cc]
 
 - banks/variations [cc]
 
