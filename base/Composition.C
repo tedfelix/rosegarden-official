@@ -1213,6 +1213,41 @@ void breakpoint()
     //std::cerr << "breakpoint()\n";
 }
 
+void 
+Composition::addMarker(Rosegarden::Marker *marker)
+{
+    markeriterator it = m_markers.begin();
+
+    for (; it != m_markers.end(); ++it)
+    {
+        if (marker->getTime() == (*it)->getTime())
+        {
+            delete (*it);
+            (*it) = marker;
+            return;
+        }
+    }
+    m_markers.push_back(marker);
+}
+
+bool
+Composition::detachMarker(Rosegarden::timeT time)
+{
+    markeriterator it = m_markers.begin();
+
+    for (; it != m_markers.end(); ++it)
+    {
+        if ((*it)->getTime() == time)
+        {
+            m_markers.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 }
 
 

@@ -32,10 +32,6 @@ Features for 1.0 - updated 20030627
 
 - porting to shared memory experimental branch [rwb/cc/gl]
 
-- event filter dialog [dmm] [DONE]
-
-- document event filter dialog in RG manual [dmm] [DONE]
-
 - look at other updates for RG manual [dmm]
     
 - request: import studio from file [dmm] [IN PROGRESS]
@@ -50,7 +46,8 @@ Features for 1.0 - updated 20030627
   [dmm/hk]
 
 - named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
-  [IN PROGRESS]
+  [ALMOST DONE - needs linking up to colours and implementing in IPBs
+                 and control rulers to complete - rwb]
 
 - find decent home for event filter toolbar icons [cc? dmm?]
 
@@ -73,6 +70,15 @@ Features for 1.0 - updated 20030627
   I think.  It may be a quick hack. [dmm]
 
 - control rulers [gl IN PROGESS]
+
+- adding instrument selection menu to tracks menu [rwb/gl]
+
+Completed
+---------
+
+- document event filter dialog in RG manual [dmm] [DONE]
+
+- event filter dialog [dmm] [DONE]
 
 Bugs
 ----

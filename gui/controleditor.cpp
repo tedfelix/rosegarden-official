@@ -458,6 +458,9 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     connect(m_colourCombo, SIGNAL(activated(int)),
             SLOT(slotColourChanged(int)));
 
+    //m_nameEdit->selectAll();
+    //m_description->selectAll();
+
     // set limits
     m_controllerBox->setMinValue(0);
     m_controllerBox->setMaxValue(127);

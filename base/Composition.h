@@ -34,6 +34,8 @@
 #include "XmlExportable.h"
 #include "ColourMap.h"
 
+#include "Marker.h"
+
 namespace Rosegarden 
 {
 
@@ -59,6 +61,10 @@ public:
 
     typedef std::map<TrackId, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
+
+    typedef std::vector<Marker*> markercontainer;
+    typedef std::vector<Marker*>::iterator markeriterator;
+    typedef std::vector<Marker*>::const_iterator markerconstiterator;
 
     Composition();
     virtual ~Composition();
@@ -164,6 +170,16 @@ public:
     Rosegarden::TrackId getNewTrackId() const;
 
 
+    //////
+    //
+    // MARKERS
+    markercontainer& getMarkers() { return m_markers; }
+    const markercontainer& getMarkers() const { return m_markers; }
+
+    // Markers are unique in absolute time so use that as a key
+    //
+    void addMarker(Rosegarden::Marker *marker);
+    bool detachMarker(Rosegarden::timeT time);
 
     //////
     //
@@ -730,6 +746,11 @@ protected:
     bool                              m_needsRefresh;
 
     ColourMap                         m_segmentColourMap;
+
+    // User defined markers in the composition
+    //
+    markercontainer                   m_markers;
+
 };
 
 }

@@ -33,6 +33,7 @@ rosegarden_SOURCES = \
         linedstaff.cpp \
         loopruler.cpp \
 	main.cpp \
+        markereditor.cpp \
 	matrixcanvasview.cpp \
 	matrixcommands.cpp \
 	matrixelement.cpp \

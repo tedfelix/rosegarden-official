@@ -96,6 +96,7 @@
 #include "Clipboard.h"
 #include "Configuration.h"
 #include "controleditor.h"
+#include "markereditor.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -127,7 +128,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_useSequencer(useSequencer),
       m_autoSaveTimer(new QTimer(this)),
       m_clipboard(new Rosegarden::Clipboard),
-      m_controlEditor(0)
+      m_controlEditor(0),
+      m_markerEditor(0)
 {
     m_myself = this;
 
@@ -600,6 +602,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditControlParameters()),
                 actionCollection(), "manage_controls");
 
+    new KAction(i18n("Edit Markers..."), 0, this,
+                SLOT(slotEditMarkers()),
+                actionCollection(), "edit_markers");
+
     new KAction(i18n("Modify MIDI &Filters..."), 0, this,
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
@@ -975,6 +981,10 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // If the control editor is up then repopulate
     //
     if (m_controlEditor) m_controlEditor->setDocument(m_doc);
+
+    // same for the Marker Editor
+    //
+    if (m_markerEditor) m_markerEditor->setDocument(m_doc);
 
     emit documentChanged(newDocument);
 }
@@ -2685,6 +2695,10 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
             m_transport->displaySMPTETime(rT);
         }
     }
+
+    // Update position on the marker editor if it's available
+    //
+    if (m_markerEditor) m_markerEditor->updatePosition();
 }
 
 void RosegardenGUIApp::slotDisplayBarTime(timeT t)
@@ -4351,6 +4365,26 @@ RosegardenGUIApp::slotEditBanks()
  
     stateChanged("bankeditor_shown");    
     bankEditor->show();
+}
+
+void
+RosegardenGUIApp::slotEditMarkers()
+{
+    m_markerEditor = new MarkerEditorDialog(this, m_doc);
+
+    connect(m_markerEditor, SIGNAL(closing()),
+            SLOT(slotMarkerEditorClosed()));
+
+    plugAccelerators(m_markerEditor, m_markerEditor->getAccelerators());
+
+    m_markerEditor->show();
+}
+
+void
+RosegardenGUIApp::slotMarkerEditorClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotMarkerEditorClosed" << endl;
+    m_markerEditor = 0;
 }
 
 void

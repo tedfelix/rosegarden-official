@@ -32,6 +32,7 @@ namespace Rosegarden {
     class Clipboard;
     class EventSelection;
     class SegmentSelection;
+    class Marker;
 
     // Patterns of properties
     //
@@ -391,5 +392,46 @@ private:
     int m_delta;
 };
 
+class AddMarkerCommand : public KNamedCommand
+{
+public:
+    AddMarkerCommand(Rosegarden::Composition *comp,
+                     Rosegarden::timeT time,
+                     const std::string &name,
+                     const std::string &description);
+    ~AddMarkerCommand();
+
+    static QString getGlobalName() { return i18n("&Add Marker"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+
+    Rosegarden::Composition     *m_composition;
+    Rosegarden::Marker          *m_marker;
+
+};
+
+
+class RemoveMarkerCommand : public KNamedCommand
+{
+public:
+    RemoveMarkerCommand(Rosegarden::Composition *comp,
+                        Rosegarden::timeT time);
+    ~RemoveMarkerCommand();
+
+    static QString getGlobalName() { return i18n("&Remove Marker"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+
+    Rosegarden::Composition     *m_composition;
+    Rosegarden::Marker          *m_marker;
+    Rosegarden::timeT            m_removeTime;
+
+};
 
 #endif

@@ -66,6 +66,7 @@ namespace Rosegarden
 
 class RosegardenProgressBar;
 class ControlEditorDialog;
+class MarkerEditorDialog;
 
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
@@ -668,6 +669,11 @@ public slots:
     void slotEditControlParameters();
 
     /**
+     * Edit Document Markers
+     */
+    void slotEditMarkers();
+
+    /**
      * Remap instruments
      */
     void slotRemapInstruments();
@@ -1033,6 +1039,11 @@ public slots:
      */
     void slotControlEditorClosed();
 
+    /**
+     * when MarkerEditor is being closed
+     */
+    void slotMarkerEditorClosed();
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -1127,6 +1138,8 @@ private:
     Rosegarden::Clipboard *m_clipboard;
 
     ControlEditorDialog   *m_controlEditor;
+
+    MarkerEditorDialog    *m_markerEditor;
 
     static const char* const MainWindowConfigGroup;
 

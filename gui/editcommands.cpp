@@ -27,6 +27,7 @@
 #include "BaseProperties.h"
 #include "Clipboard.h"
 #include "Profiler.h"
+#include "Marker.h"
 
 #include "notationproperties.h"
 #include "segmentcommands.h"
@@ -1081,3 +1082,76 @@ ChangeVelocityCommand::modifySegment()
 	}
     }
 }
+
+// ------------------- Markers -------------------
+//
+//
+
+
+AddMarkerCommand::AddMarkerCommand(Rosegarden::Composition *comp,
+                                   Rosegarden::timeT time,
+                                   const std::string &name,
+                                   const std::string &description):
+    KNamedCommand(getGlobalName()),
+    m_composition(comp)
+{
+    m_marker = new Rosegarden::Marker(time, name, description);
+}
+
+AddMarkerCommand::~AddMarkerCommand()
+{
+}
+
+
+void
+AddMarkerCommand::execute()
+{
+    m_composition->addMarker(m_marker);
+}
+
+void
+AddMarkerCommand::unexecute()
+{
+    m_composition->detachMarker(m_marker->getTime());
+}
+
+
+RemoveMarkerCommand::RemoveMarkerCommand(Rosegarden::Composition *comp,
+                                         Rosegarden::timeT time):
+    KNamedCommand(getGlobalName()),
+    m_composition(comp),
+    m_marker(0),
+    m_removeTime(time)
+{
+}
+
+RemoveMarkerCommand::~RemoveMarkerCommand()
+{
+}
+
+
+void
+RemoveMarkerCommand::execute()
+{
+    Rosegarden::Composition::markercontainer markers = 
+        m_composition->getMarkers();
+
+    Rosegarden::Composition::markerconstiterator it = markers.begin();
+
+    for (; it != markers.end(); ++it)
+    {
+        if ((*it)->getTime() == m_removeTime)
+        {
+            m_marker = *it;
+            m_composition->detachMarker(m_removeTime);
+            return;
+        }
+    }
+}
+
+void
+RemoveMarkerCommand::unexecute()
+{
+    if (m_marker) m_composition->addMarker(m_marker);
+}
+
