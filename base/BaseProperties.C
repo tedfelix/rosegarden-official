@@ -32,6 +32,9 @@ namespace BaseProperties
 
 const PropertyName NOTE_TYPE            = "NoteType";
 const PropertyName NOTE_DOTS            = "NoteDots";
+const PropertyName PITCH		= "pitch";
+const PropertyName VELOCITY		= "velocity";
+const PropertyName ACCIDENTAL		= "accidental";
 
 const PropertyName TIED_BACKWARD	= "TiedBackward";
 const PropertyName TIED_FORWARD		= "TiedForward";
@@ -51,6 +54,16 @@ const PropertyName BEAMED_GROUP_UNTUPLED_LENGTH	 = "BGroupUntupledLength";
 // for each event in a group:
 
 const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
+
+const std::string GROUP_TYPE_BEAMED		 = "beamed";
+const std::string GROUP_TYPE_TUPLED		 = "tupled";
+const std::string GROUP_TYPE_GRACE		 = "grace";
+
+const std::string MARK_EVENT_TYPE		 = "mark";
+const PropertyName MARK_TYPE			 = "MarkType";
+const PropertyName MARK_DURATION		 = "MarkDuration";
+const std::string MARK_TYPE_SLUR		 = "slur";
+const std::string MARK_TYPE_HAIRPIN		 = "hairpin";
 
 }
 

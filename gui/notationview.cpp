@@ -48,6 +48,7 @@
 #include "rosedebug.h"
 
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
 #include "staffline.h"
@@ -72,6 +73,8 @@ using std::vector;
 using std::string;
 using std::set;
 #define ID_STATUS_MSG 1
+
+using namespace Rosegarden::BaseProperties;
 
 //////////////////////////////////////////////////////////////////////
 
@@ -1095,7 +1098,7 @@ void NotationView::slotGroupBeam()
 
     helper.makeBeamedGroup(m_currentEventSelection->getBeginTime(),
                            m_currentEventSelection->getEndTime(),
-                           "beamed"); //!!!
+                           GROUP_TYPE_BEAMED);
 
     emit usedSelection();
 
@@ -1116,7 +1119,7 @@ void NotationView::slotGroupAutoBeam()
 
     helper.autoBeam(m_currentEventSelection->getBeginTime(),
                     m_currentEventSelection->getEndTime(),
-                    "beamed"); //!!!
+                    GROUP_TYPE_BEAMED);
 
     emit usedSelection();
 

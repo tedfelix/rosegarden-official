@@ -30,6 +30,9 @@ namespace BaseProperties
 
 extern const PropertyName NOTE_TYPE;
 extern const PropertyName NOTE_DOTS;
+extern const PropertyName PITCH;
+extern const PropertyName VELOCITY;
+extern const PropertyName ACCIDENTAL;
 
 extern const PropertyName TIED_BACKWARD;
 extern const PropertyName TIED_FORWARD;
@@ -41,6 +44,17 @@ extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
 extern const PropertyName BEAMED_GROUP_UNTUPLED_LENGTH;
 
 extern const PropertyName TUPLET_NOMINAL_DURATION;
+
+extern const std::string GROUP_TYPE_BEAMED;
+extern const std::string GROUP_TYPE_TUPLED;
+extern const std::string GROUP_TYPE_GRACE;
+
+extern const std::string MARK_EVENT_TYPE;
+extern const PropertyName MARK_TYPE;
+extern const PropertyName MARK_DURATION;
+
+extern const std::string MARK_TYPE_SLUR;
+extern const std::string MARK_TYPE_HAIRPIN;
 
 }
 

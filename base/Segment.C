@@ -64,32 +64,6 @@ void Segment::setStartIndex(timeT idx)
     m_startIdx = idx;
 }
 
-//!!! No longer correct -- time sigs no longer in segment -- check usage
-/*!!!
-TimeSignature Segment::getTimeSigAtEnd(timeT &absTimeOfSig)
-{
-    absTimeOfSig = 0;
-
-    if (m_timeSigTime < 0) findTimeSigAtEnd();
-    
-    absTimeOfSig = m_timeSigTime;
-    return m_timeSigAtEnd;
-}
-
-void Segment::findTimeSigAtEnd() 
-{
-    m_timeSigAtEnd = TimeSignature();
-    m_timeSigTime = 0;
-
-    const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
-
-    if (sig != rend()) {
-	assert(isTimeSig(*sig));
-        m_timeSigAtEnd = TimeSignature(**sig);
-        m_timeSigTime = (*sig)->getAbsoluteTime();
-    }
-}
-*/
 
 timeT Segment::getDuration() const
 {
@@ -468,7 +442,7 @@ Segment::getNoteTiedWith(Event *note, bool forwards) const
 
     timeT myTime = note->getAbsoluteTime();
     timeT myDuration = note->getDuration();
-    int myPitch = note->get<Int>("pitch");
+    int myPitch = note->get<Int>(BaseProperties::PITCH);
 
     iterator i = findSingle(note);
     if (i == end()) return end();
@@ -493,7 +467,7 @@ Segment::getNoteTiedWith(Event *note, bool forwards) const
             continue;
         }
 
-        if ((*i)->get<Int>("pitch") == myPitch) return i;
+        if ((*i)->get<Int>(BaseProperties::PITCH) == myPitch) return i;
     }
 
     return end();

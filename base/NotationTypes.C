@@ -22,6 +22,7 @@
 
 #include <cstdio> // needed for sprintf()
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include <iostream>
 #include <cstring> // for atoi
 
@@ -690,7 +691,7 @@ Note Note::getNearestNote(int duration, int maxDots)
 Event *Note::getAsNoteEvent(timeT absoluteTime, int pitch) const
 {
     Event *e = new Event(EventType);
-    e->set<Int>("pitch", pitch);
+    e->set<Int>(BaseProperties::PITCH, pitch);
     e->setAbsoluteTime(absoluteTime);
     e->setDuration(getDuration());
     return e;

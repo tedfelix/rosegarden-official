@@ -102,14 +102,14 @@ NotationSet::sample(const NELIterator &i)
     }
 
     if ((*i)->isNote()) {
-        long p = (*i)->event()->get<Int>("pitch");
+        long p = (*i)->event()->get<Int>(PITCH);
 
         if (m_highest == m_nel.end() ||
-            p > (*m_highest)->event()->get<Int>("pitch")) {
+            p > (*m_highest)->event()->get<Int>(PITCH)) {
             m_highest = i;
         }
         if (m_lowest == m_nel.end() ||
-            p < (*m_lowest)->event()->get<Int>("pitch")) {
+            p < (*m_lowest)->event()->get<Int>(PITCH)) {
             m_lowest = i;
         }
     }
@@ -159,8 +159,8 @@ public:
     bool operator()(const NotationElementList::iterator &a,
                     const NotationElementList::iterator &b) {
         try {
-            return ((*a)->event()->get<Int>("pitch") <
-                    (*b)->event()->get<Int>("pitch"));
+            return ((*a)->event()->get<Int>(PITCH) <
+                    (*b)->event()->get<Int>(PITCH));
         } catch (Event::NoData) {
             kdDebug(KDEBUG_AREA) << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
             return false;
@@ -187,7 +187,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
     for (unsigned int i = 0; i < size(); ++i) {
         try {
-            kdDebug(KDEBUG_AREA) << i << ": " << (*(*this)[i])->event()->get<Int>("pitch") << endl;
+            kdDebug(KDEBUG_AREA) << i << ": " << (*(*this)[i])->event()->get<Int>(PITCH) << endl;
         } catch (Event::NoData) {
             kdDebug(KDEBUG_AREA) << i << ": no pitch property" << endl;
         }
@@ -215,7 +215,7 @@ Chord::height(const NELIterator &i) const
 {
     long h;
     if ((*i)->event()->get<Int>(HEIGHT_ON_STAFF, h)) return h;
-    int pitch = (*i)->event()->get<Int>("pitch");
+    int pitch = (*i)->event()->get<Int>(PITCH);
     Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
     h = p.getHeightOnStaff();
     // not setMaybe, as we know the property is absent:
@@ -318,14 +318,11 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
 
 	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
 
-            if (!strcasecmp(t.c_str(), "beamed")) {
-	    kdDebug(KDEBUG_AREA) << "(beamed)" << endl;
+            if (t == GROUP_TYPE_BEAMED) {
                 m_type = Beamed;
-            } else if (!strcasecmp(t.c_str(), "tupled")) {
-	    kdDebug(KDEBUG_AREA) << "(tupled)" << endl;
+            } else if (t == GROUP_TYPE_TUPLED) {
                 m_type = Tupled;
-            } else if (!strcasecmp(t.c_str(), "grace")) {
-	    kdDebug(KDEBUG_AREA) << "(grace)" << endl;
+            } else if (t == GROUP_TYPE_GRACE) {
                 m_type = Grace;
             } else {
                 kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: Unknown GroupType \"" << t << "\", defaulting to Beamed" << endl;
@@ -401,7 +398,7 @@ NotationGroup::height(const NELIterator &i) const
 {
     long h;
     if ((*i)->event()->get<Int>(HEIGHT_ON_STAFF, h)) return h;
-    int pitch = (*i)->event()->get<Int>("pitch");
+    int pitch = (*i)->event()->get<Int>(PITCH);
     Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
     h = p.getHeightOnStaff();
     // not setMaybe, as we know the property is absent:

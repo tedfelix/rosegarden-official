@@ -299,16 +299,16 @@ NotationHLayout::scanStaff(StaffType &staff)
                 if (el->isNote()) {
 
                     long pitch = 64;
-                    if (!el->event()->get<Int>("pitch", pitch)) {
+                    if (!el->event()->get<Int>(PITCH, pitch)) {
                         kdDebug(KDEBUG_AREA) <<
                             "WARNING: NotationHLayout::scanStaff: couldn't get pitch for element, using default pitch of " << pitch << endl;
                     }
 
                     Accidental explicitAccidental = NoAccidental;
-                    if (el->event()->has("accidental")) {
+                    if (el->event()->has(ACCIDENTAL)) {
                         explicitAccidental =
                             Rosegarden::NotationDisplayPitch::getAccidentalByName
-                            (el->event()->get<String>("accidental"));
+                            (el->event()->get<String>(ACCIDENTAL));
                     }
 
                     Rosegarden::NotationDisplayPitch p
@@ -800,7 +800,7 @@ NotationHLayout::positionNote(StaffType &staff,
     note->event()->get<Bool>(TIED_FORWARD,  tiedForwards);
     note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
 
-    int pitch = note->event()->get<Int>("pitch");
+    int pitch = note->event()->get<Int>(PITCH);
     if (tiedForwards) tieMap[pitch] = itr;
 
     if (tiedBack) {

@@ -274,7 +274,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                     if (currentGroup != -1) fileStream << "</group>" << endl;
                     std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
                     fileStream << "<group type=\"" << type.c_str() << "\"";
-		    if (type == "tupled") { //!!!
+		    if (type == GROUP_TYPE_TUPLED) {
 			fileStream
 			    << " length=\""
 			    << (*i)->get<Int>(BEAMED_GROUP_TUPLED_LENGTH)

@@ -126,7 +126,7 @@ bool RG21Loader::parseChordItem()
         Event *noteEvent = new Event(Rosegarden::Note::EventType);
         noteEvent->setDuration(duration);
         noteEvent->setAbsoluteTime(m_currentSegmentTime);
-        noteEvent->set<Int>("pitch", pitch);
+        noteEvent->set<Int>(PITCH, pitch);
 
 	if (m_tieStatus == 1) {
 	    noteEvent->set<Bool>(TIED_FORWARD, true);
@@ -175,7 +175,7 @@ void RG21Loader::setGroupProperties(Event *e)
 	e->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
 	e->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
 
-	if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and SegmentNotationHelper.C)
+	if (m_groupType == GROUP_TYPE_TUPLED) {
 	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
 	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
 	}
@@ -192,11 +192,11 @@ bool RG21Loader::parseGroupStart()
     m_groupId = m_currentSegment->getNextId();
     m_groupStartTime = m_currentSegmentTime;
 
-    if (m_groupType == "beamed") {
+    if (m_groupType == GROUP_TYPE_BEAMED) {
 
 	// no more to do
         
-    } else if (m_groupType == "tupled") {
+    } else if (m_groupType == GROUP_TYPE_TUPLED) {
 
 	m_groupTupledLength = m_tokens[1].toUInt() *
 	    Note(Note::Hemidemisemiquaver).getDuration();
@@ -253,7 +253,7 @@ void RG21Loader::closeMark()
 
 void RG21Loader::closeGroup()
 {
-    if (m_groupType == "tupled") {
+    if (m_groupType == GROUP_TYPE_TUPLED) {
 
 	Segment::iterator i = m_currentSegment->end();
 //	Segment::iterator final = i;

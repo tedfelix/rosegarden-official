@@ -27,6 +27,7 @@
 #include "Segment.h"
 #include "Event.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include <MappedComposition.h>
 
 namespace Rosegarden
@@ -224,7 +225,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 	    // set note type and pitch
 	    m_noteOnMap[chanNoteKey]->setType(Note::EventType);
-	    m_noteOnMap[chanNoteKey]->set<Int>("pitch", midiCommand.data1);
+	    m_noteOnMap[chanNoteKey]->set<Int>(BaseProperties::PITCH, midiCommand.data1);
 	}
 	break;
 

@@ -28,6 +28,7 @@
 #include "MidiFile.h"
 #include "Segment.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "SegmentPerformanceHelper.h"
 
@@ -690,8 +691,8 @@ MidiFile::convertToRosegarden()
 		    rosegardenEvent = new Event(Rosegarden::Note::EventType);
 		    rosegardenEvent->setAbsoluteTime(rosegardenTime);
 		    rosegardenEvent->setType(Note::EventType);
-		    rosegardenEvent->set<Int>("pitch", midiEvent->note());
-		    rosegardenEvent->set<Int>("velocity", midiEvent->velocity());
+		    rosegardenEvent->set<Int>(BaseProperties::PITCH, midiEvent->note());
+		    rosegardenEvent->set<Int>(BaseProperties::VELOCITY, midiEvent->velocity());
 		    rosegardenEvent->setDuration(rosegardenDuration);
 
 		    {
@@ -739,7 +740,7 @@ MidiFile::convertToRosegarden()
 
 	    notationSegment.autoBeam
 		(rosegardenSegment->begin(), rosegardenSegment->end(),
-		 "beamed"); //!!! probably shouldn't be hardcoded!
+		 BaseProperties::GROUP_TYPE_BEAMED);
 	}
     }
 
@@ -865,8 +866,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 		//
 		midiEvent = new MidiEvent(midiEventAbsoluteTime,        // time
 					  MIDI_NOTE_ON + midiChannel,   // eventcode
-					  (*el)->get<Int>("pitch"),     // pitch
-					  (*el)->get<Int>("velocity"));                         // velocity
+					  (*el)->get<Int>(BaseProperties::PITCH),     // pitch
+					  (*el)->get<Int>(BaseProperties::VELOCITY));                         // velocity
 
 		m_midiComposition[segmentNumber].push_back(*midiEvent);
 
@@ -882,7 +883,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 		//
 		midiEvent = new MidiEvent(midiEventAbsoluteTime,
 					  MIDI_NOTE_OFF + midiChannel,
-					  (*el)->get<Int>("pitch"),
+					  (*el)->get<Int>(BaseProperties::PITCH),
 					  127);
 
 		m_midiComposition[segmentNumber].push_back(*midiEvent);

@@ -510,9 +510,9 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     e->setDuration(duration);
 
     if (!isRest) {
-        e->set<Int>("pitch", pitch);
+        e->set<Int>(PITCH, pitch);
         if (acc != NoAccidental) {
-            e->set<String>("accidental",
+            e->set<String>(ACCIDENTAL,
                            NotationDisplayPitch::getAccidentalName(acc));
         }
         setInsertedNoteGroup(e, i);
@@ -904,7 +904,7 @@ Clef SegmentNotationHelper::guessClef(iterator from, iterator to)
     for (iterator i = from; i != to; ++i) {
         if ((*i)->isa(Note::EventType)) {
             ++noteCount;
-            NotationDisplayPitch p((*i)->get<Int>("pitch"), clef, key);
+            NotationDisplayPitch p((*i)->get<Int>(PITCH), clef, key);
             totalHeight += p.getHeightOnStaff();
         }
     }

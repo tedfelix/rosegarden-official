@@ -20,18 +20,19 @@
 */
 
 #include "MappedEvent.h"
+#include "BaseProperties.h"
 
 namespace Rosegarden
 {
 
 MappedEvent::MappedEvent(const Event &e, timeT duration):
-       m_pitch(e.get<Int>("pitch")),
+       m_pitch(e.get<Int>(BaseProperties::PITCH)),
        m_absoluteTime(e.getAbsoluteTime()),
        m_duration(duration)
 {
     try
     {
-        m_velocity = e.get<Int>("velocity");
+        m_velocity = e.get<Int>(BaseProperties::VELOCITY);
     }
     catch(...)
     {
@@ -40,13 +41,13 @@ MappedEvent::MappedEvent(const Event &e, timeT duration):
 }
 
 MappedEvent::MappedEvent(const Event &e):
-       m_pitch(e.get<Int>("pitch")),
+       m_pitch(e.get<Int>(BaseProperties::PITCH)),
        m_absoluteTime(e.getAbsoluteTime()),
        m_duration(e.getDuration())
 {
     try
     {
-        m_velocity = e.get<Int>("velocity");
+        m_velocity = e.get<Int>(BaseProperties::VELOCITY);
     }
     catch(...)
     {

@@ -129,7 +129,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         if (m_inGroup) {
             m_currentEvent->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
             m_currentEvent->set<String>(BEAMED_GROUP_TYPE, m_groupType);
-	    if (m_groupType == "tupled") { //!!!
+	    if (m_groupType == GROUP_TYPE_TUPLED) {
 		m_currentEvent->set<Int>
 		    (BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
 		m_currentEvent->set<Int>
@@ -177,7 +177,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_groupId = m_currentSegment->getNextId();
         m_groupType = atts.value("type");
 
-	if (m_groupType == "tupled") { //!!!
+	if (m_groupType == GROUP_TYPE_TUPLED) {
 	    m_groupTupledLength = atts.value("length").toInt();
 	    m_groupTupledCount = atts.value("count").toInt();
 	    m_groupUntupledLength = atts.value("untupled").toInt();

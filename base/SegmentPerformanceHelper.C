@@ -32,8 +32,8 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
     else if (!tiedForward) return d;
 
     timeT t = e->getAbsoluteTime();
-    if (!e->has("pitch")) return d;
-    int pitch = e->get<Int>("pitch");
+    if (!e->has(PITCH)) return d;
+    int pitch = e->get<Int>(PITCH);
 
     for (;;) {
         i = segment().findContiguousNext(i);
@@ -47,8 +47,8 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
         timeT t2 = e->getAbsoluteTime();
         
         if (t2 > t + d) break;
-        else if (t2 < t + d || !e->has("pitch") ||
-                 e->get<Int>("pitch") != pitch) continue;
+        else if (t2 < t + d || !e->has(PITCH) ||
+                 e->get<Int>(PITCH) != pitch) continue;
 
         if (!e->get<Bool>(TIED_BACKWARD, tiedBack) ||
             !tiedBack) break;

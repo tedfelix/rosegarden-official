@@ -25,9 +25,12 @@
 #include "qcanvassimplesprite.h"
 #include "staffline.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "notationstaff.h"
 
 #include "rosedebug.h"
+
+using namespace Rosegarden::BaseProperties;
 
 NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
@@ -235,7 +238,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
             if (el.isNote()) { // make sure we get the right note
 
                 long eventPitch = 0;
-                el.event()->get<Rosegarden::Int>("pitch", eventPitch);
+                el.event()->get<Rosegarden::Int>(PITCH, eventPitch);
                 if (eventPitch == clickPitch) break;
 
             } else { // it's not a note, so we don't care about checking the pitch
