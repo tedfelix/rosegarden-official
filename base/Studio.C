@@ -159,6 +159,34 @@ Studio::clear()
     m_devices.erase(m_devices.begin(), m_devices.end());
 }
 
+std::string
+Studio::toXmlString()
+{
+    std::string xml;
+    return xml;
+}
+
+// Run through the Devices checking for MidiDevices and
+// returning the first Metronome we come across
+//
+MidiMetronome*
+Studio::getMetronome()
+{
+    std::vector<Device*>::iterator it;
+    MidiDevice *midiDevice;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+        {
+            return midiDevice->getMetronome();
+        }
+    }
+
+    return 0;
+}
 
 
 

@@ -64,6 +64,13 @@ MidiDevice::createInstruments()
                            dynamic_cast<Device*>(this))); // parent device 
     }
 
+    m_instruments.push_back(
+        new Instrument(SystemInstrumentBase + 1,      // Metronome ID
+                       Instrument::Midi,              // type
+                       string("Metronome"),           // name
+                       (MidiByte)9,                   // channel
+                       dynamic_cast<Device*>(this))); // parent device 
+
 }
 
 void
@@ -96,12 +103,13 @@ MidiDevice::setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
                          MidiByte pitch, MidiByte channel,
                          const std::string &name)
 {
+
     m_metronome->pitch = pitch;
     m_metronome->program = program;
     m_metronome->msb = msb;
     m_metronome->lsb = lsb;
     m_metronome->name = name;
-    m_metronome->channel = channel;
+    m_metronome->instrument = SystemInstrumentBase + 1; // hardcode for the mo
 }
 
 
@@ -154,11 +162,13 @@ MidiDevice::getProgramByIndex(int index)
 }
 
 
+std::string
+MidiDevice::toXmlString()
+{
+    std::string xml;
 
-
-
-
-
+    return xml;
+}
 
 }
 

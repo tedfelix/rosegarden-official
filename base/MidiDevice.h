@@ -66,6 +66,8 @@ public:
     MidiBank* getBankByIndex(int index);
     MidiProgram* getProgramByIndex(int index);
 
+    virtual std::string toXmlString();
+
 private:
     void clearProgramList();
 

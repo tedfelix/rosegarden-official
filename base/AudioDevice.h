@@ -23,7 +23,6 @@
 
 #include "Device.h"
 
-
 #ifndef _AUDIODEVICE_H_
 #define _AUDIODEVICE_H_
 
@@ -39,6 +38,10 @@ public:
     virtual ~AudioDevice();
 
     virtual void createInstruments();
+
+    // Turn into XML string
+    //
+    virtual std::string toXmlString(); 
 
 private:
 

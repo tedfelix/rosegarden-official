@@ -41,10 +41,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_readAhead(0, 40000),     // how many events to fetch
     m_transportStatus(STOPPED),
     m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
-    m_metronomeInstrument(0),
-    m_metronomeTrack(0),
-    m_metronomePitch(70),
-    m_metronomeBarVelocity(110),
+    m_metronomePitch(37),
+    m_metronomeBarVelocity(120),
     m_metronomeBeatVelocity(70),
     m_metronomeDuration(0, 10000),
     m_transport(transport)
@@ -869,9 +867,24 @@ SequenceManager::checkSoundSystemStatus()
 //
 void
 SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
-                                        const timeT &sliceEnd)
+                                       const timeT &sliceEnd)
 {
     Composition &comp = m_doc->getComposition();
+    Studio &studio = m_doc->getStudio();
+
+    MidiMetronome *metronome = studio.getMetronome();
+
+    // Create a default metronome if we haven't loaded one
+    //
+    if(metronome == 0)
+    {
+        metronome = new MidiMetronome();
+        metronome->pitch = m_metronomePitch;
+
+        // Default instrument is the first possible instrument
+        //
+        metronome->instrument = Rosegarden::SystemInstrumentBase + 1;
+    }
 
     // If neither metronome is armed and we're not playing or recording
     // then don't sound the metronome
@@ -896,8 +909,8 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     if (barStart.first >= sliceStart && barStart.first <= sliceEnd)
     {
         MappedEvent *me =
-            new MappedEvent(m_metronomeInstrument,
-                            m_metronomePitch,
+            new MappedEvent(metronome->instrument,
+                            metronome->pitch,
                             m_metronomeBarVelocity,
                             comp.getElapsedRealTime(barStart.first),
                             m_metronomeDuration);
@@ -906,8 +919,8 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
     {
         MappedEvent *me =
-            new MappedEvent(m_metronomeInstrument,
-                            m_metronomePitch,
+            new MappedEvent(metronome->instrument,
+                            metronome->pitch,
                             m_metronomeBarVelocity,
                             comp.getElapsedRealTime(barEnd.first),
                             m_metronomeDuration);
@@ -926,8 +939,8 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     {
         if (i >= sliceStart && i <= sliceEnd)
         {
-            MappedEvent *me =new MappedEvent(m_metronomeInstrument,
-                                             m_metronomePitch,
+            MappedEvent *me =new MappedEvent(metronome->instrument,
+                                             metronome->pitch,
                                              m_metronomeBeatVelocity,
                                              comp.getElapsedRealTime(i),
                                              m_metronomeDuration);
@@ -936,7 +949,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     }
 }
 
-// Send Instrument list to Sequener and ensure that initial program
+// Send Instrument list to Sequencer and ensure that initial program
 // changes follow them.  Sending the instruments ensures that we have
 // channels available on the Sequencer and then the program changes
 // are sent to those specific channel (referenced by Instrument ID)
@@ -978,13 +991,13 @@ SequenceManager::preparePlayback()
             {
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
-                                     (MidiByte)0,
+                                     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
                                      (*it)->getMSB());
                 mC.insert(mE);
 
                 mE = new MappedEvent((*it)->getID(),
                                      Rosegarden::MappedEvent::MidiController,
-                                     (MidiByte)32,
+                                     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
                                      (*it)->getLSB());
                 mC.insert(mE);
             }

@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include "XmlExportable.h"
 #include <string>
 #include <vector>
 
@@ -35,7 +36,7 @@ namespace Rosegarden
 class Instrument;
 typedef std::vector<Instrument *> InstrumentList;
 
-class Device
+class Device : public XmlExportable
 {
 public:
     typedef enum 

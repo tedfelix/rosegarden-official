@@ -115,8 +115,6 @@ private:
 
     // Metronome details
     //
-    InstrumentId m_metronomeInstrument;
-    TrackId      m_metronomeTrack;
     MidiByte     m_metronomePitch;
     MidiByte     m_metronomeBarVelocity;
     MidiByte     m_metronomeBeatVelocity;

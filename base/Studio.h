@@ -19,8 +19,11 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Device.h"
 #include <string>
+
+#include "XmlExportable.h"
+#include "Instrument.h"
+#include "Device.h"
 
 // The Studio is where Midi and Audio devices live.  We can query
 // them for a list of Instruments, connect them together or to
@@ -29,7 +32,6 @@
 //
 //
 
-#include "Instrument.h"
 
 #ifndef _STUDIO_H_
 #define _STUDIO_H_
@@ -39,7 +41,7 @@ namespace Rosegarden
 
 typedef std::vector<Instrument *> InstrumentList;
 
-class Studio
+class Studio : public XmlExportable
 {
 
 public:
@@ -59,6 +61,15 @@ public:
 
     // Clear down
     void clear();
+
+    // Get the first metronome defined in the first device -
+    // we only want one Metronome per Studio
+    //
+    MidiMetronome* getMetronome();
+
+    // Export as XML string
+    //
+    virtual std::string toXmlString();
 
 private:
 

@@ -65,6 +65,14 @@ AudioDevice::createInstruments()
 
 }
 
+std::string
+AudioDevice::toXmlString()
+{
+    std::string xml;
+    return xml;
+}
+
+
 }
 
 

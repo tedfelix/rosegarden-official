@@ -57,7 +57,7 @@ struct MidiProgram : public MidiBank
 struct MidiMetronome : public MidiProgram
 {
     MidiByte pitch;
-    MidiByte channel;
+    InstrumentId instrument;
 };
 
 
