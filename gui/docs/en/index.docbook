@@ -352,14 +352,87 @@
       <sect2 id="segment-view-split-join">
 	<title>Splitting and Joining</title>
 	<para>
+    You can use the split tool 
+    <inlinemediaobject>
+    <imageobject>
+    <imagedata fileref="rg-split.png"/>
+    </imageobject>
+    </inlinemediaobject>
+    to split a single segment
+    into two separate segments.  To split your segment, select the
+    split tool and click on the segment you wish to split.
+    </para>
+   <para>
+   By default segments are split on the closest barline in relation to
+   the cursor, but this can be prevented by holding down Shift while
+   splitting the segment.
 	</para>
       </sect2>
 
       <sect2 id="segment-view-segmentparameterbox">
 	<title>The Segment Parameter Box</title>
+
 	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-segmentparameterbox.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s segment parameter box</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
 	</para>
-      </sect2>
+
+    <para>
+    The segment parameter box allows you to adjust the following paramters:
+
+    <variablelist>
+     <varlistentry>
+      <term>Label</term>
+       <listitem>
+       <para> The label segment parameter allows you to view or modify
+       the label of the currently selected segments.</para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry>
+      <term>Repeat</term>
+       <listitem>
+       <para>To repeat the currently selected segments for the entire
+       length of the composition, click on the repeat checkbox.  To
+       turn off repeat, un-check the checkbox.</para>
+
+       <para>When repeat is turned on, you will see a ghosted view of
+       the selected segments starting from the end of the selected  
+       segments.</para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry>
+      <term>Quantize</term>
+       <listitem><para>To do...</para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry>
+      <term>Transpose</term>
+       <listitem>
+       <para>To do...</para>
+      </listitem>
+     </varlistentry>
+
+     <varlistentry>
+      <term>Delay</term>
+       <listitem>
+       <para>To do...</para>
+      </listitem>
+     </varlistentry>
+     
+    </variablelist>
+    </para>
+   </sect2>
 
       <sect2 id="segment-view-instrumentparameterbox">
 	<title>The Instrument Parameter Box</title>
@@ -584,9 +657,7 @@
 		the Segments menu or on the right-button popup menu on
 		a segment in the canvas.  Select the segments you want
 		to edit (by shift-clicking as above, or by using the
-		<!-- !!! link
-		linkend="commands-main-edit-select-all-segments"
-		-->Select All Segments<!-- /link --> function) and
+		<link linkend="commands-main-edit-select-all-segments">Select All Segments</link> function) and
 		then select <!-- !!! link
 		linkend="commands-main-segments-notation" -->Open in
 		Notation Editor<!-- /link -->.</para>
@@ -1896,7 +1967,7 @@
 	</varlistentry>  
 
 
-    <varlistentry id="commands-main-edit-select-all">
+    <varlistentry id="commands-main-edit-select-all-segments">
 	 <term>
       <menuchoice>
 	   <guimenu>Edit</guimenu>
@@ -2005,6 +2076,158 @@
      </para>
     </sect2>
     <!-- Levi Burton additions 2003.03.05 -->
+
+    <sect2>
+    <title>The Segments Menu</title>
+    <para>
+     <variablelist>
+    
+    <varlistentry id="commands-main-segments-open-default-editor">
+	 <term>
+      <menuchoice>
+	   <shortcut>
+	    <keycombo>
+         <keycap>Return</keycap>
+        </keycombo>
+       </shortcut>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Open in Default Editor</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action> Opens all of the currently
+		selected segments together in a notation editor, or in
+		whichever other editor you have configured as your
+		default. 
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-segments-open-matrix-editor">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Open in Matrix Editor</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action> Opens all of the currently
+		selected segments in a matrix editor.
+       </action>
+        See <link linkend="matrix-view">matrix editor</link>.
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-segments-open-notation-editor">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Open in Notation Editor</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action> Opens all of the currently
+		selected segments together in a notation editor.
+       </action>
+        See <link linkend="notation-view">notation editor</link>.
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <varlistentry id="commands-main-segments-open-event-editor">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Open in Event Editor</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action> Opens all of the currently
+		selected segments together in a event editor.
+       </action>
+        See <link linkend="event-view">event editor</link>.
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+    <varlistentry id="commands-main-segments-quantize">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Quantize...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>Invokes a quantization dialog for quantizing the current selections.
+       </action>
+        See <link linkend="nv-quantization">quantization</link>.
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <!-- TODO -->
+    <varlistentry id="commands-main-segments-rescale">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Rescale...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>Invokes a rescale dialog.  Need more info on how this works. 
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <!-- TODO -->
+    <varlistentry id="commands-main-segments-auto-split">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Auto-Split</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action> Not sure what this does (appears to be currently broken).
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+    <!-- TODO -->
+    <varlistentry id="commands-main-segments-split-by-pitch">
+	 <term>
+      <menuchoice>
+	   <guimenu>Segments</guimenu>
+	   <guimenuitem>Split by Pitch...</guimenuitem>
+      </menuchoice>
+     </term>
+	 <listitem>
+      <para>
+       <action>Invokes a split by pitch dialog.  Not sure was this does yet either.
+       </action>
+      </para>
+     </listitem>
+	</varlistentry>  
+
+
+
+
+     </variablelist>
+    </para>
+   </sect2>
+    
 
 
 
