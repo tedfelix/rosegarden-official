@@ -285,7 +285,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
         long currentGroup = -1;
 	bool inChord = false;
-	timeT expectedTime = 0;
+	timeT expectedTime = segment->getStartIndex();
 
         for (Segment::iterator i = segment->begin();
              i != segment->end(); ++i) {
