@@ -191,7 +191,7 @@ RosegardenProgressDialog::RosegardenProgressDialog(
         m_app(app)
 {
     QTimer *timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(slowShowMyself()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(slotShowMyself()));
     timer->start(500, TRUE); // half a second
 
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
