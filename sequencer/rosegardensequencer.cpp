@@ -186,25 +186,37 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
     // finished with them.
     //
     //
-    if (isLooping() == true && end > m_loopEnd)
+    if (isLooping() == true && end >= m_loopEnd)
     {
-
         Rosegarden::RealTime loopOverlap = end - m_loopEnd;
-        Rosegarden::MappedComposition *endLoop, *beginLoop;
 
-        endLoop = getSlice(start, m_loopEnd, firstFetch);
-        beginLoop = getSlice(m_loopStart,
-                             m_loopStart + loopOverlap, true);
+        Rosegarden::MappedComposition *endLoop = 0;
 
-        // move the start time of the begin section one loop width
-        // into the future and ensure that we keep the clocks level
-        // until this time has passed
-        //
-        beginLoop->moveStartTime(m_loopEnd - m_loopStart);
+	if (m_loopEnd > start) {
+	    endLoop = getSlice(start, m_loopEnd, firstFetch);
+	}
 
-        (*endLoop) = (*endLoop) + (*beginLoop);
-        delete beginLoop;
-        return endLoop;
+	if (loopOverlap > Rosegarden::RealTime::zeroTime) { 
+
+	    Rosegarden::MappedComposition *beginLoop =
+		getSlice(m_loopStart, m_loopStart + loopOverlap, true);
+
+	    // move the start time of the begin section one loop width
+	    // into the future and ensure that we keep the clocks level
+	    // until this time has passed
+	    //
+	    beginLoop->moveStartTime(m_loopEnd - m_loopStart);
+
+	    if (endLoop) {
+		(*endLoop) = (*endLoop) + (*beginLoop);
+		delete beginLoop;
+	    } else {
+		endLoop = beginLoop;
+	    }
+	}
+
+	if (endLoop) return endLoop;
+	else return new Rosegarden::MappedComposition();
     }
     else
         return getSlice(start, end, firstFetch);
@@ -225,7 +237,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         m_metaIterator->jumpToTime(start);
     }
 
-    bool eventsRemaining = m_metaIterator->fillCompositionWithEventsUntil(mC, end);
+    (void)m_metaIterator->fillCompositionWithEventsUntil(mC, end);
 
 //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
 // playing stops right after it starts.
@@ -534,7 +546,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     // punch in recording
     if (m_transportStatus == PLAYING)
     {
-        if (localRecordMode = STARTING_TO_RECORD_MIDI)
+        if (localRecordMode == STARTING_TO_RECORD_MIDI)
         {
             if(m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
             {
@@ -661,7 +673,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     if (m_transportStatus == RECORDING_MIDI || m_transportStatus == RECORDING_AUDIO)
     {
         m_transportStatus = PLAYING;
-        return;
+        return true;
     }
 
     // To play from the given song position sets up the internal
