@@ -45,3 +45,5 @@ Older task list
 * "close" menu item on notation window - DONE
 
 * key sig palette
+
+* selection point
