@@ -27,6 +27,7 @@
 #include <qstring.h>
 
 #include "Event.h"
+#include "Track.h"
 #include "RealTime.h"
 #include "MidiProgram.h"
 
@@ -45,6 +46,7 @@ public:
     void updateTrackData(Rosegarden::Track*);
     void updateMetronomeData(Rosegarden::InstrumentId instId,
                              bool playMetronome, bool recordMetronome);
+    void updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
 
 protected:
     void initControlBlock();

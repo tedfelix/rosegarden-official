@@ -138,6 +138,14 @@ void ControlBlockMmapper::updateMetronomeData(Rosegarden::InstrumentId instId,
     m_needsRefresh = true;
 }
 
+void ControlBlockMmapper::updateSoloData(bool solo,
+                                         Rosegarden::TrackId selectedTrack)
+{
+    m_controlBlock->setSolo(solo);
+    m_controlBlock->setSelectedTrack(selectedTrack);
+    m_needsRefresh = true;
+}
+
 
 void ControlBlockMmapper::initControlBlock()
 {

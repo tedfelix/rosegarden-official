@@ -923,6 +923,7 @@ void Composition::setRecordMetronome(bool value)
 }
 
 
+
 #ifdef TRACK_DEBUG
 // track debug convenience function
 //
@@ -987,6 +988,17 @@ void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
                   << std::endl;
 }
 
+void Composition::setSelectedTrack(TrackId track)
+{
+    m_selectedTrack = track;
+    notifySoloChanged();
+}
+
+void Composition::setSolo(bool value)
+{
+    m_solo = value;
+    notifySoloChanged();
+}
 
 // Insert a Track representation into the Composition
 //
@@ -1290,6 +1302,15 @@ Composition::notifyMetronomeChanged() const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->metronomeChanged(this, usePlayMetronome(), useRecordMetronome());
+    }
+}
+
+void
+Composition::notifySoloChanged() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->soloChanged(this, isSolo(), getSelectedTrack());
     }
 }
 

@@ -29,7 +29,9 @@ namespace Rosegarden
 {
 
 ControlBlock::ControlBlock(unsigned int nbTracks)
-    : m_nbTracks(nbTracks)
+    : m_nbTracks(nbTracks),
+      m_solo(false),
+      m_selectedTrack(0)
 {
     m_metronomeInfo.muted = true;
     m_metronomeInfo.instrumentId = 0;
@@ -48,28 +50,6 @@ void ControlBlock::updateTrackData(Track* t)
         setInstrumentForTrack(t->getId(), t->getInstrument());
         setTrackMuted(t->getId(), t->isMuted());
     }
-}
-
-void ControlBlock::setInstrumentForMetronome(InstrumentId instId)
-{
-    m_metronomeInfo.instrumentId = instId;
-}
-
-InstrumentId ControlBlock::getInstrumentForMetronome()
-{
-    return m_metronomeInfo.instrumentId;
-}
-
-
-void ControlBlock::setMetronomeMuted(bool mute)
-{
-    RG_DEBUG << "ControlBlock::setMetronomeMuted(" << mute << ")\n";
-    m_metronomeInfo.muted = mute;
-}
-
-bool ControlBlock::isMetronomeMuted()
-{
-    return m_metronomeInfo.muted;
 }
 
 void ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)

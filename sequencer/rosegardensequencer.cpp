@@ -355,11 +355,14 @@ public:
     void refresh();
 
     // delegate ControlBlock's interface
-    InstrumentId getInstrumentForTrack(unsigned int trackId);
-    bool isTrackMuted(unsigned int trackId);
+    InstrumentId getInstrumentForTrack(unsigned int trackId) { return m_controlBlock->getInstrumentForTrack(trackId); }
+    bool isTrackMuted(unsigned int trackId) { return m_controlBlock->isTrackMuted(trackId); }
 
-    InstrumentId getInstrumentForMetronome();
-    bool isMetronomeMuted();
+    InstrumentId getInstrumentForMetronome() { return m_controlBlock->getInstrumentForMetronome(); }
+    bool isMetronomeMuted() { return m_controlBlock->isMetronomeMuted(); }
+
+    bool isSolo()  { return m_controlBlock->isSolo(); }
+    Rosegarden::TrackId getSelectedTrack() { return m_controlBlock->getSelectedTrack(); }
 
 protected:
 
@@ -415,26 +418,6 @@ void ControlBlockMmapper::refresh()
     SEQMAN_DEBUG << "ControlBlockMmapper::refresh() : Not implemented yet\n";
 }
 
-InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
-{
-    return m_controlBlock->getInstrumentForTrack(trackNb);
-}
-
-bool ControlBlockMmapper::isTrackMuted(unsigned int trackNb)
-{
-    return m_controlBlock->isTrackMuted(trackNb);
-}
-
-InstrumentId ControlBlockMmapper::getInstrumentForMetronome()
-{
-    return m_controlBlock->getInstrumentForMetronome();
-}
-
-bool ControlBlockMmapper::isMetronomeMuted()
-{
-    return m_controlBlock->isMetronomeMuted();
-}
-
 //----------------------------------------
 
 
@@ -455,6 +438,8 @@ public:
     void deleteSegment(MmappedSegment*);
 
 protected:
+    bool acceptEvent(MappedEvent*, bool evtIsFromMetronome);
+
     /// Delete all iterators
     void clear();
     bool moveIteratorToTime(MmappedSegment::iterator&, const Rosegarden::RealTime&);
@@ -552,6 +537,23 @@ bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& i
     return res;
 }
 
+bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMetronome)
+{
+    if (evt->getType() == 0) return false; // discard those right away
+
+    if (evtIsFromMetronome)
+        return !m_controlBlockMmapper->isMetronomeMuted();
+        
+    // else, evt is not from metronome : first check if we're soloing (i.e. playing only the selected track)
+    if (m_controlBlockMmapper->isSolo())
+        return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
+
+    // finally we're not soloing, so check if track is muted
+    return !m_controlBlockMmapper->isTrackMuted(evt->getTrackId());
+                     
+}
+
+
 bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::MappedComposition* c,
                                                                    const Rosegarden::RealTime& endTime)
 {
@@ -610,10 +612,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                                 << " - data2: " << (unsigned int)evt->getData2()
                                 << " - metronome event: " << evtIsFromMetronome
                                 << endl;
-                if (
-                    (!evtIsFromMetronome && evt->getType() != 0 && !m_controlBlockMmapper->isTrackMuted(evt->getTrackId())) || // regular event
-                    (evtIsFromMetronome && !m_controlBlockMmapper->isMetronomeMuted()) // metronome event
-                     ) {
+                if (acceptEvent(evt, evtIsFromMetronome)) {
                     SEQUENCER_DEBUG << "inserting event\n";
                     c->insert(evt);
                 } else {

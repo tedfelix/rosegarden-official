@@ -53,7 +53,7 @@ public:
     /// ctor for sequencer - all data is read from mmapped file
     ControlBlock();
 
-    unsigned int getNbTracks();
+    unsigned int getNbTracks() { return m_nbTracks; }
     void updateTrackData(Track*);
 
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
@@ -62,16 +62,23 @@ public:
     void setTrackMuted(TrackId trackId, bool);
     bool isTrackMuted(TrackId trackId);
 
-    void setInstrumentForMetronome(InstrumentId);
-    InstrumentId getInstrumentForMetronome();
+    void setInstrumentForMetronome(InstrumentId instId) { m_metronomeInfo.instrumentId = instId; }
+    InstrumentId getInstrumentForMetronome() { return m_metronomeInfo.instrumentId; }
 
-    void setMetronomeMuted(bool);
-    bool isMetronomeMuted();
+    void setMetronomeMuted(bool mute) { m_metronomeInfo.muted = mute; }
+    bool isMetronomeMuted() { return m_metronomeInfo.muted; }
+
+    bool isSolo() { return m_solo; }
+    void setSolo(bool value) { m_solo = value; }
+    TrackId getSelectedTrack() { return m_selectedTrack; }
+    void setSelectedTrack(TrackId track) { m_selectedTrack = track; }
 
 protected:
     //--------------- Data members ---------------------------------
     // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
     int m_nbTracks;
+    bool m_solo;
+    TrackId m_selectedTrack;
     TrackInfo m_metronomeInfo;
     TrackInfo m_trackInfo[CONTROLBLOCK_MAX_NB_TRACKS]; // should be high enough for the moment
 };

@@ -1594,6 +1594,11 @@ void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, 
     m_controlBlockMmapper->updateMetronomeData(m_metronomeMmapper->getMetronomeInstrument(), playMetronome, recordMetronome);
 }
 
+void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)
+{
+    m_controlBlockMmapper->updateSoloData(solo, selectedTrack);
+}
+
 void
 SequenceManager::sendTransportControlStatuses()
 {

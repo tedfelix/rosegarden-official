@@ -399,8 +399,8 @@ protected:
      * place clicktrack events into the global MappedComposition
      *
      */
-    void insertMetronomeClicks(Rosegarden::timeT sliceStart,
-                               Rosegarden::timeT sliceEnd);
+//     void insertMetronomeClicks(Rosegarden::timeT sliceStart,
+//                                Rosegarden::timeT sliceEnd);
 
     /**
      * Create a new audio file for the sequencer and return the

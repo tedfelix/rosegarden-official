@@ -107,13 +107,9 @@ public:
 
     Track* getTrackByPosition(int position);
  
-    trackcontainer& getTracks() {
-	return m_tracks;
-    }
+    trackcontainer& getTracks() { return m_tracks; }
  
-    const trackcontainer& getTracks() const {
-	return m_tracks;
-    }
+    const trackcontainer& getTracks() const { return m_tracks; }
 
     // Reset id and position
     void resetTrackIdAndPosition(TrackId oldId, TrackId newId, int position);
@@ -122,30 +118,22 @@ public:
 
     TrackId getMaxTrackId() const;
 
-    TrackId getRecordTrack() const {
-	return m_recordTrack;
-    }
+    TrackId getRecordTrack() const { return m_recordTrack; }
 
-    void setRecordTrack(TrackId recordTrack) {
-	m_recordTrack = recordTrack;
-    }
+    void setRecordTrack(TrackId recordTrack) { m_recordTrack = recordTrack; }
 
     // Get and set Solo Track
     //
-    TrackId getSelectedTrack() const {
-        return m_selectedTrack;
-    }
+    TrackId getSelectedTrack() const { return m_selectedTrack; }
 
-    void setSelectedTrack(TrackId track) { m_selectedTrack = track; }
+    void setSelectedTrack(TrackId track);
 
     // Are we soloing a Track?
     //
     bool isSolo() const { return m_solo; }
-    void setSolo(bool value) { m_solo = value; }
+    void setSolo(bool value);
 
-    unsigned int getNbTracks() const {
-	return m_tracks.size();
-    }
+    unsigned int getNbTracks() const { return m_tracks.size(); }
 
     /**
      * Clear out the Track container
@@ -751,6 +739,7 @@ protected:
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
     void notifyMetronomeChanged() const;
+    void notifySoloChanged() const;
     void notifySourceDeletion() const;
 
     BasicQuantizer                   *m_basicQuantizer;
@@ -818,6 +807,11 @@ public:
      * Called when metronome status has changed (on/off)
      */
     virtual void metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome) = 0;
+
+    /**
+     * Called when solo status changes (solo on/off, and selected track)
+     */
+    virtual void soloChanged(const Composition *, bool solo, TrackId selectedTrack) = 0;
     
     /**
      * Called from the composition dtor

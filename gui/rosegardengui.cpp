@@ -3629,12 +3629,12 @@ void RosegardenGUIApp::slotFastforward()
 // Insert metronome clicks into the global MappedComposition that
 // will be returned as part of the slice fetch from the Sequencer.
 //
-void
-RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
-{
-    if (m_seqManager)
-        m_seqManager->insertMetronomeClicks(sliceStart, sliceEnd);
-}
+// void
+// RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
+// {
+//     if (m_seqManager)
+//         m_seqManager->insertMetronomeClicks(sliceStart, sliceEnd);
+// }
 
 // Set the loop to what we have stored (if the stored loop is (0,0) then
 // nothing happens).
