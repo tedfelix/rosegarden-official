@@ -80,12 +80,16 @@ public:
                   AudioPluginManager *pluginManager,
                   int index,
                   float initialValue,
-		  bool showBounds);
+		  bool showBounds,
+		  bool hidden);
  
     void setValue(float value, bool emitSignals = true);
     float getValue() const;
 
     int getIndex() const { return m_index; }
+
+    void show();
+    void hide();
 
 public slots:
     void slotValueChanged(float value);

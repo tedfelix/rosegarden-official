@@ -176,14 +176,27 @@ AudioPluginDialog::slotShowGUI()
 void
 AudioPluginDialog::populatePluginCategoryList()
 {
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     std::set<QString> categories;
+    QString currentCategory;
+
     for (PluginIterator i = m_pluginManager->begin();
 	 i != m_pluginManager->end(); ++i) {
+
 	if ((*i)->isSynth() == isSynth()) {
-	    if ((*i)->getCategory() != "") categories.insert((*i)->getCategory());
+
+	    if ((*i)->getCategory() != "") {
+		categories.insert((*i)->getCategory());
+	    }
+
+	    if (inst && inst->isAssigned() &&
+		((*i)->getIdentifier() == inst->getIdentifier().c_str())) {
+		currentCategory = (*i)->getCategory();
+	    }
 	}
     }
-    if (/*!!! isSynth() || */ categories.empty()) {
+
+    if (categories.empty()) {
 	m_pluginCategoryBox->hide();
 	m_pluginLabel->hide();
     }
@@ -191,10 +204,16 @@ AudioPluginDialog::populatePluginCategoryList()
     m_pluginCategoryList->clear();
     m_pluginCategoryList->insertItem(i18n("(any)"));
     m_pluginCategoryList->insertItem(i18n("(unclassified)"));
+    m_pluginCategoryList->setCurrentItem(0);
 
     for (std::set<QString>::iterator i = categories.begin();
 	 i != categories.end(); ++i) {
+
 	m_pluginCategoryList->insertItem(*i);
+
+	if (*i == currentCategory) {
+	    m_pluginCategoryList->setCurrentItem(m_pluginCategoryList->count() - 1);
+	}
     }
 }
 
@@ -210,8 +229,7 @@ AudioPluginDialog::populatePluginList()
     QString category;
     bool needCategory = false;
 
-    if (m_pluginCategoryList->isVisible() &&
-	m_pluginCategoryList->currentItem() > 0) {
+    if (m_pluginCategoryList->currentItem() > 0) {
 	needCategory = true;
 	if (m_pluginCategoryList->currentItem() == 1) {
 	    category = QString();
@@ -224,6 +242,11 @@ AudioPluginDialog::populatePluginList()
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (inst) m_bypass->setChecked(inst->isBypassed());
 
+    // Use this temporary map to ensure that the plugins are sorted
+    // by name when they go into the combobox
+    typedef std::pair<int, AudioPlugin *> PluginPair;
+    typedef std::map<QString, PluginPair> PluginMap;
+    PluginMap plugins;
     int count = 0;
 
     for (PluginIterator i = m_pluginManager->begin();
@@ -236,14 +259,23 @@ AudioPluginDialog::populatePluginList()
 	if (needCategory) {
 	    if ((*i)->getCategory() != category) continue;
 	}
-	
-	m_pluginList->insertItem((*i)->getName());
-	m_pluginsInList.push_back(count);
 
-	if (inst && inst->isAssigned()) {
-	    if ((*i)->getIdentifier() == inst->getIdentifier().c_str()) {
-		m_pluginList->setCurrentItem(m_pluginList->count()-1);
-	    }
+	plugins[(*i)->getName()] = PluginPair(count, *i);
+    }
+
+    const char *currentId = 0;
+    if (inst && inst->isAssigned()) currentId = inst->getIdentifier().c_str();
+
+    for (PluginMap::iterator i = plugins.begin(); i != plugins.end(); ++i) {
+
+	QString name = i->first;
+	if (name.endsWith(" VST")) name = name.left(name.length() - 4);
+
+	m_pluginList->insertItem(name);
+	m_pluginsInList.push_back(i->second.first);
+
+	if (currentId && currentId == i->second.second->getIdentifier()) {
+	    m_pluginList->setCurrentItem(m_pluginList->count()-1);
 	}
     }
 
@@ -257,7 +289,11 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount)
 
     int columns = 2;
     if (portCount > 24) {
-	columns = (portCount-1) / 12 + 1;
+	if (portCount > 60) {
+	    columns = (portCount - 1) / 16 + 1;
+	} else {
+	    columns = (portCount-1) / 12 + 1;
+	}
     }
 
     int perColumn = 4;
@@ -331,6 +367,15 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     makePluginParamsBox(parent, portCount);
     bool showBounds = (portCount <= 48);
+
+    int tooManyPorts = 96;
+    if (portCount > tooManyPorts) {
+
+	m_gridLayout->addMultiCellWidget(
+	    new QLabel(i18n("This plugin has too many controls to edit here."),
+		       m_pluginParamsBox),
+	    1, 1, 0, m_gridLayout->numCols()-1);
+    }
 
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     if (!inst) return;
@@ -437,7 +482,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
         PortIterator it = plugin->begin();
         int count = 0;
-
+	
         for (; it != plugin->end(); ++it)
         {
             if (((*it)->getType() & PluginPort::Control) &&
@@ -451,7 +496,8 @@ AudioPluginDialog::slotPluginSelected(int i)
                                       m_pluginManager,
                                       count,
                                       inst->getPort(count)->value,
-				      showBounds);
+				      showBounds,
+				      portCount > tooManyPorts);
 
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));
@@ -811,7 +857,8 @@ PluginControl::PluginControl(QWidget *parent,
                              AudioPluginManager *aPM,
                              int index,
                              float initialValue,
-			     bool showBounds):
+			     bool showBounds,
+			     bool hidden):
     QObject(parent),
     m_layout(layout),
     m_type(type),
@@ -893,14 +940,18 @@ PluginControl::PluginControl(QWidget *parent,
 	}
         upp->setFont(plainFont);
 
-        controlTitle->show();
-        m_dial->show();
+	QWidgetItem *item;
 
-	QWidgetItem *item = new QWidgetItem(controlTitle);
-	item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-	m_layout->addItem(item);
+	if (!hidden) {
+	    controlTitle->show();
+	    item = new QWidgetItem(controlTitle);
+	    item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+	    m_layout->addItem(item);
+	} else {
+	    controlTitle->hide();
+	}
 
-	if (showBounds) {
+	if (showBounds && !hidden) {
 	    low->show();
 	    item = new QWidgetItem(low);
 	    item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
@@ -909,11 +960,16 @@ PluginControl::PluginControl(QWidget *parent,
 	    low->hide();
 	}
 	
-	item = new QWidgetItem(m_dial);
-	item->setAlignment(Qt::AlignCenter);
-	m_layout->addItem(item);
+	if (!hidden) {
+	    m_dial->show();
+	    item = new QWidgetItem(m_dial);
+	    item->setAlignment(Qt::AlignCenter);
+	    m_layout->addItem(item);
+	} else {
+	    m_dial->hide();
+	}
 
-	if (showBounds) {
+	if (showBounds && !hidden) {
 	    upp->show();
 	    item = new QWidgetItem(upp);
 	    item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
@@ -940,7 +996,6 @@ PluginControl::getValue() const
 {
     return m_dial == 0 ? 0 : m_dial->getPosition();
 }
-
 
 void
 PluginControl::slotValueChanged(float value)

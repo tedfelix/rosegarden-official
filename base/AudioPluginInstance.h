@@ -143,6 +143,8 @@ public:
     std::string getConfigurationValue(std::string k) const;
     void setConfigurationValue(std::string k, std::string v);
 
+    std::string getDistinctiveConfigurationText() const;
+
 protected:
 
     int                                m_mappedId;

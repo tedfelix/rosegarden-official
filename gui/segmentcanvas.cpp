@@ -1536,8 +1536,15 @@ void SegmentCanvas::showRecordingSegmentItem(Segment *segment, timeT endTime)
 	
 	m_recordingSegment = addSegmentItem(segment);
 	m_recordingSegment->setEndTime(endTime);
-	m_recordingSegment->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RecordingSegmentBorder));
-        m_recordingSegment->setColour(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RecordingSegmentBlock));
+	m_recordingSegment->setPen(Rosegarden::GUIPalette::getColour
+				   (Rosegarden::GUIPalette::RecordingSegmentBorder));
+	if (segment && segment->getType() == Segment::Audio) {
+	    m_recordingSegment->setColour(Rosegarden::GUIPalette::getColour
+					  (Rosegarden::GUIPalette::RecordingAudioSegmentBlock));
+	} else {
+	    m_recordingSegment->setColour(Rosegarden::GUIPalette::getColour
+					  (Rosegarden::GUIPalette::RecordingInternalSegmentBlock));
+	}
 	m_recordingSegment->setZ(2);
 
 //	RG_DEBUG << "(recording segment now is " << m_recordingSegment << ")" << endl;

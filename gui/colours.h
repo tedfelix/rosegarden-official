@@ -51,7 +51,9 @@ public:
 
     static const char* const SegmentCanvas;
     static const char* const SegmentBorder;
-    static const char* const RecordingSegmentBlock;
+
+    static const char* const RecordingInternalSegmentBlock;
+    static const char* const RecordingAudioSegmentBlock;
     static const char* const RecordingSegmentBorder;
 
     static const char* const RepeatSegmentBorder;

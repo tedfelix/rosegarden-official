@@ -204,5 +204,34 @@ AudioPluginInstance::setConfigurationValue(std::string k, std::string v)
     m_config[k] = v;
 }
 
+std::string
+AudioPluginInstance::getDistinctiveConfigurationText() const
+{
+    std::string base = getConfigurationValue("load");
+
+    if (base == "") {
+	for (ConfigMap::const_iterator i = m_config.begin();
+	     i != m_config.end(); ++i) {
+	    if (i->second != "" && i->second[0] == '/') {
+		base = i->second;
+		break;
+	    } else if (base != "") {
+		base = i->second;
+	    }
+	}
+    }
+
+    if (base == "") return "";
+    
+    std::string::size_type s = base.rfind('/');
+    if (s < base.length() - 1) base = base.substr(s + 1);
+
+    std::string::size_type d = base.rfind('.');
+    if (d < base.length() - 1 && d > 0) base = base.substr(0, d);
+
+    return base;
+}
+    
+
 }
 

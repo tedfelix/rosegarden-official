@@ -813,6 +813,9 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QP
 		    QString type, soName, label;
 		    Rosegarden::PluginIdentifier::parseIdentifier
 			(identifier, type, soName, label);
+		    if (pname == "") {
+			pname = strtoqstr(plugin->getDistinctiveConfigurationText());
+		    }
 		    if (pname != "") {
 			pname = QString("%1: %2").arg(label).arg(pname);
 		    } else {

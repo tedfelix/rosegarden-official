@@ -56,7 +56,9 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[SegmentCanvas] = QColor(230, 230, 230);
     m_defaultsMap[SegmentBorder] = Qt::black;
-    m_defaultsMap[RecordingSegmentBlock] = QColor(255, 182, 193);
+
+    m_defaultsMap[RecordingInternalSegmentBlock] = QColor(255, 182, 193);
+    m_defaultsMap[RecordingAudioSegmentBlock] = QColor(182, 222, 255);
     m_defaultsMap[RecordingSegmentBorder] = Qt::black;
 
     m_defaultsMap[RepeatSegmentBorder] = QColor(130, 133, 170);
@@ -170,7 +172,8 @@ const char* const GUIPalette::ActiveRecordTrack = "activerecordtrack";
 
 const char* const GUIPalette::SegmentCanvas = "segmentcanvas";
 const char* const GUIPalette::SegmentBorder = "segmentborder";
-const char* const GUIPalette::RecordingSegmentBlock = "recordingsegmentblock";
+const char* const GUIPalette::RecordingInternalSegmentBlock = "recordinginternalsegmentblock";
+const char* const GUIPalette::RecordingAudioSegmentBlock = "recordingaudiosegmentblock";
 const char* const GUIPalette::RecordingSegmentBorder = "recordingsegmentborder";
 
 const char* const GUIPalette::RepeatSegmentBorder = "repeatsegmentborder";
