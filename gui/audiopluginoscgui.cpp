@@ -24,8 +24,11 @@
 #ifdef HAVE_LIBLO
 
 #include <lo/lo.h>
-#include <dssi.h>
 #include <iostream>
+
+#ifdef HAVE_DSSI
+#include <dssi.h>
+#endif
 
 #include "PluginIdentifier.h"
 #include "AudioPluginInstance.h"
