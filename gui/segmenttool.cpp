@@ -274,24 +274,23 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	m_canvas->setSnapGrain(true);
 
-	int x = e->x() - m_clickPoint.x();
-        if (x < 0) x = 0;
-        int y = e->y();
-        if (y < 0) y = 0;
+	int newX = e->x() - m_clickPoint.x() + m_currentItemStartX;
+        if (newX < 0) newX = 0;
+        int newY = e->y();
+        if (newY < 0) newY = 0;
 
-	timeT newStartTime = m_canvas->grid().snapX(m_currentItemStartX + x);
+	timeT newStartTime = m_canvas->grid().snapX(newX);
 	m_currentItem->setEndTime(m_currentItem->getEndTime() + newStartTime -
 				  m_currentItem->getStartTime());
 	m_currentItem->setStartTime(newStartTime);
 
-	TrackId track = m_canvas->grid().getYBin(y);
+	TrackId track = m_canvas->grid().getYBin(newY);
 
         int nbTracks = m_doc->getComposition().getNbTracks();
 
         if (track >= nbTracks) {
             // Make sure the item isn't dragged to below the last track
             track = nbTracks - 1;
-            y = m_canvas->grid().getYBinCoordinate(track);
         }
 
         m_currentItem->setTrack(track);
