@@ -154,6 +154,11 @@ protected:
     void addRuler(QWidget*);
 
     /**
+     * Add a ruler control box
+     */
+    void addControl(QWidget*);
+
+    /**
      * Abstract method to get the view size
      * Typically implemented as canvas()->size().
      */
@@ -176,6 +181,7 @@ protected:
 
     QScrollBar  *m_horizontalScrollBar;
     QVBoxLayout *m_rulerBox;
+    QVBoxLayout *m_controlBox;
     QWidget     *m_topBarButtons;
     QWidget     *m_bottomBarButtons;
 

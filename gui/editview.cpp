@@ -54,11 +54,15 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_canvasView(0),
     m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
     m_rulerBox(new QVBoxLayout), // added to grid later on
+    m_controlBox(new QVBoxLayout), // added to grid later on
     m_topBarButtons(0),
     m_bottomBarButtons(0)
 {
     m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
     m_grid->addLayout(m_rulerBox, 0, m_mainCol);
+    m_grid->addMultiCellLayout(m_controlBox, 0, 0, 0, 1);
+    m_controlBox->setAlignment(AlignRight);
+    
 }
 
 EditView::~EditView()
@@ -115,6 +119,11 @@ void EditView::addRuler(QWidget* w)
             w, SLOT(slotScrollHoriz(int)));
 }
 
+
+void EditView::addControl(QWidget *w)
+{
+    m_controlBox->addWidget(w);
+}
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {

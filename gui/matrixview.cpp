@@ -529,7 +529,9 @@ void MatrixView::setViewSize(QSize s)
 void MatrixView::updateView()
 {
     for (unsigned int i = 0; i != m_controlRulers.size(); i++)
-        m_controlRulers[i]->repaint();
+    {
+        m_controlRulers[i].first->repaint();
+    }
 
     canvas()->update();
 }
@@ -1356,20 +1358,32 @@ MatrixView::addControlRuler(const Rosegarden::PropertyName &property)
     //
     for (unsigned int i = 0; i != m_controlRulers.size(); i++)
     {
-        if (m_controlRulers[i]->getPropertyName() == property)
+        if (m_controlRulers[i].first->getPropertyName() == property)
             return i;
     }
+
+    int height = 20;
 
     ControlRuler *newRuler = new ControlRuler(&m_hlayout,
 	                                      m_segments[0],
                                               property,
                                               m_staffs[0]->getVelocityColour(),
                                               0,
-                                              20,
+                                              height,
                                               getCentralFrame());
 
     addRuler(newRuler);
-    m_controlRulers.push_back(newRuler);
+
+    ControlBox *newControl =
+        new ControlBox(strtoqstr(property), 
+                       m_parameterBox->width() + m_pianoKeyboard->width(),
+                       height,
+                       getCentralFrame());
+
+    addControl(newControl);
+
+    m_controlRulers.push_back(
+            std::pair<ControlRuler*, ControlBox*>(newRuler, newControl));
                              
     return m_controlRulers.size() - 1;
 }
@@ -1381,10 +1395,12 @@ MatrixView::removeControlRuler(unsigned int number)
     if (number > m_controlRulers.size() - 1)
         return false;
 
-    std::vector<ControlRuler*>::iterator it = m_controlRulers.begin();
+    std::vector<std::pair<ControlRuler*, ControlBox*> >::iterator it 
+        = m_controlRulers.begin();
     while(number--) it++;
 
-    delete (*it);
+    delete it->first;
+    delete it->second;
     m_controlRulers.erase(it);
 
     return true;

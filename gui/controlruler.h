@@ -24,6 +24,7 @@
 #define _CONTROLRULER_H_
 
 #include <qwidget.h>
+#include <qstring.h>
 
 #include "PropertyName.h"
 
@@ -94,6 +95,33 @@ private:
     QFontMetrics             m_fontMetrics;
 
     VelocityColour          *m_velocityColour;
+};
+
+/**
+ * We use a ControlBox to help modify events on the ruler - set tools etc.
+ * and provide extra information or options.
+ *
+ */
+class ControlBox : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ControlBox(QString label,
+               int width,
+               int height,
+               QWidget *parent=0,
+               const char *name = 0);
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+
+protected:
+    virtual void paintEvent(QPaintEvent *);
+
+    QString m_label;
+    int     m_width;
+    int     m_height;
 };
 
 #endif // _CONTROLRULER_H_

@@ -23,6 +23,9 @@
 
 #include <qpainter.h>
 #include <qtooltip.h>
+#include <qlabel.h>
+#include <qhbox.h>
+#include <qframe.h>
 
 #include "controlruler.h"
 #include "colours.h"
@@ -265,5 +268,45 @@ ControlRuler::paintEvent(QPaintEvent* e)
        }
     }
     */
+}
+
+ControlBox::ControlBox(QString label,
+                       int width,
+                       int height,
+                       QWidget *parent,
+                       const char *name):
+        QWidget(parent, name),
+        m_label(label + i18n(" control box")),
+        m_width(width),
+        m_height(height)
+{
+}
+
+QSize
+ControlBox::sizeHint() const
+{
+    return QSize(m_width, m_height);
+}
+
+
+QSize
+ControlBox::minimumSizeHint() const
+{
+    return QSize(m_width, m_height);
+}
+
+void
+ControlBox::paintEvent(QPaintEvent *e)
+{
+    QPainter paint(this);
+
+    paint.setPen(RosegardenGUIColours::MatrixElementBorder);
+    //paint.setBrush(RosegardenGUIColours::MatrixElementBlock);
+
+    paint.setClipRegion(e->region());
+    paint.setClipRect(e->rect().normalize());
+
+    paint.drawRect(2, 2, m_width - 3, m_height - 3);
+    paint.drawText(10, 2 * m_height / 3, m_label);
 }
 

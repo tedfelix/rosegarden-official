@@ -54,6 +54,7 @@ class MatrixParameterBox;
 class RosegardenComboBox;
 template <class T> class ZoomSlider;
 class ControlRuler;
+class ControlBox;
 
 class QMouseEvent;
 class QLabel;
@@ -376,10 +377,10 @@ protected:
 
     // Hold our matrix quantization values and snap values
     //
-    std::vector<Rosegarden::StandardQuantization> m_quantizations;
-    std::vector<Rosegarden::timeT>                m_snapValues;
+    std::vector<Rosegarden::StandardQuantization>        m_quantizations;
+    std::vector<Rosegarden::timeT>                       m_snapValues;
 
-    std::vector<ControlRuler*>                    m_controlRulers;
+    std::vector<std::pair<ControlRuler*, ControlBox*> >  m_controlRulers;
 };
 
 #endif

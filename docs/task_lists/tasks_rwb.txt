@@ -1,6 +1,8 @@
 0.2 tasks
 =========
 
+o Make AlsaDriver send NoteOn(0)s as well as NoteOffs
+
 o Repeating segments and composition end marker
 
 o AudioManager and AudioFile commands
