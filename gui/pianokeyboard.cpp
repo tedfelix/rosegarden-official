@@ -32,6 +32,7 @@ PianoKeyboard::PianoKeyboard(QWidget *parent,
       m_keySize(48, 18),
       m_blackKeySize(24, 8),
       m_nbKeys(88),
+      m_midiPitchToStringOffset(4),
       m_mouseDown(false)
 {
     computeKeyPos();
@@ -110,7 +111,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
     for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i)
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-        QString(i18n("C %1")).arg((int)m_labelKeyPos.size() - (int)i - 4));
+        QString(i18n("C %1")).arg((int)m_labelKeyPos.size() - (int)i - getMIDIPitchToStringOffset()));
 
     paint.setBrush(colorGroup().foreground());
 
