@@ -156,6 +156,11 @@ protected:
     void setupActions();
 
     /**
+     * setup status bar
+     */
+    void initStatusBar();
+
+    /**
      * show bar lines
      */
     bool showBars(NotationElementList::iterator from,
@@ -180,6 +185,9 @@ protected:
 
     RosegardenGUIDoc* m_document;
 
+    // Displayed in the status bar, holds the pixmap of the current note
+    QLabel* m_currentNotePixmap;
+
     NotationCanvasView* m_canvasView;
 
     Staff* m_mainStaff;
@@ -193,6 +201,7 @@ protected:
     NotationVLayout* m_vlayout;
 
     Note::Type m_currentSelectedNote;
+    NotePixmapFactory m_notePixmapFactory;
 	
 };
 

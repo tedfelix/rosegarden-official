@@ -111,6 +111,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     : KMainWindow(parent),
       m_config(kapp->config()),
       m_document(doc),
+      m_currentNotePixmap(0),
       m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                       height() * 2),
                                           this)),
@@ -126,7 +127,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
     setupActions();
-
+    initStatusBar();
+    
     setBackgroundMode(PaletteBase);
 
     setCentralWidget(m_canvasView);
@@ -188,6 +190,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         KMessageBox::sorry(0, "Couldn't apply layout");
     }
 
+    slotQuarter();
 }
 
 NotationView::~NotationView()
@@ -237,33 +240,32 @@ void
 NotationView::setupActions()
 {
     // setup Notes menu
-    NotePixmapFactory npf;
-    QIconSet icon(npf.makeNotePixmap(Note::WholeNote));
-    
+
+    QIconSet icon(m_notePixmapFactory.makeNotePixmap(Note::WholeNote));
     new KAction(i18n("Whole"), icon, 0, this,
                 SLOT(slotWhole()), actionCollection(), "whole_note" );
 
-    icon = QIconSet(npf.makeNotePixmap(Note::HalfNote));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::HalfNote));
     new KAction(i18n("Half"), icon, 0, this,
                 SLOT(slotHalf()), actionCollection(), "half" );
 
-    icon = QIconSet(npf.makeNotePixmap(Note::QuarterNote));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::QuarterNote));
     new KAction(i18n("Quarter"), icon, 0, this,
                 SLOT(slotQuarter()), actionCollection(), "quarter" );
 
-    icon = QIconSet(npf.makeNotePixmap(Note::EighthNote));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::EighthNote));
     new KAction(i18n("8th"), icon, 0, this,
                 SLOT(slot8th()), actionCollection(), "8th" );
 
-    icon = QIconSet(npf.makeNotePixmap(Note::SixteenthNote));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::SixteenthNote));
     new KAction(i18n("16th"), icon, 0, this,
                 SLOT(slot16th()), actionCollection(), "16th" );
 
-    icon = QIconSet(npf.makeNotePixmap(Note::ThirtySecondNote));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::ThirtySecondNote));
     new KAction(i18n("32nd"), icon, 0, this,
                 SLOT(slot32nd()), actionCollection(), "32nd" );
 
-    icon = QIconSet(npf.makeNotePixmap(Note::SixtyFourthNote));
+    icon = QIconSet(m_notePixmapFactory.makeNotePixmap(Note::SixtyFourthNote));
     new KAction(i18n("64th"), icon, 0, this,
                 SLOT(slot64th()), actionCollection(), "64th" );
     
@@ -287,6 +289,18 @@ NotationView::setupActions()
 
     createGUI("notation.rc");
 }
+
+
+void NotationView::initStatusBar()
+{
+    KStatusBar* sb = statusBar();
+
+    sb->insertItem(i18n(IDS_STATUS_DEFAULT), ID_STATUS_MSG);
+    m_currentNotePixmap = new QLabel(sb);
+    
+    sb->addWidget(m_currentNotePixmap);
+}
+
 
 bool
 NotationView::showElements(NotationElementList::iterator from,
@@ -475,6 +489,7 @@ void
 NotationView::setCurrentSelectedNote(Note::Type n)
 {
     m_currentSelectedNote = n;
+    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n));
     emit changeCurrentNote(n);
 }
 
