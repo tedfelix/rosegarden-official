@@ -1878,10 +1878,27 @@ AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
 
     // Clear down all playing audio files
     //
-    std::vector<PlayableAudioFile*>::iterator it;
+    if(pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
+    {
+        std::vector<PlayableAudioFile*>::iterator it;
+        for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
+        {
+#ifdef DEBUG_ALSA
+            std::cerr << "AlsaDriver::resetPlayback - resetting audio file" << std::endl;
+#endif // DEBU_ALSA
 
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-        (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+            // only interested in playing files
+            if ((*it)->getStatus() != PlayableAudioFile::PLAYING)
+                continue;
+
+            if (modifyNoteOff <= RealTime::zeroTime) // if ffwding
+                (*it)->setStatus(PlayableAudioFile::DEFUNCT); // for the moment do the same
+            else // rewinding - mark this file as DEFUNCT
+                (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+        }
+
+        pthread_mutex_unlock(&_diskThreadLock);
+    }
 
 #endif
 }
@@ -2006,6 +2023,8 @@ AlsaDriver::processNotesOff(const RealTime &time)
 void
 AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 {
+    pthread_mutex_lock(&_diskThreadLock);
+
     std::vector<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime() - playLatency;
 
@@ -2040,23 +2059,28 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
                 insertMappedEventForReturn(mE);
             }
             catch(...) {;}
+        }
+        
 #ifdef HAVE_LIBJACK
-            for (unsigned int j = 0; _ringBuffer.size(); ++j)
+        // Free up any used RingBuffers for reuse
+        //
+        if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
+        {
+            for (unsigned int j = 0; j < _ringBuffer.size(); ++j)
             {
                 if (_ringBuffer[j].second == (*it)->getRingBuffer())
                 {
                     _ringBuffer[j].first = false;
+                    _ringBuffer[j].second->zero(); // zero the buffer
                     break;
                 }
             }
-#endif
-            
         }
+#endif
+
     }
 
-    // Clear any defunct files from the queue
-    //
-    clearDefunctFromAudioPlayQueue();
+    pthread_mutex_unlock(&_diskThreadLock);
 
 }
 
@@ -2708,7 +2732,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 RingBuffer *ringBuffer = 0;
 
 #ifdef HAVE_LIBJACK
-                for (unsigned int j = 0; _ringBuffer.size(); ++j)
+                for (unsigned int j = 0; j < _ringBuffer.size(); ++j)
                 {
                     if (_ringBuffer[j].first == false)
                     {
@@ -2930,9 +2954,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     processMidiOut(mC, playLatency, now);
 
 #ifdef HAVE_LIBJACK
-    pthread_mutex_lock(&_diskThreadLock);
     processAudioQueue(playLatency, now);
-    pthread_mutex_unlock(&_diskThreadLock);
 #endif
 }
 
@@ -3487,7 +3509,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         // for usage and prepate a string for storage of the sample
         // slice.
         //
-        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
+        std::vector<PlayableAudioFile*> audioQueue = inst->getAudioPlayQueueNotDefunct();
         std::vector<PlayableAudioFile*>::const_iterator it;
 
         // Store returned samples in this string
@@ -3504,6 +3526,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         float peakLevelLeft, peakLevelRight;
 
+
+        int cnt = 0;
 
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
@@ -3898,7 +3922,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             *(rightBuffer++) = _tempOutBuffer2[i];
         }
 
+        // Push Playable onto main queue
+        //
         inst->pushPlayableAudioQueue();
+
+        // Clear any defunct files from the queue
+        //
+        inst->clearDefunctFromAudioPlayQueue();
 
         // Ok, now we can release the mutex
         //
@@ -3968,14 +3998,14 @@ AlsaDriver::jackSampleRate(jack_nframes_t nframes, void *)
 }
 
 void
-AlsaDriver::jackShutdown(void *arg)
+AlsaDriver::jackShutdown(void * /*arg*/)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::jackShutdown() - callback received" << std::endl;
+    std::cerr << "AlsaDriver::jackShutdown() - callback received - doing nothing yet" << std::endl;
 #endif
 
-    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
     /*
+    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
     if (inst) inst->shutdown();
     delete inst;
     */

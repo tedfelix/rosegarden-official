@@ -144,6 +144,13 @@ public:
     void addSegment(MmappedSegment*);
     void deleteSegment(MmappedSegment*);
 
+    // Return a vector of currently mapped audio segments so that we
+    // can cross check them against PlayableAudioFiles (and stop if
+    // necessary).  This will account for muting/soloing too I should
+    // hope.
+    //
+    std::vector<int> getPlayingMappedAudioSegments();
+
 protected:
     bool acceptEvent(MappedEvent*, bool evtIsFromMetronome);
 

@@ -53,6 +53,8 @@ public:
     int lock();
     void reset();
 
+    void zero(); // ensure that RingBuffer is zeroed
+
     void writeAdvance(size_t cnt);
     void readAdvance(size_t cnt);
     

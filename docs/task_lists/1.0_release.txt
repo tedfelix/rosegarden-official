@@ -70,6 +70,9 @@ Features for 1.0 - updated 20030923
 Completed
 ---------
 
+- liblrdf support for LADSPA plugins - a hierachy is provided in the plugin
+  dialog [cc]
+
 - named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
   [DONE]
 

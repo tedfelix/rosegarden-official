@@ -98,6 +98,16 @@ RingBuffer::reset()
     m_writePtr = 0;
 }
 
+// Zero the buffer
+//
+void
+RingBuffer::zero()
+{
+    for (unsigned int i = 0; i < m_size; ++i)
+        m_buffer[i] = 0;
+}
+
+
 
 void 
 RingBuffer::writeAdvance(size_t cnt)

@@ -442,8 +442,18 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                     evt->getType() == MappedEvent::Audio &&
                     evt->getEventTime() < startTime) {
 
-                    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : adjusting event audio start marker to "
+                    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
+                                    << "adjusting event audio start marker to "
                                     << startTime << endl;
+
+                    /*
+                    std::cout << "RESETTING AUDIO MARKER - event time" 
+                              << evt->getEventTime()
+                              << " - id = "
+                              << evt->getInstrument()
+                              << std::endl;
+                              */
+
                     evt->setAudioStartMarker(startTime);
                 }
 
@@ -514,6 +524,41 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
 
     }
 }
+
+std::vector<int>
+MmappedSegmentsMetaIterator::getPlayingMappedAudioSegments()
+{
+    std::vector<int> playingAudioSegments;
+    std::vector<int>::const_iterator pIt;
+
+    for(unsigned int i = 0; i < m_iterators.size(); ++i) 
+    {
+        MmappedSegment::iterator* iter = m_iterators[i];
+
+        MappedEvent *evt = new MappedEvent(*(*iter));
+        if (evt->getType() == MappedEvent::Audio)
+        {
+            // Only add a unique audio id
+            //
+            bool add = true;
+            for (pIt = playingAudioSegments.begin(); pIt != playingAudioSegments.end(); ++pIt)
+            {
+                if ((*pIt) == evt->getAudioID())
+                {
+                    add = false;
+                    break;
+                }
+            }
+
+            if (add) playingAudioSegments.push_back(evt->getAudioID());
+
+        }
+
+    }
+
+    return playingAudioSegments;
+}
+
 
 
 
