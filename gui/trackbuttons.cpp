@@ -433,6 +433,9 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
     Rosegarden::Track *track = 
         m_doc->getComposition().getTrackByPosition(mutedTrack);
 
+    //RG_DEBUG << "TrackButtons::slotToggleMutedTrack - track = " << mutedTrack
+             //<< " is " << !track->isMuted() << endl;
+
     emit muteButton(track->getId(), !track->isMuted()); // will set the value
 }
 

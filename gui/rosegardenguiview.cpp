@@ -1301,6 +1301,9 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
 void
 RosegardenGUIView::slotSetMuteButton(Rosegarden::TrackId track, bool value)
 {
+    RG_DEBUG << "RosegardenGUIView::slotSetMuteButton - track id = " << track
+             << ", value = " << value << endl;
+
     m_trackEditor->getTrackButtons()->setMuteButton(track, value);
     Rosegarden::Track *trackObj = getDocument()->
         getComposition().getTrackById(track);
