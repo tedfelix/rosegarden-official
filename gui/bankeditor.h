@@ -130,7 +130,7 @@ public slots:
     void slotNewMSB(int value);
     void slotNewLSB(int value);
 
-    void slotProgramChanged();
+    void slotProgramChanged(const QString&);
 
 protected:
 
@@ -202,6 +202,8 @@ public slots:
     void slotPopulateDevice(QListViewItem*);
 
     void slotApply();
+    void slotReset();
+
     void slotUpdate();
 
     void slotAddBank();
@@ -224,8 +226,17 @@ signals:
 protected:
     virtual void closeEvent(QCloseEvent*);
 
-    void updateDeviceItem(QListViewItem* deviceItem,
-                          Rosegarden::MidiDevice* midiDevice);
+    void resetProgramList();
+    void setProgramList(Rosegarden::MidiDevice *device);
+
+    void updateDialog();
+
+    void populateDeviceItem(QListViewItem* deviceItem,
+                            Rosegarden::MidiDevice* midiDevice);
+
+    void updateDeviceItem(MidiDeviceListViewItem* deviceItem);
+
+    bool deviceItemHasBank(MidiDeviceListViewItem* deviceItem, int bankNb);
 
     void clearItemChildren(QListViewItem* deviceItem);
 
@@ -250,6 +261,8 @@ protected:
     KListView               *m_listView;
 
     QPushButton             *m_closeButton;
+    QPushButton             *m_resetButton;
+    QPushButton             *m_applyButton;
 
     QPushButton             *m_addBank;
     QPushButton             *m_deleteBank;
@@ -265,6 +278,7 @@ protected:
     std::map<Rosegarden::DeviceId, std::string>  m_deviceNameMap;
     MidiProgramsEditor::MidiBankContainer        m_bankList;
     MidiProgramsEditor::MidiProgramContainer     m_programList;
+    MidiProgramsEditor::MidiProgramContainer     m_oldProgramList;
 
     bool                     m_modified;
     bool                     m_keepChanges;
