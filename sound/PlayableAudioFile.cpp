@@ -571,7 +571,13 @@ PlayableAudioFile::updateBuffers()
     }
     sample_t *buffer = m_workBuffer;
     
-    //!!! How come this code isn't in WAVAudioFile?
+    //!!! optimisation: move this into WAVAudioFile, and make the
+    //small file cache store the float versions instead of the
+    //pre-decoding n-bit interleaved versions.  But we should continue
+    //to do the reduceToMono stuff here: WAVAudioFile and small-file
+    //cache should always deal with the number of channels the file
+    //actually has (because we may have to produce the same file on
+    //mono and stereo tracks).
 
     // If we're reading a stereo file onto a mono target, we mix the
     // two channels.  If we're reading mono to stereo, we duplicate
@@ -763,7 +769,7 @@ RecordableAudioFile::~RecordableAudioFile()
     }
 }
 
-void 
+size_t
 RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
 {
     if (channel >= int(m_ringBuffers.size())) {
@@ -784,6 +790,7 @@ RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
 #endif
     
     m_ringBuffers[channel]->write(data, frames);
+    return frames;
 }
 
 void

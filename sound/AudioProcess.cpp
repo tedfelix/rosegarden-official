@@ -1121,6 +1121,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id, PlayableAudioFileList &audio
     if (haveFiles) {
 	if (!haveBlock) {
 	    std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
+	    m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
 	    return false; // blocked
 	}
     }
@@ -1562,7 +1563,9 @@ AudioFileWriter::write(InstrumentId id,
 		       size_t sampleCount)
 {
     if (!m_files[id].first) return; // no file
-    m_files[id].second->buffer(samples, channel, sampleCount);
+    if (m_files[id].second->buffer(samples, channel, sampleCount) < sampleCount) {
+	m_driver->reportFailure(MappedEvent::FailureDiscOverrun);
+    }
 }
 
 bool

@@ -383,6 +383,9 @@ public:
 	m_externalTransport = transport;
     }
 
+    // Report a failure back to the GUI - ideally.  Default does nothing.
+    //
+    virtual void reportFailure(Rosegarden::MappedEvent::FailureCode code) { }
 
 protected:
     // Helper functions to be implemented by subclasses

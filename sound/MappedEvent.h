@@ -142,15 +142,13 @@ public:
         SystemAudioPortCounts    = 1 << 19,
 	// Set whether we create various Audio ports (data1 is an AudioOutMask)
 	SystemAudioPorts         = 1 << 20,
-        // JACK is having some xruns - warn the user maybe
-        SystemXRuns              = 1 << 21,
-        // JACK has died
-        SystemJackDied           = 1 << 22,
+	// Some failure has occurred: data1 contains FailureCode
+	SystemFailure            = 1 << 21,
 
         // Time sig. event (from time sig. composition reference segment)
-        TimeSignature            = 1 << 23,
+        TimeSignature            = 1 << 22,
         // Tempo event (from tempo composition reference segment)
-        Tempo                    = 1 << 24
+        Tempo                    = 1 << 23
 
     } MappedEventType;
 
@@ -162,7 +160,23 @@ public:
 	SubmasterOuts            = 1 << 1
 
     } MappedEventAudioOutMask;
-	
+
+    typedef enum
+    {
+        // JACK is having some xruns - warn the user maybe
+	FailureXRuns             = 0,
+        // JACK has died
+        FailureJackDied          = 1,
+        // Audio subsystem failed to read from disc fast enough
+        FailureDiscUnderrun      = 2,
+        // Audio subsystem failed to write to disc fast enough
+        FailureDiscOverrun       = 3,
+        // Audio subsystem failed to mix busses fast enough
+        FailureBussMixUnderrun   = 4,
+        // Audio subsystem failed to mix instruments fast enough
+        FailureMixUnderrun       = 5
+
+    } FailureCode;	
 
     MappedEvent(): m_trackId(0),
                    m_instrument(0),

@@ -725,6 +725,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		size_t actual = rb->read(submaster[ch], nframes);
 		if (actual < nframes) {
 		    std::cerr << "WARNING: buffer underrun in buss ringbuffer " << buss << ":" << ch << std::endl;
+		    reportFailure(Rosegarden::MappedEvent::FailureBussMixUnderrun);
 		}
 		for (size_t i = 0; i < nframes; ++i) {
 		    sample_t sample = submaster[ch][i];
@@ -791,6 +792,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		size_t actual = rb->read(instrument[ch], nframes);
 		if (actual < nframes) {
 		    std::cerr << "WARNING: buffer underrun in instrument ringbuffer " << id << ":" << ch << std::endl;
+		    reportFailure(Rosegarden::MappedEvent::FailureMixUnderrun);
 		}
 		for (size_t i = 0; i < nframes; ++i) {
 		    sample_t sample = instrument[ch][i];
@@ -1235,7 +1237,7 @@ JackDriver::jackShutdown(void *arg)
     // Report to GUI
     //
     JackDriver *inst = static_cast<JackDriver*>(arg);
-    inst->reportMappedEvent(Rosegarden::MappedEvent::SystemJackDied);
+    inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
 }
 
 int
@@ -1255,7 +1257,7 @@ JackDriver::jackXRun(void *arg)
     // Report to GUI
     //
     JackDriver *inst = static_cast<JackDriver*>(arg);
-    inst->reportMappedEvent(Rosegarden::MappedEvent::SystemXRuns);
+    inst->reportFailure(Rosegarden::MappedEvent::FailureXRuns);
 
     return 0;
 }
@@ -1567,9 +1569,9 @@ JackDriver::closeRecordFile(AudioFileId &returnedId)
 
 
 void 
-JackDriver::reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType)
+JackDriver::reportFailure(Rosegarden::MappedEvent::FailureCode code)
 { 
-    if (m_alsaDriver) m_alsaDriver->reportMappedEvent(meType); 
+    if (m_alsaDriver) m_alsaDriver->reportFailure(code); 
 }
 
 

@@ -40,7 +40,6 @@ namespace Rosegarden
 // To enable us to have multiple file handles on real AudioFile
 // we store the file handle with this class.
 //
-//
 class PlayableAudioFile
 {
 public:
@@ -286,7 +285,7 @@ public:
     void setStatus(const RecordStatus &status) { m_status = status; }
     RecordStatus getStatus() const { return m_status; }
 
-    void buffer(const sample_t *data, int channel, size_t frames);
+    size_t buffer(const sample_t *data, int channel, size_t frames);
     void write();
 
 protected:

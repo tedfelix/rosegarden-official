@@ -66,9 +66,9 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
     m_lastRewoundAt(clock()),
-    m_sliceFetched(true), // default to true (usually ignored)
     m_countdownDialog(0),
     m_countdownTimer(new QTimer(doc)),
+    m_shownOverrunWarning(false),
     m_recordTime(new QTime()),
     m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true),
@@ -340,6 +340,7 @@ SequenceManager::stopping()
 
     stop();
 
+    m_shownOverrunWarning = false;
 }
 
 void
@@ -897,21 +898,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 m_transportStatus == RECORDING_MIDI ||
                 m_transportStatus == RECORDING_AUDIO)
             {
-                if ((*i)->getType() == Rosegarden::MappedEvent::SystemXRuns
-                        && !boolShowingWarning)
-                {
-                    boolShowingWarning = true;
+		if ((*i)->getType() == Rosegarden::MappedEvent::SystemFailure) {
 
-                    KMessageBox::information(
-                        dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                        i18n("JACK Audio subsystem is losing resolution."));
-
-                    boolShowingWarning = false;
-                }
-
-                
-                if ((*i)->getType() == Rosegarden::MappedEvent::SystemJackDied)
-                {
+		    if ((*i)->getData1() == Rosegarden::MappedEvent::FailureJackDied) {
                     // Something horrible has happened to JACK or we got
                     // bumped out of the graph.  Either way stop playback.
                     //
@@ -920,7 +909,47 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     KMessageBox::error(
                         dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                         i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
-                }
+
+		    } else if ((*i)->getData1() == Rosegarden::MappedEvent::FailureXRuns) {
+			if (!boolShowingWarning) {
+
+			    QString message = i18n("JACK Audio subsystem is losing resolution.");
+			    boolShowingWarning = true;
+		    
+			    KMessageBox::information
+//				(dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+				(0, 
+				 message);
+			    boolShowingWarning = false;
+			}
+		    } else if (!m_shownOverrunWarning) {
+			
+			QString message;
+			    
+			switch ((*i)->getData1()) {
+			    
+			case Rosegarden::MappedEvent::FailureDiscUnderrun:
+			    message = i18n("Cannot read from disc fast enough to service the audio subsystem.\nConsider increasing the disc read buffer size in the sequencer configuration.");
+			    break;
+
+			case Rosegarden::MappedEvent::FailureDiscOverrun:
+			    message = i18n("Cannot write to disc fast enough to service the audio subsystem.\nConsider increasing the disc write buffer size in the sequencer configuration.");
+			    break;
+
+			case Rosegarden::MappedEvent::FailureBussMixUnderrun:
+			case Rosegarden::MappedEvent::FailureMixUnderrun:
+			    message = i18n("The audio subsystem is failing to keep up.\nConsider increasing the mix buffer size in the sequencer configuration.");
+			    break;
+
+			default:
+			    message = i18n("Unknown sequencer failure mode!");
+			    break;
+			}
+
+			m_shownOverrunWarning = true;
+			KMessageBox::information(0, message);
+		    }
+		}
 	    }
         }
     }

@@ -138,10 +138,6 @@ public:
      */
     void suspendSequencer(bool value);
 
-    /// Slice fetched
-    bool getSliceFetched() const { return m_sliceFetched; }
-    void setSliceFetched(bool value) { m_sliceFetched = value; }
-
     /// Send the audio level to VU meters
     void sendAudioLevel(Rosegarden::MappedEvent *mE);
 
@@ -266,10 +262,10 @@ protected:
 
     clock_t                    m_lastRewoundAt;
 
-    bool                       m_sliceFetched;
-
     CountdownDialog           *m_countdownDialog;
     QTimer                    *m_countdownTimer;
+
+    bool                      m_shownOverrunWarning;
 
     // Keep a track of elapsed record time with this object
     //

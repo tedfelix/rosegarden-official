@@ -141,7 +141,7 @@ public:
 
     // Report back to GUI via the AlsaDriver
     //
-    void reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType);
+    void reportFailure(Rosegarden::MappedEvent::FailureCode code);
 
 protected:
 

@@ -44,6 +44,7 @@
 #include "Audit.h"
 
 #include <qregexp.h>
+#include <pthread.h>
 
 #define DEBUG_ALSA 1
 
@@ -3481,10 +3482,22 @@ AlsaDriver::sleep(const RealTime &rt)
 }
 
 void 
-AlsaDriver::reportMappedEvent(Rosegarden::MappedEvent::MappedEventType meType)
+AlsaDriver::reportFailure(Rosegarden::MappedEvent::FailureCode code)
 {
-    Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent(0, meType, 0, 0);
+    static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+    // We have a mutex here, as failures can come in from all sorts of
+    // different threads.  This includes the JACK process thread, from
+    // which we shouldn't be taking out locks, but if we're warning of
+    // a JACK failure already then it's probably too late.
+
+    pthread_mutex_lock(&mutex);
+
+    Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent
+	(0, Rosegarden::MappedEvent::SystemFailure, code, 0);
     insertMappedEventForReturn(mE);
+
+    pthread_mutex_unlock(&mutex);
 }
 
 }
