@@ -59,9 +59,8 @@ ViewElementsManager::notationElementList(Track::iterator from,
     return m_notationElements;
 }
 
-void
-ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
-                                     Rosegarden::Track::iterator to)
+void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
+                                          Rosegarden::Track::iterator to)
 {
     bool eventHasViewElement = false;
     
@@ -93,8 +92,16 @@ ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
 
 }
 
-void
-ViewElementsManager::insert(NotationElement *e)
+void ViewElementsManager::insert(Rosegarden::Event* e)
+{
+    if (!e->hasViewElement()) {
+        NotationElement *el = new NotationElement(e);
+        m_notationElements->insert(el);
+    }
+}
+
+
+void ViewElementsManager::insert(NotationElement *e)
 {
 //     kdDebug(KDEBUG_AREA) << "ViewElementsManager::insert("
 //                          << e->event()->getType() << ")\n";
@@ -103,8 +110,7 @@ ViewElementsManager::insert(NotationElement *e)
     m_track.insert(e->event());
 }
 
-void
-ViewElementsManager::erase(NotationElementList::iterator it)
+void ViewElementsManager::erase(NotationElementList::iterator it)
 {
     std::pair<Track::iterator, Track::iterator> interval
         = m_track.equal_range((*it)->event());

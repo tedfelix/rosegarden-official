@@ -50,6 +50,11 @@ public:
     void insertNewEvents(Rosegarden::Track::iterator from,
                          Rosegarden::Track::iterator to);
 
+    /**
+     * Wrap Event in a ViewElement if it doesn't have one already
+     */
+    void insert(Rosegarden::Event*);
+
     // overload these for each ViewElement type
     void insert(NotationElement*);
     void erase(NotationElementList::iterator);
