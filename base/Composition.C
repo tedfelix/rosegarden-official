@@ -1141,11 +1141,12 @@ std::string Composition::toXmlString()
     composition << endl;
 
     for (trackiterator tit = getTracks()->begin();
-                        tit != getTracks()->end();
-                        tit++ )
-    {
-        composition << "  " << (*tit).second->toXmlString() << endl;
-    }
+         tit != getTracks()->end();
+         ++tit)
+        {
+            if ((*tit).second)
+                composition << "  " << (*tit).second->toXmlString() << endl;
+        }
 
     composition << endl;
 
