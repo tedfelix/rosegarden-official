@@ -26,11 +26,10 @@ Tasks suggested by Chris (notation guy):
  amount about the way the data structures work.  Good candidates
  include import of Finale ETF files (see
  http://www.cs.uu.nl/~hanwen/lily-devel/etf.html and various sample
- files at http://www.cpdl.org), import of Brahms files, and export of
- Lilypond typesetting files.  ETF is difficult, Brahms should be easy,
- and the Lilypond format is probably best done by someone who's
- already very familiar with Lilypond (or who really wants to learn all
- about it).
+ files at http://www.cpdl.org), import of Brahms files, and I/O of
+ MusicXML (check first whether any other program actually uses it).
+ ETF is difficult, Brahms should be easy.  We used to ask for
+ Lilypond export here, but Hans Kieserman stepped up and wrote that. 
 
  -- We're lacking an event list window, which would be very useful.
  We do now have a window for viewing and editing the properties of a
@@ -39,6 +38,14 @@ Tasks suggested by Chris (notation guy):
 
  -- Anyone with a particular interest in any sort of notation work
  is invited and encouraged to help write support for it into Rosegarden.
+
+ -- Anyone who knows about KDE and Qt could be very helpful, as we
+ have quite a lot of things that need sorting out in that area.
+ (Guillaume can do a lot, but he doesn't have so much time at the
+ moment.)  Personally I'd like to see every single problem with
+ font sizing sorted out, for both Qt-2 and Qt-3, as well as making
+ the fonts used for things like time signature, staff name and
+ chord labels configurable.
 
 
 Tasks suggested by Bownie (MIDI and audio guy):

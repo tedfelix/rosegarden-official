@@ -738,11 +738,14 @@ NotationHLayout::reconcileBarsPage()
 
     double pageWidthSoFar = 0.0;
     double stretchFactor = 10.0;
-
     m_totalWidth = 0.0;
+
     for (StaffIntMap::iterator i = m_staffNameWidths.begin();
 	 i != m_staffNameWidths.end(); ++i) {
-	if (i->second > m_totalWidth) m_totalWidth = double(i->second);
+	if (i->second > m_totalWidth) {
+	    m_totalWidth = double(i->second);
+	    pageWidthSoFar = m_totalWidth + getPreBarMargin();
+	}
     }
 
     for (;;) {
