@@ -159,8 +159,8 @@ LoopRuler::drawLoopMarker(QPainter* paint)
         x1 = (int)m_rulerScale->getXForTime(m_endLoop);
     }
 
-    x1 += m_currentXOffset;
-    x2 += m_currentXOffset;
+    x1 += m_currentXOffset + m_xorigin;
+    x2 += m_currentXOffset + m_xorigin;
 
     paint->save();
     paint->setBrush(RosegardenGUIColours::LoopHighlight);

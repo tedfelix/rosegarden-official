@@ -98,7 +98,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_pianoView(0),
       m_lastNote(0),
       m_quantizations(
-              Rosegarden::StandardQuantization::getStandardQuantizations())
+	  Rosegarden::StandardQuantization::getStandardQuantizations()),
+      m_documentDestroyed(false)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
     Rosegarden::Composition &comp = doc->getComposition();
@@ -222,6 +223,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    QObject::connect
+	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
+
     MATRIX_DEBUG << "MatrixView : applying layout\n";
 
     bool layoutApplied = applyLayout();
@@ -231,8 +235,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
 	    m_staffs[i]->positionAllElements();
-            m_staffs[i]->getSegment().getRefreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-
+            m_staffs[i]->getSegment().getRefreshStatus
+		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
         }
     }
 
@@ -318,8 +322,10 @@ MatrixView::~MatrixView()
 {
     // Give the sequencer something to suck on while we close
     //
-    m_document->getSequenceManager()->
-        setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+    if (!m_documentDestroyed) {
+	m_document->getSequenceManager()->
+	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+    }
 
     slotSaveOptions();
 
@@ -648,10 +654,15 @@ bool MatrixView::applyLayout(int staffNo,
 void MatrixView::refreshSegment(Segment *segment,
 				timeT startTime, timeT endTime)
 {
+    if (m_documentDestroyed) return;
+
     Rosegarden::Profiler profiler("MatrixView::refreshSegment", true);
 
     MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
                          << ", " << endTime << ")\n";
+
+    m_document->getSequenceManager()->
+	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
     applyLayout(-1, startTime, endTime);
 
@@ -1220,6 +1231,29 @@ void MatrixView::closeWindow()
     delete this;
 }
 
+bool MatrixView::canPreviewAnotherNote()
+{
+    static clock_t lastCutOff = 0;
+    static int sinceLastCutOff = 0;
+
+    clock_t now = clock();
+    ++sinceLastCutOff;
+
+    if (((now - lastCutOff) / CLOCKS_PER_SEC) >= 1) {
+	sinceLastCutOff = 0;
+	lastCutOff = now;
+    } else {
+	if (sinceLastCutOff >= 20) {
+	    // don't permit more than 20 notes per second, to avoid
+	    // gungeing up the sound drivers
+	    MATRIX_DEBUG << "Rejecting preview (too busy)" << endl;
+	    return false;
+	}
+    }
+
+    return true;
+}
+
 void MatrixView::playNote(Rosegarden::Event *event)
 {
     // Only play note events
@@ -1240,6 +1274,8 @@ void MatrixView::playNote(Rosegarden::Event *event)
 
     if (ins == 0)
         return;
+
+    if (!canPreviewAnotherNote()) return;
 
     // check for null instrument
     //
@@ -1639,11 +1675,8 @@ MatrixView::slotChangeHorizontalZoom(int)
     zoomMatrix.scale(zoomValue, 1.0);
     m_canvasView->setWorldMatrix(zoomMatrix);
 
-    BarButtons* barButtons = dynamic_cast<BarButtons*>(m_topBarButtons);
-    if (barButtons) barButtons->setHScaleFactor(zoomValue);
-
-    barButtons = dynamic_cast<BarButtons*>(m_bottomBarButtons);
-    if (barButtons) barButtons->setHScaleFactor(zoomValue);
+    if (m_topBarButtons) m_topBarButtons->setHScaleFactor(zoomValue);
+    if (m_bottomBarButtons) m_bottomBarButtons->setHScaleFactor(zoomValue);
 
     for (unsigned int i = 0; i < m_controlRulers.size(); ++i)
     {
@@ -1906,3 +1939,11 @@ MatrixView::slotSetVelocities()
                              dialog->getValue2()));
     }
 }
+
+void
+MatrixView::slotDocumentDestroyed()
+{
+    MATRIX_DEBUG << "MatrixView::slotDocumentDestroyed()\n";
+    m_documentDestroyed = true;
+}
+

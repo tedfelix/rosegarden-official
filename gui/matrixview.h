@@ -348,6 +348,9 @@ public slots:
      */
     void slotInsertNoteFromAction();
 
+    /// The document has been destroyed, and we're about to go with it
+    void slotDocumentDestroyed();
+
 protected:
 
     virtual Rosegarden::Segment *getCurrentSegment();
@@ -405,6 +408,11 @@ protected:
      */
     void initZoomToolbar();
 
+    /**
+     * Test whether we've had too many preview notes recently
+     */
+    bool canPreviewAnotherNote();
+
     //--------------- Data members ---------------------------------
 
     std::vector<MatrixStaff*> m_staffs;
@@ -459,6 +467,8 @@ protected:
 
     QWidget *m_chordNameRuler;
     QWidget *m_tempoRuler;
+
+    bool m_documentDestroyed; // bit of a hack, as in NotationView
 };
 
 #endif

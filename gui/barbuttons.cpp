@@ -115,12 +115,10 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 	(m_loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
 	 doc, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
-    /*
     QObject::connect
         (doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
          m_loopRuler,
          SLOT(slotSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
-         */
 
     m_loopRuler->setBackgroundColor(RosegardenGUIColours::PointerRuler);
 }

@@ -60,7 +60,6 @@ NotationView::slotDocumentDestroyed()
 {
     NOTATION_DEBUG << "NotationView::slotDocumentDestroyed()\n";
     m_documentDestroyed = true;
-    m_inhibitRefresh = true;
 }
 
 void
@@ -476,124 +475,6 @@ void NotationView::slotEditGeneralPaste()
 	}
     }
 }
-
-/*!!!
-void NotationView::slotExtendSelectionBackward()
-{
-    slotExtendSelectionBackward(false);
-}
-
-void NotationView::slotExtendSelectionBackwardBar()
-{
-    slotExtendSelectionBackward(true);
-}
-
-void NotationView::slotExtendSelectionBackward(bool bar)
-{
-    // If there is no current selection, or the selection is entirely
-    // to the right of the cursor, move the cursor left and add to the
-    // selection
-
-    timeT oldTime = getInsertionTime();
-    if (bar) slotJumpBackward();
-    else slotStepBackward();
-    timeT newTime = getInsertionTime();
-
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    EventSelection *es = new EventSelection(segment);
-    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
-
-    if (!m_currentEventSelection ||
-	&m_currentEventSelection->getSegment() != &segment ||
-	m_currentEventSelection->getSegmentEvents().size() == 0 ||
-	m_currentEventSelection->getStartTime() >= oldTime) {
-
-	Segment::iterator extendFrom = segment.findTime(oldTime);
-
-	while (extendFrom != segment.begin() &&
-	       (*--extendFrom)->getAbsoluteTime() >= newTime) {
-	    es->addEvent(*extendFrom);
-	}
-
-    } else { // remove an event
-
-	EventSelection::eventcontainer::iterator i =
-	    es->getSegmentEvents().end();
-
-	std::vector<Event *> toErase;
-
-	while (i != es->getSegmentEvents().begin() &&
-	       (*--i)->getAbsoluteTime() >= newTime) {
-	    toErase.push_back(*i);
-	}
-
-	for (unsigned int j = 0; j < toErase.size(); ++j) {
-	    es->removeEvent(toErase[j]);
-	}
-    }
-    
-    setCurrentSelection(es);
-}
-
-void NotationView::slotExtendSelectionForward()
-{
-    slotExtendSelectionForward(false);
-}
-
-void NotationView::slotExtendSelectionForwardBar()
-{
-    slotExtendSelectionForward(true);
-}
-
-void NotationView::slotExtendSelectionForward(bool bar)
-{
-    // If there is no current selection, or the selection is entirely
-    // to the left of the cursor, move the cursor right and add to the
-    // selection
-
-    timeT oldTime = getInsertionTime();
-    if (bar) slotJumpForward();
-    else slotStepForward();
-    timeT newTime = getInsertionTime();
-
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    EventSelection *es = new EventSelection(segment);
-    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
-
-    if (!m_currentEventSelection ||
-	&m_currentEventSelection->getSegment() != &segment ||
-	m_currentEventSelection->getSegmentEvents().size() == 0 ||
-	m_currentEventSelection->getEndTime() <= oldTime) {
-
-	Segment::iterator extendFrom = segment.findTime(oldTime);
-
-	while (extendFrom != segment.end() &&
-	       (*extendFrom)->getAbsoluteTime() < newTime) {
-	    es->addEvent(*extendFrom);
-	    ++extendFrom;
-	}
-
-    } else { // remove an event
-
-	EventSelection::eventcontainer::iterator i =
-	    es->getSegmentEvents().begin();
-
-	std::vector<Event *> toErase;
-
-	while (i != es->getSegmentEvents().end() &&
-	       (*i)->getAbsoluteTime() < newTime) {
-	    toErase.push_back(*i);
-	    ++i;
-	}
-
-	for (unsigned int j = 0; j < toErase.size(); ++j) {
-	    es->removeEvent(toErase[j]);
-	}
-    }
-    
-    setCurrentSelection(es);
-}
-*/
 
 void NotationView::slotPreviewSelection()
 {

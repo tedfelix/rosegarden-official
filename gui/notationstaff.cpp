@@ -682,8 +682,6 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	m_notePixmapFactory->setSelected(selected);
 	int z = selected ? 3 : 0;
 
-	NOTATION_DEBUG << "Attempting to make sprite for event of type " << elt->event()->getType() << " at time " << elt->getAbsoluteTime() << endl;
-
 	if (elt->isNote()) {
 
 	    canvasItem = makeNoteSprite(elt);

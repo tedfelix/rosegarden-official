@@ -89,7 +89,7 @@ void EditView::paintEvent(QPaintEvent* e)
     m_needUpdate = false;
 }
 
-void EditView::setTopBarButtons(QWidget* w)
+void EditView::setTopBarButtons(BarButtons* w)
 {
     delete m_topBarButtons;
     m_topBarButtons = w;
@@ -99,9 +99,11 @@ void EditView::setTopBarButtons(QWidget* w)
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_topBarButtons, SLOT(slotScrollHoriz(int)));
+
+    
 }
 
-void EditView::setBottomBarButtons(QWidget* w)
+void EditView::setBottomBarButtons(BarButtons* w)
 {
     delete m_bottomBarButtons;
     m_bottomBarButtons = w;

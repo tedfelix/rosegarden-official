@@ -178,8 +178,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                   m_legatoQuantizer, m_properties, this)),
     m_vlayout(new NotationVLayout(&doc->getComposition(),
                                   m_legatoQuantizer, m_properties, this)),
-    m_topBarButtons(0),
-    m_bottomBarButtons(0),
     m_chordNameRuler(0),
     m_tempoRuler(0),
     m_chordNamesVisible(false),
@@ -259,9 +257,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
-    m_topBarButtons = new BarButtons(m_hlayout, 20.0, 25,
-                                     false, getCentralFrame());
-    setTopBarButtons(m_topBarButtons);
+    setTopBarButtons(new BarButtons(m_hlayout, 20.0, 25,
+				    false, getCentralFrame()));
 
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
@@ -279,9 +276,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_tempoRuler->hide();
     m_temposVisible = false;
 
-    m_bottomBarButtons = new BarButtons(m_hlayout, 20.0, 25,
-                                        true, getCentralFrame());
-    setBottomBarButtons(m_bottomBarButtons);
+    setBottomBarButtons(new BarButtons(m_hlayout, 20.0, 25,
+				       true, getCentralFrame()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
@@ -446,8 +442,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                   m_legatoQuantizer, m_properties, this)),
     m_vlayout(new NotationVLayout(&doc->getComposition(),
                                   m_legatoQuantizer, m_properties, this)),
-    m_topBarButtons(0),
-    m_bottomBarButtons(0),
     m_chordNameRuler(0),
     m_tempoRuler(0),
     m_chordNamesVisible(false),
@@ -549,8 +543,10 @@ NotationView::~NotationView()
 
     // Give the sequencer something to suck on while we close
     //
-    m_document->getSequenceManager()->
-        setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+    if (!m_documentDestroyed) {
+	m_document->getSequenceManager()->
+	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+    }
 
     slotSaveOptions();
 
@@ -1805,6 +1801,29 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
     setCurrentSelection(selection);
 }
 
+bool NotationView::canPreviewAnotherNote()
+{
+    static clock_t lastCutOff = 0;
+    static int sinceLastCutOff = 0;
+
+    clock_t now = clock();
+    ++sinceLastCutOff;
+
+    if (((now - lastCutOff) / CLOCKS_PER_SEC) >= 1) {
+	sinceLastCutOff = 0;
+	lastCutOff = now;
+    } else {
+	if (sinceLastCutOff >= 20) {
+	    // don't permit more than 20 notes per second, to avoid
+	    // gungeing up the sound drivers
+	    NOTATION_DEBUG << "Rejecting preview (too busy)" << endl;
+	    return false;
+	}
+    }
+
+    return true;
+}
+
 void NotationView::playNote(Rosegarden::Segment &s, int pitch)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
@@ -1817,6 +1836,8 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
     // check for null instrument
     //
     if (ins == 0) return;
+
+    if (!canPreviewAnotherNote()) return;
 
     // Send out note of half second duration
     //
@@ -2003,7 +2024,10 @@ void NotationView::refreshSegment(Segment *segment,
     START_TIMING;
     Rosegarden::Profiler foo("NotationView::refreshSegment()");
 
-    if (m_inhibitRefresh) return;
+    if (m_inhibitRefresh || m_documentDestroyed) return;
+
+    m_document->getSequenceManager()->
+	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
     installProgressEventFilter();
 

@@ -322,14 +322,6 @@ public slots:
     void slotUpdateInsertModeStatus();
 
     /// edit menu
-/*!!!
-    void slotExtendSelectionBackward();
-    void slotExtendSelectionForward();
-    void slotExtendSelectionBackwardBar();
-    void slotExtendSelectionForwardBar();
-    void slotExtendSelectionBackward(bool bar);
-    void slotExtendSelectionForward(bool bar);
-*/
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
@@ -465,25 +457,7 @@ public slots:
 					double cx, double cy) {
 	slotSetInsertCursorAndRecentre(position, cx, static_cast<int>(cy), true);
     }
-/*!!!
-    /// Step back one event with the insert cursor position
-    void slotStepBackward();
 
-    /// Step forward one event with the insert cursor position
-    void slotStepForward();
-
-    /// Step back one bar with the insert cursor position
-    void slotJumpBackward();
-
-    /// Step forward one bar with the insert cursor position
-    void slotJumpForward();
-
-    /// Zip back to the start of the segment
-    void slotJumpToStart();
-
-    /// Zip forward to the end of the segment
-    void slotJumpToEnd();
-*/
     /// Set insert cursor to playback pointer position
     void slotJumpCursorToPlayback();
 
@@ -693,6 +667,11 @@ protected:
     void installProgressEventFilter();
     void removeProgressEventFilter();
 
+    /**
+     * Test whether we've had too many preview notes recently
+     */
+    bool canPreviewAnotherNote();
+
     //--------------- Data members ---------------------------------
 
     NotationProperties m_properties;
@@ -741,8 +720,6 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
-    BarButtons *m_topBarButtons;
-    BarButtons *m_bottomBarButtons;
     ChordNameRuler *m_chordNameRuler;
     QWidget *m_tempoRuler;
     bool m_chordNamesVisible;

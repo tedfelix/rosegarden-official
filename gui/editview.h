@@ -144,13 +144,13 @@ protected:
      * Locate the given widget in the top bar-buttons position and
      * connect up its scrolling signals.
      */
-    void setTopBarButtons(QWidget*);
+    void setTopBarButtons(BarButtons*);
 
     /**
      * Locate the given widget in the bottom bar-buttons position and
      * connect up its scrolling signals.
      */
-    void setBottomBarButtons(QWidget*);
+    void setBottomBarButtons(BarButtons*);
 
     /**
      * Locate the given widget right above the top bar-buttons and
@@ -222,8 +222,8 @@ protected:
     QScrollBar  *m_horizontalScrollBar;
     QVBoxLayout *m_rulerBox;
     QVBoxLayout *m_controlBox;
-    QWidget     *m_topBarButtons;
-    QWidget     *m_bottomBarButtons;
+    BarButtons  *m_topBarButtons;
+    BarButtons  *m_bottomBarButtons;
 
 };
 
