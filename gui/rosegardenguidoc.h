@@ -174,6 +174,12 @@ public:
     const QString &getTitle() const;
 
     /**
+     * Returns true if the file is a regular Rosegarden ".rg" file,
+     * false if it's an imported file or a new file (not yet saved)
+     */
+    bool isRegularDotRGFile();
+
+    /**
      * returns the global command history
      */
     MultiViewCommandHistory *getCommandHistory() {

@@ -1239,11 +1239,18 @@ void RosegardenGUIApp::slotFileSave()
 
     KTmpStatusMsg msg(i18n("Saving file..."), this);
 
-    if (!m_doc->getAbsFilePath()) {
+    // if it's a new file (no file path), or an imported file
+    // (file path doesn't end with .rg), call saveAs
+    //
+    if (!m_doc->isRegularDotRGFile()) {
+
 	slotFileSaveAs();
+
     } else {
+
 	SetWaitCursor waitCursor;
         m_doc->saveDocument(m_doc->getAbsFilePath());
+
     }
 }
 

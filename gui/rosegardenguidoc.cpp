@@ -269,7 +269,7 @@ void RosegardenGUIDoc::slotAutoSave()
 //     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave()\n" << endl;
 
     if (isAutoSaved()) {
-//         RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc already autosaved\n";
+        RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc already autosaved\n";
         return;
     }
       
@@ -282,10 +282,18 @@ void RosegardenGUIDoc::slotAutoSave()
     saveDocument(autoSaveFileName, 0, true);
 }
 
+bool RosegardenGUIDoc::isRegularDotRGFile()
+{
+    return getAbsFilePath().right(3).lower() == ".rg";
+}
+
 bool RosegardenGUIDoc::saveIfModified()
 {
     RG_DEBUG << "RosegardenGUIDoc::saveIfModified()" << endl;
     bool completed=true;
+
+    static QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
+
 
     if (isModified()) {
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
@@ -295,65 +303,43 @@ bool RosegardenGUIDoc::saveIfModified()
                                                         i18n("Warning"));
         RG_DEBUG << "want_save = " << want_save << endl;
 
-        switch(want_save)
-            {
-            case KMessageBox::Yes:
-                if (getTitle() == i18n("Untitled")) {
-                    win->fileSaveAs();
-                } else {
+        switch(want_save) {
 
-                    {
-                        QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
+        case KMessageBox::Yes:
 
-                        if (midiFile.match(getAbsFilePath().lower()) != -1)
-                        {
+            if (!isRegularDotRGFile()) {
 
-                            QString newFileName =
-                                QString(getAbsFilePath()).
-                                    replace(midiFile, ".rg");
+                RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : new or imported file\n";
+                win->fileSaveAs();
 
-                            KMessageBox::information(win,
-                                    i18n("Imported MIDI file will be saved in Rosegarden-4 format.\nNew filename will be \"") + newFileName + QString("\""));
+            } else {
 
-                            saveDocument(newFileName);
-                        }
-                        else if (rg21File.match(getAbsFilePath().lower()) != -1)
-                        {
-                            QString newFileName =
-                                QString(getAbsFilePath()).
-                                    replace(rg21File, ".rg");
+                RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : regular file\n";
+                saveDocument(getAbsFilePath());
 
-                            KMessageBox::information(win,
-                                    i18n("Imported Rosegarden-2.1 file will be saved in Rosegarden-4 format\n.New filename will be \"") + newFileName + QString("\""));
-                            saveDocument(newFileName);
-                        }
-                        else 
-                            saveDocument(getAbsFilePath());
-
-                    }
-                };
-
-                //deleteContents();
-                completed=true;
-                break;
-
-            case KMessageBox::No:
-                setModified(false);
-                //deleteContents();
-                // delete the autosave file so it won't annoy
-                // the user when reloading the file.
-                QFile::remove(getAutoSaveFileName());
-                completed=true;
-                break;	
-
-            case KMessageBox::Cancel:
-                completed=false;
-                break;
-
-            default:
-                completed=false;
-                break;
             }
+
+            //deleteContents();
+            completed=true;
+            break;
+
+        case KMessageBox::No:
+            setModified(false);
+            //deleteContents();
+            // delete the autosave file so it won't annoy
+            // the user when reloading the file.
+            QFile::remove(getAutoSaveFileName());
+            completed=true;
+            break;	
+
+        case KMessageBox::Cancel:
+            completed=false;
+            break;
+
+        default:
+            completed=false;
+            break;
+        }
     }
 
     return completed;
