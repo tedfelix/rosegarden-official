@@ -336,7 +336,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_inGroup = true;
         m_groupId = m_currentSegment->getNextId();
-        m_groupType = atts.value("type");
+        m_groupType = qstrtostr(atts.value("type"));
 
 	if (m_groupType == GROUP_TYPE_TUPLED) {
 	    m_groupTupletBase = atts.value("base").toInt();

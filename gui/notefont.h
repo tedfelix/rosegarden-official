@@ -210,7 +210,7 @@ private:
     QString m_errorString;
 
     bool checkFile(int size, std::string &src) const;
-    std::string m_fontDirectory;
+    QString m_fontDirectory;
 };
 
 
@@ -257,7 +257,7 @@ public:
     QPixmap getPixmap(CharName charName, bool inverted = false) const;
 
     /// Ignores problems, returning blank canvas pixmap if necessary
-    QCanvasPixmap getCanvasPixmap
+    QCanvasPixmap* getCanvasPixmap
     (CharName charName, bool inverted = false) const;
 
 
@@ -272,7 +272,7 @@ public:
                               bool inverted = false) const;
 
     /// Ignores problems, returning blank canvas pixmap if necessary
-    QCanvasPixmap getColouredCanvasPixmap
+    QCanvasPixmap* getColouredCanvasPixmap
     (CharName charName, int hue, int minValue,
      bool inverted = false) const;
 

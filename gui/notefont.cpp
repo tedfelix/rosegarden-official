@@ -50,7 +50,7 @@ NoteFontMap::NoteFontMap(string name) :
     m_fontDirectory = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
     QString mapFileName = QString("%1/%2/mapping.xml")
-        .arg(strtoqstr(m_fontDirectory))
+        .arg(m_fontDirectory)
         .arg(strtoqstr(name));
 
     QFileInfo mapFileInfo(mapFileName);
@@ -595,7 +595,7 @@ NoteFont::getPixmap(CharName charName, bool inverted) const
     return p;
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
 {
     QPixmap p;
@@ -604,7 +604,7 @@ NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
     int x, y;
     (void)getHotspot(charName, x, y, inverted);
 
-    return QCanvasPixmap(p, QPoint(x, y));
+    return new QCanvasPixmap(p, QPoint(x, y));
 }
 
 bool
@@ -636,7 +636,7 @@ NoteFont::getColouredPixmap(CharName charName, int hue, int minValue, bool inver
     return p;
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NoteFont::getColouredCanvasPixmap(CharName charName, int hue, int minValue,
                                   bool inverted) const
 {
@@ -646,7 +646,7 @@ NoteFont::getColouredCanvasPixmap(CharName charName, int hue, int minValue,
     int x, y;
     (void)getHotspot(charName, x, y, inverted);
 
-    return QCanvasPixmap(p, QPoint(x, y));
+    return new QCanvasPixmap(p, QPoint(x, y));
 }
 
 CharName

@@ -290,7 +290,7 @@ void RG21Loader::setGroupProperties(Event *e)
 
 bool RG21Loader::parseGroupStart()
 {
-    m_groupType = m_tokens[0].lower();
+    m_groupType = qstrtostr(m_tokens[0].lower());
     m_inGroup = true;
     m_groupId = m_currentSegment->getNextId();
     m_groupStartTime = m_currentSegmentTime;

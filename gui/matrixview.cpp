@@ -503,48 +503,48 @@ void MatrixView::setupActions()
 		"cursor_end");
 
     NotePixmapFactory npf;
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-cursor-to-pointer"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-cursor-to-pointer")));
     new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
 		SLOT(slotJumpCursorToPlayback()), actionCollection(),
 		"cursor_to_playback_pointer");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-play"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-play")));
     new KAction(i18n("&Play"), icon, Key_Enter, this,
 		SIGNAL(play()), actionCollection(), "play");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-stop"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
 		SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-rewind"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
 		SIGNAL(rewindPlayback()), actionCollection(),
 		"playback_pointer_back_bar");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-ffwd"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
 		SIGNAL(fastForwardPlayback()), actionCollection(),
 		"playback_pointer_forward_bar");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-rewind-end"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
 		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
 		"playback_pointer_start");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-ffwd-end"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
 
-    icon = QIconSet(npf.makeToolbarPixmap
-		    ("transport-pointer-to-cursor"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+                                                 ("transport-pointer-to-cursor")));
     new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
 		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
 		"playback_pointer_to_cursor");
@@ -1522,7 +1522,7 @@ MatrixView::initActionsToolbar()
 
     using Rosegarden::Note;
     NotePixmapFactory npf;
-    QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
+    QPixmap noMap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
 
     m_snapGridCombo = new RosegardenComboBox(false, false, actionsToolbar);
 
@@ -1552,7 +1552,7 @@ MatrixView::initActionsToolbar()
 
 	    timeT err = 0;
 	    QString label = npf.makeNoteMenuLabel(m_snapValues[i], true, err);
-	    QPixmap pixmap = npf.makeNoteMenuPixmap(m_snapValues[i], err);
+	    QPixmap pixmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(m_snapValues[i], err));
 	    m_snapGridCombo->insertItem((err ? noMap : pixmap), label);
 	}
     }
@@ -1575,7 +1575,7 @@ MatrixView::initActionsToolbar()
 	Rosegarden::timeT time = m_quantizations[i].unit;
 	Rosegarden::timeT error = 0;
 	QString label = npf.makeNoteMenuLabel(time, true, error);
-	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
+	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
 	m_quantizeCombo->insertItem(error ? noMap : pmap, label);
     }
 

@@ -120,8 +120,7 @@ NotationStaff::insertTimeSignature(double layoutX,
 				   const TimeSignature &timeSig)
 {
     m_notePixmapFactory->setSelected(false);
-    QCanvasPixmap *pixmap =
-	new QCanvasPixmap(m_notePixmapFactory->makeTimeSigPixmap(timeSig));
+    QCanvasPixmap *pixmap = m_notePixmapFactory->makeTimeSigPixmap(timeSig);
     QCanvasSimpleSprite *sprite = new QCanvasSimpleSprite(pixmap, m_canvas);
 
     LinedStaffCoords sigCoords =
@@ -155,9 +154,8 @@ NotationStaff::drawStaffName()
 	getTrackByIndex(getSegment().getTrack())->getLabel();
 
     m_staffName = new QCanvasSimpleSprite
-	(new QCanvasPixmap
-	 (m_notePixmapFactory->makeTextPixmap
-	  (Rosegarden::Text(name, Rosegarden::Text::StaffName))),
+	(m_notePixmapFactory->makeTextPixmap
+	  (Rosegarden::Text(name, Rosegarden::Text::StaffName)),
 	 m_canvas);
 
     int layoutY = getLayoutYForHeight(5);
@@ -726,8 +724,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 				  duration != elt->getDuration());
 		restParams.setQuantized(quantized);
 		if (quantized) z = 2;
-		pixmap = new QCanvasPixmap
-		    (m_notePixmapFactory->makeRestPixmap(restParams));
+		pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
 
 	    } else {
 		NOTATION_DEBUG << "Omitting too-short rest" << endl;
@@ -735,15 +732,13 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->event()->isa(Clef::EventType)) {
 
-	    pixmap = new QCanvasPixmap
-		(m_notePixmapFactory->makeClefPixmap
-		 (Rosegarden::Clef(*elt->event())));
+	    pixmap = m_notePixmapFactory->makeClefPixmap
+		 (Rosegarden::Clef(*elt->event()));
 
 	} else if (elt->event()->isa(Rosegarden::Key::EventType)) {
 
-	    pixmap = new QCanvasPixmap
-		(m_notePixmapFactory->makeKeyPixmap
-		 (Rosegarden::Key(*elt->event()), currentClef));
+	    pixmap = m_notePixmapFactory->makeKeyPixmap
+		 (Rosegarden::Key(*elt->event()), currentClef);
 
 	} else if (elt->event()->isa(Rosegarden::Text::EventType)) {
 
@@ -758,9 +753,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	    } else {
 
-		pixmap = new QCanvasPixmap
-		    (m_notePixmapFactory->makeTextPixmap
-		     (Rosegarden::Text(*elt->event())));
+		pixmap = m_notePixmapFactory->makeTextPixmap
+		     (Rosegarden::Text(*elt->event()));
 	    }
 
 	} else if (elt->event()->isa(Indication::EventType)) {
@@ -802,13 +796,11 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	    if (indicationType == Indication::Crescendo) {
 
-		pixmap = new QCanvasPixmap
-		    (m_notePixmapFactory->makeHairpinPixmap(length, true));
+		pixmap = m_notePixmapFactory->makeHairpinPixmap(length, true);
 
 	    } else if (indicationType == Indication::Decrescendo) {
 
-		pixmap = new QCanvasPixmap
-		    (m_notePixmapFactory->makeHairpinPixmap(length, false));
+		pixmap = m_notePixmapFactory->makeHairpinPixmap(length, false);
 
 	    } else if (indicationType == Indication::Slur) {
 
@@ -820,15 +812,13 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
 		elt->event()->get<Int>(properties.SLUR_LENGTH, length);
 		
-		pixmap = new QCanvasPixmap
-		    (m_notePixmapFactory->makeSlurPixmap(length, dy, above));
+		pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
 		    
 	    } else {
 
 		NOTATION_DEBUG
 		    << "Unrecognised indicationType " << indicationType << endl;
-		pixmap = new QCanvasPixmap
-		    (m_notePixmapFactory->makeUnknownPixmap());
+		pixmap = m_notePixmapFactory->makeUnknownPixmap();
 	    }
 
 	} else {
@@ -836,8 +826,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    NOTATION_DEBUG
 		<< "NotationElement of unrecognised type "
 		<< elt->event()->getType() << endl;
-	    pixmap = new QCanvasPixmap
-		(m_notePixmapFactory->makeUnknownPixmap());
+	    pixmap = m_notePixmapFactory->makeUnknownPixmap();
 	}
 
 	if (!canvasItem && pixmap) {
@@ -1001,16 +990,12 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 	params.setLegerLines(0);
 	m_graceNotePixmapFactory->setSelected
 	    (m_notePixmapFactory->isSelected());
-	QCanvasPixmap notePixmap
-	    (m_graceNotePixmapFactory->makeNotePixmap(params));
 	item = new QCanvasNotationSprite
-	    (*elt, new QCanvasPixmap(notePixmap), m_canvas);
+	    (*elt, m_graceNotePixmapFactory->makeNotePixmap(params), m_canvas);
 
     } else {
-	QCanvasPixmap notePixmap
-	    (m_notePixmapFactory->makeNotePixmap(params));
 	item = new QCanvasNotationSprite
-	    (*elt, new QCanvasPixmap(notePixmap), m_canvas);
+	    (*elt, m_notePixmapFactory->makeNotePixmap(params), m_canvas);
     }
 
     if (m_notePixmapFactory->isSelected()) item->setZ(3);
@@ -1074,10 +1059,9 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     params.setSelected(false);
     params.setHighlighted(true);
 
-    QCanvasPixmap notePixmap(m_notePixmapFactory->makeNotePixmap(params));
     delete m_previewSprite;
     m_previewSprite = new QCanvasSimpleSprite
-	(new QCanvasPixmap(notePixmap), m_canvas);
+	(m_notePixmapFactory->makeNotePixmap(params), m_canvas);
 
     int layoutY = getLayoutYForHeight(heightOnStaff);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);

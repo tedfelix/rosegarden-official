@@ -544,8 +544,8 @@ void
 KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
-	QCanvasPixmap pmap =
-	    m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef);
+	QPixmap pmap =
+	    NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef));
 	m_keyLabel->setPixmap(pmap);
     } else {
 	m_keyLabel->setText(i18n("No such key"));
@@ -705,7 +705,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 	timeT duration(note.getDuration());
 	if (maxDuration > 0 && (2 * duration > maxDuration)) break;
 	timeT e; // error factor, ignore
-	m_unitCombo->insertItem(npf.makeNoteMenuPixmap(duration, e),
+	m_unitCombo->insertItem(NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(duration, e)),
 				npf.makeNoteMenuLabel(duration, false, e, true));
 	if (defaultUnitType == t) {
 	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
@@ -1056,7 +1056,7 @@ TextEventDialog::slotTextChanged(const QString &qtext)
     }
 
     Text rtext(text, type);
-    m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
+    m_textExampleLabel->setPixmap(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
 }
 
 void
@@ -1071,7 +1071,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     }
 
     Text rtext(text, type);
-    m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
+    m_textExampleLabel->setPixmap(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
 
     if (type == Text::Dynamic ||
 	type == Text::LocalDirection ||
@@ -1340,7 +1340,7 @@ EventEditDialog::slotDurationChanged(int value)
 {
     timeT error = 0;
     m_durationDisplay->setPixmap
-	(m_notePixmapFactory.makeNoteMenuPixmap(timeT(value), error));
+	(NotePixmapFactory::toQPixmap(m_notePixmapFactory.makeNoteMenuPixmap(timeT(value), error)));
 
     if (error >= value / 2) {
 	m_durationDisplayAux->setText("++ ");
@@ -1770,8 +1770,8 @@ TempoDialog::updateBeatLabels(double tempo)
 			       (strtoqstr("menu-" + beatName)));
 */
 	timeT error = 0;
-	m_tempoBeat->setPixmap(npf.makeNoteMenuPixmap(beat, error));
-	if (error) m_tempoBeat->setPixmap(npf.makeUnknownPixmap());
+	m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(beat, error)));
+	if (error) m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap(npf.makeUnknownPixmap()));
 
 	m_tempoBeatsPerMinute->setText
 	    (QString("= %1 )").arg
@@ -1945,7 +1945,7 @@ ClefDialog::slotClefDown()
 void
 ClefDialog::redrawClefPixmap()
 {
-    QCanvasPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef);
+    QPixmap pmap = NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeClefDisplayPixmap(m_clef));
     m_clefLabel->setPixmap(pmap);
     QString name(strtoqstr(m_clef.getClefType()));
     name = name.left(1).upper() + name.right(name.length() - 1);
@@ -1979,14 +1979,14 @@ QuantizeDialog::QuantizeDialog(QWidget *parent,
     m_unitCombo = new RosegardenComboBox(false, unitBox);
 
     NotePixmapFactory npf;
-    QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
+    QPixmap noMap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
 	Rosegarden::timeT time = m_standardQuantizations[i].unit;
 	Rosegarden::timeT error = 0;
 
-	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
+	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeNoteMenuPixmap(time, error));
 	QString label = npf.makeNoteMenuLabel(time, false, error);
 
 	if (error == 0) m_unitCombo->insertItem(pmap, label);

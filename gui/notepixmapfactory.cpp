@@ -248,6 +248,15 @@ NotePixmapFactory::getSize() const
     return m_font->getCurrentSize();
 }
 
+QPixmap
+NotePixmapFactory::toQPixmap(QCanvasPixmap* cp)
+{
+    QPixmap p = *cp;
+    delete cp;
+    return p;
+}
+
+
 void
 NotePixmapFactory::dumpStats(std::ostream &s)
 {
@@ -267,7 +276,7 @@ NotePixmapFactory::dumpStats(std::ostream &s)
 }
 
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 {
     clock_t startTime = clock();
@@ -1117,7 +1126,7 @@ NotePixmapFactory::drawTie(bool above, int length)
     }
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params) 
 {
     CharName charName(m_style->getRestCharName(params.m_noteType));
@@ -1182,16 +1191,16 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
         m_pm.drawPixmap(x, restY, *(dot.mask()));
     }
 
-    QCanvasPixmap canvasMap = makeCanvasPixmap(hotspot);
+    QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
     if (encache) {
-	m_dottedRestCache.insert(std::pair<CharName, QCanvasPixmap>
+	m_dottedRestCache.insert(std::pair<CharName, QCanvasPixmap*>
 				 (charName, canvasMap));
     }
     return canvasMap;
 }
 
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeClefPixmap(const Clef &clef) const
 {
     if (m_selected) {
@@ -1204,7 +1213,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef) const
     }
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeUnknownPixmap()
 {
     if (m_selected) {
@@ -1217,14 +1226,14 @@ NotePixmapFactory::makeUnknownPixmap()
     }
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeToolbarPixmap(const char *name)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    return QCanvasPixmap(pixmapDir + "/toolbar/" + name + ".xpm");
+    return new QCanvasPixmap(pixmapDir + "/toolbar/" + name + ".xpm");
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeNoteMenuPixmap(Rosegarden::timeT duration,
 				      Rosegarden::timeT &errorReturn)
 {
@@ -1311,7 +1320,7 @@ NotePixmapFactory::makeNoteMenuLabel(Rosegarden::timeT duration,
 }
 
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
@@ -1358,22 +1367,22 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
     return makeCanvasPixmap(m_pointZero);
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
 {
-    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap
-			     (m_style->getClefCharName(clef)));
+    QCanvasPixmap* clefPixmap = m_font->getCanvasPixmap
+			     (m_style->getClefCharName(clef));
 
     int lw = getLineSpacing();
-    int width = clefPixmap.width() + 6 * getNoteBodyWidth();
+    int width = clefPixmap->width() + 6 * getNoteBodyWidth();
 
     createPixmapAndMask(width, lw * 8 + 1);
 
     int h = clef.getAxisHeight();
     int y = (lw * 2) + ((8 - h) * lw) / 2;
     int x = 3 * getNoteBodyWidth();
-    m_p.drawPixmap(x, y - clefPixmap.offsetY(), clefPixmap);
-    m_pm.drawPixmap(x, y - clefPixmap.offsetY(), *(clefPixmap.mask()));
+    m_p.drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
+    m_pm.drawPixmap(x, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 2) + ((8 - h) * lw) / 2;
@@ -1381,10 +1390,12 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
 	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
     }
 
+    delete clefPixmap;
+
     return makeCanvasPixmap(m_pointZero);
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
@@ -1393,23 +1404,23 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
                          NoteCharacterNames::SHARP :
                          NoteCharacterNames::FLAT);
 
-    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap
-			     (m_style->getClefCharName(clef)));
+    QCanvasPixmap* clefPixmap = m_font->getCanvasPixmap
+			     (m_style->getClefCharName(clef));
     QPixmap accidentalPixmap(m_font->getPixmap(charName));
     QPoint hotspot(m_font->getHotspot(charName));
 
     int lw = getLineSpacing();
     int delta = accidentalPixmap.width() - 2*m_origin.x();
     int width = 11 * getAccidentalWidth(Rosegarden::Accidentals::Sharp) +
-	clefPixmap.width();
-    int x = clefPixmap.width() + 3 * delta;
+	clefPixmap->width();
+    int x = clefPixmap->width() + 3 * delta;
 
     createPixmapAndMask(width, lw * 8 + 1);
 
     int h = clef.getAxisHeight();
     int y = (lw * 2) + ((8 - h) * lw) / 2;
-    m_p.drawPixmap(2 * delta, y - clefPixmap.offsetY(), clefPixmap);
-    m_pm.drawPixmap(2 * delta, y - clefPixmap.offsetY(), *(clefPixmap.mask()));
+    m_p.drawPixmap(2 * delta, y - clefPixmap->offsetY(), *clefPixmap);
+    m_pm.drawPixmap(2 * delta, y - clefPixmap->offsetY(), *(clefPixmap->mask()));
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
@@ -1428,11 +1439,12 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 	m_pm.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
     }
 
+    delete clefPixmap;
     return makeCanvasPixmap(m_pointZero);
 }
     
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 {
     int nbh = getNoteBodyHeight();
@@ -1467,7 +1479,7 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
     return makeCanvasPixmap(QPoint(0, height/2));
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 {
     int thickness = getStaffLineThickness() * 2;
@@ -1586,7 +1598,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     return makeCanvasPixmap(hotspot);
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 {
     if (sig.isCommon()) {
@@ -1749,7 +1761,7 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
     return textFont;
 }    
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 {
     QString s(strtoqstr(text.getText()));
@@ -1779,7 +1791,7 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
     return makeCanvasPixmap(QPoint(2, 2));
 }
     
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
 {
     QString s(strtoqstr(text.getText()));
@@ -1845,14 +1857,14 @@ NotePixmapFactory::createPixmapAndMask(int width, int height)
     m_pm.setPen(Qt::white); m_pm.setBrush(Qt::white);
 }
 
-QCanvasPixmap
+QCanvasPixmap*
 NotePixmapFactory::makeCanvasPixmap(QPoint hotspot)
 {
     m_p.end();
     m_pm.end();
-    QCanvasPixmap p(*m_generatedPixmap, hotspot);
+    QCanvasPixmap* p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
     QBitmap m(*m_generatedMask);
-    p.setMask(m);
+    p->setMask(m);
     delete m_generatedPixmap;
     delete m_generatedMask;
     return p;

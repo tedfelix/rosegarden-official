@@ -40,7 +40,6 @@
 #include "widgets.h"
 #include "dialogs.h"
 #include "rosestrings.h"
-#include "Progress.h"
 #include "multiviewcommandhistory.h"
 
 #include "rosedebug.h"
@@ -744,7 +743,7 @@ AudioManagerDialog::slotRename()
 #endif
 
     if ( ok && !newText.isEmpty() )
-        audioFile->setName(std::string(newText));
+        audioFile->setName(qstrtostr(newText));
 
     slotPopulateFileList();
 }

@@ -288,22 +288,31 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                              m_fontName, m_fontSize));
     }
 
-    RosegardenProgressDialog *progressDlg = 0;
-
+    //
+    // layout
+    //
     if (showProgressive) {
 	show();
-        RG_DEBUG << "NotationView : setting up progress dialog\n";
+        kapp->processEvents();
 
-	progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
-                                                   100, this);
-	progressDlg->setAutoClose(false);
-        progressDlg->setAutoReset(true);
-        progressDlg->setMinimumDuration(500);
-        setupProgress(progressDlg);
-        progressDlg->show();
+//         RG_DEBUG << "NotationView : setting up progress dialog\n";
+
+//         // 	progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
+//         //                                                    100, this);
+// 	progressDlg = new KProgressDialog(0, "progressdialog",
+//                                           i18n("Starting..."),
+//                                           i18n("Starting..."));
+// 	progressDlg->setAutoClose(false);
+//         progressDlg->setAutoReset(true);
+//         progressDlg->setMinimumDuration(500);
+//         //         setupProgress(progressDlg);
+
+//         setupProgress(progressDlg->progressBar());
+
+//         m_progressDisplayer = PROGRESS_DIALOG;
     }
 
-    m_chordNameRuler->setComposition(&doc->getComposition());
+    m_chordNameRuler->setComposition(&(getDocument()->getComposition()));
 
     positionStaffs();
     m_currentStaff = 0;
@@ -329,13 +338,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	}
 	m_ok = true;
     } catch (ProgressReporter::Cancelled c) {
+	m_ok = false;
 	// when cancelled, m_ok is false -- checked by calling method
     }
 
-    if (showProgressive) {
-        delete progressDlg;
-        setupDefaultProgress();
-    }
 
     //
     // Connect signals
@@ -572,7 +578,59 @@ NotationView::~NotationView()
 
     NOTATION_DEBUG << "<- ~NotationView()\n";
 }
-    
+
+// void
+// NotationView::initialLayout()
+// {
+//     RG_DEBUG << "NotationView : setting up progress dialog\n";
+
+//     // 	progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
+//     //                                                    100, this);
+//     KProgressDialog* progressDlg = new KProgressDialog(0, "progressdialog",
+//                                       i18n("Starting..."),
+//                                       i18n("Starting..."));
+//     progressDlg->setAutoClose(false);
+//     progressDlg->setAutoReset(true);
+//     progressDlg->setMinimumDuration(500);
+//     //         setupProgress(progressDlg);
+
+//     setupProgress(progressDlg->progressBar());
+
+//     m_progressDisplayer = PROGRESS_DIALOG;
+
+//     m_chordNameRuler->setComposition(&(getDocument()->getComposition()));
+
+//     positionStaffs();
+//     m_currentStaff = 0;
+//     m_staffs[0]->setCurrent(true);
+
+//     m_hlayout->setPageMode(false);
+//     m_hlayout->setPageWidth(getPageWidth());
+
+//     try {
+// 	bool layoutApplied = applyLayout();
+// 	if (!layoutApplied) {
+// 	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+// 	} else {
+// 	    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+		
+// 		m_staffs[i]->renderAllElements();
+// 		m_staffs[i]->positionAllElements();
+// 		m_staffs[i]->getSegment().getRefreshStatus
+// 		    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+		
+// 		canvas()->update();
+// 	    }
+// 	}
+// 	m_ok = true;
+//     } catch (ProgressReporter::Cancelled c) {
+// 	m_ok = false;
+// 	// when cancelled, m_ok is false -- checked by calling method
+//     }
+
+// }
+
+
 void
 NotationView::removeViewLocalProperties(Rosegarden::Event *e)
 {
@@ -756,14 +814,14 @@ void NotationView::setupActions()
     for (std::vector<int>::iterator i = m_legatoDurations.begin();
 	 i != m_legatoDurations.end(); ++i) {
 
-	QPixmap pmap = 0;
-	QString label = 0;
+	QPixmap pmap;
+	QString label;
 
 	Note nearestNote = Note::getNearestNote(*i);
 	if (nearestNote.getDuration() == *i) {
 	    std::string noteName = nearestNote.getReferenceName(); 
 	    noteName = "menu-" + noteName;
-	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
+	    pmap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap(strtoqstr(noteName)));
 	    label = strtoqstr(nearestNote.getEnglishName());
 	} else {
 	    label = QString("%1").arg(*i);
@@ -834,8 +892,8 @@ void NotationView::setupActions()
         NoteActionData noteActionData = *actionDataIter;
         
         icon = QIconSet
-	    (m_toolbarNotePixmapFactory.makeToolbarPixmap
-	     (noteActionData.pixmapName));
+	    (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+	     (noteActionData.pixmapName)));
         noteAction = new KRadioAction(noteActionData.title,
 				      icon,
 				      noteActionData.keycode,
@@ -867,8 +925,8 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
 	 i < sizeof(actionsAccidental)/sizeof(actionsAccidental[0]); ++i) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-                        (actionsAccidental[i][3]));
+        icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+                        (actionsAccidental[i][3])));
         noteAction = new KRadioAction(i18n(actionsAccidental[i][0]), icon, 0, this,
                                       actionsAccidental[i][1],
                                       actionCollection(), actionsAccidental[i][2]);
@@ -881,35 +939,35 @@ void NotationView::setupActions()
     //
 
     // Treble
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble")));
     noteAction = new KRadioAction(i18n("&Treble Clef"), icon, 0, this,
                                   SLOT(slotTrebleClef()),
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Tenor
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor")));
     noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
                                   SLOT(slotTenorClef()),
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Alto
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto")));
     noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
                                   SLOT(slotAltoClef()),
                                   actionCollection(), "alto_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass")));
     noteAction = new KRadioAction(i18n("&Bass Clef"), icon, 0, this,
                                   SLOT(slotBassClef()),
                                   actionCollection(), "bass_clef");
     noteAction->setExclusiveGroup("notes");
 
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("text")));
     noteAction = new KRadioAction(i18n("&Text"), icon, 0, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
@@ -924,7 +982,7 @@ void NotationView::setupActions()
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("select"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("select")));
     noteAction = new KRadioAction(i18n("&Select"), icon, 0,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
@@ -1009,13 +1067,13 @@ void NotationView::setupActions()
     new KAction(i18n(GroupMenuUnTupletCommand::getGlobalName()), 0, this,
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet")));
     (new KToggleAction(i18n("Tri&plet Insert Mode"), icon, Key_G,
 		       this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
 	setChecked(false);
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("chord"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
 		       this, SLOT(slotUpdateInsertModeStatus()),
 		      actionCollection(), "chord_mode"))->
@@ -1123,8 +1181,8 @@ void NotationView::setupActions()
         const MarkActionData &markActionData = *i;
         
         icon = QIconSet
-	    (m_toolbarNotePixmapFactory.makeToolbarPixmap
-	     (markActionData.pixmapName));
+	    (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+	     (markActionData.pixmapName)));
 
 	new KAction(i18n(markActionData.title),
 		    icon,
@@ -1182,7 +1240,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
 	 i < sizeof(actionsToolbars)/sizeof(actionsToolbars[0]); ++i) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3]));
+        icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3])));
 
         KToggleAction* toolbarAction = new KToggleAction
             (i18n(actionsToolbars[i][0]), icon, 0,
@@ -1249,48 +1307,48 @@ void NotationView::setupActions()
 		SLOT(slotCurrentStaffDown()), actionCollection(),
 		"cursor_down_staff");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-cursor-to-pointer"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-cursor-to-pointer")));
     new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
 		SLOT(slotJumpCursorToPlayback()), actionCollection(),
 		"cursor_to_playback_pointer");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-play"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-play")));
     new KAction(i18n("&Play"), icon, Key_Enter, this,
 		SIGNAL(play()), actionCollection(), "play");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-stop"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
 		SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-rewind"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
 		SIGNAL(rewindPlayback()), actionCollection(),
 		"playback_pointer_back_bar");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-ffwd"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
 		SIGNAL(fastForwardPlayback()), actionCollection(),
 		"playback_pointer_forward_bar");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-rewind-end"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
 		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
 		"playback_pointer_start");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-ffwd-end"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
 
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
-		    ("transport-pointer-to-cursor"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-pointer-to-cursor")));
     new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
 		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
 		"playback_pointer_to_cursor");
@@ -1639,7 +1697,7 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     setTool(inserter);
 
     m_currentNotePixmap->setPixmap
-        (m_toolbarNotePixmapFactory.makeToolbarPixmap(pixmapName));
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap(pixmapName)));
 
     emit changeCurrentNote(rest, n);
 }
@@ -2301,6 +2359,9 @@ void NotationView::installProgressEventFilter()
         RG_DEBUG << "NotationView::installProgressEventFilter()\n";
         kapp->installEventFilter(m_progressBar);
         m_progressEventFilterInstalled = true;
+    } else {
+        RG_DEBUG << "NotationView::installProgressEventFilter() - skipping install : "
+                 << m_progressDisplayer << "," << PROGRESS_BAR << endl;
     }
 }
 
@@ -2312,6 +2373,9 @@ void NotationView::removeProgressEventFilter()
         kapp->removeEventFilter(m_progressBar);
         m_progressBar->setValue(0);
         m_progressEventFilterInstalled = false;
+    } else {
+        RG_DEBUG << "NotationView::removeProgressEventFilter() - skipping remove : "
+                 << m_progressDisplayer << "," << PROGRESS_BAR << endl;
     }
 }
     

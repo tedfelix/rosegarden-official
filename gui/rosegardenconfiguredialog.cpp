@@ -371,8 +371,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     NotePixmapFactory npf;
     for (Note::Type type = Note::Shortest; type <= Note::Longest; ++type) {
 	Note note(type);
-	QPixmap pmap = npf.makeToolbarPixmap
-	    (strtoqstr((std::string("menu-") + note.getReferenceName())));
+	QPixmap pmap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap
+	    (strtoqstr((std::string("menu-") + note.getReferenceName()))));
 	m_smoothing->insertItem(pmap, strtoqstr(note.getEnglishName()));
 	if (defaultSmoothing == type) {
 	    m_smoothing->setCurrentItem(m_smoothing->count() - 1);

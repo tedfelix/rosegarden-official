@@ -169,8 +169,8 @@ NoteInserter::NoteInserter(NotationView* view)
     config->setGroup("Notation Options");
     m_autoBeam = config->readBoolEntry("autobeam", true);
     m_matrixInsertType = (config->readNumEntry("inserttype", 0) > 0);
-    m_defaultStyle = config->readEntry
-	("style", strtoqstr(NoteStyleFactory::DefaultStyle));
+    m_defaultStyle = qstrtostr(config->readEntry
+	("style", strtoqstr(NoteStyleFactory::DefaultStyle)));
 
     KToggleAction *autoBeamAction =
 	new KToggleAction(i18n("Auto-Beam when appropriate"), 0, this,
@@ -181,8 +181,8 @@ NoteInserter::NoteInserter(NotationView* view)
     for (unsigned int i = 0; i < 6; ++i) {
 
 	icon = QIconSet
-	    (m_nParentView->getToolbarNotePixmapFactory()->
-	     makeToolbarPixmap(m_actionsAccidental[i][3]));
+	    (NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	     makeToolbarPixmap(m_actionsAccidental[i][3])));
         KRadioAction* noteAction = new KRadioAction(i18n(m_actionsAccidental[i][0]),
                                                     icon, 0, this,
                                                     m_actionsAccidental[i][1],
@@ -192,14 +192,14 @@ NoteInserter::NoteInserter(NotationView* view)
     }
 
     icon = QIconSet
-	(m_nParentView->getToolbarNotePixmapFactory()->
-	 makeToolbarPixmap("dotted-crotchet"));
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("dotted-crotchet")));
     new KToggleAction(i18n("Dotted note"), icon, 0, this,
                       SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
 
-    icon = QIconSet(m_nParentView->getToolbarNotePixmapFactory()->
-		    makeToolbarPixmap("select"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
@@ -209,8 +209,8 @@ NoteInserter::NoteInserter(NotationView* view)
                 "erase");
 
     icon = QIconSet
-	(m_nParentView->getToolbarNotePixmapFactory()->
-	 makeToolbarPixmap("rest-crotchet"));
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("rest-crotchet")));
     new KAction(i18n("Switch to Inserting Rests"), icon, 0, this,
                 SLOT(slotRestsSelected()), actionCollection(),
                 "rests");
@@ -648,14 +648,14 @@ RestInserter::RestInserter(NotationView* view)
     QIconSet icon;
 
     icon = QIconSet
-	(m_nParentView->getToolbarNotePixmapFactory()->
-	 makeToolbarPixmap("dotted-rest-crotchet"));
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("dotted-rest-crotchet")));
     new KToggleAction(i18n("Dotted rest"), icon, 0, this,
                       SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
 
-    icon = QIconSet(m_nParentView->getToolbarNotePixmapFactory()->
-		    makeToolbarPixmap("select"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
@@ -665,8 +665,8 @@ RestInserter::RestInserter(NotationView* view)
                 "erase");
 
     icon = QIconSet
-	(m_nParentView->getToolbarNotePixmapFactory()->
-	 makeToolbarPixmap("crotchet"));
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet")));
     new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
                 SLOT(slotNotesSelected()), actionCollection(),
                 "notes");
@@ -865,14 +865,14 @@ NotationEraser::NotationEraser(NotationView* view)
                       "toggle_rest_collapse");
 
     QIconSet icon
-	(m_nParentView->getToolbarNotePixmapFactory()->
-	 makeToolbarPixmap("crotchet"));
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet")));
     new KAction(i18n("Switch to Insert Tool"), icon, 0, this,
                       SLOT(slotInsertSelected()), actionCollection(),
                       "insert");
 
-    icon = QIconSet(m_nParentView->getToolbarNotePixmapFactory()->
-		    makeToolbarPixmap("select"));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+		    makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
@@ -934,8 +934,8 @@ NotationSelector::NotationSelector(NotationView* view)
             this,         SLOT(slotHideSelection()));
 
     QIconSet icon
-	(m_nParentView->getToolbarNotePixmapFactory()->
-	 makeToolbarPixmap("crotchet"));
+	(NotePixmapFactory::toQPixmap(m_nParentView->getToolbarNotePixmapFactory()->
+	 makeToolbarPixmap("crotchet")));
     new KToggleAction(i18n("Switch to Insert Tool"), icon, 0, this,
                       SLOT(slotInsertSelected()), actionCollection(),
                       "insert");

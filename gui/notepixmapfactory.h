@@ -145,22 +145,22 @@ public:
     void setNoteStyle(NoteStyle *style) { m_style = style; }
     const NoteStyle *getNoteStyle() const { return m_style; } 
 
-    QCanvasPixmap makeNotePixmap(const NotePixmapParameters &parameters);
-    QCanvasPixmap makeRestPixmap(const NotePixmapParameters &parameters);
-    QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
-    QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
+    QCanvasPixmap* makeNotePixmap(const NotePixmapParameters &parameters);
+    QCanvasPixmap* makeRestPixmap(const NotePixmapParameters &parameters);
+    QCanvasPixmap* makeClefPixmap(const Rosegarden::Clef &clef) const;
+    QCanvasPixmap* makeKeyPixmap(const Rosegarden::Key &key,
 				const Rosegarden::Clef &clef);
-    QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
-    QCanvasPixmap makeHairpinPixmap(int length, bool isCrescendo);
-    QCanvasPixmap makeSlurPixmap(int length, int dy, bool above);
-    QCanvasPixmap makeUnknownPixmap();
-    QCanvasPixmap makeClefDisplayPixmap(const Rosegarden::Clef &clef);
-    QCanvasPixmap makeKeyDisplayPixmap(const Rosegarden::Key &key,
+    QCanvasPixmap* makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
+    QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
+    QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above);
+    QCanvasPixmap* makeUnknownPixmap();
+    QCanvasPixmap* makeClefDisplayPixmap(const Rosegarden::Clef &clef);
+    QCanvasPixmap* makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);
-    QCanvasPixmap makeTextPixmap(const Rosegarden::Text &text);
+    QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
 
-    QCanvasPixmap makeToolbarPixmap(const char *name);
-    QCanvasPixmap makeNoteMenuPixmap(Rosegarden::timeT duration,
+    QCanvasPixmap* makeToolbarPixmap(const char *name);
+    QCanvasPixmap* makeNoteMenuPixmap(Rosegarden::timeT duration,
 				     Rosegarden::timeT &errorReturn);
     QString makeNoteMenuLabel(Rosegarden::timeT duration,
 			      bool brief,
@@ -189,6 +189,16 @@ public:
     int getKeyWidth(const Rosegarden::Key &key) const;
     int getTextWidth(const Rosegarden::Text &text) const;
 
+    /**
+     * We need this function because as of Qt 3.1, QCanvasPixmap
+     * is no longer copyable by value, while QPixmap still is.
+     *
+     * So all the makeXXPixmap are now returning QCanvasPixmap*
+     * instead of QCanvasPixmap, but we need an easy way to
+     * convert them to QPixmap, since we use them that
+     * way quite often (to generate toolbar button icons for instance).
+     */
+    static QPixmap toQPixmap(QCanvasPixmap*);
     static void dumpStats(std::ostream &);
 
 protected:
@@ -215,10 +225,10 @@ protected:
 
     QFont getTextFont(const Rosegarden::Text &text) const;
 
-    QCanvasPixmap makeAnnotationPixmap(const Rosegarden::Text &text);
+    QCanvasPixmap* makeAnnotationPixmap(const Rosegarden::Text &text);
 
     void createPixmapAndMask(int width, int height);
-    QCanvasPixmap makeCanvasPixmap(QPoint hotspot);
+    QCanvasPixmap* makeCanvasPixmap(QPoint hotspot);
 
     //--------------- Data members ---------------------------------
 
@@ -249,7 +259,7 @@ protected:
     QPainter m_p;
     QPainter m_pm;
 
-    typedef __HASH_NS::hash_map<CharName, QCanvasPixmap,
+    typedef __HASH_NS::hash_map<CharName, QCanvasPixmap*,
 	                        CharNameHash, CharNamesEqual> NotePixmapCache;
     mutable NotePixmapCache m_dottedRestCache;
 

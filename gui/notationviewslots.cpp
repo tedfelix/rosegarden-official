@@ -1000,7 +1000,7 @@ void NotationView::slotSetStyleFromAction()
 			  this);
 
 	addCommandToHistory(new TransformsMenuChangeStyleCommand
-			    (NoteStyleName(name),
+			    (NoteStyleName(qstrtostr(name)),
 			     *m_currentEventSelection));
     } else {
 	KMessageBox::sorry
@@ -1700,7 +1700,7 @@ void NotationView::slotDoubleFlat()
 void NotationView::slotTrebleClef()
 {
     m_currentNotePixmap->setPixmap
-        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Treble);
@@ -1710,7 +1710,7 @@ void NotationView::slotTrebleClef()
 void NotationView::slotTenorClef()
 {
     m_currentNotePixmap->setPixmap
-        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Tenor);
@@ -1720,7 +1720,7 @@ void NotationView::slotTenorClef()
 void NotationView::slotAltoClef()
 {
     m_currentNotePixmap->setPixmap
-        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Alto);
@@ -1730,7 +1730,7 @@ void NotationView::slotAltoClef()
 void NotationView::slotBassClef()
 {
     m_currentNotePixmap->setPixmap
-        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Bass);
@@ -1742,7 +1742,7 @@ void NotationView::slotBassClef()
 void NotationView::slotText()
 {
     m_currentNotePixmap->setPixmap
-        (m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("text")));
     setTool(m_toolBox->getTool(TextInserter::ToolName));
     setMenuStates();
 }
