@@ -237,9 +237,9 @@ public:
     static SegmentMmapper* makeMmapperForSegment(RosegardenGUIDoc*, Rosegarden::Segment*,
                                                  const QString& fileName);
 
-    static MetronomeMmapper* makeMetronome(RosegardenGUIDoc*);
+    static MetronomeMmapper*      makeMetronome(RosegardenGUIDoc*);
     static TimeSigSegmentMmapper* makeTimeSig(RosegardenGUIDoc*);
-    static TempoSegmentMmapper* makeTempo(RosegardenGUIDoc*);
+    static TempoSegmentMmapper*   makeTempo(RosegardenGUIDoc*);
 };
 
 //----------------------------------------

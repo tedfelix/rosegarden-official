@@ -56,6 +56,8 @@ class SegmentMmapper;
 class CompositionMmapper;
 class ControlBlockMmapper;
 class MetronomeMmapper;
+class TempoSegmentMmapper;
+class TimeSigSegmentMmapper;
 
 namespace Rosegarden
 {
@@ -224,14 +226,18 @@ protected:
     void resetCompositionMmapper();
     void resetControlBlockMmapper();
     void resetMetronomeMmapper();
+    void resetTempoSegmentMmapper();
+    void resetTimeSigSegmentMmapper();
     
     //--------------- Data members ---------------------------------
 
-    Rosegarden::MappedComposition m_mC;
-    RosegardenGUIDoc    *m_doc;
-    CompositionMmapper  *m_compositionMmapper;
-    ControlBlockMmapper *m_controlBlockMmapper;
-    MetronomeMmapper    *m_metronomeMmapper;
+    Rosegarden::MappedComposition  m_mC;
+    RosegardenGUIDoc              *m_doc;
+    CompositionMmapper            *m_compositionMmapper;
+    ControlBlockMmapper           *m_controlBlockMmapper;
+    MetronomeMmapper              *m_metronomeMmapper;
+    TempoSegmentMmapper           *m_tempoSegmentMmapper;
+    TimeSigSegmentMmapper         *m_timeSigSegmentMmapper;
 
     std::vector<Segment*> m_addedSegments;
     std::vector<Segment*> m_removedSegments;

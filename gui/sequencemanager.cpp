@@ -57,6 +57,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_compositionMmapper(new CompositionMmapper(m_doc)),
     m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
     m_metronomeMmapper(SegmentMmapperFactory::makeMetronome(m_doc)),
+    m_tempoSegmentMmapper(SegmentMmapperFactory::makeTempo(m_doc)),
+    m_timeSigSegmentMmapper(SegmentMmapperFactory::makeTimeSig(m_doc)),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
@@ -1340,6 +1342,22 @@ void SequenceManager::resetMetronomeMmapper()
     m_metronomeMmapper = SegmentMmapperFactory::makeMetronome(m_doc);
 }
 
+void SequenceManager::resetTempoSegmentMmapper()
+{
+    SEQMAN_DEBUG << "SequenceManager::resetTempoSegmentMmapper()\n";
+
+    delete m_tempoSegmentMmapper;
+    m_tempoSegmentMmapper = SegmentMmapperFactory::makeTempo(m_doc);
+}
+
+void SequenceManager::resetTimeSigSegmentMmapper()
+{
+    SEQMAN_DEBUG << "SequenceManager::resetTimeSigSegmentMmapper()\n";
+
+    delete m_timeSigSegmentMmapper;
+    m_timeSigSegmentMmapper = SegmentMmapperFactory::makeTimeSig(m_doc);
+}
+
 void SequenceManager::resetControlBlockMmapper()
 {
     SEQMAN_DEBUG << "SequenceManager::resetControlBlockMmapper()\n";
@@ -1536,6 +1554,8 @@ void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
     }
 
     m_metronomeMmapper->refresh();
+    m_timeSigSegmentMmapper->refresh();
+    m_tempoSegmentMmapper->refresh();
 }
 
 void SequenceManager::metronomeChanged(const Composition *)
@@ -1574,9 +1594,11 @@ void SequenceManager::tempoChanged(const Composition *)
         segmentModified(i->first);
     }
 
-    // and metronome
+    // and metronome, time sig and tempo
     //
     m_metronomeMmapper->refresh();
+    m_timeSigSegmentMmapper->refresh();
+    m_tempoSegmentMmapper->refresh();
 }
 
 void

@@ -553,7 +553,7 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
 bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::MappedComposition* c,
                                                                  const Rosegarden::RealTime& endTime)
 {
-     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << endTime << endl;
+    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << endTime << endl;
 
     m_currentTime = endTime;
 
@@ -570,21 +570,21 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 
             MmappedSegment::iterator* iter = m_iterators[i];
 
-             SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : checking segment #"
-                             << i << " " << iter->getSegment()->getFileName() << endl;
+            SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : checking segment #"
+                            << i << " " << iter->getSegment()->getFileName() << endl;
 
             if (!validSegments[i]) {
-                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get for this slice in segment #"
-                                 << i << endl;
+                SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get for this slice in segment #"
+                                << i << endl;
                 continue; // skip this segment
             }
 
             bool evtIsFromMetronome = iter->getSegment()->isMetronome();
 
             if (iter->atEnd()) {
-                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
-                                 << " reached end of segment #"
-                                 << i << endl;
+                SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
+                                << " reached end of segment #"
+                                << i << endl;
                 continue;
             } else if (!evtIsFromMetronome) {
                 eventsRemaining = true;
@@ -599,24 +599,29 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                     evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getTrackId()));
                 }
                 
-                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
-                                 << " inserting evt from segment #"
-                                 << i
-                                 << " : trackId: " << evt->getTrackId()
-                                 << " - inst: " << evt->getInstrument()
-                                 << " - type: " << evt->getType()
-                                 << " - time: " << evt->getEventTime()
-                                 << " - duration: " << evt->getDuration()
-                                 << " - data1: " << (unsigned int)evt->getData1()
-                                 << " - data2: " << (unsigned int)evt->getData2()
-                                 << " - metronome event: " << evtIsFromMetronome
-                                 << endl;
-                if (acceptEvent(evt, evtIsFromMetronome)) {
-                     SEQUENCER_DEBUG << "inserting event\n";
+                SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
+                                << " inserting evt from segment #"
+                                << i
+                                << " : trackId: " << evt->getTrackId()
+                                << " - inst: " << evt->getInstrument()
+                                << " - type: " << evt->getType()
+                                << " - time: " << evt->getEventTime()
+                                << " - duration: " << evt->getDuration()
+                                << " - data1: " << (unsigned int)evt->getData1()
+                                << " - data2: " << (unsigned int)evt->getData2()
+                                << " - metronome event: " << evtIsFromMetronome
+                                << endl;
+
+                if (evt->getType() == MappedEvent::TimeSignature) {
+                    // do something
+                } else if (evt->getType() == MappedEvent::TempoSignature) {
+                    // do something else
+                } else if (acceptEvent(evt, evtIsFromMetronome)) {
+                    SEQUENCER_DEBUG << "inserting event\n";
                     c->insert(evt);
                 } else {
                     
-                     SEQUENCER_DEBUG << "skipping event\n";
+                    SEQUENCER_DEBUG << "skipping event\n";
                 }
             
                 if (!evtIsFromMetronome) foundOneEvent = true;
@@ -624,15 +629,15 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 
             } else {
                 validSegments[i] = false; // no more events to get from this segment
-                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"
-                                 << i << endl;
+                SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"
+                                << i << endl;
             }
 
         }
 
     } while (foundOneEvent);
 
-     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
+    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
 
     return eventsRemaining || foundOneEvent;
 }
