@@ -149,9 +149,16 @@ NoteInserter::NoteInserter(NotationView* view)
     : NotationTool("NoteInserter", view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
+      m_autoBeam(true),
       m_accidental(Accidentals::NoAccidental)
 {
     QIconSet icon;
+
+    KToggleAction *autoBeamAction =
+	new KToggleAction(i18n("Auto-Beam after insert"), 0, this,
+			  SLOT(slotToggleAutoBeam()), actionCollection(),
+			  "toggle_auto_beam");
+    autoBeamAction->setChecked(true);
 
     for (unsigned int i = 0; i < 6; ++i) {
 
@@ -200,6 +207,7 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
     : NotationTool(menuName, view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
+      m_autoBeam(false),
       m_accidental(Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
@@ -331,7 +339,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 {
     NoteInsertionCommand *command = 
 	new NoteInsertionCommand
-        (segment, time, endTime, note, pitch, accidental);
+        (segment, time, endTime, note, pitch, accidental, m_autoBeam);
     m_nParentView->addCommandToHistory(command);
     
     kdDebug(KDEBUG_AREA) << "NoteInserter::doAddCommand: accidental is "
@@ -414,6 +422,11 @@ void NoteInserter::slotToggleDot()
 {
     // TODO : sync. this with the NotationView toolbars
     m_noteDots = (m_noteDots) ? 0 : 1;
+}
+
+void NoteInserter::slotToggleAutoBeam()
+{
+    m_autoBeam = !m_autoBeam;
 }
 
 void NoteInserter::slotEraseSelected()

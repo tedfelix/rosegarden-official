@@ -34,7 +34,8 @@ public:
 			 Rosegarden::timeT endTime,
 			 Rosegarden::Note note,
 			 int pitch,
-			 Rosegarden::Accidental accidental);
+			 Rosegarden::Accidental accidental,
+			 bool autoBeam);
     virtual ~NoteInsertionCommand();
 
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
@@ -42,9 +43,12 @@ public:
 protected:
     virtual void modifySegment();
 
+    Rosegarden::timeT m_insertionTime;
     Rosegarden::Note m_note;
     int m_pitch;
     Rosegarden::Accidental m_accidental;
+    bool m_autoBeam;
+
     Rosegarden::Event *m_lastInsertedEvent;
 };
 

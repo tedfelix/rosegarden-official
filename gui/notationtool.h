@@ -173,6 +173,7 @@ protected slots:
     void slotDoubleSharp();
     void slotDoubleFlat();
     void slotToggleDot();
+    void slotToggleAutoBeam();
 
     void slotEraseSelected();
     void slotSelectSelected();
@@ -183,6 +184,7 @@ protected:
 
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
+    bool m_autoBeam;
 
     Rosegarden::Accidental m_accidental;
 

@@ -56,11 +56,16 @@ using std::endl;
 
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
-                                           Accidental accidental) :
-    BasicCommand("Insert Note", segment, time, endTime),
+                                           Accidental accidental,
+					   bool autoBeam) :
+    BasicCommand("Insert Note", segment,
+		 (autoBeam ? segment.getBarStartForTime(time) : time),
+		 (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
+    m_insertionTime(time),
     m_note(note),
     m_pitch(pitch),
     m_accidental(accidental),
+    m_autoBeam(autoBeam),
     m_lastInsertedEvent(0)
 {
     // nothing
@@ -77,14 +82,18 @@ NoteInsertionCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     Segment::iterator i =
-        helper.insertNote(getBeginTime(), m_note, m_pitch, m_accidental);
+        helper.insertNote(m_insertionTime, m_note, m_pitch, m_accidental);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+
+    if (m_autoBeam) {
+	helper.autoBeam(m_insertionTime, m_insertionTime, GROUP_TYPE_BEAMED);
+    }
 }
 
 
 RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note) :
-    NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental)
+    NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental, false)
 {
     Command::setName("Insert Rest");
 }
@@ -99,8 +108,7 @@ RestInsertionCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
-    Segment::iterator i =
-        helper.insertRest(getBeginTime(), m_note);
+    Segment::iterator i = helper.insertRest(m_insertionTime, m_note);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
 }
 

@@ -262,6 +262,8 @@ bool RG21Loader::parseIndicationStart()
 	}
 	m_tieStatus = 2;
 
+	kdDebug(KDEBUG_AREA) << "rg21io: Indication start: it's a tie" << endl;
+
     } else {
 
 	// Jeez.  Whose great idea was it to place marks _after_ the
@@ -276,6 +278,7 @@ bool RG21Loader::parseIndicationStart()
 
 	Indication indication(indicationType, 0);
 	Event *e = indication.getAsEvent(indicationTime);
+	e->setMaybe<Int>("indicationId", indicationId);
 	setGroupProperties(e);
 	m_indicationsExtant[indicationId] = e;
 
@@ -284,6 +287,10 @@ bool RG21Loader::parseIndicationStart()
 	// before then (e.g. close-group)
 
 	m_currentSegment->insert(e);
+
+	kdDebug(KDEBUG_AREA) << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:" << endl;
+	e->dump(cerr);
+
     }
 
     // other indications not handled yet
@@ -297,14 +304,17 @@ void RG21Loader::closeIndication()
     unsigned int indicationId = m_tokens[2].toUInt();
     EventIdMap::iterator i = m_indicationsExtant.find(indicationId);
 
+    kdDebug(KDEBUG_AREA) << "rg21io: Indication close: indication id is " << indicationId << endl;
+
     // this is normal (for ties):
     if (i == m_indicationsExtant.end()) return;
 
     Event *indicationEvent = i->second;
     m_indicationsExtant.erase(i);
 
-    indicationEvent->set<Int>(Indication::IndicationDurationPropertyName,
-			m_currentSegmentTime - indicationEvent->getAbsoluteTime());
+    indicationEvent->set<Int>
+	(Indication::IndicationDurationPropertyName,
+	 m_currentSegmentTime - indicationEvent->getAbsoluteTime());
 }
 
 void RG21Loader::closeGroup()
@@ -350,6 +360,23 @@ void RG21Loader::closeGroup()
 		prev = absoluteTime;
 
 		e->set<Int>(TUPLET_NOMINAL_DURATION, duration);
+		
+		// To change the time of an event, we need to erase &
+		// re-insert it.  But erasure will delete the event, and
+		// if it's an indication event that will invalidate our
+		// indicationsExtant entry.  Hence this unpleasantness:
+
+		if ((*i)->isa(Indication::EventType)) {
+		    long indicationId = 0;
+		    if ((*i)->get<Int>("indicationId", indicationId)) {
+			EventIdMap::iterator ei =
+			    m_indicationsExtant.find(indicationId);
+			if (ei != m_indicationsExtant.end()) {
+			    m_indicationsExtant.erase(ei);
+			    m_indicationsExtant[indicationId] = e;
+			}
+		    }
+		}
 
 		toInsert.push_back(e);
 		toErase.push_back(i);

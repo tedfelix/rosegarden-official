@@ -579,6 +579,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     if (!(*getShortestElement())->event()->get<Int>(NOTE_TYPE,
                                                     shortestNoteType)) {
         kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
+	kdDebug(KDEBUG_AREA) << "(Event dump follows)" << endl;
+	(*getShortestElement())->event()->dump(cerr);
     }
     int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
     int sl = staff.getNotePixmapFactory().getStemLength();

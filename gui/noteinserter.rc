@@ -7,6 +7,8 @@
   <Action name="erase" />
   <Action name="rests" />
   <Separator/>
+  <Action name="toggle_auto_beam" />
+  <Separator/>
   <Action name="toggle_dot" />
   <Separator/>
   <Action name="no_accidental" />
