@@ -419,7 +419,7 @@ int main(int argc, char *argv[])
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
     aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
-    aboutData.addCredit("Michael McIntyre", I18N_NOOP("Lilypond output fixes and improvements\nmiscellaneous patches\nsundry pixmaps and toolbars\nSpanish translation"), "dmmcintyr@users.sourceforge.net");
+    aboutData.addCredit("Michael McIntyre", I18N_NOOP("notation selection event filter\nextra toolbars/pixmaps\nnotation/Lilypond patches\nauthor of \"Using Rosegarden\""), "dmmcintyr@users.sourceforge.net");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
     aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translatio\nALSA research"), "plcl@bigfoot.com");
@@ -430,6 +430,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
     aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
     aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
+    aboutData.addCredit("Bernd Weber", I18N_NOOP("German translation (Arbeiten mit Rosegarde)"), "weber.freiburg@freenet.de");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     
@@ -610,7 +611,6 @@ int main(int argc, char *argv[])
 #ifdef Q_WS_X11
     XSetErrorHandler( _x_errhandler );
 #endif
-
     return kapp->exec();
 }  
 
