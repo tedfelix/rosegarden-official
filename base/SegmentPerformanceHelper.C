@@ -151,7 +151,7 @@ SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 {
     return segment().getComposition()->getRealTimeDifference
 	((*i)->getAbsoluteTime(),
-	 (*i)->getAbsoluteTime() + (*i)->getDuration());
+	 (*i)->getAbsoluteTime() + getSoundingDuration(i));
 }
 
 
