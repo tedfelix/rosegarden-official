@@ -1699,7 +1699,7 @@ MatrixView::initActionsToolbar()
 
     // The SnapGrid combo
     //
-    QLabel *sLabel = new QLabel(i18n("Grid"), actionsToolbar);
+    QLabel *sLabel = new QLabel(i18n(" Grid: "), actionsToolbar, "kde toolbar widget");
     sLabel->setIndent(10);
 
     using Rosegarden::Note;
@@ -1744,7 +1744,7 @@ MatrixView::initActionsToolbar()
 
     // Quantize combo
     //
-    QLabel *qLabel = new QLabel(i18n("Quantize"), actionsToolbar);
+    QLabel *qLabel = new QLabel(i18n(" Quantize: "), actionsToolbar, "kde toolbar widget");
     qLabel->setIndent(10);
 
     m_quantizeCombo = new KComboBox(actionsToolbar);
@@ -1794,11 +1794,11 @@ MatrixView::initZoomToolbar()
     }
 
     m_hZoomSlider = new ZoomSlider<double>
-        (zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
+        (zoomSizes, -1, QSlider::Horizontal, zoomToolbar, "kde toolbar widget");
     m_hZoomSlider->setTracking(true);
     m_hZoomSlider->setFocusPolicy(QWidget::NoFocus);
 
-    m_zoomLabel = new QLabel(zoomToolbar);
+    m_zoomLabel = new QLabel(zoomToolbar, "kde toolbar widget");
     m_zoomLabel->setIndent(10);
     m_zoomLabel->setFixedWidth(80);
 

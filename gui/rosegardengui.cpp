@@ -688,7 +688,7 @@ void RosegardenGUIApp::initZoomToolbar()
 
     zoomToolbar->setBarPos(KToolBar::Right);
 
-    new QLabel(i18n("  Zoom:  "), zoomToolbar);
+    new QLabel(i18n("  Zoom:  "), zoomToolbar, "kde toolbar widget");
 
     std::vector<double> zoomSizes; // in units-per-pixel
     double defaultBarWidth44 = 100.0;
@@ -704,10 +704,10 @@ void RosegardenGUIApp::initZoomToolbar()
     QString maxZoom = QString("%1%").arg(factors[(sizeof(factors)/sizeof(factors[0])) - 1] * 100.0);
 
     m_zoomSlider = new ZoomSlider<double>
-        (zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
+        (zoomSizes, -1, QSlider::Horizontal, zoomToolbar, "kde toolbar widget");
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
-    m_zoomLabel = new QLabel(minZoom, zoomToolbar);
+    m_zoomLabel = new QLabel(minZoom, zoomToolbar, "kde toolbar widget");
     m_zoomLabel->setIndent(10);
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
