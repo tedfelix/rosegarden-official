@@ -118,7 +118,12 @@ protected:
     int m_currentBottomWidgetHeight;
 
     bool m_smoothScroll;
+    int m_smoothScrollTimeInterval;
+    int m_minDeltaScroll;
     QTime m_scrollTimer;
+    QTime m_scrollAccelerationTimer;
+    static const int DefaultSmoothScrollTimeInterval;
+    static const int DefaultMinDeltaScroll;
 };
 
 

@@ -32,7 +32,9 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
     : QCanvasView(canvas, parent, name, f),
       m_bottomWidget(0),
       m_currentBottomWidgetHeight(-1),
-      m_smoothScroll(true)
+      m_smoothScroll(true),
+      m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
+      m_minDeltaScroll(DefaultMinDeltaScroll)
 {
 }
 
@@ -127,7 +129,8 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 	// moving off the right hand side of the view   
 
 	int delta = diff / 6;
-	if (delta < std::min(diff, 10)) delta = std::min(diff, 10);
+        int diff10 = std::min(diff, m_minDeltaScroll);
+        delta = std::max(delta, diff10);
 
 	hbar->setValue(hbar->value() + delta);
 
@@ -136,20 +139,41 @@ void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
 	// moving off the left
 
 	int delta = -diff / 6;
-	if (delta < std::min(-diff, 10)) delta = std::min(-diff, 10);
+        int diff10 = std::min(-diff, m_minDeltaScroll);
+        delta = std::max(delta, diff10);
 
 	hbar->setValue(hbar->value() - delta);
 
     }
 }
 
+const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 20;
+const int RosegardenCanvasView::DefaultMinDeltaScroll = 10;
+
 bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
+
     if (m_smoothScroll) {
+        int ta = m_scrollAccelerationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
-        if (t < 20)
+
+        if (t < m_smoothScrollTimeInterval) {
+
             return false;
-        else {
+
+        } else {
+
+            if (ta > 1000) {
+                // reset smoothScrollTimeInterval
+                m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
+                m_minDeltaScroll = DefaultMinDeltaScroll;
+                m_scrollAccelerationTimer.restart();
+            } else if (ta > 100) {
+                m_smoothScrollTimeInterval /= 2;
+                m_minDeltaScroll *= 1.5;
+                m_scrollAccelerationTimer.restart();
+            }
+            
             m_scrollTimer.restart();
             return true;
         }
@@ -180,7 +204,8 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 	// moving off up
 
 	int delta = diff / 6;
-	if (delta < std::min(diff, 10)) delta = std::min(diff, 10);
+        int diff10 = std::min(diff, m_minDeltaScroll);
+        delta = std::max(delta, diff10);
 
 	vbar->setValue(vbar->value() + diff);
 
@@ -190,8 +215,9 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 	// moving off down
 
 	int delta = -diff / 6;
-	if (delta < std::min(-diff, 10)) delta = std::min(-diff, 10);
-
+        int diff10 = std::min(-diff, m_minDeltaScroll);
+        delta = std::max(delta, diff10);
+        
 	vbar->setValue(vbar->value() - delta);
 
     }
