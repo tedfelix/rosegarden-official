@@ -56,7 +56,8 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_startTime(startTime),
     m_duration(duration),
     m_selected(false),
-    m_snapGrid(snapGrid)
+    m_snapGrid(snapGrid),
+    m_repeatRectangle(0)
 {
     recalculateRectangle(true);
 }
@@ -66,7 +67,8 @@ SegmentItem::SegmentItem(Segment *segment,
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(segment),
     m_selected(false),
-    m_snapGrid(snapGrid)
+    m_snapGrid(snapGrid),
+    m_repeatRectangle(0)
 {
     recalculateRectangle(true);
 }
@@ -74,23 +76,51 @@ SegmentItem::SegmentItem(Segment *segment,
 SegmentItem::~SegmentItem()
 {
     kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
+    if (m_repeatRectangle) delete m_repeatRectangle;
 }
 
 void
 SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
     if (m_segment && inheritFromSegment) {
+
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
 	kdDebug(KDEBUG_AREA) << "inherited from segment" << endl;
+
+	if (m_segment->isRepeating()) {
+
+	    timeT repeatStart = m_startTime + m_duration;
+	    timeT repeatEnd = m_segment->getRepeatEndTime();
+
+	    if (!m_repeatRectangle) {
+		m_repeatRectangle = new QCanvasRectangle(0, 0, 1, 1, canvas());
+	    }
+
+	    m_repeatRectangle->setX
+		(m_snapGrid->getRulerScale()->getXForTime(repeatStart));
+	    m_repeatRectangle->setY
+		(m_snapGrid->getYBinCoordinate(m_track));
+	    m_repeatRectangle->setSize
+		((int)m_snapGrid->getRulerScale()->getWidthForDuration
+		 (repeatStart, repeatEnd - repeatStart) + 1,
+		 m_snapGrid->getYSnap());
+
+	    m_repeatRectangle->setZ(-1);
+	    m_repeatRectangle->show();
+	    
+	} else if (m_repeatRectangle) {
+	    delete m_repeatRectangle;
+	    m_repeatRectangle = 0;
+	}
     }
 	
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_track));
 
     setSize((int)m_snapGrid->getRulerScale()->
-	    getWidthForDuration(m_startTime, m_duration),
+	    getWidthForDuration(m_startTime, m_duration) + 1,
 	    m_snapGrid->getYSnap());
 }
 

@@ -435,6 +435,15 @@ public:
     bool isRepeating() const { return m_repeating; }
     void setRepeating(bool value) { m_repeating = value; }
 
+    /**
+     * If this Segment is repeating, calculate and return the time at
+     * which the repeating stops.  This is the start time of the
+     * following Segment on the same Track, if any, or else the end
+     * time of the Composition.  (If this Segment does not repeat,
+     * return the end time of the Segment.)
+     */
+    timeT getRepeatEndTime() const;
+
     Rosegarden::timeT getDelay() const { return m_delay; }
     void setDelay(const Rosegarden::timeT &delay) { m_delay = delay; }
 

@@ -184,7 +184,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
     
     show();
-//    kapp->processEvents();
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,

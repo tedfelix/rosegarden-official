@@ -624,6 +624,23 @@ Segment::getQuantizer() const
 }
 
 
+timeT
+Segment::getRepeatEndTime() const
+{
+    if (m_repeating && m_composition) {
+	Composition::iterator i(m_composition->findSegment(this));
+	assert(i != m_composition->end());
+	++i;
+	if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
+	    return (*i)->getStartTime();
+	} else {
+	    return m_composition->getDuration();
+	}
+    }
+    return getEndTime();
+}
+
+
 void Segment::notifyAdd(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();

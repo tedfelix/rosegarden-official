@@ -194,8 +194,8 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	// 
 	timeT seekEndTime = sliceEndElapsed;
 
-	if ((*it)->isRepeating())
-	{
+	if ((*it)->isRepeating()) seekEndTime = (*it)->getRepeatEndTime();
+/*!!!	{
 	    Composition::iterator scooter(it);
 	    if (++scooter != comp.end() &&
 		(*scooter)->getTrack() == (*it)->getTrack()) {
@@ -204,6 +204,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 		seekEndTime = (*scooter)->getStartTime();
 	    }
 	}
+*/
 
 	// No ending condition -- we do all that in the initial
 	// conditional within the loop, and subsequent breaks

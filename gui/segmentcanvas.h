@@ -118,6 +118,8 @@ protected:
 
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
+
+    QCanvasRectangle *m_repeatRectangle;
 };
 
 

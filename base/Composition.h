@@ -178,7 +178,19 @@ public:
     /**
      * Test whether a Segment exists in this Composition.
      */
-    bool contains(Segment *);
+    bool contains(const Segment *);
+
+    /**
+     * Return an iterator pointing at the given Segment, or end()
+     * if it does not exist in this Composition.
+     */
+    const_iterator findSegment(const Segment *);
+
+    /**
+     * Return an iterator pointing at the given Segment, or end()
+     * if it does not exist in this Composition.
+     */
+    iterator findSegment(Segment *);
 
     /**
      * Delete the Segment if it is part of the Composition

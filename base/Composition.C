@@ -326,10 +326,22 @@ Composition::detachSegment(Segment *p)
 }
 
 bool
-Composition::contains(Segment *s)
+Composition::contains(const Segment *s)
 {
     iterator i = find(begin(), end(), s);
     return (i != end());
+}
+
+Composition::iterator
+Composition::findSegment(Segment *s)
+{
+    return find(begin(), end(), s);
+}
+
+Composition::const_iterator
+Composition::findSegment(const Segment *s)
+{
+    return find(begin(), end(), s);
 }
 
 bool
