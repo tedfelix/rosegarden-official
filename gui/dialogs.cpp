@@ -2004,6 +2004,10 @@ ClefDialog::getConversionType() const
     return NoConversion;
 }
 
+//!!! This would probably be better with up/down buttons as well as
+//left/right ones.  The left/right buttons could choose clef type,
+//up/down choose octave offset
+
 void
 ClefDialog::slotClefUp()
 {
