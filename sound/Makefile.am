@@ -1,8 +1,15 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-# over stated path
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I$(top_srcdir)/gui -I$(top_srcdir)/base
+if NO_SOUND 
+else
+if HAVE_ALSA
+else
+arts_includes= -I$(kde_includes)/arts 
+endif
+endif
 
+# over stated path
+INCLUDES= $(all_includes) $(arts_includes) -I$(top_srcdir)/gui -I$(top_srcdir)/base
 
 COMPILE_FIRST = libRosegardenSound
 
@@ -58,6 +65,8 @@ libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
 
 else
 
+arts_libs=-lsoundserver_idl -lartsmidi -lartsflow -lartsmodules -lartskde 
+
 libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                     ArtsDriver.cpp \
                                     MidiRecord.cpp \
@@ -68,7 +77,7 @@ endif
 endif
 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
-libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules -lartskde @ALSA_LIBS@
+libRosegardenSequencer_la_LIBADD   = $(LIB_QT) $(arts_libs) libRosegardenSound.la ../base/libbase.la @ALSA_LIBS@
 
 libRosegardenSequencer_la_CFLAGS = @ALSA_CFLAGS@
 
