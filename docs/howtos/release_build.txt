@@ -2,12 +2,25 @@ How to make a new release
 
 Main steps :
 
-1. build a tarball
+1. Tag the CVS tree
 
-2. make the tarball available on SourceForge
+2. build a tarball
+
+3. make the tarball available on SourceForge
 
 
-1. Bulding the tarball
+Detailed steps :
+
+1. Tag the CVS tree
+
+From the top-level 'rosegarden' directory :
+cvs tag <RELEASE_NAME> .
+
+Note that release names can't contain dots. For instance :
+
+cvs tag RELEASE_0_1 .
+
+2. Bulding the tarball
 
 From the top level source dir :
 
@@ -23,7 +36,7 @@ the tarball should be built in the new directory, that is at
 rosegarden-0.1/rosegarden-0.1.tar.gz
 
 
-2. making the tarball available on SourceForge
+3. making the tarball available on SourceForge
 
 This is the rather non-trivial step.
 
