@@ -1727,6 +1727,7 @@ BankEditorDialog::slotImport()
         {
             std::vector<QString> importList;
             int count = 0;
+	    bool haveNames = false;
             
             for (; it != list->end(); ++it)
             {
@@ -1751,6 +1752,7 @@ BankEditorDialog::slotImport()
                         else
                         {
                             importList.push_back(strtoqstr(device->getName()));
+			    haveNames = true;
                         }
                     }
                 }
@@ -1763,7 +1765,7 @@ BankEditorDialog::slotImport()
             if (importList.size())
             {
                 ImportDeviceDialog *dialog =
-                    new ImportDeviceDialog(this, importList);
+                    new ImportDeviceDialog(this, importList, haveNames);
 
                 int res = dialog->exec();
 
@@ -1894,7 +1896,7 @@ BankEditorDialog::importFromSF2(QString filename)
 
         std::vector<QString> importList;
         importList.push_back(filename);
-        ImportDeviceDialog *dialog = new ImportDeviceDialog(this, importList);
+        ImportDeviceDialog *dialog = new ImportDeviceDialog(this, importList, false);
 
         int res = dialog->exec();
 
@@ -2221,7 +2223,8 @@ RemapInstrumentDialog::getCommandHistory()
 // ------------------- ImportDeviceDialog --------------------
 //
 ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
-                                       std::vector<QString> devices):
+                                       std::vector<QString> devices,
+				       bool showRenameOption):
     KDialogBase(parent, "importdevicedialog", true,
                 i18n("Import Banks from Device..."),
                 Ok | Cancel, Ok, true)
@@ -2257,15 +2260,21 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
     m_overwriteBanks =
         new QRadioButton(i18n("Overwrite Banks"), m_buttonGroup);
 
-    m_rename = new QCheckBox(i18n("Import device name"), mainFrame);
+    if (showRenameOption) {
+	m_rename = new QCheckBox(i18n("Import device name"), m_buttonGroup);
+    } else {
+	m_rename = 0;
+    }
 
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
     bool overwrite = config->readBoolEntry("importbanksoverwrite", false);
-    bool rename = config->readBoolEntry("importbanksrename", true);
     if (overwrite) m_buttonGroup->setButton(1);
     else m_buttonGroup->setButton(0);
-    m_rename->setChecked(rename);
+
+    bool rename = config->readBoolEntry("importbanksrename", true);
+    if (m_rename) m_rename->setChecked(rename);
 }
 
 void
@@ -2275,7 +2284,7 @@ ImportDeviceDialog::slotOk()
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     config->writeEntry("importbanksoverwrite", v == 1);
-    config->writeEntry("importbanksrename", m_rename->isChecked());
+    if (m_rename) config->writeEntry("importbanksrename", m_rename->isChecked());
     done(0);
 }
 
@@ -2302,5 +2311,5 @@ ImportDeviceDialog::getOverwrite() const
 bool
 ImportDeviceDialog::getRename() const
 {
-    return m_rename->isChecked();
+    return m_rename ? m_rename->isChecked() : false;
 }

@@ -37,6 +37,7 @@
 #include "AudioFile.h"
 #include "MappedCommon.h"
 #include "Track.h"
+#include "Event.h" // for timeT
 
 namespace Rosegarden { 
     class Composition; 
@@ -151,6 +152,7 @@ public slots:
     void slotEditSegmentAudio(Rosegarden::Segment*);
     void slotEditSegmentEventList(Rosegarden::Segment*);
     void slotSegmentAutoSplit(Rosegarden::Segment*);
+    void slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT);
 
     /**
      *

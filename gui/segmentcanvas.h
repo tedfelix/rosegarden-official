@@ -38,10 +38,10 @@ class QFont;
 class QFontMetrics;
 class QScrollBar;
 class QPopupMenu;
-class QCanvasRepeatRectangle;
 
 class RosegardenGUIDoc;
 class SegmentItemPreview;
+class SegmentRepeatRectangle;
 
 /**
  * The graphical item (rectangle) which represents a Segment
@@ -147,7 +147,7 @@ private:
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
 
-    QCanvasRepeatRectangle*   m_repeatRectangle;
+    SegmentRepeatRectangle *m_repeatRectangle;
     QString m_label;
 
     SegmentItemPreview* m_preview;
@@ -250,6 +250,8 @@ public:
      * Note : this doesn't handle overlapping SegmentItems yet
      */
     SegmentItem* findSegmentClickedOn(QPoint);
+
+    SegmentRepeatRectangle* findRepeatClickedOn(QPoint);
 
     /**
      * get the highlight brush from the canvas
@@ -356,6 +358,7 @@ signals:
     void editSegmentAudio(Rosegarden::Segment*);
     void editSegmentEventList(Rosegarden::Segment*);
     void audioSegmentAutoSplit(Rosegarden::Segment*);
+    void editRepeat(Rosegarden::Segment*, Rosegarden::timeT);
 
     void selectedSegments(const Rosegarden::SegmentSelection &);
 

@@ -37,6 +37,7 @@
 #include "dialogs.h"
 #include "audiopluginmanager.h"
 #include "studiocontrol.h"
+#include "kstartuplogo.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -760,6 +761,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             // Freeze the progress dialog
             CurrentProgressDialog::freeze();
+
+	    // Hide splash screen if present on startup
+	    KStartupLogo::hideIfStillThere();
 
             // Create a locate file dialog - give it the file name
             // and the AudioFileManager path that we've already

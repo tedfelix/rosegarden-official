@@ -2148,6 +2148,10 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
     Rosegarden::Event modelEvent(Rosegarden::Note::EventType, 0, 1);
     modelEvent.set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     Rosegarden::timeT time(getInsertionTime());
+    if (time >= segment.getEndMarkerTime()) {
+	MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+	return;
+    }
     Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
 
     MatrixInsertionCommand* command = 

@@ -55,24 +55,33 @@ using Rosegarden::SnapGrid;
 using Rosegarden::TrackId;
 using Rosegarden::timeT;
 
-class QCanvasRepeatRectangle : public QCanvasRectangle
+class SegmentRepeatRectangle : public QCanvasRectangle
 {
 public:
-    QCanvasRepeatRectangle(QCanvas*,
+    SegmentRepeatRectangle(QCanvas *,
+			   Rosegarden::Segment *,
                            SnapGrid *);
 
     void setRepeatInterval(unsigned int i) { m_repeatInterval = i; }
 
+    // only stored to make it easy to identify this rectangle later
+    Rosegarden::Segment *getSegment() const { return m_segment; }
+
+    Rosegarden::timeT getRepeatStartTime(int x);
+
     virtual void drawShape(QPainter&);
 
 protected:
+    Rosegarden::Segment *m_segment;
     unsigned int m_repeatInterval;
     SnapGrid    *m_snapGrid;
 };
 
-QCanvasRepeatRectangle::QCanvasRepeatRectangle(QCanvas *canvas,
+SegmentRepeatRectangle::SegmentRepeatRectangle(QCanvas *canvas,
+					       Rosegarden::Segment *segment,
                                                SnapGrid *snapGrid)
     : QCanvasRectangle(canvas),
+      m_segment(segment),
       m_repeatInterval(0),
       m_snapGrid(snapGrid)
 {
@@ -80,7 +89,20 @@ QCanvasRepeatRectangle::QCanvasRepeatRectangle(QCanvas *canvas,
     setPen(RosegardenGUIColours::RepeatSegmentBorder);
 }
 
-void QCanvasRepeatRectangle::drawShape(QPainter& painter)
+Rosegarden::timeT SegmentRepeatRectangle::getRepeatStartTime(int ex)
+{
+    int rWidth = int(m_snapGrid->getRulerScale()->
+		     getXForTime(m_repeatInterval));
+
+    int count = (ex - int(x())) / rWidth;
+    
+    // maybe this stuff should be in segmentitem after all...
+    return m_segment->getEndMarkerTime() + count *
+	(m_segment->getEndMarkerTime() - m_segment->getStartTime());
+}
+
+
+void SegmentRepeatRectangle::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
@@ -89,7 +111,7 @@ void QCanvasRepeatRectangle::drawShape(QPainter& painter)
     int height = rect().height();
 
     int rWidth = int(m_snapGrid->getRulerScale()->
-                        getXForTime(m_repeatInterval));
+		     getXForTime(m_repeatInterval));
 
     painter.setBrush(RosegardenGUIColours::RepeatSegmentBlock);
     painter.setPen(RosegardenGUIColours::RepeatSegmentBorder);
@@ -568,7 +590,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	if (m_segment->isRepeating()) {
 
             if (!m_repeatRectangle)
-                m_repeatRectangle = new QCanvasRepeatRectangle(canvas(),
+                m_repeatRectangle = new SegmentRepeatRectangle(canvas(),
+							       getSegment(),
                                                                m_snapGrid);
 
 	    timeT repeatStart = m_endTime;
@@ -910,6 +933,21 @@ SegmentCanvas::findSegmentClickedOn(QPoint pos)
     return 0;
 }
 
+SegmentRepeatRectangle*
+SegmentCanvas::findRepeatClickedOn(QPoint pos)
+{
+    QCanvasItemList l=canvas()->collisions(pos);
+
+    if (l.count()) {
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+            if (SegmentRepeatRectangle *r = dynamic_cast<SegmentRepeatRectangle*>(*it))
+                return r;
+        }
+    }
+
+    return 0;
+}
+
 void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     switch (e->button()) {
@@ -940,6 +978,13 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
     if (item) {
         m_currentItem = item;
 	emit editSegment(item->getSegment());
+    } else {
+	SegmentRepeatRectangle *rect = findRepeatClickedOn(e->pos());
+	Rosegarden::timeT time = rect->getRepeatStartTime(e->x());
+
+	RG_DEBUG << "editRepeat at time " << time << endl;
+	
+	emit editRepeat(rect->getSegment(), time);
     }
 }
 

@@ -162,7 +162,8 @@ namespace Marks
  * provides a few bits of information about the clefs.
  */
 
-class Clef {
+class Clef
+{
 public:
     static const std::string EventType;
     static const int EventSubOrdering;
@@ -246,7 +247,8 @@ private:
  * transposing between keys.
  */
 
-class Key {
+class Key 
+{
 public:
     static const std::string EventType;
     static const int EventSubOrdering;
@@ -793,7 +795,7 @@ class TimeSignature;
 /**
  * The Note class represents note durations only, not pitch or
  * accidental; it's therefore just as relevant to rest events as to
- * note events
+ * note events.  You can construct one of these from either.
  */
 
 class Note

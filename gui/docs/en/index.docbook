@@ -289,7 +289,7 @@
       </sect2>
 
       <sect2 id="segment-view-creating">
-	<title>Creating and editing segments</title>
+	<title>Creating segments</title>
 	<para>
 	  To create an empty segment, in preparation for composing a
 	  new part, you need to use the pencil tool.  Click on the
@@ -308,19 +308,69 @@
 	</para>
 
 	<para>
-	  Note that if you are intending to record a part from a MIDI
-	  device or audio input, you don't need to create a new
-	  segment to record into first -- each recording always goes
-	  into its own new segment, created automatically during
-	  recording.
+	  Once you have created a segment, you can then begin editing
+	  using the <link linkend="matrix-view">matrix</link> or <link
+	  linkend="notation-view">notation</link> editors.  To use one
+	  of these editors, either double-click on the segment, or
+	  else click with the right mouse button and choose the editor
+	  you want from the context menu.
 	</para>
 
+	<para>
+	  Note that if you are intending to record from a MIDI device
+	  or audio input, you don't need to create a new segment to
+	  record into first -- each recording always goes into its own
+	  new segment, created automatically during recording.
+	</para>
+	</sect2>
+
+      <sect2 id="segment-view-manipulating">
+	<title>Manipulating segments</title>
+	<para>
+	  The main window contains a selection of "tools" for editing
+	  segments.  These are available from the main toolbar: first
+	  select the tool you want from the toolbar, and then click
+	  and drag on the segments on the main canvas.
+	</para>
+
+      <sect3 id="segment-view-selector">
+	<title>The Select tool</title>
+	<para>
+	  The "select tool" (the arrow tool) is actually a
+	  multipurpose tool: it can be used to select, move, copy,
+	  resize and create segments.</para>
+
+	  <para>The most obvious use is
+	  selection: select a single segment by clicking on it with
+	  the select tool, or select several by clicking with Shift
+	  held down, or by clicking in an empty area of the window and
+	  dragging out an area.
+	  </para>
+
+	<para>To move segments with the select tool, simply click and
+	drag on the segment.  To create copies, click and drag with
+	Ctrl held down.  To resize a segment, click and drag on the
+	right-hand edge of the segment; and to create new segments,
+	click and drag on an empty area with the middle mouse button.
+	    </para>
+
+	  <para>
+	The select tool doesn't replace the other tools completely,
+	though &mdash; sometimes you need to be more precise about
+	which operation you intend, particularly when working on small
+	segments.
+	</para>
+
+      </sect3>
+
+      <sect3 id="segment-view-move-resize">
+	<title>Move and Resize tools</title>
 	<para>To move a segment to a different start time or track,
-	use the move tool and click and drag on the segment you want
+	use the Move tool and click and drag on the segment you want
 	to move.  If you hold down the Ctrl key while dragging, the
 	segment will be copied instead of moved.</para>
 
-	<para>To resize a segment, use the resize tool, and click
+	<para>To resize a segment, use the Resize tool, and click
 	and drag on the right-hand end of the segment.</para>
 
 	<para>For both move
@@ -328,48 +378,27 @@
 	particular grid position.
 	</para>
 
-      </sect2>
+      </sect3>
 
-      <sect2 id="segment-view-selector">
-	<title>The Select Tool</title>
+      <sect3 id="segment-view-split-join">
+	<title>Split tool</title>
 	<para>
-	  The select (arrow) tool has various functions.  The obvious
-	  one is selection: select a single segment by clicking on it
-	  with the select tool, or select several by clicking with
-	  Shift held down, or by clicking in an empty area of the
-	  window and dragging out an area.</para>
-
-	<para>But you can also move segments with the select tool
-	(click and drag on the segment), copy them (click and drag
-	with Ctrl held down), resize them (click and drag on the
-	right-hand edge of the segment), and create new segments
-	(click and drag on an empty area with the middle mouse
-	button).  The select tool doesn't replace the other tools
-	completely, though &mdash; sometimes you need to be more
-	precise about which operation you intend, particularly when
-	working on small segments.
-	</para>
-
-      </sect2>
-
-      <sect2 id="segment-view-split-join">
-	<title>Splitting and Joining</title>
-	<para>
-    You can use the split tool 
-    <inlinemediaobject>
-    <imageobject>
-    <imagedata fileref="rg-split.png"/>
-    </imageobject>
-    </inlinemediaobject>
-    to split a single segment
-    into two separate segments.  To split your segment, select the
-    split tool and click on the segment you wish to split.
-    </para>
-   <para>
-   By default segments are split on the closest barline in relation to
-   the cursor, but this can be prevented by holding down Shift while
-   splitting the segment.
-	</para>
+	    You can use the split tool 
+	    <inlinemediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-split.png"/>
+	  </imageobject>
+	  </inlinemediaobject>
+	    to split a single segment
+	    into two separate segments.  To split your segment, select the
+	    split tool and click on the segment you wish to split.
+	  </para>
+	  <para>
+	    By default segments are split on the closest barline in relation to
+	    the cursor, but this can be prevented by holding down Shift while
+	    splitting the segment.
+	  </para>
+	</sect3>
       </sect2>
 
       <sect2 id="segment-view-segmentparameterbox">
@@ -504,7 +533,14 @@
       <title>The Studio</title>
 
       <sect2 id="studio-introduction">
-	<title>Introduction</title>
+	<title>Devices, Instruments and Connections</title>
+
+	<para>Rosegarden uses the term Studio to refer to everything
+	it knows about the sound devices attached to the computer.
+	This may include &MIDI; and audio hardware and other sound
+	software, and includes information about connections,
+	configuration, &MIDI; patches and so on.</para>
+
 	<para>
 	
 	  &rosegarden; has the concept of a <quote>studio</quote>, which is a

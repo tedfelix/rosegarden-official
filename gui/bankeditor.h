@@ -344,7 +344,8 @@ class ImportDeviceDialog : public KDialogBase
     Q_OBJECT
 public:
     ImportDeviceDialog(QWidget *parent,
-                       std::vector<QString> devices);
+                       std::vector<QString> devices,
+		       bool showRenameOption);
  
     int getDeviceIndex() const;
     bool getOverwrite() const; 

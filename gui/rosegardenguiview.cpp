@@ -137,6 +137,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(editSegmentEventList(Rosegarden::Segment*)),
             SLOT(slotEditSegmentEventList(Rosegarden::Segment*)));
 
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(editRepeat(Rosegarden::Segment*, Rosegarden::timeT)),
+            SLOT(slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT)));
+
     connect(m_trackEditor,
             SIGNAL(droppedDocument(QString)),
             parent,
@@ -303,6 +307,15 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
 	    slotEditSegmentNotation(segment);
 	}
     }
+}
+
+
+void RosegardenGUIView::slotEditRepeat(Rosegarden::Segment *segment,
+				       Rosegarden::timeT time)
+{
+    
+//...
+
 }
 
 
