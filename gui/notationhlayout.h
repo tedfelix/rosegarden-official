@@ -290,6 +290,8 @@ protected:
      int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
 
+    void legatoQuantize(Rosegarden::Segment &segment);
+
     /// Find earliest element with quantized time of t or greater
     NotationElementList::iterator getStartOfQuantizedSlice 
     (const NotationElementList *, Rosegarden::timeT t) const;

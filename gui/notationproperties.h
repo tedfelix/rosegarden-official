@@ -60,6 +60,9 @@ public:
     const Rosegarden::PropertyName SLUR_ABOVE;
     const Rosegarden::PropertyName SLUR_Y_DELTA;
     const Rosegarden::PropertyName SLUR_LENGTH;
+    const Rosegarden::PropertyName TUPLET_NOMINAL_DURATION;
+    const Rosegarden::PropertyName NOTE_TYPE;
+    const Rosegarden::PropertyName NOTE_DOTS;
 
     // Set in applyBeam in notationsets.cpp:
 

@@ -174,7 +174,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
     }
 
     int smin = getMinWidth(**shortest);
-    if (!(*shortest)->event()->get<Int>(NOTE_DOTS)) {
+    if (!(*shortest)->event()->get<Int>(m_properties.NOTE_DOTS)) {
         smin += m_npf->getDotWidth()/2;
     }
 
@@ -183,7 +183,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
     if (shortCount < 3) smin -= 3 - shortCount;
 
     int gapPer = 
-        getComfortableGap((*shortest)->event()->get<Int>(NOTE_TYPE)) +
+        getComfortableGap((*shortest)->event()->get<Int>(m_properties.NOTE_TYPE)) +
         smin;
 
     kdDebug(KDEBUG_AREA) << "d is " << d << ", gapPer is " << gapPer << endl;
@@ -219,6 +219,34 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 
 	if (absTime < t) return i;
 	i = j;
+    }
+}
+
+
+void
+NotationHLayout::legatoQuantize(Segment &segment)
+{
+    m_legatoQuantizer->quantize(&segment, segment.begin(), segment.end());
+
+    for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
+
+	timeT duration = m_legatoQuantizer->getQuantizedDuration(*i);
+
+	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+	    int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
+	    int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+	    assert(tcount != 0);
+	    timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
+	    duration = m_legatoQuantizer->quantizeDuration(nominalDuration);
+	    (*i)->setMaybe<Int>(m_properties.TUPLET_NOMINAL_DURATION, duration);
+	}
+
+	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+
+	    Note n(Note::getNearestNote(duration));
+	    (*i)->setMaybe<Int>(m_properties.NOTE_TYPE, n.getNoteType());
+	    (*i)->setMaybe<Int>(m_properties.NOTE_DOTS, n.getDots());
+	}
     }
 }
 
@@ -266,8 +294,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
     kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
-    SegmentNotationHelper nh(segment);
-    nh.quantize();
+    legatoQuantize(segment);
 
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
@@ -494,7 +521,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   int &shortCount,
 			   NotationElementList::iterator &to)
 {
-    Chord chord(*notes, itr, m_legatoQuantizer);
+    Chord chord(*notes, itr, m_legatoQuantizer, m_properties);
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
@@ -1139,9 +1166,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		    NotationStaff &notationStaff =
 			dynamic_cast<NotationStaff &>(staff);
 		    NotationGroup group(*staff.getViewElementList(), it,
-					m_legatoQuantizer, clef, key);
-		    group.applyBeam(notationStaff, m_properties);
-		    group.applyTuplingLine(notationStaff, m_properties);
+					m_legatoQuantizer, m_properties,
+					clef, key);
+		    group.applyBeam(notationStaff);
+		    group.applyTuplingLine(notationStaff);
 		}
 	    }
 
@@ -1182,8 +1210,8 @@ NotationHLayout::positionRest(StaffType &staff,
     // convinced this is the right thing to do
 
     int baseWidth = m_npf->getRestWidth
-	(Note(rest->event()->get<Int>(NOTE_TYPE),
-	      rest->event()->get<Int>(NOTE_DOTS)));
+	(Note(rest->event()->get<Int>(m_properties.NOTE_TYPE),
+	      rest->event()->get<Int>(m_properties.NOTE_DOTS)));
 
     if (delta > 2 * baseWidth) {
         int shift = (delta - 2 * baseWidth) / 4;
@@ -1222,7 +1250,8 @@ NotationHLayout::positionChord(StaffType &staff,
 			       TieMap &tieMap,
 			       NotationElementList::iterator &to)
 {
-    Chord chord(*staff.getViewElementList(), itr, m_legatoQuantizer, clef, key);
+    Chord chord(*staff.getViewElementList(), itr, m_legatoQuantizer,
+		m_properties, clef, key);
     double baseX = (*itr)->getLayoutX();
 
     // To work out how much space to allot a note (or chord), start
@@ -1372,12 +1401,12 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     if (e.isNote()) {
 
-        long noteType = e.event()->get<Int>(NOTE_TYPE, noteType);
+        long noteType = e.event()->get<Int>(m_properties.NOTE_TYPE, noteType);
 
         w += m_npf->getNoteBodyWidth(noteType);
 
         long dots;
-        if (e.event()->get<Int>(NOTE_DOTS, dots)) {
+        if (e.event()->get<Int>(m_properties.NOTE_DOTS, dots)) {
             w += m_npf->getDotWidth() * dots;
         }
 
@@ -1385,8 +1414,8 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
     } else if (e.isRest()) {
 
-        w += m_npf->getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
-                                     e.event()->get<Int>(NOTE_DOTS)));
+        w += m_npf->getRestWidth(Note(e.event()->get<Int>(m_properties.NOTE_TYPE),
+                                     e.event()->get<Int>(m_properties.NOTE_DOTS)));
 
         return w;
     }

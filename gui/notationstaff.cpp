@@ -611,8 +611,8 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	    if (duration > 0) {
 
-		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
-		int dots = elt->event()->get<Int>(NOTE_DOTS);
+		Note::Type note = elt->event()->get<Int>(m_properties.NOTE_TYPE);
+		int dots = elt->event()->get<Int>(m_properties.NOTE_DOTS);
 		NotePixmapParameters params(note, dots);
 		setTuplingParameters(elt, params);
 		pixmap = new QCanvasPixmap(m_npf->makeRestPixmap(params));
@@ -741,8 +741,8 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 {
     static NotePixmapParameters params(Note::Crotchet, 0);
 
-    Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
-    int dots = elt->event()->get<Int>(NOTE_DOTS);
+    Note::Type note = elt->event()->get<Int>(m_properties.NOTE_TYPE);
+    int dots = elt->event()->get<Int>(m_properties.NOTE_DOTS);
 
     Accidental accidental = NoAccidental;
     (void)elt->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, accidental);

@@ -49,7 +49,8 @@ using namespace Rosegarden::BaseProperties;
 
 
 NotationSet::NotationSet(const NotationElementList &nel, NELIterator i,
-			 const Quantizer *q) :
+			 const Quantizer *q, const NotationProperties &p) :
+    m_properties(p),
     m_nel(nel),
     m_initial(nel.end()),
     m_final(nel.end()),
@@ -171,8 +172,9 @@ public:
 //////////////////////////////////////////////////////////////////////
 
 Chord::Chord(const NotationElementList &nel, NELIterator i,
-	     const Quantizer *q, const Clef &clef, const Key &key) :
-    NotationSet(nel, i, q),
+	     const Quantizer *q, const NotationProperties &p,
+	     const Clef &clef, const Key &key) :
+    NotationSet(nel, i, q, p),
     m_clef(clef),
     m_key(key),
     m_time(q->getQuantizedAbsoluteTime((*i)->event()))
@@ -246,7 +248,7 @@ bool Chord::hasStem() const
 
     NELIterator i(getInitialNote());
     for (;;) {
-	Note::Type note = (*i)->event()->get<Int>(NOTE_TYPE);
+	Note::Type note = (*i)->event()->get<Int>(m_properties.NOTE_TYPE);
 	if (Note(note).hasStem()) return true;
 	if (i == getFinalNote()) return false;
 	++i;
@@ -360,8 +362,9 @@ std::vector<Mark> Chord::getMarksForChord() const
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i, const Quantizer *q,
+			     const NotationProperties &p,
 			     const Clef &clef, const Key &key) :
-    NotationSet(nel, i, q),
+    NotationSet(nel, i, q, p),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
     m_key(key),
@@ -509,8 +512,10 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     // if (!beam.necessary) return beam;
 
-    Chord initialChord(getList(), initialNote, &getQuantizer(), m_clef, m_key),
-            finalChord(getList(),   finalNote, &getQuantizer(), m_clef, m_key);
+    Chord initialChord(getList(), initialNote, &getQuantizer(),
+		       m_properties, m_clef, m_key),
+            finalChord(getList(),   finalNote, &getQuantizer(),
+		       m_properties, m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -582,7 +587,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     using std::max;
     using std::min;
     long shortestNoteType = Note::Quaver;
-    if (!(*getShortestElement())->event()->get<Int>(NOTE_TYPE,
+    if (!(*getShortestElement())->event()->get<Int>(m_properties.NOTE_TYPE,
                                                     shortestNoteType)) {
         kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
 	kdDebug(KDEBUG_AREA) << "(Event dump follows)" << endl;
@@ -613,8 +618,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
 
 void
-NotationGroup::applyBeam(NotationStaff &staff,
-			 const NotationProperties &properties)
+NotationGroup::applyBeam(NotationStaff &staff)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
 
@@ -660,9 +664,10 @@ NotationGroup::applyBeam(NotationStaff &staff,
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
         if ((*i)->isNote() &&
-	    (*i)->event()->get<Int>(NOTE_TYPE) < Note::Crotchet) {
+	    (*i)->event()->get<Int>(m_properties.NOTE_TYPE) < Note::Crotchet) {
 
-	    Chord chord(getList(), i, &getQuantizer(), m_clef, m_key);
+	    Chord chord(getList(), i, &getQuantizer(), 
+			m_properties, m_clef, m_key);
 	    unsigned int j;
 
 //            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;
@@ -674,10 +679,10 @@ NotationGroup::applyBeam(NotationStaff &staff,
 		    (NotationProperties::STEM_UP, beam.aboveNotes);
 
 		el->event()->setMaybe<Bool>
-		    (properties.CHORD_PRIMARY_NOTE, false);
+		    (m_properties.CHORD_PRIMARY_NOTE, false);
 
 		el->event()->setMaybe<Bool>
-		    (properties.DRAW_FLAG, false);
+		    (m_properties.DRAW_FLAG, false);
 
 		el->event()->setMaybe<Bool>
 		    (NotationProperties::BEAMED, true);
@@ -688,13 +693,13 @@ NotationGroup::applyBeam(NotationStaff &staff,
 
 	    NotationElement *el = (*chord[j]);
 	    el->event()->setMaybe<Bool>(NotationProperties::BEAMED, false); // set later
-	    el->event()->setMaybe<Bool>(properties.DRAW_FLAG, true); // set later
+	    el->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, true); // set later
 	    
 	    int x = (int)el->getLayoutX();
 	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
             int beamCount = Note(el->event()->get<Int>
-                                 (NOTE_TYPE)).getFlagCount();
+                                 (m_properties.NOTE_TYPE)).getFlagCount();
 
             // If THIS_PART_BEAMS is true, then when drawing the
             // chord, if it requires more beams than the following
@@ -724,47 +729,47 @@ NotationGroup::applyBeam(NotationStaff &staff,
 //		prevEl->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
 
 		prevEl->event()->setMaybe<Int>
-                    (properties.BEAM_SECTION_WIDTH, secWidth);
+                    (m_properties.BEAM_SECTION_WIDTH, secWidth);
 		prevEl->event()->setMaybe<Int>
-		    (properties.BEAM_NEXT_BEAM_COUNT, beamCount);
+		    (m_properties.BEAM_NEXT_BEAM_COUNT, beamCount);
 
                 int prevBeamCount = Note(prevEl->event()->get<Int>
-                                         (NOTE_TYPE)).getFlagCount();
+                                         (m_properties.NOTE_TYPE)).getFlagCount();
 
 		if ((beamCount > 0) && (prevBeamCount > 0)) {
-		    el->event()->setMaybe<Bool>(properties.BEAMED, true);
-		    el->event()->setMaybe<Bool>(properties.DRAW_FLAG, false);
-		    prevEl->event()->setMaybe<Bool>(properties.BEAMED, true);
-		    prevEl->event()->setMaybe<Bool>(properties.DRAW_FLAG, false);
+		    el->event()->setMaybe<Bool>(m_properties.BEAMED, true);
+		    el->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, false);
+		    prevEl->event()->setMaybe<Bool>(m_properties.BEAMED, true);
+		    prevEl->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, false);
 		}
 
 		if (beamCount >= prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
-                        (properties.BEAM_THIS_PART_BEAMS, false);
+                        (m_properties.BEAM_THIS_PART_BEAMS, false);
                     if (prevprev != getList().end()) {
                         (*prevprev)->event()->setMaybe<Bool>
-                            (properties.BEAM_NEXT_PART_BEAMS, false);
+                            (m_properties.BEAM_NEXT_PART_BEAMS, false);
                     }
                 }
 
 		if (beamCount > prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
-                        (properties.BEAM_NEXT_PART_BEAMS, true);
+                        (m_properties.BEAM_NEXT_PART_BEAMS, true);
                 }
 
 	    } else {
-                el->event()->setMaybe<Bool>(properties.BEAM_THIS_PART_BEAMS, true);
+                el->event()->setMaybe<Bool>(m_properties.BEAM_THIS_PART_BEAMS, true);
             }
 
-	    el->event()->setMaybe<Bool>(properties.CHORD_PRIMARY_NOTE, true);
+	    el->event()->setMaybe<Bool>(m_properties.CHORD_PRIMARY_NOTE, true);
 
-	    el->event()->setMaybe<Int>(properties.BEAM_MY_Y, myY);
-	    el->event()->setMaybe<Int>(properties.BEAM_GRADIENT, beam.gradient);
+	    el->event()->setMaybe<Int>(m_properties.BEAM_MY_Y, myY);
+	    el->event()->setMaybe<Int>(m_properties.BEAM_GRADIENT, beam.gradient);
 
 	    // until they're set next time around the loop, as (*prev)->...
-//	    el->event()->setMaybe<Int>(properties.BEAM_NEXT_Y, myY);
-	    el->event()->setMaybe<Int>(properties.BEAM_SECTION_WIDTH, 0);
-	    el->event()->setMaybe<Int>(properties.BEAM_NEXT_BEAM_COUNT, 1);
+//	    el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_Y, myY);
+	    el->event()->setMaybe<Int>(m_properties.BEAM_SECTION_WIDTH, 0);
+	    el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_BEAM_COUNT, 1);
 
             prevprev = prev;
 	    prev = chord[j];
@@ -773,9 +778,9 @@ NotationGroup::applyBeam(NotationStaff &staff,
         } else if ((*i)->isNote()) {
 	    
 	    if (i == initialNote || i == finalNote) {
-		(*i)->event()->setMaybe<Bool>(properties.STEM_UP, beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(m_properties.STEM_UP, beam.aboveNotes);
 	    } else {
-		(*i)->event()->setMaybe<Bool>(properties.STEM_UP, !beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(m_properties.STEM_UP, !beam.aboveNotes);
 	    }
 	}
 
@@ -792,8 +797,7 @@ NotationGroup::applyBeam(NotationStaff &staff,
 }
 
 void 
-NotationGroup::applyTuplingLine(NotationStaff &staff,
-				const NotationProperties &properties)
+NotationGroup::applyTuplingLine(NotationStaff &staff)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationGroup::applyTuplingLine, group no is " << m_groupNo << ", group type is " << m_type << endl;
 
@@ -827,10 +831,10 @@ NotationGroup::applyTuplingLine(NotationStaff &staff,
 	  finalNote == staff.getViewElementList()->end()) {
 
 	Event *e = (*initialNoteOrRest)->event();
-	e->setMaybe<Int>(properties.TUPLING_LINE_MY_Y,
+	e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y,
 			 staff.getLayoutYForHeight(12));
-	e->setMaybe<Int>(properties.TUPLING_LINE_WIDTH, finalX - initialX);
-	e->setMaybe<Int>(properties.TUPLING_LINE_GRADIENT, 0);
+	e->setMaybe<Int>(m_properties.TUPLING_LINE_WIDTH, finalX - initialX);
+	e->setMaybe<Int>(m_properties.TUPLING_LINE_GRADIENT, 0);
 
     } else {
     
@@ -852,9 +856,9 @@ NotationGroup::applyTuplingLine(NotationStaff &staff,
 	}	
 	
 	Event *e = (*initialNoteOrRest)->event();
-	e->setMaybe<Int>(properties.TUPLING_LINE_MY_Y, startY);
-	e->setMaybe<Int>(properties.TUPLING_LINE_WIDTH, finalX - initialX);
-	e->setMaybe<Int>(properties.TUPLING_LINE_GRADIENT, beam.gradient);
+	e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y, startY);
+	e->setMaybe<Int>(m_properties.TUPLING_LINE_WIDTH, finalX - initialX);
+	e->setMaybe<Int>(m_properties.TUPLING_LINE_GRADIENT, beam.gradient);
     }
 }
 

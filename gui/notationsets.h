@@ -93,7 +93,8 @@ public:
 
 protected:
     NotationSet(const NotationElementList &nel, NELIterator elementInSet,
-		const Rosegarden::Quantizer *);
+		const Rosegarden::Quantizer *,
+		const NotationProperties &properties);
     void initialise();
 
     virtual bool test(const NELIterator &i) = 0;
@@ -101,6 +102,8 @@ protected:
 
     const NotationElementList &getList() const { return m_nel; }
     const Rosegarden::Quantizer &getQuantizer() const { return *m_quantizer; }
+
+    const NotationProperties &m_properties;
 
 private:
     const NotationElementList &m_nel;
@@ -129,6 +132,7 @@ public:
        in to the chord for you */
     Chord(const NotationElementList &nel, NELIterator elementInChord,
 	  const Rosegarden::Quantizer *quantizer,
+	  const NotationProperties &properties,
           const Rosegarden::Clef &clef = Rosegarden::Clef::DefaultClef,
           const Rosegarden::Key &key = Rosegarden::Key::DefaultKey);
 
@@ -183,6 +187,7 @@ public:
      */
     NotationGroup(const NotationElementList &nel, NELIterator elementInGroup,
 		  const Rosegarden::Quantizer *,
+		  const NotationProperties &properties,
                   const Rosegarden::Clef &clef, const Rosegarden::Key &key);
 
     virtual ~NotationGroup();
@@ -193,14 +198,14 @@ public:
      * Writes beam data into each note in the group.  Notes'
      * layout x coordinates must already have been set.
      */
-    void applyBeam(NotationStaff &, const NotationProperties &properties);
+    void applyBeam(NotationStaff &);
 
     /**
      * Writes tupling line data into each note in the group. 
      * Notes' layout x coordinates must already have been set.
      * Does nothing if this is not a tupled group.
      */
-    void applyTuplingLine(NotationStaff &, const NotationProperties &properties);
+    void applyTuplingLine(NotationStaff &);
 
     virtual bool contains(const NELIterator &) const;
 

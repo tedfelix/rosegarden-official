@@ -115,7 +115,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
             // aligned with the line above the middle line; the rest
             // are aligned with the middle line
 
-            int noteType = el->event()->get<Int>(NOTE_TYPE);
+            int noteType = el->event()->get<Int>(m_properties.NOTE_TYPE);
             if (noteType > Note::Minim) {
                 el->setLayoutY(staff.getLayoutYForHeight(6));
             } else {
@@ -124,7 +124,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
         } else if (el->isNote()) {
 
-            Chord chord(*notes, i, m_legatoQuantizer);
+            Chord chord(*notes, i, m_legatoQuantizer, m_properties);
             if (chord.size() == 0) continue;
 
             std::vector<int> h;
@@ -301,7 +301,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		(m_properties.CHORD_PRIMARY_NOTE, primary) && primary) {
 
 		Chord chord(*(staff.getViewElementList()), scooter,
-			    m_legatoQuantizer);
+			    m_legatoQuantizer, m_properties);
 
 		if (beamed) {
 		    if (stemUp) beamAbove = true;
