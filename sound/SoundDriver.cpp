@@ -275,16 +275,20 @@ SoundDriver::getMappedDevice(DeviceId id)
             retDevice.setId(id);
             retDevice.setName((*dIt)->getName());
             retDevice.setType((*dIt)->getType());
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+	    retDevice.setConnection((*dIt)->getConnection());
+#endif
             break;
         }
     }
 
-    /*
+#ifdef EXPERIMENTAL_ALSA_DRIVER
     std::cout << "SoundDriver::getMappedDevice - "
               << "name = \"" << retDevice.getName() 
               << "\" type = " << retDevice.getType()
-              << std::endl;
-              */
+              << " connection = \"" << retDevice.getConnection()
+              << "\"" << std::endl;
+#endif
 
     return retDevice;
 }

@@ -107,7 +107,9 @@ MappedDevice::operator=(const MappedDevice &mD)
     m_id = mD.getId();
     m_type = mD.getType();
     m_name = mD.getName();
-#ifdef EXPERIMENTAL_ALSA_DRIVER
+#ifndef EXPERIMENTAL_ALSA_DRIVER
+    m_client = mD.getClient();
+#else
     m_connection = mD.getConnection();
 #endif
 
@@ -138,6 +140,8 @@ operator>>(QDataStream &dS, MappedDevice *mD)
 #ifdef EXPERIMENTAL_ALSA_DRIVER
     QString connection;
     dS >> connection;
+    std::cerr << "MappedDevice::operator>> - read \"" << connection << "\""
+	      << std::endl;
     mD->setConnection(connection.data());
 #endif
     mD->setId(id);
@@ -178,6 +182,8 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 #ifdef EXPERIMENTAL_ALSA_DRIVER
     QString connection;
     dS >> connection;
+    std::cerr << "MappedDevice::operator>> - read \"" << connection << "\""
+	      << std::endl;
     mD.setConnection(connection.data());
 #endif
     mD.setId(id);
@@ -206,6 +212,8 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << QString(mD->getName().c_str());
 #ifdef EXPERIMENTAL_ALSA_DRIVER
     dS << QString(mD->getConnection().c_str());
+    std::cerr << "MappedDevice::operator>> - wrote \"" << mD->getConnection() << "\""
+	      << std::endl;
 #endif
 
     return dS;
@@ -224,6 +232,8 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << QString(mD.getName().c_str());
 #ifdef EXPERIMENTAL_ALSA_DRIVER
     dS << QString(mD.getConnection().c_str());
+    std::cerr << "MappedDevice::operator>> - wrote \"" << mD.getConnection() << "\""
+	      << std::endl;
 #endif
 
     return dS;
