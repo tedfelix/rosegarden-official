@@ -35,7 +35,7 @@ Please note that the base/ directory does not use QString, and so cannot be tran
 
 Unfortunately, someone has made the decision that American English be the default language for KDE apps, so all internal strings should originate in American English.  (I believe setting one's environment to en_US is a no-op? Please correct me if I'm wrong- it may just be the case that my default environment of en_US doesn't allow any en_US po translations.)
 
-Finally, after adding a new language, don't forget to re-run configure to let the Makefiles know about it.
+Finally, after adding a new language, don't forget to re-run make -f Makefile.cvs and configure to let the Makefiles know about it.
 
 Writing code
 --------------
@@ -59,7 +59,7 @@ Every once in a while, the main rosegarden.pot file should be updated from the l
 make -f admin/Makefile.common package-messages
 make
 Similarly, language files can be "merged" to include new diffs using
-make -f admin/Makefile.common package-merge
+make -f admin/Makefile.common package-merge POFILES=po/*.po PACKAGE=po/rosegarden
 If the changes are large or it has been a long time since the last update, announce on the mailing list to get the legions involved in updating all translated files.
 Note: The above "make" commands require the file kde.pot to be in $KDEDIR/include/kde.pot, so if you get an error use "locate kde.pot" to find it and then set KDEDIR appropriately.
 
