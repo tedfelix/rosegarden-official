@@ -39,3 +39,53 @@ From the code perspective:
    for Connections in them, but permit reload regardless of whether
    they match the current setup or not?
 
+
+Implementation notes
+~~~~~~~~~~~~~~~~~~~~
+
+On the sequencer side, MappedDevice is just a container for
+MappedInstruments.  These are concretely related to the ALSA
+read/write destination via the AlsaPort list in AlsaDriver, which maps
+instrument numbers onto ALSA ports.  The Device numbers themselves are
+relatively abstract, being derived from the instruments.
+
+On the GUI side, everything is already set up with the device list and
+instrument sublists in pretty much the way we want; the problem is
+just that the devices are being mapped directly onto concrete
+MappedDevices.
+
+We have two possibilities:
+
+ 1. The sequencer maintains the mapping of devices to "connections",
+ where either
+
+    a. the MappedDevice is the "connection" and a new Device class is
+    introduced on the sequencer side to represent the virtual Device, or
+
+    b. the MappedDevice becomes the virtual Device on the sequencer
+    side and a new Connection class is introduced
+
+ 2. The GUI maintains the mapping of devices to "connections".  The
+ Device class continues to be the virtual Device, the MappedDevice
+ remains concrete, but a new class on the GUI side is introduced to be
+ the thing that gets converted to the MappedDevice when communicating
+ with the sequencer.
+
+I suspect option 2 is probably simpler given the current setup,
+although it's appealing to be able to contact the sequencer directly
+to configure device/port mappings (i.e. option 1b is probably the most
+elegant of the three).
+
+
+Implementation strategy
+~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Enforce a one-to-one correspondence between ALSA ports and
+AlsaDriver MappedDevices.  We don't want to know about ALSA client on
+the sequencer side except when querying the ports, and we don't want
+to know about ports on the GUI side.  Possibly we could do this by
+creating a new AlsaDriver (for test purposes) that pretends one port
+per device but has a device corresponding to an ALSA port?
+
+
+2. ...
