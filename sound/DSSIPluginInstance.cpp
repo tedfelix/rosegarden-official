@@ -166,14 +166,6 @@ DSSIPluginInstance::init()
 
 		m_backupControlPortsIn.push_back(0.0);
 
-		if (m_descriptor->get_midi_controller_for_port) {
-		    int controller = m_descriptor->get_midi_controller_for_port
-			(m_instanceHandle, i);
-		    if (controller != 0 && controller != 32 && DSSI_IS_CC(controller)) {
-			m_controllerMap[DSSI_CC_NUMBER(controller)] = i;
-		    }
-		}
-
 	    } else {
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsOut.push_back(
@@ -344,6 +336,28 @@ DSSIPluginInstance::instantiate(unsigned long sampleRate)
     }
 
     m_instanceHandle = descriptor->instantiate(descriptor, sampleRate);
+
+    if (m_instanceHandle) {
+
+	if (m_descriptor->get_midi_controller_for_port) {
+
+	    for (unsigned long i = 0; i < descriptor->PortCount; ++i) {
+
+		if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]) &&
+		    LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i])) {
+
+		    int controller = m_descriptor->get_midi_controller_for_port
+			(m_instanceHandle, i);
+
+		    if (controller != 0 && controller != 32 &&
+			DSSI_IS_CC(controller)) {
+
+			m_controllerMap[DSSI_CC_NUMBER(controller)] = i;
+		    }
+		}
+	    }
+	}
+    }
 }
 
 QStringList
