@@ -222,6 +222,14 @@ public:
 
 
     /*
+     * If the sequencer is skipping slices due to the gui probably
+     * not being to service it then it can call this method to let
+     * the gui know and tell the user.
+     */
+    virtual void skippedSlices(unsigned int slices);
+
+
+    /*
      * Autoload the autoload song for Studio parameters
      *
      */

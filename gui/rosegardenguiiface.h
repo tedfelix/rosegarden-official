@@ -101,6 +101,10 @@ k_dcop:
     //
     virtual void alive() = 0;
 
+    // the sequencer has skipped so many slices
+    //
+    virtual void skippedSlices(unsigned int slices) = 0;
+
     // The sequencer requests that a new audio file is created - the
     // gui does so and returns the path of the new file so that the
     // sequencer can use it.

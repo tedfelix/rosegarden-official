@@ -977,15 +977,16 @@ AlsaDriver::processNotesOff(const RealTime &time)
     ClientPortPair outputDevice;
     RealTime offTime;
 
-    std::vector<NoteOffQueue::iterator> toDelete;
-
     // prepare the event
     snd_seq_ev_clear(event);
     snd_seq_ev_set_source(event, m_port);
 
     NoteOffQueue::iterator it = m_noteOffQueue.begin();
-    for (; it != m_noteOffQueue.end(); it++)
+    while (it != m_noteOffQueue.end())
     {
+        NoteOffQueue::iterator nextIt(it);
+        ++nextIt;
+
         if ((*it)->getRealTime() <= time)
         {
             // Set destination according to instrument mapping to port
@@ -1007,29 +1008,14 @@ AlsaDriver::processNotesOff(const RealTime &time)
                                    127);
             // send note off
             snd_seq_event_output(m_midiHandle, event);
-            toDelete.push_back(it);
+            delete(*it);
+            m_noteOffQueue.erase(it);
         }
+        it = nextIt;
     }
 
     // and flush them
     snd_seq_drain_output(m_midiHandle);
-
-    // Now delete from queue
-    //
-    std::vector<NoteOffQueue::iterator>::iterator dIt = toDelete.begin();
-    for (; dIt != toDelete.end(); dIt++)
-    {
-        NoteOffQueue::iterator it = m_noteOffQueue.begin();
-        for (; it != m_noteOffQueue.end(); it++)
-        {
-            if (*dIt == it)
-            {
-                delete (*it);
-                m_noteOffQueue.erase(it);
-                break;
-            }
-        }
-    }
 
     /*
     std::cout << "AlsaDriver::processNotesOff - "

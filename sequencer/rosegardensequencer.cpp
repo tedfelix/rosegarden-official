@@ -295,7 +295,8 @@ RosegardenSequencerApp::keepPlaying()
             Rosegarden::RealTime gapTime = sequencerTime - dropBoundary;
             int gapLength = gapTime.sec * 1000000 + gapTime.usec;
             int sliceSize = m_readAhead.sec * 1000000 + m_readAhead.usec;
-            int slices = (gapLength/sliceSize == 0) ? 1 : gapLength/sliceSize;
+            unsigned int slices = 
+                (gapLength/sliceSize == 0) ? 1 : gapLength/sliceSize;
 
             std::cerr << "RosegardenSequencerApp::keepPlaying() - "
                       << "GUI COULDN'T SERVICE SLICE REQUEST(S)" << std::endl
@@ -306,6 +307,18 @@ RosegardenSequencerApp::keepPlaying()
             if (slices > 1) std::cerr << "S";
             std::cerr <<"! --" << std::endl;
 
+            QByteArray data;
+            QDataStream arg(data, IO_WriteOnly);
+        
+            arg << slices;
+            if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                          ROSEGARDEN_GUI_IFACE_NAME,
+                                          "skippedSlices(unsigned int)",
+                                          data)) 
+            {
+                cerr << "RosegardenSequencer::keepPlaying()"
+                     << " - can't send to RosegardenGUI client" << endl;
+            }
         }
 
         Rosegarden::MappedComposition *mC =

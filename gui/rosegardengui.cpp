@@ -3140,5 +3140,12 @@ RosegardenGUIApp::slotDeleteAllAudioFiles()
 
 }
 
+void
+RosegardenGUIApp::skippedSlices(unsigned int slices)
+{
+    //std::cout << "SEQUENCER HAS SKIPPED " << slices << " SLICES" << endl;
+}
+
+
 
 
