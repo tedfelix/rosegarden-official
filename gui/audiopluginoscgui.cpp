@@ -471,6 +471,29 @@ AudioPluginOSCGUIManager::dispatch()
 
 	} else if (method == "configure") {
 
+	    if (message->getArgCount() != 2) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: wrong number of args ("
+			 << message->getArgCount() << ") for configure method"
+			 << endl;
+		goto done;
+	    }
+
+	    if (!(arg = message->getArg(0, type)) || type != 's') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get configure key"
+			 << endl;
+		goto done;
+	    }
+	    QString key = &arg->s;
+
+	    if (!(arg = message->getArg(1, type)) || type != 's') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get configure value"
+			 << endl;
+		goto done;
+	    }
+	    QString value = &arg->s;
+
+	    //!!!
+
 	} else if (method == "midi") {
 
 	    if (message->getArgCount() != 1) {
@@ -513,18 +536,6 @@ AudioPluginOSCGUIManager::dispatch()
 
 	    RG_DEBUG << "AudioPluginOSCGUIManager: unknown method " << method << endl;
 	}
-
-
-/*
-	if (m_guis.find(target) == m_guis.end()) {
-
-	    std::cerr << "Rosegarden: WARNING: AudioPluginOSCGUIManager::slotDispatch: unknown target " << target << std::endl;
-	    delete message;
-
-	} else {
-	    m_guis[target]->acceptFromGUI(message);
-	}
-*/
 
     done:
 	delete message;
@@ -607,15 +618,6 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
     free(port);
 
     m_basePath = lo_url_get_path(url);
-}
-
-void
-AudioPluginOSCGUI::acceptFromGUI(OSCMessage *message)
-{
-    RG_DEBUG << "AudioPluginOSCGUI::acceptFromGUI" << endl;
-
-
-    delete message;
 }
 
 void

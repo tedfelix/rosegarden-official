@@ -120,8 +120,7 @@ public:
 
     void setGUIUrl(QString url);
 
-    void acceptFromGUI(OSCMessage *message); // I take over ownership of message
-    void sendToGUI(OSCMessage *message); // I take over ownership of message
+    void sendToGUI(OSCMessage *message); // I take ownership of message, will delete when done
 
 protected:
     KProcess *m_gui;
