@@ -157,10 +157,14 @@ private:
     //
     //         - m_playLatency  - how long we add to all events to make
     //                            sure they play in a synchonised manner
+    //                            (i.e. give them a chance to get into aRTS)
+    //
+    //         - m_readAhead    - how many events we read in one go
     //                            
     //
-    // We can throttle these values internally at first and see how
-    // we get on.
+    // We can throttle these values internally at first, make them
+    // user defineable or even auto-throttle them.
+    //
     //
     Rosegarden::RealTime m_fetchLatency;
     Rosegarden::RealTime m_playLatency;

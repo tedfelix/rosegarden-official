@@ -39,9 +39,9 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_transportStatus(STOPPED),
     m_songPosition(0, 0),
     m_lastFetchSongPosition(0, 0),
-    m_fetchLatency(0, 20),
-    m_playLatency(0, 20),
-    m_readAhead(0, 50)
+    m_fetchLatency(0, 100000),
+    m_playLatency(0, 200000),
+    m_readAhead(0, 80000)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -243,7 +243,6 @@ RosegardenSequencerApp::updateClocks()
 
     // Using RealTime boundaries for the update check
     //
-
     Rosegarden::RealTime updateBound(0, 1000); // 1000 microseconds
 
     if (newPosition > ( m_songPosition + updateBound ) ||
@@ -262,7 +261,7 @@ RosegardenSequencerApp::updateClocks()
         arg << newPosition.sec;
         arg << newPosition.usec;
     
-        //cout << "updateClocks() - m_songPosition = " << m_songPosition << endl;
+        //std::cerr << "updateClocks() - m_songPosition = " << m_songPosition.sec << "s " << m_songPosition.usec << "us" << endl;
 
         if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                           ROSEGARDEN_GUI_IFACE_NAME,

@@ -469,6 +469,7 @@ MidiFile::convertToRosegarden()
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
     unsigned int compositionTrack = 0;
+    string trackName("Imported MIDI");
     bool noteOffFound;
     bool notesOnTrack;
 
@@ -607,8 +608,11 @@ MidiFile::convertToRosegarden()
 
 		case MIDI_COPYRIGHT_NOTICE:
 		    break;
-
+                    
+                    // Set the track name
+                    //
 		case MIDI_TRACK_NAME:
+                    trackName = midiEvent->metaMessage();
 		    break;
 
 		case MIDI_INSTRUMENT_NAME:
@@ -781,7 +785,7 @@ MidiFile::convertToRosegarden()
         track = new Rosegarden::Track((int) i,
                                       false,
                                       Rosegarden::Track::Midi,
-                                      string("Imported MIDI"),
+                                      trackName,
                                       (int) i,
                                       0);
 

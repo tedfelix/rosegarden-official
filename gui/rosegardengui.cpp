@@ -68,8 +68,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playbackLatency(0, 300),
-      m_fetchLatency(0, 200),
+      m_playbackLatency(0, 200000),
+      m_fetchLatency(0, 100000),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
 {
@@ -962,18 +962,8 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
                                     const long &sliceEndSec,
                                     const long &sliceEndUsec)
 {
-    // [rwb] - moved this code in here from MappedComposition
-    //         to reduce playback latency
-    // This means we use a static MappedComposition locally rather
-    // than continually creating and throwing away them using
-    // the previous code:
+    // Clear the global return structure
     //
-    //
-    // mappComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
-    //                                              sliceStart, sliceEnd);
-    //
-    //
-
     mappComp.clear();
 
     // if we're closing then return no events
@@ -983,6 +973,11 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
   
     mappComp.setStartTime(Rosegarden::RealTime(sliceStartSec, sliceStartUsec));
     mappComp.setEndTime(Rosegarden::RealTime(sliceEndSec, sliceEndUsec));
+
+/*
+    std::cerr << "GET SLICE AT " << sliceStartSec << "s and " << sliceStartUsec << "usecs" << endl;
+    std::cerr << "          TO " << sliceEndSec << "s and " << sliceEndUsec << "usecs" << endl;
+*/
 
 /*
     timeT sliceStartElapsed =
@@ -1039,13 +1034,13 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
             // probably in a tied series, but not as first note
             //
-            if (duration > Rosegarden::RealTime(0, 0))
+            if (duration == Rosegarden::RealTime(0, 0))
                 continue;
 
             // Eliminate events before our required time
             //
-            if ( eventTime >= mappComp.getStartTime() &&
-                 eventTime <= mappComp.getEndTime())
+            if ( eventTime > mappComp.getStartTime() &&
+                 eventTime < mappComp.getEndTime())
             {
                 // insert event
                 Rosegarden::MappedEvent *me =
@@ -1056,6 +1051,8 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
             }
         }
     }
+
+    //std::cout << "GOT SLICE OF " << mappComp.size() << " ELEMENTS" << endl;
 
     return mappComp;
 }
