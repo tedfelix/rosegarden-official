@@ -3,7 +3,7 @@
 <rosegarden-data>
 <track nb="1" start="0">
         <event type="timesignature" numerator="9" denominator="16"/>
-        <event type="keychange" key="C# major"/>
+        <event type="keychange"><prop name="key" string="C# major"/></event>
         <event type="clefchange" clef="treble"/>
         <event type="note" duration="breve" pitch="64"/>
         <event type="note" duration="crotchet" pitch="64"/>

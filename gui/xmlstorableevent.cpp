@@ -98,6 +98,44 @@ XmlStorableEvent::XmlStorableEvent(const Event &e)
 }
 
 
+void
+XmlStorableEvent::setProperty(const QXmlAttributes &attributes)
+{
+    bool have = false;
+    QString name = attributes.value("name");
+    if (name == "") {
+        kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: no property name found, ignoring" << endl;
+        return;
+    }
+
+    for (int i = 0; i < attributes.length(); ++i) {
+	QString attrName(attributes.qName(i)),
+            attrVal(attributes.value(i));
+
+	if (attrName == "name") {
+            continue;
+        } else if (have) {
+            kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
+            continue;
+        } else if (attrName == "bool") {
+            set<Bool>(name.latin1(), attrVal.lower() == "true");
+            have = true;
+        } else if (attrName == "int") {
+            set<Int>(name.latin1(), attrVal.toInt());
+            have = true;
+        } else if (attrName == "string") {
+            set<String>(name.latin1(), attrVal.latin1());
+            have = true;
+        } else {
+            kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: unknown attribute name \"" << name.latin1() << "\", ignoring" << endl;
+        }
+    }
+
+    kdDebug(KDEBUG_AREA) << "XmlStorableEvent::setProperty: Warning: no property value found" << endl;
+}
+
+
+
 QString
 XmlStorableEvent::toXmlString() const
 {

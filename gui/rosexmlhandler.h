@@ -30,6 +30,8 @@
  *@author Guillaume Laurent, Chris Cannam, Rich Bown
  */
 
+class XmlStorableEvent;
+
 class RoseXmlHandler : public QXmlDefaultHandler  {
 public:
     RoseXmlHandler(Rosegarden::Composition &composition);
@@ -58,6 +60,7 @@ public:
 protected:
     Rosegarden::Composition &m_composition;
     Rosegarden::Track *m_currentTrack;
+    XmlStorableEvent *m_currentEvent;
 
     Rosegarden::Event::timeT m_currentTime;
     Rosegarden::Event::timeT m_chordDuration;

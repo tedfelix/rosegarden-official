@@ -154,7 +154,6 @@ Event::getStorageSize() const
     return s;
 }
 
-
 bool
 operator<(const Event &a, const Event &b)
 {

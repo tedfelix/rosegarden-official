@@ -34,6 +34,8 @@ public:
     XmlStorableEvent(const QXmlAttributes& atts);
     XmlStorableEvent(const Rosegarden::Event&);
 
+    void setProperty(const QXmlAttributes& atts);
+
     QString        toXmlString() const;
     static QString toXmlString(const Event&);
 };

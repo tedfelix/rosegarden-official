@@ -31,6 +31,7 @@ using Rosegarden::Track;
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
       m_currentTrack(0),
+      m_currentEvent(0),
       m_currentTime(0),
       m_chordDuration(0),
       m_inChord(false),
@@ -97,32 +98,35 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
 
-        XmlStorableEvent *newEvent = new XmlStorableEvent(atts);
-        newEvent->setAbsoluteTime(m_currentTime);
+        if (m_currentEvent) {
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
+            delete m_currentEvent;
+        }
+
+        m_currentEvent = new XmlStorableEvent(atts);
+        m_currentEvent->setAbsoluteTime(m_currentTime);
 
         if (m_inGroup) {
-            newEvent->set<Int>(P_GROUP_NO, m_groupNo);
-            newEvent->set<String>(P_GROUP_TYPE, m_groupType);
+            m_currentEvent->set<Int>(P_GROUP_NO, m_groupNo);
+            m_currentEvent->set<String>(P_GROUP_TYPE, m_groupType);
         }
         
         if (!m_inChord) {
 
-            m_currentTime += newEvent->getDuration();
+            m_currentTime += m_currentEvent->getDuration();
 
             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
 
         } else if (m_chordDuration == 0 &&
-                   newEvent->getDuration() != 0) {
+                   m_currentEvent->getDuration() != 0) {
 
             // set chord duration to the duration of the 1st element
             // with a non-null duration (if no such elements, leave it
             // to 0).
 
-            m_chordDuration = newEvent->getDuration();
+            m_chordDuration = m_currentEvent->getDuration();
         }
         
-        m_currentTrack->insert(newEvent);
-
     } else if (lcName == "chord") {
 
         m_inChord = true;
@@ -132,6 +136,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_inGroup = true;
         m_groupNo++;
         m_groupType = atts.value("type");
+
+    } else if (lcName == "prop") {
+        
+        if (!m_currentEvent) {
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
+        } else {
+            m_currentEvent->setProperty(atts);
+        }
         
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
@@ -146,7 +158,10 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 {
     QString lcName = qName.lower();
 
-    if (lcName == "chord") {
+    if (lcName == "event") {
+        m_currentTrack->insert(m_currentEvent);
+        m_currentEvent = 0;
+    } else if (lcName == "chord") {
         m_currentTime += m_chordDuration;
         m_inChord = false;
         m_chordDuration = 0;
