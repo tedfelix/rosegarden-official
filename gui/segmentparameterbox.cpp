@@ -41,7 +41,6 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent,
     m_standardQuantizations
 	(Rosegarden::StandardQuantization::getStandardQuantizations())
 {
-    setFixedSize(136, 120);
     initBox();
 }
 
@@ -69,7 +68,7 @@ SegmentParameterBox::initBox()
     plainFont.setPointSize(10);
 
     QFont boldFont;
-    boldFont.setPointSize(11);
+    boldFont.setPointSize(10);
     boldFont.setBold(true);
 
     QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);

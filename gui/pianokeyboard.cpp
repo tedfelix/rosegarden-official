@@ -109,7 +109,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
     for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i)
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-                       QString(i18n("C %1")).arg(m_labelKeyPos.size() - i - 2));
+        QString(i18n("C %1")).arg((int)m_labelKeyPos.size() - (int)i - 4));
 
     paint.setBrush(colorGroup().foreground());
 

@@ -554,6 +554,19 @@ SequenceManager::record()
         return;
     }
 
+    // Get the record track and check the Instrument type
+    int rID = comp.getRecordTrack();
+    Rosegarden::InstrumentId inst = comp.getTrackByIndex(rID)->getInstrument();
+
+    // If no matching record instrument
+    //
+    if (studio.getInstrumentById(inst) == 0)
+    {
+        m_transport->RecordButton->setDown(false);
+        throw(i18n("No Record instrument selected"));
+    }
+
+
     // may throw an exception
     checkSoundSystemStatus();
 
@@ -574,10 +587,6 @@ SequenceManager::record()
     QByteArray data;
     QCString replyType;
     QByteArray replyData;
-
-    // Get the record track and check the Instrument type
-    int rID = comp.getRecordTrack();
-    Rosegarden::InstrumentId inst= comp.getTrackByIndex(rID)->getInstrument();
 
     switch (studio.getInstrumentById(inst)->getType())
     {
