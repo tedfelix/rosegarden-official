@@ -10,12 +10,33 @@
 #include <arts/connect.h>
 */
 
-#include <sndfile.h>
+//#include <sndfile.h>
+#include "PluginManager.h"
 
 using std::cout;
 using std::cerr;
 using std::endl;
 
+int
+main(int argc, char **argv)
+{
+    Rosegarden::PluginManager *pluginManager = new Rosegarden::PluginManager();
+    pluginManager->getenvLADSPAPath();
+
+    // find them
+    pluginManager->discoverPlugins();
+
+    Rosegarden::PluginIterator it;
+    for (it = pluginManager->begin(); it != pluginManager->end(); it++)
+    {
+        cout << "NAME = \"" << (*it)->getName() << "\"" << endl;
+    }
+
+    delete pluginManager;
+}
+
+
+/*
 int
 main(int argc, char **argv)
 {
@@ -84,5 +105,6 @@ main(int argc, char **argv)
     exit(0);
 
 }
+*/
 
 

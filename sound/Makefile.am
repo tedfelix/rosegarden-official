@@ -20,6 +20,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MappedInstrument.cpp \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
+                                PluginManager.cpp \
                                 RIFFAudioFile.cpp \
                                 SoundFile.cpp \
                                 WAVAudioFile.cpp
@@ -82,6 +83,6 @@ DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 #miditest_SOURCES = miditest.cpp
 #miditest_LDADD = -lasound -lqt libRosegardenSound.la libRosegardenSequencer.la ./base/libbase.la
 
-# audiotest_SOURCES = audiotest.cpp
-# audiotest_LDADD = -lartsmidi -lqt -lartsflow -lartsmodules -lsoundserver_idl libRosegardenSound.la libRosegardenSequencer.la -lsndfile
+#audiotest_SOURCES = audiotest.cpp
+#audiotest_LDADD = -lartsmidi -lqt -lartsflow -lartsmodules -lsoundserver_idl libRosegardenSound.la libRosegardenSequencer.la -lsndfile
 
