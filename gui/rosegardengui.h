@@ -397,6 +397,11 @@ public slots:
     void slotSelectAll();
 
     /**
+     * open a matrix view for each of the currently-selected segments
+     */
+    void slotEditInMatrix();
+
+    /**
      * open a notation view with all currently-selected segments in it
      */
     void slotEditAsNotation();

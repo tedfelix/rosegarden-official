@@ -313,6 +313,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotSelectAll()), actionCollection(),
 		"select_all");
 
+    new KAction(i18n("Open in &Matrix Editor"), 0, this,
+		SLOT(slotEditInMatrix()), actionCollection(),
+		"edit_in_matrix");
+
     new KAction(i18n("Open in &Notation Editor"), 0, this,
 		SLOT(slotEditAsNotation()), actionCollection(),
 		"edit_as_notation");
@@ -1147,6 +1151,16 @@ void RosegardenGUIApp::slotSelectAll()
 void RosegardenGUIApp::slotEditAsNotation()
 {
     m_view->slotEditSegmentNotation(0);
+}
+
+void RosegardenGUIApp::slotEditInMatrix()
+{
+    Rosegarden::SegmentSelection selection =
+	m_view->getTrackEditor()->getSegmentCanvas()->getSelectedSegments();
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	m_view->slotEditSegmentMatrix(*i);
+    }
 }
 
 void RosegardenGUIApp::slotToggleToolBar()

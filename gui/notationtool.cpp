@@ -234,6 +234,7 @@ NoteInserter::~NoteInserter()
 
 void NoteInserter::ready()
 {
+    m_clickHappened = false;
     m_nParentView->setCanvasCursor(Qt::crossCursor);
     m_nParentView->setPositionTracking(true);
 }
@@ -249,41 +250,6 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 {
     if (staffNo < 0) return;
     computeLocationAndPreview(e);
-/*!!!
-    Event *clef = 0, *key = 0;
-
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
-    
-    kdDebug(KDEBUG_AREA) << "NoteInserter::handleLeftButtonPress: coords are (" << e->x() << "," << e->y() << ")" << endl;
-
-    NotationElementList::iterator itr =
-	staff->getElementUnderCanvasCoords(e->x(), (int)e->y(), clef, key);
-
-    if (itr == staff->getViewElementList()->end()) return;
-    timeT time = (*itr)->getAbsoluteTime();
-
-    kdDebug(KDEBUG_AREA) << "Time is " << time << endl;
-
-    if ((*itr)->isRest()) {
-	time += getOffsetWithinRest(staffNo, itr,
-				    e->x() - (*itr)->getCanvasX());
-    }
-
-    kdDebug(KDEBUG_AREA) << "Insertion time: " << time << endl;
-
-    m_clickPitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
-        getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
-                            key ? Rosegarden::Key(*key) :
-                            Rosegarden::Key::DefaultKey);
-
-    m_clickTime = time;
-    m_clickStaffNo = staffNo;
-    m_clickHappened = true;
-
-    m_nParentView->previewNote(m_clickStaffNo, m_clickTime,
-			       m_clickPitch, m_clickHeight,
-			       Note(m_noteType, m_noteDots));
-*/
 }
 
 

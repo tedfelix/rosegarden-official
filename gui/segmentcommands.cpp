@@ -36,7 +36,8 @@ using Rosegarden::TrackId;
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
     XKCommand("Erase Segment"),
     m_composition(segment->getComposition()),
-    m_segment(segment)
+    m_segment(segment),
+    m_detached(false)
 {
     // nothing else
 }
@@ -45,9 +46,11 @@ SegmentEraseCommand::~SegmentEraseCommand()
 {
     // This is the only place the Segment can safely be deleted, and
     // then only if it is not in the Composition (i.e. if we executed
-    // more recently than we unexecuted)
+    // more recently than we unexecuted).  Can't safely call through
+    // the m_segment pointer here; someone else might have got to it
+    // first
 
-    if (!m_segment->getComposition()) {
+    if (m_detached) {
 	delete m_segment;
     }
 }
@@ -56,12 +59,14 @@ void
 SegmentEraseCommand::execute()
 {
     m_composition->detachSegment(m_segment);
+    m_detached = true;
 }
 
 void
 SegmentEraseCommand::unexecute()
 {
     m_composition->addSegment(m_segment);
+    m_detached = false;
 }
 
 // --------- Copy Segment ---------
@@ -70,13 +75,14 @@ SegmentCopyCommand::SegmentCopyCommand(Segment *segment):
     XKCommand("Copy Segment"),
     m_composition(segment->getComposition()),
     m_segmentToCopy(segment),
-    m_segment(0)
+    m_segment(0),
+    m_detached(false)
 {
 }
 
 SegmentCopyCommand::~SegmentCopyCommand()
 {
-    if (m_segment && !m_segment->getComposition()) {
+    if (m_detached) {
         delete m_segment;
     }
 }
@@ -86,12 +92,14 @@ SegmentCopyCommand::execute()
 {
     m_segment = new Segment(*m_segmentToCopy);
     m_composition->addSegment(m_segment);
+    m_detached = false;
 }
 
 void
 SegmentCopyCommand::unexecute()
 {
     m_composition->detachSegment(m_segment);
+    m_detached = true;
 }
 
 
@@ -106,13 +114,14 @@ SegmentInsertCommand::SegmentInsertCommand(Composition *c,
     m_segment(0),
     m_track(track),
     m_startTime(startTime),
-    m_duration(duration)
+    m_duration(duration),
+    m_detached(false)
 {
 }
 
 SegmentInsertCommand::~SegmentInsertCommand()
 {
-    if (!m_segment->getComposition()) {
+    if (m_detached) {
 	delete m_segment;
     }
 }
@@ -134,13 +143,15 @@ SegmentInsertCommand::execute()
     {
         m_composition->addSegment(m_segment);
     }
-    
+
+    m_detached = false;
 }
 
 void
 SegmentInsertCommand::unexecute()
 {
     m_composition->detachSegment(m_segment);
+    m_detached = true;
 }
 
 // --------- Record Segment --------
@@ -149,13 +160,14 @@ SegmentInsertCommand::unexecute()
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
     XKCommand("Record"),
     m_composition(s->getComposition()),
-    m_segment(s)
+    m_segment(s),
+    m_detached(false)
 {
 }
 
 SegmentRecordCommand::~SegmentRecordCommand()
 {
-    if (!m_segment->getComposition()) {
+    if (m_detached) {
 	delete m_segment;
     }
 }
@@ -166,12 +178,14 @@ SegmentRecordCommand::execute()
     if (!m_segment->getComposition()) {
 	m_composition->addSegment(m_segment);
     }
+    m_detached = false;
 }
 
 void
 SegmentRecordCommand::unexecute()
 {
     m_composition->detachSegment(m_segment);
+    m_detached = true;
 }
 
 
@@ -262,13 +276,14 @@ SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
     XKCommand("Split Segment"),
     m_segment(segment),
     m_newSegment(0),
-    m_splitTime(splitTime)
+    m_splitTime(splitTime),
+    m_detached(false)
 {
 }
 
 SegmentSplitCommand::~SegmentSplitCommand()
 {
-    if (m_newSegment && !m_newSegment->getComposition()) {
+    if (m_detached) {
 	delete m_newSegment;
     }
 }
@@ -352,6 +367,8 @@ SegmentSplitCommand::execute()
     if (!m_newSegment->getComposition()) {
 	m_segment->getComposition()->addSegment(m_newSegment);
     }
+
+    m_detached = false;
 }
 
 void
@@ -367,6 +384,7 @@ SegmentSplitCommand::unexecute()
     }
 
     m_segment->getComposition()->detachSegment(m_newSegment);
+    m_detached = true;
 }
 
 

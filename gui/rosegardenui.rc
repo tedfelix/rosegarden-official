@@ -15,6 +15,7 @@
   <Menu name="edit">
       	<Action name="select_all"/>
 	<Separator/>
+      	<Action name="edit_in_matrix"/>
       	<Action name="edit_as_notation"/>
 	<Separator/>
       	<Action name="add_tempo" append="edit_merge"/>

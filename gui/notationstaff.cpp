@@ -877,12 +877,12 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
 	(new QCanvasPixmap(notePixmap), m_canvas);
 
     int layoutY = getLayoutYForHeight(heightOnStaff);
-    LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords(layoutX, layoutY);
+    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
 
     kdDebug(KDEBUG_AREA) << "NotationStaff::showPreviewNote: Made note, moved it to (" << coords.first << "," << coords.second << ")" << endl;
 
-    m_previewSprite->show();
     m_previewSprite->move(coords.first, (double)coords.second);
+    m_previewSprite->show();
     m_canvas->update();
 } 
 

@@ -47,6 +47,7 @@ public:
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
+    bool m_detached;
 };
 
 class SegmentCopyCommand : public XKCommand
@@ -65,7 +66,7 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment     *m_segmentToCopy;
     Rosegarden::Segment     *m_segment;
-
+    bool m_detached;
 };
 
 
@@ -87,6 +88,7 @@ private:
     int                      m_track;
     Rosegarden::timeT        m_startTime;
     Rosegarden::timeT        m_duration;
+    bool m_detached;
 };
 
 
@@ -109,6 +111,7 @@ public:
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
+    bool m_detached;
 };
 
 
@@ -160,6 +163,7 @@ private:
     Rosegarden::Segment *m_segment;
     Rosegarden::Segment *m_newSegment;
     Rosegarden::timeT m_splitTime;
+    bool m_detached;
 };
 
 
