@@ -22,7 +22,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 VPATH = .
-prefix = /usr/local/kde
+prefix = /opt/kde2-gcc3
 exec_prefix = ${prefix}
 #>- 
 bindir = ${exec_prefix}/bin
@@ -73,7 +73,7 @@ host_alias = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
 target_alias = i686-pc-linux-gnu
 target_triplet = i686-pc-linux-gnu
-ARTSCCONFIG = /usr/bin/artsc-config
+ARTSCCONFIG = /opt/kde2-gcc3/bin/artsc-config
 AS = @AS@
 AUTODIRS = 
 CC = gcc
@@ -81,8 +81,8 @@ CONF_FILES =  $(top_srcdir)/./admin/configure.in.min $(top_srcdir)/configure.in.
 CPP = gcc -E
 CXX = g++
 CXXCPP = g++ -E
-DCOPIDL = /usr/bin/dcopidl
-DCOPIDL2CPP = /usr/bin/dcopidl2cpp
+DCOPIDL = /opt/kde2-gcc3/bin/dcopidl
+DCOPIDL2CPP = /opt/kde2-gcc3/bin/dcopidl2cpp
 DCOP_DEPENDENCIES = $(DCOPIDL)
 DLLTOOL = @DLLTOOL@
 DPMSINC = @DPMSINC@
@@ -92,17 +92,17 @@ GCJ = @GCJ@
 GCJFLAGS = @GCJFLAGS@
 GLINC = @GLINC@
 GLLIB = @GLLIB@
-GMSGFMT = /usr/bin/msgfmt
+GMSGFMT = :
 IDL = @IDL@
 IDL_DEPENDENCIES = @IDL_DEPENDENCIES@
-KDB2HTML = /usr/bin/kdb2html
-KDECONFIG = /usr/bin/kde-config
+KDB2HTML = /opt/kde2-gcc3/bin/kdb2html
+KDECONFIG = /opt/kde2-gcc3/bin/kde-config
 KDE_CXXFLAGS = 
 KDE_EXTRA_RPATH = 
-KDE_INCLUDES = -I/usr/include
-KDE_LDFLAGS = -L/usr/lib
+KDE_INCLUDES = -I/opt/kde2-gcc3/include
+KDE_LDFLAGS = -L/opt/kde2-gcc3/lib
 KDE_PLUGIN = -avoid-version -module -no-undefined
-KDE_RPATH = -R $(kde_libraries) -R $(x_libraries)
+KDE_RPATH = -R $(kde_libraries) -R $(qt_libraries) -R $(x_libraries)
 KDE_USE_CLOSURE_FALSE = #
 KDE_USE_CLOSURE_TRUE = 
 KDE_USE_FINAL_FALSE = 
@@ -119,7 +119,7 @@ LIBPYTHON = @LIBPYTHON@
 LIBQIMGIO = @LIBQIMGIO@
 LIBSM = -lSM -lICE
 LIBSOCKET = 
-LIBTIFF = 
+LIBTIFF = -ltiff -ljpeg -lz
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIBUCB = 
 LIBZ = -lz
@@ -140,13 +140,13 @@ LIB_QT = -lqt $(LIBPNG) $(LIBJPEG) -lXext $(LIB_X11) $(LIBSM)
 LIB_SMB = -lsmb
 LIB_X11 = -lX11 $(LIBSOCKET)
 LN_S = ln -s
-MAKEINFO = makeinfo
-MCOPIDL = /usr/bin/mcopidl
+MAKEINFO = /home/chris/rg-sf/rosegarden/admin/missing makeinfo
+MCOPIDL = /opt/kde2-gcc3/bin/mcopidl
 MICO_INCLUDES = @MICO_INCLUDES@
 MICO_LDFLAGS = @MICO_LDFLAGS@
-MOC = /usr/lib/qt2/bin/moc
-MSGFMT = /usr/bin/msgfmt
-NOOPT_CXXFLAGS =  -g -ansi -D_XOPEN_SOURCE -D_BSD_SOURCE -Wbad-function-cast -Wcast-align -Wundef -Wconversion -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -Wnon-virtual-dtor -fno-builtin -g3 -gstabs+ -fexceptions
+MOC = /opt/kde2-gcc3/qt-2.3.0/bin/moc
+MSGFMT = :
+NOOPT_CXXFLAGS =  -g -ansi -D_XOPEN_SOURCE -D_BSD_SOURCE -Wbad-function-cast -Wcast-align -Wundef -Wconversion -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -Wnon-virtual-dtor -fno-builtin -fexceptions
 NOREPO = -fno-repo
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
@@ -157,28 +157,28 @@ PAMLIBS = @PAMLIBS@
 PYTHONINC = @PYTHONINC@
 PYTHONLIB = @PYTHONLIB@
 PYTHONMODDIR = @PYTHONMODDIR@
-QT_INCLUDES = -I/usr/lib/qt2/include
-QT_LDFLAGS = 
+QT_INCLUDES = -I/opt/kde2-gcc3/qt-2.3.0/include
+QT_LDFLAGS = -L/opt/kde2-gcc3/qt-2.3.0/lib
 RANLIB = ranlib
 REPO = -frepo
 STRIP = strip
-TOPSUBDIRS =  core gui po sound
-UIC = /usr/lib/qt2/bin/uic
+TOPSUBDIRS =  core gui po sequencer sound
+UIC = /opt/kde2-gcc3/qt-2.3.0/bin/uic
 USER_INCLUDES = 
 USER_LDFLAGS = 
 USE_EXCEPTIONS = -fexceptions
 USE_RTTI = -frtti
 USE_THREADS = @USE_THREADS@
 VERSION = 0.1
-XGETTEXT = /usr/bin/xgettext
+XGETTEXT = :
 XPMINC = @XPMINC@
 XPMLIB = @XPMLIB@
 X_EXTRA_LIBS = 
 X_INCLUDES = -I/usr/X11R6/include
 X_LDFLAGS = -L/usr/X11R6/lib
 X_PRE_LIBS = 
-all_includes = -I/usr/include -I/usr/lib/qt2/include -I/usr/X11R6/include 
-all_libraries = -L/usr/X11R6/lib -L/usr/lib 
+all_includes = -I/opt/kde2-gcc3/include -I/opt/kde2-gcc3/qt-2.3.0/include -I/usr/X11R6/include 
+all_libraries = -L/usr/X11R6/lib -L/opt/kde2-gcc3/qt-2.3.0/lib -L/opt/kde2-gcc3/lib 
 idldir = @idldir@
 kde_appsdir = ${prefix}/share/applnk
 kde_bindir = ${exec_prefix}/bin
@@ -186,10 +186,10 @@ kde_confdir = ${prefix}/share/config
 kde_datadir = ${prefix}/share/apps
 kde_htmldir = ${prefix}/share/doc/HTML
 kde_icondir = ${prefix}/share/icons
-kde_includes = /usr/include
-kde_libraries = /usr/lib
-kde_libs_htmldir = /usr/share/doc/HTML
-kde_libs_prefix = /usr
+kde_includes = /opt/kde2-gcc3/include
+kde_libraries = /opt/kde2-gcc3/lib
+kde_libs_htmldir = /opt/kde2-gcc3/share/doc/HTML
+kde_libs_prefix = /opt/kde2-gcc3
 kde_locale = ${prefix}/share/locale
 kde_mimedir = ${prefix}/share/mimelnk
 kde_moduledir = ${exec_prefix}/lib/kde2
@@ -199,8 +199,8 @@ kde_sounddir = ${prefix}/share/sounds
 kde_templatesdir = ${prefix}/share/templates
 kde_wallpaperdir = ${prefix}/share/wallpapers
 micodir = @micodir@
-qt_includes = /usr/lib/qt2/include
-qt_libraries = 
+qt_includes = /opt/kde2-gcc3/qt-2.3.0/include
+qt_libraries = /opt/kde2-gcc3/qt-2.3.0/lib
 x_includes = /usr/X11R6/include
 x_libraries = /usr/X11R6/lib
 
@@ -213,7 +213,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 #>- all: all-redirect
 #>+ 1
@@ -243,17 +243,6 @@ distdir: $(DISTFILES)
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu po/Makefile
-#>- 	@for file in $(DISTFILES); do \
-#>- 	  d=$(srcdir); \
-#>- 	  if test -d $$d/$$file; then \
-#>- 	    cp -pr $$/$$file $(distdir)/$$file; \
-#>- 	  else \
-#>- 	    test -f $(distdir)/$$file \
-#>- 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-#>- 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
-#>- 	  fi; \
-#>- 	done
-#>+ 10
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

@@ -19,9 +19,14 @@
 
 #include "Midi.h"
 #include "MidiEvent.h"
+#include <iostream>
 
 namespace Rosegarden
 {
+
+using std::string;
+using std::cout;
+using std::endl;
 
 MidiEvent::MidiEvent()
 {

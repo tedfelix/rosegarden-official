@@ -108,7 +108,7 @@ namespace Rosegarden
     void record(const RecordStatus& recordStatus);
 
     // get a vector of recorded events from aRTS
-    inline vector<Arts::MidiEvent>* getMidiQueue()
+    inline std::vector<Arts::MidiEvent>* getMidiQueue()
       { return _midiRecordPort.getQueue(); }
 
     // Our current recording status.  Asynchronous record states

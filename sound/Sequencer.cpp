@@ -30,6 +30,10 @@
 namespace Rosegarden
 {
 
+using std::cerr;
+using std::cout;
+using std::endl;
+
 Sequencer::Sequencer():
                        _songPosition(0),
                        _songPlayPosition(0),

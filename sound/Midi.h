@@ -37,8 +37,8 @@ namespace Rosegarden
   //
   typedef unsigned char MidiByte;
 
-  const string MIDI_FILE_HEADER              = "MThd";
-  const string MIDI_TRACK_HEADER             = "MTrk";
+  const std::string MIDI_FILE_HEADER              = "MThd";
+  const std::string MIDI_TRACK_HEADER             = "MTrk";
 
   const MidiByte MIDI_STATUS_BYTE_MASK       = 0x80;
   const MidiByte MIDI_MESSAGE_TYPE_MASK      = 0xF0;

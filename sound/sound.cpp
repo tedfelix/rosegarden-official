@@ -31,6 +31,9 @@
 #include "Sequencer.h"
 
 
+using std::vector;
+using std::endl;
+using std::cout;
 
 int
 main(int argc, char **argv)

@@ -53,7 +53,7 @@ namespace Rosegarden
     } MIDIFileFormatType;
 
     MidiFile();
-    MidiFile (char *fn);
+    MidiFile (const char *fn);
     ~MidiFile();
 
     MidiFile& operator=(const MidiFile& mF)
@@ -71,7 +71,7 @@ namespace Rosegarden
     //bool writeHeader();
     //bool writeEvent();
 
-    const string& filename() { return _filename; }
+    const std::string& filename() { return _filename; }
     const int& timingDivision() { return _timingDivision; }
     const MIDIFileFormatType& format() { return _format; }
     const unsigned int& numberOfTracks() { return _numberOfTracks; }
@@ -82,7 +82,7 @@ namespace Rosegarden
     void convertToMidi(const Rosegarden::Composition &comp);
 
   private:
-    string _filename;
+    std::string _filename;
     int _timingDivision;   // pulses per quarter note
     MIDIFileFormatType _format;
     unsigned int _numberOfTracks;
@@ -98,18 +98,18 @@ namespace Rosegarden
 
     // Split the tasks up
     //
-    bool parseHeader(const string& midiHeader);
-    bool parseTrack(ifstream* midiFile, const unsigned int &trackNum);
+    bool parseHeader(const std::string& midiHeader);
+    bool parseTrack(std::ifstream* midiFile, const unsigned int &trackNum);
     bool writeHeader();
     bool writeTrack();
 
     // Internal convenience functions
     //
-    const unsigned int midiBytesToInt(const string& bytes);
-    const unsigned long midiBytesToLong(const string& bytes);
-    const unsigned int getNumberFromMidiBytes(ifstream* midiFile);
-    const string getMidiBytes(ifstream* midiFile, const unsigned int &bytes);
-    bool skipToNextTrack(ifstream *midiFile);
+    const unsigned int midiBytesToInt(const std::string& bytes);
+    const unsigned long midiBytesToLong(const std::string& bytes);
+    const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
+    const std::string getMidiBytes(std::ifstream* midiFile, const unsigned int &bytes);
+    bool skipToNextTrack(std::ifstream *midiFile);
 
   };
 

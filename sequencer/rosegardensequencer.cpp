@@ -20,6 +20,9 @@
 #include <iostream>
 #include "rosegardensequencer.h"
 
+using std::cerr;
+using std::endl;
+
 RosegardenSequencerApp::RosegardenSequencerApp():
     DCOPObject("RosegardenSequencerIface")
 {

@@ -24,6 +24,8 @@
 namespace Rosegarden
 {
 
+using std::vector;
+
 RosegardenMidiRecord_impl::RosegardenMidiRecord_impl(): _record(false)
 {
   _midiEventQueue = new vector<Arts::MidiEvent>();

@@ -54,7 +54,7 @@ namespace Rosegarden
     MidiEvent(const unsigned long &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &metaEventCode,
-              const string &metaMessage);
+              const std::string &metaMessage);
 
     ~MidiEvent();
 
@@ -73,7 +73,7 @@ namespace Rosegarden
     inline const MidiByte velocity() { return _data2; }
 
     inline const bool isMeta() { return (_eventCode & MIDI_FILE_META_EVENT); }
-    inline const string metaMessage() { return _metaMessage; }
+    inline const std::string metaMessage() { return _metaMessage; }
     inline const MidiByte metaMessageType() { return _metaEventCode; }
 
     MidiEvent& operator=(const MidiEvent mE) {;}
@@ -91,7 +91,7 @@ namespace Rosegarden
     MidiByte _data2;
 
     MidiByte _metaEventCode;
-    string   _metaMessage;
+    std::string   _metaMessage;
     
 
   };

@@ -47,12 +47,12 @@ namespace Rosegarden
   
     Arts::TimeStamp time() { return _midiThru.time(); }
 
-    vector<Arts::MidiEvent> *getQueue();
+    std::vector<Arts::MidiEvent> *getQueue();
 
   private:
     bool _record;
     Arts::MidiPort _midiThru;
-    vector<Arts::MidiEvent> *_midiEventQueue;
+    std::vector<Arts::MidiEvent> *_midiEventQueue;
 
     void addToList(const Arts::MidiEvent &mE);
   };

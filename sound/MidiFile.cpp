@@ -29,6 +29,13 @@
 namespace Rosegarden
 {
 
+using std::string;
+using std::ifstream;
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::ios;
+
 MidiFile::MidiFile():_filename("unamed.mid"),
                      _timingDivision(0),
                      _format(MIDI_FILE_NOT_LOADED),
@@ -38,12 +45,12 @@ MidiFile::MidiFile():_filename("unamed.mid"),
 {
 }
 
-MidiFile::MidiFile(char *fn):_filename(fn),
-                            _timingDivision(0),
-                            _format(MIDI_FILE_NOT_LOADED),
-                            _numberOfTracks(0),
-                            _trackByteCount(0),
-                            _decrementCount(false)
+MidiFile::MidiFile(const char *fn):_filename(fn),
+                                   _timingDivision(0),
+                                   _format(MIDI_FILE_NOT_LOADED),
+                                   _numberOfTracks(0),
+                                   _trackByteCount(0),
+                                   _decrementCount(false)
 {
 }
 
@@ -178,7 +185,12 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
   {
     buffer = getMidiBytes(midiFile, 4); 
 
+#if (__GNUC__ < 3)
     if (buffer.compare(Rosegarden::MIDI_TRACK_HEADER, 0, 4) == 0)
+#else
+    if (buffer.compare(0, 4, Rosegarden::MIDI_TRACK_HEADER) == 0)
+#endif
+
     {
       _trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
       _decrementCount = true;
@@ -258,7 +270,11 @@ MidiFile::parseHeader(const string &midiHeader)
     return(false);
   }
 
+#if (__GNUC__ < 3)
   if (midiHeader.compare(Rosegarden::MIDI_FILE_HEADER, 0, 4) != 0)
+#else
+  if (midiHeader.compare(0, 4, Rosegarden::MIDI_FILE_HEADER) != 0)
+#endif
   {
     cerr << "MidiFile::parseHeader - header not found or malformed" << endl;
     return(false);
