@@ -626,15 +626,14 @@ MidiFile::convertToRosegarden()
 		case MIDI_SET_TEMPO:
 
 		{
-		    long tempo =
-			(((long(midiEvent->metaMessage()[0])  << 8) +
-			  (long(midiEvent->metaMessage()[1])) << 8) +
-			 ((long)midiEvent->metaMessage()[2]));
-		    
-		    Event *tempoEvent = new Event(Composition::TempoEventType);
-		    tempoEvent->setAbsoluteTime(rosegardenTime);
-		    tempoEvent->set<Int>(Composition::TempoProperty, tempo*60);
-		    composition->getReferenceSegment()->insert(tempoEvent);
+		    unsigned char m0 = midiEvent->metaMessage()[0];
+		    unsigned char m1 = midiEvent->metaMessage()[1];
+		    unsigned char m2 = midiEvent->metaMessage()[2];
+
+		    long tempo = (((m0 << 8) + m1) << 8) + m2;
+		    tempo = 60000000 / tempo;
+
+		    composition->addTempo(rosegardenTime, tempo);
 		}
 
 		    break;

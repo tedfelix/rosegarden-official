@@ -76,9 +76,13 @@ public:
     /**
      * Returns the segment storing Bar and TimeSignature events
      */
-    Segment *getReferenceSegment() {
+    Segment *getBarSegment() {
 	calculateBarPositions();
-	return &m_referenceSegment;
+	return &m_barSegment;
+    }
+
+    Segment *getTempoSegment() {
+	return &m_tempoSegment;
     }
 
     const Quantizer *getQuantizer() const {
@@ -95,7 +99,7 @@ public:
     trackcontainer* getTracks() { return &m_tracks; }
     instrumentcontainer* getInstruments() { return &m_instruments; }
 
-    int getRecordTrack() { return m_recordTrack; }
+    int getRecordTrack() const { return m_recordTrack; }
     void setRecordTrack(const int &recordTrack) { m_recordTrack = recordTrack; }
 
     unsigned int getNbSegments() const { return m_segments.size(); }
@@ -220,27 +224,32 @@ public:
     timeT getTimeSignatureAt(timeT, TimeSignature &) const;
 
     /**
-     * Return the tempo in effect at time t.  Can be very slow;
-     * for playback, prefer setPosition plus getTempo.
+     * Return the tempo in effect at time t, in beats per minute.
      */
     double getTempoAt(timeT t) const;
 
     /**
      * Return the tempo in effect at the current playback position.
-     * Equivalent to getTempoAt(getPosition()), but much quicker.
      */
-    double getTempo() const { return m_currentTempo; }
+    double getTempo() const { return getTempoAt(getPosition()); }
 
     /**
      * Set a default tempo for the composition.  This will be
-     * overridden by any tempo events we encounter subsequently.
+     * overridden by any tempo events encountered during playback.
      */
     void setDefaultTempo(double tempo) { m_defaultTempo = tempo; }
 
     /**
+     * Add a tempo-change event at the given time, to the given
+     * tempo (in beats per minute).  Removes any existing tempo
+     * event at that time.
+     */
+    void addTempo(timeT time, double tempo);
+
+    /**
      * Get the current playback position
      */
-    timeT getPosition() { return m_position; }
+    timeT getPosition() const { return m_position; }
 
     /**
      * Set the current playback position (causing the current tempo
@@ -272,7 +281,10 @@ protected:
     int m_recordTrack;
 
     /// Contains time signature and new-bar events.
-    mutable Segment m_referenceSegment;
+    mutable Segment m_barSegment;
+
+    /// Contains tempo events.
+    Segment m_tempoSegment;
 
     // called from calculateBarPositions
     Segment::iterator addNewBar(timeT time, int barNo) const;
@@ -281,10 +293,9 @@ protected:
     Quantizer m_quantizer;
 
     timeT m_position;
-    double m_currentTempo;
     double m_defaultTempo;
 
-    /// affects the reference segment in m_referenceSegment
+    /// affects m_barSegment
     void calculateBarPositions() const;
     mutable bool m_barPositionsNeedCalculating;
 

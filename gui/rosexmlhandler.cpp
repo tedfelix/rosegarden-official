@@ -81,23 +81,15 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
 
-    } else if (lcName == "reference-segment") {
+    } else if (lcName == "bar-segment") {
 
-	if (m_currentSegment != 0) {
-            m_errorString = i18n("Reference segment too late, one or more segments already read");
-            return false;
-	}
-
-	m_currentSegment = m_composition.getReferenceSegment();
+	m_currentSegment = m_composition.getBarSegment();
 	m_currentTime = 0;
 
-/*!!!
-    } else if (lcName == "default-tempo") {
+    } else if (lcName == "tempo-segment") {
 
-	QString tempoString = atts.value("value");
-	m_composition.setDefaultTempo(tempoString.toDouble());
-	m_foundTempo = true;
-*/
+	m_currentSegment = m_composition.getTempoSegment();
+	m_currentTime = 0;
 
     } else if (lcName == "instrument") {
         int id = -1;
@@ -226,15 +218,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         QString trackNbStr = atts.value("track");
         if (trackNbStr) {
             track = trackNbStr.toInt();
-//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : segment instr. nb = "
-//                                  << trackNb << endl;
         }
 
         QString startIdxStr = atts.value("start");
         if (startIdxStr) {
             startIndex = startIdxStr.toInt();
-//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : segment start idx = "
-//                                  << startIndex << endl;
         }
         
         m_currentSegment = new Segment;

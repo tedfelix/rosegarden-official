@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<reference-segment>
+<bar-segment>
 <event type="timesignature"><property name="numerator" int="6"/><property name="denominator" int="8"/></event>
 <resync time="400"/>
 <event type="timesignature"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
-</reference-segment>
+</bar-segment>
 
 <composition recordtrack="0" pointer="0" defaultTempo="120">
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<reference-segment>
+<bar-segment>
 <event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
-</reference-segment>
+</bar-segment>
 
 <composition recordtrack="0" pointer="384" defaultTempo="120">
 

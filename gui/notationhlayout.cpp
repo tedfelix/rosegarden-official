@@ -203,7 +203,7 @@ NotationHLayout::scanStaff(StaffType &staff)
     START_TIMING;
 
     Segment &t(staff.getSegment());
-    const Segment *timeRef = t.getComposition()->getReferenceSegment();
+    const Segment *timeRef = t.getComposition()->getBarSegment();
 
     if (timeRef == 0) {
 	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference segment required (at least until code\nis written to render a segment without bar lines)" << endl;
@@ -468,7 +468,7 @@ NotationHLayout::fillFakeBars()
         if (list.size() > 0 && list[0].barNo < 0) continue; // done it already
 
         Segment &segment = staff->getSegment();
-        const Segment &refSegment = *(segment.getComposition()->getReferenceSegment());
+        const Segment &refSegment = *(segment.getComposition()->getBarSegment());
 
         for (Segment::const_iterator j = refSegment.begin();
              j != refSegment.end(); ++j) {

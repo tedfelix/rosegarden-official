@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<reference-segment>
-</reference-segment>
+<bar-segment>
+</bar-segment>
 
 <composition recordtrack="0" pointer="0" defaultTempo="120">
 

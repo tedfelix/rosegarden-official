@@ -1104,14 +1104,6 @@ void SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
 	 << " startTime = " << startTime << ", duration = "
 	 << duration << endl;
 
-/*!!!
-    iterator tsi = segment().findTimeSignatureAt(startTime);
-    if (tsi != segment().getReferenceSegment()->end()) {
-	ts = TimeSignature(**tsi);
-	sigTime = (*tsi)->getAbsoluteTime();
-    }
-*/
-
     DurationList dl;
     ts.getDurationListForInterval(dl, duration, sigTime);
 

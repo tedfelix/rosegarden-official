@@ -20,7 +20,6 @@
 */
 
 #include <string>
-#include <cstring>
 
 #include "Event.h"
 #include "Segment.h"
@@ -119,7 +118,7 @@ bool RG21Loader::parseChordItem()
     timeT duration = convertRG21Duration(i);
 
     // get chord mod flags and nb of notes.  chord mod is hex
-    int chordMods = (int)strtol((*i).latin1(), 0, 16); ++i;
+    int chordMods = (*i).toInt(0, 16); ++i;
     int nbNotes   = (*i).toInt(); ++i;
 
     vector<string> marks = convertRG21ChordMods(chordMods);
@@ -133,7 +132,7 @@ bool RG21Loader::parseChordItem()
 	// The noteMods field is nominally a hex integer.  As it
 	// happens its value can never exceed 7, but I guess we
 	// should do the right thing anyway
-	int noteMods = (int)strtol((*i).latin1(), 0, 16);
+	int noteMods = (*i).toInt(0, 16);
         pitch = convertRG21Pitch(pitch, noteMods);
 
         Event *noteEvent = new Event(Rosegarden::Note::EventType);
@@ -377,14 +376,14 @@ bool RG21Loader::parseBarType()
     }
 
     // barNo is a hex integer
-    int barNo = (int)strtol(m_tokens[2].latin1(), 0, 16);
+    int barNo = m_tokens[2].toInt(0, 16);
 
     int numerator   = m_tokens[4].toInt();
     int denominator = m_tokens[5].toInt();
 
     timeT sigTime = m_composition->getBarRange(barNo, true).first;
     TimeSignature timeSig(numerator, denominator);
-    m_composition->getReferenceSegment()->insert(timeSig.getAsEvent(sigTime));
+    m_composition->getBarSegment()->insert(timeSig.getAsEvent(sigTime));
 
     return true;
 }
