@@ -61,8 +61,7 @@ public:
 
     virtual MappedComposition *getMappedComposition();
     
-    virtual void processEventsOut(const MappedComposition &mC,
-                                  bool now);
+    virtual void processEventsOut(const MappedComposition &mC);
 
     virtual bool record(RecordStatus recordStatus);
 
@@ -80,6 +79,10 @@ public:
 
     void processMidiIn(const Arts::MidiCommand &midiCommand,
                        const Arts::TimeStamp &timeStamp);
+
+    virtual void processEventsOut(const MappedComposition &mC,
+				  const RealTime &sliceStart,
+				  const RealTime &sliceEnd);
 
     // Some Arts helper methods 'cos the basic Arts::TimeStamp
     // method is a bit unhelpful
@@ -113,9 +116,46 @@ public:
                                             unsigned long /*portNumber*/,
                                             float /*value*/) {;}
 
+    virtual float getPluginInstancePortValue(InstrumentId id,
+					     int position,
+					     unsigned long portNumber) { return 0.0; }
+
     virtual void setPluginInstanceBypass(InstrumentId /*id*/,
                                          int /*position*/,
                                          bool /*value*/) {;}
+
+    virtual QStringList getPluginInstancePrograms(InstrumentId id,
+						  int position) { return QStringList(); }
+
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position) { return QString::null; }
+
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position,
+					     int bank,
+					     int program) { return QString::null; }
+
+    virtual unsigned long getPluginInstanceProgram(InstrumentId id,
+						   int position,
+						   QString name) { return 0; }
+    
+    virtual void setPluginInstanceProgram(InstrumentId id,
+					  int position,
+					  QString program) {;}
+
+    virtual QString configurePlugin(InstrumentId id,
+				    int position,
+				    QString key,
+				    QString value) { return QString::null; }
+
+    virtual void setAudioBussLevels(int bussId,
+				    float dB,
+				    float pan) {}
+
+    virtual void setAudioInstrumentLevels(InstrumentId id,
+					  float dB,
+					  float pan) {}
+
 
     virtual bool checkForNewClients() { return false; }
     
@@ -143,8 +183,10 @@ public:
 protected:
     virtual void generateInstruments();
     virtual void processAudioQueue(bool now);
+
     virtual void processMidiOut(const MappedComposition &mC,
-                                bool now);
+                                const RealTime &sliceStart,
+				const RealTime &sliceEnd);
 
     void sendDeviceController(MidiByte controller, MidiByte value);
     std::map<unsigned int, MappedEvent*>        m_noteOnMap;

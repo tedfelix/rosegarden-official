@@ -579,8 +579,12 @@ ArtsDriver::getMappedComposition()
     
 void
 ArtsDriver::processMidiOut(const MappedComposition &mC,
-                           bool now)
+                           const RealTime &sliceStart,
+                           const RealTime &sliceEnd)
 {
+    // special case for unqueued events
+    bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+
     Arts::MidiEvent event;
 
     // MidiCommandStatus
@@ -951,9 +955,19 @@ ArtsDriver::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 
 void
-ArtsDriver::processEventsOut(const MappedComposition &mC,
-                             bool now)
+ArtsDriver::processEventsOut(const MappedComposition &mC)
 {
+    processEventsOut(mC, RealTime::zeroTime, RealTime::zeroTime);
+}
+
+void
+ArtsDriver::processEventsOut(const MappedComposition &mC,
+                             const RealTime &sliceStart,
+                             const RealTime &sliceEnd)
+{
+    // special case for unqueued events
+    bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+
     // Start playback if it isn't already
     //
     if (m_startPlayback)
@@ -987,11 +1001,12 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
     }
 
     // do MIDI events
-    processMidiOut(mC, now);
+    processMidiOut(mC, sliceStart, sliceEnd);
 
     // do any audio events
     processAudioQueue(now);
 }
+
 
 bool
 ArtsDriver::record(RecordStatus recordStatus)
