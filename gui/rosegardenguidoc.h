@@ -85,9 +85,11 @@ public:
                      Rosegarden::AudioPluginManager *audioPluginManager = 0,
                      const char *name=0);
 
-    /* Copy Constructor */
+private:
     RosegardenGUIDoc(RosegardenGUIDoc *doc);
+    RosegardenGUIDoc& operator=(const RosegardenGUIDoc &doc);
 
+public:
     /**
      * Destructor for the fileclass of the application
      */
@@ -350,9 +352,6 @@ public:
     Rosegarden::SequenceManager* getSequenceManager() 
         { return (dynamic_cast<RosegardenGUIApp*>(parent()))
                                          ->getSequenceManager(); }
-
-    /* assignment */
-    RosegardenGUIDoc& operator=(const RosegardenGUIDoc &doc);
 
     /**
      * return the list of the views currently connected to the document

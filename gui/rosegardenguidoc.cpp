@@ -114,60 +114,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 	    this, SLOT(slotDocumentRestored()));
 }
 
-RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
-    : QObject(doc->parent(), doc->name()),
-      m_modified(doc->isModified()),
-      m_autoSaved(doc->isAutoSaved()),
-      m_recordSegment(0),
-      m_endOfLastRecordedNote(0),
-      m_commandHistory(new MultiViewCommandHistory()), // lose command history
-      m_clipboard(new Rosegarden::Clipboard),          // lose clipboard
-      m_pluginManager(doc->getPluginManager())
-{
-    m_title = doc->getTitle();
-    m_absFilePath = doc->getAbsFilePath();
-
-    m_audioFileManager = doc->getAudioFileManager();
-    m_studio = doc->getStudio();
-    m_config = doc->getConfiguration();
-    m_composition = doc->getComposition();
-
-    m_viewList.setAutoDelete(true);
-    m_editViewList.setAutoDelete(false);
-
-    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
-	    this, SLOT(slotDocumentModified()));
-
-    connect(m_commandHistory, SIGNAL(documentRestored()),
-	    this, SLOT(slotDocumentRestored()));
-}
-
-RosegardenGUIDoc&
-RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
-{
-    if (&doc == this) return *this;
-
-    // clear floating objects
-    if (m_recordSegment) delete m_recordSegment;
-    m_commandHistory->clear();
-    m_clipboard->clear();
-
-    m_modified = doc.isModified();
-    m_autoSaved = doc.isAutoSaved();
-    m_title = doc.getTitle();
-    m_absFilePath = doc.getAbsFilePath();
-    m_recordSegment = 0;
-    m_endOfLastRecordedNote = 0;
-
-    m_audioFileManager = doc.getAudioFileManager();
-    m_studio = doc.getStudio();
-    m_config = doc.getConfiguration();
-    m_composition = doc.getComposition();
-
-    return *this;
-}
-
-
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
     RG_DEBUG << "~RosegardenGUIDoc()\n";
