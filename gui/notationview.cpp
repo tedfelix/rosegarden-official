@@ -73,7 +73,9 @@ using std::set;
 
 
 EventSelection::EventSelection(Track& t)
-    : m_originalTrack(t)
+    : m_originalTrack(t),
+      m_beginTime(0),
+      m_endTime(0)
 {
 }
 
@@ -88,6 +90,8 @@ EventSelection::~EventSelection()
 
 void EventSelection::cut()
 {
+    if (!m_trackEvents.size()) return;
+
     TrackNotationHelper nt(m_originalTrack);
 
     // copy Events from original Track and erase them
@@ -101,9 +105,15 @@ void EventSelection::cut()
 
         // delete Event from Track
         nt.deleteEvent(*i);
-
-        // TODO : store iterators in m_trackEvents instead of ptrs
     }
+
+    eventcontainer::iterator iter = m_trackEvents.begin();
+    
+    m_beginTime = (*iter)->getAbsoluteTime();
+    iter = m_trackEvents.end(); --iter;
+    m_endTime = (*iter)->getAbsoluteTime();
+
+    m_trackEvents.clear();
 }
 
 void EventSelection::copy()
@@ -860,10 +870,23 @@ void NotationView::slotEditRedo()
 //
 void NotationView::slotEditCut()
 {
+    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut()\n";
+
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 
+    kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : cutting selection\n";
+
     m_currentEventSelection->cut();
+
+    emit usedSelection();
+
+    redoLayout(0, // TODO : get the right staff
+               m_currentEventSelection->getBeginTime(),
+               m_currentEventSelection->getEndTime());
+
+    canvas()->update();
+    
 }
 
 void NotationView::slotEditCopy()
@@ -872,6 +895,8 @@ void NotationView::slotEditCopy()
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
     m_currentEventSelection->copy();
+
+    emit usedSelection();
 }
 
 void NotationView::slotEditPaste()
@@ -1646,6 +1671,9 @@ NotationSelector::NotationSelector(NotationView& view)
 {
     m_selectionRect->hide();
     m_selectionRect->setPen(Qt::blue);
+
+    connect(&m_parentView, SIGNAL(usedSelection()),
+            this,          SLOT(hideSelection()));
 }
 
 NotationSelector::~NotationSelector()
@@ -1680,13 +1708,28 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
 void NotationSelector::handleMouseRelease(QMouseEvent*)
 {
     m_updateRect = false;
+    setViewCurrentSelection();
 }
+
+void NotationSelector::hideSelection()
+{
+    m_selectionRect->hide();
+    m_selectionRect->setSize(0,0);
+    
+    m_parentView.canvas()->update();
+}
+
 
 #include <iostream>
 
 EventSelection* NotationSelector::getSelection()
 {
-    EventSelection* selection = new EventSelection(m_parentView.getStaff(0)->getTrack());
+    if (!m_selectionRect->visible()) return 0;
+
+    // TODO: get the right track
+    Track& originalTrack = m_parentView.getStaff(0)->getTrack();
+    
+    EventSelection* selection = new EventSelection(originalTrack);
 
     QCanvasItemList itemList = m_selectionRect->collisions(true);
 
@@ -1699,7 +1742,7 @@ EventSelection* NotationSelector::getSelection()
         
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
-            if (!m_selectionRect->rect().contains(item->x(), item->y(), true)) {
+            if (!m_selectionRect->rect().contains(int(item->x()), int(item->y()), true)) {
                 kdDebug(KDEBUG_AREA) << "Skipping item not really in selection rect\n";
                 continue;
             }

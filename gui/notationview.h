@@ -49,6 +49,7 @@ class EventSelection
 {
 public:
     typedef std::vector<Rosegarden::Event*> eventcontainer;
+    typedef std::vector<Rosegarden::Track::iterator> iteratorcontainer;
     
     EventSelection(Rosegarden::Track&);
 
@@ -73,12 +74,15 @@ public:
     void pasteToTrack(Rosegarden::Track*);
 
     void push_back(Rosegarden::Event* e) { m_trackEvents.push_back(e); }
+
+    Rosegarden::timeT getBeginTime() const { return m_beginTime; }
+    Rosegarden::timeT getEndTime()   const { return m_endTime; }
     
 protected:
 
     Rosegarden::Track& m_originalTrack;
 
-    /// copy of Events ptr from the original Track
+    /// iterators pointing to Events from the original Track
     eventcontainer m_trackEvents;
 
     /**
@@ -86,6 +90,9 @@ protected:
      * These are the events we paste from.
      */
     eventcontainer m_ownEvents;
+
+    Rosegarden::timeT m_beginTime;
+    Rosegarden::timeT m_endTime;
 };
 
 
@@ -307,9 +314,7 @@ public slots:
      */
     void hoveredOverAbsoluteTimeChange(unsigned int);
 
-    /**
-     * Set the time pointer position during playback
-     */
+     /// Set the time pointer position during playback
     void setPositionPointer(const int &position);
 
     /// Changes the font of the staffs on the view
@@ -328,7 +333,17 @@ public slots:
     void changeQuantization(int newQuantIndex);
 
 signals:
+    /**
+     * Emitted when the note selected in the palette changes
+     */
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
+
+    /**
+     * Emitted when the selection has been cut or copied
+     *
+     * @see NotationSelector#hideSelection
+     */
+    void usedSelection();
 
 protected:
 
@@ -588,8 +603,10 @@ public:
 /**
  * Rectangular note selection
  */
-class NotationSelector : public NotationTool
+class NotationSelector : public QObject, public NotationTool
 {
+    Q_OBJECT
+
 public:
     NotationSelector(NotationView&);
     ~NotationSelector();
@@ -606,6 +623,15 @@ public:
      * The returned result is owned by the caller
      */
     EventSelection* getSelection();
+
+public slots:
+    /**
+     * Hide the selection rectangle
+     *
+     * Should be called after a cut or a copy has been
+     * performed
+     */
+    void hideSelection();
     
 protected:
     /**
