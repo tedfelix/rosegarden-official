@@ -131,10 +131,12 @@ Maintaining the translation files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Every once in a while, the main rosegarden.pot file should be updated
-from the latest source files with the commands
+from the latest source files with the command
 
-  $ make -f admin/Makefile.common package-messages
-  $ make
+  $ ./scripts/update_i18n_messages
+
+(This moves the Qt moc files out of the way and then runs "make -f
+admin/Makefile.common package-messages".)
 
 Similarly, language files can be "merged" to include new diffs using
 
