@@ -20,11 +20,24 @@
 */
 
 
+#include <qstring.h>
+#include <qregexp.h>
+
+#include <kmessagebox.h>
+#include <kstatusbar.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kaction.h>
+#include <kstdaction.h>
+#include <kapp.h>
+
 #include "notationview.h"
 
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "Selection.h"
+
+#include "Profiler.h"
 
 #include "notepixmapfactory.h"
 #include "notestyle.h"
@@ -38,16 +51,6 @@
 #include "widgets.h"
 #include "chordnameruler.h"
 #include "temporuler.h"
-
-#include <qstring.h>
-#include <qregexp.h>
-#include <kmessagebox.h>
-#include <kstatusbar.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kaction.h>
-#include <kstdaction.h>
-#include <kapp.h>
 
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
@@ -389,6 +392,8 @@ NotationView::~NotationView()
 
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
     // delete canvas();
+
+    Rosegarden::Profiles::getInstance()->dump();
 
     NOTATION_DEBUG << "<- ~NotationView()\n";
 }
@@ -1466,6 +1471,8 @@ void NotationView::refreshSegment(Segment *segment,
 				  timeT startTime, timeT endTime)
 {
     START_TIMING;
+    Rosegarden::Profiler foo("NotationView::refreshSegment()");
+
     if (m_inhibitRefresh) return;
 
     bool ownProgressDlg = false;
