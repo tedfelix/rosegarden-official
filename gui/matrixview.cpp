@@ -1961,7 +1961,7 @@ MatrixView::initZoomToolbar()
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i)
     {
 //         zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
-        zoomSizes.push_back(factors[i]);
+        zoomSizes.push_back(factors[i] / 2); // GROSS HACK - see in matrixstaff.h
     }
 
     m_hZoomSlider = new ZoomSlider<double>
@@ -1985,7 +1985,7 @@ MatrixView::slotChangeHorizontalZoom(int)
 {
     double zoomValue = m_hZoomSlider->getCurrentSize();
 
-    m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0));
+    m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h
 
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
                  << zoomValue << endl;

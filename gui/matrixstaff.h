@@ -63,7 +63,7 @@ protected:
 public:
     LinedStaff::setResolution;
 
-    double getTimeScaleFactor() const { return m_scaleFactor; }
+    double getTimeScaleFactor() const { return m_scaleFactor * 2; } // TODO: GROSS HACK to enhance matrix resolution (see also in matrixview.cpp)
     void setTimeScaleFactor(double f) { m_scaleFactor = f; }
 
     int getElementHeight() { return m_resolution; }
