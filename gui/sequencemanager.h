@@ -68,12 +68,6 @@ public:
                      RosegardenTransportDialog *transport);
     ~SequenceManager();
 
-    // Called from the sequencer - gets a slice of events
-    //
-    MappedComposition* getSequencerSlice(const RealTime &sliceStart,
-                                         const RealTime &sliceEnd,
-                                         bool firstFetch);
-
     /**
      * Replaces the internal document
      */
@@ -230,16 +224,11 @@ protected:
     CompositionMmapper *m_mmapper;
 
     // statuses
-    TransportStatus m_transportStatus;
-    unsigned int    m_soundDriverStatus;
+    TransportStatus            m_transportStatus;
+    unsigned int               m_soundDriverStatus;
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
-
-    // A hangover from the blocking stop() which we haven't yet
-    // removed.
-    //
-    bool                       m_sendStop;
 
     RealTime                   m_playbackAudioLatency;
 

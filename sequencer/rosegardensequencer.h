@@ -288,7 +288,7 @@ public:
     bool keepPlaying();
 
     // Update internal clock and send GUI position pointer movement
-    void updateClocks(bool clearToSend);
+    void updateClocks();
 
     // Sends status changes up to GUI
     void notifySequencerStatus();
@@ -325,11 +325,6 @@ public:
     void setAudioRecordLatency(const Rosegarden::RealTime &latency)
         { m_audioRecordLatency = latency; }
     */
-
-    // Clear-To-Send flag
-    //
-    bool clearToSend() { return m_clearToSend; }
-    void setClearToSend(bool value) { m_clearToSend = value; }
 
     // Initialise the virtual studio at this end of the link
     //
@@ -411,10 +406,6 @@ protected:
     Rosegarden::RealTime m_loopEnd;
 
     std::vector<Rosegarden::MappedInstrument*> m_instruments;
-
-    // Are we clear to send after a call()?
-    //
-    bool m_clearToSend;
 
     // MappedStudio holds all of our session-persistent information -
     // sliders and what have you.  It's also streamable over DCOP

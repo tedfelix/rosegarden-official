@@ -158,12 +158,6 @@ int main(int argc, char *argv[])
         app.processEvents(5);
 
 
-        // Unset this flag - only gets set by call()'d operations
-        // in the next section.  After which if this flag is set
-        // we can tell the gui to send back down to us in safety.
-        //
-        roseSeq->setClearToSend(false);
-
         // Do the main conditional loop
         //
         if(roseSeq)
@@ -286,16 +280,9 @@ int main(int argc, char *argv[])
         // the Sequencer - it doesn't tick over without
         // this call.
         //
-        // At the updateClocks() point any pending stop() from
-        // the gui is processed.  The updateClocks() will 
-        // make the gui check for a stop request and if so
-        // immediately call this process back - we position
-        // this call just before the sleep period deliberately
-        // to catch this process. [rwb 7/02]
-        //
         // Also attempt to send the MIDI clock at this point.
         //
-        roseSeq->updateClocks(roseSeq->clearToSend());
+        roseSeq->updateClocks();
 
         // Pause for breath while we're gnashing this loop
         //

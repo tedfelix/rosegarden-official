@@ -65,14 +65,10 @@ k_dcop:
     virtual void rewindToBeginning() = 0;
     virtual void fastForwardToEnd() = 0;
 
-    // Sequencer gets slice of MappedEvents wrapped in a
-    // MappedComposition.  These are lightweight versions
-    // of what we have in Event and Composition.  
+    // The sequencer tells the GUI what it's just been playing so 
+    // the GUI can provide some visual feedback.
     //
-    virtual const Rosegarden::MappedComposition&
-            getSequencerSlice(long sliceStartSec, long sliceStartUsec,
-                              long sliceEndSec, long sliceEndUsec,
-                              long firstFetch) = 0;
+    virtual void showVisuals(const Rosegarden::MappedComposition &mC) = 0;
 
     // The Sequencer sends back MappedCompositions full of
     // newly recorded MappedEvents for storage and presentation
@@ -96,8 +92,7 @@ k_dcop:
     // Sequencer updates GUI pointer position
     //
     virtual void setPointerPosition(long realTimeSec,
-                                    long realTimeUsec,
-                                    long clearToSend) = 0;
+                                    long realTimeUsec) = 0;
 
     // Sequencer updates GUI with status
     //

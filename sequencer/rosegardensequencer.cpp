@@ -579,7 +579,6 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     //m_audioRecordLatency(0, 0),
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
-    m_clearToSend(false),
     m_studio(new Rosegarden::MappedStudio()),
     m_oldSliceSize(0, 0),
     m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").first()),
@@ -734,19 +733,6 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
                                  const Rosegarden::RealTime &end,
                                  bool firstFetch)
 {
-//     QByteArray data, replyData;
-//     QCString replyType;
-//     QDataStream arg(data, IO_WriteOnly);
-
-//     arg << start.sec;
-//     arg << start.usec;
-//     arg << end.sec;
-//     arg << end.usec;
-//     arg << long(firstFetch);
-
-//     SEQUENCER_DEBUG << "getSlice(" << start << " to "
-//                     << end << ")\n";
-
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
     if (firstFetch || (start < m_lastStartTime)) {
@@ -756,43 +742,6 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     m_metaIterator->fillCompositionWithEventsUntil(mC, end);
 
     m_lastStartTime = start;
-
-    // Loop timing
-    //
-    //QTime t;
-    //t.start();
-
-//     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-//                                   ROSEGARDEN_GUI_IFACE_NAME,
-//                                   "getSequencerSlice(long int, long int, long int, long int, long int)",
-//                                   data, replyType, replyData, true))
-//     {
-//         SEQUENCER_DEBUG << "RosegardenSequencer::getSlice()"
-//                         << " - can't call RosegardenGUI client" << endl;
-
-//         // Stop the sequencer so we can see if we can try again later
-//         //
-//         m_transportStatus = STOPPING;
-//     }
-//     else
-//     {
-//         //cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
-
-//         QDataStream reply(replyData, IO_ReadOnly);
-//         if (replyType == "Rosegarden::MappedComposition")
-//         {
-//             reply >> mC;
-//         }
-//         else
-//         {
-//             SEQUENCER_DEBUG << "RosegardenSequencer::getSlice() - "
-//                             << "unrecognised type returned" << endl;
-//         }
-//     }
-
-    // We've completed a call - clear to send now for a while
-    //
-    m_clearToSend = true;
 
     return mC;
 }
@@ -822,6 +771,26 @@ RosegardenSequencerApp::startPlaying()
     // the audio queue for us
     //
     m_sequencer->processEventsOut(*mC, m_playLatency, false);
+
+    // Tell the gui that we're processing these events next
+    //
+
+    /*
+    QByteArray data;
+    QDataStream arg(data, IO_WriteOnly);
+    arg << *mC;
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                  ROSEGARDEN_GUI_IFACE_NAME,
+                                 "showVisuals(Rosegarden::MappedComposition)",
+                                  data))
+    {
+        SEQUENCER_DEBUG << "RosegardenSequencer::showVisuals()"
+                        << " - can't call RosegardenGUI client"
+                        << endl;
+    }
+    */
+
 
     return true;
 }
@@ -911,7 +880,7 @@ RosegardenSequencerApp::keepPlaying()
 // ticks from our current m_songPosition.
 //
 void
-RosegardenSequencerApp::updateClocks(bool clearToSend)
+RosegardenSequencerApp::updateClocks()
 {
     // Attempt to send MIDI clock 
     //
@@ -966,13 +935,12 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
 
     arg << newPosition.sec;
     arg << newPosition.usec;
-    arg << long(clearToSend);
 
 //    std::cerr << "Calling setPointerPosition(" << newPosition.sec << "," << newPosition.usec << "," << long(clearToSend) << ")" << std::endl;
     
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                       ROSEGARDEN_GUI_IFACE_NAME,
-                      "setPointerPosition(long int, long int, long int)",
+                      "setPointerPosition(long int, long int)",
                       data))
     {
         SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks()"

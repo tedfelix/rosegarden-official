@@ -160,15 +160,6 @@ public:
     void exportMusicXmlFile(const QString &url);
 
     /**
-     * The Sequencer calls this method to get a MappedCompositon
-     * full of MappedEvents for it to play.
-     */
-    const Rosegarden::MappedComposition&
-            getSequencerSlice(long sliceStartSec, long sliceStartUSec,
-                              long sliceEndSec, long sliceEndUSec,
-                              long firstFetch);
-
-    /**
      * Get the sequence manager object
      */
     Rosegarden::SequenceManager* getSequenceManager() { return m_seqManager; }
@@ -216,19 +207,10 @@ public:
     virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
 
     /**
-     * Set the song position pointer - we use longs so that
-     * this method is directly accesible from the sequencer
-     * (longs are required over DCOP)
+     * Set the song position pointer - sent from sequencer
      */
     virtual void setPointerPosition(long posSec,
-                                    long posUSec,
-                                    long clearToSend);
-
-    /**
-     * If we've called stopping() at the SequenceManager then we'll
-     * have set a flag that we must check for using this method.
-     */
-    void checkForStop();
+                                    long posUSec);
 
     /**
      * Start the sequencer auxiliary process
@@ -407,11 +389,11 @@ protected:
     virtual void readProperties(KConfig *_cfg);
 
     /*
-     * Send the result of getSequencerSlice (operated by the
-     * Sequencer) to the GUI so as to get visual representation
-     * of the events/sounds going out
+     * Called from the sequencer - to show visuals at the gui.
+     *
      */
-    void showVisuals(Rosegarden::MappedComposition *mC);
+    virtual void showVisuals(const Rosegarden::MappedComposition &mC);
+
 
     /*
      * place clicktrack events into the global MappedComposition

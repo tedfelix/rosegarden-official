@@ -2663,8 +2663,7 @@ RosegardenGUIApp::mergeFile(const QString &filePath)
 }
 
 void RosegardenGUIApp::setPointerPosition(long posSec,
-                                          long posUsec,
-                                          long clearToSend)
+                                          long posUsec)
 {
     Rosegarden::RealTime rT(posSec, posUsec);
     Rosegarden::Composition &comp = m_doc->getComposition();
@@ -2686,17 +2685,13 @@ void RosegardenGUIApp::setPointerPosition(long posSec,
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 
-    // Check for a pending stop if we're clear to send
-    //
-    if (bool(clearToSend)) checkForStop();
-
     return;
 }
 
 void
 RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
 {
-    setPointerPosition(time.sec, time.usec, false);
+    setPointerPosition(time.sec, time.usec);
 }
 
 
@@ -3269,11 +3264,11 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
 // feedback at the GUI
 //
 void
-RosegardenGUIApp::showVisuals(Rosegarden::MappedComposition *mC)
+RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
 {
     Rosegarden::MappedComposition::iterator it;
 
-    for (it = mC->begin(); it != mC->end(); ++it )
+    for (it = mC.begin(); it != mC.end(); ++it )
     {
         // Only show MIDI MappedEvents on the transport - ensure
         // that the first non-MIDI event is always "Audio"
@@ -3327,29 +3322,6 @@ RosegardenGUIApp::slotToggleMetronome()
 //
 //
 //
-
-// This method is called from the Sequencer when it's playing.
-// It's a request to get the next slice of events for the
-// Sequencer to play.
-//
-const Rosegarden::MappedComposition&
-RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
-                                    long sliceEndSec, long sliceEndUsec,
-                                    long firstFetch)
-{
-    // have to convert from char
-    bool firstFetchBool = (bool)firstFetch;
-
-    Rosegarden::RealTime startTime(sliceStartSec, sliceStartUsec);
-    Rosegarden::RealTime endTime(sliceEndSec, sliceEndUsec);
-
-    Rosegarden::MappedComposition *mC =
-        m_seqManager->getSequencerSlice(startTime, endTime, firstFetchBool);
-
-    showVisuals(mC);
-
-    return *mC;
-}
 
 
 void
@@ -4249,21 +4221,6 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
         }
     }
 
-}
-
-void
-RosegardenGUIApp::checkForStop()
-{
-    if (m_seqManager == 0) return;
-
-    try
-    {
-        m_seqManager->stop();
-    }
-    catch(QString s)
-    {
-        KMessageBox::error(this, s);
-    }
 }
 
 void
