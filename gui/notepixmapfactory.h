@@ -23,6 +23,14 @@
 
 typedef vector<int> chordpitches;
 
+enum Note { WholeDotted = 0, Whole,
+            HalfDotted, Half,
+            QuarterDotted, Quarter,
+            EighthDotted, Eighth,
+            SixteenthDotted, Sixteenth,
+            ThirtySecondDotted, ThirtySecond,
+            SixtyFourthDotted, SixtyFourth };
+
 /**Generates pixmaps for single notes and chords
 
   *@author Guillaume Laurent
@@ -33,10 +41,6 @@ public:
     NotePixmapFactory();
     ~NotePixmapFactory();
 
-    enum Note { Whole = 0, Half, Quarter, Eighth,
-                Sixteenth, ThirtySecond, SixtyFourth };
-    
-
     /**
      * Generate a pixmap for a single note
      *
@@ -45,7 +49,7 @@ public:
      *   (useful when the tail should be collapsed with the one of a neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
-    QPixmap makeNotePixmap(unsigned int duration,
+    QPixmap makeNotePixmap(Note note,
                            bool drawTail,
                            bool stalkGoesUp = true);
 
@@ -59,7 +63,7 @@ public:
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
     QPixmap makeChordPixmap(const chordpitches &pitches,
-                            unsigned int duration, bool drawTail,
+                            Note note, bool drawTail,
                             bool stalkGoesUp = true);
 
 protected:

@@ -17,6 +17,8 @@
 
 #include <cstdio>
 
+#include <algorithm>
+
 #include <kdebug.h>
 
 #include "rosegardenguiview.h"
@@ -59,11 +61,9 @@ NotePixmapFactory::~NotePixmapFactory()
 
 
 QPixmap
-NotePixmapFactory::makeNotePixmap(unsigned int duration, bool drawTail,
+NotePixmapFactory::makeNotePixmap(Note note, bool drawTail,
                                   bool stalkGoesUp)
 {
-    Note note = duration2note(duration);
-
     if(note > SixtyFourth) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > 6 ("
                              << note << ")\n";
@@ -81,7 +81,7 @@ NotePixmapFactory::makeNotePixmap(unsigned int duration, bool drawTail,
 
     // paint note body
 
-    QPixmap *body = (note < Quarter) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body = (note < QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
     bool noteHasStalk = note > Whole;
 
     if(stalkGoesUp) {
@@ -112,7 +112,7 @@ NotePixmapFactory::makeNotePixmap(unsigned int duration, bool drawTail,
 }
 
 void
-NotePixmapFactory::readjustGeneratedPixmapHeight(NotePixmapFactory::Note note)
+NotePixmapFactory::readjustGeneratedPixmapHeight(Note note)
 {
     if(note > Eighth) {
 
@@ -146,15 +146,13 @@ NotePixmapFactory::createPixmapAndMask(unsigned int tailOffset)
 
 QPixmap
 NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
-                                   unsigned int duration, bool drawTail,
+                                   Note note, bool drawTail,
                                    bool stalkGoesUp)
 {
     PitchToHeight& pitchToHeight(PitchToHeight::instance());
 
     int highestNote = pitchToHeight[pitches[pitches.size() - 1]],
         lowestNote = pitchToHeight[pitches[0]];
-    
-    Note note = duration2note(duration);
 
     m_generatedPixmapHeight = highestNote - lowestNote + m_noteBodyHeight + Staff::stalkLen;;
 
@@ -174,7 +172,7 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
     // set mask painter RasterOp to Or
     m_pm.setRasterOp(Qt::OrROP);
 
-    QPixmap *body = (note < Quarter) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+    QPixmap *body = (note < QuarterDotted) ? &m_noteBodyEmpty : &m_noteBodyFilled;
     bool noteHasStalk = note > Whole;
 
     if(stalkGoesUp) {
@@ -215,7 +213,7 @@ NotePixmapFactory::makeChordPixmap(const chordpitches &pitches,
 
 
 void
-NotePixmapFactory::drawStalk(NotePixmapFactory::Note note,
+NotePixmapFactory::drawStalk(Note note,
                              bool drawTail, bool stalkGoesUp)
 {
     if(stalkGoesUp) {
@@ -247,17 +245,25 @@ NotePixmapFactory::drawStalk(NotePixmapFactory::Note note,
 
             tailPixmap = m_tailsDown[note - 3];
 
-            m_p.drawPixmap (1, m_generatedPixmapHeight - tailPixmap->height(), *tailPixmap);
-            m_pm.drawPixmap(1, m_generatedPixmapHeight - tailPixmap->height(), *(tailPixmap->mask()));
+            m_p.drawPixmap (1,
+                            m_generatedPixmapHeight - tailPixmap->height(),
+                            *tailPixmap);
+
+            m_pm.drawPixmap(1,
+                            m_generatedPixmapHeight - tailPixmap->height(),
+                            *(tailPixmap->mask()));
         }
 
     }
 }
 
-NotePixmapFactory::Note
+
+// Keep this around just in case
+Note
 NotePixmapFactory::duration2note(unsigned int duration)
 {
     // Very basic, very dumb.
+    // Make a quantization class - how to represent dotted notes ?
     static unsigned int wholeDuration = 384;
     Note rc;
     
