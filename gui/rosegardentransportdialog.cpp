@@ -65,7 +65,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_numerator(0),
     m_denominator(0),
     m_framesPerSecond(24),
-    m_bitsPerFrame(80)
+    m_bitsPerFrame(80),
+    m_isExpanded(false)
 {
 //     QHBox *b = new QHBox(this);
     m_transport = new RosegardenTransport(this);
@@ -126,22 +127,22 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_transport->TimeDisplayLabel->hide();
     m_transport->ToEndLabel->hide();
 
-    connect(m_transport->TimeDisplayButton, SIGNAL(released()),
+    connect(m_transport->TimeDisplayButton, SIGNAL(clicked()),
 	    SLOT(slotChangeTimeDisplay()));
 
-    connect(m_transport->ToEndButton, SIGNAL(released()),
+    connect(m_transport->ToEndButton, SIGNAL(clicked()),
 	    SLOT(slotChangeToEnd()));
 
-    connect(m_transport->LoopButton, SIGNAL(released()),
-            SLOT(slotLoopButtonReleased()));
+    connect(m_transport->LoopButton, SIGNAL(clicked()),
+            SLOT(slotLoopButtonClicked()));
 
-    connect(m_transport->PanelOpenButton, SIGNAL(released()),
-	    SLOT(slotPanelOpenButtonReleased()));
+    connect(m_transport->PanelOpenButton, SIGNAL(clicked()),
+	    SLOT(slotPanelOpenButtonClicked()));
 
-    connect(m_transport->PanelCloseButton, SIGNAL(released()),
-	    SLOT(slotPanelCloseButtonReleased()));
+    connect(m_transport->PanelCloseButton, SIGNAL(clicked()),
+	    SLOT(slotPanelCloseButtonClicked()));
 
-    connect(m_transport->PanicButton, SIGNAL(released()), SIGNAL(panic()));
+    connect(m_transport->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
 
     m_panelOpen = *m_transport->PanelOpenButton->pixmap();
     m_panelClosed = *m_transport->PanelCloseButton->pixmap();
@@ -156,7 +157,6 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     int rfh = m_transport->RecordingFrame->height();
     m_transport->RecordingFrame->hide();
     setFixedSize(width(), height() - rfh);
-    m_transport->PanelOpenButton->setOn(false);
     m_transport->PanelOpenButton->setPixmap(m_panelClosed);
 
     // and since by default we show real time (not SMPTE), by default
@@ -753,7 +753,7 @@ RosegardenTransportDialog::closeEvent (QCloseEvent * e)
 }
 
 void
-RosegardenTransportDialog::slotLoopButtonReleased()
+RosegardenTransportDialog::slotLoopButtonClicked()
 {
     if (m_transport->LoopButton->isOn())
     {
@@ -766,7 +766,7 @@ RosegardenTransportDialog::slotLoopButtonReleased()
 }
 
 void
-RosegardenTransportDialog::slotPanelOpenButtonReleased()
+RosegardenTransportDialog::slotPanelOpenButtonClicked()
 {
     int rfh = m_transport->RecordingFrame->height();
 
@@ -774,23 +774,25 @@ RosegardenTransportDialog::slotPanelOpenButtonReleased()
 	m_transport->RecordingFrame->hide();
 	setFixedSize(width(), height() - rfh);
 	m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+        m_isExpanded = false;
     } else {
 	setFixedSize(width(), height() + rfh);
 	m_transport->RecordingFrame->show();
 	m_transport->PanelOpenButton->setPixmap(m_panelOpen);
+        m_isExpanded = true;
     }
 }
 
 void
-RosegardenTransportDialog::slotPanelCloseButtonReleased()
+RosegardenTransportDialog::slotPanelCloseButtonClicked()
 {
     int rfh = m_transport->RecordingFrame->height();
 
     if (m_transport->RecordingFrame->isVisible()) {
 	m_transport->RecordingFrame->hide();
 	setFixedSize(width(), height() - rfh);
-	m_transport->PanelOpenButton->setOn(false);
 	m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+        m_isExpanded = false;
     }
 }
 
@@ -798,7 +800,7 @@ RosegardenTransportDialog::slotPanelCloseButtonReleased()
 bool 
 RosegardenTransportDialog::isExpanded()
 {
-    return (m_transport->RecordingFrame->isVisible());
+    return m_isExpanded;
 }
 
 void

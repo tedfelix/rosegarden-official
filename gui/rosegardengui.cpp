@@ -1443,9 +1443,9 @@ void RosegardenGUIApp::readOptions()
 
     opt = kapp->config()->readBoolEntry("Expanded Transport", false);
     if(opt)
-        m_transport->slotPanelOpenButtonReleased();
+        m_transport->slotPanelOpenButtonClicked();
     else
-        m_transport->slotPanelCloseButtonReleased();
+        m_transport->slotPanelCloseButtonClicked();
 
     opt = kapp->config()->readBoolEntry("Show Track labels", true);
     m_viewTrackLabels->setChecked(opt);
@@ -3550,7 +3550,7 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 
     KStartupLogo::hideIfStillThere();
 
-    KMessageBox::error(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to rosegardenmusic.com."));
+    KMessageBox::error(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
 
     m_sequencerProcess = 0; // isSequencerRunning() will return false
     // but isUsingSequencer() will keep returning true

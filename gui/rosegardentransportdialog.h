@@ -105,10 +105,10 @@ public slots:
     void slotChangeTimeDisplay();
     void slotChangeToEnd();
 
-    void slotLoopButtonReleased();
+    void slotLoopButtonClicked();
 
-    void slotPanelOpenButtonReleased();
-    void slotPanelCloseButtonReleased();
+    void slotPanelOpenButtonClicked();
+    void slotPanelCloseButtonClicked();
 
     void slotEditTempo();
     void slotEditTimeSignature();
@@ -179,6 +179,7 @@ private:
     void updateTimeDisplay();
 
     QAccel *m_accelerators;
+    bool    m_isExpanded;
 };
 
 }
