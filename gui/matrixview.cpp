@@ -529,6 +529,11 @@ void MatrixView::slotKeyPressed(unsigned int y)
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
 
+    // check for null instrument
+    //
+    if (ins == 0)
+        return;
+
     // Send out note of half second duration
     //
     Rosegarden::MappedEvent *mE = 
