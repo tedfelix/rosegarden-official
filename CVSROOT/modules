@@ -26,5 +26,5 @@
 # spread out over the entire source repository.
 
 rosegarden &admin &core &docs &gui &po &sound
-rgtest gui/rosegardengui Makefile.cvs
+rgtest gui/rosegardengui
 
