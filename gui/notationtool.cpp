@@ -60,8 +60,6 @@ NotationTool::NotationTool(const QString& menuName, NotationView* view)
       m_parentView(view),
       m_menu(0)
 {
-    m_parentView->setCanvasCursor(Qt::arrowCursor);
-    m_parentView->setPositionTracking(false);
 }
 
 NotationTool::~NotationTool()
@@ -162,43 +160,21 @@ void NotationTool::setParentView(NotationView* view)
 //------------------------------
 
 
-class
-NoteInsertionCommand : public BasicCommand
+class NoteInsertionCommand : public BasicCommand
 {
 public:
     NoteInsertionCommand(const QString &name,
 			 NotationView *view, Segment &segment, timeT time,
 			 timeT endTime, Note note, int pitch,
-			 Accidental accidental) :
-	BasicCommand(name, view, segment, time, endTime),
-	m_note(note),
-	m_pitch(pitch),
-	m_accidental(accidental),
-	m_justInsertedEvent(0),
-	m_staffId(0) { }
-    virtual ~NoteInsertionCommand() { }
+			 Accidental accidental);
+    
+
+    virtual ~NoteInsertionCommand();
 
 protected:
-    virtual void modifySegment(SegmentNotationHelper &helper) {
+    virtual void modifySegment(SegmentNotationHelper &helper);
 
-	Segment::iterator i =
-	    helper.insertNote(getBeginTime(), m_note, m_pitch, m_accidental);
-
-	if (i != helper.segment().end()) {
-	    m_justInsertedEvent = *i;
-	    m_staffId = getView()->getStaff(helper.segment())->getId();
-	}
-    }
-
-    virtual void finishExecute() {
-
-	BasicCommand::finishExecute();
-
-	if (m_justInsertedEvent) {
-	    getView()->setSingleSelectedEvent(m_staffId, m_justInsertedEvent);
-	    m_justInsertedEvent = 0;
-	}
-    }
+    virtual void finishExecute();
 
     Note m_note;
     int m_pitch;
@@ -207,28 +183,82 @@ protected:
     int m_staffId;
 };
 
+NoteInsertionCommand::NoteInsertionCommand(const QString &name,
+                                           NotationView *view, Segment &segment, timeT time,
+                                           timeT endTime, Note note, int pitch,
+                                           Accidental accidental) :
+    BasicCommand(name, view, segment, time, endTime),
+    m_note(note),
+    m_pitch(pitch),
+    m_accidental(accidental),
+    m_justInsertedEvent(0),
+    m_staffId(0)
+{
+}
+
+NoteInsertionCommand::~NoteInsertionCommand()
+{
+}
+
+void NoteInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i =
+        helper.insertNote(getBeginTime(), m_note, m_pitch, m_accidental);
+
+    if (i != helper.segment().end()) {
+        m_justInsertedEvent = *i;
+        m_staffId = getView()->getStaff(helper.segment())->getId();
+    }
+}
+
+void NoteInsertionCommand::finishExecute()
+{
+    BasicCommand::finishExecute();
+
+    if (m_justInsertedEvent) {
+        getView()->setSingleSelectedEvent(m_staffId, m_justInsertedEvent);
+        m_justInsertedEvent = 0;
+    }
+}
+
+// ------------------------------
+
 class RestInsertionCommand : public NoteInsertionCommand
 {
 public:
     RestInsertionCommand(const QString &name,
 			 NotationView *view, Segment &segment, timeT time,
-			 timeT endTime, Note note) :
-	NoteInsertionCommand(name, view, segment, time, endTime,
-			     note, 0, NoAccidental) { }
-    virtual ~RestInsertionCommand() { }
+			 timeT endTime, Note note);
 
-    virtual void modifySegment(SegmentNotationHelper &helper) {
+    virtual ~RestInsertionCommand();
 
-	Segment::iterator i =
-	    helper.insertRest(getBeginTime(), m_note);
-
-	if (i != helper.segment().end()) {
-	    m_justInsertedEvent = *i;
-	    m_staffId = getView()->getStaff(helper.segment())->getId();
-	}
-    }
+    virtual void modifySegment(SegmentNotationHelper &helper);
 };
 
+RestInsertionCommand::RestInsertionCommand(const QString &name,
+                                           NotationView *view, Segment &segment, timeT time,
+                                           timeT endTime, Note note) :
+    NoteInsertionCommand(name, view, segment, time, endTime,
+                         note, 0, NoAccidental)
+{
+}
+
+RestInsertionCommand::~RestInsertionCommand()
+{
+}
+
+void RestInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+{
+    Segment::iterator i =
+        helper.insertRest(getBeginTime(), m_note);
+
+    if (i != helper.segment().end()) {
+        m_justInsertedEvent = *i;
+        m_staffId = getView()->getStaff(helper.segment())->getId();
+    }
+}
+
+// ------------------------------
 
 NoteInserter::NoteInserter(NotationView* view)
     : NotationTool("NoteInserter", view),
@@ -236,9 +266,6 @@ NoteInserter::NoteInserter(NotationView* view)
       m_noteDots(0),
       m_accidental(Rosegarden::NoAccidental)
 {
-    m_parentView->setCanvasCursor(Qt::crossCursor);
-    m_parentView->setPositionTracking(true);
-
     for (unsigned int i = 0, accidental = NoAccidental;
          i < 6; ++i, ++accidental) {
 
@@ -265,14 +292,12 @@ NoteInserter::NoteInserter(NotationView* view)
     createMenu("noteinserter.rc");
 }
 
-NoteInserter::NoteInserter(const QString& menuName,
-                           NotationView* view)
+NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
     : NotationTool(menuName, view),
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_accidental(Rosegarden::NoAccidental)
 {
-    m_parentView->setCanvasCursor(Qt::crossCursor);
 }
 
 NotationTool* NoteInserter::getInstance(NotationView* view)
@@ -476,7 +501,6 @@ ClefInserter::ClefInserter(NotationView* view)
     : NotationTool("ClefInserter", view),
       m_clef(Rosegarden::Clef::Treble)
 {
-    m_parentView->setCanvasCursor(Qt::crossCursor);
 }
 
 void ClefInserter::finalize()
@@ -537,8 +561,6 @@ NotationEraser::NotationEraser(NotationView* view)
     : NotationTool("NotationEraser", view),
       m_collapseRest(false)
 {
-    m_parentView->setCanvasCursor(Qt::pointingHandCursor);
-
     new KToggleAction(i18n("Toggle Rest Collapse"), 0, this,
                       SLOT(toggleRestCollapse()), actionCollection(),
                       "toggle_rest_collapse");
@@ -795,9 +817,13 @@ void NotationSelector::setViewCurrentSelection()
 
 //------------------------------
 
+//----------------------------------------------------------------------
+//               Unused
+//----------------------------------------------------------------------
+
 NotationSelectionPaster::NotationSelectionPaster(EventSelection& es,
-                                                 NotationView* parent)
-    : NotationTool("NotationPaster", parent),
+                                                 NotationView* view)
+    : NotationTool("NotationPaster", view),
       m_selection(es)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
