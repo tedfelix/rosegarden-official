@@ -1,0 +1,16 @@
+Begin3
+Title:          Rosegarden
+Version:        0.1
+Entered-date:   
+Description:    Notation Editor and MIDI Sequencer for KDE2
+Keywords:       KDE2 Qt
+Author:         Guillaume Laurent <glaurent@telegraph-road.org>, Chris Cannam <cannam@all-day-breakfast.com>, Richard Bown <bownie@bownie.com>
+Maintained-by:  Guillaume Laurent <glaurent@telegraph-road.org>, Chris Cannam <cannam@all-day-breakfast.com>, Richard Bown <bownie@bownie.com>
+Home-page:      http://rosegarden.sourceforge.net
+Alternate-site: 
+Primary-site:   ftp://
+                xxxxxx  rosegarden-0.1.tar.gz
+                xxx     rosegarden-0.1.lsm
+Platform:       Linux. Needs KDE 2.x
+Copying-policy: GPL
+End
