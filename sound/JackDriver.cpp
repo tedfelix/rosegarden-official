@@ -1334,7 +1334,7 @@ JackDriver::start()
     std::cerr << "JackDriver::start" << std::endl;
 #endif
 
-    prebufferAudio();
+//!!!    prebufferAudio();
 
     // m_waiting is true if we are waiting for the JACK transport
     // to finish a change of state.
@@ -1402,7 +1402,7 @@ JackDriver::stop()
     std::cerr << "JackDriver::stop: frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime) << std::endl;
 #endif
 
-    flushAudio();
+//!!!    flushAudio();
 
     if (m_jackTransportEnabled) {
 
@@ -1560,15 +1560,10 @@ JackDriver::flushAudio()
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::flushAudio" << std::endl;
 #endif
-/*!!!
-    m_instrumentMixer->emptyBuffers();
-    m_bussMixer->emptyBuffers();
-*/
     
     //!!! experimental to get async synth events agogo
     m_fileReader->fillBuffers(RealTime::zeroTime);
 
-    //!!! tidy
     if (m_bussMixer->getBussCount() > 0) {
 	m_instrumentMixer->fillBuffers(RealTime::zeroTime);
 	m_bussMixer->fillBuffers(RealTime::zeroTime);

@@ -206,7 +206,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     if (m_values.size() == 0)
         return;
 
-    Rosegarden::Profiler profiler("SegmentAudioPreview::drawShape", true);
+//    Rosegarden::Profiler profiler("SegmentAudioPreview::drawShape", true);
 
     painter.save();
     //painter.translate(rect().x(), rect().y());
@@ -383,7 +383,7 @@ void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
 {
     if (isPreviewCurrent()) return;
 
-    Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
+//    Rosegarden::Profiler profiler("SegmentAudioPreview::updatePreview", true);
 
     // Fetch vector of floats adjusted to our resolution
     //
