@@ -173,6 +173,17 @@ AlsaDriver::~AlsaDriver()
         _threadJackClosing = true;
         std::cout << "AlsaDriver::~AlsaDriver - closing JACK client"
                   << std::endl;
+        jack_port_unregister(m_audioClient, m_audioInputPortLeft);
+        jack_port_unregister(m_audioClient, m_audioInputPortRight);
+        jack_port_unregister(m_audioClient, m_audioOutputPortLeft);
+        jack_port_unregister(m_audioClient, m_audioOutputPortRight);
+
+        if (jack_deactivate(m_audioClient))
+        {
+            std::cerr << "AlsaDriver::~AlsaDriver - deactivation failed"
+                      << std::endl;
+        }
+
         jack_client_close(m_audioClient);
         m_audioClient = 0;
     }
@@ -180,15 +191,7 @@ AlsaDriver::~AlsaDriver()
 #endif // HAVE_LIBJACK
 
 /*
-            jack_port_unregister(m_audioClient, m_audioInputPort);
-            jack_port_unregister(m_audioClient, m_audioOutputPortLeft);
-            jack_port_unregister(m_audioClient, m_audioOutputPortRight);
 
-            if (jack_deactivate(m_audioClient))
-            {
-                std::cerr << "AlsaDriver::~AlsaDriver - deactivation failed"
-                          << std::endl;
-            }
             */
 
 

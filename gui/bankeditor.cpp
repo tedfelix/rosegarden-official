@@ -38,6 +38,10 @@
 #include "Studio.h"
 #include "MidiDevice.h"
 
+using std::cout;
+using std::cerr;
+using std::endl;
+
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    Rosegarden::Studio *studio):
     KDialogBase(parent, "", true, i18n("Manage Banks and Programs..."),
@@ -142,7 +146,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             label->setFixedWidth(50);
             label->setAlignment(AlignHCenter);
 
-            m_programNames.push_back(new QLineEdit(numBox));
+            m_programNames.push_back(new ProgramLine(numBox, j*16 + i));
+
+            connect(m_programNames[j*16 + i],
+                    SIGNAL(newText(const QString&, int)),
+                    this,
+                    SLOT(slotProgramChanged(const QString&, int)));
         }
     }
     m_programTab->addTab(progHBox, i18n("Programs 0 - 63"));
@@ -159,7 +168,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             label->setFixedWidth(50);
             label->setAlignment(AlignHCenter);
 
-            m_programNames.push_back(new QLineEdit(numBox));
+            m_programNames.push_back(new ProgramLine(numBox, 64 + j*16 + i));
+
+            connect(m_programNames[64 + j*16 + i],
+                    SIGNAL(newText(const QString&, int)),
+                    this,
+                    SLOT(slotProgramChanged(const QString&, int)));
+
         }
     }
     m_programTab->addTab(progHBox, i18n("Programs 64 - 127"));
@@ -199,7 +214,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     connect(m_deleteAllBanks, SIGNAL(released()),
             this, SLOT(slotDeleteAllBanks()));
-}
+};
 
 void
 BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
@@ -505,20 +520,49 @@ BankEditorDialog::slotModifyDeviceName(const QString &label)
 void
 BankEditorDialog::setModified(bool value)
 {
+
     if (m_modified == value) return;
 
-    if (value)
+    if (value == true)
     {
         enableButtonOK(true);
         enableButtonApply(true);
     }
+    /*
     else
     {
         enableButtonOK(false);
         enableButtonApply(false);
     }
+    */
 
     m_modified = value;
+}
+
+void
+BankEditorDialog::slotProgramChanged(const QString &program, int id)
+{
+    cout << "PROGRAM (" << id << ") = \"" << program << "\"" << endl;
+    m_programList[id].name = qstrtostr(program);
+    setModified(true);
+}
+
+
+
+// ---------------------- ProgramLine -----------------------------
+//
+ProgramLine::ProgramLine(QWidget *parent, int id):
+    QLineEdit(parent), m_id(id)
+{
+    connect (this, SIGNAL(textChanged(const QString&)),
+             this, SLOT(slotNewText(const QString&)));
+}
+
+
+void
+ProgramLine::slotNewText(const QString &label)
+{
+    emit newText(label, m_id);
 }
 
 

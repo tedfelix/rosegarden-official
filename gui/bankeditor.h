@@ -21,11 +21,11 @@
 #include <vector>
 
 #include <kdialogbase.h>
+#include <qlineedit.h>
 
 #include "Instrument.h"
 
 class RosegardenComboBox;
-class QLineEdit;
 class QPushButton;
 class QFrame;
 class QSpinBox;
@@ -34,6 +34,28 @@ namespace Rosegarden { class Studio; class MidiDevice; }
 
 #ifndef _BANKEDITOR_H_
 #define _BANKEDITOR_H_
+
+
+class ProgramLine : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+    ProgramLine(QWidget *parent, int id);
+
+    int getId() const { return m_id; }
+    void setId(int id) { m_id = id; }
+
+public slots:
+    void slotNewText(const QString &);
+
+signals:
+    void newText(const QString&, int);
+
+protected:
+    int m_id;
+
+};
 
 class BankEditorDialog : public KDialogBase
 {
@@ -65,6 +87,8 @@ public slots:
     void slotModifyBankName(const QString&);
     void slotModifyDeviceName(const QString&);
 
+    void slotProgramChanged(const QString&, int);
+
 protected:
     // Get a MidiDevice from an index number
     //
@@ -78,7 +102,7 @@ protected:
     RosegardenComboBox      *m_bankCombo;
     QSpinBox                *m_msb;
     QSpinBox                *m_lsb;
-    std::vector<QLineEdit*>  m_programNames;
+    std::vector<ProgramLine*>  m_programNames;
 
     QPushButton             *m_addBank;
     QPushButton             *m_deleteBank;
