@@ -531,13 +531,15 @@ void SegmentCanvas::slotSelectSegments(std::vector<Rosegarden::Segment*> segment
     selTool->clearSelected();
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
-        if ((*it)->rtti() == SegmentItem::SegmentItemRTTI) { 
+        SegmentItem* segItem = dynamic_cast<SegmentItem*>(*it);
+        
+        if (segItem) { 
 
             for (segIt = segments.begin(); segIt != segments.end(); segIt++) {
 
-                if (dynamic_cast<SegmentItem*>(*it)->getSegment() == (*segIt)) {
+                if (segItem->getSegment() == (*segIt)) {
 
-                    selTool->slotSelectSegmentItem(dynamic_cast<SegmentItem*>(*it));
+                    selTool->slotSelectSegmentItem(segItem);
                 }
             }
         }
