@@ -495,7 +495,6 @@ const int ControlRuler::MinItemHeight = 5;
 const int ControlRuler::MaxItemHeight = 64 + 5;
 const int ControlRuler::ItemHeightRange = 64;
 
-
 ControlRuler::ControlRuler(Segment& segment,
                            Rosegarden::RulerScale* rulerScale,
                            EditViewBase* parentView,
@@ -510,6 +509,7 @@ ControlRuler::ControlRuler(Segment& segment,
     m_tool(0),
     m_maxItemValue(127),
     m_currentX(0.0),
+    m_itemMoved(false),
     m_selecting(false),
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas())),
@@ -579,6 +579,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
         }
     }
 
+    m_itemMoved = false;
     m_lastEventPos = e->pos();
 }
 
@@ -589,7 +590,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
     if (m_selecting) {
         updateSelection();
         m_selector->handleMouseButtonRelease(e);
-        RG_DEBUG << "ControlRuler::contentsMousePressEvent : leaving selection mode\n";
+        RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : leaving selection mode\n";
         m_selecting = false;
         return;
     }
@@ -599,15 +600,22 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
             item->handleMouseButtonRelease(e);
     }
 
-    m_lastEventPos = e->pos();
+    if (m_itemMoved) {
 
-    // Add command to history
-    ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
-                                                             m_segment,
-                                                             m_eventSelection->getStartTime(),
-                                                             m_eventSelection->getEndTime());
+        m_lastEventPos = e->pos();
 
-    m_parentEditView->addCommandToHistory(command);
+        // Add command to history
+        ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
+                                                                 m_segment,
+                                                                 m_eventSelection->getStartTime(),
+                                                                 m_eventSelection->getEndTime());
+
+        RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : adding command\n";
+        m_parentEditView->addCommandToHistory(command);
+
+        m_itemMoved = false;
+    }
+    
 }
 
 void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
@@ -623,8 +631,8 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    if (m_lastEventPos.isNull()) m_lastEventPos = e->pos();
-    
+    m_itemMoved = true;
+
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
             item->handleMouseMove(e, deltaX, deltaY);

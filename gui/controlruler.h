@@ -120,6 +120,7 @@ protected:
     double m_currentX;
 
     QPoint m_lastEventPos;
+    bool m_itemMoved;
 
     bool m_selecting;
     ControlSelector* m_selector;
