@@ -25,6 +25,8 @@
 
 class RosegardenComboBox;
 class QLineEdit;
+class QPushButton;
+class QFrame;
 
 namespace Rosegarden { class Studio; }
 
@@ -55,6 +57,13 @@ protected:
     QSpinBox                *m_msb;
     QSpinBox                *m_lsb;
     std::vector<QLineEdit*>  m_programNames;
+
+    QPushButton             *m_addBank;
+    QPushButton             *m_deleteBank;
+    QPushButton             *m_deleteAllBanks;
+
+    QFrame                  *m_mainFrame;
+
 };
 
 #endif // _BANKEDITOR_H_

@@ -1017,8 +1017,10 @@ RosegardenGUIDoc::alive()
 
     for (unsigned int i = 0; i < devices; i++)
     {
+        /*
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - i = "
                      << i << endl;
+                     */
         getMappedDevice(i);
     }
 
@@ -1059,30 +1061,38 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 
     if (replyType == "Rosegarden::MappedDevice")
     {
+        /*
         SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
                       << "got Rosegarden::MappedDevice" << endl;
+                      */
 
         // unfurl
         reply >> mD;
     }
     else
     {
+        /*
         SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
                       << "didn't get MappedDevice " 
                       << id << endl;
+                      */
         return;
     }
 
+    /*
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
                  << "check if we've got this device already" << endl;
+                 */
 
     // See if we've got this device already
     //
     Rosegarden::Device *device = m_studio.getDevice(id);
     Rosegarden::Instrument::InstrumentType type;
 
+    /*
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice() - device = "
                  << device << endl;
+                 */
 
     if (mD->size() == 0)
     {
@@ -1100,11 +1110,19 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         {
             device = new Rosegarden::MidiDevice(id, "MIDI device");
             m_studio.addDevice(device);
+
+            SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
+                          << "adding MIDI Device \""
+                          << device->getName() << "\"\n";
         }
         else if (type  == Rosegarden::Instrument::Audio)
         {
             device = new Rosegarden::AudioDevice(id, "Audio device");
             m_studio.addDevice(device);
+
+            SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
+                          << "adding audio Device \""
+                          << device->getName() << "\"\n";
         }
         else
         {

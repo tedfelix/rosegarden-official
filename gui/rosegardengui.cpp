@@ -464,7 +464,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
 
-    new KAction(i18n("Edit Patch Banks..."), 0, this,
+    new KAction(i18n("Manage &Banks and Programs..."), 0, this,
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
 

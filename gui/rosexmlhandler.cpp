@@ -812,6 +812,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString type = (atts.value("type")).lower();
         QString idString = atts.value("id");
+        QString nameStr = atts.value("name");
             
         if (idString.isNull())
         {
@@ -820,9 +821,19 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         int id = idString.toInt();
 
-        if (type == "midi" || type == "audio")
+        if (type == "midi")
         {
             m_device = getStudio().getDevice(id);
+
+            if (m_device->getType() == Rosegarden::Device::Midi)
+                m_device->setName(qstrtostr(nameStr));
+        }
+        else if (type == "audio")
+        {
+            m_device = getStudio().getDevice(id);
+
+            if (m_device->getType() == Rosegarden::Device::Audio)
+                m_device->setName(qstrtostr(nameStr));
         }
         else
         {
