@@ -67,8 +67,6 @@ namespace Rosegarden
 
 JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_client(0),
-    m_outputPortLeft(0),
-    m_outputPortRight(0),
     m_bufferSize(0),
     m_sampleRate(0),
     m_tempOutBuffer(0),
@@ -120,21 +118,27 @@ JackDriver::~JackDriver()
             }
         }
 
-        if (jack_port_unregister(m_client, m_outputPortLeft))
-        {
+	for (unsigned int i = 0; i < m_outputSubmasters.size(); ++i)
+	{
+	    if (jack_port_unregister(m_client, m_outputSubmasters[i]))
+	    {
 #ifdef DEBUG_ALSA
-            std::cerr << "JackDriver::shutdown - "
-                      << "can't unregister output port left" << std::endl;
+		std::cerr << "JackDriver::shutdown - "
+			  << "can't unregister output submaster " << i+1 << std::endl;
 #endif
-        }
-
-        if (jack_port_unregister(m_client, m_outputPortRight))
-        {
+	    }
+	}
+	
+	for (unsigned int i = 0; i < m_outputMasters.size(); ++i)
+	{
+	    if (jack_port_unregister(m_client, m_outputMasters[i]))
+	    {
 #ifdef DEBUG_ALSA
-            std::cerr << "JackDriver::shutdown - "
-                      << "can't unregister output port right" << std::endl;
+		std::cerr << "JackDriver::shutdown - "
+			  << "can't unregister output master " << i+1 << std::endl;
 #endif
-        }
+	    }
+	}
                 
         jack_client_close(m_client);
         m_client = 0;
@@ -194,47 +198,53 @@ JackDriver::initialise()
 
     // Create output ports
     //
-    m_outputPortLeft = jack_port_register(m_client,
-					  "master_left",
-					  JACK_DEFAULT_AUDIO_TYPE,
-					  JackPortIsOutput,
-					  0);
+    jack_port_t *port =  jack_port_register
+	(m_client, "master_L",
+	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    m_outputMasters.push_back(port);
 
-    AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                 << "added output port 1 (left)" << std::endl;
+    port = jack_port_register
+	(m_client, "master_R",
+	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+    m_outputMasters.push_back(port);
 
-    m_outputPortRight = jack_port_register(m_client,
-					   "master_right",
-					   JACK_DEFAULT_AUDIO_TYPE,
-					   JackPortIsOutput,
-					   0);
+    for (int i = 0; i < 4; ++i) {//!!!
 
-    AUDIT_STREAM << "JackDriver::initialiseAudio - "
-                 << "added output port 2 (right)" << std::endl;
+	char namebuffer[20];
 
+	snprintf(namebuffer, 19, "submaster%d_L", i);
+	port = jack_port_register
+	    (m_client, namebuffer,
+	     JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	m_outputSubmasters.push_back(port);
+
+	snprintf(namebuffer, 19, "submaster%d_R", i);
+	port = jack_port_register
+	    (m_client, namebuffer,
+	     JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	m_outputSubmasters.push_back(port);
+    }
+	
     InstrumentId instrumentBase;
     int instruments;
     m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
 
-    m_outputFaderPorts = new jack_port_t*[instruments * 2];
-
-/*!!!
     for (int i = 0; i < instruments; ++i) {
 	char namebuffer[20];
-	snprintf(namebuffer, 19, "submaster_%d_left", i);
-	m_outputFaderPorts[i * 2] = jack_port_register(m_client,
-						       namebuffer,
-						       JACK_DEFAULT_AUDIO_TYPE,
-						       JackPortIsOutput,
-						       0);
-	snprintf(namebuffer, 19, "submaster_%d_right", i);
-	m_outputFaderPorts[i*2+1] = jack_port_register(m_client,
-						       namebuffer,
-						       JACK_DEFAULT_AUDIO_TYPE,
-						       JackPortIsOutput,
-						       0);
+	snprintf(namebuffer, 19, "fader%d_L", i);
+	m_outputInstruments.push_back(jack_port_register(m_client,
+							 namebuffer,
+							 JACK_DEFAULT_AUDIO_TYPE,
+							 JackPortIsOutput,
+							 0));
+	snprintf(namebuffer, 19, "fader%d_R", i);
+	m_outputInstruments.push_back(jack_port_register(m_client,
+							 namebuffer,
+							 JACK_DEFAULT_AUDIO_TYPE,
+							 JackPortIsOutput,
+							 0));
     }
-*/
+
     AUDIT_STREAM << "JackDriver::initialiseAudio - "
                  << "creating disk thread" << std::endl;
 
@@ -290,13 +300,13 @@ JackDriver::initialise()
     {
         AUDIT_STREAM << "JackDriver::initialiseAudio - "
                      << "connecting from "
-                     << "\"" << jack_port_name(m_outputPortLeft)
+                     << "\"" << jack_port_name(m_outputMasters[0])
                      << "\" to \"" << playback_1.c_str() << "\""
                      << std::endl;
 
         // connect our client up to the ALSA ports - first left output
         //
-        if (jack_connect(m_client, jack_port_name(m_outputPortLeft),
+        if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
                          playback_1.c_str()))
         {
             AUDIT_STREAM << "JackDriver::initialiseAudio - "
@@ -309,11 +319,11 @@ JackDriver::initialise()
     {
         AUDIT_STREAM << "JackDriver::initialiseAudio - "
                      << "connecting from "
-                     << "\"" << jack_port_name(m_outputPortLeft)
+                     << "\"" << jack_port_name(m_outputMasters[1])
                      << "\" to \"" << playback_2.c_str() << "\""
                      << std::endl;
 
-        if (jack_connect(m_client, jack_port_name(m_outputPortRight),
+        if (jack_connect(m_client, jack_port_name(m_outputMasters[1]),
                          playback_2.c_str()))
         {
             AUDIT_STREAM << "JackDriver::initialiseAudio - "
@@ -325,7 +335,7 @@ JackDriver::initialise()
     // Get the latencies from JACK and set them as RealTime
     //
     jack_nframes_t outputLatency =
-        jack_port_get_total_latency(m_client, m_outputPortLeft);
+        jack_port_get_total_latency(m_client, m_outputMasters[0]);
 
     jack_nframes_t inputLatency = 
         jack_port_get_total_latency(m_client, m_inputPorts[0]);
@@ -374,8 +384,8 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
     {
         // store output connections for reconnect after port mods
         //
-        outLeftPort = jack_port_get_connections(m_outputPortLeft);
-        outRightPort = jack_port_get_connections(m_outputPortRight);
+        outLeftPort = jack_port_get_connections(m_outputMasters[0]);
+        outRightPort = jack_port_get_connections(m_outputMasters[1]);
 
         if (jack_deactivate(m_client))
         {
@@ -400,11 +410,11 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
                                        JACK_DEFAULT_AUDIO_TYPE,
                                        JackPortIsInput|JackPortIsTerminal,
                                        0);
-         m_inputPorts.push_back(inputPort);
+	m_inputPorts.push_back(inputPort);
 
 
-         AUDIT_STREAM << "JackDriver::createJackInputPorts - "
-                      << "adding input port " << i + 1 << std::endl;
+	AUDIT_STREAM << "JackDriver::createJackInputPorts - "
+		     << "adding input port " << i + 1 << std::endl;
     }
     
     // reactivate client
@@ -486,6 +496,7 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
         }
     }
 
+//!!!
     // Reconnect out ports
     if (deactivate)
     {
@@ -497,7 +508,7 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
         if (outLeftPort && outLeftPort[0])
         {
             if (jack_connect(m_client,
-                             jack_port_name(m_outputPortLeft),
+                             jack_port_name(m_outputMasters[0]),
                              outLeftPort[0]))
             {
                 AUDIT_STREAM << "JackDriver::createJackInputPorts - "
@@ -513,7 +524,7 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
         if (outRightPort && outRightPort[0])
         {
             if (jack_connect(m_client, 
-                             jack_port_name(m_outputPortRight),
+                             jack_port_name(m_outputMasters[1]),
                              outRightPort[0]))
             {
                 AUDIT_STREAM << "JackDriver::createJackInputPorts - "
@@ -527,14 +538,6 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
 }
 
 
-// The "process" callback is where we do all the work of turning a sample
-// file into a sound.  We de-interleave a WAV and send it out as needs be.
-//
-// We perform basic mixing at this level - adding the samples together
-// using the temp buffers and then read out to the audio buffer at the
-// end of the mix stage.  More details supplied within.
-//
-//
 int
 JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 {
@@ -546,14 +549,6 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
-    sample_t *leftBuffer = static_cast<sample_t*>
-	(jack_port_get_buffer(getOutputPortLeft(), nframes));
-    sample_t *rightBuffer = static_cast<sample_t*>
-	(jack_port_get_buffer(getOutputPortRight(), nframes));
-
-    memset(leftBuffer, 0, sizeof(sample_t) * nframes);
-    memset(rightBuffer, 0, sizeof(sample_t) * nframes);
-
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
 
     if (!m_mixer) {
@@ -623,11 +618,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
 
 	inputBufferLeft = static_cast<sample_t*>
-	    (jack_port_get_buffer(getInputPort(connection * channels), nframes));
+	    (jack_port_get_buffer(m_inputPorts[connection * channels], nframes));
 	
 	if (channels == 2) {
 	    inputBufferRight = static_cast<sample_t*>
-		(jack_port_get_buffer(getInputPort(connection * channels + 1), nframes));
+		(jack_port_get_buffer(m_inputPorts[connection * channels + 1], nframes));
 	}
 	
 	//!!! want an actual instrument id
@@ -644,7 +639,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	wroteSomething = true;
 
 	sample_t totalLeft = 0.0, totalRight = 0.0;
-
+/*!!! monitoring
 	for (size_t i = 0; i < nframes; ++i) {
 	    leftBuffer[i] = inputBufferLeft[i];
 	    totalLeft += leftBuffer[i];
@@ -656,7 +651,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		totalRight += rightBuffer[i];
 	    }
 	}
-
+*/
 	if (sdb) {
 	    Rosegarden::LevelInfo info;
 	    info.level = AudioLevel::multiplier_to_fader
@@ -667,60 +662,92 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    float masterPeakLeft = 0.0;
-    float masterPeakRight = 0.0;
-
-    for (InstrumentId id = instrumentBase;
+    for (InstrumentId id = 0;
 	 id < instrumentBase + instruments;
 	 ++id) {
 
+	if (id == m_mixer->getSubmasterCount() + 1) {
+	    id = instrumentBase;
+	}
+
 	bool dormant = m_mixer->isInstrumentDormant(id);
+
+	sample_t *left = 0;
+	sample_t *right = 0;
+
+	if (!dormant) {
+	    if (id == 0) { // master
+		left = static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputMasters[0],
+					  nframes));
+		right = static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputMasters[1],
+					  nframes));
+	    } else if (id < instrumentBase) { // submaster
+		left = static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2],
+					  nframes));
+		right = static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputSubmasters[(id - 1) * 2 + 1],
+					  nframes));
+	    } else { // instrument
+		if (m_outputInstruments.size() >= id - instrumentBase) {
+		    left = static_cast<sample_t *>
+			(jack_port_get_buffer(m_outputInstruments
+					      [(id - instrumentBase) * 2],
+					      nframes));
+		    right = static_cast<sample_t *>
+			(jack_port_get_buffer(m_outputInstruments
+					      [(id - instrumentBase) * 2 + 1],
+					      nframes));
+		}
+	    }
+	}
+
 	float peakLeft = 0.0;
 	float peakRight = 0.0;
 
 	RingBuffer<AudioMixer::sample_t> *rb = m_mixer->getRingBuffer(id, 0);
-	
+
 	if (rb) {
-	    if (dormant) rb->skip(m_bufferSize);
+	    if (!left) rb->skip(nframes);
 	    else {
-		size_t actual = rb->read(m_tempOutBuffer, m_bufferSize);
-		if (actual < m_bufferSize) {
+		size_t actual = rb->read(left, nframes);
+		if (actual < nframes) {
 		    std::cerr << "WARNING: buffer underrun in left  mix ringbuffer " << id << " (wanted " << m_bufferSize << ", got " << actual << ")" << std::endl;
 		}
 
-		for (size_t i = 0; i < m_bufferSize; ++i) {
-		    float sample = m_tempOutBuffer[i];
-		    leftBuffer[i] += sample;
+		for (size_t i = 0; i < nframes; ++i) {
+		    float sample = left[i];
 		    if (sample > peakLeft) peakLeft = sample;
-		    if (leftBuffer[i] > masterPeakLeft)
-			masterPeakLeft = leftBuffer[i];
 		}
 	    }
+	} else if (left) {
+	    memset(left, 0, nframes * sizeof(sample_t));
 	}
 
 	rb = m_mixer->getRingBuffer(id, 1);
 
 	if (rb) {
-	    if (dormant) rb->skip(m_bufferSize);
+	    if (!right) rb->skip(nframes);
 	    else {
-		size_t actual = rb->read(m_tempOutBuffer, m_bufferSize);
-		if (actual < m_bufferSize) {
+		size_t actual = rb->read(right, nframes);
+		if (actual < nframes) {
 		    std::cerr << "WARNING: buffer underrun in right mix ringbuffer " << id << " (wanted " << m_bufferSize << ", got " << actual << ")" << std::endl;
 		}
 
-		for (size_t i = 0; i < m_bufferSize; ++i) {
-		    float sample = m_tempOutBuffer[i];
-		    rightBuffer[i] += sample;
+		for (size_t i = 0; i < nframes; ++i) {
+		    float sample = right[i];
 		    if (sample > peakRight) peakRight = sample;
-		    if (rightBuffer[i] > masterPeakRight)
-			masterPeakRight = rightBuffer[i];
 		}
 	    }
-
-	} else if (!dormant) {
-	    // copy left to right
-	    for (size_t i = 0; i < m_bufferSize; ++i) {
-		rightBuffer[i] += m_tempOutBuffer[i];
+	} else if (right) {
+	    if (left) {
+		for (size_t i = 0; i < m_bufferSize; ++i) {
+		    right[i] = left[i];
+		}
+	    } else {
+		memset(right, 0, nframes * sizeof(sample_t));
 	    }
 	}	    
 
@@ -730,21 +757,19 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		(peakLeft, 127, AudioLevel::LongFader);
 	    info.levelRight = AudioLevel::multiplier_to_fader
 		(peakRight, 127, AudioLevel::LongFader);
-	    sdb->setInstrumentLevel(id, info);
+
+	    if (id == 0) {
+		sdb->setMasterLevel(info);
+	    } else if (id < instrumentBase) {
+		sdb->setSubmasterLevel(id - 1, info);
+	    } else {
+		sdb->setInstrumentLevel(id, info);
+	    }
 	}
     }
 
-    if (sdb) {
-	Rosegarden::LevelInfo info;
-	info.level = AudioLevel::multiplier_to_fader
-	    (masterPeakLeft, 127, AudioLevel::LongFader);
-	info.levelRight = AudioLevel::multiplier_to_fader
-	    (masterPeakRight, 127, AudioLevel::LongFader);
-	sdb->setMasterLevel(info);
-    }
-
     if (m_alsaDriver->isPlaying()) m_mixer->signal();
-    if (wroteSomething) m_fileWriter->signal(); //???
+    if (wroteSomething) m_fileWriter->signal();
 
     return 0;
 }
@@ -835,7 +860,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 bool
 JackDriver::start()
 {
-    if (!m_client) return;
+    if (!m_client) return true;
 
     prebufferAudio();
 

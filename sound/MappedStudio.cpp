@@ -105,10 +105,10 @@ const MappedObjectProperty MappedObject::Name = "name";
 const MappedObjectProperty MappedObject::Instrument = "instrument";
 const MappedObjectProperty MappedObject::Position = "position";
 
-const MappedObjectProperty MappedAudioObject::ConnectionsIn = "connectonsIn";
-const MappedObjectProperty MappedAudioObject::ConnectionsOut = "connectionsOut";
-const MappedObjectProperty MappedAudioObject::Channels = "channels";
+const MappedObjectProperty MappedConnectableObject::ConnectionsIn = "connectonsIn";
+const MappedObjectProperty MappedConnectableObject::ConnectionsOut = "connectionsOut";
 
+const MappedObjectProperty MappedAudioFader::Channels = "channels";
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
 const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLevel";
 const MappedObjectProperty MappedAudioFader::Pan = "pan";
@@ -409,6 +409,21 @@ MappedStudio::getObjectOfType(MappedObjectType type)
     return rv;
 }
 
+unsigned int
+MappedStudio::getObjectCount(MappedObjectType type)
+{
+    unsigned int count = 0;
+
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    MappedObjectCategory &category = m_objects[type];
+    count = category.size();
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return count;
+}
+
 
 bool
 MappedStudio::destroyObject(MappedObjectId id)
@@ -430,16 +445,53 @@ MappedStudio::destroyObject(MappedObjectId id)
 }
 
 bool
-MappedStudio::connectInstrument(InstrumentId /*iId*/, MappedObjectId /*msId*/)
+MappedStudio::connectObjects(MappedObjectId mId1, MappedObjectId mId2)
 {
-    return true;
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    bool rv = false;
+
+    // objects must exist and be of connectable types
+    MappedConnectableObject *obj1 =
+	dynamic_cast<MappedConnectableObject *>(getObject(mId1));
+    MappedConnectableObject *obj2 =
+	dynamic_cast<MappedConnectableObject *>(getObject(mId2));
+
+    if (obj1 && obj2) {
+	obj1->addConnection(MappedConnectableObject::Out, mId2);
+	obj2->addConnection(MappedConnectableObject::In,  mId1);
+	rv = true;
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
 }
 
 bool
-MappedStudio::connectObjects(MappedObjectId /*mId1*/, MappedObjectId /*mId2*/)
+MappedStudio::disconnectObjects(MappedObjectId mId1, MappedObjectId mId2)
 {
-    return true;
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    bool rv = false;
+
+    // objects must exist and be of connectable types
+    MappedConnectableObject *obj1 =
+	dynamic_cast<MappedConnectableObject *>(getObject(mId1));
+    MappedConnectableObject *obj2 =
+	dynamic_cast<MappedConnectableObject *>(getObject(mId2));
+
+    if (obj1 && obj2) {
+	obj1->removeConnection(MappedConnectableObject::Out, mId2);
+	obj2->removeConnection(MappedConnectableObject::In,  mId1);
+	rv = true;
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
 }
+ 
 
 // Clear down the whole studio
 //
@@ -739,31 +791,29 @@ MappedStudio::setPluginInstancePort(InstrumentId id,
 
 #endif // HAVE_LADSPA
 
-// -------------- MappedAudioObject -----------------
+// -------------- MappedConnectableObject -----------------
 //
 //
-MappedAudioObject::MappedAudioObject(MappedObject *parent,
+MappedConnectableObject::MappedConnectableObject(MappedObject *parent,
                                      const std::string &name,
                                      MappedObjectType type,
                                      MappedObjectId id,
-                                     MappedObjectValue channels,
                                      bool readOnly):
-                       MappedObject(parent,
-                                    name,
-                                    type,
-                                    id,
-                                    readOnly),
-                                    m_channels(channels)
+    MappedObject(parent,
+		 name,
+		 type,
+		 id,
+		 readOnly)
 {
 }
 
-MappedAudioObject::~MappedAudioObject()
+MappedConnectableObject::~MappedConnectableObject()
 {
 }
 
 void
-MappedAudioObject::setConnections(AudioConnection dir,
-                                  MappedObjectValueList conns)
+MappedConnectableObject::setConnections(ConnectionDirection dir,
+					MappedObjectValueList conns)
 {
     if (dir == In)
         m_connectionsIn = conns;
@@ -771,8 +821,37 @@ MappedAudioObject::setConnections(AudioConnection dir,
         m_connectionsOut = conns;
 }
 
+void
+MappedConnectableObject::addConnection(ConnectionDirection dir,
+				       MappedObjectId id)
+{
+    MappedObjectValueList &list =
+	(dir == In ? m_connectionsIn : m_connectionsOut);
+
+    for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
+	if (*i == id) return;
+    }
+    
+    list.push_back(MappedObjectValue(id));
+}
+
+void
+MappedConnectableObject::removeConnection(ConnectionDirection dir,
+					  MappedObjectId id)
+{
+    MappedObjectValueList &list =
+	(dir == In ? m_connectionsIn : m_connectionsOut);
+
+    for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
+	if (*i == id) {
+	    list.erase(i);
+	    return;
+	}
+    }
+}
+
 MappedObjectValueList
-MappedAudioObject::getConnections(AudioConnection dir)
+MappedConnectableObject::getConnections(ConnectionDirection dir)
 {
     if (dir == In)
         return m_connectionsIn;
@@ -787,17 +866,17 @@ MappedAudioFader::MappedAudioFader(MappedObject *parent,
                                    MappedObjectId id,
                                    MappedObjectValue channels,
                                    bool readOnly):
-    MappedAudioObject(parent,
+    MappedConnectableObject(parent,
                       "MappedAudioFader",
                       AudioFader,
                       id,
-                      channels,
                       readOnly),
     m_level(0.0), // dB
     m_recordLevel(0.0),
     m_instrumentId(0),
     m_bypassed(false),
-    m_pan(0)
+    m_pan(0),
+    m_channels(channels)
 {
     // Set default connections
     //
@@ -824,9 +903,9 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
         list.push_back(MappedAudioFader::FaderRecordLevel);
         list.push_back(MappedObject::Instrument);
         list.push_back(MappedAudioFader::Pan);
-        list.push_back(MappedAudioObject::Channels);
-        list.push_back(MappedAudioObject::ConnectionsIn);
-        list.push_back(MappedAudioObject::ConnectionsOut);
+        list.push_back(MappedAudioFader::Channels);
+        list.push_back(MappedConnectableObject::ConnectionsIn);
+        list.push_back(MappedConnectableObject::ConnectionsOut);
     }
     else if (property == MappedObject::Instrument)
     {
@@ -840,7 +919,7 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_recordLevel));
     }
-    else if (property == MappedAudioObject::Channels)
+    else if (property == MappedAudioFader::Channels)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_channels));
     }
@@ -848,7 +927,7 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_pan));
     }
-    else if (property == MappedAudioObject::ConnectionsIn)
+    else if (property == MappedConnectableObject::ConnectionsIn)
     {
         Rosegarden::MappedObjectValueList::const_iterator 
             it = m_connectionsIn.begin();
@@ -858,7 +937,7 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
             list.push_back(QString("%1").arg(*it));
         }
     }
-    else if (property == MappedAudioObject::ConnectionsOut)
+    else if (property == MappedConnectableObject::ConnectionsOut)
     {
         Rosegarden::MappedObjectValueList::const_iterator 
             it = m_connectionsOut.begin();
@@ -912,7 +991,7 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     {
         m_recordLevel = value;
     }
-    else if (property ==  MappedAudioObject::Channels)
+    else if (property ==  MappedAudioFader::Channels)
     {
         m_channels = value;
     }
@@ -920,12 +999,12 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     {
         m_pan = value;
     }
-    else if (property == MappedAudioObject::ConnectionsIn)
+    else if (property == MappedConnectableObject::ConnectionsIn)
     {
         m_connectionsIn.clear();
         m_connectionsIn.push_back(value);
     }
-    else if (property == MappedAudioObject::ConnectionsOut)
+    else if (property == MappedConnectableObject::ConnectionsOut)
     {
         m_connectionsOut.clear();
         m_connectionsOut.push_back(value);
@@ -953,11 +1032,10 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
 MappedAudioBuss::MappedAudioBuss(MappedObject *parent,
                                  MappedObjectId id,
                                  bool readOnly):
-    MappedAudioObject(parent,
+    MappedConnectableObject(parent,
                       "MappedAudioBuss",
                       AudioBuss,
                       id,
-		      2, // stereo
                       readOnly),
     m_level(0)
 {
@@ -977,14 +1055,14 @@ MappedAudioBuss::getPropertyList(const MappedObjectProperty &property)
     if (property == "")
     {
         list.push_back(MappedAudioBuss::Level);
-        list.push_back(MappedAudioObject::ConnectionsIn);
-        list.push_back(MappedAudioObject::ConnectionsOut);
+        list.push_back(MappedConnectableObject::ConnectionsIn);
+        list.push_back(MappedConnectableObject::ConnectionsOut);
     }
     else if (property == Level)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_level));
     }
-    else if (property == MappedAudioObject::ConnectionsIn)
+    else if (property == MappedConnectableObject::ConnectionsIn)
     {
         Rosegarden::MappedObjectValueList::const_iterator 
             it = m_connectionsIn.begin();
@@ -994,7 +1072,7 @@ MappedAudioBuss::getPropertyList(const MappedObjectProperty &property)
             list.push_back(QString("%1").arg(*it));
         }
     }
-    else if (property == MappedAudioObject::ConnectionsOut)
+    else if (property == MappedConnectableObject::ConnectionsOut)
     {
         Rosegarden::MappedObjectValueList::const_iterator 
             it = m_connectionsOut.begin();
@@ -1032,12 +1110,12 @@ MappedAudioBuss::setProperty(const MappedObjectProperty &property,
     {
         m_level = value;
     }
-    else if (property == MappedAudioObject::ConnectionsIn)
+    else if (property == MappedConnectableObject::ConnectionsIn)
     {
         m_connectionsIn.clear();
         m_connectionsIn.push_back(value);
     }
-    else if (property == MappedAudioObject::ConnectionsOut)
+    else if (property == MappedConnectableObject::ConnectionsOut)
     {
         m_connectionsOut.clear();
         m_connectionsOut.push_back(value);

@@ -128,11 +128,20 @@ VUMeter::VUMeter(QWidget *parent,
 	green  = max * 10 / 100;
     }
 
-    m_velocityColour =
-        new VelocityColour(RosegardenGUIColours::LevelMeterRed,
-                           RosegardenGUIColours::LevelMeterOrange,
-                           RosegardenGUIColours::LevelMeterGreen,
-			   max, red, orange, green);
+    if (m_type == AudioPeakHoldLong ||
+	m_type == AudioPeakHoldShort) {
+	m_velocityColour =
+	    new VelocityColour(RosegardenGUIColours::LevelMeterSolidRed,
+			       RosegardenGUIColours::LevelMeterSolidOrange,
+			       RosegardenGUIColours::LevelMeterSolidGreen,
+			       max, red, orange, green);
+    } else {
+	m_velocityColour =
+	    new VelocityColour(RosegardenGUIColours::LevelMeterRed,
+			       RosegardenGUIColours::LevelMeterOrange,
+			       RosegardenGUIColours::LevelMeterGreen,
+			       max, red, orange, green);
+    }
 }
 
 VUMeter::~VUMeter()
@@ -260,6 +269,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
     if (m_type == AudioPeakHoldLong ||
 	m_type == AudioPeakHoldShort) {
 
+	Qt::BrushStyle style = Qt::SolidPattern;
+
 	int quiet = m_velocityColour->getQuietKnee(),
 	    medium = m_velocityColour->getMediumKnee(),
 	    loud = m_velocityColour->getLoudKnee();
@@ -267,13 +278,15 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 	if (m_alignment == Vertical) {
 	    if (h > loud) {
 		paint->setPen(m_velocityColour->getLoudColour());
-		paint->setBrush(m_velocityColour->getLoudColour());
+		paint->setBrush(QBrush(m_velocityColour->getLoudColour(),
+				       style));
 		paint->drawRect(x, y, w, h - loud);
 	    }
 	} else {
 	    if (w > loud) {
 		paint->setPen(m_velocityColour->getLoudColour());
-		paint->setBrush(m_velocityColour->getLoudColour());
+		paint->setBrush(QBrush(m_velocityColour->getLoudColour(),
+				       style));
 		paint->drawRect(x + loud, y, w - loud, h);
 	    }
 	}
@@ -281,14 +294,16 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 	if (m_alignment == Vertical) {
 	    if (h > medium) {
 		paint->setPen(m_velocityColour->getMediumColour());
-		paint->setBrush(m_velocityColour->getMediumColour());
+		paint->setBrush(QBrush(m_velocityColour->getMediumColour(),
+				       style));
 		paint->drawRect(x, y + (h > loud ? (h - loud) : 0),
 				w, std::min(h - medium, loud - medium));
 	    }
 	} else {
 	    if (w > medium) {
 		paint->setPen(m_velocityColour->getMediumColour());
-		paint->setBrush(m_velocityColour->getMediumColour());
+		paint->setBrush(QBrush(m_velocityColour->getMediumColour(),
+				       style));
 		paint->drawRect(x + medium, y,
 				std::min(w - medium, loud - medium), h);
 	    }
@@ -296,12 +311,14 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 
 	if (m_alignment == Vertical) {
 	    paint->setPen(m_velocityColour->getQuietColour());
-	    paint->setBrush(m_velocityColour->getQuietColour());
+	    paint->setBrush(QBrush(m_velocityColour->getQuietColour(),
+				   style));
 	    paint->drawRect(x, y + (h > medium ? (h - medium) : 0),
 			    w, std::min(h, medium));
 	} else {
 	    paint->setPen(m_velocityColour->getQuietColour());
-	    paint->setBrush(m_velocityColour->getQuietColour());
+	    paint->setBrush(QBrush(m_velocityColour->getQuietColour(),
+				   style));
 	    paint->drawRect(x, y, std::min(w, medium), h);
 	}
 	
@@ -360,11 +377,11 @@ VUMeter::drawMeterLevel(QPainter* paint)
             // Draw the right bar
             //
             y = height() - (m_levelRight * height()) / m_maxLevel;
-	    drawColouredBar(paint, 1, hW + 1, y, width(), height() - y);
+	    drawColouredBar(paint, 1, hW + 1, y, width() - hW + 1, height() - y);
 
 	    paint->setPen(Qt::black);
 	    paint->setBrush(Qt::black);
-	    paint->drawRect(hW, 0, hW, y);
+	    paint->drawRect(hW, 0, width() - hW + 2, y);
 
             if (m_showPeakLevel)
             {

@@ -28,7 +28,7 @@
 #include <qsignalmapper.h>
 
 #include "widgets.h"
-#include "trackvumeter.h"
+#include "vumeter.h"
 
 #include "AudioLevel.h"
 
@@ -108,12 +108,51 @@ protected:
     typedef std::pair<QPixmap *, QPixmap *> PixmapRec;
     typedef std::map<SizeRec, PixmapRec> PixmapCache;
     static PixmapCache m_pixmapCache;
-
-    //!!! we should really get all sophisticated and cache these
-    //shared among faders of a given dimension
-//    QPixmap *m_groovePixmap;
-//    QPixmap *m_buttonPixmap;
 };
+
+
+// AudioVUMeter - a vertical audio meter.  Default is stereo.
+//
+class AudioVUMeter : public QWidget
+{
+public:
+    AudioVUMeter(QWidget *parent = 0,
+                 VUMeter::VUMeterType type = VUMeter::AudioPeakHoldShort,
+                 bool stereo = true,
+                 int width = 12,
+                 int height = 140,
+                 const char *name = 0);
+
+    void setLevel(double dB) {
+	m_meter->setLevel(dB);
+    }
+    void setLevel(double dBleft, double dBright) {
+	m_meter->setLevel(dBleft, dBright);
+    }
+
+    virtual void paintEvent(QPaintEvent*);
+
+protected:
+    class AudioVUMeterImpl : public VUMeter
+    {
+    public:
+	AudioVUMeterImpl(QWidget *parent,
+			 VUMeterType type,
+			 bool stereo,
+			 int width,
+			 int height,
+			 const char *name);
+    protected:
+	virtual void meterStart() { }
+	virtual void meterStop() { }
+    };
+	
+    AudioVUMeterImpl *m_meter;
+    bool m_stereo;
+    int m_yoff;
+    int m_xoff;
+};
+
     
 
 class MidiFaderWidget : public QFrame

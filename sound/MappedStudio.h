@@ -203,10 +203,8 @@ public:
                                MappedObjectId id,
                                bool readOnly);
 
-    // Connect an Instrument to a MappedStudioObject
-    //
-    bool connectInstrument(InstrumentId iId, MappedObjectId mId);
     bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
+    bool disconnectObjects(MappedObjectId mId1, MappedObjectId mId2);
 
     // Destroy a MappedObject by ID
     //
@@ -219,6 +217,10 @@ public:
     // Get an object of a certain type - to see if any exist
     //
     MappedObject* getObjectOfType(MappedObjectType type);
+
+    // Find out how many objects there are of a certain type
+    //
+    unsigned int getObjectCount(MappedObjectType type);
 
     // iterators
     MappedObject* getFirst(MappedObjectType type);
@@ -338,35 +340,33 @@ private:
 // can do the cleverness if n != m
 //
 
-class MappedAudioObject : public MappedObject
+class MappedConnectableObject : public MappedObject
 {
 public:
     static const MappedObjectProperty ConnectionsIn;
     static const MappedObjectProperty ConnectionsOut;
-    static const MappedObjectProperty Channels;
 
     typedef enum
     {
         In,
         Out
-    } AudioConnection;
+    } ConnectionDirection;
 
-    MappedAudioObject(MappedObject *parent,
-                      const std::string &name,
-                      MappedObjectType type,
-                      MappedObjectId id,
-                      MappedObjectValue channels,
-                      bool readOnly);
+    MappedConnectableObject(MappedObject *parent,
+			    const std::string &name,
+			    MappedObjectType type,
+			    MappedObjectId id,
+			    bool readOnly);
 
-    ~MappedAudioObject();
+    ~MappedConnectableObject();
 
-    // Get and set connections - these operate on normal MappedObject
-    // properties but we provide these methods for convenience.
-    //
-    void setConnections(AudioConnection dir,
+    void setConnections(ConnectionDirection dir,
                         MappedObjectValueList conns);
 
-    MappedObjectValueList getConnections (AudioConnection dir);
+    void addConnection(ConnectionDirection dir, MappedObjectId id);
+    void removeConnection(ConnectionDirection dir, MappedObjectId id);
+
+    MappedObjectValueList getConnections (ConnectionDirection dir);
 
 protected:
 
@@ -374,17 +374,14 @@ protected:
     //
     MappedObjectValueList      m_connectionsIn;
     MappedObjectValueList      m_connectionsOut;
-
-    // How many channels we carry
-    //
-    MappedObjectValue             m_channels;
 };
 
 // Audio fader
 //
-class MappedAudioFader : public MappedAudioObject
+class MappedAudioFader : public MappedConnectableObject
 {
 public:
+    static const MappedObjectProperty Channels;
 
     // properties
     //
@@ -425,9 +422,12 @@ protected:
     //
     MappedObjectValue             m_pan;
 
+    // How many channels we carry
+    //
+    MappedObjectValue             m_channels;
 };
 
-class MappedAudioBuss : public MappedAudioObject
+class MappedAudioBuss : public MappedConnectableObject
 {
 public:
     // A buss is much simpler than an instrument fader.  It's always

@@ -113,7 +113,6 @@ rosegarden_SOURCES = \
         trackheader.cpp \
         tracklabel.cpp \
 	trackseditoriface.skel \
-        trackvumeter.cpp \
         velocitycolour.cpp \
         vumeter.cpp \
         widgets.cpp \

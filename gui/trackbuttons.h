@@ -33,6 +33,7 @@
 #include "Track.h"
 
 #include "tracklabel.h"
+#include "vumeter.h"
 
 class QVBoxLayout;
 class QButtonGroup;
@@ -47,6 +48,28 @@ class QSignalMapper;
 //
 //
 // 
+
+class TrackVUMeter: public VUMeter
+{
+public:
+     TrackVUMeter(QWidget *parent = 0,
+                  VUMeterType type = Plain,
+                  int width = 0,
+                  int height = 0,
+                  int position = 0,
+                  const char *name = 0);
+
+    int getPosition() const { return m_position; }
+
+protected:
+    virtual void meterStart();
+    virtual void meterStop();
+
+private:
+    int m_position;
+    int m_textHeight;
+
+};
 
 class TrackButtons : public QFrame
 {

@@ -110,7 +110,6 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 
 	Rosegarden::InstrumentId id = i->first;
 	AudioFaderWidget *fader = i->second;
-
 	if (!fader) continue;
 
 	Rosegarden::LevelInfo info;
@@ -132,6 +131,26 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	} else {
 	    fader->m_vuMeter->setLevel(dBleft);
 	}
+    }
+
+    for (unsigned int i = 0; i < m_submasters.size(); ++i) {
+
+	AudioFaderWidget *fader = m_submasters[i];
+	if (!fader) continue;
+
+	Rosegarden::LevelInfo info;
+	if (!mapper->getSubmasterLevel(i, info)) continue;
+
+	RG_DEBUG << "MixerWindow::updateMeters: sub " << i << ", level left "
+		 << info.level << endl;
+	
+	// The values passed through are long-fader values
+	float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	    (info.level, 127, Rosegarden::AudioLevel::LongFader);
+	float dBright = Rosegarden::AudioLevel::fader_to_dB
+	    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+	fader->m_vuMeter->setLevel(dBleft, dBright);
     }
 
     Rosegarden::LevelInfo masterInfo;

@@ -96,14 +96,23 @@ public:
 	}
     }
 
+    unsigned int getSubmasterCount() { return m_submasterCount; }
+
 protected:
     static void *threadRun(void *arg);
 
-    void processBlocks(bool forceFill, bool &readSomething);
-    void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill,
-		      bool &readSomething);
+    void processBlocks(bool forceFill);
+
+    int canProcessBlocks(InstrumentId id, PlayableAudioFileList &,
+			 bool forceFill);
+    void processBlock(InstrumentId id, PlayableAudioFileList &);
+
+    int canProcessEmptyBlocks(InstrumentId id);
+    void processEmptyBlock(InstrumentId id);
+
     void generateBuffers();
+    void generateBuffer(InstrumentId id, unsigned int channels,
+			size_t bufferSamples, unsigned int &maxChannels);
 
     SoundDriver      *m_driver;
     AudioFileReader  *m_fileReader;
@@ -121,12 +130,20 @@ protected:
 
     // maintain the same number of these as the maximum number of
     // channels on any audio instrument
-    std::vector<sample_t *> m_processBuffers;
+    typedef std::vector<sample_t *> BufferSet;
+    BufferSet m_processBuffers;
 
     struct BufferRec
     {
-	BufferRec() : dormant(true), filledTo(RealTime::zeroTime), buffers() { }
+	BufferRec() { reset(RealTime::zeroTime); }
 	~BufferRec();
+
+	void reset(RealTime t) {
+	    empty = false;
+	    dormant = false;
+	    zeroFrames = 0;
+	    filledTo = t;
+	}	    
 
 	bool empty;
 	bool dormant;
@@ -143,6 +160,10 @@ protected:
 
     typedef std::map<InstrumentId, BufferRec> BufferMap;
     BufferMap m_bufferMap;
+
+    unsigned int m_submasterCount;
+    typedef std::map<InstrumentId, BufferSet> WorkBufferMap;
+    WorkBufferMap m_submasterWorkBuffers;
 };
 
 

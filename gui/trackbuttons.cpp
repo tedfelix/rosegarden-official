@@ -36,13 +36,42 @@
 #include "Studio.h"
 #include "colours.h"
 #include "tracklabel.h"
-#include "trackvumeter.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguidoc.h"
 
 using Rosegarden::TrackId;
+
+TrackVUMeter::TrackVUMeter(QWidget *parent,
+                           VUMeterType type,
+                           int width,
+                           int height,
+                           int position,
+                           const char *name):
+    VUMeter(parent, type, false, width, height, VUMeter::Horizontal, name),
+    m_position(position), m_textHeight(12)
+{
+    setAlignment(AlignCenter);
+}
+
+
+void
+TrackVUMeter::meterStart()
+{
+    clear();
+    setMinimumHeight(m_originalHeight);
+    setMaximumHeight(m_originalHeight);
+}
+
+
+void
+TrackVUMeter::meterStop()
+{
+    setMinimumHeight(m_textHeight);
+    setMaximumHeight(m_textHeight);
+    setText(QString("%1").arg(m_position + 1));
+}
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,

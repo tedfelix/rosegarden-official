@@ -519,6 +519,70 @@ RosegardenFader::calculateButtonPixmap()
 
 
     
+//  ------------------  AudioVUMeter ---------------------
+//
+AudioVUMeter::AudioVUMeter(QWidget *parent,
+                           VUMeter::VUMeterType type,
+                           bool stereo,
+                           int width,
+                           int height,
+                           const char *name) :
+    QWidget(parent, name),
+    m_stereo(stereo)
+{
+    setBackgroundMode(Qt::NoBackground);
+    setFixedSize(width, height);
+
+    // This offset is intended to match that for the height of the
+    // button pixmap in RosegardenFader (in studiowidgets.cpp, which
+    // is probably where this class should be too)
+
+    m_yoff = height / 7;
+    m_yoff /= 10;
+    ++m_yoff;
+    m_yoff *= 10;
+    ++m_yoff;
+
+    // This one is _not_ intended to match that for the button width
+
+    m_xoff = width / 4;
+
+    m_meter = new AudioVUMeterImpl(this, type, stereo,
+				   width - m_xoff, height - m_yoff, name);
+
+    m_meter->move(m_xoff/2, m_yoff/2);
+}
+
+void
+AudioVUMeter::paintEvent(QPaintEvent *e)
+{
+    QPainter paint(this);
+    paint.setPen(colorGroup().mid());
+    paint.drawRect(0, 0, width(), height());
+
+    paint.setPen(colorGroup().background());
+    paint.setBrush(colorGroup().background());
+    paint.drawRect(1, 1, width() - 2, m_yoff/2 - 1);
+    paint.drawRect(1, 1, m_xoff/2 - 1, height() - 2);
+    paint.drawRect(width() - m_xoff/2 - 1, 1, m_xoff/2, height() - 2);
+    paint.drawRect(1, height() - m_yoff/2 - 1, width() - 2, m_yoff/2);
+    paint.end();
+
+    m_meter->paintEvent(e);
+}
+
+AudioVUMeter::AudioVUMeterImpl::AudioVUMeterImpl(QWidget *parent,
+						 VUMeterType type,
+						 bool stereo,
+						 int width,
+						 int height,
+						 const char *name) :
+    VUMeter(parent, type, stereo, width, height, VUMeter::Vertical, name)
+{
+}
+
+
+
 
 
 // ---------------- AudioFaderWidget ------------------

@@ -71,6 +71,10 @@ namespace RosegardenGUIColours
     extern const QColor LevelMeterGreen;
     extern const QColor LevelMeterOrange;
     extern const QColor LevelMeterRed;
+  
+    extern const QColor LevelMeterSolidGreen;
+    extern const QColor LevelMeterSolidOrange;
+    extern const QColor LevelMeterSolidRed;
 
     extern const QColor BarLine;
     extern const QColor BarLineIncorrect;

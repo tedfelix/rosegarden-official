@@ -52,7 +52,7 @@
 #include "widgets.h"
 #include "studiocontrol.h"
 #include "rosegardenguidoc.h"
-#include "trackvumeter.h"
+#include "studiowidgets.h"
 #include "rosegardengui.h"
 
 #include "rosestrings.h"
@@ -895,7 +895,7 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 
     Rosegarden::StudioControl::setStudioObjectProperty
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
-         Rosegarden::MappedAudioObject::Channels,
+         Rosegarden::MappedAudioFader::Channels,
          Rosegarden::MappedObjectValue(channels));
 
 }
@@ -913,7 +913,7 @@ AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
 
    Rosegarden::StudioControl::setStudioObjectProperty
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
-         Rosegarden::MappedAudioObject::ConnectionsIn,
+         Rosegarden::MappedConnectableObject::ConnectionsIn,
          Rosegarden::MappedObjectValue(value));
 }
 

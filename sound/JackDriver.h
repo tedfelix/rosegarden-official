@@ -152,25 +152,14 @@ protected:
     //
     void createInputPorts(unsigned int ports, bool deactivate);
 
-    // Modify input ports
-    //
-    unsigned int getInputPorts() const { return m_inputPorts.size(); }
-
-    jack_port_t* getInputPort(unsigned int portNumber)
-        { return m_inputPorts[portNumber]; }
-
-    jack_port_t* getOutputPortLeft() { return m_outputPortLeft; }
-    jack_port_t* getOutputPortRight() { return m_outputPortRight; }
-
     // data members:
 
     jack_client_t               *m_client;
+
     std::vector<jack_port_t *>   m_inputPorts;
-
-    jack_port_t                 *m_outputPortLeft;
-    jack_port_t                 *m_outputPortRight;
-
-    jack_port_t                **m_outputFaderPorts;
+    std::vector<jack_port_t *>   m_outputInstruments;
+    std::vector<jack_port_t *>   m_outputSubmasters;
+    std::vector<jack_port_t *>   m_outputMasters;
 
     jack_nframes_t               m_bufferSize;
     jack_nframes_t               m_sampleRate;

@@ -590,7 +590,7 @@ void RosegardenGUIDoc::initialiseStudio()
             // Set the number of channels
             //
             Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioObject::Channels,
+                Rosegarden::MappedAudioFader::Channels,
                 Rosegarden::MappedObjectValue((*it)->getAudioChannels()));
 
             // Set the pan - 0 based

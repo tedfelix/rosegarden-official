@@ -64,6 +64,10 @@ namespace RosegardenGUIColours
     const QColor LevelMeterOrange = QColor(255, 165, 0);
     const QColor LevelMeterRed = QColor(200, 0, 0);
 
+    const QColor LevelMeterSolidGreen = QColor(0, 140, 0);
+    const QColor LevelMeterSolidOrange = QColor(220, 120, 0);
+    const QColor LevelMeterSolidRed = QColor(255, 50, 50);
+
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = QColor(211, 0, 31);
     const QColor BeatLine = QColor(212, 212, 212);
