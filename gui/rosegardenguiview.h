@@ -154,11 +154,6 @@ public:
     bool haveSelection();
     Rosegarden::SegmentSelection getSelection();
 
-    /*
-     * Get the box that holds the Segment and Instrument parameter boxes
-     */
-//     QVBoxLayout* getParameterBox() { return m_vboxLayout; }
-
 public slots:
     void slotEditSegment(Rosegarden::Segment*);
     void slotEditSegmentNotation(Rosegarden::Segment*);
