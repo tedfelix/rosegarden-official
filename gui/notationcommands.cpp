@@ -847,6 +847,13 @@ MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
     else if (markType == Rosegarden::Marks::Rinforzando) m = i18n("R&inforzando");
     else if (markType == Rosegarden::Marks::Tenuto) m = i18n("T&enuto");
     else if (markType == Rosegarden::Marks::Trill) m = i18n("Tri&ll");
+    else if (markType == Rosegarden::Marks::Turn) m = i18n("&Turn");
+    else if (markType == Rosegarden::Marks::Accent) m = i18n("&Accent");
+    else if (markType == Rosegarden::Marks::Staccatissimo) m = i18n("&Staccatissimo");
+    else if (markType == Rosegarden::Marks::Marcato) m = i18n("&Marcato");
+    else if (markType == Rosegarden::Marks::Pause) m = i18n("&Pause");
+    else if (markType == Rosegarden::Marks::UpBow) m = i18n("&Up-Bow");
+    else if (markType == Rosegarden::Marks::DownBow) m = i18n("&Down-Bow");
     else m = i18n("&%1%2").arg(m[0].upper()).arg(m.right(m.length()-1));
     // FIXME: That last i18n has very little chance of working, unless
     // by some miracle the exact same string was translated elsewhere already
