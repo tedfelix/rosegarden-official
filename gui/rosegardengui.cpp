@@ -1255,20 +1255,28 @@ void RosegardenGUIApp::slotFileSave()
 }
 
 QString
-RosegardenGUIApp::getValidWriteFile(const QString &extension,
+RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
 				    const QString &label)
 {
+    // extract ".rg" from "*.rg|Rosegarden files"
+    //
+    QString extension = descriptiveExtension.left(descriptiveExtension.find('|')).mid(1);
+
     QString name = KFileDialog::getSaveFileName
-	(":ROSEGARDEN", i18n(extension), this, i18n(label));
+	(":ROSEGARDEN", descriptiveExtension, this, label);
+
+//     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : KFileDialog::getSaveFileName returned "
+//              << name << endl;
+    
 
     if (name.isEmpty()) return name;
 
     // Append extension if we don't have one
     //
     if (!extension.isEmpty()) {
-	QRegExp rgFile("\\." + extension + "$");
+	QRegExp rgFile(extension + "$");
 	if (rgFile.match(name) == -1) {
-	    name += "." + extension;
+	    name += extension;
 	}
     }
 
@@ -1308,7 +1316,8 @@ void RosegardenGUIApp::slotFileSaveAs()
 
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), this);
 
-    QString newName = getValidWriteFile("*.rg|Rosegarden-4 files\n*|All files", "Save as...");
+    QString newName = getValidWriteFile(QString("*.rg|") + i18n("Rosegarden-4 files\n"),
+                                        i18n("Save as..."));
     if (newName.isEmpty()) return;
 
     SetWaitCursor waitCursor;
@@ -2511,7 +2520,9 @@ void RosegardenGUIApp::slotExportMIDI()
     KTmpStatusMsg msg(i18n("Exporting MIDI file..."), this);
 
     QString fileName = getValidWriteFile
-	("*.mid *.midi|Standard MIDI files\n*|All files", "Export as...");
+	(QString("*.mid *.midi|") + i18n("Standard MIDI files\n"),
+         i18n("Export as..."));
+
     if (fileName.isEmpty()) return;
 
     exportMIDIFile(fileName);
@@ -2544,7 +2555,8 @@ void RosegardenGUIApp::slotExportCsound()
 {
     KTmpStatusMsg msg(i18n("Exporting Csound score file..."), this);
 
-    QString fileName = getValidWriteFile("*|All files", "Export as...");
+    QString fileName = getValidWriteFile(QString("*|") + i18n("All files"),
+                                         i18n("Export as..."));
     if (fileName.isEmpty()) return;
 
     exportCsoundFile(fileName);
@@ -2574,7 +2586,8 @@ void RosegardenGUIApp::slotExportLilypond()
     KTmpStatusMsg msg(i18n("Exporting Lilypond file..."), this);
 
     QString fileName = getValidWriteFile
-	("*.ly|Lilypond files\n*|All files", "Export as...");
+	(QString("*.ly|") + i18n("Lilypond files"), i18n("Export as..."));
+
     if (fileName.isEmpty()) return;
 
     exportLilypondFile(fileName);
@@ -2604,7 +2617,8 @@ void RosegardenGUIApp::slotExportMusicXml()
     KTmpStatusMsg msg(i18n("Exporting MusicXML file..."), this);
 
     QString fileName = getValidWriteFile
-	("*.xml|XML files\n*|All files", "Export as...");
+	(QString("*.xml|") + i18n("XML files"), i18n("Export as..."));
+
     if (fileName.isEmpty()) return;
 
     exportMusicXmlFile(fileName);
