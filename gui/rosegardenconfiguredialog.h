@@ -40,8 +40,9 @@ class ConfigurationPage : public QWidget
     Q_OBJECT
 
 public:
-    ConfigurationPage( QWidget * parent=0, const char * name=0 )
-        : QWidget( parent, name ) {}
+    ConfigurationPage(RosegardenGUIDoc *doc,
+                      QWidget *parent=0, const char *name=0 )
+        : QWidget(parent, name), m_doc(doc), m_pageIndex(0) {}
     ~ConfigurationPage() {};
 
     /**
@@ -52,22 +53,11 @@ public:
 //     virtual void setup() = 0;
 
     /**
-     * Called when the installation of a profile is
-     * requested. Reimplemenations of this method should do the
-     * equivalent of a @ref setup(), but with the given @ref KConfig
-     * object instead of kapp->config() and only for those entries that
-     * really have keys defined in the profile.
-     *
-     * The default implementation does nothing.
-     */
-    virtual void installProfile( KConfig * /*profile*/ ) {};
-
-    /**
      * Should apply the changed settings (ie. read the settings from
      * the widgets into the @ref KConfig object). Called from @ref
      * ConfigureDialog.
      */
-//     virtual void apply() = 0;
+    virtual void apply() = 0;
 
     /**
      * Should cleanup any temporaries after cancel. The default
@@ -76,13 +66,16 @@ public:
      */
     virtual void dismiss() {}
 
-    void setPageIndex( int aPageIndex ) { m_PageIndex = aPageIndex; }
-    int pageIndex() const { return m_PageIndex; }
+    void setPageIndex( int aPageIndex ) { m_pageIndex = aPageIndex; }
+    int pageIndex() const { return m_pageIndex; }
 
 protected:
+
     //--------------- Data members ---------------------------------
 
-    int m_PageIndex;
+    RosegardenGUIDoc* m_doc;
+
+    int m_pageIndex;
 };
 
 /**
@@ -94,7 +87,8 @@ class TabbedConfigurationPage : public ConfigurationPage
     Q_OBJECT
 
 public:
-    TabbedConfigurationPage(QWidget *parent=0, const char *name=0);
+    TabbedConfigurationPage(RosegardenGUIDoc *doc,
+                            QWidget *parent=0, const char *name=0);
 
     static QString iconName() { return "misc"; }
     
@@ -120,12 +114,10 @@ public:
                               const char *name=0);
     ~RosegardenConfigureDialog();
 
-public slots:
-    // Actions
-    //
-    virtual void slotOK();
+protected slots:
+    virtual void slotOk();
     virtual void slotApply();
-    virtual void slotClose();
+    virtual void slotCancelOrClose();
 
     void slotActivateApply();
 

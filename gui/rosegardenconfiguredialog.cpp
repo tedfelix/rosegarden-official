@@ -40,6 +40,7 @@
 #include "Composition.h"
 #include "Configuration.h"
 #include "RealTime.h"
+#include "rosedebug.h"
 
 namespace Rosegarden
 {
@@ -50,9 +51,10 @@ namespace Rosegarden
 //
 //
 
-TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent,
+TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
+                                                 QWidget *parent,
                                                  const char *name)
-  : ConfigurationPage(parent, name)
+  : ConfigurationPage(doc, parent, name)
 {
   QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
   m_tabWidget = new QTabWidget(this);
@@ -72,6 +74,8 @@ public:
     GeneralConfigurationPage(RosegardenGUIDoc *doc,
                              QWidget *parent=0, const char *name=0);
 
+    virtual void apply();
+
     static QString iconLabel() { return i18n("General"); }
     static QString title() { return i18n("General Configuration"); }
 
@@ -85,7 +89,7 @@ protected:
 
 GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                                    QWidget *parent, const char *name)
-    : TabbedConfigurationPage(parent, name),
+    : TabbedConfigurationPage(doc, parent, name),
       m_client(0),
       m_countIn(0)
 {
@@ -116,12 +120,28 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     addTab(frame, i18n("General"));
 }
 
+void GeneralConfigurationPage::apply()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
+
+    int countIn = getCountInSpin();
+    comp.setCountInBars(countIn);
+
+    int client = getDblClickClient();
+    config.setDoubleClickClient(
+                                (Rosegarden::Configuration::DoubleClickClient)client);
+
+}
+
 
 class PlaybackConfigurationPage : public TabbedConfigurationPage
 {
 public:
     PlaybackConfigurationPage(RosegardenGUIDoc *doc,
                               QWidget *parent=0, const char *name=0);
+
+    virtual void apply();
 
     static QString iconLabel() { return i18n("Playback"); }
     static QString title()     { return i18n("Sequencer and Playback"); }
@@ -137,11 +157,10 @@ protected:
 PlaybackConfigurationPage::PlaybackConfigurationPage(RosegardenGUIDoc *doc,
                                                      QWidget *parent,
                                                      const char *name)
-    : TabbedConfigurationPage(parent, name),
+    : TabbedConfigurationPage(doc, parent, name),
       m_readAhead(0),
       m_playback(0)
 {
-    Rosegarden::Composition &comp = doc->getComposition();
     Rosegarden::Configuration &config = doc->getConfiguration();
 
     QFrame *frame = new QFrame(m_tabWidget);
@@ -172,7 +191,16 @@ PlaybackConfigurationPage::PlaybackConfigurationPage(RosegardenGUIDoc *doc,
     addTab(frame, i18n("Latency"));
 }
 
+void PlaybackConfigurationPage::apply()
+{
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
 
+    int readAhead = getReadAheadValue();
+    config.setReadAhead((RealTime(0, (readAhead * 1000))));
+
+    int playback = getPlaybackValue();
+    config.setPlaybackLatency((RealTime(0, (playback * 1000))));
+}
 
 //------------------------------------------------------------
 static inline QPixmap loadIcon( const char * name ) {
@@ -219,31 +247,10 @@ RosegardenConfigureDialog::~RosegardenConfigureDialog()
 }
 
 void
-RosegardenConfigureDialog::slotClose()
-{
-    delete this;
-}
-
-void
 RosegardenConfigureDialog::slotApply()
 {
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
-
-    int countIn = m_generalConfigurationPage->getCountInSpin();
-    comp.setCountInBars(countIn);
-
-    int readAhead = m_playbackConfigurationPage->getReadAheadValue();
-    config.setReadAhead((RealTime(0, (readAhead * 1000))));
-
-    int playback = m_playbackConfigurationPage->getPlaybackValue();
-    config.setPlaybackLatency((RealTime(0, (playback * 1000))));
-
-    int client = m_generalConfigurationPage->getDblClickClient();
-    config.setDoubleClickClient(
-            (Rosegarden::Configuration::DoubleClickClient)client);
-
-//     ApplyButton->setDisabled(true);
+    m_generalConfigurationPage->apply();
+    m_playbackConfigurationPage->apply();
 }
 
 
@@ -254,11 +261,18 @@ RosegardenConfigureDialog::slotActivateApply()
 }
 
 void
-RosegardenConfigureDialog::slotOK()
+RosegardenConfigureDialog::slotOk()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenConfigureDialog::slotOK()\n";
+
     slotApply();
-    slotClose();
+    accept();
 }
 
+void
+RosegardenConfigureDialog::slotCancelOrClose()
+{
 }
- 
+
+
+}
