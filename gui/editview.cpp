@@ -189,14 +189,14 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
     return controlRuler;
 }
 
-ControllerEventsRuler* EditView::makeControllerEventRuler()
+ControllerEventsRuler* EditView::makeControllerEventRuler(Rosegarden::ControlParameter *controller)
 {
     QCanvas* controlRulerCanvas = new QCanvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
     ControllerEventsRuler* controlRuler = new ControllerEventsRuler
 	(*getCurrentSegment(), getHLayout(), this,
-	 controlRulerCanvas, m_controlRulers);
+	 controlRulerCanvas, m_controlRulers, controller);
 
     return controlRuler;
 }
@@ -576,13 +576,15 @@ EditView::setupActions()
     //
     // Control rulers
     //
-    new KAction(i18n("Show Velocity Control Ruler"), 0, this,
+    new KAction(i18n("Show Velocity Property Ruler"), 0, this,
                 SLOT(slotShowVelocityControlRuler()), actionCollection(),
                 "show_velocity_control_ruler");
 
+    /*
     new KAction(i18n("Show Controllers Events Ruler"), 0, this,
                 SLOT(slotShowControllerEventsRuler()), actionCollection(),
                 "show_controller_events_ruler");
+                */
 
     // Disabled for now
     //
@@ -606,12 +608,51 @@ EditView::setupActions()
 void
 EditView::setupAddControlRulerMenu()
 {
-    QPopupMenu* addControlRulerMenu = dynamic_cast<QPopupMenu*>(factory()->container("add_control_ruler", this));
+    QPopupMenu* addControlRulerMenu = dynamic_cast<QPopupMenu*>
+        (factory()->container("add_control_ruler", this));
 
     if (addControlRulerMenu) {
-        addControlRulerMenu->insertItem("Insert your items here");
+        Rosegarden::Studio &studio = getDocument()->getStudio();
+        Rosegarden::ControlList *list = studio.getControlParameters();
+
+        int i = 0;
+        for (Rosegarden::ControlListConstIterator it = list->begin(); it != list->end(); ++it)
+        {
+            //addControlRulerMenu->insertItem("Insert your items here");
+            QString itemStr = i18n("%1 ruler").arg((*it)->getName());
+            addControlRulerMenu->insertItem(itemStr, i++);
+        }
+
+        connect(addControlRulerMenu, SIGNAL(activated(int)), SLOT(slotAddControlRuler(int)));
     }
 }
+
+void
+EditView::slotAddControlRuler(int controller)
+{
+    std::cout << "EditView::slotAddControlRuler - item = " << controller << std::endl;
+
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::ControlList *list = studio.getControlParameters();
+    Rosegarden::ControlParameter *control = (*list)[controller];
+
+    if (control)
+    {
+        // create control ruler to a specific controller
+        ControllerEventsRuler* controlRuler = makeControllerEventRuler(control);
+
+        addControlRuler(controlRuler);
+        
+        if (!m_controlRulers->isVisible()) {
+            m_controlRulers->show();
+        }
+    
+        getBottomWidget()->layout()->invalidate();
+        getBottomWidget()->updateGeometry();
+        getCanvasView()->updateBottomWidgetGeometry();
+    }
+}
+
 
 
 void
@@ -897,6 +938,10 @@ void EditView::slotShowVelocityControlRuler()
     showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
 }
 
+/* 
+ * This is the "generic case" control ruler which we probably don't even need 
+ *
+ */
 void EditView::slotShowControllerEventsRuler()
 {
     ControllerEventsRuler* controlRuler = makeControllerEventRuler();

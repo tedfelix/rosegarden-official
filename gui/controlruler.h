@@ -24,6 +24,7 @@
 #define _CONTROLRULER_H_
 
 #include <qstring.h>
+#include <klocale.h>
 
 #include "Staff.h"
 #include "Segment.h"
@@ -32,7 +33,7 @@
 #include "rosegardencanvasview.h"
 #include "widgets.h"
 
-namespace Rosegarden { class RulerScale; class EventSelection; }
+namespace Rosegarden { class RulerScale; class EventSelection; class ControlParameter; }
 
 class QFont;
 class QFontMetrics;
@@ -176,7 +177,9 @@ public:
                           Rosegarden::RulerScale*,
                           EditViewBase* parentView,
                           QCanvas*,
-                          QWidget* parent=0, const char* name=0, WFlags f=0);
+                          QWidget* parent=0,
+                          Rosegarden::ControlParameter *controller = 0,
+                          const char* name=0, WFlags f=0);
 
     virtual ~ControllerEventsRuler();
 
@@ -194,8 +197,10 @@ public:
 
 protected:
     //--------------- Data members ---------------------------------
-    bool m_segmentDeleted;
-    int m_defaultItemWidth;
+    bool                          m_segmentDeleted;
+    int                           m_defaultItemWidth;
+
+    Rosegarden::ControlParameter  *m_controller;
 };
 
 /**

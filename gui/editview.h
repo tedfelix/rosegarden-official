@@ -33,7 +33,7 @@
 #include "Event.h"
 #include "Selection.h"
 
-namespace Rosegarden { class Segment; class Staff; class RulerScale; }
+namespace Rosegarden { class Segment; class Staff; class RulerScale; class ControlParameter; }
 
 class QCanvasItem;
 class QScrollView;
@@ -179,6 +179,9 @@ public slots:
     void slotInsertControlRulerItem();
     void slotEraseControlRulerItem();
 
+    // add control ruler
+    void slotAddControlRuler(int);
+
 protected:
     virtual Rosegarden::RulerScale* getHLayout() = 0;
 
@@ -218,7 +221,7 @@ protected:
     /**
      * Make a ruler for controller events
      */
-    ControllerEventsRuler* makeControllerEventRuler();
+    ControllerEventsRuler* makeControllerEventRuler(Rosegarden::ControlParameter *controller = 0);
 
     /**
      * Add control ruler
@@ -259,7 +262,7 @@ protected:
      * Set up the 'Add control ruler' sub-menu
      */
     void setupAddControlRulerMenu();
-    
+
     /**
      * Create an action menu for inserting notes from the PC keyboard,
      * and add it to the action collection.  This is one of the methods

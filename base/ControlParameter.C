@@ -77,7 +77,8 @@ ControlParameter::ControlParameter(const ControlParameter &control):
         m_max(control.getMax()),
         m_default(control.getDefault()),
         m_controllerValue(control.getControllerValue()),
-        m_colour(control.getColour())
+        m_colour(control.getColour()),
+        m_ipbPosition(-1)  // doesn't appear on IPB by default
 {
 }
 
@@ -92,6 +93,7 @@ ControlParameter::operator=(const ControlParameter &control)
     m_default = control.getDefault();
     m_controllerValue = control.getControllerValue();
     m_colour = control.getColour();
+    m_ipbPosition = control.getIPBPosition();
 
     return *this;
 }

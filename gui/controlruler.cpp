@@ -46,6 +46,8 @@
 #include "velocitycolour.h"
 #include "basiccommand.h"
 #include "editviewbase.h"
+#include "ControlParameter.h"
+#include "Property.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
@@ -838,11 +840,20 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
                                              Rosegarden::RulerScale* rulerScale,
                                              EditViewBase* parentView,
                                              QCanvas* c,
-                                             QWidget* parent, const char* name, WFlags f)
+                                             QWidget* parent,
+                                             Rosegarden::ControlParameter *controller,
+                                             const char* name, WFlags f)
     : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
       m_segmentDeleted(false),
       m_defaultItemWidth(20)
 {
+    // Make a copy of the ControlParameter if we have one
+    //
+    if (controller)
+        m_controller = new Rosegarden::ControlParameter(*controller);
+    else
+        m_controller = 0;
+
     m_segment.addObserver(this);
 
     for(Segment::iterator i = m_segment.begin();
@@ -850,6 +861,22 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
 
         // skip if not a ControllerEvent
         if (!(*i)->isa(Rosegarden::Controller::EventType)) continue;
+
+        // Check for specific controller value if we need to 
+        //
+        if (m_controller)
+        {
+            try
+            {
+                if ((*i)->get<Rosegarden::Int>(Rosegarden::Controller::NUMBER)
+                        !=  m_controller->getControllerValue())
+                    continue;
+            }
+            catch(...)
+            {
+                continue;
+            }
+        }
         
         RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
@@ -872,12 +899,30 @@ ControllerEventsRuler::~ControllerEventsRuler()
 
 QString ControllerEventsRuler::getName()
 {
-    return i18n("Controller Events");
+    if (m_controller) return strtoqstr(m_controller->getName());
+    else return i18n("Controller Events");
 }
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 {
     if (!e->isa(Rosegarden::Controller::EventType)) return;
+
+    // Check for specific controller value if we need to 
+    //
+    if (m_controller)
+    {
+        try
+        {
+            if (e->get<Rosegarden::Int>(Rosegarden::Controller::NUMBER) != 
+                    m_controller->getControllerValue())
+                return;
+        }
+        catch(...)
+        {
+            return;
+        }
+    }
+
 
     RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
 
@@ -931,13 +976,23 @@ void ControllerEventsRuler::insertControllerEvent()
              << endl;
 
     // ask controller number to user
-    long number = 0; bool ok = false;
-    QIntValidator intValidator(0, 128, this);
+    long number = 0;
     
-    QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0", &ok, this, &intValidator);
-    if (ok) number = res.toULong();
+    if (m_controller)
+    {
+        number = m_controller->getControllerValue();
+    }
+    else
+    {
+        bool ok = false;
+        QIntValidator intValidator(0, 128, this);
+        QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0",
+                                            &ok, this, &intValidator);
+        if (ok) number = res.toULong();
+    }
     
-    ControllerEventInsertCommand* command = new ControllerEventInsertCommand(insertTime, number, initialValue, m_segment);
+    ControllerEventInsertCommand* command = 
+        new ControllerEventInsertCommand(insertTime, number, initialValue, m_segment);
 
     m_parentEditView->addCommandToHistory(command);
 }
