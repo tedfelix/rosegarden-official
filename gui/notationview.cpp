@@ -390,7 +390,7 @@ void NotationView::setupActions()
     
 
     // File menu
-    KStdAction::close (this, SLOT(fileClose()),         actionCollection());
+    KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
 
    // setup edit menu
     KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
@@ -727,6 +727,11 @@ void NotationView::setTool(NotationTool* tool)
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////
+
+void NotationView::closeWindow()
+{
+    close();
+}
 
 void NotationView::slotEditUndo()
 {

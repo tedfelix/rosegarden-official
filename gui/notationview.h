@@ -99,6 +99,10 @@ public:
 				int dots = 0);
 
 public slots:
+    /**
+     * close window
+     */
+    void closeWindow();
 
     /**
      * undo
