@@ -458,12 +458,12 @@ public:
     /**
      * An alternative compare class that orders by start time first
      */
-    struct SegmentTimeCmp
-    {
-	bool operator()(const Segment *a, const Segment *b) const {
-	    return a->getStartTime() < b->getStartTime();
-	}
-    };
+//     struct SegmentTimeCmp
+//     {
+// 	bool operator()(const Segment *a, const Segment *b) const {
+// 	    return a->getStartTime() < b->getStartTime();
+// 	}
+//     };
 
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
     void    addObserver(SegmentObserver *obs) { m_observers.insert(obs); }
