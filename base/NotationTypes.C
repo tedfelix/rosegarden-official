@@ -946,7 +946,7 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     
     // use these constants instead of numeric literals in order to reduce the
     // chance of making incorrect height assignments...
-    const char C = -2, D = -1, E = 0, F = 1, G = 2, A = 3, B = 4;
+    const int C = -2, D = -1, E = 0, F = 1, G = 2, A = 3, B = 4;
     
     // Here we do the actual work of making all the decisions explained above.
     switch (pitch) {
