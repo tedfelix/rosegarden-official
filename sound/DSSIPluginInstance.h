@@ -60,6 +60,9 @@ public:
     virtual sample_t **getAudioInputBuffers() { return m_inputBuffers; }
     virtual sample_t **getAudioOutputBuffers() { return m_outputBuffers; }
 
+    virtual QStringList getPrograms();
+    virtual void selectProgram(QString program);
+
     virtual void activate();
     virtual void deactivate();
 

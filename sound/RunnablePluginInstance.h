@@ -24,6 +24,7 @@
 
 #include <config.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <vector>
 
 #include "RealTime.h"
@@ -74,6 +75,9 @@ public:
 
     virtual sample_t **getAudioInputBuffers() = 0;
     virtual sample_t **getAudioOutputBuffers() = 0;
+
+    virtual QStringList getPrograms() { return QStringList(); }
+    virtual void selectProgram(QString) { }
 
     virtual void setPortValue(unsigned int port, float value) = 0;
 

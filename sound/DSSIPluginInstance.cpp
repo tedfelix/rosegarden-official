@@ -236,6 +236,55 @@ DSSIPluginInstance::instantiate(unsigned long sampleRate)
     m_instanceHandle = descriptor->instantiate(descriptor, sampleRate);
 }
 
+QStringList
+DSSIPluginInstance::getPrograms()
+{
+    QStringList programs;
+
+    if (!m_descriptor || !m_descriptor->get_program) return programs;
+
+    unsigned long index = 0;
+    DSSI_Program_Descriptor programDescriptor;
+
+    while (m_descriptor->get_program(m_instanceHandle, index, &programDescriptor)) {
+	++index;
+	programs.append(QString("%1. %2").arg(index).arg(programDescriptor.Name));
+	free(programDescriptor.Name);
+    }
+    
+    return programs;
+}
+
+void
+DSSIPluginInstance::selectProgram(QString program)
+{
+    // better if this were more efficient!
+
+    if (!m_descriptor || !m_descriptor->get_program || !m_descriptor->select_program) return;
+
+    unsigned long index = 0;
+    DSSI_Program_Descriptor programDescriptor;
+
+    bool found = false;
+    unsigned long bankNo = 0, programNo = 0;
+
+    while (m_descriptor->get_program(m_instanceHandle, index, &programDescriptor)) {
+	++index;
+	QString name = QString("%1. %2").arg(index).arg(programDescriptor.Name);
+	free(programDescriptor.Name);
+	if (name == program) {
+	    bankNo = programDescriptor.Bank;
+	    programNo = programDescriptor.Program;
+	    found = true;
+	    break;
+	}
+    }
+
+    if (found) {
+	m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
+    }
+}
+
 void
 DSSIPluginInstance::activate()
 {
