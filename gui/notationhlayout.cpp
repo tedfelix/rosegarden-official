@@ -470,6 +470,9 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	    m_progressDlg->setCompleted
 		((barTimes.second - startTime) * 95 / (endTime - startTime));
 	    m_progressDlg->processEvents();
+	    if (m_progressDlg->wasCancelled()) {
+		throw std::string("Action cancelled");
+	    }
 	}
 	++barNo;
     }
@@ -1046,6 +1049,9 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 	if (m_progressDlg) {
 	    m_progressDlg->setCompleted(50 + 50 * staffNo / m_barData.size());
 	    m_progressDlg->processEvents();
+	    if (m_progressDlg->wasCancelled()) {
+		throw std::string("Action cancelled");
+	    }
 	}
 
 	layout(i, startTime, endTime);

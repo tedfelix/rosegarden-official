@@ -210,6 +210,10 @@ protected:
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;
     unsigned int             m_compositionRefreshStatusId;
+
+    typedef std::map<Rosegarden::Segment *, unsigned int>
+        SegmentRefreshStatusIdMap;
+    SegmentRefreshStatusIdMap m_segmentsRefreshStatusIds;
 };
 
 #endif

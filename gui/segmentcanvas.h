@@ -291,6 +291,11 @@ public:
     void setShowPreviews(bool previews);
 
     /**
+     * Return whether the segment items contain previews or not
+     */
+    bool isShowingPreviews() { return m_showPreviews; }
+
+    /**
      * Show a preview of the Segment we're recording
      */
     void showRecordingSegmentItem(Rosegarden::TrackId track,

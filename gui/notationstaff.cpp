@@ -321,6 +321,9 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	m_progressDlg->setLabelText
 	    (i18n("Rendering staff %1...").arg(getId() + 1));
 	m_progressDlg->processEvents();
+	if (m_progressDlg->wasCancelled()) {
+	    throw std::string("Action cancelled");
+	}
     }
 
     Clef currentClef; // default is okay to start with
@@ -353,6 +356,9 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	    m_progressDlg->setCompleted
 		((myTime - startTime) * 100 / (endTime - startTime));
 	    m_progressDlg->processEvents();
+	    if (m_progressDlg->wasCancelled()) {
+		throw std::string("Action cancelled");
+	    }
 	}
     }
 
@@ -372,6 +378,9 @@ NotationStaff::positionElements(timeT from, timeT to)
 	m_progressDlg->setLabelText
 	    (i18n("Positioning staff %1...").arg(getId() + 1));
 	m_progressDlg->processEvents();
+	if (m_progressDlg->wasCancelled()) {
+	    throw std::string("Action cancelled");
+	}
     }
 
     int elementsPositioned = 0;
@@ -462,6 +471,9 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    timeT myTime = (*it)->getAbsoluteTime();
 	    m_progressDlg->setCompleted((myTime - from) * 100 / (to - from));
 	    m_progressDlg->processEvents();
+	    if (m_progressDlg->wasCancelled()) {
+		throw std::string("Action cancelled");
+	    }
 	}
     }
 

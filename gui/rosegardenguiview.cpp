@@ -251,6 +251,11 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     NotationView *notationView =
 	new NotationView(getDocument(), segmentsToEdit, this);
 
+    if (!notationView->isOK()) {
+	delete notationView;
+	return;
+    }
+
     // create keyboard accelerators on view
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());

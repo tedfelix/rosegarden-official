@@ -140,14 +140,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
-/*!!!
-    m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
-                          m_rulerScale->getBarWidth(lastBar));
-
-    int segmentCanvasHeight = getTrackCellHeight() * 40;
-
-    canvas->resize(m_canvasWidth, segmentCanvasHeight);
-*/
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     int trackLabelWidth = 230;
@@ -391,26 +383,23 @@ TrackEditor::setupSegments()
 
 bool TrackEditor::isCompositionModified()
 {
-    return m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
+    return m_document->getComposition().getRefreshStatus
+	(m_compositionRefreshStatusId).needsRefresh();
 }
 
 void TrackEditor::setCompositionModified(bool c)
 {
-    m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).setNeedsRefresh(c);
+    m_document->getComposition().getRefreshStatus
+	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
 
 void TrackEditor::paintEvent(QPaintEvent* e)
 {
     if (isCompositionModified()) {
+
         m_segmentCanvas->updateAllSegmentItems();
-
         m_trackButtons->slotUpdateTracks();
-
-        /*
-        m_segmentCanvas->canvas()->resize(m_canvasWidth,
-                                          getTrackCellHeight() * m_document->getComposition().getNbTracks());
-                                          */
 
 #ifdef RGKDE3
 	Composition &composition = m_document->getComposition();
@@ -430,6 +419,35 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 #endif
 
         setCompositionModified(false);
+
+    } else if (m_segmentCanvas->isShowingPreviews()) { 
+
+	for (Composition::iterator i = m_document->getComposition().begin();
+	     i != m_document->getComposition().end(); ++i) {
+
+	    SegmentRefreshStatusIdMap::iterator ri =
+		m_segmentsRefreshStatusIds.find(*i);
+
+	    bool refresh = false;
+
+	    if (ri == m_segmentsRefreshStatusIds.end()) {
+		
+		kdDebug(KDEBUG_AREA) << "TrackEditor::paintEvent: adding segment " << *i << " to map" << endl;
+		m_segmentsRefreshStatusIds[*i] = (*i)->getNewRefreshStatusId();
+
+	    } else {
+	    
+		unsigned int refreshStatusId = m_segmentsRefreshStatusIds[*i];
+		Rosegarden::SegmentRefreshStatus &refreshStatus =
+		    (*i)->getRefreshStatus(refreshStatusId);
+
+		refresh = refreshStatus.needsRefresh();
+	    }
+
+	    if (refresh) {
+		m_segmentCanvas->updateSegmentItem(*i);
+	    }
+	}
     }
 
     QWidget::paintEvent(e);
@@ -471,6 +489,8 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 
 //    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
+
+    m_pointer->setSize(3, m_segmentCanvas->canvas()->height());
 
     double canvasPosition = m_rulerScale->getXForTime(position);
     double distance = (double)canvasPosition - m_pointer->x();

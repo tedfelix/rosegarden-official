@@ -77,6 +77,9 @@ public:
 		 bool showProgressive = true); // update during initial render?
     ~NotationView();
 
+    /// constructed successfully? (main reason it might not is user hit Cancel)
+    bool isOK() const { return m_ok; }
+
     /**
      * Return the view-local PropertyName definitions for this view
      */
@@ -663,6 +666,7 @@ protected:
     RosegardenProgressDialog *m_progressDlg;
     bool m_inhibitRefresh;
     bool m_documentDestroyed;
+    bool m_ok;
 };
 
 #endif

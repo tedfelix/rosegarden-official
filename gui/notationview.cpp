@@ -177,7 +177,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeActionMenu(0),
     m_progressDlg(0),
     m_inhibitRefresh(true),
-    m_documentDestroyed(false)
+    m_documentDestroyed(false),
+    m_ok(false)
 {
     initActionDataMaps(); // does something only the 1st time it's called
     
@@ -261,7 +262,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) {
 	show();
 	m_progressDlg = new RosegardenProgressDialog
-	    (i18n("Starting..."), 0, 100, this,
+	    (i18n("Starting..."), i18n("Cancel"), 100, this,
 	     i18n("Notation progress"), true);
 	m_progressDlg->setAutoClose(false);
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -279,19 +280,27 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout.setPageMode(false);
     m_hlayout.setPageWidth(width() - 50);
 
-    bool layoutApplied = applyLayout();
-    if (!layoutApplied) {
-	KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-    } else {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-
-            m_staffs[i]->renderAllElements();
-            m_staffs[i]->positionAllElements();
-            m_staffs[i]->getSegment().getRefreshStatus
-		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-
-	    canvas()->update();
-        }
+    try {
+	bool layoutApplied = applyLayout();
+	if (!layoutApplied) {
+	    KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+	} else {
+	    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+		
+		m_staffs[i]->renderAllElements();
+		m_staffs[i]->positionAllElements();
+		m_staffs[i]->getSegment().getRefreshStatus
+		    (m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+		
+		canvas()->update();
+	    }
+	}
+	m_ok = true;
+    } catch (std::string s) {
+	if (s != "Action cancelled") {
+	    throw;
+	}
+	// when cancelled, m_ok is false -- checked by calling method
     }
 
     if (showProgressive) {
