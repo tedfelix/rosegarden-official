@@ -107,7 +107,8 @@ NotationChord::hasStem() const
     
     Iterator i(getInitialNote());
     for (;;) {
-	Note::Type note = getAsEvent(i)->get<Int>(NOTE_TYPE);
+	long note;
+	if (!getAsEvent(i)->get<Int>(NOTE_TYPE, note)) return true;
 	if (NoteStyleFactory::getStyleForEvent(getAsEvent(i))->hasStem(note))
 	    return true;
 	if (i == getFinalNote()) return false;
