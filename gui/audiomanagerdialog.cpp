@@ -515,7 +515,7 @@ AudioManagerDialog::slotInsert()
     emit insertAudioSegment(audioFile->getId(),
                             instr->getId(),
                             Rosegarden::RealTime(0, 0),
-                            Rosegarden::RealTime(0, 0));
+                            audioFile->getLength());
 }
 
 void

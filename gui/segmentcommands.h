@@ -123,6 +123,32 @@ private:
 };
 
 
+class AudioSegmentInsertCommand : public XKCommand
+{
+public:
+    AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
+                              Rosegarden::TrackId track,
+                              Rosegarden::timeT startTime,
+                              Rosegarden::AudioFileId audioFileId,
+                              const Rosegarden::RealTime &audioStartTime,
+                              const Rosegarden::RealTime &audioEndTime);
+    virtual ~AudioSegmentInsertCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+    
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Studio      *m_studio;
+    Rosegarden::Segment     *m_segment;
+    int                      m_track;
+    Rosegarden::timeT        m_startTime;
+    Rosegarden::AudioFileId  m_audioFileId;
+    Rosegarden::RealTime     m_audioStartTime;
+    Rosegarden::RealTime     m_audioEndTime;
+    bool m_detached;
+};
+
 class SegmentInsertCommand : public XKCommand
 {
 public:

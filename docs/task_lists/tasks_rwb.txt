@@ -5,7 +5,7 @@ o Sync audio and MIDI [PARTIAL]
 
 o Get first fetch audio working - partial segments
 
-o Fix Audio Segment splitting [PARTIAL]
+o Fix Audio Segment splitting [WORKING BUT TIMING DODGY]
 
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop

@@ -2700,10 +2700,10 @@ RosegardenGUIApp::slotAudioManager()
                                           Rosegarden::InstrumentId,
                                           const Rosegarden::RealTime&,
                                           const Rosegarden::RealTime&)),
-                SLOT(slotInsertAudioSegment(Rosegarden::AudioFileId,
-                                            Rosegarden::InstrumentId,
-                                            const Rosegarden::RealTime&,
-                                            const Rosegarden::RealTime&)));
+                SLOT(slotInsertAudioSegmentAndTrack(Rosegarden::AudioFileId,
+                                                    Rosegarden::InstrumentId,
+                                                    const Rosegarden::RealTime&,
+                                                    const Rosegarden::RealTime&)));
 
         m_audioManagerDialog->show();
     }
@@ -2853,21 +2853,19 @@ RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
 }
 
 void
-RosegardenGUIApp::slotInsertAudioSegment(Rosegarden::AudioFileId audioFileId,
-                                         Rosegarden::InstrumentId instrumentId,
-                                         const Rosegarden::RealTime &startTime,
-                                         const Rosegarden::RealTime &endTime)
+RosegardenGUIApp::slotInsertAudioSegmentAndTrack(
+                               Rosegarden::AudioFileId audioFileId,
+                               Rosegarden::InstrumentId instrumentId,
+                               const Rosegarden::RealTime &startTime,
+                               const Rosegarden::RealTime &endTime)
 {
-    // Create a new track
+    // Insert a Track and an audio Segment
     //
-    m_view->slotAddTracks(1, instrumentId);
-
-    // Get that Track and insert a Segment
     Rosegarden::Composition &comp = m_doc->getComposition();
-    m_view->slotAddAudioSegment(audioFileId,
-                                comp.getNbTracks(),
-                                startTime,
-                                endTime);
+    m_view->slotAddAudioSegmentAndTrack(audioFileId,
+                                        instrumentId,
+                                        startTime,
+                                        endTime);
 }
 
 // Tell whoever is interested that a SegmentSelection has changed

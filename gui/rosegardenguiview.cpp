@@ -34,6 +34,7 @@
 #include <kconfig.h>
 #include <kapp.h>
 #include <kprocess.h>
+#include <kcommand.h>
 
 // application specific includes
 #include "MappedEvent.h"
@@ -634,11 +635,29 @@ RosegardenGUIView::slotChangeInstrumentLabel(Rosegarden::InstrumentId id,
 }
 
 void
-RosegardenGUIView::slotAddAudioSegment(Rosegarden::AudioFileId audioFileId,
-                                       Rosegarden::TrackId trackId,
+RosegardenGUIView::slotAddAudioSegmentAndTrack(
+                                       Rosegarden::AudioFileId audioFileId,
+                                       Rosegarden::InstrumentId instrumentId,
                                        const Rosegarden::RealTime &startTime,
                                        const Rosegarden::RealTime &endTime)
 {
+
+    KMacroCommand *macro = new KMacroCommand("Insert Audio Segment");
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    macro->addCommand(new AddTracksCommand(&comp,
+                                           1,
+                                           instrumentId));
+
+    // Note, the new track _will be_ comp.getNbTracks
+    //
+    macro->addCommand(new AudioSegmentInsertCommand(getDocument(),
+                                                    comp.getNbTracks(),
+                                                    0,
+                                                    audioFileId,
+                                                    startTime,
+                                                    endTime));
+    slotAddCommandToHistory(macro);
 }
 
 

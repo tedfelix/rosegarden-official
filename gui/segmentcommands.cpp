@@ -177,6 +177,97 @@ SegmentQuickCopyCommand::unexecute()
     m_detached = true;
 }
 
+// -------- Audio Insert Segment --------
+//
+
+AudioSegmentInsertCommand::AudioSegmentInsertCommand(
+        RosegardenGUIDoc *doc,
+        TrackId track,
+        timeT startTime,
+        Rosegarden::AudioFileId audioFileId,
+        const Rosegarden::RealTime &audioStartTime,
+        const Rosegarden::RealTime &audioEndTime):
+    XKCommand("Create Segment"),
+    m_composition(&(doc->getComposition())),
+    m_studio(&(doc->getStudio())),
+    m_segment(0),
+    m_track(track),
+    m_startTime(startTime),
+    m_audioFileId(audioFileId),
+    m_audioStartTime(audioStartTime),
+    m_audioEndTime(audioEndTime),
+    m_detached(false)
+{
+}
+
+AudioSegmentInsertCommand::~AudioSegmentInsertCommand()
+{
+    if (m_detached) {
+	delete m_segment;
+    }
+}
+
+void
+AudioSegmentInsertCommand::execute()
+{
+    if (!m_segment)
+    {
+        // Create and insert Segment
+        //
+        m_segment = new Segment(Rosegarden::Segment::Audio);
+        m_segment->setTrack(m_track);
+        m_segment->setStartTime(m_startTime);
+	m_composition->addSegment(m_segment);
+        m_segment->setAudioStartTime(m_audioStartTime);
+        m_segment->setAudioEndTime(m_audioEndTime);
+
+        // Calculate end time
+        //
+        Rosegarden::RealTime startTime =
+            m_composition->getElapsedRealTime(m_startTime);
+
+        Rosegarden::RealTime endTime =
+            startTime + m_audioEndTime - m_audioStartTime;
+
+        timeT endTimeT = m_composition->getElapsedTimeForRealTime(endTime);
+
+	m_segment->setEndTime(endTimeT);
+
+        // Do our best to label the Segment with whatever is currently
+        // showing against it.
+        //
+        Rosegarden::Track *track = m_composition->getTrackByIndex(m_track);
+        std::string label;
+
+        if (track)
+        {
+            // try to get a reasonable Segment name by Instrument
+            //
+            label = m_studio->getSegmentName(track->getInstrument());
+
+            // if not use the track label
+            //
+            if (label == "")
+                label = track->getLabel();
+
+            m_segment->setLabel(label);
+        }
+
+    }
+    else
+    {
+        m_composition->addSegment(m_segment);
+    }
+
+    m_detached = false;
+}
+
+void
+AudioSegmentInsertCommand::unexecute()
+{
+    m_composition->detachSegment(m_segment);
+    m_detached = true;
+}
 
 // --------- Insert Segment --------
 //
