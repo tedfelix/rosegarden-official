@@ -700,6 +700,7 @@ RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
 // clef in the new Segment
 //
 //!!! make into command thingy
+/*!!!
 void
 RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
                                Rosegarden::timeT splitTime)
@@ -803,3 +804,4 @@ RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
 
 
 
+*/

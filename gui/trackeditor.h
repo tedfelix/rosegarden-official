@@ -108,27 +108,9 @@ public slots:
     void setPointerPosition(Rosegarden::timeT position);
 
     /**
-     * Create a Segment Item from a Segment (after recording)
-     *
-     */
-    //!!! go?
-//!!!    void addSegmentItem(Rosegarden::Segment *segment);
-
-    /*
-     * Delete a SegmentItem
-     */
-//!!!    void deleteSegmentItem(Rosegarden::Segment *segment);
-
-    /**
      * Show a Segment as it records
      */
     void updateRecordingSegmentItem(Rosegarden::Segment *segment);
-
-    /*
-     * Resync a SegmentItem to reflect its Segment
-     **/
-//!!! go
-//!!!    void updateSegmentItem(Rosegarden::Segment *segment);
 
     /*
      * Destroys same
@@ -148,23 +130,28 @@ public slots:
 
 
 protected slots:
-    void segmentOrderChanged(int section, int fromIdx, int toIdx);
+    void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
 
     void slotAddSegment(Rosegarden::TrackId track,
 			Rosegarden::timeT time,
 			Rosegarden::timeT duration);
 
-    void deleteSegment(Rosegarden::Segment *);
-    void updateSegmentDuration(Rosegarden::Segment *,
-			       Rosegarden::timeT);
-    void updateSegmentTimes(Rosegarden::Segment *,
-			    Rosegarden::timeT,
-			    Rosegarden::timeT);
-    void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
-					Rosegarden::TrackId,
-					Rosegarden::timeT);
+    void slotDeleteSegment(Rosegarden::Segment *);
 
-    void scrollTrackButtons(int y);
+    void slotChangeSegmentDuration(Rosegarden::Segment *,
+				   Rosegarden::timeT);
+
+    void slotChangeSegmentTimes(Rosegarden::Segment *,
+				Rosegarden::timeT,
+				Rosegarden::timeT);
+
+    void slotChangeSegmentTrackAndStartTime(Rosegarden::Segment *,
+					    Rosegarden::TrackId,
+					    Rosegarden::timeT);
+
+    void slotSplitSegment(Rosegarden::Segment *, Rosegarden::timeT);
+
+    void slotScrollTrackButtons(int y);
 
 signals:
     /**
@@ -182,9 +169,6 @@ signals:
      * @see 
      */
     void scrollHorizTo(int);
-
-    //!!! to go
-    void splitSegment(Rosegarden::Segment*, Rosegarden::timeT);
 
 protected:
     // overridden from QWidget

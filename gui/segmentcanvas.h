@@ -322,13 +322,13 @@ signals:
     /**
      * Emitted when a Segment's duration is changed
      */
-    void updateSegmentDuration(Rosegarden::Segment *,
+    void changeSegmentDuration(Rosegarden::Segment *,
 			       Rosegarden::timeT duration);
 
     /**
      * Emitted when a Segment's start time and duration have changed
      */
-    void updateSegmentTimes(Rosegarden::Segment *,
+    void changeSegmentTimes(Rosegarden::Segment *,
 			    Rosegarden::timeT startTime,
 			    Rosegarden::timeT duration);
 
@@ -336,7 +336,7 @@ signals:
      * Emitted when a Segment is moved to a different start time
      * (horizontally) or instrument (vertically)
      */
-    void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
+    void changeSegmentTrackAndStartTime(Rosegarden::Segment *,
 					Rosegarden::TrackId track,
 					Rosegarden::timeT startTime);
 
@@ -447,7 +447,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void updateSegmentTrackAndStartTime(Rosegarden::Segment*,
+    void changeSegmentTrackAndStartTime(Rosegarden::Segment*,
 					Rosegarden::TrackId,
 					Rosegarden::timeT);
 
@@ -471,7 +471,7 @@ public:
 
 signals:
     void deleteSegment(Rosegarden::Segment*);
-    void updateSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT);
+    void changeSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
     bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);
@@ -511,7 +511,7 @@ public slots:
     void selectSegmentItem(SegmentItem *selectedItem);
 
 signals:
-    void updateSegmentTrackAndStartTime(Rosegarden::Segment *,
+    void changeSegmentTrackAndStartTime(Rosegarden::Segment *,
 					Rosegarden::TrackId,
 					Rosegarden::timeT);
 

@@ -746,8 +746,8 @@ SegmentMover::SegmentMover(SegmentCanvas *c)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
 
-    connect(this, SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
-            c,    SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
+    connect(this, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
+            c,    SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
 }
@@ -767,7 +767,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
-        emit updateSegmentTrackAndStartTime(m_currentItem->getSegment(),
+        emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
 					    m_currentItem->getTrack(),
 					    m_currentItem->getStartTime());
 
@@ -803,8 +803,8 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c)
     connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
             c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
 
-    connect(this, SIGNAL(updateSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)),
-            c,    SIGNAL(updateSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)));
+    connect(this, SIGNAL(changeSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)),
+            c,    SIGNAL(changeSegmentTimes(Rosegarden::Segment*, Rosegarden::timeT, Rosegarden::timeT)));
 
     kdDebug(KDEBUG_AREA) << "SegmentResizer()\n";
 }
@@ -824,7 +824,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem->normalize();
 
     // normalisation may mean start time has changed as well as duration
-    emit updateSegmentTimes(m_currentItem->getSegment(),
+    emit changeSegmentTimes(m_currentItem->getSegment(),
 			    m_currentItem->getStartTime(),
 			    m_currentItem->getDuration());
 
@@ -868,8 +868,8 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
 
-    connect(this, SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
-            c,    SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
+    connect(this, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
+            c,    SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 }
 
 SegmentSelector::~SegmentSelector()
@@ -919,7 +919,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         m_currentItem = item;
         m_clickPoint = e->pos();
         selectSegmentItem(m_currentItem);
-        emit updateSegmentTrackAndStartTime(m_currentItem->getSegment(),
+        emit changeSegmentTrackAndStartTime(m_currentItem->getSegment(),
 					    m_currentItem->getTrack(),
 					    m_currentItem->getStartTime());
     }
@@ -946,6 +946,34 @@ SegmentSelector::selectSegmentItem(SegmentItem *selectedItem)
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 {
+    if (!m_currentItem) return;
+
+    if (m_segmentCopyMode)
+    {
+	std::cout << "Segment quick copy mode not implemented" << std::endl;
+	return;
+    }
+
+    if (m_currentItem->isSelected())
+    {
+	SegmentItemList::iterator it;
+	
+	for (it = m_selectedItems.begin();
+	     it != m_selectedItems.end();
+	     it++)
+	{
+	    //!!! we don't really want a command to happen for every
+	    //single segment -- use a compound command
+
+	    emit changeSegmentTrackAndStartTime(it->second->getSegment(),
+						it->second->getTrack(),
+						it->second->getStartTime());
+	}
+
+	m_canvas->canvas()->update();
+    }
+    
+    m_currentItem = 0;
 }
 
 // In Select mode we implement movement on the Segment
@@ -955,6 +983,7 @@ void
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
+
     if (m_segmentCopyMode)
     {
 	std::cout << "Segment quick copy mode not implemented" << std::endl;
@@ -977,12 +1006,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
 	    TrackId track = m_canvas->grid().getYBin(it->first.y() + y);
 	    it->second->setTrack(track);
-
-	    m_canvas->canvas()->update();
-	    emit updateSegmentTrackAndStartTime(it->second->getSegment(),
-						it->second->getTrack(),
-						it->second->getStartTime());
 	}
+
+	m_canvas->canvas()->update();
     }
 }
 

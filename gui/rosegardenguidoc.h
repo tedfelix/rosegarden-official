@@ -201,30 +201,8 @@ public slots:
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
-    /*
-     * Add a SegmentItem to the Canvas - does nothing if the
-     * SegmentItem already exists for this Segment
-     *
-     **/
-//!!!    void addSegmentItem(Rosegarden::Segment *segment);
-
-    /*
-     * Remove a SegmentItem from the Canvas
-     **/
-//!!!    void deleteSegmentItem(Rosegarden::Segment *segment);
-
-    /**
-     * Populate a SegmentItem with new Segment details
-     */
-//!!!    void updateSegmentItem(Rosegarden::Segment *segment);
-
     void documentModified();
     void documentRestored();
-
-    // Split a Segment at a given time
-    //
-    void splitSegment(Rosegarden::Segment *segment,
-                      Rosegarden::timeT splitTime);
 
 protected:
 

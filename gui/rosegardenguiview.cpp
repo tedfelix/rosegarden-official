@@ -185,12 +185,6 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(m_trackEditor,  SIGNAL(scrollHorizTo(int)),
             SLOT(scrollTrackEditorHoriz(int)));
 
-//!!! to go
-    connect(m_trackEditor,
-            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
-            doc,
-            SLOT(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
-
     // Re-emit signals from the loop ruler
     //
     connect(m_trackEditor->getBarButtons()->getLoopRuler(),

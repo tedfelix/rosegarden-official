@@ -571,7 +571,9 @@ private:
 /**
  * TimeSignature contains arithmetic methods relevant to time
  * signatures and bar durations, including code for splitting long
- * rest intervals into bite-sized chunks.
+ * rest intervals into bite-sized chunks.  Although there is a
+ * TimeSignature Event type, TimeSignature Events don't appear in
+ * regular Segments but only in the Composition's reference segment.
  */
 
 class TimeSignature

@@ -153,9 +153,9 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     // Synchronize side widgets (bar and track buttons) with scrollbars
     //
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(scrollTrackButtons(int)));
+            this, SLOT(slotScrollTrackButtons(int)));
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
-            this, SLOT(scrollTrackButtons(int)));
+            this, SLOT(slotScrollTrackButtons(int)));
 
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_barButtons, SLOT(scrollHoriz(int)));
@@ -169,19 +169,19 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                      this,            SLOT  (slotAddSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
 
     QObject::connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment *)),
-                     this,            SLOT  (deleteSegment(Rosegarden::Segment *)));
+                     this,            SLOT  (slotDeleteSegment(Rosegarden::Segment *)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)),
-                     this,            SLOT  (updateSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)));
+    QObject::connect(m_segmentCanvas, SIGNAL(changeSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)),
+                     this,            SLOT  (slotChangeSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTimes(Rosegarden::Segment *, Rosegarden::timeT, Rosegarden::timeT)),
-                     this,            SLOT  (updateSegmentTimes(Rosegarden::Segment *, Rosegarden::timeT, Rosegarden::timeT)));
+    QObject::connect(m_segmentCanvas, SIGNAL(changeSegmentTimes(Rosegarden::Segment *, Rosegarden::timeT, Rosegarden::timeT)),
+                     this,            SLOT  (slotChangeSegmentTimes(Rosegarden::Segment *, Rosegarden::timeT, Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
-                     this,            SLOT  (updateSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
+    QObject::connect(m_segmentCanvas, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
+                     this,            SLOT  (slotChangeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
 
     QObject::connect(m_segmentCanvas, SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
-		     this, SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
+		     this,	      SLOT  (slotSplitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
 
     QObject::connect
 	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
@@ -202,7 +202,7 @@ void TrackEditor::resizeEvent(QResizeEvent*)
                               m_barButtons->height());
 }
 
-void TrackEditor::scrollTrackButtons(int newPos)
+void TrackEditor::slotScrollTrackButtons(int newPos)
 {
     int oldPos = m_trackButtonsScrollPos;
 
@@ -290,6 +290,7 @@ void TrackEditor::addSegment(int track, int start, unsigned int duration)
 		   Rosegarden::timeT(duration));
 }
 
+
 void TrackEditor::slotAddSegment(TrackId track, timeT time, timeT duration)
 {
     if (!m_document) return; // sanity check
@@ -302,57 +303,59 @@ void TrackEditor::slotAddSegment(TrackId track, timeT time, timeT duration)
 }
 
 
-void TrackEditor::segmentOrderChanged(int section, int fromIdx, int toIdx)
+void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 {
     kdDebug(KDEBUG_AREA) << QString("TrackEditor::segmentOrderChanged(section : %1, from %2, to %3)")
         .arg(section).arg(fromIdx).arg(toIdx) << endl;
 
+    //!!! how do we get here? need to involve a command
     emit needUpdate();
 }
 
 
-void TrackEditor::deleteSegment(Rosegarden::Segment *p)
+void TrackEditor::slotDeleteSegment(Rosegarden::Segment *segment)
 {
-    Composition& composition = m_document->getComposition();
-
-    if (!composition.deleteSegment(p)) {
-        KMessageBox::error(0, QString("TrackEditor::deleteSegment() : part %1 not found").arg(long(p), 0, 16));
-        
-        kdDebug(KDEBUG_AREA) << "TrackEditor::deleteSegment() : segment "
-                             << p << " not found" << endl;
-    }
+    addCommandToHistory(new SegmentEraseCommand(segment));
 }
 
 
-void TrackEditor::updateSegmentDuration(Segment *s, timeT duration)
+void TrackEditor::slotChangeSegmentDuration(Segment *s, timeT duration)
 {
-    Composition& composition = m_document->getComposition();
-    s->setDuration(duration);
-    m_document->documentModified();
+    SegmentReconfigureCommand *command =
+	new SegmentReconfigureCommand("Resize Segment");
+    command->addSegment(s, s->getStartTime(), duration, s->getTrack());
+    addCommandToHistory(command);
 }
 
 
-void TrackEditor::updateSegmentTimes(Segment *s,
-				     timeT startTime, timeT duration)
+void TrackEditor::slotChangeSegmentTimes(Segment *s,
+					 timeT startTime, timeT duration)
 {
-    Composition& composition = m_document->getComposition();
-
-    composition.setSegmentStartTimeAndTrack(s, startTime, s->getTrack());
-    s->setDuration(duration);
-    m_document->documentModified();
+    SegmentReconfigureCommand *command =
+	new SegmentReconfigureCommand("Resize Segment");
+    command->addSegment(s, startTime, duration, s->getTrack());
+    addCommandToHistory(command);
 }
 
-void TrackEditor::updateSegmentTrackAndStartTime(Segment *s, TrackId track,
-						 timeT time)
+void TrackEditor::slotChangeSegmentTrackAndStartTime(Segment *s, TrackId track,
+						     timeT time)
 {
-    Composition& composition = m_document->getComposition();
-    composition.setSegmentStartTimeAndTrack(s, time, track);
-    m_document->documentModified();
+    SegmentReconfigureCommand *command =
+	new SegmentReconfigureCommand("Move Segment");
+    command->addSegment(s, time, s->getDuration(), track);
+    addCommandToHistory(command);
+}
+
+
+void TrackEditor::slotSplitSegment(Segment *s, timeT splitTime)
+{
+    addCommandToHistory(new SegmentSplitCommand(s, splitTime));
 }
 
 
 void TrackEditor::clear()
 {
+    //!!! when is this used? do we want to throw away the command history too?
     m_segmentCanvas->clear();
 }
 
@@ -396,96 +399,7 @@ TrackEditor::setFineGrain(bool value)
 }
 
 
-// Just like setupSegments() this creates a SegmentItem
-// on the SegmentCanvas if we've just recorded a Segment
-// or if we need to add one say as part of an Undo/Redo.
-//
-/*!!!
-void
-TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
-{
-    if (!m_document) return; // sanity check
-
-    // Check that a SegmentItem doesn't already exist
-    // for this Segment
-    //
-    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
-    QCanvasItemList::Iterator it;
-
-    for (it = itemList.begin(); it != itemList.end(); ++it)
-    {
-        QCanvasItem *item = *it;
-        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
-
-        if (segmentItem)
-            if (segmentItem->getSegment() == segment)
-                return;
-    }
-
-    int y = segment->getTrack() * getTrackCellHeight();
-
-    SegmentItem *newItem = m_segmentCanvas->addSegmentItem
-	(y, segment->getStartTime(), segment->getDuration());
-    newItem->setSegment(segment);
-
-    emit needUpdate();
-
-}
-
-void
-TrackEditor::deleteSegmentItem(Rosegarden::Segment *segment)
-{
-    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
-    QCanvasItemList::Iterator it;
-
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
-        QCanvasItem *item = *it;
-        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
-
-        if (segmentItem)
-        {
-            if (segmentItem->rtti() == SegmentItem::SegmentItemRTTI &&
-                segmentItem->getSegment() == segment)
-            {
-                delete segmentItem;
-                itemList.remove(it);
-                break;
-            }
-        }
-    }
-
-    emit needUpdate();
-}
-
-void
-TrackEditor::updateSegmentItem(Rosegarden::Segment *segment)
-{
-    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
-    QCanvasItemList::Iterator it;
-
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
-        QCanvasItem *item = *it;
-        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
-
-        if (segmentItem)
-        {
-            if (segmentItem->rtti() == SegmentItem::SegmentItemRTTI &&
-                segmentItem->getSegment() == segment)
-            {
-                segmentItem->setStartTime(segment->getStartTime());
-                segmentItem->setDuration(segment->getDuration());
-            }
-        }
-    }
-
-    emit needUpdate();
-}
-
-*/
-
-
-
-// Show a Segment as its being recorded
+// Show a Segment as it's being recorded
 //
 void
 TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)

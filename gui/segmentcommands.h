@@ -95,19 +95,57 @@ private:
 };
 
 
-class SegmentMoveCommand : public KCommand,
-                           public SegmentCommand
+/**
+ * SegmentReconfigureCommand is a general-purpose command for
+ * moving, resizing or changing the track of one or more segments
+ */
+class SegmentReconfigureCommand : public KCommand,
+				  public SegmentCommand
 {
 public:
-    SegmentMoveCommand(Rosegarden::Segment *segment);
-    virtual ~SegmentMoveCommand();
+    SegmentReconfigureCommand(QString name);
+    virtual ~SegmentReconfigureCommand();
+
+    void addSegment(Rosegarden::Segment *segment,
+		    Rosegarden::timeT startTime,
+		    Rosegarden::timeT duration,
+		    Rosegarden::TrackId track);
+
+    void execute();
+    void unexecute();
+
+    void getSegments(SegmentSet &);
+
+private:
+    struct SegmentRec {
+	Rosegarden::Segment *segment;
+	Rosegarden::timeT startTime;
+	Rosegarden::timeT duration;
+	Rosegarden::TrackId track;
+    };
+    typedef std::vector<SegmentRec> SegmentRecSet;
+    SegmentRecSet m_records;
+    void swap();
+};
+
+
+class SegmentSplitCommand : public KCommand,
+			    public SegmentCommand
+{
+public:
+    SegmentSplitCommand(Rosegarden::Segment *segment,
+			Rosegarden::timeT splitTime);
+    virtual ~SegmentSplitCommand();
 
     virtual void execute();
     virtual void unexecute();
 
+    virtual void getSegments(SegmentSet &);
+
 private:
-    Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
+    Rosegarden::Segment *m_newSegment;
+    Rosegarden::timeT m_splitTime;
 };
 
 
