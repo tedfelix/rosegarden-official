@@ -87,11 +87,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_notationElements(0),
     m_hlayout(0),
     m_vlayout(0),
-    m_currentSelectedNoteIsRest(false),
-    m_currentSelectedNoteType(Note::QuarterNote),
-    m_currentSelectedNoteDots(0),
-    m_selectDefaultNote(0),
-    m_deleteMode(false)
+    m_tool(0),
+    m_selectDefaultNote(0)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -103,8 +100,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     setCentralWidget(m_canvasView);
 
-    QObject::connect(m_canvasView, SIGNAL(noteClicked(int, const QPoint&, NotationElement*)),
-                     this,         SLOT  (noteClicked(int, const QPoint&, NotationElement*)));
+    QObject::connect(m_canvasView, SIGNAL(itemClicked(int, const QPoint&, NotationElement*)),
+                     this,         SLOT  (itemClicked(int, const QPoint&, NotationElement*)));
 
     QObject::connect(m_canvasView, SIGNAL(hoveredOverNoteChange(const QString&)),
                      this,         SLOT  (hoveredOverNoteChanged(const QString&)));
@@ -312,7 +309,41 @@ void NotationView::setupActions()
 
     }
 
-    // Eraser
+    //
+    // Clefs
+    //
+
+    // Treble
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Treble)));
+    noteAction = new KRadioAction(i18n("Treble Clef"), icon, 0, this,
+                                  SLOT(slotTrebleClef()),
+                                  actionCollection(), "treble_clef");
+    noteAction->setExclusiveGroup("notes");
+
+    // Tenor
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Tenor)));
+    noteAction = new KRadioAction(i18n("Tenor Clef"), icon, 0, this,
+                                  SLOT(slotTenorClef()),
+                                  actionCollection(), "tenor_clef");
+    noteAction->setExclusiveGroup("notes");
+
+    // Alto
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Alto)));
+    noteAction = new KRadioAction(i18n("Alto Clef"), icon, 0, this,
+                                  SLOT(slotAltoClef()),
+                                  actionCollection(), "alto_clef");
+    noteAction->setExclusiveGroup("notes");
+
+    // Bass
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Bass)));
+    noteAction = new KRadioAction(i18n("Bass Clef"), icon, 0, this,
+                                  SLOT(slotBassClef()),
+                                  actionCollection(), "bass_clef");
+    noteAction->setExclusiveGroup("notes");
+
+    //
+    // Edition tools (at the moment, there's only an eraser)
+    //
     noteAction = new KRadioAction(i18n("Erase"), "eraser",
                                   0,
                                   this, SLOT(slotEraseSelected()),
@@ -645,9 +676,10 @@ bool NotationView::applyVerticalLayout()
 
 void NotationView::setCurrentSelectedNote(bool rest, Note::Type n, int dots)
 {
-    m_currentSelectedNoteIsRest = rest;
-    m_currentSelectedNoteType = n;
-    m_currentSelectedNoteDots = dots;
+    if (rest)
+        setTool(new RestInserter(n, dots, *this));
+    else
+        setTool(new NoteInserter(n, dots, *this));
 
     if (!rest) {
         m_currentNotePixmap->setPixmap
@@ -659,8 +691,12 @@ void NotationView::setCurrentSelectedNote(bool rest, Note::Type n, int dots)
     }
 
     emit changeCurrentNote(rest, n);
+}
 
-    setDeleteMode(false);
+void NotationView::setTool(NotationTool* tool)
+{
+    delete m_tool;
+    m_tool = tool;
 }
 
 
@@ -745,6 +781,10 @@ void NotationView::slotStatusHelpMsg(const QString &text)
 }
 
 //////////////////////////////////////////////////////////////////////
+
+//----------------------------------------
+// Notes
+//----------------------------------------
 
 void NotationView::slotBreve()
 {
@@ -942,94 +982,96 @@ void NotationView::slotDottedR64th()
     setCurrentSelectedNote(true, Note::SixtyFourthNote, 1);
 }
 
+//----------------------------------------
+// Clefs
+//----------------------------------------
+void NotationView::slotTrebleClef()
+{
+}
+
+void NotationView::slotTenorClef()
+{
+}
+
+void NotationView::slotAltoClef()
+{
+}
+
+void NotationView::slotBassClef()
+{
+}
+
+
+//----------------------------------------
+// Time sigs.
+//----------------------------------------
+
+//----------------------------------------
+// Edition Tools
+//----------------------------------------
 
 void NotationView::slotEraseSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
-    setDeleteMode(true);
+    setTool(new NotationEraser(*this));
 }
 
 //----------------------------------------------------------------------
 
-void NotationView::noteClicked(int height, const QPoint &eventPos,
+void NotationView::itemClicked(int height, const QPoint &eventPos,
                                NotationElement* el)
 {
-    if (deleteMode() && el) {
-
-        deleteNote(el);
-
-    } else if (!deleteMode()) {
-
-      //        Rosegarden::Key key;
-      //        Clef clef;
-      //	TimeSignature tsig;
-        Event *tsig = 0, *clef = 0, *key = 0;
-        NotationElementList::iterator closestNote =
-            findClosestNote(eventPos.x(), tsig, clef, key);
-
-        if (closestNote == m_notationElements->end()) {
-            return;
-        }
-
-
-        //!!! still need to take accidental into account
-        int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
-            getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
-				key ? Rosegarden::Key(*key) :
-     				      Rosegarden::Key::DefaultKey);
-
-        insertNote(closestNote, tsig, pitch);
-    }
+    m_tool->handleClick(height, eventPos, el);
 }
 
-void NotationView::deleteNote(NotationElement* element)
-{
-    bool needLayout = false;
-    TrackNotationHelper nt(getTrack());
+// void NotationView::deleteNote(NotationElement* element)
+// {
+//     bool needLayout = false;
+//     TrackNotationHelper nt(getTrack());
 
-    if (element->isNote()) {
+//     if (element->isNote()) {
         
-	nt.deleteNote(element->event());
-	needLayout = true;
+// 	nt.deleteNote(element->event());
+// 	needLayout = true;
 
-    } else if (element->isRest()) {
+//     } else if (element->isRest()) {
 
-	nt.deleteRest(element->event());
-	needLayout = true;
+// 	nt.deleteRest(element->event());
+// 	needLayout = true;
 
-    } else {
-        // we don't know what it is
-        KMessageBox::sorry(0, "Not Implemented Yet");
+//     } else {
+//         // we don't know what it is
+//         KMessageBox::sorry(0, "Not Implemented Yet");
 
-    }
+//     }
     
-    if (needLayout) // TODO : be more subtle
-        redoLayout(m_notationElements->begin());
-}
+//     if (needLayout) // TODO : be more subtle
+//         redoLayout(m_notationElements->begin());
+// }
 
-void NotationView::insertNote(NotationElementList::iterator closestNote,
-			      Event *timesig, int pitch)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
-                         << pitch << endl;
+// void NotationView::insertNote(NotationElementList::iterator closestNote,
+// 			      Event *timesig, int pitch)
+// {
+//     kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
+//                          << pitch << endl;
 
 
-    // We are going to modify the document so mark it as such
-    //
-    getDocument()->setModified();
+//     // We are going to modify the document so mark it as such
+//     //
+//     getDocument()->setModified();
 
-    Note note(m_currentSelectedNoteType, m_currentSelectedNoteDots);
-    TrackNotationHelper nt(getTrack());
+//     Note note(m_currentSelectedNoteType, m_currentSelectedNoteDots);
+//     TrackNotationHelper nt(getTrack());
 
-    if (m_currentSelectedNoteIsRest) {
-	nt.insertRest((*closestNote)->event()->getAbsoluteTime(), note);
-    } else {
-	nt.insertNote((*closestNote)->event()->getAbsoluteTime(), note, pitch);
-    }
+//     if (m_currentSelectedNoteIsRest) {
+// 	nt.insertRest((*closestNote)->event()->getAbsoluteTime(), note);
+//     } else {
+// 	nt.insertNote((*closestNote)->event()->getAbsoluteTime(), note, pitch);
+//     }
 
-    redoLayout(m_notationElements->begin()); // for now
-    return;
-}
+//     redoLayout(m_notationElements->begin()); // for now
+//     return;
+// }
 
 
 NotationElementList::iterator
@@ -1162,118 +1204,113 @@ NotationView::hoveredOverAbsoluteTimeChange(unsigned int time)
     m_hoveredOverAbsoluteTime->setText(QString("Time : %1").arg(time));
 }
 
-
-
 //////////////////////////////////////////////////////////////////////
-
-#ifdef NOT_DEFINED
-
-void
-NotationView::perfTest()
+//               Notation Tools
+//////////////////////////////////////////////////////////////////////
+NotationTool::NotationTool(NotationView& view)
+    : m_parentView(view)
 {
-    // perf test - add many many notes
-    clock_t st, et;
-    struct tms spare;
-    st = times(&spare);
+}
 
+NotationTool::~NotationTool()
+{
+}
 
-    std::cout << "Adding 1000 notes" << std::endl;
-    setUpdatesEnabled(false);
+NoteInserter::NoteInserter(Rosegarden::Note::Type type,
+                           unsigned int dots,
+                           NotationView& view)
+    : NotationTool(view),
+      m_noteType(type),
+      m_noteDots(dots)
+{
+}
 
-    QCanvasPixmapArray *notePixmap = new QCanvasPixmapArray("pixmaps/note-bodyfilled.xpm");
+    
+void    
+NoteInserter::handleClick(int height, const QPoint &eventPos,
+                          NotationElement*)
+{
+    //        Rosegarden::Key key;
+    //        Clef clef;
+    //	TimeSignature tsig;
+    Event *tsig = 0, *clef = 0, *key = 0;
+    NotationElementList::iterator closestNote =
+        m_parentView.findClosestNote(eventPos.x(), tsig, clef, key);
 
-    for(unsigned int x = 0; x < 1000; ++x) {
-        for(unsigned int y = 0; y < 100; ++y) {
-
-
-            QCanvasSprite *clef = new QCanvasSprite(notePixmap, canvas());
-
-            clef->move(x * 10, y * 10);
-        }
+    if (closestNote == m_parentView.getNotationElements()->end()) {
+        return;
     }
-    setUpdatesEnabled(true);
 
-    std::cout << "Done adding 1000 notes" << std::endl;
-    et = times(&spare);
 
-    std::cout << (et-st)*10 << "ms" << std::endl;
+    //!!! still need to take accidental into account
+    int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
+        getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
+                            key ? Rosegarden::Key(*key) :
+                            Rosegarden::Key::DefaultKey);
+
+    // We are going to modify the document so mark it as such
+    //
+    m_parentView.getDocument()->setModified();
+
+    Note note(m_noteType, m_noteDots);
+    TrackNotationHelper nt(m_parentView.getTrack());
+
+    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch);
+    
+    m_parentView.redoLayout(m_parentView.getNotationElements()->begin()); // for now
+
+}
+
+void NoteInserter::doInsert(TrackNotationHelper& nt,
+                            Rosegarden::timeT absTime,
+                            const Note& note, int pitch)
+{
+    nt.insertNote(absTime, note, pitch);
 }
 
 
-void
-NotationView::test()
+RestInserter::RestInserter(Rosegarden::Note::Type type,
+                           unsigned int dots, NotationView& view)
+    : NoteInserter(type, dots, view)
 {
-    //     QCanvasEllipse *t = new QCanvasEllipse(10, 10, canvas());
-    //     t->setX(50);
-    //     t->setY(50);
+}
 
-    //     QBrush brush(blue);
-    //     t->setBrush(brush);
 
-    Staff *staff = new Staff(canvas());
-    staff->move(20, 15);
-		
-    staff = new Staff(canvas());
-    staff->move(20, 130);
-		
-    // Add some notes
+void RestInserter::doInsert(TrackNotationHelper& nt,
+                            Rosegarden::timeT absTime,
+                            const Note& note, int)
+{
+    nt.insertRest(absTime, note);
+}
 
-    QCanvasPixmapArray *notePixmap = new QCanvasPixmapArray("pixmaps/note-bodyfilled.xpm");
+NotationEraser::NotationEraser(NotationView& view)
+    : NotationTool(view)
+{
+}
 
-    for(unsigned int i = 0; i <= 8 /*! 17 */; ++i) {
-        QCanvasSprite *note = new QCanvasSprite(notePixmap, canvas());
-        note->move(20,14);
-        note->moveBy(40 + i * 20, staff->yCoordOfHeight/*! pitchYOffset*/(i));
-    }
+void NotationEraser::handleClick(int, const QPoint&,
+                                 NotationElement* element)
+{
+    bool needLayout = false;
+    TrackNotationHelper nt(m_parentView.getTrack());
 
-    ChordPixmapFactory npf(*staff);
+    if (element->isNote()) {
+        
+	nt.deleteNote(element->event());
+	needLayout = true;
 
-    for(unsigned int j = 0; j < 100; ++j) {
+    } else if (element->isRest()) {
 
-        for(unsigned int i = 0; i < 7; ++i) {
+	nt.deleteRest(element->event());
+	needLayout = true;
 
-            QPixmap note(npf.makeNotePixmap((Note::Type)i, false,
-                                            NoAccidental,
-                                            false, true, true));
+    } else {
+        // we don't know what it is
+        KMessageBox::sorry(0, "Not Implemented Yet");
 
-            QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note,
-                                                                      canvas());
-
-            noteSprite->move(50 + (i+j) * 20 , 100);
-
-        }
     }
     
-#if 0
-
-    for(unsigned int i = 0; i < 7; ++i) {
-
-
-        QPixmap note(npf.makeNotePixmap(i, false, true, false));
-
-        QCanvasSprite *noteSprite = new QCanvasSimpleSpriteSprite(&note,
-                                                                  canvas());
-
-        noteSprite->move(50 + i * 20, 150);
-
-    }
-#endif
-
-    ChordPitches pitches;
-    pitches.push_back(6); // something wrong here - pitches aren't in the right order
-    pitches.push_back(4);
-    pitches.push_back(0);
-
-    Accidentals accidentals;
-    accidentals.push_back(NoAccidental);
-    accidentals.push_back(Sharp);
-    accidentals.push_back(NoAccidental);
-
-    QPixmap chord(npf.makeChordPixmap(pitches, accidentals, 6, true, true, false));
-
-    QCanvasSprite *chordSprite = new QCanvasSimpleSprite(&chord, canvas());
-
-    chordSprite->move(50, 50);
-   
+    if (needLayout) // TODO : be more subtle
+        m_parentView.redoLayout(m_parentView.getNotationElements()->begin());
 }
-#endif
+

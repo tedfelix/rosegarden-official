@@ -34,6 +34,7 @@ class QCanvasItem;
 class QCanvasSimpleSprite;
 namespace Rosegarden { class Track; }
 class RosegardenGUIDoc;
+class NotationTool;
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
@@ -41,6 +42,9 @@ class RosegardenGUIDoc;
 
 class NotationView : public KMainWindow
 {
+    friend class NoteInserter;
+    friend class NotationEraser;
+
     Q_OBJECT
 public:
 
@@ -89,6 +93,9 @@ public:
 
     void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type,
                                 int dots = 0);
+
+    const NotationElementList* getNotationElements() const { return m_notationElements; }
+    NotationElementList* getNotationElements()  { return m_notationElements; }
 
 public slots:
 
@@ -172,14 +179,20 @@ public slots:
     void slotDottedR32nd();
     void slotDottedR64th();
 
-    // note eraser
+    // clef switch slots
+    void slotTrebleClef();
+    void slotTenorClef();
+    void slotAltoClef();
+    void slotBassClef();
+
+    // edition tools
     void slotEraseSelected();
 
     // Canvas actions slots
-    void noteClicked(int height, const QPoint&, NotationElement*);
-    void insertNote(NotationElementList::iterator closestNote,
-		    Rosegarden::Event *timesig, int pitch);
-    void deleteNote(NotationElement* note);
+    void itemClicked(int height, const QPoint&, NotationElement*);
+//     void insertNote(NotationElementList::iterator closestNote,
+// 		    Rosegarden::Event *timesig, int pitch);
+//     void deleteNote(NotationElement* note);
 
     void hoveredOverNoteChanged(const QString&);
     void hoveredOverAbsoluteTimeChange(unsigned int);
@@ -237,16 +250,9 @@ protected:
        Rosegarden::Event *&clef,
        Rosegarden::Event *&key);
 
-
     QCanvasSimpleSprite *makeNoteSprite(NotationElementList::iterator);
 
-    bool deleteMode()          { return m_deleteMode; }
-    void setDeleteMode(bool d) { m_deleteMode = d; }
-
-#ifdef NOT_DEFINED
-    void perfTest();
-    void test();
-#endif
+    void setTool(NotationTool*);
 
     KConfig* m_config;
 
@@ -274,13 +280,65 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
-    bool m_currentSelectedNoteIsRest;
-    Rosegarden::Note::Type m_currentSelectedNoteType;
-    int m_currentSelectedNoteDots;
+    NotationTool* m_tool;
 
     KAction* m_selectDefaultNote;
+};
 
-    bool m_deleteMode;
+//////////////////////////////////////////////////////////////////////
+//               Notation Tools
+//////////////////////////////////////////////////////////////////////
+
+class NotationTool
+{
+public:
+    NotationTool(NotationView&);
+    virtual ~NotationTool();
+
+    virtual void handleClick(int height, const QPoint &eventPos,
+                             NotationElement* el) = 0;
+protected:
+    NotationView& m_parentView;
+};
+
+namespace Rosegarden { class TrackNotationHelper; }
+
+class NoteInserter : public NotationTool
+{
+public:
+    NoteInserter(Rosegarden::Note::Type, unsigned int dots, NotationView&);
+    
+    virtual void handleClick(int height, const QPoint &eventPos,
+                             NotationElement* el);
+
+protected:
+    virtual void doInsert(Rosegarden::TrackNotationHelper&,
+                          Rosegarden::timeT absTime,
+                          const Rosegarden::Note&, int pitch);
+
+    Rosegarden::Note::Type m_noteType;
+    unsigned int m_noteDots;
+};
+
+class RestInserter : public NoteInserter
+{
+public:
+    RestInserter(Rosegarden::Note::Type, unsigned int dots, NotationView&);
+    
+protected:
+    virtual void doInsert(Rosegarden::TrackNotationHelper&,
+                          Rosegarden::timeT absTime,
+                          const Rosegarden::Note&, int pitch);
+};
+
+
+class NotationEraser : public NotationTool
+{
+public:
+    NotationEraser(NotationView&);
+
+    virtual void handleClick(int height, const QPoint &eventPos,
+                             NotationElement* el);
 };
 
 #endif
