@@ -58,13 +58,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         } else if (m_groupDuration == 0 &&
                    newEvent->duration() != 0) {
-            // the group duration is the duration of the 1st element
-            // with a non-null duration, or 0.
+
+            // set group duration to the duration of the 1st element
+            // with a non-null duration (if no such elements, leave it
+            // to 0).
 
             m_groupDuration = newEvent->duration();
         }
         
-        m_events.push_back(newEvent);
+        m_events.insert(newEvent);
 
     } else if (lcName == "track") {
         // TODO
