@@ -1083,7 +1083,7 @@ void NotationView::slotTransformsInterpret()
     KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
     addCommandToHistory(new TransformsMenuInterpretCommand
 			(*m_currentEventSelection, m_legatoQuantizer,
-			 TransformsMenuInterpretCommand::Articulate));
+			 TransformsMenuInterpretCommand::AllInterpretations));
 }
     
 

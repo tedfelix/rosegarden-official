@@ -46,6 +46,7 @@ using Rosegarden::Clef;
 using Rosegarden::Int;
 using Rosegarden::Bool;
 using Rosegarden::String;
+using Rosegarden::Text;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Marks;
@@ -267,7 +268,7 @@ ClefInsertionCommand::modifySegment()
 
 
 TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
-					   Rosegarden::Text text) :
+					   Text text) :
     BasicCommand("Insert Text", segment, time, time + 1),
     m_text(text),
     m_lastInsertedEvent(0)
@@ -1097,6 +1098,10 @@ TransformsMenuInterpretCommand::modifySegment()
 	++itr;
     }
 
+    //!!! need the option of ignoring current velocities or adjusting
+    //them: at the moment ApplyTextDynamics ignores them and the
+    //others adjust them
+
     if (m_interpretations & GuessDirections) guessDirections();
     if (m_interpretations & ApplyTextDynamics) applyTextDynamics();
     if (m_interpretations & ApplyHairpins) applyHairpins();
@@ -1118,7 +1123,53 @@ TransformsMenuInterpretCommand::guessDirections()
 void
 TransformsMenuInterpretCommand::applyTextDynamics()
 {
-    //...
+    // laborious
+
+    Segment &segment(getSegment());
+    int velocity = 100;
+
+    timeT startTime = m_selection->getStartTime();
+    timeT   endTime = m_selection->getEndTime();
+
+    for (Segment::iterator i = segment.begin();
+	 segment.isBeforeEndMarker(i); ++i) {
+
+	timeT t = (*i)->getAbsoluteTime();
+
+	if (t > endTime) break;
+
+	if ((*i)->isa(Text::EventType)) {
+
+	    std::string type;
+	    if ((*i)->get<String>(Text::TextTypePropertyName, type) &&
+		type == Text::Dynamic) {
+
+		std::string text;
+		if ((*i)->get<String>(Text::TextPropertyName, text)) {
+		    
+		    // should do case-insensitive matching with whitespace
+		    // removed.  can surely be cleverer about this too!
+
+		    if      (text == "ppppp") velocity = 10;
+		    else if (text == "pppp")  velocity = 20;
+		    else if (text == "ppp")   velocity = 30;
+		    else if (text == "pp")    velocity = 40;
+		    else if (text == "p")     velocity = 60;
+		    else if (text == "mp")    velocity = 80;
+		    else if (text == "mf")    velocity = 90;
+		    else if (text == "f")     velocity = 105;
+		    else if (text == "fff")   velocity = 113;
+		    else if (text == "ffff")  velocity = 120;
+		    else if (text == "fffff") velocity = 127;
+		}
+	    }
+	}
+
+	if (t >= startTime &&
+	    (*i)->isa(Note::EventType) && m_selection->contains(*i)) {
+	    (*i)->set<Int>(VELOCITY, velocity);
+	}
+    }
 }
 
 void
@@ -1130,7 +1181,33 @@ TransformsMenuInterpretCommand::applyHairpins()
 void
 TransformsMenuInterpretCommand::stressBeats()
 {
-    //...
+    Rosegarden::Composition *c = getSegment().getComposition();
+
+    for (EventSelection::eventcontainer::iterator itr =
+	     m_selection->getSegmentEvents().begin();
+	 itr != m_selection->getSegmentEvents().end(); ++itr) {
+
+	Event *e = *itr;
+	if (!e->isa(Note::EventType)) continue;
+
+	timeT t = m_quantizer->getQuantizedAbsoluteTime(e);
+	Rosegarden::TimeSignature timeSig = c->getTimeSignatureAt(t);
+	timeT barStart = getSegment().getBarStartForTime(t);
+	int stress = timeSig.getEmphasisForTime(t - barStart);
+
+	// stresses are from 0 to 4, so we add 12% to the velocity
+	// at the maximum stress, subtract 4% at the minimum
+	int velocityChange = stress * 4 - 4;
+
+	// do this even if velocityChange == 0, in case the event
+	// has no velocity yet
+	long velocity = 100;
+	e->get<Int>(VELOCITY, velocity);
+	velocity += velocity * velocityChange / 100;
+	if (velocity < 0) velocity = 0;
+	if (velocity > 127) velocity = 127;
+	e->set<Int>(VELOCITY, velocity);
+    }
 }
 
 void
@@ -1152,9 +1229,9 @@ TransformsMenuInterpretCommand::articulate()
     // -- Anything marked staccatissimo gets 30%, or 50% if slurred (!),
     //    and loses 5% of velocity.
     // 
-    // -- Anything marked sforzando gains 25% of velocity.
+    // -- Anything marked sforzando gains 35% of velocity.
     // 
-    // -- Anything marked with an accent gains 20% of velocity.
+    // -- Anything marked with an accent gains 30% of velocity.
     // 
     // -- Anything marked rinforzando gains 15% of velocity and has
     //    its full duration.  Guess we really need to use some proper
@@ -1173,8 +1250,9 @@ TransformsMenuInterpretCommand::articulate()
 	     m_selection->getSegmentEvents().begin();
 	 itr != m_selection->getSegmentEvents().end(); ++itr) {
 
-	Event *e = (*itr);
+	Event *e = *itr;
 	if (!e->isa(Note::EventType)) continue;
+	timeT duration = m_quantizer->getQuantizedDuration(e);
 
 	// the things that affect duration
 	bool staccato = false;
@@ -1192,8 +1270,11 @@ TransformsMenuInterpretCommand::articulate()
 		std::string mark = "";
 		if (e->get<String>(getMarkPropertyName(i), mark)) {
 
+		    //!!! all this stuff needs to work on a chord level, not
+		    // just a note one
+
 		    if (mark == Marks::Accent) {
-			velocityChange += 20;
+			velocityChange += 30;
 		    } else if (mark == Marks::Tenuto) {
 			tenuto = true;
 		    } else if (mark == Marks::Staccato) {
@@ -1205,7 +1286,7 @@ TransformsMenuInterpretCommand::articulate()
 			marcato = true;
 			velocityChange += 15;
 		    } else if (mark == Marks::Sforzando) {
-			velocityChange += 25;
+			velocityChange += 35;
 		    } else if (mark == Marks::Rinforzando) {
 			rinforzando = true;
 			velocityChange += 15;
@@ -1222,6 +1303,15 @@ TransformsMenuInterpretCommand::articulate()
 	    findEnclosingIndication(e, Indication::Slur);
 
 	if (inditr != m_indications.end()) slurred = true;
+	if (slurred) {
+	    // last note in a slur should be treated as if unslurred
+	    timeT slurEnd =
+		inditr->first + inditr->second->getIndicationDuration();
+	    timeT absTime = m_quantizer->getQuantizedAbsoluteTime(e);
+	    if (slurEnd == absTime + duration) { //!!! not a good enough test
+		slurred = false;
+	    }
+	}
 
 	int durationChange = 0;
 	
@@ -1241,12 +1331,20 @@ TransformsMenuInterpretCommand::articulate()
 
 	NOTATION_DEBUG << "TransformsMenuInterpretCommand::modifySegment: For note at " << e->getAbsoluteTime() << ", velocityChange is " << velocityChange << " and durationChange is " << durationChange << endl;
 
+	// do this even if velocityChange == 0, in case the event
+	// has no velocity yet
 	long velocity = 100;
 	e->get<Int>(VELOCITY, velocity);
 	velocity += velocity * velocityChange / 100;
 	if (velocity < 0) velocity = 0;
-	if (velocity > 127) velocity > 127;
+	if (velocity > 127) velocity = 127;
 	e->set<Int>(VELOCITY, velocity);
+	
+	// don't mess with the duration of a tied note
+	bool tiedForward = false;
+	if (e->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
+	    durationChange = 0;
+	}
 
 	if (durationChange != 0) { 
 
@@ -1254,7 +1352,6 @@ TransformsMenuInterpretCommand::articulate()
 	    //!!! mark this event so that we don't misquantize or
 	    // misdisplay because the duration has changed
 
-	    timeT duration = m_quantizer->getQuantizedDuration(e);
 	    duration += duration * durationChange / 100;
 
 	    Event *newEvent = new Event(*e, e->getAbsoluteTime(), duration);
