@@ -37,7 +37,7 @@
 
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
-#include "RosegardenTransport.h"
+#include "rosegardentransport.h"
 
 // the sequencer interface
 //
@@ -315,6 +315,11 @@ public slots:
     void toggleToolBar();
 
     /**
+     * toggles the transport window
+     */
+    void toggleTransport();
+
+    /**
      * toggles the tracks toolbar
      */
     void toggleTracksToolBar();
@@ -454,6 +459,7 @@ private:
     KToggleAction* m_viewToolBar;
     KToggleAction* m_viewTracksToolBar;
     KToggleAction* m_viewStatusBar;
+    KToggleAction* m_viewTransport;
 
     /**
      * Transport (Playback and Recording) status

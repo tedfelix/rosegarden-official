@@ -148,6 +148,11 @@ void RosegardenGUIApp::setupActions()
                                             "show_tracks_toolbar");
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(toggleStatusBar()), actionCollection());
 
+    m_viewTransport = new KToggleAction(i18n("Show Transport"), 0, this,
+                                             SLOT(toggleTransport()),
+                                             actionCollection(),
+                                             "show_transport");
+
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
     KStdAction::preferences(this, SLOT(customize()),    actionCollection());
 
@@ -266,10 +271,6 @@ void RosegardenGUIApp::initStatusBar()
 
 void RosegardenGUIApp::initDocument()
 {
-    // For the moment we show the Transport all the time
-    //
-    m_transport->show();
-
     m_doc = new RosegardenGUIDoc(this);
     m_doc->newDocument();
 }
@@ -288,6 +289,10 @@ void RosegardenGUIApp::initView()
     setCaption(m_doc->getTitle());
 
     setPointerPosition(m_doc->getComposition().getPosition());
+
+    // bring the transport to the front 
+    //
+    m_transport->raise();
 
 }
 
@@ -363,6 +368,7 @@ void RosegardenGUIApp::saveOptions()
     m_config->writeEntry("Geometry", size());
     m_config->writeEntry("Show Toolbar", m_viewToolBar->isChecked());
     m_config->writeEntry("Show Tracks Toolbar", m_viewTracksToolBar->isChecked());
+    m_config->writeEntry("Show Transport", m_viewTransport->isChecked());
     m_config->writeEntry("Show Statusbar",m_viewStatusBar->isChecked());
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
     m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
@@ -387,6 +393,10 @@ void RosegardenGUIApp::readOptions()
     viewToolBar = m_config->readBoolEntry("Show Tracks Toolbar", true);
     m_viewTracksToolBar->setChecked(viewToolBar);
     toggleTracksToolBar();
+
+    bool viewTransport = m_config->readBoolEntry("Show Transport", true);
+    m_viewTransport->setChecked(viewTransport);
+    toggleTransport();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
@@ -699,6 +709,19 @@ void RosegardenGUIApp::toggleTracksToolBar()
         toolBar("tracksToolBar")->show();
     else
         toolBar("tracksToolBar")->hide();
+}
+
+void RosegardenGUIApp::toggleTransport()
+{
+    KTmpStatusMsg msg(i18n("Toggle the Transport"), statusBar());
+
+    if (m_viewTransport->isChecked())
+    {
+        m_transport->show();
+        m_transport->raise();
+    }
+    else
+        m_transport->hide();
 }
 
 void RosegardenGUIApp::toggleStatusBar()
