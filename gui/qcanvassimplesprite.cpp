@@ -52,6 +52,15 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(const QString &pixmapfile,
     setSequence(m_pixmapArray);
 }
 
+QCanvasSimpleSprite::QCanvasSimpleSprite(QCanvas *canvas)
+    : QCanvasSprite(0, canvas),
+      m_pixmapArray(0)
+{
+    QCanvasPixmapArray* tmpArray = makePixmapArray(new QPixmap());
+    setSequence(tmpArray);
+}
+
+
 QCanvasSimpleSprite::~QCanvasSimpleSprite()
 {
     PixmapArrayGC::registerForDeletion(m_pixmapArray);
@@ -113,7 +122,9 @@ QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
                                              QPixmap* pixmap,
                                              QCanvas* canvas)
     : QCanvasSimpleSprite(pixmap, canvas),
-      m_notationElement(n)
+      m_notationElement(n),
+      m_pixmapFactory(0),
+      m_pixmapParameters(Rosegarden::Note::Crotchet, 0)
 {
 }
 
@@ -121,13 +132,59 @@ QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
                                              QCanvasPixmap* pixmap,
                                              QCanvas* canvas)
     : QCanvasSimpleSprite(pixmap, canvas),
-      m_notationElement(n)
+      m_notationElement(n),
+      m_pixmapFactory(0),
+      m_pixmapParameters(Rosegarden::Note::Crotchet, 0)
+
+{
+}
+
+QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
+                                             NotePixmapParameters param,
+                                             NotePixmapFactory* factory,
+                                             QCanvas* canvas)
+    : QCanvasSimpleSprite(canvas),
+      m_notationElement(n),
+      m_pixmapFactory(factory),
+      m_pixmapParameters(param)
 {
 }
 
 QCanvasNotationSprite::~QCanvasNotationSprite()
 {
 }
+
+void QCanvasNotationSprite::draw(QPainter &painter)
+{
+    // lazy rendering
+    //
+    if (! m_pixmapArray) {
+        makePixmap();
+    }
+    
+    QCanvasSimpleSprite::draw(painter);
+}
+
+QRect QCanvasNotationSprite::boundingRect() const
+{
+    if (! m_pixmapArray) {
+        QCanvasNotationSprite* fakeThis = const_cast<QCanvasNotationSprite*>(this);
+
+        fakeThis->makePixmap();
+    }
+
+    return QCanvasSimpleSprite::boundingRect();
+}
+
+
+void QCanvasNotationSprite::makePixmap()
+{
+    QCanvasPixmap pixmap = m_pixmapFactory->makeNotePixmap(m_pixmapParameters);
+    
+    m_pixmapArray = makePixmapArray(new QCanvasPixmap(pixmap));
+    setSequence(m_pixmapArray);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -139,7 +196,7 @@ void PixmapArrayGC::registerForDeletion(QCanvasPixmapArray* array)
 void PixmapArrayGC::deleteAll()
 {
     RG_DEBUG << "PixmapArrayGC::deleteAll() : "
-                         << m_pixmapArrays.size() << " pixmap arrays to delete\n";
+             << m_pixmapArrays.size() << " pixmap arrays to delete\n";
 
     for (unsigned int i = 0; i < m_pixmapArrays.size(); ++i)
         delete m_pixmapArrays[i];

@@ -1024,10 +1024,12 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 	    (*elt, new QCanvasPixmap(notePixmap), m_canvas);
 
     } else {
-	QCanvasPixmap notePixmap
-	    (m_notePixmapFactory->makeNotePixmap(params));
-	item = new QCanvasNotationSprite
-	    (*elt, new QCanvasPixmap(notePixmap), m_canvas);
+// 	QCanvasPixmap notePixmap
+// 	    (m_notePixmapFactory->makeNotePixmap(params));
+// 	item = new QCanvasNotationSprite
+// 	    (*elt, new QCanvasPixmap(notePixmap), m_canvas);
+        item = new QCanvasNotationSprite
+ 	    (*elt, params, m_notePixmapFactory, m_canvas);
     }
 
     if (m_notePixmapFactory->isSelected()) item->setZ(3);
