@@ -528,6 +528,9 @@ void MatrixView::setViewSize(QSize s)
 
 void MatrixView::updateView()
 {
+    for (unsigned int i = 0; i != m_controlRulers.size(); i++)
+        m_controlRulers[i]->repaint();
+
     canvas()->update();
 }
 
@@ -1360,6 +1363,7 @@ MatrixView::addControlRuler(const Rosegarden::PropertyName &property)
     ControlRuler *newRuler = new ControlRuler(&m_hlayout,
 	                                      m_segments[0],
                                               property,
+                                              m_staffs[0]->getVelocityColour(),
                                               0,
                                               20,
                                               getCentralFrame());

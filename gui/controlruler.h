@@ -35,6 +35,7 @@ namespace Rosegarden
 
 class QFont;
 class QFontMetrics;
+class VelocityColour;
 
 
 /**
@@ -53,6 +54,7 @@ public:
     ControlRuler(Rosegarden::RulerScale *rulerScale,
 	         Rosegarden::Segment *segment,
                  const Rosegarden::PropertyName &property,
+                 VelocityColour *velocityColour,
 	         double xorigin = 0.0,
 	         int height = 0,
 	         QWidget* parent = 0,
@@ -87,9 +89,11 @@ private:
     Rosegarden::Segment     *m_segment;
     Rosegarden::RulerScale  *m_rulerScale;
 
-    QFont m_font;
-    QFont m_boldFont;
-    QFontMetrics m_fontMetrics;
+    QFont                    m_font;
+    QFont                    m_boldFont;
+    QFontMetrics             m_fontMetrics;
+
+    VelocityColour          *m_velocityColour;
 };
 
 #endif // _CONTROLRULER_H_

@@ -30,6 +30,7 @@
 #include "rosedebug.h"
 #include "Segment.h"
 #include "RulerScale.h"
+#include "velocitycolour.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
@@ -40,6 +41,7 @@ using Rosegarden::PropertyName;
 ControlRuler::ControlRuler(RulerScale *rulerScale,
                            Segment *segment,
                            const PropertyName &property,
+                           VelocityColour *velocityColour,
                            double xorigin,
                            int height,
                            QWidget *parent,
@@ -52,7 +54,8 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
     m_width(-1),
     m_segment(segment),
     m_rulerScale(rulerScale),
-    m_fontMetrics(m_boldFont)
+    m_fontMetrics(m_boldFont),
+    m_velocityColour(velocityColour)
 {
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
@@ -102,7 +105,9 @@ ControlRuler::paintEvent(QPaintEvent* e)
     QPainter paint(this);
 
     paint.setPen(RosegardenGUIColours::MatrixElementBorder);
-    paint.setBrush(RosegardenGUIColours::MatrixElementBlock);
+
+    if (m_velocityColour == 0)
+       paint.setBrush(RosegardenGUIColours::MatrixElementBlock);
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
@@ -124,10 +129,13 @@ ControlRuler::paintEvent(QPaintEvent* e)
                                               (*it)->getDuration()))
                     + m_currentXOffset + int(m_xorigin) - x;
 
-            int value = int(double(height()) * 
-                ((*it)->get<Rosegarden::Int>(m_propertyName)/127.0));
+            int value = (*it)->get<Rosegarden::Int>(m_propertyName);
+            int blockHeight = int(double(height()) * (value/127.0));
+
+            if (m_velocityColour)
+                paint.setBrush(m_velocityColour->getColour(value));
             
-            paint.drawRect(x, height() - value, width, value);
+            paint.drawRect(x, height() - blockHeight, width, blockHeight);
         }
     }
 
