@@ -5,6 +5,8 @@ o Sync audio and MIDI [PARTIAL - manual JACK sliders]
 
 o Get first fetch audio working - partial segments
 
+o Audio path fixing - dialog thing to remap paths
+
 o Fix Audio Segment splitting [WORKING BUT TIMING DODGY]
 
 o Audio file playing feedback - async events and how to

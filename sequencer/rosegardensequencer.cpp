@@ -181,7 +181,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     arg << start.usec;
     arg << end.sec;
     arg << end.usec;
-    arg << (unsigned char)firstFetch;
+    arg << firstFetch;
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
@@ -192,7 +192,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
-                                  "getSequencerSlice(long int, long int, long int, long int, unsigned char)",
+                                  "getSequencerSlice(long int, long int, long int, long int, bool)",
                                   data, replyType, replyData, true))
     {
         cerr << "RosegardenSequencer::getSlice()"

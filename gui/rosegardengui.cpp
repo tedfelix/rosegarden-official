@@ -2055,7 +2055,7 @@ RosegardenGUIApp::slotToggleMetronome()
 const Rosegarden::MappedComposition&
 RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
                                     long sliceEndSec, long sliceEndUsec,
-                                    unsigned char firstFetch)
+                                    bool firstFetch)
 {
     // have to convert from char
     bool firstFetchBool = (bool)firstFetch;
