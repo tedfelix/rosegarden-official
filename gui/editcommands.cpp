@@ -1597,7 +1597,16 @@ SetTriggerCommand::modifySegment()
 	}
     }
 
-    //!!! update trigger references
+    // Update the rec references here, without bothering to do so in unexecute
+    // or in ClearTriggersCommand -- because it doesn't matter if a trigger
+    // has references to segments that don't actually trigger it, whereas it
+    // does matter if it loses a reference to something that does
+
+    Rosegarden::TriggerSegmentRec *rec =
+	m_selection->getSegment().getComposition()->getTriggerSegmentRec
+	(m_triggerSegmentId);
+
+    if (rec) rec->updateReferences();
 }
 
 void
@@ -1612,8 +1621,6 @@ ClearTriggersCommand::modifySegment()
 	(*i)->unset(TRIGGER_SEGMENT_RETUNE);
 	(*i)->unset(TRIGGER_SEGMENT_ADJUST_DURATION);
     }
-
-    //!!! update trigger references
 }
 
 
@@ -1666,6 +1673,9 @@ InsertTriggerNoteCommand::modifySegment()
 
     (void)Rosegarden::SegmentMatrixHelper(getSegment()).insertNote(e);
 
-    //!!! update trigger references
+    Rosegarden::TriggerSegmentRec *rec =
+	getSegment().getComposition()->getTriggerSegmentRec(m_id);
+
+    if (rec) rec->updateReferences();
 }
 
