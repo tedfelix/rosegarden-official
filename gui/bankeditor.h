@@ -21,12 +21,12 @@
 #include <vector>
 
 #include <kdialogbase.h>
-#include <qspinbox.h>
 
 class RosegardenComboBox;
 class QLineEdit;
 class QPushButton;
 class QFrame;
+class QSpinBox;
 
 namespace Rosegarden { class Studio; }
 

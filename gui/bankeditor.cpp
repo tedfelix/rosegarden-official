@@ -27,6 +27,7 @@
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+#include <qspinbox.h>
 
 #include "bankeditor.h"
 #include "widgets.h"
