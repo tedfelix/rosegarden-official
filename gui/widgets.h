@@ -297,17 +297,10 @@ public:
 
     void setText(const QString &text);
 
-    /*
-    void setShow(bool value) { m_show = value; }
-    bool isShowing() const { return m_show; }
-    */
-    
 protected:
-    //virtual void maybeTip(const QPoint &p);
+    virtual void paintEvent(QPaintEvent *e);
 
     QString m_text;
-    //bool    m_show;
-
 };
 
 

@@ -495,11 +495,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent):
                  "Click and drag up and down or left and right to modify");
     setFixedSize(m_size, m_size);
 
-    QWidget *par = parentWidget();
-    while (par->parentWidget() && par->parentWidget() != par)
-        par = par->parentWidget();
-
-    m_float = new RosegardenTextFloat(par);
+    m_float = new RosegardenTextFloat(this);
     m_float->hide();
 }
 
@@ -528,11 +524,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
                  "Click and drag up and down or left and right to modify");
     setFixedSize(size, size);
 
-    QWidget *par = parentWidget();
-    while (par->parentWidget() && par->parentWidget() != par)
-        par = par->parentWidget();
-
-    m_float = new RosegardenTextFloat(par);
+    m_float = new RosegardenTextFloat(this);
     m_float->hide();
 }
 
@@ -997,22 +989,28 @@ RosegardenQuantizeParameters::slotTypeChanged(int index)
 //
 //
 RosegardenTextFloat::RosegardenTextFloat(QWidget *parent):
-    QWidget(parent, "RosegardenTextFloat", WType_Popup),
+    QWidget(parent, "RosegardenTextFloat",
+            WStyle_Customize  | WStyle_NoBorder | WStyle_StaysOnTop),
     m_text("")
 {
-    //setFrameStyle(QFrame::WinPanel | QFrame::Raised );
-    resize(30, 30);
-}
+    QWidget *par = parentWidget();
+    QPoint pos = parent->pos() + par->pos();
 
-/*
-void
-RosegardenTextFloat::maybeTip(const QPoint &pos)
-{
-    QRect r(0, 0, parentWidget()->width(), parentWidget()->height());
-    cout << "MAYBE" << endl;
-    tip(parentWidget()->rect(), m_text);
-}
+    while (par->parentWidget() && par->parentWidget() != par)
+    {
+        par = par->parentWidget();
+        pos += par->pos();
+    }
 
+    // Position this widget to the right of the parent
+    //
+    //move(pos + QPoint(parent->width() + 5, 5));
+
+    reparent(par, WStyle_Customize  | WStyle_NoBorder | WStyle_StaysOnTop,
+             pos + QPoint(20, 5));
+
+    resize(20, 20);
+}
 
 void
 RosegardenTextFloat::paintEvent(QPaintEvent *e)
@@ -1024,20 +1022,24 @@ RosegardenTextFloat::paintEvent(QPaintEvent *e)
 
     paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
 
-    int size = 20;
-    paint.drawEllipse(0, 0, size, size);
+    paint.setPen(Qt::black);
+    paint.setBrush(Qt::red);
 
+    // get some text sizes
+    QRect textBound =  paint.boundingRect(0, 0, 100, 100, AlignCenter, m_text);
+
+    resize(textBound.width() + 6, textBound.height() + 4);
+    paint.drawRect(0, 0, textBound.width() + 5, textBound.height() + 3);
+
+    paint.setPen(Qt::black);
+    paint.drawText(3, textBound.height(), m_text);
 }
-*/
 
 
 void 
 RosegardenTextFloat::setText(const QString &text)
 {
     m_text = text;
-    //QRect r(0, 0, parentWidget()->width(), parentWidget()->height());
-    //setGloballyEnabled(true);
-    //cout << "TEXT SET" << endl;
-    //tip(parentWidget()->rect(), m_text);
+    repaint();
 }
 
