@@ -274,12 +274,11 @@ Composition::Composition(const Composition &comp):
     m_recordMetronome(comp.useRecordMetronome()),
     m_needsRefresh(true)
 {
-    m_tracks.clear();
-    m_segments.clear();
+    trackcontainer tracks = comp.getTracks();
+    for (trackcontainer::iterator i = tracks.begin(); i != tracks.end(); ++i) 
+	m_tracks[i->first] = new Track(*(i->second));
 
-    m_tracks = comp.getTracks();
-    m_segments = comp.getSegments();
-
+    segmentcontainer segments = comp.getSegments();
     for (segmentcontainer::iterator i = this->m_segments.begin();
 	 i != this->m_segments.end(); ++i) {
 	(*i)->setComposition(this);

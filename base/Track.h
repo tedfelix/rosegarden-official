@@ -61,6 +61,9 @@ public:
     // Copy constructor
     Track(const Track &);
 
+    // Assignment
+    Track operator=(const Track &);
+
     ~Track();
 
     void setId(TrackId id) { m_id = id; }

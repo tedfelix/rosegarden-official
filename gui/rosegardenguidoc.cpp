@@ -148,6 +148,21 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     m_studio = doc->getStudio();
     m_config = doc->getConfiguration();
     m_composition = doc->getComposition();
+
+    if (m_startUpSync)
+        alive();
+
+    if(!pViewList) {
+        pViewList = new QList<RosegardenGUIView>();
+    }
+
+    pViewList->setAutoDelete(true);
+
+    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
+	    this, SLOT(slotDocumentModified()));
+
+    connect(m_commandHistory, SIGNAL(documentRestored()),
+	    this, SLOT(slotDocumentRestored()));
 }
 
 RosegardenGUIDoc&
@@ -157,8 +172,8 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
 
     // clear floating objects
     if (m_recordSegment) delete m_recordSegment;
-    delete m_commandHistory;
-    delete m_clipboard;
+    m_commandHistory->clear();
+    m_clipboard->clear();
 
     m_modified = doc.isModified();
     m_autoSaved = doc.isAutoSaved();
@@ -166,8 +181,6 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_absFilePath = doc.getAbsFilePath();
     m_recordSegment = 0;
     m_endOfLastRecordedNote = 0;
-    m_commandHistory = new MultiViewCommandHistory();
-    m_clipboard = new Rosegarden::Clipboard();
     m_startUpSync = true;
 
     m_audioFileManager = doc.getAudioFileManager();

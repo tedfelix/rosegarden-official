@@ -836,7 +836,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     if (m_seqManager && m_seqManager->getTransportStatus() == PLAYING)
         slotStop();
 
-    m_doc->closeDocument();
+    //m_doc->closeDocument();
     slotEnableTransport(false);
 
 
@@ -873,7 +873,11 @@ void RosegardenGUIApp::openFile(const QString& filePath)
             canRecover = false;
     }
 
-    if (m_doc->openDocument(effectiveFilePath)) {
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(m_doc);
+
+    if (newDoc->openDocument(effectiveFilePath)) {
+
+        (*m_doc) = (*newDoc);
 
         initView();
         
@@ -912,6 +916,8 @@ void RosegardenGUIApp::openFile(const QString& filePath)
                 initView();
             }
     }
+
+    delete newDoc;
 
 }
 
@@ -1181,9 +1187,12 @@ void RosegardenGUIApp::slotFileOpen()
         if (!m_doc->saveIfModified()) {
             return;
         
-        } else {
+        }
+       
+       /* else {
             m_doc->closeDocument();
         }
+        */
     
     }
 
@@ -1199,9 +1208,11 @@ void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
         if (!m_doc->saveIfModified()) {
             return;
         
-        } else {
+        }
+       /* else {
             m_doc->closeDocument();
         }
+        */
     
     }
     
@@ -3191,7 +3202,7 @@ void
 RosegardenGUIApp::slotDocumentModified(bool m)
 {
     RG_DEBUG << "RosegardenGUIApp::slotDocumentModified(" << m << ")\n";
-    slotStateChanged("file_modified", !m);
+    slotStateChanged("file_modified", m);
 }
 
 void
