@@ -36,7 +36,7 @@ gui gui/rosegardengui
 # The 2nd 'rosegarden' is the rosegarden directory in the
 # repository
 #
-rosegarden rosegarden &admin &core &docs &gui &po &sound
+rosegarden rosegarden &admin &core &docs &gui &po &sound &sequencer
 
 #rgtest -d rosegarden rosegarden &admin &core &docs &gui &po &sound
 
