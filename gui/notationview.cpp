@@ -803,7 +803,7 @@ NotationView::getProperties() const
 void NotationView::positionStaffs()
 {
     m_config->setGroup(NotationView::ConfigGroup);
-    m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 6);
+    m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 5);
 
     Rosegarden::TrackId minTrack = 0, maxTrack = 0;
     bool haveMinTrack = false;

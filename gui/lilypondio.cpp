@@ -141,24 +141,14 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 	try {
 	    Indication i(**k);
 
-	    if ((*k)->getNotationAbsoluteTime() + i.getIndicationDuration() <=
-		(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration()) {
-
-		// Lilypond doesn't seem to like slurs starting outside a tuplet
-		// group and ending inside it.  (It doesn't seem to mind the other
-		// way around.)  So if we're in a tuplet group, for the moment
-		// we ignore any indication that started before the group did.
-		// Then we'll close it when no longer in the group.
-		//!!! No, I think that was a misunderstanding of mine caused by
-		// an incorrect call to handleEndingEvents from the group close
-		// code.  Test without this.
-		/*!!!
-		  if (tupletStartTime >= 0) {
-		  if ((*k)->getNotationAbsoluteTime() < tupletStartTime) {
-		  continue;
-		  }
-		  }
-		*/
+	    timeT indicationEnd = 
+		(*k)->getNotationAbsoluteTime() + i.getIndicationDuration();
+	    timeT eventEnd =
+		(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
+	    
+	    if (indicationEnd < eventEnd ||
+		(i.getIndicationType() == Indication::Slur &&
+		 indicationEnd == eventEnd)) {
 
                 if (i.getIndicationType() == Indication::Slur) {
                     str << ") ";
@@ -833,6 +823,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     long groupId = -1;
     std::string groupType = "";
     timeT tupletStartTime = -1;
+    std::pair<int, int> tupletRatio;
 
     bool overlong = false;
 
@@ -896,6 +887,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			} else {
 			    str << "\\times " << numerator << "/" << denominator << " { ";
 			    tupletStartTime = absTime;
+			    tupletRatio = std::pair<int, int>(numerator, denominator);
 			}
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
 			if (exportBeams) str << "[ ";
@@ -942,7 +934,14 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    Segment::iterator nextElt = chord.getFinalElement();
 	    if (s->isBeforeEndMarker(++nextElt)) {
 		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
-		if (toNext < duration) duration = toNext;
+		if (toNext < duration) {
+		    duration = toNext;
+		    if (groupId >= 0 && groupType == GROUP_TYPE_TUPLED &&
+			tupletRatio.second != 0) {
+			duration = duration * tupletRatio.second /
+			    tupletRatio.first;
+		    }
+		}
 	    }
 
 	    if (e->has(STEM_UP) && e->isPersistent<Bool>(STEM_UP)) {

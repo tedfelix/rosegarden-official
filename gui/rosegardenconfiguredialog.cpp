@@ -640,7 +640,7 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
                       ("multistaffnotesize",
                        NoteFontFactory::getDefaultSize(fontStr)));
 
-    int printpt = m_cfg->readUnsignedNumEntry("printingnotesize", 6);
+    int printpt = m_cfg->readUnsignedNumEntry("printingnotesize", 5);
     for (int i = 2; i < 16; ++i) {
 	m_printingSize->insertItem(QString("%1").arg(i));
 	if (i == printpt) {
