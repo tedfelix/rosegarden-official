@@ -667,7 +667,7 @@ LilypondExporter::write()
     str << indent(col)
 	<< (languageLevel >= 2 ? "\\override " : "\\property ")
 	<< "Score.NoteColumn"
-	<< (languageLevel >= 2 ? "" : " \\override ")
+	<< (languageLevel >= 2 ? " " : " \\override ")
 	<< "#\'force-hshift = #1.0"
         << std::endl;
     
@@ -761,7 +761,7 @@ LilypondExporter::write()
 		str << std::endl << indent(col)
 		    << (languageLevel >= 2 ? "\\override " : "\\property ")
 		    << "Voice.TextScript"
-		    << (languageLevel >= 2 ? "" : " \\override ")
+		    << (languageLevel >= 2 ? " " : " \\override ")
 		    << "#'padding = #2.0"
 		    << std::endl;
 	    }
@@ -1506,7 +1506,7 @@ LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevSty
 	str << std::endl << indent(col)
 	    << (languageLevel >= 2 ? "\\override " : "\\property ")
 	    << "Voice.NoteHead"
-	    << (languageLevel >= 2 ? "" : " \\set ")
+	    << (languageLevel >= 2 ? " " : " \\set ")
 	    << "#'style = #'"
 	    << style << std::endl << indent(col);
     }
