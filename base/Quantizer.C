@@ -23,6 +23,7 @@
 #include "Quantizer.h"
 #include "BaseProperties.h"
 #include "NotationTypes.h"
+#include "Selection.h"
 
 #include <iostream>
 #include <cstdio> // for sprintf
@@ -34,6 +35,7 @@ namespace Rosegarden {
 
 const std::string Quantizer::RawEventData = "";
 const std::string Quantizer::DefaultTarget = "DefaultQ";
+const std::string Quantizer::GlobalSource = "GlobalQ";
 
 Quantizer::Quantizer(std::string source,
 		     std::string target,
@@ -508,6 +510,33 @@ Quantizer::unquantize(Segment *s,
     insertNewEvents(s);
 }
 
+void
+Quantizer::unquantize(EventSelection *selection) const
+{
+    assert(m_toInsert.size() == 0);
+
+    Rosegarden::EventSelection::eventcontainer::iterator it
+        = selection->getSegmentEvents().begin();
+
+    for (; it != selection->getSegmentEvents().end(); it++) {
+
+	if (m_target == RawEventData) {
+
+            Segment::iterator from = selection->getSegment().findSingle(*it);
+            Segment::iterator to = selection->getSegment().findSingle(*it);
+	    setToTarget(&selection->getSegment(), from,
+			getFromSource(*from, AbsoluteTimeValue),
+			getFromSource(*to, DurationValue));
+	    
+	} else {
+	    removeTargetProperties(*it);
+	}
+    }
+    
+    insertNewEvents(&selection->getSegment());
+}
+
+
 
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const
@@ -560,7 +589,7 @@ void
 Quantizer::setToTarget(Segment *s, Segment::iterator i,
 		       timeT absTime, timeT duration) const
 {
-//    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
+    //cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
 
     if (m_target == RawEventData) {
 

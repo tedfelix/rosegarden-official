@@ -31,17 +31,20 @@
 namespace Rosegarden {
 
 struct StandardQuantization;
+class EventSelection;
 
 /**
    The Quantizer class rounds the starting times and durations of note
    and rest events according to one of a set of possible criteria.
 */
 
+
 class Quantizer
 {
 public:
     static const std::string RawEventData;
     static const std::string DefaultTarget;
+    static const std::string GlobalSource;
 
     enum QuantizationType {
 	PositionQuantize,// Snap absolute times to unit boundaries
@@ -286,6 +289,11 @@ public:
      */
     void unquantize(Segment *,
 		    Segment::iterator from, Segment::iterator to) const;
+
+    /**
+     * Unquantize a selection of Events
+     */
+    void unquantize(EventSelection *) const;
 
 protected:
     class SingleQuantizer {

@@ -223,9 +223,11 @@ MatrixParameterBox::slotQuantizeSelected(int q)
     // if we're the last value then we're Off
     //
     if ((unsigned int)(q) == m_quantizations.size())
+    {
         unit = 0;
+    }
 
-    emit quantizeSelection(Quantizer(Quantizer::RawEventData,
+    emit quantizeSelection(Quantizer(Quantizer::GlobalSource,
                                      Quantizer::RawEventData,
                                      Quantizer::PositionQuantize,
                                      unit,

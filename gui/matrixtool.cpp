@@ -286,16 +286,20 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
                                           int pitch,
                                           int staffNo,
                                           QMouseEvent *e,
-                                          Rosegarden::ViewElement *)
+                                          Rosegarden::ViewElement *element)
 {
     MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
+
+
+    // Don't create an overlapping event on the same note on the same channel
+    if (dynamic_cast<MatrixElement*>(element)) return;
 
     // Round event time to a multiple of resolution
     SnapGrid grid(m_mParentView->getSnapGrid());
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
-
+ 
     Event *el = new Event(Note::EventType, time, grid.getSnapTime(e->x()));
     el->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     el->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
@@ -303,7 +307,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_currentElement = new MatrixElement(el);
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) -
-	m_currentStaff->getElementHeight() / 2;
+            m_currentStaff->getElementHeight() / 2;
 
     m_currentElement->setLayoutY(y);
     m_currentElement->setLayoutX(grid.getRulerScale()->getXForTime(time));
@@ -462,7 +466,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
 
     if (m_clickedElement)
     {
-        int x = m_clickedElement->getLayoutX();
+        int x = int(m_clickedElement->getLayoutX());
         int width = m_clickedElement->getWidth();
         int resizeStart = int(double(width) * 0.85) + x;
 
@@ -515,6 +519,9 @@ void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
                                           QMouseEvent* e,
                                           Rosegarden::ViewElement *element)
 {
+    // Don't allow overlapping elements on the same channel
+    if (dynamic_cast<MatrixElement*>(element)) return;
+
     m_dispatchTool = m_parentView->
         getToolBox()->getTool(MatrixPainter::ToolName);
 

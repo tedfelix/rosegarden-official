@@ -1224,7 +1224,7 @@ void RosegardenGUIApp::slotQuantizeSelection()
 
     QuantizeDialog *dialog = new QuantizeDialog
 	(m_view,
-	 Rosegarden::Quantizer::RawEventData,
+         Rosegarden::Quantizer::GlobalSource,
 	 Rosegarden::Quantizer::RawEventData);
     if (dialog->exec() != QDialog::Accepted) return;
 

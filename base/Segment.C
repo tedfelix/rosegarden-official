@@ -51,7 +51,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_audioStartTime(0, 0),
     m_audioEndTime(0, 0),
     m_repeating(false),
-    m_quantizer(new Quantizer("SegmentQ", Quantizer::RawEventData)),
+    m_quantizer(new Quantizer(Quantizer::GlobalSource,
+                              Quantizer::RawEventData)),
     m_quantize(false),
     m_transpose(0),
     m_delay(0)
@@ -661,7 +662,7 @@ Segment::hasQuantization() const
 void
 Segment::setQuantizeLevel(const StandardQuantization &q)
 {
-    Quantizer newQ(q, "SegmentQ", Quantizer::RawEventData);
+    Quantizer newQ(q, Quantizer::GlobalSource, Quantizer::RawEventData);
 
     if (newQ != *m_quantizer) {
 	*m_quantizer = newQ;
@@ -672,7 +673,7 @@ Segment::setQuantizeLevel(const StandardQuantization &q)
 void
 Segment::setQuantizeLevel(const Quantizer &q)
 {
-    Quantizer newQ(q, "SegmentQ", Quantizer::RawEventData);
+    Quantizer newQ(q, Quantizer::GlobalSource, Quantizer::RawEventData);
 
     if (newQ != *m_quantizer) {
 	*m_quantizer = newQ;

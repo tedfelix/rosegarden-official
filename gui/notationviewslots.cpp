@@ -749,7 +749,7 @@ void NotationView::slotTransformsQuantize()
 
     QuantizeDialog *dialog = new QuantizeDialog
 	(this,
-	 Rosegarden::Quantizer::RawEventData,
+         Rosegarden::Quantizer::GlobalSource,
 	 Rosegarden::Quantizer::RawEventData);
 
     if (dialog->exec() == QDialog::Accepted) {

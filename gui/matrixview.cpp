@@ -667,7 +667,7 @@ void MatrixView::slotTransformsQuantize()
     if (!m_currentEventSelection) return;
 
     QuantizeDialog *dialog = new QuantizeDialog(this,
-						Quantizer::RawEventData,
+                                                Quantizer::GlobalSource,
 						Quantizer::RawEventData);
 
     if (dialog->exec() == QDialog::Accepted) {
@@ -1098,7 +1098,7 @@ MatrixView::slotQuantizeSelection(Rosegarden::Quantizer q)
 
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
-    if (q.getUnit() > 0)
+    if (q.getUnit() != 0)
     {
         KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
         addCommandToHistory(
