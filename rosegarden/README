@@ -1,5 +1,5 @@
 
-Rosegarden-4 v0.1
+Rosegarden-4 v0.1.x
 =================
 
 Rosegarden-4 is a new sequencer and musical notation editor
@@ -16,11 +16,11 @@ more limiting.
 Build requirements
 ------------------
 
-The big requirement is KDE.  This program depends on KDE 2.n for
-n >= 1 (including the kdemultimedia package), and Qt 2.n for n >= 2.
+The big requirement is KDE.  This program depends on KDE 2.2
+(including the kdemultimedia package), which itself requires Qt 2.3.1.
 
 Our code should compile with gcc-2.95 or gcc-3.0, although you may
-find that KDE 2.n won't easily compile with the latter.
+find that KDE 2.2 won't easily compile with the latter.
 
 
 Compiling from source
@@ -53,8 +53,14 @@ If you obtained the source code from a distribution tarball:
     ./configure
 
   plus appropriate "--with-qt-dir=..." and "--prefix=..." options.
-  The prefix should be the same as the one of your KDE installation.
   Then proceed with "make" and "make install".
+
+
+NOTE: The installation prefix should be the same as the one of your
+KDE installation. However you can install to another directory, but
+then you'll have to append it to your KDEDIRS variable. For instance :
+
+KDEDIRS=/usr:/home/glaurent/rosegarden
 
 
 Running the application
