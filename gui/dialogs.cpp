@@ -2147,13 +2147,12 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
                 false,
                 i18n("&Skip"),
                 i18n("&Locate")),
-                m_file(file),
-                m_path(path)
+                m_file(file)
 {
     QHBox *w = makeHBoxMainWidget();
     QString label =
-        i18n("Can't find file \"") + m_file + QString("\".\n") +
-        i18n("Would you like to try and locate this file or skip it?");
+        QString(i18n("Can't find file \"%1\".\n"
+                     "Would you like to try and locate this file or skip it?")).arg(m_file);
 
     QLabel *labelW = new QLabel(label, w);
     labelW->setAlignment(Qt::AlignHCenter);
@@ -2166,22 +2165,15 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 void
 FileLocateDialog::slotUser2()
 {
-    // Create a file dialog and set the filter to the filename
-    //
-    KFileDialog *fileDlg = new KFileDialog(m_path, m_file, (QWidget *)this,
-                                           "", true);
+    m_file = KFileDialog::getOpenFileName(":WAVS",
+                                          QString(i18n("*.wav|WAV files (*.wav)")),
+                                          this, i18n("Select an Audio File"));
 
-    if (fileDlg->exec() == QDialog::Accepted)
-    {
-        // We've found it - set the path and filename
-        //
-        m_path = fileDlg->baseURL().path();
-        m_file = fileDlg->selectedFile();
-
-        // Accept
+    if (!m_file.isEmpty()) {
+        QFileInfo fileInfo(m_file);
+        m_path = fileInfo.dirPath();
         accept();
-    }
-    else
+    } else
         reject();
 }
 
