@@ -89,6 +89,9 @@ public:
     void postMessage(OSCMessage *message); // I take over ownership of message
     void dispatch();
 
+    void updateProgram(Rosegarden::InstrumentId id, int position);
+    void updatePort(Rosegarden::InstrumentId id, int position, int port);
+
     QString getOSCUrl(Rosegarden::InstrumentId instrument, int position,
 		      QString identifier);
     QString getFriendlyName(Rosegarden::InstrumentId instrument, int position,

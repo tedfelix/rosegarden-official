@@ -5729,10 +5729,18 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
         m_doc->slotDocumentModified();
 
 	if (update) {
+	    // This modification came from The Outside!
 	    int key = (pluginIndex << 16) + instrumentId;
 	    if (m_pluginDialogs[key]) {
 		m_pluginDialogs[key]->updatePluginPortControl(portIndex);
 	    }
+#ifdef HAVE_LIBLO
+	} else {
+	    // This modification came from our own plugin dialog
+	    if (m_pluginGUIManager) m_pluginGUIManager->updatePort(instrumentId,
+								   pluginIndex,
+								   portIndex);
+#endif
 	}
     }
 }
@@ -5770,10 +5778,17 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
         m_doc->slotDocumentModified();
 
 	if (update) {
+	    // This modification came from The Outside!
 	    int key = (pluginIndex << 16) + instrumentId;
 	    if (m_pluginDialogs[key]) {
 		m_pluginDialogs[key]->updatePluginProgramControl();
 	    }
+#ifdef HAVE_LIBLO
+	} else {
+	    // This modification came from our own plugin dialog
+	    if (m_pluginGUIManager) m_pluginGUIManager->updateProgram(instrumentId,
+								      pluginIndex);
+#endif
 	}
     }
 }

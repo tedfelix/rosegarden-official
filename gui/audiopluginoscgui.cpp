@@ -256,6 +256,40 @@ AudioPluginOSCGUIManager::postMessage(OSCMessage *message)
     m_oscBuffer.write(&message, 1);
 }
 
+void
+AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
+{
+    if (m_guis.find(instrument) == m_guis.end() ||
+	m_guis[instrument].find(position) == m_guis[instrument].end()) return;
+
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) return;
+
+    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    if (!pluginInstance) return;
+
+    m_guis[instrument][position]->sendProgram(strtoqstr(pluginInstance->getProgram()));
+}
+
+void
+AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
+				     int port)
+{
+    if (m_guis.find(instrument) == m_guis.end() ||
+	m_guis[instrument].find(position) == m_guis[instrument].end()) return;
+
+    Instrument *i = m_studio->getInstrumentById(instrument);
+    if (!i) return;
+
+    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    if (!pluginInstance) return;
+
+    Rosegarden::PluginPortInstance *porti = pluginInstance->getPort(port);
+    if (!porti) return;
+
+    m_guis[instrument][position]->sendPortValue(port, porti->value);
+}
+   
 QString
 AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
 				    QString identifier)
