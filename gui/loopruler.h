@@ -48,8 +48,7 @@ class LoopRuler : public QWidget
     Q_OBJECT
 
 public:
-    LoopRuler(RosegardenGUIDoc *doc,
-	      Rosegarden::RulerScale *rulerScale,
+    LoopRuler(Rosegarden::RulerScale *rulerScale,
               int height = 0,
 	      bool invert = false,
               QWidget* parent = 0,
@@ -57,7 +56,8 @@ public:
 
     ~LoopRuler();
 
-    virtual void paintEvent(QPaintEvent*);
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
 
 public slots:
     void setLoopingMode(bool value);
@@ -65,10 +65,12 @@ public slots:
 
 protected:
     // ActiveItem interface
-    virtual void mousePressEvent       (QMouseEvent *mE);
-    virtual void mouseReleaseEvent     (QMouseEvent *mE);
-    virtual void mouseDoubleClickEvent (QMouseEvent *mE);
-    virtual void mouseMoveEvent        (QMouseEvent *mE);
+    virtual void mousePressEvent       (QMouseEvent*);
+    virtual void mouseReleaseEvent     (QMouseEvent*);
+    virtual void mouseDoubleClickEvent (QMouseEvent*);
+    virtual void mouseMoveEvent        (QMouseEvent*);
+
+    virtual void paintEvent(QPaintEvent*);
 
 signals:
     // The three main functions that this class performs
@@ -87,11 +89,11 @@ private:
     void drawBarSections(QPainter*, bool rightwards = true);
     void drawLoopMarker(QPainter*);  // between loop positions
 
+    //--------------- Data members ---------------------------------
     int  m_height;
     bool m_invert;
     int  m_lastXPaint;
 
-    RosegardenGUIDoc       *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
     Rosegarden::SnapGrid    m_grid;
     

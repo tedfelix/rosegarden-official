@@ -29,8 +29,7 @@
 
 using Rosegarden::RulerScale;
 
-LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
-                     RulerScale *rulerScale,
+LoopRuler::LoopRuler(RulerScale *rulerScale,
                      int height,
 		     bool invert,
                      QWidget *parent,
@@ -39,7 +38,6 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
       m_height(height),
       m_invert(invert),
       m_lastXPaint(0),
-      m_doc(doc),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
       m_loop(false),
@@ -57,6 +55,21 @@ LoopRuler::~LoopRuler()
 {
 }
 
+QSize LoopRuler::sizeHint() const
+{
+    int nbBars = m_rulerScale->getLastVisibleBar() - m_rulerScale->getFirstVisibleBar();
+    int firstBarWidth = m_rulerScale->getBarWidth(0);
+
+    return QSize(nbBars * firstBarWidth, m_height);
+}
+
+QSize LoopRuler::minimumSizeHint() const
+{
+    double firstBarWidth = m_rulerScale->getBarWidth(0);
+
+    return QSize(int(firstBarWidth), m_height);
+}
+
 void LoopRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
@@ -72,8 +85,6 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 
 void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
 {
-    if (!m_doc) return;
-
     int firstBar = m_rulerScale->getFirstVisibleBar(),
         lastBar = m_rulerScale->getLastVisibleBar();
 
