@@ -65,9 +65,6 @@ public:
                     const char *name=0);
 signals:
     void updateAutoSaveInterval(unsigned int);
-
-protected:
-    RosegardenGUIDoc *m_doc;
 };
 
 class DocumentConfigureDialog : public ConfigureDialogBase
@@ -76,9 +73,6 @@ public:
     DocumentConfigureDialog(RosegardenGUIDoc *doc,
                             QWidget *parent=0,
                             const char *name=0);
-
-protected:
-    RosegardenGUIDoc *m_doc;
 };
 
 

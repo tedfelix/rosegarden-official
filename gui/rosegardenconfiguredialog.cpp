@@ -1505,7 +1505,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                                  KConfig* cfg,
                                  QWidget *parent,
                                  const char *name)
-    : ConfigureDialogBase(parent, name), m_doc(doc)
+    : ConfigureDialogBase(parent, name)
 {
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
@@ -1574,8 +1574,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
                                                  QWidget *parent,
                                                  const char *name)
-    : ConfigureDialogBase(parent, name),
-      m_doc(doc)
+    : ConfigureDialogBase(parent, name)
 {
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
