@@ -53,6 +53,7 @@
 #include "rosedebug.h"
 
 #include "studiocontrol.h"
+#include "studiowidgets.h"
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
@@ -814,7 +815,7 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
       m_signalMapper(new QSignalMapper(this)),
       m_pluginManager(doc->getPluginManager())
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 10, 3);
+    QGridLayout *gridLayout = new QGridLayout(this, 10, 4);
     // Some top space
 //     gridLayout->addRowSpacing(0, 8);
 //     gridLayout->addRowSpacing(1, 30);
@@ -899,6 +900,10 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     connect(m_channelButton, SIGNAL(released()),
             this, SLOT(slotAudioChannelToggle()));
 
+    /*
+    AudioFaderWidget *afW = new AudioFaderWidget(this);
+    gridLayout->addMultiCellWidget(afW, 0, 7, 3, 3);
+    */
 }
 
 void

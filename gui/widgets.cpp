@@ -477,6 +477,25 @@ RosegardenFader::setFader(int value)
 //
 //
 
+RosegardenRotary::RosegardenRotary(QWidget *parent):
+    QWidget(parent),
+    m_minValue(0),
+    m_maxValue(100),
+    m_step(1),
+    m_pageStep(10),
+    m_size(20),
+    m_lastPosition(50),
+    m_position(50),
+    m_buttonPressed(false),
+    m_lastY(0),
+    m_lastX(0),
+    m_knobColour(0, 0, 0)
+{
+    setFixedSize(m_size, m_size);
+    QToolTip::add(this, i18n("Click n' Drag - up and down or left to right"));
+}
+
+
 RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float minValue,
                                    float maxValue,

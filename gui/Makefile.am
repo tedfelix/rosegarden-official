@@ -82,6 +82,7 @@ rosegarden_SOURCES = \
 	staffline.cpp \
         studiocommands.cpp \
         studiocontrol.cpp \
+        studiowidgets.cpp \
 	tempocolour.cpp \
 	temporuler.cpp \
 	textruler.cpp \

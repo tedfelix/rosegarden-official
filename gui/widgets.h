@@ -293,6 +293,8 @@ class RosegardenRotary : public QWidget
 {
     Q_OBJECT
 public:
+    RosegardenRotary(QWidget *parent);
+
     RosegardenRotary(QWidget *parent,
                      float minValue,
                      float maxValue,
