@@ -96,7 +96,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     config->setGroup(NotationView::ConfigGroup);
     m_colourQuantize = config->readBoolEntry("colourquantize", false);
     // Shouldn't change this one during the lifetime of the staff, really:
-    m_showUnknowns = config->readBoolEntry("showunknowns", true);
+    m_showUnknowns = config->readBoolEntry("showunknowns", false);
     changeFont(fontName, resolution);
 }
 

@@ -450,7 +450,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     m_showUnknowns = new QCheckBox
         (i18n("Show non-notation events as question marks"), frame);
-    bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
+    bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", false);
     m_showUnknowns->setChecked(defaultShowUnknowns);
     layout->addWidget(m_showUnknowns, 2, 1);
 
