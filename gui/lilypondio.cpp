@@ -912,6 +912,19 @@ LilypondExporter::write() {
                     str << lilyText;
                     lilyText = "";  // purge now that text has been bound to note
                 }
+
+                // write slashes after text
+                // / = 8 // = 16 /// = 32, etc.
+                long slashes = 0;
+                (*j)->get<Int>(BaseProperties::SLASHES, slashes);
+                if (slashes > 0) {
+                    str << ":";
+                    int length = 4;
+                    for (int c = 1; c <= slashes; c++) {
+                        length *= 2;
+                    }
+                    str << length;
+                }
                 
                 // Add a tie if necessary (or postpone it if we're in a chord)
                 bool tiedForward = false;
