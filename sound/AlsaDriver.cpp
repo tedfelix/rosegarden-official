@@ -2075,8 +2075,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                            const RealTime &sliceStart,
 			   const RealTime &sliceEnd)
 {
-    RealTime midiRelativeTime;
-    RealTime midiRelativeStopTime;
+    RealTime outputTime;
+    RealTime outputStopTime;
     MappedInstrument *instrument;
     ClientPortPair outputDevice;
     MidiByte channel;
@@ -2108,17 +2108,52 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	bool isSoftSynth = ((*i)->getInstrument() >= SoftSynthInstrumentBase);
 
-        midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
+        outputTime = (*i)->getEventTime() - m_playStartPosition +
                            m_alsaPlayStartTime;
 
-	if (now || m_playing == false) midiRelativeTime = getAlsaTime();
+	if (now && !m_playing && m_queueRunning) {
+	    // stop queue to ensure exact timing and make sure the
+	    // event gets through right now
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << "processMidiOut: stopping queue for now-event" << std::endl;
+#endif
+	    checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "processMidiOut(): stop queue");
+	    checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
+	}
 
-	processNotesOff(midiRelativeTime, now);
+	RealTime alsaTimeNow = getAlsaTime();
+	
+	if (now && !m_playing) {
+	    outputTime = alsaTimeNow;
+	}
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
-	RealTime alsaTimeNow = getAlsaTime();
-	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration() << std::endl;
+	std::cerr << "processMidiOut[" << now << "]: event is at " << outputTime << " (" << outputTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration() << std::endl;
 #endif
+
+	if (!m_queueRunning && outputTime < alsaTimeNow) {
+	    RealTime adjust = alsaTimeNow - outputTime;
+	    if ((*i)->getDuration() > RealTime::zeroTime) {
+		if ((*i)->getDuration() <= adjust) {
+#ifdef DEBUG_PROCESS_MIDI_OUT
+		    std::cerr << "processMidiOut[" << now << "]: too late for this event, abandoning it" << std::endl;
+#endif
+		    continue;
+		} else {
+#ifdef DEBUG_PROCESS_MIDI_OUT
+		    std::cerr << "processMidiOut[" << now << "]: pushing event forward and reducing duration by " << adjust << std::endl;
+#endif
+		    (*i)->setDuration((*i)->getDuration() - adjust);
+		}
+	    } else {
+#ifdef DEBUG_PROCESS_MIDI_OUT
+		std::cerr << "processMidiOut[" << now << "]: pushing zero-duration event forward by " << adjust << std::endl;
+#endif
+	    }
+	    outputTime = alsaTimeNow;
+	}
+
+	processNotesOff(outputTime, now);
 
 #ifdef HAVE_LIBJACK
 	if (m_jackDriver) {
@@ -2134,8 +2169,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
         // Second and nanoseconds for ALSA
         //
-        snd_seq_real_time_t time = { midiRelativeTime.sec,
-                                     midiRelativeTime.nsec };
+        snd_seq_real_time_t time = { outputTime.sec, outputTime.nsec };
 
 	if (!isSoftSynth) {
 
@@ -2162,7 +2196,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
         // set the stop time for Note Off
         //
-        midiRelativeStopTime = midiRelativeTime + (*i)->getDuration()
+        outputStopTime = outputTime + (*i)->getDuration()
 	    - RealTime(0, 1); // notch it back 1nsec just to ensure
 			      // correct ordering against any other
 			      // note-ons at the same nominal time
@@ -2348,6 +2382,17 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	} else {
 	    checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
 			   "processMidiOut(): output queued");
+
+	    if (now) {
+		if (m_queueRunning && !m_playing) {
+		    // restart queue
+#ifdef DEBUG_PROCESS_MIDI_OUT
+		    std::cerr << "processMidiOut: restarting queue after now-event" << std::endl;
+#endif
+		    checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, NULL), "processMidiOut(): continue queue");
+		}
+		checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
+	    }
 	}
 
         // Add note to note off stack
@@ -2355,13 +2400,13 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         if (needNoteOff)
         {
 	    NoteOffEvent *noteOffEvent =
-		new NoteOffEvent(midiRelativeStopTime, // already calculated
+		new NoteOffEvent(outputStopTime, // already calculated
 				 (*i)->getPitch(),
 				 channel,
 				 (*i)->getInstrument());
 
 #ifdef DEBUG_ALSA
-	    std::cerr << "Adding NOTE OFF at " << midiRelativeStopTime
+	    std::cerr << "Adding NOTE OFF at " << outputStopTime
 		      << std::endl;
 #endif
 
@@ -2371,7 +2416,21 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
     processNotesOff(sliceEnd - m_playStartPosition + m_alsaPlayStartTime, now);
 
-    if (m_queueRunning || now) {
+//!!!    if (m_queueRunning || now) {
+    if (m_queueRunning) {
+
+	if (now && !m_playing) {
+	    // just to be sure
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << "processMidiOut: restarting queue after all now-events" << std::endl;
+#endif
+	    checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, NULL), "processMidiOut(): continue queue");
+	}
+
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	std::cerr << "processMidiOut: m_queueRunning " << m_queueRunning
+		  << ", now " << now << std::endl;
+#endif
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
     }
 }
