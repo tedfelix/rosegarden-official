@@ -70,7 +70,7 @@ if test $kde_qtver = 3; then
 fi
 
 dnl test for sound support at all
-AC_ARG_ENABLE(sound,[  --disable-sound         distable sound support (default is enabled for aRts)],
+AC_ARG_ENABLE(sound,[  --disable-sound         disable sound support (default is enabled for aRts)],
 [
   if test "$enable_sound" = "no";
   then
