@@ -158,8 +158,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     setCentralWidget(m_canvasView);
 
-    QObject::connect(m_canvasView, SIGNAL(noteClicked(int, const QPoint&)),
-                     this,         SLOT  (noteClicked(int, const QPoint&)));
+    QObject::connect(m_canvasView, SIGNAL(noteClicked(int, const QPoint&, NotationElement*)),
+                     this,         SLOT  (noteClicked(int, const QPoint&, NotationElement*)));
 
     QObject::connect(m_canvasView, SIGNAL(hoveredOverNoteChange(const QString&)),
                      this,         SLOT  (hoveredOverNoteChanged(const QString&)));
@@ -907,22 +907,24 @@ void NotationView::slotEraseSelected()
     setDeleteMode(true);
 }
 
-void NotationView::noteClicked(int height, const QPoint &eventPos)
+void NotationView::noteClicked(int height, const QPoint &eventPos,
+                               NotationElement* el)
 {
-    Rosegarden::Key key;
-    Clef clef;
-    NotationElementList::iterator closestNote =
-        findClosestNote(eventPos.x(), clef, key);
+    if (deleteMode() && el) {
 
-    if (closestNote == m_notationElements->end()) {
-        return;
-    }
-
-    if (deleteMode()) {
-
-        deleteNote(closestNote);
+        deleteNote(el);
 
     } else {
+
+        Rosegarden::Key key;
+        Clef clef;
+        NotationElementList::iterator closestNote =
+            findClosestNote(eventPos.x(), clef, key);
+
+        if (closestNote == m_notationElements->end()) {
+            return;
+        }
+
 
         //!!! still need to take accidental into account
         int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
@@ -932,14 +934,14 @@ void NotationView::noteClicked(int height, const QPoint &eventPos)
     }
 }
 
-void NotationView::deleteNote(NotationElementList::iterator note)
+void NotationView::deleteNote(NotationElement* note)
 {
     bool needLayout = false;
     
     // is note in a chord ?
     Rosegarden::Track &track = getTrack();
 
-    if (track.noteIsInChord((*note)->event())) {
+    if (track.noteIsInChord(note->event())) {
 
         // Simply delete the event
         m_viewElementsManager->erase(note);

@@ -160,9 +160,9 @@ public slots:
     void slotEraseSelected();
 
     // Canvas actions slots
-    void noteClicked(int height, const QPoint&);
+    void noteClicked(int height, const QPoint&, NotationElement*);
     void insertNote(NotationElementList::iterator closestNote, int pitch);
-    void deleteNote(NotationElementList::iterator note);
+    void deleteNote(NotationElement* note);
 
     void hoveredOverNoteChanged(const QString&);
     void hoveredOverAbsoluteTimeChange(unsigned int);
