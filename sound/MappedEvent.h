@@ -226,6 +226,7 @@ public:
 
     // Copy constructor
     //
+    // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
     MappedEvent(const MappedEvent &mE):
         m_instrument(mE.getInstrument()),
         m_type(mE.getType()),
@@ -234,9 +235,10 @@ public:
         m_eventTime(mE.getEventTime()),
         m_duration(mE.getDuration()),
         m_audioStartMarker(mE.getAudioStartMarker()),
-        m_dataBlock("") {;}
+        m_dataBlock(mE.getDataBlock()) {;}
 
     // Copy from pointer
+    // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
     MappedEvent(MappedEvent *mE):
         m_instrument(mE->getInstrument()),
         m_type(mE->getType()),
@@ -245,7 +247,7 @@ public:
         m_eventTime(mE->getEventTime()),
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
-        m_dataBlock(""),
+        m_dataBlock(mE->getDataBlock()),
         m_isPersistent(false) {;}
 
     ~MappedEvent() {;}

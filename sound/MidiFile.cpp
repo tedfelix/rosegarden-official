@@ -1782,7 +1782,9 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         {
             // Send the normal event code (with encoded channel information)
             //
-            if ((*midiEvent)->getEventCode() != eventCode)
+            // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
+            if (((*midiEvent)->getEventCode() != eventCode) ||
+                ((*midiEvent)->getEventCode() == MIDI_SYSTEM_EXCLUSIVE))
             {
                 trackBuffer += (*midiEvent)->getEventCode();
                 eventCode = (*midiEvent)->getEventCode();
