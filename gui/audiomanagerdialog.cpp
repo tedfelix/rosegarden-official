@@ -60,11 +60,12 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     }
 
     // create widgets
-    m_addButton    = new QPushButton(i18n("Add"), v);
-    m_deleteButton = new QPushButton(i18n("Remove"), v);
-    m_playButton   = new QPushButton(i18n("Play"), v);
-    m_renameButton = new QPushButton(i18n("Rename"), v);
-    m_insertButton = new QPushButton(i18n("Insert"), v);
+    m_addButton       = new QPushButton(i18n("Add"), v);
+    m_deleteButton    = new QPushButton(i18n("Remove"), v);
+    m_playButton      = new QPushButton(i18n("Play"), v);
+    m_renameButton    = new QPushButton(i18n("Rename"), v);
+    m_insertButton    = new QPushButton(i18n("Insert"), v);
+    m_deleteAllButton = new QPushButton(i18n("Delete All"), v);
     m_fileList     = new QListView(h);
 
     // Set the column names
@@ -88,19 +89,32 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setAllColumnsShowFocus(true);
 
     // connect buttons
-    connect(m_deleteButton, SIGNAL(released()), SLOT(slotDeleteSelected()));
+    connect(m_deleteButton, SIGNAL(released()), SLOT(slotDelete()));
     connect(m_addButton, SIGNAL(released()), SLOT(slotAdd()));
     connect(m_playButton, SIGNAL(released()), SLOT(slotPlayPreview()));
-    connect(m_renameButton, SIGNAL(released()), SLOT(slotRenameSelected()));
+    connect(m_renameButton, SIGNAL(released()), SLOT(slotRename()));
+    connect(m_insertButton, SIGNAL(released()), SLOT(slotInsert()));
+    connect(m_deleteAllButton, SIGNAL(released()), SLOT(slotDeleteAll()));
 
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged()), SLOT(slotEnableButtons()));
+
+    // setup local accelerators
+    //
+    m_accelerator = new QAccel(this);
+
+    // delete
+    //
+    m_accelerator->connectItem(m_accelerator->insertItem(Key_Delete),
+                               this,
+                               SLOT(slotDelete()));
 
     slotPopulateFileList();
 }
 
 AudioManagerDialog::~AudioManagerDialog()
 {
+    delete m_accelerator;
 }
 
 // Scan the AudioFileManager and populate the m_fileList
@@ -199,7 +213,7 @@ AudioManagerDialog::getCurrentSelection()
 }
 
 void
-AudioManagerDialog::slotDeleteSelected()
+AudioManagerDialog::slotDelete()
 {
     AudioFile *audioFile = getCurrentSelection();
 
@@ -314,10 +328,24 @@ AudioManagerDialog::slotEnableButtons()
     m_deleteButton->setDisabled(false);
     m_playButton->setDisabled(false);
     m_renameButton->setDisabled(false);
+    m_insertButton->setDisabled(false);
+    m_deleteAllButton->setDisabled(false);
 }
 
 void
-AudioManagerDialog::slotRenameSelected()
+AudioManagerDialog::slotInsert()
+{
+    std::cout << "AudioManagerDialog::slotInsert" << std::endl;
+}
+
+void
+AudioManagerDialog::slotDeleteAll()
+{
+    std::cout << "AudioManagerDialog::slotDeleteAll" << std::endl;
+}
+
+void
+AudioManagerDialog::slotRename()
 {
     AudioFile *audioFile = getCurrentSelection();
 

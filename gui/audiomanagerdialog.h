@@ -19,7 +19,7 @@
 
 #include <kdialogbase.h>
 
-#include <qapplication.h>
+#include <qaccel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
@@ -84,10 +84,12 @@ public:
 
 public slots:
     void slotAdd();
-    void slotDeleteSelected();
+    void slotDelete();
     void slotPlayPreview();
-    void slotRenameSelected();
+    void slotRename();
     void slotEnableButtons();
+    void slotInsert();
+    void slotDeleteAll();
 
     // Repopulate
     //
@@ -112,11 +114,12 @@ protected:
     QPushButton      *m_playButton;
     QPushButton      *m_renameButton;
     QPushButton      *m_insertButton;
+    QPushButton      *m_deleteAllButton;
 
     AudioFileManager *m_audioFileManager;
 
     RealTime          m_maxLength;
-    QApplication     *m_app;
+    QAccel           *m_accelerator;
 
 };
 
