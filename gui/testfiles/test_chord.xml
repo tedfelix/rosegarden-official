@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<track nb="1" start="0">
+        <event type="timesignature" numerator="2" denominator="4"/>
+        <event type="clefchange" clef="treble"/>
+        <event type="keychange" key="C# major"/>
+	<chord>
+        <event type="note" duration="crotchet" pitch="64"/>
+        <event type="note" duration="crotchet" pitch="65"/>
+	</chord>
+        <group type="beamed">
+        <event type="note" duration="semiquaver" pitch="59"/>
+        <event type="note" duration="semiquaver" pitch="58"/>
+        <chord>
+        <event type="note" duration="quaver" pitch="60"/>
+        <event type="note" duration="quaver" pitch="64"/>
+        </chord>
+        <event type="note" duration="quaver" pitch="61"/>
+        </group>
+	<event type="timesignature" numerator="3" denominator="4"/>
+	<chord>
+        <event type="note" duration="crotchet" pitch="54"/>
+        <event type="note" duration="crotchet" pitch="64"/>
+        <event type="note" duration="crotchet" pitch="60"/>
+        <event type="note" duration="crotchet" pitch="48"/>
+	</chord>
+	<chord>
+        <event type="note" duration="crotchet" pitch="60"/>
+	</chord>
+</track>
+</rosegarden-data>
