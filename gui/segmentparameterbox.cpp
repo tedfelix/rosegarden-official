@@ -489,12 +489,12 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
 
     int transposeValue = text.toInt();
 
-    addCommandToHistory(new SegmentCommandChangeTransposeValue(m_segments,
-                                                               transposeValue));
+//     addCommandToHistory(new SegmentCommandChangeTransposeValue(m_segments,
+//                                                                transposeValue));
 
-//     std::vector<Rosegarden::Segment*>::iterator it;
-//     for (it = m_segments.begin(); it != m_segments.end(); it++)
-//         (*it)->setTranspose(transposeValue);
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+        (*it)->setTranspose(transposeValue);
 
 }
 
