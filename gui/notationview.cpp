@@ -2221,8 +2221,8 @@ NotationView::getPageMargins(int &left, int &top)
 	
 	double printSizeMm = 25.4 * ((double)m_printSize / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
-	left = (int)(15.0 / mmPerPixel);
-	top  = (int)(10.0 / mmPerPixel);
+	left = (int)(20.0 / mmPerPixel);
+	top  = (int)(15.0 / mmPerPixel);
     }
 }
 
@@ -2793,8 +2793,20 @@ void NotationView::print(bool previewOnly)
     QPaintDeviceMetrics pdm(&printer);
     QPainter printpainter(&printer);
 
-//    printpainter.scale((double)pdm.width()  / (double)(pageWidth - leftMargin*2),
-//		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
+    // Ideally we should aim to retain the aspect ratio and to move the
+    // staffs so as to be centred after scaling.  But because we haven't
+    // got around to the latter, let's lose the former too and just
+    // expand to fit.
+
+    // Retain aspect ratio when scaling
+//    double ratioX = (double)pdm.width()  / (double)(pageWidth - leftMargin*2),
+//	   ratioY = (double)pdm.height() / (double)(pageHeight - topMargin*2);
+//    double ratio = std::min(ratioX, ratioY);
+//    printpainter.scale(ratio, ratio);
+
+    printpainter.scale((double)pdm.width()  / (double)(pageWidth - leftMargin*2),
+		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
+    printpainter.translate(-leftMargin, -topMargin);
 
     QValueList<int> pages = printer.pageList();
 
