@@ -1395,7 +1395,7 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
 	}
     }
 
-    if (scroll) slotScrollHoriz(int(m_hlayout.getXForTime(time)));
+    if (scroll) getCanvasView()->slotScrollHoriz(int(m_hlayout.getXForTime(time)));
     updateView();
 }
 
@@ -1551,7 +1551,7 @@ NotationView::doDeferredCursorMove()
 	    ((*i)->getCanvasX() - 2, int((*i)->getCanvasY()));
 
 	if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
-	    slotScrollHoriz(int((*i)->getCanvasX()) - 4);
+	    getCanvasView()->slotScrollHoriz(int((*i)->getCanvasX()) - 4);
 	}
     }
 
@@ -1912,10 +1912,13 @@ void NotationView::slotMouseMoved(QMouseEvent *e)
         activeItem()->handleMouseMove(e);
         updateView();
     } else {
-        if (m_tool->handleMouseMove(0, 0, // unknown time and height
-				    e)) {
-	    slotScrollHorizSmallSteps(e->pos().x());
-	}
+        int follow = m_tool->handleMouseMove(0, 0, // unknown time and height
+                                             e);
+        if (follow & EditTool::FollowHorizontal)
+	    getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+
+        if (follow & EditTool::FollowVertical)
+	    getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
     }
 }
 

@@ -82,9 +82,9 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual bool handleMouseMove(Rosegarden::timeT,
-                                 int height,
-                                 QMouseEvent*);
+    virtual int handleMouseMove(Rosegarden::timeT,
+                                int height,
+                                QMouseEvent*);
 
     /**
      * Actually insert the new element
@@ -151,9 +151,9 @@ public:
                                       QMouseEvent *event,
                                       Rosegarden::ViewElement *element);
 
-    virtual bool handleMouseMove(Rosegarden::timeT time,
-                                 int height,
-                                 QMouseEvent *event);
+    virtual int handleMouseMove(Rosegarden::timeT time,
+                                int height,
+                                QMouseEvent *event);
 
     virtual void handleMouseRelease(Rosegarden::timeT,
                                     int height,
@@ -261,9 +261,9 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual bool handleMouseMove(Rosegarden::timeT,
-                                 int height,
-                                 QMouseEvent*);
+    virtual int handleMouseMove(Rosegarden::timeT,
+                                int height,
+                                QMouseEvent*);
 
     /**
      * Actually insert the new element
@@ -301,9 +301,9 @@ public:
     /**
      * Set the duration of the element
      */
-    virtual bool handleMouseMove(Rosegarden::timeT,
-                                 int height,
-                                 QMouseEvent*);
+    virtual int handleMouseMove(Rosegarden::timeT,
+                                int height,
+                                QMouseEvent*);
 
     /**
      * Actually insert the new element

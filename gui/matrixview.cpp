@@ -744,9 +744,13 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
     }
     else 
     {
-        if (m_tool->handleMouseMove(time, pitch, e)) {
-	    slotScrollHorizSmallSteps(e->pos().x());
-	}
+        int follow = m_tool->handleMouseMove(time, pitch, e);
+        
+        if (follow & EditTool::FollowHorizontal)
+	    getCanvasView()->slotScrollHorizSmallSteps(e->pos().x());
+
+        if (follow & EditTool::FollowVertical)
+	    getCanvasView()->slotScrollVertSmallSteps(e->pos().y());
 	    
         // play a preview
         if (pitch != m_previousEvPitch)
@@ -818,9 +822,9 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
 
     if (scroll)
 #ifdef RGKDE3
-        slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
+        getCanvasView()->slotScrollHoriz(getXbyWorldMatrix(m_hlayout.getXForTime(time)));
 #else
-        slotScrollHoriz(m_hlayout.getXForTime(time));
+        getCanvasView()->slotScrollHoriz(m_hlayout.getXForTime(time));
 #endif
 
     updateView();

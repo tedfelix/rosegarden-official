@@ -328,12 +328,12 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     m_mParentView->playNote(el);
 }
 
-bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
-                                    int pitch,
-                                    QMouseEvent *)
+int MatrixPainter::handleMouseMove(Rosegarden::timeT time,
+                                   int pitch,
+                                   QMouseEvent *)
 {
     // sanity check
-    if (!m_currentElement) return false;
+    if (!m_currentElement) return NoFollow;
 
     MATRIX_DEBUG << "MatrixPainter::handleMouseMove : pitch = "
                          << pitch << ", time : " << time << endl;
@@ -363,7 +363,7 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
     }
     m_mParentView->update();
 
-    return true;
+    return FollowHorizontal;
 }
 
 void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
@@ -550,8 +550,8 @@ void MatrixSelector::handleMouseDblClick(Rosegarden::timeT time,
     }
 }
 
-bool MatrixSelector::handleMouseMove(timeT time, int height,
-                                     QMouseEvent *e)
+int MatrixSelector::handleMouseMove(timeT time, int height,
+                                    QMouseEvent *e)
 {
     QPoint p = m_mParentView->inverseMapPoint(e->pos());
 
@@ -560,7 +560,7 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
         return m_dispatchTool->handleMouseMove(time, height, e);
     }
 
-    if (!m_updateRect) return false;
+    if (!m_updateRect) return NoFollow;
 
     int w = int(p.x() - m_selectionRect->x());
     int h = int(p.y() - m_selectionRect->y());
@@ -573,7 +573,7 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
     setViewCurrentSelection();
     m_mParentView->canvas()->update();
 
-    return true;
+    return FollowHorizontal | FollowVertical;
 }
 
 void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
@@ -758,14 +758,14 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
     }
 }
 
-bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
-                                  int newPitch,
-                                  QMouseEvent*)
+int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
+                                 int newPitch,
+                                 QMouseEvent*)
 {
     MATRIX_DEBUG << "MatrixMover::handleMouseMove() time = "
                          << newTime << endl;
 
-    if (!m_currentElement || !m_currentStaff) return false;
+    if (!m_currentElement || !m_currentStaff) return NoFollow;
 
     /*
     using Rosegarden::BaseProperties::PITCH;
@@ -836,7 +836,7 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
     }
 
     m_mParentView->canvas()->update();
-    return true;
+    return FollowHorizontal | FollowVertical;
 }
 
 void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
@@ -976,11 +976,11 @@ void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
     }
 }
 
-bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
-                                    int,
-                                    QMouseEvent *)
+int MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
+                                   int,
+                                   QMouseEvent *)
 {
-    if (!m_currentElement || !m_currentStaff) return false;
+    if (!m_currentElement || !m_currentStaff) return NoFollow;
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
 
     int initialWidth = m_currentElement->getWidth();
@@ -1009,7 +1009,7 @@ bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
     }
 
     m_mParentView->canvas()->update();
-    return true;
+    return FollowHorizontal;
 }
 
 void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,

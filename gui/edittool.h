@@ -86,6 +86,16 @@ class EditTool : public QObject, public KXMLGUIClient
     friend class EditToolBox;
 
 public:
+
+    /**
+     * handleMouseMove() will return a OR-ed combination of these
+     */
+    enum {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
     virtual ~EditTool();
 
     /**
@@ -151,9 +161,9 @@ public:
      * they want the canvas to scroll to the position the mouse
      * moved to following the method's return.
      */
-    virtual bool handleMouseMove(Rosegarden::timeT time,
-                                 int height,
-                                 QMouseEvent*);
+    virtual int handleMouseMove(Rosegarden::timeT time,
+                                int height,
+                                QMouseEvent*);
 
     /**
      * Do nothing
