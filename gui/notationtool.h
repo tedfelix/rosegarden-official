@@ -171,7 +171,7 @@ protected:
 
     Rosegarden::timeT getOffsetWithinRest(int staffNo,
 					  const NotationElementList::iterator&,
-					  double);
+					  double &canvasX);
 
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,

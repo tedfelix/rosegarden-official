@@ -110,6 +110,8 @@ Post-0.1.4 task list
 
 27. Click 'n drag notes to make sounds
 
+28. Why aren't breve & semibreve appearing on notationview toolbar?
+
 20020301 task list (based on outstanding items from post-0.1.3 list below)
 ==================
 

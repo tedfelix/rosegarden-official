@@ -181,8 +181,8 @@ etc
 </ToolBar>
 
 <ToolBar name="notesToolBar" newline="true">
-  <Action name="breve" />
-  <Action name="whole_note" />
+  <Action name="double_whole" />
+  <Action name="whole" />
   <Action name="half" />
   <Action name="quarter" />
   <Action name="8th" />
@@ -191,7 +191,7 @@ etc
   <Action name="64th" />
   <Separator/>
 
-  <Action name="dotted_whole_note" />
+  <Action name="dotted_whole" />
   <Action name="dotted_half" />
   <Action name="dotted_quarter" />
   <Action name="dotted_8th" />
@@ -203,8 +203,8 @@ etc
 
 <ToolBar name="restsToolBar">
 
-  <Action name="breve_rest" />
-  <Action name="whole_note_rest" />
+  <Action name="double_whole_rest" />
+  <Action name="whole_rest" />
   <Action name="half_rest" />
   <Action name="quarter_rest" />
   <Action name="8th_rest" />
@@ -213,7 +213,7 @@ etc
   <Action name="64th_rest" />
   <Separator/>
 
-  <Action name="dotted_whole_note_rest" />
+  <Action name="dotted_whole_rest" />
   <Action name="dotted_half_rest" />
   <Action name="dotted_quarter_rest" />
   <Action name="dotted_8th_rest" />

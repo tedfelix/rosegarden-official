@@ -744,10 +744,6 @@ QSize NotationView::getViewSize()
 
 void NotationView::setViewSize(QSize s)
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::setViewSize: resizing canvas from "
-			 << canvas()->width() << "x" << canvas()->height()
-			 << " to " << s.width() << "x" << s.height() << endl;
-
     canvas()->resize(s.width(), s.height());
 }
 
@@ -1346,14 +1342,11 @@ void NotationView::slotGroupTuplet(bool simple)
 	    untupled = dialog->getUntupledCount();
 	}
 
-	kdDebug(KDEBUG_AREA) << "Got time and unit from selection; they're " << t << " and " << unit << " respectively"<< endl;
-
 	segment = &m_currentEventSelection->getSegment();
 
     } else {
 
 	t = getInsertionTime();
-	kdDebug(KDEBUG_AREA) << "Got insertion time; it's " << t << endl;
 
 	NoteInserter *currentInserter = dynamic_cast<NoteInserter *>
 	    (m_toolBox->getTool(NoteInserter::ToolName));
@@ -1367,8 +1360,6 @@ void NotationView::slotGroupTuplet(bool simple)
 	}
 
 	unit = Note(unitType).getDuration();
-	kdDebug(KDEBUG_AREA) << "Got unit; it's " << unit
-			     << endl;
 
 	if (!simple) {
 	    TupletDialog *dialog = new TupletDialog(this, unitType);
@@ -2165,6 +2156,8 @@ void NotationView::initNoteActionDataMap()
 		QString refName(note.getReferenceName(rest).c_str());
 		QString shortName(note.getShortName().c_str());
 		QString titleName(note.getAmericanName().c_str());
+		titleName = titleName.left(1).upper() +
+		            titleName.right(titleName.length()-1);
 
 		shortName.replace(QRegExp(" "), "_");
 

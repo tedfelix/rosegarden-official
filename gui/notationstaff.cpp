@@ -879,9 +879,8 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     int layoutY = getLayoutYForHeight(heightOnStaff);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
 
-    kdDebug(KDEBUG_AREA) << "NotationStaff::showPreviewNote: Made note, moved it to (" << coords.first << "," << coords.second << ")" << endl;
-
     m_previewSprite->move(coords.first, (double)coords.second);
+    m_previewSprite->setZ(3);
     m_previewSprite->show();
     m_canvas->update();
 } 

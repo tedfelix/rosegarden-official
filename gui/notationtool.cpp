@@ -333,14 +333,10 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
 
-    kdDebug(KDEBUG_AREA) << "Time is " << time << endl;
-
     if ((*itr)->isRest()) {
-	time += getOffsetWithinRest(staffNo, itr, x - (*itr)->getCanvasX());
-	//!!! adjust m_clickInsertX for offset
+	time += getOffsetWithinRest(staffNo, itr, x);
+	m_clickInsertX += (x - (*itr)->getCanvasX());
     }
-
-    kdDebug(KDEBUG_AREA) << "Insertion time: " << time << endl;
 
     int pitch =
 	Rosegarden::NotationDisplayPitch(height, m_accidental).
@@ -388,7 +384,7 @@ void NoteInserter::clearPreview()
 timeT
 NoteInserter::getOffsetWithinRest(int staffNo,
 				  const NotationElementList::iterator &i,
-				  double offset)
+				  double &canvasX) // will be snapped
 {
     //!!! To make this work correctly in tuplet mode, our divisor would
     // have to be the tupletified duration of the tuplet unit -- we can
@@ -396,10 +392,7 @@ NoteInserter::getOffsetWithinRest(int staffNo,
     if (m_tupletMode) return 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
-
-    kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: offset is " << offset << endl;
-
-    kdDebug(KDEBUG_AREA) << "(Rest is at " << (*i)->getLayoutX() << ", time " << (*i)->getAbsoluteTime() << ")" << endl;
+    double offset = canvasX - (*i)->getCanvasX();
 
     if (offset < 0) return 0;
 
@@ -410,8 +403,6 @@ NoteInserter::getOffsetWithinRest(int staffNo,
 
     timeT duration = (*i)->getDuration();
 
-    kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: width is " << width << ", duration " << duration <<  endl;
-
     Rosegarden::TimeSignature timeSig =
 	staff->getSegment().getComposition()->getTimeSignatureAt
 	((*i)->getAbsoluteTime());
@@ -419,10 +410,19 @@ NoteInserter::getOffsetWithinRest(int staffNo,
 
     int unitCount = duration / unit;
     if (unitCount > 1) {
+
 	timeT result = (int)((offset / width) * unitCount);
 	if (result > unitCount - 1) result = unitCount - 1;
+
+	double visibleWidth(airWidth);
+	NotationElementList::iterator j(i);
+	if (++j != staff->getViewElementList()->end()) {
+	    visibleWidth = (*j)->getLayoutX() - (*i)->getLayoutX();
+	}
+	offset = (visibleWidth * result) / unitCount;
+	canvasX = (*i)->getCanvasX() + offset;
+	
 	result *= unit;
-	kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: returning " << result << endl;
 	return result;
     }
     
