@@ -91,7 +91,8 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     // Construct the trackEditor first so we can then
     // query it for placement information
     //
-    m_trackEditor  = new TrackEditor(doc, m_rulerScale, showTrackLabels, hbox);
+    m_trackEditor  = new TrackEditor(doc, this,
+                                     m_rulerScale, showTrackLabels, hbox);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
@@ -104,17 +105,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(slotEditSegmentAudio(Rosegarden::Segment*)));
-
-    connect(m_trackEditor, SIGNAL(trackSelected(int)),
-            SLOT(slotSelectTrackSegments(int)));
-
-    connect(m_trackEditor, SIGNAL(instrumentSelected(int)),
-            SLOT(slotUpdateInstrumentParameterBox(int)));
-
-    connect(m_trackEditor,
-           SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
-           this,
-           SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
     // Re-emit the sendMidiController
     //
@@ -364,6 +354,10 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     // Store the selected Track in the Composition
     //
     comp.setSelectedTrack(trackId);
+
+#ifdef RGKDE3
+    emit stateChange("segment_selected", KXMLGUIClient::StateNoReverse);
+#endif
 }
 
 void RosegardenGUIView::slotSelectAllSegments()
@@ -416,6 +410,10 @@ void RosegardenGUIView::slotSelectAllSegments()
 
     //!!! similarly, how to set no selected track?
     //comp.setSelectedTrack(trackId);
+
+#ifdef RGKDE3
+    emit stateChange("segment_selected", KXMLGUIClient::StateNoReverse);
+#endif
 }
     
 

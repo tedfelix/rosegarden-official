@@ -30,6 +30,11 @@
 
 #include <qvbox.h>
 #include <list>
+
+#ifdef RGKDE3
+#include <kxmlguiclient.h>
+#endif
+
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 
 #include "rosedebug.h"
@@ -91,9 +96,9 @@ public:
      */
     RosegardenGUIDoc* getDocument() const;
 
-    /*
+    /**
      * Command history
-     **/
+     */
     MultiViewCommandHistory* getCommandHistory();
 
     TrackEditor* getTrackEditor() { return m_trackEditor; }
@@ -153,14 +158,14 @@ public slots:
 
     /**
      *
-    * Highlight all the Segments on a Track because the Track has been selected
-    * We have to ensure we create a Selector object before we can highlight
-    * these tracks.
-    *
-    * Called by signal from Track selection routine to highlight
-    * all available Segments on a Track
-    *
-    */
+     * Highlight all the Segments on a Track because the Track has
+     * been selected * We have to ensure we create a Selector object
+     * before we can highlight * these tracks.
+     *
+     * Called by signal from Track selection routine to highlight
+     * all available Segments on a Track
+     *
+     */
     void slotSelectTrackSegments(int);
 
     void slotSelectAllSegments();
@@ -202,6 +207,10 @@ signals:
     // through the GUIApp)
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
+
+#ifdef RGKDE3
+    void stateChange(const QString&, KXMLGUIClient::ReverseStateChange);
+#endif
 
 protected:
     //--------------- Data members ---------------------------------

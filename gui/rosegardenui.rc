@@ -83,6 +83,8 @@
 <ToolBar name="zoomToolBar">
 </ToolBar>
 
+<!--     Application States           -->
+
 <State name="new_file">
 	<disable>
 		<Action name="file_save"/>
@@ -98,6 +100,33 @@
 		<Action name="file_save"/>
 		<Action name="file_save_as"/>
 	</enable>
+</State>
+
+<State name="have_segments">
+	<enable>
+		<Action name="select"/>
+		<Action name="move"/>
+		<Action name="erase"/>
+		<Action name="resize"/>
+		<Action name="split"/>
+		<Action name="join"/>
+	</enable>
+</State>
+
+<State name="segment_selected">
+     <enable>
+      	<Action name="edit_cut"/>
+      	<Action name="edit_copy"/>
+      	<Action name="edit_matrix"/>
+      	<Action name="edit_notation"/>
+	<Action name="quantize_selection"/>
+     </enable>
+</State>
+
+<State name="selection_enabled">
+     <enable>
+        <Action name="edit_paste"/>
+     </enable>
 </State>
 
 </kpartgui>

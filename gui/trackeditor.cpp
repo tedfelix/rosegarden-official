@@ -56,6 +56,7 @@ using Rosegarden::Segment;
 using Rosegarden::TrackId;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
+                         QWidget* rosegardenguiview,
 			 RulerScale *rulerScale,
                          bool showTrackLabels,
 			 QWidget* parent, const char* name,
@@ -111,7 +112,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
     }
 
-    init(tracks,
+    init(rosegardenguiview, tracks,
 	 comp.getBarNumber(comp.getStartMarker()),
 	 comp.getBarNumber(comp.getEndMarker()));
 }
@@ -134,7 +135,8 @@ TrackEditor::~TrackEditor()
 }
 
 void
-TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
+TrackEditor::init(QWidget* rosegardenguiview,
+                  unsigned int nbTracks, int firstBar, int lastBar)
 {
     kdDebug(KDEBUG_AREA) << "TrackEditor::init(nbTracks = "
                          << nbTracks << ", firstBar = " << firstBar
@@ -230,10 +232,10 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
             this, SLOT(slotTrackButtonsWidthChanged()));
 
     connect(m_trackButtons, SIGNAL(trackSelected(int)),
-            SIGNAL(trackSelected(int)));
+            rosegardenguiview, SLOT(slotSelectTrackSegments(int)));
 
     connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
-            SIGNAL(instrumentSelected(int)));
+            rosegardenguiview, SLOT(slotUpdateInstrumentParameterBox(int)));
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
@@ -268,7 +270,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     connect(m_segmentCanvas, 
             SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
-            this,
+            rosegardenguiview,
             SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
@@ -544,12 +546,6 @@ TrackEditor::addCommandToHistory(KCommand *command)
     getCommandHistory()->addCommand(command);
 }
 
-
-void
-TrackEditor::slotSelectedSegments(const Rosegarden::SegmentSelection &segments)
-{
-    emit selectedSegments(segments);
-}
 
 void
 TrackEditor::slotDeleteSelectedSegments()

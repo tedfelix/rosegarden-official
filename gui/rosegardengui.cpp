@@ -146,6 +146,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     //
 #ifdef RGKDE3
     stateChanged("new_file");
+    stateChanged("have_segments",    KXMLGUIClient::StateReverse);
+    stateChanged("segment_selected", KXMLGUIClient::StateReverse);
 #endif
 }
 
@@ -592,10 +594,19 @@ void RosegardenGUIApp::initView()
 
     }
 
+#ifdef RGKDE3
+    connect(m_view, SIGNAL(void stateChange(const QString&, KXMLGUIClient::ReverseStateChange)),
+            this,   SLOT  (void slotStateChanged(const QString&, KXMLGUIClient::ReverseStateChange)));
+#endif
+
     // make sure we show
     //
     m_view->show();
     slotChangeZoom(-1);
+
+#ifdef RGKDE3
+    stateChanged("new_file");
+#endif
 }
 
 bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)
@@ -2443,6 +2454,15 @@ RosegardenGUIApp::slotDocumentModified()
     stateChanged("file_modified");
 #endif
 }
+
+#ifdef RGKDE3
+void
+RosegardenGUIApp::slotStateChanged(const QString& s,
+                                   KXMLGUIClient::ReverseStateChange reverse)
+{
+    stateChanged(s, reverse);
+}
+#endif
 
 void
 RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)

@@ -64,6 +64,7 @@ public:
      * Create a new TrackEditor representing the document \a doc
      */
     TrackEditor(RosegardenGUIDoc* doc,
+                QWidget* rosegardenguiview,
                 Rosegarden::RulerScale *rulerScale,
                 bool showTrackLabels,
                 QWidget* parent = 0, const char* name = 0,
@@ -150,8 +151,6 @@ protected slots:
 
     void slotTrackButtonsWidthChanged();
 
-    void slotSelectedSegments(const Rosegarden::SegmentSelection &segments);
-
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
 
@@ -165,36 +164,15 @@ signals:
     void needUpdate();
 
     /**
-     * Emitted when the SegmentCanvas needs to be scrolled 
-     * horizontally to a position
-     *
-     * @see 
+     * sent back to RosegardenGUI
      */
-    void scrollHorizTo(int);
-
-    /*
-     * Send up to RosegardenGUIView to select track of Segments
-     *
-     */
-    void trackSelected(int);
-
-    /*
-     * Send up to RosegardenGUIView
-     *
-     */
-    void instrumentSelected(int);
-
-    /*
-     * Send up to RosegardenGUIView
-     *
-     */
-    void selectedSegments(const Rosegarden::SegmentSelection &segments);
+    void stateChange(const QString&, bool);
 
 protected:
     
     virtual void paintEvent(QPaintEvent* e);
     
-    void init(unsigned int nbTracks, int firstBar, int lastBar);
+    void init(QWidget*, unsigned int nbTracks, int firstBar, int lastBar);
 
     bool isCompositionModified();
     void setCompositionModified(bool);
