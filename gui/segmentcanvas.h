@@ -203,16 +203,6 @@ class SegmentCanvas : public RosegardenCanvasView
     Q_OBJECT
 
 public:
-    /// Available tools
-    enum ToolType { NoTool,
-                    Pencil,
-                    Eraser,
-                    Mover,
-                    Resizer,
-                    Selector,
-                    Joiner,
-                    Splitter };
-
     SegmentCanvas(RosegardenGUIDoc *doc,
                   Rosegarden::RulerScale *,QScrollBar*,  int vStep,
                   QCanvas*,
@@ -327,7 +317,7 @@ public:
 public slots:
 
     /// Set the current segment editing tool
-    void slotSetTool(SegmentCanvas::ToolType);
+    void slotSetTool(const QString& toolName);
 
     // This method only operates if we're of the "Selector"
     // tool type - it's called from the View to enable it

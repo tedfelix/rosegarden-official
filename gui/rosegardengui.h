@@ -797,9 +797,9 @@ public slots:
     void slotCloseTransport();
 
     /**
-     * Put the GUI into a given ToolType edit mode
+     * Put the GUI into a given Tool edit mode
      */
-    void slotActivateTool(SegmentCanvas::ToolType tt);
+    void slotActivateTool(const QString& toolName);
 
     /**
      * Toggles either the play or record metronome according

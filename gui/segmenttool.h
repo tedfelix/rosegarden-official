@@ -70,6 +70,7 @@ protected:
     SegmentTool(SegmentCanvas*, RosegardenGUIDoc *doc);
 
     virtual void createMenu();
+    SegmentToolBox* getToolBox();
 
     //--------------- Data members ---------------------------------
 
@@ -213,6 +214,7 @@ class SegmentSelector : public SegmentTool
     Q_OBJECT
 
     friend class SegmentToolBox;
+    friend class SegmentTool;
 
 public:
 

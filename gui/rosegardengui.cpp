@@ -729,8 +729,8 @@ void RosegardenGUIApp::initView()
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
-    connect(m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
-            this,   SLOT(slotActivateTool(SegmentCanvas::ToolType)));
+    connect(m_view, SIGNAL(activateTool(const QString&)),
+            this,   SLOT(slotActivateTool(const QString&)));
 
     connect(m_view,
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
@@ -1858,27 +1858,27 @@ void RosegardenGUIApp::slotEnableTransport(bool enable)
 
 void RosegardenGUIApp::slotPointerSelected()
 {
-    m_view->selectTool(SegmentCanvas::Selector);
+    m_view->selectTool(SegmentSelector::ToolName);
 }
 
 void RosegardenGUIApp::slotEraseSelected()
 {
-    m_view->selectTool(SegmentCanvas::Eraser);
+    m_view->selectTool(SegmentEraser::ToolName);
 }
 
 void RosegardenGUIApp::slotDrawSelected()
 {
-    m_view->selectTool(SegmentCanvas::Pencil);
+    m_view->selectTool(SegmentPencil::ToolName);
 }
 
 void RosegardenGUIApp::slotMoveSelected()
 {
-    m_view->selectTool(SegmentCanvas::Mover);
+    m_view->selectTool(SegmentMover::ToolName);
 }
 
 void RosegardenGUIApp::slotResizeSelected()
 {
-    m_view->selectTool(SegmentCanvas::Resizer);
+    m_view->selectTool(SegmentResizer::ToolName);
 }
 
 void RosegardenGUIApp::slotJoinSelected()
@@ -1889,12 +1889,12 @@ void RosegardenGUIApp::slotJoinSelected()
              "        Segments->Collapse Segments.\n"),
         i18n("Join tool not yet implemented"));
                  
-    m_view->selectTool(SegmentCanvas::Joiner);
+    m_view->selectTool(SegmentJoiner::ToolName);
 }
 
 void RosegardenGUIApp::slotSplitSelected()
 {
-    m_view->selectTool(SegmentCanvas::Splitter);
+    m_view->selectTool(SegmentSplitter::ToolName);
 }
 
 
@@ -2833,16 +2833,10 @@ RosegardenGUIApp::slotCloseTransport()
 //
 //
 void
-RosegardenGUIApp::slotActivateTool(SegmentCanvas::ToolType tt)
+RosegardenGUIApp::slotActivateTool(const QString& toolName)
 {
-    switch(tt)
-    {
-         case SegmentCanvas::Selector:
-             actionCollection()->action("select")->activate();
-             break;
-
-         default:
-             break;
+    if (toolName == SegmentSelector::ToolName) {
+        actionCollection()->action("select")->activate();
     }
 }
 

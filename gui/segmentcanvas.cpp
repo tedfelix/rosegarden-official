@@ -770,50 +770,19 @@ SegmentCanvas::getSelectionRectangle()
     return m_selectionRect;
 }
 
-// void SegmentCanvas::slotSetTool(QString toolname)
-
-void SegmentCanvas::slotSetTool(ToolType t) // TODO: get rid of the ToolType
+void SegmentCanvas::slotSetTool(const QString& toolName)
 {
-    RG_DEBUG << "SegmentCanvas::slotSetTool(" << t << ")"
+    RG_DEBUG << "SegmentCanvas::slotSetTool(" << toolName << ")"
                          << this << "\n";
 
     if (m_tool) m_tool->stow();
 
-    SegmentTool *tool;
-
-    switch(t) {
-    case Pencil:
-        tool = m_toolBox->getTool("segmentpencil");
-        break;
-    case Eraser:
-        tool = m_toolBox->getTool("segmenteraser");
-        break;
-    case Mover:
-        tool = m_toolBox->getTool("segmentmover");
-        break;
-    case Resizer:
-        tool = m_toolBox->getTool("segmentresizer");
-        break;
-    case Selector:
-        tool = m_toolBox->getTool("segmentselector");
-        break;
-    case Splitter:
-        tool = m_toolBox->getTool("segmentsplitter");
-        break;
-    case Joiner:
-        tool = m_toolBox->getTool("segmentjoiner");
-        break;
-
-    default:
-        KMessageBox::error(0, QString("SegmentCanvas::slotSetTool() : unknown tool id %1").arg(t));
-    }
-
-    m_tool = dynamic_cast<SegmentTool*>(tool);
-
-    // m_tool = m_toolBox->getTool(toolname);
-
+    m_tool = m_toolBox->getTool(toolName);
 
     if (m_tool) m_tool->ready();
+    else {
+        KMessageBox::error(0, QString("SegmentCanvas::slotSetTool() : unknown tool name %1").arg(toolName));
+    }
 }
 
 void SegmentCanvas::updateAllSegmentItems()

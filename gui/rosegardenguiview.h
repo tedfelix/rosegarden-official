@@ -32,7 +32,6 @@
 #include <list>
 #include <vector>
 
-#include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 #include "rosedebug.h"
 
 #include "AudioFile.h"
@@ -114,7 +113,7 @@ public:
     /**
      * Select a tool at the SegmentCanvas
      */
-    void selectTool(SegmentCanvas::ToolType tool);
+    void selectTool(const QString toolName);
 
     /**
      * These two are just-passing-through methods called from
@@ -212,7 +211,7 @@ public slots:
     void slotChangeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
 signals:
-    void activateTool(SegmentCanvas::ToolType);
+    void activateTool(const QString& toolName);
 
     void stateChange(const QString&, bool);
 

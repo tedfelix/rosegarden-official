@@ -44,6 +44,7 @@
 #include "rosegardengui.h"
 #include "trackeditor.h"
 #include "segmentcanvas.h"
+#include "segmenttool.h"
 #include "notationview.h"
 #include "matrixview.h"
 #include "trackbuttons.h"
@@ -216,9 +217,9 @@ void RosegardenGUIView::print(KPrinter *printer, Composition* p)
     delete notationView;
 }
 
-void RosegardenGUIView::selectTool(SegmentCanvas::ToolType tool)
+void RosegardenGUIView::selectTool(const QString toolName)
 {
-    m_trackEditor->getSegmentCanvas()->slotSetTool(tool);
+    m_trackEditor->getSegmentCanvas()->slotSetTool(toolName);
 }
 
 bool
@@ -677,7 +678,7 @@ void RosegardenGUIView::slotSetSelectedSegments(
     // on the toolbar so that we have a SegmentSelector object
     // to write the Segments into
     //
-    if (segments.size() > 0) emit activateTool(SegmentCanvas::Selector);
+    if (segments.size() > 0) emit activateTool(SegmentSelector::ToolName);
 
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
@@ -721,7 +722,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     // on the toolbar so that we have a SegmentSelector object
     // to write the Segments into
     //
-    if (segments.size() > 0) emit activateTool(SegmentCanvas::Selector);
+    if (segments.size() > 0) emit activateTool(SegmentSelector::ToolName);
 
     // Send the segment list even if it's empty as we
     // use that to clear any current selection

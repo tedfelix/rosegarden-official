@@ -126,9 +126,16 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
-    if (item) 
+    if (item) {
         m_currentItem = item;
-
+        if (!item->isSelected()) {
+            SegmentSelector* selector = dynamic_cast<SegmentSelector*>(getToolBox()->getTool("segmentselector"));
+            
+            selector->clearSelected();
+            selector->addToSelection(item);
+        }
+    }
+    
     showMenu();
 }
 
@@ -173,6 +180,10 @@ SegmentTool::addCommandToHistory(KCommand *command)
     m_doc->getCommandHistory()->addCommand(command);
 }
 
+SegmentToolBox* SegmentTool::getToolBox()
+{
+    return m_canvas->getToolBox();
+}
 
 //////////////////////////////
 // SegmentPencil
@@ -567,7 +578,10 @@ SegmentSelector::~SegmentSelector()
 
 void SegmentSelector::stow()
 {
-    clearSelected();
+    // don't clear selection, it's nice to still have it when you
+    // switch back to the selector tool
+    //
+    // clearSelected();
 }
 
 void
@@ -665,7 +679,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
 	if (!m_segmentAddMode &&
 	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
-            SegmentResizer* resizer = m_canvas->getToolBox()->getTool(SegmentResizer::ToolName);
+            SegmentResizer* resizer = getToolBox()->getTool(SegmentResizer::ToolName);
             resizer->setEdgeThreshold(threshold);
 
 	    m_dispatchTool = resizer;
@@ -707,7 +721,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         // Add on middle button - bounding box on rest
         //
 	if (e->button() == MidButton) {
-	    m_dispatchTool =  m_canvas->getToolBox()->getTool(SegmentPencil::ToolName);
+	    m_dispatchTool =  getToolBox()->getTool(SegmentPencil::ToolName);
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
 	}
