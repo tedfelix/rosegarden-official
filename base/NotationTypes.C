@@ -732,9 +732,9 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
     char tmp[1024];
 
     if (key.isSharp())
-        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(), octave);
+        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(), octave - 2);
     else
-        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(), octave);
+        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(), octave - 2);
     
     return string(tmp);
     

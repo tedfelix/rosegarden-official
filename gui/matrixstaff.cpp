@@ -101,7 +101,7 @@ QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
     int octave = pitch / 12;
     pitch  = pitch % 12;
 
-    return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave);
+    return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave - 2);
 }
 
 void MatrixStaff::eventAdded(const Rosegarden::Segment *segment,
