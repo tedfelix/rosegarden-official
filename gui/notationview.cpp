@@ -1448,9 +1448,18 @@ void NotationView::itemPressed(int height, int staffNo,
 {
     QPoint eventPos = e->pos();
 
-    setActiveItem(0);
-    m_tool->handleMousePress(height, staffNo, eventPos, el);
+    ButtonState btnState = e->state();
 
+    if (btnState & ShiftButton) { // on shift-click, set cursor position
+
+        setCursorPosition(e->x());
+
+    } else {
+
+        setActiveItem(0);
+        m_tool->handleMousePress(height, staffNo, eventPos, el);
+    }
+    
 }
 
 void NotationView::activeItemPressed(QMouseEvent* e,
