@@ -37,7 +37,7 @@
 class RosegardenGUIDoc;
 class QFont;
 class QFontMetrics;
-
+class QCanvasRepeatRectangle;
 
 /**
  * The graphical item (rectangle) which represents a Segment
@@ -121,7 +121,7 @@ protected:
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
 
-    QCanvasRectangle*   m_repeatRectangle;
+    QCanvasRepeatRectangle*   m_repeatRectangle;
     QString m_label;
 
     static QFont *m_font;

@@ -48,6 +48,46 @@ using Rosegarden::SnapGrid;
 using Rosegarden::TrackId;
 using Rosegarden::timeT;
 
+class QCanvasRepeatRectangle : public QCanvasRectangle
+{
+public:
+    QCanvasRepeatRectangle(QCanvas*);
+
+    void setRepeatInterval(unsigned int i) { m_repeatInterval = i; }
+
+    virtual void drawShape(QPainter&);
+
+protected:
+    unsigned int m_repeatInterval;
+};
+
+QCanvasRepeatRectangle::QCanvasRepeatRectangle(QCanvas* canvas)
+    : QCanvasRectangle(canvas),
+      m_repeatInterval(0)
+{
+}
+
+void QCanvasRepeatRectangle::drawShape(QPainter& painter)
+{
+    QCanvasRectangle::drawShape(painter);
+
+    unsigned int pos = x() + m_repeatInterval - 1,
+        width = rect().width(),
+        height = rect().height();
+
+    kdDebug(KDEBUG_AREA) << "drawShape : width = " << width
+                         << " repeat int. = " << m_repeatInterval
+                         << " x = " << x() << "rect.x() = "
+                         << rect().x() << "\n";
+    
+    while (pos < width) {
+        painter.drawLine(pos, 1, pos, height);
+        kdDebug(KDEBUG_AREA) << "drawShape : paint line at " << pos << "\n";
+        pos += m_repeatInterval;
+    }
+}
+
+
 //////////////////////////////////////////////////////////////////////
 //                SegmentItem
 //////////////////////////////////////////////////////////////////////
@@ -118,7 +158,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     //
     if (m_segment && inheritFromSegment) {
 
-        if (!m_repeatRectangle) m_repeatRectangle = new QCanvasRectangle(canvas());
+        if (!m_repeatRectangle) m_repeatRectangle = new QCanvasRepeatRectangle(canvas());
 
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
@@ -139,7 +179,10 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 		 (repeatStart, repeatEnd - repeatStart) + 1,
 		 m_snapGrid->getYSnap());
 
+            m_repeatRectangle->setRepeatInterval(rect().width() - 1);
+
             m_repeatRectangle->show();
+
 	} else {
             m_repeatRectangle->hide();
         }
