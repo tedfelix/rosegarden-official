@@ -3221,10 +3221,11 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString & /*path*/):
     KDialogBase(parent, 0, true,
                 i18n("Locate audio file"),
-                User1|User2,
+                User1|User2|User3,
                 Ok,
                 false,
                 i18n("&Skip"),
+                i18n("Skip &All"),
                 i18n("&Locate")),
                 m_file(file)
 {
@@ -3242,11 +3243,12 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 // Locate a file
 //
 void
-FileLocateDialog::slotUser2()
+FileLocateDialog::slotUser3()
 {
-    m_file = KFileDialog::getOpenFileName(":WAVS",
-                                          QString(i18n("*.wav|WAV files (*.wav)")),
-                                          this, i18n("Select an Audio File"));
+    m_file = KFileDialog::getOpenFileName
+        (":WAVS",
+         QString(i18n("*.wav|WAV files (*.wav)")),
+         this, i18n("Select an Audio File"));
 
     if (!m_file.isEmpty()) {
         QFileInfo fileInfo(m_file);
@@ -3262,6 +3264,14 @@ void
 FileLocateDialog::slotUser1()
 {
     reject();
+}
+
+// Skip all files
+//
+void
+FileLocateDialog::slotUser2()
+{
+    done(-1);
 }
 
 

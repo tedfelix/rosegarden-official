@@ -229,6 +229,12 @@ protected slots:
     void slotCountdownTimerTimeout();
     void slotCountdownStop();
 
+    // Activated by timer to allow a message to be reported to 
+    // the user - we use this mechanism so that the user isn't
+    // bombarded with dialogs in the event of lots of failures.
+    //
+    void slotAllowReport() { m_canReport = true; }
+
 protected:
 
     void resetCompositionMmapper();
@@ -282,6 +288,12 @@ protected:
     // it's only the position pointer.
     //
     SequencerMapper          *m_sequencerMapper;
+
+    // Just to make sure we don't bother the user too often
+    //
+    QTimer                    *m_reportTimer;
+    bool                       m_canReport;
+
 };
 
 }

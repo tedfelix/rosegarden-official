@@ -603,6 +603,7 @@ public:
 protected:
     virtual void slotUser1();
     virtual void slotUser2();
+    virtual void slotUser3();
 
     QString m_file;
     QString m_path;

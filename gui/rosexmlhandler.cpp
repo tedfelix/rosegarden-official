@@ -254,7 +254,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_deprecation(false),
       m_createDevices(createNewDevicesWhenNeeded),
       m_haveControls(false),
-      m_cancelled(false)
+      m_cancelled(false),
+      m_skipAllAudio(false)
 {
 }
 
@@ -590,6 +591,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 getComposition().setSolo(false);
         }
 
+
+        QString playMetStr = atts.value("playmetronome");
+        if (playMetStr)
+        {
+            if (playMetStr.toInt())
+               getComposition().setPlayMetronome(true);
+            else
+               getComposition().setPlayMetronome(false);
+        }
+
+        QString recMetStr = atts.value("playmetronome");
+        if (recMetStr)
+        {
+            if (recMetStr.toInt())
+               getComposition().setRecordMetronome(true);
+            else
+               getComposition().setRecordMetronome(false);
+        }
+
 	QString copyrightStr = atts.value("copyright");
 	if (copyrightStr)
 	{
@@ -832,6 +852,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
+        if (m_skipAllAudio)
+        {
+            std::cout << "SKIPPING audio file" << std::endl;
+            return true;
+        }
+
 	QString id(atts.value("id"));
         QString file(atts.value("file"));
         QString label(atts.value("label"));
@@ -889,17 +915,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
 				        file,
 				        QString(getAudioFileManager().getAudioPath().c_str()));
+                    int result = fL.exec();
 
-                    if (fL.exec() == QDialog::Accepted)
+                    if (result == QDialog::Accepted)
                     {
                         newFilename = fL.getFilename();
                         newPath = fL.getDirectory();
                     }
-                    else
+                    else if (result == QDialog::Rejected)
                     {
                         // just skip the file
                         break;
+                    } else
+                    {
+                        // don't process any more audio files
+                        m_skipAllAudio = true;
+                        CurrentProgressDialog::thaw();
+                        return true;
                     }
+
     
                 } while(getAudioFileManager().insertFile(qstrtostr(label),
                                                 qstrtostr(newFilename),

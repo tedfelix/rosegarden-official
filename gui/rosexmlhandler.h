@@ -156,6 +156,7 @@ protected:
     bool                              m_createDevices;
     bool                              m_haveControls;
     bool                              m_cancelled;
+    bool                              m_skipAllAudio;
 };
 
 #endif

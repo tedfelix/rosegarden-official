@@ -1207,7 +1207,8 @@ std::string Composition::toXmlString()
         composition << "\" solo=\"" << m_solo;
 
     composition << "\" selected=\"" << m_selectedTrack;
-
+    composition << "\" playmetronome=\"" << m_playMetronome;
+    composition << "\" recordmetronome=\"" << m_recordMetronome;
     composition << "\">" << endl << endl;
 
     composition << endl;

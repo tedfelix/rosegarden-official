@@ -72,16 +72,22 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_recordTime(new QTime()),
     m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true),
-    m_sequencerMapper(0)
+    m_sequencerMapper(0),
+    m_reportTimer(new QTimer(doc)),
+    m_canReport(true)
 {
     m_compositionMmapper->cleanup();
 
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
-    // Connect this for use later
+    // Connect these for use later
     //
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
+
+    m_reportTimer->stop();
+    connect(m_reportTimer, SIGNAL(timeout()),
+            this, SLOT(slotAllowReport()));
 
     connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
@@ -899,6 +905,30 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 		    SEQMAN_DEBUG << "Failure of some sort..." << endl;
 
+                    if (!m_canReport)
+                    {
+                        SEQMAN_DEBUG << "Not reporting it to user just yet" 
+                                     << endl;
+                        continue;
+                    }
+
+                    // If we get any sort of audio failure and we're recording
+                    // audio then assume we want to stop.  Usually this'll
+                    // ruin our recording.
+                    //
+                    /*
+                    if (m_transportStatus == RECORDING_AUDIO)
+                    {
+                        stopping();
+
+                        KMessageBox::error(
+                            dynamic_cast<QWidget*>
+                            (m_doc->parent())->parentWidget(),
+                            i18n("Audio glitch during recording.  Stopping."));
+                    }
+                    */
+
+
 		    if ((*i)->getData1() == Rosegarden::MappedEvent::FailureJackDied) {
                     // Something horrible has happened to JACK or we got
                     // bumped out of the graph.  Either way stop playback.
@@ -948,6 +978,15 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			m_shownOverrunWarning = true;
 			KMessageBox::information(0, message);
 		    }
+
+                    // Turn off the report flag and set off a one-shot
+                    // timer for 5 seconds.
+                    //
+                    if (!m_reportTimer->isActive())
+                    {
+                        m_canReport = false;
+                        m_reportTimer->start(5000, true);
+                    }
 		}
 	    }
         }
