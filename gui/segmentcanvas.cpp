@@ -53,7 +53,7 @@ unsigned int TrackItem::getItemNbTimeSteps() const
     return widthToNbSteps(width());
 }
 
-unsigned int TrackItem::getStartIndex() const
+timeT TrackItem::getStartIndex() const
 {
     return x() / m_widthToDurationRatio * m_timeStepsResolution;
 }

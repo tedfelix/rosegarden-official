@@ -63,8 +63,8 @@ protected:
     Rosegarden::Track *m_currentTrack;
     XmlStorableEvent *m_currentEvent;
 
-    Rosegarden::Event::timeT m_currentTime;
-    Rosegarden::Event::timeT m_chordDuration;
+    Rosegarden::timeT m_currentTime;
+    Rosegarden::timeT m_chordDuration;
 
     bool m_inChord;
     bool m_inGroup;

@@ -40,6 +40,7 @@ using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::Note;
 using Rosegarden::TimeSignature;
+using Rosegarden::timeT;
 
 
 NotationHLayout::NotationHLayout(Staff &staff, //!!! maybe not needed, just trying to build up consistent interfaces for h & v layout
@@ -116,7 +117,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
     Key key;
     Clef clef;
     TimeSignature timeSignature;
-    Event::timeT nbTimeUnitsInCurrentBar = 0;
+    timeT nbTimeUnitsInCurrentBar = 0;
     const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
 
     if (from != m_notationElements.begin()) {
@@ -134,7 +135,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
     NotationElementList::iterator shortest = m_notationElements.end();
     int shortCount = 0;
     NotationElementList::iterator it = from;
-    Event::timeT absoluteTime = 0;
+    timeT absoluteTime = 0;
 
     for ( ; it != to; ++it) {
         
@@ -249,7 +250,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 
             // See if we've completed a bar
 
-            Event::timeT barDuration = timeSignature.getBarDuration();
+            timeT barDuration = timeSignature.getBarDuration();
 
             if (nbTimeUnitsInCurrentBar >= barDuration) {
                 barCorrect = (nbTimeUnitsInCurrentBar == barDuration);
@@ -539,7 +540,7 @@ NotationHLayout::layout()
 
 void
 NotationHLayout::addNewBar(NotationElementList::iterator start,
-                           Event::timeT time, int x, int width, int fwidth,
+                           timeT time, int x, int width, int fwidth,
                            bool fixed, bool correct)
 {
     if (m_barPositions.size() > 0) {

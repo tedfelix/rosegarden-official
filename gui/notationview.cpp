@@ -56,6 +56,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
 using Rosegarden::TimeSignature;
+using Rosegarden::timeT;
 
 class RestSplitter
 {
@@ -64,21 +65,21 @@ public:
      * restDuration : duration of rest being replaced
      * replacedBit  : duration of note replacing the rest
      */
-    RestSplitter(Event::timeT restDuration, Event::timeT replacedBit);
+    RestSplitter(timeT restDuration, timeT replacedBit);
     
-    Event::timeT nextBit();
+    timeT nextBit();
 
 protected:
-    Event::timeT m_restDuration;
-    Event::timeT m_remainDuration;
-    Event::timeT m_replacedBit;
-    Event::timeT m_currentBit;
+    timeT m_restDuration;
+    timeT m_remainDuration;
+    timeT m_replacedBit;
+    timeT m_currentBit;
     
-    static Event::timeT m_baseRestDuration;
+    static timeT m_baseRestDuration;
 };
 
-RestSplitter::RestSplitter(Event::timeT restDuration,
-                           Event::timeT replacedBit)
+RestSplitter::RestSplitter(timeT restDuration,
+                           timeT replacedBit)
     : m_restDuration(restDuration),
       m_remainDuration(0),
       m_replacedBit(replacedBit),
@@ -95,7 +96,7 @@ RestSplitter::RestSplitter(Event::timeT restDuration,
 }
 
     
-Event::timeT
+timeT
 RestSplitter::nextBit()
 {
     if (m_remainDuration == 0) return 0;
@@ -117,7 +118,7 @@ RestSplitter::nextBit()
     return m_currentBit;
 }
 
-Event::timeT
+timeT
 RestSplitter::m_baseRestDuration = 384; // whole note rest
 
 //////////////////////////////////////////////////////////////////////
@@ -1155,10 +1156,10 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
         RestSplitter splitter((*rest)->event()->getDuration(),
                               newNote->event()->getDuration());
 
-        Event::timeT restAbsoluteTime = newNote->event()->getAbsoluteTime() +
+        timeT restAbsoluteTime = newNote->event()->getAbsoluteTime() +
             newNote->event()->getDuration();
     
-        while(Event::timeT bit = splitter.nextBit()) {
+        while(timeT bit = splitter.nextBit()) {
             kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << bit
                                  << " at time " << restAbsoluteTime << endl;
 

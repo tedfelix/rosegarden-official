@@ -29,6 +29,7 @@ using Rosegarden::Note;
 using Rosegarden::String;
 using Rosegarden::Int;
 using Rosegarden::Bool;
+using Rosegarden::timeT;
 
 Quantizer::Quantizer()
 {
@@ -52,7 +53,7 @@ Quantizer::quantize(Track::iterator from,
 void
 Quantizer::quantize(Event *el)
 {
-    Event::timeT drt = el->getDuration();
+    timeT drt = el->getDuration();
 
     //!!! inefficient (work duplicated in the two quantize methods)
 
@@ -81,7 +82,7 @@ Quantizer::quantize(Event *el)
 }
 
 void
-Quantizer::quantize(Event::timeT drt, int &high, int &low)
+Quantizer::quantize(timeT drt, int &high, int &low)
 {
     //!!! no dottedness -- NotationTypes stuff can help more here
 

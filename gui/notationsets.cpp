@@ -33,6 +33,7 @@ using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
 using Rosegarden::Equation;
+using Rosegarden::timeT;
 
 NotationSet::NotationSet(const NotationElementList &nel,
                          NELIterator i, bool quantized) :
@@ -79,7 +80,7 @@ NotationSet::initialise()
 void
 NotationSet::sample(const NELIterator &i)
 {
-    Event::timeT d(durationOf(i, m_quantized));
+    timeT d(durationOf(i, m_quantized));
 
     if (d > 0) {
         if (m_longest == m_nel.end() ||
@@ -106,7 +107,7 @@ NotationSet::sample(const NELIterator &i)
     }
 }
 
-Event::timeT
+timeT
 NotationSet::durationOf(const NELIterator &i, bool quantized)
 {
     if (quantized) {
@@ -468,7 +469,7 @@ NotationGroup::calculateBeam(Staff &staff)
 	    beam.startY += nh * (Note::Quaver - shortestNoteType) / 2;
     }  
 
-    Event::timeT crotchet = Note(Note::Crotchet).getDuration();
+    timeT crotchet = Note(Note::Crotchet).getDuration();
     beam.necessary =
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet;

@@ -43,7 +43,7 @@ public:
     struct BarPosition
     {
         NotationElementList::iterator start; // i.e. event following barline
-        Rosegarden::Event::timeT time;    // absolute time of event at "start"
+        Rosegarden::timeT time;    // absolute time of event at "start"
         int x;                // coordinate for display
         int idealWidth;       // theoretical width
         int fixedWidth;       // minimum possible width
@@ -51,7 +51,7 @@ public:
         bool correct;         // false if preceding bar has incorrect duration
         
         BarPosition(NotationElementList::iterator istart,
-                    Rosegarden::Event::timeT itime,
+                    Rosegarden::timeT itime,
                     int ix, int iwidth, int fwidth,
                     bool ifixed, bool icorrect) :
             start(istart), time(itime), x(ix), idealWidth(iwidth),
@@ -81,7 +81,7 @@ protected:
     };
 	    
     void addNewBar(NotationElementList::iterator start,
-                   Rosegarden::Event::timeT time,
+                   Rosegarden::timeT time,
                    int x, int width, int fwidth,
                    bool, bool);
 

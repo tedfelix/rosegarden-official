@@ -135,8 +135,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "group") {
 
+        if (!m_currentTrack) {
+            m_errorString = i18n("Got group outside of a track");
+            return false;
+        }
+        
         m_inGroup = true;
-        m_groupNo++;
+        m_groupNo = m_currentTrack->getNextGroupId();
         m_groupType = atts.value("type");
 
     } else if (lcName == "property") {

@@ -28,6 +28,7 @@ using Rosegarden::Note;
 using Rosegarden::Bool;
 using Rosegarden::Int;
 using Rosegarden::String;
+using Rosegarden::timeT;
 
 
 XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
@@ -49,7 +50,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
         } else if (attrName == "duration") {
 
             bool isNumeric = true;
-            Event::timeT d = attrVal.toUInt(&isNumeric);
+            timeT d = attrVal.toUInt(&isNumeric);
 
             if (!isNumeric) {
 		try {

@@ -21,10 +21,14 @@
 #ifndef TRACKSCANVAS_H
 #define TRACKSCANVAS_H
 
+#include "Event.h"
+
 #include <qwidget.h>
 #include <qcanvas.h>
 
+using Rosegarden::timeT;
 namespace Rosegarden { class Track; }
+
 
 class TrackItem : public QCanvasRectangle
 {
@@ -32,7 +36,7 @@ public:
     TrackItem(int x, int y, int nbSteps, QCanvas* canvas);
 
     unsigned int getItemNbTimeSteps() const;
-    unsigned int getStartIndex() const;
+    timeT getStartIndex() const;
 
     int  getInstrument() const;
     void setInstrument(int i);

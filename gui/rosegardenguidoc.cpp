@@ -252,7 +252,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
             if (nextEl != (*trks)->end()) {
 
-                Event::timeT absTime = (*i)->getAbsoluteTime();
+                timeT absTime = (*i)->getAbsoluteTime();
             
                 if ((*nextEl)->getAbsoluteTime() == absTime) {
 

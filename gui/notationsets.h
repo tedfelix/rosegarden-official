@@ -92,7 +92,7 @@ protected:
 
     const NotationElementList &getList() const { return m_nel; }
 
-    Rosegarden::Event::timeT durationOf(const NELIterator &i, bool quantized);
+    Rosegarden::timeT durationOf(const NELIterator &i, bool quantized);
 
 private:
     const NotationElementList &m_nel;
@@ -132,7 +132,7 @@ private:
     int height(const NELIterator&) const;
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;
-    Rosegarden::Event::timeT m_time;
+    Rosegarden::timeT m_time;
 };
 
 

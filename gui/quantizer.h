@@ -49,7 +49,7 @@ public:
 protected:
 
     /// actual quantizer
-    void quantize(Rosegarden::Event::timeT duration, int &high, int &low);
+    void quantize(Rosegarden::timeT duration, int &high, int &low);
 };
 
 #endif
