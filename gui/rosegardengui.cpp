@@ -558,7 +558,9 @@ void RosegardenGUIApp::quit()
                 break;
         }
     }	
-    statusMsg(i18n(IDS_STATUS_DEFAULT));
+
+    // cc: this causes a crash, for me
+//    statusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
 void RosegardenGUIApp::editUndo()

@@ -139,9 +139,6 @@ void Track::calculateBarPositions()
 
     m_barPositions.clear();
 
-    bool startNewBar(true);
-    bool barCorrect(true);
-
     timeT absoluteTime = 0;
     timeT barStartTime = 0;
     timeT barDuration = timeSignature.getBarDuration();
@@ -153,44 +150,38 @@ void Track::calculateBarPositions()
         Event *e = *i;
         absoluteTime = m_quantizer->quantizeByUnit(e->getAbsoluteTime());
 
-        if (absoluteTime - barStartTime >= barDuration) {
-            barCorrect = (absoluteTime - barStartTime == barDuration);
-            startNewBar = true;
-        }
-
-        if (startNewBar) {
-            addNewBar(absoluteTime, true, barCorrect, timeSignature);
-            barStartTime = absoluteTime;
-            startNewBar = false;
+        if (m_barPositions.size() == 0 ||
+            absoluteTime - barStartTime >= barDuration) {
+            addNewBar(absoluteTime, false, barStartTime, timeSignature);
+            barStartTime += barDuration;  //= absoluteTime;
         }
 
         if (e->isa(TimeSignature::EventType)) {
 
-            timeSignature = TimeSignature(*e);
-            barDuration = timeSignature.getBarDuration();
-
             if (absoluteTime > barStartTime) {
-                addNewBar(absoluteTime, true, true, timeSignature);
+                addNewBar(absoluteTime, true, barStartTime, timeSignature);
                 barStartTime = absoluteTime;
             }
 
+            timeSignature = TimeSignature(*e);
+            barDuration = timeSignature.getBarDuration();
         }
 
         // solely so that absoluteTime is correct after we hit end():
         absoluteTime += m_quantizer->getNoteQuantizedDuration(e);
     }
 
-    if (startNewBar || absoluteTime > barStartTime) {
-        addNewBar
-            (absoluteTime, false,
-             absoluteTime - barStartTime == barDuration, timeSignature);
+    if (m_barPositions.size() == 0 || absoluteTime > barStartTime) {
+        addNewBar(absoluteTime, false, barStartTime, timeSignature);
     }
 }
 
 
-void Track::addNewBar(timeT start, bool fixed, bool correct,
+void Track::addNewBar(timeT start, bool fixed, timeT previousStart,
 		      TimeSignature timesig)
 {
+    bool correct =
+        fixed || (start == previousStart + timesig.getBarDuration());
     m_barPositions.push_back(BarPosition(start, fixed, correct, timesig));
 }
 

@@ -226,7 +226,8 @@ public:
 
 private:
     /// for use by calculateBarPositions
-    void addNewBar(timeT start, bool fixed, bool correct, TimeSignature tsig);
+    void addNewBar(timeT start, bool fixed,
+                   timeT prevStart, TimeSignature tsig);
 
     /// used by calculateBarPositions
     bool hasEffectiveDuration(iterator i);

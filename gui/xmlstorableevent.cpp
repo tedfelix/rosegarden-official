@@ -223,4 +223,3 @@ XmlStorableEvent::toXmlString(const Event &e)
 //    res += "/>";
     return res;
 }
-

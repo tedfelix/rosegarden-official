@@ -825,8 +825,8 @@ void TrackNotationHelper::autoBeamAux(iterator from, iterator to,
 
 Clef TrackNotationHelper::guessClef(iterator from, iterator to)
 {
-    long totalHeight;
-    int noteCount;
+    long totalHeight = 0;
+    int noteCount = 0;
 
     // just the defaults:
     Clef clef;
