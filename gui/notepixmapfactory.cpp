@@ -1547,7 +1547,10 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     bool havePixmap = false;
     QPoint topLeft, bottomRight, hotspot;
 
-    bool smooth = m_font->getNoteFontMap().isSmooth() && thickness > 3;
+    //!!! could remove "nbh > 5" requirement if we did a better job of
+    // sizing so that any horizontal part was rescaled down to exactly
+    // 1 pixel wide instead of blurring
+    bool smooth = m_font->getNoteFontMap().isSmooth() && nbh > 5;
 
     if (smooth) thickness += 2;
 
