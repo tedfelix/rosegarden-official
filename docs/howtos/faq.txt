@@ -494,6 +494,20 @@ wavetable on-board synth devices.  If you're using a soft synth, you
 should see it here too.  All of these will be available in the
 drop-down Instrument list inside Rosegarden.
 
+What if I see Rosegarden itself in the client list when I start the sequencer?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then you've probably got an old version of rosegardensequencer hanging
+around.  That can happen when Rosegarden exits abnormally or perhaps
+when there was a problem with the JACK server.  If you're having problems
+getting Rosegarden to play or record then close it down (and JACK too if
+you're running it) and look for any instances of rosegarden,
+rosegardensequencer or lt-rosegardensequencer in the process table.
+
+  $ ps -ef|grep rosegarden
+
+Kill any instances of rosegarden, rosegardensequencer or lt-rosegardensequencer
+that are still hanging around and try to restart Rosegarden.
 
 How do I get audio to work?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -504,8 +518,19 @@ the Rosegarden sequencer.  If you give jackd the -v option, it will
 report when Rosegarden succeeds in connecting to it.
 
 Unfortunately getting the right combination of magic incantations to
-make JACK work is not always easy and is not something we can help you
-with.  If it's any help, once it's working it usually stays working.
+make JACK work is not always easy.  Good values for an SBLive and
+indeed on the built-in via868 on my Acer laptop as follows:
+
+  $ jackd -d alsa -d hw -r 44100 -p 2048 -n 2
+
+This will usually ensure that I don't get any xruns (JACK being
+unable to process audio in time) and provide reasonable latency.
+The '-r 44100' option sets the sample rate for the JACK server
+which will in turn define the rate at which WAV audio files will
+be recorded.  This is important if you want to transfer any of
+the WAVs directly to CD - 44100Hz (44.1KHz) is the sample rate
+that audio CDs work at.
+
 
 Why are the program names wrong in my MIDI file?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
