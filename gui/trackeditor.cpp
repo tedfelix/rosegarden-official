@@ -121,9 +121,6 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     QObject::connect(m_tracksCanvas, SIGNAL(deleteTrack(Rosegarden::Track*)),
                      this,           SLOT(deleteTrack(Rosegarden::Track*)));
 
-    QObject::connect(m_tracksCanvas, SIGNAL(resizeTrack(Rosegarden::Track*)),
-                     this,           SLOT(resizeTrack(Rosegarden::Track*)));
-
     QObject::connect(m_tracksCanvas, SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)),
                      this,           SLOT(updateTrackInstrumentAndStartIndex(TrackItem*)));
 
@@ -183,7 +180,7 @@ TracksEditor::addTrack(TrackItem *p)
     int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
     p->setInstrument(instrument);
 
-    kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrack() : track instr is %1 at %2")
+    kdDebug(KDEBUG_AREA) << QString("TracksEditor::addTrack() : track instr is %1 at y=%2")
         .arg(instrument).arg(p->y())
                          << ", p = " << p << endl;
 
