@@ -1249,6 +1249,7 @@ public slots:
 				   int index);
     void slotPluginBypassed(Rosegarden::InstrumentId,
 			    int index, bool bypassed);
+    void slotStartPluginGUI(Rosegarden::InstrumentId, int index);
 
 protected:
     /**

@@ -131,6 +131,11 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this,
 	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)));
+
+    connect(m_audioInstrumentParameters,
+	    SIGNAL(startPluginGUI(Rosegarden::InstrumentId, int)),
+	    this,
+	    SIGNAL(startPluginGUI(Rosegarden::InstrumentId, int)));
     
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -545,19 +550,24 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     : InstrumentParameterPanel(doc, parent),
       m_audioFader(new AudioFaderWidget(this, AudioFaderWidget::FaderBox))
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 3, 1, 5, 5);
+    QGridLayout *gridLayout = new QGridLayout(this, 3, 2, 5, 5);
 
     // Instrument label : first row, all cols
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 1, AlignCenter);
 
     m_synthButton = new QPushButton(this);
     m_synthButton->setText(i18n("<no synth>"));
     QToolTip::add(m_synthButton, i18n("Synth plugin button"));
     connect(m_synthButton, SIGNAL(clicked()), this, SLOT(slotSynthButtonClicked()));
-    gridLayout->addMultiCellWidget(m_synthButton, 1, 1, 0, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_synthButton, 1, 1, 0, 0, AlignRight);
+
+    m_synthGUIButton = new QPushButton(this);
+    m_synthGUIButton->setText(i18n("GUI"));
+    connect(m_synthGUIButton, SIGNAL(clicked()), this, SLOT(slotSynthGUIButtonClicked()));
+    gridLayout->addMultiCellWidget(m_synthGUIButton, 1, 1, 1, 1, AlignLeft);
 
     // fader and connect it
-    gridLayout->addMultiCellWidget(m_audioFader, 3, 3, 0, 0);
+    gridLayout->addMultiCellWidget(m_audioFader, 2, 2, 0, 1);
 
     connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
             this, SLOT(slotAudioChannels(int)));
@@ -594,6 +604,13 @@ void
 AudioInstrumentParameterPanel::slotSynthButtonClicked()
 {
     slotSelectPlugin(Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
+}
+
+void
+AudioInstrumentParameterPanel::slotSynthGUIButtonClicked()
+{
+    emit startPluginGUI(m_selectedInstrument->getId(),
+			Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
 
 void
@@ -681,9 +698,11 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     int start = 0;
     if (instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 	m_synthButton->show();
+	m_synthGUIButton->show();
 	start = -1;
     } else {
 	m_synthButton->hide();
+	m_synthGUIButton->hide();
     }
 
     for (int i = start; i < int(m_audioFader->m_plugins.size()); i++)
@@ -736,6 +755,10 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     // Pan - adjusted backwards
     //
     m_audioFader->m_pan->setPosition(instrument->getPan() - 100);
+
+    // Tell fader box whether to include e.g. audio input selection
+    // 
+    m_audioFader->setIsSynth(instrument->getType() == Rosegarden::Instrument::SoftSynth);
 
     blockSignals(false);
 }

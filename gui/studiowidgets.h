@@ -37,6 +37,8 @@ namespace Rosegarden {
     class Studio;
 }
 
+class QGridLayout;
+
 
 class RosegardenFader : public QWidget
 {
@@ -281,9 +283,13 @@ public:
 
     void setAudioChannels(int);
 
+    void setIsSynth(bool);
+
     bool owns(const QObject *object);
 
     std::vector<QPushButton*>  m_plugins;
+
+    QGridLayout               *m_grid;
 
     AudioVUMeter              *m_vuMeter;
 
@@ -299,6 +305,9 @@ public:
     QPixmap                    m_stereoPixmap;
 
     QSignalMapper             *m_signalMapper;
+
+    QLabel                    *m_inputLabel;
+    QLabel                    *m_outputLabel;
 
     AudioRouteMenu            *m_audioInput; 
     AudioRouteMenu            *m_audioOutput; 

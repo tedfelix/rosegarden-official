@@ -29,11 +29,14 @@
 #include "PluginIdentifier.h"
 #include "AudioPluginInstance.h"
 #include "MappedCommon.h"
+#include "Midi.h"
+#include "MappedEvent.h"
 #include "Exception.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardengui.h"
+#include "studiocontrol.h"
 
 #include <kprocess.h>
 #include <klocale.h>
@@ -238,7 +241,7 @@ AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
 	.arg(type)
 	.arg(instrument);
 
-    if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 	url = url.arg("synth");
     } else {
 	url = url.arg(position);
@@ -265,7 +268,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     if (!path.startsWith(pluginStr)) {
 	RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: malformed path "
 		 << path << endl;
-	return;
+	return false;
     }
 
     path = path.right(path.length() - pluginStr.length());
@@ -330,7 +333,7 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
     Instrument *i = m_studio->getInstrumentById(instrument);
     if (!i) return i18n("Rosegarden Plugin");
     else {
-	if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+	if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 	    return i18n("Rosegarden: %1").arg(strtoqstr(i->getPresentationName()));
 	} else {
 	    return i18n("Rosegarden: %1: %2").arg(strtoqstr(i->getPresentationName()))
@@ -470,7 +473,41 @@ AudioPluginOSCGUIManager::dispatch()
 
 	} else if (method == "midi") {
 
+	    if (message->getArgCount() != 1) {
+		RG_DEBUG << "AudioPluginOSCGUIManager: wrong number of args ("
+			 << message->getArgCount() << ") for midi method"
+			 << endl;
+		goto done;
+	    }
+	    if (!(arg = message->getArg(0, type)) || type != 'm') {
+		RG_DEBUG << "AudioPluginOSCGUIManager: failed to get MIDI event"
+			 << endl;
+		goto done;
+	    }
+	    
+	    RG_DEBUG << "AudioPluginOSCGUIManager: handling MIDI message" << endl;
+
+	    // let's only handle note on and note off
+
+	    int eventCode = arg->m[1];
+	    int eventType = eventCode & Rosegarden::MIDI_MESSAGE_TYPE_MASK;
+	    if (eventType == Rosegarden::MIDI_NOTE_ON ||
+		eventType == Rosegarden::MIDI_NOTE_OFF) {
+		Rosegarden::MappedEvent ev(instrument,
+					   Rosegarden::MappedEvent::MidiNote,
+					   Rosegarden::MidiByte(arg->m[2]),
+					   Rosegarden::MidiByte(arg->m[3]),
+					   Rosegarden::RealTime::zeroTime,
+					   Rosegarden::RealTime::zeroTime,
+					   Rosegarden::RealTime::zeroTime);
+		if (eventType == Rosegarden::MIDI_NOTE_OFF) ev.setVelocity(0);
+		Rosegarden::StudioControl::sendMappedEvent(ev);
+	    }		
+
 	} else if (method == "exiting") {
+
+	    RG_DEBUG << "AudioPluginOSCGUIManager: GUI exiting" << endl;
+	    stopGUI(instrument, position);
 
 	} else {
 

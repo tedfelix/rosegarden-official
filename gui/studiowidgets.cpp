@@ -1100,8 +1100,6 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     
     // Sort out the layout accordingly
     //
-    QGridLayout *grid;
-   
     if (type == FaderStrip)
     {
 	setFrameStyle(Box | Sunken);
@@ -1112,12 +1110,12 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	if (havePlugins) ++rows;
 	if (haveMiscButtons) ++rows;
 
-        grid = new QGridLayout(this, rows, 2, 0, 1);
+        m_grid = new QGridLayout(this, rows, 2, 0, 1);
 
 	int row = 0;
 	if (haveInOut) {
-	    grid->addMultiCellWidget(m_audioInput->getWidget(), 0, 0, 0, 1, AlignCenter);
-	    grid->addMultiCellWidget(m_audioOutput->getWidget(), 1, 1, 0, 1, AlignCenter);
+	    m_grid->addMultiCellWidget(m_audioInput->getWidget(), 0, 0, 0, 1, AlignCenter);
+	    m_grid->addMultiCellWidget(m_audioOutput->getWidget(), 1, 1, 0, 1, AlignCenter);
 	    row = 2;
 	}
 
@@ -1126,66 +1124,66 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	    f.setBold(true);
 	    QLabel *idLabel = new QLabel(id, this);
 	    idLabel->setFont(f);
-	    grid->addWidget(idLabel, row, 0, AlignCenter);
-	    grid->addWidget(m_pan, row, 1, AlignCenter);
+	    m_grid->addWidget(idLabel, row, 0, AlignCenter);
+	    m_grid->addWidget(m_pan, row, 1, AlignCenter);
 	} else {
-	    grid->addMultiCellWidget(m_pan, row, row, 0, 1, AlignCenter);
+	    m_grid->addMultiCellWidget(m_pan, row, row, 0, 1, AlignCenter);
 	}
 
 	++row;
 
-	grid->addMultiCellWidget(m_fader, row, row, 0, 0, AlignRight);
-	grid->addMultiCellWidget(m_vuMeter, row, row, 1, 1, AlignLeft);
+	m_grid->addMultiCellWidget(m_fader, row, row, 0, 0, AlignRight);
+	m_grid->addMultiCellWidget(m_vuMeter, row, row, 1, 1, AlignLeft);
 
 	++row;
 	if (haveMiscButtons) {
-	    grid->addWidget(m_muteButton, row, 0, AlignCenter);
-	    grid->addWidget(m_soloButton, row, 1, AlignCenter);
+	    m_grid->addWidget(m_muteButton, row, 0, AlignCenter);
+	    m_grid->addWidget(m_soloButton, row, 1, AlignCenter);
 	} else {
-	    grid->addMultiCellWidget(m_muteButton, row, row, 0, 1, AlignCenter);
+	    m_grid->addMultiCellWidget(m_muteButton, row, row, 0, 1, AlignCenter);
 	}
 
 	if (haveMiscButtons) {
 	    ++row;
-	    grid->addWidget(m_recordButton, row, 0, AlignCenter);	
-	    grid->addWidget(m_stereoButton, row, 1, AlignCenter);
+	    m_grid->addWidget(m_recordButton, row, 0, AlignCenter);	
+	    m_grid->addWidget(m_stereoButton, row, 1, AlignCenter);
 	}
 
 	if (havePlugins) {
 	    ++row;
-	    grid->addMultiCellWidget(pluginVbox, row, row, 0, 1, AlignCenter); 
+	    m_grid->addMultiCellWidget(pluginVbox, row, row, 0, 1, AlignCenter); 
 	}
     }
     else
     {
-        grid = new QGridLayout(this, 6, 6, 6, 6);
+        m_grid = new QGridLayout(this, 6, 6, 6, 6);
 
 	if (havePlugins) {
-	    grid->addMultiCellWidget(pluginVbox,    2, 6, 0, 1, AlignCenter);
+	    m_grid->addMultiCellWidget(pluginVbox,    2, 6, 0, 1, AlignCenter);
 	}
 
-        grid->addMultiCellWidget(m_vuMeter,     2, 6, 3, 3, AlignCenter);
-        grid->addMultiCellWidget(m_fader,       2, 6, 2, 2, AlignCenter);
-        grid->addMultiCellWidget(m_recordFader, 2, 6, 4, 4, AlignCenter);
+        m_grid->addMultiCellWidget(m_vuMeter,     2, 6, 3, 3, AlignCenter);
+        m_grid->addMultiCellWidget(m_fader,       2, 6, 2, 2, AlignCenter);
+        m_grid->addMultiCellWidget(m_recordFader, 2, 6, 4, 4, AlignCenter);
 
-        grid->addWidget(m_muteButton,           2, 5, AlignLeft);
-        grid->addWidget(m_soloButton,           3, 5, AlignLeft);
+        m_grid->addWidget(m_muteButton,           2, 5, AlignLeft);
+        m_grid->addWidget(m_soloButton,           3, 5, AlignLeft);
 
-        grid->addWidget(m_recordButton,         4, 5, AlignLeft);
+        m_grid->addWidget(m_recordButton,         4, 5, AlignLeft);
 
-//        grid->addMultiCellWidget(panLabel,      8, 8, 0, 1, AlignCenter);
-        grid->addWidget(m_pan,                  5, 5, AlignLeft);
-        grid->addWidget(m_stereoButton,         6, 5, AlignLeft);
+//        m_grid->addMultiCellWidget(panLabel,      8, 8, 0, 1, AlignCenter);
+        m_grid->addWidget(m_pan,                  5, 5, AlignLeft);
+        m_grid->addWidget(m_stereoButton,         6, 5, AlignLeft);
 
 	if (haveInOut) {
 
-	    QLabel *inputLabel = new QLabel(i18n("In:"), this);
-	    grid->addWidget(inputLabel,             0, 1, AlignRight);
-	    grid->addMultiCellWidget(m_audioInput->getWidget(),  0, 0, 2, 5, AlignLeft);
+	    m_inputLabel = new QLabel(i18n("In:"), this);
+	    m_grid->addWidget(m_inputLabel, 0, 1, AlignRight);
+	    m_grid->addMultiCellWidget(m_audioInput->getWidget(),  0, 0, 2, 5, AlignLeft);
 
-	    QLabel *outputLabel = new QLabel(i18n("Out:"), this);
-	    grid->addWidget(outputLabel,             1, 1, AlignRight);
-	    grid->addMultiCellWidget(m_audioOutput->getWidget(),  1, 1, 2, 5, AlignLeft);
+	    m_outputLabel = new QLabel(i18n("Out:"), this);
+	    m_grid->addWidget(m_outputLabel, 1, 1, AlignRight);
+	    m_grid->addMultiCellWidget(m_audioOutput->getWidget(),  1, 1, 2, 5, AlignLeft);
 	}
     }
 
@@ -1205,9 +1203,21 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	    }
 	} 
     }
-
 }
 
+void
+AudioFaderWidget::setIsSynth(bool isSynth)
+{
+    if (isSynth) {
+	m_inputLabel->hide();
+	m_audioInput->getWidget()->hide();
+	m_recordFader->hide();
+    } else {
+	m_inputLabel->show();
+	m_audioInput->getWidget()->show();
+	m_recordFader->show();
+    }
+}
 
 void
 AudioFaderWidget::slotSetInstrument(Rosegarden::Studio *studio,
@@ -1216,6 +1226,7 @@ AudioFaderWidget::slotSetInstrument(Rosegarden::Studio *studio,
     if (m_audioInput) m_audioInput->slotSetInstrument(studio, instrument);
     if (m_audioOutput) m_audioOutput->slotSetInstrument(studio, instrument);
     if (instrument) setAudioChannels(instrument->getAudioChannels());
+    if (instrument) setIsSynth(instrument->getType() == Rosegarden::Instrument::SoftSynth);
 }
 
 bool

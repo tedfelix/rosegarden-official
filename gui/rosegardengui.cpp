@@ -288,6 +288,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	    this,
 	    SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
 
+    connect(m_instrumentParameterBox,
+	    SIGNAL(startPluginGUI(Rosegarden::InstrumentId, int)),
+	    this,
+	    SLOT(slotStartPluginGUI(Rosegarden::InstrumentId, int)));
+
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
@@ -5727,6 +5732,15 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
         // Set modified
         m_doc->slotDocumentModified();
     }
+}
+
+void
+RosegardenGUIApp::slotStartPluginGUI(Rosegarden::InstrumentId instrument,
+				     int index)
+{
+#ifdef HAVE_LIBLO
+    m_pluginGUIManager->startGUI(instrument, index);
+#endif
 }
 
 void
