@@ -305,7 +305,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Add a velocity ruler
     //
-    addPropertyViewRuler(Rosegarden::BaseProperties::VELOCITY);
+//!!!    addPropertyViewRuler(Rosegarden::BaseProperties::VELOCITY);
 
     m_chordNameRuler = new ChordNameRuler
 	(&m_hlayout, doc, segments, 0, 20, getCentralFrame());

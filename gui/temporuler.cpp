@@ -52,8 +52,10 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_rulerScale(rulerScale),
     m_fontMetrics(m_boldFont)
 {
-    m_font.setPointSize(m_small ? 9 : 11);
-    m_boldFont.setPointSize(m_small ? 9 : 11);
+//    m_font.setPointSize(m_small ? 9 : 11);
+//    m_boldFont.setPointSize(m_small ? 9 : 11);
+    m_font.setPixelSize(m_height * 2 / 3);
+    m_boldFont.setPixelSize(m_height * 2 / 3);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
@@ -195,6 +197,11 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	double x = m_rulerScale->getXForTime(time) + m_currentXOffset
                    + m_xorigin;
 	
+	paint.drawLine(static_cast<int>(x),
+		       height() - (height()/3 - 2),
+		       static_cast<int>(x),
+		       height());
+
 	if (i->second & timeSigChangeHere) {
 
 	    Rosegarden::TimeSignature sig =
