@@ -69,13 +69,21 @@ BarButtons::drawButtons()
     // Create a vertical box for the loopBar and the bar buttons
     //
     QVBox *buttonBar = new QVBox(this);
-    buttonBar->setMinimumSize(m_barWidth * m_bars, m_barHeight);
-    buttonBar->setMaximumSize(m_barWidth * m_bars, m_barHeight);
+
+/*  Not working at the moment
+
+    int buttonBarWidth = m_barWidth *
+                    m_doc->getComposition().getBarRange(m_bars, false).second
+                    / m_doc->getComposition().getBarRange(0, false).second;
+*/
+
+    buttonBar->setMinimumSize(m_bars * m_barWidth, m_barHeight);
+    buttonBar->setMaximumSize(m_bars * m_barWidth, m_barHeight);
 
     // The loop bar is where we're going to be defining our loops
     //
     QCanvas *canvas = new QCanvas(buttonBar);
-    canvas->resize(m_barWidth * m_bars, loopBarHeight);
+    canvas->resize(m_bars * m_barWidth, loopBarHeight);
     canvas->setBackgroundColor(RosegardenGUIColours::LoopRulerBackground);
 
 
@@ -107,7 +115,6 @@ BarButtons::drawButtons()
     // Another horizontal layout box..
     //
     QHBox *hButtonBar = new QHBox(buttonBar);
-
 
     // First bar width by which others are judged
     //

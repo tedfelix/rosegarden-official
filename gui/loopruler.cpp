@@ -54,6 +54,11 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
         m_barWidthMap[i] = barMarkers.second - barMarkers.first;
     }
  
+    // Turn off all scrollbars on this view
+    //
+    setHScrollBarMode(QScrollView::AlwaysOff);
+    setVScrollBarMode(QScrollView::AlwaysOff);
+ 
     // Draw out the sections according to the bar widths
     //
     drawBarSections();

@@ -96,13 +96,13 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     QScrollView *barButtonsView = new QScrollView(topSplit);
 
+    barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+    barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+
     BarButtons *barButtons = new BarButtons(doc,
                                             barButtonsView,
                                             tracksEditor->getVHeader(),
                                             tracksEditor->getHHeader());
-
-    barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-    barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
     // set a plain frame for the scrollview
     //
