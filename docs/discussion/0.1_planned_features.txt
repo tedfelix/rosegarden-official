@@ -1,7 +1,8 @@
 Features for release 0.1
 
 - be able to store music in multiple tracks and display multiple
-  tracks (however basic that display may be) : DONE
+  tracks (however basic that display may be) : DONE (not quite -
+  saving doesn't work).
 
 - updating one edit window when something is edited in another
   (however crudely we do it at first).  -- at the moment if you
