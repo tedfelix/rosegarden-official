@@ -28,6 +28,10 @@
 
 #include "lilypondio.h"
 #include "config.h"
+#include "qstring.h"
+#include "qregexp.h" // QT3.0 replace()
+#include "rosestrings.h" // strtoqstr
+#include <klocale.h> // i18n
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -354,20 +358,37 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
 bool
 LilypondExporter::write() {
-    std::ofstream str(m_fileName.c_str(), std::ios::out);
+    QString tmp_fileName = strtoqstr(m_fileName);
+    // The correct behaviour is to show an error box warning the user -
+    // but for now, just remove the illegal chars automatically.
+//     if (tmp_fileName.contains(' ') || tmp_fileName.contains('\\')) {
+//         // Error: "Lilypond does not allow spaces or backslashes in
+//         // the name of the .ly file.  Would you like RG to remove them
+//         // automatically or go back and change the filename yourself?"
+//         // [Remove] [Cancel Save]
+//         return false;
+//     }
+    tmp_fileName.replace(QRegExp(" "), "");
+    tmp_fileName.replace(QRegExp("\\\\"), "");
+    tmp_fileName.replace(QRegExp("'"), "");
+    tmp_fileName.replace(QRegExp("\""), "");
+
+    std::ofstream str(qstrtostr(tmp_fileName).c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "LilypondExporter::write() - can't write file " << m_fileName << std::endl;
+        std::cerr << i18n("LilypondExporter::write() - can't write file %1").arg(tmp_fileName) << std::endl;
         return false;
     }
 
     // Lilypond header information
     str << "\\version \"1.4.10\"\n";
     // user-specified headers coming in from new metadata eventually ???
+    tmp_fileName.replace(QRegExp("&"), "\\&");
+    tmp_fileName.replace(QRegExp("_"), "\\_");
     str << "\\header {\n";
-    str << "\ttitle = \"" << m_fileName << "\"\n";
+    str << "\ttitle = \"" << tmp_fileName << "\"\n";
     str << "\tsubtitle = \"subtitle\"\n";
     str << "\tfooter = \"Rosegarden " << VERSION << "\"\n";
-    str << "\ttagline = \"Exported from " << m_fileName << " by Rosegarden " << VERSION << "\"\n";
+    str << "\ttagline = \"Exported from " << tmp_fileName << " by Rosegarden " << VERSION << "\"\n";
 
     try {
        if (m_composition->getCopyrightNote() != "") {
