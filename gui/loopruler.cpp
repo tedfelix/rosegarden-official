@@ -31,10 +31,15 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      const int &barWidth,
                      const int &height,
                      QWidget *parent,
-                     const char *name):
-    QWidget(parent, name),
-    m_bars(bars), m_barWidth(barWidth), m_height(height),
-    m_doc(doc), m_loop(false), m_startLoop(0)
+                     const char *name)
+    : QWidget(parent, name),
+      m_bars(bars),
+      m_barWidth(barWidth),
+      m_height(height),
+      m_snap(0),
+      m_doc(doc),
+      m_loop(false),
+      m_startLoop(0), m_endLoop(0)
 {
     setMinimumSize(bars * barWidth, height);
     setMaximumSize(bars * barWidth, height);
