@@ -68,6 +68,12 @@ public:
      */
     void erase(NotationElementList::iterator);
 
+    /**
+     * Erase the element
+     * Also erase it from the wrapped Track
+     */
+    void erase(NotationElement*);
+
     Rosegarden::Track& getTrack() { return m_track; }
 
 protected:

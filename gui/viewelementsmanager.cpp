@@ -128,7 +128,7 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
             kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : Found Event : "
                                  << (*it) << endl;
 
-            delete *eIter;
+            //delete *eIter; - the track will delete it
             m_track.erase(eIter);
             foundEvent = true;
             break;
@@ -144,5 +144,12 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
         KMessageBox::error(0, "ViewElementsManager::erase() : could't find event");
     }
 
+}
+
+void ViewElementsManager::erase(NotationElement* el)
+{
+    Rosegarden::Event* ev = el->event();
+    m_notationElements->erase(el); // this will delete el
+    m_track.erase(ev);
 }
 
