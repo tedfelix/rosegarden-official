@@ -59,18 +59,18 @@ NotationVLayout::layout(NotationElementList::iterator from,
     for (i = from; i != to; ++i) {
 
         NotationElement *el = (*i);
-        el->setY(0);
+        el->setLayoutY(0);
 
         if (el->isRest()) {
 
             // rest pixmaps are sized so that they will be correctly
             // displayed when set to align on the top staff line
-            el->setY(m_staff.yCoordOfHeight(8));
+            el->setLayoutY(m_staff.yCoordOfHeight(8));
 
         } else if (el->isNote()) {
 
             try {
-                el->setY(m_staff.yCoordOfHeight(el->event()->get<Int>(P_HEIGHT_ON_STAFF)));
+                el->setLayoutY(m_staff.yCoordOfHeight(el->event()->get<Int>(P_HEIGHT_ON_STAFF)));
             } catch (Event::NoData) {
                 kdDebug(KDEBUG_AREA) <<
                     "NotationVLayout::layout : couldn't get properties for element (has NotationHLayout::preparse run?)"
@@ -84,12 +84,12 @@ NotationVLayout::layout(NotationElementList::iterator from,
                 // clef pixmaps are sized so that they will be
                 // correctly displayed when set to align one leger
                 // line above the top staff line... well, almost
-                el->setY(m_staff.yCoordOfHeight(10) + 1);
+                el->setLayoutY(m_staff.yCoordOfHeight(10) + 1);
 //                clef = Clef(*el->event());
 
             } else if (el->event()->isa(Key::EventPackage, Key::EventType)) {
 
-                el->setY(m_staff.yCoordOfHeight(12));
+                el->setLayoutY(m_staff.yCoordOfHeight(12));
 //                key = Key(*el->event());
             }
         }

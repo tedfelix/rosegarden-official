@@ -28,27 +28,49 @@ class QCanvasItem;
 class NotationElementList;
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
+ *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ *
+ * The Notation H and V layout is performed on a
+ * NotationElementList. Once this is done, each NotationElement is
+ * affected a QCanvasItem which is set at these coords.
+ *
+ * @see see NotationView::showElements()
+ */
 
 class NotationElement : public ViewElement
 {
 public:
+    struct NoCanvasItem {};
+    
     NotationElement(Event *event);
 
     ~NotationElement();
 
-    double x() { return m_x; }
-    double y() { return m_y; }
+    double getLayoutX() { return m_x; }
+    double getLayoutY() { return m_y; }
 
-    void setX(double x) { m_x = x; }
-    void setY(double y) { m_y = y; }
+    /// returns the x pos of the associated canvas item
+    double getEffectiveX() throw (NoCanvasItem);
+
+    /// returns the y pos of the associated canvas item
+    double getEffectiveY() throw (NoCanvasItem);
+
+    void setLayoutX(double x) { m_x = x; }
+    void setLayoutY(double y) { m_y = y; }
 
     bool isRest() const;
     bool isNote() const;
 
-    /// The object takes ownership of its canvas item
-    void setCanvasItem(QCanvasItem *e);
+    /**
+     * Sets the canvas item representing this notation element on screen.
+     *
+     * The canvas item will have its coords set to the ones of the
+     * notation element (as set by the H/V layout) + the offset
+     *
+     * NOTE: The object takes ownership of its canvas item.
+     */
+    void setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset);
+
     QCanvasItem* canvasItem() { return m_canvasItem; }
 
 protected:

@@ -45,6 +45,25 @@ NotationElement::~NotationElement()
     delete m_canvasItem;
 }
 
+double
+NotationElement::getEffectiveX() throw (NoCanvasItem)
+{
+    if (m_canvasItem)
+        return m_canvasItem->x();
+    else
+        throw NoCanvasItem();
+}
+
+double
+NotationElement::getEffectiveY() throw (NoCanvasItem)
+{
+    if (m_canvasItem)
+        return m_canvasItem->y();
+    else
+        throw NoCanvasItem();
+}
+
+
 bool
 NotationElement::isRest() const
 {
@@ -61,10 +80,11 @@ NotationElement::isNote() const
 }
 
 void
-NotationElement::setCanvasItem(QCanvasItem *e)
+NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
 {
     delete m_canvasItem;
     m_canvasItem = e;
+    e->move(m_x + dxoffset, m_y + dyoffset);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -111,7 +131,7 @@ NotationElementList::findNext(const string &package,
 #ifndef NDEBUG
 kdbgstream& operator<<(kdbgstream &dbg, NotationElement &e)
 {
-    dbg << "NotationElement - x : " << e.x() << " - y : " << e.y()
+    dbg << "NotationElement - x : " << e.getLayoutX() << " - y : " << e.getLayoutY()
         << endl << *e.event() << endl;
 
 //     e.event()->dump(cout);

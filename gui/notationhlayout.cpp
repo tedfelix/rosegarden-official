@@ -193,7 +193,7 @@ NotationHLayout::layout()
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
             NotationElement *nel = (*it);
-            nel->setX(x);
+            nel->setLayoutX(x);
 
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 

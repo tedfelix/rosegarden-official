@@ -413,10 +413,9 @@ NotationView::showElements(NotationElementList::iterator from,
                 
             if (sprite) {
                 
-                sprite->move(dxoffset + (*it)->x(), dyoffset + (*it)->y());
+                (*it)->setCanvasItem(sprite, dxoffset, dyoffset);
                 sprite->show();
 
-                (*it)->setCanvasItem(sprite);
             }
             
         } catch (...) {
@@ -445,7 +444,7 @@ NotationView::showBars(NotationElementList::iterator from,
 //                          << " - lastElement->x = " << (*lastElement)->x() << endl
 //                          << "lastElement : " << *(*lastElement) << endl;
     
-    m_currentStaff->deleteBars((*from)->x());
+    m_currentStaff->deleteBars((*from)->getEffectiveX());
         
     for (NotationHLayout::BarPositions::const_iterator it = barPos.begin();
         it != barPos.end(); ++it) {
@@ -781,10 +780,10 @@ NotationView::findClosestNote(double eventX)
 
         double dist;
         
-        if ( (*it)->x() >= eventX )
-            dist = (*it)->x() - eventX;
+        if ( (*it)->getEffectiveX() >= eventX )
+            dist = (*it)->getEffectiveX() - eventX;
         else
-            dist = eventX - (*it)->x();
+            dist = eventX - (*it)->getEffectiveX();
 
         if (dist < minDist) {
             kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
