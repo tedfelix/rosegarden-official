@@ -68,12 +68,7 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playLatency(0, 100000), // the sequencer's head start
-      m_fetchLatency(0, 50000), // how long we allow to fetch and queue new events
-      m_readAhead(0, 40000),    // how many events to fetch (microseconds)
-      m_transportStatus(STOPPED),
-      m_sequencerProcess(0),
-      m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS)
+      m_sequencerProcess(0)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -89,6 +84,17 @@ RosegardenGUIApp::RosegardenGUIApp()
 
     // Create a sequence manager
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
+
+    // Temporary arrangement until we get the playback pointer
+    // into the document
+    //
+    connect((QObject*)m_seqManager,
+             SIGNAL(setPointerPosition(Rosegarden::RealTime)),
+             SLOT(setPointerPosition(Rosegarden::RealTime)));
+
+    connect((QObject*)m_seqManager,
+            SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            SLOT(setPointerPosition(Rosegarden::timeT)));
 
     readOptions();
 
@@ -496,7 +502,7 @@ void RosegardenGUIApp::openFile(const QString& url)
 
     // Stop if playing
     //
-    if (m_transportStatus == PLAYING)
+    if (m_seqManager->getTransportStatus() == PLAYING)
       stop();
 
     m_doc->closeDocument();
@@ -1046,183 +1052,6 @@ void RosegardenGUIApp::changeTimeResolution()
     
 }
 
-// This method is called from the Sequencer when it's playing.
-// It's a request to get the next slice of events for the
-// Sequencer to play.
-//
-//
-const Rosegarden::MappedComposition&
-RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
-                                    const long &sliceStartUsec,
-                                    const long &sliceEndSec,
-                                    const long &sliceEndUsec)
-{
-    // Clear the global return structure
-    //
-    mappComp.clear();
-
-    // if we're closing then return no events
-    //
-    if (m_transportStatus == STOPPING)
-      return mappComp;
-
-    Rosegarden::Composition &comp = m_doc->getComposition();
-  
-    mappComp.setStartTime(Rosegarden::RealTime(sliceStartSec, sliceStartUsec));
-    mappComp.setEndTime(Rosegarden::RealTime(sliceEndSec, sliceEndUsec));
-
-    timeT sliceStartElapsed =
-              comp.getElapsedTimeForRealTime(mappComp.getStartTime());
-
-    timeT sliceEndElapsed =
-              comp.getElapsedTimeForRealTime(mappComp.getEndTime());
-
-    // Place metronome clicks in the global MappedCompisition
-    // if they're enabled for our current mode
-    //
-    if ( ( ( m_transportStatus == PLAYING ||
-             m_transportStatus == STARTING_TO_PLAY )
-                && comp.usePlayMetronome() ) ||
-         ( ( m_transportStatus == RECORDING_MIDI ||
-             m_transportStatus == RECORDING_AUDIO ||
-             m_transportStatus == STARTING_TO_RECORD_MIDI ||
-             m_transportStatus == STARTING_TO_RECORD_AUDIO )
-                && comp.useRecordMetronome() ) )
-        insertMetronomeClicks(sliceStartElapsed, sliceEndElapsed);
-
-    Rosegarden::RealTime eventTime;
-    Rosegarden::RealTime duration;
-  
-    for (Rosegarden::Composition::iterator i = comp.begin();
-                             i != comp.end(); i++ )
-    {
-        // Skip segment if the track is muted
-        //
-        if (comp.getTrackByIndex((*i)->getTrack())->isMuted())
-            continue;
-
-        if ((*i)->getType() == Rosegarden::Segment::Audio)
-        {
-
-            // An Audio event has three time parameters associated
-            // with it.  The start of the Segment is when the audio
-            // event should start.  The StartTime is how far into
-            // the sample the playback should commence and the
-            // EndTime is how far into the sample playback should
-            // stop.
-            //
-            //
-            if ((*i)->getStartTime() < sliceStartElapsed ||
-                (*i)->getStartTime() > sliceEndElapsed)
-                continue;
-
-            cout << "AUDIO START = " << (*i)->getAudioStartTime() << endl;
-            cout << "AUDIO END   = " << (*i)->getAudioEndTime() << endl;
-            cout << "SLICE START = " << sliceStartElapsed << endl;
-            cout << "SLICE END   = " << sliceEndElapsed << endl << endl;
-
-            eventTime = comp.getElapsedRealTime((*i)->getStartTime());
-
-            Rosegarden::RealTime startTime =
-                       comp.getElapsedRealTime (((*i)->getAudioStartTime()));
-
-            duration = comp.getElapsedRealTime
-                            (((*i)->getAudioEndTime())) - startTime;
-
-            assert (duration >= Rosegarden::RealTime(0,0));
-            
-            Rosegarden::TrackId track = (*i)->getTrack();
-
-            Rosegarden::InstrumentId instrument = comp.
-                             getTrackByIndex(track)->getInstrument();
-
-            // Insert Audio event
-            //
-            Rosegarden::MappedEvent *me =
-                    new Rosegarden::MappedEvent(eventTime,
-                                                startTime,
-                                                duration,
-                                                instrument,
-                                                track,
-                                                (*i)->getAudioFileID());
-            mappComp.insert(me);
-
-            continue; // next Segment
-        }
-        else
-        {
-            // Skip the Segment if it starts too late to be of
-            // interest to our slice.
-            if ( (*i)->getStartTime() > sliceEndElapsed )
-                continue;
-        }
-
-        Rosegarden::SegmentPerformanceHelper helper(**i);
-
-        for ( Rosegarden::Segment::iterator j = (*i)->findTime(sliceStartElapsed);
-                                          j != (*i)->end(); ++j )
-        {
-            // Skip this event if it isn't a note
-            //
-            if (!(*j)->isa(Rosegarden::Note::EventType))
-                continue;
-
-            // get the eventTime
-            eventTime = comp.getElapsedRealTime((*j)->getAbsoluteTime());
-
-            // As events are stored chronologically we can escape if
-            // we're already beyond our event horizon for this slice.
-            //
-            if ( eventTime > mappComp.getEndTime() )
-                break;
-
-            // Eliminate events before our required time
-            //
-            if ( eventTime >= mappComp.getStartTime() &&
-                 eventTime <= mappComp.getEndTime())
-            {
-		// Find the performance duration, i.e. taking into account any
-		// ties etc that this note may have  --cc
-		// 
-		duration = helper.getRealSoundingDuration(j);
-		
-		// probably in a tied series, but not as first note
-		//
-		if (duration == Rosegarden::RealTime(0, 0))
-		    continue;
-
-                Rosegarden::TrackId track = (*i)->getTrack();
-
-                Rosegarden::InstrumentId instrument = comp.
-                             getTrackByIndex(track)->getInstrument();
-                // insert event
-                Rosegarden::MappedEvent *me =
-                      new Rosegarden::MappedEvent(**j, eventTime, duration,
-                                                  instrument, track);
-
-                mappComp.insert(me);
-            }
-        }
-    }
-
-    //std::cout << "GOT SLICE OF " << mappComp.size() << " ELEMENTS" << endl;
-    
-    // send the MappedEvents to the GUI as well so we can process
-    // them for the level meters
-    //
-    return mappComp;
-
-    /*
-    Rosegarden::RealTime startTime(sliceStartSec, sliceStartUsec);
-    Rosegarden::RealTime endTime(sliceEndSec, sliceEndUsec);
-    Rosegarden::MappedComposition *mC = m_seqManager->getSequencerSlice(startTime, endTime);
-
-    showVisuals(*mC);
-
-    return *mC;
-    */
-}
-
 
 void RosegardenGUIApp::importMIDI()
 {
@@ -1257,7 +1086,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
     // Stop if playing
     //
-    if (m_transportStatus == PLAYING)
+    if (m_seqManager->getTransportStatus() == PLAYING)
         stop();
 
     m_doc->closeDocument();
@@ -1288,7 +1117,7 @@ void RosegardenGUIApp::importRG21()
 
     // Stop if playing
     //
-    if (m_transportStatus == PLAYING)
+    if (m_seqManager->getTransportStatus() == PLAYING)
         stop();
     
     importRG21File(tmpfile);
@@ -1372,13 +1201,20 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     }
 }
 
+void
+RosegardenGUIApp::setPointerPosition(Rosegarden::RealTime time)
+{
+    setPointerPosition(time.sec, time.usec);
+}
+
+
 void RosegardenGUIApp::setPointerPosition(timeT t)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    if ( m_transportStatus == PLAYING ||
-         m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO )
+    if ( m_seqManager->getTransportStatus() == PLAYING ||
+         m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+         m_seqManager->getTransportStatus() == RECORDING_AUDIO )
     {
         if (t >= comp.getEndMarker())
         {
@@ -1445,215 +1281,6 @@ void RosegardenGUIApp::displayBarTime(timeT t)
     m_transport->displayBarTime(barNo, beatNo, unitNo);
 }
 
-void RosegardenGUIApp::play()
-{
-
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-  
-    // If already playing or recording then stop
-    //
-    if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO )
-    {
-        stop();
-        return;
-    }
-
-    if (!m_sequencerProcess && !launchSequencer())
-        return;
-
-    // For the moment just throw this check in here
-    // (see the note on the method for how we should
-    // eventually use it)
-    //
-    if(!getSoundSystemStatus())
-        return;
-
-    // make sure we toggle the play button
-    // 
-    if (m_transport->PlayButton->state() == QButton::Off)
-        m_transport->PlayButton->toggle();
-
-    // write the start position argument to the outgoing stream
-    //
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    if (m_doc->getComposition().getTempo() == 0)
-    {
-      cout <<
-       "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
-        << endl;
-      m_doc->getComposition().setDefaultTempo(120.0);
-    }
-    else
-    {
-        cout << "RosegardenGUIApp::play() - starting to play" <<  endl;
-    }
-
-    // set the tempo in the transport
-    //
-    m_transport->setTempo(m_doc->getComposition().getTempo());
-
-    // The arguments for the Sequencer
-    //
-
-    Rosegarden::RealTime startPos = m_doc->getComposition().
-                getElapsedRealTime(m_doc->getComposition().getPosition());
-
-    // If we're looping then jump to loop start
-    //
-    if (m_doc->getComposition().isLooping())
-        startPos = m_doc->getComposition().getElapsedRealTime(
-                            m_doc->getComposition().getLoopStart());
-
-    // playback start position
-    streamOut << startPos.sec;
-    streamOut << startPos.usec;
-
-    // playback latency
-    streamOut << m_playLatency.sec;
-    streamOut << m_playLatency.usec;
-
-    // fetch latency
-    streamOut << m_fetchLatency.sec;
-    streamOut << m_fetchLatency.usec;
-
-    // read ahead slice
-    streamOut << m_readAhead.sec;
-    streamOut << m_readAhead.usec;
-
-    // Send Play to the Sequencer
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "play(long int, long int, long int, long int, long int, long int, long int, long int)",
-                                  data, replyType, replyData))
-    {
-        // failed - pop up and disable sequencer options
-        m_transportStatus = STOPPED;
-        KMessageBox::error(this,
-          i18n("Failed to contact Rosegarden sequencer"));
-    }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-  
-        if (result)
-        {
-            // completed successfully 
-            m_transportStatus = STARTING_TO_PLAY;
-        }
-        else
-        {
-            m_transportStatus = STOPPED;
-            KMessageBox::error(this, i18n("Failed to start playback"));
-        }
-    }
-
-}
-
-// Send stop request to Sequencer if playing, else
-// return to start of segment
-void RosegardenGUIApp::stop()
-{
-    // Animate the stop button - this seems to get caught looping
-    // at the moment
-    //
-    // m_transport->StopButton->animateClick();
-
-    if (m_transportStatus == STOPPED)
-    {
-        setPointerPosition(0);
-        return;
-    }
-
-    // set the play metronome on
-    //
-    m_transport->MetronomeButton->setOn(m_doc->getComposition().usePlayMetronome());
-
-
-    // If we're recording MIDI then tidy up the recording Segment
-    //
-    if (m_transportStatus == RECORDING_MIDI)
-    {
-        m_doc->stopRecordingMidi();
-    } 
-
-
-    QByteArray data;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "stop()", data))
-    {
-        // failed - pop up and disable sequencer options
-        KMessageBox::error(this,
-        i18n("Failed to contact Rosegarden sequencer with \"Stop\" command"));
-    }
-
-    // always untoggle the play button at this stage
-    //
-    if (m_transport->PlayButton->state() == QButton::On)
-        m_transport->PlayButton->toggle();
-
-    if (m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
-    {
-        // untoggle the record button
-        //
-        if (m_transport->RecordButton->state() == QButton::On)
-            m_transport->RecordButton->toggle();
-
-        cout << "RosegardenGUIApp::stop() - stopped recording" << endl;
-    }
-    else
-    {
-        cout << "RosegardenGUIApp::stop() - stopped playing" << endl;
-    }
-
-    // ok, we're stopped
-    //
-    m_transportStatus = STOPPED;
-
-}
-
-// Jump to previous bar
-//
-void RosegardenGUIApp::rewind()
-{
-    Rosegarden::Composition &composition = m_doc->getComposition();
-
-    timeT position = composition.getPosition();
-    
-    // want to cope with bars beyond the actual end of the piece
-    timeT newPosition = composition.getBarRangeForTime(position - 1).first;
-
-    setPointerPosition(newPosition);
-}
-
-
-// Jump to next bar
-//
-void RosegardenGUIApp::fastforward()
-{
-    Rosegarden::Composition &composition = m_doc->getComposition();
-
-    timeT position = composition.getPosition() + 1;
-    timeT newPosition = composition.getBarRangeForTime(position).second;
-
-    // we need to work out where the trackseditor finishes so we
-    // don't skip beyond it.  Generally we need extra-Composition
-    // non-destructive start and end markers for the piece.
-    //
-    setPointerPosition(newPosition);
-
-}
-
 
 void RosegardenGUIApp::refreshTimeDisplay()
 {
@@ -1661,40 +1288,6 @@ void RosegardenGUIApp::refreshTimeDisplay()
 }
 
 
-// This method is a callback from the Sequencer to update the GUI
-// with state change information.  The GUI requests the Sequencer
-// to start playing or to start recording and enters a pending
-// state (see rosegardendcop.h for TransportStatus values).
-// The Sequencer replies when ready with it's status.  If anything
-// fails then we default (or try to default) to STOPPED at both
-// the GUI and the Sequencer.
-//
-void RosegardenGUIApp::notifySequencerStatus(const int& status)
-{
-    // for the moment we don't do anything fancy
-    m_transportStatus = (TransportStatus) status;
-}
-
-
-void RosegardenGUIApp::sendSequencerJump(const Rosegarden::RealTime &position)
-{
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-    streamOut << position.sec;
-    streamOut << position.usec;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "jumpTo(long int, long int)",
-                                  data))
-    {
-      // failed - pop up and disable sequencer options
-      m_transportStatus = STOPPED;
-      KMessageBox::error(this, i18n("Failed to contact Rosegarden sequencer"));
-    }
-
-    return;
-}
 
 void RosegardenGUIApp::editAllTracks()
 {
@@ -1817,248 +1410,6 @@ RosegardenGUIApp::closeTransport()
      m_viewTransport->setChecked(false);
 }
 
-// Called when we want to start recording from the GUI.
-// This method tells the sequencer to start recording and
-// from then on the sequencer returns MappedCompositions
-// to the GUI via the "processRecordedMidi() method -
-// also called via DCOP
-//
-//
-
-void
-RosegardenGUIApp::record()
-{
-    Rosegarden::Composition &comp = m_doc->getComposition();
-
-    // if already recording then stop
-    //
-    if (m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
-    {
-        stop();
-        return;
-    }
-
-    // ensure these exist
-    //
-    if (!m_sequencerProcess && !launchSequencer())
-        return;
-
-    // For the moment just throw this check in here
-    // (see the note on the method for how we should
-    // eventually use it)
-    //
-    if(!getSoundSystemStatus())
-        return;
-
-    // toggle the Metronome button if it's in use
-    //
-    m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
-
-    // Adjust backwards by the bar count in
-    //
-    int startBar = comp.getBarNumber(comp.getPosition());
-    startBar -= comp.getCountInBars();
-    setPointerPosition(comp.getBarRange(startBar).first);
-
-
-    // Some locals
-    //
-    TransportStatus recordType;
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-
-    // get the record track and check its type
-    int rID = comp.getRecordTrack();
-
-    switch (comp.getTrackByIndex(rID)->getType())
-    {
-        case Rosegarden::Track::Midi:
-            recordType = STARTING_TO_RECORD_MIDI;
-            cout << "RosegardenGUIApp::record() - starting to record MIDI" << endl;
-            break;
-
-        case Rosegarden::Track::Audio:
-            recordType = STARTING_TO_RECORD_AUDIO;
-            cout << "RosegardenGUIApp::record() - starting to record Audio" << endl;
-            break;
-
-        default:
-            cout << "RosegardenGUIApp::record() - unrecognised track type" << endl;
-            return;
-            break;
-    }
-
-    // make sure we toggle the record button and play button
-    // 
-    if (m_transport->RecordButton->state() == QButton::Off)
-        m_transport->RecordButton->toggle();
-
-    if (m_transport->PlayButton->state() == QButton::Off)
-        m_transport->PlayButton->toggle();
-
-    // write the start position argument to the outgoing stream
-    //
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    if (comp.getTempo() == 0)
-    {
-        cout <<
-         "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
-          << endl;
-        comp.setDefaultTempo(120.0);
-    }
-    else
-    {
-        cout << "RosegardenGUIApp::record() - starting to record" << endl;
-    }
-
-    // set the tempo in the transport
-    //
-    m_transport->setTempo(comp.getTempo());
-
-    // The arguments for the Sequencer  - record is similar to playback,
-    // we must being playing to record
-    //
-
-    Rosegarden::RealTime startPos =comp.getElapsedRealTime(comp.getPosition());
-
-    // playback start position
-    streamOut << startPos.sec;
-    streamOut << startPos.usec;
-
-    // playback latency
-    streamOut << m_playLatency.sec;
-    streamOut << m_playLatency.usec;
-
-    // fetch latency
-    streamOut << m_fetchLatency.sec;
-    streamOut << m_fetchLatency.usec;
-
-    // read ahead slice
-    streamOut << m_readAhead.sec;
-    streamOut << m_readAhead.usec;
-
-    // record type
-    streamOut << (int)recordType;
-
-    // Send Play to the Sequencer
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
-                                  data, replyType, replyData))
-    {
-        // failed - pop up and disable sequencer options
-        m_transportStatus = STOPPED;
-        KMessageBox::error(this,
-          i18n("Failed to contact Rosegarden sequencer"));
-    }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-  
-        if (result)
-        {
-            // completed successfully 
-            m_transportStatus = recordType;
-        }
-        else
-        {
-            m_transportStatus = STOPPED;
-            KMessageBox::error(this, i18n("Failed to start recording"));
-        }
-    }
-
-}
-
-
-
-// This method accepts an incoming MappedComposition and goes about
-// inserting it into the Composition and updating the display to show
-// what has been recorded and where.
-//
-//
-void
-RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
-{
-    if (mC.size() > 0)
-    {
-/*
-        std::cout << "processRecordMidi has returned a composition with " <<
-                     mC.size() << " elements" << endl;
-*/
-
-        Rosegarden::MappedComposition::iterator i;
-
-        // send all events to the MIDI in label
-        //
-        for (i = mC.begin(); i != mC.end(); ++i )
-        {
-            m_transport->setMidiInLabel(*i);
-        }
-
-    }
-
-    // send any recorded Events to a Segment for storage and display
-    //
-    m_doc->insertRecordedMidi(mC);
-
-}
-
-
-
-// Process unexpected MIDI events at the GUI - send them to the Transport
-// or to a MIDI mixer for display purposes only.  Useful feature to enable
-// the musician to prove to herself quickly that the MIDI input is still
-// working.
-//
-//
-void
-RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
-{
-    if (mC.size())
-    {
-/*
-        std::cout << "RosegardenGUIApp::processAsynchronousMidi - GOT " <<
-                      mC.size() << " ASYNC EVENT(S)" << endl;
-*/
-
-        Rosegarden::MappedComposition::iterator i;
-
-        // send all events to the MIDI in label
-        //
-        for (i = mC.begin(); i != mC.end(); ++i )
-        {
-            m_transport->setMidiInLabel(*i);
-        }
-    }
-}
-
-
-// Double stop always does the trick
-void
-RosegardenGUIApp::rewindToBeginning()
-{
-    cout << "RosegardenGUIApp::rewindToBeginning()" << endl;
-    setPointerPosition(0);
-
-}
-
-
-void
-RosegardenGUIApp::fastForwardToEnd()
-{
-    cout << "RosegardenGUIApp::fastForwardToEnd()" << endl;
-
-    Rosegarden::Composition &composition = m_doc->getComposition();
-    Rosegarden::RealTime jumpTo = composition.getElapsedRealTime(composition.getDuration());
-
-    setPointerPosition(jumpTo);
-}
 
 
 // We use this slot to active a tool mode on the GUI
@@ -2125,68 +1476,6 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
 }
 
 
-// Called from the LoopRuler (usually a double click)
-// to set position and start playing
-//
-void
-RosegardenGUIApp::setPlayPosition(Rosegarden::timeT position)
-{
-
-    // If already playing then stop
-    //
-    if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO )
-    {
-        stop();
-        return;
-    }
-    
-    // otherwise off we go
-    //
-    setPointerPosition(position);
-    play();
-}
-
-
-void
-RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
-{
-    m_doc->getComposition().setLoopStart(lhs);
-    m_doc->getComposition().setLoopEnd(rhs);
-/*
-    std::cout << "setGUILoop(): START = "
-              << m_doc->getComposition().getLoopStart()
-              << " END = "
-              << m_doc->getComposition().getLoopEnd() << std::endl;
-*/
-
-
-    // Let the sequencer know about the loop markers
-    //
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    Rosegarden::RealTime loopStart =
-            m_doc->getComposition().getElapsedRealTime(lhs);
-    Rosegarden::RealTime loopEnd =
-            m_doc->getComposition().getElapsedRealTime(rhs);
-
-    streamOut << loopStart.sec;
-    streamOut << loopStart.usec;
-    streamOut << loopEnd.sec;
-    streamOut << loopEnd.usec;
-  
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                 "setLoop(long int, long int, long int, long int)", data))
-    {
-        // failed - pop up and disable sequencer options
-        KMessageBox::error(this,
-        i18n("Failed to contact Rosegarden sequencer with \"setLoop\""));
-    }
-}
-
 // Process the outgoing sounds into some form of visual
 // feedback at the GUI
 //
@@ -2206,137 +1495,7 @@ RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
 
 }
 
-// Once we have proper initialisation of the Sequencer we can use
-// this method properly (i.e. once) - at the moment we just call
-// it whenever we try to start the Sequencer
-//
-bool
-RosegardenGUIApp::getSoundSystemStatus()
-{
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
 
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getSoundSystemStatus()",
-                                  data, replyType, replyData))
-    {
-        // failed - pop up and disable sequencer options
-        KMessageBox::error(this,
-        i18n("Failed to contact Rosegarden sequencer"));
-    }
-    else
-    {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-        m_soundSystemStatus = (Rosegarden::SoundSystemStatus) result;
-
-        switch(m_soundSystemStatus)
-        {
-            case Rosegarden::MIDI_AND_AUDIO_SUBSYS_OK:
-                // we're fine
-                break;
-
-            case Rosegarden::MIDI_SUBSYS_OK:
-                KMessageBox::error(this,
-                        i18n("Audio subsystem has failed to initialise"));
-                return false;
-                break;
-
-            case Rosegarden::AUDIO_SUBSYS_OK:
-                KMessageBox::error(this,
-                        i18n("MIDI subsystem has failed to initialise"));
-                return false;
-                break;
-                
-            case Rosegarden::NO_SEQUENCE_SUBSYS:
-            default:
-                KMessageBox::error(this,
-                   i18n("MIDI and Audio subsystems have failed to initialise"));
-                return false;
-                break;
-        }
-    }
-
-    return true;
-}
-
-
-// Insert metronome clicks into the global MappedComposition that
-// will be returned as part of the slice fetch from the Sequencer.
-//
-//
-void
-RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
-{
-    // move these outside at some point
-    //
-    int metronomePitch = 70;
-    int metronomeInstrument = 0;
-    int metronomeTrack = 0;
-    int metronomeBarVely = 110;  // louder on bar start
-    int metronomeBeatVely = 80;
-
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    std::pair<timeT, timeT> barStart = comp.getBarRange(comp.getBarNumber(sliceStart));
-    std::pair<timeT, timeT> barEnd = comp.getBarRange(comp.getBarNumber(sliceEnd));
-
-    // The slice can straddle a bar boundary so check
-    // in both bars for the marker
-    //
-    if (barStart.first >= sliceStart && barStart.first <= sliceEnd)
-    {
-        Rosegarden::MappedEvent *me =
-            new Rosegarden::MappedEvent(metronomePitch,
-                                        comp.getElapsedRealTime(barStart.first),
-                                        Rosegarden::RealTime(0, 100000),
-                                        metronomeBarVely,
-                                        metronomeInstrument,
-                                        metronomeTrack);
-
-
-        mappComp.insert(me);
-    }
-    else if (barEnd.first >= sliceStart && barEnd.first <= sliceEnd)
-    {
-        Rosegarden::MappedEvent *me =
-            new Rosegarden::MappedEvent(metronomePitch,
-                                        comp.getElapsedRealTime(barEnd.first),
-                                        Rosegarden::RealTime(0, 100000),
-                                        metronomeBarVely,
-                                        metronomeInstrument,
-                                        metronomeTrack);
-
-
-        mappComp.insert(me);
-    }
-
-    // Is this solution for the beats bulletproof?  I'm not so sure.
-    //
-    //
-    bool isNew;
-    Rosegarden::TimeSignature timeSig = comp.getTimeSignatureInBar(comp.getBarNumber(sliceStart), isNew);
-    for (int i = barStart.first + timeSig.getBeatDuration();
-             i < barStart.second;
-             i += timeSig.getBeatDuration())
-    {
-        if (i >= sliceStart && i <= sliceEnd)
-        {
-            Rosegarden::MappedEvent *me =
-                new Rosegarden::MappedEvent(metronomePitch,
-                                            comp.getElapsedRealTime(i),
-                                            Rosegarden::RealTime(0, 100000),
-                                            metronomeBeatVely,
-                                            metronomeInstrument,
-                                            metronomeTrack);
-
-
-            mappComp.insert(me);
-        }
-    }
-}
 
 // Sets the play or record Metronome status according to
 // the current transport status
@@ -2346,10 +1505,10 @@ RosegardenGUIApp::toggleMetronome()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    if (m_transportStatus == STARTING_TO_RECORD_MIDI ||
-        m_transportStatus == STARTING_TO_RECORD_AUDIO ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
+    if (m_seqManager->getTransportStatus() == STARTING_TO_RECORD_MIDI ||
+        m_seqManager->getTransportStatus() == STARTING_TO_RECORD_AUDIO ||
+        m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
     {
         if (comp.useRecordMetronome())
             comp.setRecordMetronome(false);
@@ -2369,3 +1528,151 @@ RosegardenGUIApp::toggleMetronome()
     }
 }
 
+// ------------------------ SequenceManager ----------------------------
+//
+//
+//
+//
+//
+
+// This method is called from the Sequencer when it's playing.
+// It's a request to get the next slice of events for the
+// Sequencer to play.
+//
+Rosegarden::MappedComposition
+RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
+                                    long sliceEndSec, long sliceEndUsec)
+{
+
+    Rosegarden::RealTime startTime(sliceStartSec, sliceStartUsec);
+    Rosegarden::RealTime endTime(sliceEndSec, sliceEndUsec);
+
+    Rosegarden::MappedComposition *mC =
+        m_seqManager->getSequencerSlice(startTime, endTime);
+
+    showVisuals(*mC);
+
+    return *mC;
+}
+
+
+void
+RosegardenGUIApp::rewindToBeginning()
+{
+    m_seqManager->rewindToBeginning();
+}
+
+
+void
+RosegardenGUIApp::fastForwardToEnd()
+{
+    m_seqManager->fastForwardToEnd();
+}
+
+// Called from the LoopRuler (usually a double click)
+// to set position and start playing
+//
+void
+RosegardenGUIApp::setPlayPosition(Rosegarden::timeT time)
+{
+    m_seqManager->setPlayStartTime(time);
+}
+
+
+// Process unexpected MIDI events at the GUI - send them to the Transport
+// or to a MIDI mixer for display purposes only.  Useful feature to enable
+// the musician to prove to herself quickly that the MIDI input is still
+// working.
+//
+void
+RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
+{
+    m_seqManager->processAsynchronousMidi(mC);
+}
+
+
+void
+RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
+{
+    m_seqManager->processRecordedMidi(mC);
+}
+
+// This method is a callback from the Sequencer to update the GUI
+// with state change information.  The GUI requests the Sequencer
+// to start playing or to start recording and enters a pending
+// state (see rosegardendcop.h for TransportStatus values).
+// The Sequencer replies when ready with it's status.  If anything
+// fails then we default (or try to default) to STOPPED at both
+// the GUI and the Sequencer.
+//
+void RosegardenGUIApp::notifySequencerStatus(const int& status)
+{
+    m_seqManager->setTransportStatus((TransportStatus) status);
+}
+
+
+void RosegardenGUIApp::sendSequencerJump(const Rosegarden::RealTime &time)
+{
+    m_seqManager->sendSequencerJump(time);
+}
+
+// Called when we want to start recording from the GUI.
+// This method tells the sequencer to start recording and
+// from then on the sequencer returns MappedCompositions
+// to the GUI via the "processRecordedMidi() method -
+// also called via DCOP
+//
+void
+RosegardenGUIApp::record()
+{
+    if (!m_sequencerProcess && !launchSequencer())
+                return;
+
+    m_seqManager->record();
+}
+
+
+void
+RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
+{
+    m_seqManager->setLoop(lhs, rhs);
+}
+
+void RosegardenGUIApp::play()
+{
+    if (!m_sequencerProcess && !launchSequencer())
+                return;
+
+    m_seqManager->play();
+}
+
+// Send stop request to Sequencer if playing, else
+// return to start of segment
+void RosegardenGUIApp::stop()
+{
+    m_seqManager->stop();
+}
+
+// Jump to previous bar
+//
+void RosegardenGUIApp::rewind()
+{
+    m_seqManager->rewind();
+}
+
+
+// Jump to next bar
+//
+void RosegardenGUIApp::fastforward()
+{
+    m_seqManager->fastforward();
+}
+
+// Insert metronome clicks into the global MappedComposition that
+// will be returned as part of the slice fetch from the Sequencer.
+//
+void
+RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
+{
+    m_seqManager->insertMetronomeClicks(sliceStart, sliceEnd);
+}

@@ -34,19 +34,31 @@
 #include "Midi.h"
 
 
+// SequenceManager is a helper class that wraps the sequencing
+// functionality at the GUI level.  The sequencer still communicates
+// with the RosegardenGUIApp but all calls are passed on directly
+// to this class.
+//
+// Basically this neatens up the source code and provides a
+// logical break in the design.
+//
 namespace Rosegarden
 {
 
-class SequenceManager
+class SequenceManager : public QObject
 {
+    Q_OBJECT
 public:
     SequenceManager(RosegardenGUIDoc *doc,
                      RosegardenTransportDialog *transport);
     ~SequenceManager();
 
+    // Called from the sequencer - gets a slice of events
+    //
     MappedComposition* getSequencerSlice(const RealTime &sliceStart,
                                          const RealTime &sliceEnd);
 
+    // Transport controls
     void play();
     void stop();
     void rewind();
@@ -56,37 +68,43 @@ public:
     void fastForwardToEnd();
 
     void setPlayStartTime(const timeT &time);
-
     void notifySequencerStatus(TransportStatus status);
     void sendSequencerJump(const RealTime &time);
+    void setLoop(const timeT &lhs, const timeT &rhs);
+    void insertMetronomeClicks(const timeT &sliceStart, const timeT &sliceEnd);
 
+    // Events coming in
     void processRecordedMidi(const MappedComposition &mC);
     void processAsynchronousMidi(const MappedComposition &mC);
 
-    void setLoop(const timeT &lhs, const timeT &rhs);
-
+    // Before playing and recording (throws exceptions)
+    //
     void checkSoundSystemStatus();
 
-    void insertMetronomeClicks(const timeT &sliceStart, const timeT &sliceEnd);
+    // Check and set sequencer status
+    void setTransportStatus(const TransportStatus &status);
+    TransportStatus getTransportStatus() const { return m_transportStatus; }
 
-    // Upwards interfaces
+
+signals:
+    // For the moment we cheat and use signals for these
     //
-    void setPointerPosition(timeT time);
-    void setPointerPosition(RealTime realTime);
-    bool launchSequencer();
-    void sequencerExited(KProcess*);
+    void setPointerPosition(Rosegarden::timeT);
+    void setPointerPosition(Rosegarden::RealTime);
 
 private:
 
+    Rosegarden::MappedComposition m_mC;
+    RosegardenGUIDoc *m_doc;
+
+    // Latencies
     RealTime m_playLatency;
     RealTime m_fetchLatency;
     RealTime m_readAhead;
 
+    // statuses
     TransportStatus m_transportStatus;
     SoundSystemStatus m_soundSystemStatus;
-
-    Rosegarden::MappedComposition m_mC;
-    RosegardenGUIDoc *m_doc;
 
     // Metronome details
     //
@@ -96,8 +114,6 @@ private:
     MidiByte     m_metronomeBarVelocity;
     MidiByte     m_metronomeBeatVelocity;
     RealTime     m_metronomeDuration;
-
-    KProcess* m_sequencerProcess;
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;

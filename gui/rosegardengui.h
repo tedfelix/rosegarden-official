@@ -129,11 +129,9 @@ public:
      * The Sequencer calls this method to get a MappedCompositon
      * full of MappedEvents for it to play.
      */
-    const Rosegarden::MappedComposition&
-            getSequencerSlice(const long &sliceStartSec,
-                              const long &sliceStartUSec,
-                              const long &sliceEndSec,
-                              const long &sliceEndUSec);
+    Rosegarden::MappedComposition
+            getSequencerSlice(long sliceStartSec, long sliceStartUSec,
+                              long sliceEndSec, long sliceEndUSec);
 
     /**
      * The Sequencer sends back a MappedComposition full of
@@ -434,6 +432,7 @@ public slots:
      * this method is directly accesible from the sequencer
      * (longs are required over DCOP)
      */
+    void setPointerPosition(Rosegarden::RealTime time);
     void setPointerPosition(const long &posSec, const long &posUSec);
 
     /**
@@ -445,13 +444,6 @@ public slots:
      * Set a loop
      */
     void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
-
-    /*
-     * Rosegarden::RealTime version of the same
-     */
-    inline void setPointerPosition(const Rosegarden::RealTime &rT)
-        { setPointerPosition(rT.sec, rT.usec); }
-
 
     /**
      * timeT version of the same
@@ -571,25 +563,15 @@ private:
     KAction *m_rewindEndTransport;
     KAction *m_ffwdEndTransport;
 
-    Rosegarden::RealTime m_playLatency;
-    Rosegarden::RealTime m_fetchLatency;
-    Rosegarden::RealTime m_readAhead;
-
-    /**
-     * Transport (Playback and Recording) status
-     */
-    TransportStatus m_transportStatus;
-
     KProcess* m_sequencerProcess;
 
-    // transport dialog pointer
+    // SequenceManager
     //
-    Rosegarden::RosegardenTransportDialog *m_transport;
     Rosegarden::SequenceManager *m_seqManager;
 
-    // A local copy of the last SoundSystem status
-    // 
-    Rosegarden::SoundSystemStatus m_soundSystemStatus;
+    // Transport dialog pointer
+    //
+    Rosegarden::RosegardenTransportDialog *m_transport;
 };
  
 #endif // ROSEGARDENGUI_H

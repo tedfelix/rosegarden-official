@@ -34,6 +34,11 @@ namespace Rosegarden
 SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
                                    RosegardenTransportDialog *transport):
     m_doc(doc),
+    m_playLatency(0, 100000),  // the sequencer's head start
+    m_fetchLatency(0, 50000),  // how long to fetch and queue new events
+    m_readAhead(0, 40000),     // how many events to fetch
+    m_transportStatus(STOPPED),
+    m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
     m_metronomeInstrument(0),
     m_metronomeTrack(0),
     m_metronomePitch(70),
@@ -48,6 +53,12 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 SequenceManager::~SequenceManager()
 {
 } 
+
+void
+SequenceManager::setTransportStatus(const TransportStatus &status)
+{
+    m_transportStatus = status;
+}
 
 // This method is called from the Sequencer when it's playing.
 // It's a request to get the next slice of events for the
@@ -213,9 +224,6 @@ SequenceManager::play()
         return;
     }
 
-    if (!m_sequencerProcess && !launchSequencer())
-        return;
-
     // This check may throw an exception
     checkSoundSystemStatus();
 
@@ -305,7 +313,7 @@ SequenceManager::stop()
 
     if (m_transportStatus == STOPPED)
     {
-        setPointerPosition(0);
+        emit setPointerPosition(0);
         return;
     }
 
@@ -364,7 +372,7 @@ SequenceManager::rewind()
     // want to cope with bars beyond the actual end of the piece
     timeT newPosition = composition.getBarRangeForTime(position - 1).first;
 
-    setPointerPosition(newPosition);
+    emit setPointerPosition(newPosition);
 }
 
 
@@ -382,7 +390,7 @@ SequenceManager::fastforward()
     // don't skip beyond it.  Generally we need extra-Composition
     // non-destructive start and end markers for the piece.
     //
-    setPointerPosition(newPosition);
+    emit setPointerPosition(newPosition);
 
 }
 
@@ -426,52 +434,6 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
 
 
 
-// Sequencer auxiliary process management
-bool
-SequenceManager::launchSequencer()
-{
-    /*
-    if (m_sequencerProcess) return true;
-
-    // If we've already registered a sequencer then don't start another
-    // one
-    //
-    if (kapp->dcopClient()->
-        isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
-      return true;
-
-    KTmpStatusMsg msg(i18n("Starting the sequencer..."), statusBar());
-    
-    m_sequencerProcess = new KProcess;
-
-    (*m_sequencerProcess) << "rosegardensequencer";
-
-    connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
-            this, SLOT(sequencerExited(KProcess*)));
-
-    bool res = m_sequencerProcess->start();
-    
-    if (!res) {
-        m_sequencerProcess = 0;
-        throw(string("Couldn't start the sequencer"));
-    }
-
-    return res;
-    */
-    return true;
-
-}
-
-/*
-void
-SequenceManager::sequencerExited(KProcess*)
-{
-    m_sequencerProcess = 0;
-    throw(string("Sequencer exited"));
-}
-*/
-
-
 // Called when we want to start recording from the GUI.
 // This method tells the sequencer to start recording and
 // from then on the sequencer returns MappedCompositions
@@ -494,11 +456,6 @@ SequenceManager::record()
         return;
     }
 
-    // ensure these exist
-    //
-    if (!m_sequencerProcess && !launchSequencer())
-        return;
-
     // may throw an exception
     checkSoundSystemStatus();
 
@@ -510,7 +467,7 @@ SequenceManager::record()
     //
     int startBar = comp.getBarNumber(comp.getPosition());
     startBar -= comp.getCountInBars();
-    setPointerPosition(comp.getBarRange(startBar).first);
+    emit setPointerPosition(comp.getBarRange(startBar).first);
 
 
     // Some locals
@@ -679,7 +636,7 @@ void
 SequenceManager::rewindToBeginning()
 {
     cout << "RosegardenGUIApp::rewindToBeginning()" << endl;
-    setPointerPosition(0);
+    emit setPointerPosition(0);
 }
 
 
@@ -691,7 +648,7 @@ SequenceManager::fastForwardToEnd()
     Composition &comp = m_doc->getComposition();
     RealTime jumpTo = comp.getElapsedRealTime(comp.getDuration());
 
-    setPointerPosition(jumpTo);
+    emit setPointerPosition(jumpTo);
 }
 
 
@@ -714,7 +671,7 @@ SequenceManager::setPlayStartTime(const timeT &time)
     
     // otherwise off we go
     //
-    setPointerPosition(time);
+    emit setPointerPosition(time);
     play();
 }
 
@@ -867,18 +824,6 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         }
     }
 }
-
-void
-SequenceManager::setPointerPosition(timeT time)
-{
-}
-
-void
-SequenceManager::setPointerPosition(RealTime realTime)
-{
-}
-
-
 
 
 }

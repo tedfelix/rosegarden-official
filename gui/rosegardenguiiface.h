@@ -60,11 +60,9 @@ k_dcop:
     // MappedComposition.  These are lightweight versions
     // of what we have in Event and Composition.  
     //
-    virtual const Rosegarden::MappedComposition&
-            getSequencerSlice(const long &sliceStartSec,
-                              const long &sliceStartUsec,
-                              const long &sliceEndSec,
-                              const long &sliceEndUsec) = 0;
+    virtual Rosegarden::MappedComposition
+            getSequencerSlice(long sliceStartSec, long sliceStartUsec,
+                              long sliceEndSec, long sliceEndUsec) = 0;
 
     // The Sequencer sends back MappedCompositions full of
     // newly recorded MappedEvents for storage and presentation
