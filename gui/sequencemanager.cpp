@@ -885,7 +885,7 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
 
         // Default instrument is the first possible instrument
         //
-        metronome->instrument = Rosegarden::SystemInstrumentBase + 1;
+        metronome->instrument = Rosegarden::SystemInstrumentBase;
     }
 
     // If neither metronome is armed and we're not playing or recording

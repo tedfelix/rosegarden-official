@@ -1,6 +1,6 @@
 0.2 TO-DO for rwb
 -----------------
-updated 12.04.2002
+updated 15.04.2002
 
 Currently looking at:
 
@@ -8,12 +8,12 @@ o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
   - MIDI recording timestamps [DONE]
   - first pass Audio
-  - latencies
+  - latencies [??]
   - hanging notes on stop [DONE - VOICES_OFF type controller call and
                                   processPending()]
   - configure [DONE with GL]
   - start-up bug [FIXED?]
-  - metronome broken with ALSA?
+  - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
 
 o MappedDevice transmission is breaking occasionally
   [HOPEFULLY FIXED in MappedDevice itself]

@@ -170,6 +170,9 @@ private:
     // (multiple ports for a client)
     //
     ClientPortPair               m_currentPair;
+
+    // added metronome yet?
+    bool                         m_addedMetronome;
 };
 
 }

@@ -46,7 +46,8 @@ AlsaDriver::AlsaDriver():
     m_midiInputPortConnected(false),
     m_alsaPlayStartTime(0, 0),
     m_alsaRecordStartTime(0, 0),
-    m_currentPair(-1, -1)
+    m_currentPair(-1, -1),
+    m_addedMetronome(false)
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
 }
@@ -135,6 +136,7 @@ AlsaDriver::generateInstruments()
 
     m_instruments.clear();
     m_alsaPorts.clear();
+
 
     std::cout << std::endl << "  ALSA Client information:"
               << std::endl << std::endl;
@@ -235,23 +237,57 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
     if (client != m_currentPair.first && m_currentPair.first != -1)
         m_deviceRunningId++;
  
+    AlsaPort *alsaInstr;
+    MappedInstrument *instr;
+    std::string channelName;
+    char number[100];
+
+
     if (type == Instrument::Midi)
     {
 
-        // Create AlsaPort with the start and end MappedInstrumnet
+        // If we haven't added a metronome then add one to the first
+        // instrument we add.   This is accomplished by adding a
+        // MappedInstrument for Instrument #0
         //
-        AlsaPort *alsaInstr = new AlsaPort(m_midiRunningId,
-                                           m_midiRunningId + 15,
-                                           name,
-                                           client,
-                                           port,
-                                           duplex);  // a duplex port?
+        if(m_addedMetronome == false)
+        {
+            alsaInstr = new AlsaPort(0,
+                                     0,
+                                     name,
+                                     client,
+                                     port,
+                                     duplex);  // a duplex port?
+
+            m_alsaPorts.push_back(alsaInstr);
+
+            for (int channel = 0; channel < 16; channel++)
+            {
+                sprintf(number, ", Channel %d", channel);
+                channelName = "Metronome" + std::string(number);
+                instr = new MappedInstrument(type,
+                                             9, // always the drum channel
+                                             channel,
+                                             channelName,
+                                             m_deviceRunningId);
+                m_instruments.push_back(instr);
+            }
+            m_addedMetronome = true;
+        }
+
+        // Create AlsaPort with the start and end MappedInstrument
+        // indexes.
+        //
+        alsaInstr = new AlsaPort(m_midiRunningId,
+                                 m_midiRunningId + 15,
+                                 name,
+                                 client,
+                                 port,
+                                 duplex);  // a duplex port?
 
         m_alsaPorts.push_back(alsaInstr);
 
 
-        std::string channelName;
-        char number[100];
 
         for (int channel = 0; channel < 16; channel++)
         {
@@ -885,6 +921,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                             outputDevice.second);
 
         /*
+        cout << "INSTRUMENT = " << (*i)->getInstrument() << endl;
+
         cout << "TIME = " << time.tv_sec << " : " << time.tv_nsec * 1000
               << endl;
 
@@ -919,7 +957,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                       channel,
                                       (*i)->getPitch(),
                                       (*i)->getVelocity());
-                cout << "PITCH = " << (int)(*i)->getPitch() << endl;
                 break;
 
             case MappedEvent::MidiProgramChange:
