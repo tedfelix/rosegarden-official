@@ -1032,9 +1032,11 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 #endif
 
     // scoreAbsoluteTimeForBase wants to know the previous starting
-    // note (N) and the previous starting note that ends before this
-    // one starts (N').  Much more efficient to calculate them once
-    // now before the loop.
+    // note (N) and the previous starting note that ends (roughly)
+    // before this one starts (N').  Much more efficient to calculate
+    // them once now before the loop.
+
+    static timeT shortTime = Note(Note::Shortest).getDuration();
     
     Segment::iterator j(i);
     Segment::iterator n(s->end()), nprime(s->end());
@@ -1043,7 +1045,7 @@ NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) c
 	--j;
 	if ((*j)->isa(Note::EventType)) {
 	    if (n == s->end()) n = j;
-	    if ((*j)->getAbsoluteTime() + (*j)->getDuration()
+	    if ((*j)->getAbsoluteTime() + (*j)->getDuration() + shortTime/2
 		<= (*i)->getAbsoluteTime()) {
 		nprime = j;
 		break;
@@ -1278,6 +1280,9 @@ NotationQuantizer::Impl::quantizeDurationProvisional(Segment *, Segment::iterato
 void
 NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 {
+    static int totalFracCount = 0;
+    static float totalFrac = 0;
+
     Profiler profiler("NotationQuantizer::Impl::quantizeDuration");
 
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -1337,7 +1342,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	} else {
 	    ud = m_q->getFromSource(**ci, DurationValue);
 	}
-	
+
 	timeT qt = getProvisional(**ci, AbsoluteTimeValue);
 
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -1361,6 +1366,12 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	timeT qd = getProvisional(**ci, DurationValue);
 
 	timeT spaceAvailable = nextNoteTime - qt;
+	
+	if (spaceAvailable > 0) {
+	    float frac = float(ud) / float(spaceAvailable);
+	    totalFrac += frac;
+	    totalFracCount += 1;
+	}
 
 	if (!m_contrapuntal && qd > spaceAvailable) {
 
@@ -1440,6 +1451,10 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	setProvisional(**ci, DurationValue, qd);
 	if (!m_contrapuntal) nonContrapuntalDuration = qd;
     }
+
+#ifdef DEBUG_NOTATION_QUANTIZER
+    cout << "totalFrac " << totalFrac << ", totalFracCount " << totalFracCount << ", avg " << (totalFracCount > 0 ? (totalFrac / totalFracCount) : 0) << endl;
+#endif
 }
 
 
