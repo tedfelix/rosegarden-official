@@ -26,6 +26,7 @@
 #include "basiccommand.h"
 
 #include "Quantizer.h"
+#include <klocale.h>
 
 namespace Rosegarden {
     class Clipboard;
@@ -60,7 +61,7 @@ public:
     CutCommand(Rosegarden::SegmentSelection &selection,
 	       Rosegarden::Clipboard *clipboard);
 
-    static QString getGlobalName() { return "Cu&t"; }
+    static QString getGlobalName() { return i18n("Cu&t"); }
 };
 
 
@@ -72,7 +73,7 @@ public:
     CutAndCloseCommand(Rosegarden::EventSelection &selection,
 		       Rosegarden::Clipboard *clipboard);
 
-    static QString getGlobalName() { return "C&ut and Close"; }
+    static QString getGlobalName() { return i18n("C&ut and Close"); }
 
 protected:
     class CloseCommand : public KNamedCommand
@@ -112,7 +113,7 @@ public:
 
     virtual ~CopyCommand();
 
-    static QString getGlobalName() { return "&Copy"; }
+    static QString getGlobalName() { return i18n("&Copy"); }
 
     virtual void execute();
     virtual void unexecute();
@@ -134,7 +135,7 @@ public:
 
     virtual ~PasteSegmentsCommand();
 
-    static QString getGlobalName() { return "&Paste"; }
+    static QString getGlobalName() { return i18n("&Paste"); }
 
     virtual void execute();
     virtual void unexecute();
@@ -168,7 +169,7 @@ public:
 		       Rosegarden::timeT pasteTime,
 		       PasteType pasteType);
 
-    static QString getGlobalName() { return "&Paste"; }
+    static QString getGlobalName() { return i18n("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();
@@ -193,7 +194,7 @@ class EraseCommand : public BasicSelectionCommand
 public:
     EraseCommand(Rosegarden::EventSelection &selection);
 
-    static QString getGlobalName() { return "&Erase"; }
+    static QString getGlobalName() { return i18n("&Erase"); }
 
     virtual Rosegarden::timeT getRelayoutEndTime();
 
@@ -218,7 +219,7 @@ public:
 		     Rosegarden::Event *eventToModify,
 		     const Rosegarden::Event &newEvent);
 
-    static QString getGlobalName() { return "Edit E&vent"; }
+    static QString getGlobalName() { return i18n("Edit E&vent"); }
 
 protected:
     virtual void modifySegment();
@@ -284,7 +285,7 @@ public:
                              int value1,
                              int value2);
 
-    static QString getGlobalName() { return "Set &Property"; }
+    static QString getGlobalName() { return i18n("Set &Property"); }
 
     virtual void modifySegment();
 
@@ -329,7 +330,7 @@ public:
     SetLyricsCommand(Rosegarden::Segment *segment, QString newLyricData);
     ~SetLyricsCommand();
     
-    static QString getGlobalName() { return "Edit L&yrics"; }
+    static QString getGlobalName() { return i18n("Edit L&yrics"); }
 
     virtual void execute();
     virtual void unexecute();
@@ -350,11 +351,11 @@ public:
 
     static QString getGlobalName(int semitones = 0) {
 	switch (semitones) {
-	case   1: return "&Up a Semitone";
-	case  -1: return "&Down a Semitone";
-	case  12: return "Up an &Octave";
-	case -12: return "Down an Octa&ve";
-	default:  return "&Transpose...";
+	case   1: return i18n("&Up a Semitone");
+	case  -1: return i18n("&Down a Semitone");
+	case  12: return i18n("Up an &Octave");
+	case -12: return i18n("Down an Octa&ve");
+	default:  return i18n("&Transpose...");
 	}
     }
 
@@ -378,8 +379,8 @@ public:
 	m_selection(&selection), m_delta(delta) { }
 
     static QString getGlobalName(int delta = 0) {
-	if (delta > 0) return "&Increase Velocity";
-	else return "&Reduce Velocity";
+	if (delta > 0) return i18n("&Increase Velocity");
+	else return i18n("&Reduce Velocity");
     }
 
 protected:

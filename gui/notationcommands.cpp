@@ -218,9 +218,9 @@ ClefInsertionCommand::getGlobalName(Rosegarden::Clef *clef)
     if (clef) {
 	QString name(strtoqstr(clef->getClefType()));
 	name = name.left(1).upper() + name.right(name.length()-1);
-	return QString("Change to ") + name + " Cle&f...";
+	return i18n("Change to %1 Cle&f...").arg(name);
     } else {
-	return "Add Cle&f Change...";
+	return i18n("Add Cle&f Change...");
     }
 }
 
@@ -659,13 +659,11 @@ QString
 GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Rosegarden::Indication::Slur) {
-	return "Add S&lur";
+	return i18n("Add S&lur");
     }
 
-    std::string n = "Add &";
-    n += (char)toupper(indicationType[0]);
-    n += indicationType.substr(1);
-    return QString(strtoqstr(n));
+    QString n = i18n("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));
+    return n;
 }
 
 TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
@@ -1019,18 +1017,21 @@ NotesMenuAddSlashesCommand::modifySegment()
 QString
 MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 {
-    std::string m = markType;
+    QString m = strtoqstr(markType);
 
     // Gosh, lots of collisions
-    if (markType == Rosegarden::Marks::Sforzando) m = "S&forzando";
-    else if (markType == Rosegarden::Marks::Staccato) m = "Sta&ccato";
-    else if (markType == Rosegarden::Marks::Rinforzando) m = "R&inforzando";
-    else if (markType == Rosegarden::Marks::Tenuto) m = "T&enuto";
-    else if (markType == Rosegarden::Marks::Trill) m = "Tri&ll";
-    else m = std::string("&") + (char)toupper(m[0]) + m.substr(1);
+    if (markType == Rosegarden::Marks::Sforzando) m = i18n("S&forzando");
+    else if (markType == Rosegarden::Marks::Staccato) m = i18n("Sta&ccato");
+    else if (markType == Rosegarden::Marks::Rinforzando) m = i18n("R&inforzando");
+    else if (markType == Rosegarden::Marks::Tenuto) m = i18n("T&enuto");
+    else if (markType == Rosegarden::Marks::Trill) m = i18n("Tri&ll");
+    else m = i18n("&%1%2").arg(m[0].upper()).arg(m.right(m.length()-1));
+    // FIXME: That last i18n has very little chance of working, unless
+    // by some miracle the exact same string was translated elsewhere already
+    // but we'll leave it as a warning
 
-    m = std::string("Add ") + m;
-    return QString(strtoqstr(m));
+    m = i18n("Add %1").arg(m);
+    return m;
 }
 
 void

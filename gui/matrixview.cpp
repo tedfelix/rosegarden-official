@@ -439,40 +439,40 @@ void MatrixView::setupActions()
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
-    new KAction(i18n(EventQuantizeCommand::getGlobalName()), 0, this,
+    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(1)), 0,
+    new KAction(TransposeCommand::getGlobalName(1), 0,
 		Key_Up, this,
                 SLOT(slotTransposeUp()), actionCollection(),
                 "transpose_up");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(12)), 0,
+    new KAction(TransposeCommand::getGlobalName(12), 0,
 		Key_Up + CTRL, this,
                 SLOT(slotTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(-1)), 0,
+    new KAction(TransposeCommand::getGlobalName(-1), 0,
 		Key_Down, this,
                 SLOT(slotTransposeDown()), actionCollection(),
                 "transpose_down");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(-12)), 0,
+    new KAction(TransposeCommand::getGlobalName(-12), 0,
 		Key_Down + CTRL, this,
                 SLOT(slotTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(0)), 0, this,
+    new KAction(TransposeCommand::getGlobalName(0), 0, this,
                 SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
 
-    new KAction(i18n(ChangeVelocityCommand::getGlobalName(10)), 0,
+    new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
 		Key_Up + SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
                 "velocity_up");
 
-    new KAction(i18n(ChangeVelocityCommand::getGlobalName(-10)), 0,
+    new KAction(ChangeVelocityCommand::getGlobalName(-10), 0,
 		Key_Down + SHIFT, this,
                 SLOT(slotVelocityDown()), actionCollection(),
                 "velocity_down");

@@ -26,6 +26,7 @@
 #include "rosestrings.h"
 #include "basiccommand.h"
 #include "notestyle.h"
+#include <klocale.h>
 
 
 // Insertion commands
@@ -127,10 +128,9 @@ public:
 
     static QString getGlobalName(Rosegarden::Key *key = 0) {
 	if (key) {
-	    return QString("Change to &Key ") +
-		strtoqstr(key->getName()) + "...";
+	    return i18n("Change to &Key %1...").arg(strtoqstr(key->getName()));
 	} else {
-	    return "Add &Key Change...";
+	    return i18n("Add &Key Change...");
 	}
     }
 
@@ -157,10 +157,9 @@ public:
 
     static QString getGlobalName(Rosegarden::Key *key = 0) {
 	if (key) {
-	    return QString("Change all to &Key ") +
-		strtoqstr(key->getName()) + "...";
+	    return i18n("Change all to &Key %1...").arg(strtoqstr(key->getName()));
 	} else {
-	    return "Add &Key Change...";
+	    return i18n("Add &Key Change...");
 	}
     }
 };
@@ -198,7 +197,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "&Beam Group"; }
+    static QString getGlobalName() { return i18n("&Beam Group"); }
 
 protected:
     virtual void modifySegment();
@@ -215,7 +214,7 @@ public:
     GroupMenuAutoBeamCommand(Rosegarden::Segment &segment) :
 	BasicSelectionCommand(getGlobalName(), segment) { }
 
-    static QString getGlobalName() { return "&Auto-Beam"; }
+    static QString getGlobalName() { return i18n("&Auto-Beam"); }
 
 protected:
     virtual void modifySegment();
@@ -229,7 +228,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "&Unbeam"; }
+    static QString getGlobalName() { return i18n("&Unbeam"); }
 
 protected:
     virtual void modifySegment();
@@ -246,8 +245,8 @@ public:
 			   int untupled = 3, int tupled = 2);
 
     static QString getGlobalName(bool simple = true) {
-	if (simple) return "&Simple Tuplet";
-	else return "&Tuplet...";
+	if (simple) return i18n("&Simple Tuplet");
+	else return i18n("&Tuplet...");
     }
 
 protected:
@@ -268,7 +267,7 @@ public:
 	m_selection(&selection) { }
 
     static QString getGlobalName() {
-	return "&Untuplet";
+	return i18n("&Untuplet");
     }
 
 protected:
@@ -282,7 +281,7 @@ class GroupMenuGraceCommand : public BasicCommand
 public:
     GroupMenuGraceCommand(Rosegarden::EventSelection &selection);
 
-    static QString getGlobalName() { return "Make &Grace Notes"; }
+    static QString getGlobalName() { return i18n("Make &Grace Notes"); }
 
 protected:
     virtual void modifySegment();
@@ -296,7 +295,7 @@ public:
     GroupMenuUnGraceCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection) { }
 
-    static QString getGlobalName() { return "Ung&race"; }
+    static QString getGlobalName() { return i18n("Ung&race"); }
 
 protected:
     virtual void modifySegment();
@@ -342,7 +341,7 @@ public:
 
     TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection);
 
-    static QString getGlobalName() { return "&Normalize Rests"; }
+    static QString getGlobalName() { return i18n("&Normalize Rests"); }
 
 protected:
     virtual void modifySegment();
@@ -359,7 +358,7 @@ public:
 
     TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection);
 
-    static QString getGlobalName() { return "&Collapse Rests"; }
+    static QString getGlobalName() { return i18n("&Collapse Rests"); }
 
 protected:
     virtual void modifySegment();
@@ -373,7 +372,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "Collapse &Equal-Pitch Notes"; }
+    static QString getGlobalName() { return i18n("Collapse &Equal-Pitch Notes"); }
 
 protected:
     virtual void modifySegment();
@@ -390,7 +389,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "&Tie Equal-Pitch Notes"; }
+    static QString getGlobalName() { return i18n("&Tie Equal-Pitch Notes"); }
 
 protected:
     virtual void modifySegment();
@@ -407,7 +406,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "&Untie Notes"; }
+    static QString getGlobalName() { return i18n("&Untie Notes"); }
 
 protected:
     virtual void modifySegment();
@@ -428,7 +427,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), segment, true),
 	m_selection(0) { }
 
-    static QString getGlobalName() { return "Make Notes &Viable"; }
+    static QString getGlobalName() { return i18n("Make Notes &Viable"); }
 
 protected:
     virtual void modifySegment();
@@ -449,7 +448,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), segment, true),
 	m_selection(0) { }
 
-    static QString getGlobalName() { return "De-&Counterpoint"; }
+    static QString getGlobalName() { return i18n("De-&Counterpoint"); }
 
 protected:
     virtual void modifySegment();
@@ -486,7 +485,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "&Restore Computed Stems"; }
+    static QString getGlobalName() { return i18n("&Restore Computed Stems"); }
 
 protected:
     virtual void modifySegment();
@@ -505,7 +504,7 @@ public:
 	m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-	return "Change &Note Style";
+	return i18n("Change &Note Style");
     }
 
     static QString getGlobalName(NoteStyleName style);
@@ -562,7 +561,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_text(text) { }
 
-    static QString getGlobalName() { return "Add Te&xt Mark..."; }
+    static QString getGlobalName() { return i18n("Add Te&xt Mark..."); }
 
 protected:
     virtual void modifySegment();
@@ -580,7 +579,7 @@ public:
 	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-    static QString getGlobalName() { return "&Remove All Marks"; }
+    static QString getGlobalName() { return i18n("&Remove All Marks"); }
 
 protected:
     virtual void modifySegment();
@@ -599,7 +598,7 @@ public:
 	m_selection(&selection),
 	m_quantizer(quantizer) { }
     
-    static QString getGlobalName() { return "Fi&x Smoothed Values"; }
+    static QString getGlobalName() { return i18n("Fi&x Smoothed Values"); }
     
 protected:
     virtual void modifySegment();
@@ -634,7 +633,7 @@ public:
 
     //!!! might be nice to get a name based on the interpretations
     // applied as well
-    static QString getGlobalName() { return "&Interpret..."; }
+    static QString getGlobalName() { return i18n("&Interpret..."); }
     
 protected:
     virtual void modifySegment();

@@ -422,7 +422,7 @@ void RosegardenGUIApp::setupActions()
 
     // arf -- the action's called Collapse, the command's called Merge,
     // and the menu text says Join
-    new KAction(i18n(SegmentMergeCommand::getGlobalName()),
+    new KAction(SegmentMergeCommand::getGlobalName(),
                 0,
                 this, SLOT(slotMergeSegments()),
                 actionCollection(), "collapse");
@@ -432,7 +432,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");
 
-    new KAction(i18n(SegmentLabelCommand::getGlobalName()),
+    new KAction(SegmentLabelCommand::getGlobalName(),
                 0,
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
@@ -492,15 +492,15 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotTempoToSegmentLength()), actionCollection(),
                 "set_tempo_to_segment_length");
 
-    new KAction(i18n(SegmentRescaleCommand::getGlobalName()), 0, this,
+    new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
                 SLOT(slotRescaleSelection()), actionCollection(),
                 "rescale");
 
-    new KAction(i18n(SegmentAutoSplitCommand::getGlobalName()), 0, this,
+    new KAction(SegmentAutoSplitCommand::getGlobalName(), 0, this,
                 SLOT(slotAutoSplitSelection()), actionCollection(),
                 "auto_split");
 
-    new KAction(i18n(SegmentSplitByPitchCommand::getGlobalName()), 0, this,
+    new KAction(SegmentSplitByPitchCommand::getGlobalName(), 0, this,
                 SLOT(slotSplitSelectionByPitch()), actionCollection(),
                 "split_by_pitch");
 

@@ -1011,34 +1011,34 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-beam")));
 
-    new KAction(i18n(GroupMenuBeamCommand::getGlobalName()), icon, 0, this,
+    new KAction(GroupMenuBeamCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
 
-    new KAction(i18n(GroupMenuAutoBeamCommand::getGlobalName()), 0, this,
+    new KAction(GroupMenuAutoBeamCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-unbeam")));
 
-    new KAction(i18n(GroupMenuBreakCommand::getGlobalName()), icon, 0, this,
+    new KAction(GroupMenuBreakCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
     
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-simple-tuplet")));
 
-    new KAction(i18n(GroupMenuTupletCommand::getGlobalName(true)), icon, 0, this,
+    new KAction(GroupMenuTupletCommand::getGlobalName(true), icon, 0, this,
 		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-tuplet")));
 
-    new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), icon, 0, this,
+    new KAction(GroupMenuTupletCommand::getGlobalName(false), icon, 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
-    new KAction(i18n(GroupMenuUnTupletCommand::getGlobalName()), 0, this,
+    new KAction(GroupMenuUnTupletCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet")));
@@ -1057,46 +1057,46 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-grace")));
 
-    new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), icon, 0, this,
+    new KAction(GroupMenuGraceCommand::getGlobalName(), icon, 0, this,
 		SLOT(slotGroupGrace()), actionCollection(), "grace");
 
-    new KAction(i18n(GroupMenuUnGraceCommand::getGlobalName()), 0, this,
+    new KAction(GroupMenuUnGraceCommand::getGlobalName(), 0, this,
 		SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-slur")));
 
-    new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Slur)), icon, 0, this,
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Slur), icon, 0, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-crescendo")));
 
-    new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Crescendo)), icon, 0, this,
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Crescendo), icon, 0, this,
                 SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
 
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("group-decrescendo")));
 
-    new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Decrescendo)), icon, 0, this,
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Decrescendo), icon, 0, this,
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     // setup Transforms menu
-    new KAction(i18n(TransformsMenuNormalizeRestsCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuNormalizeRestsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
 
-    new KAction(i18n(TransformsMenuCollapseRestsCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuCollapseRestsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
-    new KAction(i18n(TransformsMenuCollapseNotesCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuCollapseNotesCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
@@ -1104,69 +1104,69 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("transforms-tie")));
 
-    new KAction(i18n(TransformsMenuTieNotesCommand::getGlobalName()), icon, 0, this,
+    new KAction(TransformsMenuTieNotesCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotTransformsTieNotes()), actionCollection(),
                 "tie_notes");
 
-    new KAction(i18n(TransformsMenuUntieNotesCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuUntieNotesCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsUntieNotes()), actionCollection(),
                 "untie_notes");
 
-    new KAction(i18n(TransformsMenuMakeNotesViableCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuMakeNotesViableCommand::getGlobalName(), 0, this,
 		SLOT(slotTransformsMakeNotesViable()), actionCollection(),
 		"make_notes_viable");
 
-    new KAction(i18n(TransformsMenuDeCounterpointCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuDeCounterpointCommand::getGlobalName(), 0, this,
 		SLOT(slotTransformsDeCounterpoint()), actionCollection(),
 		"de_counterpoint");
 
-    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)),
+    new KAction(TransformsMenuChangeStemsCommand::getGlobalName(true),
 		0, Key_PageUp + CTRL, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
 
-    new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(false)),
+    new KAction(TransformsMenuChangeStemsCommand::getGlobalName(false),
 		0, Key_PageDown + CTRL, this,
                 SLOT(slotTransformsStemsDown()), actionCollection(),
                 "stems_down");
 
-    new KAction(i18n(TransformsMenuRestoreStemsCommand::getGlobalName()), 0, this,
+    new KAction(TransformsMenuRestoreStemsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(1)), 0,
+    new KAction(TransposeCommand::getGlobalName(1), 0,
 		Key_Up, this,
                 SLOT(slotTransposeUp()), actionCollection(),
                 "transpose_up");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(12)), 0,
+    new KAction(TransposeCommand::getGlobalName(12), 0,
 		Key_Up + CTRL, this,
                 SLOT(slotTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(-1)), 0,
+    new KAction(TransposeCommand::getGlobalName(-1), 0,
 		Key_Down, this,
                 SLOT(slotTransposeDown()), actionCollection(),
                 "transpose_down");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(-12)), 0,
+    new KAction(TransposeCommand::getGlobalName(-12), 0,
 		Key_Down + CTRL, this,
                 SLOT(slotTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
-    new KAction(i18n(TransposeCommand::getGlobalName(0)), 0, this,
+    new KAction(TransposeCommand::getGlobalName(0), 0, this,
                 SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
 
-    new KAction(i18n(EventQuantizeCommand::getGlobalName()), 0, this,
+    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 /*!!!
-    new KAction(i18n(TransformsMenuFixSmoothingCommand::getGlobalName()), 0,
+    new KAction(TransformsMenuFixSmoothingCommand::getGlobalName(), 0,
 		this, SLOT(slotTransformsFixSmoothing()), actionCollection(),
                 "fix_smoothing");
 */
-    new KAction(i18n(TransformsMenuInterpretCommand::getGlobalName()), 0,
+    new KAction(TransformsMenuInterpretCommand::getGlobalName(), 0,
 		this, SLOT(slotTransformsInterpret()), actionCollection(),
 		"interpret");
 
@@ -1195,11 +1195,11 @@ void NotationView::setupActions()
         (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
         ("text-mark")));
 
-    new KAction(i18n(MarksMenuAddTextMarkCommand::getGlobalName()), icon, 0, this,
+    new KAction(MarksMenuAddTextMarkCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotMarksAddTextMark()), actionCollection(),
                 "add_text_mark");
 
-    new KAction(i18n(MarksMenuRemoveMarksCommand::getGlobalName()), 0, this,
+    new KAction(MarksMenuRemoveMarksCommand::getGlobalName(), 0, this,
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
 
@@ -1212,7 +1212,7 @@ void NotationView::setupActions()
 		    QString("slashes_%1").arg(i));
     }
 
-    new KAction(i18n(ClefInsertionCommand::getGlobalName()), 0, this,
+    new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");
 
@@ -1224,7 +1224,7 @@ void NotationView::setupActions()
                 SLOT(slotEditAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
-    new KAction(i18n(KeyInsertionCommand::getGlobalName()), 0, this,
+    new KAction(KeyInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddKeySignature()), actionCollection(),
                 "add_key_signature");
 

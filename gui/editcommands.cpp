@@ -856,17 +856,17 @@ EventUnquantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
     if (quantizer) {
 	switch (quantizer->getType()) {
 	case Rosegarden::Quantizer::PositionQuantize:
-	    return "Position &Quantize";
+	    return i18n("Position &Quantize");
 	case Rosegarden::Quantizer::UnitQuantize:
-	    return "Unit &Quantize";
+	    return i18n("Unit &Quantize");
 	case Rosegarden::Quantizer::NoteQuantize:
-	    return "Note &Quantize";
+	    return i18n("Note &Quantize");
 	case Rosegarden::Quantizer::LegatoQuantize:
-	    return "Smoothing &Quantize";
+	    return i18n("Smoothing &Quantize");
 	}
     }
 */
-    return "&Quantize...";
+    return i18n("&Quantize...");
 }
 
 void
