@@ -127,7 +127,7 @@ MidiDevice::generateDefaultMetronome()
 {
     InstrumentList insList = getAllInstruments();
     InstrumentList::const_iterator it = insList.begin();
-    for (; it != insList.end(); +it)
+    for (; it != insList.end(); ++it)
     {
         /*
         if ((*it)->getChannel() == 9)
