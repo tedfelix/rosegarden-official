@@ -623,9 +623,24 @@ AudioFileManager::drawPreview(AudioFileId id,
     painter.setPen(kapp->palette().color(QPalette::Active,
                                          QColorGroup::Dark));
 
+    if (values.size() == 0)
+    {
+        std::cerr << "AudioFileManager::drawPreview - "
+                  << "no preview values returned!" << std::endl;
+        return;
+    }
+
     float yStep = pixmap->height() / 2;
     int channels = audioFile->getChannels();
     float ch1Value, ch2Value;
+
+    if (channels == 0)
+    {
+        std::cerr << "AudioFileManager::drawPreview - "
+                  << "no channels in audio file!" << std::endl;
+        return;
+    }
+
 
     // Render pixmap
     //

@@ -1357,10 +1357,6 @@ RosegardenGUIDoc::stopRecordingAudio()
 
     m_recordSegment->setStartTime(shiftedStartTime);
 
-    // something in the record segment (that's why it was added
-    // to the composition)
-    m_commandHistory->addCommand (new SegmentRecordCommand(m_recordSegment));
-
 }
 
 // Called from the sequencer when all is clear with the newly recorded
@@ -1438,6 +1434,10 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
                      << endl;
         return;
     }
+
+    // something in the record segment (that's why it was added
+    // to the composition)
+    m_commandHistory->addCommand(new SegmentRecordCommand(m_recordSegment));
 
     // clear down
     m_recordSegment = 0;

@@ -12,11 +12,13 @@ o JACK connection management - stereo, panning
 
 o Matrix Hypereditor [HALF COMPLETED]
 
-o Matrix width bug [HALF COMPLETED]
+o BUG - Matrix width bug [HALF COMPLETED]
 
-o Matrix pointer width
+o BUG - Matrix pointer width
 
-o Plugin calls() during playback causing usual problem
+o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
+
+o BUG - Plugin calls() during playback causing usual problem
 
 o File loading blank-out
 

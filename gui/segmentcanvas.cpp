@@ -510,14 +510,14 @@ void SegmentItem::drawShape(QPainter& painter)
         
     if (m_preview && m_showPreview) m_preview->drawShape(painter);
 
-    // Don't show label if we're showing the preview
-    //
-    if (m_showPreview  && m_segment->getType() == Rosegarden::Segment::Audio)
-        return;
-
     // draw label
     if (m_segment) 
     {
+        // Don't show label if we're showing the preview
+        //
+        if (m_showPreview && m_segment->getType() == Rosegarden::Segment::Audio)
+            return;
+
         painter.setFont(*m_font);
         QRect labelRect = rect();
         int x = labelRect.x() + 3;
