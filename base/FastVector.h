@@ -87,18 +87,19 @@ class FastVector
 { 
 public:
     typedef T value_type;
-    typedef signed long size_type;
+    typedef long size_type;
+    typedef long difference_type;
 
 private:
     class iterator_base : public
 
 #if defined(_STL_1997_) || (__GNUC__ > 2)
-    std::iterator<std::random_access_iterator_tag, T, size_type>
+    std::iterator<std::random_access_iterator_tag, T, difference_type>
 #else
 #if defined(__STL_USE_NAMESPACES)
     std::
 #endif
-    random_access_iterator<T, size_type>
+    random_access_iterator<T, difference_type>
 #endif
     {
     public:
@@ -134,17 +135,17 @@ private:
 	    return (m_v != i.m_v || m_i != i.m_i);
 	}
 
-	iterator_base &operator+=(size_type i) { m_i += i; return *this; }
-	iterator_base &operator-=(size_type i) { m_i -= i; return *this; }
+	iterator_base &operator+=(difference_type i) { m_i += i; return *this; }
+	iterator_base &operator-=(difference_type i) { m_i -= i; return *this; }
 
-	iterator_base operator+(size_type i) const {
+	iterator_base operator+(difference_type i) const {
 	    iterator_base n(*this); n += i; return n;
 	}
-	iterator_base operator-(size_type i) const {
+	iterator_base operator-(difference_type i) const {
 	    iterator_base n(*this); n -= i; return n;
 	}
 
-	size_type operator-(const iterator_base &i) const {
+	difference_type operator-(const iterator_base &i) const {
 	    assert(m_v == i.m_v);
             return m_i - i.m_i;
 	}

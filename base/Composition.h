@@ -454,6 +454,8 @@ protected:
 	virtual ~ReferenceSegment();
 	
 	typedef Impl::iterator iterator;
+	typedef Impl::size_type size_type;
+	typedef Impl::difference_type difference_type;
 
 	Impl::size;
 	Impl::begin;
