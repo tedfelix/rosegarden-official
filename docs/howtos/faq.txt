@@ -584,3 +584,22 @@ will then allow new users to quickly create their own particular
 Studio device settings with the minimum of work on their part.
 
 
+Improving Performance
+---------------------
+
+I get drop outs or xruns with JACK.  How do I improve performance?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A good tip posted on the Linux Audio User list by Patrick Shirkey
+has to do with journaled file systems (ext3, reiserfs etc.):
+
+  The main problem is that jack writes data to a /tmp file. It has been 
+  found that mounting /tmp as tmpfs (in RAM) solves the problems that many 
+  people have experienced with lockups while using JACK.
+
+  Just put this in your /etc/fstab
+
+  none                /tmp              tmpfs     defaults      0 0
+
+You should them remount your /tmp filesystem (mount /tmp as root).
+
