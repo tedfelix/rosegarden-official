@@ -477,8 +477,10 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
+//    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
 	    timeT duration = elt->event()->get<Int>
 		(Rosegarden::Quantizer::LegatoDurationProperty);
+//kdDebug(KDEBUG_AREA) << "done" <<endl;
 
 	    if (duration > 0) {
 		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);

@@ -118,7 +118,14 @@ NotationSet::sample(const NELIterator &i)
 timeT
 NotationSet::durationOf(const NELIterator &i)
 {
-    return (*i)->event()->get<Int>(Quantizer::LegatoDurationProperty);
+//    kdDebug(KDEBUG_AREA) << "NotationSet::durationOf: about to query legato duration property" << endl;
+    long d = 0;
+    if (!(*i)->event()->get<Int>(Quantizer::LegatoDurationProperty, d)) {
+	// presumably not a note or rest
+	d = (*i)->getDuration();
+    }
+//    kdDebug(KDEBUG_AREA) << "done" << endl;
+    return d;
 }
 
 NotationSet::NELIterator

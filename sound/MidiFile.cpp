@@ -645,13 +645,15 @@ MidiFile::convertToRosegarden()
 			break;
 
 		    case MIDI_TIME_SIGNATURE:
-			rosegardenEvent = new Event(Rosegarden::TimeSignature::EventType);
+//			rosegardenEvent = new Event(Rosegarden::TimeSignature::EventType);
 			numerator = (int) midiEvent->metaMessage()[0];
 			denominator = 1 << ((int) midiEvent->metaMessage()[1]);
 
 			if (numerator == 0 ) numerator = 4;
 			if (denominator == 0 ) denominator = 4;
 
+			//!!! Change this so as to place time sigs in the
+			// reference segment.
 			rosegardenEvent = Rosegarden::TimeSignature
 			    (numerator, denominator).getAsEvent(rosegardenTime);
 			rosegardenSegment->insert(rosegardenEvent);
@@ -667,10 +669,9 @@ MidiFile::convertToRosegarden()
 
 			// create and insert the key event
 			//
-			key = new Rosegarden::Key(accidentals, isSharp, isMinor);
-			rosegardenEvent = key->getAsEvent(rosegardenTime);
+			rosegardenEvent = Rosegarden::Key
+			    (accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
 			rosegardenSegment->insert(rosegardenEvent);
-			delete key;
 
 			break;
 

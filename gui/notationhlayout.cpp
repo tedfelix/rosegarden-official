@@ -381,6 +381,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                     int sd = 0;
                     try {
+//    kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: about to query legato duration property" << endl;
 			if (d > 0 &&
 			    (shortest == notes->end() ||
 			     d <= (sd = (*shortest)->event()->get<Int>
@@ -397,6 +398,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 				shortCount = 1;
 			    }
 			}
+//kdDebug(KDEBUG_AREA) << "done" <<endl;
                     } catch (Event::NoData e) {
                         kdDebug(KDEBUG_AREA) << "No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
                     }
