@@ -242,6 +242,12 @@ MidiDevice::clearControlList()
 void
 MidiDevice::addProgram(const MidiProgram &prog)
 {
+    // Refuse duplicates
+    for (ProgramList::const_iterator it = m_programList.begin();
+	 it != m_programList.end(); ++it) {
+	if (*it == prog) return;
+    }
+
     m_programList.push_back(prog);
 }
 
