@@ -11,7 +11,7 @@ class LogExtractor
   end
 
   def extract
-    cmd = "cvs -q -z3 log -d '#{@from}<#{@to}' #{@files}"
+    cmd = "cvs -q -z3 log -r -d '#{@from}<#{@to}' #{@files}"
     puts cmd if $DEBUG
     @logStream = IO.popen cmd
     @logParser = LogParser.new @logStream
@@ -106,9 +106,9 @@ def usage
 end
 ########## And now for something completely different
 
-logparser = LogParser.new(File.new ARGV[0])
-logparser.parse
-exit
+# logparser = LogParser.new(File.new ARGV[0])
+# logparser.parse
+# exit
 
 timeFormat = /[\d]{4}-[\d]{2}-[\d]{2}/
 yesterday = Date.today - 1
