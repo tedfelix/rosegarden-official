@@ -211,6 +211,22 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 //             this,
 //             SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
 
+    connect(m_trackEditor->getBarButtons(),
+            SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            parent,
+            SLOT(setPointerPosition(Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBarButtons(),
+            SIGNAL(setPlayPosition(Rosegarden::timeT)),
+            parent,
+            SLOT(setPlayPosition(Rosegarden::timeT)));
+
+    connect(m_trackEditor->getBarButtons(),
+            SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+            parent,
+            SLOT(setLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
+
     if (doc)
         m_trackEditor->setupSegments();
 }
