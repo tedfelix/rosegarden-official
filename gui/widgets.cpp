@@ -57,8 +57,6 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
     if (m_reverse)
          value = -value;
 
-    RG_DEBUG << "RosegardenComboBox::wheelEvent(" << value << ")\n";
-       
     if (value < 0)
     {
         if (currentItem() < count() - 1)
