@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden" version="090">
+<kpartgui name="Rosegarden" version="091">
 
 <MenuBar>
   <Menu name="file">
