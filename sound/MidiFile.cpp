@@ -685,7 +685,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     // NB.  Instead of just using Event::getDuration to get the
     // duration of an event, use TrackPerformanceHelper::getSoundingDuration,
     // somewhat like the way TrackNotationHelper is used in the method
-    // above... (i.e. construct the PerformanceTrack on the
+    // above... (i.e. construct the TrackPerformanceHelper on the
     // stack and let it be discarded after you've finished with
     // it, all it is is a bunch of methods).
     //
