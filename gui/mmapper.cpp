@@ -339,7 +339,7 @@ void SegmentMmapper::setFileSize(size_t size)
 
     } else {
 
-        // On linux, ftrunctate can enlarge a file, but this isn't specified by POSIX
+        // On linux, ftruncate can enlarge a file, but this isn't specified by POSIX
         // so go the safe way
 
         if (size == 0) {

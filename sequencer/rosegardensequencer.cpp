@@ -66,7 +66,6 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_studio(new Rosegarden::MappedStudio()),
-    m_oldSliceSize(0, 0),
     m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").first()),
     m_metaIterator(0),
     m_controlBlockMmapper(0),
@@ -105,11 +104,6 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     // set this here and now so we can accept async midi events
     //
     m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
-
-    // Setup the slice timer
-    //
-    m_sliceTimer = new QTimer(this);
-//    connect(m_sliceTimer, SIGNAL(timeout()), this, SLOT(slotRevertSliceSize()));
 
     // Check for new clients every so often
     //
@@ -1400,27 +1394,6 @@ RosegardenSequencerApp::slotCheckForNewClients()
     }
 }
 
-
-
-void
-RosegardenSequencerApp::setSliceSize(long timeSec, long timeUSec)
-{
-    int msecs = (timeSec * 1000) + (timeUSec / 1000);
-    SEQUENCER_DEBUG << "set slice size = " << msecs << "ms" << endl;
-
-    Rosegarden::RealTime newReadAhead(timeSec, timeUSec);
-
-    m_readAhead = newReadAhead;
-
-    /*
-    if (newReadAhead > m_readAhead)
-    else // shrinking slice, we have to refetch sooner
-    {
-        // for the moment we just keep it simple
-        m_readAhead = newReadAhead;
-    }
-    */
-}
 
 // Set the MIDI Clock period in microseconds
 //

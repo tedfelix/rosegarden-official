@@ -297,7 +297,7 @@ AbstractSet<Element, Container>::sample(const Iterator &i)
     Event *e = getAsEvent(i);
     timeT d(q.getQuantizedDuration(e));
     
-    if (d > 0) {
+    if (e->isa(Note::EventType) || d > 0) {
         if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(getAsEvent(m_longest))) {
 //	    std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;

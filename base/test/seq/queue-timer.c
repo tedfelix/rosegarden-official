@@ -29,6 +29,8 @@ main(int argc, char **argv)
     int rval;
     struct timeval starttv, prevdiff;
     int countdown = -1;
+    snd_seq_queue_timer_t *timer;
+    snd_timer_id_t *timerid;
 
     if (snd_seq_open(&handle, "hw", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
 	fprintf(stderr, "failed to open ALSA sequencer interface\n");
@@ -48,7 +50,18 @@ main(int argc, char **argv)
 	fprintf(stderr, "failed to create ALSA sequencer queue\n");
 	return 1;
     }
-
+/*
+    snd_seq_queue_timer_alloca(&timer);
+    snd_seq_get_queue_timer(handle, queue, timer);
+    snd_timer_id_alloca(&timerid);
+    snd_timer_id_set_class(timerid, SND_TIMER_CLASS_PCM);
+    snd_timer_id_set_sclass(timerid, SND_TIMER_SCLASS_NONE);
+    snd_timer_id_set_card(timerid, 0);
+    snd_timer_id_set_device(timerid, 0);
+    snd_timer_id_set_subdevice(timerid, 0);
+    snd_seq_queue_timer_set_id(timer, timerid);
+    snd_seq_set_queue_timer(handle, queue, timer);
+*/
     snd_seq_start_queue(handle, queue, 0);
     snd_seq_drain_output(handle);
 
@@ -91,13 +104,21 @@ main(int argc, char **argv)
 	if (diffdiff.tv_usec >  5000 ||
 	    diffdiff.tv_usec < -5000) {
 	    fprintf(stderr, "oops! queue slipped\n");
-	    countdown = 2;
+	    if (tv.tv_sec < 5) {
+		fprintf(stderr, "(ignoring in first few seconds)\n");
+	    } else {
+		countdown = 2;
+	    }
 	} else {
 	    if (countdown > 0) --countdown;
 	}
 
 	fprintf(stderr, "\n");
-	sleep(1);
+//	sleep(1);
+	struct timespec ts;
+	ts.tv_sec = 0;
+	ts.tv_nsec = 500000000;
+	nanosleep(&ts, 0);
     }
 }
 

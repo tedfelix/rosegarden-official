@@ -966,15 +966,27 @@ void EditView::slotAddTimeSignature()
     int barNo = composition->getBarNumber(insertionTime);
     bool atStartOfBar = (insertionTime == composition->getBarStart(barNo));
 
-    Rosegarden::CompositionTimeSliceAdapter adapter
-        (&getDocument()->getComposition(), insertionTime,
-         getDocument()->getComposition().getDuration());
-    Rosegarden::AnalysisHelper helper;
-    Rosegarden::TimeSignature timeSig = helper.guessTimeSignature(adapter);
+    TimeSignatureDialog *dialog = 0;
+    int timeSigNo = composition->getTimeSignatureNumberAt(insertionTime);
 
-    TimeSignatureDialog *dialog = new TimeSignatureDialog
-        (this, timeSig, barNo, atStartOfBar,
-         i18n("Estimated time signature shown"));
+    if (timeSigNo >= 0) {
+
+	dialog = new TimeSignatureDialog
+	    (this, composition->getTimeSignatureAt(insertionTime),
+	     barNo, atStartOfBar);
+
+    } else {
+
+	Rosegarden::CompositionTimeSliceAdapter adapter
+	    (&getDocument()->getComposition(), insertionTime,
+	     getDocument()->getComposition().getDuration());
+	Rosegarden::AnalysisHelper helper;
+	Rosegarden::TimeSignature timeSig = helper.guessTimeSignature(adapter);
+	
+	dialog = new TimeSignatureDialog
+	    (this, timeSig, barNo, atStartOfBar,
+	     i18n("Estimated time signature shown"));
+    }
     
     if (dialog->exec() == QDialog::Accepted) {
 

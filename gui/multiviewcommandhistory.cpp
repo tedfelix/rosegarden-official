@@ -120,6 +120,8 @@ MultiViewCommandHistory::addCommand(KCommand *command, bool execute)
 {
     if (!command) return;
 
+    RG_DEBUG << "MultiViewCommandHistory::addCommand: " << command << endl;
+
     // We can't redo after adding a command
     clearStack(m_redoStack);
 
@@ -217,6 +219,13 @@ MultiViewCommandHistory::clipStack(CommandStack &stack, int limit)
 
 	CommandStack tempStack;
 	for (i = 0; i < limit; ++i) {
+	KCommand *togo = stack.top();
+	KNamedCommand *named = dynamic_cast<KNamedCommand *>(togo);
+	if (named) {
+	    RG_DEBUG << "MVCH::clipStack: Saving recent command: " << named->name() << " at " << togo << endl;
+	} else {
+	    RG_DEBUG << "MVCH::clipStack: Saving recent unnamed command" << " at " << togo << endl;
+	}
 	    tempStack.push(stack.top());
 	    stack.pop();
 	}
@@ -235,9 +244,9 @@ MultiViewCommandHistory::clearStack(CommandStack &stack)
 	KCommand *togo = stack.top();
 	KNamedCommand *named = dynamic_cast<KNamedCommand *>(togo);
 	if (named) {
-	    RG_DEBUG << "MVCH::clearStack: About to delete command: " << named->name() << endl;
+	    RG_DEBUG << "MVCH::clearStack: About to delete command: " << named->name() << " at " << togo << endl;
 	} else {
-	    RG_DEBUG << "MVCH::clearStack: About to delete unnamed command" << endl;
+	    RG_DEBUG << "MVCH::clearStack: About to delete unnamed command" << " at " << togo << endl;
 	}
 	delete togo;
 	stack.pop();

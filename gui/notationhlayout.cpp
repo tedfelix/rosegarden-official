@@ -237,6 +237,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	bool newTimeSig = false;
 	timeSignature = getComposition()->getTimeSignatureInBar
 	    (barNo, newTimeSig);
+	NOTATION_DEBUG << "bar " << barNo << ", startBarOfStaff " << startBarOfStaff
+		       << ", newTimeSig " << newTimeSig << endl;
 	if (barNo == startBarOfStaff) newTimeSig = true;
 
 	float fixedWidth = 0.0;
@@ -1205,14 +1207,15 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	}
 
 	double offset = getPostBarMargin();
+	double delta = 0;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
             NotationElement *el = static_cast<NotationElement*>(*it);
+	    delta = 0;
 
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
-	    double delta = 0;
 	    if (chunkitr != chunks.end()) {
 //		NOTATION_DEBUG << "barX is " << barX << ", reconcileRatio is " << reconcileRatio << " (" << bdi->second.sizeData.reconciledWidth << "/" << bdi->second.sizeData.idealWidth << ") , chunk's x is " << (*chunkitr).x << ", chunk is at " << &(*chunkitr) << endl;
 		x = barX + offset + reconcileRatio * (*chunkitr).x;
@@ -1350,8 +1353,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	if (timeSigToPlace) {
 	    // no other events in this bar, so we never managed to place it
-	    NOTATION_DEBUG << "Placing timesig at " << x << endl;
-	    bdi->second.layoutData.timeSigX = (int)x;
+	    x = x + delta - m_npf->getTimeSigWidth(bdi->second.basicData.timeSignature);
+	    NOTATION_DEBUG << "Placing timesig reluctantly at " << x << endl;
+	    bdi->second.layoutData.timeSigX = (int)(x);
 	    timeSigToPlace = false;
 	}
 

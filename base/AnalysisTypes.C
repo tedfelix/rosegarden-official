@@ -326,9 +326,11 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
 	if (time >= nextSigTime) {
 	    Composition *comp = c.getComposition();
 	    int sigNo = comp->getTimeSignatureNumberAt(time);
-	    std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
-	    timeSigTime = sig.first;
-	    timeSig = sig.second;
+	    if (sigNo >= 0) {
+		std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
+		timeSigTime = sig.first;
+		timeSig = sig.second;
+	    }
 	    if (sigNo < comp->getTimeSignatureCount() - 1) {
 		nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
 	    } else {
@@ -1021,9 +1023,11 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
 	if (time >= nextSigTime) {
 	    Composition *comp = c.getComposition();
 	    int sigNo = comp->getTimeSignatureNumberAt(time);
-	    std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
-	    timeSigTime = sig.first;
-	    timeSig = sig.second;
+	    if (sigNo >= 0) {
+		std::pair<timeT, TimeSignature> sig = comp->getTimeSignatureChange(sigNo);
+		timeSigTime = sig.first;
+		timeSig = sig.second;
+	    }
 	    if (sigNo < comp->getTimeSignatureCount() - 1) {
 		nextSigTime = comp->getTimeSignatureChange(sigNo + 1).first;
 	    } else {

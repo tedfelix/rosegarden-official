@@ -1895,10 +1895,10 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
 	QPixmap map;
 	if (m_font->getPixmap(NoteCharacterNames::COMMON_TIME, map)) {
-	    //!!! selected
+	    //!!! selected?
 	    createPixmapAndMask(map.width(), map.height());
 	    m_p.drawPixmap(0, 0, map);
-	    m_pm.drawPixmap(0, 0, map);
+	    m_pm.drawPixmap(0, 0, *(map.mask()));
 	    return makeCanvasPixmap(QPoint(0, map.height()/2));
 	}
 

@@ -241,10 +241,6 @@ public:
     //
     virtual void clearStudio();
 
-    // Sequencer Slice Size
-    //
-    virtual void setSliceSize(long timeSec, long timeUSec);
-
     // Debug stuff, to check MmappedSegment::iterator
     virtual void dumpFirstSegment();
 

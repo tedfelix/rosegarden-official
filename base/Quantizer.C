@@ -650,8 +650,7 @@ public:
 	m_provisionalAbsTime("notationquantizer-provisionalAbsTime"),
 	m_provisionalDuration("notationquantizer-provisionalDuration"),
 	m_provisionalNoteType("notationquantizer-provisionalNoteType"),
-	m_provisionalScore("notationquantizer-provisionalScore"),
-	m_provisionalSlur("notationquantizer-provisionalSlur")
+	m_provisionalScore("notationquantizer-provisionalScore")
     { }
 
     Impl(const Impl &i) :
@@ -664,8 +663,7 @@ public:
 	m_provisionalAbsTime(i.m_provisionalAbsTime),
 	m_provisionalDuration(i.m_provisionalDuration),
 	m_provisionalNoteType(i.m_provisionalNoteType),
-	m_provisionalScore(i.m_provisionalScore),
-	m_provisionalSlur(i.m_provisionalSlur)
+	m_provisionalScore(i.m_provisionalScore)
     { }
 
     class ProvisionalQuantizer : public Quantizer {
@@ -729,7 +727,6 @@ private:
     PropertyName m_provisionalDuration;
     PropertyName m_provisionalNoteType;
     PropertyName m_provisionalScore;
-    PropertyName m_provisionalSlur;
 };
 
 NotationQuantizer::NotationQuantizer() :
@@ -850,7 +847,6 @@ NotationQuantizer::Impl::unsetProvisionalProperties(Event *e) const
     e->unset(m_provisionalDuration);
     e->unset(m_provisionalNoteType);
     e->unset(m_provisionalScore);
-    e->unset(m_provisionalSlur);
 }
 
 void
@@ -1108,8 +1104,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	 getProvisional(*nextNote, AbsoluteTimeValue) :
 	 s->getEndMarkerTime());
 
-    bool slur = true;
-    timeT firstDuration = 0;
+    timeT nonContrapuntalDuration = 0;
     
     for (Chord::iterator ci = c.begin(); ci != c.end(); ++ci) {
 
@@ -1120,21 +1115,31 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 #ifdef DEBUG_NOTATION_QUANTIZER
 	    cout << "not recalculating duration for tuplet" << endl;
 #endif
-	    slur = false; // cop out
-	    continue;
-	}
-
-	if (!m_contrapuntal && firstDuration > 0) {
-	    // if not contrapuntal, give all notes in chord equal duration
-#ifdef DEBUG_NOTATION_QUANTIZER 
-	    cout << "setting duration trivially to " << firstDuration << endl;
-#endif
-	    setProvisional(**ci, DurationValue, firstDuration);
 	    continue;
 	}
 	
+	timeT ud = 0;
+
+	if (!m_contrapuntal) {
+	    // if not contrapuntal, give all notes in chord equal duration
+	    if (nonContrapuntalDuration > 0) {
+#ifdef DEBUG_NOTATION_QUANTIZER 
+		cout << "setting duration trivially to " << nonContrapuntalDuration << endl;
+#endif
+		setProvisional(**ci, DurationValue, nonContrapuntalDuration);
+		continue;
+	    } else {
+		// establish whose duration to use, then set it at the
+		// bottom after it's been quantized
+		Segment::iterator li = c.getLongestElement();
+		if (li != s->end()) ud = m_q->getFromSource(*li, DurationValue);
+		else ud = m_q->getFromSource(**ci, DurationValue);
+	    }
+	} else {
+	    ud = m_q->getFromSource(**ci, DurationValue);
+	}
+	
 	timeT qt = getProvisional(**ci, AbsoluteTimeValue);
-	timeT ud = m_q->getFromSource(**ci, DurationValue);
 
 #ifdef DEBUG_NOTATION_QUANTIZER
 	cout << "note at time " << (**ci)->getAbsoluteTime() << " (provisional time " << qt << ")" << endl;
@@ -1161,7 +1166,6 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	if (!m_contrapuntal && qd > spaceAvailable) {
 
 	    qd = Note::getNearestNote(spaceAvailable).getDuration();
-	    // leave slur true
 
 #ifdef DEBUG_NOTATION_QUANTIZER
 	    cout << "non-contrapuntal segment, rounded duration down to "
@@ -1183,9 +1187,6 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	    spaceAvailable = std::min(spaceAvailable, 
 				      comp->getBarEndForTime(qt) - qt);
 
-	    // Test for a slur
-	    if (!(ud >= spaceAvailable && qd <= spaceAvailable)) slur = false;
-	
 	    // We have a really good possibility of staccato if we have a
 	    // note on a boundary whose base is double the note duration
 	    // and there's nothing else until the next boundary and we're
@@ -1238,13 +1239,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	}
 
 	setProvisional(**ci, DurationValue, qd);
-    }
-
-    if (slur) {
-	for (Chord::iterator ci = c.begin(); ci != c.end(); ++ci) {
-	    if (!(**ci)->isa(Note::EventType)) continue;
-	    (**ci)->setMaybe<Bool>(m_provisionalSlur, true);
-	}
+	if (!m_contrapuntal) nonContrapuntalDuration = qd;
     }
 }
 
@@ -1658,85 +1653,23 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     }
     ++passes;
 
-    // staccato and slurs
+    // staccato (we now do slurs separately, in SegmentNotationHelper::autoSlur)
 
     if (m_articulate) {
-
-//!!! dropping this for the moment
-//!!!	bool inSlur = false;
-//!!!	timeT slurFrom = s->getEndTime();
-//!!!	timeT slurTo = slurFrom;
-//!!!	timeT prevQt = slurFrom;
-//!!!	int itemsInSlur = 0;
 
 	for (i = from; i != to; ++i) {
 
 	    if (!(*i)->isa(Note::EventType)) continue;
 
-//!!!	    timeT qt = getProvisional(*i, AbsoluteTimeValue);
 	    timeT qd = getProvisional(*i, DurationValue);
 	    timeT ud = m_q->getFromSource(*i, DurationValue);
-/*!!!
-	    if (inSlur) {
 
-		if (qt <= slurTo) { // still within slur
-
-		    if (qt > prevQt) ++itemsInSlur;
-		    slurTo = qt + qd;
-
-		    if (!(*i)->has(m_provisionalSlur)) {
-			// being requested not to continue it, so end after
-			// this note
-			Indication ind(Indication::Slur, slurTo - slurFrom);
-			m_q->m_toInsert.push_back(ind.getAsEvent(slurFrom));
-			inSlur = false;
-		    } else {
-			// split slurs at beat boundaries
-			TimeSignature ts = comp->getTimeSignatureAt(qt);
-			timeT barStart = comp->getBarStartForTime(qt);
-			if (ts.getEmphasisForTime(qt - barStart) > 1 &&
-			    itemsInSlur > 1) {
-			    Indication ind(Indication::Slur, qt - slurFrom);
-			    m_q->m_toInsert.push_back(ind.getAsEvent(slurFrom));
-			    slurFrom = qt;
-			    slurTo = qt + qd;
-			    itemsInSlur = 1;
-			}
-		    }
-
-		} else { // outside existing slur
-
-		    Indication ind(Indication::Slur, slurTo - slurFrom);
-		    m_q->m_toInsert.push_back(ind.getAsEvent(slurFrom));
-
-		    if ((*i)->has(m_provisionalSlur)) {
-			slurFrom = qt;
-			slurTo = qt + qd;
-			inSlur = true;
-			itemsInSlur = 1;
-		    } else {
-			inSlur = false;
-		    }
-		}
-
-	    } else { // no slur
-	    
-		if ((*i)->has(m_provisionalSlur)) {
-		    slurFrom = qt;
-		    slurTo = qt + qd;
-		    inSlur = true;
-		    itemsInSlur = 1;
-		}
-	    }
-*/
 	    if (ud < (qd * 3 / 4) &&
 		qd <= Note(Note::Crotchet).getDuration()) {
 		Marks::addMark(**i, Marks::Staccato, true);
-	    } else if (ud > qd /*!!! && !inSlur */) {
+	    } else if (ud > qd) {
 		Marks::addMark(**i, Marks::Tenuto, true);
 	    }	    
-
-//!!!	    prevQt = qt;
 	}
 	++passes;
     }
