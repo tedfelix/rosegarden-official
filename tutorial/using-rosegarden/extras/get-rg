@@ -1,0 +1,181 @@
+#!/bin/bash
+#
+# get-rg
+#
+# A work in progress that gets and builds Rosegarden from CVS, makes new
+# packages via checkinstall and removes old packages.
+#
+# This works on my box, but it's very, very much a work in progress.  I'm only
+# sharing it in its current rude state because I find it's actually pretty
+# convenient to use, and I hope that even if it fails on your box for some
+# reason, fixing it will be less trouble than either writing one from scratch
+# yourself or going through all the hoops along the way to build Rosegarden
+# every other day.
+#
+# Send questions, comments, bug reports to:
+#
+# D. Michael McIntyre <silvan@windows-sucks.com>
+#
+#
+# REQUIRES:  checkinstall, dpkg, ANSI_defs
+#
+# NOTE: ANSI_defs is a universal function library that a lot of my personal
+# scripts call upon.  For this script's purposes, it provides the [ OK ] and
+# [FAILED] messages.  It's superfluous and froofy.  The script assumes it's on
+# your PATH, but should run without it.  (It should be available from the same
+# place you got this script.)
+
+OK () {
+    echo "   [  OK  ]"
+}
+
+Failed () {
+    echo "   [FAILED]"
+}
+
+#config_opt=" --prefix=/usr --with-jack --without-ladspa --with-alsa "
+#config_opts=" --prefix=/usr --with-jack --with-ladspa --with-alsa "
+
+
+config_opts=" --prefix=/usr --without-jack --without-ladspa --with-alsa "
+
+
+. `which ANSI_defs`
+
+
+echo "Logging into CVS server...  Hit [enter] for password."
+cvs -d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden login 
+
+if [ -d rosegarden ]; then
+    echo "Updating existing Rosegarden directory..."
+    
+    cd rosegarden
+    
+
+    printf "Running make clean..."
+    if (make clean  > /dev/null 2>&1); then
+        OK
+    else
+        Failed
+        echo "Results may be unpredictable, but we'll try anyway..."
+    fi
+
+    echo "Connecting to CVS server for updates..."
+    cd ..
+    cvs -Q -z3 -d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden update rosegarden
+else
+    echo "Starting Rosegarden CVS from scratch..."
+    cvs -z3 -d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden co rosegarden
+fi
+
+if [ -d rosegarden ]; then
+    echo "Finished downloading..."
+    cd rosegarden
+    printf "Creating Makefile..."
+    make -f Makefile.cvs  > /dev/null 2>&1&&OK||Failed
+    if [ -f "configure" ]; then
+        printf "Configuring..."
+        if (./configure $config_opts  > /dev/null 2>&1); then
+            OK
+        else
+            Failed
+            echo "Configure failed... Compile manually..."
+            exit 1
+        fi
+
+        printf "Building...  Be patient.  This will take a long, long time..."
+        if (make  > /dev/null 2>&1); then
+            OK
+            echo "Running checkinstall..."
+        else
+            Failed
+            echo "Make failed.  Compile manually..."
+            exit 1
+        fi
+
+        printf "Checking to see if Rosegarden is running..."
+        while (pgrep rosegarden  > /dev/null 2>&1); do
+            echo
+            echo "Rosegarden is running!  Close it out (check for orphans), then"
+            read -p "hit [enter] to continue when finished..." key
+        done
+        OK
+        
+        printf "Uninstalling current Rosegarden..."
+        rg=`dpkg -l|grep rosegarden|awk '{print $2}'`  #for Debian
+        if [ -z "$rg" ]; then
+            if (sudo make uninstall  > /dev/null 2>&1); then
+                printf "...make uninstall..."
+                OK
+            else
+                Failed
+                echo "No installed package found, and make uninstall failed.  Be advised."
+            fi
+        elif (sudo dpkg -r $rg  > /dev/null 2>&1); then
+            printf "...removing deb..."
+            OK
+        else
+            Failed
+        fi
+
+        if [ -f checkinstall-version ]; then
+            version=$(cat checkinstall-version)
+        else
+            echo "Starting with package revision 1..."
+            version=1
+        fi
+
+        echo "Building Debian package version $version via checkinstall..."
+        sudo cat > description-pak << EOF
+rosegarden from CVS
+
+installed via checkinstall for easy removal
+installed by script "get-rg"
+EOF
+
+
+# note:  I never could figure out how to get checkinstall to be completely automated...
+# it always, annoyingly, requires the user to press a few keys, even when all the info
+# it needs is provided up front.  Maybe there's some bit of trickery I could do here
+# to feed it the necessary input, but a | didn't seem to do the trick...  Perhaps
+# this could use expect or something.  For now, I'm leaving it as it is.
+
+
+        if (sudo /sbin/checkinstall \
+                --type=debian       \
+                --pkgname=rosegarden-4  \
+                --pkgversion=4.0.8    \
+                --pkgrelease=$version   \
+                --backup=no \
+                --nodoc); then
+            ((version++))
+            echo $version > checkinstall-version
+
+
+            # do some post-checkinstall cleanup
+
+            if ! [ -d "../rosegarden-packages" ]; then
+                mkdir ../rosegarden-packages
+            fi
+
+            printf "Moving package(s) to ../rosegarden-packages..."
+            if (mv *deb ../rosegarden-packages > /dev/null 2>&1); then
+                OK
+            else
+                Failed
+            fi
+
+            echo "Rosegarden should be good to go!  Enjoy!"
+            
+            exit 0
+        else
+            echo "Checkintall failed for some reason.  Investigate manually."
+            exit 1
+        fi
+        
+    fi
+else
+    echo "No rosegarden directory.  Something went wrong.  Investigate manually."
+    exit 1
+fi
+
