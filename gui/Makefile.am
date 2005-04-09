@@ -208,6 +208,8 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/testfiles/bogus-surf-jam.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/the-rose-garden.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/children.rg $(kde_datadir)/$(data_dirname)/examples
+	$(INSTALL_DATA) $(srcdir)/testfiles/stormy-riders.rg $(kde_datadir)/$(data_dirname)/examples
+	$(INSTALL_DATA) $(srcdir)/testfiles/Djer-Fire.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/fonts/*.pfa $(kde_datadir)/$(data_dirname)/fonts
 	$(INSTALL_DATA) $(srcdir)/fonts/mappings/*.xml $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(INSTALL_DATA) $(srcdir)/pixmaps/misc/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/misc
