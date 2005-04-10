@@ -94,7 +94,7 @@ def detect_kde(env):
 	if qtdir:
 		print GREEN + "qt is in " + qtdir + NORMAL
 	else:
-		m = re.search('(.*)/lib/libqt.*', os.popen('ldd `kde-config --expandvars --install lib`' + '/libkdeui.so | grep libqt').read().strip().split()[2])
+		m = re.search('(.*)/lib/libqt.*', os.popen('ldd `kde-config --expandvars --install lib`' + '/libkdeui.so.4 | grep libqt').read().strip().split()[2])
 		if m:
 			qtdir = m.group(1)
 			print YELLOW + "qt was found as " + m.group(1) + NORMAL
@@ -182,12 +182,13 @@ def detect_kde(env):
 
 		subst_vars = lambda x: x.replace('${exec_prefix}', execprefix).replace('${datadir}', 
 			datadir).replace('${libdir}', libdir)
+		debian_fix = lambda x: x.replace('/usr/share', '${datadir}')
 		env['KDEBIN']   = subst_vars(os.popen('kde-config --install exe').read().strip())
 		env['KDEAPPS']  = subst_vars(os.popen('kde-config --install apps').read().strip())		
 		env['KDEDATA']  = subst_vars(os.popen('kde-config --install data').read().strip())
 		env['KDEMODULE']= subst_vars(os.popen('kde-config --install module').read().strip())
 		env['KDELOCALE']= subst_vars(os.popen('kde-config --install locale').read().strip())
-		env['KDEDOC']   = subst_vars(os.popen('kde-config --install html').read().strip())
+		env['KDEDOC']   = subst_vars( debian_fix(os.popen('kde-config --install html').read().strip()) )
 		env['KDEKCFG']  = subst_vars(os.popen('kde-config --install kcfg').read().strip())
 		env['KDEXDG']   = subst_vars(os.popen('kde-config --install xdgdata-apps').read().strip())
 		env['KDEMENU']  = subst_vars(os.popen('kde-config --install apps').read().strip())
@@ -227,7 +228,23 @@ def detect_kde(env):
 
 
 def generate(env):
-	""" Set up the qt and kde environment and builders - the moc part is difficult to understand """
+	""""Set up the qt and kde environment and builders - the moc part is difficult to understand """
+
+	env.Help("""
+"""+BOLD+
+"""*** KDE options ***
+-------------------"""
++NORMAL+"""
+"""+BOLD+"""* prefix     """+NORMAL+""": base install path,         ie: /usr/local
+"""+BOLD+"""* execprefix """+NORMAL+""": install path for binaries, ie: /usr/bin
+"""+BOLD+"""* datadir    """+NORMAL+""": install path for the data, ie: /usr/local/share
+"""+BOLD+"""* libdir     """+NORMAL+""": install path for the libs, ie: /usr/lib
+"""+BOLD+"""* kdeincludes"""+NORMAL+""": path to the kde includes (/usr/include/kde on debian, ...)
+"""+BOLD+"""* qtincludes """+NORMAL+""": same punishment, for qt includes (/usr/include/qt on debian, ...)
+"""+BOLD+"""* kdelibs    """+NORMAL+""": path to the kde libs, for linking the programs
+"""+BOLD+"""* qtlibs     """+NORMAL+""": same punishment, for qt libraries
+ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
+"""+NORMAL)
 
 	import os.path
 	import re

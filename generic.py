@@ -1,5 +1,14 @@
 ## Thomas Nagy, 2005
 
+"""
+Detect and store the most common options
+* kdecxxflags  : debug=1 (-g) or debug=full (-g3, slower)
+  else use the user CXXFLAGS if any, - or -O2 by default
+* prefix : the installation path
+* extraincludes : a list of paths separated by ':'
+ie: scons configure debug=full prefix=/usr/local extraincludes=/tmp/include:/usr/local
+"""
+
 BOLD   ="\033[1m"
 RED    ="\033[91m"
 GREEN  ="\033[92m"
@@ -7,24 +16,27 @@ YELLOW ="\033[93m"
 CYAN   ="\033[96m"
 NORMAL ="\033[0m"
 
+import os
+
 def exists(env):
 	return true
 
 def generate(env):
-	"""
-	Detect and store the most common options
-	* debug  : anything (-g) or 'full' (-g3, slower)
-	* prefix : the installation path
-	* extraincludes : a list of paths separated by ':'
-
-	ie: scons configure debug=full prefix=/usr/local extraincludes=/tmp/include:/usr/local
-	"""
+	env.Help("""
+"""+BOLD+
+"""*** Generic options ***
+-----------------------"""+NORMAL+"""
+"""+BOLD+"""* debug  """+NORMAL+""": debug=1 (-g) or debug=full (-g3, slower) else use environment CXXFLAGS, or -O2 by default
+"""+BOLD+"""* prefix """+NORMAL+""": the installation path
+"""+BOLD+"""* extraincludes """+NORMAL+""": a list of paths separated by ':'
+ie: """+BOLD+"""scons configure debug=full prefix=/usr/local extraincludes=/tmp/include:/usr/local
+"""+NORMAL)
 
 	# load the options
 	from SCons.Options import Options, PathOption
 	opts = Options('generic.cache.py')
 	opts.AddOptions(
-		( 'DEBUGLEVEL', 'debug level for the project : full or just anything' ),
+		( 'KDECXXFLAGS', 'debug level for the project : full or just anything' ),
 		( 'PREFIX', 'prefix for installation' ),
 		( 'EXTRAINCLUDES', 'extra include paths for the project' ),
 	)
@@ -34,17 +46,25 @@ def generate(env):
 	env.Alias('configure', None)
 
 	# configure the environment if needed
-	if 'configure' in env['TARGS']:
+	if 'configure' in env['TARGS'] or not env.has_key('KDECXXFLAGS'):
 		# need debugging ?
+		if env.has_key('KDECXXFLAGS'):
+			env.__delitem__('KDECXXFLAGS')
 		if env['ARGS'].get('debug', None):
 			debuglevel = env['ARGS'].get('debug', None)
 			print CYAN+'** Enabling debug for the project **' + NORMAL
 			if (debuglevel == "full"):
-				env['DEBUGLEVEL'] = '-DDEBUG:-g3'
+				env['KDECXXFLAGS'] = ['-DDEBUG', '-g3']
 			else:
-				env['DEBUGLEVEL'] = '-DDEBUG:-g'
-		elif env.has_key('DEBUGLEVEL'):
-			env.__delitem__('DEBUGLEVEL')
+				env['KDECXXFLAGS'] = ['-DDEBUG', '-g']
+		else:
+			if os.environ.has_key('CXXFLAGS'):
+				# user-defined flags (gentooers will be elighted)
+				import SCons.Util
+				env['KDECXXFLAGS'] = SCons.Util.CLVar( os.environ['CXXFLAGS'] )
+				env.Append( KDECXXFLAGS = ['-DNDEBUG', '-DNO_DEBUG'] )
+			else:
+				env.Append(KDECXXFLAGS = ['-O2', '-DNDEBUG', '-DNO_DEBUG'])
 
 		# user-specified prefix
 		if env['ARGS'].get('prefix', None):
@@ -63,8 +83,9 @@ def generate(env):
 		# and finally save the options in a cache
 		opts.Save('generic.cache.py', env)
 
-	if env.has_key('DEBUGLEVEL'):
-		env.AppendUnique(CPPFLAGS = [str(env['DEBUGLEVEL']).split(':')])
+	if env.has_key('KDECXXFLAGS'):
+		# load the flags
+                env.AppendUnique( CPPFLAGS = env['KDECXXFLAGS'] )
 
 	if env.has_key('EXTRAINCLUDES'):
 		incpaths = []

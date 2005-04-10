@@ -47,22 +47,11 @@ scons configure debug=1; scons; scons configure ;
 
 import os
 
-def Check_pkg_config(context, version):
-	context.Message('Checking for pkg-config ... ')
-	ret = context.TryAction('pkg-config --atleast-pkgconfig-version=%s' % version)[0]
-	context.Result(ret)
-	return ret
+env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools = ['default', 'generic', 'kde', 'sound'], toolpath='./')
+#env.AppendUnique( ENV = os.environ )
+env.AppendUnique( ENV = {'PATH' : os.environ['PATH'], 'HOME' : os.environ['HOME']} )
 
-def Check_package(context, module, version):
-	context.Message('Checking for %s >= %s ... ' % (module, version))
-	ret = context.TryAction('pkg-config %s --atleast-version=%s' % (module, version))[0]
-	if ret:
-	    env.ParseConfig('pkg-config %s --cflags --libs' % module);
-	context.Result(ret)
-	return ret
-
-env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools = ['default', 'generic', 'kde'], toolpath='./')
-env.AppendUnique( ENV = os.environ )
+VERSION = "1.1cvs"
 
 # The target make dist requires the python module shutil which is in 2.3
 env.EnsurePythonVersion(2,3)
@@ -71,39 +60,6 @@ env.EnsurePythonVersion(2,3)
 env['INSTALL_ALL'] = 0
 if 'install' in COMMAND_LINE_TARGETS:
     env['INSTALL_ALL'] = 1
-
-##
-## Configure stuff    
-conf = Configure(env, custom_tests = { 'Check_pkg_config' : Check_pkg_config, 
-                                       'Check_package' : Check_package }) 
-if not conf.Check_pkg_config('0.15'):
-    print 'pkg-config >= 0.15 not found.' 
-    Exit(1) 
-
-haveAlsa    = conf.Check_package('alsa','1.0')
-haveJack    = conf.Check_package('jack', '0.77')
-haveLadspa  = conf.CheckHeader('ladspa.h')
-haveLiblrdf = conf.CheckLibWithHeader('lrdf', ['stdio.h', 'lrdf.h'], 'C', 'lrdf_init();')
-haveLiblo   = conf.Check_package('liblo', '0.7')
-haveLibmad  = conf.Check_package('mad', '0.10')
-haveLibdssi = conf.Check_package('dssi', '0.4')
-haveXft     = conf.Check_package('xft', '2.1.0')
-
-env = conf.Finish()
-
-env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
-if haveAlsa:
-    env.Append(CCFLAGS = '-DHAVE_ALSA')
-if haveJack:
-    env.Append(CCFLAGS = '-DHAVE_JACK')
-if haveLadspa:
-    env.Append(CCFLAGS = '-DHAVE_LADSPA')
-if haveLiblo:
-    env.Append(CCFLAGS = '-DHAVE_LIBLO')
-if haveLibmad:
-    env.Append(CCFLAGS = '-DHAVE_LIBMAD')
-if haveLiblrdf:
-    env.Append(CCFLAGS = '-DHAVE_LRDF')
 
 # Export 'env' so that sconscripts in subdirectories can use it
 Export( "env" )
@@ -117,6 +73,11 @@ env.SConsignFile('scons_signatures')
 ## The qt library is needed by every sub-program
 env.AppendUnique(LIBS = ['qt-mt'])
 
+## Threading is needed
+env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
+
+env.Append(CCFLAGS = '-DVERSION=\\"' + VERSION + '\\"')
+
 ## The list of install targets is populated 
 ## when the SConscripts are read
 env['INST_TARGETS'] = []
@@ -125,7 +86,7 @@ env.SConscript("base/SConscript")
 soundLibs = env.SConscript("sound/SConscript")
 env.SConscript("sequencer/SConscript", 'soundLibs')
 env.SConscript("gui/SConscript", 'soundLibs')
-env.SConscript("doc/en/SConscript")
+#env.SConscript("docs/en/SConscript")
 env.SConscript("po/SConscript")
 
 env.Alias('install', env['INST_TARGETS'])
