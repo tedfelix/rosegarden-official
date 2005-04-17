@@ -51,7 +51,7 @@ env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools = ['default'
 #env.AppendUnique( ENV = os.environ )
 env.AppendUnique( ENV = {'PATH' : os.environ['PATH'], 'HOME' : os.environ['HOME']} )
 
-VERSION = "1.1cvs"
+VERSION = "4-1.1_cvs"
 
 # The target make dist requires the python module shutil which is in 2.3
 env.EnsurePythonVersion(2,3)
