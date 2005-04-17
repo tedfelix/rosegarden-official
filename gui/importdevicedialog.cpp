@@ -39,6 +39,7 @@
 #include "Studio.h"
 #include "MidiDevice.h"
 #include "MidiProgram.h"
+#include "ControlParameter.h"
 
 #include "SF2PatchExtractor.h"
 
@@ -299,9 +300,17 @@ ImportDeviceDialog::importFromRG(QString fileName)
 	    std::vector<Rosegarden::MidiBank> banks =
 		device->getBanks();
 
+	    // DMM - check for controllers too, because some users have
+	    // created .rgd files that contain only controllers
+	    // see bug #1183522
+	    // 
+	    std::vector<Rosegarden::ControlParameter> controllers =
+		device->getControlParameters();
+
 	    // We've got a bank on a Device fom this file
+	    // (or a device that contains controllers)
 	    //
-	    if (banks.size()) m_devices.push_back(device);
+	    if (banks.size()||controllers.size()) m_devices.push_back(device);
 	}
     }
 

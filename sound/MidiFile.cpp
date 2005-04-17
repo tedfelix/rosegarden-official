@@ -1358,7 +1358,7 @@ MidiFile::convertToMidi(Composition &comp)
 
     // Insert tempo events
     //
-    for (int i = 0; i < comp.getTempoChangeCount(); i++)
+    for (int i = 0; i < comp.getTempoChangeCount(); i++) // i=0 should be comp.getStart-something
     {
         std::pair<timeT, long> tempo = comp.getRawTempoChange(i);
 
