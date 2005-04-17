@@ -231,6 +231,8 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
                 NotationPreviewData::iterator npi = cachedNPData->lower_bound(rect),
                     npEnd = cachedNPData->end();
+                if (npi != cachedNPData->begin())
+                    --npi;
 
                 int xLim = rect.topRight().x();
                 for(; npi->x() <= xLim && npi != npEnd; ++npi) {
@@ -372,9 +374,6 @@ CompositionModel::NotationPreviewData* CompositionModelImpl::getNotationPreviewD
     if (!npData) {
         npData = makeNotationPreviewDataCache(s);
     }
-    
-    RG_DEBUG << "CompositionModelImpl::getNotationPreviewData() : get npData "
-             << npData << " for segment " << s << endl;
 
     return npData;
 }
@@ -1083,6 +1082,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     if (m_showPreviews) {
 
         refreshDirtyPreviews();
+        p->setRasterOp(Qt::XorROP);
         
         CompositionModel::AudioPreviewData::const_iterator api = m_audioPreviewData.begin();
         CompositionModel::AudioPreviewData::const_iterator apEnd = m_audioPreviewData.end();
@@ -1099,6 +1099,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
             p->drawRect(*npi);
         }
         
+        p->setRasterOp(Qt::CopyROP);
     }
 
     drawPointer(p, clipRect);
