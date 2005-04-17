@@ -149,13 +149,32 @@ CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
 {
     m_notationPreviewDataCache.setAutoDelete(true);
     m_audioPreviewDataCache.setAutoDelete(true);
-    refreshPreviewCache();
+    refreshAllPreviews();
     m_composition.addObserver(this);
+
+    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
+    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+
+    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+        i != segEnd; ++i) {
+
+        (*i)->addObserver(this);
+    }
+
 }
 
 CompositionModelImpl::~CompositionModelImpl()
 {
     m_composition.removeObserver(this);
+
+    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
+    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+
+    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+        i != segEnd; ++i) {
+
+        (*i)->removeObserver(this);
+    }
 }
 
 unsigned int CompositionModelImpl::getNbRows()
@@ -169,8 +188,8 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 {
     m_res.clear();
 
-    RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
-	     << (dynamic_cast<Rosegarden::SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel() << endl;
+//     RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
+// 	     << (dynamic_cast<Rosegarden::SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel() << endl;
 
     const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
     Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
@@ -207,21 +226,21 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             if (npData && s->getType() == Rosegarden::Segment::Internal) {
                 NotationPreviewData* cachedNPData = getNotationPreviewData(s);
 
-                RG_DEBUG << "CompositionModelImpl::getRectanglesIn() : npData = "
-                         << npData << " - rect = " << rect << endl;
+//                 RG_DEBUG << "CompositionModelImpl::getRectanglesIn() : npData = "
+//                          << npData << " - rect = " << rect << endl;
 
                 NotationPreviewData::iterator npi = cachedNPData->lower_bound(rect),
                     npEnd = cachedNPData->end();
 
                 int xLim = rect.topRight().x();
                 for(; npi->x() <= xLim && npi != npEnd; ++npi) {
-                    RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
-                             << " - npi = " << (*npi) << endl;
+//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
+//                              << " - npi = " << (*npi) << endl;
                     QRect tr = *npi;
                     // put preview rectangle inside the corresponding segment's CompositionRect
                     tr.moveBy(sr.x(), sr.y());
-                    RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
-                             << tr << endl;
+//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
+//                              << tr << endl;
                     npData->insert(tr);
                 }
                 
@@ -278,7 +297,7 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
     }
 }
 
-void CompositionModelImpl::refreshPreviewCache()
+void CompositionModelImpl::refreshAllPreviews()
 {
     clearPreviewCache();
 
@@ -288,7 +307,7 @@ void CompositionModelImpl::refreshPreviewCache()
     for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
-        segmentAdded(&m_composition, *i);
+        makePreviewCache(*i);
     }
     
 }
@@ -301,6 +320,8 @@ void CompositionModelImpl::clearPreviewCache()
 
 void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, NotationPreviewData* npData)
 {
+    npData->clear();
+    
     Segment::iterator segEnd = segment->end();
     
     for (Segment::iterator i = segment->begin();
@@ -369,33 +390,70 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
     return apData;
 }
 
+void CompositionModelImpl::refreshDirtyPreviews()
+{
+    std::set<const Rosegarden::Segment*>::iterator i = m_dirtySegments.begin();
+    std::set<const Rosegarden::Segment*>::iterator dirtySegmentsEnd = m_dirtySegments.end();
+    
+    for (;i != dirtySegmentsEnd; ++i) {
+        const Segment* s = *i;
+
+        if (s->getType() == Rosegarden::Segment::Audio) {
+            AudioPreviewData* apData = getAudioPreviewData(s);
+            updatePreviewCacheForAudioSegment(s, apData);
+        } else {
+            NotationPreviewData* npData = getNotationPreviewData(s);
+            updatePreviewCacheForNotationSegment(s, npData);
+        }
+    }
+    clearDirtyPreviews();
+}
+
+void CompositionModelImpl::clearDirtyPreviews()
+{
+    m_dirtySegments.clear();
+}
+                                             
 void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-    if (s->getType() == Rosegarden::Segment::Audio) {
-        AudioPreviewData* apData = getAudioPreviewData(s);
-        updatePreviewCacheForAudioSegment(s, apData);
-    } else {
-        NotationPreviewData* npData = getNotationPreviewData(s);
-        updatePreviewCacheForNotationSegment(s, npData);
-    }
+    m_dirtySegments.insert(s);
 }
 
 void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-    if (s->getType() == Rosegarden::Segment::Audio) {
-        makeAudioPreviewDataCache(s);
-    } else {
+    RG_DEBUG << "CompositionModelImpl::eventRemoved()\n";
+    m_dirtySegments.insert(s);
+}
+
+void CompositionModelImpl::makePreviewCache(Segment *s) 
+{
+    if (s->getType() == Rosegarden::Segment::Internal) {
         makeNotationPreviewDataCache(s);
+    } else {
+        makeAudioPreviewDataCache(s);
     }
+}
+
+void CompositionModelImpl::removePreviewCache(Segment *s) 
+{
+    if (s->getType() == Rosegarden::Segment::Internal) {
+        m_notationPreviewDataCache.remove(s);
+    } else {
+        m_audioPreviewDataCache.remove(s);
+    }
+
 }
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s) 
 {
-    if (s->getType() == Rosegarden::Segment::Audio) {
-        makeAudioPreviewDataCache(s);
-    } else {
-        makeNotationPreviewDataCache(s);
-    }
+    makePreviewCache(s);
+    s->addObserver(this);
+}
+
+void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
+{
+    removePreviewCache(s);
+    s->removeObserver(this);
 }
 
 CompositionModel::NotationPreviewData* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
@@ -414,15 +472,6 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCa
     m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
 
     return apData;
-}
-
-void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
-{
-    if (s->getType() == Rosegarden::Segment::Internal) {
-        m_notationPreviewDataCache.remove(s);
-    } else {
-        m_audioPreviewDataCache.remove(s);
-    }
 }
 
 void CompositionModelImpl::setSelectionRect(const QRect& r)
@@ -837,9 +886,16 @@ void CompositionView::setSelectionRectSize(int w, int h)
     getModel()->setSelectionRect(m_selectionRect);
 }
 
-void CompositionView::refreshPreviews()
+void CompositionView::refreshAllPreviews()
 {
-    dynamic_cast<CompositionModelImpl*>(getModel())->refreshPreviewCache();
+    dynamic_cast<CompositionModelImpl*>(getModel())->refreshAllPreviews();
+    dynamic_cast<CompositionModelImpl*>(getModel())->clearDirtyPreviews();
+    
+}
+
+void CompositionView::refreshDirtyPreviews()
+{
+    dynamic_cast<CompositionModelImpl*>(getModel())->refreshDirtyPreviews();
 }
 
 Rosegarden::SegmentSelection
@@ -1025,6 +1081,9 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     }
 
     if (m_showPreviews) {
+
+        refreshDirtyPreviews();
+        
         CompositionModel::AudioPreviewData::const_iterator api = m_audioPreviewData.begin();
         CompositionModel::AudioPreviewData::const_iterator apEnd = m_audioPreviewData.end();
         

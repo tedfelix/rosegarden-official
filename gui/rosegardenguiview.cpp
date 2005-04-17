@@ -830,6 +830,7 @@ void RosegardenGUIView::setZoomSize(double size)
     m_trackEditor->slotSetPointerPosition
 	(getDocument()->getComposition().getPosition());
 
+    m_trackEditor->getSegmentCanvas()->refreshAllPreviews();
     m_trackEditor->getSegmentCanvas()->updateContents();
 
     if (m_trackEditor->getTempoRuler()) {

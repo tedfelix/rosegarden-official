@@ -181,8 +181,10 @@ public:
     virtual void setLength(int width);
     virtual int  getLength();
 
-    void refreshPreviewCache();
+    void refreshAllPreviews();
+    void refreshDirtyPreviews();
     void clearPreviewCache();
+    void clearDirtyPreviews();
     NotationPreviewData* makeNotationPreviewDataCache(const Rosegarden::Segment *s);
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
@@ -217,6 +219,9 @@ protected:
     NotationPreviewData* getNotationPreviewData(const Rosegarden::Segment* s);
     AudioPreviewData* getAudioPreviewData(const Rosegarden::Segment* s);
 
+    void makePreviewCache(Rosegarden::Segment* s);
+    void removePreviewCache(Rosegarden::Segment* s);
+
     //--------------- Data members ---------------------------------
     Rosegarden::Composition&     m_composition;
     Rosegarden::SnapGrid         m_grid;
@@ -230,6 +235,9 @@ protected:
     
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
+    
+    // Segments which preview needs to be updated
+    std::set<const Rosegarden::Segment*> m_dirtySegments;
 
     rectcontainer m_res;
     itemcontainer m_movingItems;
@@ -320,7 +328,12 @@ public:
     /**
      * Refresh all previews
      */
-    void refreshPreviews();
+    void refreshAllPreviews();
+
+    /**
+     * Refresh previews of segments which have been modified since last refresh
+     */
+    void refreshDirtyPreviews();
 
     /// Return the selected Segments if we're currently using a "Selector"
     Rosegarden::SegmentSelection getSelectedSegments();
