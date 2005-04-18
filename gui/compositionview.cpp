@@ -40,8 +40,8 @@ using Rosegarden::Composition;
 using Rosegarden::timeT;
 using Rosegarden::GUIPalette;
 
-const QColor CompositionRect::DefaultPenColor = Qt::red;
-const QColor CompositionRect::DefaultBrushColor = Qt::white;
+const QColor CompositionRect::DefaultPenColor = Qt::black;
+const QColor CompositionRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
 
 
 timeT CompositionItemHelper::getStartTime(const CompositionItem& item, const Rosegarden::SnapGrid& grid)
@@ -1046,6 +1046,9 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     CompositionModel::AudioPreviewData*    audioPreviewData = 0;
     CompositionModel::NotationPreviewData* notationPreviewData = 0;
 
+    //
+    // Fetch previews
+    //
     if (m_showPreviews) {
         notationPreviewData = &m_notationPreviewData;
         m_notationPreviewData.clear();
@@ -1053,10 +1056,17 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         m_audioPreviewData.clear();
     }
 
+    //
+    // Fetch segment rectangles to draw
+    //
     const CompositionModel::rectcontainer& rects = getModel()->getRectanglesIn(clipRect,
                                                                             notationPreviewData, audioPreviewData);
     CompositionModel::rectcontainer::const_iterator i = rects.begin();
     CompositionModel::rectcontainer::const_iterator end = rects.end();
+
+    //
+    // Draw Segment Rectangles
+    //
     p->save();
     for(; i != end; ++i) {
         p->setBrush(i->getBrush());
@@ -1079,6 +1089,9 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         drawIntersections(rects, p, clipRect);
     }
 
+    //
+    // Previews
+    //
     if (m_showPreviews) {
 
         refreshDirtyPreviews();
@@ -1102,24 +1115,42 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         p->setRasterOp(Qt::CopyROP);
     }
 
+    //
+    // Playback Pointer
+    //
     drawPointer(p, clipRect);
 
+    //
+    // Tmp rect (rect displayed while drawing a new segment)
+    //
     if (m_tmpRect.isValid() && m_tmpRect.intersects(clipRect)) {
-        p->setBrush(GUIPalette::getColour(GUIPalette::SegmentCanvas));
+        p->setBrush(CompositionRect::DefaultBrushColor);
         p->setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
         drawRect(m_tmpRect, p, clipRect);
     }
 
+    //
+    // Tool guides (crosshairs)
+    //
     if (m_drawGuides)
         drawGuides(p, clipRect);
 
+    //
+    // Selection Rect
+    //
     if (m_drawSelectionRect) {
         drawRect(m_selectionRect, p, clipRect, false, 0, false);
     }
 
+    //
+    // Floating Text
+    //
     if (m_drawTextFloat)
         drawTextFloat(p, clipRect);
 
+    //
+    // Split line
+    //
     if (m_splitLinePos.x() > 0 && clipRect.contains(m_splitLinePos)) {
         p->save();
         p->setPen(m_guideColor);
