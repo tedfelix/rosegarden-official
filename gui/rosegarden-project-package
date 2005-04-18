@@ -1,0 +1,671 @@
+#!/usr/bin/perl -w
+# -*- cperl-indent-level: 4 -*-
+#
+# Rosegarden Project file packager
+# Chris Cannam, March 2005
+#
+# This program converts between Rosegarden (.rg) files and Rosegarden
+# Project (.rgp) files.
+#
+# A Rosegarden file (.rg) is a single file (in gzipped XML format)
+# that defines a Rosegarden composition in terms of events, segments,
+# programs, plugin data, references to audio files, and so on.  Some
+# of these types of information depend on the presence of external
+# files such as the audio files or plugin preset data, without which
+# the file cannot be used.
+#
+# A Rosegarden Project (.rgp) file is a bundle of files, including the
+# Rosegarden file itself, as well as any audio file or other external
+# data it requires, in compressed form.  A Rosegarden Project file is
+# intended to be portable and self-contained, but the Rosegarden
+# program itself does not (at the time of writing) understand these
+# files directly.
+#
+# This program can take a Rosegarden file, examine it to find out
+# which other data files it uses, and pack it to create the
+# corresponding Rosegarden Project file.  Conversely, it can also take
+# a Rosegarden Project file and unpack it as a project directory for
+# use with Rosegarden.
+
+# TODO:
+# - quiet
+# - versioning
+# - graceful recovery from running out of disk space
+# - mucho tidying
+
+use strict;
+
+use XML::Twig;
+use File::Copy;
+use File::Basename;
+use Getopt::Long;
+
+my $dcop = undef;
+sub usage {
+    print "Usage: rgproject [--quiet] [--pack] file.rg [file.rgp]\n";
+    print "       rgproject [--quiet] --unpack file.rgp\n";
+    print "       rgproject [--quiet] --rg file.rgp\n";
+    print "       rgproject --conftest\n";
+    if (defined $dcop) {
+	`dcop "$dcop" close`;
+    }
+    exit 2;
+}
+
+my $kdialog = "kdialog --title \"Rosegarden Project\" --icon \"rosegarden\"";
+
+my $pack = 0;
+my $unpack = 0;
+my $conftest = 0;
+my $rg = 0;
+my $quiet = 0;
+my $result = GetOptions("pack" => \$pack,
+			"unpack" => \$unpack,
+			"conftest" => \$conftest,
+			"rg" => \$rg,
+			"quiet" => \$quiet);
+if ($result eq "") {
+    usage;
+}
+
+if (!$conftest) {
+    $dcop = `$kdialog --progressbar "Please wait..." 100`;
+    chomp $dcop;
+}
+
+my @temporaries = ();
+$SIG{__DIE__} = sub {
+    `dcop "$dcop" close`;
+    map { system qq{rm -rf $_} } @temporaries;
+    return 1;
+};
+
+sub conftest {
+    my @required = ();
+    system "$kdialog -v >/dev/null" and push @required, "kdialog";
+    system "flac --help >/dev/null" and push @required, "flac";
+#    system "oggenc -h >/dev/null 2>&1" and push @required, "oggenc";
+#    system "oggdec -h >/dev/null 2>&1" and push @required, "oggdec";
+    system "dcop --help >/dev/null" and push @required, "dcop";
+    return @required;
+}
+
+sub canonicalise {
+    my $b = shift;
+    my $p = shift;
+    $p =~ s,^~/,$ENV{"HOME"}/,;
+    $p =~ s,^~$,$ENV{"HOME"},;
+    $p =~ s,^([^/]),$b/$1,;
+    $p =~ s,/$,,;
+    return $p;
+}
+
+sub relativise {
+    my $b = shift;
+    my $p = shift;
+    if ($p =~ m,^$b/,) {
+	$p =~ s,^$b/,,;
+    }
+    return $p;
+}
+
+sub name {
+    my $rgFile = shift;
+    my $n = shift;
+    if ($n =~ m,^RG-AUDIO-\d+\.wav$,i or
+	$n =~ m,/RG-AUDIO-\d+\.wav$,i) {
+	my $base = basename $rgFile;
+	$base =~ s/\.rg$//;
+	$n =~ s,RG-AUDIO-(\d+)\.wav$,$base-rg-$1.wav,;
+    }
+    return $n;
+}
+
+sub convertType {
+    my $file = shift;
+    if ($file =~ m/\.(wav|w64)$/i) {
+	return 'flac';
+    } else {
+	return 'copy';
+    }
+}
+
+sub contrib { # Approximate amount of contribution to overall processing time
+    my $file = shift;
+    my $size = (stat $file)[7];
+    if (!defined $size) {
+	return 10.0;
+    }
+    if (convertType($file) eq 'flac' or convertType($file) eq 'ogg') {
+	return $size / 1000.0;
+    } else {
+	return $size / 50000.0;
+    }
+}
+
+sub locate {
+    my $file = shift;
+    if (-f $file) {
+	return $file;
+    }
+    my $code = system qq{$kdialog --warningyesnocancel 'File not found:\n$file\nDo you want to browse for this file now?'};
+    if ($code == 512) { # cancel
+	die "File $file not found.";
+    } elsif ($code == 256) { # no
+	return "";
+    }
+    my $dir = dirname $file;
+    if (! -d $dir) { $dir = $ENV{'HOME'}; }
+    $file = basename $file;
+    $file = `$kdialog --getopenfilename "$dir" "$file"`;
+    chomp $file;
+    return $file;
+}
+
+sub convert {
+    my $source = shift;
+    my $target = shift;
+    print "$source -> $target\n";
+    $source = locate $source;
+    return if ($source eq "");
+    my $d = dirname $target;
+    print "Creating directory $d\n";
+    system qq{mkdir -p "$d"} and die "Failed to create directory $d: $!";
+    print "Convert type is " . convertType($source) . "\n";
+    if (convertType($source) eq 'flac') {
+	print "Running flac -o $target $source\n";
+	system qq{flac -s -o "$target.rgp.flac" "$source"} and
+	  die "Failed to convert $source to $target"; # warn via dialog & recover
+    } elsif (convertType($source) eq 'ogg') {
+	print "Running oggenc -o $target $source\n";
+	system qq{oggenc -o "$target.rgp.ogg" "$source"} and
+	  die "Failed to convert $source to $target"; # warn via dialog & recover
+    } else {
+	print "Copying $source to $target\n";
+	copy $source, $target or die "Failed to copy $source to $target: $!";
+    }
+    return 1;
+}
+
+sub rgPack {
+
+    my ($d, $an, $pn);
+    $an = 0;
+    $pn = 0;
+    my $projectDir = "";
+    my %audioFiles = ();
+    my %unusedAudioFiles = ();
+    my @possibles = ();
+    my @indices = ();
+
+    my $rgFile = shift;
+    my $projectFile = shift;
+
+    if (-f $projectFile) {
+	if (system qq{$kdialog --warningyesno "Project file \"$projectFile\" already exists.  Overwrite it?"}) {
+	    die "Not overwriting existing project file $projectFile";
+	}
+    }
+
+    my $targetDir = $projectFile . ".d";
+    if (-f $targetDir or -d $targetDir) {
+	system qq{$kdialog --sorry "Packaging directory \"$targetDir\" already exists.\nCannot continue to create project file."};
+	die "Not overwriting existing packaging directory $targetDir";
+    }
+
+    `dcop "$dcop" setLabel "Reading Rosegarden file..."`;
+
+    my $dir = '.';
+    if ($rgFile =~ m,/,) {
+	$dir = $rgFile;
+	$dir =~ s,[^/]*$,,;
+    }
+
+    if ($dir =~ m,^[^/],) {
+	my $wd = `pwd`;
+	chomp $wd;
+	$dir = "$wd/$dir";
+    }
+
+    $dir =~ s,/\.?/,/,g;
+
+    print "dir is $dir\n";
+
+    my $twig = XML::Twig->new();
+
+    open INZIP, "-|", "gunzip -c $rgFile";
+
+    eval {
+	$twig->parse(\*INZIP);
+    };
+
+    close INZIP;
+
+    my $root = $twig->root;
+    if (!defined $root) { die "No root"; }
+
+    if ($root->gi ne 'rosegarden-data') {
+	die "Not a Rosegarden file";
+    }
+
+    my $audioFilesNode = $root->first_child('audiofiles');
+
+    my $audioPathNode = $audioFilesNode->first_child('audioPath');
+    $projectDir = canonicalise $dir, $audioPathNode->att('value');
+
+    my @audioNodes = $audioFilesNode->children('audio');
+    foreach my $audioNode (@audioNodes) {
+	my $file = $audioNode->att('file');
+	my $id = $audioNode->att('id');
+	my $done = 0;
+	foreach my $segment ($root->children('segment')) {
+	    if (defined $segment->att('type') and
+		$segment->att('type') eq "audio" and
+		$segment->att('file') == $id) {
+		$audioFiles{$id} = $file;
+		$done = 1;
+		last;
+	    }
+	}
+	if (!$done) { $unusedAudioFiles{$id} = $file; }
+    }
+
+    if (%unusedAudioFiles) {
+	my @args;
+	map {
+	    my $id = $_;
+	    my $file = $unusedAudioFiles{$id};
+
+	    my $haveElsewhere = 0;
+	    foreach my $usedFile (values %audioFiles) {
+		if ($usedFile eq $file) {
+		    $haveElsewhere = 1;
+		    last;
+		}
+	    }
+
+	    if (!$haveElsewhere) {
+
+		my $fn = canonicalise $projectDir, $file;
+		my $desc = `file "$fn"`;
+		my $sz = `wc -c "$fn"`;
+		chomp $desc;
+		chomp $sz;
+		$sz =~ s,\s+.*,,;
+		$desc =~ s,^$fn: ,,;
+		$desc =~ s,\([^\)]*\)\s+,,g;
+		$fn =~ s,^$projectDir/,[PROJECT]/,;
+		push @args, ($id, "\"$fn - $sz bytes - $desc\"", "off");
+	    }
+
+	} sort { $a <=> $b } keys %unusedAudioFiles;
+
+	print STDERR "args are @args\n";
+	my $result = `$kdialog --checklist "The following audio files are referred to in the Rosegarden file,\nbut are not used in any segment.\n\nBy default these will not be included in the project file.\n\nPlease select any that you wish to include." @args`;
+	if ($? == 256) {
+	    die "Operation cancelled";
+	}
+	chomp $result;
+	print STDERR "result is $result\n";
+	@indices =
+	  map { s/^"([^"]*)"$/$1/; $_ }
+	    split '\s', $result;
+    }
+
+    map { $audioFiles{$_} = $unusedAudioFiles{$_} } @indices;
+    @indices = ();
+
+    my @peakFiles = ();
+    map {
+	my $peakFile = canonicalise($projectDir, $_) . ".pk";
+	-f $peakFile and push @peakFiles, $peakFile;
+    } values %audioFiles;
+
+    my %possibleMap;
+
+    my $studioNode = $root->first_child('studio');
+    my @deviceNodes = $studioNode->children('device');
+    foreach my $deviceNode (@deviceNodes) {
+	my @instrumentNodes = $deviceNode->children('instrument');
+	foreach my $instrumentNode (@instrumentNodes) {
+	    my @pluginNodes = $instrumentNode->children('plugin');
+	    push @pluginNodes, $instrumentNode->children('synth');
+	    my @configureNodes;
+	    map { push @configureNodes, $_->children('configure') } @pluginNodes;
+	    map {
+		my $possible = $_->att('value');
+		my $loc = canonicalise $projectDir, $possible;
+		if (-f $loc && -r $loc) {
+		    $possibleMap{$possible} = 1;
+		}
+	    } @configureNodes;
+	}
+    }
+
+    @possibles = sort keys %possibleMap;
+
+    `dcop "$dcop" setProgress 5`;
+
+    print "Possibles: @possibles\n";
+
+    if (@possibles) {
+	print STDERR "$#possibles possibles\n";
+	my @args;
+	my $n = 0;
+	map {
+	    my $possible = $_;
+	    my $fn = canonicalise $projectDir, $possible;
+	    my $desc = `file "$fn"`;
+	    my $sz = `wc -c "$fn"`;
+	    my $status = "off";
+	    chomp $desc;
+	    chomp $sz;
+	    $sz =~ s,\s+.*,,;
+	    $desc =~ s,^$fn: ,,;
+	    $desc =~ s,\([^\)]*\)\s+,,g;
+	    if ($fn =~ m,^$projectDir/[^/]*$,) {
+		$status = "on";
+	    }
+	    $fn =~ s,^$projectDir/,(PROJECT)/,;
+	    push @args, ($n, "\"$fn - $sz bytes - $desc\"", $status);
+	    ++$n;
+	} @possibles;
+	print STDERR "args are @args\n";
+	my $result = `$kdialog --checklist "The following files may be required for use by plugins used in this composition.\n\nPlease select any that you wish to include in the project file." @args`;
+	if ($? == 256) {
+	    die "Operation cancelled";
+	}
+	chomp $result;
+	print STDERR "result is $result\n";
+	@indices =
+	  map { s/^"([^"]*)"$/$1/; $_ }
+	    split '\s', $result;
+    }
+
+    mkdir $targetDir or die "Cannot create packaging directory $targetDir: $!";
+    push @temporaries, $targetDir;
+
+    my @sourceFiles = sort values %audioFiles;
+    push @sourceFiles, @peakFiles;
+    map { push @sourceFiles, $possibles[$_] } @indices;
+
+    print "Source files: @sourceFiles\n";
+
+    `dcop "$dcop" setProgress 10`;
+
+    my %fileMap;
+
+    my $totalContrib = 0.0;
+    map { $totalContrib += contrib canonicalise $projectDir, $_; } @sourceFiles;
+    if ($totalContrib == 0) {
+	$totalContrib = 10;
+    }
+
+    my $contribCount = 0.0;
+
+    print "Total contribution: $totalContrib\n";
+
+    my $newProjectDir = basename $rgFile;
+    $newProjectDir =~ s/.rg$//i;
+    if ($newProjectDir eq basename $rgFile) {
+	$newProjectDir = $newProjectDir . ".d";
+    }
+
+    foreach my $origSourceFile (@sourceFiles) {
+	my $sourceRelative = relativise $projectDir, $origSourceFile;
+	my $renamedRelative = name $rgFile, $sourceRelative;
+	if ($sourceRelative =~ m,^/,) {
+	    $renamedRelative = basename $renamedRelative;
+	}
+	my $sourceFile = canonicalise $projectDir, $sourceRelative;
+	my $targetFile = canonicalise($targetDir . "/" . $newProjectDir, $renamedRelative);
+	my $count = 1;
+	while (-f $targetFile or -d $targetFile) {
+	    print "$targetFile exists... ";
+	    if ($renamedRelative =~ m,.([^.]+)$,) {
+		$renamedRelative =~ s,^(.*).([^.]+)$,$1_$count.$2,;
+	    } else {
+		$renamedRelative = $renamedRelative . "_$count";
+	    }
+	    $targetFile = canonicalise($targetDir . "/" . $newProjectDir, $renamedRelative);
+	    ++$count;
+	    print "trying $targetFile\n";
+	}
+	if (convertType($sourceFile) eq 'flac' or
+	    convertType($sourceFile) eq 'ogg') {
+	    `dcop "$dcop" setLabel "Converting $renamedRelative..."`;
+	} else {
+	    `dcop "$dcop" setLabel "Including $renamedRelative..."`;
+	}	
+	$fileMap{$sourceRelative} = $renamedRelative;
+	convert $sourceFile, $targetFile;
+	$contribCount += contrib $sourceFile;
+	my $progress = int(10.0 + $contribCount * 82.0 / $totalContrib);
+	`dcop "$dcop" setProgress $progress`;
+    }
+
+    my $code;
+    while (($code = system qq{$kdialog --yesno "Do you want to include any more files in this project?"}) == 0) {
+	my $file = `$kdialog --getopenfilename "$dir" "*"`;
+	chomp $file;
+	my $targetFile = canonicalise($targetDir . "/" . $newProjectDir, basename $file);
+	convert $file, $targetFile;
+    }	
+
+    `dcop "$dcop" setLabel "Converting Rosegarden file..."`;
+
+    $audioPathNode->set_att('value', $newProjectDir);
+
+    foreach my $audioNode (@audioNodes) {
+	if (exists $audioFiles{$audioNode->att('id')}) {
+	    if (exists $fileMap{$audioNode->att('file')}) {
+		my $before = $audioNode->att('file');
+		my $after = $fileMap{$before};
+		print "Renaming $before to $after in XML\n";
+		$audioNode->set_att('file', $after);
+	    }
+	} else {
+	    $audioNode->cut;
+	}
+    }
+
+    foreach my $deviceNode (@deviceNodes) {
+	my @instrumentNodes = $deviceNode->children('instrument');
+	foreach my $instrumentNode (@instrumentNodes) {
+	    my @pluginNodes = $instrumentNode->children('plugin');
+	    push @pluginNodes, $instrumentNode->children('synth');
+	    my @configureNodes;
+	    map { push @configureNodes, $_->children('configure') } @pluginNodes;
+	    foreach my $configureNode (@configureNodes) {
+		if (exists $fileMap{$configureNode->att('value')}) {
+		    my $before = $configureNode->att('value');
+		    my $after = $fileMap{$before};
+		    print "Renaming $before to $after in configure XML\n";
+		    $configureNode->set_att('value', $after);
+		}
+	    }
+	}
+    }
+
+    my $targetRgFile = $targetDir . "/" . basename $rgFile;
+    my $targetRgXml = $targetRgFile . ".xml";
+
+    print "out is $targetRgFile\n";
+
+    open OUT, "| gzip -c > $targetRgFile" or die "Failed to open $targetRgFile for writing via gzip";
+
+    $twig->print(\*OUT);
+
+    close OUT;
+
+    `dcop "$dcop" setLabel "Packaging..."`;
+    `dcop "$dcop" setProgress 95`;
+
+    system qq{rm -f "$projectFile"} and die "Overwriting old project file failed: $!";
+
+    my $baseTarget = basename $targetDir;
+    my $baseRg = basename $targetRgFile;
+    my $baseProject = basename $projectFile;
+    print "dir is $dir\nbaseTarget is $baseTarget\nbaseRg is $baseRg\nnewProjectDir is $newProjectDir\n";
+    system qq{cd "$dir/$baseTarget"; tar cf - "$baseRg" "$newProjectDir" | gzip --fast -c > "$baseProject" ; mv "$baseProject" ..} and die "Making tarball failed";
+
+    `dcop "$dcop" setLabel "Done"`;
+    `dcop "$dcop" setProgress 100`;
+
+    system qq{rm -r "$targetDir"} and die "Cleaning up packaging directory failed: $!";
+
+    sleep 1;
+
+    `dcop "$dcop" close`;
+
+    return 1;
+}
+
+sub rgUnpack {
+
+    my $rgFile = shift;
+    my $projectFile = shift;
+
+    $rgFile = basename $rgFile;
+
+    if (-f $rgFile) {
+	if (system qq{$kdialog --warningyesno "Rosegarden file \"$rgFile\" already exists.  Overwrite it?"}) {
+	    die "Not overwriting existing Rosegarden file $rgFile";
+	}
+    }
+
+    my %dirs;
+    map { chomp; s,/.*$,,; $dirs{$_} = 1; } `gunzip -c "$projectFile" | tar tf -`;
+
+    my $projectDir = "";
+    for my $targetDir (keys %dirs) {
+	next if ($targetDir eq basename $rgFile);
+	if ($projectDir eq "") { $projectDir = $targetDir; }
+	if (-f $targetDir or -d $targetDir) {
+	    if (system qq{$kdialog --warningyesno "Project file or directory \"$targetDir\" already exists.  Overwrite it?"}) {
+		die "Not overwriting existing project file or directory $targetDir";
+	    }
+	}
+    }
+
+    `dcop "$dcop" setLabel "Unpacking..."`;
+    `gunzip -c "$projectFile" | tar xf -`;
+
+    `dcop "$dcop" setProgress 20`;
+
+    push @temporaries, $rgFile;
+    push @temporaries, $projectDir;
+
+    my @encFiles = `ls $projectDir/*.rgp.flac $projectDir/*.rgp.ogg 2>/dev/null`;
+    my $count = 0;
+    foreach my $encFile (@encFiles) {
+	chomp $encFile;
+	my $origFile = $encFile;
+	$origFile =~ s/\.rgp\.(flac|ogg)$//;
+	my $decoder = 'flac -s -d';
+	if ($encFile =~ /ogg$/) {
+	    $decoder = 'oggdec';
+	}
+	if (system qq{$decoder -o "$origFile" "$encFile"}) {
+	    die "Failed to unpack $origFile"; # should warn & continue
+	} else {
+	    system qq{rm "$encFile"};
+	}
+	my $progress = @encFiles;
+	$progress = int(25 + $count * 75 / $progress);
+	++$count;
+	`dcop "$dcop" setProgress $progress`;
+    }
+
+    `dcop "$dcop" setLabel "Done"`;
+    `dcop "$dcop" setProgress 100`;
+
+    sleep 1;
+
+    `dcop "$dcop" close`;
+
+    @temporaries = ();
+    return 1;
+}
+
+
+if (!$pack && !$unpack && !$conftest && !$rg) {
+    if (exists $ARGV[0]) {
+	if ($ARGV[0] =~ /.rg$/i) {
+	    $pack = 1;
+	} elsif ($ARGV[0] =~ /.rgp$/i) {
+	    $unpack = 1;
+	} else {
+	    usage;
+	}
+    } else {
+	usage;
+    }
+}
+
+my @required = conftest;
+if (@required) {
+    print "The following additional packages are required but not available in the PATH:\n";
+    print join ' ', @required;
+    print "\n";
+    if ($conftest) {
+	exit 1;
+    } else {
+	die "Configuration requirements not met";
+    }
+}
+
+if ($conftest) {
+    exit 0;
+}
+
+if ($pack) {
+
+    if ($unpack || $conftest || $rg) { usage; }
+
+    my ($rgFile, $projectFile);
+
+    if (exists $ARGV[0]) {
+	$rgFile = $ARGV[0];
+    }
+    if (! -f $rgFile) {
+	die "$rgFile: No such file or directory\n";
+    }
+
+    if (exists $ARGV[1]) {
+	$projectFile = $ARGV[1];
+    } else {
+	$projectFile = $rgFile;
+	$projectFile =~ s/\.rg$/.rgp/;
+	if ($projectFile eq $rgFile) {
+	    $projectFile = $rgFile . ".rgp";
+	}
+    }
+
+    rgPack $rgFile, $projectFile;
+
+} elsif ($unpack || $rg) {
+
+    if ($pack || $conftest) { usage; }
+    if ($unpack && $rg) { usage; }
+
+    my $projectFile;
+
+    if (exists $ARGV[0]) {
+	$projectFile = $ARGV[0];
+    }
+    if (! -f $projectFile) {
+	die "$projectFile: No such file or directory\n";
+    }
+
+    my $rgFile = $projectFile;
+    $rgFile =~ s/\.rg\.rgp$/.rg/i;
+    $rgFile =~ s/\.rgp$/.rg/i;
+
+    rgUnpack $rgFile, $projectFile;
+
+    if ($rg) {
+	system qq{rosegarden "$rgFile"};
+    }
+}
+

@@ -1,6 +1,6 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-bin_PROGRAMS = rosegarden
+bin_PROGRAMS = rosegarden 
 
 rosegarden_SOURCES = \
         audiocommands.cpp \
@@ -226,6 +226,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
 	$(INSTALL_DATA) $(srcdir)/library/*.rgd            $(kde_datadir)/$(data_dirname)/library
 	$(INSTALL_DATA) $(srcdir)/docs/en/tips             $(kde_datadir)/$(data_dirname)
+	$(INSTALL_SCRIPT) $(srcdir)/rosegarden-project-package $(DESTDIR)$(bindir)/rosegarden-project-package
 	perl -ne 'print "$$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h > $(DESTDIR)$(kde_datadir)/$(data_dirname)/version.txt
 
 

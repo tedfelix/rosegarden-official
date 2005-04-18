@@ -55,6 +55,7 @@
 #include <ktip.h>
 #include <kpopupmenu.h>
 #include <kfilemetainfo.h>
+#include <ktempfile.h>
 
 // application specific includes
 
@@ -316,20 +317,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     }
 #endif
 
-    emit startupStatusMessage(i18n("Testing project packager..."));
-    KProcess *proc = new KProcess;
-    *proc << "rosegarden-package";
-    *proc << "--conftest";
-    proc->start(KProcess::Block, KProcess::All);
-    if (proc->exitStatus()) {
-	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - No project packager available" << endl;
-	stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
-    } else {
-	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - Project packager OK" << endl;
-	stateChanged("have_project_packager", KXMLGUIClient::StateNoReverse);
-    }
-    delete proc;
-
     // Plugin manager
     //
     emit startupStatusMessage(i18n("Initializing plugin manager..."));
@@ -413,6 +400,20 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	    SIGNAL(pluginBypassed(Rosegarden::InstrumentId, int, bool)),
 	    m_instrumentParameterBox,
 	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
+
+    emit startupStatusMessage(i18n("Testing project packager..."));
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-project-package";
+    *proc << "--conftest";
+    proc->start(KProcess::Block, KProcess::All);
+    if (!proc->normalExit() || proc->exitStatus()) {
+	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - No project packager available" << endl;
+	stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
+    } else {
+	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - Project packager OK" << endl;
+	stateChanged("have_project_packager", KXMLGUIClient::StateNoReverse);
+    }
+    delete proc;
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -3918,7 +3919,7 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
 
         proc->start(KProcess::Block, KProcess::All);
 
-        if (proc->exitStatus()) {
+        if (!proc->normalExit() || proc->exitStatus()) {
             RG_DEBUG << "couldn't kill any sequencer processes" << endl;
 	}
 	delete proc;
@@ -4129,8 +4130,36 @@ void RosegardenGUIApp::slotExportProject()
 
     if (fileName.isEmpty()) return;
     
-    //!!!
-//    exportMIDIFile(fileName);
+    //!!!kprocess
+
+    KTempFile tempFile(QString::null, ".rg");
+    tempFile.setAutoDelete(true);
+
+    CurrentProgressDialog::freeze();
+	
+    QString errMsg;
+    if (!m_doc->saveDocument(tempFile.name(), errMsg,
+			     true)) { // pretend it's autosave
+	KMessageBox::sorry(this, i18n("Saving temporary file failed: %1").arg(errMsg));
+	CurrentProgressDialog::thaw();
+	return;
+    }
+
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-project-package";
+    *proc << "--pack";
+    *proc << tempFile.name();
+    *proc << fileName;
+
+    proc->start(KProcess::Block, KProcess::All);
+
+    if (!proc->normalExit() || proc->exitStatus()) {
+	KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"").arg(fileName));
+	CurrentProgressDialog::thaw();
+	return;
+    }
+
+    delete proc;
 }
 
 void RosegardenGUIApp::slotExportMIDI()
