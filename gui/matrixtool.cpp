@@ -241,7 +241,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     ev->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     ev->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
-    m_currentElement = new MatrixElement(ev, false); //!!! for now
+    m_currentElement = new MatrixElement(ev, m_mParentView->isDrumMode());
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) -
             m_currentStaff->getElementHeight() / 2;
@@ -308,33 +308,51 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     // got the mouse down
     if (!m_currentElement) return;
 
-    // Insert element if it has a non null duration,
-    // discard it otherwise
-    //
-    timeT time = m_currentElement->getViewAbsoluteTime();
+    if (m_mParentView->isDrumMode()) {
 
-    if (time > endTime) std::swap(time, endTime);
+	MatrixPercussionInsertionCommand *command =
+	    new MatrixPercussionInsertionCommand(m_currentStaff->getSegment(),
+						 m_currentElement->getViewAbsoluteTime(),
+						 m_currentElement->event());
+	m_mParentView->addCommandToHistory(command);
 
-    if (endTime == time) endTime = time + m_currentElement->getViewDuration();
+	Event* ev = m_currentElement->event();
+	delete m_currentElement;
+	delete ev;
 
-    Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-    MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
-
-    MatrixInsertionCommand* command = 
-	new MatrixInsertionCommand(m_currentStaff->getSegment(),
-				   time,
-                                   endTime,
-				   m_currentElement->event());
-    
-    m_mParentView->addCommandToHistory(command);
-
-    Event* ev = m_currentElement->event();
-    delete m_currentElement;
-    delete ev;
-
-    ev = command->getLastInsertedEvent();
-    if (ev) m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
+	ev = command->getLastInsertedEvent();
+	if (ev) m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
 						  ev);
+    } else {
+
+	// Insert element if it has a non null duration,
+	// discard it otherwise
+	//
+	timeT time = m_currentElement->getViewAbsoluteTime();
+	
+	if (time > endTime) std::swap(time, endTime);
+	
+	if (endTime == time) endTime = time + m_currentElement->getViewDuration();
+	
+	Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
+	MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
+	
+	MatrixInsertionCommand* command = 
+	    new MatrixInsertionCommand(m_currentStaff->getSegment(),
+				       time,
+				       endTime,
+				       m_currentElement->event());
+	
+	m_mParentView->addCommandToHistory(command);
+
+	Event* ev = m_currentElement->event();
+	delete m_currentElement;
+	delete ev;
+
+	ev = command->getLastInsertedEvent();
+	if (ev) m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
+						  ev);
+    }
 
     m_mParentView->update();
     m_currentElement = 0;

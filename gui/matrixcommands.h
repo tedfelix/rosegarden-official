@@ -44,6 +44,27 @@ protected:
     Rosegarden::Event *m_lastInsertedEvent; // an alias for another event
 };
 
+class MatrixPercussionInsertionCommand : public BasicCommand
+{
+public:
+    MatrixPercussionInsertionCommand(Rosegarden::Segment &segment,
+				     Rosegarden::timeT time,
+				     Rosegarden::Event *event);
+
+    virtual ~MatrixPercussionInsertionCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+    
+protected:
+    virtual void modifySegment();
+
+    Rosegarden::timeT getEndTime(Rosegarden::Segment &segment,
+				 Rosegarden::timeT time);
+
+    Rosegarden::Event *m_event;
+    Rosegarden::Event *m_lastInsertedEvent; // an alias for another event
+};
+
 //------------------------------
 
 class MatrixEraseCommand : public BasicCommand

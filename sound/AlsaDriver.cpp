@@ -4030,22 +4030,28 @@ AlsaDriver::runTasks()
 	unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
 	unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
 	
+#ifdef DEBUG_ALSA
 	if (!m_playing) {
 	    std::cerr << "Skew: " << t_skew << "/" << t_base;
 	}
+#endif
 	
 	unsigned int newSkew = t_skew + (unsigned int)(t_skew * ratio);
 	
 	if (newSkew != t_skew) {
+#ifdef DEBUG_ALSA
 	    if (!m_playing) {
 		std::cerr << " changed to " << newSkew << endl;
 	    }
+#endif
 	    snd_seq_queue_tempo_set_skew(q_ptr, newSkew);
 	    snd_seq_set_queue_tempo( m_midiHandle, m_queue, q_ptr);
 	} else {
+#ifdef DEBUG_ALSA
 	    if (!m_playing) {
 		std::cerr << endl;
 	    }
+#endif
 	}
 
 	m_firstTimerCheck = true;

@@ -22,6 +22,7 @@
 #include "matrixcommands.h"
 #include "BaseProperties.h"
 #include "SegmentMatrixHelper.h"
+#include "Composition.h"
 
 #include <klocale.h>
 #include "rosestrings.h"
@@ -61,6 +62,64 @@ void MatrixInsertionCommand::modifySegment()
     m_lastInsertedEvent = new Event(*m_event);
     helper.insertNote(m_lastInsertedEvent);
 }
+
+MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Rosegarden::Segment &segment,
+								   timeT time,
+								   Event *event) :
+    BasicCommand(i18n("Insert Percussion Note"), segment, time,
+		 getEndTime(segment, time)),
+    m_event(0)
+{
+    Rosegarden::timeT endTime = getEndTime(segment, time);
+    m_event = new Event(*event, time, endTime - time);
+}
+
+MatrixPercussionInsertionCommand::~MatrixPercussionInsertionCommand()
+{
+    delete m_event;
+    // don't want to delete m_lastInsertedEvent, it's just an alias
+}
+
+void MatrixPercussionInsertionCommand::modifySegment()
+{
+    MATRIX_DEBUG << "MatrixPercussionInsertionCommand::modifySegment()\n";
+
+    if (!m_event->has(Rosegarden::BaseProperties::VELOCITY)) {
+	m_event->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+    }
+
+    //!!! Absolutely need to truncate previous event on segment as well
+
+    Rosegarden::SegmentMatrixHelper helper(getSegment());
+    m_lastInsertedEvent = new Event(*m_event);
+    helper.insertNote(m_lastInsertedEvent);
+}
+
+Rosegarden::timeT
+MatrixPercussionInsertionCommand::getEndTime(Rosegarden::Segment &segment,
+					     Rosegarden::timeT time)
+{
+    Rosegarden::timeT endTime = time;
+
+    for (Rosegarden::Segment::iterator i = segment.findTime(time);
+	 segment.isBeforeEndMarker(i); ++i) {
+	if ((*i)->getAbsoluteTime() > time) endTime = (*i)->getAbsoluteTime();
+    }
+    endTime = segment.getEndMarkerTime();
+
+    Rosegarden::Composition *comp = segment.getComposition();
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange =
+	comp->getBarRangeForTime(time);
+    Rosegarden::timeT barDuration = barRange.second - barRange.first;
+    
+    if (endTime > time + barDuration) {
+	endTime = time + barDuration;
+    }
+
+    return endTime;
+}
+
+
 
 MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
                                        Event *event) :

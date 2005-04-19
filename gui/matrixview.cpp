@@ -2462,6 +2462,9 @@ MatrixView::updateViewCaption()
 {
     // Set client label
     //
+    QString view = i18n("Matrix");
+    if (isDrumMode()) view = i18n("Percussion");
+
     if (m_segments.size() == 1) {
 
 	Rosegarden::TrackId trackId = m_segments[0]->getTrack();
@@ -2471,20 +2474,23 @@ MatrixView::updateViewCaption()
 	int trackPosition = -1;
 	if (track) trackPosition = track->getPosition();
 
-        setCaption(i18n("%1 - Segment Track #%2 - Matrix")
+        setCaption(i18n("%1 - Segment Track #%2 - %3")
                    .arg(getDocument()->getTitle())
-                   .arg(trackPosition + 1));
+                   .arg(trackPosition + 1)
+		   .arg(view));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setCaption(i18n("%1 - All Segments - Matrix")
-                   .arg(getDocument()->getTitle()));
+        setCaption(i18n("%1 - All Segments - %2")
+                   .arg(getDocument()->getTitle())
+		   .arg(view));
 
     } else {
 
-        setCaption(i18n("%1 - %2 Segments - Matrix ")
+        setCaption(i18n("%1 - %2 Segments - %2 ")
                    .arg(getDocument()->getTitle())
-                   .arg(m_segments.size()));
+                   .arg(m_segments.size())
+		   .arg(view));
     }
 }
 
