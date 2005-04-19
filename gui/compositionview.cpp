@@ -239,8 +239,12 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 //                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
 //                              << " - npi = " << (*npi) << endl;
                     QRect tr = *npi;
+
                     // put preview rectangle inside the corresponding segment's CompositionRect
-                    tr.moveBy(sr.x(), sr.y());
+		    //               tr.moveBy(sr.x(), sr.y());
+		    // already has correct x-coord virtue of snap grid
+		    tr.moveBy(0, sr.y());
+
 //                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
 //                              << tr << endl;
                     npData->insert(tr);
