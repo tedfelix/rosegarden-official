@@ -3233,10 +3233,28 @@ void RosegardenGUIApp::slotImportProject()
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
 
-    //!!!
-//    openFile(tmpfile, ImportMIDI); // does everything including setting the document
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-project-package";
+    *proc << "--unpack";
+    *proc << tmpfile;
 
-//    KIO::NetAccess::removeTempFile( tmpfile );
+    proc->start(KProcess::Block, KProcess::All);
+
+    if (!proc->normalExit() || proc->exitStatus()) {
+	KMessageBox::sorry(this, i18n("Failed to import project file \"%1\"").arg(tmpfile));
+	CurrentProgressDialog::thaw();
+	KIO::NetAccess::removeTempFile( tmpfile );
+	delete proc;
+	return;
+    }
+
+    KIO::NetAccess::removeTempFile( tmpfile );
+    delete proc;
+
+    QString rgFile = tmpfile;
+    rgFile.replace(QRegExp(".rg.rgp$"), ".rg");
+    rgFile.replace(QRegExp(".rgp$"), ".rg");
+    openURL(rgFile);
 }
 
 void RosegardenGUIApp::slotImportMIDI()
@@ -4130,8 +4148,6 @@ void RosegardenGUIApp::slotExportProject()
 
     if (fileName.isEmpty()) return;
     
-    //!!!kprocess
-
     KTempFile tempFile(QString::null, ".rg");
     tempFile.setAutoDelete(true);
 
@@ -4156,6 +4172,7 @@ void RosegardenGUIApp::slotExportProject()
     if (!proc->normalExit() || proc->exitStatus()) {
 	KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"").arg(fileName));
 	CurrentProgressDialog::thaw();
+	delete proc;
 	return;
     }
 

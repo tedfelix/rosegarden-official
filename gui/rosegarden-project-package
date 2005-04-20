@@ -75,9 +75,9 @@ if (!$conftest) {
 
 my @temporaries = ();
 $SIG{__DIE__} = sub {
-    `dcop "$dcop" close`;
-    map { system qq{rm -rf $_} } @temporaries;
-    return 1;
+   `dcop "$dcop" close`;
+   map { system qq{rm -rf $_} } @temporaries;
+   return 1;
 };
 
 sub conftest {
@@ -202,14 +202,14 @@ sub rgPack {
     my $projectFile = shift;
 
     if (-f $projectFile) {
-	if (system qq{$kdialog --warningyesno "Project file \"$projectFile\" already exists.  Overwrite it?"}) {
+	if (system qq{$kdialog --warningyesno "Project file \"`pwd`/$projectFile\" already exists.  Overwrite it?"}) {
 	    die "Not overwriting existing project file $projectFile";
 	}
     }
 
     my $targetDir = $projectFile . ".d";
     if (-f $targetDir or -d $targetDir) {
-	system qq{$kdialog --sorry "Packaging directory \"$targetDir\" already exists.\nCannot continue to create project file."};
+	system qq{$kdialog --sorry "Packaging directory \"`pwd`/$targetDir\" already exists.\nCannot continue to create project file."};
 	die "Not overwriting existing packaging directory $targetDir";
     }
 
@@ -445,7 +445,7 @@ sub rgPack {
     }
 
     my $code;
-    while (($code = system qq{$kdialog --yesno "Do you want to include any more files in this project?"}) == 0) {
+    while (($code = system qq{$kdialog --yesno "Do you want to include any additional files in this project?"}) == 0) {
 	my $file = `$kdialog --getopenfilename "$dir" "*"`;
 	chomp $file;
 	my $targetFile = canonicalise($targetDir . "/" . $newProjectDir, basename $file);
@@ -506,8 +506,9 @@ sub rgPack {
     my $baseTarget = basename $targetDir;
     my $baseRg = basename $targetRgFile;
     my $baseProject = basename $projectFile;
-    print "dir is $dir\nbaseTarget is $baseTarget\nbaseRg is $baseRg\nnewProjectDir is $newProjectDir\n";
-    system qq{cd "$dir/$baseTarget"; tar cf - "$baseRg" "$newProjectDir" | gzip --fast -c > "$baseProject" ; mv "$baseProject" ..} and die "Making tarball failed";
+    print "dir is $targetDir\nbaseTarget is $baseTarget\nbaseRg is $baseRg\nnewProjectDir is $newProjectDir\n";
+    system qq{mkdir -p "$targetDir/$newProjectDir"};
+    system qq{cd "$targetDir"; tar cf - "$baseRg" "$newProjectDir" | gzip --fast -c > "$baseProject" ; mv "$baseProject" ..} and die "Making tarball failed";
 
     `dcop "$dcop" setLabel "Done"`;
     `dcop "$dcop" setProgress 100`;
@@ -576,6 +577,10 @@ sub rgUnpack {
 	++$count;
 	`dcop "$dcop" setProgress $progress`;
     }
+
+    #!!! Now the unpacked rg file is wherever it was left, not in
+    # $rgFile, and the directory is not with $rgFile either -- move 'em
+
 
     `dcop "$dcop" setLabel "Done"`;
     `dcop "$dcop" setProgress 100`;

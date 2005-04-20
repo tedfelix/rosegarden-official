@@ -1041,7 +1041,7 @@ void CompositionView::setSnapGrain(bool fine)
 
 void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
 {
-    QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
+    //!!!   QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
 
     QRect clipRect(clipx, clipy, clipw, cliph);
 
