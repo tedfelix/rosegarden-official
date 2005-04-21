@@ -4147,14 +4147,15 @@ void RosegardenGUIApp::slotExportProject()
          i18n("Export as..."));
 
     if (fileName.isEmpty()) return;
-    
-    KTempFile tempFile(QString::null, ".rg");
-    tempFile.setAutoDelete(true);
+
+    QString rgFile = fileName;
+    rgFile.replace(QRegExp(".rg.rgp$"), ".rg");
+    rgFile.replace(QRegExp(".rgp$"), ".rg"); 
 
     CurrentProgressDialog::freeze();
 	
     QString errMsg;
-    if (!m_doc->saveDocument(tempFile.name(), errMsg,
+    if (!m_doc->saveDocument(rgFile, errMsg,
 			     true)) { // pretend it's autosave
 	KMessageBox::sorry(this, i18n("Saving temporary file failed: %1").arg(errMsg));
 	CurrentProgressDialog::thaw();
@@ -4164,10 +4165,11 @@ void RosegardenGUIApp::slotExportProject()
     KProcess *proc = new KProcess;
     *proc << "rosegarden-project-package";
     *proc << "--pack";
-    *proc << tempFile.name();
+    *proc << rgFile;
     *proc << fileName;
 
     proc->start(KProcess::Block, KProcess::All);
+    QFile::remove(rgFile);
 
     if (!proc->normalExit() || proc->exitStatus()) {
 	KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"").arg(fileName));

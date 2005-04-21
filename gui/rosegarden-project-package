@@ -527,7 +527,8 @@ sub rgUnpack {
     my $rgFile = shift;
     my $projectFile = shift;
 
-    $rgFile = basename $rgFile;
+    my $rgDir = dirname $rgFile;
+#    $rgFile = basename $rgFile;
 
     if (-f $rgFile) {
 	if (system qq{$kdialog --warningyesno "Rosegarden file \"$rgFile\" already exists.  Overwrite it?"}) {
@@ -542,19 +543,21 @@ sub rgUnpack {
     for my $targetDir (keys %dirs) {
 	next if ($targetDir eq basename $rgFile);
 	if ($projectDir eq "") { $projectDir = $targetDir; }
-	if (-f $targetDir or -d $targetDir) {
-	    if (system qq{$kdialog --warningyesno "Project file or directory \"$targetDir\" already exists.  Overwrite it?"}) {
+	if (-f "$rgDir/$targetDir" or -d "$rgDir/$targetDir") {
+	    if (system qq{$kdialog --warningyesno "Project file or directory \"$rgDir/$targetDir\" already exists.  Overwrite it?"}) {
 		die "Not overwriting existing project file or directory $targetDir";
 	    }
 	}
     }
 
+    $projectDir="$rgDir/$projectDir";
+
     `dcop "$dcop" setLabel "Unpacking..."`;
-    `gunzip -c "$projectFile" | tar xf -`;
+    `gunzip -c "$projectFile" | ( cd "$rgDir"; tar xf - )`;
 
     `dcop "$dcop" setProgress 20`;
 
-    push @temporaries, $rgFile;
+    push @temporaries, "$rgFile";
     push @temporaries, $projectDir;
 
     my @encFiles = `ls $projectDir/*.rgp.flac $projectDir/*.rgp.ogg 2>/dev/null`;
