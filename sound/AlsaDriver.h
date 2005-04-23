@@ -417,6 +417,32 @@ private:
 
     RealTime                     m_loopStartTime;
     RealTime                     m_loopEndTime;
+
+    /*
+    ** VN MTC stuff
+    */
+    RealTime                     m_mtcReceiveTime;
+    RealTime                     m_mtcEncodedTime;
+    int                          m_mtcFrames;
+    int                          m_mtcSeconds;
+    int                          m_mtcMinutes;
+    int                          m_mtcHours;
+    int                          m_mtcSMPTEType;
+
+    void handleMTCQFrame(unsigned int data_byte, RealTime the_time);
+    void tweakSkew(int factor);
+    void calibrateMTC();
+
+    int                         m_mtcFirstTime;
+    RealTime                    m_mtcLastEncoded;
+    RealTime                    m_mtcLastReceive;
+    long long int               m_mtcSigmaE;
+    long long int               m_mtcSigmaC;
+    unsigned int                m_mtcSkew;
+    /*
+    ** MTC stuff end
+    */
+
     bool                         m_looping;
 
     bool                         m_haveShutdown;
