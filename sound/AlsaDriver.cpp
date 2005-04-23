@@ -1565,16 +1565,6 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     m_startPlayback = true;
 
-/*
- * MTC
- */
-    m_mtcFirstTime = -1;
-    m_mtcSigmaE = 0;
-    m_mtcSigmaC = 0;
-/*
- * MTC end
- */
-
 //!!!
 #ifdef HAVE_LIBJACK
 //    m_jackDriver->prebufferAudio();
@@ -2145,13 +2135,6 @@ AlsaDriver::getMappedComposition()
                        std::cerr << "REALTIME SYSEX" << endl;
                    }
 #endif
-                   if ((MidiByte)(data[0]) == MIDI_SYSEX_RT)
-                   {
-                       std::cerr << "REALTIME SYSEX" << endl;
-                       for (int ii = 0; ii < data.length(); ++ii) {
-                           printf("B %d = %02x\n", ii, data[ii]);
-                       }
-                   }
 
                    MappedEvent *mE = new MappedEvent();
                    mE->setType(MappedEvent::MidiSystemMessage);
@@ -2169,20 +2152,11 @@ AlsaDriver::getMappedComposition()
             case SND_SEQ_EVENT_SENSING: // MIDI device is still there
                break;
 
-            case SND_SEQ_EVENT_QFRAME:
-		handleMTCQFrame(event->data.control.value, eventTime);
-#if 0
-               std::cerr << "AlsaDriver::getMappedComposition - "
-                         << "got MTC qframe" << std::endl;
-
-		std::cerr << event->data.control.value; /*<VN>*/
-#endif
-               break;
-
             case SND_SEQ_EVENT_CLOCK:
+               /*
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got realtime MIDI clock" << std::endl;
-
+                         */
                break;
 
             case SND_SEQ_EVENT_START:
@@ -2244,227 +2218,6 @@ AlsaDriver::getMappedComposition()
     }
 
     return &m_recordComposition;
-}
-
-static int lock_count = 0;
-
-void
-AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
-{
-    switch(data_byte & 0xF0)
-    {
-        /* Frame */
-        case 0x00:
-            /*
-             * Reset everything
-             */
-		m_mtcReceiveTime = the_time;
-            m_mtcFrames = data_byte & 0x0f;
-            m_mtcSeconds = 0;
-            m_mtcMinutes = 0;
-            m_mtcHours = 0;
-            m_mtcSMPTEType = 0;
-
-            break;
-            
-        case 0x10:
-            m_mtcFrames |= (data_byte & 0x0f) << 4;
-            break;
-            
-        /* Seconds */
-        case 0x20:
-            m_mtcSeconds = data_byte & 0x0f;
-            break;
-        case 0x30:
-            m_mtcSeconds |= (data_byte & 0x0f) << 4;
-            break;
-            
-        /* Minutes */
-        case 0x40:
-            m_mtcMinutes = data_byte & 0x0f;
-            break;
-        case 0x50:
-            m_mtcMinutes |= (data_byte & 0x0f) << 4;
-            break;
-            
-        /* Hours and SMPTE type */
-        case 0x60:
-            m_mtcHours = data_byte & 0x0f;
-            break;
-        case 0x70:
-            m_mtcHours |= (data_byte & 0x01) << 4;
-            m_mtcSMPTEType = (data_byte & 0x06) >> 1;
-
-            /*
-             * Ok, got all the bits now
-             * (Assuming time is rolling forward)
-             */
-
-            /* correct for 2-frame lag*/
-            m_mtcFrames += 2;
-            if (m_mtcFrames > 29 /*<VN> implicit 30fps*/) {
-                m_mtcFrames -= 30;
-                if (++m_mtcSeconds == 60) {
-                    m_mtcSeconds = 0;
-                    if (++m_mtcMinutes == 60) {
-                        m_mtcMinutes = 0;
-                        ++m_mtcHours;
-                    }
-                }
-            }
-            
-#ifdef MTC_DEBUG
-            printf("Got a complete sequence: %02d:%02d:%02d.%02d (type %d)\n",
-                    m_mtcHours,
-                    m_mtcMinutes,
-                    m_mtcSeconds,
-                    m_mtcFrames,
-                    m_mtcSMPTEType);
-#endif
-
-            /* compute m_mtcEncodedTime */
-            m_mtcEncodedTime.sec = m_mtcSeconds +
-                        m_mtcMinutes * 60 +
-                        m_mtcHours * 60 * 60;
-            m_mtcEncodedTime.nsec = (int) ((100000000UL * (unsigned)m_mtcFrames) / (unsigned) 3); /*<VN> implicit 30fps*/
-            /*
-             * We only mess with the clock if we are playing
-             */
-            if (m_playing) {
-#ifdef MTC_DEBUG
-                std::cerr << "MTC Tstamp " << m_mtcEncodedTime;
-                std::cerr << " Received @ " << m_mtcReceiveTime << endl;
-#endif
-
-                calibrateMTC();
-
-                RealTime t_diff = m_mtcEncodedTime - m_mtcReceiveTime;
-                std::cerr << "Diff: "<< t_diff << endl; 
-
-                /* -ve diff means ALSA time ahead of MTC time */
-
-                if (t_diff.sec > 0) {
-                    tweakSkew(60000);
-                }
-                else if (t_diff.sec < 0) {
-                    tweakSkew(-60000);
-                }
-                else {
-                    /* "small" diff - use adaptive technique */
-                    tweakSkew(t_diff.nsec / 1400);
-			if ((t_diff.nsec /1000000) == 0) {
-				if (++lock_count == 3) {
-            printf("Got a lock @ %02d:%02d:%02d.%02d (type %d)\n",
-                    m_mtcHours,
-                    m_mtcMinutes,
-                    m_mtcSeconds,
-                    m_mtcFrames,
-                    m_mtcSMPTEType);
-				}
-			}
-			else {
-				lock_count = 0;
-			}
-                }
-                
-            }
-
-            break;
-
-        /* Oh dear, demented device! */
-        default:
-            break;
-    }
-
-}
-
-static int last_factor = 0;
-static int bias_factor = 0;
-
-void
-AlsaDriver::calibrateMTC()
-{
-    if (m_mtcFirstTime < 0)
-        return;
-    else if (m_mtcFirstTime > 0)
-    {
-        --m_mtcFirstTime;
-        m_mtcSigmaC = 0;
-        m_mtcSigmaE = 0;
-    }
-    else
-    {
-        RealTime diff_e = m_mtcEncodedTime - m_mtcLastEncoded;
-        RealTime diff_c = m_mtcReceiveTime - m_mtcLastReceive;
-
-#ifdef MTC_DEBUG
-        printf("diffs %d %d %d\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
-#endif
-        
-        m_mtcSigmaE += ((long long int) diff_e.nsec) * m_mtcSkew;
-        m_mtcSigmaC += diff_c.nsec;
-
-
-        int t_bias = (m_mtcSigmaE / m_mtcSigmaC) - 0x10000;
-
-#ifdef MTC_DEBUG
-        printf("Sigmas: %lld %lld %d\n", m_mtcSigmaE, m_mtcSigmaC, t_bias);
-#endif
-
-        bias_factor = t_bias;
-    }
-
-    m_mtcLastReceive = m_mtcReceiveTime;
-    m_mtcLastEncoded = m_mtcEncodedTime;
-
-}
-
-void
-AlsaDriver::tweakSkew(int factor)
-{
-
-    if (factor > 50000) {
-        factor = 50000;
-    }
-    else if (factor < -50000) {
-        factor = -50000;
-    }
-    else if (factor == last_factor)
-    {
-        return;
-    }
-    else
-    {
-        if (m_mtcFirstTime == -1)
-            m_mtcFirstTime =5;
-    }
-    last_factor = factor;
-
-//    if (factor > 0 && factor < 75)
-//        factor = 75;
-//    else if (factor < 0 && factor > -75)
-//        factor = -75;
-        
-    snd_seq_queue_tempo_t *q_ptr;
-    snd_seq_queue_tempo_alloca(&q_ptr);
-
-    snd_seq_get_queue_tempo( m_midiHandle, m_queue, q_ptr);
-
-    unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
-#ifdef MTC_DEBUG
-    std::cerr << "Skew: " << t_skew;
-#endif
-
-    t_skew = 0x10000 + factor + bias_factor;
-
-#ifdef MTC_DEBUG
-    std::cerr << " changed to " << factor << "+" <<bias_factor << endl;
-#endif
-
-    snd_seq_queue_tempo_set_skew(q_ptr, t_skew);
-    snd_seq_set_queue_tempo( m_midiHandle, m_queue, q_ptr);
-
-    m_mtcSkew = t_skew;
 }
     
 static size_t _debug_jack_frame_count = 0;
@@ -3074,7 +2827,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 	// when we're not).  Check both if you want to know whether
 	// we're really rolling.
         m_playing = true;
-	tweakSkew(0x10000);
     }
 
     AudioFile *audioFile = 0;
