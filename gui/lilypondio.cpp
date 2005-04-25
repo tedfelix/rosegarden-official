@@ -552,13 +552,14 @@ LilypondExporter::write()
     bool exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     bool exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
 
-    int languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 1);
+    int languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 2);
 
     switch (languageLevel) {
 
 	// 0 -> Lilypond 1.6 or 1.8
 	// 1 -> Lilypond 2.0
 	// 2 -> Lilypond 2.2
+	// 3 -> Lilypond 2.4
 
     case 0:
 	str << "\\version \"1.6.0\"" << std::endl;
@@ -572,11 +573,15 @@ LilypondExporter::write()
 	str << "\\version \"2.2.0\"" << std::endl;
 	break;
 
+    case 3:
+	str << "\\version \"2.4.0\"" << std::endl;
+	break;
+
     default:
 	std::cerr << "ERROR: Unknown language level " << languageLevel
 		  << ", results may be unpredictable, "
 		  << "omitting \\version" << std::endl;
-	languageLevel = 1;
+	languageLevel = 2;
     }
 
     // enable "point and click" debugging via xdvi to make finding the
@@ -688,8 +693,10 @@ LilypondExporter::write()
     str << "\\score {" << std::endl;
     if (languageLevel < 1) {
 	str << indent(++col) << "\\notes <" << std::endl;  // indent+
-    } else {
+    } else if (languageLevel <= 2) {
 	str << indent(++col) << "\\notes <<" << std::endl;  // indent+
+    } else {
+	str << indent(++col) << "<<" << std::endl;  // indent+
     }	
 
     // Make chords offset colliding notes by default
@@ -778,8 +785,13 @@ LilypondExporter::write()
             voiceNumber << "voice " << voiceCounter;
             lyricNumber << "lyric " << voiceCounter++;
 
-            if (exportLyrics && languageLevel >= 1) {
-		str << indent(col) <<  "\\addlyrics" << std::endl;
+            if (exportLyrics) {
+		if (languageLevel >= 1 && languageLevel <= 2) {
+		    str << indent(col) << "\\addlyrics" << std::endl;
+		} else if (languageLevel >= 3) {
+		    //!!! Looks like something we need to sort out before 2.6!
+		    str << indent(col) << "\\oldaddlyrics" << std::endl;
+		}
 	    }
             str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                 << "\" {"; // indent+
@@ -843,8 +855,12 @@ LilypondExporter::write()
             // write accumulated lyric events to the Lyric context, if user
             // desires
             if (exportLyrics) {
-                str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str()
-                    << "\" \\lyrics  { " << std::endl;
+                str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" ";
+		if (languageLevel <= 2) {
+                    str << "\\lyrics  { " << std::endl;
+		} else {
+		    str << "\\lyricmode { " << std::endl;
+		}
                 str << indent(++col) << lilyLyrics << " " << std::endl;
                 str << std::endl << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
             }
@@ -877,7 +893,11 @@ LilypondExporter::write()
         case 2 : paper += "legal\"";  break;
         case 3 : paper = "";          break; // "do not specify"
     }
-    str << indent(col) << "\\paper { " << paper <<" }" << std::endl;
+    if (languageLevel <= 2) {
+	str << indent(col) << "\\paper { " << paper <<" }" << std::endl;
+    } else {
+	str << indent(col) << "\\layout { " << paper <<" }" << std::endl;
+    }
 
     // write initial tempo in Midi block, if user wishes (added per user request...
     // makes debugging the .ly file easier because fewer "noisy" errors are
@@ -1007,7 +1027,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationView::ConfigGroup);
     bool exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    int languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 1);
+    int languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 2);
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
     timeT barStart = m_composition->getBarStart(barNo);
@@ -1155,13 +1175,19 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		}
 	    } else {
 		if (lastStem != 0) {
-		    str << "\\stemBoth ";
+		    if (languageLevel <= 2) {
+			str << "\\stemBoth ";
+		    } else {
+			str << "\\stemNeutral ";
+		    }
 		    lastStem = 0;
 		}
 	    }
 
 	    if (chord.size() > 1) str << "< ";
 	    if (languageLevel < 1) handleEndingEvents(eventsInProgress, i, str);
+
+	    Segment::iterator stylei = s->end();
 
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
@@ -1176,7 +1202,12 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 		} else if ((*i)->isa(Note::EventType)) {
 
-		    writeStyle(*i, prevStyle, col, str);
+		    if (languageLevel >= 3) {
+			// only one override per chord, and that outside the <>
+			stylei = i;
+		    } else {
+			writeStyle(*i, prevStyle, col, str);
+		    }
 		    writePitch(*i, key, str);
 
 		    if (languageLevel < 1) { // Lily 1.x: durations in simultaneous section
@@ -1211,7 +1242,17 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    if (languageLevel >= 1) {
+
 		if (chord.size() > 1) str << "> ";
+
+		if (languageLevel >= 3) {
+		    // only one override per chord, and that outside the <>
+		    if (stylei != s->end()) {
+			writeStyle(*stylei, prevStyle, col, str);
+			stylei = s->end();
+		    }
+		}
+
 		if (duration != prevDuration) {
 		    writeDuration(duration, str);
 		    str << " ";
@@ -1334,7 +1375,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     }
 
     if (lastStem != 0) {
-	str << "\\stemBoth ";
+	if (languageLevel <= 2) {
+	    str << "\\stemBoth ";
+	} else {
+	    str << "\\stemNeutral ";
+	}
     }
 
     if (overlong) {
@@ -1549,7 +1594,7 @@ LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevSty
 	
 	KConfig *cfg = kapp->config();
 	cfg->setGroup(NotationView::ConfigGroup);
-	int languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 1);
+	int languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 2);
 
 	str << std::endl << indent(col)
 	    << (languageLevel >= 2 ? "\\override " : "\\property ")
