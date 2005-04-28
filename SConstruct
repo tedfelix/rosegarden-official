@@ -97,7 +97,7 @@ env.Alias('install', env['INST_TARGETS'])
 rcre = re.compile("\\.rc$")
 
 def filterRCFiles(x):
-    rcre.search(x)
+    return rcre.search(x)
 
 rcfiles = filter(filterRCFiles, os.listdir("gui"))
 
@@ -146,11 +146,11 @@ for ex in examples:
 libfiles = os.listdir("gui/library")
 rgre = re.compile("\\.rgd$")
 def rgdfilter(x):
-    rgre.search(x)
+    return rgre.search(x)
 
 libfiles = filter(rgdfilter, libfiles)
 for l in libfiles:
-    KDEinstall(env['KDEDATA']+'/rosegarden/library', l, env)
+    KDEinstall(env['KDEDATA']+'/rosegarden/library', "gui/library/" + l, env)
 
 ## Install the rosegarden-project-package script
 KDEinstall(env['KDEBIN'], "gui/rosegarden-project-package", env)
