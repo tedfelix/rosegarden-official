@@ -46,10 +46,13 @@ scons configure debug=1; scons; scons configure ;
 """
 
 import os
+import re
 
 env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools = ['default', 'generic', 'kde', 'sound'], toolpath='./')
 #env.AppendUnique( ENV = os.environ )
 env.AppendUnique( ENV = {'PATH' : os.environ['PATH'], 'HOME' : os.environ['HOME']} )
+
+Import( '*' )
 
 VERSION = "4-1.1_cvs"
 
@@ -90,6 +93,73 @@ env.SConscript("gui/SConscript", 'soundLibs')
 env.SConscript("po/SConscript")
 
 env.Alias('install', env['INST_TARGETS'])
+
+rcre = re.compile("\\.rc$")
+
+def filterRCFiles(x):
+    rcre.search(x)
+
+rcfiles = filter(filterRCFiles, os.listdir("gui"))
+
+## Install the .rc files
+for rc in rcfiles:
+    KDEinstall(env['KDEDATA']+'/rosegarden', "gui/" + rc, env)
+
+## Install the .desktop file
+KDEinstall(env['KDEMENU']+'/Applications', 'gui/rosegarden.desktop', env)
+
+## Install the mime files
+mimefiles = ['x-rosegarden21.desktop', 'x-rosegarden.desktop',
+'x-rosegarden-device.desktop', 'x-soundfont.desktop']
+for mf in mimefiles:
+    KDEinstall(env['KDEMIME']+'/audio', "gui/" + mf, env)
+
+KDEinstallas(env['KDEICONS']+'/locolor/16x16/apps/x-rosegarden.xpm',   "gui/pixmaps/icons/cc-hi16-rosegarden.xpm", env)
+KDEinstallas(env['KDEICONS']+'/hicolor/16x16/apps/x-rosegarden.xpm',   "gui/pixmaps/icons/rg-rwb-rose3-16x16.png", env)
+
+KDEinstallas(env['KDEICONS']+'/hicolor/48x48/apps/rosegarden.png',   "gui/pixmaps/icons/rg-rwb-rose3-48x48.png", env)
+KDEinstallas(env['KDEICONS']+'/hicolor/64x64/apps/rosegarden.png',   "gui/pixmaps/icons/rg-rwb-rose3-64x64.png", env)
+
+KDEinstallas(env['KDEICONS']+'/hicolor/128x128/apps/rosegarden.png', "gui/pixmaps/icons/rg-rwb-rose3-128x128.png", env)
+
+KDEinstallas(env['KDEICONS']+'/locolor/32x32/apps/rosegarden.xpm',   "gui/pixmaps/icons/cc-hi32-rosegarden.xpm", env)
+KDEinstallas(env['KDEICONS']+'/hicolor/32x32/apps/rosegarden.png',   "gui/pixmaps/icons/rg-rwb-rose3-32x32.png", env)
+
+KDEinstallas(env['KDEICONS']+'/hicolor/16x16/mimetypes/x-rosegarden.png',   "gui/pixmaps/icons/mm-mime-hi16-rosegarden.png", env)
+KDEinstallas(env['KDEICONS']+'/locolor/16x16/mimetypes/x-rosegarden.png',   "gui/pixmaps/icons/mm-mime-hi16-rosegarden.png", env)
+
+KDEinstallas(env['KDEICONS']+'/hicolor/32x32/mimetypes/x-rosegarden.png',   "gui/pixmaps/icons/mm-mime-hi32-rosegarden.png", env)
+KDEinstallas(env['KDEICONS']+'/locolor/32x32/mimetypes/x-rosegarden.png',   "gui/pixmaps/icons/mm-mime-hi32-rosegarden.png", env)
+
+
+
+
+## Install the examples
+examples = ['glazunov.rg',
+'notation-for-string-orchestra-in-D-minor.rg',
+'ravel-pc-gmaj-adagio.rg', 'perfect-moment.rg', 'bogus-surf-jam.rg', 'the-rose-garden.rg',
+'children.rg', 'stormy-riders.rg', 'Djer-Fire.rg']
+for ex in examples:
+    KDEinstall(env['KDEDATA']+'/rosegarden/examples', "gui/testfiles/" + ex, env)
+
+## Install the library files
+libfiles = os.listdir("gui/library")
+rgre = re.compile("\\.rgd$")
+def rgdfilter(x):
+    rgre.search(x)
+
+libfiles = filter(rgdfilter, libfiles)
+for l in libfiles:
+    KDEinstall(env['KDEDATA']+'/rosegarden/library', l, env)
+
+## Install the rosegarden-project-package script
+KDEinstall(env['KDEBIN'], "gui/rosegarden-project-package", env)
+
+## Install the version.txt file
+versionFile = open("version.txt", "w")
+versionFile.write(VERSION)
+versionFile.close()
+KDEinstall(env['KDEDATA']+'/rosegarden', "version.txt", env)
 
 
 ## Debugging help
