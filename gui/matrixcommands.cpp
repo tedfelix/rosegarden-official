@@ -22,6 +22,7 @@
 #include "matrixcommands.h"
 #include "BaseProperties.h"
 #include "SegmentMatrixHelper.h"
+#include "Segment.h"
 #include "Composition.h"
 
 #include <klocale.h>
@@ -31,8 +32,11 @@
 using Rosegarden::Event;
 using Rosegarden::Note;
 using Rosegarden::timeT;
+using Rosegarden::Segment;
+using Rosegarden::Int;
+using Rosegarden::BaseProperties;
 
-MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
+MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
                                                timeT time,
                                                timeT endTime,
                                                Event *event) :
@@ -54,8 +58,8 @@ void MatrixInsertionCommand::modifySegment()
 {
     MATRIX_DEBUG << "MatrixInsertionCommand::modifySegment()\n";
 
-    if (!m_event->has(Rosegarden::BaseProperties::VELOCITY)) {
-	m_event->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+    if (!m_event->has(BaseProperties::VELOCITY)) {
+	m_event->set<Int>(BaseProperties::VELOCITY, 100);
     }
 
     Rosegarden::SegmentMatrixHelper helper(getSegment());
@@ -63,14 +67,16 @@ void MatrixInsertionCommand::modifySegment()
     helper.insertNote(m_lastInsertedEvent);
 }
 
-MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Rosegarden::Segment &segment,
+MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Segment &segment,
 								   timeT time,
 								   Event *event) :
-    BasicCommand(i18n("Insert Percussion Note"), segment, time,
-		 getEndTime(segment, time)),
-    m_event(0)
+    BasicCommand(i18n("Insert Percussion Note"), segment,
+		 getEffectiveStartTime(segment, time, *event),
+		 getEndTime(segment, time, *event)),
+    m_event(0),
+    m_time(time)
 {
-    Rosegarden::timeT endTime = getEndTime(segment, time);
+    timeT endTime = getEndTime(segment, time, *event);
     m_event = new Event(*event, time, endTime - time);
 }
 
@@ -84,28 +90,103 @@ void MatrixPercussionInsertionCommand::modifySegment()
 {
     MATRIX_DEBUG << "MatrixPercussionInsertionCommand::modifySegment()\n";
 
-    if (!m_event->has(Rosegarden::BaseProperties::VELOCITY)) {
-	m_event->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
+    if (!m_event->has(BaseProperties::VELOCITY)) {
+	m_event->set<Int>(BaseProperties::VELOCITY, 100);
     }
 
-    //!!! Absolutely need to truncate previous event on segment as well
+    Segment &s = getSegment();
 
-    Rosegarden::SegmentMatrixHelper helper(getSegment());
+    Segment::iterator i = s.findTime(m_time);
+
+    int pitch = 0;
+    if (m_event->has(BaseProperties::PITCH)) {
+	pitch = m_event->get<Int>(BaseProperties::PITCH);
+    }
+
+    while (i != s.begin()) {
+
+	--i;
+
+	if ((*i)->getAbsoluteTime() < m_time &&
+	    (*i)->isa(Note::EventType)) {
+
+	    if ((*i)->has(BaseProperties::PITCH) &&
+		(*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+
+		if ((*i)->getAbsoluteTime() + (*i)->getDuration() > m_time) {
+		    Rosegarden::Event *newPrevious = new Rosegarden::Event
+			(**i, (*i)->getAbsoluteTime(), m_time - (*i)->getAbsoluteTime());
+		    s.erase(i);
+		    i = s.insert(newPrevious);
+		} else {
+		    break;
+		}
+	    }
+	}
+    }
+
+    Rosegarden::SegmentMatrixHelper helper(s);
     m_lastInsertedEvent = new Event(*m_event);
     helper.insertNote(m_lastInsertedEvent);
 }
 
-Rosegarden::timeT
-MatrixPercussionInsertionCommand::getEndTime(Rosegarden::Segment &segment,
-					     Rosegarden::timeT time)
+timeT
+MatrixPercussionInsertionCommand::getEffectiveStartTime(Segment &segment,
+							timeT time,
+							Rosegarden::Event &event)
 {
-    Rosegarden::timeT endTime = time;
+    Rosegarden::timeT startTime = time;
 
-    for (Rosegarden::Segment::iterator i = segment.findTime(time);
-	 segment.isBeforeEndMarker(i); ++i) {
-	if ((*i)->getAbsoluteTime() > time) endTime = (*i)->getAbsoluteTime();
+    int pitch = 0;
+    if (event.has(BaseProperties::PITCH)) {
+	pitch = event.get<Int>(BaseProperties::PITCH);
     }
-    endTime = segment.getEndMarkerTime();
+
+    Segment::iterator i = segment.findTime(time);
+    while (i != segment.begin()) {
+	--i;
+
+	if ((*i)->has(BaseProperties::PITCH) &&
+	    (*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+
+	    if ((*i)->getAbsoluteTime() < time &&
+		(*i)->isa(Note::EventType)) {
+		if ((*i)->getAbsoluteTime() + (*i)->getDuration() > time) {
+		    startTime = (*i)->getAbsoluteTime();
+		} else {
+		    break;
+		}
+	    }
+	}
+    }
+
+    return startTime;
+}
+
+timeT
+MatrixPercussionInsertionCommand::getEndTime(Segment &segment,
+					     Rosegarden::timeT time,
+					     Rosegarden::Event &event)
+{
+    Rosegarden::timeT endTime = segment.getEndMarkerTime();
+
+    int pitch = 0;
+    if (event.has(BaseProperties::PITCH)) {
+	pitch = event.get<Int>(BaseProperties::PITCH);
+    }
+
+    for (Segment::iterator i = segment.findTime(time);
+	 segment.isBeforeEndMarker(i); ++i) {
+
+	if ((*i)->has(BaseProperties::PITCH) &&
+	    (*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+
+	    if ((*i)->getAbsoluteTime() > time &&
+		(*i)->isa(Rosegarden::Note::EventType)) {
+		endTime = (*i)->getAbsoluteTime();
+	    }
+	}
+    }
 
     Rosegarden::Composition *comp = segment.getComposition();
     std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange =
@@ -121,7 +202,7 @@ MatrixPercussionInsertionCommand::getEndTime(Rosegarden::Segment &segment,
 
 
 
-MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
+MatrixEraseCommand::MatrixEraseCommand(Segment &segment,
                                        Event *event) :
     BasicCommand(i18n("Erase Note"),
                  segment,
@@ -152,7 +233,7 @@ void MatrixEraseCommand::modifySegment()
     }
 }
 
-MatrixModifyCommand::MatrixModifyCommand(Rosegarden::Segment &segment,
+MatrixModifyCommand::MatrixModifyCommand(Segment &segment,
                                          Rosegarden::Event *oldEvent,
                                          Rosegarden::Event *newEvent,
                                          bool isMove,
@@ -186,7 +267,7 @@ void MatrixModifyCommand::modifySegment()
 				      m_oldEvent->getAbsoluteTime() +
 				      m_oldEvent->getDuration());
 
-        Rosegarden::Segment &segment(getSegment());
+        Segment &segment(getSegment());
         segment.insert(m_newEvent);
         segment.eraseSingle(m_oldEvent);
 

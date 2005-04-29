@@ -58,10 +58,15 @@ public:
 protected:
     virtual void modifySegment();
 
+    Rosegarden::timeT getEffectiveStartTime(Rosegarden::Segment &segment,
+					    Rosegarden::timeT startTime,
+					    Rosegarden::Event &event);
     Rosegarden::timeT getEndTime(Rosegarden::Segment &segment,
-				 Rosegarden::timeT time);
+				 Rosegarden::timeT endTime,
+				 Rosegarden::Event &event);
 
     Rosegarden::Event *m_event;
+    Rosegarden::timeT m_time;
     Rosegarden::Event *m_lastInsertedEvent; // an alias for another event
 };
 
