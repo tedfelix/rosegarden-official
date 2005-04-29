@@ -33,11 +33,13 @@ using Rosegarden::SnapGrid;
 
 MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
 				   Rosegarden::SnapGrid *snapGrid,
+				   bool drumMode,
                                    QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
     : RosegardenCanvasView(viewing, parent, name, f),
       m_staff(staff),
       m_snapGrid(snapGrid),
+      m_drumMode(drumMode),
       m_previousEvTime(0),
       m_previousEvPitch(0),
       m_mouseWasPressed(false),
@@ -61,7 +63,16 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(double(p.x())) << endl;
 
-    timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+    timeT evTime;
+
+    if (m_drumMode) {
+	evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapEither);
+	MATRIX_DEBUG << "MatrixCanvasView: drum mode: snapEither " << p.x() << " -> " << evTime << endl;
+    } else {
+	evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+	MATRIX_DEBUG << "MatrixCanvasView: normal mode: snapLeft " << p.x() << " -> " << evTime << endl;
+    }
+
     int evPitch = m_staff.getHeightAtCanvasCoords(p.x(), p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
@@ -128,7 +139,13 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 
     if (m_ignoreClick) return;
 
-    timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+    timeT evTime;
+    if (m_drumMode) {
+	evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapEither);
+    } else {
+	evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+    }
+
     int evPitch = m_staff.getHeightAtCanvasCoords(p.x(), p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
@@ -170,7 +187,13 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
         return;
     }
 
-    timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+    timeT evTime;
+    if (m_drumMode) {
+	evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapEither);
+    } else {
+	evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+    }
+
     int evPitch = m_staff.getHeightAtCanvasCoords(p.x(), p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();

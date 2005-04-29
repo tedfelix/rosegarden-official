@@ -243,6 +243,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0],
                                         m_snapGrid,
+					m_drumMode,
                                         tCanvas,
                                         getCentralWidget());
     setCanvasView(m_canvasView);
@@ -2037,30 +2038,30 @@ void
 MatrixView::slotChangeHorizontalZoom(int)
 {
     double zoomValue = m_hZoomSlider->getCurrentSize();
-
+    
 //     m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595
     m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0));
-
+    
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
                  << zoomValue << endl;
-
+    
     // Set zoom matrix
     //
     QWMatrix zoomMatrix;
     zoomMatrix.scale(zoomValue, 1.0);
     m_canvasView->setWorldMatrix(zoomMatrix);
-
+    
     // make control rulers zoom too
     //
     setControlRulersZoom(zoomMatrix);
-
+    
     if (m_topBarButtons) m_topBarButtons->setHScaleFactor(zoomValue);
     if (m_bottomBarButtons) m_bottomBarButtons->setHScaleFactor(zoomValue);
-
+    
     for (unsigned int i = 0; i < m_propertyViewRulers.size(); ++i)
     {
-        m_propertyViewRulers[i].first->setHScaleFactor(zoomValue);
-        m_propertyViewRulers[i].first->repaint();
+	m_propertyViewRulers[i].first->setHScaleFactor(zoomValue);
+	m_propertyViewRulers[i].first->repaint();
     }
 
     if (m_topBarButtons) m_topBarButtons->update();
