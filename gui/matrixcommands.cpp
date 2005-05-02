@@ -34,7 +34,7 @@ using Rosegarden::Note;
 using Rosegarden::timeT;
 using Rosegarden::Segment;
 using Rosegarden::Int;
-using Rosegarden::BaseProperties;
+using namespace Rosegarden::BaseProperties;
 
 MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
                                                timeT time,
@@ -58,8 +58,8 @@ void MatrixInsertionCommand::modifySegment()
 {
     MATRIX_DEBUG << "MatrixInsertionCommand::modifySegment()\n";
 
-    if (!m_event->has(BaseProperties::VELOCITY)) {
-	m_event->set<Int>(BaseProperties::VELOCITY, 100);
+    if (!m_event->has(VELOCITY)) {
+	m_event->set<Int>(VELOCITY, 100);
     }
 
     Rosegarden::SegmentMatrixHelper helper(getSegment());
@@ -90,8 +90,8 @@ void MatrixPercussionInsertionCommand::modifySegment()
 {
     MATRIX_DEBUG << "MatrixPercussionInsertionCommand::modifySegment()\n";
 
-    if (!m_event->has(BaseProperties::VELOCITY)) {
-	m_event->set<Int>(BaseProperties::VELOCITY, 100);
+    if (!m_event->has(VELOCITY)) {
+	m_event->set<Int>(VELOCITY, 100);
     }
 
     Segment &s = getSegment();
@@ -99,8 +99,8 @@ void MatrixPercussionInsertionCommand::modifySegment()
     Segment::iterator i = s.findTime(m_time);
 
     int pitch = 0;
-    if (m_event->has(BaseProperties::PITCH)) {
-	pitch = m_event->get<Int>(BaseProperties::PITCH);
+    if (m_event->has(PITCH)) {
+	pitch = m_event->get<Int>(PITCH);
     }
 
     while (i != s.begin()) {
@@ -110,8 +110,8 @@ void MatrixPercussionInsertionCommand::modifySegment()
 	if ((*i)->getAbsoluteTime() < m_time &&
 	    (*i)->isa(Note::EventType)) {
 
-	    if ((*i)->has(BaseProperties::PITCH) &&
-		(*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+	    if ((*i)->has(PITCH) &&
+		(*i)->get<Int>(PITCH) == pitch) {
 
 		if ((*i)->getAbsoluteTime() + (*i)->getDuration() > m_time) {
 		    Rosegarden::Event *newPrevious = new Rosegarden::Event
@@ -138,16 +138,16 @@ MatrixPercussionInsertionCommand::getEffectiveStartTime(Segment &segment,
     Rosegarden::timeT startTime = time;
 
     int pitch = 0;
-    if (event.has(BaseProperties::PITCH)) {
-	pitch = event.get<Int>(BaseProperties::PITCH);
+    if (event.has(PITCH)) {
+	pitch = event.get<Int>(PITCH);
     }
 
     Segment::iterator i = segment.findTime(time);
     while (i != segment.begin()) {
 	--i;
 
-	if ((*i)->has(BaseProperties::PITCH) &&
-	    (*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+	if ((*i)->has(PITCH) &&
+	    (*i)->get<Int>(PITCH) == pitch) {
 
 	    if ((*i)->getAbsoluteTime() < time &&
 		(*i)->isa(Note::EventType)) {
@@ -171,15 +171,15 @@ MatrixPercussionInsertionCommand::getEndTime(Segment &segment,
     Rosegarden::timeT endTime = segment.getEndMarkerTime();
 
     int pitch = 0;
-    if (event.has(BaseProperties::PITCH)) {
-	pitch = event.get<Int>(BaseProperties::PITCH);
+    if (event.has(PITCH)) {
+	pitch = event.get<Int>(PITCH);
     }
 
     for (Segment::iterator i = segment.findTime(time);
 	 segment.isBeforeEndMarker(i); ++i) {
 
-	if ((*i)->has(BaseProperties::PITCH) &&
-	    (*i)->get<Int>(BaseProperties::PITCH) == pitch) {
+	if ((*i)->has(PITCH) &&
+	    (*i)->get<Int>(PITCH) == pitch) {
 
 	    if ((*i)->getAbsoluteTime() > time &&
 		(*i)->isa(Rosegarden::Note::EventType)) {
