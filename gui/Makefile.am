@@ -167,9 +167,9 @@ install-data-local:
 	$(mkinstalldirs) $(kde_icondir)/hicolor/48x48/apps/
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-48x48.png $(DESTDIR)$(kde_icondir)/hicolor/48x48/apps/rosegarden.png
 	$(mkinstalldirs) $(kde_icondir)/hicolor/64x64/apps/
-	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-64x64.png $(DESTDIR)$(kde_icondir)/hicolor/48x48/apps/rosegarden.png
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-64x64.png $(DESTDIR)$(kde_icondir)/hicolor/64x64/apps/rosegarden.png
 	$(mkinstalldirs) $(kde_icondir)/hicolor/128x128/apps/
-	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-128x128.png $(DESTDIR)$(kde_icondir)/hicolor/48x48/apps/rosegarden.png
+	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/rg-rwb-rose3-128x128.png $(DESTDIR)$(kde_icondir)/hicolor/128x128/apps/rosegarden.png
 	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
 	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
 	- $(INSTALL_DATA) $(srcdir)/pixmaps/icons/cc-hi32-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/32x32/apps/rosegarden.xpm

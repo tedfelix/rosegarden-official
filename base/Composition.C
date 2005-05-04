@@ -1661,6 +1661,20 @@ Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
     updateRefreshStatuses();
 }
 
+void
+Composition::dump(std::ostream& out, bool full) const
+{
+    out << "Composition segments : " << endl;
+
+    for(iterator i = begin(); i != end(); ++i) {
+        Segment* s = *i;
+
+        out << "Segment start : " << s->getStartTime() << " - end : " << s->getEndMarkerTime()
+            << " - repeating : " << s->isRepeating() << endl;
+        
+    }
+    
+}
 
 
 

@@ -754,7 +754,10 @@ public:
     void    addObserver(CompositionObserver *obs) { m_observers.push_back(obs); }
     void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
 
-
+    //////
+    // DEBUG FACILITIES
+    void dump(std::ostream&, bool full=false) const;
+    
 protected:
 
     static const std::string TempoEventType; 

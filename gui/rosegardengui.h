@@ -1300,6 +1300,8 @@ public slots:
 
     void slotDocumentDevicesResyncd();
 
+    void slotDebugDump();
+
 protected:
     /**
      * Jog a selection of segments by an amount

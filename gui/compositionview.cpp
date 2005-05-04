@@ -695,9 +695,9 @@ Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const C
     int rWidth = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatInterval)));
 
     int count = (p.x() - int(itemImpl->rect().x())) / rWidth;
-    
-    return s->getEndMarkerTime() + count *
-	(s->getEndMarkerTime() - s->getStartTime());
+    RG_DEBUG << "CompositionModelImpl::getRepeatTimeAt() : count = " << count << endl;
+
+    return /*s->getEndMarkerTime() + */(count * (s->getEndMarkerTime() - s->getStartTime()));
 }
 
 

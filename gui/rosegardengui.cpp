@@ -1058,6 +1058,11 @@ void RosegardenGUIApp::setupActions()
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(true);
 
+    // DEBUG FACILITY
+    new KAction(i18n("Segment Debug Dump "), 0, this,
+                SLOT(slotDebugDump()), actionCollection(),
+                "debug_dump_segments");
+
     // create the Transport GUI and add the callbacks to the
     // buttons and keyboard accelerators
     //
@@ -3893,6 +3898,13 @@ void RosegardenGUIApp::slotToggleTracking()
 {
     m_view->getTrackEditor()->slotToggleTracking();
 }
+
+void RosegardenGUIApp::slotDebugDump()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    comp.dump(std::cerr);
+}
+
     
 
 // Sequencer auxiliary process management
