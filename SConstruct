@@ -157,7 +157,7 @@ KDEinstall(env['KDEBIN'], "gui/rosegarden-project-package", env)
 
 ## Install the version.txt file
 versionFile = open("version.txt", "w")
-versionFile.write(VERSION)
+versionFile.write(VERSION + '\n')
 versionFile.close()
 KDEinstall(env['KDEDATA']+'/rosegarden', "version.txt", env)
 
