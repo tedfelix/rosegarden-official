@@ -169,6 +169,10 @@ public:
     void setControllerValue(MidiByte controller, MidiByte value);
     MidiByte getControllerValue(MidiByte controller) const;
 
+    // Pass a pointer, because we can have no key mapping
+    void setKeyMapping(const MidiKeyMapping *mapping) { m_keyMapping = mapping; }
+    const MidiKeyMapping *getKeyMapping() const { return m_keyMapping; }
+
     // Convenience functions (strictly redundant with get/setProgram):
     // 
     void setProgramChange(MidiByte program);
@@ -237,6 +241,7 @@ private:
     MidiByte        m_transpose;
     MidiByte        m_pan;  // required by audio
     MidiByte        m_volume;
+    const MidiKeyMapping *m_keyMapping;
 
     // Used for Audio volume (dB value)
     //

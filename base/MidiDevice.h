@@ -78,6 +78,7 @@ public:
 
     void addProgram(const MidiProgram &program);
     void addBank(const MidiBank &bank);
+    void addKeyMapping(const MidiKeyMapping &mapping); // I own the result!
 
     void clearBankList();
     void clearProgramList();
@@ -94,14 +95,18 @@ public:
     const ProgramList &getPrograms() const { return m_programList; }
     ProgramList getPrograms(const MidiBank &bank) const;
 
+    const KeyMappingList &getKeyMappings() const { return m_keyMappingList; }
+
     std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
 
     void replaceBankList(const BankList &bank);
     void replaceProgramList(const ProgramList &program);
+    void replaceKeyMappingList(const KeyMappingList &mappings);
 
     void mergeBankList(const BankList &bank);
     void mergeProgramList(const ProgramList &program);
+    void mergeKeyMappingList(const KeyMappingList &mappings);
 
     virtual InstrumentList getAllInstruments() const;
     virtual InstrumentList getPresentationInstruments() const;
@@ -177,6 +182,7 @@ protected:
     ProgramList    m_programList;
     BankList       m_bankList;
     ControlList    m_controlList;
+    KeyMappingList m_keyMappingList;
     MidiMetronome *m_metronome;
 
     // used when we're presenting the instruments

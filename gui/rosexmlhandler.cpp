@@ -247,6 +247,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_lsb(0),
       m_instrument(0),
       m_plugin(0),
+      m_colourMap(0),
+      m_keyMapping(0),
       m_pluginId(0),
       m_totalElements(elementCount),
       m_elementsSoFar(0),
@@ -1340,6 +1342,44 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
         }
 
+    } else if (lcName == "keymapping") {
+
+        if (m_section != InStudio) {
+            m_errorString = "Found Keymapping outside Studio";
+            return false;
+        }
+
+	if (m_device && (m_device->getType() == Rosegarden::Device::Midi)) {
+
+	    QString lsbStr = atts.value("lsb");
+	    QString msbStr = atts.value("msb");
+	    QString progStr = atts.value("program");
+	    QString chanStr = atts.value("channel");
+	    QString name = atts.value("name");
+
+	    m_keyMapping = new Rosegarden::MidiKeyMapping
+		(((lsbStr && msbStr) ?
+		  Rosegarden::MidiBank(true,
+				       lsbStr.toInt(),
+				       msbStr.toInt()) : Rosegarden::MidiBank()),
+		 Rosegarden::MidiByte(progStr ? progStr.toInt() : 0),
+		 Rosegarden::MidiByte(chanStr ? chanStr.toInt() : 0),
+		 (lsbStr && msbStr && progStr),
+		 qstrtostr(name));
+
+	    m_keyNameMap.clear();
+	}
+
+    } else if (lcName == "key") {
+	
+	if (m_keyMapping) {
+	    QString numStr = atts.value("number");
+	    QString namStr = atts.value("name");
+	    if (numStr && namStr) {
+		m_keyNameMap[numStr.toInt()] = qstrtostr(namStr);
+	    }
+	}
+
     } else if (lcName == "controls") {
 
         // Only clear down the controllers list if we have found some controllers in the RG file
@@ -2073,6 +2113,20 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     } else if (lcName == "device") {
 
         m_device = 0;
+
+    } else if (lcName == "keymapping") {
+
+	if (m_keyMapping) {
+	    if (!m_keyNameMap.empty()) {
+		Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+		    (m_device);
+		if (md) {
+		    m_keyMapping->setMap(m_keyNameMap);
+		    md->addKeyMapping(*m_keyMapping);
+		}
+	    }
+	    m_keyMapping = 0;
+	}
 
     } else if (lcName == "audiofiles") {
 

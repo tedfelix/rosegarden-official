@@ -150,6 +150,8 @@ protected:
     Rosegarden::Buss                 *m_buss;
     Rosegarden::AudioPluginInstance  *m_plugin;
     Rosegarden::ColourMap            *m_colourMap;
+    Rosegarden::MidiKeyMapping       *m_keyMapping;
+    Rosegarden::MidiKeyMapping::KeyNameMap m_keyNameMap;
     unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;

@@ -177,6 +177,7 @@ MidiDevice::operator=(const MidiDevice &dev)
 MidiDevice::~MidiDevice()
 {
     delete m_metronome;
+    //!!! delete key mappings
 }
 
 void
@@ -380,6 +381,12 @@ MidiDevice::getBankName(const MidiBank &bank) const
     return "";
 }
 
+void
+MidiDevice::addKeyMapping(const MidiKeyMapping &mapping)
+{
+    m_keyMappingList.push_back(mapping);
+}
+
 std::string
 MidiDevice::toXmlString()
 {
@@ -468,6 +475,34 @@ MidiDevice::toXmlString()
     midiDevice << "    </device>" << std::endl;
 #endif
 
+    KeyMappingList::iterator kit;
+
+    for (kit = m_keyMappingList.begin(); kit != m_keyMappingList.end(); kit++)
+    {
+        midiDevice << "        <keymapping "
+                   << "name=\"" << encode(kit->getName()) << "\" ";
+
+	if (kit->useProgram()) {
+	    midiDevice << "msb=\"" << (int)kit->getBank().getMSB() << "\" "
+		       << "lsb=\"" << (int)kit->getBank().getLSB() << "\" "
+		       << "program=\"" << (int)kit->getProgram() << "\">"
+		       << std::endl;
+	} else {
+	    midiDevice << "channel=\"" << (int)kit->getChannel() << "\">"
+		       << std::endl;
+	}
+
+	midiDevice << "\n";
+
+	for (MidiKeyMapping::KeyNameMap::const_iterator nmi =
+		 kit->getMap().begin(); nmi != kit->getMap().end(); ++nmi) {
+	    midiDevice << "          <key number=\"" << nmi->first
+		       << "\" name=\"" << encode(nmi->second) << "\"/>\n";
+	}
+
+	midiDevice << "        </keymapping>\n";
+    }
+
     return midiDevice.str();
 }
 
@@ -519,6 +554,12 @@ MidiDevice::replaceProgramList(const ProgramList &programList)
     m_programList = programList;
 }
 
+void
+MidiDevice::replaceKeyMappingList(const KeyMappingList &keyMappingList)
+{
+    m_keyMappingList = keyMappingList;
+}
+
 
 // Merge the new bank list in without duplication
 //
@@ -568,6 +609,31 @@ MidiDevice::mergeProgramList(const ProgramList &programList)
 
         if (clash == false)
             addProgram(*it);
+        else
+            clash = false;
+    }
+}
+
+void
+MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
+{
+    KeyMappingList::const_iterator it;
+    KeyMappingList::iterator oIt;
+    bool clash = false;
+
+    for (it = keyMappingList.begin(); it != keyMappingList.end(); it++)
+    {
+        for (oIt = m_keyMappingList.begin(); oIt != m_keyMappingList.end(); oIt++)
+        {
+	    if (*it == *oIt)
+            {
+                clash = true;
+                break;
+            }
+        }
+
+        if (clash == false)
+            addKeyMapping(*it);
         else
             clash = false;
     }

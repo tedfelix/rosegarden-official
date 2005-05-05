@@ -24,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace Rosegarden
 {
@@ -78,6 +79,55 @@ private:
 
 typedef std::vector<MidiProgram> ProgramList;
 
+class MidiKeyMapping
+{
+public:
+    //!!! tidy into .C
+
+    typedef std::map<MidiByte, std::string> KeyNameMap;
+
+    MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
+		   bool useProgram, const std::string &name) :
+	m_bank(bank), m_program(program), m_channel(channel),
+	m_use(useProgram) { }
+	
+    MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
+		   bool useProgram, const std::string &name,
+		   const KeyNameMap &map) :
+	m_bank(bank), m_program(program), m_channel(channel),
+	m_use(useProgram), m_map(map) { }
+
+    bool operator==(const MidiKeyMapping &m) const {
+	return ((m_use ?
+		 (m_program == m.m_program &&
+		  m_bank == m.m_bank) :
+		 (m_channel == m.m_channel)) &&
+		(m_map == m.m_map));
+    }
+
+    // clients looking this up shouldn't compare it against their own bank
+    // directly, but just compare its lsb and msb -- as it may have different
+    // percussion settings etc
+    const MidiBank      &getBank() const { return m_bank; }
+
+    MidiByte             getProgram() const { return m_program; }
+    MidiByte             getChannel() const { return m_channel; }
+    bool                 useProgram() const { return m_use; }
+    const std::string   &getName() const { return m_name; }
+    const KeyNameMap    &getMap() const { return m_map; }
+    const std::string   &getMapForKeyName(MidiByte pitch) { return m_map[pitch]; }
+    void                 setMap(const KeyNameMap &map) { m_map = map; }
+    
+private:
+    MidiBank    m_bank;
+    MidiByte    m_program;
+    MidiByte    m_channel;
+    bool        m_use;
+    std::string m_name;
+    KeyNameMap  m_map;
+};
+
+typedef std::vector<MidiKeyMapping> KeyMappingList;
 
 // A mapped MIDI instrument - a drum track click for example
 //

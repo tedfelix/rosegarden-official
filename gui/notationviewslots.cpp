@@ -2615,6 +2615,14 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 void
 NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
+    //!!! Problematic.  Ideally we wouldn't insert events into windows
+    //that weren't actually visible, otherwise all hell could break
+    //loose (metaphorically speaking, I should probably add).  I did
+    //think of checking isActiveWindow() and returning if the current
+    //window wasn't active, but that will prevent anyone from
+    //step-recording from e.g. vkeybd, which cannot be used without
+    //losing focus (and thus active-ness) from the Rosegarden window.
+
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
     if (!action) {
