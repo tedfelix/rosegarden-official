@@ -33,6 +33,7 @@
 #include "compositionitemhelper.h"
 #include "colours.h"
 #include "rosegardencanvasview.h" // for NoFollow,FollowVertical,FollowHorizontal constants
+#include "rosestrings.h"
 
 using Rosegarden::SnapGrid;
 using Rosegarden::Segment;
@@ -727,7 +728,10 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
 //                  << " w = " << w << endl;
     }
 
-    return CompositionRect(x, y, w, h);
+    CompositionRect cr(x, y, w, h);
+    cr.setLabel(strtoqstr(s.getLabel()));
+
+    return cr;
 }
 
 //
@@ -1187,13 +1191,20 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
     if (r.isRepeating()) {
         QColor brushColor = brush.color();
         brush.setColor(brushColor.light(150));
-        
     }
     
     p->setBrush(brush);
     p->setPen(r.getPen());
     drawRect(r, p, clipRect, r.isSelected(), intersectLvl, fill);
 
+    if (!r.getLabel().isEmpty()) {
+        p->save();
+        p->setPen(white);
+        p->setBrush(red);
+        p->drawText(r.x() + 5, r.y() + r.height() / 2, r.getLabel());
+        p->restore();
+    }
+    
     if (r.isRepeating()) {
 
         CompositionRect::repeatmarks repeatMarks = r.getRepeatMarks();

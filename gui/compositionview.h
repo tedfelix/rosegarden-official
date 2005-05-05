@@ -76,6 +76,8 @@ public:
     bool                isRepeating() const                   { return m_repeatMarks.size() > 0; }
     int                 getBaseWidth() const                  { return m_baseWidth; }
     void                setBaseWidth(int bw)                  { m_baseWidth = bw; }
+    QString             getLabel() const                      { return m_label; }
+    void                setLabel(QString l)                   { m_label = l; }
 
     static const QColor DefaultPenColor;
     static const QColor DefaultBrushColor;
@@ -87,6 +89,7 @@ protected:
     QPen        m_pen;
     repeatmarks m_repeatMarks;
     int         m_baseWidth;
+    QString     m_label;
 };
 
 class CompositionModel : public QObject, public Rosegarden::CompositionObserver, public Rosegarden::SegmentObserver
