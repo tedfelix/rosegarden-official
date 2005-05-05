@@ -946,6 +946,8 @@ void CompositionView::slotSelectSegments(const SegmentSelection &segments)
 {
     static QRect dummy;
 
+    getModel()->clearSelected();
+
     for(SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
         getModel()->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
     }
