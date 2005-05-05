@@ -46,7 +46,7 @@ scons configure debug=1; scons; scons configure ;
 """
 
 import os
-import re
+import glob
 
 env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, tools = ['default', 'generic', 'kde', 'sound'], toolpath='./')
 #env.AppendUnique( ENV = os.environ )
@@ -94,26 +94,24 @@ env.SConscript("po/SConscript")
 
 env.Alias('install', env['INST_TARGETS'])
 
-rcre = re.compile("\\.rc$")
+##
+## Installation
+##
 
-def filterRCFiles(x):
-    return rcre.search(x)
+# .rc files
+for rc in glob.glob("gui/*.rc"):
+    KDEinstall(env['KDEDATA']+'/rosegarden', rc, env)
 
-rcfiles = filter(filterRCFiles, os.listdir("gui"))
-
-## Install the .rc files
-for rc in rcfiles:
-    KDEinstall(env['KDEDATA']+'/rosegarden', "gui/" + rc, env)
-
-## Install the .desktop file
+# .desktop file
 KDEinstall(env['KDEMENU']+'/Applications', 'gui/rosegarden.desktop', env)
 
-## Install the mime files
+# mime files
 mimefiles = ['x-rosegarden21.desktop', 'x-rosegarden.desktop',
 'x-rosegarden-device.desktop', 'x-soundfont.desktop']
 for mf in mimefiles:
     KDEinstall(env['KDEMIME']+'/audio', "gui/" + mf, env)
 
+# icons
 KDEinstallas(env['KDEICONS']+'/locolor/16x16/apps/x-rosegarden.xpm',   "gui/pixmaps/icons/cc-hi16-rosegarden.xpm", env)
 KDEinstallas(env['KDEICONS']+'/hicolor/16x16/apps/x-rosegarden.xpm',   "gui/pixmaps/icons/rg-rwb-rose3-16x16.png", env)
 
@@ -131,10 +129,47 @@ KDEinstallas(env['KDEICONS']+'/locolor/16x16/mimetypes/x-rosegarden.png',   "gui
 KDEinstallas(env['KDEICONS']+'/hicolor/32x32/mimetypes/x-rosegarden.png',   "gui/pixmaps/icons/mm-mime-hi32-rosegarden.png", env)
 KDEinstallas(env['KDEICONS']+'/locolor/32x32/mimetypes/x-rosegarden.png',   "gui/pixmaps/icons/mm-mime-hi32-rosegarden.png", env)
 
+# styles
+for s in glob.glob("gui/styles/*.xml"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/styles', s, env)
+
+# fonts
+for s in glob.glob("gui/fonts/*.pfa"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts', s, env)
+
+for s in glob.glob("gui/fonts/mappings/*.xml"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/mappings', s, env)
+
+for s in glob.glob("gui/pixmaps/rg21/4/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/rg21/4', s, env)
+for s in glob.glob("gui/pixmaps/rg21/8/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/rg21/8', s, env)
+
+for s in glob.glob("gui/pixmaps/feta/4/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/feta/4', s, env)
+for s in glob.glob("gui/pixmaps/feta/6/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/feta/6', s, env)
+for s in glob.glob("gui/pixmaps/feta/8/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/feta/8', s, env)
+for s in glob.glob("gui/pixmaps/feta/10/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/feta/10', s, env)
+for s in glob.glob("gui/pixmaps/feta/12/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/fonts/feta/12', s, env)
+
+# pixmaps
+for s in glob.glob("gui/pixmaps/misc/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/pixmaps/misc', s, env)
+
+for s in glob.glob("gui/pixmaps/toolbar/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/pixmaps/toolbar', s, env)
+
+for s in glob.glob("gui/pixmaps/transport/*.xpm"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/pixmaps/transport', s, env)
+
+KDEinstall(env['KDEDATA']+'/rosegarden/pixmaps', "gui/pixmaps/splash.png", env)
 
 
-
-## Install the examples
+# examples
 examples = ['glazunov.rg',
 'notation-for-string-orchestra-in-D-minor.rg',
 'ravel-pc-gmaj-adagio.rg', 'perfect-moment.rg', 'bogus-surf-jam.rg', 'the-rose-garden.rg',
@@ -142,20 +177,20 @@ examples = ['glazunov.rg',
 for ex in examples:
     KDEinstall(env['KDEDATA']+'/rosegarden/examples', "gui/testfiles/" + ex, env)
 
-## Install the library files
-libfiles = os.listdir("gui/library")
-rgre = re.compile("\\.rgd$")
-def rgdfilter(x):
-    return rgre.search(x)
+# autoload.rg
+KDEinstall(env['KDEDATA']+'/rosegarden', "gui/testfiles/autoload.rg", env)
 
-libfiles = filter(rgdfilter, libfiles)
-for l in libfiles:
-    KDEinstall(env['KDEDATA']+'/rosegarden/library', "gui/library/" + l, env)
+# tips
+KDEinstall(env['KDEDATA']+'/rosegarden', "gui/docs/en/tips", env)
 
-## Install the rosegarden-project-package script
+# library files
+for l in glob.glob("gui/library/*.rgd"):
+    KDEinstall(env['KDEDATA']+'/rosegarden/library', l, env)
+
+# rosegarden-project-package script
 KDEinstall(env['KDEBIN'], "gui/rosegarden-project-package", env)
 
-## Install the version.txt file
+# version.txt file
 versionFile = open("version.txt", "w")
 versionFile.write(VERSION + '\n')
 versionFile.close()
