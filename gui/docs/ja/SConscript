@@ -1,0 +1,14 @@
+import glob
+Import( "env KDEdoc" )
+myenv=env.Copy()
+
+## documentation to build
+myenv.Meinproc( "index.docbook" )
+
+myenv['APPNAME'] = 'rosegarden'
+KDEdoc( 'ja', 'index.cache.bz2', myenv )
+KDEdoc( 'ja', 'index.docbook', myenv )
+
+# for i in glob.glob("*.png"):
+#    KDEdoc( 'en', l, myenv )
+
