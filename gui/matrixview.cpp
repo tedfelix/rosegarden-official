@@ -120,7 +120,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_dockVisible(true),
       m_drumMode(drumMode)
 {
-    RG_DEBUG << "MatrixView ctor\n";
+    RG_DEBUG << "MatrixView ctor: drumMode " << drumMode << "\n";
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/toolbar");
     QPixmap matrixPixmap(pixmapDir + "/matrix.xpm");
@@ -162,6 +162,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_config->setGroup(ConfigGroup);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
+
+    Rosegarden::Track *track =
+        comp.getTrackById(segments[0]->getTrack());
+
+    Rosegarden::Instrument *instr = getDocument()->getStudio().
+        getInstrumentById(track->getInstrument());
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, 
@@ -218,13 +224,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	    this,
 	    SLOT(slotCheckTrackAssignments()));
     
-    // Set the instrument we're using on this segment
-    //
-    Rosegarden::Track *track =
-        comp.getTrackById(m_staffs[0]->getSegment().getTrack());
-
-    Rosegarden::Instrument *instr = getDocument()->getStudio().
-        getInstrumentById(track->getInstrument());
+    if (instr) {
+	if (instr->getKeyMapping()) {
+	    RG_DEBUG << "MatrixView: Instrument has key mapping: "
+		     << instr->getKeyMapping()->getName() << endl;
+	} else {
+	    RG_DEBUG << "MatrixView: Instrument has no key mapping" << endl;
+	}
+    }
 
     // Assign the instrument
     //

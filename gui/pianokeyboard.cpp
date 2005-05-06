@@ -34,11 +34,11 @@
 const unsigned int _smallWhiteKeyHeight = 14;
 const unsigned int _whiteKeyHeight = 18;
     
-PianoKeyboard::PianoKeyboard(QWidget *parent)
+PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
     : QWidget(parent),
       m_keySize(48, 18),
       m_blackKeySize(24, 8),
-      m_nbKeys(88),
+      m_nbKeys(keys),
       m_mouseDown(false),
       m_hoverHighlight(new QWidget(this)),
       m_lastHoverHighlight(0)

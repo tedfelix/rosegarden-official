@@ -1854,6 +1854,7 @@ BankEditorDialog::slotImport()
 	Rosegarden::BankList banks(dialog->getBanks());
 	Rosegarden::ProgramList programs(dialog->getPrograms());
 	Rosegarden::ControlList controls(dialog->getControllers());
+	Rosegarden::KeyMappingList keyMappings(dialog->getKeyMappings());
 	Rosegarden::MidiDevice::VariationType variation(dialog->getVariationType());
 	std::string librarianName(dialog->getLibrarianName());
 	std::string librarianEmail(dialog->getLibrarianEmail());
@@ -1872,15 +1873,19 @@ BankEditorDialog::slotImport()
                                           librarianName,
                                           librarianEmail);
         
-        if (dialog->shouldOverwriteBanks())
+        if (dialog->shouldOverwriteBanks()) {
             command->setVariation(variation);
+	}
         if (dialog->shouldImportBanks()) {
             command->setBankList(banks);
             command->setProgramList(programs);
         }
-        if (dialog->shouldImportControllers())
+        if (dialog->shouldImportControllers()) {
             command->setControlList(controls);
-
+	}
+	if (dialog->shouldImportKeyMappings()) {
+	    command->setKeyMappingList(keyMappings);
+	}
         command->setOverwrite(dialog->shouldOverwriteBanks());
         command->setRename(dialog->shouldRename());
 

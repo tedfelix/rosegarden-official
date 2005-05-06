@@ -149,6 +149,7 @@ ImportDeviceDialog::doImport()
 				  optionsBox);
 
     m_importBanks = new QCheckBox(i18n("Import banks"), gb);
+    m_importKeyMappings = new QCheckBox(i18n("Import key mappings"), gb);
     m_importControllers = new QCheckBox(i18n("Import controllers"), gb);
 
     if (showRenameOption) {
@@ -167,6 +168,7 @@ ImportDeviceDialog::doImport()
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     m_importBanks->setChecked(config->readBoolEntry("importbanks", true));
+    m_importKeyMappings->setChecked(config->readBoolEntry("importkeymappings", true));
     m_importControllers->setChecked(config->readBoolEntry("importcontrollers", true));
 
     bool rename = config->readBoolEntry("importbanksrename", true);
@@ -219,6 +221,12 @@ ImportDeviceDialog::getPrograms() const
     return m_device->getPrograms();
 }
 
+const Rosegarden::KeyMappingList &
+ImportDeviceDialog::getKeyMappings() const
+{
+    return m_device->getKeyMappings();
+}
+
 const Rosegarden::ControlList &
 ImportDeviceDialog::getControllers() const
 {
@@ -247,6 +255,12 @@ bool
 ImportDeviceDialog::shouldImportBanks() const
 {
     return m_importBanks->isChecked();
+}
+
+bool
+ImportDeviceDialog::shouldImportKeyMappings() const
+{
+    return m_importKeyMappings->isChecked();
 }
 
 bool
@@ -308,9 +322,11 @@ ImportDeviceDialog::importFromRG(QString fileName)
 		device->getControlParameters();
 
 	    // We've got a bank on a Device fom this file
-	    // (or a device that contains controllers)
+	    // (or a device that contains controllers or key mappings)
 	    //
-	    if (banks.size()||controllers.size()) m_devices.push_back(device);
+	    if (banks.size() || 
+		controllers.size() ||
+		device->getKeyMappings().size()) m_devices.push_back(device);
 	}
     }
 

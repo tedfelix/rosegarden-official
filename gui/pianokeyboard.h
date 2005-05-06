@@ -32,7 +32,7 @@ class PianoKeyboard : public QWidget
 {
     Q_OBJECT
 public:
-    PianoKeyboard(QWidget *parent);
+    PianoKeyboard(QWidget *parent, int keys = 88);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;

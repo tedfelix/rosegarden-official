@@ -25,6 +25,7 @@
 #include "matrixvlayout.h"
 #include "velocitycolour.h"
 #include "matrixview.h"
+#include "rosegardenguidoc.h"
 
 #include "Segment.h"
 #include "BaseProperties.h"
@@ -54,8 +55,14 @@ MatrixStaff::~MatrixStaff()
     // nothing
 }
 
-int  MatrixStaff::getLineCount()        const { return MatrixVLayout::
-						       maxMIDIPitch + 1; }
+int MatrixStaff::getLineCount() const {
+    if (m_view->isDrumMode()) {
+	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
+	if (km) return km->getMap().size() + 1;
+    }
+    return MatrixVLayout::maxMIDIPitch + 1;
+}
+
 int  MatrixStaff::getLegerLineCount()   const { return 0; }
 int  MatrixStaff::getBottomLineHeight() const { return 0; }
 int  MatrixStaff::getHeightPerLine()    const { return 1; }
@@ -138,5 +145,18 @@ Rosegarden::ViewElement*
 MatrixStaff::makeViewElement(Rosegarden::Event* e)
 {
     return new MatrixElement(e, m_view->isDrumMode());
+}
+
+const Rosegarden::MidiKeyMapping *
+MatrixStaff::getKeyMapping() const
+{
+    Rosegarden::Composition *comp = getSegment().getComposition();
+    if (!comp) return 0;
+    Rosegarden::TrackId trackId = getSegment().getTrack();
+    Rosegarden::Track *track = comp->getTrackById(trackId);
+    Rosegarden::Instrument *instr = m_view->getDocument()->getStudio().
+	getInstrumentById(track->getInstrument());
+    if (!instr) return 0;
+    return instr->getKeyMapping();
 }
 

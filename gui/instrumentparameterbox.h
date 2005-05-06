@@ -223,6 +223,7 @@ public slots:
     void slotSelectBank(int index);
     void slotSelectVariation(int index);
     void slotSelectChannel(int index);
+    void slotSelectKeyMapping(int index);
 
     void slotControllerChanged(int index);
 
@@ -230,6 +231,7 @@ public slots:
     void slotToggleProgramChange(bool value);
     void slotToggleBank(bool value);
     void slotToggleVariation(bool value);
+    void slotToggleKeyMapping(bool value);
 
 protected:
 
@@ -241,6 +243,9 @@ protected:
 
     // fill (or hide) variation combo based on current bank and program
     void populateVariationList();
+
+    // fill (or hide) keymapping combo based on current bank, program & channel
+    void populateKeyMappingList();
 
     // send the bank and program events relevant to this instrument
     void sendBankAndProgram();
@@ -259,14 +264,17 @@ protected:
     KComboBox          *m_variationValue;
     KComboBox          *m_channelValue;
     KComboBox          *m_programValue;
+    KComboBox          *m_keyMappingValue;
 
     QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;
     QCheckBox          *m_variationCheckBox;
     QCheckBox          *m_programCheckBox;
+    QCheckBox          *m_keyMappingCheckBox;
 
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
+    QLabel             *m_keyMappingLabel;
 
     QGridLayout        *m_mainGrid;
     QFrame             *m_rotaryFrame;
@@ -274,9 +282,10 @@ protected:
     RotaryMap           m_rotaries;
     QSignalMapper      *m_rotaryMapper;
 
-    Rosegarden::BankList      m_banks;
-    Rosegarden::ProgramList   m_programs;
-    Rosegarden::MidiByteList  m_variations;
+    Rosegarden::BankList       m_banks;
+    Rosegarden::ProgramList    m_programs;
+    Rosegarden::MidiByteList   m_variations;
+    Rosegarden::KeyMappingList m_keyMappings;
 };
 
 

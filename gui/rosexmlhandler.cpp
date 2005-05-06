@@ -1365,6 +1365,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		 Rosegarden::MidiByte(progStr ? progStr.toInt() : 0),
 		 Rosegarden::MidiByte(chanStr ? chanStr.toInt() : 0),
 		 (lsbStr && msbStr && progStr),
+		 (chanStr && true),
 		 qstrtostr(name));
 
 	    m_keyNameMap.clear();

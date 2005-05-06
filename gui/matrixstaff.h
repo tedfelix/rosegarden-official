@@ -46,6 +46,8 @@ protected:
     virtual bool elementsInSpaces() const;
     virtual bool showBeatLines() const;
 
+    const Rosegarden::MidiKeyMapping *getKeyMapping() const;
+
     /**
      * Override from Rosegarden::Staff<T>
      * Wrap only notes 

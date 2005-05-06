@@ -46,6 +46,7 @@ public:
     bool doImport();
 
     bool shouldImportBanks() const;
+    bool shouldImportKeyMappings() const;
     bool shouldImportControllers() const;
     bool shouldOverwriteBanks() const; 
     bool shouldRename() const;
@@ -53,6 +54,7 @@ public:
     std::string getDeviceName() const;
     const Rosegarden::BankList &getBanks() const;
     const Rosegarden::ProgramList &getPrograms() const;
+    const Rosegarden::KeyMappingList &getKeyMappings() const;
     const Rosegarden::ControlList &getControllers() const;
     std::string getLibrarianName() const;
     std::string getLibrarianEmail() const;
@@ -72,6 +74,7 @@ protected:
     QLabel             *m_deviceLabel;
 
     QCheckBox          *m_importBanks;
+    QCheckBox          *m_importKeyMappings;
     QCheckBox          *m_importControllers;
     QCheckBox          *m_rename;
 

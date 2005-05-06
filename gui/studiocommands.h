@@ -50,6 +50,7 @@ public:
     void setBankList   (const Rosegarden::BankList    &bankList);
     void setProgramList(const Rosegarden::ProgramList &programList);
     void setControlList(const Rosegarden::ControlList &controlList);
+    void setKeyMappingList(const Rosegarden::KeyMappingList &keyMappingList);
     void setOverwrite  (bool overwrite) { m_overwrite = overwrite; }
     void setRename     (bool rename)    { m_rename = rename; }
 
@@ -72,6 +73,7 @@ protected:
     Rosegarden::BankList                   m_bankList;
     Rosegarden::ProgramList                m_programList;
     Rosegarden::ControlList                m_controlList;
+    Rosegarden::KeyMappingList             m_keyMappingList;
 
     std::string                            m_oldName;
     std::string                            m_oldLibrarianName;
@@ -80,6 +82,7 @@ protected:
     Rosegarden::BankList                   m_oldBankList;
     Rosegarden::ProgramList                m_oldProgramList;
     Rosegarden::ControlList                m_oldControlList;
+    Rosegarden::KeyMappingList             m_oldKeyMappingList;
 
     bool                                   m_overwrite;
     bool                                   m_rename;
@@ -87,6 +90,7 @@ protected:
     bool                                   m_changeBanks;
     bool                                   m_changePrograms;
     bool                                   m_changeControls;
+    bool                                   m_changeKeyMappings;
     bool                                   m_clearBankAndProgramList;
 
 };

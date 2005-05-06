@@ -52,7 +52,6 @@ class RosegardenGUIDoc;
 class MatrixStaff;
 class MatrixCanvasView;
 class PianoKeyboard;
-//!!!class MatrixParameterBox;
 class InstrumentParameterBox;
 class KComboBox;
 template <class T> class ZoomSlider;
@@ -580,7 +579,6 @@ protected:
 
     // The parameter box
     //
-//!!!    MatrixParameterBox *m_parameterBox;
     InstrumentParameterBox *m_parameterBox;
 
     // Toolbar flora

@@ -48,24 +48,9 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     m_changeBanks(false),
     m_changePrograms(false),
     m_changeControls(false),
+    m_changeKeyMappings(false),
     m_clearBankAndProgramList(false)
 {
-//     if (variationType) {
-// 	m_variationType = *variationType;
-// 	m_changeVariation = true;
-//     }
-//     if (bankList) {
-// 	m_bankList = *bankList;
-// 	m_changeBanks = true;
-//     }
-//     if (programList) {
-// 	m_programList = *programList;
-// 	m_changePrograms = true;
-//     } 
-//     if (controlList) {
-// 	m_controlList = *controlList;
-// 	m_changeControls = true;
-//     }
 }
 
 void ModifyDeviceCommand::setVariation(Rosegarden::MidiDevice::VariationType variationType)
@@ -92,6 +77,12 @@ void ModifyDeviceCommand::setControlList(const Rosegarden::ControlList &controlL
     m_changeControls = true;
 }
 
+void ModifyDeviceCommand::setKeyMappingList(const Rosegarden::KeyMappingList &keyMappingList)
+{
+    m_keyMappingList = keyMappingList;
+    m_changeKeyMappings = true;
+}
+
 void
 ModifyDeviceCommand::execute()
 {
@@ -116,6 +107,7 @@ ModifyDeviceCommand::execute()
     m_oldBankList = midiDevice->getBanks();
     m_oldProgramList = midiDevice->getPrograms();
     m_oldControlList = midiDevice->getControlParameters();
+    m_oldKeyMappingList = midiDevice->getKeyMappings();
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
@@ -154,6 +146,8 @@ ModifyDeviceCommand::execute()
 
     //!!! merge option?
     if (m_changeControls) midiDevice->replaceControlParameters(m_controlList);
+
+    if (m_changeKeyMappings) midiDevice->mergeKeyMappingList(m_keyMappingList);
 }
 
 void
@@ -180,6 +174,7 @@ ModifyDeviceCommand::unexecute()
     midiDevice->replaceBankList(m_oldBankList);
     midiDevice->replaceProgramList(m_oldProgramList);
     midiDevice->replaceControlParameters(m_oldControlList);
+    midiDevice->replaceKeyMappingList(m_oldKeyMappingList);
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
     if (m_changeVariation) midiDevice->setVariationType(m_oldVariationType);
 }

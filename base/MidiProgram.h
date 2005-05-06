@@ -87,22 +87,22 @@ public:
     typedef std::map<MidiByte, std::string> KeyNameMap;
 
     MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
-		   bool useProgram, const std::string &name) :
+		   bool useProgram, bool useChannel, const std::string &name) :
 	m_bank(bank), m_program(program), m_channel(channel),
-	m_use(useProgram) { }
+	m_useProgram(useProgram), m_useChannel(useChannel), m_name(name) { }
 	
     MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
-		   bool useProgram, const std::string &name,
+		   bool useProgram, bool useChannel, const std::string &name,
 		   const KeyNameMap &map) :
 	m_bank(bank), m_program(program), m_channel(channel),
-	m_use(useProgram), m_map(map) { }
+	m_useProgram(useProgram), m_useChannel(useChannel), m_name(name),
+	m_map(map) { }
 
     bool operator==(const MidiKeyMapping &m) const {
-	return ((m_use ?
-		 (m_program == m.m_program &&
-		  m_bank == m.m_bank) :
-		 (m_channel == m.m_channel)) &&
-		(m_map == m.m_map));
+	if (m_useProgram && (m_program != m.m_program || !(m_bank == m.m_bank)))
+	    return false;
+	if (m_useChannel && (m_channel != m.m_channel)) return false;
+	return (m_map == m.m_map);
     }
 
     // clients looking this up shouldn't compare it against their own bank
@@ -112,7 +112,8 @@ public:
 
     MidiByte             getProgram() const { return m_program; }
     MidiByte             getChannel() const { return m_channel; }
-    bool                 useProgram() const { return m_use; }
+    bool                 useProgram() const { return m_useProgram; }
+    bool                 useChannel() const { return m_useChannel; }
     const std::string   &getName() const { return m_name; }
     const KeyNameMap    &getMap() const { return m_map; }
     const std::string   &getMapForKeyName(MidiByte pitch) { return m_map[pitch]; }
@@ -122,7 +123,8 @@ private:
     MidiBank    m_bank;
     MidiByte    m_program;
     MidiByte    m_channel;
-    bool        m_use;
+    bool        m_useProgram;
+    bool        m_useChannel;
     std::string m_name;
     KeyNameMap  m_map;
 };

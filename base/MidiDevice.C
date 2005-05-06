@@ -625,7 +625,7 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
     {
         for (oIt = m_keyMappingList.begin(); oIt != m_keyMappingList.end(); oIt++)
         {
-	    if (*it == *oIt)
+	    if (it->getName() == oIt->getName())
             {
                 clash = true;
                 break;
