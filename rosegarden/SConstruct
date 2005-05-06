@@ -89,7 +89,7 @@ env.SConscript("base/SConscript")
 soundLibs = env.SConscript("sound/SConscript")
 env.SConscript("sequencer/SConscript", 'soundLibs')
 env.SConscript("gui/SConscript", 'soundLibs')
-#env.SConscript("docs/en/SConscript")
+env.SConscript("gui/docs/en/SConscript")
 env.SConscript("po/SConscript")
 
 env.Alias('install', env['INST_TARGETS'])
