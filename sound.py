@@ -92,6 +92,7 @@ def generate(env):
 			#os.popen('echo "#define HAVE_LIBMAD">>config.h')
 		if haveLiblrdf:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLRDF')
+			env.AppendUnique(SOUND_LDFLAGS = '-llrdf')
 			#os.popen('echo "#define HAVE_LIBLRDF">>config.h')
 
 		env['ISCONFIGURED'] = 1
