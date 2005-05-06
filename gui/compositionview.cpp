@@ -420,12 +420,12 @@ void CompositionModelImpl::clearDirtyPreviews()
                                              
 void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
+//     RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
     m_dirtySegments.insert(s);
 }
 
 void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-    RG_DEBUG << "CompositionModelImpl::eventRemoved()\n";
     m_dirtySegments.insert(s);
 }
 
@@ -1043,6 +1043,12 @@ void CompositionView::setSnapGrain(bool fine)
     }
 }
 
+void CompositionView::slotUpdate()
+{
+    RG_DEBUG << "CompositionView::slotUpdate()\n";
+    refreshDirtyPreviews();
+    viewport()->update();
+}
 
 
 void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)

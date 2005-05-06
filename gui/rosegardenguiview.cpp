@@ -165,6 +165,11 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 						    Rosegarden::timeT)),
 		this, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *,
 						      Rosegarden::timeT)));
+
+
+        QObject::connect
+            (getCommandHistory(), SIGNAL(commandExecuted()),
+             m_trackEditor->getSegmentCanvas(), SLOT(slotUpdate()));
     }
 }
 

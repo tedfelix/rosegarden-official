@@ -390,6 +390,8 @@ public slots:
     // TextFloat timer
     void slotTextFloatTimeout();
 
+    void slotUpdate();
+
 signals:
     void editSegment(Rosegarden::Segment*); // use default editor
     void editSegmentNotation(Rosegarden::Segment*);
