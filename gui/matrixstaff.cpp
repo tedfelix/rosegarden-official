@@ -32,6 +32,7 @@
 #include "Composition.h"
 #include "Selection.h"
 
+#include "rosedebug.h"
 
 using Rosegarden::Segment;
 using Rosegarden::SnapGrid;
@@ -55,7 +56,10 @@ MatrixStaff::~MatrixStaff()
     // nothing
 }
 
-int MatrixStaff::getLineCount() const {
+int MatrixStaff::getLineCount() const
+{
+    MATRIX_DEBUG << "MatrixStaff::getLineCount: isDrumMode " << m_view->isDrumMode() << ", key mapping " << (getKeyMapping() ? getKeyMapping()->getName() : "<none>") << endl;
+
     if (m_view->isDrumMode()) {
 	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
 	if (km) return km->getMap().size() + 1;
