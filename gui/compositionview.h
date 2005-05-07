@@ -420,7 +420,7 @@ protected:
     void drawPointer(QPainter * p, const QRect& clipRect);
     void drawGuides(QPainter * p, const QRect& clipRect);
     void drawTextFloat(QPainter * p, const QRect& clipRect);
-    void pointerMoveUpdate();
+    void pointerMoveUpdate(int oldPos = -1);
 
     void initStepSize();
     void releaseCurrentItem();

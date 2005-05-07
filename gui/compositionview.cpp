@@ -1057,7 +1057,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
 
     QRect clipRect(clipx, clipy, clipw, cliph);
 
-    RG_DEBUG << "CompositionView::drawContents() clipRect = " << clipRect << endl;
+//     RG_DEBUG << "CompositionView::drawContents() clipRect = " << clipRect << endl;
 
     CompositionModel::AudioPreviewData*    audioPreviewData = 0;
     CompositionModel::NotationPreviewData* notationPreviewData = 0;
@@ -1094,7 +1094,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
             m_2ndLevelUpdate = false;
         }
         
-        RG_DEBUG << "CompositionView::drawContents : draw comp rect " << *i << endl;
+//         RG_DEBUG << "CompositionView::drawContents : draw comp rect " << *i << endl;
         drawCompRect(*i, p, clipRect);
     }
     
@@ -1124,7 +1124,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         CompositionModel::NotationPreviewData::const_iterator npEnd = m_notationPreviewData.end();
         
         for(; npi != npEnd; ++npi) {
-            RG_DEBUG << "CompositionView::drawContents : draw preview rect " << *npi << endl;
+//             RG_DEBUG << "CompositionView::drawContents : draw preview rect " << *npi << endl;
             p->drawRect(*npi);
         }
         
@@ -1526,9 +1526,18 @@ void CompositionView::releaseCurrentItem()
 
 void CompositionView::setPointerPos(int pos)
 {
-    pointerMoveUpdate();
+    int oldPos = m_pointerPos;
+    bool smallChange = abs(oldPos - pos) < 10;
+
+    if (smallChange)
+        pointerMoveUpdate();
+
     m_pointerPos = pos;
-    pointerMoveUpdate();
+
+    if (smallChange)
+        pointerMoveUpdate();
+    else
+        pointerMoveUpdate(oldPos);
 }
 
 void CompositionView::setTextFloat(int x, int y, const QString &text)
@@ -1539,11 +1548,26 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     m_drawTextFloat = true;
 }
 
-void CompositionView::pointerMoveUpdate()
+void CompositionView::pointerMoveUpdate(int oldPos)
 {
-    int x = std::max(0, m_pointerPos - int(m_pointerPen.width()) - 2);
-    updateContents(QRect(x, 0,
-                         m_pointerPen.width() + 4, contentsHeight()));
+    if (oldPos < 0) { // "large" change - only update around the current pointer position
+
+        int x = std::max(0, m_pointerPos - int(m_pointerPen.width()) - 2);
+        updateContents(QRect(x, 0,
+                             m_pointerPen.width() + 4, contentsHeight()));
+
+    } else {
+
+        int left = oldPos, right = m_pointerPos;
+        if (oldPos > m_pointerPos) {
+            left = m_pointerPos;
+            right = oldPos;
+        }
+        int x = std::max(0, left - int(m_pointerPen.width()) - 2);
+        updateContents(QRect(x, 0,
+                             m_pointerPen.width() + 4 + (right - left), contentsHeight()));
+        
+    }
 }
 
 void CompositionView::slotSetFineGrain(bool value)

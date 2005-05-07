@@ -431,8 +431,6 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
         getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
     }
 
-    emit needUpdate();
-
 }
 
 void
