@@ -114,6 +114,57 @@ MidiProgram::setName(std::string name)
     m_name = name;
 }
 
+MidiKeyMapping::MidiKeyMapping(const MidiBank &bank, MidiByte program,
+			       MidiByte channel, bool useProgram,
+			       bool useChannel, const std::string &name) :
+    m_bank(bank), m_program(program), m_channel(channel),
+    m_useProgram(useProgram), m_useChannel(useChannel), m_name(name)
+{
+    // nothing else
+}
+
+MidiKeyMapping::MidiKeyMapping(const MidiBank &bank, MidiByte program,
+			       MidiByte channel, bool useProgram,
+			       bool useChannel, const std::string &name,
+			       const KeyNameMap &map) :
+    m_bank(bank), m_program(program), m_channel(channel),
+    m_useProgram(useProgram), m_useChannel(useChannel), m_name(name),
+    m_map(map)
+{
+    // nothing else
+}
+
+bool
+MidiKeyMapping::operator==(const MidiKeyMapping &m) const
+{
+    if (m_useProgram && (m_program != m.m_program || !(m_bank == m.m_bank)))
+	return false;
+    if (m_useChannel && (m_channel != m.m_channel)) return false;
+    return (m_map == m.m_map);
+}
+
+int
+MidiKeyMapping::getOffset(MidiByte pitch) const
+{
+    int c;
+    for (KeyNameMap::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
+	if (i->first == pitch) return c;
+	++c;
+    }
+    return -1;
+}
+
+int
+MidiKeyMapping::getPitchForOffset(int offset) const
+{
+    KeyNameMap::const_iterator i = m_map.begin();
+    while (i != m_map.end() && offset > 0) {
+	++i; --offset;
+    }
+    if (i == m_map.end()) return -1;
+    else return i->first;
+}
+	
 
 MidiMetronome::MidiMetronome(InstrumentId instrument,
                              MidiByte barPitch,

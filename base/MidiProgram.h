@@ -82,28 +82,16 @@ typedef std::vector<MidiProgram> ProgramList;
 class MidiKeyMapping
 {
 public:
-    //!!! tidy into .C
-
     typedef std::map<MidiByte, std::string> KeyNameMap;
 
     MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
-		   bool useProgram, bool useChannel, const std::string &name) :
-	m_bank(bank), m_program(program), m_channel(channel),
-	m_useProgram(useProgram), m_useChannel(useChannel), m_name(name) { }
+		   bool useProgram, bool useChannel, const std::string &name);
 	
     MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
 		   bool useProgram, bool useChannel, const std::string &name,
-		   const KeyNameMap &map) :
-	m_bank(bank), m_program(program), m_channel(channel),
-	m_useProgram(useProgram), m_useChannel(useChannel), m_name(name),
-	m_map(map) { }
+		   const KeyNameMap &map);
 
-    bool operator==(const MidiKeyMapping &m) const {
-	if (m_useProgram && (m_program != m.m_program || !(m_bank == m.m_bank)))
-	    return false;
-	if (m_useChannel && (m_channel != m.m_channel)) return false;
-	return (m_map == m.m_map);
-    }
+    bool operator==(const MidiKeyMapping &m) const;
 
     // clients looking this up shouldn't compare it against their own bank
     // directly, but just compare its lsb and msb -- as it may have different
@@ -119,6 +107,16 @@ public:
     const std::string   &getMapForKeyName(MidiByte pitch) { return m_map[pitch]; }
     void                 setMap(const KeyNameMap &map) { m_map = map; }
     
+    // Return 0 if the supplied argument is the lowest pitch in the
+    // mapping, 1 if it is the second-lowest, etc.  Return -1 if it
+    // is not in the mapping at all.  Not instant.
+    int                  getOffset(MidiByte pitch) const;
+
+    // Return the offset'th pitch in the mapping.  Return -1 if there
+    // are fewer than offset pitches in the mapping (or offset < 0).
+    // Not instant.
+    int                  getPitchForOffset(int offset) const;
+
 private:
     MidiBank    m_bank;
     MidiByte    m_program;
