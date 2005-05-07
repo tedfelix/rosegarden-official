@@ -68,10 +68,10 @@ if 'install' in COMMAND_LINE_TARGETS:
 Export( "env" )
 
 # Cache directory
-env.CacheDir('cache')
+#env.CacheDir('cache')
 
 # Avoid spreading .sconsign files everywhere
-env.SConsignFile('scons_signatures')
+#env.SConsignFile('scons_signatures')
 
 ## The qt library is needed by every sub-program
 env.AppendUnique(LIBS = ['qt-mt'])
