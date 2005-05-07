@@ -1205,11 +1205,15 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
     p->setPen(r.getPen());
     drawRect(r, p, clipRect, r.isSelected(), intersectLvl, fill);
 
+    // draw segment label
+    //
     if (!r.getLabel().isEmpty()) {
         p->save();
         p->setPen(white);
         p->setBrush(red);
-        p->drawText(r.x() + 5, r.y() + r.height() / 2, r.getLabel());
+        QRect textRect(r);
+        textRect.setX(textRect.x() + 3);
+        p->drawText(textRect, Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
         p->restore();
     }
     
