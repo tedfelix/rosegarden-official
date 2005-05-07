@@ -329,10 +329,11 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
 {
     npData->clear();
     
-    Segment::iterator segEnd = segment->end();
-    
+    int segStartX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
+    int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
+						       
     for (Segment::iterator i = segment->begin();
-	 i != segEnd; ++i) {
+	 segment->isBeforeEndMarker(i); ++i) {
 
         long pitch = 0;
         if (!(*i)->isa(Rosegarden::Note::EventType) ||
@@ -351,6 +352,8 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         int width = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(eventStart,
                                                                               eventEnd - eventStart)));
 
+	if (x <= segStartX) { ++x; if (width > 1) --width; }
+	if (width > 1) --width;
 
         double y0 = 0;
         double y1 = m_grid.getYSnap();
