@@ -74,7 +74,6 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
                         std::string(SND_LIB_VERSION_STR)),
     m_client(-1),
     m_inputport(-1),
-    m_outputport(-1),
     m_queue(-1),
     m_maxClients(-1),
     m_maxPorts(-1),
@@ -589,11 +588,15 @@ AlsaDriver::generateInstruments()
     AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); it++)
     {
-        /*
-        std::cout << "installing device " << (*it)->m_name
-             << " client = " << (*it)->m_client
-             << " port = " << (*it)->m_port << endl;
-             */
+	if ((*it)->m_client == m_client) {
+	    std::cerr << "(Ignoring own port " << (*it)->m_client
+		      << ":" << (*it)->m_port << ")" << std::endl;
+	    continue;
+	} else if ((*it)->m_client == 0) {
+	    std::cerr << "(Ignoring system port " << (*it)->m_client
+		      << ":" << (*it)->m_port << ")" << std::endl;
+	    continue;
+	}
 
 	if ((*it)->isWriteable()) {
 	    MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
@@ -834,7 +837,45 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 		     << "\nDefault device name for this device is "
 		     << deviceName << std::endl;
     }
+
+    if (reqDirection == MidiDevice::Play) {
+
+	QString portName;
+
+	if (QString(deviceName).startsWith("Anonymous MIDI device ")) {
+	    portName = QString("out %1")
+		.arg(m_outputPorts.size() + 1);
+	} else {
+	    portName = QString("out %1 - %2")
+		.arg(m_outputPorts.size() + 1)
+		.arg(deviceName);
+	}
+
+	int outputPort = checkAlsaError(snd_seq_create_simple_port
+					(m_midiHandle,
+					 portName,
+					 SND_SEQ_PORT_CAP_READ |
+					 SND_SEQ_PORT_CAP_SUBS_READ,
+					 SND_SEQ_PORT_TYPE_APPLICATION), 
+					"createMidiDevice - can't create output port");
+
+	if (outputPort >= 0) {
+
+	    std::cerr << "CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId << std::endl;
+
+	    m_outputPorts[deviceId] = outputPort;
 	
+	    if (port) {
+		std::cerr << "Connecting my port " << outputPort << " to " << port->m_client << ":" << port->m_port << " on initialisation" << std::endl;
+		snd_seq_connect_to(m_midiHandle,
+				   outputPort,
+				   port->m_client,
+				   port->m_port);
+		std::cerr << "done" << std::endl;
+	    }
+	}
+    }
+
     MappedDevice *device = new MappedDevice(deviceId,
 					    Device::Midi,
 					    deviceName,
@@ -947,6 +988,48 @@ AlsaDriver::removeDevice(DeviceId id)
     insertMappedEventForReturn(mE);
 }
 
+void
+AlsaDriver::renameDevice(DeviceId id, QString name)
+{
+    DeviceIntMap::iterator i = m_outputPorts.find(id);
+    if (i == m_outputPorts.end()) {
+	std::cerr << "WARNING: AlsaDriver::renameDevice: Cannot find device "
+		  << id << " in port map" << std::endl;
+	return;
+    }
+
+    snd_seq_port_info_t *pinfo;
+    snd_seq_port_info_alloca(&pinfo);
+    snd_seq_get_port_info(m_midiHandle, i->second, pinfo);
+
+    QString oldName = snd_seq_port_info_get_name(pinfo);
+    int sep = oldName.find(" - ");
+
+    QString newName;
+    
+    if (name.startsWith("Anonymous MIDI device ")) {
+	if (sep < 0) sep = 0;
+	newName = oldName.left(sep);
+    } else if (sep < 0) {
+	newName = oldName + " - " + name;
+    } else {
+	newName = oldName.left(sep + 3) + name;
+    }	
+
+    snd_seq_port_info_set_name(pinfo, newName.data());
+    checkAlsaError(snd_seq_set_port_info(m_midiHandle, i->second, pinfo),
+		   "renameDevice");
+
+    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+	if (m_devices[i]->getId() == id) {
+	    m_devices[i]->setName(newName.data());
+	    break;
+	}
+    }
+
+    std::cerr << "Renamed " << m_client << ":" << i->second << " to " << name << std::endl;
+}
+
 ClientPortPair
 AlsaDriver::getPortByName(std::string name)
 {
@@ -1012,6 +1095,52 @@ AlsaDriver::getConnection(Device::DeviceType type,
 }
 
 void
+AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
+{
+    ClientPortPair pair(-1,-1);
+    if (connection && connection != "") {
+	pair = getPortByName(connection.data());
+    }
+    setConnectionToDevice(device, connection, pair);
+}
+
+void
+AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
+				  const ClientPortPair &pair)
+{
+    QString prevConnection = device.getConnection();
+    device.setConnection(connection.data());
+    
+    if (device.getDirection() == Rosegarden::MidiDevice::Play) {
+
+	DeviceIntMap::iterator j = m_outputPorts.find(device.getId());
+
+	if (j != m_outputPorts.end()) {
+
+	    if (prevConnection != "") {
+		ClientPortPair prevPair = getPortByName(prevConnection);
+		if (prevPair.first >= 0 && prevPair.second >= 0) {
+
+	std::cerr << "Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection" << std::endl;
+		    snd_seq_disconnect_to(m_midiHandle,
+					  j->second,
+					  prevPair.first,
+					  prevPair.second);
+		}
+	    }
+
+	    if (pair.first >= 0 && pair.second >= 0) {
+	std::cerr << "Connecting my port " << j->second << " to " << pair.first << ":" << pair.second << " on reconnection" << std::endl;
+		snd_seq_connect_to(m_midiHandle,
+				   j->second,
+				   pair.first,
+				   pair.second);
+	    }
+	}
+    }
+}
+
+void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
     Audit audit;
@@ -1024,7 +1153,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 	for (unsigned int i = 0; i < m_devices.size(); ++i) {
 
 	    if (m_devices[i]->getId() == id) {
-		m_devices[i]->setConnection(connection.data());
+		setConnectionToDevice(*m_devices[i], connection, port);
 
 		MappedEvent *mE =
 		    new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
@@ -1053,7 +1182,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 	for (unsigned int i = 0; i < m_devices.size(); ++i) {
 
 	    if (m_devices[i]->getId() == id) {
-		m_devices[i]->setConnection(idealConnection.data());
+		setConnectionToDevice(*m_devices[i], idealConnection, port);
 		break;
 	    }
 	}
@@ -1120,7 +1249,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 	    for (unsigned int i = 0; i < m_devices.size(); ++i) {
 
 		if (m_devices[i]->getId() == id) {
-		    m_devices[i]->setConnection(port->m_name);
+		    setConnectionToDevice(*m_devices[i], port->m_name, m_devicePortMap[id]);
 		    
 		    // in this case we don't request a device resync,
 		    // because this is only invoked at times such as
@@ -1340,7 +1469,6 @@ AlsaDriver::initialiseMidi()
     Audit audit;
 
     // Create a non-blocking handle.
-    // ("hw" will possibly give in to other handles in future?)
     //
     if (snd_seq_open(&m_midiHandle,
                      "default",
@@ -1353,6 +1481,17 @@ AlsaDriver::initialiseMidi()
         exit(EXIT_FAILURE);
     }
 
+    snd_seq_set_client_name(m_midiHandle, "rosegarden");
+
+    if ((m_client = snd_seq_client_id(m_midiHandle)) < 0)
+    {
+#ifdef DEBUG_ALSA
+        std::cerr << "AlsaDriver::initialiseMidi - can't create client"
+                  << std::endl;
+#endif
+        return;
+    }
+
     generatePortList();
     generateInstruments();
 
@@ -1363,19 +1502,6 @@ AlsaDriver::initialiseMidi()
     {
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
-                  << std::endl;
-#endif
-        return;
-    }
-
-
-    // Create a client
-    //
-    snd_seq_set_client_name(m_midiHandle, "Rosegarden");
-    if ((m_client = snd_seq_client_id(m_midiHandle)) < 0)
-    {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::initialiseMidi - can't create client"
                   << std::endl;
 #endif
         return;
@@ -1395,103 +1521,17 @@ AlsaDriver::initialiseMidi()
     snd_seq_port_info_set_timestamping(pinfo, 1);
     snd_seq_port_info_set_timestamp_real(pinfo, 1);
     snd_seq_port_info_set_timestamp_queue(pinfo, m_queue);
-    snd_seq_port_info_set_name(pinfo, "Rosegarden input");
-    m_inputport = checkAlsaError(snd_seq_create_port(m_midiHandle, pinfo), 
-                                 "initialiseMidi - can't create input port");
-    if (m_inputport < 0)
+    snd_seq_port_info_set_name(pinfo, "record in");
+    if (checkAlsaError(snd_seq_create_port(m_midiHandle, pinfo), 
+                       "initialiseMidi - can't create input port") < 0)
         return;
-
-    // Create the output port
-    //
-    m_outputport = checkAlsaError(snd_seq_create_simple_port(m_midiHandle,
-                                       "Rosegarden output",
-                                        SND_SEQ_PORT_CAP_READ,
-                                        //SND_SEQ_PORT_CAP_WRITE |
-                                        //SND_SEQ_PORT_CAP_SUBS_WRITE |
-                                        //SND_SEQ_PORT_CAP_SUBS_READ,
-                                        //SND_SEQ_PORT_CAP_NO_EXPORT,
-                                        SND_SEQ_PORT_TYPE_APPLICATION), 
-                                        "initialiseMidi - can't create output port");
-    if (m_outputport < 0)
-        return;
-    
-    /*
-    ClientPortPair inputDevice = getFirstDestination(true); // duplex = true
-
-    audit << "    Record port set to (" << inputDevice.first
-              << ", "
-              << inputDevice.second
-              << ")" << std::endl << std::endl;
-    */
-    
-    AlsaPortList::iterator it;
-
-    // Connect to all available output client/ports
-    //
-    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); it++)
-    {
-        if (snd_seq_connect_to(m_midiHandle,
-                               m_outputport,
-                               (*it)->m_client,
-                               (*it)->m_port) < 0)
-        {
-            /*
-            std::cerr << "AlsaDriver::initialiseMidi - "
-                      << "can't subscribe output client/port ("
-                      << (*it)->m_client << ", "
-                      << (*it)->m_port << ")"
-                      << std::endl;
-                      */
-        }
-    }
+    m_inputport = snd_seq_port_info_get_port(pinfo);
 
     // Subscribe the input port to the ALSA Announce port
     // to receive notifications when clients, ports and subscriptions change
     snd_seq_connect_from( m_midiHandle, m_inputport, 
 			  SND_SEQ_CLIENT_SYSTEM, SND_SEQ_PORT_SYSTEM_ANNOUNCE );
     
-    /*
-    // Connect input port - enabling timestamping on the way through.
-    // We have to fill out the subscription information as follows:
-    //
-    snd_seq_addr_t sender, dest;
-    snd_seq_port_subscribe_t *subs;
-    snd_seq_port_subscribe_alloca(&subs);
-
-    sender.client = inputDevice.first;
-    sender.port = inputDevice.second;
-    dest.client = m_client;
-    dest.port = m_inputport;
-
-    snd_seq_port_subscribe_set_sender(subs, &sender);
-    snd_seq_port_subscribe_set_dest(subs, &dest);
-
-    snd_seq_port_subscribe_set_queue(subs, m_queue);
-
-    // enable time-stamp-update mode 
-    //
-    snd_seq_port_subscribe_set_time_update(subs, 1);
-
-    // set so we get realtime timestamps
-    //
-    snd_seq_port_subscribe_set_time_real(subs, 1);
-
-    if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
-    {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::initialiseMidi - "
-                  << "can't subscribe input client:port "
-		  << int(sender.client) << ":" << int(sender.port)
-                  << std::endl;
-#endif
-        // Not the end of the world if this fails but we
-        // have to flag it internally.
-        //
-        m_midiInputPortConnected = false;
-    }
-    else 
-        m_midiInputPortConnected = true;
-    */
     m_midiInputPortConnected = true;
     
     // Set the input queue size
@@ -1594,17 +1634,15 @@ AlsaDriver::stopPlayback()
     //
     if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_STOP, "");
 
-    // send sounds-off to all client port pairs
+    // send sounds-off to all play devices
     //
-    AlsaPortList::iterator it;
-    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
-    {
-        sendDeviceController(ClientPortPair((*it)->m_client,
-					    (*it)->m_port),
-			     MIDI_CONTROLLER_SUSTAIN, 0);
-        sendDeviceController(ClientPortPair((*it)->m_client,
-					    (*it)->m_port),
-			     MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
+    for (MappedDeviceList::iterator i = m_devices.begin(); i != m_devices.end(); ++i) {
+	if ((*i)->getDirection() == Rosegarden::MidiDevice::Play) {
+	    sendDeviceController((*i)->getId(),
+				 MIDI_CONTROLLER_SUSTAIN, 0);
+	    sendDeviceController((*i)->getId(),
+				 MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
+	}
     }
 
 #ifdef HAVE_LIBJACK
@@ -1735,25 +1773,25 @@ AlsaDriver::allNotesOff()
 
     // prepare the event
     snd_seq_ev_clear(&event);
-    snd_seq_ev_set_source(&event, m_outputport);
     offTime = getAlsaTime();
 
     for (NoteOffQueue::iterator it = m_noteOffQueue.begin();
                                 it != m_noteOffQueue.end(); ++it)
     {
-        // Set destination according to instrument mapping to port
+        // Set destination according to connection for instrument
         //
-        outputDevice = getPairForMappedInstrument((*it)->getInstrument());
+	outputDevice = getPairForMappedInstrument((*it)->getInstrument());
 	if (outputDevice.first < 0 || outputDevice.second < 0) continue;
 
-//!!! and soft synths?
+	snd_seq_ev_set_subs(&event);
 
-        snd_seq_ev_set_dest(&event,
-                            outputDevice.first,
-                            outputDevice.second);
+	// Set source according to port for device
+	//
+	int src = getOutputPortForMappedInstrument((*it)->getInstrument());
+	if (src < 0) continue;
+	snd_seq_ev_set_source(&event, src);
 
-
-        /*
+        /*!!!
         snd_seq_real_time_t alsaOffTime = { offTime.sec,
                                             offTime.nsec };
 
@@ -1802,7 +1840,6 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 
     // prepare the event
     snd_seq_ev_clear(&event);
-    snd_seq_ev_set_source(&event, m_outputport);
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
     std::cerr << "AlsaDriver::processNotesOff(" << time << ")" << std::endl;
@@ -1813,9 +1850,18 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 
 	NoteOffEvent *ev = *m_noteOffQueue.begin();
 
+/*!!!
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << ev->getRealTime() << ", instr " << ev->getInstrument() << ", channel " << int(ev->getChannel()) << ", pitch " << int(ev->getPitch()) << std::endl;
 #endif
+*/
+	snd_seq_ev_set_subs(&event);
+
+	// Set source according to port for device
+	//
+	int src = getOutputPortForMappedInstrument(ev->getInstrument());
+	if (src < 0) continue;
+	snd_seq_ev_set_source(&event, src);
 
 	bool isSoftSynth = (ev->getInstrument() >= SoftSynthInstrumentBase);
 
@@ -1960,7 +2006,7 @@ AlsaDriver::getMappedComposition()
 
     snd_seq_event_t *event;
 
-    while(snd_seq_event_input(m_midiHandle, &event) > 0)
+    while (snd_seq_event_input(m_midiHandle, &event) > 0)
     {
         unsigned int channel = (unsigned int)event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) +
@@ -2240,7 +2286,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     // These won't change in this slice
     //
     snd_seq_ev_clear(&event);
-    snd_seq_ev_set_source(&event, m_outputport);
 
     if ((mC.begin() != mC.end()) && getSequencerDataBlock()) {
 	getSequencerDataBlock()->setVisual(*mC.begin());
@@ -2329,6 +2374,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	if (!isSoftSynth) {
 
+/*!!!
 	    // Set destination according to Instrument mapping
 	    outputDevice = getPairForMappedInstrument((*i)->getInstrument());
 	    if (outputDevice.first < 0 && outputDevice.second < 0 &&
@@ -2342,6 +2388,21 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	    snd_seq_ev_set_dest(&event,
 				outputDevice.first,
 				outputDevice.second);
+*/
+
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << std::endl;
+	    std::cout << "pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration() << std::endl;
+#endif
+
+	    snd_seq_ev_set_subs(&event);
+
+	    // Set source according to port for device
+	    //
+	    int src = getOutputPortForMappedInstrument((*i)->getInstrument());
+	    if (src < 0) continue;
+	    snd_seq_ev_set_source(&event, src);
+
 	    snd_seq_ev_schedule_real(&event, m_queue, 0, &time);
 
 	} else {
@@ -3137,14 +3198,18 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         
 	if ((*i)->getType() == MappedEvent::Panic)
         {
-    	    AlsaPortList::iterator it;
-	    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
-	    {
-	    	ClientPortPair dest((*it)->m_client,(*it)->m_port);
-		sendDeviceController(dest, MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
-		sendDeviceController(dest, MIDI_CONTROLLER_RESET, 0);
+	    for (MappedDeviceList::iterator i = m_devices.begin();
+		 i != m_devices.end(); ++i) {
+		if ((*i)->getDirection() == Rosegarden::MidiDevice::Play) {
+		    sendDeviceController((*i)->getId(),
+					 MIDI_CONTROLLER_SUSTAIN, 0);
+		    sendDeviceController((*i)->getId(),
+					 MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
+		    sendDeviceController((*i)->getId(),
+					 MIDI_CONTROLLER_RESET, 0);
+		}
 	    }
-        }
+	}
     }
 
     // Process Midi and Audio
@@ -3281,23 +3346,44 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
     return ClientPortPair(-1, -1);
 }
 
+int
+AlsaDriver::getOutputPortForMappedInstrument(InstrumentId id)
+{
+    MappedInstrument *instrument = getMappedInstrument(id);
+    if (instrument)
+    {
+	DeviceId device = instrument->getDevice();
+	DeviceIntMap::iterator i = m_outputPorts.find(device);
+	if (i != m_outputPorts.end()) {
+	    return i->second;
+	}
+#ifdef DEBUG_ALSA
+	else {
+	    cerr << "WARNING: AlsaDriver::getOutputPortForMappedInstrument: couldn't find output port for device for instrument " << id << ", falling through" << endl;
+	}
+#endif
+    }
+
+    return -1;
+}
+
 // Send a direct controller to the specified port/client
 //
 void
-AlsaDriver::sendDeviceController(const ClientPortPair &device,
+AlsaDriver::sendDeviceController(DeviceId device,
                                  MidiByte controller,
                                  MidiByte value)
 {
     snd_seq_event_t event;
 
-    // These won't change in this slice
-    //
     snd_seq_ev_clear(&event);
-    snd_seq_ev_set_source(&event, m_outputport);
+    
+    snd_seq_ev_set_subs(&event);
 
-    snd_seq_ev_set_dest(&event,
-                        device.first,
-                        device.second);
+    DeviceIntMap::iterator dimi = m_outputPorts.find(device);
+    if (dimi == m_outputPorts.end()) return;
+    
+    snd_seq_ev_set_source(&event, dimi->second);
     snd_seq_ev_set_direct(&event);
     
     for (int i = 0; i < 16; i++)
@@ -3310,7 +3396,7 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
     }
 
     // we probably don't need this:
-    checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendDSeviceController(): draining");
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendDeviceController(): draining");
 }
 
 void
@@ -3365,56 +3451,12 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
     return false;
 }
 
-// At some point make this check for just different numbers of clients
-//
 bool
 AlsaDriver::checkForNewClients()
 {
     Audit audit;
-    /*
-    snd_seq_client_info_t *cinfo;
-    snd_seq_port_info_t *pinfo;
-    int  client;
-    unsigned int currentPortCount = 0,
-                     oldPortCount = m_alsaPorts.size();
+    bool madeChange = false;
 
-    unsigned int writeCap = SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE;
-    unsigned int readCap = SND_SEQ_PORT_CAP_SUBS_READ|SND_SEQ_PORT_CAP_READ;
-
-    snd_seq_client_info_alloca(&cinfo);
-    snd_seq_client_info_set_client(cinfo, -1);
-
-    // Count current ports
-    //
-    while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
-    {
-        client = snd_seq_client_info_get_client(cinfo);
-        snd_seq_port_info_alloca(&pinfo);
-        snd_seq_port_info_set_client(pinfo, client);
-        snd_seq_port_info_set_port(pinfo, -1);
-
-        // Ignore ourselves and the system client
-        //
-        if (client == m_client || client == 0) continue;
-
-        while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
-        {
-            int cap = snd_seq_port_info_get_capability(pinfo);
-
-            if ((((cap & writeCap) == writeCap) ||
-                 ((cap & readCap)  == readCap)) &&
-                ((cap & SND_SEQ_PORT_CAP_NO_EXPORT) == 0))
-                currentPortCount++;
-        }
-    }
-
-    if (oldPortCount == currentPortCount) return false;
-
-    audit << "AlsaDriver: number of ports changed ("
-	      << currentPortCount << " now, " << oldPortCount << " before)"
-	      << std::endl;
-    */
-    
     if (!m_portCheckNeeded)
     	return false;
     
@@ -3435,10 +3477,15 @@ AlsaDriver::checkForNewClients()
 	     j != m_alsaPorts.end(); ++j) {
 	    if ((*j)->m_client == pair.first &&
 		(*j)->m_port == pair.second) {
-		if ((*i)->getDirection() == MidiDevice::Record)
-			(*i)->setRecording(isRecording(*j));
-		else
+		if ((*i)->getDirection() == MidiDevice::Record) {
+		    bool recState = isRecording(*j);
+		    if (recState != (*i)->isRecording()) {
+		        madeChange = true;
+			(*i)->setRecording(recState);
+		    }
+		} else {
 			(*i)->setRecording(false);
+		}
 		found = true;
 		break;
 	    }
@@ -3447,8 +3494,9 @@ AlsaDriver::checkForNewClients()
 	if (!found) {
 	    m_suspendedPortMap[pair] = (*i)->getId();
 	    m_devicePortMap[(*i)->getId()] = ClientPortPair(-1, -1);
-	    (*i)->setConnection("");
+	    setConnectionToDevice(**i, "");
 	    (*i)->setRecording(false);
+	    madeChange = true;
 	}
     }
     
@@ -3464,16 +3512,15 @@ AlsaDriver::checkForNewClients()
 	for (AlsaPortList::iterator i = newPorts.begin();
 	     i != newPorts.end(); ++i) {
 
-	    audit << (*i)->m_name << std::endl;
-
-	    if ((*i)->isWriteable()) {
-		if (snd_seq_connect_to(m_midiHandle,
-				       m_outputport,
-				       (*i)->m_client,
-				       (*i)->m_port) < 0) {
-		    // nothing
-		}
+	    if ((*i)->m_client == m_client) {
+		audit << "(Ignoring own port " << (*i)->m_client << ":" << (*i)->m_port << ")" << std::endl;
+		continue;
+	    } else if ((*i)->m_client == 0) {
+		audit << "(Ignoring system port " << (*i)->m_client << ":" << (*i)->m_port << ")" << std::endl;
+		continue;
 	    }
+
+	    audit << (*i)->m_name << std::endl;
 
 	    std::string portName = (*i)->m_name;
 	    ClientPortPair portPair = ClientPortPair((*i)->m_client,
@@ -3487,11 +3534,14 @@ AlsaDriver::checkForNewClients()
 
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
-		    if ((*j)->getId() == id) (*j)->setConnection(portName);
+		    if ((*j)->getId() == id) {
+			setConnectionToDevice(**j, portName);
+		    }
 		}
 
 		m_suspendedPortMap.erase(m_suspendedPortMap.find(portPair));
 		m_devicePortMap[id] = portPair;
+		madeChange = true;
 		continue;
 	    }
 	    
@@ -3506,8 +3556,9 @@ AlsaDriver::checkForNewClients()
 			audit << "(Reusing record device " << (*j)->getId()
 				  << ")" << std::endl;
 			m_devicePortMap[(*j)->getId()] = portPair;
-			(*j)->setConnection(portName);
+			setConnectionToDevice(**j, portName);
 			needRecordDevice = false;
+			madeChange = true;
 			break;
 		    }
 		}
@@ -3524,8 +3575,9 @@ AlsaDriver::checkForNewClients()
 			audit << "(Reusing play device " << (*j)->getId()
 				  << ")" << std::endl;
 			m_devicePortMap[(*j)->getId()] = portPair;
-			(*j)->setConnection(portName);
+			setConnectionToDevice(**j, portName);
 			needPlayDevice = false;
+			madeChange = true;
 			break;
 		    }
 		}
@@ -3545,6 +3597,7 @@ AlsaDriver::checkForNewClients()
 		    audit << "(Created new record device " << device->getId() << ")" << std::endl;
 		    addInstrumentsForDevice(device);
 		    m_devices.push_back(device);
+		    madeChange = true;
 		}
 	    }
 
@@ -3560,16 +3613,88 @@ AlsaDriver::checkForNewClients()
 		    audit << "(Created new play device " << device->getId() << ")" << std::endl;
 		    addInstrumentsForDevice(device);
 		    m_devices.push_back(device);
+		    madeChange = true;
 		}
 	    }
 	}
     }
-    
-    MappedEvent *mE =
-	new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
-			0, 0);
-    // send completion event
-    insertMappedEventForReturn(mE);
+
+    // If one of our ports is connected to a single other port and
+    // it isn't the one we thought, we should update our connection
+
+    for (MappedDeviceList::iterator i = m_devices.begin();
+	 i != m_devices.end(); ++i) {
+
+	DevicePortMap::iterator j = m_devicePortMap.find((*i)->getId());
+
+	snd_seq_addr_t addr;
+	addr.client = m_client;
+
+	DeviceIntMap::iterator ii = m_outputPorts.find((*i)->getId());
+	if (ii == m_outputPorts.end()) continue;
+	addr.port = ii->second;
+
+	snd_seq_query_subscribe_t *subs;
+	snd_seq_query_subscribe_alloca(&subs);
+	snd_seq_query_subscribe_set_root(subs, &addr);
+	snd_seq_query_subscribe_set_index(subs, 0);
+	
+	bool haveOurs = false;
+	int others = 0;
+	ClientPortPair firstOther;
+
+	while (!snd_seq_query_port_subscribers(m_midiHandle, subs)) {
+
+	    const snd_seq_addr_t *otherEnd =
+		snd_seq_query_subscribe_get_addr(subs);
+		
+	    if (!otherEnd) continue;
+
+	    if (j != m_devicePortMap.end() &&
+		otherEnd->client == j->second.first &&
+		otherEnd->port == j->second.second) {
+		haveOurs = true;
+	    } else {
+		++others;
+		firstOther = ClientPortPair(otherEnd->client, otherEnd->port);
+	    }
+
+	    snd_seq_query_subscribe_set_index
+		(subs, snd_seq_query_subscribe_get_index(subs) + 1);
+	}
+
+	if (haveOurs) { // leave our own connection alone, and stop worrying
+	    continue;
+
+	} else {
+	    if (others == 0) {
+		if (j != m_devicePortMap.end()) {
+		    j->second = ClientPortPair(-1, -1);
+		    setConnectionToDevice(**i, "");
+		    madeChange = true;
+		}
+	    } else {
+		for (AlsaPortList::iterator k = m_alsaPorts.begin();
+		     k != m_alsaPorts.end(); ++k) {
+		    if ((*k)->m_client == firstOther.first &&
+			(*k)->m_port == firstOther.second) {
+			m_devicePortMap[(*i)->getId()] = firstOther;
+			setConnectionToDevice(**i, (*k)->m_name, firstOther);
+			madeChange = true;
+			break;
+		    }
+		}
+	    }
+	}
+    }
+
+    if (madeChange) {
+	MappedEvent *mE =
+	    new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
+			    0, 0);
+	// send completion event
+	insertMappedEventForReturn(mE);
+    }
     
     m_portCheckNeeded = false;
     	
@@ -3841,24 +3966,31 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
 {
     snd_seq_addr_t sender, dest;
     sender.client = m_client;
-    sender.port = m_outputport;
 
-    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); ++it)
-    {
-        // One message per writeable port
-        //
-        if ((*it)->m_port == 0 && (*it)->isWriteable())
-        {
+    for (MappedDeviceList::iterator i = m_devices.begin();
+	 i != m_devices.end(); ++i) {
+	
+	ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
+	
+	int client = pair.first;
+	int port = pair.second;
+	
+	if ((*i)->getDirection() == Rosegarden::MidiDevice::Play) {
+
             snd_seq_event_t event;
             memset(&event, 0, sizeof(&event));
 
             // Set destination and sender
-            dest.client = (*it)->m_client;
-            dest.port = (*it)->m_port;
-        
+            dest.client = client;
+	    dest.port = port;
             event.dest = dest;
+	    
+	    DeviceIntMap::iterator dimi = m_outputPorts.find((*i)->getId());
+	    if (dimi == m_outputPorts.end()) continue;
+
+	    sender.port = dimi->second;
             event.source = sender;
+
             event.queue = SND_SEQ_QUEUE_DIRECT;
 
             // set the command
@@ -3911,24 +4043,30 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 {
     snd_seq_addr_t sender, dest;
     sender.client = m_client;
-    sender.port = m_outputport;
     snd_seq_real_time_t sendTime = { time.sec, time.nsec };
 
-    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); ++it)
-    {
-        // One message per writeable port
-        //
-        if ((*it)->m_port == 0 && (*it)->isWriteable())
-        {
+    for (MappedDeviceList::iterator i = m_devices.begin();
+	 i != m_devices.end(); ++i) {
+	
+	ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
+
+	int client = pair.first;
+	int port = pair.second;
+
+	if ((*i)->getDirection() == Rosegarden::MidiDevice::Play) {
+
             snd_seq_event_t event;
             memset(&event, 0, sizeof(&event));
 
             // Set destination and sender
-            dest.client = (*it)->m_client;
-            dest.port = (*it)->m_port;
-        
+            dest.client = client;
+	    dest.port = port;
             event.dest = dest;
+	    
+	    DeviceIntMap::iterator dimi = m_outputPorts.find((*i)->getId());
+	    if (dimi == m_outputPorts.end()) continue;
+
+	    sender.port = dimi->second;
             event.source = sender;
 
             // Schedule the command

@@ -568,9 +568,18 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
     {
 	std::string name = qstrtostr(m_playTable->text(row, col));
 	if (device->getName() != name) {
+
 	    m_document->getCommandHistory()->addCommand
 		(new RenameDeviceCommand(m_studio, id, name));
 	    emit deviceNamesChanged();
+
+	    QByteArray data;
+	    QDataStream arg(data, IO_WriteOnly);
+
+	    arg << (unsigned int)id;
+	    arg << m_playTable->text(row, col);
+
+	    rgapp->sequencerSend("renameDevice(unsigned int, QString)", data);
 	}
     }
     break;
@@ -609,9 +618,18 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
     {
 	std::string name = qstrtostr(m_recordTable->text(row, col));
 	if (device->getName() != name) {
+
 	    m_document->getCommandHistory()->addCommand
 		(new RenameDeviceCommand(m_studio, id, name));
 	    emit deviceNamesChanged();
+
+	    QByteArray data;
+	    QDataStream arg(data, IO_WriteOnly);
+
+	    arg << (unsigned int)id;
+	    arg << m_recordTable->text(row, col);
+
+	    rgapp->sequencerSend("renameDevice(unsigned int, QString)", data);
 	}
     }
     break;

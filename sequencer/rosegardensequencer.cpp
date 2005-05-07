@@ -1140,6 +1140,12 @@ RosegardenSequencerApp::removeDevice(unsigned int deviceId)
     m_driver->removeDevice(deviceId);
 }
 
+void
+RosegardenSequencerApp::renameDevice(unsigned int deviceId, QString name)
+{
+    m_driver->renameDevice(deviceId, name);
+}
+
 unsigned int
 RosegardenSequencerApp::getConnections(int type, unsigned int direction)
 {

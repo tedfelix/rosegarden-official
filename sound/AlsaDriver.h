@@ -303,6 +303,7 @@ public:
     virtual DeviceId addDevice(Device::DeviceType type,
 			       MidiDevice::DeviceDirection direction);
     virtual void removeDevice(DeviceId id);
+    virtual void renameDevice(DeviceId id, QString name);
 
     // Get available connections per device
     // 
@@ -355,6 +356,7 @@ protected:
 
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
+    int getOutputPortForMappedInstrument(InstrumentId id);
     std::map<unsigned int, std::map<unsigned int, MappedEvent*> >  m_noteOnMap;
 
     /**
@@ -383,12 +385,16 @@ protected:
 
     virtual void processAudioQueue(bool /* now */) { }
 
+    virtual void setConnectionToDevice(MappedDevice &device, QString connection);
+    virtual void setConnectionToDevice(MappedDevice &device, QString connection,
+				       const ClientPortPair &pair);
+
 private:
     RealTime getAlsaTime();
 
     // Locally convenient to control our devices
     //
-    void sendDeviceController(const ClientPortPair &device,
+    void sendDeviceController(Rosegarden::DeviceId device,
                               MidiByte byte1,
                               MidiByte byte2);
 			      
@@ -401,7 +407,10 @@ private:
     snd_seq_t                   *m_midiHandle;
     int                          m_client;
     int                          m_inputport;
-    int                          m_outputport;
+    
+    typedef std::map<Rosegarden::DeviceId, int> DeviceIntMap;
+    DeviceIntMap                 m_outputPorts;
+
     int                          m_queue;
     int                          m_maxClients;
     int                          m_maxPorts;

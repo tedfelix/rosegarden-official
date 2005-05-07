@@ -163,6 +163,11 @@ public:
     //
     virtual void removeDevice(unsigned int id) = 0;
 
+    // Rename the given device.
+    // Ignored if the driver does not permit this operation.
+    //
+    virtual void renameDevice(unsigned int id, QString name) = 0;
+
     // Return the number of permissible connections for a device of
     // the given type and direction (corresponding to MidiDevice::
     // DeviceDirection enum).  Direction is ignored for non-MIDI devices.

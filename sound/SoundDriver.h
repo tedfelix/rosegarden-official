@@ -287,6 +287,7 @@ public:
 	return Device::NO_DEVICE;
     }
     virtual void removeDevice(DeviceId) { }
+    virtual void renameDevice(DeviceId, QString) { }
 
     virtual unsigned int getConnections(Device::DeviceType,
 					MidiDevice::DeviceDirection) { return 0; }
@@ -444,7 +445,6 @@ protected:
 
     // MIDI Note-off handling
     //
-    //std::map<unsigned int, MappedEvent*>        m_noteOnMap;
     NoteOffQueue                                m_noteOffQueue;
 
     // This is our driver's own list of MappedInstruments and MappedDevices.  

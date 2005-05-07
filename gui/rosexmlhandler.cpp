@@ -1203,6 +1203,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		setMIDIDeviceConnection(connection);
 	    }
 
+	    setMIDIDeviceName(nameStr);
+
 	    QString vstr = atts.value("variation").lower();
 	    Rosegarden::MidiDevice::VariationType variation =
 		Rosegarden::MidiDevice::NoVariations;
@@ -2289,23 +2291,41 @@ RoseXmlHandler::skipToNextPlayDevice()
 
 void
 RoseXmlHandler::setMIDIDeviceConnection(QString connection)
-{
+{ 
     SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection(" << connection << ")" << endl;
 
     Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(m_device);
     if (!md) return;
-		    
+
     QByteArray data;
-    QByteArray replyData;
-    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+    
+    arg << (unsigned int)md->getId();
+    arg << connection;
+    
+    rgapp->sequencerSend("setPlausibleConnection(unsigned int, QString)",
+			 data);
+    // connection should be sync'd later in the natural course of things
+}
+
+void
+RoseXmlHandler::setMIDIDeviceName(QString name)
+{
+    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceName(" << name << ")" << endl;
+
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(m_device);
+    if (!md) return;
+
+    QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
 
     arg << (unsigned int)md->getId();
-    arg << connection;
+    arg << name;
 
-    rgapp->sequencerCall("setPlausibleConnection(unsigned int, QString)",
-                         replyType, replyData, data);
-    // connection should be sync'd later in the natural course of things
+    std::cerr << "Renaming device " << md->getId() << " to " << name << std::endl;
+	
+    rgapp->sequencerSend("renameDevice(unsigned int, QString)",
+			 data);
 }
 
 
