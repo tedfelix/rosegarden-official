@@ -74,7 +74,7 @@ env.SConscript("sequencer/SConscript", 'soundLibs')
 env.SConscript("gui/SConscript", 'soundLibs')
 #env.SConscript("gui/docs/en/SConscript")
 ## We are now using one top-level file for the documentation instead of several almost empty scripts
-env.SConscript("gui/doc/SConscript")
+env.SConscript("gui/docs/SConscript")
 
 #env.SConscript("po/SConscript")
 env.KDElang('po/', 'rosegarden') # one script to remove
