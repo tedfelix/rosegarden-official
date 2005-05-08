@@ -1112,7 +1112,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     // Previews
     //
     if (m_showPreviews) {
-
+        p->save();
         refreshDirtyPreviews();
         p->setRasterOp(Qt::XorROP);
         
@@ -1131,8 +1131,17 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
             p->drawRect(*npi);
         }
         
-        p->setRasterOp(Qt::CopyROP);
+        p->restore();
     }
+
+    //
+    // Draw segment labels (they must be drawn over the preview rects)
+    //
+    
+    for(i = rects.begin(); i != end; ++i) {
+        drawCompRectLabel(*i, p, clipRect);
+    }
+    
 
     //
     // Playback Pointer
@@ -1208,18 +1217,6 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
     p->setPen(r.getPen());
     drawRect(r, p, clipRect, r.isSelected(), intersectLvl, fill);
 
-    // draw segment label
-    //
-    if (!r.getLabel().isEmpty()) {
-        p->save();
-        p->setPen(white);
-        p->setBrush(red);
-        QRect textRect(r);
-        textRect.setX(textRect.x() + 3);
-        p->drawText(textRect, Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
-        p->restore();
-    }
-    
     if (r.isRepeating()) {
 
         CompositionRect::repeatmarks repeatMarks = r.getRepeatMarks();
@@ -1252,9 +1249,27 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
         }
 
     }
-    
+
     p->restore();
 }
+
+void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect)
+{
+    // draw segment label
+    //
+    if (!r.getLabel().isEmpty()) {
+        p->save();
+        p->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentLabel));
+        QRect textRect(r);
+        textRect.setX(textRect.x() + 3);
+        QRect textBoundingRect = p->boundingRect(textRect, Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
+        p->fillRect(textBoundingRect, white);
+        p->drawText(textRect, Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
+        p->restore();
+    }
+    
+}
+
 
 void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRect,
                                bool isSelected, int intersectLvl, bool fill)

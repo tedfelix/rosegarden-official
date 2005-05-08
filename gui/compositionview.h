@@ -415,6 +415,7 @@ protected:
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
     void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
                       int intersectLvl = 0, bool fill = true);
+    void drawCompRectLabel(const CompositionRect& r, QPainter *p, const QRect& clipRect);
     void drawIntersections(const CompositionModel::rectcontainer&, QPainter * p, const QRect& clipRect);
 
     void drawPointer(QPainter * p, const QRect& clipRect);
