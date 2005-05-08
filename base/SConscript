@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # -*- python -*-
 ############################
 ## load the config
@@ -5,50 +6,54 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env" )
+Import('env')
 myenv=env.Copy()
 
-myenv.Library('base', ['AnalysisTypes.C',
-'AudioDevice.C', 
-'AudioLevel.C', 
-'AudioPluginInstance.C', 
-'BaseProperties.C', 
-'Clipboard.C', 
-'Colour.C', 
-'ColourMap.C', 
-'Composition.C', 
-'CompositionTimeSliceAdapter.C', 
-'Configuration.C', 
-'ControlParameter.C', 
-'Device.C', 
-'Equation.C', 
-'Event.C', 
-'Exception.C', 
-'Instrument.C', 
-'LayoutEngine.C', 
-'Marker.C', 
-'MidiDevice.C', 
-'MidiProgram.C', 
-'MidiTypes.C', 
-'NotationTypes.C', 
-'Profiler.C', 
-'Property.C', 
-'PropertyMap.C', 
-'PropertyName.C', 
-'Quantizer.C', 
-'RealTime.C', 
-'RulerScale.C', 
-'Segment.C', 
-'SegmentMatrixHelper.C', 
-'SegmentNotationHelper.C', 
-'SegmentPerformanceHelper.C', 
-'Selection.C', 
-'Sets.C', 
-'SnapGrid.C', 
-'SoftSynthDevice.C', 
-'Staff.C', 
-'Studio.C', 
-'Track.C', 
-'TriggerSegment.C', 
-'ViewElement.C', 
-'XmlExportable.C'], CPPPATH=['..', '.'])
+src="""
+AnalysisTypes.C
+AudioDevice.C
+AudioLevel.C
+AudioPluginInstance.C
+BaseProperties.C
+Clipboard.C
+Colour.C
+ColourMap.C
+Composition.C
+CompositionTimeSliceAdapter.C
+Configuration.C
+ControlParameter.C
+Device.C
+Equation.C
+Event.C
+Exception.C
+Instrument.C
+LayoutEngine.C
+Marker.C
+MidiDevice.C
+MidiProgram.C
+MidiTypes.C
+NotationTypes.C
+Profiler.C
+Property.C
+PropertyMap.C
+PropertyName.C
+Quantizer.C
+RealTime.C
+RulerScale.C
+Segment.C
+SegmentMatrixHelper.C
+SegmentNotationHelper.C
+SegmentPerformanceHelper.C
+Selection.C
+Sets.C
+SnapGrid.C
+SoftSynthDevice.C
+Staff.C
+Studio.C
+Track.C
+TriggerSegment.C
+ViewElement.C
+XmlExportable.C
+""".split()
+
+myenv.Library('base', src, CPPPATH=['..', '.'])

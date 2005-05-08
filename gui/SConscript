@@ -138,20 +138,20 @@ rgSources = Split("""
 	xmlstorableevent.cpp
 """)
 
-rg = KDEprogram('rosegarden', rgSources, myenv )
+rg = myenv.KDEprogram('rosegarden', rgSources )
 
 
-KDEaddpaths( ['/usr/X11R6/include/X11/Xft',
+myenv.KDEaddpaths_includes( ['/usr/X11R6/include/X11/Xft',
            '/usr/include/freetype2',
-           '../base', '../sound', '..', '.'], myenv)
+           '../base', '../sound', '..', '.'])
 
 # KDE libs
-KDEaddlibs([ 'kdeui', 'kdecore', 'kdeprint', 'kio', ], myenv)
+myenv.KDEaddlibs([ 'kdeui', 'kdecore', 'kdeprint', 'kio', ])
 
-KDEaddlibs([ 'Xft' ], myenv)
+myenv.KDEaddlibs([ 'Xft' ])
 
 # RG libs
-KDEaddlibs(['RosegardenSequencer', 'RosegardenSound', 'base'], myenv)
+myenv.KDEaddlibs(['RosegardenSequencer', 'RosegardenSound', 'base'])
 
 myenv['LIBPATH'].insert(0, '../base')
 myenv['LIBPATH'].insert(0, '../sound')
