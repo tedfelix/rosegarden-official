@@ -49,8 +49,8 @@
 #include <pthread.h>
 
 
-#define DEBUG_ALSA 1
-#define DEBUG_PROCESS_MIDI_OUT 1
+//#define DEBUG_ALSA 1
+//#define DEBUG_PROCESS_MIDI_OUT 1
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
@@ -1858,25 +1858,16 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 
 	    snd_seq_ev_set_subs(&event);
 
-	    // Set source and destination according to instrument
+	    // Set source according to instrument
 	    //
-//!!!	    outputDevice = getPairForMappedInstrument(ev->getInstrument());
 	    int src = getOutputPortForMappedInstrument(ev->getInstrument());
-//!!!	    if (src < 0 || outputDevice.first < 0 || outputDevice.second < 0) {
 	    if (src < 0) {
 		delete ev;
 		m_noteOffQueue.erase(m_noteOffQueue.begin());
 		continue;
 	    }
 
-	    // Set source according to port for device
-	    //
 	    snd_seq_ev_set_source(&event, src);
-/*!!!
-	    snd_seq_ev_set_dest(&event,
-				outputDevice.first,
-				outputDevice.second);
-*/
 	    snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
 
 	} else {
