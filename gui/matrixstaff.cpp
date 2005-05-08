@@ -62,16 +62,54 @@ int MatrixStaff::getLineCount() const
 
     if (m_view->isDrumMode()) {
 	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
-	if (km) return km->getMap().size() + 1;
+	if (km) {
+	    int minPitch, maxPitch;
+	    const Rosegarden::MidiKeyMapping::KeyNameMap &map = km->getMap();
+	    Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator mi = map.begin();
+	    if (mi != map.end()) {
+		minPitch = mi->first;
+		mi = map.end();
+		--mi;
+		maxPitch = mi->first;
+		return maxPitch - minPitch + 1;
+	    }
+	}
     }
     return MatrixVLayout::maxMIDIPitch + 1;
 }
 
-int  MatrixStaff::getLegerLineCount()   const { return 0; }
-int  MatrixStaff::getBottomLineHeight() const { return 0; }
-int  MatrixStaff::getHeightPerLine()    const { return 1; }
-bool MatrixStaff::elementsInSpaces()    const { return true; }
-bool MatrixStaff::showBeatLines()       const { return true; }
+int MatrixStaff::getLegerLineCount() const
+{
+    return 0;
+}
+
+int MatrixStaff::getBottomLineHeight() const
+{
+    if (m_view->isDrumMode()) {
+	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
+	if (km) {
+	    const Rosegarden::MidiKeyMapping::KeyNameMap &map = km->getMap();
+	    Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator mi = map.begin();
+	    if (mi != map.end()) return mi->first;
+	}
+    }
+    return 0;
+}
+
+int MatrixStaff::getHeightPerLine() const
+{
+    return 1;
+}
+
+bool MatrixStaff::elementsInSpaces() const
+{
+    return true;
+}
+
+bool MatrixStaff::showBeatLines() const
+{
+    return true;
+}
 
 bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 {
