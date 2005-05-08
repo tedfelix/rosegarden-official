@@ -13,6 +13,15 @@ def exists(env):
 def generate(env):
 	import SCons.Util, os
 
+	env.Help("""
+"""+BOLD+
+"""*** Sound options ***
+-----------------------"""+NORMAL+"""
+"""+BOLD+"""* noalsa  """+NORMAL+""": disable alsa
+"""+BOLD+"""* nojack """+NORMAL+""": disable jack
+ie: """+BOLD+"""scons configure noalsa=1 nojack=1
+"""+NORMAL)
+
 	def Check_pkg_config(context, version):
 		context.Message('Checking for pkg-config ... ')
 		pkg_config_command = 'pkg-config'
@@ -41,7 +50,8 @@ def generate(env):
 
 	# load the options
 	from SCons.Options import Options, PathOption
-	opts = Options('sound.cache.py')
+	cachefile = env['CACHEDIR']+'/sound.cache.py'
+	opts = Options(cachefile)
 	opts.AddOptions(
 		( 'ISCONFIGURED', 'debug level for the project : full or just anything' ),
 		( 'SOUND_CCFLAGS', 'additional compilation flags' ),
@@ -64,8 +74,18 @@ def generate(env):
 
 		os.popen(">config.h")
 
-		haveAlsa    = conf.Check_package('alsa','1.0')
-		haveJack    = conf.Check_package('jack', '0.77')
+		if 'noalsa' in env['TARGS']:
+			print "-> Alsa module disabled by user"
+			haveAlsa    = 0
+		else:
+			haveAlsa    = conf.Check_package('alsa','1.0')
+
+		if 'nojack' in env['TARGS']:
+			print "-> Jack module disabled by user"
+			haveJack    = 0
+		else:
+			haveJack    = conf.Check_package('jack', '0.77')
+
 		haveLadspa  = conf.CheckHeader('ladspa.h')
 		haveLiblrdf = conf.CheckLibWithHeader('lrdf', ['stdio.h', 'lrdf.h'], 'C', 'lrdf_init();')
 		haveLiblo   = conf.Check_package('liblo', '0.7')
@@ -77,25 +97,33 @@ def generate(env):
 
 		if haveAlsa:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_ALSA')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_ALSA')
 		if haveJack:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBJACK')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBJACK')
 		if haveLadspa:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LADSPA')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_LADSPA')
 		if haveLiblo:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLO')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBLO')
 		if haveLibmad:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBMAD')
 		if haveLiblrdf:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLRDF')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBLRDF')
 			env.AppendUnique(SOUND_LDFLAGS = '-llrdf')
 		if haveLibdssi:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_DSSI')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_DSSI')
 		if haveXft:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_XFT')
+			env.Append(SOUND_CXXFLAGS = '-DHAVE_XFT')
 			env.AppendUnique(SOUND_LDFLAGS = '-lXft')
 
 		env['ISCONFIGURED'] = 1
-		opts.Save('sound.cache.py', env)
+		opts.Save(cachefile, env)
 
 	if env.has_key('SOUND_CCFLAGS'):
 		env.AppendUnique(CCFLAGS = env['SOUND_CCFLAGS'] )

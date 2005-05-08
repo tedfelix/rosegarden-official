@@ -81,6 +81,9 @@ William <rosegarden4c AT orthoset.com>
 Liu Songhe <jackliu9999 AT msn.com>
     * Simplified Chinese translation
 
+Thomas Nagy <tnagy256@yahoo.fr>
+    * SCons/bksys building system
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
