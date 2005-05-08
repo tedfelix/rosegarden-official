@@ -1263,7 +1263,7 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
         QRect textRect(r);
         textRect.setX(textRect.x() + 3);
         QRect textBoundingRect = p->boundingRect(textRect, Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
-        p->fillRect(textBoundingRect, white);
+        p->fillRect(textBoundingRect & r, white);
         p->drawText(textRect, Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
         p->restore();
     }
