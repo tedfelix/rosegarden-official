@@ -165,7 +165,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 	examples="""
 	gui/testfiles/glazunov.rg
 	gui/testfiles/notation-for-string-orchestra-in-D-minor.rg
-	gui/testfiles/navel-pc-gmaj-adagio.rg
+	gui/testfiles/ravel-pc-gmaj-adagio.rg
 	gui/testfiles/perfect-moment.rg
 	gui/testfiles/bogus-surf-jam.rg
 	gui/testfiles/the-rose-garden.rg
@@ -187,7 +187,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 	env.KDEinstall('KDEDATA', '/rosegarden/library', glob.glob("gui/library/*.rgd"))
 
 	# rosegarden-project-package script
-	env.KDEinstall('KDEBIN', "gui/rosegarden-project-package" )
+	env.KDEinstall('KDEBIN', '', "gui/rosegarden-project-package" )
 
 
 	# version.txt file
