@@ -77,23 +77,22 @@ def generate(env):
 
 		if haveAlsa:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_ALSA')
-			#os.popen('echo "#define HAVE_ALSA">>config.h')
 		if haveJack:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBJACK')
-			#os.popen('echo "#define HAVE_LIBJACK">>config.h')
 		if haveLadspa:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LADSPA')
-			#os.popen('echo "#define HAVE_LADSPA">>config.h')
 		if haveLiblo:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLO')
-			#os.popen('echo "#define HAVE_LIBLO">>config.h')
 		if haveLibmad:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
-			#os.popen('echo "#define HAVE_LIBMAD">>config.h')
 		if haveLiblrdf:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLRDF')
 			env.AppendUnique(SOUND_LDFLAGS = '-llrdf')
-			#os.popen('echo "#define HAVE_LIBLRDF">>config.h')
+		if haveLibdssi:
+			env.Append(SOUND_CCFLAGS = '-DHAVE_DSSI')
+		if haveXft:
+			env.Append(SOUND_CCFLAGS = '-DHAVE_XFT')
+			env.AppendUnique(SOUND_LDFLAGS = '-lXft')
 
 		env['ISCONFIGURED'] = 1
 		opts.Save('sound.cache.py', env)
