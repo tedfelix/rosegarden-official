@@ -51,7 +51,7 @@ env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS,
 ## Exit if configuration requested (scons configure)
 if 'configure' in COMMAND_LINE_TARGETS:
 	env.Exit(0)
-#env.AppendUnique( ENV = os.environ )
+env.AppendUnique( ENV = os.environ )
 env.AppendUnique( ENV = {'PATH' : os.environ['PATH'], 'HOME' : os.environ['HOME']} )
 
 ## Use this to set rpath - this may cause trouble if folders are moved (chrpath)
