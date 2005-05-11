@@ -960,6 +960,16 @@ AlsaDriver::addDevice(Device::DeviceType type,
 void
 AlsaDriver::removeDevice(DeviceId id)
 {
+    DeviceIntMap::iterator i1 = m_outputPorts.find(id);
+    if (i1 == m_outputPorts.end()) {
+	std::cerr << "WARNING: AlsaDriver::removeDevice: Cannot find device "
+		  << id << " in port map" << std::endl;
+	return;
+    }
+    checkAlsaError( snd_seq_delete_port(m_midiHandle, i1->second),
+		    "removeDevice");
+    m_outputPorts.erase(i1);
+	
     for (MappedDeviceList::iterator i = m_devices.end();
 	 i != m_devices.begin(); ) {
 	

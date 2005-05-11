@@ -535,6 +535,11 @@ DeviceManagerDialog::slotDeletePlayDevice()
     CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
 	(m_studio, id);
     m_document->getCommandHistory()->addCommand(command);
+
+    QByteArray data;
+    QDataStream arg(data, IO_WriteOnly);
+    arg << (unsigned int)id;
+    rgapp->sequencerSend("removeDevice(unsigned int)", data);
 }
 
 void
