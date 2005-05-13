@@ -1422,7 +1422,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     if (mtcMode < 0 || mtcMode > 2) mtcMode = 0;
     m_mtcTransport->setCurrentItem(mtcMode);
 
-    label = new QLabel(i18n("Automatically connect sync output to all devices"), frame);
+    label = new QLabel(i18n("Automatically connect sync output to all devices in use"), frame);
     layout->addWidget(label, 5, 0);
     m_midiSyncAuto = new QCheckBox(frame);
     layout->addWidget(m_midiSyncAuto, 5, 1);

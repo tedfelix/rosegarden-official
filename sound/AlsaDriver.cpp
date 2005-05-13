@@ -4470,47 +4470,32 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
                     bool isCommand,
                     const std::string &data)
 {
-    MappedComposition mC;
-    MappedEvent *mE;
+    snd_seq_event_t event;
 
-    DeviceId deviceId = Device::NO_DEVICE;
-    
-    for (MappedInstrumentList::iterator i = m_instruments.begin();
-	 i != m_instruments.end(); ++i) {
+    snd_seq_ev_clear(&event);
+    snd_seq_ev_set_source(&event, m_syncOutputPort);
+    snd_seq_ev_set_subs(&event);
 
-	if ((*i)->getDevice() == deviceId) continue;
-	deviceId = (*i)->getDevice();
+    unsigned char dataArr[10] =
+	{ MIDI_SYSTEM_EXCLUSIVE,
+	  MIDI_SYSEX_RT, deviceArg,
+	  (isCommand ? MIDI_SYSEX_RT_COMMAND : MIDI_SYSEX_RT_RESPONSE),
+	  instruction };
 
-	if ((*i)->getType() != Instrument::Midi) continue;
-
-	// Create a plain SysEx
-	//
-	mE = new MappedEvent((*i)->getId(),
-			     MappedEvent::MidiSystemMessage);
-        mE->setData1(Rosegarden::MIDI_SYSTEM_EXCLUSIVE);
-
-	// Make it a RealTime SysEx
-	mE->addDataByte(MIDI_SYSEX_RT);
+    std::string dataString = std::string((const char *)dataArr) +
+	data + (char)MIDI_END_OF_EXCLUSIVE;
 	
-	// Add the destination
-	mE->addDataByte(deviceArg);
-	
-	// Add the command type
-	if (isCommand)
-	    mE->addDataByte(MIDI_SYSEX_RT_COMMAND);
-	else
-	    mE->addDataByte(MIDI_SYSEX_RT_RESPONSE);
-	
-	// Add the command
-	mE->addDataByte(instruction);
-	
-	// Add any data
-	mE->addDataString(data);
-    
-	mC.insert(mE);
+    snd_seq_ev_set_sysex(&event, dataString.length(),
+			 (char *)dataString.c_str());
+
+    event.queue = SND_SEQ_QUEUE_DIRECT;
+
+    checkAlsaError(snd_seq_event_output_direct(m_midiHandle, &event),
+		   "sendMMC event send");
+
+    if (m_queueRunning) {
+	checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendMMC drain");
     }
-
-    processMidiOut(mC, RealTime::zeroTime, RealTime::zeroTime);
 }
 
 // Send a system real-time message from the sync output port
