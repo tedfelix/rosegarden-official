@@ -62,18 +62,7 @@ int MatrixStaff::getLineCount() const
 
     if (m_view->isDrumMode()) {
 	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
-	if (km) {
-	    int minPitch, maxPitch;
-	    const Rosegarden::MidiKeyMapping::KeyNameMap &map = km->getMap();
-	    Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator mi = map.begin();
-	    if (mi != map.end()) {
-		minPitch = mi->first;
-		mi = map.end();
-		--mi;
-		maxPitch = mi->first;
-		return maxPitch - minPitch + 1;
-	    }
-	}
+	if (km) return km->getPitchExtent() + 1;
     }
     return MatrixVLayout::maxMIDIPitch + 1;
 }
@@ -87,11 +76,7 @@ int MatrixStaff::getBottomLineHeight() const
 {
     if (m_view->isDrumMode()) {
 	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
-	if (km) {
-	    const Rosegarden::MidiKeyMapping::KeyNameMap &map = km->getMap();
-	    Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator mi = map.begin();
-	    if (mi != map.end()) return mi->first;
-	}
+	if (km) return km->getPitchForOffset(0);
     }
     return 0;
 }

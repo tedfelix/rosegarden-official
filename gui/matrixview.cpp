@@ -69,6 +69,7 @@
 #include "temporuler.h"
 #include "chordnameruler.h"
 #include "pianokeyboard.h"
+#include "percussionpitchruler.h"
 #include "editcommands.h"
 #include "notationcommands.h"
 #include "qdeferscrollview.h"
@@ -181,12 +182,31 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     MATRIX_DEBUG << "MatrixView : creating canvas view\n";
 
+    const Rosegarden::MidiKeyMapping *mapping = 0;
+    
+    if (instr) {
+	mapping = instr->getKeyMapping();
+	if (mapping) {
+	    RG_DEBUG << "MatrixView: Instrument has key mapping: "
+		     << mapping->getName() << endl;
+	} else {
+	    RG_DEBUG << "MatrixView: Instrument has no key mapping" << endl;
+	}
+    }
+
     m_pianoView = new QDeferScrollView(getCentralWidget());
-    m_pianoKeyboard = new PianoKeyboard(m_pianoView->viewport());
+
+    if (isDrumMode() && instr && instr->getKeyMapping()) {
+	m_pitchRuler = new PercussionPitchRuler(m_pianoView->viewport(),
+						instr->getKeyMapping(),
+						8); // line spacing
+    } else {
+	m_pitchRuler = new PianoKeyboard(m_pianoView->viewport());
+    }
     
     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
     m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_pianoView->addChild(m_pianoKeyboard);
+    m_pianoView->addChild(m_pitchRuler);
     m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
 
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
@@ -223,15 +243,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	    SIGNAL(checkTrackAssignments()),
 	    this,
 	    SLOT(slotCheckTrackAssignments()));
-    
-    if (instr) {
-	if (instr->getKeyMapping()) {
-	    RG_DEBUG << "MatrixView: Instrument has key mapping: "
-		     << instr->getKeyMapping()->getName() << endl;
-	} else {
-	    RG_DEBUG << "MatrixView: Instrument has no key mapping" << endl;
-	}
-    }
 
     // Assign the instrument
     //
@@ -313,16 +324,16 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          this, SLOT(slotHoveredOverNoteChanged(int)));
 
     QObject::connect
-        (m_pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
-         this,            SLOT  (slotHoveredOverKeyChanged(unsigned int)));
+        (m_pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
+         this,         SLOT  (slotHoveredOverKeyChanged(unsigned int)));
 
     QObject::connect
-        (m_pianoKeyboard, SIGNAL(keyPressed(unsigned int, bool)),
-         this,            SLOT  (slotKeyPressed(unsigned int, bool)));
+        (m_pitchRuler, SIGNAL(keyPressed(unsigned int, bool)),
+         this,         SLOT  (slotKeyPressed(unsigned int, bool)));
 
     QObject::connect
-        (m_pianoKeyboard, SIGNAL(keySelected(unsigned int, bool)),
-         this,            SLOT  (slotKeySelected(unsigned int, bool)));
+        (m_pitchRuler, SIGNAL(keySelected(unsigned int, bool)),
+         this,         SLOT  (slotKeySelected(unsigned int, bool)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
@@ -377,7 +388,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     // Force height for the moment
     //
-    m_pianoKeyboard->setFixedHeight(canvas()->height());
+    m_pitchRuler->setFixedHeight(canvas()->height());
 
 
     updateViewCaption();
@@ -1333,7 +1344,7 @@ MatrixView::slotHoveredOverNoteChanged(int evPitch)
     Rosegarden::MidiPitchLabel label(evPitch);
     m_hoveredOverNoteName->setText(QString("%1 (%2)").
             arg(label.getQString()).arg(evPitch));
-    m_pianoKeyboard->drawHoverNote(evPitch);
+    m_pitchRuler->drawHoverNote(evPitch);
 }
 
 void
@@ -2123,7 +2134,7 @@ MatrixView::addPropertyViewRuler(const Rosegarden::PropertyName &property)
     addRuler(newRuler);
 
     PropertyBox *newControl = new PropertyBox(strtoqstr(property), 
-                                              m_parameterBox->width() + m_pianoKeyboard->width(),
+                                              m_parameterBox->width() + m_pitchRuler->width(),
                                               height,
                                               getCentralWidget());
 

@@ -143,6 +143,17 @@ MidiKeyMapping::operator==(const MidiKeyMapping &m) const
     return (m_map == m.m_map);
 }
 
+std::string
+MidiKeyMapping::getMapForKeyName(MidiByte pitch) const
+{
+    KeyNameMap::const_iterator i = m_map.find(pitch);
+    if (i != m_map.end()) {
+	return i->second;
+    } else {
+	return "";
+    }
+}
+
 int
 MidiKeyMapping::getOffset(MidiByte pitch) const
 {
@@ -164,6 +175,22 @@ MidiKeyMapping::getPitchForOffset(int offset) const
     if (i == m_map.end()) return -1;
     else return i->first;
 }
+
+int
+MidiKeyMapping::getPitchExtent() const
+{
+    int minPitch = 0, maxPitch = 0;
+    KeyNameMap::const_iterator mi = m_map.begin();
+    if (mi != m_map.end()) {
+	minPitch = mi->first;
+	mi = m_map.end();
+	--mi;
+	maxPitch = mi->first;
+	return maxPitch - minPitch + 1;
+    }
+    return maxPitch - minPitch;
+}
+
 	
 
 MidiMetronome::MidiMetronome(InstrumentId instrument,

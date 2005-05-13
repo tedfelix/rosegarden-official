@@ -104,7 +104,7 @@ public:
     bool                 useChannel() const { return m_useChannel; }
     const std::string   &getName() const { return m_name; }
     const KeyNameMap    &getMap() const { return m_map; }
-    const std::string   &getMapForKeyName(MidiByte pitch) { return m_map[pitch]; }
+    std::string          getMapForKeyName(MidiByte pitch) const;
     void                 setMap(const KeyNameMap &map) { m_map = map; }
     
     // Return 0 if the supplied argument is the lowest pitch in the
@@ -116,6 +116,11 @@ public:
     // are fewer than offset pitches in the mapping (or offset < 0).
     // Not instant.
     int                  getPitchForOffset(int offset) const;
+
+    // Return the difference between the top and bottom pitches
+    // contained in the map.
+    //
+    int                  getPitchExtent() const;
 
 private:
     MidiBank    m_bank;

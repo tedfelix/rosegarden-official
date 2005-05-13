@@ -51,7 +51,7 @@ namespace Rosegarden {
 class RosegardenGUIDoc;
 class MatrixStaff;
 class MatrixCanvasView;
-class PianoKeyboard;
+class PitchRuler;
 class InstrumentParameterBox;
 class KComboBox;
 template <class T> class ZoomSlider;
@@ -563,7 +563,7 @@ protected:
     KDockWidget         *m_dockLeft;
     MatrixCanvasView    *m_canvasView;
     QDeferScrollView    *m_pianoView;
-    PianoKeyboard       *m_pianoKeyboard;
+    PitchRuler          *m_pitchRuler;
 
     // The last note we sent in case we're swooshing up and
     // down the keyboard and don't want repeat notes sending

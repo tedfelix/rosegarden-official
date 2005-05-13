@@ -19,89 +19,55 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef PIANOKEYBOARD_H
-#define PIANOKEYBOARD_H
+#ifndef PERCUSSIONPITCHRULER_H
+#define PERCUSSIONPITCHRULER_H
 
 #include <vector>
 
 #include <qwidget.h>
 
 #include "pitchruler.h"
-#include "matrixstaff.h"
+#include "MidiProgram.h"
 
-class PianoKeyboard : public PitchRuler
+// basically a simpler PianoKeyboard
+
+class PercussionPitchRuler : public PitchRuler
 {
     Q_OBJECT
 public:
-    PianoKeyboard(QWidget *parent, int keys = 88);
+    PercussionPitchRuler(QWidget *parent,
+			 const Rosegarden::MidiKeyMapping *mapping,
+			 int lineSpacing);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
-    /* 
-     * We want to be able to call this from the matrix view
-     */
     void drawHoverNote(int evPitch);
 
 signals:
-
-    /**
-     * A key has been clicked on the keyboard.
-     *
-     * The repeating flag is there to tell the MatrixView not to send
-     * the same note again as we're in the middle of a swoosh.
-     * MatrixView does the y -> Note calculation.
-     */
     void keyPressed(unsigned int y, bool repeating);
-
-    /**
-     * A key has been clicked with the selection modifier pressed.
-     * The MatrixView will probably interpret this as meaning to
-     * select all notes of that pitch.
-     *
-     * The repeating flag is there to tell the MatrixView not to
-     * clear the selection as we're in the middle of a swoosh.
-     * MatrixView does the y -> Note calculation.
-     */
     void keySelected(unsigned int y, bool repeating);
-
-    /**
-     * Emitted when the mouse cursor moves to a different key when
-     * not clicking or selecting.
-     * MatrixView does the y -> Note calculation.
-     */
     void hoveredOverKeyChanged(unsigned int y);
 
 protected:
-
     virtual void paintEvent(QPaintEvent*);
-
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
     virtual void mouseReleaseEvent(QMouseEvent*);
     virtual void enterEvent(QEvent *);
     virtual void leaveEvent(QEvent *);
 
-    // compute all key positions and store them
-    //
-    void computeKeyPos();
+    const Rosegarden::MidiKeyMapping *m_mapping;
 
-    //--------------- Data members ---------------------------------
-    QSize m_keySize;
-    QSize m_blackKeySize;
-    unsigned int m_nbKeys;
-
-    std::vector<unsigned int> m_whiteKeyPos;
-    std::vector<unsigned int> m_blackKeyPos;
-    std::vector<unsigned int> m_labelKeyPos;
-    std::vector<unsigned int> m_allKeyPos;
+    int                       m_width;
+    int                       m_lineSpacing;
 
     bool                      m_mouseDown;
     bool                      m_selecting;
 
-    // highlight element on the keyboard
     QWidget                  *m_hoverHighlight;
     int                       m_lastHoverHighlight;
 };
+
 
 #endif

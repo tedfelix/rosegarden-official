@@ -232,8 +232,14 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
 
     for (SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
-	m_sourceClipboard->newSegment(*i)->setLabel((*i)->getLabel() + " " +
-						    qstrtostr(i18n("(copied)")));
+	QString newLabel = strtoqstr((*i)->getLabel());
+	if (newLabel.contains(i18n("(copied)"))) {
+	    m_sourceClipboard->newSegment(*i);
+	} else {
+	    m_sourceClipboard->newSegment(*i)->
+		setLabel(i18n("%1 (copied)").arg
+			 (strtoqstr((*i)->getLabel())));
+	}
     }
 }
 

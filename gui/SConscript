@@ -84,8 +84,10 @@ rgSources = Split("""
 	notefont.cpp 
 	notefontviewer.cpp 
 	notepixmapfactory.cpp 
-	notestyle.cpp 
-	pianokeyboard.cpp 
+	notestyle.cpp
+        percussionpitchruler.cpp
+	pianokeyboard.cpp
+        pitchruler.cpp
 	pixmapfunctions.cpp 
 	playlist.cpp
 	progressreporter.cpp

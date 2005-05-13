@@ -1,22 +1,22 @@
 // -*- c-basic-offset: 4 -*-
 
 /*
-  Rosegarden-4
-  A sequencer and musical notation editor.
+    Rosegarden-4
+    A sequencer and musical notation editor.
 
-  This program is Copyright 2000-2005
-  Guillaume Laurent   <glaurent@telegraph-road.org>,
-  Chris Cannam        <cannam@all-day-breakfast.com>,
-  Richard Bown        <bownie@bownie.com>
+    This program is Copyright 2000-2005
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
 
-  The moral right of the authors to claim authorship of this work
-  has been asserted.
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #include <qpainter.h>
@@ -25,92 +25,48 @@
 #include <klocale.h>
 #include <iostream>
 
-#include "pianokeyboard.h"
+#include "percussionpitchruler.h"
 #include "midipitchlabel.h"
 #include "colours.h"
 #include "rosedebug.h"
 #include "matrixview.h"
+#include "rosestrings.h"
 
-const unsigned int _smallWhiteKeyHeight = 14;
-const unsigned int _whiteKeyHeight = 18;
-    
-PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
-    : PitchRuler(parent),
-      m_keySize(48, 18),
-      m_blackKeySize(24, 8),
-      m_nbKeys(keys),
-      m_mouseDown(false),
-      m_hoverHighlight(new QWidget(this)),
-      m_lastHoverHighlight(0)
+using Rosegarden::MidiKeyMapping;
+
+PercussionPitchRuler::PercussionPitchRuler(QWidget *parent, 
+					   const MidiKeyMapping *mapping,
+					   int lineSpacing) :
+    PitchRuler(parent),
+    m_mapping(mapping),
+    m_width(50),
+    m_lineSpacing(lineSpacing),
+    m_mouseDown(false),
+    m_hoverHighlight(new QWidget(this)),
+    m_lastHoverHighlight(0)
 {
     m_hoverHighlight->hide();
-    m_hoverHighlight->setPaletteBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::MatrixKeyboardFocus));
+    m_hoverHighlight->setPaletteBackgroundColor
+	(Rosegarden::GUIPalette::getColour
+	 (Rosegarden::GUIPalette::MatrixKeyboardFocus));
 
     setPaletteBackgroundColor(QColor(238, 238, 224));
 
-    computeKeyPos();
     setMouseTracking(true);
 }
 
-QSize PianoKeyboard::sizeHint() const
+QSize PercussionPitchRuler::sizeHint() const
 {
-    return QSize(m_keySize.width(),
-                 m_keySize.height() * m_nbKeys);
+    return QSize(m_width,
+		 (m_lineSpacing + 1) * m_mapping->getPitchExtent());
 }
 
-QSize PianoKeyboard::minimumSizeHint() const
+QSize PercussionPitchRuler::minimumSizeHint() const
 {
-    return m_keySize;
+    return QSize(m_width, m_lineSpacing + 1);
 }
 
-void PianoKeyboard::computeKeyPos()
-{
-    int y = -9;
-
-    unsigned int posInOctave = 0,
-        keyHeight = _smallWhiteKeyHeight;
-
-    for(unsigned int i = 0; i < m_nbKeys; ++i) {
-        posInOctave = (i+5) % 7;
-
-        if (y >= 0)
-        {
-            m_whiteKeyPos.push_back(y);
-            m_allKeyPos.push_back(y);
-        }
-
-        if (posInOctave == 2)
-            m_labelKeyPos.push_back(y + (keyHeight * 3/4) - 2);
-
-        if (posInOctave == 0 ||
-            posInOctave == 2 ||
-            posInOctave == 6 ||
-            posInOctave == 3) { // draw shorter white key
-
-
-            keyHeight = _smallWhiteKeyHeight;
-
-            if (posInOctave == 2 ||
-                posInOctave == 6) --keyHeight;
-            
-        } else {
-
-            keyHeight = _whiteKeyHeight;        }
-
-        if (posInOctave != 2 && posInOctave != 6) { // draw black key
-
-            unsigned int bY = y + keyHeight - m_blackKeySize.height() / 2;
-
-            m_blackKeyPos.push_back(bY);
-            m_allKeyPos.push_back(bY);
-
-        }
-
-        y += keyHeight;
-    }
-}
-
-void PianoKeyboard::paintEvent(QPaintEvent*)
+void PercussionPitchRuler::paintEvent(QPaintEvent*)
 {
     static QFont pFont("helvetica", 8);
 
@@ -118,48 +74,41 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
     paint.setFont(pFont);
 
-    for(unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
-        paint.drawLine(0, m_whiteKeyPos[i],
-                       m_keySize.width(), m_whiteKeyPos[i]);
+    int minPitch = m_mapping->getPitchForOffset(0);
+    int extent = m_mapping->getPitchExtent();
 
-    for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i) {
-
-	int pitch = (m_labelKeyPos.size() - i) * 12;
-
-	// for some reason I don't immediately comprehend,
-	// m_labelKeyPos contains two more octaves than we need
-	pitch -= 24;
-
-	Rosegarden::MidiPitchLabel label(pitch);
-        paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-		       label.getQString());
+    for (int i = 0; i < extent; ++i) {
+	paint.drawLine(0,       i * (m_lineSpacing + 1),
+		       m_width, i * (m_lineSpacing + 1));
     }
 
-    paint.setBrush(colorGroup().foreground());
+    for (int i = 0; i < extent; ++i) {
 
-    for(unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
-        paint.drawRect(0, m_blackKeyPos[i],
-                       m_blackKeySize.width(), m_blackKeySize.height());
+	Rosegarden::MidiPitchLabel label(minPitch + i);
+	std::string key = m_mapping->getMapForKeyName(minPitch + i);
+
+        paint.drawText(0, (extent - i - 1) * (m_lineSpacing + 1),
+		       QString("%1: %2")
+		       .arg(label.getQString())
+		       .arg(strtoqstr(key)));
+    }
 }
 
-void PianoKeyboard::enterEvent(QEvent *)
+void PercussionPitchRuler::enterEvent(QEvent *)
 {
-    //drawHoverNote(e->y());
 }
 
-
-void PianoKeyboard::leaveEvent(QEvent*)
+void PercussionPitchRuler::leaveEvent(QEvent*)
 {
     m_hoverHighlight->hide();
 }
 
-void PianoKeyboard::drawHoverNote(int evPitch)
+void PercussionPitchRuler::drawHoverNote(int evPitch)
 {
-   if (m_lastHoverHighlight != evPitch)
+    if (m_lastHoverHighlight != evPitch)
     {
-        //MATRIX_DEBUG << "PianoKeyboard::drawHoverNote : note = " << evPitch << endl;
         m_lastHoverHighlight = evPitch;
-
+/*!!!
         int count = 0;
         std::vector<unsigned int>::iterator it;
         for (it = m_allKeyPos.begin(); it != m_allKeyPos.end(); ++it, ++count)
@@ -226,11 +175,11 @@ void PianoKeyboard::drawHoverNote(int evPitch)
             }
         }
     }
-
-
+*/
+    }
 }
 
-void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
+void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 {
     // The routine to work out where this should appear doesn't coincide with the note
     // that we send to the sequencer - hence this is a bit pointless and crap at the moment.
@@ -238,6 +187,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
     //
     // RWB (20040220)
     //
+/*!!!
     MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
     if (matrixView)
     {
@@ -256,9 +206,10 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 	    emit keyPressed(e->y(), true); // we're swooshing
     else
         emit hoveredOverKeyChanged(e->y());
+*/
 }
 
-void PianoKeyboard::mousePressEvent(QMouseEvent *e)
+void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
@@ -274,7 +225,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
+void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == LeftButton)
     {
@@ -283,4 +234,5 @@ void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-#include "pianokeyboard.moc"
+#include "percussionpitchruler.moc"
+
