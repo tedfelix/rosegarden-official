@@ -1338,7 +1338,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     //  -------------- Synchronisation tab -----------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 5, 2, 10, 5);
+    layout = new QGridLayout(frame, 7, 2, 10, 5);
 
     // Timer selection
     // 
@@ -1360,9 +1360,9 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // MIDI Clock
     //
     label = new QLabel(i18n("Send MIDI Clock and System messages"), frame);
-    layout->addWidget(label, 1, 0);
+    layout->addWidget(label, 2, 0);
     m_midiClockEnabled = new QCheckBox(frame);
-    layout->addWidget(m_midiClockEnabled, 1, 1);
+    layout->addWidget(m_midiClockEnabled, 2, 1);
 
     bool midiClock = m_cfg->readBoolEntry("midiclock", false);
     m_midiClockEnabled->setChecked(midiClock);
@@ -1370,60 +1370,45 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // JACK Transport
     //
     label = new QLabel(i18n("JACK transport mode"), frame);
-    layout->addWidget(label, 2, 0);
+    layout->addWidget(label, 1, 0);
 
     m_jackTransport = new KComboBox(frame);
-    layout->addWidget(m_jackTransport, 2, 1); //, Qt::AlignHCenter);
+    layout->addWidget(m_jackTransport, 1, 1);
 
     m_jackTransport->insertItem(i18n("Ignore JACK transport"));
     m_jackTransport->insertItem(i18n("Sync"));
+
 /*!!! Removed as not yet implemented
     m_jackTransport->insertItem(i18n("Sync, and offer timebase master"));
 */
 
     bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
     bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
-/*!!!
-    if (jackMaster && jackTransport)
-        m_jackTransport->setCurrentItem(2);
-    else 
-    {
-*/
-        if (jackTransport)
-            m_jackTransport->setCurrentItem(1);
-        else
-            m_jackTransport->setCurrentItem(0);
-//!!!    }
 
-    /*
+    if (jackTransport)
+	m_jackTransport->setCurrentItem(1);
+    else
+	m_jackTransport->setCurrentItem(0);
+
     // MMC Transport
     //
-    label = new QLabel(i18n("MMC transport mode"), frame);
+    label = new QLabel(i18n("MIDI Machine Control mode"), frame);
     layout->addWidget(label, 3, 0);
     
     m_mmcTransport = new KComboBox(frame);
     layout->addWidget(m_mmcTransport, 3, 1); //, Qt::AlignHCenter);
 
     m_mmcTransport->insertItem(i18n("Off"));
-    m_mmcTransport->insertItem(i18n("MMC Slave"));
     m_mmcTransport->insertItem(i18n("MMC Master"));
+    m_mmcTransport->insertItem(i18n("MMC Slave"));
 
-    bool mmcMaster = m_cfg->readBoolEntry("mmcmaster", false);
-    bool mmcTransport = m_cfg->readBoolEntry("mmctransport", false);
-
-    if (mmcMaster && mmcTransport)
-        m_mmcTransport->setCurrentItem(2);
-    else
-    {
-        if (mmcTransport)
-            m_mmcTransport->setCurrentItem(1);
-        else
-            m_mmcTransport->setCurrentItem(0);
-    }
+    int mmcMode = m_cfg->readNumEntry("mmcmode", 0);
+    if (mmcMode < 0 || mmcMode > 2) mmcMode = 0;
+    m_mmcTransport->setCurrentItem(mmcMode);
 
     // MTC transport (send only for the moment)
     //
-    label = new QLabel(i18n("MTC send"), frame);
+    label = new QLabel(i18n("MIDI Time Code mode"), frame);
     layout->addWidget(label, 4, 0);
 
     m_mtcTransport = new KComboBox(frame);
@@ -1431,11 +1416,18 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     m_mtcTransport->insertItem(i18n("Off"));
     m_mtcTransport->insertItem(i18n("MTC Master"));
+    m_mtcTransport->insertItem(i18n("MTC Slave"));
 
-    bool mtcMaster = m_cfg->readBoolEntry("mtcmaster", false);
+    int mtcMode = m_cfg->readNumEntry("mtcmode", 0);
+    if (mtcMode < 0 || mtcMode > 2) mtcMode = 0;
+    m_mtcTransport->setCurrentItem(mtcMode);
 
-    if (mtcMaster) m_mtcTransport->setCurrentItem(1);
-    */
+    label = new QLabel(i18n("Automatically connect sync output to all devices"), frame);
+    layout->addWidget(label, 5, 0);
+    m_midiSyncAuto = new QCheckBox(frame);
+    layout->addWidget(m_midiSyncAuto, 5, 1);
+
+    m_midiSyncAuto->setChecked(m_cfg->readBoolEntry("midisyncautoconnect", true));
 
     addTab(frame, i18n("Synchronisation"));
 }
@@ -1703,52 +1695,32 @@ SequencerConfigurationPage::apply()
     Rosegarden::StudioControl::sendMappedEvent(mEjackValue);
 #endif // HAVE_LIBJACK
 
-	/*
-    // Now write the MMC entry
-    //
-    bool mmcTransport, mmcMaster;
-    int mmcValue = m_mmcTransport->currentItem();
-
-    switch(mmcValue)
-    {
-        case 2:
-            mmcTransport = true;
-            mmcMaster = true;
-            break;
-
-        case 1:
-            mmcTransport = true;
-            mmcMaster = false;
-            break;
-
-        default:
-            mmcValue = 0;
-
-        case 0:
-            mmcTransport = false;
-            mmcMaster = false;
-            break;
-
-    }
-
-    bool mtcMaster = false;
-    if (m_mtcTransport->currentItem() == 1) mtcMaster = true;
-
     // Write the entries
     //
-    m_cfg->writeEntry("mmctransport", mmcTransport);
-    m_cfg->writeEntry("mmcmaster", mmcMaster);
-    m_cfg->writeEntry("mtcmaster", mtcMaster);
-    
+    m_cfg->writeEntry("mmcmode", m_mmcTransport->currentItem());
+    m_cfg->writeEntry("mtcmode", m_mtcTransport->currentItem());
+    m_cfg->writeEntry("midisyncautoconnect", m_midiSyncAuto->isChecked());
 
-    // Now send it
+    // Now send
     //
     Rosegarden::MappedEvent mEmccValue(Rosegarden::MidiInstrumentBase, // InstrumentId
                                        Rosegarden::MappedEvent::SystemMMCTransport,
-                                       Rosegarden::MidiByte(mmcValue));
+                                       Rosegarden::MidiByte(m_mmcTransport->currentItem()));
 
     Rosegarden::StudioControl::sendMappedEvent(mEmccValue);
-	*/
+
+    Rosegarden::MappedEvent mEmtcValue(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                       Rosegarden::MappedEvent::SystemMTCTransport,
+                                       Rosegarden::MidiByte(m_mtcTransport->currentItem()));
+
+    Rosegarden::StudioControl::sendMappedEvent(mEmtcValue);
+
+    Rosegarden::MappedEvent mEmsaValue(Rosegarden::MidiInstrumentBase, // InstrumentId
+                                       Rosegarden::MappedEvent::SystemMIDISyncAuto,
+                                       Rosegarden::MidiByte(m_midiSyncAuto->isChecked() ? 1 : 0));
+
+    Rosegarden::StudioControl::sendMappedEvent(mEmsaValue);
+
 
     // ------------- MIDI Clock and System messages ------------
     //
@@ -1756,6 +1728,7 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)
+    //!!! No, don't remove -- this controls SPP as well doesn't it?
     //
     Rosegarden::MappedEvent mEMIDIClock(Rosegarden::MidiInstrumentBase, // InstrumentId
                                         Rosegarden::MappedEvent::SystemMIDIClock,

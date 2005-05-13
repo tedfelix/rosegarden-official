@@ -54,6 +54,11 @@ public:
     virtual TransportToken transportJump(TransportRequest, RealTime) = 0;
 
     virtual bool isTransportSyncComplete(TransportToken token) = 0;
+
+    // The value returned here is a constant (within the context of a
+    // particular ExternalTransport object) that is guaranteed never
+    // to be returned by any of the transport request methods.
+    virtual TransportToken getInvalidTransportToken() const = 0;
 };
 
 }

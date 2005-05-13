@@ -151,7 +151,12 @@ public:
         Tempo                    = 1 << 23,
         
         // Panic function
-        Panic			 = 1 << 24
+        Panic			 = 1 << 24,
+
+        // Set RG as MTC master/slave
+        SystemMTCTransport       = 1 << 25,
+        // Auto-connect sync outputs
+        SystemMIDISyncAuto       = 1 << 26
 
     } MappedEventType;
 
@@ -186,6 +191,8 @@ public:
         FailureJackRestart       = 8,
         // JACK kicked us out, and now the reconnection has failed
         FailureJackRestartFailed = 9,
+	// A necessary ALSA call has returned an error code
+	FailureALSACallFailed    = 10,
     } FailureCode;	
 
     MappedEvent(): m_trackId(0),

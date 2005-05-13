@@ -406,6 +406,7 @@ public:
     TransportToken transportChange(TransportRequest);
     TransportToken transportJump(TransportRequest, Rosegarden::RealTime);
     bool isTransportSyncComplete(TransportToken token);
+    TransportToken getInvalidTransportToken() const { return 0; }
 
 public slots:
 

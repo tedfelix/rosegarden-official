@@ -70,7 +70,7 @@ RosegardenSequencerApp::RosegardenSequencerApp() :
     m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").last()),
     m_metaIterator(0),
     m_controlBlockMmapper(0),
-    m_transportToken(0),
+    m_transportToken(1),
     m_isEndOfCompReached(false)
 {
     SEQUENCER_DEBUG << "Registering with DCOP server" << endl;

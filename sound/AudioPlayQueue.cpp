@@ -24,7 +24,7 @@
 #include "PlayableAudioFile.h"
 #include "Profiler.h"
 
-//#define DEBUG_AUDIO_PLAY_QUEUE 1
+#define DEBUG_AUDIO_PLAY_QUEUE 1
 //#define FINE_DEBUG_AUDIO_PLAY_QUEUE 1
 
 namespace Rosegarden {

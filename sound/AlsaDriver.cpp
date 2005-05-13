@@ -51,6 +51,7 @@
 
 //#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
+//#define MTC_DEBUG 1
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
@@ -73,12 +74,14 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio, std::string("alsa-lib version ") +
                         std::string(SND_LIB_VERSION_STR)),
     m_client(-1),
-    m_inputport(-1),
+    m_inputPort(-1),
+    m_syncOutputPort(-1),
     m_queue(-1),
     m_maxClients(-1),
     m_maxPorts(-1),
     m_maxQueues(-1),
     m_midiInputPortConnected(false),
+    m_midiSyncAutoConnect(true),
     m_alsaPlayStartTime(0, 0),
     m_alsaRecordStartTime(0, 0),
     m_loopStartTime(0, 0),
@@ -185,19 +188,19 @@ AlsaDriver::getSystemInfo()
 
     snd_seq_system_info_alloca(&sysinfo);
 
-    if ((err = snd_seq_system_info(m_midiHandle, sysinfo)) < 0)
-    {
-#ifdef DEBUG_ALSA
+    if ((err = snd_seq_system_info(m_midiHandle, sysinfo)) < 0) {
         std::cerr << "System info error: " <<  snd_strerror(err)
                   << std::endl;
-#endif
-        exit(EXIT_FAILURE);
+	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
+	m_maxQueues = 0;
+	m_maxClients = 0;
+	m_maxPorts = 0;
+	return;
     }
 
     m_maxQueues = snd_seq_system_info_get_queues(sysinfo); 
     m_maxClients = snd_seq_system_info_get_clients(sysinfo);
     m_maxPorts = snd_seq_system_info_get_ports(sysinfo);
-
 }
 
 void
@@ -212,16 +215,16 @@ AlsaDriver::showQueueStatus(int queue)
 
     for (idx = min; idx < max; ++idx)
     {
-        if ((err = snd_seq_get_queue_status(m_midiHandle, idx, status))<0)
-        {
+        if ((err = snd_seq_get_queue_status(m_midiHandle, idx, status))<0) {
+
             if (err == -ENOENT)
                 continue;
 
-#ifdef DEBUG_ALSA
             std::cerr << "Client " << idx << " info error: "
                       << snd_strerror(err) << std::endl;
-#endif
-            exit(EXIT_FAILURE);
+
+	    reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
+	    return;
         }
 
 #ifdef DEBUG_ALSA
@@ -871,6 +874,12 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 				   outputPort,
 				   port->m_client,
 				   port->m_port);
+		if (m_midiSyncAutoConnect) {
+		    snd_seq_connect_to(m_midiHandle,
+				       m_syncOutputPort,
+				       port->m_client,
+				       port->m_port);
+		}
 		std::cerr << "done" << std::endl;
 	    }
 	}
@@ -1136,6 +1145,25 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 					  j->second,
 					  prevPair.first,
 					  prevPair.second);
+
+		    if (m_midiSyncAutoConnect) {
+			bool foundElsewhere = false;
+			for (MappedDeviceList::iterator k = m_devices.begin();
+			     k != m_devices.end(); ++k) {
+			    if ((*k)->getId() != device.getId()) {
+				if ((*k)->getConnection() == prevConnection) {
+				    foundElsewhere = true;
+				    break;
+				}
+			    }
+			}
+			if (!foundElsewhere) {
+			    snd_seq_disconnect_to(m_midiHandle,
+						  m_syncOutputPort,
+						  pair.first,
+						  pair.second);
+			}			
+		    }
 		}
 	    }
 
@@ -1145,6 +1173,12 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 				   j->second,
 				   pair.first,
 				   pair.second);
+		if (m_midiSyncAutoConnect) {
+		    snd_seq_connect_to(m_midiHandle,
+				       m_syncOutputPort,
+				       pair.first,
+				       pair.second);
+		}
 	    }
 	}
     }
@@ -1283,7 +1317,8 @@ AlsaDriver::checkTimerSync(size_t frames)
     if (!m_doTimerChecks) return;
 
 #ifdef HAVE_LIBJACK
-    if (!m_jackDriver || !m_queueRunning || frames == 0) {
+    if (!m_jackDriver || !m_queueRunning || frames == 0 ||
+	(getMTCStatus() == TRANSPORT_SLAVE)) {
 	m_firstTimerCheck = true;
 	return;
     }
@@ -1483,12 +1518,12 @@ AlsaDriver::initialiseMidi()
     if (snd_seq_open(&m_midiHandle,
                      "default",
                      SND_SEQ_OPEN_DUPLEX,
-                     SND_SEQ_NONBLOCK) < 0)
-    {
+                     SND_SEQ_NONBLOCK) < 0) {
         audit << "AlsaDriver::initialiseMidi - "
                   << "couldn't open sequencer - " << snd_strerror(errno)
                   << std::endl;
-        exit(EXIT_FAILURE);
+	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
+	return;
     }
 
     snd_seq_set_client_name(m_midiHandle, "rosegarden");
@@ -1502,13 +1537,10 @@ AlsaDriver::initialiseMidi()
         return;
     }
 
-    generatePortList();
-    generateInstruments();
-
     // Create a queue
     //
-    if((m_queue = snd_seq_alloc_named_queue(m_midiHandle,
-                                                "Rosegarden queue")) < 0)
+    if ((m_queue = snd_seq_alloc_named_queue(m_midiHandle,
+					     "Rosegarden queue")) < 0)
     {
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
@@ -1532,18 +1564,19 @@ AlsaDriver::initialiseMidi()
     snd_seq_port_info_set_timestamp_real(pinfo, 1);
     snd_seq_port_info_set_timestamp_queue(pinfo, m_queue);
     snd_seq_port_info_set_name(pinfo, "record in");
+
     if (checkAlsaError(snd_seq_create_port(m_midiHandle, pinfo), 
                        "initialiseMidi - can't create input port") < 0)
         return;
-    m_inputport = snd_seq_port_info_get_port(pinfo);
+    m_inputPort = snd_seq_port_info_get_port(pinfo);
 
     // Subscribe the input port to the ALSA Announce port
     // to receive notifications when clients, ports and subscriptions change
-    snd_seq_connect_from( m_midiHandle, m_inputport, 
+    snd_seq_connect_from( m_midiHandle, m_inputPort, 
 			  SND_SEQ_CLIENT_SYSTEM, SND_SEQ_PORT_SYSTEM_ANNOUNCE );
     
     m_midiInputPortConnected = true;
-    
+
     // Set the input queue size
     //
     if (snd_seq_set_client_pool_output(m_midiHandle, 2000) < 0 ||
@@ -1558,7 +1591,19 @@ AlsaDriver::initialiseMidi()
         return;
     }
 
+    // Create sync output now as well
+    m_syncOutputPort = checkAlsaError(snd_seq_create_simple_port
+				      (m_midiHandle,
+				       "sync out",
+				       SND_SEQ_PORT_CAP_READ |
+				       SND_SEQ_PORT_CAP_SUBS_READ,
+				       SND_SEQ_PORT_TYPE_APPLICATION), 
+				      "initialiseMidi - can't create sync output port");
+
     getSystemInfo();
+
+    generatePortList();
+    generateInstruments();
 
     // Modify status with MIDI success
     //
@@ -1569,9 +1614,9 @@ AlsaDriver::initialiseMidi()
 
     // Start the timer
     if (checkAlsaError(snd_seq_start_queue(m_midiHandle, m_queue, NULL), 
-                       "initialiseMidi(): couldn't start queue") < 0)
-    {
-        exit(EXIT_FAILURE);
+                       "initialiseMidi(): couldn't start queue") < 0) {
+	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
+	return;
     }
 
     m_queueRunning = true;
@@ -1615,10 +1660,17 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     m_startPlayback = true;
 
-//!!!
-#ifdef HAVE_LIBJACK
-//    m_jackDriver->prebufferAudio();
-#endif
+    m_mtcFirstTime = -1;
+    m_mtcSigmaE = 0;
+    m_mtcSigmaC = 0;
+
+    if (getMMCStatus() == TRANSPORT_MASTER) {
+        sendMMC(127, MIDI_MMC_PLAY, true, "");
+    }
+
+    if (getMTCStatus() == TRANSPORT_MASTER) {
+	insertMTCFullFrame(position);
+    }
 }
 
 
@@ -1628,6 +1680,11 @@ AlsaDriver::stopPlayback()
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver - stopPlayback" << std::endl;
 #endif
+
+    if (getMMCStatus() == TRANSPORT_MASTER)
+    {
+        sendMMC(127, MIDI_MMC_STOP, true, "");
+    }
 
     allNotesOff();
     m_playing = false;
@@ -1731,7 +1788,12 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
     snd_seq_remove_events(m_midiHandle, info);
 
-
+    if (getMTCStatus() == TRANSPORT_MASTER) {
+	m_mtcFirstTime = -1;
+	m_mtcSigmaE = 0;
+	m_mtcSigmaC = 0;
+	insertMTCFullFrame(position);
+    }
 }
 
 void 
@@ -2160,7 +2222,10 @@ AlsaDriver::getMappedComposition()
                break;
 
             case SND_SEQ_EVENT_SYSEX:
-               {
+
+		if (!testForMTCSysex(event) &&
+		    !testForMMCSysex(event)) {
+
                    // Bundle up the data into a block on the MappedEvent
                    //
                    std::string data;
@@ -2169,11 +2234,18 @@ AlsaDriver::getMappedComposition()
                        data += *(ptr++);
 
 #ifdef DEBUG_ALSA
-                   if ((MidiByte)(data[0]) == MIDI_SYSEX_RT)
+                   if ((MidiByte)(data[1]) == MIDI_SYSEX_RT)
                    {
                        std::cerr << "REALTIME SYSEX" << endl;
                    }
 #endif
+                   if ((MidiByte)(data[1]) == MIDI_SYSEX_RT)
+                   {
+                       std::cerr << "REALTIME SYSEX" << endl;
+                       for (int ii = 0; ii < data.length(); ++ii) {
+                           printf("B %d = %02x\n", ii, data[ii]);
+                       }
+                   }
 
                    MappedEvent *mE = new MappedEvent();
                    mE->setType(MappedEvent::MidiSystemMessage);
@@ -2189,13 +2261,18 @@ AlsaDriver::getMappedComposition()
 
 
             case SND_SEQ_EVENT_SENSING: // MIDI device is still there
-               break;
+		break;
+
+            case SND_SEQ_EVENT_QFRAME:
+		if (getMTCStatus() == TRANSPORT_SLAVE) {
+		    handleMTCQFrame(event->data.control.value, eventTime);
+		}
+		break;
 
             case SND_SEQ_EVENT_CLOCK:
-               /*
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got realtime MIDI clock" << std::endl;
-                         */
+
                break;
 
             case SND_SEQ_EVENT_START:
@@ -2256,9 +2333,527 @@ AlsaDriver::getMappedComposition()
         }
     }
 
+    if (getMTCStatus() == TRANSPORT_SLAVE && isPlaying()) {
+#ifdef MTC_DEBUG
+	std::cerr << "seq time is " << getSequencerTime() << ", last MTC receive "
+		  << m_mtcLastReceive << ", first time " << m_mtcFirstTime << std::endl;
+#endif
+	if (m_mtcFirstTime == 0) { // have received _some_ MTC quarter-frame info
+	    RealTime seqTime = getSequencerTime();
+	    if (m_mtcLastReceive < seqTime &&
+		seqTime - m_mtcLastReceive > RealTime(0, 500000000L)) {
+		ExternalTransport *transport = getExternalTransportControl();
+		if (transport) {
+		    transport->transportJump(ExternalTransport::TransportStopAtTime,
+					     m_mtcLastEncoded);
+		}
+	    }
+	}
+    }
+
     return &m_recordComposition;
 }
+
+static int lock_count = 0;
+
+void
+AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
+{
+    if (getMTCStatus() != TRANSPORT_SLAVE) return;
     
+    switch(data_byte & 0xF0)
+    {
+        /* Frame */
+        case 0x00:
+            /*
+             * Reset everything
+             */
+	    m_mtcReceiveTime = the_time;
+            m_mtcFrames = data_byte & 0x0f;
+            m_mtcSeconds = 0;
+            m_mtcMinutes = 0;
+            m_mtcHours = 0;
+            m_mtcSMPTEType = 0;
+
+            break;
+            
+        case 0x10:
+            m_mtcFrames |= (data_byte & 0x0f) << 4;
+            break;
+            
+        /* Seconds */
+        case 0x20:
+            m_mtcSeconds = data_byte & 0x0f;
+            break;
+        case 0x30:
+            m_mtcSeconds |= (data_byte & 0x0f) << 4;
+            break;
+            
+        /* Minutes */
+        case 0x40:
+            m_mtcMinutes = data_byte & 0x0f;
+            break;
+        case 0x50:
+            m_mtcMinutes |= (data_byte & 0x0f) << 4;
+            break;
+            
+        /* Hours and SMPTE type */
+        case 0x60:
+            m_mtcHours = data_byte & 0x0f;
+            break;
+
+        case 0x70:
+	{
+            m_mtcHours |= (data_byte & 0x01) << 4;
+            m_mtcSMPTEType = (data_byte & 0x06) >> 1;
+
+	    int fps = 30;
+	    if (m_mtcSMPTEType == 0) fps = 24;
+	    else if (m_mtcSMPTEType == 1) fps = 25;
+
+            /*
+             * Ok, got all the bits now
+             * (Assuming time is rolling forward)
+             */
+
+            /* correct for 2-frame lag */
+            m_mtcFrames += 2;
+            if (m_mtcFrames >= fps) {
+                m_mtcFrames -= fps;
+                if (++m_mtcSeconds == 60) {
+                    m_mtcSeconds = 0;
+                    if (++m_mtcMinutes == 60) {
+                        m_mtcMinutes = 0;
+                        ++m_mtcHours;
+                    }
+                }
+            }
+            
+#ifdef MTC_DEBUG
+            printf("RG MTC: Got a complete sequence: %02d:%02d:%02d.%02d (type %d)\n",
+                    m_mtcHours,
+                    m_mtcMinutes,
+                    m_mtcSeconds,
+                    m_mtcFrames,
+                    m_mtcSMPTEType);
+#endif
+
+            /* compute encoded time */
+            m_mtcEncodedTime.sec = m_mtcSeconds +
+		                   m_mtcMinutes * 60 +
+                                   m_mtcHours * 60 * 60;
+
+	    switch (fps) {
+	    case 24:
+		m_mtcEncodedTime.nsec = (int)
+		    ((125000000UL * (unsigned)m_mtcFrames) / (unsigned) 3);
+		break;
+	    case 25:
+		m_mtcEncodedTime.nsec = (int)
+		    (40000000UL * (unsigned)m_mtcFrames);
+		break;
+	    case 30:
+	    default:
+		m_mtcEncodedTime.nsec = (int)
+		    ((100000000UL * (unsigned)m_mtcFrames) / (unsigned) 3);
+		break;
+	    }
+
+            /*
+             * We only mess with the clock if we are playing
+             */
+            if (m_playing) {
+#ifdef MTC_DEBUG
+                std::cerr << "RG MTC: Tstamp " << m_mtcEncodedTime;
+                std::cerr << " Received @ " << m_mtcReceiveTime << endl;
+#endif
+
+                calibrateMTC();
+
+                RealTime t_diff = m_mtcEncodedTime - m_mtcReceiveTime;
+                std::cerr << "Diff: "<< t_diff << endl; 
+
+                /* -ve diff means ALSA time ahead of MTC time */
+
+                if (t_diff.sec > 0) {
+                    tweakSkewForMTC(60000);
+                }
+                else if (t_diff.sec < 0) {
+                    tweakSkewForMTC(-60000);
+                }
+                else {
+                    /* "small" diff - use adaptive technique */
+                    tweakSkewForMTC(t_diff.nsec / 1400);
+			if ((t_diff.nsec /1000000) == 0) {
+				if (++lock_count == 3) {
+            printf("Got a lock @ %02d:%02d:%02d.%02d (type %d)\n",
+                    m_mtcHours,
+                    m_mtcMinutes,
+                    m_mtcSeconds,
+                    m_mtcFrames,
+                    m_mtcSMPTEType);
+				}
+			}
+			else {
+				lock_count = 0;
+			}
+                }
+                
+            } else {
+		/* If we're not playing, we should be. */
+#ifdef MTC_DEBUG
+		std::cerr << "MTC: Received quarter frame while not playing - starting now" << std::endl;
+#endif
+		ExternalTransport *transport = getExternalTransportControl();
+		if (transport) {
+		    transport->transportJump
+			(ExternalTransport::TransportStartAtTime,
+			 m_mtcEncodedTime);
+		}
+	    }
+
+            break;
+	}
+
+        /* Oh dear, demented device! */
+        default:
+            break;
+    }
+}
+
+void
+AlsaDriver::insertMTCFullFrame(RealTime time)
+{
+    snd_seq_event_t event;
+
+    snd_seq_ev_clear(&event);
+    snd_seq_ev_set_source(&event, m_syncOutputPort);
+    snd_seq_ev_set_subs(&event);
+
+    m_mtcEncodedTime = time;
+    m_mtcSeconds = m_mtcEncodedTime.sec % 60;
+    m_mtcMinutes = (m_mtcEncodedTime.sec / 60) % 60;
+    m_mtcHours = (m_mtcEncodedTime.sec / 3600);
+
+    // We always send at 25fps, it's the easiest to avoid rounding problems
+    m_mtcFrames = (unsigned)m_mtcEncodedTime.nsec / 40000000U;
+
+    time = time + m_alsaPlayStartTime - m_playStartPosition;
+    snd_seq_real_time_t atime = { time.sec, time.nsec };
+
+    unsigned char data[10] =
+	{ MIDI_SYSTEM_EXCLUSIVE,
+	  MIDI_SYSEX_RT, 127, 1, 1,
+	  0, 0, 0, 0,
+	  MIDI_END_OF_EXCLUSIVE };
+    
+    data[5] = ((unsigned char)m_mtcHours & 0x1f) + (1 << 5); // 1 indicates 25fps
+    data[6] = (unsigned char)m_mtcMinutes;
+    data[7] = (unsigned char)m_mtcSeconds;
+    data[8] = (unsigned char)m_mtcFrames;
+
+    snd_seq_ev_schedule_real(&event, m_queue, 0, &atime);
+    snd_seq_ev_set_sysex(&event, 10, data);
+
+    checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
+		   "insertMTCFullFrame event send");
+
+    if (m_queueRunning) {
+	checkAlsaError(snd_seq_drain_output(m_midiHandle), "insertMTCFullFrame drain");
+    }
+}
+
+void
+AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
+{
+    if (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime) {
+	// not a real slice
+	return;
+    }
+    
+    // We send at 25fps, it's the easiest to avoid rounding problems
+    RealTime twoFrames(0, 80000000U);
+    RealTime quarterFrame(0, 10000000U);
+    int fps = 25;
+
+#ifdef MTC_DEBUG
+    std::cout << "AlsaDriver::insertMTCQFrames(" << sliceStart << ","
+	      << sliceEnd << "): first time " << m_mtcFirstTime << std::endl;
+#endif
+
+    RealTime t;
+
+    if (m_mtcFirstTime != 0) { // first time through, reset location
+	m_mtcEncodedTime = sliceStart;
+	t = sliceStart;
+	m_mtcFirstTime = 0;
+    } else {
+	t = m_mtcEncodedTime + quarterFrame;
+    }
+
+    m_mtcSeconds = m_mtcEncodedTime.sec % 60;
+    m_mtcMinutes = (m_mtcEncodedTime.sec / 60) % 60;
+    m_mtcHours = (m_mtcEncodedTime.sec / 3600);
+    m_mtcFrames = (unsigned)m_mtcEncodedTime.nsec / 40000000U; // 25fps
+
+    std::string bytes = " ";
+
+    int type = 0;
+
+    while (m_mtcEncodedTime < sliceEnd) {
+
+	snd_seq_event_t event;
+	snd_seq_ev_clear(&event);
+	snd_seq_ev_set_source(&event, m_syncOutputPort);
+	snd_seq_ev_set_subs(&event);
+
+#ifdef MTC_DEBUG
+	std::cout << "Sending MTC quarter frame at " << t << std::endl;
+#endif
+
+	unsigned char c = (type << 4);
+
+	switch (type) {
+	case 0: c +=  ((unsigned char)m_mtcFrames & 0x0f); break;
+	case 1: c += (((unsigned char)m_mtcFrames & 0xf0) >> 4); break;
+	case 2: c +=  ((unsigned char)m_mtcSeconds & 0x0f); break;
+	case 3: c += (((unsigned char)m_mtcSeconds & 0xf0) >> 4); break;
+	case 4: c +=  ((unsigned char)m_mtcMinutes & 0x0f); break;
+	case 5: c += (((unsigned char)m_mtcMinutes & 0xf0) >> 4); break;
+	case 6: c +=  ((unsigned char)m_mtcHours & 0x0f); break;
+	case 7: // hours high nibble + smpte type
+	    c += (m_mtcHours >> 4) & 0x01;
+	    c += (1 << 1); // type 1 indicates 25fps
+	    break;
+	}
+
+	RealTime scheduleTime = t + m_alsaPlayStartTime - m_playStartPosition;
+	snd_seq_real_time_t atime = { scheduleTime.sec, scheduleTime.nsec };
+	
+	event.type = SND_SEQ_EVENT_QFRAME;
+	event.data.control.value = c;
+
+	snd_seq_ev_schedule_real(&event, m_queue, 0, &atime);
+
+	checkAlsaError(snd_seq_event_output(m_midiHandle, &event),
+		       "insertMTCQFrames sending qframe event");
+
+	if (++type == 8) {
+	    m_mtcFrames += 2;
+	    if (m_mtcFrames >= fps) {
+		m_mtcFrames -= fps;
+		if (++m_mtcSeconds == 60) {
+		    m_mtcSeconds = 0;
+		    if (++m_mtcMinutes == 60) {
+			m_mtcMinutes = 0;
+			++m_mtcHours;
+		    }
+		}
+	    }
+	    m_mtcEncodedTime = t;
+	    type = 0;
+	}
+
+	t = t + quarterFrame;
+    }
+}
+
+bool
+AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
+{
+    if (getMTCStatus() != TRANSPORT_SLAVE) return false;
+
+    // At this point, and possibly for the foreseeable future, the only
+    // sysex we're interested in is full-frame transport location
+
+#ifdef MTC_DEBUG
+    std::cerr << "MTC: testing sysex of length " << event->data.ext.len << ":" << std::endl;
+    for (int i = 0; i < event->data.ext.len; ++i) {
+	std::cerr << (int)*((unsigned char *)event->data.ext.ptr + i) << " ";
+    }
+    std::cerr << endl;
+#endif
+
+    if (event->data.ext.len != 10) return false;
+
+    unsigned char *ptr = (unsigned char *)(event->data.ext.ptr);
+    
+    if (*ptr++ != MIDI_SYSTEM_EXCLUSIVE) return false;
+    if (*ptr++ != MIDI_SYSEX_RT) return false;
+    if (*ptr++ > 127) return false;
+
+    // 01 01 for MTC full frame
+
+    if (*ptr++ != 1) return false;
+    if (*ptr++ != 1) return false;
+
+    int htype = *ptr++;
+    int min   = *ptr++;
+    int sec   = *ptr++;
+    int frame = *ptr++;
+
+    if (*ptr != MIDI_END_OF_EXCLUSIVE) return false;
+
+    int hour = (htype & 0x1f);
+    int type = (htype & 0xe0) >> 5;
+
+    m_mtcFrames = frame;
+    m_mtcSeconds = sec;
+    m_mtcMinutes = min;
+    m_mtcHours = hour;
+    m_mtcSMPTEType = type;
+
+    int fps = 30;
+    if (m_mtcSMPTEType == 0) fps = 24;
+    else if (m_mtcSMPTEType == 1) fps = 25;
+
+    m_mtcEncodedTime.sec = sec + min * 60 + hour * 60 * 60;
+    
+    switch (fps) {
+    case 24:
+	m_mtcEncodedTime.nsec = (int)
+	    ((125000000UL * (unsigned)m_mtcFrames) / (unsigned) 3);
+	break;
+    case 25:
+	m_mtcEncodedTime.nsec = (int)
+	    (40000000UL * (unsigned)m_mtcFrames);
+	break;
+    case 30:
+    default:
+	m_mtcEncodedTime.nsec = (int)
+	    ((100000000UL * (unsigned)m_mtcFrames) / (unsigned) 3);
+	break;
+    }
+
+#ifdef MTC_DEBUG
+    std::cerr << "MTC: MTC sysex found (frame type " << type
+	      << "), jumping to " << m_mtcEncodedTime << std::endl;
+#endif
+    
+    ExternalTransport *transport = getExternalTransportControl();
+    if (transport) {
+	transport->transportJump
+	    (ExternalTransport::TransportJumpToTime,
+	     m_mtcEncodedTime);
+    }
+}
+
+static int last_factor = 0;
+static int bias_factor = 0;
+
+void
+AlsaDriver::calibrateMTC()
+{
+    if (m_mtcFirstTime < 0)
+        return;
+    else if (m_mtcFirstTime > 0)
+    {
+        --m_mtcFirstTime;
+        m_mtcSigmaC = 0;
+        m_mtcSigmaE = 0;
+    }
+    else
+    {
+        RealTime diff_e = m_mtcEncodedTime - m_mtcLastEncoded;
+        RealTime diff_c = m_mtcReceiveTime - m_mtcLastReceive;
+
+#ifdef MTC_DEBUG
+        printf("RG MTC: diffs %d %d %d\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
+#endif
+        
+        m_mtcSigmaE += ((long long int) diff_e.nsec) * m_mtcSkew;
+        m_mtcSigmaC += diff_c.nsec;
+
+
+        int t_bias = (m_mtcSigmaE / m_mtcSigmaC) - 0x10000;
+
+#ifdef MTC_DEBUG
+        printf("RG MTC: sigmas %lld %lld %d\n", m_mtcSigmaE, m_mtcSigmaC, t_bias);
+#endif
+
+        bias_factor = t_bias;
+    }
+
+    m_mtcLastReceive = m_mtcReceiveTime;
+    m_mtcLastEncoded = m_mtcEncodedTime;
+
+}
+
+void
+AlsaDriver::tweakSkewForMTC(int factor)
+{
+    if (factor > 50000) {
+        factor = 50000;
+    }
+    else if (factor < -50000) {
+        factor = -50000;
+    }
+    else if (factor == last_factor)
+    {
+        return;
+    }
+    else
+    {
+        if (m_mtcFirstTime == -1)
+            m_mtcFirstTime = 5;
+    }
+    last_factor = factor;
+
+    snd_seq_queue_tempo_t *q_ptr;
+    snd_seq_queue_tempo_alloca(&q_ptr);
+
+    snd_seq_get_queue_tempo( m_midiHandle, m_queue, q_ptr);
+
+    unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
+#ifdef MTC_DEBUG
+    std::cerr << "RG MTC: skew: " << t_skew;
+#endif
+
+    t_skew = 0x10000 + factor + bias_factor;
+
+#ifdef MTC_DEBUG
+    std::cerr << " changed to " << factor << "+" <<bias_factor << endl;
+#endif
+
+    snd_seq_queue_tempo_set_skew(q_ptr, t_skew);
+    snd_seq_set_queue_tempo( m_midiHandle, m_queue, q_ptr);
+
+    m_mtcSkew = t_skew;
+}
+    
+bool
+AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
+{
+    if (getMMCStatus() != TRANSPORT_SLAVE) return false;
+
+    if (event->data.ext.len != 6) return false;
+
+    unsigned char *ptr = (unsigned char *)(event->data.ext.ptr);
+    
+    if (*ptr++ != MIDI_SYSTEM_EXCLUSIVE) return false;
+    if (*ptr++ != MIDI_SYSEX_RT) return false;
+    if (*ptr++ > 127) return false;
+    if (*ptr++ != MIDI_SYSEX_RT_COMMAND) return false;
+
+    int instruction = *ptr++;
+
+    if (*ptr != MIDI_END_OF_EXCLUSIVE) return false;
+
+    if (instruction == MIDI_MMC_PLAY) {
+	ExternalTransport *transport = getExternalTransportControl();
+	if (transport) {
+	    transport->transportChange(ExternalTransport::TransportPlay);
+	}
+    } else if (instruction == MIDI_MMC_STOP) {
+	ExternalTransport *transport = getExternalTransportControl();
+	if (transport) {
+	    transport->transportChange(ExternalTransport::TransportStop);
+	}
+    }
+
+    return true;
+}
+
 static size_t _debug_jack_frame_count = 0;
 
 void
@@ -2366,22 +2961,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         snd_seq_real_time_t time = { outputTime.sec, outputTime.nsec };
 
 	if (!isSoftSynth) {
-
-/*!!!
-	    // Set destination according to Instrument mapping
-	    outputDevice = getPairForMappedInstrument((*i)->getInstrument());
-	    if (outputDevice.first < 0 && outputDevice.second < 0 &&
-		(*i)->getType() != MappedEvent::MidiSystemMessage) continue;
-
-#ifdef DEBUG_PROCESS_MIDI_OUT
-	    std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << " -> output device " << outputDevice.first << ":" << outputDevice.second << std::endl;
-//	    std::cout << "pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration() << std::endl;
-#endif
-
-	    snd_seq_ev_set_dest(&event,
-				outputDevice.first,
-				outputDevice.second);
-*/
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	    std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << std::endl;
@@ -2570,9 +3149,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             case MappedEvent::AudioLevel:
             case MappedEvent::AudioStopped:
             case MappedEvent::SystemUpdateInstruments:
-	case MappedEvent::SystemJackTransport: //???
+	    case MappedEvent::SystemJackTransport: //???
             case MappedEvent::SystemMMCTransport:
             case MappedEvent::SystemMIDIClock:
+            case MappedEvent::SystemMIDISyncAuto:
                 break;
 
             default:
@@ -2625,6 +3205,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     }
 
     processNotesOff(sliceEnd - m_playStartPosition + m_alsaPlayStartTime, now);
+
+    if (getMTCStatus() == TRANSPORT_MASTER) {
+	insertMTCQFrames(sliceStart, sliceEnd);
+    }
 
 //!!!    if (m_queueRunning || now) {
     if (m_queueRunning) {
@@ -2697,15 +3281,11 @@ AlsaDriver::startClocks()
 #endif
 
     // Restart the timer
-    if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0)
-    {
-	//!!! bit excessive?
-#ifdef DEBUG_ALSA
+    if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0) {
 	std::cerr << "AlsaDriver::startClocks - couldn't start queue - "
 		  << snd_strerror(result)
 		  << std::endl;
-#endif
-	exit(EXIT_FAILURE);
+	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
     }
 
     std::cerr << "AlsaDriver::startClocks: started clocks" << std::endl;
@@ -2731,13 +3311,6 @@ AlsaDriver::startClocks()
         // and this being the manner of constructing the SPP MIDI
         // message it _feels_ right.  The sendSystemDirect reconstruction
         // was worked out by guesswork.
-        //
-
-        /*
-        if (m_midiSongPositionPointer != spp)
-        {
-            m_midiSongPositionPointer = spp;
-            */
 
         // Get time from current alsa time to start of alsa timing -
         // add the initial starting point and divide by the total
@@ -2782,11 +3355,6 @@ AlsaDriver::startClocks()
                              m_alsaPlayStartTime);
     }
 
-    if (isMMCMaster())
-    {
-        sendMMC(127, MIDI_MMC_PLAY, true, "");
-    }
-
     // process pending MIDI events
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocks(): draining");
 }
@@ -2799,20 +3367,14 @@ AlsaDriver::startClocksApproved()
     std::cerr << "AlsaDriver::startClocks: startClocksApproved" << std::endl;
 
     // Restart the timer
-    if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0)
-    {
-	//!!! bit excessive?
-#ifdef DEBUG_ALSA
+    if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0) {
 	std::cerr << "AlsaDriver::startClocks - couldn't start queue - "
 		  << snd_strerror(result)
 		  << std::endl;
-#endif
-	exit(EXIT_FAILURE);
+	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
     }
 
     m_queueRunning = true;
-
-    //!!! too slow, guess we need the off-by-1 trick
 
     // process pending MIDI events
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocksApproved(): draining");
@@ -2823,21 +3385,16 @@ AlsaDriver::stopClocks()
 {
     std::cerr << "AlsaDriver::stopClocks" << std::endl;
 
-    if (checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "stopClocks(): stopping queue") < 0) 
-    {
-	exit(EXIT_FAILURE);
+    if (checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "stopClocks(): stopping queue") < 0) {
+	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
     }
-    if (checkAlsaError(snd_seq_drain_output(m_midiHandle), "stopClocks(): draining output to stop queue") < 0) 
-    {
-	exit(EXIT_FAILURE);
-    }
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "stopClocks(): draining output to stop queue");
 
     m_queueRunning = false;
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
 	m_jackDriver->stop();
-//!!!	m_jackDriver->flushAudio();
     }
 #endif
     
@@ -2881,6 +3438,10 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 	// when we're not).  Check both if you want to know whether
 	// we're really rolling.
         m_playing = true;
+
+	if (getMTCStatus() == TRANSPORT_SLAVE) {
+	    tweakSkewForMTC(0);
+	}
     }
 
     AudioFile *audioFile = 0;
@@ -3033,6 +3594,28 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             }
         }
 
+        if ((*i)->getType() == MappedEvent::SystemMIDISyncAuto)
+        {
+            if ((*i)->getData1())
+            {
+                m_midiSyncAutoConnect = true;
+#ifdef DEBUG_ALSA
+                std::cerr << "AlsaDriver::processEventsOut - "
+                          << "Rosegarden MIDI SYNC AUTO ENABLED"
+                          << std::endl;
+#endif
+            }
+            else
+            {
+                m_midiSyncAutoConnect = false;
+#ifdef DEBUG_ALSA
+                std::cerr << "AlsaDriver::processEventsOut - "
+                          << "Rosegarden MIDI SYNC AUTO DISABLED"
+                          << std::endl;
+#endif
+            }
+        }
+
 #ifdef HAVE_LIBJACK
 
         // Set the JACK transport 
@@ -3082,28 +3665,24 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
         if ((*i)->getType() == MappedEvent::SystemMMCTransport)
         {
-            m_mmcMaster = false;
-            m_mmcEnabled = false;
-
             switch ((int)(*i)->getData1())
             {
-                case 2:
+                case 1:
 #ifdef DEBUG_ALSA
                     std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden is MMC MASTER"
                               << std::endl;
 #endif
-                    m_mmcMaster = true;
-                    m_mmcEnabled = true;
+		    setMMCStatus(TRANSPORT_MASTER);
                     break;
 
-                case 1:
-                    m_mmcEnabled = true;
+                case 2:
 #ifdef DEBUG_ALSA
                     std::cerr << "AlsaDriver::processEventsOut - "
                               << "Rosegarden is MMC SLAVE"
                               << std::endl;
 #endif
+		    setMMCStatus(TRANSPORT_SLAVE);
                     break;
 
                 case 0:
@@ -3113,6 +3692,45 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                               << "Rosegarden MMC Transport DISABLED"
                               << std::endl;
 #endif
+		    setMMCStatus(TRANSPORT_OFF);
+                    break;
+            }
+        }
+
+        if ((*i)->getType() == MappedEvent::SystemMTCTransport)
+        {
+            switch ((int)(*i)->getData1())
+            {
+                case 1:
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden is MTC MASTER"
+                              << std::endl;
+#endif
+		    setMTCStatus(TRANSPORT_MASTER);
+		    tweakSkewForMTC(0);
+		    m_mtcFirstTime = -1;
+                    break;
+
+                case 2:
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden is MTC SLAVE"
+                              << std::endl;
+#endif
+		    setMTCStatus(TRANSPORT_SLAVE);
+		    m_mtcFirstTime = -1;
+                    break;
+
+                case 0:
+                default:
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden MTC Transport DISABLED"
+                              << std::endl;
+#endif
+		    setMTCStatus(TRANSPORT_OFF);
+		    m_mtcFirstTime = -1;
                     break;
             }
         }
@@ -3424,7 +4042,7 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
 	snd_seq_query_subscribe_alloca(&qSubs);
 
 	rg_addr.client = m_client;
-	rg_addr.port = m_inputport;
+	rg_addr.port = m_inputPort;
 
 	snd_seq_query_subscribe_set_type(qSubs, SND_SEQ_QUERY_SUBS_WRITE);
 	snd_seq_query_subscribe_set_index(qSubs, 0);
@@ -3755,21 +4373,12 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
     snd_seq_port_subscribe_alloca(&subs);
 
     dest.client = m_client;
-    dest.port = m_inputport;
+    dest.port = m_inputPort;
 
     // Set destinations and senders
     //
     snd_seq_port_subscribe_set_sender(subs, &sender);
     snd_seq_port_subscribe_set_dest(subs, &dest);
-    //snd_seq_port_subscribe_set_queue(subs, m_queue);
-
-    // enable time-stamp-update mode 
-    //
-    //snd_seq_port_subscribe_set_time_update(subs, 1);
-
-    // set so we get realtime timestamps
-    //
-    //snd_seq_port_subscribe_set_time_real(subs, 1);
 
     // subscribe or unsubscribe the port
     //
@@ -3780,7 +4389,6 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 	    // Not the end of the world if this fails but we
 	    // have to flag it internally.
 	    //
-	    //m_midiInputPortConnected = false;
 	    audit << "AlsaDriver::setRecordDevice - "
 		  << int(sender.client) << ":" << int(sender.port)
 		  << " failed to subscribe device " 
@@ -3812,14 +4420,14 @@ AlsaDriver::unsetRecordDevices()
 {
     snd_seq_addr_t dest;
     dest.client = m_client;
-    dest.port = m_inputport;
+    dest.port = m_inputPort;
 
     snd_seq_query_subscribe_t *qSubs;
     snd_seq_addr_t tmp_addr;
     snd_seq_query_subscribe_alloca(&qSubs);
 
     tmp_addr.client = m_client;
-    tmp_addr.port = m_inputport;
+    tmp_addr.port = m_inputPort;
 
     // Unsubsribe any existing connections
     //
@@ -3900,132 +4508,60 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 	mE->addDataString(data);
     
 	mC.insert(mE);
-
-#ifdef NOT_DEFINED
-    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); ++it)
-    {
-        // One message per writeable port
-        //
-        if ((*it)->m_port == 0 && (*it)->isWriteable())
-        {
-            try
-            {
-                // Create a plain SysEx
-                //
-		mE = new MappedEvent(0, //!!! should be iterating over devices?  (*it)->m_startId,
-				     MappedEvent::MidiSystemEMessage);
-                mE->setData1(Rosegarden::MIDI_SYSTEM_EXCLUSIVE);
-
-		// Make it a RealTime SysEx
-		mE->addDataByte(MIDI_SYSEX_RT);
-		
-		// Add the destination
-		mE->addDataByte(deviceId);
-		
-		// Add the command type
-		if (isCommand)
-		    mE->addDataByte(MIDI_SYSEX_RT_COMMAND);
-		else
-		    mE->addDataByte(MIDI_SYSEX_RT_RESPONSE);
-		
-		// Add the command
-		mE->addDataByte(instruction);
-		
-		// Add any data
-		mE->addDataString(data);
-            }
-            catch(...)
-            {
-#ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::sendMMC - "
-                          << "couldn't create MMC message" << std::endl;
-#endif
-                return;
-            }
-
-            mC.insert(mE);
-        }
-#endif
     }
 
     processMidiOut(mC, RealTime::zeroTime, RealTime::zeroTime);
 }
 
-// Send a system real-time message
+// Send a system real-time message from the sync output port
 //
 void
 AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
 {
-    snd_seq_addr_t sender, dest;
-    sender.client = m_client;
+    snd_seq_event_t event;
 
-    for (MappedDeviceList::iterator i = m_devices.begin();
-	 i != m_devices.end(); ++i) {
+    snd_seq_ev_clear(&event);
+    snd_seq_ev_set_source(&event, m_syncOutputPort);
+    snd_seq_ev_set_subs(&event);
+
+    event.queue = SND_SEQ_QUEUE_DIRECT;
+
+    // set the command
+    event.type = command;
+
+    // set args if we have them
+    switch(args.length())
+    {
+    case 0:
+	break;
 	
-	ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
+    case 1:
+	event.data.control.value = args[0];
+	break;
 	
-	int client = pair.first;
-	int port = pair.second;
+    case 2:
+	event.data.control.value = int(args[0]) | (int(args[1]) << 7);
+	break;
 	
-	if ((*i)->getDirection() == Rosegarden::MidiDevice::Play) {
-
-            snd_seq_event_t event;
-            memset(&event, 0, sizeof(&event));
-
-            // Set destination and sender
-            dest.client = client;
-	    dest.port = port;
-            event.dest = dest;
-	    
-	    DeviceIntMap::iterator dimi = m_outputPorts.find((*i)->getId());
-	    if (dimi == m_outputPorts.end()) continue;
-
-	    sender.port = dimi->second;
-            event.source = sender;
-
-            event.queue = SND_SEQ_QUEUE_DIRECT;
-
-            // set the command
-            event.type = command;
-
-            // set args if we have them
-            switch(args.length())
-            {
-                case 0:
-                    break;
-
-                case 1:
-                    //event.data.control.param = args[0];
-                    event.data.control.value = args[0];
-                    break;
-
-                case 2:
-                    //event.data.control.param = args[1];
-                    event.data.control.value = int(args[0]) | (int(args[1]) << 7);
-                    break;
-
-                default: // do nothing
-                    std::cerr << "AlsaDriver::sendSystemDirect - "
-                              << "too many argument bytes" << std::endl;
-                    break;
-            }
-
-            int error = snd_seq_event_output_direct(m_midiHandle, &event);
-
-            if (error < 0)
-            {
-#ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::sendSystemDirect - "
-                          << "can't send event (" << int(command) << ")"
-                          << std::endl;
-#endif
-            }
-        }
+    default: // do nothing
+	std::cerr << "AlsaDriver::sendSystemDirect - "
+		  << "too many argument bytes" << std::endl;
+	break;
     }
 
-    // we probably don't need this here, but probably yes.
-    checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendSystemDirect(): draining");
+    int error = snd_seq_event_output_direct(m_midiHandle, &event);
+
+    if (error < 0)
+    {
+#ifdef DEBUG_ALSA
+	std::cerr << "AlsaDriver::sendSystemDirect - "
+		  << "can't send event (" << int(command) << ")"
+		  << std::endl;
+#endif
+    }
+
+//    checkAlsaError(snd_seq_drain_output(m_midiHandle),
+//		   "sendSystemDirect(): draining");
 }
 
 
@@ -4034,77 +4570,50 @@ AlsaDriver::sendSystemQueued(MidiByte command,
                              const std::string &args,
                              const RealTime &time)
 {
-    snd_seq_addr_t sender, dest;
-    sender.client = m_client;
+    snd_seq_event_t event;
+
+    snd_seq_ev_clear(&event);
+    snd_seq_ev_set_source(&event, m_syncOutputPort);
+    snd_seq_ev_set_subs(&event);
+
     snd_seq_real_time_t sendTime = { time.sec, time.nsec };
 
-    for (MappedDeviceList::iterator i = m_devices.begin();
-	 i != m_devices.end(); ++i) {
+    // Schedule the command
+    //
+    event.type = command;
+
+    snd_seq_ev_schedule_real(&event, m_queue, 0, &sendTime);
+
+    // set args if we have them
+    switch(args.length())
+    {
+    case 1:
+	event.data.control.value = args[0];
+	break;
 	
-	ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
-
-	int client = pair.first;
-	int port = pair.second;
-
-	if ((*i)->getDirection() == Rosegarden::MidiDevice::Play) {
-
-            snd_seq_event_t event;
-            memset(&event, 0, sizeof(&event));
-
-            // Set destination and sender
-            dest.client = client;
-	    dest.port = port;
-            event.dest = dest;
-	    
-	    DeviceIntMap::iterator dimi = m_outputPorts.find((*i)->getId());
-	    if (dimi == m_outputPorts.end()) continue;
-
-	    sender.port = dimi->second;
-            event.source = sender;
-
-            // Schedule the command
-            //
-            event.type = command;
-
-            // useful for debugging
-            //snd_seq_ev_set_note(&event, 0, 64, 127, 100);
-
-            snd_seq_ev_schedule_real(&event, m_queue, 0, &sendTime);
-
-            // set args if we have them
-            switch(args.length())
-            {
-                case 1:
-                    event.data.control.param = args[0];
-                    event.data.control.value = args[0];
-                    break;
-
-                case 2:
-                    event.data.control.param = args[0];
-                    event.data.control.value = int(args[0]) | (int(args[1]) << 7);
-                    break;
-
-                default: // do nothing
-                    break;
-            }
-
-            int error = snd_seq_event_output(m_midiHandle, &event);
-
-            if (error < 0)
-            {
+    case 2:
+	event.data.control.value = int(args[0]) | (int(args[1]) << 7);
+	break;
+	
+    default: // do nothing
+	break;
+    }
+    
+    int error = snd_seq_event_output(m_midiHandle, &event);
+    
+    if (error < 0)
+    {
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::sendSystemQueued - "
-                          << "can't send event (" << int(command) << ")"
-                          << " - error = (" << error << ")"
-                          << std::endl;
+	std::cerr << "AlsaDriver::sendSystemQueued - "
+		  << "can't send event (" << int(command) << ")"
+		  << " - error = (" << error << ")"
+		  << std::endl;
 #endif
-            }
-        }
     }
 
-    if (m_queueRunning) {
-	checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendSystemQueued(): draining");
-    }
+//    if (m_queueRunning) {
+//	checkAlsaError(snd_seq_drain_output(m_midiHandle), "sendSystemQueued(): draining");
+//    }
 }
 
 

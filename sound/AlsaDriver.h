@@ -282,6 +282,36 @@ public:
                  bool isCommand,
                  const std::string &data);
 
+    // Check whether the given event is an MMC command we need to act on
+    // (and if so act on it)
+    //
+    bool testForMMCSysex(const snd_seq_event_t *event);
+
+    // Create and enqueue a batch of MTC quarter-frame events
+    //
+    void insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd);
+
+    // Create and enqueue an MTC full-frame system exclusive event
+    //
+    void insertMTCFullFrame(RealTime time);
+
+    // Parse and accept an incoming MTC quarter-frame event
+    //
+    void handleMTCQFrame(unsigned int data_byte, RealTime the_time);
+
+    // Check whether the given event is an MTC sysex we need to act on
+    // (and if so act on it)
+    //
+    bool testForMTCSysex(const snd_seq_event_t *event);
+
+    // Adjust the ALSA clock skew for MTC lock
+    //
+    void tweakSkewForMTC(int factor);
+
+    // Recalibrate internal MTC factors
+    //
+    void calibrateMTC();
+
     // Send a System message straight away
     //
     void sendSystemDirect(MidiByte command,
@@ -406,10 +436,13 @@ private:
     //
     snd_seq_t                   *m_midiHandle;
     int                          m_client;
-    int                          m_inputport;
+
+    int                          m_inputPort;
     
     typedef std::map<Rosegarden::DeviceId, int> DeviceIntMap;
     DeviceIntMap                 m_outputPorts;
+
+    int                          m_syncOutputPort;
 
     int                          m_queue;
     int                          m_maxClients;
@@ -421,11 +454,33 @@ private:
     //
     bool                         m_midiInputPortConnected;
 
+    bool                         m_midiSyncAutoConnect;
+
     RealTime                     m_alsaPlayStartTime;
     RealTime                     m_alsaRecordStartTime;
 
     RealTime                     m_loopStartTime;
     RealTime                     m_loopEndTime;
+
+    // MIDI Time Code handling:
+
+    // Received/emitted MTC data breakdown:
+    RealTime                     m_mtcReceiveTime;
+    RealTime                     m_mtcEncodedTime;
+    int                          m_mtcFrames;
+    int                          m_mtcSeconds;
+    int                          m_mtcMinutes;
+    int                          m_mtcHours;
+    int                          m_mtcSMPTEType;
+
+    // Calculated MTC factors:
+    int                          m_mtcFirstTime;
+    RealTime                     m_mtcLastEncoded;
+    RealTime                     m_mtcLastReceive;
+    long long int                m_mtcSigmaE;
+    long long int                m_mtcSigmaC;
+    unsigned int                 m_mtcSkew;
+
     bool                         m_looping;
 
     bool                         m_haveShutdown;

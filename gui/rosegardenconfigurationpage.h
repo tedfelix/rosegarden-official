@@ -515,6 +515,7 @@ protected:
     QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;
     QComboBox *m_mtcTransport;
+    QCheckBox *m_midiSyncAuto;
 
     int      m_sampleRate;
     QSlider* m_readAhead;

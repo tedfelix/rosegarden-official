@@ -70,6 +70,16 @@ typedef enum
 } SoundDriverStatus;
 
 
+// Used for MMC and MTC, not for JACK transport
+//
+typedef enum
+{
+    TRANSPORT_OFF,
+    TRANSPORT_MASTER,
+    TRANSPORT_SLAVE
+} TransportSyncStatus;
+
+
 // The NoteOffQueue holds a time ordered set of
 // pending MIDI NOTE OFF events.
 //
@@ -380,15 +390,15 @@ public:
     void setMidiRecordDevice(DeviceId id) { m_midiRecordDevice = id; }
     DeviceId getMIDIRecordDevice() const { return m_midiRecordDevice; }
 
-    // Set MMC state
+    // MMC master/slave setting
     //
-    bool isMMCEnabled() const { return m_mmcEnabled; }
-    void enableMMC(bool mmc) { m_mmcEnabled = mmc; }
+    TransportSyncStatus getMMCStatus() const { return m_mmcStatus; }
+    void setMMCStatus(TransportSyncStatus status) { m_mmcStatus = status; }
 
-    // Set MMC master/slave
+    // MTC master/slave setting
     //
-    bool isMMCMaster() const { return (m_mmcMaster && m_mmcEnabled); }
-    void setMasterMMC(bool mmc) { m_mmcMaster = mmc; }
+    TransportSyncStatus getMTCStatus() const { return m_mtcStatus; }
+    void setMTCStatus(TransportSyncStatus status) { m_mtcStatus = status; }
 
     // MMC Id
     //
@@ -499,10 +509,10 @@ protected:
     //
     ExternalTransport           *m_externalTransport;
 
-    // MMC status and ID
+    // MMC and MTC status and ID
     //
-    bool                         m_mmcEnabled;
-    bool                         m_mmcMaster;
+    TransportSyncStatus          m_mmcStatus;
+    TransportSyncStatus          m_mtcStatus;
     MidiByte                     m_mmcId;      // device id
 
     // MIDI clock interval

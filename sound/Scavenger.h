@@ -110,8 +110,8 @@ Scavenger<T>::claim(T *t)
 	}
     }
 
-    // Oh no -- run out of slots!  We'd better just delete something
-    // and hope.  This is very bad news and could cause real trouble.
+    // Oh no -- run out of slots!  Warn and discard something at
+    // random (without deleting it -- it's probably safer to leak).
 
     for (size_t i = 0; i < m_objects.size(); ++i) {
 	ObjectTimePair &pair = m_objects[i];
@@ -122,7 +122,6 @@ Scavenger<T>::claim(T *t)
 	    pair.first = t;
 	    ++m_claimed;
 	    ++m_scavenged;
-	    delete ot;
 	}
     }
 }

@@ -907,6 +907,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                                              *audioManagerDialog)
 {
     static bool boolShowingWarning = false;
+    static bool boolShowingALSAWarning = false;
     static long warningShownAt = 0;
 
     if (m_doc == 0 || mC.size() == 0) return;
@@ -1053,8 +1054,26 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                                      << endl;
                         continue;
                     }
+
+		    if ((*i)->getData1() == MappedEvent::FailureALSACallFailed) {
+			
+			struct timeval tv;
+			(void)gettimeofday(&tv, 0);
+
+			if (tv.tv_sec - warningShownAt >= 5 &&
+			    !boolShowingALSAWarning) {
+
+			    QString message = i18n("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
+			    boolShowingALSAWarning = true;
 		    
-		    if ((*i)->getData1() == MappedEvent::FailureXRuns) {
+			    KMessageBox::information(0, message);
+			    boolShowingALSAWarning = false;
+
+			    (void)gettimeofday(&tv, 0);
+			    warningShownAt = tv.tv_sec;
+			}
+
+		    } else if ((*i)->getData1() == MappedEvent::FailureXRuns) {
 
 //#define REPORT_XRUNS 1
 #ifdef REPORT_XRUNS
@@ -2022,10 +2041,11 @@ SequenceManager::sendTransportControlStatuses()
     bool jackTransport = config->readBoolEntry("jacktransport", false);
     bool jackMaster = config->readBoolEntry("jackmaster", false);
 
-    bool mmcTransport = config->readBoolEntry("mmctransport", false);
-    bool mmcMaster = config->readBoolEntry("mmcmaster", false);
+    int mmcMode = config->readNumEntry("mmcmode", 0);
+    int mtcMode = config->readNumEntry("mtcmode", 0);
 
     bool midiClock = config->readBoolEntry("midiclock", false);
+    bool midiSyncAuto = config->readBoolEntry("midisyncautoconnect", false);
 
     // Send JACK transport
     //
@@ -2048,22 +2068,20 @@ SequenceManager::sendTransportControlStatuses()
 
     // Send MMC transport
     //
-    int mmcValue = 0;
-    if (mmcTransport && mmcMaster)
-        mmcValue = 2;
-    else
-    {
-        if (mmcTransport)
-            mmcValue = 1;
-        else
-            mmcValue = 0;
-    }
-
-    MappedEvent mEmccValue(MidiInstrumentBase, // InstrumentId
+    MappedEvent mEmmcValue(MidiInstrumentBase, // InstrumentId
                                        MappedEvent::SystemMMCTransport,
-                                       MidiByte(mmcValue));
+                                       MidiByte(mmcMode));
 
-    StudioControl::sendMappedEvent(mEmccValue);
+    StudioControl::sendMappedEvent(mEmmcValue);
+
+
+    // Send MTC transport
+    //
+    MappedEvent mEmtcValue(MidiInstrumentBase, // InstrumentId
+                                       MappedEvent::SystemMTCTransport,
+                                       MidiByte(mtcMode));
+
+    StudioControl::sendMappedEvent(mEmtcValue);
 
 
     // Send MIDI Clock
@@ -2073,6 +2091,15 @@ SequenceManager::sendTransportControlStatuses()
                                         MidiByte(midiClock));
 
     StudioControl::sendMappedEvent(mEmidiClock);
+
+
+    // Send MIDI Sync Auto-Connect
+    //
+    MappedEvent mEmidiSyncAuto(MidiInstrumentBase, // InstrumentId
+			       MappedEvent::SystemMIDISyncAuto,
+			       MidiByte(midiSyncAuto ? 1 : 0));
+
+    StudioControl::sendMappedEvent(mEmidiSyncAuto);
 
 }
 

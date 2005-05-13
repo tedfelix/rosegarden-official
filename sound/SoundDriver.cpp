@@ -56,8 +56,8 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_studio(studio),
     m_sequencerDataBlock(0),
     m_externalTransport(0),
-    m_mmcEnabled(false),
-    m_mmcMaster(false),
+    m_mmcStatus(TRANSPORT_OFF),
+    m_mtcStatus(TRANSPORT_OFF),
     m_mmcId(0),           // default MMC id of 0
     m_midiClockEnabled(false),
     m_midiClockInterval(0, 0),
