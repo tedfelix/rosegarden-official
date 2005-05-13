@@ -84,6 +84,9 @@ Liu Songhe <jackliu9999 AT msn.com>
 Thomas Nagy <tnagy256@yahoo.fr>
     * SCons/bksys building system
 
+Vince Negri <vince-rg@bulbous.freeserve.co.uk>
+    * Initial MTC slave implementation (the bits without the bugs)
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
