@@ -170,12 +170,18 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     Rosegarden::Instrument *instr = getDocument()->getStudio().
         getInstrumentById(track->getInstrument());
 
+    int resolution = 8;
+
+    if (isDrumMode() && instr && instr->getKeyMapping()) {
+	resolution = 11;
+    }
+
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, 
                                            segments[i],
                                            m_snapGrid,
                                            i,
-                                           8, //!!! so random, so rare
+					   resolution,
                                            this));
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
@@ -199,7 +205,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     if (isDrumMode() && instr && instr->getKeyMapping()) {
 	m_pitchRuler = new PercussionPitchRuler(m_pianoView->viewport(),
 						instr->getKeyMapping(),
-						8); // line spacing
+						resolution); // line spacing
     } else {
 	m_pitchRuler = new PianoKeyboard(m_pianoView->viewport());
     }

@@ -39,7 +39,7 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
 					   int lineSpacing) :
     PitchRuler(parent),
     m_mapping(mapping),
-    m_width(50),
+    m_width(100),
     m_lineSpacing(lineSpacing),
     m_mouseDown(false),
     m_hoverHighlight(new QWidget(this)),
@@ -68,11 +68,18 @@ QSize PercussionPitchRuler::minimumSizeHint() const
 
 void PercussionPitchRuler::paintEvent(QPaintEvent*)
 {
-    static QFont pFont("helvetica", 8);
+    static QFont *pFont = 0;
+    static QFontMetrics *pFontMetrics;
+
+    if (!pFont) {
+	pFont = new QFont();
+	pFont->setPixelSize(8);
+	pFontMetrics = new QFontMetrics(*pFont);
+    }
 
     QPainter paint(this);
 
-    paint.setFont(pFont);
+    paint.setFont(*pFont);
 
     int minPitch = m_mapping->getPitchForOffset(0);
     int extent = m_mapping->getPitchExtent();
@@ -82,15 +89,22 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
 		       m_width, i * (m_lineSpacing + 1));
     }
 
+    int lw = pFontMetrics->width("A#2");
+
     for (int i = 0; i < extent; ++i) {
 
 	Rosegarden::MidiPitchLabel label(minPitch + i);
 	std::string key = m_mapping->getMapForKeyName(minPitch + i);
 
-        paint.drawText(0, (extent - i - 1) * (m_lineSpacing + 1),
-		       QString("%1: %2")
-		       .arg(label.getQString())
-		       .arg(strtoqstr(key)));
+        paint.drawText
+	    (2, (extent - i - 1) * (m_lineSpacing + 1) +
+	     pFontMetrics->ascent() + 2,
+	     label.getQString());
+
+        paint.drawText
+	    (9 + lw, (extent - i - 1) * (m_lineSpacing + 1) +
+	     pFontMetrics->ascent() + 2,
+	     strtoqstr(key));
     }
 }
 
