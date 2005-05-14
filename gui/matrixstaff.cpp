@@ -58,13 +58,13 @@ MatrixStaff::~MatrixStaff()
 
 int MatrixStaff::getLineCount() const
 {
-    MATRIX_DEBUG << "MatrixStaff::getLineCount: isDrumMode " << m_view->isDrumMode() << ", key mapping " << (getKeyMapping() ? getKeyMapping()->getName() : "<none>") << endl;
+//    MATRIX_DEBUG << "MatrixStaff::getLineCount: isDrumMode " << m_view->isDrumMode() << ", key mapping " << (getKeyMapping() ? getKeyMapping()->getName() : "<none>") << endl;
 
     if (m_view->isDrumMode()) {
 	const Rosegarden::MidiKeyMapping *km = getKeyMapping();
 	if (km) return km->getPitchExtent() + 1;
     }
-    return MatrixVLayout::maxMIDIPitch + 1;
+    return MatrixVLayout::maxMIDIPitch + 2;
 }
 
 int MatrixStaff::getLegerLineCount() const

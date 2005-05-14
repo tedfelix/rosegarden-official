@@ -183,6 +183,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                            i,
 					   resolution,
                                            this));
+	// staff has one too many rows to avoid a half-row at the top:
+	m_staffs[i]->setY(-resolution / 2);
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
@@ -209,7 +211,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     } else {
 	m_pitchRuler = new PianoKeyboard(m_pianoView->viewport());
     }
-    
+
     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
     m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
     m_pianoView->addChild(m_pitchRuler);

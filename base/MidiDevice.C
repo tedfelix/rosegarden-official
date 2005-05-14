@@ -384,7 +384,18 @@ MidiDevice::getBankName(const MidiBank &bank) const
 void
 MidiDevice::addKeyMapping(const MidiKeyMapping &mapping)
 {
+    //!!! handle dup names
     m_keyMappingList.push_back(mapping);
+}
+
+const MidiKeyMapping *
+MidiDevice::getKeyMappingByName(const std::string &name) const
+{
+    for (KeyMappingList::const_iterator i = m_keyMappingList.begin();
+	 i != m_keyMappingList.end(); ++i) {
+	if (i->getName() == name) return &(*i);
+    }
+    return 0;
 }
 
 std::string
@@ -469,12 +480,6 @@ MidiDevice::toXmlString()
     for (iit = m_instruments.begin(); iit != m_instruments.end(); iit++)
         midiDevice << (*iit)->toXmlString();
 
-#if (__GNUC__ < 3)
-    midiDevice << "    </device>" << std::endl << std::ends;
-#else
-    midiDevice << "    </device>" << std::endl;
-#endif
-
     KeyMappingList::iterator kit;
 
     for (kit = m_keyMappingList.begin(); kit != m_keyMappingList.end(); kit++)
@@ -492,16 +497,20 @@ MidiDevice::toXmlString()
 		       << std::endl;
 	}
 
-	midiDevice << "\n";
-
 	for (MidiKeyMapping::KeyNameMap::const_iterator nmi =
 		 kit->getMap().begin(); nmi != kit->getMap().end(); ++nmi) {
-	    midiDevice << "          <key number=\"" << nmi->first
+	    midiDevice << "          <key number=\"" << (int)nmi->first
 		       << "\" name=\"" << encode(nmi->second) << "\"/>\n";
 	}
 
 	midiDevice << "        </keymapping>\n";
     }
+
+#if (__GNUC__ < 3)
+    midiDevice << "    </device>" << std::endl << std::ends;
+#else
+    midiDevice << "    </device>" << std::endl;
+#endif
 
     return midiDevice.str();
 }

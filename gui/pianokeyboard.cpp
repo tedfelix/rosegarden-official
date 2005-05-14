@@ -65,7 +65,8 @@ QSize PianoKeyboard::minimumSizeHint() const
 
 void PianoKeyboard::computeKeyPos()
 {
-    int y = -9;
+//    int y = -9;
+    int y = -1;
 
     unsigned int posInOctave = 0,
         keyHeight = _smallWhiteKeyHeight;
@@ -112,11 +113,15 @@ void PianoKeyboard::computeKeyPos()
 
 void PianoKeyboard::paintEvent(QPaintEvent*)
 {
-    static QFont pFont("helvetica", 8);
+    static QFont *pFont = 0;
+    if (!pFont) {
+	pFont = new QFont();
+	pFont->setPixelSize(9);
+    }
 
     QPainter paint(this);
 
-    paint.setFont(pFont);
+    paint.setFont(*pFont);
 
     for(unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
         paint.drawLine(0, m_whiteKeyPos[i],

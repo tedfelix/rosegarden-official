@@ -909,8 +909,9 @@ void RosegardenGUIDoc::initialiseStudio()
 //
 // Update notes:
 // MINOR -> 2 : plugins on busses
+// MINOR -> 3 : key mappings for percussion instruments
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 2;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 3;
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
 
 

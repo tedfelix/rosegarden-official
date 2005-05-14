@@ -96,6 +96,7 @@ public:
     ProgramList getPrograms(const MidiBank &bank) const;
 
     const KeyMappingList &getKeyMappings() const { return m_keyMappingList; }
+    const MidiKeyMapping *getKeyMappingByName(const std::string &) const;
 
     std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;

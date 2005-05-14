@@ -30,6 +30,7 @@
 #include "colours.h"
 #include "rosedebug.h"
 #include "matrixview.h"
+#include "matrixstaff.h"
 #include "rosestrings.h"
 
 using Rosegarden::MidiKeyMapping;
@@ -42,13 +43,11 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
     m_width(100),
     m_lineSpacing(lineSpacing),
     m_mouseDown(false),
-    m_hoverHighlight(new QWidget(this)),
-    m_lastHoverHighlight(0)
+    m_lastHoverHighlight(-1)
 {
-    m_hoverHighlight->hide();
-    m_hoverHighlight->setPaletteBackgroundColor
-	(Rosegarden::GUIPalette::getColour
-	 (Rosegarden::GUIPalette::MatrixKeyboardFocus));
+    m_font = new QFont();
+    m_font->setPixelSize(9);
+    m_fontMetrics = new QFontMetrics(*m_font);
 
     setPaletteBackgroundColor(QColor(238, 238, 224));
 
@@ -68,18 +67,9 @@ QSize PercussionPitchRuler::minimumSizeHint() const
 
 void PercussionPitchRuler::paintEvent(QPaintEvent*)
 {
-    static QFont *pFont = 0;
-    static QFontMetrics *pFontMetrics;
-
-    if (!pFont) {
-	pFont = new QFont();
-	pFont->setPixelSize(8);
-	pFontMetrics = new QFontMetrics(*pFont);
-    }
-
     QPainter paint(this);
 
-    paint.setFont(*pFont);
+    paint.setFont(*m_font);
 
     int minPitch = m_mapping->getPitchForOffset(0);
     int extent = m_mapping->getPitchExtent();
@@ -89,21 +79,23 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
 		       m_width, i * (m_lineSpacing + 1));
     }
 
-    int lw = pFontMetrics->width("A#2");
+    int lw = m_fontMetrics->width("A#2");
 
     for (int i = 0; i < extent; ++i) {
 
 	Rosegarden::MidiPitchLabel label(minPitch + i);
 	std::string key = m_mapping->getMapForKeyName(minPitch + i);
 
+	RG_DEBUG << i << ": " << label.getQString() << ": " << key << endl;
+
         paint.drawText
 	    (2, (extent - i - 1) * (m_lineSpacing + 1) +
-	     pFontMetrics->ascent() + 2,
+	     m_fontMetrics->ascent() + 1,
 	     label.getQString());
 
         paint.drawText
 	    (9 + lw, (extent - i - 1) * (m_lineSpacing + 1) +
-	     pFontMetrics->ascent() + 2,
+	     m_fontMetrics->ascent() + 1,
 	     strtoqstr(key));
     }
 }
@@ -114,101 +106,55 @@ void PercussionPitchRuler::enterEvent(QEvent *)
 
 void PercussionPitchRuler::leaveEvent(QEvent*)
 {
-    m_hoverHighlight->hide();
+//    m_hoverHighlight->hide();
 }
 
 void PercussionPitchRuler::drawHoverNote(int evPitch)
 {
-    if (m_lastHoverHighlight != evPitch)
-    {
+    QPainter paint(this);
+    paint.setFont(*m_font);
+
+    if (m_lastHoverHighlight != evPitch) {
+
+	int minPitch = m_mapping->getPitchForOffset(0);
+	int extent = m_mapping->getPitchExtent();
+
+	int lw = m_fontMetrics->width("A#2");
+
+	if (m_lastHoverHighlight >= 0) {
+
+	    int y = (extent - (m_lastHoverHighlight - minPitch) - 1) * (m_lineSpacing + 1);
+	    paint.setBrush(QColor(238, 238, 224));
+	    paint.setPen(QColor(238, 238, 224));
+	    paint.drawRect(lw + 7, y + 1, m_width - lw, m_lineSpacing);
+	    std::string key = m_mapping->getMapForKeyName(m_lastHoverHighlight);
+	    paint.setPen(Qt::black);
+	    paint.drawText
+		(9 + lw, y + m_fontMetrics->ascent() + 1,
+		 strtoqstr(key));
+	} 
+
+	int y = (extent - (evPitch - minPitch) - 1) * (m_lineSpacing + 1);
         m_lastHoverHighlight = evPitch;
-/*!!!
-        int count = 0;
-        std::vector<unsigned int>::iterator it;
-        for (it = m_allKeyPos.begin(); it != m_allKeyPos.end(); ++it, ++count)
-        {
-            if (126 - evPitch == count)
-            {
-                int width = m_keySize.width() - 8;
-                int yPos = *it + 5;
+	paint.setBrush(paint.pen().color());
+	paint.drawRect(lw + 7, y, m_width - lw, m_lineSpacing + 1);
+	paint.setPen(QColor(238, 238, 224));
 
-                // check if this is a black key
-                //
-                std::vector<unsigned int>::iterator bIt;
-                bool isBlack = false;
-                for (bIt = m_blackKeyPos.begin(); bIt != m_blackKeyPos.end(); ++bIt)
-                {
-                    if (*bIt == *it)
-                    {
-                        isBlack = true;
-                        break;
-                    }
-                }
-
-                // Adjust for black note
-                //
-                if (isBlack)
-                {
-                    width = m_blackKeySize.width() - 8;
-                    yPos -= 3;
-                }
-                else
-                {
-                    // If a white note then ensure that we allow for short/tall ones
-                    //
-                    std::vector<unsigned int>::iterator wIt = m_whiteKeyPos.begin(), tIt;
-                    
-                    while (wIt != m_whiteKeyPos.end())
-                    {
-                        if (*wIt == *it)
-                        {
-                            tIt = wIt;
-
-                            if (++tIt != m_whiteKeyPos.end())
-                            {
-                                //MATRIX_DEBUG << "WHITE KEY HEIGHT = " << *tIt - *wIt << endl;
-                                if (*tIt - *wIt == _whiteKeyHeight)
-                                {
-                                    yPos += 2;
-                                }
-
-                            }
-                        }
-
-                        ++wIt;
-                    }
-
-
-                }
-
-                m_hoverHighlight->setFixedSize(width, 4);
-                m_hoverHighlight->move(3, yPos);
-                m_hoverHighlight->show();
-
-                return;
-            }
-        }
-    }
-*/
+	std::string key = m_mapping->getMapForKeyName(evPitch);
+        paint.drawText
+	    (9 + lw, y + m_fontMetrics->ascent() + 1,
+	     strtoqstr(key));
     }
 }
 
 void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 {
-    // The routine to work out where this should appear doesn't coincide with the note
-    // that we send to the sequencer - hence this is a bit pointless and crap at the moment.
-    // My own fault it's so crap but there you go.
-    //
-    // RWB (20040220)
-    //
-/*!!!
+    // ugh
+    
     MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
-    if (matrixView)
-    {
+    if (matrixView) {
         MatrixStaff *staff = matrixView->getStaff(0);
-
-        if (staff)
-        {
+        if (staff) {
             drawHoverNote(staff->getHeightAtCanvasCoords(e->x(), e->y()));
         }
     }
@@ -220,15 +166,14 @@ void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 	    emit keyPressed(e->y(), true); // we're swooshing
     else
         emit hoveredOverKeyChanged(e->y());
-*/
 }
 
 void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-    if (e->button() == LeftButton)
-    {
+    if (e->button() == LeftButton) {
+
         m_mouseDown = true;
 	m_selecting = (bs & Qt::ShiftButton);
 	
@@ -241,8 +186,7 @@ void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 
 void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton)
-    {
+    if (e->button() == LeftButton) {
         m_mouseDown = false;
 	m_selecting = false;
     }

@@ -65,8 +65,10 @@ protected:
     bool                      m_mouseDown;
     bool                      m_selecting;
 
-    QWidget                  *m_hoverHighlight;
     int                       m_lastHoverHighlight;
+
+    QFont                    *m_font;
+    QFontMetrics             *m_fontMetrics;
 };
 
 
