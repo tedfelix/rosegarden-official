@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 
 BOLD   ="\033[1m"
 RED    ="\033[91m"
@@ -6,21 +7,20 @@ YELLOW ="\033[93m"
 CYAN   ="\033[96m"
 NORMAL ="\033[0m"
 
-
 def exists(env):
 	return true
 
 def generate(env):
 	import SCons.Util, os
 
-	env.Help("""
-"""+BOLD+
-"""*** Sound options ***
+	if env['help']:
+		print """
+"""+BOLD+"""*** Sound options ***
 -----------------------"""+NORMAL+"""
 """+BOLD+"""* noalsa  """+NORMAL+""": disable alsa
 """+BOLD+"""* nojack """+NORMAL+""": disable jack
 ie: """+BOLD+"""scons configure noalsa=1 nojack=1
-"""+NORMAL)
+"""+NORMAL
 
 	def Check_pkg_config(context, version):
 		context.Message('Checking for pkg-config ... ')
@@ -72,19 +72,20 @@ ie: """+BOLD+"""scons configure noalsa=1 nojack=1
 			print 'pkg-config >= 0.15 not found.' 
 			env.Exit(1) 
 
-		os.popen(">config.h")
+		#os.popen(">config.h")
 
+		import sys
 		if 'noalsa' in env['TARGS']:
 			print "-> Alsa module disabled by user"
-			haveAlsa    = 0
+			haveAlsa = 0
 		else:
-			haveAlsa    = conf.Check_package('alsa','1.0')
+			haveAlsa = conf.Check_package('alsa','1.0')
 
 		if 'nojack' in env['TARGS']:
 			print "-> Jack module disabled by user"
-			haveJack    = 0
+			haveJack = 0
 		else:
-			haveJack    = conf.Check_package('jack', '0.77')
+			haveJack = conf.Check_package('jack', '0.77')
 
 		haveLadspa  = conf.CheckHeader('ladspa.h')
 		haveLiblrdf = conf.CheckLibWithHeader('lrdf', ['stdio.h', 'lrdf.h'], 'C', 'lrdf_init();')
@@ -97,36 +98,30 @@ ie: """+BOLD+"""scons configure noalsa=1 nojack=1
 
 		if haveAlsa:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_ALSA')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_ALSA')
+			#os.popen('echo "#define HAVE_ALSA">>config.h')
 		if haveJack:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBJACK')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBJACK')
+			#os.popen('echo "#define HAVE_LIBJACK">>config.h')
 		if haveLadspa:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LADSPA')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_LADSPA')
+			#os.popen('echo "#define HAVE_LADSPA">>config.h')
 		if haveLiblo:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLO')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBLO')
+			#os.popen('echo "#define HAVE_LIBLO">>config.h')
 		if haveLibmad:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBMAD')
+			#os.popen('echo "#define HAVE_LIBMAD">>config.h')
 		if haveLiblrdf:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLRDF')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_LIBLRDF')
 			env.AppendUnique(SOUND_LDFLAGS = '-llrdf')
-		if haveLibdssi:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_DSSI')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_DSSI')
-		if haveXft:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_XFT')
-			env.Append(SOUND_CXXFLAGS = '-DHAVE_XFT')
-			env.AppendUnique(SOUND_LDFLAGS = '-lXft')
+			#os.popen('echo "#define HAVE_LIBLRDF">>config.h')
 
 		env['ISCONFIGURED'] = 1
 		opts.Save(cachefile, env)
 
 	if env.has_key('SOUND_CCFLAGS'):
 		env.AppendUnique(CCFLAGS = env['SOUND_CCFLAGS'] )
+		env.AppendUnique(CXXFLAGS = env['SOUND_CCFLAGS'] )
 	if env.has_key('SOUND_LDFLAGS'):
 		env.AppendUnique(LINKFLAGS = env['SOUND_LDFLAGS'] )
 
