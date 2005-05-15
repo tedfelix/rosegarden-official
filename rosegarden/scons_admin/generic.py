@@ -22,18 +22,23 @@ def exists(env):
 	return true
 
 def generate(env):
-	env.Help("""
-"""+BOLD+
-"""*** Generic options ***
+	## Bksys requires scons 0.96
+	env.EnsureSConsVersion(0, 96)
+	
+	import sys
+	env['help']=0
+	if '--help' in sys.argv or '-h' in sys.argv:
+		env['help']=1
+	
+	if env['help']:
+		print """
+"""+BOLD+"""*** Generic options ***
 -----------------------"""+NORMAL+"""
 """+BOLD+"""* debug  """+NORMAL+""": debug=1 (-g) or debug=full (-g3, slower) else use environment CXXFLAGS, or -O2 by default
 """+BOLD+"""* prefix """+NORMAL+""": the installation path
 """+BOLD+"""* extraincludes """+NORMAL+""": a list of paths separated by ':'
 ie: """+BOLD+"""scons configure debug=full prefix=/usr/local extraincludes=/tmp/include:/usr/local
-"""+NORMAL)
-
-	## Bksys requires scons 0.96
-	env.EnsureSConsVersion(0, 96)
+"""+NORMAL
 	
 	## Global cache directory
 	## Put all project files in it so a rm -rf cache will clean up the config
@@ -75,7 +80,7 @@ ie: """+BOLD+"""scons configure debug=full prefix=/usr/local extraincludes=/tmp/
 	import SCons.Util
 
 	# configure the environment if needed
-	if 'configure' in env['TARGS'] or not env.has_key('ISCONFIGURED'):
+	if not env['help'] and ('configure' in env['TARGS'] or not env.has_key('ISCONFIGURED')):
 		# be paranoid, unset existing variables
 		if env.has_key('KDECXXFLAGS'):
 			env.__delitem__('KDECXXFLAGS')

@@ -167,6 +167,7 @@ def detect_kde(env):
 		env['KDEDOC']   = subst_vars( debian_fix(os.popen('kde-config --install html').read().strip()) )
 		env['KDEKCFG']  = subst_vars(os.popen('kde-config --install kcfg').read().strip())
 		env['KDEXDG']   = subst_vars(os.popen('kde-config --install xdgdata-apps').read().strip())
+		env['KDEXDGDIR']= subst_vars(os.popen('kde-config --install xdgdata-dirs').read().strip())
 		env['KDEMENU']  = subst_vars(os.popen('kde-config --install apps').read().strip())
 		env['KDEMIME']  = subst_vars(os.popen('kde-config --install mime').read().strip())
 		env['KDEICONS'] = subst_vars(os.popen('kde-config --install icon').read().strip())
@@ -182,6 +183,7 @@ def detect_kde(env):
 		env['KDEDOC']   = os.popen('kde-config --expandvars --install html').read().strip()
 		env['KDEKCFG']  = os.popen('kde-config --expandvars --install kcfg').read().strip()
 		env['KDEXDG']   = os.popen('kde-config --expandvars --install xdgdata-apps').read().strip()
+		env['KDEXDGDIR']= os.popen('kde-config --expandvars --install xdgdata-dirs').read().strip()
 		env['KDEMENU']  = os.popen('kde-config --expandvars --install apps').read().strip()
 		env['KDEMIME']  = os.popen('kde-config --expandvars --install mime').read().strip()
 		env['KDEICONS'] = os.popen('kde-config --expandvars --install icon').read().strip()
@@ -203,11 +205,10 @@ def detect_kde(env):
 
 def generate(env):
 	""""Set up the qt and kde environment and builders - the moc part is difficult to understand """
-	env.Help("""
-"""+BOLD+
-"""*** KDE options ***
--------------------"""
-+NORMAL+"""
+	if env['help']:
+		print """
+"""+BOLD+"""*** KDE options ***
+-------------------"""+NORMAL+"""
 """+BOLD+"""* prefix     """+NORMAL+""": base install path,         ie: /usr/local
 """+BOLD+"""* execprefix """+NORMAL+""": install path for binaries, ie: /usr/bin
 """+BOLD+"""* datadir    """+NORMAL+""": install path for the data, ie: /usr/local/share
@@ -218,7 +219,7 @@ def generate(env):
 """+BOLD+"""* kdelibs    """+NORMAL+""": path to the kde libs, for linking the programs
 """+BOLD+"""* qtlibs     """+NORMAL+""": same punishment, for qt libraries
 ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
-"""+NORMAL)
+"""+NORMAL
 
 	import SCons.Defaults
 	import SCons.Tool
@@ -382,6 +383,7 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		('KDEDOC', 'installation path of the application documentation'),
 		('KDEKCFG', 'installation path of the .kcfg files'),
 		('KDEXDG', 'installation path of the service types'),
+		('KDEXDGDIR', 'installation path of the xdg service directories'),
 		('KDEMENU', ''),
 		('KDEMIME', 'installation path of to the mimetypes'),
 		('KDEICONS', ''),
@@ -390,11 +392,11 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	opts.Update(env)
 
 	# reconfigure when things are missing
-	if 'configure' in env['TARGS'] or not env.has_key('QTDIR') or not env.has_key('KDEDIR'):
+	if not env['help'] and ('configure' in env['TARGS'] or not env.has_key('QTDIR') or not env.has_key('KDEDIR')):
 		detect_kde(env)
 
-	# finally save the configuration to the cache file
-	opts.Save(cachefile, env)
+		# finally save the configuration to the cache file
+		opts.Save(cachefile, env)
 
 	## set default variables, one can override them in sconscript files
 	env.Append(CXXFLAGS = ['-I'+env['KDEINCLUDEPATH'], '-I'+env['QTINCLUDEPATH'] ])
@@ -649,7 +651,7 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			else:
 				basedir += lenv[restype]+'/'
 		#print file # <- useful to trace stuff :)
-		install_list =  env.Install(basedir+subdir, files)
+		install_list =  env.Install(basedir+subdir+'/', files)
 		env.Alias('install', install_list)
 		return install_list
 
@@ -675,10 +677,11 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 			KDEinstall(lenv, 'KDEBIN', '', target)
 		return program_list
 
-	def KDEshlib(lenv, target, source, kdelib=0):
+	def KDEshlib(lenv, target, source, kdelib=0, libprefix='lib'):
 		""" Makes a shared library for kde (.la file for klibloader)
 		The library is installed except if one sets env['NOAUTOINSTALL'] """
 		src = KDEfiles(lenv, target, source)
+		lenv['LIBPREFIX']=libprefix
 		library_list = lenv.SharedLibrary(target, src)
 		lafile_list  = lenv.LaFile(target, library_list)
 		if not lenv.has_key('NOAUTOINSTALL'):
