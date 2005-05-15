@@ -198,6 +198,8 @@ if 'install' in COMMAND_LINE_TARGETS:
 
 ### Emulate "make distclean"
 if 'distclean' in COMMAND_LINE_TARGETS:
+
+	os.popen("find . -name \"*.pyc\" | xargs rm -rf")
 	
 	## The target scons distclean requires the python module shutil which is in 2.3
 	env.EnsurePythonVersion(2, 3)
