@@ -23,14 +23,17 @@
 #define _EXCEPTION_H_
 
 #include <string>
+#include <exception>
 
 namespace Rosegarden {
 
-class Exception
+class Exception : public virtual std::exception
 {
 public:
     Exception(std::string message);
     Exception(std::string message, std::string file, int line);
+
+    virtual ~Exception() throw () {}
 
     std::string getMessage() const { return m_message; }
 

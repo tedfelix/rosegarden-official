@@ -202,7 +202,7 @@ AudioLevel::multiplier_to_fader(float multiplier, int maxLevel, FaderType type)
 {
     if (multiplier == 0.0) return 0;
     float dB = multiplier_to_dB(multiplier);
-    float fader = dB_to_fader(dB, maxLevel, type);
+    int fader = dB_to_fader(dB, maxLevel, type);
     return fader;
 }
 

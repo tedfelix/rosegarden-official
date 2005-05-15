@@ -1662,7 +1662,7 @@ Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
 }
 
 void
-Composition::dump(std::ostream& out, bool full) const
+Composition::dump(std::ostream& out, bool) const
 {
     out << "Composition segments : " << endl;
 

@@ -672,8 +672,10 @@ public:
     /**
      * Called after the segment's end marker time has been
      * changed
+     *
+     * @param shorten true if the marker change shortens the segment's duration
      */
-    virtual void endMarkerTimeChanged(const Segment *, bool shorten) { }
+    virtual void endMarkerTimeChanged(const Segment *, bool /*shorten*/) { }
 
     /**
      * Called from the segment dtor
