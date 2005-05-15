@@ -286,7 +286,7 @@ PlayableAudioFile::setRingBufferPoolSizes(size_t n, size_t nframes)
 
 
 void
-PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
+PlayableAudioFile::initialise(size_t, size_t smallFileSize)
 {
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::initialise() " << this << std::endl;
@@ -323,7 +323,7 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
     if (m_targetSampleRate <= 0) m_targetSampleRate = m_audioFile->getSampleRate();
 
     m_ringBuffers = new RingBuffer<sample_t> *[m_targetChannels];
-    for (int ch = 0; ch < m_targetChannels; ++ch) {
+    for (unsigned int ch = 0; ch < m_targetChannels; ++ch) {
 	m_ringBuffers[ch] = 0;
     }
 }
@@ -350,7 +350,7 @@ PlayableAudioFile::~PlayableAudioFile()
 void
 PlayableAudioFile::returnRingBuffers()
 {
-    for (int i = 0; i < m_targetChannels; ++i) {
+    for (unsigned int i = 0; i < m_targetChannels; ++i) {
 	if (m_ringBuffers[i]) {
 	    m_ringBufferPool->returnBuffer(m_ringBuffers[i]);
 	    m_ringBuffers[i] = 0;
@@ -404,7 +404,7 @@ PlayableAudioFile::getSampleFramesAvailable()
 //	return cframes - m_currentFrameOffset;
     }
 
-    for (int ch = 0; ch < m_targetChannels; ++ch) {
+    for (unsigned int ch = 0; ch < m_targetChannels; ++ch) {
 	if (!m_ringBuffers[ch]) return 0;
 	size_t thisChannel = m_ringBuffers[ch]->getReadSpace();
 	if (ch == 0 || thisChannel < actual) actual = thisChannel;
@@ -430,14 +430,14 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 	size_t qty = 0;
 	bool done = m_fileEnded;
 
-	for (int ch = 0; ch < int(channels) && ch < m_targetChannels; ++ch) {
+	for (unsigned int ch = 0; ch < channels && ch < m_targetChannels; ++ch) {
 	    if (!m_ringBuffers[ch]) return 0; //!!! fatal
 	    size_t here = m_ringBuffers[ch]->readAdding(destination[ch] + offset, nframes);
 	    if (ch == 0 || here < qty) qty = here;
 	    if (done && (m_ringBuffers[ch]->getReadSpace() > 0)) done = false;
 	}
 
-	for (int ch = channels; ch < m_targetChannels; ++ch) {
+	for (unsigned int ch = channels; ch < m_targetChannels; ++ch) {
 	    m_ringBuffers[ch]->skip(nframes);
 	}
 
@@ -467,7 +467,7 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 	    size_t scanFrame = RealTime::realTime2Frame(m_currentScanPoint,
 							m_targetSampleRate);
 
-	    size_t startFrame = scanFrame;
+	// UNUSED - size_t startFrame = scanFrame;
 	    size_t endFrame = scanFrame + nframes;
 	    if (endFrame >= cframes) m_fileEnded = true;
 
@@ -643,7 +643,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
     }
 	
     if (!m_isSmallFile) {
-	for (int i = 0; i < m_targetChannels; ++i) {
+	for (unsigned int i = 0; i < m_targetChannels; ++i) {
 	    if (m_ringBuffers[i]) m_ringBuffers[i]->reset();
 	}
 	updateBuffers();
@@ -676,7 +676,7 @@ PlayableAudioFile::updateBuffers()
 
     size_t nframes = 0;
 
-    for (int ch = 0; ch < m_targetChannels; ++ch) {
+    for (unsigned int ch = 0; ch < m_targetChannels; ++ch) {
 	size_t writeSpace = m_ringBuffers[ch]->getWriteSpace();
 	if (ch == 0 || writeSpace < nframes) nframes = writeSpace;
     }
@@ -739,7 +739,7 @@ PlayableAudioFile::updateBuffers()
 #ifdef DEBUG_PLAYABLE_READ
 	std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames" << std::endl;
 #endif
-	for (int i = 0; i < m_targetChannels; ++i) {
+	for (unsigned int i = 0; i < m_targetChannels; ++i) {
 	    m_workBuffers.push_back(new sample_t[m_workBufferSize]);
 	}
 
@@ -813,7 +813,7 @@ PlayableAudioFile::updateBuffers()
 
 	m_currentScanPoint = m_currentScanPoint + block;
 
-	for (int ch = 0; ch < m_targetChannels; ++ch) {
+	for (unsigned int ch = 0; ch < m_targetChannels; ++ch) {
 	    m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
 	}
     }

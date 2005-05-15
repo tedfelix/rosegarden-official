@@ -184,7 +184,7 @@ protected:
     //
     InstrumentId          m_instrumentId;
 
-    int                   m_targetChannels;
+    unsigned int          m_targetChannels;
     int                   m_targetSampleRate;
 
     bool                  m_fileEnded;

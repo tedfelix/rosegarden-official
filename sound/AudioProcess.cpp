@@ -173,7 +173,7 @@ AudioThread::terminate()
 	std::cerr << name << "::terminate(): cancel requested" << std::endl;
 #endif
 
-	int rv = pthread_join(m_thread, 0);
+	// UNUSED - int rv = pthread_join(m_thread, 0);
 
 #ifdef DEBUG_THREAD_CREATE_DESTROY
 	std::cerr << name << "::terminate(): thread exited with return value " << rv << std::endl;
@@ -393,7 +393,7 @@ AudioBussMixer::emptyBuffers()
     for (int i = 0; i < m_bussCount; ++i) {
 	m_bufferMap[i].dormant = true;
 	for (int ch = 0; ch < 2; ++ch) {
-	    if (int(m_bufferMap[i].buffers.size()) > ch) {
+	    if (static_cast<int>(m_bufferMap[i].buffers.size()) > ch) {
 		m_bufferMap[i].buffers[ch]->reset();
 	    }
 	}
@@ -471,7 +471,7 @@ AudioBussMixer::updateInstrumentConnections()
 
 	BufferRec &rec = m_bufferMap[buss];
 
-	while (int(rec.instruments.size()) < audioInstruments + synthInstruments) {
+	while (static_cast<int>(rec.instruments.size()) < audioInstruments + synthInstruments) {
 	    rec.instruments.push_back(false);
 	}
 	
@@ -552,7 +552,7 @@ AudioBussMixer::processBlocks()
 	    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
 		// is this instrument on this buss?
-		if (int(rec.instruments.size()) <= i ||
+		if (static_cast<int>(rec.instruments.size()) <= i ||
 		    !rec.instruments[i]) continue;
 	    
 		InstrumentId id;
@@ -601,7 +601,7 @@ AudioBussMixer::processBlocks()
 	    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
 		// is this instrument on this buss?
-		if (int(rec.instruments.size()) <= i ||
+		if (static_cast<int>(rec.instruments.size()) <= i ||
 		    !rec.instruments[i]) continue;
 
 		if (processedInstruments[i]) {
@@ -797,7 +797,7 @@ AudioInstrumentMixer::AudioInstrumentMixer(SoundDriver *driver,
 	else id = synthInstrumentBase + (i - audioInstruments);
 
 	PluginList &list = m_plugins[id];
-	for (int j = 0; j < int(Instrument::PLUGIN_COUNT); ++j) {
+	for (int j = 0; j < static_cast<int>(Instrument::PLUGIN_COUNT); ++j) {
 	    list.push_back(0);
 	}
 
@@ -868,7 +868,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
     RunnablePluginInstance *oldInstance = 0;
 
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+    if (position == static_cast<int>(Instrument::SYNTH_PLUGIN_POSITION)) {
 
 	oldInstance = m_synths[id];
 	m_synths[id] = instance;
@@ -877,7 +877,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
 	PluginList &list = m_plugins[id];
 
-	if (position < Instrument::PLUGIN_COUNT) {
+	if (position < static_cast<int>(Instrument::PLUGIN_COUNT)) {
 	    while (position >= (int)list.size()) {
 		list.push_back(0);
 	    }
@@ -902,7 +902,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 
     RunnablePluginInstance *oldInstance = 0;
 
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+    if (position == static_cast<int>(Instrument::SYNTH_PLUGIN_POSITION)) {
 
 	if (m_synths[id]) {
 	    oldInstance = m_synths[id];
@@ -956,11 +956,11 @@ AudioInstrumentMixer::getPluginInstance(InstrumentId id, int position)
 {
     // Not RT safe
 
-    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
+    if (position == static_cast<int>(Instrument::SYNTH_PLUGIN_POSITION)) {
 	return m_synths[id];
     } else {
 	PluginList &list = m_plugins[id];
-	if (position < int(list.size())) return list[position];
+	if (position < static_cast<int>(list.size())) return list[position];
     }
     return 0;
 }

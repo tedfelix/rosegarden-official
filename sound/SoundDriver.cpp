@@ -203,6 +203,9 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
 	 fi != files.end(); ++fi) {
 	PlayableAudioFile *file = *fi;
 	if (mE->getRuntimeSegmentId() == -1) {
+
+	    // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
+	    //        and mE->getAudioID() of type int.
 	    if (file->getInstrument() == mE->getInstrument() &&
 		int(file->getAudioFile()->getId() == mE->getAudioID())) {
 		file->cancel();
