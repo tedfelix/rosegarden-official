@@ -179,7 +179,7 @@ LADSPAPluginInstance::getLatency()
 {
     if (m_latencyPort) {
 	if (!m_run) run(RealTime::zeroTime);
-	return static_cast<unsigned int>(*m_latencyPort);
+	return *m_latencyPort;
     }
     return 0;
 }

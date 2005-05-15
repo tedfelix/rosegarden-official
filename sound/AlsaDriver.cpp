@@ -4653,7 +4653,7 @@ AlsaDriver::runTasks()
 	snd_seq_get_queue_tempo(m_midiHandle, m_queue, q_ptr);
 
 	unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
-	// UNUSED - unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
+	unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
 	
 #ifdef DEBUG_ALSA
 	if (!m_playing) {
