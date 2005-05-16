@@ -79,10 +79,21 @@ env.SConscript("gui/docs/SConscript")
 #env.SConscript("po/SConscript")
 env.KDElang('po/', 'rosegarden') # one script to remove
 
-# disable object cache
-env.CacheDir(None)
+# disable object cache, unless you want it (define the SCONS_CACHE env. var)
+if not os.environ.has_key('SCONS_CACHE'):
+	env.CacheDir(None)
 
+# Create empty 'config.h' file because it's still included by many sources, even though they
+# don't need it in an scons build
 #
+if not os.access("config.h", os.F_OK):
+	dummyConfigHFile = open("config.h", "w")
+	dummyConfigHFile.write("// scons-generated dummy config.h - all preprocessor symbols are passed throught '-D' args by scons\n")
+	dummyConfigHFile.close()
+
+
+
+##
 ## Installation
 ##
 
