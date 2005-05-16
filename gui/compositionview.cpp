@@ -1257,7 +1257,7 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
 {
     // draw segment label
     //
-    if (!r.getLabel().isEmpty()) {
+    if (!r.getLabel().isEmpty() && !r.isSelected()) {
         p->save();
         p->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentLabel));
         p->setBrush(white);
