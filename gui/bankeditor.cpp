@@ -171,33 +171,126 @@ int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) con
 
 //--------------------------------------------------
 
-MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
-                                       QWidget* parent,
-                                       const char* name)
-    : QVGroupBox(i18n("Bank and Program details"),
-                 parent, name),
+NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
+			     QString title,
+			     QWidget* parent,
+			     const char* name,
+			     QString headingPrefix)
+    : QVGroupBox(title, parent, name),
       m_bankEditor(bankEditor),
-      m_mainFrame(new QFrame(this)),
-      m_percussion(new QCheckBox(m_mainFrame)),
-      m_msb(new QSpinBox(m_mainFrame)),
-      m_lsb(new QSpinBox(m_mainFrame)),
+      m_mainFrame(new QFrame(this))
+{
+    m_mainLayout = new QGridLayout(m_mainFrame,
+				   4,  // rows
+				   6,  // cols
+				   2); // margin
+ 
+    // Librarian
+    //
+    QGroupBox *groupBox = new QGroupBox(2,
+                                        Qt::Horizontal,
+                                        i18n("Librarian"),
+                                        m_mainFrame);
+    m_mainLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
+
+    new QLabel(i18n("Name"), groupBox);
+    m_librarian = new QLabel(groupBox);
+
+    new QLabel(i18n("Email"), groupBox);
+    m_librarianEmail = new QLabel(groupBox);
+
+    QToolTip::add(groupBox,
+                  i18n("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
+
+    QTabWidget* tabw = new QTabWidget(this);
+
+    tabw->setMargin(10);
+
+    QHBox *h;
+    QVBox *v;
+    QHBox *numBox;
+    QLabel *label;
+    
+    unsigned int tabs = 4;
+    unsigned int cols = 2;
+    unsigned int labelId = 0;
+
+    for (unsigned int tab = 0; tab < tabs; ++tab)
+    {
+	h = new QHBox(tabw);
+
+	for (unsigned int col = 0; col < cols; ++col)
+	{
+	    v = new QVBox(h);
+
+	    for (unsigned int row = 0; row < 128/(tabs*cols); ++row)
+	    {
+		numBox = new QHBox(v);
+		label = new QLabel(QString("%1").arg(labelId + 1), numBox);
+		label->setFixedWidth(40);
+		label->setAlignment(AlignHCenter);
+
+		KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
+		lineEdit->setMinimumWidth(110);
+		lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
+		lineEdit->setCompletionObject(&m_completion);
+		m_names.push_back(lineEdit);
+		
+		connect(m_names[labelId],
+			SIGNAL(textChanged(const QString&)),
+			this,
+			SLOT(slotNameChanged(const QString&)));
+
+		++labelId;
+	    }
+	}
+	
+	tabw->addTab(h,
+		     (tab == 0 ? headingPrefix + QString(" %1 - %2") :
+		      QString("%1 - %2")).
+		     arg(tab * (128/tabs) + 1).
+		     arg((tab + 1) * (128 / tabs)));
+    }
+}
+
+MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
+				       QWidget* parent,
+				       const char* name)
+    : NameSetEditor(bankEditor,
+		    i18n("Bank and Program details"),
+		    parent, name, i18n("Programs")),
       m_bankList(bankEditor->getBankList()),
       m_programList(bankEditor->getProgramList()),
       m_oldBank(false, 0, 0)
 {
+    QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
+    if (additionalWidget) {
+	m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
+    }
 
-    QGridLayout *gridLayout = new QGridLayout(m_mainFrame,
-                                              4,  // rows
-                                              6,  // cols
+}
+
+QWidget *
+MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
+{
+    QFrame *frame = new QFrame(parent);
+    
+    m_percussion = new QCheckBox(frame);
+    m_msb = new QSpinBox(frame);
+    m_lsb = new QSpinBox(frame);
+	
+    QGridLayout *gridLayout = new QGridLayout(frame,
+					      3,  // rows
+                                              2,  // cols
                                               2); // margin
  
-    gridLayout->addWidget(new QLabel(i18n("Percussion"), m_mainFrame),
+    gridLayout->addWidget(new QLabel(i18n("Percussion"), frame),
                           0, 0, AlignLeft);
     gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
 	    this, SLOT(slotNewPercussion()));
 
-    gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
+    gridLayout->addWidget(new QLabel(i18n("MSB Value"), frame),
                           1, 0, AlignLeft);
     m_msb->setMinValue(0);
     m_msb->setMaxValue(127);
@@ -212,7 +305,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     connect(m_msb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewMSB(int)));
 
-    gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame),
+    gridLayout->addWidget(new QLabel(i18n("LSB Value"), frame),
                           2, 0, AlignLeft);
     m_lsb->setMinValue(0);
     m_lsb->setMaxValue(127);
@@ -221,72 +314,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     connect(m_lsb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewLSB(int)));
 
-    // Librarian
-    //
-    QGroupBox *groupBox = new QGroupBox(2,
-                                        Qt::Horizontal,
-                                        i18n("Librarian"),
-                                        m_mainFrame);
-    gridLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
-
-
-    new QLabel(i18n("Name"), groupBox);
-    m_librarian = new QLabel(groupBox);
-
-    new QLabel(i18n("Email"), groupBox);
-    m_librarianEmail = new QLabel(groupBox);
-
-    QToolTip::add(groupBox,
-                  i18n("The librarian maintains the generic Bank and Program information for this device.\nIf you've made modifications to a Bank to suit your own device it might be worth\nliaising with the librarian in order to publish your Bank information for the benefit\nof others."));
-
-    QTabWidget* tabw = new QTabWidget(this);
-
-    tabw->setMargin(10);
-
-    QHBox *progHBox;
-    QVBox *progVBox;
-    QHBox *numBox;
-    QLabel *label;
-    
-    unsigned int tabs = 4;
-    unsigned int cols = 2;
-    unsigned int labelId = 0;
-
-    for (unsigned int tab = 0; tab < tabs; ++tab)
-    {
-	progHBox = new QHBox(tabw);
-
-	for (unsigned int col = 0; col < cols; ++col)
-	{
-	    progVBox = new QVBox(progHBox);
-
-	    for (unsigned int row = 0; row < 128/(tabs*cols); ++row)
-	    {
-		numBox = new QHBox(progVBox);
-		label = new QLabel(QString("%1").arg(labelId + 1), numBox);
-		label->setFixedWidth(40);
-		label->setAlignment(AlignHCenter);
-
-		KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
-		lineEdit->setMinimumWidth(110);
-		lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
-		lineEdit->setCompletionObject(&m_completion);
-		m_programNames.push_back(lineEdit);
-		
-		connect(m_programNames[labelId],
-			SIGNAL(textChanged(const QString&)),
-			this,
-			SLOT(slotProgramChanged(const QString&)));
-
-		++labelId;
-	    }
-	}
-	
-	tabw->addTab(progHBox,
-		     (tab == 0 ? i18n("Programs %1 - %2") : QString("%1 - %2")).
-		     arg(tab * (128/tabs) + 1).
-		     arg((tab + 1) * (128 / tabs)));
-    }
+    return frame;
 }
 
 Rosegarden::ProgramList
@@ -330,8 +358,8 @@ MidiProgramsEditor::clearAll()
 {
     blockAllSignals(true);
 
-    for(unsigned int i = 0; i < m_programNames.size(); ++i)
-        m_programNames[i]->clear();
+    for(unsigned int i = 0; i < m_names.size(); ++i)
+        m_names[i]->clear();
 
     setTitle(i18n("Bank and Program details"));
 
@@ -387,20 +415,20 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
     Rosegarden::ProgramList programSubset = getBankSubset(*m_currentBank);
     Rosegarden::ProgramList::iterator it;
 
-    for (unsigned int i = 0; i < m_programNames.size(); i++) {
-        m_programNames[i]->clear();
+    for (unsigned int i = 0; i < m_names.size(); i++) {
+        m_names[i]->clear();
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
                 QString programName = strtoqstr(it->getName());
                 m_completion.addItem(programName);
-                m_programNames[i]->setText(programName);
+                m_names[i]->setText(programName);
                 break;
             }
         }
 
         // show start of label
-        m_programNames[i]->setCursorPosition(0);
+        m_names[i]->setCursorPosition(0);
     }
 
     blockAllSignals(false);
@@ -525,7 +553,7 @@ struct ProgramCmp
 };
 
 void
-MidiProgramsEditor::slotProgramChanged(const QString& programName)
+MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
     const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
     if (!lineEdit) {

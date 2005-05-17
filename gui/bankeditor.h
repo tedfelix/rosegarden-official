@@ -98,7 +98,32 @@ protected:
     int    m_bankNb;
 };
 
-class MidiProgramsEditor : public QVGroupBox
+class NameSetEditor : public QVGroupBox
+{
+    Q_OBJECT
+public:
+    virtual void clearAll() = 0;
+
+public slots:
+    virtual void slotNameChanged(const QString&) = 0;
+
+protected:
+    NameSetEditor(BankEditorDialog *bankEditor,
+		  QString title,
+		  QWidget *parent,
+		  const char *name,
+		  QString headingPrefix = "");
+
+    QGridLayout             *m_mainLayout;
+    BankEditorDialog*        m_bankEditor;
+    KCompletion              m_completion;
+    std::vector<KLineEdit*>  m_names;
+    QFrame                  *m_mainFrame;
+    QLabel                  *m_librarian;
+    QLabel                  *m_librarianEmail;
+};
+
+class MidiProgramsEditor : public NameSetEditor
 {
     Q_OBJECT
 public:
@@ -106,16 +131,34 @@ public:
                        QWidget *parent,
                        const char *name = 0);
 
-    int ensureUniqueMSB(int msb, bool ascending);
-    int ensureUniqueLSB(int lsb, bool ascending);
+    Rosegarden::MidiBank* getCurrentBank();
+
+    void clearAll();
+
+    void populateBank(QListViewItem*);
+
+    void resetMSBLSB();
 
     // Does the banklist contain this combination already?
     //
     bool banklistContains(const Rosegarden::MidiBank &);
 
-    Rosegarden::ProgramList getBankSubset(const Rosegarden::MidiBank &);
+public slots:
 
-    Rosegarden::MidiBank* getCurrentBank();
+    // Check that any new MSB/LSB combination is unique for this device
+    //
+    void slotNewMSB(int value);
+    void slotNewLSB(int value);
+    void slotNewPercussion(); // gets value from checkbox
+
+    virtual void slotNameChanged(const QString &);
+
+protected:
+
+    int ensureUniqueMSB(int msb, bool ascending);
+    int ensureUniqueLSB(int lsb, bool ascending);
+
+    Rosegarden::ProgramList getBankSubset(const Rosegarden::MidiBank &);
 
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const Rosegarden::MidiBank &oldBank,
@@ -127,40 +170,24 @@ public:
 
     void setBankName(const QString& s);
 
-    void clearAll();
-
-    void populateBank(QListViewItem*);
-
-    void resetMSBLSB();
-
-public slots:
-
-    // Check that any new MSB/LSB combination is unique for this device
-    //
-    void slotNewMSB(int value);
-    void slotNewLSB(int value);
-    void slotNewPercussion(); // gets value from checkbox
-
-    void slotProgramChanged(const QString&);
-
-protected:
+    virtual QWidget *makeAdditionalWidget(QWidget *parent);
 
     void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
-    BankEditorDialog*        m_bankEditor;
+//    BankEditorDialog*        m_bankEditor;
 
-    KCompletion              m_completion;
-    std::vector<KLineEdit*>  m_programNames;
+//    KCompletion              m_completion;
+//    std::vector<KLineEdit*>  m_programNames;
 
-    QFrame                   *m_mainFrame;
+//    QFrame                   *m_mainFrame;
 
     QCheckBox                *m_percussion;
     QSpinBox                 *m_msb;
     QSpinBox                 *m_lsb;
 
-    QLabel                   *m_librarian;
-    QLabel                   *m_librarianEmail;
+//    QLabel                   *m_librarian;
+//    QLabel                   *m_librarianEmail;
 
     Rosegarden::MidiBank     *m_currentBank;
     Rosegarden::BankList     &m_bankList;

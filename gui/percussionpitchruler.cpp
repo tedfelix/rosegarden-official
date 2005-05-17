@@ -40,7 +40,6 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
 					   int lineSpacing) :
     PitchRuler(parent),
     m_mapping(mapping),
-    m_width(100),
     m_lineSpacing(lineSpacing),
     m_mouseDown(false),
     m_lastHoverHighlight(-1)
@@ -48,6 +47,7 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
     m_font = new QFont();
     m_font->setPixelSize(9);
     m_fontMetrics = new QFontMetrics(*m_font);
+    m_width = m_fontMetrics->width("  A#2   Low Wood Block  ");
 
     setPaletteBackgroundColor(QColor(238, 238, 224));
 
