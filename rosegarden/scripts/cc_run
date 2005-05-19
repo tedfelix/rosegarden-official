@@ -1,12 +1,25 @@
 #!/bin/sh
-prefix=/opt/rosegarden-installs
-tag="$1"; shift
-if [ -z "$tag" ]; then
-    echo "Usage: $0 <tag>"
-    exit 2
+prefix=/opt/rosegarden-install
+debug=""
+tag=""
+
+if [ "$1" = "-d" ]; then
+    debug="gdb"
+    shift
 fi
+
+case "$1" in
+    [a-z]*) tag="$1"; shift;;
+	 *) tag=`basename \`pwd\``;
+	    echo "No tag supplied: trying implied tag from path \"$tag\"";;
+esac
+
 if [ ! -d "$prefix/$tag" ]; then
     echo "No such tag as $tag (directory $prefix/$tag not found)"
     exit 1
 fi
-PATH="$prefix/$tag/bin:$PATH" KDEDIRS="/opt/rosegarden-installs/$tag" "$prefix/$tag/bin/rosegarden" "$@"
+
+PATH="$prefix/$tag/bin:$PATH" \
+    KDEDIRS="$prefix/$tag" \
+    $debug "$prefix/$tag/bin/rosegarden" "$@"
+
