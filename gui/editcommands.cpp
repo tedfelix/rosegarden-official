@@ -1437,6 +1437,8 @@ MoveCommand::modifySegment()
     for (i  = m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
+	RG_DEBUG << "MoveCommand::modifySegment: event at " << (*i)->getAbsoluteTime() << " type " << (*i)->getType() << endl;
+
 	if ((*i)->isa(Note::EventRestType)) continue;
 
 	toErase.push_back(*i);
@@ -1459,7 +1461,12 @@ MoveCommand::modifySegment()
 
     for (unsigned int j = 0; j < toErase.size(); ++j) {
 	Segment::iterator jtr(segment.findSingle(toErase[j]));
-	if (jtr != segment.end()) segment.erase(jtr);
+	if (jtr != segment.end()) {
+	    RG_DEBUG << "found event " << j << endl;
+	    segment.erase(jtr);
+	} else {
+	    RG_DEBUG << "failed to find event " << j << endl;
+	}	    
     }
 
     for (unsigned int j = 0; j < toInsert.size(); ++j) {
