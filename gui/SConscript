@@ -140,7 +140,13 @@ rgSources = Split("""
 	xmlstorableevent.cpp
 """)
 
-rg = myenv.KDEprogram('rosegarden', rgSources )
+lircSources = Split("""lircclient.cpp
+lirccommander.cpp
+""")
+if myenv.has_key('LIRC_SOURCES'):
+        rgSources += lircSources
+
+rg = myenv.KDEprogram('rosegarden', rgSources)
 
 
 myenv.KDEaddpaths_includes( ['/usr/X11R6/include/X11/Xft',

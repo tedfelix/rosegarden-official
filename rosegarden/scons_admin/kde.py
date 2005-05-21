@@ -218,6 +218,7 @@ def generate(env):
 """+BOLD+"""* qtincludes """+NORMAL+""": same punishment, for qt includes (/usr/include/qt on debian, ...)
 """+BOLD+"""* kdelibs    """+NORMAL+""": path to the kde libs, for linking the programs
 """+BOLD+"""* qtlibs     """+NORMAL+""": same punishment, for qt libraries
+"""+BOLD+"""* nolirc     """+NORMAL+""": disable LIRC
 ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 """+NORMAL
 
@@ -388,6 +389,10 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 		('KDEMIME', 'installation path of to the mimetypes'),
 		('KDEICONS', ''),
 		('KDESERV', ''),
+
+		( 'OPTLIB_CCFLAGS', 'optional libraries compilation flags' ),
+		( 'OPTLIB_LDFLAGS', 'optional libraries link flags' ),
+		( 'LIRC_SOURCES', 'compile in LIRC sources' )
 	)
 	opts.Update(env)
 
@@ -395,15 +400,43 @@ ie: """+BOLD+"""scons configure libdir=/usr/local/lib qtincludes=/usr/include/qt
 	if not env['help'] and ('configure' in env['TARGS'] or not env.has_key('QTDIR') or not env.has_key('KDEDIR')):
 		detect_kde(env)
 
+		# Configure stuff for optional libraries
+		conf = env.Configure()
+
+		if env.has_key('OPTLIB_CCFLAGS'):
+			env.__delitem__('OPTLIB_CCFLAGS')
+		if env.has_key('OPTLIB_LDFLAGS'):
+			env.__delitem__('OPTLIB_LDFLAGS')
+
+		if 'nolirc' in env['ARGS']:
+			print "-> LIRC support disabled by user"
+			haveLirc = 0
+		else:
+			haveLirc = conf.CheckLibWithHeader('lirc_client', 'lirc/lirc_client.h', 'C', 'int lirc_init();')
+
+		env = conf.Finish()
+
+		if haveLirc:
+			env.Append(LIRC_SOURCES = 1)
+			env.Append(OPTLIB_CCFLAGS = '-DHAVE_LIRC')
+			env.AppendUnique(OPTLIB_LDFLAGS = '-llirc_client')
+
 		# finally save the configuration to the cache file
 		opts.Save(cachefile, env)
 
 	## set default variables, one can override them in sconscript files
 	env.Append(CXXFLAGS = ['-I'+env['KDEINCLUDEPATH'], '-I'+env['QTINCLUDEPATH'] ])
 	env.Append(LIBPATH = [env['KDELIBPATH'], env['QTLIBPATH'] ])
-	
+
+	# optional libraries
+	if env.has_key('OPTLIB_CCFLAGS'):
+		env.AppendUnique(CCFLAGS = env['OPTLIB_CCFLAGS'] )
+		env.AppendUnique(CXXFLAGS = env['OPTLIB_CCFLAGS'] )
+	if env.has_key('OPTLIB_LDFLAGS'):
+		env.AppendUnique(LINKFLAGS = env['OPTLIB_LDFLAGS'] )
+
 	env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME'] = 1
-	
+
 	env['QT_AUTOSCAN'] = 1
 	env['QT_DEBUG']    = 0
 	env['QT_UIC_HFLAGS']   = '-L $QTPLUGINS -nounload'

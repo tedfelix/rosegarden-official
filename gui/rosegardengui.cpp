@@ -131,6 +131,11 @@
 #include "audiopluginoscgui.h"
 #endif
 
+#ifdef HAVE_LIRC
+#include "lircclient.h"
+#include "lirccommander.h"
+#endif
+
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -248,6 +253,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif
       m_playTimer(new QTimer(this)),
       m_stopTimer(new QTimer(this))
+#ifdef HAVE_LIRC
+    , m_lircClient(0),
+      m_lircCommander(0)
+#endif
 {
     m_myself = this;
 
@@ -463,6 +472,19 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // All toolbars should be created before this is called
     setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
+        
+#ifdef HAVE_LIRC 
+    try {
+	m_lircClient = new LircClient();
+    } catch (Rosegarden::Exception e) {
+	RG_DEBUG << e.getMessage() << endl;
+	// continue without
+	m_lircClient = 0;
+    }
+    if (m_lircClient) {
+	m_lircCommander = new LircCommander(m_lircClient, this);
+    }
+#endif        
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -483,6 +505,11 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
     delete m_seqManager;
 
+#ifdef HAVE_LIRC 
+    delete m_lircCommander;
+    delete m_lircClient;
+#endif     
+    
     Rosegarden::Profiles::getInstance()->dump();
 }
 

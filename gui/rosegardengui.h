@@ -78,6 +78,11 @@ class InstrumentParameterBox;
 class AudioPluginOSCGUIManager;
 #endif
 
+#ifdef HAVE_LIRC
+class LircClient;
+class LircCommander;
+#endif
+
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
   * window and reads the config file as well as providing a menubar, toolbar
@@ -1430,6 +1435,11 @@ private:
     //
     QTimer *m_playTimer;
     QTimer *m_stopTimer;
+
+#ifdef HAVE_LIRC        
+    LircClient *m_lircClient;
+    LircCommander *m_lircCommander;
+#endif     
 };
 
 /**
