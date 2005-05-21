@@ -87,6 +87,9 @@ Thomas Nagy <tnagy256@yahoo.fr>
 Vince Negri <vince-rg@bulbous.freeserve.co.uk>
     * Initial MTC slave implementation (the bits without the bugs)
 
+Toni Arnold <toni__arnold@bluewin.ch>
+    * LIRC infrared remote-controller support
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
