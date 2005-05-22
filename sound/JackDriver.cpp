@@ -33,7 +33,7 @@
 #ifdef HAVE_LIBJACK
 
 //#define DEBUG_JACK_DRIVER 1
-//#define DEBUG_JACK_TRANSPORT 1
+#define DEBUG_JACK_TRANSPORT 1
 //#define DEBUG_JACK_PROCESS 1
 //#define DEBUG_JACK_XRUN 1
 
@@ -55,6 +55,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_waiting(false),
     m_waitingState(JackTransportStopped),
     m_waitingToken(0),
+    m_ignoreProcessTransportCount(0),
     m_bussMixer(0),
     m_instrumentMixer(0),
     m_fileReader(0),
@@ -767,6 +768,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     jack_transport_state_t state = JackTransportRolling;
     bool doneRecord = false;
 
+    int ignoreCount = m_ignoreProcessTransportCount;
+    if (ignoreCount > 0) --m_ignoreProcessTransportCount;
+
     if (m_jackTransportEnabled) {
 
 	state = jack_transport_query(m_client, &position);
@@ -775,7 +779,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	std::cerr << "JackDriver::jackProcess: JACK transport state is " << state << std::endl;
 #endif
 	if (state == JackTransportStopped) {
-	    if (playing && clocksRunning) {
+	    if (playing && clocksRunning && !m_waiting) {
 		ExternalTransport *transport = 
 		    m_alsaDriver->getExternalTransportControl();
 		if (transport) {
@@ -816,11 +820,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     if (state == JackTransportRolling) { // also covers not-on-transport case
 	if (m_waiting) {
+	    if (ignoreCount > 0) {
 #ifdef DEBUG_JACK_TRANSPORT
-	    std::cerr << "JackDriver::jackProcess: transport rolling, telling ALSA driver to go!" << std::endl;
+		std::cerr << "JackDriver::jackProcess: transport rolling, but we're ignoring it (count = " << ignoreCount << ")" << std::endl;
 #endif
-	    m_alsaDriver->startClocksApproved();
-	    m_waiting = false;
+	    } else {
+#ifdef DEBUG_JACK_TRANSPORT
+		std::cerr << "JackDriver::jackProcess: transport rolling, telling ALSA driver to go!" << std::endl;
+#endif
+		m_alsaDriver->startClocksApproved();
+		m_waiting = false;
+	    }
 	}
 
 #ifdef DEBUG_JACK_PROCESS
@@ -1355,9 +1365,9 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
     if (!transport) return true;
 
 #ifdef DEBUG_JACK_TRANSPORT
-    std::cerr << "JackDriver::jackSyncCallback: state " << state << ", frame " << position->frame << ", m_waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying() << std::endl;
+    std::cerr << "JackDriver::jackSyncCallback: state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : "starting") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying() << std::endl;
 
-    std::cerr << "JackDriver::jackSyncCallback: unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2 << std::endl;
+    std::cerr << "JackDriver::jackSyncCallback: m_waitingState " << inst->m_waitingState << ", unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2 << std::endl;
     
     std::cerr << "JackDriver::jackSyncCallback: rate " << position->frame_rate << ", bar " << position->bar << ", beat " << position->beat << ", tick " << position->tick << ", bpm " << position->beats_per_minute << std::endl;
 
@@ -1426,6 +1436,10 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 #endif
 	}
 
+#ifdef DEBUG_JACK_TRANSPORT
+	std::cerr << "JackDriver::jackSyncCallback: Setting waiting to " << inst->m_waiting << " and waiting state to " << inst->m_waitingState << " (request was " << request << ")" << std::endl;
+#endif
+
 	inst->m_waiting = true;
 	inst->m_waitingState = state;
 	return 0;
@@ -1447,15 +1461,23 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 }
 
 bool
-JackDriver::start()
+JackDriver::relocateTransportInternal(bool alsoStart)
 {
     if (!m_client) return true;
 
-#ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::start" << std::endl;
+#ifdef DEBUG_JACK_TRANSPORT
+    const char *fn = (alsoStart ?
+		      "JackDriver::startTransport" :
+		      "JackDriver::relocateTransport");
 #endif
 
-//!!!    prebufferAudio();
+#ifdef DEBUG_JACK_TRANSPORT
+    std::cerr << fn << std::endl;
+#else
+#ifdef DEBUG_JACK_DRIVER
+    std::cerr << "JackDriver::relocateTransportInternal" << std::endl;
+#endif
+#endif
 
     // m_waiting is true if we are waiting for the JACK transport
     // to finish a change of state.
@@ -1479,7 +1501,7 @@ JackDriver::start()
 		// Nope, this came from Rosegarden
 
 #ifdef DEBUG_JACK_TRANSPORT
-		std::cerr << "JackDriver::start: asking JACK transport to start, setting wait state" << std::endl;
+		std::cerr << fn << ": asking JACK transport to start, setting wait state" << std::endl;
 #endif
 		m_waiting = true;
 		m_waitingState = JackTransportStarting;
@@ -1498,10 +1520,15 @@ JackDriver::start()
 		    jack_transport_locate(m_client, frame);
 		}
 
-		jack_transport_start(m_client);
+		if (alsoStart) {
+		    jack_transport_start(m_client);
+		    m_ignoreProcessTransportCount = 1;
+		} else {
+		    m_ignoreProcessTransportCount = 2;
+		}
 	    } else {
 #ifdef DEBUG_JACK_TRANSPORT
-		std::cerr << "JackDriver::start: waiting already" << std::endl;
+		std::cerr << fn << ": waiting already" << std::endl;
 #endif
 	    }
 	}
@@ -1515,13 +1542,25 @@ JackDriver::start()
     startTime = RealTime(tv.tv_sec, tv.tv_usec * 1000); //!!!
 #endif
 #ifdef DEBUG_JACK_TRANSPORT
-    std::cerr << "JackDriver::start: not on JACK transport, accepting right away" << std::endl;
+    std::cerr << fn << ": not on JACK transport, accepting right away" << std::endl;
 #endif
     return true;
 }
 
+bool
+JackDriver::startTransport()
+{
+    return relocateTransportInternal(true);
+}
+
+bool
+JackDriver::relocateTransport()
+{
+    return relocateTransportInternal(false);
+}
+
 void
-JackDriver::stop()
+JackDriver::stopTransport()
 {
     if (!m_client) return;
 
@@ -1689,23 +1728,18 @@ JackDriver::prebufferAudio()
 {
     if (!m_instrumentMixer) return;
 
+    //!!!??? experimental addition at the same time as we removed the
+    //call to m_jackDriver->stopTransport() from
+    //AlsaDriver::stopClocks().  We want this to happen when
+    //repositioning during playback, and stopTransport no longer
+    //happens then.  I suppose it could alternatively go in
+    //relocateTransportInternal?
+    m_instrumentMixer->resetAllPlugins();
+
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::prebufferAudio: sequencer time is "
 	      << m_alsaDriver->getSequencerTime() << std::endl;
 #endif
-
-    // For JACK transport sync, the next slice could start anywhere.
-    // We need to query it.
-//!!! urch, no, seems this is being called before the transport has actually
-// repositioned
-/*
-    if (m_jackTransportEnabled) {
-	jack_position_t position;
-	jack_transport_query(m_client, &position);
-	m_bussMixer->fillBuffers
-	    (RealTime::frame2RealTime(position.frame, m_sampleRate));
-    } else {
-*/
 
     RealTime sliceStart = getNextSliceStart(m_alsaDriver->getSequencerTime());
 

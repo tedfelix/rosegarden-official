@@ -3819,17 +3819,19 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
             m_doc->setPointerPosition(t); //causes this method to be re-invoked
             return;
         }
+    }
 
-        try
-        {
-            if (!m_originatingJump) {
-                m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
-            }
-        }
-        catch(QString s)
-        {
-            KMessageBox::error(this, s);
-        }
+    // cc 20050520 - jump at the sequencer even if we're not playing,
+    // because we might be a transport master of some kind
+    try
+    {
+	if (!m_originatingJump) {
+	    m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+	}
+    }
+    catch(QString s)
+    {
+	KMessageBox::error(this, s);
     }
 
     if (t != comp.getStartMarker() && t > comp.getEndMarker()) {

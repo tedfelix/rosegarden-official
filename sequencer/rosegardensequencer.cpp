@@ -453,22 +453,25 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
 
     m_driver->resetPlayback(oldPosition, m_songPosition);
 
-    // Now prebuffer as in startPlaying:
+    if (m_driver->isPlaying()) {
+    
+	// Now prebuffer as in startPlaying:
 
-    m_mC.clear();
-    fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+	m_mC.clear();
+	fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
 
-    // process whether we need to or not as this also processes
-    // the audio queue for us
-    //
-    m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
-
-//!!!    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
-//!!!    ::sleep(1);
-
-    m_driver->startClocks();
+	// process whether we need to or not as this also processes
+	// the audio queue for us
+	//
+	m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
+    }
     
     incrementTransportToken();
+
+//    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
+//    ::sleep(1);
+
+    m_driver->startClocks();
 
     return;
 }

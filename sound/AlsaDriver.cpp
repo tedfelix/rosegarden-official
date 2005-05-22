@@ -59,6 +59,8 @@
 using std::cerr;
 using std::endl;
 
+static size_t _debug_jack_frame_count = 0;
+
 #define AUTO_TIMER_NAME "(auto)"
 
 
@@ -93,6 +95,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 #endif
     ,m_queueRunning(false)
     ,m_portCheckNeeded(false),
+    m_needJackStart(NeedNoJackStart),
     m_doTimerChecks(false),
     m_firstTimerCheck(true),
     m_timerRatio(0),
@@ -1651,7 +1654,7 @@ void
 AlsaDriver::initialisePlayback(const RealTime &position)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver - initialisePlayback" << std::endl;
+    std::cerr << "\n\nAlsaDriver - initialisePlayback" << std::endl;
 #endif
 
     // now that we restart the queue at each play, the origin is always zero
@@ -1671,6 +1674,12 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     if (getMTCStatus() == TRANSPORT_MASTER) {
 	insertMTCFullFrame(position);
     }
+
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+	m_needJackStart = NeedJackStart;
+    }
+#endif
 }
 
 
@@ -1678,7 +1687,7 @@ void
 AlsaDriver::stopPlayback()
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver - stopPlayback" << std::endl;
+    std::cerr << "\n\nAlsaDriver - stopPlayback" << std::endl;
 #endif
 
     if (getMMCStatus() == TRANSPORT_MASTER)
@@ -1688,6 +1697,13 @@ AlsaDriver::stopPlayback()
 
     allNotesOff();
     m_playing = false;
+
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+	m_jackDriver->stopTransport();
+	m_needJackStart = NeedNoJackStart;
+    }
+#endif
     
     // Flush the output and input queues
     //
@@ -1754,6 +1770,10 @@ AlsaDriver::stopPlayback()
 void
 AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 {
+#ifdef DEBUG_ALSA
+    std::cerr << "\n\nAlsaDriver - resetPlayback(" << position << ")" << std::endl;
+#endif
+
     m_playStartPosition = position;
     m_alsaPlayStartTime = getAlsaTime();
 
@@ -1794,6 +1814,12 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 	m_mtcSigmaC = 0;
 	insertMTCFullFrame(position);
     }
+
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+	m_needJackStart = NeedJackReposition;
+    }
+#endif
 }
 
 void 
@@ -2854,8 +2880,6 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
     return true;
 }
 
-static size_t _debug_jack_frame_count = 0;
-
 void
 AlsaDriver::processMidiOut(const MappedComposition &mC,
                            const RealTime &sliceStart,
@@ -3210,7 +3234,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	insertMTCQFrames(sliceStart, sliceEnd);
     }
 
-//!!!    if (m_queueRunning || now) {
     if (m_queueRunning) {
 
 	if (now && !m_playing) {
@@ -3266,16 +3289,41 @@ AlsaDriver::startClocks()
 
     std::cerr << "AlsaDriver::startClocks" << std::endl;
 
+    if (m_needJackStart) {
+	std::cerr << "AlsaDriver::startClocks: Need JACK start (m_playing = " << m_playing << ")" << std::endl;
+    }
+    
 #ifdef HAVE_LIBJACK
-    // Don't need any locks on this, except for those that the
-    // driver methods take and hold for themselves
+
+    // New JACK transport scheme: The initialisePlayback,
+    // resetPlayback and stopPlayback methods set m_needJackStart, and
+    // then this method checks it and calls the appropriate JACK
+    // transport start or relocate method, which calls back on
+    // startClocksApproved when ready.  (Previously this method always
+    // called the JACK transport start method, so we couldn't handle
+    // moving the pointer when not playing, and we had to stop the
+    // transport explicitly from resetPlayback when repositioning
+    // during playback.)
 
     if (m_jackDriver) {
-	m_jackDriver->prebufferAudio();
-	if (!m_jackDriver->start()) {
-	    // need to wait for transport sync
-	    _debug_jack_frame_count = m_jackDriver->getFramesProcessed();
-	    return;
+
+	// Don't need any locks on this, except for those that the
+	// driver methods take and hold for themselves
+
+	if (m_needJackStart != NeedNoJackStart) {
+	    m_jackDriver->prebufferAudio();
+	    bool rv;
+	    if (m_needJackStart == NeedJackReposition) {
+		rv = m_jackDriver->relocateTransport();
+	    } else {
+		rv = m_jackDriver->startTransport();
+	    }
+	    if (!rv) {
+		std::cerr << "AlsaDriver::startClocks: Waiting for startClocksApproved" << std::endl;
+		// need to wait for transport sync
+		_debug_jack_frame_count = m_jackDriver->getFramesProcessed();
+		return;
+	    }
 	}
     }
 #endif
@@ -3362,9 +3410,14 @@ AlsaDriver::startClocks()
 void
 AlsaDriver::startClocksApproved()
 {
-    int result;
-
     std::cerr << "AlsaDriver::startClocks: startClocksApproved" << std::endl;
+
+    //!!!
+    m_needJackStart = NeedNoJackStart;
+    startClocks();
+    return;
+
+    int result;
 
     // Restart the timer
     if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, NULL)) < 0) {
@@ -3392,11 +3445,10 @@ AlsaDriver::stopClocks()
 
     m_queueRunning = false;
 
-#ifdef HAVE_LIBJACK
-    if (m_jackDriver) {
-	m_jackDriver->stop();
-    }
-#endif
+    // We used to call m_jackDriver->stop() from here, but we no
+    // longer do -- it's now called from stopPlayback() so as to
+    // handle repositioning during playback (when stopClocks is
+    // necessary but stopPlayback and m_jackDriver->stop() are not).
     
     snd_seq_event_t event;
     snd_seq_ev_clear(&event);

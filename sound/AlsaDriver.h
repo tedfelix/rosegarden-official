@@ -517,6 +517,8 @@ private:
     bool m_queueRunning;
     
     bool m_portCheckNeeded;
+
+    enum { NeedNoJackStart, NeedJackReposition, NeedJackStart } m_needJackStart;
     
     bool m_doTimerChecks;
     bool m_firstTimerCheck;

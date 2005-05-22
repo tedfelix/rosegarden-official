@@ -61,10 +61,15 @@ public:
     void setTransportEnabled(bool e) { m_jackTransportEnabled = e; }
     void setTransportMaster (bool m) { m_jackTransportMaster  = m; }
 
-    // start returns false if sound driver should wait for it to call
-    // back on startClocksApproved before starting clocks
-    bool start();
-    void stop();
+    // These methods call back on the sound driver if necessary to
+    // establish the current transport location to start at or
+    // relocate to.  startTransport and relocateTransport return true
+    // if they have completed and the sound driver can safely call
+    // startClocks; false if the sound driver should wait for the JACK
+    // driver to call back on startClocksApproved before starting.
+    bool startTransport();
+    bool relocateTransport();
+    void stopTransport();
 
     RealTime getAudioPlayLatency() const;
     RealTime getAudioRecordLatency() const;
@@ -226,6 +231,8 @@ protected:
     bool createSubmasterOutputs(int pairs);
     bool createRecordInputs(int pairs);
 
+    bool relocateTransportInternal(bool alsoStart);
+
     // data members:
 
     jack_client_t               *m_client;
@@ -247,6 +254,7 @@ protected:
     bool                         m_waiting;
     jack_transport_state_t       m_waitingState;
     ExternalTransport::TransportToken m_waitingToken;
+    int                          m_ignoreProcessTransportCount;
 
     AudioBussMixer              *m_bussMixer;
     AudioInstrumentMixer        *m_instrumentMixer;
