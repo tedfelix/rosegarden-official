@@ -78,7 +78,9 @@ rosegarden_SOURCES = \
 	notefontviewer.cpp \
 	notepixmapfactory.cpp \
 	notestyle.cpp \
+	percussionpitchruler.cpp \
 	pianokeyboard.cpp \
+	pitchruler.cpp \
 	pixmapfunctions.cpp \
 	playlist.cpp \
 	progressreporter.cpp \
