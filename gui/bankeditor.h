@@ -57,13 +57,19 @@ class KLineEdit;
 class MidiDeviceListViewItem : public KListViewItem
 {
 public:
+    // Device
     MidiDeviceListViewItem(Rosegarden::DeviceId id,
                            QListView* parent, QString name);
 
+    // Bank
     MidiDeviceListViewItem(Rosegarden::DeviceId id,
                            QListViewItem* parent, QString name,
 			   bool percussion,
                            int msb, int lsb);
+
+    // Key Mapping
+    MidiDeviceListViewItem(Rosegarden::DeviceId id,
+                           QListViewItem* parent, QString name);
 
     Rosegarden::DeviceId getDeviceId() const { return m_deviceId; }
 
@@ -96,6 +102,15 @@ protected:
 
     //--------------- Data members ---------------------------------
     int    m_bankNb;
+};
+
+class MidiKeyMapListViewItem : public MidiDeviceListViewItem
+{
+public:
+    MidiKeyMapListViewItem(Rosegarden::DeviceId deviceId,
+			   QListViewItem* parent, QString name);
+
+    virtual int compare(QListViewItem *i, int col, bool ascending) const;
 };
 
 class NameSetEditor : public QVGroupBox
@@ -175,19 +190,9 @@ protected:
     void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
-//    BankEditorDialog*        m_bankEditor;
-
-//    KCompletion              m_completion;
-//    std::vector<KLineEdit*>  m_programNames;
-
-//    QFrame                   *m_mainFrame;
-
     QCheckBox                *m_percussion;
     QSpinBox                 *m_msb;
     QSpinBox                 *m_lsb;
-
-//    QLabel                   *m_librarian;
-//    QLabel                   *m_librarianEmail;
 
     Rosegarden::MidiBank     *m_currentBank;
     Rosegarden::BankList     &m_bankList;

@@ -82,8 +82,15 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
 					       bool percussion,
                                                int msb, int lsb)
     : KListViewItem(parent, name,
-		    QString(percussion ? i18n("Yes") : i18n("No")),
+		    QString(percussion ? i18n("Percussion Bank") : i18n("Bank")),
 		    QString().setNum(msb), QString().setNum(lsb)),
+      m_deviceId(deviceId)
+{
+}
+
+MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
+                                               QListViewItem* parent, QString name)
+    : KListViewItem(parent, name, i18n("Key Mapping"), "", ""),
       m_deviceId(deviceId)
 {
 }
@@ -129,7 +136,7 @@ MidiBankListViewItem::MidiBankListViewItem(Rosegarden::DeviceId deviceId,
 
 void MidiBankListViewItem::setPercussion(bool percussion)
 {
-    setText(1, QString(percussion ? i18n("Yes") : i18n("No")));
+    setText(1, QString(percussion ? i18n("Percussion Bank") : i18n("Bank")));
 }
 
 void MidiBankListViewItem::setMSB(int msb)
@@ -145,6 +152,12 @@ void MidiBankListViewItem::setLSB(int lsb)
 int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) const
 {
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(i);
+
+    if (!bankItem) {
+	MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem *>(i);
+	if (keyItem) return -1; // banks before key maps
+    }
+
     if (!bankItem || (col != 2 && col != 3)) {
 	return MidiDeviceListViewItem::compare(i, col, ascending);
     }
@@ -167,6 +180,25 @@ int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) con
 	thisVal == otherVal ? 0	:
 	-1;
     
+}
+
+//--------------------------------------------------
+
+MidiKeyMapListViewItem::MidiKeyMapListViewItem(Rosegarden::DeviceId deviceId,
+					       QListViewItem* parent,
+					       QString name)
+    : MidiDeviceListViewItem(deviceId, parent, name)
+{
+    setText(1, i18n("Key Mapping"));
+}
+
+int MidiKeyMapListViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    if (dynamic_cast<MidiBankListViewItem *>(i)) {
+	return 1; // banks before key maps
+    }
+
+    return MidiDeviceListViewItem::compare(i, col, ascending);
 }
 
 //--------------------------------------------------
@@ -267,7 +299,6 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     if (additionalWidget) {
 	m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
     }
-
 }
 
 QWidget *
@@ -284,7 +315,7 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
                                               2,  // cols
                                               2); // margin
  
-    gridLayout->addWidget(new QLabel(i18n("Percussion"), frame),
+    gridLayout->addWidget(new QLabel(i18n("Type"), frame),
                           0, 0, AlignLeft);
     gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
@@ -751,7 +782,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QVBox* leftPart = new QVBox(splitter);
     m_listView = new KListView(leftPart);
     m_listView->addColumn(i18n("MIDI Device"));
-    m_listView->addColumn(i18n("Percussion"));
+    m_listView->addColumn(i18n("Type"));
     m_listView->addColumn(i18n("MSB"));
     m_listView->addColumn(i18n("LSB"));
     m_listView->setRootIsDecorated(true);
@@ -1133,8 +1164,15 @@ BankEditorDialog::populateDeviceItem(QListViewItem* deviceItem, Rosegarden::Midi
 				 banks[i].isPercussion(),
                                  banks[i].getMSB(), banks[i].getLSB());
     }
-            
-    
+
+    const Rosegarden::KeyMappingList &mappings = midiDevice->getKeyMappings();
+    for (unsigned int i = 0; i < mappings.size(); ++i) {
+        RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding key mapping "
+                 << itemName << " - " << strtoqstr(mappings[i].getName())
+                 << endl;
+        new MidiKeyMapListViewItem(midiDevice->getId(), deviceItem,
+				   strtoqstr(mappings[i].getName()));
+    }
 }
 
 void
