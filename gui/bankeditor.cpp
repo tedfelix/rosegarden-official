@@ -406,13 +406,13 @@ MidiProgramsEditor::clearAll()
 }
 
 void
-MidiProgramsEditor::populateBank(QListViewItem* item)
+MidiProgramsEditor::populate(QListViewItem* item)
 {
-    RG_DEBUG << "MidiProgramsEditor::populateBank\n";
+    RG_DEBUG << "MidiProgramsEditor::populate\n";
 
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
     if (!bankItem) {
-        RG_DEBUG << "MidiProgramsEditor::populateBank : not a bank item - returning\n";
+        RG_DEBUG << "MidiProgramsEditor::populate : not a bank item - returning\n";
         return;
     }
     
@@ -424,7 +424,7 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
 
     setBankName(item->text(0));
 
-    RG_DEBUG << "MidiProgramsEditor::populateBank : bankItem->getBank = "
+    RG_DEBUG << "MidiProgramsEditor::populate : bankItem->getBank = "
              << bankItem->getBank() << endl;
 
     m_currentBank = &(m_bankList[bankItem->getBank()]); // device->getBankByIndex(bankItem->getBank());
@@ -466,7 +466,7 @@ MidiProgramsEditor::populateBank(QListViewItem* item)
 }
 
 void
-MidiProgramsEditor::resetMSBLSB()
+MidiProgramsEditor::reset()
 {
     m_percussion->blockSignals(true);
     m_msb->blockSignals(true);
@@ -598,7 +598,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     //
     unsigned int id = senderName.toUInt() - 1;
 
-    RG_DEBUG << "BankEditorDialog::slotProgramChanged("
+    RG_DEBUG << "BankEditorDialog::slotNameChanged("
              << programName << ") : id = " << id << endl;
 
     Rosegarden::MidiProgram *program = getProgram(*getCurrentBank(), id);
@@ -730,6 +730,120 @@ void MidiProgramsEditor::blockAllSignals(bool block)
     m_lsb->blockSignals(block);
 }
 
+
+MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
+					   QWidget* parent,
+					   const char* name)
+    : NameSetEditor(bankEditor,
+		    i18n("Key Mapping details"),
+		    parent, name, i18n("Key Mappings")),
+      m_mapping(0)
+{
+    QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
+    if (additionalWidget) {
+	m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
+    }
+}
+
+QWidget *
+MidiKeyMappingEditor::makeAdditionalWidget(QWidget *parent)
+{
+    return 0;
+}
+
+void
+MidiKeyMappingEditor::clearAll()
+{
+    blockAllSignals(true);
+
+    for (unsigned int i = 0; i < m_names.size(); ++i)
+        m_names[i]->clear();
+
+    setTitle(i18n("Key Mapping details"));
+
+    setEnabled(false);
+
+    blockAllSignals(false);
+}
+
+void
+MidiKeyMappingEditor::populate(QListViewItem* item)
+{
+    RG_DEBUG << "MidiKeyMappingEditor::populate\n";
+
+    MidiKeyMapListViewItem *keyItem =
+	dynamic_cast<MidiKeyMapListViewItem *>(item);
+    if (!keyItem) {
+        RG_DEBUG << "MidiKeyMappingEditor::populate : not a key item - returning\n";
+        return;
+    }
+    
+    Rosegarden::MidiDevice* device = m_bankEditor->getCurrentMidiDevice();
+    if (!device) return;
+    
+    setEnabled(true);
+
+    setTitle(item->text(0));
+
+    m_mapping = device->getKeyMappingByName(item->text(0));
+
+    if (!m_mapping) {
+	RG_DEBUG << "WARNING: MidiKeyMappingEditor::populate: No such mapping as " << item->text(0) << endl;
+    }
+
+    blockAllSignals(true);
+
+    // Librarian details
+    //
+    m_librarian->setText(strtoqstr(device->getLibrarianName()));
+    m_librarianEmail->setText(strtoqstr(device->getLibrarianEmail()));
+
+    for (Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator it =
+	     m_mapping->getMap().begin();
+	 it != m_mapping->getMap().end(); ++it) {
+
+	int i = it->first;
+	if (i < 0 || i > 127) {
+	    RG_DEBUG << "WARNING: MidiKeyMappingEditor::populate: Key " << i
+		     << " out of range in mapping " << m_mapping->getName()
+		     << endl;
+	    continue;
+	}
+
+	QString name = strtoqstr(it->second);
+	m_completion.addItem(name);
+	m_names[i]->setText(name);
+        m_names[i]->setCursorPosition(0);
+    }
+
+    blockAllSignals(false);
+}
+
+void
+MidiKeyMappingEditor::reset()
+{
+    //...
+}
+
+void
+MidiKeyMappingEditor::slotNameChanged(const QString& name)
+{
+    //!!! blah
+}
+
+void MidiKeyMappingEditor::blockAllSignals(bool block)
+{
+    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
+    QObjectListIt it(*allChildren);
+    QObject *obj;
+
+    while ( (obj = it.current()) != 0 ) {
+        obj->blockSignals(block);
+        ++it;
+    }
+}
+
+
 //
 //--------------------------------------------------
 //
@@ -845,7 +959,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_programEditor = new MidiProgramsEditor(this, vbox);
     vboxLayout->addWidget(m_programEditor);
 
+    m_keyMappingEditor = new MidiKeyMappingEditor(this, vbox);
+    vboxLayout->addWidget(m_keyMappingEditor);
+    m_keyMappingEditor->hide();
+
     m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
+    m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
 
     m_optionBox  = new QVGroupBox(i18n("Options"), vbox);
     vboxLayout->addWidget(m_optionBox);
@@ -914,6 +1033,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     if (!haveMidiPlayDevice) {
         leftPart->setDisabled(true);
         m_programEditor->setDisabled(true);
+	m_keyMappingEditor->setDisabled(true);
 	m_optionBox->setDisabled(true);
     }
 
@@ -1329,29 +1449,47 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 
     if (!item) return;
 
+    MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem *>(item);
+
+    if (keyItem) {
+
+	stateChanged("on_key_item");
+	stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
+    
+	Rosegarden::MidiDevice *device = getMidiDevice(keyItem->getDeviceId());
+	setProgramList(device);
+
+	m_keyMappingEditor->populate(item);
+
+	m_programEditor->hide();
+	m_keyMappingEditor->show();
+	
+	m_lastDevice = keyItem->getDeviceId();
+
+	return;
+    }
+
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
 
-    if (!bankItem) {
+    if (bankItem) {
 
-        // Ensure we fill these lists for the new device
-        //
-        MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
+	stateChanged("on_bank_item");
+	stateChanged("on_key_item", KXMLGUIClient::StateReverse);
+    
+	m_deleteBank->setEnabled(true);
+	m_copyPrograms->setEnabled(true);
 
-        m_lastDevice = deviceItem->getDeviceId();
+	if (m_copyBank.first != Rosegarden::Device::NO_DEVICE)
+	    m_pastePrograms->setEnabled(true);
 
-        Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
-        if (!device) {
-            RG_DEBUG << "BankEditorDialog::populateDevice - no device for this item\n";
-            return;
-        }
+	Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDeviceId());
 
-        m_bankList = device->getBanks();
-        setProgramList(device);
+	if (!m_keepBankList || m_bankList.size() == 0)
+	    m_bankList    = device->getBanks();
+	else
+	    m_keepBankList = false;
 
-        RG_DEBUG << "BankEditorDialog::populateDevice : not a bank item - disabling" << endl;
-        m_deleteBank->setEnabled(false);
-        m_copyPrograms->setEnabled(false);
-        m_pastePrograms->setEnabled(false);
+	setProgramList(device);
 
 	m_variationToggle->setChecked(device->getVariationType() !=
 				      Rosegarden::MidiDevice::NoVariations);
@@ -1360,41 +1498,50 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 	    (device->getVariationType() ==
 	     Rosegarden::MidiDevice::VariationFromLSB ? 0 : 1);
 
-        stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
-        m_programEditor->clearAll();
+	m_lastBank = m_bankList[bankItem->getBank()];
 
-        return;
+	m_programEditor->populate(item);
+
+	m_keyMappingEditor->hide();
+	m_programEditor->show();
+	
+	m_lastDevice = bankItem->getDeviceId();
+
+	return;
     }
 
-    stateChanged("on_bank_item");
+    // Device, not bank or key mapping
+    // Ensure we fill these lists for the new device
+    //
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
     
-    m_deleteBank->setEnabled(true);
-    m_copyPrograms->setEnabled(true);
-
-    if (m_copyBank.first != Rosegarden::Device::NO_DEVICE)
-        m_pastePrograms->setEnabled(true);
-
-    Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDeviceId());
-
-    if (!m_keepBankList || m_bankList.size() == 0)
-        m_bankList    = device->getBanks();
-    else
-        m_keepBankList = false;
-
+    m_lastDevice = deviceItem->getDeviceId();
+    
+    Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
+    if (!device) {
+	RG_DEBUG << "BankEditorDialog::populateDevice - no device for this item\n";
+	return;
+    }
+    
+    m_bankList = device->getBanks();
     setProgramList(device);
-
+    
+    RG_DEBUG << "BankEditorDialog::populateDevice : not a bank item - disabling" << endl;
+    m_deleteBank->setEnabled(false);
+    m_copyPrograms->setEnabled(false);
+    m_pastePrograms->setEnabled(false);
+    
     m_variationToggle->setChecked(device->getVariationType() !=
 				  Rosegarden::MidiDevice::NoVariations);
     m_variationCombo->setEnabled(m_variationToggle->isChecked());
     m_variationCombo->setCurrentItem
 	(device->getVariationType() ==
 	 Rosegarden::MidiDevice::VariationFromLSB ? 0 : 1);
-
-    m_lastBank = m_bankList[bankItem->getBank()];
-
-    m_programEditor->populateBank(item);
-	
-    m_lastDevice = bankItem->getDeviceId();
+    
+    stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
+    stateChanged("on_key_item", KXMLGUIClient::StateReverse);
+    m_programEditor->clearAll();
+    m_keyMappingEditor->clearAll();
 }
 
 void
@@ -1447,8 +1594,8 @@ BankEditorDialog::slotApply()
         command->setVariation(variation);
         command->setBankList(m_bankList);
         command->setProgramList(m_programList);
-
     }
+
     addCommandToHistory(command);
 
     // Our freaky fudge to update instrument/device names externally
@@ -1466,11 +1613,15 @@ void
 BankEditorDialog::slotReset()
 {
     resetProgramList();
-    m_programEditor->resetMSBLSB();
-    m_programEditor->populateBank(m_listView->currentItem());
+
+    m_programEditor->reset();
+    m_programEditor->populate(m_listView->currentItem());
+    m_keyMappingEditor->reset();
+    m_keyMappingEditor->populate(m_listView->currentItem());
 
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem
 	(m_listView->currentItem());
+
     if (deviceItem) {
 	Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
 	m_variationToggle->setChecked(device->getVariationType() !=
@@ -1712,26 +1863,22 @@ BankEditorDialog::getMidiDevice(QListViewItem* item)
 std::pair<int, int>
 BankEditorDialog::getFirstFreeBank(QListViewItem* item)
 {
-    int msb = 0;
-    int lsb = 0;
-
-    Rosegarden::MidiDevice *device = getMidiDevice(item);
-
     //!!! percussion? this is actually only called in the expectation
     // that percussion==false at the moment
 
-    if (device)
-    {
-        do
-        {
-            lsb = 0;
-            while(m_programEditor->banklistContains(MidiBank(false, msb, lsb)) && lsb < 128)
-                lsb++;
-        }
-        while (lsb == 128 && msb++);
+    for (int msb = 0; msb < 128; ++msb) {
+	for (int lsb = 0; lsb < 128; ++lsb) {
+	    Rosegarden::BankList::iterator i = m_bankList.begin();
+	    for ( ; i != m_bankList.end(); ++i) {
+		if (i->getLSB() == lsb && i->getMSB() == msb) {
+		    break;
+		}
+	    }
+	    if (i == m_bankList.end()) return std::pair<int, int>(msb, lsb);
+	}
     }
 
-    return std::pair<int, int>(msb, lsb);
+    return std::pair<int, int>(0, 0);
 }
 
 void

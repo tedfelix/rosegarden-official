@@ -119,6 +119,9 @@ class NameSetEditor : public QVGroupBox
 public:
     virtual void clearAll() = 0;
 
+    virtual void populate(QListViewItem *) = 0;
+    virtual void reset() = 0;
+
 public slots:
     virtual void slotNameChanged(const QString&) = 0;
 
@@ -146,17 +149,9 @@ public:
                        QWidget *parent,
                        const char *name = 0);
 
-    Rosegarden::MidiBank* getCurrentBank();
-
     void clearAll();
-
-    void populateBank(QListViewItem*);
-
-    void resetMSBLSB();
-
-    // Does the banklist contain this combination already?
-    //
-    bool banklistContains(const Rosegarden::MidiBank &);
+    void populate(QListViewItem*);
+    void reset();
 
 public slots:
 
@@ -170,8 +165,14 @@ public slots:
 
 protected:
 
+    Rosegarden::MidiBank* getCurrentBank();
+
     int ensureUniqueMSB(int msb, bool ascending);
     int ensureUniqueLSB(int lsb, bool ascending);
+
+    // Does the banklist contain this combination already?
+    //
+    bool banklistContains(const Rosegarden::MidiBank &);
 
     Rosegarden::ProgramList getBankSubset(const Rosegarden::MidiBank &);
 
@@ -201,6 +202,31 @@ protected:
     Rosegarden::MidiBank      m_oldBank;
 };
 
+class MidiKeyMappingEditor : public NameSetEditor
+{
+    Q_OBJECT
+
+public:
+    MidiKeyMappingEditor(BankEditorDialog *bankEditor,
+			 QWidget *parent,
+			 const char *name = 0);
+
+    void clearAll();
+    void populate(QListViewItem *);
+    void reset();
+
+public slots:
+    virtual void slotNameChanged(const QString &);
+
+protected:
+    virtual QWidget *makeAdditionalWidget(QWidget *parent);
+    void blockAllSignals(bool block);
+
+    //--------------- Data members ---------------------------------
+    const Rosegarden::MidiKeyMapping *m_mapping;
+    //!!! blah from key mapping whatsit
+};
+
 class BankEditorDialog : public KMainWindow
 {
     Q_OBJECT
@@ -224,7 +250,7 @@ public:
 
     void setCurrentDevice(Rosegarden::DeviceId device);
 
-    Rosegarden::MidiBank* getCurrentBank() { return m_programEditor->getCurrentBank(); }
+//!!!    Rosegarden::MidiBank* getCurrentBank() { return m_programEditor->getCurrentBank(); }
 
     // Get a MidiDevice from an index number
     //
@@ -304,8 +330,8 @@ protected:
     Rosegarden::Studio      *m_studio;
     RosegardenGUIDoc        *m_doc;
 
-    
     MidiProgramsEditor      *m_programEditor;
+    MidiKeyMappingEditor    *m_keyMappingEditor;
     KListView               *m_listView;
 
     QGroupBox               *m_optionBox;
