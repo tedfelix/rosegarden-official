@@ -737,6 +737,8 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
     : NameSetEditor(bankEditor,
 		    i18n("Key Mapping details"),
 		    parent, name, i18n("Pitches")),
+      m_useChannel(0),
+      m_channel(0),
       m_device(0)
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
@@ -748,7 +750,35 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
 QWidget *
 MidiKeyMappingEditor::makeAdditionalWidget(QWidget *parent)
 {
-    return 0;
+    QFrame *frame = new QFrame(parent);
+ 
+    QGridLayout *gridLayout = new QGridLayout(frame,
+					      2,  // rows
+                                              2,  // cols
+                                              2); // margin
+ 
+    m_useChannel = new QCheckBox(i18n("One channel only"), frame);
+    gridLayout->addMultiCellWidget(m_useChannel, 0, 0, 0, 1);
+    gridLayout->addWidget(new QLabel(i18n("Channel"), frame), 1, 0);
+
+    m_channel = new QSpinBox(frame);
+    m_channel->setMinValue(1);
+    m_channel->setMaxValue(16);
+    gridLayout->addWidget(m_channel, 1, 1);
+
+    connect(m_useChannel, SIGNAL(clicked()),
+	    this, SLOT(slotUseChannelToggled()));
+
+    connect(m_channel, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotChannelChanged(int)));
+
+    QToolTip::add(m_useChannel,
+            i18n("Selects whether the key map should be available only for a single channel on this device"));
+
+    QToolTip::add(m_channel,
+            i18n("Selects which channel on this device the key map should be available for"));
+
+    return frame;
 }
 
 void
@@ -854,6 +884,18 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
 	m_mapping.getMap()[pitch] = qstrtostr(name);
 	m_bankEditor->setModified(true);
     }
+}
+
+void MidiKeyMappingEditor::slotChannelChanged(int channel)
+{
+    RG_DEBUG << "MidiKeyMappingEditor::slotChannelChanged(" << channel << ")" << endl;
+    //!!!
+}
+
+void MidiKeyMappingEditor::slotUseChannelToggled()
+{
+    RG_DEBUG << "MidiKeyMappingEditor::slotUseChannelToggled()" << endl;
+    //!!!
 }
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
@@ -2166,6 +2208,7 @@ BankEditorDialog::selectDeviceItem(Rosegarden::MidiDevice *device)
     }
     while ((child = child->nextSibling()));
 }
+
 void
 BankEditorDialog::selectDeviceBankItem(Rosegarden::DeviceId deviceId,
                                        int bank)

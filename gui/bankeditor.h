@@ -223,12 +223,18 @@ public:
 
 public slots:
     virtual void slotNameChanged(const QString &);
+    
+    void slotChannelChanged(int channel);
+    void slotUseChannelToggled();
 
 protected:
     virtual QWidget *makeAdditionalWidget(QWidget *parent);
     void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
+
+    QCheckBox *m_useChannel;
+    QSpinBox *m_channel;
 
     Rosegarden::MidiDevice *m_device;
     std::string m_mappingName;
