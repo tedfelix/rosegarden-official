@@ -114,6 +114,16 @@ MidiProgram::setName(std::string name)
     m_name = name;
 }
 
+MidiKeyMapping::MidiKeyMapping() :
+    m_bank(MidiBank(true, 0, 0)),
+    m_program(0),
+    m_channel(9),
+    m_useProgram(false),
+    m_useChannel(true),
+    m_name("")
+{
+}
+
 MidiKeyMapping::MidiKeyMapping(const MidiBank &bank, MidiByte program,
 			       MidiByte channel, bool useProgram,
 			       bool useChannel, const std::string &name) :

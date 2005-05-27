@@ -111,6 +111,11 @@ public:
 			   QListViewItem* parent, QString name);
 
     virtual int compare(QListViewItem *i, int col, bool ascending) const;
+
+    QString getName() const { return m_name; }
+
+protected:
+    QString m_name;
 };
 
 class NameSetEditor : public QVGroupBox
@@ -213,6 +218,7 @@ public:
 
     void clearAll();
     void populate(QListViewItem *);
+    Rosegarden::MidiKeyMapping &getMapping() { return m_mapping; }
     void reset();
 
 public slots:
@@ -223,8 +229,10 @@ protected:
     void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
-    const Rosegarden::MidiKeyMapping *m_mapping;
-    //!!! blah from key mapping whatsit
+
+    Rosegarden::MidiDevice *m_device;
+    std::string m_mappingName;
+    Rosegarden::MidiKeyMapping m_mapping;
 };
 
 class BankEditorDialog : public KMainWindow
@@ -250,8 +258,6 @@ public:
 
     void setCurrentDevice(Rosegarden::DeviceId device);
 
-//!!!    Rosegarden::MidiBank* getCurrentBank() { return m_programEditor->getCurrentBank(); }
-
     // Get a MidiDevice from an index number
     //
     Rosegarden::MidiDevice* getMidiDevice(Rosegarden::DeviceId);
@@ -259,6 +265,8 @@ public:
     Rosegarden::MidiDevice* getCurrentMidiDevice();
     Rosegarden::BankList&   getBankList()     { return m_bankList; }
     Rosegarden::ProgramList&getProgramList()  { return m_programList; }
+
+    Rosegarden::Studio *getStudio() { return m_studio; }
 
     void setModified(bool value);
 
@@ -282,8 +290,9 @@ public slots:
     void slotUpdate();
 
     void slotAddBank();
-    void slotDeleteBank();
-    void slotDeleteAllBanks();
+    void slotAddKeyMapping();
+    void slotDelete();
+    void slotDeleteAll();
 
     void slotImport();
     void slotExport();
@@ -343,8 +352,9 @@ protected:
     QPushButton             *m_applyButton;
 
     QPushButton             *m_addBank;
-    QPushButton             *m_deleteBank;
-    QPushButton             *m_deleteAllBanks;
+    QPushButton             *m_addKeyMapping;
+    QPushButton             *m_delete;
+    QPushButton             *m_deleteAll;
 
     QPushButton             *m_importBanks;
     QPushButton             *m_exportBanks;
@@ -360,7 +370,7 @@ protected:
 
     bool                     m_modified;
     bool                     m_keepBankList;
-    bool                     m_deleteAll;
+    bool                     m_deleteAllReally;
 
     Rosegarden::DeviceId     m_lastDevice;
     Rosegarden::MidiBank     m_lastBank;

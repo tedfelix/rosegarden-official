@@ -84,6 +84,8 @@ class MidiKeyMapping
 public:
     typedef std::map<MidiByte, std::string> KeyNameMap;
 
+    MidiKeyMapping();
+
     MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
 		   bool useProgram, bool useChannel, const std::string &name);
 	
@@ -104,7 +106,9 @@ public:
     bool                 useChannel() const { return m_useChannel; }
     const std::string   &getName() const { return m_name; }
     const KeyNameMap    &getMap() const { return m_map; }
+    KeyNameMap          &getMap() { return m_map; }
     std::string          getMapForKeyName(MidiByte pitch) const;
+    void                 setName(const std::string &name) { m_name = name; }
     void                 setMap(const KeyNameMap &map) { m_map = map; }
     
     // Return 0 if the supplied argument is the lowest pitch in the

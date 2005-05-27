@@ -187,7 +187,8 @@ int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) con
 MidiKeyMapListViewItem::MidiKeyMapListViewItem(Rosegarden::DeviceId deviceId,
 					       QListViewItem* parent,
 					       QString name)
-    : MidiDeviceListViewItem(deviceId, parent, name)
+    : MidiDeviceListViewItem(deviceId, parent, name),
+      m_name(name)
 {
     setText(1, i18n("Key Mapping"));
 }
@@ -598,7 +599,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     //
     unsigned int id = senderName.toUInt() - 1;
 
-    RG_DEBUG << "BankEditorDialog::slotNameChanged("
+    RG_DEBUG << "MidiProgramsEditor::slotNameChanged("
              << programName << ") : id = " << id << endl;
 
     Rosegarden::MidiProgram *program = getProgram(*getCurrentBank(), id);
@@ -706,7 +707,6 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
     }
 
     return 0;
-
 }
 
 void
@@ -736,8 +736,8 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
 					   const char* name)
     : NameSetEditor(bankEditor,
 		    i18n("Key Mapping details"),
-		    parent, name, i18n("Key Mappings")),
-      m_mapping(0)
+		    parent, name, i18n("Pitches")),
+      m_device(0)
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
@@ -780,32 +780,45 @@ MidiKeyMappingEditor::populate(QListViewItem* item)
     
     Rosegarden::MidiDevice* device = m_bankEditor->getCurrentMidiDevice();
     if (!device) return;
-    
+
+    m_device = device;
+    m_mappingName = qstrtostr(keyItem->getName());
+
     setEnabled(true);
 
-    setTitle(item->text(0));
+    reset();
+}
 
-    m_mapping = device->getKeyMappingByName(item->text(0));
+void
+MidiKeyMappingEditor::reset()
+{
+    if (!m_device) return;
 
-    if (!m_mapping) {
-	RG_DEBUG << "WARNING: MidiKeyMappingEditor::populate: No such mapping as " << item->text(0) << endl;
+    setTitle(m_mappingName);
+
+    const Rosegarden::MidiKeyMapping *m = m_device->getKeyMappingByName(m_mappingName);
+
+    if (!m) {
+	RG_DEBUG << "WARNING: MidiKeyMappingEditor::reset: No such mapping as " << m_mappingName << endl;
     }
+
+    m_mapping = *m;
 
     blockAllSignals(true);
 
     // Librarian details
     //
-    m_librarian->setText(strtoqstr(device->getLibrarianName()));
-    m_librarianEmail->setText(strtoqstr(device->getLibrarianEmail()));
+    m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
+    m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
     for (Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator it =
-	     m_mapping->getMap().begin();
-	 it != m_mapping->getMap().end(); ++it) {
+	     m_mapping.getMap().begin();
+	 it != m_mapping.getMap().end(); ++it) {
 
 	int i = it->first;
 	if (i < 0 || i > 127) {
-	    RG_DEBUG << "WARNING: MidiKeyMappingEditor::populate: Key " << i
-		     << " out of range in mapping " << m_mapping->getName()
+	    RG_DEBUG << "WARNING: MidiKeyMappingEditor::reset: Key " << i
+		     << " out of range in mapping " << m_mapping.getName()
 		     << endl;
 	    continue;
 	}
@@ -820,15 +833,27 @@ MidiKeyMappingEditor::populate(QListViewItem* item)
 }
 
 void
-MidiKeyMappingEditor::reset()
-{
-    //...
-}
-
-void
 MidiKeyMappingEditor::slotNameChanged(const QString& name)
 {
-    //!!! blah
+    const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
+    if (!lineEdit) {
+        RG_DEBUG << "MidiKeyMappingEditor::slotProgramChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        return;
+    }
+
+    QString senderName = sender()->name();
+
+    // Adjust value back to zero rated
+    //
+    unsigned int pitch = senderName.toUInt() - 1;
+
+    RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged("
+             << name << ") : pitch = " << pitch << endl;
+
+    if (qstrtostr(name) != m_mapping.getMap()[pitch]) {
+	m_mapping.getMap()[pitch] = qstrtostr(name);
+	m_bankEditor->setModified(true);
+    }
 }
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
@@ -857,7 +882,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_copyBank(Rosegarden::Device::NO_DEVICE, -1),
     m_modified(false),
     m_keepBankList(false),
-    m_deleteAll(false),
+    m_deleteAllReally(false),
     m_lastDevice(Rosegarden::Device::NO_DEVICE),
     m_updateDeviceList(false)
 {
@@ -905,30 +930,35 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_listView->restoreLayout(kapp->config(), BankEditorConfigGroup);
 
     QFrame *bankBox = new QFrame(leftPart);
-    QGridLayout *gridLayout = new QGridLayout(bankBox, 3, 3, 6, 6);
+    QGridLayout *gridLayout = new QGridLayout(bankBox, 4, 2, 6, 6);
 
-    m_addBank        = new QPushButton(i18n("Add"), bankBox);
-    m_deleteBank     = new QPushButton(i18n("Delete"), bankBox);
-    m_deleteAllBanks = new QPushButton(i18n("Delete All"), bankBox);
+    m_addBank        = new QPushButton(i18n("Add Bank"), bankBox);
+    m_addKeyMapping  = new QPushButton(i18n("Add Key Mapping"), bankBox);
+    m_delete         = new QPushButton(i18n("Delete"), bankBox);
+    m_deleteAll      = new QPushButton(i18n("Delete All"), bankBox);
     gridLayout->addWidget(m_addBank, 0, 0);
-    gridLayout->addWidget(m_deleteBank, 0, 1);
-    gridLayout->addWidget(m_deleteAllBanks, 0, 2);
+    gridLayout->addWidget(m_addKeyMapping, 0, 1);
+    gridLayout->addWidget(m_delete, 1, 0);
+    gridLayout->addWidget(m_deleteAll, 1, 1);
 
     // Tips
     //
     QToolTip::add(m_addBank,
                   i18n("Add a Bank to the current device"));
 
-    QToolTip::add(m_deleteBank,
-                  i18n("Delete the current Bank"));
+    QToolTip::add(m_addKeyMapping,
+                  i18n("Add a Percussion Key Mapping to the current device"));
 
-    QToolTip::add(m_deleteAllBanks,
-                  i18n("Delete all Banks from the current Device"));
+    QToolTip::add(m_delete,
+                  i18n("Delete the current Bank or Key Mapping"));
+
+    QToolTip::add(m_deleteAll,
+                  i18n("Delete all Banks and Key Mappings from the current Device"));
 
     m_importBanks = new QPushButton(i18n("Import..."), bankBox);
     m_exportBanks = new QPushButton(i18n("Export..."), bankBox);
-    gridLayout->addWidget(m_importBanks, 1, 0);
-    gridLayout->addWidget(m_exportBanks, 1, 1);
+    gridLayout->addWidget(m_importBanks, 2, 0);
+    gridLayout->addWidget(m_exportBanks, 2, 1);
 
     // Tips
     //
@@ -939,8 +969,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_copyPrograms = new QPushButton(i18n("Copy"), bankBox);
     m_pastePrograms = new QPushButton(i18n("Paste"), bankBox);
-    gridLayout->addWidget(m_copyPrograms, 2, 0);
-    gridLayout->addWidget(m_pastePrograms, 2, 1);
+    gridLayout->addWidget(m_copyPrograms, 3, 0);
+    gridLayout->addWidget(m_pastePrograms, 3, 1);
 
     // Tips
     //
@@ -982,11 +1012,14 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_addBank, SIGNAL(clicked()),
             this, SLOT(slotAddBank()));
 
-    connect(m_deleteBank, SIGNAL(clicked()),
-            this, SLOT(slotDeleteBank()));
+    connect(m_addKeyMapping, SIGNAL(clicked()),
+            this, SLOT(slotAddKeyMapping()));
 
-    connect(m_deleteAllBanks, SIGNAL(clicked()),
-            this, SLOT(slotDeleteAllBanks()));
+    connect(m_delete, SIGNAL(clicked()),
+            this, SLOT(slotDelete()));
+
+    connect(m_deleteAll, SIGNAL(clicked()),
+            this, SLOT(slotDeleteAll()));
 
     connect(m_importBanks, SIGNAL(clicked()),
             this, SLOT(slotImport()));
@@ -1157,7 +1190,6 @@ BankEditorDialog::updateDialog()
         {
             // Device already displayed but make sure the label is up to date
             //
-            //
             QListViewItem* currentItem = m_listView->currentItem();
 
             if (currentItem)
@@ -1224,18 +1256,17 @@ BankEditorDialog::updateDialog()
         deviceItem->setOpen(true);
 
         populateDeviceItem(deviceItem, midiDevice);
-
     }
 
-
-    // delete items which corresponding devices are no longer present,
+    // delete items whose corresponding devices are no longer present,
     // and update the other ones
     //
     std::vector<MidiDeviceListViewItem*> itemsToDelete;
 
-    MidiDeviceListViewItem* sibling = dynamic_cast<MidiDeviceListViewItem*>(m_listView->firstChild());
+    MidiDeviceListViewItem* sibling = dynamic_cast<MidiDeviceListViewItem*>
+	(m_listView->firstChild());
     
-    while(sibling) {
+    while (sibling) {
 
         if (m_deviceNameMap.find(sibling->getDeviceId()) == m_deviceNameMap.end())
             itemsToDelete.push_back(sibling);
@@ -1307,6 +1338,8 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
     QString itemName = strtoqstr(midiDevice->getName());
 
     Rosegarden::BankList banks = midiDevice->getBanks();
+    Rosegarden::KeyMappingList keymaps = midiDevice->getKeyMappings();
+
     // add missing banks for this device
     //
     for (unsigned int i = 0; i < banks.size(); ++i) {
@@ -1321,36 +1354,78 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
                                  banks[i].getMSB(), banks[i].getLSB());
     }
             
+    for (unsigned int i = 0; i < keymaps.size(); ++i) {
 
+	QListViewItem *child = deviceItem->firstChild();
+	bool have = false;
+    
+	while (child) {
+	    MidiKeyMapListViewItem *keyItem =
+		dynamic_cast<MidiKeyMapListViewItem*>(child);
+	    if (keyItem) {
+		if (keyItem->getName() == strtoqstr(keymaps[i].getName())) {
+		    have = true;
+		}
+	    }
+	    child = child->nextSibling();
+	}
+
+	if (have) continue;
+
+        RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
+                 << itemName << " - " << strtoqstr(keymaps[i].getName())
+                 << endl;
+        new MidiKeyMapListViewItem(midiDevice->getId(), deviceItem,
+				   strtoqstr(keymaps[i].getName()));
+    }
+            
     // delete banks which are no longer present
     //
-    std::vector<MidiBankListViewItem*> childrenToDelete;
+    std::vector<QListViewItem*> childrenToDelete;
 
-    MidiBankListViewItem* child = dynamic_cast<MidiBankListViewItem*>(deviceItem->firstChild());
+    QListViewItem* child = deviceItem->firstChild();
     
-    while(child) {
-        if (child->getBank() >= int(banks.size()))
-            childrenToDelete.push_back(child);
-        else { // update the banks MSB/LSB which might have changed
-	    child->setPercussion(banks[child->getBank()].isPercussion());
-            child->setMSB(banks[child->getBank()].getMSB());
-            child->setLSB(banks[child->getBank()].getLSB());
+    while (child) {
+
+	MidiBankListViewItem *bankItem =
+	    dynamic_cast<MidiBankListViewItem *>(child);
+	if (bankItem) {
+	    if (bankItem->getBank() >= int(banks.size()))
+		childrenToDelete.push_back(child);
+	    else { // update the banks MSB/LSB which might have changed
+		bankItem->setPercussion(banks[bankItem->getBank()].isPercussion());
+		bankItem->setMSB(banks[bankItem->getBank()].getMSB());
+		bankItem->setLSB(banks[bankItem->getBank()].getLSB());
+	    }
+        }
+
+	MidiKeyMapListViewItem *keyItem =
+	    dynamic_cast<MidiKeyMapListViewItem *>(child);
+	if (keyItem) {
+	    if (!midiDevice->getKeyMappingByName(qstrtostr(keyItem->getName()))) {
+		childrenToDelete.push_back(child);
+	    }
         }
         
-        child = dynamic_cast<MidiBankListViewItem*>(child->nextSibling());
+        child = child->nextSibling();
     }
 
-    for(unsigned int i = 0; i < childrenToDelete.size(); ++i) delete childrenToDelete[i];
+    for (unsigned int i = 0; i < childrenToDelete.size(); ++i) 
+	delete childrenToDelete[i];
 }
 
 bool
 BankEditorDialog::deviceItemHasBank(MidiDeviceListViewItem* deviceItem, int bankNb)
 {
-    MidiBankListViewItem *child = dynamic_cast<MidiBankListViewItem*>(deviceItem->firstChild());
+    QListViewItem *child = deviceItem->firstChild();
     
-    while(child) {
-        if (child->getBank() == bankNb) return true;
-        child = dynamic_cast<MidiBankListViewItem*>(child->nextSibling());
+    while (child) {
+	MidiBankListViewItem *bankItem =
+	    dynamic_cast<MidiBankListViewItem*>(child);
+	if (bankItem) {
+	    if (bankItem->getBank() == bankNb) return true;
+	}
+	child = child->nextSibling();
     }
     
     return false;
@@ -1362,7 +1437,7 @@ BankEditorDialog::clearItemChildren(QListViewItem* item)
 {
     QListViewItem* child = 0;
     
-    while((child = item->firstChild())) delete child;
+    while ((child = item->firstChild())) delete child;
 }
 
 
@@ -1456,7 +1531,11 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 	stateChanged("on_key_item");
 	stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
     
+	m_delete->setEnabled(true);
+
 	Rosegarden::MidiDevice *device = getMidiDevice(keyItem->getDeviceId());
+	if (!device) return;
+
 	setProgramList(device);
 
 	m_keyMappingEditor->populate(item);
@@ -1476,13 +1555,14 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 	stateChanged("on_bank_item");
 	stateChanged("on_key_item", KXMLGUIClient::StateReverse);
     
-	m_deleteBank->setEnabled(true);
+	m_delete->setEnabled(true);
 	m_copyPrograms->setEnabled(true);
 
 	if (m_copyBank.first != Rosegarden::Device::NO_DEVICE)
 	    m_pastePrograms->setEnabled(true);
 
 	Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDeviceId());
+	if (!device) return;
 
 	if (!m_keepBankList || m_bankList.size() == 0)
 	    m_bankList    = device->getBanks();
@@ -1527,7 +1607,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
     setProgramList(device);
     
     RG_DEBUG << "BankEditorDialog::populateDevice : not a bank item - disabling" << endl;
-    m_deleteBank->setEnabled(false);
+    m_delete->setEnabled(false);
     m_copyPrograms->setEnabled(false);
     m_pastePrograms->setEnabled(false);
     
@@ -1557,7 +1637,7 @@ BankEditorDialog::slotApply()
     // if we've not populated them here yet.
     //
     if (m_bankList.size() == 0 && m_programList.size() == 0 &&
-            m_deleteAll == false)
+            m_deleteAllReally == false)
     {
         RG_DEBUG << "BankEditorDialog::slotApply() : m_bankList size = 0\n";
 
@@ -1568,7 +1648,6 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianEmail());
 
         command->clearBankAndProgramList();
-
     }
     else
     {
@@ -1590,6 +1669,19 @@ BankEditorDialog::slotApply()
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail());
+
+	MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem*>
+	    (m_listView->currentItem());
+	if (keyItem) {
+	    Rosegarden::KeyMappingList kml(device->getKeyMappings());
+	    for (int i = 0; i < kml.size(); ++i) {
+		if (kml[i].getName() == qstrtostr(keyItem->getName())) {
+		    kml[i] = m_keyMappingEditor->getMapping();
+		    break;
+		}
+	    }
+	    command->setKeyMappingList(kml);
+	}
 
         command->setVariation(variation);
         command->setBankList(m_bankList);
@@ -1662,7 +1754,11 @@ BankEditorDialog::getParentDeviceItem(QListViewItem* item)
 {
     if (!item) return 0;
 
-    if (dynamic_cast<MidiBankListViewItem*>(item)) // this is a bank item,
+    if (dynamic_cast<MidiBankListViewItem*>(item))
+        // go up to the parent device item
+        item = item->parent();
+
+    if (dynamic_cast<MidiKeyMapListViewItem*>(item))
         // go up to the parent device item
         item = item->parent();
 
@@ -1719,7 +1815,51 @@ BankEditorDialog::slotAddBank()
 }
 
 void
-BankEditorDialog::slotDeleteBank()
+BankEditorDialog::slotAddKeyMapping()
+{
+    if (!m_listView->currentItem()) return;
+
+    QListViewItem* currentItem = m_listView->currentItem();
+
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
+    Rosegarden::MidiDevice *device = getMidiDevice(currentItem);
+   
+    if (device) {
+
+	QString name = "";
+	int n = 0;
+	while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != 0) {
+	    ++n;
+	    if (n == 1) name = i18n("<new mapping>");
+	    else name = i18n("<new mapping %1>").arg(n);
+	}
+
+	Rosegarden::MidiKeyMapping newKeyMapping(Rosegarden::MidiBank(true, 0, 0),
+						 0, 9, true, false, qstrtostr(name));
+
+	
+	ModifyDeviceCommand *command = new ModifyDeviceCommand
+	    (m_studio,
+	     device->getId(),
+	     device->getName(),
+	     device->getLibrarianName(),
+	     device->getLibrarianEmail());
+
+	Rosegarden::KeyMappingList kml;
+	kml.push_back(newKeyMapping);
+	command->setKeyMappingList(kml);
+	command->setOverwrite(false);
+	command->setRename(false);
+
+	addCommandToHistory(command);
+
+	updateDialog();
+        selectDeviceItem(device);
+    }
+}
+
+void
+BankEditorDialog::slotDelete()
 {
     if (!m_listView->currentItem()) return;
 
@@ -1729,7 +1869,7 @@ BankEditorDialog::slotDeleteBank()
 
     Rosegarden::MidiDevice *device = getMidiDevice(currentItem);
 
-    if (device)
+    if (device && bankItem)
     {
         int currentBank = bankItem->getBank();
 
@@ -1774,13 +1914,54 @@ BankEditorDialog::slotDeleteBank()
 
             slotApply();
             selectDeviceItem(device);
-
         }
+    }
+
+    MidiKeyMapListViewItem* keyItem = dynamic_cast<MidiKeyMapListViewItem*>(currentItem);
+
+    if (keyItem && device) {
+	
+        int reply =
+            KMessageBox::warningYesNo(this, i18n("Really delete this key mapping?"));
+
+        if (reply == KMessageBox::Yes) {
+
+	    std::string keyMappingName = qstrtostr(keyItem->getName());
+
+	    ModifyDeviceCommand *command = new ModifyDeviceCommand
+		(m_studio,
+		 device->getId(),
+		 device->getName(),
+		 device->getLibrarianName(),
+		 device->getLibrarianEmail());
+
+	    Rosegarden::KeyMappingList kml = device->getKeyMappings();
+
+	    for (Rosegarden::KeyMappingList::iterator i = kml.begin();
+		 i != kml.end(); ++i) {
+		if (i->getName() == keyMappingName) {
+		    RG_DEBUG << "erasing " << keyMappingName << endl;
+		    kml.erase(i);
+		    break;
+		}
+	    }
+
+	    RG_DEBUG <<" setting " << kml.size() << " key mappings to device " << endl;
+
+	    command->setKeyMappingList(kml);
+	    command->setOverwrite(true);
+
+	    addCommandToHistory(command);
+
+	    RG_DEBUG <<" device has " << device->getKeyMappings().size() << " key mappings now " << endl;
+
+	    updateDialog();
+	}
     }
 }
 
 void
-BankEditorDialog::slotDeleteAllBanks()
+BankEditorDialog::slotDeleteAll()
 {
     if (!m_listView->currentItem()) return;
 
@@ -1816,9 +1997,9 @@ BankEditorDialog::slotDeleteAllBanks()
         // (we might not need this anymore but I'm too scared to remove it
         // now).
         //
-        m_deleteAll = true;
+        m_deleteAllReally = true;
         slotApply();
-        m_deleteAll = false;
+        m_deleteAllReally = false;
 
         selectDeviceItem(device);
 
@@ -1888,7 +2069,10 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 
     MidiDeviceListViewItem* deviceItem =
         dynamic_cast<MidiDeviceListViewItem*>(item);
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
+    MidiBankListViewItem* bankItem =
+	dynamic_cast<MidiBankListViewItem*>(item);
+    MidiKeyMapListViewItem *keyItem =
+	dynamic_cast<MidiKeyMapListViewItem*>(item);
     
     if (bankItem) {
 
@@ -1902,8 +2086,45 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
             setModified(true);
         }
         
-    } else if (deviceItem) {
+    } else if (keyItem) {
 
+        RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
+                 << "modify key mapping name to " << label << endl;
+
+	QString oldName = keyItem->getName();
+	
+	QListViewItem* currentItem = m_listView->currentItem();
+	Rosegarden::MidiDevice *device = getMidiDevice(currentItem);
+
+	if (device) {
+	    
+	    ModifyDeviceCommand *command = new ModifyDeviceCommand
+		(m_studio,
+		 device->getId(),
+		 device->getName(),
+		 device->getLibrarianName(),
+		 device->getLibrarianEmail());
+
+	    Rosegarden::KeyMappingList kml = device->getKeyMappings();
+
+	    for (Rosegarden::KeyMappingList::iterator i = kml.begin();
+		 i != kml.end(); ++i) {
+		if (i->getName() == oldName) {
+		    i->setName(label);
+		    break;
+		}
+	    }
+
+	    command->setKeyMappingList(kml);
+	    command->setOverwrite(true);
+
+	    addCommandToHistory(command);
+
+	    updateDialog();
+	}
+
+    } else if (deviceItem) { // must be last, as the others are subclasses
+	
         // renaming a device item
 
         RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName - "
@@ -1915,6 +2136,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 
             m_updateDeviceList = true;
         }
+        	
     }
     
 }

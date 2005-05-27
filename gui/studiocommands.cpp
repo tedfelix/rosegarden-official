@@ -123,6 +123,10 @@ ModifyDeviceCommand::execute()
             if (m_changeBanks) midiDevice->replaceBankList(m_bankList);
             if (m_changePrograms) midiDevice->replaceProgramList(m_programList);
         }
+
+	if (m_changeKeyMappings) {
+	    midiDevice->replaceKeyMappingList(m_keyMappingList);
+	}
         
         if (m_rename) midiDevice->setName(m_name);
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
@@ -136,6 +140,10 @@ ModifyDeviceCommand::execute()
             if (m_changeBanks) midiDevice->mergeBankList(m_bankList);
             if (m_changePrograms) midiDevice->mergeProgramList(m_programList);
         }
+
+	if (m_changeKeyMappings) {
+	    midiDevice->mergeKeyMappingList(m_keyMappingList);
+	}
         
 	if (m_rename) {
 	    std::string mergeName = midiDevice->getName() +
@@ -146,8 +154,6 @@ ModifyDeviceCommand::execute()
 
     //!!! merge option?
     if (m_changeControls) midiDevice->replaceControlParameters(m_controlList);
-
-    if (m_changeKeyMappings) midiDevice->mergeKeyMappingList(m_keyMappingList);
 }
 
 void
