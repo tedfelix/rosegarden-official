@@ -2037,7 +2037,12 @@ QCanvasPixmap*
 NotePixmapFactory::makeToolbarPixmap(const char *name)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    return new QCanvasPixmap(pixmapDir + "/toolbar/" + name + ".xpm");
+    QString fileBase = pixmapDir + "/toolbar/" + name;
+    if (QFile(fileBase + ".png").exists()) {
+	return new QCanvasPixmap(fileBase + ".png");
+    } else {
+	return new QCanvasPixmap(fileBase + ".xpm");
+    }
 }
 
 QCanvasPixmap*
