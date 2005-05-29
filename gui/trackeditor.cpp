@@ -141,6 +141,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     // Segment Canvas
     //
     m_compositionModel = new CompositionModelImpl(m_doc->getComposition(),
+                                                  m_doc->getStudio(),
                                                   m_rulerScale, getTrackCellHeight());
     
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);

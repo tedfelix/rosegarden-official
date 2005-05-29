@@ -16,6 +16,7 @@ rgSources = Split("""
         audiopluginmanager.cpp 
 	audiopluginoscgui.cpp 
 	audiopreviewthread.cpp 
+	audiopreviewupdater.cpp 
 	audiosynthmanager.cpp 
         bankeditor.cpp
         barbuttons.cpp 

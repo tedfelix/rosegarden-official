@@ -9,6 +9,7 @@ rosegarden_SOURCES = \
         audiopluginmanager.cpp \
 	audiopluginoscgui.cpp \
 	audiopreviewthread.cpp \
+	audiopreviewupdater.cpp \
 	audiosynthmanager.cpp \
         bankeditor.cpp\
         barbuttons.cpp \

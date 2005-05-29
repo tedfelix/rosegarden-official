@@ -92,26 +92,69 @@ protected:
     QString     m_label;
 };
 
+class PreviewRect : public QRect {
+public:
+    PreviewRect(int left, int top, int width, int height) :
+        QRect(left, top, width, height) {};
+
+    PreviewRect(const QRect& r) :
+        QRect(r) {};
+
+    const QColor& getColor() const { return m_color; }
+    void setColor(QColor c) { m_color = c; }
+
+protected:
+    QColor m_color;
+};
+
+
 class CompositionModel : public QObject, public Rosegarden::CompositionObserver, public Rosegarden::SegmentObserver
 {
+public:
     struct RectCompare {
-	bool operator()(const QRect &r1, const QRect &r2) const {
+	bool operator()(const PreviewRect &r1, const PreviewRect &r2) const {
 	    return r1.x() < r2.x();
 	}
     };
 
-    typedef std::multiset<QRect, RectCompare> RectList;
+    typedef std::multiset<PreviewRect, RectCompare> RectList;
 
-public:
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::vector<CompositionItem> itemcontainer;
-    typedef std::vector<float> AudioPreviewData;
+
     typedef RectList NotationPreviewData;
+
+    class AudioPreviewData {
+    public:
+        AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
+
+        bool showsMinima()              { return m_showMinima; }
+        void setShowMinima(bool s)      { m_showMinima = s;    }
+
+        unsigned int getChannels()       { return m_channels;   }
+        void setChannels(unsigned int c) { m_channels = c;      }
+
+        std::vector<float>& getValues()     { return m_values;  }
+
+        QRect getSegmentRect()              { return m_segmentRect; }
+        void setSegmentRect(const QRect& r) { m_segmentRect = r; }
+
+    protected:
+        std::vector<float> m_values;
+        bool               m_showMinima;
+        unsigned int       m_channels;
+        QRect              m_segmentRect;
+
+    private:
+        // no copy ctor
+        AudioPreviewData(const AudioPreviewData&);
+    };
+
 
     virtual ~CompositionModel() {};
 
     virtual unsigned int getNbRows() = 0;
-    virtual const rectcontainer& getRectanglesIn(const QRect& rect, NotationPreviewData*, AudioPreviewData*) = 0;
+    virtual const rectcontainer& getRectanglesIn(const QRect& rect, RectList* notationRects, RectList* audioRects) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
@@ -143,7 +186,9 @@ protected:
     CompositionItem* m_currentCompositionItem;
 };
 
-namespace Rosegarden { class Segment; class Composition; class SnapGrid; class RulerScale; }
+namespace Rosegarden { class Segment; class Studio; class SnapGrid; class RulerScale; }
+class AudioPreviewThread;
+class AudioPreviewUpdater;
 
 class CompositionModelImpl : public CompositionModel
 {
@@ -151,13 +196,14 @@ class CompositionModelImpl : public CompositionModel
 public:
 
     CompositionModelImpl(Rosegarden::Composition& compo,
+                         Rosegarden::Studio& studio,
                          Rosegarden::RulerScale *rulerScale,
                          int vStep);
 
     ~CompositionModelImpl();
     
     virtual unsigned int getNbRows();
-    virtual const rectcontainer& getRectanglesIn(const QRect& rect, NotationPreviewData*, AudioPreviewData*);
+    virtual const rectcontainer& getRectanglesIn(const QRect& rect, RectList* notationRects, RectList* audioRects);
     virtual itemcontainer     getItemsAt      (const QPoint&);
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
@@ -184,6 +230,7 @@ public:
     virtual void setLength(int width);
     virtual int  getLength();
 
+    void setAudioPreviewThread(AudioPreviewThread& thread);
     void refreshAllPreviews();
     void refreshDirtyPreviews();
     void clearPreviewCache();
@@ -196,7 +243,8 @@ public:
                                               const Rosegarden::SnapGrid& grid);
 
     Rosegarden::SegmentSelection getSelectedSegments() { return m_selectedSegments; }
-    Rosegarden::Composition&     getComposition() { return m_composition; }
+    Rosegarden::Composition&     getComposition()      { return m_composition; }
+    Rosegarden::Studio&          getStudio()           { return m_studio; }
 
 
     // CompositionObserver
@@ -209,6 +257,9 @@ public:
 
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
+
+protected slots:
+    void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
 protected:
     void setSelected(const Rosegarden::Segment*, bool selected = true);
@@ -224,14 +275,18 @@ protected:
 
     void makePreviewCache(Rosegarden::Segment* s);
     void removePreviewCache(Rosegarden::Segment* s);
+    void makeAudioPreviewRects(RectList* apData, const Rosegarden::Segment* s, const QRect&);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Composition&     m_composition;
+    Rosegarden::Studio&          m_studio;
     Rosegarden::SnapGrid         m_grid;
     Rosegarden::SegmentSelection m_selectedSegments;
     Rosegarden::SegmentSelection m_tmpSelectedSegments;
     Rosegarden::SegmentSelection m_previousTmpSelectedSegments;
     Rosegarden::Segment*         m_recordingSegment;
+
+    AudioPreviewThread*          m_audioPreviewThread;
 
     typedef QPtrDict<NotationPreviewData> NotationPreviewDataCache;
     typedef QPtrDict<AudioPreviewData>    AudioPreviewDataCache;
@@ -470,8 +525,8 @@ protected:
 
     bool         m_2ndLevelUpdate;
 
-    mutable CompositionModel::AudioPreviewData    m_audioPreviewData;
-    mutable CompositionModel::NotationPreviewData m_notationPreviewData;
+    mutable CompositionModel::RectList m_audioPreviewRects;
+    mutable CompositionModel::RectList m_notationPreviewRects;
 };
 
 #endif
