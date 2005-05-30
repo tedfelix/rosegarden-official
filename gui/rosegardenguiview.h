@@ -204,6 +204,8 @@ public slots:
 
     void slotShowPreviews(bool);
 
+    void slotShowSegmentLabels(bool);
+
     /**
      * Update previews for a particular instrument, if audio
      */

@@ -409,6 +409,8 @@ public:
     void setTextFloat(int x, int y, const QString &text);
     void hideTextFloat() { m_drawTextFloat = false; }
 
+    void setShowSegmentLabels(bool b) { m_showSegmentLabels = b; }
+
     void updateSize(bool shrinkWidth=false);
 
 public slots:
@@ -495,6 +497,7 @@ protected:
     SegmentToolBox* m_toolBox;
 
     bool         m_showPreviews;
+    bool         m_showSegmentLabels;
     bool         m_fineGrain;
 
     int          m_minWidth;

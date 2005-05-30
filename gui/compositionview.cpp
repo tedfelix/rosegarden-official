@@ -290,10 +290,11 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
 void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segment* segment, const QRect& clipRect)
 {
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects()\n";
     AudioPreviewData* cachedAPData = getAudioPreviewData(segment);
-    int height = m_grid.getYSnap()/2 - 2;
-    int halfRectHeight = m_grid.getYSnap()/2;
+    const int height = m_grid.getYSnap()/2 - 2;
+    const int halfRectHeight = m_grid.getYSnap()/2;
+
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : halfRectHeight = " << halfRectHeight << endl;
 
     float gain[2] = { 1.0, 1.0 };
     Rosegarden::TrackId trackId = segment->getTrack();
@@ -363,6 +364,9 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
             
         }
 
+        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - h1 = " << h1
+                 << " - h2 : " << h2 << endl;
+
         int width = 1;
         const QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
 
@@ -370,12 +374,13 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
 
 	if (h1 >= 1.0) { h1 = 1.0; color = Qt::red; }
 
-        int height = int(h1 * height + 0.5);
+        float h = h1 * height;
 
-        PreviewRect r(tRect.x() + i, tRect.y() + int(halfRectHeight - height),
-                      width, height);
+        PreviewRect r(tRect.x() + i, tRect.y() + int(halfRectHeight - h + 0.5),
+                      width, int(h - 0.5));
         r.setColor(color);
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r1 " << r << endl;
+        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r1 "
+                 << r << " - height = " << height << endl;
 
         apRects->insert(r);
         
@@ -387,13 +392,14 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
 	if (h2 >= 1.0) { h2 = 1.0; color = Qt::red; }
 	else { color = defaultCol; }
 
-        height = int(h2 * height + 0.5);
+        h = h2 * height + 0.5;
 
         PreviewRect r2(tRect.x() + i, tRect.y() + int(halfRectHeight),
-                       width, height);
+                       width, int(h));
         r2.setColor(color);
         apRects->insert(r2);
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r2 " << r2 << endl;
+        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r2 "
+                 << r2 << " - height = " << height << endl;
 
 // 	painter.drawLine(tRect.x() + i,
 // 			 tRect.y() + int(halfRectHeight),
@@ -980,6 +986,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_tool(0),
       m_toolBox(0),
       m_showPreviews(false),
+      m_showSegmentLabels(true),
       m_fineGrain(false),
       m_minWidth(m_model->getLength()),
       m_stepSize(0),
@@ -1333,9 +1340,10 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     //
     // Draw segment labels (they must be drawn over the preview rects)
     //
-    
-    for(i = rects.begin(); i != end; ++i) {
-        drawCompRectLabel(*i, p, clipRect);
+    if (m_showSegmentLabels) {
+        for(i = rects.begin(); i != end; ++i) {
+            drawCompRectLabel(*i, p, clipRect);
+        }
     }
     
 

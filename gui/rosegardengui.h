@@ -707,6 +707,11 @@ public slots:
     void slotTempoToSegmentLength(QWidget* parent);
 
     /**
+     * toggle segment labels
+     */
+    void slotToggleSegmentLabels();
+    
+    /**
      * open the default editor for each of the currently-selected segments
      */
     void slotEdit();
@@ -1359,6 +1364,7 @@ private:
     KToggleAction* m_viewTempoRuler;
     KToggleAction* m_viewChordNameRuler;
     KToggleAction* m_viewPreviews;
+    KToggleAction* m_viewSegmentLabels;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

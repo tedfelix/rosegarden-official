@@ -901,6 +901,9 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
 
+    m_viewSegmentLabels = new KToggleAction(i18n("Show Segment Labels"), 0, this,
+                                            SLOT(slotToggleSegmentLabels()), actionCollection(),
+                                            "show_segment_labels");
 
     //
     // Tracks menu
@@ -1724,6 +1727,7 @@ void RosegardenGUIApp::slotSaveOptions()
     kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     kapp->config()->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
     kapp->config()->writeEntry("Show Previews",                m_viewPreviews->isChecked());
+    kapp->config()->writeEntry("Show Segment Labels",          m_viewSegmentLabels->isChecked());
     kapp->config()->writeEntry("Show Parameters",              m_dockVisible);
 
 #ifdef SETTING_LOG_DEBUG
@@ -1828,6 +1832,10 @@ void RosegardenGUIApp::readOptions()
     opt = kapp->config()->readBoolEntry("Show Previews", true);
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
+
+    opt = kapp->config()->readBoolEntry("Show Segment Labels", true);
+    m_viewSegmentLabels->setChecked(opt);
+    slotToggleSegmentLabels();
 
     opt = kapp->config()->readBoolEntry("Show Parameters", true);
     if (!opt)
@@ -2753,7 +2761,13 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
     } 
 }
 
-
+void RosegardenGUIApp::slotToggleSegmentLabels()
+{
+    KToggleAction* act = dynamic_cast<KToggleAction*>(actionCollection()->action("show_segment_labels"));
+    if (act) {
+        m_view->slotShowSegmentLabels(act->isChecked());
+    }
+}
 
 void RosegardenGUIApp::slotEdit()
 {
