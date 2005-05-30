@@ -80,6 +80,15 @@ public:
     QString getAuthor() const { return m_author; }
     QString getCopyright() const { return m_copyright; }
     bool isSynth() const { return m_isSynth; }
+    bool isEffect() const { // true if >0 audio inputs
+	for (unsigned int i = 0; i < m_ports.size(); ++i) {
+	    if ((m_ports[i]->getType() & PluginPort::Input) &&
+		(m_ports[i]->getType() & PluginPort::Audio)) {
+		return true;
+	    }
+	}
+	return false;
+    }
     bool isGrouped() const { return m_isGrouped; }
     QString getCategory() const { return m_category; }
 

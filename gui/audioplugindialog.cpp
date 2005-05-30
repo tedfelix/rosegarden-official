@@ -184,7 +184,8 @@ AudioPluginDialog::populatePluginCategoryList()
     for (PluginIterator i = m_pluginManager->begin();
 	 i != m_pluginManager->end(); ++i) {
 
-	if ((*i)->isSynth() == isSynth()) {
+	if (( isSynth() && (*i)->isSynth()) ||
+	    (!isSynth() && (*i)->isEffect())) {
 
 	    if ((*i)->getCategory() != "") {
 		categories.insert((*i)->getCategory());
@@ -259,15 +260,17 @@ AudioPluginDialog::populatePluginList()
 
 	++count;
 
-	if ((*i)->isSynth() != isSynth()) continue;
+	if (( isSynth() && (*i)->isSynth()) ||
+	    (!isSynth() && (*i)->isEffect())) {
 
-	if (needCategory) {
-	    QString cat = "";
-	    if ((*i)->getCategory()) cat = (*i)->getCategory();
-	    if (cat != category) continue;
+	    if (needCategory) {
+		QString cat = "";
+		if ((*i)->getCategory()) cat = (*i)->getCategory();
+		if (cat != category) continue;
+	    }
+
+	    plugins[(*i)->getName()] = PluginPair(count, *i);
 	}
-
-	plugins[(*i)->getName()] = PluginPair(count, *i);
     }
 
     const char *currentId = 0;

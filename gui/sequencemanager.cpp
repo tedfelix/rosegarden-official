@@ -1429,17 +1429,12 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 
     SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
 
-    MappedObjectPropertyList seqPlugins
-#ifdef QUERY_PLUGINS_FROM_GUI
-	(50000)
-#endif
-	;
+    MappedObjectPropertyList seqPlugins;
 
     {
 	Rosegarden::Profiler profiler("querying plugins", true);
 
 #ifdef QUERY_PLUGINS_FROM_GUI
-
 	if (!rgapp->noSequencerMode()) {
 
 	    // We only waste the time looking for plugins here if we
@@ -1479,7 +1474,7 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
         QString category = seqPlugins[i++];
         unsigned int portCount = seqPlugins[i++].toInt();
 
-//	std::cerr << "PLUGIN: " << identifier << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
+//	std::cerr << "PLUGIN: " << i << ": " << (identifier ? identifier : "(null)") << " unique id " << uniqueId << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
 
         AudioPlugin *aP = aPM->addPlugin(identifier,
                                          name,

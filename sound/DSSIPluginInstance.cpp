@@ -911,7 +911,15 @@ DSSIPluginInstance::run(const RealTime &blockTime)
  done:
     if (needLock) pthread_mutex_unlock(&m_processLock);
 
-    if (m_idealChannelCount < m_audioPortsOut.size()) {
+    if (m_audioPortsOut.size() == 0) {
+	// copy inputs to outputs
+	for (size_t ch = 0; ch < m_idealChannelCount; ++ch) {
+	    size_t sch = ch % m_audioPortsIn.size();
+	    for (size_t i = 0; i < m_blockSize; ++i) {
+		m_outputBuffers[ch][i] = m_inputBuffers[sch][i];
+	    }
+	}
+    } else if (m_idealChannelCount < m_audioPortsOut.size()) {
 	if (m_idealChannelCount == 1) {
 	    // mix down to mono
 	    for (size_t ch = 1; ch < m_audioPortsOut.size(); ++ch) {

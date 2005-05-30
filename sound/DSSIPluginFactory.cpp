@@ -60,6 +60,8 @@ DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 	const LADSPA_Descriptor *descriptor = ddesc->LADSPA_Plugin;
 	if (!descriptor) continue;
 	
+//	std::cerr << "DSSIPluginFactory::enumeratePlugins: Name " << (descriptor->Name ? descriptor->Name : "NONE" ) << std::endl;
+
 	list.push_back(*i);
 	list.push_back(descriptor->Name);
 	list.push_back(QString("%1").arg(descriptor->UniqueID));
