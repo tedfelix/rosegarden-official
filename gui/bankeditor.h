@@ -93,6 +93,7 @@ public:
     int getBank()     { return m_bankNb; }
 
     void setPercussion(bool percussion);
+    bool isPercussion() const { return m_percussion; }
     void setMSB(int msb);
     void setLSB(int msb);
 
@@ -101,6 +102,7 @@ public:
 protected:
 
     //--------------- Data members ---------------------------------
+    bool   m_percussion;
     int    m_bankNb;
 };
 

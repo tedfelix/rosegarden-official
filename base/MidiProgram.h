@@ -100,15 +100,26 @@ public:
     // percussion settings etc
     const MidiBank      &getBank() const { return m_bank; }
 
+    void                 setBank(const MidiBank &bank) { m_bank = bank; }
+
     MidiByte             getProgram() const { return m_program; }
+    void                 setProgram(MidiByte program) { m_program = program; }
+
     MidiByte             getChannel() const { return m_channel; }
+    void                 setChannel(MidiByte channel) { m_channel = channel; }
+
     bool                 useProgram() const { return m_useProgram; }
+    void                 setUseProgram(bool use) { m_useProgram = use; }
+
     bool                 useChannel() const { return m_useChannel; }
+    void                 setUseChannel(bool use) { m_useChannel = use; }
+
     const std::string   &getName() const { return m_name; }
+    void                 setName(const std::string &name) { m_name = name; }
+
     const KeyNameMap    &getMap() const { return m_map; }
     KeyNameMap          &getMap() { return m_map; }
     std::string          getMapForKeyName(MidiByte pitch) const;
-    void                 setName(const std::string &name) { m_name = name; }
     void                 setMap(const KeyNameMap &map) { m_map = map; }
     
     // Return 0 if the supplied argument is the lowest pitch in the

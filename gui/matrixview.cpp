@@ -185,6 +185,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                            this));
 	// staff has one too many rows to avoid a half-row at the top:
 	m_staffs[i]->setY(-resolution / 2);
+	if (isDrumMode()) m_staffs[i]->setX(resolution);
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
@@ -204,7 +205,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_pianoView = new QDeferScrollView(getCentralWidget());
 
-    if (isDrumMode() && instr && instr->getKeyMapping()) {
+    if (isDrumMode() && instr && instr->getKeyMapping() &&
+	!instr->getKeyMapping()->getMap().empty()) {
 	m_pitchRuler = new PercussionPitchRuler(m_pianoView->viewport(),
 						instr->getKeyMapping(),
 						resolution); // line spacing
@@ -2327,7 +2329,11 @@ MatrixView::readjustCanvasSize()
 //         }
 
         if (staff.getTotalHeight() + staff.getY() > maxHeight) {
-            maxHeight = staff.getTotalHeight() + staff.getY() + 1;
+	    if (isDrumMode()) {
+		maxHeight = staff.getTotalHeight() + staff.getY() + 5;
+	    } else {
+		maxHeight = staff.getTotalHeight() + staff.getY() + 1;
+	    }
         }
 
     }
@@ -2541,6 +2547,9 @@ int MatrixView::computePostLayoutWidth()
                  << " endmarkertime : " << segment->getEndMarkerTime()
                  << " barEnd for time : " << composition->getBarEndForTime(segment->getEndMarkerTime())
                  << endl;
+
+    newWidth += 12;
+    if (isDrumMode()) newWidth += 12;
 
     return newWidth;
 }

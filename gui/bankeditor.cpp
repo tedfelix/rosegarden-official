@@ -130,12 +130,14 @@ MidiBankListViewItem::MidiBankListViewItem(Rosegarden::DeviceId deviceId,
                                            QString name,
 					   bool percussion, int msb, int lsb)
     : MidiDeviceListViewItem(deviceId, parent, name, percussion, msb, lsb),
+      m_percussion(percussion),
       m_bankNb(bankNb)
 {
 }
 
 void MidiBankListViewItem::setPercussion(bool percussion)
 {
+    m_percussion = percussion;
     setText(1, QString(percussion ? i18n("Percussion Bank") : i18n("Bank")));
 }
 
@@ -316,7 +318,7 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
                                               2,  // cols
                                               2); // margin
  
-    gridLayout->addWidget(new QLabel(i18n("Type"), frame),
+    gridLayout->addWidget(new QLabel(i18n("Percussion"), frame),
                           0, 0, AlignLeft);
     gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
@@ -498,6 +500,12 @@ MidiProgramsEditor::slotNewPercussion()
     if (banklistContains(MidiBank(percussion, m_msb->value(), m_lsb->value()))) {
 	RG_DEBUG << "MidiProgramsEditor::slotNewPercussion: calling setChecked(" << !percussion << ")" << endl;
 	m_percussion->setChecked(!percussion);
+    } else {
+	MidiBank newBank(percussion,
+			 m_msb->value(),
+			 m_lsb->value());
+	modifyCurrentPrograms(*getCurrentBank(), newBank);
+	*getCurrentBank() = newBank;
     }
     m_percussion->blockSignals(false);
     m_bankEditor->setModified(true);
@@ -841,6 +849,9 @@ MidiKeyMappingEditor::reset()
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
     m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
+    m_useChannel->setChecked(m_mapping.useChannel());
+    m_channel->setValue(m_mapping.getChannel() + 1);
+
     for (Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator it =
 	     m_mapping.getMap().begin();
 	 it != m_mapping.getMap().end(); ++it) {
@@ -867,7 +878,7 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
 {
     const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiKeyMappingEditor::slotProgramChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
         return;
     }
 
@@ -889,13 +900,20 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
 void MidiKeyMappingEditor::slotChannelChanged(int channel)
 {
     RG_DEBUG << "MidiKeyMappingEditor::slotChannelChanged(" << channel << ")" << endl;
-    //!!!
+    if (m_mapping.getChannel() != channel) {
+	m_mapping.setChannel(channel - 1);
+	m_bankEditor->setModified(true);
+    }
 }
 
 void MidiKeyMappingEditor::slotUseChannelToggled()
 {
     RG_DEBUG << "MidiKeyMappingEditor::slotUseChannelToggled()" << endl;
-    //!!!
+    bool use = m_useChannel->isChecked();
+    if (m_mapping.useChannel() != use) {
+	m_mapping.setUseChannel(use);
+	m_bankEditor->setModified(true);
+    }
 }
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
@@ -1267,7 +1285,7 @@ BankEditorDialog::updateDialog()
 			    dynamic_cast<MidiBankListViewItem *>(child);
 
 			if (bankItem) {
-			    bool percussion = (bankItem->text(1).lower() == "yes");
+			    bool percussion = bankItem->isPercussion();
 			    int msb = bankItem->text(2).toInt();
 			    int lsb = bankItem->text(3).toInt();
 			    std::string bankName =
