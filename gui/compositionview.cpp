@@ -231,32 +231,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
             // Notation preview data
             if (npData && s->getType() == Rosegarden::Segment::Internal) {
-                NotationPreviewData* cachedNPData = getNotationPreviewData(s);
-
-//                 RG_DEBUG << "CompositionModelImpl::getRectanglesIn() : npData = "
-//                          << npData << " - rect = " << rect << endl;
-
-                NotationPreviewData::iterator npi = cachedNPData->lower_bound(rect),
-                    npEnd = cachedNPData->end();
-                if (npi != cachedNPData->begin())
-                    --npi;
-
-                int xLim = rect.topRight().x();
-                for(; npi->x() <= xLim && npi != npEnd; ++npi) {
-//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
-//                              << " - npi = " << (*npi) << endl;
-                    QRect tr = *npi;
-
-                    // put preview rectangle inside the corresponding segment's CompositionRect
-		    //               tr.moveBy(sr.x(), sr.y());
-		    // already has correct x-coord virtue of snap grid
-		    tr.moveBy(0, sr.y());
-
-//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
-//                              << tr << endl;
-                    npData->insert(tr);
-                }
-                
+                makeNotationPreviewRects(npData, sr.y(), s, rect);                
 
             // Audio preview data
             } else if (apData && s->getType() == Rosegarden::Segment::Audio) {
@@ -286,6 +261,47 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     }
 
     return m_res;
+}
+
+
+void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY,
+                                                    const Segment* segment, const QRect& clipRect)
+{
+    NotationPreviewData* cachedNPData = getNotationPreviewData(segment);
+
+//                 RG_DEBUG << "CompositionModelImpl::getRectanglesIn() : npData = "
+//                          << npData << " - rect = " << rect << endl;
+
+    NotationPreviewData::iterator npi = cachedNPData->lower_bound(clipRect),
+        npEnd = cachedNPData->end();
+    if (npi != cachedNPData->begin())
+        --npi;
+
+    // compute the preview color so it's as visible as possible over the segment's color
+    QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
+    int h, s, v;
+    segColor.hsv(&h, &s, &v);
+    h += 180;
+    v = 255 - v;
+    segColor.setHsv(h, s, v);
+
+    int xLim = clipRect.topRight().x();
+    for(; npi->x() <= xLim && npi != npEnd; ++npi) {
+//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
+//                              << " - npi = " << (*npi) << endl;
+        PreviewRect tr = *npi;
+
+        tr.setColor(segColor);
+
+        // put preview rectangle inside the corresponding segment's CompositionRect
+        //               tr.moveBy(sr.x(), sr.y());
+        // already has correct x-coord virtue of snap grid
+        tr.moveBy(0, baseY);
+
+//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
+//                              << tr << endl;
+        npRects->insert(tr);
+    }
 }
 
 void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segment* segment, const QRect& clipRect)
@@ -1316,9 +1332,10 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         
         for(; api != apEnd; ++api) {
             const PreviewRect& pr = *api;
-            QColor col = pr.getColor().isValid() ? pr.getColor() : Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
-            p->setBrush(pr.getColor());
-            p->setPen(pr.getColor());
+            QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
+            QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
+            p->setBrush(col);
+            p->setPen(col);
             p->drawLine(pr.topLeft(), pr.bottomLeft());
         }
 
@@ -1328,9 +1345,10 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         for(; npi != npEnd; ++npi) {
 //             RG_DEBUG << "CompositionView::drawContents : draw preview rect " << *npi << endl;
             const PreviewRect& pr = *npi;
-            QColor col = pr.getColor().isValid() ? pr.getColor() : Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentInternalPreview);
-            p->setBrush(pr.getColor());
-            p->setPen(pr.getColor());
+            QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
+            QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
+            p->setBrush(col);
+            p->setPen(col);
             p->drawRect(pr);
         }
         

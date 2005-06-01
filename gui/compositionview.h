@@ -275,6 +275,7 @@ protected:
 
     void makePreviewCache(Rosegarden::Segment* s);
     void removePreviewCache(Rosegarden::Segment* s);
+    void makeNotationPreviewRects(RectList* apData, int baseY, const Rosegarden::Segment* s, const QRect&);
     void makeAudioPreviewRects(RectList* apData, const Rosegarden::Segment* s, const QRect&);
 
     //--------------- Data members ---------------------------------
