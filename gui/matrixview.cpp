@@ -185,7 +185,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                            this));
 	// staff has one too many rows to avoid a half-row at the top:
 	m_staffs[i]->setY(-resolution / 2);
-	if (isDrumMode()) m_staffs[i]->setX(resolution);
+//!!!	if (isDrumMode()) m_staffs[i]->setX(resolution);
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
