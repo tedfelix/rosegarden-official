@@ -38,9 +38,14 @@ public:
                         const Rosegarden::Composition& c,
                         const Rosegarden::Segment*,
                         const QRect&,
-                        CompositionModel::AudioPreviewData& apData,
                         CompositionModelImpl* parent);
+    ~AudioPreviewUpdater();
     bool update();
+
+    const Rosegarden::Segment *getSegment() const { return m_segment; }
+
+    const std::vector<float> &getComputedValues(unsigned int &channels) const
+    { channels = m_channels; return m_values; }
 
 signals:
     void audioPreviewComplete(AudioPreviewUpdater*);
@@ -54,8 +59,8 @@ protected:
     const Rosegarden::Segment*     m_segment;
     QRect                          m_rect;
     bool                           m_showMinima;
-
-    CompositionModel::AudioPreviewData& m_apData;
+    unsigned int                   m_channels;
+    std::vector<float>             m_values;
 
     int m_previewToken;
 

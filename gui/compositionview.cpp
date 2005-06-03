@@ -328,12 +328,16 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
 
     bool showMinima = cachedAPData->showsMinima();
     unsigned int channels = cachedAPData->getChannels();
-    std::vector<float>& values = cachedAPData->getValues();
+    const std::vector<float>& values = cachedAPData->getValues();
 
     if (channels == 0) {
         RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : problem with audio file for segment "
                  << segment->getLabel().c_str() << endl;
         return;
+    } else {
+	RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects: Have "
+		 << channels << " channels, " << values.size()
+		 << " samples for audio preview" << endl;
     }
     
     int samplePoints = values.size() / (channels * (showMinima ? 2 : 1));
@@ -380,50 +384,44 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
             
         }
 
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - h1 = " << h1
-                 << " - h2 : " << h2 << endl;
+//        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - h1 = " << h1
+//                 << " - h2 : " << h2 << endl;
 
         int width = 1;
-        const QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
+        const QColor defaultCol = Rosegarden::GUIPalette::getColour
+	    (Rosegarden::GUIPalette::SegmentAudioPreview);
 
-        QColor color = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
+        QColor color;
+	int baseY = tRect.y() + halfRectHeight;
+
+	// h1 left, h2 right
+
+	int h = int(h1 * height + 0.5);
 
 	if (h1 >= 1.0) { h1 = 1.0; color = Qt::red; }
+	else { color = defaultCol; }
 
-        float h = h1 * height;
-
-        PreviewRect r(tRect.x() + i, tRect.y() + int(halfRectHeight - h + 0.5),
-                      width, int(h - 0.5));
+        PreviewRect r(tRect.x() + i, baseY - h, width, h);
         r.setColor(color);
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r1 "
-                 << r << " - height = " << height << endl;
+
+//        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r1 "
+//                 << r << " - height = " << height << endl;
 
         apRects->insert(r);
-        
-// 	painter.drawLine(tRect.x() + i,
-// 			 tRect.y() + int(halfRectHeight - h1 * height + 0.5),
-// 			 tRect.x() + i,
-// 			 tRect.y() + int(halfRectHeight));
+
+        h = int(h2 * height + 0.5);
 
 	if (h2 >= 1.0) { h2 = 1.0; color = Qt::red; }
 	else { color = defaultCol; }
 
-        h = h2 * height + 0.5;
-
-        PreviewRect r2(tRect.x() + i, tRect.y() + int(halfRectHeight),
-                       width, int(h));
+        PreviewRect r2(tRect.x() + i, baseY, width, h);
         r2.setColor(color);
+
         apRects->insert(r2);
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r2 "
-                 << r2 << " - height = " << height << endl;
 
-// 	painter.drawLine(tRect.x() + i,
-// 			 tRect.y() + int(halfRectHeight),
-// 			 tRect.x() + i,
-// 			 tRect.y() + int(halfRectHeight + h2 * height + 0.5));
-
+//        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r2 "
+//                 << r2 << " - height = " << height << endl;
     }
-
 
     if (segment->isAutoFading()) {
 
@@ -487,12 +485,14 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread& thread)
 
 void CompositionModelImpl::refreshAllPreviews()
 {
+    RG_DEBUG << "CompositionModelImpl::refreshAllPreviews" << endl;
+
     clearPreviewCache();
 
     const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
     Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for (Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
         makePreviewCache(*i);
@@ -502,6 +502,8 @@ void CompositionModelImpl::refreshAllPreviews()
 
 void CompositionModelImpl::clearPreviewCache()
 {
+    RG_DEBUG << "CompositionModelImpl::clearPreviewCache" << endl;
+
     m_notationPreviewDataCache.clear();
     m_audioPreviewDataCache.clear();
 }
@@ -558,24 +560,43 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
         QRect segRect = computeSegmentRect(*segment, m_composition, m_grid);
         AudioPreviewUpdater* updater = new AudioPreviewUpdater(*m_audioPreviewThread,
                                                                m_composition, segment, segRect,
-                                                               *apData, this);
+							       this);
+
+	apData->setSegmentRect(segRect);
 
         connect(updater, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
                 this, SLOT(slotAudioPreviewComplete(AudioPreviewUpdater*)));
 
         updater->update();
+
     } else {
         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - no audio preview thread set\n";
     }
-    
-    
-    
 }
 
 void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 {
     RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete()\n";
+    
+    AudioPreviewData *apData = getAudioPreviewData(apu->getSegment());
+    if (apData) {
+	unsigned int channels = 0;
+	const std::vector<float> &values = apu->getComputedValues(channels);
+	if (channels > 0) {
+	    RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete: set " << values.size() << " samples on " << channels << " channels" << endl;
+	    apData->setChannels(channels);
+	    apData->setValues(values);
+	}
+    }
+
     delete apu;
+}
+
+
+CompositionModel::AudioPreviewData::~AudioPreviewData()
+{
+    RG_DEBUG << "CompositionModel::AudioPreviewData::~AudioPreviewData()"
+	     << endl;
 }
 
 
@@ -678,7 +699,9 @@ CompositionModel::NotationPreviewData* CompositionModelImpl::makeNotationPreview
 
 CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
 {
-    AudioPreviewData* apData = new AudioPreviewData(false, 0); // TODO: are 'showMinima' and 'channels' used ?
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")" << endl;
+
+    AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
     updatePreviewCacheForAudioSegment(s, apData);
     m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
 

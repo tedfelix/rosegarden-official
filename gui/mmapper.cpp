@@ -732,6 +732,13 @@ void AudioSegmentMmapper::dump()
     Rosegarden::RealTime eventTime;
     Rosegarden::Track* track = comp.getTrackById(m_segment->getTrack());
     
+    // Can't write out if no track
+    if (!track) {
+	std::cerr << "AudioSegmentMmapper::dump: ERROR: No track for segment!"
+		  << std::endl;
+	return;
+    }
+
     timeT segmentStartTime = m_segment->getStartTime();
     timeT segmentEndTime = m_segment->getEndMarkerTime();
     timeT segmentDuration = segmentEndTime - segmentStartTime;

@@ -127,6 +127,7 @@ public:
     class AudioPreviewData {
     public:
         AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
+	~AudioPreviewData();
 
         bool showsMinima()              { return m_showMinima; }
         void setShowMinima(bool s)      { m_showMinima = s;    }
@@ -134,7 +135,8 @@ public:
         unsigned int getChannels()       { return m_channels;   }
         void setChannels(unsigned int c) { m_channels = c;      }
 
-        std::vector<float>& getValues()     { return m_values;  }
+        const std::vector<float> &getValues() const { return m_values;  }
+	void setValues(const std::vector<float>&v) { m_values = v; }
 
         QRect getSegmentRect()              { return m_segmentRect; }
         void setSegmentRect(const QRect& r) { m_segmentRect = r; }

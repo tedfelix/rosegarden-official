@@ -26,21 +26,26 @@
 AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
                                          const Rosegarden::Composition& c, const Rosegarden::Segment* s,
                                          const QRect& r,
-                                         CompositionModel::AudioPreviewData& apData, CompositionModelImpl* parent)
+                                         CompositionModelImpl* parent)
     : QObject(parent),
       m_thread(thread),
       m_composition(c),
       m_segment(s),
       m_rect(r),
       m_showMinima(false),
-      m_apData(apData),
+      m_channels(0),
       m_previewToken(-1)
 {
 }
 
+AudioPreviewUpdater::~AudioPreviewUpdater()
+{
+    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater" << endl;
+}
+
 bool AudioPreviewUpdater::update()
 {
-    m_apData.setSegmentRect(m_rect);
+//!!!    m_apData.setSegmentRect(m_rect);
 
     // Get sample start and end times and work out duration
     //
@@ -49,8 +54,8 @@ bool AudioPreviewUpdater::update()
         m_composition.getElapsedRealTime(m_segment->getEndMarkerTime()) -
         m_composition.getElapsedRealTime(m_segment->getStartTime()) ;
 
-//    RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
-//	     << m_segment->getAudioFileId() << " requesting values" <<endl;
+    RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
+	     << m_segment->getAudioFileId() << " requesting values" <<endl;
     
     AudioPreviewThread::Request request;
     request.audioFileId = m_segment->getAudioFileId();
@@ -71,21 +76,34 @@ bool AudioPreviewUpdater::event(QEvent *e)
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
 	if (ev) {
 	    int token = (int)ev->data();
-            unsigned int channels = 0;
+            m_channels = 0; // to be filled as getPreview return value
 
-	    RG_DEBUG << "AudioPreviewUpdater::token " << token << ", my token " << m_previewToken <<endl;
+	    RG_DEBUG << "AudioPreviewUpdater::token " << token << ", my token " << m_previewToken << endl;
 
 	    if (m_previewToken >= 0 && token >= m_previewToken) {
 		m_previewToken = -1;
-		m_thread.getPreview(token, channels, m_apData.getValues());
+//!!!		m_thread.getPreview(token, channels, m_apData.getValues());
+		m_thread.getPreview(token, m_channels, m_values);
+//!!!		m_apData.setValues(tmp);
+
+		if (m_channels == 0) {
+		    RG_DEBUG << "AudioPreviewUpdater: failed to find preview!" << endl;
+		} else {
+
+		    RG_DEBUG << "AudioPreviewUpdater: got correct preview (" << m_channels << " channels, " << m_values.size() << " samples)" << endl;
+
+//!!!		    m_apData.setChannels(channels);
+		}
 
 	    } else {
+
 		// this one is out of date already
 		std::vector<float> tmp;
-		m_thread.getPreview(token, channels, tmp);
-	    }
+		unsigned int tmpChannels;
+		m_thread.getPreview(token, tmpChannels, tmp);
 
-            m_apData.setChannels(channels);
+		RG_DEBUG << "AudioPreviewUpdater: got obsolete preview (" << tmpChannels << " channels, " << tmp.size() << " samples)" << endl;
+	    }
 
             emit audioPreviewComplete(this);
 
