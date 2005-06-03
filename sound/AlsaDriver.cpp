@@ -522,7 +522,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 //
                 if (firstSpace < 0) firstSpace = fullClientName.length();
 
-                if (firstSpace &&
+                if (firstSpace > 0 &&
 		    int(fullPortName.length()) >= firstSpace &&
 		    fullPortName.substr(0, firstSpace) ==
 		    fullClientName.substr(0, firstSpace)) {
@@ -533,7 +533,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
                 // Sanity check for length
                 //
-                if (name.length() > 25) name = portId + fullPortName;
+                if (name.length() > 35) name = portId + fullPortName;
 
 		if (direction == WriteOnly) {
 		    name += " (write)";
