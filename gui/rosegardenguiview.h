@@ -136,8 +136,8 @@ public:
      * Show a Segment as it records - remove the SegmentItem
      * when no longer needed
      */
-    void showRecordingSegmentItem(Rosegarden::Segment* segment);
-    void deleteRecordingSegmentItem();
+    void showRecordingSegmentItem(Rosegarden::Segment *segment);
+    void deleteRecordingSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * Show output levels

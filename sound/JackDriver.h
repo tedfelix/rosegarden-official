@@ -134,8 +134,10 @@ public:
     // explicitly close the file eventually though to make sure
     // the integrity is correct (sample sizes must be written).
     //
-    bool createRecordFile(const std::string &fileName);
-    bool closeRecordFile(AudioFileId &returnedId);
+    bool openRecordFile(Rosegarden::InstrumentId id,
+			const std::string &fileName);
+    bool closeRecordFile(Rosegarden::InstrumentId id,
+			 AudioFileId &returnedId);
 
     // Set or change the number of audio inputs and outputs.
     // The first of these is slightly misnamed -- the submasters
@@ -218,7 +220,8 @@ protected:
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
-    int          jackProcessRecord(jack_nframes_t nframes,
+    int          jackProcessRecord(Rosegarden::InstrumentId id,
+				   jack_nframes_t nframes,
 				   sample_t *, sample_t *, bool);
     int          jackProcessEmpty(jack_nframes_t nframes);
 
@@ -269,9 +272,15 @@ protected:
     RealTime                     m_maxInstrumentLatency;
     bool                         m_haveAsyncAudioEvent;
 
-    int                          m_recordInput;
-    int                          m_recordInputChannel; // -1 -> stereo
-    float                        m_recordLevel;
+    struct RecordInputDesc {
+	int   input;
+	int   channel;
+	float level;
+	RecordInputDesc(int i = 1000, int c = -1, float l = 0.0f) :
+	    input(i), channel(c), level(l) { }
+    };
+    typedef std::map<Rosegarden::InstrumentId, RecordInputDesc> RecordInputMap;
+    RecordInputMap               m_recordInputs;
 
     time_t                       m_kickedOutAt;
     size_t                       m_framesProcessed;

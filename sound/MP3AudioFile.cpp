@@ -310,6 +310,12 @@ MP3AudioFile::appendSamples(const std::string &/*buffer*/)
     return false;
 }
 
+bool
+MP3AudioFile::appendSamples(const char */*buffer*/, unsigned int)
+{
+    return false;
+}
+
 
 // Get the length of the sample in Seconds/Microseconds
 //

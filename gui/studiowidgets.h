@@ -131,6 +131,7 @@ public:
     AudioVUMeter(QWidget *parent = 0,
                  VUMeter::VUMeterType type = VUMeter::AudioPeakHoldShort,
                  bool stereo = true,
+		 bool hasRecord = false,
                  int width = 12,
                  int height = 140,
                  const char *name = 0);
@@ -142,6 +143,13 @@ public:
 	m_meter->setLevel(dBleft, dBright);
     }
 
+    void setRecordLevel(double dB) {
+	m_meter->setRecordLevel(dB);
+    }
+    void setRecordLevel(double dBleft, double dBright) {
+	m_meter->setRecordLevel(dBleft, dBright);
+    }
+
     virtual void paintEvent(QPaintEvent*);
 
 protected:
@@ -151,6 +159,7 @@ protected:
 	AudioVUMeterImpl(QWidget *parent,
 			 VUMeterType type,
 			 bool stereo,
+			 bool hasRecord,
 			 int width,
 			 int height,
 			 const char *name);

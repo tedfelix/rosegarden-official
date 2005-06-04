@@ -447,7 +447,7 @@ AudioBussMixer::updateInstrumentConnections()
 {
     // Not RT safe
 
-    if (m_bussCount == 0) generateBuffers();
+    if (m_bussCount <= 0) generateBuffers();
 
     InstrumentId audioInstrumentBase;
     int audioInstruments;
@@ -2020,23 +2020,22 @@ AudioFileWriter::~AudioFileWriter()
 
 
 bool
-AudioFileWriter::createRecordFile(InstrumentId id,
-				  const std::string &fileName)
+AudioFileWriter::openRecordFile(InstrumentId id,
+				const std::string &fileName)
 {
     getLock();
 
     if (m_files[id].first) {
 	releaseLock();
-	std::cerr << "AudioFileWriter::createRecordFile: already have record file!" << std::endl;
+	std::cerr << "AudioFileWriter::openRecordFile: already have record file!" << std::endl;
 	return false; // already have one
     }
 
 #ifdef DEBUG_WRITER
-    std::cerr << "AudioFileWriter::createRecordFile: audio monitoring instrument is " << m_driver->getAudioMonitoringInstrument() << std::endl;
+    std::cerr << "AudioFileWriter::openRecordFile: instrument id is " << id << std::endl;
 #endif
     
-    MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader
-	(m_driver->getAudioMonitoringInstrument());
+    MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader(id);
 
     RealTime bufferLength = m_driver->getAudioWriteBufferLength();
     int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
@@ -2063,25 +2062,26 @@ AudioFileWriter::createRecordFile(InstrumentId id,
         // open the file for writing
         //
 	if (!recordFile->write()) {
-	    std::cerr << "AudioFileWriter::createRecordFile: failed to open " << fileName << " for writing" << std::endl;
+	    std::cerr << "AudioFileWriter::openRecordFile: failed to open " << fileName << " for writing" << std::endl;
 	    delete recordFile;
 	    releaseLock();
 	    return false;
 	}
 
-#ifdef DEBUG_WRITER
-	std::cerr << "AudioFileWriter::createRecordFile: created " << channels << "-channel file at " << fileName << std::endl;
-#endif
-
 	RecordableAudioFile *raf = new RecordableAudioFile(recordFile,
 							   bufferSamples);
 	m_files[id].second = raf;
 	m_files[id].first = recordFile;
+
+#ifdef DEBUG_WRITER
+	std::cerr << "AudioFileWriter::openRecordFile: created " << channels << "-channel file at " << fileName << " (id is " << recordFile->getId() << ")" << std::endl;
+#endif
+
 	releaseLock();
 	return true;
     }
 
-    std::cerr << "AudioFileWriter::createRecordFile: no audio fader for record instrument " << m_driver->getAudioMonitoringInstrument() << "!" << std::endl;
+    std::cerr << "AudioFileWriter::openRecordFile: no audio fader for record instrument " << id << "!" << std::endl;
     releaseLock();
     return false;
 }	
@@ -2106,12 +2106,56 @@ AudioFileWriter::closeRecordFile(InstrumentId id, AudioFileId &returnedId)
 
     returnedId = m_files[id].first->getId();
     m_files[id].second->setStatus(RecordableAudioFile::DEFUNCT);
+
 #ifdef DEBUG_WRITER
-    std::cerr << "AudioFileWriter::closeRecordFile: instrument " << id << " file set defunct" << std::endl;
+    std::cerr << "AudioFileWriter::closeRecordFile: instrument " << id << " file set defunct (file ID is " << returnedId << ")" << std::endl;
 #endif
+
+    // Don't reset the file pointers here; that will be done in the
+    // next call to kick().  Doesn't really matter when that happens,
+    // but let's encourage it to happen soon just for certainty.
+    signal();
+
     return true;
 }
-    
+
+bool
+AudioFileWriter::haveRecordFileOpen(InstrumentId id)
+{
+    InstrumentId instrumentBase;
+    int instrumentCount;
+    m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
+
+    if (id < instrumentBase || id >= instrumentBase + instrumentCount) {
+	return false;
+    }
+
+    return (m_files[id].first &&
+	    (m_files[id].second->getStatus() != RecordableAudioFile::DEFUNCT));
+}
+
+bool
+AudioFileWriter::haveRecordFilesOpen()
+{
+    InstrumentId instrumentBase;
+    int instrumentCount;
+    m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
+
+    for (InstrumentId id = instrumentBase; id < instrumentBase + instrumentCount; ++id) {
+
+	if (m_files[id].first &&
+	    (m_files[id].second->getStatus() != RecordableAudioFile::DEFUNCT)) {
+#ifdef DEBUG_WRITER
+	    std::cerr << "AudioFileWriter::haveRecordFilesOpen: found open record file for instrument " << id << std::endl;
+#endif
+	    return true;
+	}
+    }
+#ifdef DEBUG_WRITER
+    std::cerr << "AudioFileWriter::haveRecordFilesOpen: nope" << std::endl;
+#endif
+    return false;
+}
 
 void
 AudioFileWriter::kick(bool wantLock)

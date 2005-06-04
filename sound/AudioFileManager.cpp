@@ -38,6 +38,8 @@
 
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qdatetime.h>
+#include <qfile.h>
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
@@ -380,6 +382,15 @@ AudioFileManager::setAudioPath(const std::string &path)
 
 }
 
+void
+AudioFileManager::testAudioPath() throw (BadAudioPathException)
+{
+    QFileInfo info(m_audioPath);
+    if (!(info.exists() && info.isDir() && !info.isRelative() &&
+	  info.isWritable() && info.isReadable()))
+	throw BadAudioPathException(m_audioPath.data());
+}
+
 
 // See if we can find a given file in our search path
 // return the first occurence of a match or the empty
@@ -472,80 +483,46 @@ AudioFileManager::clear()
     m_peakManager.clear();
 }
 
-std::string
+AudioFile *
 AudioFileManager::createRecordingAudioFile()
 {
     MutexLock lock(&_audioFileManagerLock);
 
     AudioFileId newId = getFirstUnusedID();
-    int audioFileNumber = 0;
+    QString fileName = "";
 
-    // search for used RG-AUDIO files in the record directory
-    DIR *dir = opendir(m_audioPath.c_str());
-    std::string prefix = "RG-AUDIO-";
-    std::string file;
+    while (fileName == "") {
 
-    if (dir)
-    {
-        dirent *entry;
+	fileName = QString("rg-%1-%2.wav")
+	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
+	    .arg(newId + 1);
 
-        while ((entry = readdir(dir)) != NULL)
-        {
-            file = entry->d_name;
-
-            // hmm, why aren't file types working?
-            // we should be able to filter by d_type but
-            // it's currently returning NULL
-
-#if (__GNUC__ < 3)
-            if (file.compare(prefix, 0, 9) == 0)
-#else
-            if (file.compare(0, 9, prefix) == 0)
-#endif
-            {
-                // get the number
-                file.erase(0, 9);
-
-                // match and remove post dot
-                std::string::size_type pos = file.find(".");
-                if (pos != std::string::npos) {
-                    file.erase(pos, file.length());
-		}
-
-		// store
-		if (atoi(file.c_str()) > audioFileNumber)
-		    audioFileNumber = atoi(file.c_str());
-            }
-        }
-
+	if (QFile(m_audioPath.c_str() + fileName).exists()) {
+	    fileName = "";
+	    ++newId;
+	}
     }
-#ifdef DEBUG_AUDIOFILEMANAGER
-    else
-    {
-        std::cerr << "AudioFileManager::createRecordingAudioFile - "
-                  << "can't access recording directory \'"
-                  << m_audioPath << "\'" << std::endl;
-    }
-#endif
-
-    // start from 1, not 0 if we've not found anything
-    if (audioFileNumber == 0)
-        audioFileNumber = 1;
-    else
-        audioFileNumber++;
-
-    // composite with number and return
-    char number[100];
-    sprintf(number, "%.4d", audioFileNumber);
-    file = prefix + number + ".wav";
 
     // insert file into vector
-    WAVAudioFile *aF = new WAVAudioFile(newId, file, m_audioPath + file);
+    WAVAudioFile *aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + fileName.data());
     m_audioFiles.push_back(aF);
 
-    // what we return is the full path to the file
-    return m_audioPath + file;
+    return aF;
 } 
+
+std::vector<std::string>
+AudioFileManager::createRecordingAudioFiles(unsigned int n)
+{
+    //!!! MTR want some way to find out _NOW_ if we can't write to audio dir
+
+    std::vector<std::string> v;
+    for (unsigned int i = 0; i < n; ++i) {
+	AudioFile *af = createRecordingAudioFile();
+	if (af) v.push_back(m_audioPath + af->getFilename().data());
+	//!!! MTR ... else what?
+    }
+    return v;
+}
 
 AudioFile*
 AudioFileManager::getLastAudioFile()

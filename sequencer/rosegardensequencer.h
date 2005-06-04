@@ -216,11 +216,6 @@ public:
 
     virtual void setLowLatencyMode(bool);
 
-    // Audio monitoring
-    //
-    virtual void setAudioMonitoring(long value);
-    virtual void setAudioMonitoringInstrument(unsigned int id);
-
     // Audio latencies
     //
     virtual Rosegarden::MappedRealTime getAudioPlayLatency();

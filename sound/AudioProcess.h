@@ -359,9 +359,12 @@ public:
 
     void kick(bool wantLock = true);
 
-    bool createRecordFile(InstrumentId id, const std::string &fileName);
+    bool openRecordFile(InstrumentId id, const std::string &fileName);
     bool closeRecordFile(InstrumentId id, AudioFileId &returnedId);
 
+    bool haveRecordFileOpen(InstrumentId id);
+    bool haveRecordFilesOpen();
+    
     void write(InstrumentId id, const sample_t *, int channel, size_t samples);
 
 protected:

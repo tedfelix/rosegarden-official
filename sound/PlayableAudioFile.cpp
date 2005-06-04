@@ -935,15 +935,20 @@ RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
 void
 RecordableAudioFile::write()
 {
-    //!!! The file is assumed to be 16-bit WAV
-    
-    // not quick, and wasteful of memory
+    // Use a static buffer -- this obviously requires that write() is
+    // only called from a single thread
+    static size_t bufferSize = 0;
+    static sample_t *buffer = 0;
+    static char *encodeBuffer = 0;
 
+    //!!! The file is assumed to be 16-bit WAV
+
+    unsigned int channels = m_audioFile->getChannels();
     unsigned char b1, b2;
 
     // We need the same amount of available data on every channel
     size_t s = 0;
-    for (unsigned int ch = 0; ch < m_audioFile->getChannels(); ++ch) {
+    for (unsigned int ch = 0; ch < channels; ++ch) {
 	size_t available = m_ringBuffers[ch]->getReadSpace();
 #ifdef DEBUG_RECORDABLE
 	std::cerr << "RecordableAudioFile::write: " << available << " frames available to write on channel " << ch << std::endl;
@@ -952,28 +957,39 @@ RecordableAudioFile::write()
     }
     if (s == 0) return;
 
-    sample_t *buffer = new sample_t[m_audioFile->getChannels() * s];
-    for (unsigned int ch = 0; ch < m_audioFile->getChannels(); ++ch) {
+    size_t bufferReqd = channels * s;
+    if (bufferReqd > bufferSize) {
+	if (buffer) {
+	    buffer = (sample_t *)realloc(buffer, bufferReqd * sizeof(sample_t));
+	    encodeBuffer = (char *)realloc(encodeBuffer, bufferReqd * 2);
+	} else {
+	    buffer = (sample_t *) malloc(bufferReqd * sizeof(sample_t));
+	    encodeBuffer = (char *)malloc(bufferReqd * 2);
+	}
+	bufferSize = bufferReqd;
+    }
+    
+    for (unsigned int ch = 0; ch < channels; ++ch) {
 	m_ringBuffers[ch]->read(buffer + ch * s, s);
     }
 
-    std::string sbuf;
+    // interleave
+    size_t index = 0;
     for (size_t i = 0; i < s; ++i) {
-	for (unsigned int ch = 0; ch < m_audioFile->getChannels(); ++ch) {
+	for (unsigned int ch = 0; ch < channels; ++ch) {
 	    float sample = buffer[i + ch * s];
 	    b2 = (unsigned char)((long)(sample * 32767.0) & 0xff);
 	    b1 = (unsigned char)((long)(sample * 32767.0) >> 8);
-	    sbuf += b2;
-	    sbuf += b1;
+	    encodeBuffer[index++] = b2;
+	    encodeBuffer[index++] = b1;
 	}
     }
 
 #ifdef DEBUG_RECORDABLE
-    std::cerr << "RecordableAudioFile::write: writing " << sbuf.length() << " bytes to file" << std::endl;
+    std::cerr << "RecordableAudioFile::write: writing " << s << " frames at " << channels << " channels to file" << std::endl;
 #endif
 
-    m_audioFile->appendSamples(sbuf);
-    delete[] buffer;
+    m_audioFile->appendSamples(encodeBuffer, s);
 }
 
 }

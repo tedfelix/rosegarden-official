@@ -182,29 +182,18 @@ int main(int argc, char *argv[])
 	    }
 	    break;
 
-	case STARTING_TO_RECORD_MIDI:
+	case STARTING_TO_RECORD:
 	    if (!roseSeq->startPlaying())
 	    {
 		roseSeq->setStatus(STOPPING);
 	    }
 	    else
 	    {
-		roseSeq->setStatus(RECORDING_MIDI);
+		roseSeq->setStatus(RECORDING);
 	    }
 	    break;
 
-	case STARTING_TO_RECORD_AUDIO:
-	    if (!roseSeq->startPlaying())
-	    {
-		roseSeq->setStatus(STOPPING);
-	    }
-	    else
-	    {
-		roseSeq->setStatus(RECORDING_AUDIO);
-	    }
-	    break;
-
-	case RECORDING_MIDI:
+	case RECORDING:
 	    if (!roseSeq->keepPlaying())
 	    {
 		// there's a problem or the piece has
@@ -217,18 +206,7 @@ int main(int argc, char *argv[])
 		// and return them to the gui
 		//
 		roseSeq->processRecordedMidi();
-	    }
-	    break;
 
-	case RECORDING_AUDIO:
-	    if (!roseSeq->keepPlaying())
-	    {
-		// there's a problem or the piece has
-		// finished - so stop playing
-		roseSeq->setStatus(STOPPING);
-	    }
-	    else
-	    {
 		// Now process any incoming audio
 		// and return it to the gui
 		//

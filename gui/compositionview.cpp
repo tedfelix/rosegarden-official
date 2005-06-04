@@ -151,7 +151,6 @@ CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
     : m_composition(compo),
       m_studio(studio),
       m_grid(rulerScale, vStep),
-      m_recordingSegment(0),
       m_audioPreviewThread(0)
 {
     m_notationPreviewDataCache.setAutoDelete(true);
@@ -220,7 +219,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             if (s->isRepeating())
                 computeRepeatMarks(sr, s);
 
-            if (s != m_recordingSegment) {
+            if (m_recordingSegments.find(s) == m_recordingSegments.end()) {
                 QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 sr.setBrush(brushColor);
            	sr.setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
@@ -764,14 +763,14 @@ QRect CompositionModelImpl::getSelectionContentsRect()
     return selectionRect;
 }
 
-void CompositionModelImpl::setRecordingItem(const CompositionItem& item)
+void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
 {
-    m_recordingSegment = CompositionItemHelper::getSegment(item);
+    m_recordingSegments.insert(CompositionItemHelper::getSegment(item));
 }
 
-void CompositionModelImpl::clearRecordingItem()
+void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 {
-    m_recordingSegment = 0;
+    m_recordingSegments.erase(CompositionItemHelper::getSegment(item));
 }
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const

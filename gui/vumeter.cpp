@@ -34,6 +34,7 @@ using Rosegarden::AudioLevel;
 VUMeter::VUMeter(QWidget *parent,
                  VUMeterType type,
                  bool stereo,
+		 bool hasRecord,
                  int width,
                  int height,
                  VUAlignment alignment,
@@ -43,18 +44,23 @@ VUMeter::VUMeter(QWidget *parent,
     m_type(type),
     m_alignment(alignment),
     m_levelLeft(0),
+    m_recordLevelLeft(0),
     m_peakLevelLeft(0),
     m_levelStepLeft(m_baseLevelStep),
+    m_recordLevelStepLeft(m_baseLevelStep),
     m_fallTimerLeft(0),
     m_peakTimerLeft(0),
     m_levelRight(0),
+    m_recordLevelRight(0),
     m_peakLevelRight(0),
     m_levelStepRight(0),
+    m_recordLevelStepRight(0),
     m_fallTimerRight(0),
     m_peakTimerRight(0),
     m_showPeakLevel(true),
     m_baseLevelStep(3),
-    m_stereo(stereo)
+    m_stereo(stereo),
+    m_hasRecord(hasRecord)
 {
     // Work out if we need peak hold first
     //
@@ -167,94 +173,125 @@ VUMeter::~VUMeter()
 void
 VUMeter::setLevel(double level)
 {
-    setLevel(level, level);
+    setLevel(level, level, false);
 }
 
 void
 VUMeter::setLevel(double leftLevel, double rightLevel)
 {
+    setLevel(leftLevel, rightLevel, false);
+}
+
+void
+VUMeter::setRecordLevel(double level)
+{
+    setLevel(level, level, true);
+}
+
+void
+VUMeter::setRecordLevel(double leftLevel, double rightLevel)
+{
+    setLevel(leftLevel, rightLevel, true);
+}
+
+void
+VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
+{
+    if (record && !m_hasRecord) return;
+
+    short &ll = (record ? m_recordLevelLeft : m_levelLeft);
+    short &lr = (record ? m_recordLevelRight : m_levelRight);
+
     switch (m_type) {
 
     case AudioPeakHoldShort:
-	m_levelLeft = AudioLevel::dB_to_fader
+	ll = AudioLevel::dB_to_fader
 	    (leftLevel, m_maxLevel, AudioLevel::ShortFader);
-	m_levelRight = AudioLevel::dB_to_fader
+	lr = AudioLevel::dB_to_fader
 	    (rightLevel, m_maxLevel, AudioLevel::ShortFader);
 	break;
 
     case AudioPeakHoldLong:
-	m_levelLeft = AudioLevel::dB_to_fader
+	ll = AudioLevel::dB_to_fader
 	    (leftLevel, m_maxLevel, AudioLevel::LongFader);
-	m_levelRight = AudioLevel::dB_to_fader
+	lr = AudioLevel::dB_to_fader
 	    (rightLevel, m_maxLevel, AudioLevel::LongFader);
 	break;
 
     case AudioPeakHoldIEC:
-	m_levelLeft = AudioLevel::dB_to_fader
+	ll = AudioLevel::dB_to_fader
 	    (leftLevel, m_maxLevel, AudioLevel::IEC268Meter);
-	m_levelRight = AudioLevel::dB_to_fader
+	lr = AudioLevel::dB_to_fader
 	    (rightLevel, m_maxLevel, AudioLevel::IEC268Meter);
 	break;
 
     case AudioPeakHoldIECLong:
-	m_levelLeft = AudioLevel::dB_to_fader
+	ll = AudioLevel::dB_to_fader
 	    (leftLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
-	m_levelRight = AudioLevel::dB_to_fader
+	lr = AudioLevel::dB_to_fader
 	    (rightLevel, m_maxLevel, AudioLevel::IEC268LongMeter);
 	break;
 
     default:
-	m_levelLeft = (int)(double(m_maxLevel) * leftLevel);
-	m_levelRight = (int)(double(m_maxLevel) * rightLevel);
+	ll = (int)(double(m_maxLevel) * leftLevel);
+	lr = (int)(double(m_maxLevel) * rightLevel);
     };
 
-    if (m_levelLeft < 0) m_levelLeft = 0;
-    if (m_levelLeft > m_maxLevel) m_levelLeft = m_maxLevel;
-    if (m_levelRight < 0) m_levelRight = 0;
-    if (m_levelRight > m_maxLevel) m_levelRight = m_maxLevel;
+    if (ll < 0) ll = 0;
+    if (ll > m_maxLevel) ll = m_maxLevel;
+    if (lr < 0) lr = 0;
+    if (lr > m_maxLevel) lr = m_maxLevel;
 
-    m_levelStepLeft = m_baseLevelStep;
-    m_levelStepRight = m_baseLevelStep;
+    if (record) {
+	m_recordLevelStepLeft = m_baseLevelStep;
+	m_recordLevelStepRight = m_baseLevelStep;
+    } else {
+	m_levelStepLeft = m_baseLevelStep;
+	m_levelStepRight = m_baseLevelStep;
+    }	
 
     // Only start the timer when we need it
-    if (m_levelLeft > 0) {
+    if (ll > 0) {
 	if (m_fallTimerLeft->isActive() == false) {
 	    m_fallTimerLeft->start(40); // 40 ms per level fall iteration
 	    meterStart();
 	}
     }
-
-    if (m_levelRight > 0) {
+    
+    if (lr > 0) {
 	if (m_fallTimerRight && m_fallTimerRight->isActive() == false) {
 	    m_fallTimerRight->start(40); // 40 ms per level fall iteration
 	    meterStart();
 	}
     }    
 
-    // Reset level and reset timer if we're exceeding the
-    // current peak
-    //
-    if (m_levelLeft >= m_peakLevelLeft && m_showPeakLevel)
-    {
-        m_peakLevelLeft = m_levelLeft;
+    if (!record) {
 
-        if (m_peakTimerLeft->isActive())
-            m_peakTimerLeft->stop();
+	// Reset level and reset timer if we're exceeding the
+	// current peak
+	//
+	if (ll >= m_peakLevelLeft && m_showPeakLevel)
+	{
+	    m_peakLevelLeft = ll;
 
-        m_peakTimerLeft->start(1000); // milliseconds of peak hold
-    }
+	    if (m_peakTimerLeft->isActive())
+		m_peakTimerLeft->stop();
 
-    if (m_levelRight >= m_peakLevelRight && m_showPeakLevel)
-    {
-        m_peakLevelRight = m_levelRight;
+	    m_peakTimerLeft->start(1000); // milliseconds of peak hold
+	}
 
-        if (m_peakTimerRight)
-        {
-            if (m_peakTimerRight->isActive())
-                m_peakTimerRight->stop();
+	if (lr >= m_peakLevelRight && m_showPeakLevel)
+	{
+	    m_peakLevelRight = lr;
 
-            m_peakTimerRight->start(1000); // milliseconds of peak hold
-        }
+	    if (m_peakTimerRight)
+	    {
+		if (m_peakTimerRight->isActive())
+		    m_peakTimerRight->stop();
+
+		m_peakTimerRight->start(1000); // milliseconds of peak hold
+	    }
+	}
     }
 
     QPainter paint(this);
@@ -413,15 +450,27 @@ VUMeter::drawMeterLevel(QPainter* paint)
         {
             int hW = width() / 2;
 
+	    int midWidth = 1;
+	    if (m_hasRecord) midWidth = 2;
+
             // Draw the left bar
             //
             int y = height() - (m_levelLeft * height()) / m_maxLevel;
+	    int ry = height() - (m_recordLevelLeft * height()) / m_maxLevel;
 
-	    drawColouredBar(paint, 0, 0, y, hW - 1, height() - y);
+	    drawColouredBar(paint, 0, 0, y, hW - midWidth, height() - y);
+
+	    if (m_hasRecord) {
+		drawColouredBar(paint, 0, hW - midWidth, ry, midWidth + 1, height() - ry);
+	    }
 
 	    paint->setPen(m_background);
 	    paint->setBrush(m_background);
-	    paint->drawRect(0, 0, hW, y);
+	    paint->drawRect(0, 0, hW - midWidth, y);
+
+	    if (m_hasRecord) {
+		paint->drawRect(hW - midWidth, 0, midWidth + 1, ry);
+	    }
 
             if (m_showPeakLevel)
             {
@@ -430,22 +479,31 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
 		if (h > loud) {
 		    paint->setPen(Qt::red); // brighter than the red meter bar
-		    paint->drawLine(0, y-1, hW - 2, y-1); 
-		    paint->drawLine(0, y+1, hW - 2, y+1);
+		    paint->drawLine(0, y-1, hW - midWidth - 1, y-1); 
+		    paint->drawLine(0, y+1, hW - midWidth - 1, y+1);
 		}		    
 
                 paint->setPen(Qt::white);
-                paint->drawLine(0, y, hW - 2, y);
+                paint->drawLine(0, y, hW - midWidth - 1, y);
             }
 
             // Draw the right bar
             //
             y = height() - (m_levelRight * height()) / m_maxLevel;
-	    drawColouredBar(paint, 1, hW + 1, y, width() - hW + 1, height() - y);
+	    ry = height() - (m_recordLevelRight * height()) / m_maxLevel;
+	    drawColouredBar(paint, 1, hW + midWidth, y, hW - midWidth, height() - y);
+
+	    if (m_hasRecord) {
+		drawColouredBar(paint, 1, hW, ry, midWidth + 1, height() - ry);
+	    }
 
 	    paint->setPen(m_background);
 	    paint->setBrush(m_background);
-	    paint->drawRect(hW, 0, width() - hW + 2, y);
+	    paint->drawRect(hW + midWidth, 0, hW - midWidth + 1, y);
+
+	    if (m_hasRecord) {
+		paint->drawRect(hW, 0, midWidth, ry);
+	    }
 
             if (m_showPeakLevel)
             {
@@ -454,14 +512,14 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
 		if (h > loud) {
 		    paint->setPen(Qt::red); // brighter than the red meter bar
-		    paint->drawLine(hW + 1, y-1, width(), y-1); 
-		    paint->drawLine(hW + 1, y+1, width(), y+1);
+		    paint->drawLine(hW + midWidth, y-1, width(), y-1); 
+		    paint->drawLine(hW + midWidth, y+1, width(), y+1);
 		}		    
 
                 paint->setPen(Qt::white);
                 paint->setBrush(Qt::white);
 
-                paint->drawLine(hW + 1, y, width(), y);
+                paint->drawLine(hW + midWidth, y, width(), y);
             }
         }
         else // horizontal
@@ -549,18 +607,23 @@ VUMeter::drawMeterLevel(QPainter* paint)
 void
 VUMeter::slotReduceLevelRight()
 {
-    m_levelStepRight = m_levelRight * m_baseLevelStep / 100 + 1;
-    if (m_levelStepRight < 1)
-	m_levelStepRight = 1;
+    m_levelStepRight = int(m_levelRight) * m_baseLevelStep / 100 + 1;
+    if (m_levelStepRight < 1) m_levelStepRight = 1;
 
-    if (m_levelRight > 0)
-        m_levelRight -= m_levelStepRight;
+    m_recordLevelStepRight = int(m_recordLevelRight) * m_baseLevelStep / 100 + 1;
+    if (m_recordLevelStepRight < 1) m_recordLevelStepRight = 1;
 
-    if (m_levelRight <= 0)
-    {
+    if (m_levelRight > 0) m_levelRight -= m_levelStepRight;
+    if (m_recordLevelRight > 0) m_recordLevelRight -= m_recordLevelStepRight;
+
+    if (m_levelRight <= 0) {
         m_levelRight = 0;
         m_peakLevelRight = 0;
+    }
 
+    if (m_recordLevelRight <= 0) m_recordLevelRight = 0;
+
+    if (m_levelRight == 0 && m_recordLevelRight == 0) {
         // Always stop the timer when we don't need it
         if (m_fallTimerRight) m_fallTimerRight->stop();
         meterStop();
@@ -573,20 +636,25 @@ VUMeter::slotReduceLevelRight()
 void
 VUMeter::slotReduceLevelLeft()
 {
-    m_levelStepLeft = m_levelLeft * m_baseLevelStep / 100 + 1;
-    if (m_levelStepLeft < 1)
-	m_levelStepLeft = 1;
+    m_levelStepLeft = int(m_levelLeft) * m_baseLevelStep / 100 + 1;
+    if (m_levelStepLeft < 1) m_levelStepLeft = 1;
 
-    if (m_levelLeft > 0)
-        m_levelLeft -= m_levelStepLeft;
+    m_recordLevelStepLeft = int(m_recordLevelLeft) * m_baseLevelStep / 100 + 1;
+    if (m_recordLevelStepLeft < 1) m_recordLevelStepLeft = 1;
 
-    if (m_levelLeft <= 0)
-    {
+    if (m_levelLeft > 0) m_levelLeft -= m_levelStepLeft;
+    if (m_recordLevelLeft > 0) m_recordLevelLeft -= m_recordLevelStepLeft;
+
+    if (m_levelLeft <= 0) {
         m_levelLeft = 0;
         m_peakLevelLeft = 0;
+    }
 
+    if (m_recordLevelLeft <= 0) m_recordLevelLeft = 0;
+
+    if (m_levelLeft == 0 && m_recordLevelLeft == 0) {
         // Always stop the timer when we don't need it
-        m_fallTimerLeft->stop();
+        if (m_fallTimerLeft) m_fallTimerLeft->stop();
         meterStop();
     }
 

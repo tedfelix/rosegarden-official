@@ -289,26 +289,24 @@ public:
     /**
      * insert some recorded MIDI events into our recording Segment
      */
-    void insertRecordedMidi(const Rosegarden::MappedComposition &mc,
-                            TransportStatus status);
+    void insertRecordedMidi(const Rosegarden::MappedComposition &mc);
 
-    /*
-     *  insert a recording SegmentItem for Audio with a given audio level
+    /**
+     * Update the recording progress -- called regularly from
+     * RosegardenGUIApp::slotUpdatePlaybackPosition() while recording
      */
-    void insertRecordedAudio(const Rosegarden::RealTime &time,
-                             TransportStatus status);
+    void updateRecordingMIDISegment();
+
+    /**
+     * Update the recording progress for audio
+     */
+    void updateRecordingAudioSegments();
 
     /**
      * Tidy up the recording SegmentItems and other post record jobs
      */
     void stopRecordingMidi();
     void stopRecordingAudio();
-
-    /**
-     * Update the recording progress -- called regularly from
-     * RosegardenGUIApp::slotUpdatePlaybackPosition() while recording
-     */
-    void updateRecordingSegment();
 
     /**
      * Register audio samples at the sequencer
@@ -354,7 +352,9 @@ public:
      * Create a new audio file and return the path to it so that
      * the sequencer can use it to write to.
      */
-    std::string createNewAudioFile();
+//!!! mtr    std::string createNewAudioFile();
+
+    void addRecordAudioSegment(Rosegarden::InstrumentId, Rosegarden::AudioFileId);
 
     // Audio play and record latencies direct from the sequencer
     //
@@ -370,8 +370,12 @@ public:
     // awkward around new audio files as timing is crucial - the gui can't
     // access the file until lead-out information has been written by the 
     // sequencer.
+    //!!!mtr 
+    // Note that the sequencer doesn't know the audio file id (yet),
+    // only the instrument it was recorded to.  (It also knows the
+    // filename, but the instrument id is enough for us.)
     //
-    void finalizeAudioFile(Rosegarden::AudioFileId id);
+    void finalizeAudioFile(Rosegarden::InstrumentId instrument);
 
     /*
     void setAudioRecordLatency(const Rosegarden::RealTime &latency)
@@ -407,7 +411,7 @@ public:
         { return (dynamic_cast<RosegardenGUIApp*>(parent()))
                                          ->getSequenceManager(); }
 
-    Rosegarden::Segment *getRecordSegment() { return m_recordSegment; }
+    Rosegarden::Segment *getRecordMIDISegment() { return m_recordMIDISegment; }
 
     QStringList getTimers();
     QString getCurrentTimer();
@@ -482,8 +486,8 @@ signals:
      * start of the new region, which is presumed to extend up to the
      * end of the segment.
      */
-    void recordingSegmentUpdated(Rosegarden::Segment *recordSegment,
-				 Rosegarden::timeT updatedFrom);
+    void recordMIDISegmentUpdated(Rosegarden::Segment *recordSegment,
+				  Rosegarden::timeT updatedFrom);
 
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
@@ -588,10 +592,16 @@ protected:
     AudioPreviewThread m_audioPreviewThread;
 
     /**
-     * a Segment onto which we can record events
+     * a Segment onto which we can record MIDI events
      */
-    Rosegarden::Segment *m_recordSegment;
+    Rosegarden::Segment *m_recordMIDISegment;
 
+    /**
+     * Segments for recording audio (per instrument)
+     */
+    typedef std::map<Rosegarden::InstrumentId, Rosegarden::Segment *> RecordingSegmentMap;
+    RecordingSegmentMap m_recordAudioSegments;
+    
     /**
      * a map[Pitch] of Rosegarden::Event elements, for NoteOn calculations
      */

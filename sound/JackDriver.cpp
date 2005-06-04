@@ -65,9 +65,6 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_directMasterAudioInstruments(0L),
     m_directMasterSynthInstruments(0L),
     m_haveAsyncAudioEvent(false),
-    m_recordInput(1000),
-    m_recordInputChannel(-1),
-    m_recordLevel(0.0),
     m_kickedOutAt(0),
     m_framesProcessed(0),
     m_ok(false)
@@ -213,6 +210,16 @@ JackDriver::initialise(bool reinitialise)
                      << "JACK server not running"
                      << std::endl;
 	return;
+    }
+
+    InstrumentId instrumentBase;
+    int instrumentCount;
+    m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
+    for (InstrumentId id = instrumentBase;
+	 id < instrumentBase + instrumentCount; ++id) {
+	// prefill so that we can refer to the map without a lock (as
+	// the number of instruments won't change)
+	m_recordInputs[id] = RecordInputDesc(1000, -1, 0.0);
     }
 
     // set callbacks
@@ -771,6 +778,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     int ignoreCount = m_ignoreProcessTransportCount;
     if (ignoreCount > 0) --m_ignoreProcessTransportCount;
 
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_alsaDriver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
     if (m_jackTransportEnabled) {
 
 	state = jack_transport_query(m_client, &position);
@@ -789,7 +800,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    m_waitingToken =
 			transport->transportJump
 			(ExternalTransport::TransportStopAtTime,
-			 RealTime::frame2RealTime(position.frame,
+		 RealTime::frame2RealTime(position.frame,
 						  position.frame_rate));
 		}
 	    } else if (clocksRunning) {
@@ -797,11 +808,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #ifdef DEBUG_JACK_PROCESS
 		    std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
-		    // do this before record monitor, otherwise we lost monitor out
+		    // do this before record monitor, otherwise we lose monitor out
 		    jackProcessEmpty(nframes);
 		}
 
-		int rv = jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
+		// for monitoring:
+		int rv = 0;
+		for (InstrumentId id = audioInstrumentBase;
+		     id < audioInstrumentBase + audioInstruments; ++id) {
+		    int irv = jackProcessRecord(id, nframes, 0, 0, clocksRunning);
+		    if (irv != 0) rv = irv;
+		}
 		doneRecord = true;
 		
 		if (!asyncAudio) {
@@ -850,11 +867,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #ifdef DEBUG_JACK_PROCESS
 		std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
-		// do this before record monitor, otherwise we lost monitor out
+		// do this before record monitor, otherwise we lose monitor out
 		jackProcessEmpty(nframes);
 	    }
 
-	    int rv = jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
+	    // for monitoring:
+	    int rv = 0;
+	    for (InstrumentId id = audioInstrumentBase;
+		 id < audioInstrumentBase + audioInstruments; ++id) {
+		int irv = jackProcessRecord(id, nframes, 0, 0, clocksRunning);
+		if (irv != 0) rv = irv;
+	    }
 	    doneRecord = true;
 
 	    if (!asyncAudio) {
@@ -871,10 +894,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 #endif
 
-    InstrumentId audioInstrumentBase;
-    int audioInstruments;
-    m_alsaDriver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
-
     InstrumentId synthInstrumentBase;
     int synthInstruments;
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
@@ -890,7 +909,21 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     memset(master[0], 0, nframes * sizeof(sample_t));
     memset(master[1], 0, nframes * sizeof(sample_t));
-	
+
+    // Reset monitor outs (if present) here prior to mixing
+    
+    if (m_outputMonitors.size() > 0) {
+	sample_t *buffer = static_cast<sample_t *>
+	    (jack_port_get_buffer(m_outputMonitors[0], nframes));
+	if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+    }
+    
+    if (m_outputMonitors.size() > 1) {
+	sample_t *buffer = static_cast<sample_t *>
+	    (jack_port_get_buffer(m_outputMonitors[1], nframes));
+	if (buffer) memset(buffer, 0, nframes * sizeof(sample_t));
+    }
+
     int bussCount = m_bussMixer->getBussCount();
     
     // If we have any busses, then we just mix from them (but we still
@@ -944,14 +977,16 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    sdb->setSubmasterLevel(buss, info);
 	}
 
-	if (buss + 1 == m_recordInput) {
-	    jackProcessRecord(nframes, submaster[0], submaster[1], clocksRunning);
-	    doneRecord = true;
+	for (InstrumentId id = audioInstrumentBase;
+	     id < audioInstrumentBase + audioInstruments; ++id) {
+	    if (buss + 1 == m_recordInputs[id].input) {
+		jackProcessRecord(id, nframes, submaster[0], submaster[1], clocksRunning);
+	    }
 	}
     }
 
 #ifdef DEBUG_JACK_PROCESS
-    std::cerr << "JackDriver::jackProcess: have " << audioInstruments << " audio and " << synthInstruments << " synth instruments" << std::endl;
+    std::cerr << "JackDriver::jackProcess: have " << audioInstruments << " audio and " << synthInstruments << " synth instruments and " << bussCount << " busses" << std::endl;
 #endif
 
     bool allInstrumentsDormant = true;
@@ -1097,10 +1132,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	sdb->setMasterLevel(info);
     }
 
-    if (m_recordInput == 0) {
-	jackProcessRecord(nframes, master[0], master[1], clocksRunning);
-    } else if (!doneRecord) {
-	jackProcessRecord(nframes, 0, 0, clocksRunning);
+    for (InstrumentId id = audioInstrumentBase;
+	 id < audioInstrumentBase + audioInstruments; ++id) {
+	if (m_recordInputs[id].input == 0) {
+	    jackProcessRecord(id, nframes, master[0], master[1], clocksRunning);
+	} else if (m_recordInputs[id].input < 1000) { // buss, already done
+	    // nothing
+	} else if (!doneRecord) {
+	    jackProcessRecord(id, nframes, 0, 0, clocksRunning);
+	}
     }
 
     if (playing) {
@@ -1175,7 +1215,8 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
 }
     
 int
-JackDriver::jackProcessRecord(jack_nframes_t nframes,
+JackDriver::jackProcessRecord(Rosegarden::InstrumentId id,
+			      jack_nframes_t nframes,
 			      sample_t *sourceBufferLeft,
 			      sample_t *sourceBufferRight,
 			      bool clocksRunning)
@@ -1193,38 +1234,42 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
     sample_t peakLeft = 0.0, peakRight = 0.0;
 
 #ifdef DEBUG_JACK_PROCESS
-    std::cerr << "JackDriver::jackProcessRecord" << std::endl;
+    std::cerr << "JackDriver::jackProcessRecord(" << id << ")" << std::endl;
 #endif
 
     // Get input buffers
     //
     sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
 
-    int channel = m_recordInputChannel;
+    int recInput = m_recordInputs[id].input;
+
+    int channel = m_recordInputs[id].channel;
     int channels = (channel == -1 ? 2 : 1);
     if (channels == 2) channel = 0;
+
+    float level = m_recordInputs[id].level;
 
     if (sourceBufferLeft) {
 
 #ifdef DEBUG_JACK_PROCESS
-	std::cerr << "JackDriver::jackProcessRecord: buss input provided" << std::endl;
+	std::cerr << "JackDriver::jackProcessRecord(" << id << "): buss input provided" << std::endl;
 #endif
 	inputBufferLeft = sourceBufferLeft;
 	if (sourceBufferRight) inputBufferRight = sourceBufferRight;
 
-    } else if (m_recordInput < 1000) {
+    } else if (recInput < 1000) {
 
 #ifdef DEBUG_JACK_PROCESS
-	std::cerr << "JackDriver::jackProcessRecord: no known input" << std::endl;
+	std::cerr << "JackDriver::jackProcessRecord(" << id << "): no known input" << std::endl;
 #endif
 	return 0;
 
     } else {
 
 #ifdef DEBUG_JACK_PROCESS
-	std::cerr << "JackDriver::jackProcessRecord: record input " << m_recordInput << std::endl;
+	std::cerr << "JackDriver::jackProcessRecord(" << id << "): record input " << recInput << std::endl;
 #endif
-	int input = m_recordInput - 1000;
+	int input = recInput - 1000;
 
 	int port = input * channels + channel;
 	int portRight = input * channels + 1;
@@ -1240,13 +1285,14 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 	}
     }
 
-    float gain = AudioLevel::dB_to_multiplier(m_recordLevel);
+    float gain = AudioLevel::dB_to_multiplier(level);
     
-    if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
-	clocksRunning) {
+    if (m_alsaDriver->getRecordStatus() == RECORD_ON &&
+	clocksRunning &&
+	m_fileWriter->haveRecordFileOpen(id)) {
 
 #ifdef DEBUG_JACK_PROCESS
-	std::cerr << "JackDriver::jackProcessRecord: recording" << std::endl;
+	std::cerr << "JackDriver::jackProcessRecord(" << id << "): recording" << std::endl;
 #endif
 	memset(m_tempOutBuffer, 0, nframes * sizeof(sample_t));
 
@@ -1261,11 +1307,14 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 		sample_t *buf = 
 		    static_cast<sample_t *>
 		    (jack_port_get_buffer(m_outputMonitors[0], nframes));
-		memcpy(buf, m_tempOutBuffer, nframes * sizeof(sample_t));
+		if (buf) {
+		    for (size_t i = 0; i < nframes; ++i) {
+			buf[i] += m_tempOutBuffer[i];
+		    }
+		}
 	    }
 
-	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				m_tempOutBuffer, 0, nframes);
+	    m_fileWriter->write(id, m_tempOutBuffer, 0, nframes);
 	}
 
 	if (channels == 2) {
@@ -1280,12 +1329,15 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 		    sample_t *buf =
 			static_cast<sample_t *>
 			(jack_port_get_buffer(m_outputMonitors[1], nframes));
-		    memcpy(buf, m_tempOutBuffer, nframes * sizeof(sample_t));
+		    if (buf) {
+			for (size_t i = 0; i < nframes; ++i) {
+			    buf[i] += m_tempOutBuffer[i];
+			}
+		    }
 		}
 	    } 
 
-	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				m_tempOutBuffer, 1, nframes);
+	    m_fileWriter->write(id, m_tempOutBuffer, 1, nframes);
 	}
 	    
 	wroteSomething = true;
@@ -1294,8 +1346,10 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 
 	// want peak levels and monitors anyway, even if not recording
 
+	//!!!mtr peaks per-instrument
+
 #ifdef DEBUG_JACK_PROCESS
-	std::cerr << "JackDriver::jackProcessRecord: monitoring only" << std::endl;
+	std::cerr << "JackDriver::jackProcessRecord(" << id << "): monitoring only" << std::endl;
 #endif
 
 	if (inputBufferLeft) {
@@ -1337,7 +1391,7 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 	    (peakLeft, 127, AudioLevel::LongFader);
 	info.levelRight = AudioLevel::multiplier_to_fader
 	    (peakRight, 127, AudioLevel::LongFader);
-	sdb->setRecordLevel(info);
+	sdb->setInstrumentRecordLevel(id, info);
     }
 
     if (wroteSomething) {
@@ -1790,7 +1844,7 @@ JackDriver::updateAudioData()
     if (!m_ok || !m_client) return;
 
 #ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::updateAudioData starting" << std::endl;
+//    std::cerr << "JackDriver::updateAudioData starting" << std::endl;
 #endif
 
     MappedAudioBuss *mbuss =
@@ -1825,6 +1879,76 @@ JackDriver::updateAudioData()
 	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->getAudioFader(id);
 	if (!fader) continue;
 
+//!!!	if (i < audioInstruments && m_fileWriter &&
+//	    m_fileWriter->haveRecordFileOpen(id)) {
+
+	    //!!!MTR no, we really need to update when something
+	    // changes, regardless of whether we're recording to instr
+	    // or not -- call this method less often but do more work in it?
+
+	    float f = 2;
+	    (void)fader->getProperty(MappedAudioFader::Channels, f);
+	    int channels = (int)f;
+	    
+	    int inputChannel = -1;
+	    if (channels == 1) {
+		float f = 0;
+		(void)fader->getProperty(MappedAudioFader::InputChannel, f);
+		inputChannel = (int)f;
+	    }
+	    
+	    float level = 0.0;
+	    (void)fader->getProperty(MappedAudioFader::FaderRecordLevel, level);
+
+	    // Like in base/Instrument.h, we use numbers < 1000 to
+	    // mean buss numbers and >= 1000 to mean record ins
+	    // when recording the record input number.
+	    
+	    MappedObjectValueList connections = fader->getConnections
+		(MappedConnectableObject::In);
+	    int input = 1000;
+
+	    if (connections.empty()) {
+		
+		std::cerr << "No connections in for record instrument "
+			  << (id) << " (mapped id " << fader->getId() << ")" << std::endl;
+
+		// oh dear.
+		input = 1000;
+
+	    } else if (*connections.begin() == mbuss->getId()) {
+
+		input = 0;
+		
+	    } else {
+		
+		MappedObject *obj = m_alsaDriver->getMappedStudio()->
+		    getObjectById(MappedObjectId(*connections.begin()));
+
+		if (!obj) {
+
+		    std::cerr << "No such object as " << *connections.begin() << std::endl;
+		    input = 1000;
+		} else if (obj->getType() == MappedObject::AudioBuss) {
+		    input = (int)((MappedAudioBuss *)obj)->getBussId();
+		} else if (obj->getType() == MappedObject::AudioInput) {
+		    input = (int)((MappedAudioInput *)obj)->getInputNumber()
+			+ 1000;
+		} else {
+		    std::cerr << "Object " << *connections.begin() << " is not buss or input" << std::endl;
+		    input = 1000;
+		}
+	    }
+	
+	    if (m_recordInputs[id].input != input) {
+		std::cerr << "Changing record input for instrument "
+			  << id << " to " << input << std::endl;
+	    }
+	    m_recordInputs[id] = RecordInputDesc(input, inputChannel, level);
+//!!!	}
+
+/*!!! MTR
+
 	if (id == m_alsaDriver->getAudioMonitoringInstrument()) {
 
 	    float f = 2;
@@ -1837,8 +1961,9 @@ JackDriver::updateAudioData()
 		(void)fader->getProperty(MappedAudioFader::InputChannel, f);
 		inputChannel = (int)f;
 	    }
-	    m_recordInputChannel = inputChannel;
+//!!!mtr	    m_recordInputChannel = inputChannel;
 	    
+    //!!! can't do with a single record level
 	    float level = 0.0;
 	    (void)fader->getProperty(MappedAudioFader::FaderRecordLevel, level);
 	    m_recordLevel = level;
@@ -1885,7 +2010,7 @@ JackDriver::updateAudioData()
 		}
 	    }
 	}
-
+*/
 	size_t pluginLatency = 0;
 	bool empty = m_instrumentMixer->isInstrumentEmpty(id);
 
@@ -1896,7 +2021,7 @@ JackDriver::updateAudioData()
 	// If we find the object is connected to no output, or to buss
 	// number 0 (the master), then we set the bit appropriately.
 
-	MappedObjectValueList connections = fader->getConnections
+	/*!!!mtr	MappedObjectValueList */ connections = fader->getConnections
 	    (MappedConnectableObject::Out);
 
 	if (connections.empty() || (*connections.begin() == mbuss->getId())) {
@@ -1958,7 +2083,7 @@ JackDriver::updateAudioData()
     }
 
 #ifdef DEBUG_JACK_DRIVER
-    std::cerr << "JackDriver::updateAudioData exiting" << std::endl;
+//    std::cerr << "JackDriver::updateAudioData exiting" << std::endl;
 #endif
 }
 
@@ -2203,25 +2328,27 @@ JackDriver::getSynthPlugin(InstrumentId id)
 }
 
 bool
-JackDriver::createRecordFile(const std::string &filename)
+JackDriver::openRecordFile(Rosegarden::InstrumentId id,
+			   const std::string &filename)
 {
     if (m_fileWriter) {
 	if (!m_fileWriter->running()) {
 	    m_fileWriter->run();
 	}
-	return m_fileWriter->createRecordFile(m_alsaDriver->getAudioMonitoringInstrument(), filename);
+	return m_fileWriter->openRecordFile(id, filename);
     } else {
-	std::cerr << "JackDriver::createRecordFile: No file writer available!" << std::endl;
+	std::cerr << "JackDriver::openRecordFile: No file writer available!" << std::endl;
 	return false;
     }
 }
 
 bool
-JackDriver::closeRecordFile(AudioFileId &returnedId)
+JackDriver::closeRecordFile(Rosegarden::InstrumentId id,
+			    AudioFileId &returnedId)
 {
     if (m_fileWriter) {
-	return m_fileWriter->closeRecordFile(m_alsaDriver->getAudioMonitoringInstrument(), returnedId);
-	if (m_fileWriter->running()) {
+	return m_fileWriter->closeRecordFile(id, returnedId);
+	if (m_fileWriter->running() && !m_fileWriter->haveRecordFilesOpen()) {
 	    m_fileWriter->terminate();
 	}
     } else return false;

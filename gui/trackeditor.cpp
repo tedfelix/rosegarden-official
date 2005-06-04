@@ -479,15 +479,17 @@ TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
     //
     timeT endTime = comp.getPosition();
     */
-    m_segmentCanvas->getModel()->setRecordingItem(CompositionItemHelper::makeCompositionItem(segment));
+    m_segmentCanvas->getModel()->addRecordingItem
+	(CompositionItemHelper::makeCompositionItem(segment));
 
     emit needUpdate();
 }
 
 void
-TrackEditor::slotDeleteRecordingSegmentItem()
+TrackEditor::slotDeleteRecordingSegmentItem(Rosegarden::Segment *segment)
 {
-    m_segmentCanvas->getModel()->clearRecordingItem();
+    m_segmentCanvas->getModel()->removeRecordingItem
+	(CompositionItemHelper::makeCompositionItem(segment));
     emit needUpdate();
 }
 

@@ -28,7 +28,7 @@
 #define ROSEGARDENGUIIFACE_H
 
 #include <dcopobject.h>
-#include <qvaluelist.h>
+#include <qvaluevector.h>
 #include <dcopref.h>
 
 #include "rosegardendcop.h"
@@ -86,6 +86,11 @@ k_dcop:
     // sequencer can use it.
     //
     virtual QString createNewAudioFile() = 0;
+    virtual QValueVector<QString> createRecordAudioFiles
+    (const QValueVector<Rosegarden::InstrumentId> &recordInstruments) = 0;
+    virtual QString getAudioFilePath() = 0;
+
+    virtual QValueVector<Rosegarden::InstrumentId> getArmedInstruments() = 0;
 
     virtual void showError(QString error) = 0;
 

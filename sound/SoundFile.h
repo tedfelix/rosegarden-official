@@ -92,6 +92,9 @@ protected:
     // write some bytes to an output stream
     void putBytes(std::ofstream *file, const std::string outputString);
 
+    // write some bytes to an output stream
+    void putBytes(std::ofstream *file, const char *buffer, size_t n);
+
     // Read buffering - define chunk size and buffer file reading
     //
     int            m_readChunkPtr;

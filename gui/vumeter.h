@@ -57,6 +57,12 @@ public:
     void setLevel(double level);
     void setLevel(double leftLevel, double rightLevel);
 
+    // Mono and stereo record level setting.  Same units.  Only
+    // applicable if hasRecord true in constructor.
+    //
+    void setRecordLevel(double level);
+    void setRecordLevel(double leftLevel, double rightLevel);
+
     virtual void paintEvent(QPaintEvent*);
 
 protected:
@@ -66,6 +72,7 @@ protected:
     VUMeter(QWidget *parent = 0,
             VUMeterType type = Plain,
             bool stereo = false,
+	    bool hasRecord = false,
             int width = 0,
             int height = 0,
             VUAlignment alignment = Horizontal,
@@ -76,6 +83,8 @@ protected:
     virtual void meterStop() = 0;
 
     int         m_originalHeight;
+
+    void setLevel(double leftLevel, double rightLevel, bool record);
 
 private slots:
     void slotReduceLevelLeft();
@@ -94,24 +103,29 @@ private:
     VUAlignment m_alignment;
     QColor      m_background;
 
-    int         m_maxLevel;
+    short       m_maxLevel;
 
-    int         m_levelLeft;
-    int         m_peakLevelLeft;
-    int         m_levelStepLeft;
+    short       m_levelLeft;
+    short       m_recordLevelLeft;
+    short       m_peakLevelLeft;
+    short       m_levelStepLeft;
+    short       m_recordLevelStepLeft;
     QTimer     *m_fallTimerLeft;
     QTimer     *m_peakTimerLeft;
 
-    int         m_levelRight;
-    int         m_peakLevelRight;
-    int         m_levelStepRight;
+    short       m_levelRight;
+    short       m_recordLevelRight;
+    short       m_peakLevelRight;
+    short       m_levelStepRight;
+    short       m_recordLevelStepRight;
     QTimer     *m_fallTimerRight;
     QTimer     *m_peakTimerRight;
 
     bool        m_showPeakLevel;
-    int         m_baseLevelStep;
+    short       m_baseLevelStep;
 
     bool        m_stereo;
+    bool        m_hasRecord;
 
     // We use this to work out our colours
     //

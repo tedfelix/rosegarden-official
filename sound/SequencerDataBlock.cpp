@@ -191,26 +191,35 @@ SequencerDataBlock::setInstrumentLevel(InstrumentId id, const LevelInfo &info)
 }
 
 bool
-SequencerDataBlock::getRecordLevel(LevelInfo &level) const
+SequencerDataBlock::getInstrumentRecordLevel(InstrumentId id, LevelInfo &info) const
 {
-    static int lastUpdateIndex = 0;
+    static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
-    int currentIndex = m_recordLevelUpdateIndex;
-    level = m_recordLevel;
+    int index = instrumentToIndex(id);
+    if (index < 0) {
+	info.level = info.levelRight = 0;
+	return false;
+    }
 
-    if (lastUpdateIndex != currentIndex) {
-	lastUpdateIndex  = currentIndex;
+    int currentUpdateIndex = m_recordLevelUpdateIndices[index];
+    info = m_recordLevels[index];
+
+    if (lastUpdateIndex[index] != currentUpdateIndex) {
+	lastUpdateIndex[index]  = currentUpdateIndex;
 	return true;
     } else {
-	return false;
+	return false; // no change
     }
 }
 
 void
-SequencerDataBlock::setRecordLevel(const LevelInfo &info)
+SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &info)
 {
-    m_recordLevel = info;
-    ++m_recordLevelUpdateIndex;
+    int index = instrumentToIndexCreating(id);
+    if (index < 0) return;
+
+    m_recordLevels[index] = info;
+    ++m_recordLevelUpdateIndices[index];
 }
 
 void
@@ -299,8 +308,8 @@ SequencerDataBlock::clearTemporaries()
     *((MappedEvent *)&m_visualEvent) = MappedEvent();
     m_haveVisualEvent = false;
     m_recordEventIndex = 0;
-    m_recordLevel.level = 0;
-    m_recordLevel.levelRight = 0;
+//!!!    m_recordLevel.level = 0;
+//!!!    m_recordLevel.levelRight = 0;
     memset(m_knownInstruments, 0,
            SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(InstrumentId));
     m_knownInstrumentCount = 0;

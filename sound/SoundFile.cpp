@@ -238,6 +238,12 @@ SoundFile::putBytes(std::ofstream *file,
         *file << (FileByte) oS[i];
 }
 
+void
+SoundFile::putBytes(std::ofstream *file, const char *buffer, size_t n)
+{
+    file->write(buffer, n);
+}
+
 
 // Clip off any path from the filename
 std::string

@@ -1024,9 +1024,9 @@ void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
     m_trackEditor->slotUpdateRecordingSegmentItem(segment);
 }
 
-void RosegardenGUIView::deleteRecordingSegmentItem()
+void RosegardenGUIView::deleteRecordingSegmentItem(Rosegarden::Segment *segment)
 {
-    m_trackEditor->slotDeleteRecordingSegmentItem();
+    m_trackEditor->slotDeleteRecordingSegmentItem(segment);
 }
 
 
@@ -1557,8 +1557,9 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
     {
         if (comp.getSelectedTrack() == (*it).second->getId())
         {
-            m_trackEditor->getTrackButtons()->
-                setRecordTrack((*it).second->getPosition());
+//!!! MTR            m_trackEditor->getTrackButtons()->
+//                setRecordTrack((*it).second->getPosition());
+//!!! MTR is this needed?
             slotUpdateInstrumentParameterBox((*it).second->getInstrument());
         }
     }
@@ -1568,6 +1569,7 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
 
     if (instr)
     {
+//!!! MTR -- implications?
         getDocument()->setAudioMonitoringState(
                 (instr->getType() == Rosegarden::Instrument::Audio), id);
     }

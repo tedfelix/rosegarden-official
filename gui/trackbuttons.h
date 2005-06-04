@@ -111,9 +111,6 @@ public:
 
     ~TrackButtons();
 
-    /// Return the track selected for recording
-    int selectedRecordTrack();
-
     /// Return a vector of muted tracks
     std::vector<int> mutedTracks();
 
@@ -143,7 +140,7 @@ public:
     /*
      * Make this available so that others can set record buttons down
      */
-    void setRecordTrack(int position);
+    void setRecordTrack(int position, bool value);
 
     /**
      * Precalculate the Instrument popup so we don't have to every
@@ -170,10 +167,11 @@ signals:
     //
     void modified();
 
-    // New record button set - if we're setting to an audio track
-    // we need to tell the sequencer for live monitoring purposes.
+    // A record button has been pressed - if we're setting to an audio
+    // track we need to tell the sequencer for live monitoring
+    // purposes.
     //
-    void newRecordButton();
+    void recordButton(Rosegarden::TrackId track, bool state);
 
     // A mute button has been pressed
     //
@@ -181,7 +179,7 @@ signals:
 
 public slots:
 
-    void slotSetRecordTrack(int position);
+    void slotToggleRecordTrack(int position);
     void slotToggleMutedTrack(int mutedTrack);
     void slotUpdateTracks();
     void slotRenameTrack(QString newName, Rosegarden::TrackId trackId);
@@ -212,9 +210,9 @@ protected:
     void removeButtons(unsigned int position);
 
     /**
-     * Set record button down - graphically only
+     * Set record button - graphically only
      */
-    void setRecordButtonDown(int position);
+    void setRecordButton(int position, bool down);
 
     /**
      *  buttons, starting at the specified index
@@ -259,7 +257,6 @@ protected:
     //
     int                               m_borderGap;
 
-    int                               m_lastID;
     int                               m_trackLabelWidth;
     int                               m_popupItem;
 

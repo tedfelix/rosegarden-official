@@ -51,10 +51,8 @@ namespace Rosegarden
 //
 typedef enum
 {
-    ASYNCHRONOUS_MIDI,
-    ASYNCHRONOUS_AUDIO,
-    RECORD_MIDI,
-    RECORD_AUDIO
+    RECORD_OFF,
+    RECORD_ON,
 } RecordStatus;
 
 
@@ -175,9 +173,12 @@ public:
 				  const RealTime &sliceStart,
 				  const RealTime &sliceEnd) = 0;
 
-    // Activate a recording state
+    // Activate a recording state.  armedInstruments and audioFileNames
+    // can be NULL if no audio tracks recording.
     //
-    virtual bool record(RecordStatus recordStatus) = 0;
+    virtual bool record(RecordStatus recordStatus,
+			const std::vector<InstrumentId> *armedInstruments = 0,
+			const std::vector<QString> *audioFileNames = 0) = 0;
 
     // Process anything that's pending
     //
@@ -336,20 +337,6 @@ public:
     void clearAudioQueue();
     const AudioPlayQueue *getAudioQueue() const;
 
-    // Recording filename
-    //
-    void setRecordingFilename(const std::string &file)
-        {  m_recordingFilename = file; }
-
-
-    // Audio monitoring InstrumentId
-    //
-    InstrumentId getAudioMonitoringInstrument()
-        { return m_audioMonitoringInstrument; }
-
-    void setAudioMonitoringInstrument(InstrumentId id)
-        { m_audioMonitoringInstrument = id; }
-
     // Latencies
     //
     virtual RealTime getAudioPlayLatency() { return RealTime::zeroTime; }
@@ -485,11 +472,6 @@ protected:
     // A list of AudioFiles that we can play.
     //
     std::vector<AudioFile*>                     m_audioFiles;
-
-    // Filename we should record to
-    std::string                                 m_recordingFilename;
-
-    InstrumentId                                m_audioMonitoringInstrument;
 
     RealTime m_audioMixBufferLength;
     RealTime m_audioReadBufferLength;

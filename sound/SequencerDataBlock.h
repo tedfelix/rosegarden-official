@@ -68,9 +68,6 @@ public:
     int getRecordedEvents(MappedComposition &) const;
     void addRecordedEvents(MappedComposition *);
 
-    bool getRecordLevel(LevelInfo &) const;
-    void setRecordLevel(const LevelInfo &);
-
     bool getTrackLevel(TrackId track, LevelInfo &) const;
     void setTrackLevel(TrackId track, const LevelInfo &);
 
@@ -82,6 +79,9 @@ public:
     bool getInstrumentLevelForMixer(InstrumentId id, LevelInfo &) const;
 
     void setInstrumentLevel(InstrumentId id, const LevelInfo &);
+
+    bool getInstrumentRecordLevel(InstrumentId id, LevelInfo &) const;
+    void setInstrumentRecordLevel(InstrumentId id, const LevelInfo &);
 
     bool getSubmasterLevel(int submaster, LevelInfo &) const;
     void setSubmasterLevel(int submaster, const LevelInfo &);
@@ -117,14 +117,14 @@ protected:
     char m_recordBuffer[sizeof(MappedEvent) *
 			SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
 
-    int m_recordLevelUpdateIndex;
-    LevelInfo m_recordLevel;
-
     InstrumentId m_knownInstruments[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     int m_knownInstrumentCount;
 
     int m_levelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     LevelInfo m_levels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+
+    int m_recordLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+    LevelInfo m_recordLevels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int m_submasterLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
     LevelInfo m_submasterLevels[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];

@@ -227,8 +227,10 @@ public:
     // display of the audio input stream.
     //!!! This is also the recording instrument!
     //
-    virtual void setAudioMonitoring(long value) = 0;
-    virtual void setAudioMonitoringInstrument(unsigned int id) = 0;
+#ifdef MTR_IN_PROGRESS
+//!!!    virtual void setAudioMonitoring(long value) = 0;
+//!!!    virtual void setAudioMonitoringInstrument(unsigned int id) = 0;
+#endif
 
     // Fetch audio play latencies
     //

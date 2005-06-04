@@ -95,8 +95,10 @@ GUIPalette::GUIPalette()
 
 //    m_defaultsMap[LevelMeterSolidGreen] = QColor(0, 140, 0);
     m_defaultsMap[LevelMeterSolidGreen] = QColor(84, 177, 248); // blue!
-    m_defaultsMap[LevelMeterSolidOrange] = QColor(220, 120, 0);
-    m_defaultsMap[LevelMeterSolidRed] = QColor(255, 50, 50);
+//    m_defaultsMap[LevelMeterSolidOrange] = QColor(220, 120, 0);
+    m_defaultsMap[LevelMeterSolidOrange] = QColor(255, 225, 0);
+//    m_defaultsMap[LevelMeterSolidRed] = QColor(255, 50, 50);
+    m_defaultsMap[LevelMeterSolidRed] = QColor(255, 0, 0);
 
     m_defaultsMap[BarLine] = Qt::black;
     m_defaultsMap[BarLineIncorrect] = QColor(211, 0, 31);
@@ -152,7 +154,8 @@ GUIPalette::GUIPalette()
 
 //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor(211, 194, 238, QColor::Hsv);
-    m_defaultsMap[RecordTrackLED] = QColor(0, 250, 225, QColor::Hsv);
+    m_defaultsMap[RecordMIDITrackLED] = QColor(50, 250, 225, QColor::Hsv);
+    m_defaultsMap[RecordAudioTrackLED] = QColor(0, 250, 225, QColor::Hsv);
 
     m_defaultsMap[PlaybackFaderOutline] = QColor(211, 194, 238, QColor::Hsv);
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
@@ -259,7 +262,8 @@ const char* const GUIPalette::RotaryMeter = "rotarymeter";
 const char* const GUIPalette::MarkerBackground = "markerbackground";
 
 const char* const GUIPalette::MuteTrackLED = "mutetrackled";
-const char* const GUIPalette::RecordTrackLED = "recordtrackled";
+const char* const GUIPalette::RecordMIDITrackLED = "recordmiditrackled";
+const char* const GUIPalette::RecordAudioTrackLED = "recordaudiotrackled";
 
 const char* const GUIPalette::PlaybackFaderOutline = "playbackfaderoutline";
 const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";

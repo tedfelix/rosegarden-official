@@ -49,7 +49,7 @@
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
+#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 //#define MTC_DEBUG 1
 
@@ -1730,35 +1730,55 @@ AlsaDriver::stopPlayback()
 
 #ifdef HAVE_LIBJACK
     // Close any recording file
-    if (m_recordStatus == RECORD_AUDIO)
+    if (m_recordStatus == RECORD_ON)
     {
-	AudioFileId id;
-	if (m_jackDriver && m_jackDriver->closeRecordFile(id)) {
+	for (InstrumentSet::const_iterator i = m_recordingInstruments.begin();
+	     i != m_recordingInstruments.end(); ++i) {
 
-	    // Create event to return to gui to say that we've completed
-	    // an audio file and we can generate a preview for it now.
-	    //
-	    try
-	    {
-		MappedEvent *mE =
-		    new MappedEvent(id,
-				    MappedEvent::AudioGeneratePreview,
-				    0);
+	    Rosegarden::InstrumentId id = *i;
+
+	    if (id >= Rosegarden::AudioInstrumentBase &&
+		id <  Rosegarden::MidiInstrumentBase) {
 		
-		// send completion event
-		insertMappedEventForReturn(mE);
-	    }
-	    catch(...) {;}
-	}
+		AudioFileId auid = 0;
+		if (m_jackDriver && m_jackDriver->closeRecordFile(id, auid)) {
 
-        m_recordStatus = ASYNCHRONOUS_AUDIO;
+#ifdef DEBUG_ALSA
+		    std::cerr << "AlsaDriver::stopPlayback: sending back to GUI for instrument " << id << std::endl;
+#endif
+
+		    // Create event to return to gui to say that we've
+		    // completed an audio file and we can generate a
+		    // preview for it now.
+		    //
+		    // nasty hack -- don't have right audio id here, and
+		    // the sequencer will wipe out the instrument id and
+		    // replace it with currently-selected one in gui --
+		    // so use audio id slot to pass back instrument id
+		    // and handle accordingly in gui
+		    try
+		    {
+			MappedEvent *mE =
+			    new MappedEvent(id,
+					    MappedEvent::AudioGeneratePreview,
+					    id % 256,
+					    id / 256);
+			
+			// send completion event
+			insertMappedEventForReturn(mE);
+		    }
+		    catch(...) {;}
+		}
+	    }
+	}
     }
 #endif
 
     // Change recorded state if any set
     //
-    if (m_recordStatus == RECORD_MIDI)
-        m_recordStatus = ASYNCHRONOUS_MIDI;
+    if (m_recordStatus == RECORD_ON) m_recordStatus = RECORD_OFF;
+
+    m_recordingInstruments.clear();
 
     stopClocks(); // Resets ALSA timer to zero, tells JACK driver to stop
 
@@ -2066,14 +2086,6 @@ AlsaDriver::getMappedComposition()
 	    m_recordComposition.insert(new MappedEvent(**i));
 	}
 	m_returnComposition.clear();
-    }
-
-    if (m_recordStatus != RECORD_MIDI &&
-        m_recordStatus != RECORD_AUDIO &&
-        m_recordStatus != ASYNCHRONOUS_MIDI &&
-        m_recordStatus != ASYNCHRONOUS_AUDIO)
-    {
-        return &m_recordComposition;
     }
 
     // If the input port hasn't connected we shouldn't poll it
@@ -3020,7 +3032,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         else
         {
 #ifdef DEBUG_ALSA
-            std::cerr << "processMidiOut() - couldn't get Instrument for Event"
+            std::cerr << "processMidiOut() - No instrument for event of type "
+		      << (int)(*i)->getType() << " at " << (*i)->getEventTime()
                       << std::endl;
 #endif
             channel = 0;
@@ -3890,57 +3903,74 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 		m_jackDriver->kickAudio();
 	    }
 	}
-	m_jackDriver->updateAudioData();
     }
 #endif
 }
 
 bool
-AlsaDriver::record(RecordStatus recordStatus)
+AlsaDriver::record(RecordStatus recordStatus,
+		   const std::vector<InstrumentId> *armedInstruments,
+		   const std::vector<QString> *audioFileNames)
 {
-    if (recordStatus == RECORD_MIDI)
+    m_recordingInstruments.clear();
+
+    if (recordStatus == RECORD_ON)
     {
         // start recording
-        m_recordStatus = RECORD_MIDI;
+        m_recordStatus = RECORD_ON;
 	m_alsaRecordStartTime = RealTime::zeroTime;
-    }
-    else if (recordStatus == RECORD_AUDIO)
-    {
-#ifdef HAVE_LIBJACK
-	if (m_jackDriver &&
-	    m_jackDriver->createRecordFile(m_recordingFilename))
-        {
-            m_recordStatus = RECORD_AUDIO;
-        }
-        else
-        {
-            m_recordStatus = ASYNCHRONOUS_MIDI;
-	    if (m_jackDriver) {
-		std::cerr << "AlsaDriver::record: JACK driver failed to prepare for recording" << std::endl;
-	    }
-	    return false;
-        }
-#else
+
+	unsigned int audioCount = 0;
+
+	if (armedInstruments) {
+
+	    for (unsigned int i = 0; i < armedInstruments->size(); ++i) {
+
+		Rosegarden::InstrumentId id = (*armedInstruments)[i];
+
+		m_recordingInstruments.insert(id);
+		if (!audioFileNames || (audioCount >= audioFileNames->size())) {
+		    continue;
+		}
+
+		QString fileName = (*audioFileNames)[audioCount];
+
+		if (id >= Rosegarden::AudioInstrumentBase &&
+		    id <  Rosegarden::MidiInstrumentBase) {
+
+		    bool good = false;
+
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::record - can't record audio without JACK"
-                  << std::endl;
-#endif
+		    std::cerr << "AlsaDriver::record: Requesting new record file \"" << fileName << "\" for instrument " << id << std::endl;
 #endif
 
+#ifdef HAVE_LIBJACK
+		    if (m_jackDriver &&
+			m_jackDriver->openRecordFile(id, fileName.data())) {
+			good = true;
+		    }
+#endif
+		    
+		    if (!good) {
+			m_recordStatus = RECORD_OFF;
+			std::cerr << "AlsaDriver::record: No JACK driver, or JACK driver failed to prepare for recording audio" << std::endl;
+			return false;
+		    }
+
+		    ++audioCount;
+		}
+	    }
+        }
     }
     else
-    if (recordStatus == ASYNCHRONOUS_MIDI)
+    if (recordStatus == RECORD_OFF)
     {
-        m_recordStatus = ASYNCHRONOUS_MIDI;
-    }
-    else if (recordStatus == ASYNCHRONOUS_AUDIO)
-    {
-        m_recordStatus = ASYNCHRONOUS_AUDIO;
+        m_recordStatus = RECORD_OFF;
     }
 #ifdef DEBUG_ALSA
     else
     {
-        std::cerr << "ArtsDriver::record - unsupported recording mode"
+        std::cerr << "AlsaDriver::record - unsupported recording mode"
                   << std::endl;
     }
 #endif
@@ -4069,6 +4099,12 @@ AlsaDriver::processPending()
 	processNotesOff(getAlsaTime(), true);
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processPending(): draining");
     }
+
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+	m_jackDriver->updateAudioData();
+    }
+#endif
 
     scavengePlugins();
     m_audioQueueScavenger.scavenge();

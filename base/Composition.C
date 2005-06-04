@@ -175,7 +175,6 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 int Composition::m_defaultNbBars = 100;
 
 Composition::Composition() :
-    m_recordTrack(0),
     m_solo(false),   // default is not soloing
     m_selectedTrack(0),
     m_timeSigSegment(TimeSignature::EventType),
@@ -1251,10 +1250,11 @@ void Composition::checkSelectedAndRecordTracks()
         
     }
 
-    if (m_tracks.find(m_recordTrack) == m_tracks.end()) {
-
-        m_recordTrack = getClosestValidTrackId(m_recordTrack);
-        
+    for (recordtrackcontainer::iterator i = m_recordTracks.begin();
+	 i != m_recordTracks.end(); ++i) {
+	if (m_tracks.find(*i) == m_tracks.end()) {
+	    m_recordTracks.erase(i);
+	}
     }
 
 }
@@ -1301,6 +1301,24 @@ Composition::getMaxTrackId() const
     return i->first;
 }
 
+void
+Composition::setTrackRecording(TrackId track, bool recording)
+{
+    std::cerr << "Composition::setTrackRecording(" << track << "," << recording << ")" << std::endl;
+
+    if (recording) {
+	m_recordTracks.insert(track);
+    } else {
+	m_recordTracks.erase(track);
+    }
+}
+
+bool
+Composition::isTrackRecording(TrackId track) const
+{
+    return m_recordTracks.find(track) != m_recordTracks.end();
+}
+
 
 // Export the Composition as XML, also iterates through
 // Tracks and any further sub-objects
@@ -1310,8 +1328,14 @@ std::string Composition::toXmlString()
 {
     std::stringstream composition;
 
-    composition << "<composition recordtrack=\"";
-    composition << m_recordTrack;
+    composition << "<composition recordtracks=\"";
+    for (recordtrackiterator i = m_recordTracks.begin();
+	 i != m_recordTracks.end(); ) {
+	composition << *i;
+	if (++i != m_recordTracks.end()) {
+	    composition << ",";
+	}
+    }
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)

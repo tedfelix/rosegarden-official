@@ -212,9 +212,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 		SLOT(slotPlayPreview()), 
 		actionCollection(), "preview_audio");
 
+/*!!! Not actually implemented -- this never worked right!
     new KAction(i18n("Re&label"), 0, 0, this,
 		SLOT(slotRename()), 
 		actionCollection(), "rename_audio");
+*/
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/insert_audio_into_track.xpm"));
     new KAction(i18n("&Insert into Selected Audio Track"), 
@@ -402,6 +404,9 @@ AudioManagerDialog::slotPopulateFileList()
             p.setPen(Qt::black);
             p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
         }
+
+	//!!! Why isn't the label the label the user assigned to the file?
+	// Why do we allow the user to assign a label at all, then?
 
         QString label = QString((*it)->getShortFilename().c_str());
              

@@ -425,6 +425,12 @@ protected:
      * path to it as a QString.
      */
     QString createNewAudioFile();
+    QValueVector<QString> createRecordAudioFiles(const QValueVector<Rosegarden::InstrumentId> &);
+
+    QString getAudioFilePath();
+
+    //!!!mtr
+    QValueVector<Rosegarden::InstrumentId> getArmedInstruments();
 
     /**
      * Show a sequencer error to the user.  This is for errors from
@@ -485,6 +491,11 @@ public slots:
      * @param url : a string containing a url (protocol://foo/bar/file.rg)
      */
     virtual void slotOpenDroppedURL(QString url);
+
+    /**
+     * Open the document properties dialog on the Audio page
+     */
+    virtual void slotOpenAudioPathSettings();
 
     /**
      * open a new application window by creating a new instance of

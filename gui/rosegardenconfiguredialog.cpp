@@ -261,6 +261,27 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
 }
 
 void
+DocumentConfigureDialog::showAudioPage()
+{
+    int index = 0;
+    
+    for (configurationpages::iterator i = m_configurationPages.begin();
+	 i != m_configurationPages.end(); ++i) {
+
+	AudioConfigurationPage *page =
+	    dynamic_cast<AudioConfigurationPage *>(*i);
+
+	if (!page) {
+	    ++index;
+	    continue;
+	}
+
+	showPage(index);
+	return;
+    }
+}    
+
+void
 DocumentConfigureDialog::selectMetadata(QString name)
 {
     int index = 0;

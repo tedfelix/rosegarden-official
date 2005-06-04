@@ -46,12 +46,11 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_startPlayback(false),
     m_playing(false),
     m_midiRecordDevice(0),
-    m_recordStatus(ASYNCHRONOUS_MIDI),
+    m_recordStatus(RECORD_OFF),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
     m_audioQueueScavenger(4, 50),
     m_audioQueue(0),
-    m_audioMonitoringInstrument(AudioInstrumentBase),
     m_lowLatencyMode(true),
     m_studio(studio),
     m_sequencerDataBlock(0),
@@ -180,7 +179,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
-    m_audioQueueScavenger.claim(oldQueue);
+    if (oldQueue) m_audioQueueScavenger.claim(oldQueue);
 }
 
 void
@@ -189,12 +188,14 @@ SoundDriver::clearAudioQueue()
     AudioPlayQueue *newQueue = new AudioPlayQueue();
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
-    m_audioQueueScavenger.claim(oldQueue);
+    if (oldQueue) m_audioQueueScavenger.claim(oldQueue);
 }
 void
 SoundDriver::cancelAudioFile(MappedEvent *mE)
 {
     std::cout << "SoundDriver::cancelAudioFile" << std::endl;
+
+    if (!m_audioQueue) return;
 
     // For now we only permit cancelling unscheduled files.
 

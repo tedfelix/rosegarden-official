@@ -27,6 +27,7 @@
 #include <qinputdialog.h>
 #include <qobjectlist.h>
 #include <qlayout.h>
+#include <qvaluevector.h>
 
 // include files for KDE
 #include <kcursor.h>
@@ -3185,8 +3186,10 @@ void RosegardenGUIApp::slotDeleteTrack()
     Rosegarden::Instrument *inst = m_doc->getStudio().
         getInstrumentById(comp.getTrackById(trackId)->getInstrument());
 
+#ifdef MTR_IN_PROGRESS
     if (inst && inst->getType() == Rosegarden::Instrument::Midi)
         comp.setRecordTrack(trackId);
+#endif
 
     m_view->slotSelectTrackSegments(trackId);
 }
@@ -3709,18 +3712,16 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     m_doc->setPointerPosition(elapsedTime);
     m_originatingJump = false;
 
-    if (m_seqManager->getTransportStatus() == RECORDING_MIDI) {
+    if (m_seqManager->getTransportStatus() == RECORDING) {
 
 	Rosegarden::MappedComposition mC;
 	if (mapper->getRecordedEvents(mC) > 0) {
 	    m_seqManager->processAsynchronousMidi(mC, 0);
-	    m_doc->insertRecordedMidi(mC, RECORDING_MIDI);
+	    m_doc->insertRecordedMidi(mC);
 	}
-	m_doc->updateRecordingSegment();
 
-    } else if (m_seqManager->getTransportStatus() == RECORDING_AUDIO) {
-
-	m_doc->insertRecordedAudio(position, RECORDING_AUDIO);
+	m_doc->updateRecordingMIDISegment();
+	m_doc->updateRecordingAudioSegments();
     }
 
     if (m_audioMixer && m_audioMixer->isVisible())
@@ -3808,7 +3809,7 @@ RosegardenGUIApp::slotUpdateMonitoring()
     SequencerMapper *mapper = m_seqManager->getSequencerMapper();
 
     if (m_audioMixer && m_audioMixer->isVisible())
-        m_audioMixer->updateMonitorMeter(mapper);
+        m_audioMixer->updateMonitorMeters(mapper);
 
     if (m_midiMixer && m_midiMixer->isVisible())
         m_midiMixer->updateMonitorMeter(mapper);
@@ -3823,8 +3824,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     Rosegarden::Composition &comp = m_doc->getComposition();
 
     if ( m_seqManager->getTransportStatus() == PLAYING ||
-         m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-         m_seqManager->getTransportStatus() == RECORDING_AUDIO )
+         m_seqManager->getTransportStatus() == RECORDING )
     {
         if (t > comp.getEndMarker())
         {
@@ -3929,8 +3929,7 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
 void RosegardenGUIApp::slotRefreshTimeDisplay()
 {
     if ( m_seqManager->getTransportStatus() == PLAYING ||
-         m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-         m_seqManager->getTransportStatus() == RECORDING_AUDIO ) {
+         m_seqManager->getTransportStatus() == RECORDING ) {
 	return; // it'll be refreshed in a moment anyway
     }
     slotSetPointerPosition(m_doc->getComposition().getPosition());
@@ -4483,10 +4482,8 @@ RosegardenGUIApp::slotToggleMetronome()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    if (m_seqManager->getTransportStatus() == STARTING_TO_RECORD_MIDI ||
-        m_seqManager->getTransportStatus() == STARTING_TO_RECORD_AUDIO ||
-        m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO ||
+    if (m_seqManager->getTransportStatus() == STARTING_TO_RECORD ||
+        m_seqManager->getTransportStatus() == RECORDING ||
         m_seqManager->getTransportStatus() == RECORDING_ARMED)
     {
         if (comp.useRecordMetronome())
@@ -4520,8 +4517,7 @@ RosegardenGUIApp::slotRewindToBeginning()
 {
     // ignore requests if recording
     //
-    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+    if (m_seqManager->getTransportStatus() == RECORDING)
         return;
 
     m_seqManager->rewindToBeginning();
@@ -4533,8 +4529,7 @@ RosegardenGUIApp::slotFastForwardToEnd()
 {
     // ignore requests if recording
     //
-    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+    if (m_seqManager->getTransportStatus() == RECORDING)
         return;
 
     m_seqManager->fastForwardToEnd();
@@ -4561,8 +4556,7 @@ void RosegardenGUIApp::notifySequencerStatus(int status)
 {
     stateChanged("not_playing",
                  (status == PLAYING ||
-                  status == RECORDING_MIDI ||
-                  status == RECORDING_AUDIO) ?
+                  status == RECORDING) ?
                  KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
 
     if (m_seqManager)
@@ -4600,8 +4594,7 @@ RosegardenGUIApp::slotRecord()
             return;
     }
 
-    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+    if (m_seqManager->getTransportStatus() == RECORDING)
     {
         slotStop();
     }
@@ -4622,6 +4615,21 @@ RosegardenGUIApp::slotRecord()
         m_transport->MetronomeButton()->setOn(false);
         m_transport->RecordButton()->setOn(false);
         m_transport->PlayButton()->setOn(false);
+	return;
+    }
+    catch(Rosegarden::AudioFileManager::BadAudioPathException e)
+    {
+	if (KMessageBox::warningContinueCancel
+	    (this,
+	     i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
+	     i18n("Warning"),
+	     i18n("Set audio file path")) == KMessageBox::Continue) {
+	    slotOpenAudioPathSettings();
+	}
+        m_transport->MetronomeButton()->setOn(false);
+        m_transport->RecordButton()->setOn(false);
+        m_transport->PlayButton()->setOn(false);
+	return;
     }
     catch(Rosegarden::Exception e)
     {
@@ -4630,6 +4638,7 @@ RosegardenGUIApp::slotRecord()
         m_transport->MetronomeButton()->setOn(false);
         m_transport->RecordButton()->setOn(false);
         m_transport->PlayButton()->setOn(false);
+	return;
     }
 
     // plugin the keyboard accelerators for focus on this dialog
@@ -4669,6 +4678,16 @@ RosegardenGUIApp::slotToggleRecord()
     catch(QString s)
     {
         KMessageBox::error(this, s);
+    }
+    catch(Rosegarden::AudioFileManager::BadAudioPathException e)
+    {
+	if (KMessageBox::warningContinueCancel
+	    (this,
+	     i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before you start to record audio.\nWould you like to set it now?"),
+	     i18n("Error"),
+	     i18n("Set audio file path")) == KMessageBox::Continue) {
+	    slotOpenAudioPathSettings();
+	}
     }
     catch(Rosegarden::Exception e)
     {
@@ -4819,8 +4838,7 @@ void RosegardenGUIApp::slotRewind()
 {
     // ignore requests if recording
     //
-    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+    if (m_seqManager->getTransportStatus() == RECORDING)
         return;
     if (m_seqManager)
         m_seqManager->rewind();
@@ -4833,8 +4851,7 @@ void RosegardenGUIApp::slotFastforward()
 {
     // ignore requests if recording
     //
-    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+    if (m_seqManager->getTransportStatus() == RECORDING)
         return;
 
     if (m_seqManager)
@@ -4969,6 +4986,17 @@ void RosegardenGUIApp::slotEditDocumentProperties()
     Rosegarden::DocumentConfigureDialog *configDlg = 
         new Rosegarden::DocumentConfigureDialog(m_doc, this);
 
+    configDlg->show();
+}
+
+void RosegardenGUIApp::slotOpenAudioPathSettings()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotOpenAudioPathSettings\n";
+
+    Rosegarden::DocumentConfigureDialog *configDlg = 
+        new Rosegarden::DocumentConfigureDialog(m_doc, this);
+
+    configDlg->showAudioPage();
     configDlg->show();
 }
 
@@ -5313,7 +5341,64 @@ RosegardenGUIApp::setCursor(const QCursor& cursor)
 QString
 RosegardenGUIApp::createNewAudioFile()
 {
-    return QString(m_doc->createNewAudioFile().c_str());
+//!!!mtr    return QString(m_doc->createNewAudioFile().c_str());
+    Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().createRecordingAudioFile();
+    if (!aF) { //!!!mtr -- what, exactly?
+    } else {
+//	return m_doc->getAudioFileManager().getAudioPath() + aF->getFilename();
+	return aF->getFilename();
+    }
+}
+
+QValueVector<QString>
+RosegardenGUIApp::createRecordAudioFiles(const QValueVector<Rosegarden::InstrumentId> &recordInstruments)
+{
+    QValueVector<QString> qv;
+    for (unsigned int i = 0; i < recordInstruments.size(); ++i) {
+	Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().createRecordingAudioFile();
+	if (aF) {
+	    //!!! mtr ... and if not aF, report error to user
+//	    qv.push_back(m_doc->getAudioFileManager().getAudioPath() + aF->getFilename());
+	    qv.push_back(aF->getFilename());
+	    m_doc->addRecordAudioSegment(recordInstruments[i],
+					 aF->getId());
+	}
+    }
+    return qv;
+}
+
+QString
+RosegardenGUIApp::getAudioFilePath()
+{
+    //!!!mtr
+    return QString(m_doc->getAudioFileManager().getAudioPath().c_str());
+}
+
+QValueVector<Rosegarden::InstrumentId>
+RosegardenGUIApp::getArmedInstruments()
+{
+    std::set<Rosegarden::InstrumentId> iid;
+
+    const Rosegarden::Composition::recordtrackcontainer &tr =
+	m_doc->getComposition().getRecordTracks();
+
+    for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+	     tr.begin(); i != tr.end(); ++i) {
+	Rosegarden::TrackId tid = (*i);
+	Rosegarden::Track *track = m_doc->getComposition().getTrackById(tid);
+	if (track) {
+	    iid.insert(track->getInstrument());
+	} else {
+	    std::cerr << "Warning: RosegardenGUIApp::getArmedInstruments: Armed track " << tid << " not found in Composition" << std::endl;
+	}
+    }
+
+    QValueVector<Rosegarden::InstrumentId> iv;
+    for (std::set<Rosegarden::InstrumentId>::iterator ii = iid.begin();
+	 ii != iid.end(); ++ii) {
+	iv.push_back(*ii);
+    }
+    return iv;
 }
 
 void
@@ -6844,8 +6929,7 @@ RosegardenGUIApp::slotAutoSave()
 {
     if (!m_seqManager ||
         m_seqManager->getTransportStatus() == PLAYING ||
-        m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        m_seqManager->getTransportStatus() == RECORDING)
         return;
 
     KConfig* config = kapp->config();

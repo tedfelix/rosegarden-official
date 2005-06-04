@@ -152,6 +152,11 @@ public:
     //
     virtual bool appendSamples(const std::string &buffer) = 0;
 
+    // Append a string of samples to an already open (for writing)
+    // audio file.  Caller must have interleaved samples etc.
+    //
+    virtual bool appendSamples(const char *buffer, unsigned int frames) = 0;
+
     // Get the length of the sample file in RealTime
     //
     virtual RealTime getLength() = 0;

@@ -44,10 +44,6 @@ public:
 	return m_sequencerDataBlock->getRecordedEvents(mC);
     }
 
-    bool getRecordLevel(Rosegarden::LevelInfo &info) const {
-	return m_sequencerDataBlock->getRecordLevel(info);
-    }
-
     bool getTrackLevel(Rosegarden::TrackId track,
 		       Rosegarden::LevelInfo &info) const {
 	return m_sequencerDataBlock->getTrackLevel(track, info);
@@ -61,6 +57,11 @@ public:
     bool getInstrumentLevelForMixer(Rosegarden::InstrumentId id,
 			    Rosegarden::LevelInfo &info) const {
 	return m_sequencerDataBlock->getInstrumentLevelForMixer(id, info);
+    }
+
+    bool getInstrumentRecordLevel(Rosegarden::InstrumentId id,
+				  Rosegarden::LevelInfo &info) const {
+	return m_sequencerDataBlock->getInstrumentRecordLevel(id, info);
     }
 
     bool getSubmasterLevel(int submaster,

@@ -35,6 +35,7 @@
 #include <qstring.h>
 #include <qdir.h>
 #include <qbuffer.h>
+#include <qvaluevector.h>
 
 #include "rosedebug.h"
 #include "rosegardensequencer.h"
@@ -108,10 +109,6 @@ RosegardenSequencerApp::RosegardenSequencerApp() :
 
     m_driver->setSequencerDataBlock(m_sequencerMapper.getSequencerDataBlock());
     m_driver->setExternalTransportControl(this);
-
-    // set this here and now so we can accept async midi events
-    //
-    m_driver->record(Rosegarden::ASYNCHRONOUS_MIDI);
 
     // Check for new clients every so often
     //
@@ -354,8 +351,7 @@ RosegardenSequencerApp::updateClocks()
     // If we're not playing etc. then that's all we need to do
     //
     if (m_transportStatus != PLAYING &&
-        m_transportStatus != RECORDING_MIDI &&
-        m_transportStatus != RECORDING_AUDIO)
+        m_transportStatus != RECORDING)
         return;
 
     Rosegarden::RealTime newPosition = m_driver->getSequencerTime();
@@ -514,7 +510,6 @@ RosegardenSequencerApp::processRecordedAudio()
 // to mop up any async (unexpected) incoming MIDI or Audio events
 // and forward them to the GUI for display
 //
-//
 void
 RosegardenSequencerApp::processAsynchronousEvents()
 {
@@ -601,85 +596,108 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 {
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus << endl;
+
     // punch in recording
     if (m_transportStatus == PLAYING)
     {
-        if (localRecordMode == STARTING_TO_RECORD_MIDI)
+        if (localRecordMode == STARTING_TO_RECORD)
         {
-            if(m_driver->record(Rosegarden::RECORD_MIDI) == false)
+            if (m_driver->record(Rosegarden::RECORD_ON) == false)
             {
                 stop();
                 return 0;
             }
 
-            m_transportStatus = RECORDING_MIDI;
+            m_transportStatus = RECORDING;
             return 1;
-        }
-        else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
-        {
-            // do something
         }
     }
 
-    // For audio recording we need to retrieve the input ports
-    // we're connected to from the Studio.
+    // For audio recording we need to retrieve audio
+    // file names from the GUI
     //
-    if (localRecordMode == STARTING_TO_RECORD_MIDI)
+    if (localRecordMode == STARTING_TO_RECORD)
     {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
-                        << " - starting to record MIDI" << endl;
+                        << " - starting to record" << endl;
+
+	QValueVector<Rosegarden::InstrumentId> armedInstruments;
+	QValueVector<QString> audioFileNames;
+
+	{
+	    QByteArray data, replyData;
+	    QCString replyType;
+	    QDataStream arg(data, IO_WriteOnly);
+	    
+	    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+					  ROSEGARDEN_GUI_IFACE_NAME,
+					  "getArmedInstruments()",
+					  data, replyType, replyData, true)) {
+		SEQUENCER_DEBUG << "RosegardenSequencer::record()"
+				<< " - can't call RosegardenGUI client for getArmedInstruments"
+				<< endl;
+	    }
+
+	    QDataStream reply(replyData, IO_ReadOnly);
+	    if (replyType == "QValueVector<Rosegarden::InstrumentId>") {
+		reply >> armedInstruments;
+	    } else {
+		SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
+				<< "unrecognised type returned for getArmedInstruments" << endl;
+	    }
+	}
+
+	QValueVector<Rosegarden::InstrumentId> audioInstruments;
+
+	for (unsigned int i = 0; i < armedInstruments.size(); ++i) {
+	    if (armedInstruments[i] >= Rosegarden::AudioInstrumentBase &&
+		armedInstruments[i] <  Rosegarden::MidiInstrumentBase) {
+		audioInstruments.push_back(armedInstruments[i]);
+	    }
+	}
+
+	if (audioInstruments.size() > 0) {
+	    
+	    QByteArray data, replyData;
+	    QCString replyType;
+	    QDataStream arg(data, IO_WriteOnly);
+	    
+	    arg << audioInstruments;
+
+	    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+					  ROSEGARDEN_GUI_IFACE_NAME,
+					  "createRecordAudioFiles(QValueVector<Rosegarden::InstrumentId>)",
+					  data, replyType, replyData, true)) {
+		SEQUENCER_DEBUG << "RosegardenSequencer::record()"
+				<< " - can't call RosegardenGUI client for createNewAudioFiles"
+				<< endl;
+	    }
+
+	    QDataStream reply(replyData, IO_ReadOnly);
+	    if (replyType == "QValueVector<QString>") {
+		reply >> audioFileNames;
+	    } else {
+		SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
+				<< "unrecognised type returned for createNewAudioFiles" << endl;
+	    }
+	}
+
+	std::vector<Rosegarden::InstrumentId> armedInstrumentsVec;
+	std::vector<QString> audioFileNamesVec;
+	for (int i = 0; i < armedInstruments.size(); ++i) {
+	    armedInstrumentsVec.push_back(armedInstruments[i]);
+	}
+	for (int i = 0; i < audioFileNames.size(); ++i) {
+	    audioFileNamesVec.push_back(audioFileNames[i]);
+	}
 
         // Get the Sequencer to prepare itself for recording - if
         // this fails we stop.
         //
-        if (m_driver->record(Rosegarden::RECORD_MIDI) == false)
-        {
-            stop();
-            return 0;
-        }
-
-    }
-    else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
-                        << " - starting to record Audio" << endl;
-
-        QByteArray data, replyData;
-        QCString replyType;
-        QDataStream arg(data, IO_WriteOnly);
-
-        if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-                                      ROSEGARDEN_GUI_IFACE_NAME,
-                                      "createNewAudioFile()",
-                                      data, replyType, replyData, true))
-        {
-            SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-                            << " - can't call RosegardenGUI client"
-                            << endl;
-        }
-
-        QDataStream reply(replyData, IO_ReadOnly);
-        QString audioFileName;
-        if (replyType == "QString")
-        {
-            reply >> audioFileName;
-        }
-        else
-        {
-            SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
-                            << "unrecognised type returned" << endl;
-        }
-
-        // set recording filename
-        m_driver->setRecordingFilename(std::string(audioFileName.data()));
-
-        // set recording
-        if (m_driver->record(Rosegarden::RECORD_AUDIO) == false)
-        {
-            SEQUENCER_DEBUG << "couldn't start recording - "
-                            << "perhaps audio file path wrong?"
-                            << endl;
-
+        if (m_driver->record(Rosegarden::RECORD_ON,
+			     &armedInstrumentsVec,
+			     &audioFileNamesVec) == false) {
             stop();
             return 0;
         }
@@ -723,7 +741,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // Check for record toggle (punch out)
     //
-    if (m_transportStatus == RECORDING_MIDI || m_transportStatus == RECORDING_AUDIO)
+    if (m_transportStatus == RECORDING)
     {
         m_transportStatus = PLAYING;
         return true;
@@ -740,10 +758,8 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 	    (m_songPosition);
     }
 
-    if (m_transportStatus != RECORDING_MIDI &&
-        m_transportStatus != RECORDING_AUDIO &&
-        m_transportStatus != STARTING_TO_RECORD_MIDI &&
-        m_transportStatus != STARTING_TO_RECORD_AUDIO)
+    if (m_transportStatus != RECORDING &&
+        m_transportStatus != STARTING_TO_RECORD)
     {
         m_transportStatus = STARTING_TO_PLAY;
     }
@@ -1236,38 +1252,6 @@ RosegardenSequencerApp::sequencerAlive()
                     << "trying to tell GUI that we're alive" << endl;
 }
 
-void
-RosegardenSequencerApp::setAudioMonitoring(long value)
-{
-    bool bValue = (bool)value;
-    std::vector<unsigned int> inputPorts;
-
-    if (bValue &&
-            m_driver->getRecordStatus() == Rosegarden::ASYNCHRONOUS_MIDI)
-    {
-        m_driver->record(Rosegarden::ASYNCHRONOUS_AUDIO);
-        SEQUENCER_DEBUG << "RosegardenSequencerApp::setAudioMonitoring - "
-                        << "monitoring audio input" << endl;
-        return;
-    }
-
-    if (bValue == false &&
-            m_driver->getRecordStatus() == Rosegarden::ASYNCHRONOUS_AUDIO)
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencerApp::setAudioMonitoring - "
-                        << "monitoring MIDI input" << endl;
-        m_driver->record(Rosegarden::ASYNCHRONOUS_MIDI);
-    }
-    
-}
-
-void
-RosegardenSequencerApp::setAudioMonitoringInstrument(unsigned int id)
-{
-    m_driver->setAudioMonitoringInstrument(id);
-}
-
-
 Rosegarden::MappedRealTime
 RosegardenSequencerApp::getAudioPlayLatency()
 {
@@ -1505,8 +1489,7 @@ RosegardenSequencerApp::connectMappedObjects(int id1, int id2)
     // When this happens we need to resynchronise our audio processing,
     // and this is the easiest (and most brutal) way to do it.
     if (m_transportStatus == PLAYING ||
-	m_transportStatus == RECORDING_MIDI ||
-	m_transportStatus == RECORDING_AUDIO) {
+	m_transportStatus == RECORDING) {
 	Rosegarden::RealTime seqTime = m_driver->getSequencerTime();
 	jumpTo(seqTime.sec, seqTime.nsec);
     }
@@ -1582,8 +1565,7 @@ RosegardenSequencerApp::slotCheckForNewClients()
     // Don't do this check if any of these conditions hold
     //
     if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
+        m_transportStatus == RECORDING)
         return;
 
     if (m_driver->checkForNewClients())
@@ -1739,8 +1721,7 @@ RosegardenSequencerApp::checkExternalTransport()
 				     data);
 
 	    if (m_transportStatus == PLAYING ||
-		m_transportStatus != RECORDING_MIDI &&
-		m_transportStatus != RECORDING_AUDIO) {
+		m_transportStatus != RECORDING) {
 		jumpTo(pair.second.sec, pair.second.usec() * 1000);
 	    }
 

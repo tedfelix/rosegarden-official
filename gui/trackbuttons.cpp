@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
 
 #include "trackbuttons.h"
 #include "Track.h"
@@ -83,7 +84,7 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
                            int height,
                            int position,
                            const char *name):
-    VUMeter(parent, type, false, width, height, VUMeter::Horizontal, name),
+    VUMeter(parent, type, false, false, width, height, VUMeter::Horizontal, name),
     m_position(position), m_textHeight(12)
 {
     setAlignment(AlignCenter);
@@ -126,7 +127,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
       m_offset(4),
       m_cellSize(trackCellHeight),
       m_borderGap(1),
-      m_lastID(-1),
       m_trackLabelWidth(trackLabelWidth),
       m_popupItem(0),
       m_lastSelected(-1)
@@ -150,7 +150,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     m_layout->addStretch(20);
 
     connect(m_recordSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotSetRecordTrack(int)));
+            this, SLOT(slotToggleRecordTrack(int)));
 
     connect(m_muteSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotToggleMutedTrack(int)));
@@ -266,10 +266,14 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     // 'mute' and 'record' leds
     //
-    mute = new KLedButton(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
+
+    mute = new KLedButton(Rosegarden::GUIPalette::getColour
+			  (Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
     QToolTip::add(mute, i18n("Mute track"));
     hblayout->addWidget(mute);
-    record = new KLedButton(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RecordTrackLED), trackHBox);
+
+    record = new KLedButton(Rosegarden::GUIPalette::getColour
+			    (Rosegarden::GUIPalette::RecordMIDITrackLED), trackHBox);
     QToolTip::add(record, i18n("Record on this track"));
     hblayout->addWidget(record);
 
@@ -289,7 +293,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     m_muteLeds.push_back(mute);
     m_recordLeds.push_back(record);
-
 
     //
     // Track label
@@ -363,15 +366,6 @@ void TrackButtons::setButtonMapping(QObject* obj, Rosegarden::TrackId trackId)
 }
 
 
-
-// Return the track that's currently set for recording
-//
-//
-int TrackButtons::selectedRecordTrack()
-{
-    return m_lastID;
-}
-
 // Fill out the buttons with Instrument information
 //
 void
@@ -397,8 +391,10 @@ TrackButtons::populateButtons()
 
             // Set record button from track
             //
-            if (m_doc->getComposition().getRecordTrack() == track->getId())
-                setRecordTrack(track->getPosition());
+	    bool recording = 
+		m_doc->getComposition().isTrackRecording(track->getId());
+	    RG_DEBUG << "Track " << track->getId() << ": recording " << recording << endl;
+	    setRecordTrack(track->getPosition(), recording);
 
             // reset track tokens
             m_trackLabels[i]->setId(track->getId());
@@ -510,10 +506,6 @@ TrackButtons::slotUpdateTracks()
     unsigned int newNbTracks = comp.getNbTracks();
     Rosegarden::Track *track = 0;
 
-    track = comp.getTrackById(comp.getRecordTrack());
-    if (track)
-        setRecordTrack(track->getPosition());
-
     if (newNbTracks < m_tracks)
     {
         for (unsigned int i = m_tracks; i > newNbTracks; --i)
@@ -571,6 +563,32 @@ TrackButtons::slotUpdateTracks()
     }
     m_tracks = newNbTracks;
 
+    // Set record status and colour
+
+    for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
+
+	track = comp.getTrackByPosition(i);
+
+	if (track) {
+
+	    setRecordTrack(i, comp.isTrackRecording(track->getId()));
+
+	    Rosegarden::Instrument *ins =
+		m_doc->getStudio().getInstrumentById(track->getInstrument());
+
+	    if (ins &&
+		ins->getType() == Rosegarden::Instrument::Audio) {
+		m_recordLeds[i]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordAudioTrackLED));
+	    } else {
+		m_recordLeds[i]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordMIDITrackLED));
+	    }
+	}
+    }
+
     // repopulate the buttons
     populateButtons();
 }
@@ -580,42 +598,105 @@ TrackButtons::slotUpdateTracks()
 //
 //
 void
-TrackButtons::slotSetRecordTrack(int position)
+TrackButtons::slotToggleRecordTrack(int position)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *track = comp.getTrackByPosition(position);
 
-    setRecordTrack(position);
-    selectLabel(position);
+    bool state = !comp.isTrackRecording(track->getId());
 
-    comp.setSelectedTrack(track->getId());
-    emit newRecordButton();
+    Rosegarden::Instrument *instrument = m_doc->getStudio().getInstrumentById
+	(track->getInstrument());
+
+    bool audio = (instrument &&
+		  instrument->getType() == Rosegarden::Instrument::Audio);
+
+    if (audio && state) {
+	try {
+	    m_doc->getAudioFileManager().testAudioPath();
+	} catch(Rosegarden::AudioFileManager::BadAudioPathException e) {
+	    if (KMessageBox::warningContinueCancel
+		(this,
+		 i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
+		 i18n("Warning"),
+		 i18n("Set audio file path")) == KMessageBox::Continue) {
+		RosegardenGUIApp::self()->slotOpenAudioPathSettings();
+	    }
+	}
+    }
+
+    // can have any number of audio instruments armed, but only
+    // one track armed per instrument; can only have one midi track
+    // armed at all
+
+    // Need to copy this container, as we're implicitly modifying it
+    // through calls to comp.setTrackRecording
+
+    Rosegarden::Composition::recordtrackcontainer oldRecordTracks =
+	comp.getRecordTracks();
+
+    for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+	     oldRecordTracks.begin();
+	 i != oldRecordTracks.end(); ++i) {
+
+	if (!comp.isTrackRecording(*i)) {
+	    // We've already reset this one
+	    continue;
+	}
+
+	Rosegarden::Track *otherTrack = comp.getTrackById(*i);
+
+	if (otherTrack &&
+	    otherTrack != track) {
+	    
+	    bool unselect;
+
+	    if (audio) {
+		unselect = (otherTrack->getInstrument() == track->getInstrument());
+	    } else {
+		Rosegarden::Instrument *otherInstrument =
+		    m_doc->getStudio().getInstrumentById(otherTrack->getInstrument());
+
+		unselect = ((instrument && otherInstrument) &&
+			    (otherInstrument->getType() == instrument->getType()));
+	    }
+
+	    if (unselect) {
+		// found another record track of the same type (and
+		// with the same instrument, if audio): unselect that
+
+		//!!! should we tell the user, particularly for the
+		//audio case? might seem odd otherwise
+
+//		comp.setTrackRecording(*i, false);
+		int otherPos = otherTrack->getPosition();
+		setRecordTrack(otherPos, false);
+	    }
+	}
+    }
+
+    setRecordTrack(position, state);
+
+    emit recordButton(track->getId(), state);
 }
 
 void
-TrackButtons::setRecordTrack(int position)
+TrackButtons::setRecordTrack(int position, bool state)
 {
-    setRecordButtonDown(position);
-
-    // set and update
-    m_doc->getComposition().setRecordTrack(m_trackLabels[position]->getId());
+    setRecordButton(position, state);
+    m_doc->getComposition().setTrackRecording
+	(m_trackLabels[position]->getId(), state);
 }
 
 void
-TrackButtons::setRecordButtonDown(int position)
+TrackButtons::setRecordButton(int position, bool state)
 {
     if (position < 0 || position >= (int)m_tracks)
         return;
 
     KLedButton* led = m_recordLeds[position];
     
-    led->on();
-
-    if (m_lastID != position && m_lastID != -1) {
-        m_recordLeds[m_lastID]->off();
-    }
-
-    m_lastID = position;
+    led->setState(state ? KLed::On : KLed::Off);
 }
 
 void
@@ -954,11 +1035,6 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             if (inst->sendsProgramChange())
                 m_trackLabels[m_popupItem]->setAlternativeLabel(strtoqstr(inst->getProgramName()));
 
-            // Ensure that we set a record track properly
-            //
-            if (track->getId() == comp.getRecordTrack())
-                slotSetRecordTrack(track->getPosition());
-
         }
         else
             RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";
@@ -996,8 +1072,23 @@ TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
     {
         track = comp.getTrackByPosition(i);
 
-        if(track && track->getInstrument() == id)
+        if (track && track->getInstrument() == id) {
+
             m_trackLabels[i]->setAlternativeLabel(label);
+
+	    Rosegarden::Instrument *ins = m_doc->getStudio().
+                getInstrumentById(track->getInstrument());
+
+	    if (ins->getType() == Rosegarden::Instrument::Audio) {
+		m_recordLeds[i]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordAudioTrackLED));
+	    } else {
+		m_recordLeds[i]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordMIDITrackLED));
+	    }
+	}
     }
 }
 
@@ -1047,10 +1138,20 @@ TrackButtons::slotSynchroniseWithComposition()
 	    if (ins) instrumentName = strtoqstr(ins->getPresentationName());
 
             m_trackLabels[i]->getInstrumentLabel()->setText(instrumentName);
+
+	    setRecordButton(i, comp.isTrackRecording(track->getId()));
+
+	    if (ins->getType() == Rosegarden::Instrument::Audio) {
+		m_recordLeds[i]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordAudioTrackLED));
+	    } else {
+		m_recordLeds[i]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordMIDITrackLED));
+	    }
         }
     }
-
-    setRecordButtonDown(comp.getRecordTrack());
 }
 
 void

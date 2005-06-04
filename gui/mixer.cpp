@@ -26,6 +26,7 @@
 #include "studiocontrol.h"
 #include "constants.h"
 #include "audiopluginmanager.h"
+#include "sequencemanager.h"
 #include "rosestrings.h"
 
 #include "Studio.h"
@@ -250,10 +251,10 @@ AudioMixerWindow::populate()
     m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
-    // Total cols: is 2 for each fader, submaster or master, plus 2
-    // for the monitor strip, plus 1 for each spacer.
+    // Total cols: is 2 for each fader, submaster or master, plus 1
+    // for each spacer.
     QGridLayout *mainLayout = new QGridLayout
-	(m_mainBox, (instruments.size() + busses.size() + 1) * 3, 7);
+	(m_mainBox, (instruments.size() + busses.size()) * 3, 7);
 
     setCaption(i18n("Audio Mixer"));
 
@@ -313,7 +314,8 @@ AudioMixerWindow::populate()
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, rec.m_input != 0,
+	     20, 240);
 
 	QToolTip::add(rec.m_fader, i18n("Audio level"));
 	QToolTip::add(rec.m_meter, i18n("Audio level"));
@@ -462,7 +464,7 @@ AudioMixerWindow::populate()
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, false, 20, 240);
 
 	QToolTip::add(rec.m_fader, i18n("Audio level"));
 	QToolTip::add(rec.m_meter, i18n("Audio level"));
@@ -533,45 +535,7 @@ AudioMixerWindow::populate()
 	rec.m_fader = new RosegardenFader
 	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
 	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, 20, 240);
-
-	QToolTip::add(rec.m_fader, i18n("Audio record level"));
-	QToolTip::add(rec.m_meter, i18n("Audio record level"));
-
-	rec.m_muteButton = new QPushButton(m_mainBox);
-	rec.m_muteButton->setText("M");
-	rec.m_muteButton->setToggleButton(true);
-	rec.m_muteButton->setFlat(true);
-
-	QToolTip::add(rec.m_muteButton, i18n("Mute"));
-
-	QLabel *idLabel = new QLabel(i18n("Rec"), m_mainBox);
-	idLabel->setFont(boldFont);
-
-	mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col+1, Qt::AlignCenter);
-	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-	mainLayout->addWidget(rec.m_meter, 3, col+1, Qt::AlignCenter);
-
-//	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
-	rec.m_muteButton->hide();
-
-	m_monitor = rec;
-	updateFader(-1);
-
-	connect(rec.m_fader, SIGNAL(faderChanged(float)),
-		this, SLOT(slotFaderLevelChanged(float)));
-
-	connect(rec.m_muteButton, SIGNAL(clicked()),
-		this, SLOT(slotMuteChanged()));
-
-	mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col+2, col+2);
-
-	col += 3;
-
-	rec.m_fader = new RosegardenFader
-	    (Rosegarden::AudioLevel::LongFader, 20, 240, m_mainBox);
-	rec.m_meter = new AudioVUMeter
-	    (m_mainBox, VUMeter::AudioPeakHoldIEC, true, 20, 240);
+	    (m_mainBox, VUMeter::AudioPeakHoldIEC, true, false, 20, 240);
 
 	QToolTip::add(rec.m_fader, i18n("Audio master output level"));
 	QToolTip::add(rec.m_meter, i18n("Audio master output level"));
@@ -580,8 +544,8 @@ AudioMixerWindow::populate()
 	rec.m_muteButton->setText("M");
 	rec.m_muteButton->setToggleButton(true);
 	rec.m_muteButton->setFlat(true);
-
-	idLabel = new QLabel(i18n("Master"), m_mainBox);
+	
+	QLabel *idLabel = new QLabel(i18n("Master"), m_mainBox);
 	idLabel->setFont(boldFont);
 
 	mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col+1, Qt::AlignCenter);
@@ -657,13 +621,6 @@ AudioMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
     updateRouteButtons(id);
     updatePluginButtons(id);
     updateMiscButtons(id);
-
-    Rosegarden::Composition &comp = m_document->getComposition();
-    Rosegarden::TrackId recordTrackId = comp.getRecordTrack();
-    Rosegarden::Track *recordTrack = comp.getTrackById(recordTrackId);
-    if (recordTrack && recordTrack->getInstrument() == id) {
-	updateFader(-1); // sekrit code for monitor fader
-    }
 
     blockSignals(false);
 }
@@ -763,17 +720,9 @@ AudioMixerWindow::updateFader(int id)
 {
     if (id == -1) {
 
-	Rosegarden::Composition &comp = m_document->getComposition();
-	Rosegarden::TrackId recordTrackId = comp.getRecordTrack();
-	Rosegarden::Track *recordTrack = comp.getTrackById(recordTrackId);
-	if (recordTrack) {
-	    Rosegarden::InstrumentId instrumentId = recordTrack->getInstrument();
-	    Rosegarden::Instrument *instrument = m_studio->getInstrumentById
-		(instrumentId);
+	// This used to be the special code for updating the monitor fader.
+	return;
 
-            if (instrument) m_monitor.m_fader->setFader(instrument->getRecordLevel());
-	}
-	
     } else if (id >= (int)Rosegarden::AudioInstrumentBase) {
 
 	FaderRec &rec = m_faders[id];
@@ -1017,29 +966,6 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 	return;
     } 
 
-    if (m_monitor.m_fader == s) {
-	
-	Rosegarden::Composition &comp = m_document->getComposition();
-	Rosegarden::TrackId recordTrackId = comp.getRecordTrack();
-	Rosegarden::Track *recordTrack = comp.getTrackById(recordTrackId);
-	if (recordTrack) {
-	    Rosegarden::InstrumentId instrumentId = recordTrack->getInstrument();
-	    Rosegarden::Instrument *instrument = m_studio->getInstrumentById
-		(instrumentId);
-
-            if (instrument) {
-		instrument->setRecordLevel(dB);
-		Rosegarden::StudioControl::setStudioObjectProperty
-		    (Rosegarden::MappedObjectId(instrument->getMappedId()),
-		     Rosegarden::MappedAudioFader::FaderRecordLevel,
-		     Rosegarden::MappedObjectValue(dB));
-		emit instrumentParametersChanged(instrument->getId());
-	    }
-	}
-
-	return;
-    }
-
     int index = 1;
 
     for (FaderVector::iterator i = m_submasters.begin();
@@ -1189,20 +1115,22 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 	if (!rec.m_populated) continue;
 
 	Rosegarden::LevelInfo info;
-	if (!mapper->getInstrumentLevelForMixer(id, info)) continue;
 
-	// The values passed through are long-fader values
-	float dBleft = Rosegarden::AudioLevel::fader_to_dB
-	    (info.level, 127, Rosegarden::AudioLevel::LongFader);
+	if (mapper->getInstrumentLevelForMixer(id, info)) {
 
-	if (rec.m_stereoness) {
-	    float dBright = Rosegarden::AudioLevel::fader_to_dB
-		(info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+	    // The values passed through are long-fader values
+	    float dBleft = Rosegarden::AudioLevel::fader_to_dB
+		(info.level, 127, Rosegarden::AudioLevel::LongFader);
 
-	    rec.m_meter->setLevel(dBleft, dBright);
-
-	} else {
-	    rec.m_meter->setLevel(dBleft);
+	    if (rec.m_stereoness) {
+		float dBright = Rosegarden::AudioLevel::fader_to_dB
+		    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+		
+		rec.m_meter->setLevel(dBleft, dBright);
+		
+	    } else {
+		rec.m_meter->setLevel(dBleft);
+	    }
 	}
     }
 
@@ -1222,7 +1150,7 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 	rec.m_meter->setLevel(dBleft, dBright);
     }
 
-    updateMonitorMeter(mapper);
+    updateMonitorMeters(mapper);
 
     Rosegarden::LevelInfo masterInfo;
     if (mapper->getMasterLevel(masterInfo)) {
@@ -1237,17 +1165,56 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 }
 
 void
-AudioMixerWindow::updateMonitorMeter(SequencerMapper *mapper)
+AudioMixerWindow::updateMonitorMeters(SequencerMapper *mapper)
 {
-    Rosegarden::LevelInfo monitorInfo;
-    if (mapper->getRecordLevel(monitorInfo)) {
+    // only show monitor levels when quiescent or when recording (as
+    // record levels)
+    if (m_document->getSequenceManager() &&
+	m_document->getSequenceManager()->getTransportStatus() == PLAYING) {
+	return;
+    }
 
-	float dBleft = Rosegarden::AudioLevel::fader_to_dB
-	    (monitorInfo.level, 127, Rosegarden::AudioLevel::LongFader);
-	float dBright = Rosegarden::AudioLevel::fader_to_dB
-	    (monitorInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Composition::trackcontainer &tracks = comp.getTracks();
 
-	m_monitor.m_meter->setLevel(dBleft, dBright);
+    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+
+	Rosegarden::InstrumentId id = i->first;
+	FaderRec &rec = i->second;
+	if (!rec.m_populated) continue;
+
+	Rosegarden::LevelInfo info;
+
+	if (mapper->getInstrumentRecordLevel(id, info)) {
+
+	    bool armed = false;
+
+	    for (Rosegarden::Composition::trackcontainer::iterator ti =
+		     tracks.begin(); ti != tracks.end(); ++ti) {
+		if (ti->second->getInstrument() == id) {
+		    if (comp.isTrackRecording(ti->second->getId())) {
+			armed = true;
+			break;
+		    }
+		}
+	    }
+
+	    if (!armed) continue;
+
+	    // The values passed through are long-fader values
+	    float dBleft = Rosegarden::AudioLevel::fader_to_dB
+		(info.level, 127, Rosegarden::AudioLevel::LongFader);
+
+	    if (rec.m_stereoness) {
+		float dBright = Rosegarden::AudioLevel::fader_to_dB
+		    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+		
+		rec.m_meter->setRecordLevel(dBleft, dBright);
+		
+	    } else {
+		rec.m_meter->setRecordLevel(dBleft);
+	    }
+	}
     }
 }
 
@@ -1996,7 +1963,7 @@ MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
                            int width,
                            int height,
                            const char *name):
-    VUMeter(parent, type, false, width, height, VUMeter::Vertical, name)
+    VUMeter(parent, type, false, false, width, height, VUMeter::Vertical, name)
 {
     setAlignment(AlignCenter);
 }

@@ -558,16 +558,23 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         // Get and set the record track
         //
-        int recordTrack = -1;
         QString recordStr = atts.value("recordtrack");
-
         if (recordStr) {
-            recordTrack = recordStr.toInt();
+	    getComposition().setTrackRecording(recordStr.toInt(), true);
         }
 
-        getComposition().setRecordTrack(recordTrack);
+	QString recordPlStr = atts.value("recordtracks");
+	if (recordPlStr) {
+	    RG_DEBUG << "Record tracks: " << recordPlStr << endl;
+	    QStringList recordList = QStringList::split(',', recordPlStr);
+	    for (QStringList::iterator i = recordList.begin();
+		 i != recordList.end(); ++i) {
+		RG_DEBUG << "Record track: " << (*i).toInt() << endl;
+		getComposition().setTrackRecording((*i).toInt(), true);
+	    }
+	}
 
-        // Get and ste the position pointer
+        // Get and set the position pointer
         //
         int position = 0;
         QString positionStr = atts.value("pointer");

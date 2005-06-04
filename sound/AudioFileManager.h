@@ -32,6 +32,7 @@
 #include "XmlExportable.h"
 #include "PeakFileManager.h"
 #include "PeakFile.h"
+#include "Exception.h"
 
 // AudioFileManager loads and maps audio files to their
 // internal references (ids).  A point of contact for
@@ -39,9 +40,13 @@
 // use this class to pick up the AudioFile references,
 // editing the AudioFiles in a Composition will be
 // made through this manager.
-//
-//
-//
+
+// This is in the sound library because it's so closely
+// connected to other sound classes like the AudioFile
+// ones.  However, the audio file manager itself within
+// Rosegarden is stored in the GUI process.  This class
+// is not (and should not be) used elsewhere within the
+// sound or sequencer libraries.
 
 namespace Rosegarden
 {
@@ -55,6 +60,22 @@ public:
     AudioFileManager();
     virtual ~AudioFileManager();
     
+    class BadAudioPathException : public Exception
+    {
+    public:
+	BadAudioPathException(std::string path) :
+	    Exception("Bad audio file path"), m_path(path) { }
+	BadAudioPathException(std::string path, std::string file, int line) :
+	    Exception("Bad audio file path", file, line), m_path(path) { }
+
+	~BadAudioPathException() throw() { }
+
+	std::string getPath() const { return m_path; }
+
+    private:
+	std::string m_path;
+    };
+
 private:
     AudioFileManager(const AudioFileManager &aFM);
     AudioFileManager& operator=(const AudioFileManager &);
@@ -111,9 +132,17 @@ public:
     std::string getAudioPath() const { return m_audioPath; }
     void setAudioPath(const std::string &path);
 
+    // Throw if the current audio path does not exist or is not writable
+    //
+    void testAudioPath() throw(BadAudioPathException);
+
     // Get a new audio filename at the audio record path
     //
-    std::string createRecordingAudioFile();
+    AudioFile *createRecordingAudioFile();
+
+    // Get a set of new audio filenames at the audio record path
+    //
+    std::vector<std::string> createRecordingAudioFiles(unsigned int number);
 
     // return the last file in the vector - the last created
     //
@@ -124,7 +153,6 @@ public:
     virtual std::string toXmlString();
 
     // Convenience function generate all previews on the audio file.
-    // 
     //
     void generatePreviews();
 

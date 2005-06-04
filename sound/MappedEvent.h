@@ -251,15 +251,15 @@ public:
     // Audio MappedEvent shortcut constructor
     //
     MappedEvent(InstrumentId id,
-                MidiByte audioID,
+                unsigned short audioID,
                 const RealTime &eventTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
          m_trackId(0),
          m_instrument(id),
          m_type(Audio),
-         m_data1(audioID),
-         m_data2(0),
+         m_data1(audioID % 256),
+         m_data2(audioID / 256),
          m_eventTime(eventTime),
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
@@ -422,16 +422,13 @@ public:
     void setData1(MidiByte d1) { m_data1 = d1; }
     void setData2(MidiByte d2) { m_data2 = d2; }
 
-    // Also use the pitch as the Audio file ID
-    //
-    void setAudioID(MidiByte id) { m_data1 = id; }
-    int getAudioID() const { return m_data1; }
+    void setAudioID(unsigned short id) { m_data1 = id % 256; m_data2 = id / 256; }
+    int getAudioID() const { return m_data1 + 256 * m_data2; }
 
     // A sample doesn't have to be played from the beginning.  When
     // passing an Audio event this value may be set to indicate from
     // where in the sample it should be played.  Duration is measured
     // against total sounding length (not absolute position).
-    //
     //
     void setAudioStartMarker(const RealTime &aS)
         { m_audioStartMarker = aS; }

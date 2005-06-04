@@ -65,7 +65,7 @@ public:
     ~AudioMixerWindow();
 
     void updateMeters(SequencerMapper *mapper);
-    void updateMonitorMeter(SequencerMapper *mapper);
+    void updateMonitorMeters(SequencerMapper *mapper);
 
 signals:
     void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);

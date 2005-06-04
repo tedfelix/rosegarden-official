@@ -69,7 +69,9 @@ public:
 
     virtual MappedComposition *getMappedComposition();
     
-    virtual bool record(RecordStatus recordStatus);
+    virtual bool record(RecordStatus recordStatus,
+			const std::vector<InstrumentId> *armedInstruments = 0,
+			const std::vector<QString> *audioFileNames = 0);
 
     virtual void startClocks();
     virtual void startClocksApproved(); // called by JACK driver in sync mode
@@ -490,6 +492,10 @@ private:
 #endif
 
     Scavenger<RunnablePluginInstance> m_pluginScavenger;
+
+    //!!!mtr -- hoist to SoundDriver w/setter?
+    typedef std::set<Rosegarden::InstrumentId> InstrumentSet;
+    InstrumentSet m_recordingInstruments;
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;

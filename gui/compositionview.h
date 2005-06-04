@@ -173,8 +173,8 @@ public:
     virtual void finalizeSelectionRect() = 0;
     virtual QRect getSelectionContentsRect() = 0;
 
-    virtual void setRecordingItem(const CompositionItem&) = 0;
-    virtual void clearRecordingItem() = 0;
+    virtual void addRecordingItem(const CompositionItem&) = 0;
+    virtual void removeRecordingItem(const CompositionItem&) = 0;
 
     virtual void startMove(const CompositionItem&) = 0;
     virtual void startMoveSelection() = 0;
@@ -221,8 +221,8 @@ public:
     virtual void finalizeSelectionRect();
     virtual QRect getSelectionContentsRect();
 
-    virtual void setRecordingItem(const CompositionItem&);
-    virtual void clearRecordingItem();
+    virtual void addRecordingItem(const CompositionItem&);
+    virtual void removeRecordingItem(const CompositionItem &);
 
     virtual void startMove(const CompositionItem&);
     virtual void startMoveSelection();
@@ -287,7 +287,9 @@ protected:
     Rosegarden::SegmentSelection m_selectedSegments;
     Rosegarden::SegmentSelection m_tmpSelectedSegments;
     Rosegarden::SegmentSelection m_previousTmpSelectedSegments;
-    Rosegarden::Segment*         m_recordingSegment;
+
+    typedef std::set<Rosegarden::Segment *> RecordingSegmentSet;
+    RecordingSegmentSet          m_recordingSegments;
 
     AudioPreviewThread*          m_audioPreviewThread;
 

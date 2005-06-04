@@ -101,6 +101,7 @@ public:
     // audio file.
     //
     virtual bool appendSamples(const std::string &buffer);
+    virtual bool appendSamples(const char *buffer, unsigned int samples);
 
     // Get the length of the sample in Seconds/Microseconds
     //

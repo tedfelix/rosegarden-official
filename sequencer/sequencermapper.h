@@ -44,10 +44,6 @@ public:
 	m_sequencerDataBlock->addRecordedEvents(mC);
     }
 
-    void setRecordLevel(const Rosegarden::LevelInfo &info) {
-	m_sequencerDataBlock->setRecordLevel(info);
-    }
-
     void setTrackLevel(Rosegarden::TrackId track, const Rosegarden::LevelInfo &info) {
 	m_sequencerDataBlock->setTrackLevel(track, info);
     }
@@ -55,6 +51,11 @@ public:
     void setInstrumentLevel(Rosegarden::InstrumentId id,
 			    const Rosegarden::LevelInfo &info) {
 	m_sequencerDataBlock->setInstrumentLevel(id, info);
+    }
+
+    void setInstrumentRecordLevel(Rosegarden::InstrumentId id,
+				  const Rosegarden::LevelInfo &info) {
+	m_sequencerDataBlock->setInstrumentRecordLevel(id, info);
     }
 
     void setSubmasterLevel(int submaster,

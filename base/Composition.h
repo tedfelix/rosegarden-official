@@ -77,6 +77,10 @@ public:
     typedef triggersegmentcontainer::iterator triggersegmentcontaineriterator;
     typedef triggersegmentcontainer::const_iterator triggersegmentcontainerconstiterator;
 
+    typedef std::set<TrackId> recordtrackcontainer;
+    typedef recordtrackcontainer::iterator recordtrackiterator;
+    typedef recordtrackcontainer::const_iterator recordtrackconstiterator;
+
     Composition();
     virtual ~Composition();
 
@@ -126,9 +130,9 @@ public:
 
     TrackId getMaxTrackId() const;
 
-    TrackId getRecordTrack() const { return m_recordTrack; }
-
-    void setRecordTrack(TrackId recordTrack) { m_recordTrack = recordTrack; }
+    const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }
+    void setTrackRecording(TrackId track, bool recording);
+    bool isTrackRecording(TrackId track) const;
 
     // Get and set Solo Track
     //
@@ -800,9 +804,9 @@ protected:
     trackcontainer                    m_tracks;
     segmentcontainer                  m_segments;
 
-    // The track we can record on
+    // The tracks we are armed for record on
     //
-    Rosegarden::TrackId               m_recordTrack;
+    recordtrackcontainer              m_recordTracks;
 
     // Are we soloing and if so which Track?
     //

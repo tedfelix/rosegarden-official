@@ -75,6 +75,8 @@ public:
                             QWidget *parent=0,
                             const char *name=0);
 
+    void showAudioPage();
+
     void selectMetadata(QString name);
 };
 

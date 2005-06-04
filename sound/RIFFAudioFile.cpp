@@ -91,6 +91,13 @@ RIFFAudioFile::appendSamples(const std::string &buffer)
     return true;
 }
 
+bool
+RIFFAudioFile::appendSamples(const char *buf, unsigned int frames)
+{
+    putBytes(m_outFile, buf, frames * m_bytesPerFrame);
+    return true;
+}
+
 // scan on from a descriptor position
 bool
 RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)

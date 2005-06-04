@@ -135,7 +135,7 @@ public slots:
     /*
      * Destroys same
      */
-    void slotDeleteRecordingSegmentItem();
+    void slotDeleteRecordingSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * c.f. what we have in rosegardenguiview.h

@@ -228,8 +228,7 @@ SequenceManager::play()
     // If already playing or recording then stop
     //
     if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO )
+        m_transportStatus == RECORDING )
         {
             stopping();
             return true;
@@ -396,8 +395,7 @@ SequenceManager::stop()
 {
     // Toggle off the buttons - first record
     //
-    if (m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
+    if (m_transportStatus == RECORDING)
     {
         m_transport->RecordButton()->setOn(false);
         m_transport->MetronomeButton()->
@@ -441,17 +439,13 @@ SequenceManager::stop()
     m_transportStatus = STOPPED;
 
     // if we're recording MIDI or Audio then tidy up the recording Segment
-    if (status == RECORDING_MIDI)
+    if (status == RECORDING)
     {
+	//!!! MTR check this
         m_doc->stopRecordingMidi();
-
-        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording MIDI\n";
-    }
-
-    if (status == RECORDING_AUDIO)
-    {
         m_doc->stopRecordingAudio();
-        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording audio\n";
+
+        SEQMAN_DEBUG << "SequenceManager::stop() - stopped recording\n";
     }
 
     // always untoggle the play button at this stage
@@ -580,23 +574,34 @@ SequenceManager::record(bool toggled)
 
     bool punchIn = false; // are we punching in?
 
-    // Rather clumsy additional check for audio subsys when we start
-    // recording - once we enforce audio subsystems then this will
-    // become redundant.
-    //
-    if (!(m_soundDriverStatus & AUDIO_OK)) {
-        int rID = comp.getRecordTrack();
-        InstrumentId instrId =
-            comp.getTrackById(rID)->getInstrument();
+    // If we have any audio tracks armed, then we need to check for
+    // a valid audio record path and a working audio subsystem before
+    // we go any further
+
+    const Rosegarden::Composition::recordtrackcontainer &recordTracks =
+	comp.getRecordTracks();
+
+    for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+	     recordTracks.begin();
+	 i != recordTracks.end(); ++i) {
+
+	Rosegarden::Track *track = comp.getTrackById(*i);
+        InstrumentId instrId = track->getInstrument();
         Instrument *instr = studio.getInstrumentById(instrId);
 
-        if (!instr || instr->getType() == Instrument::Audio) {
-            m_transport->RecordButton()->setOn(false);
-            throw(Exception("Audio subsystem is not available - can't record audio"));
-        }
+	if (instr && instr->getType() == Instrument::Audio) {
+	    if (!m_doc || !(m_soundDriverStatus & AUDIO_OK)) {
+		m_transport->RecordButton()->setOn(false);
+		throw(Exception("Audio subsystem is not available - can't record audio"));
+	    }
+	    // throws BadAudioPathException if path is not valid:
+	    m_doc->getAudioFileManager().testAudioPath();
+	    break;
+	}
     }
 
-    if (toggled) {
+    if (toggled) { // preparing record or punch-in record
+
         if (m_transportStatus == RECORDING_ARMED) {
             SEQMAN_DEBUG << "SequenceManager::record - unarming record\n";
             m_transportStatus = STOPPED;
@@ -619,8 +624,7 @@ SequenceManager::record(bool toggled)
             return;
         }
 
-        if (m_transportStatus == RECORDING_MIDI ||
-            m_transportStatus == RECORDING_AUDIO) {
+        if (m_transportStatus == RECORDING) {
             SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
 
             QByteArray data;
@@ -653,18 +657,32 @@ SequenceManager::record(bool toggled)
 
 punchin:
 
-        // Get the record track and check the Instrument type
-        int rID = comp.getRecordTrack();
-        InstrumentId inst =
-            comp.getTrackById(rID)->getInstrument();
+        // Get the record tracks and check we have a record instrument
 
-        // If no matching record instrument
-        //
-        if (studio.getInstrumentById(inst) == 0) {
-            m_transport->RecordButton()->setDown(false);
-            throw(Exception("No Record instrument selected"));
-        }
+	bool haveInstrument = false;
+	bool haveAudioInstrument = false;
 
+	for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+		 comp.getRecordTracks().begin();
+	     i != comp.getRecordTracks().end(); ++i) {
+	    
+	    InstrumentId iid =
+		comp.getTrackById(*i)->getInstrument();
+
+	    Instrument *inst = studio.getInstrumentById(iid);
+	    if (inst) {
+		haveInstrument = true;
+		if (inst->getType() == Instrument::Audio) {
+		    haveAudioInstrument = true;
+		    break;
+		}
+	    }
+	}
+	
+	if (!haveInstrument) {
+	    m_transport->RecordButton()->setDown(false);
+	    throw(Exception("No Record instrument selected"));
+	}
 
         // may throw an exception
         checkSoundDriverStatus();
@@ -682,7 +700,7 @@ punchin:
         // if we're not take off the number of count-in bars and start 
         // recording.
         //
-        if(comp.isLooping())
+        if (comp.isLooping())
             m_doc->setPointerPosition(comp.getLoopStart());
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
@@ -694,54 +712,11 @@ punchin:
 
 	m_doc->setRecordStartTime(m_doc->getComposition().getPosition());
 
-        // Some locals
-        //
-        TransportStatus recordType;
-
-        switch (studio.getInstrumentById(inst)->getType()) {
-
-        case Instrument::Midi:
-	case Instrument::SoftSynth:
-            recordType = STARTING_TO_RECORD_MIDI;
-            SEQMAN_DEBUG << "SequenceManager::record() - starting to record MIDI\n";
-            break;
-
-        case Instrument::Audio: {
-
-//             AudioFileManager &afm = m_doc->getAudioFileManager();
-//             QString mountPoint = KIO::findPathMountPoint(strtoqstr(afm.getAudioPath()));
-//             KDiskFreeSp * job = new KDiskFreeSp;
-//             connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
-//                                                 unsigned long)),
-//                     this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
-//                                                    unsigned long)));
-//             m_gotDiskSpaceResult = false;
-//             job->readDF(mountPoint);
-//             while (!m_gotDiskSpaceResult) {
-//                 rgapp::refreshGUI(50);
-//             }
-            
-
-            // Check the disk space available is within current
-            // audio recording limit
-            //
-//             config->setGroup(SequencerOptionsConfigGroup);
-
+	if (haveAudioInstrument) {
 	    // Ask the document to update its record latencies so as to
 	    // do latency compensation when we stop
 	    m_doc->updateAudioRecordLatency();
-
-            recordType = STARTING_TO_RECORD_AUDIO;
-            SEQMAN_DEBUG << "SequenceManager::record() - "
-                         << "starting to record Audio\n";
-            break;
-        }
-            
-        default:
-            SEQMAN_DEBUG << "SequenceManager::record() - unrecognised instrument type " << int(studio.getInstrumentById(inst)->getType()) << " for instrument " << inst << "\n";
-            return;
-            break;
-        }
+	}
 
         // set the buttons
         m_transport->RecordButton()->setOn(true);
@@ -758,7 +733,7 @@ punchin:
         //
         m_transport->setTempo(comp.getTempo());
 
-        // The arguments for the Sequencer  - record is similar to playback,
+        // The arguments for the Sequencer - record is similar to playback,
         // we must being playing to record.
         //
         RealTime startPos =
@@ -817,7 +792,7 @@ punchin:
 	}
 
         // record type
-        streamOut << (long)recordType;
+        streamOut << (long)STARTING_TO_RECORD;
     
         // Send Play to the Sequencer
         if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
@@ -833,8 +808,9 @@ punchin:
         streamIn >> result;
   
         if (result) {
+
             // completed successfully 
-            m_transportStatus = recordType;
+            m_transportStatus = STARTING_TO_RECORD;
 
 	    // Create the countdown timer dialog to show recording time
 	    // remaining.  (Note (dmm) this has changed, and it now reports
@@ -848,23 +824,6 @@ punchin:
 	    // set seconds to total possible time, initially
 	    Rosegarden::RealTime rtd = comp.getElapsedRealTime(d);
 	    int seconds = rtd.sec;
-
-	    /* #1045380 ("minutes of audio recording" just insanely
-	       confusing) -- No, let's not use this.  We should count
-	       to the end of the composition in both cases.
-
-	    // if we're recording audio, and if the audio recording limit is
-	    // less than the total available time, adjust the time down to the
-	    // audio limit
-	    if (recordType == STARTING_TO_RECORD_AUDIO) {
-		KConfig* config = kapp->config();
-		config->setGroup(SequencerOptionsConfigGroup);
-
-		int s = 60 * 
-		    (config->readNumEntry("audiorecordminutes", 5));
-		if (s < seconds) seconds = s;
-	    }
-	    */
 
 	    // re-initialise
 	    m_countdownDialog->setTotalTime(seconds);
@@ -886,12 +845,9 @@ punchin:
             //
             m_transportStatus = STOPPED;
 
-            if (recordType == STARTING_TO_RECORD_AUDIO) {
+            if (haveAudioInstrument) {
                 throw(Exception("Couldn't start recording audio.\nPlease set a valid file path in the Document Properties\n(Composition menu -> Edit Document Properties -> Audio)."));
-            } else {
-                throw(Exception("Couldn't start recording MIDI"));
             }
-
         }
     }
 }
@@ -964,8 +920,10 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 	    if ((*i)->getType() == 
 		MappedEvent::AudioGeneratePreview)
 	    {
-		m_doc->finalizeAudioFile(
-		    AudioFileId((*i)->getData1()));
+		SEQMAN_DEBUG << "Received AudioGeneratePreview: data1 is " << int((*i)->getData1()) << ", data2 " << int((*i)->getData2()) << ", instrument is " << (*i)->getInstrument() << endl;
+
+		m_doc->finalizeAudioFile((int)(*i)->getData1() +
+					 (int)(*i)->getData2() * 256);
 	    }
 	    
 	    if ((*i)->getType() ==
@@ -983,28 +941,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 	    }
 
             if (m_transportStatus == PLAYING ||
-                m_transportStatus == RECORDING_MIDI ||
-                m_transportStatus == RECORDING_AUDIO)
+                m_transportStatus == RECORDING)
             {
 		if ((*i)->getType() == MappedEvent::SystemFailure) {
 
 		    SEQMAN_DEBUG << "Failure of some sort..." << endl;
-
-                    // If we get any sort of audio failure and we're recording
-                    // audio then assume we want to stop.  Usually this'll
-                    // ruin our recording.
-                    //
-                    /*
-                    if (m_transportStatus == RECORDING_AUDIO)
-                    {
-                        stopping();
-
-                        KMessageBox::error(
-                            dynamic_cast<QWidget*>
-                            (m_doc->parent())->parentWidget(),
-                            i18n("Audio glitch during recording.  Stopping."));
-                    }
-                    */
 
 		    bool handling = true;
 
@@ -1218,8 +1159,7 @@ SequenceManager::setPlayStartTime(const timeT &time)
     // If already playing then stop
     //
     if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO )
+        m_transportStatus == RECORDING )
     {
         stopping();
         return;

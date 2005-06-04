@@ -107,7 +107,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_modified(false),
       m_autoSaved(false),
       m_audioPreviewThread(&m_audioFileManager),
-      m_recordSegment(0),
+      m_recordMIDISegment(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_pluginManager(pluginManager),
       m_audioRecordLatency(0, 0),
@@ -1372,49 +1372,70 @@ RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
 // Event-rich, Composition-inserted, mouthwateringly-ripe Segment.
 //
 void
-RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
-                                     TransportStatus status)
+RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
+    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi" << endl;
+
     // Just create a new record Segment if we don't have one already.
-    // Make sure we don't recreate the m_recordSegment if it's already
+    // Make sure we don't recreate the record segment if it's already
     // freed.
     //
-    if (m_recordSegment == 0 && status == RECORDING_MIDI) {
 
-        m_recordSegment = new Segment();
-        m_recordSegment->setTrack(m_composition.getRecordTrack());
-	m_recordSegment->setStartTime(m_recordStartTime);
+    Rosegarden::Track *midiRecordTrack = 0;
+
+    const Rosegarden::Composition::recordtrackcontainer &tr =
+	getComposition().getRecordTracks();
+
+    for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+	     tr.begin(); i != tr.end(); ++i) {
+	Rosegarden::TrackId tid = (*i);
+	Rosegarden::Track *track = getComposition().getTrackById(tid);
+	if (track) {
+	    Rosegarden::Instrument *instrument = 
+		m_studio.getInstrumentById(track->getInstrument());
+	    if (instrument->getType() == Rosegarden::Instrument::Midi) {
+		midiRecordTrack = track;
+		break;
+	    }
+	}
+    }
+
+    if (!midiRecordTrack) return;
+
+    if (m_recordMIDISegment == 0) {
+
+        m_recordMIDISegment = new Segment();
+        m_recordMIDISegment->setTrack(midiRecordTrack->getId());
+	m_recordMIDISegment->setStartTime(m_recordStartTime);
 
         // Set an appropriate segment label
         //
-        Rosegarden::Track *track =
-            m_composition.getTrackById(m_composition.getRecordTrack());
         std::string label = "";
 
-        if (track) {
-            if (track->getLabel() == "") {
+        if (midiRecordTrack) {
+            if (midiRecordTrack->getLabel() == "") {
                 Rosegarden::Instrument *instr =
-                    m_studio.getInstrumentById(track->getInstrument());
+                    m_studio.getInstrumentById(midiRecordTrack->getInstrument());
 
                 if (instr) {
                     label = m_studio.getSegmentName(instr->getId());
                 }
             } else {
-                label = track->getLabel();
+                label = midiRecordTrack->getLabel();
 	    }
 
 	    label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
         }
 
-        m_recordSegment->setLabel(label);
+        m_recordMIDISegment->setLabel(label);
     }
 
-    if (mC.size() > 0 && m_recordSegment) 
+    if (mC.size() > 0 && m_recordMIDISegment) 
     { 
         Rosegarden::MappedComposition::const_iterator i;
         Rosegarden::Event *rEvent = 0;
         timeT duration, absTime;
-	timeT updateFrom = m_recordSegment->getEndTime();
+	timeT updateFrom = m_recordMIDISegment->getEndTime();
 	bool haveNotes = false;
 
         // process all the incoming MappedEvents
@@ -1479,8 +1500,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 			    Rosegarden::Event *newEv = new Rosegarden::Event
 				(*oldEv, oldEv->getAbsoluteTime(), duration);
 			    newEv->set<Int>(RECORDED_CHANNEL, channel);
-			    m_recordSegment->erase(mi->second);
-			    m_recordSegment->insert(newEv);
+			    m_recordMIDISegment->erase(mi->second);
+			    m_recordMIDISegment->insert(newEv);
 			    pm->erase(mi);
 
 			    if (updateFrom > newEv->getAbsoluteTime()) {
@@ -1575,19 +1596,19 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             // Set the start index and then insert into the Composition
             // (if we haven't before)
             //
-            if (m_recordSegment->size() == 0 && !m_composition.contains(m_recordSegment))
+            if (m_recordMIDISegment->size() == 0 && !m_composition.contains(m_recordMIDISegment))
             {
-                m_recordSegment->setStartTime (m_composition.getBarStartForTime(absTime));
-                m_recordSegment->fillWithRests(absTime);
-                m_composition.addSegment(m_recordSegment);
+                m_recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
+                m_recordMIDISegment->fillWithRests(absTime);
+                m_composition.addSegment(m_recordMIDISegment);
             }
 
             // Now insert the new event
             //
 	    if (isNoteOn) {
-		m_noteOnEvents[port][channel][pitch] = m_recordSegment->insert(rEvent);
+		m_noteOnEvents[port][channel][pitch] = m_recordMIDISegment->insert(rEvent);
 	    } else {
-		m_recordSegment->insert(rEvent);
+		m_recordMIDISegment->insert(rEvent);
 	    }
         }
 
@@ -1600,31 +1621,33 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 	    if (tracking == 1) { // notation
 		
 		EventQuantizeCommand *command = new EventQuantizeCommand
-		    (*m_recordSegment,
+		    (*m_recordMIDISegment,
 		     updateFrom,
-		     m_recordSegment->getEndTime(),
+		     m_recordMIDISegment->getEndTime(),
 		     "Notation Options",
 		     true);
 		// don't add to history
 		command->execute();
 	    }
 
-	    emit recordingSegmentUpdated(m_recordSegment, updateFrom);
+	    emit recordMIDISegmentUpdated(m_recordMIDISegment, updateFrom);
 	}
     }
 }
 
 void
-RosegardenGUIDoc::updateRecordingSegment()
+RosegardenGUIDoc::updateRecordingMIDISegment()
 {
-    // We assume the transport status is RECORDING_MIDI or else we
-    // wouldn't be here
+    RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
 
-    if (!m_recordSegment) {
+    if (!m_recordMIDISegment) {
 	// make this call once to create one
-	insertRecordedMidi(Rosegarden::MappedComposition(), RECORDING_MIDI);
+	insertRecordedMidi(Rosegarden::MappedComposition());
+	if (!m_recordMIDISegment) return; // not recording any MIDI
     }
     
+    RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
+
     NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
  	 mi != m_noteOnEvents.end(); ++mi)
@@ -1641,9 +1664,9 @@ RosegardenGUIDoc::updateRecordingSegment()
 	    (*ev, ev->getAbsoluteTime(),
 	     m_composition.getPosition() - ev->getAbsoluteTime());
 
-	m_recordSegment->erase(pm->second);
+	m_recordMIDISegment->erase(pm->second);
 	tweakedNoteOnEvents[mi->first][cm->first][pm->first] = 
-		m_recordSegment->insert(newEv);
+		m_recordMIDISegment->insert(newEv);
     }
 
     m_noteOnEvents = tweakedNoteOnEvents;
@@ -1651,7 +1674,7 @@ RosegardenGUIDoc::updateRecordingSegment()
     // update this segment on the GUI
     RosegardenGUIView *v;
     for (v = m_viewList.first(); v != 0; v = m_viewList.next()) {
-	v->showRecordingSegmentItem(m_recordSegment);
+	v->showRecordingSegmentItem(m_recordMIDISegment);
     }
 }
 
@@ -1661,16 +1684,20 @@ RosegardenGUIDoc::updateRecordingSegment()
 void
 RosegardenGUIDoc::stopRecordingMidi()
 {
+    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi" << endl;
+
     // If we've created nothing then do nothing with it
     //
-    if (m_recordSegment == 0)
+    if (m_recordMIDISegment == 0)
         return;
+
+    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have record MIDI segment" << endl;
 
     // otherwise do something with it
     //
     RosegardenGUIView *w;
     for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
-        w->deleteRecordingSegmentItem();
+        w->deleteRecordingSegmentItem(m_recordMIDISegment);
     }
 
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin(); 
@@ -1685,16 +1712,16 @@ RosegardenGUIDoc::stopRecordingMidi()
 	Rosegarden::Event *oldEv = *pm->second;
 	Rosegarden::Event *newEv = new Rosegarden::Event
 	    (*oldEv, oldEv->getAbsoluteTime(),
-	     m_recordSegment->getEndTime() - oldEv->getAbsoluteTime());
-	m_recordSegment->erase(pm->second);
-	m_recordSegment->insert(newEv);
+	     m_recordMIDISegment->getEndTime() - oldEv->getAbsoluteTime());
+	m_recordMIDISegment->erase(pm->second);
+	m_recordMIDISegment->insert(newEv);
     }
     m_noteOnEvents.clear();
         
     // the record segment will have already been added to the
     // composition if there was anything in it; otherwise we
     // don't need to do so
-    if (m_recordSegment->getComposition() != 0) {
+    if (m_recordMIDISegment->getComposition() != 0) {
 
 	// Quantize for notation only -- doesn't affect performance timings.
 
@@ -1702,28 +1729,28 @@ RosegardenGUIDoc::stopRecordingMidi()
 
 	command->addCommand
 	    (new EventQuantizeCommand
-	     (*m_recordSegment,
-	      m_recordSegment->getStartTime(),
-	      m_recordSegment->getEndTime(),
+	     (*m_recordMIDISegment,
+	      m_recordMIDISegment->getStartTime(),
+	      m_recordMIDISegment->getEndTime(),
 	      "Notation Options",
 	      true));
 
 	command->addCommand
 	    (new AdjustMenuNormalizeRestsCommand
-	     (*m_recordSegment,
-	      m_recordSegment->getComposition()->getBarStartForTime
-	      (m_recordSegment->getStartTime()),
-	      m_recordSegment->getComposition()->getBarEndForTime
-	      (m_recordSegment->getEndTime())));
+	     (*m_recordMIDISegment,
+	      m_recordMIDISegment->getComposition()->getBarStartForTime
+	      (m_recordMIDISegment->getStartTime()),
+	      m_recordMIDISegment->getComposition()->getBarEndForTime
+	      (m_recordMIDISegment->getEndTime())));
 	
 	command->addCommand
 	    (new SegmentRecordCommand
-	     (m_recordSegment));
+	     (m_recordMIDISegment));
 
 	m_commandHistory->addCommand(command);
     }
 
-    m_recordSegment = 0;
+    m_recordMIDISegment = 0;
 
     slotUpdateAllViews(0);
 }
@@ -2045,91 +2072,123 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     delete mD;
 }
 
-std::string
-RosegardenGUIDoc::createNewAudioFile()
+//!!!mtr std::string
+//RosegardenGUIDoc::createNewAudioFile()
+//{
+//    return m_audioFileManager.createRecordingAudioFile();
+//}
+
+void
+RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
+					Rosegarden::AudioFileId auid)
 {
-    return m_audioFileManager.createRecordingAudioFile();
+    //!!! mtr this is called from RosegardenGUIApp::createRecordAudioFiles.
+    // how can we be sure the segments don't leak?
+    
+    Rosegarden::Segment *recordSegment = new Segment
+	(Rosegarden::Segment::Audio);
+
+    // Find the right track
+
+    Rosegarden::Track *recordTrack = 0;
+    
+    const Rosegarden::Composition::recordtrackcontainer &tr =
+	getComposition().getRecordTracks();
+
+    for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+	     tr.begin(); i != tr.end(); ++i) {
+	Rosegarden::TrackId tid = (*i);
+	Rosegarden::Track *track = getComposition().getTrackById(tid);
+	if (track) {
+	    if (iid == track->getInstrument()) {
+		recordTrack = track;
+		break;
+	    }
+	}
+    }
+
+    if (!recordTrack) {
+	RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment(" << iid << ", "
+		 << auid << "): No record-armed track found for instrument!"
+		 << endl;
+	return;
+    }
+
+    recordSegment->setTrack(recordTrack->getId());
+    recordSegment->setStartTime(m_recordStartTime);
+    recordSegment->setAudioStartTime(Rosegarden::RealTime::zeroTime);
+
+    // Set an appropriate segment label
+    //
+    std::string label = "";
+
+    if (recordTrack) {
+	if (recordTrack->getLabel() == "") {
+
+	    Rosegarden::Instrument *instr =
+		m_studio.getInstrumentById(recordTrack->getInstrument());
+		
+	    if (instr) {
+		label = instr->getName() + std::string(" ");
+	    }
+
+	} else {
+	    label = recordTrack->getLabel() + std::string(" ");
+	}
+	    
+	label += std::string("(recorded audio)");
+    }
+
+    recordSegment->setLabel(label);
+    recordSegment->setAudioFileId(auid);
+
+    RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
+    m_recordAudioSegments[iid] = recordSegment;
 }
 
 
 void
-RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime& /*time*/,
-                                      TransportStatus status)
+RosegardenGUIDoc::updateRecordingAudioSegments()
 {
-    if (status != RECORDING_AUDIO)
-        return;
+    RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments" << endl;
 
-    // Just create a new record Segment if we don't have one already.
-    // Make sure we don't recreate the m_recordSegment if it's already
-    // freed.
-    //
-    if (m_recordSegment == 0)
-    {
-        m_recordSegment = new Segment(Rosegarden::Segment::Audio);
-        m_recordSegment->setTrack(m_composition.getRecordTrack());
-	m_recordSegment->setStartTime(m_recordStartTime);
-        m_recordSegment->setAudioStartTime(Rosegarden::RealTime::zeroTime);
+    const Rosegarden::Composition::recordtrackcontainer &tr =
+	getComposition().getRecordTracks();
 
-        // Set an appropriate segment label
-        //
-        Rosegarden::Track *track =
-            m_composition.getTrackById(m_composition.getRecordTrack());
-        std::string label = "";
+    for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+	     tr.begin(); i != tr.end(); ++i) {
 
-        if (track)
-        {
-            if (track->getLabel() == "")
-            {
-                Rosegarden::Instrument *instr =
-                    m_studio.getInstrumentById(track->getInstrument());
+	Rosegarden::TrackId tid = (*i);
+	Rosegarden::Track *track = getComposition().getTrackById(tid);
 
-                if (instr)
-                {
-                    label = instr->getName() + std::string(" ");
-                }
-            }
-            else
-                label = track->getLabel() + std::string(" ");
+	if (track) {
 
-            label += std::string("(recorded audio)");
-        }
-        m_recordSegment->setLabel(label);
-        
-        // new audio file will have been pushed to the back of the
-        // AudioFileManager queue - fetch it out and get the 
-        // AudioFileId
-        //
-        Rosegarden::AudioFile *audioFile =
-            m_audioFileManager.getLastAudioFile();
+	    Rosegarden::InstrumentId iid = track->getInstrument();
 
-        if (audioFile)
-        {
-            m_recordSegment->setAudioFileId(audioFile->getId());
-        }
-        else
-        {
-            RG_DEBUG << "RosegardenGUIDoc::insertRecordedAudio - "
-                         << "no audio file" << endl;
-        }
+	    //!!! MTR need to ensure m_recordAudioSegments is cleared down!
 
-        // always insert straight away for audio
-        m_composition.addSegment(m_recordSegment);
-    }
+	    if (m_recordAudioSegments[iid]) {
 
-    // Leaving this in causes a massive memory leak at the gui
-    // when recording audio:
-    //
-    // [ 730011 ] "memory leak after recording?"
-    //
-    // m_recordSegment->fillWithRests
-    //   (m_composition.getElapsedTimeForRealTime(time));
-    //
-    // Leaving it here for informational purposes.  RWB (20030523)
+		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: segment for instr "
+			 << iid << endl;
+		
+		Rosegarden::Segment *recordSegment = m_recordAudioSegments[iid];
+		if (!recordSegment->getComposition()) {
 
-    // update this segment on the GUI
-    RosegardenGUIView *w;
-    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
-        w->showRecordingSegmentItem(m_recordSegment);
+		    // always insert straight away for audio
+		    m_composition.addSegment(recordSegment);
+		}
+
+		// update this segment on the GUI
+		RosegardenGUIView *w;
+		for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
+		    w->showRecordingSegmentItem(recordSegment);
+		}
+	    } else {
+		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: no segment for instr "
+			 << iid << endl;
+	    }
+	}
     }
 }
 
@@ -2141,58 +2200,101 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime& /*time*/,
 void
 RosegardenGUIDoc::stopRecordingAudio()
 {
+    RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio" << endl;
+
     // If we've created nothing then do nothing with it
     //
-    if (m_recordSegment == 0)
-        return;
+//!!! mtr    if (m_recordSegment == 0)
+//        return;
 
-    RosegardenGUIView *w;
-    for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
-        w->deleteRecordingSegmentItem();
-    }
+    for (RecordingSegmentMap::iterator ri = m_recordAudioSegments.begin();
+	 ri != m_recordAudioSegments.end(); ++ri) {
 
-    // set the audio end time
-    //
-    m_recordSegment->setAudioEndTime(
-        m_composition.getRealTimeDifference(m_recordSegment->getStartTime(),
-                                            m_composition.getPosition()));
+	Rosegarden::Segment *recordSegment = ri->second;
 
-    // now add the Segment
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
+	if (!recordSegment) continue;
+
+	RosegardenGUIView *w;
+	for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
+	    w->deleteRecordingSegmentItem(recordSegment);
+	}
+
+	// set the audio end time
+	//
+	recordSegment->setAudioEndTime(
+	    m_composition.getRealTimeDifference(recordSegment->getStartTime(),
+						m_composition.getPosition()));
+
+	// now add the Segment
+	RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
                  << "got recorded segment" << endl;
 
-    // now move the segment back by the record latency
-    //
-    Rosegarden::RealTime adjustedStartTime =
-        m_composition.getElapsedRealTime(m_recordSegment->getStartTime()) -
-	m_audioRecordLatency;
+	// now move the segment back by the record latency
+	//
+	Rosegarden::RealTime adjustedStartTime =
+	    m_composition.getElapsedRealTime(recordSegment->getStartTime()) -
+	    m_audioRecordLatency;
 
-    Rosegarden::timeT shiftedStartTime =
-        m_composition.getElapsedTimeForRealTime(adjustedStartTime);
+	Rosegarden::timeT shiftedStartTime =
+	    m_composition.getElapsedTimeForRealTime(adjustedStartTime);
 
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
+	RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
                  << "shifted recorded audio segment by "
-                 <<  m_recordSegment->getStartTime() - shiftedStartTime
-	     << " clicks (from " << m_recordSegment->getStartTime()
-	     << " to " << shiftedStartTime << ")" << endl;
+                 <<  recordSegment->getStartTime() - shiftedStartTime
+		 << " clicks (from " << recordSegment->getStartTime()
+		 << " to " << shiftedStartTime << ")" << endl;
 
-    m_recordSegment->setStartTime(shiftedStartTime);
+	recordSegment->setStartTime(shiftedStartTime);
+    }
+
+    //!!!MTR need to clear record segments from m_recordAudioSegments --
+    // but where? here or in finalizeAudioFile? or elsewhere?
 }
+
 
 // Called from the sequencer when all is clear with the newly recorded
 // file - this method finalizes the add of the audio file as it should
 // now have proper audio file information in the header.
 //
 void
-RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
+RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
 {
-    RG_DEBUG << "RosegardenGUIDoc::finalizeAudioFile" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::finalizeAudioFile(" << iid << ")" << endl;
 
-    // Get the last added audio file - the one we've just recorded
-    // and generate a preview of this audio file for population
-    // into the resulting SegmentItems.
-    //
-    Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getLastAudioFile();
+    Rosegarden::Segment *recordSegment = 0;
+    recordSegment = m_recordAudioSegments[iid];
+
+    //!!! MTR -- ah now hang on -- the call made here doesn't supply
+    // the correct audio file ID
+    // We need a single finalizeAudioFiles?
+
+    //!!! MTR GOT HERE
+/*!!!
+    Rosegarden::InstrumentId iid = 0;
+    for (RecordingSegmentMap::iterator i = m_recordAudioSegments.begin();
+	 i != m_recordAudioSegments.end(); ++i) {
+	if (i->second && i->second->getAudioFileId() == id) {
+	    recordSegment = i->second;
+	    Rosegarden::TrackId tid = recordSegment->getTrack();
+	    Rosegarden::Track *track = getComposition().getTrackById(tid);
+	    if (track) {
+		iid = track->getInstrument();
+		break;
+	    }
+	}
+    }
+*/
+    if (!recordSegment) {
+	RG_DEBUG << "RosegardenGUIDoc::finalizeAudioFile: Failed to find segment" << endl;
+	return;
+    }
+
+    Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getAudioFile
+	(recordSegment->getAudioFileId());
+    if (!newAudioFile) {
+	std::cerr << "WARNING: RosegardenGUIDoc::finalizeAudioFile: No audio file found for instrument " << iid << " (audio file id " << recordSegment->getAudioFileId() << ")" << std::endl;
+	return;
+    }
 
     // Create a progress dialog
     //
@@ -2211,6 +2313,8 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     try
     {
         m_audioFileManager.generatePreview(newAudioFile->getId());
+	//!!! mtr just for now?:
+//!!!	m_audioFileManager.generatePreviews();
     }
     catch(std::string e)
     {
@@ -2222,22 +2326,19 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
     delete progressDlg;
 
-    if (m_recordSegment) {
+    m_commandHistory->addCommand
+	(new SegmentRecordCommand(recordSegment));
 
-	m_commandHistory->addCommand
-	    (new SegmentRecordCommand(m_recordSegment));
-
-	// Update preview
-	//
+    // Update preview
+    //
 // 	RosegardenGUIView *w;
 // 	for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
 // 	    w->getTrackEditor()->
 // 		getSegmentCanvas()->updateSegmentItem(m_recordSegment);
 // 	}
 
-	// update views
-	slotUpdateAllViews(0);
-    }
+    // update views
+    slotUpdateAllViews(0);
 
     // Now install the file in the sequencer
     //
@@ -2254,7 +2355,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     rgapp->sequencerSend("addAudioFile(QString, int)", data);
 
     // clear down
-    m_recordSegment = 0;
+    m_recordAudioSegments.erase(iid);
 }
 
 void
@@ -2269,6 +2370,7 @@ RosegardenGUIDoc::slotNewRecordButton()
 
     // If we're got an audio track then tell someone goddamn
     //
+#ifdef MTR_IN_PROGRESS
     Rosegarden::Track *recordTrack
         = m_composition.getTrackById(m_composition.getRecordTrack());
 
@@ -2295,7 +2397,7 @@ RosegardenGUIDoc::slotNewRecordButton()
             }
         }
     }
-
+#endif
 }
 
 void

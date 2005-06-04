@@ -38,12 +38,10 @@ typedef enum
 {
      STOPPED,
      PLAYING,
-     RECORDING_MIDI,
-     RECORDING_AUDIO,
+     RECORDING,
      STOPPING,
      STARTING_TO_PLAY,
-     STARTING_TO_RECORD_MIDI,
-     STARTING_TO_RECORD_AUDIO,
+     STARTING_TO_RECORD,
      RECORDING_ARMED,                   // gui only state
      QUIT
 } TransportStatus;

@@ -566,6 +566,7 @@ RosegardenFader::calculateButtonPixmap()
 AudioVUMeter::AudioVUMeter(QWidget *parent,
                            VUMeter::VUMeterType type,
                            bool stereo,
+			   bool hasRecord,
                            int width,
                            int height,
                            const char *name) :
@@ -590,7 +591,7 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
     m_xoff = width / 4;
     if (m_xoff % 2 == 1) ++m_xoff;
 
-    m_meter = new AudioVUMeterImpl(this, type, stereo,
+    m_meter = new AudioVUMeterImpl(this, type, stereo, hasRecord,
 				   width - m_xoff, height - m_yoff, name);
 
     m_meter->move(m_xoff/2, m_yoff/2);
@@ -617,10 +618,11 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
 AudioVUMeter::AudioVUMeterImpl::AudioVUMeterImpl(QWidget *parent,
 						 VUMeterType type,
 						 bool stereo,
+						 bool hasRecord,
 						 int width,
 						 int height,
 						 const char *name) :
-    VUMeter(parent, type, stereo, width, height, VUMeter::Vertical, name)
+    VUMeter(parent, type, stereo, hasRecord, width, height, VUMeter::Vertical, name)
 {
 }
 
