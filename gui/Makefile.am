@@ -43,6 +43,8 @@ rosegarden_SOURCES = \
 	ktmpstatusmsg.cpp \
         lilypondio.cpp \
         linedstaff.cpp \
+	lircclient.cpp \
+	lirccommander.cpp \
         loopruler.cpp \
 	main.cpp \
         markereditor.cpp \

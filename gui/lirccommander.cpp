@@ -22,6 +22,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
 #ifdef HAVE_LIRC
 
 #include <stdlib.h>
@@ -125,6 +127,6 @@ void LircCommander::f_fastForwardToEnd()
     this->m_rgGUIApp->fastForwardToEnd();
 }
 
-
+#include "lirccommander.moc"
 
 #endif // HAVE_LIRC

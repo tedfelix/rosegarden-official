@@ -22,6 +22,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
 #ifdef HAVE_LIRC
 
 #include "lircclient.h"
@@ -97,5 +99,6 @@ void LircClient::readButton()
     }
 }
 
+#include "lircclient.moc"
 
 #endif // HAVE_LIRC
