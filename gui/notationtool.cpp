@@ -729,19 +729,19 @@ void NoteInserter::slotRestsSelected()
 
 const char* NoteInserter::m_actionsAccidental[][4] = 
     {
-        { i18n("No accidental"),  "1slotNoAccidental()",  "no_accidental",
+        { "No accidental",  "1slotNoAccidental()",  "no_accidental",
           "accidental-none" },
-        { i18n("Follow accidental"),  "1slotFollowAccidental()",  "follow_accidental",
+        { "Follow accidental",  "1slotFollowAccidental()",  "follow_accidental",
           "accidental-follow" },
-        { i18n("Sharp"),          "1slotSharp()",         "sharp_accidental",
+        { "Sharp",          "1slotSharp()",         "sharp_accidental",
           "accidental-sharp" },
-        { i18n("Flat"),           "1slotFlat()",          "flat_accidental",
+        { "Flat",           "1slotFlat()",          "flat_accidental",
           "accidental-flat" },
-        { i18n("Natural"),        "1slotNatural()",       "natural_accidental",
+        { "Natural",        "1slotNatural()",       "natural_accidental",
           "accidental-natural" },
-        { i18n("Double sharp"),   "1slotDoubleSharp()",   "double_sharp_accidental",
+        { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
           "accidental-doublesharp" },
-        { i18n("Double flat"),    "1slotDoubleFlat()",    "double_flat_accidental",
+        { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
           "accidental-doubleflat" }
     };
 
