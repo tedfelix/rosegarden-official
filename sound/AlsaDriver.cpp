@@ -49,7 +49,7 @@
 #include <pthread.h>
 
 
-#define DEBUG_ALSA 1
+//#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 //#define MTC_DEBUG 1
 

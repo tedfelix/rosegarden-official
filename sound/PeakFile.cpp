@@ -656,8 +656,7 @@ PeakFile::getPreview(const RealTime &startTime,
                      int width,
                      bool showMinima)
 {
-//#define DEBUG_PREVIEW_SIZE
-#ifdef DEBUG_PREVIEW_SIZE
+#ifdef DEBUG_PEAKFILE
     std::cout << "PeakFile::getPreview - "
               << "startTime = " << startTime
               << ", endTime = " << endTime

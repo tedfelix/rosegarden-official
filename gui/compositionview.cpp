@@ -200,8 +200,10 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
     Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for (Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
+
+	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
 
         Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
@@ -309,7 +311,7 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
     const int height = m_grid.getYSnap()/2 - 2;
     const int halfRectHeight = m_grid.getYSnap()/2;
 
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : halfRectHeight = " << halfRectHeight << endl;
+//    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : halfRectHeight = " << halfRectHeight << endl;
 
     float gain[2] = { 1.0, 1.0 };
     Rosegarden::TrackId trackId = segment->getTrack();
@@ -334,9 +336,9 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
                  << segment->getLabel().c_str() << endl;
         return;
     } else {
-	RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects: Have "
-		 << channels << " channels, " << values.size()
-		 << " samples for audio preview" << endl;
+//	RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects: Have "
+//		 << channels << " channels, " << values.size()
+//		 << " samples for audio preview" << endl;
     }
     
     int samplePoints = values.size() / (channels * (showMinima ? 2 : 1));
@@ -766,11 +768,17 @@ QRect CompositionModelImpl::getSelectionContentsRect()
 void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
 {
     m_recordingSegments.insert(CompositionItemHelper::getSegment(item));
+
+    RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
+	     << m_recordingSegments.size() << " recording items" << endl;
 }
 
 void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 {
     m_recordingSegments.erase(CompositionItemHelper::getSegment(item));
+
+    RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
+	     << m_recordingSegments.size() << " recording items" << endl;
 }
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
@@ -943,6 +951,9 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
     int y = grid.getYBinCoordinate(trackPosition);
     int h = grid.getYSnap();
     int w;
+
+    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << x << ", y " << y << " startTime " << startTime << ", endTime " << endTime << endl;
+
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
         timeT repeatEnd   = s.getRepeatEndTime();
@@ -953,8 +964,8 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
 //                  << " w = " << w << endl;
     } else {
         w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
-//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
-//                  << " w = " << w << endl;
+         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
+                  << " w = " << w << " (x for time at start is " << grid.getRulerScale()->getXForTime(startTime) << ", end is " << grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
     }
 
     CompositionRect cr(x, y, w, h);

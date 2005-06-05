@@ -410,7 +410,6 @@ AudioSegmentInsertCommand::execute()
         m_segment = new Segment(Rosegarden::Segment::Audio);
         m_segment->setTrack(m_track);
         m_segment->setStartTime(m_startTime);
-	m_composition->addSegment(m_segment);
         m_segment->setAudioStartTime(m_audioStartTime);
         m_segment->setAudioEndTime(m_audioEndTime);
         m_segment->setAudioFileId(m_audioFileId);
@@ -424,6 +423,9 @@ AudioSegmentInsertCommand::execute()
             startTime + m_audioEndTime - m_audioStartTime;
 
         timeT endTimeT = m_composition->getElapsedTimeForRealTime(endTime);
+
+	RG_DEBUG << "AudioSegmentInsertCommand::execute : start timeT "
+		 << m_startTime << ", startTime " << startTime << ", audioStartTime " << m_audioStartTime << ", audioEndTime " << m_audioEndTime << ", endTime " << endTime << ", end timeT " << endTimeT << endl;
 
 	m_segment->setEndTime(endTimeT);
 
@@ -442,6 +444,7 @@ AudioSegmentInsertCommand::execute()
 
         m_segment->setLabel(label);
 
+	m_composition->addSegment(m_segment);
     }
     else
     {

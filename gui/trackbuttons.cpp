@@ -393,7 +393,6 @@ TrackButtons::populateButtons()
             //
 	    bool recording = 
 		m_doc->getComposition().isTrackRecording(track->getId());
-	    RG_DEBUG << "Track " << track->getId() << ": recording " << recording << endl;
 	    setRecordTrack(track->getPosition(), recording);
 
             // reset track tokens

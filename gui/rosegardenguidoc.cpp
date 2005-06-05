@@ -2150,8 +2150,6 @@ RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
 void
 RosegardenGUIDoc::updateRecordingAudioSegments()
 {
-    RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments" << endl;
-
     const Rosegarden::Composition::recordtrackcontainer &tr =
 	getComposition().getRecordTracks();
 
@@ -2165,12 +2163,7 @@ RosegardenGUIDoc::updateRecordingAudioSegments()
 
 	    Rosegarden::InstrumentId iid = track->getInstrument();
 
-	    //!!! MTR need to ensure m_recordAudioSegments is cleared down!
-
 	    if (m_recordAudioSegments[iid]) {
-
-		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: segment for instr "
-			 << iid << endl;
 		
 		Rosegarden::Segment *recordSegment = m_recordAudioSegments[iid];
 		if (!recordSegment->getComposition()) {
@@ -2178,6 +2171,11 @@ RosegardenGUIDoc::updateRecordingAudioSegments()
 		    // always insert straight away for audio
 		    m_composition.addSegment(recordSegment);
 		}
+
+		recordSegment->setAudioEndTime(
+		    m_composition.getRealTimeDifference(recordSegment->getStartTime(),
+							m_composition.getPosition()));
+
 
 		// update this segment on the GUI
 		RosegardenGUIView *w;
@@ -2201,11 +2199,6 @@ void
 RosegardenGUIDoc::stopRecordingAudio()
 {
     RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio" << endl;
-
-    // If we've created nothing then do nothing with it
-    //
-//!!! mtr    if (m_recordSegment == 0)
-//        return;
 
     for (RecordingSegmentMap::iterator ri = m_recordAudioSegments.begin();
 	 ri != m_recordAudioSegments.end(); ++ri) {
@@ -2246,9 +2239,6 @@ RosegardenGUIDoc::stopRecordingAudio()
 
 	recordSegment->setStartTime(shiftedStartTime);
     }
-
-    //!!!MTR need to clear record segments from m_recordAudioSegments --
-    // but where? here or in finalizeAudioFile? or elsewhere?
 }
 
 
@@ -2264,26 +2254,6 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
     Rosegarden::Segment *recordSegment = 0;
     recordSegment = m_recordAudioSegments[iid];
 
-    //!!! MTR -- ah now hang on -- the call made here doesn't supply
-    // the correct audio file ID
-    // We need a single finalizeAudioFiles?
-
-    //!!! MTR GOT HERE
-/*!!!
-    Rosegarden::InstrumentId iid = 0;
-    for (RecordingSegmentMap::iterator i = m_recordAudioSegments.begin();
-	 i != m_recordAudioSegments.end(); ++i) {
-	if (i->second && i->second->getAudioFileId() == id) {
-	    recordSegment = i->second;
-	    Rosegarden::TrackId tid = recordSegment->getTrack();
-	    Rosegarden::Track *track = getComposition().getTrackById(tid);
-	    if (track) {
-		iid = track->getInstrument();
-		break;
-	    }
-	}
-    }
-*/
     if (!recordSegment) {
 	RG_DEBUG << "RosegardenGUIDoc::finalizeAudioFile: Failed to find segment" << endl;
 	return;
@@ -2313,7 +2283,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
     try
     {
         m_audioFileManager.generatePreview(newAudioFile->getId());
-	//!!! mtr just for now?:
+	//!!! mtr just for now?: or better to do this once after the fact?
 //!!!	m_audioFileManager.generatePreviews();
     }
     catch(std::string e)
@@ -2328,14 +2298,6 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
 
     m_commandHistory->addCommand
 	(new SegmentRecordCommand(recordSegment));
-
-    // Update preview
-    //
-// 	RosegardenGUIView *w;
-// 	for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
-// 	    w->getTrackEditor()->
-// 		getSegmentCanvas()->updateSegmentItem(m_recordSegment);
-// 	}
 
     // update views
     slotUpdateAllViews(0);

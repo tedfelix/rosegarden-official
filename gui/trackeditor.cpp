@@ -470,15 +470,6 @@ TrackEditor::slotSetFineGrain(bool value)
 void
 TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
-    /*
-    Composition &comp = m_doc->getComposition();
-    //int y = segment->getTrack() * getTrackCellHeight();
-
-    // Show recording SegmentItem from recording start point to
-    // current point position
-    //
-    timeT endTime = comp.getPosition();
-    */
     m_segmentCanvas->getModel()->addRecordingItem
 	(CompositionItemHelper::makeCompositionItem(segment));
 

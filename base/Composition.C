@@ -1304,8 +1304,6 @@ Composition::getMaxTrackId() const
 void
 Composition::setTrackRecording(TrackId track, bool recording)
 {
-    std::cerr << "Composition::setTrackRecording(" << track << "," << recording << ")" << std::endl;
-
     if (recording) {
 	m_recordTracks.insert(track);
     } else {
