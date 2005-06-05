@@ -680,35 +680,39 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (!m_currentItem || !changeMade()) return;
+    if (m_currentItem) {
 
-    timeT newStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
-    timeT newEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
-    Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
+        timeT newStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
+        timeT newEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
+        Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
 
-    if (m_resizeStart && (newStartTime < newEndTime)) {
+        if  (changeMade()) {
+            
+            if (m_resizeStart && (newStartTime < newEndTime)) {
 
-	addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
+                addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
 
-    } else {
+            } else {
 
-	SegmentReconfigureCommand *command =
-	    new SegmentReconfigureCommand("Resize Segment");
+                SegmentReconfigureCommand *command =
+                    new SegmentReconfigureCommand("Resize Segment");
 
-        int trackPos = CompositionItemHelper::getTrackPos(m_currentItem, m_canvas->grid());
+                int trackPos = CompositionItemHelper::getTrackPos(m_currentItem, m_canvas->grid());
 	
-	Rosegarden::Composition &comp = m_doc->getComposition();
-	Rosegarden::Track *track = comp.getTrackByPosition(trackPos);
+                Rosegarden::Composition &comp = m_doc->getComposition();
+                Rosegarden::Track *track = comp.getTrackByPosition(trackPos);
 
-	command->addSegment(segment,
-			    newStartTime,
-			    newEndTime,
-			    track->getId());
-	addCommandToHistory(command);
+                command->addSegment(segment,
+                                    newStartTime,
+                                    newEndTime,
+                                    track->getId());
+                addCommandToHistory(command);
+            }
+        }
     }
-
-    m_canvas->updateContents();
+    
     m_canvas->getModel()->endMove();
+    m_canvas->updateContents();
     setChangeMade(false);
     m_currentItem = CompositionItem();
 }
