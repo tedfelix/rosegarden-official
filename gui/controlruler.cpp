@@ -1239,6 +1239,8 @@ void PropertyControlRuler::init()
     for(ViewElementList::iterator i = viewElementList->begin();
         i != viewElementList->end(); ++i) {
 
+	if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
+
  	double x = m_rulerScale->getXForTime((*i)->getViewAbsoluteTime());
  	new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x + m_staffOffset),
                         int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
@@ -1250,6 +1252,8 @@ void PropertyControlRuler::init()
 void PropertyControlRuler::elementAdded(const Rosegarden::Staff *, ViewElement *el)
 {
     RG_DEBUG << "PropertyControlRuler::elementAdded()\n";
+
+    if (el->isa(Rosegarden::Note::EventRestType)) return;
 
     double x = m_rulerScale->getXForTime(el->getViewAbsoluteTime());
 
