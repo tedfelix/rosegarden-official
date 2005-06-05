@@ -2,7 +2,7 @@
 
 #
 # ins2rgd.pl
-# Takes a Sonar .ins instrument definition file on stdin
+# Takes a Cakewalk/Sonar .ins instrument definition file on stdin
 # emits an (uncompressed) .rgd, which the user then compresses and places
 # in the appropriate directory (usually /usr/share/apps/rosegarden/library).
 #
@@ -13,16 +13,28 @@
 #
 # BUGS: This could still use some work -- there are hard-coded values that
 #       could be configured...
+# 
+# Modified by Pedro Lopez-Cabanillas <plcl@users.sf.net> (06-05-2005)
+# to include Controllers and KeyMappings.
 
-my $devicename = shift;
-my $librarian = shift;
-my $librarian_email = shift
-  || die qq{Usage: $0 "devicename" "librarian name" "librarian email" < file.ins > file.xml};
+my $devicename = undef;
+my $librarian = "Created using ins2rgd.pl";
+my $librarian_email = "rosegarden-devel\@lists.sourceforge.net";
 
-my $flag_in_names = undef;	# .Patch Names section
-my $flag_in_defs = undef;	# .Instrument Definitions section
-my $curbank = undef;		# current bank
+use constant IN_PATCH => 1;	# .Patch Names section
+use constant IN_INSTR => 2;	# .Instrument Definitions section
+use constant IN_NOTES => 3;	# .Note Names section
+use constant IN_CTRLS => 4;	# .Controller Names section
+
+my $flag_in = undef;	
+my $current = undef;		# current bank
 my $banks = {};			# the in-memory banks database
+my $keymaps = {};
+my $controllers = {};
+my $banknumof = {};
+my $keybank = {};
+my $keyprog = {};
+my $keybased = {};
 
 # sussed from txt2rgd.py
 %converter_table = (
@@ -43,50 +55,115 @@ s/\s+$//; # might be cr/lf too
 
   if(/^\.Patch Names/i)
     {
-    $flag_in_names=1;
-    $flag_in_defs=undef;
+    $flag_in=IN_PATCH;
     next LINE;
     }
 
   if(/^\.Instrument Definitions/i)
     {
-    $flag_in_defs=1;
-    $flag_in_names=undef;
+    $flag_in=IN_INSTR;
     next LINE;
     }
 
-
-  if($flag_in_names)
+  if(/^\.Note Names/i)
     {
-    if(m#^\[(.+)\]$#)
-      {
-      $curbank = $1;
-      $banks->{$curbank} = {};
-      next LINE;
-      }
-    if(m#^(\d+)\=(.+)$#)
-      {
-      my $voicenum = $1;
-      my $voicename = $2;
-      
-      $voicename = doquote($voicename);
-
-      $banks->{$curbank}->{$voicenum} = $voicename;
-      }
-    }
-  
-
-  if($flag_in_defs)
-    {
-    if(m#Patch\[(\d+)\]=(.+)$#)
-      {
-      my $banknum = $1;
-      my $bankname = $2;
-      
-      $banknumof{$bankname}=$banknum;
-      }
+    $flag_in=IN_NOTES;
+    next LINE;
     }
 
+  if(/^\.Controller Names/i)
+    {
+    $flag_in=IN_CTRLS;
+    next LINE;
+    }
+
+  if(/^\./i)
+    {
+    $flag_in=undef;
+    next LINE;
+    }
+
+  if (defined($flag_in)) 
+    {
+
+    if($flag_in == IN_PATCH)
+      {
+      if(m#^\[(.+)\]$#)
+        {
+        $current = doquote($1);
+        $banks->{$current} = {};
+        next LINE;
+        }
+      if(m#^(\d+)\=(.+)$#)
+        {
+        my $voicenum = $1;
+        my $voicename = doquote($2);
+      
+        $banks->{$current}->{$voicenum} = $voicename;
+        }
+      }
+
+      if($flag_in == IN_INSTR)
+        {
+        if(m#^\[(.+)\]$#)
+          {
+	  unless(defined($devicename))
+            {
+            $devicename = doquote($1);
+            }
+	  next LINE;
+          }
+        if(m#Patch\[(\d+)\]=(.+)$#)
+          {
+          my $banknum = $1;
+          my $bankname = doquote($2);
+      
+          $banknumof{$bankname}=$banknum;
+  	  next LINE;
+          }
+        if(m#Key\[(\d+)\,(\d+)\]=(.+)$#)
+          {
+          my $keymapname = doquote($3);
+          $keybank{$keymapname}=$1;
+          $keyprog{$keymapname}=$2;
+          }
+      }
+
+    if($flag_in == IN_NOTES)
+      {
+      if(m#^\[(.+)\]$#)
+        {
+        $current = doquote($1);
+        $keymaps->{$current} = {};
+        next LINE;
+        }
+      if(m#^BasedOn\=(.+)$#)
+        {
+	my $basemap = doquote($1);
+	$keybased{$current} = $basemap;
+	}
+      if(m#^(\d+)\=(.+)$#)
+        {
+        my $keynum = $1;
+        my $keyname = $2;
+      
+        $keymaps->{$current}->{$keynum} = doquote($keyname);
+        }
+      }
+
+    if($flag_in == IN_CTRLS)
+      {
+      if(m#^(\d+)\=(.+)$#)
+        {
+	my $ctl = $1;
+        my $controlname = $2;
+	unless($ctl == 1 || $ctl == 7 || $ctl == 10 || $ctl == 11 || $ctl == 64 || $ctl == 91 || $ctl == 93)
+	  {
+          $controllers{$ctl} = doquote($controlname);
+	  }
+        }
+      }
+    }
   }
 
 # end of .ins file -- write .rgd xml
@@ -94,13 +171,11 @@ s/\s+$//; # might be cr/lf too
 # header
 print '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
-<rosegarden-data version="4-0.9.8_cvs">
-<studio thrufilter="0" recordfilter="0" audioinputpairs="2" mixerdisplayoptions="0" metronomedevice="0">
-
-
+<rosegarden-data>
+<studio thrufilter="0" recordfilter="0">
 <device id="0" name="',$devicename,'" direction="play" variation="" type="midi">
-<librarian name="',$librarian,'" email="',$librarian_email,'"/>
-<metronome instrument="2009" pitch="37" depth="2" barvelocity="120" beatvelocity="100" subbeatvelocity="80"/>
+	<librarian name="',$librarian,'" email="',$librarian_email,'"/>
+	<metronome instrument="0" msb="0" lsb="0" program="0" pitch="37" />
 ';
 
 # generate list of banks sorted by bank number
@@ -121,7 +196,7 @@ for my $bank (@banks)
     $percussion='false';
     }
   
-  print qq{<bank name="$bank" percussion="$percussion" msb="$msb" lsb="$lsb">};
+  print qq{\t<bank name="$bank" percussion="$percussion" msb="$msb" lsb="$lsb">};
   print "\n";
 
   @voicenums = sort
@@ -131,114 +206,71 @@ for my $bank (@banks)
   for $voicenum (@voicenums)
     {
     $voicename = $banks->{$bank}->{$voicenum};
-    print qq{\t<program id="$voicenum" name="$voicename"/>\n};
+    print qq{\t\t<program id="$voicenum" name="$voicename"/>\n};
     }
 
-  print "</bank>\n";
+  print "\t</bank>\n\n";
 
   }
 
-print '
-        <controls>
-            <control name="Pan" type="controller" description="&lt;none&gt;" min="0" max="127" default="64" controllervalue="10" colourindex="2" ipbposition="0"/>
-            <control name="Chorus" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="93" colourindex="3" ipbposition="1"/>
-            <control name="Volume" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="7" colourindex="1" ipbposition="2"/>
-            <control name="Reverb" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="91" colourindex="3" ipbposition="3"/>
-            <control name="Sustain" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="64" colourindex="4" ipbposition="4"/>
-            <control name="Expression" type="controller" description="&lt;none&gt;" min="0" max="127" default="100" controllervalue="11" colourindex="2" ipbposition="5"/>
-            <control name="Modulation" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="1" colourindex="4" ipbposition="-1"/>
-            <control name="PitchBend" type="pitchbend" description="&lt;none&gt;" min="0" max="16383" default="8192" controllervalue="1" colourindex="4" ipbposition="-1"/>
-        </controls>
-        <instrument id="2000" channel="0" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+#standard controllers
+print ' 
+	<controls>
+		<control name="Pan" type="controller" description="&lt;none&gt;" min="0" max="127" default="64" controllervalue="10" colourindex="2" ipbposition="0"/>
+		<control name="Chorus" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="93" colourindex="3" ipbposition="1"/>
+		<control name="Volume" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="7" colourindex="1" ipbposition="2"/>
+		<control name="Reverb" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="91" colourindex="3" ipbposition="3"/>
+		<control name="Sustain" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="64" colourindex="4" ipbposition="4"/>
+		<control name="Expression" type="controller" description="&lt;none&gt;" min="0" max="127" default="100" controllervalue="11" colourindex="2" ipbposition="5"/>
+		<control name="Modulation" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="1" colourindex="4" ipbposition="-1"/>
+		<control name="PitchBend" type="pitchbend" description="&lt;none&gt;" min="0" max="16383" default="8192" controllervalue="1" colourindex="4" ipbposition="-1"/>
+';
 
-        <instrument id="2001" channel="1" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+# some additional controllers
+for $controlnum (keys %controllers)
+ {
+ $controlname = $controllers{$controlnum};
+ print qq{\t\t<control name="$controlname" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="$controlnum" colourindex="4" ipbposition="-1"/>\n};
+ }
+print "\t</controls>\n\n";
 
-        <instrument id="2002" channel="2" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+# key mappings
 
-        <instrument id="2003" channel="3" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+for $keymap (keys %keybank)
+  {
+  $bnk = $keybank{$keymap};
+  $prg = $keyprog{$keymap};
+  $msb = int( $bnk / 128 );
+  $lsb = $bnk - (128*$msb);
+  $base = $keybased{$keymap};
 
-        <instrument id="2004" channel="4" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+  print qq{\t<keymapping name="$keymap" msb="$msb" lsb="$lsb" program="$prg">\n};
+  
+  if(defined($base))
+    {
+    for $key (keys %{$keymaps->{$base}})
+      {
+      unless(defined($keymaps->{$keymap}->{$key}))
+        {
+	$keymaps->{$keymap}->{$key} = $keymaps->{$base}->{$key};
+	}
+      }
+    }
 
-        <instrument id="2005" channel="5" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+  @keyes = sort { $a <=> $b } (keys %{ $keymaps->{$keymap} } );
 
-        <instrument id="2006" channel="6" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+  for $key (@keyes)
+    {
+    $keyname = $keymaps->{$keymap}->{$key};
+    print qq{\t\t<key number="$key" name="$keyname"/>\n};
+    }
 
-        <instrument id="2007" channel="7" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
+  print "\t</keymapping>\n\n";
+  }
 
-        <instrument id="2008" channel="8" type="midi">
-            <bank percussion="false" msb="0" lsb="0"/>
-            <program id="0"/>
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2009" channel="9" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2010" channel="10" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2011" channel="11" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2012" channel="12" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2013" channel="13" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2014" channel="14" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-        <instrument id="2015" channel="15" type="midi">
-            <pan value="64"/>
-            <volume value="100"/>
-        </instrument>
-
-    </device>
-
-
-
-
+# end of device definition
+print '</device>
 </studio>
-
-
 </rosegarden-data>
 ';
 
