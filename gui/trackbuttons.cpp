@@ -1078,7 +1078,7 @@ TrackButtons::changeInstrumentLabel(Rosegarden::InstrumentId id, QString label)
 	    Rosegarden::Instrument *ins = m_doc->getStudio().
                 getInstrumentById(track->getInstrument());
 
-	    if (ins->getType() == Rosegarden::Instrument::Audio) {
+	    if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
 		m_recordLeds[i]->setColor
 		    (Rosegarden::GUIPalette::getColour
 		     (Rosegarden::GUIPalette::RecordAudioTrackLED));
@@ -1140,7 +1140,7 @@ TrackButtons::slotSynchroniseWithComposition()
 
 	    setRecordButton(i, comp.isTrackRecording(track->getId()));
 
-	    if (ins->getType() == Rosegarden::Instrument::Audio) {
+	    if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
 		m_recordLeds[i]->setColor
 		    (Rosegarden::GUIPalette::getColour
 		     (Rosegarden::GUIPalette::RecordAudioTrackLED));
