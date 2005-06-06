@@ -1346,8 +1346,6 @@ JackDriver::jackProcessRecord(Rosegarden::InstrumentId id,
 
 	// want peak levels and monitors anyway, even if not recording
 
-	//!!!mtr peaks per-instrument
-
 #ifdef DEBUG_JACK_PROCESS
 	std::cerr << "JackDriver::jackProcessRecord(" << id << "): monitoring only" << std::endl;
 #endif
@@ -1879,138 +1877,66 @@ JackDriver::updateAudioData()
 	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->getAudioFader(id);
 	if (!fader) continue;
 
-//!!!	if (i < audioInstruments && m_fileWriter &&
-//	    m_fileWriter->haveRecordFileOpen(id)) {
-
-	    //!!!MTR no, we really need to update when something
-	    // changes, regardless of whether we're recording to instr
-	    // or not -- call this method less often but do more work in it?
-
-	    float f = 2;
-	    (void)fader->getProperty(MappedAudioFader::Channels, f);
-	    int channels = (int)f;
-	    
-	    int inputChannel = -1;
-	    if (channels == 1) {
-		float f = 0;
-		(void)fader->getProperty(MappedAudioFader::InputChannel, f);
-		inputChannel = (int)f;
-	    }
-	    
-	    float level = 0.0;
-	    (void)fader->getProperty(MappedAudioFader::FaderRecordLevel, level);
-
-	    // Like in base/Instrument.h, we use numbers < 1000 to
-	    // mean buss numbers and >= 1000 to mean record ins
-	    // when recording the record input number.
-	    
-	    MappedObjectValueList connections = fader->getConnections
-		(MappedConnectableObject::In);
-	    int input = 1000;
-
-	    if (connections.empty()) {
-		
-		std::cerr << "No connections in for record instrument "
-			  << (id) << " (mapped id " << fader->getId() << ")" << std::endl;
-
-		// oh dear.
-		input = 1000;
-
-	    } else if (*connections.begin() == mbuss->getId()) {
-
-		input = 0;
-		
-	    } else {
-		
-		MappedObject *obj = m_alsaDriver->getMappedStudio()->
-		    getObjectById(MappedObjectId(*connections.begin()));
-
-		if (!obj) {
-
-		    std::cerr << "No such object as " << *connections.begin() << std::endl;
-		    input = 1000;
-		} else if (obj->getType() == MappedObject::AudioBuss) {
-		    input = (int)((MappedAudioBuss *)obj)->getBussId();
-		} else if (obj->getType() == MappedObject::AudioInput) {
-		    input = (int)((MappedAudioInput *)obj)->getInputNumber()
-			+ 1000;
-		} else {
-		    std::cerr << "Object " << *connections.begin() << " is not buss or input" << std::endl;
-		    input = 1000;
-		}
-	    }
+	float f = 2;
+	(void)fader->getProperty(MappedAudioFader::Channels, f);
+	int channels = (int)f;
 	
-	    if (m_recordInputs[id].input != input) {
-		std::cerr << "Changing record input for instrument "
-			  << id << " to " << input << std::endl;
-	    }
-	    m_recordInputs[id] = RecordInputDesc(input, inputChannel, level);
-//!!!	}
-
-/*!!! MTR
-
-	if (id == m_alsaDriver->getAudioMonitoringInstrument()) {
-
-	    float f = 2;
-	    (void)fader->getProperty(MappedAudioFader::Channels, f);
-	    int channels = (int)f;
+	int inputChannel = -1;
+	if (channels == 1) {
+	    float f = 0;
+	    (void)fader->getProperty(MappedAudioFader::InputChannel, f);
+	    inputChannel = (int)f;
+	}
+	
+	float level = 0.0;
+	(void)fader->getProperty(MappedAudioFader::FaderRecordLevel, level);
+	
+	// Like in base/Instrument.h, we use numbers < 1000 to
+	// mean buss numbers and >= 1000 to mean record ins
+	// when recording the record input number.
+	
+	MappedObjectValueList connections = fader->getConnections
+	    (MappedConnectableObject::In);
+	int input = 1000;
+	
+	if (connections.empty()) {
 	    
-	    int inputChannel = -1;
-	    if (channels == 1) {
-		float f = 0;
-		(void)fader->getProperty(MappedAudioFader::InputChannel, f);
-		inputChannel = (int)f;
-	    }
-//!!!mtr	    m_recordInputChannel = inputChannel;
+	    std::cerr << "No connections in for record instrument "
+		      << (id) << " (mapped id " << fader->getId() << ")" << std::endl;
 	    
-    //!!! can't do with a single record level
-	    float level = 0.0;
-	    (void)fader->getProperty(MappedAudioFader::FaderRecordLevel, level);
-	    m_recordLevel = level;
-
-	    // At the moment we only record one track at a time, and
-	    // we record to the so-called audio monitoring instrument.
-	    // So we just have the one field to set, to note which
-	    // input is connected to it.  Like in base/Instrument.h,
-	    // we use numbers < 1000 to mean buss numbers and >= 1000
-	    // to mean record ins.
+	    // oh dear.
+	    input = 1000;
 	    
-	    MappedObjectValueList connections = fader->getConnections
-		(MappedConnectableObject::In);
-
-	    if (connections.empty()) {
+	} else if (*connections.begin() == mbuss->getId()) {
+	    
+	    input = 0;
+	    
+	} else {
+	    
+	    MappedObject *obj = m_alsaDriver->getMappedStudio()->
+		getObjectById(MappedObjectId(*connections.begin()));
+	    
+	    if (!obj) {
 		
-		std::cerr << "No connections in for record instrument "
-			  << (id) << " (mapped id " << fader->getId() << ")" << std::endl;
-
-		// oh dear.
-		m_recordInput = 1000;
-
-	    } else if (*connections.begin() == mbuss->getId()) {
-
-		m_recordInput = 0;
-		
+		std::cerr << "No such object as " << *connections.begin() << std::endl;
+		input = 1000;
+	    } else if (obj->getType() == MappedObject::AudioBuss) {
+		input = (int)((MappedAudioBuss *)obj)->getBussId();
+	    } else if (obj->getType() == MappedObject::AudioInput) {
+		input = (int)((MappedAudioInput *)obj)->getInputNumber()
+		    + 1000;
 	    } else {
-		
-		MappedObject *obj = m_alsaDriver->getMappedStudio()->
-		    getObjectById(MappedObjectId(*connections.begin()));
-
-		if (!obj) {
-
-		    std::cerr << "No such object as " << *connections.begin() << std::endl;
-		    m_recordInput = 1000;
-		} else if (obj->getType() == MappedObject::AudioBuss) {
-		    m_recordInput = (int)((MappedAudioBuss *)obj)->getBussId();
-		} else if (obj->getType() == MappedObject::AudioInput) {
-		    m_recordInput = (int)((MappedAudioInput *)obj)->getInputNumber()
-			+ 1000;
-		} else {
-		    std::cerr << "Object " << *connections.begin() << " is not buss or input" << std::endl;
-		    m_recordInput = 1000;
-		}
+		std::cerr << "Object " << *connections.begin() << " is not buss or input" << std::endl;
+		input = 1000;
 	    }
 	}
-*/
+	
+	if (m_recordInputs[id].input != input) {
+	    std::cerr << "Changing record input for instrument "
+		      << id << " to " << input << std::endl;
+	}
+	m_recordInputs[id] = RecordInputDesc(input, inputChannel, level);
+
 	size_t pluginLatency = 0;
 	bool empty = m_instrumentMixer->isInstrumentEmpty(id);
 
@@ -2021,8 +1947,7 @@ JackDriver::updateAudioData()
 	// If we find the object is connected to no output, or to buss
 	// number 0 (the master), then we set the bit appropriately.
 
-	/*!!!mtr	MappedObjectValueList */ connections = fader->getConnections
-	    (MappedConnectableObject::Out);
+	connections = fader->getConnections(MappedConnectableObject::Out);
 
 	if (connections.empty() || (*connections.begin() == mbuss->getId())) {
 	    if (i < audioInstruments) {

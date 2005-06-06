@@ -441,7 +441,6 @@ SequenceManager::stop()
     // if we're recording MIDI or Audio then tidy up the recording Segment
     if (status == RECORDING)
     {
-	//!!! MTR check this
         m_doc->stopRecordingMidi();
         m_doc->stopRecordingAudio();
 

@@ -221,17 +221,6 @@ public:
 
     virtual void setLowLatencyMode(bool lowLatMode) = 0;
 
-    // Set audio monitoring Instrument - tells the sequencer that the
-    // gui is currently monitoring audio and which Instrument to report
-    // the input level against - this is so we can get a real time
-    // display of the audio input stream.
-    //!!! This is also the recording instrument!
-    //
-#ifdef MTR_IN_PROGRESS
-//!!!    virtual void setAudioMonitoring(long value) = 0;
-//!!!    virtual void setAudioMonitoringInstrument(unsigned int id) = 0;
-#endif
-
     // Fetch audio play latencies
     //
     virtual Rosegarden::MappedRealTime getAudioPlayLatency() = 0;

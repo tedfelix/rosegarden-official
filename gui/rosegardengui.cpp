@@ -3186,11 +3186,6 @@ void RosegardenGUIApp::slotDeleteTrack()
     Rosegarden::Instrument *inst = m_doc->getStudio().
         getInstrumentById(comp.getTrackById(trackId)->getInstrument());
 
-#ifdef MTR_IN_PROGRESS
-    if (inst && inst->getType() == Rosegarden::Instrument::Midi)
-        comp.setRecordTrack(trackId);
-#endif
-
     m_view->slotSelectTrackSegments(trackId);
 }
 
@@ -5341,11 +5336,12 @@ RosegardenGUIApp::setCursor(const QCursor& cursor)
 QString
 RosegardenGUIApp::createNewAudioFile()
 {
-//!!!mtr    return QString(m_doc->createNewAudioFile().c_str());
     Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().createRecordingAudioFile();
-    if (!aF) { //!!!mtr -- what, exactly?
+    if (!aF) {
+	// createRecordingAudioFile doesn't actually write to the disk,
+	// and in principle it shouldn't fail
+	return "";
     } else {
-//	return m_doc->getAudioFileManager().getAudioPath() + aF->getFilename();
 	return aF->getFilename();
     }
 }
@@ -5357,8 +5353,8 @@ RosegardenGUIApp::createRecordAudioFiles(const QValueVector<Rosegarden::Instrume
     for (unsigned int i = 0; i < recordInstruments.size(); ++i) {
 	Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().createRecordingAudioFile();
 	if (aF) {
-	    //!!! mtr ... and if not aF, report error to user
-//	    qv.push_back(m_doc->getAudioFileManager().getAudioPath() + aF->getFilename());
+	    // createRecordingAudioFile doesn't actually write to the disk,
+	    // and in principle it shouldn't fail
 	    qv.push_back(aF->getFilename());
 	    m_doc->addRecordAudioSegment(recordInstruments[i],
 					 aF->getId());
@@ -5370,7 +5366,6 @@ RosegardenGUIApp::createRecordAudioFiles(const QValueVector<Rosegarden::Instrume
 QString
 RosegardenGUIApp::getAudioFilePath()
 {
-    //!!!mtr
     return QString(m_doc->getAudioFileManager().getAudioPath().c_str());
 }
 

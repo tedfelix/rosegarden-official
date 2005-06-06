@@ -1552,27 +1552,20 @@ RosegardenGUIView::slotSetRecord(Rosegarden::InstrumentId id, bool value)
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Composition::trackcontainer &tracks = comp.getTracks();
     Rosegarden::Composition::trackiterator it;
-
+#ifdef NOT_DEFINED
     for (it = tracks.begin(); it != tracks.end(); ++it)
     {
         if (comp.getSelectedTrack() == (*it).second->getId())
         {
 //!!! MTR            m_trackEditor->getTrackButtons()->
 //                setRecordTrack((*it).second->getPosition());
-//!!! MTR is this needed?
+//!!! MTR is this needed? I think probably not
             slotUpdateInstrumentParameterBox((*it).second->getInstrument());
         }
     }
-
+#endif
     Rosegarden::Studio &studio = getDocument()->getStudio();
     Rosegarden::Instrument *instr = studio.getInstrumentById(id);
-
-    if (instr)
-    {
-//!!! MTR -- implications?
-        getDocument()->setAudioMonitoringState(
-                (instr->getType() == Rosegarden::Instrument::Audio), id);
-    }
 }
 
 void

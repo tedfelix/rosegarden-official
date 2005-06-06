@@ -493,7 +493,7 @@ private:
 
     Scavenger<RunnablePluginInstance> m_pluginScavenger;
 
-    //!!!mtr -- hoist to SoundDriver w/setter?
+    //!!! -- hoist to SoundDriver w/setter?
     typedef std::set<Rosegarden::InstrumentId> InstrumentSet;
     InstrumentSet m_recordingInstruments;
 

@@ -348,12 +348,6 @@ public:
      */
     void getMappedDevice(Rosegarden::DeviceId id);
 
-    /*
-     * Create a new audio file and return the path to it so that
-     * the sequencer can use it to write to.
-     */
-//!!! mtr    std::string createNewAudioFile();
-
     void addRecordAudioSegment(Rosegarden::InstrumentId, Rosegarden::AudioFileId);
 
     // Audio play and record latencies direct from the sequencer
@@ -370,9 +364,9 @@ public:
     // awkward around new audio files as timing is crucial - the gui can't
     // access the file until lead-out information has been written by the 
     // sequencer.
-    //!!!mtr 
+    //
     // Note that the sequencer doesn't know the audio file id (yet),
-    // only the instrument it was recorded to.  (It also knows the
+    // only the instrument it was recorded to.  (It does know the
     // filename, but the instrument id is enough for us.)
     //
     void finalizeAudioFile(Rosegarden::InstrumentId instrument);
@@ -425,10 +419,6 @@ public:
     bool isBeingDestroyed() { return m_beingDestroyed; }
 
     static const unsigned int MinNbOfTracks; // 64
-
-    // Turn on and off audio monitoring for a particular instrument
-    //
-    void setAudioMonitoringState(bool value, Rosegarden::InstrumentId id);
 
 public slots:
     /**

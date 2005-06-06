@@ -513,13 +513,11 @@ AudioFileManager::createRecordingAudioFile()
 std::vector<std::string>
 AudioFileManager::createRecordingAudioFiles(unsigned int n)
 {
-    //!!! MTR want some way to find out _NOW_ if we can't write to audio dir
-
     std::vector<std::string> v;
     for (unsigned int i = 0; i < n; ++i) {
 	AudioFile *af = createRecordingAudioFile();
 	if (af) v.push_back(m_audioPath + af->getFilename().data());
-	//!!! MTR ... else what?
+	// !af should not happen, and we have no good recovery if it does
     }
     return v;
 }

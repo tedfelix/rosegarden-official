@@ -2072,19 +2072,10 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     delete mD;
 }
 
-//!!!mtr std::string
-//RosegardenGUIDoc::createNewAudioFile()
-//{
-//    return m_audioFileManager.createRecordingAudioFile();
-//}
-
 void
 RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
 					Rosegarden::AudioFileId auid)
 {
-    //!!! mtr this is called from RosegardenGUIApp::createRecordAudioFiles.
-    // how can we be sure the segments don't leak?
-    
     Rosegarden::Segment *recordSegment = new Segment
 	(Rosegarden::Segment::Audio);
 
@@ -2329,59 +2320,6 @@ RosegardenGUIDoc::slotNewRecordButton()
 
     // Document modified
     slotDocumentModified();
-
-    // If we're got an audio track then tell someone goddamn
-    //
-#ifdef MTR_IN_PROGRESS
-    Rosegarden::Track *recordTrack
-        = m_composition.getTrackById(m_composition.getRecordTrack());
-
-    if (recordTrack)
-    {
-        Rosegarden::Instrument *recordInstr =
-            m_studio.getInstrumentById(recordTrack->getInstrument());
-
-        if (recordInstr)
-        {
-            if (recordInstr->getType() == Rosegarden::Instrument::Audio)
-                setAudioMonitoringState(true, recordInstr->getId());
-            else
-                setAudioMonitoringState(false, recordInstr->getId());
-
-            // Update the instrument parameter box
-            //
-            RosegardenGUIView *w;
-            for(w=m_viewList.first(); w!=0; w=m_viewList.next())
-            {
-                w->slotSetRecord(recordInstr->getId(), 
-                        (m_composition.getRecordTrack() == 
-                         m_composition.getSelectedTrack()));
-            }
-        }
-    }
-#endif
-}
-
-void
-RosegardenGUIDoc::setAudioMonitoringState(bool value,
-                                          Rosegarden::InstrumentId id)
-{
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (unsigned int)id;
-
-    rgapp->sequencerSend("setAudioMonitoringInstrument(unsigned int)", data);
-    
-    QByteArray data2;
-    QDataStream streamOut2(data, IO_WriteOnly);
-
-    streamOut2 << long(value);
-
-    rgapp->sequencerSend("setAudioMonitoring(long int)", data);
-
-    RG_DEBUG << "setAudioMonitoringState - " << value
-             << " - instrument = " << id << endl;
 }
 
 
