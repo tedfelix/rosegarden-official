@@ -163,7 +163,7 @@ Colour::dataToXmlString() const
 // Generic Colour routines:
 
 Colour
-Rosegarden::getCombinationColour(const Colour &input1, const Colour &input2)
+getCombinationColour(const Colour &input1, const Colour &input2)
 {
     Colour ret((input1.getRed()+input2.getRed())/2,
                 (input1.getGreen()+input2.getGreen())/2,
