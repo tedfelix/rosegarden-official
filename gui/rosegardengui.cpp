@@ -3160,6 +3160,21 @@ void RosegardenGUIApp::slotDeleteTrack()
     //
     if (comp.getNbTracks() == 1) return;
 
+// VLADA
+    if (m_view->haveSelection()) {
+
+	Rosegarden::SegmentSelection selection = m_view->getSelection();
+	m_view->slotSelectTrackSegments(trackId);
+	m_view->getTrackEditor()->slotDeleteSelectedSegments();
+	m_view->slotSetSelectedSegments(selection);
+
+    } else {
+
+	m_view->slotSelectTrackSegments(trackId);
+	m_view->getTrackEditor()->slotDeleteSelectedSegments();
+    }
+//VLADA
+
     int position = track->getPosition();
 
     // Delete the track
@@ -3187,7 +3202,9 @@ void RosegardenGUIApp::slotDeleteTrack()
     Rosegarden::Instrument *inst = m_doc->getStudio().
         getInstrumentById(comp.getTrackById(trackId)->getInstrument());
 
-    m_view->slotSelectTrackSegments(trackId);
+//VLADA
+//    m_view->slotSelectTrackSegments(trackId);
+//VLADA
 }
 
 void RosegardenGUIApp::slotMoveTrackDown()
@@ -4207,7 +4224,7 @@ void RosegardenGUIApp::slotExportProject()
     QString errMsg;
     if (!m_doc->saveDocument(rgFile, errMsg,
 			     true)) { // pretend it's autosave
-	KMessageBox::sorry(this, i18n("Saving temporary file failed: %1").arg(errMsg));
+	KMessageBox::sorry(this, i18n("Saving Rosegarden file to package failed: %1").arg(errMsg));
 	CurrentProgressDialog::thaw();
 	return;
     }
