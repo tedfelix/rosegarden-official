@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>RosegardenTransport</class>
 <widget class="QFrame">
     <property name="name">
@@ -39,213 +39,6 @@
         <property name="frameShadow">
             <enum>Raised</enum>
         </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PanelOpenButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>3</x>
-                    <y>56</y>
-                    <width>25</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image0</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="on">
-                <bool>true</bool>
-            </property>
-            <property name="flat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Show additional controls</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>ToEndButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>3</x>
-                    <y>26</y>
-                    <width>25</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image1</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="flat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Display time to end</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>FfwdButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>370</x>
-                    <y>4</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image2</pixmap>
-            </property>
-            <property name="autoRepeat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Fast forward</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Moves the current pointer position forwards one bar.</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>FfwdEndButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>370</x>
-                    <y>43</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image3</pixmap>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Fast forward to end</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PlayButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>303</x>
-                    <y>4</y>
-                    <width>66</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image4</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="default">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Play/Pause</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Plays from the current pointer position, or pauses playback if already in progress.</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>RewindButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>260</x>
-                    <y>4</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image5</pixmap>
-            </property>
-            <property name="autoRepeat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Rewind</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Moves the current pointer position back one bar.</string>
-            </property>
-        </widget>
         <widget class="QFrame">
             <property name="name">
                 <cstring>LCDBoxFrame</cstring>
@@ -527,7 +320,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -549,7 +342,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image7</pixmap>
+                    <pixmap>image1</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -571,7 +364,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -593,7 +386,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -615,7 +408,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -637,7 +430,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -659,7 +452,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -681,7 +474,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image8</pixmap>
+                    <pixmap>image2</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -703,7 +496,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2398,7 +2191,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2420,7 +2213,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image7</pixmap>
+                    <pixmap>image1</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2442,7 +2235,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image7</pixmap>
+                    <pixmap>image1</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2464,7 +2257,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image7</pixmap>
+                    <pixmap>image1</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2486,7 +2279,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2508,7 +2301,7 @@
                     </rect>
                 </property>
                 <property name="pixmap">
-                    <pixmap>image6</pixmap>
+                    <pixmap>image0</pixmap>
                 </property>
                 <property name="scaledContents">
                     <bool>true</bool>
@@ -2520,12 +2313,151 @@
         </widget>
         <widget class="QPushButton">
             <property name="name">
-                <cstring>StopButton</cstring>
+                <cstring>TimeDisplayButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>3</x>
+                    <y>4</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image3</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>false</bool>
+            </property>
+            <property name="flat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Switch between real time, musical time, and frame count</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>ToEndButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>3</x>
+                    <y>26</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image4</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="flat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Display time to end</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PanelOpenButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>3</x>
+                    <y>56</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image5</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="on">
+                <bool>true</bool>
+            </property>
+            <property name="flat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Show additional controls</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>FfwdButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>370</x>
+                    <y>4</y>
+                    <width>42</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image6</pixmap>
+            </property>
+            <property name="autoRepeat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Fast forward</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Moves the current pointer position forwards one bar.</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PlayButton</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>303</x>
-                    <y>43</y>
+                    <y>4</y>
                     <width>66</width>
                     <height>38</height>
                 </rect>
@@ -2540,13 +2472,19 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image9</pixmap>
+                <pixmap>image7</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="default">
+                <bool>false</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Stop</string>
+                <string>Play/Pause</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Stops playback or recording.</string>
+                <string>Plays from the current pointer position, or pauses playback if already in progress.</string>
             </property>
         </widget>
         <widget class="QPushButton">
@@ -2571,7 +2509,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image10</pixmap>
+                <pixmap>image8</pixmap>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Rewind to beginning</string>
@@ -2582,21 +2520,86 @@
         </widget>
         <widget class="QPushButton">
             <property name="name">
-                <cstring>TimeDisplayButton</cstring>
+                <cstring>RewindButton</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>3</x>
+                    <x>260</x>
                     <y>4</y>
-                    <width>25</width>
-                    <height>25</height>
+                    <width>42</width>
+                    <height>38</height>
                 </rect>
             </property>
-            <property name="font">
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image9</pixmap>
+            </property>
+            <property name="autoRepeat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Rewind</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Moves the current pointer position back one bar.</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>FfwdEndButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>370</x>
+                    <y>43</y>
+                    <width>42</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image10</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Fast forward to end</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>StopButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>303</x>
+                    <y>43</y>
+                    <width>66</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
             </property>
             <property name="text">
                 <string></string>
@@ -2604,14 +2607,11 @@
             <property name="pixmap">
                 <pixmap>image11</pixmap>
             </property>
-            <property name="toggleButton">
-                <bool>false</bool>
-            </property>
-            <property name="flat">
-                <bool>true</bool>
-            </property>
             <property name="toolTip" stdset="0">
-                <string>Switch between real time, musical time, and frame count</string>
+                <string>Stop</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Stops playback or recording.</string>
             </property>
         </widget>
     </widget>
@@ -2633,231 +2633,6 @@
         <property name="frameShadow">
             <enum>Raised</enum>
         </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PanelCloseButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>3</x>
-                    <y>4</y>
-                    <width>25</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image12</pixmap>
-            </property>
-            <property name="flat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Hide additional controls</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PanicButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>174</x>
-                    <y>4</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image13</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Panic Button</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Resets all MIDI devices if you've got stuck notes</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>MetronomeButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>217</x>
-                    <y>4</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image14</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Metronome</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Provides a metronome click for you to play along with</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>SoloButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>260</x>
-                    <y>4</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image15</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Solo</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Mutes all but the currently selected track</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>RecordButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>303</x>
-                    <y>4</y>
-                    <width>66</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image16</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Record</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Record either MIDI or audio</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>LoopButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>370</x>
-                    <y>4</y>
-                    <width>42</width>
-                    <height>38</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucidatypewriter</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="focusPolicy">
-                <enum>NoFocus</enum>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image17</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Loop</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Turn on and off the loop markers (if set)</string>
-            </property>
-        </widget>
         <widget class="QFrame">
             <property name="name">
                 <cstring>MidiEventFrame</cstring>
@@ -4218,6 +3993,231 @@
                 </property>
             </widget>
         </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PanelCloseButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>3</x>
+                    <y>4</y>
+                    <width>25</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image12</pixmap>
+            </property>
+            <property name="flat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Hide additional controls</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PanicButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>174</x>
+                    <y>4</y>
+                    <width>42</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image13</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>false</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Panic Button</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Resets all MIDI devices if you've got stuck notes</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>MetronomeButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>217</x>
+                    <y>4</y>
+                    <width>42</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image14</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Metronome</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Provides a metronome click for you to play along with</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>SoloButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>260</x>
+                    <y>4</y>
+                    <width>42</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image15</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Solo</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Mutes all but the currently selected track</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>RecordButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>303</x>
+                    <y>4</y>
+                    <width>66</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image16</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Record</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Record either MIDI or audio</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>LoopButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>370</x>
+                    <y>4</y>
+                    <width>42</width>
+                    <height>38</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucidatypewriter</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image17</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Loop</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Turn on and off the loop markers (if set)</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <customwidgets>
@@ -4240,61 +4240,61 @@
 </customwidgets>
 <images>
     <image name="image0">
-        <data format="XPM.GZ" length="269">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022130543251d2e253d856405bffcbc54105b19c856360003103709c4353134313001ab4c0471cd93cc53cc93c01a11001b571906a0dc440880729394c12a9593a07ac17c200f6614900fe2c14d4e525646b12809a7bd48dc5a6b2e0052ad3583</data>
-    </image>
-    <image name="image1">
-        <data format="XPM.GZ" length="269">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022130543251d2e253d856405bffcbc54105b19c856360003103711c4353134313001ab4c0271cd93cc53cc93c01a1100c65506e2c444185719850be6c1b9caca494000e32a43000e5974bde826a3db0b7755ad351700ee6c379e</data>
-    </image>
-    <image name="image2">
-        <data format="XPM.GZ" length="864">789c5dd0cb8edb201406e07d9e02c5bba8f21803b1adaa8bb92d5b7559a9ea828b9d3883934c2e3393547df7f21f50830ad211dfef0b07ee16ecc7f7af6c71373b9ef469b4ccaef5812ddc799a2e3f7f7df93d9b73c978cb84607cfe69362f9965df76db1e6b1fd6454503dc24cac835b10d9378fec7163c26dac81dc82b2e39bd7c21b698e004d61526f8962823ef41c1455577e089d88956101d28b9ac24f5ff9828233f885ab65283afa0aa55a56a704854912b70592ff992d8838d685423404d348d6b0c68c0568413d0d343a28a7c073bd9f14e822f892af24ab45dd759f029d1453e835a6a1e39262a4ddf3e80469ada10f744677ae3c02d68955d5a055aa2b3dad2d322b18f2ccba22c5329cb9868c8d82c717d580eab224bd66348362f59e2a76d39f8dd3e4bfc6b3178ef8a2cf18790f8bec892e32994f3982571bc6dff4ffc7b966c505c714ba68f502efbdb7fce23f6ba66bbf7a143bfca3a0cbd0dfedede12f43f1c1f6ee77abce2ec87ec369e700fcff1cae67f3ecffe02d111c719</data>
-    </image>
-    <image name="image3">
-        <data format="XPM.GZ" length="813">789c65d1c96ec3201080e1bb9f02855b543531de40551fa1558f95aa1e6070129c90d559aaaaefdecc405a99e08bbf5fd8183c19b3f7b717369e64875ef70e182cf49e8dedd1fbaf8fcfe7ef6c94974ce44cd42c1f3d64a34706ec75b36ef1de5deff99406d24796813ba2bc5ec4ee8f12398b84c00552280142210159e4c5b4a045f7c85ad7aad6c803b2299abc2990dbc82ab0279a46051eff68909b481b6891b290b9a4c9ebc82a70453452499abc44aa52e581e71b55899c4756818608ca2a40b6480d5a6be209694a230c4dd69175e005091508a8909c68a1054bbf60308685f35bd18653017b2bed6c4e65f15f5cb74c8beb5669717ecd93e2fc8627c5b9ed5d71bbbbe2d3b24f9f3a246ff67db2ba3ff26417960fbfb95bf1e1be4e679eec9dc7133b5dd233bc3f552a3f4fd92f82c9b8bc</data>
-    </image>
-    <image name="image4">
-        <data format="XPM.GZ" length="1370">789c9dd25b4bc3301407f0f77d8ab0bd0da96d2ebd203e78ab4f8a8f82f890dbb255bbe9b6aa53fceef69cc4216c683081925fcfbfa44dcfe198dcde5c91f1e160b596eb99267a2a97646cbab6dddcdd1f7f0c862c2734254c906c783018264493ebc5dcc2daf5eb518a03d80572cf0659c2049e046acf1698a530811a59c204aa40ed790ea4294ce04320f75c212b5ad20af8046419e30c5ff81459b19261750ae419e71cab6f4041452a28f005298511127809cc699ee5585d22656e72ac8e80052bb28201e748559842012f80252b33cf05529555893481c67303ac78252a0e5c0325979944be070acf47a496526ae059a0f57c062aaea8c2f00c6994540658075a4f09d442532d80af81b9e70469b4d418b681d6338918ffc88d645c4e6963b7f727fd6124497fb1bb39e7a6b3ef9c699a87c4364df3b82fe7da79787ee19c4a6c7f677fceb9a7e7b89c6b9693a89c73abb58dcab9eee5352ae7de644c4e6d62f6ed378df98ed57bccb99ce0a1fc993b3ddbfeb7ae3b4f6cd7757b72edc58f3ea8ebbe0feabadeed83cb6d13ec193f72f697587c3f7f1e0dbe00454a3e43</data>
-    </image>
-    <image name="image5">
-        <data format="XPM.GZ" length="864">789c5dcfcb6ea3301886e17daec20abba82218db01349a454fcb197559a9eac207726ae2a439b44daade7bfdfd7603aa2d593c2f60f078c41e1ffeb1d178b03fe8c3c2323bd73b3672c7f5faf4f4fcf77330e492f19a09c1f8f06a30cc9965ff37bec5b50fd75941035c24cac817621d26717f610d1e136de41ae405979c1efe20d698e0162c0b4cf02d51465e83828ba26cc003b111b520ce40c96521e9ff6f1365e489a8652d35f80aaa5215aa04db4415e9c04939e113e214ac44a52a015aa2a95c654003d6229c80eeee1255e43bd8c88637129c27aac833d1364d63c1fb441779076aa979e43251697af70634d29486b8223ad31a076e40abecc42a50139dd596ee66896d644e234bcba5688360bb92b936acd35957e68b50962f5d59ad7d9b6fb6fe52b299f76df6ea2f259bfa5076be2bcb7dc0e1d895cd9bff19a9bcfbdf05fb7abfe8957cf51170daf64a7ec6b7b07ff7872e947cda2ffa3a94b05fef5c37c71667e9957c87b39f6f7b25bbc3721fcad79fc1373c43c7b2</data>
-    </image>
-    <image name="image6">
         <data format="XPM.GZ" length="923">789c9d924d0a83301085f739c5e0eca454ad1184d22314ba2c942e261169176e5abb28a577afd1980cfe54705cbd2fc973f2325108e7d311c2483c6baaef1af48d1e1016afaa7a5fae878f087631a4122424c146045bd080715b46a29132913a4f8d5446e6695ee8cc483252670595657b76a21639122b858e2b4efd7e6c3e5faae7481c2329c7492d72232c6ffeea8d8c58c747f6db757c64ef38bb2e2acf790acd02fecf1f87fb7b4e7c01c9f3619b1d1fb7b98a4fd8afe213f696b35bcd713b4a5d9f1c778367df8b4fa7cb9353b211cee6ffdd8b1f2c0ac43d</data>
     </image>
-    <image name="image7">
+    <image name="image1">
         <data format="XPM.GZ" length="412">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade652325530365130513054d2e152d253485650360003105719c435313449b630067193405c0b638b946453103711c44d364d494c4b03eb05017a3194131393c08ca4c444652a1808320fcc009947175fd45a730100351049ee</data>
     </image>
-    <image name="image8">
+    <image name="image2">
         <data format="XPM.GZ" length="923">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232325030365130513054d2e152d253485650360003105719c435313449b630067113415c0b638b946453103709c44d364d494c4b03ebc50246c5e92daeac9c0802ca68e2497080ae1ea21c5dfd80b97f8488d75a7301005e68a747</data>
     </image>
+    <image name="image3">
+        <data format="PNG" length="83">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac77260000001a49444154189563602013fc87629c624ca49836aa986cc5240100b319040db65cea050000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="155">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac772600000062494441541895a5d0cb0980400c45d1a3b8746593b6623dd6611f8268093a6e14469951c407817c6e42127e2a24e200e50b78510c9f6091838b1bd862c58605fd7d48886cc41cef19fbd5d171163a0ca8d13ced1f3065f2c9c35385ecebb29ff8ac1d37bc1e2a162452d80000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="113">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac7726000000384944415418956360a0156084d2ff8951cb82c4f1c1a3700b32c71b8fe9ffa1f228009b06ac0ab169c0ab10ae819595952885c836d01100006e300bb19d2784610000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="249">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c049444154388dedd33d6a42411440e18f68914210ecdc804b10d249305aa473776e203bb0b1b20b08a9035980a6b1b0b21253f843c03777de08761e1806e63087cbc0f0e0de3412e713ecb1297459a658a157e82e3c05ae8b4ff40b5d360c1dcc1381c865c3d00e02495727fc3ff05ae8ae98e250b17698056e9c0b7f242e9f0329f77b0ea49ea295385f6319b8f75c387571806de0be4ac33f7839edb55cb346f41b43c7df56dbe5265e9ea6a98a462e0c2f3052fda6910b79c3f30deec1357f84474343c1d303120000000049454e44ae426082</data>
+    </image>
+    <image name="image7">
+        <data format="PNG" length="333">89504e470d0a1a0a0000000d4948445200000024000000140806000000e57a9f3500000114494441544889edd53d4a04311880e1c79f6d443b2b9bedec843d8285b65e411b576fe15ec376af3056eb0104c14eb4dec2b510c44204b5188bd9e0e0cfec6432b28d2f043209df376fbe84847faa59aa985bc764dabf40fef73a2c54cc6de06edabfc4016e6be4ec2a161318e3193ba5b1579cd7b62c09e5a5f686013a33e24ebfc4f57fc835f92d783142b0831345b57a117151c408057a0aa981d9d58aa689109fd5bac66e7b3acd85029b1829cecd5aba4eba50a08f1b6ca726aa127a88ccb582d50417540bbd47e4c9b085b3349df42d7bc43ef654dc2d312c27c466386e4b24d0a442ad57a54cacd0507156866d8b04ea6ed91887ea3d8819ee4bdf5778c25169eca5e67fbf916bf1d26b83eebc05e6ce074aa53289a23c29100000000049454e44ae426082</data>
+    </image>
+    <image name="image8">
+        <data format="PNG" length="226">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000a949444154388dedd3210a02411406e00f316c50bc8547106c2aa8c1e6dd148cdec06c320b66c166d164f0046b70c3b2e830bb2a88f8c3f0c29bf9e63130fcf3ed69635ae6c00c695643e8098b32709a5b8fd2c125eb3f84eb656ecba16bb4429b6a9f40cbc2835894f8a718638524768ad8899701b4f90a3cc1f949aff10abc432f805786e1806e56df0ac3117decdf0d73ffc65d6cabc0f3422de68a113615068b4a82e1a7f01fc90dab2a1b4817a92dca0000000049454e44ae426082</data>
+    </image>
     <image name="image9">
-        <data format="XPM.GZ" length="606">789cddd0bf0ac2301006f03d4f71345b116b4b0b11f1111447411c7277e99fa10a5a0711df5d2f6d202088b3df65b8df97edb214f6bb0da499ba0e76e808a8b51748f9d6f7f7c371fd50496e405e0e793253c91c08b6e79393bd79ef7ae1236c279623d9d3c8086ba141b33428a4893cd209b1c4024b61e7c9e89085564815155409b5279325ff8b13ddc8f947beb7da8660d41287b8a8ad9b90ff6ba90d895bdd85c4d7f9e9becf957a0101af9593</data>
+        <data format="PNG" length="248">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000bf49444154388dedd3b16a42311840e18fe2e050e82c38f7110a6eb6601ddcfa767d81ce5dba74ea26143a17bab9585727471d222236f9d3e8e2e0814b86737312fecbe5c239708ba7235c353ac773a3731544ef3045afd1814e107dc74da3db91bbf1c9d15cf821d818b93fec8f628c577433eff5f15670551658179e55e05e72b1fd514cf05b38f43370d7b5f0178685c03270590e3fde0f06dbf590c855c330c33dbe1b5d354cfa5507d26c5b5c354c9aeb233e1addbfe9627484bb90d80042ac3405a2aa17210000000049454e44ae426082</data>
     </image>
     <image name="image10">
-        <data format="XPM.GZ" length="813">789c65d1496ec3201480e1bd4f81c22eaa9c802750d523b4eab252d505606730b133394355f5eef57b90a810bce1fb858580d9947cbcbf92e92c390e6a581b6256ea40a6f5a9ebbe3fbf5e7e9209cb09678497844d9e92494a0c79dbf60dcced38a7731cc0de3377dc23c5f821db3b0570e9691c1b2097dc7009d4c08c65f30c373d004b55ca52018fc02aab589501779e85e380d495743cdda9815bcfda5101452698c0c59d67e1b8416a21052e5e03652e99e3f9469903179e85a3411a594b035c0195514a212f409d6bae7171ed593a5e81a630dc14408aac4d636a7c8260b842695c94468cffdd4b8365b15c8565dddab06c5a1b14daf53628740be17fd9591b96bd8d4bff509ac343a1c7b8a47488761f0f75eaa39252159f22a59b362a293d5f6ee57af1d7456fe5f15683f2fb9cfc019c4fb8f0</data>
+        <data format="PNG" length="243">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000ba49444154388dedd3316a02411487f11f89458a848087f008829d48d4c2cebb2958e61069acac7381c01e402b0b0f209b62151665dcb7d94db71f0c036f1edffb33ccd0f1df3c27ea4b9c716c7be0067b0c1ef4ac905ff65ae25c917898e8c94beb8ea78a017d6c1fc8935489e1fd2ff288b82c9fb42dbecabf306f227e4bd45ff0d944fc9aa81fb088887b91a692748c2cd21cbde30ca3a89458e21f7c287e6298aac4df8aa4b5a455e21d663825ced7377b88a9e2697534e717602c1d33e8c59cfe0000000049454e44ae426082</data>
     </image>
     <image name="image11">
-        <data format="XPM.GZ" length="239">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022230543251d2e253d856405bffcbc54105b19c85636313431308148210084abac0c6203c981e5225c556bcd050098e02b91</data>
+        <data format="PNG" length="169">89504e470d0a1a0a0000000d4948445200000024000000140806000000e57a9f3500000070494441544889edce310a80300c85e15f71701747f1241ed473387a092fa1ae4e42275d3a740b257510de0781b634c903f999cad13b02533c5fc0006c4097fc09c0ead89165061ea38edca175c18045289045812c0a6451208b02591a47ef029cc93d003bd0266fb763be5b1f4b3ef502b686123393bbf88e0000000049454e44ae426082</data>
     </image>
     <image name="image12">
-        <data format="XPM.GZ" length="269">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234540022130543251d2e253d856405bffcbc54103b11c856360003105719c4353134313001ab4c0271cd93cc53cc93c01a110017571985ab9c9888c4554ed44b548673954152203e980be681f9606e6212042442b93080d35e28b7d69a0b00b01d382c</data>
+        <data format="PNG" length="118">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac77260000003d4944415418956360a02b606565fd4facdaff0c0c0cde509a28850c8434202b8401ac1ab029c4d0c088a49810606444e2e03299818181612b118651000017690d16df26b4f00000000049454e44ae426082</data>
     </image>
     <image name="image13">
-        <data format="XPM.GZ" length="1849">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523231500022630543251d2e253d856405bffcbc54105b19c856360003103711c4b530b630b43006ab24128caa1da16a95c16060d5268294260eac5a3daccea582da446c4ea0b35abd442c4aa990ce681566a4a8c50e46d58e00b5b5d65c00ad9747f9</data>
+        <data format="PNG" length="251">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c249444154388de5d4316a42411080e14f8580d85879855c200748e3653c8fa517b048619f3204049b9026454484105090140a42f220297ca07918de3e98a0e00fcb32c3cecf30ec2e67422d5256c7001b7c63895e84f836171eae754a3765348fe41a11e29723b9b708f10cab426e1a2186c742fc1a257ef82ff1b8aa38951632fbeb761d2586e75c9ae1aaec70ea286092efeff88c140fed9ef55d859ad3d1c13dbe3047374adcf7fb135a9415a4ce382bc4db6a7dfd4d1b237ce0093751e20be00753d8298bc322561e0000000049454e44ae426082</data>
     </image>
     <image name="image14">
-        <data format="XPM.GZ" length="629">789c8d914d0ac2301085f73d45e8ec8aa4ad8998221e417129888be9a4a08b2a685d8878773be97fade0d045dec7cc7b93340cc47eb71141e8dd0b2cce24e8843711d8479e3f0fc7f5cbf3e79128bfa588fd99e74b41627bbd647c86f20c912b9696a58a55a45c27b2d4a88d4696294ba34c6c144b62995062136299b1448d0bd42e65a2fee150d604c754ca14879c1b5d2f7c71b2ac2d0d7d20659bcea8f56f2261c4f10727703e4d40d75f0fd4019dbfac0760cc3398e0bc7d355005349cb7cfdcae55407bafee0ed0e3d43e64c9a9ff3efd92fffd97017fafbc0f5191789d</data>
+        <data format="PNG" length="939">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000037249444154388db594cf6b244514c7bf55dd355dd5d5e5a467925197e04a88b7ac42584febcd83067f65dd954411bcacb247efdebcf83788e051167f6c4090752537bdac1850884141bc0926214b32d3d5ddd3fdbadf5e321242d80ca80505f5e3f33ef5ea1514f03f35711ea0b58eadb55701c44288b6699afb799edf1d8fc7f9bf3a796161e1e3c160c0ce391e0c06dceff7d93977ebbc38797262adbdd0eff7df8ae3f87100504ad9d168b4aeb546d3343b59966dd7750da5d42b4aa964aacc9c734f596bef3be7786e6e6e5f6b3d48d374addbedb2b5f64829950441106aad779d739ca6e9d5a932d65aaf00488d319f0c87c3d9388eaf30f3750060e68dbaaeb3a669280cc38dbaae311e8fd7a612174571270c43efbd7f370802d4753d088260656666069d4ee7f6840b8260c31883b66d579452d154e5b0d62e3ae7368d31bcb8b8d874bb5dee743afb6118764e8855144587172f5ee4344d5f38376300f0deffd1b6ed3bceb9a3e17028a3284218865f115135619aa6a9a594dfedefefa36ddb97a6121fcbffaaaaeac3aaaa4044d05a7f7f9ad15a7f9e2409aaaaba16866130951800acb524a5c4ecec2ccab2bc1904c1e99b6d3273e59cbb608cb93cb5d87b7f9d99b1b7b707a5d473dd6ef7e6c9fdaaaa0e851077f33c8710e2da546263cc9351145d69db16ccfc2d1181883eb2d63e7192534adde9f57a20a217a712cfccccac1b632480dfbdf7ab52cadfa4948f8461f8a9736e69c21d1c1cdc6e9aa69e9f9fbf64ad5d3aed39ab146f1e1d1da16ddb2f89680ce03d2104003c4f44bf2449720300cab2dccdf3fcdee1e121e2385e7da8d85a7b29cbb2a7cbb26c9ba6f90c00aaaafaa1d3e9c018734b29f5675dd76f4f7821c4d7de7b78ef5f7ea8d818f386520a52ca9ff33cdf0180f178cc4551dcf3deaf9565b92884f869c29765f98dd61a5aebcb51143d76a6584a2989689d99a194fae2244444ab6ddbbeaf94ba41441f4cd6f33cdf21a25f8928b0d6be7a32e69f8f3e4992679d733f0e87438461b82d84d88da228ecf57a62341a892ccbe4f2f232b6b7b74144d4348d104234ccfc4c5dd73d66de288ae2f5892f9c0c8220488aa2401445c8b26c294992a5d16804ef3d92240111616b6b0b524a144581344d41441042a0280a4829e7cecc584a29e2387e2d08824799998510cccc8299594a2901f07197ccdc1e3f9e00d0327359d7f56651147f9f7ec4ffbc3d0026c392ee07e4b4cb0000000049454e44ae426082</data>
     </image>
     <image name="image15">
-        <data format="XPM.GZ" length="584">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523232500022130543251d2e253d856405bffcbc54103b09c856360003103711c4354d344d314d04719541dc64d364b36453b0462c8090b87262121c2422c4914481002e8e2a8c104fc2238ecd5e7ce270d728ebe1b017a73b13b1fb0b6417663810238ee62f5ce289d8c513b1ba1fd95f24c457ad3517008d4f9044</data>
+        <data format="PNG" length="371">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000013a49444154388dedd4bb2e454114c6f11f8e884b2541229ad3d269157a2fa0f104442b1e802894940a8542ed0d241205894b14e25228142e8970222e21147b4bb6c99cb3f72651f99295cc4cd6facf9a596b867f1550158bd8470d6fb8c325ce71822bdc60b52874122ff86860efb8c76e51e8580e306b0ff52095c8da4c30dfc51a6ed18f81747c8af5a2d992dc6736ab6a99e02f3547d65a83f9147a7f020fb5255ea81dcc6334b279218de03102cf5a0d1b9810af535d55b124e9d3bcced84177d9ec9bd3132ce0a8017ca52c385415d3380ec037bf056737c8829f438758bbe5a922295a56e779419d18c299ef857b953cdf8b34bbf08e67f3c0e3925f2c165ccf36d116829a82f95e9af5b5e477eb421f3a02bf9ef404cb98c3531e781cc338404bbac1a0e449b7a4fe9738c4760cd848ad682f13f0a7fa04dd097dd4554106f70000000049454e44ae426082</data>
     </image>
     <image name="image16">
-        <data format="XPM.GZ" length="768">789c6dd2c96e83301006e03b4f61851baa0866b7aa3e42ab1e2b553d18db2c09fb72a8aabe7be3195320ca9cf8fe013c8c383be4e3fd9538676b9af95c09224a3e12472e4df3fdf9f5f2639d6842684afc80d0d393757289206f5dabf4f57cbbb685e4110f351b43c58566af29a358c65cf3b23209341532a1c8ca502699668d4c590aec908c32386831640c0e1a0d258e2180ca4f7da63921833080f9b9a108a02b91a1174277300c439839474651e46b5e0d59045d1b19d318ba85a68abd5b699686c24b355b244d293043fa9e0f37bbf7b58536cf845487302fb0ca6a0b65f15f9735bc16bbaa316cf659d162681fc2a283501ec31ec2ec180e8fc2fcd1e3f0c3b8ea188e3867b9cf26337cb5cbca79fdcced05e5b22da46e3113c7d5d5fd90abe56e9ffb25ff3e5b7f3bbcc675</data>
+        <data format="PNG" length="425">89504e470d0a1a0a0000000d4948445200000024000000160806000000a8b23e3e00000170494441544889edd64f4b15511807e0e74a78179218a42b572e320211128296adc3bddfa4851fc065e037689fa0d0576813881be1ba70510b23b04c32c43fcdbc2de65c1a2e16e774ef0d027f300c9c7987f7e1cc9933c36dfeb37486b93998c67d4ca5a12b9c7438fea7a0047982e758c12ceee01bde6107bbc3c04a30f3c18be0a0e2474db48f8a2a380c3682c571636683f5e0f320e406d8f76033581817a61bac051fda8d63e018409da6d99c1e076821d8a9a86f82fc0e16ec45b3ceb23251607a80c79dc217a16e1ed972d01d3568b9668e3c51ab660a0f653eb612d04c617dbbc74c49716e4e51177388746f564a40bd094efa1d721429e738d06c9a2305eda35750df6ff01ebd0e97a3061d612bf8c29f67297e9d2ff00687057df2933e1b9b15e7193bf575f03a581a0ba6855a0c5e0647fd4d720052079f8257c1d3dcfda79fbffddacfe31956f10877d3a533cd02dec65b7ccc5d3b438112aaabf9edb887c9347c85af382e85dc26373f016bc9c9ec16ee2b220000000049454e44ae426082</data>
     </image>
     <image name="image17">
-        <data format="XPM.GZ" length="1055">789c75d2c96e83301006e03b4f61855b5411b04d03aafa08ad7aac54f5e06508242c61e9a1aafaee65cce6406a72e0b37e31e3710e7bf2fef642f607a7ed449729a252d190bdfe2a8aef8fcfe71f67c77c42fb1f25c1eec1d9794491d7aa047c87feddf5cd427623f9408d0c7c7c90d5483ef08ca43e3e486518d388c6c816c902e63353f434920fcc0c631631132e915cf0880ba44486340c438abc208fec181e19b246462c0a22c3c6504671249162a41e7845c62ad6b1422648c145283832474a2ea9344c914a2b501ae92275a81f75882c0c011f33c669b9422a0da09514eebc6925921358eb94ac136906ab95a5378904f7ce97dc6c16f9e58c4eac44debb5c6a634f65bf952f890ae0eaadd615a09a133540b30e785e03504f8916601bf03c80764a74ff253a2b71bf4a6755193bb5bed577ba54a9613aed5cce9c76e9144f3b4c0cc6889998755a33b1790d4dc2edc486a95b11584ffdf6e686c4eae63cebf64d95eded9bfe859c3abdfb0f1ac7b89edb26b199eceef7c9f90391b3f990</data>
+        <data format="PNG" length="1630">89504e470d0a1a0a0000000d494844520000001e000000160806000000d7632ccf000006254944415448899d96dd6f13d919c69f33f64c666c3776e2d85252882c079234911cea84ed96283852942e526e9030b0ab65511bb577ace855a5fe03fd07daa25e54ad8046424a82caaa05544489058240364d37acd26ef0126cec38df7166ec3373e6cc476f1a2bb07ced3ed2b93aafdedff3be47ef3987e0edf2747575291e8f472484889cf37d9cf35edbb6bfeff1783ca2282e8ba2f82fd7759f9ba6c96cdbe6c160509f9d9de56f4a4a5eb7914aa5bce5723960db76dbe8e8e8e78f1e3d42a150c0dada1ab6b7b7a1eb3a0040511484c361442211b4b4b4a0b7b7176363634738e75f298aa2bdcec037c0a954caab699a1f40dbd1a347676fddba85b5b53598a609d7756159161863701c0784100882004992e0f57a210802445144341ac5e0e020eeddbb778473fe5524125133998cf55a70575797e4f7fb0f9e3a75eacb4b972ebd00dc95ebbab505008490dada2b499210894470faf4695cb972e587d56af5bfb95ccef80638954a7929a51ddddddd5fdeb871038c31104220cb321a1b1bd1d6d6869696163c7efcf8cf2f77696060e067e57219a55209d96c165b5b5b300c038ee34014450c0d0d617171b18f31f6786161c17c013c3c3c1c4d2693ab172f5e84aaaaf0f97c88c5623871e204eedebdfb81a2288b00cc579dd7de424dd33cd0dfdf7f6b727212cf9e3d43a552412010c0993367f0e0c18396e9e9e915002e0180643229fafdfefe9595953bebebebf07abd48a552a0941ef7f97c3384908d898989b7410100e9745a721ca78131f6235996af65321998a68968348ae6e6e69f6c6e6e661616164c010042a1507d3c1ebfa3aa2a5cd745229100a5f4b8dfef9f9a9c9c5c7e5728004c4c4c9857af5e5d5514e59f94d2e38944028410689a86783cfe8f783c5e0f00422a95f212420ecccdcda15aad0200745dff8bcfe7fb62626262e75d81af3050f1f97c5f18863106009452cccfcfc3b6edf693274f4a5e003263ecbd8d8d0d1886014551ded846001200f3db74c1711ce8ba8e8d8d0d84c3e124807981734e1cc711764784730e4992ce504a7bd2e974702f54d7f51fa8aa7a4cd3b4c4f0f0b0ff4db0743a1da094f64892f4b16559b51114048130c688271e8f3b8410811032aa691a1863505515070f1efc90523addd3d3a37577773300c14aa572fce9d3a77f24842892246d7674746c66b359f672573a3b3b9b0cc3189065f9dac3870f51ad5621cb325a5b5b110a857ea3284a5ec8643296288ad94422019fcf0700d8d9d9c1d4d414d6d7d7ffdad7d757a4940e1a8611a794262a950a72b9dc27dbdbdb9f9aa6f9deb163c7ea5faaf2fdc3870fafacaeae5e9b9a9ac2cece0e0821080402e8e9e981288a8be3e3e3a607005a5b5bed72b9fcc8b2ac8faad52a38e7608c616b6b0b737373e09c7f120c067f6e9ae6a15c2e874aa502c658a72ccb21599697dbdbdb370e1d3a24504afb8ac562e6f6eddb78fefc39aad52a1cc7415d5d1d9a9b9b51575737c239ff4f369bb53d0090cbe5ac582cc60606067ef9e4c913e8ba0ec771605916745d87aaaac8e7f328140ab57b9a3106c658872449dff3f97c4b9224e9aaaa9ec8e7f383ebebebb5ab561004343535219d4e43d3b45f2793c9722693713dbb6d8ac562ac5028dc4c2412a36b6b6bb06d1b8ee3d40c70ce61db76ed2c5dd705630caeeb768642a1af25497a56ad56878bc562af6118100401b22c231c0e63787818c562f18824494f2e5cb8600180b09b2893c9188cb1b9e5e5e5fe73e7cea1bdbd1d4d4d4d50140582500b7ba5c8ff5f084288254912fc7e3fa2d1283a3b3b71fefc796c6f6fbf2fcbf2bfc7c7c76b23e8d99ba0542af14824b292cfe77fab28cadf8786867e5aa954e0ba2e3c1e4f6d2601401004343434a0b5b5f5b3502874a5aeae6ed9b2ac165dd73fd8b76f1f464646609a66aa5028fc4ad3b4a5ebd7afbf30f7affd08f4f6f68a8d8d8d0d9cf3ae9191913b33333358585840369b05e71ca15008b158ec6fe170f87782203c0804029c527ae0ecd9b3f3972f5ffe312124ab695af9e577f8ade0bd060281805f14c5fde572f9d3a5a5a55f1042b07ffffecfc2e1f0efbd5eeff4cd9b37d5ddd8e6e666b1542af1effcf579858120800f4ba5d21f1a1a1afe545f5f3f460899b97fffbef6ae39f6cafb2d622963ec4e30183ce638ceb2699a5fcfceced2ef020580ff01fde52bd054ede3830000000049454e44ae426082</data>
     </image>
     <image name="image18">
-        <data format="XPM.GZ" length="646">789c6dd2c10ac2300c00d07bbf2234b7229d1be245fc04c5a3201e4615f430059d0711ff5ddb2e6bb236ec90eed134cb5a19d8ef36602af5ecdbfeeac05dda0798d3abebde87e3faa374d3807fa0d633a52d38d8de6f679fe33fc776e196f53cd010188256a3600a292882096246517815ca99884606e18044a3a40d91824820924265a7923a2e8bcd05f33db1173e002913175f2a6be6d3294871a2d95fa00e8a94ee017b69d339d90df1e77c57ea072ede6758</data>
+        <data format="PNG" length="256">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c749444154388dad55db1184200c4c180bb81a28c73aad811228c356f42b3792db3cc0db2fc724bb7901dc7b270f27ed17fa5fa9b117b7cd90211f4ba0ac906a7f1453b4d30ca917bb590681552af23f69bfc4ffa71519d2c8f62546ea5ea03738b1c18c33a4d156f0d13f43b61952e4af6d6e8fb3a408f080448419a433d6486d85052fdba892a295f5d45785cd8c51a9d6de6a814a8d2131da51f98e7a3b64ec9da04a8db53d43be3c3c0b22cacf17e4cdb5a931649ceddf34b190cf0aa019f03f1fd3e7457f03b5a66c9ed26e86130000000049454e44ae426082</data>
     </image>
 </images>
 <tabstops>

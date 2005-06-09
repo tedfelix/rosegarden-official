@@ -48,7 +48,7 @@
 #include "rosedebug.h"          // debug stream
 
 
-#define COMPILE_DEPRECATED      // will compile the useless 1.0 features
+//#define COMPILE_DEPRECATED      // will compile the useless 1.0 features
                                 // ifdeffing this stuff out will ease the
 				// transition into oblivion as I expunge
 				// these useless ideas and then implement new,

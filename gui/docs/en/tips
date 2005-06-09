@@ -47,6 +47,23 @@ synths that are started after Rosegarden is already running?</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
+<p>If your studio setup does not change very often, and  you would prefer for
+the settings in your <b>autoload.rg</b> to take precedence over whatever
+studio is saved with any files you happen to load, you can make your autoload
+the default studio for everything using <b>Settings -> Configure Rosegarden ->
+Behaviour -> Always use default studio when loading files</b>.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>If you have accidentally recorded a segment so short that it does not
+appear on the canvas, which you can only hear during subsequent recording
+sessions, you can gain access to it by using <b>Composition -> Change Document
+Duration</b> and then setting the composition to start at a negative number.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
 <p>...that if you place a note at the wrong pitch using the notation editor, you can move it one semitone at a time with the up and down arrow keys on your keyboard?</p>
 </html>
 </tip>

@@ -165,9 +165,11 @@ if 'install' in COMMAND_LINE_TARGETS:
 
 	#for s in glob.glob("gui/pixmaps/toolbar/*.xpm"):
 	env.KDEinstall('KDEDATA','/rosegarden/pixmaps/toolbar', glob.glob("gui/pixmaps/toolbar/*.xpm"))
-
+	env.KDEinstall('KDEDATA','/rosegarden/pixmaps/toolbar', glob.glob("gui/pixmaps/toolbar/*.png"))
+	
 	#for s in glob.glob("gui/pixmaps/transport/*.xpm"):
 	env.KDEinstall('KDEDATA','/rosegarden/pixmaps/transport', glob.glob("gui/pixmaps/transport/*.xpm"))
+	env.KDEinstall('KDEDATA','/rosegarden/pixmaps/transport', glob.glob("gui/pixmaps/transport/*.png"))
 
 	env.KDEinstall('KDEDATA','/rosegarden/pixmaps', "gui/pixmaps/splash.png")
 

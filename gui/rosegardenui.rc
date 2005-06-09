@@ -198,6 +198,13 @@
         <Action name="delete_track"/>
         <Action name="move_track_up"/>
         <Action name="move_track_down"/>
+	<Separator/>
+        <Action name="mute_all_tracks"/>
+        <Action name="unmute_all_tracks"/>
+	<Separator/>
+<!--	<Action name="show_previews"/>
+	<Action name="show_segment_labels"/>
+	<Action name="show_tracklabels"/>  -->
 </ToolBar>
 
 <ToolBar name="Editors Toolbar">

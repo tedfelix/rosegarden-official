@@ -676,6 +676,7 @@ void RosegardenGUIApp::setupActions()
                                              actionCollection(),
                                              "show_chord_name_ruler");
 
+    
     m_viewPreviews = new KToggleAction(i18n("Show Segment Pre&views"), 0, this,
                                        SLOT(slotTogglePreviews()),
                                        actionCollection(),
@@ -897,7 +898,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIconSet(pixmap);
-    new KAction(i18n("Manage A&udio Segments"), icon,
+    new KAction(i18n("Manage Files Associated with A&udio Segments"), icon,
                 Key_U + CTRL, 
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
@@ -909,7 +910,7 @@ void RosegardenGUIApp::setupActions()
     //
     // Tracks menu
     //
-    pixmap.load(pixmapDir + "/toolbar/add_tracks.xpm");
+    pixmap.load(pixmapDir + "/toolbar/add_tracks.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("Add &Track"), icon, CTRL + Key_T,
                 this, SLOT(slotAddTrack()),
@@ -919,19 +920,19 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
-    pixmap.load(pixmapDir + "/toolbar/delete_track.xpm");
+    pixmap.load(pixmapDir + "/toolbar/delete_track.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("D&elete Track"), icon, CTRL + Key_D,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
-    pixmap.load(pixmapDir + "/toolbar/move_track_down.xpm");
+    pixmap.load(pixmapDir + "/toolbar/move_track_down.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("Move Track &Down"), icon, SHIFT + Key_Down,
                 this, SLOT(slotMoveTrackDown()),
                 actionCollection(), "move_track_down");
 
-    pixmap.load(pixmapDir + "/toolbar/move_track_up.xpm");
+    pixmap.load(pixmapDir + "/toolbar/move_track_up.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("Move Track &Up"), icon, SHIFT + Key_Up,
                 this, SLOT(slotMoveTrackUp()),
@@ -947,13 +948,13 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
-    pixmap.load(pixmapDir + "/toolbar/mute-all.xpm");
+    pixmap.load(pixmapDir + "/toolbar/mute-all.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("&Mute all Tracks"), icon, 0, 
                 this, SLOT(slotMuteAllTracks()),
                 actionCollection(), "mute_all_tracks");
 
-    pixmap.load(pixmapDir + "/toolbar/un-mute-all.xpm");
+    pixmap.load(pixmapDir + "/toolbar/un-mute-all.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("&Unmute all Tracks"), icon, 0, 
                 this, SLOT(slotUnmuteAllTracks()),
