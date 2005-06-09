@@ -3400,8 +3400,8 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
              "Would you like to try and locate this file or skip it?").arg(m_file);
 
     QLabel *labelW = new QLabel(label, w);
-    labelW->setAlignment(Qt::AlignHCenter);
-    labelW->setMinimumHeight(100);
+    labelW->setAlignment(Qt::AlignCenter);
+    labelW->setMinimumHeight(60);
 }
 
 
@@ -3410,12 +3410,13 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 void
 FileLocateDialog::slotUser3()
 {
-    m_file = KFileDialog::getOpenFileName
-        (":WAVS",
-         i18n("*.wav|WAV files (*.wav)"),
-         this, i18n("Select an Audio File"));
-
     if (!m_file.isEmpty()) {
+	m_file = KFileDialog::getOpenFileName
+	    (":WAVS",
+	     i18n("%1|Requested file (%2)\n*.wav|WAV files (*.wav)")
+	     .arg(QFileInfo(m_file).fileName())
+	     .arg(QFileInfo(m_file).fileName()),
+	     this, i18n("Select an Audio File"));
         QFileInfo fileInfo(m_file);
         m_path = fileInfo.dirPath();
         accept();

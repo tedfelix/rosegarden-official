@@ -2,7 +2,7 @@
 # -*- cperl-indent-level: 4 -*-
 #
 # Rosegarden Project file packager
-# Chris Cannam, March 2005
+# Chris Cannam 2005
 #
 # This program converts between Rosegarden (.rg) files and Rosegarden
 # Project (.rgp) files.
