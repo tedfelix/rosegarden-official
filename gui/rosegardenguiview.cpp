@@ -1407,9 +1407,11 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
     QString audioFile;
     int trackId;
     Rosegarden::timeT time;
-    s >> audioFile;
+    audioFile = s.readLine();
     s >> trackId;
     s >> time;
+
+    RG_DEBUG << "RosegardenGUIView::slotDroppedNewAudio: audioFile " << audioFile << ", trackId " << trackId << ", time " << time << endl;
 
     RosegardenGUIApp *app = RosegardenGUIApp::self();
     Rosegarden::AudioFileManager &aFM = getDocument()->getAudioFileManager();

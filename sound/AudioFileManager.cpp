@@ -147,7 +147,7 @@ AudioFileManager::addFile(const std::string &filePath)
             if (aF->open() == false)
             {
                 delete aF;
-                throw(i18n("Can't open audiofile"));
+                throw(i18n("Failed to open audio file."));
             }
         }
         catch(std::string e)
@@ -182,7 +182,7 @@ AudioFileManager::addFile(const std::string &filePath)
 #endif // HAVE_LIBMAD
     else
     {
-        throw(i18n("Unsupported audio file format"));
+        throw(i18n("Unsupported audio file format \"%1\".").arg(ext));
     }
 
     if (aF)
