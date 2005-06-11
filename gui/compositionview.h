@@ -240,9 +240,8 @@ public:
     NotationPreviewData* makeNotationPreviewDataCache(const Rosegarden::Segment *s);
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
-    static CompositionRect computeSegmentRect(const Rosegarden::Segment&,
-                                              const Rosegarden::Composition& comp,
-                                              const Rosegarden::SnapGrid& grid);
+    CompositionRect computeSegmentRect(const Rosegarden::Segment&);
+    QPoint computeSegmentOrigin(const Rosegarden::Segment&);
 
     Rosegarden::SegmentSelection getSelectedSegments() { return m_selectedSegments; }
     Rosegarden::Composition&     getComposition()      { return m_composition; }

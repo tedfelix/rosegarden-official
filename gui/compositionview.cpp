@@ -206,7 +206,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
 
         Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
+        CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(rect) && !isMoving(s)) {
             bool tmpSelected = isTmpSelected(s),
                 pTmpSelected = wasTmpSelected(s);
@@ -288,7 +288,7 @@ void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY
 
     int xLim = clipRect.topRight().x();
     for(; npi->x() <= xLim && npi != npEnd; ++npi) {
-//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : xLim = " << xLim
+//                     RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : xLim = " << xLim
 //                              << " - npi = " << (*npi) << endl;
         PreviewRect tr = *npi;
 
@@ -299,7 +299,7 @@ void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY
         // already has correct x-coord virtue of snap grid
         tr.moveBy(0, baseY);
 
-//                     RG_DEBUG << "CompositionModelImpl::getRectanglesIn : inserting preview rect "
+//                     RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : inserting preview rect "
 //                              << tr << endl;
         npRects->insert(tr);
     }
@@ -345,6 +345,10 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
     float h1, h2, l1 = 0, l2 = 0;
 
     QRect tRect = cachedAPData->getSegmentRect();
+    int currentTRectX, currentTRectY;
+    QPoint currentSegmentOrigin = computeSegmentOrigin(*segment);
+    tRect.moveTopLeft(currentSegmentOrigin);
+
     double sampleScaleFactor = samplePoints / double(tRect.width());
 
     int i0 = clipRect.x() - tRect.x();
@@ -420,8 +424,8 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
 
         apRects->insert(r2);
 
-//        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r2 "
-//                 << r2 << " - height = " << height << endl;
+//         RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r " << r
+//                  << " - r2 " << r2 << " - height = " << height << endl;
     }
 
     if (segment->isAutoFading()) {
@@ -438,17 +442,6 @@ void CompositionModelImpl::makeAudioPreviewRects(RectList* apRects, const Segmen
                        audioFadeInEnd, 1);
         r3.setColor(Qt::blue);
         apRects->insert(r3);
-
-//         // Convert by matrix
-//         int mappedFadeInEnd, y;
-//         painter.worldMatrix().map(audioFadeInEnd, 0, &mappedFadeInEnd, &y);
-
-//         painter.setPen(Qt::blue);
-//         painter.drawLine(tRect.x(),
-//                          tRect.y() + tRect.height() - 1,
-//                          tRect.x() + mappedFadeInEnd,
-//                          tRect.y());
-
     }
 
 
@@ -558,7 +551,8 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
 {
     if (m_audioPreviewThread) {
         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started\n";
-        QRect segRect = computeSegmentRect(*segment, m_composition, m_grid);
+        QRect segRect = computeSegmentRect(*segment);
+        segRect.moveTopLeft(QPoint(0,0));
         AudioPreviewUpdater* updater = new AudioPreviewUpdater(*m_audioPreviewThread,
                                                                m_composition, segment, segRect,
 							       this);
@@ -723,7 +717,7 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
         i != segEnd; ++i) {
 
         Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
+        CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(m_selectionRect)) {
             m_tmpSelectedSegments.insert(s);
         }
@@ -739,7 +733,7 @@ void CompositionModelImpl::finalizeSelectionRect()
         i != segEnd; ++i) {
 
         Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
+        CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(m_selectionRect)) {
             setSelected(s);
         }
@@ -758,7 +752,7 @@ QRect CompositionModelImpl::getSelectionContentsRect()
         i != sel.end(); ++i) {
 
         Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
+        CompositionRect sr = computeSegmentRect(*s);
         selectionRect |= sr;
     }
 
@@ -804,7 +798,7 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
         i != segments.end(); ++i) {
 
         Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
+        CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
 //             RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
             computeRepeatMarks(sr, s);
@@ -890,7 +884,7 @@ void CompositionModelImpl::startMoveSelection()
     Rosegarden::SegmentSelection::iterator i = m_selectedSegments.begin();
     for(; i != m_selectedSegments.end(); ++i) {
         Segment* s = *i;
-        CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
+        CompositionRect sr = computeSegmentRect(*s);
         startMove(CompositionItem(new CompositionItemImpl(*s, sr)));
     }
     
@@ -938,37 +932,48 @@ Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const C
     return /*s->getEndMarkerTime() + */(count * (s->getEndMarkerTime() - s->getStartTime()));
 }
 
-
-CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s,
-                                                         const Rosegarden::Composition& comp,
-                                                         const Rosegarden::SnapGrid& grid)
+QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 {
-    int trackPosition = comp.getTrackById(s.getTrack())->getPosition();
+    int trackPosition = m_composition.getTrackById(s.getTrack())->getPosition();
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 
-    int x = int(nearbyint(grid.getRulerScale()->getXForTime(startTime)));
-    int y = grid.getYBinCoordinate(trackPosition);
-    int h = grid.getYSnap();
+    QPoint res;
+    
+    res.setX(int(nearbyint(m_grid.getRulerScale()->getXForTime(startTime))));
+    res.setY(m_grid.getYBinCoordinate(trackPosition));
+
+    return res;
+}
+
+
+CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
+{
+    Rosegarden::timeT startTime = s.getStartTime();
+    Rosegarden::timeT endTime   = s.getEndMarkerTime();
+
+    QPoint origin = computeSegmentOrigin(s);
+
+    int h = m_grid.getYSnap();
     int w;
 
-    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << x << ", y " << y << " startTime " << startTime << ", endTime " << endTime << endl;
+//     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
         timeT repeatEnd   = s.getRepeatEndTime();
-        w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(repeatStart,
-                                                      repeatEnd - repeatStart)));
+        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(repeatStart,
+                                                                      repeatEnd - repeatStart)));
 //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is repeating - repeatStart = "
 //                  << repeatStart << " - repeatEnd : " << repeatEnd
 //                  << " w = " << w << endl;
     } else {
-        w = int(nearbyint(grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
-         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
-                  << " w = " << w << " (x for time at start is " << grid.getRulerScale()->getXForTime(startTime) << ", end is " << grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
+        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
+//          RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
+//                   << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
     }
 
-    CompositionRect cr(x, y, w, h);
+    CompositionRect cr(origin, QSize(w, h));
     cr.setLabel(strtoqstr(s.getLabel()));
 
     return cr;
