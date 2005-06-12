@@ -212,19 +212,25 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.xpm");
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.png");
     QIconSet icon = QIconSet(pixmap);
     new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
                 SLOT(slotOpenInMatrix()), actionCollection(),
                 "open_in_matrix");
 
-    pixmap.load(pixmapDir + "/toolbar/notation.xpm");
+    pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
+    icon = QIconSet(pixmap);
+    new KAction(i18n("Open in &Percussion Matrix Editor"), icon, 0, this,
+                SLOT(slotOpenInPercussionMatrix()), actionCollection(),
+                "open_in_percussion_matrix");
+    
+    pixmap.load(pixmapDir + "/toolbar/notation.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
                 SLOT(slotOpenInNotation()), actionCollection(),
                 "open_in_notation");
 
-    pixmap.load(pixmapDir + "/toolbar/eventlist.xpm");
+    pixmap.load(pixmapDir + "/toolbar/eventlist.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
                 SLOT(slotOpenInEventList()), actionCollection(),
@@ -278,6 +284,7 @@ void EditViewBase::slotUpdateToolbars()
 void
 EditViewBase::slotOpenInNotation()
 {
+
     emit openInNotation(m_segments);
 }
 
@@ -285,6 +292,12 @@ void
 EditViewBase::slotOpenInMatrix()
 {
     emit openInMatrix(m_segments);
+}
+
+void
+EditViewBase::slotOpenInPercussionMatrix()
+{
+    emit openInPercussionMatrix(m_segments);
 }
 
 void

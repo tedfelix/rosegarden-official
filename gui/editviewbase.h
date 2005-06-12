@@ -151,6 +151,7 @@ signals:
      */
     void openInNotation(std::vector<Rosegarden::Segment *>);
     void openInMatrix(std::vector<Rosegarden::Segment *>);
+    void openInPercussionMatrix(std::vector<Rosegarden::Segment *>);
     void openInEventList(std::vector<Rosegarden::Segment *>);
     
     /**
@@ -229,6 +230,7 @@ public slots:
     void slotStateChanged(const QString&, bool noReverse);
 
     virtual void slotOpenInMatrix();
+    virtual void slotOpenInPercussionMatrix();
     virtual void slotOpenInNotation();
     virtual void slotOpenInEventList();
     

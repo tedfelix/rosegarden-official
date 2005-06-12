@@ -57,6 +57,7 @@
 	   <text>Edit &amp;With</text>
 	   <Action name="open_in_event_list"/>
 	   <Action name="open_in_matrix"/>
+	   <Action name="open_in_percussion_matrix"/>
   </Menu>
   <Separator/>
   <Action name="add_clef"/>

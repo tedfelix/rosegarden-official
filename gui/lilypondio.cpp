@@ -730,7 +730,9 @@ LilypondExporter::write()
 
         // do nothing if track is muted...  this provides a crude but easily implemented
         // method for users to selectively export tracks...
-        Rosegarden::Track *track = m_composition->getTrackById((*i)->getTrack());
+//        Rosegarden::Track *track = m_composition->getTrackById((*i)->getTrack());
+        // fix bug #1218737 Lillypond export should follow track order
+        Rosegarden::Track *track = m_composition->getTrackByPosition(trackNo);
         
         if (!exportUnmuted || (!track->isMuted())) {
             if ((int) (*i)->getTrack() != lastTrackIndex) {

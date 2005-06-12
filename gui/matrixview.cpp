@@ -573,7 +573,7 @@ void MatrixView::setupActions()
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
 
-    pixmap.load(pixmapDir + "/toolbar/quantize.xpm");
+    pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIconSet(pixmap);
     new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
