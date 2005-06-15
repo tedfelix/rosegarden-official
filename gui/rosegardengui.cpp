@@ -1330,6 +1330,7 @@ void RosegardenGUIApp::initView()
         slotToggleRulers();
         slotToggleTempoRuler();
         slotTogglePreviews();
+        slotToggleSegmentLabels();
 
         // Reset any loop on the sequencer
         //
