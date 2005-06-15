@@ -272,7 +272,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
 
         for(std::vector<SegmentRefreshMap::iterator>::iterator ei = eraseThese.begin();
             ei != eraseThese.end(); ++ei) {
-            m_segments.erase(ei);
+            m_segments.erase(*ei);
         }
 
 
