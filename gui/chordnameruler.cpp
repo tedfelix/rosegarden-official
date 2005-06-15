@@ -259,15 +259,22 @@ ChordNameRuler::recalculate(timeT from, timeT to)
 	    ss.insert(*ci);
 	}
 
+        std::vector<SegmentRefreshMap::iterator> eraseThese;
+        
 	for (SegmentRefreshMap::iterator si = m_segments.begin();
 	     si != m_segments.end(); ++si) {
-
 	    if (ss.find(si->first) == ss.end()) {
-		m_segments.erase(si);
+		eraseThese.push_back(si);
 		level = RecalcWhole;
 		NOTATION_DEBUG << "Segment deleted, updating (now have " << m_segments.size() << " segments)" << endl;
 	    }
 	}
+
+        for(std::vector<SegmentRefreshMap::iterator>::iterator ei = eraseThese.begin();
+            ei != eraseThese.end(); ++ei) {
+            m_segments.erase(ei);
+        }
+
 
 	for (SegmentSelection::iterator si = ss.begin();
 	     si != ss.end(); ++si) {
