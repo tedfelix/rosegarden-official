@@ -275,6 +275,9 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         timeT startTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x()))),
               endTime = int(nearbyint(m_canvas->grid().getRulerScale()->getTimeForX(tmpRect.x() + tmpRect.width())));
 
+//         RG_DEBUG << "SegmentPencil::handleMouseButtonRelease() : new segment with track id "
+//                  << track->getId() << endl;
+
         SegmentInsertCommand *command =
             new SegmentInsertCommand(m_doc, track->getId(),
                                      startTime, endTime);
@@ -507,7 +510,9 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                 CompositionItem item = *it;
 
                 Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
-                Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
+                int trackPos = m_canvas->grid().getYBin(item->rect().y());
+                Rosegarden::Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
+                Rosegarden::TrackId itemTrackId = track->getId();
                 timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
                 timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
 
