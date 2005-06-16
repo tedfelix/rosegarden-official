@@ -152,7 +152,9 @@ EXTRA_DIST = \
 	pixmaps/feta/10/*.xpm \
 	pixmaps/feta/12/*.xpm \
 	pixmaps/toolbar/*.xpm \
+	pixmaps/toolbar/*.png \
 	pixmaps/transport/*.xpm \
+	pixmaps/transport/*.png \
 	pixmaps/*.png \
         pixmaps/misc/*.xpm \
 	styles/*.xml \
@@ -226,7 +228,9 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/10/*.xpm    $(kde_datadir)/$(data_dirname)/fonts/feta/10
 	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/12/*.xpm    $(kde_datadir)/$(data_dirname)/fonts/feta/12
 	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
+	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.png    $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
+	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.png  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
 	$(INSTALL_DATA) $(srcdir)/library/*.rgd            $(kde_datadir)/$(data_dirname)/library
