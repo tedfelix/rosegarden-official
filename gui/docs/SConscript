@@ -84,4 +84,4 @@ def processfolder(folder, lang, destination=""):
 processfolder('en/', 'en', 'rosegarden/')
 processfolder('ja/', 'ja', 'rosegarden/')
 processfolder('sv/', 'sv', 'rosegarden/')
-
+processfolder('es/', 'es', 'rosegarden/')
