@@ -645,13 +645,14 @@ void TrackEditor::dropEvent(QDropEvent* event)
                      << posInSegmentCanvas.x()
                      << endl;
 
-            if (m_doc->getComposition().getTrackById(trackPos))
+            Rosegarden::Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
+            if (track)
             {
                 QString audioText;
                 QTextOStream t(&audioText);
 
                 t << filePath << "\n";
-                t << trackPos << "\n";
+                t << track->getId() << "\n";
                 t << time << "\n";
 
                 emit droppedNewAudio(audioText);
@@ -694,31 +695,31 @@ void TrackEditor::dropEvent(QDropEvent* event)
                 // Drop this audio segment if we have a valid track number
                 // (could also check for time limits too)
                 //
-                if (m_doc->getComposition().getTrackById(trackPos))
-                    {
+                Rosegarden::Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
+                if (track) {
 
-                        RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
-                                 << trackPos
-                                 << ", time = "
-                                 << time 
-                                 << ", x = "
-                                 << event->pos().x()
-                                 << ", map = "
-                                 << posInSegmentCanvas.x()
-                                 << endl;
+                    RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = " 
+                             << trackPos
+                             << ", time = "
+                             << time 
+                             << ", x = "
+                             << event->pos().x()
+                             << ", map = "
+                             << posInSegmentCanvas.x()
+                             << endl;
 
-                        QString audioText;
-                        QTextOStream t(&audioText);
-                        t << audioFileId << "\n";
-                        t << trackPos << "\n"; // track id
-                        t << time << "\n"; // time on canvas
-                        t << startTime.sec << "\n";
-                        t << startTime.nsec << "\n";
-                        t << endTime.sec << "\n";
-                        t << endTime.nsec << "\n";
+                    QString audioText;
+                    QTextOStream t(&audioText);
+                    t << audioFileId << "\n";
+                    t << track->getId() << "\n";
+                    t << time << "\n"; // time on canvas
+                    t << startTime.sec << "\n";
+                    t << startTime.nsec << "\n";
+                    t << endTime.sec << "\n";
+                    t << endTime.nsec << "\n";
 
-                        emit droppedAudio(audioText);
-                    }
+                    emit droppedAudio(audioText);
+                }
 
             } else {
 
