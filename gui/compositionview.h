@@ -258,6 +258,7 @@ public:
 
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
+    void needUpdate(QRect);
 
 protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
@@ -452,6 +453,7 @@ public slots:
     void slotTextFloatTimeout();
 
     void slotUpdate();
+    void slotUpdate(QRect);
 
 signals:
     void editSegment(Rosegarden::Segment*); // use default editor

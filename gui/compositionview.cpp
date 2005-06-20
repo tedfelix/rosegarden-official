@@ -286,8 +286,10 @@ void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY
     v = 255 - v;
     segColor.setHsv(h, s, v);
 
-    int xLim = clipRect.topRight().x();
-    for(; npi->x() <= xLim && npi != npEnd; ++npi) {
+    int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
+    int xLim = std::min(clipRect.topRight().x(), segEndX);
+
+    for(; (npi->x() + npi->width()) <= xLim && npi != npEnd; ++npi) {
 //                     RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : xLim = " << xLim
 //                              << " - npi = " << (*npi) << endl;
         PreviewRect tr = *npi;
@@ -301,6 +303,9 @@ void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY
 
 //                     RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : inserting preview rect "
 //                              << tr << endl;
+//         if ((tr.x() + tr.width()) > xLim)
+//             tr.setWidth(xLim - tr.x());
+
         npRects->insert(tr);
     }
 }
@@ -578,13 +583,16 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 	unsigned int channels = 0;
 	const std::vector<float> &values = apu->getComputedValues(channels);
 	if (channels > 0) {
-	    RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete: set " << values.size() << " samples on " << channels << " channels" << endl;
+	    RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete: set "
+                     << values.size() << " samples on " << channels << " channels" << endl;
 	    apData->setChannels(channels);
 	    apData->setValues(values);
 	}
     }
 
     delete apu;
+
+    emit needUpdate(QRect());
 }
 
 
@@ -1078,6 +1086,9 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     connect(model, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
             this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 
+    connect(model, SIGNAL(needUpdate(QRect)),
+            this, SLOT(slotUpdate(QRect)));
+
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {
         cmi->setAudioPreviewThread(doc->getAudioPreviewThread());
@@ -1302,6 +1313,15 @@ void CompositionView::slotUpdate()
     viewport()->update();
 }
 
+void CompositionView::slotUpdate(QRect rect)
+{
+    RG_DEBUG << "CompositionView::slotUpdate() rect " << rect;
+    refreshDirtyPreviews();
+    if (rect.isValid())
+        viewport()->update(rect);
+    else
+        viewport()->update();
+}
 
 void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
 {
