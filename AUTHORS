@@ -90,6 +90,9 @@ Vince Negri <vince-rg@bulbous.freeserve.co.uk>
 Toni Arnold <toni__arnold@bluewin.ch>
     * LIRC infrared remote-controller support
 
+Jan Bína <jbina@sky.cz>
+    * Czech translation
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
