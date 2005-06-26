@@ -1322,6 +1322,7 @@ void CompositionView::setSnapGrain(bool fine)
 void CompositionView::slotUpdate()
 {
     RG_DEBUG << "CompositionView::slotUpdate()\n";
+    slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
     viewport()->update();
 }
@@ -1329,6 +1330,7 @@ void CompositionView::slotUpdate()
 void CompositionView::slotUpdate(QRect rect)
 {
     RG_DEBUG << "CompositionView::slotUpdate() rect " << rect;
+    slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
     if (rect.isValid())
         viewport()->update(rect);
