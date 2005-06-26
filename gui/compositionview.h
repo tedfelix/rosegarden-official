@@ -28,6 +28,7 @@
 #include <qpen.h>
 #include <qvaluevector.h>
 #include <qptrdict.h>
+#include <qpixmap.h>
 
 #include "Composition.h"
 #include "SnapGrid.h"
@@ -473,7 +474,11 @@ protected:
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
 
-    virtual void drawContents(QPainter * p, int clipx, int clipy, int clipw, int cliph);
+    virtual void viewportPaintEvent(QPaintEvent*);
+    virtual void resizeEvent(QResizeEvent*);
+    
+    void refreshDrawBuffer();
+    void drawArea(QPainter * p, const QRect& rect);
     void drawRect(const QRect& rect, QPainter * p, const QRect& clipRect,
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
     void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
@@ -493,6 +498,10 @@ protected:
 
     SegmentSelector* getSegmentSelectorTool();
 
+protected slots:
+    void slotDrawBufferNeedsRefresh() { m_drawBufferNeedsRefresh = true; }
+
+protected:         
 
     //--------------- Data members ---------------------------------
 
@@ -533,6 +542,9 @@ protected:
     QPoint       m_textFloatPos;
 
     bool         m_2ndLevelUpdate;
+
+    QPixmap      m_drawBuffer;
+    bool         m_drawBufferNeedsRefresh;
 
     mutable CompositionModel::RectList m_audioPreviewRects;
     mutable CompositionModel::RectList m_notationPreviewRects;

@@ -24,6 +24,8 @@
 
 #include <kmessagebox.h>
 
+// #include "Profiler.h"
+
 #include "AudioLevel.h"
 #include "BaseProperties.h"
 #include "SnapGrid.h"
@@ -203,7 +205,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     for (Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
-	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
+// 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
 
         Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s);
@@ -957,6 +959,8 @@ QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 
 CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 {
+//     Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
+
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 
@@ -1042,7 +1046,7 @@ void CompositionItemImpl::refreshRepeatMarks(int newX, int newWidth)
 CompositionView::CompositionView(RosegardenGUIDoc* doc,
                                  CompositionModel* model,
                                  QWidget * parent, const char * name, WFlags f)
-    : RosegardenScrollView(parent, name, f | WResizeNoErase|WStaticContents),
+    : RosegardenScrollView(parent, name, f | WNoAutoErase|WStaticContents),
       m_model(model),
       m_currentItem(0),
       m_tool(0),
@@ -1065,22 +1069,29 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_foreGuidePos(0),
       m_drawSelectionRect(false),
       m_drawTextFloat(false),
-      m_2ndLevelUpdate(false)
+      m_2ndLevelUpdate(false),
+      m_drawBuffer(visibleWidth(), visibleHeight()),
+      m_drawBufferNeedsRefresh(true)
 {
     m_toolBox = new SegmentToolBox(this, doc);
 
     setDragAutoScroll(true);
-//     viewport()->setBackgroundMode(PaletteBase);
+    setBackgroundMode(NoBackground);
+    viewport()->setBackgroundMode(NoBackground);
     viewport()->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
     updateSize();
     
     QScrollBar* hsb = horizontalScrollBar();
 
+    // dynamically adjust content size when scrolling past current composition's end
     connect(hsb, SIGNAL(nextLine()),
             this, SLOT(scrollRight()));
     connect(hsb, SIGNAL(prevLine()),
             this, SLOT(scrollLeft()));
+    connect(this, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotDrawBufferNeedsRefresh()));
+
 //     connect(this, SIGNAL(contentsMoving(int, int)),
 //             this, SLOT(slotContentsMoving(int, int)));
     connect(model, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
@@ -1120,6 +1131,7 @@ void CompositionView::updateSize(bool shrinkWidth)
 
 void CompositionView::scrollRight()
 {
+    RG_DEBUG << "CompositionView::scrollRight()\n";
     if (m_stepSize == 0) initStepSize();
 
     if (horizontalScrollBar()->value() == horizontalScrollBar()->maxValue()) {
@@ -1133,6 +1145,7 @@ void CompositionView::scrollRight()
 
 void CompositionView::scrollLeft()
 {
+    RG_DEBUG << "CompositionView::scrollLeft()\n";
     if (m_stepSize == 0) initStepSize();
 
     int cWidth = contentsWidth();
@@ -1323,13 +1336,59 @@ void CompositionView::slotUpdate(QRect rect)
         viewport()->update();
 }
 
-void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw, int cliph)
+/// update size of draw buffer
+void CompositionView::resizeEvent(QResizeEvent* e)
 {
-    //!!!   QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
+    QScrollView::resizeEvent(e);
+    m_drawBuffer.resize(visibleWidth(), visibleHeight());
+//     RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_drawBuffer.size() << endl;
+}
 
-    QRect clipRect(clipx, clipy, clipw, cliph);
+void CompositionView::viewportPaintEvent(QPaintEvent* e)
+{
+//     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << e->rect().normalize()
+//              << " - drawbuffer size = " << m_drawBuffer.size() <<endl;
 
-//     RG_DEBUG << "CompositionView::drawContents() clipRect = " << clipRect << endl;
+    if (m_drawBufferNeedsRefresh)
+        refreshDrawBuffer();
+
+    bitBlt (viewport(), 0, 0, &m_drawBuffer, 0, 0);
+}
+
+void CompositionView::refreshDrawBuffer()
+{
+//     RG_DEBUG << "CompositionView::refreshDrawBuffer()\n";
+
+    QPainter p;
+    m_drawBuffer.fill(viewport(), 0, 0);
+    p.begin(&m_drawBuffer, viewport());
+
+//     QPen framePen(Qt::red, 1);
+//     p->setPen(framePen);
+//     p->drawRect(0, 0, m_drawBuffer.width(), m_drawBuffer.height());
+
+    QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
+    p.translate(-contentsX(), -contentsY());
+    drawArea(&p, r);
+    
+    p.end();
+    m_drawBufferNeedsRefresh = false;
+}
+
+
+void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
+{
+
+    // must log last drawing to know what to erase, try to compute
+    // intersection between what's being drawn and preview drawing,
+    // this should give what needs to be erased. playback cursor and
+    // guidelines are not part of this.
+    //
+    // more likely, try to make the QPixmap bitBlt work properly - try
+    // bitBlt() only what needs to be, as in viewportPaintEvent
+    // 
+
+//     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 
     CompositionModel::RectList* audioPreviewData    = 0;
     CompositionModel::RectList* notationPreviewData = 0;
@@ -1366,14 +1425,14 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
             m_2ndLevelUpdate = false;
         }
         
-//         RG_DEBUG << "CompositionView::drawContents : draw comp rect " << *i << endl;
+//         RG_DEBUG << "CompositionView::drawArea : draw comp rect " << *i << endl;
         drawCompRect(*i, p, clipRect);
     }
     
     p->restore();
     
     if (rects.size() > 1) {
-//         RG_DEBUG << "CompositionView::drawContents : drawing intersections\n";
+//         RG_DEBUG << "CompositionView::drawArea : drawing intersections\n";
         drawIntersections(rects, p, clipRect);
     }
 
@@ -1401,7 +1460,7 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
         CompositionModel::RectList::const_iterator npEnd = m_notationPreviewRects.end();
         
         for(; npi != npEnd; ++npi) {
-//             RG_DEBUG << "CompositionView::drawContents : draw preview rect " << *npi << endl;
+//             RG_DEBUG << "CompositionView::drawArea : draw preview rect " << *npi << endl;
             const PreviewRect& pr = *npi;
             QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
             QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
@@ -1558,7 +1617,10 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
 {
 //     RG_DEBUG << "CompositionView::drawRect : intersectLvl = " << intersectLvl
 //              << " - brush col = " << p->brush().color() << endl;
-    
+
+//     RG_DEBUG << "CompositionView::drawRect " << r << " - xformed : " << p->xForm(r)
+//              << " - contents x = " << contentsX() << ", contents y = " << contentsY() << endl;
+
     p->save();
     
     QRect rect = r;
@@ -1742,6 +1804,8 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 {
+    slotDrawBufferNeedsRefresh();
+
     switch (e->button()) {
     case LeftButton:
     case MidButton:
@@ -1761,12 +1825,12 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     default:
         break;
     }
-
-    return;
 }
 
 void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    slotDrawBufferNeedsRefresh();
+
     stopAutoScroll();
 
     if (!m_tool) return;
@@ -1803,6 +1867,8 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
 void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 {
+    slotDrawBufferNeedsRefresh();
+
     if (!m_tool) return;
 
     int follow = m_tool->handleMouseMove(e);
@@ -1846,10 +1912,13 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     m_textFloatPos.setY(y);
     m_textFloatText = text;
     m_drawTextFloat = true;
+    slotDrawBufferNeedsRefresh();
 }
 
 void CompositionView::pointerMoveUpdate(int oldPos)
 {
+    slotDrawBufferNeedsRefresh();
+
     if (oldPos < 0) { // "large" change - only update around the current pointer position
 
         int x = std::max(0, m_pointerPos - int(m_pointerPen.width()) - 2);
@@ -1879,6 +1948,7 @@ void
 CompositionView::slotTextFloatTimeout() 
 { 
     hideTextFloat();
+    slotDrawBufferNeedsRefresh();
 }
 
 #include "compositionview.moc"

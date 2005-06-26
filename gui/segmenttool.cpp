@@ -384,7 +384,7 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
         CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
         
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
-        m_canvas->updateContents();
+        m_canvas->updateContents(m_currentItem->rect());
     }
 
     setCurrentItem(CompositionItem());
@@ -548,6 +548,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 	CompositionModel::itemcontainer::iterator it;
         int guideX = 0;
         int guideY = 0;
+        QRect updateRect;
 
 	for (it = movingItems.begin();
 	     it != movingItems.end();
@@ -592,7 +593,9 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 //             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
 //                      << newX << "," << newY << endl;
 
+            updateRect |= (*it)->rect();
             (*it)->moveTo(newX, newY);
+            updateRect |= (*it)->rect();
             setChangeMade(true);
         }
 
