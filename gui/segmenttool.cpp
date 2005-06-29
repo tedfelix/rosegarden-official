@@ -297,10 +297,9 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->setSelected(item);
-        m_canvas->getModel()->setSelected(item);
         m_canvas->getModel()->signalSelection();
         m_canvas->setTmpRect(QRect());
-        m_canvas->updateContents(tmpRect);
+        m_canvas->slotUpdate();
 
     } else {
 
