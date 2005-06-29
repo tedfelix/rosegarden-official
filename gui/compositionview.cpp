@@ -235,12 +235,10 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             // Notation preview data
             if (npData && s->getType() == Rosegarden::Segment::Internal) {
                 makeNotationPreviewRects(npData, sr.y(), s, rect);                
-
             // Audio preview data
             } else if (apData && s->getType() == Rosegarden::Segment::Audio) {
                 makeAudioPreviewRects(apData, s, rect);
             }
-            
             
             m_res.push_back(sr);
         }
@@ -464,8 +462,8 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
         timeT repeatInterval = endTime - startTime;
         timeT repeatStart = endTime;
         timeT repeatEnd = s->getRepeatEndTime();
-        sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(repeatStart,
-                                                                              repeatEnd - repeatStart))));
+        sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
+                                                                              repeatEnd - startTime))));
 
         CompositionRect::repeatmarks repeatMarks;
                 
@@ -974,8 +972,8 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
         timeT repeatEnd   = s.getRepeatEndTime();
-        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(repeatStart,
-                                                                      repeatEnd - repeatStart)));
+        w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
+                                                                      repeatEnd - startTime)));
 //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is repeating - repeatStart = "
 //                  << repeatStart << " - repeatEnd : " << repeatEnd
 //                  << " w = " << w << endl;
