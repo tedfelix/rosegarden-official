@@ -1220,6 +1220,8 @@ using Rosegarden::SegmentSelection;
 
 void CompositionView::slotSelectSegments(const SegmentSelection &segments)
 {
+//     RG_DEBUG << "CompositionView::slotSelectSegments\n";
+
     static QRect dummy;
 
     getModel()->clearSelected();
@@ -1227,7 +1229,7 @@ void CompositionView::slotSelectSegments(const SegmentSelection &segments)
     for(SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i) {
         getModel()->setSelected(CompositionItem(new CompositionItemImpl(**i, dummy)));
     }
-    updateContents();
+    slotUpdate();
 }
 
 SegmentSelector*
@@ -1324,7 +1326,7 @@ void CompositionView::slotUpdate()
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
-    viewport()->update();
+    viewport()->repaint();
 }
 
 void CompositionView::slotUpdate(QRect rect)
@@ -1333,9 +1335,9 @@ void CompositionView::slotUpdate(QRect rect)
     slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
     if (rect.isValid())
-        viewport()->update(rect);
+        viewport()->repaint(rect);
     else
-        viewport()->update();
+        viewport()->repaint();
 }
 
 /// update size of draw buffer
