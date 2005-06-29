@@ -1344,7 +1344,11 @@ void CompositionView::slotUpdate(QRect rect)
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
     QScrollView::resizeEvent(e);
-    m_drawBuffer.resize(visibleWidth(), visibleHeight());
+    int w = std::max(m_drawBuffer.width(), visibleWidth());
+    int h = std::max(m_drawBuffer.height(), visibleHeight());
+    
+    m_drawBuffer.resize(w, h);
+    slotDrawBufferNeedsRefresh();
 //     RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_drawBuffer.size() << endl;
 }
 
