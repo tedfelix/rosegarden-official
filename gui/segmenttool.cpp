@@ -1004,7 +1004,9 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                 CompositionItem item = *it;
 
                 Rosegarden::Segment* segment = CompositionItemHelper::getSegment(item);
-                Rosegarden::TrackId itemTrackId = m_canvas->grid().getYBin(item->rect().y());
+                int trackPos = m_canvas->grid().getYBin(item->rect().y());
+                Rosegarden::Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
+                Rosegarden::TrackId itemTrackId = track->getId();
                 timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
                 timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
 
