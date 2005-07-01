@@ -416,22 +416,35 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 
     double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
 
-    m_segmentCanvas->setPointerPos(pos);
+    int currentPointerPos = m_segmentCanvas->getPointerPos();
+
+    double distance = pos - currentPointerPos;
+    if (distance < 0.0) distance = -distance;
+
+    if (distance >= 1.0) {
+
+        m_segmentCanvas->setPointerPos(pos);
 
 // 	if (m_playTracking) {
 // 	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
 // 	}
 	
-    if (m_doc && m_doc->getSequenceManager() &&
-        (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
+        if (m_doc && m_doc->getSequenceManager() &&
+            (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
-        if (m_playTracking) {
-            getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+            if (m_playTracking) {
+                getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+            }
+        } else if (!getSegmentCanvas()->isAutoScrolling()) {
+            int newpos = int(double(position) / ruler->getUnitsPerPixel());
+//             RG_DEBUG << "TrackEditor::slotSetPointerPosition("
+//                      << position
+//                      << ") : calling canvas->slotScrollHoriz() "
+//                      << newpos << " - pos = " << pos << endl;
+            getSegmentCanvas()->slotScrollHoriz(newpos);
         }
-    } else if (!getSegmentCanvas()->isAutoScrolling()) {
-        getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
     }
-
+    
 }
 
 void
