@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.4  (Linux)">
+	<META NAME="CREATED" CONTENT="20050629;20475500">
+	<META NAME="CHANGED" CONTENT="20050702;9582500">
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1>Bug Submission Guidelines</H1>
+<P STYLE="margin-bottom: 0in">When you discover a problem with
+Rosegarden, you can help us a great deal by performing the following
+steps when submitting bug reports. We realize that wading through
+these guidelines and then following them means more work for you, and
+we thank you in advance for taking the time to help us help you. For
+your part, it is a waste of your time to report an issue that no one
+will ever address, and for ours, it is more often than not a waste of
+our limited resources to follow up on reports that are not made in
+accordance with these guidelines.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<H2>Check for Similar Bugs</H2>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Go to our bug tracker at
+	<A HREF="https://sourceforge.net/tracker/?group_id=4932&amp;atid=104932">https://sourceforge.net/tracker/?group_id=4932&amp;atid=104932</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in">Try to come up with a word or
+	expression that anyone who submitted this issue previously would
+	have used in the description. You have a better chance of finding
+	the previous bugs if you use terms that are as generic and simple as
+	possible. SourceForge will not return any hits unless it finds <B>all</B>
+	of the terms you enter in one of the bug summaries, and it cannot
+	search the text of the reports directly. Consequently, a search for
+	&ldquo;audio&rdquo; or &ldquo;audio segment&rdquo; is more likely to
+	find something than a search for &ldquo;audio segment resize
+	problem.&rdquo; Bear in mind spelling differences between the US and
+	the rest of the English speaking world as well. SourceForge won't
+	find reports about &ldquo;bad behaviour&rdquo; that were submitted
+	by an American who spelled it &ldquo;bad behavior,&rdquo; and so on.</P>
+	<LI><P STYLE="margin-bottom: 0in">Input your search into the
+	&ldquo;Summary keyword:&rdquo; box. Hit the &ldquo;Browse&rdquo;
+	button.</P>
+	<LI><P STYLE="margin-bottom: 0in">If there were no results, go back
+	and try other keywords until you run out of ideas, or until you get
+	sick of wrestling with the lousy search facility at SourceForge. We
+	appreciate your making an effort to find existing reports, but we
+	don't expect you to waste an hour of your life trying to coax
+	something out of that admittedly very lame search facility either.</P>
+	<LI><P STYLE="margin-bottom: 0in">If you did find a result, or
+	results, read through the previous reports and see if your bug is
+	already described. If it is not described to your satisfaction, you
+	can add additional comments to existing reports, if appropriate.</P>
+	<LI><P STYLE="margin-bottom: 0in">If there is no previous work to
+	draw on, then you should continue on to file a new report.</P>
+</UL>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<H2>Submit a New Report</H2>
+<P>Once you have made a reasonable effort to ensure that you have
+discovered a new issue, then please continue with the following
+guidelines in mind.</P>
+<H3>Bug or Whine?</H3>
+<P>Is it a real bug, or do you just perceive it as a bug because the
+software you grew up on did things differently? Try to take
+Rosegarden on its own terms, and try to be realistic when deciding
+whether a particular complaint is a true bug or merely a feature
+request. If it's a feature request, don't try to sneak it onto the
+radar screen by branding it a bug. File it as a feature request. (See
+the guidelines at
+<A HREF="http://rosegarden.sourceforge.net/RFE-guidelines.html">http://rosegarden.sourceforge.net/RFE-guidelines.html</A>
+for more details.)</P>
+<H3>Bugs to Avoid</H3>
+<P>Build or installation problems make for particularly useless bug
+reports, and packaging problems are completely between you and your
+distro package maintainer(s). Please deal with these issues on the
+<A HREF="mailto:rosegarden-devel@lists.sourceforge.net">rosegarden-devel</A>
+mailing list unless specifically asked to do otherwise.</P>
+<H3>Don't Be a Nobody</H3>
+<P>Please take the time to create a SourceForge account for yourself
+and use it for submitting and tracking your bug reports. The process
+of working out a solution to an issue and determining whether or not
+it is really fixed works best when you make yourself available for
+followup questions, and when you take an active interest in looking
+after your report. When you submit an issue as &ldquo;nobody,&rdquo;
+it automatically decreases the chances that anyone will ever address
+the problem you're reporting. Especially if your initial report is
+insufficient for us to determine exactly what the problem is in the
+first place.</P>
+<H3>Repeatability is Critical</H3>
+<P>A bug report that isn't repeatable is a waste of everyone's time.
+We realize that random things happen to random people at random
+times, and there are a number of real bugs we have been unable to
+puzzle out. Reporting things like &ldquo;something went wrong with
+this file but I can't repeat it&rdquo; is, sadly, a waste of your
+time and ours. We're certain something did indeed go wrong, but
+unless you can come up with a series of steps that cause the problem
+to manifest consistently, or at least frequently, then we will never
+be able to solve the problem, and it is pointless for us to try.</P>
+<P>Having said that, &ldquo;something went wrong with this file, and
+now when I do this, this happens&rdquo; is perfectly acceptable. It
+is not as good as helping us determine how the file wound up in a bad
+state in the first place through a repeatable procedure, but if the
+bad state that you're in here and now leads on to consistent,
+repeatable results, it's a starting place, and problems like this can
+occasionally be solved.</P>
+<H3>Keep it Simple</H3>
+<P>You should make every effort to reduce a problem to the smallest,
+least complicated number of steps that can produce the bad result,
+and you should describe this procedure using as few words as
+possible. If you see something happen in the context of working on a
+complex composition, it is usually beneficial to save this work, set
+it aside, start a new file, and attempt to reproduce the problem in a
+controlled test environment, using the fewest steps possible. The
+shorter and more concise your report, the more likely it is that we
+will fix it. On the other hand, the longer and more complex your
+report, the more likely it is that we will skip over it time and
+again in favor of something easier to digest.</P>
+<H3>One Bug per Report</H3>
+<P>You should avoid the temptation to save yourself effort by
+combining different issues into one massive report. If there are
+three related aspects to the same overriding problem, then file each
+of these aspects separately. Under no circumstances should you ever
+file a &ldquo;big bug list&rdquo; report that reels off a laundry
+list of separate, unrelated issues.</P>
+<P>Here are some <B>good</B> examples. These all relate to audio
+segments, but they are filed as distinct issues. They try to be to
+the point and repeatable.</P>
+<P><A HREF="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1223299&amp;group_id=4932&amp;atid=104932">Audio
+segment preview not aligned to tempo ruler</A></P>
+<P><A HREF="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1223295&amp;group_id=4932&amp;atid=104932">Removed
+audio segments still playing</A></P>
+<P><A HREF="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1224659&amp;group_id=4932&amp;atid=104932">audio
+segment selected after insert from file manager</A></P>
+<P>It would have been terrible to combine them into one single
+&ldquo;problems with audio segments&rdquo; report instead, for
+example. Worse yet would have been something like this particularly
+egregious example of a <B>bad</B> bug report:</P>
+<P><A HREF="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=740273&amp;group_id=4932&amp;atid=104932">Juan's
+big list</A></P>
+<P>This &ldquo;big list&rdquo; report was filed by one of us, so we
+well understand this temptation to lump things together like this. We
+have erred, but do as we say, not as we have done in a moment of
+wrong thinking.</P>
+<H3>Assigning a Category</H3>
+<P>You are free to try to determine what category your bug belongs
+to, and to assign it both to a category and to a particular
+developer. If you aren't sure what category to use, or which
+developer should handle this particular problem, then leaving it
+unassigned is perfectly acceptable, and preferable to assigning it
+incorrectly.</P>
+<H3>Producing a Stack Trace</H3>
+<P>If your bug involves a crash, then we will often come back and ask
+you to produce a stack trace if you didn't include one. In order to
+produce a useful trace from a standard user environment, you probably
+need to perform a few steps.</P>
+<P>Go to a bash prompt (for example, run &ldquo;Terminal Program
+(Konsole)&rdquo; from the KDE menu) and then issue these commands to
+allow for the creation of core dumps, and to bypass the KDE bug
+handler:</P>
+<BLOCKQUOTE>ulimit -c unlimited</BLOCKQUOTE>
+<BLOCKQUOTE>ulimit -H -c unlimited</BLOCKQUOTE>
+<BLOCKQUOTE>export KDE_DEBUG=1 
+</BLOCKQUOTE>
+<P>Now start rosegarden from this same command line, and reproduce
+the crash. You should now have a core file in your current directory.
+The core file is either named &quot;core&quot; or &quot;core.&lt;number&gt;&quot;.
+</P>
+<P>Now run &ldquo;gdb&rdquo; : 
+</P>
+<BLOCKQUOTE>gdb rosegarden &lt;core_file&gt;</BLOCKQUOTE>
+<P>Now type &ldquo;where&rdquo; at the gdb prompt.  Let the trace run
+to completion (or until it becomes apparent that it's in an infinite
+loop) and copy the results, then paste them into your report.</P>
+<H3>Priority</H3>
+<P>Your bugs should be submitted at the default priority of 5. They
+will be examined and assigned a new priority level in due course. See
+<A HREF="http://rosegarden.sourceforge.net/bug-priorities.html">this
+chart</A> for an explanation as to what various priority levels
+represent.</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+</BODY>
+</HTML>
