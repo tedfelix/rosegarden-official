@@ -21,6 +21,8 @@
 
 #include "NotationTypes.h"
 
+#include "rosedebug.h"
+
 #include "qpainter.h"
 #include "matrixelement.h"
 #include "colours.h"
@@ -104,12 +106,19 @@ QPointArray QCanvasMatrixDiamond::areaPoints() const
 
 void QCanvasMatrixDiamond::drawShape(QPainter & p)
 {
+    p.save();
+    p.setWorldXForm(false);
+
     QPointArray pa(4);
     int q = height() / 2 + 2;
-    pa[0] = QPoint((int)x(), (int)y() - 3);
-    pa[1] = QPoint((int)x() + q, (int)y() - 3 + q);
+    QPoint mapPos = p.worldMatrix().map(QPoint(int(x()), int(y())));
+    
+    pa[0] = QPoint(mapPos.x(), mapPos.y() - 3);
+    pa[1] = QPoint(mapPos.x() + q, mapPos.y() - 3 + q);
     pa[2] = pa[0] + QPoint(0, q * 2);
     pa[3] = pa[1] - QPoint(q * 2, 0);
     p.drawConvexPolygon(pa);
+
+    p.restore();
 }
 
