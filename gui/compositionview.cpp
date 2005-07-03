@@ -24,7 +24,7 @@
 
 #include <kmessagebox.h>
 
-// #include "Profiler.h"
+#include "Profiler.h"
 
 #include "AudioLevel.h"
 #include "BaseProperties.h"
@@ -194,6 +194,8 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
                                                                              RectList* npData,
                                                                              RectList* apData)
 {
+    Rosegarden::Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
+
     m_res.clear();
 
 //     RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
@@ -942,6 +944,8 @@ Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const C
 
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 {
+    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentOrigin", true);
+
     int trackPosition = m_composition.getTrackById(s.getTrack())->getPosition();
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
@@ -957,7 +961,7 @@ QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 
 CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 {
-//     Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
+    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
 
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
@@ -1102,7 +1106,8 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     if (cmi) {
         cmi->setAudioPreviewThread(doc->getAudioPreviewThread());
     }
-    
+
+    m_drawBuffer.setOptimization(QPixmap::BestOptim);
 }
 
 void CompositionView::initStepSize()
@@ -1356,24 +1361,26 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 //              << " - drawbuffer size = " << m_drawBuffer.size() <<endl;
 
     if (m_drawBufferNeedsRefresh)
-        refreshDrawBuffer();
+        refreshDrawBuffer(e->rect());
 
     bitBlt (viewport(), 0, 0, &m_drawBuffer, 0, 0);
 }
 
-void CompositionView::refreshDrawBuffer()
+void CompositionView::refreshDrawBuffer(const QRect& rect)
 {
-//     RG_DEBUG << "CompositionView::refreshDrawBuffer()\n";
+    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
+//     RG_DEBUG << "CompositionView::refreshDrawBuffer() r = " << rect << endl;
 
     QPainter p;
     m_drawBuffer.fill(viewport(), 0, 0);
     p.begin(&m_drawBuffer, viewport());
 
 //     QPen framePen(Qt::red, 1);
-//     p->setPen(framePen);
-//     p->drawRect(0, 0, m_drawBuffer.width(), m_drawBuffer.height());
+//     p.setPen(framePen);
+//     p.drawRect(rect);
 
     QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
+//     QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
     p.translate(-contentsX(), -contentsY());
     drawArea(&p, r);
     
@@ -1384,15 +1391,7 @@ void CompositionView::refreshDrawBuffer()
 
 void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 {
-
-    // must log last drawing to know what to erase, try to compute
-    // intersection between what's being drawn and preview drawing,
-    // this should give what needs to be erased. playback cursor and
-    // guidelines are not part of this.
-    //
-    // more likely, try to make the QPixmap bitBlt work properly - try
-    // bitBlt() only what needs to be, as in viewportPaintEvent
-    // 
+    Rosegarden::Profiler profiler("CompositionView::drawArea", true);
 
 //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 
