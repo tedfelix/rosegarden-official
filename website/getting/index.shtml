@@ -41,8 +41,8 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=290255">Rosegarden
-release 1.0pre1 sources</a>, 16th December 2004, for download from the
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=304969">Rosegarden
+release 1.0 sources</a>, 14th February 2005, for download from the
 SourceForge page.</li>
 
 	    <li><a href="http://sourceforge.net/cvs/?group_id=4932">Rosegarden
@@ -57,8 +57,7 @@ mailing list.</li></ul>
     short while before they are brought up-to-date with each new
     release of Rosegarden and there's no guarantee of their
     completeness.  Please take a moment to check whether you are
-    really getting the latest release (currently Rosegarden-4-1.0pre1,
-    also known as Rosegarden-4-0.9.91) before you download a binary
+    really getting the latest release (currently Rosegarden-4-1.0) before you download a binary
     package.</p>
 
 <h3>Rosegarden for Mandrake</h3>
