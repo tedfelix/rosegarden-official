@@ -1048,7 +1048,11 @@ void CompositionItemImpl::refreshRepeatMarks(int newX, int newWidth)
 CompositionView::CompositionView(RosegardenGUIDoc* doc,
                                  CompositionModel* model,
                                  QWidget * parent, const char * name, WFlags f)
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
     : RosegardenScrollView(parent, name, f | WNoAutoErase|WStaticContents),
+#else
+    : RosegardenScrollView(parent, name, f | WResizeNoErase|WStaticContents),
+#endif
       m_model(model),
       m_currentItem(0),
       m_tool(0),
