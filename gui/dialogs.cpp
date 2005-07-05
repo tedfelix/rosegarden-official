@@ -3897,18 +3897,23 @@ EventParameterDialog::EventParameterDialog(
     m_patternCombo = new KComboBox(patternBox);
 
     // create options
+    // 0 flat
     text = i18n("Flat - set %1 to value").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
+    // 1 alternating
     text = i18n("Alternating - set %1 to max and min on alternate events").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
+    // 2 crescendo
     text = i18n("Crescendo - set %1 rising from min to max").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
+    // 3 diminuendo
     text = i18n("Diminuendo - set %1 falling from max to min").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
+    // 4 ringing
     text = i18n("Ringing - set %1 alternating from max to min with both dying to zero").arg(strtoqstr(property));
     m_patternCombo->insertItem(text);
 
@@ -3943,7 +3948,7 @@ EventParameterDialog::slotPatternSelected(int value)
 {
     switch(value)
     {
-        case 0:
+        case 0: // flat
             m_value1Label->setText(i18n("Value"));
             m_value1Label->show();
             m_value1Combo->show();
@@ -3951,34 +3956,34 @@ EventParameterDialog::slotPatternSelected(int value)
             m_value2Combo->hide();
             break;
 
-        case 1:
-            m_value1Label->setText(i18n("Start Value"));
-            m_value2Label->setText(i18n("End Value"));
+        case 1: // alternating
+            m_value1Label->setText(i18n("First Value"));
+            m_value2Label->setText(i18n("Second Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();
             m_value2Combo->show();
             break;
 
-        case 2:
-            m_value1Label->setText(i18n("Start Value"));
-            m_value2Label->setText(i18n("End Value"));
+        case 2: // crescendo
+            m_value1Label->setText(i18n("Low Value"));
+            m_value2Label->setText(i18n("High Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();
             m_value2Combo->show();
             break;
 
-        case 3:
-            m_value1Label->setText(i18n("End Value"));
-            m_value2Label->setText(i18n("Start Value"));
+        case 3: // decrescendo
+            m_value1Label->setText(i18n("High Value"));
+            m_value2Label->setText(i18n("Low Value"));
             m_value1Label->show();
             m_value1Combo->show();
             m_value2Label->show();
             m_value2Combo->show();
             break;
 
-        case 4:
+        case 4: // ringing
             m_value1Label->setText(i18n("First Value"));
             m_value2Label->setText(i18n("Second Value"));
             m_value1Label->show();

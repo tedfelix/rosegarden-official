@@ -704,7 +704,7 @@ EventEditCommand::modifySegment()
 
 // -------------------- SelectionPropertyCommand -----------------
 //
-//
+// 
 SelectionPropertyCommand::SelectionPropertyCommand(
         Rosegarden::EventSelection *selection,
         const Rosegarden::PropertyName &property,
@@ -753,6 +753,7 @@ SelectionPropertyCommand::modifySegment()
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i)
     {
+	// flat
         if (m_pattern == Rosegarden::FlatPattern)
             (*i)->set<Rosegarden::Int>(m_property, m_value1);
         else if (m_pattern == Rosegarden::AlternatingPattern)
@@ -762,18 +763,17 @@ SelectionPropertyCommand::modifySegment()
             else
                 (*i)->set<Rosegarden::Int>(m_property, m_value2);
 
-        } else if (m_pattern == Rosegarden::CrescendoPattern)
-        {
-            (*i)->set<Rosegarden::Int>(m_property,
-                                       m_value2 +
-                                       int(step *
-					   ((*i)->getAbsoluteTime() - startTime)));
-        } else if (m_pattern == Rosegarden::DecrescendoPattern)
+	// crescendo, decrescendo
+	// (determined by step, above, which is in turn influenced by whether
+	// value1 is greater than value2)
+        } else if ((m_pattern == Rosegarden::CrescendoPattern)||
+	          (m_pattern == Rosegarden::DecrescendoPattern))
         {
             (*i)->set<Rosegarden::Int>(m_property,
                                        m_value1 -
                                        int(step *
 					   ((*i)->getAbsoluteTime() - startTime)));
+	// ringing
         } else if (m_pattern == Rosegarden::RingingPattern)
         {
             if (count % 2 == 0)

@@ -48,11 +48,6 @@
 #include "rosedebug.h"          // debug stream
 
 
-//#define COMPILE_DEPRECATED      // will compile the useless 1.0 features
-                                // ifdeffing this stuff out will ease the
-				// transition into oblivion as I expunge
-				// these useless ideas and then implement new,
-				// useful ones beyond 1.0
 
 using Rosegarden::Note;
 
@@ -89,12 +84,17 @@ EventFilterDialog::initDialog()
     QGridLayout* noteFrameLayout = new QGridLayout(noteFrame, 1, 1, 20, 6); 
 
     // Master Checkbox
-    m_noteCheckBox = new QCheckBox(i18n("Enable"),noteFrame);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_noteCheckBox->setChecked(cfg->readBoolEntry("notecheckbox", true));
-    noteFrameLayout->addWidget(m_noteCheckBox, 0, 0);
-    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), this,
-	    SLOT(slotNoteCheckBoxToggle(int))); 
+//! getting rid of this for now because it's superfluous now that I've gotten
+//rid of the Wheel and Controller sections of the dialog...  Leaving it here
+//in case I come up with something later on to replace the Wheel and
+//Controller sections of the dialog.
+//
+//    m_noteCheckBox = new QCheckBox(i18n("Enable"),noteFrame);
+//    cfg->setGroup(EventFilterDialog::ConfigGroup);
+//    m_noteCheckBox->setChecked(cfg->readBoolEntry("notecheckbox", true));
+//    noteFrameLayout->addWidget(m_noteCheckBox, 0, 0);
+//    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), this,
+//	    SLOT(slotNoteCheckBoxToggle(int))); 
 
     // Labels
     QLabel* pitchFromLabel = new QLabel(i18n("from:"),noteFrame);
@@ -200,145 +200,6 @@ EventFilterDialog::initDialog()
 
     populateDurationCombos();
 
-#ifdef COMPILE_DEPRECATED
-// DEPRECATED
- 
-    //----------[ Controller Filter Widgets ]---------------------
-
-    // Frame
-    QGroupBox* controllerFrame = new QGroupBox(i18n("Controller Events"), mainWidget);
-    QGridLayout* controllerFrameLayout = new QGridLayout(controllerFrame, 1, 1, 20, 6); 
-
-    // Master Checkbox
-    m_controllerCheckBox = new QCheckBox(i18n("Enable"),controllerFrame);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerCheckBox->setChecked(cfg->readBoolEntry("controllercheckbox", false));
-    controllerFrameLayout->addWidget(m_controllerCheckBox, 0, 0);
-    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), this,
-	    SLOT(slotControllerCheckBoxToggle(int)));
-
-    // Labels
-    QLabel* controllerFromLabel = new QLabel(i18n("from:"), controllerFrame);
-    controllerFrameLayout->addWidget(controllerFromLabel, 0, 2);
-
-    QLabel* controllerToLabel = new QLabel(i18n("to:"), controllerFrame);
-    controllerFrameLayout->addWidget(controllerToLabel, 0, 4);
-   
-    QLabel* numberLabel = new QLabel(i18n("Number:"), controllerFrame);
-    controllerFrameLayout->addWidget(numberLabel, 1, 1);
-    
-    QLabel* valueLabel = new QLabel(i18n("Value:"), controllerFrame);
-    controllerFrameLayout->addWidget(valueLabel, 2, 1);
-
-    // Include Boxes
-    m_controllerNumberIncludeComboBox = new QComboBox(0, controllerFrame);
-    m_controllerNumberIncludeComboBox->insertItem(i18n("include"));
-    m_controllerNumberIncludeComboBox->insertItem(i18n("exclude"));
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerNumberIncludeComboBox->setCurrentItem(
-	cfg->readUnsignedNumEntry("controllerinclude", 0));
-    controllerFrameLayout->addWidget(m_controllerNumberIncludeComboBox, 1, 0);
-
-    m_controllerValueIncludeComboBox = new QComboBox(0, controllerFrame);
-    m_controllerValueIncludeComboBox->insertItem(i18n("include"));
-    m_controllerValueIncludeComboBox->insertItem(i18n("exclude"));
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerValueIncludeComboBox->setCurrentItem(
-	    cfg->readUnsignedNumEntry("valueinclude", 0));
-    controllerFrameLayout->addWidget(m_controllerValueIncludeComboBox, 2, 0);
-
-    // Spin Boxes From/To
-    m_controllerNumberFromSpinBox = new QSpinBox(controllerFrame);
-    m_controllerNumberFromSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerNumberFromSpinBox->setValue(cfg->readUnsignedNumEntry("controllerfrom", 0));
-    controllerFrameLayout->addWidget(m_controllerNumberFromSpinBox, 1, 2);
-    connect(m_controllerNumberFromSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotControllerFromChanged(int)));
-
-    m_controllerNumberToSpinBox = new QSpinBox(controllerFrame);
-    m_controllerNumberToSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerNumberToSpinBox->setValue(cfg->readUnsignedNumEntry("controllerto", 127));
-    controllerFrameLayout->addWidget( m_controllerNumberToSpinBox, 1, 4 );
-    connect(m_controllerNumberToSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotControllerToChanged(int)));
-
-    m_controllerValueFromSpinBox = new QSpinBox(controllerFrame);
-    m_controllerValueFromSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerValueFromSpinBox->setValue(cfg->readUnsignedNumEntry("valuefrom", 0));
-    controllerFrameLayout->addWidget(m_controllerValueFromSpinBox, 2, 2);
-    connect(m_controllerValueFromSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotValueFromChanged(int)));
-
-    m_controllerValueToSpinBox = new QSpinBox(controllerFrame);
-    m_controllerValueToSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerValueToSpinBox->setValue(cfg->readUnsignedNumEntry("valueto", 127));
-    controllerFrameLayout->addWidget( m_controllerValueToSpinBox, 2, 4 );
-    connect(m_controllerValueToSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotValueToChanged(int)));
-
-    //----------[ Wheel Filter Widgets ]--------------------------
-    
-    // Frame
-    QGroupBox* wheelFrame = new QGroupBox(i18n("Wheel Events"), mainWidget);
-    QGridLayout* wheelFrameLayout = new QGridLayout(wheelFrame, 1, 1, 20, 6); 
-
-    // Master Checkbox
-    m_wheelCheckBox = new QCheckBox(i18n("Enable"), wheelFrame);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelCheckBox->setChecked(cfg->readBoolEntry("wheelcheckbox", false));
-    wheelFrameLayout->addWidget(m_wheelCheckBox, 0, 0);
-    connect(m_wheelCheckBox, SIGNAL(stateChanged(int)), this,
-	    SLOT(slotWheelCheckBoxToggle(int)));
-
-    // Labels
-    QLabel* wheelFromLabel = new QLabel(i18n("from:"), wheelFrame);
-    wheelFrameLayout->addWidget(wheelFromLabel, 0, 2);
-    
-    QLabel* wheelToLabel = new QLabel(i18n("to:"), wheelFrame);
-    wheelFrameLayout->addWidget(wheelToLabel, 0, 4);
-    
-    QLabel* wheelAmountLabel = new QLabel(i18n("Amount:"), wheelFrame);
-    wheelFrameLayout->addMultiCellWidget(wheelAmountLabel, 1, 2, 1, 1);
-
-    // Include Box
-    m_wheelAmountIncludeComboBox = new QComboBox(0, wheelFrame);
-    m_wheelAmountIncludeComboBox->insertItem(i18n("include"));
-    m_wheelAmountIncludeComboBox->insertItem(i18n("exclude"));
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelAmountIncludeComboBox->setCurrentItem(
-	    cfg->readUnsignedNumEntry("wheelinclude", 0));
-    wheelFrameLayout->addMultiCellWidget(m_wheelAmountIncludeComboBox, 1, 2, 0, 0);
-
-    // Spin Boxes From/To
-    m_wheelAmountFromSpinBox = new QSpinBox(wheelFrame);
-    m_wheelAmountFromSpinBox->setMaxValue(8191);
-    m_wheelAmountFromSpinBox->setMinValue(-8192);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelAmountFromSpinBox->setValue(cfg->readNumEntry("wheelfrom", -8192));
-    wheelFrameLayout->addWidget(m_wheelAmountFromSpinBox, 2, 2);
-    connect(m_wheelAmountFromSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotWheelFromChanged(int)));
-
-    m_wheelAmountToSpinBox = new QSpinBox(wheelFrame);
-    m_wheelAmountToSpinBox->setMaxValue(8191);
-    m_wheelAmountToSpinBox->setMinValue(-8192);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelAmountToSpinBox->setValue(cfg->readNumEntry("wheelto", 8191));
-    wheelFrameLayout->addWidget(m_wheelAmountToSpinBox, 2, 4);
-    connect(m_wheelAmountToSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotWheelToChanged(int)));
-
-    // Force a sync with the checkboxes in the event that they were read false
-    // from kconfig data.
-    slotNoteCheckBoxToggle(0);
-    slotControllerCheckBoxToggle(0);
-    slotWheelCheckBoxToggle(0);
-
-#endif // COMPILE_DEPRECATED
 
     //---------[ Buttons ]--------------------------------------
     QFrame* privateLayoutWidget = new QFrame(mainWidget);
@@ -408,12 +269,6 @@ EventFilterDialog::slotToggleAll()
     m_velocityToSpinBox          ->setValue(127);
     m_noteDurationFromComboBox   ->setCurrentItem(11); // hard coded; should be variable
     m_noteDurationToComboBox     ->setCurrentItem(0);  // 0 = unlimited; 11 = 0
-    m_controllerNumberFromSpinBox->setValue(0);
-    m_controllerNumberToSpinBox  ->setValue(127);
-    m_controllerValueFromSpinBox ->setValue(0);
-    m_controllerValueToSpinBox   ->setValue(127);
-    m_wheelAmountFromSpinBox     ->setValue(-8192);
-    m_wheelAmountToSpinBox       ->setValue(8191);
 }
 
 void
@@ -426,12 +281,6 @@ EventFilterDialog::slotToggleNone()
     m_velocityToSpinBox          ->setValue(0);
     m_noteDurationFromComboBox   ->setCurrentItem(11);
     m_noteDurationToComboBox     ->setCurrentItem(11);
-    m_controllerNumberFromSpinBox->setValue(0);
-    m_controllerNumberToSpinBox  ->setValue(0);
-    m_controllerValueFromSpinBox ->setValue(0);
-    m_controllerValueToSpinBox   ->setValue(0);
-    m_wheelAmountFromSpinBox     ->setValue(0);
-    m_wheelAmountToSpinBox       ->setValue(0);
 }
 
 void
@@ -453,26 +302,6 @@ EventFilterDialog::slotOk()
     cfg->writeEntry("durationfrom",    m_noteDurationFromComboBox->currentItem());
     cfg->writeEntry("durationto",      m_noteDurationToComboBox->currentItem());
     
-
-#ifdef COMPILE_DEPRECATED
-    cfg->writeEntry("controllercheckbox", m_controllerCheckBox->isChecked());
-    
-    cfg->writeEntry("controllerinclude", m_controllerNumberIncludeComboBox->currentItem());
-    cfg->writeEntry("controllerfrom",    m_controllerNumberFromSpinBox->value());
-    cfg->writeEntry("controllerto",      m_controllerNumberToSpinBox->value());
-
-    cfg->writeEntry("valueinclude", m_controllerValueIncludeComboBox->currentItem());
-    cfg->writeEntry("valuefrom",    m_controllerValueFromSpinBox->value());
-    cfg->writeEntry("valueto",      m_controllerValueToSpinBox->value());
-    
-
-    cfg->writeEntry("wheelcheckbox", m_wheelCheckBox->isChecked());
-
-    cfg->writeEntry("wheelinclude", m_wheelAmountIncludeComboBox->currentItem());
-    cfg->writeEntry("wheelfrom",    m_wheelAmountFromSpinBox->value());
-    cfg->writeEntry("wheelto",      m_wheelAmountToSpinBox->value());
-#endif // DEPRECATED
-    
     accept();
 }
 
@@ -491,28 +320,6 @@ EventFilterDialog::slotNoteCheckBoxToggle(int)
     m_noteDurationFromComboBox   ->setEnabled(state);
 }
 
-#ifdef COMPILE_DEPRECATED
-void
-EventFilterDialog::slotControllerCheckBoxToggle(int)
-{
-    bool state = m_controllerCheckBox->isChecked();
-    m_controllerNumberIncludeComboBox->setEnabled(state);
-    m_controllerValueIncludeComboBox ->setEnabled(state);
-    m_controllerNumberToSpinBox      ->setEnabled(state);
-    m_controllerNumberFromSpinBox    ->setEnabled(state);
-    m_controllerValueToSpinBox       ->setEnabled(state);
-    m_controllerValueFromSpinBox     ->setEnabled(state);
-}
-
-void
-EventFilterDialog::slotWheelCheckBoxToggle(int)
-{
-    bool state = m_wheelCheckBox->isChecked();
-    m_wheelAmountIncludeComboBox->setEnabled(state);
-    m_wheelAmountToSpinBox      ->setEnabled(state);
-    m_wheelAmountFromSpinBox    ->setEnabled(state);
-}
-#endif //DEPRECATED
 
 void
 EventFilterDialog::slotPitchFromChanged(int pitch)
@@ -556,49 +363,6 @@ EventFilterDialog::slotDurationToChanged(int index)
 	m_noteDurationFromComboBox->setCurrentItem(index);
 }
 
-void
-EventFilterDialog::slotControllerFromChanged(int controller)
-{
-    if (controller > m_controllerNumberToSpinBox->value())
-	m_controllerNumberToSpinBox->setValue(controller);
-}
-
-#ifdef COMPILE_DEPRECATED
-void
-EventFilterDialog::slotControllerToChanged(int controller)
-{
-    if (controller < m_controllerNumberFromSpinBox->value())
-	m_controllerNumberFromSpinBox->setValue(controller);
-}
-
-void
-EventFilterDialog::slotValueFromChanged(int value)
-{
-    if (value > m_controllerValueToSpinBox->value())
-	m_controllerValueToSpinBox->setValue(value);
-}
-
-void
-EventFilterDialog::slotValueToChanged(int value)
-{
-    if (value < m_controllerValueFromSpinBox->value())
-	m_controllerValueFromSpinBox->setValue(value);
-}
-
-void
-EventFilterDialog::slotWheelFromChanged(int value)
-{
-    if (value > m_wheelAmountToSpinBox->value())
-	m_wheelAmountToSpinBox->setValue(value);
-}
-
-void
-EventFilterDialog::slotWheelToChanged(int value)
-{
-    if (value < m_wheelAmountFromSpinBox->value())
-	m_wheelAmountFromSpinBox->setValue(value);
-}
-#endif // DEPRECATED
 
 void
 EventFilterDialog::slotPitchFromChooser()
@@ -700,50 +464,11 @@ EventFilterDialog::getDuration()
     return foo;
 }
 
-#ifdef COMPILE_DEPRECATED
-// disappearing after 1.0
-EventFilterDialog::filterRange
-EventFilterDialog::getController()
-{
-    EventFilterDialog::filterRange foo;
-    foo.first  = m_controllerNumberFromSpinBox->value();
-    foo.second = m_controllerNumberToSpinBox  ->value();
-    if (!controllerNumberIsInclusive()) invert(foo);
-    return foo;
-}
-
-
-EventFilterDialog::filterRange
-EventFilterDialog::getValue()
-{
-    EventFilterDialog::filterRange foo;
-    foo.first  = m_controllerValueFromSpinBox->value();
-    foo.second = m_controllerValueToSpinBox  ->value();
-    if (!controllerValueIsInclusive()) invert(foo);
-    return foo;
-}
-
-EventFilterDialog::filterRange
-EventFilterDialog::getWheel()
-{
-    EventFilterDialog::filterRange foo;
-    foo.first  =  m_wheelAmountFromSpinBox->value();
-    foo.second =  m_wheelAmountToSpinBox  ->value();
-    if (!wheelIsInclusive()) invert(foo);
-    return foo;
-}
-#endif // DEPRECATED
 
 bool
 EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
 {
-    if ((*e).isa(Rosegarden::Note::EventType)      
-#ifdef COMPILE_DEPRECATED
-	||
-        (*e).isa(Rosegarden::Controller::EventType)||
-	(*e).isa(Rosegarden::PitchBend::EventType)
-#endif
-	)
+    if ((*e).isa(Rosegarden::Note::EventType))
     {
 	long property = 0;
 
@@ -764,36 +489,6 @@ EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
 	    if (!EventFilterDialog::eventInRange(getDuration(), property)) return false; 
 	    property = 0; 
 	} 
-#ifdef COMPILE_DEPRECATED
-	else if ((*e).isa(Rosegarden::Controller::EventType) && filterController())
-	{
-	    // controller number
-	    (*e).get<Rosegarden::Int>(Rosegarden::Controller::NUMBER, property);
-	    if (!EventFilterDialog::eventInRange(getController(), property)) return false;
-	    property = 0;
-
-	    // controller value
-	    (*e).get<Rosegarden::Int>(Rosegarden::Controller::VALUE, property);
-	    if (!EventFilterDialog::eventInRange(getValue(), property)) return false;
-	    
-	}
-	else if ((*e).isa(Rosegarden::PitchBend::EventType) && filterWheel())
-	{
-	    // pitch bend amount
-	    (*e).get<Rosegarden::Int>(Rosegarden::PitchBend::MSB, property);
-	    unsigned char MSB = char(property);
-	    (*e).get<Rosegarden::Int>(Rosegarden::PitchBend::LSB, property);
-	    unsigned char LSB = char(property);
-
-	    property = LSB;
-	    property <<= 7;
-	    property += MSB;
-
-	    RG_DEBUG << "pitch bend was " << property << endl;
-	    
-	    if (!EventFilterDialog::eventInRange(getWheel(), property)) return false;
-	}
-#endif	
 	return true;
     }
     return false;

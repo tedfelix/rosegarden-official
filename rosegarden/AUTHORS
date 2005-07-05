@@ -1,8 +1,13 @@
-Lead developers :
+Lead developers:
 
 Chris Cannam <cannam@all-day-breakfast.com>
 Richard Bown <bownie@bownie.com>
 Guillaume Laurent <glaurent@telegraph-road.org>
+
+Adjunct developers:
+
+D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+
 
 Contributors:
 
@@ -16,12 +21,6 @@ Hans Kieserman <hkieserman@mail.com>
     * Lilypond output
     * assorted other patches
     * i18n-ization
-    
-Michael McIntyre <dmmcintyr@users.sourceforge.net>
-    + notation/matrix event selection filter
-    + extra toolbars/pixmaps
-    + Lilypond/notation patches
-    + author of "Using Rosegarden"
     
 Levi Burton <donburton@sbcglobal.net> 
     * UI improvements
@@ -62,9 +61,6 @@ Hasso Tepper
 Jelmer Vernooij
     * Dutch translation
 
-Bernd Weber
-    * German translation (Arbeiten mit Rosegarden)
-
 Oota Toshiya
     * Japanese translation
 
@@ -93,6 +89,12 @@ Toni Arnold <toni__arnold@bluewin.ch>
 Jan Bína <jbina@sky.cz>
     * Czech translation
 
+Vladimir Savic <vladimir@vladimirsavic.net> 
+    * assorted icons
+
+Marcos Guglielmetti <marcospcmusica@yahoo.com.ar>
+    * Spanish translation
+
 ##
-## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
+## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##

@@ -418,10 +418,10 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Guillaume Laurent", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
     aboutData.addAuthor("Chris Cannam", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
     aboutData.addAuthor("Richard Bown", 0, "bownie@bownie.com", "http://bownie.com");
+    aboutData.addAuthor("D. Michael McIntyre (adjunct)", 0, "dmmcintyr@users.sourceforge.net", "http://www.geocities.com/Paris/Rue/5407");
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
     aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
-    aboutData.addCredit("Michael McIntyre", I18N_NOOP("notation selection event filter\nextra toolbars/pixmaps\nnotation/Lilypond patches\nauthor of \"Using Rosegarden\""), "dmmcintyr@users.sourceforge.net");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
     aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translation\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
@@ -433,7 +433,6 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Stefan Asserh√§ll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
     aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
     aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
-    aboutData.addCredit("Bernd Weber", I18N_NOOP("German translation (Arbeiten mit Rosegarden)"), "weber.freiburg@freenet.de");
     aboutData.addCredit("Kevin Liang", I18N_NOOP("HSpinBox class"), "xkliang@rhpcs.mcmaster.ca");
     aboutData.addCredit("Thorsten Wilms", I18N_NOOP("Original designs for rotary controllers"), "t_w_@freenet.de");
     aboutData.addCredit("Oota Toshiya", I18N_NOOP("Japanese translation"), "ribbon@users.sourceforge.net");
@@ -441,6 +440,9 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Liu Songhe", I18N_NOOP("Simplified Chinese translation"), "jackliu9999@msn.com");
     aboutData.addCredit("Jan BÌna", I18N_NOOP("Czech translation"), "jbina@sky.cz");
     aboutData.addCredit("Thomas Nagy", I18N_NOOP("SCons/bksys building system"), "tnagy256@yahoo.fr");
+    aboutData.addCredit("Vladimir Savic", I18N_NOOP("assorted icons"), "vladimir@vladimirsavic.net");
+    aboutData.addCredit("Marcos Guglielmetti", I18N_NOOP("Spanish translation"), "marcospcmusica@yahoo.com.ar");
+//    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     
