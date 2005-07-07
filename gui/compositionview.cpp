@@ -284,8 +284,11 @@ void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY
     QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
     int h, s, v;
     segColor.hsv(&h, &s, &v);
-    h += 180;
-    v = 255 - v;
+    h += 180 % 360;
+    if (s < v) v = 0;
+    else v = 255;
+    s = 31;
+
     segColor.setHsv(h, s, v);
 
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
