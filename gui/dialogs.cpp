@@ -4471,14 +4471,15 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     vbox = new QVBox(hbox);
 
-    m_metronomePitchSelector = new KComboBox(vbox);
-    m_metronomePitchSelector->insertItem(i18n("Bar Pitch"));
-    m_metronomePitchSelector->insertItem(i18n("Beat Pitch"));
-    m_metronomePitchSelector->insertItem(i18n("Sub-beat Pitch"));    
-    connect(m_metronomePitchSelector, SIGNAL(activated(int)), this, SLOT(slotPitchSelectorChanged(int)));
-    m_metronomePitch = new RosegardenPitchChooser(i18n("Pitch"), vbox);
+    m_metronomePitch = new RosegardenPitchChooser(i18n("Pitch"), vbox, 60);
     connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotPitchChanged(int)));
     connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));
+
+    m_metronomePitchSelector = new KComboBox(m_metronomePitch);
+    m_metronomePitchSelector->insertItem(i18n("for Bar"));
+    m_metronomePitchSelector->insertItem(i18n("for Beat"));
+    m_metronomePitchSelector->insertItem(i18n("for Sub-beat"));    
+    connect(m_metronomePitchSelector, SIGNAL(activated(int)), this, SLOT(slotPitchSelectorChanged(int)));
 
     QGroupBox *enableBox = new QGroupBox
 	(1, Horizontal, i18n("Metronome Activated"), vbox);

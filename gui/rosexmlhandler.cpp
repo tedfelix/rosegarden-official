@@ -1317,6 +1317,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             {
                 QString nameStr = (atts.value("name"));
                 Rosegarden::MidiByte pc = atts.value("id").toInt();
+		QString keyMappingStr = (atts.value("keymapping"));
 
                 // Create a new program
                 Rosegarden::MidiProgram program
@@ -1324,7 +1325,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 					  m_msb,
 					  m_lsb),
 		     pc,
-		     qstrtostr(nameStr));
+		     qstrtostr(nameStr),
+		     keyMappingStr ? qstrtostr(keyMappingStr) : "");
 
                 if (m_device->getType() == Rosegarden::Device::Midi)
                 {
@@ -1354,9 +1356,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "keymapping") {
 
 	if (m_section == InInstrument) {
-
-	    m_keyMappingsPending[m_instrument] = atts.value("name");
-
+	    RG_DEBUG << "Old-style keymapping in instrument found, ignoring" << endl;
 	} else {
 
 	    if (m_section != InStudio) {
@@ -1365,24 +1365,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    }
 	    
 	    if (m_device && (m_device->getType() == Rosegarden::Device::Midi)) {
-
-		QString lsbStr = atts.value("lsb");
-		QString msbStr = atts.value("msb");
-		QString progStr = atts.value("program");
-		QString chanStr = atts.value("channel");
 		QString name = atts.value("name");
-
-		m_keyMapping = new Rosegarden::MidiKeyMapping
-		    (((lsbStr && msbStr) ?
-		      Rosegarden::MidiBank(true,
-					   lsbStr.toInt(),
-					   msbStr.toInt()) : Rosegarden::MidiBank()),
-		     Rosegarden::MidiByte(progStr ? progStr.toInt() : 0),
-		     Rosegarden::MidiByte(chanStr ? chanStr.toInt() : 0),
-		     (lsbStr && msbStr && progStr),
-		     (chanStr && true),
-		     qstrtostr(name));
-		
+		m_keyMapping = new Rosegarden::MidiKeyMapping(qstrtostr(name));
 		m_keyNameMap.clear();
 	    }
 	}
@@ -2066,7 +2050,6 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     if (lcName == "rosegarden-data") {
 
-	updateKeyMappingsPending();
 	getComposition().updateTriggerSegmentReferences();
 
     } else if (lcName == "event") {
@@ -2343,25 +2326,5 @@ RoseXmlHandler::setMIDIDeviceName(QString name)
 	
     rgapp->sequencerSend("renameDevice(unsigned int, QString)",
 			 data);
-}
-
-void
-RoseXmlHandler::updateKeyMappingsPending()
-{
-    for (std::map<Rosegarden::Instrument *, QString>::iterator i =
-	     m_keyMappingsPending.begin(); i != m_keyMappingsPending.end();
-	 ++i) {
-	Rosegarden::Instrument *instr = i->first;
-	Rosegarden::Device *device = instr->getDevice();
-	Rosegarden::MidiDevice *midiDevice =
-	    dynamic_cast<Rosegarden::MidiDevice *>(device);
-	if (!midiDevice) {
-	    std::cerr << "Warning: updateKeyMappingsPending: Device " << device->getId() << " is not a MIDI device" << std::endl;
-	    continue;
-	}
-	SEQMAN_DEBUG << "Setting key mapping " << i->second << " to instrument " << instr->getId() << " on device " << device->getId() << endl;
-	instr->setKeyMapping(midiDevice->getKeyMappingByName
-			     (qstrtostr(i->second)));
-    }
 }
 

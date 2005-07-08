@@ -115,8 +115,6 @@ protected:
     void setMIDIDeviceName(QString name);
     void skipToNextPlayDevice();
 
-    void updateKeyMappingsPending();
-
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc    *m_doc;
@@ -155,7 +153,6 @@ protected:
     Rosegarden::ColourMap            *m_colourMap;
     Rosegarden::MidiKeyMapping       *m_keyMapping;
     Rosegarden::MidiKeyMapping::KeyNameMap m_keyNameMap;
-    std::map<Rosegarden::Instrument *, QString> m_keyMappingsPending;
     unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;

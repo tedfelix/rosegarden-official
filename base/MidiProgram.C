@@ -78,8 +78,8 @@ MidiProgram::MidiProgram() :
     // nothing else
 }
 
-MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, std::string name) :
-    m_bank(bank), m_program(program), m_name(name)
+MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, std::string name, std::string keyMapping) :
+    m_bank(bank), m_program(program), m_name(name), m_keyMapping(keyMapping)
 {
     // nothing else
 }
@@ -102,43 +102,43 @@ MidiProgram::getProgram() const
     return m_program;
 }
 
-std::string
+const std::string &
 MidiProgram::getName() const
 {
     return m_name;
 }
 
 void
-MidiProgram::setName(std::string name)
+MidiProgram::setName(const std::string &name)
 {
     m_name = name;
 }
 
+const std::string &
+MidiProgram::getKeyMapping() const
+{
+    return m_keyMapping;
+}
+
+void
+MidiProgram::setKeyMapping(const std::string &keyMapping)
+{
+    m_keyMapping = keyMapping;
+}
+
 MidiKeyMapping::MidiKeyMapping() :
-    m_bank(MidiBank(true, 0, 0)),
-    m_program(0),
-    m_channel(9),
-    m_useProgram(false),
-    m_useChannel(true),
     m_name("")
 {
 }
 
-MidiKeyMapping::MidiKeyMapping(const MidiBank &bank, MidiByte program,
-			       MidiByte channel, bool useProgram,
-			       bool useChannel, const std::string &name) :
-    m_bank(bank), m_program(program), m_channel(channel),
-    m_useProgram(useProgram), m_useChannel(useChannel), m_name(name)
+MidiKeyMapping::MidiKeyMapping(const std::string &name) :
+    m_name(name)
 {
     // nothing else
 }
 
-MidiKeyMapping::MidiKeyMapping(const MidiBank &bank, MidiByte program,
-			       MidiByte channel, bool useProgram,
-			       bool useChannel, const std::string &name,
-			       const KeyNameMap &map) :
-    m_bank(bank), m_program(program), m_channel(channel),
-    m_useProgram(useProgram), m_useChannel(useChannel), m_name(name),
+MidiKeyMapping::MidiKeyMapping(const std::string &name, const KeyNameMap &map) :
+    m_name(name),
     m_map(map)
 {
     // nothing else
@@ -147,9 +147,6 @@ MidiKeyMapping::MidiKeyMapping(const MidiBank &bank, MidiByte program,
 bool
 MidiKeyMapping::operator==(const MidiKeyMapping &m) const
 {
-    if (m_useProgram && (m_program != m.m_program || !(m_bank == m.m_bank)))
-	return false;
-    if (m_useChannel && (m_channel != m.m_channel)) return false;
     return (m_map == m.m_map);
 }
 

@@ -398,6 +398,36 @@ MidiDevice::getKeyMappingByName(const std::string &name) const
     return 0;
 }
 
+const MidiKeyMapping *
+MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
+{
+    ProgramList::const_iterator it;
+
+    for (it = m_programList.begin(); it != m_programList.end(); it++) {
+	if (*it == program) {
+	    std::string kmn = it->getKeyMapping();
+	    if (kmn == "") return 0;
+	    return getKeyMappingByName(kmn);
+	}
+    }
+
+    return 0;
+}
+
+void
+MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
+				    std::string mapping)
+{
+    ProgramList::iterator it;
+
+    for (it = m_programList.begin(); it != m_programList.end(); it++) {
+	if (*it == program) {
+	    it->setKeyMapping(mapping);
+	}
+    }
+}
+    
+
 std::string
 MidiDevice::toXmlString()
 {
@@ -485,17 +515,7 @@ MidiDevice::toXmlString()
     for (kit = m_keyMappingList.begin(); kit != m_keyMappingList.end(); kit++)
     {
         midiDevice << "        <keymapping "
-                   << "name=\"" << encode(kit->getName()) << "\" ";
-
-	if (kit->useProgram()) {
-	    midiDevice << "msb=\"" << (int)kit->getBank().getMSB() << "\" "
-		       << "lsb=\"" << (int)kit->getBank().getLSB() << "\" "
-		       << "program=\"" << (int)kit->getProgram() << "\">"
-		       << std::endl;
-	} else {
-	    midiDevice << "channel=\"" << (int)kit->getChannel() << "\">"
-		       << std::endl;
-	}
+                   << "name=\"" << encode(kit->getName()) << "\">";
 
 	for (MidiKeyMapping::KeyNameMap::const_iterator nmi =
 		 kit->getMap().begin(); nmi != kit->getMap().end(); ++nmi) {

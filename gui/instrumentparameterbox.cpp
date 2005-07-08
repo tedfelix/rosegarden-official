@@ -652,24 +652,20 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_channelValue = new KComboBox(this);
     m_programValue = new KComboBox(this);
     m_variationValue = new KComboBox(this);
-    m_keyMappingValue = new KComboBox(this);
     m_bankCheckBox = new QCheckBox(this);
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
-    m_keyMappingCheckBox = new QCheckBox(this);
 
     m_bankValue->setSizeLimit(20);
     m_programValue->setSizeLimit(20);
     m_variationValue->setSizeLimit(20);
-    m_keyMappingValue->setSizeLimit(20);
 
     m_bankLabel = new QLabel(i18n("Bank"), this);
     m_variationLabel = new QLabel(i18n("Variation"), this);
     QLabel* programLabel = new QLabel(i18n("Program"), this);
     QLabel* channelLabel = new QLabel(i18n("Channel"), this);
     QLabel *percussionLabel = new QLabel(i18n("Percussion"), this);
-    m_keyMappingLabel = new QLabel(i18n("Key map"), this);
 
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
@@ -677,7 +673,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     int width = metrics.width("Acoustic Grand Piano 123");
     m_bankValue->setMinimumWidth(width);
     m_programValue->setMinimumWidth(width);
-    m_keyMappingValue->setMinimumWidth(width);
 
     m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
     m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);
@@ -700,10 +695,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
     m_mainGrid->addWidget(m_variationValue, 6, 2, AlignRight);
 
-    m_mainGrid->addWidget(m_keyMappingLabel, 7, 0);
-    m_mainGrid->addWidget(m_keyMappingCheckBox, 7, 1);
-    m_mainGrid->addWidget(m_keyMappingValue, 7, 2, AlignRight);
-
     // Populate channel list
     for (int i = 0; i < 16; i++)
         m_channelValue->insertItem(QString("%1").arg(i+1));
@@ -714,7 +705,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_programValue->setDisabled(true);
     m_bankValue->setDisabled(true);
     m_variationValue->setDisabled(true);
-    m_keyMappingValue->setDisabled(true);
 
     // Only active if we have an Instrument selected
     //
@@ -722,7 +712,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_programCheckBox->setDisabled(true);
     m_bankCheckBox->setDisabled(true);
     m_variationCheckBox->setDisabled(true);
-    m_keyMappingCheckBox->setDisabled(true);
 
     // Connect up the toggle boxes
     //
@@ -738,9 +727,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_variationCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleVariation(bool)));
 
-    connect(m_keyMappingCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggleKeyMapping(bool)));
-
 
     // Connect activations
     //
@@ -753,9 +739,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_programValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectProgram(int)));
 
-    connect(m_keyMappingValue, SIGNAL(activated(int)),
-            this, SLOT(slotSelectKeyMapping(int)));
-
     connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectChannel(int)));
 
@@ -764,7 +747,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_bankValue->setCurrentItem(-1);
     m_channelValue->setCurrentItem(-1);
     m_variationValue->setCurrentItem(-1);
-    m_keyMappingValue->setCurrentItem(-1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
@@ -822,7 +804,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_programCheckBox->setDisabled(false);
     m_bankCheckBox->setDisabled(false);
     m_variationCheckBox->setDisabled(false);
-    m_keyMappingCheckBox->setDisabled(false);
 
     // Activate all checkboxes
     //
@@ -830,7 +811,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
     m_variationCheckBox->setChecked(instrument->sendsBankSelect());
-    m_keyMappingCheckBox->setChecked(instrument->getKeyMapping());
 
     // Basic parameters
     //
@@ -841,7 +821,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     populateBankList();
     populateProgramList();
     populateVariationList();
-    populateKeyMappingList();
 
     // Setup the ControlParameters
     //
@@ -1056,27 +1035,6 @@ MIDIInstrumentParameterPanel::slotSelectChannel(int index)
 }
 
 void
-MIDIInstrumentParameterPanel::slotSelectKeyMapping(int index)
-{
-    if (m_selectedInstrument == 0) return;
-    
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (md == 0) return;
-
-    if (index >= m_keyMappings.size()) return;
-
-    const Rosegarden::KeyMappingList &kml = md->getKeyMappings();
-
-    for (Rosegarden::KeyMappingList::const_iterator ki = kml.begin();
-	 ki != kml.end(); ++ki) {
-	if (ki->getName() == m_keyMappings[index].getName()) {
-	    m_selectedInstrument->setKeyMapping(&(*ki));
-	}
-    }
-}
-
-void
 MIDIInstrumentParameterPanel::populateBankList()
 {
     if (m_selectedInstrument == 0)
@@ -1253,90 +1211,6 @@ MIDIInstrumentParameterPanel::populateProgramList()
 	    m_selectedInstrument->setProgramChange
 		((m_programs[m_programValue->currentItem()]).getProgram());
 	}
-    }
-}
-void
-MIDIInstrumentParameterPanel::populateKeyMappingList()
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    m_keyMappingValue->clear();
-    m_keyMappings.clear();
-
-    MidiDevice *md = dynamic_cast<MidiDevice*>
-	(m_selectedInstrument->getDevice());
-    if (!md) {
-	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateKeyMappingList: No MidiDevice for Instrument "
-                 << m_selectedInstrument->getId() << endl;
-	return;
-    }
-
-    Rosegarden::MidiBank bank(m_selectedInstrument->isPercussion(), 0, 0);
-    if (m_selectedInstrument->sendsBankSelect()) {
-	bank = m_selectedInstrument->getProgram().getBank();
-    }
-
-    Rosegarden::MidiByte program(0);
-    if (m_selectedInstrument->sendsProgramChange()) {
-	program = m_selectedInstrument->getProgram().getProgram();
-    }
-
-    int currentMapping = -1;
-
-    const Rosegarden::KeyMappingList &mappings = md->getKeyMappings();
-
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateKeyMappingList: "
-	     << mappings.size() << " mappings in device " << md->getId() << endl;
-
-    for (unsigned int i = 0; i < mappings.size(); ++i) {
-	std::string mappingName = mappings[i].getName();
-	bool good = false;
-	RG_DEBUG << i << ": " << mappingName << ": bank "
-		 << (int)mappings[i].getBank().getLSB() << ","
-		 << (int)mappings[i].getBank().getMSB() << ": program "
-		 << (int)mappings[i].getProgram() << ": useProgram "
-		 << mappings[i].useProgram() << ": channel " 
-		 << (int)mappings[i].getChannel() << ": useChannel "
-		 << mappings[i].useChannel() << endl;
-
-	if (mappingName != "") {
-	    if (mappings[i].useProgram()) {
-		if (mappings[i].getBank().getLSB() == bank.getLSB() &&
-		    mappings[i].getBank().getMSB() == bank.getMSB() &&
-		    mappings[i].getProgram() == program) {
-		    good = true;
-		}
-	    } else if (mappings[i].useChannel()) {
-		if (mappings[i].getChannel() ==
-		    m_selectedInstrument->getMidiChannel()) {
-		    good = true;
-		}
-	    } else {
-		good = true;
-	    }
-	}
-	if (good) {
-	    RG_DEBUG << "Adding " << mappingName << endl;
-	    m_keyMappingValue->insertItem(strtoqstr(mappingName));
-	    if (m_selectedInstrument->getKeyMapping() != 0 &&
-		m_selectedInstrument->getKeyMapping()->getName() == mappingName) {
-		m_keyMappingValue->setCurrentItem(m_keyMappings.size());
-	    }
-	    m_keyMappings.push_back(mappings[i]);
-	}
-    }
-
-    if (m_keyMappings.empty()) {
-	m_keyMappingLabel->hide();
-	m_keyMappingValue->hide();
-	m_keyMappingCheckBox->hide();
-    } else {
-	m_keyMappingLabel->show();
-	m_keyMappingValue->show();
-	m_keyMappingCheckBox->show();
-//	m_keyMappingValue->setEnabled(m_selectedInstrument->getKeyMapping() != 0);
-//	m_keyMappingCheckBox->setChecked(m_selectedInstrument->getKeyMapping() != 0);
     }
 }
 
@@ -1579,24 +1453,6 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
 					 getProgramName()));
     emit updateAllBoxes();
 }
-
-void
-MIDIInstrumentParameterPanel::slotToggleKeyMapping(bool value)
-{
-    if (m_selectedInstrument == 0)
-    {
-        m_keyMappingCheckBox->setChecked(false);
-        emit updateAllBoxes();
-        return;
-    }
-
-    m_keyMappingCheckBox->setChecked(value);
-    m_selectedInstrument->setKeyMapping(NULL);
-    m_keyMappingValue->setDisabled(!value);
-    populateKeyMappingList();
-    slotSelectKeyMapping(0);
-}
-
 
 void
 MIDIInstrumentParameterPanel::slotSelectBank(int index)

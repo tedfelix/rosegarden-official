@@ -60,21 +60,25 @@ class MidiProgram
 {
 public:
     MidiProgram();
-    MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "");
+    MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "",
+		std::string keyMapping = "");
 
     // comparator disregards name
     bool operator==(const MidiProgram &p) const;
     
     const MidiBank&     getBank() const;
     MidiByte            getProgram() const;
-    std::string         getName() const;
+    const std::string  &getName() const;
+    const std::string  &getKeyMapping() const;
 
-    void                setName(std::string name);
+    void                setName(const std::string &name);
+    void                setKeyMapping(const std::string &name);
 
 private:
     MidiBank m_bank;
     MidiByte m_program;
     std::string m_name;
+    std::string m_keyMapping;
 };
 
 typedef std::vector<MidiProgram> ProgramList;
@@ -85,34 +89,10 @@ public:
     typedef std::map<MidiByte, std::string> KeyNameMap;
 
     MidiKeyMapping();
-
-    MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
-		   bool useProgram, bool useChannel, const std::string &name);
-	
-    MidiKeyMapping(const MidiBank &bank, MidiByte program, MidiByte channel,
-		   bool useProgram, bool useChannel, const std::string &name,
-		   const KeyNameMap &map);
+    MidiKeyMapping(const std::string &name);
+    MidiKeyMapping(const std::string &name, const KeyNameMap &map);
 
     bool operator==(const MidiKeyMapping &m) const;
-
-    // clients looking this up shouldn't compare it against their own bank
-    // directly, but just compare its lsb and msb -- as it may have different
-    // percussion settings etc
-    const MidiBank      &getBank() const { return m_bank; }
-
-    void                 setBank(const MidiBank &bank) { m_bank = bank; }
-
-    MidiByte             getProgram() const { return m_program; }
-    void                 setProgram(MidiByte program) { m_program = program; }
-
-    MidiByte             getChannel() const { return m_channel; }
-    void                 setChannel(MidiByte channel) { m_channel = channel; }
-
-    bool                 useProgram() const { return m_useProgram; }
-    void                 setUseProgram(bool use) { m_useProgram = use; }
-
-    bool                 useChannel() const { return m_useChannel; }
-    void                 setUseChannel(bool use) { m_useChannel = use; }
 
     const std::string   &getName() const { return m_name; }
     void                 setName(const std::string &name) { m_name = name; }
@@ -138,11 +118,6 @@ public:
     int                  getPitchExtent() const;
 
 private:
-    MidiBank    m_bank;
-    MidiByte    m_program;
-    MidiByte    m_channel;
-    bool        m_useProgram;
-    bool        m_useChannel;
     std::string m_name;
     KeyNameMap  m_map;
 };

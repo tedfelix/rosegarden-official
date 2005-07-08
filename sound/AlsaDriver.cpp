@@ -83,7 +83,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_maxPorts(-1),
     m_maxQueues(-1),
     m_midiInputPortConnected(false),
-    m_midiSyncAutoConnect(true),
+    m_midiSyncAutoConnect(false),
     m_alsaPlayStartTime(0, 0),
     m_alsaRecordStartTime(0, 0),
     m_loopStartTime(0, 0),
@@ -3669,6 +3669,13 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                           << "Rosegarden MIDI SYNC AUTO ENABLED"
                           << std::endl;
 #endif
+		for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
+		     dpmi != m_devicePortMap.end(); ++dpmi) {
+		    snd_seq_connect_to(m_midiHandle,
+				       m_syncOutputPort,
+				       dpmi->second.first,
+				       dpmi->second.second);
+		}
             }
             else
             {

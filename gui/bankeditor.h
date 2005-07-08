@@ -131,13 +131,18 @@ public:
 
 public slots:
     virtual void slotNameChanged(const QString&) = 0;
+    virtual void slotEntryButtonPressed() = 0;
 
 protected:
     NameSetEditor(BankEditorDialog *bankEditor,
 		  QString title,
 		  QWidget *parent,
 		  const char *name,
-		  QString headingPrefix = "");
+		  QString headingPrefix = "",
+		  bool showEntryButtons = false);
+
+    QPushButton *getEntryButton(int n) { return m_entryButtons[n]; }
+    const QPushButton *getEntryButton(int n) const { return m_entryButtons[n]; }
 
     QGridLayout             *m_mainLayout;
     BankEditorDialog*        m_bankEditor;
@@ -146,6 +151,7 @@ protected:
     QFrame                  *m_mainFrame;
     QLabel                  *m_librarian;
     QLabel                  *m_librarianEmail;
+    std::vector<QPushButton *> m_entryButtons;
 };
 
 class MidiProgramsEditor : public NameSetEditor
@@ -169,6 +175,8 @@ public slots:
     void slotNewPercussion(); // gets value from checkbox
 
     virtual void slotNameChanged(const QString &);
+    virtual void slotEntryButtonPressed();
+    void slotEntryMenuItemSelected(int);
 
 protected:
 
@@ -202,11 +210,15 @@ protected:
     QSpinBox                 *m_msb;
     QSpinBox                 *m_lsb;
 
+    Rosegarden::MidiDevice   *m_device;
+
     Rosegarden::MidiBank     *m_currentBank;
     Rosegarden::BankList     &m_bankList;
     Rosegarden::ProgramList  &m_programList;
 
     Rosegarden::MidiBank      m_oldBank;
+
+    unsigned int              m_currentMenuProgram;
 };
 
 class MidiKeyMappingEditor : public NameSetEditor
@@ -225,18 +237,13 @@ public:
 
 public slots:
     virtual void slotNameChanged(const QString &);
-    
-    void slotChannelChanged(int channel);
-    void slotUseChannelToggled();
+    virtual void slotEntryButtonPressed();
 
 protected:
     virtual QWidget *makeAdditionalWidget(QWidget *parent);
     void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
-
-    QCheckBox *m_useChannel;
-    QSpinBox *m_channel;
 
     Rosegarden::MidiDevice *m_device;
     std::string m_mappingName;

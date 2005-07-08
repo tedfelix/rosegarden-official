@@ -130,7 +130,6 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_keyMapping(0),
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
@@ -174,7 +173,6 @@ Instrument::Instrument(InstrumentId id,
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_keyMapping(0),
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
@@ -230,7 +228,6 @@ Instrument::Instrument(const Instrument &ins):
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
     m_volume(ins.getVolume()),
-    m_keyMapping(ins.getKeyMapping()),
     m_level(ins.getLevel()),
     m_recordLevel(ins.getRecordLevel()),
     m_device(ins.getDevice()),
@@ -270,7 +267,6 @@ Instrument::operator=(const Instrument &ins)
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();
     m_volume = ins.getVolume();
-    m_keyMapping = ins.getKeyMapping();
     m_level = ins.getLevel();
     m_recordLevel = ins.getRecordLevel();
     m_device = ins.getDevice();
@@ -438,12 +434,6 @@ Instrument::toXmlString()
         instrument << "            <volume value=\""
                    << (int)m_volume << "\"/>" << std::endl;
 
-	if (m_keyMapping) {
-	    instrument << "            <keymapping name=\""
-		       << XmlExportable::encode(m_keyMapping->getName())
-		       << "\"/>" << std::endl;
-	}
-
         for (StaticControllerConstIterator it = m_staticControllers.begin();
              it != m_staticControllers.end(); ++it)
         {
@@ -549,6 +539,25 @@ Instrument::getControllerValue(MidiByte controller) const
 
     throw std::string("<no controller of that value>");
 }
+
+const MidiKeyMapping *
+Instrument::getKeyMapping() const
+{
+    MidiDevice *md = dynamic_cast<MidiDevice*>(m_device);
+    if (!md) return 0;
+
+    const MidiKeyMapping *mkm = md->getKeyMappingForProgram(m_program);
+    if (mkm) return mkm;
+
+    if (isPercussion()) { // if any key mapping is available, use it
+	const KeyMappingList &kml = md->getKeyMappings();
+	if (kml.begin() != kml.end()) {
+	    return &(*kml.begin());
+	}
+    }
+
+    return 0;
+}    
 
 
 Buss::Buss(BussId id) :

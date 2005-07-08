@@ -33,6 +33,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qpopupmenu.h>
 #include <qregexp.h>
 #include <qtooltip.h>
 #include <qdir.h>
@@ -210,7 +211,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 			     QString title,
 			     QWidget* parent,
 			     const char* name,
-			     QString headingPrefix)
+			     QString headingPrefix,
+			     bool showEntryButtons)
     : QVGroupBox(title, parent, name),
       m_bankEditor(bankEditor),
       m_mainFrame(new QFrame(this))
@@ -244,7 +246,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     QHBox *h;
     QVBox *v;
     QHBox *numBox;
-    QLabel *label;
     
     unsigned int tabs = 4;
     unsigned int cols = 2;
@@ -261,11 +262,23 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 	    for (unsigned int row = 0; row < 128/(tabs*cols); ++row)
 	    {
 		numBox = new QHBox(v);
-		label = new QLabel(QString("%1").arg(labelId + 1), numBox);
-		label->setFixedWidth(40);
-		label->setAlignment(AlignHCenter);
+		QString numberText = QString("%1").arg(labelId + 1);
 
-		KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
+		QLabel *label = new QLabel(numberText, numBox);
+		label->setFixedWidth(40);
+		label->setAlignment(AlignCenter);
+
+		if (showEntryButtons) {
+		    QPushButton *button = new QPushButton("", numBox, numberText);
+		    button->setMaximumWidth(40);
+		    button->setMaximumHeight(20);
+		    button->setFlat(true);
+		    connect(button, SIGNAL(clicked()),
+			    this, SLOT(slotEntryButtonPressed()));
+		    m_entryButtons.push_back(button);
+		}
+
+		KLineEdit* lineEdit = new KLineEdit(numBox, numberText);
 		lineEdit->setMinimumWidth(110);
 		lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
 		lineEdit->setCompletionObject(&m_completion);
@@ -293,7 +306,8 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 				       const char* name)
     : NameSetEditor(bankEditor,
 		    i18n("Bank and Program details"),
-		    parent, name, i18n("Programs")),
+		    parent, name, i18n("Programs"), true),
+      m_device(0),
       m_bankList(bankEditor->getBankList()),
       m_programList(bankEditor->getProgramList()),
       m_oldBank(false, 0, 0)
@@ -420,8 +434,8 @@ MidiProgramsEditor::populate(QListViewItem* item)
     }
     
     Rosegarden::DeviceId deviceId = bankItem->getDeviceId();
-    Rosegarden::MidiDevice* device = m_bankEditor->getMidiDevice(deviceId);
-    if (!device) return;
+    m_device = m_bankEditor->getMidiDevice(deviceId);
+    if (!m_device) return;
     
     setEnabled(true);
 
@@ -430,7 +444,7 @@ MidiProgramsEditor::populate(QListViewItem* item)
     RG_DEBUG << "MidiProgramsEditor::populate : bankItem->getBank = "
              << bankItem->getBank() << endl;
 
-    m_currentBank = &(m_bankList[bankItem->getBank()]); // device->getBankByIndex(bankItem->getBank());
+    m_currentBank = &(m_bankList[bankItem->getBank()]); // m_device->getBankByIndex(bankItem->getBank());
 
     blockAllSignals(true);
 
@@ -443,20 +457,38 @@ MidiProgramsEditor::populate(QListViewItem* item)
 
     // Librarian details
     //
-    m_librarian->setText(strtoqstr(device->getLibrarianName()));
-    m_librarianEmail->setText(strtoqstr(device->getLibrarianEmail()));
+    m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
+    m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
     Rosegarden::ProgramList programSubset = getBankSubset(*m_currentBank);
     Rosegarden::ProgramList::iterator it;
+
+    QPixmap noKeyPixmap, keyPixmap;
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QString file = pixmapDir + "/toolbar/key-white.png";
+    if (QFile(file).exists()) noKeyPixmap = QPixmap(file);
+    file = pixmapDir + "/toolbar/key-green.png";
+    if (QFile(file).exists()) keyPixmap = QPixmap(file);
+
+    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
 
     for (unsigned int i = 0; i < m_names.size(); i++) {
         m_names[i]->clear();
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
+
                 QString programName = strtoqstr(it->getName());
                 m_completion.addItem(programName);
                 m_names[i]->setText(programName);
+
+		if (m_device->getKeyMappingForProgram(*it)) {
+		    getEntryButton(i)->setPixmap(keyPixmap);
+		} else {
+		    getEntryButton(i)->setPixmap(noKeyPixmap);
+		}
+		getEntryButton(i)->setEnabled(haveKeyMappings);
+
                 break;
             }
         }
@@ -657,6 +689,101 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 }
 
+class BlahPopupMenu2 : public QPopupMenu
+{
+    // just to make itemHeight public
+public:
+    BlahPopupMenu2(QWidget *parent) : QPopupMenu(parent) { }
+    using QPopupMenu::itemHeight;
+};
+
+void
+MidiProgramsEditor::slotEntryButtonPressed()
+{
+    QPushButton* button = dynamic_cast<QPushButton*>(const_cast<QObject *>(sender()));
+    if (!button) {
+        RG_DEBUG << "MidiProgramsEditor::slotEntryButtonPressed() : %%% ERROR - signal sender is not a QPushButton\n";
+        return;
+    }
+
+    QString senderName = button->name();
+
+    if (!m_device) return;
+
+    const Rosegarden::KeyMappingList &kml = m_device->getKeyMappings();
+    if (kml.empty()) return;
+
+    // Adjust value back to zero rated
+    //
+    unsigned int id = senderName.toUInt() - 1;
+    Rosegarden::MidiProgram *program = getProgram(*getCurrentBank(), id);
+    if (!program) return;
+    m_currentMenuProgram = id;
+
+    BlahPopupMenu2 *menu = new BlahPopupMenu2(button);
+
+    const Rosegarden::MidiKeyMapping *currentMapping =
+	m_device->getKeyMappingForProgram(*program);
+    int currentEntry = 0;
+
+    menu->insertItem(i18n("<no key mapping>"), this,
+		     SLOT(slotEntryMenuItemSelected(int)), 0, 0);
+    menu->setItemParameter(0, 0);
+
+    for (int i = 0; i < kml.size(); ++i) {
+	menu->insertItem(strtoqstr(kml[i].getName()),
+			 this, SLOT(slotEntryMenuItemSelected(int)),
+			 0, i+1);
+	menu->setItemParameter(i+1, i+1);
+	if (currentMapping && (kml[i] == *currentMapping)) currentEntry = i+1;
+    }
+    
+    int itemHeight = menu->itemHeight(0) + 2;
+    QPoint pos = QCursor::pos();
+    
+    pos.rx() -= 10;
+    pos.ry() -= (itemHeight / 2 + currentEntry * itemHeight);
+
+    menu->popup(pos);
+}
+
+void
+MidiProgramsEditor::slotEntryMenuItemSelected(int i)
+{
+    if (!m_device) return;
+
+    const Rosegarden::KeyMappingList &kml = m_device->getKeyMappings();
+    if (kml.empty()) return;
+
+    Rosegarden::MidiProgram *program = getProgram(*getCurrentBank(), m_currentMenuProgram);
+    if (!program) return;
+
+    if (i == 0) { // no key mapping
+	m_device->setKeyMappingForProgram(*program, "");
+    } else {
+	--i;
+	if (i < kml.size()) {
+	    m_device->setKeyMappingForProgram(*program, kml[i].getName());
+	}
+    }
+
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+
+    if (m_device->getKeyMappingForProgram(*program)) {
+	QString file = pixmapDir + "/toolbar/key-green.png";
+	if (QFile(file).exists()) {
+	    getEntryButton(m_currentMenuProgram)->setPixmap(QPixmap(file));
+	}
+    } else {
+	QString file = pixmapDir + "/toolbar/key-white.png";
+	if (QFile(file).exists()) {
+	    getEntryButton(m_currentMenuProgram)->setPixmap(QPixmap(file));
+	}
+    }
+    getEntryButton(m_currentMenuProgram)->setEnabled(haveKeyMappings);
+}
+
 int
 MidiProgramsEditor::ensureUniqueMSB(int msb, bool ascending)
 {
@@ -744,9 +871,7 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
 					   const char* name)
     : NameSetEditor(bankEditor,
 		    i18n("Key Mapping details"),
-		    parent, name, i18n("Pitches")),
-      m_useChannel(0),
-      m_channel(0),
+		    parent, name, i18n("Pitches"), false),
       m_device(0)
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
@@ -758,35 +883,7 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
 QWidget *
 MidiKeyMappingEditor::makeAdditionalWidget(QWidget *parent)
 {
-    QFrame *frame = new QFrame(parent);
- 
-    QGridLayout *gridLayout = new QGridLayout(frame,
-					      2,  // rows
-                                              2,  // cols
-                                              2); // margin
- 
-    m_useChannel = new QCheckBox(i18n("One channel only"), frame);
-    gridLayout->addMultiCellWidget(m_useChannel, 0, 0, 0, 1);
-    gridLayout->addWidget(new QLabel(i18n("Channel"), frame), 1, 0);
-
-    m_channel = new QSpinBox(frame);
-    m_channel->setMinValue(1);
-    m_channel->setMaxValue(16);
-    gridLayout->addWidget(m_channel, 1, 1);
-
-    connect(m_useChannel, SIGNAL(clicked()),
-	    this, SLOT(slotUseChannelToggled()));
-
-    connect(m_channel, SIGNAL(valueChanged(int)),
-	    this, SLOT(slotChannelChanged(int)));
-
-    QToolTip::add(m_useChannel,
-            i18n("Selects whether the key map should be available only for a single channel on this device"));
-
-    QToolTip::add(m_channel,
-            i18n("Selects which channel on this device the key map should be available for"));
-
-    return frame;
+    return 0;
 }
 
 void
@@ -849,9 +946,6 @@ MidiKeyMappingEditor::reset()
     m_librarian->setText(strtoqstr(m_device->getLibrarianName()));
     m_librarianEmail->setText(strtoqstr(m_device->getLibrarianEmail()));
 
-    m_useChannel->setChecked(m_mapping.useChannel());
-    m_channel->setValue(m_mapping.getChannel() + 1);
-
     for (Rosegarden::MidiKeyMapping::KeyNameMap::const_iterator it =
 	     m_mapping.getMap().begin();
 	 it != m_mapping.getMap().end(); ++it) {
@@ -897,23 +991,9 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
     }
 }
 
-void MidiKeyMappingEditor::slotChannelChanged(int channel)
+void
+MidiKeyMappingEditor::slotEntryButtonPressed()
 {
-    RG_DEBUG << "MidiKeyMappingEditor::slotChannelChanged(" << channel << ")" << endl;
-    if (m_mapping.getChannel() != channel) {
-	m_mapping.setChannel(channel - 1);
-	m_bankEditor->setModified(true);
-    }
-}
-
-void MidiKeyMappingEditor::slotUseChannelToggled()
-{
-    RG_DEBUG << "MidiKeyMappingEditor::slotUseChannelToggled()" << endl;
-    bool use = m_useChannel->isChecked();
-    if (m_mapping.useChannel() != use) {
-	m_mapping.setUseChannel(use);
-	m_bankEditor->setModified(true);
-    }
 }
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
@@ -1894,10 +1974,8 @@ BankEditorDialog::slotAddKeyMapping()
 	    else name = i18n("<new mapping %1>").arg(n);
 	}
 
-	Rosegarden::MidiKeyMapping newKeyMapping(Rosegarden::MidiBank(true, 0, 0),
-						 0, 9, true, false, qstrtostr(name));
+	Rosegarden::MidiKeyMapping newKeyMapping(qstrtostr(name));
 
-	
 	ModifyDeviceCommand *command = new ModifyDeviceCommand
 	    (m_studio,
 	     device->getId(),
