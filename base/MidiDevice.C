@@ -489,7 +489,12 @@ MidiDevice::toXmlString()
             {
                 midiDevice << "            <program "
                            << "id=\"" << (int)pt->getProgram() << "\" "
-                           << "name=\"" << encode(pt->getName()) << "\"/>" << std::endl;
+                           << "name=\"" << encode(pt->getName()) << "\" ";
+                if (!pt->getKeyMapping().empty()) {
+                    midiDevice << "keymapping=\"" 
+                               << encode(pt->getKeyMapping()) << "\" ";
+                }
+                midiDevice << "/>" << std::endl;
             }
         }
 
