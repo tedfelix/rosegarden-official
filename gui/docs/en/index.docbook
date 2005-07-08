@@ -124,7 +124,8 @@
 
     * Hideous inconsistency (documented in an RFE already) between
       having to use RG for MIDI routing and being unable to use RG
-      for audio routing.
+      for audio routing.  UPDATE: We now have external MIDI routing,
+      document it.
 
     * Uh, Pedro implemented this multiport recording but we can't
       actually split the results can we?
@@ -885,11 +886,19 @@
       <para>
 	To record a new segment into a track, first make sure the
 	right track is selected for recording by selecting the red
-	LED-style button on the track label, and then use the
-	Transport's record control.  This has the effect of both
-	starting the transport (thus playing the existing composition)
-	and recording into the appropriate track.  Currently only a
-	single track at a time may be active for recording.
+	(for audio tracks) or yellow (for MIDI tracks) LED-style
+	button on the track label, and then use the Transport's record
+	control.  This has the effect of both starting the transport,
+	thus playing the existing composition, and recording into the
+	appropriate track.
+      </para>
+      <para>
+	You can only select a single MIDI track for recording, but you
+	can record any number of audio tracks at once so long as your
+	computer is powerful enough.  You can also select a MIDI track
+	and one or more audio tracks at the same time.  Be careful not
+	to accidentally leave tracks selected when you have finished
+	using them and are trying to record somewhere else.
       </para>
       <para>
 	Alternatively you can use punch-in record to separate the acts
@@ -899,18 +908,18 @@
 	playback and recording without stopping the transport, or you
 	can use Space to arm for recording when the transport is
 	stopped, so that a subsequent Play will in fact record as
-	well.  (The latter is handy when using an <link
+	well.  (The latter is handy when synchronising to an <link
 	linkend="transport-external">external transport</link>.)
       </para>
       <para>
-	If the record track is assigned to a MIDI instrument, then
-	recording will take place from all of the MIDI devices that
-	are selected for recording in the <link
-	linkend="studio-device-editor">MIDI device manager</link>.
+	If you record to a MIDI track, your recording will be from all
+	of the MIDI devices that are selected for recording in the
+	<link linkend="studio-device-editor">MIDI device
+	manager</link>.
       </para>
       <para>
-	If the record track is assigned to an audio instrument,
-	recording will be from the input currently selected for that
+	If you record to audio tracks, your recording to each track
+	will be from the input currently selected for that track's
 	instrument in the <link
 	linkend="segment-view-instrumentparameterbox">instrument
 	parameter box</link>.  This will either be an external audio
@@ -919,31 +928,58 @@
 	record from your soundcard's first available physical record
 	in.  You may wish to use <!-- !!! link
 	linkend="studio-audio-routing" --> a JACK connection tool to
-	connect some other JACK audio application to the input instead.
+	connect some other JACK audio application to the input
+	instead.
       </para>
     </sect1>
 
     <sect1 id="transport-external">
-      <title>External transports</title>
-      <para>
-	Rosegarden supports the JACK transport mechanism for
-	synchronising its transport with other JACK applications.
-	To activate it, go to 
-	<menuchoice>
-	  <guimenu lang="en">Settings</guimenu>
-	  <guimenuitem>Configure Rosegarden...</guimenuitem>
-	</menuchoice>
-	and in the Sequencer page's Synchronisation tab, select "Sync"
-	from the JACK transport mode menu.</para>
+      <title>Synchronising to external transports</title>
+      <sect2 id="transport-jack">
+	<title>JACK Transport</title>
+	<para>
+	  Rosegarden supports the JACK transport mechanism for
+	  synchronising its transport with other JACK applications on
+	  the same computer.  To activate it, go to
+	  <menuchoice>
+	    <guimenu lang="en">Settings</guimenu>
+	    <guimenuitem>Configure Rosegarden...</guimenuitem>
+	  </menuchoice>
+	  and in the Sequencer page's Synchronisation tab, select "Sync"
+	  from the JACK transport mode menu.</para>
+	
+	<para>When the JACK transport is in use, all of the applications
+	  that are subscribed to it share a common transport control, and
+	  you can start, stop, and move the transport from any one of
+	  them.</para>
 
-      <para>When the JACK transport is in use, all of the applications
-      that are subscribed to it share a common transport control, and
-      you can start, stop, and move the transport from any one of
-      them.</para>
-
-      <para>Many Linux audio applications support JACK transport:
-      consult their documentation for details of whether and
-      how.</para>
+	<para>Many Linux audio applications that use the JACK audio
+	server also support JACK transport: consult their
+	documentation for details of whether and how.</para>
+      </sect2>
+      <sect2 id="transport-mtc">
+	<title>MIDI Time Code</title>
+	<para>
+	  Rosegarden supports MIDI Time Code (MTC) synchronisation in
+	  master and slave modes.  This is particularly useful for
+	  synchronising the Rosegarden transport with a hardware
+	  MTC-capable device, or with software running on other
+	  computers connected via MIDI.
+	</para>
+	<para>To make Rosegarden the MTC Master, so that it will
+	  control any MTC slave device or application connected to it,
+	  go to
+	  <menuchoice>
+	    <guimenu lang="en">Settings</guimenu>
+	    <guimenuitem>Configure Rosegarden...</guimenuitem>
+	  </menuchoice>
+	  and in the Sequencer page's Synchronisation tab, select "MTC
+	  Master" from the MIDI Time Code menu.  To make Rosegarden an
+	  MTC Slave so that Rosegarden's transport will automatically
+	  be synchronised with incoming MTC events, select "MTC
+	  Slave".
+	</para>
+      </sect2>
     </sect1>
   </chapter>
 
