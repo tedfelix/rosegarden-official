@@ -79,13 +79,18 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 
     int y = m_pixmap.height() - 12;
 
-    paint.setPen(QColor(206,214,163));
-    paint.setBrush(QColor(206,214,163));
+//    paint.setPen(QColor(206,214,163));
+//    paint.setBrush(QColor(206,214,163));
+    QColor bg(49,94,19);
+    paint.setPen(bg);
+    paint.setBrush(bg);
     paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,
 			 220, (y + 8) - (m_pixmap.height() - 43)));
 
-    paint.setPen(Qt::black);
-    paint.setBrush(Qt::black);
+//    paint.setPen(Qt::black);
+//    paint.setBrush(Qt::black);
+    paint.setPen(Qt::white);
+    paint.setBrush(Qt::white);
 
     QString version(VERSION);
     int sepIdx = version.find("-");
