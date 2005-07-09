@@ -520,7 +520,7 @@ MidiDevice::toXmlString()
     for (kit = m_keyMappingList.begin(); kit != m_keyMappingList.end(); kit++)
     {
         midiDevice << "        <keymapping "
-                   << "name=\"" << encode(kit->getName()) << "\">";
+                   << "name=\"" << encode(kit->getName()) << "\">\n";
 
 	for (MidiKeyMapping::KeyNameMap::const_iterator nmi =
 		 kit->getMap().begin(); nmi != kit->getMap().end(); ++nmi) {

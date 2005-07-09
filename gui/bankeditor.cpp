@@ -470,11 +470,15 @@ MidiProgramsEditor::populate(QListViewItem* item)
     file = pixmapDir + "/toolbar/key-green.png";
     if (QFile(file).exists()) keyPixmap = QPixmap(file);
 
-    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+    bool haveKeyMappings = m_currentBank->isPercussion()
+			   && (m_device->getKeyMappings().size() > 0);
 
     for (unsigned int i = 0; i < m_names.size(); i++) {
-        m_names[i]->clear();
-
+	m_names[i]->clear();
+	getEntryButton(i)->setEnabled(haveKeyMappings);
+	getEntryButton(i)->setPixmap(noKeyPixmap);
+	QToolTip::remove( getEntryButton(i) );
+	
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
 
@@ -484,10 +488,10 @@ MidiProgramsEditor::populate(QListViewItem* item)
 
 		if (m_device->getKeyMappingForProgram(*it)) {
 		    getEntryButton(i)->setPixmap(keyPixmap);
-		} else {
-		    getEntryButton(i)->setPixmap(noKeyPixmap);
+		    QToolTip::add( getEntryButton(i), 
+			i18n("Key Mapping: %1").arg(        
+			m_device->getKeyMappingForProgram(*it)->getName() ) );
 		}
-		getEntryButton(i)->setEnabled(haveKeyMappings);
 
                 break;
             }
@@ -757,31 +761,37 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
 
     Rosegarden::MidiProgram *program = getProgram(*getCurrentBank(), m_currentMenuProgram);
     if (!program) return;
+    
+    std::string newMapping;
 
     if (i == 0) { // no key mapping
-	m_device->setKeyMappingForProgram(*program, "");
+	newMapping = "";
     } else {
 	--i;
 	if (i < kml.size()) {
-	    m_device->setKeyMappingForProgram(*program, kml[i].getName());
+	    newMapping = kml[i].getName();
 	}
     }
 
+    m_device->setKeyMappingForProgram(*program, newMapping);
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
-
-    if (m_device->getKeyMappingForProgram(*program)) {
-	QString file = pixmapDir + "/toolbar/key-green.png";
-	if (QFile(file).exists()) {
-	    getEntryButton(m_currentMenuProgram)->setPixmap(QPixmap(file));
-	}
-    } else {
+    QPushButton *btn = getEntryButton(m_currentMenuProgram);
+    	
+    if (newMapping.empty()) {
 	QString file = pixmapDir + "/toolbar/key-white.png";
 	if (QFile(file).exists()) {
-	    getEntryButton(m_currentMenuProgram)->setPixmap(QPixmap(file));
+	    btn->setPixmap(QPixmap(file));
 	}
+	QToolTip::remove(btn);
+    } else {
+	QString file = pixmapDir + "/toolbar/key-green.png";
+	if (QFile(file).exists()) {
+	    btn->setPixmap(QPixmap(file));
+	}
+	QToolTip::add(btn, i18n("Key Mapping: %1").arg(newMapping));
     }
-    getEntryButton(m_currentMenuProgram)->setEnabled(haveKeyMappings);
+    btn->setEnabled(haveKeyMappings);
 }
 
 int
