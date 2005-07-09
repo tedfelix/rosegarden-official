@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-#
 # ins2rgd.pl
 # Takes a Cakewalk/Sonar .ins instrument definition file on stdin
 # emits an (uncompressed) .rgd, which the user then compresses and places
@@ -14,8 +13,11 @@
 # BUGS: This could still use some work -- there are hard-coded values that
 #       could be configured...
 # 
-# Modified by Pedro Lopez-Cabanillas <plcl@users.sf.net> (06-05-2005)
-# to include Controllers and KeyMappings.
+# Modified by Pedro Lopez-Cabanillas <plcl@users.sf.net> (Jul/2005)
+# -> include Controllers and KeyMappings.
+#
+# Usage:
+#	ins2rgd.pl original.ins | gzip > converted.rgd
 
 my $devicename = undef;
 my $librarian = "Created using ins2rgd.pl";
@@ -32,9 +34,9 @@ my $banks = {};			# the in-memory banks database
 my $keymaps = {};
 my $controllers = {};
 my $banknumof = {};
-my $keybank = {};
-my $keyprog = {};
 my $keybased = {};
+my $mappedkeys = {};
+my $bankselmethod = 0;
 
 # sussed from txt2rgd.py
 %converter_table = (
@@ -113,6 +115,11 @@ s/\s+$//; # might be cr/lf too
             }
 	  next LINE;
           }
+        if(m#^BankSelMethod\=(\d+)$#)
+          {
+	  $bankselmethod=$1;
+	  next LINE;
+	  }
         if(m#Patch\[(\d+)\]=(.+)$#)
           {
           my $banknum = $1;
@@ -124,8 +131,7 @@ s/\s+$//; # might be cr/lf too
         if(m#Key\[(\d+)\,(\d+)\]=(.+)$#)
           {
           my $keymapname = doquote($3);
-          $keybank{$keymapname}=$1;
-          $keyprog{$keymapname}=$2;
+	  $mappedkeys->{$1}->{$2} = $keymapname;
           }
       }
 
@@ -183,9 +189,21 @@ print '<?xml version="1.0" encoding="UTF-8"?>
 
 for my $bank (@banks)
   {
-  $msb = int( $banknumof{$bank} / 128 );
-  $lsb = $banknumof{$bank} - (128*$msb);
+  my $banknum = $banknumof{$bank};
+  my $msb;
+  my $lsb;
   my $percussion;
+
+  if ($bankselmethod == 1)
+    {
+    $msb = $banknum;
+    $lsb = 0;
+    }
+    else
+    {
+    $msb = int( $banknum / 128 );
+    $lsb = $banknum - (128*$msb);
+    }
   
   if ($bank =~ /drum/i)
     {
@@ -206,7 +224,15 @@ for my $bank (@banks)
   for $voicenum (@voicenums)
     {
     $voicename = $banks->{$bank}->{$voicenum};
-    print qq{\t\t<program id="$voicenum" name="$voicename"/>\n};
+    print qq{\t\t<program id="$voicenum" name="$voicename"};
+    if ($percussion eq 'true') 
+      {
+      if (defined($mappedkeys->{$banknum}->{$voicenum}))
+        {
+        print qq{ keymapping="$mappedkeys->{$banknum}->{$voicenum}"};
+	}
+      } 
+    print "/>\n";
     }
 
   print "\t</bank>\n\n";
@@ -236,16 +262,12 @@ print "\t</controls>\n\n";
 
 # key mappings
 
-for $keymap (keys %keybank)
+for $keymap (keys %{$keymaps})
   {
-  $bnk = $keybank{$keymap};
-  $prg = $keyprog{$keymap};
-  $msb = int( $bnk / 128 );
-  $lsb = $bnk - (128*$msb);
-  $base = $keybased{$keymap};
+  my $base = $keybased{$keymap};
 
-  print qq{\t<keymapping name="$keymap" msb="$msb" lsb="$lsb" program="$prg">\n};
-  
+  print qq{\t<keymapping name="$keymap">\n};  
+
   if(defined($base))
     {
     for $key (keys %{$keymaps->{$base}})
