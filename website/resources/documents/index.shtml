@@ -16,10 +16,9 @@
     <h2>Documents</h2>
 
       <p>Rosegarden comes with some documentation in the form of a
-      help system and tooltip help, and you may find the online <a
-      href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> (still a work in
-      progress) helpful.  Here you can find a handful of other
-      miscellaneous documents.</p>
+      help system and tooltip help, and you may find the following <a
+      href="http://rosegarden.sourceforge.net/tutorial/">offerings</a> helpful
+  as well.</p>
 
       <h3>MIDI Device Program Maps</h3>
       
@@ -66,6 +65,13 @@
     consult <a href="http://www.linuxmusician.com/index.php?option=displaypage&Itemid=51&op=page">the Linux Musician Guide to Home Recording</a>.  It's a bit Windows-centric still but it has some useful
     information for beginners to the world of home recording.
     </p>
+
+    <h3>Bug and RFE Priorities on the SourceForge tracker</h3>
+    <p>If you've submitted a bug report or a feature request, you can use the following tables to determine whether someone has looked at the report yet, and how soon the Rosegarden team expects to do something about the issue or request.<p>
+    <p><a href="http://rosegarden.sourceforge.net/tutorial/bug-priorities.html">bug
+	priorities</a></p>
+    <p><a href="http://rosegarden.sourceforge.net/tutorial/RFE-priorities.html">feature
+	request priorities</a></p>
 
     </div>
 

@@ -16,7 +16,14 @@
 	<p>This is where you can find many of the extra documents and links that are relevant to users of Rosegarden.  Some things that may be of interest include:
 	<ul>
 	<li><a href="/resources/faq/">Frequently asked questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
-	<li>A <a href="http://rosegarden.sourceforge.net/tutorial/">Tutorial</a> by Michael McIntyre.</li>
+	<li>Rosegarden <a href="http://rosegarden.sourceforge.net/tutorial">books</a> and a free online <a href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> by D. Michael McIntyre.</li>
+	<li>Have you found a bug?  Please read these <a
+	    href="http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html">guidelines</a>
+	to learn the proper procedure for filing a bug report.  Thanks!</li>
+	<li>Do you want to request a new feature?  Please read these <a
+	    href="http://rosegarden.sourceforge.net/tutorial/RFE-guidelines.html">guidelines</a>
+	for suggestions about how to improve the chances that someone will
+	implement your idea.</li>
 	<li><a href="/resources/links/">Links to other sites</a> including composers who use Rosegarden, other software, and Linux audio community sites.</li>
 	<li><a href="/resources/documents/">Various other documents</a> for users.</li>
 	<li><a href="/resources/authors/">About the authors.</a></li>
