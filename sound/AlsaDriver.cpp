@@ -2786,6 +2786,8 @@ AlsaDriver::testForMTCSysex(const snd_seq_event_t *event)
 	    (ExternalTransport::TransportJumpToTime,
 	     m_mtcEncodedTime);
     }
+
+    return true;
 }
 
 static int last_factor = 0;
