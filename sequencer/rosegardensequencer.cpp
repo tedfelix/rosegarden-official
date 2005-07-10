@@ -165,7 +165,6 @@ RosegardenSequencerApp::stop()
     Rosegarden::Profiles::getInstance()->dump();
     
     incrementTransportToken();
-
 }
 
 // Get a slice of events from the GUI
@@ -599,25 +598,18 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     SEQUENCER_DEBUG << "RosegardenSequencerApp::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus << endl;
 
     // punch in recording
-    if (m_transportStatus == PLAYING)
-    {
-        if (localRecordMode == STARTING_TO_RECORD)
-        {
-            if (m_driver->record(Rosegarden::RECORD_ON) == false)
-            {
-                stop();
-                return 0;
-            }
-
-            m_transportStatus = RECORDING;
-            return 1;
-        }
+    if (m_transportStatus == PLAYING) {
+        if (localRecordMode == STARTING_TO_RECORD) {
+	    SEQUENCER_DEBUG << "RosegardenSequencerApp::record: punching in" << endl;
+	    localRecordMode = RECORDING; // no need to start playback
+	}
     }
 
     // For audio recording we need to retrieve audio
     // file names from the GUI
     //
-    if (localRecordMode == STARTING_TO_RECORD)
+    if (localRecordMode == STARTING_TO_RECORD ||
+	localRecordMode == RECORDING)
     {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
                         << " - starting to record" << endl;
@@ -713,11 +705,16 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     //
     m_transportStatus = localRecordMode;
 
-    // Ensure that playback is initialised
-    //
-    m_driver->initialisePlayback(m_songPosition);
+    if (localRecordMode == RECORDING) { // punch in
+	return 1;
+    } else {
 
-    return play(time, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
+	// Ensure that playback is initialised
+	//
+	m_driver->initialisePlayback(m_songPosition);
+
+	return play(time, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
+    }
 }
 
 // We receive a starting time from the GUI which we use as the
@@ -735,14 +732,13 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
                              const Rosegarden::RealTime &audioWrite,
 			     long smallFileSize)
 {
-    if (m_transportStatus == PLAYING || m_transportStatus == STARTING_TO_PLAY)
+    if (m_transportStatus == PLAYING ||
+	m_transportStatus == STARTING_TO_PLAY)
         return true;
-
 
     // Check for record toggle (punch out)
     //
-    if (m_transportStatus == RECORDING)
-    {
+    if (m_transportStatus == RECORDING) {
         m_transportStatus = PLAYING;
         return true;
     }
@@ -841,6 +837,19 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // keep it simple
     return true;
+}
+
+int
+RosegardenSequencerApp::punchOut()
+{
+    // Check for record toggle (punch out)
+    //
+    if (m_transportStatus == RECORDING) {
+	m_driver->punchOut();
+        m_transportStatus = PLAYING;
+        return true;
+    }
+    return false;
 }
 
 MmappedSegment* RosegardenSequencerApp::mmapSegment(const QString& file)
@@ -1772,4 +1781,4 @@ RosegardenSequencerApp::incrementTransportToken()
     std::cout << "RosegardenSequencerApp::incrementTransportToken: incrementing to " << m_transportToken << std::endl;
 }
 
-#include "rosegardensequencer.moc"
+

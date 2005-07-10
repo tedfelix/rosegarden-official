@@ -61,6 +61,7 @@ public:
     virtual void initialise();
     virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
+    virtual void punchOut();
     virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position);
     virtual void allNotesOff();
     virtual void processNotesOff(const RealTime &time, bool now);

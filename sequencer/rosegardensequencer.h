@@ -105,6 +105,8 @@ public:
 	       long smallFileSize,
                long recordMode);
 
+    int punchOut();
+
     // looping
     void setLoop(const Rosegarden::RealTime &loopStart,
                  const Rosegarden::RealTime &loopEnd);

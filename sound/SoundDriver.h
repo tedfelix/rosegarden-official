@@ -151,6 +151,7 @@ public:
 
     virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;
+    virtual void punchOut() = 0; // stop recording, continue playing
     virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position) = 0;
     virtual void allNotesOff() = 0;
     

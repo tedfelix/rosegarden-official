@@ -442,6 +442,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Thomas Nagy", I18N_NOOP("SCons/bksys building system"), "tnagy256@yahoo.fr");
     aboutData.addCredit("Vladimir Savic", I18N_NOOP("assorted icons"), "vladimir@vladimirsavic.net");
     aboutData.addCredit("Marcos Guglielmetti", I18N_NOOP("Spanish translation"), "marcospcmusica@yahoo.com.ar");
+    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince-rg@bulbous.freeserve.co.uk");
 //    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));

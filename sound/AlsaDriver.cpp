@@ -1728,6 +1728,22 @@ AlsaDriver::stopPlayback()
 	}
     }
 
+    punchOut();
+
+    stopClocks(); // Resets ALSA timer to zero, tells JACK driver to stop
+
+    clearAudioQueue();
+
+    startClocksApproved(); // restarts ALSA timer without starting JACK transport
+}
+
+void
+AlsaDriver::punchOut()
+{
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::punchOut" << std::endl;
+#endif
+
 #ifdef HAVE_LIBJACK
     // Close any recording file
     if (m_recordStatus == RECORD_ON)
@@ -1779,12 +1795,6 @@ AlsaDriver::stopPlayback()
     if (m_recordStatus == RECORD_ON) m_recordStatus = RECORD_OFF;
 
     m_recordingInstruments.clear();
-
-    stopClocks(); // Resets ALSA timer to zero, tells JACK driver to stop
-
-    clearAudioQueue();
-
-    startClocksApproved(); // restarts ALSA timer without starting JACK transport
 }
 
 void
@@ -1845,7 +1855,9 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 void 
 AlsaDriver::setMIDIClockInterval(RealTime interval)
 {
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::setMIDIClockInterval(" << interval << ")" << endl;
+#endif
 
     // Reset the value
     //
@@ -3676,7 +3688,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 				       dpmi->second.first,
 				       dpmi->second.second);
 		}
-            }
+	    }
             else
             {
                 m_midiSyncAutoConnect = false;
