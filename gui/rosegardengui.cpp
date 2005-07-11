@@ -598,6 +598,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotTutorial()), actionCollection(),
 		"tutorial");
 
+    new KAction(i18n("&Bug Reporting Guidlines"), 0, 0, this,
+		SLOT(slotBugGuidelines()), actionCollection(),
+		"guidelines");
+
     // setup edit menu
     KStdAction::cut      (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
@@ -6592,9 +6596,15 @@ RosegardenGUIApp::slotPlayListClosed()
 void
 RosegardenGUIApp::slotTutorial()
 {
-    //    QString tutorialURL = i18n("http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml");
-    QString tutorialURL = i18n("file://usr/share/doc/using-rosegarden/en/chapter-0.html");
+    QString tutorialURL = i18n("http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html");
     kapp->invokeBrowser(tutorialURL);
+}
+
+void
+RosegardenGUIApp::slotBugGuidelines()
+{
+    QString glURL = i18n("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
+    kapp->invokeBrowser(glURL);
 }
 
 void

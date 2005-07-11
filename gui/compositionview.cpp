@@ -225,13 +225,23 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             if (s->isRepeating())
                 computeRepeatMarks(sr, s);
 
+	    bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
+
             if (m_recordingSegments.find(s) == m_recordingSegments.end()) {
-                QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
+		QColor brushColor = GUIPalette::convertColour(m_composition.
+			getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 sr.setBrush(brushColor);
            	sr.setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
             } else {
+                // border is the same for both audio and MIDI
            	sr.setPen(GUIPalette::getColour(GUIPalette::RecordingSegmentBorder));
-                sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingInternalSegmentBlock));
+                // audio color
+                if (isAudio) {
+                    sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingAudioSegmentBlock));
+                // MIDI/default color
+                } else {
+                    sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingInternalSegmentBlock));
+                }
             }
 
             // Notation preview data
@@ -284,10 +294,23 @@ void CompositionModelImpl::makeNotationPreviewRects(RectList* npRects, int baseY
     QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
     int h, s, v;
     segColor.hsv(&h, &s, &v);
-    h += 180 % 360;
-    if (s < v) v = 0;
-    else v = 255;
+  
+    // colors with saturation lower than value should be pastel tints, and
+    // they get a value of 0; yellow and green hues close to the dead center
+    // point for that hue were taking a value of 255 with the (s < v)
+    // formula, so I added an extra hack to force hues in those two narrow
+    // ranges toward black.  Black always looks good, while white washes out
+    // badly against intense yellow, and doesn't look very good against
+    // intense green either...  hacky, but this produces pleasant results against
+    // every bizarre extreme of color I could cook up to throw at it
+    if ( (((h > 57) && (h < 66)) || ((h > 93) && (h < 131))) ||
+	 (s < v) ) {
+	v = 0;
+    } else {
+	v = 255;
+    }
     s = 31;
+    h += 180;
 
     segColor.setHsv(h, s, v);
 

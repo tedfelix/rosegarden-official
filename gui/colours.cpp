@@ -57,8 +57,16 @@ GUIPalette::GUIPalette()
     m_defaultsMap[SegmentCanvas] = QColor(230, 230, 230);
     m_defaultsMap[SegmentBorder] = Qt::black;
 
-    m_defaultsMap[RecordingInternalSegmentBlock] = QColor(255, 182, 193);
-    m_defaultsMap[RecordingAudioSegmentBlock] = QColor(182, 222, 255);
+// 1.0 colors
+//    m_defaultsMap[RecordingInternalSegmentBlock] = QColor(255, 182, 193);
+//    m_defaultsMap[RecordingAudioSegmentBlock] = QColor(182, 222, 255);
+    
+    // MIDI recording preview (pale yellow)
+    m_defaultsMap[RecordingInternalSegmentBlock] = QColor(255, 234, 182);
+    
+    // audio recording preview (pale red)
+    m_defaultsMap[RecordingAudioSegmentBlock] = QColor(255, 182,193);
+    
     m_defaultsMap[RecordingSegmentBorder] = Qt::black;
 
     m_defaultsMap[RepeatSegmentBorder] = QColor(130, 133, 170);

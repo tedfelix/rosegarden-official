@@ -177,6 +177,7 @@
   </Menu>
   <Menu name="help" append="about_merge"><text>&amp;Help</text>
     <Action name="tutorial"/>
+    <Action name="guidelines"/>
   </Menu>
 
 </MenuBar>

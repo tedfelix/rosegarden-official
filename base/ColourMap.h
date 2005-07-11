@@ -33,8 +33,8 @@
 
 // These are the default, default colour
 #define COLOUR_DEF_R 197
-#define COLOUR_DEF_B 125 
 #define COLOUR_DEF_G 211
+#define COLOUR_DEF_B 125 
 
 namespace Rosegarden 
 {

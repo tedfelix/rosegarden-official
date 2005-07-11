@@ -212,6 +212,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/testfiles/notation-for-string-orchestra-in-D-minor.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/ravel-pc-gmaj-adagio.rg                     $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/perfect-moment.rg                           $(kde_datadir)/$(data_dirname)/examples
+	$(INSTALL_DATA) $(srcdir)/testfiles/bwv-1060-brass-band-1-allegro.rg                           $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/bogus-surf-jam.rg                           $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/the-rose-garden.rg                          $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/children.rg                                 $(kde_datadir)/$(data_dirname)/examples

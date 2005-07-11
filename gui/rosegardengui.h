@@ -1197,6 +1197,11 @@ public slots:
     void slotTutorial();
 
     /**
+     * Surf to the bug reporting guidelines
+     */
+    void slotBugGuidelines();
+    
+    /**
      * View the trigger segments manager
      */
     void slotManageTriggerSegments();

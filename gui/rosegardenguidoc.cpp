@@ -2132,6 +2132,7 @@ RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
 
     recordSegment->setLabel(label);
     recordSegment->setAudioFileId(auid);
+    recordSegment->setColourIndex(1);
 
     RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;
