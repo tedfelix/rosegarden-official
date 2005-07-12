@@ -90,10 +90,13 @@ Jan Bína <jbina@sky.cz>
     * Czech translation
 
 Vladimir Savic <vladimir@vladimirsavic.net> 
-    * assorted icons
+    * icons, icons, icons
 
 Marcos Guglielmetti <marcospcmusica@yahoo.com.ar>
     * Spanish translation
+
+Carolyn McIntyre <catma@adelphia.net>
+    * new splash screen photo (of Michael McIntyre's rose garden)
 
 ##
 ## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
