@@ -9,32 +9,109 @@ Please keep an eye on the FAQ for known problems and workarounds:
   http://www.rosegardenmusic.com/resources/faq/
 
 When you find bugs, first check whether a newer version of Rosegarden
-has been released yet; if not, please check whether your bug has
-already been reported on the bug tracker:
+has been released yet; if not, please continue on to:
 
-  http://sourceforge.net/tracker/?group_id=4932&atid=104932
-
-and if it hasn't, please report it there!
+  http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html
 
 
 Build requirements
 ------------------
 
-The big requirement is KDE 3.x, or more specifically the KDE 3.x
+The big requirement is KDE 3.1, or later, or more specifically the KDE 3.1+
 development libraries (you don't need the whole KDE environment).
 
-Our code compiles with gcc-3.x.
+Our code compiles with gcc-3.x.  If you are a package maintainer, and your
+distro has moved to gcc-4.x, please read the note below.
 
 For MIDI support on Linux, you need ALSA 0.9.x or 1.0; for audio you
-also need JACK 0.77 or newer.
+need JACK 0.77 or newer; for synth plugins you need DSSI 0.9.x or newer.
+
+This release should build using the traditional, familiar autoconf/automake
+build system.  This build system is deprecated, however, and will disappear
+eventually.  We suggest using the new scons/bksys build system instead.  See
+below for details.
 
 
-Compiling from source
----------------------
+SPECIAL NOTES FOR PACKAGE MAINTAINERS
+-------------------------------------
+
+DSSI
+
+Many distros released their packages of 1.0 compiled without the optional
+DSSI/synth plugin support.  We received a lot of complaints on our lists from
+your users and ours about your packages being built without this feature.  We
+would like to request that you please take whatever steps are necessary within
+the framework of your particular distro to pick up DSSI (at least the API,
+although we would like to see the plugins made available too), package it, and
+build Rosegarden against it.  Thank you.  For details on DSSI, see:
+
+  http://dssi.sourceforge.net/
+
+gcc-4.x
+
+Several users have reported problems compiling with gcc-4.x, and we have not
+had time to investigate these problems.  We are interested in patches to
+smooth over various compiler incompatibility issues, but we should warn you
+that several complicated patches which aimed to suppress an assortment of
+deprecation and signed/unsigned int/float warnings have had to be rejected
+because they either broke our compatibility with KDE 3.1, or they broke our
+code.  Please do not waste your time trying to suppress these warnings, and
+instead concentrate on doing the bare minimum necessary to get the code to
+build.  Thank you.
+
+
+Compiling from soucrce with scons/bksys (RECOMMENDED)
+-----------------------------------------------------
+
+You will need to obtain and install scons.  If you are not familiar with
+scons, see:
+
+  http://scons.sourceforge.net/
+
+For a typical end-user installation with no unusual requirements, simply run
+
+  scons configure
+  scons
+  scons install
+
+Our new build system should automatically detect your installation prefix and
+various optional installed libraries with no further effort on your part.  For
+specical requirements, a few options are supported.  These take the format
+scons configure option=[0|1], for example
+
+  scons configure debug=1
+
+To see a list of available options, use
+
+  scons configure --help
+
+To perform the equivalent of a "make clean" or "make distclean" use
+
+  scons -c
+
+To uninstall, use
+
+  scons -c install
+
+
+Compiling from source the traditional way (DEPRECATED)
+------------------------------------------------------
+
+If you obtained the source code from the SourceForge CVS repository:
+
+  There is no configure script in the repository, so you need to create one
+  with
+  
+    make -f Makefile.cvs
+
+  Continue from here as though you had a distribution tarball.  (You will need
+  to install the pixmaps and various support files to the global KDE
+  directories before the application will run correctly.)
+  
 
 If you obtained the source code from a distribution tarball: 
 
-  Just run 
+  Just run
 
     ./configure
 
@@ -47,24 +124,6 @@ KDE installation. However you can install to another directory, but
 then you'll have to append it to your KDEDIRS variable. For instance :
 
 KDEDIRS=/usr:/home/glaurent/rosegarden
-
-
-If you obtained the source code from the SourceForge CVS repository:
-
-  grab one of the developers' configure scripts such as
-  "gl_configure", edit it to your needs (you will most likely first
-  need to change the Qt and KDE install paths in the script according
-  to your setup), and run it. It will setup your source tree so you'll
-  just have to run "make" afterwards.
-
-  For more info, you can refer to the "COMPILING" file found in the
-  KDE source code for a description of how to compile code from CVS,
-  but the xx_configure scripts should perform the actions described in
-  that file for you (make -f Makefile.cvs ; ./configure...).
-
-  After configuring, run "make" and, if the compile succeeds, "make
-  install".  (The pixmaps need to be installed to the global KDE
-  directories before the application will run correctly.)
 
 
 Running Rosegarden
@@ -88,11 +147,10 @@ You can also "make uninstall" if you decide it's a waste of your time.
 Notes for developers
 --------------------
 
-We are actively seeking developers who are interested in coding new
-parts of the application, adding features, and fixing bugs.  See
-the files in docs/task_lists/ for some idea of the things
-we're already thinking about doing for the next developer release.
-Good ideas are also welcome.
+We are actively seeking developers who are interested in coding new parts of
+the application, adding features, and fixing bugs.  See the bug and feature
+request trackers at SourceForge for inspiration, and if you intend to do
+anything, please discuss it on the rosegarden-devel mailing list.
 
 Be warned that we intend to be fairly strict about code quality... as
 far as that's possible, given the not always superb standards of our
@@ -102,10 +160,7 @@ own code.
 User documentation
 ------------------
 
-There is a semi-reference Help (Help menu -> Rosegarden Handbook),
-which is not yet complete but is slated to be completed by 1.0.  There
-is also a tutorial (Help menu -> Rosegarden Online Tutorial), which
-again is scheduled for completion for the 1.0 release.
+See the Help menu.  Help -> Rosegarden Handbook; Help -> Online Tutorial
 
 
 Developer documentation
@@ -122,10 +177,6 @@ starting-points include:
   docs/code/global_design.txt -- which classes do what, more or less
   docs/data_struct/units.txt -- how we store pitch and time
   docs/data_struct/sets.txt -- some terminology explained
-
-  docs/task_lists/tasks_available.txt and
-  docs/task_lists/1.0_release.txt -- ideas for what to do next (see also
-  the SourceForge tracker page for feature requests and bug reports)
 
 
 Authors and copyright
@@ -146,13 +197,12 @@ Authors and copyright
   which is Copyright 1997 - 2004 Jan Nieuwenhuizen and Han-Wen Nienhuys.
 
 * Other major contributors include Randall Farmer, Ron Kuris, Hans
-  Kieserman, and Michael McIntyre.  See AUTHORS for more details, and
-  the individual source files for copyright attributions.
+  Kieserman, Michael McIntyre, and Pedro Lopez-Cabanillas.  See AUTHORS for
+  more details, and the individual source files for copyright attributions.
 
-* The Rosegarden splash-screen image is from a 1900 postcard of Thornden
-  Park at Syracuse University, Syracuse, NY.  It is probably out of
-  copyright, but is nonetheless used with permission from and thanks to
-  the staff of Syracuse University.
+* The Rosegarden splash-screen image is Copyright 2005 Carolyn H. McIntyre,
+  used by permission.  (It is a photograph of a rose growing in Michael
+  McIntyre's real live rose garden.)
 
 Rosegarden-4 is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

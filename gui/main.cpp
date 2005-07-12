@@ -423,6 +423,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
     aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
+    aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"),"<markh@linuxfromscratch.org>");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
     aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translation\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
     aboutData.addCredit("JÃ¶rg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
@@ -438,11 +439,13 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Oota Toshiya", I18N_NOOP("Japanese translation"), "ribbon@users.sourceforge.net");
     aboutData.addCredit("William", I18N_NOOP("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
     aboutData.addCredit("Liu Songhe", I18N_NOOP("Simplified Chinese translation"), "jackliu9999@msn.com");
+    aboutData.addCredit("Toni Arnold", I18N_NOOP("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
+    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince-rg@bulbous.freeserve.co.uk");
     aboutData.addCredit("Jan Bína", I18N_NOOP("Czech translation"), "jbina@sky.cz");
     aboutData.addCredit("Thomas Nagy", I18N_NOOP("SCons/bksys building system"), "tnagy256@yahoo.fr");
-    aboutData.addCredit("Vladimir Savic", I18N_NOOP("assorted icons"), "vladimir@vladimirsavic.net");
+    aboutData.addCredit("Vladimir Savic", I18N_NOOP("icons, icons, icons"), "vladimir@vladimirsavic.net");
     aboutData.addCredit("Marcos Guglielmetti", I18N_NOOP("Spanish translation"), "marcospcmusica@yahoo.com.ar");
-    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince-rg@bulbous.freeserve.co.uk");
+    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("new splash screen photo (of Michael's rose garden)"), "catma@adelphia.net");
 //    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));

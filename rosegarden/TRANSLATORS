@@ -1,17 +1,4 @@
-We'd like to thank the following for their contributions to the translation
-effort:
-
-Alexandre Prokoudine <avp@altlinux.ru>               Russian
-Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>  Spanish
-JÃ¶rg Schumann <jrschumann@gmx.de>                   German
-Michael McIntyre <dmmcintyr@users.sourceforge.net>   Spanish
-Kevin Donnelly <kevin@dotmon.com>                    Welsh
-Stefan Asserhäll <stefan.asserhall@comhem.se>        Swedish
-Daniele Medri                                        Italian
-Didier Burli                                         French
-Hasso Tepper <hasso@estpak.ee>                       Estonian
-
-Hans Kieserman <hkieserman@mail.com>                 i18n-ization
+Please see the AUTHORS file for a list of translators.
 
 If you'd like to translate Rosegarden into your language, contact us at
 <rosegarden-devel@lists.sourceforge.net>
