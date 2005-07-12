@@ -25,6 +25,22 @@
 #include <string>
 #include <iostream>
 #include <kdebug.h>
+#include <kdeversion.h>
+
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
+class QDateTime;
+class QDate;
+class QTime;
+class QPoint;
+class QSize;
+class QRect;
+class QRegion;
+class KURL;
+class QStringList;
+class QColor;
+class QPen;
+class QBrush;
+#endif
 
 namespace Rosegarden { class Event; class Segment; class RealTime; }
 
@@ -54,6 +70,44 @@ operator<<(kdbgstream&, const Rosegarden::Segment&);
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::RealTime&);
 
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
+kdbgstream& 
+operator << (kdbgstream&, const QDateTime& dateTime );
+
+kdbgstream& 
+operator << (kdbgstream&, const QDate& date );
+
+kdbgstream& 
+operator << (kdbgstream&, const QTime& time );
+
+kdbgstream& 
+operator << (kdbgstream&, const QPoint& point );
+
+kdbgstream& 
+operator << (kdbgstream&, const QSize& size );
+
+kdbgstream& 
+operator << (kdbgstream&, const QRect& rect);
+
+kdbgstream& 
+operator << (kdbgstream&, const QRegion& region);
+
+kdbgstream& 
+operator << (kdbgstream&, const KURL& url );
+
+kdbgstream& 
+operator << (kdbgstream&, const QStringList& list);
+
+kdbgstream& 
+operator << (kdbgstream&, const QColor& color);
+
+kdbgstream& 
+operator << (kdbgstream&, const QPen& pen );
+
+kdbgstream& 
+operator << (kdbgstream&, const QBrush& brush );
+#endif
+
 #else
 
 inline kndbgstream&
@@ -67,6 +121,45 @@ operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
 
 inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::RealTime&) { return s; }
+
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
+inline kndbgstream& 
+operator << (kndbgstream& s, const QDateTime&  ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QDate&  ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QTime& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QPoint& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QSize& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QRect& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QRegion& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const KURL& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QStringList& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QColor& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QPen& ) { return s; }
+
+inline kndbgstream& 
+operator << (kndbgstream& s, const QBrush& ) { return s; }
+
+#endif
 
 #endif
 
