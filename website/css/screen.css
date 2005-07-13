@@ -10,7 +10,7 @@
   float: left;
   clear: left;
   width: 100%;
-  background: #e3e8c7;
+  background: #d6f2c2;
 }
 
 #nav { 
@@ -18,14 +18,14 @@
   font-family: verdana, sans-serif;
   font-size: 0.95em;
   font-weight: bold;
-  color: #64684f;
+  color: #3c421a;
 }
 
 #subfullwidth {
   float: left;
   clear: left;
   width: 100%;
-  background: #eff1e2;
+  background: #d6f2c2;
 }
 
 #subnav { 
@@ -33,12 +33,12 @@
   font-family: verdana, sans-serif;
   font-size: 0.95em;
   font-weight: normal;
-  color: #64684f;
+  color: #32421a;
 }
 
 .newsheadline { 
-  color: #23440e;
-  background-color: #a6d785;
+  color: #34340c;
+  background-color: #e4f2da;
   float: left;
   clear: left;
   width: 120px;
