@@ -1228,13 +1228,13 @@ void RosegardenGUIView::slotShowChordNameRuler(bool v)
 void RosegardenGUIView::slotShowPreviews(bool v)
 {
     m_trackEditor->getSegmentCanvas()->setShowPreviews(v);
-    m_trackEditor->getSegmentCanvas()->viewport()->repaint();
+    m_trackEditor->getSegmentCanvas()->slotUpdate();
 }
 
 void RosegardenGUIView::slotShowSegmentLabels(bool v)
 {
     m_trackEditor->getSegmentCanvas()->setShowSegmentLabels(v);
-    m_trackEditor->getSegmentCanvas()->viewport()->repaint();
+    m_trackEditor->getSegmentCanvas()->slotUpdate();
 }
 
 void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
