@@ -1692,7 +1692,10 @@ Composition::dump(std::ostream& out, bool) const
         Segment* s = *i;
 
         out << "Segment start : " << s->getStartTime() << " - end : " << s->getEndMarkerTime()
-            << " - repeating : " << s->isRepeating() << endl;
+            << " - repeating : " << s->isRepeating()
+            << " - track id : " << s->getTrack()
+            << " - label : " << s->getLabel()
+            << endl;
         
     }
     
