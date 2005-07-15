@@ -598,7 +598,7 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotTutorial()), actionCollection(),
 		"tutorial");
 
-    new KAction(i18n("&Bug Reporting Guidlines"), 0, 0, this,
+    new KAction(i18n("&Bug Reporting Guidelines"), 0, 0, this,
 		SLOT(slotBugGuidelines()), actionCollection(),
 		"guidelines");
 
