@@ -25,6 +25,7 @@
 #include <vector>
 #include <set>
 
+#include <qmap.h>
 #include <qpen.h>
 #include <qvaluevector.h>
 #include <qptrdict.h>
@@ -118,10 +119,16 @@ public:
 	}
     };
 
+    struct CompositionItemCompare {
+	bool operator()(const CompositionItem &c1, const CompositionItem &c2) const {
+	    return c1->hashKey() < c2->hashKey();
+	}
+    };
+
     typedef std::multiset<PreviewRect, RectCompare> RectList;
 
     typedef std::vector<CompositionRect> rectcontainer;
-    typedef std::vector<CompositionItem> itemcontainer;
+    typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
     typedef RectList NotationPreviewData;
 
@@ -292,6 +299,8 @@ protected:
     typedef std::set<Rosegarden::Segment *> RecordingSegmentSet;
     RecordingSegmentSet          m_recordingSegments;
 
+    typedef std::vector<CompositionItem> itemgc;
+
     AudioPreviewThread*          m_audioPreviewThread;
 
     typedef QPtrDict<NotationPreviewData> NotationPreviewDataCache;
@@ -305,8 +314,11 @@ protected:
 
     rectcontainer m_res;
     itemcontainer m_movingItems;
-    
+    itemgc m_itemGC;
+
     QRect m_selectionRect;
+
+    QMap<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
 };
 
 
@@ -320,6 +332,8 @@ public:
     virtual void setX(int x)                      { m_rect.setX(x); }
     virtual void setY(int y)                      { m_rect.setY(y); }
     virtual void setWidth(int w)                  { m_rect.setWidth(w); }
+    // use segment address as hash key
+    virtual long hashKey()                        { return (long)getSegment(); }
 
     Rosegarden::Segment* getSegment()             { return &m_segment; }
     const Rosegarden::Segment* getSegment() const { return &m_segment; }

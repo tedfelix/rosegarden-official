@@ -288,6 +288,7 @@ protected:
     bool m_segmentQuickCopyDone;
     bool m_passedInertiaEdge;
     bool m_buttonPressed;
+    bool m_selectionMoveStarted;
 
     SegmentTool *m_dispatchTool;
 };

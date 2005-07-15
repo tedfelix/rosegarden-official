@@ -832,6 +832,7 @@ SegmentSelector::SegmentSelector(CompositionView *c, RosegardenGUIDoc *d)
       m_segmentCopyMode(false),
       m_segmentQuickCopyDone(false),
       m_buttonPressed(false),
+      m_selectionMoveStarted(false),
       m_dispatchTool(0)
 {
     RG_DEBUG << "SegmentSelector()\n";
@@ -1034,6 +1035,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     setChangeMade(false);
     
+    m_selectionMoveStarted = false;
+
     m_currentItem = CompositionItem();
 }
 
@@ -1107,7 +1110,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     if (m_canvas->getModel()->isSelected(m_currentItem)) {
 // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
 
-        m_canvas->getModel()->startMoveSelection();
+        if (!m_selectionMoveStarted) { // start move on selected items only once
+            m_canvas->getModel()->startMoveSelection();
+            m_selectionMoveStarted = true;
+        }
+
         CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
         setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(movingItems, m_currentItem));
 

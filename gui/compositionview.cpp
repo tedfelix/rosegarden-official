@@ -66,10 +66,10 @@ timeT CompositionItemHelper::getEndTime(const CompositionItem& item, const Roseg
     timeT t = 0;
 
     if (item) {
-        QRect itemRect = item->rect();
+        CompositionRect itemRect = item->rect();
         
         RG_DEBUG << "CompositionItemHelper::getEndTime() : rect width = "
-                 << itemRect.width() << endl;
+                 << itemRect.width() << " - item is repeating : " << item->isRepeating() << endl;
 
         t = std::max(grid.snapX(itemRect.x() + itemRect.width()) - 1, 0L);
     }
@@ -221,9 +221,6 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             
             if (pTmpSelected != tmpSelected)
                 sr.setNeedsFullUpdate(true);
-
-            if (s->isRepeating())
-                computeRepeatMarks(sr, s);
 
 	    bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
 
@@ -494,12 +491,18 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
                                                                               repeatEnd - startTime))));
 
         CompositionRect::repeatmarks repeatMarks;
-                
+
+        RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
+                 << repeatStart << " - repeatEnd = " << repeatEnd << endl;
+
         for(timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
             repeatMarks.push_back(int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark))));
         }
         sr.setRepeatMarks(repeatMarks);
-        sr.setBaseWidth(repeatMarks[0] - sr.x());
+        if (repeatMarks.size() > 0)
+            sr.setBaseWidth(repeatMarks[0] - sr.x());
+        else
+            sr.setBaseWidth(sr.width());
     }
 }
 
@@ -837,14 +840,13 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
 //             RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
-            computeRepeatMarks(sr, s);
-            res.push_back(CompositionItem(new CompositionItemImpl(*s, sr)));
+            res.insert(CompositionItem(new CompositionItemImpl(*s, sr)));
         } else {
 //             RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
         }
         
     }
-    std::sort(res.begin(), res.end());
+
     return res;
 }
 
@@ -911,8 +913,15 @@ bool CompositionModelImpl::wasTmpSelected(const Segment* s) const
 
 void CompositionModelImpl::startMove(const CompositionItem& item)
 {
-    item->saveRect();
-    m_movingItems.push_back(item);
+    itemcontainer::iterator i = m_movingItems.find(item);
+    
+    // if an "identical" composition item has already been inserted, drop this one
+    if (i != m_movingItems.end()) {
+        m_itemGC.push_back(item);
+    } else {
+        item->saveRect();
+        m_movingItems.insert(item);
+    }
 }
 
 void CompositionModelImpl::startMoveSelection()
@@ -933,6 +942,12 @@ void CompositionModelImpl::endMove()
     }
 
     m_movingItems.clear();
+
+    for(itemgc::iterator i = m_itemGC.begin(); i != m_itemGC.end(); ++i) {
+        delete *i;
+    }
+    m_itemGC.clear();
+    
 }
 
 void CompositionModelImpl::setLength(int width)
@@ -989,6 +1004,10 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
 
+//     CompositionRect cachedCR = m_segmentRectMap[&s];
+//     if (cachedCR.isValid())
+//         return cachedCR;
+
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 
@@ -1015,6 +1034,11 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 
     CompositionRect cr(origin, QSize(w, h));
     cr.setLabel(strtoqstr(s.getLabel()));
+
+//     m_segmentRectMap.insert(&s, cr);
+
+    if (s.isRepeating())
+        computeRepeatMarks(cr, &s);
 
     return cr;
 }
@@ -1077,7 +1101,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
     : RosegardenScrollView(parent, name, f | WNoAutoErase|WStaticContents),
 #else
-    : RosegardenScrollView(parent, name, f | WResizeNoErase|WStaticContents),
+    : RosegardenScrollView(parent, name, f | WRepaintNoErase|WResizeNoErase|WStaticContents),
 #endif
       m_model(model),
       m_currentItem(0),
@@ -1329,7 +1353,7 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
     CompositionModel::itemcontainer items = getModel()->getItemsAt(pos);
 
     if (items.size()) {
-        CompositionItem res = items.front();
+        CompositionItem res = *(items.begin());
 
         items.erase(items.begin());
 
@@ -1864,6 +1888,8 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 
 void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    RG_DEBUG << "CompositionView::contentsMouseReleaseEvent()\n";
+
     slotDrawBufferNeedsRefresh();
 
     stopAutoScroll();

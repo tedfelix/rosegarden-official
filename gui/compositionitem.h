@@ -40,6 +40,9 @@ public:
     virtual void setY(int y) = 0;
     virtual void setWidth(int w) = 0;
 
+    // used by itemcontainer
+    virtual long hashKey() = 0;
+
     QRect savedRect() const   { return m_savedRect; }
     void saveRect() const     { m_savedRect = rect(); }
 
