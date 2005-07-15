@@ -1004,14 +1004,18 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
 
-//     CompositionRect cachedCR = m_segmentRectMap[&s];
-//     if (cachedCR.isValid())
-//         return cachedCR;
+    QPoint origin = computeSegmentOrigin(s);
 
+    CompositionRect cachedCR = m_segmentRectMap[&s];
+    if (cachedCR.isValid()) {
+//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache\n";
+        cachedCR.moveTopLeft(origin);
+        return cachedCR;
+    }
+    
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 
-    QPoint origin = computeSegmentOrigin(s);
 
     int h = m_grid.getYSnap();
     int w;
@@ -1035,7 +1039,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     CompositionRect cr(origin, QSize(w, h));
     cr.setLabel(strtoqstr(s.getLabel()));
 
-//     m_segmentRectMap.insert(&s, cr);
+    m_segmentRectMap.insert(&s, cr);
 
     if (s.isRepeating())
         computeRepeatMarks(cr, &s);
