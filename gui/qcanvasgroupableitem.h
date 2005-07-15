@@ -24,6 +24,8 @@
 
 #include <qcanvas.h>
 
+class QCanvasItemGroup;
+
 /**
  * This class is meant to be inherited by QCanvasItem children to make
  * them groupable.

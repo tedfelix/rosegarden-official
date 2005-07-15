@@ -45,6 +45,9 @@ namespace Rosegarden { class RulerScale; }
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
+class SegmentToolBox;
+class SegmentSelector;
+
 // Allow the tools to share the Selector tool's selection
 // through these.
 //
