@@ -718,153 +718,165 @@ LilypondExporter::write()
 
     int lastTrackIndex = -1;
     int voiceCounter = 0;
-    int trackNo = 0;
 
-    // Write out all segments for each Track
-    for (Composition::iterator i = m_composition->begin();
-         i != m_composition->end(); ++i) {
+    // Write out all segments for each Track, in track order.
+    // This involves a hell of a lot of loops through all tracks
+    // and segments, but the time spent doing that should still
+    // be relatively small in the greater scheme.
 
-        emit setProgress(int(double(trackNo++)/
-                             double(m_composition->getNbTracks()) * 100.0));
-        rgapp->refreshGUI(50);
+    Rosegarden::Track *track = 0;
 
-        // do nothing if track is muted...  this provides a crude but easily implemented
-        // method for users to selectively export tracks...
-        Rosegarden::Track *track = m_composition->getTrackById((*i)->getTrack());
-        
-	if (!exportUnmuted || (!track->isMuted())) {
-            if ((int) (*i)->getTrack() != lastTrackIndex) {
-                if (lastTrackIndex != -1) {
-                    // close the old track (Staff context)
-		    if (languageLevel < 1) {
-			str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
-		    } else {
-			str << std::endl << indent(--col) << ">> % Staff" << std::endl;  // indent-
+    for (int trackPos = 0;
+	 (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
+	
+	for (Composition::iterator i = m_composition->begin();
+	     i != m_composition->end(); ++i) {
+
+	    if ((*i)->getTrack() != track->getId()) continue;
+
+	    emit setProgress(int(double(trackPos)/
+				 double(m_composition->getNbTracks()) * 100.0));
+	    rgapp->refreshGUI(50);
+
+	    // do nothing if track is muted...  this provides a crude
+	    // but easily implemented method for users to selectively
+	    // export tracks...
+	    if (!exportUnmuted || (!track->isMuted())) {
+		if ((int) (*i)->getTrack() != lastTrackIndex) {
+		    if (lastTrackIndex != -1) {
+			// close the old track (Staff context)
+			if (languageLevel < 1) {
+			    str << std::endl << indent(--col) << "> % Staff" << std::endl;  // indent-
+			} else {
+			    str << std::endl << indent(--col) << ">> % Staff" << std::endl;  // indent-
+			}
 		    }
-                }
-                lastTrackIndex = (*i)->getTrack();
+		    lastTrackIndex = (*i)->getTrack();
 
-                // avoid problem with <untitled> tracks yielding a .ly file that
-                // jumbles all notes together on a single staff...
-                // every Staff context has to have a unique name, even if the
-                // Staff.instrument property is the same for multiple staffs...
-                std::ostringstream staffName;
-                staffName << protectIllegalChars(m_composition->
-                        getTrackById(lastTrackIndex)->getLabel());
-
-                if (staffName.str() == "") {
-                    staffName << "track";
-                }
-                
-                str << std::endl
-		    << indent(col) << "\\context Staff = \"" << staffName.str()
-                    << " " << (voiceCounter +1) << "\" ";
-		if (languageLevel < 1) {
-		    str << "< " << std::endl;
-		} else {
-		    str << "<< " << std::endl;
+		    // avoid problem with <untitled> tracks yielding a
+		    // .ly file that jumbles all notes together on a
+		    // single staff...  every Staff context has to
+		    // have a unique name, even if the
+		    // Staff.instrument property is the same for
+		    // multiple staffs...
+		    std::ostringstream staffName;
+		    staffName << protectIllegalChars(m_composition->
+						     getTrackById(lastTrackIndex)->getLabel());
+		    
+		    if (staffName.str() == "") {
+			staffName << "track";
+		    }
+		    
+		    str << std::endl
+			<< indent(col) << "\\context Staff = \"" << staffName.str()
+			<< " " << (voiceCounter +1) << "\" ";
+		    if (languageLevel < 1) {
+			str << "< " << std::endl;
+		    } else {
+			str << "<< " << std::endl;
+		    }
+		    
+		    str << indent(++col)
+			<< (languageLevel >= 2 ? "\\set " : "\\property ")
+			<< "Staff.instrument = \""
+			<< staffName.str() <<"\"" << std::endl;
 		}
-
-                str << indent(++col)
-		    << (languageLevel >= 2 ? "\\set " : "\\property ")
-		    << "Staff.instrument = \""
-                    << staffName.str() <<"\"" << std::endl;
-            }
-
-            // Temporary storage for non-atomic events (!BOOM)
-            // ex. Lilypond expects signals when a decrescendo starts 
-            // as well as when it ends
-            eventendlist eventsInProgress;
-            eventstartlist eventsToStart;
+		
+		// Temporary storage for non-atomic events (!BOOM)
+		// ex. Lilypond expects signals when a decrescendo starts 
+		// as well as when it ends
+		eventendlist eventsInProgress;
+		eventstartlist eventsToStart;
           
-            // If the segment doesn't start at 0, add a "skip" to the start
-            // No worries about overlapping segments, because Voices can overlap
-            // voiceCounter is a hack because Lilypond does not by default make 
-            // them unique
-            std::ostringstream voiceNumber, lyricNumber;
-            voiceNumber << "voice " << voiceCounter;
-            lyricNumber << "lyric " << voiceCounter++;
+		// If the segment doesn't start at 0, add a "skip" to the start
+		// No worries about overlapping segments, because Voices can overlap
+		// voiceCounter is a hack because Lilypond does not by default make 
+		// them unique
+		std::ostringstream voiceNumber, lyricNumber;
+		voiceNumber << "voice " << voiceCounter;
+		lyricNumber << "lyric " << voiceCounter++;
 
-            if (exportLyrics) {
-		if (languageLevel >= 1 && languageLevel <= 2) {
-		    str << indent(col) << "\\addlyrics" << std::endl;
-		} else if (languageLevel >= 3) {
-		    //!!! Looks like something we need to sort out before 2.6!
-		    str << indent(col) << "\\oldaddlyrics" << std::endl;
+		if (exportLyrics) {
+		    if (languageLevel >= 1 && languageLevel <= 2) {
+			str << indent(col) << "\\addlyrics" << std::endl;
+		    } else if (languageLevel >= 3) {
+			//!!! Looks like something we need to sort out before 2.6!
+			str << indent(col) << "\\oldaddlyrics" << std::endl;
+		    }
 		}
-	    }
-            str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
-                << "\" {"; // indent+
+		str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
+		    << "\" {"; // indent+
 
-	    if (languageLevel >= 1) {
-		// matter of taste, and I assume this works in 1.6 too,
-		// but I was finding the need for it all the time in my 2.0
-		// tests just now
-		str << std::endl << indent(col)
-		    << (languageLevel >= 2 ? "\\override " : "\\property ")
-		    << "Voice.TextScript"
-		    << (languageLevel >= 2 ? " " : " \\override ")
-		    << "#'padding = #2.0"
-		    << std::endl;
-	    }
+		if (languageLevel >= 1) {
+		    // matter of taste, and I assume this works in 1.6 too,
+		    // but I was finding the need for it all the time in my 2.0
+		    // tests just now
+		    str << std::endl << indent(col)
+			<< (languageLevel >= 2 ? "\\override " : "\\property ")
+			<< "Voice.TextScript"
+			<< (languageLevel >= 2 ? " " : " \\override ")
+			<< "#'padding = #2.0"
+			<< std::endl;
+		}
 
-	    Rosegarden::SegmentNotationHelper helper(**i);
-	    helper.setNotationProperties();
+		Rosegarden::SegmentNotationHelper helper(**i);
+		helper.setNotationProperties();
             
-	    int firstBar = m_composition->getBarNumber((*i)->getStartTime());
+		int firstBar = m_composition->getBarNumber((*i)->getStartTime());
 
-	    if (firstBar > 0) {
-		// Add a skip for the duration until the start of the first
-		// bar in the segment.  If the segment doesn't start on a bar
-		// line, an additional skip will be written (in the form of
-		// a series of rests) at the start of writeBar, below.
-		//!!! This doesn't cope correctly yet with time signature changes
-		// during this skipped section.
-		writeSkip(timeSignature, 0, m_composition->getBarStart(firstBar),
-			  false, str);
-	    }
-
-            std::string lilyText = "";      // text events
-            std::string lilyLyrics = "";    // lyric events
-            std::string prevStyle = "";     // track note styles 
-	    bool note_ended_with_a_lyric = true;
-
-	    Rosegarden::Key key;
-
-	    for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
-		 barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
-		 ++barNo) {
-
-		str << std::endl;
-
-		writeBar(*i, barNo, col, key,
-			 lilyText, lilyLyrics,
-			 prevStyle, eventsInProgress, str, note_ended_with_a_lyric);
-
-		if (exportBarChecks) {
-		    str << " |";
+		if (firstBar > 0) {
+		    // Add a skip for the duration until the start of the first
+		    // bar in the segment.  If the segment doesn't start on a bar
+		    // line, an additional skip will be written (in the form of
+		    // a series of rests) at the start of writeBar, below.
+		    //!!! This doesn't cope correctly yet with time signature changes
+		    // during this skipped section.
+		    writeSkip(timeSignature, 0, m_composition->getBarStart(firstBar),
+			      false, str);
 		}
-	    }
 
-	    // closing bar
-	    str << std::endl << indent(col) << " \\bar \"|.\"";
+		std::string lilyText = "";      // text events
+		std::string lilyLyrics = "";    // lyric events
+		std::string prevStyle = "";     // track note styles 
+		bool note_ended_with_a_lyric = true;
 
-            // close Voice context
-            str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
+		Rosegarden::Key key;
+
+		for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
+		     barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
+		     ++barNo) {
+
+		    str << std::endl;
+
+		    writeBar(*i, barNo, col, key,
+			     lilyText, lilyLyrics,
+			     prevStyle, eventsInProgress, str, note_ended_with_a_lyric);
+
+		    if (exportBarChecks) {
+			str << " |";
+		    }
+		}
+
+		// closing bar
+		str << std::endl << indent(col) << " \\bar \"|.\"";
+
+		// close Voice context
+		str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
             
-            // write accumulated lyric events to the Lyric context, if user
-            // desires
-            if (exportLyrics) {
-                str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" ";
-		if (languageLevel <= 2) {
-                    str << "\\lyrics  { " << std::endl;
-		} else {
-		    str << "\\lyricmode { " << std::endl;
+		// write accumulated lyric events to the Lyric context, if user
+		// desires
+		if (exportLyrics) {
+		    str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" ";
+		    if (languageLevel <= 2) {
+			str << "\\lyrics  { " << std::endl;
+		    } else {
+			str << "\\lyricmode { " << std::endl;
+		    }
+		    str << indent(++col) << lilyLyrics << " " << std::endl;
+		    str << std::endl << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
 		}
-                str << indent(++col) << lilyLyrics << " " << std::endl;
-                str << std::endl << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
-            }
-        }
+	    }
+	}
     }
     
     // close the last track (Staff context)
