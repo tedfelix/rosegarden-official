@@ -1,5 +1,5 @@
 
-Rosegarden-4 v1.0
+Rosegarden-4 v1.2
 =================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
@@ -60,7 +60,7 @@ instead concentrate on doing the bare minimum necessary to get the code to
 build.  Thank you.
 
 
-Compiling from soucrce with scons/bksys (RECOMMENDED)
+Compiling from source with scons/bksys (RECOMMENDED)
 -----------------------------------------------------
 
 You will need to obtain and install scons.  If you are not familiar with
