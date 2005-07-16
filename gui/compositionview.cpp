@@ -1006,12 +1006,12 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 
     QPoint origin = computeSegmentOrigin(s);
 
-    CompositionRect cachedCR = m_segmentRectMap[&s];
-    if (cachedCR.isValid()) {
-//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache\n";
-        cachedCR.moveTopLeft(origin);
-        return cachedCR;
-    }
+//     CompositionRect cachedCR = m_segmentRectMap[&s];
+//     if (cachedCR.isValid()) {
+// //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache\n";
+//         cachedCR.moveTopLeft(origin);
+//         return cachedCR;
+//     }
     
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
@@ -1039,7 +1039,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     CompositionRect cr(origin, QSize(w, h));
     cr.setLabel(strtoqstr(s.getLabel()));
 
-    m_segmentRectMap.insert(&s, cr);
+//     m_segmentRectMap.insert(&s, cr);
 
     if (s.isRepeating())
         computeRepeatMarks(cr, &s);
