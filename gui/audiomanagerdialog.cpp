@@ -816,7 +816,7 @@ void
 AudioManagerDialog::slotRemoveAll()
 {
     QString question =
-        i18n("This will unload all audio files and remove their associated segments.  Are you sure?");
+        i18n("This will unload all audio files and remove their associated segments.  This action cannot be undone, and associations with these files will be lost.  Files will not be removed from your disk.\nAre you sure?");
 
     int reply = KMessageBox::warningContinueCancel(this, question);
 
@@ -846,7 +846,7 @@ void
 AudioManagerDialog::slotRemoveAllUnused()
 {
     QString question =
-        i18n("This will unload all audio files that have no segments used in this composition.  Are you sure?");
+        i18n("This will unload all audio files that are not associated with any segments in this composition.   This action cannot be undone, and associations with these files will be lost.  Files will not be removed from your disk.\nAre you sure?");
 
     int reply = KMessageBox::warningContinueCancel(this, question);
 

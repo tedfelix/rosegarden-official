@@ -142,9 +142,9 @@ SegmentParameterBox::initBox()
     connect(m_delayValue, SIGNAL(activated(int)),
             SLOT(slotDelaySelected(int)));
 
-//     // Detect when the document colours are updated
-//     connect (m_doc, SIGNAL(docColoursChanged()),
-//              this, SLOT(slotDocColoursChanged()));
+    // Detect when the document colours are updated
+    connect(m_doc, SIGNAL(docColoursChanged()),
+            this, SLOT(slotDocColoursChanged()));
 
     // handle text changes for delay
     connect(m_delayValue, SIGNAL(textChanged(const QString&)),
@@ -315,6 +315,8 @@ SegmentParameterBox::useSegments(const Rosegarden::SegmentSelection &segments)
 void
 SegmentParameterBox::slotDocColoursChanged()
 {
+    RG_DEBUG << "SegmentParameterBox::slotDocColoursChanged()" << endl;
+	
     m_colourValue->clear();
     m_colourList.clear();
     // Populate it from composition.m_segmentColourMap
@@ -342,7 +344,7 @@ SegmentParameterBox::slotDocColoursChanged()
 
 void SegmentParameterBox::update()
 {
-    RG_DEBUG << "SegmentParameterBox::update()\n";
+    RG_DEBUG << "SegmentParameterBox::update()" << endl;
 
     populateBoxFromSegments();
 }
@@ -650,6 +652,8 @@ SegmentParameterBox::populateBoxFromSegments()
 
 /*!!! No, not setting up autofade widgets.  The implementation's too
       incomplete to finish for this release.
+
+      (Or for the next one after the one the previous comment referred to.)
 
         m_fadeInLabel->show();
         m_fadeInSpin->show();

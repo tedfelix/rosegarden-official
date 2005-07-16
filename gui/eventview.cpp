@@ -1191,13 +1191,13 @@ EventView::setupActions()
     EditViewBase::setupActions("eventlist.rc");
     
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert.xpm"));
+    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
     
     new KAction(i18n("&Insert Event"), icon, Key_I, this,
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.xpm");
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
     icon = QIconSet(pixmap);
     
     new KAction(i18n("&Delete Event"), icon, Key_Delete, this,
@@ -1236,7 +1236,7 @@ EventView::setupActions()
 
     KRadioAction *action;
 
-    pixmap.load(pixmapDir + "/toolbar/time-musical.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-musical.png");
     icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
@@ -1245,7 +1245,7 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 0) action->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-real.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-real.png");
     icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
@@ -1254,7 +1254,7 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 1) action->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-raw.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-raw.png");
     icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,

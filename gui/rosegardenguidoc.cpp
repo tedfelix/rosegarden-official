@@ -2132,6 +2132,9 @@ RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
 
     recordSegment->setLabel(label);
     recordSegment->setAudioFileId(auid);
+    //!!! currently hard-coded without a constant defined in some appropriate
+    // place...  index 1 is the default color for newly-recorded audio
+    // segments, to set them apart from MIDI segments
     recordSegment->setColourIndex(1);
 
     RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
@@ -2579,12 +2582,12 @@ RosegardenGUIDoc::getClipboard()
     return app->getClipboard();
 }
 
+// emit a docColoursChanged() signal to notify the SPB color combo that it
+// should re-populate itself from the new map
 void RosegardenGUIDoc::slotDocColoursChanged()
 {
-    RG_DEBUG << "RosegardenGUIDoc::slotDocColoursChanged()\n";
-    // XXX: WE NEED TO UPDATE THE WHOLE TRACK DISPLAY HERE 
-    //      (AS THE SEGMENT COLOUR MAP HAS CHANGED)
-    //      I can't get it to work (ARGH) - MH
+    RG_DEBUG << "RosegardenGUIDoc::slotDocColoursChanged(): emitting docColoursChanged()" << endl;
+
     emit docColoursChanged();
 }
 

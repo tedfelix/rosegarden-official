@@ -999,7 +999,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
 
-    pixmap.load(pixmapDir + "/toolbar/time-musical.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-musical.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("Manage &Metronome"), 0, this,
                 SLOT(slotManageMetronome()),
@@ -1550,6 +1550,10 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
     if (doc) {
         setDocument(doc);
 
+	// fix # 1235755, "SPB combo not updating after document swap"
+	RG_DEBUG << "RosegardenGUIApp::openFile(): calling slotDocColoursChanged() in doc" << endl;
+	doc->slotDocColoursChanged(); 
+
 	kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 	if (kapp->config()->readBoolEntry("alwaysusedefaultstudio", false)) {
 
@@ -1708,7 +1712,7 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
         delete newDoc;
         return 0;
     }
-    
+   
     return newDoc;
 }
 

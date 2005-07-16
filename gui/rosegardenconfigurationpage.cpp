@@ -2368,6 +2368,8 @@ ColourConfigurationPage::apply()
 {
     SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, m_map);
     m_doc->getCommandHistory()->addCommand(command);
+
+    RG_DEBUG << "ColourConfigurationPage::apply() emitting docColoursChanged()" << endl;
     emit docColoursChanged();
 }
 

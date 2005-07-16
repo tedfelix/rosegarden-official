@@ -598,20 +598,20 @@ TempoView::setupActions()
     EditViewBase::setupActions("tempoview.rc", false);
     
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.xpm"));
+    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
     
     new KAction(AddTempoChangeCommand::getGlobalName(), icon, Key_I, this,
                 SLOT(slotEditInsertTempo()), actionCollection(),
                 "insert_tempo");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.xpm");
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIconSet(pixmap);
     
     new KAction(AddTimeSignatureCommand::getGlobalName(), icon, Key_G, this,
                 SLOT(slotEditInsertTimeSignature()), actionCollection(),
                 "insert_timesig");
 
-    pixmap.load(pixmapDir + "/toolbar/event-delete.xpm");
+    pixmap.load(pixmapDir + "/toolbar/event-delete.png");
     icon = QIconSet(pixmap);
     
     new KAction(i18n("&Delete"), icon, Key_Delete, this,
@@ -638,7 +638,7 @@ TempoView::setupActions()
 
     KRadioAction *action;
 
-    pixmap.load(pixmapDir + "/toolbar/time-musical.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-musical.png");
     icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
@@ -647,7 +647,7 @@ TempoView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 0) action->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-real.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-real.png");
     icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
@@ -656,7 +656,7 @@ TempoView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 1) action->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-raw.xpm");
+    pixmap.load(pixmapDir + "/toolbar/time-raw.png");
     icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
