@@ -1034,6 +1034,15 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             if (inst->sendsProgramChange())
                 m_trackLabels[m_popupItem]->setAlternativeLabel(strtoqstr(inst->getProgramName()));
 
+	    if (inst->getType() == Rosegarden::Instrument::Audio) {
+		m_recordLeds[m_popupItem]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordAudioTrackLED));
+	    } else {
+		m_recordLeds[m_popupItem]->setColor
+		    (Rosegarden::GUIPalette::getColour
+		     (Rosegarden::GUIPalette::RecordMIDITrackLED));
+	    }
         }
         else
             RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";

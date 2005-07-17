@@ -26,7 +26,18 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.2  2005/07/17 11:42:36  cannam
+ * * fixes from stg branch:
+ *   - fix failure to recolour led when switching track from audio to midi or vice versa
+ *   - fix colour number / menu index confusion in spb colour menu
+ *
+ * Revision 1.1.10.1  2005/07/17 00:00:30  cannam
+ *
+ * * merge across from HEAD to 17/07/2005
+ * * appearance fixes
+ *
  * Revision 1.1  2004/04/05 09:54:05  cannam
+ *
  * * antialiased LEDs
  *
  * Revision 1.24  2002/12/16 15:10:03  mkretz
@@ -647,6 +658,10 @@ KLed::setColor(const QColor& col)
   if(led_color!=col) {
     led_color = col;
     d->offcolor = col.dark(d->dark_factor);
+    delete d->on_map;
+    d->on_map = 0;
+    delete d->off_map;
+    d->off_map = 0;
     update();
   }
 }

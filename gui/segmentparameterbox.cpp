@@ -332,7 +332,7 @@ SegmentParameterBox::slotDocColoursChanged()
             m_colourValue->insertItem(colour, i18n("Default Color"), i);
         else
             m_colourValue->insertItem(colour, strtoqstr(it->second.second), i);
-        m_colourList[it->first] = i;
+        m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
 
@@ -851,14 +851,15 @@ SegmentParameterBox::slotColourSelected(int value)
 {
     if (value != m_addColourPos)
     {
-        unsigned int temp;
+        unsigned int temp = 0;
 
-        RosegardenColourTable::ColourList::const_iterator pos = m_colourList.find(value);
-
-        if (pos != m_colourList.end())
-            temp = pos->first;
-        else // Somehow we are trying to set a colour which doesn't exist
-            temp = 0;
+	RosegardenColourTable::ColourList::const_iterator pos;
+	for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
+	    if (pos->second == value) {
+		temp = pos->first;
+		break;
+	    }
+	}
 
         Rosegarden::SegmentSelection segments;
         std::vector<Rosegarden::Segment*>::iterator it;
