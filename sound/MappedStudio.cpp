@@ -401,7 +401,9 @@ MappedStudio::createObject(MappedObjectType type,
     // Insert
     if (mO)
     {
-//	std::cerr << "Adding object " << id << " to category " << type << std::endl;
+#ifdef DEBUG_MAPPEDSTUDIO
+	std::cerr << "Adding object " << id << " to category " << type << std::endl;
+#endif
         m_objects[type][id] = mO;
     }
 
