@@ -167,8 +167,6 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[PlaybackFaderOutline] = QColor(211, 194, 238, QColor::Hsv);
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
-
-
 }
 
 GUIPalette* GUIPalette::getInstance() 
@@ -279,4 +277,9 @@ const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";
  
 GUIPalette* GUIPalette::m_instance = 0;
 
+// defines which index in the document's colourmap should be used as the color
+// when creating new audio segments from recordings, or inserting from the
+// audio file manager (presumes a file derived from the updated autoload.rg
+// that shipped along with this change)
+const int GUIPalette::AudioDefaultIndex = 1;
 }

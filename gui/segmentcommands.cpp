@@ -32,6 +32,7 @@
 #include "PeakFile.h"
 #include "Clipboard.h"
 #include "Sets.h"
+#include "colours.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;
@@ -413,6 +414,10 @@ AudioSegmentInsertCommand::execute()
         m_segment->setAudioStartTime(m_audioStartTime);
         m_segment->setAudioEndTime(m_audioEndTime);
         m_segment->setAudioFileId(m_audioFileId);
+
+	// Set color for audio segment (DMM)
+        //
+	m_segment->setColourIndex(Rosegarden::GUIPalette::AudioDefaultIndex);
 
         // Calculate end time
         //

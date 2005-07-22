@@ -208,11 +208,10 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
         i != segEnd; ++i) {
 
 // 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
-
+	
         Segment* s = *i;
         if (isMoving(s))
             continue;
-        
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(rect)) {
             bool tmpSelected = isTmpSelected(s),
@@ -351,8 +350,10 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectList* npRects, int base
     // ranges toward black.  Black always looks good, while white washes out
     // badly against intense yellow, and doesn't look very good against
     // intense green either...  hacky, but this produces pleasant results against
-    // every bizarre extreme of color I could cook up to throw at it
-    if ( (((h > 57) && (h < 66)) || ((h > 93) && (h < 131))) ||
+    // every bizarre extreme of color I could cook up to throw at it, plus
+    // (the real reason for all this convoluted fiddling, it does all that while keeping
+    // white against bright reds and blues, which looks better than black)
+    if ( ((((h > 57) && (h < 66)) || ((h > 93) && (h < 131))) && (s > 127) && (v > 127) ) ||
 	 (s < v) ) {
 	v = 0;
     } else {
@@ -1060,12 +1061,12 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 
     QPoint origin = computeSegmentOrigin(s);
 
-//     CompositionRect cachedCR = m_segmentRectMap[&s];
-//     if (cachedCR.isValid()) {
-// //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache\n";
-//         cachedCR.moveTopLeft(origin);
-//         return cachedCR;
-//     }
+    CompositionRect cachedCR = m_segmentRectMap[&s];
+    if (cachedCR.isValid()) {
+//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache\n";
+         cachedCR.moveTopLeft(origin);
+         return cachedCR;
+    }
     
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
@@ -1093,7 +1094,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     CompositionRect cr(origin, QSize(w, h));
     cr.setLabel(strtoqstr(s.getLabel()));
 
-//     m_segmentRectMap.insert(&s, cr);
+    m_segmentRectMap.insert(&s, cr);
 
     if (s.isRepeating())
         computeRepeatMarks(cr, &s);

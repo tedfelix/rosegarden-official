@@ -144,6 +144,7 @@ public:
     static const char* const PlaybackFaderOutline;
     static const char* const RecordFaderOutline;
 
+    static const int AudioDefaultIndex;
     
 protected:
     GUIPalette();

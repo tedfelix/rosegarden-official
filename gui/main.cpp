@@ -373,7 +373,7 @@ void testInstalledVersion()
                   " This may mean one of the following:\n\n"
                   " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
                   "     installed.  If you compiled it yourself, check that you have\n"
-                  "     run \"make install\" and that the procedure completed\n"
+                  "     run \"scons install\" and that the procedure completed\n"
                   "     successfully.\n\n"
                   " 2. The upgrade was installed in a non-standard directory,\n"
                   "     and an old version was found in a standard directory.  If so,\n"

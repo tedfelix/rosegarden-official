@@ -2132,10 +2132,15 @@ RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
 
     recordSegment->setLabel(label);
     recordSegment->setAudioFileId(auid);
-    //!!! currently hard-coded without a constant defined in some appropriate
-    // place...  index 1 is the default color for newly-recorded audio
-    // segments, to set them apart from MIDI segments
-    recordSegment->setColourIndex(1);
+    
+    // set color for audio segment to distinguish it from a MIDI segment on an
+    // audio track drawn with the pencil (depends on having the current
+    // autoload.rg or a file derived from it to deliever predictable results,
+    // but the worst case here is segments drawn in the wrong color when
+    // adding new segments to old files, which I don't forsee as being enough
+    // of a problem to be worth cooking up a more robust implementation of
+    // this new color for new audio segments (DMM)
+    recordSegment->setColourIndex(Rosegarden::GUIPalette::AudioDefaultIndex);
 
     RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;

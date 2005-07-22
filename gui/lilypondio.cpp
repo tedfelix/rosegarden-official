@@ -838,7 +838,12 @@ LilypondExporter::write()
 		std::string lilyText = "";      // text events
 		std::string lilyLyrics = "";    // lyric events
 		std::string prevStyle = "";     // track note styles 
-		bool note_ended_with_a_lyric = true;
+//		bool note_ended_with_a_lyric = true;
+//		
+      		// old pre-1.0 patch by Hans from bug #773371
+	 	// 
+		bool note_ended_with_a_lyric = false;
+		//
 
 		Rosegarden::Key key;
 
@@ -1071,6 +1076,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	writeSkip(timeSignature, 0, writtenDuration, true, str);
     }
 
+    // old pre-1.0 patch by Hans from bug #773371
+    // 
+    std::string prevType = Note::EventType;
+    //
     timeT prevDuration = -1;
     eventstartlist eventsToStart;
 
@@ -1244,7 +1253,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    }
 
 		    str << " ";
-
 		} else if ((*i)->isa(Indication::EventType)) {
 		    eventsToStart.insert(*i);
 		    eventsInProgress.insert(*i);
@@ -1294,7 +1302,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    if (tiedForward) str << "~ ";
-
+	    // old pre-1.0 patch by Hans from bug #773371
+	    // 
+            prevType = Note::EventType;
+	    //
 	} else if ((*i)->isa(Note::EventRestType)) {
 
 	    if (languageLevel < 1) handleEndingEvents(eventsInProgress, i, str);
@@ -1312,6 +1323,17 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    str << " ";
+
+	    // old pre-1.0 patch by Hans from bug #773371
+	    // 
+            // Lilypond treats consecutive rests as one lyric
+            if (prevType != Note::EventRestType) {
+                lilyLyrics += "_ ";
+                note_ended_with_a_lyric = false;
+            }
+            prevType = Note::EventRestType;
+	    //
+ 
 	    if (languageLevel >= 1) handleEndingEvents(eventsInProgress, i, str);
 	    handleStartingEvents(eventsToStart, str);
 
