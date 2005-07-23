@@ -40,7 +40,7 @@ dnl Perform program name transformation
 AC_ARG_PROGRAM
 
 dnl Automake doc recommends to do this only here. (Janos)
-AM_INIT_AUTOMAKE(rosegarden, 4-1.1_cvs) dnl searches for some needed programs
+AM_INIT_AUTOMAKE(rosegarden, 4-1.2_cvs) dnl searches for some needed programs
 
 KDE_SET_PREFIX
 
@@ -93,6 +93,22 @@ fi
 
 if test "$with_xft" = "yes"; then
     AC_DEFINE(HAVE_XFT, 1, [Define if you have Xft support])
+fi
+
+dnl check for LIRC
+AC_ARG_WITH(lirc, [  --with-lirc             enable LIRC support (enabled by default when installed)],
+  [ if test "$withval" = "yes"; then with_lirc=yes; else with_lirc=no; fi ],
+  with_lirc=yes)
+
+if test "$with_lirc" = "yes"; then
+  AC_CHECK_HEADERS(lirc/lirc_client.h,,[with_lirc=no])
+  if test "$with_lirc" = "yes"; then
+    AC_CHECK_LIB(lirc_client,lirc_init,,[with_lirc=no])
+  fi
+fi
+
+if test "$with_lirc" = "yes"; then
+    AC_DEFINE(HAVE_LIRC, 1, [Define if you have LIRC support])
 fi
 
 dnl test for sound support at all
@@ -353,6 +369,7 @@ echo
 echo "Install Directory             : $prefix"
 echo
 echo "Xft notation font support     : ${with_xft}"
+echo "LIRC remote control support   : ${with_lirc}"
 if test "$with_sound" = "no"; then
     echo "No sound support configured."
 else
@@ -362,7 +379,7 @@ else
     echo "DSSI synth plugin support     : ${with_dssi}"
     echo "Custom OSC plugin GUI support : ${with_liblo}"
     echo "LRDF plugin metadata support  : ${with_liblrdf}"
-
+    
     if test "$with_alsa" = "no"; then
         echo "aRts MIDI and audio          : yes"
     fi
@@ -433,6 +450,7 @@ AC_CONFIG_FILES([ gui/Makefile ])
 AC_CONFIG_FILES([ gui/docs/Makefile ])
 AC_CONFIG_FILES([ gui/docs/de/Makefile ])
 AC_CONFIG_FILES([ gui/docs/en/Makefile ])
+AC_CONFIG_FILES([ gui/docs/es/Makefile ])
 AC_CONFIG_FILES([ gui/docs/ja/Makefile ])
 AC_CONFIG_FILES([ gui/docs/sv/Makefile ])
 AC_CONFIG_FILES([ po/Makefile ])
