@@ -243,6 +243,8 @@ public:
     virtual int  getLength();
 
     void setAudioPreviewThread(AudioPreviewThread& thread);
+    AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
+
     void refreshAllPreviews();
     void refreshDirtyPreviews();
     void clearPreviewCache();
@@ -488,6 +490,7 @@ signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
     
 protected:
+    virtual bool event(QEvent *);
 
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);

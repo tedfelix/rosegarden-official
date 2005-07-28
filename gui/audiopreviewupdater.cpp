@@ -40,7 +40,7 @@ AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
 
 AudioPreviewUpdater::~AudioPreviewUpdater()
 {
-    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater" << endl;
+    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater\n";
 }
 
 bool AudioPreviewUpdater::update()
@@ -54,8 +54,9 @@ bool AudioPreviewUpdater::update()
         m_composition.getElapsedRealTime(m_segment->getEndMarkerTime()) -
         m_composition.getElapsedRealTime(m_segment->getStartTime()) ;
 
-    RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
-	     << m_segment->getAudioFileId() << " requesting values" <<endl;
+    RG_DEBUG << "AudioPreviewUpdater::update() - for file id "
+	     << m_segment->getAudioFileId() << " requesting values - thread running : "
+             << m_thread.running() << " - thread finished : " << m_thread.finished() << endl;
     
     AudioPreviewThread::Request request;
     request.audioFileId = m_segment->getAudioFileId();
@@ -66,13 +67,14 @@ bool AudioPreviewUpdater::update()
     request.notify = this;
     if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
     m_previewToken = m_thread.requestPreview(request);
+    if (!m_thread.running()) m_thread.start();
 }
 
 bool AudioPreviewUpdater::event(QEvent *e)
 {
-    RG_DEBUG << "AudioPreviewUpdater::event" <<endl;
+    RG_DEBUG << "AudioPreviewUpdater::event\n";
 
-    if (e->type() == QEvent::User + 1) {
+    if (e->type() == AudioPreviewThread::AudioPreviewReady) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
 	if (ev) {
 	    int token = (int)ev->data();
@@ -87,10 +89,11 @@ bool AudioPreviewUpdater::event(QEvent *e)
 //!!!		m_apData.setValues(tmp);
 
 		if (m_channels == 0) {
-		    RG_DEBUG << "AudioPreviewUpdater: failed to find preview!" << endl;
+		    RG_DEBUG << "AudioPreviewUpdater: failed to find preview!\n";
 		} else {
 
-		    RG_DEBUG << "AudioPreviewUpdater: got correct preview (" << m_channels << " channels, " << m_values.size() << " samples)" << endl;
+		    RG_DEBUG << "AudioPreviewUpdater: got correct preview (" << m_channels
+                             << " channels, " << m_values.size() << " samples)\n";
 
 //!!!		    m_apData.setChannels(channels);
 		}
@@ -102,7 +105,8 @@ bool AudioPreviewUpdater::event(QEvent *e)
 		unsigned int tmpChannels;
 		m_thread.getPreview(token, tmpChannels, tmp);
 
-		RG_DEBUG << "AudioPreviewUpdater: got obsolete preview (" << tmpChannels << " channels, " << tmp.size() << " samples)" << endl;
+		RG_DEBUG << "AudioPreviewUpdater: got obsolete preview (" << tmpChannels
+                         << " channels, " << tmp.size() << " samples)\n";
 	    }
 
             emit audioPreviewComplete(this);

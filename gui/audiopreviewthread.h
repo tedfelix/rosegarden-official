@@ -22,11 +22,12 @@
 #ifndef AUDIOPREVIEWTHREAD_H
 #define AUDIOPREVIEWTHREAD_H
 
-#include <qthread.h>
-#include <qmutex.h>
-
 #include <vector>
 #include <map>
+
+#include <qthread.h>
+#include <qmutex.h>
+#include <qevent.h>
 
 #include "RealTime.h"
 
@@ -56,12 +57,21 @@ public:
     virtual void getPreview(int token, unsigned int &channels,
 			    std::vector<float> &values);
 
+    void setEmptyQueueListener(QObject* o) { m_emptyQueueListener = o; }
+
+    static const QEvent::Type AudioPreviewReady;
+    static const QEvent::Type AudioPreviewQueueEmpty;
+    
+
 protected:
     virtual bool process();
+
 
     Rosegarden::AudioFileManager *m_manager;
     int m_nextToken;
     bool m_exiting;
+
+    QObject* m_emptyQueueListener;
 
     typedef std::pair<int, Request> RequestRec;
     typedef std::multimap<int, RequestRec> RequestQueue;

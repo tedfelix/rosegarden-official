@@ -51,7 +51,7 @@ signals:
     void audioPreviewComplete(AudioPreviewUpdater*);
 
 protected:
-    virtual bool event(QEvent *);
+    virtual bool event(QEvent*);
 
     AudioPreviewThread& m_thread;
 

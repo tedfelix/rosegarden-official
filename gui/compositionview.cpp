@@ -157,7 +157,6 @@ CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
 {
     m_notationPreviewDataCache.setAutoDelete(true);
     m_audioPreviewDataCache.setAutoDelete(true);
-    refreshAllPreviews();
     m_composition.addObserver(this);
 
     const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
@@ -570,7 +569,7 @@ void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread& thread)
 
 void CompositionModelImpl::refreshAllPreviews()
 {
-    RG_DEBUG << "CompositionModelImpl::refreshAllPreviews" << endl;
+    RG_DEBUG << "CompositionModelImpl::refreshAllPreviews\n";
 
     clearPreviewCache();
 
@@ -587,7 +586,7 @@ void CompositionModelImpl::refreshAllPreviews()
 
 void CompositionModelImpl::clearPreviewCache()
 {
-    RG_DEBUG << "CompositionModelImpl::clearPreviewCache" << endl;
+    RG_DEBUG << "CompositionModelImpl::clearPreviewCache\n";
 
     m_notationPreviewDataCache.clear();
     m_audioPreviewDataCache.clear();
@@ -670,7 +669,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 	const std::vector<float> &values = apu->getComputedValues(channels);
 	if (channels > 0) {
 	    RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete: set "
-                     << values.size() << " samples on " << channels << " channels" << endl;
+                     << values.size() << " samples on " << channels << " channels\n";
 	    apData->setChannels(channels);
 	    apData->setValues(values);
 	}
@@ -678,14 +677,13 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 
     delete apu;
 
-    emit needUpdate(QRect());
+//     emit needUpdate(QRect());
 }
 
 
 CompositionModel::AudioPreviewData::~AudioPreviewData()
 {
-    RG_DEBUG << "CompositionModel::AudioPreviewData::~AudioPreviewData()"
-	     << endl;
+    RG_DEBUG << "CompositionModel::AudioPreviewData::~AudioPreviewData()\n";
 }
 
 
@@ -713,6 +711,8 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
 
 void CompositionModelImpl::refreshDirtyPreviews()
 {
+    RG_DEBUG << "CompositionModelImpl::refreshDirtyPreviews()\n";
+
     std::set<const Rosegarden::Segment*>::iterator i = m_dirtySegments.begin();
     std::set<const Rosegarden::Segment*>::iterator dirtySegmentsEnd = m_dirtySegments.end();
     
@@ -721,6 +721,8 @@ void CompositionModelImpl::refreshDirtyPreviews()
 
         if (s->getType() == Rosegarden::Segment::Audio) {
             AudioPreviewData* apData = getAudioPreviewData(s);
+            RG_DEBUG << "CompositionModelImpl::refreshDirtyPreviews() - update audio preview cache for segment "
+                     << s << endl;
             updatePreviewCacheForAudioSegment(s, apData);
         } else {
             NotationPreviewData* npData = getNotationPreviewData(s);
@@ -1217,7 +1219,10 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {
         cmi->setAudioPreviewThread(doc->getAudioPreviewThread());
+//         cmi->refreshAllPreviews(); - no need, done by setZoom(1x)
     }
+
+    doc->getAudioPreviewThread().setEmptyQueueListener(this);
 
     m_drawBuffer.setOptimization(QPixmap::BestOptim);
 }
@@ -1446,7 +1451,7 @@ void CompositionView::slotUpdate()
 
 void CompositionView::slotUpdate(QRect rect)
 {
-    RG_DEBUG << "CompositionView::slotUpdate() rect " << rect;
+    RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
     slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
     if (rect.isValid())
@@ -1911,6 +1916,18 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
     p->drawText(m_textFloatPos.x() + 2, m_textFloatPos.y() + 14, m_textFloatText);
 
     p->restore();
+}
+
+bool CompositionView::event(QEvent* e)
+{
+    if (e->type() == AudioPreviewThread::AudioPreviewQueueEmpty) {
+        RG_DEBUG << "CompositionView::event - AudioPreviewQueueEmpty\n";
+        slotDrawBufferNeedsRefresh();
+        viewport()->update();
+        return true;
+    }
+
+    return RosegardenScrollView::event(e);
 }
 
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)

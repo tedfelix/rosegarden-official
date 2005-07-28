@@ -30,21 +30,34 @@
 AudioPreviewThread::AudioPreviewThread(Rosegarden::AudioFileManager *manager) :
     m_manager(manager),
     m_nextToken(0),
-    m_exiting(false)
+    m_exiting(false),
+    m_emptyQueueListener(0)
 {
 }
 
 void
 AudioPreviewThread::run()
 {
-    RG_DEBUG << "AudioPreviewThread::run entering" << endl;
+    bool emptyQueueSignalled = false;
+
+    RG_DEBUG << "AudioPreviewThread::run entering\n";
 
     while (!m_exiting) {
-	if (!process()) break;
-	usleep(300000);
+
+        if (m_queue.empty()) {        
+            if (m_emptyQueueListener && !emptyQueueSignalled) {
+                QApplication::postEvent(m_emptyQueueListener,
+                                        new QCustomEvent(AudioPreviewQueueEmpty, 0));
+                emptyQueueSignalled = true;
+            }
+
+            usleep(300000);
+        } else {
+            process();
+        }
     }
 
-    RG_DEBUG << "AudioPreviewThread::run exiting" << endl;
+    RG_DEBUG << "AudioPreviewThread::run exiting\n";
 }
 
 void
@@ -56,75 +69,77 @@ AudioPreviewThread::finish()
 bool
 AudioPreviewThread::process()
 {
-    while (!m_queue.empty()) {
+    RG_DEBUG << "AudioPreviewThread::process()\n";
+
+    if (!m_queue.empty()) {
 
 	int failed = 0;
+        int count = 0;
 
-	for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
+        // process 1st request and leave
+        RequestQueue::iterator i = m_queue.begin();
 
-	    m_mutex.lock();
+        m_mutex.lock();
 
-	    // i->first is width, which we use only to provide an ordering to
-	    // ensure we do smaller previews first.  We don't use it here.
+        // i->first is width, which we use only to provide an ordering to
+        // ensure we do smaller previews first.  We don't use it here.
 
-	    RequestRec &rec = i->second;
-	    int token = rec.first;
-	    Request req = rec.second;
-	    m_mutex.unlock();
+        RequestRec &rec = i->second;
+        int token = rec.first;
+        Request req = rec.second;
+        m_mutex.unlock();
     
-	    std::vector<float> results;
+        std::vector<float> results;
     
-	    try {
-		// Requires thread-safe AudioFileManager::getPreview
-		results = m_manager->getPreview(req.audioFileId,
-						req.audioStartTime,
-						req.audioEndTime,
-						req.width,
-						req.showMinima);
-	    } catch (std::string e) {
+        try {
+            RG_DEBUG << "AudioPreviewThread::process() file id " << req.audioFileId << endl;
+
+            // Requires thread-safe AudioFileManager::getPreview
+            results = m_manager->getPreview(req.audioFileId,
+                                            req.audioStartTime,
+                                            req.audioEndTime,
+                                            req.width,
+                                            req.showMinima);
+        } catch (std::string e) {
 	
-//		RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
+            //		RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
 	
-		// OK, we hope this just means we're still recording -- so
-		// leave this one in the queue
-		++failed;
-		continue;
-	    }
+            // OK, we hope this just means we're still recording -- so
+            // leave this one in the queue
+            ++failed;
+        }
     
-	    m_mutex.lock();
+        m_mutex.lock();
 
-	    // We need to check that the token is still in the queue
-	    // (i.e. hasn't been cancelled).  Otherwise we shouldn't notify
+        // We need to check that the token is still in the queue
+        // (i.e. hasn't been cancelled).  Otherwise we shouldn't notify
 
-	    bool found = false;
-	    for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
-		if (i->second.first == token) {
-		    found = true;
-		    m_queue.erase(i);
-		    break;
-		}
-	    }
+        bool found = false;
+        for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
+            if (i->second.first == token) {
+                found = true;
+                m_queue.erase(i);
+            }
+        }
 
-	    if (found) {
-		unsigned int channels = m_manager->getAudioFile(req.audioFileId)->getChannels();
-		m_results[token] = ResultsPair(channels, results);
-		QObject *notify = req.notify;
-		QApplication::postEvent
-		    (notify,
-		     new QCustomEvent(QEvent::Type(QEvent::User + 1), (void *)token));
-		m_mutex.unlock();
-		break; // start again from start of queue, as iterator
-		       // has been invalidated by erase
-	    }
+        if (found) {
+            unsigned int channels = m_manager->getAudioFile(req.audioFileId)->getChannels();
+            m_results[token] = ResultsPair(channels, results);
+            QObject *notify = req.notify;
+            QApplication::postEvent
+                (notify,
+                 new QCustomEvent(AudioPreviewReady, (void *)token));
+        }
 
-	    m_mutex.unlock();
-	}
+        m_mutex.unlock();
 
 	if (failed > 0 && failed == m_queue.size()) {
+            RG_DEBUG << "AudioPreviewThread::process() - return true\n";
 	    return true; // delay and try again
 	}
     }
 
+    RG_DEBUG << "AudioPreviewThread::process() - return false\n";
     return false;
 }
 
@@ -132,6 +147,8 @@ int
 AudioPreviewThread::requestPreview(const Request &request)
 {
     m_mutex.lock();
+
+    RG_DEBUG << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << endl;
 
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
 	if (i->second.second.notify == request.notify) {
@@ -146,8 +163,12 @@ AudioPreviewThread::requestPreview(const Request &request)
     ++m_nextToken;
     m_mutex.unlock();
 
-    if (!running()) start();
+//     if (!running()) start();
 
+    RG_DEBUG << "AudioPreviewThread::requestPreview : thread running : " << running()
+             << " - thread finished : " << finished() << endl;
+
+    RG_DEBUG << "AudioPreviewThread::requestPreview - token = " << token << endl;
     return token;
 }
 
@@ -155,6 +176,8 @@ void
 AudioPreviewThread::cancelPreview(int token)
 {
     m_mutex.lock();
+
+    RG_DEBUG << "AudioPreviewThread::cancelPreview for token " << token << endl;
     
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
 	if (i->second.first == token) {
@@ -187,4 +210,7 @@ AudioPreviewThread::getPreview(int token, unsigned int &channels,
 
     return;
 }
+
+const QEvent::Type AudioPreviewThread::AudioPreviewReady       = QEvent::Type(QEvent::User + 1);
+const QEvent::Type AudioPreviewThread::AudioPreviewQueueEmpty  = QEvent::Type(QEvent::User + 2);
 
