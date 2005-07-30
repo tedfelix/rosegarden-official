@@ -413,6 +413,9 @@ void CompositionModelImpl::makeAudioPreviewRects(PRectList* apRects, const Segme
     unsigned int channels = cachedAPData->getChannels();
     const std::vector<float>& values = cachedAPData->getValues();
 
+    if (values.size() == 0)
+        return;
+
     if (channels == 0) {
         RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : problem with audio file for segment "
                  << segment->getLabel().c_str() << endl;
