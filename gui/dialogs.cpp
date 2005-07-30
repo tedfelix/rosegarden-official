@@ -3417,9 +3417,18 @@ FileLocateDialog::slotUser3()
 	     .arg(QFileInfo(m_file).fileName())
 	     .arg(QFileInfo(m_file).fileName()),
 	     this, i18n("Select an Audio File"));
-        QFileInfo fileInfo(m_file);
-        m_path = fileInfo.dirPath();
-        accept();
+
+        RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file << endl;
+
+        if (m_file.isEmpty()) {
+            RG_DEBUG << "FileLocateDialog::slotUser3() : reject\n";
+            reject();
+        } else {
+            QFileInfo fileInfo(m_file);
+            m_path = fileInfo.dirPath();
+            accept();
+        }
+        
     } else
         reject();
 }
