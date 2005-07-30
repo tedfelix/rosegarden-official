@@ -1097,7 +1097,17 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
 //                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
 //                  << cachedCR.getBaseWidth() << endl;
+        int deltaX = origin.x() - cachedCR.x();
         cachedCR.moveTopLeft(origin);
+
+        if (s.isRepeating() && deltaX != 0) { // update repeat marks
+            CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
+            for(int i = 0; i < repeatMarks.size(); ++i) {
+                repeatMarks[i] += deltaX;
+            }
+            cachedCR.setRepeatMarks(repeatMarks);
+        }
+        
         return cachedCR;
     }
 
