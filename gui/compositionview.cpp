@@ -66,7 +66,7 @@ timeT CompositionItemHelper::getEndTime(const CompositionItem& item, const Roseg
     timeT t = 0;
 
     if (item) {
-        CompositionRect itemRect = item->rect();
+        QRect itemRect = item->rect();
         
         RG_DEBUG << "CompositionItemHelper::getEndTime() : rect width = "
                  << itemRect.width() << " - item is repeating : " << item->isRepeating() << endl;
@@ -544,11 +544,13 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
 
         CompositionRect::repeatmarks repeatMarks;
 
-        RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
-                 << repeatStart << " - repeatEnd = " << repeatEnd << endl;
+//         RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : repeatStart = "
+//                  << repeatStart << " - repeatEnd = " << repeatEnd << endl;
 
         for(timeT repeatMark = repeatStart; repeatMark < repeatEnd; repeatMark += repeatInterval) {
-            repeatMarks.push_back(int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark))));
+            int mark = int(nearbyint(m_grid.getRulerScale()->getXForTime(repeatMark)));
+//             RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : mark at " << mark << endl;
+            repeatMarks.push_back(mark);
         }
         sr.setRepeatMarks(repeatMarks);
         if (repeatMarks.size() > 0)
@@ -557,6 +559,11 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
 //             RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : no repeat marks\n";
             sr.setBaseWidth(sr.width());
         }
+
+//         RG_DEBUG << "CompositionModelImpl::computeRepeatMarks : s = "
+//                  << s << " base width = " << sr.getBaseWidth()
+//                  << " - nb repeat marks = " << repeatMarks.size() << endl;
+
     }
 }
 
@@ -711,7 +718,7 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
 
 void CompositionModelImpl::refreshDirtyPreviews()
 {
-    RG_DEBUG << "CompositionModelImpl::refreshDirtyPreviews()\n";
+//     RG_DEBUG << "CompositionModelImpl::refreshDirtyPreviews()\n";
 
     std::set<const Rosegarden::Segment*>::iterator i = m_dirtySegments.begin();
     std::set<const Rosegarden::Segment*>::iterator dirtySegmentsEnd = m_dirtySegments.end();
@@ -748,6 +755,12 @@ void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden
     m_dirtySegments.insert(s);
 }
 
+void CompositionModelImpl::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
+{
+    m_segmentRectMap.erase(s);
+}
+
+
 void CompositionModelImpl::makePreviewCache(Segment *s) 
 {
     if (s->getType() == Rosegarden::Segment::Internal) {
@@ -775,9 +788,17 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
+    m_segmentRectMap.erase(s);
     removePreviewCache(s);
     s->removeObserver(this);
 }
+
+void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
+{
+    m_segmentRectMap.erase(s);
+}
+
+
 
 CompositionModel::NotationPreviewData* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
@@ -1056,6 +1077,11 @@ QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
     return res;
 }
 
+bool CompositionModelImpl::isCachedRectCurrent(const Segment& s, const CompositionRect& r) 
+{
+    return s.isRepeating() == r.isRepeating();
+}
+
 
 CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 {
@@ -1064,12 +1090,14 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     QPoint origin = computeSegmentOrigin(s);
 
     CompositionRect cachedCR = m_segmentRectMap[&s];
-    if (cachedCR.isValid()) {
-//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache\n";
-         cachedCR.moveTopLeft(origin);
-         return cachedCR;
+    if (cachedCR.isValid() && isCachedRectCurrent(s, cachedCR)) {
+//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
+//                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
+//                  << cachedCR.getBaseWidth() << endl;
+        cachedCR.moveTopLeft(origin);
+        return cachedCR;
     }
-    
+
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 
@@ -1096,10 +1124,10 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     CompositionRect cr(origin, QSize(w, h));
     cr.setLabel(strtoqstr(s.getLabel()));
 
-    m_segmentRectMap.insert(&s, cr);
-
     if (s.isRepeating())
         computeRepeatMarks(cr, &s);
+
+    m_segmentRectMap.insert(&s, cr);
 
     return cr;
 }
@@ -1676,6 +1704,9 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
 
         CompositionRect::repeatmarks repeatMarks = r.getRepeatMarks();
 
+//         RG_DEBUG << "CompositionView::drawCompRect() : drawing repeating rect " << r
+//                  << " nb repeat marks = " << repeatMarks.size() << endl;
+
         // draw 'start' rectangle with original brush
         //
         QRect startRect = r;
@@ -1695,10 +1726,12 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
                 break;
             
             if (pos >= clipRect.left()) {
+                QPoint p1(pos, r.y() + penWidth),
+                    p2(pos, r.y() + r.height() - penWidth - 1);
+                
 //                 RG_DEBUG << "CompositionView::drawCompRect() : drawing repeat mark at "
-//                          << pos << "," << r.y() + penWidth << endl;
-                p->drawLine(pos, r.y() + penWidth, pos,
-                            r.y() + r.height() - penWidth - 1);
+//                          << p1 << "-" << p2 << endl;
+                p->drawLine(p1, p2);
             }
             
         }

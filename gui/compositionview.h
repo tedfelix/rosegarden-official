@@ -263,11 +263,13 @@ public:
     // CompositionObserver
     virtual void segmentAdded(const Rosegarden::Composition *, Rosegarden::Segment *);
     virtual void segmentRemoved(const Rosegarden::Composition *, Rosegarden::Segment *);
+    virtual void segmentRepeatChanged(const Rosegarden::Composition *, Rosegarden::Segment *, bool);
 
     // SegmentObserver
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
-
+    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool /*shorten*/);
+    
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
     void needUpdate(QRect);
@@ -281,6 +283,8 @@ protected:
     bool isTmpSelected(const Rosegarden::Segment*) const;
     bool wasTmpSelected(const Rosegarden::Segment*) const;
     bool isMoving(const Rosegarden::Segment*) const;
+    bool isCachedRectCurrent(const Rosegarden::Segment& s, const CompositionRect& r);
+    
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
     void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, NotationPreviewData*);
     void updatePreviewCacheForAudioSegment(const Rosegarden::Segment* s, AudioPreviewData*);
