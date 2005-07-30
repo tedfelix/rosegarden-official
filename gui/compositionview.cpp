@@ -684,7 +684,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 
     delete apu;
 
-//     emit needUpdate(QRect());
+    emit needUpdate(computeSegmentRect(*(apu->getSegment())));
 }
 
 
@@ -1474,7 +1474,7 @@ void CompositionView::slotUpdate()
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
-    viewport()->repaint();
+    viewport()->repaint(false);
 }
 
 void CompositionView::slotUpdate(QRect rect)
@@ -1483,9 +1483,9 @@ void CompositionView::slotUpdate(QRect rect)
     slotDrawBufferNeedsRefresh();
     refreshDirtyPreviews();
     if (rect.isValid())
-        viewport()->repaint(rect);
+        viewport()->repaint(rect, false);
     else
-        viewport()->repaint();
+        viewport()->repaint(false);
 }
 
 /// update size of draw buffer
