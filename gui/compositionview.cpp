@@ -33,6 +33,7 @@
 #include "RulerScale.h"
 
 #include "audiopreviewupdater.h"
+#include "compositioncolourcache.h"
 #include "compositionview.h"
 #include "compositionitemhelper.h"
 #include "colours.h"
@@ -229,16 +230,16 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 		QColor brushColor = GUIPalette::convertColour(m_composition.
 			getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 sr.setBrush(brushColor);
-           	sr.setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
+           	sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
             } else {
                 // border is the same for both audio and MIDI
-           	sr.setPen(GUIPalette::getColour(GUIPalette::RecordingSegmentBorder));
+           	sr.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
                 // audio color
                 if (isAudio) {
-                    sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingAudioSegmentBlock));
+                    sr.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
                 // MIDI/default color
                 } else {
-                    sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingInternalSegmentBlock));
+                    sr.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
                 }
             }
 
@@ -265,7 +266,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
             sr.setBrush(brushColor);
 
-            sr.setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
+            sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
             
             m_res.push_back(sr);
         }
@@ -308,16 +309,16 @@ void CompositionModelImpl::computeAllSegmentRects()
             QColor brushColor = GUIPalette::convertColour(m_composition.
                                                           getSegmentColourMap().getColourByIndex(s->getColourIndex()));
             sr.setBrush(brushColor);
-            sr.setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
+            sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
         } else {
             // border is the same for both audio and MIDI
-            sr.setPen(GUIPalette::getColour(GUIPalette::RecordingSegmentBorder));
+            sr.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
             // audio color
             if (isAudio) {
-                sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingAudioSegmentBlock));
+                sr.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
                 // MIDI/default color
             } else {
-                sr.setBrush(GUIPalette::getColour(GUIPalette::RecordingInternalSegmentBlock));
+                sr.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
             }
         }
 
@@ -535,7 +536,7 @@ void CompositionModelImpl::makeAudioPreviewRects(PRectList* apRects, const Segme
 
 void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment* s)
 {
-    if (s->isRepeating()) { // this works only at the creation of the CompositionRect - need a way to refresh those marks when segment is moved along X
+    if (s->isRepeating()) {
 
         timeT startTime = s->getStartTime();
         timeT endTime = s->getEndMarkerTime();
@@ -1501,6 +1502,11 @@ void CompositionView::slotUpdate(QRect rect)
         viewport()->repaint(false);
 }
 
+void CompositionView::slotRefreshColourCache()
+{
+    CompositionColourCache::getInstance()->init();
+}
+
 /// update size of draw buffer
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
@@ -1649,7 +1655,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     //
     if (m_tmpRect.isValid() && m_tmpRect.intersects(clipRect)) {
         p->setBrush(CompositionRect::DefaultBrushColor);
-        p->setPen(GUIPalette::getColour(GUIPalette::SegmentBorder));
+        p->setPen(CompositionColourCache::getInstance()->SegmentBorder);
         drawRect(m_tmpRect, p, clipRect);
     }
 
@@ -1730,7 +1736,7 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
 
         // now draw the 'repeat' marks
         //
-        p->setPen(GUIPalette::getColour(GUIPalette::RepeatSegmentBorder));
+        p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
         int penWidth = std::max(r.getPen().width(), 1u);
 
         for (unsigned int i = 0; i < repeatMarks.size(); ++i) {
@@ -1958,7 +1964,7 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 
     drawRect(bound, p, clipRect, false, 0, false);
 
-    p->setPen(GUIPalette::getColour(GUIPalette::RotaryFloatForeground));
+    p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
     p->drawText(m_textFloatPos.x() + 2, m_textFloatPos.y() + 14, m_textFloatText);
 
     p->restore();

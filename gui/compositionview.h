@@ -269,7 +269,7 @@ public:
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool /*shorten*/);
-    
+
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
     void needUpdate(QRect);
@@ -481,6 +481,8 @@ public slots:
 
     void slotUpdate();
     void slotUpdate(QRect);
+
+    void slotRefreshColourCache();
 
 signals:
     void editSegment(Rosegarden::Segment*); // use default editor
