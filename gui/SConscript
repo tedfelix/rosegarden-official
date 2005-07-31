@@ -25,6 +25,7 @@ rgSources = Split("""
 	colours.cpp 
 	colourwidgets.cpp 
         commondialogs.cpp 
+        compositioncolourcache.cpp 
         compositionview.cpp 
         constants.cpp 
         controleditor.cpp 

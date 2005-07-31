@@ -1258,6 +1258,9 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     connect(model, SIGNAL(needUpdate(QRect)),
             this, SLOT(slotUpdate(QRect)));
 
+    connect(doc, SIGNAL(docColoursChanged()),
+            this, SLOT(slotRefreshColourCache()));
+
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {
         cmi->setAudioPreviewThread(doc->getAudioPreviewThread());
@@ -1505,6 +1508,7 @@ void CompositionView::slotUpdate(QRect rect)
 void CompositionView::slotRefreshColourCache()
 {
     CompositionColourCache::getInstance()->init();
+    slotUpdate();
 }
 
 /// update size of draw buffer
