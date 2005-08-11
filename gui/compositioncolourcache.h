@@ -33,6 +33,7 @@ public:
 
     QColor SegmentCanvas;
     QColor SegmentAudioPreview;
+    QColor SegmentInternalPreview;
     QColor SegmentLabel;
     QColor SegmentBorder;
     QColor RepeatSegmentBorder;

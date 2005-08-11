@@ -29,6 +29,7 @@ void CompositionColourCache::init()
 {
     SegmentCanvas                 = GUIPalette::getColour(GUIPalette::SegmentCanvas);
     SegmentAudioPreview           = GUIPalette::getColour(GUIPalette::SegmentAudioPreview);
+    SegmentInternalPreview        = GUIPalette::getColour(GUIPalette::SegmentInternalPreview);
     SegmentLabel                  = GUIPalette::getColour(GUIPalette::SegmentLabel);
     SegmentBorder                 = GUIPalette::getColour(GUIPalette::SegmentBorder);
     RepeatSegmentBorder           = GUIPalette::getColour(GUIPalette::RepeatSegmentBorder);
