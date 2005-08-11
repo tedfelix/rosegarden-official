@@ -191,7 +191,7 @@ unsigned int CompositionModelImpl::getNbRows()
 }
 
 const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
-                                                                             PRectList* npData,
+                                                                             PRectIntervals* npData,
                                                                              PRectList* apData)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
@@ -328,7 +328,7 @@ void CompositionModelImpl::computeAllSegmentRects()
 }
 
 
-void CompositionModelImpl::makeNotationPreviewRects(PRectList* npRects, int baseY,
+void CompositionModelImpl::makeNotationPreviewRects(PRectIntervals* npRects, int baseY,
                                                     const Segment* segment, const QRect& clipRect)
 {
     NotationPreviewData* cachedNPData = getNotationPreviewData(segment);
@@ -338,54 +338,20 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectList* npRects, int base
     if (npi != cachedNPData->begin())
         --npi;
 
-    // compute the preview color so it's as visible as possible over the segment's color
-    QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
-    int h, s, v;
-    segColor.hsv(&h, &s, &v);
-  
-    // colors with saturation lower than value should be pastel tints, and
-    // they get a value of 0; yellow and green hues close to the dead center
-    // point for that hue were taking a value of 255 with the (s < v)
-    // formula, so I added an extra hack to force hues in those two narrow
-    // ranges toward black.  Black always looks good, while white washes out
-    // badly against intense yellow, and doesn't look very good against
-    // intense green either...  hacky, but this produces pleasant results against
-    // every bizarre extreme of color I could cook up to throw at it, plus
-    // (the real reason for all this convoluted fiddling, it does all that while keeping
-    // white against bright reds and blues, which looks better than black)
-    if ( ((((h > 57) && (h < 66)) || ((h > 93) && (h < 131))) && (s > 127) && (v > 127) ) ||
-	 (s < v) ) {
-	v = 0;
-    } else {
-	v = 255;
-    }
-    s = 31;
-    h += 180;
-
-    segColor.setHsv(h, s, v);
+    PRectInterval interval;
+    
+    interval.range.first = npi;
 
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
     int xLim = std::min(clipRect.topRight().x(), segEndX);
 
-    for(; (npi->x() + npi->width()) <= xLim && npi != npEnd; ++npi) {
-//                     RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : xLim = " << xLim
-//                              << " - npi = " << (*npi) << endl;
-        PreviewRect tr = *npi;
+    // move iterator forward
+    //
+    while((npi->x() + npi->width()) <= xLim && npi != npEnd) ++npi;
 
-        tr.setColor(segColor);
-
-        // put preview rectangle inside the corresponding segment's CompositionRect
-        //               tr.moveBy(sr.x(), sr.y());
-        // already has correct x-coord virtue of snap grid
-        tr.moveBy(0, baseY);
-
-//                     RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : inserting preview rect "
-//                              << tr << endl;
-//         if ((tr.x() + tr.width()) > xLim)
-//             tr.setWidth(xLim - tr.x());
-
-        npRects->insert(tr);
-    }
+    interval.range.second = npi;
+    interval.baseY = baseY;
+    npRects->push_back(interval);
 }
 
 void CompositionModelImpl::makeAudioPreviewRects(PRectList* apRects, const Segment* segment, const QRect& clipRect)
@@ -609,7 +575,8 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
     
     int segStartX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
-						       
+    QColor segColor = computeSegmentNotationPreviewColor(segment);
+
     for (Segment::iterator i = segment->begin();
 	 segment->isBeforeEndMarker(i); ++i) {
 
@@ -639,7 +606,9 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         if (y < y0) y = y0;
         if (y > y1-1) y = y1-1;
 
-        QRect r(x, (int)y, width, 2);
+        PreviewRect r(x, (int)y, width, 2);
+        r.setColor(segColor);
+
 //         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : npData = "
 //                  << npData << ", preview rect = "
 //                  << r << endl;
@@ -647,6 +616,38 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
     }
 
 }
+
+QColor CompositionModelImpl::computeSegmentNotationPreviewColor(const Segment* segment) 
+{
+    // compute the preview color so it's as visible as possible over the segment's color
+    QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
+    int h, s, v;
+    segColor.hsv(&h, &s, &v);
+  
+    // colors with saturation lower than value should be pastel tints, and
+    // they get a value of 0; yellow and green hues close to the dead center
+    // point for that hue were taking a value of 255 with the (s < v)
+    // formula, so I added an extra hack to force hues in those two narrow
+    // ranges toward black.  Black always looks good, while white washes out
+    // badly against intense yellow, and doesn't look very good against
+    // intense green either...  hacky, but this produces pleasant results against
+    // every bizarre extreme of color I could cook up to throw at it, plus
+    // (the real reason for all this convoluted fiddling, it does all that while keeping
+    // white against bright reds and blues, which looks better than black)
+    if ( ((((h > 57) && (h < 66)) || ((h > 93) && (h < 131))) && (s > 127) && (v > 127) ) ||
+	 (s < v) ) {
+	v = 0;
+    } else {
+	v = 255;
+    }
+    s = 31;
+    h += 180;
+
+    segColor.setHsv(h, s, v);
+
+    return segColor;
+}
+
 
 void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, AudioPreviewData* apData)
 {
@@ -1531,28 +1532,30 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     if (m_drawBufferNeedsRefresh)
         refreshDrawBuffer(e->rect());
 
-    bitBlt (viewport(), 0, 0, &m_drawBuffer, 0, 0);
+    bitBlt (viewport(), 0, 0, &m_drawBuffer);
 }
 
 void CompositionView::refreshDrawBuffer(const QRect& rect)
 {
     Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
-//     RG_DEBUG << "CompositionView::refreshDrawBuffer() r = " << rect << endl;
+//     RG_DEBUG << "CompositionView::refreshDrawBuffer() r = "
+//              << rect << endl;
 
     QPainter p;
+
     m_drawBuffer.fill(viewport(), 0, 0);
     p.begin(&m_drawBuffer, viewport());
 
-//     QPen framePen(Qt::red, 1);
-//     p.setPen(framePen);
-//     p.drawRect(rect);
+    //     QPen framePen(Qt::red, 1);
+    //     p.setPen(framePen);
+    //     p.drawRect(rect);
 
     QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
-//     QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
     p.translate(-contentsX(), -contentsY());
     drawArea(&p, r);
-    
+
     p.end();
+    
     m_drawBufferNeedsRefresh = false;
 }
 
@@ -1564,7 +1567,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 
     CompositionModel::PRectList* audioPreviewData    = 0;
-    CompositionModel::PRectList* notationPreviewData = 0;
+    CompositionModel::PRectIntervals* notationPreviewData = 0;
 
     //
     // Fetch previews
@@ -1616,24 +1619,31 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         
         for(; api != apEnd; ++api) {
             const PreviewRect& pr = *api;
-            QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
+            QColor defaultCol = CompositionColourCache::getInstance()->SegmentAudioPreview;
             QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
             p->setBrush(col);
             p->setPen(col);
             p->drawLine(pr.topLeft(), pr.bottomLeft());
         }
 
-        CompositionModel::PRectList::const_iterator npi = m_notationPreviewRects.begin();
-        CompositionModel::PRectList::const_iterator npEnd = m_notationPreviewRects.end();
+        CompositionModel::PRectIntervals::const_iterator npi = m_notationPreviewRects.begin();
+        CompositionModel::PRectIntervals::const_iterator npEnd = m_notationPreviewRects.end();
         
         for(; npi != npEnd; ++npi) {
 //             RG_DEBUG << "CompositionView::drawArea : draw preview rect " << *npi << endl;
-            const PreviewRect& pr = *npi;
-            QColor defaultCol = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentAudioPreview);
-            QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
-            p->setBrush(col);
-            p->setPen(col);
-            p->drawRect(pr);
+            CompositionModel::PRectInterval interval = *npi;
+            p->save();
+            p->translate(0, interval.baseY);
+            for(; interval.range.first != interval.range.second; ++interval.range.first) {
+
+                const PreviewRect& pr = *(interval.range.first);
+                QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
+                QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
+                p->setBrush(col);
+                p->setPen(col);
+                p->drawRect(pr);
+            }
+            p->restore();
         }
         
         p->restore();
