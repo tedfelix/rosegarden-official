@@ -135,7 +135,7 @@ public:
     typedef PRectList NotationPreviewData;
     struct PRectInterval {
         std::pair<NotationPreviewData::iterator, NotationPreviewData::iterator> range;
-        int baseY;
+        QPoint basePoint;
     };
 
     typedef std::vector<PRectInterval> PRectIntervals;
@@ -143,7 +143,7 @@ public:
     class AudioPreviewData {
     public:
         AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
-	~AudioPreviewData();
+	// ~AudioPreviewData();
 
         bool showsMinima()              { return m_showMinima; }
         void setShowMinima(bool s)      { m_showMinima = s;    }
@@ -157,11 +157,15 @@ public:
         QRect getSegmentRect()              { return m_segmentRect; }
         void setSegmentRect(const QRect& r) { m_segmentRect = r; }
 
+        void addPreviewRect(const PreviewRect& r) { m_previewRects.insert(r); }
+        const PRectList& getPreviewRects() { return m_previewRects; }
+
     protected:
         std::vector<float> m_values;
         bool               m_showMinima;
         unsigned int       m_channels;
         QRect              m_segmentRect;
+        PRectList          m_previewRects;
 
     private:
         // no copy ctor
@@ -172,7 +176,8 @@ public:
     virtual ~CompositionModel() {};
 
     virtual unsigned int getNbRows() = 0;
-    virtual const rectcontainer& getRectanglesIn(const QRect& rect, PRectIntervals* notationRects, PRectList* audioRects) = 0;
+    virtual const rectcontainer& getRectanglesIn(const QRect& rect,
+                                                 PRectIntervals* notationRects, PRectIntervals* audioRects) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
@@ -221,7 +226,8 @@ public:
     ~CompositionModelImpl();
     
     virtual unsigned int getNbRows();
-    virtual const rectcontainer& getRectanglesIn(const QRect& rect, PRectIntervals* notationRects, PRectList* audioRects);
+    virtual const rectcontainer& getRectanglesIn(const QRect& rect,
+                                                 PRectIntervals* notationRects, PRectIntervals* audioRects);
     virtual itemcontainer     getItemsAt      (const QPoint&);
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
@@ -299,8 +305,10 @@ protected:
 
     void makePreviewCache(Rosegarden::Segment* s);
     void removePreviewCache(Rosegarden::Segment* s);
-    void makeNotationPreviewRects(PRectIntervals* npData, int baseY, const Rosegarden::Segment*, const QRect&);
-    void makeAudioPreviewRects(PRectList* apData, const Rosegarden::Segment*, const QRect&);
+    void makeNotationPreviewRects(PRectIntervals* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void makeAudioPreviewRects(PRectIntervals* apData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void postProcessAudioPreview(AudioPreviewData*, const Rosegarden::Segment*);
+
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
 
     void computeAllSegmentRects();
@@ -581,7 +589,7 @@ protected:
     QPixmap      m_secondaryDrawBuffer;
     bool         m_drawBufferNeedsRefresh;
 
-    mutable CompositionModel::PRectList m_audioPreviewRects;
+    mutable CompositionModel::PRectIntervals m_audioPreviewRects;
     mutable CompositionModel::PRectIntervals m_notationPreviewRects;
 };
 
