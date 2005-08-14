@@ -285,6 +285,10 @@ SegmentParameterBox::initBox()
 void
 SegmentParameterBox::setDocument(RosegardenGUIDoc* doc)
 {
+    if (m_doc != 0)
+        disconnect(m_doc, SIGNAL(docColoursChanged()),
+                   this, SLOT(slotDocColoursChanged()));
+        
     m_doc = doc;
 
     // Detect when the document colours are updated
