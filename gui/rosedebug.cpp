@@ -37,6 +37,7 @@
 #include "Event.h"
 #include "Segment.h"
 #include "RealTime.h"
+#include "Colour.h"
 
 kdbgstream&
 operator<<(kdbgstream &dbg, const std::string &s)
@@ -89,6 +90,13 @@ kdbgstream&
 operator<<(kdbgstream &dbg, const Rosegarden::RealTime &t)
 {
     dbg << "sec : " << t.sec << ", nsec : " << t.nsec;
+    return dbg;
+}
+
+kdbgstream&
+operator<<(kdbgstream &dbg, const Rosegarden::Colour &c)
+{
+    dbg << "Colour : rgb = " << c.getRed() << "," << c.getGreen() << "," << c.getBlue();
     return dbg;
 }
 

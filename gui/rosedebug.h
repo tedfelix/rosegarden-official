@@ -42,7 +42,7 @@ class QPen;
 class QBrush;
 #endif
 
-namespace Rosegarden { class Event; class Segment; class RealTime; }
+namespace Rosegarden { class Event; class Segment; class RealTime; class Colour; }
 
 #define KDEBUG_AREA                 200000
 #define KDEBUG_AREA_NOTATION        200001
@@ -69,6 +69,9 @@ operator<<(kdbgstream&, const Rosegarden::Segment&);
 
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::RealTime&);
+
+kdbgstream&
+operator<<(kdbgstream&, const Rosegarden::Colour&);
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
 kdbgstream& 
@@ -121,6 +124,9 @@ operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
 
 inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::RealTime&) { return s; }
+
+inline kndbgstream&
+operator<<(kndbgstream &s, const Rosegarden::Colour&) { return s; }
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
 inline kndbgstream& 
