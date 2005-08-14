@@ -295,6 +295,7 @@ SegmentParameterBox::setDocument(RosegardenGUIDoc* doc)
     connect (m_doc, SIGNAL(docColoursChanged()),
              this, SLOT(slotDocColoursChanged()));
 
+    slotDocColoursChanged(); // repopulate combo
 }
 
 void
