@@ -133,12 +133,12 @@ public:
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
     typedef PRectList NotationPreviewData;
-    struct PRectInterval {
+    struct PRectRange {
         std::pair<NotationPreviewData::iterator, NotationPreviewData::iterator> range;
         QPoint basePoint;
     };
 
-    typedef std::vector<PRectInterval> PRectIntervals;
+    typedef std::vector<PRectRange> PRectRanges;
 
     class AudioPreviewData {
     public:
@@ -177,7 +177,7 @@ public:
 
     virtual unsigned int getNbRows() = 0;
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 PRectIntervals* notationRects, PRectIntervals* audioRects) = 0;
+                                                 PRectRanges* notationRects, PRectRanges* audioRects) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
@@ -227,7 +227,7 @@ public:
     
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 PRectIntervals* notationRects, PRectIntervals* audioRects);
+                                                 PRectRanges* notationRects, PRectRanges* audioRects);
     virtual itemcontainer     getItemsAt      (const QPoint&);
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
@@ -305,8 +305,8 @@ protected:
 
     void makePreviewCache(Rosegarden::Segment* s);
     void removePreviewCache(Rosegarden::Segment* s);
-    void makeNotationPreviewRects(PRectIntervals* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
-    void makeAudioPreviewRects(PRectIntervals* apData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void makeNotationPreviewRects(PRectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void makeAudioPreviewRects(PRectRanges* apData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
     void postProcessAudioPreview(AudioPreviewData*, const Rosegarden::Segment*);
 
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
@@ -589,8 +589,8 @@ protected:
     QPixmap      m_secondaryDrawBuffer;
     bool         m_drawBufferNeedsRefresh;
 
-    mutable CompositionModel::PRectIntervals m_audioPreviewRects;
-    mutable CompositionModel::PRectIntervals m_notationPreviewRects;
+    mutable CompositionModel::PRectRanges m_audioPreviewRects;
+    mutable CompositionModel::PRectRanges m_notationPreviewRects;
 };
 
 #endif

@@ -191,8 +191,8 @@ unsigned int CompositionModelImpl::getNbRows()
 }
 
 const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
-                                                                             PRectIntervals* npData,
-                                                                             PRectIntervals* apData)
+                                                                             PRectRanges* npData,
+                                                                             PRectRanges* apData)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
 
@@ -328,7 +328,7 @@ void CompositionModelImpl::computeAllSegmentRects()
 }
 
 
-void CompositionModelImpl::makeNotationPreviewRects(PRectIntervals* npRects, QPoint basePoint,
+void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint basePoint,
                                                     const Segment* segment, const QRect& clipRect)
 {
     NotationPreviewData* cachedNPData = getNotationPreviewData(segment);
@@ -338,7 +338,7 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectIntervals* npRects, QPo
     if (npi != cachedNPData->begin())
         --npi;
 
-    PRectInterval interval;
+    PRectRange interval;
     
     interval.range.first = npi;
 
@@ -354,7 +354,7 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectIntervals* npRects, QPo
     npRects->push_back(interval);
 }
 
-void CompositionModelImpl::makeAudioPreviewRects(PRectIntervals* apRects, QPoint basePoint,
+void CompositionModelImpl::makeAudioPreviewRects(PRectRanges* apRects, QPoint basePoint,
                                                  const Segment* segment, const QRect& clipRect)
 {
     AudioPreviewData* cachedAPData = getAudioPreviewData(segment);
@@ -365,7 +365,7 @@ void CompositionModelImpl::makeAudioPreviewRects(PRectIntervals* apRects, QPoint
     if (npi != previewRects.begin())
         --npi;
 
-    PRectInterval interval;
+    PRectRange interval;
     
     interval.range.first = npi;
 
@@ -1592,8 +1592,8 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
 //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 
-    CompositionModel::PRectIntervals* audioPreviewData    = 0;
-    CompositionModel::PRectIntervals* notationPreviewData = 0;
+    CompositionModel::PRectRanges* audioPreviewData    = 0;
+    CompositionModel::PRectRanges* notationPreviewData = 0;
 
     //
     // Fetch previews
@@ -1641,11 +1641,11 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
         // draw audio previews
         //
-        CompositionModel::PRectIntervals::const_iterator api = m_audioPreviewRects.begin();
-        CompositionModel::PRectIntervals::const_iterator apEnd = m_audioPreviewRects.end();
+        CompositionModel::PRectRanges::const_iterator api = m_audioPreviewRects.begin();
+        CompositionModel::PRectRanges::const_iterator apEnd = m_audioPreviewRects.end();
         
         for(; api != apEnd; ++api) {
-            CompositionModel::PRectInterval interval = *api;
+            CompositionModel::PRectRange interval = *api;
             p->save();
             p->translate(interval.basePoint.x(), interval.basePoint.y());
             for(; interval.range.first != interval.range.second; ++interval.range.first) {
@@ -1662,11 +1662,11 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         
         // draw notation previews
         //
-        CompositionModel::PRectIntervals::const_iterator npi = m_notationPreviewRects.begin();
-        CompositionModel::PRectIntervals::const_iterator npEnd = m_notationPreviewRects.end();
+        CompositionModel::PRectRanges::const_iterator npi = m_notationPreviewRects.begin();
+        CompositionModel::PRectRanges::const_iterator npEnd = m_notationPreviewRects.end();
         
         for(; npi != npEnd; ++npi) {
-            CompositionModel::PRectInterval interval = *npi;
+            CompositionModel::PRectRange interval = *npi;
             p->save();
             p->translate(interval.basePoint.x(), interval.basePoint.y());
             for(; interval.range.first != interval.range.second; ++interval.range.first) {
