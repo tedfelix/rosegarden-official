@@ -25,7 +25,7 @@
 #include <vector>
 #include <algorithm>
 
-#ifdef NDEBUG
+#if defined(NDEBUG) || defined(DEBUG)
 #define NO_TIMING 1
 #endif
 

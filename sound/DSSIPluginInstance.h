@@ -26,7 +26,6 @@
 #include <set>
 #include <map>
 #include <qstring.h>
-#include "config.h"
 #include "Instrument.h"
 
 #ifdef HAVE_DSSI

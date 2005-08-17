@@ -21,8 +21,6 @@
 
 #include "AudioProcess.h"
 
-#include "config.h"
-
 #include "RunnablePluginInstance.h"
 #include "PlayableAudioFile.h"
 #include "WAVAudioFile.h"

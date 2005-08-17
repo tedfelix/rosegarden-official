@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # -*- python -*-
 ############################
 ## load the config
@@ -6,27 +7,20 @@
 ## SConstruct file
 
 Import('env')
-myenv=env.Copy()
-Import("soundLibs")
 
-rgseqSources = Split("""
+rgseqSources="""
 mmappedcontrolblock.cpp
 mmappedsegment.cpp
 rosegardensequencer.cpp
 main.cpp
 sequencermapper.cpp
 rosegardensequenceriface.skel
-""")
+"""
 
-rgseq = myenv.KDEprogram('rosegardensequencer', rgseqSources)
-
-myenv.KDEaddpaths_includes( ['../base', '../sound', '../gui', '../', './'])
-myenv.KDEaddlibs(['RosegardenSequencer', 'RosegardenSound', 'base', 'kdeui', 'kdecore'])
-
-#myenv.KDEaddpaths_libs( ['../base', '../sound'] )
-myenv['LIBPATH'].insert(0, '../base')
-myenv['LIBPATH'].insert(0, '../sound')
-
-for dep in soundLibs:
-    Depends(rgseq, dep)
-
+obj=env.kobject('program')
+obj.target='rosegardensequencer'
+obj.source=rgseqSources
+obj.includes='# #base #sound #gui'
+obj.libs='RosegardenSequencer RosegardenSound base kdeui kdecore'
+obj.libpaths='../base ../sound'
+obj.execute()

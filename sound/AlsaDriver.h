@@ -29,8 +29,6 @@
 #include <set>
 #include <map>
 
-#include "config.h"
-
 #ifdef HAVE_ALSA
 
 #include <alsa/asoundlib.h> // ALSA

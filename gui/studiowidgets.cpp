@@ -19,7 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "config.h"
+#include <cmath>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -44,8 +44,6 @@
 #include "studiocontrol.h"
 #include "rosegardengui.h"
 #include "audiopluginoscgui.h"
-
-#include <cmath>
 
 //----------------------------------------
 

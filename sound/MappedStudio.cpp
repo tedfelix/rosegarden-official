@@ -26,7 +26,6 @@
 #include "PluginFactory.h"
 
 #include <pthread.h> // for mutex
-#include "config.h"
 
 //#define DEBUG_MAPPEDSTUDIO 1
 

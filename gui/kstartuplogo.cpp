@@ -24,8 +24,6 @@
 
 #include <unistd.h>
 
-#include "config.h"
-
 #include <qpainter.h>
 #include <qfontmetrics.h>
 

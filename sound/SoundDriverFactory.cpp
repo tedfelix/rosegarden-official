@@ -18,8 +18,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include "config.h"
-
 #ifdef NO_SOUND
 #include "DummyDriver.h"
 #else

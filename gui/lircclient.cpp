@@ -22,8 +22,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include "config.h"
-
 #ifdef HAVE_LIRC
 
 #include "lircclient.h"

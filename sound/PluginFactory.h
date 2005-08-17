@@ -25,8 +25,6 @@
 #include <qstring.h>
 #include <vector>
 
-#include "config.h"
-
 #include "MappedCommon.h"
 
 namespace Rosegarden

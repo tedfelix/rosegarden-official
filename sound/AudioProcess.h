@@ -22,8 +22,6 @@
 #ifndef _AUDIO_PROCESS_H_
 #define _AUDIO_PROCESS_H_
 
-#include "config.h"
-
 #include "SoundDriver.h"
 #include "Instrument.h"
 #include "RealTime.h"

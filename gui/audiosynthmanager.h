@@ -24,7 +24,6 @@
 #include <kmainwindow.h>
 #include <vector>
 
-#include "config.h"
 #include "Instrument.h"
 
 class RosegardenGUIDoc;

@@ -21,7 +21,6 @@
 #ifndef _AUDIO_PLUGIN_OSC_GUI_H_
 #define _AUDIO_PLUGIN_OSC_GUI_H_
 
-#include "config.h"
 #include <qobject.h>
 
 #ifdef HAVE_LIBLO

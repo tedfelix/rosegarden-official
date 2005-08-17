@@ -19,8 +19,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include "config.h"
-
 #ifndef _MP3AUDIOFILE_H_
 #define _MP3AUDIOFILE_H_
 

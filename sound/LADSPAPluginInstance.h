@@ -22,7 +22,6 @@
 #include <vector>
 #include <set>
 #include <qstring.h>
-#include "config.h"
 #include "Instrument.h"
 
 #ifndef _LADSPAPLUGININSTANCE_H_

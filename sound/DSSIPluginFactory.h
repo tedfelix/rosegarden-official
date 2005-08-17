@@ -22,8 +22,6 @@
 #ifndef _DSSI_PLUGIN_FACTORY_H_
 #define _DSSI_PLUGIN_FACTORY_H_
 
-#include "config.h"
-
 #ifdef HAVE_DSSI
 
 #include "LADSPAPluginFactory.h"

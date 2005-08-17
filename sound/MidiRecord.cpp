@@ -19,8 +19,6 @@
 */
 
 
-#include "config.h"
-
 #ifndef HAVE_ALSA
 
 #include "MidiRecord.h"

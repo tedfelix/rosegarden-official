@@ -50,7 +50,6 @@
 #include "Sets.h"
 
 #include "lilypondio.h"
-#include "config.h"
 #include "rosestrings.h" // strtoqstr
 #include "notationproperties.h"
 #include "notationview.h"

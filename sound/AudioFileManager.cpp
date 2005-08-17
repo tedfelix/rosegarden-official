@@ -46,7 +46,6 @@
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
 #include "MP3AudioFile.h"
-#include "config.h"
 #include "rosestrings.h"
 
 namespace Rosegarden

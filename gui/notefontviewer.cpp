@@ -40,8 +40,6 @@
 
 #include "notefontviewer.h"
 
-#include "config.h"
-
 #ifdef HAVE_XFT
 #include <ft2build.h>
 #include <X11/Xft/Xft.h>

@@ -18,8 +18,6 @@
   COPYING included with this distribution for more information.
 */
 
-#include "config.h"
-
 #ifndef HAVE_ALSA
 
 #include <map>

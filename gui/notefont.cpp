@@ -42,7 +42,6 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "pixmapfunctions.h"
-#include "config.h"
 
 using std::string;
 using std::map;

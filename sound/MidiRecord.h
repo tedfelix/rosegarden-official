@@ -22,8 +22,6 @@
 #ifndef _ROSEGARDEN_MIDI_RECORD_H_
 #define _ROSEGARDEN_MIDI_RECORD_H_
 
-#include "config.h"
-
 #ifndef HAVE_ALSA
 
 #include "MidiArts.h"

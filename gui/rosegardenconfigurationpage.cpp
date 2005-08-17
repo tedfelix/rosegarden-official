@@ -31,8 +31,6 @@
 
 #include "SoundDriver.h"
 
-#include "config.h"
-
 #include <algorithm>
 
 #include <qspinbox.h>

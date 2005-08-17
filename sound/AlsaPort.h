@@ -20,7 +20,6 @@
 
 #include <vector>
 #include <set>
-#include "config.h"
 #include "Instrument.h"
 #include "MappedCommon.h"
 

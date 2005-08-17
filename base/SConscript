@@ -7,9 +7,8 @@
 ## SConstruct file
 
 Import('env')
-myenv=env.Copy()
 
-src="""
+base_src="""
 AnalysisTypes.C
 AudioDevice.C
 AudioLevel.C
@@ -56,4 +55,20 @@ ViewElement.C
 XmlExportable.C
 """.split()
 
-myenv.Library('base', src, CPPPATH=['..', '.'])
+obj=env.genobj('staticlib',env)
+obj.libpaths='./ ../'
+obj.includes='# ../gui'
+obj.target='libbase'
+obj.src=base_src
+obj.execute()
+
+
+
+# TODO remove
+"""
+myenv['LIBPATH'].append('.')
+myenv['LIBPATH'].append('..')
+base = myenv.Library('base', base_src)
+Default(base)
+"""
+

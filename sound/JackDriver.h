@@ -22,8 +22,6 @@
 #ifndef _JACKDRIVER_H_
 #define _JACKDRIVER_H_
 
-#include "config.h"
-
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 

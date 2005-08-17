@@ -22,8 +22,6 @@
 #ifndef _LADSPA_PLUGIN_FACTORY_H_
 #define _LADSPA_PLUGIN_FACTORY_H_
 
-#include "config.h"
-
 #ifdef HAVE_LADSPA
 
 #include "PluginFactory.h"

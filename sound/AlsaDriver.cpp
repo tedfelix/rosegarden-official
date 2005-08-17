@@ -19,8 +19,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include "config.h"
-
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>

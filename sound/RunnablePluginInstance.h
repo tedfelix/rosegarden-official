@@ -22,7 +22,6 @@
 #ifndef _RUNNABLE_PLUGIN_INSTANCE_H_
 #define _RUNNABLE_PLUGIN_INSTANCE_H_
 
-#include <config.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <vector>

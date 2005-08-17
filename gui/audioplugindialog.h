@@ -28,7 +28,6 @@
 #include <qstringlist.h>
 
 #include "Instrument.h"
-#include "config.h"
 
 #ifndef _AUDIOPLUGINDIALOG_H_
 #define _AUDIOPLUGINDIALOG_H_

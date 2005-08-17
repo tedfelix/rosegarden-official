@@ -41,7 +41,6 @@
 
 #include "ColourMap.h"
 #include "Device.h"
-#include "config.h"
 #include "widgets.h"
 #include "colourwidgets.h"
 

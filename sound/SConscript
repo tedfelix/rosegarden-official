@@ -7,54 +7,77 @@
 ## SConstruct file
 
 Import('env')
-myenv=env.Copy()
 
-mainSources = Split("""AudioCache.cpp 
-AudioFile.cpp 
-AudioFileManager.cpp 
-AudioPlayQueue.cpp 
-AudioProcess.cpp 
-Audit.cpp 
-BWFAudioFile.cpp 
-ControlBlock.cpp 
-DSSIPluginFactory.cpp 
-DSSIPluginInstance.cpp 
-LADSPAPluginFactory.cpp 
-LADSPAPluginInstance.cpp 
-MappedComposition.cpp 
-MappedDevice.cpp 
-MappedEvent.cpp 
-MappedInstrument.cpp 
-MappedRealTime.cpp 
-MappedStudio.cpp 
-MidiEvent.cpp 
-MidiFile.cpp 
-MP3AudioFile.cpp 
-PeakFile.cpp 
-PeakFileManager.cpp 
-PluginFactory.cpp 
-PluginIdentifier.cpp 
-RIFFAudioFile.cpp 
-RunnablePluginInstance.cpp 
-SequencerDataBlock.cpp 
-SF2PatchExtractor.cpp 
-SoundFile.cpp 
+mainSources=Split("""
+AudioCache.cpp
+AudioFile.cpp
+AudioFileManager.cpp
+AudioPlayQueue.cpp
+AudioProcess.cpp
+Audit.cpp
+BWFAudioFile.cpp
+ControlBlock.cpp
+DSSIPluginFactory.cpp
+DSSIPluginInstance.cpp
+LADSPAPluginFactory.cpp
+LADSPAPluginInstance.cpp
+MappedComposition.cpp
+MappedDevice.cpp
+MappedEvent.cpp
+MappedInstrument.cpp
+MappedRealTime.cpp
+MappedStudio.cpp
+MidiEvent.cpp
+MidiFile.cpp
+MP3AudioFile.cpp
+PeakFile.cpp
+PeakFileManager.cpp
+PluginFactory.cpp
+PluginIdentifier.cpp
+RIFFAudioFile.cpp
+RunnablePluginInstance.cpp
+SequencerDataBlock.cpp
+SF2PatchExtractor.cpp
+SoundFile.cpp
 WAVAudioFile.cpp
 """)
 
-noSoundDriver = Split("""PlayableAudioFile.cpp
+noSoundDriver=Split("""
+PlayableAudioFile.cpp
 SoundDriver.cpp
 SoundDriverFactory.cpp
 """)
 
-alsaSource = Split("""AlsaDriver.cpp
+alsaSource=Split("""
+AlsaDriver.cpp
 AlsaPort.cpp
-JackDriver.cpp 
-PlayableAudioFile.cpp 
-SoundDriver.cpp 
-SoundDriverFactory.cpp""")
+JackDriver.cpp
+PlayableAudioFile.cpp
+SoundDriver.cpp
+SoundDriverFactory.cpp
+""")
 
-rgsoundLib = myenv.Library('RosegardenSound', mainSources + alsaSource, CPPPATH=['../base', '../gui', '..', '.'])
-rgseqLib   = myenv.Library('RosegardenSequencer', alsaSource, CPPPATH=['../base', '../gui', '..', '.'])
+obj=env.kobject('staticlib', env)
+obj.target='libRosegardenSound'
+obj.source=mainSources
+obj.includes='#base #gui ../'
+obj.execute()
 
-Return('rgsoundLib rgseqLib')
+obj=env.genobj('staticlib', env)
+obj.target='libRosegardenSequencer'
+obj.src=alsaSource
+obj.includes='#base #gui'
+obj.execute()
+
+
+#TODO remove
+"""
+cpppaths='../base ../gui .. .'.split()
+
+rgsoundLib = env.Library('RosegardenSound', mainSources alsaSource, CPPPATH=cpppaths)
+rgseqLib   = env.Library('RosegardenSequencer', alsaSource, CPPPATH=cpppaths)
+
+#Default(rgsoundLib)
+#Default(rgseqLib)
+#Return('rgsoundLib rgseqLib')
+"""
