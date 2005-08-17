@@ -1,27 +1,20 @@
 #! /usr/bin/env python
 
-BOLD   ="\033[1m"
-RED    ="\033[91m"
-GREEN  ="\033[92m"
-YELLOW ="\033[93m"
-CYAN   ="\033[96m"
-NORMAL ="\033[0m"
+import SCons.Util, os
 
 def exists(env):
 	return true
 
 def generate(env):
-	import SCons.Util, os
 
-	if env['help']:
-		print """
-"""+BOLD+"""*** Sound options ***
------------------------"""+NORMAL+"""
-"""+BOLD+"""* noalsa """+NORMAL+""": disable ALSA
-"""+BOLD+"""* nojack """+NORMAL+""": disable JACK
-"""+BOLD+"""* nodssi """+NORMAL+""": disable DSSI
-ie: """+BOLD+"""scons configure noalsa=1 nojack=1 nodssi=1
-"""+NORMAL
+	if env['HELP']:
+		p=env.pprint
+		p('BOLD','*** Sound options ***')
+		p('BOLD','--------------------')
+		p('BOLD','* noalsa     ','disable ALSA')
+		p('BOLD','* nojack     ','disable JACK')
+		p('BOLD','* nodssi     ','disable DSSI')
+		p('BOLD','ie: scons configure noalsa=1 nojack=1 nodssi=1 ')
 
 	def Check_pkg_config(context, version):
 		context.Message('Checking for pkg-config ... ')
@@ -54,41 +47,40 @@ ie: """+BOLD+"""scons configure noalsa=1 nojack=1 nodssi=1
 	cachefile = env['CACHEDIR']+'/sound.cache.py'
 	opts = Options(cachefile)
 	opts.AddOptions(
-		( 'ISCONFIGURED', 'debug level for the project : full or just anything' ),
+		( 'SNDISCONFIGURED', 'debug level for the project : full or just anything' ),
 		( 'SOUND_CCFLAGS', 'additional compilation flags' ),
 		( 'SOUND_LDFLAGS', 'additional link flags' )
 		)
 	opts.Update(env)
 
-	if 'configure' in env['TARGS'] or not env.has_key('ISCONFIGURED') or not os.path.isfile('config.h'):
-		## Configure stuff    
-		conf = env.Configure(custom_tests = { 'Check_pkg_config' : Check_pkg_config, 'Check_package' : Check_package }) 
+	if not env['HELP'] and (env['_CONFIGURE'] or not env.has_key('SNDISCONFIGURED') or not os.path.isfile('config.h')):
+		## Configure stuff
+		conf = env.Configure(custom_tests = { 'Check_pkg_config' : Check_pkg_config, 'Check_package' : Check_package })
 
-		if env.has_key('SOUND_CCFLAGS'):
-			env.__delitem__('SOUND_CCFLAGS')
-		if env.has_key('SOUND_LDFLAGS'):
-			env.__delitem__('SOUND_LDFLAGS')
+		if env.has_key('SOUND_CCFLAGS'):   env.__delitem__('SOUND_CCFLAGS')
+		if env.has_key('SOUND_LDFLAGS'):   env.__delitem__('SOUND_LDFLAGS')
+		if env.has_key('SNDISCONFIGURED'): env.__delitem__('SNDISCONFIGURED')
 
 		if not conf.Check_pkg_config('0.15'):
-			print 'pkg-config >= 0.15 not found.' 
-			env.Exit(1) 
+			print 'pkg-config >= 0.15 not found.'
+			env.Exit(1)
 
 		#os.popen(">config.h")
 
 		import sys
-		if 'noalsa' in env['TARGS']:
+		if 'noalsa' in env['ARGS']:
 			print "-> ALSA support disabled by user"
 			haveAlsa = 0
 		else:
 			haveAlsa = conf.Check_package('alsa','1.0')
 
-		if 'nojack' in env['TARGS']:
+		if 'nojack' in env['ARGS']:
 			print "-> JACK support disabled by user"
 			haveJack = 0
 		else:
 			haveJack = conf.Check_package('jack', '0.77')
 
-		if 'nodssi' in env['TARGS']:
+		if 'nodssi' in env['ARGS']:
 		    	print "-> DSSI support disabled by user"
 			haveDssi = 0
 		else:
@@ -102,26 +94,19 @@ ie: """+BOLD+"""scons configure noalsa=1 nojack=1 nodssi=1
 
 		env = conf.Finish()
 
-		if haveAlsa:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_ALSA')
-		if haveJack:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBJACK')
-		if haveDssi:
-		    	env.Append(SOUND_CCFLAGS = '-DHAVE_DSSI')
-		if haveLadspa:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_LADSPA')
-		if haveLiblo:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLO')
-		if haveLibmad:
-			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
+		if haveAlsa:   env.Append(SOUND_CCFLAGS = '-DHAVE_ALSA')
+		if haveJack:   env.Append(SOUND_CCFLAGS = '-DHAVE_LIBJACK')
+		if haveDssi:   env.Append(SOUND_CCFLAGS = '-DHAVE_DSSI')
+		if haveLadspa: env.Append(SOUND_CCFLAGS = '-DHAVE_LADSPA')
+		if haveLiblo:  env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLO')
+		if haveLibmad: env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
 		if haveLiblrdf:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLRDF')
 			env.AppendUnique(SOUND_LDFLAGS = '-llrdf')
 		if haveXft:
 		    	env.Append(SOUND_CCFLAGS = '-DHAVE_XFT')
 			env.AppendUnique(SOUND_LDFLAGS = '-lXft')
-			
-		env['ISCONFIGURED'] = 1
+		env['SNDISCONFIGURED'] = 1
 		opts.Save(cachefile, env)
 
 	if env.has_key('SOUND_CCFLAGS'):

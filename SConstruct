@@ -6,7 +6,7 @@
 ##        Guillaume Laurent   <glaurent@telegraph-road.org>,
 ##        Chris Cannam        <cannam@all-day-breakfast.com>,
 ##        Richard Bown        <bownie@bownie.com>
-
+##        Stephen Torri       <storri@torri.org>
 
 """
 Extract from bksys doc :
@@ -44,13 +44,28 @@ VERSION = "4-1.2_cvs"
 
 import os
 import glob
+import fnmatch
+import re
+import string
+import sys
 
 env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, 
-		tools = ['default', 'generic', 'kde', 'sound'], 
+		tools = ['default', 'generic', 'kde', 'sound', 'test'], 
 		toolpath=['./', 'scons_admin/'])
+
+#-----------------------------
+#        Variables
+#-----------------------------
+
+# Setup the default build directory to c_reldir
+c_builddir = 'RGbuild'
+
 ## Exit if configuration requested (scons configure)
 if 'configure' in COMMAND_LINE_TARGETS:
 	env.Exit(0)
+#-----------------------------
+#        Environment
+#-----------------------------
 env.AppendUnique( ENV = os.environ )
 env.AppendUnique( ENV = {'PATH' : os.environ['PATH'], 'HOME' : os.environ['HOME']} )
 
@@ -68,34 +83,34 @@ env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
 
 env.Append(CCFLAGS = '-DVERSION=\\"' + VERSION + '\\"')
 
-env.SConscript("base/SConscript")
-soundLibs = env.SConscript("sound/SConscript")
-env.SConscript("sequencer/SConscript", 'soundLibs')
-env.SConscript("gui/SConscript", 'soundLibs')
-#env.SConscript("gui/docs/en/SConscript")
-## We are now using one top-level file for the documentation instead of several almost empty scripts
-env.SConscript("gui/docs/SConscript")
+#-----------------------------
+#        Build
+#-----------------------------
+def givedir(dir):
+	return env.join(c_builddir, dir)
 
-#env.SConscript("po/SConscript")
-env.KDElang('po/', 'rosegarden') # one script to remove
+SetOption('duplicate', 'soft-copy')
+dirs = env.Split("""
+	sound
+	sequencer
+	gui
+	base
+""")
+
+bdirs=[]
+for d in dirs:
+	tmpdir = givedir(d)
+	env.BuildDir(tmpdir, d)
+	bdirs.append(tmpdir)
+env.subdirs(bdirs)
 
 # disable object cache, unless you want it (define the SCONS_CACHE env. var)
 if not os.environ.has_key('SCONS_CACHE'):
 	env.CacheDir(None)
 
-# Create empty 'config.h' file because it's still included by many sources, even though they
-# don't need it in an scons build
-#
-if not os.access("config.h", os.F_OK):
-	dummyConfigHFile = open("config.h", "w")
-	dummyConfigHFile.write("// scons-generated dummy config.h - all preprocessor symbols are passed throught '-D' args by scons\n")
-	dummyConfigHFile.close()
-
-
-
-##
-## Installation
-##
+#-----------------------------
+#        Installation
+#-----------------------------
 
 if 'install' in COMMAND_LINE_TARGETS:
 
@@ -203,79 +218,11 @@ if 'install' in COMMAND_LINE_TARGETS:
 	# rosegarden-project-package script
 	env.KDEinstall('KDEBIN', '', "gui/rosegarden-project-package" )
 
-
 	# version.txt file
 	versionFile = open("version.txt", "w")
 	versionFile.write(VERSION + '\n')
 	versionFile.close()
 	env.KDEinstall('KDEDATA', '/rosegarden', "version.txt")
 
-### Emulate "make distclean"
-if 'distclean' in COMMAND_LINE_TARGETS:
+env.dist('rosegarden', VERSION)
 
-	os.popen("find . -name \"*.pyc\" | xargs rm -rf")
-	
-	## The target scons distclean requires the python module shutil which is in 2.3
-	env.EnsurePythonVersion(2, 3)
-
-	## Remove the cache directory
-	import shutil
-	if os.path.isdir(env['CACHEDIR']):
-		shutil.rmtree(env['CACHEDIR'])
-
-	env.Default(None)
-	env.Exit(0)
-
-### To make a tarball of your masterpiece, use 'scons dist'
-if 'dist' in COMMAND_LINE_TARGETS:
-
-	## The target scons dist requires the python module shutil which is in 2.3
-	env.EnsurePythonVersion(2, 3)
-
-	APPNAME = 'rosegarden'
-	VERSION = os.popen("cat VERSION").read().rstrip()
-	FOLDER  = APPNAME+'-'+VERSION
-	ARCHIVE = FOLDER+'.tar.bz2'
-
-	## If your app name and version number are defined in 'version.h', use this instead:
-	## (contributed by Dennis Schridde devurandom@gmx@net)
-	#import re
-	#INFO = dict( re.findall( '(?m)^#define\s+(\w+)\s+(.*)(?<=\S)', open(r"version.h","rb").read() ) )
-	#APPNAME = INFO['APPNAME']
-	#VERSION = INFO['VERSION']
-
-	import shutil
-	import glob
-
-	## check if the temporary directory already exists
-	if os.path.isdir(FOLDER):
-		shutil.rmtree(FOLDER)
-	if os.path.isfile(ARCHIVE):
-		os.remove(ARCHIVE)
-
-	## create a temporary directory
-	startdir = os.getcwd()
-	shutil.copytree(startdir, FOLDER)
-
-	## remove our object files first
-	os.popen("find "+FOLDER+" -name \"*cache*\" | xargs rm -rf")
-	os.popen("find "+FOLDER+" -name \"*.pyc\" | xargs rm -f")
-	#os.popen("pushd %s && scons -c " % FOLDER) # TODO
-
-	## CVS cleanup
-	os.popen("find "+FOLDER+" -name \"CVS\" | xargs rm -rf")
-	os.popen("find "+FOLDER+" -name \".cvsignore\" | xargs rm -rf")
-
-	## Subversion cleanup
-	os.popen("find %s -name .svn -type d | xargs rm -rf" % FOLDER)
-
-	## Create the tarball (coloured output)
-	print "\033[92m"+"Writing archive "+ARCHIVE+"\033[0m"
-	os.popen("tar cjf "+ARCHIVE+" "+FOLDER)
-
-	## Remove the temporary directory
-	if os.path.isdir(FOLDER):
-		shutil.rmtree(FOLDER)
-
-	env.Default(None)
-	env.Exit(0)
