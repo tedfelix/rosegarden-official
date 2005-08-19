@@ -11,6 +11,7 @@ def generate(env):
 		p=env.pprint
 		p('BOLD','*** Sound options ***')
 		p('BOLD','--------------------')
+		p('BOLD','* nosound    ','disable sound support')
 		p('BOLD','* noalsa     ','disable ALSA')
 		p('BOLD','* nojack     ','disable JACK')
 		p('BOLD','* nodssi     ','disable DSSI')
@@ -68,6 +69,12 @@ def generate(env):
 		#os.popen(">config.h")
 
 		import sys
+		if 'nosound' in env['ARGS']:
+			print "-> sound support disabled by user"
+			haveSound = 0
+		else:
+			haveSound = 1
+
 		if 'noalsa' in env['ARGS']:
 			print "-> ALSA support disabled by user"
 			haveAlsa = 0
@@ -108,6 +115,71 @@ def generate(env):
 			env.AppendUnique(SOUND_LDFLAGS = '-lXft')
 		env['SNDISCONFIGURED'] = 1
 		opts.Save(cachefile, env)
+
+		#
+		# Configure warnings
+		#
+		if not haveXft:
+			print """
+* Score rendering quality and performance may be
+improved if Xft 2.1.0 and Freetype 2 are available, to permit
+Rosegarden to override the Qt font selection mechanism.  It
+may not be worth trying to install them if they aren't already
+present in your distribution though.
+			"""
+
+		if not haveSound or not haveAlsa:
+			print """			
+* Rosegarden requires the ALSA (Advanced Linux Sound Architecture) drivers
+for MIDI, and the JACK audio framework for audio sequencing.
+Please see the documentation at http://www.rosegardenmusic.com/getting/
+for more information about these dependencies.
+			"""
+		elif haveSound and not haveAlsa:
+			print """			
+(Rosegarden does contain some code for audio and MIDI using the KDE
+aRts multimedia service.  But it's unlikely to compile, let alone work.)
+			"""
+		else:
+			if not haveJack:
+				print """
+* Rosegarden uses the JACK audio server for audio recording and
+sequencing.  See http://jackit.sf.net/ for more information about
+getting and installing JACK.  If you want to use Rosegarden only
+for MIDI, then you do not need JACK.
+				"""
+
+			if not haveLadspa:
+				print """
+* Rosegarden supports LADSPA audio plugins if available.  See
+http://www.ladspa.org/ for more information about LADSPA.  To
+build LADSPA support into Rosegarden, you need to make sure
+you have ladspa.h available on your system.
+				"""
+
+			if not haveDssi:
+				print """
+* Rosegarden supports DSSI audio plugins if available.  See
+http://dssi.sf.net/ for more information about DSSI.  To
+build DSSI support into Rosegarden, you need to make sure
+you have dssi.h available on your system.
+				"""
+
+			if not haveLiblo:
+				print """
+* Rosegarden supports custom GUIs for DSSI (and LADSPA) plugins using
+the Open Sound Control protocol, if the Lite OSC library liblo is
+available.  Go to http://www.plugin.org.uk/liblo/ to obtain liblo
+and http://dssi.sf.net/ for more information about DSSI GUIs.
+				"""
+			if not haveLiblrdf:
+				print """
+* Rosegarden supports the LRDF metadata format for classification
+of LADSPA and DSSI plugins.  This will improve the usability of
+plugin selection dialogs.  You can obtain LRDF from
+http://www.plugin.org.uk/lrdf/.
+				"""
+
 
 	if env.has_key('SOUND_CCFLAGS'):
 		env.AppendUnique(CCFLAGS = env['SOUND_CCFLAGS'] )
