@@ -8,9 +8,59 @@ import SCons.Util
 from SCons.Script.SConscript import SConsEnvironment
 from SCons.Options import Options, PathOption
 
+distexcludes = ["~$", "CVS$", "CVSROOT$", "\\.cvsignore$", "\\.#",
+		"\\.o$", "\\.a$", "cache$", "build$", "\\.pyc$", "\\.svn$",
+		"\\.deps$", "\\.moc$", "\\.dblite$", "\\.rej$", "\\.orig$", "gui/testfiles$", "core$", "core\\.[0-9]*",
+		"gui/rosegarden$", "sequencer/rosegarden$" ]
+distexclre = []
+for pattern in distexcludes:
+#	print "adding " + pattern
+	distexclre.append(re.compile(pattern))
+
+
+def isPartOfDist(filename):
+	if not os.path.isfile(filename) and not os.path.isdir(filename):
+		return False
+	for rexp in distexclre:
+#		print "checking if " + filename + " contains " + rexp.pattern
+		if (rexp.search(filename)):
+#			print "it matches"
+			return False
+# 		else:
+# 			print "no match"
+	return True
+
+def distcopytree(src, dst):
+    """Customized version of shutil.copytree - Recursively copy a directory tree using copy2().
+
+    The destination directory must not already exist.
+    If exception(s) occur, an Error is raised with a list of reasons.
+
+    Only relevant files are copied
+
+    """
+    names = os.listdir(src)
+    os.mkdir(dst)
+    errors = []
+    for name in names:
+        srcname = os.path.join(src, name)
+        dstname = os.path.join(dst, name)
+        try:
+            if isPartOfDist(srcname):
+		    if os.path.isdir(srcname):
+			    distcopytree(srcname, dstname)
+		    else:
+			    print "copy " + srcname + " to " + dstname
+			    shutil.copy2(srcname, dstname)
+        except (IOError, os.error), why:
+            errors.append((srcname, dstname, why))
+    if errors:
+        raise Error, errors
+
+
 def dist(env, appname, version=None):
 	### To make a tarball of your masterpiece, use 'scons dist'
-	import os
+	import os, shutil
 	if 'dist' in sys.argv:
 		if not version: VERSION=os.popen("cat VERSION").read().rstrip()
 		else: VERSION=version
@@ -24,35 +74,16 @@ def dist(env, appname, version=None):
 		## create a temporary directory
 		startdir = os.getcwd()
 	
-		os.popen("mkdir -p "+TMPFOLD)	
-		os.popen("cp -R * "+TMPFOLD)
-		os.popen("mv "+TMPFOLD+" "+FOLDER)
-
-		## remove scons-local if it is unpacked
-		os.popen("rm -rf "+FOLDER+"/scons "+FOLDER+"/sconsign "+FOLDER+"/scons-local-0.96.1")
-
-		## remove our object files first
-		os.popen("find "+FOLDER+" -name \"cache\" | xargs rm -rf")
-		os.popen("find "+FOLDER+" -name \"build\" | xargs rm -rf")
-		os.popen("find "+FOLDER+" -name \"*.pyc\" | xargs rm -f")
-
-		## CVS cleanup
-		os.popen("find "+FOLDER+" -name \"CVS\" | xargs rm -rf")
-		os.popen("find "+FOLDER+" -name \".cvsignore\" | xargs rm -rf")
-
-		## Subversion cleanup
-		os.popen("find %s -name .svn -type d | xargs rm -rf" % FOLDER)
-
-		## GNU Arch cleanup
-		os.popen("find "+FOLDER+" -name \"{arch}\" | xargs rm -rf")
-		os.popen("find "+FOLDER+" -name \".arch-i*\" | xargs rm -rf")
+		distcopytree(".", TMPFOLD)
+		#os.popen("cp -R * "+TMPFOLD)
+ 		shutil.move(TMPFOLD, FOLDER)
 
 		## Create the tarball (coloured output)
 		print "\033[92m"+"Writing archive "+ARCHIVE+"\033[0m"
 		os.popen("tar cjf "+ARCHIVE+" "+FOLDER)
 
-		## Remove the temporary directory
-		os.popen('rm -rf '+FOLDER)
+# 		## Remove the temporary directory
+ 		shutil.rmtree(FOLDER)
 		env.Exit(0)
 
 	if 'distclean' in sys.argv:
