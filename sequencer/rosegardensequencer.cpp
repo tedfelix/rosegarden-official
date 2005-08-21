@@ -1782,3 +1782,4 @@ RosegardenSequencerApp::incrementTransportToken()
 }
 
 
+#include "rosegardensequencer.moc"

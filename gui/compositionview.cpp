@@ -622,7 +622,6 @@ void CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, con
     float h1, h2, l1 = 0, l2 = 0;
 
     QRect tRect = apData->getSegmentRect();
-    int currentTRectX, currentTRectY;
     QPoint currentSegmentOrigin = computeSegmentOrigin(*segment);
     tRect.moveTopLeft(currentSegmentOrigin);
 
@@ -1129,7 +1128,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 
         if (s.isRepeating() && deltaX != 0) { // update repeat marks
             CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
-            for(int i = 0; i < repeatMarks.size(); ++i) {
+            for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
                 repeatMarks[i] += deltaX;
             }
             cachedCR.setRepeatMarks(repeatMarks);
@@ -1145,7 +1144,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     int h = m_grid.getYSnap();
     int w;
 
-//     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
+    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
@@ -1157,8 +1156,8 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 //                  << " w = " << w << endl;
     } else {
         w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
-//          RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
-//                   << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
+         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
+                  << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
     }
 
     CompositionRect cr(origin, QSize(w, h));
@@ -1212,7 +1211,7 @@ void CompositionItemImpl::refreshRepeatMarks(int newX, int newWidth)
     
     
     CompositionRect::repeatmarks repeatMarks = m_rect.getRepeatMarks();
-    for(int i = 0; i < repeatMarks.size(); ++i) {
+    for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
         repeatMarks[i] += deltaX;
     }
 
@@ -1308,8 +1307,6 @@ void CompositionView::updateSize(bool shrinkWidth)
 {
     int vStep = getModel()->grid().getYSnap();
     int height = std::max(getModel()->getNbRows(), 64u) * vStep;
-    
-    Rosegarden::Composition &comp = dynamic_cast<CompositionModelImpl*>(getModel())->getComposition();
     
     Rosegarden::RulerScale *ruler = grid().getRulerScale();
     int width = int(nearbyint(ruler->getTotalWidth()));
@@ -1876,22 +1873,26 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
 
         if (rectTopY >= clipRect.y() &&
             rectTopY <= (clipRect.y() + clipRect.height())) {
-            p->drawLine(rect.topLeft(), rect.topRight());
+            // to prevent overflow, in case the original rect is too wide
+            // the line would be drawn "backwards"
+            p->drawLine(intersection.topLeft(), intersection.topRight());
         }
 
         int rectBottomY = rect.y() + rect.height();
         if (rectBottomY >= clipRect.y() &&
             rectBottomY <= (clipRect.y() + clipRect.height()))
-            p->drawLine(rect.bottomLeft(), rect.bottomRight());
+            // to prevent overflow, in case the original rect is too wide
+            // the line would be drawn "backwards"
+            p->drawLine(intersection.bottomLeft(), intersection.bottomRight());
 
         int rectLeftX = rect.x();
         if (rectLeftX >= clipRect.x() &&
             rectLeftX <= (clipRect.x() + clipRect.width()))
             p->drawLine(rect.topLeft(), rect.bottomLeft());
 
-        int rectRightX = rect.x() + rect.width();
-        if (rectRightX >= clipRect.x() &&
-            rectRightX <= (clipRect.x() + clipRect.width()))
+        unsigned int rectRightX = rect.x() + rect.width(); // make sure we don't overflow
+        if (rectRightX >= unsigned(clipRect.x()) &&
+            rectRightX <= unsigned(clipRect.x() + clipRect.width()))
             p->drawLine(rect.topRight(), rect.bottomRight());
 
     }

@@ -117,3 +117,5 @@ bool AudioPreviewUpdater::event(QEvent *e)
 
     return QObject::event(e);
 }
+
+#include "audiopreviewupdater.moc"

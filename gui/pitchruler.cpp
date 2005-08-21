@@ -41,3 +41,4 @@ PitchRuler::minimumSizeHint() const
     return QWidget::minimumSizeHint();
 }
 
+#include "pitchruler.moc"
