@@ -226,7 +226,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
 	    bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
 
-            if (m_recordingSegments.find(s) == m_recordingSegments.end()) {
+            if (isRecording(s)) {
 		QColor brushColor = GUIPalette::convertColour(m_composition.
 			getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 sr.setBrush(brushColor);
@@ -305,7 +305,7 @@ void CompositionModelImpl::computeAllSegmentRects()
 
         bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
 
-        if (m_recordingSegments.find(s) == m_recordingSegments.end()) {
+        if (isRecording(s)) {
             QColor brushColor = GUIPalette::convertColour(m_composition.
                                                           getSegmentColourMap().getColourByIndex(s->getColourIndex()));
             sr.setBrush(brushColor);
@@ -934,6 +934,12 @@ bool CompositionModelImpl::isMoving(const Segment* sm) const
     return false;
 }
 
+bool CompositionModelImpl::isRecording(const Segment* s) const
+{
+    return m_recordingSegments.find(const_cast<Segment*>(s)) == m_recordingSegments.end();
+}
+
+
 CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& point)
 {
     itemcontainer res;
@@ -1118,25 +1124,28 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 
     QPoint origin = computeSegmentOrigin(s);
 
-    CompositionRect cachedCR = m_segmentRectMap[&s];
-    if (cachedCR.isValid() && isCachedRectCurrent(s, cachedCR)) {
-//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
-//                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
-//                  << cachedCR.getBaseWidth() << endl;
-        int deltaX = origin.x() - cachedCR.x();
-        cachedCR.moveTopLeft(origin);
-
-        if (s.isRepeating() && deltaX != 0) { // update repeat marks
-            CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
-            for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
-                repeatMarks[i] += deltaX;
-            }
-            cachedCR.setRepeatMarks(repeatMarks);
-        }
+    if (!isRecording(&s)) {
         
-        return cachedCR;
-    }
+        CompositionRect cachedCR = m_segmentRectMap[&s];
+        if (cachedCR.isValid() && isCachedRectCurrent(s, cachedCR)) {
+            //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
+            //                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
+            //                  << cachedCR.getBaseWidth() << endl;
+            int deltaX = origin.x() - cachedCR.x();
+            cachedCR.moveTopLeft(origin);
 
+            if (s.isRepeating() && deltaX != 0) { // update repeat marks
+                CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
+                for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
+                    repeatMarks[i] += deltaX;
+                }
+                cachedCR.setRepeatMarks(repeatMarks);
+            }
+        
+            return cachedCR;
+        }
+    }
+    
     Rosegarden::timeT startTime = s.getStartTime();
     Rosegarden::timeT endTime   = s.getEndMarkerTime();
 

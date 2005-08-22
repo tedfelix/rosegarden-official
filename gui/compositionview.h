@@ -295,6 +295,7 @@ protected:
     bool isTmpSelected(const Rosegarden::Segment*) const;
     bool wasTmpSelected(const Rosegarden::Segment*) const;
     bool isMoving(const Rosegarden::Segment*) const;
+    bool isRecording(const Rosegarden::Segment*) const;
     bool isCachedRectCurrent(const Rosegarden::Segment& s, const CompositionRect& r);
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
