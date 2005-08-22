@@ -1426,6 +1426,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
         }
 
         m_recordMIDISegment->setLabel(label);
+
+        emit newMIDIRecordingSegment(m_recordMIDISegment);
     }
 
     if (mC.size() > 0 && m_recordMIDISegment) 
@@ -1668,12 +1670,6 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
     }
 
     m_noteOnEvents = tweakedNoteOnEvents;
-    
-    // update this segment on the GUI
-    RosegardenGUIView *v;
-    for (v = m_viewList.first(); v != 0; v = m_viewList.next()) {
-	v->showRecordingSegmentItem(m_recordMIDISegment);
-    }
 }
 
 
@@ -1693,11 +1689,6 @@ RosegardenGUIDoc::stopRecordingMidi()
 
     // otherwise do something with it
     //
-    RosegardenGUIView *w;
-    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
-        w->deleteRecordingSegmentItem(m_recordMIDISegment);
-    }
-
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin(); 
 	 mi != m_noteOnEvents.end(); ++mi) 
 	for (ChanMap::iterator cm = mi->second.begin();
@@ -1749,6 +1740,8 @@ RosegardenGUIDoc::stopRecordingMidi()
     }
 
     m_recordMIDISegment = 0;
+
+    emit stoppedMIDIRecording();
 
     slotUpdateAllViews(0);
 }
@@ -2142,6 +2135,8 @@ RosegardenGUIDoc::addRecordAudioSegment(Rosegarden::InstrumentId iid,
 
     RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;
+
+    emit newAudioRecordingSegment(recordSegment);
 }
 
 
@@ -2174,12 +2169,6 @@ RosegardenGUIDoc::updateRecordingAudioSegments()
 		    m_composition.getRealTimeDifference(recordSegment->getStartTime(),
 							m_composition.getPosition()));
 
-
-		// update this segment on the GUI
-		RosegardenGUIView *w;
-		for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
-		    w->showRecordingSegmentItem(recordSegment);
-		}
 	    } else {
 		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: no segment for instr "
 			 << iid << endl;
@@ -2204,11 +2193,6 @@ RosegardenGUIDoc::stopRecordingAudio()
 	Rosegarden::Segment *recordSegment = ri->second;
 
 	if (!recordSegment) continue;
-
-	RosegardenGUIView *w;
-	for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
-	    w->deleteRecordingSegmentItem(recordSegment);
-	}
 
 	// set the audio end time
 	//
@@ -2237,6 +2221,7 @@ RosegardenGUIDoc::stopRecordingAudio()
 
 	recordSegment->setStartTime(shiftedStartTime);
     }
+    emit stoppedAudioRecording();
 }
 
 

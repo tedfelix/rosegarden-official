@@ -128,16 +128,6 @@ public slots:
     void slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end);
 
     /**
-     * Show a Segment as it records
-     */
-    void slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment);
-
-    /*
-     * Destroys same
-     */
-    void slotDeleteRecordingSegmentItem(Rosegarden::Segment *segment);
-
-    /**
      * c.f. what we have in rosegardenguiview.h
      * These are instrumental in passing through
      * key presses from GUI front panel down to

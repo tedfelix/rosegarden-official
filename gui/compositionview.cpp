@@ -910,7 +910,7 @@ void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
     m_recordingSegments.insert(CompositionItemHelper::getSegment(item));
 
     RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
-	     << m_recordingSegments.size() << " recording items" << endl;
+	     << m_recordingSegments.size() << " recording items\n";
 }
 
 void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
@@ -918,7 +918,13 @@ void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
     m_recordingSegments.erase(CompositionItemHelper::getSegment(item));
 
     RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
-	     << m_recordingSegments.size() << " recording items" << endl;
+	     << m_recordingSegments.size() << " recording items\n";
+}
+
+void CompositionModelImpl::clearRecordingItems()
+{
+    m_recordingSegments.clear();
+    RG_DEBUG << "CompositionModelImpl::clearRecordingItem\n";
 }
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
@@ -1295,6 +1301,16 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     connect(doc, SIGNAL(docColoursChanged()),
             this, SLOT(slotRefreshColourCache()));
 
+    // recording-related signals
+    connect(doc, SIGNAL(newMIDIRecordingSegment(Rosegarden::Segment*)),
+            this, SLOT(slotNewMIDIRecordingSegment(Rosegarden::Segment*)));
+    connect(doc, SIGNAL(newAudioRecordingSegment(Rosegarden::Segment*)),
+            this, SLOT(slotNewAudioRecordingSegment(Rosegarden::Segment*)));
+    connect(doc, SIGNAL(stoppedAudioRecording()),
+            this, SLOT(slotStoppedRecording()));
+    connect(doc, SIGNAL(stoppedMIDIRecording()),
+            this, SLOT(slotStoppedRecording()));
+
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {
         cmi->setAudioPreviewThread(doc->getAudioPreviewThread());
@@ -1542,6 +1558,26 @@ void CompositionView::slotRefreshColourCache()
     CompositionColourCache::getInstance()->init();
     refreshAllPreviews();
     slotUpdate();
+}
+
+void CompositionView::slotNewMIDIRecordingSegment(Rosegarden::Segment* s)
+{
+    getModel()->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
+}
+
+void CompositionView::slotNewAudioRecordingSegment(Rosegarden::Segment* s)
+{
+    getModel()->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
+}
+
+void CompositionView::slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT)
+{
+    slotUpdate();
+}
+
+void CompositionView::slotStoppedRecording()
+{
+    getModel()->clearRecordingItems();
 }
 
 /// update size of draw buffer

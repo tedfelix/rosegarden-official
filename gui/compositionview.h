@@ -196,6 +196,7 @@ public:
 
     virtual void addRecordingItem(const CompositionItem&) = 0;
     virtual void removeRecordingItem(const CompositionItem&) = 0;
+    virtual void clearRecordingItems() = 0;
 
     virtual void startMove(const CompositionItem&) = 0;
     virtual void startMoveSelection() = 0;
@@ -245,6 +246,7 @@ public:
 
     virtual void addRecordingItem(const CompositionItem&);
     virtual void removeRecordingItem(const CompositionItem &);
+    virtual void clearRecordingItems();
 
     virtual void startMove(const CompositionItem&);
     virtual void startMoveSelection();
@@ -499,6 +501,11 @@ public slots:
     void slotUpdate(QRect);
 
     void slotRefreshColourCache();
+
+    void slotNewMIDIRecordingSegment(Rosegarden::Segment*);
+    void slotNewAudioRecordingSegment(Rosegarden::Segment*);
+    void slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT updatedFrom);
+    void slotStoppedRecording();
 
 signals:
     void editSegment(Rosegarden::Segment*); // use default editor

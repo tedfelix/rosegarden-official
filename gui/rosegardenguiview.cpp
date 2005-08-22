@@ -1016,20 +1016,6 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
     emit checkTrackAssignments();
 }
 
-
-// Show a segment as it records
-//
-void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
-{
-    m_trackEditor->slotUpdateRecordingSegmentItem(segment);
-}
-
-void RosegardenGUIView::deleteRecordingSegmentItem(Rosegarden::Segment *segment)
-{
-    m_trackEditor->slotDeleteRecordingSegmentItem(segment);
-}
-
-
 // Send a NoteOn or AudioLevel MappedEvent to the track meters
 // by Instrument id
 //

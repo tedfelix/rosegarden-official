@@ -478,25 +478,6 @@ TrackEditor::slotSetFineGrain(bool value)
      m_segmentCanvas->slotSetFineGrain(value);
 }
 
-// Show a Segment as its being recorded
-//
-void
-TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
-{
-    m_segmentCanvas->getModel()->addRecordingItem
-	(CompositionItemHelper::makeCompositionItem(segment));
-
-    emit needUpdate();
-}
-
-void
-TrackEditor::slotDeleteRecordingSegmentItem(Rosegarden::Segment *segment)
-{
-    m_segmentCanvas->getModel()->removeRecordingItem
-	(CompositionItemHelper::makeCompositionItem(segment));
-    emit needUpdate();
-}
-
 MultiViewCommandHistory*
 TrackEditor::getCommandHistory()
 {

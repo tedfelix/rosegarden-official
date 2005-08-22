@@ -479,6 +479,19 @@ signals:
     void recordMIDISegmentUpdated(Rosegarden::Segment *recordSegment,
 				  Rosegarden::timeT updatedFrom);
 
+    /**
+     * Emitted when a new MIDI recording segment is set
+     */
+    void newMIDIRecordingSegment(Rosegarden::Segment*);
+
+    /**
+     * Emitted when a new audio recording segment is set
+     */
+    void newAudioRecordingSegment(Rosegarden::Segment*);
+
+    void stoppedAudioRecording();
+    void stoppedMIDIRecording();
+
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
     void docColoursChanged();
