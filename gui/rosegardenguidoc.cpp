@@ -1372,7 +1372,7 @@ RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
 void
 RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
-    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi" << endl;
+//     RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi" << endl;
 
     // Just create a new record Segment if we don't have one already.
     // Make sure we don't recreate the record segment if it's already
@@ -1638,7 +1638,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 void
 RosegardenGUIDoc::updateRecordingMIDISegment()
 {
-    RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
+//     RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
 
     if (!m_recordMIDISegment) {
 	// make this call once to create one
@@ -1646,7 +1646,7 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 	if (!m_recordMIDISegment) return; // not recording any MIDI
     }
     
-    RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
+//     RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
 
     NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
@@ -2170,8 +2170,8 @@ RosegardenGUIDoc::updateRecordingAudioSegments()
 							m_composition.getPosition()));
 
 	    } else {
-		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: no segment for instr "
-			 << iid << endl;
+// 		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: no segment for instr "
+// 			 << iid << endl;
 	    }
 	}
     }
