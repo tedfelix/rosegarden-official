@@ -212,6 +212,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
         Segment* s = *i;
         if (isMoving(s))
             continue;
+        
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(rect)) {
             bool tmpSelected = isTmpSelected(s),
@@ -226,7 +227,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
 	    bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
 
-            if (isRecording(s)) {
+            if (!isRecording(s)) {
 		QColor brushColor = GUIPalette::convertColour(m_composition.
 			getSegmentColourMap().getColourByIndex(s->getColourIndex()));
                 sr.setBrush(brushColor);
@@ -252,7 +253,10 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             }
             
             m_res.push_back(sr);
+        } else {
+//             RG_DEBUG << "CompositionModelImpl::getRectanglesIn: - segment out of rect\n";
         }
+        
     }
 
     // moving items
@@ -305,7 +309,7 @@ void CompositionModelImpl::computeAllSegmentRects()
 
         bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
 
-        if (isRecording(s)) {
+        if (!isRecording(s)) {
             QColor brushColor = GUIPalette::convertColour(m_composition.
                                                           getSegmentColourMap().getColourByIndex(s->getColourIndex()));
             sr.setBrush(brushColor);
@@ -942,7 +946,7 @@ bool CompositionModelImpl::isMoving(const Segment* sm) const
 
 bool CompositionModelImpl::isRecording(const Segment* s) const
 {
-    return m_recordingSegments.find(const_cast<Segment*>(s)) == m_recordingSegments.end();
+    return m_recordingSegments.find(const_cast<Segment*>(s)) != m_recordingSegments.end();
 }
 
 
@@ -1130,13 +1134,15 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 
     QPoint origin = computeSegmentOrigin(s);
 
-    if (!isRecording(&s)) {
+    bool isRecordingSegment = isRecording(&s);
+    
+    if (!isRecordingSegment) {
         
         CompositionRect cachedCR = m_segmentRectMap[&s];
         if (cachedCR.isValid() && isCachedRectCurrent(s, cachedCR)) {
-            //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
-            //                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
-            //                  << cachedCR.getBaseWidth() << endl;
+//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
+//                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
+//                  << cachedCR.getBaseWidth() << endl;
             int deltaX = origin.x() - cachedCR.x();
             cachedCR.moveTopLeft(origin);
 
@@ -1153,13 +1159,13 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     }
     
     Rosegarden::timeT startTime = s.getStartTime();
-    Rosegarden::timeT endTime   = s.getEndMarkerTime();
+    Rosegarden::timeT endTime   = isRecordingSegment ? s.getEndTime() : s.getEndMarkerTime();
 
 
     int h = m_grid.getYSnap();
     int w;
 
-    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
+//     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
@@ -1171,8 +1177,8 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 //                  << " w = " << w << endl;
     } else {
         w = int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime, endTime - startTime)));
-         RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
-                  << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
+//          RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
+//                   << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
     }
 
     CompositionRect cr(origin, QSize(w, h));
@@ -1572,6 +1578,7 @@ void CompositionView::slotNewAudioRecordingSegment(Rosegarden::Segment* s)
 
 void CompositionView::slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT)
 {
+    RG_DEBUG << "CompositionView::slotRecordMIDISegmentUpdated()\n";
     slotUpdate();
 }
 
