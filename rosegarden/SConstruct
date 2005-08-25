@@ -83,6 +83,8 @@ env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
 
 env.Append(CCFLAGS = '-DVERSION=\\"' + VERSION + '\\"')
 
+env.Append(CCFLAGS = '-DNO_TIMING')
+
 #-----------------------------
 #        Build
 #-----------------------------
@@ -107,6 +109,14 @@ env.subdirs(bdirs)
 # disable object cache, unless you want it (define the SCONS_CACHE env. var)
 if not os.environ.has_key('SCONS_CACHE'):
 	env.CacheDir(None)
+
+#-----------------------------
+# Process the translations
+#-----------------------------
+
+## They are usually located in the po/ directory
+env.KDElang('po/', 'rosegarden')
+
 
 #-----------------------------
 #        Installation

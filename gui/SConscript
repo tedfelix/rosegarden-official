@@ -8,6 +8,12 @@
 
 Import('env')
 
+env.docfolder('docs/en/', 'en', 'rosegarden/')
+env.docfolder('docs/es/', 'es', 'rosegarden/')
+env.docfolder('docs/de/', 'de', 'rosegarden/')
+env.docfolder('docs/sv/', 'sv', 'rosegarden/')
+env.docfolder('docs/ja/', 'ja', 'rosegarden/')
+
 rgSources="""
 audiocommands.cpp 
 audiomanagerdialog.cpp 
