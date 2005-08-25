@@ -41,7 +41,8 @@ echo -e 'i18n("_: NAME OF TRANSLATORS\\n"\n"Your names")\ni18n("_: EMAIL OF TRAN
 # process the tips - $SRCDIR is supposed to be where the tips are living
 pushd $TIPSDIR; preparetips >tips.cpp; popd
 
-$XGETTEXT `find $SRCDIR -name "*.cpp"` -o tmp.pot
+#$XGETTEXT `find $SRCDIR -name "*.cpp"` -o tmp.pot
+$XGETTEXT `find $SRCDIR -name "*.cpp" -o -name "*.h"` rc.cpp $TIPSDIR/tips.cpp -o tmp.pot
 
 # remove the intermediate files
 rm -f $TIPSDIR/tips.cpp
