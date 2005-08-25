@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-17 23:06+0200\n"
+"POT-Creation-Date: 2005-08-25 22:12+0200\n"
 "PO-Revision-Date: 2004-12-16 17:57+0100\n"
 "Last-Translator: Alessandro Musesti <a.musesti@dmf.bs.unicatt.it>\n"
 "Language-Team:  <it@li.org>\n"
@@ -954,6 +954,22 @@ msgstr "A"
 msgid "<no devices>"
 msgstr "<nessun dispositivo>"
 
+#: ../gui/trackeditor.cpp:552
+msgid "Turn Repeating Segment into Real Copies"
+msgstr "Trasforma il segmento ripeuti in copie"
+
+#: ../gui/trackeditor.cpp:554
+msgid "Turn Repeating Segments into Real Copies"
+msgstr "Trasforma i segmenti ripeuti in copie"
+
+#: ../gui/trackeditor.cpp:720
+msgid ""
+"You can't drop files into Rosegarden from this client.  Try using Konqueror "
+"instead."
+msgstr ""
+"Non puoi aprire i file in Rosegarden con questo client. Prova ad usare "
+"Konqueror piuttosto."
+
 #: ../gui/notefont.cpp:68
 msgid "unknown error"
 msgstr "Errore sconosciuto"
@@ -991,7 +1007,7 @@ msgstr ""
 "Non hai ancora definito un editor audio per Rosegarden.\n"
 "Guarda Impostazioni -> Configura Rosegarden -> Generale -> Edistor esterni."
 
-#: ../gui/rosegardenguiview.cpp:1437 ../gui/rosegardenguiview.cpp:1441
+#: ../gui/rosegardenguiview.cpp:1423 ../gui/rosegardenguiview.cpp:1427
 msgid "Can't add dropped file. "
 msgstr "Non posso aggiungere il file rilasciato."
 
@@ -1117,7 +1133,7 @@ msgid "&Text"
 msgstr "&Testo"
 
 #: ../gui/notationview.cpp:1406 ../gui/rosegardengui.cpp:733
-#: ../gui/matrixview.cpp:547
+#: ../gui/editcommands.h:221 ../gui/matrixview.cpp:547
 msgid "&Erase"
 msgstr "Canc&ella"
 
@@ -1142,7 +1158,7 @@ msgstr "Seleziona fino alla fin&e"
 msgid "Select Whole St&aff"
 msgstr "Seleziona &tutto"
 
-#: ../gui/notationview.cpp:1436
+#: ../gui/notationview.cpp:1436 ../gui/editcommands.h:79
 msgid "C&ut and Close"
 msgstr "Taglia e chi&udi"
 
@@ -1703,6 +1719,154 @@ msgstr "Non Ãš possibile incollare in questo punto"
 msgid "Ready."
 msgstr "Pronto."
 
+#: ../gui/notationcommands.h:148
+msgid "Change to &Key %1..."
+msgstr "Cambiamento nella chiave %1..."
+
+#: ../gui/notationcommands.h:150 ../gui/notationcommands.h:179
+msgid "Add &Key Change..."
+msgstr "Aggiungi cambiamento di &chiave..."
+
+#: ../gui/notationcommands.h:177
+msgid "Change all to &Key %1..."
+msgstr "Cambia tutto nella &chiave %1..."
+
+#: ../gui/notationcommands.h:195
+msgid "Add Pedal &Press"
+msgstr "Aggiungi &pressione di pedale"
+
+#: ../gui/notationcommands.h:197
+msgid "Add Pedal &Release"
+msgstr "Aggiungi &rilascio di pedale"
+
+#: ../gui/notationcommands.h:244
+msgid "&Beam Group"
+msgstr "&Beam Group"
+
+#: ../gui/notationcommands.h:261
+msgid "&Auto-Beam"
+msgstr "&Auto-Beam"
+
+#: ../gui/notationcommands.h:275
+msgid "&Unbeam"
+msgstr "&Unbeam"
+
+#: ../gui/notationcommands.h:293
+msgid "&Triplet"
+msgstr "&Terzina"
+
+#: ../gui/notationcommands.h:294
+msgid "Tu&plet..."
+msgstr "Tu&plet..."
+
+#: ../gui/notationcommands.h:316
+msgid "&Untuplet"
+msgstr "&Untuplet"
+
+#: ../gui/notationcommands.h:330
+msgid "Make &Grace Notes"
+msgstr "Inserisci &abbellimento"
+
+#: ../gui/notationcommands.h:344
+msgid "Ung&race"
+msgstr ""
+
+#: ../gui/notationcommands.h:387
+msgid "Make &Chord"
+msgstr "Crea A&ccordo"
+
+#: ../gui/notationcommands.h:410
+msgid "&Normalize Rests"
+msgstr "&Normalizza le pause"
+
+#: ../gui/notationcommands.h:427
+msgid "&Collapse Rests"
+msgstr "&Unisci le pause"
+
+#: ../gui/notationcommands.h:440
+msgid "&Tie"
+msgstr "Lega&tura di valore"
+
+#: ../gui/notationcommands.h:457
+msgid "&Untie"
+msgstr "&Slega"
+
+#: ../gui/notationcommands.h:479 ../gui/notationcommands.h:497
+msgid "Tie Notes at &Barlines"
+msgstr "Lega le note alle &battute"
+
+#: ../gui/notationcommands.h:515
+msgid "Split-and-Tie Overlapping &Chords"
+msgstr "Dividi-e-lega gli a&ccordi sovrapposti"
+
+#: ../gui/notationcommands.h:533
+msgid "Stems &Up"
+msgstr "Gambi in alto"
+
+#: ../gui/notationcommands.h:533
+msgid "Stems &Down"
+msgstr "Gambi in basso"
+
+#: ../gui/notationcommands.h:552
+msgid "&Restore Computed Stems"
+msgstr "&Ripristina i gambi"
+
+#: ../gui/notationcommands.h:570
+msgid "Slur &Above"
+msgstr "Legatura sopr&a"
+
+#: ../gui/notationcommands.h:570
+msgid "Slur &Below"
+msgstr "Legatura &sotto"
+
+#: ../gui/notationcommands.h:589
+msgid "&Restore Computed Slur Position"
+msgstr "&Ripristina la posizione calcolata della legatura"
+
+#: ../gui/notationcommands.h:608
+msgid "Change &Note Style"
+msgstr "Cambia stile della &nota"
+
+#: ../gui/notationcommands.h:627
+msgid "Slashes"
+msgstr ""
+
+#: ../gui/notationcommands.h:665
+msgid "Add Te&xt Mark..."
+msgstr "Aggiungi marcatori di te&sto..."
+
+#: ../gui/notationcommands.h:702
+msgid "&Remove All Marks"
+msgstr "&Rimuovi tutti i marcatori"
+
+#: ../gui/notationcommands.h:718
+msgid "&Remove Fingerings"
+msgstr "&Rimuovi diteggiature"
+
+#: ../gui/notationcommands.h:734
+msgid "Fi&x Notation Quantization"
+msgstr "Fissa la quantizzazione della notazione"
+
+#: ../gui/notationcommands.h:750
+msgid "Remo&ve Notation Quantization"
+msgstr "Rimuo&vi la quantizzazione della notazione"
+
+#: ../gui/notationcommands.h:781
+msgid "&Interpret..."
+msgstr "&Interpreta..."
+
+#: ../gui/notationcommands.h:865
+msgid "Fine Reposition"
+msgstr "Posizionamento fine"
+
+#: ../gui/notationcommands.h:883
+msgid "Restore Computed Positions"
+msgstr "Ripristina le posizioni"
+
+#: ../gui/notationcommands.h:900
+msgid "Set Visibility"
+msgstr "Imposta la visibilitÃ "
+
 #: ../gui/rosegardengui.cpp:292
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
@@ -1878,7 +2042,7 @@ msgstr "&Ridimensiona"
 msgid "&Split"
 msgstr "&Dividi"
 
-#: ../gui/rosegardengui.cpp:759
+#: ../gui/rosegardengui.cpp:759 ../gui/segmentcommands.h:399
 msgid "&Join"
 msgstr "&Unisci"
 
@@ -3497,7 +3661,8 @@ msgstr "<il tempo si Ãš perso>"
 msgid "Just how big is your hard disk?"
 msgstr "Quanto Ãš grande il tuo disco fisso?"
 
-#: ../gui/dialogs.cpp:4391 ../gui/rosegardentransport.cpp:1661
+#: ../gui/dialogs.cpp:4391 ../gui/rosegardentransport.cpp:1661 rc.cpp:475
+#, no-c-format
 msgid "Metronome"
 msgstr "Metronomo"
 
@@ -3701,6 +3866,8 @@ msgid "Base pitch"
 msgstr "TonalitÃ  di base"
 
 #: ../gui/dialogs.cpp:5012 ../gui/rosegardenconfigurationpage.cpp:207
+#: ../gui/rosegardenconfigurationpage.h:230
+#: ../gui/rosegardenconfigurationpage.h:231
 msgid "Notation"
 msgstr "Notazione"
 
@@ -4229,22 +4396,6 @@ msgstr "Mostra le Opzioni Avanzate"
 msgid "Hide Advanced Options"
 msgstr "Nascondi le Opzioni Avanzate"
 
-#: ../gui/trackeditor.cpp:571
-msgid "Turn Repeating Segment into Real Copies"
-msgstr "Trasforma il segmento ripeuti in copie"
-
-#: ../gui/trackeditor.cpp:573
-msgid "Turn Repeating Segments into Real Copies"
-msgstr "Trasforma i segmenti ripeuti in copie"
-
-#: ../gui/trackeditor.cpp:739
-msgid ""
-"You can't drop files into Rosegarden from this client.  Try using Konqueror "
-"instead."
-msgstr ""
-"Non puoi aprire i file in Rosegarden con questo client. Prova ad usare "
-"Konqueror piuttosto."
-
 #: ../gui/multiviewcommandhistory.cpp:301
 msgid "Nothing to undo"
 msgstr "Nulla da ripristinare"
@@ -4460,6 +4611,75 @@ msgstr "xemo.org"
 msgid "Copyright 2001-2003 Xemus Software LLC"
 msgstr "Copyright 2001-2003 Xemus Software LLC"
 
+#: ../gui/segmentcommands.h:163
+msgid "Quick-Copy Segment"
+msgstr "Copia rapida del segmento"
+
+#: ../gui/segmentcommands.h:360 ../gui/segmentcommands.h:380
+msgid "&Split on Silence"
+msgstr "&Dividi sul silenzio"
+
+#: ../gui/segmentcommands.h:419 ../gui/editcommands.h:426
+msgid "Stretch or S&quash..."
+msgstr "Dilata o &comprimi..."
+
+#: ../gui/segmentcommands.h:467
+msgid "Add Time Si&gnature Change..."
+msgstr "Aggiungi cambiamento di &tempo nella battuta..."
+
+#: ../gui/segmentcommands.h:506
+msgid "Remove &Time Signature Change..."
+msgstr "Rimuovi cambiamento di &tempo nella battuta..."
+
+#: ../gui/segmentcommands.h:530
+msgid "Modify &Default Tempo..."
+msgstr "Modifica il ritmo pre&definito..."
+
+#: ../gui/segmentcommands.h:555
+msgid "Remove &Tempo Change..."
+msgstr "Rimuovi cambiamento di ri&tmo..."
+
+#: ../gui/segmentcommands.h:584
+msgid "Add Te&mpo Change..."
+msgstr "Aggiungi cambiamento di rit&mo..."
+
+#: ../gui/segmentcommands.h:606
+msgid "Add Tracks..."
+msgstr "Aggiungi le tracce..."
+
+#: ../gui/segmentcommands.h:628
+msgid "Delete Tracks..."
+msgstr "Elimina le tracce..."
+
+#: ../gui/segmentcommands.h:650
+msgid "Move Tracks..."
+msgstr "lSposta le tracce..."
+
+#: ../gui/segmentcommands.h:670
+msgid "Rename Track"
+msgstr "Rinomina la traccia"
+
+#: ../gui/segmentcommands.h:691
+#, fuzzy
+msgid "Change &Composition Start and End..."
+msgstr "Cambia la durata della &composizione..."
+
+#: ../gui/segmentcommands.h:722
+msgid "Split by &Pitch..."
+msgstr "Divi&di per altezza..."
+
+#: ../gui/segmentcommands.h:749
+msgid "Re&label..."
+msgstr "Rie&tichettatura..."
+
+#: ../gui/segmentcommands.h:769
+msgid "Change Segment Color..."
+msgstr "Cambia il colore del segmento..."
+
+#: ../gui/segmentcommands.h:788
+msgid "Change Segment Color Map..."
+msgstr "Cambia la mappa colore del segmento..."
+
 #: ../gui/styles.cpp:1
 msgid "Classical"
 msgstr "Classico"
@@ -4515,7 +4735,8 @@ msgid "unknown audio file"
 msgstr "file audio sconosciuto"
 
 #: ../gui/segmentcommands.cpp:566 ../gui/rosegardentransport.cpp:1655
-#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
+#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368 rc.cpp:461
+#, no-c-format
 msgid "Record"
 msgstr "Registra"
 
@@ -4725,11 +4946,11 @@ msgstr ""
 msgid "%1 (recorded)"
 msgstr "%1 (registrato)"
 
-#: ../gui/rosegardenguidoc.cpp:1726
+#: ../gui/rosegardenguidoc.cpp:1717
 msgid "Insert Recorded MIDI"
 msgstr "Inserisci un file MIDI registrato"
 
-#: ../gui/rosegardenguidoc.cpp:2270 ../gui/audiomanagerdialog.cpp:1085
+#: ../gui/rosegardenguidoc.cpp:2255 ../gui/audiomanagerdialog.cpp:1085
 msgid "Generating audio preview..."
 msgstr "Generazione anteprima audio..."
 
@@ -4750,80 +4971,100 @@ msgid "Set Segment Duration..."
 msgstr "Imposta la durata del segmento..."
 
 #: ../gui/rosegardentransport.cpp:1616 ../gui/rosegardentransportdialog.cpp:80
+#: rc.cpp:366
+#, no-c-format
 msgid "Rosegarden Transport"
 msgstr "Trasporto di Rosegarden"
 
-#: ../gui/rosegardentransport.cpp:1617
+#: ../gui/rosegardentransport.cpp:1617 rc.cpp:369
+#, no-c-format
 msgid "SIG"
 msgstr "SIG"
 
-#: ../gui/rosegardentransport.cpp:1618
+#: ../gui/rosegardentransport.cpp:1618 rc.cpp:372
+#, no-c-format
 msgid "DIV"
 msgstr "DIV"
 
-#: ../gui/rosegardentransport.cpp:1619
+#: ../gui/rosegardentransport.cpp:1619 rc.cpp:375
+#, no-c-format
 msgid "/16"
 msgstr "/16"
 
-#: ../gui/rosegardentransport.cpp:1620
+#: ../gui/rosegardentransport.cpp:1620 rc.cpp:378
+#, no-c-format
 msgid "TEMPO"
 msgstr "RITMO"
 
-#: ../gui/rosegardentransport.cpp:1621
+#: ../gui/rosegardentransport.cpp:1621 rc.cpp:381
+#, no-c-format
 msgid "END"
 msgstr "FINE"
 
-#: ../gui/rosegardentransport.cpp:1622
+#: ../gui/rosegardentransport.cpp:1622 rc.cpp:384
+#, no-c-format
 msgid "BAR"
 msgstr "BATTUTA"
 
-#: ../gui/rosegardentransport.cpp:1624
+#: ../gui/rosegardentransport.cpp:1624 rc.cpp:388
+#, no-c-format
 msgid "Switch between real time, musical time, and frame count"
 msgstr "Commuta tra tempo reale, tempo musicale e conteggio dei frame"
 
-#: ../gui/rosegardentransport.cpp:1626
+#: ../gui/rosegardentransport.cpp:1626 rc.cpp:392
+#, no-c-format
 msgid "Display time to end"
 msgstr "Mostra il tempo alla fine"
 
-#: ../gui/rosegardentransport.cpp:1628
+#: ../gui/rosegardentransport.cpp:1628 rc.cpp:396
+#, no-c-format
 msgid "Show additional controls"
 msgstr "Mostra ia controlli aggiuntivi"
 
-#: ../gui/rosegardentransport.cpp:1631
+#: ../gui/rosegardentransport.cpp:1631 rc.cpp:403
+#, no-c-format
 msgid "Stops playback or recording."
 msgstr "Arresta la riproduzione o la registrazione."
 
-#: ../gui/rosegardentransport.cpp:1633
+#: ../gui/rosegardentransport.cpp:1633 rc.cpp:407
+#, no-c-format
 msgid "Play/Pause"
 msgstr "Riproduci/Pausa"
 
-#: ../gui/rosegardentransport.cpp:1634
+#: ../gui/rosegardentransport.cpp:1634 rc.cpp:410
+#, no-c-format
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
 msgstr "Suona dalla posizione corrente, o mette in pausa se sta giÃ  suonando."
 
-#: ../gui/rosegardentransport.cpp:1636
+#: ../gui/rosegardentransport.cpp:1636 rc.cpp:414
+#, no-c-format
 msgid "Rewind"
 msgstr "Riavvolgi"
 
-#: ../gui/rosegardentransport.cpp:1637
+#: ../gui/rosegardentransport.cpp:1637 rc.cpp:417
+#, no-c-format
 msgid "Moves the current pointer position back one bar."
 msgstr "Muove li puntatore indietro di una battuta."
 
-#: ../gui/rosegardentransport.cpp:1639
+#: ../gui/rosegardentransport.cpp:1639 rc.cpp:421
+#, no-c-format
 msgid "Fast forward"
 msgstr "Avanti veloce"
 
-#: ../gui/rosegardentransport.cpp:1640
+#: ../gui/rosegardentransport.cpp:1640 rc.cpp:424
+#, no-c-format
 msgid "Moves the current pointer position forwards one bar."
 msgstr "Muove li puntatore avanti di una battuta."
 
-#: ../gui/rosegardentransport.cpp:1642
+#: ../gui/rosegardentransport.cpp:1642 rc.cpp:428
+#, no-c-format
 msgid "Rewind to beginning"
 msgstr "Indietro all'inizio"
 
-#: ../gui/rosegardentransport.cpp:1643
+#: ../gui/rosegardentransport.cpp:1643 rc.cpp:431
+#, no-c-format
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
@@ -4831,11 +5072,13 @@ msgstr ""
 "Muove il puntatore all'inizio della composizione.  (Questo puÃ² significare "
 "un avanzamento se il puntatore si trova prima dell'inizio.)"
 
-#: ../gui/rosegardentransport.cpp:1645
+#: ../gui/rosegardentransport.cpp:1645 rc.cpp:435
+#, no-c-format
 msgid "Fast forward to end"
 msgstr "Avanti veloce fino alla fine"
 
-#: ../gui/rosegardentransport.cpp:1646
+#: ../gui/rosegardentransport.cpp:1646 rc.cpp:438
+#, no-c-format
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
@@ -4843,55 +5086,69 @@ msgstr ""
 "Muove il puntatore alla fine della composizione.  (Questo puÃ² significare "
 "un ritorno indietro se il puntatore si trova oltre la fine.)"
 
-#: ../gui/rosegardentransport.cpp:1647
+#: ../gui/rosegardentransport.cpp:1647 rc.cpp:441
+#, no-c-format
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr "Mostra l'attivitÃ  MIDI fuori e dentro Rosegarden"
 
 #: ../gui/rosegardentransport.cpp:1648 ../gui/rosegardentransport.cpp:1651
+#: rc.cpp:444 rc.cpp:453
+#, no-c-format
 msgid "NO EVENTS"
 msgstr "NESSUN EVENTO"
 
-#: ../gui/rosegardentransport.cpp:1649
+#: ../gui/rosegardentransport.cpp:1649 rc.cpp:447
+#, no-c-format
 msgid "IN"
 msgstr "Ingresso"
 
-#: ../gui/rosegardentransport.cpp:1650
+#: ../gui/rosegardentransport.cpp:1650 rc.cpp:450
+#, no-c-format
 msgid "OUT"
 msgstr "Uscita"
 
-#: ../gui/rosegardentransport.cpp:1653
+#: ../gui/rosegardentransport.cpp:1653 rc.cpp:457
+#, no-c-format
 msgid "Hide additional controls"
 msgstr "Nascondi i controlli aggiuntivi"
 
-#: ../gui/rosegardentransport.cpp:1656
+#: ../gui/rosegardentransport.cpp:1656 rc.cpp:464
+#, no-c-format
 msgid "Record either MIDI or audio"
 msgstr "Registra MIDI oppure audio"
 
-#: ../gui/rosegardentransport.cpp:1658
+#: ../gui/rosegardentransport.cpp:1658 rc.cpp:468
+#, no-c-format
 msgid "Loop"
 msgstr "Ciclico"
 
-#: ../gui/rosegardentransport.cpp:1659
+#: ../gui/rosegardentransport.cpp:1659 rc.cpp:471
+#, no-c-format
 msgid "Turn on and off the loop markers (if set)"
 msgstr "Accendi e spegni i marcatori della ripetizione (se attivati)"
 
-#: ../gui/rosegardentransport.cpp:1662
+#: ../gui/rosegardentransport.cpp:1662 rc.cpp:478
+#, no-c-format
 msgid "Provides a metronome click for you to play along with"
 msgstr "Produce un battito del metronomo da seguire per suonare"
 
-#: ../gui/rosegardentransport.cpp:1664 ../gui/mixer.cpp:344
+#: ../gui/rosegardentransport.cpp:1664 ../gui/mixer.cpp:344 rc.cpp:482
+#, no-c-format
 msgid "Solo"
 msgstr "Solo"
 
-#: ../gui/rosegardentransport.cpp:1665
+#: ../gui/rosegardentransport.cpp:1665 rc.cpp:485
+#, no-c-format
 msgid "Mutes all but the currently selected track"
 msgstr "Rendi silenziose tutte le tracce tranne quella selezionata"
 
-#: ../gui/rosegardentransport.cpp:1667
+#: ../gui/rosegardentransport.cpp:1667 rc.cpp:489
+#, no-c-format
 msgid "Panic Button"
 msgstr "Bottone di allarme"
 
-#: ../gui/rosegardentransport.cpp:1668
+#: ../gui/rosegardentransport.cpp:1668 rc.cpp:492
+#, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Azzera tutti i dispositivi MIDI se ci sono note bloccate"
 
@@ -4914,7 +5171,8 @@ msgstr "Ripeti"
 msgid "Delay"
 msgstr "Ritardo"
 
-#: ../gui/segmentparameterbox.cpp:84 ../gui/colourwidgets.cpp:47
+#: ../gui/segmentparameterbox.cpp:84 ../gui/rosegardenconfigurationpage.h:428
+#: ../gui/colourwidgets.cpp:47
 msgid "Color"
 msgstr "Colore"
 
@@ -5129,6 +5387,82 @@ msgstr "&Muovi eventi su un altro segmento"
 msgid "Insert Trigger Note"
 msgstr "Inserisci nota attivata"
 
+#: ../gui/editcommands.h:67
+msgid "Cu&t"
+msgstr "&Taglia"
+
+#: ../gui/editcommands.h:246
+msgid "Edit E&vent"
+msgstr "Modifica e&vento"
+
+#: ../gui/editcommands.h:314
+msgid "Collapse &Equal-Pitch Notes"
+msgstr "Unisci le note alla st&essa altezza"
+
+#: ../gui/editcommands.h:336
+msgid "Set &Property"
+msgstr "Imposta &proprietÃ "
+
+#: ../gui/editcommands.h:381
+msgid "Edit L&yrics"
+msgstr "Modifica pa&role"
+
+#: ../gui/editcommands.h:402
+msgid "&Up a Semitone"
+msgstr "Alza di &un semitono"
+
+#: ../gui/editcommands.h:403
+msgid "&Down a Semitone"
+msgstr "Abbassa &di un semitono"
+
+#: ../gui/editcommands.h:404
+msgid "Up an &Octave"
+msgstr "Alza di un'&ottava"
+
+#: ../gui/editcommands.h:405
+msgid "Down an Octa&ve"
+msgstr "Abbassa di un'otta&va"
+
+#: ../gui/editcommands.h:406
+msgid "&Transpose..."
+msgstr "&Trasporto..."
+
+#: ../gui/editcommands.h:494
+msgid "&Increase Velocity"
+msgstr "&Aumenta la velocitÃ "
+
+#: ../gui/editcommands.h:495
+msgid "&Reduce Velocity"
+msgstr "&Riduci la velocitÃ "
+
+#: ../gui/editcommands.h:515
+msgid "&Add Marker"
+msgstr "&Aggiungi marcatore"
+
+#: ../gui/editcommands.h:538
+msgid "&Remove Marker"
+msgstr "&Rimuovi marcatore"
+
+#: ../gui/editcommands.h:564
+msgid "&Modify Marker"
+msgstr "&Modifica marcatore"
+
+#: ../gui/editcommands.h:603
+msgid "Tri&gger Segment"
+msgstr "Attiva il se&gmento"
+
+#: ../gui/editcommands.h:629
+msgid "&Clear Triggers"
+msgstr "&Pulisci attivatori"
+
+#: ../gui/editcommands.h:683
+msgid "&Set Note Type"
+msgstr "Impo&sta tipo di nota"
+
+#: ../gui/editcommands.h:706
+msgid "&Add Dot"
+msgstr "&Aggiungi punto"
+
 #: ../gui/segmenttool.cpp:501 ../gui/segmenttool.cpp:997
 msgid "Move Segment"
 msgstr "Sposta il segmento"
@@ -5232,7 +5566,9 @@ msgstr "Numero di battute durante la registrazione"
 msgid "Always use default studio when loading files"
 msgstr "Usa sempre lo studio di default quando carichi i file"
 
-#: ../gui/rosegardenconfigurationpage.cpp:208 ../gui/matrixview.cpp:2498
+#: ../gui/rosegardenconfigurationpage.cpp:208
+#: ../gui/rosegardenconfigurationpage.h:292
+#: ../gui/rosegardenconfigurationpage.h:293 ../gui/matrixview.cpp:2498
 msgid "Matrix"
 msgstr "Matrice"
 
@@ -5461,6 +5797,7 @@ msgstr "%1 (frastagliato)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:829
 #: ../gui/rosegardenconfigurationpage.cpp:1065
+#: ../gui/rosegardenconfigurationpage.h:183
 msgid "General"
 msgstr "Generale"
 
@@ -5866,6 +6203,7 @@ msgid "Polyphony"
 msgstr "Polifonia"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1967
+#: ../gui/rosegardenconfigurationpage.h:385
 msgid "Audio"
 msgstr "Audio"
 
@@ -6365,6 +6703,34 @@ msgid ""
 msgstr ""
 "Prova a copiare questo file in una directory dove hai i diritti di scrittura "
 "e riaggiungilo"
+
+#: ../gui/rosegardenconfigurationpage.h:184
+msgid "General Configuration"
+msgstr "Configurazione generale"
+
+#: ../gui/rosegardenconfigurationpage.h:318
+msgid "Latency"
+msgstr "Latenza"
+
+#: ../gui/rosegardenconfigurationpage.h:319
+msgid "Sequencer Latency"
+msgstr "Latenza del sequencer"
+
+#: ../gui/rosegardenconfigurationpage.h:386
+msgid "Audio Settings"
+msgstr "Impostazioni audio"
+
+#: ../gui/rosegardenconfigurationpage.h:429
+msgid "Color Settings"
+msgstr "Impostazioni colore"
+
+#: ../gui/rosegardenconfigurationpage.h:463
+msgid "Sequencer"
+msgstr "Sequencer"
+
+#: ../gui/rosegardenconfigurationpage.h:464
+msgid "Sequencer Settings"
+msgstr "Impostazioni del sequencer"
 
 #: ../gui/matrixview.cpp:359
 msgid "Couldn't apply piano roll layout"
@@ -7099,7 +7465,7 @@ msgstr "Aggiungi dispositivo di riproduzione"
 msgid "Add Record Device"
 msgstr "Aggiungi dispositivo di registrazione"
 
-#: ../gui/deviceeditor.cpp:82
+#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
 msgid "Delete Device"
 msgstr "Elimina dispositivo"
 
@@ -7469,6 +7835,42 @@ msgstr "Sposta la nota"
 msgid "Modify Note"
 msgstr "Modifica la nota"
 
+#: ../gui/studiocommands.h:60
+msgid "Modify &MIDI Bank"
+msgstr "Modifica il Banco &MIDI"
+
+#: ../gui/studiocommands.h:105
+msgid "Modify &Device Mapping"
+msgstr "Modifica la mappatura dei &dispositivi"
+
+#: ../gui/studiocommands.h:126
+msgid "Modify &Instrument Mapping"
+msgstr "Modifica la mappatura degli &strumenti"
+
+#: ../gui/studiocommands.h:155
+msgid "Rename Device"
+msgstr "Rinomina dispositivo"
+
+#: ../gui/studiocommands.h:191
+msgid "Create Device"
+msgstr "Crea dispositivo"
+
+#: ../gui/studiocommands.h:219
+msgid "Reconnect Device"
+msgstr "Riconnetti dispositivo"
+
+#: ../gui/studiocommands.h:248
+msgid "&Add Control Parameter"
+msgstr "&Aggiungi parametro di controllo"
+
+#: ../gui/studiocommands.h:275
+msgid "&Remove Control Parameter"
+msgstr "&Rimuovi parametro di controllo"
+
+#: ../gui/studiocommands.h:302
+msgid "&Modify Control Parameter"
+msgstr "&Modifica parametro di controllo"
+
 #: ../gui/rosegardenconfiguredialog.cpp:152
 msgid "Configure Rosegarden"
 msgstr "Configura Rosegarden"
@@ -7705,6 +8107,10 @@ msgstr "Sovrascrivi banchi"
 msgid "Bank %1:%2"
 msgstr "Banco %1:%2"
 
+#: ../gui/audiocommands.h:57
+msgid "Distribute Audio Segments over MIDI"
+msgstr "Segmenti Audio Distribuiti su MIDI"
+
 #: ../gui/timewidget.cpp:85
 msgid "Note:"
 msgstr "Nota:"
@@ -7901,416 +8307,331 @@ msgstr ""
 "Questa Ãš un'anteprima del font \"%1\". Puoi cambiarlo cliccando il bottone "
 "\"Scegli...\"."
 
-#~ msgid "Change to &Key %1..."
-#~ msgstr "Cambiamento nella chiave %1..."
-
-#~ msgid "Add &Key Change..."
-#~ msgstr "Aggiungi cambiamento di &chiave..."
-
-#~ msgid "Change all to &Key %1..."
-#~ msgstr "Cambia tutto nella &chiave %1..."
-
-#~ msgid "Add Pedal &Press"
-#~ msgstr "Aggiungi &pressione di pedale"
-
-#~ msgid "Add Pedal &Release"
-#~ msgstr "Aggiungi &rilascio di pedale"
-
-#~ msgid "&Beam Group"
-#~ msgstr "&Beam Group"
-
-#~ msgid "&Auto-Beam"
-#~ msgstr "&Auto-Beam"
-
-#~ msgid "&Unbeam"
-#~ msgstr "&Unbeam"
-
-#~ msgid "&Triplet"
-#~ msgstr "&Terzina"
-
-#~ msgid "Tu&plet..."
-#~ msgstr "Tu&plet..."
-
-#~ msgid "&Untuplet"
-#~ msgstr "&Untuplet"
-
-#~ msgid "Make &Grace Notes"
-#~ msgstr "Inserisci &abbellimento"
-
-#~ msgid "Make &Chord"
-#~ msgstr "Crea A&ccordo"
-
-#~ msgid "&Normalize Rests"
-#~ msgstr "&Normalizza le pause"
-
-#~ msgid "&Collapse Rests"
-#~ msgstr "&Unisci le pause"
-
-#~ msgid "&Tie"
-#~ msgstr "Lega&tura di valore"
-
-#~ msgid "&Untie"
-#~ msgstr "&Slega"
-
-#~ msgid "Tie Notes at &Barlines"
-#~ msgstr "Lega le note alle &battute"
-
-#~ msgid "Split-and-Tie Overlapping &Chords"
-#~ msgstr "Dividi-e-lega gli a&ccordi sovrapposti"
-
-#~ msgid "Stems &Up"
-#~ msgstr "Gambi in alto"
-
-#~ msgid "Stems &Down"
-#~ msgstr "Gambi in basso"
-
-#~ msgid "&Restore Computed Stems"
-#~ msgstr "&Ripristina i gambi"
-
-#~ msgid "Slur &Above"
-#~ msgstr "Legatura sopr&a"
-
-#~ msgid "Slur &Below"
-#~ msgstr "Legatura &sotto"
-
-#~ msgid "&Restore Computed Slur Position"
-#~ msgstr "&Ripristina la posizione calcolata della legatura"
-
-#~ msgid "Change &Note Style"
-#~ msgstr "Cambia stile della &nota"
-
-#~ msgid "Add Te&xt Mark..."
-#~ msgstr "Aggiungi marcatori di te&sto..."
-
-#~ msgid "&Remove All Marks"
-#~ msgstr "&Rimuovi tutti i marcatori"
-
-#~ msgid "&Remove Fingerings"
-#~ msgstr "&Rimuovi diteggiature"
-
-#~ msgid "Fi&x Notation Quantization"
-#~ msgstr "Fissa la quantizzazione della notazione"
-
-#~ msgid "Remo&ve Notation Quantization"
-#~ msgstr "Rimuo&vi la quantizzazione della notazione"
-
-#~ msgid "&Interpret..."
-#~ msgstr "&Interpreta..."
-
-#~ msgid "Fine Reposition"
-#~ msgstr "Posizionamento fine"
-
-#~ msgid "Restore Computed Positions"
-#~ msgstr "Ripristina le posizioni"
-
-#~ msgid "Set Visibility"
-#~ msgstr "Imposta la visibilitÃ "
-
-#~ msgid "&Layout Mode"
-#~ msgstr "Modo di &visualizzazione"
-
-#~ msgid "Add Event Ruler"
-#~ msgstr "Aggiungi indicatore eventi"
-
-#~ msgid "&Composition"
-#~ msgstr "&Composizione"
-
-#~ msgid "Se&gment"
-#~ msgstr "Se&gmento"
-
-#~ msgid "Edit &With"
-#~ msgstr "Modifica &con"
-
-#~ msgid "N&otes"
-#~ msgstr "N&ote"
-
-#~ msgid "&Beams"
-#~ msgstr "&Battiti"
-
-#~ msgid "&Octaves"
-#~ msgstr "&Ottave"
-
-#~ msgid "&Indications"
-#~ msgstr "&Indicazioni"
-
-#~ msgid "Slur &Position"
-#~ msgstr "&Posizione della legatura"
-
-#~ msgid "Mar&ks"
-#~ msgstr "Ma&rcatori"
-
-#~ msgid "&Ornaments"
-#~ msgstr "&Ornamenti"
-
-#~ msgid "&Fingerings"
-#~ msgstr "&Diteggiature"
-
-#~ msgid "Ad&just"
-#~ msgstr "Ag&giusta"
-
-#~ msgid "&Accidentals"
-#~ msgstr "&Accidenti"
-
-#~ msgid "Trip&lets and Tuplets"
-#~ msgstr "Terzine e tup&lets"
-
-#~ msgid "S&tem Direction"
-#~ msgstr "Direzione del gambo"
-
-#~ msgid "R&ests"
-#~ msgstr "Paus&e"
-
-#~ msgid "&Notes"
-#~ msgstr "&Note"
-
-#~ msgid "&Quantize"
-#~ msgstr "&Quantizza"
-
-#~ msgid "Trans&pose"
-#~ msgstr "Tras&poni"
-
-#~ msgid "&Fine Positioning"
-#~ msgstr "Posizionamento &fine"
-
-#~ msgid "Fine Ti&ming"
-#~ msgstr "Suddivisione fine del te&mpo"
-
-#~ msgid "&Visibility"
-#~ msgstr "&VisibilitÃ "
-
-#~ msgid "&Editor Tools"
-#~ msgstr "Strumenti dell'&editor"
-
-#~ msgid "&Rests"
-#~ msgstr "&Pause"
-
-#~ msgid "&Clefs"
-#~ msgstr "&Chiavi"
-
-#~ msgid "Local &Cursor"
-#~ msgstr "&Cursore locale"
-
-#~ msgid "T&ransport"
-#~ msgstr "T&rasporto"
-
-#~ msgid "&Toolbars"
-#~ msgstr "&Strumenti"
-
-#~ msgid "&Rulers"
-#~ msgstr "Indicato&ri"
-
-#~ msgid "Tools Toolbar"
-#~ msgstr "Barra degli strumenti"
-
-#~ msgid "Transport Toolbar"
-#~ msgstr "Barra degli strumenti per il Trasporto"
-
-#~ msgid "Notes Toolbar"
-#~ msgstr "Barra delle note"
-
-#~ msgid "Rests Toolbar"
-#~ msgstr "Barra delle pause"
-
-#~ msgid "Clefs Toolbar"
-#~ msgstr "Barra delle chiavi"
-
-#~ msgid "Accidentals Toolbar"
-#~ msgstr "Barra degli accidenti"
-
-#~ msgid "Group Toolbar"
-#~ msgstr "Barra dei raggruppatori"
-
-#~ msgid "Marks Toolbar"
-#~ msgstr "Barra dei marcatori"
-
-#~ msgid "Meta Toolbar"
-#~ msgstr "Meta barra degli strumenti"
-
-#~ msgid "Layout Toolbar"
-#~ msgstr "Barra degli strumenti di visualizzazione"
-
-#, fuzzy
-#~ msgid "Control Ruler actions"
-#~ msgstr "Eventi del controller"
-
-#, fuzzy
-#~ msgid "Property Ruler actions"
-#~ msgstr "Azioni sui file audio"
-
-#, fuzzy
-#~ msgid "Number of Stereo &Inputs"
-#~ msgstr "Numero di ingressi audio di JACK"
-
-#~ msgid "&Grid"
-#~ msgstr "&Griglia"
-
-#~ msgid "&Segment"
-#~ msgstr "&Segmento"
-
-#~ msgid "&Velocity"
-#~ msgstr "&VelocitÃ "
-
-#, fuzzy
-#~ msgid "Actions Toolbar"
-#~ msgstr "Barra degli strumenti"
-
-#~ msgid "Zoom Toolbar"
-#~ msgstr "Barra degli strumenti per l'ingrandimento"
-
-#~ msgid "Time Toolbar"
-#~ msgstr "Barra degli strumenti del tempo"
-
-#~ msgid "&Import"
-#~ msgstr "&Importa"
-
-#~ msgid "&Merge"
-#~ msgstr "&Unisci"
-
-#~ msgid "&Export"
-#~ msgstr "&Esporta"
-
-#, fuzzy
-#~ msgid "&Studio"
-#~ msgstr "Audio"
-
-#~ msgid "&Tempo and Time Signature"
-#~ msgstr "Ri&tmo e tempo"
-
-#~ msgid "Se&gments"
-#~ msgstr "Se&gmenti"
-
-#~ msgid "&Split or Join"
-#~ msgstr "&Dividi o unisci"
-
-#~ msgid "Trac&ks"
-#~ msgstr "Trac&ce"
-
-#~ msgid "Set &Instrument"
-#~ msgstr "Seleziona &Strumento"
-
-#~ msgid "Tracks Toolbar"
-#~ msgstr "Barra degli strumenti per le tracce"
-
-#, fuzzy
-#~ msgid "Editors Toolbar"
-#~ msgstr "Barra degli strumenti"
-
-#, fuzzy
-#~ msgid "&Action"
-#~ msgstr "Direzione"
-
-#, fuzzy
-#~ msgid "General Toolbar"
-#~ msgstr "Barra degli strumenti"
-
-#~ msgid "Quick-Copy Segment"
-#~ msgstr "Copia rapida del segmento"
-
-#~ msgid "&Split on Silence"
-#~ msgstr "&Dividi sul silenzio"
-
-#~ msgid "Stretch or S&quash..."
-#~ msgstr "Dilata o &comprimi..."
-
-#~ msgid "Add Time Si&gnature Change..."
-#~ msgstr "Aggiungi cambiamento di &tempo nella battuta..."
-
-#~ msgid "Remove &Time Signature Change..."
-#~ msgstr "Rimuovi cambiamento di &tempo nella battuta..."
-
-#~ msgid "Modify &Default Tempo..."
-#~ msgstr "Modifica il ritmo pre&definito..."
-
-#~ msgid "Remove &Tempo Change..."
-#~ msgstr "Rimuovi cambiamento di ri&tmo..."
-
-#~ msgid "Add Te&mpo Change..."
-#~ msgstr "Aggiungi cambiamento di rit&mo..."
-
-#~ msgid "Add Tracks..."
-#~ msgstr "Aggiungi le tracce..."
-
-#~ msgid "Delete Tracks..."
-#~ msgstr "Elimina le tracce..."
-
-#~ msgid "Move Tracks..."
-#~ msgstr "lSposta le tracce..."
-
-#~ msgid "Rename Track"
-#~ msgstr "Rinomina la traccia"
-
-#, fuzzy
-#~ msgid "Change &Composition Start and End..."
-#~ msgstr "Cambia la durata della &composizione..."
-
-#~ msgid "Split by &Pitch..."
-#~ msgstr "Divi&di per altezza..."
-
-#~ msgid "Re&label..."
-#~ msgstr "Rie&tichettatura..."
-
-#~ msgid "Change Segment Color..."
-#~ msgstr "Cambia il colore del segmento..."
-
-#~ msgid "Change Segment Color Map..."
-#~ msgstr "Cambia la mappa colore del segmento..."
-
-#~ msgid "Cu&t"
-#~ msgstr "&Taglia"
-
-#~ msgid "Edit E&vent"
-#~ msgstr "Modifica e&vento"
-
-#~ msgid "Collapse &Equal-Pitch Notes"
-#~ msgstr "Unisci le note alla st&essa altezza"
-
-#~ msgid "Set &Property"
-#~ msgstr "Imposta &proprietÃ "
-
-#~ msgid "Edit L&yrics"
-#~ msgstr "Modifica pa&role"
-
-#~ msgid "&Up a Semitone"
-#~ msgstr "Alza di &un semitono"
-
-#~ msgid "&Down a Semitone"
-#~ msgstr "Abbassa &di un semitono"
-
-#~ msgid "Up an &Octave"
-#~ msgstr "Alza di un'&ottava"
-
-#~ msgid "Down an Octa&ve"
-#~ msgstr "Abbassa di un'otta&va"
-
-#~ msgid "&Transpose..."
-#~ msgstr "&Trasporto..."
-
-#~ msgid "&Increase Velocity"
-#~ msgstr "&Aumenta la velocitÃ "
-
-#~ msgid "&Reduce Velocity"
-#~ msgstr "&Riduci la velocitÃ "
-
-#~ msgid "&Add Marker"
-#~ msgstr "&Aggiungi marcatore"
-
-#~ msgid "&Remove Marker"
-#~ msgstr "&Rimuovi marcatore"
-
-#~ msgid "&Modify Marker"
-#~ msgstr "&Modifica marcatore"
-
-#~ msgid "Tri&gger Segment"
-#~ msgstr "Attiva il se&gmento"
-
-#~ msgid "&Clear Triggers"
-#~ msgstr "&Pulisci attivatori"
-
-#~ msgid "&Set Note Type"
-#~ msgstr "Impo&sta tipo di nota"
-
-#~ msgid "&Add Dot"
-#~ msgstr "&Aggiungi punto"
+#: rc.cpp:6
+#, no-c-format
+msgid "&Layout Mode"
+msgstr "Modo di &visualizzazione"
+
+#: rc.cpp:9 rc.cpp:171
+#, no-c-format
+msgid "Add Event Ruler"
+msgstr "Aggiungi indicatore eventi"
+
+#: rc.cpp:12 rc.cpp:174 rc.cpp:273
+#, no-c-format
+msgid "&Composition"
+msgstr "&Composizione"
+
+#: rc.cpp:15 rc.cpp:237
+#, no-c-format
+msgid "Se&gment"
+msgstr "Se&gmento"
+
+#: rc.cpp:18 rc.cpp:180 rc.cpp:240 rc.cpp:285
+#, no-c-format
+msgid "Edit &With"
+msgstr "Modifica &con"
+
+#: rc.cpp:21
+#, no-c-format
+msgid "N&otes"
+msgstr "N&ote"
+
+#: rc.cpp:24
+#, no-c-format
+msgid "&Beams"
+msgstr "&Battiti"
+
+#: rc.cpp:27
+#, no-c-format
+msgid "&Octaves"
+msgstr "&Ottave"
+
+#: rc.cpp:30
+#, no-c-format
+msgid "&Indications"
+msgstr "&Indicazioni"
+
+#: rc.cpp:33
+#, no-c-format
+msgid "Slur &Position"
+msgstr "&Posizione della legatura"
+
+#: rc.cpp:36
+#, no-c-format
+msgid "Mar&ks"
+msgstr "Ma&rcatori"
+
+#: rc.cpp:39
+#, no-c-format
+msgid "&Ornaments"
+msgstr "&Ornamenti"
+
+#: rc.cpp:42
+#, no-c-format
+msgid "&Fingerings"
+msgstr "&Diteggiature"
+
+#: rc.cpp:45
+#, no-c-format
+msgid "S&lashes"
+msgstr ""
+
+#: rc.cpp:48 rc.cpp:183
+#, no-c-format
+msgid "Ad&just"
+msgstr "Ag&giusta"
+
+#: rc.cpp:51 rc.cpp:93
+#, no-c-format
+msgid "&Accidentals"
+msgstr "&Accidenti"
+
+#: rc.cpp:54
+#, no-c-format
+msgid "Trip&lets and Tuplets"
+msgstr "Terzine e tup&lets"
+
+#: rc.cpp:57
+#, no-c-format
+msgid "S&tem Direction"
+msgstr "Direzione del gambo"
+
+#: rc.cpp:60
+#, no-c-format
+msgid "R&ests"
+msgstr "Paus&e"
+
+#: rc.cpp:63 rc.cpp:87
+#, no-c-format
+msgid "&Notes"
+msgstr "&Note"
+
+#: rc.cpp:66 rc.cpp:186
+#, no-c-format
+msgid "&Quantize"
+msgstr "&Quantizza"
+
+#: rc.cpp:69 rc.cpp:192
+#, no-c-format
+msgid "Trans&pose"
+msgstr "Tras&poni"
+
+#: rc.cpp:72
+#, no-c-format
+msgid "&Fine Positioning"
+msgstr "Posizionamento &fine"
+
+#: rc.cpp:75
+#, no-c-format
+msgid "Fine Ti&ming"
+msgstr "Suddivisione fine del te&mpo"
+
+#: rc.cpp:78
+#, no-c-format
+msgid "&Visibility"
+msgstr "&VisibilitÃ "
+
+#: rc.cpp:84 rc.cpp:198 rc.cpp:300
+#, no-c-format
+msgid "&Editor Tools"
+msgstr "Strumenti dell'&editor"
+
+#: rc.cpp:90
+#, no-c-format
+msgid "&Rests"
+msgstr "&Pause"
+
+#: rc.cpp:96
+#, no-c-format
+msgid "&Clefs"
+msgstr "&Chiavi"
+
+#: rc.cpp:99 rc.cpp:201
+#, no-c-format
+msgid "Local &Cursor"
+msgstr "&Cursore locale"
+
+#: rc.cpp:102 rc.cpp:150 rc.cpp:204 rc.cpp:258 rc.cpp:303
+#, no-c-format
+msgid "T&ransport"
+msgstr "T&rasporto"
+
+#: rc.cpp:108 rc.cpp:210 rc.cpp:306
+#, no-c-format
+msgid "&Toolbars"
+msgstr "&Strumenti"
+
+#: rc.cpp:111 rc.cpp:213 rc.cpp:309
+#, no-c-format
+msgid "&Rulers"
+msgstr "Indicato&ri"
+
+#: rc.cpp:114 rc.cpp:216 rc.cpp:315
+#, no-c-format
+msgid "Tools Toolbar"
+msgstr "Barra degli strumenti"
+
+#: rc.cpp:117 rc.cpp:162 rc.cpp:219 rc.cpp:249 rc.cpp:261 rc.cpp:324
+#: rc.cpp:345
+#, no-c-format
+msgid "Transport Toolbar"
+msgstr "Barra degli strumenti per il Trasporto"
+
+#: rc.cpp:120
+#, no-c-format
+msgid "Notes Toolbar"
+msgstr "Barra delle note"
+
+#: rc.cpp:123
+#, no-c-format
+msgid "Rests Toolbar"
+msgstr "Barra delle pause"
+
+#: rc.cpp:126
+#, no-c-format
+msgid "Clefs Toolbar"
+msgstr "Barra delle chiavi"
+
+#: rc.cpp:129
+#, no-c-format
+msgid "Accidentals Toolbar"
+msgstr "Barra degli accidenti"
+
+#: rc.cpp:132
+#, no-c-format
+msgid "Group Toolbar"
+msgstr "Barra dei raggruppatori"
+
+#: rc.cpp:135
+#, no-c-format
+msgid "Marks Toolbar"
+msgstr "Barra dei marcatori"
+
+#: rc.cpp:138
+#, no-c-format
+msgid "Meta Toolbar"
+msgstr "Meta barra degli strumenti"
+
+#: rc.cpp:141
+#, no-c-format
+msgid "Layout Toolbar"
+msgstr "Barra degli strumenti di visualizzazione"
+
+#: rc.cpp:144 rc.cpp:228
+#, fuzzy, no-c-format
+msgid "Control Ruler actions"
+msgstr "Eventi del controller"
+
+#: rc.cpp:147 rc.cpp:231
+#, fuzzy, no-c-format
+msgid "Property Ruler actions"
+msgstr "Azioni sui file audio"
+
+#: rc.cpp:156
+#, fuzzy, no-c-format
+msgid "Number of Stereo &Inputs"
+msgstr "Numero di ingressi audio di JACK"
+
+#: rc.cpp:159
+#, fuzzy, no-c-format
+msgid "&Number of Submasters"
+msgstr "Numero di ingressi audio di JACK"
+
+#: rc.cpp:168
+#, no-c-format
+msgid "&Grid"
+msgstr "&Griglia"
+
+#: rc.cpp:177
+#, no-c-format
+msgid "&Segment"
+msgstr "&Segmento"
+
+#: rc.cpp:189
+#, no-c-format
+msgid "&Velocity"
+msgstr "&VelocitÃ "
+
+#: rc.cpp:222 rc.cpp:243 rc.cpp:252 rc.cpp:339 rc.cpp:348
+#, fuzzy, no-c-format
+msgid "Actions Toolbar"
+msgstr "Barra degli strumenti"
+
+#: rc.cpp:225 rc.cpp:255 rc.cpp:327 rc.cpp:351
+#, no-c-format
+msgid "Zoom Toolbar"
+msgstr "Barra degli strumenti per l'ingrandimento"
+
+#: rc.cpp:246 rc.cpp:333 rc.cpp:342 rc.cpp:363
+#, no-c-format
+msgid "Time Toolbar"
+msgstr "Barra degli strumenti del tempo"
+
+#: rc.cpp:264
+#, no-c-format
+msgid "&Import"
+msgstr "&Importa"
+
+#: rc.cpp:267
+#, no-c-format
+msgid "&Merge"
+msgstr "&Unisci"
+
+#: rc.cpp:270
+#, no-c-format
+msgid "&Export"
+msgstr "&Esporta"
+
+#: rc.cpp:276
+#, fuzzy, no-c-format
+msgid "&Studio"
+msgstr "Audio"
+
+#: rc.cpp:279
+#, no-c-format
+msgid "&Tempo and Time Signature"
+msgstr "Ri&tmo e tempo"
+
+#: rc.cpp:282
+#, no-c-format
+msgid "Se&gments"
+msgstr "Se&gmenti"
+
+#: rc.cpp:288
+#, no-c-format
+msgid "&Split or Join"
+msgstr "&Dividi o unisci"
+
+#: rc.cpp:291
+#, no-c-format
+msgid "Trac&ks"
+msgstr "Trac&ce"
+
+#: rc.cpp:294
+#, no-c-format
+msgid "Set &Instrument"
+msgstr "Seleziona &Strumento"
+
+#: rc.cpp:318
+#, no-c-format
+msgid "Tracks Toolbar"
+msgstr "Barra degli strumenti per le tracce"
+
+#: rc.cpp:321
+#, fuzzy, no-c-format
+msgid "Editors Toolbar"
+msgstr "Barra degli strumenti"
+
+#: rc.cpp:354
+#, fuzzy, no-c-format
+msgid "&Action"
+msgstr "Direzione"
+
+#: rc.cpp:357
+#, fuzzy, no-c-format
+msgid "General Toolbar"
+msgstr "Barra degli strumenti"
 
 #~ msgid ""
 #~ "This will unload all audio files and remove their associated segments.  "
@@ -8325,57 +8646,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Questo svuoterÃ  tutti i file audio che non hanno segmenti usati in "
 #~ "questa composizione.  Sei sicuro?"
-
-#~ msgid "General Configuration"
-#~ msgstr "Configurazione generale"
-
-#~ msgid "Latency"
-#~ msgstr "Latenza"
-
-#~ msgid "Sequencer Latency"
-#~ msgstr "Latenza del sequencer"
-
-#~ msgid "Audio Settings"
-#~ msgstr "Impostazioni audio"
-
-#~ msgid "Color Settings"
-#~ msgstr "Impostazioni colore"
-
-#~ msgid "Sequencer"
-#~ msgstr "Sequencer"
-
-#~ msgid "Sequencer Settings"
-#~ msgstr "Impostazioni del sequencer"
-
-#~ msgid "Modify &MIDI Bank"
-#~ msgstr "Modifica il Banco &MIDI"
-
-#~ msgid "Modify &Device Mapping"
-#~ msgstr "Modifica la mappatura dei &dispositivi"
-
-#~ msgid "Modify &Instrument Mapping"
-#~ msgstr "Modifica la mappatura degli &strumenti"
-
-#~ msgid "Rename Device"
-#~ msgstr "Rinomina dispositivo"
-
-#~ msgid "Create Device"
-#~ msgstr "Crea dispositivo"
-
-#~ msgid "Reconnect Device"
-#~ msgstr "Riconnetti dispositivo"
-
-#~ msgid "&Add Control Parameter"
-#~ msgstr "&Aggiungi parametro di controllo"
-
-#~ msgid "&Remove Control Parameter"
-#~ msgstr "&Rimuovi parametro di controllo"
-
-#~ msgid "&Modify Control Parameter"
-#~ msgstr "&Modifica parametro di controllo"
-
-#~ msgid "Distribute Audio Segments over MIDI"
-#~ msgstr "Segmenti Audio Distribuiti su MIDI"
 
 #~ msgid "Re&label"
 #~ msgstr "Rie&tichettatura..."

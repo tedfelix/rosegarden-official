@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rosegarden4 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-17 23:06+0200\n"
+"POT-Creation-Date: 2005-08-25 22:12+0200\n"
 "PO-Revision-Date: 2005-02-01 19:15+0800\n"
 "Last-Translator: Liu Songhe <jack@linux.net.cn>\n"
 "Language-Team: Simplified Chinese <i18n-translation@lists.linux.net.cn>\n"
@@ -852,6 +852,20 @@ msgstr "到"
 msgid "<no devices>"
 msgstr "<没有设备>"
 
+#: ../gui/trackeditor.cpp:552
+msgid "Turn Repeating Segment into Real Copies"
+msgstr "将重复的小节转换为真实的副本"
+
+#: ../gui/trackeditor.cpp:554
+msgid "Turn Repeating Segments into Real Copies"
+msgstr "将重复的小节转换为真实的副本"
+
+#: ../gui/trackeditor.cpp:720
+msgid ""
+"You can't drop files into Rosegarden from this client.  Try using Konqueror "
+"instead."
+msgstr ""
+
 #: ../gui/notefont.cpp:68
 #, fuzzy
 msgid "unknown error"
@@ -890,7 +904,7 @@ msgid ""
 "See Settings -> Configure Rosegarden -> General -> External Editors."
 msgstr ""
 
-#: ../gui/rosegardenguiview.cpp:1437 ../gui/rosegardenguiview.cpp:1441
+#: ../gui/rosegardenguiview.cpp:1423 ../gui/rosegardenguiview.cpp:1427
 #, fuzzy
 msgid "Can't add dropped file. "
 msgstr "无法打开文件“%1”"
@@ -1016,7 +1030,7 @@ msgid "&Text"
 msgstr "文本(&T)"
 
 #: ../gui/notationview.cpp:1406 ../gui/rosegardengui.cpp:733
-#: ../gui/matrixview.cpp:547
+#: ../gui/editcommands.h:221 ../gui/matrixview.cpp:547
 msgid "&Erase"
 msgstr "擦除(&E)"
 
@@ -1042,7 +1056,7 @@ msgstr "从当前位置到结尾选中(&E)"
 msgid "Select Whole St&aff"
 msgstr "选中整个五线谱(&A)"
 
-#: ../gui/notationview.cpp:1436
+#: ../gui/notationview.cpp:1436 ../gui/editcommands.h:79
 msgid "C&ut and Close"
 msgstr "剪切并关闭(&U)"
 
@@ -1617,6 +1631,168 @@ msgstr "无法粘贴到这点"
 msgid "Ready."
 msgstr "已就绪。"
 
+#: ../gui/notationcommands.h:148
+msgid "Change to &Key %1..."
+msgstr "变更为键 %1(&K)..."
+
+#: ../gui/notationcommands.h:150 ../gui/notationcommands.h:179
+msgid "Add &Key Change..."
+msgstr "添加键改变(&K)..."
+
+#: ../gui/notationcommands.h:177
+msgid "Change all to &Key %1..."
+msgstr "全部变为键 %1(&K)..."
+
+#: ../gui/notationcommands.h:195
+msgid "Add Pedal &Press"
+msgstr ""
+
+#: ../gui/notationcommands.h:197
+msgid "Add Pedal &Release"
+msgstr ""
+
+#: ../gui/notationcommands.h:244
+msgid "&Beam Group"
+msgstr "全部分开符尾(&B)"
+
+#: ../gui/notationcommands.h:261
+msgid "&Auto-Beam"
+msgstr "自动分开符尾(&A)"
+
+#: ../gui/notationcommands.h:275
+msgid "&Unbeam"
+msgstr "取销符尾分开(&U)"
+
+#: ../gui/notationcommands.h:293
+#, fuzzy
+msgid "&Triplet"
+msgstr "三连音"
+
+#: ../gui/notationcommands.h:294
+#, fuzzy
+msgid "Tu&plet..."
+msgstr "连音(&T)..."
+
+#: ../gui/notationcommands.h:316
+msgid "&Untuplet"
+msgstr "取消连音(&U)"
+
+#: ../gui/notationcommands.h:330
+msgid "Make &Grace Notes"
+msgstr "制作装饰音音符(&G)"
+
+#: ../gui/notationcommands.h:344
+msgid "Ung&race"
+msgstr "取消装饰音(&R)"
+
+#: ../gui/notationcommands.h:387
+#, fuzzy
+msgid "Make &Chord"
+msgstr " 和弦"
+
+#: ../gui/notationcommands.h:410
+msgid "&Normalize Rests"
+msgstr "规格化休止符(&N)"
+
+#: ../gui/notationcommands.h:427
+msgid "&Collapse Rests"
+msgstr "压缩休止符(&C)"
+
+#: ../gui/notationcommands.h:440
+#, fuzzy
+msgid "&Tie"
+msgstr "时间"
+
+#: ../gui/notationcommands.h:457
+#, fuzzy
+msgid "&Untie"
+msgstr "松解音符(&U)"
+
+#: ../gui/notationcommands.h:479 ../gui/notationcommands.h:497
+#, fuzzy
+msgid "Tie Notes at &Barlines"
+msgstr "将音符捆绑于进程线等等"
+
+#: ../gui/notationcommands.h:515
+#, fuzzy
+msgid "Split-and-Tie Overlapping &Chords"
+msgstr "分割与捆绑重叠和弦"
+
+#: ../gui/notationcommands.h:533
+msgid "Stems &Up"
+msgstr "符干向上(&U)"
+
+#: ../gui/notationcommands.h:533
+msgid "Stems &Down"
+msgstr "符干向下(&D)"
+
+#: ../gui/notationcommands.h:552
+msgid "&Restore Computed Stems"
+msgstr "恢复计算好的符干(&R)"
+
+#: ../gui/notationcommands.h:570
+msgid "Slur &Above"
+msgstr ""
+
+#: ../gui/notationcommands.h:570
+msgid "Slur &Below"
+msgstr ""
+
+#: ../gui/notationcommands.h:589
+#, fuzzy
+msgid "&Restore Computed Slur Position"
+msgstr "恢复计算好的符干(&R)"
+
+#: ../gui/notationcommands.h:608
+msgid "Change &Note Style"
+msgstr "改变音符样式(&N)"
+
+#: ../gui/notationcommands.h:627
+msgid "Slashes"
+msgstr "斜线"
+
+#: ../gui/notationcommands.h:665
+msgid "Add Te&xt Mark..."
+msgstr "添加文本标记(&X)..."
+
+#: ../gui/notationcommands.h:702
+msgid "&Remove All Marks"
+msgstr "删除所有标记(&R)"
+
+#: ../gui/notationcommands.h:718
+#, fuzzy
+msgid "&Remove Fingerings"
+msgstr "删除所有标记(&R)"
+
+#: ../gui/notationcommands.h:734
+#, fuzzy
+msgid "Fi&x Notation Quantization"
+msgstr "启发记号量化(&Q)"
+
+#: ../gui/notationcommands.h:750
+#, fuzzy
+msgid "Remo&ve Notation Quantization"
+msgstr "启发记号量化(&Q)"
+
+#: ../gui/notationcommands.h:781
+msgid "&Interpret..."
+msgstr "解析(&I)..."
+
+#: ../gui/notationcommands.h:865
+#, fuzzy
+msgid "Fine Reposition"
+msgstr "插入到作品中"
+
+#: ../gui/notationcommands.h:883
+#, fuzzy
+msgid "Restore Computed Positions"
+msgstr "恢复计算好的符干(&R)"
+
+#: ../gui/notationcommands.h:900
+#, fuzzy
+msgid "Set Visibility"
+msgstr "力度(&V)"
+
 #: ../gui/rosegardengui.cpp:292
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
@@ -1793,7 +1969,7 @@ msgstr "重定义大小(&R)"
 msgid "&Split"
 msgstr "分割(&R)"
 
-#: ../gui/rosegardengui.cpp:759
+#: ../gui/rosegardengui.cpp:759 ../gui/segmentcommands.h:399
 msgid "&Join"
 msgstr "加入(&J)"
 
@@ -3421,7 +3597,8 @@ msgstr "<定时出现偏差>"
 msgid "Just how big is your hard disk?"
 msgstr "您的硬盘到底有多大？"
 
-#: ../gui/dialogs.cpp:4391 ../gui/rosegardentransport.cpp:1661
+#: ../gui/dialogs.cpp:4391 ../gui/rosegardentransport.cpp:1661 rc.cpp:475
+#, no-c-format
 msgid "Metronome"
 msgstr "节拍器"
 
@@ -3625,6 +3802,8 @@ msgid "Base pitch"
 msgstr ""
 
 #: ../gui/dialogs.cpp:5012 ../gui/rosegardenconfigurationpage.cpp:207
+#: ../gui/rosegardenconfigurationpage.h:230
+#: ../gui/rosegardenconfigurationpage.h:231
 msgid "Notation"
 msgstr "记号"
 
@@ -4165,20 +4344,6 @@ msgstr "高级选项"
 msgid "Hide Advanced Options"
 msgstr "高级选项"
 
-#: ../gui/trackeditor.cpp:571
-msgid "Turn Repeating Segment into Real Copies"
-msgstr "将重复的小节转换为真实的副本"
-
-#: ../gui/trackeditor.cpp:573
-msgid "Turn Repeating Segments into Real Copies"
-msgstr "将重复的小节转换为真实的副本"
-
-#: ../gui/trackeditor.cpp:739
-msgid ""
-"You can't drop files into Rosegarden from this client.  Try using Konqueror "
-"instead."
-msgstr ""
-
 #: ../gui/multiviewcommandhistory.cpp:301
 msgid "Nothing to undo"
 msgstr "没什么可撤消！"
@@ -4392,6 +4557,79 @@ msgstr "xemo.org"
 msgid "Copyright 2001-2003 Xemus Software LLC"
 msgstr "版权所有 2001-2003 Xemus Software LLC"
 
+#: ../gui/segmentcommands.h:163
+msgid "Quick-Copy Segment"
+msgstr "快速复制小节"
+
+#: ../gui/segmentcommands.h:360 ../gui/segmentcommands.h:380
+msgid "&Split on Silence"
+msgstr "安静拆分(&S)"
+
+#: ../gui/segmentcommands.h:419 ../gui/editcommands.h:426
+msgid "Stretch or S&quash..."
+msgstr ""
+
+#: ../gui/segmentcommands.h:467
+msgid "Add Time Si&gnature Change..."
+msgstr "添加时间署名变更(&G)..."
+
+#: ../gui/segmentcommands.h:506
+#, fuzzy
+msgid "Remove &Time Signature Change..."
+msgstr "添加时间署名变更(&G)..."
+
+#: ../gui/segmentcommands.h:530
+msgid "Modify &Default Tempo..."
+msgstr "修改默认节拍(&D)..."
+
+#: ../gui/segmentcommands.h:555
+msgid "Remove &Tempo Change..."
+msgstr "删除节拍变更(&T)..."
+
+#: ../gui/segmentcommands.h:584
+msgid "Add Te&mpo Change..."
+msgstr "添加节拍变更(&M)..."
+
+#: ../gui/segmentcommands.h:606
+msgid "Add Tracks..."
+msgstr "添加轨道..."
+
+#: ../gui/segmentcommands.h:628
+msgid "Delete Tracks..."
+msgstr "删除轨道..."
+
+#: ../gui/segmentcommands.h:650
+msgid "Move Tracks..."
+msgstr "移动轨道..."
+
+#: ../gui/segmentcommands.h:670
+#, fuzzy
+msgid "Rename Track"
+msgstr "删除轨道(&D)"
+
+#: ../gui/segmentcommands.h:691
+#, fuzzy
+msgid "Change &Composition Start and End..."
+msgstr "改变作品持续时间(&C)..."
+
+#: ../gui/segmentcommands.h:722
+msgid "Split by &Pitch..."
+msgstr "根据音色拆分(&P)..."
+
+#: ../gui/segmentcommands.h:749
+msgid "Re&label..."
+msgstr "重新标注(&L)..."
+
+#: ../gui/segmentcommands.h:769
+#, fuzzy
+msgid "Change Segment Color..."
+msgstr "改为 %1 谱号(&F)..."
+
+#: ../gui/segmentcommands.h:788
+#, fuzzy
+msgid "Change Segment Color Map..."
+msgstr "改为 %1 谱号(&F)..."
+
 #: ../gui/styles.cpp:1
 msgid "Classical"
 msgstr "经典"
@@ -4450,7 +4688,8 @@ msgid "unknown audio file"
 msgstr "未知的音频文件"
 
 #: ../gui/segmentcommands.cpp:566 ../gui/rosegardentransport.cpp:1655
-#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
+#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368 rc.cpp:461
+#, no-c-format
 msgid "Record"
 msgstr "录制"
 
@@ -4669,11 +4908,11 @@ msgstr "--  %1 (从 %2)\n"
 msgid "%1 (recorded)"
 msgstr "%1 (已录制)"
 
-#: ../gui/rosegardenguidoc.cpp:1726
+#: ../gui/rosegardenguidoc.cpp:1717
 msgid "Insert Recorded MIDI"
 msgstr "插入录制好的 MIDI"
 
-#: ../gui/rosegardenguidoc.cpp:2270 ../gui/audiomanagerdialog.cpp:1085
+#: ../gui/rosegardenguidoc.cpp:2255 ../gui/audiomanagerdialog.cpp:1085
 msgid "Generating audio preview..."
 msgstr "正在生成音频预览..."
 
@@ -4694,144 +4933,180 @@ msgid "Set Segment Duration..."
 msgstr "设置片段音长..."
 
 #: ../gui/rosegardentransport.cpp:1616 ../gui/rosegardentransportdialog.cpp:80
+#: rc.cpp:366
+#, no-c-format
 msgid "Rosegarden Transport"
 msgstr "玫瑰园播放控制器"
 
-#: ../gui/rosegardentransport.cpp:1617
+#: ../gui/rosegardentransport.cpp:1617 rc.cpp:369
+#, no-c-format
 msgid "SIG"
 msgstr "标记"
 
-#: ../gui/rosegardentransport.cpp:1618
+#: ../gui/rosegardentransport.cpp:1618 rc.cpp:372
+#, no-c-format
 msgid "DIV"
 msgstr "DIV"
 
-#: ../gui/rosegardentransport.cpp:1619
+#: ../gui/rosegardentransport.cpp:1619 rc.cpp:375
+#, no-c-format
 msgid "/16"
 msgstr "/16"
 
-#: ../gui/rosegardentransport.cpp:1620
+#: ../gui/rosegardentransport.cpp:1620 rc.cpp:378
+#, no-c-format
 msgid "TEMPO"
 msgstr "节拍"
 
-#: ../gui/rosegardentransport.cpp:1621
+#: ../gui/rosegardentransport.cpp:1621 rc.cpp:381
+#, no-c-format
 msgid "END"
 msgstr "结束"
 
-#: ../gui/rosegardentransport.cpp:1622
+#: ../gui/rosegardentransport.cpp:1622 rc.cpp:384
+#, no-c-format
 msgid "BAR"
 msgstr "进程条"
 
-#: ../gui/rosegardentransport.cpp:1624
+#: ../gui/rosegardentransport.cpp:1624 rc.cpp:388
+#, no-c-format
 msgid "Switch between real time, musical time, and frame count"
 msgstr "在真实时间、音乐时间和帧计数之间切换"
 
-#: ../gui/rosegardentransport.cpp:1626
+#: ../gui/rosegardentransport.cpp:1626 rc.cpp:392
+#, no-c-format
 msgid "Display time to end"
 msgstr "以倒计时方式显示时间"
 
-#: ../gui/rosegardentransport.cpp:1628
+#: ../gui/rosegardentransport.cpp:1628 rc.cpp:396
+#, no-c-format
 msgid "Show additional controls"
 msgstr "显示额外控件"
 
-#: ../gui/rosegardentransport.cpp:1631
+#: ../gui/rosegardentransport.cpp:1631 rc.cpp:403
+#, no-c-format
 msgid "Stops playback or recording."
 msgstr "停止播放或录音。"
 
-#: ../gui/rosegardentransport.cpp:1633
+#: ../gui/rosegardentransport.cpp:1633 rc.cpp:407
+#, no-c-format
 msgid "Play/Pause"
 msgstr "播放/暂停"
 
-#: ../gui/rosegardentransport.cpp:1634
+#: ../gui/rosegardentransport.cpp:1634 rc.cpp:410
+#, no-c-format
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
 msgstr "从当前的指针位置播放，或者如果正在播放则暂停回放。"
 
-#: ../gui/rosegardentransport.cpp:1636
+#: ../gui/rosegardentransport.cpp:1636 rc.cpp:414
+#, no-c-format
 msgid "Rewind"
 msgstr "回绕"
 
-#: ../gui/rosegardentransport.cpp:1637
+#: ../gui/rosegardentransport.cpp:1637 rc.cpp:417
+#, no-c-format
 msgid "Moves the current pointer position back one bar."
 msgstr "将当前指针位置向后移动一个进程条"
 
-#: ../gui/rosegardentransport.cpp:1639
+#: ../gui/rosegardentransport.cpp:1639 rc.cpp:421
+#, no-c-format
 msgid "Fast forward"
 msgstr "快进"
 
-#: ../gui/rosegardentransport.cpp:1640
+#: ../gui/rosegardentransport.cpp:1640 rc.cpp:424
+#, no-c-format
 msgid "Moves the current pointer position forwards one bar."
 msgstr "将当前指针位置向前移动一个进程条。"
 
-#: ../gui/rosegardentransport.cpp:1642
+#: ../gui/rosegardentransport.cpp:1642 rc.cpp:428
+#, no-c-format
 msgid "Rewind to beginning"
 msgstr "回绕到起点"
 
-#: ../gui/rosegardentransport.cpp:1643
+#: ../gui/rosegardentransport.cpp:1643 rc.cpp:431
+#, no-c-format
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
 msgstr ""
 
-#: ../gui/rosegardentransport.cpp:1645
+#: ../gui/rosegardentransport.cpp:1645 rc.cpp:435
+#, no-c-format
 msgid "Fast forward to end"
 msgstr "快进至终点"
 
-#: ../gui/rosegardentransport.cpp:1646
+#: ../gui/rosegardentransport.cpp:1646 rc.cpp:438
+#, no-c-format
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
 msgstr ""
 
-#: ../gui/rosegardentransport.cpp:1647
+#: ../gui/rosegardentransport.cpp:1647 rc.cpp:441
+#, no-c-format
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr "于玫瑰园内或外显示 MIDI 激活"
 
 #: ../gui/rosegardentransport.cpp:1648 ../gui/rosegardentransport.cpp:1651
+#: rc.cpp:444 rc.cpp:453
+#, no-c-format
 msgid "NO EVENTS"
 msgstr "没有事件"
 
-#: ../gui/rosegardentransport.cpp:1649
+#: ../gui/rosegardentransport.cpp:1649 rc.cpp:447
+#, no-c-format
 msgid "IN"
 msgstr "内"
 
-#: ../gui/rosegardentransport.cpp:1650
+#: ../gui/rosegardentransport.cpp:1650 rc.cpp:450
+#, no-c-format
 msgid "OUT"
 msgstr "外"
 
-#: ../gui/rosegardentransport.cpp:1653
+#: ../gui/rosegardentransport.cpp:1653 rc.cpp:457
+#, no-c-format
 msgid "Hide additional controls"
 msgstr "隐藏额外控件"
 
-#: ../gui/rosegardentransport.cpp:1656
+#: ../gui/rosegardentransport.cpp:1656 rc.cpp:464
+#, no-c-format
 msgid "Record either MIDI or audio"
 msgstr "录制 MIDI 或音频"
 
-#: ../gui/rosegardentransport.cpp:1658
+#: ../gui/rosegardentransport.cpp:1658 rc.cpp:468
+#, no-c-format
 msgid "Loop"
 msgstr "循环"
 
-#: ../gui/rosegardentransport.cpp:1659
+#: ../gui/rosegardentransport.cpp:1659 rc.cpp:471
+#, no-c-format
 msgid "Turn on and off the loop markers (if set)"
 msgstr "开启或关闭循环标记(如果设置的话)"
 
-#: ../gui/rosegardentransport.cpp:1662
+#: ../gui/rosegardentransport.cpp:1662 rc.cpp:478
+#, no-c-format
 msgid "Provides a metronome click for you to play along with"
 msgstr "提供一个节拍器滴答声以便您能跟随它播放"
 
-#: ../gui/rosegardentransport.cpp:1664 ../gui/mixer.cpp:344
+#: ../gui/rosegardentransport.cpp:1664 ../gui/mixer.cpp:344 rc.cpp:482
+#, no-c-format
 msgid "Solo"
 msgstr "独奏"
 
-#: ../gui/rosegardentransport.cpp:1665
+#: ../gui/rosegardentransport.cpp:1665 rc.cpp:485
+#, no-c-format
 msgid "Mutes all but the currently selected track"
 msgstr "除了当前选中的轨道外全部静音"
 
-#: ../gui/rosegardentransport.cpp:1667
+#: ../gui/rosegardentransport.cpp:1667 rc.cpp:489
+#, no-c-format
 msgid "Panic Button"
 msgstr "应急按钮"
 
-#: ../gui/rosegardentransport.cpp:1668
+#: ../gui/rosegardentransport.cpp:1668 rc.cpp:492
+#, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr ""
 
@@ -4854,7 +5129,8 @@ msgstr "重复"
 msgid "Delay"
 msgstr "延迟"
 
-#: ../gui/segmentparameterbox.cpp:84 ../gui/colourwidgets.cpp:47
+#: ../gui/segmentparameterbox.cpp:84 ../gui/rosegardenconfigurationpage.h:428
+#: ../gui/colourwidgets.cpp:47
 msgid "Color"
 msgstr "配色"
 
@@ -5060,6 +5336,82 @@ msgstr "移动事件到其他片段(&M)"
 msgid "Insert Trigger Note"
 msgstr "插入触发记号"
 
+#: ../gui/editcommands.h:67
+msgid "Cu&t"
+msgstr "剪切(&T)"
+
+#: ../gui/editcommands.h:246
+msgid "Edit E&vent"
+msgstr "编辑事件(&V)"
+
+#: ../gui/editcommands.h:314
+msgid "Collapse &Equal-Pitch Notes"
+msgstr "压缩相同音色的音符(&E)"
+
+#: ../gui/editcommands.h:336
+msgid "Set &Property"
+msgstr "设定属性(&P)"
+
+#: ../gui/editcommands.h:381
+msgid "Edit L&yrics"
+msgstr "编辑歌词(&Y)"
+
+#: ../gui/editcommands.h:402
+msgid "&Up a Semitone"
+msgstr "升高一个半音(&U)"
+
+#: ../gui/editcommands.h:403
+msgid "&Down a Semitone"
+msgstr "降低一个半音(&D)"
+
+#: ../gui/editcommands.h:404
+msgid "Up an &Octave"
+msgstr "升高一个八度音阶(&O)"
+
+#: ../gui/editcommands.h:405
+msgid "Down an Octa&ve"
+msgstr "降低一个八度音阶(&V)"
+
+#: ../gui/editcommands.h:406
+msgid "&Transpose..."
+msgstr "变调(&T)..."
+
+#: ../gui/editcommands.h:494
+msgid "&Increase Velocity"
+msgstr "提高力度(&I)"
+
+#: ../gui/editcommands.h:495
+msgid "&Reduce Velocity"
+msgstr "降低力度(&R)"
+
+#: ../gui/editcommands.h:515
+msgid "&Add Marker"
+msgstr "添加示标(&A)"
+
+#: ../gui/editcommands.h:538
+msgid "&Remove Marker"
+msgstr "删除示标(&R)"
+
+#: ../gui/editcommands.h:564
+msgid "&Modify Marker"
+msgstr "修改示标(&M)"
+
+#: ../gui/editcommands.h:603
+msgid "Tri&gger Segment"
+msgstr "触发片段(&G)"
+
+#: ../gui/editcommands.h:629
+msgid "&Clear Triggers"
+msgstr "清除触发器(&C)"
+
+#: ../gui/editcommands.h:683
+msgid "&Set Note Type"
+msgstr "设置记号类型(&S)"
+
+#: ../gui/editcommands.h:706
+msgid "&Add Dot"
+msgstr "添加顿音符号(&A)"
+
 #: ../gui/segmenttool.cpp:501 ../gui/segmenttool.cpp:997
 msgid "Move Segment"
 msgstr "移动小节"
@@ -5166,7 +5518,9 @@ msgstr "录音时进程条的数量"
 msgid "Always use default studio when loading files"
 msgstr "载入文件时总是使用默认工作环境"
 
-#: ../gui/rosegardenconfigurationpage.cpp:208 ../gui/matrixview.cpp:2498
+#: ../gui/rosegardenconfigurationpage.cpp:208
+#: ../gui/rosegardenconfigurationpage.h:292
+#: ../gui/rosegardenconfigurationpage.h:293 ../gui/matrixview.cpp:2498
 msgid "Matrix"
 msgstr "字模"
 
@@ -5398,6 +5752,7 @@ msgstr "%1 (粗糙)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:829
 #: ../gui/rosegardenconfigurationpage.cpp:1065
+#: ../gui/rosegardenconfigurationpage.h:183
 msgid "General"
 msgstr "常规"
 
@@ -5798,6 +6153,7 @@ msgid "Polyphony"
 msgstr "复调"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1967
+#: ../gui/rosegardenconfigurationpage.h:385
 msgid "Audio"
 msgstr "音频"
 
@@ -6298,6 +6654,35 @@ msgid ""
 "Try copying this file to a directory where you have write permission and re-"
 "add it"
 msgstr "尝试复制此文件到一个您拥有写权限的目录里并重新添加它"
+
+#: ../gui/rosegardenconfigurationpage.h:184
+msgid "General Configuration"
+msgstr "常规配置"
+
+#: ../gui/rosegardenconfigurationpage.h:318
+msgid "Latency"
+msgstr "潜伏期"
+
+#: ../gui/rosegardenconfigurationpage.h:319
+msgid "Sequencer Latency"
+msgstr "音序发生器潜伏期"
+
+#: ../gui/rosegardenconfigurationpage.h:386
+msgid "Audio Settings"
+msgstr "音频设置"
+
+#: ../gui/rosegardenconfigurationpage.h:429
+#, fuzzy
+msgid "Color Settings"
+msgstr "音频设置"
+
+#: ../gui/rosegardenconfigurationpage.h:463
+msgid "Sequencer"
+msgstr "音序发生器"
+
+#: ../gui/rosegardenconfigurationpage.h:464
+msgid "Sequencer Settings"
+msgstr "音序发生器设置"
 
 #: ../gui/matrixview.cpp:359
 msgid "Couldn't apply piano roll layout"
@@ -7039,7 +7424,7 @@ msgstr "添加播放设备"
 msgid "Add Record Device"
 msgstr "添加录制设备"
 
-#: ../gui/deviceeditor.cpp:82
+#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
 msgid "Delete Device"
 msgstr "删除设备"
 
@@ -7420,6 +7805,45 @@ msgstr "移动音符"
 msgid "Modify Note"
 msgstr "修改音符"
 
+#: ../gui/studiocommands.h:60
+msgid "Modify &MIDI Bank"
+msgstr "修改 MIDI 库(&M)"
+
+#: ../gui/studiocommands.h:105
+msgid "Modify &Device Mapping"
+msgstr "修改设备映射(&D)"
+
+#: ../gui/studiocommands.h:126
+msgid "Modify &Instrument Mapping"
+msgstr "修改乐器映射(&I)"
+
+#: ../gui/studiocommands.h:155
+msgid "Rename Device"
+msgstr "重命名设备"
+
+#: ../gui/studiocommands.h:191
+msgid "Create Device"
+msgstr "创建设备"
+
+#: ../gui/studiocommands.h:219
+msgid "Reconnect Device"
+msgstr "重新连接设备"
+
+#: ../gui/studiocommands.h:248
+#, fuzzy
+msgid "&Add Control Parameter"
+msgstr "乐器参数"
+
+#: ../gui/studiocommands.h:275
+#, fuzzy
+msgid "&Remove Control Parameter"
+msgstr "小节参数"
+
+#: ../gui/studiocommands.h:302
+#, fuzzy
+msgid "&Modify Control Parameter"
+msgstr "编辑控制器参数"
+
 #: ../gui/rosegardenconfiguredialog.cpp:152
 msgid "Configure Rosegarden"
 msgstr "配置玫瑰园"
@@ -7678,6 +8102,10 @@ msgstr "覆盖库"
 msgid "Bank %1:%2"
 msgstr ""
 
+#: ../gui/audiocommands.h:57
+msgid "Distribute Audio Segments over MIDI"
+msgstr "在 MIDI 上排布音频片段"
+
 #: ../gui/timewidget.cpp:85
 msgid "Note:"
 msgstr "音符："
@@ -7869,423 +8297,331 @@ msgid ""
 "\"Choose...\" button."
 msgstr "这是字体“%1”的预览。您可以点击“选择...”按钮来改变它。"
 
-#~ msgid "Change to &Key %1..."
-#~ msgstr "变更为键 %1(&K)..."
-
-#~ msgid "Add &Key Change..."
-#~ msgstr "添加键改变(&K)..."
-
-#~ msgid "Change all to &Key %1..."
-#~ msgstr "全部变为键 %1(&K)..."
-
-#~ msgid "&Beam Group"
-#~ msgstr "全部分开符尾(&B)"
-
-#~ msgid "&Auto-Beam"
-#~ msgstr "自动分开符尾(&A)"
-
-#~ msgid "&Unbeam"
-#~ msgstr "取销符尾分开(&U)"
-
-#, fuzzy
-#~ msgid "&Triplet"
-#~ msgstr "三连音"
-
-#, fuzzy
-#~ msgid "Tu&plet..."
-#~ msgstr "连音(&T)..."
-
-#~ msgid "&Untuplet"
-#~ msgstr "取消连音(&U)"
-
-#~ msgid "Make &Grace Notes"
-#~ msgstr "制作装饰音音符(&G)"
-
-#~ msgid "Ung&race"
-#~ msgstr "取消装饰音(&R)"
-
-#, fuzzy
-#~ msgid "Make &Chord"
-#~ msgstr " 和弦"
-
-#~ msgid "&Normalize Rests"
-#~ msgstr "规格化休止符(&N)"
-
-#~ msgid "&Collapse Rests"
-#~ msgstr "压缩休止符(&C)"
-
-#, fuzzy
-#~ msgid "&Tie"
-#~ msgstr "时间"
-
-#, fuzzy
-#~ msgid "&Untie"
-#~ msgstr "松解音符(&U)"
-
-#, fuzzy
-#~ msgid "Tie Notes at &Barlines"
-#~ msgstr "将音符捆绑于进程线等等"
-
-#, fuzzy
-#~ msgid "Split-and-Tie Overlapping &Chords"
-#~ msgstr "分割与捆绑重叠和弦"
-
-#~ msgid "Stems &Up"
-#~ msgstr "符干向上(&U)"
-
-#~ msgid "Stems &Down"
-#~ msgstr "符干向下(&D)"
-
-#~ msgid "&Restore Computed Stems"
-#~ msgstr "恢复计算好的符干(&R)"
-
-#, fuzzy
-#~ msgid "&Restore Computed Slur Position"
-#~ msgstr "恢复计算好的符干(&R)"
-
-#~ msgid "Change &Note Style"
-#~ msgstr "改变音符样式(&N)"
-
-#~ msgid "Slashes"
-#~ msgstr "斜线"
-
-#~ msgid "Add Te&xt Mark..."
-#~ msgstr "添加文本标记(&X)..."
-
-#~ msgid "&Remove All Marks"
-#~ msgstr "删除所有标记(&R)"
-
-#, fuzzy
-#~ msgid "&Remove Fingerings"
-#~ msgstr "删除所有标记(&R)"
-
-#, fuzzy
-#~ msgid "Fi&x Notation Quantization"
-#~ msgstr "启发记号量化(&Q)"
-
-#, fuzzy
-#~ msgid "Remo&ve Notation Quantization"
-#~ msgstr "启发记号量化(&Q)"
-
-#~ msgid "&Interpret..."
-#~ msgstr "解析(&I)..."
-
-#, fuzzy
-#~ msgid "Fine Reposition"
-#~ msgstr "插入到作品中"
-
-#, fuzzy
-#~ msgid "Restore Computed Positions"
-#~ msgstr "恢复计算好的符干(&R)"
-
-#~ msgid "&Layout Mode"
-#~ msgstr "布局模式(&L)"
-
-#~ msgid "Add Event Ruler"
-#~ msgstr "添加事件标尺"
-
-#, fuzzy
-#~ msgid "&Composition"
-#~ msgstr "插入到作品中"
-
-#, fuzzy
-#~ msgid "Se&gment"
-#~ msgstr "小节(&M)"
-
-#, fuzzy
-#~ msgid "Edit &With"
-#~ msgstr "根据音色拆分"
-
-#~ msgid "N&otes"
-#~ msgstr "音符(&O)"
-
-#, fuzzy
-#~ msgid "&Beams"
-#~ msgstr "节拍"
-
-#~ msgid "&Octaves"
-#~ msgstr "八度音阶(&O)"
-
-#, fuzzy
-#~ msgid "&Indications"
-#~ msgstr "指示"
-
-#, fuzzy
-#~ msgid "Slur &Position"
-#~ msgstr "插入到作品中"
-
-#~ msgid "Mar&ks"
-#~ msgstr "标记(&K)"
-
-#, fuzzy
-#~ msgid "&Ornaments"
-#~ msgstr "小节(&M)"
-
-#, fuzzy
-#~ msgid "&Fingerings"
-#~ msgstr "正在添加连音线..."
-
-#~ msgid "S&lashes"
-#~ msgstr "斜线(&L)"
-
-#~ msgid "&Accidentals"
-#~ msgstr "临时记号(&A)"
-
-#, fuzzy
-#~ msgid "Trip&lets and Tuplets"
-#~ msgstr "简单连音(&S)"
-
-#~ msgid "S&tem Direction"
-#~ msgstr "符干方向(&T)"
-
-#, fuzzy
-#~ msgid "R&ests"
-#~ msgstr "休止符(&R)"
-
-#~ msgid "&Notes"
-#~ msgstr "音符(&N)"
-
-#, fuzzy
-#~ msgid "&Quantize"
-#~ msgstr "量化"
-
-#~ msgid "Trans&pose"
-#~ msgstr "变调(&P)"
-
-#, fuzzy
-#~ msgid "&Fine Positioning"
-#~ msgstr "插入到作品中"
-
-#, fuzzy
-#~ msgid "&Visibility"
-#~ msgstr "力度(&V)"
-
-#~ msgid "&Editor Tools"
-#~ msgstr "编辑器工具(&E)"
-
-#~ msgid "&Rests"
-#~ msgstr "休止符(&R)"
-
-#~ msgid "&Clefs"
-#~ msgstr "谱号(&C)"
-
-#~ msgid "T&ransport"
-#~ msgstr "播放控制器(&R)"
-
-#~ msgid "&Toolbars"
-#~ msgstr "工具栏(&T)"
-
-#~ msgid "&Rulers"
-#~ msgstr "标尺(&R)"
-
-#~ msgid "Tools Toolbar"
-#~ msgstr "工具工具栏"
-
-#~ msgid "Transport Toolbar"
-#~ msgstr "播放控制器工具栏"
-
-#~ msgid "Notes Toolbar"
-#~ msgstr "音符工具栏"
-
-#~ msgid "Rests Toolbar"
-#~ msgstr "休止符工具栏"
-
-#~ msgid "Clefs Toolbar"
-#~ msgstr "谱号工具栏"
-
-#~ msgid "Accidentals Toolbar"
-#~ msgstr "临时记号工具栏"
-
-#~ msgid "Group Toolbar"
-#~ msgstr "分组工具栏"
-
-#~ msgid "Marks Toolbar"
-#~ msgstr "标记工具栏"
-
-#~ msgid "Meta Toolbar"
-#~ msgstr "元(数据)工具栏"
-
-#~ msgid "Layout Toolbar"
-#~ msgstr "布局工具栏"
-
-#~ msgid "Control Ruler actions"
-#~ msgstr "控制器标尺行为"
-
-#~ msgid "Property Ruler actions"
-#~ msgstr "属性标尺行为"
-
-#~ msgid "Number of Stereo &Inputs"
-#~ msgstr "立体声输入数量(&I)"
-
-#~ msgid "&Number of Submasters"
-#~ msgstr "副控制器数量(&N)"
-
-#~ msgid "&Grid"
-#~ msgstr "栅格(&G)"
-
-#, fuzzy
-#~ msgid "&Segment"
-#~ msgstr "小节(&M)"
-
-#~ msgid "&Velocity"
-#~ msgstr "力度(&V)"
-
-#~ msgid "Actions Toolbar"
-#~ msgstr "行为工具栏"
-
-#~ msgid "Zoom Toolbar"
-#~ msgstr "缩放工具栏"
-
-#~ msgid "Time Toolbar"
-#~ msgstr "时间工具栏"
-
-#~ msgid "&Import"
-#~ msgstr "导入(&I)"
-
-#~ msgid "&Merge"
-#~ msgstr "并入(&M)"
-
-#~ msgid "&Export"
-#~ msgstr "导出(&E)"
-
-#~ msgid "&Studio"
-#~ msgstr "工作环境(&S)"
-
-#, fuzzy
-#~ msgid "&Tempo and Time Signature"
-#~ msgstr "以事件列表编辑器打开(&E)"
-
-#~ msgid "Se&gments"
-#~ msgstr "片段(&G)"
-
-#~ msgid "&Split or Join"
-#~ msgstr "拆分或合并(&S)"
-
-#~ msgid "Trac&ks"
-#~ msgstr "轨道(&K)"
-
-#~ msgid "Set &Instrument"
-#~ msgstr "设置乐器(&I)"
-
-#~ msgid "Tracks Toolbar"
-#~ msgstr "轨道工具栏"
-
-#~ msgid "Editors Toolbar"
-#~ msgstr "编辑器工具栏"
-
-#, fuzzy
-#~ msgid "&Action"
-#~ msgstr "符干方向(&T)"
-
-#, fuzzy
-#~ msgid "General Toolbar"
-#~ msgstr "元(数据)工具栏"
-
-#~ msgid "Quick-Copy Segment"
-#~ msgstr "快速复制小节"
-
-#~ msgid "&Split on Silence"
-#~ msgstr "安静拆分(&S)"
-
-#~ msgid "Add Time Si&gnature Change..."
-#~ msgstr "添加时间署名变更(&G)..."
-
-#, fuzzy
-#~ msgid "Remove &Time Signature Change..."
-#~ msgstr "添加时间署名变更(&G)..."
-
-#~ msgid "Modify &Default Tempo..."
-#~ msgstr "修改默认节拍(&D)..."
-
-#~ msgid "Remove &Tempo Change..."
-#~ msgstr "删除节拍变更(&T)..."
-
-#~ msgid "Add Te&mpo Change..."
-#~ msgstr "添加节拍变更(&M)..."
-
-#~ msgid "Add Tracks..."
-#~ msgstr "添加轨道..."
-
-#~ msgid "Delete Tracks..."
-#~ msgstr "删除轨道..."
-
-#~ msgid "Move Tracks..."
-#~ msgstr "移动轨道..."
-
-#, fuzzy
-#~ msgid "Rename Track"
-#~ msgstr "删除轨道(&D)"
-
-#, fuzzy
-#~ msgid "Change &Composition Start and End..."
-#~ msgstr "改变作品持续时间(&C)..."
-
-#~ msgid "Split by &Pitch..."
-#~ msgstr "根据音色拆分(&P)..."
-
-#~ msgid "Re&label..."
-#~ msgstr "重新标注(&L)..."
-
-#, fuzzy
-#~ msgid "Change Segment Color..."
-#~ msgstr "改为 %1 谱号(&F)..."
-
-#~ msgid "Cu&t"
-#~ msgstr "剪切(&T)"
-
-#~ msgid "Edit E&vent"
-#~ msgstr "编辑事件(&V)"
-
-#~ msgid "Collapse &Equal-Pitch Notes"
-#~ msgstr "压缩相同音色的音符(&E)"
-
-#~ msgid "Set &Property"
-#~ msgstr "设定属性(&P)"
-
-#~ msgid "Edit L&yrics"
-#~ msgstr "编辑歌词(&Y)"
-
-#~ msgid "&Up a Semitone"
-#~ msgstr "升高一个半音(&U)"
-
-#~ msgid "&Down a Semitone"
-#~ msgstr "降低一个半音(&D)"
-
-#~ msgid "Up an &Octave"
-#~ msgstr "升高一个八度音阶(&O)"
-
-#~ msgid "Down an Octa&ve"
-#~ msgstr "降低一个八度音阶(&V)"
-
-#~ msgid "&Transpose..."
-#~ msgstr "变调(&T)..."
-
-#~ msgid "&Increase Velocity"
-#~ msgstr "提高力度(&I)"
-
-#~ msgid "&Reduce Velocity"
-#~ msgstr "降低力度(&R)"
-
-#~ msgid "&Add Marker"
-#~ msgstr "添加示标(&A)"
-
-#~ msgid "&Remove Marker"
-#~ msgstr "删除示标(&R)"
-
-#~ msgid "&Modify Marker"
-#~ msgstr "修改示标(&M)"
-
-#~ msgid "Tri&gger Segment"
-#~ msgstr "触发片段(&G)"
-
-#~ msgid "&Clear Triggers"
-#~ msgstr "清除触发器(&C)"
-
-#~ msgid "&Set Note Type"
-#~ msgstr "设置记号类型(&S)"
-
-#~ msgid "&Add Dot"
-#~ msgstr "添加顿音符号(&A)"
+#: rc.cpp:6
+#, no-c-format
+msgid "&Layout Mode"
+msgstr "布局模式(&L)"
+
+#: rc.cpp:9 rc.cpp:171
+#, no-c-format
+msgid "Add Event Ruler"
+msgstr "添加事件标尺"
+
+#: rc.cpp:12 rc.cpp:174 rc.cpp:273
+#, fuzzy, no-c-format
+msgid "&Composition"
+msgstr "插入到作品中"
+
+#: rc.cpp:15 rc.cpp:237
+#, fuzzy, no-c-format
+msgid "Se&gment"
+msgstr "小节(&M)"
+
+#: rc.cpp:18 rc.cpp:180 rc.cpp:240 rc.cpp:285
+#, fuzzy, no-c-format
+msgid "Edit &With"
+msgstr "根据音色拆分"
+
+#: rc.cpp:21
+#, no-c-format
+msgid "N&otes"
+msgstr "音符(&O)"
+
+#: rc.cpp:24
+#, fuzzy, no-c-format
+msgid "&Beams"
+msgstr "节拍"
+
+#: rc.cpp:27
+#, no-c-format
+msgid "&Octaves"
+msgstr "八度音阶(&O)"
+
+#: rc.cpp:30
+#, fuzzy, no-c-format
+msgid "&Indications"
+msgstr "指示"
+
+#: rc.cpp:33
+#, fuzzy, no-c-format
+msgid "Slur &Position"
+msgstr "插入到作品中"
+
+#: rc.cpp:36
+#, no-c-format
+msgid "Mar&ks"
+msgstr "标记(&K)"
+
+#: rc.cpp:39
+#, fuzzy, no-c-format
+msgid "&Ornaments"
+msgstr "小节(&M)"
+
+#: rc.cpp:42
+#, fuzzy, no-c-format
+msgid "&Fingerings"
+msgstr "正在添加连音线..."
+
+#: rc.cpp:45
+#, no-c-format
+msgid "S&lashes"
+msgstr "斜线(&L)"
+
+#: rc.cpp:48 rc.cpp:183
+#, no-c-format
+msgid "Ad&just"
+msgstr ""
+
+#: rc.cpp:51 rc.cpp:93
+#, no-c-format
+msgid "&Accidentals"
+msgstr "临时记号(&A)"
+
+#: rc.cpp:54
+#, fuzzy, no-c-format
+msgid "Trip&lets and Tuplets"
+msgstr "简单连音(&S)"
+
+#: rc.cpp:57
+#, no-c-format
+msgid "S&tem Direction"
+msgstr "符干方向(&T)"
+
+#: rc.cpp:60
+#, fuzzy, no-c-format
+msgid "R&ests"
+msgstr "休止符(&R)"
+
+#: rc.cpp:63 rc.cpp:87
+#, no-c-format
+msgid "&Notes"
+msgstr "音符(&N)"
+
+#: rc.cpp:66 rc.cpp:186
+#, fuzzy, no-c-format
+msgid "&Quantize"
+msgstr "量化"
+
+#: rc.cpp:69 rc.cpp:192
+#, no-c-format
+msgid "Trans&pose"
+msgstr "变调(&P)"
+
+#: rc.cpp:72
+#, fuzzy, no-c-format
+msgid "&Fine Positioning"
+msgstr "插入到作品中"
+
+#: rc.cpp:75
+#, fuzzy, no-c-format
+msgid "Fine Ti&ming"
+msgstr "插入到作品中"
+
+#: rc.cpp:78
+#, fuzzy, no-c-format
+msgid "&Visibility"
+msgstr "力度(&V)"
+
+#: rc.cpp:84 rc.cpp:198 rc.cpp:300
+#, no-c-format
+msgid "&Editor Tools"
+msgstr "编辑器工具(&E)"
+
+#: rc.cpp:90
+#, no-c-format
+msgid "&Rests"
+msgstr "休止符(&R)"
+
+#: rc.cpp:96
+#, no-c-format
+msgid "&Clefs"
+msgstr "谱号(&C)"
+
+#: rc.cpp:99 rc.cpp:201
+#, no-c-format
+msgid "Local &Cursor"
+msgstr ""
+
+#: rc.cpp:102 rc.cpp:150 rc.cpp:204 rc.cpp:258 rc.cpp:303
+#, no-c-format
+msgid "T&ransport"
+msgstr "播放控制器(&R)"
+
+#: rc.cpp:108 rc.cpp:210 rc.cpp:306
+#, no-c-format
+msgid "&Toolbars"
+msgstr "工具栏(&T)"
+
+#: rc.cpp:111 rc.cpp:213 rc.cpp:309
+#, no-c-format
+msgid "&Rulers"
+msgstr "标尺(&R)"
+
+#: rc.cpp:114 rc.cpp:216 rc.cpp:315
+#, no-c-format
+msgid "Tools Toolbar"
+msgstr "工具工具栏"
+
+#: rc.cpp:117 rc.cpp:162 rc.cpp:219 rc.cpp:249 rc.cpp:261 rc.cpp:324
+#: rc.cpp:345
+#, no-c-format
+msgid "Transport Toolbar"
+msgstr "播放控制器工具栏"
+
+#: rc.cpp:120
+#, no-c-format
+msgid "Notes Toolbar"
+msgstr "音符工具栏"
+
+#: rc.cpp:123
+#, no-c-format
+msgid "Rests Toolbar"
+msgstr "休止符工具栏"
+
+#: rc.cpp:126
+#, no-c-format
+msgid "Clefs Toolbar"
+msgstr "谱号工具栏"
+
+#: rc.cpp:129
+#, no-c-format
+msgid "Accidentals Toolbar"
+msgstr "临时记号工具栏"
+
+#: rc.cpp:132
+#, no-c-format
+msgid "Group Toolbar"
+msgstr "分组工具栏"
+
+#: rc.cpp:135
+#, no-c-format
+msgid "Marks Toolbar"
+msgstr "标记工具栏"
+
+#: rc.cpp:138
+#, no-c-format
+msgid "Meta Toolbar"
+msgstr "元(数据)工具栏"
+
+#: rc.cpp:141
+#, no-c-format
+msgid "Layout Toolbar"
+msgstr "布局工具栏"
+
+#: rc.cpp:144 rc.cpp:228
+#, no-c-format
+msgid "Control Ruler actions"
+msgstr "控制器标尺行为"
+
+#: rc.cpp:147 rc.cpp:231
+#, no-c-format
+msgid "Property Ruler actions"
+msgstr "属性标尺行为"
+
+#: rc.cpp:156
+#, no-c-format
+msgid "Number of Stereo &Inputs"
+msgstr "立体声输入数量(&I)"
+
+#: rc.cpp:159
+#, no-c-format
+msgid "&Number of Submasters"
+msgstr "副控制器数量(&N)"
+
+#: rc.cpp:168
+#, no-c-format
+msgid "&Grid"
+msgstr "栅格(&G)"
+
+#: rc.cpp:177
+#, fuzzy, no-c-format
+msgid "&Segment"
+msgstr "小节(&M)"
+
+#: rc.cpp:189
+#, no-c-format
+msgid "&Velocity"
+msgstr "力度(&V)"
+
+#: rc.cpp:222 rc.cpp:243 rc.cpp:252 rc.cpp:339 rc.cpp:348
+#, no-c-format
+msgid "Actions Toolbar"
+msgstr "行为工具栏"
+
+#: rc.cpp:225 rc.cpp:255 rc.cpp:327 rc.cpp:351
+#, no-c-format
+msgid "Zoom Toolbar"
+msgstr "缩放工具栏"
+
+#: rc.cpp:246 rc.cpp:333 rc.cpp:342 rc.cpp:363
+#, no-c-format
+msgid "Time Toolbar"
+msgstr "时间工具栏"
+
+#: rc.cpp:264
+#, no-c-format
+msgid "&Import"
+msgstr "导入(&I)"
+
+#: rc.cpp:267
+#, no-c-format
+msgid "&Merge"
+msgstr "并入(&M)"
+
+#: rc.cpp:270
+#, no-c-format
+msgid "&Export"
+msgstr "导出(&E)"
+
+#: rc.cpp:276
+#, no-c-format
+msgid "&Studio"
+msgstr "工作环境(&S)"
+
+#: rc.cpp:279
+#, fuzzy, no-c-format
+msgid "&Tempo and Time Signature"
+msgstr "以事件列表编辑器打开(&E)"
+
+#: rc.cpp:282
+#, no-c-format
+msgid "Se&gments"
+msgstr "片段(&G)"
+
+#: rc.cpp:288
+#, no-c-format
+msgid "&Split or Join"
+msgstr "拆分或合并(&S)"
+
+#: rc.cpp:291
+#, no-c-format
+msgid "Trac&ks"
+msgstr "轨道(&K)"
+
+#: rc.cpp:294
+#, no-c-format
+msgid "Set &Instrument"
+msgstr "设置乐器(&I)"
+
+#: rc.cpp:318
+#, no-c-format
+msgid "Tracks Toolbar"
+msgstr "轨道工具栏"
+
+#: rc.cpp:321
+#, no-c-format
+msgid "Editors Toolbar"
+msgstr "编辑器工具栏"
+
+#: rc.cpp:354
+#, fuzzy, no-c-format
+msgid "&Action"
+msgstr "符干方向(&T)"
+
+#: rc.cpp:357
+#, fuzzy, no-c-format
+msgid "General Toolbar"
+msgstr "元(数据)工具栏"
 
 #~ msgid ""
 #~ "This will unload all audio files and remove their associated segments.  "
@@ -8296,57 +8632,6 @@ msgstr "这是字体“%1”的预览。您可以点击“选择...”按钮来�
 #~ "This will unload all audio files that have no segments used in this "
 #~ "composition.  Are you sure?"
 #~ msgstr "这将卸载没有被此作品使用任何片段的全部音频文件。您确定吗？"
-
-#~ msgid "General Configuration"
-#~ msgstr "常规配置"
-
-#~ msgid "Latency"
-#~ msgstr "潜伏期"
-
-#~ msgid "Sequencer Latency"
-#~ msgstr "音序发生器潜伏期"
-
-#~ msgid "Audio Settings"
-#~ msgstr "音频设置"
-
-#, fuzzy
-#~ msgid "Color Settings"
-#~ msgstr "音频设置"
-
-#~ msgid "Sequencer"
-#~ msgstr "音序发生器"
-
-#~ msgid "Sequencer Settings"
-#~ msgstr "音序发生器设置"
-
-#~ msgid "Modify &MIDI Bank"
-#~ msgstr "修改 MIDI 库(&M)"
-
-#~ msgid "Modify &Device Mapping"
-#~ msgstr "修改设备映射(&D)"
-
-#~ msgid "Modify &Instrument Mapping"
-#~ msgstr "修改乐器映射(&I)"
-
-#~ msgid "Rename Device"
-#~ msgstr "重命名设备"
-
-#~ msgid "Create Device"
-#~ msgstr "创建设备"
-
-#~ msgid "Reconnect Device"
-#~ msgstr "重新连接设备"
-
-#, fuzzy
-#~ msgid "&Add Control Parameter"
-#~ msgstr "乐器参数"
-
-#, fuzzy
-#~ msgid "&Remove Control Parameter"
-#~ msgstr "小节参数"
-
-#~ msgid "Distribute Audio Segments over MIDI"
-#~ msgstr "在 MIDI 上排布音频片段"
 
 #~ msgid "Re&label"
 #~ msgstr "重新标注(&L)"
