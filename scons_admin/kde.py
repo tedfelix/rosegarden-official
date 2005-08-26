@@ -243,7 +243,7 @@ def detect_kde(env):
 	env['QTLIBPATH']=qtlibs
 
 def generate(env):
-	""""Set up the qt and kde environment and builders - the moc part is difficult to understand """
+	""" Set up the qt and kde environment and builders - the moc part is difficult to understand """
 
 	# attach this function immediately
 	SConsEnvironment.KDEuse=KDEuse
