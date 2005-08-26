@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: sv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-08-25 22:12+0200\n"
-"PO-Revision-Date: 2005-08-24 22:19+0200\n"
+"PO-Revision-Date: 2005-08-26 12:57+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@comhem.se>\n"
 "Language-Team: Svenska <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -888,17 +888,14 @@ msgid "Export..."
 msgstr "Exportera..."
 
 #: ../gui/bankeditor.cpp:1116
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr ""
-"Importera bank- och programdata från Rosegarden-fil till nuvarande enhet"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr "Importera bank- och programdata från Rosegarden-fil till nuvarande enhet"
 
 #: ../gui/bankeditor.cpp:1118
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"Exportera all bank- och programdata till utbytesfil med Rosegarden-format"
+msgstr "Exportera all bank- och programdata till utbytesfil med Rosegarden-format"
 
 #: ../gui/bankeditor.cpp:1128
 msgid "Copy all Program names from current Bank to clipboard"
@@ -992,8 +989,7 @@ msgstr "Enhet eller instrument"
 
 #: ../gui/bankeditor.cpp:2679
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr ""
-"Mappa om spår för alla instrument till en enhet eller ett enstaka instrument"
+msgstr "Mappa om spår för alla instrument till en enhet eller ett enstaka instrument"
 
 #: ../gui/bankeditor.cpp:2680 ../gui/dialogs.cpp:4410
 #: ../gui/deviceeditor.cpp:61 ../gui/devicemanager.cpp:88
@@ -1080,7 +1076,7 @@ msgstr "Kan inte lägga till släppt fil. "
 
 #: ../gui/audiopreviewupdater_moc.cpp:34 ../gui/audiopreviewupdater_moc.cpp:42
 msgid "AudioPreviewUpdater"
-msgstr ""
+msgstr "Ljudförhandsgranskningsuppdaterare"
 
 #: ../gui/rosexmlhandler.cpp:430
 msgid ""
@@ -1527,9 +1523,8 @@ msgid "Reconciling staffs..."
 msgstr "Gör notsystem förenliga..."
 
 #: ../gui/notationview.cpp:2742 ../gui/matrixview.cpp:1083
-#, fuzzy
 msgid "  1 event selected "
-msgstr "Inga segment utan ljud markerade"
+msgstr "  1 händelse markerad "
 
 #: ../gui/notationview.cpp:2745 ../gui/matrixview.cpp:1086
 msgid "  No selection "
@@ -1701,23 +1696,20 @@ msgid "Jogging right..."
 msgstr "Knuffar åt höger..."
 
 #: ../gui/rosegardentempo.cpp:35
-#, fuzzy
 msgid "Set Tempo"
-msgstr "Ställ in övergripande tempo"
+msgstr "Ställ in tempo"
 
 #: ../gui/rosegardentempo.cpp:44
-#, fuzzy
 msgid "Modify Tempo"
-msgstr "Ändra not"
+msgstr "Ändra tempo"
 
 #: ../gui/rosegardentempo.cpp:51
 msgid "Change this tempo to"
-msgstr ""
+msgstr "Ändra detta tempo till"
 
 #: ../gui/rosegardentempo.cpp:55
-#, fuzzy
 msgid "Tempo at time"
-msgstr "Tempo   "
+msgstr "Tempo vid tid"
 
 #: ../gui/rosegardentempo.cpp:59 ../gui/rosegardentempo.cpp:70
 #: ../gui/eventfilter.cpp:252 ../gui/eventfilter.cpp:253
@@ -1725,9 +1717,8 @@ msgid "0"
 msgstr "0"
 
 #: ../gui/rosegardentempo.cpp:66
-#, fuzzy
 msgid "is currently"
-msgstr "Nuvarande"
+msgstr "är för närvarande"
 
 #: ../gui/notationtool.cpp:180
 msgid "Auto-Beam when appropriate"
@@ -2714,7 +2705,7 @@ msgstr ""
 "Vill du ställa in den nu?"
 
 #: ../gui/rosegardengui.cpp:5101 ../gui/matrixview.cpp:2071
-#, fuzzy, c-format
+#, c-format
 msgid "%1%"
 msgstr "%1 %"
 
@@ -2776,8 +2767,7 @@ msgid "Saving current document as default studio..."
 msgstr "Sparar nuvarande dokument som standardstudio..."
 
 #: ../gui/rosegardengui.cpp:6781
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Är du säker på att du vill importera din standardstudio och låta den "
 "nuvarande gå förlorad?"
@@ -2813,8 +2803,7 @@ msgid "<no instrument>"
 msgstr "<inget instrument>"
 
 #: ../gui/tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Klicka och håll nere vänster musknapp för att tilldela spåret till ett "
 "instrument."
@@ -3056,14 +3045,12 @@ msgid "Example"
 msgstr "Exempel"
 
 #: ../gui/dialogs.cpp:1282
-#, fuzzy
 msgid "Advanced Event Edit"
-msgstr "&Avancerad händelseeditor"
+msgstr "Avancerad händelseeditor"
 
 #: ../gui/dialogs.cpp:1282
-#, fuzzy
 msgid "Advanced Event Viewer"
-msgstr "&Avancerad händelseeditor"
+msgstr "Avancerad händelsevisning"
 
 #: ../gui/dialogs.cpp:1300
 msgid "Intrinsics"
@@ -4051,10 +4038,8 @@ msgstr ""
 "Att avsluta andra program som kör kan förbättra Rosegardens prestanda."
 
 #: ../gui/sequencemanager.cpp:981
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
-msgstr ""
-"Slut på processorkraft för ljudbehandling i realtid. Kan inte fortsätta."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
+msgstr "Slut på processorkraft för ljudbehandling i realtid. Kan inte fortsätta."
 
 #: ../gui/sequencemanager.cpp:1006
 msgid ""
@@ -4071,8 +4056,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK-ljudsystemet förlorar samplade ramar."
 
 #: ../gui/sequencemanager.cpp:1045
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Misslyckades läsa ljuddata snabbt från till disk för att hantera "
 "ljudsystemet."
@@ -4526,145 +4510,146 @@ msgstr ""
 
 #: ../gui/fonts.cpp:1
 msgid "Feta Pixmaps"
-msgstr ""
+msgstr "Feta Punktavbildat"
 
 #: ../gui/fonts.cpp:2 ../gui/fonts.cpp:7
-#, fuzzy
 msgid "GNU Lilypond"
-msgstr "Lilypond 2.4"
+msgstr "GNU Lilypond"
 
 #: ../gui/fonts.cpp:3 ../gui/fonts.cpp:8
 msgid "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
-msgstr ""
+msgstr "Copyright © 1997-2003 Han-Wen Nienhuys och Jan Nieuwenhuizen"
 
 #: ../gui/fonts.cpp:4 ../gui/fonts.cpp:9 ../gui/fonts.cpp:14
 #: ../gui/fonts.cpp:19 ../gui/fonts.cpp:24 ../gui/fonts.cpp:29
 #: ../gui/fonts.cpp:34 ../gui/fonts.cpp:39 ../gui/fonts.cpp:44
 #: ../gui/fonts.cpp:49 ../gui/fonts.cpp:54
 msgid "Chris Cannam"
-msgstr ""
+msgstr "Chris Cannam"
 
 #: ../gui/fonts.cpp:5 ../gui/fonts.cpp:40
 msgid "pixmap"
-msgstr ""
+msgstr "Punktavbildat"
 
 #: ../gui/fonts.cpp:6
 msgid "Feta"
-msgstr ""
+msgstr "Feta"
 
 #: ../gui/fonts.cpp:10 ../gui/fonts.cpp:15 ../gui/fonts.cpp:20
 #: ../gui/fonts.cpp:25 ../gui/fonts.cpp:30 ../gui/fonts.cpp:35
 #: ../gui/fonts.cpp:45 ../gui/fonts.cpp:50 ../gui/fonts.cpp:55
-#, fuzzy
 msgid "scalable"
-msgstr "Skala om"
+msgstr "skalbar"
 
 #: ../gui/fonts.cpp:11
 msgid "Fughetta"
-msgstr ""
+msgstr "Fughetta"
 
 #: ../gui/fonts.cpp:12
 msgid ""
 "Created by Blake Hodgetts; freely redistributable.  See http://www.efh.org/"
 "~bch/aboutfonts.html"
 msgstr ""
+"Skapat av Blake Hodgetts. Kan distribueras fritt. Se "
+"http://www.efh.org/~bch/aboutfonts.html"
 
 #: ../gui/fonts.cpp:13
 msgid "Copyright 1995-1999 Blake Hodgetts"
-msgstr ""
+msgstr "Copyright 1995-1999 Blake Hodgetts"
 
 #: ../gui/fonts.cpp:16
 msgid "Inkpen"
-msgstr ""
+msgstr "Inkpen"
 
 #: ../gui/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
 msgstr ""
+"Inkpen är en del av Sibelius, men andra teckensnitt kan använda samma "
+"mappning."
 
 #: ../gui/fonts.cpp:18 ../gui/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
-msgstr ""
+msgstr "Copyright Sibelius Software Ltd"
 
 #: ../gui/fonts.cpp:21
-#, fuzzy
 msgid "Maestro"
-msgstr "Huvudnivå"
+msgstr "Maestro"
 
 #: ../gui/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
+msgstr "Maestro är en del av Finale, men andra teckensnitt använder samma mappning."
 
 #: ../gui/fonts.cpp:23 ../gui/fonts.cpp:33
-#, fuzzy
 msgid "Copyright Coda Inc"
-msgstr "Copyright"
+msgstr "Copyright Coda Inc"
 
 #: ../gui/fonts.cpp:26
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: ../gui/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
 msgstr ""
+"Opus är en del av Sibelius, men andra teckensnitt kan använda samma "
+"mappning."
 
 #: ../gui/fonts.cpp:31
 msgid "Petrucci"
-msgstr ""
+msgstr "Petrucci"
 
 #: ../gui/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
 msgstr ""
+"Petrucci är en del av Finale, men andra teckensnitt använder samma "
+"mappning."
 
 #: ../gui/fonts.cpp:36
 msgid "RG21"
-msgstr ""
+msgstr "RG21"
 
 #: ../gui/fonts.cpp:37
-#, fuzzy
 msgid "Rosegarden 2.1"
-msgstr "Rosegarden: %1"
+msgstr "Rosegarden 2.1"
 
 #: ../gui/fonts.cpp:38
 msgid "Copyright (c) 1994--2001 Chris Cannam"
-msgstr ""
+msgstr "Copyright © 1994-2001 Chris Cannam"
 
 #: ../gui/fonts.cpp:41
 msgid "Sonata"
-msgstr ""
+msgstr "Sonata"
 
 #: ../gui/fonts.cpp:42
-#, fuzzy
 msgid "Adobe"
-msgstr "Ljud"
+msgstr "Adobe"
 
 #: ../gui/fonts.cpp:43
-#, fuzzy
 msgid "Copyright Adobe Inc"
-msgstr "Copyright"
+msgstr "Copyright Adobe Inc"
 
 #: ../gui/fonts.cpp:46
 msgid "Steinberg"
-msgstr ""
+msgstr "Steinberg"
 
 #: ../gui/fonts.cpp:47
 msgid "The Steinberg Notation font is part of Cubase."
-msgstr ""
+msgstr "Notskriftsteckensnittet Steinberg är en del av Cubase."
 
 #: ../gui/fonts.cpp:48
 msgid "Copyright Steinberg Inc"
-msgstr ""
+msgstr "Copyright Steinberg Inc"
 
 #: ../gui/fonts.cpp:51
 msgid "Xinfonia"
-msgstr ""
+msgstr "Xinfonia"
 
 #: ../gui/fonts.cpp:52
 msgid "xemo.org"
-msgstr ""
+msgstr "xemo.org"
 
 #: ../gui/fonts.cpp:53
 msgid "Copyright 2001-2003 Xemus Software LLC"
-msgstr ""
+msgstr "Copyright 2001-2003 Xemus Software LLC"
 
 #: ../gui/segmentcommands.h:163
 msgid "Quick-Copy Segment"
@@ -4736,27 +4721,23 @@ msgstr "Ändra segmentets färgkarta..."
 
 #: ../gui/styles.cpp:1
 msgid "Classical"
-msgstr ""
+msgstr "Klassisk"
 
 #: ../gui/styles.cpp:2
-#, fuzzy
 msgid "Cross"
-msgstr "Styrning"
+msgstr "Kors"
 
 #: ../gui/styles.cpp:3
-#, fuzzy
 msgid "Mensural"
-msgstr "Allmänt"
+msgstr "Mensural"
 
 #: ../gui/styles.cpp:4
-#, fuzzy
 msgid "Triangle"
-msgstr "Trippel"
+msgstr "Triangel"
 
 #: ../gui/pitchruler_moc.cpp:34 ../gui/pitchruler_moc.cpp:42
-#, fuzzy
 msgid "PitchRuler"
-msgstr "Tonhöjder"
+msgstr "Tonhöjdslinjal"
 
 #: ../gui/segmentcommands.cpp:86
 msgid "Repeat Segments"
@@ -7437,10 +7418,8 @@ msgid "global element must precede note elements"
 msgstr "globala element måste vara innan notelement"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
-msgstr ""
-"globala och notelement kan ha egenskapen form eller teckennamn, men inte båda"
+msgid "global and note elements may have shape or charname attribute, but not both"
+msgstr "globala och notelement kan ha egenskapen form eller teckennamn, men inte båda"
 
 #: ../gui/rosegardentransportdialog.cpp:743
 #: ../gui/rosegardentransportdialog.cpp:820
@@ -8019,8 +7998,7 @@ msgstr ""
 
 #: ../gui/devicemanager.cpp:114
 msgid "Export Bank and Controller data to a Rosegarden interchange file"
-msgstr ""
-"Exportera bank- och styrenhetsdata till utbytesfil med Rosegarden-format"
+msgstr "Exportera bank- och styrenhetsdata till utbytesfil med Rosegarden-format"
 
 #: ../gui/devicemanager.cpp:116
 msgid "View and edit Banks and Programs for the selected device"
@@ -8232,8 +8210,7 @@ msgstr "%1 på %2 spår"
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Det här tar bort alla utlösande segment från hela kompositionen. Är du säker?"
+msgstr "Det här tar bort alla utlösande segment från hela kompositionen. Är du säker?"
 
 #: ../gui/triggermanager.cpp:341
 msgid "Remove all triggered segments"
@@ -8641,9 +8618,3 @@ msgstr "Å&tgärd"
 msgid "General Toolbar"
 msgstr "Allmän verktygsrad"
 
-#~ msgid ""
-#~ "_n:   1 event selected \n"
-#~ "  %n events selected "
-#~ msgstr ""
-#~ "  1 händelse markerad \n"
-#~ "  %n händelser markerade "
