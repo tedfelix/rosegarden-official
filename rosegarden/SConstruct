@@ -50,7 +50,7 @@ import string
 import sys
 
 env = Environment(TARGS=COMMAND_LINE_TARGETS, ARGS=ARGUMENTS, 
-		tools = ['default', 'generic', 'kde', 'sound', 'test'], 
+		tools = ['default', 'generic', 'kde', 'sound', 'test', 'rosegarden'], 
 		toolpath=['./', 'scons_admin/'])
 
 #-----------------------------
