@@ -913,22 +913,22 @@ void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
 {
     m_recordingSegments.insert(CompositionItemHelper::getSegment(item));
 
-    RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
-	     << m_recordingSegments.size() << " recording items\n";
+//     RG_DEBUG << "CompositionModelImpl::addRecordingItem: now have "
+// 	     << m_recordingSegments.size() << " recording items\n";
 }
 
 void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 {
     m_recordingSegments.erase(CompositionItemHelper::getSegment(item));
 
-    RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
-	     << m_recordingSegments.size() << " recording items\n";
+//     RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
+// 	     << m_recordingSegments.size() << " recording items\n";
 }
 
 void CompositionModelImpl::clearRecordingItems()
 {
     m_recordingSegments.clear();
-    RG_DEBUG << "CompositionModelImpl::clearRecordingItem\n";
+//     RG_DEBUG << "CompositionModelImpl::clearRecordingItem\n";
 }
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
@@ -1143,15 +1143,18 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
 //                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
 //                  << cachedCR.getBaseWidth() << endl;
-            int deltaX = origin.x() - cachedCR.x();
             cachedCR.moveTopLeft(origin);
 
-            if (s.isRepeating() && deltaX != 0) { // update repeat marks
-                CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
-                for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
-                    repeatMarks[i] += deltaX;
-                }
-                cachedCR.setRepeatMarks(repeatMarks);
+            if (s.isRepeating() && (origin.x() != cachedCR.x() || origin.y() != cachedCR.y())) { // update repeat marks
+
+                // this doesn't work in the general case (if there's another segment on the same track for instance),
+                // it's better to simply recompute all the marks
+//                 CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
+//                 for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
+//                     repeatMarks[i] += deltaX;
+//                 }
+//                 cachedCR.setRepeatMarks(repeatMarks);
+                computeRepeatMarks(cachedCR, &s);
             }
         
             return cachedCR;

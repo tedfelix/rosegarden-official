@@ -542,8 +542,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
     if (m_currentItem) {
         CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
 
-        RG_DEBUG << "SegmentMover::handleMouseMove : nb movingItems = "
-                 << movingItems.size() << endl;
+//         RG_DEBUG << "SegmentMover::handleMouseMove : nb movingItems = "
+//                  << movingItems.size() << endl;
 
 	CompositionModel::itemcontainer::iterator it;
         int guideX = 0;
