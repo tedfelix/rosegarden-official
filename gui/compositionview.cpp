@@ -1143,9 +1143,12 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
 //                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
 //                  << cachedCR.getBaseWidth() << endl;
+            int deltaX = origin.x() != cachedCR.x();
+            int deltaY = origin.y() != cachedCR.y();
+
             cachedCR.moveTopLeft(origin);
 
-            if (s.isRepeating() && (origin.x() != cachedCR.x() || origin.y() != cachedCR.y())) { // update repeat marks
+            if (s.isRepeating() && (deltaX != 0 || deltaY != 0)) { // update repeat marks
 
                 // this doesn't work in the general case (if there's another segment on the same track for instance),
                 // it's better to simply recompute all the marks
