@@ -315,8 +315,6 @@ protected:
 
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
 
-    void computeAllSegmentRects();
-
     void clearInCache(const Rosegarden::Segment*);
     void putInCache(const Rosegarden::Segment*, const CompositionRect&);
     const CompositionRect& getFromCache(const Rosegarden::Segment*, Rosegarden::timeT& endTime);
@@ -355,8 +353,6 @@ protected:
 
     QMap<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
     QMap<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;
-
-    CompositionModel::CRectList m_allRects;
 };
 
 

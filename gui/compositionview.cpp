@@ -56,7 +56,9 @@ timeT CompositionItemHelper::getStartTime(const CompositionItem& item, const Ros
     timeT t = 0;
 
     if (item) {
-	t = std::max(grid.snapX(item->rect().x()) - 1, 0L);
+ 	// t = std::max(grid.snapX(item->rect().x()) - 1, 0L); - wrong, we can have negative start times,
+        // and if we do this we 'crop' segments when they are moved before the start of the composition
+	t = grid.snapX(item->rect().x()) - 1;
 
         RG_DEBUG << "CompositionItemHelper::getStartTime(): item is repeating : " << item->isRepeating()
                  << " - startTime = " << t
@@ -303,59 +305,6 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
     return m_res;
 }
-
-void CompositionModelImpl::computeAllSegmentRects()
-{
-    m_allRects.clear();
-
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
-
-    for (Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
-         i != segEnd; ++i) {
-
-        // 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
-
-        Segment* s = *i;
-        if (isMoving(s))
-            continue;
-        
-        CompositionRect sr = computeSegmentRect(*s);
-
-        bool tmpSelected = isTmpSelected(s),
-            pTmpSelected = wasTmpSelected(s);
-
-        if (isSelected(s) || isTmpSelected(s) || sr.intersects(m_selectionRect)) {
-            sr.setSelected(true);
-        }
-            
-        if (pTmpSelected != tmpSelected)
-            sr.setNeedsFullUpdate(true);
-
-        bool isAudio = (s && s->getType() == Rosegarden::Segment::Audio);
-
-        if (!isRecording(s)) {
-            QColor brushColor = GUIPalette::convertColour(m_composition.
-                                                          getSegmentColourMap().getColourByIndex(s->getColourIndex()));
-            sr.setBrush(brushColor);
-            sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
-        } else {
-            // border is the same for both audio and MIDI
-            sr.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
-            // audio color
-            if (isAudio) {
-                sr.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
-                // MIDI/default color
-            } else {
-                sr.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
-            }
-        }
-
-        m_allRects.insert(sr);
-
-    }
-}
-
 
 void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint basePoint,
                                                     const Segment* segment, const QRect& clipRect)
