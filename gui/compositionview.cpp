@@ -1162,7 +1162,8 @@ bool CompositionModelImpl::isCachedRectCurrent(const Segment& s, const Compositi
 
 void CompositionModelImpl::clearInCache(const Rosegarden::Segment* s)
 {
-    m_segmentRectMap.erase(s);    
+    m_segmentRectMap.erase(s);
+    m_segmentEndTimeMap.erase(s);
 }
 
 void CompositionModelImpl::putInCache(const Rosegarden::Segment*s, const CompositionRect& cr)
