@@ -1084,7 +1084,7 @@ Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const C
     int count = (p.x() - int(itemImpl->rect().x())) / rWidth;
     RG_DEBUG << "CompositionModelImpl::getRepeatTimeAt() : count = " << count << endl;
 
-    return /*s->getEndMarkerTime() + */(count * (s->getEndMarkerTime() - s->getStartTime()));
+    return count != 0 ? startTime + (count * (s->getEndMarkerTime() - s->getStartTime())) : 0;
 }
 
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
@@ -2129,8 +2129,10 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
         Rosegarden::timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentItem);
 
         RG_DEBUG << "editRepeat at time " << time << endl;
-
-        emit editRepeat(itemImpl->getSegment(), time);
+        if (time > 0)
+            emit editRepeat(itemImpl->getSegment(), time);
+        else
+            emit editSegment(itemImpl->getSegment());
 
     } else {
             
