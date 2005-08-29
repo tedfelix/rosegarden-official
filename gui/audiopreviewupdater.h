@@ -40,7 +40,7 @@ public:
                         const QRect&,
                         CompositionModelImpl* parent);
     ~AudioPreviewUpdater();
-    bool update();
+    void update();
 
     const Rosegarden::Segment *getSegment() const { return m_segment; }
 

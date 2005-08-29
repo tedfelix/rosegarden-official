@@ -43,7 +43,7 @@ AudioPreviewUpdater::~AudioPreviewUpdater()
     RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater\n";
 }
 
-bool AudioPreviewUpdater::update()
+void AudioPreviewUpdater::update()
 {
 //!!!    m_apData.setSegmentRect(m_rect);
 

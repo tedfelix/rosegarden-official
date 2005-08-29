@@ -748,13 +748,42 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
     timeT itemStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
-    timeT itemEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
+    timeT itemEndTime   = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
 
+    timeT duration = 0;
 
     if (m_resizeStart) {
 
-	timeT duration = itemEndTime - time;
-        RG_DEBUG << "SegmentResizer::handleMouseMove() : duration = "
+	duration = itemEndTime - time;
+        RG_DEBUG << "SegmentResizer::handleMouseMove() resize start : duration = "
+                 << duration << " - snap = " << snap
+                 << " - itemEndTime : " << itemEndTime
+                 << " - time : " << time
+                 << endl;
+
+        timeT newStartTime = 0;
+
+	if ((duration > 0 && duration <  snap) ||
+	    (duration < 0 && duration > -snap)) {
+
+            newStartTime = itemEndTime - (duration < 0 ? -snap : snap);
+            
+	} else {
+
+            newStartTime = itemEndTime - duration;
+
+	}
+
+        CompositionItemHelper::setStartTime(m_currentItem,
+                                            newStartTime,
+                                            m_canvas->grid());
+    } else { // resize end
+
+	duration = time - itemStartTime;
+
+        timeT newEndTime = 0;
+
+        RG_DEBUG << "SegmentResizer::handleMouseMove() resize end : duration = "
                  << duration << " - snap = " << snap
                  << " - itemEndTime : " << itemEndTime
                  << " - time : " << time
@@ -762,47 +791,22 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
 	if ((duration > 0 && duration <  snap) ||
 	    (duration < 0 && duration > -snap)) {
-	    CompositionItemHelper::setStartTime(m_currentItem,
-                                                itemEndTime - (duration < 0 ? -snap : snap),
-                                                m_canvas->grid());
-	} else {
-            CompositionItemHelper::setStartTime(m_currentItem,
-                                                itemEndTime - duration,
-                                                m_canvas->grid());
-	}
-        if (duration != 0)
-            setChangeMade(true);
 
-	// avoid updating preview, as it will update incorrectly
-	// (moving the events rather than leaving them alone and
-	// truncating if appropriate)
-// 	if (m_currentItem->getShowPreview()) {
-// 	    m_previewSuspended = true;
-// 	    m_currentItem->setShowPreview(false);
-// 	}
+            newEndTime = (duration < 0 ? -snap : snap) + itemStartTime;
 
-    } else {
-
-	timeT duration = time - itemStartTime;
-
-	if ((duration > 0 && duration <  snap) ||
-	    (duration < 0 && duration > -snap)) {
-            CompositionItemHelper::setEndTime(m_currentItem,
-                                              (duration < 0 ? -snap : snap) + itemStartTime,
-                                              m_canvas->grid());
 	} else {
 
-            CompositionItemHelper::setEndTime(m_currentItem,
-                                              duration + itemStartTime,
-                                              m_canvas->grid());
-	}
-        if (duration != 0)
-            setChangeMade(true);
+            newEndTime = duration + itemStartTime;
 
-	// update preview
-// 	if (m_currentItem->getPreview())
-// 	    m_currentItem->getPreview()->setPreviewCurrent(false);
+	}
+
+        CompositionItemHelper::setEndTime(m_currentItem,
+                                          newEndTime,
+                                          m_canvas->grid());
     }
+
+    if (duration != 0)
+        setChangeMade(true);
 
     m_canvas->updateContents();
 

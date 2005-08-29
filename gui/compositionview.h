@@ -31,6 +31,7 @@
 #include <qptrdict.h>
 #include <qpixmap.h>
 
+#include "Event.h"
 #include "Composition.h"
 #include "SnapGrid.h"
 
@@ -267,7 +268,8 @@ public:
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
     CompositionRect computeSegmentRect(const Rosegarden::Segment&);
-    QPoint computeSegmentOrigin(const Rosegarden::Segment&);
+    QPoint          computeSegmentOrigin(const Rosegarden::Segment&);
+    void            computeRepeatMarks(CompositionItem&);
 
     Rosegarden::SegmentSelection getSelectedSegments() { return m_selectedSegments; }
     Rosegarden::Composition&     getComposition()      { return m_composition; }
@@ -298,7 +300,6 @@ protected:
     bool wasTmpSelected(const Rosegarden::Segment*) const;
     bool isMoving(const Rosegarden::Segment*) const;
     bool isRecording(const Rosegarden::Segment*) const;
-    bool isCachedRectCurrent(const Rosegarden::Segment& s, const CompositionRect& r);
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
     void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, NotationPreviewData*);
@@ -315,6 +316,12 @@ protected:
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
 
     void computeAllSegmentRects();
+
+    void clearInCache(const Rosegarden::Segment*);
+    void putInCache(const Rosegarden::Segment*, const CompositionRect&);
+    const CompositionRect& getFromCache(const Rosegarden::Segment*, Rosegarden::timeT& endTime);
+    bool isCachedRectCurrent(const Rosegarden::Segment& s, const CompositionRect& r,
+                             QPoint segmentOrigin, Rosegarden::timeT segmentEndTime);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Composition&     m_composition;
@@ -347,6 +354,7 @@ protected:
     QRect m_selectionRect;
 
     QMap<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
+    QMap<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;
 
     CompositionModel::CRectList m_allRects;
 };
@@ -367,10 +375,9 @@ public:
 
     Rosegarden::Segment* getSegment()             { return &m_segment; }
     const Rosegarden::Segment* getSegment() const { return &m_segment; }
+    CompositionRect& getCompRect()                { return m_rect; }
 
 protected:
-    // recompute the repeat marks after an X-wise move
-    void refreshRepeatMarks(int newX, int newWidth = -1);
 
     //--------------- Data members ---------------------------------
     Rosegarden::Segment& m_segment;
