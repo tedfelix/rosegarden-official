@@ -1139,7 +1139,10 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
         timeT endTime = 0;
         
         CompositionRect cachedCR = getFromCache(&s, endTime);
-        if (cachedCR.isValid() && isCachedRectCurrent(s, cachedCR, origin, endTime)) {
+        // don't cache repeating segments - it's just hopeless, because the segment's rect may have to be recomputed
+        // in other cases than just when the segment itself is moved,
+        // for instance if another segment is moved over it
+        if (!s.isRepeating() && cachedCR.isValid() && isCachedRectCurrent(s, cachedCR, origin, endTime)) {
 //         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
 //                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
 //                  << cachedCR.getBaseWidth() << endl;
