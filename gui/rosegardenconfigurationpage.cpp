@@ -169,7 +169,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_nameStyle = new KComboBox(frame);
     m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
-    m_nameStyle->insertItem(i18n("Localised (where available)"));
+    m_nameStyle->insertItem(i18n("Localized (where available)"));
     m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
     layout->addWidget(m_nameStyle, 0, 1);
 
@@ -189,7 +189,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     addTab(frame, i18n("Presentation"));
 
     //
-    // "Behaviour" tab
+    // "Behavior" tab
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
@@ -221,7 +221,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_studio->setChecked(m_cfg->readBoolEntry("alwaysusedefaultstudio", false));
     layout->addWidget(m_studio, 2, 1);
 
-    addTab(frame, i18n("Behaviour"));
+    addTab(frame, i18n("Behavior"));
 
     //
     // External editor tab

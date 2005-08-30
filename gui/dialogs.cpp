@@ -1633,7 +1633,7 @@ EventEditDialog::slotPropertyDeleted()
     if (KMessageBox::warningContinueCancel
 	(this,
 	 i18n("Are you sure you want to delete the \"%1\" property?\n\n"
-	      "Removing necessary properties may cause unexpected behaviour.").
+	      "Removing necessary properties may cause unexpected behavior.").
 	 arg(propertyName),
 	 i18n("Edit Event"),
 	 i18n("&Delete")) != KMessageBox::Continue) return;

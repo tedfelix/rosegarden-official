@@ -159,7 +159,7 @@ ImportDeviceDialog::doImport()
     }
 
     m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
-                                     i18n("Bank import behaviour"),
+                                     i18n("Bank import behavior"),
                                      optionsBox);
     m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
     m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
