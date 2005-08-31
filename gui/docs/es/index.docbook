@@ -356,7 +356,7 @@
       <title
 >Características especiales</title
 > <para
->Éste manual asume que su instalación de Rosegarden soporta todas las características de las que es capaz. Algunas de ellas, incluyendo ciertas  muy importantes, son actualmente opcionales al momento de realizar la instalación de Rosegarden, dependiendo en qué otras librerías y códigos de soporte se encuentran disponibles. Por ejemplo, el subsistema completo de audio es compilado sólo si las librerías de JACK se encuentran disponibles; plugins de soporte para sintetizadores dependen de un número de otros módulos; etc.</para
+>Éste manual asume que su instalación de Rosegarden soporta todas las características de las que es capaz. Algunas de ellas, incluyendo ciertas muy importantes, son actualmente opcionales al momento de realizar la instalación de Rosegarden, dependiendo en qué otras librerías y códigos de soporte se encuentran disponibles. Por ejemplo, el subsistema completo de audio es compilado sólo si las librerías de JACK se encuentran disponibles; plugins de soporte para sintetizadores dependen de un número de otros módulos; etc.</para
 > <para
 >Éstas dependencias están documentadas en el README de Rosegarden y en la documentacíon de configuración. Si encuentra que éste manual se refiere a características no visibles en la versión de Rosegarden que está utilizando, consulte la documentación de configuración o a su distribuidor. </para>
     </sect2>
@@ -460,7 +460,7 @@
 >.) </para>
 
       <para
->&rosegarden; es capaz de producir partituras muy legibles. De todas formas, está diseñado para ser un editor de pantalla y no primariamente un editor de partes. Si quiere producir partituras con  verdadera calidad de impresión, se debe considerar el uso de <ulink url="http://www.lilypond.org"
+>&rosegarden; es capaz de producir partituras muy legibles. De todas formas, está diseñado para ser un editor de pantalla y no primariamente un editor de partes. Si quiere producir partituras con verdadera calidad de impresión, se debe considerar el uso de <ulink url="http://www.lilypond.org"
 >Lilypond</ulink
 > junto con &rosegarden;. Lilypond es un software para crear partituras que lee un archivo de texto especializado y produce impresiones de alta calidad. &rosegarden; es capaz de escribir archivos de Lilypond usando la función <menuchoice
 > <guimenu lang="es"
@@ -800,7 +800,7 @@
       <para
 >Para grabar un nuevo segmento en una pista, primero asegúrese que la pista correcta haya sido seleccionada para grabar seleccionando el botón estilo LED rojo en la etiqueta de la pista, y luego use el control de grabación del Tranporte. Esto hace que se inicien tanto el transporte (por lo que se reproduce la composición existente) como la grabación en la pista apropiada. Por el momento solo una pista por vez puede estar activa para grabar. </para>
       <para
->Alternativamente se puede utilizar la grabación de pinchado para separar los actos de comenzar el transporte y entrar en modo de grabación. Las grabaciones por pinchado pueden ser activadas y desactivadas con la barra espaciadora. Puede presionarla mientras se reproduce una composición para cambiar instantáneamente entre reproducción y grabación sin tener que parar el transporte, o puede utilizarla para armar para grabación cuando el transporte se encuentra detenido, de manera que la reproducción subsecuente sea de hecho una grabación. (Esto último es práctico cuando se utiliza  un <link linkend="transport-external"
+>Alternativamente se puede utilizar la grabación de pinchado para separar los actos de comenzar el transporte y entrar en modo de grabación. Las grabaciones por pinchado pueden ser activadas y desactivadas con la barra espaciadora. Puede presionarla mientras se reproduce una composición para cambiar instantáneamente entre reproducción y grabación sin tener que parar el transporte, o puede utilizarla para armar para grabación cuando el transporte se encuentra detenido, de manera que la reproducción subsecuente sea de hecho una grabación. (Esto último es práctico cuando se utiliza un <link linkend="transport-external"
 >transporte externo</link
 >.) </para>
       <para
@@ -817,7 +817,7 @@
       <title
 >Transportes externos</title>
       <para
->Rosegarden soporta el mecanismo de tranporte JACK para sincronizar su transporte con otras aplicaciones JACK. Para activarlo,  vaya a <menuchoice
+>Rosegarden soporta el mecanismo de tranporte JACK para sincronizar su transporte con otras aplicaciones JACK. Para activarlo, vaya a <menuchoice
 > <guimenu lang="es"
 >Configuraciones</guimenu
 > <guimenuitem
@@ -1429,7 +1429,7 @@
 	      </imageobject>
 		<textobject>
 		  <phrase
->Administrador  de color de &rosegarden;'</phrase>
+>Administrador de color de &rosegarden;'</phrase>
 		</textobject>
 	      </mediaobject>
 	      </screenshot>
@@ -1972,7 +1972,7 @@
 >introducción</title>
 
       <para
->El editor de partituras de Rosegarden permite ver y editar en la forma tradicional de partituras  </para
+>El editor de partituras de Rosegarden permite ver y editar en la forma tradicional de partituras </para
 ><para>
 
 	<screenshot>
@@ -2052,7 +2052,7 @@
 >Distribuciones lineales y de página</title>
 
       <para
->La manera usual de presentación del editor de partituras es conocida como distribución Lineal: una línea de pentagrama sobre la otra, en las cuales, cada pentagrama es una línea horizontal. Algunas funciones del editor (como la  <link linkend="nv-rulers"
+>La manera usual de presentación del editor de partituras es conocida como distribución Lineal: una línea de pentagrama sobre la otra, en las cuales, cada pentagrama es una línea horizontal. Algunas funciones del editor (como la <link linkend="nv-rulers"
 >Reglas</link
 >)solamente están disponibles en la distribución Lineal. </para>
 
@@ -2092,7 +2092,7 @@
 >Reglas y cursores</title>
 
       <para
->El editor de partituras de Rosegarden incluye dos reglas y dos cursores. Las reglas  están graduadas y ubicadas en las tiras horizontales, arriba y debajo del tablero principal, y los cursores son las líneas verticales de color que se muestran inicialmente al principio del pentagrama superior en el editor. </para>
+>El editor de partituras de Rosegarden incluye dos reglas y dos cursores. Las reglas están graduadas y ubicadas en las tiras horizontales, arriba y debajo del tablero principal, y los cursores son las líneas verticales de color que se muestran inicialmente al principio del pentagrama superior en el editor. </para>
 
       <para
 >El cursor púrpura es el cursor de inserción. Muestra el punto en el cual tomarán lugar las operaciones tales como copiar y pegar. Se puede ubicar el cursor de inserción cliqueando o arrastrando sobre la regla superior, o cliqueando con la herramienta de selección en una parte vacía del pentagrama (evitando los eventos), o cliqueando en cualquier lugar mientas se mantiene apretada la tecla <keycap
@@ -2131,7 +2131,7 @@
 >funciones que afectan selecciones</quote
 >, y <quote
 >operaciones de arrastre.</quote
->.  </para>
+>. </para>
 
       <variablelist>
 	<varlistentry>
@@ -2152,7 +2152,7 @@
 >Funciones que operan en selecciones</term>
 	  <listitem>
 	    <para
->La mayor parte de las funciones que restan en el menú, requieren que previamente se realice una selección antes de aplicarlas. Alguna de ellas, (como las funciones  <guimenuitem
+>La mayor parte de las funciones que restan en el menú, requieren que previamente se realice una selección antes de aplicarlas. Alguna de ellas, (como las funciones <guimenuitem
 >Cortar</guimenuitem
 > o la <guimenuitem
 >Estilo de Nota</guimenuitem
@@ -2164,7 +2164,7 @@
 	    <para
 >Para seleccionar eventos en la ventana principal, cambiar a la herramienta de Selección (flecha) y entonces dibujar un área rectangular conteniendo los eventos que se quieran seleccionar. Los eventos seleccionados se resaltarán en color azul. Si se hace clic en un sólo evento, sólo éste será seleccionado. <footnote
 > <para
-> De todas maneras, es posible hacer un doble clic en un evento en particular para abrir una ventana de diálogo para ese evento, pero nada que hacer con lo seleccionado.</para
+>De todas maneras, es posible hacer un doble clic en un evento en particular para abrir una ventana de diálogo para ese evento, pero nada que hacer con lo seleccionado.</para
 > </footnote
 > </para
 ><para
@@ -2516,7 +2516,7 @@
 		<para
 >Las notas que siguen a la armadura de clave, retendrán su afinación dentro de la octava, pero deben ser movidas a una octava diferente para confeccionar una nueva clave, y allí serán ejecutadas en la nueva afinación. </para>
 		<para
->Por ejemplo insertando una clave de tenor en el medio de una sección de clave aguda causará que las notas se ajusten a la nueva tonalidad moviéndose una línea pero se ejecutarán una octava más baja que antes.,  </para>
+>Por ejemplo insertando una clave de tenor en el medio de una sección de clave aguda causará que las notas se ajusten a la nueva tonalidad moviéndose una línea pero se ejecutarán una octava más baja que antes., </para>
 	      </listitem>
 	    </varlistentry>
 	    
@@ -2702,35 +2702,35 @@
 >.</para>
 
       <para
->The <guimenu
->Notes</guimenu
-> menu also contains options for adding slashes across note stems, for example to indicate short repeated notes or drum rolls. These are currently purely notational; &rosegarden; will not take them into account when playing the staff or generating &MIDI;.</para>
+>El menu <guimenu
+>Grupo</guimenu
+> también contiene optciones para agregar barras a través de las asas de las notas, por ejemplo, para indicar notas corta y repetidas o rolls de percusión. Éstas son actualmente puramente notación; &rosegarden; no las tomará en cuenta cuando reproduzca la partitura o genere &MIDI;.</para>
     </sect1>
     
     <!-- Beamed groups, including overlapping and nesting them -->
 
     <sect1 id="nv-beamed-groups">
       <title
->Beams</title>
+>Unir Plicas</title>
       
       <para
->Adding beams to notes is considered a grouping operation in the &rosegarden; Notation editor, available on the <guimenu
->Group</guimenu
-> menu. Select the notes you want to beam, and use the Beam <guimenu
->Group</guimenu
-> menu option. To remove a beam, select the notes and use the <guimenuitem
->Unbeam</guimenuitem
-> menu option.</para>
+>Unir plicas en las notas está considerada una operación de agrupamiento en el Editor de Partitura de &rosegarden;, disponible en el menu <guimenu
+>Grupo</guimenu
+>. Selecciona las notas que quieres unir, y usa la opción Agrupar Plicas dentro del menú <guimenu
+>Grupo</guimenu
+>. Para remover la plica, selecciona las notas y usa la opción <guimenuitem
+>Desagrupar Plicas</guimenuitem
+>.</para>
 
       <para
->It is possible to have more than one beamed group happening at the same time &mdash; you just select and beam the separate groups one at a time &mdash; but Rosegarden is usually not yet clever enough to work out which notes should have stems up and which should have stems down for simultaneous beamed groups, so you will probably have to set the stem directions of the notes in the groups explicitly as well as beaming them.</para>
+>Es posible tener más de un grupo con plicas al mismo tiempo  &mdash; simplemente selecciona y une los grupos separados de a uno &mdash; pero Rosegarden usualmente no es lo suficientemente inteligente como para saber qué notas deben tener las plicas hacia arriba y cuáles deben estar hacia abajo para un grupo de plicas unidas simultáneamente, entonces probablememte deberás corregir las direcciones de las plicas de las notas en los grupos explícitamente, como así también deberás unirlas.</para>
 
       <para
->&rosegarden; can attempt to guess a sensible beaming for a piece of music, provided it's not too complicated. To invoke this, select the notes you want to calculate the beaming for (for example by triple-clicking to select a whole staff) and then use the <guimenuitem
->Auto-Beam</guimenuitem
-> option on the <guimenu
->Group menu</guimenu
->. Auto-beaming is also done automatically when loading a &MIDI; file, for example, and the editor also does some automatic beaming as you enter notes (this can be disabled by changing the "Auto-Beam when appropriate" setting on the configuration dialog or the insertion tool's right-button menu).</para>
+>&rosegarden; puede intentar adivinar una forma coherente de unir las piezas de música, no es tan complicado. Para invocar ésto, selecciona las notas para las cuales que quieres calcular la unión, (por ejemplo, por triple-clicleo para seleccionar todo el pentagrama) y luego usa la opción <guimenuitem
+>Auto-Unir</guimenuitem
+> en el <guimenu
+>Groupos menu</guimenu
+>. Esto es realizado incluso cuando se carga un archivo &MIDI;, por ejemplo, y el editor también hace algunas uniones automáticas mientras ingresas notas (ésto puede ser deshabilitado cambiando la configuración del diálogo "Auto-Unir cuando sea apropiado" o en la barra de herrramientas de inserción, con el menú que aparece presionando el botón derecho.</para>
 
     </sect1>
 
@@ -2741,15 +2741,15 @@
 >Tresillos y otros tríos</title>
 
       <para
->A triplet group consists of three notes or chords played in the time of two. (More precisely, it consists of notes with a total duration of three arbitrary units played in the time of two of those units.)</para>
+>Un grupo de tresillos consiste en tres notas o acordes repoducidos en el tiempo de dos. (Más precisamente, consiste en notas con una duración total de tres unidades arbitrarias reproducidas en el tiempo de dos de esas unidades.)</para>
 
       <para
->We use the word <quote
->tuplet</quote
-> to describe the general situation in which notes with a total duration of any given number of units are played in the time of a different number of those units: nine notes in the time of eight, or six in the time of four, or a crotchet and a quaver in the time of a single crotchet, or even two notes in the time of three. (At present &rosegarden; does not support the last example &mdash; tuplet groups must always be played with a shorter duration than written.)</para>
+>Usamos la frase <quote
+>grupo irregular<quote
+> para describir la situación general en la cual las notas con una duración total de cualquier número de unidades son reproducidas en el tiempo de un diferente número de esas unidades: nueve notas en el tiempo de ocho, o seis en el tiempo de cuatro, o incluso dos notas en el tiempo de tres. (En el presente &rosegarden; no soporta el último ejemplo &mdash;, los grupo irregular deben siempre ser reproducidos con una duración más corta que la escrita.</para>
 
       <para
->The triplet and tuplet menu functions work by taking an existing series of notes or rests and squashing them so they play quicker, filling in the left-over space at the end of the series with a final rest and drawing the whole as a tuplet group. You can therefore create a new series of triplets by entering the first two notes of the series (in their normal form), making them into triplets, and then filling in the rest left over by the triplet operation with the final note of the triplet. Or you can apply the triplet operation before you enter any notes, thus turning the original rest itself into triplet form, and then insert the notes of the triplet on top of it. Some examples may help:</para>
+>Las funciones de los menus de tresillos y grupos irregulares funcionan tomando una serie de notas existentes o silencios, </para>
 
       <!-- Need examples and screenshots -->
       
@@ -5817,7 +5817,7 @@ Changing the Time Signature
 >Este elemento lista los símbolos disponibles en este tipo de letra, y desde que archivos de mapa de pixeles o tipos de letra del sistema debe dibujarse.</para>
 
 	  <para
->Debería contener una lista de elementos  "símbolo". Estos tienen numerosos atributos posibles, la elección de los cuales dependerá de si la fuente esta basada en mapas de pixeles o tipos de letra del sistema. </para>
+>Debería contener una lista de elementos "símbolo". Estos tienen numerosos atributos posibles, la elección de los cuales dependerá de si la fuente esta basada en mapas de pixeles o tipos de letra del sistema. </para>
 
 	  <variablelist>
 	    <varlistentry>
@@ -5833,7 +5833,7 @@ Changing the Time Signature
 >La mayoría de los símbolos que Rosegarden espera encontrar están en el estándar; una excepción es que muchas fuentes tienen una versión especial del símbolo flag, que se utiliza en los casos en donde se componen múltiples flags a partir de uno solo. Rosegarden se refiere a esto como "MUSICAL SYMBOL COMBINING FLAG-0", un nombre no utilizado en el estándar Unicode (que tiene los flags 1-5 solamente).</para>
 
 		<para
->Para una lista definitiva de los nombres de símbolo reconocidos por Rosegarden, vea el archivo "gui/notecharname.cpp" en su  código fuente. Notar, sin embargo, que es posible usar nombres de símbolo adicionales introduciéndolos en <link linkend="developers-note-styles"
+>Para una lista definitiva de los nombres de símbolo reconocidos por Rosegarden, vea el archivo "gui/notecharname.cpp" en su código fuente. Notar, sin embargo, que es posible usar nombres de símbolo adicionales introduciéndolos en <link linkend="developers-note-styles"
 >estilo notación</link
 >. </para>
 	      </listitem>
