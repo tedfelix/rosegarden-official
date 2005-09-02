@@ -2723,7 +2723,7 @@
 >.</para>
 
       <para
->Es posible tener más de un grupo con plicas al mismo tiempo  &mdash; simplemente selecciona y une los grupos separados de a uno &mdash; pero Rosegarden usualmente no es lo suficientemente inteligente como para saber qué notas deben tener las plicas hacia arriba y cuáles deben estar hacia abajo para un grupo de plicas unidas simultáneamente, entonces probablememte deberás corregir las direcciones de las plicas de las notas en los grupos explícitamente, como así también deberás unirlas.</para>
+>Es posible tener más de un grupo con plicas al mismo tiempo &mdash; simplemente selecciona y une los grupos separados de a uno &mdash; pero Rosegarden usualmente no es lo suficientemente inteligente como para saber qué notas deben tener las plicas hacia arriba y cuáles deben estar hacia abajo para un grupo de plicas unidas simultáneamente, entonces probablememte deberás corregir las direcciones de las plicas de las notas en los grupos explícitamente, como así también deberás unirlas.</para>
 
       <para
 >&rosegarden; puede intentar adivinar una forma coherente de unir las piezas de música, no es tan complicado. Para invocar ésto, selecciona las notas para las cuales que quieres calcular la unión, (por ejemplo, por triple-clicleo para seleccionar todo el pentagrama) y luego usa la opción <guimenuitem
@@ -2745,8 +2745,8 @@
 
       <para
 >Usamos la frase <quote
->grupo irregular<quote
-> para describir la situación general en la cual las notas con una duración total de cualquier número de unidades son reproducidas en el tiempo de un diferente número de esas unidades: nueve notas en el tiempo de ocho, o seis en el tiempo de cuatro, o incluso dos notas en el tiempo de tres. (En el presente &rosegarden; no soporta el último ejemplo &mdash;, los grupo irregular deben siempre ser reproducidos con una duración más corta que la escrita.</para>
+>grupo irregular</quote
+> para describir la situación general en la cual las notas con una duración total de cualquier número de unidades son reproducidas en el tiempo de un diferente número de esas unidades: nueve notas en el tiempo de ocho, o seis en el tiempo de cuatro, o incluso dos notas en el tiempo de tres. (En el presente &rosegarden; no soporta el último ejemplo &mdash;, los grupo irregular deben siempre ser reproducidos con una duración más corta que la escrita.)</para>
 
       <para
 >Las funciones de los menus de tresillos y grupos irregulares funcionan tomando una serie de notas existentes o silencios, </para>
@@ -2770,7 +2770,7 @@
       </para>
 
       <para
->To specify a general tuplet group, we need to know what the base note is (for example, if we play three crotchets in the time of two then the base is a crotchet) and the ratio of the number of base notes written to the number played.</para>
+>Para especificar un grupo irregular general, necesitamos saber cuál es la nota base (por ejemplo, si tocamos tres corcheas en el tiempo de dos, entonces la base es una corchea) y el radio del número de notas base escritas en el número interpretado.</para>
 
       <!-- Then discuss "tuplet mode": with a subtitle? -->
 
@@ -2785,9 +2785,9 @@
 >Tipos de pegado</title>
 
       <para
->The meaning of <quote
->cut and paste</quote
-> is less obvious for a music editing program than it is for something like a word processor in which the letters and words go in a simple linear order. Accordingly, &rosegarden;'s Notation editor offers several different types of Paste operation, as well as separate Cut and Cut and Close functions. </para>
+>El significado de <quote
+>cortar y pegar</quote
+> es menos obvio para un programa de edición de música de lo que lo es para algo como un procesador de textos en el cual las letras y las palabras van en un orden simple y lineal. De acuerdo con ésto, el Editor de Partituras de &rosegarden; ofrece diferentes y variados tipos de operaciones de Pegado, así como funciones separadas de Cortar, y Cortar y Cerrar. </para>
 
       <para>
 	<screenshot>
@@ -2810,7 +2810,7 @@
 >Restringido</term>
 	  <listitem>
 	    <para
->Requires an existing gap (containing nothing but rests) of enough duration to completely contain the clipboard's contents. The contents are pasted into the gap. If there is no gap long enough, the paste is not carried out. </para>
+>Requiere un vacío existente (conteniendo nada salvo los silencios) de una duración suficiente como para contener completamente los contenidos del portapapeles. Los contenidos son pegados dentro del vacío. Si no hay un espacio vacío lo suficientemente largo, la operación de pegado no se lleva a cabo. </para>
 	    <para
 >Este es el tipo de pegado por defecto </para>
 	  </listitem>
@@ -2821,7 +2821,7 @@
 >Simple</term>
 	  <listitem>
 	    <para
->Erases enough events to make a gap long enough to paste into, and then pastes into that. The pasted events therefore completely replace any existing ones in the time covered by the paste. </para>
+>Borra suficientes eventos como para hacer un vacío lo suficientemente largo como para pegar algo dentro, y luego pega dentro de éste. Los eventos pegados remplazan cualquier nota existente en el tiempo cubierto por el pegado. </para>
 	  </listitem>
 	</varlistentry>
 
@@ -2830,7 +2830,7 @@
 >Abrir y Pegar</term>
 	  <listitem>
 	    <para
->The opposite of Cut and Close. Makes room for the paste by moving all of the subsequent events further towards the end of the composition. </para>
+>Lo opuesto a Cortar y Cerrar. Hace lugar para el pegado moviendo todos los eventos subsecuentes un poco más lejos hacia el final de la composición. </para>
 	  </listitem>
 	</varlistentry>
 
@@ -2839,7 +2839,7 @@
 >Solapar la nota</term>
 	  <listitem>
 	    <para
->Carries out a paste in the way that it would happen if you entered each of the notes in the clipboard yourself using the notation editor: if there are other notes overlapping with them, the new or existing notes will be split into ties appropriately. </para>
+>Lleva a cabo un pegado en la manera en que pasaría si ingresaras cada una de las notas en el portapapeles tú mismo usando el Editor de Partituras: si hay otras notas superponiéndose encima de ellas, las nuevas o existentes notas serán divididas con ligaduras de prolongación de una manera apropiada. </para>
 	  </listitem>
 	</varlistentry>
 
@@ -2848,14 +2848,14 @@
 >Solapar la matriz</term>
 	  <listitem>
 	    <para
->Carries out a paste in the way that it would happen if you entered each of the notes in the clipboard yourself using the matrix editor: the notes presently in the way of the paste will be ignored, allowing the new notes to overlap arbitrarily with them. </para>
+>Lleva a cabo un pegado en la manera en que pasaría si ingresaras cada una de las notas en el portapapeles tú mismo usando el Editor de Matriz: las notas presentes en el camino del pegado serán ignoradas, permitiendo a las nuevas notas superponerse arbitrariamente con ellas. </para>
 	  </listitem>
 	</varlistentry>
 
       </variablelist>
 
       <para
->All of these take effect at the current position of the insert cursor on the current staff. To choose between the various paste types, use the Paste... menu option (with dots) on the Edit menu. </para>
+>Todo ésto tiene efecto en la posición actual del cursor de inserción en el pentagrama actual. Para elegir entre los varios tipos de pegado, usa la opción de menú Pegar... (con puntos suspensivos) en el menú Editar. </para>
 
     </sect1>
 
@@ -2873,9 +2873,9 @@
 >Normalizando silencios</title>
 
 	  <para
->Sometimes as a result of editing or quantization operations, a piece of notation can end up with incorrect rest durations for the current time signature. You can use the <guimenuitem
->Normalize Rests</guimenuitem
-> function to fix these. This function examines each sequence of consecutive rests found in the selection, and adjusts, splits and merges rests as necessary to ensure that the rests have theoretically correct durations and fall on the correct boundaries. </para>
+>A veces como resultado de operaciones de editado o cuantización, una parte de la partitura puede terminar con duraciones de silencios incorrectas para la medida de compás actual. Puedes usar la funcion <guimenuitem
+>Normalizar Silencios</guimenuitem
+> para arreglar ésto. Ésta función examina cada secuencia consecutiva e silencios que se encuentran en la selección, y ajusta, divide y mezcla los silencios tanto como sea necesario como para asegurar que esos silencios tienen teóricamente duraciones correctas y caen en las barras correctas. </para>
 	  
 	  <para
 >Por ejemplo, una barra 4/4 que contiene una negra, luego un silencio de blanca y un silencio de negra será reacomodado de manera de poner el silencio de negra antes que el de blanca, dado que éste último no debe cruzar el límite central de pulso de la barra. </para>
