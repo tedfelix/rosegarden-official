@@ -1012,7 +1012,7 @@ void NotationView::slotAddIndication(std::string type, QString desc)
 	setSingleSelectedEvent(m_currentEventSelection->getSegment(),
 			       command->getLastInsertedEvent());
     } else {
-	KMessageBox::sorry(this, i18n("Can't add overlapping %1 indications").arg(desc));
+	KMessageBox::sorry(this, i18n("Can't add overlapping %1 indications").arg(desc)); // TODO PLURAL - how many 'indications' ?
 	delete command;
     }
 } 

@@ -1767,7 +1767,7 @@ static QString durationToString(Rosegarden::Composition &comp,
 				Rosegarden::timeT duration,
 				Rosegarden::RealTime rt)
 {
-    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)")
+    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
 	.arg(rt.sec / 60).arg(rt.sec % 60)
 	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
 	.arg(duration).arg(comp.getBarNumber(absTime + duration) -

@@ -2115,12 +2115,10 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
 	if (!sizeAction) {
 	    sizeAction = 
-		new KToggleAction
-		(sizes[i] == 1 ? i18n("%1 pixel").arg(sizes[i]) :
-		                 i18n("%1 pixels").arg(sizes[i]),
-		 0, this,
-		 SLOT(slotChangeFontSizeFromAction()),
-		 actionCollection(), actionName);
+		new KToggleAction(i18n("%1 pixel", "%1 pixels", sizes[i]),
+                                  0, this,
+                                  SLOT(slotChangeFontSizeFromAction()),
+                                  actionCollection(), actionName);
 	}
 
 	sizeAction->setChecked(sizes[i] == m_fontSize);
@@ -3616,9 +3614,8 @@ void NotationView::updateViewCaption()
 
     } else {
 
-        setCaption(i18n("%1 - %2 Segments - Notation")
-                   .arg(getDocument()->getTitle())
-                   .arg(m_segments.size()));
+        setCaption(i18n("%1 - 1 Segment - Notation", "%1 - %n Segments - Notation", m_segments.size()),
+                   getDocument()->getTitle());
 
     }
 }

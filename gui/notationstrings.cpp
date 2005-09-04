@@ -83,7 +83,7 @@ NotationStrings::getNoteName(Note note, bool plural, bool triplet)
     };
 
     if (plural && triplet) {        
-        return addDots(i18n("%1 triplets").arg(names[type]), dots, false, true);
+        return addDots(i18n("%1 triplets").arg(names[type]), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {
@@ -147,7 +147,7 @@ NotationStrings::getShortNoteName(Note note, bool plural, bool triplet)
     };
 
     if (plural && triplet) {        
-        return addDots(i18n("%1 triplets").arg(names[type]), dots, false, true);
+        return addDots(i18n("%1 triplets").arg(names[type]), dots, false, true); // TODO - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {

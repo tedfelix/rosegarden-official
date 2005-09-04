@@ -163,11 +163,10 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     for (int i = 1; i <= 16; i *= 2) {
 	action =
-	    new KRadioAction
-	    ((i == 1 ? i18n("%1 Input") : i18n("%1 Inputs")).arg(i),
-	     0, this,
-	     SLOT(slotSetInputCountFromAction()), actionCollection(),
-	     QString("inputs_%1").arg(i));
+	    new KRadioAction(i18n("1 Input", "%n Inputs", i),
+                             0, this,
+                             SLOT(slotSetInputCountFromAction()), actionCollection(),
+                             QString("inputs_%1").arg(i));
 	action->setExclusiveGroup("inputs");
 	if (i == int(m_studio->getRecordIns().size())) action->setChecked(true);
     }
