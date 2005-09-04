@@ -150,6 +150,10 @@ public:
     Rosegarden::SegmentSelection getSelection();
     void updateSelectionContents();
 
+    static bool isMainWindowLastActive(const QWidget *w) {
+	return w == m_lastActiveMainWindow;
+    }
+
 public slots:
     void slotEditSegment(Rosegarden::Segment*);
     void slotEditSegmentNotation(Rosegarden::Segment*);
@@ -261,11 +265,30 @@ public slots:
     void slotUpdateRecordingSegment(Rosegarden::Segment *segment,
 				    Rosegarden::timeT updatedFrom);
 
-    /*
+    /**
      * A manual fudgy way of creating a view update for certain
      * semi-static data (devices/instrument labels mainly)
      */
     void slotSynchroniseWithComposition();
+
+    /**
+     * To indicate that an edit view, mixer, etc (something that might
+     * want to receive MIDI input) has become active.  We only send
+     * inputs such as MIDI to a single one of these, in most cases,
+     * and it's whichever was most recently made active.  (It doesn't
+     * have to still _be_ active -- we want to allow moving focus to
+     * another application entirely but still receiving MIDI etc in
+     * Rosegarden.)
+     */
+    void slotActiveMainWindowChanged(const QWidget *);
+    void slotActiveMainWindowChanged(); // uses sender()
+
+    /**
+     * An event has been received from a device connected to the
+     * external controller port.
+     */
+    void slotControllerDeviceEventReceived(Rosegarden::MappedEvent *);
+    void slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *);
 
 signals:
     void activateTool(QString toolName);
@@ -305,11 +328,17 @@ signals:
     void instrumentLevelsChanged(Rosegarden::InstrumentId,
 				 const Rosegarden::LevelInfo &);
 
-protected:
+    void controllerDeviceEventReceived(Rosegarden::MappedEvent *,
+				       const void *);
 
+    void instrumentParametersChanged(Rosegarden::InstrumentId);
+
+protected:
     NotationView *createNotationView(std::vector<Rosegarden::Segment *>);
     MatrixView   *createMatrixView  (std::vector<Rosegarden::Segment *>, bool drumMode);
     EventView    *createEventView   (std::vector<Rosegarden::Segment *>);
+
+    virtual void windowActivationChange(bool);
 
     //--------------- Data members ---------------------------------
 
@@ -319,6 +348,7 @@ protected:
     SegmentParameterBox		  *m_segmentParameterBox;
     InstrumentParameterBox	  *m_instrumentParameterBox;
 
+    static const QWidget          *m_lastActiveMainWindow;
 };
 
 #endif // ROSEGARDENGUIVIEW_H

@@ -25,6 +25,7 @@
 #include <kmainwindow.h>
 #include "studiowidgets.h"
 #include "Instrument.h"
+#include "MappedEvent.h"
 
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
@@ -41,12 +42,16 @@ public:
 
 signals:
     void closing();
+    void windowActivated();
 
 protected slots:
     void slotClose();
 
 protected:
     virtual void closeEvent(QCloseEvent *);
+    virtual void windowActivationChange(bool);
+
+    virtual void sendControllerRefresh() = 0;
 
     RosegardenGUIDoc *m_document;
     Rosegarden::Studio *m_studio;
@@ -66,6 +71,10 @@ public:
 
     void updateMeters(SequencerMapper *mapper);
     void updateMonitorMeters(SequencerMapper *mapper);
+
+public slots:
+    void slotControllerDeviceEventReceived(Rosegarden::MappedEvent *,
+					   const void *);
 
 signals:
     void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);
@@ -114,6 +123,9 @@ protected slots:
     void slotUpdateSynthFaderVisibility();
     void slotUpdateSubmasterVisibility();
     void slotUpdatePluginButtonVisibility();
+
+protected:
+    virtual void sendControllerRefresh();
 
 private:
 
@@ -220,6 +232,11 @@ public:
 public slots:
     void slotSynchronise(); // synchronise with updated studio
 
+    void slotControllerDeviceEventReceived(Rosegarden::MappedEvent *,
+					   const void *);
+
+    void slotCurrentTabChanged(QWidget *);
+
 signals:
     void play();
     void stop();
@@ -241,6 +258,8 @@ protected slots:
 
 protected:
     void addTab(QWidget *tab, const QString &title);
+
+    virtual void sendControllerRefresh();
 
     QTabWidget                        *m_tabWidget;
 

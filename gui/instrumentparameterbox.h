@@ -267,6 +267,7 @@ protected:
 
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
+    QLabel             *m_programLabel;
 
     QGridLayout        *m_mainGrid;
     QFrame             *m_rotaryFrame;

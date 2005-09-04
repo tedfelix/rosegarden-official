@@ -168,11 +168,14 @@ signals:
     void bypassed(Rosegarden::InstrumentId, int pluginIndex, bool bp);
     void destroyed(Rosegarden::InstrumentId, int index);
 
+    void windowActivated();
+
 protected slots:
     virtual void slotClose();
 
 protected:
     virtual void closeEvent(QCloseEvent *e);
+    virtual void windowActivationChange(bool);
 
     void makePluginParamsBox(QWidget*, int portCount, int tooManyPorts);
     QStringList getProgramsForInstance(AudioPluginInstance *inst, int &current);

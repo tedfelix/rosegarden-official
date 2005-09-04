@@ -8,6 +8,7 @@
 	 the very bottom in older KDE3 versions: -->
     <Menu name="import" append="new_merge"><text>&amp;Import</text>
       <Action name="file_import_project" />
+      <Separator/>
       <Action name="file_import_midi" />
       <Action name="file_import_rg21" />
       <Action name="file_import_hydrogen" />
@@ -22,11 +23,14 @@
 	 the very bottom in older KDE3 versions: -->
     <Menu name="export" append="new_merge"><text>&amp;Export</text>
       <Action name="file_export_project" />
+      <Separator/>
       <Action name="file_export_midi" />
       <Action name="file_export_csound" />
-      <Action name="file_export_lilypond" />
       <Action name="file_export_mup" />
       <Action name="file_export_musicxml" />
+      <Separator/>
+      <Action name="file_export_lilypond" />
+      <Action name="file_preview_lilypond" />
     </Menu>
   <Separator/>
   <Action name="file_show_playlist" />
@@ -294,6 +298,12 @@
 	<enable>
 		<Action name="file_import_project"/>
 		<Action name="file_export_project"/>
+	</enable>
+</State>
+
+<State name="have_lilypondview">
+	<enable>
+		<Action name="file_preview_lilypond"/>
 	</enable>
 </State>
 

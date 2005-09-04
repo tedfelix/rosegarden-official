@@ -180,7 +180,7 @@ public:
     /**
      * export a Lilypond file
      */
-    void exportLilypondFile(QString url);
+    bool exportLilypondFile(QString url);
 
     /**
      * export a MusicXml file
@@ -612,6 +612,12 @@ public slots:
      * Let the user enter a Lilypond file to export to
      */
     void slotExportLilypond();
+
+    /**
+     * Export to a temporary file and process
+     */
+    void slotPreviewLilypond();
+    void slotLilypondViewProcessExited(KProcess *);
 
     /**
      * Let the user enter a MusicXml file to export to

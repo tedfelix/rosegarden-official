@@ -1066,7 +1066,7 @@ AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key
 }
 
 void
-AudioInstrumentMixer::resetAllPlugins()
+AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 {
     // Not RT safe
 
@@ -1091,7 +1091,8 @@ AudioInstrumentMixer::resetAllPlugins()
 	RunnablePluginInstance *instance = j->second;
 
 	if (instance) {
-	    std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on synth for instrument " << id << std::endl;
+	    std::cerr << "AudioInstrumentMixer::resetAllPlugins: (re)setting " << channels << " channels on synth for instrument " << id << std::endl;
+	    if (discardEvents) instance->discardEvents();
 	    instance->setIdealChannelCount(channels);
 	}
     }	
@@ -1112,7 +1113,8 @@ AudioInstrumentMixer::resetAllPlugins()
 	    RunnablePluginInstance *instance = *i;
 
 	    if (instance) {
-		std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on plugin for instrument " << id << std::endl;
+		std::cerr << "AudioInstrumentMixer::resetAllPlugins: (re)setting " << channels << " channels on plugin for instrument " << id << std::endl;
+		if (discardEvents) instance->discardEvents();
 		instance->setIdealChannelCount(channels);
 	    }
 	}
@@ -2045,8 +2047,10 @@ AudioFileWriter::openRecordFile(InstrumentId id,
 	(void)fader->getProperty(MappedAudioFader::Channels, fch);
         int channels = (int)fch;
 
-        int bytesPerSample = 2 * channels;
-        int bitsPerSample = 16;
+	RIFFAudioFile::SubFormat format = m_driver->getAudioRecFileFormat();
+
+        int bytesPerSample = (format == RIFFAudioFile::PCM ? 2 : 4) * channels;
+        int bitsPerSample  = (format == RIFFAudioFile::PCM ? 16 : 32);
 
         AudioFile *recordFile =
             new WAVAudioFile(fileName,

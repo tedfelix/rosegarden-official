@@ -425,14 +425,39 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     }
     delete proc;
 
+
+    //!!! and something like this for lilypondview (call it something
+    //else & fold into rg tree?):
+    
+    proc = new KProcess();
+    *proc << "rosegarden-lilypondview";
+    *proc << "-v";
+    proc->start(KProcess::Block, KProcess::All);
+    if (!proc->normalExit() || proc->exitStatus()) {
+	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - No lilypondview available" << endl;
+	stateChanged("have_lilypondview", KXMLGUIClient::StateReverse);
+    } else {
+	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - Lilypondview OK" << endl;
+	stateChanged("have_lilypondview", KXMLGUIClient::StateNoReverse);
+    }
+    delete proc;
+
+    
+
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
+    stateChanged("have_lilypondview", KXMLGUIClient::StateNoReverse);
 
     emit startupStatusMessage(i18n("Starting sequence manager..."));
 
     // transport is created by setupActions()
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
+
+    if (m_view) {
+	connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *)),
+		m_view, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *)));
+    }
 
     // Make sure we get the sequencer status now
     //
@@ -575,6 +600,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotExportLilypond()), actionCollection(),
                 "file_export_lilypond");
 
+    new KAction(i18n("Pre&view Lilypond file..."), 0, 0, this,
+                SLOT(slotPreviewLilypond()), actionCollection(),
+                "file_preview_lilypond");
+
     new KAction(i18n("Export Music&XML file..."), 0, 0, this,
                 SLOT(slotExportMusicXml()), actionCollection(),
                 "file_export_musicxml");
@@ -594,7 +623,7 @@ void RosegardenGUIApp::setupActions()
     KStdAction::quit  (this, SLOT(slotQuit()),              actionCollection());
 
     // help menu
-    new KAction(i18n("Rosegarden Online &Tutorial"), 0, 0, this,
+    new KAction(i18n("Rosegarden &Tutorial"), 0, 0, this,
 		SLOT(slotTutorial()), actionCollection(),
 		"tutorial");
 
@@ -1318,6 +1347,9 @@ void RosegardenGUIApp::initView()
     connect(m_view, SIGNAL(stateChange(QString, bool)),
             this,   SLOT  (slotStateChanged(QString, bool)));
 
+    connect(m_view, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    this, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
+
     connect(this, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_view, SLOT(slotUpdateAudioPreviews(Rosegarden::InstrumentId)));
 
@@ -1350,6 +1382,8 @@ void RosegardenGUIApp::initView()
 	    CurrentProgressDialog::thaw();
         }
 
+	connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *)),
+		m_view, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *)));
     }
 
     delete m_playList;
@@ -4374,10 +4408,44 @@ void RosegardenGUIApp::slotExportLilypond()
     exportLilypondFile(fileName);
 }
 
-void RosegardenGUIApp::exportLilypondFile(QString file)
+static std::map<KProcess *, KTempFile *> lilyTempFileMap;
+
+void RosegardenGUIApp::slotPreviewLilypond()
+{
+    KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
+    KTempFile *file = new KTempFile(QString::null, ".ly");
+    file->setAutoDelete(true);
+    if (!file->name()) {
+	CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+	delete file;
+    }
+    if (!exportLilypondFile(file->name())) {
+	return;
+    }
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-lilypondview";
+    *proc << "-g";
+    *proc << file->name();
+    connect(proc, SIGNAL(processExited(KProcess *)),
+	    this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+    lilyTempFileMap[proc] = file;
+    proc->start(KProcess::NotifyOnExit);
+}
+
+void RosegardenGUIApp::slotLilypondViewProcessExited(KProcess *p)
+{
+    delete lilyTempFileMap[p];
+    lilyTempFileMap.erase(p);
+    delete p;
+}
+
+bool RosegardenGUIApp::exportLilypondFile(QString file)
 {
     LilypondOptionsDialog dialog(this);
-    if (dialog.exec() != QDialog::Accepted) return;
+    if (dialog.exec() != QDialog::Accepted) {
+	return false;
+    }
 
     RosegardenProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
                                          100,
@@ -4394,7 +4462,10 @@ void RosegardenGUIApp::exportLilypondFile(QString file)
     if (!e.write()) {
 	CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
+	return false;
     }
+
+    return true;
 }
 
 void RosegardenGUIApp::slotExportMusicXml()
@@ -5447,7 +5518,9 @@ RosegardenGUIApp::slotAudioManager()
 {
     if (m_audioManagerDialog)
     {
+        m_audioManagerDialog->show();
         m_audioManagerDialog->raise();
+        m_audioManagerDialog->setActiveWindow();
         return;
     }
         
@@ -5709,7 +5782,9 @@ void
 RosegardenGUIApp::slotManageMIDIDevices()
 {
     if (m_deviceManager) {
+	m_deviceManager->show();
 	m_deviceManager->raise();
+	m_deviceManager->setActiveWindow();
 	return;
     }
 
@@ -5748,7 +5823,9 @@ void
 RosegardenGUIApp::slotManageSynths()
 {
     if (m_synthManager) {
+	m_synthManager->show();
 	m_synthManager->raise();
+	m_synthManager->setActiveWindow();
 	return;
     }
 
@@ -5786,11 +5863,19 @@ void
 RosegardenGUIApp::slotOpenAudioMixer()
 {
     if (m_audioMixer) {
+	m_audioMixer->show();
 	m_audioMixer->raise();
+	m_audioMixer->setActiveWindow();
 	return;
     }
 
     m_audioMixer = new AudioMixerWindow(this, m_doc);
+
+    connect(m_audioMixer, SIGNAL(windowActivated()),
+	    m_view, SLOT(slotActiveMainWindowChanged()));
+
+    connect(m_view, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)),
+	    m_audioMixer, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)));
     
     connect(m_audioMixer, SIGNAL(closing()),
             this, SLOT(slotAudioMixerClosed()));
@@ -5856,12 +5941,20 @@ void
 RosegardenGUIApp::slotOpenMidiMixer()
 {
     if (m_midiMixer) {
+	m_midiMixer->show();
 	m_midiMixer->raise();
+	m_midiMixer->setActiveWindow();
 	return;
     }
 
     m_midiMixer = new MidiMixerWindow(this, m_doc);
     
+    connect(m_midiMixer, SIGNAL(windowActivated()),
+	    m_view, SLOT(slotActiveMainWindowChanged()));
+
+    connect(m_view, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)),
+	    m_midiMixer, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)));
+
     connect(m_midiMixer, SIGNAL(closing()),
             this, SLOT(slotMidiMixerClosed()));
 
@@ -5904,7 +5997,9 @@ RosegardenGUIApp::slotEditControlParameters(Rosegarden::DeviceId device)
     for (std::set<ControlEditorDialog *>::iterator i = m_controlEditors.begin();
 	 i != m_controlEditors.end(); ++i) {
 	if ((*i)->getDevice() == device) {
+	    (*i)->show();
 	    (*i)->raise();
+	    (*i)->setActiveWindow();
 	    return;
 	}
     }
@@ -5939,7 +6034,9 @@ RosegardenGUIApp::slotEditBanks(Rosegarden::DeviceId device)
     if (m_bankEditor) {
 	if (device != Rosegarden::Device::NO_DEVICE)
 	    m_bankEditor->setCurrentDevice(device);
+	m_bankEditor->show();
 	m_bankEditor->raise();
+	m_bankEditor->setActiveWindow();
 	return;
     }
 
@@ -5963,7 +6060,9 @@ void
 RosegardenGUIApp::slotManageTriggerSegments()
 {
     if (m_triggerSegmentManager) {
+	m_triggerSegmentManager->show();
 	m_triggerSegmentManager->raise();
+	m_triggerSegmentManager->setActiveWindow();
 	return;
     }
 
@@ -5991,7 +6090,9 @@ void
 RosegardenGUIApp::slotEditMarkers()
 {
     if (m_markerEditor) {
+	m_markerEditor->show();
 	m_markerEditor->raise();
+	m_markerEditor->setActiveWindow();
 	return;
     }
 
@@ -6045,7 +6146,9 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
     int key = (index << 16) + instrumentId;
 
     if (m_pluginDialogs[key]) {
+	m_pluginDialogs[key]->show();
 	m_pluginDialogs[key]->raise();
+	m_pluginDialogs[key]->setActiveWindow();
 	return;
     }
 
@@ -6080,6 +6183,12 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 #endif
 					  container,
 					  index);
+
+    connect(dialog, SIGNAL(windowActivated()),
+	    m_view, SLOT(slotActiveMainWindowChanged()));
+
+    connect(m_view, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)),
+	    dialog, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)));
 
     // Plug the new dialog into the standard keyboard accelerators so
     // that we can use them still while the plugin has focus.

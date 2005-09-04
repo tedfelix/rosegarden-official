@@ -75,6 +75,15 @@ MixerWindow::closeEvent(QCloseEvent *e)
 }
 
 void
+MixerWindow::windowActivationChange(bool)
+{
+    if (isActiveWindow()) {
+	emit windowActivated();
+	sendControllerRefresh();
+    }
+}
+
+void
 MixerWindow::slotClose()
 {
     RG_DEBUG << "MixerWindow::slotClose()\n";
@@ -727,16 +736,30 @@ AudioMixerWindow::updateFader(int id)
 	FaderRec &rec = m_faders[id];
 	if (!rec.m_populated) return;
 	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+
+	rec.m_fader->blockSignals(true);
 	rec.m_fader->setFader(instrument->getLevel());
+	rec.m_fader->blockSignals(false);
+
+	rec.m_pan->blockSignals(true);
 	rec.m_pan->setPosition(instrument->getPan() - 100);
+	rec.m_pan->blockSignals(false);
 
     } else {
 
 	FaderRec &rec = (id == 0 ? m_master : m_submasters[id-1]);
 	Rosegarden::BussList busses = m_studio->getBusses();
 	Rosegarden::Buss *buss = busses[id];
+
+	rec.m_fader->blockSignals(true);
 	rec.m_fader->setFader(buss->getLevel());
-	if (rec.m_pan) rec.m_pan->setPosition(buss->getPan() - 100);
+	rec.m_fader->blockSignals(false);
+
+	if (rec.m_pan) {
+	    rec.m_pan->blockSignals(true);
+	    rec.m_pan->setPosition(buss->getPan() - 100);
+	    rec.m_pan->blockSignals(false);
+	}
     }
 }
 
@@ -946,6 +969,44 @@ AudioMixerWindow::slotOutputChanged()
 }
 
 void
+AudioMixerWindow::sendControllerRefresh()
+{
+    //!!! really want some notification of whether we have an external controller!
+    int controllerChannel = 0;
+
+    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+
+	if (controllerChannel >= 16) break;
+	
+	Rosegarden::Instrument *instrument =
+	    m_studio->getInstrumentById(i->first);
+	
+	int value = Rosegarden::AudioLevel::dB_to_fader
+	    (instrument->getLevel(), 127, Rosegarden::AudioLevel::LongFader);
+	Rosegarden::MappedEvent mE(instrument->getId(),
+				   Rosegarden::MappedEvent::MidiController,
+				   Rosegarden::MIDI_CONTROLLER_VOLUME,
+				   Rosegarden::MidiByte(value));
+	mE.setRecordedChannel(controllerChannel);
+	mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+	Rosegarden::StudioControl::sendMappedEvent(mE);
+
+	int ipan = (int(instrument->getPan()) * 64) / 100;
+	if (ipan < 0) ipan = 0;
+	if (ipan > 127) ipan = 127;
+	Rosegarden::MappedEvent mEp(instrument->getId(),
+				    Rosegarden::MappedEvent::MidiController,
+				    Rosegarden::MIDI_CONTROLLER_PAN,
+				    Rosegarden::MidiByte(ipan));
+	mEp.setRecordedChannel(controllerChannel);
+	mEp.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+	Rosegarden::StudioControl::sendMappedEvent(mEp);
+
+	++controllerChannel;
+    }
+}
+
+void
 AudioMixerWindow::slotFaderLevelChanged(float dB)
 {
     const QObject *s = sender();
@@ -985,6 +1046,8 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 	++index;
     }
 
+    int controllerChannel = 0;
+
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 	
@@ -1002,8 +1065,24 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 		instrument->setLevel(dB);
 	    }
 
+	    // send out to external controllers as well.
+	    //!!! really want some notification of whether we have any!
+	    if (controllerChannel < 16) {
+		int value = Rosegarden::AudioLevel::dB_to_fader
+		    (dB, 127, Rosegarden::AudioLevel::LongFader);
+                Rosegarden::MappedEvent mE(instrument->getId(),
+					   Rosegarden::MappedEvent::MidiController,
+					   Rosegarden::MIDI_CONTROLLER_VOLUME,
+					   Rosegarden::MidiByte(value));
+		mE.setRecordedChannel(controllerChannel);
+		mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+		Rosegarden::StudioControl::sendMappedEvent(mE);
+	    }
+
 	    emit instrumentParametersChanged(i->first);
 	}
+
+	++controllerChannel;
     }	    
 }
 
@@ -1033,6 +1112,8 @@ AudioMixerWindow::slotPanChanged(float pan)
 	++index;
     }
 
+    int controllerChannel = 0;
+
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 	
@@ -1049,8 +1130,25 @@ AudioMixerWindow::slotPanChanged(float pan)
 		instrument->setPan(Rosegarden::MidiByte(pan + 100.0));
 	    }
 
+	    // send out to external controllers as well.
+	    //!!! really want some notification of whether we have any!
+	    if (controllerChannel < 16) {
+		int ipan = (int(instrument->getPan()) * 64) / 100;
+		if (ipan < 0) ipan = 0;
+		if (ipan > 127) ipan = 127;
+                Rosegarden::MappedEvent mE(instrument->getId(),
+					   Rosegarden::MappedEvent::MidiController,
+					   Rosegarden::MIDI_CONTROLLER_PAN,
+					   Rosegarden::MidiByte(ipan));
+		mE.setRecordedChannel(controllerChannel);
+		mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+		Rosegarden::StudioControl::sendMappedEvent(mE);
+	    }
+
 	    emit instrumentParametersChanged(i->first);
 	}
+
+	++controllerChannel;
     }
 }
 
@@ -1214,6 +1312,71 @@ AudioMixerWindow::updateMonitorMeters(SequencerMapper *mapper)
 		rec.m_meter->setRecordLevel(dBleft);
 	    }
 	}
+    }
+}
+
+void
+AudioMixerWindow::slotControllerDeviceEventReceived(Rosegarden::MappedEvent *e,
+						    const void *preferredCustomer)
+{
+    if (preferredCustomer != this) return;
+    RG_DEBUG << "AudioMixerWindow::slotControllerDeviceEventReceived: this one's for me" << endl;
+    raise();
+
+    // get channel number n from event
+    // update instrument for nth fader in m_faders
+
+    if (e->getType() != Rosegarden::MappedEvent::MidiController) return;
+    unsigned int channel = e->getRecordedChannel();
+    Rosegarden::MidiByte controller = e->getData1();
+    Rosegarden::MidiByte value = e->getData2();
+
+    int count = 0;
+    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+
+	if (count < channel) { ++count; continue; }
+
+	Rosegarden::Instrument *instrument =
+	    m_studio->getInstrumentById(i->first);
+	if (!instrument) continue;
+
+	switch (controller) {
+
+	case Rosegarden::MIDI_CONTROLLER_VOLUME:
+	{
+	    float level = Rosegarden::AudioLevel::fader_to_dB
+		(value, 127, Rosegarden::AudioLevel::LongFader);
+	
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(instrument->getMappedId(),
+		 Rosegarden::MappedAudioFader::FaderLevel,
+		 Rosegarden::MappedObjectValue(level));
+
+	    instrument->setLevel(level);
+	    break;
+	}
+
+	case Rosegarden::MIDI_CONTROLLER_PAN:
+	{
+	    Rosegarden::MidiByte ipan = Rosegarden::MidiByte((value / 64.0) * 100.0 + 0.01);
+
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(instrument->getMappedId(),
+		 Rosegarden::MappedAudioFader::Pan,
+		 Rosegarden::MappedObjectValue(float(ipan) - 100.0));
+
+	    instrument->setPan(ipan);
+	    break;
+	}	    
+
+	default:
+	    break;
+	}
+
+	slotUpdateInstrument(i->first);
+	emit instrumentParametersChanged(i->first);
+
+	break;
     }
 }
 
@@ -1566,6 +1729,8 @@ MidiMixerWindow::setupTabs()
     //
     m_tabWidget = new QTabWidget(this);
     setCentralWidget(m_tabWidget);
+    connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
+	    this, SLOT(slotCurrentTabChanged(QWidget *)));
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
     setCaption(i18n("MIDI Mixer"));
 
@@ -1755,14 +1920,35 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
             Rosegarden::Instrument *instr = m_studio->
                 getInstrumentById((*it)->m_id);
 
-            if (instr)
-            {
+            if (instr) {
+
                 instr->setVolume(Rosegarden::MidiByte(value));
+
                 Rosegarden::MappedEvent mE((*it)->m_id,
                                        Rosegarden::MappedEvent::MidiController,
                                        Rosegarden::MIDI_CONTROLLER_VOLUME,
                                        Rosegarden::MidiByte(value));
                 Rosegarden::StudioControl::sendMappedEvent(mE);
+
+		// send out to external controllers as well.
+		//!!! really want some notification of whether we have any!
+		int tabIndex = m_tabWidget->currentPageIndex();
+		if (tabIndex < 0) tabIndex = 0;
+		int i = 0;
+		for (Rosegarden::DeviceList::const_iterator dit = m_studio->begin();
+		     dit != m_studio->end(); ++dit) {
+	    RG_DEBUG << "slotFaderLevelChanged: i = "<< i << ", tabIndex " << tabIndex << endl;
+		    if (!dynamic_cast<Rosegarden::MidiDevice*>(*dit)) continue;
+		    if (i != tabIndex) { ++i; continue; }
+	    RG_DEBUG << "slotFaderLevelChanged: device id = "<< instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+		    if (instr->getDevice()->getId() == (*dit)->getId()) {
+		RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instr->getMidiChannel() << endl;
+			mE.setRecordedChannel(instr->getMidiChannel());
+			mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+			Rosegarden::StudioControl::sendMappedEvent(mE);
+		    }
+		    break;
+		}
             }
 
             emit instrumentParametersChanged((*it)->m_id);
@@ -1822,6 +2008,25 @@ MidiMixerWindow::slotControllerChanged(float value)
                                    Rosegarden::MidiByte(value));
         Rosegarden::StudioControl::sendMappedEvent(mE);
 
+	int tabIndex = m_tabWidget->currentPageIndex();
+	if (tabIndex < 0) tabIndex = 0;
+	int i = 0;
+	for (Rosegarden::DeviceList::const_iterator dit = m_studio->begin();
+	     dit != m_studio->end(); ++dit) {
+	    RG_DEBUG << "slotControllerChanged: i = "<< i << ", tabIndex " << tabIndex << endl;
+	    if (!dynamic_cast<Rosegarden::MidiDevice*>(*dit)) continue;
+	    if (i != tabIndex) { ++i; continue; }
+	    RG_DEBUG << "slotControllerChanged: device id = "<< instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
+	    if (instr->getDevice()->getId() == (*dit)->getId()) {
+		RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instr->getMidiChannel() << endl;
+		// send out to external controllers as well.
+		//!!! really want some notification of whether we have any!
+		mE.setRecordedChannel(instr->getMidiChannel());
+		mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+		Rosegarden::StudioControl::sendMappedEvent(mE);
+	    }
+	}
+
         emit instrumentParametersChanged(m_faders[i]->m_id);
     }
 }
@@ -1857,8 +2062,10 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                 {
                     // Set Volume fader
                     //
+		    m_faders[count]->m_volumeFader->blockSignals(true);
                     m_faders[count]->m_volumeFader->
                         setFader(float((*iIt)->getVolume()));
+		    m_faders[count]->m_volumeFader->blockSignals(false);
 
                     /*
                     Rosegarden::StaticControllers &staticControls = 
@@ -1872,6 +2079,8 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                     for (unsigned int i = 0; i < controls.size(); ++i)
                     {
                         float value = 0.0;
+
+			m_faders[count]->m_controllerRotaries[i].second->blockSignals(true);
 
                         if (controls[i].getControllerValue() == 
                                 Rosegarden::MIDI_CONTROLLER_PAN)
@@ -1915,6 +2124,8 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                             m_faders[count]->m_controllerRotaries[i].
                                 second->setPosition(value);
                         }
+
+			m_faders[count]->m_controllerRotaries[i].second->blockSignals(false);
                     }
                 }
                 count++;
@@ -1943,6 +2154,164 @@ void
 MidiMixerWindow::updateMonitorMeter(SequencerMapper *)
 {
     // none here
+}
+
+void
+MidiMixerWindow::slotControllerDeviceEventReceived(Rosegarden::MappedEvent *e,
+						   const void *preferredCustomer)
+{
+    if (preferredCustomer != this) return;
+    RG_DEBUG << "MidiMixerWindow::slotControllerDeviceEventReceived: this one's for me" << endl;
+    raise();
+
+    // get channel number n from event
+    // get nth instrument on current tab
+
+    if (e->getType() != Rosegarden::MappedEvent::MidiController) return;
+    unsigned int channel = e->getRecordedChannel();
+    Rosegarden::MidiByte controller = e->getData1();
+    Rosegarden::MidiByte value = e->getData2();
+
+    int tabIndex = m_tabWidget->currentPageIndex();
+
+    int i = 0;
+    
+    for (Rosegarden::DeviceList::const_iterator it = m_studio->begin();
+	 it != m_studio->end(); ++it) {
+
+        Rosegarden::MidiDevice *dev =
+	    dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+	if (!dev) continue;
+	if (i != tabIndex) { ++i; continue; }
+
+	Rosegarden::InstrumentList instruments = dev->getPresentationInstruments();
+	
+	for (Rosegarden::InstrumentList::const_iterator iIt =
+		 instruments.begin(); iIt != instruments.end(); ++iIt) {
+	    
+	    Rosegarden::Instrument *instrument = *iIt;
+
+	    if (instrument->getMidiChannel() != channel) continue;
+	    
+	    switch (controller) {
+
+	    case Rosegarden::MIDI_CONTROLLER_VOLUME:
+		RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
+		instrument->setVolume(value);
+		break;
+
+	    case Rosegarden::MIDI_CONTROLLER_PAN:
+		RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
+		instrument->setPan(value);
+		break;
+
+	    default:
+	    {
+		Rosegarden::ControlList cl = dev->getIPBControlParameters();
+		for (Rosegarden::ControlList::const_iterator i = cl.begin();
+		     i != cl.end(); ++i) {
+		    if ((*i).getControllerValue() == controller) {
+			RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
+			instrument->setControllerValue(controller, value);
+			break;
+		    }
+		}
+		break;
+	    }
+	    }
+	    
+	    Rosegarden::MappedEvent mE(instrument->getId(),
+				       Rosegarden::MappedEvent::MidiController,
+				       Rosegarden::MidiByte(controller),
+				       Rosegarden::MidiByte(value));
+	    Rosegarden::StudioControl::sendMappedEvent(mE);
+
+	    slotUpdateInstrument(instrument->getId());
+	    emit instrumentParametersChanged(instrument->getId());
+	}
+
+	break;
+    }
+}
+
+void
+MidiMixerWindow::slotCurrentTabChanged(QWidget *)
+{
+    sendControllerRefresh();
+}
+
+void
+MidiMixerWindow::sendControllerRefresh()
+{
+    //!!! need to know if we have a current external controller device,
+    // as this is expensive
+
+    int tabIndex = m_tabWidget->currentPageIndex();
+    RG_DEBUG << "MidiMixerWindow::slotCurrentTabChanged: current is " << tabIndex << endl;
+
+    if (tabIndex < 0) return;
+
+    int i = 0;
+
+    for (Rosegarden::DeviceList::const_iterator dit = m_studio->begin();
+	 dit != m_studio->end(); ++dit) {
+
+	Rosegarden::MidiDevice *dev = dynamic_cast<Rosegarden::MidiDevice*>(*dit);
+	RG_DEBUG << "device is " << (*dit)->getId() << ", dev " << dev << endl;
+
+	if (!dev) continue;
+	if (i != tabIndex) { ++i; continue; }
+
+	Rosegarden::InstrumentList instruments = dev->getPresentationInstruments();
+	Rosegarden::ControlList controls = dev->getIPBControlParameters();
+	
+	RG_DEBUG << "device has " << instruments.size() << " presentation instruments, " << dev->getAllInstruments().size() << " instruments " << endl;
+
+	for (Rosegarden::InstrumentList::const_iterator iIt =
+		 instruments.begin(); iIt != instruments.end(); ++iIt) {
+	    
+	    Rosegarden::Instrument *instrument = *iIt;
+	    int channel = instrument->getMidiChannel();
+
+	    RG_DEBUG << "instrument is " << instrument->getId() <<endl;
+
+	    for (Rosegarden::ControlList::const_iterator cIt = 
+		     controls.begin(); cIt != controls.end(); ++cIt) {
+
+		int controller = (*cIt).getControllerValue();
+		int value;
+		if (controller == Rosegarden::MIDI_CONTROLLER_PAN) {
+		    value = instrument->getPan();
+		} else {
+		    try {
+			value = instrument->getControllerValue(controller);
+		    } catch (std::string s) {
+			std::cerr << "Exception in MidiMixerWindow::currentChanged: " << s << " (controller " << controller << ", instrument "<< instrument->getId() << ")" << std::endl;
+			value = 0;
+		    }
+		}
+
+		Rosegarden::MappedEvent mE(instrument->getId(),
+					   Rosegarden::MappedEvent::MidiController,
+					   controller, value);
+		mE.setRecordedChannel(channel);
+		mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+		Rosegarden::StudioControl::sendMappedEvent(mE);
+	    }
+
+	    Rosegarden::MappedEvent mE(instrument->getId(),
+				       Rosegarden::MappedEvent::MidiController,
+				       Rosegarden::MIDI_CONTROLLER_VOLUME,
+				       instrument->getVolume());
+	    mE.setRecordedChannel(channel);
+	    mE.setRecordedDevice(Rosegarden::Device::CONTROL_DEVICE);
+	    RG_DEBUG << "sending controller mapped event for channel " << channel << ", volume "<< instrument->getVolume() << endl;
+	    Rosegarden::StudioControl::sendMappedEvent(mE);
+	}
+
+	break;
+    }
 }
 
 void 

@@ -52,7 +52,7 @@ MappedEvent::MappedEvent(InstrumentId id,
     m_fadeInTime(Rosegarden::RealTime::zeroTime),
     m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_recordedChannel(0),
-    m_recordedPort(0)
+    m_recordedDevice(0)
     
 {
     try {
@@ -180,7 +180,7 @@ MappedEvent::operator=(const MappedEvent &mE)
     m_fadeInTime = mE.getFadeInTime();
     m_fadeOutTime = mE.getFadeOutTime();
     m_recordedChannel = mE.getRecordedChannel();
-    m_recordedPort = mE.getRecordedPort();
+    m_recordedDevice = mE.getRecordedDevice();
 
     return *this;
 }
@@ -211,7 +211,7 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getFadeOutTime().sec;
     dS << (unsigned int)mE->getFadeOutTime().nsec;
     dS << (unsigned int)mE->getRecordedChannel();
-    dS << (unsigned int)mE->getRecordedPort();
+    dS << (unsigned int)mE->getRecordedDevice();
 
     return dS;
 }
@@ -238,7 +238,7 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
     dS << (unsigned int)mE.getFadeOutTime().sec;
     dS << (unsigned int)mE.getFadeOutTime().nsec;
     dS << (unsigned int)mE.getRecordedChannel();
-    dS << (unsigned int)mE.getRecordedPort();
+    dS << (unsigned int)mE.getRecordedDevice();
 
     return dS;
 }
@@ -254,7 +254,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     int runtimeSegmentId = -1;
     unsigned int autoFade = 0, 
         fadeInSec = 0, fadeInNsec = 0, fadeOutSec = 0, fadeOutNsec = 0,
-        recordedChannel = 0, recordedPort = 0;
+        recordedChannel = 0, recordedDevice = 0;
 
     dS >> trackId;
     dS >> instrument;
@@ -275,7 +275,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> fadeOutSec;
     dS >> fadeOutNsec;
     dS >> recordedChannel;
-    dS >> recordedPort;
+    dS >> recordedDevice;
 
     mE->setTrackId((TrackId)trackId);
     mE->setInstrument((InstrumentId)instrument);
@@ -291,7 +291,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setFadeInTime(RealTime(fadeInSec, fadeInNsec));
     mE->setFadeOutTime(RealTime(fadeOutSec, fadeOutNsec));
     mE->setRecordedChannel(recordedChannel);
-    mE->setRecordedPort(recordedPort);
+    mE->setRecordedDevice(recordedDevice);
 
     return dS;
 }
@@ -307,7 +307,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     int runtimeSegmentId = -1;
     unsigned int autoFade = 0, 
         fadeInSec = 0, fadeInNsec = 0, fadeOutSec = 0, fadeOutNsec = 0,
-        recordedChannel = 0, recordedPort = 0;
+        recordedChannel = 0, recordedDevice = 0;
          
     dS >> trackId;
     dS >> instrument;
@@ -328,7 +328,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> fadeOutSec;
     dS >> fadeOutNsec;
     dS >> recordedChannel;
-    dS >> recordedPort;
+    dS >> recordedDevice;
 
     mE.setTrackId((TrackId)trackId);
     mE.setInstrument((InstrumentId)instrument);
@@ -344,7 +344,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setFadeInTime(RealTime(fadeInSec, fadeInNsec));
     mE.setFadeOutTime(RealTime(fadeOutSec, fadeOutNsec));
     mE.setRecordedChannel(recordedChannel);
-    mE.setRecordedPort(recordedPort);
+    mE.setRecordedDevice(recordedDevice);
 
     return dS;
 }

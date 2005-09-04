@@ -2,7 +2,7 @@
 # -*- cperl-indent-level: 4 -*-
 #
 # Rosegarden Project file packager
-# Chris Cannam 2005
+# Chris Cannam, Fervent Software 2005
 #
 # This program converts between Rosegarden (.rg) files and Rosegarden
 # Project (.rgp) files.
@@ -69,15 +69,18 @@ if ($result eq "") {
 }
 
 if (!$conftest) {
-    $dcop = `$kdialog --progressbar "Please wait..." 100`;
+    $dcop = `kdialog --title \"Rosegarden Project Progress\" --icon \"rosegarden\" --progressbar "Please wait..." 100`;
     chomp $dcop;
 }
 
 my @temporaries = ();
 $SIG{__DIE__} = sub {
-   `dcop "$dcop" close`;
-   map { system qq{rm -rf $_} } @temporaries;
-   return 1;
+    my $error = shift;
+    $error =~ s/ at .*$/./;
+    `dcop "$dcop" close`;
+    map { system qq{rm -rf $_} } @temporaries;
+    system qq{kdialog --error "$error"};
+    return 1;
 };
 
 sub conftest {
@@ -527,8 +530,18 @@ sub rgUnpack {
     my $rgFile = shift;
     my $projectFile = shift;
 
+    $rgFile =~ /.rg$/i or $rgFile = "$rgFile.rg";
+
+    # directory containing target rg file
     my $rgDir = dirname $rgFile;
-#    $rgFile = basename $rgFile;
+
+    my $origRgFile = basename $projectFile;
+    $origRgFile =~ s/\.rg\.rgp$/.rg/i;
+    $origRgFile =~ s/\.rgp$/.rg/i;
+
+    if (-d $rgFile) {
+	die "Target Rosegarden file $rgFile exists and is a directory -- not overwriting";
+    }
 
     if (-f $rgFile) {
 	if (system qq{$kdialog --warningyesno "Rosegarden file \"$rgFile\" already exists.  Overwrite it?"}) {
@@ -536,29 +549,74 @@ sub rgUnpack {
 	}
     }
 
+    my $projectDir = $rgFile;
+    $projectDir =~ s/\.[^\.\/]*$//;
+    if ($projectDir eq $rgFile) {
+        $projectDir = "$projectDir.d";
+    }
+    # projectDir is now absolute or relative to cwd
+
+    if (-f $projectDir or -d $projectDir) {
+      if (system qq{$kdialog --warningyesno "Project directory \"$projectDir\" already exists.  Overwrite any duplicate files?"}) {
+          die "Not overwriting existing project directory $projectDir";
+      }
+    } else {
+	system qq{mkdir -p "$projectDir"} and die "Failed to create target project directory $projectDir";
+	push @temporaries, $projectDir;
+    }
+
     my %dirs;
     map { chomp; s,/.*$,,; $dirs{$_} = 1; } `gunzip -c "$projectFile" | tar tf -`;
 
-    my $projectDir = "";
+    my $origProjectDir = "";
     for my $targetDir (keys %dirs) {
-	next if ($targetDir eq basename $rgFile);
-	if ($projectDir eq "") { $projectDir = $targetDir; }
-	if (-f "$rgDir/$targetDir" or -d "$rgDir/$targetDir") {
-	    if (system qq{$kdialog --warningyesno "Project file or directory \"$rgDir/$targetDir\" already exists.  Overwrite it?"}) {
-		die "Not overwriting existing project file or directory $targetDir";
-	    }
+	if ($targetDir =~ /.rg$/ and !($targetDir =~ m,/,)) {
+	    $origRgFile = $targetDir;
+	    next;
+	}
+	if ($targetDir eq $origRgFile) {
+	    next;
+	}
+	if ($origProjectDir eq "") {
+	    $origProjectDir = $targetDir;
+	    next;
 	}
     }
+    # origProjectDir is now relative to the base path
+    # origRgFile is a base name only (no path)
 
-    $projectDir="$rgDir/$projectDir";
+    # We have:
+    # rgFile -> target to unpack rg file to
+    # projectFile -> original project file
+    # rgDir -> target directory to contain rg file
+    # origRgFile -> original rg file (virtual) in same dir as project file
+    # projectDir -> target to unpack project files to (rgFile.d)
+    # origProjectDir -> original name of project directory (probably origRgFile.d)
+
+    # procedure:
+    # create a temporary directory tmpdir
+    # go there and unpack the original project file
+    # this will create original rg file and original project dir in tmpdir
+    # move original project dir from tmpdir to rgDir
+    # unpack audio files in new project dir
+    # move original rg file from tmpdir to rgFile
+    # if the project dir basename differs from the original project dir basename,
+    #   edit the rgFile (just the audioPath node) appropriately.
+    # !!! extra above: show error and exit if rgFile exists and is a directory
+
+    my $tmpdir = "rgp_tmp_$$"; ##!!! clean up
+    system qq{ mkdir "$tmpdir" } and die "Failed to create temporary directory $tmpdir";
+
+    push @temporaries, $tmpdir;
 
     `dcop "$dcop" setLabel "Unpacking..."`;
-    `gunzip -c "$projectFile" | ( cd "$rgDir"; tar xf - )`;
+    `gunzip -c "$projectFile" | ( cd "$tmpdir"; tar xf - )`;
 
     `dcop "$dcop" setProgress 20`;
 
-    push @temporaries, "$rgFile";
-    push @temporaries, $projectDir;
+    for my $item (glob "$tmpdir/$origProjectDir/*") {
+	system qq{mv "$item" "$projectDir/"} and die "Failed to move $item to $projectDir";
+    }
 
     my @encFiles = `ls $projectDir/*.rgp.flac $projectDir/*.rgp.ogg 2>/dev/null`;
     my $count = 0;
@@ -581,9 +639,20 @@ sub rgUnpack {
 	`dcop "$dcop" setProgress $progress`;
     }
 
-    #!!! Now the unpacked rg file is wherever it was left, not in
-    # $rgFile, and the directory is not with $rgFile either -- move 'em
+    # we now have the target project directory set up correctly:
+    # all we need is the rg file
 
+    open INZIP, "-|", "gunzip -c $tmpdir/$origRgFile" or die "Failed to open original Rosegarden file $tmpdir/$origRgFile";
+    open OUTZIP, "| gzip -c > $rgFile" or die "Failed to open target Rosegarden file $rgFile for writing";
+    my $encProjDir = basename $projectDir;
+    while (<INZIP>) {
+	if (/<audioPath\s/) {
+	    s/<audioPath\s+value=\"[^\"]*"\s*\/>/<audioPath value="$encProjDir"\/>/;
+	}
+	print OUTZIP;
+    }
+    close INZIP;
+    close OUTZIP;
 
     `dcop "$dcop" setLabel "Done"`;
     `dcop "$dcop" setProgress 100`;
@@ -666,9 +735,14 @@ if ($pack) {
 	die "$projectFile: No such file or directory\n";
     }
 
-    my $rgFile = $projectFile;
-    $rgFile =~ s/\.rg\.rgp$/.rg/i;
-    $rgFile =~ s/\.rgp$/.rg/i;
+    my $rgFile;
+    if (exists $ARGV[1]) {
+        $rgFile = $ARGV[1];
+    } else {
+        $rgFile = $projectFile;
+        $rgFile =~ s/\.rg\.rgp$/.rg/i;
+        $rgFile =~ s/\.rgp$/.rg/i;
+    }
 
     rgUnpack $rgFile, $projectFile;
 

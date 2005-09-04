@@ -79,7 +79,8 @@ protected:
 				       const Rosegarden::Key &key);
 
     // compose an appropriate Lilypond representation for various Marks
-    std::string composeLilyMark(std::string eventMark, bool stemUp);
+    std::string composeLilyMark(std::string eventMark, bool stemUp,
+				int languageLevel);
 
     // find/protect illegal characters in user-supplied strings
     std::string protectIllegalChars(std::string inStr);

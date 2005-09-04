@@ -22,6 +22,8 @@
 #include "AudioLevel.h"
 #include <cmath>
 #include <iostream>
+#include <map>
+#include <vector>
 
 namespace Rosegarden {
 
@@ -42,7 +44,12 @@ static const FaderDescription faderTypes[] = {
     FaderDescription(-70.0, +10.0, 0.80), // long
     FaderDescription(-70.0,   0.0, 1.00), // IEC268
     FaderDescription(-70.0, +10.0, 0.80), // IEC268 long
+    FaderDescription(-40.0,   0.0, 1.00), // preview
 };
+
+typedef std::vector<float> LevelList;
+static std::map<int, LevelList> previewLevelCache;
+static const LevelList &getPreviewLevelCache(int levels);
 
 float
 AudioLevel::multiplier_to_dB(float multiplier)
@@ -205,6 +212,61 @@ AudioLevel::multiplier_to_fader(float multiplier, int maxLevel, FaderType type)
     int fader = dB_to_fader(dB, maxLevel, type);
     return fader;
 }
+
+
+const LevelList &
+getPreviewLevelCache(int levels)
+{
+    LevelList &ll = previewLevelCache[levels];
+    if (ll.empty()) {
+	for (int i = 0; i <= levels; ++i) {
+	    float m = AudioLevel::fader_to_multiplier
+		(i, levels, AudioLevel::PreviewLevel);
+	    if (levels == 1) m /= 100; // noise
+	    ll.push_back(m);
+	}
+    }
+    return ll;
+}
+
+int
+AudioLevel::multiplier_to_preview(float m, int levels)
+{
+    const LevelList &ll = getPreviewLevelCache(levels);
+    int result = -1;
+
+    int lo = 0, hi = levels;
+
+    // binary search
+    int level = -1;
+    while (result < 0) {
+	int newlevel = (lo + hi) / 2;
+	if (newlevel == level ||
+	    newlevel == 0 ||
+	    newlevel == levels) {
+	    result = newlevel;
+	    break;
+	}
+	level = newlevel;
+	if (ll[level] >= m) {
+	    hi = level;
+	} else if (ll[level+1] >= m) {
+	    result = level;
+	} else {
+	    lo = level;
+	}
+    }
+		   
+    return result;
+}
+
+float
+AudioLevel::preview_to_multiplier(int level, int levels)
+{
+    const LevelList &ll = getPreviewLevelCache(levels);
+    return ll[level];
+}
+	
 
 }
 

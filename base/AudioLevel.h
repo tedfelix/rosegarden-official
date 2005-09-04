@@ -41,7 +41,8 @@ public:
 	     ShortFader = 0, // -40 -> +6  dB
               LongFader = 1, // -70 -> +10 dB
             IEC268Meter = 2, // -70 ->  0  dB
-	IEC268LongMeter = 3  // -70 -> +10 dB (0dB aligns with LongFader)
+        IEC268LongMeter = 3, // -70 -> +10 dB (0dB aligns with LongFader)
+	   PreviewLevel = 4
     };
 
     static float multiplier_to_dB(float multiplier);
@@ -54,6 +55,9 @@ public:
     static int   multiplier_to_fader(float multiplier, int maxFaderLevel,
 				     FaderType type);
 
+    // fast if "levels" doesn't change often -- for audio segment previews
+    static int   multiplier_to_preview(float multiplier, int levels);
+    static float preview_to_multiplier(int level, int levels);
 };
 
 }

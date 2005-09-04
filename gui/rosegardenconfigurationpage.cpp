@@ -1282,7 +1282,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ------------------ Record tab ---------------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 5, 2, 10, 5);
+    layout = new QGridLayout(frame, 6, 2, 10, 5);
 
     int increment = 0;
 
@@ -1312,6 +1312,15 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     layout->addWidget(label, 2, 0);
     layout->addWidget(m_createSubmasterOuts, 2, 1);
+    ++increment;
+
+    label = new QLabel(i18n("Record audio files as:"), frame);
+    m_audioRecFormat = new KComboBox(frame);
+    m_audioRecFormat->insertItem(i18n("16-bit PCM WAV format (smaller files)"));
+    m_audioRecFormat->insertItem(i18n("32-bit float WAV format (higher quality)"));
+    m_audioRecFormat->setCurrentItem(m_cfg->readUnsignedNumEntry("audiorecordfileformat", 1));
+    layout->addWidget(label, 3, 0);
+    layout->addWidget(m_audioRecFormat, 3, 1);
     ++increment;
 
 #endif // HAVE_LIBJACK
@@ -1627,6 +1636,7 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("audiolowlatencymonitoring", m_lowLatencyMode->currentItem() == 0);
     m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
     m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
+    m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentItem());
 
     // Audio record minutes
     //
@@ -1647,6 +1657,12 @@ SequencerConfigurationPage::apply()
 	 ports);
 
     Rosegarden::StudioControl::sendMappedEvent(mEports);
+
+    Rosegarden::MappedEvent mEff
+	(Rosegarden::MidiInstrumentBase,
+	 Rosegarden::MappedEvent::SystemAudioFileFormat,
+	 m_audioRecFormat->currentItem());
+    Rosegarden::StudioControl::sendMappedEvent(mEff);
 
     m_cfg->writeEntry("timer", m_timer->currentText());
     if (m_timer->currentText() != m_origTimer) {

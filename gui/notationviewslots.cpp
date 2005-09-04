@@ -2623,6 +2623,10 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
     //step-recording from e.g. vkeybd, which cannot be used without
     //losing focus (and thus active-ness) from the Rosegarden window.
 
+    //!!! I know -- we'll keep track of which edit view (or main view,
+    //or mixer, etc) is active, and we'll only allow insertion into
+    //the most recently activated.  How about that?
+
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
     if (!action) {

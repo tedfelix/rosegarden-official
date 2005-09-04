@@ -444,6 +444,7 @@ private:
     DeviceIntMap                 m_outputPorts;
 
     int                          m_syncOutputPort;
+    int                          m_controllerPort;
 
     int                          m_queue;
     int                          m_maxClients;

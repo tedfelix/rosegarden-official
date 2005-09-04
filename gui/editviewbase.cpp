@@ -717,6 +717,16 @@ void EditViewBase::slotCompositionStateUpdate()
     updateViewCaption();
 }
 
+
+void
+EditViewBase::windowActivationChange(bool oldState)
+{
+    if (isActiveWindow()) {
+	emit windowActivated();
+    }
+}
+
+
 /*
  * Let tools know if their current element has gone
  */

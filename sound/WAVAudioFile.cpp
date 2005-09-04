@@ -45,7 +45,6 @@ WAVAudioFile::WAVAudioFile(const unsigned int &id,
     RIFFAudioFile(id, name, fileName)
 {
     m_type = WAV;
-
 }
 
 WAVAudioFile::WAVAudioFile(const std::string &fileName,
@@ -54,14 +53,9 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
                            unsigned int bytesPerSecond = 6000,
                            unsigned int bytesPerFrame = 2,
                            unsigned int bitsPerSample = 16):
-    RIFFAudioFile(0, "", fileName)
+    RIFFAudioFile(fileName, channels, sampleRate, bytesPerSecond, bytesPerFrame, bitsPerSample)
 {
     m_type = WAV;
-    m_bitsPerSample = bitsPerSample;
-    m_sampleRate = sampleRate;
-    m_bytesPerSecond = bytesPerSecond;
-    m_bytesPerFrame = bytesPerFrame;
-    m_channels = channels;
 }
 
 WAVAudioFile::~WAVAudioFile()

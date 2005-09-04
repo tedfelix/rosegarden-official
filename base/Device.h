@@ -52,6 +52,7 @@ public:
     // special device ids
     static const DeviceId NO_DEVICE;
     static const DeviceId ALL_DEVICES;
+    static const DeviceId CONTROL_DEVICE;
 
     Device(DeviceId id, const std::string &name, DeviceType type):
         m_name(name), m_type(type), m_id(id) { }

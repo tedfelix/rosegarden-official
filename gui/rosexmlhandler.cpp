@@ -1651,6 +1651,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         if (container)
         {
+	    emit setOperationName(i18n("Loading plugins..."));
+	    RosegardenProgressDialog::processEvents();
+
             // Get the details
 	    int position;
 	    if (lcName == "synth") {

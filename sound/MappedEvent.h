@@ -156,7 +156,9 @@ public:
         // Set RG as MTC master/slave
         SystemMTCTransport       = 1 << 25,
         // Auto-connect sync outputs
-        SystemMIDISyncAuto       = 1 << 26
+        SystemMIDISyncAuto       = 1 << 26,
+	// File format used for audio recording (data1 is 0=PCM,1=float)
+	SystemAudioFileFormat    = 1 << 27
 
     } MappedEventType;
 
@@ -210,7 +212,7 @@ public:
                    m_fadeInTime(Rosegarden::RealTime::zeroTime),
                    m_fadeOutTime(Rosegarden::RealTime::zeroTime),
                    m_recordedChannel(0),
-                   m_recordedPort(0) {}
+                   m_recordedDevice(0) {}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -246,7 +248,7 @@ public:
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
         m_recordedChannel(0),
-        m_recordedPort(0) {}
+        m_recordedDevice(0) {}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -270,7 +272,7 @@ public:
          m_fadeInTime(Rosegarden::RealTime::zeroTime),
          m_fadeOutTime(Rosegarden::RealTime::zeroTime),
          m_recordedChannel(0),
-         m_recordedPort(0) {}
+         m_recordedDevice(0) {}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -294,7 +296,7 @@ public:
          m_fadeInTime(Rosegarden::RealTime::zeroTime),
          m_fadeOutTime(Rosegarden::RealTime::zeroTime),
          m_recordedChannel(0),
-         m_recordedPort(0) {}
+         m_recordedDevice(0) {}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -314,7 +316,7 @@ public:
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
         m_recordedChannel(0),
-        m_recordedPort(0) {}
+        m_recordedDevice(0) {}
 
 
     // Construct SysExs say
@@ -336,7 +338,7 @@ public:
         m_fadeInTime(Rosegarden::RealTime::zeroTime),
         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
         m_recordedChannel(0),
-        m_recordedPort(0) {}
+        m_recordedDevice(0) {}
 
     // Copy constructor
     //
@@ -357,7 +359,7 @@ public:
         m_fadeInTime(mE.getFadeInTime()),
         m_fadeOutTime(mE.getFadeOutTime()),
         m_recordedChannel(mE.getRecordedChannel()),
-        m_recordedPort(mE.getRecordedPort()) {}
+        m_recordedDevice(mE.getRecordedDevice()) {}
 
     // Copy from pointer
     // Fix for 674731 by Pedro Lopez-Cabanillas (20030531)
@@ -377,7 +379,7 @@ public:
         m_fadeInTime(mE->getFadeInTime()),
         m_fadeOutTime(mE->getFadeOutTime()),
         m_recordedChannel(mE->getRecordedChannel()),
-        m_recordedPort(mE->getRecordedPort()) {}
+        m_recordedDevice(mE->getRecordedDevice()) {}
 
     // Construct perhaps without initialising, for placement new or equivalent
     MappedEvent(bool initialise) {
@@ -495,11 +497,10 @@ public:
     void setRecordedChannel(const unsigned int channel) 
 	    { m_recordedChannel = channel; }
 	    
-    // Original event input port as it was recorded
+    // Original event record device as it was recorded
     //
-    unsigned int getRecordedPort() const { return m_recordedPort; }
-    void setRecordedPort(const unsigned int port)
-	    { m_recordedPort = port; }    
+    unsigned int getRecordedDevice() const { return m_recordedDevice; }
+    void setRecordedDevice(const unsigned int device) { m_recordedDevice = device; }
 
 private:
     TrackId          m_trackId;
@@ -536,7 +537,7 @@ private:
     // stored as it was recorded
     //
     unsigned int	  m_recordedChannel;
-    unsigned int	  m_recordedPort;
+    unsigned int	  m_recordedDevice;
 };
 
 

@@ -202,7 +202,7 @@ size_t
 DSSIPluginInstance::getLatency()
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
+//    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
 #endif
 
     if (m_latencyPort) {
@@ -219,6 +219,12 @@ DSSIPluginInstance::silence()
 	deactivate();
 	activate();
     }
+}
+
+void
+DSSIPluginInstance::discardEvents()
+{
+    m_eventBuffer.reset();
 }
 
 void
@@ -561,7 +567,6 @@ DSSIPluginInstance::activate()
 #endif
 
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->activate) return;
-    m_eventBuffer.reset();
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
 
     if (m_program) {

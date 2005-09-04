@@ -55,6 +55,11 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
     m_bytesPerSecond = bytesPerSecond;
     m_bytesPerFrame = bytesPerFrame;
     m_channels = channels;
+
+    if (bitsPerSample == 16) m_subFormat = PCM;
+    else if (bitsPerSample == 32) m_subFormat = FLOAT;
+    else throw(std::string("Rosegarden currently only supports 16-bit PCM or IEEE floating-point RIFF files for writing"));
+
 }
 
 RIFFAudioFile::~RIFFAudioFile()
@@ -517,8 +522,12 @@ RIFFAudioFile::writeFormatChunk()
     //cout << "LENGTH = " << getLittleEndianFromInteger(0x10, 4) << endl;
     outString += getLittleEndianFromInteger(0x10, 4);
 
-    // "always one"
-    outString += getLittleEndianFromInteger(0x01, 2);
+    // 1 for PCM, 3 for float
+    if (m_subFormat == PCM) {
+	outString += getLittleEndianFromInteger(0x01, 2);
+    } else {
+	outString += getLittleEndianFromInteger(0x03, 2);
+    }
 
     // channel
     outString += getLittleEndianFromInteger(m_channels, 2);

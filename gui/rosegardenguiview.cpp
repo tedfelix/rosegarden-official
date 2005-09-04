@@ -84,6 +84,8 @@ using Rosegarden::timeT;
 
 static double barWidth44 = 100.0;
 
+const QWidget *RosegardenGUIView::m_lastActiveMainWindow = 0;
+
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      SegmentParameterBox* segmentParameterBox,
                                      InstrumentParameterBox* instrumentParameterBox,
@@ -159,6 +161,9 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
+
+    connect(this, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)),
+	    this, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)));
 
     if (doc) {
 	connect(doc, SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *,
@@ -245,6 +250,9 @@ void
 RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
 {
     TempoView *tempoView = new TempoView(getDocument(), this, t);
+
+    connect(tempoView, SIGNAL(windowActivated()),
+	    this, SLOT(slotActiveMainWindowChanged()));
 
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,
@@ -405,6 +413,10 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 					     TempoDialog::TempoDialogAction)),
             RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
                                                            TempoDialog::TempoDialogAction)));
+
+
+    connect(notationView, SIGNAL(windowActivated()),
+	    this, SLOT(slotActiveMainWindowChanged()));
 
     connect(notationView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
@@ -575,6 +587,9 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 		    RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
 
+    connect(matrixView, SIGNAL(windowActivated()),
+	    this, SLOT(slotActiveMainWindowChanged()));
+
     connect(matrixView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
 
@@ -690,6 +705,9 @@ EventView *RosegardenGUIView::createEventView(std::vector<Rosegarden::Segment *>
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
+
+    connect(eventView, SIGNAL(windowActivated()),
+	    this, SLOT(slotActiveMainWindowChanged()));
 
     connect(eventView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
@@ -1613,6 +1631,217 @@ RosegardenGUIView::slotSynchroniseWithComposition()
 }
 
 void
+RosegardenGUIView::windowActivationChange(bool)
+{
+    if (isActiveWindow()) {
+	slotActiveMainWindowChanged(this);
+    }
+}
+
+void
+RosegardenGUIView::slotActiveMainWindowChanged(const QWidget *w)
+{
+    m_lastActiveMainWindow = w;
+}
+
+void
+RosegardenGUIView::slotActiveMainWindowChanged()
+{
+    const QWidget *w = dynamic_cast<const QWidget *>(sender());
+    if (w) slotActiveMainWindowChanged(w);
+}
+
+void
+RosegardenGUIView::slotControllerDeviceEventReceived(Rosegarden::MappedEvent *e)
+{
+    RG_DEBUG << "Controller device event received - send to " << (void *)m_lastActiveMainWindow << " (I am " << this << ")" << endl;
+
+    //!!! So, what _should_ we do with these?
+
+    // -- external controller that sends e.g. volume control for each
+    // of a number of channels -> if mixer present, use control to adjust
+    // tracks on mixer
+
+    // -- external controller that sends e.g. separate controllers on
+    // the same channel for adjusting various parameters -> if IPB
+    // visible, adjust it.  Should we use the channel to select the
+    // track? maybe as an option
+
+    // do we actually need the last active main window for either of
+    // these? -- yes, to determine whether to send to mixer or to IPB
+    // in the first place.  Send to audio mixer if active, midi mixer
+    // if active, plugin dialog if active, otherwise keep it for
+    // ourselves for the IPB.  But, we'll do that by having the edit
+    // views pass it back to us.
+
+    // -- then we need to send back out to device. 
+
+    //!!! special cases: controller 81 received by any window ->
+    // select window 0->main, 1->audio mix, 2->midi mix
+
+    //!!! controller 82 received by main window -> select track
+
+    //!!! these obviously should be configurable
+
+    if (e->getType() == Rosegarden::MappedEvent::MidiController) {
+
+	if (e->getData1() == 81) {
+
+	    // select window
+	    int window = e->getData2();
+
+	    if (window < 10) { // me
+
+		show();
+		raise();
+		setActiveWindow();
+
+	    } else if (window < 20) {
+
+		RosegardenGUIApp::self()->slotOpenAudioMixer();
+
+	    } else if (window < 30) {
+
+		RosegardenGUIApp::self()->slotOpenMidiMixer();
+	    }
+	}
+    }
+
+    emit controllerDeviceEventReceived(e, m_lastActiveMainWindow);
+}
+
+void
+RosegardenGUIView::slotControllerDeviceEventReceived(Rosegarden::MappedEvent *e, const void *preferredCustomer)
+{
+    if (preferredCustomer != this) return;
+    RG_DEBUG << "RosegardenGUIView::slotControllerDeviceEventReceived: this one's for me" << endl;
+    raise();
+
+    RG_DEBUG << "Event is type: " << int(e->getType()) << ", channel " << int(e->getRecordedChannel()) << ", data1 " << int(e->getData1()) << ", data2 " << int(e->getData2()) << endl;
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+
+    Rosegarden::TrackId currentTrackId = comp.getSelectedTrack();
+    Rosegarden::Track *track = comp.getTrackById(currentTrackId);
+    
+    // If the event is a control change on channel n, then (if
+    // follow-channel is on) switch to the nth track of the same type
+    // as the current track -- or the first track of the given
+    // channel?, and set the control appropriately.  Any controls in
+    // IPB are supported for a MIDI device plus program and bank; only
+    // volume and pan are supported for audio/synth devices.
+    //!!! complete this
+
+    if (e->getType() != Rosegarden::MappedEvent::MidiController) {
+
+	if (e->getType() == Rosegarden::MappedEvent::MidiProgramChange) {
+	    int program = e->getData1();
+	    if (!track) return;
+	    Rosegarden::InstrumentId ii = track->getInstrument();
+	    Rosegarden::Instrument *instrument = studio.getInstrumentById(ii);
+	    if (!instrument) return;
+	    instrument->setProgramChange(program);
+	    emit instrumentParametersChanged(ii);
+	}
+	return;
+    }
+
+    unsigned int channel = e->getRecordedChannel();
+    Rosegarden::MidiByte controller = e->getData1();
+    Rosegarden::MidiByte value = e->getData2();
+
+    if (controller == 82) { //!!! magic select-track controller
+	int tracks = comp.getNbTracks();
+	Rosegarden::Track *track = comp.getTrackByPosition(value * tracks / 127);
+	if (track) {
+	    slotSelectTrackSegments(track->getId());
+	}
+	return;
+    }
+
+    if (!track) return;
+
+    Rosegarden::InstrumentId ii = track->getInstrument();
+    Rosegarden::Instrument *instrument = studio.getInstrumentById(ii);
+
+    if (!instrument) return;
+
+    switch (instrument->getType()) {
+
+    case Rosegarden::Instrument::Midi:
+    {
+	Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+	    (instrument->getDevice());
+	if (!md) {
+	    std::cerr << "WARNING: MIDI instrument has no MIDI device in slotControllerDeviceEventReceived" << std::endl;
+	    return;
+	}
+
+	//!!! we need a central clearing house for these changes,
+	// for a proper mvc structure.  reqd for automation post-1.2.
+	// in the mean time this duplicates much of
+	// MIDIInstrumentParameterPanel::slotControllerChanged etc
+	
+	switch (controller) {
+
+	case Rosegarden::MIDI_CONTROLLER_VOLUME:
+	    RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
+	    instrument->setVolume(value);
+	    break;
+
+	case Rosegarden::MIDI_CONTROLLER_PAN:
+	    RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
+	    instrument->setPan(value);
+	    break;
+
+	default:
+	{
+	    Rosegarden::ControlList cl = md->getIPBControlParameters();
+	    for (Rosegarden::ControlList::const_iterator i = cl.begin();
+		 i != cl.end(); ++i) {
+		if ((*i).getControllerValue() == controller) {
+		    RG_DEBUG << "Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value << endl;
+		    instrument->setControllerValue(controller, value);
+		    break;
+		}
+	    }
+	    break;
+	}
+	}
+		     
+	break;
+    }
+
+    case Rosegarden::Instrument::SoftSynth:
+    case Rosegarden::Instrument::Audio: 
+	
+	switch (controller) {
+
+	case Rosegarden::MIDI_CONTROLLER_VOLUME:
+	    RG_DEBUG << "Setting volume for instrument " << instrument->getId() << " to " << value << endl;
+	    instrument->setLevel(Rosegarden::AudioLevel::fader_to_dB
+				 (value, 127, Rosegarden::AudioLevel::ShortFader));
+	    break;
+
+	case Rosegarden::MIDI_CONTROLLER_PAN:
+	    RG_DEBUG << "Setting pan for instrument " << instrument->getId() << " to " << value << endl;
+	    instrument->setPan(Rosegarden::MidiByte((value / 64.0) * 100.0 + 0.01));
+	    break;
+	   
+	default:
+	    break;
+	}
+
+	break;
+    }
+
+    emit instrumentParametersChanged(instrument->getId());
+
+    //!!! send out updates via MIDI
+}
+
+void
 RosegardenGUIView::initChordNameRuler()
 {
     getTrackEditor()->getChordNameRuler()->setReady();
@@ -1620,3 +1849,4 @@ RosegardenGUIView::initChordNameRuler()
 
 
 #include "rosegardenguiview.moc"
+

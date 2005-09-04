@@ -205,7 +205,7 @@ public:
 
     QString configurePlugin(InstrumentId, int, QString, QString);
 
-    void resetAllPlugins();
+    void resetAllPlugins(bool discardEvents = false);
     void destroyAllPlugins();
 
     RunnablePluginInstance *getSynthPlugin(InstrumentId id) { return m_synths[id]; }

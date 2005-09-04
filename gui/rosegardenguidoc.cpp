@@ -869,6 +869,7 @@ void RosegardenGUIDoc::initialiseStudio()
 
     bool faderOuts = config->readBoolEntry("audiofaderouts", false);
     bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
+    unsigned int audioFileFormat = config->readUnsignedNumEntry("audiorecordfileformat", 1);
 
     Rosegarden::MidiByte ports = 0;
     if (faderOuts) {
@@ -883,6 +884,12 @@ void RosegardenGUIDoc::initialiseStudio()
 	 ports);
 
     Rosegarden::StudioControl::sendMappedEvent(mEports);
+
+    Rosegarden::MappedEvent mEff
+	(Rosegarden::MidiInstrumentBase,
+	 Rosegarden::MappedEvent::SystemAudioFileFormat,
+	 audioFileFormat);
+    Rosegarden::StudioControl::sendMappedEvent(mEff);
 }
 
 
@@ -1442,6 +1449,15 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
         //
         for (i = mC.begin(); i != mC.end(); ++i)
         {
+	    if ((*i)->getRecordedDevice() == Rosegarden::Device::CONTROL_DEVICE) {
+		// send to GUI
+		RosegardenGUIView *v;
+		for (v = m_viewList.first(); v != 0; v = m_viewList.next()) {
+		    v->slotControllerDeviceEventReceived(*i);
+		}
+		continue;
+	    }
+
             absTime = m_composition.getElapsedTimeForRealTime((*i)->getEventTime());
 
             /* This is incorrect, unless the tempo at absTime happens to
@@ -1459,7 +1475,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 	    bool isNoteOn = false;
 	    int pitch = 0;
 	    int channel = (*i)->getRecordedChannel();
-	    int port = (*i)->getRecordedPort();
+	    int device = (*i)->getRecordedDevice();
 	    
             switch((*i)->getType()) {
                 case Rosegarden::MappedEvent::MidiNote:
@@ -1489,7 +1505,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 			// it's a note-off
 	
 			//NoteOnMap::iterator mi = m_noteOnEvents.find((*i)->getPitch());
-			PitchMap *pm = &m_noteOnEvents[port][channel];
+			PitchMap *pm = &m_noteOnEvents[device][channel];
 			PitchMap::iterator mi = pm->find(pitch);
 
 			if (mi != pm->end()) {
@@ -1591,7 +1607,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
             
             // Set the recorded input port
             //
-            rEvent->set<Int>(RECORDED_PORT, port);
+            rEvent->set<Int>(RECORDED_PORT, device);
 
             // Set the start index and then insert into the Composition
             // (if we haven't before)
@@ -1606,7 +1622,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
             // Now insert the new event
             //
 	    if (isNoteOn) {
-		m_noteOnEvents[port][channel][pitch] = m_recordMIDISegment->insert(rEvent);
+		m_noteOnEvents[device][channel][pitch] = m_recordMIDISegment->insert(rEvent);
 	    } else {
 		m_recordMIDISegment->insert(rEvent);
 	    }

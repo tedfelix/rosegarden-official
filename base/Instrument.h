@@ -142,6 +142,9 @@ public:
     void setMidiTranspose(MidiByte mT) { m_transpose = mT; }
     MidiByte getMidiTranspose() const { return m_transpose; }
 
+    // Pan is 0-127 for MIDI instruments, and (for some
+    // unfathomable reason) 0-200 for audio instruments.
+    //
     void setPan(MidiByte pan) { m_pan = pan; }
     MidiByte getPan() const { return m_pan; }
 

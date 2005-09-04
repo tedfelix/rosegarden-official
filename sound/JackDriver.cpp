@@ -1658,7 +1658,7 @@ JackDriver::stopTransport()
 	}
     }
 
-    if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins();
+    if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins(true); // discard events too
 }
 
 
@@ -1760,7 +1760,7 @@ JackDriver::restoreIfRestorable()
 
     if (now < m_kickedOutAt || now >= m_kickedOutAt + 3) {
     
-	if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins();
+	if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins(true);
 	std::cerr << "reset plugins" << std::endl;
 
 	initialise(true);
@@ -1786,7 +1786,9 @@ JackDriver::prebufferAudio()
     //repositioning during playback, and stopTransport no longer
     //happens then.  I suppose it could alternatively go in
     //relocateTransportInternal?
-    m_instrumentMixer->resetAllPlugins();
+    // NB. Don't want to discard events here as this is called after
+    // pushing events to the soft synth queues at startup
+    m_instrumentMixer->resetAllPlugins(false);
 
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::prebufferAudio: sequencer time is "

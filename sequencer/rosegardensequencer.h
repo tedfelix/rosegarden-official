@@ -365,7 +365,8 @@ public:
     void sleep(const Rosegarden::RealTime &rt);
 
     void applyFiltering(Rosegarden::MappedComposition *mC,
-			Rosegarden::MidiFilter filter);
+			Rosegarden::MidiFilter filter,
+			bool filterControlDevice);
 
     // Are we looping?
     //

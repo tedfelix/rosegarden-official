@@ -4862,6 +4862,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent) :
     m_lilyLanguage->insertItem(i18n("Lilypond 2.0"));
     m_lilyLanguage->insertItem(i18n("Lilypond 2.2"));
     m_lilyLanguage->insertItem(i18n("Lilypond 2.4"));
+    m_lilyLanguage->insertItem(i18n("Lilypond 2.6"));
     m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 1));
     layout->addWidget(m_lilyLanguage, 0, 1);
 

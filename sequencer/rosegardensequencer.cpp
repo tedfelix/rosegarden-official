@@ -480,7 +480,7 @@ RosegardenSequencerApp::processRecordedMidi()
 
     if (mC->empty() || !m_controlBlockMmapper) return;
 
-    applyFiltering(mC, m_controlBlockMmapper->getRecordFilter());
+    applyFiltering(mC, m_controlBlockMmapper->getRecordFilter(), false);
     int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
 	(m_controlBlockMmapper->getSelectedTrack());
     for (Rosegarden::MappedComposition::iterator i = mC->begin();
@@ -490,7 +490,7 @@ RosegardenSequencerApp::processRecordedMidi()
 
     m_sequencerMapper.updateRecordingBuffer(mC);
 
-    applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
+    applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
     m_driver->processEventsOut(*mC);
 }
 
@@ -546,7 +546,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     QDataStream arg(data, IO_WriteOnly);
     arg << mC;
 
-    applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
+    applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
     m_driver->processEventsOut(*mC);
 
 //    SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
@@ -572,13 +572,18 @@ RosegardenSequencerApp::processAsynchronousEvents()
 
 void
 RosegardenSequencerApp::applyFiltering(Rosegarden::MappedComposition *mC,
-				       Rosegarden::MidiFilter filter)
+				       Rosegarden::MidiFilter filter,
+				       bool filterControlDevice)
 {
     for (Rosegarden::MappedComposition::iterator i = mC->begin();
 	 i != mC->end(); ) { // increment in loop
 	Rosegarden::MappedComposition::iterator j = i;
 	++j;
-	if ((*i)->getType() & filter) mC->erase(i);
+	if (((*i)->getType() & filter) ||
+	    (filterControlDevice && ((*i)->getRecordedDevice() ==
+				     Rosegarden::Device::CONTROL_DEVICE))) {
+	    mC->erase(i);
+	}
 	i = j;
     }
 }    

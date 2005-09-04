@@ -76,6 +76,7 @@ public:
     virtual size_t getLatency();
 
     virtual void silence();
+    virtual void discardEvents();
     virtual void setIdealChannelCount(size_t channels); // may re-instantiate
 
     virtual bool isInGroup() const { return m_grouped; }

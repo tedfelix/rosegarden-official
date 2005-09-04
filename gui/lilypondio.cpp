@@ -383,7 +383,8 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 // need extensive reworking eventually, possibly with version awareness
 // 
 std::string
-LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
+LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp,
+				  int languageLevel) {
 
     std::string inStr = "", outStr = "";
     std::string prefix = (stemUp) ? "_" : "^";
@@ -397,8 +398,11 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         } else if (inStr == "rf") {
             inStr = "\\rfz";
         } else {        
-	    // FIX 1.X / 2.X VERSION DIFFERENCE HERE
-            inStr = "#'(italic \"" + inStr + "\")";
+	    if (languageLevel < 2) {
+		inStr = "#'(italic \"" + inStr + "\")";
+	    } else {
+		inStr = "\\markup { \\italic " + inStr + " } ";
+	    }
         }
 
         outStr = prefix + inStr;
@@ -410,8 +414,11 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
         inStr = protectIllegalChars(Rosegarden::Marks::getFingeringFromMark(eventMark));
 	
-	// FIX 1.X / 2.X VERSION DIFFERENCE HERE
-	inStr = "#'(italic \"" + inStr + "\")";
+	if (languageLevel < 2) {
+	    inStr = "#'(italic \"" + inStr + "\")";
+	} else {
+	    inStr = "\\markup { \\italic " + inStr + " } ";
+	}
 
         outStr = prefix + inStr;
         
@@ -559,6 +566,7 @@ LilypondExporter::write()
 	// 1 -> Lilypond 2.0
 	// 2 -> Lilypond 2.2
 	// 3 -> Lilypond 2.4
+	// 4 -> Lilypond 2.6
 
     case 0:
 	str << "\\version \"1.6.0\"" << std::endl;
@@ -574,6 +582,10 @@ LilypondExporter::write()
 
     case 3:
 	str << "\\version \"2.4.0\"" << std::endl;
+	break;
+
+    case 4:
+	str << "\\version \"2.6.0\"" << std::endl;
 	break;
 
     default:
@@ -1263,20 +1275,26 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    if (languageLevel >= 1) {
 
 		if (chord.size() > 1) str << "> ";
-
+		
 		if (languageLevel >= 3) {
+		    if (duration != prevDuration) {
+			writeDuration(duration, str);
+			str << " ";
+			prevDuration = duration;
+		    }
 		    // only one override per chord, and that outside the <>
 		    if (stylei != s->end()) {
 			writeStyle(*stylei, prevStyle, col, str);
 			stylei = s->end();
 		    }
+		} else {
+		    if (duration != prevDuration) {
+			writeDuration(duration, str);
+			str << " ";
+			prevDuration = duration;
+		    }
 		}
 
-		if (duration != prevDuration) {
-		    writeDuration(duration, str);
-		    str << " ";
-		    prevDuration = duration;
-		}
 		if (lilyText != "") {
 		    str << lilyText;
 		    lilyText = "";
@@ -1290,7 +1308,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    bool stemUp = true;
 	    e->get<Bool>(NotationProperties::STEM_UP, stemUp);
 	    for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
-		str << composeLilyMark(*j, stemUp);
+		str << composeLilyMark(*j, stemUp, languageLevel);
 	    }
 	    if (marks.size() > 0) str << " ";
 

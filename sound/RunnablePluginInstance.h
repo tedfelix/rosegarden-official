@@ -92,6 +92,7 @@ public:
     virtual size_t getLatency() = 0;
 
     virtual void silence() = 0;
+    virtual void discardEvents() { }
     virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew

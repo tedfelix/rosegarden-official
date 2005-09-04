@@ -720,6 +720,14 @@ AudioPluginDialog::slotBypassChanged(bool bp)
 }
 
 void
+AudioPluginDialog::windowActivationChange(bool oldState)
+{
+    if (isActiveWindow()) {
+	emit windowActivated();
+    }
+}
+
+void
 AudioPluginDialog::closeEvent(QCloseEvent *e)
 {
     e->accept();

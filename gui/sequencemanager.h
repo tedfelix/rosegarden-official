@@ -225,6 +225,7 @@ signals:
 
     void insertableNoteOnReceived(int pitch, int velocity);
     void insertableNoteOffReceived(int pitch, int velocity);
+    void controllerDeviceEventReceived(Rosegarden::MappedEvent *ev);
     
 protected slots:
     void slotCountdownTimerTimeout();

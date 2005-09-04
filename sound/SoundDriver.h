@@ -30,6 +30,7 @@
 #include "SequencerDataBlock.h"
 #include "PlayableAudioFile.h"
 #include "Scavenger.h"
+#include "RIFFAudioFile.h" // for SubFormat enum
 
 // Abstract base to support SoundDrivers such as aRts and ALSA.
 //
@@ -338,6 +339,9 @@ public:
     void clearAudioQueue();
     const AudioPlayQueue *getAudioQueue() const;
 
+    RIFFAudioFile::SubFormat getAudioRecFileFormat() const { return m_audioRecFileFormat; }
+
+
     // Latencies
     //
     virtual RealTime getAudioPlayLatency() { return RealTime::zeroTime; }
@@ -480,6 +484,8 @@ protected:
     int m_smallFileSize;
     bool m_lowLatencyMode;
 
+    RIFFAudioFile::SubFormat m_audioRecFileFormat;
+    
     // Virtual studio hook
     //
     MappedStudio                *m_studio;

@@ -536,6 +536,8 @@ protected:
     QCheckBox    *m_createFaderOuts;
     QCheckBox    *m_createSubmasterOuts;
 
+    QComboBox    *m_audioRecFormat;
+
     KComboBox    *m_lowLatencyMode;
 
 #endif // HAVE_LIBJACK

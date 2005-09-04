@@ -885,8 +885,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     }
 
     i = tempMC.begin();
-    if (i != tempMC.end()) {
-	m_transport->setMidiOutLabel(*i);
+    while (i != tempMC.end()) {
+	if ((*i)->getRecordedDevice() != Device::CONTROL_DEVICE) {
+	    m_transport->setMidiOutLabel(*i);
+	    break;
+	}
+	++i;
     }
 
     for (i = mC.begin(); i != mC.end(); ++i )
@@ -1111,13 +1115,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     }
     
     // if we aren't playing or recording, consider invoking any
-    // step-by-step clients (using unfiltered composition)
-    
-    if (m_transportStatus == STOPPED ||
-	m_transportStatus == RECORDING_ARMED) {
+    // step-by-step clients (using unfiltered composition).  send
+    // out any incoming external controller events
 
-	for (i = mC.begin(); i != mC.end(); ++i )
-	{
+    for (i = mC.begin(); i != mC.end(); ++i ) {
+	if (m_transportStatus == STOPPED ||
+	    m_transportStatus == RECORDING_ARMED) {
 	    if ((*i)->getType() == MappedEvent::MidiNote) {
 		if ((*i)->getVelocity() == 0) {
 		    emit insertableNoteOffReceived((*i)->getPitch(), (*i)->getVelocity());
@@ -1125,6 +1128,10 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		    emit insertableNoteOnReceived((*i)->getPitch(), (*i)->getVelocity());
 		}
 	    }
+	}
+	if ((*i)->getRecordedDevice() == Rosegarden::Device::CONTROL_DEVICE) {
+	    SEQMAN_DEBUG << "controllerDeviceEventReceived" << endl;
+	    emit controllerDeviceEventReceived(*i);
 	}
     }
 }
@@ -1506,6 +1513,7 @@ SequenceManager::reinitialiseSequencerStudio()
     //
     bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
     bool faderOuts = config->readBoolEntry("audiofaderouts", false);
+    unsigned int audioFileFormat = config->readUnsignedNumEntry("audiorecordfileformat", 1);
 
     MidiByte ports = 0;
     if (faderOuts) {
@@ -1520,6 +1528,12 @@ SequenceManager::reinitialiseSequencerStudio()
 	 ports);
 
     StudioControl::sendMappedEvent(mEports);
+
+    MappedEvent mEff
+	(MidiInstrumentBase,
+	 MappedEvent::SystemAudioFileFormat,
+	 audioFileFormat);
+    StudioControl::sendMappedEvent(mEff);
 
 
     // Set the studio from the current document

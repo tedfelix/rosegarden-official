@@ -76,6 +76,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_client(-1),
     m_inputPort(-1),
     m_syncOutputPort(-1),
+    m_controllerPort(-1),
     m_queue(-1),
     m_maxClients(-1),
     m_maxPorts(-1),
@@ -1601,6 +1602,17 @@ AlsaDriver::initialiseMidi()
 				       SND_SEQ_PORT_TYPE_APPLICATION), 
 				      "initialiseMidi - can't create sync output port");
 
+    // and port for hardware controller
+    m_controllerPort = checkAlsaError(snd_seq_create_simple_port
+				      (m_midiHandle,
+				       "external controller",
+				       SND_SEQ_PORT_CAP_READ |
+				       SND_SEQ_PORT_CAP_WRITE |
+				       SND_SEQ_PORT_CAP_SUBS_READ |
+				       SND_SEQ_PORT_CAP_SUBS_WRITE,
+				       SND_SEQ_PORT_TYPE_APPLICATION), 
+				      "initialiseMidi - can't create controller port");
+
     getSystemInfo();
 
     generatePortList();
@@ -2115,22 +2127,37 @@ AlsaDriver::getMappedComposition()
         unsigned int chanNoteKey = ( channel << 8 ) +
                                    (unsigned int) event->data.note.note;
                              
-        // clientPort is a number rolling up a client:port pair into a
-        // single integer. It could be also an arithmetic transformation.
-        //
-	unsigned int clientPort = 0;
-	for (MappedDeviceList::iterator i = m_devices.begin();
-	     i != m_devices.end(); ++i) 
-	{
-	    ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
-	    if (((*i)->getDirection() == MidiDevice::Record) &&
-	        ( pair.first == event->source.client ) &&
-	        ( pair.second == event->source.port ))
+	bool fromController = false;
+	if (event->dest.client == m_client &&
+	    event->dest.port == m_controllerPort) {
+#ifdef DEBUG_ALSA
+	    std::cerr << "Received an external controller event" << std::endl;
+#endif
+	    fromController = true;
+	} else {
+#ifdef DEBUG_ALSA
+	    std::cerr << "Received non-controller event (dest=" << (int)event->dest.client << ":" << (int)event->dest.port << ", controller is " << (int)m_client << ":" << (int)m_controllerPort << ")" << std::endl;
+#endif
+	}
+
+	unsigned int deviceId = Rosegarden::Device::NO_DEVICE;
+
+	if (fromController) {
+	    deviceId = Rosegarden::Device::CONTROL_DEVICE;
+	} else {
+	    for (MappedDeviceList::iterator i = m_devices.begin();
+		 i != m_devices.end(); ++i) 
 	    {
-		clientPort = (*i)->getId();
-		break;
+		ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
+		if (((*i)->getDirection() == MidiDevice::Record) &&
+		    ( pair.first == event->source.client ) &&
+		    ( pair.second == event->source.port ))
+		{
+		    deviceId = (*i)->getId();
+		    break;
+		}
 	    }
-	}   
+	}
 	
         eventTime.sec = event->time.time.tv_sec;
         eventTime.nsec = event->time.time.tv_nsec;
@@ -2138,9 +2165,9 @@ AlsaDriver::getMappedComposition()
 
         switch(event->type)
         {
-
             case SND_SEQ_EVENT_NOTE:
             case SND_SEQ_EVENT_NOTEON:
+		if (fromController) continue;
                 if (event->data.note.velocity > 0)
                 {
 		    MappedEvent *mE = new MappedEvent();
@@ -2148,7 +2175,7 @@ AlsaDriver::getMappedComposition()
                     mE->setVelocity(event->data.note.velocity);
                     mE->setEventTime(eventTime);
                     mE->setRecordedChannel(channel);
-                    mE->setRecordedPort(clientPort);
+                    mE->setRecordedDevice(deviceId);
 
                     // Negative duration - we need to hear the NOTE ON
                     // so we must insert it now with a negative duration
@@ -2164,17 +2191,18 @@ AlsaDriver::getMappedComposition()
                     // them.
                     //
                     m_recordComposition.insert(new MappedEvent(mE));
-                    m_noteOnMap[clientPort][chanNoteKey] = mE;
+                    m_noteOnMap[deviceId][chanNoteKey] = mE;
 
                     break;
                 }
 
             case SND_SEQ_EVENT_NOTEOFF:
-                if (m_noteOnMap[clientPort][chanNoteKey] != 0)
+		if (fromController) continue;
+                if (m_noteOnMap[deviceId][chanNoteKey] != 0)
                 {
                     // Set duration correctly on the NOTE OFF
                     //
-                    MappedEvent *mE = m_noteOnMap[clientPort][chanNoteKey];
+                    MappedEvent *mE = m_noteOnMap[deviceId][chanNoteKey];
                     RealTime duration = eventTime - mE->getEventTime();
 
                     if (duration < RealTime::zeroTime) break;
@@ -2190,13 +2218,15 @@ AlsaDriver::getMappedComposition()
 
                     // reset the reference
                     //
-                    m_noteOnMap[clientPort][chanNoteKey] = 0;
+                    m_noteOnMap[deviceId][chanNoteKey] = 0;
                     
                 }
                 break;
 
             case SND_SEQ_EVENT_KEYPRESS:
                 {
+		    if (fromController) continue;
+
                     // Fix for 632964 by Pedro Lopez-Cabanillas (20030523)
                     //
                     MappedEvent *mE = new MappedEvent();
@@ -2205,7 +2235,7 @@ AlsaDriver::getMappedComposition()
                     mE->setData1(event->data.note.note);
                     mE->setData2(event->data.note.velocity);
                     mE->setRecordedChannel(channel);
-                    mE->setRecordedPort(clientPort);
+                    mE->setRecordedDevice(deviceId);
                     m_recordComposition.insert(mE);
                 }
                 break;
@@ -2218,7 +2248,7 @@ AlsaDriver::getMappedComposition()
                     mE->setData1(event->data.control.param);
                     mE->setData2(event->data.control.value);
                     mE->setRecordedChannel(channel);
-                    mE->setRecordedPort(clientPort);
+                    mE->setRecordedDevice(deviceId);
                     m_recordComposition.insert(mE);
                 }
                 break;
@@ -2230,7 +2260,7 @@ AlsaDriver::getMappedComposition()
                     mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.value);
                     mE->setRecordedChannel(channel);
-                    mE->setRecordedPort(clientPort);
+                    mE->setRecordedDevice(deviceId);
                     m_recordComposition.insert(mE);
 
                 }
@@ -2238,6 +2268,8 @@ AlsaDriver::getMappedComposition()
 
             case SND_SEQ_EVENT_PITCHBEND:
                 {
+		    if (fromController) continue;
+
                     // Fix for 711889 by Pedro Lopez-Cabanillas (20030523)
                     //
                     int s = event->data.control.value + 8192;
@@ -2249,13 +2281,15 @@ AlsaDriver::getMappedComposition()
                     mE->setData1(d1);
                     mE->setData2(d2);
                     mE->setRecordedChannel(channel);
-                    mE->setRecordedPort(clientPort);
+                    mE->setRecordedDevice(deviceId);
                     m_recordComposition.insert(mE);
                 }
                 break;
 
             case SND_SEQ_EVENT_CHANPRESS:
                 {
+		    if (fromController) continue;
+
                     // Fixed by Pedro Lopez-Cabanillas (20030523)
                     //
                     int s = event->data.control.value & 0x7f;
@@ -2264,12 +2298,14 @@ AlsaDriver::getMappedComposition()
                     mE->setEventTime(eventTime);
                     mE->setData1(s);
                     mE->setRecordedChannel(channel);
-                    mE->setRecordedPort(clientPort);
+                    mE->setRecordedDevice(deviceId);
                     m_recordComposition.insert(mE);
                 }
                break;
 
             case SND_SEQ_EVENT_SYSEX:
+
+		if (fromController) continue;
 
 		if (!testForMTCSysex(event) &&
 		    !testForMMCSysex(event)) {
@@ -2285,20 +2321,16 @@ AlsaDriver::getMappedComposition()
                    if ((MidiByte)(data[1]) == MIDI_SYSEX_RT)
                    {
                        std::cerr << "REALTIME SYSEX" << endl;
-                   }
-#endif
-                   if ((MidiByte)(data[1]) == MIDI_SYSEX_RT)
-                   {
-                       std::cerr << "REALTIME SYSEX" << endl;
-                       for (int ii = 0; ii < data.length(); ++ii) {
+                       for (unsigned int ii = 0; ii < data.length(); ++ii) {
                            printf("B %d = %02x\n", ii, data[ii]);
                        }
                    }
+#endif
 
                    MappedEvent *mE = new MappedEvent();
                    mE->setType(MappedEvent::MidiSystemMessage);
                    mE->setData1(Rosegarden::MIDI_SYSTEM_EXCLUSIVE);
-                   mE->setRecordedPort(clientPort);
+                   mE->setRecordedDevice(deviceId);
                    // chop off SYX and EOX bytes from data block
                    // Fix for 674731 by Pedro Lopez-Cabanillas (20030601)
                    DataBlockRepository::setDataBlockForEvent(mE, data.substr(1, data.length() - 2));
@@ -2312,6 +2344,7 @@ AlsaDriver::getMappedComposition()
 		break;
 
             case SND_SEQ_EVENT_QFRAME:
+		if (fromController) continue;
 		if (getMTCStatus() == TRANSPORT_SLAVE) {
 		    handleMTCQFrame(event->data.control.value, eventTime);
 		}
@@ -2939,7 +2972,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
-	bool isSoftSynth = ((*i)->getInstrument() >= SoftSynthInstrumentBase);
+	bool isControllerOut = ((*i)->getRecordedDevice() == 
+				Rosegarden::Device::CONTROL_DEVICE);
+	
+	bool isSoftSynth = (!isControllerOut &&
+			    ((*i)->getInstrument() >= SoftSynthInstrumentBase));
 
         outputTime = (*i)->getEventTime() - m_playStartPosition +
                            m_alsaPlayStartTime;
@@ -3019,7 +3056,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	    // Set source according to port for device
 	    //
-	    int src = getOutputPortForMappedInstrument((*i)->getInstrument());
+	    int src;
+
+	    if (isControllerOut) {
+		src = m_controllerPort;
+	    } else {
+		src = getOutputPortForMappedInstrument((*i)->getInstrument());
+	    }
+
 	    if (src < 0) continue;
 	    snd_seq_ev_set_source(&event, src);
 
@@ -3039,10 +3083,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 			      // note-ons at the same nominal time
 	bool needNoteOff = false;
  
-        if (instrument != 0)
+	if (isControllerOut) {
+	    channel = (*i)->getRecordedChannel();
+#ifdef DEBUG_ALSA
+	    std::cerr << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel << std::endl;
+#endif
+	} else if (instrument != 0) {
             channel = instrument->getChannel();
-        else
-        {
+	} else {
 #ifdef DEBUG_ALSA
             std::cerr << "processMidiOut() - No instrument for event of type "
 		      << (int)(*i)->getType() << " at " << (*i)->getEventTime()
@@ -3891,6 +3939,34 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 #endif
         }
         
+	if ((*i)->getType() == MappedEvent::SystemAudioFileFormat) 
+	{
+#ifdef HAVE_LIBJACK
+	    int format = (*i)->getData1();
+	    switch (format) {
+	    case 0:
+		m_audioRecFileFormat = RIFFAudioFile::PCM;
+		break;
+	    case 1:
+		m_audioRecFileFormat = RIFFAudioFile::FLOAT;
+		break;
+	    default:
+#ifdef DEBUG_ALSA
+		std::cerr << "AlsaDriver::processEventsOut - "
+			  << "MappedEvent::SystemAudioFileFormat - unexpected format number " << format
+			  << std::endl;
+#endif
+		break;
+	    }
+#else
+#ifdef DEBUG_ALSA
+            std::cerr << "AlsaDriver::processEventsOut - "
+                      << "MappedEvent::SystemAudioFileFormat - no audio subsystem"
+                      << std::endl;
+#endif
+#endif
+	}
+
 	if ((*i)->getType() == MappedEvent::Panic)
         {
 	    for (MappedDeviceList::iterator i = m_devices.begin();

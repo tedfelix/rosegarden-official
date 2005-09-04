@@ -166,6 +166,8 @@ signals:
      */
     void toggleSolo(bool);
 
+    void windowActivated();
+
 public slots:
     /**
      * close window
@@ -250,6 +252,8 @@ public slots:
     virtual void slotCompositionStateUpdate();
     
 protected:
+
+    virtual void windowActivationChange(bool);
 
     virtual void paintEvent(QPaintEvent* e);
 

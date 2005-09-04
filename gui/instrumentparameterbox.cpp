@@ -663,7 +663,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_bankLabel = new QLabel(i18n("Bank"), this);
     m_variationLabel = new QLabel(i18n("Variation"), this);
-    QLabel* programLabel = new QLabel(i18n("Program"), this);
+    m_programLabel = new QLabel(i18n("Program"), this);
     QLabel* channelLabel = new QLabel(i18n("Channel"), this);
     QLabel *percussionLabel = new QLabel(i18n("Percussion"), this);
 
@@ -687,7 +687,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1);
     m_mainGrid->addWidget(m_bankValue, 4, 2, AlignRight);
 
-    m_mainGrid->addWidget(programLabel, 5, 0);
+    m_mainGrid->addWidget(m_programLabel, 5, 0);
     m_mainGrid->addWidget(m_programCheckBox, 5, 1);
     m_mainGrid->addWidget(m_programValue, 5, 2, AlignRight);
 
@@ -1182,6 +1182,19 @@ MIDIInstrumentParameterPanel::populateProgramList()
     int currentProgram = -1;
 
     Rosegarden::ProgramList programs = md->getPrograms(bank);
+
+    if (!programs.empty()) {
+	if (m_programLabel->isHidden()) {
+	    m_programLabel->show();
+	    m_programCheckBox->show();
+	    m_programValue->show();
+	}
+    } else {
+	m_programLabel->hide();
+	m_programCheckBox->hide();
+	m_programValue->hide();
+    }
+
     for (unsigned int i = 0; i < programs.size(); ++i) {
 	std::string programName = programs[i].getName();
 	if (programName != "") {
