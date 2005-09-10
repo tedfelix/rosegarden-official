@@ -264,6 +264,8 @@ public:
     void refreshDirtyPreviews();
     void clearPreviewCache();
     void clearDirtyPreviews();
+    void clearSegmentRectsCache() { clearInCache(0); }
+
     NotationPreviewData* makeNotationPreviewDataCache(const Rosegarden::Segment *s);
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
@@ -437,9 +439,9 @@ public:
     bool isShowingPreviews() { return m_showPreviews; }
 
     /**
-     * Refresh all previews
+     * Refresh all previews and seg rect cache
      */
-    void refreshAllPreviews();
+    void refreshAllPreviewsAndCache();
 
     /**
      * Refresh previews of segments which have been modified since last refresh

@@ -1111,8 +1111,13 @@ bool CompositionModelImpl::isCachedRectCurrent(const Segment& s, const Compositi
 
 void CompositionModelImpl::clearInCache(const Rosegarden::Segment* s)
 {
-    m_segmentRectMap.erase(s);
-    m_segmentEndTimeMap.erase(s);
+    if (s) {
+        m_segmentRectMap.erase(s);
+        m_segmentEndTimeMap.erase(s);
+    } else { // clear the whole cache
+        m_segmentRectMap.clear();
+        m_segmentEndTimeMap.clear();
+    }
 }
 
 void CompositionModelImpl::putInCache(const Rosegarden::Segment*s, const CompositionRect& cr)
@@ -1377,11 +1382,11 @@ void CompositionView::setSelectionRectSize(int w, int h)
     getModel()->setSelectionRect(m_selectionRect);
 }
 
-void CompositionView::refreshAllPreviews()
+void CompositionView::refreshAllPreviewsAndCache()
 {
     dynamic_cast<CompositionModelImpl*>(getModel())->refreshAllPreviews();
     dynamic_cast<CompositionModelImpl*>(getModel())->clearDirtyPreviews();
-    
+    dynamic_cast<CompositionModelImpl*>(getModel())->clearSegmentRectsCache();    
 }
 
 void CompositionView::refreshDirtyPreviews()
@@ -1551,7 +1556,7 @@ void CompositionView::slotUpdate(QRect rect)
 void CompositionView::slotRefreshColourCache()
 {
     CompositionColourCache::getInstance()->init();
-    refreshAllPreviews();
+    refreshAllPreviewsAndCache();
     slotUpdate();
 }
 
