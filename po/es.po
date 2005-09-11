@@ -5,6 +5,8 @@
 # Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>, 2003, 2004.
 # D. Michael McIntyre <dmmcintyr@users.sourceforge.net>, 2003, 2004.
 #
+# Marcos Guglielmetti <marcospcmusica@yahoo.com.ar>, 2005.
+# Última modificación realizada en /gui/audiomanagerdialog.cpp:849
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
@@ -7200,7 +7202,11 @@ msgid ""
 "in this composition.   This action cannot be undone, and associations with "
 "these files will be lost.  Files will not be removed from your disk.\n"
 "Are you sure?"
-msgstr ""
+msgstr "Esto descargará todos los archivos de audio que no estén asociados con segmento alguno "
+"dentro de esta composición.   Esta acción no puede ser deshecha, y las asociaciones con "
+"esos archivos serás perdidas.  Los archivos no serán removidos de tu disco.\n"
+"¿Estás seguro?"
+
 
 #: ../gui/audiomanagerdialog.cpp:900
 msgid "Change Audio File label"
