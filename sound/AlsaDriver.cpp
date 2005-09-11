@@ -2922,7 +2922,8 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
 
     if (*ptr != MIDI_END_OF_EXCLUSIVE) return false;
 
-    if (instruction == MIDI_MMC_PLAY) {
+    if (instruction == MIDI_MMC_PLAY ||
+	instruction == MIDI_MMC_DEFERRED_PLAY) {
 	ExternalTransport *transport = getExternalTransportControl();
 	if (transport) {
 	    transport->transportChange(ExternalTransport::TransportPlay);
