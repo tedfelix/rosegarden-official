@@ -7,6 +7,8 @@
 #
 # Marcos Guglielmetti <marcospcmusica@yahoo.com.ar>, 2005.
 # Última modificación realizada en /gui/audiomanagerdialog.cpp:849
+##: ../gui/sequencemanager.cpp:1006
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
@@ -122,6 +124,17 @@ msgid ""
 ">\n"
 "Behaviour -> Always use default studio when loading files</b>.</p>\n"
 msgstr ""
+"<p>Si la configuración de tu estudio no cambia muy a menudo, y tú preferirías "
+"que\n"
+"las configuraciones en tu <b>autoload.rg</b> tengan prioridad sobre cualquier\n"
+"estudio que grabes con cualquier archivo que estés cargando, puedes hacer de tu"
+"autoload\n"
+"el estudio predeterminado para todo, usando <b>Preferencias -> Configurar Rosegarden -"
+">\n"
+"Comportamiento -> Usar siempre estudio por omisión al cargar archivos</b>.</p>\n"
+
+
+
 
 #: ../gui/docs/en/tips.cpp:59
 msgid ""
@@ -5681,6 +5694,9 @@ msgid ""
 "possible to continue sequencing.  Please check console output for more "
 "information."
 msgstr ""
+"Un error serio ha ocurrido en el subsistema ALSA MIDI.  Puede no ser"
+"posible continuar secuenciando.  Por favor revisa la salida de consola para más"
+"información."
 
 #: ../gui/sequencemanager.cpp:1027
 msgid "JACK Audio subsystem is losing sample frames."
