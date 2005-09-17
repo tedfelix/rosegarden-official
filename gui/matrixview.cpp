@@ -150,7 +150,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
 
     m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", false)) {
+    if (m_config->readBoolEntry("backgroundtextures", true)) {
 	QPixmap background;
 	QString pixmapDir =
 	    KGlobal::dirs()->findResource("appdata", "pixmaps/");

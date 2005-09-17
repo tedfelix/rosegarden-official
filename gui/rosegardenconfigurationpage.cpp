@@ -184,7 +184,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(m_backgroundTextures, 2, 1);
 
     m_backgroundTextures->setChecked(m_cfg->readBoolEntry("backgroundtextures",
-                                                          false));
+                                                          true));
 
     addTab(frame, i18n("Presentation"));
 

@@ -1006,7 +1006,7 @@ void NotationView::positionPages()
     bool haveBackground = false;
     
     m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", false)) {
+    if (m_config->readBoolEntry("backgroundtextures", true)) {
 	QString pixmapDir =
 	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
 	if (background.load(QString("%1/misc/bg-paper-white.xpm").

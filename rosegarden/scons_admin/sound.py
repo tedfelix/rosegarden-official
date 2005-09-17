@@ -179,8 +179,6 @@ of LADSPA and DSSI plugins.  This will improve the usability of
 plugin selection dialogs.  You can obtain LRDF from
 http://www.plugin.org.uk/lrdf/.
 				"""
-
-
 	if env.has_key('SOUND_CCFLAGS'):
 		env.AppendUnique(CCFLAGS = env['SOUND_CCFLAGS'] )
 		env.AppendUnique(CXXFLAGS = env['SOUND_CCFLAGS'] )
