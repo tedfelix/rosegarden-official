@@ -59,13 +59,10 @@ public:
 	m_composition->addObserver(this);
     }
     virtual ~EditViewTimeSigNotifier() {
-	if (m_composition) m_composition->removeObserver(this);
+	if (!isCompositionDeleted()) m_composition->removeObserver(this);
     }
     virtual void timeSignatureChanged(const Rosegarden::Composition *c) {
 	if (c == m_composition) m_timeSigChanged = true;
-    }
-    virtual void compositionDeleted(const Rosegarden::Composition *c) {
-	if (c == m_composition) m_composition = 0;
     }
 
     bool hasTimeSigChanged() const { return m_timeSigChanged; }

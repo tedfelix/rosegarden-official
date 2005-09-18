@@ -1882,11 +1882,6 @@ void SequenceManager::timeSignatureChanged(const Composition *)
     resetMetronomeMmapper();
 }
 
-void SequenceManager::compositionDeleted(const Composition *)
-{
-    // do nothing
-}
-
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
     m_controlBlockMmapper->updateTrackData(t);

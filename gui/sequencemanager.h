@@ -194,7 +194,6 @@ public:
     virtual void metronomeChanged          (const Composition*);
     virtual void soloChanged               (const Composition*, bool solo, TrackId selectedTrack);
     virtual void tempoChanged              (const Composition*);
-    virtual void compositionDeleted        (const Composition*);
 
     void processAddedSegment(Segment*);
     void processRemovedSegment(Segment*);

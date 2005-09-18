@@ -948,6 +948,10 @@ protected:
 class CompositionObserver
 {
 public:
+    CompositionObserver() : m_compositionDeleted(false) {}
+    
+    virtual ~CompositionObserver() {}
+    
     /**
      * Called after the segment has been added to the composition
      */
@@ -1023,7 +1027,14 @@ public:
     /**
      * Called from the composition dtor
      */
-    virtual void compositionDeleted(const Composition *) { }
+    virtual void compositionDeleted(const Composition *) {
+        m_compositionDeleted = true;
+    }
+
+    bool isCompositionDeleted() { return m_compositionDeleted; }
+
+protected:
+    bool m_compositionDeleted;
 };
 
 }

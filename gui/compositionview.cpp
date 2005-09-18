@@ -200,15 +200,18 @@ CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
 
 CompositionModelImpl::~CompositionModelImpl()
 {
-    m_composition.removeObserver(this);
+    if (!isCompositionDeleted()) {
 
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+        m_composition.removeObserver(this);
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
-        i != segEnd; ++i) {
+        const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
+        Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
 
-        (*i)->removeObserver(this);
+        for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+            i != segEnd; ++i) {
+
+            (*i)->removeObserver(this);
+        }
     }
 }
 
@@ -811,8 +814,6 @@ void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s,
 {
     clearInCache(s);
 }
-
-
 
 CompositionModel::NotationPreviewData* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {

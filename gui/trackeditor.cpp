@@ -98,6 +98,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 TrackEditor::~TrackEditor()
 {
     delete m_chordNameRuler;
+    delete m_compositionModel;
 }
 
 void

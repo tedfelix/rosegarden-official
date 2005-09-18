@@ -133,6 +133,7 @@ private: // not provided
 class StaffObserver
 {
 public:
+    virtual ~StaffObserver() {}
     virtual void elementAdded(const Staff *, ViewElement *) = 0;
     virtual void elementRemoved(const Staff *, ViewElement *) = 0;
 

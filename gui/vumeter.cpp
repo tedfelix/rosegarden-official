@@ -168,6 +168,11 @@ VUMeter::VUMeter(QWidget *parent,
 
 VUMeter::~VUMeter()
 {
+    delete m_velocityColour;
+    delete m_peakTimerRight;
+    delete m_peakTimerLeft;
+    delete m_fallTimerRight;
+    delete m_fallTimerLeft;
 }
 
 void

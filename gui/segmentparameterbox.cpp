@@ -60,7 +60,9 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
 
 SegmentParameterBox::~SegmentParameterBox()
 {
-    m_doc->getComposition().removeObserver(this);
+    if (!isCompositionDeleted()) {
+        m_doc->getComposition().removeObserver(this);
+    }
 }
 
 

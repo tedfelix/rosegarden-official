@@ -658,6 +658,8 @@ private: // assignment operator not provided
 class SegmentObserver
 {
 public:
+    virtual ~SegmentObserver() {}
+
     /**
      * Called after the event has been added to the segment
      */
@@ -679,8 +681,9 @@ public:
 
     /**
      * Called from the segment dtor
+     * MUST BE IMPLEMENTED BY ALL OBSERVERS
      */
-    virtual void segmentDeleted(const Segment *) { }
+    virtual void segmentDeleted(const Segment *) = 0;
 };
 
 

@@ -51,6 +51,7 @@ class LinedStaff;
 class LinedStaffManager
 {
 public:
+    virtual ~LinedStaffManager() {}
     virtual LinedStaff *getStaffForCanvasCoords(int x, int y) const = 0;
 };
 

@@ -225,7 +225,7 @@ public:
                          Rosegarden::RulerScale *rulerScale,
                          int vStep);
 
-    ~CompositionModelImpl();
+    virtual ~CompositionModelImpl();
     
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
@@ -287,6 +287,7 @@ public:
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool /*shorten*/);
+    virtual void segmentDeleted(const Rosegarden::Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
 
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);

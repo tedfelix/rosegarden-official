@@ -173,7 +173,7 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, Rosegarden::timeT o
 
 TempoView::~TempoView()
 {
-    if (!getDocument()->isBeingDestroyed()) {
+    if (!getDocument()->isBeingDestroyed() && !isCompositionDeleted()) {
 	getDocument()->getComposition().removeObserver(this);
     }
 }
