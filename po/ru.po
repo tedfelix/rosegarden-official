@@ -1,3 +1,4 @@
+# translation of ru.po to Russian
 # translation of Rosegarden to Russian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) 2003 THE PACKAGE'S COPYRIGHT HOLDER.
@@ -10,15 +11,14 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-09-04 12:46+0200\n"
-"PO-Revision-Date: 2005-02-10 03:22+0300\n"
+"PO-Revision-Date: 2005-09-20 22:06+0400\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.10.2\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../gui/docs/en/tips.cpp:3
 msgid ""
@@ -581,6 +581,8 @@ msgid ""
 "Segment colours\n"
 "Other UI and bug fixes"
 msgstr ""
+"Цвета сегментов\n"
+"Исправления интерфейса и ошибок"
 
 #: ../gui/main.cpp:425
 msgid ""
@@ -656,34 +658,32 @@ msgstr "Перевод на шведский"
 
 #: ../gui/main.cpp:440
 msgid "LIRC infrared remote-controller support"
-msgstr ""
+msgstr "Поддержка пультов ДУ через LIR"
 
 #: ../gui/main.cpp:441
 msgid "MTC slave timing implementation"
-msgstr ""
+msgstr "Реализация тайминга MTC slave"
 
 #: ../gui/main.cpp:442
-#, fuzzy
 msgid "Czech translation"
-msgstr "Перевод на французский"
+msgstr "Перевод на чешский"
 
 #: ../gui/main.cpp:443
 msgid "SCons/bksys building system"
-msgstr ""
+msgstr "Система сборки SCons/bksys"
 
 #: ../gui/main.cpp:444
 msgid "icons, icons, icons"
-msgstr ""
+msgstr "новые пиктограммы"
 
 #: ../gui/main.cpp:445 ../gui/main.cpp:446 ../gui/main.cpp:447
 #: ../gui/main.cpp:448
-#, fuzzy
 msgid "Spanish translation"
-msgstr "Перевод на шведский"
+msgstr "Перевод на испанский"
 
 #: ../gui/main.cpp:450
 msgid "new splash screen photo (of Michael's rose garden)"
-msgstr ""
+msgstr "Фотография для новой заставки при старте"
 
 #: ../gui/main.cpp:453 ../gui/_translatorinfo.cpp:1
 msgid ""
@@ -908,8 +908,7 @@ msgid "Export..."
 msgstr "Экспортировать"
 
 #: ../gui/bankeditor.cpp:1116
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Импортировать данные о банке и программах\n"
 "из файла Rosegarden в текущее устройство"
@@ -1694,9 +1693,8 @@ msgid "%1 - All Segments - Notation"
 msgstr "%1 - Все сегменты - Партитура"
 
 #: ../gui/notationview.cpp:3617
-#, fuzzy
 msgid "%1 - 1 Segment - Notation"
-msgstr "%1 - Сегментов %2 - Партитура"
+msgstr "%1 - 1 cегмент - Партитура"
 
 #: ../gui/audiopreviewupdater_moc.cpp:34 ../gui/audiopreviewupdater_moc.cpp:42
 msgid "AudioPreviewUpdater"
@@ -3137,26 +3135,24 @@ msgid "MIDI Machine Control mode"
 msgstr "Настроить управление событиями"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1400
-#, fuzzy
 msgid "MMC Master"
-msgstr "Общий"
+msgstr "Ведущий MMC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1401
 msgid "MMC Slave"
-msgstr ""
+msgstr "Ведомый MMC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1409
 msgid "MIDI Time Code mode"
 msgstr ""
 
 #: ../gui/rosegardenconfigurationpage.cpp:1416
-#, fuzzy
 msgid "MTC Master"
-msgstr "Общий"
+msgstr "Ведущий MTC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1417
 msgid "MTC Slave"
-msgstr ""
+msgstr "Ведомый MTC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1423
 msgid "Automatically connect sync output to all devices in use"
@@ -3836,9 +3832,8 @@ msgid "Manage Files Associated with A&udio Segments"
 msgstr "Управлять &звуковыми сегментами"
 
 #: ../gui/rosegardengui.cpp:910
-#, fuzzy
 msgid "Show Segment Labels"
-msgstr "Метка сегмента"
+msgstr "Показывать метки сегментов"
 
 #: ../gui/rosegardengui.cpp:919
 msgid "Add &Track"
@@ -4143,7 +4138,7 @@ msgstr "Импортировать файл &Rosegarden 2.1..."
 
 #: ../gui/rosegardengui.cpp:3315
 msgid "Failed to import project file \"%1\""
-msgstr ""
+msgstr "Не удалось импортировать файл проекта \"%1\""
 
 #: ../gui/rosegardengui.cpp:3338
 msgid "Open MIDI File"
@@ -4319,12 +4314,16 @@ msgid ""
 "before recording audio.\n"
 "Would you like to set it now?"
 msgstr ""
+"Каталог со звуковыми файлами не существует "
+"или закрыт для записи.\n Укажите правильный "
+"каталог в свойствах документа перед началом "
+"записи.\n"
+"Хотите сделать это прямо сейчас?"
 
 #: ../gui/rosegardengui.cpp:4648 ../gui/rosegardengui.cpp:4710
 #: ../gui/trackbuttons.cpp:621
-#, fuzzy
 msgid "Set audio file path"
-msgstr "Путь к звуковым файлам:"
+msgstr "Указать путь к звуковым файлам"
 
 #: ../gui/rosegardengui.cpp:4708
 msgid ""
@@ -4377,14 +4376,12 @@ msgid "Play List"
 msgstr "Список воспроизведения"
 
 #: ../gui/rosegardengui.cpp:6603
-#, fuzzy
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
-msgstr "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
+msgstr "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 
 #: ../gui/rosegardengui.cpp:6610
-#, fuzzy
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
-msgstr "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
+msgstr "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 
 #: ../gui/rosegardengui.cpp:6687
 msgid "Queueing MIDI panic events for tranmission..."
@@ -4401,8 +4398,7 @@ msgid "Saving current document as default studio..."
 msgstr "Документ сохраняется как стандартное описание студии..."
 
 #: ../gui/rosegardengui.cpp:6781
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Вы действительно хотите сделать этот документ стандартным \n"
 "описанием студии и отказаться от текущего описания?"
@@ -4438,8 +4434,7 @@ msgid "<no instrument>"
 msgstr "<нет инструмента>"
 
 #: ../gui/tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Щёлкните левой кнопкой мыши и назначьте \n"
 "инструмент для дорожки через появившееся меню."
@@ -5122,11 +5117,12 @@ msgstr ""
 "Вы предпочитаете найти его или пропустить?"
 
 #: ../gui/dialogs.cpp:3416
-#, fuzzy
 msgid ""
 "%1|Requested file (%2)\n"
 "*.wav|WAV files (*.wav)"
-msgstr "Файлы *.wav|WAV (*.wav)"
+msgstr ""
+"%1|Запрошенный файл (%2)\n"
+"*.wav|Файлы WAV (*.wav)"
 
 #: ../gui/dialogs.cpp:3419
 msgid "Select an Audio File"
@@ -5178,8 +5174,7 @@ msgstr "Бемоль - установить значение %1"
 
 #: ../gui/dialogs.cpp:3914
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Переменный - установить %1 в макс. или мин. значение на переменных событиях"
+msgstr "Переменный - установить %1 в макс. или мин. значение на переменных событиях"
 
 #: ../gui/dialogs.cpp:3918
 msgid "Crescendo - set %1 rising from min to max"
@@ -5204,14 +5199,12 @@ msgid "Second Value"
 msgstr "Второе значение"
 
 #: ../gui/dialogs.cpp:3978 ../gui/dialogs.cpp:3988
-#, fuzzy
 msgid "Low Value"
-msgstr "Значение LSB"
+msgstr "Низкое значение"
 
 #: ../gui/dialogs.cpp:3979 ../gui/dialogs.cpp:3987
-#, fuzzy
 msgid "High Value"
-msgstr "Первое значение"
+msgstr "Высокое значение"
 
 #: ../gui/dialogs.cpp:4036
 msgid "Change Composition Length"
@@ -5388,14 +5381,12 @@ msgid "for Sub-beat"
 msgstr ""
 
 #: ../gui/dialogs.cpp:4494
-#, fuzzy
 msgid "Metronome Activated"
-msgstr "Метроном"
+msgstr "Метроном запущен"
 
 #: ../gui/dialogs.cpp:4495
-#, fuzzy
 msgid "Playing"
-msgstr "Воспроизвести"
+msgstr "Идёт воспроизведение..."
 
 #: ../gui/dialogs.cpp:4496
 #, fuzzy
@@ -5427,9 +5418,8 @@ msgid "Lilypond 2.2"
 msgstr "Lilypond 2.2"
 
 #: ../gui/dialogs.cpp:4864
-#, fuzzy
 msgid "Lilypond 2.4"
-msgstr "Lilypond 2.2"
+msgstr "Lilypond 2.4"
 
 #: ../gui/dialogs.cpp:4869
 msgid "Paper size to use in \\paper block"
@@ -5643,8 +5633,7 @@ msgstr ""
 "других приложений может улучшить производительность Rosegarden."
 
 #: ../gui/sequencemanager.cpp:981
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Мощности процессора уже не хватает для работы в режиме \n"
 "реального времени.  Продолжение работы невозможно."
@@ -5661,8 +5650,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Подсистема JACK Audio теряет некоторые сэмплы."
 
 #: ../gui/sequencemanager.cpp:1045
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Не удалось своевременно прочитать звуковые данные с диска\n"
 "для обеспечения нормальной работы звуковой подсистемы."
@@ -6766,8 +6754,7 @@ msgstr "Вставить в существующий интервал [\"огр�
 
 #: ../gui/editcommands.cpp:419
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Стереть существующие события для освобождения пространства [\"просто\"]"
+msgstr "Стереть существующие события для освобождения пространства [\"просто\"]"
 
 #: ../gui/editcommands.cpp:421
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -7388,9 +7375,8 @@ msgid "%1 - All Segments - %2"
 msgstr "%1 - Все сегменты - Матричный редактор"
 
 #: ../gui/matrixview.cpp:2523
-#, fuzzy
 msgid "%1 - %2 Segments - %2 "
-msgstr "%1 - %2 сегментов - Матричный редактор"
+msgstr "%1 - Сегментов: %2 - %2 "
 
 #: ../gui/matrixview.cpp:2606
 msgid "Can't insert note: No grid duration selected"
@@ -7537,8 +7523,7 @@ msgid "global element must precede note elements"
 msgstr "элемент global должен предшестовать элементу note"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "Элементы global и note могут содержать атрибут shape или charname, но не оба "
 "сразу"
@@ -8714,65 +8699,3 @@ msgstr "&Действие"
 msgid "General Toolbar"
 msgstr "Общая панель"
 
-#~ msgid "%1 pixels"
-#~ msgstr "%1 пикселей"
-
-#~ msgid "%1 Inputs"
-#~ msgstr "Входов: %1"
-
-#~ msgid "%1 on %2 tracks"
-#~ msgstr "%1 на %2 дорожках"
-
-#~ msgid ""
-#~ "This will unload all audio files and remove their associated segments.  "
-#~ "Are you sure?"
-#~ msgstr ""
-#~ "Это приведёт к выгрузке всех звуковых файлов \"%1\" и удалению связанных "
-#~ "с ним сегментов? Вы уверены?"
-
-#~ msgid ""
-#~ "This will unload all audio files that have no segments used in this "
-#~ "composition.  Are you sure?"
-#~ msgstr ""
-#~ "Это приведёт к выгрузке всех звуковых файлов,\n"
-#~ "не представленных сегментами в данной композиции.\n"
-#~ "Вы уверены?"
-
-#~ msgid "Programs %1 - %2"
-#~ msgstr "Программы %1 - %2"
-
-#~ msgid "Segments Canvas - Create and manipulate your segments here"
-#~ msgstr ""
-#~ "Канва сегментов - здесь можно создавать сегменты и манипулировать ими"
-
-#~ msgid ""
-#~ "notation selection event filter\n"
-#~ "extra toolbars/pixmaps\n"
-#~ "notation/Lilypond patches\n"
-#~ "author of \"Using Rosegarden\""
-#~ msgstr ""
-#~ "фильтр выбора событий при выделении в партитуре\n"
-#~ "дополнительные панели/пиктограммы\n"
-#~ "партитура/патчи к экспорту в Lilypond\n"
-#~ "автор руководства \"Использование Rosegarden\""
-
-#~ msgid "German translation (Arbeiten mit Rosegarden)"
-#~ msgstr "Перевод на немецкий (Arbeiten mit Rosegarden)"
-
-#~ msgid "Follow accidental"
-#~ msgstr "Следовать случайным знакам альтерации"
-
-#~ msgid "Audio record level"
-#~ msgstr "Уровень записи звука"
-
-#~ msgid "Rec"
-#~ msgstr "Записать"
-
-#~ msgid "Re&label"
-#~ msgstr "Изменить &имя метки"
-
-#~ msgid "Start Value"
-#~ msgstr "Начальное значение"
-
-#~ msgid "End Value"
-#~ msgstr "Конечное значение"
