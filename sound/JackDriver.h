@@ -228,7 +228,7 @@ protected:
     void initialise(bool reinitialise = false);
 
     bool createMainOutputs();
-    bool createFaderOutputs(int pairs);
+    bool createFaderOutputs(int audioPairs, int synthPairs);
     bool createSubmasterOutputs(int pairs);
     bool createRecordInputs(int pairs);
 

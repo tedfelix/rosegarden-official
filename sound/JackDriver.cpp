@@ -477,10 +477,11 @@ JackDriver::createMainOutputs()
 }
 
 bool
-JackDriver::createFaderOutputs(int pairs)
+JackDriver::createFaderOutputs(int audioPairs, int synthPairs)
 {
     if (!m_client) return false;
 
+    int pairs = audioPairs + synthPairs;
     int pairsNow = m_outputInstruments.size() / 2;
     if (pairs == pairsNow) return true;
 
@@ -489,7 +490,11 @@ JackDriver::createFaderOutputs(int pairs)
 	char namebuffer[22];
 	jack_port_t *port;
 
-	snprintf(namebuffer, 21, "fader %d out L", i+1);
+	if (i < audioPairs) {
+	    snprintf(namebuffer, 21, "audio fader %d out L", i+1);
+	} else {
+	    snprintf(namebuffer, 21, "synth fader %d out L", i-audioPairs+1);
+	}
 
 	port = jack_port_register(m_client,
 				  namebuffer,
@@ -499,7 +504,12 @@ JackDriver::createFaderOutputs(int pairs)
 	if (!port) return false;
 	m_outputInstruments.push_back(port);
 
-	snprintf(namebuffer, 21, "fader %d out R", i+1);
+	if (i < audioPairs) {
+	    snprintf(namebuffer, 21, "audio fader %d out R", i+1);
+	} else {
+	    snprintf(namebuffer, 21, "synth fader %d out R", i-audioPairs+1);
+	}
+
 	port = jack_port_register(m_client,
 				  namebuffer,
 				  JACK_DEFAULT_AUDIO_TYPE,
@@ -621,15 +631,17 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 
     if (faderOuts) {
 	InstrumentId instrumentBase;
-	int instruments;
-	m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
-	if (!createFaderOutputs(instruments)) {
+	int audioInstruments;
+	int synthInstruments;
+	m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, audioInstruments);
+	m_alsaDriver->getSoftSynthInstrumentNumbers(instrumentBase, synthInstruments);
+	if (!createFaderOutputs(audioInstruments, synthInstruments)) {
 	    m_ok = false;
 	    audit << "Failed to create fader outs!" << std::endl;
 	    return;
 	}
     } else {
-	createFaderOutputs(0);
+	createFaderOutputs(0, 0);
     }
 
     if (submasterOuts) {
