@@ -546,6 +546,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
     
     AudioPreviewData *apData = getAudioPreviewData(apu->getSegment());
     if (apData) {
+	RG_DEBUG << "CompositionModelImpl::slotAudioPreviewComplete(" << apu << "): apData contains " << apData->getValues().size() << " values already" << endl;
 	unsigned int channels = 0;
 	const std::vector<float> &values = apu->getComputedValues(channels);
 	if (channels > 0) {
@@ -660,16 +661,18 @@ void CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, con
         const QColor defaultCol = CompositionColourCache::getInstance()->SegmentAudioPreview;
 
         QColor color;
-	int baseY = /*tRect.y() + */ halfRectHeight;
+	int baseY = halfRectHeight;
 
 	// h1 left, h2 right
-
-	int h = int(h1 * height + 0.5);
 
 	if (h1 >= 1.0) { h1 = 1.0; color = Qt::red; }
 	else { color = defaultCol; }
 
-        PreviewRect r(/* tRect.x() + */ i, baseY - h, width, h);
+//	int h = int(h1 * height + 0.5);
+	int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, height);
+	if (h < 0) h = 0;
+
+        PreviewRect r(i, baseY - h, width, h);
         r.setColor(color);
 
 //        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() - insert rect r1 "
@@ -677,12 +680,14 @@ void CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, con
 
         apData->addPreviewRect(r);
 
-        h = int(h2 * height + 0.5);
-
 	if (h2 >= 1.0) { h2 = 1.0; color = Qt::red; }
 	else { color = defaultCol; }
 
-        PreviewRect r2(/* tRect.x() + */ i, baseY, width, h);
+//        h = int(h2 * height + 0.5);
+	h = Rosegarden::AudioLevel::multiplier_to_preview(h2, height);
+	if (h < 0) h = 0;
+
+        PreviewRect r2(i, baseY, width, h);
         r2.setColor(color);
 
         apData->addPreviewRect(r2);
@@ -701,8 +706,7 @@ void CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, con
                                                                      segment->getStartTime()) -
                                  m_grid.getRulerScale()->getXForTime(segment->getStartTime()));
 
-        PreviewRect r3(/* tRect.x() */ 0, /* tRect.y() + */ tRect.height() - 1,
-                       audioFadeInEnd, 1);
+        PreviewRect r3(0, tRect.height() - 1, audioFadeInEnd, 1);
         r3.setColor(Qt::blue);
         apData->addPreviewRect(r3);
     }
