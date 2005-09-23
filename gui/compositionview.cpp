@@ -707,6 +707,7 @@ void CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, con
         apData->addPreviewRect(r3);
     }
 
+    RG_DEBUG << "CompositionModelImpl::postProcessAudioPreview: now have " << apData->getPreviewRects().size() << " preview rects in " << apData << endl;
     
 }
 
