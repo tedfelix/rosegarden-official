@@ -913,8 +913,8 @@ PeakFile::getPreview(const RealTime &startTime,
     }
 
     resetStream();
-    delete hiValues;
-    delete loValues;
+    delete[] hiValues;
+    delete[] loValues;
     
     // We have a good preview in the cache so store our parameters
     //
