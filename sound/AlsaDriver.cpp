@@ -42,6 +42,7 @@
 #include "MappedEvent.h"
 #include "Audit.h"
 #include "AudioPlayQueue.h"
+#include "ExternalTransport.h"
 
 #include <qregexp.h>
 #include <pthread.h>
