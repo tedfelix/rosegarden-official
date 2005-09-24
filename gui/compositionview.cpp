@@ -213,6 +213,12 @@ CompositionModelImpl::~CompositionModelImpl()
             (*i)->removeObserver(this);
         }
     }
+
+    while (!m_audioPreviewUpdaters.empty()) {
+	// Cause any running previews to be cancelled
+	delete *(m_audioPreviewUpdaters.begin());
+	m_audioPreviewUpdaters.erase(*m_audioPreviewUpdaters.begin());
+    }
 }
 
 unsigned int CompositionModelImpl::getNbRows()
@@ -417,6 +423,12 @@ void CompositionModelImpl::refreshAllPreviews()
 {
     RG_DEBUG << "CompositionModelImpl::refreshAllPreviews\n";
 
+    while (!m_audioPreviewUpdaters.empty()) {
+	// Cause any running previews to be cancelled
+	delete *(m_audioPreviewUpdaters.begin());
+	m_audioPreviewUpdaters.erase(*m_audioPreviewUpdaters.begin());
+    }
+
     clearPreviewCache();
 
     const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
@@ -533,6 +545,7 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
         connect(updater, SIGNAL(audioPreviewComplete(AudioPreviewUpdater*)),
                 this, SLOT(slotAudioPreviewComplete(AudioPreviewUpdater*)));
 
+	m_audioPreviewUpdaters.insert(updater);
         updater->update();
 
     } else {
@@ -558,6 +571,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 	}
     }
 
+    m_audioPreviewUpdaters.erase(apu);
     delete apu;
 
     emit needUpdate(computeSegmentRect(*(apu->getSegment())));

@@ -41,6 +41,7 @@ AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
 AudioPreviewUpdater::~AudioPreviewUpdater()
 {
     RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater\n";
+    if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
 }
 
 void AudioPreviewUpdater::update()
@@ -110,6 +111,7 @@ bool AudioPreviewUpdater::event(QEvent *e)
 	    }
 
             emit audioPreviewComplete(this);
+	    m_previewToken = -1;
 
 	    return true;
 	}

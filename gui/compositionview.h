@@ -153,7 +153,7 @@ public:
         void setChannels(unsigned int c) { m_channels = c;      }
 
         const std::vector<float> &getValues() const { return m_values;  }
-	void setValues(const std::vector<float>&v) { m_values = v; }
+	void setValues(const std::vector<float>&v) { m_values = v; m_previewRects.clear(); }
 
         QRect getSegmentRect()              { return m_segmentRect; }
         void setSegmentRect(const QRect& r) { m_segmentRect = r; }
@@ -341,12 +341,15 @@ protected:
 
     typedef QPtrDict<NotationPreviewData> NotationPreviewDataCache;
     typedef QPtrDict<AudioPreviewData>    AudioPreviewDataCache;
-    
+
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
     
     // Segments which preview needs to be updated
     std::set<const Rosegarden::Segment*> m_dirtySegments;
+
+    // Updaters currently working
+    std::set<AudioPreviewUpdater *> m_audioPreviewUpdaters;
 
     rectcontainer m_res;
     itemcontainer m_movingItems;
