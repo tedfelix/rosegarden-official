@@ -310,9 +310,10 @@ protected:
     void setupAddControlRulerMenu();
 
     /**
-     * Do this after any other segment setup in a subordinate view
+     * Do this after any other segment setup in a subordinate view.
+     * Returns true if there were any tabs to set up.
      */
-    void setupControllerTabs();
+    bool setupControllerTabs();
 
     /**
      * Create an action menu for inserting notes from the PC keyboard,

@@ -183,6 +183,8 @@ void EditView::setControlRulersZoom(QWMatrix zoomMatrix)
 
 void EditView::setControlRulersCurrentSegment()
 {
+    RG_DEBUG << "EditView::setControlRulersCurrentSegment: visible is " << m_controlRulers->isVisible() << endl;
+
     bool visible = m_controlRulers->isVisible();
 
     delete m_controlRulers;
@@ -193,9 +195,13 @@ void EditView::setControlRulersCurrentSegment()
     m_controlRulers = new KTabWidget(getBottomWidget(), "controlrulers");
 #endif
 
-    setupControllerTabs();
+    bool haveTabs = setupControllerTabs();
+    setupAddControlRulerMenu();
 
-    if (visible) m_controlRulers->show();
+    if (haveTabs) m_controlRulers->show();
+    else m_controlRulers->hide();
+
+    updateBottomWidgetGeometry();
 
 /*
     for (int i = 0; i < m_controlRulers->count(); ++i) {
@@ -794,10 +800,14 @@ EditView::setupActions()
 void
 EditView::setupAddControlRulerMenu()
 {
+    RG_DEBUG << "EditView::setupAddControlRulerMenu" << endl;
+
     QPopupMenu* addControlRulerMenu = dynamic_cast<QPopupMenu*>
         (factory()->container("add_control_ruler", this));
 
     if (addControlRulerMenu) {
+
+	addControlRulerMenu->clear();
 
 	//!!! problem here with notation view -- current segment can
 	// change after construction, but this function isn't used again
@@ -840,9 +850,11 @@ EditView::setupAddControlRulerMenu()
 
 }
 
-void
+bool
 EditView::setupControllerTabs()
 {
+    bool have = false;
+
     // Setup control rulers the Segment already has some stored against it.
     //
     Rosegarden::Segment *segment = getCurrentSegment();
@@ -850,14 +862,22 @@ EditView::setupControllerTabs()
 
     RG_DEBUG << "EditView::setupControllerTabs - got " << list.size() << " EventRulers" << endl;
 
+    RG_DEBUG << "Segment view features: " << segment->getViewFeatures() << endl;
+    if (segment->getViewFeatures() & FeatureShowVelocity) {
+	showPropertyControlRuler(Rosegarden::BaseProperties::VELOCITY);
+	have = true;
+    }
+
     if (list.size())
     {
 	Rosegarden::Controllable *c = 
 	    dynamic_cast<Rosegarden::MidiDevice *>(getCurrentDevice());
 	if (!c) {
 	    c = dynamic_cast<Rosegarden::SoftSynthDevice *>(getCurrentDevice());
-	    if (!c) return;
+	    if (!c) return have;
 	}
+
+	have = true;
 
         Rosegarden::Segment::EventRulerListIterator it;
 
@@ -885,6 +905,8 @@ EditView::setupControllerTabs()
 
         updateBottomWidgetGeometry();
     }
+
+    return have;
 }
 
 
