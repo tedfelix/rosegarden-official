@@ -1217,7 +1217,13 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     }
 
     CompositionRect cr(origin, QSize(w, h));
-    cr.setLabel(strtoqstr(s.getLabel()));
+    QString label = strtoqstr(s.getLabel());
+    if (s.getType() == Rosegarden::Segment::Audio) {
+	static QRegExp re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
+	static QRegExp re2("\\.[^.]+$"); // filename suffix
+	label.replace(re1, "").replace(re2, "");
+    }
+    cr.setLabel(label);
 
     if (s.isRepeating())
         computeRepeatMarks(cr, &s);
@@ -1876,6 +1882,7 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
 {
     // draw segment label
     //
+#ifdef NOT_DEFINED
     if (!r.getLabel().isEmpty() /* && !r.isSelected() */) {
         p->save();
         p->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SegmentLabel));
@@ -1888,7 +1895,63 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
         p->drawText(textRect, Qt::AlignLeft|Qt::AlignVCenter, label);
         p->restore();
     }
-    
+#else
+    if (!r.getLabel().isEmpty()) {
+
+        p->save();
+
+	QFont font;
+	font.setPixelSize(r.height() / 2.2);
+	font.setWeight(QFont::Bold);
+	font.setItalic(false);
+	p->setFont(font);
+
+	QRect labelRect = QRect
+	    (r.x(),
+	     r.y() + ((r.height() - p->fontMetrics().height()) / 2) + 1,
+	     r.width(),
+	     p->fontMetrics().height());
+
+        int x = labelRect.x() + p->fontMetrics().width('x');
+        int y = labelRect.y();
+
+	QBrush brush = r.getBrush();
+	QColor surroundColour = brush.color().light(110);
+
+	int h, s, v;
+	surroundColour.hsv(&h, &s, &v);
+	if (v < 150) surroundColour.setHsv(h, s, 225);
+	p->setPen(surroundColour);
+
+	for (int i = 0; i < 9; ++i) {
+
+	    if (i == 4) continue;
+
+	    int wx = x, wy = y;
+
+	    if (i < 3) --wx;
+	    if (i > 5) ++wx;
+	    if (i % 3 == 0) --wy;
+	    if (i % 3 == 2) ++wy;
+
+	    labelRect.setX(wx);
+	    labelRect.setY(wy);
+
+	    p->drawText(labelRect,
+			Qt::AlignLeft | Qt::AlignTop,
+			r.getLabel());
+	}
+
+        labelRect.setX(x);
+        labelRect.setY(y);
+
+        p->setPen(Rosegarden::GUIPalette::getColour
+		  (Rosegarden::GUIPalette::SegmentLabel));
+        p->drawText(labelRect,
+		    Qt::AlignLeft|Qt::AlignVCenter, r.getLabel());
+        p->restore();
+    }
+#endif
 }
 
 
