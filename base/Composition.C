@@ -50,7 +50,7 @@ const PropertyName Composition::NoAbsoluteTimeProperty = "NoAbsoluteTime";
 const PropertyName Composition::BarNumberProperty = "BarNumber";
 
 const std::string Composition::TempoEventType = "tempo";
-const PropertyName Composition::TempoProperty = "BeatsPerHour";
+const PropertyName Composition::TempoProperty = "Tempo";
 const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
 
 
@@ -184,7 +184,7 @@ Composition::Composition() :
     m_basicQuantizer(new BasicQuantizer()),
     m_notationQuantizer(new NotationQuantizer()),
     m_position(0),
-    m_defaultTempo(120.0),
+    m_defaultTempo(getTempoForQpm(120.0)),
     m_startMarker(0),
     m_endMarker(getBarRange(m_defaultNbBars).first),
     m_loopStart(0),
@@ -766,8 +766,8 @@ Composition::removeTimeSignature(int n)
 }
 
 
-double
-Composition::getTempoAt(timeT t) const
+tempoT
+Composition::getTempoAtTime(timeT t) const
 {
     ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
 
@@ -783,12 +783,12 @@ Composition::getTempoAt(timeT t) const
 #ifdef DEBUG_TEMPO_STUFF
 	    cerr << "Composition: Negative time " << t << " for tempo, using 0" << endl;
 #endif
-	    return getTempoAt(0);
+	    return getTempoAtTime(0);
 	}
 	else return m_defaultTempo;
     }
     
-    double tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
+    tempoT tempo = (tempoT)((*i)->get<Int>(TempoProperty));
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Found tempo " << tempo << " at " << t << endl;
@@ -797,34 +797,15 @@ Composition::getTempoAt(timeT t) const
 }
 
 int
-Composition::addTempo(timeT time, double tempo)
-{
-    Event *tempoEvent = new Event(TempoEventType, time);
-    tempoEvent->set<Int>(TempoProperty, (long)(tempo * 60 + 0.001));
-
-    ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
-
-    m_tempoTimestampsNeedCalculating = true;
-    updateRefreshStatuses();
-
-#ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
-#endif
-    notifyTempoChanged();
-
-    return std::distance(m_tempoSegment.begin(), i);
-}
-
-int
-Composition::addRawTempo(timeT time, int tempo)
+Composition::addTempoAtTime(timeT time, tempoT tempo)
 {
     Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, tempo);
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
-    updateRefreshStatuses();
     m_tempoTimestampsNeedCalculating = true;
+    updateRefreshStatuses();
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
@@ -848,12 +829,12 @@ Composition::getTempoChangeNumberAt(timeT t) const
     else return std::distance(m_tempoSegment.begin(), i);
 }
 
-std::pair<timeT, long>
-Composition::getRawTempoChange(int n) const
+std::pair<timeT, tempoT>
+Composition::getTempoChange(int n) const
 {
-    return std::pair<timeT, long>
+    return std::pair<timeT, tempoT>
 	(m_tempoSegment[n]->getAbsoluteTime(),
-	 m_tempoSegment[n]->get<Int>(TempoProperty));
+	 tempoT(m_tempoSegment[n]->get<Int>(TempoProperty)));
 }
 
 void
@@ -882,11 +863,13 @@ Composition::getElapsedRealTime(timeT t) const
 
     RealTime elapsed = getTempoTimestamp(*i) +
 	time2RealTime(t - (*i)->getAbsoluteTime(),
-		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
-/*
+		      tempoT((*i)->get<Int>(TempoProperty)));
+
+#ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition::getElapsedRealTime: " << t << " -> "
-	 << elapsed << endl;
-*/
+	 << elapsed << " (last tempo change at " << (*i)->getAbsoluteTime() << ")" << endl;
+#endif
+
     return elapsed;
 }
 
@@ -906,7 +889,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 
     timeT elapsed = (*i)->getAbsoluteTime() +
 	realTime2Time(t - getTempoTimestamp(*i),
-		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+		      (tempoT)((*i)->get<Int>(TempoProperty)));
 
 #ifdef DEBUG_TEMPO_STUFF
     static int doError = true;
@@ -919,7 +902,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	     << elapsed << " (error " << (cfReal - t)
 	     << " or " << (cfTimeT - elapsed) << ", tempo "
 	     << (*i)->getAbsoluteTime() << ":"
-	     << ((double)((*i)->get<Int>(TempoProperty)) / 60.0) << ")" << endl;
+	     << (tempoT)((*i)->get<Int>(TempoProperty)) << ")" << endl;
     }
 #endif
     return elapsed;
@@ -932,7 +915,8 @@ Composition::calculateTempoTimestamps() const
 
     timeT lastTimeT = 0;
     RealTime lastRealTime;
-    double tempo = m_defaultTempo;
+
+    tempoT tempo = m_defaultTempo;
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << endl;
@@ -952,47 +936,71 @@ Composition::calculateTempoTimestamps() const
 
 	lastRealTime = myTime;
 	lastTimeT = (*i)->getAbsoluteTime();
-	tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
+	tempo = tempoT((*i)->get<Int>(TempoProperty));
     }
 
     m_tempoTimestampsNeedCalculating = false;
 }	
 
-RealTime
-Composition::time2RealTime(timeT tsec, double tempo) const
-{
-    double factor = Note(Note::Crotchet).getDuration() * tempo;
-    int sec = (long)((60.0 * (double)tsec) / factor);
-    timeT tnsec = tsec - realTime2Time(RealTime(sec, 0), tempo);
-    int nsec = (long)((60000000000.0 * (double)tnsec) / factor);
+#ifdef DEBUG_TEMPO_STUFF
+static int DEBUG_silence_recursive_tempo_printout = 0;
+#endif
 
+RealTime
+Composition::time2RealTime(timeT t, tempoT tempo) const
+{
+    static timeT cdur = Note(Note::Crotchet).getDuration();
+
+    double dt = (double(t) * 100000 * 60) / (double(tempo) * cdur);
+
+    int sec = int(dt);
+    int nsec = int((dt - sec) * 1000000000);
+   
     RealTime rt(sec, nsec);
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition::time2RealTime: sec " << sec << ", nsec "
-	 << nsec << ", tempo " << tempo
-	 << ", factor " << factor << ", tsec " << tsec << ", tnsec " << tnsec << ", rt " << rt << endl;
+    if (!DEBUG_silence_recursive_tempo_printout) {
+	cerr << "Composition::time2RealTime: t " << t << ", sec " << sec << ", nsec "
+	     << nsec << ", tempo " << tempo
+	     << ", cdur " << cdur << ", dt " << dt << ", rt " << rt << endl;
+	DEBUG_silence_recursive_tempo_printout = 1;
+	timeT ct = realTime2Time(rt, tempo);
+	timeT et = t - ct;
+	RealTime ert = time2RealTime(et, tempo);
+	cerr << "cf. realTime2Time(" << rt << ") -> " << ct << " [err " << et << " (" << ert << "?)]" << endl;
+	DEBUG_silence_recursive_tempo_printout=0;
+    }
 #endif
 
     return rt;
 }
 
 timeT
-Composition::realTime2Time(RealTime rt, double tempo) const
+Composition::realTime2Time(RealTime rt, tempoT tempo) const
 {
-    double factor = Note(Note::Crotchet).getDuration() * tempo;
-    double tsec = ((double)rt.sec * factor) / 60.0;
-    double tnsec = ((double)rt.nsec * factor);
+    static timeT cdur = Note(Note::Crotchet).getDuration();
 
-    double t = tsec + (tnsec / 60000000000.0);
+    double tsec = (double(rt.sec) * cdur) * (tempo / (60.0 * 100000.0));
+    double tnsec = ((double)rt.nsec * cdur) * (tempo / 100000.0);
+
+    double dt = tsec + (tnsec / 60000000000.0);
+    timeT t = (timeT)(dt + (dt < 0 ? -1e-6 : 1e-6));
 
 #ifdef DEBUG_TEMPO_STUFF
-    cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
-	 << rt.nsec << ", tempo " << tempo
-	 << ", factor " << factor << ", tsec " << tsec << ", tnsec " << tnsec << ", t " << t << endl;
+    if (!DEBUG_silence_recursive_tempo_printout) {
+	cerr << "Composition::realTime2Time: rt.sec " << rt.sec << ", rt.nsec "
+	     << rt.nsec << ", tempo " << tempo
+	     << ", cdur " << cdur << ", tsec " << tsec << ", tnsec " << tnsec << ", dt " << dt << ", t " << t << endl;
+	DEBUG_silence_recursive_tempo_printout = 1;
+	RealTime crt = time2RealTime(t, tempo);
+	RealTime ert = rt - crt;
+	timeT et = realTime2Time(ert, tempo);
+	cerr << "cf. time2RealTime(" << t << ") -> " << crt << " [err " << ert << " (" << et << "?)]" << endl;
+	DEBUG_silence_recursive_tempo_printout = 0;
+    }
 #endif
 
-    return (timeT)t;
+    return t;
 }
 
 RealTime
@@ -1337,7 +1345,9 @@ std::string Composition::toXmlString()
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
-                << std::setprecision(4) << m_defaultTempo;
+                << std::setprecision(4) << (((m_defaultTempo / 10) * 6) / 10000);
+    composition << "\" compositionDefaultTempo=\"";
+    composition << m_defaultTempo;
 
     if (m_loopStart != m_loopEnd)
     {
@@ -1405,9 +1415,10 @@ std::string Composition::toXmlString()
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
+	tempoT tempo = tempoT((*i)->get<Int>(TempoProperty));
 	composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
-		    << "\" bph=\""
-		    << (*i)->get<Int>(TempoProperty) << "\"/>" << endl;
+		    << "\" bph=\"" << ((tempo * 6) / 10000)
+		    << "\" tempo=\"" << tempo << "\"/>" << endl;
     }
 
     composition << endl;

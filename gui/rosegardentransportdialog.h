@@ -60,7 +60,7 @@ public:
     void displayFrameTime(const Rosegarden::RealTime &rt);
     void displayBarTime(int bar, int beat, int unit);
 
-    void setTempo(const double &tempo);
+    void setTempo(const Rosegarden::tempoT &tempo);
     void setTimeSignature(const Rosegarden::TimeSignature &timeSig);
 
     void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
@@ -167,7 +167,7 @@ private:
     int m_thousandths;
     int m_tenThousandths;
 
-    double m_tempo;
+    Rosegarden::tempoT m_tempo;
     int m_numerator;
     int m_denominator;
 

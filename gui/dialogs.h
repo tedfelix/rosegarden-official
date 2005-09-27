@@ -34,6 +34,7 @@
 #include "editcommands.h"
 #include "notepixmapfactory.h"
 #include "commondialogs.h" // HSpinBox
+#include "Composition.h" // tempoT
 
 class QWidget;
 class QLineEdit;
@@ -485,7 +486,7 @@ signals:
     // Return results in this signal
     //
     void changeTempo(Rosegarden::timeT,  // tempo change time
-                     double,             // tempo value
+                     Rosegarden::tempoT,  // tempo value
                      TempoDialog::TempoDialogAction); // tempo action
 
 protected:

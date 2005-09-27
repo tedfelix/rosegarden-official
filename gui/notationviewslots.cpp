@@ -2829,10 +2829,12 @@ NotationView::slotEditTempos(Rosegarden::timeT t)
 
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)),
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
 	    RosegardenGUIApp::self(),
             SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 double, TempoDialog::TempoDialogAction)));
+                                 Rosegarden::tempoT,
+				 TempoDialog::TempoDialogAction)));
 
     connect(tempoView, SIGNAL(saveFile()),
 	    RosegardenGUIApp::self(), SLOT(slotFileSave()));

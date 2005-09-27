@@ -585,8 +585,9 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 	    getComposition().addTimeSignature(ts.first + time0, ts.second);
 	}
 	for (int i = 0; i < doc->getComposition().getTempoChangeCount(); ++i) {
-	    std::pair<timeT, long> t = doc->getComposition().getRawTempoChange(i);
-	    getComposition().addRawTempo(t.first + time0, t.second);
+	    std::pair<timeT, Rosegarden::tempoT> t =
+		doc->getComposition().getTempoChange(i);
+	    getComposition().addTempoAtTime(t.first + time0, t.second);
 	}
     }
 
@@ -915,9 +916,10 @@ void RosegardenGUIDoc::initialiseStudio()
 // Update notes:
 // MINOR -> 2 : plugins on busses
 // MINOR -> 3 : key mappings for percussion instruments
+// POINT -> 1 : tempo resolution increased (but we still save old format too)
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 3;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 1;
 
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,

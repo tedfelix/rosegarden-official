@@ -166,7 +166,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	timePoints.insert
 	    (TimePoints::value_type
-	     (m_composition->getRawTempoChange(tempoNo).first,
+	     (m_composition->getTempoChange(tempoNo).first,
 	      tempoChangeHere));
     }
 
@@ -199,7 +199,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    t1 = i->first;
 	}
 
-	QColor colour = TempoColour::getColour(m_composition->getTempoAt(t0));
+	QColor colour = TempoColour::getColour
+	    (m_composition->getTempoQpm(m_composition->getTempoAtTime(t0)));
         paint.setPen(colour);
         paint.setBrush(colour);
 
@@ -242,7 +243,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	if (i->second & tempoChangeHere) { 
 
-	    double tempo = m_composition->getTempoAt(time);
+	    double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(time));
 	    long bpm = long(tempo);
 	    long frac = long(tempo * 100 + 0.001) - 100 * bpm;
 

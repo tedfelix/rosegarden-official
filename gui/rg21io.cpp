@@ -129,11 +129,12 @@ bool RG21Loader::parseMetronome()
     int count = (*i).toInt(&isNumeric);
     if (!count || !isNumeric) return false;
 
-    // RG4 raw tempos are in crotchets-per-hour, and we need to take
-    // into account the fact that "duration" might not be a crotchet
-
-    int raw = (count * duration * 60) / Note(Note::Crotchet).getDuration();
-    m_composition->addRawTempo(m_currentSegmentTime, raw);
+    // we need to take into account the fact that "duration" might not
+    // be a crotchet
+    
+    double qpm = (count * duration) / Note(Note::Crotchet).getDuration();
+    m_composition->addTempoAtTime(m_currentSegmentTime,
+				  m_composition->getTempoForQpm(qpm));
     return true;
 }
 

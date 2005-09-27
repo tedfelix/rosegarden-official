@@ -39,6 +39,11 @@
 
 namespace Rosegarden 
 {
+// We store tempo in quarter-notes per minute * 10^5 (hundred
+// thousandths of a quarter-note per minute).  This means the maximum
+// tempo in a 32-bit integer is about 21400 qpm.  We use a signed int
+// for compatibility with the Event integer type.
+typedef int tempoT;
 
 class Quantizer;
 class BasicQuantizer;
@@ -492,37 +497,36 @@ public:
     //  TEMPO
 
     /**
-     * Return the tempo in effect at time t, in quarters per minute.
+     * Return the (approximate) number of quarters per minute for a
+     * given tempo.
      */
-    double getTempoAt(timeT t) const;
+    static double getTempoQpm(tempoT tempo) { return double(tempo) / 100000.0; }
+    static tempoT getTempoForQpm(double qpm) { return tempoT(qpm * 100000 + 0.01); }
+
+    /**
+     * Return the tempo in effect at time t.
+     */
+    tempoT getTempoAtTime(timeT t) const;
 
     /**
      * Return the tempo in effect at the current playback position.
      */
-    double getTempo() const { return getTempoAt(getPosition()); }
+    tempoT getCurrentTempo() const { return getTempoAtTime(getPosition()); }
 
     /**
      * Set a default tempo for the composition.  This will be
      * overridden by any tempo events encountered during playback.
      */
-    void setDefaultTempo(double tempo) { m_defaultTempo = tempo; }
-    double getDefaultTempo() const { return m_defaultTempo; }
+    void setCompositionDefaultTempo(tempoT tempo) { m_defaultTempo = tempo; }
+    tempoT getCompositionDefaultTempo() const { return m_defaultTempo; }
 
     /**
-     * Add a tempo-change event at the given time, to the given
-     * tempo (in quarters per minute).  Removes any existing tempo
-     * event at that time.  Returns the index of the new tempo
-     * event in a form suitable for passing to removeTempoChange.
+     * Add a tempo-change event at the given time, to the given tempo.
+     * Removes any existing tempo event at that time.  Returns the
+     * index of the new tempo event in a form suitable for passing to
+     * removeTempoChange.
      */
-    int addTempo(timeT time, double tempo);
-
-    /**
-     * Add a tempo-change event at the given time, to the given
-     * tempo (in quarters per hour).  Removes any existing tempo
-     * event at that time.  Returns the index of the new tempo
-     * event in a form suitable for passing to removeTempoChange.
-     */
-    int addRawTempo(timeT time, int tempo);
+    int addTempoAtTime(timeT time, tempoT tempo);
 
     /**
      * Return the number of tempo changes in the composition.
@@ -531,17 +535,16 @@ public:
 
     /**
      * Return the index of the last tempo change before the given
-     * time, in a range suitable for passing to getRawTempoChange.
+     * time, in a range suitable for passing to getTempoChange.
      * Return -1 if the default tempo is in effect at this time.
      */
     int getTempoChangeNumberAt(timeT time) const;
 
     /**
      * Return the absolute time of and tempo introduced by tempo
-     * change number n, in quarters per hour (this is the value that's
-     * actually stored)
+     * change number n
      */
-    std::pair<timeT, long> getRawTempoChange(int n) const;
+    std::pair<timeT, tempoT> getTempoChange(int n) const;
 
     /**
      * Remove tempo change event n from the composition.
@@ -765,7 +768,7 @@ public:
 protected:
 
     static const std::string TempoEventType; 
-    static const PropertyName TempoProperty; // stored in quarters per hour
+    static const PropertyName TempoProperty;
 
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;
@@ -869,8 +872,8 @@ protected:
     /// affects m_tempoSegment
     void calculateTempoTimestamps() const;
     mutable bool m_tempoTimestampsNeedCalculating;
-    RealTime time2RealTime(timeT time, double tempo) const;
-    timeT realTime2Time(RealTime rtime, double tempo) const;
+    RealTime time2RealTime(timeT time, tempoT tempo) const;
+    timeT realTime2Time(RealTime rtime, tempoT tempo) const;
 
     typedef std::list<CompositionObserver *> ObserverSet;
     ObserverSet m_observers;
@@ -894,7 +897,7 @@ protected:
     NotationQuantizer                *m_notationQuantizer;
 
     timeT                             m_position;
-    double                            m_defaultTempo;
+    tempoT                            m_defaultTempo;
 
     // Notional Composition markers - these define buffers for the
     // start and end of the piece, Segments can still exist outside

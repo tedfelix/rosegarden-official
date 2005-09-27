@@ -180,7 +180,6 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     // if the rest of the Transport ever changes then this code
     // will have to as well.
     //
-    //
     QPalette pal;
     pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
 
@@ -677,7 +676,7 @@ RosegardenTransportDialog::updateTimeDisplay()
 }
 
 void
-RosegardenTransportDialog::setTempo(const double &tempo)
+RosegardenTransportDialog::setTempo(const Rosegarden::tempoT &tempo)
 {
     if (m_tempo == tempo) return;
     m_tempo = tempo;
@@ -687,7 +686,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     // where the tempo should always be consistent.  Quarter Note
     // Length is sent (MIDI CLOCK) at 24ppqn.
     //
-    double qnD = 60.0/tempo;
+    double qnD = 60.0 / Rosegarden::Composition::getTempoQpm(tempo);
     Rosegarden::RealTime qnTime =
         Rosegarden::RealTime(long(qnD),
                              long((qnD - double(long(qnD))) * 1000000000.0));
@@ -695,7 +694,7 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     StudioControl::sendQuarterNoteLength(qnTime);
 
     QString tempoString;
-    tempoString.sprintf("%4.3f", tempo);
+    tempoString.sprintf("%4.3f", Rosegarden::Composition::getTempoQpm(tempo));
 
     m_transport->TempoDisplay->setText(tempoString);
 }

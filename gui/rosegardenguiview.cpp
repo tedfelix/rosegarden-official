@@ -256,10 +256,12 @@ RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
 
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)),
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
 	    RosegardenGUIApp::self(),
             SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 double, TempoDialog::TempoDialogAction)));
+                                 Rosegarden::tempoT,
+				 TempoDialog::TempoDialogAction)));
 
     connect(tempoView, SIGNAL(saveFile()),
 	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
@@ -409,9 +411,11 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
     //
-    connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT, double,
+    connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT,
+					     Rosegarden::tempoT,
 					     TempoDialog::TempoDialogAction)),
-            RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
+            RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT,
+							   Rosegarden::tempoT,
                                                            TempoDialog::TempoDialogAction)));
 
 
@@ -582,10 +586,12 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
     //
-    connect(matrixView, SIGNAL(changeTempo(Rosegarden::timeT, double,
+    connect(matrixView, SIGNAL(changeTempo(Rosegarden::timeT,
+					   Rosegarden::tempoT,
 					   TempoDialog::TempoDialogAction)),
-		    RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT, double,
-				      TempoDialog::TempoDialogAction)));
+		    RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT,
+								   Rosegarden::tempoT,
+								   TempoDialog::TempoDialogAction)));
 
     connect(matrixView, SIGNAL(windowActivated()),
 	    this, SLOT(slotActiveMainWindowChanged()));

@@ -121,24 +121,24 @@ CsoundExporter::write()
 
 	for (int i = 0; i < tempoCount - 1; ++i) {
 
-	    std::pair<Rosegarden::timeT, long> tempoChange = 
-		m_composition->getRawTempoChange(i);
+	    std::pair<Rosegarden::timeT, Rosegarden::tempoT> tempoChange = 
+		m_composition->getTempoChange(i);
 
 	    timeT myTime = tempoChange.first;
 	    timeT nextTime = myTime;
 	    if (i < m_composition->getTempoChangeCount()-1) {
-		nextTime = m_composition->getRawTempoChange(i+1).first;
+		nextTime = m_composition->getTempoChange(i+1).first;
 	    }
 	    
-	    int tempo = tempoChange.second / 60;
+	    int tempo = int(Composition::getTempoQpm(tempoChange.second));
 
 	    str << convertTime(  myTime) << " " << tempo << " "
 		<< convertTime(nextTime) << " " << tempo << " ";
 	}
 
-	str << convertTime(m_composition->getRawTempoChange(tempoCount-1).first)
+	str << convertTime(m_composition->getTempoChange(tempoCount-1).first)
 	    << " "
-	    << m_composition->getRawTempoChange(tempoCount-1).second/60
+	    << int(Composition::getTempoQpm(m_composition->getTempoChange(tempoCount-1).second))
 	    << std::endl;
     }
 

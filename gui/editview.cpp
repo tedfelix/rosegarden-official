@@ -1165,10 +1165,12 @@ void EditView::slotAddTempo()
 
     connect(&tempoDlg,
             SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)),
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
             this,
             SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)));
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)));
         
     tempoDlg.setTempoPosition(insertionTime);
     tempoDlg.exec();

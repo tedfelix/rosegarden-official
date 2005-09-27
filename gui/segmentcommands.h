@@ -520,7 +520,7 @@ class ModifyDefaultTempoCommand : public KNamedCommand
 {
 public:
     ModifyDefaultTempoCommand(Rosegarden::Composition *composition,
-                              double tempo):
+                              Rosegarden::tempoT tempo):
 	KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempo(tempo) {}
@@ -534,8 +534,8 @@ public:
 
 private:
     Rosegarden::Composition *m_composition;
-    double                   m_tempo;
-    double                   m_oldTempo;
+    Rosegarden::tempoT       m_tempo;
+    Rosegarden::tempoT       m_oldTempo;
 };
 
 
@@ -561,7 +561,7 @@ private:
     Rosegarden::Composition *m_composition;
     int                      m_tempoChangeIndex;
     Rosegarden::timeT        m_oldTime;
-    long                     m_oldTempo; // bph
+    Rosegarden::tempoT       m_oldTempo;
 };
 
 
@@ -571,7 +571,7 @@ class AddTempoChangeCommand : public KNamedCommand
 public:
     AddTempoChangeCommand(Rosegarden::Composition *composition,
                           Rosegarden::timeT time,
-                          double tempo):
+                          Rosegarden::tempoT tempo):
 	KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
@@ -589,8 +589,8 @@ public:
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_time;
-    double m_tempo; // bpm
-    int m_oldTempo; // bph
+    Rosegarden::tempoT m_tempo;
+    Rosegarden::tempoT m_oldTempo;
     int m_tempoChangeIndex;
 };
 
@@ -968,7 +968,7 @@ private:
     
     Rosegarden::Composition *m_composition;
 
-    typedef std::map<Rosegarden::timeT, long> TempoMap;
+    typedef std::map<Rosegarden::timeT, Rosegarden::tempoT> TempoMap;
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
 };

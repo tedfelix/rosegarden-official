@@ -931,7 +931,7 @@ LilypondExporter::write()
     // makes debugging the .ly file easier because fewer "noisy" errors are
     // produced during the process of rendering MIDI...)
     if (exportMidi) {
-        double tempo = m_composition->getTempoAt(m_composition->getStartMarker());
+        int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(m_composition->getStartMarker())));
         // Incomplete?  Can I get away without converting tempo relative to the time
         // signature for this purpose?  we'll see...
         str << indent(col++) << "\\midi {" << std::endl;

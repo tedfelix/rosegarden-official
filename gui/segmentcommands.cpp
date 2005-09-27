@@ -1627,13 +1627,13 @@ AddTempoChangeCommand::execute()
 
     if (oldIndex >= 0)
     {
-        std::pair<timeT, long> data = 
-            m_composition->getRawTempoChange(oldIndex);
+        std::pair<timeT, Rosegarden::tempoT> data = 
+            m_composition->getTempoChange(oldIndex);
 
         if (data.first == m_time) m_oldTempo = data.second;
     }
 
-    m_tempoChangeIndex = m_composition->addTempo(m_time, m_tempo);
+    m_tempoChangeIndex = m_composition->addTempoAtTime(m_time, m_tempo);
 }
 
 void
@@ -1642,7 +1642,7 @@ AddTempoChangeCommand::unexecute()
     m_composition->removeTempoChange(m_tempoChangeIndex);
 
     if (m_oldTempo != 0) {
-        m_composition->addRawTempo(m_time, m_oldTempo);
+        m_composition->addTempoAtTime(m_time, m_oldTempo);
     }
 }
 
@@ -1651,8 +1651,8 @@ RemoveTempoChangeCommand::execute()
 {
     if (m_tempoChangeIndex >= 0)
     {
-        std::pair<timeT, long> data = 
-            m_composition->getRawTempoChange(m_tempoChangeIndex);
+        std::pair<timeT, Rosegarden::tempoT> data = 
+            m_composition->getTempoChange(m_tempoChangeIndex);
 
         // store
         m_oldTime = data.first;
@@ -1668,20 +1668,20 @@ RemoveTempoChangeCommand::execute()
 void
 RemoveTempoChangeCommand::unexecute()
 {
-    m_composition->addRawTempo(m_oldTime, m_oldTempo);
+    m_composition->addTempoAtTime(m_oldTime, m_oldTempo);
 }
 
 void
 ModifyDefaultTempoCommand::execute()
 {
-    m_oldTempo = m_composition->getDefaultTempo();
-    m_composition->setDefaultTempo(m_tempo);
+    m_oldTempo = m_composition->getCompositionDefaultTempo();
+    m_composition->setCompositionDefaultTempo(m_tempo);
 }
 
 void
 ModifyDefaultTempoCommand::unexecute()
 {
-    m_composition->setDefaultTempo(m_oldTempo);
+    m_composition->setCompositionDefaultTempo(m_oldTempo);
 }
 
 
@@ -2701,7 +2701,7 @@ CreateTempoMapFromSegmentCommand::execute()
     }
 
     for (TempoMap::iterator i = m_newTempi.begin(); i != m_newTempi.end(); ++i) {
-	m_composition->addRawTempo(i->first, i->second);
+	m_composition->addTempoAtTime(i->first, i->second);
     }
 }
 
@@ -2716,7 +2716,7 @@ CreateTempoMapFromSegmentCommand::unexecute()
     }
 
     for (TempoMap::iterator i = m_oldTempi.begin(); i != m_oldTempi.end(); ++i) {
-	m_composition->addRawTempo(i->first, i->second);
+	m_composition->addTempoAtTime(i->first, i->second);
     }
 }
 
@@ -2759,20 +2759,20 @@ CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
 
     if (beatTimeTs.size() < 2) return;
 
-    long prevRawTempo = -1;
+    Rosegarden::tempoT prevTempo = 0;
 
-    // set up m_oldTempi and prevRawTempo
+    // set up m_oldTempi and prevTempo
 
     for (int i = m_composition->getTempoChangeNumberAt(*beatTimeTs.begin()-1) + 1;
 	 i <= m_composition->getTempoChangeNumberAt(*beatTimeTs.end()-1); ++i) {
 
-	std::pair<Rosegarden::timeT, long> tempoChange =
-	    m_composition->getRawTempoChange(i);
+	std::pair<Rosegarden::timeT, Rosegarden::tempoT> tempoChange =
+	    m_composition->getTempoChange(i);
 	m_oldTempi[tempoChange.first] = tempoChange.second;
-	if (prevRawTempo == -1) prevRawTempo = tempoChange.second;
+	if (prevTempo == 0) prevTempo = tempoChange.second;
     }
 
-    RG_DEBUG << "starting raw tempo: " << prevRawTempo << endl;
+    RG_DEBUG << "starting tempo: " << prevTempo << endl;
 
     Rosegarden::timeT quarter = Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration();
 
@@ -2781,22 +2781,23 @@ CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
 	Rosegarden::timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat-1];
 	Rosegarden::RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat-1];
 
-	// Calculate tempo in quarter notes per hour.
-	// This is 3600 / {quarter note duration in seconds}
-	// = 3600 / ( {beat in seconds} * {quarter in ticks} / { beat in ticks} )
-	// = ( 3600 * {beat in ticks} ) / ( {beat in seconds} * {quarter in ticks} )
+	// Calculate tempo to nearest qpm.
+	// This is 60 / {quarter note duration in seconds}
+	// = 60 / ( {beat in seconds} * {quarter in ticks} / { beat in ticks} )
+	// = ( 60 * {beat in ticks} ) / ( {beat in seconds} * {quarter in ticks} )
+	// Precision is deliberately limited to qpm to avoid silly values.
 
 	double beatSec = double(beatRealTime.sec) +
 	    double(beatRealTime.usec() / 1000000.0);
-	double qph = (3600.0 * beatTime) / (beatSec * quarter);
-	long rawTempo = long(qph + 0.000001);
+	double qpm = (60.0 * beatTime) / (beatSec * quarter);
+	Rosegarden::tempoT tempo = Composition::getTempoForQpm(int(qpm + 0.001));
 
 	RG_DEBUG << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat] << endl;
-	RG_DEBUG << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", rawTempo " << rawTempo << endl;
+	RG_DEBUG << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", tempo " << tempo << endl;
 
-	if (rawTempo != prevRawTempo) {
-	    m_newTempi[beatTimeTs[beat-1]] = rawTempo;
-	    prevRawTempo = rawTempo;
+	if (tempo != prevTempo) {
+	    m_newTempi[beatTimeTs[beat-1]] = tempo;
+	    prevTempo = tempo;
 	}
     }
 	

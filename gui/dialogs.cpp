@@ -2743,7 +2743,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 
     // Set tempo
     new QLabel(i18n("New tempo"), tempoBox);
-    m_tempoValueSpinBox = new HSpinBox(tempoBox, 0, 1e6, 0.0, 1000.0, 6);
+    m_tempoValueSpinBox = new HSpinBox(tempoBox, 0, 100000, 0.0, 1000.0, 5);
 
     connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
             SLOT(slotTempoChanged(const QString &)));
@@ -2833,9 +2833,9 @@ TempoDialog::populateTempo()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    double tempo = comp.getTempoAt(m_tempoTime);
+    Rosegarden::tempoT tempo = comp.getTempoAtTime(m_tempoTime);
 
-    m_tempoValueSpinBox->setValuef(float(tempo));    
+    m_tempoValueSpinBox->setValue(tempo);
 
     updateBeatLabels(tempo);
 
@@ -2869,7 +2869,7 @@ TempoDialog::populateTempo()
     int tempoChangeNo = comp.getTempoChangeNumberAt(m_tempoTime);
     if (tempoChangeNo >= 0) {
 
-	timeT lastTempoTime = comp.getRawTempoChange(tempoChangeNo).first;
+	timeT lastTempoTime = comp.getTempoChange(tempoChangeNo).first;
 	if (lastTempoTime < m_tempoTime) {
 
 	    Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
@@ -2961,7 +2961,9 @@ TempoDialog::slotActionChanged()
 void
 TempoDialog::slotOk()
 {
-    double tempoDouble = double(m_tempoValueSpinBox->valuef());
+//    double tempoDouble = double(m_tempoValueSpinBox->valuef());
+    Rosegarden::tempoT tempo = m_tempoValueSpinBox->value();
+    RG_DEBUG << "Tempo is " << tempo << endl;
 
     // Check for freakiness in the returned results - 
     // if we can't believe the double value then use
@@ -2974,7 +2976,7 @@ TempoDialog::slotOk()
     if (m_timeEditor) {
 
 	emit changeTempo(m_timeEditor->getTime(),
-			 tempoDouble,
+			 tempo,
 			 AddTempo);
 
     } else {
@@ -2993,7 +2995,7 @@ TempoDialog::slotOk()
 	}
 	
 	emit changeTempo(m_tempoTime,
-			 tempoDouble,
+			 tempo,
 			 action);
     }
 

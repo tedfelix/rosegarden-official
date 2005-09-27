@@ -251,8 +251,8 @@ SequenceManager::play()
     // 
     m_transport->PlayButton()->setOn(true);
 
-    if (comp.getTempo() == 0) {
-        comp.setDefaultTempo(120.0);
+    if (comp.getCurrentTempo() == 0) {
+        comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
 
         SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
     } else {
@@ -261,14 +261,14 @@ SequenceManager::play()
 
     // Send initial tempo
     //
-    double qnD = 60.0/comp.getTempo();
+    double qnD = 60.0 / comp.getTempoQpm(comp.getCurrentTempo());
     RealTime qnTime =
         RealTime(long(qnD), 
                 long((qnD - double(long(qnD))) * 1000000000.0));
     StudioControl::sendQuarterNoteLength(qnTime);
 
     // set the tempo in the transport
-    m_transport->setTempo(comp.getTempo());
+    m_transport->setTempo(comp.getCurrentTempo());
 
     // The arguments for the Sequencer
     RealTime startPos = comp.getElapsedRealTime(comp.getPosition());
@@ -721,16 +721,16 @@ punchin:
         m_transport->RecordButton()->setOn(true);
         m_transport->PlayButton()->setOn(true);
 
-        if (comp.getTempo() == 0) {
+        if (comp.getCurrentTempo() == 0) {
             SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
-            comp.setDefaultTempo(120.0);
+            comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
         } else {
             SEQMAN_DEBUG << "SequenceManager::record() - starting to record\n";
         }
 
         // set the tempo in the transport
         //
-        m_transport->setTempo(comp.getTempo());
+        m_transport->setTempo(comp.getCurrentTempo());
 
         // The arguments for the Sequencer - record is similar to playback,
         // we must being playing to record.

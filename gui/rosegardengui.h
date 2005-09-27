@@ -1156,7 +1156,7 @@ public slots:
      * Modify tempo
      */
     void slotChangeTempo(Rosegarden::timeT time,
-                         double value,      
+                         Rosegarden::tempoT value,      
                          TempoDialog::TempoDialogAction action);
 
     /**

@@ -390,7 +390,10 @@ RosegardenTimeWidget::populate()
 
 	bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
 		       m_composition->getTempoChangeNumberAt(m_startTime));
-	double tempo = m_composition->getTempoAt(m_startTime);
+
+	//!!! imprecise -- better to work from tempoT directly
+	double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(m_startTime));
+
 	int qpmc = int(tempo * 100.0);
 	int bpmc = qpmc;
 	if (timeSig.getBeatDuration()

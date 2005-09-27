@@ -257,14 +257,17 @@ TempoView::applyLayout(int /*staffNo*/)
     if (m_filter & Tempo) {
 	for (int i = 0; i < comp->getTempoChangeCount(); ++i) {
 
-	    std::pair<Rosegarden::timeT, long> tempo = comp->getRawTempoChange(i);
+	    std::pair<Rosegarden::timeT, Rosegarden::tempoT> tempo =
+		comp->getTempoChange(i);
 	
 	    QString desc;
 
-	    float qpm = float(tempo.second) / 60.0;
-	    int qpmUnits = int(qpm);
-	    int qpmTenths = int((qpm - qpmUnits) * 10);
-	    int qpmHundredths = int((qpm - qpmUnits - qpmTenths/10.0) * 100);
+	    //!!! imprecise -- better to work from tempoT directly
+
+	    float qpm = comp->getTempoQpm(tempo.second);
+	    int qpmUnits = int(qpm + 0.001);
+	    int qpmTenths = int((qpm - qpmUnits) * 10 + 0.001);
+	    int qpmHundredths = int((qpm - qpmUnits - qpmTenths/10.0) * 100 + 0.001);
 
 	    Rosegarden::TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
 	    if (sig.getBeatDuration() ==
@@ -275,9 +278,9 @@ TempoView::applyLayout(int /*staffNo*/)
 		float bpm = (float(tempo.second) *
 			     Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()) /
 		    (sig.getBeatDuration() * 60.0);
-		int bpmUnits = int(bpm);
-		int bpmTenths = int((bpm - bpmUnits) * 10);
-		int bpmHundredths = int((bpm - bpmUnits - bpmTenths/10.0) * 100);
+		int bpmUnits = int(bpm + 0.001);
+		int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
+		int bpmHundredths = int((bpm - bpmUnits - bpmTenths/10.0) * 100 + 0.001);
 
 		desc = i18n("%1.%2%3 qpm (%4.%5%6 bpm)   ").
 		    arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths).
@@ -516,10 +519,12 @@ TempoView::slotEditInsertTempo()
 
     connect(&dialog, 
 	    SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)),
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
 	    this,
             SIGNAL(changeTempo(Rosegarden::timeT,
-			       double, TempoDialog::TempoDialogAction)));
+			       Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)));
 
     dialog.exec();
 }
@@ -810,10 +815,12 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 
 	connect(&dialog, 
 		SIGNAL(changeTempo(Rosegarden::timeT,
-				   double, TempoDialog::TempoDialogAction)),
+				   Rosegarden::tempoT,
+				   TempoDialog::TempoDialogAction)),
 		this,
 		SIGNAL(changeTempo(Rosegarden::timeT,
-				   double, TempoDialog::TempoDialogAction)));
+				   Rosegarden::tempoT,
+				   TempoDialog::TempoDialogAction)));
 	
 	dialog.exec();
 	break;

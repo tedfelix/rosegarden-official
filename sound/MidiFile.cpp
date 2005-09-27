@@ -973,8 +973,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                         if (tempo != 0)
                         {
-                            tempo = 60000000 / tempo;
-                            composition.addTempo(rosegardenTime, tempo);
+			    double qpm = 60000000.0 / double(tempo);
+			    Rosegarden::tempoT rgt(Composition::getTempoForQpm(qpm));
+			    std::cout << "MidiFile: converted MIDI tempo " << tempo << " to Rosegarden tempo " << rgt << std::endl;
+                            composition.addTempoAtTime(rosegardenTime, rgt);
                         }
                     }
                     break;
@@ -1360,13 +1362,13 @@ MidiFile::convertToMidi(Composition &comp)
     //
     for (int i = 0; i < comp.getTempoChangeCount(); i++) // i=0 should be comp.getStart-something
     {
-        std::pair<timeT, long> tempo = comp.getRawTempoChange(i);
+        std::pair<timeT, Rosegarden::tempoT> tempo = comp.getTempoChange(i);
 
         midiEventAbsoluteTime = tempo.first * m_timingDivision
                                  / crotchetDuration;
 
-        long tempoValue = (long) ( tempo.second / 60.0 );
-        tempoValue = 60000000 / tempoValue;
+	double qpm = Composition::getTempoQpm(tempo.second);
+        long tempoValue = long(60000000.0 / qpm + 0.01);
 
         string tempoString;
         tempoString += (MidiByte) ( tempoValue >> 16 & 0xFF );

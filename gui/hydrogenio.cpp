@@ -405,7 +405,8 @@ HydrogenXMLHandler::characters(const QString& chars)
         } else if (m_currentProperty == "bpm") {
 
             m_bpm = qstrtodouble(ch);
-            m_composition->addTempo(0, m_bpm);
+            m_composition->addTempoAtTime
+		(0, Rosegarden::Composition::getTempoForQpm(m_bpm));
 
         } else if (m_currentProperty == "volume") {
             m_volume = qstrtodouble(ch);

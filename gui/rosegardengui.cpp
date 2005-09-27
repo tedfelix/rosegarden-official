@@ -1327,7 +1327,7 @@ void RosegardenGUIApp::initView()
 
     // set the tempo in the transport
     //
-    m_transport->setTempo(comp.getTempo());
+    m_transport->setTempo(comp.getCurrentTempo());
 
     // bring the transport to the front 
     //
@@ -3721,8 +3721,8 @@ RosegardenGUIApp::mergeFile(QString filePath, ImportType type)
 		timingsDiffer = true;
 	    } else {
 		for (int i = 0; i < c1.getTempoChangeCount(); ++i) {
-		    std::pair<timeT, long> t1 = c1.getRawTempoChange(i);
-		    std::pair<timeT, long> t2 = c2.getRawTempoChange(i);
+		    std::pair<timeT, Rosegarden::tempoT> t1 = c1.getTempoChange(i);
+		    std::pair<timeT, Rosegarden::tempoT> t2 = c2.getTempoChange(i);
 		    if (t1.first != t2.first || t1.second != t2.second) {
 			timingsDiffer = true;
 			break;
@@ -3913,7 +3913,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     m_transport->setTimeSignature(comp.getTimeSignatureAt(t));
 
     // and the tempo
-    m_transport->setTempo(comp.getTempoAt(t));
+    m_transport->setTempo(comp.getTempoAtTime(t));
 
     // and the time
     //
@@ -5132,9 +5132,11 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 
     connect(&tempoDialog,
             SIGNAL(changeTempo(Rosegarden::timeT,
-                               double, TempoDialog::TempoDialogAction)),
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
             SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 double, TempoDialog::TempoDialogAction)));
+                                 Rosegarden::tempoT,
+				 TempoDialog::TempoDialogAction)));
 
     tempoDialog.setTempoPosition(m_doc->getComposition().getPosition());
     tempoDialog.exec();
@@ -5197,7 +5199,7 @@ void RosegardenGUIApp::slotChangeZoom(int)
 
 void
 RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
-                                  double value,
+                                  Rosegarden::tempoT value,
                                   TempoDialog::TempoDialogAction action)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
@@ -5224,7 +5226,7 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
         }
 
         // get time of previous tempo change
-        Rosegarden::timeT prevTime = comp.getRawTempoChange(index).first;
+        Rosegarden::timeT prevTime = comp.getTempoChange(index).first;
 
         KMacroCommand *macro =
             new KMacroCommand(i18n("Replace Tempo Change at %1").arg(time));

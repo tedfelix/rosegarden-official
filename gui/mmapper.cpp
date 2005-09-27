@@ -1196,13 +1196,19 @@ void TempoSegmentMmapper::dump()
 
     for (int i = 0; i < comp.getTempoChangeCount(); ++i) {
 
-        std::pair<timeT, long> tempoChange = comp.getRawTempoChange(i);
+        std::pair<timeT, Rosegarden::tempoT> tempoChange = comp.getTempoChange(i);
 
         eventTime = comp.getElapsedRealTime(tempoChange.first);
         MappedEvent* mappedEvent = new (bufPos) MappedEvent();
         mappedEvent->setType(MappedEvent::Tempo);
         mappedEvent->setEventTime(eventTime);
-        mappedEvent->setData1(tempoChange.second);
+
+	// Nasty hack -- we use the instrument ID to pass through the
+	// raw tempo value, as it has the appropriate range (unlike
+	// e.g. tempo1 + tempo2).  These events are not actually used
+	// on the sequencer side yet, so this may change to something
+	// nicer at some point.
+        mappedEvent->setInstrument(tempoChange.second);
         
         ++bufPos;
     }

@@ -539,11 +539,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	QString timeStr = atts.value("time");
 	if (timeStr) t = timeStr.toInt();
 	
-	int bph = 120 * 60; // arbitrary
+	Rosegarden::tempoT tempo = Rosegarden::Composition::getTempoForQpm(120.0);
+	QString tempoStr = atts.value("tempo");
 	QString bphStr = atts.value("bph");
-	if (bphStr) bph = bphStr.toInt();
+	if (tempoStr) {
+	    tempo = tempoStr.toInt();
+	} else if (bphStr) {
+	    tempo = Rosegarden::Composition::getTempoForQpm
+		(double(bphStr.toInt()) / 60.0);
+	}
 
-	getComposition().addRawTempo(t, bph);
+	getComposition().addTempoAtTime(t, tempo);
 
     } else if (lcName == "composition") {
 
@@ -585,15 +591,22 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         getComposition().setPosition(position);
 
 
-        // Get and (eventually) set the tempo
+        // Get and (eventually) set the default tempo.
+	// We prefer the new compositionDefaultTempo over the
+	// older defaultTempo.
         //
-        double tempo = 120.0;
-        QString tempoStr = atts.value("defaultTempo");
+        QString tempoStr = atts.value("compositionDefaultTempo");
         if (tempoStr) {
-            tempo = qstrtodouble(tempoStr);
-        }
-
-        getComposition().setDefaultTempo(tempo);
+	    Rosegarden::tempoT tempo = Rosegarden::tempoT(tempoStr.toInt());
+	    getComposition().setCompositionDefaultTempo(tempo);
+	} else {
+	    tempoStr = atts.value("defaultTempo");
+	    if (tempoStr) {
+		double tempo = qstrtodouble(tempoStr);
+		getComposition().setCompositionDefaultTempo
+		    (Composition::getTempoForQpm(tempo));
+	    }
+	}
         
         // set the composition flag
         m_inComposition = true;
@@ -2189,7 +2202,10 @@ RoseXmlHandler::fatalError(const QXmlParseException& exception)
 bool
 RoseXmlHandler::endDocument()
 {
-    if (m_foundTempo == false) getComposition().setDefaultTempo(120.0);
+    if (m_foundTempo == false) {
+	getComposition().setCompositionDefaultTempo
+	    (Composition::getTempoForQpm(120.0));
+    }
 
     return true;
 }
