@@ -425,13 +425,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     }
     delete proc;
 
-
-    //!!! and something like this for lilypondview (call it something
-    //else & fold into rg tree?):
-    
+    emit startupStatusMessage(i18n("Testing Lilypond previewer..."));
     proc = new KProcess();
     *proc << "rosegarden-lilypondview";
-    *proc << "-v";
+    *proc << "--conftest";
     proc->start(KProcess::Block, KProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
 	RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - No lilypondview available" << endl;
@@ -442,12 +439,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     }
     delete proc;
 
-    
-
     // Load the initial document (this includes doc's own autoload)
     //
     setDocument(doc);
-    stateChanged("have_lilypondview", KXMLGUIClient::StateNoReverse);
 
     emit startupStatusMessage(i18n("Starting sequence manager..."));
 

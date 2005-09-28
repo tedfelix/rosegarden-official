@@ -228,6 +228,9 @@ if 'install' in COMMAND_LINE_TARGETS:
 	# rosegarden-project-package script
 	env.KDEinstall('KDEBIN', '', "gui/rosegarden-project-package" )
 
+	# rosegarden-lilypondview script
+	env.KDEinstall('KDEBIN', '', "gui/rosegarden-lilypondview" )
+
 	# version.txt file
 	versionFile = open("version.txt", "w")
 	versionFile.write(VERSION + '\n')

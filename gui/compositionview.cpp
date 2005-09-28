@@ -174,7 +174,7 @@ bool operator<(const CompositionItem& a, const CompositionItem& b)
 //
 // CompositionModelImpl
 //
-CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
+CompositionModelImpl::CompositionModelImpl(Composition& compo,
                                            Rosegarden::Studio& studio,                                           
                                            Rosegarden::RulerScale *rulerScale,
                                            int vStep)
@@ -187,10 +187,10 @@ CompositionModelImpl::CompositionModelImpl(Rosegarden::Composition& compo,
     m_audioPreviewDataCache.setAutoDelete(true);
     m_composition.addObserver(this);
 
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
         (*i)->addObserver(this);
@@ -204,10 +204,10 @@ CompositionModelImpl::~CompositionModelImpl()
 
         m_composition.removeObserver(this);
 
-        const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-        Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+        const Composition::segmentcontainer& segments = m_composition.getSegments();
+        Composition::segmentcontainer::iterator segEnd = segments.end();
 
-        for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+        for(Composition::segmentcontainer::iterator i = segments.begin();
             i != segEnd; ++i) {
 
             (*i)->removeObserver(this);
@@ -237,10 +237,10 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 //     RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
 // 	     << (dynamic_cast<Rosegarden::SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel() << endl;
 
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for (Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for (Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
 // 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
@@ -431,10 +431,10 @@ void CompositionModelImpl::refreshAllPreviews()
 
     clearPreviewCache();
 
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for (Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for (Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
         makePreviewCache(*i);
@@ -712,7 +712,7 @@ void CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, con
 
     if (segment->isAutoFading()) {
 
-        Rosegarden::Composition &comp = getComposition();
+        Composition &comp = getComposition();
 
         int audioFadeInEnd = int(
                                  m_grid.getRulerScale()->getXForTime(comp.
@@ -861,10 +861,10 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     m_previousTmpSelectedSegments = m_tmpSelectedSegments;
     m_tmpSelectedSegments.clear();
     
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
         Segment* s = *i;
@@ -877,10 +877,10 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
 
 void CompositionModelImpl::finalizeSelectionRect()
 {
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
-    Rosegarden::Composition::segmentcontainer::iterator segEnd = segments.end();
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
         Segment* s = *i;
@@ -955,9 +955,9 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
 {
     itemcontainer res;
 
-    const Rosegarden::Composition::segmentcontainer& segments = m_composition.getSegments();
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
 
-    for(Rosegarden::Composition::segmentcontainer::iterator i = segments.begin();
+    for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segments.end(); ++i) {
 
         Segment* s = *i;
