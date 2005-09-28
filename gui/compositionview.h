@@ -141,6 +141,8 @@ public:
 
     typedef std::vector<PRectRange> PRectRanges;
 
+    typedef std::vector<PreviewRect> previewrectlist;
+
     class AudioPreviewData {
     public:
         AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
@@ -178,7 +180,7 @@ public:
 
     virtual unsigned int getNbRows() = 0;
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 PRectRanges* notationRects, PRectRanges* audioRects) = 0;
+                                                 PRectRanges* notationRects, previewrectlist* audioRects) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
@@ -229,7 +231,7 @@ public:
     
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 PRectRanges* notationRects, PRectRanges* audioRects);
+                                                 PRectRanges* notationRects, previewrectlist* audioRects);
     virtual itemcontainer     getItemsAt      (const QPoint&);
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
@@ -313,7 +315,7 @@ protected:
     void makePreviewCache(Rosegarden::Segment* s);
     void removePreviewCache(Rosegarden::Segment* s);
     void makeNotationPreviewRects(PRectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
-    void makeAudioPreviewRects(PRectRanges* apData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void makeAudioPreviewRects(previewrectlist* apRects, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
     void postProcessAudioPreview(AudioPreviewData*, const Rosegarden::Segment*);
 
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
@@ -606,7 +608,7 @@ protected:
     QPixmap      m_secondaryDrawBuffer;
     bool         m_drawBufferNeedsRefresh;
 
-    mutable CompositionModel::PRectRanges m_audioPreviewRects;
+    mutable CompositionModel::previewrectlist m_audioPreviewRects;
     mutable CompositionModel::PRectRanges m_notationPreviewRects;
 };
 
