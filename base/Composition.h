@@ -42,7 +42,8 @@ namespace Rosegarden
 // We store tempo in quarter-notes per minute * 10^5 (hundred
 // thousandths of a quarter-note per minute).  This means the maximum
 // tempo in a 32-bit integer is about 21400 qpm.  We use a signed int
-// for compatibility with the Event integer type.
+// for compatibility with the Event integer type -- but note that we
+// use 0 (rather than -1) to indicate "tempo not set", by convention.
 typedef int tempoT;
 
 class Quantizer;
@@ -551,6 +552,19 @@ public:
      */
     void removeTempoChange(int n);
 
+    /**
+     * Get the slowest assigned tempo in the composition.
+     */
+    tempoT getMinTempo() const {
+	return ((m_minTempo != 0) ? m_minTempo : m_defaultTempo);
+    }
+
+    /**
+     * Get the fastest assigned tempo in the composition.
+     */
+    tempoT getMaxTempo() const { 
+	return ((m_maxTempo != 0) ? m_maxTempo : m_defaultTempo);
+    }
 
 
     //////
@@ -898,6 +912,8 @@ protected:
 
     timeT                             m_position;
     tempoT                            m_defaultTempo;
+    tempoT                            m_minTempo; // cached from tempo segment
+    tempoT                            m_maxTempo; // cached from tempo segment
 
     // Notional Composition markers - these define buffers for the
     // start and end of the piece, Segments can still exist outside

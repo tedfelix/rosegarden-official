@@ -333,7 +333,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) m_chordNameRuler->show();
 
     m_tempoRuler = new TempoRuler
-	(m_hlayout, doc, m_leftGutter, 20, false, getCentralWidget());
+	(m_hlayout, doc, m_leftGutter, 24, false, getCentralWidget());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
     // make tempo ruler double click editable

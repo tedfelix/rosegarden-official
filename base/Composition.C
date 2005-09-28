@@ -185,6 +185,8 @@ Composition::Composition() :
     m_notationQuantizer(new NotationQuantizer()),
     m_position(0),
     m_defaultTempo(getTempoForQpm(120.0)),
+    m_minTempo(0),
+    m_maxTempo(0),
     m_startMarker(0),
     m_endMarker(getBarRange(m_defaultNbBars).first),
     m_loopStart(0),
@@ -481,6 +483,9 @@ Composition::clear()
 
     m_timeSigSegment.clear();
     m_tempoSegment.clear();
+    m_defaultTempo = getTempoForQpm(120.0);
+    m_minTempo = 0;
+    m_maxTempo = 0;
     m_loopStart = 0;
     m_loopEnd = 0;
     m_position = 0;
@@ -804,6 +809,9 @@ Composition::addTempoAtTime(timeT time, tempoT tempo)
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
+    if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+    if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+
     m_tempoTimestampsNeedCalculating = true;
     updateRefreshStatuses();
 
@@ -840,8 +848,22 @@ Composition::getTempoChange(int n) const
 void
 Composition::removeTempoChange(int n)
 {
+    tempoT oldTempo = m_tempoSegment[n]->get<Int>(TempoProperty);
     m_tempoSegment.erase(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
+
+    if (oldTempo == m_minTempo ||
+	oldTempo == m_maxTempo) {
+	m_minTempo = 0;
+	m_maxTempo = 0;
+	for (ReferenceSegment::iterator i = m_tempoSegment.begin();
+	     i != m_tempoSegment.end(); ++i) {
+	    tempoT tempo = (*i)->get<Int>(TempoProperty);
+	    if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+	    if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+	}
+    }
+
     updateRefreshStatuses();
     notifyTempoChanged();
 }

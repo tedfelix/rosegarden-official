@@ -413,7 +413,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, doc, 0, 20, false, getCentralWidget());
+	(&m_hlayout, doc, 0, 24, false, getCentralWidget());
     addRuler(m_tempoRuler);
 
     // make tempo ruler double click editable

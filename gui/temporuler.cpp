@@ -60,8 +60,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 //    m_font.setPixelSize(m_height * 2 / 3);
 //    m_boldFont.setPixelSize(m_height * 2 / 3);
 
-    m_font.setPixelSize(m_height / 2 + 2);
-    m_boldFont.setPixelSize(m_height / 2 + 2);
+    m_font.setPixelSize(m_height / 3);
+    m_boldFont.setPixelSize(m_height * 2 / 5);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
@@ -136,7 +136,8 @@ void
 TempoRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
-    paint.setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerForeground));
+    paint.setPen(Rosegarden::GUIPalette::getColour
+		 (Rosegarden::GUIPalette::TextRulerForeground));
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
@@ -150,7 +151,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("019");
     int fontHeight = boundsForHeight.height();
-    int textY = fontHeight + 1;
+    int textY = fontHeight + 2;
 
     double prevEndX = -1000.0;
     double prevTempo = 0.0;
@@ -161,25 +162,34 @@ TempoRuler::paintEvent(QPaintEvent* e)
     int timeSigChangeHere = 2;
     TimePoints timePoints;
 
-    for (int tempoNo = m_composition->getTempoChangeNumberAt(from) + 1;
-	 tempoNo <= m_composition->getTempoChangeNumberAt(to); ++tempoNo) {
+    for (int tempoNo = m_composition->getTempoChangeNumberAt(from);
+	 tempoNo <= m_composition->getTempoChangeNumberAt(to) + 1; ++tempoNo) {
 
-	timePoints.insert
-	    (TimePoints::value_type
-	     (m_composition->getTempoChange(tempoNo).first,
-	      tempoChangeHere));
-    }
-
-    for (int sigNo = m_composition->getTimeSignatureNumberAt(from) + 1;
-	 sigNo <= m_composition->getTimeSignatureNumberAt(to); ++sigNo) {
-
-	timeT time(m_composition->getTimeSignatureChange(sigNo).first);
-	if (timePoints.find(time) != timePoints.end()) {
-	    timePoints[time] |= timeSigChangeHere;
-	} else {
-	    timePoints.insert(TimePoints::value_type(time, timeSigChangeHere));
+	if (tempoNo >= 0 && tempoNo < m_composition->getTempoChangeCount()) {
+	    timePoints.insert
+		(TimePoints::value_type
+		 (m_composition->getTempoChange(tempoNo).first,
+		  tempoChangeHere));
 	}
     }
+
+    for (int sigNo = m_composition->getTimeSignatureNumberAt(from);
+	 sigNo <= m_composition->getTimeSignatureNumberAt(to) + 1; ++sigNo) {
+
+	if (sigNo >= 0 && sigNo < m_composition->getTimeSignatureCount()) {
+	    timeT time(m_composition->getTimeSignatureChange(sigNo).first);
+	    if (timePoints.find(time) != timePoints.end()) {
+		timePoints[time] |= timeSigChangeHere;
+	    } else {
+		timePoints.insert(TimePoints::value_type(time, timeSigChangeHere));
+	    }
+	}
+    }
+
+    int lastx = 0, lasty = 0;
+    bool haveSome = false;
+    Rosegarden::tempoT minTempo = m_composition->getMinTempo();
+    Rosegarden::tempoT maxTempo = m_composition->getMaxTempo();
 
     for (TimePoints::iterator i = timePoints.begin(); ; ++i) {
 
@@ -199,8 +209,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    t1 = i->first;
 	}
 
-	QColor colour = TempoColour::getColour
-	    (m_composition->getTempoQpm(m_composition->getTempoAtTime(t0)));
+	Rosegarden::tempoT tempo = m_composition->getTempoAtTime(t0);
+
+	QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
         paint.setBrush(colour);
 
@@ -209,11 +220,37 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
         paint.drawRect(static_cast<int>(x0), 0, static_cast<int>(x1 - x0), height());
 
+	int drawh = height() - 4;
+	int y = drawh / 2;
+	if (maxTempo > minTempo) {
+	    y = drawh - 
+		int((double(tempo - minTempo) / double(maxTempo - minTempo))
+		    * drawh + 0.5);
+	}
+	y += 2;
+	if (haveSome) {
+	    int x = int(x0) + 1;
+	    paint.setPen(Qt::black);
+	    paint.drawLine(lastx + 1, lasty, x - 2, lasty);
+	    paint.drawRect(x - 1, y - 1, 3, 3);
+	    paint.setPen(Qt::white);
+	    paint.drawPoint(x, y);
+	}
+	lastx = int(x0) + 1;
+	lasty = y;
+	haveSome = true;
+
 	if (i == timePoints.end()) break;
+    }
+
+    if (haveSome) {
+	paint.setPen(Qt::black);
+	paint.drawLine(lastx + 1, lasty, width(), lasty);
     }
 
     paint.setPen(Qt::black);
     paint.setBrush(Qt::black);
+    paint.drawLine(0, 0, width(), 0);
 
     for (TimePoints::iterator i = timePoints.begin();
 	 i != timePoints.end(); ++i) {
@@ -221,12 +258,13 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	timeT time = i->first;
 	double x = m_rulerScale->getXForTime(time) + m_currentXOffset
                    + m_xorigin;
-	
+
+/*	
 	paint.drawLine(static_cast<int>(x),
-//		       height() - (height()/3 - 2),
-		       height() - (height()/3),
+		       height() - (height()/4),
 		       static_cast<int>(x),
 		       height());
+*/
 
 	if (i->second & timeSigChangeHere) {
 
@@ -247,16 +285,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    long bpm = long(tempo);
 	    long frac = long(tempo * 100 + 0.001) - 100 * bpm;
 
-	    QString tempoString;
-	    if (frac) {
-		if (frac < 10) {
-		    tempoString = QString("%1.0%2").arg(bpm).arg(frac);
-		} else {
-		    tempoString = QString("%1.%2").arg(bpm).arg(frac);
-		}
-	    } else {
-		tempoString = QString("%1").arg(bpm);
-	    }
+	    QString tempoString = QString("%1").arg(bpm);
+
 	    if (tempo == prevTempo) {
 		if (m_small) continue;
 		tempoString = "=";

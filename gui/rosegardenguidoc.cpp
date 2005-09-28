@@ -1310,6 +1310,8 @@ RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
     if (progress) {
 	connect(&handler, SIGNAL(setProgress(int)),
 		progress->progressBar(), SLOT(setValue(int)));
+	connect(&handler, SIGNAL(setOperationName(QString)),
+		progress, SLOT(slotSetOperationName(QString)));
 	connect(&handler, SIGNAL(incrementProgress(int)),
 		progress->progressBar(), SLOT(advance(int)));
 	connect(progress, SIGNAL(cancelClicked()),
@@ -2280,6 +2282,8 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
 
     connect(&m_audioFileManager, SIGNAL(setProgress(int)),
             progressDlg->progressBar(), SLOT(setValue(int)));
+    connect(&m_audioFileManager, SIGNAL(setOperationName(QString)),
+	    progressDlg, SLOT(slotSetOperationName(QString)));
             
     try
     {
