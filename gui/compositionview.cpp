@@ -334,7 +334,7 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint
 
     // move iterator forward
     //
-    while((npi->x() + npi->width()) <= xLim && npi != npEnd) ++npi;
+    while (npi->x() < xLim && npi != npEnd) ++npi;
 
     interval.range.second = npi;
     interval.basePoint = QPoint(0, basePoint.y());
@@ -480,6 +480,7 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
 
 	if (x <= segStartX) { ++x; if (width > 1) --width; }
 	if (width > 1) --width;
+	if (width < 1) ++width;
 
         double y0 = 0;
         double y1 = m_grid.getYSnap();
