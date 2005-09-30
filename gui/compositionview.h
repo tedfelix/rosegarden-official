@@ -115,32 +115,22 @@ class CompositionModel : public QObject, public Rosegarden::CompositionObserver,
 {
 public:
 
-    struct RectCompare {
-	bool operator()(const QRect &r1, const QRect &r2) const {
-	    return r1.x() < r2.x();
-	}
-    };
-
     struct CompositionItemCompare {
 	bool operator()(const CompositionItem &c1, const CompositionItem &c2) const {
 	    return c1->hashKey() < c2->hashKey();
 	}
     };
 
-    typedef std::multiset<PreviewRect, RectCompare> PRectList;
-
+    typedef std::vector<PreviewRect> previewrectlist;
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
-    typedef PRectList NotationPreviewData;
     struct PRectRange {
-        std::pair<NotationPreviewData::iterator, NotationPreviewData::iterator> range;
+        std::pair<previewrectlist::iterator, previewrectlist::iterator> range;
         QPoint basePoint;
     };
 
     typedef std::vector<PRectRange> PRectRanges;
-
-    typedef std::vector<PreviewRect> previewrectlist;
 
     class AudioPreviewData {
     public:
@@ -263,7 +253,7 @@ public:
     void clearDirtyPreviews();
     void clearSegmentRectsCache() { clearInCache(0); }
 
-    NotationPreviewData* makeNotationPreviewDataCache(const Rosegarden::Segment *s);
+    previewrectlist* makeNotationPreviewDataCache(const Rosegarden::Segment *s);
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
     CompositionRect computeSegmentRect(const Rosegarden::Segment&);
@@ -302,9 +292,9 @@ protected:
     bool isRecording(const Rosegarden::Segment*) const;
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
-    void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, NotationPreviewData*);
+    void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, previewrectlist*);
     void updatePreviewCacheForAudioSegment(const Rosegarden::Segment* s, AudioPreviewData*);
-    NotationPreviewData* getNotationPreviewData(const Rosegarden::Segment* s);
+    previewrectlist* getNotationPreviewData(const Rosegarden::Segment* s);
     AudioPreviewData* getAudioPreviewData(const Rosegarden::Segment* s);
 
     void makePreviewCache(Rosegarden::Segment* s);
@@ -336,7 +326,7 @@ protected:
 
     AudioPreviewThread*          m_audioPreviewThread;
 
-    typedef QPtrDict<NotationPreviewData> NotationPreviewDataCache;
+    typedef QPtrDict<previewrectlist> NotationPreviewDataCache;
     typedef QPtrDict<AudioPreviewData>    AudioPreviewDataCache;
 
     NotationPreviewDataCache     m_notationPreviewDataCache;

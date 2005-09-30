@@ -315,13 +315,29 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     return m_res;
 }
 
+struct RectCompare {
+    bool operator()(const QRect &r1, const QRect &r2) const {
+        return r1.x() < r2.x();
+    }
+};
+
+
+
 void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint basePoint,
                                                     const Segment* segment, const QRect& clipRect)
 {
-    NotationPreviewData* cachedNPData = getNotationPreviewData(segment);
+    previewrectlist* cachedNPData = getNotationPreviewData(segment);
 
-    NotationPreviewData::iterator npi = cachedNPData->lower_bound(clipRect),
-        npEnd = cachedNPData->end();
+    if (cachedNPData->empty())
+        return;
+
+    previewrectlist::iterator npEnd = cachedNPData->end();
+
+    previewrectlist::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
+
+    if (npi == npEnd)
+        return;
+
     if (npi != cachedNPData->begin())
         --npi;
 
@@ -349,9 +365,6 @@ void CompositionModelImpl::makeAudioPreviewRects(previewrectlist* apRects, const
 
     if (values.size() == 0)
         return;
-
-    int segEndX = segRect.topRight().x();
-    int xLim = std::min(clipRect.topRight().x(), segEndX);
 
     const int height = m_grid.getYSnap()/2 - 2;
     const int halfRectHeight = m_grid.getYSnap()/2;
@@ -426,7 +439,7 @@ void CompositionModelImpl::makeAudioPreviewRects(previewrectlist* apRects, const
         const QColor defaultCol = CompositionColourCache::getInstance()->SegmentAudioPreview;
 
         QColor color;
-	int baseY = halfRectHeight + segRect.y();
+	int baseX = segRect.x(), baseY = halfRectHeight + segRect.y();
 
 	// h1 left, h2 right
 
@@ -436,7 +449,7 @@ void CompositionModelImpl::makeAudioPreviewRects(previewrectlist* apRects, const
 	int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, height);
 	if (h < 0) h = 0;
 
-        PreviewRect r(i, baseY - h, width, h);
+        PreviewRect r(i + baseX, baseY - h, width, h);
         r.setColor(color);
 
         apRects->push_back(r);
@@ -447,7 +460,7 @@ void CompositionModelImpl::makeAudioPreviewRects(previewrectlist* apRects, const
 	h = Rosegarden::AudioLevel::multiplier_to_preview(h2, height);
 	if (h < 0) h = 0;
 
-        PreviewRect r2(i, baseY, width, h);
+        PreviewRect r2(i + baseX, baseY, width, h);
         r2.setColor(color);
 
         apRects->push_back(r2);
@@ -554,12 +567,11 @@ void CompositionModelImpl::clearPreviewCache()
     m_audioPreviewDataCache.clear();
 }
 
-void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, NotationPreviewData* npData)
+void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, previewrectlist* npData)
 {
     npData->clear();
     
     int segStartX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
-//     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
     QColor segColor = computeSegmentNotationPreviewColor(segment);
 
     for (Segment::iterator i = segment->begin();
@@ -598,7 +610,7 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
 //         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : npData = "
 //                  << npData << ", preview rect = "
 //                  << r << endl;
-        npData->insert(r);
+        npData->push_back(r);
     }
 
 }
@@ -682,9 +694,9 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
     emit needUpdate(computeSegmentRect(*(apu->getSegment())));
 }
 
-CompositionModel::NotationPreviewData* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
+CompositionModel::previewrectlist* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
 {
-    NotationPreviewData* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+    previewrectlist* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
  
     if (!npData) {
         npData = makeNotationPreviewDataCache(s);
@@ -720,7 +732,7 @@ void CompositionModelImpl::refreshDirtyPreviews()
                      << s << endl;
             updatePreviewCacheForAudioSegment(s, apData);
         } else {
-            NotationPreviewData* npData = getNotationPreviewData(s);
+            previewrectlist* npData = getNotationPreviewData(s);
             updatePreviewCacheForNotationSegment(s, npData);
         }
     }
@@ -786,9 +798,9 @@ void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s,
     clearInCache(s);
 }
 
-CompositionModel::NotationPreviewData* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+CompositionModel::previewrectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
-    NotationPreviewData* npData = new NotationPreviewData();
+    previewrectlist* npData = new previewrectlist();
     updatePreviewCacheForNotationSegment(s, npData);
     m_notationPreviewDataCache.insert(const_cast<Segment*>(s), npData);
 
