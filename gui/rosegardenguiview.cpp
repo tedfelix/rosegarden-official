@@ -849,8 +849,6 @@ void RosegardenGUIView::setZoomSize(double size)
 {
     m_rulerScale->setUnitsPerPixel(size);
 
-    //m_trackEditor->slotReadjustCanvasSize();
-
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
 
     double xScale = duration44/(size * barWidth44);
@@ -1249,11 +1247,9 @@ void RosegardenGUIView::slotShowSegmentLabels(bool v)
 
 void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
 {
-    // nothing to do anymore with the new canvas
-//     if (!m_trackEditor->getSegmentCanvas()->isShowingPreviews()) return;
-//     RG_DEBUG << "RosegardenGUIView::slotUpdateAudioPreviews" << endl;
-//     m_trackEditor->getSegmentCanvas()->canvas()->setAllChanged();
-//     m_trackEditor->getSegmentCanvas()->canvas()->update();
+    if (m_trackEditor->getSegmentCanvas()->isShowingPreviews()) {
+        m_trackEditor->getSegmentCanvas()->slotUpdate();
+    }
 }
 	
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
