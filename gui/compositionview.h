@@ -128,7 +128,6 @@ public:
     };
 
     typedef std::multiset<PreviewRect, RectCompare> PRectList;
-    typedef std::multiset<CompositionRect, RectCompare> CRectList;
 
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
@@ -155,20 +154,16 @@ public:
         void setChannels(unsigned int c) { m_channels = c;      }
 
         const std::vector<float> &getValues() const { return m_values;  }
-	void setValues(const std::vector<float>&v) { m_values = v; m_previewRects.clear(); }
+	void setValues(const std::vector<float>&v) { m_values = v; }
 
         QRect getSegmentRect()              { return m_segmentRect; }
         void setSegmentRect(const QRect& r) { m_segmentRect = r; }
-
-        void addPreviewRect(const PreviewRect& r) { m_previewRects.insert(r); }
-        const PRectList& getPreviewRects() { return m_previewRects; }
 
     protected:
         std::vector<float> m_values;
         bool               m_showMinima;
         unsigned int       m_channels;
         QRect              m_segmentRect;
-        PRectList          m_previewRects;
 
     private:
         // no copy ctor
@@ -315,8 +310,8 @@ protected:
     void makePreviewCache(Rosegarden::Segment* s);
     void removePreviewCache(Rosegarden::Segment* s);
     void makeNotationPreviewRects(PRectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
-    void makeAudioPreviewRects(previewrectlist* apRects, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
-    void postProcessAudioPreview(AudioPreviewData*, const Rosegarden::Segment*);
+    void makeAudioPreviewRects(previewrectlist* apRects, const Rosegarden::Segment*,
+                               const CompositionRect& segRect, const QRect& clipRect);
 
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
 
