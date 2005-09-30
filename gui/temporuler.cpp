@@ -35,6 +35,7 @@
 using Rosegarden::RulerScale;
 using Rosegarden::Composition;
 using Rosegarden::timeT;
+using Rosegarden::tempoT;
 
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
@@ -50,6 +51,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_currentXOffset(0),
     m_width(-1),
     m_small(small),
+    m_illuminate(-1),
+    m_refreshLinesOnly(false),
     m_composition(&doc->getComposition()),
     m_rulerScale(rulerScale),
     m_fontMetrics(m_boldFont)
@@ -65,13 +68,15 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
-    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
+//    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
+    setBackgroundMode(Qt::NoBackground);
 
     QObject::connect
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	 this, SLOT(update()));
 
-    QToolTip::add(this, i18n("Tempo and Time Signature Ruler.\nDouble click to insert an event."));
+//    QToolTip::add(this, i18n("Tempo and Time Signature Ruler.\nDouble click to insert an event."));
+    setMouseTracking(false);
 }
 
 TempoRuler::~TempoRuler()
@@ -100,6 +105,50 @@ TempoRuler::slotScrollHoriz(int x)
     }
 }
 
+
+void
+TempoRuler::mouseReleaseEvent(QMouseEvent *e)
+{
+}
+
+void
+TempoRuler::mouseMoveEvent(QMouseEvent *e)
+{
+    int x = e->x() + 1;
+    int y = e->y();
+    timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
+    int tcn = m_composition->getTempoChangeNumberAt(t);
+    if (tcn >= 0 && tcn < m_composition->getTempoChangeCount()) {
+	std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+	int bar, beat, fraction, remainder;
+	m_composition->getMusicalTimeForAbsoluteTime(tc.first, bar, beat,
+						     fraction, remainder);
+	RG_DEBUG << "Tempo change: tempo " << m_composition->getTempoQpm(tc.second) << " at " << bar << ":" << beat << ":" << fraction << ":" << remainder << endl;
+	m_illuminate = tcn;
+	m_refreshLinesOnly = true;
+	update();
+    }
+}
+
+void
+TempoRuler::wheelEvent(QWheelEvent *e)
+{
+}
+
+void
+TempoRuler::enterEvent(QEvent *)
+{
+    setMouseTracking(true);
+}    
+
+void
+TempoRuler::leaveEvent(QEvent *)
+{
+    setMouseTracking(false);
+    m_illuminate = -1;
+    m_refreshLinesOnly = true;
+    update();
+}    
 
 void
 TempoRuler::mousePressEvent(QMouseEvent *e)
@@ -188,8 +237,14 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     int lastx = 0, lasty = 0;
     bool haveSome = false;
-    Rosegarden::tempoT minTempo = m_composition->getMinTempo();
-    Rosegarden::tempoT maxTempo = m_composition->getMaxTempo();
+    tempoT minTempo = m_composition->getMinTempo();
+    tempoT maxTempo = m_composition->getMaxTempo();
+    bool illuminate = false;
+
+    if (m_illuminate >= 0) {
+	int tcn = m_composition->getTempoChangeNumberAt(from);
+	illuminate = (m_illuminate == tcn);
+    }
 
     for (TimePoints::iterator i = timePoints.begin(); ; ++i) {
 
@@ -209,7 +264,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    t1 = i->first;
 	}
 
-	Rosegarden::tempoT tempo = m_composition->getTempoAtTime(t0);
+	tempoT tempo = m_composition->getTempoAtTime(t0);
 
 	QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
@@ -218,7 +273,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	double x0, x1;
 	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
 	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
-        paint.drawRect(static_cast<int>(x0), 0, static_cast<int>(x1 - x0), height());
+	if (!m_refreshLinesOnly) {
+	    paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
+	}
 
 	int drawh = height() - 4;
 	int y = drawh / 2;
@@ -229,23 +286,38 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	}
 	y += 2;
 	if (haveSome) {
+
 	    int x = int(x0) + 1;
-	    paint.setPen(Qt::black);
+
+	    paint.setPen(illuminate ? Qt::white : Qt::black);
 	    paint.drawLine(lastx + 1, lasty, x - 2, lasty);
+
+	    if (m_illuminate >= 0) {
+		int tcn = m_composition->getTempoChangeNumberAt(t0);
+		illuminate = (m_illuminate == tcn);
+	    }
+
+	    paint.setPen(illuminate ? Qt::white : Qt::black);
 	    paint.drawRect(x - 1, y - 1, 3, 3);
-	    paint.setPen(Qt::white);
+
+	    paint.setPen(illuminate ? Qt::black : Qt::white);
 	    paint.drawPoint(x, y);
 	}
 	lastx = int(x0) + 1;
 	lasty = y;
-	haveSome = true;
-
 	if (i == timePoints.end()) break;
+	haveSome = true;
     }
 
     if (haveSome) {
-	paint.setPen(Qt::black);
+	paint.setPen(illuminate ? Qt::white : Qt::black);
 	paint.drawLine(lastx + 1, lasty, width(), lasty);
+    } else if (!m_refreshLinesOnly) {
+	tempoT tempo = m_composition->getTempoAtTime(from);
+	QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
+        paint.setPen(colour);
+        paint.setBrush(colour);
+	paint.drawRect(e->rect());
     }
 
     paint.setPen(Qt::black);
@@ -266,7 +338,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 		       height());
 */
 
-	if (i->second & timeSigChangeHere) {
+	if ((i->second & timeSigChangeHere) && !m_refreshLinesOnly) {
 
 	    Rosegarden::TimeSignature sig =
 		m_composition->getTimeSignatureAt(time);
@@ -279,11 +351,11 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    paint.drawText(static_cast<int>(x) + 2, m_height - 2, str);
 	}
 
-	if (i->second & tempoChangeHere) { 
+	if ((i->second & tempoChangeHere) && !m_refreshLinesOnly) { 
 
 	    double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(time));
 	    long bpm = long(tempo);
-	    long frac = long(tempo * 100 + 0.001) - 100 * bpm;
+//	    long frac = long(tempo * 100 + 0.001) - 100 * bpm;
 
 	    QString tempoString = QString("%1").arg(bpm);
 
@@ -311,6 +383,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    prevEndX = x + bounds.width();
 	}
     }
+
+    m_refreshLinesOnly = false;
 }
 
 #include "temporuler.moc"
