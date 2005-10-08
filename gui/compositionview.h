@@ -273,6 +273,7 @@ public:
     // SegmentObserver
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
+    virtual void appearanceChanged(const Rosegarden::Segment *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool /*shorten*/);
     virtual void segmentDeleted(const Rosegarden::Segment*) { /* nothing to do - handled by CompositionObserver::segmentRemoved() */ };
 

@@ -626,6 +626,7 @@ private: // stuff to support SegmentObservers
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
+    void notifyAppearanceChange() const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifySourceDeletion() const;
 
@@ -670,6 +671,12 @@ public:
      * and just before it is deleted
      */
     virtual void eventRemoved(const Segment *, Event *) { }
+
+    /**
+     * Called after a change in the segment that will change the way its displays,
+     * like a label change for instance
+     */
+    virtual void appearanceChanged(const Segment *) { }
 
     /**
      * Called after the segment's end marker time has been

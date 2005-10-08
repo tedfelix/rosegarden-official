@@ -32,6 +32,8 @@ typedef std::vector<ControlParameter> ControlList;
 class Controllable
 {
 public:
+    virtual ~Controllable() {}
+    
     virtual const ControlList &getControlParameters() const = 0;
     virtual const ControlParameter *getControlParameter(int index) const = 0;
     virtual const ControlParameter *getControlParameter(const std::string &type,

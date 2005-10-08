@@ -755,6 +755,11 @@ void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden
     m_dirtySegments.insert(s);
 }
 
+void CompositionModelImpl::appearanceChanged(const Rosegarden::Segment *s)
+{
+    clearInCache(s);
+}
+
 void CompositionModelImpl::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
 {
     clearInCache(s);

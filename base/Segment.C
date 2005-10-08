@@ -935,6 +935,7 @@ Segment::setLabel(const std::string &label)
 {
     m_label = label; 
     if (m_composition) m_composition->updateRefreshStatuses();
+    notifyAppearanceChange();
 }
 
 bool
@@ -1068,6 +1069,15 @@ Segment::notifyRemove(Event *e) const
     }
 }
  
+
+void
+Segment::notifyAppearanceChange() const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->appearanceChanged(this);
+    }
+}
 
 void
 Segment::notifyEndMarkerChange(bool shorten) const
