@@ -230,7 +230,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
                                                                              PRectRanges* npData,
                                                                              previewrectlist* apData)
 {
-    Rosegarden::Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
+//    Rosegarden::Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
 
     m_res.clear();
 
@@ -1078,7 +1078,7 @@ Rosegarden::timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const C
 
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 {
-    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentOrigin", true);
+//    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentOrigin", true);
 
     int trackPosition = m_composition.getTrackById(s.getTrack())->getPosition();
     Rosegarden::timeT startTime = s.getStartTime();
@@ -1123,7 +1123,7 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
 
 CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 {
-    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
+//    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
 
     QPoint origin = computeSegmentOrigin(s);
 
@@ -1601,7 +1601,7 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
 void CompositionView::refreshDrawBuffer(const QRect& rect)
 {
-    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
+//    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
 //     RG_DEBUG << "CompositionView::refreshDrawBuffer() r = "
 //              << rect << endl;
 
@@ -1626,7 +1626,7 @@ void CompositionView::refreshDrawBuffer(const QRect& rect)
 
 void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 {
-    Rosegarden::Profiler profiler("CompositionView::drawArea", true);
+//    Rosegarden::Profiler profiler("CompositionView::drawArea", true);
 
 //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 

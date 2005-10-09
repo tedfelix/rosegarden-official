@@ -102,7 +102,7 @@ AudioPreviewThread::process()
                                             req.showMinima);
         } catch (std::string e) {
 	
-            //		RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
+	    RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
 	
             // OK, we hope this just means we're still recording -- so
             // leave this one in the queue
@@ -148,7 +148,7 @@ AudioPreviewThread::requestPreview(const Request &request)
 {
     m_mutex.lock();
 
-    RG_DEBUG << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << endl;
+    RG_DEBUG << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << endl;
 
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
 	if (i->second.second.notify == request.notify) {

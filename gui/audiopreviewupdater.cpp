@@ -38,16 +38,17 @@ AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
 {
 }
 
+static std::set<void *> apu_deleted;
+
 AudioPreviewUpdater::~AudioPreviewUpdater()
 {
-    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater\n";
+    apu_deleted.insert(this);
+    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater on " << this << " ( token " << m_previewToken << ")" << endl;
     if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
 }
 
 void AudioPreviewUpdater::update()
 {
-//!!!    m_apData.setSegmentRect(m_rect);
-
     // Get sample start and end times and work out duration
     //
     Rosegarden::RealTime audioStartTime = m_segment->getAudioStartTime();
@@ -73,7 +74,11 @@ void AudioPreviewUpdater::update()
 
 bool AudioPreviewUpdater::event(QEvent *e)
 {
-    RG_DEBUG << "AudioPreviewUpdater::event\n";
+    RG_DEBUG << "AudioPreviewUpdater::event (" << this << ")" << endl;
+
+    if (apu_deleted.find(this) != apu_deleted.end()) {
+	RG_DEBUG << "\nAudioPreviewUpdater::event: WARNING: THIS AudioPreviewUpdater HAS ALREADY BEEN DELETED\n" << endl;
+    }
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
@@ -85,9 +90,7 @@ bool AudioPreviewUpdater::event(QEvent *e)
 
 	    if (m_previewToken >= 0 && token >= m_previewToken) {
 		m_previewToken = -1;
-//!!!		m_thread.getPreview(token, channels, m_apData.getValues());
 		m_thread.getPreview(token, m_channels, m_values);
-//!!!		m_apData.setValues(tmp);
 
 		if (m_channels == 0) {
 		    RG_DEBUG << "AudioPreviewUpdater: failed to find preview!\n";
@@ -95,8 +98,6 @@ bool AudioPreviewUpdater::event(QEvent *e)
 
 		    RG_DEBUG << "AudioPreviewUpdater: got correct preview (" << m_channels
                              << " channels, " << m_values.size() << " samples)\n";
-
-//!!!		    m_apData.setChannels(channels);
 		}
 
 	    } else {
