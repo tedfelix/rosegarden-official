@@ -83,7 +83,9 @@ env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
 
 env.Append(CCFLAGS = '-DVERSION=\\"' + VERSION + '\\"')
 
-env.Append(CCFLAGS = '-DNO_TIMING')
+##!!! WTF? This is supposed to be defined if NDEBUG is set, which is supposed
+## to happen if debug is not actively requested
+##env.Append(CCFLAGS = '-DNO_TIMING')
 
 #-----------------------------
 #        Build
