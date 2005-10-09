@@ -38,11 +38,8 @@ AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
 {
 }
 
-static std::set<void *> apu_deleted;
-
 AudioPreviewUpdater::~AudioPreviewUpdater()
 {
-    apu_deleted.insert(this);
     RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater on " << this << " ( token " << m_previewToken << ")" << endl;
     if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
 }
@@ -75,10 +72,6 @@ void AudioPreviewUpdater::update()
 bool AudioPreviewUpdater::event(QEvent *e)
 {
     RG_DEBUG << "AudioPreviewUpdater::event (" << this << ")" << endl;
-
-    if (apu_deleted.find(this) != apu_deleted.end()) {
-	RG_DEBUG << "\nAudioPreviewUpdater::event: WARNING: THIS AudioPreviewUpdater HAS ALREADY BEEN DELETED\n" << endl;
-    }
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);

@@ -25,6 +25,8 @@
 #include <vector>
 #include <algorithm>
 
+//#define NO_TIMING 1
+
 #ifdef NDEBUG
 #define NO_TIMING 1
 #endif
