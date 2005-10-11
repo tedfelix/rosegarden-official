@@ -1402,7 +1402,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 	if (track) {
 	    Rosegarden::Instrument *instrument = 
 		m_studio.getInstrumentById(track->getInstrument());
-	    if (instrument->getType() == Rosegarden::Instrument::Midi) {
+	    if (instrument->getType() == Rosegarden::Instrument::Midi ||
+		instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 		midiRecordTrack = track;
 		break;
 	    }
