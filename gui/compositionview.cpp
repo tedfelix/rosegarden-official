@@ -56,9 +56,9 @@ timeT CompositionItemHelper::getStartTime(const CompositionItem& item, const Ros
     timeT t = 0;
 
     if (item) {
- 	// t = std::max(grid.snapX(item->rect().x()) - 1, 0L); - wrong, we can have negative start times,
+ 	// t = std::max(grid.snapX(item->rect().x()), 0L); - wrong, we can have negative start times,
         // and if we do this we 'crop' segments when they are moved before the start of the composition
-	t = grid.snapX(item->rect().x()) - 1;
+	t = grid.snapX(item->rect().x());
 
         RG_DEBUG << "CompositionItemHelper::getStartTime(): item is repeating : " << item->isRepeating()
                  << " - startTime = " << t
@@ -75,7 +75,7 @@ timeT CompositionItemHelper::getEndTime(const CompositionItem& item, const Roseg
     if (item) {
         QRect itemRect = item->rect();
         
-        t = std::max(grid.snapX(itemRect.x() + itemRect.width()) - 1, 0L);
+        t = std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
 
         RG_DEBUG << "CompositionItemHelper::getEndTime() : rect width = "
                  << itemRect.width()
