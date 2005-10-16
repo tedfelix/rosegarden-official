@@ -517,7 +517,7 @@ protected:
      * @return false if parsing failed
      * @see RoseXmlHandler
      */
-    bool xmlParse(QIODevice* file, QString &errMsg,
+    bool xmlParse(QString fileContents, QString &errMsg,
                   RosegardenProgressDialog *progress,
                   unsigned int elementCount,
 		  bool permanent,

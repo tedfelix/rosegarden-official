@@ -26,6 +26,7 @@
 #include <unistd.h> // sleep
 
 // include files for Qt
+#include <qbuffer.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwidget.h>
@@ -364,6 +365,7 @@ void RosegardenGUIDoc::performAutoload()
 
 }
 
+#include <iostream>
 
 bool RosegardenGUIDoc::openDocument(const QString& filename,
 				    bool permanent,
@@ -417,9 +419,28 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 //                  << endl;
 
 
+        // Fugly work-around in case of broken rg files
+        //
+        int c = 0;
+        std::vector<char> baseBuffer;
+    
+        while (c >= 0) {
+            c = fileCompressedDevice->getch();
+            if (c>=0)
+                baseBuffer.push_back(c);
+        }
+        baseBuffer.push_back(0);
+
+        fileCompressedDevice->close();
+
+        QString fileContents(&baseBuffer[0]);
+
         // parse xml file
-	okay = xmlParse(fileCompressedDevice, errMsg, &progressDlg,
+	okay = xmlParse(fileContents, errMsg, &progressDlg,
                         elementCount, permanent, cancelled);
+// 	okay = xmlParse(fileCompressedDevice, errMsg, &progressDlg,
+//                         elementCount, permanent, cancelled);
+        delete fileCompressedDevice;
 
     }
 
@@ -1058,6 +1079,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         return false;
     }
 
+    fileCompressedDevice->close();
 
     delete fileCompressedDevice; // DO NOT USE outStream AFTER THIS POINT
     
@@ -1296,8 +1318,15 @@ bool RosegardenGUIDoc::isSequencerRunning()
     return parentApp->isSequencerRunning();
 }
 
+class RGXmlInputSource : public QXmlInputSource 
+{
+public:
+    virtual void fetchData();
+};
+
+
 bool
-RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
+RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                            RosegardenProgressDialog *progress,
                            unsigned int elementCount,
 			   bool permanent,
@@ -1318,7 +1347,8 @@ RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
 		&handler, SLOT(slotCancel()));
     }
     
-    QXmlInputSource source(file);
+    QXmlInputSource source;
+    source.setData(fileContents);
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
