@@ -3426,6 +3426,8 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
     midiFile.convertToRosegarden(newDoc->getComposition(),
                                  Rosegarden::MidiFile::CONVERT_REPLACE);
 
+    updateTextEncodings(&newDoc->getComposition());
+    
     // Set modification flag
     //
     newDoc->slotDocumentModified();

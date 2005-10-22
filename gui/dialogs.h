@@ -1031,4 +1031,24 @@ protected:
     KComboBox *m_comboBox;
 };
 
+
+class IdentifyTextCodecDialog : public KDialogBase
+{
+    Q_OBJECT
+    
+public:
+    IdentifyTextCodecDialog(QWidget *parent, std::string text);
+
+    std::string getCodec() const { return m_codec; }
+
+protected slots:
+    void slotCodecSelected(const QString &c);
+
+protected:
+    std::string m_text;
+    std::string m_codec;
+    QLabel *m_example;
+};
+
+
 #endif

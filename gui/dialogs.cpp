@@ -41,6 +41,7 @@
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <qtextedit.h>
+#include <qtextcodec.h>
 #include <qaccel.h>
 
 #include <klocale.h>
@@ -5352,4 +5353,57 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
     m_comboBox->setCurrentItem(0);
     layout->addWidget(m_comboBox, 0, 1); 
 }
+
+
+IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
+						 std::string text) :
+    KDialogBase(parent, 0, true, i18n("Choose Text Encoding"), Ok),
+    m_text(text)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    new QLabel(i18n("\nThis file contains text in an unknown language encoding.\n\nPlease select, from the following estimated text encodings,\nthe encoding to use for text in this file:\n"), vbox);
+
+    KComboBox *codecs = new KComboBox(vbox);
+    
+    std::string defaultCodec;
+    QTextCodec *cc = QTextCodec::codecForContent(text.c_str(), text.length());
+    QTextCodec *codec = 0;
+    
+    std::cerr << "cc is " << (cc ? cc->name() : "null") << std::endl;
+
+    int i = 0;
+    while ((codec = QTextCodec::codecForIndex(i)) != 0) {
+	if (codec->heuristicContentMatch(m_text.c_str(), m_text.length()) <= 0) {
+	    ++i;
+	    continue;
+	}
+	std::cerr << "codec " << codec->name() << " probability " << codec->heuristicContentMatch(m_text.c_str(),m_text.length()) << std::endl;
+	std::string name = codec->name();
+	codecs->insertItem(strtoqstr(name), 0);
+	if (cc && (name == cc->name())) codecs->setCurrentItem(0);
+	++i;
+    }
+    
+    connect(codecs, SIGNAL(activated(const QString &)),
+	    this, SLOT(slotCodecSelected(const QString &)));
+    
+    new QLabel(i18n("\nExample text from file:"), vbox);
+    m_example = new QLabel("", vbox);
+    QFont font;
+    font.setStyleHint(QFont::TypeWriter);
+    m_example->setFont(font);
+    m_example->setPaletteForegroundColor(Qt::blue);
+    slotCodecSelected(codecs->currentText());
+}
+
+void
+IdentifyTextCodecDialog::slotCodecSelected(const QString &c)
+{
+    QTextCodec *codec = QTextCodec::codecForName(c);
+    m_codec = qstrtostr(codec->name());
+    QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
+    m_example->setText("\"" + outText + "\"");
+}
+
+
 #include "dialogs.moc"
