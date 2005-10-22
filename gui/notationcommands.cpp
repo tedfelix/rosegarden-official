@@ -426,7 +426,14 @@ MultiKeyInsertionCommand::MultiKeyInsertionCommand(Rosegarden::Composition &c,
     KMacroCommand(getGlobalName(&key))
 {
     for (Rosegarden::Composition::iterator i = c.begin(); i != c.end(); ++i) {
-       addCommand(new KeyInsertionCommand(**i, time, key, convert, transpose));
+	Rosegarden::Segment *segment = *i;
+	// no harm in using getEndTime instead of getEndMarkerTime here:
+	if (segment->getStartTime() <= time && segment->getEndTime() > time) {
+	    addCommand(new KeyInsertionCommand(*segment, time, key, convert, transpose));
+	} else if (segment->getStartTime() > time) {
+	    addCommand(new KeyInsertionCommand(*segment, segment->getStartTime(),
+					       key, convert, transpose));
+	}
     }
 }
 
