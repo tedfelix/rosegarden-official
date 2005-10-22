@@ -3614,8 +3614,8 @@ void NotationView::updateViewCaption()
 
     } else {
 
-        setCaption(i18n("%1 - 1 Segment - Notation", "%1 - %n Segments - Notation", m_segments.size()),
-                   getDocument()->getTitle());
+        setCaption(i18n("%1 - 1 Segment - Notation", "%1 - %n Segments - Notation", m_segments.size())
+                   .arg(getDocument()->getTitle()));
 
     }
 }
