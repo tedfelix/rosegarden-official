@@ -158,13 +158,33 @@ std::string XmlExportable::encode(const std::string &s0)
 	}
     }
 
-    if (bufsiz < buflen + mblen + 1) {
-	bufsiz = 2 * buflen + mblen + 1;
-	buffer = (char *)realloc(buffer, bufsiz);
-    }
     if (mblen > 0) {
-	strncpy(buffer + buflen, multibyte, mblen);
-	buflen += mblen;
+	// does multibyte contain a valid sequence?
+	unsigned int length = 
+	    (!(multibyte[0] & 0x20)) ? 2 :
+	    (!(multibyte[0] & 0x10)) ? 3 :
+	    (!(multibyte[0] & 0x08)) ? 4 :
+	    (!(multibyte[0] & 0x04)) ? 5 : 0;
+
+	if (length == 0 || mblen == length) {
+	    if (bufsiz < buflen + mblen + 1) {
+		bufsiz = 2 * buflen + mblen + 1;
+		buffer = (char *)realloc(buffer, bufsiz);
+	    }
+	    strncpy(buffer + buflen, multibyte, mblen);
+	    buflen += mblen;
+	} else {
+	    if (!warned) {
+		std::cerr
+		    << "WARNING: Invalid utf8 char width in string \""
+		    << s0 << "\" at index " << len << " ("
+		    << mblen << " octet"
+		    << (mblen != 1 ? "s" : "")
+		    << ", expected " << length << ")" << std::endl;
+		warned = true;
+	    }
+	    // and drop the character
+	}
     }
     buffer[buflen] = '\0';
 
