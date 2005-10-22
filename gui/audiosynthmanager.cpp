@@ -86,7 +86,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 	++count;
     }
 
-    for (int i = 0; i < 24; ++i) {
+    for (int i = 0; i < Rosegarden::SoftSynthInstrumentCount; ++i) {
 
 	Rosegarden::InstrumentId id = Rosegarden::SoftSynthInstrumentBase + i;
 	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);

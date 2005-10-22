@@ -51,10 +51,13 @@ typedef std::vector<std::pair<MidiByte, MidiByte> >::const_iterator StaticContro
 
 // Instrument number groups
 //
-const InstrumentId SystemInstrumentBase    =  0;
-const InstrumentId AudioInstrumentBase     =  1000;
-const InstrumentId MidiInstrumentBase      =  2000;
-const InstrumentId SoftSynthInstrumentBase = 10000;
+const InstrumentId SystemInstrumentBase     = 0;
+const InstrumentId AudioInstrumentBase      = 1000;
+const InstrumentId MidiInstrumentBase       = 2000;
+const InstrumentId SoftSynthInstrumentBase  = 10000;
+
+const unsigned int AudioInstrumentCount     = 16;
+const unsigned int SoftSynthInstrumentCount = 24;
 
 const MidiByte MidiMaxValue = 127;
 const MidiByte MidiMidValue = 64;

@@ -355,7 +355,7 @@ public:
 					   int &audioInstrumentCount) {
 	audioInstrumentBase = AudioInstrumentBase;
 #ifdef HAVE_LIBJACK
-	audioInstrumentCount = 16;
+	audioInstrumentCount = AudioInstrumentCount;
 #else
 	audioInstrumentCount = 0;
 #endif
@@ -365,7 +365,7 @@ public:
 					       int &ssInstrumentCount) {
 	ssInstrumentBase = SoftSynthInstrumentBase;
 #ifdef HAVE_DSSI
-	ssInstrumentCount = 24;
+	ssInstrumentCount = SoftSynthInstrumentCount;
 #else
 	ssInstrumentCount = 0;
 #endif
