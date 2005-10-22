@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "POT-Creation-Date: 2004-12-05 13:31+0100\n"
-"PO-Revision-Date: 2005-10-05 23:26+0200\n"
+"PO-Revision-Date: 2005-10-22 20:44+0200\n"
 "Last-Translator: Jan Bína <jbina@sky.cz>\n"
 "Language-Team: čeština <mbt@sky.cz>\n"
 "MIME-Version: 1.0\n"
@@ -5254,7 +5254,7 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:1025
 msgid "Load SoundFont to SoundBlaster card at startup"
-msgstr "Načít zvukové písmo do karty Soundblaster při spuštění"
+msgstr "Načíst zvukové písmo do karty Soundblaster při spuštění"
 
 #: rosegardenconfiguredialog.cpp:1026
 msgid ""
