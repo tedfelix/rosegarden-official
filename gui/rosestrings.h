@@ -32,7 +32,7 @@ extern std::string qstrtostr(const QString &);
 extern double strtodouble(const std::string &);
 extern double qstrtodouble(const QString &);
 
-namespace Rosegarden { class Composition; }
-extern void updateTextEncodings(Rosegarden::Composition *);
+class QTextCodec;
+extern std::string convertFromCodec(std::string, QTextCodec *);
 
 #endif

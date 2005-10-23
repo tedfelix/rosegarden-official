@@ -28,6 +28,7 @@
 #include <qobjectlist.h>
 #include <qlayout.h>
 #include <qvaluevector.h>
+#include <qtextcodec.h>
 
 // include files for KDE
 #include <kcursor.h>
@@ -3388,6 +3389,80 @@ void RosegardenGUIApp::slotMergeMIDI()
     KIO::NetAccess::removeTempFile( tmpfile );
 }
 
+QTextCodec *
+RosegardenGUIApp::guessTextCodec(std::string text)
+{
+    QTextCodec *codec = 0;
+
+    for (int c = 0; c < text.length(); ++c) {
+	if (text[c] & 0x80) {
+	    
+	    CurrentProgressDialog::freeze();
+	    KStartupLogo::hideIfStillThere();
+	    
+	    IdentifyTextCodecDialog dialog(0, text);
+	    dialog.exec();
+	    
+	    std::string codecName = dialog.getCodec();
+	    
+	    CurrentProgressDialog::thaw();
+	    
+	    if (codecName != "") {
+		codec = QTextCodec::codecForName(codecName.c_str());
+	    }
+	    break;
+	}
+    }
+
+    return codec;
+}
+
+void
+RosegardenGUIApp::fixTextEncodings(Rosegarden::Composition *c)
+
+{
+    QTextCodec *codec = 0;
+
+    for (Rosegarden::Composition::iterator i = c->begin();
+	 i != c->end(); ++i) {
+
+	for (Rosegarden::Segment::iterator j = (*i)->begin();
+	     j != (*i)->end(); ++j) {
+
+	    if ((*j)->isa(Rosegarden::Text::EventType)) {
+
+		std::string text;
+
+		if ((*j)->get<Rosegarden::String>
+		    (Rosegarden::Text::TextPropertyName, text)) {
+
+		    if (!codec) codec = guessTextCodec(text);
+
+		    if (codec) {
+			(*j)->set<Rosegarden::String>
+			    (Rosegarden::Text::TextPropertyName,
+			     convertFromCodec(text, codec));
+		    }
+		}
+	    }
+	}
+    }
+
+    if (!codec) codec = guessTextCodec(c->getCopyrightNote());
+    if (codec) c->setCopyrightNote(convertFromCodec(c->getCopyrightNote(), codec));
+
+    for (Rosegarden::Composition::trackcontainer::iterator i =
+	     c->getTracks().begin(); i != c->getTracks().end(); ++i) {
+	if (!codec) codec = guessTextCodec(i->second->getLabel());
+	if (codec) i->second->setLabel(convertFromCodec(i->second->getLabel(), codec));
+    }
+    
+    for (Rosegarden::Composition::iterator i = c->begin(); i != c->end(); ++i) {
+	if (!codec) codec = guessTextCodec((*i)->getLabel());
+	if (codec) (*i)->setLabel(convertFromCodec((*i)->getLabel(), codec));
+    }
+}
+
 RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
 {
@@ -3426,7 +3501,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
     midiFile.convertToRosegarden(newDoc->getComposition(),
                                  Rosegarden::MidiFile::CONVERT_REPLACE);
 
-    updateTextEncodings(&newDoc->getComposition());
+    fixTextEncodings(&newDoc->getComposition());
     
     // Set modification flag
     //

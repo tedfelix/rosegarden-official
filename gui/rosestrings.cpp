@@ -26,9 +26,7 @@
 #include "Event.h"
 
 #include <qtextcodec.h>
-#include "kstartuplogo.h"
-#include "widgets.h"
-#include "dialogs.h"
+
 
 
 QString strtoqstr(const std::string &str)
@@ -98,67 +96,10 @@ double qstrtodouble(const QString &s)
     return strtodouble(qstrtostr(s));
 }
 
-
-//!!! This is a bit of a stopgap place for this code
-	
-static QTextCodec *
-identifyTextCodec(std::string text)
-{
-    // text is known to contain non-ascii characters
-
-    CurrentProgressDialog::freeze();
-    KStartupLogo::hideIfStillThere();
-
-    std::cerr << "identifyTextCodec(" << text << ")" << std::endl;
-
-    //!!! need to truncate text to a reasonable length, at the same
-    // time as ensuring it contains some characters in the non-ASCII
-    // encoding
-
-    IdentifyTextCodecDialog dialog(0, text);
-    dialog.exec();
-
-    std::string codec = dialog.getCodec();
-
-    CurrentProgressDialog::thaw();
-
-    if (codec == "") return 0;
-    return QTextCodec::codecForName(codec.c_str());
-}
-
-static std::string
-convertTextCodec(std::string text, QTextCodec *codec)
+std::string
+convertFromCodec(std::string text, QTextCodec *codec)
 {
     if (codec) return qstrtostr(codec->toUnicode(text.c_str(), text.length()));
     else return text;
 }
 
-void
-updateTextEncodings(Rosegarden::Composition *c)
-{
-    QTextCodec *codec = 0;
-
-    for (Rosegarden::Composition::iterator i = c->begin();
-	 i != c->end(); ++i) {
-	for (Rosegarden::Segment::iterator j = (*i)->begin();
-	     j != (*i)->end(); ++j) {
-	    if ((*j)->isa(Rosegarden::Text::EventType)) {
-		std::string text;
-		if ((*j)->get<Rosegarden::String>
-		    (Rosegarden::Text::TextPropertyName, text)) {
-		    if (!codec) {
-			for (int c = 0; c < text.length(); ++c) {
-			    if (text[c] & 0x80) {
-				codec = identifyTextCodec(text);
-				break;
-			    }
-			}
-		    }
-		    (*j)->set<Rosegarden::String>
-			(Rosegarden::Text::TextPropertyName,
-			 convertTextCodec(text, codec));
-		}
-	    }
-	}
-    }
-}

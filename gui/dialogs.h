@@ -1042,11 +1042,12 @@ public:
     std::string getCodec() const { return m_codec; }
 
 protected slots:
-    void slotCodecSelected(const QString &c);
+    void slotCodecSelected(int);
 
 protected:
     std::string m_text;
     std::string m_codec;
+    std::vector<std::string> m_codecs;
     QLabel *m_example;
 };
 
