@@ -424,16 +424,16 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         int c = 0;
         std::vector<char> baseBuffer;
     
-        while (c >= 0) {
+        while (c != -1) {
             c = fileCompressedDevice->getch();
-            if (c>=0)
+            if (c != -1)
                 baseBuffer.push_back(c);
         }
-        baseBuffer.push_back(0);
 
         fileCompressedDevice->close();
 
-        QString fileContents(&baseBuffer[0]);
+	QString fileContents = QString::fromUtf8(&baseBuffer[0],
+						 baseBuffer.size());
 
         // parse xml file
 	okay = xmlParse(fileContents, errMsg, &progressDlg,
