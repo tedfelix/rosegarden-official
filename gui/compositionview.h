@@ -298,8 +298,8 @@ protected:
     previewrectlist* getNotationPreviewData(const Rosegarden::Segment* s);
     AudioPreviewData* getAudioPreviewData(const Rosegarden::Segment* s);
 
-    void makePreviewCache(Rosegarden::Segment* s);
-    void removePreviewCache(Rosegarden::Segment* s);
+    void makePreviewCache(const Rosegarden::Segment* s);
+    void removePreviewCache(const Rosegarden::Segment* s);
     void makeNotationPreviewRects(PRectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
     void makeAudioPreviewRects(previewrectlist* apRects, const Rosegarden::Segment*,
                                const CompositionRect& segRect, const QRect& clipRect);

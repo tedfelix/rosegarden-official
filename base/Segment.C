@@ -1105,6 +1105,7 @@ Segment::setColourIndex(const unsigned int input)
     m_colourIndex = input;
     updateRefreshStatuses(getStartTime(), getEndTime());
     if (m_composition) m_composition->updateRefreshStatuses();
+    notifyAppearanceChange();
 }
 
 void

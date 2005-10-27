@@ -766,7 +766,7 @@ void CompositionModelImpl::endMarkerTimeChanged(const Rosegarden::Segment *s, bo
 }
 
 
-void CompositionModelImpl::makePreviewCache(Segment *s) 
+void CompositionModelImpl::makePreviewCache(const Segment *s) 
 {
     if (s->getType() == Rosegarden::Segment::Internal) {
         makeNotationPreviewDataCache(s);
@@ -775,12 +775,12 @@ void CompositionModelImpl::makePreviewCache(Segment *s)
     }
 }
 
-void CompositionModelImpl::removePreviewCache(Segment *s) 
+void CompositionModelImpl::removePreviewCache(const Segment *s) 
 {
     if (s->getType() == Rosegarden::Segment::Internal) {
-        m_notationPreviewDataCache.remove(s);
+        m_notationPreviewDataCache.remove(const_cast<Segment*>(s));
     } else {
-        m_audioPreviewDataCache.remove(s);
+        m_audioPreviewDataCache.remove(const_cast<Segment*>(s));
     }
 
 }
@@ -1103,9 +1103,11 @@ void CompositionModelImpl::clearInCache(const Rosegarden::Segment* s)
     if (s) {
         m_segmentRectMap.erase(s);
         m_segmentEndTimeMap.erase(s);
+        removePreviewCache(s);
     } else { // clear the whole cache
         m_segmentRectMap.clear();
         m_segmentEndTimeMap.clear();
+        clearPreviewCache();
     }
 }
 
