@@ -447,7 +447,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     emit startupStatusMessage(i18n("Starting sequence manager..."));
 
     // transport is created by setupActions()
-    m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
+    m_seqManager = new Rosegarden::SequenceManager(m_doc, getTransport());
 
     if (m_view) {
 	connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *)),
@@ -521,8 +521,7 @@ RosegardenGUIApp::~RosegardenGUIApp()
         delete m_sequencerProcess;
     }
 
-    if (m_transport)
-        delete m_transport;
+    delete m_transport;
 
     delete m_seqManager;
 
@@ -1123,35 +1122,12 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotDebugDump()), actionCollection(),
                 "debug_dump_segments");
 
-    // create the Transport GUI and add the callbacks to the
-    // buttons and keyboard accelerators
-    //
-    m_transport =
-        new Rosegarden::RosegardenTransportDialog(this);
-    plugAccelerators(m_transport, m_transport->getAccelerators());
-
     // create main gui
     //
     createGUI("rosegardenui.rc", false);
 
-    // Ensure that the checkbox is unchecked if the dialog
-    // is closed
-    connect(m_transport, SIGNAL(closed()),
-            SLOT(slotCloseTransport()));
+    createAndSetupTransport();
 
-    // Handle loop setting and unsetting from the transport loop button
-    //
-    
-    connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
-    connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
-    connect(m_transport, SIGNAL(panic()), SLOT(slotPanic()));
-
-    connect(m_transport, SIGNAL(editTempo(QWidget*)),
-            SLOT(slotEditTempo(QWidget*)));
-
-    connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
-            SLOT(slotEditTimeSignature(QWidget*)));
-    
     // transport toolbar is hidden by default - TODO : this should be in options
     //
     //toolBar("Transport Toolbar")->hide();
@@ -1318,21 +1294,21 @@ void RosegardenGUIApp::initView()
 
     // and the time signature
     //
-    m_transport->setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+    getTransport()->setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
 
     // set the tempo in the transport
     //
-    m_transport->setTempo(comp.getCurrentTempo());
+    getTransport()->setTempo(comp.getCurrentTempo());
 
     // bring the transport to the front 
     //
-    m_transport->raise();
+    getTransport()->raise();
 
     // set the play metronome button
-    m_transport->MetronomeButton()->setOn(comp.usePlayMetronome());
+    getTransport()->MetronomeButton()->setOn(comp.usePlayMetronome());
 
     // Set the solo button
-    m_transport->SoloButton()->setOn(comp.isSolo());
+    getTransport()->SoloButton()->setOn(comp.isSolo());
 
     // make sure we show
     //
@@ -1756,12 +1732,12 @@ void RosegardenGUIApp::slotSaveOptions()
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
 
 #ifdef SETTING_LOG_DEBUG
-    _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(m_transport->isExpanded()));
+    _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(getTransport()->isExpanded()));
     _settingLog(QString("SETTING 2 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 #endif
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
-    kapp->config()->writeEntry("Expanded Transport",           m_transport ? m_transport->isExpanded() : false);
+    kapp->config()->writeEntry("Expanded Transport",           m_transport ? getTransport()->isExpanded() : false);
     kapp->config()->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
     kapp->config()->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
     kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
@@ -1844,9 +1820,9 @@ void RosegardenGUIApp::readOptions()
 #endif
 
     if(opt)
-        m_transport->slotPanelOpenButtonClicked();
+        getTransport()->slotPanelOpenButtonClicked();
     else
-        m_transport->slotPanelCloseButtonClicked();
+        getTransport()->slotPanelCloseButtonClicked();
 
     opt = kapp->config()->readBoolEntry("Show Track labels", true);
 
@@ -1952,7 +1928,7 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 {
     RG_DEBUG << "RosegardenGUIApp::showEvent()\n";
 
-    m_transport->raise();
+    getTransport()->raise();
     KMainWindow::showEvent(e);
 }
 
@@ -1960,7 +1936,7 @@ bool RosegardenGUIApp::queryClose()
 {
     RG_DEBUG << "RosegardenGUIApp::queryClose" << endl;
 #ifdef SETTING_LOG_DEBUG
-    _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(m_transport->isExpanded()));
+    _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(getTransport()->isExpanded()));
     _settingLog(QString("SETTING 1 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 #endif
     QString errMsg;
@@ -2585,6 +2561,47 @@ void RosegardenGUIApp::jogSelection(Rosegarden::timeT amount)
     m_view->slotAddCommandToHistory(command);
 }
 
+void RosegardenGUIApp::createAndSetupTransport()
+{
+    // create the Transport GUI and add the callbacks to the
+    // buttons and keyboard accelerators
+    //
+    m_transport =
+        new Rosegarden::RosegardenTransportDialog(this);
+    plugAccelerators(m_transport, m_transport->getAccelerators());
+
+    // Ensure that the checkbox is unchecked if the dialog
+    // is closed
+    connect(m_transport, SIGNAL(closed()),
+            SLOT(slotCloseTransport()));
+
+    // Handle loop setting and unsetting from the transport loop button
+    //
+    
+    connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
+    connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
+    connect(m_transport, SIGNAL(panic()), SLOT(slotPanic()));
+
+    connect(m_transport, SIGNAL(editTempo(QWidget*)),
+            SLOT(slotEditTempo(QWidget*)));
+
+    connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
+            SLOT(slotEditTimeSignature(QWidget*)));
+
+    if (m_seqManager != 0)
+        m_seqManager->setTransport(m_transport);
+    
+}
+
+Rosegarden::RosegardenTransportDialog* RosegardenGUIApp::getTransport() 
+{
+    if (m_transport == 0)
+        createAndSetupTransport();
+    
+    return m_transport;
+}
+
+
 void RosegardenGUIApp::slotSplitSelectionByPitch()
 {
     if (!m_view->haveSelection()) return;
@@ -2911,14 +2928,14 @@ void RosegardenGUIApp::slotToggleTransport()
 
     if (m_viewTransport->isChecked())
     {
-        m_transport->show();
-        m_transport->raise();
-        m_transport->blockSignals(false);
+        getTransport()->show();
+        getTransport()->raise();
+        getTransport()->blockSignals(false);
     }
     else
     {
-        m_transport->hide();
-        m_transport->blockSignals(true);
+        getTransport()->hide();
+        getTransport()->blockSignals(true);
     }
 }
 
@@ -3011,7 +3028,7 @@ void RosegardenGUIApp::slotStatusHelpMsg(QString text)
 void RosegardenGUIApp::slotEnableTransport(bool enable)
 {
     if (m_transport)
-        m_transport->setEnabled(enable);
+        getTransport()->setEnabled(enable);
 }
 
 void RosegardenGUIApp::slotPointerSelected()
@@ -3828,7 +3845,7 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 
     Rosegarden::MappedEvent ev;
     bool haveEvent = mapper->getVisual(ev);
-    if (haveEvent) m_transport->setMidiOutLabel(&ev);
+    if (haveEvent) getTransport()->setMidiOutLabel(&ev);
 
     Rosegarden::RealTime position = mapper->getPositionPointer();
 
@@ -3981,15 +3998,15 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     }
 
     // and the time sig
-    m_transport->setTimeSignature(comp.getTimeSignatureAt(t));
+    getTransport()->setTimeSignature(comp.getTimeSignatureAt(t));
 
     // and the tempo
-    m_transport->setTempo(comp.getTempoAtTime(t));
+    getTransport()->setTempo(comp.getTempoAtTime(t));
 
     // and the time
     //
     Rosegarden::RosegardenTransportDialog::TimeDisplayMode mode =
-	m_transport->getCurrentMode();
+	getTransport()->getCurrentMode();
     
     if (mode == Rosegarden::RosegardenTransportDialog::BarMode ||
 	mode == Rosegarden::RosegardenTransportDialog::BarMetronomeMode) {
@@ -4000,21 +4017,21 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
         Rosegarden::RealTime rT(comp.getElapsedRealTime(t));
 
-        if (m_transport->isShowingTimeToEnd()) {
+        if (getTransport()->isShowingTimeToEnd()) {
             rT = rT - comp.getElapsedRealTime(comp.getDuration());
         }
 
         if (mode == Rosegarden::RosegardenTransportDialog::RealMode) {
 
-            m_transport->displayRealTime(rT);
+            getTransport()->displayRealTime(rT);
 
         } else if (mode == Rosegarden::RosegardenTransportDialog::SMPTEMode) {
 
-            m_transport->displaySMPTETime(rT);
+            getTransport()->displaySMPTETime(rT);
 
         } else {
 	    
-	    m_transport->displayFrameTime(rT);
+	    getTransport()->displayFrameTime(rT);
 	}
     }
 
@@ -4036,7 +4053,7 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
     int beatNo = (t - barStart) / beatDuration;
     int unitNo = (t - barStart) - (beatNo * beatDuration);
     
-    if (m_transport->isShowingTimeToEnd()) {
+    if (getTransport()->isShowingTimeToEnd()) {
         barNo = barNo + 1 - comp.getNbBars();
         beatNo = timeSig.getBeatsPerBar() - 1 - beatNo;
         unitNo = timeSig.getBeatDuration() - 1 - unitNo;
@@ -4049,7 +4066,7 @@ void RosegardenGUIApp::slotDisplayBarTime(timeT t)
     // show units in hemidemis (or whatever), not in raw time ticks
     unitNo /= Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
     
-    m_transport->displayBarTime(barNo, beatNo, unitNo);
+    getTransport()->displayBarTime(barNo, beatNo, unitNo);
 }
 
 
@@ -4580,6 +4597,13 @@ RosegardenGUIApp::slotCloseTransport()
     slotToggleTransport(); // hides the transport
 }
 
+void
+RosegardenGUIApp::slotDeleteTransport()
+{
+    delete m_transport;
+    m_transport = 0;
+}
+
 // We use this slot to active a tool mode on the GUI
 // from a layer below the top level.  For example when
 // we select a Track on the trackeditor and want this
@@ -4655,7 +4679,7 @@ RosegardenGUIApp::slotToggleMetronome()
         else
             comp.setRecordMetronome(true);
 
-        m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
+        getTransport()->MetronomeButton()->setOn(comp.useRecordMetronome());
     }
     else
     {
@@ -4664,7 +4688,7 @@ RosegardenGUIApp::slotToggleMetronome()
         else
             comp.setPlayMetronome(true);
 
-        m_transport->MetronomeButton()->setOn(comp.usePlayMetronome());
+        getTransport()->MetronomeButton()->setOn(comp.usePlayMetronome());
     }
 }
 
@@ -4776,9 +4800,9 @@ RosegardenGUIApp::slotRecord()
         //
         KMessageBox::error(this, s);
 
-        m_transport->MetronomeButton()->setOn(false);
-        m_transport->RecordButton()->setOn(false);
-        m_transport->PlayButton()->setOn(false);
+        getTransport()->MetronomeButton()->setOn(false);
+        getTransport()->RecordButton()->setOn(false);
+        getTransport()->PlayButton()->setOn(false);
 	return;
     }
     catch(Rosegarden::AudioFileManager::BadAudioPathException e)
@@ -4790,18 +4814,18 @@ RosegardenGUIApp::slotRecord()
 	     i18n("Set audio file path")) == KMessageBox::Continue) {
 	    slotOpenAudioPathSettings();
 	}
-        m_transport->MetronomeButton()->setOn(false);
-        m_transport->RecordButton()->setOn(false);
-        m_transport->PlayButton()->setOn(false);
+        getTransport()->MetronomeButton()->setOn(false);
+        getTransport()->RecordButton()->setOn(false);
+        getTransport()->PlayButton()->setOn(false);
 	return;
     }
     catch(Rosegarden::Exception e)
     {
         KMessageBox::error(this, strtoqstr(e.getMessage()));
 
-        m_transport->MetronomeButton()->setOn(false);
-        m_transport->RecordButton()->setOn(false);
-        m_transport->PlayButton()->setOn(false);
+        getTransport()->MetronomeButton()->setOn(false);
+        getTransport()->RecordButton()->setOn(false);
+        getTransport()->PlayButton()->setOn(false);
 	return;
     }
 
@@ -4871,9 +4895,9 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 
         // toggle the loop button
         if (lhs != rhs)
-            m_transport->LoopButton()->setOn(true);
+            getTransport()->LoopButton()->setOn(true);
         else
-            m_transport->LoopButton()->setOn(false);
+            getTransport()->LoopButton()->setOn(false);
 
     }
     catch(QString s)
@@ -5057,7 +5081,7 @@ void RosegardenGUIApp::slotToggleSolo(bool value)
     RG_DEBUG << "RosegardenGUIApp::slotToggleSolo value = " << value << endl;
 
     m_doc->getComposition().setSolo(value);
-    m_transport->SoloButton()->setOn(value);
+    getTransport()->SoloButton()->setOn(value);
 
     m_doc->slotDocumentModified();
 

@@ -131,6 +131,8 @@ public:
 
     RosegardenGUIView* getView() { return m_view; }
 
+    Rosegarden::RosegardenTransportDialog* getTransport();
+
     enum ImportType { ImportRG4, ImportMIDI, ImportRG21, ImportHydrogen, ImportCheckType };
 
     /**
@@ -469,6 +471,13 @@ protected:
      * (like closing edit views, emitting documentChanged signal, etc...)
      */
     void setDocument(RosegardenGUIDoc*);
+
+    /**
+     * Jog a selection of segments by an amount
+     */
+    void jogSelection(Rosegarden::timeT amount);
+
+    void createAndSetupTransport();
 
 signals:
     void startupStatusMessage(QString message);
@@ -1051,6 +1060,13 @@ public slots:
     void slotCloseTransport();
 
     /**
+     * called by RosegardenApplication when session management tells
+     * it to save its state. This is to avoid saving the transport as
+     * a 2nd main window
+     */
+    void slotDeleteTransport();
+    
+    /**
      * Put the GUI into a given Tool edit mode
      */
     void slotActivateTool(QString toolName);
@@ -1344,12 +1360,6 @@ public slots:
     void slotDocumentDevicesResyncd();
 
     void slotDebugDump();
-
-protected:
-    /**
-     * Jog a selection of segments by an amount
-     */
-    void jogSelection(Rosegarden::timeT amount);
 
 private:
 

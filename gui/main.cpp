@@ -503,11 +503,13 @@ int main(int argc, char *argv[])
     RosegardenGUIApp *rosegardengui = 0;
  
     if (app.isRestored()) {
+        RG_DEBUG << "Restoring from session\n";
 
         // RESTORE(RosegardenGUIApp);
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
             // memory leak if more than one can be restored?
+            RG_DEBUG << "Restoring from session - restoring app #" << n << endl;
             (rosegardengui = new RosegardenGUIApp)->restore(n);
             n++;
         }
@@ -545,6 +547,10 @@ int main(int argc, char *argv[])
         args->clear();
 
     }
+
+    QObject::connect(&app, SIGNAL(aboutToSaveState()),
+                     rosegardengui, SLOT(slotDeleteTransport()));
+
 
     // Now that we've started up, raise start logo
     //

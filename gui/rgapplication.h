@@ -62,6 +62,12 @@ public:
     void setNoSequencerMode(bool m=true) { m_noSequencerMode = m; }
     bool noSequencerMode() { return m_noSequencerMode; }
 
+    virtual void saveState(QSessionManager&);
+    
+signals:
+    // connect this to RosegardenGUIApp
+    void aboutToSaveState();
+    
 public slots:
     void sfxLoadExited(KProcess *proc);
     

@@ -96,6 +96,12 @@ RosegardenApplication::refreshGUI(int maxTime)
 			       maxTime);
 }
 
+void RosegardenApplication::saveState(QSessionManager& sm)
+{
+    emit aboutToSaveState();
+    KUniqueApplication::saveState(sm);
+}
+
 RosegardenApplication* RosegardenApplication::rgApp()
 {
     return dynamic_cast<RosegardenApplication*>(kApplication());

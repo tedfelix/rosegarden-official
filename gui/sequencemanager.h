@@ -213,6 +213,8 @@ public:
 
     /// Ensure that the sequencer file is mapped
     void mapSequencer();
+
+    void setTransport(RosegardenTransportDialog* t) { m_transport = t; }
     
 public slots:
 
