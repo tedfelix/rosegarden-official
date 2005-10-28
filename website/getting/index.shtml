@@ -16,99 +16,104 @@
     <h2>How to get Rosegarden</h2>
 
     <p>The Rosegarden development team currently only makes Rosegarden
-    available in source code form to be compiled after download.</p>
+    available in <a href="#source">source code form</a>, to be compiled after download.</p>
+
+    <p>Installable binary packages for many major Linux distributions
+    including Mandriva, Debian (package "rosegarden4"), Ubuntu,
+    ALT Linux and PCLinuxOS are available from those distributions'
+    downloadable package repositories.  Please consult your
+    distribution's documentation for more details, and check that your
+    distribution provides the latest available version (currently
+    Rosegarden-4-1.0) before downloading.  RedHat/Fedora users may
+    wish to consider the excellent <a
+    href="http://www-ccrma.stanford.edu/planetccrma/software/">PlanetCCRMA</a>
+    audio software package set.</p>
+
+    <p>Because of the complexity of Rosegarden and its dependency on
+    numerous other C and C++ libraries and services that vary from one
+    distribution to another, it is sadly not practical at this time
+    for the Rosegarden team to provide installable packages for the
+    many Linux distributions available.</p>
 
     <h2>Fervent Software's Studio to Go!</h2>
 
-    <p><b>Studio..<i>to
-    go!</i></b> is a commercial package of music software on a
-    single bootable Live CD, with support, produced by Rosegarden developers.  Rosegarden is of course included,
-    along with a wide selection of other software all configured and
-    ready to go.  This is almost certainly the easiest way to get a
-    complete Rosegarden configuration, particularly if you aren't a
-    Linux user already.  <a
+    <p><b>Studio..<i>to go!</i></b> is a commercial package of music
+    software with a Linux distribution on a single bootable Live CD,
+    with support, produced by Rosegarden developers.  Rosegarden is of
+    course included, along with a wide selection of other software all
+    configured and ready to go.  This is almost certainly the easiest
+    way to get a complete Rosegarden configuration, particularly if
+    you aren't a Linux user already.  <a
     href="http://www.ferventsoftware.com/">Find out more here!</a></p>
 
-    <h2>Downloads</h2>
+    <br>
+    <hr>
+    <a name="source"/><h2>Source Downloads</h2>
+
+    <h3>Current stable release</h3>
 
 	<p><i>Note: please read the <a
 	href="/getting/requirements/">Hardware and System Requirements
 	page</a> to find out whether Rosegarden will work on your
-	system.</i></p>
-
-    <h3>Source code</h3>
+	system, and read the README file in the downloaded package for
+	details of how to compile.</i></p>
 
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
 href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=304969">Rosegarden
-release 1.0 sources</a>, 14th February 2005, for download from the
-SourceForge page.</li>
+release 1.0 source code</a>, 14th February 2005, for download from the
+SourceForge page.</li></ul>
 
-	    <li><a href="http://sourceforge.net/cvs/?group_id=4932">Rosegarden
-CVS</a> from the SourceForge repository; this is the latest
-bleeding-edge, work-in-progress and might not build or run but will
-have all the latest features as discussed on the rosegarden-devel
-mailing list.</li></ul>
+    <h3>CVS development versions</h3>
 
-    <h3>Binary packages</h3>
+    <p>The latest, up-to-the-minute source code in use by Rosegarden
+    developers is always available by anonymous CVS from SourceForge.
+    <a href="http://sourceforge.net/cvs/?group_id=4932">Please read
+    the instructions here</a> for more details.  Note that this is
+    always a work in progress, that might not build or run.</p>
 
-    <p>These are all maintained by other people, so it may take a
-    short while before they are brought up-to-date with each new
-    release of Rosegarden and there's no guarantee of their
-    completeness.  Please take a moment to check whether you are
-    really getting the latest release (currently Rosegarden-4-1.0) before you download a binary
-    package.</p>
+    <h3>CVS branches</h3>
 
-<h3>Rosegarden for Mandrake</h3>
+    <p>Several "branches" of the Rosegarden source code are available
+    in CVS, containing different features for prospective developers
+    or other interested parties.  You can choose one of these by
+    adding the option "<code>-r </code><i>branchname</i>" to the end
+    of your CVS <code>checkout</code> or <code>update</code>
+    command.</p>
 
-<ul><li><a
-href="http://rpm.nyvalls.se/">Rosegarden for Mandrake</a>, one of Thac's amazing list of audio and music application RPMs -- click through according to your version of Mandrake and scroll down to find Rosegarden.</li>
-</ul>
+    <p>The current
+    active branches are:
 
-<p>Apparently there's also an RPM in the Mandrake Cooker bleeding-edge
-package repository.</p>
+    <ul><li><b>HEAD</b> - This is the default CVS branch used when no
+    other branch name is given.  This contains the code that will
+    ultimately become the next official stable release of Rosegarden,
+    although of course that doesn't mean it'll be stable now.  (You
+    can return to this branch after updating from another one, with the
+    "cvs update -A" command.)</li>
 
-<h3>Rosegarden for SuSE</h3>
+    <li><b>guitar_chord_editor</b> - This contains experimental
+    development aimed at adding guitar chord fretboard editing and
+    printing within Rosegarden (by Stephen Torri).  Note that this
+    branch may be significantly out-of-date compared to HEAD in all
+    areas other than the guitar fretboard code.</li>
 
-<p>We don't know of any source of up-to-date SuSE packages of
-Rosegarden.  SuSE have included Rosegarden in their last two
-distributions, but neither of the packages worked very well.
+    <li><b>glasgow_pitchtracker</b> - This contains extensive custom work to support the <a
+    href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University
+    of Glasgow Pitch Tracker project</a>.  Note that this
+    branch may be significantly out-of-date compared to HEAD in all
+    areas other than the pitch tracker support.</li>
 
-<p>We recommend building from source on SuSE: two of the three core
-Rosegarden developers use SuSE and you should be able to compile
-Rosegarden out of the box on SuSE 8.2 or 9.0.
-
-<h3>Rosegarden for RedHat</h3>
-
-<ul><li><a href="http://www-ccrma.stanford.edu/planetccrma/software/soundapps.html#rosegarden">Rosegarden for RedHat 7.3, 8.0, 9.0, and Fedora Core 1</a> from
-<a href="http://www-ccrma.stanford.edu/planetccrma/software/">Planet CCRMA</a>.
-<br><br>
-
-Planet CCRMA is a well-maintained and easy to use distribution of
-audio and sound applications for RedHat, which can install everything
-you need semi-automatically.  If you want to set up an audio
-workstation on RedHat, your best bet is to install the Planet CCRMA
-system: read the documentation on the Planet site, and go from there.</ul>
-
-<h3>Rosegarden for Debian</h3>
-
-<ul><li>
-Rosegarden is available as part of
-<a href="http://packages.debian.org/unstable/sound/rosegarden4">Debian unstable</a>, thanks to Enrique Robledo Arnuncio.
-</li></ul>
-
-<h3>Rosegarden for your distribution</h3>
-
-<p>Several distributions are now including versions of Rosegarden, if
-not in the base distribution then in an extended package repository.
-For example, Mandrake, SuSE, Debian and the Russian language ALT Linux
-all make Rosegarden packages available to their users.</p>
-
-<p>If we're not packaged as part of your favourite distribution then
-please get in touch with your distribution manufacturer and ask why
-not!  If you've made an RPM or package for any distribution then
-please let us know so that we can link it here.</p>
+    <li><b>experiments</b> - This is a general scratch area for
+    developers, that may contain daring experimental work of all
+    kinds.  The only limitation is that it should preferably still
+    compile.  Changes to this branch will usually be notified on the
+    Rosegarden development mailing list.</li>
+    </ul>
+    
+    <p>Note that we have changed build system (from automake to scons)
+    recently, and some of these branches still use the old system
+    while others use the new.  Check the README for details.</p>
 
 <br>
 
