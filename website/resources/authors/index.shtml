@@ -11,11 +11,11 @@
     <div id="main">
     <br>
 
-    <h2>Authors</h2>
-    <p>Rosegarden has three core developers, who between them are to
-    blame for most of the application as you find it now.  Their email
-    addresses are shown below in obfuscated form - change the "at" to "@"
-    and the "dot" to "." to form the valid addresses.
+    <h2>Authors</h2> <p>Rosegarden has three core developers who
+    between them are to blame for most of the application as you find
+    it now, plus one long-term adjunct developer and writer.  Their
+    email addresses are shown below in obfuscated form - change the
+    "at" to "@" and the "dot" to "." to form the valid addresses.
     </p>
 
     <h4><a href="http://www.all-day-breakfast.com/cannam/">Chris
@@ -30,23 +30,26 @@
     University of Bath, with <a
     href="http://www.all-day-breakfast.com/space/">Andy Green</a>
     working on the MIDI sequencer and Chris on the notation editor.
-    They were the sole developers until late in 1995, some time after
-    the barely-usable 1.0 release.</p><p>For Rosegarden-4, Chris is
-    responsible for most of the notation rendering and some of the
-    file and data code.  He lives in London and is currently working
-    full-time on Rosegarden and related activities.</p>
+    They were the sole developers until late in 1995.</p>
+
+    <p>Chris has worked on nearly every aspect of Rosegarden at some
+    point, having been responsible for most of the notation rendering
+    and editing, some of the file and data representation, and much of
+    the audio and MIDI sequencing, recording, plugin, and MIDI studio
+    management subsystems.  He has mostly managed to avoid working on
+    the segment and matrix editors.  He lives in London.</p>
 
 
     <h4><a href="http://www.bownie.com/">Richard Bown</a>, bownie at bownie dot com</h4>
 
     <p><img style="float:right; margin-top: 0px; margin-left: 12px; margin-right:0px; margin-bottom:8px" src="http://www.bownie.com/rosegarden-author-pic.png" alt=" "/>Richard has been working on Rosegarden since the end of
-    1995, when he was drafted in to take over the Unix sequencer.  He is
-    responsible for almost all the MIDI, audio, sequencing and
-    recording code in Rosegarden-4.</p><p>Richard works full-time on Rosegarden
-    and related music and technology projects and is available to talk to
-    about commercial and non-commercial activities involving music technology
-    (including Rosegarden) and also to give demos.
-    </p>
+    1995, when he was drafted in to take over the Unix sequencer.  He has been
+    responsible for the Rosegarden MIDI, audio, sequencing and
+    recording code, and significant parts of the GUI.</p>
+
+    <p>Richard is available to talk to about commercial and
+    non-commercial activities involving music technology (including
+    Rosegarden) and also to give demos.  </p>
 
 
     <h4><a href="http://www.telegraph-road.org">Guillaume Laurent</a>, glaurent at telegraph-road dot org</h4>
@@ -58,7 +61,7 @@
     He's been using Linux since 1995, and first worked on
     Rosegarden in the summer of 1996, when he supplied a few hundred
     lines of new code in his first couple of emails.  Guillaume is
-    responsible for getting the Rosegarden-4 project restarted, for
+    responsible for getting the Rosegarden project restarted, for
     creating the basic design and writing much of the GUI code and
     file and data framework, and for most of the project administration.
 
@@ -73,7 +76,7 @@
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
     src="http://users.adelphia.net/~silvan/silvan-headshot.jpg"
-    alt=" "/>Michael lives in Chritiansburg, Virginia, in the United States of
+    alt=" "/>Michael lives in Christiansburg, Virginia, in the United States of
     America.  He got his first taste of Linux toward the end of 2001.  He came to work at Rosegarden in December 2002, after being shamed
     into doing something more useful than complaining, as a consequence of his
     <a href="http://lalists.stanford.edu/lau/2002/11/0317.html">infamous
