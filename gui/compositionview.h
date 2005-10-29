@@ -528,6 +528,7 @@ protected:
     
     void refreshDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
+    void drawAreaArtifacts(QPainter * p, const QRect& rect);
     void drawRect(const QRect& rect, QPainter * p, const QRect& clipRect,
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);
     void drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,

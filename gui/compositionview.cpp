@@ -1599,6 +1599,11 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
         refreshDrawBuffer(e->rect());
 
     bitBlt (viewport(), 0, 0, &m_drawBuffer);
+
+//     QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
+//     QPainter p(viewport());
+//     p.translate(-contentsX(), -contentsY());
+//     drawAreaArtifacts(&p, r);
 }
 
 void CompositionView::refreshDrawBuffer(const QRect& rect)
@@ -1729,8 +1734,13 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
             drawCompRectLabel(*i, p, clipRect);
         }
     }
-    
 
+    drawAreaArtifacts(p, clipRect);
+    
+}
+
+void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
+{
     //
     // Playback Pointer
     //
@@ -1774,8 +1784,8 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
                     m_splitLinePos.x(), m_splitLinePos.y() + getModel()->grid().getYSnap());
         p->restore();
     }
-    
 }
+
 
 void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 {
