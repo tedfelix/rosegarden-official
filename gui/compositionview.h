@@ -526,7 +526,8 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
     
-    void refreshDrawBuffer(const QRect&);
+    void refreshSegmentsDrawBuffer(const QRect&);
+    void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
     void drawAreaArtifacts(QPainter * p, const QRect& rect);
     void drawRect(const QRect& rect, QPainter * p, const QRect& clipRect,
@@ -549,7 +550,9 @@ protected:
     SegmentSelector* getSegmentSelectorTool();
 
 protected slots:
-    void slotDrawBufferNeedsRefresh() { m_drawBufferNeedsRefresh = true; }
+    void slotSegmentsDrawBufferNeedsRefresh()  { m_segmentsDrawBufferNeedsRefresh = true; }
+    void slotArtifactsDrawBufferNeedsRefresh() { m_artifactsDrawBufferNeedsRefresh = true; }
+    void slotAllDrawBuffersNeedRefresh()       { m_artifactsDrawBufferNeedsRefresh = m_segmentsDrawBufferNeedsRefresh = true; }
 
 protected:         
 
@@ -591,9 +594,10 @@ protected:
     QString      m_textFloatText;
     QPoint       m_textFloatPos;
 
-    QPixmap      m_drawBuffer;
-    QPixmap      m_secondaryDrawBuffer;
-    bool         m_drawBufferNeedsRefresh;
+    QPixmap      m_segmentsDrawBuffer;
+    QPixmap      m_artifactsDrawBuffer;
+    bool         m_segmentsDrawBufferNeedsRefresh;
+    bool         m_artifactsDrawBufferNeedsRefresh;
 
     mutable CompositionModel::previewrectlist m_audioPreviewRects;
     mutable CompositionModel::PRectRanges m_notationPreviewRects;
