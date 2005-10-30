@@ -360,6 +360,8 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint
 void CompositionModelImpl::makeAudioPreviewRects(previewrectlist* apRects, const Segment* segment,
                                                  const CompositionRect& segRect, const QRect& clipRect)
 {
+    Rosegarden::Profiler profiler("CompositionModelImpl::makeAudioPreviewRects", true);
+
     AudioPreviewData* apData = getAudioPreviewData(segment);
     const std::vector<float>& values = apData->getValues();
 
@@ -707,6 +709,8 @@ CompositionModel::previewrectlist* CompositionModelImpl::getNotationPreviewData(
 
 CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
 {
+    Rosegarden::Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
+
     AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
 
     if (!apData) {
@@ -1592,18 +1596,22 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
-//     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << e->rect().normalize()
-//              << " - drawbuffer size = " << m_drawBuffer.size() <<endl;
+    QRect r = e->rect().normalize();
+
+    RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
+              << " - drawbuffer size = " << m_drawBuffer.size() <<endl;
 
     if (m_drawBufferNeedsRefresh)
-        refreshDrawBuffer(e->rect());
+        refreshDrawBuffer(r);
 
-    bitBlt (viewport(), 0, 0, &m_drawBuffer);
+//    bitBlt (viewport(), 0, 0, &m_drawBuffer);
+    bitBlt(viewport(), r.x(), r.y(),
+	   &m_drawBuffer, r.x(), r.y(), r.width(), r.height());
 
-//     QRect r(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
-//     QPainter p(viewport());
-//     p.translate(-contentsX(), -contentsY());
-//     drawAreaArtifacts(&p, r);
+    r = QRect(contentsX(), contentsY(), m_drawBuffer.width(), m_drawBuffer.height());
+    QPainter p(viewport());
+    p.translate(-contentsX(), -contentsY());
+    drawAreaArtifacts(&p, r);
 }
 
 void CompositionView::refreshDrawBuffer(const QRect& rect)
@@ -1633,7 +1641,7 @@ void CompositionView::refreshDrawBuffer(const QRect& rect)
 
 void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 {
-//    Rosegarden::Profiler profiler("CompositionView::drawArea", true);
+    Rosegarden::Profiler profiler("CompositionView::drawArea", true);
 
 //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 
@@ -1735,7 +1743,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         }
     }
 
-    drawAreaArtifacts(p, clipRect);
+//    drawAreaArtifacts(p, clipRect);
     
 }
 
@@ -2096,6 +2104,10 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
 
 void CompositionView::drawPointer(QPainter *p, const QRect& clipRect)
 {
+    RG_DEBUG << "CompositionView::drawPointer: clipRect "
+	     << clipRect.x() << "," << clipRect.y() << " " << clipRect.width()
+	     << "x" << clipRect.height() << " pointer pos is " << m_pointerPos << endl;
+
     if (m_pointerPos >= clipRect.x() && m_pointerPos <= (clipRect.x() + clipRect.width())) {
         p->save();
         p->setPen(m_pointerPen);
@@ -2258,7 +2270,7 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
 
 void CompositionView::pointerMoveUpdate(int oldPos)
 {
-    slotDrawBufferNeedsRefresh();
+//    slotDrawBufferNeedsRefresh();
 
     if (oldPos < 0) { // "large" change - only update around the current pointer position
 
