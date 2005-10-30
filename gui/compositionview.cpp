@@ -1415,7 +1415,7 @@ void CompositionView::updateSelectionContents()
 
 void CompositionView::slotContentsMoving(int x, int y)
 {
-    qDebug("contents moving : x=%d", x);
+//     qDebug("contents moving : x=%d", x);
 }
 
 void CompositionView::slotSetTool(const QString& toolName)
@@ -1548,13 +1548,15 @@ void CompositionView::slotUpdate()
 
 void CompositionView::slotUpdate(QRect rect)
 {
-    RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
+//     RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
     slotAllDrawBuffersNeedRefresh();
     refreshDirtyPreviews();
-    if (rect.isValid())
-        viewport()->repaint(rect, false);
-    else
-        viewport()->repaint(false);
+//     if (rect.isValid())
+//         viewport()->repaint(rect, false);
+//     else
+
+    // ignore the rect, doesn't make any difference anyway since we redrawn everything
+    viewport()->repaint(false);
 }
 
 void CompositionView::slotRefreshColourCache()
@@ -1711,7 +1713,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         //
         CompositionModel::previewrectlist::const_iterator api = m_audioPreviewRects.begin();
         CompositionModel::previewrectlist::const_iterator apEnd = m_audioPreviewRects.end();
-        
+
         for(; api != apEnd; ++api) {
             p->save();
 
