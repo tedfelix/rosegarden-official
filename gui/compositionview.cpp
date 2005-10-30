@@ -1602,8 +1602,8 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
     QRect r = e->rect().normalize();
 
-    RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
-              << " - drawbuffer size = " << m_segmentsDrawBuffer.size() <<endl;
+//     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
+//               << " - drawbuffer size = " << m_segmentsDrawBuffer.size() <<endl;
 
     if (m_segmentsDrawBufferNeedsRefresh) {        
         refreshSegmentsDrawBuffer(r);
@@ -1613,11 +1613,6 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     }
     
    bitBlt(viewport(), 0, 0, &m_artifactsDrawBuffer);
-
-//     r = QRect(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
-//     QPainter p(viewport());
-//     p.translate(-contentsX(), -contentsY());
-//     drawAreaArtifacts(&p, r);
 }
 
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
