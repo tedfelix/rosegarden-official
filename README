@@ -26,10 +26,9 @@ distro has moved to gcc-4.x, please read the note below.
 For MIDI support on Linux, you need ALSA 0.9.x or 1.0; for audio you
 need JACK 0.77 or newer; for synth plugins you need DSSI 0.9.x or newer.
 
-This release should build using the traditional, familiar autoconf/automake
-build system.  This build system is deprecated, however, and will disappear
-eventually.  We suggest using the new scons/bksys build system instead.  See
-below for details.
+We have recently switched from automake/autoconf/make to scons for
+building.  Please see the section on Compiling from Source below for
+details.
 
 
 SPECIAL NOTES FOR PACKAGE MAINTAINERS
@@ -60,8 +59,8 @@ instead concentrate on doing the bare minimum necessary to get the code to
 build.  Thank you.
 
 
-Compiling from source with scons/bksys (RECOMMENDED)
------------------------------------------------------
+Compiling from source
+---------------------
 
 You will need to obtain and install scons.  If you are not familiar with
 scons, see:
@@ -92,32 +91,6 @@ To perform the equivalent of a "make clean" or "make distclean" use
 To uninstall, use
 
   scons -c install
-
-
-Compiling from source the traditional way (DEPRECATED)
-------------------------------------------------------
-
-If you obtained the source code from the SourceForge CVS repository:
-
-  There is no configure script in the repository, so you need to create one
-  with
-  
-    make -f Makefile.cvs
-
-  Continue from here as though you had a distribution tarball.  (You will need
-  to install the pixmaps and various support files to the global KDE
-  directories before the application will run correctly.)
-  
-
-If you obtained the source code from a distribution tarball: 
-
-  Just run
-
-    ./configure
-
-  plus appropriate "--with-qt-dir=..." and "--prefix=..." options.
-  Then proceed with "make" and "make install".
-
 
 NOTE: The installation prefix should be the same as the one of your
 KDE installation. However you can install to another directory, but
