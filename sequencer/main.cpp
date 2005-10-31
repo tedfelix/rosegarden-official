@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
 
     if (app.isRestored())
     {
+        SEQUENCER_DEBUG << "RosegardenSequencer - we're being session-restored - that's not supposed to happen\n";
 	app.quit(); // don't do session restore -- GUI will start a sequencer
     }
     else
