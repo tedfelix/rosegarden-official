@@ -2121,9 +2121,9 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
 
 void CompositionView::drawPointer(QPainter *p, const QRect& clipRect)
 {
-    RG_DEBUG << "CompositionView::drawPointer: clipRect "
-	     << clipRect.x() << "," << clipRect.y() << " " << clipRect.width()
-	     << "x" << clipRect.height() << " pointer pos is " << m_pointerPos << endl;
+//     RG_DEBUG << "CompositionView::drawPointer: clipRect "
+// 	     << clipRect.x() << "," << clipRect.y() << " " << clipRect.width()
+// 	     << "x" << clipRect.height() << " pointer pos is " << m_pointerPos << endl;
 
     if (m_pointerPos >= clipRect.x() && m_pointerPos <= (clipRect.x() + clipRect.width())) {
         p->save();
@@ -2262,18 +2262,9 @@ void CompositionView::releaseCurrentItem()
 
 void CompositionView::setPointerPos(int pos)
 {
-    int oldPos = m_pointerPos;
-    bool smallChange = abs(oldPos - pos) < 10;
-
-    if (smallChange)
-        pointerMoveUpdate();
-
     m_pointerPos = pos;
-
-    if (smallChange)
-        pointerMoveUpdate();
-    else
-        pointerMoveUpdate(oldPos);
+    slotArtifactsDrawBufferNeedsRefresh();
+    updateContents();
 }
 
 void CompositionView::setTextFloat(int x, int y, const QString &text)
@@ -2283,30 +2274,6 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     m_textFloatText = text;
     m_drawTextFloat = true;
     slotArtifactsDrawBufferNeedsRefresh();
-}
-
-void CompositionView::pointerMoveUpdate(int oldPos)
-{
-   slotArtifactsDrawBufferNeedsRefresh();
-
-    if (oldPos < 0) { // "large" change - only update around the current pointer position
-
-        int x = std::max(0, m_pointerPos - int(m_pointerPen.width()) - 2);
-        updateContents(QRect(x, 0,
-                             m_pointerPen.width() + 4, contentsHeight()));
-
-    } else {
-
-        int left = oldPos, right = m_pointerPos;
-        if (oldPos > m_pointerPos) {
-            left = m_pointerPos;
-            right = oldPos;
-        }
-        int x = std::max(0, left - int(m_pointerPen.width()) - 2);
-        updateContents(QRect(x, 0,
-                             m_pointerPen.width() + 4 + (right - left), contentsHeight()));
-        
-    }
 }
 
 void CompositionView::slotSetFineGrain(bool value)

@@ -127,7 +127,7 @@ void RosegardenScrollView::stopAutoScroll()
 
 void RosegardenScrollView::doAutoScroll()
 {
-//     RG_DEBUG << "RosegardenScrollView::doAutoScroll()\n";
+    RG_DEBUG << "RosegardenScrollView::doAutoScroll()\n";
 
     static QPoint previousP;
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
