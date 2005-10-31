@@ -424,12 +424,13 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"),"<markh@linuxfromscratch.org>");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
     aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translation\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
-    aboutData.addCredit("JÃ¶rg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
+    aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
+    aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
     aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
     aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
     aboutData.addCredit("Alessandro Musesti", I18N_NOOP("Italian translation"), "a.musesti@dmf.unicatt.it");
-    aboutData.addCredit("Stefan AsserhÃ€ll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
+    aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
     aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
     aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
     aboutData.addCredit("Kevin Liang", I18N_NOOP("HSpinBox class"), "xkliang@rhpcs.mcmaster.ca");
@@ -446,7 +447,8 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Lisandro Damián Nicanor Pérez Meyer", I18N_NOOP("Spanish translation"), "perezmeyer@infovia.com.ar");
     aboutData.addCredit("Javier Castrillo", I18N_NOOP("Spanish translation"), "riverplatense@gmail.com");
     aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
-    
+    aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
+    aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
     aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("new splash screen photo (of Michael's rose garden)"), "catma@adelphia.net");
 //    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
