@@ -2948,19 +2948,16 @@ msgid "Japanese translation"
 msgstr "traducció al japonès"
 
 #: main.cpp:441 _translatorinfo.cpp:1
-#, fuzzy
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
-msgstr ""
-"_: NAME OF TRANSLATORS\n"
-"Joaquim Perez i Noguer,  Feliu Ferrer i Valero"
+msgstr "Feliu Ferrer i Valero, Quim Perez i Noguer"
 
 #: main.cpp:441 _translatorinfo.cpp:3
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr "plcl@users.sourceforge.net,dmmcintyr@users.sourceforge.net"
+msgstr "mverge2@pie.xtec.es,noguer@osona.com"
 
 #: markereditor.cpp:107
 msgid "Manage Markers"
