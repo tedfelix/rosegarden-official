@@ -493,8 +493,6 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
         if (changeMade()) {
 
             CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
-        
-
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
@@ -598,6 +596,9 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
             updateRect |= (*it)->rect();
             setChangeMade(true);
         }
+
+        if (changeMade())
+            m_canvas->getModel()->signalContentChange();
 
         guideX = m_currentItem->rect().x();
         guideY = m_currentItem->rect().y();
@@ -1170,6 +1171,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             (*it)->moveTo(newX, newY);
             setChangeMade(true);
 	}
+
+        if (changeMade())
+            m_canvas->getModel()->signalContentChange();
 
         guideX = m_currentItem->rect().x();
         guideY = m_currentItem->rect().y();

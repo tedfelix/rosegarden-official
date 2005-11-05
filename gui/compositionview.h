@@ -113,6 +113,7 @@ protected:
 
 class CompositionModel : public QObject, public Rosegarden::CompositionObserver, public Rosegarden::SegmentObserver
 {
+    Q_OBJECT
 public:
 
     struct CompositionItemCompare {
@@ -181,6 +182,7 @@ public:
     virtual void setSelectionRect(const QRect&) = 0;
     virtual void finalizeSelectionRect() = 0;
     virtual QRect getSelectionContentsRect() = 0;
+    virtual void signalContentChange() = 0;
 
     virtual void addRecordingItem(const CompositionItem&) = 0;
     virtual void removeRecordingItem(const CompositionItem&) = 0;
@@ -193,6 +195,10 @@ public:
 
     virtual void setLength(int width) = 0;
     virtual int  getLength() = 0;
+
+signals:
+    void needContentUpdate();
+    void needArtifactsUpdate();
 
 protected:
     CompositionItem* m_currentCompositionItem;
@@ -231,6 +237,7 @@ public:
     virtual void setSelectionRect(const QRect&);
     virtual void finalizeSelectionRect();
     virtual QRect getSelectionContentsRect();
+    virtual void signalContentChange();
 
     virtual void addRecordingItem(const CompositionItem&);
     virtual void removeRecordingItem(const CompositionItem &);
@@ -279,7 +286,6 @@ public:
 
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
-    void needUpdate(QRect);
 
 protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
@@ -384,14 +390,14 @@ public:
     void setPointerPos(int pos);
     int getPointerPos() { return m_pointerPos; }
 
-    void setGuidesPos(int x, int y) { m_topGuidePos = x; m_foreGuidePos = y; }
-    void setGuidesPos(const QPoint& p) { m_topGuidePos = p.x(); m_foreGuidePos = p.y(); }
-    void setDrawGuides(bool d) { m_drawGuides = d; }
+    void setGuidesPos(int x, int y);
+    void setGuidesPos(const QPoint& p);
+    void setDrawGuides(bool d);
 
     QRect getSelectionRect() const { return m_selectionRect; }
     void setSelectionRectPos(const QPoint& pos);
     void setSelectionRectSize(int w, int h);
-    void setDrawSelectionRect(bool d) { m_drawSelectionRect = d; }
+    void setDrawSelectionRect(bool d);
 
     Rosegarden::SnapGrid& grid() { return m_model->grid(); }
 
@@ -406,7 +412,7 @@ public:
 
     CompositionModel* getModel() { return m_model; }
 
-    void setTmpRect(const QRect& r) { m_tmpRect = r; }
+    void setTmpRect(const QRect& r) { m_tmpRect = r; slotSegmentsDrawBufferNeedsRefresh(); }
     const QRect& getTmpRect() const { return m_tmpRect; }
 
     /**
