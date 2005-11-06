@@ -1635,9 +1635,13 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
     QRect r = e->rect().normalize();
+    QRect updateRect = r;
+
+    r &= viewport()->rect();
+    r.moveBy(contentsX(), contentsY());
 
 //     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
-//               << " - drawbuffer size = " << m_segmentsDrawBuffer.size() <<endl;
+//               << " - updateRect = " << updateRect <<endl;
 
     if (m_segmentsDrawBufferNeedsRefresh) {        
         refreshSegmentsDrawBuffer(r);
@@ -1646,7 +1650,15 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
         refreshArtifactsDrawBuffer(r);
     }
     
-   bitBlt(viewport(), 0, 0, &m_artifactsDrawBuffer);
+    bitBlt(viewport(), updateRect.x(), updateRect.y(),
+           &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+
+    // DEBUG
+//     QPainter p(viewport());
+//     static QPen framePen(Qt::red, 1);
+//     p.setPen(framePen);
+//     p.drawRect(updateRect);
+
 }
 
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
@@ -1657,16 +1669,18 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 
     QPainter p;
 
-    m_segmentsDrawBuffer.fill(viewport(), 0, 0);
+//     m_segmentsDrawBuffer.fill(viewport(), 0, 0);
     p.begin(&m_segmentsDrawBuffer, viewport());
 
-    //     QPen framePen(Qt::red, 1);
-    //     p.setPen(framePen);
-    //     p.drawRect(rect);
+    // DEBUG - show what's updated
+//     QPen framePen(Qt::red, 1);
+//     p.setPen(framePen);
+//     p.drawRect(rect);
 
-    QRect r(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
+//     QRect r(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
     p.translate(-contentsX(), -contentsY());
-    drawArea(&p, r);
+    p.eraseRect(rect);
+    drawArea(&p, rect);
 
     p.end();
     
@@ -1680,8 +1694,8 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
     QPainter p;
     p.begin(&m_artifactsDrawBuffer, viewport());
     p.translate(-contentsX(), -contentsY());
-    QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
-    drawAreaArtifacts(&p, r);
+//     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
+    drawAreaArtifacts(&p, rect);
     p.end();
 
     m_artifactsDrawBufferNeedsRefresh = false;
