@@ -2838,7 +2838,7 @@ TempoDialog::populateTempo()
 
     m_tempoValueSpinBox->setValue(tempo);
 
-    updateBeatLabels(tempo);
+    updateBeatLabels(comp.getTempoQpm(tempo));
 
     if (m_timeEditor) {
 	m_timeEditor->slotSetTime(m_tempoTime);
@@ -2912,7 +2912,7 @@ TempoDialog::populateTempo()
 }
 
 void
-TempoDialog::updateBeatLabels(double tempo)
+TempoDialog::updateBeatLabels(double qpm)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
@@ -2940,7 +2940,7 @@ TempoDialog::updateBeatLabels(double tempo)
 	m_tempoBeatsPerMinute->setText
 //	    (QString("= %1 )").arg
 	    (QString("= %1 ").arg
-	     (int(tempo * Note(Note::Crotchet).getDuration() / beat)));
+	     (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
 	m_tempoBeatLabel->show();
 	m_tempoBeat->show();
 	m_tempoBeatsPerMinute->show();

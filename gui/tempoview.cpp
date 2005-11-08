@@ -275,9 +275,9 @@ TempoView::applyLayout(int /*staffNo*/)
 		desc = i18n("%1.%2%3").
 		    arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths);
 	    } else {
-		float bpm = (float(tempo.second) *
+		float bpm = (qpm *
 			     Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()) /
-		    (sig.getBeatDuration() * 60.0);
+		    sig.getBeatDuration();
 		int bpmUnits = int(bpm + 0.001);
 		int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
 		int bpmHundredths = int((bpm - bpmUnits - bpmTenths/10.0) * 100 + 0.001);

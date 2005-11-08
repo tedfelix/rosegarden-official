@@ -1766,8 +1766,6 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 
 //     m_segmentsDrawBuffer.fill(viewport(), 0, 0);
     p.begin(&m_segmentsDrawBuffer, viewport());
-
-
 //     QRect r(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
     p.translate(-contentsX(), -contentsY());
     p.eraseRect(rect);
