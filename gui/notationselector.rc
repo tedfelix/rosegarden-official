@@ -5,6 +5,19 @@
 <Menu noMerge="1" name="NotationSelector">
   <Action name="insert" />
   <Action name="erase" />
+  <Separator />
+<!--  <Action name="collapse_rests" /> -->
+  <Action name="collapse_rests_aggressively" />
+  <Separator />
+  <Action name="respell_flat" />
+  <Action name="respell_sharp" />
+  <Action name="respell_natural" />
+  <Separator />
+  <Action name="collapse_notes" />
+  <Action name="interpret" />
+  <Separator />
+  <Action name="make_invisible" />
+  <Action name="make_visible" />
 </Menu>
 
 </kpartgui>

@@ -1135,6 +1135,45 @@ NotationSelector::NotationSelector(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
+// (this crashed, and it might be superfluous with ^N anyway, so I'm
+// commenting it out, but leaving it here in case I change my mind about
+// fooling with it.)  (DMM)
+//    new KAction(i18n("Normalize Rests"), 0, 0, this,
+//		SLOT(slotCollapseRests()), actionCollection(),
+//		"collapse_rests"); 
+
+    new KAction(i18n("Collapse Rests"), 0, 0, this,
+		SLOT(slotCollapseRestsHard()), actionCollection(),
+		"collapse_rests_aggressively"); 
+
+    new KAction(i18n("Respell as Flat"), 0, 0, this,
+		SLOT(slotRespellFlat()), actionCollection(),
+		"respell_flat"); 
+
+    new KAction(i18n("Respell as Sharp"), 0, 0, this,
+		SLOT(slotRespellSharp()), actionCollection(),
+		"respell_sharp"); 
+
+    new KAction(i18n("Respell as Natural"), 0, 0, this,
+		SLOT(slotRespellNatural()), actionCollection(),
+		"respell_natural"); 
+
+    new KAction(i18n("Collapse Notes"), 0, 0, this,
+		SLOT(slotCollapseNotes()), actionCollection(),
+		"collapse_notes"); 
+
+    new KAction(i18n("Interpret"), 0, 0, this,
+		SLOT(slotInterpret()), actionCollection(),
+		"interpret"); 
+
+    new KAction(i18n("Make Invisible"), 0, 0, this,
+		SLOT(slotMakeInvisible()), actionCollection(),
+		"make_invisible"); 
+
+    new KAction(i18n("Make Visible"), 0, 0, this,
+		SLOT(slotMakeVisible()), actionCollection(),
+		"make_visible"); 
+
     createMenu("notationselector.rc");
 }
 
@@ -1681,6 +1720,52 @@ void NotationSelector::slotEraseSelected()
 {
     m_parentView->actionCollection()->action("erase")->activate();
 }
+
+//void NotationSelector::slotCollapseRests()
+//{
+//    m_parentView->actionCollection()->action("collapse_rests")->activate();
+//}
+
+void NotationSelector::slotCollapseRestsHard()
+{
+    m_parentView->actionCollection()->action("collapse_rests_aggressively")->activate();
+}
+
+void NotationSelector::slotRespellFlat()
+{
+    m_parentView->actionCollection()->action("respell_flat")->activate();
+}
+
+void NotationSelector::slotRespellSharp()
+{
+    m_parentView->actionCollection()->action("respell_sharp")->activate();
+}
+
+void NotationSelector::slotRespellNatural()
+{
+    m_parentView->actionCollection()->action("respell_natural")->activate();
+}
+
+void NotationSelector::slotCollapseNotes()
+{
+    m_parentView->actionCollection()->action("collapse_notes")->activate();
+}
+
+void NotationSelector::slotInterpret()
+{
+    m_parentView->actionCollection()->action("interpret")->activate();
+}
+
+void NotationSelector::slotMakeInvisible()
+{
+    m_parentView->actionCollection()->action("make_invisible")->activate();
+}
+
+void NotationSelector::slotMakeVisible()
+{
+    m_parentView->actionCollection()->action("make_visible")->activate();
+}
+
 
 EventSelection* NotationSelector::getSelection()
 {

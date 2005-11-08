@@ -438,6 +438,15 @@ public slots:
     
     void slotInsertSelected();
     void slotEraseSelected();
+//    void slotCollapseRests();
+    void slotCollapseRestsHard();
+    void slotRespellFlat();
+    void slotRespellSharp();
+    void slotRespellNatural();
+    void slotCollapseNotes();
+    void slotInterpret();
+    void slotMakeInvisible();
+    void slotMakeVisible();
 
     void slotClickTimeout();
 
