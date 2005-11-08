@@ -153,6 +153,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 	QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 	if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
 			    arg(pixmapDir))) {
+	    m_segmentCanvas->setBackgroundPixmap(background);
 	    m_segmentCanvas->viewport()->setBackgroundPixmap(background);
 	}
     }

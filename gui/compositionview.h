@@ -464,6 +464,8 @@ public:
 
     void setShowSegmentLabels(bool b) { m_showSegmentLabels = b; }
 
+    void setBackgroundPixmap(const QPixmap &m) { m_backgroundPixmap = m; }
+
     void updateSize(bool shrinkWidth=false);
 
 public slots:
@@ -606,6 +608,7 @@ protected:
     bool         m_artifactsDrawBufferNeedsRefresh;
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;
+    QPixmap      m_backgroundPixmap;
 
     mutable CompositionModel::previewrectlist m_audioPreviewRects;
     mutable CompositionModel::PRectRanges m_notationPreviewRects;

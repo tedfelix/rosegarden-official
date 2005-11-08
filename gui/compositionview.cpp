@@ -1768,7 +1768,25 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
     p.begin(&m_segmentsDrawBuffer, viewport());
 //     QRect r(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
     p.translate(-contentsX(), -contentsY());
+
     p.eraseRect(rect);
+
+    if (!m_backgroundPixmap.isNull()) {
+	QPainter ip(&m_segmentsDrawBuffer);
+	ip.translate(-contentsX(), -contentsY());
+	// need to round boundaries of draw rect so as to make sure
+	// the pixmap is tiled properly across the whole canvas
+	int x = rect.x(), y = rect.y(),
+	    w = rect.width(), h = rect.height(),
+	    pw = m_backgroundPixmap.width(), ph = m_backgroundPixmap.height();
+	x = (x / pw) * pw;
+	y = (y / ph) * ph;
+	w = (w / pw + 1) * pw;
+	h = (h / ph + 1) * ph;
+	ip.setClipRect(rect, QPainter::CoordPainter);
+	ip.drawTiledPixmap(x, y, w, h, m_backgroundPixmap);
+    }
+    
     drawArea(&p, rect);
 
     // DEBUG - show what's updated
