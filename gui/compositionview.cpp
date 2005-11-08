@@ -1685,49 +1685,60 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
     int w = m_segmentsDrawBuffer.width(), h = m_segmentsDrawBuffer.height();
     int cx = contentsX(), cy = contentsY();
     
-    if (cx != m_lastBufferRefreshX) {
+    if (m_segmentsDrawBufferNeedsRefresh) {
+
+	// if the flag is set explicitly, we need to refresh the
+	// entire buffer because we have no way to know what part of
+	// it has changed.
+
+	refreshRect = QRect(cx, cy, w, h);
 	
-	int dx = m_lastBufferRefreshX - cx;
+    } else {
+
+	if (cx != m_lastBufferRefreshX) {
 	
-	if (dx > -w && dx < w) {
+	    int dx = m_lastBufferRefreshX - cx;
 	    
-	    QPainter cp(&m_segmentsDrawBuffer);
-	    cp.drawPixmap(dx, 0, m_segmentsDrawBuffer);
-	    cp.end();
-	    
-	    if (dx < 0) {
-		refreshRect |= QRect(cx + w + dx, cy, -dx, h);
+	    if (dx > -w && dx < w) {
+		
+		QPainter cp(&m_segmentsDrawBuffer);
+		cp.drawPixmap(dx, 0, m_segmentsDrawBuffer);
+		cp.end();
+		
+		if (dx < 0) {
+		    refreshRect |= QRect(cx + w + dx, cy, -dx, h);
+		} else {
+		    refreshRect |= QRect(cx, cy, dx, h);
+		}
+		
 	    } else {
-		refreshRect |= QRect(cx, cy, dx, h);
+		
+		refreshRect = QRect(cx, cy, w, h);
+		all = true;
 	    }
-	    
-	} else {
-	    
-	    refreshRect = QRect(cx, cy, w, h);
-	    all = true;
 	}
-    }
-    
-    if (cy != m_lastBufferRefreshY && !all) {
 	
-	int dy = m_lastBufferRefreshY - cy;
-	
-	if (dy > -h && dy < h) {
+	if (cy != m_lastBufferRefreshY && !all) {
 	    
-	    QPainter cp(&m_segmentsDrawBuffer);
-	    cp.drawPixmap(0, dy, m_segmentsDrawBuffer);
-	    cp.end();
+	    int dy = m_lastBufferRefreshY - cy;
 	    
-	    if (dy < 0) {
-		refreshRect |= QRect(cx, cy + h + dy, w, -dy);
+	    if (dy > -h && dy < h) {
+		
+		QPainter cp(&m_segmentsDrawBuffer);
+		cp.drawPixmap(0, dy, m_segmentsDrawBuffer);
+		cp.end();
+		
+		if (dy < 0) {
+		    refreshRect |= QRect(cx, cy + h + dy, w, -dy);
+		} else {
+		    refreshRect |= QRect(cx, cy, w, dy);
+		}
+		
 	    } else {
-		refreshRect |= QRect(cx, cy, w, dy);
+		
+		refreshRect = QRect(cx, cy, w, h);
+		all = true;
 	    }
-	    
-	} else {
-	    
-	    refreshRect = QRect(cx, cy, w, h);
-	    all = true;
 	}
     }
 
