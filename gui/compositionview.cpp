@@ -1294,7 +1294,9 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_segmentsDrawBuffer(visibleWidth(), visibleHeight()),
       m_artifactsDrawBuffer(visibleWidth(), visibleHeight()),
       m_segmentsDrawBufferNeedsRefresh(true),
-      m_artifactsDrawBufferNeedsRefresh(true)
+      m_artifactsDrawBufferNeedsRefresh(true),
+      m_lastBufferRefreshX(0),
+      m_lastBufferRefreshY(0)
 {
     m_toolBox = new SegmentToolBox(this, doc);
 
@@ -1312,8 +1314,9 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
             this, SLOT(scrollRight()));
     connect(hsb, SIGNAL(prevLine()),
             this, SLOT(scrollLeft()));
-    connect(this, SIGNAL(contentsMoving(int, int)),
-            this, SLOT(slotAllDrawBuffersNeedRefresh()));
+
+//    connect(this, SIGNAL(contentsMoving(int, int)),
+//            this, SLOT(slotAllDrawBuffersNeedRefresh()));
 
 //     connect(this, SIGNAL(contentsMoving(int, int)),
 //             this, SLOT(slotContentsMoving(int, int)));
@@ -1640,18 +1643,30 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
 
-//     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
-//               << " - updateRect = " << updateRect <<endl;
+    RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
+             << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
 
-    if (m_segmentsDrawBufferNeedsRefresh) {        
-        refreshSegmentsDrawBuffer(r);
-        refreshArtifactsDrawBuffer(r);
-    } else if (m_artifactsDrawBufferNeedsRefresh) {
-        refreshArtifactsDrawBuffer(r);
-    }
-    
+    checkScrollAndRefreshDrawBuffer(r);
+
+    //!!! cc -- for the moment blit directly from the segment buffer
+    // and add the artifacts afterwards on the window.
+
+    // if (m_artifactsDrawBufferNeedsRefresh) {
+    //      refreshArtifactsDrawBuffer(r);
+    // }
+    // bitBlt(viewport(), updateRect.x(), updateRect.y(),
+    //         &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+
     bitBlt(viewport(), updateRect.x(), updateRect.y(),
-           &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+	   &m_segmentsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+
+    QPainter p;
+    p.begin(viewport());
+    p.translate(-contentsX(), -contentsY());
+//     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
+    drawAreaArtifacts(&p, r);
+    p.end();
+    
 
     // DEBUG
 //     QPainter p(viewport());
@@ -1661,34 +1676,107 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
 }
 
+void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
+{
+    bool needRefresh = m_segmentsDrawBufferNeedsRefresh;
+    bool all = false;
+    QRect refreshRect;
+     
+    int w = m_segmentsDrawBuffer.width(), h = m_segmentsDrawBuffer.height();
+    int cx = contentsX(), cy = contentsY();
+    
+    if (cx != m_lastBufferRefreshX) {
+	
+	int dx = m_lastBufferRefreshX - cx;
+	
+	if (dx > -w && dx < w) {
+	    
+	    QPainter cp(&m_segmentsDrawBuffer);
+	    cp.drawPixmap(dx, 0, m_segmentsDrawBuffer);
+	    cp.end();
+	    
+	    if (dx < 0) {
+		refreshRect |= QRect(cx + w + dx, cy, -dx, h);
+	    } else {
+		refreshRect |= QRect(cx, cy, dx, h);
+	    }
+	    
+	} else {
+	    
+	    refreshRect = QRect(cx, cy, w, h);
+	    all = true;
+	}
+    }
+    
+    if (cy != m_lastBufferRefreshY && !all) {
+	
+	int dy = m_lastBufferRefreshY - cy;
+	
+	if (dy > -h && dy < h) {
+	    
+	    QPainter cp(&m_segmentsDrawBuffer);
+	    cp.drawPixmap(0, dy, m_segmentsDrawBuffer);
+	    cp.end();
+	    
+	    if (dy < 0) {
+		refreshRect |= QRect(cx, cy + h + dy, w, -dy);
+	    } else {
+		refreshRect |= QRect(cx, cy, w, dy);
+	    }
+	    
+	} else {
+	    
+	    refreshRect = QRect(cx, cy, w, h);
+	    all = true;
+	}
+    }
+
+    if (refreshRect.isValid()) {
+	needRefresh = true;
+	refreshRect |= rect;
+    } else {
+	refreshRect = rect;
+    }
+
+    if (needRefresh) refreshSegmentsDrawBuffer(refreshRect);
+
+    m_segmentsDrawBufferNeedsRefresh = false;
+    m_lastBufferRefreshX = cx;
+    m_lastBufferRefreshY = cy;
+}
+
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 {
 //    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
-//     RG_DEBUG << "CompositionView::refreshDrawBuffer() r = "
-//              << rect << endl;
+    RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
+	     << rect << endl;
 
     QPainter p;
 
 //     m_segmentsDrawBuffer.fill(viewport(), 0, 0);
     p.begin(&m_segmentsDrawBuffer, viewport());
 
-    // DEBUG - show what's updated
-//     QPen framePen(Qt::red, 1);
-//     p.setPen(framePen);
-//     p.drawRect(rect);
 
 //     QRect r(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
     p.translate(-contentsX(), -contentsY());
     p.eraseRect(rect);
     drawArea(&p, rect);
 
+    // DEBUG - show what's updated
+//    QPen framePen(Qt::red, 1);
+//    p.setPen(framePen);
+//    p.drawRect(rect);
+    
     p.end();
     
-    m_segmentsDrawBufferNeedsRefresh = false;
+//    m_segmentsDrawBufferNeedsRefresh = false;
 }
 
 void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
 {
+     RG_DEBUG << "CompositionView::refreshArtifactsDrawBuffer() r = "
+              << rect << endl;
+
     bitBlt(&m_artifactsDrawBuffer, 0, 0, &m_segmentsDrawBuffer);
 
     QPainter p;

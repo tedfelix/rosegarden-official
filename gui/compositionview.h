@@ -532,6 +532,7 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
     
+    void checkScrollAndRefreshDrawBuffer(const QRect &);
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
@@ -603,6 +604,8 @@ protected:
     QPixmap      m_artifactsDrawBuffer;
     bool         m_segmentsDrawBufferNeedsRefresh;
     bool         m_artifactsDrawBufferNeedsRefresh;
+    int          m_lastBufferRefreshX;
+    int          m_lastBufferRefreshY;
 
     mutable CompositionModel::previewrectlist m_audioPreviewRects;
     mutable CompositionModel::PRectRanges m_notationPreviewRects;
