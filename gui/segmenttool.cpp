@@ -1063,7 +1063,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (!m_currentItem)  {
 
-	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item\n";
+// 	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item\n";
 
         // do a bounding box
         QRect selectionRect  = m_canvas->getSelectionRect();

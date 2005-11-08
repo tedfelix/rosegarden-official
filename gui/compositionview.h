@@ -198,6 +198,7 @@ public:
 
 signals:
     void needContentUpdate();
+    void needContentUpdate(const QRect&);
     void needArtifactsUpdate();
 
 protected:
@@ -503,7 +504,7 @@ public slots:
     void slotTextFloatTimeout();
 
     void slotUpdate();
-    void slotUpdate(QRect);
+    void slotUpdate(const QRect&);
 
     void slotRefreshColourCache();
 

@@ -5390,7 +5390,7 @@ void
 RosegardenGUIApp::slotStateChanged(QString s,
                                    bool noReverse)
 {
-    RG_DEBUG << "RosegardenGUIApp::slotStateChanged " << s << "," << noReverse << endl;
+//     RG_DEBUG << "RosegardenGUIApp::slotStateChanged " << s << "," << noReverse << endl;
 
     stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 }

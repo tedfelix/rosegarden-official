@@ -845,6 +845,8 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     const Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
+    QRect updateRect;
+    
     for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
@@ -852,11 +854,16 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(m_selectionRect)) {
             m_tmpSelectedSegments.insert(s);
+            updateRect |= sr;
         }
     }
 
-    if (m_previousTmpSelectedSegments.size() != m_tmpSelectedSegments.size())
-        emit needContentUpdate();
+    if (m_previousTmpSelectedSegments.size() != m_tmpSelectedSegments.size()) {
+//         RG_DEBUG << "CompositionModelImpl::setSelectionRect() : update r = "
+//                  << updateRect << endl;
+        emit needContentUpdate(updateRect);
+//         emit needContentUpdate();
+    }
 
     emit needArtifactsUpdate();
 }
@@ -994,7 +1001,7 @@ void CompositionModelImpl::setSelected(const Segment* segment, bool selected)
 
 void CompositionModelImpl::signalSelection()
 {
-    RG_DEBUG << "CompositionModelImpl::signalSelection()\n";
+//     RG_DEBUG << "CompositionModelImpl::signalSelection()\n";
     emit selectedSegments(getSelectedSegments());
 }
 void CompositionModelImpl::signalContentChange()
@@ -1324,8 +1331,9 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
             this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 
     connect(model, SIGNAL(needContentUpdate()),
-//             this, SLOT(slotUpdate()));
             this, SLOT(slotSegmentsDrawBufferNeedsRefresh()));
+    connect(model, SIGNAL(needContentUpdate(const QRect&)),
+            this, SLOT(slotUpdate(const QRect&)));
     connect(model, SIGNAL(needArtifactsUpdate()),
             this, SLOT(slotArtifactsDrawBufferNeedsRefresh()));
 
@@ -1581,17 +1589,15 @@ void CompositionView::slotUpdate()
     viewport()->repaint(false);
 }
 
-void CompositionView::slotUpdate(QRect rect)
+void CompositionView::slotUpdate(const QRect& rect)
 {
-//     RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
+    RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
     slotAllDrawBuffersNeedRefresh();
     refreshDirtyPreviews();
-//     if (rect.isValid())
-//         viewport()->repaint(rect, false);
-//     else
-
-    // ignore the rect, doesn't make any difference anyway since we redrawn everything
-    viewport()->repaint(false);
+    if (rect.isValid())
+        viewport()->repaint(rect, false);
+    else
+        viewport()->repaint(false);
 }
 
 void CompositionView::slotRefreshColourCache()
@@ -1643,8 +1649,8 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
 
-    RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
-             << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
+//     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
+//              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
 
     checkScrollAndRefreshDrawBuffer(r);
 
@@ -1669,10 +1675,10 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     
 
     // DEBUG
-//     QPainter p(viewport());
+//     QPainter pdebug(viewport());
 //     static QPen framePen(Qt::red, 1);
-//     p.setPen(framePen);
-//     p.drawRect(updateRect);
+//     pdebug.setPen(framePen);
+//     pdebug.drawRect(updateRect);
 
 }
 
