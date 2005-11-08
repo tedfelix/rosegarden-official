@@ -351,6 +351,7 @@ protected:
     itemgc m_itemGC;
 
     QRect m_selectionRect;
+    QRect m_previousSelectionUpdateRect;
 
     QMap<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
     QMap<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;

@@ -861,11 +861,14 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     if (m_previousTmpSelectedSegments.size() != m_tmpSelectedSegments.size()) {
 //         RG_DEBUG << "CompositionModelImpl::setSelectionRect() : update r = "
 //                  << updateRect << endl;
-        emit needContentUpdate(updateRect);
+        emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
 //         emit needContentUpdate();
     }
 
     emit needArtifactsUpdate();
+
+    m_previousSelectionUpdateRect = updateRect;
+
 }
 
 void CompositionModelImpl::finalizeSelectionRect()
