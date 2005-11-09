@@ -862,7 +862,6 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
 //         RG_DEBUG << "CompositionModelImpl::setSelectionRect() : update r = "
 //                  << updateRect << endl;
         emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
-//         emit needContentUpdate();
     }
 
     emit needArtifactsUpdate();
@@ -1597,9 +1596,11 @@ void CompositionView::slotUpdate(const QRect& rect)
     RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
     slotAllDrawBuffersNeedRefresh();
     refreshDirtyPreviews();
-    if (rect.isValid())
-        viewport()->repaint(rect, false);
-    else
+    if (rect.isValid()) {
+        QRect cr(rect);
+        cr.moveTopLeft(contentsToViewport(cr.topLeft()));
+        viewport()->repaint(cr, false);
+    } else
         viewport()->repaint(false);
 }
 
@@ -1660,21 +1661,20 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     //!!! cc -- for the moment blit directly from the segment buffer
     // and add the artifacts afterwards on the window.
 
-    // if (m_artifactsDrawBufferNeedsRefresh) {
-    //      refreshArtifactsDrawBuffer(r);
-    // }
-    // bitBlt(viewport(), updateRect.x(), updateRect.y(),
-    //         &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+    refreshArtifactsDrawBuffer(r);
 
     bitBlt(viewport(), updateRect.x(), updateRect.y(),
-	   &m_segmentsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+           &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
 
-    QPainter p;
-    p.begin(viewport());
-    p.translate(-contentsX(), -contentsY());
-//     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
-    drawAreaArtifacts(&p, r);
-    p.end();
+//     bitBlt(viewport(), updateRect.x(), updateRect.y(),
+// 	   &m_segmentsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
+
+    // draw artifacts directly on screen - bliting limits flicker, though
+//     QPainter p;
+//     p.begin(viewport());
+//     p.translate(-contentsX(), -contentsY());
+// //     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
+//     drawAreaArtifacts(&p, r);
     
 
     // DEBUG
@@ -1712,7 +1712,6 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 		
 		QPainter cp(&m_segmentsDrawBuffer);
 		cp.drawPixmap(dx, 0, m_segmentsDrawBuffer);
-		cp.end();
 		
 		if (dx < 0) {
 		    refreshRect |= QRect(cx + w + dx, cy, -dx, h);
@@ -1735,7 +1734,6 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 		
 		QPainter cp(&m_segmentsDrawBuffer);
 		cp.drawPixmap(0, dy, m_segmentsDrawBuffer);
-		cp.end();
 		
 		if (dy < 0) {
 		    refreshRect |= QRect(cx, cy + h + dy, w, -dy);
@@ -1810,8 +1808,8 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 
 void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
 {
-     RG_DEBUG << "CompositionView::refreshArtifactsDrawBuffer() r = "
-              << rect << endl;
+//      RG_DEBUG << "CompositionView::refreshArtifactsDrawBuffer() r = "
+//               << rect << endl;
 
     bitBlt(&m_artifactsDrawBuffer, 0, 0, &m_segmentsDrawBuffer);
 
