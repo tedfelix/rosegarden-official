@@ -45,6 +45,12 @@ class RingBuffer
 public:
     /**
      * Create a ring buffer with room for n samples.
+     *
+     * Note that the internal storage size will actually be n+1
+     * samples, as one element is unavailable for administrative
+     * reasons.  Since the ring buffer performs best if its size is a
+     * power of two, this means n should ideally be some power of two
+     * minus one.
      */
     RingBuffer(size_t n);
 
@@ -155,7 +161,7 @@ Scavenger<ScavengerArrayWrapper<T> > RingBuffer<T, N>::m_scavenger;
 
 template <typename T, int N>
 RingBuffer<T, N>::RingBuffer(size_t n) :
-    m_buffer(new T[n]),
+    m_buffer(new T[n + 1]),
     m_writer(0),
     m_size(n + 1),
     m_mlocked(false)
@@ -190,8 +196,8 @@ RingBuffer<T, N>::resize(size_t newSize)
     m_scavenger.claim(new ScavengerArrayWrapper<T>(m_buffer));
 
     reset();
-    m_buffer = new T[newSize];
-    m_size = newSize;
+    m_buffer = new T[newSize + 1];
+    m_size = newSize + 1;
 
     if (m_mlocked) {
 	if (::mlock((void *)m_buffer, m_size * sizeof(T))) {
