@@ -250,6 +250,8 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
             continue;
         
         CompositionRect sr = computeSegmentRect(*s);
+//         RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr << endl;
+
         if (sr.intersects(rect)) {
             bool tmpSelected = isTmpSelected(s),
                 pTmpSelected = wasTmpSelected(s);
@@ -916,7 +918,11 @@ void CompositionModelImpl::addRecordingItem(const CompositionItem& item)
 
 void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 {
-    m_recordingSegments.erase(CompositionItemHelper::getSegment(item));
+    Segment* s = CompositionItemHelper::getSegment(item);
+    
+    m_recordingSegments.erase(s);
+    clearInCache(s);
+
     emit needContentUpdate();
 
 //     RG_DEBUG << "CompositionModelImpl::removeRecordingItem: now have "
@@ -926,6 +932,7 @@ void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 void CompositionModelImpl::clearRecordingItems()
 {
     m_recordingSegments.clear();
+    clearSegmentRectsCache();
     emit needContentUpdate();
 //     RG_DEBUG << "CompositionModelImpl::clearRecordingItem\n";
 }
