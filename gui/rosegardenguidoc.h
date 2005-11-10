@@ -491,6 +491,7 @@ signals:
 
     void stoppedAudioRecording();
     void stoppedMIDIRecording();
+    void audioFileFinalized(Rosegarden::Segment*);
 
     void playPositionChanged(Rosegarden::timeT);
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);

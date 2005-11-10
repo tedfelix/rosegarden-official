@@ -288,6 +288,9 @@ public:
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
 
+public slots:
+    void slotAudioFileFinalized(Rosegarden::Segment*);
+
 protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
@@ -327,8 +330,8 @@ protected:
     Rosegarden::SegmentSelection m_tmpSelectedSegments;
     Rosegarden::SegmentSelection m_previousTmpSelectedSegments;
 
-    typedef std::set<Rosegarden::Segment *> RecordingSegmentSet;
-    RecordingSegmentSet          m_recordingSegments;
+    typedef std::set<Rosegarden::Segment *> recordingsegmentset;
+    recordingsegmentset          m_recordingSegments;
 
     typedef std::vector<CompositionItem> itemgc;
 

@@ -699,6 +699,13 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 //     emit needContentUpdate(computeSegmentRect(*(apu->getSegment()))); // better ?
 }
 
+void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)
+{
+    RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()\n";
+    m_dirtySegments.insert(s);
+    refreshDirtyPreviews();
+}
+
 CompositionModel::previewrectlist* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
 {
     previewrectlist* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
@@ -922,6 +929,7 @@ void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
     
     m_recordingSegments.erase(s);
     clearInCache(s);
+    removePreviewCache(s);
 
     emit needContentUpdate();
 
@@ -931,8 +939,12 @@ void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
 
 void CompositionModelImpl::clearRecordingItems()
 {
+    for(recordingsegmentset::iterator i = m_recordingSegments.begin();
+        i != m_recordingSegments.end(); ++i)
+        clearInCache(*i);
+
     m_recordingSegments.clear();
-    clearSegmentRectsCache();
+
     emit needContentUpdate();
 //     RG_DEBUG << "CompositionModelImpl::clearRecordingItem\n";
 }
@@ -1358,6 +1370,8 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
             this, SLOT(slotStoppedRecording()));
     connect(doc, SIGNAL(stoppedMIDIRecording()),
             this, SLOT(slotStoppedRecording()));
+    connect(doc, SIGNAL(audioFileFinalized(Rosegarden::Segment*)),
+            getModel(), SLOT(slotAudioFileFinalized(Rosegarden::Segment*)));
 
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {

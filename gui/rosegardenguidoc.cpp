@@ -2354,6 +2354,7 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
 
     // clear down
     m_recordAudioSegments.erase(iid);
+    emit audioFileFinalized(recordSegment);
 }
 
 void
