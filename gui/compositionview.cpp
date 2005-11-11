@@ -227,7 +227,7 @@ unsigned int CompositionModelImpl::getNbRows()
 }
 
 const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
-                                                                             PRectRanges* npData,
+                                                                             RectRanges* npData,
                                                                              previewrectlist* apData)
 {
 //    Rosegarden::Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
@@ -325,17 +325,17 @@ struct RectCompare {
 
 
 
-void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint basePoint,
+void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint basePoint,
                                                     const Segment* segment, const QRect& clipRect)
 {
-    previewrectlist* cachedNPData = getNotationPreviewData(segment);
+    rectlist* cachedNPData = getNotationPreviewData(segment);
 
     if (cachedNPData->empty())
         return;
 
-    previewrectlist::iterator npEnd = cachedNPData->end();
+    rectlist::iterator npEnd = cachedNPData->end();
 
-    previewrectlist::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
+    rectlist::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, clipRect, RectCompare());
 
     if (npi == npEnd)
         return;
@@ -343,7 +343,7 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint
     if (npi != cachedNPData->begin())
         --npi;
 
-    PRectRange interval;
+    RectRange interval;
     
     interval.range.first = npi;
 
@@ -356,6 +356,8 @@ void CompositionModelImpl::makeNotationPreviewRects(PRectRanges* npRects, QPoint
 
     interval.range.second = npi;
     interval.basePoint = QPoint(0, basePoint.y());
+    interval.color = computeSegmentNotationPreviewColor(segment);
+
     npRects->push_back(interval);
 }
 
@@ -552,14 +554,16 @@ void CompositionModelImpl::refreshAllPreviews()
 
     clearPreviewCache();
 
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    // no need to recompute the previews - it happens on demand when the segments are redrawn
+    //
+//     const Composition::segmentcontainer& segments = m_composition.getSegments();
+//     Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-        i != segEnd; ++i) {
+//     for (Composition::segmentcontainer::iterator i = segments.begin();
+//         i != segEnd; ++i) {
 
-        makePreviewCache(*i);
-    }
+//         makePreviewCache(*i);
+//     }
     
 }
 
@@ -571,12 +575,11 @@ void CompositionModelImpl::clearPreviewCache()
     m_audioPreviewDataCache.clear();
 }
 
-void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, previewrectlist* npData)
+void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, rectlist* npData)
 {
     npData->clear();
     
     int segStartX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
-    QColor segColor = computeSegmentNotationPreviewColor(segment);
 
     for (Segment::iterator i = segment->begin();
 	 segment->isBeforeEndMarker(i); ++i) {
@@ -608,8 +611,7 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         if (y < y0) y = y0;
         if (y > y1-1) y = y1-1;
 
-        PreviewRect r(x, (int)y, width, 2);
-        r.setColor(segColor);
+        QRect r(x, (int)y, width, 2);
 
 //         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : npData = "
 //                  << npData << ", preview rect = "
@@ -695,8 +697,8 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
     m_audioPreviewUpdaters.erase(apu);
     delete apu;
 
-    emit needContentUpdate();
-//     emit needContentUpdate(computeSegmentRect(*(apu->getSegment()))); // better ?
+//     emit needContentUpdate();
+    emit needContentUpdate(computeSegmentRect(*(apu->getSegment())));
 }
 
 void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)
@@ -706,9 +708,9 @@ void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)
     refreshDirtyPreviews();
 }
 
-CompositionModel::previewrectlist* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
+CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
 {
-    previewrectlist* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+    rectlist* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
  
     if (!npData) {
         npData = makeNotationPreviewDataCache(s);
@@ -742,11 +744,9 @@ void CompositionModelImpl::refreshDirtyPreviews()
 
         if (s->getType() == Rosegarden::Segment::Audio) {
             AudioPreviewData* apData = getAudioPreviewData(s);
-            RG_DEBUG << "CompositionModelImpl::refreshDirtyPreviews() - update audio preview cache for segment "
-                     << s << endl;
             updatePreviewCacheForAudioSegment(s, apData);
         } else {
-            previewrectlist* npData = getNotationPreviewData(s);
+            rectlist* npData = getNotationPreviewData(s);
             updatePreviewCacheForNotationSegment(s, npData);
         }
     }
@@ -773,7 +773,7 @@ void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden
 
 void CompositionModelImpl::appearanceChanged(const Rosegarden::Segment *s)
 {
-    clearInCache(s);
+    clearInCache(s, true);
     emit needContentUpdate();
 }
 
@@ -812,8 +812,7 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
-    clearInCache(s);
-    removePreviewCache(s);
+    clearInCache(s, true);
     s->removeObserver(this);
     emit needContentUpdate();
 }
@@ -824,23 +823,24 @@ void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s,
     emit needContentUpdate();
 }
 
-CompositionModel::previewrectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
-    previewrectlist* npData = new previewrectlist();
+    rectlist* npData = new rectlist();
     updatePreviewCacheForNotationSegment(s, npData);
     m_notationPreviewDataCache.insert(const_cast<Segment*>(s), npData);
+    m_dirtySegments.erase(const_cast<Segment*>(s));
 
     return npData;
 }
 
 CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
 {
-    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")" << endl;
+//     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")" << endl;
 
     AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
     updatePreviewCacheForAudioSegment(s, apData);
     m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
-
+    m_dirtySegments.erase(const_cast<Segment*>(s));
     return apData;
 }
 
@@ -928,8 +928,7 @@ void CompositionModelImpl::removeRecordingItem(const CompositionItem &item)
     Segment* s = CompositionItemHelper::getSegment(item);
     
     m_recordingSegments.erase(s);
-    clearInCache(s);
-    removePreviewCache(s);
+    clearInCache(s, true);
 
     emit needContentUpdate();
 
@@ -941,7 +940,7 @@ void CompositionModelImpl::clearRecordingItems()
 {
     for(recordingsegmentset::iterator i = m_recordingSegments.begin();
         i != m_recordingSegments.end(); ++i)
-        clearInCache(*i);
+        clearInCache(*i, true);
 
     m_recordingSegments.clear();
 
@@ -1152,16 +1151,18 @@ bool CompositionModelImpl::isCachedRectCurrent(const Segment& s, const Compositi
          (cachedSegmentOrigin.x() == r.x() && s.getEndMarkerTime() == cachedSegmentEndTime));
 }
 
-void CompositionModelImpl::clearInCache(const Rosegarden::Segment* s)
+void CompositionModelImpl::clearInCache(const Rosegarden::Segment* s, bool clearPreview)
 {
     if (s) {
         m_segmentRectMap.erase(s);
         m_segmentEndTimeMap.erase(s);
-        removePreviewCache(s);
+        if (clearPreview)
+            removePreviewCache(s);
     } else { // clear the whole cache
         m_segmentRectMap.clear();
         m_segmentEndTimeMap.clear();
-        clearPreviewCache();
+        if (clearPreview)
+            clearPreviewCache();
     }
 }
 
@@ -1383,7 +1384,16 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
 
     m_segmentsDrawBuffer.setOptimization(QPixmap::BestOptim);
     m_artifactsDrawBuffer.setOptimization(QPixmap::BestOptim);
+
+    
 }
+
+void CompositionView::setBackgroundPixmap(const QPixmap &m)
+{
+    m_backgroundPixmap = m;
+//     viewport()->setErasePixmap(m_backgroundPixmap);
+}
+
 
 void CompositionView::initStepSize()
 {
@@ -1452,11 +1462,9 @@ void CompositionView::setDrawSelectionRect(bool d)
 }
 
 
-void CompositionView::refreshAllPreviewsAndCache()
+void CompositionView::clearSegmentRectsCache(bool clearPreviews)
 {
-    dynamic_cast<CompositionModelImpl*>(getModel())->refreshAllPreviews();
-    dynamic_cast<CompositionModelImpl*>(getModel())->clearDirtyPreviews();
-    dynamic_cast<CompositionModelImpl*>(getModel())->clearSegmentRectsCache();    
+    dynamic_cast<CompositionModelImpl*>(getModel())->clearSegmentRectsCache(clearPreviews);
 }
 
 void CompositionView::refreshDirtyPreviews()
@@ -1628,7 +1636,7 @@ void CompositionView::slotUpdate(const QRect& rect)
 void CompositionView::slotRefreshColourCache()
 {
     CompositionColourCache::getInstance()->init();
-    refreshAllPreviewsAndCache();
+    clearSegmentRectsCache();
     slotUpdate();
 }
 
@@ -1678,9 +1686,6 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 //              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
 
     checkScrollAndRefreshDrawBuffer(r);
-
-    //!!! cc -- for the moment blit directly from the segment buffer
-    // and add the artifacts afterwards on the window.
 
     refreshArtifactsDrawBuffer(r);
 
@@ -1742,7 +1747,7 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 		
 	    } else {
 		
-		refreshRect = QRect(cx, cy, w, h);
+		refreshRect.setRect(cx, cy, w, h);
 		all = true;
 	    }
 	}
@@ -1764,7 +1769,7 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 		
 	    } else {
 		
-		refreshRect = QRect(cx, cy, w, h);
+		refreshRect.setRect(cx, cy, w, h);
 		all = true;
 	    }
 	}
@@ -1787,42 +1792,25 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 {
 //    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
-    RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
-	     << rect << endl;
+//     RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
+// 	     << rect << endl;
 
-    QPainter p;
-
-//     m_segmentsDrawBuffer.fill(viewport(), 0, 0);
-    p.begin(&m_segmentsDrawBuffer, viewport());
-//     QRect r(contentsX(), contentsY(), m_segmentsDrawBuffer.width(), m_segmentsDrawBuffer.height());
+    QPainter p(&m_segmentsDrawBuffer, viewport());
     p.translate(-contentsX(), -contentsY());
 
-    p.eraseRect(rect);
-
     if (!m_backgroundPixmap.isNull()) {
-	QPainter ip(&m_segmentsDrawBuffer);
-	ip.translate(-contentsX(), -contentsY());
-	// need to round boundaries of draw rect so as to make sure
-	// the pixmap is tiled properly across the whole canvas
-	int x = rect.x(), y = rect.y(),
-	    w = rect.width(), h = rect.height(),
-	    pw = m_backgroundPixmap.width(), ph = m_backgroundPixmap.height();
-	x = (x / pw) * pw;
-	y = (y / ph) * ph;
-	w = (w / pw + 1) * pw;
-	h = (h / ph + 1) * ph;
-	ip.setClipRect(rect, QPainter::CoordPainter);
-	ip.drawTiledPixmap(x, y, w, h, m_backgroundPixmap);
+        QPoint pp(rect.x() % m_backgroundPixmap.height(), rect.y() % m_backgroundPixmap.width());
+	p.drawTiledPixmap(rect, m_backgroundPixmap, pp);
+    } else {
+        p.eraseRect(rect);
     }
-    
+
     drawArea(&p, rect);
 
     // DEBUG - show what's updated
 //    QPen framePen(Qt::red, 1);
 //    p.setPen(framePen);
 //    p.drawRect(rect);
-    
-    p.end();
     
 //    m_segmentsDrawBufferNeedsRefresh = false;
 }
@@ -1852,7 +1840,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
 
     CompositionModel::previewrectlist* audioPreviewData = 0;
-    CompositionModel::PRectRanges* notationPreviewData = 0;
+    CompositionModel::RectRanges* notationPreviewData = 0;
 
     //
     // Fetch previews
@@ -1918,18 +1906,18 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         
         // draw notation previews
         //
-        CompositionModel::PRectRanges::const_iterator npi = m_notationPreviewRects.begin();
-        CompositionModel::PRectRanges::const_iterator npEnd = m_notationPreviewRects.end();
+        CompositionModel::RectRanges::const_iterator npi = m_notationPreviewRects.begin();
+        CompositionModel::RectRanges::const_iterator npEnd = m_notationPreviewRects.end();
         
         for(; npi != npEnd; ++npi) {
-            CompositionModel::PRectRange interval = *npi;
+            CompositionModel::RectRange interval = *npi;
             p->save();
             p->translate(interval.basePoint.x(), interval.basePoint.y());
             for(; interval.range.first != interval.range.second; ++interval.range.first) {
 
                 const PreviewRect& pr = *(interval.range.first);
                 QColor defaultCol = CompositionColourCache::getInstance()->SegmentInternalPreview;
-                QColor col = pr.getColor().isValid() ? pr.getColor() : defaultCol;
+                QColor col = interval.color.isValid() ? interval.color : defaultCol;
                 p->setBrush(col);
                 p->setPen(col);
                 p->drawRect(pr);

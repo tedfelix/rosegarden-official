@@ -123,15 +123,17 @@ public:
     };
 
     typedef std::vector<PreviewRect> previewrectlist;
+    typedef std::vector<QRect> rectlist;
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
-    struct PRectRange {
-        std::pair<previewrectlist::iterator, previewrectlist::iterator> range;
+    struct RectRange {
+        std::pair<rectlist::iterator, rectlist::iterator> range;
         QPoint basePoint;
+        QColor color;
     };
 
-    typedef std::vector<PRectRange> PRectRanges;
+    typedef std::vector<RectRange> RectRanges;
 
     class AudioPreviewData {
     public:
@@ -166,7 +168,7 @@ public:
 
     virtual unsigned int getNbRows() = 0;
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 PRectRanges* notationRects, previewrectlist* audioRects) = 0;
+                                                 RectRanges* notationRects, previewrectlist* audioRects) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
@@ -223,7 +225,7 @@ public:
     
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 PRectRanges* notationRects, previewrectlist* audioRects);
+                                                 RectRanges* notationRects, previewrectlist* audioRects);
     virtual itemcontainer     getItemsAt      (const QPoint&);
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
@@ -259,9 +261,9 @@ public:
     void refreshDirtyPreviews();
     void clearPreviewCache();
     void clearDirtyPreviews();
-    void clearSegmentRectsCache() { clearInCache(0); }
+    void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
 
-    previewrectlist* makeNotationPreviewDataCache(const Rosegarden::Segment *s);
+    rectlist*            makeNotationPreviewDataCache(const Rosegarden::Segment *s);
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
     CompositionRect computeSegmentRect(const Rosegarden::Segment&);
@@ -303,20 +305,20 @@ protected:
     bool isRecording(const Rosegarden::Segment*) const;
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
-    void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, previewrectlist*);
+    void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, rectlist*);
     void updatePreviewCacheForAudioSegment(const Rosegarden::Segment* s, AudioPreviewData*);
-    previewrectlist* getNotationPreviewData(const Rosegarden::Segment* s);
+    rectlist* getNotationPreviewData(const Rosegarden::Segment* s);
     AudioPreviewData* getAudioPreviewData(const Rosegarden::Segment* s);
 
     void makePreviewCache(const Rosegarden::Segment* s);
     void removePreviewCache(const Rosegarden::Segment* s);
-    void makeNotationPreviewRects(PRectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
     void makeAudioPreviewRects(previewrectlist* apRects, const Rosegarden::Segment*,
                                const CompositionRect& segRect, const QRect& clipRect);
 
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
 
-    void clearInCache(const Rosegarden::Segment*);
+    void clearInCache(const Rosegarden::Segment*, bool clearPreviewCache = false);
     void putInCache(const Rosegarden::Segment*, const CompositionRect&);
     const CompositionRect& getFromCache(const Rosegarden::Segment*, Rosegarden::timeT& endTime);
     bool isCachedRectCurrent(const Rosegarden::Segment& s, const CompositionRect& r,
@@ -337,7 +339,7 @@ protected:
 
     AudioPreviewThread*          m_audioPreviewThread;
 
-    typedef QPtrDict<previewrectlist> NotationPreviewDataCache;
+    typedef QPtrDict<rectlist> NotationPreviewDataCache;
     typedef QPtrDict<AudioPreviewData>    AudioPreviewDataCache;
 
     NotationPreviewDataCache     m_notationPreviewDataCache;
@@ -442,9 +444,9 @@ public:
     bool isShowingPreviews() { return m_showPreviews; }
 
     /**
-     * Refresh all previews and seg rect cache
+     * clear all seg rect cache
      */
-    void refreshAllPreviewsAndCache();
+    void clearSegmentRectsCache(bool clearPreviews = false);
 
     /**
      * Refresh previews of segments which have been modified since last refresh
@@ -469,7 +471,7 @@ public:
 
     void setShowSegmentLabels(bool b) { m_showSegmentLabels = b; }
 
-    void setBackgroundPixmap(const QPixmap &m) { m_backgroundPixmap = m; }
+    void setBackgroundPixmap(const QPixmap &m);
 
     void updateSize(bool shrinkWidth=false);
 
@@ -616,7 +618,7 @@ protected:
     QPixmap      m_backgroundPixmap;
 
     mutable CompositionModel::previewrectlist m_audioPreviewRects;
-    mutable CompositionModel::PRectRanges m_notationPreviewRects;
+    mutable CompositionModel::RectRanges m_notationPreviewRects;
 };
 
 #endif
