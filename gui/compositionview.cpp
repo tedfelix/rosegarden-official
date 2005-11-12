@@ -787,7 +787,7 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
     clearInCache(s, true);
     s->removeObserver(this);
-    emit needContentUpdate();
+    emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
@@ -2414,6 +2414,13 @@ void CompositionView::setDrawGuides(bool d)
     slotArtifactsDrawBufferNeedsRefresh();
 }
 
+void CompositionView::setTmpRect(const QRect& r)
+{
+    QRect pRect = m_tmpRect;
+    m_tmpRect = r;
+    slotUpdate(m_tmpRect | pRect);
+}
+
 void CompositionView::setTextFloat(int x, int y, const QString &text)
 {
     m_textFloatPos.setX(x);
@@ -2421,6 +2428,12 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     m_textFloatText = text;
     m_drawTextFloat = true;
     slotArtifactsDrawBufferNeedsRefresh();
+
+    // most of the time when the floating text is drawn
+    // we want to update a larger part of the view
+    // so don't update here
+//     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignAuto, m_textFloatText);
+//     slotUpdate(r);
 }
 
 void CompositionView::slotSetFineGrain(bool value)

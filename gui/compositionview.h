@@ -414,7 +414,7 @@ public:
 
     CompositionModel* getModel() { return m_model; }
 
-    void setTmpRect(const QRect& r) { m_tmpRect = r; slotSegmentsDrawBufferNeedsRefresh(); }
+    void setTmpRect(const QRect& r);
     const QRect& getTmpRect() const { return m_tmpRect; }
 
     /**

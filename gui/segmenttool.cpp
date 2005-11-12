@@ -350,7 +350,6 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     }
 
     m_canvas->setTmpRect(tmpRect);
-    m_canvas->updateContents(oldTmpRect | tmpRect);
     return RosegardenCanvasView::FollowHorizontal;
 }
 
@@ -383,7 +382,6 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
         CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
         
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
-        m_canvas->updateContents(m_currentItem->rect());
     }
 
     setCurrentItem(CompositionItem());
@@ -742,6 +740,8 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
         return RosegardenCanvasView::NoFollow;
     }
 
+    QRect oldRect = m_currentItem->rect();
+
     m_canvas->setSnapGrain(true);
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
@@ -809,7 +809,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     if (duration != 0)
         setChangeMade(true);
 
-    m_canvas->updateContents();
+    m_canvas->slotUpdate(m_currentItem->rect() | oldRect);
 
     return RosegardenCanvasView::FollowHorizontal;
 }
