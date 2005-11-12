@@ -704,8 +704,7 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
 void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)
 {
     RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()\n";
-    m_dirtySegments.insert(s);
-    refreshDirtyPreviews();
+    removePreviewCache(s);
 }
 
 CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
@@ -732,42 +731,16 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
     return apData;
 }
 
-void CompositionModelImpl::refreshDirtyPreviews()
-{
-//     RG_DEBUG << "CompositionModelImpl::refreshDirtyPreviews()\n";
-
-    std::set<const Rosegarden::Segment*>::iterator i = m_dirtySegments.begin();
-    std::set<const Rosegarden::Segment*>::iterator dirtySegmentsEnd = m_dirtySegments.end();
-    
-    for (;i != dirtySegmentsEnd; ++i) {
-        const Segment* s = *i;
-
-        if (s->getType() == Rosegarden::Segment::Audio) {
-            AudioPreviewData* apData = getAudioPreviewData(s);
-            updatePreviewCacheForAudioSegment(s, apData);
-        } else {
-            rectlist* npData = getNotationPreviewData(s);
-            updatePreviewCacheForNotationSegment(s, npData);
-        }
-    }
-    clearDirtyPreviews();
-}
-
-void CompositionModelImpl::clearDirtyPreviews()
-{
-    m_dirtySegments.clear();
-}
-                                             
 void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
 //     RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
-    m_dirtySegments.insert(s);
+    removePreviewCache(s);
     emit needContentUpdate();
 }
 
 void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-    m_dirtySegments.insert(s);
+    removePreviewCache(s);
     emit needContentUpdate();
 }
 
@@ -828,7 +801,6 @@ CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(c
     rectlist* npData = new rectlist();
     updatePreviewCacheForNotationSegment(s, npData);
     m_notationPreviewDataCache.insert(const_cast<Segment*>(s), npData);
-    m_dirtySegments.erase(const_cast<Segment*>(s));
 
     return npData;
 }
@@ -840,7 +812,6 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCa
     AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
     updatePreviewCacheForAudioSegment(s, apData);
     m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
-    m_dirtySegments.erase(const_cast<Segment*>(s));
     return apData;
 }
 
@@ -1467,11 +1438,6 @@ void CompositionView::clearSegmentRectsCache(bool clearPreviews)
     dynamic_cast<CompositionModelImpl*>(getModel())->clearSegmentRectsCache(clearPreviews);
 }
 
-void CompositionView::refreshDirtyPreviews()
-{
-    dynamic_cast<CompositionModelImpl*>(getModel())->refreshDirtyPreviews();
-}
-
 Rosegarden::SegmentSelection
 CompositionView::getSelectedSegments()
 {
@@ -1616,7 +1582,6 @@ void CompositionView::slotUpdate()
 {
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotAllDrawBuffersNeedRefresh();
-    refreshDirtyPreviews();
     viewport()->repaint(false);
 }
 
@@ -1624,7 +1589,6 @@ void CompositionView::slotUpdate(const QRect& rect)
 {
     RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
     slotAllDrawBuffersNeedRefresh();
-    refreshDirtyPreviews();
     if (rect.isValid()) {
         QRect cr(rect);
         cr.moveTopLeft(contentsToViewport(cr.topLeft()));
@@ -1884,7 +1848,6 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     //
     if (m_showPreviews) {
         p->save();
-        refreshDirtyPreviews();
 
         // draw audio previews
         //

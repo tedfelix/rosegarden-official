@@ -258,9 +258,7 @@ public:
     AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 
     void refreshAllPreviews();
-    void refreshDirtyPreviews();
     void clearPreviewCache();
-    void clearDirtyPreviews();
     void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
 
     rectlist*            makeNotationPreviewDataCache(const Rosegarden::Segment *s);
@@ -345,9 +343,6 @@ protected:
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
     
-    // Segments which preview needs to be updated
-    std::set<const Rosegarden::Segment*> m_dirtySegments;
-
     // Updaters currently working
     std::set<AudioPreviewUpdater *> m_audioPreviewUpdaters;
 
@@ -447,11 +442,6 @@ public:
      * clear all seg rect cache
      */
     void clearSegmentRectsCache(bool clearPreviews = false);
-
-    /**
-     * Refresh previews of segments which have been modified since last refresh
-     */
-    void refreshDirtyPreviews();
 
     /// Return the selected Segments if we're currently using a "Selector"
     Rosegarden::SegmentSelection getSelectedSegments();
