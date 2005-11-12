@@ -825,7 +825,7 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     const Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
-    QRect updateRect;
+    QRect updateRect = m_selectionRect;
     
     for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
@@ -838,11 +838,8 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
         }
     }
 
-    if (m_previousTmpSelectedSegments.size() != m_tmpSelectedSegments.size()) {
-//         RG_DEBUG << "CompositionModelImpl::setSelectionRect() : update r = "
-//                  << updateRect << endl;
-        emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
-    }
+    updateRect = updateRect.normalize();
+    emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
 
     emit needArtifactsUpdate();
 
@@ -1582,7 +1579,7 @@ void CompositionView::slotUpdate()
 {
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotAllDrawBuffersNeedRefresh();
-    viewport()->repaint(false);
+    repaintContents(false);
 }
 
 void CompositionView::slotUpdate(const QRect& rect)
@@ -1590,11 +1587,9 @@ void CompositionView::slotUpdate(const QRect& rect)
     RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
     slotAllDrawBuffersNeedRefresh();
     if (rect.isValid()) {
-        QRect cr(rect);
-        cr.moveTopLeft(contentsToViewport(cr.topLeft()));
-        viewport()->repaint(cr, false);
+        repaintContents(rect, false);
     } else
-        viewport()->repaint(false);
+        repaintContents(false);
 }
 
 void CompositionView::slotRefreshColourCache()

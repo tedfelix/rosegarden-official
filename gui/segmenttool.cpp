@@ -1080,8 +1080,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         //
         m_canvas->setSelectionRectSize(w, h);
 
-        m_canvas->updateContents(selectionRect.normalize() | m_canvas->getSelectionRect().normalize());
-
         m_canvas->getModel()->signalSelection();
         return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
     }
