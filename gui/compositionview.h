@@ -334,6 +334,7 @@ protected:
     recordingsegmentset          m_recordingSegments;
 
     typedef std::vector<CompositionItem> itemgc;
+    typedef std::vector<AudioPreviewUpdater*> audiopreviewupdatergc;
 
     AudioPreviewThread*          m_audioPreviewThread;
 
@@ -349,6 +350,7 @@ protected:
     rectcontainer m_res;
     itemcontainer m_movingItems;
     itemgc m_itemGC;
+    audiopreviewupdatergc m_apuGC;
 
     QRect m_selectionRect;
     QRect m_previousSelectionUpdateRect;

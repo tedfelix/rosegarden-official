@@ -573,6 +573,9 @@ void CompositionModelImpl::clearPreviewCache()
 
     m_notationPreviewDataCache.clear();
     m_audioPreviewDataCache.clear();
+    for(audiopreviewupdatergc::iterator i = m_apuGC.begin(); i != m_apuGC.end(); ++i)
+        delete *i;
+        
 }
 
 void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, rectlist* npData)
@@ -695,10 +698,11 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
     }
 
     m_audioPreviewUpdaters.erase(apu);
-    delete apu;
+    const Segment* segment = apu->getSegment();
+    m_apuGC.push_back(apu);
 
 //     emit needContentUpdate();
-    emit needContentUpdate(computeSegmentRect(*(apu->getSegment())));
+    emit needContentUpdate(computeSegmentRect(*(segment)));
 }
 
 void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)

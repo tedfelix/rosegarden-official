@@ -119,6 +119,7 @@ AudioPreviewThread::process()
             if (i->second.first == token) {
                 found = true;
                 m_queue.erase(i);
+                break;
             }
         }
 
