@@ -1681,7 +1681,9 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 		command->execute();
 	    }
 
-	    emit recordMIDISegmentUpdated(m_recordMIDISegment, updateFrom);
+            // this signal is currently unused - leaving just in case
+            // recording segments are updated through the SegmentObserver::eventAdded() interface
+// 	    emit recordMIDISegmentUpdated(m_recordMIDISegment, updateFrom);
 	}
     }
 }

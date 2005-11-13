@@ -243,14 +243,14 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     for (Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
-// 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
+	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
 	
         Segment* s = *i;
         if (isMoving(s))
             continue;
         
         CompositionRect sr = computeSegmentRect(*s);
-//         RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr << endl;
+        RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr << endl;
 
         if (sr.intersects(rect)) {
             bool tmpSelected = isTmpSelected(s),
@@ -751,6 +751,7 @@ void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden
 void CompositionModelImpl::appearanceChanged(const Rosegarden::Segment *s)
 {
     clearInCache(s, true);
+//     emit needContentUpdate(computeSegmentRect(*s));
     emit needContentUpdate();
 }
 
@@ -1171,9 +1172,9 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
         // in other cases than just when the segment itself is moved,
         // for instance if another segment is moved over it
         if (!s.isRepeating() && cachedCR.isValid() && isCachedRectCurrent(s, cachedCR, origin, endTime)) {
-//         RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
-//                  << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
-//                  << cachedCR.getBaseWidth() << endl;
+        RG_DEBUG << "CompositionModelImpl::computeSegmentRect() : using cache for seg "
+                 << &s << " - cached rect repeating = " << cachedCR.isRepeating() << " - base width = "
+                 << cachedCR.getBaseWidth() << endl;
 
             bool xChanged = origin.x() != cachedCR.x();
             bool yChanged = origin.y() != cachedCR.y();
@@ -1203,7 +1204,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     int h = m_grid.getYSnap();
     int w;
 
-//     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
+    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
@@ -1344,6 +1345,8 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
             this, SLOT(slotNewMIDIRecordingSegment(Rosegarden::Segment*)));
     connect(doc, SIGNAL(newAudioRecordingSegment(Rosegarden::Segment*)),
             this, SLOT(slotNewAudioRecordingSegment(Rosegarden::Segment*)));
+//     connect(doc, SIGNAL(recordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT)),
+//             this, SLOT(slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT)));
     connect(doc, SIGNAL(stoppedAudioRecording()),
             this, SLOT(slotStoppedRecording()));
     connect(doc, SIGNAL(stoppedMIDIRecording()),
@@ -1592,6 +1595,7 @@ void CompositionView::slotUpdate()
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotAllDrawBuffersNeedRefresh();
     repaintContents(false);
+//     updateContents();
 }
 
 void CompositionView::slotUpdate(const QRect& rect)
@@ -1600,8 +1604,10 @@ void CompositionView::slotUpdate(const QRect& rect)
     slotAllDrawBuffersNeedRefresh();
     if (rect.isValid()) {
         repaintContents(rect, false);
+//         updateContents(rect);
     } else
         repaintContents(false);
+//         updateContents();
 }
 
 void CompositionView::slotRefreshColourCache()
@@ -1621,11 +1627,11 @@ void CompositionView::slotNewAudioRecordingSegment(Rosegarden::Segment* s)
     getModel()->addRecordingItem(CompositionItemHelper::makeCompositionItem(s));
 }
 
-void CompositionView::slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT)
-{
-    RG_DEBUG << "CompositionView::slotRecordMIDISegmentUpdated()\n";
-    slotUpdate();
-}
+// void CompositionView::slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT)
+// {
+//     RG_DEBUG << "CompositionView::slotRecordMIDISegmentUpdated()\n";
+//     slotUpdate();
+// }
 
 void CompositionView::slotStoppedRecording()
 {
@@ -2404,7 +2410,11 @@ void CompositionView::releaseCurrentItem()
 void CompositionView::setPointerPos(int pos)
 {
     m_pointerPos = pos;
-    slotArtifactsDrawBufferNeedsRefresh();
+    if (getModel()->haveRecordingItems())
+        slotAllDrawBuffersNeedRefresh();
+    else
+        slotArtifactsDrawBufferNeedsRefresh();
+
     updateContents();
 }
 

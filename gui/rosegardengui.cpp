@@ -3852,10 +3852,6 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     Rosegarden::Composition &comp = m_doc->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
 
-    m_originatingJump = true;
-    m_doc->setPointerPosition(elapsedTime);
-    m_originatingJump = false;
-
     if (m_seqManager->getTransportStatus() == RECORDING) {
 
 	Rosegarden::MappedComposition mC;
@@ -3867,6 +3863,10 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 	m_doc->updateRecordingMIDISegment();
 	m_doc->updateRecordingAudioSegments();
     }
+
+    m_originatingJump = true;
+    m_doc->setPointerPosition(elapsedTime);
+    m_originatingJump = false;
 
     if (m_audioMixer && m_audioMixer->isVisible())
         m_audioMixer->updateMeters(mapper);
