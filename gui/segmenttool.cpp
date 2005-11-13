@@ -947,7 +947,6 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	} else {
 
             m_canvas->setSelectionRectPos(e->pos());
-            m_canvas->setSelectionRectSize(0,0);
             m_canvas->setDrawSelectionRect(true);
             if (!m_segmentAddMode)
                 m_canvas->getModel()->clearSelected();
@@ -983,7 +982,6 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     if (!m_currentItem) {
         m_canvas->setDrawSelectionRect(false);
         m_canvas->getModel()->finalizeSelectionRect();
-        m_canvas->updateContents();
         m_canvas->getModel()->signalSelection();
         return;
     }

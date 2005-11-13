@@ -839,10 +839,15 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     }
 
     updateRect = updateRect.normalize();
-    emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
 
-    emit needArtifactsUpdate();
+    if (!updateRect.isNull() && !m_previousSelectionUpdateRect.isNull()) {
 
+        emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
+        emit needArtifactsUpdate();
+
+    }
+    
+    
     m_previousSelectionUpdateRect = updateRect;
 
 }
@@ -862,7 +867,7 @@ void CompositionModelImpl::finalizeSelectionRect()
         }
     }
 
-    m_selectionRect = QRect();
+    m_previousSelectionUpdateRect = m_selectionRect = QRect();
     m_tmpSelectedSegments.clear();
 }
 
@@ -1413,7 +1418,7 @@ void CompositionView::scrollLeft()
 
 void CompositionView::setSelectionRectPos(const QPoint& pos)
 {
-    m_selectionRect.setTopLeft(pos);
+    m_selectionRect.setRect(pos.x(), pos.y(), 0, 0);
     getModel()->setSelectionRect(m_selectionRect);
 }
 
@@ -1425,8 +1430,11 @@ void CompositionView::setSelectionRectSize(int w, int h)
 
 void CompositionView::setDrawSelectionRect(bool d)
 {
-    m_drawSelectionRect = d;
-    slotArtifactsDrawBufferNeedsRefresh();
+    if (m_drawSelectionRect != d) {
+        m_drawSelectionRect = d;
+        slotArtifactsDrawBufferNeedsRefresh();
+        slotUpdate(m_selectionRect);
+    }
 }
 
 
