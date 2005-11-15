@@ -72,12 +72,7 @@ if [ "$1" == "-g" ]; then
     if [ -z "$prog_xdialog" ]; then
 	# can't do graphical mode
 	echo "rosegarden-lilypondview: Graphical progress dialog requires Xdialog utility" 1>&2
-	command="$0 $@"
-	case "$command" in 
-	    /*) ;;
-	    *) command="`pwd`/$command";;
-	esac
-	exec "$prog_terminal" -e "$command" # run without graphical mode instead
+	graphical=""
     fi
 fi
 
@@ -167,7 +162,7 @@ cp "$input" "$tmpdir" || exit 1
 	    count=$(($bars * 7 / 3))
 	
 	    indev=/dev/pts/0
-	    if [ ! -f "$indev" ]; then indev=/dev/ptya0; fi
+	    if [ ! -c "$indev" ]; then indev=/dev/ptya0; fi
 
 	    $prog_lilypond $args "$base" <$indev 2>&1 | tee -a "$logfile" | \
 	      perl -e '
