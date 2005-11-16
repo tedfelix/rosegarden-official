@@ -798,6 +798,10 @@ AudioSegmentSplitCommand::execute()
 	m_segment->setLabel(qstrtostr(i18n("%1 (split)").arg
 				      (strtoqstr(m_segmentLabel))));
         m_newSegment->setLabel(m_segment->getLabel());
+
+	// Set color
+	// 
+	m_newSegment->setColourIndex(m_segment->getColourIndex());
     }
 
     // Resize left hand Segment

@@ -3184,11 +3184,11 @@ void RosegardenGUIApp::slotAddTracks()
     bool ok = false;
 
     int tracks = QInputDialog::getInteger(
-                i18n("How many tracks do you want to add? (max. 24)"),
-                i18n("Tracks to add"),
+                i18n("Add Tracks"),
+                i18n("Tracks to add (max. 256)"),
                 1,
                 1,
-                24,
+                256,
                 1,
                 &ok,
                 this);
