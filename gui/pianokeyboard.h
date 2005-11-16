@@ -66,6 +66,15 @@ signals:
     void keySelected(unsigned int y, bool repeating);
 
     /**
+     * A key has been released on the keyboard.
+     *
+     * The repeating flag is there to tell the MatrixView not to send
+     * the same note again as we're in the middle of a swoosh.
+     * MatrixView does the y -> Note calculation.
+     */
+    void keyReleased(unsigned int y, bool repeating);
+
+    /**
      * Emitted when the mouse cursor moves to a different key when
      * not clicking or selecting.
      * MatrixView does the y -> Note calculation.
@@ -102,6 +111,7 @@ protected:
     // highlight element on the keyboard
     QWidget                  *m_hoverHighlight;
     int                       m_lastHoverHighlight;
+    int                       m_lastKeyPressed;
 };
 
 #endif

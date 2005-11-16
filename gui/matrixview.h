@@ -356,6 +356,11 @@ public slots:
     void slotKeyPressed(unsigned int y, bool repeating);
 
     /**
+     * Catch the keyboard being released
+     */
+    void slotKeyReleased(unsigned int y, bool repeating);
+
+    /**
      * Catch the keyboard being pressed with selection modifier
      */
     void slotKeySelected(unsigned int y, bool repeating);

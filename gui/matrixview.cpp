@@ -346,6 +346,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          this,         SLOT  (slotKeySelected(unsigned int, bool)));
 
     QObject::connect
+        (m_pitchRuler, SIGNAL(keyReleased(unsigned int, bool)),
+         this,         SLOT  (slotKeyReleased(unsigned int, bool)));
+
+    QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,            SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
@@ -1540,11 +1544,11 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
         return;
 
     Rosegarden::MappedEvent mE(ins->getId(),
-                               Rosegarden::MappedEvent::MidiNoteOneShot,
+                               Rosegarden::MappedEvent::MidiNote,
                                evPitch + staff.getSegment().getTranspose(),
                                Rosegarden::MidiMaxValue,
                                Rosegarden::RealTime::zeroTime,
-                               Rosegarden::RealTime(0, 250000000),
+                               Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime::zeroTime);
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
@@ -1618,6 +1622,38 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
+void MatrixView::slotKeyReleased(unsigned int y, bool repeating)
+{
+    MatrixStaff& staff = *(m_staffs[0]);
+    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasCoords(-1, y);
+
+    if (m_lastNote == evPitch && repeating)
+        return;
+
+    Rosegarden::Segment &segment(staff.getSegment());
+
+    // send note off (note on at zero velocity)
+
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Track *track = comp.getTrackById(segment.getTrack());
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0)
+        return;
+
+    Rosegarden::MappedEvent mE(ins->getId(),
+                               Rosegarden::MappedEvent::MidiNote,
+                               evPitch + segment.getTranspose(),
+                               0,
+                               Rosegarden::RealTime::zeroTime,
+                               Rosegarden::RealTime::zeroTime,
+                               Rosegarden::RealTime::zeroTime);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
+}
 
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 {

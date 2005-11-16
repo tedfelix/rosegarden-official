@@ -21,6 +21,7 @@
 
 #include <qpainter.h>
 #include <qtooltip.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <iostream>
@@ -41,7 +42,8 @@ PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
       m_nbKeys(keys),
       m_mouseDown(false),
       m_hoverHighlight(new QWidget(this)),
-      m_lastHoverHighlight(0)
+      m_lastHoverHighlight(0),
+      m_lastKeyPressed(0)
 {
     m_hoverHighlight->hide();
     m_hoverHighlight->setPaletteBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::MatrixKeyboardFocus));
@@ -156,6 +158,11 @@ void PianoKeyboard::enterEvent(QEvent *)
 void PianoKeyboard::leaveEvent(QEvent*)
 {
     m_hoverHighlight->hide();
+
+    int pos = mapFromGlobal( cursor().pos() ).x(); 
+    if( pos > m_keySize.width() - 5 || pos < 0 ) { // bit of a hack
+	emit keyReleased(m_lastKeyPressed,false);
+    }
 }
 
 void PianoKeyboard::drawHoverNote(int evPitch)
@@ -254,12 +261,16 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
         }
     }
 
-    if (m_mouseDown)
-	if (m_selecting)
+    if (e->state() & Qt::LeftButton) {
+	if (m_selecting) 
 	    emit keySelected(e->y(), true);
 	else 
 	    emit keyPressed(e->y(), true); // we're swooshing
-    else
+
+	emit keyReleased(m_lastKeyPressed,true);
+	m_lastKeyPressed = e->y();
+    }
+    else 
         emit hoveredOverKeyChanged(e->y());
 }
 
@@ -271,6 +282,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
     {
         m_mouseDown = true;
 	m_selecting = (bs & Qt::ShiftButton);
+	m_lastKeyPressed = e->y();
 	
 	if (m_selecting)
 	    emit keySelected(e->y(), false);
@@ -285,6 +297,7 @@ void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
     {
         m_mouseDown = false;
 	m_selecting = false;
+	emit keyReleased(e->y(), false);
     }
 }
 
