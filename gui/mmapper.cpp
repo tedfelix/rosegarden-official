@@ -47,6 +47,8 @@
 #include "rgapplication.h"
 #include "constants.h"
 
+#include <stdint.h>
+
 // Seems not to be properly defined under some gcc 2.95 setups
 #ifndef MREMAP_MAYMOVE
 #define MREMAP_MAYMOVE 1
@@ -908,7 +910,7 @@ QString CompositionMmapper::makeFileName(Segment* segment)
 
     return QString("%1/segment_%2")
         .arg(tmpDirs.last())
-        .arg((unsigned int)segment, 0, 16);
+        .arg((uintptr_t)segment, 0, 16);
 }
 
 QString CompositionMmapper::getSegmentFileName(Segment* s)

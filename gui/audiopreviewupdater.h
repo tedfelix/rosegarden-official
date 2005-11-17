@@ -24,6 +24,8 @@
 
 #include <qobject.h>
 
+#include <stdint.h>
+
 #include "Segment.h"
 #include "Composition.h"
 
@@ -62,8 +64,7 @@ protected:
     unsigned int                   m_channels;
     std::vector<float>             m_values;
 
-    int m_previewToken;
-
+    intptr_t m_previewToken;
 };
 
 #endif

@@ -76,7 +76,7 @@ bool AudioPreviewUpdater::event(QEvent *e)
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
 	if (ev) {
-	    int token = (int)ev->data();
+	    intptr_t token = (intptr_t)ev->data();
             m_channels = 0; // to be filled as getPreview return value
 
 	    RG_DEBUG << "AudioPreviewUpdater::token " << token << ", my token " << m_previewToken << endl;
