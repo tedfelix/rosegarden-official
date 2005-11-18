@@ -943,7 +943,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTrack()),
                 actionCollection(), "add_track");
 
-    new KAction(i18n("&Add Tracks..."), 0,
+    new KAction(i18n("&Add Multiple Tracks..."), 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
@@ -3184,11 +3184,11 @@ void RosegardenGUIApp::slotAddTracks()
     bool ok = false;
 
     int tracks = QInputDialog::getInteger(
-                i18n("Add Tracks"),
-                i18n("Tracks to add (max. 256)"),
+                i18n("Add Multiple Tracks"),
+                i18n("How many tracks do you want to add?"),
                 1,
                 1,
-                256,
+                32,
                 1,
                 &ok,
                 this);

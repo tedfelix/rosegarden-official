@@ -1940,7 +1940,19 @@ RespellCommand::modifySegment()
 
 	    } else if (m_type == Set) {
 		
-		(*i)->set<String>(ACCIDENTAL, m_accidental);
+		// trap respelling black key notes as natural; which is
+		// impossible, and makes rawPitchToDisplayPitch() do crazy
+		// things as a consequence (fixes #1349782)
+		// 1 = C#, 3 = D#, 6 = F#, 8 = G#, 10 = A#
+		long pitch;
+		(*i)->get<Int>(PITCH, pitch);
+		pitch %= 12;
+		if ((pitch == 1 || pitch == 3 || pitch == 6 || pitch == 8 || pitch == 10 )
+			&& m_accidental == Natural) {
+		    // fail silently; is there anything to do here?
+		} else {
+                    (*i)->set<String>(ACCIDENTAL, m_accidental);
+		}
 
 	    } else {
 
