@@ -365,6 +365,7 @@ void CompositionModelImpl::makeAudioPreviewRects(previewrectlist* apRects, const
                                                  const CompositionRect& segRect, const QRect& clipRect)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::makeAudioPreviewRects", true);
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects\n";
 
     AudioPreviewData* apData = getAudioPreviewData(segment);
     const std::vector<float>& values = apData->getValues();
@@ -725,6 +726,7 @@ CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const R
 CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
+    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
 
     AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
 
@@ -737,28 +739,28 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
 
 void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-//     RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
+    RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
     removePreviewCache(s);
-    emit needContentUpdate();
+    emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
     removePreviewCache(s);
-    emit needContentUpdate();
+    emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::appearanceChanged(const Rosegarden::Segment *s)
 {
     clearInCache(s, true);
 //     emit needContentUpdate(computeSegmentRect(*s));
-    emit needContentUpdate();
+    emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
 {
     clearInCache(s);
-    emit needContentUpdate();
+    emit needContentUpdate(computeSegmentRect(*s));
 }
 
 
@@ -1594,20 +1596,18 @@ void CompositionView::slotUpdate()
 {
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotAllDrawBuffersNeedRefresh();
-    repaintContents(false);
-//     updateContents();
+    updateContents();
 }
 
 void CompositionView::slotUpdate(const QRect& rect)
 {
-    RG_DEBUG << "CompositionView::slotUpdate() rect " << rect << endl;
+    RG_DEBUG << "CompositionView::slotUpdate() rect "
+             << rect << " - valid : " << rect.isValid() << endl;
     slotAllDrawBuffersNeedRefresh();
     if (rect.isValid()) {
-        repaintContents(rect, false);
-//         updateContents(rect);
+        updateContents(rect);
     } else
-        repaintContents(false);
-//         updateContents();
+        updateContents();
 }
 
 void CompositionView::slotRefreshColourCache()
@@ -1660,7 +1660,8 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     r.moveBy(contentsX(), contentsY());
 
 //     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
-//              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
+//              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
+//              << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
 
     checkScrollAndRefreshDrawBuffer(r);
 
@@ -1703,7 +1704,7 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 	// entire buffer because we have no way to know what part of
 	// it has changed.
 
-	refreshRect = QRect(cx, cy, w, h);
+	refreshRect.setRect(cx, cy, w, h);
 	
     } else {
 
@@ -2410,9 +2411,9 @@ void CompositionView::releaseCurrentItem()
 void CompositionView::setPointerPos(int pos)
 {
     m_pointerPos = pos;
-    if (getModel()->haveRecordingItems())
-        slotAllDrawBuffersNeedRefresh();
-    else
+//     if (getModel()->haveRecordingItems())
+//         slotAllDrawBuffersNeedRefresh();
+//     else
         slotArtifactsDrawBufferNeedsRefresh();
 
     updateContents();
