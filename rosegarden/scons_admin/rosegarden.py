@@ -15,6 +15,7 @@ def generate(env):
 		p('BOLD','--------------------')
 		p('BOLD','* nolirc     ','disable LIRC support')
 		p('BOLD','ie: scons configure nolirc=1')
+		return
 
 	from SCons.Options import Options
 	cachefile=env['CACHEDIR']+'misc.cache.py'
