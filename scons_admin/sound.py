@@ -16,6 +16,7 @@ def generate(env):
 		p('BOLD','* nojack     ','disable JACK')
 		p('BOLD','* nodssi     ','disable DSSI')
 		p('BOLD','ie: scons configure noalsa=1 nojack=1 nodssi=1 ')
+		return
 
 	def Check_pkg_config(context, version):
 		context.Message('Checking for pkg-config ... ')
