@@ -76,12 +76,7 @@ public slots:
 
 protected:
     virtual void paintEvent(QPaintEvent *);
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
     virtual void mousePressEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void mouseMoveEvent(QMouseEvent *);
-    virtual void wheelEvent(QWheelEvent *);
 
 private:
     double m_xorigin;
@@ -89,8 +84,6 @@ private:
     int  m_currentXOffset;
     int  m_width;
     bool m_small;
-    int  m_illuminate;
-    bool m_refreshLinesOnly;
 
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;
