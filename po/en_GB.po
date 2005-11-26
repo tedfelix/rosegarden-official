@@ -2393,7 +2393,7 @@ msgstr ""
 
 #: ../gui/rosegardenconfigurationpage.cpp:224
 msgid "Behavior"
-msgstr ""
+msgstr "Behaviour"
 
 #: ../gui/rosegardenconfigurationpage.cpp:234
 msgid "External audio editor"
@@ -4415,6 +4415,9 @@ msgid ""
 "\n"
 "Removing necessary properties may cause unexpected behavior."
 msgstr ""
+"Are you sure you want to delete the \"%1\" property?\n"
+"\n"
+"Removing necessary properties may cause unexpected behaviour."
 
 #: ../gui/dialogs.cpp:1638 ../gui/dialogs.cpp:1669 ../gui/dialogs.cpp:1727
 msgid "Edit Event"
@@ -7806,7 +7809,7 @@ msgstr ""
 
 #: ../gui/importdevicedialog.cpp:162
 msgid "Bank import behavior"
-msgstr ""
+msgstr "Bank import behaviour"
 
 #: ../gui/importdevicedialog.cpp:164
 msgid "Merge banks"
