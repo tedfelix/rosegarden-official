@@ -1107,7 +1107,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			    i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
 		    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer) {
+
 			std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
+
+			KMessageBox::information(
+			    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+			    i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p>"));
 		    }
 		}
 	    }

@@ -512,13 +512,6 @@ RosegardenSequencerApp::processRecordedAudio()
 void
 RosegardenSequencerApp::processAsynchronousEvents()
 {
-    Rosegarden::MappedComposition *mC = m_driver->getMappedComposition();
-
-    if (mC->empty()) {
-	m_driver->processPending();
-	return;
-    }
-
     if (!m_controlBlockMmapper) {
 	try {
 	    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").last()
@@ -533,7 +526,14 @@ RosegardenSequencerApp::processAsynchronousEvents()
 	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
-//    SEQUENCER_DEBUG << "processAsynchronousEvents: have " << mC->size() << " events" << endl;
+    Rosegarden::MappedComposition *mC = m_driver->getMappedComposition();
+
+    if (mC->empty()) {
+	m_driver->processPending();
+	return;
+    }
+
+//    std::cerr << "processAsynchronousEvents: have " << mC->size() << " events" << std::endl;
 
     int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
 	(m_controlBlockMmapper->getSelectedTrack());
@@ -549,7 +549,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
     m_driver->processEventsOut(*mC);
 
-//    SEQUENCER_DEBUG << "processAsynchronousEvents: sent " << mC->size() << " events" << endl;
+//    std::cerr << "processAsynchronousEvents: sent " << mC->size() << " events" << std::endl;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                  ROSEGARDEN_GUI_IFACE_NAME,

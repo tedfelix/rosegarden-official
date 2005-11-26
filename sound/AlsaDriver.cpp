@@ -323,6 +323,8 @@ AlsaDriver::generateTimerList()
 std::string
 AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 {
+    Audit audit;
+    
     // Look for the apparent best-choice timer.
 
     if (m_timers.empty()) return "";
@@ -330,7 +332,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // The system RTC timer ought to be good, but it doesn't look like
     // a very safe choice -- we've seen some system lockups apparently
     // connected with use of this timer on 2.6 kernels.  So we avoid
-    // that unless the alternative is a 100Hz system timer.
+    // using that as an auto option.
 
     // Looks like our most reliable options for timers are, in order:
     // 
@@ -347,6 +349,23 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // 
     // 5. System timer.
 
+    // As of Linux kernel 2.6.13 (?) the default system timer
+    // resolution has been reduced from 1000Hz to 250Hz, giving us
+    // only 4ms accuracy instead of 1ms.  This may be better than the
+    // 10ms available from the stock 2.4 kernel, but it's not enough
+    // for really solid MIDI timing.  If JACK is running at 44.1 or
+    // 48KHz with a buffer size less than 256 frames, then the PCM
+    // timer will give us less jitter.  Even at 256 frames, it may be
+    // preferable in practice just because it's simpler.
+
+    // However, we can't safely choose the PCM timer over the system
+    // timer unless the latter has really awful resolution, because we
+    // don't know for certain which PCM JACK is using.  We guess at
+    // hw:0 for the moment, which gives us a stuck timer problem if
+    // it's actually using something else.  So if the system timer
+    // runs at 250Hz, we really have to choose it anyway and just give
+    // a warning.
+
     wantTimerChecks = false; // for most options
 
 #ifdef HAVE_LIBJACK
@@ -360,7 +379,11 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 	    if (i->clas == SND_TIMER_CLASS_GLOBAL) {
 		if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
 		    long hz = 1000000000 / i->resolution;
-		    if (hz > 900) {
+		    if (hz > 240) {
+			if (hz < 750) {
+			    audit << "System timer is only " << hz << "Hz, sending a warning" << std::endl;
+			    reportFailure(Rosegarden::MappedEvent::WarningImpreciseTimer);
+			}
 			wantTimerChecks = true;
 		        return i->name;
 		    }
@@ -388,7 +411,11 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
 	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
 		long hz = 1000000000 / i->resolution;
-		if (hz > 900) {
+		if (hz > 240) {
+		    if (hz < 750) {
+			audit << "System timer is only " << hz << "Hz, sending a warning" << std::endl;
+			reportFailure(Rosegarden::MappedEvent::WarningImpreciseTimer);
+		    }
 		    return i->name;
 		}
 	    }
@@ -397,6 +424,8 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 
     // look for the system RTC timer if available
 
+/* No, this doesn't seem to be safe with some popular kernels
+
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
 	 i != m_timers.end(); ++i) {
 	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
@@ -404,6 +433,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 	    if (i->device == SND_TIMER_GLOBAL_RTC) return i->name;
 	}
     }
+*/
 
     // next look for slow, unpopular 100Hz 2.4 system timer
 
@@ -412,6 +442,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
 	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
 	    if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
+		audit << "Using low-resolution system timer, sending a warning" << std::endl;
 		reportFailure(Rosegarden::MappedEvent::WarningImpreciseTimer);
 		return i->name;
 	    }

@@ -4756,7 +4756,9 @@ void RosegardenGUIApp::notifySequencerStatus(int status)
 //
 void RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
 {
-    if (!m_seqManager) return; // probably getting this from a not-yet-killed runaway sequencer
+    if (!m_seqManager) {
+	return; // probably getting this from a not-yet-killed runaway sequencer
+    }
 
     m_seqManager->processAsynchronousMidi(mC, 0);
     SequencerMapper *mapper = m_seqManager->getSequencerMapper();
