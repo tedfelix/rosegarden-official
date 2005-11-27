@@ -754,8 +754,6 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
     const int height = m_grid.getYSnap()/2 - penWidth;
     const int halfRectHeight = m_grid.getYSnap()/2 - penWidth / 2 - 2;
 
-    //    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : halfRectHeight = " << halfRectHeight << endl;
-
     float gain[2] = { 1.0, 1.0 };
     Rosegarden::TrackId trackId = segment->getTrack();
     Rosegarden::Track *track = getComposition().getTrackById(trackId);
@@ -2036,9 +2034,21 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         //
         CompositionModel::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
         CompositionModel::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
-
+        QRect pixRect;
+        QPoint basePoint;
         for(; api != apEnd; ++api) {
-            p->drawPixmap(api->basePoint, api->pixmap);
+            pixRect = api->pixmap.rect();
+            pixRect.moveTopLeft(api->basePoint);
+            pixRect &= clipRect;
+            basePoint = pixRect.topLeft();
+            pixRect.moveBy(-api->basePoint.x(), -api->basePoint.y());
+#ifdef COPY_TO_TMP_PIXMAP
+            QPixmap tmp(pixRect.size());
+            copyBlt(&tmp, 0, 0, &(api->pixmap), pixRect.x(), pixRect.y(), pixRect.width(), pixRect.height());
+            p->drawPixmap(basePoint, tmp);
+#else
+            p->drawPixmap(basePoint, api->pixmap, pixRect);
+#endif
         }
         
         // draw notation previews
