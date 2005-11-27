@@ -24,8 +24,8 @@
 
 #include <vector>
 #include <set>
+#include <map>
 
-#include <qmap.h>
 #include <qpen.h>
 #include <qvaluevector.h>
 #include <qptrdict.h>
@@ -122,10 +122,17 @@ public:
 	}
     };
 
-    typedef std::vector<PreviewRect> previewrectlist;
     typedef std::vector<QRect> rectlist;
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
+
+    struct AudioPreviewDrawDataItem {
+        AudioPreviewDrawDataItem(QPixmap p, QPoint bp) : pixmap(p), basePoint(bp) {};
+        QPixmap pixmap;
+        QPoint basePoint;
+    };
+    
+    typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
 
     struct RectRange {
         std::pair<rectlist::iterator, rectlist::iterator> range;
@@ -168,7 +175,7 @@ public:
 
     virtual unsigned int getNbRows() = 0;
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 RectRanges* notationRects, previewrectlist* audioRects) = 0;
+                                                 RectRanges* notationRects, AudioPreviewDrawData* audioRects) = 0;
 
     virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
@@ -226,7 +233,7 @@ public:
     
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
-                                                 RectRanges* notationRects, previewrectlist* audioRects);
+                                                 RectRanges* notationRects, AudioPreviewDrawData* audioRects);
     virtual itemcontainer     getItemsAt      (const QPoint&);
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
@@ -309,11 +316,13 @@ protected:
     void updatePreviewCacheForAudioSegment(const Rosegarden::Segment* s, AudioPreviewData*);
     rectlist* getNotationPreviewData(const Rosegarden::Segment* s);
     AudioPreviewData* getAudioPreviewData(const Rosegarden::Segment* s);
+    QPixmap getAudioPreviewPixmap(const Rosegarden::Segment* s);
+    QRect postProcessAudioPreview(AudioPreviewData*, const Rosegarden::Segment*);
 
     void makePreviewCache(const Rosegarden::Segment* s);
     void removePreviewCache(const Rosegarden::Segment* s);
     void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
-    void makeAudioPreviewRects(previewrectlist* apRects, const Rosegarden::Segment*,
+    void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Rosegarden::Segment*,
                                const CompositionRect& segRect, const QRect& clipRect);
 
     QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
@@ -357,8 +366,9 @@ protected:
     QRect m_selectionRect;
     QRect m_previousSelectionUpdateRect;
 
-    QMap<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
-    QMap<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;
+    std::map<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
+    std::map<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;
+    std::map<const Rosegarden::Segment*, QPixmap> m_audioSegmentPreviewMap;
 };
 
 
@@ -612,7 +622,7 @@ protected:
     int          m_lastBufferRefreshY;
     QPixmap      m_backgroundPixmap;
 
-    mutable CompositionModel::previewrectlist m_audioPreviewRects;
+    mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
     mutable CompositionModel::RectRanges m_notationPreviewRects;
 };
 

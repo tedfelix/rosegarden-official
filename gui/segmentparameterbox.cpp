@@ -153,7 +153,7 @@ SegmentParameterBox::initBox()
             SLOT(slotDelayTextChanged(const QString &)));
 
     // set up combo box for colours
-    m_colourValue = new KComboBox(this);
+    m_colourValue = new KComboBox(false, this);
     m_colourValue->setFont(font);
     m_colourValue->setFixedHeight(comboHeight);
 

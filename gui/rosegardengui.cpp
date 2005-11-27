@@ -2035,7 +2035,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
         return;
     }
 
-    QString target;
+    QString target, caption(url.path());
 
     if (KIO::NetAccess::download(url, target) == false) {
         KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
@@ -2048,7 +2048,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
     openFile(target);
 
-    setCaption(url.path());
+    setCaption(caption);
 }
 
 void RosegardenGUIApp::slotFileOpen()

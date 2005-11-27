@@ -78,6 +78,8 @@ public:
 
     void setScrollDirectionConstraint(int d) { m_scrollDirectionConstraint = d; }
 
+    int getDeltaScroll() { return m_minDeltaScroll; }
+
 public slots:
     /// Update the RosegardenScrollView after a change of content
     virtual void slotUpdate();
