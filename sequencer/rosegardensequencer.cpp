@@ -262,7 +262,7 @@ RosegardenSequencerApp::applyLatencyCompensation(Rosegarden::MappedComposition &
 	Rosegarden::RealTime instrumentLatency =
 	    m_driver->getInstrumentPlayLatency((*i)->getInstrument());
 
-	std::cerr << "RosegardenSequencerApp::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency << std::endl;
+//	std::cerr << "RosegardenSequencerApp::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency << std::endl;
 
 	(*i)->setEventTime((*i)->getEventTime() +
 			   maxLatency - instrumentLatency);
@@ -391,7 +391,7 @@ RosegardenSequencerApp::updateClocks()
 
     Rosegarden::RealTime maxLatency = m_driver->getMaximumPlayLatency();
     if (maxLatency != Rosegarden::RealTime::zeroTime) {
-	std::cerr << "RosegardenSequencerApp::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency << std::endl;
+//	std::cerr << "RosegardenSequencerApp::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency << std::endl;
 	newPosition = newPosition - maxLatency;
     }
 
