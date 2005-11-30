@@ -262,6 +262,8 @@ RosegardenSequencerApp::applyLatencyCompensation(Rosegarden::MappedComposition &
 	Rosegarden::RealTime instrumentLatency =
 	    m_driver->getInstrumentPlayLatency((*i)->getInstrument());
 
+	std::cerr << "RosegardenSequencerApp::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency << std::endl;
+
 	(*i)->setEventTime((*i)->getEventTime() +
 			   maxLatency - instrumentLatency);
     }
@@ -385,6 +387,12 @@ RosegardenSequencerApp::updateClocks()
 
         if (m_songPosition <= m_driver->getStartPosition())
             newPosition = m_driver->getStartPosition();
+    }
+
+    Rosegarden::RealTime maxLatency = m_driver->getMaximumPlayLatency();
+    if (maxLatency != Rosegarden::RealTime::zeroTime) {
+	std::cerr << "RosegardenSequencerApp::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency << std::endl;
+	newPosition = newPosition - maxLatency;
     }
 
     // Remap the position pointer
@@ -513,6 +521,27 @@ void
 RosegardenSequencerApp::processAsynchronousEvents()
 {
     if (!m_controlBlockMmapper) {
+
+	// If the control block mmapper doesn't exist, we'll just
+	// return here.  But we want to ensure we don't check again
+	// immediately, because we're probably waiting for the GUI to
+	// start up.
+
+	static bool lastChecked = false;
+	static struct timeval lastCheckedAt;
+
+	struct timeval tv;
+	(void)gettimeofday(&tv, 0);
+
+	if (lastChecked &&
+	    tv.tv_sec == lastCheckedAt.tv_sec) {
+	    lastCheckedAt = tv;
+	    return;
+	}
+
+	lastChecked = true;
+	lastCheckedAt = tv;
+
 	try {
 	    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").last()
                                                             + "/rosegarden_control_block");
