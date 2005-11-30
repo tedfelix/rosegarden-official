@@ -202,11 +202,14 @@ size_t
 DSSIPluginInstance::getLatency()
 {
 #ifdef DEBUG_DSSI
-//    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
+    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
 #endif
 
     if (m_latencyPort) {
 	if (!m_run) run(RealTime::zeroTime);
+#ifdef DEBUG_DSSI 
+	std::cerr << "DSSIPluginInstance::getLatency(): latency is " << (size_t)(*m_latencyPort + 0.1) << std::endl;
+#endif
 	return (size_t)(*m_latencyPort + 0.1);
     }
     return 0;

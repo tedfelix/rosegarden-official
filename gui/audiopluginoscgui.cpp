@@ -787,6 +787,8 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     QString type, soName, label;
     Rosegarden::PluginIdentifier::parseIdentifier(identifier, type, soName, label);
 
+    RG_DEBUG << "AudioPluginOSCGUI::getGUIFilePath(" << identifier << ")" << endl;
+
     QFileInfo soInfo(soName);
     if (soInfo.isRelative()) {
 	//!!!
@@ -816,21 +818,31 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 	    QFileInfo *info;
 
 	    while ((info = i.current()) != 0) {
+		
+		RG_DEBUG << "Looking at " << info->fileName() << " in path "
+			 << info->filePath() << " for suffix " << suffixes[k] << ", fuzzy " << fuzzy << endl;
 
 		++i;
 
 		if (!(info->isFile() || info->isSymLink())
-		    || !info->isExecutable()) continue;
+		    || !info->isExecutable()) {
+		    RG_DEBUG << "(not executable)" << endl;
+		    continue;
+		}
 
 		if (fuzzy) {
 		    if (info->fileName().left(fileBase.length()) != fileBase) continue;
+		    RG_DEBUG << "(is file base)" << endl;
 		} else {
 		    if (info->fileName().left(label.length()) != label) continue;
+		    RG_DEBUG << "(is label)" << endl;
 		}
 
 		if (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k])) {
+		    RG_DEBUG << "(ends with suffix " << suffixes[k] << " or out of suffixes)" << endl;
 		    return info->filePath();
 		}
+		RG_DEBUG << "(doesn't end with suffix " << suffixes[k] << ")" << endl;
 	    }
 	}
     }
