@@ -2063,6 +2063,8 @@ BankEditorDialog::slotDelete()
             slotApply();
             selectDeviceItem(device);
         }
+
+	return;
     }
 
     MidiKeyMapListViewItem* keyItem = dynamic_cast<MidiKeyMapListViewItem*>(currentItem);
@@ -2105,6 +2107,8 @@ BankEditorDialog::slotDelete()
 
 	    updateDialog();
 	}
+
+	return;
     }
 }
 
