@@ -2115,7 +2115,7 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
 	if (!sizeAction) {
 	    sizeAction = 
-		new KToggleAction(i18n("%1 pixel", "%1 pixels", sizes[i]),
+		new KToggleAction(i18n("%1 pixel", "%1 pixels", sizes[i]).arg(sizes[i]),
                                   0, this,
                                   SLOT(slotChangeFontSizeFromAction()),
                                   actionCollection(), actionName);
