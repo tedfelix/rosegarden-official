@@ -554,6 +554,7 @@ void NotationView::slotEditGeneralPaste()
 
         PasteEventsCommand::PasteType type = dialog.getPasteType();
         if (dialog.setAsDefault()) {
+	    config->setGroup(NotationView::ConfigGroup);
             config->writeEntry("pastetype", type);
         }
 
