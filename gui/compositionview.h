@@ -620,6 +620,8 @@ protected:
     bool         m_artifactsDrawBufferNeedsRefresh;
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;
+    int          m_lastPointerRefreshX;
+    int          m_lastPointerRefreshY;
     QPixmap      m_backgroundPixmap;
 
     mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;

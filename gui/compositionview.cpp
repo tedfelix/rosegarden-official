@@ -1472,7 +1472,8 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_segmentsDrawBufferNeedsRefresh(true),
       m_artifactsDrawBufferNeedsRefresh(true),
       m_lastBufferRefreshX(0),
-      m_lastBufferRefreshY(0)
+      m_lastBufferRefreshY(0),
+      m_lastPointerRefreshX(0)
 {
     m_toolBox = new SegmentToolBox(this, doc);
 
@@ -2581,33 +2582,34 @@ void CompositionView::releaseCurrentItem()
 void CompositionView::setPointerPos(int pos)
 {
     int oldPos = m_pointerPos;
+    if (oldPos == pos) return;
 
     m_pointerPos = pos;
     slotArtifactsDrawBufferNeedsRefresh();
 
-//     int deltaW = abs(m_pointerPos - oldPos);
-//     QRect updateRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
-//                      deltaW + m_pointerPen.width() * 2, visibleHeight());
+    // interesting -- isAutoScrolling() never seems to return true?
+    RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
     
-//     if (isAutoScrolling()) {
-//         updateRect.moveLeft(-getDeltaScroll());
-//         updateRect.moveRight(getDeltaScroll());
-//     }
-    
-//     QRect visibleRect = viewport()->rect();
-//     visibleRect.moveLeft(contentsX());
-    
-//     updateRect &= visibleRect;
+    if (contentsX() != m_lastPointerRefreshX ||
+	contentsY() != m_lastPointerRefreshY) {
+	m_lastPointerRefreshX = contentsX();
+	m_lastPointerRefreshY = contentsY();
+	// We'll need to shift the whole canvas anyway, so
+	updateContents();
+	return;
+    }
 
-//     if (updateRect.width() > 0) { // need update
+    int deltaW = abs(m_pointerPos - oldPos);
+    QRect updateRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
+		     deltaW + m_pointerPen.width() * 2, contentsHeight());
+
+    if (updateRect.width() > 0) { // need update
 //         // if the update rect is wider than half of the visible width, do a full update
-//         if (updateRect.width() < visibleWidth() / 2)
-//             updateContents(updateRect);
-//         else
-//             updateContents();
-//     }
-
-    updateContents();
+	if (updateRect.width() < visibleWidth() / 2)
+	    updateContents(updateRect);
+	else
+	    updateContents();
+    }
 }
 
 void CompositionView::setGuidesPos(int x, int y)
