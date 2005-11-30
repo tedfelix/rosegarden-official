@@ -1831,23 +1831,28 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 //              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
 //              << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
 
-    checkScrollAndRefreshDrawBuffer(r);
+    bool changed = checkScrollAndRefreshDrawBuffer(r);
 
-    refreshArtifactsDrawBuffer(r);
+    if (changed || m_artifactsDrawBufferNeedsRefresh) {
+
+	QRect copyRect(r); // r was modified by checkScrollAndRefreshDrawBuffer
+	copyRect.moveBy(-contentsX(), -contentsY());
+
+	bitBlt(&m_artifactsDrawBuffer,
+	       copyRect.x(), copyRect.y(),
+	       &m_segmentsDrawBuffer,
+	       copyRect.x(), copyRect.y(), copyRect.width(), copyRect.height());
+	m_artifactsDrawBufferNeedsRefresh = true;
+    }
+
+    if (m_artifactsDrawBufferNeedsRefresh) {
+
+	refreshArtifactsDrawBuffer(r);
+    }
 
     bitBlt(viewport(), updateRect.x(), updateRect.y(),
-           &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
-
-//     bitBlt(viewport(), updateRect.x(), updateRect.y(),
-// 	   &m_segmentsDrawBuffer, updateRect.x(), updateRect.y(), r.width(), r.height());
-
-    // draw artifacts directly on screen - bliting limits flicker, though
-//     QPainter p;
-//     p.begin(viewport());
-//     p.translate(-contentsX(), -contentsY());
-// //     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
-//     drawAreaArtifacts(&p, r);
-    
+	   &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(),
+	   updateRect.width(), updateRect.height());
 
     // DEBUG
 //     QPainter pdebug(viewport());
@@ -1857,10 +1862,11 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
 }
 
-void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
+bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
 {
     bool needRefresh = m_segmentsDrawBufferNeedsRefresh;
     bool all = false;
+    bool scroll = false;
     QRect refreshRect;
      
     int w = m_segmentsDrawBuffer.width(), h = m_segmentsDrawBuffer.height();
@@ -1878,6 +1884,7 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 
 	if (cx != m_lastBufferRefreshX) {
 	
+	    scroll = true;
 	    int dx = m_lastBufferRefreshX - cx;
 	    
 	    if (dx > -w && dx < w) {
@@ -1900,6 +1907,7 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
 	
 	if (cy != m_lastBufferRefreshY && !all) {
 	    
+	    scroll = true;
 	    int dy = m_lastBufferRefreshY - cy;
 	    
 	    if (dy > -h && dy < h) {
@@ -1933,6 +1941,10 @@ void CompositionView::checkScrollAndRefreshDrawBuffer(const QRect &rect)
     m_segmentsDrawBufferNeedsRefresh = false;
     m_lastBufferRefreshX = cx;
     m_lastBufferRefreshY = cy;
+
+    rect = refreshRect;
+    if (scroll) rect.setRect(cx, cy, w, h);
+    return needRefresh;
 }
 
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
@@ -1965,8 +1977,6 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
 {
 //      RG_DEBUG << "CompositionView::refreshArtifactsDrawBuffer() r = "
 //               << rect << endl;
-
-    bitBlt(&m_artifactsDrawBuffer, 0, 0, &m_segmentsDrawBuffer);
 
     QPainter p;
     p.begin(&m_artifactsDrawBuffer, viewport());
@@ -2588,28 +2598,39 @@ void CompositionView::setPointerPos(int pos)
     slotArtifactsDrawBufferNeedsRefresh();
 
     // interesting -- isAutoScrolling() never seems to return true?
-    RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
+//    RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
     
-    if (contentsX() != m_lastPointerRefreshX ||
-	contentsY() != m_lastPointerRefreshY) {
+    if (contentsX() != m_lastPointerRefreshX) {
 	m_lastPointerRefreshX = contentsX();
-	m_lastPointerRefreshY = contentsY();
 	// We'll need to shift the whole canvas anyway, so
 	updateContents();
 	return;
     }
 
     int deltaW = abs(m_pointerPos - oldPos);
-    QRect updateRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
-		     deltaW + m_pointerPen.width() * 2, contentsHeight());
 
-    if (updateRect.width() > 0) { // need update
-//         // if the update rect is wider than half of the visible width, do a full update
-	if (updateRect.width() < visibleWidth() / 2)
-	    updateContents(updateRect);
-	else
-	    updateContents();
+    if (deltaW <= m_pointerPen.width() * 2) { // use one rect instead of two separate ones
+
+	QRect updateRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
+			 deltaW + m_pointerPen.width() * 2, contentsHeight());
+	updateContents(updateRect);
+
+    } else {
+
+	updateContents(QRect(m_pointerPos - m_pointerPen.width(), 0,
+			     m_pointerPen.width() * 2, contentsHeight()));
+
+	updateContents(QRect(oldPos - m_pointerPen.width(), 0,
+			     m_pointerPen.width() * 2, contentsHeight()));
     }
+
+//    if (updateRect.width() > 0) { // need update
+//         // if the update rect is wider than half of the visible width, do a full update
+//	if (updateRect.width() < visibleWidth() / 2)
+//	    updateContents(updateRect);
+//	else
+//	    updateContents();
+//    }
 }
 
 void CompositionView::setGuidesPos(int x, int y)

@@ -546,7 +546,8 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
     
-    void checkScrollAndRefreshDrawBuffer(const QRect &);
+    // if something changed, returns true and sets rect accordingly
+    bool checkScrollAndRefreshDrawBuffer(QRect &);
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
@@ -621,7 +622,6 @@ protected:
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;
     int          m_lastPointerRefreshX;
-    int          m_lastPointerRefreshY;
     QPixmap      m_backgroundPixmap;
 
     mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
