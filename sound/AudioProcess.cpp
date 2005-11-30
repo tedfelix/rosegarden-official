@@ -129,6 +129,7 @@ AudioThread::run()
 	}
     }
 
+    pthread_attr_setstacksize(&attr, 1048576);
     int rv = pthread_create(&m_thread, &attr, staticThreadRun, this);
 
     if (rv != 0 && priority > 0) {
@@ -137,6 +138,7 @@ AudioThread::run()
 		  << "\ntrying again with normal scheduling" << std::endl;
 #endif
 	pthread_attr_init(&attr);
+	pthread_attr_setstacksize(&attr, 1048576);
 	rv = pthread_create(&m_thread, &attr, staticThreadRun, this);
     }
 
