@@ -388,7 +388,7 @@ void testInstalledVersion()
                   " found in the standard KDE installation directories.\n\n"
                   " This may mean one of the following:\n\n"
                   " 1. Rosegarden has not been correctly installed.  If you compiled\n"
-                  "     it yourself, check that you have run \"make install\" and that\n"
+                  "     it yourself, check that you have run \"scons install\" and that\n"
                   "     the procedure completed successfully.\n\n"
                   " 2. Rosegarden has been installed in a non-standard directory,\n"
                   "     and you need to add this directory to your KDEDIRS environment\n"
