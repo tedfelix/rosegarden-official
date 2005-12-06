@@ -30,6 +30,7 @@
 #include <qvaluevector.h>
 #include <qptrdict.h>
 #include <qpixmap.h>
+#include <qimage.h>
 
 #include "Event.h"
 #include "Composition.h"
@@ -110,6 +111,8 @@ protected:
     QColor m_color;
 };
 
+typedef std::vector<QPixmap> PixmapArray;
+
 
 class CompositionModel : public QObject, public Rosegarden::CompositionObserver, public Rosegarden::SegmentObserver
 {
@@ -127,9 +130,10 @@ public:
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
     struct AudioPreviewDrawDataItem {
-        AudioPreviewDrawDataItem(QPixmap p, QPoint bp) : pixmap(p), basePoint(bp) {};
-        QPixmap pixmap;
+        AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) : pixmap(p), basePoint(bp), rect(r) {};
+        PixmapArray pixmap;
         QPoint basePoint;
+        QRect rect;
     };
     
     typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
@@ -316,7 +320,7 @@ protected:
     void updatePreviewCacheForAudioSegment(const Rosegarden::Segment* s, AudioPreviewData*);
     rectlist* getNotationPreviewData(const Rosegarden::Segment* s);
     AudioPreviewData* getAudioPreviewData(const Rosegarden::Segment* s);
-    QPixmap getAudioPreviewPixmap(const Rosegarden::Segment* s);
+    PixmapArray getAudioPreviewPixmap(const Rosegarden::Segment* s);
     QRect postProcessAudioPreview(AudioPreviewData*, const Rosegarden::Segment*);
 
     void makePreviewCache(const Rosegarden::Segment* s);
@@ -368,7 +372,7 @@ protected:
 
     std::map<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
     std::map<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;
-    std::map<const Rosegarden::Segment*, QPixmap> m_audioSegmentPreviewMap;
+    std::map<const Rosegarden::Segment*, PixmapArray> m_audioSegmentPreviewMap;
 };
 
 
@@ -551,6 +555,7 @@ protected:
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
+    void drawAreaAudioPreviews(QPainter * p, const QRect& rect);
     void drawAreaArtifacts(QPainter * p, const QRect& rect);
     void drawRect(const QRect& rect, QPainter * p, const QRect& clipRect,
                   bool isSelected = false, int intersectLvl = 0, bool fill = true);

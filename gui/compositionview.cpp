@@ -368,11 +368,11 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
     Rosegarden::Profiler profiler("CompositionModelImpl::makeAudioPreviewRects", true);
 //     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects\n";
 
-    QPixmap previewPixmap = getAudioPreviewPixmap(segment);
-    int penWidth = std::max(1U, segRect.getPen().width());
+    PixmapArray previewImage = getAudioPreviewPixmap(segment);
+    int penWidth = 0; // std::max(1U, segRect.getPen().width());
     QPoint basePoint(segRect.x() + penWidth, segRect.y() + penWidth);
 
-    AudioPreviewDrawDataItem previewItem(previewPixmap, basePoint);
+    AudioPreviewDrawDataItem previewItem(previewImage, basePoint, segRect);
 
     apRects->push_back(previewItem);
 
@@ -725,40 +725,69 @@ void CompositionModelImpl::slotAudioPreviewComplete(AudioPreviewUpdater* apu)
         emit needContentUpdate(updateRect);
 }
 
-QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, const Rosegarden::Segment* segment)
+class AudioPreviewPainter {
+public:
+    AudioPreviewPainter(CompositionModelImpl& model, CompositionModel::AudioPreviewData* apData, const Rosegarden::Segment* segment);
+
+    void paintPreviewImage();
+    PixmapArray getPreviewImage();
+    const CompositionRect& getSegmentRect() { return m_rect; }
+
+    static const int TileWidth;
+
+protected:
+    void initPainters();
+    void recyclePainters();
+    void finalizeCurrentSlice();
+
+    //--------------- Data members ---------------------------------
+    CompositionModelImpl& m_model;
+    CompositionModel::AudioPreviewData* m_apData;
+    const Rosegarden::Segment* m_segment;
+    CompositionRect m_rect;
+    QPixmap m_pixmap;
+    QBitmap m_pixmapMask;
+    PixmapArray m_previewPixmaps;
+    QPainter m_p;
+    QPainter m_pb;
+    QColor m_defaultCol;
+    int m_penWidth;
+    int m_height;
+    int m_halfRectHeight;
+    int m_sliceNb;
+
+};
+
+AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model, CompositionModel::AudioPreviewData* apData, const Rosegarden::Segment* segment)
+    : m_model(model),
+      m_apData(apData),
+      m_segment(segment),
+      m_rect(model.computeSegmentRect(*(segment))),
+      m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
+      m_height(model.grid().getYSnap()/2)
 {
-    CompositionRect segRect = computeSegmentRect(*(segment));
-    int penWidth = (std::max(1U, segRect.getPen().width()) * 2);
-    
-    QPixmap previewPixmap(segRect.width() - penWidth, segRect.height() - penWidth);
-    QBitmap previewPixmapMask(previewPixmap.size());
+    int pixWidth = std::min(m_rect.width(), TileWidth);
+    m_pixmap.resize(pixWidth, m_rect.height());
+    m_pixmapMask.resize(m_pixmap.size());
+    m_penWidth = (std::max(1U, m_rect.getPen().width()) * 2);
 
-    previewPixmap.fill();
-    previewPixmapMask.fill(Qt::color0);
+    m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
+}
 
-    // draw preview
-    QPainter p(&previewPixmap);
-    QPainter pb(&previewPixmapMask);
-//     p.fillRect(previewPixmap.rect(), segRect.getBrush());
+const int AudioPreviewPainter::TileWidth = 30000;
 
-    p.translate(penWidth, penWidth);
-    pb.translate(penWidth, penWidth);
-
-    pb.setPen(Qt::color1);
-
-    const std::vector<float>& values = apData->getValues();
+void AudioPreviewPainter::paintPreviewImage()
+{
+    const std::vector<float>& values = m_apData->getValues();
 
     if (values.size() == 0)
-        return QRect();
+        return;
         
-    const int height = m_grid.getYSnap()/2 - penWidth;
-    const int halfRectHeight = m_grid.getYSnap()/2 - penWidth / 2 - 2;
-
     float gain[2] = { 1.0, 1.0 };
-    Rosegarden::TrackId trackId = segment->getTrack();
-    Rosegarden::Track *track = getComposition().getTrackById(trackId);
+    Rosegarden::TrackId trackId = m_segment->getTrack();
+    Rosegarden::Track *track = m_model.getComposition().getTrackById(trackId);
     if (track) {
-        Rosegarden::Instrument *instrument = getStudio().getInstrumentById(track->getInstrument());
+        Rosegarden::Instrument *instrument = m_model.getStudio().getInstrumentById(track->getInstrument());
         if (instrument) {
             float level = Rosegarden::AudioLevel::dB_to_multiplier(instrument->getLevel());
             float pan = instrument->getPan() - 100.0;
@@ -768,24 +797,32 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
 
     }
 
-    bool showMinima = apData->showsMinima();
-    unsigned int channels = apData->getChannels();
+    bool showMinima = m_apData->showsMinima();
+    unsigned int channels = m_apData->getChannels();
     if (channels == 0) {
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : problem with audio file for segment "
-                 << segment->getLabel().c_str() << endl;
-        return QRect();
+        RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : problem with audio file for segment "
+                 << m_segment->getLabel().c_str() << endl;
+        return;
     }
 
     int samplePoints = values.size() / (channels * (showMinima ? 2 : 1));
     float h1, h2, l1 = 0, l2 = 0;
-    double sampleScaleFactor = samplePoints / double(segRect.width());
+    double sampleScaleFactor = samplePoints / double(m_rect.width());
+    m_sliceNb = 0;
 
-    for (int i = 0; i < segRect.width(); ++i) {
+    initPainters();
+
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.width() << endl;
+
+    for (int i = 0; i < m_rect.width(); ++i) {
         // For each i work get the sample starting point
         //
         int position = int(channels * i * sampleScaleFactor);
         if (position < 0) continue;
-        if (position >= values.size() - channels) break;
+        if (position >= values.size() - channels) {
+            finalizeCurrentSlice();
+            break;
+        }
 
         if (channels == 1) {
 
@@ -795,7 +832,7 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
             h1 *= gain[0];
             h2 *= gain[1];
 
-            if (apData->showsMinima()) {
+            if (m_apData->showsMinima()) {
                 l1 = values[position++];
                 l2 = l1;
 
@@ -813,56 +850,114 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
         }
 
         int width = 1;
-        const QColor defaultCol = CompositionColourCache::getInstance()->SegmentAudioPreview;
-
         QColor color;
 
         // h1 left, h2 right
 
         if (h1 >= 1.0) { h1 = 1.0; color = Qt::red; }
-        else { color = defaultCol; }
+        else { color = m_defaultCol; }
 
-        int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, height);
+        int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, m_height);
         if (h < 0) h = 0;
 
-        p.setPen(color);
-        p.drawRect(i, halfRectHeight - h, width, h);
-        pb.drawRect(i, halfRectHeight - h, width, h);
+        m_p.setPen(color);
+//         RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : drawRect " << QRect(i, m_halfRectHeight - h, width, h) << endl;
+        int rectX = i % TileWidth;
+        m_p.drawRect(rectX, m_halfRectHeight - h, width, h);
+        m_pb.drawRect(rectX, m_halfRectHeight - h, width, h);
 
         if (h2 >= 1.0) { h2 = 1.0; color = Qt::red; }
-        else { color = defaultCol; }
+        else { color = m_defaultCol; }
 
-        h = Rosegarden::AudioLevel::multiplier_to_preview(h2, height);
+        h = Rosegarden::AudioLevel::multiplier_to_preview(h2, m_height);
         if (h < 0) h = 0;
 
-        p.setPen(color);
-        p.drawRect(i, halfRectHeight, width, h);
-        pb.drawRect(i, halfRectHeight, width, h);
-        
+        m_p.setPen(color);
+        m_p.drawRect(rectX,  m_halfRectHeight, width, h);
+        m_pb.drawRect(rectX, m_halfRectHeight, width, h);
+
+        if (((i+1) % TileWidth) == 0 || i == (m_rect.width() - 1)) {
+            finalizeCurrentSlice();
+        }
     }
 
-    if (segment->isAutoFading()) {
+    if (m_segment->isAutoFading()) {
 
-        Composition &comp = getComposition();
+        Composition &comp = m_model.getComposition();
 
         int audioFadeInEnd = int(
-                                 m_grid.getRulerScale()->getXForTime(comp.
-                                                                     getElapsedTimeForRealTime(segment->getFadeInTime()) +
-                                                                     segment->getStartTime()) -
-                                 m_grid.getRulerScale()->getXForTime(segment->getStartTime()));
+                                 m_model.grid().getRulerScale()->getXForTime(comp.
+                                                                     getElapsedTimeForRealTime(m_segment->getFadeInTime()) +
+                                                                     m_segment->getStartTime()) -
+                                 m_model.grid().getRulerScale()->getXForTime(m_segment->getStartTime()));
 
-        p.setPen(Qt::blue);
-        p.drawRect(0, apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
-        pb.drawRect(0, apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
+        m_p.setPen(Qt::blue);
+        m_p.drawRect(0,  m_apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
+        m_pb.drawRect(0, m_apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
     }
 
-    p.end();
-    pb.end();
+    m_p.end();
+    m_pb.end();
+}
 
-    previewPixmap.setMask(previewPixmapMask);
-    m_audioSegmentPreviewMap[segment] = previewPixmap;
+void AudioPreviewPainter::finalizeCurrentSlice()
+{
+//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * TileWidth << endl;
+
+    recyclePainters();
+
+    m_pixmap.setMask(m_pixmapMask);
+
+
+    m_previewPixmaps.push_back(QPixmap(m_pixmap));
+
+    // reset all
+    m_pixmap.fill();
+    m_pixmapMask.fill(Qt::color0);
+    m_p.resetXForm();
+    m_pb.resetXForm();
+    m_p.translate(m_penWidth, m_penWidth);
+    m_pb.translate(m_penWidth, m_penWidth);
+    m_pb.setPen(Qt::color1);
+    ++m_sliceNb;
+
+}
+
+PixmapArray AudioPreviewPainter::getPreviewImage()
+{
+    return m_previewPixmaps;
+}
+
+void AudioPreviewPainter::recyclePainters()
+{
+    m_p.flush();
+    m_pb.flush();
+}
+
+void AudioPreviewPainter::initPainters()
+{
+    m_pixmap.fill();
+    m_pixmapMask.fill(Qt::color0);
+    m_p.begin(&m_pixmap);
+    m_pb.begin(&m_pixmapMask);
+    m_p.translate(m_penWidth, m_penWidth);
+    m_pb.translate(m_penWidth, m_penWidth);
+
+    m_pb.setPen(Qt::color1);
+}
+
+
+
+QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, const Segment* segment)
+{
+    RG_DEBUG << "CompositionModelImpl::postProcessAudioPreview()\n";
+
+    AudioPreviewPainter previewPainter(*this, apData, segment);
+    previewPainter.paintPreviewImage();
+
+    m_audioSegmentPreviewMap[segment] = previewPainter.getPreviewImage();
     
-    return segRect;
+    return previewPainter.getSegmentRect();
 }
 
 
@@ -897,7 +992,7 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
     return apData;
 }
 
-QPixmap CompositionModelImpl::getAudioPreviewPixmap(const Rosegarden::Segment* s)
+PixmapArray CompositionModelImpl::getAudioPreviewPixmap(const Rosegarden::Segment* s)
 {
     getAudioPreviewData(s);
     return m_audioSegmentPreviewMap[s];
@@ -2043,24 +2138,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
         // draw audio previews
         //
-        CompositionModel::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
-        CompositionModel::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
-        QRect pixRect;
-        QPoint basePoint;
-        for(; api != apEnd; ++api) {
-            pixRect = api->pixmap.rect();
-            pixRect.moveTopLeft(api->basePoint);
-            pixRect &= clipRect;
-            basePoint = pixRect.topLeft();
-            pixRect.moveBy(-api->basePoint.x(), -api->basePoint.y());
-#ifdef COPY_TO_TMP_PIXMAP
-            QPixmap tmp(pixRect.size());
-            copyBlt(&tmp, 0, 0, &(api->pixmap), pixRect.x(), pixRect.y(), pixRect.width(), pixRect.height());
-            p->drawPixmap(basePoint, tmp);
-#else
-            p->drawPixmap(basePoint, api->pixmap, pixRect);
-#endif
-        }
+        drawAreaAudioPreviews(p, clipRect);
         
         // draw notation previews
         //
@@ -2097,6 +2175,61 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
 
 //    drawAreaArtifacts(p, clipRect);
     
+}
+
+void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
+{
+    CompositionModel::AudioPreviewDrawData::const_iterator api = m_audioPreviewRects.begin();
+    CompositionModel::AudioPreviewDrawData::const_iterator apEnd = m_audioPreviewRects.end();
+    QRect rectToFill, // rect to fill on canvas
+        localRect; // the rect of the tile to draw on the canvas
+    QPoint basePoint, // origin of segment rect
+        drawBasePoint; // origin of rect to fill on canvas
+    QRect r;
+    for(; api != apEnd; ++api) {
+        rectToFill = api->rect;
+        basePoint = api->basePoint;
+        rectToFill.moveTopLeft(basePoint);
+        rectToFill &= clipRect;
+        r = rectToFill;
+        drawBasePoint = rectToFill.topLeft();
+        rectToFill.moveBy(-basePoint.x(), -basePoint.y());
+        int firstPixmapIdx = (r.x() - basePoint.x()) / AudioPreviewPainter::TileWidth;
+        if (firstPixmapIdx >= api->pixmap.size()) {
+//             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : WARNING - miscomputed pixmap array : r.x = "
+//                      << r.x() << " - basePoint.x = " << basePoint.x() << " - firstPixmapIdx = " << firstPixmapIdx
+//                      << endl;
+            continue;
+        }
+        int x = 0, idx = firstPixmapIdx;
+        RG_DEBUG << "CompositionView::drawAreaAudioPreviews : clipRect = " << clipRect
+                 << " - firstPixmapIdx = " << firstPixmapIdx << endl;
+        while(x < clipRect.width()) {
+            int pixmapRectXOffset = idx * AudioPreviewPainter::TileWidth;
+            localRect.setRect(basePoint.x() + pixmapRectXOffset, basePoint.y(),
+                              AudioPreviewPainter::TileWidth, api->rect.height());
+//             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : initial localRect = "
+//                      << localRect << endl;
+            localRect &= clipRect;
+//             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : localRect & clipRect = "
+//                      << localRect << endl;
+            if (localRect.isEmpty()) {
+//                 RG_DEBUG << "CompositionView::drawAreaAudioPreviews : localRect & clipRect is empty\n";
+                break;
+            }
+            localRect.moveBy(-(basePoint.x() + pixmapRectXOffset), -basePoint.y());
+
+//             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
+//                      << idx << " at " << drawBasePoint << " - localRect = " << localRect << endl;
+            p->drawPixmap(drawBasePoint, api->pixmap[idx], localRect);
+            ++idx;
+            if (idx >= api->pixmap.size())
+                break;
+//             basePoint.setX(basePoint.x() + AudioPreviewPainter::TileWidth);
+            drawBasePoint.setX(drawBasePoint.x() + localRect.width());
+            x += localRect.width();
+        }
+    }
 }
 
 void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
@@ -2591,6 +2724,7 @@ void CompositionView::releaseCurrentItem()
 
 void CompositionView::setPointerPos(int pos)
 {
+    RG_DEBUG << "CompositionView::setPointerPos(" << pos << ")\n";
     int oldPos = m_pointerPos;
     if (oldPos == pos) return;
 
