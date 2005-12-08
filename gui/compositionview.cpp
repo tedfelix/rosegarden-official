@@ -858,7 +858,7 @@ void AudioPreviewPainter::paintPreviewImage()
         else { color = m_defaultCol; }
 
         int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, m_height);
-        if (h < 0) h = 0;
+        if (h <= 0) h = 1;
 
         m_p.setPen(color);
 //         RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : drawRect " << QRect(i, m_halfRectHeight - h, width, h) << endl;
