@@ -733,12 +733,14 @@ public:
     PixmapArray getPreviewImage();
     const CompositionRect& getSegmentRect() { return m_rect; }
 
-    static const int TileWidth;
+    static int tileWidth();
 
 protected:
     void initPainters();
     void recyclePainters();
     void finalizeCurrentSlice();
+    void translatePainters(bool reset=false);
+    void clearPixmaps();
 
     //--------------- Data members ---------------------------------
     CompositionModelImpl& m_model;
@@ -766,7 +768,7 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model, Compositio
       m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
       m_height(model.grid().getYSnap()/2)
 {
-    int pixWidth = std::min(m_rect.width(), TileWidth);
+    int pixWidth = std::min(m_rect.width(), tileWidth());
     m_pixmap.resize(pixWidth, m_rect.height());
     m_pixmapMask.resize(m_pixmap.size());
     m_penWidth = (std::max(1U, m_rect.getPen().width()) * 2);
@@ -774,7 +776,12 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model, Compositio
     m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
 }
 
-const int AudioPreviewPainter::TileWidth = 30000;
+int AudioPreviewPainter::tileWidth()
+{
+    static int tw = -1;
+    if (tw == -1) tw = QApplication::desktop()->width();
+    return tw;
+}
 
 void AudioPreviewPainter::paintPreviewImage()
 {
@@ -862,7 +869,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
         m_p.setPen(color);
 //         RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : drawRect " << QRect(i, m_halfRectHeight - h, width, h) << endl;
-        int rectX = i % TileWidth;
+        int rectX = i % tileWidth();
         m_p.drawRect(rectX, m_halfRectHeight - h, width, h);
         m_pb.drawRect(rectX, m_halfRectHeight - h, width, h);
 
@@ -876,7 +883,7 @@ void AudioPreviewPainter::paintPreviewImage()
         m_p.drawRect(rectX,  m_halfRectHeight, width, h);
         m_pb.drawRect(rectX, m_halfRectHeight, width, h);
 
-        if (((i+1) % TileWidth) == 0 || i == (m_rect.width() - 1)) {
+        if (((i+1) % tileWidth()) == 0 || i == (m_rect.width() - 1)) {
             finalizeCurrentSlice();
         }
     }
@@ -902,7 +909,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
 void AudioPreviewPainter::finalizeCurrentSlice()
 {
-//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * TileWidth << endl;
+//     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth() << endl;
 
     recyclePainters();
 
@@ -912,15 +919,9 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     m_previewPixmaps.push_back(QPixmap(m_pixmap));
 
     // reset all
-    m_pixmap.fill();
-    m_pixmapMask.fill(Qt::color0);
-    m_p.resetXForm();
-    m_pb.resetXForm();
-    m_p.translate(m_penWidth, m_penWidth);
-    m_pb.translate(m_penWidth, m_penWidth);
-    m_pb.setPen(Qt::color1);
+    clearPixmaps();
+    translatePainters(true);
     ++m_sliceNb;
-
 }
 
 PixmapArray AudioPreviewPainter::getPreviewImage()
@@ -936,16 +937,29 @@ void AudioPreviewPainter::recyclePainters()
 
 void AudioPreviewPainter::initPainters()
 {
-    m_pixmap.fill();
-    m_pixmapMask.fill(Qt::color0);
+    clearPixmaps();
     m_p.begin(&m_pixmap);
     m_pb.begin(&m_pixmapMask);
-    m_p.translate(m_penWidth, m_penWidth);
-    m_pb.translate(m_penWidth, m_penWidth);
+    translatePainters();
 
     m_pb.setPen(Qt::color1);
 }
 
+void AudioPreviewPainter::clearPixmaps()
+{
+    m_pixmap.fill();
+    m_pixmapMask.fill(Qt::color0);
+}
+
+void AudioPreviewPainter::translatePainters(bool reset)
+{
+    if (reset) {
+        m_p.resetXForm();
+        m_pb.resetXForm();
+    }
+    m_p.translate(0, m_penWidth);
+    m_pb.translate(0, m_penWidth);
+}
 
 
 QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, const Segment* segment)
@@ -2194,7 +2208,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
         r = rectToFill;
         drawBasePoint = rectToFill.topLeft();
         rectToFill.moveBy(-basePoint.x(), -basePoint.y());
-        int firstPixmapIdx = (r.x() - basePoint.x()) / AudioPreviewPainter::TileWidth;
+        int firstPixmapIdx = (r.x() - basePoint.x()) / AudioPreviewPainter::tileWidth();
         if (firstPixmapIdx >= api->pixmap.size()) {
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : WARNING - miscomputed pixmap array : r.x = "
 //                      << r.x() << " - basePoint.x = " << basePoint.x() << " - firstPixmapIdx = " << firstPixmapIdx
@@ -2202,12 +2216,12 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
             continue;
         }
         int x = 0, idx = firstPixmapIdx;
-        RG_DEBUG << "CompositionView::drawAreaAudioPreviews : clipRect = " << clipRect
-                 << " - firstPixmapIdx = " << firstPixmapIdx << endl;
+//         RG_DEBUG << "CompositionView::drawAreaAudioPreviews : clipRect = " << clipRect
+//                  << " - firstPixmapIdx = " << firstPixmapIdx << endl;
         while(x < clipRect.width()) {
-            int pixmapRectXOffset = idx * AudioPreviewPainter::TileWidth;
+            int pixmapRectXOffset = idx * AudioPreviewPainter::tileWidth();
             localRect.setRect(basePoint.x() + pixmapRectXOffset, basePoint.y(),
-                              AudioPreviewPainter::TileWidth, api->rect.height());
+                              AudioPreviewPainter::tileWidth(), api->rect.height());
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : initial localRect = "
 //                      << localRect << endl;
             localRect &= clipRect;
@@ -2225,7 +2239,6 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
             ++idx;
             if (idx >= api->pixmap.size())
                 break;
-//             basePoint.setX(basePoint.x() + AudioPreviewPainter::TileWidth);
             drawBasePoint.setX(drawBasePoint.x() + localRect.width());
             x += localRect.width();
         }
