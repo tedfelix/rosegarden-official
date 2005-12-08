@@ -111,7 +111,7 @@ protected:
     QColor m_color;
 };
 
-typedef std::vector<QPixmap> PixmapArray;
+typedef std::vector<QImage> PixmapArray;
 
 
 class CompositionModel : public QObject, public Rosegarden::CompositionObserver, public Rosegarden::SegmentObserver

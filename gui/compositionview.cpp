@@ -916,7 +916,7 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     m_pixmap.setMask(m_pixmapMask);
 
 
-    m_previewPixmaps.push_back(QPixmap(m_pixmap));
+    m_previewPixmaps.push_back(m_pixmap.convertToImage());
 
     // reset all
     clearPixmaps();
@@ -2235,7 +2235,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
 
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
 //                      << idx << " at " << drawBasePoint << " - localRect = " << localRect << endl;
-            p->drawPixmap(drawBasePoint, api->pixmap[idx], localRect);
+            p->drawImage(drawBasePoint, api->pixmap[idx], localRect);
             ++idx;
             if (idx >= api->pixmap.size())
                 break;
