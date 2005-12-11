@@ -38,8 +38,6 @@ public:
     RingBufferPool(size_t bufferSize);
     virtual ~RingBufferPool();
 
-    void mlock();
-
     /**
      * Set the default size for buffers.  Buffers currently allocated
      * will not be resized until they are returned.
@@ -77,13 +75,16 @@ protected:
     AllocList m_buffers;
 
     size_t m_bufferSize;
+
+    pthread_mutex_t m_lock;
 };
 
 
 RingBufferPool::RingBufferPool(size_t bufferSize) :
     m_bufferSize(bufferSize)
 {
-    // nothing
+    pthread_mutex_t initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
+    memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
 }
 
 RingBufferPool::~RingBufferPool()
@@ -102,20 +103,16 @@ RingBufferPool::~RingBufferPool()
     }
 
     m_buffers.clear();
+
+    pthread_mutex_destroy(&m_lock);
 }
 
-void
-RingBufferPool::mlock()
-{
-    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
-	i->first->mlock();
-    }
-}
- 
 void
 RingBufferPool::setBufferSize(size_t n)
 {
     if (m_bufferSize == n) return;
+
+    pthread_mutex_lock(&m_lock);
 
 #ifdef DEBUG_RING_BUFFER_POOL
     std::cerr << "RingBufferPool::setBufferSize: from " << m_bufferSize
@@ -139,35 +136,57 @@ RingBufferPool::setBufferSize(size_t n)
     }
 
     m_bufferSize = n;
+    pthread_mutex_unlock(&m_lock);
 }    
 
 void
 RingBufferPool::setPoolSize(size_t n)
 {
+    pthread_mutex_lock(&m_lock);
+
 #ifdef DEBUG_RING_BUFFER_POOL
     std::cerr << "RingBufferPool::setPoolSize: from " << m_buffers.size()
 	      << " to " << n << std::endl;
 #endif
 
-    size_t count = 0;
-    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ) {
-	if (i->second || count < n) {
-	    ++count;
-	    ++i;
-	} else {
-	    m_buffers.erase(i);
+    size_t allocatedCount = 0, count = 0;
+
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	if (i->second) ++allocatedCount;
+	++count;
+    }
+
+    if (count > n) {
+	for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ) {
+	    if (!i->second) {
+		delete i->first;
+		m_buffers.erase(i);
+		if (--count == n) break;
+	    } else {
+		++i;
+	    }
 	}
     }
-    while (count < n) {
+
+    while (count < n) { 
 	m_buffers.push_back(AllocPair(new RingBuffer<sample_t>(m_bufferSize),
 				      false));
 	++count;
-    }
+    }	
+
+#ifdef DEBUG_RING_BUFFER_POOL
+    std::cerr << "RingBufferPool::setPoolSize: have " << m_buffers.size()
+	      << " buffers (" << allocatedCount << " allocated)" << std::endl;
+#endif
+
+    pthread_mutex_unlock(&m_lock);
 }
 
 bool
 RingBufferPool::getBuffers(size_t n, RingBuffer<sample_t> **buffers)
 {
+    pthread_mutex_lock(&m_lock);
+
     size_t count = 0;
 
     for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
@@ -178,32 +197,39 @@ RingBufferPool::getBuffers(size_t n, RingBuffer<sample_t> **buffers)
 #ifdef DEBUG_RING_BUFFER_POOL
 	std::cerr << "RingBufferPool::getBuffers(" << n << "): not available" << std::endl;
 #endif
+	pthread_mutex_unlock(&m_lock);
 	return false;
     }
     count = 0;
 
 #ifdef DEBUG_RING_BUFFER_POOL
-	std::cerr << "RingBufferPool::getBuffers(" << n << "): available" << std::endl;
+    std::cerr << "RingBufferPool::getBuffers(" << n << "): available" << std::endl;
 #endif
 
     for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
 	if (!i->second) {
 	    i->second = true;
 	    i->first->reset();
+	    i->first->mlock();
 	    buffers[count] = i->first;
 	    if (++count == n) break;
 	}
     }
 
+    pthread_mutex_unlock(&m_lock);
     return true;
 }
 
 void
 RingBufferPool::returnBuffer(RingBuffer<sample_t> *buffer)
 {
+    pthread_mutex_lock(&m_lock);
+
 #ifdef DEBUG_RING_BUFFER_POOL
     std::cerr << "RingBufferPool::returnBuffer" << std::endl;
 #endif
+
+    buffer->munlock();
 
     for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
 	if (i->first == buffer) {
@@ -214,6 +240,8 @@ RingBufferPool::returnBuffer(RingBuffer<sample_t> *buffer)
 	    }
 	}
     }
+
+    pthread_mutex_unlock(&m_lock);
 }
 
 
@@ -260,11 +288,9 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
 	// files requiring different buffer sizes?  That shouldn't be the
 	// usual case, but it's not unthinkable.
 	m_ringBufferPool = new RingBufferPool(bufferSize);
-	m_ringBufferPool->mlock();
     } else {
 	m_ringBufferPool->setBufferSize
 	    (std::max(bufferSize, m_ringBufferPool->getBufferSize()));
-	m_ringBufferPool->mlock();
     }
 
     initialise(bufferSize, smallFileSize);
@@ -281,7 +307,6 @@ PlayableAudioFile::setRingBufferPoolSizes(size_t n, size_t nframes)
 	    (std::max(nframes, m_ringBufferPool->getBufferSize()));
     }
     m_ringBufferPool->setPoolSize(n);
-    m_ringBufferPool->mlock();
 }
 
 

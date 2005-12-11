@@ -3659,7 +3659,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 #ifdef DEBUG_PLAYING_AUDIO
 		std::cout << "Creating playable audio file: id " << audioFile->getId() << ", event time " << (*i)->getEventTime() << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels <<  std::endl;
 
-		std::cout << "Read buffer length is " << bufferLength << " (" << RealTime::realTime2Frame(bufferLength, m_jackDriver->getSampleRate()) << " frames)" << std::endl;
+		std::cout << "Read buffer length is " << bufferLength << " (" << bufferFrames << " frames)" << std::endl;
 #endif
 
                 PlayableAudioFile *paf =

@@ -27,8 +27,19 @@
 
 #include <Scavenger.h>
 
-namespace Rosegarden
-{
+//#define DEBUG_RINGBUFFER 1
+//#define DEBUG_RINGBUFFER_CREATE_DESTROY 1
+
+#ifdef DEBUG_RINGBUFFER
+#define DEBUG_RINGBUFFER_CREATE_DESTROY 1
+#endif
+
+#ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
+#include <iostream>
+static int __extant_ringbuffers = 0;
+#endif
+
+namespace Rosegarden {
 
 /**
  * RingBuffer implements a lock-free ring buffer for one writer and N
@@ -44,7 +55,7 @@ class RingBuffer
 {
 public:
     /**
-     * Create a ring buffer with room for n samples.
+     * Create a ring buffer with room to write n samples.
      *
      * Note that the internal storage size will actually be n+1
      * samples, as one element is unavailable for administrative
@@ -74,6 +85,12 @@ public:
      * for success.
      */
     bool mlock();
+
+    /**
+     * Unlock the ring buffer from physical memory.  Returns true for
+     * success.
+     */
+    bool munlock();
 
     /**
      * Reset read and write pointers, thus emptying the buffer.
@@ -154,6 +171,10 @@ protected:
     bool             m_mlocked;
 
     static Scavenger<ScavengerArrayWrapper<T> > m_scavenger;
+
+private:
+    RingBuffer(const RingBuffer &); // not provided
+    RingBuffer &operator=(const RingBuffer &); // not provided
 };
 
 template <typename T, int N>
@@ -166,22 +187,38 @@ RingBuffer<T, N>::RingBuffer(size_t n) :
     m_size(n + 1),
     m_mlocked(false)
 {
+#ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::RingBuffer(" << n << ") [now have " << (++__extant_ringbuffers) << "]" << std::endl;
+#endif
+
     for (int i = 0; i < N; ++i) m_readers[i] = 0;
+
+    m_scavenger.scavenge();
 }
 
 template <typename T, int N>
 RingBuffer<T, N>::~RingBuffer()
 {
+#ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::~RingBuffer [now have " << (--__extant_ringbuffers) << "]" << std::endl;
+#endif
+
     if (m_mlocked) {
 	::munlock((void *)m_buffer, m_size * sizeof(T));
     }
     delete[] m_buffer;
+
+    m_scavenger.scavenge();
 }
 
 template <typename T, int N>
 size_t
 RingBuffer<T, N>::getSize() const
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::getSize(): " << m_size-1 << std::endl;
+#endif
+
     return m_size - 1;
 }
 
@@ -189,6 +226,12 @@ template <typename T, int N>
 void
 RingBuffer<T, N>::resize(size_t newSize)
 {
+#ifdef DEBUG_RINGBUFFER_CREATE_DESTROY
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::resize(" << newSize << ")" << std::endl;
+#endif
+
+    m_scavenger.scavenge();
+
     if (m_mlocked) {
 	::munlock((void *)m_buffer, m_size * sizeof(T));
     }
@@ -216,9 +259,22 @@ RingBuffer<T, N>::mlock()
 }
 
 template <typename T, int N>
+bool
+RingBuffer<T, N>::munlock()
+{
+    if (::munlock((void *)m_buffer, m_size * sizeof(T))) return false;
+    m_mlocked = false;
+    return true;
+}
+
+template <typename T, int N>
 void
 RingBuffer<T, N>::reset()
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::reset" << std::endl;
+#endif
+
     m_writer = 0;
     for (int i = 0; i < N; ++i) m_readers[i] = 0;
 }
@@ -229,9 +285,16 @@ RingBuffer<T, N>::getReadSpace(int R) const
 {
     size_t writer = m_writer;
     size_t reader = m_readers[R];
+    size_t space = 0;
 
-    if (writer > reader) return writer - reader;
-    else return ((writer + m_size) - reader) % m_size;
+    if (writer > reader) space = writer - reader;
+    else space = ((writer + m_size) - reader) % m_size;
+
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::getReadSpace(" << R << "): " << space << std::endl;
+#endif
+
+    return space;
 }
 
 template <typename T, int N>
@@ -243,6 +306,19 @@ RingBuffer<T, N>::getWriteSpace() const
 	size_t here = (m_readers[i] + m_size - m_writer - 1) % m_size;
 	if (i == 0 || here < space) space = here;
     }
+
+#ifdef DEBUG_RINGBUFFER
+    size_t rs(getReadSpace()), rp(m_readers[0]);
+
+    std::cerr << "RingBuffer: write space " << space << ", read space "
+	      << rs << ", total " << (space + rs) << ", m_size " << m_size << std::endl;
+    std::cerr << "RingBuffer: reader " << rp << ", writer " << m_writer << std::endl;
+#endif
+
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::getWriteSpace(): " << space << std::endl;
+#endif
+
     return space;
 }
 
@@ -250,8 +326,16 @@ template <typename T, int N>
 size_t
 RingBuffer<T, N>::read(T *destination, size_t n, int R)
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::read(dest, " << n << ", " << R << ")" << std::endl;
+#endif
+
     size_t available = getReadSpace(R);
     if (n > available) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: Only " << available << " samples available"
+		  << std::endl;
+#endif
 	memset(destination + available, 0, (n - available) * sizeof(T));
 	n = available;
     }
@@ -266,6 +350,11 @@ RingBuffer<T, N>::read(T *destination, size_t n, int R)
     }
 
     m_readers[R] = (m_readers[R] + n) % m_size;
+
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::read: read " << n << ", reader now " << m_readers[R] << std::endl;
+#endif
+
     return n;
 }
 
@@ -273,8 +362,18 @@ template <typename T, int N>
 size_t
 RingBuffer<T, N>::readAdding(T *destination, size_t n, int R)
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::readAdding(dest, " << n << ", " << R << ")" << std::endl;
+#endif
+
     size_t available = getReadSpace(R);
-    if (n > available) n = available;
+    if (n > available) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: Only " << available << " samples available"
+		  << std::endl;
+#endif
+	n = available;
+    }
     if (n == 0) return n;
 
     size_t here = m_size - m_readers[R];
@@ -300,7 +399,15 @@ template <typename T, int N>
 T
 RingBuffer<T, N>::readOne(int R)
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::readOne(" << R << ")" << std::endl;
+#endif
+
     if (m_writer == m_readers[R]) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: No sample available"
+		  << std::endl;
+#endif
 	T t;
 	memset(&t, 0, sizeof(T));
 	return t;
@@ -314,7 +421,15 @@ template <typename T, int N>
 T
 RingBuffer<T, N>::peek(int R) const
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::peek(" << R << ")" << std::endl;
+#endif
+
     if (m_writer == m_readers[R]) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: No sample available"
+		  << std::endl;
+#endif
 	T t;
 	memset(&t, 0, sizeof(T));
 	return t;
@@ -327,8 +442,18 @@ template <typename T, int N>
 size_t
 RingBuffer<T, N>::skip(size_t n, int R)
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::skip(" << n << ", " << R << ")" << std::endl;
+#endif
+
     size_t available = getReadSpace(R);
-    if (n > available) n = available;
+    if (n > available) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: Only " << available << " samples available"
+		  << std::endl;
+#endif
+	n = available;
+    }
     if (n == 0) return n;
     m_readers[R] = (m_readers[R] + n) % m_size;
     return n;
@@ -338,8 +463,18 @@ template <typename T, int N>
 size_t
 RingBuffer<T, N>::write(const T *source, size_t n)
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::write(" << n << ")" << std::endl;
+#endif
+
     size_t available = getWriteSpace();
-    if (n > available) n = available;
+    if (n > available) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: Only room for " << available << " samples"
+		  << std::endl;
+#endif
+	n = available;
+    }
     if (n == 0) return n;
 
     size_t here = m_size - m_writer;
@@ -351,6 +486,11 @@ RingBuffer<T, N>::write(const T *source, size_t n)
     }
 
     m_writer = (m_writer + n) % m_size;
+
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::write: wrote " << n << ", writer now " << m_writer << std::endl;
+#endif
+
     return n;
 }
 
@@ -358,8 +498,18 @@ template <typename T, int N>
 size_t
 RingBuffer<T, N>::zero(size_t n)
 {
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::zero(" << n << ")" << std::endl;
+#endif
+
     size_t available = getWriteSpace();
-    if (n > available) n = available;
+    if (n > available) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: Only room for " << available << " samples"
+		  << std::endl;
+#endif
+	n = available;
+    }
     if (n == 0) return n;
 
     size_t here = m_size - m_writer;
@@ -373,7 +523,6 @@ RingBuffer<T, N>::zero(size_t n)
     m_writer = (m_writer + n) % m_size;
     return n;
 }
-
 
 }
 

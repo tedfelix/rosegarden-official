@@ -72,6 +72,10 @@ AudioThread::AudioThread(std::string name,
     m_running(false),
     m_exiting(false)
 {
+#ifdef DEBUG_THREAD_CREATE_DESTROY
+    std::cerr << "AudioThread::AudioThread() [" << m_name << "]" << std::endl;
+#endif
+
     pthread_mutex_t  initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
     memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
 
@@ -82,7 +86,7 @@ AudioThread::AudioThread(std::string name,
 AudioThread::~AudioThread()
 {
 #ifdef DEBUG_THREAD_CREATE_DESTROY
-    std::cerr << "AudioThread::~AudioThread()" << std::endl;
+    std::cerr << "AudioThread::~AudioThread() [" << m_name << "]" << std::endl;
 #endif
 
     if (m_thread) {
@@ -1242,12 +1246,25 @@ AudioInstrumentMixer::generateBuffers()
 	if (channels < 2) channels = 2;
 	if (channels > maxChannels) maxChannels = channels;
 
-	for (size_t i = 0; i < rec.buffers.size(); ++i) {
-	    delete rec.buffers[i];
-	}
-	rec.buffers.clear();
+	bool replaceBuffers = (rec.buffers.size() > channels);
 
-	for (unsigned int i = 0; i < channels; ++i) {
+	if (!replaceBuffers) {
+	    for (size_t i = 0; i < rec.buffers.size(); ++i) {
+		if (rec.buffers[i]->getSize() != bufferSamples) {
+		    replaceBuffers = true;
+		    break;
+		}
+	    }
+	}
+
+	if (replaceBuffers) {
+	    for (size_t i = 0; i < rec.buffers.size(); ++i) {
+		delete rec.buffers[i];
+	    }
+	    rec.buffers.clear();
+	}
+
+	while (rec.buffers.size() < channels) {
 
 	    // All our ringbuffers are set up for two readers: the
 	    // buss mix thread and the main process thread for

@@ -780,8 +780,12 @@ PeakFile::getPreview(const RealTime &startTime,
         //
         if (!m_peakCache.length())
         {
-           if (scanToPeak(peakNumber) == false)
+	    if (scanToPeak(peakNumber) == false) {
+#ifdef DEBUG_PEAKFILE
+		std::cout << "PeakFile::getPreview: scanToPeak(" << peakNumber << ") failed" << std::endl;
+#endif
                 m_lastPreviewCache.push_back(0.0f);
+	    }
 	}
 #ifdef DEBUG_PEAKFILE
 	std::cout << "PeakFile::getPreview: step is " << step << ", format * pointsPerValue * channels is " << (m_format * m_pointsPerValue * m_channels) << std::endl;
@@ -902,7 +906,9 @@ PeakFile::getPreview(const RealTime &startTime,
 
 	for (int j = 0; j < m_channels; ++j) {
 
-//            cout << "VALUE = " << hiValues[j] / divisor << endl;
+#ifdef DEBUG_PEAKFILE
+	    std::cout << "VALUE = " << hiValues[j] / divisor << std::endl;
+#endif
 
             // Always push back high value
             m_lastPreviewCache.push_back(hiValues[j] / divisor);
