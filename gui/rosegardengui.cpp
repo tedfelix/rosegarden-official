@@ -4621,6 +4621,14 @@ RosegardenGUIApp::slotActivateTool(QString toolName)
 
 
 void
+RosegardenGUIApp::slotUpdateKeyModifiers(bool shift, bool ctrl)
+{
+    m_view->setShift(shift);
+    m_view->setControl(ctrl);
+}
+
+
+void
 RosegardenGUIApp::keyPressEvent(QKeyEvent *event)
 {
     switch(event->key())

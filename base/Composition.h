@@ -723,6 +723,7 @@ public:
 
     // Colour stuff
     ColourMap& getSegmentColourMap() { return m_segmentColourMap; }
+    const ColourMap& getSegmentColourMap() const { return m_segmentColourMap; }
     void setSegmentColourMap(Rosegarden::ColourMap &newmap);
 
     // General colourmap for non-segments

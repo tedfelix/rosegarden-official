@@ -74,13 +74,16 @@ ColourMap::deleteItemByIndex(const unsigned int item_num)
 }
 
 Colour
-ColourMap::getColourByIndex(const unsigned int item_num)
+ColourMap::getColourByIndex(const unsigned int item_num) const
 {
-    // Iterate over the m_map and if we find a match, return the Colour
-    // If we don't match, return the default colour
-    Colour ret = m_map[0].first;
+    // Iterate over the m_map and if we find a match, return the
+    // Colour.  If we don't match, return the default colour.  m_map
+    // was initialised with at least one item in the ctor, so this is
+    // safe.
+    Colour ret = (*m_map.begin()).second.first;
 
-    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+    for (RCMap::const_iterator position = m_map.begin();
+	 position != m_map.end(); ++position)
         if (position->first == item_num)
             ret = position->second.first;
 
@@ -88,12 +91,16 @@ ColourMap::getColourByIndex(const unsigned int item_num)
 }
 
 std::string
-ColourMap::getNameByIndex(const unsigned int item_num)
+ColourMap::getNameByIndex(const unsigned int item_num) const
 {
-    // Iterate over the m_map and if we find a match, return the name
-    std::string ret = m_map[0].second;
+    // Iterate over the m_map and if we find a match, return the name.
+    // If we don't match, return the default colour's name.  m_map was
+    // initialised with at least one item in the ctor, so this is
+    // safe.
+    std::string ret = (*m_map.begin()).second.second;
 
-    for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
+    for (RCMap::const_iterator position = m_map.begin();
+	 position != m_map.end(); ++position)
         if (position->first == item_num)
             ret = position->second.second;
 

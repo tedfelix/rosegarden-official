@@ -189,6 +189,10 @@ LoopRuler::drawLoopMarker(QPainter* paint)
 void
 LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
+    Qt::ButtonState bs = mE->state();
+    RosegardenGUIApp::self()->slotUpdateKeyModifiers
+	(bs & Qt::ShiftButton, bs & Qt::ControlButton);
+
     if (mE->button() == LeftButton)
     {
 	double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;

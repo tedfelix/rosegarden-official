@@ -104,6 +104,10 @@ TempoRuler::slotScrollHoriz(int x)
 void
 TempoRuler::mousePressEvent(QMouseEvent *e)
 {
+    Qt::ButtonState bs = e->state();
+    RosegardenGUIApp::self()->slotUpdateKeyModifiers
+	(bs & Qt::ShiftButton, bs & Qt::ControlButton);
+
     if (e->type() == QEvent::MouseButtonDblClick) {
 	timeT t = m_rulerScale->getTimeForX
 	    (e->x() - m_currentXOffset - m_xorigin);

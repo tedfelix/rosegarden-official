@@ -256,7 +256,7 @@ AudioLevel::multiplier_to_preview(float m, int levels)
 	    lo = level;
 	}
     }
-		   
+	
     return result;
 }
 

@@ -69,14 +69,14 @@ public:
      * the Segments get out of sync with the ColourMap and have invalid
      * colour values, they'll be set to the Composition default colour.
      */
-    Colour getColourByIndex(unsigned int item_num);
+    Colour getColourByIndex(unsigned int item_num) const;
 
     /**
      * Returns the string associated with the item_num passed in.  If the
      * item_num doesn't exist, it'll return "" (the same name as the default
      * colour has - for internationalization reasons).
      */
-    std::string getNameByIndex(unsigned int item_num);
+    std::string getNameByIndex(unsigned int item_num) const;
 
     /**
      * If item_num exists, this routine deletes it from the map.

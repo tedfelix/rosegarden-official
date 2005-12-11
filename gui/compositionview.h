@@ -278,8 +278,11 @@ public:
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
     CompositionRect computeSegmentRect(const Rosegarden::Segment&);
+    QColor          computeSegmentPreviewColor(const Rosegarden::Segment*);
     QPoint          computeSegmentOrigin(const Rosegarden::Segment&);
     void            computeRepeatMarks(CompositionItem&);
+
+    bool isRecording(const Rosegarden::Segment*) const;
 
     Rosegarden::SegmentSelection getSelectedSegments() { return m_selectedSegments; }
     Rosegarden::Composition&     getComposition()      { return m_composition; }
@@ -313,7 +316,6 @@ protected:
     bool isTmpSelected(const Rosegarden::Segment*) const;
     bool wasTmpSelected(const Rosegarden::Segment*) const;
     bool isMoving(const Rosegarden::Segment*) const;
-    bool isRecording(const Rosegarden::Segment*) const;
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
     void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, rectlist*);
@@ -328,8 +330,6 @@ protected:
     void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
     void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Rosegarden::Segment*,
                                const CompositionRect& segRect, const QRect& clipRect);
-
-    QColor computeSegmentNotationPreviewColor(const Rosegarden::Segment*);
 
     void clearInCache(const Rosegarden::Segment*, bool clearPreviewCache = false);
     void putInCache(const Rosegarden::Segment*, const CompositionRect&);

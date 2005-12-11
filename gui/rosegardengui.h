@@ -1357,6 +1357,8 @@ public slots:
     void slotStopPluginGUI(Rosegarden::InstrumentId, int index);
     void slotPluginGUIExited(Rosegarden::InstrumentId, int index);
 
+    void slotUpdateKeyModifiers(bool shiftPressed, bool ctrlPressed);
+
     void slotDocumentDevicesResyncd();
 
     void slotDebugDump();
