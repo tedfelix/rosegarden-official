@@ -2358,7 +2358,7 @@ void RosegardenGUIApp::slotEditPaste()
                                   m_clipboard, insertionTime));
 
     // User preference? Update song pointer position on paste
-    m_doc->setPointerPosition(m_doc->getComposition().getPosition());
+    m_doc->slotSetPointerPosition(m_doc->getComposition().getPosition());
 }
 
 void RosegardenGUIApp::slotSelectAll()
@@ -3865,7 +3865,7 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     }
 
     m_originatingJump = true;
-    m_doc->setPointerPosition(elapsedTime);
+    m_doc->slotSetPointerPosition(elapsedTime);
     m_originatingJump = false;
 
     if (m_audioMixer && m_audioMixer->isVisible())
@@ -3974,7 +3974,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
         {
             slotStop();
             t = comp.getEndMarker();
-            m_doc->setPointerPosition(t); //causes this method to be re-invoked
+            m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
             return;
         }
     }
@@ -3993,7 +3993,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     }
 
     if (t != comp.getStartMarker() && t > comp.getEndMarker()) {
-        m_doc->setPointerPosition(comp.getStartMarker());
+        m_doc->slotSetPointerPosition(comp.getStartMarker());
         return;
     }
 
@@ -4985,7 +4985,7 @@ void RosegardenGUIApp::slotJumpToTime(int sec, int usec)
     Rosegarden::Composition *comp = &m_doc->getComposition();
     Rosegarden::timeT t = comp->getElapsedTimeForRealTime
 	(Rosegarden::RealTime(sec, usec * 1000));
-    m_doc->setPointerPosition(t);
+    m_doc->slotSetPointerPosition(t);
 }
 
 void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
@@ -6912,7 +6912,7 @@ RosegardenGUIApp::slotPanic()
 void
 RosegardenGUIApp::slotSetPointer(Rosegarden::timeT t)
 {
-    m_doc->setPointerPosition(t);
+    m_doc->slotSetPointerPosition(t);
 }
 
 

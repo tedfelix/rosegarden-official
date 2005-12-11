@@ -356,6 +356,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+    QObject::connect
+	(doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     MATRIX_DEBUG << "MatrixView : applying layout\n";
 

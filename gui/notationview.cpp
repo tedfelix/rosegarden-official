@@ -486,6 +486,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+    QObject::connect
+	(doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);

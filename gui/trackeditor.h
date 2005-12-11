@@ -113,6 +113,12 @@ public slots:
     void slotSetPointerPosition(Rosegarden::timeT position);
 
     /**
+     * Update the pointer position as it is being dragged along
+     * This changes how the segment canvas will scroll to follow the pointer
+     */
+    void slotPointerDraggedToPosition(Rosegarden::timeT position);
+
+    /**
      * Act on a canvas scroll event
      */
     void slotCanvasScrolled(int, int);

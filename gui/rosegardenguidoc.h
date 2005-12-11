@@ -314,12 +314,6 @@ public:
     void prepareAudio();
 
     /**
-     * Cause the pointerPositionChanged signal to be emitted and any
-     * associated internal work in the document to happen
-     */
-    void setPointerPosition(Rosegarden::timeT);
-
-    /**
      * Cause the playPositionChanged signal to be emitted and any
      * associated internal work in the document to happen
      */
@@ -443,7 +437,7 @@ public slots:
      */
     void slotAutoSave();
 
-    void slotSetPointerPosition(Rosegarden::timeT t) { setPointerPosition(t); }
+    void slotSetPointerPosition(Rosegarden::timeT);
     void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
 
@@ -468,6 +462,11 @@ signals:
      * Emitted during playback, to suggest that views should track along
      */
     void pointerPositionChanged(Rosegarden::timeT);
+
+    /**
+     * Emitted when pointer is dragged on the loop ruler
+     */
+    void pointerDraggedToPosition(Rosegarden::timeT);
 
     /**
      * Emitted during recording, to indicate that some new notes (it's

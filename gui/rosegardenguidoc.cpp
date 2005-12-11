@@ -1838,7 +1838,7 @@ RosegardenGUIDoc::prepareAudio()
 }
 
 void
-RosegardenGUIDoc::setPointerPosition(Rosegarden::timeT t)
+RosegardenGUIDoc::slotSetPointerPosition(Rosegarden::timeT t)
 {
     m_composition.setPosition(t);
     emit pointerPositionChanged(t);

@@ -78,8 +78,11 @@ protected:
 signals:
     // The three main functions that this class performs
     //
-    /// Set the pointer position on mouse single click or drag
+    /// Set the pointer position on mouse single click
     void setPointerPosition(Rosegarden::timeT);
+
+    /// Set the pointer position on mouse drag
+    void dragPointerToPosition(Rosegarden::timeT);
 
     /// Set pointer position and start playing on double click
     void setPlayPosition(Rosegarden::timeT);

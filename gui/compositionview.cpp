@@ -2737,7 +2737,7 @@ void CompositionView::releaseCurrentItem()
 
 void CompositionView::setPointerPos(int pos)
 {
-    RG_DEBUG << "CompositionView::setPointerPos(" << pos << ")\n";
+//     RG_DEBUG << "CompositionView::setPointerPos(" << pos << ")\n";
     int oldPos = m_pointerPos;
     if (oldPos == pos) return;
 

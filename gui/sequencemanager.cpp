@@ -365,9 +365,9 @@ SequenceManager::stopping()
     if (m_transportStatus == STOPPED)
     {
         if (m_doc->getComposition().isLooping())
-            m_doc->setPointerPosition(m_doc->getComposition().getLoopStart());
+            m_doc->slotSetPointerPosition(m_doc->getComposition().getLoopStart());
         else
-            m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
+            m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
 
         return;
     }
@@ -496,9 +496,9 @@ SequenceManager::rewind()
     }
     
     if (barRange.first < composition.getStartMarker()) {
-	m_doc->setPointerPosition(composition.getStartMarker());
+	m_doc->slotSetPointerPosition(composition.getStartMarker());
     } else {
-	m_doc->setPointerPosition(barRange.first);
+	m_doc->slotSetPointerPosition(barRange.first);
     }
 }
 
@@ -518,7 +518,7 @@ SequenceManager::fastforward()
     if (newPosition > composition.getEndMarker())
         newPosition = composition.getEndMarker();
 
-    m_doc->setPointerPosition(newPosition);
+    m_doc->slotSetPointerPosition(newPosition);
 
 }
 
@@ -700,12 +700,12 @@ punchin:
         // recording.
         //
         if (comp.isLooping())
-            m_doc->setPointerPosition(comp.getLoopStart());
+            m_doc->slotSetPointerPosition(comp.getLoopStart());
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
                 startBar -= config->readUnsignedNumEntry("countinbars", 2);
-                m_doc->setPointerPosition(comp.getBarRange(startBar).first);
+                m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
         }
 
@@ -1146,7 +1146,7 @@ void
 SequenceManager::rewindToBeginning()
 {
     SEQMAN_DEBUG << "SequenceManager::rewindToBeginning()\n";
-    m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
+    m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
 }
 
 
@@ -1156,7 +1156,7 @@ SequenceManager::fastForwardToEnd()
     SEQMAN_DEBUG << "SequenceManager::fastForwardToEnd()\n";
 
     Composition &comp = m_doc->getComposition();
-    m_doc->setPointerPosition(comp.getDuration());
+    m_doc->slotSetPointerPosition(comp.getDuration());
 }
 
 
@@ -1178,7 +1178,7 @@ SequenceManager::setPlayStartTime(const timeT &time)
     
     // otherwise off we go
     //
-    m_doc->setPointerPosition(time);
+    m_doc->slotSetPointerPosition(time);
     play();
 }
 

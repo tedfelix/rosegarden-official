@@ -277,6 +277,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    connect(m_doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
+	    this, SLOT(slotPointerDraggedToPosition(Rosegarden::timeT)));
  
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,
                                       Rosegarden::timeT)),
@@ -443,14 +446,13 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
             if (m_playTracking) {
                 getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
             }
-        } else /*if (!getSegmentCanvas()->isAutoScrolling())*/ {
+        } else if (!getSegmentCanvas()->isAutoScrolling()) {
             int newpos = int(double(position) / ruler->getUnitsPerPixel());
 //             RG_DEBUG << "TrackEditor::slotSetPointerPosition("
 //                      << position
 //                      << ") : calling canvas->slotScrollHoriz() "
 //                      << newpos << endl;
-            getSegmentCanvas()->doAutoScroll();
-            getSegmentCanvas()->slotScrollHorizSmallSteps(newpos);
+            getSegmentCanvas()->slotScrollHoriz(newpos);
         }
 
         m_segmentCanvas->setPointerPos(pos);
@@ -458,6 +460,39 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     
 }
 
+void
+TrackEditor::slotPointerDraggedToPosition(Rosegarden::timeT position)
+{
+    Rosegarden::SimpleRulerScale *ruler = 
+        dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
+
+    if (!ruler) return;
+
+    double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
+
+    int currentPointerPos = m_segmentCanvas->getPointerPos();
+
+    double distance = pos - currentPointerPos;
+    if (distance < 0.0) distance = -distance;
+
+    if (distance >= 1.0) {
+
+        if (m_doc && m_doc->getSequenceManager() &&
+            (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
+
+            if (m_playTracking) {
+                getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+            }
+        } else {
+            int newpos = int(double(position) / ruler->getUnitsPerPixel());
+            getSegmentCanvas()->slotScrollHorizSmallSteps(newpos);
+            getSegmentCanvas()->doAutoScroll();
+        }
+
+        m_segmentCanvas->setPointerPos(pos);
+    }
+    
+}
 void
 TrackEditor::slotToggleTracking()
 {

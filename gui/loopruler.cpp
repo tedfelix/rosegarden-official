@@ -258,7 +258,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         }
     }
     else
-        emit setPointerPosition(m_rulerScale->getTimeForX(x));
+        emit dragPointerToPosition(m_rulerScale->getTimeForX(x));
 
     emit mouseMove();
 }
