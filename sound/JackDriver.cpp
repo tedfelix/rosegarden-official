@@ -1246,7 +1246,7 @@ JackDriver::jackProcessRecord(Rosegarden::InstrumentId id,
     sample_t peakLeft = 0.0, peakRight = 0.0;
 
 #ifdef DEBUG_JACK_PROCESS
-    std::cerr << "JackDriver::jackProcessRecord(" << id << ")" << std::endl;
+    std::cerr << "JackDriver::jackProcessRecord(" << id << "): clocksRunning " << clocksRunning << std::endl;
 #endif
 
     // Get input buffers
