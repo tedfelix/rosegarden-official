@@ -106,6 +106,7 @@ public slots:
     void slotRemove();
     void slotRemoveAll();
     void slotRemoveAllUnused();
+    void slotDeleteUnused();
     void slotExportAudio();
 
     // get selection
@@ -181,6 +182,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     KListView        *m_fileList;
+    QLabel           *m_wrongSampleRates;
     RosegardenGUIDoc *m_doc;
 
     QAccel           *m_accelerators;

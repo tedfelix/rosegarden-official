@@ -14,7 +14,7 @@
     <Action name="remove_all_audio"/>
     <Action name="remove_all_unused_audio"/>
     <Separator/>
-    <Action name="rename_audio"/>
+    <Action name="delete_unused_audio"/>
 </Menu>
 
 <Menu name="action">
@@ -39,6 +39,7 @@
   <enable>
     <Action name="remove_all_audio"/>
     <Action name="remove_all_unused_audio"/>
+    <Action name="delete_unused_audio"/>
   </enable>
 </State>
 

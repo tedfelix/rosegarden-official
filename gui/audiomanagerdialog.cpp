@@ -40,6 +40,7 @@
 #include <kio/netaccess.h>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <kdialogbase.h>
 
 #include "audiomanagerdialog.h"
 #include "dialogs.h"
@@ -73,7 +74,7 @@ public:
 
     AudioListItem(KListView *parent,
                   QString label,
-                  Rosegarden::AudioFileId id):
+                  AudioFileId id):
                       KListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
@@ -82,7 +83,7 @@ public:
 
     AudioListItem(KListViewItem *parent, 
                   QString label,
-                  Rosegarden::AudioFileId id):
+                  AudioFileId id):
                       KListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
@@ -90,29 +91,29 @@ public:
                                     m_segment(0) {;}
 
 
-    Rosegarden::AudioFileId getId() { return m_id; }
+    AudioFileId getId() { return m_id; }
 
-    void setStartTime(const Rosegarden::RealTime &time)
+    void setStartTime(const RealTime &time)
         { m_startTime = time; }
-    Rosegarden::RealTime getStartTime() { return m_startTime; }
+    RealTime getStartTime() { return m_startTime; }
 
-    void setDuration(const Rosegarden::RealTime &time)
+    void setDuration(const RealTime &time)
         { m_duration = time; }
-    Rosegarden::RealTime getDuration() { return m_duration; }
+    RealTime getDuration() { return m_duration; }
 
-    void setSegment(Rosegarden::Segment *segment)
+    void setSegment(Segment *segment)
         { m_segment = segment; }
-    Rosegarden::Segment *getSegment() { return m_segment; }
+    Segment *getSegment() { return m_segment; }
 
 protected:
-    Rosegarden::AudioFileId m_id;
+    AudioFileId m_id;
 
     // for audio segments
-    Rosegarden::RealTime m_startTime;
-    Rosegarden::RealTime m_duration;
+    RealTime m_startTime;
+    RealTime m_duration;
 
     // pointer to a segment
-    Rosegarden::Segment *m_segment;
+    Segment *m_segment;
 
 };
 
@@ -179,10 +180,10 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     setCaption(i18n("Audio File Manager"));
     setWFlags(WDestructiveClose);
 
-    QHBox *h = new QHBox(this);
-    setCentralWidget(h);
-    h->setMargin(10);
-    h->setSpacing(5);
+    QVBox *box = new QVBox(this);
+    setCentralWidget(box);
+    box->setMargin(10);
+    box->setSpacing(5);
 
     m_sampleRate = 0;
     
@@ -195,7 +196,10 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         m_sampleRate = result;
     }
 
-    m_fileList = new AudioListView(h);
+    m_fileList = new AudioListView(box);
+
+    m_wrongSampleRates = new QLabel(i18n("* Some audio files are encoded at a sample rate different from that of the JACK audio server.\nRosegarden will play them at the correct speed, but they will sound terrible.\nPlease consider resampling such files externally, or adjusting the sample rate of the JACK server."), box);
+    m_wrongSampleRates->hide();
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
@@ -227,9 +231,13 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 		SLOT(slotRemoveAll()), 
 		actionCollection(), "remove_all_audio");
 
-    new KAction(i18n("Unload &all Unused Audio Files"), 0, 0, this,
+    new KAction(i18n("Unload all &Unused Audio Files"), 0, 0, this,
 		SLOT(slotRemoveAllUnused()), 
 		actionCollection(), "remove_all_unused_audio");
+
+    new KAction(i18n("&Delete Unused Audio Files..."), 0, 0, this,
+		SLOT(slotDeleteUnused()), 
+		actionCollection(), "delete_unused_audio");
 
     new KAction(i18n("&Export Audio File"), "fileexport", 0, this,
 		SLOT(slotExportAudio()), 
@@ -325,8 +333,8 @@ AudioManagerDialog::slotPopulateFileList()
     //
     AudioListItem *selectedItem =
         dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
-    Rosegarden::AudioFileId lastId = 0;
-    Rosegarden::Segment *lastSegment = 0;
+    AudioFileId lastId = 0;
+    Segment *lastSegment = 0;
     bool findSelection = false;
     bool foundSelection = false;
 
@@ -371,18 +379,19 @@ AudioManagerDialog::slotPopulateFileList()
 
     // Create a vector of audio Segments only
     //
-    std::vector<Rosegarden::Segment*> segments;
-    std::vector<Rosegarden::Segment*>::const_iterator iit;
+    std::vector<Segment*> segments;
+    std::vector<Segment*>::const_iterator iit;
 
     for (Composition::iterator it = m_doc->getComposition().begin();
              it != m_doc->getComposition().end(); ++it)
     {
-        if ((*it)->getType() == Rosegarden::Segment::Audio)
+        if ((*it)->getType() == Segment::Audio)
             segments.push_back(*it);
     }
 
     // duration
-    Rosegarden::RealTime segmentDuration;
+    RealTime segmentDuration;
+    bool wrongSampleRates = false;
 
     for (std::vector<AudioFile*>::const_iterator
              it = m_doc->getAudioFileManager().begin();
@@ -421,7 +430,7 @@ AudioManagerDialog::slotPopulateFileList()
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // set start time and duration
-        item->setStartTime(Rosegarden::RealTime::zeroTime);
+        item->setStartTime(RealTime::zeroTime);
         item->setDuration(length);
 
         // Envelope pixmap
@@ -446,6 +455,7 @@ AudioManagerDialog::slotPopulateFileList()
         //
 	if (m_sampleRate != 0 && (*it)->getSampleRate() != m_sampleRate) {
 	    sRate.sprintf("%.1f KHz *", float((*it)->getSampleRate())/ 1000.0);
+	    wrongSampleRates = true;
 	} else {
 	    sRate.sprintf("%.1f KHz", float((*it)->getSampleRate())/ 1000.0);
 	}
@@ -521,6 +531,12 @@ AudioManagerDialog::slotPopulateFileList()
 
     updateActionState(foundSelection);
 
+    if (wrongSampleRates) {
+	m_wrongSampleRates->show();
+    } else {
+	m_wrongSampleRates->hide();
+    }
+
     m_fileList->blockSignals(false);
 }
 
@@ -556,7 +572,7 @@ AudioManagerDialog::slotExportAudio()
     AudioListItem *item =
         dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
     
-    Rosegarden::Segment *segment = item->getSegment();
+    Segment *segment = item->getSegment();
 
     QString saveFile =
         KFileDialog::getSaveFileName(":WAVS",
@@ -577,7 +593,7 @@ AudioManagerDialog::slotExportAudio()
 
     progressDlg.progressBar()->setProgress(0);
 
-    Rosegarden::RealTime segmentDuration 
+    RealTime segmentDuration 
         = segment->getAudioEndTime() - segment->getAudioStartTime();
     
     WAVAudioFile *destFile 
@@ -638,8 +654,8 @@ AudioManagerDialog::slotRemove()
         // Get the id and segment of the next item so that we can
         // match against it
         //
-        Rosegarden::AudioFileId id = 0;
-        Rosegarden::Segment *segment = 0;
+        AudioFileId id = 0;
+        Segment *segment = 0;
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(newItem);
         
         if (aItem)
@@ -655,7 +671,7 @@ AudioManagerDialog::slotRemove()
 
         // Do it - will force update
         //
-        Rosegarden::SegmentSelection selection;
+        SegmentSelection selection;
         selection.insert(item->getSegment());
         emit deleteSegments(selection);
 
@@ -673,13 +689,13 @@ AudioManagerDialog::slotRemove()
 
     // remove segments along with audio file
     //
-    Rosegarden::AudioFileId id = audioFile->getId();
-    Rosegarden::SegmentSelection selection;
+    AudioFileId id = audioFile->getId();
+    SegmentSelection selection;
     Composition &comp = m_doc->getComposition();
 
     for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
     {
-        if ((*it)->getType() == Rosegarden::Segment::Audio &&
+        if ((*it)->getType() == Segment::Audio &&
             (*it)->getAudioFileId() == id)
             selection.insert(*it);
     }
@@ -808,7 +824,7 @@ AudioManagerDialog::slotInsert()
     RG_DEBUG << "AudioManagerDialog::slotInsert\n";
 
     emit insertAudioSegment(audioFile->getId(),
-                            Rosegarden::RealTime::zeroTime,
+                            RealTime::zeroTime,
                             audioFile->getLength());
 }
 
@@ -816,19 +832,19 @@ void
 AudioManagerDialog::slotRemoveAll()
 {
     QString question =
-        i18n("This will unload all audio files and remove their associated segments.  This action cannot be undone, and associations with these files will be lost.  Files will not be removed from your disk.\nAre you sure?");
+        i18n("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
     int reply = KMessageBox::warningContinueCancel(this, question);
 
     if (reply != KMessageBox::Continue)
         return;
 
-    Rosegarden::SegmentSelection selection;
+    SegmentSelection selection;
     Composition &comp = m_doc->getComposition();
 
     for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
     {
-        if ((*it)->getType() == Rosegarden::Segment::Audio)
+        if ((*it)->getType() == Segment::Audio)
             selection.insert(*it);
     }
     // delete segments
@@ -846,23 +862,23 @@ void
 AudioManagerDialog::slotRemoveAllUnused()
 {
     QString question =
-        i18n("This will unload all audio files that are not associated with any segments in this composition.   This action cannot be undone, and associations with these files will be lost.  Files will not be removed from your disk.\nAre you sure?");
+        i18n("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
     int reply = KMessageBox::warningContinueCancel(this, question);
 
     if (reply != KMessageBox::Continue)
         return;
 
-    std::set<Rosegarden::AudioFileId> audioFiles;
+    std::set<AudioFileId> audioFiles;
     Composition &comp = m_doc->getComposition();
 
     for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
     {
-        if ((*it)->getType() == Rosegarden::Segment::Audio)
+        if ((*it)->getType() == Segment::Audio)
             audioFiles.insert((*it)->getAudioFileId());
     }
 
-    std::vector<Rosegarden::AudioFileId> toDelete;
+    std::vector<AudioFileId> toDelete;
     for (std::vector<AudioFile*>::const_iterator
          aIt = m_doc->getAudioFileManager().begin();
          aIt != m_doc->getAudioFileManager().end(); ++aIt)
@@ -873,7 +889,7 @@ AudioManagerDialog::slotRemoveAllUnused()
 
     // Delete the audio files from the AFM
     //
-    for (std::vector<Rosegarden::AudioFileId>::iterator dIt = toDelete.begin();
+    for (std::vector<AudioFileId>::iterator dIt = toDelete.begin();
             dIt != toDelete.end(); ++dIt)
     {
         m_doc->getAudioFileManager().removeFile(*dIt);
@@ -883,6 +899,143 @@ AudioManagerDialog::slotRemoveAllUnused()
     // clear the file list
     m_fileList->clear();
     slotPopulateFileList();
+}
+
+class UnusedAudioSelectionDialog : public KDialogBase
+{
+public:
+    UnusedAudioSelectionDialog(QWidget *, AudioFileManager *, std::vector<AudioFileId>);
+    
+    std::vector<QString> getSelectedAudioFileNames() const;
+
+protected:
+    AudioFileManager *m_mgr;
+    std::vector<AudioFileId> m_ids;
+    QListView *m_listView;
+};
+
+UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
+						       AudioFileManager *mgr,
+						       std::vector<AudioFileId> ids) :
+    KDialogBase(parent, 0, true, i18n("Select Unused Audio Files"), Ok | Cancel),
+    m_mgr(mgr),
+    m_ids(ids)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    new QLabel(i18n("The following audio files are not used in the current composition.\n\nPlease select the ones you wish to delete permanently from the hard disk.\n"), vbox);
+
+    m_listView = new KListView(vbox);
+
+    m_listView->addColumn(i18n("File name"));
+    m_listView->addColumn(i18n("File size"));
+    m_listView->addColumn(i18n("Last modified date"));
+
+    for (int i = 0; i < ids.size(); ++i) {
+	AudioFile *af = mgr->getAudioFile(ids[i]);
+	if (!af) {
+	    std::cerr << "WARNING: UnusedAudioSelectionDialog: No audio file for id " << ids[i] << std::endl;
+	    continue;
+	}
+	QString fileName = strtoqstr(af->getFilename());
+	QFileInfo info(fileName);
+	QString fileSize = i18n(" (not found) ");
+	QString fileDate;
+	if (info.exists()) {
+	    fileSize = QString(" %1 ").arg(info.size());
+	    fileDate = QString(" %1 ").arg(info.lastModified().toString());
+	}
+	QListViewItem *item = new KListViewItem
+	    (m_listView, fileName, fileSize, fileDate);
+    }
+
+    m_listView->setSelectionMode(QListView::Multi);
+}
+
+std::vector<QString> 
+UnusedAudioSelectionDialog::getSelectedAudioFileNames() const
+{
+    std::vector<QString> selectedNames;
+
+    QListViewItem *item = 0;
+
+    for (int i = 0; i < m_ids.size(); ++i) {
+
+	if (item) item = item->nextSibling();
+	else item = m_listView->firstChild();
+	
+	if (m_listView->isSelected(item)) {
+	    selectedNames.push_back(item->text(0));
+	}
+    }
+
+    return selectedNames;
+}
+
+void
+AudioManagerDialog::slotDeleteUnused()
+{
+    std::set<AudioFileId> audioFiles;
+    Composition &comp = m_doc->getComposition();
+
+    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
+    {
+        if ((*it)->getType() == Segment::Audio)
+            audioFiles.insert((*it)->getAudioFileId());
+    }
+
+    std::vector<AudioFileId> toDelete;
+    std::map<QString, AudioFileId> nameMap;
+
+    for (std::vector<AudioFile*>::const_iterator
+         aIt = m_doc->getAudioFileManager().begin();
+         aIt != m_doc->getAudioFileManager().end(); ++aIt)
+    {
+        if (audioFiles.find((*aIt)->getId()) == audioFiles.end()) {
+            toDelete.push_back((*aIt)->getId());
+	    nameMap[(*aIt)->getFilename()] = (*aIt)->getId();
+	}
+    }
+
+    UnusedAudioSelectionDialog *dialog = new UnusedAudioSelectionDialog
+	(this, &m_doc->getAudioFileManager(), toDelete);
+
+    if (dialog->exec() == QDialog::Accepted) {
+
+	std::vector<QString> names = dialog->getSelectedAudioFileNames();
+
+	QString question =
+	    i18n("About to delete %1 audio file(s) permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover these files.\nAre you sure?").arg(names.size());
+
+	int reply = KMessageBox::warningContinueCancel(this, question);
+
+	if (reply != KMessageBox::Continue) {
+	    delete dialog;
+	    return;
+	}
+
+	for (int i = 0; i < names.size(); ++i) {
+	    std::cerr << i << ": " << names[i] << std::endl;
+	    QFile file(names[i]);
+	    if (!file.remove()) {
+		KMessageBox::error(this, i18n("File %1 could not be deleted.").arg(names[i]));
+	    } else {
+		if (nameMap.find(names[i]) != nameMap.end()) {
+		    m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
+		    emit deleteAudioFile(nameMap[names[i]]);
+		} else {
+		    std::cerr << "WARNING: Audio file name " << names[i] << " not in name map" << std::endl;
+		}
+
+		QFile peakFile(QString("%1.pk").arg(names[i]));
+		peakFile.remove();
+	    }
+	}
+    }
+
+    m_fileList->clear();
+    slotPopulateFileList();
+    
+    delete dialog;
 }
 
 
@@ -919,7 +1072,7 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
     //
     if (aItem && aItem->getSegment())
     {
-        Rosegarden::SegmentSelection selection;
+        SegmentSelection selection;
         selection.insert(aItem->getSegment());
         emit segmentsSelected(selection);
     }
@@ -933,8 +1086,8 @@ AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 // purpose.  Set segment to 0 for parent audio entries.
 //
 void
-AudioManagerDialog::setSelected(Rosegarden::AudioFileId id, 
-                                const Rosegarden::Segment *segment,
+AudioManagerDialog::setSelected(AudioFileId id, 
+                                const Segment *segment,
                                 bool propagate)
 {
     QListViewItem *it = m_fileList->firstChild();
@@ -972,7 +1125,7 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
                         // Only propagate to segmentcanvas if asked to
                         if (propagate)
                         {
-                            Rosegarden::SegmentSelection selection;
+                            SegmentSelection selection;
                             selection.insert(aItem->getSegment());
                             emit segmentsSelected(selection);
                         }
@@ -1022,14 +1175,14 @@ AudioManagerDialog::slotCommandExecuted(KCommand*)
 
 void
 AudioManagerDialog::slotSegmentSelection(
-        const Rosegarden::SegmentSelection &segments)
+        const SegmentSelection &segments)
 {
-    const Rosegarden::Segment *segment = 0;
+    const Segment *segment = 0;
 
     for (SegmentSelection::const_iterator it = segments.begin();
                                     it != segments.end(); ++it)
     {
-        if ((*it)->getType() == Rosegarden::Segment::Audio) 
+        if ((*it)->getType() == Segment::Audio) 
         {
             // Only get one audio segment
             if (segment == 0)
@@ -1062,7 +1215,7 @@ AudioManagerDialog::slotCancelPlayingAudioFile()
 
 
 void
-AudioManagerDialog::closePlayingDialog(Rosegarden::AudioFileId id)
+AudioManagerDialog::closePlayingDialog(AudioFileId id)
 {
     //std::cout << "AudioManagerDialog::closePlayingDialog" << std::endl;
     if (m_audioPlayingDialog && id == m_playingAudioFile)
@@ -1077,7 +1230,7 @@ AudioManagerDialog::closePlayingDialog(Rosegarden::AudioFileId id)
 bool
 AudioManagerDialog::addFile(const KURL& kurl)
 {
-    Rosegarden::AudioFileId id = 0;
+    AudioFileId id = 0;
 
     // Now set the "last add" path so that next time we use "file add"
     // we start looking in the same place.
@@ -1225,18 +1378,18 @@ AudioManagerDialog::addAudioFile(const QString &filePath)
 bool
 AudioManagerDialog::isSelectedTrackAudio()
 {
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Studio &studio = m_doc->getStudio();
+    Composition &comp = m_doc->getComposition();
+    Studio &studio = m_doc->getStudio();
 
-    Rosegarden::TrackId currentTrackId = comp.getSelectedTrack();
-    Rosegarden::Track *track = comp.getTrackById(currentTrackId);
+    TrackId currentTrackId = comp.getSelectedTrack();
+    Track *track = comp.getTrackById(currentTrackId);
 
     if (track) {
-	Rosegarden::InstrumentId ii = track->getInstrument();
-	Rosegarden::Instrument *instrument = studio.getInstrumentById(ii);
+	InstrumentId ii = track->getInstrument();
+	Instrument *instrument = studio.getInstrumentById(ii);
 
 	if (instrument &&
-	    instrument->getType() == Rosegarden::Instrument::Audio)
+	    instrument->getType() == Instrument::Audio)
             return true;
     }
     
@@ -1249,11 +1402,11 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 {
     RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment" << endl;
 
-    //Rosegarden::Composition &comp = m_doc->getComposition();
+    //Composition &comp = m_doc->getComposition();
 
     QList<RosegardenGUIView>& viewList = m_doc->getViewList();
     RosegardenGUIView *w = 0;
-    Rosegarden::SegmentSelection selection;
+    SegmentSelection selection;
 
     for(w = viewList.first(); w != 0; w = viewList.next())
     {
@@ -1262,18 +1415,18 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 
     // Store the insert times in a local vector
     //
-    std::vector<Rosegarden::timeT> insertTimes;
+    std::vector<timeT> insertTimes;
 
-    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+    for (SegmentSelection::iterator i = selection.begin();
          i != selection.end(); ++i)
     {
         // For MIDI (Internal) Segments only of course
         //
-        if ((*i)->getType() == Rosegarden::Segment::Internal)
+        if ((*i)->getType() == Segment::Internal)
         {
             for (Segment::iterator it = (*i)->begin(); it != (*i)->end(); ++it)
             {
-                if ((*it)->isa(Rosegarden::Note::EventType))
+                if ((*it)->isa(Note::EventType))
                     insertTimes.push_back((*it)->getAbsoluteTime());
             }
         }
