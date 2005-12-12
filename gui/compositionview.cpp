@@ -739,15 +739,7 @@ public:
     static int tileWidth();
 
 protected:
-/*!!!
-    void initPainters();
-    void recyclePainters();
-*/
     void finalizeCurrentSlice();
-/*!!!
-    void translatePainters(bool reset=false);
-*/
-    void clearPixmaps();
 
     //--------------- Data members ---------------------------------
     CompositionModelImpl& m_model;
@@ -757,10 +749,6 @@ protected:
     CompositionRect m_rect;
 
     QImage m_image;
-/*!!!
-    QPixmap m_pixmap;
-    QBitmap m_pixmapMask;
-*/
     PixmapArray m_previewPixmaps;
 
     QPainter m_p;
@@ -788,14 +776,10 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
 {
     int pixWidth = std::min(m_rect.width(), tileWidth());
 
-/*!!!
-    m_pixmap.resize(pixWidth, m_rect.height());
-    m_pixmapMask.resize(m_pixmap.size());
-*/
     m_image = QImage(pixWidth, m_rect.height(), 8, 4);
+    m_image.setAlphaBuffer(true);
 
     m_penWidth = (std::max(1U, m_rect.getPen().width()) * 2);
-
     m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
 }
 
@@ -842,14 +826,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
     m_image.fill(0);
 
-/*!!!
-    initPainters();
-
-    m_p.setPen(Qt::color0);
-    m_p.setBrush(Qt::color0);
-    m_p.drawRect(0, 0, m_pixmap.width(), m_pixmap.height());
-    m_p.setBrush(Qt::NoBrush);
-*/
+    int centre = m_image.height() / 2;
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.width() << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
 
@@ -889,51 +866,39 @@ void AudioPreviewPainter::paintPreviewImage()
         }
 
         int width = 1;
-        QColor color;
+	int pixel;
 
         // h1 left, h2 right
-/*!!!
-        if (h1 >= 1.0) { h1 = 1.0; color = Qt::red; }
-        else { color = m_defaultCol; }
-*/
+        if (h1 >= 1.0) { h1 = 1.0; pixel = 2; }
+	else { pixel = 1; }
+
         int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, m_height);
         if (h <= 0) h = 1;
+	if (h > m_halfRectHeight) h = m_halfRectHeight;
 
         int rectX = i % tileWidth();
 
-//!!!        m_p.setPen(color);
-/*!!!
-	m_p.setPen(Qt::color1);
-//         RG_DEBUG << "AudioPreviewPainter::paintPreviewImage : drawRect " << QRect(i, m_halfRectHeight - h, width, h) << endl;
-        m_p.drawRect(rectX, m_halfRectHeight - h, width, h);
-        m_pb.drawRect(rectX, m_halfRectHeight - h, width, h);
-*/
-	
 	for (int py = 0; py < h; ++py) {
-	    m_image.setPixel(rectX, m_halfRectHeight - py, 1);
+	    m_image.setPixel(rectX, centre - py, pixel);
 	}
 	
-        if (h2 >= 1.0) { h2 = 1.0; color = Qt::red; }
-        else { color = m_defaultCol; }
+        if (h2 >= 1.0) { h2 = 1.0; pixel = 2; }
+        else { pixel = 1; }
 
         h = Rosegarden::AudioLevel::multiplier_to_preview(h2, m_height);
         if (h < 0) h = 0;
-
-/*!!!
-        m_p.setPen(color);
-        m_p.drawRect(rectX,  m_halfRectHeight, width, h);
-        m_pb.drawRect(rectX, m_halfRectHeight, width, h);
-*/
 	
 	for (int py = 0; py < h; ++py) {
-	    m_image.setPixel(rectX, m_halfRectHeight + py, 1);
+	    m_image.setPixel(rectX, centre + py, pixel);
 	}
 
         if (((i+1) % tileWidth()) == 0 || i == (m_rect.width() - 1)) {
             finalizeCurrentSlice();
         }
     }
-/*!!!
+
+/* Auto-fade not yet implemented.
+
     if (m_segment->isAutoFading()) {
 
         Composition &comp = m_model.getComposition();
@@ -958,50 +923,23 @@ void AudioPreviewPainter::finalizeCurrentSlice()
 {
 //     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth() << endl;
 
-/*!!!
-    recyclePainters();
-
-    m_pixmap.setMask(m_pixmapMask);
-
-    QImage image(m_pixmap.convertToImage());
-*/
-
     CompositionRect sr = m_model.computeSegmentRect(*m_segment);
 
-    if (!m_model.isRecording(m_segment)) {
-	QColor brushColor = GUIPalette::convertColour
-	    (m_composition.
-	     getSegmentColourMap().getColourByIndex(m_segment->getColourIndex()));
-	m_image.setColor(0, brushColor.rgb());
-    } else {
-	m_image.setColor(0, sr.getBrush().color().rgb());
-    }
+    // transparent background
+    m_image.setColor(0, qRgba(255, 255, 255, 0));
 
-    QColor previewColour = m_model.computeSegmentPreviewColor(m_segment);
-    m_image.setColor(1, previewColour.rgb());
+    // foreground from computeSegmentPreviewColor
+    QColor c = m_model.computeSegmentPreviewColor(m_segment);
+    QRgb rgba = qRgba(c.red(), c.green(), c.blue(), 255);
+    m_image.setColor(1, rgba);
 
-/*!!!
-    for (int i = 0; i < 10; ++i) {
-	for (int j = 0; j < 10; ++j) {
-	    std::cerr << m_image.pixelIndex(j, i) << " ";
-	}
-	std::cerr << std::endl;
-    }
+    // red for clipping
+    m_image.setColor(2, qRgba(255, 0, 0, 0));
 
-    for (int i = 0; i < 10; ++i) {
-	for (int j = 0; j < 10; ++j) {
-	    std::cerr << m_image.pixel(j, i) << " ";
-	}
-	std::cerr << std::endl;
-    }
-*/
     m_previewPixmaps.push_back(m_image.copy());
 
-    // reset all
-    clearPixmaps();
-/*!!!
-    translatePainters(true);
-*/
+    m_image.fill(0);
+
     ++m_sliceNb;
 }
 
@@ -1009,43 +947,6 @@ PixmapArray AudioPreviewPainter::getPreviewImage()
 {
     return m_previewPixmaps;
 }
-/*!!!
-void AudioPreviewPainter::recyclePainters()
-{
-    m_p.flush();
-    m_pb.flush();
-}
-
-void AudioPreviewPainter::initPainters()
-{
-    clearPixmaps();
-    m_p.begin(&m_pixmap);
-    m_pb.begin(&m_pixmapMask);
-    translatePainters();
-
-    m_pb.setPen(Qt::color1);
-}
-*/
-
-void AudioPreviewPainter::clearPixmaps()
-{
-    m_image.fill(0);
-    /*!!!
-    m_pixmapMask.fill(Qt::color0);
-    */
-}
-
-/*!!!
-void AudioPreviewPainter::translatePainters(bool reset)
-{
-    if (reset) {
-        m_p.resetXForm();
-        m_pb.resetXForm();
-    }
-    m_p.translate(0, m_penWidth);
-    m_pb.translate(0, m_penWidth);
-}
-*/
 
 QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, const Segment* segment)
 {
@@ -2320,16 +2221,6 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
 
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
 //                      << idx << " at " << drawBasePoint << " - localRect = " << localRect << endl;
-
-	    // Convert image to a pixmap at proper colour depth,
-	    // instead of wrongly dithering to a 1-bit temporary
-	    // pixmap as Qt seems to want to do if we just drawImage
-/*!!!
-	    QPixmap tempMap(api->pixmap[idx].width(), api->pixmap[idx].height());
-	    tempMap.convertFromImage(api->pixmap[idx], 
-				     Qt::ColorOnly | Qt::ThresholdDither | Qt::AvoidDither);
-	    p->drawPixmap(drawBasePoint, tempMap, localRect);
-*/
 
             p->drawImage(drawBasePoint, api->pixmap[idx], localRect,
 			 Qt::ColorOnly | Qt::ThresholdDither | Qt::AvoidDither);

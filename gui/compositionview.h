@@ -282,8 +282,6 @@ public:
     QPoint          computeSegmentOrigin(const Rosegarden::Segment&);
     void            computeRepeatMarks(CompositionItem&);
 
-    bool isRecording(const Rosegarden::Segment*) const;
-
     Rosegarden::SegmentSelection getSelectedSegments() { return m_selectedSegments; }
     Rosegarden::Composition&     getComposition()      { return m_composition; }
     Rosegarden::Studio&          getStudio()           { return m_studio; }
@@ -316,6 +314,7 @@ protected:
     bool isTmpSelected(const Rosegarden::Segment*) const;
     bool wasTmpSelected(const Rosegarden::Segment*) const;
     bool isMoving(const Rosegarden::Segment*) const;
+    bool isRecording(const Rosegarden::Segment*) const;
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
     void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, rectlist*);
