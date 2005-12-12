@@ -934,7 +934,7 @@ void AudioPreviewPainter::finalizeCurrentSlice()
     m_image.setColor(1, rgba);
 
     // red for clipping
-    m_image.setColor(2, qRgba(255, 0, 0, 0));
+    m_image.setColor(2, qRgba(255, 0, 0, 255));
 
     m_previewPixmaps.push_back(m_image.copy());
 
