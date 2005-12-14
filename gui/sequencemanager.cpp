@@ -48,9 +48,6 @@
 #include "sequencermapper.h"
 
 #include "Profiler.h"
-#ifdef QUERY_PLUGINS_FROM_GUI
-#include "PluginFactory.h"
-#endif
 
 
 namespace Rosegarden
@@ -1369,96 +1366,6 @@ SequenceManager::resetMidiNetwork()
     }
     showVisuals(mC);
     StudioControl::sendMappedComposition(mC);
-}
-
-void
-SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
-{
-    //!!! At this point we might be better off querying identifier
-    // and category only... and then filling in the blanks when we
-    // actually want to display the thing.
-
-    SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
-
-    MappedObjectPropertyList seqPlugins;
-
-    {
-	Rosegarden::Profiler profiler("querying plugins", true);
-
-#ifdef QUERY_PLUGINS_FROM_GUI
-	if (!rgapp->noSequencerMode()) {
-
-	    // We only waste the time looking for plugins here if we
-	    // know we're actually going to be able to use them.
-	    // Otherwise fall back to querying the sequencer for them,
-	    // which will almost certainly fail (because we just
-	    // established it wasn't running) but at least will fail
-	    // in a way consistent with the old
-	    // non-QUERY_PLUGINS_FROM_GUI behaviour.
-
-	    PluginFactory::enumerateAllPlugins(seqPlugins);
-
-	    SEQMAN_DEBUG << "got " << seqPlugins.size() << " pieces of plugin data at GUI side" << endl;
-
-	} else {
-	    seqPlugins = StudioControl::getPluginInformation();
-	}
-#else
-
-	seqPlugins = StudioControl::getPluginInformation();
-
-#endif
-    }
-
-    unsigned int i = 0;
-
-    while (i < seqPlugins.size())
-    {
-        QString identifier = seqPlugins[i++];
-        QString name = seqPlugins[i++];
-        unsigned long uniqueId = seqPlugins[i++].toLong();
-        QString label = seqPlugins[i++];
-        QString author = seqPlugins[i++];
-        QString copyright = seqPlugins[i++];
-	bool isSynth = ((seqPlugins[i++]).lower() == "true");
-	bool isGrouped = ((seqPlugins[i++]).lower() == "true");
-        QString category = seqPlugins[i++];
-        unsigned int portCount = seqPlugins[i++].toInt();
-
-//	std::cerr << "PLUGIN: " << i << ": " << (identifier ? identifier : "(null)") << " unique id " << uniqueId << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
-
-        AudioPlugin *aP = aPM->addPlugin(identifier,
-                                         name,
-                                         uniqueId,
-                                         label,
-                                         author,
-                                         copyright,
-					 isSynth,
-					 isGrouped,
-					 category);
-
-        for (unsigned int j = 0; j < portCount; j++)
-        {
-            int number = seqPlugins[i++].toInt();
-            name = seqPlugins[i++];
-            PluginPort::PortType type =
-                PluginPort::PortType(seqPlugins[i++].toInt());
-            PluginPort::PortDisplayHint hint =
-                PluginPort::PortDisplayHint(seqPlugins[i++].toInt());
-            PortData lowerBound = seqPlugins[i++].toFloat();
-            PortData upperBound = seqPlugins[i++].toFloat();
-	    PortData defaultValue = seqPlugins[i++].toFloat();
-
-            aP->addPort(number,
-                        name,
-                        type,
-                        hint,
-                        lowerBound,
-                        upperBound,
-			defaultValue);
-
-        }
-    }
 }
 
 

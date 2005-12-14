@@ -127,6 +127,7 @@ sequencemanager.cpp
 sequencermapper.cpp 
 spline.cpp 
 staffline.cpp 
+startuptester.cpp 
 studiocommands.cpp 
 studiocontrol.cpp 
 studiowidgets.cpp 

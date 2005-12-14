@@ -73,6 +73,8 @@ class PlayListDialog;
 class SegmentParameterBox;
 class InstrumentParameterBox;
 
+class StartupTester;
+
 #ifdef HAVE_LIBLO
 class AudioPluginOSCGUIManager;
 #endif
@@ -1361,6 +1363,8 @@ public slots:
 
     void slotDocumentDevicesResyncd();
 
+    void slotTestStartupTester();
+
     void slotDebugDump();
 
 private:
@@ -1486,6 +1490,8 @@ private:
     //
     QTimer *m_playTimer;
     QTimer *m_stopTimer;
+
+    StartupTester *m_startupTester;
 
 #ifdef HAVE_LIRC        
     LircClient *m_lircClient;

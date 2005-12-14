@@ -37,8 +37,6 @@
 
 #include <ctime>
 
-#define QUERY_PLUGINS_FROM_GUI 1
-
 // SequenceManager is a helper class that wraps the sequencing
 // functionality at the GUI level.  The sequencer still communicates
 // with the RosegardenGUIApp but all calls are passed on directly
@@ -150,13 +148,6 @@ public:
 
     /// Reset MIDI network
     void resetMidiNetwork();
-
-    /**
-     * Get the plugins that are available at the sequencer and put
-     * them in the local pluginmanager
-     */
-    static void getSequencerPlugins(Rosegarden::AudioPluginManager *);
-
 
     /// Reinitialise the studio
     void reinitialiseSequencerStudio();

@@ -24,6 +24,8 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <qthread.h>
+#include <qmutex.h>
 
 #include "AudioPluginInstance.h"
 
@@ -134,18 +136,6 @@ class AudioPluginManager
 public:
     AudioPluginManager();
 
-    AudioPlugin* addPlugin(const QString &identifier,
-                           const QString &name,
-                           unsigned long uniqueId,
-                           const QString &label,
-                           const QString &author,
-                           const QString &copyright,
-			   bool isSynth,
-			   bool isGrouped,
-			   const QString &category);
-
-    bool removePlugin(const QString &identifier);
-
     // Get a straight list of names
     //
     std::vector<QString> getPluginNames();
@@ -165,10 +155,8 @@ public:
     //
     AudioPlugin* getPluginByUniqueId(unsigned long uniqueId);
 
-//    int getPositionByUniqueId(unsigned long uniqueId);
-
-    PluginIterator begin() { return m_plugins.begin(); }
-    PluginIterator end() { return m_plugins.end(); }
+    PluginIterator begin();
+    PluginIterator end();
 
     // Sample rate
     //
@@ -178,14 +166,38 @@ public:
     AudioPluginClipboard* getPluginClipboard() { return &m_pluginClipboard; }
 
 protected:
+    AudioPlugin* addPlugin(const QString &identifier,
+                           const QString &name,
+                           unsigned long uniqueId,
+                           const QString &label,
+                           const QString &author,
+                           const QString &copyright,
+			   bool isSynth,
+			   bool isGrouped,
+			   const QString &category);
+
+    bool removePlugin(const QString &identifier);
+
+    class Enumerator : public QThread
+    {
+    public:
+	Enumerator(AudioPluginManager *);
+	virtual void run();
+	bool isDone() const { return m_done; }
+	
+    protected:
+	AudioPluginManager *m_manager;
+	bool m_done;
+    };
+
+    void awaitEnumeration();
     void fetchSampleRate();
 
     std::vector<AudioPlugin*> m_plugins;
-
     unsigned int              m_sampleRate;
-
     AudioPluginClipboard      m_pluginClipboard;
-
+    Enumerator                m_enumerator;
+    QMutex                    m_mutex;
 };
 
 }
