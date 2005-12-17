@@ -68,7 +68,7 @@ QSize PianoKeyboard::minimumSizeHint() const
 void PianoKeyboard::computeKeyPos()
 {
 //    int y = -9;
-    int y = -1;
+    int y = -4;
 
     unsigned int posInOctave = 0,
         keyHeight = _smallWhiteKeyHeight;
