@@ -161,6 +161,12 @@ EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
 	} else {
 	    return key(col, ascending).compare(i->key(col, ascending));
 	}
+    } else if (col == 3) { // pitch
+	// numeric comparison for pitch used to work when we only
+	// showed the numeric pitch number, but then we added the MIDI
+	// pitch name as well and that broke plain numeric comparison
+	return key(col, ascending).section(' ', 0, 0).toInt() -
+	    i->key(col, ascending).section(' ', 0, 0).toInt();
     } else {               // numeric comparison
         return key(col, ascending).toInt() - i->key(col, ascending).toInt();
     }
