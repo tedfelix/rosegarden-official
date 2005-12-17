@@ -678,20 +678,33 @@ AudioManagerDialog::slotRemove()
         return;
     }
 
-    QString question = i18n("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
-        .arg(QString(audioFile->getFilename().c_str()));
-
-    // Ask the question
-    int reply = KMessageBox::warningContinueCancel(this, question);
-
-    if (reply != KMessageBox::Continue)
-        return;
-
     // remove segments along with audio file
     //
     AudioFileId id = audioFile->getId();
     SegmentSelection selection;
     Composition &comp = m_doc->getComposition();
+
+    bool haveSegments = false;
+    for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
+    {
+        if ((*it)->getType() == Segment::Audio &&
+            (*it)->getAudioFileId() == id) {
+	    haveSegments = true;
+	    break;
+	}
+    }
+
+    if (haveSegments) {
+
+	QString question = i18n("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
+	    .arg(QString(audioFile->getFilename().c_str()));
+
+	// Ask the question
+	int reply = KMessageBox::warningContinueCancel(this, question);
+
+	if (reply != KMessageBox::Continue)
+	    return;
+    }
 
     for (Composition::iterator it = comp.begin(); it != comp.end(); ++it)
     {
