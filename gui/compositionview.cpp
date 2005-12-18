@@ -366,7 +366,7 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
                                                  const CompositionRect& segRect, const QRect& clipRect)
 {
     Rosegarden::Profiler profiler("CompositionModelImpl::makeAudioPreviewRects", true);
-//     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects\n";
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects\n";
 
     PixmapArray previewImage = getAudioPreviewPixmap(segment);
     int penWidth = 0; // std::max(1U, segRect.getPen().width());
@@ -769,8 +769,8 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
       m_apData(apData),
       m_composition(composition),
       m_segment(segment),
-      m_image(1, 1, 8, 4),
       m_rect(model.computeSegmentRect(*(segment))),
+      m_image(1, 1, 8, 4),
       m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
       m_height(model.grid().getYSnap()/2)
 {
@@ -999,7 +999,7 @@ PixmapArray CompositionModelImpl::getAudioPreviewPixmap(const Rosegarden::Segmen
 }
 
 
-void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
+void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *e)
 {
     RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
     removePreviewCache(s);
@@ -1232,6 +1232,11 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
     return res;
 }
 
+void CompositionModelImpl::setPointerPos(int xPos)
+{
+    m_pointerTimePos = grid().getRulerScale()->getTimeForX(xPos);
+}
+
 void CompositionModelImpl::setSelected(const CompositionItem& item, bool selected)
 {
     const CompositionItemImpl* itemImpl = dynamic_cast<const CompositionItemImpl*>((_CompositionItem*)item);
@@ -1462,13 +1467,13 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     }
     
     Rosegarden::timeT startTime = s.getStartTime();
-    Rosegarden::timeT endTime   = isRecordingSegment ? s.getEndTime() : s.getEndMarkerTime();
+    Rosegarden::timeT endTime   = isRecordingSegment ? m_pointerTimePos /*s.getEndTime()*/ : s.getEndMarkerTime();
 
 
     int h = m_grid.getYSnap();
     int w;
 
-    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
+//     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
@@ -1859,6 +1864,7 @@ void CompositionView::slotUpdate()
 {
     RG_DEBUG << "CompositionView::slotUpdate()\n";
     slotAllDrawBuffersNeedRefresh();
+    m_invalidRect = QRect();
     updateContents();
 }
 
@@ -1868,6 +1874,7 @@ void CompositionView::slotUpdate(const QRect& rect)
              << rect << " - valid : " << rect.isValid() << endl;
     slotAllDrawBuffersNeedRefresh();
     if (rect.isValid()) {
+        m_invalidRect |= rect;
         updateContents(rect);
     } else
         updateContents();
@@ -1916,21 +1923,27 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
-    QRect r = e->rect().normalize();
-    QRect updateRect = r;
+    QRect r = m_invalidRect.isEmpty() ? e->rect().normalize() : m_invalidRect;
+    QRect ar = e->rect().normalize();
+    QRect updateRect = ar;
 
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
+    ar &= viewport()->rect();
+    ar.moveBy(contentsX(), contentsY());
 
 //     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
 //              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
 //              << " - needs refresh " << m_segmentsDrawBufferNeedsRefresh << endl;
 
-    bool changed = checkScrollAndRefreshDrawBuffer(r);
+//     RG_DEBUG << "CompositionView::viewportPaintEvent() step1 r = " << r << " - invalidRect : " << m_invalidRect << endl;
+
+    bool changed = checkScrollAndRefreshDrawBuffer(r, ar);
 
     if (changed || m_artifactsDrawBufferNeedsRefresh) {
 
-	QRect copyRect(r); // r was modified by checkScrollAndRefreshDrawBuffer
+//         RG_DEBUG << "CompositionView::viewportPaintEvent() step2 r = " << r << endl;
+	QRect copyRect(ar); // r and ar were modified by checkScrollAndRefreshDrawBuffer
 	copyRect.moveBy(-contentsX(), -contentsY());
 
 	bitBlt(&m_artifactsDrawBuffer,
@@ -1949,6 +1962,8 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 	   &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(),
 	   updateRect.width(), updateRect.height());
 
+    m_invalidRect = QRect();
+
     // DEBUG
 //     QPainter pdebug(viewport());
 //     static QPen framePen(Qt::red, 1);
@@ -1957,24 +1972,25 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
 }
 
-bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
+bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, QRect &artifactsRect)
 {
     bool needRefresh = m_segmentsDrawBufferNeedsRefresh;
     bool all = false;
     bool scroll = false;
-    QRect refreshRect;
+    QRect refreshRect, artifactsRefreshRect;
      
     int w = m_segmentsDrawBuffer.width(), h = m_segmentsDrawBuffer.height();
     int cx = contentsX(), cy = contentsY();
     
-    if (m_segmentsDrawBufferNeedsRefresh) {
+    if (m_segmentsDrawBufferNeedsRefresh && m_invalidRect.isEmpty()) {
 
 	// if the flag is set explicitly, we need to refresh the
 	// entire buffer because we have no way to know what part of
 	// it has changed.
 
 	refreshRect.setRect(cx, cy, w, h);
-	
+	artifactsRefreshRect = refreshRect;
+
     } else {
 
 	if (cx != m_lastBufferRefreshX) {
@@ -1988,14 +2004,19 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
 		cp.drawPixmap(dx, 0, m_segmentsDrawBuffer);
 		
 		if (dx < 0) {
-		    refreshRect |= QRect(cx + w + dx, cy, -dx, h);
+                    QRect t(cx + w + dx, cy, -dx, h);
+		    refreshRect |= t;
+                    artifactsRefreshRect |= t;
 		} else {
-		    refreshRect |= QRect(cx, cy, dx, h);
+                    QRect t(cx, cy, dx, h);
+		    refreshRect |= t;
+                    artifactsRefreshRect |= t;
 		}
 		
 	    } else {
 		
 		refreshRect.setRect(cx, cy, w, h);
+                artifactsRefreshRect = refreshRect;
 		all = true;
 	    }
 	}
@@ -2011,14 +2032,19 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
 		cp.drawPixmap(0, dy, m_segmentsDrawBuffer);
 		
 		if (dy < 0) {
-		    refreshRect |= QRect(cx, cy + h + dy, w, -dy);
+                    QRect t(cx, cy + h + dy, w, -dy);
+		    refreshRect |= t;
+                    artifactsRefreshRect |= t;
 		} else {
-		    refreshRect |= QRect(cx, cy, w, dy);
+                    QRect t(cx, cy, w, dy);
+		    refreshRect |= t;
+                    artifactsRefreshRect |= t;
 		}
 		
 	    } else {
 		
 		refreshRect.setRect(cx, cy, w, h);
+                artifactsRefreshRect = refreshRect;
 		all = true;
 	    }
 	}
@@ -2027,8 +2053,10 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
     if (refreshRect.isValid()) {
 	needRefresh = true;
 	refreshRect |= rect;
+        artifactsRefreshRect |= artifactsRect;
     } else {
 	refreshRect = rect;
+        artifactsRefreshRect = artifactsRect;
     }
 
     if (needRefresh) refreshSegmentsDrawBuffer(refreshRect);
@@ -2037,8 +2065,13 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
     m_lastBufferRefreshX = cx;
     m_lastBufferRefreshY = cy;
 
-    rect = refreshRect;
-    if (scroll) rect.setRect(cx, cy, w, h);
+    if (scroll) {
+        rect.setRect(cx, cy, w, h);
+        artifactsRect = rect;
+    } else {
+        rect = refreshRect;
+        artifactsRect = artifactsRefreshRect;
+    }
     return needRefresh;
 }
 
@@ -2735,7 +2768,13 @@ void CompositionView::setPointerPos(int pos)
     if (oldPos == pos) return;
 
     m_pointerPos = pos;
-    slotArtifactsDrawBufferNeedsRefresh();
+    getModel()->setPointerPos(pos);
+    slotArtifactsDrawBufferNeedsRefresh(); // bad idea - we redraw everything
+
+//     if (getModel()->haveRecordingItems()) {
+//         RG_DEBUG << "CompositionView::setPointerPos : slotSegmentsDrawBufferNeedsRefresh\n";
+//         slotSegmentsDrawBufferNeedsRefresh();
+//     }
 
     // interesting -- isAutoScrolling() never seems to return true?
 //    RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;

@@ -186,6 +186,8 @@ public:
 
     virtual Rosegarden::SnapGrid& grid() = 0;
 
+    virtual void setPointerPos(int xPos) = 0;
+
     virtual void setSelected(const CompositionItem&, bool selected = true) = 0;
     virtual bool isSelected(const CompositionItem&) const = 0;
     virtual void setSelected(const itemcontainer&) = 0;
@@ -242,6 +244,8 @@ public:
     virtual Rosegarden::timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
     virtual Rosegarden::SnapGrid& grid() { return m_grid; }
+
+    virtual void setPointerPos(int xPos);
 
     virtual void setSelected(const CompositionItem&, bool selected = true);
     virtual bool isSelected(const CompositionItem&) const;
@@ -343,6 +347,8 @@ protected:
     Rosegarden::SegmentSelection m_selectedSegments;
     Rosegarden::SegmentSelection m_tmpSelectedSegments;
     Rosegarden::SegmentSelection m_previousTmpSelectedSegments;
+
+    Rosegarden::timeT            m_pointerTimePos;
 
     typedef std::set<Rosegarden::Segment *> recordingsegmentset;
     recordingsegmentset          m_recordingSegments;
@@ -549,8 +555,11 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
     
-    // if something changed, returns true and sets rect accordingly
-    bool checkScrollAndRefreshDrawBuffer(QRect &);
+    /**
+     * if something changed, returns true and sets rect accordingly
+     * works on segment buffer rect and artifacts buffer rect
+     */
+    bool checkScrollAndRefreshDrawBuffer(QRect &, QRect&);
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
@@ -627,6 +636,8 @@ protected:
     int          m_lastBufferRefreshY;
     int          m_lastPointerRefreshX;
     QPixmap      m_backgroundPixmap;
+
+    QRect        m_invalidRect;
 
     mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
     mutable CompositionModel::RectRanges m_notationPreviewRects;
