@@ -76,11 +76,6 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
     }
 }
 
-void RosegardenScrollView::slotUpdate()
-{
-    update();
-}
-
 // Smooth scroll checks
 //
 

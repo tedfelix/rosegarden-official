@@ -174,7 +174,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
         QObject::connect
             (getCommandHistory(), SIGNAL(commandExecuted()),
-             m_trackEditor->getSegmentCanvas(), SLOT(slotUpdate()));
+             m_trackEditor->getSegmentCanvas(), SLOT(slotUpdateSegmentsDrawBuffer()));
     }
 }
 
@@ -859,7 +859,7 @@ void RosegardenGUIView::setZoomSize(double size)
 
     m_trackEditor->getSegmentCanvas()->clearSegmentRectsCache(true);
     m_trackEditor->getSegmentCanvas()->updateSize(true);
-    m_trackEditor->getSegmentCanvas()->slotUpdate();
+    m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
 
     if (m_trackEditor->getTempoRuler()) {
 	m_trackEditor->getTempoRuler()->repaint();
@@ -1237,19 +1237,19 @@ void RosegardenGUIView::slotShowChordNameRuler(bool v)
 void RosegardenGUIView::slotShowPreviews(bool v)
 {
     m_trackEditor->getSegmentCanvas()->setShowPreviews(v);
-    m_trackEditor->getSegmentCanvas()->slotUpdate();
+    m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
 }
 
 void RosegardenGUIView::slotShowSegmentLabels(bool v)
 {
     m_trackEditor->getSegmentCanvas()->setShowSegmentLabels(v);
-    m_trackEditor->getSegmentCanvas()->slotUpdate();
+    m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
 }
 
 void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
 {
     if (m_trackEditor->getSegmentCanvas()->isShowingPreviews()) {
-        m_trackEditor->getSegmentCanvas()->slotUpdate();
+        m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
     }
 }
 	

@@ -299,7 +299,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         m_canvas->getModel()->setSelected(item);
         m_canvas->getModel()->signalSelection();
         m_canvas->setTmpRect(QRect());
-        m_canvas->slotUpdate();
+        m_canvas->slotUpdateSegmentsDrawBuffer();
 
     } else {
 
@@ -524,7 +524,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
         m_canvas->hideTextFloat();
         m_canvas->setDrawGuides(false);
         m_canvas->getModel()->endMove();
-        m_canvas->slotUpdate();
+        m_canvas->slotUpdateSegmentsDrawBuffer();
 
     }
 
@@ -809,7 +809,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     if (duration != 0)
         setChangeMade(true);
 
-    m_canvas->slotUpdate(m_currentItem->rect() | oldRect);
+    m_canvas->slotUpdateSegmentsDrawBuffer(m_currentItem->rect() | oldRect);
 
     return RosegardenCanvasView::FollowHorizontal;
 }
@@ -1026,7 +1026,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         }
         
         m_canvas->getModel()->endMove();
-	m_canvas->slotUpdate();
+	m_canvas->slotUpdateSegmentsDrawBuffer();
 
     }
     

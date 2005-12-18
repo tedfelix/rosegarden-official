@@ -522,8 +522,8 @@ public slots:
     // TextFloat timer
     void slotTextFloatTimeout();
 
-    void slotUpdate();
-    void slotUpdate(const QRect&);
+    void slotUpdateSegmentsDrawBuffer();
+    void slotUpdateSegmentsDrawBuffer(const QRect&);
 
     void slotRefreshColourCache();
 
@@ -559,7 +559,7 @@ protected:
      * if something changed, returns true and sets rect accordingly
      * works on segment buffer rect and artifacts buffer rect
      */
-    bool checkScrollAndRefreshDrawBuffer(QRect &, QRect&);
+    bool checkScrollAndRefreshDrawBuffer(QRect&);
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);

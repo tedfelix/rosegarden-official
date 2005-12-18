@@ -81,9 +81,6 @@ public:
     int getDeltaScroll() { return m_minDeltaScroll; }
 
 public slots:
-    /// Update the RosegardenScrollView after a change of content
-    virtual void slotUpdate();
-
     /**
      * Scroll horizontally to make the given position visible,
      * paging to as to get some visibility of the next screenful

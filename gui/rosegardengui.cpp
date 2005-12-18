@@ -5847,7 +5847,7 @@ RosegardenGUIApp::slotRelabelSegments()
     {
         m_doc->getCommandHistory()->addCommand
             (new SegmentLabelCommand(selection, newLabel));
-        m_view->getTrackEditor()->getSegmentCanvas()->slotUpdate();
+        m_view->getTrackEditor()->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
     }
 }
 
