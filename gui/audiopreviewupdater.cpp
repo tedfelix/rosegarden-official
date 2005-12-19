@@ -23,6 +23,8 @@
 
 #include "audiopreviewthread.h"
 
+static int apuExtantCount = 0;
+
 AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
                                          const Rosegarden::Composition& c, const Rosegarden::Segment* s,
                                          const QRect& r,
@@ -36,11 +38,14 @@ AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
       m_channels(0),
       m_previewToken(-1)
 {
+    ++apuExtantCount;
+    RG_DEBUG << "AudioPreviewUpdater::AudioPreviewUpdater " << this << " (now " << apuExtantCount << " extant)" << endl;
 }
 
 AudioPreviewUpdater::~AudioPreviewUpdater()
 {
-    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater on " << this << " ( token " << m_previewToken << ")" << endl;
+    --apuExtantCount;
+    RG_DEBUG << "AudioPreviewUpdater::~AudioPreviewUpdater on " << this << " ( token " << m_previewToken << ") (now " << apuExtantCount << " extant)" << endl;
     if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
 }
 
@@ -67,6 +72,12 @@ void AudioPreviewUpdater::update()
     if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
     m_previewToken = m_thread.requestPreview(request);
     if (!m_thread.running()) m_thread.start();
+}
+
+void AudioPreviewUpdater::cancel()
+{
+    if (m_previewToken >= 0) m_thread.cancelPreview(m_previewToken);
+    m_previewToken = -1;
 }
 
 bool AudioPreviewUpdater::event(QEvent *e)

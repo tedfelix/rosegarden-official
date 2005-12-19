@@ -187,7 +187,6 @@ public:
     virtual Rosegarden::SnapGrid& grid() = 0;
 
     virtual void setPointerPos(int xPos) = 0;
-
     virtual void setSelected(const CompositionItem&, bool selected = true) = 0;
     virtual bool isSelected(const CompositionItem&) const = 0;
     virtual void setSelected(const itemcontainer&) = 0;
@@ -216,7 +215,6 @@ signals:
     void needContentUpdate();
     void needContentUpdate(const QRect&);
     void needArtifactsUpdate();
-    void needArtifactsUpdate(const QRect&);
 
 protected:
     CompositionItem* m_currentCompositionItem;
@@ -247,7 +245,6 @@ public:
     virtual Rosegarden::SnapGrid& grid() { return m_grid; }
 
     virtual void setPointerPos(int xPos);
-
     virtual void setSelected(const CompositionItem&, bool selected = true);
     virtual bool isSelected(const CompositionItem&) const;
     virtual void setSelected(const itemcontainer&);
@@ -275,7 +272,6 @@ public:
     void setAudioPreviewThread(AudioPreviewThread& thread);
     AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 
-    void refreshAllPreviews();
     void clearPreviewCache();
     void clearSegmentRectsCache(bool clearPreviews = false) { clearInCache(0, clearPreviews); }
 
@@ -355,7 +351,6 @@ protected:
     recordingsegmentset          m_recordingSegments;
 
     typedef std::vector<CompositionItem> itemgc;
-    typedef std::vector<AudioPreviewUpdater*> audiopreviewupdatergc;
 
     AudioPreviewThread*          m_audioPreviewThread;
 
@@ -364,14 +359,10 @@ protected:
 
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
-    
-    // Updaters currently working
-    std::set<AudioPreviewUpdater *> m_audioPreviewUpdaters;
 
     rectcontainer m_res;
     itemcontainer m_movingItems;
     itemgc m_itemGC;
-    audiopreviewupdatergc m_apuGC;
 
     QRect m_selectionRect;
     QRect m_previousSelectionUpdateRect;
@@ -379,6 +370,10 @@ protected:
     std::map<const Rosegarden::Segment*, CompositionRect> m_segmentRectMap;
     std::map<const Rosegarden::Segment*, Rosegarden::timeT> m_segmentEndTimeMap;
     std::map<const Rosegarden::Segment*, PixmapArray> m_audioSegmentPreviewMap;
+    
+    typedef std::map<const Rosegarden::Segment*, AudioPreviewUpdater *>
+        AudioPreviewUpdaterMap;
+    AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
 };
 
 
@@ -556,11 +551,8 @@ protected:
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
     
-    /**
-     * if something changed, returns true and sets rect accordingly
-     * works on segment buffer rect and artifacts buffer rect
-     */
-    bool checkScrollAndRefreshDrawBuffer(QRect&);
+    // if something changed, returns true and sets rect accordingly
+    bool checkScrollAndRefreshDrawBuffer(QRect &);
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
@@ -585,10 +577,30 @@ protected:
     SegmentSelector* getSegmentSelectorTool();
 
 protected slots:
-    void slotSegmentsDrawBufferNeedsRefresh()  { m_segmentsDrawBufferNeedsRefresh = true; }
-    void slotArtifactsDrawBufferNeedsRefresh() { m_artifactsDrawBufferNeedsRefresh = true; }
-    void slotAllDrawBuffersNeedRefresh()       { m_artifactsDrawBufferNeedsRefresh = m_segmentsDrawBufferNeedsRefresh = true; }
-    void slotUpdateArtifactsDrawBuffer(const QRect& r) { m_artifactsDrawBufferNeedsRefresh = true; updateContents(r); }
+    void slotSegmentsDrawBufferNeedsRefresh() {
+	m_segmentsDrawBufferRefresh =
+	    QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+    }
+
+    void slotSegmentsDrawBufferNeedsRefresh(QRect r) {
+	m_segmentsDrawBufferRefresh |=
+	    (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
+	     & r);
+    }
+
+    void slotArtifactsDrawBufferNeedsRefresh() {
+	m_artifactsDrawBufferNeedsRefresh = true; 
+    }
+
+    void slotAllDrawBuffersNeedRefresh() {
+	m_artifactsDrawBufferNeedsRefresh = true;
+	slotSegmentsDrawBufferNeedsRefresh();
+    }
+
+    void slotAllDrawBuffersNeedRefresh(QRect r) {
+	m_artifactsDrawBufferNeedsRefresh = true;
+	slotSegmentsDrawBufferNeedsRefresh(r);
+    }
 
 protected:         
 
@@ -632,14 +644,13 @@ protected:
 
     QPixmap      m_segmentsDrawBuffer;
     QPixmap      m_artifactsDrawBuffer;
-    bool         m_segmentsDrawBufferNeedsRefresh;
+//!!!    bool         m_segmentsDrawBufferNeedsRefresh;
+    QRect        m_segmentsDrawBufferRefresh;
     bool         m_artifactsDrawBufferNeedsRefresh;
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;
     int          m_lastPointerRefreshX;
     QPixmap      m_backgroundPixmap;
-
-    QRect        m_invalidRect;
 
     mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
     mutable CompositionModel::RectRanges m_notationPreviewRects;

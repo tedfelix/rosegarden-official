@@ -37,12 +37,17 @@ class AudioPreviewUpdater : public QObject
 
 public:
     AudioPreviewUpdater(AudioPreviewThread &thread,
-                        const Rosegarden::Composition& c,
-                        const Rosegarden::Segment*,
-                        const QRect&,
-                        CompositionModelImpl* parent);
+                        const Rosegarden::Composition &composition,
+                        const Rosegarden::Segment *segment,
+                        const QRect &displayExtent,
+                        CompositionModelImpl *parent);
     ~AudioPreviewUpdater();
+
     void update();
+    void cancel();
+
+    QRect getDisplayExtent() const { return m_rect; }
+    void setDisplayExtent(const QRect &rect) { m_rect = rect; }
 
     const Rosegarden::Segment *getSegment() const { return m_segment; }
 

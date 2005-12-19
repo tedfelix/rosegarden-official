@@ -150,14 +150,14 @@ AudioPreviewThread::requestPreview(const Request &request)
     m_mutex.lock();
 
     RG_DEBUG << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify << endl;
-
+/*!!!
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
 	if (i->second.second.notify == request.notify) {
 	    m_queue.erase(i);
 	    break;
 	}
     }
-
+*/
     int token = m_nextToken;
     m_queue.insert(RequestQueue::value_type(request.width,
 					    RequestRec(token, request)));
