@@ -216,6 +216,7 @@ signals:
     void needContentUpdate();
     void needContentUpdate(const QRect&);
     void needArtifactsUpdate();
+    void needArtifactsUpdate(const QRect&);
 
 protected:
     CompositionItem* m_currentCompositionItem;
@@ -587,6 +588,7 @@ protected slots:
     void slotSegmentsDrawBufferNeedsRefresh()  { m_segmentsDrawBufferNeedsRefresh = true; }
     void slotArtifactsDrawBufferNeedsRefresh() { m_artifactsDrawBufferNeedsRefresh = true; }
     void slotAllDrawBuffersNeedRefresh()       { m_artifactsDrawBufferNeedsRefresh = m_segmentsDrawBufferNeedsRefresh = true; }
+    void slotUpdateArtifactsDrawBuffer(const QRect& r) { m_artifactsDrawBufferNeedsRefresh = true; updateContents(r); }
 
 protected:         
 

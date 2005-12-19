@@ -1110,12 +1110,10 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     updateRect = updateRect.normalize();
 
     if (!updateRect.isNull() && !m_previousSelectionUpdateRect.isNull()) {
-
-        emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
-        emit needArtifactsUpdate();
-
+        QRect t = updateRect | m_previousSelectionUpdateRect;
+        emit needArtifactsUpdate(t);
+        emit needContentUpdate(t);
     }
-    
     
     m_previousSelectionUpdateRect = updateRect;
 
@@ -1601,11 +1599,13 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
             this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
 
     connect(model, SIGNAL(needContentUpdate()),
-            this, SLOT(slotSegmentsDrawBufferNeedsRefresh()));
+            this, SLOT(slotUpdateSegmentsDrawBuffer()));
     connect(model, SIGNAL(needContentUpdate(const QRect&)),
             this, SLOT(slotUpdateSegmentsDrawBuffer(const QRect&)));
     connect(model, SIGNAL(needArtifactsUpdate()),
             this, SLOT(slotArtifactsDrawBufferNeedsRefresh()));
+    connect(model, SIGNAL(needArtifactsUpdate(const QRect&)),
+            this, SLOT(slotUpdateArtifactsDrawBuffer(const QRect&)));
 
     connect(doc, SIGNAL(docColoursChanged()),
             this, SLOT(slotRefreshColourCache()));
@@ -1710,7 +1710,7 @@ void CompositionView::setDrawSelectionRect(bool d)
     if (m_drawSelectionRect != d) {
         m_drawSelectionRect = d;
         slotArtifactsDrawBufferNeedsRefresh();
-        update(m_selectionRect);
+        updateContents(m_selectionRect);
     }
 }
 
@@ -1941,7 +1941,7 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
     if (changed || m_artifactsDrawBufferNeedsRefresh) {
 
 //         RG_DEBUG << "CompositionView::viewportPaintEvent() step2 r = " << r << endl;
-	QRect copyRect(r); // r and ar were modified by checkScrollAndRefreshDrawBuffer
+	QRect copyRect(r); // r was modified by checkScrollAndRefreshDrawBuffer
 	copyRect.moveBy(-contentsX(), -contentsY());
 
 	bitBlt(&m_artifactsDrawBuffer,
@@ -2758,6 +2758,8 @@ void CompositionView::setPointerPos(int pos)
     getModel()->setPointerPos(pos);
     slotArtifactsDrawBufferNeedsRefresh(); // bad idea - we redraw everything
 
+    updateContents();
+
 //     if (getModel()->haveRecordingItems()) {
 //         RG_DEBUG << "CompositionView::setPointerPos : slotSegmentsDrawBufferNeedsRefresh\n";
 //         slotSegmentsDrawBufferNeedsRefresh();
@@ -2821,7 +2823,7 @@ void CompositionView::setTmpRect(const QRect& r)
 {
     QRect pRect = m_tmpRect;
     m_tmpRect = r;
-    update(m_tmpRect | pRect);
+    slotUpdateSegmentsDrawBuffer(m_tmpRect | pRect);
 }
 
 void CompositionView::setTextFloat(int x, int y, const QString &text)
