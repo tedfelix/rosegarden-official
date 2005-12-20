@@ -647,7 +647,6 @@ protected:
 
     QPixmap      m_segmentsDrawBuffer;
     QPixmap      m_artifactsDrawBuffer;
-//!!!    bool         m_segmentsDrawBufferNeedsRefresh;
     QRect        m_segmentsDrawBufferRefresh;
     bool         m_artifactsDrawBufferNeedsRefresh;
     int          m_lastBufferRefreshX;

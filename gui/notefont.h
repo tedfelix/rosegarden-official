@@ -519,7 +519,7 @@ public:
 
     static NoteFont *getFont(std::string fontName, int size);
 
-    static std::set<std::string> getFontNames();
+    static std::set<std::string> getFontNames(bool onStartup = false);
     static std::vector<int> getAllSizes(std::string fontName); // sorted
     static std::vector<int> getScreenSizes(std::string fontName); // sorted
 

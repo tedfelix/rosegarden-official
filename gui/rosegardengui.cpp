@@ -4062,7 +4062,7 @@ void RosegardenGUIApp::slotTestStartupTester()
     m_startupTester = 0;
 
     // And preload this work
-    (void)NoteFontFactory::getFontNames();
+    (void)NoteFontFactory::getFontNames(true);
 }
 
 void RosegardenGUIApp::slotDebugDump()

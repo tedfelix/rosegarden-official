@@ -197,7 +197,6 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
 
         (*i)->addObserver(this);
     }
-
 }
 
 CompositionModelImpl::~CompositionModelImpl()
@@ -424,7 +423,7 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
 
 void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread& thread)
 {
-    RG_DEBUG << "CompositionModelImpl::setAudioPreviewThread()\n";
+    std::cerr << "\nCompositionModelImpl::setAudioPreviewThread()\n" << std::endl;
     m_audioPreviewThread = &thread;
 }
 
@@ -439,6 +438,20 @@ void CompositionModelImpl::clearPreviewCache()
     for (AudioPreviewUpdaterMap::iterator i = m_audioPreviewUpdaterMap.begin();
 	 i != m_audioPreviewUpdaterMap.end(); ++i) {
 	i->second->cancel();
+    }
+
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
+
+    for(Composition::segmentcontainer::iterator i = segments.begin();
+        i != segEnd; ++i) {
+
+	if ((*i)->getType() == Rosegarden::Segment::Audio) {
+	    // This will create the audio preview updater.  The
+	    // preview won't be calculated and cached until the
+	    // updater completes and calls back.
+	    updatePreviewCacheForAudioSegment((*i), 0);
+	}
     }
 }
 
@@ -523,12 +536,12 @@ QColor CompositionModelImpl::computeSegmentPreviewColor(const Segment* segment)
 void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, AudioPreviewData* apData)
 {
     if (m_audioPreviewThread) {
-        RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started\n";
+	std::cerr << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started" << std::endl;
 
         QRect segRect = computeSegmentRect(*segment);
         segRect.moveTopLeft(QPoint(0,0));
-
-	apData->setSegmentRect(segRect);
+	
+	if (apData) apData->setSegmentRect(segRect);
 
 	if (m_audioPreviewUpdaterMap.find(segment) ==
 	    m_audioPreviewUpdaterMap.end()) {

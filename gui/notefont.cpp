@@ -35,6 +35,7 @@
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
 
 #include <iostream>
 
@@ -1734,7 +1735,7 @@ NoteFont::getCharacterShaded(CharName charName,
 
 
 std::set<std::string>
-NoteFontFactory::getFontNames()
+NoteFontFactory::getFontNames(bool onStartup)
 {
     if (m_fontNames.empty()) {
 
@@ -1762,6 +1763,10 @@ NoteFontFactory::getFontNames()
 		    KStartupLogo::hideIfStillThere();
 		    KMessageBox::error(0, strtoqstr(e.getMessage()));
 		    throw;
+		}
+
+		if (onStartup) {
+		    kapp->processEvents(50);
 		}
 	    }
 	}
