@@ -2770,39 +2770,16 @@ void CompositionView::setPointerPos(int pos)
 	QRect updateRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
 			 deltaW + m_pointerPen.width() * 2, contentsHeight());
 
-	if (getModel()->haveRecordingItems()) {
-	    repaintContents(updateRect);
-	} else {
-	    updateContents(updateRect);
-	}
+        updateContents(updateRect);
 
     } else {
 
-	if (getModel()->haveRecordingItems()) {
+        updateContents(QRect(m_pointerPos - m_pointerPen.width(), 0,
+                             m_pointerPen.width() * 2, contentsHeight()));
 
-	    repaintContents(QRect(oldPos - m_pointerPen.width(), 0,
-				  m_pointerPen.width() * 2, contentsHeight()));
-
-	    repaintContents(QRect(m_pointerPos - m_pointerPen.width(), 0,
-				  m_pointerPen.width() * 2, contentsHeight()));
-
-	} else {
-	
-	    updateContents(QRect(m_pointerPos - m_pointerPen.width(), 0,
-				 m_pointerPen.width() * 2, contentsHeight()));
-
-	    updateContents(QRect(oldPos - m_pointerPen.width(), 0,
-				 m_pointerPen.width() * 2, contentsHeight()));
-	}
+        updateContents(QRect(oldPos - m_pointerPen.width(), 0,
+                             m_pointerPen.width() * 2, contentsHeight()));
     }
-
-//    if (updateRect.width() > 0) { // need update
-//         // if the update rect is wider than half of the visible width, do a full update
-//	if (updateRect.width() < visibleWidth() / 2)
-//	    updateContents(updateRect);
-//	else
-//	    updateContents();
-//    }
 }
 
 void CompositionView::setGuidesPos(int x, int y)
