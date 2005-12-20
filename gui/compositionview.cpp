@@ -1825,8 +1825,10 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
     QMemArray<QRect> rects = e->region().rects();
-    for(int i = 0; i < rects.size(); ++i)
+    for (int i = 0; i < rects.size(); ++i)
         viewportPaintRect(rects[i]);
+
+    m_artifactsDrawBufferNeedsRefresh = false;
 }
 
 void CompositionView::viewportPaintRect(QRect r)
@@ -1855,7 +1857,6 @@ void CompositionView::viewportPaintRect(QRect r)
     }
 
     if (m_artifactsDrawBufferNeedsRefresh) {
-
 	refreshArtifactsDrawBuffer(r);
     }
 
@@ -1998,7 +1999,7 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
     drawAreaArtifacts(&p, rect);
     p.end();
 
-    m_artifactsDrawBufferNeedsRefresh = false;
+//    m_artifactsDrawBufferNeedsRefresh = false;
 }
 
 
