@@ -376,136 +376,6 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
     AudioPreviewDrawDataItem previewItem(previewImage, basePoint, segRect);
 
     apRects->push_back(previewItem);
-
-    return;
-
-
-
-#if 0
-    AudioPreviewData* apData = getAudioPreviewData(segment);
-    const std::vector<float>& values = apData->getValues();
-
-    if (values.size() == 0)
-        return;
-
-    const int height = m_grid.getYSnap()/2 - 2;
-    const int halfRectHeight = m_grid.getYSnap()/2;
-
-    //    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : halfRectHeight = " << halfRectHeight << endl;
-
-    float gain[2] = { 1.0, 1.0 };
-    Rosegarden::TrackId trackId = segment->getTrack();
-    Rosegarden::Track *track = getComposition().getTrackById(trackId);
-    if (track) {
-        Rosegarden::Instrument *instrument = getStudio().getInstrumentById(track->getInstrument());
-        if (instrument) {
-            float level = Rosegarden::AudioLevel::dB_to_multiplier(instrument->getLevel());
-            float pan = instrument->getPan() - 100.0;
-            gain[0] = level * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
-            gain[1] = level * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
-        }
-
-    }
-
-    bool showMinima = apData->showsMinima();
-    unsigned int channels = apData->getChannels();
-    if (channels == 0) {
-        RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects() : problem with audio file for segment "
-                 << segment->getLabel().c_str() << endl;
-        return;
-    }
-
-    int samplePoints = values.size() / (channels * (showMinima ? 2 : 1));
-    float h1, h2, l1 = 0, l2 = 0;
-    double sampleScaleFactor = samplePoints / double(segRect.width());
-
-    int i0 = clipRect.x() - segRect.x();
-    i0 = std::max(i0, 0);
-
-    int i1 = i0 + clipRect.width();
-    i1 = std::min(i1, segRect.width());
-
-    for (int i = i0; i < i1; ++i) {
-        // For each i work get the sample starting point
-        //
-        int position = int(channels * i * sampleScaleFactor);
-        if (position < 0) continue;
-        if (position >= values.size() - channels) break;
-
-        if (channels == 1) {
-
-            h1 = values[position++];
-            h2 = h1;
-
-	    h1 *= gain[0];
-	    h2 *= gain[1];
-
-            if (apData->showsMinima()) {
-                l1 = values[position++];
-                l2 = l1;
-
-		l1 *= gain[0];
-		l2 *= gain[1];
-            }
-        } else {
-
-            h1 = values[position++] * gain[0];
-            if (showMinima) l1 = values[position++] * gain[0];
-
-            h2 = values[position++] * gain[1];
-            if (showMinima) l2 = values[position++] * gain[1];
-            
-        }
-
-        int width = 1;
-        const QColor defaultCol = CompositionColourCache::getInstance()->SegmentAudioPreview;
-
-        QColor color;
-	int baseX = segRect.x(), baseY = halfRectHeight + segRect.y();
-
-	// h1 left, h2 right
-
-	if (h1 >= 1.0) { h1 = 1.0; color = Qt::red; }
-	else { color = defaultCol; }
-
-	int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, height);
-	if (h < 0) h = 0;
-
-        PreviewRect r(i + baseX, baseY - h, width, h);
-        r.setColor(color);
-
-        apRects->push_back(r);
-
-	if (h2 >= 1.0) { h2 = 1.0; color = Qt::red; }
-	else { color = defaultCol; }
-
-	h = Rosegarden::AudioLevel::multiplier_to_preview(h2, height);
-	if (h < 0) h = 0;
-
-        PreviewRect r2(i + baseX, baseY, width, h);
-        r2.setColor(color);
-
-        apRects->push_back(r2);
-        
-    }
-
-    if (segment->isAutoFading()) {
-
-        Composition &comp = getComposition();
-
-        int audioFadeInEnd = int(
-                                 m_grid.getRulerScale()->getXForTime(comp.
-                                                                     getElapsedTimeForRealTime(segment->getFadeInTime()) +
-                                                                     segment->getStartTime()) -
-                                 m_grid.getRulerScale()->getXForTime(segment->getStartTime()));
-
-        PreviewRect r3(clipRect.x(), apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
-        r3.setColor(Qt::blue);
-        apRects->push_back(r3);
-    }
-
-#endif
-    
 }
 
 void CompositionModelImpl::computeRepeatMarks(CompositionItem& item)
@@ -942,6 +812,26 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
     return previewPainter.getSegmentRect();
 }
 
+void CompositionModelImpl::slotInstrumentParametersChanged(Rosegarden::InstrumentId id)
+{
+    RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()\n";
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
+
+    for (Composition::segmentcontainer::iterator i = segments.begin();
+        i != segEnd; ++i) {
+
+        Segment* s = *i;
+        if (s->getType() == Rosegarden::Segment::Audio) {
+
+            Rosegarden::TrackId trackId = s->getTrack();
+            Rosegarden::Track *track = getComposition().getTrackById(trackId);
+            if (track && track->getInstrument() == id) {
+                makeAudioPreviewDataCache(s);
+            }
+        }
+    }
+}
 
 void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)
 {
@@ -1064,7 +954,7 @@ CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(c
 
 CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
 {
-//     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")" << endl;
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")" << endl;
 
     AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
     updatePreviewCacheForAudioSegment(s, apData);

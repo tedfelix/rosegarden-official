@@ -305,6 +305,7 @@ signals:
 
 public slots:
     void slotAudioFileFinalized(Rosegarden::Segment*);
+    void slotInstrumentParametersChanged(Rosegarden::InstrumentId);
 
 protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);

@@ -1245,13 +1245,6 @@ void RosegardenGUIView::slotShowSegmentLabels(bool v)
     m_trackEditor->getSegmentCanvas()->setShowSegmentLabels(v);
     m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
 }
-
-void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
-{
-    if (m_trackEditor->getSegmentCanvas()->isShowingPreviews()) {
-        m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
-    }
-}
 	
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
                                       Rosegarden::InstrumentId id)

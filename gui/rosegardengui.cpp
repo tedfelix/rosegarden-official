@@ -1273,9 +1273,6 @@ void RosegardenGUIApp::initView()
     connect(m_view, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    this, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
 
-    connect(this, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_view, SLOT(slotUpdateAudioPreviews(Rosegarden::InstrumentId)));
-
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
     // to send these toggles twice on initialisation.

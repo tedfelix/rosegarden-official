@@ -145,6 +145,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                                   m_doc->getStudio(),
                                                   m_rulerScale, getTrackCellHeight());
     
+    connect(rosegardenguiview, SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+            m_compositionModel, SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+    connect(rosegardenguiview->parent(), SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+            m_compositionModel, SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
