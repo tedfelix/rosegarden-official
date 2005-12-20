@@ -550,6 +550,8 @@ protected:
 
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
+
+    virtual void viewportPaintRect(QRect);
     
     // if something changed, returns true and sets rect accordingly
     bool checkScrollAndRefreshDrawBuffer(QRect &);

@@ -1921,13 +1921,19 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
-    QRect r = e->rect().normalize();
+    QMemArray<QRect> rects = e->region().rects();
+    for(int i = 0; i < rects.size(); ++i)
+        viewportPaintRect(rects[i]);
+}
+
+void CompositionView::viewportPaintRect(QRect r)
+{
     QRect updateRect = r;
 
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
 
-     RG_DEBUG << "CompositionView::viewportPaintEvent() r = " << r
+     RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
               << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
               << " - refresh " << m_segmentsDrawBufferRefresh << endl;
 

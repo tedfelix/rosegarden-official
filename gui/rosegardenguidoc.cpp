@@ -2359,18 +2359,6 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
     emit audioFileFinalized(recordSegment);
 }
 
-void
-RosegardenGUIDoc::slotNewRecordButton()
-{
-    // Inform the sequencer if it's an audio track
-    //
-    RG_DEBUG << "RosegardenGUIDoc::slotNewRecordButton()" << endl;
-
-    // Document modified
-    slotDocumentModified();
-}
-
-
 Rosegarden::RealTime
 RosegardenGUIDoc::getAudioPlayLatency()
 {

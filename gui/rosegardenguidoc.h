@@ -441,11 +441,6 @@ public slots:
     void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
 
-    // Record button has changed - tell the sequencer if it's to
-    // an audio track.
-    //
-    void slotNewRecordButton();
-
     void slotDocColoursChanged();
 
     // Cancelling an audio preview

@@ -215,9 +215,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_trackButtons, SIGNAL(muteButton(Rosegarden::TrackId, bool)),
             rosegardenguiview, SLOT(slotSetMuteButton(Rosegarden::TrackId, bool)));
 
-    connect(m_trackButtons, SIGNAL(newRecordButton()),
-            m_doc, SLOT(slotNewRecordButton()));
-
     // connect loop rulers' follow-scroll signals
     connect(m_topBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_segmentCanvas, SLOT(startAutoScroll(int)));
@@ -265,7 +262,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdate()));
+    connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdateSegmentsDrawBuffer()));
 
     connect(m_segmentCanvas, 
             SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
