@@ -986,7 +986,7 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
     QRect updateRect = m_selectionRect;
-    
+
     for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segEnd; ++i) {
 
@@ -1838,11 +1838,13 @@ void CompositionView::viewportPaintRect(QRect r)
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
 
-     RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
-              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
-              << " - refresh " << m_segmentsDrawBufferRefresh << endl;
+    RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
+             << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
+             << " - refresh " << m_segmentsDrawBufferRefresh << endl;
 
-    bool changed = checkScrollAndRefreshDrawBuffer(r);
+
+    bool scroll = false;
+    bool changed = checkScrollAndRefreshDrawBuffer(r, scroll);
 
     if (changed || m_artifactsDrawBufferNeedsRefresh) {
 
@@ -1860,11 +1862,18 @@ void CompositionView::viewportPaintRect(QRect r)
 	refreshArtifactsDrawBuffer(r);
     }
 
-    bitBlt(viewport(), updateRect.x(), updateRect.y(),
-	   &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(),
-	   updateRect.width(), updateRect.height());
+    if (scroll) {
+        bitBlt(viewport(), 0, 0,
+               &m_artifactsDrawBuffer, 0, 0,
+               m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
+    } else {
+        bitBlt(viewport(), updateRect.x(), updateRect.y(),
+               &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(),
+               updateRect.width(), updateRect.height());
+    }
 
     // DEBUG
+
 //     QPainter pdebug(viewport());
 //     static QPen framePen(Qt::red, 1);
 //     pdebug.setPen(framePen);
@@ -1872,7 +1881,7 @@ void CompositionView::viewportPaintRect(QRect r)
 
 }
 
-bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
+bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 {
     bool all = false;
     QRect refreshRect = m_segmentsDrawBufferRefresh;
@@ -1880,7 +1889,7 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect)
     int w = m_segmentsDrawBuffer.width(), h = m_segmentsDrawBuffer.height();
     int cx = contentsX(), cy = contentsY();
 
-    bool scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
+    scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
 
     if (scroll) {
 

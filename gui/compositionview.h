@@ -554,8 +554,11 @@ protected:
 
     virtual void viewportPaintRect(QRect);
     
-    // if something changed, returns true and sets rect accordingly
-    bool checkScrollAndRefreshDrawBuffer(QRect &);
+    /**
+     * if something changed, returns true and sets rect accordingly
+     * sets 'scroll' if some scrolling occurred
+     */
+    bool checkScrollAndRefreshDrawBuffer(QRect &, bool& scroll);
     void refreshSegmentsDrawBuffer(const QRect&);
     void refreshArtifactsDrawBuffer(const QRect&);
     void drawArea(QPainter * p, const QRect& rect);
