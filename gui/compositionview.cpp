@@ -945,9 +945,12 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
+    QRect r = computeSegmentRect(*s);
+    
     clearInCache(s, true);
     s->removeObserver(this);
-    emit needContentUpdate(computeSegmentRect(*s));
+    m_recordingSegments.erase(s); // this could be a recording segment
+    emit needContentUpdate(r);
 }
 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
@@ -1374,7 +1377,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     int h = m_grid.getYSnap();
     int w;
 
-    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
+//     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
@@ -1762,15 +1765,15 @@ void CompositionView::setSnapGrain(bool fine)
 
 void CompositionView::slotUpdateSegmentsDrawBuffer()
 {
-    RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()\n";
+//     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()\n";
     slotAllDrawBuffersNeedRefresh();
     updateContents();
 }
 
 void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
 {
-    RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer() rect "
-             << rect << " - valid : " << rect.isValid() << endl;
+//     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer() rect "
+//              << rect << " - valid : " << rect.isValid() << endl;
 
     slotAllDrawBuffersNeedRefresh(rect);
 
@@ -1838,9 +1841,9 @@ void CompositionView::viewportPaintRect(QRect r)
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
 
-    RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
-             << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
-             << " - refresh " << m_segmentsDrawBufferRefresh << endl;
+//     RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
+//              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
+//              << " - refresh " << m_segmentsDrawBufferRefresh << endl;
 
 
     bool scroll = false;
@@ -2667,7 +2670,7 @@ void CompositionView::setPointerPos(int pos)
     slotArtifactsDrawBufferNeedsRefresh();
 
     // interesting -- isAutoScrolling() never seems to return true?
-    RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
+//     RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
     
     if (contentsX() != m_lastPointerRefreshX) {
 	m_lastPointerRefreshX = contentsX();

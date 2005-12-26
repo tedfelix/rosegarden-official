@@ -657,6 +657,8 @@ punchin:
 
 	bool haveInstrument = false;
 	bool haveAudioInstrument = false;
+	bool haveMIDIInstrument = false;
+	Rosegarden::TrackId recordMIDITrack = 0;
 
 	for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
 		 comp.getRecordTracks().begin();
@@ -671,6 +673,9 @@ punchin:
 		if (inst->getType() == Instrument::Audio) {
 		    haveAudioInstrument = true;
 		    break;
+		} else { // soft synths count as MIDI for our purposes here
+		    haveMIDIInstrument = true;
+		    recordMIDITrack = *i;
 		}
 	    }
 	}
@@ -712,6 +717,17 @@ punchin:
 	    // Ask the document to update its record latencies so as to
 	    // do latency compensation when we stop
 	    m_doc->updateAudioRecordLatency();
+	}
+
+	if (haveMIDIInstrument) {
+	    // Create the record MIDI segment now, so that the
+	    // composition view has a real segment to display.  It
+	    // won't actually be added to the composition until the
+	    // first recorded event arrives.  We don't have to do this
+	    // from here for audio, because for audio the sequencer
+	    // calls back on createRecordAudioFiles so as to find out
+	    // what files it needs to write to.
+	    m_doc->addRecordMIDISegment(recordMIDITrack);
 	}
 
         // set the buttons

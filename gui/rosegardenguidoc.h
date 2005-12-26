@@ -342,6 +342,7 @@ public:
      */
     void getMappedDevice(Rosegarden::DeviceId id);
 
+    void addRecordMIDISegment(Rosegarden::TrackId);
     void addRecordAudioSegment(Rosegarden::InstrumentId, Rosegarden::AudioFileId);
 
     // Audio play and record latencies direct from the sequencer

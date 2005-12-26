@@ -1443,33 +1443,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
     if (!midiRecordTrack) return;
 
     if (m_recordMIDISegment == 0) {
-
-        m_recordMIDISegment = new Segment();
-        m_recordMIDISegment->setTrack(midiRecordTrack->getId());
-	m_recordMIDISegment->setStartTime(m_recordStartTime);
-
-        // Set an appropriate segment label
-        //
-        std::string label = "";
-
-        if (midiRecordTrack) {
-            if (midiRecordTrack->getLabel() == "") {
-                Rosegarden::Instrument *instr =
-                    m_studio.getInstrumentById(midiRecordTrack->getInstrument());
-
-                if (instr) {
-                    label = m_studio.getSegmentName(instr->getId());
-                }
-            } else {
-                label = midiRecordTrack->getLabel();
-	    }
-
-	    label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
-        }
-
-        m_recordMIDISegment->setLabel(label);
-
-        emit newMIDIRecordingSegment(m_recordMIDISegment);
+	addRecordMIDISegment(midiRecordTrack->getId());
     }
 
     if (mC.size() > 0 && m_recordMIDISegment) 
@@ -1644,14 +1618,12 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
             //
             rEvent->set<Int>(RECORDED_PORT, device);
 
-            // Set the start index and then insert into the Composition
-            // (if we haven't before)
+            // Set the proper start index (if we haven't before)
             //
-            if (m_recordMIDISegment->size() == 0 && !m_composition.contains(m_recordMIDISegment))
+            if (m_recordMIDISegment->size() == 0)
             {
                 m_recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
                 m_recordMIDISegment->fillWithRests(absTime);
-                m_composition.addSegment(m_recordMIDISegment);
             }
 
             // Now insert the new event
@@ -1737,6 +1709,16 @@ RosegardenGUIDoc::stopRecordingMidi()
     //
     if (m_recordMIDISegment == 0)
         return;
+
+    if (m_recordMIDISegment->size() == 0) {
+	if (m_recordMIDISegment->getComposition()) {
+	    m_recordMIDISegment->getComposition()->deleteSegment(m_recordMIDISegment);
+	} else {
+	    delete m_recordMIDISegment;
+	}
+	m_recordMIDISegment = 0;
+	return;
+    }
 
     RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have record MIDI segment" << endl;
 
@@ -2114,6 +2096,44 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     }
 
     delete mD;
+}
+
+void
+RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
+{
+    RG_DEBUG << "RosegardenGUIDoc::addRecordMIDISegment(" << tid << ")" << endl;
+
+    delete m_recordMIDISegment;
+
+    m_recordMIDISegment = new Segment();
+    m_recordMIDISegment->setTrack(tid);
+    m_recordMIDISegment->setStartTime(m_recordStartTime);
+
+    // Set an appropriate segment label
+    //
+    std::string label = "";
+    
+    Rosegarden::Track *track = m_composition.getTrackById(tid);
+    if (track) {
+	if (track->getLabel() == "") {
+	    Rosegarden::Instrument *instr =
+		m_studio.getInstrumentById(track->getInstrument());
+	    
+	    if (instr) {
+		label = m_studio.getSegmentName(instr->getId());
+	    }
+	} else {
+	    label = track->getLabel();
+	}
+	
+	label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
+    }
+    
+    m_recordMIDISegment->setLabel(label);
+    
+    m_composition.addSegment(m_recordMIDISegment);
+
+    emit newMIDIRecordingSegment(m_recordMIDISegment);
 }
 
 void
