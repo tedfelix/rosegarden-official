@@ -178,11 +178,11 @@ sub convert {
     if (convertType($source) eq 'flac') {
 	print "Running flac -o $target $source\n";
 	system qq{flac -s -o "$target.rgp.flac" "$source"} and
-	  die "Failed to convert $source to $target"; # warn via dialog & recover
+	  die "Failed to convert $source to $target.rgp.flac"; # warn via dialog & recover
     } elsif (convertType($source) eq 'ogg') {
 	print "Running oggenc -o $target $source\n";
 	system qq{oggenc -o "$target.rgp.ogg" "$source"} and
-	  die "Failed to convert $source to $target"; # warn via dialog & recover
+	  die "Failed to convert $source to $target.rgp.ogg"; # warn via dialog & recover
     } else {
 	print "Copying $source to $target\n";
 	copy $source, $target or die "Failed to copy $source to $target: $!";

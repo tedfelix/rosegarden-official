@@ -423,7 +423,7 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
 
 void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread& thread)
 {
-    std::cerr << "\nCompositionModelImpl::setAudioPreviewThread()\n" << std::endl;
+//    std::cerr << "\nCompositionModelImpl::setAudioPreviewThread()\n" << std::endl;
     m_audioPreviewThread = &thread;
 }
 
@@ -536,7 +536,7 @@ QColor CompositionModelImpl::computeSegmentPreviewColor(const Segment* segment)
 void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, AudioPreviewData* apData)
 {
     if (m_audioPreviewThread) {
-	std::cerr << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started" << std::endl;
+//	std::cerr << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started" << std::endl;
 
         QRect segRect = computeSegmentRect(*segment);
         segRect.moveTopLeft(QPoint(0,0));

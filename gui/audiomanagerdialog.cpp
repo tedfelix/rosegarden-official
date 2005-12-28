@@ -1016,31 +1016,34 @@ AudioManagerDialog::slotDeleteUnused()
 
 	std::vector<QString> names = dialog->getSelectedAudioFileNames();
 
-	QString question =
-	    i18n("About to delete %1 audio file(s) permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover these files.\nAre you sure?").arg(names.size());
+	if (names.size() > 0) {
+	
+	    QString question =
+		i18n("About to delete %1 audio file permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover this file.\nAre you sure?", "About to delete %1 audio files permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover these files.\nAre you sure?", names.size()).arg(names.size());
+	    
+	    int reply = KMessageBox::warningContinueCancel(this, question);
 
-	int reply = KMessageBox::warningContinueCancel(this, question);
+	    if (reply != KMessageBox::Continue) {
+		delete dialog;
+		return;
+	    }
 
-	if (reply != KMessageBox::Continue) {
-	    delete dialog;
-	    return;
-	}
-
-	for (int i = 0; i < names.size(); ++i) {
-	    std::cerr << i << ": " << names[i] << std::endl;
-	    QFile file(names[i]);
-	    if (!file.remove()) {
-		KMessageBox::error(this, i18n("File %1 could not be deleted.").arg(names[i]));
-	    } else {
-		if (nameMap.find(names[i]) != nameMap.end()) {
-		    m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
-		    emit deleteAudioFile(nameMap[names[i]]);
+	    for (int i = 0; i < names.size(); ++i) {
+		std::cerr << i << ": " << names[i] << std::endl;
+		QFile file(names[i]);
+		if (!file.remove()) {
+		    KMessageBox::error(this, i18n("File %1 could not be deleted.").arg(names[i]));
 		} else {
-		    std::cerr << "WARNING: Audio file name " << names[i] << " not in name map" << std::endl;
-		}
+		    if (nameMap.find(names[i]) != nameMap.end()) {
+			m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
+			emit deleteAudioFile(nameMap[names[i]]);
+		    } else {
+			std::cerr << "WARNING: Audio file name " << names[i] << " not in name map" << std::endl;
+		    }
 
-		QFile peakFile(QString("%1.pk").arg(names[i]));
-		peakFile.remove();
+		    QFile peakFile(QString("%1.pk").arg(names[i]));
+		    peakFile.remove();
+		}
 	    }
 	}
     }
