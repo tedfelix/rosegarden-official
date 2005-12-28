@@ -33,11 +33,9 @@ class QScrollBar;
 class QGridLayout;
 
 /**
- * A QScrollView with an auxiliary horiz. scrollbar
- * That scrollbar should be provided by the parent widget
- * (typically an EditView). The RosegardenCanvasView keeps
- * the auxilliary horiz. scrollbar range in sync with the
- * one of its own scrollbar with slotUpdate().
+ * A QScrollView with more elaborate auto-scrolling capabilities
+ * and the ability to have a "fixed" (non-scrolling) widget at its bottom,
+ * just above the bottom scrollbar.
  */
 class RosegardenScrollView : public QScrollView
 {

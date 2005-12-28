@@ -595,7 +595,8 @@ protected slots:
     }
 
     void slotArtifactsDrawBufferNeedsRefresh() {
-	m_artifactsDrawBufferNeedsRefresh = true; 
+	m_artifactsDrawBufferNeedsRefresh = true;
+        updateContents();
     }
 
     void slotAllDrawBuffersNeedRefresh() {

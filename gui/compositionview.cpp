@@ -866,7 +866,7 @@ CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const R
 CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
 {
 //    Rosegarden::Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
-     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
+    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
 
     AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
 
@@ -1005,9 +1005,10 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
 
     if (!updateRect.isNull() && !m_previousSelectionUpdateRect.isNull()) {
 
-        emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
-        emit needArtifactsUpdate();
+        if (m_tmpSelectedSegments != m_previousTmpSelectedSegments)
+            emit needContentUpdate(updateRect | m_previousSelectionUpdateRect);
 
+        emit needArtifactsUpdate();
     }
     
     
@@ -1976,8 +1977,8 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 {
 //    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
-     RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
- 	     << rect << endl;
+//      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
+//  	     << rect << endl;
 
     QPainter p(&m_segmentsDrawBuffer, viewport());
     p.translate(-contentsX(), -contentsY());
