@@ -85,11 +85,21 @@ main(int argc, char **argv)
     snd_seq_queue_timer_alloca(&timer);
     snd_seq_get_queue_timer(handle, queue, timer);
     snd_timer_id_alloca(&timerid);
+
+    /* To test a PCM timer: */
+/*
     snd_timer_id_set_class(timerid, SND_TIMER_CLASS_PCM);
     snd_timer_id_set_sclass(timerid, SND_TIMER_SCLASS_NONE);
     snd_timer_id_set_card(timerid, 0);
     snd_timer_id_set_device(timerid, 0);
     snd_timer_id_set_subdevice(timerid, 0);
+*/
+
+    /* To test the system timer: */
+    snd_timer_id_set_class(timerid, SND_TIMER_CLASS_GLOBAL);
+    snd_timer_id_set_sclass(timerid, SND_TIMER_SCLASS_NONE);
+    snd_timer_id_set_device(timerid, SND_TIMER_GLOBAL_SYSTEM);
+
     snd_seq_queue_timer_set_id(timer, timerid);
     snd_seq_set_queue_timer(handle, queue, timer);
 
