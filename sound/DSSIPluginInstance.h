@@ -164,7 +164,9 @@ protected:
     size_t                    m_outputBufferCount;
     size_t                    m_sampleRate;
     float                    *m_latencyPort;
+
     bool                      m_run;
+    bool                      m_runSinceReset;
     
     bool                      m_bypassed;
     QString                   m_program;

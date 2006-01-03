@@ -1079,7 +1079,9 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
     // lock required here to protect against calling
     // activate/deactivate at the same time as run()
 
+#ifdef DEBUG_MIXER
     std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
+#endif
 
     getLock();
     if (m_bussMixer) m_bussMixer->getLock();
@@ -1097,7 +1099,9 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 	RunnablePluginInstance *instance = j->second;
 
 	if (instance) {
+#ifdef DEBUG_MIXER
 	    std::cerr << "AudioInstrumentMixer::resetAllPlugins: (re)setting " << channels << " channels on synth for instrument " << id << std::endl;
+#endif
 	    if (discardEvents) instance->discardEvents();
 	    instance->setIdealChannelCount(channels);
 	}
@@ -1119,7 +1123,9 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 	    RunnablePluginInstance *instance = *i;
 
 	    if (instance) {
+#ifdef DEBUG_MIXER
 		std::cerr << "AudioInstrumentMixer::resetAllPlugins: (re)setting " << channels << " channels on plugin for instrument " << id << std::endl;
+#endif
 		if (discardEvents) instance->discardEvents();
 		instance->setIdealChannelCount(channels);
 	    }
@@ -1327,6 +1333,22 @@ AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
 
     bool discard;
     processBlocks(discard);
+
+    releaseLock();
+}
+
+void
+AudioInstrumentMixer::allocateBuffers()
+{
+    // Not RT safe
+
+    getLock();
+
+#ifdef DEBUG_MIXER
+    std::cerr << "AudioInstrumentMixer::allocateBuffers()" << std::endl;
+#endif
+
+    generateBuffers();
 
     releaseLock();
 }

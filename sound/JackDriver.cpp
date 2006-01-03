@@ -1117,6 +1117,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    dormantTime = dormantTime +
 		RealTime::frame2RealTime(m_bufferSize, m_sampleRate);
 	    if (dormantTime > RealTime(10, 0)) {
+		std::cerr << "JackDriver: dormantTime = " << dormantTime << ", resetting m_haveAsyncAudioEvent" << std::endl;
 		m_haveAsyncAudioEvent = false;
 	    }
 	}
@@ -1628,6 +1629,7 @@ JackDriver::stopTransport()
 {
     if (!m_client) return;
 
+    std::cerr << "JackDriver::stopTransport: resetting m_haveAsyncAudioEvent" << std::endl;
     m_haveAsyncAudioEvent = false;
 
 #ifdef DEBUG_JACK_TRANSPORT
@@ -1788,16 +1790,26 @@ JackDriver::restoreIfRestorable()
 }	
 
 void
+JackDriver::prepareAudio()
+{
+    if (!m_instrumentMixer) return;
+
+    // This is used when restarting clocks after repositioning, but
+    // when not actually playing (yet).  We need to do things like
+    // regenerating the processing buffers here.  prebufferAudio()
+    // also does all of this, but rather more besides.
+    
+    m_instrumentMixer->allocateBuffers();
+    m_instrumentMixer->resetAllPlugins(false);
+}
+
+void
 JackDriver::prebufferAudio()
 {
     if (!m_instrumentMixer) return;
 
-    //!!!??? experimental addition at the same time as we removed the
-    //call to m_jackDriver->stopTransport() from
-    //AlsaDriver::stopClocks().  We want this to happen when
-    //repositioning during playback, and stopTransport no longer
-    //happens then.  I suppose it could alternatively go in
-    //relocateTransportInternal?
+    // We want this to happen when repositioning during playback, and
+    // stopTransport no longer happens then, so we call it from here.
     // NB. Don't want to discard events here as this is called after
     // pushing events to the soft synth queues at startup
     m_instrumentMixer->resetAllPlugins(false);
@@ -1810,10 +1822,11 @@ JackDriver::prebufferAudio()
     RealTime sliceStart = getNextSliceStart(m_alsaDriver->getSequencerTime());
 
     m_fileReader->fillBuffers(sliceStart);
-    m_instrumentMixer->fillBuffers(sliceStart);
 
     if (m_bussMixer->getBussCount() > 0) {
-	m_bussMixer->fillBuffers(sliceStart);
+	m_bussMixer->fillBuffers(sliceStart); // also calls on m_instrumentMixer
+    } else {
+	m_instrumentMixer->fillBuffers(sliceStart);
     }
 }
 
@@ -1826,11 +1839,11 @@ JackDriver::flushAudio()
     std::cerr << "JackDriver::flushAudio" << std::endl;
 #endif
     
-    //!!! experimental to get async synth events agogo
+    // to get async synth events agogo:
+
     m_fileReader->fillBuffers(RealTime::zeroTime);
 
     if (m_bussMixer->getBussCount() > 0) {
-	m_instrumentMixer->fillBuffers(RealTime::zeroTime);
 	m_bussMixer->fillBuffers(RealTime::zeroTime);
     } else {
 	m_instrumentMixer->fillBuffers(RealTime::zeroTime);
@@ -2179,7 +2192,12 @@ void
 JackDriver::setPluginInstance(InstrumentId id, QString identifier,
 			      int position)
 {
-    if (m_instrumentMixer) m_instrumentMixer->setPlugin(id, position, identifier);
+    if (m_instrumentMixer) {
+	m_instrumentMixer->setPlugin(id, position, identifier);
+    }
+    if (!m_alsaDriver->isPlaying()) {
+	prebufferAudio(); // to ensure the plugin's ringbuffers are generated
+    }
 }
 
 void

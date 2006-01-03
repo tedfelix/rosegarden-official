@@ -570,8 +570,7 @@ AudioPluginDialog::slotPluginPortChanged(float value)
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     inst->getPort(control->getIndex())->value = value;
 
-    emit pluginPortChanged(m_containerId,
-			   m_index, control->getIndex(), value);
+    emit pluginPortChanged(m_containerId, m_index, control->getIndex());
 }
 
 void
@@ -584,7 +583,7 @@ AudioPluginDialog::slotPluginProgramChanged(const QString &value)
 	inst->setProgram("");
     } else {
 	inst->setProgram(qstrtostr(value));
-	emit pluginProgramChanged(m_containerId, m_index, value);
+	emit pluginProgramChanged(m_containerId, m_index);
     }
 }
 
@@ -813,11 +812,11 @@ AudioPluginDialog::slotPaste()
 	for (std::map<std::string, std::string>::const_iterator i =
 		 clipboard->m_configuration.begin();
 	     i != clipboard->m_configuration.end(); ++i) {
-	    emit pluginConfigurationChanged(m_containerId,
-					    m_index,
-					    false,
-					    strtoqstr(i->first),
-					    strtoqstr(i->second));
+	    emit changePluginConfiguration(m_containerId,
+					   m_index,
+					   false,
+					   strtoqstr(i->first),
+					   strtoqstr(i->second));
 	}
 
 	// and set the program

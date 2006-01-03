@@ -154,9 +154,10 @@ public:
     int tryAudioQueueLocks();
     int releaseAudioQueueLocks();
 
-    void prebufferAudio();
+    void prepareAudio(); // when repositioning etc
+    void prebufferAudio(); // when starting playback (incorporates prepareAudio)
     void flushAudio(); // when stopping
-    void kickAudio();
+    void kickAudio(); // for paranoia only
 
     // Because we don't want to do any lookups that might involve
     // locking etc from within the JACK process thread, we instead

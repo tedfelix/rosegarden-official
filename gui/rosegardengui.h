@@ -1010,15 +1010,6 @@ public slots:
      */
     void slotSetPointerPosition(Rosegarden::timeT t);
 
-    /*
-     * Ugh, another version - this is the one we can use safely
-     * when playing or stopped that actually moves the pointer
-     * through the Document interface.  This is probably the
-     * only version we need now but the whole pointer situation
-     * is so confused it'll take a while to clear it out.
-     */
-    void slotSetPointer(Rosegarden::timeT t);
-
     /**
      * Set the pointer position and start playing (from LoopRuler)
      */
@@ -1345,16 +1336,48 @@ public slots:
 
     void slotPluginSelected(Rosegarden::InstrumentId instrument,
 			    int index, int plugin);
+
+    /**
+     * An external GUI has requested a port change.
+     */
+    void slotChangePluginPort(Rosegarden::InstrumentId instrument,
+			      int index, int portIndex, float value);
+
+    /**
+     * Our internal GUI has made a port change -- the
+     * PluginPortInstance already contains the new value, but we need
+     * to inform the sequencer and update external GUIs.
+     */
     void slotPluginPortChanged(Rosegarden::InstrumentId instrument,
-			       int index, int portIndex, float value);
+			       int index, int portIndex);
+
+    /**
+     * An external GUI has requested a program change.
+     */
+    void slotChangePluginProgram(Rosegarden::InstrumentId instrument,
+				 int index, QString program);
+
+    /**
+     * Our internal GUI has made a program change -- the
+     * AudioPluginInstance already contains the new program, but we
+     * need to inform the sequencer, update external GUIs, and update
+     * the port values for the new program.
+     */
     void slotPluginProgramChanged(Rosegarden::InstrumentId instrument,
-				  int index, QString program);
+				  int index);
+
+    /**
+     * An external GUI has requested a configure call.  (This can only
+     * happen from an external GUI, we have no way to manage these
+     * internally.)
+     */
+    void slotChangePluginConfiguration(Rosegarden::InstrumentId, int index,
+				       bool global, QString key, QString value);
     void slotPluginDialogDestroyed(Rosegarden::InstrumentId instrument,
 				   int index);
     void slotPluginBypassed(Rosegarden::InstrumentId,
 			    int index, bool bypassed);
-    void slotPluginConfigurationChanged(Rosegarden::InstrumentId, int index,
-					bool global, QString key, QString value);
+
     void slotShowPluginGUI(Rosegarden::InstrumentId, int index);
     void slotStopPluginGUI(Rosegarden::InstrumentId, int index);
     void slotPluginGUIExited(Rosegarden::InstrumentId, int index);

@@ -157,10 +157,10 @@ public slots:
 
 signals:
     void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
-    void pluginPortChanged(Rosegarden::InstrumentId, int pluginIndex, int portIndex, float value);
-    void pluginProgramChanged(Rosegarden::InstrumentId, int pluginIndex, QString program);
-    void pluginConfigurationChanged(Rosegarden::InstrumentId, int pluginIndex,
-				    bool global, QString key, QString value);
+    void pluginPortChanged(Rosegarden::InstrumentId, int pluginIndex, int portIndex);
+    void pluginProgramChanged(Rosegarden::InstrumentId, int pluginIndex);
+    void changePluginConfiguration(Rosegarden::InstrumentId, int pluginIndex,
+				   bool global, QString key, QString value);
     void showPluginGUI(Rosegarden::InstrumentId, int pluginIndex);
     void stopPluginGUI(Rosegarden::InstrumentId, int pluginIndex);
 

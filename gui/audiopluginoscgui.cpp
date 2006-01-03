@@ -558,7 +558,7 @@ AudioPluginOSCGUIManager::dispatch()
 	    RG_DEBUG << "AudioPluginOSCGUIManager: setting port " << port
 		     << " to value " << value << endl;
 
-	    m_app->slotPluginPortChanged(instrument, position, port, value);
+	    m_app->slotChangePluginPort(instrument, position, port, value);
 
 	} else if (method == "program") {
 
@@ -584,7 +584,7 @@ AudioPluginOSCGUIManager::dispatch()
 	    QString programName = Rosegarden::StudioControl::getPluginProgram
 		(pluginInstance->getMappedId(), bank, program);
 
-	    m_app->slotPluginProgramChanged(instrument, position, programName);
+	    m_app->slotChangePluginProgram(instrument, position, programName);
 
 	} else if (method == "update") {
 
@@ -679,13 +679,13 @@ AudioPluginOSCGUIManager::dispatch()
 	    RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
 		     << ")" << endl;
 
-	    m_app->slotPluginConfigurationChanged(instrument, position,
+	    m_app->slotChangePluginConfiguration(instrument, position,
 #ifdef DSSI_GLOBAL_CONFIGURE_PREFIX
-						  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
+						 key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
 #else
-						  false,
+						 false,
 #endif
-						  key, value);
+						 key, value);
 
 	} else if (method == "midi") {
 

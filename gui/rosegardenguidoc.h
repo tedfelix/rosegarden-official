@@ -439,6 +439,7 @@ public slots:
     void slotAutoSave();
 
     void slotSetPointerPosition(Rosegarden::timeT);
+    void slotDragPointerToPosition(Rosegarden::timeT);
     void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
 
@@ -455,7 +456,8 @@ signals:
     void documentModified(bool);
 
     /**
-     * Emitted during playback, to suggest that views should track along
+     * Emitted during playback, to suggest that views should track along,
+     * as well as when pointer is moved via a click on the loop ruler.
      */
     void pointerPositionChanged(Rosegarden::timeT);
 

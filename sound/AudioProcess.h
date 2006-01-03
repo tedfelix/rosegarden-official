@@ -94,7 +94,8 @@ public:
     
     /**
      * Prebuffer.  This should be called only when the transport is
-     * not running.
+     * not running.  This also calls fillBuffers on the instrument
+     * mixer.
      */
     void fillBuffers(const RealTime &currentTime);
 
@@ -229,6 +230,13 @@ public:
      * not running. 
      */
     void fillBuffers(const RealTime &currentTime);
+    
+    /**
+     * Ensure plugins etc have enough buffers.  This is also done by
+     * fillBuffers and only needs to be called here if the extra work
+     * involved in fillBuffers is not desirable.
+     */
+    void allocateBuffers();
 
     /**
      * Empty and discard buffer contents.

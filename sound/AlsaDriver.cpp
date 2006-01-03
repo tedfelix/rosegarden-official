@@ -1772,7 +1772,7 @@ AlsaDriver::stopPlayback()
 
     punchOut();
 
-    stopClocks(); // Resets ALSA timer to zero, tells JACK driver to stop
+    stopClocks(); // Resets ALSA timer to zero
 
     clearAudioQueue();
 
@@ -3383,7 +3383,12 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
 	synthPlugin->sendEvent(t, ev);
 
-	if (now) m_jackDriver->setHaveAsyncAudioEvent();
+	if (now) {
+#ifdef DEBUG_ALSA
+	    std::cerr << "AlsaDriver::processSoftSynthEventOut: setting haveAsyncAudioEvent" << std::endl;
+#endif
+	    m_jackDriver->setHaveAsyncAudioEvent();
+	}
     }
 #endif
 }
@@ -3417,7 +3422,12 @@ AlsaDriver::startClocks()
 	// driver methods take and hold for themselves
 
 	if (m_needJackStart != NeedNoJackStart) {
-	    m_jackDriver->prebufferAudio();
+	    if (m_needJackStart == NeedJackStart ||
+		m_playing) {
+		m_jackDriver->prebufferAudio();
+	    } else {
+		m_jackDriver->prepareAudio();
+	    }
 	    bool rv;
 	    if (m_needJackStart == NeedJackReposition) {
 		rv = m_jackDriver->relocateTransport();
@@ -4024,8 +4034,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     if (m_jackDriver) {
 	if (haveNewAudio) {
 	    if (now) {
-		m_jackDriver->setHaveAsyncAudioEvent();
 		m_jackDriver->prebufferAudio();
+		m_jackDriver->setHaveAsyncAudioEvent();
 	    }
 	    if (m_queueRunning) {
 		m_jackDriver->kickAudio();

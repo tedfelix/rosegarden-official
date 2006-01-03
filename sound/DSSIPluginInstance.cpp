@@ -61,6 +61,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_sampleRate(sampleRate),
     m_latencyPort(0),
     m_run(false),
+    m_runSinceReset(false),
     m_bypassed(false),
     m_grouped(false)
 {
@@ -118,6 +119,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_sampleRate(sampleRate),
     m_latencyPort(0),
     m_run(false),
+    m_runSinceReset(false),
     m_bypassed(false),
     m_grouped(false)
 {
@@ -202,7 +204,7 @@ size_t
 DSSIPluginInstance::getLatency()
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
+//    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
 #endif
 
     if (m_latencyPort) {
@@ -218,15 +220,27 @@ DSSIPluginInstance::getLatency()
 void
 DSSIPluginInstance::silence()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::silence: m_run " << m_run << ", m_runSinceReset " << m_runSinceReset << std::endl;
+#endif
+
+    if (m_run && !m_runSinceReset) {
+	return;
+    }
     if (m_instanceHandle != 0) {
 	deactivate();
 	activate();
     }
+    m_runSinceReset = false;
 }
 
 void
 DSSIPluginInstance::discardEvents()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::discardEvents" << std::endl;
+#endif
+
     m_eventBuffer.reset();
 }
 
@@ -832,6 +846,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	    }
 	}
 	m_run = true;
+	m_runSinceReset = true;
 	if (needLock) pthread_mutex_unlock(&m_processLock);
 	return;
     }
@@ -948,6 +963,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 
     m_lastRunTime = blockTime;
     m_run = true;
+    m_runSinceReset = true;
 }
 
 void

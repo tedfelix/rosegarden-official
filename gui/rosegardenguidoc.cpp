@@ -1827,6 +1827,13 @@ RosegardenGUIDoc::slotSetPointerPosition(Rosegarden::timeT t)
 }
 
 void
+RosegardenGUIDoc::slotDragPointerToPosition(Rosegarden::timeT t)
+{
+    m_composition.setPosition(t);
+    emit pointerDraggedToPosition(t);
+}
+
+void
 RosegardenGUIDoc::setPlayPosition(Rosegarden::timeT t)
 {
     emit playPositionChanged(t);

@@ -1427,6 +1427,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    connect(m_doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
+            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
     connect(m_doc, SIGNAL(documentModified(bool)),
             this,   SLOT(slotDocumentModified(bool)));
 
@@ -4062,7 +4065,7 @@ void RosegardenGUIApp::slotTestStartupTester()
     m_startupTester = 0;
 
     // And preload this work
-    (void)NoteFontFactory::getFontNames(true);
+//!!!    (void)NoteFontFactory::getFontNames(true);
 }
 
 void RosegardenGUIApp::slotDebugDump()
@@ -6190,7 +6193,7 @@ RosegardenGUIApp::slotEditMarkers()
             SLOT(slotMarkerEditorClosed()));
 
     connect(m_markerEditor, SIGNAL(jumpToMarker(Rosegarden::timeT)),
-            this, SLOT(slotSetPointer(Rosegarden::timeT)));
+            m_doc, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     plugAccelerators(m_markerEditor, m_markerEditor->getAccelerators());
 
@@ -6289,19 +6292,19 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
     
     connect(dialog,
-	    SIGNAL(pluginPortChanged(Rosegarden::InstrumentId, int, int, float)),
+	    SIGNAL(pluginPortChanged(Rosegarden::InstrumentId, int, int)),
 	    this,
-	    SLOT(slotPluginPortChanged(Rosegarden::InstrumentId, int, int, float)));
+	    SLOT(slotPluginPortChanged(Rosegarden::InstrumentId, int, int)));
     
     connect(dialog,
-	    SIGNAL(pluginProgramChanged(Rosegarden::InstrumentId, int, QString)),
+	    SIGNAL(pluginProgramChanged(Rosegarden::InstrumentId, int)),
 	    this,
-	    SLOT(slotPluginProgramChanged(Rosegarden::InstrumentId, int, QString)));
+	    SLOT(slotPluginProgramChanged(Rosegarden::InstrumentId, int)));
     
     connect(dialog,
-	    SIGNAL(pluginConfigurationChanged(Rosegarden::InstrumentId, int, bool, QString, QString)),
+	    SIGNAL(changePluginConfiguration(Rosegarden::InstrumentId, int, bool, QString, QString)),
 	    this,
-	    SLOT(slotPluginConfigurationChanged(Rosegarden::InstrumentId, int, bool, QString, QString)));
+	    SLOT(slotChangePluginConfiguration(Rosegarden::InstrumentId, int, bool, QString, QString)));
     
     connect(dialog,
 	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
@@ -6495,10 +6498,58 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 }
 
 void
+RosegardenGUIApp::slotChangePluginPort(Rosegarden::InstrumentId instrumentId,
+				       int pluginIndex,
+				       int portIndex,
+				       float value)
+{
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginPort - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
+    
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
+    if (!inst) {
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginPort - "
+		 << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+	return;
+    }
+
+    Rosegarden::PluginPortInstance *port = inst->getPort(portIndex);
+    if (!port) {
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginPort - no port "
+		 << portIndex << endl;
+	return;
+    }
+
+    RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
+	     << "setting plugin port (" << inst->getMappedId()
+	     << ", " << portIndex << ") from " << port->value
+	     << " to " << value << endl;
+
+    port->value = value;
+
+    Rosegarden::StudioControl::setStudioPluginPort(inst->getMappedId(),
+						   portIndex, port->value);
+	    
+    m_doc->slotDocumentModified();
+
+    // This modification came from The Outside!
+    int key = (pluginIndex << 16) + instrumentId;
+    if (m_pluginDialogs[key]) {
+	m_pluginDialogs[key]->updatePluginPortControl(portIndex);
+    }
+}
+
+void
 RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
 					int pluginIndex,
-					int portIndex,
-					float value)
+					int portIndex)
 {
     Rosegarden::PluginContainer *container = 0;
 
@@ -6511,53 +6562,96 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
     }    
     
     Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
+    if (!inst) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
+		 << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+	return;
+    }
 
-    if (inst)
-    {
-        Rosegarden::StudioControl::
-            setStudioPluginPort(inst->getMappedId(),
-                                portIndex,
-                                value);
+    Rosegarden::PluginPortInstance *port = inst->getPort(portIndex);
+    if (!port) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - no port "
+		 << portIndex << endl;
+	return;
+    }
 
-	bool update = false;
-	Rosegarden::PluginPortInstance *port = inst->getPort(portIndex);
-	if (!port) {
-	    RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - no port " << portIndex
-		     << endl;
-	} else {
-	    if (fabs(port->value - value) > 1e-7) update = true;
-	    port->value = value;
-	}
-                                
-        RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
-                 << "setting plugin port ("
-		 << inst->getMappedId() << ", " << portIndex << ") to "
-                 << value << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
+	     << "setting plugin port (" << inst->getMappedId()
+	     << ", " << portIndex << ") to " << port->value << endl;
 
-        // Set modified
-        m_doc->slotDocumentModified();
+    Rosegarden::StudioControl::setStudioPluginPort(inst->getMappedId(),
+						   portIndex, port->value);
+	    
+    m_doc->slotDocumentModified();
 
-	if (update) {
-	    // This modification came from The Outside!
-	    int key = (pluginIndex << 16) + instrumentId;
-	    if (m_pluginDialogs[key]) {
-		m_pluginDialogs[key]->updatePluginPortControl(portIndex);
-	    }
 #ifdef HAVE_LIBLO
-	} else {
-	    // This modification came from our own plugin dialog
-	    if (m_pluginGUIManager) m_pluginGUIManager->updatePort(instrumentId,
-								   pluginIndex,
-								   portIndex);
+    // This modification came from our own plugin dialog, so update
+    // any external GUIs
+    if (m_pluginGUIManager) {
+	m_pluginGUIManager->updatePort(instrumentId,
+				       pluginIndex,
+				       portIndex);
+    }
 #endif
-	}
+}
+
+
+void
+RosegardenGUIApp::slotChangePluginProgram(Rosegarden::InstrumentId instrumentId,
+					  int pluginIndex,
+					  QString program)
+{
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginProgram - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
+    
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
+    if (!inst) {
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginProgram - "
+		 << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+	return;
+    }
+
+    RG_DEBUG << "RosegardenGUIApp::slotChangePluginProgram - "
+	     << "setting plugin program ("
+	     << inst->getMappedId() << ") from " << inst->getProgram()
+	     << " to " << program << endl;
+    
+    inst->setProgram(qstrtostr(program));
+
+    Rosegarden::StudioControl::
+	setStudioObjectProperty(inst->getMappedId(),
+				Rosegarden::MappedPluginSlot::Program,
+				program);
+
+    Rosegarden::PortInstanceIterator portIt;
+    
+    for (portIt = inst->begin();
+	 portIt != inst->end(); ++portIt) {
+	float value = Rosegarden::StudioControl::getStudioPluginPort
+	    (inst->getMappedId(),
+	     (*portIt)->number);
+	(*portIt)->value = value;
+    }
+    
+    // Set modified
+    m_doc->slotDocumentModified();
+
+    int key = (pluginIndex << 16) + instrumentId;
+    if (m_pluginDialogs[key]) {
+	m_pluginDialogs[key]->updatePluginProgramControl();
     }
 }
 
 void
 RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId,
-					   int pluginIndex,
-					   QString program)
+					   int pluginIndex)
 {
     Rosegarden::PluginContainer *container = 0;
 
@@ -6570,42 +6664,125 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
     }    
     
     Rosegarden::AudioPluginInstance *inst = container->getPlugin(pluginIndex);
+    if (!inst) {
+	RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
+		 << "no plugin at index " << pluginIndex << " on " << instrumentId << endl;
+	return;
+    }
 
-    if (inst)
-    {
-	inst->setProgram(qstrtostr(program));
+    QString program = strtoqstr(inst->getProgram());
 
-        Rosegarden::StudioControl::
-            setStudioObjectProperty(inst->getMappedId(),
-				    Rosegarden::MappedPluginSlot::Program,
-				    program);
-
-	Rosegarden::PortInstanceIterator portIt;
+    RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
+	     << "setting plugin program ("
+	     << inst->getMappedId() << ") to " << program << endl;
     
-	for (portIt = inst->begin();
-	     portIt != inst->end(); ++portIt) {
-	    float value = Rosegarden::StudioControl::getStudioPluginPort
-		(inst->getMappedId(),
-		 (*portIt)->number);
-	    (*portIt)->value = value;
+    Rosegarden::StudioControl::
+	setStudioObjectProperty(inst->getMappedId(),
+				Rosegarden::MappedPluginSlot::Program,
+				program);
+
+    Rosegarden::PortInstanceIterator portIt;
+    
+    for (portIt = inst->begin();
+	 portIt != inst->end(); ++portIt) {
+	float value = Rosegarden::StudioControl::getStudioPluginPort
+	    (inst->getMappedId(),
+	     (*portIt)->number);
+	(*portIt)->value = value;
+    }
+    
+    // Set modified
+    m_doc->slotDocumentModified();
+
+#ifdef HAVE_LIBLO
+    if (m_pluginGUIManager) m_pluginGUIManager->updateProgram(instrumentId,
+							      pluginIndex);
+#endif
+}
+
+void
+RosegardenGUIApp::slotChangePluginConfiguration(Rosegarden::InstrumentId instrumentId,
+						int index,
+						bool global,
+						QString key,
+						QString value)
+{
+    Rosegarden::PluginContainer *container = 0;
+
+    container = m_doc->getStudio().getInstrumentById(instrumentId);
+    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
+    if (!container) {
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginConfiguration - "
+		 << "no instrument or buss of id " << instrumentId << endl;
+	return;
+    }    
+    
+    Rosegarden::AudioPluginInstance *inst = container->getPlugin(index);
+
+    if (global && inst) {
+
+	// Set the same configuration on other plugins in the same
+	// instance group
+
+	Rosegarden::AudioPlugin *pl =
+	    m_pluginManager->getPluginByIdentifier(strtoqstr(inst->getIdentifier()));
+
+	if (pl && pl->isGrouped()) {
+
+	    Rosegarden::InstrumentList il =
+		m_doc->getStudio().getAllInstruments();
+
+	    for (Rosegarden::InstrumentList::iterator i = il.begin();
+		 i != il.end(); ++i) {
+
+		for (Rosegarden::PluginInstanceIterator pli =
+			 (*i)->beginPlugins();
+		     pli != (*i)->endPlugins(); ++pli) {
+
+		    if (*pli && (*pli)->isAssigned() &&
+			(*pli)->getIdentifier() == inst->getIdentifier() &&
+			(*pli) != inst) {
+
+			slotChangePluginConfiguration
+			    ((*i)->getId(), (*pli)->getPosition(),
+			     false, key, value);
+
+#ifdef HAVE_LIBLO
+			m_pluginGUIManager->updateConfiguration
+			    ((*i)->getId(), (*pli)->getPosition(), key);
+#endif
+		    }
+		}
+	    }
 	}
-    
-        RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
-                 << "setting plugin program ("
-		 << inst->getMappedId() << ") to "
-                 << program << endl;
+    }
+
+    if (inst) {
+
+	inst->setConfigurationValue(qstrtostr(key), qstrtostr(value));
+
+	Rosegarden::MappedObjectPropertyList config;
+	for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
+		 i = inst->getConfiguration().begin();
+	     i != inst->getConfiguration().end(); ++i) {
+	    config.push_back(strtoqstr(i->first));
+	    config.push_back(strtoqstr(i->second));
+	}
+
+	RG_DEBUG << "RosegardenGUIApp::slotChangePluginConfiguration: setting new config on mapped id " << inst->getMappedId() << endl;
+
+	Rosegarden::StudioControl::setStudioObjectPropertyList
+	    (inst->getMappedId(),
+	     Rosegarden::MappedPluginSlot::Configuration,
+	     config);
 
         // Set modified
         m_doc->slotDocumentModified();
 
-	int key = (pluginIndex << 16) + instrumentId;
+	int key = (index << 16) + instrumentId;
 	if (m_pluginDialogs[key]) {
-	    m_pluginDialogs[key]->updatePluginProgramControl();
+	    m_pluginDialogs[key]->updatePluginProgramList();
 	}
-#ifdef HAVE_LIBLO
-	if (m_pluginGUIManager) m_pluginGUIManager->updateProgram(instrumentId,
-								  pluginIndex);
-#endif
     }
 }
 
@@ -6649,92 +6826,6 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
     }
 
     emit pluginBypassed(instrumentId, pluginIndex, bp);
-}
-
-void
-RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instrumentId,
-						 int index,
-						 bool global,
-						 QString key,
-						 QString value)
-{
-    Rosegarden::PluginContainer *container = 0;
-
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container) container = m_doc->getStudio().getBussById(instrumentId);
-    if (!container) {
-	RG_DEBUG << "RosegardenGUIApp::slotPluginConfigurationChanged - "
-		 << "no instrument or buss of id " << instrumentId << endl;
-	return;
-    }    
-    
-    Rosegarden::AudioPluginInstance *inst = container->getPlugin(index);
-
-    if (global && inst) {
-
-	// Set the same configuration on other plugins in the same
-	// instance group
-
-	Rosegarden::AudioPlugin *pl =
-	    m_pluginManager->getPluginByIdentifier(strtoqstr(inst->getIdentifier()));
-
-	if (pl && pl->isGrouped()) {
-
-	    Rosegarden::InstrumentList il =
-		m_doc->getStudio().getAllInstruments();
-
-	    for (Rosegarden::InstrumentList::iterator i = il.begin();
-		 i != il.end(); ++i) {
-
-		for (Rosegarden::PluginInstanceIterator pli =
-			 (*i)->beginPlugins();
-		     pli != (*i)->endPlugins(); ++pli) {
-
-		    if (*pli && (*pli)->isAssigned() &&
-			(*pli)->getIdentifier() == inst->getIdentifier() &&
-			(*pli) != inst) {
-
-			slotPluginConfigurationChanged
-			    ((*i)->getId(), (*pli)->getPosition(),
-			     false, key, value);
-
-#ifdef HAVE_LIBLO
-			m_pluginGUIManager->updateConfiguration
-			    ((*i)->getId(), (*pli)->getPosition(), key);
-#endif
-		    }
-		}
-	    }
-	}
-    }
-
-    if (inst) {
-
-	inst->setConfigurationValue(qstrtostr(key), qstrtostr(value));
-
-	Rosegarden::MappedObjectPropertyList config;
-	for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
-		 i = inst->getConfiguration().begin();
-	     i != inst->getConfiguration().end(); ++i) {
-	    config.push_back(strtoqstr(i->first));
-	    config.push_back(strtoqstr(i->second));
-	}
-
-	RG_DEBUG << "RosegardenGUIApp::slotPluginConfigurationChanged: setting new config on mapped id " << inst->getMappedId() << endl;
-
-	Rosegarden::StudioControl::setStudioObjectPropertyList
-	    (inst->getMappedId(),
-	     Rosegarden::MappedPluginSlot::Configuration,
-	     config);
-
-        // Set modified
-        m_doc->slotDocumentModified();
-
-	int key = (index << 16) + instrumentId;
-	if (m_pluginDialogs[key]) {
-	    m_pluginDialogs[key]->updatePluginProgramList();
-	}
-    }
 }
 
 void
@@ -6896,13 +6987,6 @@ RosegardenGUIApp::slotPanic()
 
     }
 }
-
-void
-RosegardenGUIApp::slotSetPointer(Rosegarden::timeT t)
-{
-    m_doc->slotSetPointerPosition(t);
-}
-
 
 void
 RosegardenGUIApp::slotPopulateTrackInstrumentPopup()
