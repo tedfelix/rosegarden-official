@@ -4,7 +4,7 @@
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2005
+    This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
