@@ -148,6 +148,11 @@ public:
     void openFile(QString filePath, ImportType type);
 
     /**
+     * decode and open a project file
+     */
+    void importProject(QString filePath);
+
+    /**
      * open a URL
      */
     virtual void openURL(QString url);

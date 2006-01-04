@@ -1503,6 +1503,11 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
 {
     RG_DEBUG << "RosegardenGUIApp::openFile " << filePath << endl;
 
+    if (type == ImportCheckType && filePath.endsWith(".rgp")) {
+	importProject(filePath);
+	return;
+    }
+
     RosegardenGUIDoc *doc = createDocument(filePath, type);
     if (doc) {
         setDocument(doc);
@@ -3302,25 +3307,32 @@ void RosegardenGUIApp::slotImportProject()
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
 
+    importProject(tmpfile);
+
+    KIO::NetAccess::removeTempFile(tmpfile);
+}
+
+void RosegardenGUIApp::importProject(QString filePath)
+{
     KProcess *proc = new KProcess;
     *proc << "rosegarden-project-package";
     *proc << "--unpack";
-    *proc << tmpfile;
+    *proc << filePath;
 
+    KStartupLogo::hideIfStillThere();
     proc->start(KProcess::Block, KProcess::All);
 
     if (!proc->normalExit() || proc->exitStatus()) {
-	KMessageBox::sorry(this, i18n("Failed to import project file \"%1\"").arg(tmpfile));
+	CurrentProgressDialog::freeze();
+	KMessageBox::sorry(this, i18n("Failed to import project file \"%1\"").arg(filePath));
 	CurrentProgressDialog::thaw();
-	KIO::NetAccess::removeTempFile( tmpfile );
 	delete proc;
 	return;
     }
 
-    KIO::NetAccess::removeTempFile( tmpfile );
     delete proc;
 
-    QString rgFile = tmpfile;
+    QString rgFile = filePath;
     rgFile.replace(QRegExp(".rg.rgp$"), ".rg");
     rgFile.replace(QRegExp(".rgp$"), ".rg");
     openURL(rgFile);
@@ -4350,7 +4362,6 @@ void RosegardenGUIApp::slotExportProject()
     *proc << fileName;
 
     proc->start(KProcess::Block, KProcess::All);
-    QFile::remove(rgFile);
 
     if (!proc->normalExit() || proc->exitStatus()) {
 	KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"").arg(fileName));
