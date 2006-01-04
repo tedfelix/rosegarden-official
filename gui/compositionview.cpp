@@ -1475,7 +1475,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
       m_segmentsDrawBuffer(visibleWidth(), visibleHeight()),
       m_artifactsDrawBuffer(visibleWidth(), visibleHeight()),
       m_segmentsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
-      m_artifactsDrawBufferNeedsRefresh(true),
+      m_artifactsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
       m_lastBufferRefreshX(0),
       m_lastBufferRefreshY(0),
       m_lastPointerRefreshX(0)
@@ -1829,10 +1829,10 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
     QMemArray<QRect> rects = e->region().rects();
-    for (int i = 0; i < rects.size(); ++i)
-        viewportPaintRect(rects[i]);
 
-    m_artifactsDrawBufferNeedsRefresh = false;
+    for (int i = 0; i < rects.size(); ++i) {
+        viewportPaintRect(rects[i]);
+    }
 }
 
 void CompositionView::viewportPaintRect(QRect r)
@@ -1844,26 +1844,30 @@ void CompositionView::viewportPaintRect(QRect r)
 
 //     RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
 //              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
-//              << " - refresh " << m_segmentsDrawBufferRefresh << endl;
+//              << " - refresh " << m_segmentsDrawBufferRefresh << " artrefresh " << m_artifactsDrawBufferRefresh << endl;
 
 
     bool scroll = false;
     bool changed = checkScrollAndRefreshDrawBuffer(r, scroll);
 
-    if (changed || m_artifactsDrawBufferNeedsRefresh) {
+    if (changed || m_artifactsDrawBufferRefresh.isValid()) {
 
-	QRect copyRect(r); // r was modified by checkScrollAndRefreshDrawBuffer
+	// r was modified by checkScrollAndRefreshDrawBuffer
+	QRect copyRect(r | m_artifactsDrawBufferRefresh);
 	copyRect.moveBy(-contentsX(), -contentsY());
+
+//	RG_DEBUG << "copying from segment to artifacts buffer: " << copyRect << endl;
 
 	bitBlt(&m_artifactsDrawBuffer,
 	       copyRect.x(), copyRect.y(),
 	       &m_segmentsDrawBuffer,
 	       copyRect.x(), copyRect.y(), copyRect.width(), copyRect.height());
-	m_artifactsDrawBufferNeedsRefresh = true;
+	m_artifactsDrawBufferRefresh |= r;
     }
 
-    if (m_artifactsDrawBufferNeedsRefresh) {
-	refreshArtifactsDrawBuffer(r);
+    if (m_artifactsDrawBufferRefresh.isValid()) {
+	refreshArtifactsDrawBuffer(m_artifactsDrawBufferRefresh);
+	m_artifactsDrawBufferRefresh = QRect();
     }
 
     if (scroll) {
@@ -1890,12 +1894,15 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
     bool all = false;
     QRect refreshRect = m_segmentsDrawBufferRefresh;
      
-    int w = m_segmentsDrawBuffer.width(), h = m_segmentsDrawBuffer.height();
+    int w = visibleWidth(), h = visibleHeight();
     int cx = contentsX(), cy = contentsY();
 
     scroll = (cx != m_lastBufferRefreshX || cy != m_lastBufferRefreshY);
 
     if (scroll) {
+
+//	RG_DEBUG << "checkScrollAndRefreshDrawBuffer: scrolling by ("
+//		 << cx - m_lastBufferRefreshX << "," << cy - m_lastBufferRefreshY << ")" << endl;
 
 	if (refreshRect.isValid()) {
 
@@ -2668,7 +2675,6 @@ void CompositionView::setPointerPos(int pos)
 
     m_pointerPos = pos;
     getModel()->setPointerPos(pos);
-    slotArtifactsDrawBufferNeedsRefresh();
 
     // interesting -- isAutoScrolling() never seems to return true?
 //     RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;
@@ -2676,7 +2682,7 @@ void CompositionView::setPointerPos(int pos)
     if (contentsX() != m_lastPointerRefreshX) {
 	m_lastPointerRefreshX = contentsX();
 	// We'll need to shift the whole canvas anyway, so
-	updateContents();
+	slotArtifactsDrawBufferNeedsRefresh();
 	return;
     }
 
@@ -2684,18 +2690,21 @@ void CompositionView::setPointerPos(int pos)
 
     if (deltaW <= m_pointerPen.width() * 2) { // use one rect instead of two separate ones
 
-	QRect updateRect(std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
-			 deltaW + m_pointerPen.width() * 2, contentsHeight());
+	QRect updateRect
+	    (std::min(m_pointerPos, oldPos) - m_pointerPen.width(), 0,
+	     deltaW + m_pointerPen.width() * 2, contentsHeight());
 
-        updateContents(updateRect);
+	slotArtifactsDrawBufferNeedsRefresh(updateRect);
 
     } else {
 
-        updateContents(QRect(m_pointerPos - m_pointerPen.width(), 0,
-                             m_pointerPen.width() * 2, contentsHeight()));
+	slotArtifactsDrawBufferNeedsRefresh
+	    (QRect(m_pointerPos - m_pointerPen.width(), 0,
+		   m_pointerPen.width() * 2, contentsHeight()));
 
-        updateContents(QRect(oldPos - m_pointerPen.width(), 0,
-                             m_pointerPen.width() * 2, contentsHeight()));
+	slotArtifactsDrawBufferNeedsRefresh
+	    (QRect(oldPos - m_pointerPen.width(), 0,
+		   m_pointerPen.width() * 2, contentsHeight()));
     }
 }
 

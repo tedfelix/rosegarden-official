@@ -595,18 +595,26 @@ protected slots:
     }
 
     void slotArtifactsDrawBufferNeedsRefresh() {
-	m_artifactsDrawBufferNeedsRefresh = true;
+	m_artifactsDrawBufferRefresh = 
+	    QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
         updateContents();
     }
 
+    void slotArtifactsDrawBufferNeedsRefresh(QRect r) {
+	m_artifactsDrawBufferRefresh |=
+	    (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
+	     & r);
+        updateContents(r);
+    }
+
     void slotAllDrawBuffersNeedRefresh() {
-	m_artifactsDrawBufferNeedsRefresh = true;
 	slotSegmentsDrawBufferNeedsRefresh();
+	slotArtifactsDrawBufferNeedsRefresh();
     }
 
     void slotAllDrawBuffersNeedRefresh(QRect r) {
-	m_artifactsDrawBufferNeedsRefresh = true;
 	slotSegmentsDrawBufferNeedsRefresh(r);
+	slotArtifactsDrawBufferNeedsRefresh(r);
     }
 
 protected:         
@@ -652,7 +660,7 @@ protected:
     QPixmap      m_segmentsDrawBuffer;
     QPixmap      m_artifactsDrawBuffer;
     QRect        m_segmentsDrawBufferRefresh;
-    bool         m_artifactsDrawBufferNeedsRefresh;
+    QRect        m_artifactsDrawBufferRefresh;
     int          m_lastBufferRefreshX;
     int          m_lastBufferRefreshY;
     int          m_lastPointerRefreshX;
