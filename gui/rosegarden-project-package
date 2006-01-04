@@ -87,6 +87,8 @@ sub conftest {
     my @required = ();
     system "$kdialog -v >/dev/null" and push @required, "kdialog";
     system "flac --help >/dev/null" and push @required, "flac";
+    # sndfile-convert --help always returns 1
+    system "which sndfile-convert >/dev/null" and push @required, "sndfile-convert";
 #    system "oggenc -h >/dev/null 2>&1" and push @required, "oggenc";
 #    system "oggdec -h >/dev/null 2>&1" and push @required, "oggdec";
     system "dcop --help >/dev/null" and push @required, "dcop";
@@ -99,6 +101,7 @@ sub canonicalise {
     $p =~ s,^~/,$ENV{"HOME"}/,;
     $p =~ s,^~$,$ENV{"HOME"},;
     $p =~ s,^([^/]),$b/$1,;
+    $p =~ s,/./,/,g;
     $p =~ s,/$,,;
     return $p;
 }
@@ -115,12 +118,20 @@ sub relativise {
 sub name {
     my $rgFile = shift;
     my $n = shift;
-    if ($n =~ m,^RG-AUDIO-\d+\.wav$,i or
-	$n =~ m,/RG-AUDIO-\d+\.wav$,i) {
-	my $base = basename $rgFile;
-	$base =~ s/\.rg$//;
-	$n =~ s,RG-AUDIO-(\d+)\.wav$,$base-rg-$1.wav,;
+    my $base = basename $rgFile;
+    $base =~ s/\.rg$//i;
+
+    if ($n =~ m,^RG-AUDIO-\d+\.wav(.pk)?$,i or
+	$n =~ m,/RG-AUDIO-\d+\.wav(.pk)?$,i) {
+
+	$n =~ s,RG-AUDIO-(\d+)\.wav,$base-rg-$1.wav,;
+
+    } elsif ($n =~ m,^rg-[0-9-]+.wav(.pk)?$, or
+	     $n =~ m,/rg-[0-9-]+.wav(.pk)?$,) {
+
+	$n =~ s,rg-([0-9-]+).wav,$base-rg-$1.wav,;
     }
+
     return $n;
 }
 
@@ -176,9 +187,21 @@ sub convert {
     system qq{mkdir -p "$d"} and die "Failed to create directory $d: $!";
     print "Convert type is " . convertType($source) . "\n";
     if (convertType($source) eq 'flac') {
-	print "Running flac -o $target $source\n";
-	system qq{flac -s -o "$target.rgp.flac" "$source"} and
-	  die "Failed to convert $source to $target.rgp.flac"; # warn via dialog & recover
+	print "Running flac -o $target.rgp.flac $source\n";
+	system qq{flac -s -o "$target.rgp.flac" "$source"} and do {
+	    # Conversion failed.  First let's assume that's because the
+	    # input is a type of WAV file flac doesn't like.
+	    system qq{sndfile-convert -pcm24 "$source" "$target.rgp.wav"} and do {
+		die "Failed to convert $source to PCM-24 intermediate file: $!";
+	    };
+	    system qq{flac -s -o "$target.rgp.flac" "$target.rgp.wav"} and do {
+		# OK, that didn't help.
+		system qq{rm -f "$target.rgp.wav"};
+		die "Failed to convert PCM-24 intermediate file $target.rgp.wav to $target.rgp.flac: $!"; # warn via dialog & recover
+	    };
+	    # Looks good, remove intermediate file
+	    system qq{rm -f "$target.rgp.wav"};
+	};
     } elsif (convertType($source) eq 'ogg') {
 	print "Running oggenc -o $target $source\n";
 	system qq{oggenc -o "$target.rgp.ogg" "$source"} and
@@ -204,8 +227,11 @@ sub rgPack {
     my $rgFile = shift;
     my $projectFile = shift;
 
+    $rgFile = canonicalise `pwd`, $rgFile;
+    $projectFile = canonicalise `pwd`, $projectFile;
+
     if (-f $projectFile) {
-	if (system qq{$kdialog --warningyesno "Project file \"`pwd`/$projectFile\" already exists.  Overwrite it?"}) {
+	if (system qq{$kdialog --warningyesno "Project file \"$projectFile\" already exists.  Overwrite it?"}) {
 	    die "Not overwriting existing project file $projectFile";
 	}
     }
@@ -415,18 +441,20 @@ sub rgPack {
     }
 
     foreach my $origSourceFile (@sourceFiles) {
-	my $sourceRelative = relativise $projectDir, $origSourceFile;
+	my $sourceCanonical = canonicalise $projectDir, $origSourceFile;
+	my $sourceRelative = relativise $projectDir, $sourceCanonical;
 	my $renamedRelative = name $rgFile, $sourceRelative;
 	if ($sourceRelative =~ m,^/,) {
 	    $renamedRelative = basename $renamedRelative;
 	}
 	my $sourceFile = canonicalise $projectDir, $sourceRelative;
 	my $targetFile = canonicalise($targetDir . "/" . $newProjectDir, $renamedRelative);
+	print "first guess: $sourceFile -> $targetFile (renamedRelative is $renamedRelative)\n";
 	my $count = 1;
 	while (-f $targetFile or -d $targetFile) {
 	    print "$targetFile exists... ";
-	    if ($renamedRelative =~ m,.([^.]+)$,) {
-		$renamedRelative =~ s,^(.*).([^.]+)$,$1_$count.$2,;
+	    if ($renamedRelative =~ m,\.([^.]+)$,) {
+		$renamedRelative =~ s,^(.*)\.([^.]+)$,$1_$count.$2,;
 	    } else {
 		$renamedRelative = $renamedRelative . "_$count";
 	    }
@@ -440,7 +468,7 @@ sub rgPack {
 	} else {
 	    `dcop "$dcop" setLabel "Including $renamedRelative..."`;
 	}	
-	$fileMap{$sourceRelative} = $renamedRelative;
+	$fileMap{$origSourceFile} = $renamedRelative;
 	convert $sourceFile, $targetFile;
 	$contribCount += contrib $sourceFile;
 	my $progress = int(10.0 + $contribCount * 82.0 / $totalContrib);
@@ -520,6 +548,9 @@ sub rgPack {
 
     sleep 1;
 
+    my $completeProject = canonicalise $targetDir, "../$baseProject";
+    system qq{$kdialog --msgbox "Packaging complete."};
+
     `dcop "$dcop" close`;
 
     return 1;
@@ -529,6 +560,9 @@ sub rgUnpack {
 
     my $rgFile = shift;
     my $projectFile = shift;
+
+    $rgFile = canonicalise `pwd`, $rgFile;
+    $projectFile = canonicalise `pwd`, $projectFile;
 
     $rgFile =~ /.rg$/i or $rgFile = "$rgFile.rg";
 
@@ -688,7 +722,7 @@ if (@required) {
     if ($conftest) {
 	exit 1;
     } else {
-	die "Configuration requirements not met";
+	die "Configuration requirements not met\nThe following helper applications were not found: " . join(', ', @required);
     }
 }
 
