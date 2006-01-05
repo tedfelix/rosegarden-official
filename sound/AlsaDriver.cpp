@@ -1281,9 +1281,16 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
     // AlsaDriver::generatePortList above) to pick out the relevant parts
     // of the requested string.
     
-    int client = 0;
+    int client = -1;
     int colon = idealConnection.find(":");
     if (colon >= 0) client = idealConnection.left(colon).toInt();
+
+    int portNo = -1;
+    if (client > 0) {
+	QString remainder = idealConnection.mid(colon + 1);
+	int space = remainder.find(" ");
+	if (space >= 0) portNo = remainder.left(space).toInt();
+    }
 
     int firstSpace = idealConnection.find(" ");
     int endOfText  = idealConnection.find(QRegExp("[^\\w ]"), firstSpace);
@@ -1295,46 +1302,82 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 	text = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
     }
 
-    for (int testName = 1; testName >= 0; --testName) {
+    for (int testUsed = 1; testUsed >= 0; --testUsed) {
 
-	for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+	for (int testNumbers = 1; testNumbers >= 0; --testNumbers) {
 
-	    AlsaPortDescription *port = m_alsaPorts[i];
+	    for (int testName = 1; testName >= 0; --testName) {
 
-	    if (client > 0 && (port->m_client / 64 != client / 64)) continue;
-	    
-	    if (testName && text != "" &&
-		!QString(port->m_name.c_str()).contains(text)) continue;
-	    
-	    bool used = false;
-	    for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
-		 dpmi != m_devicePortMap.end(); ++dpmi) {
-		if (dpmi->second.first  == port->m_client &&
-		    dpmi->second.second == port->m_port) {
-		    used = true;
-		    break;
-		}
-	    }
-	    if (used) continue;
+		int fitness =
+		    (testName << 3) + 
+		    (testNumbers << 2) +
+		    (testUsed << 1) + 1;
 
-	    // OK, this one will do
-
-	    audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
-			 << port->m_name << " available" << std::endl;
-
-	    m_devicePortMap[id] = ClientPortPair(port->m_client, port->m_port);
-
-	    for (unsigned int i = 0; i < m_devices.size(); ++i) {
-
-		if (m_devices[i]->getId() == id) {
-		    setConnectionToDevice(*m_devices[i], port->m_name, m_devicePortMap[id]);
+		for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
 		    
-		    // in this case we don't request a device resync,
-		    // because this is only invoked at times such as
-		    // file load when the GUI is well aware that the
-		    // whole situation is in upheaval anyway
+		    AlsaPortDescription *port = m_alsaPorts[i];
 		    
-		    return;
+		    if (client > 0) {
+			
+			if (port->m_client / 64 != client / 64) continue;
+			
+			if (testNumbers) {
+			    // We always check the client class (above).
+			    // But we also prefer to have something in
+			    // common with client or port number, at least
+			    // for ports that aren't used elsewhere
+			    // already.  We don't check both because the
+			    // chances are the entire string would already
+			    // have matched if both figures did; instead
+			    // we check the port if it's > 0 (handy for
+			    // e.g. matching the MIDI synth port on a
+			    // multi-port soundcard) and the client
+			    // otherwise.
+			    if (portNo > 0) {
+				if (port->m_port != portNo) continue;
+			    } else {
+				if (port->m_client != client) continue;
+			    }
+			}
+		    }
+		    
+		    if (testName && text != "" &&
+			!QString(port->m_name.c_str()).contains(text)) continue;
+		    
+		    if (testUsed) {
+			bool used = false;
+			for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
+			     dpmi != m_devicePortMap.end(); ++dpmi) {
+			    if (dpmi->second.first  == port->m_client &&
+				dpmi->second.second == port->m_port) {
+				used = true;
+				break;
+			    }
+			}
+			if (used) continue;
+		    }
+		    
+		    // OK, this one will do
+		    
+		    audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
+			  << port->m_name << " available with fitness "
+			  << quality << std::endl;
+		    
+		    m_devicePortMap[id] = ClientPortPair(port->m_client, port->m_port);
+		    
+		    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+			
+			if (m_devices[i]->getId() == id) {
+			    setConnectionToDevice(*m_devices[i], port->m_name, m_devicePortMap[id]);
+			    
+			    // in this case we don't request a device resync,
+			    // because this is only invoked at times such as
+			    // file load when the GUI is well aware that the
+			    // whole situation is in upheaval anyway
+			    
+			    return;
+			}
+		    }
 		}
 	    }
 	}
@@ -3424,8 +3467,10 @@ AlsaDriver::startClocks()
 	if (m_needJackStart != NeedNoJackStart) {
 	    if (m_needJackStart == NeedJackStart ||
 		m_playing) {
+		std::cerr << "AlsaDriver::startClocks: playing, prebuffer audio" << std::endl;
 		m_jackDriver->prebufferAudio();
 	    } else {
+		std::cerr << "AlsaDriver::startClocks: prepare audio only" << std::endl;
 		m_jackDriver->prepareAudio();
 	    }
 	    bool rv;
