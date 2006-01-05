@@ -714,6 +714,10 @@ AudioManagerDialog::slotRemove()
     }
     emit deleteSegments(selection);
 
+    if (m_doc->getAudioFileManager().wasAudioFileRecorded(audioFile->getId())) {
+	m_doc->addOrphanedAudioFile(strtoqstr(audioFile->getFilename()));
+    }
+
     m_doc->getAudioFileManager().removeFile(id);
 
     // tell the sequencer
@@ -863,6 +867,17 @@ AudioManagerDialog::slotRemoveAll()
     // delete segments
     emit deleteSegments(selection);
 
+    for (std::vector<AudioFile*>::const_iterator
+	     aIt = m_doc->getAudioFileManager().begin();
+         aIt != m_doc->getAudioFileManager().end(); ++aIt)
+    {
+	if (m_doc->getAudioFileManager().wasAudioFileRecorded((*aIt)->getId())) {
+	    m_doc->addOrphanedAudioFile(strtoqstr((*aIt)->getFilename()));
+	}
+    }
+
+    m_doc->getAudioFileManager().clear();
+
     // and now the audio files
     emit deleteAllAudioFiles();
 
@@ -903,8 +918,15 @@ AudioManagerDialog::slotRemoveAllUnused()
     // Delete the audio files from the AFM
     //
     for (std::vector<AudioFileId>::iterator dIt = toDelete.begin();
-            dIt != toDelete.end(); ++dIt)
-    {
+            dIt != toDelete.end(); ++dIt) {
+
+	if (m_doc->getAudioFileManager().wasAudioFileRecorded(*dIt)) {
+	    AudioFile *file = m_doc->getAudioFileManager().getAudioFile(*dIt);
+	    if (file) {
+		m_doc->addOrphanedAudioFile(strtoqstr(file->getFilename()));
+	    }
+	}
+
         m_doc->getAudioFileManager().removeFile(*dIt);
         emit deleteAudioFile(*dIt);
     }
@@ -914,28 +936,14 @@ AudioManagerDialog::slotRemoveAllUnused()
     slotPopulateFileList();
 }
 
-class UnusedAudioSelectionDialog : public KDialogBase
-{
-public:
-    UnusedAudioSelectionDialog(QWidget *, AudioFileManager *, std::vector<AudioFileId>);
-    
-    std::vector<QString> getSelectedAudioFileNames() const;
-
-protected:
-    AudioFileManager *m_mgr;
-    std::vector<AudioFileId> m_ids;
-    QListView *m_listView;
-};
-
 UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
-						       AudioFileManager *mgr,
-						       std::vector<AudioFileId> ids) :
-    KDialogBase(parent, 0, true, i18n("Select Unused Audio Files"), Ok | Cancel),
-    m_mgr(mgr),
-    m_ids(ids)
+						       QString introductoryText,
+						       std::vector<QString> fileNames,
+						       bool offerCancel) :
+    KDialogBase(parent, 0, true, i18n("Select Unused Audio Files"), (offerCancel ? (Ok | Cancel) : Ok))
 {
     QVBox *vbox = makeVBoxMainWidget();
-    new QLabel(i18n("The following audio files are not used in the current composition.\n\nPlease select the ones you wish to delete permanently from the hard disk.\n"), vbox);
+    new QLabel(introductoryText, vbox);
 
     m_listView = new KListView(vbox);
 
@@ -943,13 +951,8 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     m_listView->addColumn(i18n("File size"));
     m_listView->addColumn(i18n("Last modified date"));
 
-    for (int i = 0; i < ids.size(); ++i) {
-	AudioFile *af = mgr->getAudioFile(ids[i]);
-	if (!af) {
-	    std::cerr << "WARNING: UnusedAudioSelectionDialog: No audio file for id " << ids[i] << std::endl;
-	    continue;
-	}
-	QString fileName = strtoqstr(af->getFilename());
+    for (unsigned int i = 0; i < fileNames.size(); ++i) {
+	QString fileName = fileNames[i];
 	QFileInfo info(fileName);
 	QString fileSize = i18n(" (not found) ");
 	QString fileDate;
@@ -969,16 +972,15 @@ UnusedAudioSelectionDialog::getSelectedAudioFileNames() const
 {
     std::vector<QString> selectedNames;
 
-    QListViewItem *item = 0;
+    QListViewItem *item = m_listView->firstChild();
 
-    for (int i = 0; i < m_ids.size(); ++i) {
+    while (item) {
 
-	if (item) item = item->nextSibling();
-	else item = m_listView->firstChild();
-	
 	if (m_listView->isSelected(item)) {
 	    selectedNames.push_back(item->text(0));
 	}
+
+	item = item->nextSibling();
     }
 
     return selectedNames;
@@ -996,7 +998,7 @@ AudioManagerDialog::slotDeleteUnused()
             audioFiles.insert((*it)->getAudioFileId());
     }
 
-    std::vector<AudioFileId> toDelete;
+    std::vector<QString> toDelete;
     std::map<QString, AudioFileId> nameMap;
 
     for (std::vector<AudioFile*>::const_iterator
@@ -1004,13 +1006,15 @@ AudioManagerDialog::slotDeleteUnused()
          aIt != m_doc->getAudioFileManager().end(); ++aIt)
     {
         if (audioFiles.find((*aIt)->getId()) == audioFiles.end()) {
-            toDelete.push_back((*aIt)->getId());
+            toDelete.push_back(strtoqstr((*aIt)->getFilename()));
 	    nameMap[(*aIt)->getFilename()] = (*aIt)->getId();
 	}
     }
 
     UnusedAudioSelectionDialog *dialog = new UnusedAudioSelectionDialog
-	(this, &m_doc->getAudioFileManager(), toDelete);
+	(this,
+	 i18n("The following audio files are not used in the current composition.\n\nPlease select the ones you wish to delete permanently from the hard disk.\n"),
+	 toDelete);
 
     if (dialog->exec() == QDialog::Accepted) {
 

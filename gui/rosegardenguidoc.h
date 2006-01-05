@@ -366,6 +366,16 @@ public:
     //
     void finalizeAudioFile(Rosegarden::InstrumentId instrument);
 
+    // Tell the document that an audio file has been orphaned.  An
+    // orphaned audio file is a file that was created by recording in
+    // Rosegarden during the current session, but that has been
+    // unloaded from the audio file manager.  It's therefore likely
+    // that no other application will be using it, and that that user
+    // doesn't want to keep it.  We can offer to delete these files
+    // permanently when the document is saved.
+    //
+    void addOrphanedAudioFile(QString fileName);
+
     /*
     void setAudioRecordLatency(const Rosegarden::RealTime &latency)
         { m_audioRecordLatency = latency; }
@@ -545,6 +555,8 @@ protected:
                      long totalNbOfEvents, long &count,
                      QString extraAttributes = QString::null);
 
+    bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
+
     //--------------- Data members ---------------------------------
 
     /**
@@ -645,6 +657,8 @@ protected:
     Rosegarden::RealTime m_audioRecordLatency;
 
     Rosegarden::timeT m_recordStartTime;
+
+    std::vector<QString> m_orphanedAudioFiles;
 
     // Autosave period for this document in seconds
     //

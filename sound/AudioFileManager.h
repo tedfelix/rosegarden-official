@@ -23,6 +23,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
 
 #include <qpixmap.h>
@@ -144,6 +145,15 @@ public:
     //
     std::vector<std::string> createRecordingAudioFiles(unsigned int number);
 
+    // Return whether a file was created by recording within this "session"
+    //
+    bool wasAudioFileRecentlyRecorded(AudioFileId id);
+
+    // Indicate that a new "session" has started from the point of view of
+    // recorded audio files (e.g. that the document has been saved)
+    //
+    void resetRecentlyRecordedFiles();
+
     // return the last file in the vector - the last created
     //
     AudioFile* getLastAudioFile();
@@ -241,6 +251,13 @@ private:
     std::string                                   m_audioPath;
 
     PeakFileManager                               m_peakManager;
+
+    // All audio files are stored in m_audioFiles.  This additional
+    // set of pointers just refers to those that have been created by
+    // recording within the current session, and thus that the user
+    // may wish to remove at the end of the session if the document is
+    // not saved.
+    std::set<AudioFile*>                          m_recordedAudioFiles;
 
 };
 

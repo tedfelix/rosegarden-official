@@ -277,66 +277,179 @@ bool RosegardenGUIDoc::isRegularDotRGFile()
 bool RosegardenGUIDoc::saveIfModified()
 {
     RG_DEBUG << "RosegardenGUIDoc::saveIfModified()" << endl;
-    bool completed=true;
+    bool completed = true;
 
-    if (isModified()) {
-        RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
-        int want_save = KMessageBox::warningYesNoCancel(win,
-                                                        i18n("The current file has been modified.\n"
-                                                             "Do you want to save it?"),
-                                                        i18n("Warning"));
-        RG_DEBUG << "want_save = " << want_save << endl;
+    if (!isModified()) return completed;
 
-        switch(want_save) {
+    
+    RosegardenGUIApp *win = (RosegardenGUIApp *)parent();
 
-        case KMessageBox::Yes:
+    int wantSave = KMessageBox::warningYesNoCancel
+	(win,
+	 i18n("The current file has been modified.\n"
+	      "Do you want to save it?"),
+	 i18n("Warning"));
 
-            if (!isRegularDotRGFile()) {
+    RG_DEBUG << "wantSave = " << wantSave << endl;
 
-                RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : new or imported file\n";
-                win->fileSaveAs();
-                completed=true;
+    switch (wantSave) {
 
-            } else {
+    case KMessageBox::Yes:
 
-                RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : regular file\n";
-                QString errMsg;
-                completed = saveDocument(getAbsFilePath(), errMsg);
+	if (!isRegularDotRGFile()) {
 
-                if (!completed) {
-                    if (errMsg)
-                        KMessageBox::error(0, i18n(QString("Could not save document at %1\n(%2)")
-                                                   .arg(getAbsFilePath()).arg(errMsg)));
-                    else
+	    RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : new or imported file\n";
+	    win->fileSaveAs();
+	    completed = true;
+	    
+	} else {
+
+	    RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : regular file\n";
+	    QString errMsg;
+	    completed = saveDocument(getAbsFilePath(), errMsg);
+	    
+	    if (!completed) {
+		if (errMsg) {
+		    KMessageBox::error(0, i18n(QString("Could not save document at %1\n(%2)")
+					       .arg(getAbsFilePath()).arg(errMsg)));
+		} else {
                         KMessageBox::error(0, i18n(QString("Could not save document at %1")
                                                    .arg(getAbsFilePath())));
-                }
+		}
+	    }
+	}
+	
+	break;
 
-                
-            }
+    case KMessageBox::No:
+	setModified(false);
+	
+	// delete the autosave file so it won't annoy
+	// the user when reloading the file.
+	QFile::remove(getAutoSaveFileName());
+	completed = true;
+	break;	
+	
+    case KMessageBox::Cancel:
+	completed = false;
+	break;
+	
+    default:
+	completed = false;
+	break;
+    }
 
-            break;
-
-        case KMessageBox::No:
-            setModified(false);
-
-            // delete the autosave file so it won't annoy
-            // the user when reloading the file.
-            QFile::remove(getAutoSaveFileName());
-            completed=true;
-            break;	
-
-        case KMessageBox::Cancel:
-            completed=false;
-            break;
-
-        default:
-            completed=false;
-            break;
-        }
+    if (completed) {
+	completed = deleteOrphanedAudioFiles(wantSave == KMessageBox::No);
+	if (completed) m_audioFileManager.resetRecentlyRecordedFiles();
     }
 
     return completed;
+}
+
+bool
+RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
+{
+    std::vector<QString> orphans;
+    
+    if (documentWillNotBeSaved) {
+	    
+	// All audio files recorded in this session are about to
+	// become orphans
+	
+	for (std::vector<Rosegarden::AudioFile *>::const_iterator i =
+		 m_audioFileManager.begin();
+	     i != m_audioFileManager.end(); ++i) {
+	    if (m_audioFileManager.wasAudioFileRecorded((*i)->getId())) {
+		orphans.push_back(strtoqstr((*i)->getFilename()));
+	    }
+	}
+    }
+	
+    // Whether we save or not, explicitly orphaned (i.e. recorded in
+    // this session and then unloaded) files are orphans.  Make sure
+    // they are actually unknown to the audio file manager (i.e. they
+    // haven't been loaded more than once, or reloaded after
+    // orphaning).
+	
+    for (std::vector<QString>::iterator i = m_orphanedAudioFiles.begin();
+	 i != m_orphanedAudioFiles.end(); ++i) {
+	
+	bool stillHave = false;
+	
+	for (std::vector<Rosegarden::AudioFile *>::const_iterator j =
+		 m_audioFileManager.begin();
+	     j != m_audioFileManager.end(); ++j) {
+	    if (strtoqstr((*j)->getFilename()) == *i) {
+		stillHave = true;
+		break;
+	    }
+	}
+	
+	if (!stillHave) orphans.push_back(*i);
+    }
+    
+    if (orphans.empty()) return true;
+
+    if (documentWillNotBeSaved) {
+
+	int reply = KMessageBox::warningYesNoCancel
+	    (0,
+	     i18n("Delete the %1 audio file recorded during this session?", 
+		  "Delete the %1 audio files recorded during this session?",
+		  orphans.size()).arg(orphans.size()));
+
+	switch (reply) {
+
+	case KMessageBox::Yes:
+	    break;
+
+	case KMessageBox::No:
+	    return true;
+
+	default:
+	case KMessageBox::Cancel:
+	    return false;
+	}
+
+    } else {
+
+	Rosegarden::UnusedAudioSelectionDialog *dialog =
+	    new Rosegarden::UnusedAudioSelectionDialog
+	    (0,
+	     i18n("The following audio files were recorded during this session but have been unloaded\nfrom the audio file manager, and so are no longer in use in the document you are saving.\n\nYou may want to clean up these files to save disk space.\n\nPlease select any you wish to delete permanently from the hard disk.\n"),
+	    orphans);
+	
+	if (dialog->exec() != QDialog::Accepted) {
+	    delete dialog;
+	    return true;
+	}
+	    
+	orphans = dialog->getSelectedAudioFileNames();
+	delete dialog;
+    }
+
+    if (orphans.empty()) return true;
+
+    QString question =
+	i18n("About to delete %1 audio file permanently from the hard disk.\nThere will be no way to recover this file.\nAre you sure?", "About to delete %1 audio files permanently from the hard disk.\nThere will be no way to recover these files.\nAre you sure?", orphans.size()).arg(orphans.size());
+	    
+    int reply = KMessageBox::warningContinueCancel(0, question);
+	    
+    if (reply == KMessageBox::Continue) {
+	for (int i = 0; i < orphans.size(); ++i) {
+	    QFile file(orphans[i]);
+	    if (!file.remove()) {
+		KMessageBox::error(0, i18n("File %1 could not be deleted.")
+				   .arg(orphans[i]));
+	    }
+	    
+	    QFile peakFile(QString("%1.pk").arg(orphans[i]));
+	    peakFile.remove();
+	}
+    }
+
+    return true;
 }
 
 void RosegardenGUIDoc::newDocument()
@@ -2648,6 +2761,12 @@ void RosegardenGUIDoc::slotDocColoursChanged()
     RG_DEBUG << "RosegardenGUIDoc::slotDocColoursChanged(): emitting docColoursChanged()" << endl;
 
     emit docColoursChanged();
+}
+
+void
+RosegardenGUIDoc::addOrphanedAudioFile(QString fileName)
+{
+    m_orphanedAudioFiles.push_back(fileName);
 }
 
 const unsigned int RosegardenGUIDoc::MinNbOfTracks = 64;

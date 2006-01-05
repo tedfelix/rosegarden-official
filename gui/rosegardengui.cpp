@@ -482,6 +482,8 @@ RosegardenGUIApp::~RosegardenGUIApp()
     delete m_lircClient;
 #endif     
 
+    delete m_doc;
+
     Rosegarden::Profiles::getInstance()->dump();
 }
 
@@ -1417,7 +1419,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // this will delete all edit views
     //
-    if (oldDoc != 0) delete oldDoc;
+    delete oldDoc;
     
     // connect needed signals
     //

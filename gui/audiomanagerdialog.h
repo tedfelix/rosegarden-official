@@ -201,6 +201,22 @@ protected:
     static const char* const AudioManagerDialogConfigGroup;
 };
 
+
+class UnusedAudioSelectionDialog : public KDialogBase
+{
+public:
+    UnusedAudioSelectionDialog(QWidget *,
+			       QString introductoryText,
+			       std::vector<QString> fileNames,
+			       bool offerCancel = true);
+    
+    std::vector<QString> getSelectedAudioFileNames() const;
+
+protected:
+    QListView *m_listView;
+};
+
+
 }
 
 #endif // _AUDIOAMANAGERDIALOG_H_

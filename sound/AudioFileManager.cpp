@@ -282,6 +282,7 @@ AudioFileManager::removeFile(AudioFileId id)
         if ((*it)->getId() == id)
         {
 	    m_peakManager.removeAudioFile(*it);
+	    m_recordedAudioFiles.erase(*it);
             delete(*it);
             m_audioFiles.erase(it);
             return true;
@@ -472,8 +473,10 @@ AudioFileManager::clear()
 
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
-         ++it)
+         ++it) {
+	m_recordedAudioFiles.erase(*it);
         delete(*it);
+    }
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
 
@@ -505,6 +508,7 @@ AudioFileManager::createRecordingAudioFile()
     // insert file into vector
     WAVAudioFile *aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + fileName.data());
     m_audioFiles.push_back(aF);
+    m_recordedAudioFiles.insert(aF);
 
     return aF;
 } 
@@ -519,6 +523,20 @@ AudioFileManager::createRecordingAudioFiles(unsigned int n)
 	// !af should not happen, and we have no good recovery if it does
     }
     return v;
+}
+
+bool
+AudioFileManager::wasAudioFileRecorded(AudioFileId id)
+{
+    AudioFile *file = getAudioFile(id);
+    if (file) return (m_recordedAudioFiles.find(file) !=
+		      m_recordedAudioFiles.end());
+}
+
+void
+AudioFileManager::resetRecentlyRecordedFiles()
+{
+    m_recordedAudioFiles.clear();
 }
 
 AudioFile*
