@@ -1361,7 +1361,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 		    
 		    audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
 			  << port->m_name << " available with fitness "
-			  << quality << std::endl;
+			  << fitness << std::endl;
 		    
 		    m_devicePortMap[id] = ClientPortPair(port->m_client, port->m_port);
 		    
