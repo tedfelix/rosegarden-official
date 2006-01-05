@@ -714,7 +714,7 @@ AudioManagerDialog::slotRemove()
     }
     emit deleteSegments(selection);
 
-    if (m_doc->getAudioFileManager().wasAudioFileRecorded(audioFile->getId())) {
+    if (m_doc->getAudioFileManager().wasAudioFileRecentlyRecorded(audioFile->getId())) {
 	m_doc->addOrphanedAudioFile(strtoqstr(audioFile->getFilename()));
     }
 
@@ -871,7 +871,7 @@ AudioManagerDialog::slotRemoveAll()
 	     aIt = m_doc->getAudioFileManager().begin();
          aIt != m_doc->getAudioFileManager().end(); ++aIt)
     {
-	if (m_doc->getAudioFileManager().wasAudioFileRecorded((*aIt)->getId())) {
+	if (m_doc->getAudioFileManager().wasAudioFileRecentlyRecorded((*aIt)->getId())) {
 	    m_doc->addOrphanedAudioFile(strtoqstr((*aIt)->getFilename()));
 	}
     }
@@ -920,7 +920,7 @@ AudioManagerDialog::slotRemoveAllUnused()
     for (std::vector<AudioFileId>::iterator dIt = toDelete.begin();
             dIt != toDelete.end(); ++dIt) {
 
-	if (m_doc->getAudioFileManager().wasAudioFileRecorded(*dIt)) {
+	if (m_doc->getAudioFileManager().wasAudioFileRecentlyRecorded(*dIt)) {
 	    AudioFile *file = m_doc->getAudioFileManager().getAudioFile(*dIt);
 	    if (file) {
 		m_doc->addOrphanedAudioFile(strtoqstr(file->getFilename()));

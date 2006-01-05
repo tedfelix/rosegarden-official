@@ -526,7 +526,7 @@ AudioFileManager::createRecordingAudioFiles(unsigned int n)
 }
 
 bool
-AudioFileManager::wasAudioFileRecorded(AudioFileId id)
+AudioFileManager::wasAudioFileRecentlyRecorded(AudioFileId id)
 {
     AudioFile *file = getAudioFile(id);
     if (file) return (m_recordedAudioFiles.find(file) !=

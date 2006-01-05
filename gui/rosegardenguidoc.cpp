@@ -360,7 +360,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 	for (std::vector<Rosegarden::AudioFile *>::const_iterator i =
 		 m_audioFileManager.begin();
 	     i != m_audioFileManager.end(); ++i) {
-	    if (m_audioFileManager.wasAudioFileRecorded((*i)->getId())) {
+	    if (m_audioFileManager.wasAudioFileRecentlyRecorded((*i)->getId())) {
 		orphans.push_back(strtoqstr((*i)->getFilename()));
 	    }
 	}
