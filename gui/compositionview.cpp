@@ -2547,8 +2547,6 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 {
     QRect bound = p->boundingRect(0, 0, 300, 40, AlignAuto, m_textFloatText);
 
-    if (!bound.intersects(clipRect)) return;
-
     p->save();
 
     bound.setLeft(bound.left() - 2);
@@ -2557,11 +2555,15 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
     bound.setBottom(bound.bottom() + 2);
     bound.moveTopLeft(m_textFloatPos);
 
-    drawRect(bound, p, clipRect, false, 0, false);
+    if (bound.intersects(clipRect)) {
+ 
+        drawRect(bound, p, clipRect, false, 0, false);
 
-    p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
-    p->drawText(m_textFloatPos.x() + 2, m_textFloatPos.y() + 14, m_textFloatText);
+        p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
+        p->drawText(m_textFloatPos.x() + 2, m_textFloatPos.y() + 14, m_textFloatText);
 
+    }
+    
     p->restore();
 }
 
