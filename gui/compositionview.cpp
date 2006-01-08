@@ -38,6 +38,7 @@
 #include "compositionview.h"
 #include "compositionitemhelper.h"
 #include "colours.h"
+#include "rgapplication.h"
 #include "rosegardenguidoc.h"
 #include "rosegardencanvasview.h" // for NoFollow,FollowVertical,FollowHorizontal constants
 #include "rosestrings.h"
@@ -2205,8 +2206,8 @@ void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
     //
     // Floating Text
     //
-    if (m_drawTextFloat)
-        drawTextFloat(p, clipRect);
+//     if (m_drawTextFloat)
+//         drawTextFloat(p, clipRect);
 
     //
     // Split line
@@ -2748,6 +2749,9 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     // so don't update here
 //     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignAuto, m_textFloatText);
 //     slotUpdateSegmentsDrawBuffer(r);
+
+    
+    rgapp->slotSetStatusMessage(text);
 }
 
 void CompositionView::slotSetFineGrain(bool value)
@@ -2760,6 +2764,7 @@ CompositionView::slotTextFloatTimeout()
 { 
     hideTextFloat();
     slotArtifactsDrawBufferNeedsRefresh();
+    rgapp->slotSetStatusMessage(QString::null);
 }
 
 #include "compositionview.moc"

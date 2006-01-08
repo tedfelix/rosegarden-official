@@ -24,12 +24,14 @@
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
+#include <kstatusbar.h>
 
 #include "constants.h"
 #include "rgapplication.h"
 #include "rosegardengui.h"
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
+#include "ktmpstatusmsg.h"
 
 int RosegardenApplication::newInstance()
 {
@@ -84,6 +86,17 @@ void RosegardenApplication::sfxLoadExited(KProcess *proc)
                            i18n("Failed to load soundfont %1").arg(soundFontPath));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
+    }
+    
+}
+
+void RosegardenApplication::slotSetStatusMessage(QString msg)
+{
+    KMainWindow* mainWindow = dynamic_cast<KMainWindow*>(mainWidget());
+    if (mainWindow) {
+        if (msg.isEmpty())
+            msg = KTmpStatusMsg::getDefaultMsg();
+        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), KTmpStatusMsg::getDefaultId());
     }
     
 }

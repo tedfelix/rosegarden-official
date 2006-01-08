@@ -70,7 +70,8 @@ signals:
     
 public slots:
     void sfxLoadExited(KProcess *proc);
-    
+    void slotSetStatusMessage(QString txt);
+
 protected:
     //--------------- Data members ---------------------------------
     
