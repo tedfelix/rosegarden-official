@@ -97,7 +97,7 @@ def generate(env):
 		haveLadspa  = conf.CheckHeader('ladspa.h')
 		haveLiblrdf = conf.CheckLibWithHeader('lrdf', ['stdio.h', 'lrdf.h'], 'C', 'lrdf_init();')
 		haveLiblo   = conf.Check_package('liblo', '0.7')
-		haveLibmad  = conf.Check_package('mad', '0.10')
+#		haveLibmad  = conf.Check_package('mad', '0.10')
 		haveXft     = conf.Check_package('xft', '2.1.0')
 
 		env = conf.Finish()
@@ -107,7 +107,7 @@ def generate(env):
 		if haveDssi:   env.Append(SOUND_CCFLAGS = '-DHAVE_DSSI')
 		if haveLadspa: env.Append(SOUND_CCFLAGS = '-DHAVE_LADSPA')
 		if haveLiblo:  env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLO')
-		if haveLibmad: env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
+#		if haveLibmad: env.Append(SOUND_CCFLAGS = '-DHAVE_LIBMAD')
 		if haveLiblrdf:
 			env.Append(SOUND_CCFLAGS = '-DHAVE_LIBLRDF')
 			env.AppendUnique(SOUND_LDFLAGS = '-llrdf')
