@@ -947,7 +947,9 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
     QRect r = computeSegmentRect(*s);
-    
+
+    m_selectedSegments.erase(s);
+
     clearInCache(s, true);
     s->removeObserver(this);
     m_recordingSegments.erase(s); // this could be a recording segment
