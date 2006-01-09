@@ -25,7 +25,7 @@ lilypond_version="`lilypond --version`"
 if [ "$?" != "0" ]; then
     echo "rosegarden-lilypondview: Lilypond unavailable" 1>&2
 else
-    lilypond_version="`echo $lilypond_version | grep LilyPond | head -1 | sed 's/^.* //'`"
+    lilypond_version="`lilypond --version | grep LilyPond | head -1 | sed 's/^.* //'`"
     case "$lilypond_version" in
 	1.*|2.0.*)
 	    echo "rosegarden-lilypondview: Unsupported Lilypond version ($lilypond_version)" 1>&2;;
@@ -91,7 +91,7 @@ if [ ! -f "$input" ]; then
     fi
 fi
 
-cp "$input" "$tmpdir" || exit 1
+cp "$input" "$tmpdir/" || exit 1
 
 (
 	dir=`dirname "$input"`
@@ -121,6 +121,7 @@ cp "$input" "$tmpdir" || exit 1
 
 	args=""
 	convert=""
+echo "Lilypond version is $lilypond_version, file version is $fileversion"
 	case "$lilypond_version" in
 	    2.2.*)
 		args="--no-pdf"
@@ -139,11 +140,13 @@ cp "$input" "$tmpdir" || exit 1
 
 	if [ -n "$convert" ]; then
 	    echo "File version is $fileversion against Lilypond version $version -- converting..." 1>&2
-	    if [ -n "$graphical" ]; then
-		convert-ly "$base" > "${base}_converted" 2> "$logfile" && mv "${base}_converted" "$base"
-            else
-		convert-ly "$base" > "${base}_converted" && mv "${base}_converted" "$base"
-	    fi
+	    for srcfile in "$base" $includes; do
+		if [ -n "$graphical" ]; then
+		    convert-ly "$srcfile" > "${srcfile}_converted" 2> "$logfile" && mv "${srcfile}_converted" "$srcfile"
+		else
+		    convert-ly "$srcfile" > "${srcfile}_converted" && mv "${srcfile}_converted" "$srcfile"
+		fi
+	    done
 	fi
 
 	if [ -n "$graphical" ] ; then
