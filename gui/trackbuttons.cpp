@@ -624,9 +624,9 @@ TrackButtons::slotToggleRecordTrack(int position)
 	}
     }
 
-    // can have any number of audio instruments armed, but only
-    // one track armed per instrument; can only have one midi track
-    // armed at all
+    // can have any number of audio instruments armed, but only one
+    // track armed per instrument; can only have one midi or soft
+    // synth track armed at all
 
     // Need to copy this container, as we're implicitly modifying it
     // through calls to comp.setTrackRecording
@@ -653,11 +653,15 @@ TrackButtons::slotToggleRecordTrack(int position)
 	    if (audio) {
 		unselect = (otherTrack->getInstrument() == track->getInstrument());
 	    } else {
+		// our track is not an audio track, check that the
+		// other isn't either
 		Rosegarden::Instrument *otherInstrument =
 		    m_doc->getStudio().getInstrumentById(otherTrack->getInstrument());
+		bool otherAudio = (otherInstrument &&
+				   otherInstrument->getType() == 
+				   Rosegarden::Instrument::Audio);
 
-		unselect = ((instrument && otherInstrument) &&
-			    (otherInstrument->getType() == instrument->getType()));
+		unselect = !otherAudio;
 	    }
 
 	    if (unselect) {
@@ -667,7 +671,6 @@ TrackButtons::slotToggleRecordTrack(int position)
 		//!!! should we tell the user, particularly for the
 		//audio case? might seem odd otherwise
 
-//		comp.setTrackRecording(*i, false);
 		int otherPos = otherTrack->getPosition();
 		setRecordTrack(otherPos, false);
 	    }
