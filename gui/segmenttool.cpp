@@ -681,8 +681,6 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 	    m_resizeStart = false;
 	}
     }
-
-    m_previewSuspended = false;
 }
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)

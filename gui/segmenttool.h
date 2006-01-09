@@ -234,7 +234,6 @@ protected:
 
     int m_edgeThreshold;
     bool m_resizeStart;
-    bool m_previewSuspended;
 };
 
 class SegmentSelector : public SegmentTool
