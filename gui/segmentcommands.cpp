@@ -1242,7 +1242,7 @@ SegmentAutoSplitCommand::unexecute()
 }
 
 
-SegmentMergeCommand::SegmentMergeCommand(Rosegarden::SegmentSelection &
+SegmentJoinCommand::SegmentJoinCommand(Rosegarden::SegmentSelection &
 					 segments) :
     KNamedCommand(getGlobalName()),
     m_newSegment(0),
@@ -1255,7 +1255,7 @@ SegmentMergeCommand::SegmentMergeCommand(Rosegarden::SegmentSelection &
     assert(m_oldSegments.size() > 0);
 }
 
-SegmentMergeCommand::~SegmentMergeCommand()
+SegmentJoinCommand::~SegmentJoinCommand()
 {
     if (m_detached) {
 	for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
@@ -1267,12 +1267,12 @@ SegmentMergeCommand::~SegmentMergeCommand()
 }
 
 void
-SegmentMergeCommand::execute()
+SegmentJoinCommand::execute()
 {
     Composition *composition = m_oldSegments[0]->getComposition();
     if (!composition) {
 	std::cerr
-	    << "SegmentMergeCommand::execute: ERROR: old segments are not in composition!"
+	    << "SegmentJoinCommand::execute: ERROR: old segments are not in composition!"
 	    << std::endl;
 	return;
     }
@@ -1339,7 +1339,7 @@ SegmentMergeCommand::execute()
 }
 
 void
-SegmentMergeCommand::unexecute()
+SegmentJoinCommand::unexecute()
 {
     for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
 	m_newSegment->getComposition()->addSegment(m_oldSegments[i]);

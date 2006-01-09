@@ -387,11 +387,11 @@ private:
 };
 
 
-class SegmentMergeCommand : public KNamedCommand
+class SegmentJoinCommand : public KNamedCommand
 {
 public:
-    SegmentMergeCommand(Rosegarden::SegmentSelection &segments);
-    virtual ~SegmentMergeCommand();
+    SegmentJoinCommand(Rosegarden::SegmentSelection &segments);
+    virtual ~SegmentJoinCommand();
 
     virtual void execute();
     virtual void unexecute();

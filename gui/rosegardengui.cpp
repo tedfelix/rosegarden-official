@@ -855,7 +855,7 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotSetSegmentDurations()), actionCollection(),
 		"set_segment_duration");
 
-    new KAction(SegmentMergeCommand::getGlobalName(),
+    new KAction(SegmentJoinCommand::getGlobalName(),
                 Key_J + CTRL,
                 this, SLOT(slotJoinSegments()),
                 actionCollection(), "join_segments");
@@ -2408,7 +2408,7 @@ void RosegardenGUIApp::slotJoinSegments()
         }
     }
 
-    m_view->slotAddCommandToHistory(new SegmentMergeCommand(selection));
+    m_view->slotAddCommandToHistory(new SegmentJoinCommand(selection));
     m_view->updateSelectionContents();
 }
 
