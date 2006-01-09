@@ -1718,6 +1718,9 @@ void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentRemoved(" << s << ")\n";
     m_removedSegments.push_back(s);
+    std::vector<Segment*>::iterator i = find(m_addedSegments.begin(), m_addedSegments.end(), s);
+    if (i != m_addedSegments.end())
+        m_addedSegments.erase(i);
 }
 
 void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)
