@@ -4790,7 +4790,6 @@ RosegardenGUIApp::slotRecord()
 
     if (m_seqManager->getTransportStatus() == RECORDING)
     {
-	RG_DEBUG << "RosegardenGUIApp::slotRecord: already recording, calling slotStop" << endl;
         slotStop();
 	return;
     }
