@@ -395,8 +395,8 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
 	int reply = KMessageBox::warningYesNoCancel
 	    (0,
-	     i18n("Delete the %1 audio file recorded during this session?", 
-		  "Delete the %1 audio files recorded during this session?",
+	     i18n("Delete the %1 audio file recorded during the unsaved session?", 
+		  "Delete the %1 audio files recorded during the unsaved session?",
 		  orphans.size()).arg(orphans.size()));
 
 	switch (reply) {
