@@ -509,7 +509,9 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	Rosegarden::SegmentSelection selection = getSelection();
 	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	     i != selection.end(); ++i) {
-	    slotEditSegmentMatrix(*i);
+	    if ((*i)->getType() != Rosegarden::Segment::Audio) {
+		slotEditSegmentMatrix(*i);
+	    }
 	}
 	return;
     }
@@ -682,7 +684,9 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 	Rosegarden::SegmentSelection selection = getSelection();
 	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	     i != selection.end(); ++i) {
-	    slotEditSegmentEventList(*i);
+	    if ((*i)->getType() != Rosegarden::Segment::Audio) {
+		slotEditSegmentEventList(*i);
+	    }
 	}
 	return;
     }
