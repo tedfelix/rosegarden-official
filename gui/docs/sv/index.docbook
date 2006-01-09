@@ -6,9 +6,9 @@
   <!ENTITY MIDI "<acronym
 >MIDI</acronym
 >">
-  <!ENTITY % addindex "IGNORE">
   <!ENTITY % Swedish "INCLUDE"
 > <!-- change language only here -->
+  <!ENTITY % addindex "IGNORE">
 ]>
 
 <!-- The language must be changed in the <book
@@ -254,9 +254,9 @@
     </copyright>
 
     <date
->2004-08-04</date>
+>2005-08-04</date>
     <releaseinfo
->0.9.9</releaseinfo>
+>1.2.0</releaseinfo>
 
     <abstract>
       <para>
@@ -271,14 +271,14 @@
 	      </textobject>
 	    </mediaobject>
 </screenshot
-> Rosegarden är en ljud- och &MIDI;-sequencer och editor för musikalisk notskrift. Den här handboken beskriver hur den används. </para>
+> Rosegarden är ett program för ljud- och &MIDI;-inspelning och en editor för musikalisk notskrift. Den här handboken beskriver hur det används. </para>
     </abstract>
 
     <keywordset>
       <keyword
 >Rosegarden</keyword>
       <keyword
->sequencer</keyword>
+>musikbehandlare</keyword>
       <keyword
 >MIDI</keyword>
       <keyword
@@ -288,7 +288,7 @@
       <keyword
 >beteckning</keyword>
       <keyword
->notskrift</keyword>
+>partitur</keyword>
       <keyword
 >KDE</keyword>
     </keywordset>
@@ -315,7 +315,7 @@
     <para
 ><application
 >Rosegarden</application
-> är en ljud- och &MIDI;-sequencer och editor för musikalisk notskrift. Rosegarden låter dig spela in, arrangera och komponera musik, i form av ett traditionellt partitur eller &MIDI;-data, eller ljudfiler som antingen importeras eller spelas in via en mikrofon, gitarr eller vilken ljudkälla du önskar. Du kan använda Rosegarden för att skriva, redigera och organisera musik för att skapa en komposition, som du därefter kan syntetisera, lägga till effekter i och mixa för att bränna till en cd eller distribuera på webben. Rosegarden innehåller också professionellt stöd för notskriftsredigering för utskrift med hög kvalitet. </para>
+> är ett program för ljud- och &MIDI;-inspelning och en editor för musikalisk notskrift. Rosegarden låter dig spela in, arrangera och komponera musik, i form av ett traditionellt partitur eller &MIDI;-data, eller ljudfiler som antingen importeras eller spelas in via en mikrofon, gitarr eller vilken ljudkälla du önskar. Du kan använda Rosegarden för att skriva, redigera och organisera musik för att skapa en komposition, som du därefter kan syntetisera, lägga till effekter i och mixa för att bränna till en cd eller distribuera på webben. Rosegarden innehåller också professionellt stöd för notredigering för utskrift med hög kvalitet. </para>
 
     <para
 ><application
@@ -420,8 +420,8 @@
 >När en MIDI-fil laddas, delar &rosegarden; upp musiken i ett spår per MIDI-spår eller kanal i filen, <link linkend="studio-midi-import"
 >ställer in lämpliga instrumentavbildningar</link
 > och <link linkend="nv-quantization"
->försöker beräkna en trolig notskrift</link
-> för framförd MIDI-data. </para>
+>försöker beräkna en trolig notering</link
+> för utförd MIDI-data. </para>
     </sect1>
 
     <sect1 id="file-merge">
@@ -453,10 +453,10 @@
 >. </para>
 
       <para
->Att skapa ett partitur från framförd data är en svår uppgift, och i de flesta fall är det inte rimligt att förvänta sig att en standardutskrift baserad på MIDI-data är särskilt läsbar. Du bör använda <link linkend="notation-view"
->notskriftseditorn</link
+>Att skapa ett partitur från utförd data är en svår uppgift, och i de flesta fall är det inte rimligt att förvänta sig att en standardutskrift baserad på MIDI-data är särskilt läsbar. Du bör använda <link linkend="notation-view"
+>notbehandlaren</link
 > för att städa upp partituret innan du skriver ut det. (Se också <link linkend="nv-quantization"
->Notskrift från framförandedata</link
+>Notskrift från utförandedata</link
 >.) </para>
 
       <para
@@ -482,10 +482,12 @@
       <title
 >Översikt</title>
       <para
->&rosegarden;s huvudlayout liknar många andra populära sequencer-program. Det är baserat på en spårstruktur: Huvudfönstret visar en spåreditor med en spårlista och tillhörande instrument längsmed vänster sida. Du kan behandla och flytta block med musikdata (som kallas &ldquo;segment&rdquo;) i spåreditorn, samt öppna själva segmenten i specialiserade editorer (<link linkend="notation-view"
->notskrift</link
+>&rosegarden;s utseende liknar många andra populära musikbehandlare. Det är baserat på en spårstruktur: Huvudfönstret visar en spåreditor med en spårlista och tillhörande instrument längs med vänster sida. Du kan behandla och flytta block med musikdata (som kallas &ldquo;segment&rdquo;) i spåreditorn, samt öppna själva segmenten i specialiserade editorer (<link linkend="notation-view"
+>not</link
 >, <link linkend="matrix-view"
 >matris</link
+>, <link linkend="percussion-matrix-view"
+>slagverksmatris</link
 > och <link linkend="event-view"
 >händelselista</link
 >). </para>
@@ -515,14 +517,14 @@
       </imageobject>
 	<textobject>
 	  <phrase
->&rosegarden;s spårknappar som visar spårrubriker</phrase>
+>&rosegarden;s spårknappar som visar spårnamn</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
       </para>
 
       <para
->Området med knappar till vänster om segmentduken visar spårnummer, tystnads- och inspelningsstatus, och spårets rubrik. Du kan göra ett spår tyst eller inte genom att klicka på den blåa knappen i form av en lysdiod, och välja ett visst spår som ska användas för inspelning genom att klicka på den röda knappen. För att ändra spårrubriken, dubbelklicka på den. </para>
+>Området med knappar till vänster om segmentduken visar spårnummer, tystnads- och inspelningsstatus, och spårets namn. Du kan göra ett spår tyst eller inte genom att klicka på den blåa knappen i form av en lysdiod, och välja ett visst spår som ska användas för inspelning genom att klicka på den röda knappen. För att ändra spårnamnet, dubbelklicka på det. </para>
       
       <para>
 	<screenshot>
@@ -539,11 +541,11 @@
       </para>
 
       <para
->Spårrubriker visas bara om menyalternativet <menuchoice
+>Spårnamn visas bara om menyalternativet <menuchoice
 ><guimenu lang="sv"
 >Inställningar</guimenu
 > <guimenuitem
->Visa spårrubriker</guimenuitem
+>Visa spårnamn</guimenuitem
 ></menuchoice
 > är aktiverat. Annars visas spårens instrumenttilldelningar istället, som i bilden.</para>
 
@@ -555,7 +557,7 @@
 >Varje spår måste ha ett tilldelat instrument för att kunna höras. Normalt tilldelas de 16 första spåren till de 16 instrumenten i den första tillgängliga MIDI-enheten, och de följande 16 spåren tilldelas till ljud.</para>
 
       <para
->För att ändra instrumenttilldelningen för ett spår, högerklicka på spårrubriken: En meny dyker upp där du kan välja bland alla tillgängliga instrument. </para>
+>För att ändra instrumenttilldelningen för ett spår, högerklicka på spårnamnet: En meny dyker upp där du kan välja bland alla tillgängliga instrument. </para>
       
       <para>
 	<screenshot>
@@ -588,16 +590,18 @@
       <title
 >Skapa segment</title>
       <para
->För att skapa ett tomt segment när någonting nytt ska komponeras, måste du använda pennverktyget. Klicka på pennan i verktygsraden, och klicka därefter på stället där du vill att segmentet ska börja (på rätt höjd för spåret som du vill att segmentet ska finnas i, och på ett avstånd i redigeringsfönstret som motsvarar rätt tid) och dra åt höger till segmentet är rätt antal takter i längd. </para>
+>För att skapa ett tomt segment när någonting nytt ska komponeras, måste du använda pennverktyget. Klicka på pennan i verktygsraden, och klicka därefter på stället där du vill att segmentet ska börja (på rätt plats för spåret som du vill att segmentet ska finnas i, och på ett avstånd i redigeringsfönstret som motsvarar rätt tid) och dra åt höger till segmentet är rätt antal takter i längd. </para>
 
       <para
->Oftast börjar varje nytt segment på en taktlinje och utökas takt för takt, men effekten att låsa till rutnätet kan förhindras genom att hålla nere Skift under klick- och dragåtgärden. </para>
+>Oftast börjar varje nytt segment på ett taktstreck och utökas takt för takt, men effekten att låsa till rutnätet kan förhindras genom att hålla nere Skift under klick- och dragåtgärden. </para>
 
       <para
 >När du väl har skapat ett segment kan du börja redigera det med <link linkend="matrix-view"
 >matriseditorn</link
+>, <link linkend="percussion-matrix-view"
+>slagverksmatriseditorn</link
 > eller <link linkend="notation-view"
->notskriftseditorn</link
+>notbehandlaren</link
 >. För att använda en av editorerna, dubbelklicka antingen på segmentet eller klicka med höger musknapp och välj editorn du vill använda i den sammanhangsberoende menyn. </para>
 
       <para
@@ -610,7 +614,7 @@
       <title
 >Ljudsegment</title>
       <para
->Ett ljudsegment innehåller inspelad eller samplad ljuddata, istället för redigerbar nothändelsedata. Rosegarden låter dig spela in, spela upp, arrangera och dela ljudsegment, men innehåller inte funktioner för redigering av ljudvågformer. </para>
+>Ett ljudsegment innehåller inspelad eller samplad ljuddata, istället för redigerbar tonhändelsedata. Rosegarden låter dig spela in, spela upp, arrangera och dela ljudsegment, men innehåller inte funktioner för redigering av ljudvågformer. </para>
       <para
 >För att skapa ett ljudsegment kan du <link linkend="recording"
 >spela in</link
@@ -707,13 +711,13 @@
 > </inlinemediaobject
 > för att dela ett enstaka segment i två separata segment. För att dela segmentet, välj delningsverktyget och klicka på segmentet du vill dela. </para>
 	<para
->Normalt delas segment vid taktlinjen närmast markören, men det kan förhindras genom att hålla nere Skift när segmentet delas. </para>
+>Normalt delas segment vid taktstrecket närmast markören, men det kan förhindras genom att hålla nere Skift när segmentet delas. </para>
       </sect2>
     </sect1>
 
     <sect1 id="segment-view-tempo-timesig">
       <title
->Tempo och taktartssignatur</title>
+>Tempo och taktart</title>
       <sect2 id="tempo">
 	<title
 >Tempo</title>
@@ -734,7 +738,7 @@
       
       <sect2 id="time-signature">
 	<title
->Taktartssignatur</title>
+>Taktart</title>
 	<para>
 	  <screenshot>
 	    <mediaobject>
@@ -743,7 +747,7 @@
 	</imageobject>
 	  <textobject>
 	    <phrase
->&rosegarden;s taktartssignaturdialogruta</phrase>
+>&rosegarden;s taktartsdialogruta</phrase>
 	  </textobject>
 	</mediaobject>
 	</screenshot>
@@ -785,10 +789,10 @@
 >. </para>
     
     <para
->Överföringen visar tiden som uppnåtts av uppspelningsmarkören, normalt i sekunder. Du kan ändra den att visa musiktid (takter och taktslag), musiktid med en blinkande visuell metronom, eller ramtider för ljudsampling, med den översta av de små knapparna till vänster i överföringsfönstret. Knappen direkt nedanför byter mellan att visa tid som är kvar till kompositionens slut istället för tid från början.</para>
+>Överföringen visar tiden som uppnåtts av uppspelningsmarkören, normalt i sekunder. Du kan ändra den att visa metronomtid (takter och taktslag), metronomtid med en blinkande visuell metronom, eller ramtider för ljudsampling, med den översta av de små knapparna till vänster i överföringsfönstret. Knappen direkt nedanför byter mellan att visa tid som är kvar till kompositionens slut istället för tid från början.</para>
 
     <para
->Huvudknapparna i överföringen startar uppspelning med sequencern eller gör paus, flyttar markörpositionen framåt, flyttar den bakåt, stoppar den eller går till kompositionens början eller slut. </para>
+>Huvudknapparna i överföringen startar uppspelning med musikbehandlaren eller gör paus, flyttar markörpositionen framåt, flyttar den bakåt, stoppar den eller går till kompositionens början eller slut. </para>
 
     <para
 >Ytterligare knappar och visning av &MIDI;-händelser är dolda längst ner i överföringsfönstret, och kan visas eller inte med pilknappen i det längst till vänster. Dessutom finns knappar för inspelning, för upprepning, för att spela enskilda spår solo, för att stänga av eller sätta på metronomen och för att tysta dina MIDI-enheter (panikknapp) i extradelen. </para>
@@ -798,38 +802,57 @@
       <title
 >Inspelning</title>
       <para
->För att spela in ett nytt segment i ett spår, försäkra dig först om att rätt spår är markerat för inspelning genom att klicka på den röda lysdiodknappen vid spårets rubrik, och använd därefter överföringens inspelningsknapp. Det ger effekten att både starta överföringen (och därigenom spela upp den befintliga kompositionen) och att spela in i motsvarande spår. För närvarande kan bara ett enda spår vara aktivt för inspelning på en gång. </para>
+>För att spela in ett nytt segment i ett spår, försäkra dig först om att rätt spår är markerat för inspelning genom att klicka på den röda (för ljudspår) eller gula (för MIDI-spår) lysdiodknappen vid spårets namn, och använd därefter överföringens inspelningsknapp. Det ger effekten att både starta överföringen, och därigenom spela upp den befintliga kompositionen, och att spela in i motsvarande spår. </para>
       <para
->Som ett alternativ kan du använda punch-in inspelning för att skilja på åtgärderna att starta överföringen och gå in i inspelningsläge. Punch-in inspelning ändras med mellanslagstangenten. Du kan trycka på mellanslag medan en komposition spelas upp för att omedelbart byta mellan uppspelning och inspelning utan att stoppa överföringen, eller använda mellanslag för att förbereda inspelning medan överföringen är stoppad, så att följande uppspelning i själva verket också spelar in. (Det senare är praktiskt när <link linkend="transport-external"
+>Du kan bara markera ett enda MIDI-spår för inspelning, men du kan spela in hur många ljudspår som helst samtidigt så länge datorn är kraftfull nog. Du kan också markera ett MIDI-spår och ett eller flera ljudspår samtidigt. Var försiktig så att du inte lämnar spår markerade av misstag när du är klar med användning av dem och försöker spela in någon annanstans. </para>
+      <para
+>Som ett alternativ kan du använda punch-in inspelning för att skilja på åtgärderna att starta överföringen och gå in i inspelningsläge. Punch-in inspelning ändras med mellanslagstangenten. Du kan trycka på mellanslag medan en komposition spelas upp för att omedelbart byta mellan uppspelning och inspelning utan att stoppa överföringen, eller använda mellanslag för att förbereda inspelning medan överföringen är stoppad, så att följande uppspelning i själva verket också spelar in. (Det senare är praktiskt vid synkronisering med en <link linkend="transport-external"
 >extern överföring</link
-> används.) </para>
+>.) </para>
       <para
->Om inspelningsspåret är tilldelat till ett MIDI-instrument, sker inspelning från alla MIDI-enheter som är inställda för inspelning i <link linkend="studio-device-editor"
+>Om du spelar in ett MIDI-spår, sker inspelning från alla MIDI-enheter som är inställda för inspelning i <link linkend="studio-device-editor"
 >MIDI-enhetshanteringen</link
 >. </para>
       <para
->Om inspelningsspåret är tilldelat till ett ljudinstrument, sker inspelning från ingången som för närvarande är inställd för det instrumentet i <link linkend="segment-view-instrumentparameterbox"
+>Om du spelar in ljudspår, sker inspelning av varje spår från ingången som för närvarande är inställd för det spårets instrument i <link linkend="segment-view-instrumentparameterbox"
 >instrumentparameterrutan</link
->. Det är antingen en extern ljudingång eller en delnivå eller huvudnivå för ljud (för att utföra ihopmixningar). Om det är en extern ingång, spelar den normalt in från ljudkortets första tillgängliga fysiska inspelningsingång. Du kanske vill använda ett anslutningsverktyg i JACK för att ansluta ett annat ljudprogram som stöder JACK till ingången istället. </para>
+>. Det är antingen en extern ljudingång eller en delnivå eller huvudnivå för ljud (för att utföra ihopmixningar). Om det är en extern ingång, spelas det normalt in från ljudkortets första tillgängliga fysiska inspelningsingång. Du kanske vill använda ett anslutningsverktyg i JACK för att ansluta ett annat ljudprogram som stöder JACK till ingången istället. </para>
     </sect1>
-
     <sect1 id="transport-external">
       <title
->Extern överföring</title>
-      <para
->Rosegarden stöder överföringsmekanismen i JACK för att synkronisera överföringen med andra program med JACK. För att aktivera den, gå till <menuchoice
+>Synkronisering med extern överföring</title>
+      <sect2 id="transport-jack">
+	<title
+>Överföring med JACK</title>
+	<para
+>Rosegarden stöder överföringsmekanismen i JACK för att synkronisera överföringen med andra program med JACK på samma dator. För att aktivera den, gå till <menuchoice
 ><guimenu lang="sv"
 >Inställningar</guimenu
 > <guimenuitem
 >Anpassa Rosegarden...</guimenuitem
 ></menuchoice
-> och välj "Synkronisera" i menyn för JACK överföringsläge på sidan Sequencer under fliken Synkronisering.</para>
-
-      <para
+> och välj "Synkronisera" i menyn för JACK överföringsläge på sidan Musikbehandlare under fliken Synkronisering.</para>
+	
+	<para
 >När överföring med JACK används, delar alla program som prenumererar på den en gemensam styrning av överföringen, och du kan starta, stoppa och förflytta överföringen från vart och ett av dem.</para>
 
-      <para
->Många ljudprogram under Linux stöder överföring med JACK. Titta i deras dokumentation för detaljinformation om de gör det och hur.</para>
+	<para
+>Många ljudprogram under Linux som använder ljudservern JACK stöder också överföring med JACK. Titta i deras dokumentation för detaljinformation om de gör det och hur.</para>
+      </sect2>
+      <sect2 id="transport-mtc">
+	<title
+>MIDI-tidkod</title>
+	<para
+>Rosegarden stöder synkronisering med MIDI-tidkod (MTC) i huvud- och slavläge. Det är särskilt användbart för att synkronisera Rosegardens överföring med en hårdvaruenhet som stöder MTC, eller med programvara som kör på andra datorer anslutna via MIDI. </para>
+	<para
+>För att göra Rosegarden till MTC-huvudenhet, så att det styr alla MTC-slavar eller program som ansluts, gå till <menuchoice
+><guimenu lang="sv"
+>Inställningar</guimenu
+> <guimenuitem
+>Anpassa Rosegarden...</guimenuitem
+></menuchoice
+> och välj "MTC-huvudenhet" i menyn MIDI-tidkodsläge under fliken Synkronisering på sidan Musikbehandlare. För att göra Rosegarden till en slav, så att Rosegardens överföring automatiskt synkroniseras med inkommande MTC-händelser, välj "MTC-slav". </para>
+      </sect2>
     </sect1>
   </chapter>
 
@@ -969,6 +992,17 @@
       <para
 >Om det inte finns en aktuell .rgd-fil tillgänglig för din synt, kan du använda dialogrutan för att skapa en ny bank. För att göra det måste du hitta programavbildningen i din synts MIDI-implementeringsdiagram och skriva in namnen för hand: Därefter kan du exportera dem till en .rgd-fil att dela med andra användare av Rosegarden. Kontakta e-postlistan rosegarden-user om du har skapat en ny .rgd-fil och vill bidra med den. (Det är hur alla befintliga .rgd-filer har kommit att inkluderas med Rosegarden: andra användare har bidragit dem.) </para>
 
+      <sect2 id="studio-keymappings">
+	<title
+>Tonavbildningar för slagverk</title>
+
+	<para
+>Många MIDI-syntar har åtminstone ett slagverksprogram, där varje "tonhöjd" spelar ett annorlunda ljud. Rosegarden innehåller en särskild matriseditor för slagverk för att visa och redigera toner med en skala som består av de riktiga namnen på tonhöjderna, istället för den konventionella tonskalan på ett piano. </para>
+
+	<para
+>Tonavbildningarna som är tillgängliga för en viss MIDI-synt definieras också i Rosegardens enhetsfil (".rgd"). Varje MIDI-program som definieras som ett slagverksprogram kan ha en tillhörande tonavbildning. Om det finns en, används den normalt för alla spår som tilldelas programmet. Liksom program och bankdefinitioner kan tonavbildningar importeras från och exporteras till .rgd-filer. </para>
+      </sect2>
+
       <sect2 id="studio-soundfonts">
 	<title
 >Ljudteckensnitt</title>
@@ -977,7 +1011,7 @@
 >Om du råkar använda en programvarusynt eller ljudkortssynt som använder ljudteckensnittsfiler (.sf2), kan du helt enkelt ladda riktiga programnamn direkt från .sf2-filen i dialogrutan. Begär bara import som vanligt, och välj därefter .sf2-filen som du använder istället för en .rgd-fil. </para>
 
 	<para
->Observera att studion bara hanterar information om befintliga MIDI-enheter i Rosegarden. Den hanterar inte uppgifter som att ladda ett ljudteckensnitt till ljudkortet från början. Om du vill försäkra dig om att ett ljudteckensnitt laddas till ljudkortet när Rosegarden startas, ska du använda det speciella alternativet "Ladda ljudsamplingar till Soundblaster-kort vid start" i sequencerinställningen under <menuchoice
+>Observera att studion bara hanterar information om befintliga MIDI-enheter i Rosegarden. Den hanterar inte uppgifter som att ladda ett ljudteckensnitt till ljudkortet från början. Om du vill försäkra dig om att ett ljudteckensnitt laddas till ljudkortet när Rosegarden startas, ska du använda det speciella alternativet "Ladda ljudsamplingar till Soundblaster-kort vid start" i inställningen av musikbehandlaren under <menuchoice
 ><guimenu lang="sv"
 >Inställningar</guimenu
 > <guimenuitem
@@ -1184,7 +1218,7 @@
       </para>
 
 	<para
->Under menyerna för val av insticksmoduler, har dialogrutan ett varierande antal vridbara knappar som visar alla parametrar som kan ändras för insticksprogrammet du har valt. För att ändra ett värde, klicka bara på en vridknapp och dra uppåt och neråt, eller vänster och höger. (Uppåt eller åt höger för att öka värdet, neråt eller åt vänster för att minska det.) Du kan också rulla mushjulet för att ändra värdet, eller klicka med musens mittenknapp för att återställa det till det ursprungliga normalvärdet.</para>
+>Under menyerna för val av insticksmoduler, har dialogrutan ett varierande antal vridbara rattar som visar alla parametrar som kan ändras för insticksprogrammet du har valt. För att ändra ett värde, klicka bara på en ratt och dra uppåt och neråt, eller vänster och höger. (Uppåt eller åt höger för att öka värdet, neråt eller åt vänster för att minska det.) Du kan också rulla mushjulet för att ändra värdet, eller klicka med musens mittenknapp för att återställa det till det ursprungliga normalvärdet.</para>
 
 	<para
 >Det är också möjligt att kopiera en insticksmodul med sin nuvarande inställning till en annan plats, för att använda samma insticksmodulinställningar för mer än ett instrument, eller för att basera en insticksmodulinställning på en annan. Klicka bara på knappen Kopiera när du har ställt in insticksmodulen som du vill ha den, och öppna därefter dialogrutan för en annan insticksmodulplats och klicka på Klistra in.</para>
@@ -1196,7 +1230,7 @@
 	<title
 >Syntinsticksmoduler</title>
 	<para
->Syntinsticksmoduler kan användas istället för MIDI-enheter i hårdvara eller fristående programvarusyntar, för att skapa ljud från segmenten med nothändelser.</para>
+>Syntinsticksmoduler kan användas istället för MIDI-enheter i hårdvara eller fristående programvarusyntar, för att skapa ljud från segmenten med tonhändelser.</para>
 
 	<para
 >Att använda en syntinsticksmodul ger dig något bättre kontroll och upprepningsbarhet än att använda en extern MIDI-enhet, eftersom Rosegarden kan ladda rätt insticksmodul åt dig och använda riktiga inställningar nästa gång du laddar samma fil. Insticksmoduler kan också ge bättre tidsupplösning än externa MIDI-enheter, och syntinsticksmodulinstrument har fördelen att vara fördelningsbara som ljudinstrument, vilket också betyder att du kan lägga till effektinsticksmoduler ovanför dem. </para>
@@ -1231,7 +1265,7 @@
 >Egna redigeringsfönster i en insticksmodul</title>
 
 	<para
->De flesta insticksmoduler kan styras helt och hållet med vridknapparna i Rosegardens insticksmoduldialogruta. Dock har några få insticksmoduler (i allmänhet syntar) också sina egna redigeringsfönster som kan aktiveras eller inaktiveras från Rosegarden, och som kan tillhandahålla fullständigare eller bättre organiserade knappar.</para>
+>De flesta insticksmoduler kan styras helt och hållet med rattarna i Rosegardens insticksmoduldialogruta. Dock har några få insticksmoduler (i allmänhet syntar) också sina egna redigeringsfönster som kan aktiveras eller inaktiveras från Rosegarden, och som kan tillhandahålla fullständigare eller bättre organiserade knappar.</para>
 
 	<para
 >När du väljer en insticksmodul som har sitt eget redigeringsfönster, aktiveras knappen nere till vänster i insticksmodulens dialogruta som heter "Editor":</para>
@@ -1259,7 +1293,7 @@
       <title
 >Metronomer</title>
       <para
->Rosegarden har två inbyggda metronomer, en för användning under inspelning och en som kan kopplas in under normal uppspelning. De fungerar genom att skicka noter till ett MIDI-instrument, och båda metronomerna använder samma instrument, tonhöjds- och ljudstyrkeinformation. </para>
+>Rosegarden har två inbyggda metronomer, en för användning under inspelning och en som kan kopplas in under normal uppspelning. De fungerar genom att skicka toner till ett MIDI-instrument, och båda metronomerna använder samma instrument, tonhöjds- och ljudstyrkeinformation. </para>
 
       <para>
 	<screenshot>
@@ -1316,6 +1350,20 @@
 
     </sect1>
 
+
+    <sect1 id="studio-external-controllers">
+      <title
+>Externa MIDI-styrenheter</title>
+      <para
+>Rosegardens ljud- och MIDI-mixningsfönster samt huvudfönstret kan också i viss mån styras av en extern MIDI-enhet. För att ställa in det, måste du använda ett ALSA MIDI-anslutningsprogram som qjackctl för att ansluta MIDI-styrenheten till Rosegardens "externa styringång" och MIDI-utgångarna. </para>
+      <para
+>Rosegarden tar emot MIDI-styrändringsmeddelanden för att justera mixerspåret som motsvarar den inkommande MIDI-kanalen vid varje styrenhetshändelse, och skickar också ut MIDI-meddelanden när något ändras i ett mixerspår för att stödja styrenheter med motoriserade skjutreglage eller knappar. </para>
+      <para
+>Rosegarden tar emot MIDI-styrenhet nummer 81 för att ändra fönstret som för närvarande är aktivt. Skicka styrenhet 81 med datavärdet 0-9 för att välja huvudfönstret, 10-19 för att välja ljudmixerfönstret eller 20-29 för att välja MIDI-mixerfönstret.</para>
+      <para
+>Rosegarden tar emot MIDI-styrenhet nummer 82 för att ändra spår som för närvarande är markerat i huvudfönstret. Stegningen av styrenheten beror på antal spår i fönstret: förhållandet mellan styrenhetens datavärde till spårnummer beräknas så att det fullständiga dataintervallet i MIDI-styrenheten används, under förutsättning att det inte finns mer än 128 spår i fönstret.</para>
+    </sect1>
+
   </chapter>
 
 
@@ -1353,10 +1401,10 @@
 >Om ett enstaka segment för närvarande är markerat, visas dess parametrar i segmentparameterrutan och kan redigeras där. Om flera segment är markerade, visar parameterrutan bara nuvarande värden där de är samma för alla markerade segment, men du kan fortfarande redigera dem och ändringarna gäller för allt som är markerat. <variablelist>
 	  <varlistentry>
 	    <term
->Rubrik</term>
+>Namn</term>
 	    <listitem>
 	      <para
->Visar rubriken för det markerade segmentet (eller segmenten, om alla har samma rubrik). Klicka på knappen "..." för att redigera rubriken.</para>
+>Visar namnet på det markerade segmentet (eller segmenten, om alla har samma namn). Klicka på knappen "..." för att redigera namnet.</para>
 	    </listitem>
 	  </varlistentry>
 	  
@@ -1383,7 +1431,7 @@
 >Kvantisera</term>
 	    <listitem>
 	      <para
->Visar kvantiseringsinställningen för markerade segment. Du kan ändra den för att snabbt kvantisera starttider för alla deras noter. För mer avancerad kvantisering, använd <menuchoice
+>Visar kvantiseringsinställningen för markerade segment. Du kan ändra den för att snabbt kvantisera starttider för alla deras toner. För mer avancerad kvantisering, använd <menuchoice
 > <guimenu lang="sv"
 >Segment</guimenu
 > <guimenuitem
@@ -1400,7 +1448,7 @@
 >Transponera</term>
 	    <listitem>
 	      <para
->Visar transponeringen (i halvtoner) som för närvarande används för det markerade segmentet. Transponeringen utförs när segmentet spelas upp, och visas inte med noterna i matris-, notskrifts- eller händelseeditorerna. Du kan använda den för att snabbt ändra tonhöjd för en del eller hela kompositionen.</para>
+>Visar transponeringen (i halvtonssteg) som för närvarande används för det markerade segmentet. Transponeringen utförs när segmentet spelas upp, och visas inte med noterna i matris-, not- eller händelseeditorerna. Du kan använda den för att snabbt ändra tonhöjd för en del eller hela kompositionen.</para>
 	    </listitem>
 	  </varlistentry>
 
@@ -1409,9 +1457,9 @@
 >Fördröjning</term>
 	    <listitem>
 	      <para
->Visar fördröjningen som för närvarande gäller för markerade segment. Du kan ställa in en fördröjning här för att göra att ett helt segment spelas upp senare än skrivet. Fördröjningen utförs när segmentet spelas upp, och visas inte med noterna i matris-, notskrifts- eller händelseeditorerna. </para>
+>Visar fördröjningen som för närvarande gäller för markerade segment. Du kan ställa in en fördröjning här för att göra att ett helt segment spelas upp senare än skrivet. Fördröjningen utförs när segmentet spelas upp, och visas inte med noterna i matris-, not- eller händelseeditorerna. </para>
 	      <para
->Du kan antingen ange en fördröjning med musiktid (genom att välja notlängd i fördröjningskombinationsrutan), då fördröjningens exakta tid beror på tempot, eller med realtid (genom att välja tiden i millisekunder i kombinationsrutan). </para>
+>Du kan antingen ange en fördröjning med metronomtid (genom att välja notvärde i fördröjningskombinationsrutan), då fördröjningens exakta tid beror på tempot, eller med klocktid (genom att välja tiden i millisekunder i kombinationsrutan). </para>
 	    </listitem>
 	  </varlistentry>
 
@@ -1465,7 +1513,7 @@
 >Den visar vilka instrument som tilldelats nuvarande markerat spår, och innehåller alla redigerbara knapparna för instrumentet. Kom ihåg att eftersom hur många spår som helst kan tilldelas till samma instrument, kan inställningarna i rutan påverka mer än ett spår åt gången.</para>
 
       <para
->Layouten och innehållet i instrumentparameterrutan beror på instrumenttypen: MIDI, ljud eller syntinsticksmodul. </para>
+>Utseendet och innehållet i instrumentparameterrutan beror på instrumenttypen: MIDI, ljud eller syntinsticksmodul. </para>
 
       <sect2 id="segment-view-instrumentparameterbox-midi">
 	<title
@@ -1553,7 +1601,7 @@
     <title
 >Kvantisering</title>
     <para
->"Kvantisering" är processen att flytta noter och andra händelser så att de börjar eller avslutas på exakta taktdelar. Det används traditionellt för att göra ett ungefärligt framförande till ett precist men som låter ganska mekaniskt, antingen på grund av att precision är önskad effekt, eller på grund av orsaker som att göra noter tydligare i notskrift. </para>
+>"Kvantisering" är processen att flytta toner och andra händelser så att de börjar eller avslutas på exakta taktdelar. Det används traditionellt för att göra ett ungefärligt utförande till ett precist men som låter ganska mekaniskt, antingen på grund av att precision är önskad effekt, eller på grund av orsaker som att göra noter tydligare i notering. </para>
 
     <para
 >För allmän kvantisering, använd <menuchoice
@@ -1568,7 +1616,7 @@
 > <guimenuitem
 >Kvantisera</guimenuitem
 ></menuchoice
-> i matris- eller notskriftseditorerna. Det visar en dialogruta där du kan välja precis de kvantiseringsparametrarna du behöver, och tillämpar dem på alla markerade segmenten eller noterna. (Du kan också snabbt nå dialogrutan genom att trycka på tangenten "=".) </para>
+> i matriseditorn eller notbehandlarna. Det visar en dialogruta där du kan välja precis de kvantiseringsparametrarna du behöver, och tillämpar dem på alla markerade segment eller toner. (Du kan också snabbt nå dialogrutan genom att trycka på tangenten "=".) </para>
 
     <para>
       <screenshot>
@@ -1593,7 +1641,7 @@
 >Rutnätskvantisering</term>
 	<listitem>
 	  <para
->Rutnätskvantiseringen flyttar starttider för noter så att de börjar på den närmaste punkten i ett rutnät (definierat av de olika parametrarna för kvantiseringen). På så sätt justeras noter som ursprungligen varierar något i starttid av kvantiseringen, vilket ger ett mer precist och mekaniskt framförande. </para>
+>Rutnätskvantiseringen flyttar starttider för toner så att de börjar på den närmaste punkten i ett rutnät (definierat av de olika parametrarna för kvantiseringen). På så sätt justeras toner som ursprungligen varierar något i starttid av kvantiseringen, vilket ger ett mer precist och mekaniskt utförande. </para>
 	</listitem>
       </varlistentry>
 
@@ -1602,7 +1650,7 @@
 >Legato-kvantisering</term>
 	<listitem>
 	  <para
->Legato-kvantiseringen utför en enkel rutnätskvantisering, och justerar också notlängderna så att eventuella mellanrum mellan noterna tas bort genom att förlänga varje not så att den (åtminstone) fortsätter till början på nästa. Du kan också få denna legato-effekt utan tillhörande rutnätskvantisering med funktionen <menuchoice
+>Legato-kvantiseringen utför en enkel rutnätskvantisering, och justerar också notvärdena så att eventuella avstånd mellan tonerna tas bort genom att förlänga varje not så att den (åtminstone) fortsätter till början på nästa. Du kan också få denna legato-effekt utan tillhörande rutnätskvantisering med funktionen <menuchoice
 ><guimenu lang="sv"
 >Justera</guimenu
 > <guimenuitem
@@ -1616,11 +1664,11 @@
 
       <varlistentry>
 	<term
->Heuristisk kvantisering av notskrift</term>
+>Heuristisk kvantisering</term>
 	<listitem>
 	  <para
->Notskriftskvantiseringen försöker justera starttider och längder för noter så att en läsbar notskrift skapas. Se <link linkend="nv-quantization"
->Notskrift från framförandedata</link
+>Kvantiseringen försöker justera starttider och notvärden för toner så att en läsbar notering skapas. Se <link linkend="nv-quantization"
+>Notskrift från utförandedata</link
 > för en beskrivning av kvantiseringen och dess användning.</para>
 	</listitem>
       </varlistentry>
@@ -1647,9 +1695,9 @@
 	  <para
 >Det här är ett procenttal som justerar graden som alternerande taktslag kvantiseras "sent".</para>
 	  <para
->Om inställt till inget (förvalt värde), görs kvantiseringen till ett jämt rutnät med mellanrum enligt grundenheten för rutnätet.</para>
+>Om inställt till inget (förvalt värde), görs kvantiseringen till ett jämt rutnät med avstånd enligt grundenheten för rutnätet.</para>
 	  <para
->Om inställd till 100 %, placeras varannan rutnätslinje två tredjedelar av avståndet mellan föregående och nästa, istället för halvvägs. Det gör att noter kvantiseras till första och tredje triolen med en svajig takt. </para>
+>Om inställd till 100 %, placeras varannan rutnätslinje två tredjedelar av avståndet mellan föregående och nästa, istället för halvvägs. Det gör att toner kvantiseras till första och tredje triolen med en svajig takt. </para>
 	  <para
 >Övriga inställningar ger proportionellt varierande grad av svaj. Du kan också ställa in parametern till negativa värden (för att omväxlande taktslag ska börja tidigare) eller till värden större än 100 %.</para>
 	</listitem>
@@ -1676,17 +1724,17 @@
 
       <varlistentry>
 	<term
->Kvantisera både tonlängd och starttider</term>
+>Kvantisera både notvärden och starttider</term>
 	<listitem>
 	  <para
->Om det här alternativet är aktiverat, kvantiseras noternas sluttider till samma rutnät som deras starttider. </para>
+>Om det här alternativet är aktiverat, kvantiseras tonernas sluttider till samma rutnät som deras starttider. </para>
 	</listitem>
       </varlistentry>
     </variablelist>
 
     <para
 >Kvantiseringsdialogrutan har också en valfri avancerad sektion som innehåller ytterligare alternativ för <link linkend="nv-quantization"
->notskriftskvantisering</link
+>kvantisering</link
 >. </para>
     
     <para
@@ -1707,7 +1755,7 @@
     <title
 >Matriseditorn</title>
     <para
->&rosegarden;s matriseditor låter dig visa och redigera musik med ett enkelt logiskt format: Varje not representeras som ett block i ett rutnät, på en höjd som motsvarar tonhöjden. </para>
+>&rosegarden;s matriseditor låter dig visa och redigera musik med ett enkelt logiskt format: Varje not representeras som ett block i ett rutnät, på en plats som motsvarar tonhöjden. </para>
     <para>
       <screenshot>
 	<mediaobject>
@@ -1720,7 +1768,7 @@
       </textobject>
     </mediaobject>
 </screenshot
-> Varje fönster i matriseditorn visar ett enstaka segment. För att redigera ett segment, högerklicka bara på det på huvudduken och välj matriseditorn i menyn. Alternativt kan du ställa in Rosegarden att göra matriseditorn till standardeditor som är tillgänglig genom att dubbelklicka på ett segment. </para>
+> Varje fönster i matriseditorn visar ett enstaka segment. För att redigera ett segment, högerklicka bara på det på huvudduken och välj matriseditorn i menyn. Alternativt kan du ställa in Rosegarden att göra matriseditorn till standardvy som är tillgänglig genom att dubbelklicka på ett segment. </para>
 
     <sect1 id="matrix-grid-quantize">
       <title
@@ -1728,7 +1776,7 @@
       <para
 >Matrisvyn innehåller menyerna Rutnät och Kvantisering i huvudmenyraden. </para>
       <para
->Rutnätsmenyn styr det synliga rutnätets storlek i matrisvyns bakgrund, samt tidsupplösningen som används när noter skrivs in och flyttas. Efter du har ställt in det till ett visst tidsvärde, låses de normala åtgärderna för att infoga och dra noter automatiskt till rutnätspunkter åtskilda med det tidsvärdets bredd. Du kan överskrida låsningseffekten tillfälligt genom att hålla nere Skift under redigeringen, eller inaktivera den genom att ställa in rutnätsmenyn till Ingen låsning. </para>
+>Rutnätsmenyn styr det synliga rutnätets storlek i matrisvyns bakgrund, samt tidsupplösningen som används när noter skrivs in och flyttas. Efter du har ställt in det till ett visst tidsvärde, låses de normala åtgärderna för att infoga och dra noter automatiskt till rutnätspunkter åtskilda med det tidsvärdets bredd. Du kan överskrida positioneringsfunktionen tillfälligt genom att hålla nere Skift under redigeringen, eller inaktivera den genom att ställa in rutnätsmenyn till Ingen låsning. </para>
       <para
 >Kvantiseringsmenyn fungerar på ett ganska annorlunda sätt. I stället för att styra beteendet hos andra redigeringsverktyg, utför den verkligen en åtgärd. När du ändrar värde i menyn, blir de markerade noterna, eller hela segmentet om ingenting är markerat, omedelbart kvantiserade av en rutnätskvantisering med vald upplösning. </para>
       <para
@@ -1739,10 +1787,10 @@
       <title
 >Infoga noter</title>
       <para
->Det enklaste sättet att mata in en not i matrisvyn är att använda musen. För att göra det, välj pennverktyget i verktygsraden, klicka och dra därefter i matriseditorn. Noten matas in vid tiden och med tonhöjden som motsvarar punkten du klickar, och har en längd som motsvarar avståndet du drar innan du släpper musknappen.</para>
+>Det enklaste sättet att mata in en not i matrisvyn är att använda musen. För att göra det, välj pennverktyget i verktygsraden, klicka och dra därefter i matriseditorn. Noten matas in vid tiden och med tonhöjden som motsvarar punkten du klickar, och har ett notvärde som motsvarar avståndet du drar innan du släpper musknappen.</para>
 
       <para
->Normalt är tiden och längden låsta till en viss rutnätsenhet enligt rutnätsinställningarna i menyn Visa eller verktygsraden. Du kan förhindra effekten genom att hålla nere Skift medan du klickar och drar. </para>
+>Normalt är tiden och notvärdet låsta till en viss rutnätsenhet enligt rutnätsinställningarna i menyn Visa eller verktygsraden. Du kan förhindra effekten genom att hålla nere Skift medan du klickar och drar. </para>
 
       <sect2 id="matrix-insertion-keyboard">
 	<title
@@ -1750,10 +1798,10 @@
 
 	<sect3>
 	  <title
->Varaktighet</title>
+>Notvärde</title>
 
 	  <para
->Varaktigheten för noter som matas in via tangentbordet styrs av rutnätsinställningarna i menyn Visa eller verktygsraden . Du kan ställa in den genom att använda de numeriska tangenterna:</para>
+>Notvärden för noter som matas in via tangentbordet styrs av rutnätsinställningarna i menyn Visa eller verktygsraden . Du kan ställa in det genom att använda de numeriska tangenterna:</para>
 
 	  <itemizedlist>
 	    <listitem
@@ -1784,13 +1832,13 @@
 ><para
 ><keycap
 >8</keycap
-> &ndash; Åttondelsnot</para
+> &ndash; Åttondedelsnot</para
 ></listitem>
 	    <listitem
 ><para
 ><keycap
 >6</keycap
-> &ndash; Sextondelsnot</para
+> &ndash; Sextondedelsnot</para
 ></listitem>
 	    <listitem
 ><para
@@ -1813,7 +1861,7 @@
 >Tonhöjd</title>
 
 	  <para
->Så fort rätt längd är vald i rutnätsmenyn kan du infoga en not på <link linkend="nv-rulers"
+>Så fort rätt notvärde är vald i rutnätsmenyn kan du infoga en not på <link linkend="nv-rulers"
 >infogningsmarkörens</link
 > aktuella position genom att trycka på en av tonhöjdstangenterna:</para>
 
@@ -1912,7 +1960,7 @@
 >Alla infogningskommandon är också tillgängliga från en undermeny i menyn Verktyg. Det är inte troligt att du någonsin vill navigera i menyn bara för att infoga en enstaka not, men menyerna visar snabbtangenterna och tillhandahåller på så sätt en användbar referens om du skulle glömma vilken tangent som gör vad.</para>
 
 	  <para
->Snabbtangenterna är för närvarande gjorda för att användas med tangentbord som har QWERTY-layout. Det finns ännu inte något sätt att ändra snabbtangenter till en annan layout, förutom att individuellt ändra tilldelning av varje tangent med <menuchoice
+>Snabbtangenterna är för närvarande gjorda för att användas med tangentbord som har QWERTY-organisation. Det finns ännu inte något sätt att ändra snabbtangenter till en annan organisation, förutom att individuellt ändra tilldelning av varje tangent med <menuchoice
 ><guimenu lang="sv"
 >Inställningar</guimenu
 > <guimenuitem
@@ -1929,13 +1977,13 @@
 >Skriva in noter genom att använda ett MIDI-keyboard</title>
 
 	<para
->Du kan lägga till noter i matriseditorn en i taget med ett MIDI-keyboard eller en annan MIDI-styrenhet. Matriseditorn använder tonhöjden du spelar på ett keyboard, men fördröjningarna du har valt i editorns egna rutnätsinställningar. Det är känt som "stegvis inspelning". </para>
+>Du kan lägga till noter i matriseditorn en i taget med ett MIDI-keyboard eller en annan MIDI-styrenhet. Matriseditorn använder tonhöjden du spelar på ett keyboard, men de notvärden du har valt i editorns egna rutnätsinställningar. Det är känt som "stegvis inspelning". </para>
 
 	<para
->För att börja mata in noter från ett MIDI-keyboard, försäkra dig först om att det är inställt som förvald MIDI-inspelningsenhet. Försäkra dig därefter om att du har rätt rutnätsinställning i menyn Visa eller på verktygsraden, eftersom det styr noternas längd. Tryck därefter på knappen för stegvis inspelning i matriseditorns verktygsrad, eller välj Stegvis inspelning i menyn Verktyg. Från detta ögonblick infogas alla noter som du spelar på ditt MIDI-keyboard vid den nuvarande inmatningstiden i fönstret, ända till stegvis inspelning stängs av igen, aktiveras i ett annat fönster eller fönstret stängs. </para>
+>För att börja mata in noter från ett MIDI-keyboard, försäkra dig först om att det är inställt som förvald MIDI-inspelningsenhet. Försäkra dig därefter om att du har rätt rutnätsinställning i menyn Visa eller på verktygsraden, eftersom det styr notvärdena. Tryck därefter på knappen för stegvis inspelning i matriseditorns verktygsrad, eller välj Stegvis inspelning i menyn Verktyg. Från detta ögonblick infogas alla toner som du spelar på ditt MIDI-keyboard vid den nuvarande inmatningstiden i fönstret, ända till stegvis inspelning stängs av igen, aktiveras i ett annat fönster eller fönstret stängs. </para>
 
 	<para
->Du kan ändra rutnätsinställningar medan stegvis inspelning pågår, för att infoga noter med olika varaktighet. </para>
+>Du kan ändra rutnätsinställningar medan stegvis inspelning pågår, för att infoga noter med olika notvärden. </para>
       </sect2>
     </sect1>
 
@@ -1966,10 +2014,25 @@
     </sect1>
 
   </chapter>
+  
+  <chapter id="percussion-matrix-view">
+    <title
+>Slagverksmatriseditorn</title>
+    
+    <para
+>Slagverksmatriseditorn är identisk med <link linkend="matrix-view"
+>matriseditorn</link
+>, förutom att den visar tonhöjdsnamn på den vertikala skalan istället för pianotangenter, och att den inte visar notvärdet för varje not. Den är avsedd för användning med slagverksprogram i MIDI-instrument, där varje tonhöjd spelar ett annorlunda slagverksljud.</para>
+
+    <para
+>Se också <link linkend="studio-keymappings"
+>Tonavbildningar för slagverk</link
+>.</para>
+  </chapter>
 
   <chapter id="notation-view">
     <title
->Notskriftseditorn</title>
+>Notbehandlaren</title>
 
     <!-- Introduction, purpose -->
 
@@ -1978,7 +2041,7 @@
 >Inledning</title>
 
       <para
->&rosegarden;s notskriftseditor gör det möjligt att visa och redigera ett eller flera notsystem med traditionell partiturnotation. </para
+>&rosegarden;s notbehandlare gör det möjligt att visa och redigera ett eller flera notsystem med traditionell partiturnotation. </para
 ><para>
 
 	<screenshot>
@@ -1988,13 +2051,13 @@
       </imageobject>
 	<textobject>
 	  <phrase
->&rosegarden;s notskriftseditor</phrase>
+>&rosegarden;s notbehandlare</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
 	</para>
       <para
->&rosegarden; försöker presentera partitur med bästa möjliga layout givet dess huvudsakliga fokus som ett sequencer-program. Det betyder att även om editorn stöder ackord, överlappande och nästlade balkgrupper, trioler och godtyckliga tupler, förslagsnoter, dynamik, accenter, text och så vidare, tillhandahåller den inte så mycket detaljkontroll över layouten (särskilt i musik med kontrapunkt) som särskilda program för redigering av partitur kan göra. &rosegarden; har inte som mål att skapa partitur av typsättningskvalitet, även om Lilypond-filer kan exporteras, vilka kan utgöra en bra grund för typsättning. </para>
+>&rosegarden; försöker presentera partitur med bästa möjliga utläggning givet dess huvudsakliga fokus som en musikbehandlare. Det betyder att även om editorn stöder ackord, överlappande och nästlade balkgrupper, trioler och godtyckliga annandelningar, prydnadsnoter, dynamik, accenter, text och så vidare, tillhandahåller den inte så mycket detaljkontroll över utläggningen (särskilt i musik med kontrapunkt) som särskilda program för redigering av partitur kan göra. &rosegarden; har inte som mål att skapa partitur av typsättningskvalitet, även om Lilypond-filer kan exporteras, vilka kan utgöra en bra grund för typsättning. </para>
     </sect1>
 
     <!-- Single and multiple staffs, and "current staff" -->
@@ -2004,7 +2067,7 @@
 >Enkla och flera notsystem</title>
 
       <para
->Det finns tre sätt att öppna en notskriftseditor i &rosegarden;s huvudfönster. (Alla kräver att du först har ett befintligt segment i huvudfönstret, så om du påbörjar en ny komposition, bör du skapa dina segment innan du börjar fundera på hur de ska redigeras.) <variablelist>
+>Det finns tre sätt att öppna en notbehandlare i &rosegarden;s huvudfönster. (Alla kräver att du först har ett befintligt segment i huvudfönstret, så om du påbörjar en ny komposition, bör du skapa dina segment innan du börjar fundera på hur de ska redigeras.) <variablelist>
 
 	  <varlistentry>
 	    <term
@@ -2012,31 +2075,31 @@
 	    <listitem>
 	      
 	      <para
->Det mest uppenbara sättet är att dubbelklicka på ett segment på huvudduken. Det öppnar segmentet i den editor som du har ställt in som standardeditor (notskrift, matris eller händelselista), som normalt är notskriftseditorn. Alltså öppnas ett segment som ett enskilt notsystem i notskriftseditorns fönster genom att dubbelklicka på det.</para>
+>Det mest uppenbara sättet är att dubbelklicka på ett segment på huvudduken. Det öppnar segmentet i den editor som du har ställt in som standardvy (not, matris eller händelselista), som normalt är notbehandlaren. Alltså öppnas ett segment som ett enskilt notsystem i notbehandlarens fönster genom att dubbelklicka på det.</para>
 	      
 	      <para
->Du kan också öppna en editor med flera notsystem på följande sätt: Håll nere Skift-tangenten, markera (med ett enda musklick) alla segment i huvudvyn som du vill öppna, men dubbelklicka på det sista. Alla markerade segment öppnas då tillsammans i ett enda notskriftsfönster.</para>
+>Du kan också öppna en editor med flera notsystem på följande sätt: Håll nere Skift-tangenten, markera (med ett enda musklick) alla segment i huvudvyn som du vill öppna, men dubbelklicka på det sista. Alla markerade segment öppnas då tillsammans i ett enda fönster i notbehandlaren.</para>
 
 	    </listitem>
 	  </varlistentry>
 
 	  <varlistentry>
 	    <term
->Funktionen Öppna i standardeditor (returtangenten)</term>
+>Funktionen Öppna i standardvy (returtangenten)</term>
 	    <listitem>
 
 	      <para
->Returtangenten är en snabbtangent för menyfunktionen att öppna i standardeditorn, som gör i stort sett samma sak som att dubbelklicka: Den öppnar alla segment som för närvarande är markerade i notskriftseditorn, eller i någon annan editor som du har ställt in som standardeditor. </para>
+>Returtangenten är en snabbtangent för menyfunktionen att öppna i standardvyn, som gör i stort sett samma sak som att dubbelklicka: Den öppnar alla segment som för närvarande är markerade i notbehandlaren, eller i någon annan editor som du har ställt in som standardvy. </para>
 	    </listitem>
 	  </varlistentry>
 	  
 	  <varlistentry>
 	    <term
->Menyfunktionerna Öppna i notskriftseditor</term>
+>Menyfunktionerna Öppna i notbehandlare</term>
 	    <listitem>
 
 	      <para
->Som ett alternativ kan du använda huvudfönstrets menyalternativ Öppna i notskriftseditor, antingen i menyn Segment eller i menyn som visas med höger musknapp över ett segment på duken. Markera segmenten du vill redigera (genom att skift-klicka som ovan, eller genom att använda alternativet Markera alla segment) och välj därefter Öppna i notskriftseditor.</para>
+>Som ett alternativ kan du använda huvudfönstrets menyalternativ Öppna i notbehandlare, antingen i menyn Segment eller i menyn som visas med höger musknapp över ett segment på duken. Markera segmenten du vill redigera (genom att skift-klicka som ovan, eller genom att använda alternativet Markera alla segment) och välj därefter Öppna i notbehandlare.</para>
 	    </listitem>
 	    
 	  </varlistentry>
@@ -2045,7 +2108,7 @@
       </para>
 
       <para
->Om du har mer än ett notsystem (dvs. segment) synligt i notskriftseditorn kan bara ett av dem vara "aktuellt" på en gång. Det aktuella notsystemet kan urskiljas eftersom infogningsmarkören visas i det (se <link linkend="nv-rulers"
+>Om du har mer än ett notsystem (dvs. segment) synligt i notbehandlaren kan bara ett av dem vara "aktuellt" på en gång. Det aktuella notsystemet kan urskiljas eftersom infogningsmarkören visas i det (se <link linkend="nv-rulers"
 >Linjaler och markörer</link
 >), och det är notsystemet där alla redigeringsåtgärder som använder infogningsmarkören äger rum. Det översta notsystemet är normalt det aktuella, men du kan byta till ett annat notsystem genom att Ctrl-klicka på det eller genom att använda menyalternativen Markör upp notsystem och Markör ner notsystem. </para>
 
@@ -2055,21 +2118,21 @@
 
     <sect1 id="nv-layout">
       <title
->Linjär- och sidlayout</title>
+>Horisontell och sidbaserad utläggning</title>
 
       <para
->Det vanliga sättet som notskriftseditorn visar notsystem är känt som linjär layout: Notsystem ovanför varandra, med varje notsystem som en enda, horisontell rullande lång rad. Vissa funktioner i editorn (som <link linkend="nv-rulers"
+>Det vanliga sättet som notbehandlaren visar notsystem är känt som horisontell utläggning: Notsystem ovanför varandra, med varje notsystem som en enda, horisontell rullande lång rad. Vissa funktioner i editorn (som <link linkend="nv-rulers"
 >linjalerna</link
->) är bara tillgängliga med linjär layout. </para>
+>) är bara tillgängliga med horisontell utläggning. </para>
 
       <para
->Du kan dock också visa notsystem med två olika sidbaserade layouter: Kontinuerlig sidlayout eller Flersidorslayout.</para>
+>Du kan dock också visa notsystem med två olika sidbaserade utläggningar: Vertikal utläggning eller Sidutläggning.</para>
 
       <para
->I kontinuerlig sidlayout visas notskriften på en oändligt hög sida med samma bredd som fönstret. Varje notsystem bryts vid radens slut, och påbörjar en ny rad under återstående notsystem.</para>
+>I vertikal utläggning visas noteringen på en oändligt hög sida med samma bredd som fönstret. Varje notsystem bryts vid radens slut, och påbörjar en ny rad under återstående notsystem.</para>
 
       <para
->I flersidorslayout visas notskriften uppdelad på riktiga sidor i stort sett som den ser ut när den skrivs ut. Varje sidas storlek beräknas så att ungefär samma antal noter får plats på varje rad som när det verkligen skrivs ut (enligt punktstorleken som anges för utskriftsupplösningen i inställningsdialogrutan). Den utskrivna versionen är troligen inte precis likadan, eftersom det beror på den exakta pappersstorleken och marginalerna som används vid utskrift, men det bör vara ganska nära om du råkar använda A4-papper.</para>
+>I sidutläggning visas noteringen uppdelad på riktiga sidor i stort sett som den ser ut när den skrivs ut. Varje sidas storlek beräknas så att ungefär samma antal noter får plats på varje rad som när det verkligen skrivs ut (enligt punktstorleken som anges för utskriftsupplösningen i inställningsdialogrutan). Den utskrivna versionen är troligen inte precis likadan, eftersom det beror på den exakta pappersstorleken och marginalerna som används vid utskrift, men det bör vara ganska nära om du råkar använda A4-papper.</para>
 
       <para>
 	<screenshot>
@@ -2079,16 +2142,16 @@
       </imageobject>
 	<textobject>
 	  <phrase
->&rosegarden;s notskriftseditor med flersidorslayout</phrase>
+>&rosegarden;s notbehandlare med sidutläggning</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
 	</para
 ><para
->De flesta, men inte alla, av visnings- och redigeringsfunktionerna fungerar lika bra i sidlayoutlägena som i linjär layout. </para>
+>De flesta, men inte alla, av visnings- och redigeringsfunktionerna fungerar lika bra i sidutläggningslägena som i horisontell utläggning. </para>
 
       <para
->För att byta mellan layoutlägen, använd menyalternativen Linjär layout, Kontinuerlig sidlayout och Flersidorslayout. </para>
+>För att byta mellan utläggningslägen, använd menyalternativen Horisontell utläggning, Vertikal utläggning och Sidutläggning. </para>
     </sect1>
 
     <!-- Rulers and Cursors -->
@@ -2098,7 +2161,7 @@
 >Linjaler och markörer</title>
 
       <para
->&rosegarden;s notskriftsredigeringsfönster innehåller två linjaler och två markörer. Linjalerna är de horisontella raderna uppdelade med graderingar längst upp och längst ner på huvudnotskriftsduken, och markörerna är de färgade vertikala linjerna som ursprungligen visas i början av det översta notsystemet i editorn. </para>
+>&rosegarden;s notredigeringsfönster innehåller två linjaler och två markörer. Linjalerna är de horisontella raderna uppdelade med graderingar längst upp och längst ner på huvudnoteringsduken, och markörerna är de färgade vertikala linjerna som ursprungligen visas i början av det översta notsystemet i editorn. </para>
 
       <para
 >Den violetta markören är infogningsmarkören. Den visar platsen där åtgärder som infoga och klistra in utförs. Du kan flytta infogningsmarkören genom att klicka eller dra på den övre linjalen, eller genom att klicka med markeringsverktyget på en tom del av notsystemet (och undvika alla händelser), eller genom att klicka var som helst med <keycap
@@ -2117,7 +2180,7 @@
 
       <para
 >Observera att linjalerna bara visas i läget <link linkend="nv-layout"
->Linjär layout</link
+>Horisontell utläggning</link
 >. </para>
 
     </sect1>
@@ -2131,7 +2194,7 @@
       <title
 >Verktyg och markeringar</title>
       <para
->De flesta redigeringsfunktioner i menyer och verktygsrader i &rosegarden;s notskriftseditor ingår i en av tre kategorier: <quote
+>De flesta redigeringsfunktioner i menyer och verktygsrader i &rosegarden;s notbehandlare ingår i en av tre kategorier: <quote
 >verktyg</quote
 >, <quote
 >funktioner som arbetar med markeringar</quote
@@ -2145,7 +2208,7 @@
 >Verktyg</term>
 	  <listitem>
 	    <para
->De grundläggande verktygen är markeringsverktyget, borttagningsverktyget och de som används för att infoga noter, pauser, text och så vidare, vilka oftast väljes med knappar i verktygsraden. Att välja ett verktyg ändrar det normala beteendet hos musknapparna på huvudnotskriftsduken, åtminstone till ett annat verktyg väljes istället. Genom att till exempel välja markeringsverktyget kan du göra markeringar och på så sätt använda de markeringsbaserade funktionerna (nedan). Genom att välja ett infogningsverktyg (som en av noterna) ändras det grafiska gränssnittets beteende så att noter infogas genom att klicka på duken. Genom att välja borttagningsverktyget gör att du kan ta bort händelser genom att klicka på dem. </para>
+>De grundläggande verktygen är markeringsverktyget, borttagningsverktyget och de som används för att infoga noter, pauser, text och så vidare, vilka oftast väljes med knappar i verktygsraden. Att välja ett verktyg ändrar det normala beteendet hos musknapparna på huvudnoteringsduken, åtminstone till ett annat verktyg väljes istället. Genom att till exempel välja markeringsverktyget kan du göra markeringar och på så sätt använda de markeringsbaserade funktionerna (nedan). Genom att välja ett infogningsverktyg (som en av noterna) ändras det grafiska gränssnittets beteende så att noter infogas genom att klicka på duken. Genom att välja borttagningsverktyget gör att du kan ta bort händelser genom att klicka på dem. </para>
 	    <para
 >Du kan också byta aktuellt verktyg med menyn Verktyg. </para>
 	  </listitem>
@@ -2161,7 +2224,7 @@
 > eller <guimenuitem
 >Notstil</guimenuitem
 >) fungerar på alla händelser som markerats. Andra (såsom <guimenuitem
->Förslagsnot</guimenuitem
+>Prydnadsnot</guimenuitem
 > eller <guimenuitem
 >Skaftriktning</guimenuitem
 >) vägrar fungera om inte markeringen innehåller några noter. </para>
@@ -2187,7 +2250,7 @@
 >Dragåtgärder</term>
 	  <listitem>
 	    <para
->Du kan också utföra en viss mängd redigering genom att bara dra omkring saker. Byt till markeringsverktyget (pilen), och därefter kan du ändra tonhöjd på noter genom att bara klicka och dra deras huvuden uppåt eller neråt, och ändra tider för noter och andra händelser genom att dra dem åt vänster eller höger. (Du kan inte dra pauser eller taktartssignaturer, men du kan dra allting annat. Om du har markerat mer än en händelse, dras hela markeringen på en gång.) </para>
+>Du kan också utföra en viss mängd redigering genom att bara dra omkring saker. Byt till markeringsverktyget (pilen), och därefter kan du ändra tonhöjd på noter genom att bara klicka och dra deras huvuden uppåt eller neråt, och ändra tider för noter och andra händelser genom att dra dem åt vänster eller höger. (Du kan inte dra pauser eller taktarter, men du kan dra allting annat. Om du har markerat mer än en händelse, dras hela markeringen på en gång.) </para>
 	    <para
 >Att dra är oftast ett mindre noggrant sätt att redigera än att använda funktionerna i menyn eller verktygsraden, men det kan vara enklare. </para>
 	  </listitem>
@@ -2202,19 +2265,19 @@
 >Infoga noter och pauser</title>
 
       <para
->För att infoga en not, välj ett av notverktygen genom att klicka på en viss notlängd i verktygsraden, och därefter klicka i notsystemet på platsen där du vill lägga till noten.</para>
+>För att infoga en not, välj ett av notverktygen genom att klicka på ett visst notvärde i verktygsraden, och därefter klicka i notsystemet på platsen där du vill lägga till noten.</para>
 
       <para
->Du kan också markera en av de tillfälliga förtecknen på verktygsraden för att infoga upphöjda eller nersänkta noter. Om inget tillfälligt förtecken används, följer den infogade noten tonarten. Som ett alternativ kan du välja ikonen "Följ föregående tillfälliga förtecken" (som visas som en not med en pil som pekar tillbaka från stället där förtecknet skulle visas) för att få noten att följa det tillfälliga förtecken som senast användes på samma höjd i notsystemet.</para>
+>Du kan också markera en av de tillfälliga förtecknen på verktygsraden för att infoga upphöjda eller nersänkta noter. Om inget tillfälligt förtecken används, följer den infogade noten de fasta förtecknen. Som ett alternativ kan du välja ikonen "Följ föregående tillfälliga förtecken" (som visas som en not med en pil som pekar tillbaka från stället där förtecknet skulle visas) för att få noten att följa det tillfälliga förtecken som senast användes på samma plats i notsystemet.</para>
 
       <para
->Om du lägger till en not på samma tid som en befintlig not med annan längd, antar editorn i allmänhet att du vill skapa ackord och delar upp den befintliga eller nya noten på motsvarande sätt för att skapa ett eller flera bundna ackord. Om du verkligen vill skapa ett ackord med två olika längder, kan du markera de bundna nothuvudena och använda funktionen Sammanfoga noter med samma tonhöjd för att sammanfoga dem. Som ett alternativ kan det förvalda beteendet ändras in &rosegarden;s inställningsdialogruta, så att uppdelningen inte alls görs.</para>
+>Om du lägger till en not på samma tid som en befintlig not med annat notvärde, antar editorn i allmänhet att du vill skapa ackord och delar upp den befintliga eller nya noten på motsvarande sätt för att skapa ett eller flera bundna ackord. Om du verkligen vill skapa ett ackord med två olika notvärden, kan du markera de bundna nothuvudena och använda funktionen Lägg ihop noter med samma tonhöjd för att lägga ihop dem. Som ett alternativ kan det förvalda beteendet ändras in &rosegarden;s inställningsdialogruta, så att uppdelningen inte alls görs.</para>
 
       <para
->Om du lägger till en not exakt ovanpå en befintlig not med annorlunda längd (dvs. på samma tonhöjd), ändras längden på den befintliga noten till den nya notens längd.</para>
+>Om du lägger till en not exakt ovanpå en befintlig not med annorlunda notvärde (dvs. på samma tonhöjd), ändras notvärdet på den befintliga noten till det nya notvärdet.</para>
 
       <para
->Om du lägger till en paus på exakt samma tid som en befintlig not, blir den befintliga noten tyst under pausens längd, vilket förkortar den eller möjligen tar bort den helt och hållet.</para>
+>Om du lägger till en paus på exakt samma tid som en befintlig not, blir den befintliga noten tyst under pausvärdet, vilket förkortar den eller möjligen tar bort den helt och hållet.</para>
 
       <sect2 id="nv-insertion-keyboard">
 	<title
@@ -2222,17 +2285,17 @@
 
 	<sect3>
 	  <title
->Varaktighet</title>
+>Notvärde</title>
 
 	  <para
->Försäkra dig först om att ett notskriftsverktyg är valt för att ange notens längd (eller pausens längd) som du vill infoga. Du kan välja de olika nottyperna genom att använda nummertangenterna:</para>
+>Försäkra dig först om att ett notverktyg är valt för att ange notvärdet (eller pausvärdet) som du vill infoga. Du kan välja de olika nottyperna genom att använda nummertangenterna:</para>
 
 	  <itemizedlist>
 	    <listitem
 ><para
 ><keycap
 >5</keycap
-> &ndash; Dubbelnot</para
+> &ndash; Brevis</para
 ></listitem>
 	    <listitem
 ><para
@@ -2256,13 +2319,13 @@
 ><para
 ><keycap
 >8</keycap
-> &ndash; Åttondelsnot</para
+> &ndash; Åttondedelsnot</para
 ></listitem>
 	    <listitem
 ><para
 ><keycap
 >6</keycap
-> &ndash; Sextondelsnot</para
+> &ndash; Sextondedelsnot</para
 ></listitem>
 	    <listitem
 ><para
@@ -2279,9 +2342,9 @@
 	  </itemizedlist>
 	  
 	  <para
->Du kan byta till en triolversion av notlängden genom att trycka på tangenten <keycap
+>Du kan byta till en triolversion av notvärdet genom att trycka på tangenten <keycap
 >G</keycap
->. Genom att trycka på den igen byter du tillbaka till normal längd. Statusraden längst ner i fönstret underrättar dig om att en triollängd är aktiv.</para>
+>. Genom att trycka på den igen byter du tillbaka till normalt notvärde. Statusraden längst ner i fönstret underrättar dig om att ett triolvärde är aktivt.</para>
 	</sect3>
 
 	<sect3>
@@ -2289,7 +2352,7 @@
 >Tonhöjd</title>
 
 	  <para
->Så fort ett notskriftsverktyg är valt, kan du infoga en not på <link linkend="nv-rulers"
+>Så fort ett notverktyg är valt, kan du infoga en not på <link linkend="nv-rulers"
 >infogningsmarkörens</link
 > aktuella position genom att trycka på en av tonhöjdstangenterna:</para>
 
@@ -2339,7 +2402,7 @@
 	  </itemizedlist>
 
 	  <para
->Tryck på tangenten "." för att växla mellan varaktighet med eller utan punkt.</para>
+>Tryck på tangenten "." för att växla mellan notvärden med eller utan punkt.</para>
 
 	  <para
 >Genom att hålla nere <keycap
@@ -2403,7 +2466,7 @@
 >Ackord</title>
 
 	  <para
->Normalbeteendet i notskriftseditorn är att flytta infogningsmarkören framåt efter en not har infogats, så att den är klar att mata in en ny not på efterföljande plats i en melodi. Det kan ändras med tangenten <keycap
+>Normalbeteendet i notbehandlaren är att flytta infogningsmarkören framåt efter en not har infogats, så att den är klar att mata in en ny not på efterföljande plats i en melodi. Det kan ändras med tangenten <keycap
 >H</keycap
 >, som byter till ackordsläge så att efterföljande inmatning sker samtidigt som den senaste. Att trycka på <keycap
 >H</keycap
@@ -2413,10 +2476,10 @@
 
 	<sect3>
 	  <title
->Ändra notlängder</title>
+>Ändra notvärden</title>
 
 	  <para
->Du kan använda tangentbordet för att ändra längd på noter som du redan har skrivit in. Försäkra dig om att noterna du vill ändra är markerade, och tryck därefter på <keycap
+>Du kan använda tangentbordet för att ändra notvärden som du redan har skrivit in. Försäkra dig om att noterna du vill ändra är markerade, och tryck därefter på <keycap
 >Ctrl</keycap
 > samt nummertangenten för noten som du vill ha. Du kan också lägga till eller ta bort punkter, genom att trycka <keycap
 >Ctrl</keycap
@@ -2427,8 +2490,8 @@
 >Alt</keycap
 > samt <keycap
 >Ctrl</keycap
->, ändrar du längden på noterna som de visas i notskriftseditorn utan att ändra framförd längd. Det kan vara mycket användbart för att städa upp ett partitur: Se också <link linkend="nv-quantization"
->Notskrift från framförandedata</link
+>, ändrar du notvärden som de visas i notbehandlaren utan att ändra utfört notvärde. Det kan vara mycket användbart för att städa upp ett partitur: Se också <link linkend="nv-quantization"
+>Notskrift från utförandedata</link
 >. </para>
 	</sect3>
 
@@ -2440,7 +2503,7 @@
 >Alla infogningskommandon är också tillgängliga från en undermeny i menyn Verktyg. Det är inte troligt att du någonsin vill navigera i menyn bara för att infoga en enstaka not, men menyerna visar snabbtangenterna och tillhandahåller på så sätt en användbar referens om du skulle glömma vilken tangent som gör vad.</para>
 
 	  <para
->Snabbtangenterna är för närvarande gjorda för att användas med tangentbord som har QWERTY-layout. Det finns ännu inte något sätt att ändra snabbtangenter till en annan layout, förutom att individuellt ändra tilldelning av varje tangent med alternativet "Anpassa genvägar..." i menyn Inställningar.</para>
+>Snabbtangenterna är för närvarande gjorda för att användas med tangentbord som har QWERTY-organisation. Det finns ännu inte något sätt att ändra snabbtangenter till en annan organisation, förutom att individuellt ändra tilldelning av varje tangent med alternativet "Anpassa genvägar..." i menyn Inställningar.</para>
 
 	  <para
 >Genom att hålla nere <keycap
@@ -2456,13 +2519,13 @@
 >Skriva in noter genom att använda ett MIDI-keyboard</title>
 
 	<para
->Du kan lägga till noter i notskriftseditorn en i taget med ett MIDI-keyboard eller en annan MIDI-styrenhet, en process som är känd som "stegvis inspelning". Notskriftseditorn använder tonhöjden du spelar på ett keyboard, men fördröjningarna du har valt i själva editorn. </para>
+>Du kan lägga till noter i notbehandlaren en i taget med ett MIDI-keyboard eller en annan MIDI-styrenhet, en process som är känd som "stegvis inspelning". Notbehandlaren använder tonhöjden du spelar på ett keyboard, men de notvärden du har valt i själva editorn. </para>
 
 	<para
->För att börja mata in noter från ett MIDI-keyboard, försäkra dig först om att det är inställt som förvald MIDI-inspelningsenhet. Försäkra dig därefter om att ett notskriftsverktyg är valt för att ange en längd. Tryck därefter på knappen för stegvis inspelning i notskriftseditorns verktygsrad, eller välj Stegvis inspelning i menyn Verktyg. Från detta ögonblick infogas alla noter som du spelar på ditt MIDI-keyboard vid den nuvarande inmatningstiden i notskriftsfönstret, ända till stegvis inspelning stängs av igen, aktiveras i ett annat fönster eller fönstret stängs. </para>
+>För att börja mata in noter från ett MIDI-keyboard, försäkra dig först om att det är inställt som förvald MIDI-inspelningsenhet. Försäkra dig därefter om att ett notverktyg är valt för att ange ett notvärde. Tryck därefter på knappen för stegvis inspelning i notbehandlarens verktygsrad, eller välj Stegvis inspelning i menyn Verktyg. Från detta ögonblick infogas alla toner som du spelar på ditt MIDI-keyboard vid den nuvarande inmatningstiden i noteringsfönstret, ända till stegvis inspelning stängs av igen, aktiveras i ett annat fönster eller fönstret stängs. </para>
 
 	<para
->Du kan välja ett annat notskriftsverktyg medan stegvis inspelning pågår för att infoga noter med olika fördröjning, och du kan också byta till ackordläge för att infoga ackord. </para>
+>Du kan välja ett annat notverktyg medan stegvis inspelning pågår för att infoga noter med olika notvärden, och du kan också byta till ackordläge för att infoga ackord. </para>
       </sect2>
       
     </sect1>
@@ -2475,12 +2538,12 @@
 
 <!-- !!! rework -->      
       <para
->Det första man måste veta om hur &rosegarden; hanterar dessa är att tidsrelaterade ändringar (tempo och taktartssignaturer) hanteras helt annorlunda än klaver och tonarter. För att förenkla hantering av uppspelning och inspelning samt notskrift, kräver &rosegarden; att när tempo eller taktartssignatur ändras, görs det i alla notsystem på en gång. Du kan inte låta ett notsystem använda 3/4 medan ett annat samtidigt använder 4/4, eller ha ett notsystem som spelar med 120 taktslag och ett annat med 90. Det gäller bara tid: Det finns inga sådana begränsningar för användning av klav- och tonartsändringar.</para>
+>Det första man måste veta om hur &rosegarden; hanterar dessa är att tidsrelaterade ändringar (tempo och taktarter) hanteras helt annorlunda än klaver och tonarter. För att förenkla hantering av uppspelning och inspelning samt notering, kräver &rosegarden; att när tempo eller taktart ändras, görs det i alla notsystem på en gång. Du kan inte låta ett notsystem använda 3/4 medan ett annat samtidigt använder 4/4, eller ha ett notsystem som spelar med 120 taktslag och ett annat med 90. Det gäller bara tid: Det finns inga sådana begränsningar för användning av klav- och tonartsbyten.</para>
 
       <para
->För att ändra klav, tonart, tempo eller taktartssignatur inne i ett fönster i notskriftseditorn, placera <link linkend="nv-rulers"
+>För att ändra klav, tonart, tempobeteckning eller taktart inne i ett fönster i notbehandlaren, placera <link linkend="nv-rulers"
 >infogningsmarkören</link
-> på ett ställe där du vill att ändringen ska ske, och använd en av redigeringsmenyns funktioner Lägg till klavändring..., Lägg till tonartsändring..., Lägg till tempoändring... eller Lägg till taktartssignaturändring... . Då visas en dialogruta där du kan välja en viss inställning för klav, tonart, tempo eller taktartssignatur som du vill använda, enligt följande.</para>
+> på ett ställe där du vill att ändringen ska ske, och använd en av redigeringsmenyns funktioner Lägg till klavbyte..., Lägg till tonartsbyte..., Byt tempo... eller Byt taktart... . Då visas en dialogruta där du kan välja en viss inställning för klav, tonart, tempobeteckning eller taktart som du vill använda, enligt följande.</para>
 
       <sect2 id="nv-signatures-clef">
 	<title
@@ -2507,7 +2570,7 @@
 >Behåll nuvarande tonhöjder</term>
 	      <listitem>
 		<para
->Alla noter som följer klaven behåller sina nuvarande framförda tonhöjder. </para>
+>Alla noter som följer klaven behåller sina nuvarande utförda tonhöjder. </para>
 		<para
 >Genom att till exempel infoga en c-klav i mitten av ett avsnitt med en tidigare g-klav gör att noterna som kommer efter klaven att flyttas en oktav högre i notsystemet, eftersom de fortfarande har sina tonhöjder enligt g-klaven. </para>
 	      </listitem>
@@ -2540,7 +2603,7 @@
 	</imageobject>
 	  <textobject>
 	    <phrase
->&rosegarden;s dialogruta för tonartssignatur</phrase>
+>&rosegarden;s dialogruta för fasta förtecken</phrase>
 	  </textobject>
 	</mediaobject>
 	</screenshot>
@@ -2572,7 +2635,7 @@
 >Dynamik</term
 ><listitem
 ><para
->Används för mindre lokala indikeringar som dynamikbeteckningarna "p", "mf" etc. Visas normalt under notsystemet med liten kursiv stil. </para
+>Används för mindre lokala föredragsbeteckningar som dynamikbeteckningarna "p", "mf" etc. Visas normalt under notsystemet med liten kursiv stil. </para
 ></listitem
 ></varlistentry>
 
@@ -2625,7 +2688,7 @@
 
 	<varlistentry
 ><term
->Notering</term
+>Anteckning</term
 ><listitem
 ><para
 >Används för hjälptext som inte strikt anses tillhöra partituret. Visas normalt under notsystemet, i en gul ruta som liknar en klisterlapp. </para
@@ -2649,7 +2712,7 @@
 >, låter dig redigera alla sångtexthändelser för ett enskilt notsystem på en gång, med ett ganska grundläggande textbaserat redigeringssystem. För att använda den, välj bara menyalternativet, redigera sångtexten i dialogrutan som visas, och klicka därefter på Ok.</para>
 
 	<para
->Sångtext som du skriver in måste följa ett visst format. Taktlinjer är mycket viktiga för att undvika att editorn blir förvirrad, och representeras med ett snedstreck ("/"). Inom varje takt skiljs enskilda stavelser åt med mellanslag (åtminstone ett mellanslag: editorn bryr sig inte om extra blanktecken). Varje stavelse kopplas i sin tur till nästföljande not eller ackord i takten (även om editorn för närvarande kan bli riktigt förvirrad av ackord som inte är exakta, dvs. som kräver utjämning eller kvantisering).</para>
+>Sångtext som du skriver in måste följa ett visst format. Taktstreck är mycket viktiga för att undvika att editorn blir förvirrad, och representeras med ett snedstreck ("/"). Inom varje takt skiljs enskilda stavelser åt med mellanslag (åtminstone ett mellanslag: editorn bryr sig inte om extra blanktecken). Varje stavelse kopplas i sin tur till nästföljande not eller ackord i takten (även om editorn för närvarande kan bli riktigt förvirrad av ackord som inte är exakta, dvs. som kräver utjämning eller kvantisering).</para>
 
 	<para
 >Om du vill att en not inte ska ha någon tillhörande stavelse, måste du använda en punkt (".") som stavelse för noten. (Det är därför standardtexten för ett segment oftast är full med punkter.) Kom ihåg att skilja punkterna åt med mellanslag, så att de tydligt är skilda stavelser.</para>
@@ -2674,21 +2737,21 @@
 
     <sect1 id="nv-indication">
       <title
->Bågar och strutar</title>
+>Legatobågar och klykor</title>
 
       <para
->Dynamikmarkeringarna bågar och strutar lagras som händelser, precis som noter eller pauser. För att skapa en, markera området du vill täcka (en följd av noter eller något annat), och använd därefter alternativen <guimenuitem
->Lägg till bindebåge</guimenuitem
+>Dynamikmarkeringarna legatobågar och klykor lagras som händelser, precis som noter eller pauser. För att skapa en, markera området du vill täcka (en följd av noter eller något annat), och använd därefter alternativen <guimenuitem
+>Lägg till legatobåge</guimenuitem
 >, <guimenuitem
 >Lägg till crescendo</guimenuitem
 > eller <guimenuitem
->Lägg till decrescendo</guimenuitem
+>Lägg till diminuendo</guimenuitem
 > i menyn <guimenu
 >Grupp</guimenu
 >.</para>
 
       <para
->Du kan ta bort en båge eller strut på samma sätt som alla andra händelser: Markera den antingen med markeringsverktyget och tryck därefter på <keycap
+>Du kan ta bort en legatobåge eller klyka på samma sätt som alla andra händelser: Markera den antingen med markeringsverktyget och tryck därefter på <keycap
 >Delete</keycap
 >, eller klicka på den med borttagningsverktyget aktivt.</para>
 
@@ -2698,7 +2761,7 @@
 
     <sect1 id="nv-note-qualities">
       <title
->Notskaft och snedstreck</title>
+>Notskaft och tvärbalkar</title>
 
       <para
 >Du kan ställa in skaftriktningen på alla markerade noter (under förutsättning att de är av en sort som har skaft) med de tre skaftriktningsalternativen i menyn Noter. Alternativen låter dig antingen låsa skaften uppåt eller neråt, eller återgå till skaftriktningen som &rosegarden; annars skulle ha valt. Se också <link linkend="nv-beamed-groups"
@@ -2708,7 +2771,7 @@
       <para
 >Menyn <guimenu
 >Noter</guimenu
-> innehåller också alternativ för att lägga till snedstreck på notskaft, för att till exempel ange korta upprepade noter eller trumvirvlar. De är för närvarande bara notation. &rosegarden; tar inte hänsyn till dem när notsystemet spelas upp eller när &MIDI; skapas.</para>
+> innehåller också alternativ för att lägga till tvärbalkar på notskaft, för att till exempel ange korta upprepade noter eller trumvirvlar. De är för närvarande bara notation. &rosegarden; tar inte hänsyn till dem när notsystemet spelas upp eller när &MIDI; skapas.</para>
     </sect1>
     
     <!-- Beamed groups, including overlapping and nesting them -->
@@ -2718,7 +2781,7 @@
 >Balkar</title>
       
       <para
->Att lägga till balkar till noter anses som en grupperingsåtgärd i &rosegarden;s notskriftseditor, tillgänglig i menyn <guimenu
+>Att lägga till balkar till noter anses som en grupperingsåtgärd i &rosegarden;s notbehandlare, tillgänglig i menyn <guimenu
 >Grupp</guimenu
 >. Markera noterna du vill lägga till en balk för, och använd menyalternativet Balkar i menyn <guimenu
 >Grupp</guimenu
@@ -2742,18 +2805,18 @@
 
     <sect1 id="nv-tuplets">
       <title
->Trioler och andra tupler</title>
+>Trioler och andra annandelningar</title>
 
       <para
->En triolgrupp består av tre noter eller ackord som spelas under samma tid som två. (Mer exakt består den av noter med en total längd av tre godtyckliga enheter, som spelas under samma tid som två av enheterna.)</para>
+>En triolgrupp består av tre toner eller ackord som spelas under samma tid som två. (Mer exakt består den av toner med ett totalt notvärde av tre godtyckliga enheter, som spelas under samma tid som två av enheterna.)</para>
 
       <para
 >Vi använder ordet <quote
->tupel</quote
-> för att beskriva det allmänna fallet då noter med en total längd av ett givet antal enheter, spelas under en tid som anges av ett annat antal av enheterna: Nio noter under tiden för åtta, eller sex under tiden för fyra, eller en fjärdedelsnot och en åttondelsnot under tiden för en enda fjärdedelsnot, eller till och med två noter under tiden för tre. (För närvarande stöder inte &rosegarden; det sista exemplet. Tupelgrupper måste alltid spelas med en kortare längd än den skrivna.)</para>
+>annandelning</quote
+> för att beskriva det allmänna fallet då toner med ett totalt notvärde av ett givet antal enheter, spelas under en tid som anges av ett annat antal av enheterna: Nio toner under tiden för åtta, eller sex under tiden för fyra, eller en fjärdedelsnot och en åttondedelsnot under tiden för en enda fjärdedelsnot, eller till och med två toner under tiden för tre. (För närvarande stöder inte &rosegarden; det sista exemplet. Annandelningar måste alltid spelas med ett kortare notvärde än det skrivna.)</para>
 
       <para
->Menyfunktionerna för trioler och tupler fungerar genom att ta en befintlig följd av noter eller pauser och trycka ihop dem så att de spelas upp snabbare, och fylla i överblivet utrymme efter följden med en slutgiltig paus och rita upp det hela som en tupelgrupp. Därför kan du skapa en ny följd av trioler genom att mata in de första två noterna i följden (med normal form), göra dem till trioler, och därefter fylla i utrymmet som blivit kvar efter triolåtgärden med den sista noten i triolen. Eller kan du utföra triolåtgärden innan du matar in några noter, och på så sätt omvandla den ursprungliga pausen till triolform, och därefter infoga triolens noter ovanpå den. Några exempel kan vara till hjälp:</para>
+>Menyfunktionerna för trioler och annandelningar fungerar genom att ta en befintlig följd av noter eller pauser och trycka ihop dem så att de spelas upp snabbare, och fylla i överblivet utrymme efter följden med en slutgiltig paus och rita upp det hela som en annandelning. Därför kan du skapa en ny följd av trioler genom att mata in de första två noterna i följden (med normal form), göra dem till trioler, och därefter fylla i utrymmet som blivit kvar efter triolåtgärden med den sista noten i triolen. Eller kan du utföra triolåtgärden innan du matar in några noter, och på så sätt omvandla den ursprungliga pausen till triolform, och därefter infoga triolens noter ovanpå den. Några exempel kan vara till hjälp:</para>
 
       <!-- Need examples and screenshots -->
       
@@ -2767,14 +2830,14 @@
       </imageobject>
 	<textobject>
 	  <phrase
->&rosegarden;s allmänna tupeldialogruta</phrase>
+>&rosegarden;s allmänna dialogruta för annandelningar</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
       </para>
 
       <para
->För att ange en allmän tupelgrupp, måste man känna till vad grundnoten är (om man till exempel spelar tre fjärdedelsnoter under tiden för två är grundnoten en fjärdedelsnot) och förhållandet mellan antalet grundnoter som skrivs till antalet som spelas.</para>
+>För att ange en allmän annandelning, måste man känna till vad grundnoten är (om man till exempel spelar tre fjärdedelsnoter under tiden för två är grundnoten en fjärdedelsnot) och förhållandet mellan antalet grundnoter som skrivs till antalet som spelas.</para>
 
       <!-- Then discuss "tuplet mode": with a subtitle? -->
 
@@ -2791,7 +2854,7 @@
       <para
 >Betydelsen av <quote
 >klipp ut och klistra in</quote
-> är inte så uppenbar för musikredigeringsprogram som den är för något som en ordbehandlare, där bokstäverna och orden anges i en enkel linjär ordning. I enlighet med det erbjuder &rosegarden;s notskriftseditor flera olika typer av inklistringsåtgärder, samt separata funktioner för Klipp ut eller Klipp ut och stäng. </para>
+> är inte så uppenbar för musikredigeringsprogram som den är för något som en ordbehandlare, där bokstäverna och orden anges i en enkel linjär ordning. I enlighet med det erbjuder &rosegarden;s notbehandlare flera olika typer av inklistringsåtgärder, samt separata funktioner för Klipp ut eller Klipp ut och stäng. </para>
 
       <para>
 	<screenshot>
@@ -2814,7 +2877,7 @@
 >Begränsat</term>
 	  <listitem>
 	    <para
->Kräver ett befintligt gap (som inte innehåller något annat än pauser) med tillräcklig längd för att helt omfatta klippbordets innehåll. Innehållet klistras in i gapet. Om det inte finns ett gap som är långt nog, utförs inte inklistringen. </para>
+>Kräver ett befintligt gap (som inte innehåller något annat än pauser) med tillräckligt notvärde för att helt omfatta klippbordets innehåll. Innehållet klistras in i gapet. Om det inte finns ett gap som är långt nog, utförs inte inklistringen. </para>
 	    <para
 >Det här är förvald inklistringstyp. </para>
 	  </listitem>
@@ -2843,7 +2906,7 @@
 >Överlagring av noter</term>
 	  <listitem>
 	    <para
->Utför en inklistring på samma sätt som skulle ske om du skrev in var och en av noterna på klippbordet själv med notskriftseditorn: Om det finns andra noter som överlappar med dem, delas nya och befintliga noter i lämpliga bindningar. </para>
+>Utför en inklistring på samma sätt som skulle ske om du skrev in var och en av noterna på klippbordet själv med notbehandlaren: Om det finns andra noter som överlappar med dem, delas nya och befintliga noter i lämpliga bindebågar. </para>
 	  </listitem>
 	</varlistentry>
 
@@ -2865,21 +2928,21 @@
 
     <sect1 id="nv-adjustments">
       <title
->Justera notskrift</title>
+>Justera notering</title>
 
 
       <sect2 id="nv-adjustments-note-rest-durations">
 	<title
->Justera not- och pauslängder</title>
+>Justera not- och pausvärden</title>
 	
 	<sect3 id="nv-normalize-rests">
 	  <title
 >Normalisera pauser</title>
 
 	  <para
->Ibland kan ett notskriftsavsnitt råka ut för felaktiga pauslängder för aktuell taktartssignatur, som ett resultat av redigering eller kvantiseringsåtgärder. Du kan använda funktionen <guimenuitem
+>Ibland kan ett notavsnitt råka ut för felaktiga pausvärden för aktuell taktart, som ett resultat av redigering eller kvantiseringsåtgärder. Du kan använda funktionen <guimenuitem
 >Normalisera pauser</guimenuitem
-> för att fixa dem. Funktionen undersöker varje sekvens av pauser i en följd som hittas i markeringen och justerar, delar och sammanfogar pauser enligt vad som är nödvändigt för att försäkra att pauserna har rätt teoretisk längd och hamnar på rätt gränser. </para>
+> för att fixa dem. Funktionen undersöker varje sekvens av pauser i en följd som hittas i markeringen och justerar, delar och lägger ihop pauser enligt vad som är nödvändigt för att försäkra att pauserna har rätt teoretiskt pausvärde och hamnar på rätt gränser. </para>
 	  
 	  <para
 >Om en 4/4-takt innehåller en fjärdedelsnot, arrangeras en halvnotspaus och en fjärdedelspaus om så att fjärdedelspausen placeras först, eftersom halvnotspausen inte ska överlappa den centrala taktgränsen i takten. </para>
@@ -2984,13 +3047,13 @@
 
     <sect1 id="nv-interpret">
       <title
->Tolka framförandeantydningar i notskrift</title>
+>Tolka utförandeantydningar i notskrift</title>
       <!-- !!! -->
       <para
->Du kan använda tolkningsfunktionen för att ändra ljudstyrkor och tider för noter enligt eventuell skriven eller angiven dynamik som hittas. Tillgängliga val av tolkningar är följande: <variablelist>
+>Du kan använda tolkningsfunktionen för att ändra ljudstyrkor och tider för toner enligt eventuell skriven eller angiven dynamik som hittas. Tillgängliga val av tolkningar är följande: <variablelist>
 	  <varlistentry>
 	    <term
->Tillämpa textdynamik (p, mf, ff, etc.) </term>
+>Tillämpa dynamikbeteckningar (p, mf, ff, etc.) </term>
 	    <listitem
 ><para
 >Anger en ljudstyrka för varje not baserat på senaste texten av typen "Dynamik" som observerats i samma notsystem (bara text på formen pp, p, mp, mf, f, ff, fff etc känns igen). </para
@@ -2999,10 +3062,10 @@
 	  
 	  <varlistentry>
 	    <term
->Använd strutdynamik </term>
+>Använd dynamikklykor </term>
 	    <listitem
 ><para
->Gör att noterna gradvis ökar eller minskar ljudstyrka under en strut som anger crescendo eller decrescendo. </para
+>Gör att noterna gradvis ökar eller minskar ljudstyrka under en klyka som anger crescendo eller diminuendo. </para
 ></listitem>
 	  </varlistentry>
 	  
@@ -3017,10 +3080,10 @@
 	  
 	  <varlistentry>
 	    <term
->Artikulera bågar, staccato, tenuto, etc. </term>
+>Artikulationsbeteckningar </term>
 	    <listitem
 ><para
->Avkortar noter utan bågar, avkortar staccato-noter ännu mer, och ger noter inne i bågar och tenuto-noter sin fulla längd. </para
+>Avkortar noter utan legatobågar, avkortar staccato-noter ännu mer, och ger noter inne i legatobågar och tenuto-noter sina fulla notvärden. </para
 ></listitem>
 	  </varlistentry>
 	</variablelist>
@@ -3033,21 +3096,21 @@
 
     <sect1 id="nv-quantization">
       <title
->Notskrift från framförandedata</title>
+>Notskrift från utförandedata</title>
 
       <para
->&rosegarden; är ett program med flera användningsområden: Det är en notskriftseditor, men det är i huvudsak en sequencer och editor för framförd musik, och i framföranden är noternas tider och längder naturligtvis sällan så precisa som de är i ett tryckt partitur. </para>
+>&rosegarden; är ett program med flera användningsområden: Det är en notbehandlare, men det är i huvudsak en musikbehandlare och editor för utförd musik, och i utföranden är tonernas tider och notvärden naturligtvis sällan så precisa som de är i ett tryckt partitur. </para>
 
       <para
->Det betyder att det ofta är önskvärt för &rosegarden; att göra en hel del uppstädning av grundläggande nottider och notlängder vid försök att skapa meningsfulla noter att visa i notskriftseditorn. Det är en sorts kvantisering, men en sort som kräver en förvånansvärd mängd gissningar för att göras bra. Det ingår en kvantisering i &rosegarden; som är konstruerad för att göra ett något bättre jobb än den enkla rutnätskvantiseringen. </para>
+>Det betyder att det ofta är önskvärt för &rosegarden; att göra en hel del uppstädning av grundläggande nottider och notvärden vid försök att skapa meningsfulla noter att visa i notbehandlaren. Det är en sorts kvantisering, men en sort som kräver en förvånansvärd mängd gissningar för att göras bra. Det ingår en kvantisering i &rosegarden; som är konstruerad för att göra ett något bättre jobb än den enkla rutnätskvantiseringen. </para>
 
       <para
 >Att använda kvantisering enbart för notskrift kallas ganska fantasilöst för <quote
->notskriftskvantisering</quote
->: Den gäller bara noterna du ser och redigerar i notskrift, och påverkar inte noterna som spelas, eller det du redigerar i andra vyer som matrisvyn. Kvantiseringen utförs automatiskt för musik som importeras eller spelas in från MIDI, även om inte alla dess möjliga funktioner normalt är aktiverade. </para>
+>kvantisering</quote
+>: Den gäller bara noterna du ser och redigerar i notskrift, och påverkar inte tonerna som spelas, eller det du redigerar i andra vyer som matrisvyn. Kvantiseringen utförs automatiskt för musik som importeras eller spelas in från MIDI, även om inte alla dess möjliga funktioner normalt är aktiverade. </para>
 
       <para
->Det finns två sätt att se vilka noter som har kvantiserats för notskrift. Normalt innehåller varje notskriftsvy en linjal för obehandlade noter (i gruppen med linjaler ovanför partituret) som visar ett rektangulärt block för varje not. Blocket är placerat så att det representerar tiden och längden för noten som framfördes, men med rektangelns övre och nedre kant utökade eller avkortade för att representera tiden efter notskriftskvantisering. Om det är för mycket information för dig, kan du som ett alternativ välja (i inställningsdialogrutan) att visa alla nothuvuden i partituret som har ändrade tider efter notskriftskvantisering med grön färg. </para>
+>Det finns två sätt att se vilka noter som har kvantiserats för notskrift. Normalt innehåller varje notvy en linjal för obehandlade noter (i gruppen med linjaler ovanför partituret) som visar ett rektangulärt block för varje not. Blocket är placerat så att det representerar tiden och notvärdet för noten som utfördes, men med rektangelns övre och nedre kant utökade eller avkortade för att representera tiden efter kvantisering. Om det är för mycket information för dig, kan du som ett alternativ välja (i inställningsdialogrutan) att visa alla nothuvuden i partituret som har ändrade tider efter kvantisering med grön färg. </para>
 
       <para>
 
@@ -3058,7 +3121,7 @@
       </imageobject>
 	<textobject>
 	  <phrase
->&rosegarden;s kvantiseringsdialogruta för notskrift</phrase>
+>&rosegarden;s kvantiseringsdialogruta</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
@@ -3070,7 +3133,7 @@
 
       <sect2 id="nv-quantization-parameters">
 	<title
->Inställningsbara parametrar för den heuristiska notskriftskvantiseringen</title>
+>Inställningsbara parametrar för den heuristiska kvantiseringen</title>
 
 	<sect3 id="nv-quantization-parameters-during">
 	  <title
@@ -3083,7 +3146,7 @@
 >Komplexitet</term>
 	      <listitem>
 		<para
->Notskriftskvantiseringens "komplexitet" är dess mest grundläggande parameter. En "komplex" kvantisering är mer redo att acceptera att musik som ser komplex ut i själva verket är avsedd att vara komplex, medan en "enkel" kvantisering är mer redo att anta att musik som ser komplex ut orsakas av ett mindre precist framförande av enkel musik. </para>
+>Kvantiseringens "komplexitet" är dess mest grundläggande parameter. En "komplex" kvantisering är mer redo att acceptera att musik som ser komplex ut i själva verket är avsedd att vara komplex, medan en "enkel" kvantisering är mer redo att anta att musik som ser komplex ut orsakas av ett mindre precist utförande av enkel musik. </para>
 		<para
 >Standardinställningarna är avsedda att skapa rimliga resultat för ett ganska brett musikspektrum. </para>
 	      </listitem>
@@ -3094,20 +3157,20 @@
 >Grundenhet för rutnät</term>
 	      <listitem>
 		<para
->Den grundläggande rutnätsenheten (inställd till en nots längdvärde) anger den absolut minsta notenheten som tillåts bli kvar i partituret efter kvantisering. Om den till exempel är inställd till en sextondelsnot, placeras alla noter på gränser som är en multipel av sextondelsnoter, och längderna är också multiplar av sextondelsnoter. </para>
+>Den grundläggande rutnätsenheten (inställd till ett notvärde) anger den absolut minsta notenheten som tillåts bli kvar i partituret efter kvantisering. Om den till exempel är inställd till en sextondedelsnot, placeras alla noter på gränser som är en multipel av sextondedelsnoter, och notvärdena är också multiplar av sextondedelsnoter. </para>
 		<para
->Basrutnätsenhetens Inställning är inte riktigt så viktig för notskriftskvantisering som den är för den vanliga rutnätskvantiseringen, eftersom allt den gör är att lägga en absolut gräns på precisionsnivån som tillåts av komplexitetsparametern. Oftast när du hittar ett fall där bättre resultat uppnås genom att öka rutnätsenheten, har du i själva verket hittat ett fall där kvantiseringen helt enkelt inte gjorde ett så bra jobb som den skulle ha kunnat göra med den mindre enheten. </para>
+>Basrutnätsenhetens Inställning är inte riktigt så viktig för kvantisering som den är för den vanliga rutnätskvantiseringen, eftersom allt den gör är att lägga en absolut gräns på precisionsnivån som tillåts av komplexitetsparametern. Oftast när du hittar ett fall där bättre resultat uppnås genom att öka rutnätsenheten, har du i själva verket hittat ett fall där kvantiseringen helt enkelt inte gjorde ett så bra jobb som den skulle ha kunnat göra med den mindre enheten. </para>
 	      </listitem>
 	    </varlistentry>
 
 	    <varlistentry>
 	      <term
->Tupletnivå</term>
+>Annandelningsnivå</term>
 	      <listitem>
 		<para
->Notskriftskvantiseringen klarar av att identifiera tupler (trioler och andra tidskomprimerade grupper), inom rimliga gränser. Parametern styr hur ambitiös den försöker vara när den letar efter tupler, genom att ange en gräns för hur många noter per tupelgrupp som den försöker identifiera. Om den är inställd till <quote
+>Kvantiseringen klarar av att identifiera annandelningar (trioler och andra tidskomprimerade grupper), inom rimliga gränser. Parametern styr hur ambitiös den försöker vara när den letar efter annandelningar, genom att ange en gräns för hur många noter per annandelning som den försöker identifiera. Om den är inställd till <quote
 >Inget</quote
->, försöker inte kvantiseringen identifiera tupler alls. </para>
+>, försöker inte kvantiseringen identifiera annandelningar överhuvudtaget. </para>
 	      </listitem>
 	    </varlistentry>
 
@@ -3132,32 +3195,32 @@
 
 	    <varlistentry>
 	      <term
->Lägg till artikulering (staccato, tenuto, bågar)</term>
+>Lägg till artikulationsbeteckningar</term>
 	      <listitem>
 		<para
->Gör att kvantiseringen försöker identifiera vilka noter som ska markeras som staccato, baserat på längden hos individuella noter och noter i följd (för noter som är slutar väsentligt tidigare än den efterföljande noten, men uppenbarligen inte tidigt nog för att vara värda en paus), tenuto (för noter som nästan eller precis överlappar följande not) och bågar (för följder av noter som möts eller överlappar). </para>
+>Gör att kvantiseringen försöker identifiera vilka noter som ska markeras som staccato, baserat på notvärdet hos individuella noter och noter i följd (för noter som slutar väsentligt tidigare än den efterföljande noten, men uppenbarligen inte tidigt nog för att vara värda en paus), tenuto (för noter som nästan eller precis överlappar följande not) och legatobågar (för följder av noter som möts eller överlappar). </para>
 	      </listitem>
 	    </varlistentry>
 
 	    <varlistentry>
 	      <term
->Bind noter vid taktlinjer etc.</term>
+>Bind noter vid taktstreck etc.</term>
 	      <listitem>
 		<para
->Gör att alla noter som fortfarande finns kvar efter kvantisering och överlappar taktlinjer eller som har längder som inte kan uttryckas exakt med enstaka nothuvuden att delas upp i flera noter på lämpligt sätt, och bindas. Det får samma effekt som att utföra funktionen "Bind noter vid taktlinjer" i notskriftsvyn. </para>
+>Gör att alla noter som fortfarande finns kvar efter kvantisering och överlappar taktstreck eller som har notvärden som inte kan uttryckas exakt med enstaka nothuvuden att delas upp i flera noter på lämpligt sätt, och bindas. Det får samma effekt som att utföra funktionen "Bind noter vid taktstreck" i notvyn. </para>
 		<para
->Den här parametern är normalt inte aktiverad, delvis på grund av att den ändrar antalet nothändelser, vilket är olämpligt när &rosegarden; delvis eller huvudsakligen används som en MIDI-sequencer. </para>
+>Den här parametern är normalt inte aktiverad, delvis på grund av att den ändrar antalet tonhändelser, vilket är olämpligt när &rosegarden; delvis eller huvudsakligen används som en MIDI-musikbehandlare. </para>
 	      </listitem>
 	    </varlistentry>
 
 	    <varlistentry>
 	      <term
->Dela och bind överlappande ackord</term>
+>Dela och bind ackordnoter med för stora notvärden</term>
 	      <listitem>
 		<para
->Gör att överlappande noter delas och binds, så att strikta ackord med individuella nothuvuden bundna efter behov skapas. Det får samma effekt som att utföra funktionen "Dela och bind överlappande ackord" i notskriftsvyn. </para>
+>Gör att överlappande noter delas och binds, så att strikta ackord med individuella nothuvuden bundna efter behov skapas. Det får samma effekt som att utföra funktionen "Dela och bind ackordnoter med för stora notvärden" i notvyn. </para>
 		<para
->Den här parametern är normalt inte aktiverad, delvis på grund av att den ändrar antalet nothändelser, vilket är olämpligt när &rosegarden; delvis eller huvudsakligen används som en MIDI-sequencer. </para>
+>Den här parametern är normalt inte aktiverad, delvis på grund av att den ändrar antalet tonhändelser, vilket är olämpligt när &rosegarden; delvis eller huvudsakligen används som en MIDI-musikbehandlare. </para>
 	      </listitem>
 	    </varlistentry>
 	  </variablelist>
@@ -3183,7 +3246,7 @@
       <para
 >Det är också möjligt att skapa dina egna notstilar genom att beskriva dem med <acronym
 >XML</acronym
->-filer. (Till och med standardstilarna är definierade på detta sätt: Den enda orsaken att editorn vet om att en klassisk sextondelsnot har ett ovalt lutande ifyllt huvud, ett skaft, två flaggor etc., är att beskrivningen i Classical.xml anger det.) Se <link linkend="developers-note-styles"
+>-filer. (Till och med standardstilarna är definierade på detta sätt: Den enda orsaken att editorn vet om att en klassisk sextondedelsnot har ett ovalt lutande ifyllt huvud, ett skaft, två flaggor etc., är att beskrivningen i Classical.xml anger det.) Se <link linkend="developers-note-styles"
 >Anpassa Rosegarden</link
 > för mer information. </para>
     </sect1>
@@ -3192,13 +3255,13 @@
       <title
 >Notteckensnitt</title>
       <para
->&rosegarden; levereras med ett enda skalbart notskriftsteckensnitt, Feta-teckensnittet utvecklat i Lilypond-projektet. Feta är ett teckensnitt med mycket hög kvalitet som bör vara lämpligt för nästan allt klassiskt arbete. </para>
+>&rosegarden; levereras med ett enda skalbart notteckensnitt, Feta-teckensnittet utvecklat i Lilypond-projektet. Feta är ett teckensnitt med mycket hög kvalitet som bör vara lämpligt för nästan allt klassiskt arbete. </para>
 
       <para
->&rosegarden; innehåller också stöd som standard för ett antal andra notskriftsteckensnitt. Du måste själv tillhandahålla teckensnitten på formaten Truetype (.ttf) eller Postscript Typ-1 (.pfb, .pfa), och du måste ha lämpliga rättigheter för att installera dem på samma plats som &rosegarden; installerades. För att installera ett notskriftsteckensnitt som stöds, lokalisera katalogen share för &rosegarden;s installation (oftast en underkatalog till KDE-skrivbordets installationsträd, som /opt/kde/share/apps/rosegarden). Du märker att katalogen har en underkatalog som heter "fonts". Kopiera teckensnittsfilerna till den, och starta om &rosegarden;. Om teckensnittet stöds, ska det nu synas i teckensnittsmenyn i notskriftseditorn.</para>
+>&rosegarden; innehåller också stöd som standard för ett antal andra notteckensnitt. Du måste själv tillhandahålla teckensnitten på formaten Truetype (.ttf) eller Postscript Typ-1 (.pfb, .pfa), och du måste ha lämpliga rättigheter för att installera dem på samma plats som &rosegarden; installerades. För att installera ett notteckensnitt som stöds, lokalisera katalogen share för &rosegarden;s installation (oftast en underkatalog till KDE-skrivbordets installationsträd, som /opt/kde/share/apps/rosegarden). Du märker att katalogen har en underkatalog som heter "fonts". Kopiera teckensnittsfilerna till den, och starta om &rosegarden;. Om teckensnittet stöds, ska det nu synas i teckensnittsmenyn i notbehandlaren.</para>
 
       <para
->Fullständigt eller delvis stöd tillhandahålls för närvarande för följande teckensnitt: Fughetta, av Blake Hodgetts; Petrucci, det "ursprungliga" Finale-teckensnittet; Maestro, det "nya" Finale-teckensnittet; Opus, Sibelius teckensnitt; Inkpen, Sibelius jazz-teckensnitt; Sonata från Adobe; Steinberg, från Cubase-sequencern; och Xinfonia. (De flesta av ovanstående teckensnittsnamn är registrerade varumärken av respektive företag.) ROSEGARDEN-GRUPPEN GER INGA UTFÄSTELSER ANGÅENDE JURIDISK STATUS FÖR ANVÄNDNING AV NÅGOT AV DESSA TECKENSNITT MED ROSEGARDEN. Det är ditt ansvar att försäkra dig om att du följer den licens (om det finns någon) som du erhöll teckensnittet med, innan du försöker använda det. Om du inte är säker på att du har rättighet att använda ett teckensnitt, gör då inte det. Förutom alla andra aspekter, så är det vanliga Feta-teckensnittet ändå bättre än de flesta av dem.</para>
+>Fullständigt eller delvis stöd tillhandahålls för närvarande för följande teckensnitt: Fughetta, av Blake Hodgetts; Petrucci, det "ursprungliga" Finale-teckensnittet; Maestro, det "nya" Finale-teckensnittet; Opus, Sibelius teckensnitt; Inkpen, Sibelius jazz-teckensnitt; Sonata från Adobe; Steinberg, från Cubase-musikbehandlaren; och Xinfonia. (De flesta av ovanstående teckensnittsnamn är registrerade varumärken av respektive företag.) ROSEGARDEN-GRUPPEN GER INGA UTFÄSTELSER ANGÅENDE JURIDISK STATUS FÖR ANVÄNDNING AV NÅGOT AV DESSA TECKENSNITT MED ROSEGARDEN. Det är ditt ansvar att försäkra dig om att du följer den licens (om det finns någon) som du erhöll teckensnittet med, innan du försöker använda det. Om du inte är säker på att du har rättighet att använda ett teckensnitt, gör då inte det. Förutom alla andra aspekter, så är det vanliga Feta-teckensnittet ändå bättre än de flesta av dem.</para>
 
       <para
 >Det är också möjligt att tillhandahålla nya avbildningsfiler för att använda nya teckensnitt. För vissa teckensnitt som har liknande avbildningar eller mått som teckensnitt i listan ovan, kan det vara så enkelt som att redigera teckensnittets namn i avbildningsfilen. Se <link linkend="developers-note-fonts"
@@ -5602,16 +5665,16 @@ Changing the Time Signature
 
     <sect1 id="developers-note-fonts">
       <title
->Anpassa egna notskriftsteckensnitt</title>
+>Anpassa egna notteckensnitt</title>
 
       <para
->Om du har ett notskriftsteckensnitt installerat på systemet med ett skalbart format (Truetype eller Typ-1) men den för närvarande inte stöds av Rosegarden, kan du skapa din egen XML-avbildningsfil för att beskriva teckensnittets teckenavbildning och mått på ett sätt som Rosegarden kan använda. Filerna installeras i underkatalogen fonts/mappings i Rosegardens installationskatalog, och ett antal exempel ingår i distributionen.</para>
+>Om du har ett notteckensnitt installerat på systemet med ett skalbart format (Truetype eller Typ-1) men den för närvarande inte stöds av Rosegarden, kan du skapa din egen XML-avbildningsfil för att beskriva teckensnittets teckenavbildning och mått på ett sätt som Rosegarden kan använda. Filerna installeras i underkatalogen fonts/mappings i Rosegardens installationskatalog, och ett antal exempel ingår i distributionen.</para>
 
       <para
 >Du kan också använda avbildningsfilerna för att definiera nya teckensnitt baserade på punktavbildning, där varje form av en viss storlek laddas från en separat punktavbildningsfil. De två standardteckensnitten för notskrift som levereras med Rosegarden-4 är punktavbildade teckensnitt som definierats exakt på detta sätt. </para>
 
       <para
->Det är till och med möjligt att definiera ett notskriftsteckensnitt att använda en eller flera skalbara systemteckensnitt, förbättrade med punktavbildningar för vissa storlekar eller för tecken som inte finns i de skalbara teckensnitten. Det går eftersom det mesta av avbildningsfilernas format är samma för skalbara och punktavbildade teckensnitt, och när det finns olika element för olika sorters teckensnitt är det oftast möjligt att inkludera båda. Rosegarden använder oftast punktavbildningar om de är tillgängliga, och annars skalbara teckensnitt. </para>
+>Det är till och med möjligt att definiera ett notteckensnitt att använda en eller flera skalbara systemteckensnitt, förbättrade med punktavbildningar för vissa storlekar eller för tecken som inte finns i de skalbara teckensnitten. Det går eftersom det mesta av avbildningsfilernas format är samma för skalbara och punktavbildade teckensnitt, och när det finns olika element för olika sorters teckensnitt är det oftast möjligt att inkludera båda. Rosegarden använder oftast punktavbildningar om de är tillgängliga, och annars skalbara teckensnitt. </para>
 
       <para
 >Du kanske också vill redigera avbildningsfilerna som levereras med Rosegarden om du tycker att deras mått för justering eller storlek inte passar dig. (Om du tycker att någon av filerna som levereras är felaktig på något sätt, tala gärna om det för oss.) </para>
@@ -5626,7 +5689,7 @@ Changing the Time Signature
 
       <sect2 id="developers-note-fonts-mapping-format">
 	<title
->XML-format för avbildning av notskriftsteckensnitt</title>
+>XML-format för avbildning av notteckensnitt</title>
 
 	<para
 >Här är en översikt över XML-elementen som kan användas i en teckensnittsavbildningsfil.</para>
@@ -5689,7 +5752,7 @@ Changing the Time Signature
 >smooth</term>
 		<listitem>
 		  <para
->Ett Booleanskt attribut som anger om teckensnittet är kantutjämnat eller inte. Ska ha värdet "true" eller "false". Om teckensnittet är utjämnat, kommer andra element som balkar och bågar som inte skapas från teckensnittet att vara kantutjämnade.</para>
+>Ett Booleanskt attribut som anger om teckensnittet är kantutjämnat eller inte. Ska ha värdet "true" eller "false". Om teckensnittet är utjämnat, kommer andra element som balkar och legatobågar som inte skapas från teckensnittet att vara kantutjämnade.</para>
 		</listitem>
 	      </varlistentry>
 
@@ -5713,7 +5776,7 @@ Changing the Time Signature
 	  <para
 >Det här elementet är bara relevant för skalbara teckensnitt. Det används för att ange att teckensnittet bara ska erbjudas om vissa systemteckensnitt är tillgängliga, samt att koppla identifikationsvärden med systemteckensnitten att kunna hänvisa till i elementet <link linkend="developers-note-fonts-mapping-format-font-symbol-map"
 >font-symbol-map</link
->. Den här metoden används för att bestämma vilka notskriftsteckensnitt som användaren ska erbjudas, och dessutom låta dig komponera ett notskriftsteckensnitt i Rosegarden från mer än ett systemteckensnitt om du önskar. </para>
+>. Den här metoden används för att bestämma vilka notteckensnitt som användaren ska erbjudas, och dessutom låta dig komponera ett notteckensnitt i Rosegarden från mer än ett systemteckensnitt om du önskar. </para>
 	  <para
 >Elementet "font-requirements" ska innehålla en lista med delelementen "font-requirement". Vart och ett av dessa har två attribut: "font-id" som innehåller en numerisk identifikation av ditt val för referenser på andra ställe in filen, och antingen attributet "name" eller "names". Om "name" tillhandahålls, används det som namnet på ett enstaka systemteckensnitt som ska höra ihop med teckensnittsidentifikationen. Om "names" tillhandahålls behandlas det som en lista av systemteckensnitt åtskilda med kommatecken, där det första som hittas kopplas ihop med teckensnittsidentifikationen. </para>
 	</sect3>
@@ -5723,7 +5786,7 @@ Changing the Time Signature
 >font-sizes</title>
 
 	  <para
->Elementet "font-sizes" anger vilka storlekar av notskriftsteckensnitt som är tillgängliga, och hur den nominella teckenstorleken förhåller sig till storleken på element som inte ingår i teckensnittet, såsom skaft, notsystemlinjer och balkar. Ett notskriftsteckensnitts "storlek" antas vara avståndet i bildpunkter mellan notsystemlinjer, eller exaktare, höjden av ett vanligt nothuvud som fullständigt fyller mellanrummet mellan linjer: Storleken omfattar därför inte tjockleken hos någon av intilliggande notskriftslinjer. </para>
+>Elementet "font-sizes" anger vilka storlekar av notteckensnitt som är tillgängliga, och hur den nominella teckenstorleken förhåller sig till storleken på element som inte ingår i teckensnittet, såsom skaft, notsystemlinjer och balkar. Ett notteckensnitts "storlek" antas vara avståndet i bildpunkter mellan notsystemlinjer, eller exaktare, platsen för ett vanligt nothuvud som fullständigt fyller avståndet mellan linjer: Storleken omfattar därför inte tjockleken hos någon av intilliggande notlinjer. </para>
 
 	  <para
 >Det finns två möjliga delelement till "font-sizes": "font-scale" och "font-size". Deras användning beror på typ av teckensnitt som beskrivs.</para>
@@ -5753,7 +5816,7 @@ Changing the Time Signature
 >font-height</term>
 	      <listitem>
 		<para
->Kan antingen användas i "font-size" eller "font-scale". Det är bara tillämpligt för skalbara teckensnitt, men krävs för dem om det används i elementet "font-scale". Det anger storleken på systemteckensnittet som används för att rita en given storlek av notskriftsteckensnittet.</para>
+>Kan antingen användas i "font-size" eller "font-scale". Det är bara tillämpligt för skalbara teckensnitt, men krävs för dem om det används i elementet "font-scale". Det anger storleken på systemteckensnittet som används för att rita en given storlek av notteckensnittet.</para>
 	      </listitem>
 	    </varlistentry>
 
@@ -5818,7 +5881,7 @@ Changing the Time Signature
 	  <title
 >font-symbol-map</title>
 	  <para
->Det här elementet listar symbolerna som är tillgängliga i notskriftsteckensnittet, och vilka punktavbildningsfiler eller vilka kodpunkter i ett systemteckensnitt som de ska ritas upp med.</para>
+>Det här elementet listar symbolerna som är tillgängliga i notteckensnittet, och vilka punktavbildningsfiler eller vilka kodpunkter i ett systemteckensnitt som de ska ritas upp med.</para>
 
 	  <para
 >Det ska innehålla en lista med "symbol" element. De har flera möjliga attribut, där valet av vilka normalt beror på om teckensnittet är baserat på punktavbildningar eller systemteckensnitt: </para>
@@ -5829,7 +5892,7 @@ Changing the Time Signature
 >name</term>
 	      <listitem>
 		<para
->Krävs. Det här attributet ska innehålla namnet på notskriftssymbolen. Om symbolen finns i <ulink url="http://www.unicode.org/charts/PDF/U1D100.pdf"
+>Krävs. Det här attributet ska innehålla namnet på notsymbolen. Om symbolen finns i <ulink url="http://www.unicode.org/charts/PDF/U1D100.pdf"
 >Unicode 3.2 standarden</ulink
 >, ska namnet som används för att identifiera symbolen vara det som används i standarden.</para>
 
@@ -5937,17 +6000,17 @@ Changing the Time Signature
     
     <sect1 id="developers-note-styles">
       <title
->Skapa nya notskriftsstilar</title>
+>Skapa nya notstilar</title>
 
       <para
->Rosegardens notskriftseditor har möjlighet att visa och redigera noter med olika standardstilar: klassisk, rombformade huvuden och så vidare. Alla stilar definieras i definitionsfiler på XML-form som installeras tillsammans med programmet, och det är möjligt att skapa en ny genom att skriva en enkel XML-fil. Rosegarden tittar helt enkelt på uppsättningen installerade filer för att avgöra vilka stilar som användaren ska erbjudas. Du kan till exempel hänvisa till standarduppsättningen med filer i underkatalogen för stilar i Rosegardens installationskatalog. </para>
+>Rosegardens notbehandlare har möjlighet att visa och redigera noter med olika standardstilar: klassisk, rombformade huvuden och så vidare. Alla stilar definieras i definitionsfiler på XML-form som installeras tillsammans med programmet, och det är möjligt att skapa en ny genom att skriva en enkel XML-fil. Rosegarden tittar helt enkelt på uppsättningen installerade filer för att avgöra vilka stilar som användaren ska erbjudas. Du kan till exempel hänvisa till standarduppsättningen med filer i underkatalogen för stilar i Rosegardens installationskatalog. </para>
 
       <para
 >Filformatet är inte ännu särskilt omfattande. För ögonblicket är det konstruerat för att vara kraftfullt nog att beskriva standardstilarna som levereras med Rosegarden, men inte mycket mer. Om du gör ett försök att skapa nya stilar på det här sättet, är vi mycket intresserade av din återmatning via Rosegardens e-postlistor. </para>
       
       <sect2 id="developers-note-styles-format">
 	<title
->XML-format för notskriftsstil</title>
+>XML-format för notstil</title>
 
 	<para
 >Här är en översikt över XML-elementen som kan användas i en stildefinitionsfil. </para>
@@ -5980,7 +6043,7 @@ Changing the Time Signature
 >type</term>
 	      <listitem>
 		<para
->Gäller bara elementet "note", och krävs för det elementet. Det här attributet anger vilken sorts not som stilen gäller för. Giltiga värden är notnamn på amerikansk eller brittisk engelska (från "64th", "sixth-fourth note", "hemidemisemiquaver" etc till "double whole note"). </para>
+>Gäller bara elementet "note", och krävs för det elementet. Det här attributet anger vilken sorts not som stilen gäller för. Giltiga värden är tonnamn på amerikansk eller brittisk engelska (från "64th", "sixth-fourth note", "hemidemisemiquaver" etc till "double whole note"). </para>
 	      </listitem>
 	    </varlistentry>
 
@@ -6036,7 +6099,7 @@ Changing the Time Signature
 >slashes</term>
 	      <listitem>
 		<para
->Anger hur många snedstreck noten ska ha över skaftet. </para>
+>Anger hur många tvärbalkar noten ska ha över skaftet. </para>
 	      </listitem>
 	    </varlistentry>
 
@@ -6348,7 +6411,7 @@ Changing the Time Signature
 	<itemizedlist>
 	  <listitem
 ><para
->0.9.9 &ndash; juli 2004: syntinsticksmoduler, utlösande segment, notskriftsförbättringar </para
+>0.9.9 &ndash; juli 2004: syntinsticksmoduler, utlösande segment, notationsförbättringar </para
 ></listitem>
 	  <listitem
 ><para
@@ -6372,7 +6435,7 @@ Changing the Time Signature
 ></listitem>
 	  <listitem
 ><para
->0.9 &ndash; april 2003: många förbättringar av notskrift, förbättrad bankeditor, ljudförbättringar och förfiningar, översättningar </para
+>0.9 &ndash; april 2003: många förbättringar av notation, förbättrad bankeditor, ljudförbättringar och förfiningar, översättningar </para
 ></listitem>
 	  <listitem
 ><para
@@ -6404,11 +6467,11 @@ Changing the Time Signature
 ></listitem>
 	  <listitem
 ><para
->0.1.2 &ndash; november 2001: ångra notskrift, transportdialogruta, positionspekare </para
+>0.1.2 &ndash; november 2001: ångra notation, transportdialogruta, positionspekare </para
 ></listitem>
 	  <listitem
 ><para
->0.1.1 &ndash; oktober 2001: skalbar notskrift </para
+>0.1.1 &ndash; oktober 2001: skalbar notation </para
 ></listitem>
 	  <listitem
 ><para
