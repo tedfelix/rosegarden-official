@@ -58,6 +58,7 @@
 #include "eventfilter.h"
 #include "qcanvassimplesprite.h"
 #include "tempoview.h"
+#include "notationstrings.h"
 
 #include "ktmpstatusmsg.h"
 
@@ -1238,13 +1239,26 @@ void NotationView::slotInsertRest()
     timeT time = getInsertionTime();
 
     RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+
     if (!restInserter) {
-        KMessageBox::sorry(this, i18n("No rest duration selected"));
-        return;
+
+	NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+	if (!noteInserter) {
+	    KMessageBox::sorry(this, i18n("No note duration selected"));
+	    return;
+	}
+
+	Rosegarden::Note note(noteInserter->getCurrentNote());
+    
+	restInserter = dynamic_cast<RestInserter*>
+	    (m_toolBox->getTool(RestInserter::ToolName));
+
+	restInserter->slotSetNote(note.getNoteType());
+	restInserter->slotSetDots(note.getDots());
     }
 
     restInserter->insertNote(segment, time,
-                             0, Rosegarden::Accidentals::NoAccidental);
+                             0, Rosegarden::Accidentals::NoAccidental, true);
 }
 
 void NotationView::slotSwitchFromRestToNote()
@@ -1256,14 +1270,29 @@ void NotationView::slotSwitchFromRestToNote()
     }
 
     Rosegarden::Note note(restInserter->getCurrentNote());
+
+    QString actionName = NotationStrings::getReferenceName(note, false);
+    actionName = actionName.replace("-", "_");
     
+    KRadioAction *action = dynamic_cast<KRadioAction *>
+	(actionCollection()->action(actionName));
+
+    if (!action) {
+	std::cerr << "WARNING: Failed to find note action \""
+		  << actionName << "\"" << std::endl;
+    } else {
+	action->activate();
+    }
+
     NoteInserter *noteInserter = dynamic_cast<NoteInserter*>
-        (m_toolBox->getTool(NoteInserter::ToolName));
+	(m_toolBox->getTool(NoteInserter::ToolName));
 
-    noteInserter->slotSetNote(note.getNoteType());
-    noteInserter->slotSetDots(note.getDots());
+    if (noteInserter) {
+	noteInserter->slotSetNote(note.getNoteType());
+	noteInserter->slotSetDots(note.getDots());
+	setTool(noteInserter);
+    }
 
-    setTool(noteInserter);
     setMenuStates();
 }
 
@@ -1277,13 +1306,28 @@ void NotationView::slotSwitchFromNoteToRest()
 
     Rosegarden::Note note(noteInserter->getCurrentNote());
     
+    QString actionName = NotationStrings::getReferenceName(note, true);
+    actionName = actionName.replace("-", "_");
+    
+    KRadioAction *action = dynamic_cast<KRadioAction *>
+	(actionCollection()->action(actionName));
+
+    if (!action) {
+	std::cerr << "WARNING: Failed to find rest action \""
+		  << actionName << "\"" << std::endl;
+    } else {
+	action->activate();
+    }
+
     RestInserter *restInserter = dynamic_cast<RestInserter*>
-        (m_toolBox->getTool(RestInserter::ToolName));
+	(m_toolBox->getTool(RestInserter::ToolName));
 
-    restInserter->slotSetNote(note.getNoteType());
-    restInserter->slotSetDots(note.getDots());
+    if (restInserter) {
+	restInserter->slotSetNote(note.getNoteType());
+	restInserter->slotSetDots(note.getDots());
+	setTool(restInserter);
+    }
 
-    setTool(restInserter);
     setMenuStates();
 }
 

@@ -606,6 +606,7 @@
 
 <State name="note_insert_tool_current">
   <enable>
+    <Action name="insert_rest"/>
     <Action name="insert_note_actionmenu"/>
     <Action name="switch_from_note_to_rest"/>
   </enable>

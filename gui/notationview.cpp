@@ -3256,14 +3256,18 @@ void NotationView::setMenuStates()
 
     // 2. set inserter-related states
 
-    if (dynamic_cast<NoteInserter *>(m_tool)) {
-	NOTATION_DEBUG << "Have note inserter " << endl;
-	stateChanged("note_insert_tool_current", StateNoReverse);
-	stateChanged("rest_insert_tool_current", StateReverse);
-    } else if (dynamic_cast<RestInserter *>(m_tool)) {
+    // #1372863 -- RestInserter is a subclass of NoteInserter, so we
+    // need to test dynamic_cast<RestInserter *> before
+    // dynamic_cast<NoteInserter *> (which will succeed for both)
+
+    if (dynamic_cast<RestInserter *>(m_tool)) {
 	NOTATION_DEBUG << "Have rest inserter " << endl;
 	stateChanged("note_insert_tool_current", StateReverse);
 	stateChanged("rest_insert_tool_current", StateNoReverse);
+    } else if (dynamic_cast<NoteInserter *>(m_tool)) {
+	NOTATION_DEBUG << "Have note inserter " << endl;
+	stateChanged("note_insert_tool_current", StateNoReverse);
+	stateChanged("rest_insert_tool_current", StateReverse);
     } else {
 	NOTATION_DEBUG << "Have neither inserter " << endl;
 	stateChanged("note_insert_tool_current", StateReverse);
