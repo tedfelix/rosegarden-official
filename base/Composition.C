@@ -1519,6 +1519,19 @@ Composition::getNewTrackId() const
 void
 Composition::notifySegmentAdded(Segment *s) const
 {
+    // If there is an earlier repeating segment on the same track, we
+    // need to notify the change of its repeat end time
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+
+	if (((*i)->getTrack() == s->getTrack())
+	    && ((*i)->isRepeating())
+	    && ((*i)->getStartTime() < s->getStartTime())) {
+
+	    notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+	}
+    }
+
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentAdded(this, s);
@@ -1529,6 +1542,19 @@ Composition::notifySegmentAdded(Segment *s) const
 void
 Composition::notifySegmentRemoved(Segment *s) const
 {
+    // If there is an earlier repeating segment on the same track, we
+    // need to notify the change of its repeat end time
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+
+	if (((*i)->getTrack() == s->getTrack())
+	    && ((*i)->isRepeating())
+	    && ((*i)->getStartTime() < s->getStartTime())) {
+
+	    notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+	}
+    }
+
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentRemoved(this, s);
@@ -1541,6 +1567,15 @@ Composition::notifySegmentRepeatChanged(Segment *s, bool repeat) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentRepeatChanged(this, s, repeat);
+    }
+}
+
+void
+Composition::notifySegmentRepeatEndChanged(Segment *s, timeT t) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentRepeatEndChanged(this, s, t);
     }
 }
 
@@ -1563,11 +1598,25 @@ Composition::notifySegmentTransposeChanged(Segment *s, int transpose) const
 }
 
 void
-Composition::notifySegmentTrackChanged(Segment *s, TrackId id) const
+Composition::notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId) const
 {
+    // If there is an earlier repeating segment on either the
+    // origin or destination track, we need to notify the change
+    // of its repeat end time
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+
+	if (((*i)->getTrack() == oldId || (*i)->getTrack() == newId) 
+	    && ((*i)->isRepeating())
+	    && ((*i)->getStartTime() < s->getStartTime())) {
+
+	    notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+	}
+    }
+
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
-	(*i)->segmentTrackChanged(this, s, id);
+	(*i)->segmentTrackChanged(this, s, newId);
     }
 }
 

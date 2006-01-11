@@ -1729,6 +1729,12 @@ void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool 
     segmentModified(s);
 }
 
+void SequenceManager::segmentRepeatEndChanged(const Composition*, Segment* s, timeT newEndTime)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentRepeatEndChanged(" << s << ", " << newEndTime << ")\n";
+    segmentModified(s);
+}
+
 void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s, timeT t, RealTime)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentEventsTimingChanged(" << s << ", " << t << ")\n";

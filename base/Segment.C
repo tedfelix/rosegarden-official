@@ -141,11 +141,12 @@ Segment::setTrack(TrackId id)
 {
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
+    TrackId oldTrack = m_track;
     m_track = id;
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
-	c->notifySegmentTrackChanged(this, id);
+	c->notifySegmentTrackChanged(this, oldTrack, id);
     }
 }
 
@@ -867,7 +868,7 @@ Segment::setDelay(timeT delay)
 {
     m_delay = delay;
     if (m_composition) {
-//         m_composition->updateRefreshStatuses(); // no need to do that - affects playback only
+        // don't updateRefreshStatuses() - affects playback only 
         m_composition->notifySegmentEventsTimingChanged(this, delay, RealTime::zeroTime);
     }
 }
