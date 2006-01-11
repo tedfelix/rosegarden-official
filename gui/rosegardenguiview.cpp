@@ -71,9 +71,7 @@ using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
 using Rosegarden::timeT;
 
-// Use this to define the basic unit of the main QCanvas size - increasing this
-// gives us greater resolution at higher zoom values (as we no longer resize the
-// canvas but zoom the QCanvasView
+// Use this to define the basic unit of the main QCanvas size.
 //
 // This apparently arbitrary figure is what we think is an
 // appropriate width in pixels for a 4/4 bar.  Beware of making it
@@ -81,10 +79,15 @@ using Rosegarden::timeT;
 // the visual difference between 2/4 and 4/4 is perhaps greater
 // than it sounds.
 //
-
 static double barWidth44 = 100.0;
 
 const QWidget *RosegardenGUIView::m_lastActiveMainWindow = 0;
+
+// This is the maximum number of matrix, event view or percussion
+// matrix editors to open in a single operation (not the maximum that
+// can be open at a time -- there isn't one)
+//
+static int maxEditorsToOpen = 8;
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      SegmentParameterBox* segmentParameterBox,
@@ -506,11 +509,13 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	    segmentsToEdit.push_back(p);
 	}
     } else {
+	int count = 0;
 	Rosegarden::SegmentSelection selection = getSelection();
 	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	     i != selection.end(); ++i) {
 	    if ((*i)->getType() != Rosegarden::Segment::Audio) {
 		slotEditSegmentMatrix(*i);
+		if (++count == maxEditorsToOpen) break;
 	    }
 	}
 	return;
@@ -539,10 +544,14 @@ void RosegardenGUIView::slotEditSegmentPercussionMatrix(Rosegarden::Segment* p)
 	    segmentsToEdit.push_back(p);
 	}
     } else {
+	int count = 0;
 	Rosegarden::SegmentSelection selection = getSelection();
 	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	     i != selection.end(); ++i) {
-	    slotEditSegmentPercussionMatrix(*i);
+	    if ((*i)->getType() != Rosegarden::Segment::Audio) {
+		slotEditSegmentPercussionMatrix(*i);
+		if (++count == maxEditorsToOpen) break;
+	    }
 	}
 	return;
     }
@@ -557,23 +566,31 @@ void RosegardenGUIView::slotEditSegmentPercussionMatrix(Rosegarden::Segment* p)
 
 void RosegardenGUIView::slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *> segmentsToEdit)
 {
+    int count = 0;
     for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
 	 i != segmentsToEdit.end(); ++i) {
 	std::vector<Rosegarden::Segment *> tmpvec;
 	tmpvec.push_back(*i);
 	MatrixView *view = createMatrixView(tmpvec, false);
-	if (view) view->show();
+	if (view) {
+	    view->show();
+	    if (++count == maxEditorsToOpen) break;
+	}
     }
 }
 
 void RosegardenGUIView::slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *> segmentsToEdit)
 {
+    int count = 0;
     for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
 	 i != segmentsToEdit.end(); ++i) {
 	std::vector<Rosegarden::Segment *> tmpvec;
 	tmpvec.push_back(*i);
 	MatrixView *view = createMatrixView(tmpvec, true);
-	if (view) view->show();
+	if (view) {
+	    view->show();
+	    if (++count == maxEditorsToOpen) break;
+	}
     }
 }
 
@@ -681,11 +698,13 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 	    segmentsToEdit.push_back(p);
 	}
     } else {
+	int count = 0;
 	Rosegarden::SegmentSelection selection = getSelection();
 	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	     i != selection.end(); ++i) {
 	    if ((*i)->getType() != Rosegarden::Segment::Audio) {
 		slotEditSegmentEventList(*i);
+		if (++count == maxEditorsToOpen) break;
 	    }
 	}
 	return;
@@ -701,12 +720,16 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 
 void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segment *> segmentsToEdit)
 {
+    int count = 0;
     for (std::vector<Rosegarden::Segment *>::iterator i = segmentsToEdit.begin();
 	 i != segmentsToEdit.end(); ++i) {
 	std::vector<Rosegarden::Segment *> tmpvec;
 	tmpvec.push_back(*i);
 	EventView *view = createEventView(tmpvec);
-	if (view) view->show();
+	if (view) {
+	    view->show();
+	    if (++count == maxEditorsToOpen) break;
+	}
     }
 }
 
