@@ -248,6 +248,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 // 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
 	
         Segment* s = *i;
+
         if (isMoving(s))
             continue;
         
@@ -696,6 +697,8 @@ void AudioPreviewPainter::paintPreviewImage()
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.width() << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
 
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1] << endl;
+
     double audioDuration = double(m_segment->getAudioEndTime().sec) +
 	double(m_segment->getAudioEndTime().nsec) / 1000000000.0;
 
@@ -764,6 +767,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	}
 
         if (position < 0) continue;
+
         if (position >= values.size() - channels) {
             finalizeCurrentSlice();
             break;
@@ -851,8 +855,6 @@ void AudioPreviewPainter::paintPreviewImage()
 void AudioPreviewPainter::finalizeCurrentSlice()
 {
 //     RG_DEBUG << "AudioPreviewPainter::finalizeCurrentSlice : copying pixmap to image at " << m_sliceNb * tileWidth() << endl;
-
-    CompositionRect sr = m_model.computeSegmentRect(*m_segment);
 
     // transparent background
     m_image.setColor(0, qRgba(255, 255, 255, 0));
