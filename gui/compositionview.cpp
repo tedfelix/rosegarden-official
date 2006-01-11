@@ -696,10 +696,73 @@ void AudioPreviewPainter::paintPreviewImage()
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.width() << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
 
+    double audioDuration = double(m_segment->getAudioEndTime().sec) +
+	double(m_segment->getAudioEndTime().nsec) / 1000000000.0;
+
+    // We need to take each pixel value and map it onto a point within
+    // the preview.  We have samplePoints preview points in a known
+    // duration of audioDuration.  Thus each point spans a real time
+    // of audioDuration / samplePoints.  We need to convert the
+    // accumulated real time back into musical time, and map this
+    // proportionately across the segment width.
+
+    CompositionRect sr = m_model.computeSegmentRect(*m_segment);
+
+    Rosegarden::RealTime startRT =
+	m_model.getComposition().getElapsedRealTime(m_segment->getStartTime());
+    double startTime = double(startRT.sec) + double(startRT.nsec) / 1000000000.0;
+
+    Rosegarden::RealTime endRT =
+	m_model.getComposition().getElapsedRealTime(m_segment->getEndMarkerTime());
+    double endTime = double(endRT.sec) + double(endRT.nsec) / 1000000000.0;
+
+    bool haveTempoChange = false;
+
+    int finalTempoChangeNumber =
+	m_model.getComposition().getTempoChangeNumberAt
+	(m_segment->getEndMarkerTime());
+
+    if ((finalTempoChangeNumber >= 0) &&
+
+	(finalTempoChangeNumber > 
+	 m_model.getComposition().getTempoChangeNumberAt
+	 (m_segment->getStartTime()))) {
+
+	haveTempoChange = true;
+    }
+
     for (int i = 0; i < m_rect.width(); ++i) {
-        // For each i work get the sample starting point
-        //
-        int position = int(channels * i * sampleScaleFactor);
+
+	// i is the x coordinate within the rectangle.  We need to
+	// calculate the position within the audio preview from which
+	// to draw the peak for this coordinate.  It's possible there
+	// may be more than one, in which case we need to find the
+	// peak of all of them.
+
+	int position = 0;
+
+	if (haveTempoChange) {
+	    
+	    // First find the time corresponding to this i.
+	    timeT musicalTime =
+		m_model.grid().getRulerScale()->getTimeForX(sr.x() + i);
+	    Rosegarden::RealTime realTime =
+		m_model.getComposition().getElapsedRealTime(musicalTime);
+	    
+	    double time = double(realTime.sec) +
+		double(realTime.nsec) / 1000000000.0;
+	    double offset = time - startTime;
+
+	    if (endTime > startTime) {
+		position = offset * m_rect.width() / (endTime - startTime);
+		position = int(channels * position);
+	    }
+	    
+	} else {
+
+	    position = int(channels * i * sampleScaleFactor);
+	}
+
         if (position < 0) continue;
         if (position >= values.size() - channels) {
             finalizeCurrentSlice();
