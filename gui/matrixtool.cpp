@@ -308,11 +308,16 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     // got the mouse down
     if (!m_currentElement) return;
 
+    timeT time = m_currentElement->getViewAbsoluteTime();
+    timeT segmentEndTime = m_currentStaff->getSegment().getEndMarkerTime();
+
     if (m_mParentView->isDrumMode()) {
+
+	if (time > segmentEndTime) time = segmentEndTime;
 
 	MatrixPercussionInsertionCommand *command =
 	    new MatrixPercussionInsertionCommand(m_currentStaff->getSegment(),
-						 m_currentElement->getViewAbsoluteTime(),
+						 time,
 						 m_currentElement->event());
 	m_mParentView->addCommandToHistory(command);
 
@@ -328,30 +333,38 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
 	// Insert element if it has a non null duration,
 	// discard it otherwise
 	//
-	timeT time = m_currentElement->getViewAbsoluteTime();
-	
 	if (time > endTime) std::swap(time, endTime);
 	
 	if (endTime == time) endTime = time + m_currentElement->getViewDuration();
-	
-	Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-	MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
-	
-	MatrixInsertionCommand* command = 
-	    new MatrixInsertionCommand(m_currentStaff->getSegment(),
-				       time,
-				       endTime,
-				       m_currentElement->event());
-	
-	m_mParentView->addCommandToHistory(command);
 
-	Event* ev = m_currentElement->event();
-	delete m_currentElement;
-	delete ev;
+	if (time < segmentEndTime) {
+	
+	    if (endTime > segmentEndTime) endTime = segmentEndTime;
 
-	ev = command->getLastInsertedEvent();
-	if (ev) m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-						  ev);
+	    Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
+	    MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
+	
+	    MatrixInsertionCommand* command = 
+		new MatrixInsertionCommand(m_currentStaff->getSegment(),
+					   time,
+					   endTime,
+					   m_currentElement->event());
+	
+	    m_mParentView->addCommandToHistory(command);
+
+	    Event* ev = m_currentElement->event();
+	    delete m_currentElement;
+	    delete ev;
+
+	    ev = command->getLastInsertedEvent();
+	    if (ev) m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
+							  ev);
+	} else {
+
+	    Event* ev = m_currentElement->event();
+	    delete m_currentElement;
+	    delete ev;
+	}
     }
 
     m_mParentView->update();
