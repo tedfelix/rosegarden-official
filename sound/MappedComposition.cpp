@@ -55,7 +55,7 @@ MappedComposition::MappedComposition(const MappedComposition &mC):
 QDataStream&
 operator<<(QDataStream &dS, MappedComposition *mC)
 {
-    dS << mC->size();
+    dS << int(mC->size());
 
     for (MappedCompositionIterator it = mC->begin(); it != mC->end(); ++it )
 	dS << (*it);
@@ -67,7 +67,7 @@ operator<<(QDataStream &dS, MappedComposition *mC)
 QDataStream&
 operator<<(QDataStream &dS, const MappedComposition &mC)
 {
-    dS << mC.size();
+    dS << int(mC.size());
 
     for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); ++it )
 	dS << (*it);

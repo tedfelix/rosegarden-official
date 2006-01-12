@@ -67,7 +67,7 @@ public:
     void returnBuffer(RingBuffer<sample_t> *buffer);
 
 protected:
-    // Want to avoid memory allocation when marking a buffer
+    // Want to avoid memory allocation if possible when marking a buffer
     // unallocated or allocated, so we use a single container for all
 
     typedef std::pair<RingBuffer<sample_t> *, bool> AllocPair;
@@ -195,11 +195,25 @@ RingBufferPool::getBuffers(size_t n, RingBuffer<sample_t> **buffers)
 
     if (count < n) {
 #ifdef DEBUG_RING_BUFFER_POOL
-	std::cerr << "RingBufferPool::getBuffers(" << n << "): not available" << std::endl;
+	std::cerr << "RingBufferPool::getBuffers(" << n << "): not available (in pool of " << m_buffers.size() << "), resizing" << std::endl;
 #endif
-	pthread_mutex_unlock(&m_lock);
-	return false;
+
+	AllocList newBuffers;
+
+	while (count < n) {
+	    for (size_t i = 0; i < m_buffers.size(); ++i) {
+		newBuffers.push_back(m_buffers[i]);
+	    }
+	    for (size_t i = 0; i < m_buffers.size(); ++i) {
+		newBuffers.push_back(AllocPair(new RingBuffer<sample_t>(m_bufferSize),
+					       false));
+	    }
+	    count += m_buffers.size();
+	}
+
+	m_buffers = newBuffers;
     }
+
     count = 0;
 
 #ifdef DEBUG_RING_BUFFER_POOL
@@ -362,6 +376,7 @@ PlayableAudioFile::~PlayableAudioFile()
 
     returnRingBuffers();
     delete[] m_ringBuffers;
+    m_ringBuffers = 0;
 
     if (m_isSmallFile) {
 	m_smallFileCache.decrementReference(m_audioFile);
@@ -492,12 +507,11 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 	    size_t scanFrame = RealTime::realTime2Frame(m_currentScanPoint,
 							m_targetSampleRate);
 
-	    size_t startFrame = scanFrame;
 	    size_t endFrame = scanFrame + nframes;
 	    if (endFrame >= cframes) m_fileEnded = true;
 
 #ifdef DEBUG_PLAYABLE_READ
-	    std::cerr << "PlayableAudioFile::addSamples: it's a small file: want frames " << startFrame << " to " << endFrame << " of " << cframes << std::endl;
+	    std::cerr << "PlayableAudioFile::addSamples: it's a small file: want frames " << scanFrame << " to " << endFrame << " of " << cframes << std::endl;
 #endif
 	    
 	    // all this could be neater!

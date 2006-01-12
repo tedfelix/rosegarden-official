@@ -116,7 +116,6 @@ Scavenger<T>::claim(T *t)
     for (size_t i = 0; i < m_objects.size(); ++i) {
 	ObjectTimePair &pair = m_objects[i];
 	if (pair.first != 0) {
-	    T *ot = pair.first;
 	    pair.first = 0;
 	    pair.second = sec;
 	    pair.first = t;
