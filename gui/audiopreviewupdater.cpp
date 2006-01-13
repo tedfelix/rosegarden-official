@@ -58,7 +58,7 @@ void AudioPreviewUpdater::update()
         m_composition.getElapsedRealTime(m_segment->getEndMarkerTime()) -
         m_composition.getElapsedRealTime(m_segment->getStartTime()) ;
 
-    RG_DEBUG << "AudioPreviewUpdater::update() - for file id "
+    RG_DEBUG << "AudioPreviewUpdater(" << this << ")::update() - for file id "
 	     << m_segment->getAudioFileId() << " requesting values - thread running : "
              << m_thread.running() << " - thread finished : " << m_thread.finished() << endl;
     
@@ -82,7 +82,7 @@ void AudioPreviewUpdater::cancel()
 
 bool AudioPreviewUpdater::event(QEvent *e)
 {
-    std::cerr << "AudioPreviewUpdater::event (" << this << ")" << std::endl;
+    std::cerr << "AudioPreviewUpdater(" << this << ")::event (" << this << ")" << std::endl;
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);
@@ -93,6 +93,7 @@ bool AudioPreviewUpdater::event(QEvent *e)
 	    RG_DEBUG << "AudioPreviewUpdater::token " << token << ", my token " << m_previewToken << endl;
 
 	    if (m_previewToken >= 0 && token >= m_previewToken) {
+
 		m_previewToken = -1;
 		m_thread.getPreview(token, m_channels, m_values);
 
@@ -104,6 +105,8 @@ bool AudioPreviewUpdater::event(QEvent *e)
                              << " channels, " << m_values.size() << " samples)\n";
 		}
 
+		emit audioPreviewComplete(this);
+
 	    } else {
 
 		// this one is out of date already
@@ -114,9 +117,6 @@ bool AudioPreviewUpdater::event(QEvent *e)
 		RG_DEBUG << "AudioPreviewUpdater: got obsolete preview (" << tmpChannels
                          << " channels, " << tmp.size() << " samples)\n";
 	    }
-
-            emit audioPreviewComplete(this);
-	    m_previewToken = -1;
 
 	    return true;
 	}
