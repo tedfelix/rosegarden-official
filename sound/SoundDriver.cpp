@@ -127,16 +127,21 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 	    int bufferFrames = RealTime::realTime2Frame
 		(bufferLength, getSampleRate());
 
-	    PlayableAudioFile *paf =
-		new PlayableAudioFile(i->getInstrument(),
-				      audioFile,
-				      i->getEventTime(),
-				      i->getAudioStartMarker(),
-				      i->getDuration(),
-				      bufferFrames,
-				      getSmallFileSize() * 1024,
-				      channels,
-				      getSampleRate());
+	    PlayableAudioFile *paf = 0;
+
+	    try {
+		paf = new PlayableAudioFile(i->getInstrument(),
+					    audioFile,
+					    i->getEventTime(),
+					    i->getAudioStartMarker(),
+					    i->getDuration(),
+					    bufferFrames,
+					    getSmallFileSize() * 1024,
+					    channels,
+					    getSampleRate());
+	    } catch (...) {
+		continue;
+	    }
 
 	    paf->setRuntimeSegmentId(i->getRuntimeSegmentId());
 
@@ -162,7 +167,6 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                           << std::endl;
             }
 #endif
-
 
 	    newQueue->addScheduled(paf);
 	}

@@ -3717,17 +3717,22 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 		std::cout << "Read buffer length is " << bufferLength << " (" << bufferFrames << " frames)" << std::endl;
 #endif
 
-                PlayableAudioFile *paf =
-                    new PlayableAudioFile((*i)->getInstrument(),
-                                          audioFile,
-                                          getSequencerTime() +
-					  (RealTime(1, 0) / 4),
-                                          (*i)->getAudioStartMarker(),
-                                          (*i)->getDuration(),
-					  bufferFrames,
-					  getSmallFileSize() * 1024,
-					  channels,
-					  m_jackDriver->getSampleRate());
+                PlayableAudioFile *paf = 0;
+
+		try {
+		    paf = new PlayableAudioFile((*i)->getInstrument(),
+						audioFile,
+						getSequencerTime() +
+						(RealTime(1, 0) / 4),
+						(*i)->getAudioStartMarker(),
+						(*i)->getDuration(),
+						bufferFrames,
+						getSmallFileSize() * 1024,
+						channels,
+						m_jackDriver->getSampleRate());
+		} catch (...) {
+		    continue;
+		}
 
                 if ((*i)->isAutoFading())
                 {
