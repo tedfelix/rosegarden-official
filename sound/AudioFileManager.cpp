@@ -531,6 +531,7 @@ AudioFileManager::wasAudioFileRecentlyRecorded(AudioFileId id)
     AudioFile *file = getAudioFile(id);
     if (file) return (m_recordedAudioFiles.find(file) !=
 		      m_recordedAudioFiles.end());
+    return false;
 }
 
 void
@@ -821,8 +822,8 @@ AudioFileManager::drawPreview(AudioFileId id,
             ch2Value = values[i * channels + 1];
         }
 
-        painter.drawLine(i, static_cast<int>(yStep + ch1Value * yStep),
-                         i, static_cast<int>(yStep - ch2Value * yStep));
+        painter.drawLine(i, static_cast<int>(yStep - ch1Value * yStep),
+                         i, static_cast<int>(yStep + ch2Value * yStep));
     }
 }
 
