@@ -1060,6 +1060,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
+	if (!search.startsWith("/") && !search.startsWith("~")) {
+	    QString docPath = m_doc->getAbsFilePath();
+	    QString dirPath = QFileInfo(docPath).dirPath();
+	    if (QFileInfo(dirPath).exists()) {
+		search = dirPath + "/" + search;
+	    }
+	}
+
         getAudioFileManager().setAudioPath(qstrtostr(search));
 
     } else if (lcName == "begin") {
