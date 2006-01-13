@@ -1089,7 +1089,9 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 	    float dBright = Rosegarden::AudioLevel::fader_to_dB
 		(mE->getData2(), 127, Rosegarden::AudioLevel::LongFader);
 
-            m_instrumentParameterBox->setAudioMeter(dBleft, dBright);
+            m_instrumentParameterBox->setAudioMeter(dBleft, dBright,
+						    Rosegarden::AudioLevel::DB_FLOOR,
+						    Rosegarden::AudioLevel::DB_FLOOR);
         }
 
         // Don't always send all audio levels so we don't
@@ -1117,6 +1119,7 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
     typedef std::map<Rosegarden::InstrumentId, Rosegarden::LevelInfo> LevelMap;
     static LevelMap levels;
+    static LevelMap recLevels;
 
     for (StateMap::iterator i = states.begin(); i != states.end(); ++i) {
 	i->second = unknownState;
@@ -1132,9 +1135,14 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	Rosegarden::InstrumentId instrumentId = track->getInstrument();
 
 	if (states[instrumentId] == unknownState) {
-	    bool isNew =
-		mapper->getInstrumentLevel(instrumentId, levels[instrumentId]);
+
+	    bool isNew = mapper->getInstrumentLevel(instrumentId, 
+						    levels[instrumentId]);
 	    states[instrumentId] = (isNew ? newState : oldState);
+
+	    isNew = mapper->getInstrumentRecordLevel(instrumentId,
+						     recLevels[instrumentId]);
+	    states[instrumentId] = (isNew ? newState : states[instrumentId]);
 	}
 
 	if (states[instrumentId] == oldState) continue;
@@ -1152,13 +1160,15 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
         */
 
 	Rosegarden::LevelInfo &info = levels[instrumentId];
+	Rosegarden::LevelInfo &recInfo = recLevels[instrumentId];
 
 	if (instrument->getType() == Rosegarden::Instrument::Audio ||
 	    instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 
             // Don't send a 0 to an audio meter
             //
-            if (info.level == 0 && info.levelRight == 0) continue;
+            if (info.level == 0 && info.levelRight == 0 &&
+		recInfo.level == 0 && recInfo.levelRight == 0) continue;
 
 	    if (m_instrumentParameterBox->getSelectedInstrument() &&
 		instrument->getId() ==
@@ -1169,7 +1179,13 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 		float dBright = Rosegarden::AudioLevel::fader_to_dB
 		    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
-		m_instrumentParameterBox->setAudioMeter(dBleft, dBright);
+		float recDBleft = Rosegarden::AudioLevel::fader_to_dB
+		    (recInfo.level, 127, Rosegarden::AudioLevel::LongFader);
+		float recDBright = Rosegarden::AudioLevel::fader_to_dB
+		    (recInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+		m_instrumentParameterBox->setAudioMeter(dBleft, dBright,
+							recDBleft, recDBright);
 	    }
 
 	    m_trackEditor->getTrackButtons()->slotSetTrackMeter

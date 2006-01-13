@@ -73,7 +73,8 @@ public:
     Rosegarden::Instrument* getSelectedInstrument()
         { return m_selectedInstrument; }
 
-    void setAudioMeter(float dBleft, float dBright);
+    void setAudioMeter(float dBleft, float dBright,
+		       float recDBleft, float recDBright);
 
     void setDocument(RosegardenGUIDoc* doc);
 
@@ -159,7 +160,8 @@ public:
     // Set the audio meter to a given level for a maximum of
     // two channels.
     //
-    void setAudioMeter(float dBleft, float dBright);
+    void setAudioMeter(float dBleft, float dBright,
+		       float recDBleft, float recDBright);
 
     // Set the button colour
     //

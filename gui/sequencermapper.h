@@ -64,6 +64,11 @@ public:
 	return m_sequencerDataBlock->getInstrumentRecordLevel(id, info);
     }
 
+    bool getInstrumentRecordLevelForMixer(Rosegarden::InstrumentId id,
+					  Rosegarden::LevelInfo &info) const {
+	return m_sequencerDataBlock->getInstrumentRecordLevelForMixer(id, info);
+    }
+
     bool getSubmasterLevel(int submaster,
 			   Rosegarden::LevelInfo &info) const {
 	return m_sequencerDataBlock->getSubmasterLevel(submaster, info);

@@ -212,6 +212,28 @@ SequencerDataBlock::getInstrumentRecordLevel(InstrumentId id, LevelInfo &info) c
     }
 }
 
+bool
+SequencerDataBlock::getInstrumentRecordLevelForMixer(InstrumentId id, LevelInfo &info) const
+{
+    static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+
+    int index = instrumentToIndex(id);
+    if (index < 0) {
+	info.level = info.levelRight = 0;
+	return false;
+    }
+
+    int currentUpdateIndex = m_recordLevelUpdateIndices[index];
+    info = m_recordLevels[index];
+
+    if (lastUpdateIndex[index] != currentUpdateIndex) {
+	lastUpdateIndex[index]  = currentUpdateIndex;
+	return true;
+    } else {
+	return false; // no change
+    }
+}
+
 void
 SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &info)
 {

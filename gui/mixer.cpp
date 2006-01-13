@@ -1282,7 +1282,7 @@ AudioMixerWindow::updateMonitorMeters(SequencerMapper *mapper)
 
 	Rosegarden::LevelInfo info;
 
-	if (mapper->getInstrumentRecordLevel(id, info)) {
+	if (mapper->getInstrumentRecordLevelForMixer(id, info)) {
 
 	    bool armed = false;
 

@@ -2736,7 +2736,9 @@ MatrixView::slotInstrumentLevelsChanged(Rosegarden::InstrumentId id,
     float dBright = Rosegarden::AudioLevel::fader_to_dB
 	(info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
     
-    m_parameterBox->setAudioMeter(dBleft, dBright);
+    m_parameterBox->setAudioMeter(dBleft, dBright,
+				  Rosegarden::AudioLevel::DB_FLOOR,
+				  Rosegarden::AudioLevel::DB_FLOOR);
 }
 
 void

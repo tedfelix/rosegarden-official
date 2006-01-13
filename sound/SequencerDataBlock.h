@@ -81,6 +81,8 @@ public:
     void setInstrumentLevel(InstrumentId id, const LevelInfo &);
 
     bool getInstrumentRecordLevel(InstrumentId id, LevelInfo &) const;
+    bool getInstrumentRecordLevelForMixer(InstrumentId id, LevelInfo &) const;
+
     void setInstrumentRecordLevel(InstrumentId id, const LevelInfo &);
 
     bool getSubmasterLevel(int submaster, LevelInfo &) const;

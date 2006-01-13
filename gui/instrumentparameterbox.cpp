@@ -166,9 +166,9 @@ InstrumentParameterBox::~InstrumentParameterBox()
 }
 
 void
-InstrumentParameterBox::setAudioMeter(float ch1, float ch2)
+InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch2r)
 {
-    m_audioInstrumentParameters->setAudioMeter(ch1, ch2);
+    m_audioInstrumentParameters->setAudioMeter(ch1, ch2, ch1r, ch2r);
 }
 
 void
@@ -517,16 +517,17 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
 }
 
 void
-AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
+AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright,
+					     float recDBleft, float recDBright)
 {
 //    RG_DEBUG << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
 //	     << "," << dBright << ")" << endl;
     
-    if (m_selectedInstrument)
-    {
+    if (m_selectedInstrument) {
 	// Always set stereo, because we have to reflect what's happening
 	// with the pan setting even on mono tracks
 	m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
+	m_audioFader->m_vuMeter->setRecordLevel(recDBleft, recDBright);
     }
 }
 

@@ -1007,7 +1007,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     //
     QHBox *faderHbox = new QHBox(this);
     
-    m_vuMeter = new AudioVUMeter(faderHbox);
+    m_vuMeter = new AudioVUMeter(faderHbox, VUMeter::AudioPeakHoldShort,
+				 true, true);
     
     m_recordFader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
 					20, m_vuMeter->height(), faderHbox);
@@ -1017,7 +1018,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     delete m_vuMeter; // only used the first one to establish height,
 		      // actually want it after the record fader in
 		      // hbox
-    m_vuMeter = new AudioVUMeter(faderHbox);
+    m_vuMeter = new AudioVUMeter(faderHbox, VUMeter::AudioPeakHoldShort,
+				 true, true);
 
     m_fader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
 				  20, m_vuMeter->height(), faderHbox);

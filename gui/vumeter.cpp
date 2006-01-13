@@ -202,6 +202,10 @@ VUMeter::setRecordLevel(double leftLevel, double rightLevel)
 void
 VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 {
+    if (!isVisible()) return;
+
+    RG_DEBUG << "setLevel(" << (void *)this << "): record=" << record << ", leftLevel=" << leftLevel << ", hasRecord=" << m_hasRecord << endl;
+
     if (record && !m_hasRecord) return;
 
     short &ll = (record ? m_recordLevelLeft : m_levelLeft);
@@ -456,7 +460,11 @@ VUMeter::drawMeterLevel(QPainter* paint)
             int hW = width() / 2;
 
 	    int midWidth = 1;
-	    if (m_hasRecord) midWidth = 2;
+	    if (m_hasRecord) {
+		if (width() > 10) {
+		    midWidth = 2;
+		}
+	    }
 
             // Draw the left bar
             //

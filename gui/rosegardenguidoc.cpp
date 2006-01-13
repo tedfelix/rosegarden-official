@@ -2399,6 +2399,23 @@ RosegardenGUIDoc::stopRecordingAudio()
 
 	// now move the segment back by the record latency
 	//
+/*!!!
+  No.  I don't like this.
+
+  The record latency doesn't always exist -- for example, if recording
+  from a synth plugin there is no record latency, and we have no way
+  here to distinguish.
+
+  The record latency is a total latency figure that actually includes
+  some play latency, and we compensate for that again on playback (see
+  bug #1378766).
+
+  The timeT conversion of record latency is approximate in frames,
+  giving potential phase error.
+
+  Cutting this out won't break any existing files, as the latency
+  compensation there is already encoded into the file.
+
 	Rosegarden::RealTime adjustedStartTime =
 	    m_composition.getElapsedRealTime(recordSegment->getStartTime()) -
 	    m_audioRecordLatency;
@@ -2413,6 +2430,7 @@ RosegardenGUIDoc::stopRecordingAudio()
 		 << " to " << shiftedStartTime << ")" << endl;
 
 	recordSegment->setStartTime(shiftedStartTime);
+*/
     }
     emit stoppedAudioRecording();
 }
