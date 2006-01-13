@@ -14,6 +14,26 @@
 # for yourself and help me to improve this script, thanks
 # (tnagyemail-mail tat yahoo d0tt fr)
 
+if [ -z "$KDE_GETTEXT_BASE" ]; then
+    if [ -d /opt/gettext-kde ]; then
+	KDE_GETTEXT_BASE=/opt/gettext-kde
+    fi
+fi
+if [ ! -d "$KDE_GETTEXT_BASE" ]; then
+    echo 1>&2
+    echo "WARNING: Environment variable KDE_GETTEXT_BASE must be set" 1>&2
+    echo "such that the KDE patched version of gettext is found in " 1>&2
+    echo "KDE_GETTEXT_BASE/bin/." 1>&2
+    echo 1>&2
+    echo "Falling back to default gettext, but plural translations " 1>&2
+    echo "will probably be wrong." 1>&2
+    echo 1>&2
+    echo "See ftp://ftp.kde.org/devel/gettext-kde/ for the patched gettext." 1>&2
+    echo 1>&2
+else
+    KDE_GETTEXT_PATH=${KDE_GETTEXT_BASE}/bin/
+fi
+
 SRCDIR=../gui # srcdir is the directory containing the source code
 TIPSDIR=$SRCDIR/docs/en # tipsdir is the directory containing the tips
 
@@ -23,12 +43,12 @@ KDEPOT=$KDEDIR/include/kde.pot
 if [ ! -f "$KDEPOT" ] && [ -f /usr/include/kde/kde.pot ]; then
     KDEPOT=/usr/include/kde/kde.pot
 fi
-XGETTEXT="xgettext -C -ki18n -ktr2i18n -kI18N_NOOP -ktranslate -kaliasLocale -x $KDEPOT "
+XGETTEXT="${KDE_GETTEXT_PATH}xgettext -C -ki18n -ktr2i18n -kI18N_NOOP -ktranslate -kaliasLocale -x $KDEPOT "
 
 ## check that kde.pot is available
 if ! test -e $KDEPOT; then
 	echo "$KDEPOT does not exist, there is something wrong with your installation!"
-	XGETTEXT="xgettext -C -ki18n -ktr2i18n -kI18N_NOOP -ktranslate -kaliasLocale "
+	XGETTEXT="${KDE_GETTEXT_PATH}xgettext -C -ki18n -ktr2i18n -kI18N_NOOP -ktranslate -kaliasLocale "
 fi
 
 > rc.cpp
