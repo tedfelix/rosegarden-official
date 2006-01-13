@@ -155,11 +155,25 @@ void ControlBlockMmapper::updateMetronomeForRecord()
     m_controlBlock->setMetronomeMuted(muted);
 }
 
-void ControlBlockMmapper::updateSoloData(bool solo,
+bool ControlBlockMmapper::updateSoloData(bool solo,
                                          Rosegarden::TrackId selectedTrack)
 {
+    bool changed = false;
+
+    if (solo != m_controlBlock->isSolo()) {
+
+	changed = true;
+
+    } else if (solo &&
+	       (selectedTrack != m_controlBlock->getSelectedTrack())) {
+
+	changed = true;
+    }
+
     m_controlBlock->setSolo(solo);
     m_controlBlock->setSelectedTrack(selectedTrack);
+
+    return changed;
 }
 
 void ControlBlockMmapper::setDocument(RosegardenGUIDoc* doc)

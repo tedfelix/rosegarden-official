@@ -1887,7 +1887,12 @@ void SequenceManager::filtersChanged(MidiFilter thruFilter,
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)
 {
-    m_controlBlockMmapper->updateSoloData(solo, selectedTrack);
+    if (m_controlBlockMmapper->updateSoloData(solo, selectedTrack)) {
+	if (m_transportStatus == PLAYING) {
+	    QByteArray data;
+	    rgapp->sequencerSend("remapTracks()", data);
+	}
+    }
 }
 
 void SequenceManager::tempoChanged(const Composition *c)

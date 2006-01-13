@@ -62,7 +62,7 @@ public:
     void updateMetronomeData(Rosegarden::InstrumentId instId);
     void updateMetronomeForPlayback();
     void updateMetronomeForRecord();
-    void updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
+    bool updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
     void updateMidiFilters(Rosegarden::MidiFilter thruFilter,
 			   Rosegarden::MidiFilter recordFilter);
     void setDocument(RosegardenGUIDoc*);
