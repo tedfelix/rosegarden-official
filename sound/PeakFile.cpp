@@ -549,7 +549,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
         for (int i = 0; i < m_blockSize; i++)
         {
-            for (unsigned int j = 0; j < m_audioFile->getChannels(); j++)
+            for (unsigned int ch = 0; ch < m_audioFile->getChannels(); ch++)
             {
                 // Single byte format values range from 0-255 and then
                 // shifted down about the x-axis.  Double byte and above
@@ -596,18 +596,18 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
                 //
                 if (i == 0)
                 {
-                    channelPeaks[j].first = sampleValue;
-                    channelPeaks[j].second = sampleValue;
+                    channelPeaks[ch].first = sampleValue;
+                    channelPeaks[ch].second = sampleValue;
                 }
                 else
                 {
                     // Compare and store
                     //
-                    if (sampleValue > channelPeaks[j].first)
-                        channelPeaks[j].first = sampleValue;
+                    if (sampleValue > channelPeaks[ch].first)
+                        channelPeaks[ch].first = sampleValue;
 
-                    if (sampleValue < channelPeaks[j].second)
-                        channelPeaks[j].second = sampleValue;
+                    if (sampleValue < channelPeaks[ch].second)
+                        channelPeaks[ch].second = sampleValue;
                 }
 
                 // Store peak of peaks if it fits
@@ -771,15 +771,15 @@ PeakFile::getPreview(const RealTime &startTime,
     float *hiValues = new float[m_channels];
     float *loValues = new float[m_channels];
 
-    for (int i = 0; i < width; i++)
-    {
+    for (int i = 0; i < width; i++) {
+
         peakNumber = startPeak + int(double(i) * step);
 	int nextPeakNumber = startPeak + int(double(i+1) * step);
 
         // Seek to value
         //
-        if (!m_peakCache.length())
-        {
+        if (!m_peakCache.length()) {
+
 	    if (scanToPeak(peakNumber) == false) {
 #ifdef DEBUG_PEAKFILE
 		std::cout << "PeakFile::getPreview: scanToPeak(" << peakNumber << ") failed" << std::endl;
@@ -791,26 +791,22 @@ PeakFile::getPreview(const RealTime &startTime,
 	std::cout << "PeakFile::getPreview: step is " << step << ", format * pointsPerValue * channels is " << (m_format * m_pointsPerValue * m_channels) << std::endl;
 #endif
 
-	for (int j = 0; j < m_channels; j++)
-        {
-            hiValues[j] = 0.0f;
-            loValues[j] = 0.0f;
+	for (int ch = 0; ch < m_channels; ch++) {
+            hiValues[ch] = 0.0f;
+            loValues[ch] = 0.0f;
 	}
 
         // Get peak value over channels
         //
-	for (int k = 0; peakNumber < nextPeakNumber; ++k)
-	{
-	    for (int j = 0; j < m_channels; j++)
-	    {
-		if (!m_peakCache.length())
-		{
-		    try
-		    {
+	for (int k = 0; peakNumber < nextPeakNumber; ++k) {
+
+	    for (int ch = 0; ch < m_channels; ch++) {
+
+		if (!m_peakCache.length()) {
+
+		    try {
 			peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-		    }
-		    catch (std::string e)
-		    {
+		    } catch (std::string e) {
 			// Problem with the get - probably an EOF
 			// return the results so far.
 			//
@@ -818,28 +814,22 @@ PeakFile::getPreview(const RealTime &startTime,
 			std::cout << "PeakFile::getPreview - \"" << e << "\"\n"
 				  << endl;
 #endif
-			resetStream();
-		    
-			delete hiValues;
-			delete loValues;
-			return m_lastPreviewCache;
+			goto done;
 		    }
 #ifdef DEBUG_PEAKFILE
 		    std::cout << "PeakFile::getPreview - "
 			      << "read from file" << std::endl;
 #endif
-		}
-		else
-		{
-		    int charNum = peakNumber * m_format * 
-			m_channels * m_pointsPerValue;
+		} else {
+
+		    int valueNum = peakNumber * m_channels + ch;
+		    int charNum = valueNum * m_format * m_pointsPerValue;
 		    int charLength = m_format * m_pointsPerValue;
 
 		    // Get peak value from the cached string if 
 		    // the value is valid.
 		    //
-		    if (charNum + charLength <= m_peakCache.length())
-		    {
+		    if (charNum + charLength <= m_peakCache.length()) {
 			peakData = m_peakCache.substr(charNum, charLength);
 #ifdef DEBUG_PEAKFILE
 			std::cout << "PeakFile::getPreview - "
@@ -849,42 +839,8 @@ PeakFile::getPreview(const RealTime &startTime,
 		}
 
 
-		if (peakData.length() == (unsigned int)(m_format *
-							m_pointsPerValue))
-		{
-		    int intDivisor = int(divisor);
-		    int inValue =
-			getIntegerFromLittleEndian(peakData.substr(0, m_format));
-
-		    while (inValue > intDivisor) {
-			inValue -= (1 << (m_format * 8));
-		    }
-
-#ifdef DEBUG_PEAKFILE
-		    std::cout << "found potential hivalue " << inValue << std::endl;
-#endif
-
-		    if (k == 0 || inValue > hiValues[j]) {
-			hiValues[j] = float(inValue);
-		    }
-
-		    if (m_pointsPerValue == 2)
-		    {
-			inValue = 
-			    getIntegerFromLittleEndian(
-                                peakData.substr(m_format, m_format));
-
-			while (inValue > intDivisor) {
-			    inValue -= (1 << (m_format * 8));
-			}
-
-			if (k == 0 || inValue < loValues[j]) {
-			    loValues[j] = inValue;
-			}
-		    }
-		}
-		else
-		{
+		if (peakData.length() != (unsigned int)(m_format *
+							m_pointsPerValue)) {
 		    // We didn't get the whole peak block - return what
 		    // we've got so far
 		    //
@@ -893,31 +849,65 @@ PeakFile::getPreview(const RealTime &startTime,
 			      << "failed to get complete peak block"
 			      << endl;
 #endif
+		    goto done;
+		}
 
-		    resetStream();
-		    delete hiValues;
-		    delete loValues;
-		    return m_lastPreviewCache;
+		int intDivisor = int(divisor);
+		int inValue =
+		    getIntegerFromLittleEndian(peakData.substr(0, m_format));
+		
+		while (inValue > intDivisor) {
+		    inValue -= (1 << (m_format * 8));
+		}
+		
+#ifdef DEBUG_PEAKFILE
+		std::cout << "found potential hivalue " << inValue << std::endl;
+#endif
+		
+		if (k == 0 || inValue > hiValues[ch]) {
+		    hiValues[ch] = float(inValue);
+		}
+		
+		if (m_pointsPerValue == 2) {
+		    
+		    inValue = 
+			getIntegerFromLittleEndian(
+			    peakData.substr(m_format, m_format));
+		    
+		    while (inValue > intDivisor) {
+			inValue -= (1 << (m_format * 8));
+		    }
+		    
+		    if (k == 0 || inValue < loValues[ch]) {
+			loValues[ch] = inValue;
+		    }
 		}
 	    }
 
 	    ++peakNumber;
 	}
 
-	for (int j = 0; j < m_channels; ++j) {
+	for (int ch = 0; ch < m_channels; ++ch) {
+
+	    float value = hiValues[ch] / divisor;
 
 #ifdef DEBUG_PEAKFILE
-	    std::cout << "VALUE = " << hiValues[j] / divisor << std::endl;
+	    std::cout << "VALUE = " << hiValues[ch] / divisor << std::endl;
 #endif
 
-            // Always push back high value
-            m_lastPreviewCache.push_back(hiValues[j] / divisor);
-
-            if (showMinima)
-                m_lastPreviewCache.push_back(loValues[j] / divisor);
+	    if (showMinima) {
+                m_lastPreviewCache.push_back(loValues[ch] / divisor);
+	    } else {
+		value = fabs(value);
+		if (m_pointsPerValue == 2) {
+		    value = std::max(value, fabsf(loValues[ch] / divisor));
+		}
+		m_lastPreviewCache.push_back(value);
+	    }
 	}
     }
 
+done:
     resetStream();
     delete[] hiValues;
     delete[] loValues;
@@ -991,7 +981,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
     {
         value = 0.0;
 
-        for (int j = 0; j < m_channels; j++)
+        for (int ch = 0; ch < m_channels; ch++)
         {
             try
             {
