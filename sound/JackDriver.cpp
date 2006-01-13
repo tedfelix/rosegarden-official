@@ -1430,7 +1430,7 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
     if (!transport) return true;
 
 #ifdef DEBUG_JACK_TRANSPORT
-    std::cerr << "JackDriver::jackSyncCallback: state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : "starting") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying() << std::endl;
+    std::cerr << "JackDriver::jackSyncCallback: state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : state == 3 ? "starting" : "unknown") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying() << std::endl;
 
     std::cerr << "JackDriver::jackSyncCallback: m_waitingState " << inst->m_waitingState << ", unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2 << std::endl;
     
@@ -1501,12 +1501,12 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 #endif
 	}
 
+	inst->m_waiting = true;
+	inst->m_waitingState = state;
+
 #ifdef DEBUG_JACK_TRANSPORT
 	std::cerr << "JackDriver::jackSyncCallback: Setting waiting to " << inst->m_waiting << " and waiting state to " << inst->m_waitingState << " (request was " << request << ")" << std::endl;
 #endif
-
-	inst->m_waiting = true;
-	inst->m_waitingState = state;
 	return 0;
 
     } else {
@@ -1621,6 +1621,7 @@ JackDriver::startTransport()
 bool
 JackDriver::relocateTransport()
 {
+
     return relocateTransportInternal(false);
 }
 

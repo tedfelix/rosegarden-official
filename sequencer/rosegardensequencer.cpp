@@ -471,8 +471,8 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
     
     incrementTransportToken();
 
-//    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
-//    ::sleep(1);
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
+    ::sleep(1);
 
     m_driver->startClocks();
 
@@ -1696,8 +1696,8 @@ RosegardenSequencerApp::transportJump(TransportRequest request,
 
     std::cout << "RosegardenSequencerApp::transportJump: " << request << ", " << rt << std::endl;
 
-    if (request == TransportNoChange) return m_transportToken;
-    else return m_transportToken + 1;
+    if (request == TransportNoChange) return m_transportToken + 1;
+    else return m_transportToken + 2;
 }
 
 bool
