@@ -665,6 +665,7 @@ void AudioPreviewPainter::paintPreviewImage()
         return;
         
     float gain[2] = { 1.0, 1.0 };
+    int instrumentChannels = 2;
     Rosegarden::TrackId trackId = m_segment->getTrack();
     Rosegarden::Track *track = m_model.getComposition().getTrackById(trackId);
     if (track) {
@@ -674,8 +675,8 @@ void AudioPreviewPainter::paintPreviewImage()
             float pan = instrument->getPan() - 100.0;
             gain[0] = level * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
             gain[1] = level * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+	    instrumentChannels = instrument->getAudioChannels();
         }
-
     }
 
     bool showMinima = m_apData->showsMinima();
@@ -778,25 +779,30 @@ void AudioPreviewPainter::paintPreviewImage()
             h1 = values[position++];
             h2 = h1;
 
-            h1 *= gain[0];
-            h2 *= gain[1];
-
-            if (m_apData->showsMinima()) {
+            if (showMinima) {
                 l1 = values[position++];
                 l2 = l1;
-
-                l1 *= gain[0];
-                l2 *= gain[1];
             }
         } else {
 
-            h1 = values[position++] * gain[0];
-            if (showMinima) l1 = values[position++] * gain[0];
+            h1 = values[position++];
+            if (showMinima) l1 = values[position++];
 
-            h2 = values[position++] * gain[1];
-            if (showMinima) l2 = values[position++] * gain[1];
+            h2 = values[position++];
+            if (showMinima) l2 = values[position++];
             
         }
+
+	if (instrumentChannels == 1 && channels == 2) {
+	    h1 = h2 = (h1 + h2) / 2;
+	    l1 = l2 = (l1 + l2) / 2;
+	}
+
+	h1 *= gain[0];
+	h2 *= gain[1];
+	
+	l1 *= gain[0];
+	l2 *= gain[1];
 
         int width = 1;
 	int pixel;
