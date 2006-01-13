@@ -338,7 +338,7 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
 				   std::ios::in | std::ios::binary);
 
-	//!!! need to catch this
+	std::cerr << "ERROR: PlayableAudioFile::initialise: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
 
 	//!!! I sometimes see this being thrown for a file that's been
 	//played many many times already in this composition. Are we
@@ -706,9 +706,7 @@ PlayableAudioFile::updateBuffers()
     if (!m_ringBuffers[0]) {
 	// need a buffer: can we get one?
 	if (!m_ringBufferPool->getBuffers(m_targetChannels, m_ringBuffers)) {
-#ifdef DEBUG_PLAYABLE_READ
-	    std::cerr << "PlayableAudioFile::updateBuffers: no ring buffers available" << std::endl;
-#endif
+	    std::cerr << "WARNING: PlayableAudioFile::updateBuffers: no ring buffers available" << std::endl;
 	    return false;
 	}
     }
@@ -716,6 +714,7 @@ PlayableAudioFile::updateBuffers()
     size_t nframes = 0;
 
     for (int ch = 0; ch < m_targetChannels; ++ch) {
+	if (!m_ringBuffers[ch]) continue;
 	size_t writeSpace = m_ringBuffers[ch]->getWriteSpace();
 	if (ch == 0 || writeSpace < nframes) nframes = writeSpace;
     }
@@ -853,7 +852,9 @@ PlayableAudioFile::updateBuffers()
 	m_currentScanPoint = m_currentScanPoint + block;
 
 	for (int ch = 0; ch < m_targetChannels; ++ch) {
-	    m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
+	    if (m_ringBuffers[ch]) {
+		m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
+	    }
 	}
     }
 
