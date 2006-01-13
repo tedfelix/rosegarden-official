@@ -293,7 +293,9 @@ TriggerSegmentManager::slotUpdate()
 	QString label = strtoqstr((*it)->getSegment()->getLabel());
 	if (label == "") label = i18n("<no label>");
 
-	QString used = i18n("%1 on 1 track", "%1 on %n tracks", tracks.size()).arg(uses);
+	QString used = i18n("%1 on 1 track",
+			    "%1 on %n tracks",
+			    tracks.size()).arg(uses);
 
 	QString pitch = QString("%1 (%2)")
 	    .arg(Rosegarden::MidiPitchLabel((*it)->getBasePitch()).getQString())

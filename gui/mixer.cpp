@@ -190,7 +190,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     
     for (int i = 2; i <= 8; i *= 2) {
 	action = new KRadioAction
-	    (i18n("%1 Submasters").arg(i),
+	    (i18n("1 Submaster", "%n Submasters", i),
 	     0, this,
 	     SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
 	     QString("submasters_%1").arg(i));

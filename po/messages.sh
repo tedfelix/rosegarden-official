@@ -19,7 +19,10 @@ TIPSDIR=$SRCDIR/docs/en # tipsdir is the directory containing the tips
 
 KDEDIR=`kde-config --prefix`
 EXTRACTRC=extractrc
-KDEPOT=`kde-config --prefix`/include/kde.pot
+KDEPOT=$KDEDIR/include/kde.pot
+if [ ! -f "$KDEPOT" ] && [ -f /usr/include/kde/kde.pot ]; then
+    KDEPOT=/usr/include/kde/kde.pot
+fi
 XGETTEXT="xgettext -C -ki18n -ktr2i18n -kI18N_NOOP -ktranslate -kaliasLocale -x $KDEPOT "
 
 ## check that kde.pot is available

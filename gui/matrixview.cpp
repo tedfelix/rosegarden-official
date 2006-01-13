@@ -2561,9 +2561,10 @@ MatrixView::updateViewCaption()
 
     } else {
 
-        setCaption(i18n("%1 - %2 Segments - %2 ")
+        setCaption(i18n("%1 - 1 Segment - %2",
+			"%1 - %n Segments - %2",
+			m_segments.size())
                    .arg(getDocument()->getTitle())
-                   .arg(m_segments.size())
 		   .arg(view));
     }
 }
