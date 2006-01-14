@@ -1116,12 +1116,16 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
     typedef std::map<Rosegarden::InstrumentId, int> StateMap;
     static StateMap states;
+    static StateMap recStates;
 
     typedef std::map<Rosegarden::InstrumentId, Rosegarden::LevelInfo> LevelMap;
     static LevelMap levels;
     static LevelMap recLevels;
 
     for (StateMap::iterator i = states.begin(); i != states.end(); ++i) {
+	i->second = unknownState;
+    }
+    for (StateMap::iterator i = recStates.begin(); i != recStates.end(); ++i) {
 	i->second = unknownState;
     }
 
@@ -1135,29 +1139,23 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	Rosegarden::InstrumentId instrumentId = track->getInstrument();
 
 	if (states[instrumentId] == unknownState) {
-
 	    bool isNew = mapper->getInstrumentLevel(instrumentId, 
 						    levels[instrumentId]);
 	    states[instrumentId] = (isNew ? newState : oldState);
-
-	    isNew = mapper->getInstrumentRecordLevel(instrumentId,
-						     recLevels[instrumentId]);
-	    states[instrumentId] = (isNew ? newState : states[instrumentId]);
 	}
 
-	if (states[instrumentId] == oldState) continue;
+	if (recStates[instrumentId] == unknownState) {
+	    bool isNew = mapper->getInstrumentRecordLevel(instrumentId,
+							  recLevels[instrumentId]);
+	    recStates[instrumentId] = (isNew ? newState : oldState);
+	}
+
+	if (states[instrumentId] == oldState &&
+	    recStates[instrumentId] == oldState) continue;
 
 	Rosegarden::Instrument *instrument =
 	    getDocument()->getStudio().getInstrumentById(instrumentId);
 	if (!instrument) continue;
-
-	// Eech.  If we have a mixer and this is an audio instrument, then
-	// our mixer has already used up the "is new?" token.
-        //
-        /*
-	if (instrument->getType() == Rosegarden::Instrument::Audio) {
-	}
-        */
 
 	Rosegarden::LevelInfo &info = levels[instrumentId];
 	Rosegarden::LevelInfo &recInfo = recLevels[instrumentId];
@@ -1165,45 +1163,61 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	if (instrument->getType() == Rosegarden::Instrument::Audio ||
 	    instrument->getType() == Rosegarden::Instrument::SoftSynth) {
 
-            // Don't send a 0 to an audio meter
-            //
-            if (info.level == 0 && info.levelRight == 0 &&
-		recInfo.level == 0 && recInfo.levelRight == 0) continue;
+	    float dBleft = Rosegarden::AudioLevel::DB_FLOOR;
+	    float dBright = Rosegarden::AudioLevel::DB_FLOOR;
+	    float recDBleft = Rosegarden::AudioLevel::DB_FLOOR;
+	    float recDBright = Rosegarden::AudioLevel::DB_FLOOR;
 
-	    if (m_instrumentParameterBox->getSelectedInstrument() &&
+	    bool toSet = false;
+
+	    if (states[instrumentId] == newState &&
+		(getDocument()->getSequenceManager()->getTransportStatus()
+		 != STOPPED)) {
+
+		if (info.level != 0 || info.levelRight != 0) {
+		    dBleft = Rosegarden::AudioLevel::fader_to_dB
+			(info.level, 127, Rosegarden::AudioLevel::LongFader);
+		    dBright = Rosegarden::AudioLevel::fader_to_dB
+			(info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+		}
+		toSet = true;
+		m_trackEditor->getTrackButtons()->slotSetTrackMeter
+		    ((info.level + info.levelRight) / 254.0, track->getPosition());
+	    }
+	    
+	    if (recStates[instrumentId] == newState &&
+		instrument->getType() == Rosegarden::Instrument::Audio &&
+		(getDocument()->getSequenceManager()->getTransportStatus()
+		 != PLAYING)) {
+
+		if (recInfo.level != 0 || recInfo.levelRight != 0) {
+		    recDBleft = Rosegarden::AudioLevel::fader_to_dB
+			(recInfo.level, 127, Rosegarden::AudioLevel::LongFader);
+		    recDBright = Rosegarden::AudioLevel::fader_to_dB
+			(recInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+		}
+		toSet = true;
+	    }
+
+	    if (toSet &&
+		m_instrumentParameterBox->getSelectedInstrument() &&
 		instrument->getId() ==
 		m_instrumentParameterBox->getSelectedInstrument()->getId()) {
-
-		float dBleft = Rosegarden::AudioLevel::fader_to_dB
-		    (info.level, 127, Rosegarden::AudioLevel::LongFader);
-		float dBright = Rosegarden::AudioLevel::fader_to_dB
-		    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
-
-		float recDBleft = Rosegarden::AudioLevel::fader_to_dB
-		    (recInfo.level, 127, Rosegarden::AudioLevel::LongFader);
-		float recDBright = Rosegarden::AudioLevel::fader_to_dB
-		    (recInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
 		m_instrumentParameterBox->setAudioMeter(dBleft, dBright,
 							recDBleft, recDBright);
 	    }
 
-	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		((info.level + info.levelRight) / 254.0, track->getPosition());
-
 	} else {
 
             if (info.level == 0) continue;
 
-            /*
-            RG_DEBUG << "RosegardenGUIView::updateMeters - "
-                     << "Instrument ID " << instrumentId
-                     << " is getting value " << info.level / 127.0
-                     << endl;
-                     */
+	    if (getDocument()->getSequenceManager()->getTransportStatus()
+		 != STOPPED) {
 
-	    m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
-		(info.level / 127.0, instrumentId);
+		m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
+		    (info.level / 127.0, instrumentId);
+	    }
 	}
     }
 
@@ -1212,6 +1226,27 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	    emit instrumentLevelsChanged(i->first, levels[i->first]);
 	}
     }
+}    
+
+void
+RosegardenGUIView::updateMonitorMeters(SequencerMapper *mapper)
+{
+    Rosegarden::Instrument *instrument =
+	m_instrumentParameterBox->getSelectedInstrument();
+    if (!instrument ||
+	(instrument->getType() != Rosegarden::Instrument::Audio)) return;
+
+    Rosegarden::LevelInfo level;
+    if (!mapper->getInstrumentRecordLevel(instrument->getId(), level)) return;
+
+    float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	(level.level, 127, Rosegarden::AudioLevel::LongFader);
+    float dBright = Rosegarden::AudioLevel::fader_to_dB
+	(level.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+    m_instrumentParameterBox->setAudioMeter
+	(Rosegarden::AudioLevel::DB_FLOOR, Rosegarden::AudioLevel::DB_FLOOR,
+	 dBleft, dBright);
 }    
 
 void

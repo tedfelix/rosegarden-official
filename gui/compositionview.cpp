@@ -980,7 +980,7 @@ void CompositionModelImpl::appearanceChanged(const Rosegarden::Segment *s)
 void CompositionModelImpl::endMarkerTimeChanged(const Rosegarden::Segment *s, bool shorten)
 {
     RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")" << endl;
-    clearInCache(s);
+    clearInCache(s, true);
     if (shorten) {
 	emit needContentUpdate(); // no longer know former segment dimension
     } else {

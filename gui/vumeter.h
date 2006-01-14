@@ -83,6 +83,7 @@ protected:
     virtual void meterStop() = 0;
 
     int         m_originalHeight;
+    bool        m_active;
 
     void setLevel(double leftLevel, double rightLevel, bool record);
 

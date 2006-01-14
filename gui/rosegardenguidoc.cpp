@@ -322,8 +322,6 @@ bool RosegardenGUIDoc::saveIfModified()
 	break;
 
     case KMessageBox::No:
-	setModified(false);
-	
 	// delete the autosave file so it won't annoy
 	// the user when reloading the file.
 	QFile::remove(getAutoSaveFileName());
@@ -344,6 +342,7 @@ bool RosegardenGUIDoc::saveIfModified()
 	if (completed) m_audioFileManager.resetRecentlyRecordedFiles();
     }
 
+    if (completed) setModified(false);
     return completed;
 }
 

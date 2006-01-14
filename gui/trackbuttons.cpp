@@ -97,6 +97,7 @@ TrackVUMeter::meterStart()
     clear();
     setMinimumHeight(m_originalHeight);
     setMaximumHeight(m_originalHeight);
+    m_active = true;
 }
 
 
@@ -106,6 +107,10 @@ TrackVUMeter::meterStop()
     setMinimumHeight(m_textHeight);
     setMaximumHeight(m_textHeight);
     setText(QString("%1").arg(m_position + 1));
+    if (m_active) {
+	m_active = false;
+	update();
+    }
 }
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,

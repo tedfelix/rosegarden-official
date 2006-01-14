@@ -41,6 +41,7 @@ VUMeter::VUMeter(QWidget *parent,
                  const char *name):
     QLabel(parent, name),
     m_originalHeight(height),
+    m_active(true),
     m_type(type),
     m_alignment(alignment),
     m_levelLeft(0),
@@ -204,7 +205,7 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 {
     if (!isVisible()) return;
 
-    RG_DEBUG << "setLevel(" << (void *)this << "): record=" << record << ", leftLevel=" << leftLevel << ", hasRecord=" << m_hasRecord << endl;
+//    RG_DEBUG << "setLevel(" << (void *)this << "): record=" << record << ", leftLevel=" << leftLevel << ", hasRecord=" << m_hasRecord << endl;
 
     if (record && !m_hasRecord) return;
 
@@ -303,13 +304,16 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
 	}
     }
 
-    QPainter paint(this);
-    drawMeterLevel(&paint);
+    if (m_active) {
+	QPainter paint(this);
+	drawMeterLevel(&paint);
+    }
 }
 
 void
-VUMeter::paintEvent(QPaintEvent*)
+VUMeter::paintEvent(QPaintEvent *e)
 {
+//    RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
     QPainter paint(this);
 
     if (m_type == VUMeter::AudioPeakHoldShort ||
@@ -331,7 +335,6 @@ VUMeter::paintEvent(QPaintEvent*)
     }
     else if (m_type == VUMeter::FixedHeightVisiblePeakHold)
     {
-        //RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
 	paint.setPen(m_background);
 	paint.setBrush(m_background);
 	paint.drawRect(0, 0, width(), height());
@@ -441,7 +444,7 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
             paint->setBrush(mixedColour);
 	}
 
-        //RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
+//        RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
 
 	paint->drawRect(x, y, w, h);
     }

@@ -4964,6 +4964,16 @@ AlsaDriver::runTasks()
 void 
 AlsaDriver::reportFailure(Rosegarden::MappedEvent::FailureCode code)
 {
+//#define REPORT_XRUNS 1
+#ifndef REPORT_XRUNS
+    if (code == MappedEvent::FailureXRuns ||
+	code == MappedEvent::FailureDiscUnderrun ||
+	code == MappedEvent::FailureBussMixUnderrun ||
+	code == MappedEvent::FailureMixUnderrun) {
+	return;
+    }
+#endif
+
     // Ignore consecutive duplicates
     if (_failureReportWriteIndex > 0 &&
 	_failureReportWriteIndex != _failureReportReadIndex) {

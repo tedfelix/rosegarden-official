@@ -138,6 +138,7 @@ public:
     void showVisuals(const Rosegarden::MappedEvent *mE);
 
     void updateMeters(SequencerMapper *mapper);
+    void updateMonitorMeters(SequencerMapper *mapper);
 
     /**
      * Change zoom size -- set the RulerScale's units-per-pixel to size

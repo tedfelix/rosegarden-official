@@ -99,8 +99,7 @@ the notation editor?  Simply select the segments, then use <b>Edit -> Open in No
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that Rosegarden can export files for use by Lilypond, the high-quality score typesetting system?
-
+<p>...that Rosegarden can export files for use by Lilypond, the high-quality score typesetting system?<br><br>
 From the <b>File</b> menu, navigate to <b>Export -> Export Lilypond File</b></p>
 </html>
 </tip>
@@ -119,7 +118,7 @@ in the main window?</p>
 <html>
 <p>...that the number of tracks in new documents is based on the contents of
 your autoload.rg file?
-
+<br><br>
 Whether you prefer to start with three tracks or 43, create a document that
 contains the desired number of tracks, plus any other studio or document properties settings
 you wish to configure, and use <b>Composition -> Studio -> Save Current Document as Default

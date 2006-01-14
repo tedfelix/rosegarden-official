@@ -2,7 +2,7 @@
 # -*- cperl-indent-level: 4 -*-
 #
 # Rosegarden Project file packager
-# Chris Cannam, Fervent Software 2005
+# Chris Cannam, Fervent Software 2005-2006
 #
 # This program converts between Rosegarden (.rg) files and Rosegarden
 # Project (.rgp) files.
@@ -39,6 +39,9 @@ use XML::Twig;
 use File::Copy;
 use File::Basename;
 use Getopt::Long;
+
+print "Rosegarden Project Packager v0.19 (c) Fervent Software Ltd 2005-2006\n";
+print "This is Free Software under the GNU General Public License.\n";
 
 my $dcop = undef;
 sub usage {
@@ -97,7 +100,9 @@ sub conftest {
 
 sub canonicalise {
     my $b = shift;
+    chomp $b;
     my $p = shift;
+    chomp $p;
     $p =~ s,^~/,$ENV{"HOME"}/,;
     $p =~ s,^~$,$ENV{"HOME"},;
     $p =~ s,^([^/]),$b/$1,;
@@ -108,7 +113,9 @@ sub canonicalise {
 
 sub relativise {
     my $b = shift;
+    chomp $b;
     my $p = shift;
+    chomp $p;
     if ($p =~ m,^$b/,) {
 	$p =~ s,^$b/,,;
     }
@@ -230,6 +237,10 @@ sub rgPack {
     $rgFile = canonicalise `pwd`, $rgFile;
     $projectFile = canonicalise `pwd`, $projectFile;
 
+    if (-d $projectFile) {
+	die "Project file $projectFile exists and is a directory -- not overwriting it";
+    }
+    
     if (-f $projectFile) {
 	if (system qq{$kdialog --warningyesno "Project file \"$projectFile\" already exists.  Overwrite it?"}) {
 	    die "Not overwriting existing project file $projectFile";
@@ -564,6 +575,10 @@ sub rgUnpack {
     $rgFile = canonicalise `pwd`, $rgFile;
     $projectFile = canonicalise `pwd`, $projectFile;
 
+    if (! -f $projectFile) {
+	die "Project file $projectFile not found";
+    }
+
     $rgFile =~ /.rg$/i or $rgFile = "$rgFile.rg";
 
     # directory containing target rg file
@@ -590,13 +605,19 @@ sub rgUnpack {
     }
     # projectDir is now absolute or relative to cwd
 
-    if (-f $projectDir or -d $projectDir) {
-      if (system qq{$kdialog --warningyesno "Project directory \"$projectDir\" already exists.  Overwrite any duplicate files?"}) {
-          die "Not overwriting existing project directory $projectDir";
-      }
+    if (-f $projectDir) {
+
+	die "Project directory $projectDir already exists and is a file -- not overwriting it";
+
+    } elsif (-d $projectDir) {
+
+	if (system qq{$kdialog --warningyesno "Project directory \"$projectDir\" already exists.  Overwrite any duplicate files?"}) {
+	    die "Not overwriting existing project directory $projectDir";
+	}
+
     } else {
-	system qq{mkdir -p "$projectDir"} and die "Failed to create target project directory $projectDir";
 	push @temporaries, $projectDir;
+	system qq{mkdir -p "$projectDir"} and die "Failed to create target project directory $projectDir";
     }
 
     my %dirs;
@@ -639,6 +660,7 @@ sub rgUnpack {
     # !!! extra above: show error and exit if rgFile exists and is a directory
 
     my $tmpdir = "rgp_tmp_$$"; ##!!! clean up
+    if (-e $tmpdir) { die "Temporary directory $tmpdir already exists, abandoning"; }
     system qq{ mkdir "$tmpdir" } and die "Failed to create temporary directory $tmpdir";
 
     push @temporaries, $tmpdir;
@@ -658,7 +680,7 @@ sub rgUnpack {
 	chomp $encFile;
 	my $origFile = $encFile;
 	$origFile =~ s/\.rgp\.(flac|ogg)$//;
-	my $decoder = 'flac -s -d';
+	my $decoder = 'flac -s -f -d';
 	if ($encFile =~ /ogg$/) {
 	    $decoder = 'oggdec';
 	}
@@ -693,6 +715,7 @@ sub rgUnpack {
 
     sleep 1;
 
+    system qq{rm -rf "$tmpdir"};
     `dcop "$dcop" close`;
 
     @temporaries = ();
@@ -738,6 +761,7 @@ if ($pack) {
 
     if (exists $ARGV[0]) {
 	$rgFile = $ARGV[0];
+	chomp $rgFile;
     }
     if (! -f $rgFile) {
 	die "$rgFile: No such file or directory\n";
@@ -745,6 +769,7 @@ if ($pack) {
 
     if (exists $ARGV[1]) {
 	$projectFile = $ARGV[1];
+	chomp $projectFile;
     } else {
 	$projectFile = $rgFile;
 	$projectFile =~ s/\.rg$/.rgp/;
@@ -764,6 +789,7 @@ if ($pack) {
 
     if (exists $ARGV[0]) {
 	$projectFile = $ARGV[0];
+	chomp $projectFile;
     }
     if (! -f $projectFile) {
 	die "$projectFile: No such file or directory\n";
@@ -772,6 +798,7 @@ if ($pack) {
     my $rgFile;
     if (exists $ARGV[1]) {
         $rgFile = $ARGV[1];
+	chomp $rgFile;
     } else {
         $rgFile = $projectFile;
         $rgFile =~ s/\.rg\.rgp$/.rg/i;

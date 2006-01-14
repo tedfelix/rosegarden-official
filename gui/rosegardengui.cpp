@@ -3924,6 +3924,8 @@ RosegardenGUIApp::slotUpdateMonitoring()
     if (m_midiMixer && m_midiMixer->isVisible())
         m_midiMixer->updateMonitorMeter(mapper);
 
+    m_view->updateMonitorMeters(mapper);
+
     slotUpdateCPUMeter(false);
 }
 

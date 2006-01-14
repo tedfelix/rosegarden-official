@@ -730,6 +730,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     // Don't allow Audio segments to resize yet
     //
+/*!!!
     if (segment->getType() == Rosegarden::Segment::Audio)
     {
         m_currentItem = CompositionItem();
@@ -737,6 +738,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
                 i18n("You can't yet resize an audio segment!"));
         return RosegardenCanvasView::NoFollow;
     }
+*/
 
     QRect oldRect = m_currentItem->rect();
 

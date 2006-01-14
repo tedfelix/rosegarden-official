@@ -338,13 +338,11 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
 				   std::ios::in | std::ios::binary);
 
-	std::cerr << "ERROR: PlayableAudioFile::initialise: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
-
-	//!!! I sometimes see this being thrown for a file that's been
-	//played many many times already in this composition. Are we
-	//leaking fds?
-	if (!*m_file)
-	    throw(std::string("PlayableAudioFile - can't open file"));
+	if (!*m_file) {
+	    std::cerr << "ERROR: PlayableAudioFile::initialise: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+	    delete m_file;
+	    m_file = 0;
+	}
     }
 
     // Scan to the beginning of the data chunk we need
@@ -352,7 +350,12 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::initialise - scanning to " << m_startIndex << std::endl;
 #endif
-    scanTo(m_startIndex);
+    if (m_file) {
+	scanTo(m_startIndex);
+    } else {
+	m_fileEnded = false;
+	m_currentScanPoint = m_startIndex;
+    }
 
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::initialise: buffer size is " << bufferSize << " frames, file size is " << m_audioFile->getSize() << std::endl;
@@ -567,7 +570,6 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 	std::ifstream file(m_audioFile->getFilename().c_str(),
 			   std::ios::in | std::ios::binary);
 
-	//!!! need to catch this
 	if (!file) throw(std::string("PlayableAudioFile - can't open file"));
 
 #ifdef DEBUG_PLAYABLE
@@ -635,6 +637,18 @@ PlayableAudioFile::fillBuffers()
     }
 #endif
 
+    if (!m_isSmallFile && (!m_file || !*m_file)) {
+	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+				   std::ios::in | std::ios::binary);
+	if (!*m_file) {
+	    std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+//	    throw(std::string("PlayableAudioFile - can't open file"));
+	    delete m_file;
+	    m_file = 0;
+	    return;
+	}
+    }
+
     scanTo(m_startIndex);
     updateBuffers();
 }
@@ -667,6 +681,19 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 	return true;
     }
 
+    if (!m_isSmallFile && (!m_file || !*m_file)) {
+	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+				   std::ios::in | std::ios::binary);
+	if (!*m_file) {
+	    std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+//	    throw(std::string("PlayableAudioFile - can't open file"));
+	    delete m_file;
+	    m_file = 0;
+	    return false;
+	}
+	scanTo(m_startIndex);
+    }
+
     RealTime scanTime = m_startIndex;
 
     if (currentTime > m_startTime) {
@@ -695,6 +722,7 @@ bool
 PlayableAudioFile::updateBuffers()
 {
     if (m_isSmallFile) return false;
+    if (!m_file) return false;
 
     if (m_fileEnded) {
 #ifdef DEBUG_PLAYABLE_READ
@@ -704,6 +732,12 @@ PlayableAudioFile::updateBuffers()
     }
 
     if (!m_ringBuffers[0]) {
+	
+	if (m_targetChannels < 0) {
+	    std::cerr << "WARNING: PlayableAudioFile::updateBuffers: m_targetChannels < 0, can't allocate ring buffers" << std::endl;
+	    return false;
+	}
+
 	// need a buffer: can we get one?
 	if (!m_ringBufferPool->getBuffers(m_targetChannels, m_ringBuffers)) {
 	    std::cerr << "WARNING: PlayableAudioFile::updateBuffers: no ring buffers available" << std::endl;
@@ -796,7 +830,14 @@ PlayableAudioFile::updateBuffers()
 			    m_workBuffers,
 			    false)) {
 
-	if (obtained < fileFrames) m_fileEnded = true;
+	if (obtained < fileFrames) {
+	    m_fileEnded = true;
+	    if (m_file) {
+		m_file->close();
+		delete m_file;
+		m_file = 0;
+	    }
+	}
 
 /*!!! No -- GUI and notification side of things isn't up to this yet,
       so comment it out just in case

@@ -586,6 +586,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 		    // write out as 16-bit (m_format == 2)
 		    float val = *(float *)samplePtr;
 		    sampleValue = (int)(32767.0 * val);
+		    samplePtr += 4;
 		}
                 else
                 {
