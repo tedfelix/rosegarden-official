@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <sys/time.h>
+#include <iostream>
 
 namespace Rosegarden
 {
