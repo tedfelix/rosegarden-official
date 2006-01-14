@@ -1933,8 +1933,8 @@ AudioFileReader::fillBuffers(const RealTime &currentTime)
     RealTime bufferLength = m_driver->getAudioReadBufferLength();
     int bufferFrames = RealTime::realTime2Frame(bufferLength, m_sampleRate);
     
-    PlayableAudioFile::setRingBufferPoolSizes
-	(queue->getMaxBuffersRequired() * 2 + 4, bufferFrames);
+    int poolSize = queue->getMaxBuffersRequired() * 2 + 4;
+    PlayableAudioFile::setRingBufferPoolSizes(poolSize, bufferFrames);
     
     const AudioPlayQueue::FileSet &files = queue->getAllScheduledFiles();
     
@@ -1946,10 +1946,14 @@ AudioFileReader::fillBuffers(const RealTime &currentTime)
 	 fi != files.end(); ++fi) {
 	(*fi)->clearBuffers();
     }
-    
+
+    int allocated = 0;
     for (AudioPlayQueue::FileSet::const_iterator fi = files.begin();
 	 fi != files.end(); ++fi) {
 	(*fi)->fillBuffers(currentTime);
+	if ((*fi)->getEndTime() >= currentTime) {
+	    if (++allocated == poolSize) break;
+	} // else the file's ring buffers will have been returned
     }
     
     releaseLock();
@@ -1970,7 +1974,8 @@ AudioFileReader::kick(bool wantLock)
 
     AudioPlayQueue::FileSet playing;
     
-    queue->getPlayingFiles(now, m_driver->getAudioReadBufferLength(), playing);
+    queue->getPlayingFiles
+	(now, RealTime(3, 0) + m_driver->getAudioReadBufferLength(), playing);
     
     for (AudioPlayQueue::FileSet::iterator fi = playing.begin();
 	 fi != playing.end(); ++fi) {

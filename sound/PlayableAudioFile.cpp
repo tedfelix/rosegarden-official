@@ -75,13 +75,15 @@ protected:
     AllocList m_buffers;
 
     size_t m_bufferSize;
+    size_t m_available;
 
     pthread_mutex_t m_lock;
 };
 
 
 RingBufferPool::RingBufferPool(size_t bufferSize) :
-    m_bufferSize(bufferSize)
+    m_bufferSize(bufferSize),
+    m_available(0)
 {
     pthread_mutex_t initialisingMutex = PTHREAD_MUTEX_INITIALIZER;
     memcpy(&m_lock, &initialisingMutex, sizeof(pthread_mutex_t));
@@ -174,9 +176,11 @@ RingBufferPool::setPoolSize(size_t n)
 	++count;
     }	
 
+    m_available = std::max(allocatedCount, n) - allocatedCount;
+
 #ifdef DEBUG_RING_BUFFER_POOL
     std::cerr << "RingBufferPool::setPoolSize: have " << m_buffers.size()
-	      << " buffers (" << allocatedCount << " allocated)" << std::endl;
+	      << " buffers (" << allocatedCount << " allocated, " << m_available << " available)" << std::endl;
 #endif
 
     pthread_mutex_unlock(&m_lock);
@@ -209,6 +213,7 @@ RingBufferPool::getBuffers(size_t n, RingBuffer<sample_t> **buffers)
 					       false));
 	    }
 	    count += m_buffers.size();
+	    m_available += m_buffers.size();
 	}
 
 	m_buffers = newBuffers;
@@ -226,9 +231,14 @@ RingBufferPool::getBuffers(size_t n, RingBuffer<sample_t> **buffers)
 	    i->first->reset();
 	    i->first->mlock();
 	    buffers[count] = i->first;
+	    --m_available;
 	    if (++count == n) break;
 	}
     }
+
+#ifdef DEBUG_RING_BUFFER_POOL
+    std::cerr << "RingBufferPool::getBuffers: " << m_available << " remain in pool of " << m_buffers.size() << std::endl;
+#endif
 
     pthread_mutex_unlock(&m_lock);
     return true;
@@ -248,12 +258,17 @@ RingBufferPool::returnBuffer(RingBuffer<sample_t> *buffer)
     for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
 	if (i->first == buffer) {
 	    i->second = false;
+	    ++m_available;
 	    if (buffer->getSize() != m_bufferSize) {
 		delete buffer;
 		i->first = new RingBuffer<sample_t>(m_bufferSize);
 	    }
 	}
     }
+
+#ifdef DEBUG_RING_BUFFER_POOL
+    std::cerr << "RingBufferPool::returnBuffer: " << m_available << " remain in pool of " << m_buffers.size() << std::endl;
+#endif
 
     pthread_mutex_unlock(&m_lock);
 }

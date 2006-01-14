@@ -49,7 +49,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_recordStatus(RECORD_OFF),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
-    m_audioQueueScavenger(4, 50),
+//    m_audioQueueScavenger(4, 50),
     m_audioQueue(0),
     m_lowLatencyMode(true),
     m_audioRecFileFormat(RIFFAudioFile::FLOAT),

@@ -113,6 +113,8 @@ Scavenger<T>::claim(T *t)
     // Oh no -- run out of slots!  Warn and discard something at
     // random (without deleting it -- it's probably safer to leak).
 
+    std::cerr << "WARNING: Scavenger::claim(" << t << "): run out of slots"
+	      << std::endl;
     for (size_t i = 0; i < m_objects.size(); ++i) {
 	ObjectTimePair &pair = m_objects[i];
 	if (pair.first != 0) {
