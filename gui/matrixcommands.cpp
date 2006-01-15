@@ -168,7 +168,14 @@ MatrixPercussionInsertionCommand::getEndTime(Segment &segment,
 					     Rosegarden::timeT time,
 					     Rosegarden::Event &event)
 {
-    Rosegarden::timeT endTime = segment.getEndMarkerTime();
+    Rosegarden::timeT endTime =
+	time + Rosegarden::Note(Rosegarden::Note::Semibreve,
+				0).getDuration();
+    Rosegarden::timeT barEndTime = segment.getBarEndForTime(time);
+    Rosegarden::timeT segmentEndTime = segment.getEndMarkerTime();
+
+    if (barEndTime > endTime) endTime = barEndTime;
+    if (endTime > segmentEndTime) endTime = segmentEndTime;
 
     int pitch = 0;
     if (event.has(PITCH)) {
@@ -192,6 +199,7 @@ MatrixPercussionInsertionCommand::getEndTime(Segment &segment,
     std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange =
 	comp->getBarRangeForTime(time);
     Rosegarden::timeT barDuration = barRange.second - barRange.first;
+
     
     if (endTime > time + barDuration) {
 	endTime = time + barDuration;
