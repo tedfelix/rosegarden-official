@@ -116,6 +116,8 @@ AudioPluginInstance::toXmlString()
                << m_ports[i]->number
                << "\" value=\""
                << m_ports[i]->value
+               << "\" changed=\""
+               << (m_ports[i]->changedSinceProgramChange ? "true" : "false")
                << "\"/>" << std::endl;
     }
 
@@ -196,6 +198,17 @@ AudioPluginInstance::getConfigurationValue(std::string k) const
     ConfigMap::const_iterator i = m_config.find(k);
     if (i != m_config.end()) return i->second;
     return "";
+}
+
+void
+AudioPluginInstance::setProgram(std::string program)
+{
+    m_program = program;
+    
+    PortInstanceIterator it = m_ports.begin();
+    for (; it != m_ports.end(); ++it) {
+	(*it)->changedSinceProgramChange = false;
+    }
 }
 	
 void

@@ -86,10 +86,14 @@ class PluginPortInstance
 {
 public:
     PluginPortInstance(unsigned int n,
-                       float v):number(n), value(v) {;}
+                       float v)
+	: number(n), value(v), changedSinceProgramChange(false) {;}
 
     int number;
     PortData value;
+    bool changedSinceProgramChange;
+
+    void setValue(PortData v) { value = v; changedSinceProgramChange = true; }
 };
 
 typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
@@ -131,7 +135,7 @@ public:
     void setBypass(bool bypass) { m_bypass = bypass; }
     bool isBypassed() const { return m_bypass; }
 
-    void setProgram(std::string program) { m_program = program; }
+    void setProgram(std::string program);
     std::string getProgram() const { return m_program; }
 
     int getMappedId() const { return m_mappedId; }

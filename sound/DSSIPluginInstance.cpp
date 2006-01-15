@@ -176,6 +176,7 @@ DSSIPluginInstance::init()
 					   (i, data));
 
 		m_backupControlPortsIn.push_back(0.0);
+		m_portChangedSinceProgramChange.push_back(false);
 
 	    } else {
 		LADSPA_Data *data = new LADSPA_Data(0.0);
@@ -528,7 +529,7 @@ void
 DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::selectProgram(" << program << ")" << std::endl;
+    std::cerr << "DSSIPluginInstance[" << this << "]::selectProgram(" << program << ", " << backupPortValues << ")" << std::endl;
 #endif
 
     if (!m_descriptor) return;
@@ -566,12 +567,13 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
     pthread_mutex_unlock(&m_processLock);
 
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::selectProgram(" << program << "): made select_program(" << bankNo << "," << programNo << " call" << std::endl;
+    std::cerr << "DSSIPluginInstance::selectProgram(" << program << "): made select_program(" << bankNo << "," << programNo << ") call" << std::endl;
 #endif
 
     if (backupPortValues) {
 	for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
 	    m_backupControlPortsIn[i] = *m_controlPortsIn[i].second;
+	    m_portChangedSinceProgramChange[i] = false;
 	}
     }
 }
@@ -580,24 +582,35 @@ void
 DSSIPluginInstance::activate()
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::activate" << std::endl;
+    std::cerr << "DSSIPluginInstance[" << this << "]::activate" << std::endl;
 #endif
 
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->activate) return;
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
+
+    for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
+	if (m_portChangedSinceProgramChange[i]) {
+#ifdef DEBUG_DSSI
+	    std::cerr << "DSSIPluginInstance::activate: setting port " << m_controlPortsIn[i].first << " to " << m_backupControlPortsIn[i] << std::endl;
+#endif
+	    *m_controlPortsIn[i].second = m_backupControlPortsIn[i];
+	}
+    }
 
     if (m_program) {
 #ifdef DEBUG_DSSI
 	std::cerr << "DSSIPluginInstance::activate: restoring program " << m_program << std::endl;
 #endif
 	selectProgramAux(m_program, false);
-    }
 
-    for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
+	for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
+	    if (m_portChangedSinceProgramChange[i]) {
 #ifdef DEBUG_DSSI
-	std::cerr << "DSSIPluginInstance::activate: setting port " << m_controlPortsIn[i].first << " to " << m_backupControlPortsIn[i] << std::endl;
+		std::cerr << "DSSIPluginInstance::activate: setting port " << m_controlPortsIn[i].first << " to " << m_backupControlPortsIn[i] << std::endl;
 #endif
-	*m_controlPortsIn[i].second = m_backupControlPortsIn[i];
+		*m_controlPortsIn[i].second = m_backupControlPortsIn[i];
+	    }
+	}
     }
 }
 
@@ -649,7 +662,7 @@ void
 DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::setPortValue(" << portNumber << ") to " << value << std::endl;
+    std::cerr << "DSSIPluginInstance[" << this << "]::setPortValue(" << portNumber << ") to " << value << std::endl;
 #endif
     for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
         if (m_controlPortsIn[i].first == portNumber) {
@@ -664,6 +677,7 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 	    }
             (*m_controlPortsIn[i].second) = value;
 	    m_backupControlPortsIn[i] = value;
+	    m_portChangedSinceProgramChange[i] = true;
         }
     }
 }

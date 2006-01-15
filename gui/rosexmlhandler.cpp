@@ -1766,10 +1766,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         unsigned long portId = atts.value("id").toULong();
 	double value = qstrtodouble(atts.value("value"));
+	
+	QString changed = atts.value("changed");
+	bool changedSinceProgram = (changed == "true");
 
         if (m_plugin)
         {
             m_plugin->addPort(portId, value);
+	    if (changedSinceProgram) {
+		Rosegarden::PluginPortInstance *ppi = m_plugin->getPort(portId);
+		if (ppi) ppi->changedSinceProgramChange = true;
+	    }
         }
 
     } else if (lcName == "configure") {

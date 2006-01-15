@@ -568,7 +568,7 @@ AudioPluginDialog::slotPluginPortChanged(float value)
 
     // store the new value
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
-    inst->getPort(control->getIndex())->value = value;
+    inst->getPort(control->getIndex())->setValue(value);
 
     emit pluginPortChanged(m_containerId, m_index, control->getIndex());
 }

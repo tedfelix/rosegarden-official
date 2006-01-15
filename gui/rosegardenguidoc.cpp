@@ -436,7 +436,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     int reply = KMessageBox::warningContinueCancel(0, question);
 	    
     if (reply == KMessageBox::Continue) {
-	for (int i = 0; i < orphans.size(); ++i) {
+	for (size_t i = 0; i < orphans.size(); ++i) {
 	    QFile file(orphans[i]);
 	    if (!file.remove()) {
 		KMessageBox::error(0, i18n("File %1 could not be deleted.")
@@ -970,15 +970,6 @@ void RosegardenGUIDoc::initialiseStudio()
 		properties.push_back(Rosegarden::MappedPluginSlot::Bypassed);
 		values.push_back(Rosegarden::MappedObjectValue(plugin->isBypassed()));
 		
-		// Set the program
-		//
-		if (plugin->getProgram() != "") {
-		    Rosegarden::StudioControl::setStudioObjectProperty
-			(pluginMappedId,
-			 Rosegarden::MappedPluginSlot::Program,
-			 strtoqstr(plugin->getProgram()));
-		}
-		
 		// Set all the port values
 		// 
 		Rosegarden::PortInstanceIterator portIt;
@@ -990,6 +981,28 @@ void RosegardenGUIDoc::initialiseStudio()
 			(pluginMappedId,
 			 (*portIt)->number,
 			 (*portIt)->value);
+                }
+
+		// Set the program
+		//
+		if (plugin->getProgram() != "") {
+		    Rosegarden::StudioControl::setStudioObjectProperty
+			(pluginMappedId,
+			 Rosegarden::MappedPluginSlot::Program,
+			 strtoqstr(plugin->getProgram()));
+		}
+		
+		// Set the post-program port values
+		// 
+		for (portIt = plugin->begin();
+		     portIt != plugin->end(); ++portIt)
+		{
+		    if ((*portIt)->changedSinceProgramChange) {
+			Rosegarden::StudioControl::setStudioPluginPort
+			    (pluginMappedId,
+			     (*portIt)->number,
+			     (*portIt)->value);
+		    }
                 }
             }
         }

@@ -6548,7 +6548,7 @@ RosegardenGUIApp::slotChangePluginPort(Rosegarden::InstrumentId instrumentId,
 	     << ", " << portIndex << ") from " << port->value
 	     << " to " << value << endl;
 
-    port->value = value;
+    port->setValue(value);
 
     Rosegarden::StudioControl::setStudioPluginPort(inst->getMappedId(),
 						   portIndex, port->value);

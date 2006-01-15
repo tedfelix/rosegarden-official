@@ -133,6 +133,7 @@ protected:
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsOut;
 
     std::vector<LADSPA_Data>  m_backupControlPortsIn;
+    std::vector<bool>  m_portChangedSinceProgramChange;
 
     std::map<int, int>        m_controllerMap;
 
