@@ -237,7 +237,7 @@ Segment::setEndMarkerTime(timeT t)
     if (m_type == Audio) {
 	RealTime oldAudioEndTime = m_audioEndTime;
 	if (m_composition) {
-	    m_audioEndTime = m_audioStartTime +
+	    m_audioEndTime = // m_audioStartTime +
 		m_composition->getRealTimeDifference(m_startTime, t);
 	    if (oldAudioEndTime != m_audioEndTime) {
 		if (m_endMarkerTime) *m_endMarkerTime = t;

@@ -920,6 +920,10 @@ done:
     m_lastPreviewWidth = width;
     m_lastPreviewShowMinima = showMinima;
 
+#ifdef DEBUG_PEAKFILE
+    std::cout << "Returning " << m_lastPreviewCache.size() << " items" << std::endl;
+#endif
+
     return m_lastPreviewCache;
 }
 
