@@ -346,9 +346,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
 EventView::~EventView()
 {
-    if (!getDocument()->isBeingDestroyed()) {
-	for (unsigned int i = 0; i < m_segments.size(); ++i)
-	    m_segments[i]->removeObserver(this);
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+        RG_DEBUG << "~EventView - removing this observer from " << m_segments[i] << endl;
+        m_segments[i]->removeObserver(this);
     }
 }
 
@@ -356,6 +356,19 @@ void
 EventView::eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *e)
 {
     m_deletedEvents.insert(e);
+}
+
+void
+EventView::segmentDeleted(const Rosegarden::Segment *s)
+{
+    std::vector<Rosegarden::Segment *>::iterator i = std::find(m_segments.begin(), m_segments.end(), s);
+
+    if (i != m_segments.end()) {
+        m_segments.erase(i);
+    } else {
+        RG_DEBUG << "%%% WARNING - EventView::segmentDeleted() called on non-registered segment - should not happen\n";
+    }
+    
 }
 
 bool

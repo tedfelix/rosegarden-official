@@ -700,11 +700,16 @@ ControlRuler::ControlRuler(Segment *segment,
     m_numberFloat = new RosegardenTextFloat(this);
     m_numberFloat->hide();
 
+    m_segment->addObserver(this);
+
     emit stateChange("have_controller_item_selected", false);
 }
 
 ControlRuler::~ControlRuler()
 {
+    if (m_segment) {
+        m_segment->removeObserver(this);
+    }
 }
 
 void ControlRuler::slotUpdate()
@@ -753,6 +758,12 @@ void ControlRuler::setControlTool(ControlTool* tool)
 {
     if (m_tool) delete m_tool;
     m_tool = tool;
+}
+
+void
+ControlRuler::segmentDeleted(const Rosegarden::Segment *)
+{
+    m_segment = 0;
 }
 
 void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
@@ -1144,7 +1155,6 @@ PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName
     m_propertyLineY(0)
 {
     m_staff->addObserver(this);
-    m_segment->addObserver(this);
     m_propertyLine->setZ(1000); // bring to front
 
     setMenuName("property_ruler_menu");
@@ -1216,10 +1226,6 @@ PropertyControlRuler::~PropertyControlRuler()
     if (m_staff) {
         m_staff->removeObserver(this);
     }
-    if (m_segment) {
-        m_segment->removeObserver(this);
-    }
-    
 }
 
 QString PropertyControlRuler::getName()
@@ -1287,18 +1293,6 @@ void PropertyControlRuler::staffDeleted(const Rosegarden::Staff *)
 }
 
 void
-PropertyControlRuler::eventAdded(const Rosegarden::Segment *, Rosegarden::Event *e)
-{
-    // nothing to do
-}
-
-void
-PropertyControlRuler::eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *e)
-{
-    // nothing to do
-}
-
-void
 PropertyControlRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
 {
     timeT endMarkerTime = s->getEndMarkerTime();
@@ -1310,12 +1304,6 @@ PropertyControlRuler::endMarkerTimeChanged(const Rosegarden::Segment *s, bool)
     clear();
     init();
 }
-
-void
-PropertyControlRuler::segmentDeleted(const Rosegarden::Segment *)
-{
-}
-
 
 void PropertyControlRuler::computeStaffOffset()
 {
@@ -1558,15 +1546,12 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment *segment,
                                              const ControlParameter *controller,
                                              const char* name, WFlags f)
     : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
-      m_segmentDeleted(false),
       m_defaultItemWidth(20),
       m_controlLine(new QCanvasLine(canvas())),
       m_controlLineShowing(false),
       m_controlLineX(0),
       m_controlLineY(0)
 {
-    m_segment->addObserver(this);
-
     // Make a copy of the ControlParameter if we have one
     //
     if (controller)
@@ -1685,8 +1670,6 @@ ControllerEventsRuler::drawBackground()
 
 ControllerEventsRuler::~ControllerEventsRuler()
 {
-    if (!m_segmentDeleted)
-        m_segment->removeObserver(this);
 }
 
 
@@ -1764,16 +1747,6 @@ void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
             }
         }
     }
-}
-
-void ControllerEventsRuler::endMarkerTimeChanged(const Segment*, bool)
-{
-    // nothing to do
-}
-
-void ControllerEventsRuler::segmentDeleted(const Segment*)
-{
-    m_segmentDeleted = false;
 }
 
 void ControllerEventsRuler::insertControllerEvent()

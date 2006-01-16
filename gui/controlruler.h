@@ -48,7 +48,7 @@ class QPopupMenu;
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public RosegardenCanvasView
+class ControlRuler : public RosegardenCanvasView, public Rosegarden::SegmentObserver
 {
     Q_OBJECT
 
@@ -76,6 +76,9 @@ public:
     QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
 
     Rosegarden::RulerScale* getRulerScale() { return m_rulerScale; }
+
+    // SegmentObserver interface
+    virtual void segmentDeleted(const Rosegarden::Segment *);
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
@@ -165,7 +168,7 @@ protected:
  * PropertyControlRuler : edit a property on events on a staff (only
  * events with a ViewElement attached, mostly notes)
  */
-class PropertyControlRuler : public ControlRuler, public Rosegarden::StaffObserver, public Rosegarden::SegmentObserver
+class PropertyControlRuler : public ControlRuler, public Rosegarden::StaffObserver
 {
 public:
     PropertyControlRuler(Rosegarden::PropertyName propertyName,
@@ -194,10 +197,7 @@ public:
     virtual void selectAllProperties();
 
     /// SegmentObserver interface
-    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
-    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool shorten);
-    virtual void segmentDeleted(const Rosegarden::Segment *);
 
 protected:
 
@@ -231,7 +231,7 @@ protected:
 /**
  * ControllerEventsRuler : edit Controller events
  */
-class ControllerEventsRuler : public ControlRuler, public Rosegarden::SegmentObserver
+class ControllerEventsRuler : public ControlRuler
 {
 public:
     ControllerEventsRuler(Rosegarden::Segment*,
@@ -255,8 +255,6 @@ public:
     /// SegmentObserver interface
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
-    virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool shorten);
-    virtual void segmentDeleted(const Rosegarden::Segment *);
 
     virtual void insertControllerEvent();
     virtual void eraseControllerEvent();
@@ -284,7 +282,6 @@ protected:
                          int endValue);
 
     //--------------- Data members ---------------------------------
-    bool                          m_segmentDeleted;
     int                           m_defaultItemWidth;
 
     Rosegarden::ControlParameter  *m_controller;

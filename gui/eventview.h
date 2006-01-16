@@ -133,7 +133,7 @@ public slots:
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *) { }
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
     virtual void endMarkerTimeChanged(const Rosegarden::Segment *, bool) { }
-    virtual void segmentDeleted(const Rosegarden::Segment *) { }
+    virtual void segmentDeleted(const Rosegarden::Segment *);
 
 signals:
     void editTriggerSegment(int);
