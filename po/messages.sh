@@ -14,16 +14,18 @@
 # for yourself and help me to improve this script, thanks
 # (tnagyemail-mail tat yahoo d0tt fr)
 
-if [ -z "$KDE_GETTEXT_BASE" ]; then
-    if [ -d /opt/gettext-kde ]; then
-	KDE_GETTEXT_BASE=/opt/gettext-kde
+if [ -z "$KDE_GETTEXT_BIN" ]; then
+    if [ -f ./xgettext ] && ./xgettext --help 2>&1 | grep -q extract; then
+	KDE_GETTEXT_BIN=.
+    elif [ -d /opt/gettext-kde/bin ]; then
+	KDE_GETTEXT_BIN=/opt/gettext-kde/bin
     fi
 fi
-if [ ! -d "$KDE_GETTEXT_BASE" ]; then
+if [ ! -d "$KDE_GETTEXT_BIN" ]; then
     echo 1>&2
-    echo "WARNING: Environment variable KDE_GETTEXT_BASE must be set" 1>&2
+    echo "WARNING: Environment variable KDE_GETTEXT_BIN must be set" 1>&2
     echo "such that the KDE patched version of gettext is found in " 1>&2
-    echo "KDE_GETTEXT_BASE/bin/." 1>&2
+    echo "KDE_GETTEXT_BIN/." 1>&2
     echo 1>&2
     echo "Falling back to default gettext, but plural translations " 1>&2
     echo "will probably be wrong." 1>&2
@@ -31,7 +33,7 @@ if [ ! -d "$KDE_GETTEXT_BASE" ]; then
     echo "See ftp://ftp.kde.org/devel/gettext-kde/ for the patched gettext." 1>&2
     echo 1>&2
 else
-    KDE_GETTEXT_PATH=${KDE_GETTEXT_BASE}/bin/
+    KDE_GETTEXT_PATH=${KDE_GETTEXT_BIN}/
 fi
 
 SRCDIR=../gui # srcdir is the directory containing the source code
