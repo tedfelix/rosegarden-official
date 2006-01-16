@@ -1161,7 +1161,7 @@ void
 AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 				  const ClientPortPair &pair)
 {
-    QString prevConnection = device.getConnection();
+    QString prevConnection = device.getConnection().c_str();
     device.setConnection(connection.data());
     
     if (device.getDirection() == Rosegarden::MidiDevice::Play) {
@@ -1171,7 +1171,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 	if (j != m_outputPorts.end()) {
 
 	    if (prevConnection != "") {
-		ClientPortPair prevPair = getPortByName(prevConnection);
+		ClientPortPair prevPair = getPortByName(prevConnection.data());
 		if (prevPair.first >= 0 && prevPair.second >= 0) {
 
 	std::cerr << "Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection" << std::endl;
@@ -1185,7 +1185,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 			for (MappedDeviceList::iterator k = m_devices.begin();
 			     k != m_devices.end(); ++k) {
 			    if ((*k)->getId() != device.getId()) {
-				if ((*k)->getConnection() == prevConnection) {
+				if ((*k)->getConnection() == prevConnection.data()) {
 				    foundElsewhere = true;
 				    break;
 				}
@@ -1368,7 +1368,9 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 		    for (unsigned int i = 0; i < m_devices.size(); ++i) {
 			
 			if (m_devices[i]->getId() == id) {
-			    setConnectionToDevice(*m_devices[i], port->m_name, m_devicePortMap[id]);
+			    setConnectionToDevice(*m_devices[i],
+						  port->m_name.c_str(),
+						  m_devicePortMap[id]);
 			    
 			    // in this case we don't request a device resync,
 			    // because this is only invoked at times such as
@@ -4409,7 +4411,7 @@ AlsaDriver::checkForNewClients()
 
 	    audit << (*i)->m_name << std::endl;
 
-	    std::string portName = (*i)->m_name;
+	    QString portName = (*i)->m_name.c_str();
 	    ClientPortPair portPair = ClientPortPair((*i)->m_client,
 						     (*i)->m_port);
 

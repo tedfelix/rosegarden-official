@@ -202,6 +202,8 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
 
 CompositionModelImpl::~CompositionModelImpl()
 {
+    RG_DEBUG << "CompositionModelImpl::~CompositionModelImpl()" << endl;
+
     if (!isCompositionDeleted()) {
 
         m_composition.removeObserver(this);
@@ -215,6 +217,8 @@ CompositionModelImpl::~CompositionModelImpl()
             (*i)->removeObserver(this);
         }
     }
+
+    RG_DEBUG << "CompositionModelImpl::~CompositionModelImpl(): removal from Segment & Composition observers OK" << endl;
 
     while (!m_audioPreviewUpdaterMap.empty()) {
 	// Cause any running previews to be cancelled

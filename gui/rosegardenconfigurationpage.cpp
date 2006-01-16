@@ -337,31 +337,31 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 {
     m_cfg->setGroup(NotationView::ConfigGroup);
 
-    QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame,
-                                          8, 2, // nbrow, nbcol
-                                          10, 5);
+    QFrame *mainFrame = new QFrame(m_tabWidget);
+    QGridLayout *mainLayout = new QGridLayout(mainFrame, 2, 2, 10, 5);
 
-    layout->addWidget
-        (new QLabel(i18n("Notation font"), frame),
-         0, 0);
+    QGroupBox *noteFontBox = new QGroupBox(1, Horizontal, i18n("Notation font"), mainFrame);
+    QGroupBox *otherFontBox = new QGroupBox(1, Horizontal, i18n("Other fonts"), mainFrame);
+    QGroupBox *descriptionBox = new QGroupBox(1, Horizontal, i18n("Description"), mainFrame);
+
+    mainLayout->addWidget(noteFontBox, 0, 0);
+    mainLayout->addMultiCellWidget(otherFontBox, 1, 1, 0, 1);
+    mainLayout->addWidget(descriptionBox, 0, 1);
+
+    QFrame *frame = new QFrame(noteFontBox);
+    QGridLayout *layout = new QGridLayout(frame, 5, 3, 10, 5);
+    
     layout->addWidget
         (new QLabel(i18n("Font size for single-staff views"), frame),
-         2, 0);
+         1, 0);
     layout->addWidget
         (new QLabel(i18n("Font size for multi-staff views"), frame),
-         3, 0);
+         2, 0);
     layout->addWidget
         (new QLabel(i18n("Font size for printing (pt)"), frame),
-         4, 0);
-    layout->addWidget
-        (new QLabel(i18n("Text font"), frame),
-         5, 0);
-    layout->addWidget
-        (new QLabel(i18n("Time Signature font"), frame),
-         6, 0);
+         3, 0);
 
-    QFrame *subFrame = new QFrame(frame);
+    QFrame *subFrame = new QFrame(descriptionBox);
     QGridLayout *subLayout = new QGridLayout(subFrame,
                                              4, 2, // nbrow, nbcol
                                              12, 2);
@@ -371,9 +371,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     subLayout->addWidget(new QLabel(i18n("Mapped by:"), subFrame), 2, 0);
     subLayout->addWidget(new QLabel(i18n("Type:"), subFrame), 3, 0);
     m_fontOriginLabel = new QLabel(subFrame);
+    m_fontOriginLabel->setAlignment(Qt::WordBreak);
+    m_fontOriginLabel->setFixedWidth(250);
     m_fontCopyrightLabel = new QLabel(subFrame);
     m_fontCopyrightLabel->setAlignment(Qt::WordBreak);
-    m_fontCopyrightLabel->setMinimumWidth(300);
+    m_fontCopyrightLabel->setFixedWidth(250);
     m_fontMappedByLabel = new QLabel(subFrame);
     m_fontTypeLabel = new QLabel(subFrame);
     subLayout->addWidget(m_fontOriginLabel, 0, 1);
@@ -381,12 +383,31 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     subLayout->addWidget(m_fontMappedByLabel, 2, 1);
     subLayout->addWidget(m_fontTypeLabel, 3, 1);
 
-    layout->addMultiCellWidget(subFrame,
-                               1, 1,
-                               0, 1);
+//    layout->addMultiCellWidget(subFrame,
+//                               0, 3,
+//                               2, 2);
 
     m_viewButton = 0;
 
+    m_font = new KComboBox(frame);
+
+#ifdef HAVE_XFT
+    m_viewButton = new QPushButton(i18n("View"), frame);
+    layout->addWidget(m_font, 0, 0);
+    layout->addWidget(m_viewButton, 0, 1);
+    QObject::connect(m_viewButton, SIGNAL(clicked()),
+		     this, SLOT(slotViewButtonPressed()));
+#else
+    layout->addMultiCellWidget(m_font, 0, 0, 0, 1);
+#endif
+
+    QPushButton *rescanButton = new QPushButton(i18n("Rescan available fonts"), frame);
+    layout->addWidget(rescanButton, 4, 0);
+    QObject::connect(rescanButton, SIGNAL(clicked()),
+		     this, SLOT(slotRescanFonts()));
+
+
+/*
 #ifdef HAVE_XFT
     QHBox *fontBox = new QHBox(frame);
     m_font = new KComboBox(fontBox);
@@ -400,33 +421,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_font = new KComboBox(frame);
     layout->addWidget(m_font, 0, 1);
 #endif
-
+*/
     m_font->setEditable(false);
-
-    QString defaultFont = m_cfg->readEntry
-        ("notefont", strtoqstr(NoteFontFactory::getDefaultFontName()));
-
-    try {
-	(void)NoteFontFactory::getFont
-	    (qstrtostr(defaultFont),
-	     NoteFontFactory::getDefaultSize(qstrtostr(defaultFont)));
-    } catch (Rosegarden::Exception e) {
-	defaultFont = strtoqstr(NoteFontFactory::getDefaultFontName());
-    }
-
-    std::set<std::string> fs(NoteFontFactory::getFontNames());
-    std::vector<std::string> f(fs.begin(), fs.end());
-    std::sort(f.begin(), f.end());
-
-    m_untranslatedFont.clear();
-    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
-        QString s(strtoqstr(*i));
-        m_untranslatedFont.append(s);
-        m_font->insertItem(i18n(s.utf8()));
-        if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
-    }
-    QObject::connect(m_font, SIGNAL(activated(int)),
-                     this, SLOT(slotFontComboChanged(int)));
 
     m_singleStaffSize = new KComboBox(frame);
     m_singleStaffSize->setEditable(false);
@@ -437,11 +433,24 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_printingSize = new KComboBox(frame);
     m_printingSize->setEditable(false);
 
-    slotFontComboChanged(m_font->currentItem());
+    slotPopulateFontCombo(false);
 
-    layout->addWidget(m_singleStaffSize, 2, 1);
-    layout->addWidget(m_multiStaffSize, 3, 1);
-    layout->addWidget(m_printingSize, 4, 1);
+    QObject::connect(m_font, SIGNAL(activated(int)),
+                     this, SLOT(slotFontComboChanged(int)));
+    
+    layout->addWidget(m_singleStaffSize, 1, 1);
+    layout->addWidget(m_multiStaffSize, 2, 1);
+    layout->addWidget(m_printingSize, 3, 1);
+
+    frame = new QFrame(otherFontBox);
+    QGridLayout *otherLayout = new QGridLayout(frame, 2, 2, 10, 5);
+
+    otherLayout->addWidget
+        (new QLabel(i18n("Text font"), frame),
+         0, 0);
+    otherLayout->addWidget
+        (new QLabel(i18n("Time Signature font"), frame),
+         1, 0);
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
     m_textFont = new KDE32Backport::KFontRequester(frame);
@@ -460,11 +469,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_textFont->setFont(textFont);
     m_timeSigFont->setFont(timeSigFont);
 
-    layout->addWidget(m_textFont, 5, 1);
-    layout->addWidget(m_timeSigFont, 6, 1);
+    otherLayout->addWidget(m_textFont, 0, 1);
+    otherLayout->addWidget(m_timeSigFont, 1, 1);
     
 
-    addTab(frame, i18n("Font"));
+    addTab(mainFrame, i18n("Font"));
 
 
 
@@ -712,6 +721,43 @@ NotationConfigurationPage::slotViewButtonPressed()
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }
 #endif
+}
+
+void
+NotationConfigurationPage::slotRescanFonts()
+{
+    slotPopulateFontCombo(true);
+}
+
+void
+NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
+{
+    QString defaultFont = m_cfg->readEntry
+        ("notefont", strtoqstr(NoteFontFactory::getDefaultFontName()));
+
+    try {
+	(void)NoteFontFactory::getFont
+	    (qstrtostr(defaultFont),
+	     NoteFontFactory::getDefaultSize(qstrtostr(defaultFont)));
+    } catch (Rosegarden::Exception e) {
+	defaultFont = strtoqstr(NoteFontFactory::getDefaultFontName());
+    }
+
+    std::set<std::string> fs(NoteFontFactory::getFontNames(rescan));
+    std::vector<std::string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+
+    m_untranslatedFont.clear();
+    m_font->clear();
+
+    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
+        QString s(strtoqstr(*i));
+        m_untranslatedFont.append(s);
+        m_font->insertItem(i18n(s.utf8()));
+        if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
+    }
+
+    slotFontComboChanged(m_font->currentItem());
 }
 
 void

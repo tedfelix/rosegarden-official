@@ -233,6 +233,8 @@ public:
 
 protected slots:
     void slotFontComboChanged(int);
+    void slotRescanFonts();
+    void slotPopulateFontCombo(bool rescan);
     void slotViewButtonPressed();
 
 protected:

@@ -30,5 +30,6 @@ namespace Rosegarden
 const char* const GeneralOptionsConfigGroup = "General Options";
 const char* const LatencyOptionsConfigGroup = "Latency Options";
 const char* const SequencerOptionsConfigGroup = "Sequencer Options";
+const char* const NotationViewConfigGroup = "Notation Options";
 
 }

@@ -32,6 +32,7 @@ namespace Rosegarden
     extern const char* const GeneralOptionsConfigGroup;
     extern const char* const LatencyOptionsConfigGroup;
     extern const char* const SequencerOptionsConfigGroup;
+    extern const char* const NotationViewConfigGroup;
 }
 
 #endif

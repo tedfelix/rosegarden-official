@@ -3631,7 +3631,7 @@ void NotationView::updateViewCaption()
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
-const char* const NotationView::ConfigGroup = "Notation Options";
+const char* const NotationView::ConfigGroup = Rosegarden::NotationViewConfigGroup;
 
 
 #include "notationview.moc"

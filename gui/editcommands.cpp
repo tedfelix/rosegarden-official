@@ -237,8 +237,7 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
 	    m_sourceClipboard->newSegment(*i);
 	} else {
 	    m_sourceClipboard->newSegment(*i)->
-		setLabel(i18n("%1 (copied)").arg
-			 (strtoqstr((*i)->getLabel())));
+		setLabel(qstrtostr(i18n("%1 (copied)").arg(newLabel)));
 	}
     }
 }

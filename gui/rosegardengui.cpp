@@ -4079,9 +4079,6 @@ void RosegardenGUIApp::slotTestStartupTester()
 
     delete m_startupTester;
     m_startupTester = 0;
-
-    // And preload this work
-//!!!    (void)NoteFontFactory::getFontNames(true);
 }
 
 void RosegardenGUIApp::slotDebugDump()
@@ -5546,7 +5543,7 @@ RosegardenGUIApp::createNewAudioFile()
 	// and in principle it shouldn't fail
 	return "";
     } else {
-	return aF->getFilename();
+	return aF->getFilename().c_str();
     }
 }
 
@@ -5559,7 +5556,7 @@ RosegardenGUIApp::createRecordAudioFiles(const QValueVector<Rosegarden::Instrume
 	if (aF) {
 	    // createRecordingAudioFile doesn't actually write to the disk,
 	    // and in principle it shouldn't fail
-	    qv.push_back(aF->getFilename());
+	    qv.push_back(aF->getFilename().c_str());
 	    m_doc->addRecordAudioSegment(recordInstruments[i],
 					 aF->getId());
 	}

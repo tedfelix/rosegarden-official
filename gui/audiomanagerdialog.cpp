@@ -1008,7 +1008,7 @@ AudioManagerDialog::slotDeleteUnused()
     {
         if (audioFiles.find((*aIt)->getId()) == audioFiles.end()) {
             toDelete.push_back(strtoqstr((*aIt)->getFilename()));
-	    nameMap[(*aIt)->getFilename()] = (*aIt)->getId();
+	    nameMap[strtoqstr((*aIt)->getFilename())] = (*aIt)->getId();
 	}
     }
 

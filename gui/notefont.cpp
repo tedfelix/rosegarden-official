@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qregexp.h>
 #include <qfontdatabase.h>
+#include <qstringlist.h>
 
 #include <algorithm>
 
@@ -36,6 +37,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
+#include <kconfig.h>
 
 #include <iostream>
 
@@ -43,6 +45,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "pixmapfunctions.h"
+#include "constants.h"
 
 using std::string;
 using std::map;
@@ -1735,9 +1738,28 @@ NoteFont::getCharacterShaded(CharName charName,
 
 
 std::set<std::string>
-NoteFontFactory::getFontNames(bool onStartup)
+NoteFontFactory::getFontNames(bool forceRescan)
 {
-    if (m_fontNames.empty()) {
+    NOTATION_DEBUG << "NoteFontFactory::getFontNames: forceRescan = " << forceRescan << endl;
+
+    if (forceRescan) m_fontNames.clear();
+    if (!m_fontNames.empty()) return m_fontNames;
+    
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::NotationViewConfigGroup);
+
+    QString fontNameList = "";
+    if (!forceRescan) {
+	fontNameList = config->readEntry("notefontlist");
+    }	
+
+    NOTATION_DEBUG << "NoteFontFactory::getFontNames: read from cache: " << fontNameList << endl;
+
+    QStringList names = QStringList::split(",", fontNameList);
+
+    if (names.empty()) {
+
+	NOTATION_DEBUG << "NoteFontFactory::getFontNames: No names available, rescanning..." << endl;
 
 	QString mappingDir = 
 	    KGlobal::dirs()->findResource("appdata", "fonts/mappings/");
@@ -1758,19 +1780,25 @@ NoteFontFactory::getFontNames(bool onStartup)
 
 		try {
 		    NoteFontMap map(name);
-		    if (map.ok()) m_fontNames.insert(map.getName());
+		    if (map.ok()) names.append(strtoqstr(map.getName()));
 		} catch (Rosegarden::Exception e) {
 		    KStartupLogo::hideIfStillThere();
 		    KMessageBox::error(0, strtoqstr(e.getMessage()));
 		    throw;
 		}
-
-		if (onStartup) {
-		    kapp->processEvents(50);
-		}
 	    }
 	}
-    } 
+    }
+
+    QString savedNames = "";
+
+    for (QStringList::Iterator i = names.begin(); i != names.end(); ++i) {
+	m_fontNames.insert(qstrtostr(*i));
+	if (i != names.begin()) savedNames += ",";
+	savedNames += *i;
+    }
+
+    config->writeEntry("notefontlist", savedNames);
 
     return m_fontNames;
 }
@@ -1830,16 +1858,26 @@ NoteFontFactory::getFont(std::string fontName, int size)
 std::string
 NoteFontFactory::getDefaultFontName()
 {
+    static std::string defaultFont = "";
+    if (defaultFont != "") return defaultFont;
+
     std::set<std::string> fontNames = getFontNames();
-    if (fontNames.find("Feta") != fontNames.end()) return "Feta";
-    else if (fontNames.find("Feta Pixmaps") != fontNames.end()) return "Feta Pixmaps";
-    else if (fontNames.size() == 0) {
-	QString message = i18n("Can't obtain a default font -- no fonts found");
-	KStartupLogo::hideIfStillThere();
-	KMessageBox::error(0, message);
-	throw NoFontsAvailable(qstrtostr(message));
+
+    if (fontNames.find("Feta") != fontNames.end()) defaultFont = "Feta";
+    else {
+	fontNames = getFontNames(true);
+	if (fontNames.find("Feta") != fontNames.end()) defaultFont = "Feta";
+	else if (fontNames.find("Feta Pixmaps") != fontNames.end()) defaultFont = "Feta Pixmaps";
+	else if (fontNames.size() > 0) defaultFont = *fontNames.begin();
+	else {
+	    QString message = i18n("Can't obtain a default font -- no fonts found");
+	    KStartupLogo::hideIfStillThere();
+	    KMessageBox::error(0, message);
+	    throw NoFontsAvailable(qstrtostr(message));
+	}
     }
-    else return *fontNames.begin();
+
+    return defaultFont;
 }
 
 int

@@ -532,10 +532,10 @@ public:
     };
 
 
-    /// For use by SegmentObserver objects like Composition & ViewElementsManager
+    /// For use by SegmentObserver objects like Composition & Staff
     void    addObserver(SegmentObserver *obs) { m_observers.push_back(obs); }
 
-    /// For use by SegmentObserver objects like Composition & ViewElementsManager
+    /// For use by SegmentObserver objects like Composition & Staff
     void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
 
     // List of visible EventRulers attached to this segment

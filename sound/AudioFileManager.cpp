@@ -385,7 +385,7 @@ AudioFileManager::setAudioPath(const std::string &path)
 void
 AudioFileManager::testAudioPath() throw (BadAudioPathException)
 {
-    QFileInfo info(m_audioPath);
+    QFileInfo info(m_audioPath.c_str());
     if (!(info.exists() && info.isDir() && !info.isRelative() &&
 	  info.isWritable() && info.isReadable()))
 	throw BadAudioPathException(m_audioPath.data());

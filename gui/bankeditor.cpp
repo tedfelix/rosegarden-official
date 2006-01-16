@@ -485,12 +485,12 @@ MidiProgramsEditor::populate(QListViewItem* item)
                 QString programName = strtoqstr(it->getName());
                 m_completion.addItem(programName);
                 m_names[i]->setText(programName);
-
+		
 		if (m_device->getKeyMappingForProgram(*it)) {
 		    getEntryButton(i)->setPixmap(keyPixmap);
-		    QToolTip::add( getEntryButton(i), 
+		    QToolTip::add(getEntryButton(i), 
 			i18n("Key Mapping: %1").arg(        
-			m_device->getKeyMappingForProgram(*it)->getName() ) );
+			    strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
 		}
 
                 break;
@@ -789,7 +789,7 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
 	if (QFile(file).exists()) {
 	    btn->setPixmap(QPixmap(file));
 	}
-	QToolTip::add(btn, i18n("Key Mapping: %1").arg(newMapping));
+	QToolTip::add(btn, i18n("Key Mapping: %1").arg(strtoqstr(newMapping)));
     }
     btn->setEnabled(haveKeyMappings);
 }
@@ -939,7 +939,7 @@ MidiKeyMappingEditor::reset()
 {
     if (!m_device) return;
 
-    setTitle(m_mappingName);
+    setTitle(strtoqstr(m_mappingName));
 
     const Rosegarden::MidiKeyMapping *m = m_device->getKeyMappingByName(m_mappingName);
 
@@ -2262,7 +2262,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 	    for (Rosegarden::KeyMappingList::iterator i = kml.begin();
 		 i != kml.end(); ++i) {
 		if (i->getName() == oldName) {
-		    i->setName(label);
+		    i->setName(qstrtostr(label));
 		    break;
 		}
 	    }
