@@ -113,12 +113,12 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     // Disable the loop button if JACK transport enabled, because this
     // causes a nasty race condition, and it just seems our loops are not JACK compatible
     // #1240039 - DMM
-    KConfig* config = rgapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-    if (config->readBoolEntry("jacktransport", false))
-    {
-        m_transport->LoopButton->setEnabled(false);
-    }
+//    KConfig* config = rgapp->config();
+//    config->setGroup(SequencerOptionsConfigGroup);
+//    if (config->readBoolEntry("jacktransport", false))
+//    {
+//        m_transport->LoopButton->setEnabled(false);
+//    }
 
 
     // read only tempo
@@ -893,15 +893,15 @@ void
 RosegardenTransportDialog::slotLoopButtonClicked()
 {
     // disable if JACK transport has been set #1240039 - DMM
-    KConfig* config = rgapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-    if (config->readBoolEntry("jacktransport", false))
-    {
-	//!!! - this will fail silently
-	m_transport->LoopButton->setEnabled(false);
-	m_transport->LoopButton->setOn(false);
-        return;
-    }
+//    KConfig* config = rgapp->config();
+//    config->setGroup(SequencerOptionsConfigGroup);
+//    if (config->readBoolEntry("jacktransport", false))
+//    {
+//	//!!! - this will fail silently
+//	m_transport->LoopButton->setEnabled(false);
+//	m_transport->LoopButton->setOn(false);
+//        return;
+//    }
 
     if (m_transport->LoopButton->isOn())
     {
