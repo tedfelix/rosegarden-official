@@ -33,12 +33,14 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include "midipitchlabel.h"
 #include "rosestrings.h"
 #include "widgets.h"
 #include "rosedebug.h"
 #include "rgapplication.h"
+#include "constants.h"
 
 namespace Rosegarden
 {
@@ -107,6 +109,17 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     //
     m_transport->PlayButton->setToggleButton(true);
     m_transport->RecordButton->setToggleButton(true);
+
+    // Disable the loop button if JACK transport enabled, because this
+    // causes a nasty race condition, and it just seems our loops are not JACK compatible
+    // #1240039 - DMM
+    KConfig* config = rgapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    if (config->readBoolEntry("jacktransport", false))
+    {
+        m_transport->LoopButton->setEnabled(false);
+    }
+
 
     // read only tempo
     //
@@ -210,6 +223,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     // accelerator object
     //
     m_accelerators = new QAccel(this);
+
+
 }
 
 RosegardenTransportDialog::~RosegardenTransportDialog()
@@ -877,6 +892,17 @@ RosegardenTransportDialog::closeEvent (QCloseEvent * /*e*/)
 void
 RosegardenTransportDialog::slotLoopButtonClicked()
 {
+    // disable if JACK transport has been set #1240039 - DMM
+    KConfig* config = rgapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    if (config->readBoolEntry("jacktransport", false))
+    {
+	//!!! - this will fail silently
+	m_transport->LoopButton->setEnabled(false);
+	m_transport->LoopButton->setOn(false);
+        return;
+    }
+
     if (m_transport->LoopButton->isOn())
     {
         emit setLoop();

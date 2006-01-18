@@ -1212,6 +1212,19 @@ SequenceManager::setPlayStartTime(const timeT &time)
 void
 SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 {
+    // do not set a loop if JACK transport sync is enabled, because this is
+    // completely broken, and apparently broken due to a limitation of JACK
+    // transport itself.  #1240039 - DMM
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    if (config->readBoolEntry("jacktransport", false))
+    {
+	//!!! message box should go here to inform user of why the loop was
+	// not set, but I can't add it at the moment due to to the pre-release
+	// freeze - DMM
+	return;
+    }
+
     // Let the sequencer know about the loop markers
     //
     QByteArray data;
