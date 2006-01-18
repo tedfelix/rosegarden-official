@@ -247,6 +247,12 @@ SequenceManager::play()
     // make sure we toggle the play button
     // 
     m_transport->PlayButton()->setOn(true);
+    
+    //!!! disable the record button, because recording while playing is horribly
+    // broken, and disabling it is less complicated than fixing it
+    // see #1223025 - DMM
+    SEQMAN_DEBUG << "SequenceManager::play() - disabling record button, as we are playing\n";	
+    m_transport->RecordButton()->setEnabled(false);
 
     if (comp.getCurrentTempo() == 0) {
         comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
@@ -406,6 +412,12 @@ SequenceManager::stop()
 
     // Now playback
     m_transport->PlayButton()->setOn(false);
+    
+    // re-enable the record button if it was previously disabled when
+    // going into play mode - DMM
+    SEQMAN_DEBUG << "SequenceManager::stop() - re-enabling record button\n";	
+    m_transport->RecordButton()->setEnabled(true);
+	
 
     // "call" the sequencer with a stop so we get a synchronous
     // response - then we can fiddle about with the audio file
@@ -633,6 +645,7 @@ SequenceManager::record(bool toggled)
             if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
                                   replyType, replyData, data))
             {
+		SEQMAN_DEBUG << "SequenceManager::record - the \"not very plausible\" code executed\n";
                 m_transportStatus = STOPPED;
                 return;
             }
