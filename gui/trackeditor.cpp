@@ -345,6 +345,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
 	slotReadjustCanvasSize();
         m_trackButtons->slotUpdateTracks();
+        m_segmentCanvas->clearSegmentRectsCache(true);
         m_segmentCanvas->updateContents();
 
 	Composition &composition = m_doc->getComposition();
