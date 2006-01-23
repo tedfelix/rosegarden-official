@@ -794,8 +794,57 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	if (reqDirection == MidiDevice::Record && !port->isReadable())  return 0;
 	if (reqDirection == MidiDevice::Play   && !port->isWriteable()) return 0;
 
-	int category = (port->m_client <  64 ? SYSTEM :
-			port->m_client < 128 ? HARDWARE : SOFTWARE);
+	// ALSA 1.0.11rc1 changed the client number ranges, suddenly
+	// and without notice.
+	// 
+	// Before the switch, system clients were 0-63, hardware
+	// clients 64-127 and software clients 128+.  After the
+	// switch, system clients are 0-15, hardware clients 16-127
+	// and software clients 128+.
+	// 
+	// This is problematic because it means we can no longer tell
+	// reliably whether a client in the range 16-63 is a system or
+	// hardware client without knowing the ALSA driver version.
+	// And we don't know that -- it's not guaranteed to be the
+	// same as the library version and probably in many cases it
+	// isn't, regardless of what the ALSA webpage advises.
+	// 
+	// Using these numbers for this purpose is clearly not
+	// supported by ALSA, but there doesn't seem to be any other
+	// way to distinguish between these categories, and it's an
+	// important distinction because we want to be able to
+	// autoconnect to hardware clients but absolutely not to
+	// system ones.
+
+	int category = SOFTWARE;
+	bool ambiguousCategory = false;
+	bool noConnect = false;
+
+	if (port->m_client < 16) {
+	    category = SYSTEM;
+	    noConnect = true;
+	} else if (port->m_client < 64) {
+	    // I said we can't rely on this, but it's better than
+	    // nothing.  What an absolutely foul hack.
+	    bool oldScheme = (SND_LIB_MAJOR == 0 ||
+			      (SND_LIB_MAJOR == 1 &&
+			       SND_LIB_MINOR == 0 &&
+			       SND_LIB_SUBMINOR < 11));
+	    if (oldScheme) {
+		category = SYSTEM;
+		// These numbers were even exported via the ALSA API!
+		if (port->m_client == 62 || port->m_client == 63) {
+		    noConnect = true;
+		}
+	    } else {
+		category = HARDWARE;
+	    }
+	    ambiguousCategory = true;
+	} else if (port->m_client < 128) {
+	    category = HARDWARE;
+	} else {
+	    category = SOFTWARE;
+	}
 
 	bool haveName = false;
 
@@ -853,14 +902,16 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	    }
 	}
 
-	m_devicePortMap[deviceId] = ClientPortPair(port->m_client,
-						   port->m_port);
-
-	connectionName = port->m_name;
+	if (!noConnect) {
+	    m_devicePortMap[deviceId] = ClientPortPair(port->m_client,
+						       port->m_port);
+	    connectionName = port->m_name;
+	}
 
 	audit << "Creating device " << deviceId << " in "
 		     << (reqDirection == MidiDevice::Play ? "Play" : "Record")
-		     << " mode for connection " << connectionName
+		     << " mode for connection " << port->m_name
+                     << (noConnect ? " (not connecting)" : "")
 		     << "\nDefault device name for this device is "
 		     << deviceName << std::endl;
 
@@ -903,16 +954,18 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	    m_outputPorts[deviceId] = outputPort;
 	
 	    if (port) {
-		std::cerr << "Connecting my port " << outputPort << " to " << port->m_client << ":" << port->m_port << " on initialisation" << std::endl;
-		snd_seq_connect_to(m_midiHandle,
-				   outputPort,
-				   port->m_client,
-				   port->m_port);
-		if (m_midiSyncAutoConnect) {
+		if (connectionName != "") {
+		    std::cerr << "Connecting my port " << outputPort << " to " << port->m_client << ":" << port->m_port << " on initialisation" << std::endl;
 		    snd_seq_connect_to(m_midiHandle,
-				       m_syncOutputPort,
+				       outputPort,
 				       port->m_client,
 				       port->m_port);
+		    if (m_midiSyncAutoConnect) {
+			snd_seq_connect_to(m_midiHandle,
+					   m_syncOutputPort,
+					   port->m_client,
+					   port->m_port);
+		    }
 		}
 		std::cerr << "done" << std::endl;
 	    }

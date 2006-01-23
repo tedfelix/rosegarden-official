@@ -80,22 +80,86 @@ AlsaPortCmp::operator()(AlsaPortDescription *a1, AlsaPortDescription *a2)
     // * System ports (client id 0-63) sorted by client id then
     //   port id
 
-    const int HARDWARE = 1, SOFTWARE = 2, SYSTEM = 3;
 
-    int a1type = (a1->m_client < 64  ? SYSTEM :
-		  a1->m_client < 128 ? HARDWARE : SOFTWARE);
+    // See comment in AlsaDriver::createMidiDevice -- the client
+    // numbering scheme changed in ALSA driver 1.0.11rc1.
+    // We now order:
+    //
+    // * Write-only software ports (client id 128+) sorted by client
+    //   id then port id
+    // 
+    // * Probable hardware ports (client id 16-127) sorted by
+    //   direction (write, duplex, read) then client id (64+
+    //   preferred) then port id
+    // 
+    // * Read-write or read-only software ports (client id 128+)
+    //   sorted by client id then port id
+    // 
+    // * System ports (client id 0-15) sorted by client id then
+    //   port id
+    //
+    // It's necessary to handle software ports ahead of
+    // hardware/system ports, because we want to keep all the hardware
+    // ports together (we don't want to change the priority of a
+    // hardware port relative to a software port based on its client
+    // ID) and we can't know for sure whether the 16-63 range are
+    // hardware or system ports.
 
-    int a2type = (a2->m_client < 64  ? SYSTEM :
-		  a2->m_client < 128 ? HARDWARE : SOFTWARE);
+    enum Category {
+	WRITE_ONLY_SOFTWARE,
+	HARDWARE_PROBABLY,
+	MIXED_SOFTWARE,
+	SYSTEM
+    };
+    
+    bool oldScheme = (SND_LIB_MAJOR == 0 ||
+		      (SND_LIB_MAJOR == 1 &&
+		       SND_LIB_MINOR == 0 &&
+		       SND_LIB_SUBMINOR < 11));
 
-    if (a1type != a2type) return a1type < a2type;
+    Category a1cat;
+    if (a1->m_client < 16) a1cat = SYSTEM;
+    else if (oldScheme && (a1->m_client < 64)) a1cat = SYSTEM;
+    else if (a1->m_client < 128) a1cat = HARDWARE_PROBABLY;
+    else a1cat = MIXED_SOFTWARE;
 
-    if (a1type == HARDWARE) {
+    if (a1cat == MIXED_SOFTWARE) {
+	if (a1->m_direction == WriteOnly) a1cat = WRITE_ONLY_SOFTWARE;
+    }
+
+    Category a2cat;
+    if (a2->m_client < 16) a2cat = SYSTEM;
+    else if (oldScheme && (a2->m_client < 64)) a2cat = SYSTEM;
+    else if (a2->m_client < 128) a2cat = HARDWARE_PROBABLY;
+    else a2cat = MIXED_SOFTWARE;
+
+    if (a2cat == MIXED_SOFTWARE) {
+	if (a2->m_direction == WriteOnly) a2cat = WRITE_ONLY_SOFTWARE;
+    }
+
+    if (a1cat != a2cat) return int(a1cat) < int(a2cat);
+
+    if (a1cat == HARDWARE_PROBABLY) {
+
 	if (a1->m_direction == WriteOnly) {
 	    if (a2->m_direction != WriteOnly) return true;
 	} else if (a1->m_direction == Duplex) {
 	    if (a2->m_direction == ReadOnly) return true;
 	}
+	
+	int c1 = a1->m_client;
+	int c2 = a2->m_client;
+	if (c1 < 64) c1 += 1000;
+	if (c2 < 64) c2 += 1000;
+	if (c1 != c2) return c1 < c2;
+
+    } else if (a1cat == SYSTEM) {
+
+	int c1 = a1->m_client;
+	int c2 = a2->m_client;
+	if (c1 < 16) c1 += 1000;
+	if (c2 < 16) c2 += 1000;
+	if (c1 != c2) return c1 < c2;
     }
 
     if (a1->m_client != a2->m_client) {
