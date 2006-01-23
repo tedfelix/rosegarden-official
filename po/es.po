@@ -2584,10 +2584,11 @@ msgid "%1 (%2)"
 msgstr "&%1%2"
 
 #: ../gui/dialogs.cpp:5434
+#, build problems, fixed
 msgid ""
-"\n"
 "Example text from file:"
-msgstr "Ejemplo de texto perteneciente al archivo:"
+msgstr ""
+"Ejemplo de texto perteneciente al archivo:"
 
 #: ../gui/editcommands.cpp:223
 msgid "(excerpt)"
@@ -7367,7 +7368,7 @@ msgid ""
 "Are you sure?\n"
 "About to delete %1 audio files permanently from the hard disk.\n"
 "There will be no way to recover these files.\n"
-"Are you sure?"
+"Are you sure?\n"
 msgstr ""
 "_n: Se borrará el archivo de audio %1 de modo permanente.\n"
 "No habrá modo de recuperar este archivo.\n"
@@ -8476,6 +8477,7 @@ msgstr ""
 "Por favor, seleccione cuáles de ellos quiere borrar permanentemente del disco duro.\n"
 
 #: ../gui/audiomanagerdialog.cpp:1027
+#, build problems, fixed
 msgid ""
 "_n: About to delete %1 audio file permanently from the hard disk.\n"
 "This action cannot be undone, and there will be no way to recover this "
@@ -8484,13 +8486,15 @@ msgid ""
 "About to delete %1 audio files permanently from the hard disk.\n"
 "This action cannot be undone, and there will be no way to recover these "
 "files.\n"
-"Are you sure?"
+"Are you sure?\n"
 msgstr ""
 "_n: Se borrará el archivo de audio %1 de modo permanente.\n"
-"Esta acción no se puede deshacer y no habrá modo de recuperar este archivo.\n"
+"Esta acción no se puede deshacer y no habrá modo de recuperar este "
+"archivo.\n"
 "¿Está seguro?\n"
 "Se borrarán los archivos %1 de modo permanente.\n"
-"Esta acción no se puede deshacer y no habrá modo de recuperar estos archivos.\n"
+"Esta acción no se puede deshacer y no habrá modo de recuperar estos "
+"archivos.\n"
 "¿Está seguro?\n"
 
 #: ../gui/audiomanagerdialog.cpp:1074
