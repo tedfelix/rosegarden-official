@@ -277,7 +277,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_useSequencer) {
 
 #ifdef HAVE_LIBJACK
-//#define OFFER_JACK_START_OPTION 1
+#define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
         // First we check if jackd is running allready
 

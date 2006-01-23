@@ -1114,7 +1114,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // --------------------- Startup control ----------------------
     //
 #ifdef HAVE_LIBJACK
-//#define OFFER_JACK_START_OPTION 1
+#define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 4, 4, 10, 5);
