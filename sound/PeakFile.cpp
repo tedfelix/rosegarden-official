@@ -980,7 +980,8 @@ PeakFile::getSplitPoints(const RealTime &startTime,
     float value;
     float fThreshold = float(threshold)/100.0;
     bool belowThreshold = true;
-    RealTime startSplit;
+    RealTime startSplit = RealTime::zeroTime;
+    bool inSplit = false;
 
     for (int i = startPeak; i < endPeak; i++)
     {
@@ -1014,6 +1015,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
             if (value > fThreshold)
             {
                 startSplit = getTime(i);
+		inSplit = true;
                 belowThreshold = false;
             }
         }
@@ -1022,14 +1024,17 @@ PeakFile::getSplitPoints(const RealTime &startTime,
             if (value < fThreshold && getTime(i) - startSplit > minLength)
             {
                 // insert values
-                points.push_back(SplitPointPair(startSplit, getTime(i)));
+		if (inSplit) {
+		    points.push_back(SplitPointPair(startSplit, getTime(i)));
+		}
+		inSplit = false;
                 belowThreshold = true;
             }
         }
     }
 
     // if we've got a split point open the close it
-    if (belowThreshold == false)
+    if (inSplit)
     {
         points.push_back(SplitPointPair(startSplit,
                                         getTime(endPeak)));

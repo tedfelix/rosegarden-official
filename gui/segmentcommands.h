@@ -324,7 +324,7 @@ private:
     Rosegarden::timeT *m_previousEndMarkerTime;
     bool m_detached;
     std::string m_segmentLabel;
-    Rosegarden::RealTime m_previousEndAudioTime;
+//    Rosegarden::RealTime m_previousEndAudioTime;
 };
 
 class SegmentSplitCommand : public KNamedCommand

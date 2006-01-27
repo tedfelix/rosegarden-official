@@ -3494,6 +3494,8 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     m_canvas = new QCanvas(w);
     m_canvas->resize(m_canvasWidth, m_canvasHeight);
     m_canvasView = new QCanvasView(m_canvas, w);
+    m_canvasView->setFixedWidth(m_canvasWidth);
+    m_canvasView->setFixedHeight(m_canvasHeight);
 
     m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
     m_canvasView->setVScrollBarMode(QScrollView::AlwaysOff);
@@ -3502,7 +3504,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     QHBox *hbox = new QHBox(w);
     new QLabel(i18n("Threshold"), hbox);
     m_thresholdSpin = new QSpinBox(hbox);
-    m_thresholdSpin->setSpecialValueText("%");
+    m_thresholdSpin->setSuffix(" %");
     connect(m_thresholdSpin, SIGNAL(valueChanged(int)),
             SLOT(slotThresholdChanged(int)));
 
@@ -3515,7 +3517,6 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     m_thresholdSpin->setValue(threshold);
     drawPreview();
     drawSplits(1);
-
 }
 
 void 
@@ -3686,25 +3687,27 @@ AudioSplitDialog::drawPreview()
     m_canvas->update();
 }
 
-// Retreive and display split points on the envelope
+// Retrieve and display split points on the envelope
 //
 void
 AudioSplitDialog::drawSplits(int threshold)
 {
     // Now get the current split points and paint them
     //
+    Rosegarden::RealTime startTime = m_segment->getAudioStartTime();
+    Rosegarden::RealTime endTime = m_segment->getAudioEndTime();
+
     Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
     std::vector<Rosegarden::SplitPointPair> splitPoints =
         aFM.getSplitPoints(m_segment->getAudioFileId(),
-                           m_segment->getAudioStartTime(),
-                           m_segment->getAudioEndTime(),
+                           startTime,
+                           endTime,
                            threshold);
 
     std::vector<Rosegarden::SplitPointPair>::iterator it;
     std::vector<QCanvasRectangle*> tempRects;
 
-    Rosegarden::RealTime length = m_segment->getAudioEndTime() - 
-        m_segment->getAudioStartTime();
+    Rosegarden::RealTime length = endTime - startTime;
     double ticksPerUsec = double(m_previewWidth) /
                           double((length.sec * 1000000.0) + length.usec());
 
@@ -3715,11 +3718,14 @@ AudioSplitDialog::drawSplits(int threshold)
 
     for (it = splitPoints.begin(); it != splitPoints.end(); it++)
     {
-        x1 = int(ticksPerUsec * double(double(it->first.sec) *
-                    1000000.0 + (double)it->first.usec()));
+	Rosegarden::RealTime splitStart = it->first - startTime;
+	Rosegarden::RealTime splitEnd = it->second - startTime;
 
-        x2 = int(ticksPerUsec * double(double(it->second.sec) *
-                    1000000.0 + double(it->second.usec())));
+        x1 = int(ticksPerUsec * double(double(splitStart.sec) *
+                    1000000.0 + (double)splitStart.usec()));
+
+        x2 = int(ticksPerUsec * double(double(splitEnd.sec) *
+                    1000000.0 + double(splitEnd.usec())));
 
         QCanvasRectangle *rect = new QCanvasRectangle(m_canvas);
         rect->setX(startX + x1);
@@ -3727,9 +3733,9 @@ AudioSplitDialog::drawSplits(int threshold)
         rect->setZ(2);
         rect->setSize(x2 - x1, m_previewHeight + overlapHeight);
         rect->setPen(kapp->
-                palette().color(QPalette::Active, QColorGroup::Dark));
+                palette().color(QPalette::Active, QColorGroup::Mid));
         rect->setBrush(kapp->
-                palette().color(QPalette::Active, QColorGroup::Dark));
+                palette().color(QPalette::Active, QColorGroup::Mid));
         rect->setVisible(true);
         tempRects.push_back(rect);
     }

@@ -269,7 +269,7 @@ public:
     virtual void setLength(int width);
     virtual int  getLength();
 
-    void setAudioPreviewThread(AudioPreviewThread& thread);
+    void setAudioPreviewThread(AudioPreviewThread *thread);
     AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 
     void clearPreviewCache();
@@ -484,6 +484,8 @@ public:
     void setBackgroundPixmap(const QPixmap &m);
 
     void updateSize(bool shrinkWidth=false);
+
+    void endAudioPreviewGeneration();
 
 public slots:
     void scrollRight();

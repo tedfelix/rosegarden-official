@@ -219,11 +219,13 @@ CompositionModelImpl::~CompositionModelImpl()
     }
 
     RG_DEBUG << "CompositionModelImpl::~CompositionModelImpl(): removal from Segment & Composition observers OK" << endl;
-
-    while (!m_audioPreviewUpdaterMap.empty()) {
-	// Cause any running previews to be cancelled
-	delete m_audioPreviewUpdaterMap.begin()->second;
-	m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
+    
+    if (m_audioPreviewThread) {
+	while (!m_audioPreviewUpdaterMap.empty()) {
+	    // Cause any running previews to be cancelled
+	    delete m_audioPreviewUpdaterMap.begin()->second;
+	    m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
+	}
     }
 }
 
@@ -427,10 +429,17 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
     }
 }
 
-void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread& thread)
+void CompositionModelImpl::setAudioPreviewThread(AudioPreviewThread *thread)
 {
 //    std::cerr << "\nCompositionModelImpl::setAudioPreviewThread()\n" << std::endl;
-    m_audioPreviewThread = &thread;
+
+    while (!m_audioPreviewUpdaterMap.empty()) {
+	// Cause any running previews to be cancelled
+	delete m_audioPreviewUpdaterMap.begin()->second;
+	m_audioPreviewUpdaterMap.erase(m_audioPreviewUpdaterMap.begin());
+    }
+
+    m_audioPreviewThread = thread;
 }
 
 void CompositionModelImpl::clearPreviewCache()
@@ -1609,7 +1618,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
 
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {
-        cmi->setAudioPreviewThread(doc->getAudioPreviewThread());
+        cmi->setAudioPreviewThread(&doc->getAudioPreviewThread());
     }
 
     doc->getAudioPreviewThread().setEmptyQueueListener(this);
@@ -1619,6 +1628,14 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
 
     
 }
+
+void CompositionView::endAudioPreviewGeneration()
+{
+    CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(m_model);
+    if (cmi) {
+        cmi->setAudioPreviewThread(0);
+    }
+}    
 
 void CompositionView::setBackgroundPixmap(const QPixmap &m)
 {

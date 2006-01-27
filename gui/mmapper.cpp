@@ -253,6 +253,7 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
     m_fd = ::open(m_fileName.latin1(), O_RDWR|O_CREAT|O_TRUNC,
                   S_IRUSR|S_IWUSR);
     if (m_fd < 0) {
+	perror("SegmentMmapper::SegmentMmapper: Failed to open mmap file for writing");
         SEQMAN_DEBUG << "SegmentMmapper : Couldn't open " << m_fileName
                      << endl;
         throw Rosegarden::Exception("Couldn't open " + qstrtostr(m_fileName));

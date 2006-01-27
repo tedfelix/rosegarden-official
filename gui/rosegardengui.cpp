@@ -464,6 +464,12 @@ RosegardenGUIApp::~RosegardenGUIApp()
 {
     RG_DEBUG << "~RosegardenGUIApp()\n";
 
+    if (getView() &&
+	getView()->getTrackEditor() &&
+	getView()->getTrackEditor()->getSegmentCanvas()) {
+	getView()->getTrackEditor()->getSegmentCanvas()->endAudioPreviewGeneration();
+    }
+
 #ifdef HAVE_LIBLO
     delete m_pluginGUIManager;
 #endif
@@ -1416,6 +1422,12 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 	m_pluginGUIManager->setStudio(&m_doc->getStudio());
     }
 #endif
+
+    if (getView() &&
+	getView()->getTrackEditor() &&
+	getView()->getTrackEditor()->getSegmentCanvas()) {
+	getView()->getTrackEditor()->getSegmentCanvas()->endAudioPreviewGeneration();
+    }
 
     // this will delete all edit views
     //

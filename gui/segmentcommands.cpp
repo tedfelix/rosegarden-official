@@ -789,8 +789,11 @@ AudioSegmentSplitCommand::execute()
 
         // Set original end time
         //
-        m_previousEndAudioTime = m_segment->getAudioEndTime();
-        m_segment->setAudioEndTime(m_newSegment->getAudioStartTime());
+//        m_previousEndAudioTime = m_segment->getAudioEndTime();
+//        m_segment->setAudioEndTime(m_newSegment->getAudioStartTime());
+
+	RG_DEBUG << "AudioSegmentSplitCommand::execute: Set end audio of left segment to " << m_newSegment->getAudioStartTime() << endl;
+
 
         // Set labels
         //
@@ -813,6 +816,8 @@ AudioSegmentSplitCommand::execute()
 	m_previousEndMarkerTime = 0;
     }
 
+    RG_DEBUG << "AudioSegmentSplitCommand::execute: Setting end marker of left segment to " << m_splitTime << endl;
+
     m_segment->setEndMarkerTime(m_splitTime);
 
     if (!m_newSegment->getComposition()) {
@@ -827,6 +832,8 @@ void
 AudioSegmentSplitCommand::unexecute()
 {
     if (m_previousEndMarkerTime) {
+    RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Restoring end marker of left segment to " << *m_previousEndMarkerTime << endl;
+
 	m_segment->setEndMarkerTime(*m_previousEndMarkerTime);
 	delete m_previousEndMarkerTime;
 	m_previousEndMarkerTime = 0;
@@ -835,7 +842,8 @@ AudioSegmentSplitCommand::unexecute()
     }
 
     m_segment->setLabel(m_segmentLabel);
-    m_segment->setAudioEndTime(m_previousEndAudioTime);
+//    RG_DEBUG << "AudioSegmentSplitCommand::unexecute: Setting audio end time of left segment to " << m_previousEndAudioTime << endl;
+//    m_segment->setAudioEndTime(m_previousEndAudioTime);
     m_segment->getComposition()->detachSegment(m_newSegment);
     m_detached = true;
 }
@@ -1031,19 +1039,39 @@ AudioSegmentAutoSplitCommand::execute()
 	
 	char splitNumber[10];
 	int splitCount = 0;
+
+	timeT origStartTime = m_segment->getStartTime();
+	Rosegarden::RealTime audioStart = m_segment->getAudioStartTime();
+	Rosegarden::RealTime origStartRT = m_composition->getElapsedRealTime(origStartTime);
 	
 	for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); it++)
 	{
-	    absStartTime = m_segment->getStartTime() +
-		m_composition->getElapsedTimeForRealTime(it->first);
+	    // The start time for the segment is the original
+	    // segment's start time, plus whatever it->first translates
+	    // into as an offset from the original segment's start
+	    // time
+
+	    RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: range " << it->first << " -> " << it->second << endl;
+
+	    absStartTime = m_composition->getElapsedTimeForRealTime
+		(origStartRT - audioStart + it->first);
+
+	    absEndTime = m_composition->getElapsedTimeForRealTime
+		(origStartRT - audioStart + it->second);
+
+//	    absStartTime = m_segment->getStartTime() +
+//		m_composition->getElapsedTimeForRealTime(it->first - audioStart);
 	    
-	    absEndTime = m_segment->getStartTime() +
-		m_composition->getElapsedTimeForRealTime(it->second);
+//	    absEndTime = m_segment->getStartTime() +
+//		m_composition->getElapsedTimeForRealTime(it->second - audioStart);
 	    
 	    Segment *newSegment = new Segment(*m_segment);
+
+	    newSegment->setStartTime(absStartTime);
+            newSegment->setAudioFileId(m_segment->getAudioFileId());
 	    newSegment->setAudioStartTime(it->first);
 	    newSegment->setAudioEndTime(it->second);
-            newSegment->setAudioFileId(m_segment->getAudioFileId());
+	    newSegment->setEndMarkerTime(absEndTime);
 	    
 	    // label
 	    sprintf(splitNumber, "%d", splitCount++);
@@ -1054,12 +1082,11 @@ AudioSegmentAutoSplitCommand::execute()
 
 	    newSegment->setColourIndex(m_segment->getColourIndex());
 	    
-	    newSegment->setStartTime(absStartTime);
-	    newSegment->setEndTime(absEndTime);
-
 	    RG_DEBUG << "AudioSegmentAutoSplitCommand::execute "
-                     << "seg start = " << newSegment->getStartTime()
-                     << ", seg end = "<< newSegment->getEndTime()
+		     << "abs start = " << absStartTime
+		     << ", abs end = " << absEndTime
+                     << ", seg start = " << newSegment->getStartTime()
+                     << ", seg end = "<< newSegment->getEndMarkerTime()
                      << ", audio start = " << newSegment->getAudioStartTime() 
                      << ", audio end = " << newSegment->getAudioEndTime()
                      << endl;
@@ -1068,6 +1095,8 @@ AudioSegmentAutoSplitCommand::execute()
 	}
     }
     
+    RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: have " << m_newSegments.size() << " new segments" << endl;
+
     for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
 	m_composition->addSegment(m_newSegments[i]);
     }
