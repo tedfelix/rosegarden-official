@@ -160,6 +160,7 @@ static void _settingLog(QString msg)
 }
 #endif
 
+//#define DEBUG_TEMPO_FROM_AUDIO
 
 SetWaitCursor::SetWaitCursor()
     : m_guiApp(dynamic_cast<RosegardenGUIApp*>(kapp->mainWidget()))
@@ -2750,11 +2751,13 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
 	    beats = dialog.getQuantity(); // beats (or bars)
 	    if (dialog.getMode() == 1)    // bars  (multiply by time sig)
 		beats *= timeSig.getBeatsPerBar();
-// 	    RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength - beats = " << beats
-//                      << " mode = " << ((dialog.getMode() == 0) ? "bars" : "beats") << endl
-//                      << " beats per bar = " << timeSig.getBeatsPerBar()
-//                      << " user quantity = " << dialog.getQuantity()
-//                      << " user mode = " << dialog.getMode() << endl;
+#ifdef DEBUG_TEMPO_FROM_AUDIO
+	    RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength - beats = " << beats
+                      << " mode = " << ((dialog.getMode() == 0) ? "bars" : "beats") << endl
+                      << " beats per bar = " << timeSig.getBeatsPerBar()
+                      << " user quantity = " << dialog.getQuantity()
+                      << " user mode = " << dialog.getMode() << endl;
+#endif
         }
         else
         {
@@ -2766,10 +2769,22 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
         double beatLengthUsec =
             double(segDuration.sec * 1000000 + segDuration.usec()) /
             double(beats);
-
+	
         // New tempo is a minute divided by time of beat
         //
         double newTempo = 60.0 * 1000000.0 / beatLengthUsec;
+
+	// multiply by 100,000 to correct #1414252, although I can't work out
+	// *why* this is necessary.  (used to produce eg. 0.00084 instead of
+	// 84.0)
+	newTempo *= 100000;
+	
+#ifdef DEBUG_TEMPO_FROM_AUDIO
+	RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength info: " << endl
+	         << " beatLengthUsec   = " << beatLengthUsec << endl
+		 << " segDuration.usec = " << segDuration.usec() << endl
+		 << " newTempo         = " << newTempo << endl;
+#endif
 
         KMacroCommand *macro = new KMacroCommand(i18n("Set Global Tempo"));
 
