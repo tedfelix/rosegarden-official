@@ -1787,6 +1787,12 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
     }
 }
 
+void SequenceManager::segmentEndMarkerChanged(const Composition*, Segment *s, bool)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentEndMarkerChanged(" << s << ")\n";
+    segmentModified(s);
+}
+
 void SequenceManager::processAddedSegment(Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::processAddedSegment(" << s << ")\n";

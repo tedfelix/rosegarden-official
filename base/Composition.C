@@ -1627,6 +1627,15 @@ Composition::notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId)
 }
 
 void
+Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentEndMarkerChanged(this, s, shorten);
+    }
+}    
+
+void
 Composition::notifyEndMarkerChange(bool shorten) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();

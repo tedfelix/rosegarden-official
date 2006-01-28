@@ -900,6 +900,7 @@ protected:
     void notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const;
     void notifySegmentTransposeChanged(Segment *s, int transpose) const;
     void notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId) const;
+    void notifySegmentEndMarkerChange(Segment *s, bool shorten) const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
     void notifyTrackDeleted(TrackId) const;
@@ -1006,6 +1007,12 @@ public:
      */
     virtual void segmentTransposeChanged(const Composition *, Segment *,
                                          int /* transpose */) { }
+
+    /**
+     * Called when the segment's end marker time has changed
+     */
+    virtual void segmentEndMarkerChanged(const Composition *, Segment *,
+                                         bool /* shorten */) { }
 
     /**
      * Called when the segment's track has changed

@@ -1095,12 +1095,13 @@ Segment::notifyAppearanceChange() const
 }
 
 void
-Segment::notifyEndMarkerChange(bool shorten) const
+Segment::notifyEndMarkerChange(bool shorten)
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->endMarkerTimeChanged(this, shorten);
     }
+    m_composition->notifySegmentEndMarkerChange(this, shorten);
 }
 
 

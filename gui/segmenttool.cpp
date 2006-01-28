@@ -509,12 +509,18 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                 int trackPos = m_canvas->grid().getYBin(item->rect().y());
                 Rosegarden::Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
                 Rosegarden::TrackId itemTrackId = track->getId();
-                timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
-                timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
+                timeT newStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
+
+		// No -- we absolutely don't want to snap the end time
+		// to the grid.  We want it to remain exactly the same
+		// as it was, but relative to the new start time. --cc
+//                timeT newEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
+		timeT newEndTime = newStartTime + segment->getEndMarkerTime()
+		    - segment->getStartTime();
 
                 command->addSegment(segment,
-                                    itemStartTime,
-                                    itemEndTime,
+                                    newStartTime,
+                                    newEndTime,
                                     itemTrackId);
             }
 
@@ -687,9 +693,21 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem) {
 
-        timeT newStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
-        timeT newEndTime = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
         Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
+
+	// We only want to snap the end that we were actually resizing.
+
+	timeT newStartTime, newEndTime;
+	
+	if (m_resizeStart) {
+	    newStartTime = CompositionItemHelper::getStartTime
+		(m_currentItem, m_canvas->grid());
+	    newEndTime = segment->getEndMarkerTime();
+	} else {
+	    newEndTime = CompositionItemHelper::getEndTime
+		(m_currentItem, m_canvas->grid());
+	    newStartTime = segment->getStartTime();
+	}
 
         if  (changeMade()) {
             
@@ -748,8 +766,19 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     timeT snap = m_canvas->grid().getSnapTime(double(e->pos().x()));
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
 
-    timeT itemStartTime = CompositionItemHelper::getStartTime(m_currentItem, m_canvas->grid());
-    timeT itemEndTime   = CompositionItemHelper::getEndTime(m_currentItem, m_canvas->grid());
+    // We only want to snap the end that we were actually resizing.
+    
+    timeT itemStartTime, itemEndTime;
+    
+    if (m_resizeStart) {
+	itemStartTime = CompositionItemHelper::getStartTime
+	    (m_currentItem, m_canvas->grid());
+	itemEndTime = segment->getEndMarkerTime();
+    } else {
+	itemEndTime = CompositionItemHelper::getEndTime
+	    (m_currentItem, m_canvas->grid());
+	itemStartTime = segment->getStartTime();
+    }
 
     timeT duration = 0;
 
@@ -1013,7 +1042,11 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                 Rosegarden::Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
                 Rosegarden::TrackId itemTrackId = track->getId();
                 timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
-                timeT itemEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
+		// No -- we absolutely don't want to snap the end time
+		// to the grid.  We want it to remain exactly the same
+		// as it was, but relative to the new start time. --cc
+                timeT itemEndTime   = itemStartTime + segment->getEndMarkerTime()
+		    - segment->getStartTime();
 
                 command->addSegment(segment,
                                     itemStartTime,

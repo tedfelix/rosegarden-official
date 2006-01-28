@@ -627,7 +627,7 @@ private: // stuff to support SegmentObservers
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
     void notifyAppearanceChange() const;
-    void notifyEndMarkerChange(bool shorten) const;
+    void notifyEndMarkerChange(bool shorten);
     void notifySourceDeletion() const;
 
 private: // assignment operator not provided

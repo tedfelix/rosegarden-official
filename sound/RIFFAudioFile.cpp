@@ -278,10 +278,9 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
     // sanity
     if (file == 0) return std::string("");
 
-    long totalSamples = m_sampleRate * time.sec +
-                        ( ( m_sampleRate * time.usec() ) / 1000000 );
-
-    long totalBytes = totalSamples * m_channels * m_bytesPerFrame;
+    long totalFrames = RealTime::realTime2Frame(time, m_sampleRate);
+    long totalBytes = totalFrames * m_bytesPerFrame;
+    
     try {
 	return getBytes(file, totalBytes);
     } catch (std::string s) {

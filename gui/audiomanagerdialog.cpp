@@ -204,7 +204,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
 
-    new KAction(i18n("&Add Audio File"), "fileopen", 0, this,
+    new KAction(i18n("&Add Audio File..."), "fileopen", 0, this,
 		SLOT(slotAdd()), actionCollection(), "add_audio");
 
     new KAction(i18n("&Unload Audio File"), "editdelete", 0, this,
@@ -239,7 +239,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 		SLOT(slotDeleteUnused()), 
 		actionCollection(), "delete_unused_audio");
 
-    new KAction(i18n("&Export Audio File"), "fileexport", 0, this,
+    new KAction(i18n("&Export Audio File..."), "fileexport", 0, this,
 		SLOT(slotExportAudio()), 
 		actionCollection(), "export_audio");
 
@@ -579,7 +579,7 @@ AudioManagerDialog::slotExportAudio()
                                      i18n("*.wav|WAV files (*.wav)"),
                                      this, i18n("Choose a name to save this file as"));
     
-    if (sourceFile == 0 || item == 0 || segment == 0 || saveFile.isEmpty())
+    if (sourceFile == 0 || item == 0 || saveFile.isEmpty())
         return;
 
     // Check for a dot extension and append ".wav" if not found
@@ -593,8 +593,13 @@ AudioManagerDialog::slotExportAudio()
 
     progressDlg.progressBar()->setProgress(0);
 
-    RealTime segmentDuration 
-        = segment->getAudioEndTime() - segment->getAudioStartTime();
+    RealTime clipStartTime = RealTime::zeroTime;
+    RealTime clipDuration = sourceFile->getLength();
+
+    if (segment) {
+	clipStartTime = segment->getAudioStartTime();
+	clipDuration = segment->getAudioEndTime() - clipStartTime;
+    }
     
     WAVAudioFile *destFile 
         = new WAVAudioFile(qstrtostr(saveFile),
@@ -612,10 +617,8 @@ AudioManagerDialog::slotExportAudio()
     
     destFile->write();
 
-    sourceFile->scanTo(segment->getAudioStartTime());
-
-    destFile->appendSamples
-        (sourceFile->getSampleFrameSlice(segmentDuration));
+    sourceFile->scanTo(clipStartTime);
+    destFile->appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
 
     destFile->close();
     sourceFile->close();    
