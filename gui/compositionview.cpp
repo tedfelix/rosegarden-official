@@ -1017,6 +1017,7 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
         m_notationPreviewDataCache.remove(const_cast<Segment*>(s));
     } else {
         m_audioPreviewDataCache.remove(const_cast<Segment*>(s));
+        m_audioSegmentPreviewMap.erase(s);
     }
 
 }
@@ -2253,8 +2254,8 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
             }
             localRect.moveBy(-(basePoint.x() + pixmapRectXOffset), -basePoint.y());
 
-//             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
-//                      << idx << " at " << drawBasePoint << " - localRect = " << localRect << endl;
+            RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
+                     << idx << " at " << drawBasePoint << " - localRect = " << localRect << endl;
 
             p->drawImage(drawBasePoint, api->pixmap[idx], localRect,
 			 Qt::ColorOnly | Qt::ThresholdDither | Qt::AvoidDither);
