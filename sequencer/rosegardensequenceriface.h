@@ -45,6 +45,8 @@ public:
     //
     virtual void quit() = 0;
 
+    
+
     // play from a given time with given parameters
     //
     virtual int play(long timeSec,
@@ -78,6 +80,10 @@ public:
     //
     virtual ASYNC stop() = 0;
 
+    // punch out from recording to playback
+    //
+    virtual int punchOut() = 0;
+    
     // Set the sequencer to a given time
     //
     virtual void jumpTo(long posSec, long posNsec) = 0;

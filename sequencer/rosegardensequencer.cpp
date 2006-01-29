@@ -774,7 +774,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     //
     if (m_transportStatus == RECORDING) {
         m_transportStatus = PLAYING;
-        return true;
+	return punchOut();
     }
 
     // To play from the given song position sets up the internal

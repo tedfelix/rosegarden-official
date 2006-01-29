@@ -251,8 +251,8 @@ SequenceManager::play()
     //!!! disable the record button, because recording while playing is horribly
     // broken, and disabling it is less complicated than fixing it
     // see #1223025 - DMM
-    SEQMAN_DEBUG << "SequenceManager::play() - disabling record button, as we are playing\n";	
-    m_transport->RecordButton()->setEnabled(false);
+//    SEQMAN_DEBUG << "SequenceManager::play() - disabling record button, as we are playing\n";	
+//    m_transport->RecordButton()->setEnabled(false);
 
     if (comp.getCurrentTempo() == 0) {
         comp.setCompositionDefaultTempo(comp.getTempoForQpm(120.0));
@@ -415,8 +415,8 @@ SequenceManager::stop()
     
     // re-enable the record button if it was previously disabled when
     // going into play mode - DMM
-    SEQMAN_DEBUG << "SequenceManager::stop() - re-enabling record button\n";	
-    m_transport->RecordButton()->setEnabled(true);
+//    SEQMAN_DEBUG << "SequenceManager::stop() - re-enabling record button\n";	
+//    m_transport->RecordButton()->setEnabled(true);
 	
 
     // "call" the sequencer with a stop so we get a synchronous
@@ -575,6 +575,8 @@ SequenceManager::record(bool toggled)
 {
     mapSequencer();
 
+    SEQMAN_DEBUG << "SequenceManager::record(" << toggled << ")" << endl;
+
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
     KConfig* config = kapp->config();
@@ -642,15 +644,19 @@ SequenceManager::record(bool toggled)
             // Send Record to the Sequencer to signal it to drop out of record mode
             //
 	    //!!! huh? this doesn't look very plausible
-            if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-                                  replyType, replyData, data))
+//            if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
+//                                  replyType, replyData, data))
+	    if (!rgapp->sequencerCall("punchOut()", replyType, replyData, data))
             {
 		SEQMAN_DEBUG << "SequenceManager::record - the \"not very plausible\" code executed\n";
+		m_doc->stopRecordingMidi();
+		m_doc->stopRecordingAudio();
                 m_transportStatus = STOPPED;
                 return;
             }
 
             m_doc->stopRecordingMidi();
+            m_doc->stopRecordingAudio();
             m_transportStatus = PLAYING;
 
             return;
@@ -862,9 +868,15 @@ punchin:
 	    //
 	    m_countdownTimer->start(1000);
 
+	    connect(m_countdownDialog, SIGNAL(stopped()),
+		    RosegardenGUIApp::self(), SLOT(slotStop()));
+	    connect(m_countdownDialog, SIGNAL(completed()),
+		    RosegardenGUIApp::self(), SLOT(slotStop()));
+
 	    // Pop-up the dialog (don't use exec())
 	    //
 	    m_countdownDialog->show();
+
         } else {
             // Stop immediately - turn off buttons in parent
             //

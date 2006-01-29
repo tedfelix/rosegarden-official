@@ -2301,8 +2301,8 @@ void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
     //
     // Floating Text
     //
-//     if (m_drawTextFloat)
-//         drawTextFloat(p, clipRect);
+    if (m_drawTextFloat)
+	drawTextFloat(p, clipRect);
 
     //
     // Split line
@@ -2846,7 +2846,7 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
 //     slotUpdateSegmentsDrawBuffer(r);
 
     
-    rgapp->slotSetStatusMessage(text);
+//    rgapp->slotSetStatusMessage(text);
 }
 
 void CompositionView::slotSetFineGrain(bool value)
@@ -2859,7 +2859,7 @@ CompositionView::slotTextFloatTimeout()
 { 
     hideTextFloat();
     slotArtifactsDrawBufferNeedsRefresh();
-    rgapp->slotSetStatusMessage(QString::null);
+//    rgapp->slotSetStatusMessage(QString::null);
 }
 
 #include "compositionview.moc"

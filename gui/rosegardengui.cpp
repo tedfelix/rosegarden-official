@@ -4819,6 +4819,11 @@ RosegardenGUIApp::slotRecord()
         slotStop();
 	return;
     }
+    else if (m_seqManager->getTransportStatus() == PLAYING)
+    {
+	slotToggleRecord();
+	return;
+    }
 
     // Attempt to start recording
     //
