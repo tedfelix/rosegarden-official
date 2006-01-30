@@ -512,6 +512,8 @@ DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::s
 {
     blockid id = m_lastId++;
 
+    std::cerr << "DataBlockRepository::registerDataBlock: " << s.length() << " chars, id is " << id << std::endl;
+
     DataBlockFile dataBlockFile(id);
     dataBlockFile.setData(s);
 

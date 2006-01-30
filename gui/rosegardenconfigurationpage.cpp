@@ -1459,7 +1459,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     if (mmcMode < 0 || mmcMode > 2) mmcMode = 0;
     m_mmcTransport->setCurrentItem(mmcMode);
 
-    // MTC transport (send only for the moment)
+    // MTC transport
     //
     label = new QLabel(i18n("MIDI Time Code mode"), frame);
     layout->addWidget(label, 4, 0);
