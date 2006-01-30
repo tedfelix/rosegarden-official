@@ -42,6 +42,7 @@ public:
     QColor RecordingInternalSegmentBlock;
     QColor Pointer;
     QColor MovementGuide;
+    QColor RotaryFloatBackground;
     QColor RotaryFloatForeground;
 
 protected:

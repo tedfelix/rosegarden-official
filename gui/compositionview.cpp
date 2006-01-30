@@ -654,7 +654,7 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
       m_defaultCol(CompositionColourCache::getInstance()->SegmentAudioPreview),
       m_height(model.grid().getYSnap()/2)
 {
-    int pixWidth = std::min(m_rect.width(), tileWidth());
+    int pixWidth = std::min(m_rect.getBaseWidth(), tileWidth());
 
     m_image = QImage(pixWidth, m_rect.height(), 8, 4);
     m_image.setAlphaBuffer(true);
@@ -702,14 +702,14 @@ void AudioPreviewPainter::paintPreviewImage()
 
     int samplePoints = values.size() / (channels * (showMinima ? 2 : 1));
     float h1, h2, l1 = 0, l2 = 0;
-    double sampleScaleFactor = samplePoints / double(m_rect.width());
+    double sampleScaleFactor = samplePoints / double(m_rect.getBaseWidth());
     m_sliceNb = 0;
 
     m_image.fill(0);
 
     int centre = m_image.height() / 2;
 
-    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.width() << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
+    RG_DEBUG << "AudioPreviewPainter::paintPreviewImage width = " << m_rect.getBaseWidth() << ", height = " << m_rect.height() << ", halfRectHeight = " << m_halfRectHeight << endl;
 
     RG_DEBUG << "AudioPreviewPainter::paintPreviewImage: channels = " << channels << ", gain left = " << gain[0] << ", right = " << gain[1] << endl;
 
@@ -722,8 +722,6 @@ void AudioPreviewPainter::paintPreviewImage()
     // of audioDuration / samplePoints.  We need to convert the
     // accumulated real time back into musical time, and map this
     // proportionately across the segment width.
-
-    CompositionRect sr = m_model.computeSegmentRect(*m_segment);
 
     Rosegarden::RealTime startRT =
 	m_model.getComposition().getElapsedRealTime(m_segment->getStartTime());
@@ -748,7 +746,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	haveTempoChange = true;
     }
 
-    for (int i = 0; i < m_rect.width(); ++i) {
+    for (int i = 0; i < m_rect.getBaseWidth(); ++i) {
 
 	// i is the x coordinate within the rectangle.  We need to
 	// calculate the position within the audio preview from which
@@ -762,7 +760,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    
 	    // First find the time corresponding to this i.
 	    timeT musicalTime =
-		m_model.grid().getRulerScale()->getTimeForX(sr.x() + i);
+		m_model.grid().getRulerScale()->getTimeForX(m_rect.x() + i);
 	    Rosegarden::RealTime realTime =
 		m_model.getComposition().getElapsedRealTime(musicalTime);
 	    
@@ -771,7 +769,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    double offset = time - startTime;
 
 	    if (endTime > startTime) {
-		position = offset * m_rect.width() / (endTime - startTime);
+		position = offset * m_rect.getBaseWidth() / (endTime - startTime);
 		position = int(channels * position);
 	    }
 	    
@@ -844,7 +842,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	    m_image.setPixel(rectX, centre + py, pixel);
 	}
 
-        if (((i+1) % tileWidth()) == 0 || i == (m_rect.width() - 1)) {
+        if (((i+1) % tileWidth()) == 0 || i == (m_rect.getBaseWidth() - 1)) {
             finalizeCurrentSlice();
         }
     }
@@ -1491,8 +1489,11 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
     }
     cr.setLabel(label);
 
-    if (s.isRepeating())
+    if (s.isRepeating()) {
         computeRepeatMarks(cr, &s);
+    } else {
+	cr.setBaseWidth(cr.width());
+    }
 
     putInCache(&s, cr);
 
@@ -2641,7 +2642,9 @@ void CompositionView::drawPointer(QPainter *p, const QRect& clipRect)
 
 void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 {
-    QRect bound = p->boundingRect(0, 0, 300, 40, AlignAuto, m_textFloatText);
+    QFontMetrics metrics(p->fontMetrics());
+
+    QRect bound = p->boundingRect(0, 0, 300, metrics.height() + 6, AlignAuto, m_textFloatText);
 
     p->save();
 
@@ -2649,14 +2652,27 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
     bound.setRight(bound.right() + 2);
     bound.setTop(bound.top() - 2);
     bound.setBottom(bound.bottom() + 2);
-    bound.moveTopLeft(m_textFloatPos);
+
+    QPoint pos(m_textFloatPos);
+    if (pos.y() < 0 && getModel()) {
+	if (pos.y() + bound.height() < 0) {
+	    pos.setY(pos.y() + getModel()->grid().getYSnap() * 3);
+	} else {
+	    pos.setY(pos.y() + getModel()->grid().getYSnap() * 2);
+	}
+    }
+
+    bound.moveTopLeft(pos);
 
     if (bound.intersects(clipRect)) {
  
-        drawRect(bound, p, clipRect, false, 0, false);
+	p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
+
+        drawRect(bound, p, clipRect, false, 0, true);
 
         p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
-        p->drawText(m_textFloatPos.x() + 2, m_textFloatPos.y() + 14, m_textFloatText);
+
+        p->drawText(pos.x() + 2, pos.y() + 3 + metrics.ascent(), m_textFloatText);
 
     }
     

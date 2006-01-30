@@ -36,6 +36,7 @@ void CompositionColourCache::init()
     RecordingSegmentBorder        = GUIPalette::getColour(GUIPalette::RecordingSegmentBorder);
     RecordingAudioSegmentBlock    = GUIPalette::getColour(GUIPalette::RecordingAudioSegmentBlock);
     RecordingInternalSegmentBlock = GUIPalette::getColour(GUIPalette::RecordingInternalSegmentBlock);
+    RotaryFloatBackground         = GUIPalette::getColour(GUIPalette::RotaryFloatBackground);
     RotaryFloatForeground         = GUIPalette::getColour(GUIPalette::RotaryFloatForeground);
     
 }
