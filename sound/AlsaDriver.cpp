@@ -48,7 +48,7 @@
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
+#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 //#define MTC_DEBUG 1
 
@@ -2448,13 +2448,17 @@ AlsaDriver::getMappedComposition()
                        data += *(ptr++);
 
 #ifdef DEBUG_ALSA
-                   if ((MidiByte)(data[1]) == MIDI_SYSEX_RT)
-                   {
+                   if ((MidiByte)(data[1]) == MIDI_SYSEX_RT) {
                        std::cerr << "REALTIME SYSEX" << endl;
-                       for (unsigned int ii = 0; ii < data.length(); ++ii) {
-                           printf("B %d = %02x\n", ii, data[ii]);
+                       for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
+                           printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                        }
-                   }
+                   } else {
+                       std::cerr << "NON-REALTIME SYSEX" << endl;
+                       for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
+                           printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
+                       }
+		   }
 #endif
 
                    MappedEvent *mE = new MappedEvent();
@@ -2481,9 +2485,10 @@ AlsaDriver::getMappedComposition()
 		break;
 
             case SND_SEQ_EVENT_CLOCK:
+#ifdef DEBUG_ALSA
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got realtime MIDI clock" << std::endl;
-
+#endif
                break;
 
             case SND_SEQ_EVENT_START:

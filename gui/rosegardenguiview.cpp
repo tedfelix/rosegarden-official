@@ -169,11 +169,12 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 	    this, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)));
 
     if (doc) {
+/* signal no longer exists
 	connect(doc, SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *,
 						    Rosegarden::timeT)),
 		this, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *,
 						      Rosegarden::timeT)));
-
+*/
 
         QObject::connect
             (getCommandHistory(), SIGNAL(commandExecuted()),
@@ -1682,9 +1683,13 @@ RosegardenGUIView::slotUpdateRecordingSegment(Rosegarden::Segment *segment,
 
     NotationView *view = createNotationView(segments);
     if (!view) return;
+
+/* signal no longer exists
     QObject::connect
 	(getDocument(), SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *, Rosegarden::timeT)),
 	 view, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *, Rosegarden::timeT)));
+*/
+
     view->show();
 }
 

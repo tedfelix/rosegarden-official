@@ -1938,9 +1938,9 @@ void CompositionView::viewportPaintRect(QRect r)
     r &= viewport()->rect();
     r.moveBy(contentsX(), contentsY());
 
-     RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
-              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
-              << " - refresh " << m_segmentsDrawBufferRefresh << " artrefresh " << m_artifactsDrawBufferRefresh << endl;
+//     RG_DEBUG << "CompositionView::viewportPaintRect() r = " << r
+//              << " - moveBy " << contentsX() << "," << contentsY() << " - updateRect = " << updateRect
+//              << " - refresh " << m_segmentsDrawBufferRefresh << " artrefresh " << m_artifactsDrawBufferRefresh << endl;
 
 
     bool scroll = false;
@@ -2080,8 +2080,8 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 {
 //    Rosegarden::Profiler profiler("CompositionView::refreshDrawBuffer", true);
-      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
-  	     << rect << endl;
+//      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
+//  	     << rect << endl;
 
     QPainter p(&m_segmentsDrawBuffer, viewport());
     p.translate(-contentsX(), -contentsY());

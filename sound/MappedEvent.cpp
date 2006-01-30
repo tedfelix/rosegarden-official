@@ -30,6 +30,8 @@
 #include "Midi.h"
 #include "MidiTypes.h"
  
+#define DEBUG_MAPPEDEVENT 1
+
 namespace Rosegarden
 {
 
@@ -453,6 +455,7 @@ void DataBlockFile::addDataString(const std::string& s)
 
 void DataBlockFile::prepareToWrite()
 {    
+    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
     if (!m_file.isWritable()) {
         m_file.close();
         assert(m_file.open(IO_WriteOnly | IO_Append));
@@ -461,6 +464,7 @@ void DataBlockFile::prepareToWrite()
 
 void DataBlockFile::prepareToRead()
 {
+    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
     if (!m_file.isReadable()) {
         m_file.close();
         assert(m_file.open(IO_ReadOnly));
@@ -496,6 +500,7 @@ void DataBlockRepository::setDataBlockForEvent(MappedEvent* e, const std::string
 {
     DataBlockFile dataBlockFile(e->getDataBlockId());
     dataBlockFile.setData(s);
+    std::cerr << "Writing " << s.length() << " chars to file for datablock " << e->getDataBlockId() << std::endl;
 }
 
 bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
