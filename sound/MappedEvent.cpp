@@ -522,7 +522,7 @@ bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
 DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::string& s)
 {
     blockid id = 0;
-    while (id == 0) id = (blockid)random();
+    while (id == 0 || DataBlockFile(id).exists()) id = (blockid)random();
 
     std::cerr << "DataBlockRepository::registerDataBlock: " << s.length() << " chars, id is " << id << std::endl;
 
