@@ -394,7 +394,7 @@ protected:
 };
 
 DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
-    : m_fileName(KGlobal::dirs()->resourceDirs("tmp").first() + QString("/datablock_%1").arg(id)),
+    : m_fileName(KGlobal::dirs()->resourceDirs("tmp").first() + QString("/rosegarden_datablock_%1").arg(id)),
       m_file(m_fileName),
       m_cleared(false)
 {
@@ -404,7 +404,7 @@ DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
 DataBlockFile::~DataBlockFile()
 {
     if (m_cleared) {
-//         std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
+        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
         QFile::remove(m_fileName);
     }
     
@@ -417,7 +417,7 @@ bool DataBlockFile::exists()
 
 void DataBlockFile::setData(const std::string& s)
 {
-//     std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
+    std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
     prepareToWrite();
 
     QDataStream stream(&m_file);
@@ -431,7 +431,7 @@ std::string DataBlockFile::getData()
     prepareToRead();
 
     QDataStream stream(&m_file);
-//     std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
+    std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
     char* tmp = new char[m_file.size()];
     stream.readRawBytes(tmp, m_file.size());
     std::string res(tmp, m_file.size());
@@ -493,14 +493,25 @@ std::string DataBlockRepository::getDataBlock(DataBlockRepository::blockid id)
 
 std::string DataBlockRepository::getDataBlockForEvent(MappedEvent* e)
 {
-    return getInstance()->getDataBlock(e->getDataBlockId());
+    blockid id = e->getDataBlockId();
+    if (id == 0) {
+	std::cerr << "WARNING: DataBlockRepository::getDataBlockForEvent called on event with data block id 0" << std::endl;
+	return "";
+    }
+    return getInstance()->getDataBlock(id);
 }
 
 void DataBlockRepository::setDataBlockForEvent(MappedEvent* e, const std::string& s)
 {
-    DataBlockFile dataBlockFile(e->getDataBlockId());
-    dataBlockFile.setData(s);
-    std::cerr << "Writing " << s.length() << " chars to file for datablock " << e->getDataBlockId() << std::endl;
+    blockid id = e->getDataBlockId();
+    if (id == 0) {
+	std::cerr << "Creating new datablock for event" << std::endl;
+	getInstance()->registerDataBlockForEvent(s, e);
+    } else {
+	std::cerr << "Writing " << s.length() << " chars to file for datablock " << id << std::endl;
+	DataBlockFile dataBlockFile(id);
+	dataBlockFile.setData(s);
+    }
 }
 
 bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
@@ -510,7 +521,8 @@ bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
 
 DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::string& s)
 {
-    blockid id = m_lastId++;
+    blockid id = 0;
+    while (id == 0) id = (blockid)random();
 
     std::cerr << "DataBlockRepository::registerDataBlock: " << s.length() << " chars, id is " << id << std::endl;
 
@@ -539,7 +551,6 @@ void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 
     
 DataBlockRepository::DataBlockRepository()
-    : m_lastId(1)
 {
 }
 
@@ -553,7 +564,7 @@ void DataBlockRepository::clear()
     //
     QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
 
-    QDir segmentsDir(tmpPath, "datablock_*");
+    QDir segmentsDir(tmpPath, "rosegarden_datablock_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
         QString segmentName = tmpPath + '/' + segmentsDir[i];
         QFile::remove(segmentName);

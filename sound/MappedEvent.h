@@ -90,8 +90,6 @@ protected:
     //--------------- Data members ---------------------------------
 
     static DataBlockRepository* m_instance;
-
-    blockid m_lastId;
 };
 
 
