@@ -350,7 +350,7 @@ SequenceManager::play()
         m_transportStatus = STARTING_TO_PLAY;
     } else {
         m_transportStatus = STOPPED;
-        throw(Exception("Failed to start playback"));
+	std::cerr << "ERROR: SequenceManager::play(): Failed to start playback!" << std::endl;
     }
 
     return false;

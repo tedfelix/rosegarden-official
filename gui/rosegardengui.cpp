@@ -5036,7 +5036,8 @@ void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
 //
 void RosegardenGUIApp::slotStop()
 {
-    if (m_seqManager->getCountdownDialog()) {
+    if (m_seqManager &&
+	m_seqManager->getCountdownDialog()) {
 	disconnect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
 		   this, SLOT(slotStop()));
 	disconnect(m_seqManager->getCountdownDialog(), SIGNAL(completed()),
