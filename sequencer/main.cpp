@@ -78,6 +78,8 @@ signalHandler(int /*sig*/)
 
 int main(int argc, char *argv[])
 {
+    srandom((unsigned int)time(0) * (unsigned int)getpid());
+
     // Block signals during startup, so that child threads (inheriting
     // this mask) ignore them; then after startup we can unblock them
     // for this thread only.  This trick picked up from the jackd code.
