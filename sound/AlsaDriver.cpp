@@ -165,6 +165,8 @@ AlsaDriver::shutdown()
         m_midiHandle = 0;
     }
 
+    DataBlockRepository::getInstance()->clear();
+
     m_haveShutdown = true;
 }
 

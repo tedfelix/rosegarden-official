@@ -72,6 +72,7 @@ signalHandler(int /*sig*/)
     if (_mainThread) {
 	_exiting = true;
 	cleanup();
+	SEQUENCER_DEBUG << "Is that the time!?" << endl;
 	exit(0);
     }
 }
