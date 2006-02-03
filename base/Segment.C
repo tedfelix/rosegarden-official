@@ -167,14 +167,23 @@ Segment::getEndMarkerTime() const
 {
     timeT endTime;
 
-    if (m_endMarkerTime) {
-	endTime = *m_endMarkerTime;
-    } else {
-	endTime = getEndTime();
-    }
+    if (m_type == Audio && m_composition) {
 
-    if (m_composition) {
-	endTime = std::min(endTime, m_composition->getEndMarker());
+	RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+	RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
+	endTime = m_composition->getElapsedTimeForRealTime(endRT);
+
+    } else {
+
+	if (m_endMarkerTime) {
+	    endTime = *m_endMarkerTime;
+	} else {
+	    endTime = getEndTime();
+	}
+
+	if (m_composition) {
+	    endTime = std::min(endTime, m_composition->getEndMarker());
+	}
     }
 
     return endTime;
