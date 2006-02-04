@@ -311,6 +311,7 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
 		} else {
 		    type = myType; 
 		    haveType = true;
+		    segment = *i;
 		}
 	    }
 	} else return;
