@@ -51,18 +51,20 @@ public:
 
     CompositionRect() : QRect(), m_selected(false),
                         m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
-    CompositionRect(const QRect& r) : QRect(r), m_selected(false),
+    CompositionRect(const QRect& r) : QRect(r), m_resized(false), m_selected(false),
                                       m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(const QPoint & topLeft, const QPoint & bottomRight)
-        : QRect(topLeft, bottomRight), m_selected(false),
+        : QRect(topLeft, bottomRight), m_resized(false), m_selected(false),
           m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(const QPoint & topLeft, const QSize & size)
-        : QRect(topLeft, size), m_selected(false),
+        : QRect(topLeft, size), m_resized(false), m_selected(false),
           m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(int left, int top, int width, int height)
-        : QRect(left, top, width, height), m_selected(false),
+        : QRect(left, top, width, height), m_resized(false), m_selected(false),
           m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
 
+    void setResized(bool s)       { m_resized = s; }
+    bool isResized() const        { return m_resized; }
     void setSelected(bool s)      { m_selected = s; }
     bool isSelected() const       { return m_selected; }
     bool needsFullUpdate() const  { return m_needUpdate; }
@@ -87,6 +89,7 @@ public:
     static const QColor DefaultBrushColor;
 
 protected:
+    bool        m_resized;
     bool        m_selected;
     bool        m_needUpdate;
     QBrush      m_brush;
@@ -203,10 +206,13 @@ public:
     virtual void clearRecordingItems() = 0;
     virtual bool haveRecordingItems() = 0;
 
-    virtual void startMove(const CompositionItem&) = 0;
-    virtual void startMoveSelection() = 0;
-    virtual itemcontainer& getMovingItems() = 0;
-    virtual void endMove() = 0;
+    enum ChangeType { ChangeMove, ChangeResize };
+
+    virtual void startChange(const CompositionItem&, ChangeType change) = 0;
+    virtual void startChangeSelection(ChangeType change) = 0;
+    virtual itemcontainer& getChangingItems() = 0;
+    virtual void endChange() = 0;
+    virtual ChangeType getChangeType() = 0;
 
     virtual void setLength(int width) = 0;
     virtual int  getLength() = 0;
@@ -261,10 +267,11 @@ public:
     virtual void clearRecordingItems();
     virtual bool haveRecordingItems() { return m_recordingSegments.size() > 0; }
 
-    virtual void startMove(const CompositionItem&);
-    virtual void startMoveSelection();
-    virtual itemcontainer& getMovingItems() { return m_movingItems; }
-    virtual void endMove();
+    virtual void startChange(const CompositionItem&, ChangeType change);
+    virtual void startChangeSelection(ChangeType change);
+    virtual itemcontainer& getChangingItems() { return m_changingItems; }
+    virtual void endChange();
+    virtual ChangeType getChangeType() { return m_changeType; }
 
     virtual void setLength(int width);
     virtual int  getLength();
@@ -329,6 +336,8 @@ protected:
     void makePreviewCache(const Rosegarden::Segment* s);
     void removePreviewCache(const Rosegarden::Segment* s);
     void makeNotationPreviewRects(RectRanges* npData, QPoint basePoint, const Rosegarden::Segment*, const QRect&);
+    void makeNotationPreviewRectsMovingSegment(RectRanges* npData, QPoint basePoint, const Rosegarden::Segment*,
+                                               const QRect&);
     void makeAudioPreviewRects(AudioPreviewDrawData* apRects, const Rosegarden::Segment*,
                                const CompositionRect& segRect, const QRect& clipRect);
 
@@ -362,7 +371,8 @@ protected:
     AudioPreviewDataCache        m_audioPreviewDataCache;
 
     rectcontainer m_res;
-    itemcontainer m_movingItems;
+    itemcontainer m_changingItems;
+    ChangeType    m_changeType;
     itemgc m_itemGC;
 
     QRect m_selectionRect;

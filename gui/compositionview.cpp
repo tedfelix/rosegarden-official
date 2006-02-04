@@ -293,7 +293,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
             // Notation preview data
             if (npData && s->getType() == Rosegarden::Segment::Internal) {
-                makeNotationPreviewRects(npData, sr.topLeft(), s, rect);                
+                makeNotationPreviewRects(npData, QPoint(0, sr.y()), s, rect);                
             // Audio preview data
             } else if (apData && s->getType() == Rosegarden::Segment::Audio) {
                 makeAudioPreviewRects(apData, s, sr, rect);
@@ -306,10 +306,11 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
         
     }
 
-    // moving items
+    // changing items
 
-    itemcontainer::iterator movEnd = m_movingItems.end();
-    for(itemcontainer::iterator i = m_movingItems.begin(); i != movEnd; ++i) {
+    itemcontainer::iterator movEnd = m_changingItems.end();
+    bool moving = getChangeType() == ChangeMove;
+    for(itemcontainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
         CompositionRect sr((*i)->rect());
         if (sr.intersects(rect)) {
             Segment* s = CompositionItemHelper::getSegment(*i);
@@ -319,6 +320,14 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
             sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
             
+            // Notation preview data
+            if (npData && s->getType() == Rosegarden::Segment::Internal) {
+                makeNotationPreviewRectsMovingSegment(npData, sr.topLeft(), s, sr);
+            // Audio preview data
+            } else if (apData && s->getType() == Rosegarden::Segment::Audio) {
+                makeAudioPreviewRects(apData, s, sr, rect);
+            }
+
             m_res.push_back(sr);
         }
     }
@@ -337,6 +346,7 @@ struct RectCompare {
 void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint basePoint,
                                                     const Segment* segment, const QRect& clipRect)
 {
+
     rectlist* cachedNPData = getNotationPreviewData(segment);
 
     if (cachedNPData->empty())
@@ -359,12 +369,58 @@ void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint 
     int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
     int xLim = std::min(clipRect.topRight().x(), segEndX);
 
+    RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRects : basePoint.x : "
+             << basePoint.x() << endl;
+
     // move iterator forward
     //
     while (npi->x() < xLim && npi != npEnd) ++npi;
 
     interval.range.second = npi;
-    interval.basePoint = QPoint(0, basePoint.y());
+    interval.basePoint.setX(0);
+    interval.basePoint.setY(basePoint.y());
+    interval.color = computeSegmentPreviewColor(segment);
+
+    npRects->push_back(interval);
+}
+
+void CompositionModelImpl::makeNotationPreviewRectsMovingSegment(RectRanges* npRects, QPoint basePoint,
+                                                                 const Segment* segment, const QRect& clipRect)
+{
+    CompositionRect unmovedSR = computeSegmentRect(*segment);
+
+    rectlist* cachedNPData = getNotationPreviewData(segment);
+
+    if (cachedNPData->empty())
+        return;
+
+    rectlist::iterator npEnd = cachedNPData->end();
+
+    rectlist::iterator npi = std::lower_bound(cachedNPData->begin(), npEnd, unmovedSR, RectCompare());
+
+    if (npi == npEnd)
+        return;
+
+    if (npi != cachedNPData->begin())
+        --npi;
+
+    RectRange interval;
+    
+    interval.range.first = npi;
+
+    int segEndX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getEndMarkerTime())));
+    int xLim = getChangeType() == ChangeMove ? unmovedSR.topRight().x() : clipRect.topRight().x();
+
+    RG_DEBUG << "CompositionModelImpl::makeNotationPreviewRectsMovingSegment : basePoint.x : "
+             << basePoint.x() << endl;
+
+    // move iterator forward
+    //
+    while (npi->x() < xLim && npi != npEnd) ++npi;
+
+    interval.range.second = npi;
+    interval.basePoint.setY(basePoint.y());
+    interval.basePoint.setX(basePoint.x() - unmovedSR.x());
     interval.color = computeSegmentPreviewColor(segment);
 
     npRects->push_back(interval);
@@ -1173,9 +1229,9 @@ void CompositionModelImpl::clearRecordingItems()
 
 bool CompositionModelImpl::isMoving(const Segment* sm) const
 {
-    itemcontainer::const_iterator movEnd = m_movingItems.end();
+    itemcontainer::const_iterator movEnd = m_changingItems.end();
 
-    for(itemcontainer::const_iterator i = m_movingItems.begin(); i != movEnd; ++i) {
+    for(itemcontainer::const_iterator i = m_changingItems.begin(); i != movEnd; ++i) {
         const CompositionItemImpl* ci = dynamic_cast<const CompositionItemImpl*>((_CompositionItem*)(*i));
         const Segment* s = ci->getSegment();
         if (sm == s) return true;
@@ -1294,43 +1350,45 @@ bool CompositionModelImpl::wasTmpSelected(const Segment* s) const
     return m_previousTmpSelectedSegments.find(const_cast<Segment*>(s)) != m_previousTmpSelectedSegments.end();
 }
 
-void CompositionModelImpl::startMove(const CompositionItem& item)
+void CompositionModelImpl::startChange(const CompositionItem& item, CompositionModel::ChangeType change)
 {
-    itemcontainer::iterator i = m_movingItems.find(item);
+    m_changeType = change;
+
+    itemcontainer::iterator i = m_changingItems.find(item);
     
     // if an "identical" composition item has already been inserted, drop this one
-    if (i != m_movingItems.end()) {
+    if (i != m_changingItems.end()) {
         m_itemGC.push_back(item);
     } else {
         item->saveRect();
-        m_movingItems.insert(item);
+        m_changingItems.insert(item);
     }
 }
 
-void CompositionModelImpl::startMoveSelection()
+void CompositionModelImpl::startChangeSelection(CompositionModel::ChangeType change)
 {
     Rosegarden::SegmentSelection::iterator i = m_selectedSegments.begin();
     for(; i != m_selectedSegments.end(); ++i) {
         Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s);
-        startMove(CompositionItem(new CompositionItemImpl(*s, sr)));
+        startChange(CompositionItem(new CompositionItemImpl(*s, sr)), change);
     }
     
 }
 
-void CompositionModelImpl::endMove()
+void CompositionModelImpl::endChange()
 {
-    for(itemcontainer::const_iterator i = m_movingItems.begin(); i != m_movingItems.end(); ++i) {
+    for(itemcontainer::const_iterator i = m_changingItems.begin(); i != m_changingItems.end(); ++i) {
         delete *i;
     }
 
-    m_movingItems.clear();
+    m_changingItems.clear();
 
     for(itemgc::iterator i = m_itemGC.begin(); i != m_itemGC.end(); ++i) {
         delete *i;
     }
     m_itemGC.clear();
-    RG_DEBUG << "CompositionModelImpl::endMove" << endl;
+    RG_DEBUG << "CompositionModelImpl::endChange" << endl;
     emit needContentUpdate();
 }
 
@@ -2185,6 +2243,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
             CompositionModel::RectRange interval = *npi;
             p->save();
             p->translate(interval.basePoint.x(), interval.basePoint.y());
+            RG_DEBUG << "CompositionView::drawArea : translating to x = " << interval.basePoint.x() << endl;
             for(; interval.range.first != interval.range.second; ++interval.range.first) {
 
                 const PreviewRect& pr = *(interval.range.first);
@@ -2192,6 +2251,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
                 p->setBrush(col);
                 p->setPen(col);
+                RG_DEBUG << "CompositionView::drawArea : drawing rect at x = " << pr.x() << endl;
                 p->drawRect(pr);
             }
             p->restore();

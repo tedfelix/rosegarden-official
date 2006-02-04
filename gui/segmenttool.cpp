@@ -456,17 +456,17 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 
         if (m_canvas->getModel()->haveSelection()) {
             RG_DEBUG << "SegmentMover::handleMouseButtonPress() : haveSelection\n";
-            // startMove on all selected segments
-            m_canvas->getModel()->startMoveSelection();
+            // startChange on all selected segments
+            m_canvas->getModel()->startChangeSelection(CompositionModel::ChangeMove);
 
 
-            CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+            CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
             // set m_currentItem to its "sibling" among selected (now moving) items
-            setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(movingItems, m_currentItem));
+            setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentItem));
 
         } else {
             RG_DEBUG << "SegmentMover::handleMouseButtonPress() : no selection\n";
-            m_canvas->getModel()->startMove(item);
+            m_canvas->getModel()->startChange(item, CompositionModel::ChangeMove);
         }
         
         m_canvas->updateContents();
@@ -490,17 +490,17 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 
         if (changeMade()) {
 
-            CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+            CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (movingItems.size() == 1 ? i18n("Move Segment") : i18n("Move Segments"));
+                (changingItems.size() == 1 ? i18n("Move Segment") : i18n("Move Segments"));
 
 
             CompositionModel::itemcontainer::iterator it;
         
-            for (it = movingItems.begin();
-                 it != movingItems.end();
+            for (it = changingItems.begin();
+                 it != changingItems.end();
                  it++) {
 
                 CompositionItem item = *it;
@@ -529,7 +529,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
         
         m_canvas->hideTextFloat();
         m_canvas->setDrawGuides(false);
-        m_canvas->getModel()->endMove();
+        m_canvas->getModel()->endChange();
         m_canvas->slotUpdateSegmentsDrawBuffer();
 
     }
@@ -542,18 +542,18 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     m_canvas->setSnapGrain(true);
     if (m_currentItem) {
-        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+        CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
 
-//         RG_DEBUG << "SegmentMover::handleMouseMove : nb movingItems = "
-//                  << movingItems.size() << endl;
+//         RG_DEBUG << "SegmentMover::handleMouseMove : nb changingItems = "
+//                  << changingItems.size() << endl;
 
 	CompositionModel::itemcontainer::iterator it;
         int guideX = 0;
         int guideY = 0;
         QRect updateRect;
 
-	for (it = movingItems.begin();
-	     it != movingItems.end();
+	for (it = changingItems.begin();
+	     it != changingItems.end();
 	     it++) {
 //             it->second->showRepeatRect(false);
 
@@ -678,7 +678,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
     if (item) {
         RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
         setCurrentItem(item);
-        m_canvas->getModel()->startMove(item);
+        m_canvas->getModel()->startChange(item, CompositionModel::ChangeResize);
 
 	// Are we resizing from start or end?
 	if (item->rect().x() + item->rect().width()/2 > e->pos().x()) {
@@ -734,7 +734,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
         }
     }
     
-    m_canvas->getModel()->endMove();
+    m_canvas->getModel()->endChange();
     m_canvas->updateContents();
     setChangeMade(false);
     m_currentItem = CompositionItem();
@@ -945,7 +945,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	}
 
 
-        m_canvas->getModel()->startMove(item);
+        m_canvas->getModel()->startChange(item, CompositionModel::ChangeMove);
         m_canvas->getModel()->setSelected(item);
 
         // Moving
@@ -1019,7 +1019,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
     if (m_canvas->getModel()->isSelected(m_currentItem)) {
 
-        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
+        CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
 	CompositionModel::itemcontainer::iterator it;
 
         if (changeMade()) {
@@ -1031,8 +1031,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
             SegmentSelection newSelection;
 
-            for (it = movingItems.begin();
-                 it != movingItems.end();
+            for (it = changingItems.begin();
+                 it != changingItems.end();
                  it++) {
 
                 CompositionItem item = *it;
@@ -1058,7 +1058,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
             addCommandToHistory(command);
         }
         
-        m_canvas->getModel()->endMove();
+        m_canvas->getModel()->endChange();
 	m_canvas->slotUpdateSegmentsDrawBuffer();
 
     }
@@ -1146,19 +1146,19 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
 
         if (!m_selectionMoveStarted) { // start move on selected items only once
-            m_canvas->getModel()->startMoveSelection();
+            m_canvas->getModel()->startChangeSelection(CompositionModel::ChangeMove);
             m_selectionMoveStarted = true;
         }
 
-        CompositionModel::itemcontainer& movingItems = m_canvas->getModel()->getMovingItems();
-        setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(movingItems, m_currentItem));
+        CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
+        setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentItem));
 
 	CompositionModel::itemcontainer::iterator it;
         int guideX = 0;
         int guideY = 0;
 
-	for (it = movingItems.begin();
-	     it != movingItems.end();
+	for (it = changingItems.begin();
+	     it != changingItems.end();
 	     ++it) {
 
 //             RG_DEBUG << "SegmentSelector::handleMouseMove() : movingItem at "
