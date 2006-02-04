@@ -255,6 +255,7 @@
    <Separator/>
    <Action name="edit_cut"/>
    <Action name="edit_copy"/>
+   <Action name="edit_paste"/>
    <Separator/>
    <Action name="delete"/>
    <Action name="join_segments"/>
@@ -358,7 +359,6 @@
         <Action name="set_tempo_to_segment_length"/>
      </enable>
       <disable>
-        <Action name="edit_default"/>
         <Action name="edit_notation"/>
         <Action name="edit_matrix"/>
         <Action name="edit_percussion_matrix"/>

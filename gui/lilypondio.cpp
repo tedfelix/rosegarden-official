@@ -479,12 +479,8 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 
     QString tmpStr = strtoqstr(inStr);
 
-//    tmpStr.replace(QRegExp("_"), " ");
-    tmpStr.replace(QRegExp("_"), "\\_");
-
     tmpStr.replace(QRegExp("&"), "\\&");
     tmpStr.replace(QRegExp("\\^"), "\\^");
-    tmpStr.replace(QRegExp("#"), "\\#");
     tmpStr.replace(QRegExp("%"), "\\%");
     tmpStr.replace(QRegExp("<"), "\\<");
     tmpStr.replace(QRegExp(">"), "\\>");
@@ -492,17 +488,14 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
     tmpStr.replace(QRegExp("\\]"), "");
     tmpStr.replace(QRegExp("\\{"), "");
     tmpStr.replace(QRegExp("\\}"), "");
-// () seem OK
-//    tmpStr.replace(QRegExp("\\("), "");
-//    tmpStr.replace(QRegExp("\\)"), "");
-    tmpStr.replace(QRegExp("\""), "");
-
-//    tmpStr.replace(QRegExp("-"), "\\-");
 
     // [cc] Convert to latin1, which is what Lilypond expects.
     // I have no idea whether, or how, non-latin1 characters can be
     // handled by Lilypond; I just know if you feed it utf8 you get
     // garbage.
+    //
+    // DMM - we should see if this is still true, because current (2.6)
+    // Lilypond docs speak of using utf8 to achieve special results
 
     static QTextCodec *codec(QTextCodec::codecForName("ISO8859-1"));
     return codec->fromUnicode(tmpStr).data();
@@ -773,7 +766,7 @@ LilypondExporter::write()
 		    std::ostringstream staffName;
 		    staffName << protectIllegalChars(m_composition->
 						     getTrackById(lastTrackIndex)->getLabel());
-		    
+		   
 		    if (staffName.str() == "") {
 			staffName << "track";
 		    }
@@ -791,6 +784,15 @@ LilypondExporter::write()
 			<< (languageLevel >= 2 ? "\\set " : "\\property ")
 			<< "Staff.instrument = \""
 			<< staffName.str() <<"\"" << std::endl;
+
+		    // turn off the stupid accidental cancelling business,
+		    // because we don't do that ourselves, and because my 11
+		    // year old son pointed out to me that it "Looks really
+		    // stupid.  Why is it cancelling out four flats and then
+		    // adding five flats back?  That's brain damaged."
+		    str << (languageLevel >= 2 ? "\\set " : "\\property ")
+			<< "Staff.printKeyCancellation = ##f"
+			<< std::endl;
 		}
 		
 		// Temporary storage for non-atomic events (!BOOM)
@@ -1495,8 +1497,6 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 {
     try {
 	
-	//!! DMM -  this needs to deal with the new Text::Chord type
-	 
 	Rosegarden::Text text(*textEvent);
 	std::string s = protectIllegalChars(text.getText());
 	
@@ -1506,16 +1506,17 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 	    if (languageLevel < 1) {
 		lilyText += "^#'((bold Large)\"" + s + "\")";
 	    } else {
-		lilyText += "^\\markup { \\bold \\large " + s + " } ";
+		lilyText += "^\\markup { \\bold \\large \"" + s + "\" } ";
 	    }
 
-	} else if (text.getTextType() == Text::LocalTempo) {
+	} else if (text.getTextType() == Text::LocalTempo ||
+		   text.getTextType() == Text::Chord) {
 
 	    // print above staff, bold, small
 	    if (languageLevel < 1) {
 		lilyText += "^#'(bold \"" + s + "\")";
 	    } else {
-		lilyText += "^\\markup { \\bold " + s + " } ";
+		lilyText += "^\\markup { \\bold \"" + s + "\" } ";
 	    }
 
 	} else if (text.getTextType() == Text::Lyric) {
@@ -1536,13 +1537,15 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 		std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
 			  << s << std::endl;
 	    }
-
+        
 	} else if (text.getTextType() == Text::Direction) {
 
-	    // \mark is syntactically a different thing from the
-	    // others here, they don't mix
-//	    lilyText += " \\mark \"" + s + "\" ";
-	    lilyText += "^\\markup { " + s + " } ";
+	    // print above staff, large
+	    if (languageLevel < 1) {
+		lilyText += "^#'((Large) \"" + s + "\") ";
+	    } else {
+		lilyText += "^\\markup { \\large \"" + s + "\" } ";
+	    }
 
 	} else if (text.getTextType() == Text::LocalDirection) {
 
@@ -1550,7 +1553,7 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 	    if (languageLevel < 1) {
 		lilyText += "_#'((bold italic) \"" + s + "\") ";
 	    } else {
-		lilyText += "_\\markup { \\bold \\italic " + s + " } ";
+		lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
 	    }
 
 	} else {

@@ -2771,14 +2771,10 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
             double(beats);
 	
         // New tempo is a minute divided by time of beat
+	// converted up (#1414252) to a sane value via getTempoFoQpm()
         //
-        double newTempo = 60.0 * 1000000.0 / beatLengthUsec;
+        double newTempo = comp.getTempoForQpm(60.0 * 1000000.0 / beatLengthUsec);
 
-	// multiply by 100,000 to correct #1414252, although I can't work out
-	// *why* this is necessary.  (used to produce eg. 0.00084 instead of
-	// 84.0)
-	newTempo *= 100000;
-	
 #ifdef DEBUG_TEMPO_FROM_AUDIO
 	RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength info: " << endl
 	         << " beatLengthUsec   = " << beatLengthUsec << endl

@@ -4907,7 +4907,11 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent) :
     
     m_lilyExportLyrics = new QCheckBox(
         i18n("Export \\lyric blocks"), frame);
-    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", true));
+    
+    // default to lyric export == false because if you export the default
+    // empty "- - -" lyrics, crap results ensue, and people will know if they
+    // do need to export the lyrics - DMM
+    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
     layout->addWidget(m_lilyExportLyrics, 3, 1);
 
     m_lilyExportUnmuted = new QCheckBox(
