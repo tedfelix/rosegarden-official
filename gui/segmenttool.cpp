@@ -678,7 +678,6 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
     if (item) {
         RG_DEBUG << "SegmentResizer::handleMouseButtonPress - got item" << endl;
         setCurrentItem(item);
-        m_canvas->getModel()->startChange(item, CompositionModel::ChangeResize);
 
 	// Are we resizing from start or end?
 	if (item->rect().x() + item->rect().width()/2 > e->pos().x()) {
@@ -686,6 +685,9 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 	} else {
 	    m_resizeStart = false;
 	}
+
+        m_canvas->getModel()->startChange(item, m_resizeStart ? CompositionModel::ChangeResizeFromStart : CompositionModel::ChangeResizeFromEnd);
+
     }
 }
 

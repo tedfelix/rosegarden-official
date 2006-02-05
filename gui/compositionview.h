@@ -206,7 +206,7 @@ public:
     virtual void clearRecordingItems() = 0;
     virtual bool haveRecordingItems() = 0;
 
-    enum ChangeType { ChangeMove, ChangeResize };
+    enum ChangeType { ChangeMove, ChangeResizeFromStart, ChangeResizeFromEnd };
 
     virtual void startChange(const CompositionItem&, ChangeType change) = 0;
     virtual void startChangeSelection(ChangeType change) = 0;
