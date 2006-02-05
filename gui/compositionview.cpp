@@ -446,10 +446,15 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
     RG_DEBUG << "CompositionModelImpl::makeAudioPreviewRects - segRect = " << segRect << endl;
 
     PixmapArray previewImage = getAudioPreviewPixmap(segment);
-    int penWidth = 0; // std::max(1U, segRect.getPen().width());
-    QPoint basePoint(segRect.x() + penWidth, segRect.y() + penWidth);
+
+    QPoint basePoint = segRect.topLeft();
 
     AudioPreviewDrawDataItem previewItem(previewImage, basePoint, segRect);
+
+    if (getChangeType() == ChangeResizeFromStart) {
+        CompositionRect originalRect = computeSegmentRect(*segment);
+        previewItem.resizeOffset = segRect.x() - originalRect.x();
+    }
 
     apRects->push_back(previewItem);
 }
@@ -988,7 +993,7 @@ PixmapArray AudioPreviewPainter::getPreviewImage()
 
 QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, const Segment* segment)
 {
-    RG_DEBUG << "CompositionModelImpl::postProcessAudioPreview()\n";
+//     RG_DEBUG << "CompositionModelImpl::postProcessAudioPreview()\n";
 
     AudioPreviewPainter previewPainter(*this, apData, m_composition, segment);
     previewPainter.paintPreviewImage();
@@ -1000,7 +1005,7 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
 
 void CompositionModelImpl::slotInstrumentParametersChanged(Rosegarden::InstrumentId id)
 {
-    RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()\n";
+//     RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()\n";
     const Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
@@ -1021,7 +1026,7 @@ void CompositionModelImpl::slotInstrumentParametersChanged(Rosegarden::Instrumen
 
 void CompositionModelImpl::slotAudioFileFinalized(Rosegarden::Segment* s)
 {
-    RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()\n";
+//     RG_DEBUG << "CompositionModelImpl::slotAudioFileFinalized()\n";
     removePreviewCache(s);
 }
 
@@ -1039,7 +1044,7 @@ CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const R
 CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
 {
 //    Rosegarden::Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
-    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
+//     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
 
     AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
 
@@ -2341,6 +2346,10 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : initial localRect = "
 //                      << localRect << endl;
             localRect &= r;
+            if (idx == firstPixmapIdx && api->resizeOffset != 0) {
+                // this segment is being resized from start, clip beginning of preview
+                localRect.moveBy(api->resizeOffset, 0);
+            }
 
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : localRect & clipRect = "
 //                      << localRect << endl;
@@ -2350,8 +2359,9 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
             }
             localRect.moveBy(-(basePoint.x() + pixmapRectXOffset), -basePoint.y());
 
-            RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
-                     << idx << " at " << drawBasePoint << " - localRect = " << localRect << endl;
+//             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : drawing pixmap "
+//                      << idx << " at " << drawBasePoint << " - localRect = " << localRect
+//                      << " - preResizeOrigin : " << api->preResizeOrigin << endl;
 
             p->drawImage(drawBasePoint, api->pixmap[idx], localRect,
 			 Qt::ColorOnly | Qt::ThresholdDither | Qt::AvoidDither);

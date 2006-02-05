@@ -133,10 +133,16 @@ public:
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
 
     struct AudioPreviewDrawDataItem {
-        AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) : pixmap(p), basePoint(bp), rect(r) {};
+        AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
+            pixmap(p), basePoint(bp), rect(r), resizeOffset(0) {};
         PixmapArray pixmap;
         QPoint basePoint;
         QRect rect;
+
+        // when showing a segment that is being resized from the
+        // beginning, this contains the offset between the current
+        // rect of the segment and the resized one
+        int resizeOffset;
     };
     
     typedef std::vector<AudioPreviewDrawDataItem> AudioPreviewDrawData;
