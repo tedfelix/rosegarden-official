@@ -787,11 +787,11 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
     if (m_resizeStart) {
 
 	duration = itemEndTime - time;
-        RG_DEBUG << "SegmentResizer::handleMouseMove() resize start : duration = "
-                 << duration << " - snap = " << snap
-                 << " - itemEndTime : " << itemEndTime
-                 << " - time : " << time
-                 << endl;
+//         RG_DEBUG << "SegmentResizer::handleMouseMove() resize start : duration = "
+//                  << duration << " - snap = " << snap
+//                  << " - itemEndTime : " << itemEndTime
+//                  << " - time : " << time
+//                  << endl;
 
         timeT newStartTime = 0;
 
@@ -815,11 +815,11 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
         timeT newEndTime = 0;
 
-        RG_DEBUG << "SegmentResizer::handleMouseMove() resize end : duration = "
-                 << duration << " - snap = " << snap
-                 << " - itemEndTime : " << itemEndTime
-                 << " - time : " << time
-                 << endl;
+//         RG_DEBUG << "SegmentResizer::handleMouseMove() resize end : duration = "
+//                  << duration << " - snap = " << snap
+//                  << " - itemEndTime : " << itemEndTime
+//                  << " - time : " << time
+//                  << endl;
 
 	if ((duration > 0 && duration <  snap) ||
 	    (duration < 0 && duration > -snap)) {
