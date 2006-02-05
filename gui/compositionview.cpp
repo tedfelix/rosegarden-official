@@ -24,6 +24,8 @@
 #include <qbitmap.h>
 
 #include <kmessagebox.h>
+#include <kconfig.h>
+#include <kapp.h>
 
 #include "Profiler.h"
 
@@ -38,6 +40,7 @@
 #include "compositionview.h"
 #include "compositionitemhelper.h"
 #include "colours.h"
+#include "constants.h"
 #include "rgapplication.h"
 #include "rosegardenguidoc.h"
 #include "rosegardencanvasview.h" // for NoFollow,FollowVertical,FollowHorizontal constants
@@ -812,6 +815,17 @@ void AudioPreviewPainter::paintPreviewImage()
 	haveTempoChange = true;
     }
 
+/*!!! Leave this commented out until after 1.2.3, as the option in the
+      config dialog introduces a new translation string
+
+    KConfig* config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+
+    bool meterLevels = (config->readUnsignedNumEntry("audiopreviewstyle", 1)
+			== 1);
+*/
+    bool meterLevels = true;
+
     for (int i = 0; i < m_rect.getBaseWidth(); ++i) {
 
 	// i is the x coordinate within the rectangle.  We need to
@@ -888,7 +902,13 @@ void AudioPreviewPainter::paintPreviewImage()
         if (h1 >= 1.0) { h1 = 1.0; pixel = 2; }
 	else { pixel = 1; }
 
-        int h = Rosegarden::AudioLevel::multiplier_to_preview(h1, m_height);
+        int h;
+
+	if (meterLevels) {
+	    h = Rosegarden::AudioLevel::multiplier_to_preview(h1, m_height);
+	} else {
+	    h = h1 * m_height;
+	}
         if (h <= 0) h = 1;
 	if (h > m_halfRectHeight) h = m_halfRectHeight;
 
@@ -901,7 +921,11 @@ void AudioPreviewPainter::paintPreviewImage()
         if (h2 >= 1.0) { h2 = 1.0; pixel = 2; }
         else { pixel = 1; }
 
-        h = Rosegarden::AudioLevel::multiplier_to_preview(h2, m_height);
+	if (meterLevels) {
+	    h = Rosegarden::AudioLevel::multiplier_to_preview(h2, m_height);
+	} else {
+	    h = h2 * m_height;
+	}
         if (h < 0) h = 0;
 	
 	for (int py = 0; py < h; ++py) {

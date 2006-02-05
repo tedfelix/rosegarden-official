@@ -211,6 +211,7 @@ protected:
     QCheckBox *m_autosave;
     QSpinBox*  m_autosaveInterval;
     QComboBox* m_nameStyle;
+    QComboBox* m_previewStyle;
 
 };
 

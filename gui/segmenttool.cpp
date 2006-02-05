@@ -693,6 +693,8 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
+    RG_DEBUG << "SegmentResizer::handleMouseButtonRelease" << endl;
+
     if (m_currentItem) {
 
         Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
@@ -715,7 +717,11 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
             
             if (m_resizeStart && (newStartTime < newEndTime)) {
 
-                addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
+		if (segment->getType() == Rosegarden::Segment::Audio) {
+		    addCommandToHistory(new AudioSegmentResizeFromStartCommand(segment, newStartTime));
+		} else {
+		    addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
+		}
 
             } else {
 
@@ -744,6 +750,8 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 
 int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
+    RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
+
     if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
     Rosegarden::Segment* segment = CompositionItemHelper::getSegment(m_currentItem);

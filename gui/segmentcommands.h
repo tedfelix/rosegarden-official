@@ -288,8 +288,8 @@ private:
  * padding with rests or deleting events as appropriate.  (Distinct
  * from Segment::setStartTime, as used by SegmentReconfigureCommand,
  * which moves all the events in the segment.)
+ * Not for use on audio segments (see AudioSegmentResizeFromStartCommand).
  */
-
 class SegmentResizeFromStartCommand : public BasicCommand
 {
 public:
@@ -302,6 +302,28 @@ protected:
 
 private:
     Rosegarden::Segment *m_segment;
+    Rosegarden::timeT m_oldStartTime;
+    Rosegarden::timeT m_newStartTime;
+};
+
+
+/**
+ * As above, but for audio segments.
+ */
+class AudioSegmentResizeFromStartCommand : public KNamedCommand
+{
+public:
+    AudioSegmentResizeFromStartCommand(Rosegarden::Segment *segment,
+				       Rosegarden::timeT newStartTime);
+    virtual ~AudioSegmentResizeFromStartCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Segment *m_segment;
+    Rosegarden::Segment *m_newSegment;
+    bool m_detached;
     Rosegarden::timeT m_oldStartTime;
     Rosegarden::timeT m_newStartTime;
 };

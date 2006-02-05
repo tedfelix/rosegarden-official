@@ -155,10 +155,15 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                             4, 2, // nbrow, nbcol -- one extra row improves layout
+                             5, 2, // nbrow, nbcol -- one extra row improves layout
                              10, 5);
     layout->addWidget(new QLabel(i18n("Note name style"),
                                  frame), 0, 0);
+/*!!! Leave this commented out until after 1.2.3, as the option in the
+      config dialog introduces a new translation string
+    layout->addWidget(new QLabel(i18n("Audio preview scale"),
+                                 frame), 1, 0);
+*/
     layout->addWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
                                  frame), 1, 0);
 
@@ -172,6 +177,16 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_nameStyle->insertItem(i18n("Localized (where available)"));
     m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
     layout->addWidget(m_nameStyle, 0, 1);
+
+
+/*!!! Leave this commented out until after 1.2.3, as the option in the
+      config dialog introduces a new translation string
+    m_previewStyle = new KComboBox(frame);
+    m_previewStyle->insertItem(i18n("Linear - easier to see loud peaks"));
+    m_previewStyle->insertItem(i18n("Meter scaling - easier to see quiet activity"));
+    m_previewStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("audiopreviewstyle", 1));
+    layout->addWidget(m_previewStyle, 1, 1);
+*/
 
     m_midiPitchOctave = new QSpinBox(frame);
     m_midiPitchOctave->setMaxValue(10);
@@ -297,6 +312,12 @@ void GeneralConfigurationPage::apply()
 
     int namestyle = getNoteNameStyle();
     m_cfg->writeEntry("notenamestyle", namestyle);
+
+/*!!! Leave this commented out until after 1.2.3, as the option in the
+      config dialog introduces a new translation string
+    int previewstyle = m_previewStyle->currentItem();
+    m_cfg->writeEntry("audiopreviewstyle", previewstyle);
+*/
 
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
 
@@ -1117,7 +1138,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 #define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 4, 10, 5);
+    layout = new QGridLayout(frame, 8, 4, 10, 5);
 
     label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you\nautomatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main\naudio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full\npath where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"), frame);
 

@@ -682,7 +682,6 @@ SegmentReconfigureCommand::swap()
 // SegmentResizeFromStartCommand
 //
 //
-
 SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *s,
 							     timeT time) :
     BasicCommand(i18n("Resize Segment"), *s,
@@ -728,6 +727,55 @@ SegmentResizeFromStartCommand::modifySegment()
 	    i = j;
 	}
     }
+}
+
+AudioSegmentResizeFromStartCommand::AudioSegmentResizeFromStartCommand(Segment *segment,
+								       timeT newStartTime) :
+    KNamedCommand(i18n("Resize Segment")),
+    m_segment(segment),
+    m_newSegment(0),
+    m_detached(false),
+    m_oldStartTime(segment->getStartTime()),
+    m_newStartTime(newStartTime)
+{
+}
+
+AudioSegmentResizeFromStartCommand::~AudioSegmentResizeFromStartCommand()
+{
+    if (!m_detached) delete m_segment;
+    else delete m_newSegment;
+}
+
+void
+AudioSegmentResizeFromStartCommand::execute()
+{
+    Composition *c = m_segment->getComposition();
+
+    if (!m_newSegment) {
+	Rosegarden::RealTime oldRT = c->getElapsedRealTime(m_oldStartTime);
+	Rosegarden::RealTime newRT = c->getElapsedRealTime(m_newStartTime);
+
+	m_newSegment = new Segment(*m_segment);
+	m_newSegment->setStartTime(m_newStartTime);
+	m_newSegment->setAudioStartTime(m_segment->getAudioStartTime() -
+					(oldRT - newRT));
+    }
+
+    c->addSegment(m_newSegment);
+    m_newSegment->setEndMarkerTime(m_segment->getEndMarkerTime());
+    c->detachSegment(m_segment);
+
+    m_detached = false;
+}
+
+void
+AudioSegmentResizeFromStartCommand::unexecute()
+{
+    Composition *c = m_newSegment->getComposition();
+    c->addSegment(m_segment);
+    c->detachSegment(m_newSegment);
+
+    m_detached = true;
 }
 
 
