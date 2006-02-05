@@ -2340,7 +2340,8 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
                               AudioPreviewPainter::tileWidth(), api->rect.height());
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : initial localRect = "
 //                      << localRect << endl;
-            localRect &= clipRect;
+            localRect &= r;
+
 //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : localRect & clipRect = "
 //                      << localRect << endl;
             if (localRect.isEmpty()) {

@@ -750,7 +750,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 
 int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
-    RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
+//     RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
 
     if (!m_currentItem) return RosegardenCanvasView::NoFollow;
 
