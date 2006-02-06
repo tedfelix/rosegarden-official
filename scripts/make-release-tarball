@@ -12,7 +12,7 @@ tarname="$rgname.tar.bz2"
 echo "Building tarball for $rgname"
 CVSROOT=`cat ../CVS/Root` cvs -z3 co -P rosegarden
 mv rosegarden "$rgname"
-tar cvjf "$tarname" "$rgname" --exclude=RGbuild --exclude=CVS --exclude=.svn --exclude=web --exclude=docs/test || exit 1
+tar cvjf "$tarname" "$rgname" --exclude=RGbuild --exclude=CVS --exclude=.svn --exclude=web --exclude=docs/test --exclude=admin || exit 1
 cd ..
 mv "$tmpdir/$tarname" .
 rm -rf "$tmpdir"
