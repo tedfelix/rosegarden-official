@@ -1,6 +1,6 @@
 
-Rosegarden-4 v1.2
-=================
+Rosegarden-4 v1.2.3
+===================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
 
@@ -20,50 +20,22 @@ Build requirements
 The big requirement is KDE 3.1, or later, or more specifically the KDE 3.1+
 development libraries (you don't need the whole KDE environment).
 
-Our code compiles with gcc-3.x.  If you are a package maintainer, and your
-distro has moved to gcc-4.x, please read the note below.
+Our code compiles with gcc-3.x and gcc-4.x.
 
 For MIDI support on Linux, you need ALSA 0.9.x or 1.0; for audio you
-need JACK 0.77 or newer; for synth plugins you need DSSI 0.9.x or newer.
+need JACK 0.77 or newer; for synth plugins you need DSSI 0.9.x or
+newer; for synth plugin GUI support you need liblo 0.7 or newer.
 
 We have recently switched from automake/autoconf/make to scons for
 building.  Please see the section on Compiling from Source below for
 details.
 
 
-SPECIAL NOTES FOR PACKAGE MAINTAINERS
--------------------------------------
-
-DSSI
-
-Many distros released their packages of 1.0 compiled without the optional
-DSSI/synth plugin support.  We received a lot of complaints on our lists from
-your users and ours about your packages being built without this feature.  We
-would like to request that you please take whatever steps are necessary within
-the framework of your particular distro to pick up DSSI (at least the API,
-although we would like to see the plugins made available too), package it, and
-build Rosegarden against it.  Thank you.  For details on DSSI, see:
-
-  http://dssi.sourceforge.net/
-
-gcc-4.x
-
-Several users have reported problems compiling with gcc-4.x, and we have not
-had time to investigate these problems.  We are interested in patches to
-smooth over various compiler incompatibility issues, but we should warn you
-that several complicated patches which aimed to suppress an assortment of
-deprecation and signed/unsigned int/float warnings have had to be rejected
-because they either broke our compatibility with KDE 3.1, or they broke our
-code.  Please do not waste your time trying to suppress these warnings, and
-instead concentrate on doing the bare minimum necessary to get the code to
-build.  Thank you.
-
-
 Compiling from source
 ---------------------
 
 You will need to obtain and install scons.  If you are not familiar with
-scons, see:
+scons, it's a more modern alternative to "make".  See this page:
 
   http://scons.sourceforge.net/
 
@@ -73,10 +45,13 @@ For a typical end-user installation with no unusual requirements, simply run
   scons
   scons install
 
-Our new build system should automatically detect your installation prefix and
-various optional installed libraries with no further effort on your part.  For
-specical requirements, a few options are supported.  These take the format
-scons configure option=[0|1], for example
+The build system should automatically detect your installation prefix
+and various optional installed libraries with no further effort on
+your part.  It will tell you if something it needs does not appear to
+be available.
+
+For special requirements, a few options are supported.  These take the
+format scons configure option=[0|1], for example
 
   scons configure debug=1
 
@@ -103,11 +78,10 @@ Running Rosegarden
 ------------------
 
 Just run the "rosegarden" application (found in the KDE bin directory
-after installation, and also in the gui/ directory of the source
-tree).  The sequencer process is started automatically when the gui is
-started, provided it has been correctly installed (by "make install")
-in the global KDE directories.  If you have any problems running the
-application, consult the FAQ:
+after installation).  The sequencer process is started automatically
+when the gui is started, provided it has been correctly installed (by
+"make install") in the global KDE directories.  If you have any
+problems running the application, consult the FAQ:
 
   http://www.rosegardenmusic.com/resources/faq/
 
@@ -117,39 +91,62 @@ mailing list on Sourceforge.
 You can also "make uninstall" if you decide it's a waste of your time.
 
 
-Notes for developers
---------------------
-
-We are actively seeking developers who are interested in coding new parts of
-the application, adding features, and fixing bugs.  See the bug and feature
-request trackers at SourceForge for inspiration, and if you intend to do
-anything, please discuss it on the rosegarden-devel mailing list.
-
-Be warned that we intend to be fairly strict about code quality... as
-far as that's possible, given the not always superb standards of our
-own code.
-
-
 User documentation
 ------------------
 
-See the Help menu.  Help -> Rosegarden Handbook; Help -> Online Tutorial
+There is a lot of documentation for Rosegarden available through the
+Help menu.  Go to Help -> Rosegarden Handbook for the reference
+manual, and Help -> Online Tutorial for a tutorial.
+
+
+SPECIAL NOTES FOR PACKAGE MAINTAINERS
+-------------------------------------
+
+DSSI
+
+Many distros released their packages of Rosegarden-4 v1.0 compiled
+without the optional DSSI/synth plugin support.  We received a lot of
+complaints on our lists from your users and ours about your packages
+being built without this feature.
+
+We would like to request that you please take whatever steps are
+necessary within the framework of your particular distro to ensure
+that Rosegarden is built with DSSI support, and ideally that some of
+the currently available DSSI plugins are also packaged for your
+distro.  Thank you.  For details on DSSI, see:
+
+  http://dssi.sourceforge.net/
+
+
+Notes for developers
+--------------------
+
+We are actively seeking developers who are interested in coding new
+parts of the application, adding features, and fixing bugs.  See the
+bug and feature request trackers at SourceForge for inspiration.  If
+you intend to do anything, please discuss it on the rosegarden-devel
+mailing list (of course, providing working code will make your
+argument extra persuasive).
+
+Be warned that we tend to be fairly strict about code quality... as
+far as that's possible, given the not always superb standards of our
+own code.
 
 
 Developer documentation
 -----------------------
 
-All the documentation we have is in the docs/ subdirectory.  Good
-starting-points include:
+All the documentation we have (not enough) is in the docs/
+subdirectory, including:
+
+  docs/code/global_design.txt -- which classes do what, more or less
+  docs/data_struct/units.txt -- how we store pitch and time
+  docs/data_struct/sets.txt -- some terminology explained
 
   docs/howtos/alsa-notes -- brief notes about getting and installing the
 	ALSA sound drivers (we recommend ALSA for use with Rosegarden)
   docs/howtos/artsd-mcop-notes.txt -- notes on how to get sound with aRts
 	(not recommended!)
-
-  docs/code/global_design.txt -- which classes do what, more or less
-  docs/data_struct/units.txt -- how we store pitch and time
-  docs/data_struct/sets.txt -- some terminology explained
 
 
 Authors and copyright
