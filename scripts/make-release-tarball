@@ -5,10 +5,14 @@ if [ -z "$version" ]; then
 	echo "ERROR: Failed to extract version number from SConstruct"
 	exit 1
 fi
-mkdir "$tmpdir" || exit 1
-cd "$tmpdir"
 rgname="rosegarden-$version"
 tarname="$rgname.tar.bz2"
+if [ -f "$tarname" ]; then
+    echo "Tarball file $tarname already exists, exiting"
+    exit 1
+fi
+mkdir "$tmpdir" || exit 1
+cd "$tmpdir"
 echo "Building tarball for $rgname"
 CVSROOT=`cat ../CVS/Root` cvs -z3 co -P rosegarden
 mv rosegarden "$rgname"
