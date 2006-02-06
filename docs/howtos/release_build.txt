@@ -1,3 +1,8 @@
+
+*** NOTE: This is obsoleted by the new scons build system (among other things).
+*** Keeping it around because some of the SourceForge URLs are handy reminders.
+
+
 How to Make a New Release
 =========================
 Updated: 6th May 2003
