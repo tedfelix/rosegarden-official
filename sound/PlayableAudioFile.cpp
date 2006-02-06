@@ -284,6 +284,8 @@ size_t PlayableAudioFile::m_rawFileBufferSize = 0;
 
 RingBufferPool *PlayableAudioFile::m_ringBufferPool = 0;
 
+size_t PlayableAudioFile::m_xfadeFrames = 30;
+
 PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
                                      AudioFile *audioFile,
                                      const RealTime &startTime,
@@ -301,6 +303,8 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_instrumentId(instrumentId),
     m_targetChannels(targetChannels),
     m_targetSampleRate(targetSampleRate),
+    m_fileEnded(false),
+    m_firstRead(true),
     m_runtimeSegmentId(-1),
     m_isSmallFile(false),
     m_currentScanPoint(RealTime::zeroTime),
@@ -442,6 +446,8 @@ PlayableAudioFile::scanTo(const RealTime &time)
     std::cerr << "PlayableAudioFile::scanTo(" << time << "): set m_currentScanPoint to " << m_currentScanPoint << std::endl;
 #endif
 
+    m_firstRead = true; // so we know to xfade in
+
     return ok;
 }
 
@@ -526,21 +532,30 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 							m_targetSampleRate);
 
 	    size_t endFrame = scanFrame + nframes;
-	    if (endFrame >= cframes) m_fileEnded = true;
+	    size_t n = nframes;
+
+	    if (endFrame >= cframes) {
+		m_fileEnded = true;
+		n = cframes - scanFrame;
+	    }
 
 #ifdef DEBUG_PLAYABLE_READ
 	    std::cerr << "PlayableAudioFile::addSamples: it's a small file: want frames " << scanFrame << " to " << endFrame << " of " << cframes << std::endl;
 #endif
-	    
+
+	    size_t xfadeIn  = (m_firstRead ? m_xfadeFrames : 0);
+	    size_t xfadeOut = (m_fileEnded ? m_xfadeFrames : 0);
+
 	    // all this could be neater!
 
 	    if (channels == 1 && cchannels == 2) { // mix
-		for (size_t i = 0; i < nframes; ++i) {
-		    if (scanFrame + i < cframes) {
-			destination[0][i + offset] += 
-			    cached[0][scanFrame + i] +
-			    cached[1][scanFrame + i];
-		    }
+		for (size_t i = 0; i < n; ++i) {
+		    sample_t v =
+			cached[0][scanFrame + i] +
+			cached[1][scanFrame + i];
+		    if ((i+1) < xfadeIn)  v = (v * (i+1)) / xfadeIn;
+		    if ((n-i) < xfadeOut) v = (v * (n-i)) / xfadeOut;
+		    destination[0][i + offset] += v;
 		}
 	    } else {
 		for (size_t ch = 0; ch < channels; ++ch) {
@@ -549,11 +564,11 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 			if (channels == 2 && cchannels == 1) sch = 0;
 			else break;
 		    } else {
-			for (size_t i = 0; i < nframes; ++i) {
-			    if (scanFrame + i < cframes) {
-				destination[ch][i + offset] +=
-				    cached[sch][scanFrame + i];
-			    }
+			for (size_t i = 0; i < n; ++i) {
+			    sample_t v = cached[sch][scanFrame + i];
+			    if ((i+1) < xfadeIn)  v = (v * (i+1)) / xfadeIn;
+			    if ((n-i) < xfadeOut) v = (v * (n-i)) / xfadeOut;
+			    destination[ch][i + offset] += v;
 			}
 		    }
 		}
@@ -810,10 +825,13 @@ PlayableAudioFile::updateBuffers()
     size_t obtained =
 	m_audioFile->getSampleFrames(m_file, m_rawFileBuffer, fileFrames);
 
+    if (obtained < fileFrames || m_file->eof()) {
+	m_fileEnded = true;
+    }
+
 #ifdef DEBUG_PLAYABLE
     std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " frames" << std::endl;
 #endif
-
 
     if (nframes > m_workBufferSize) {
 
@@ -844,15 +862,6 @@ PlayableAudioFile::updateBuffers()
 			    nframes,
 			    m_workBuffers,
 			    false)) {
-
-	if (obtained < fileFrames) {
-	    m_fileEnded = true;
-	    if (m_file) {
-		m_file->close();
-		delete m_file;
-		m_file = 0;
-	    }
-	}
 
 /*!!! No -- GUI and notification side of things isn't up to this yet,
       so comment it out just in case
@@ -908,9 +917,35 @@ PlayableAudioFile::updateBuffers()
 	m_currentScanPoint = m_currentScanPoint + block;
 
 	for (int ch = 0; ch < m_targetChannels; ++ch) {
+
+	    if (m_firstRead || m_fileEnded) {
+		float xfade = std::min(m_xfadeFrames, nframes);
+		if (m_firstRead) {
+		    for (size_t i = 0; i < xfade; ++i) {
+			m_workBuffers[ch][i] *= float(i+1) / xfade;
+		    }
+		}
+		if (m_fileEnded) {
+		    for (size_t i = 0; i < xfade; ++i) {
+			m_workBuffers[ch][nframes - i - 1] *=
+			    float(i+1) / xfade;
+		    }
+		}
+	    }
+
 	    if (m_ringBuffers[ch]) {
 		m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
 	    }
+	}
+    }
+
+    m_firstRead = false;
+
+    if (obtained < fileFrames) {
+	if (m_file) {
+	    m_file->close();
+	    delete m_file;
+	    m_file = 0;
 	}
     }
 

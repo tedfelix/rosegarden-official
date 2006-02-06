@@ -187,6 +187,8 @@ protected:
     int                   m_targetSampleRate;
 
     bool                  m_fileEnded;
+    bool                  m_firstRead;
+    static size_t         m_xfadeFrames;
     int                   m_runtimeSegmentId;
 
     static AudioCache     m_smallFileCache;
