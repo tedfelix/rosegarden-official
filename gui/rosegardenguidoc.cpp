@@ -299,8 +299,7 @@ bool RosegardenGUIDoc::saveIfModified()
 	if (!isRegularDotRGFile()) {
 
 	    RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : new or imported file\n";
-	    win->fileSaveAs();
-	    completed = true;
+	    completed = win->slotFileSaveAs();
 	    
 	} else {
 

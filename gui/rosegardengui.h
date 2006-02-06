@@ -212,7 +212,6 @@ public:
      */
     virtual void fileNew()    { slotFileNew(); }
     virtual void fileSave()   { slotFileSave(); }
-    virtual void fileSaveAs() { slotFileSaveAs(); }
     virtual void fileClose()  { slotFileClose(); }
     virtual void quit()       { slotQuit(); }
 
@@ -554,7 +553,7 @@ public slots:
     /**
      * save a document by a new filename
      */
-    void slotFileSaveAs();
+    bool slotFileSaveAs();
 
     /**
      * asks for saving if the file is modified, then closes the actual

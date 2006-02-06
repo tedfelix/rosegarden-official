@@ -2196,16 +2196,16 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
 }
     
 
-void RosegardenGUIApp::slotFileSaveAs()
+bool RosegardenGUIApp::slotFileSaveAs()
 {
-    if (!m_doc) return;
+    if (!m_doc) return false;
 
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), this);
 
     QString newName = getValidWriteFile("*.rg|" + i18n("Rosegarden-4 files") +
                                         "\n*|" + i18n("All files"),
                                         i18n("Save as..."));
-    if (newName.isEmpty()) return;
+    if (newName.isEmpty()) return false;
 
     SetWaitCursor waitCursor;
     QFileInfo saveAsInfo(newName);
@@ -2231,6 +2231,7 @@ void RosegardenGUIApp::slotFileSaveAs()
         emit compositionStateUpdate();
     }
     
+    return res;
 }
 
 void RosegardenGUIApp::slotFileClose()
