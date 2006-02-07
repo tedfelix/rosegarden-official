@@ -86,9 +86,9 @@ problems running the application, consult the FAQ:
   http://www.rosegardenmusic.com/resources/faq/
 
 or if that doesn't answer your question then use the rosegarden-user
-mailing list on Sourceforge.
+mailing list on SourceForge.
 
-You can also "make uninstall" if you decide it's a waste of your time.
+You can also "scons -c install" if you decide it's a waste of your time.
 
 
 User documentation
