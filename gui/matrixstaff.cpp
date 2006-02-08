@@ -156,7 +156,9 @@ void MatrixStaff::positionElement(Rosegarden::ViewElement* vel)
 MatrixElement*
 MatrixStaff::getElement(Rosegarden::Event *event)
 {
-    return dynamic_cast<MatrixElement*>((*findEvent(event)));
+    Rosegarden::ViewElementList::iterator i = findEvent(event);
+    if (i == m_viewElementList->end()) return 0;
+    return dynamic_cast<MatrixElement*>(*i);
 }
 
 
