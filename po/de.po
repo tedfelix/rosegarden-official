@@ -6603,12 +6603,12 @@ msgstr ""
 #: ../gui/rosegardenconfigurationpage.cpp:1425
 
 msgid "MTC Master"
-msgstr "MMC Master"
+msgstr "MTC Master"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1426
 
 msgid "MTC Slave"
-msgstr "MMC Slave"
+msgstr "MTC Slave"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1432
 msgid "Automatically connect sync output to all devices in use"
