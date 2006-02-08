@@ -889,8 +889,8 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
             painter.setPen(kapp->palette().color(QPalette::Active,
                                                  QColorGroup::Dark));
 
-        painter.drawLine(i, static_cast<int>(yStep + ch1Value * yStep),
-                         i, static_cast<int>(yStep - ch2Value * yStep));
+        painter.drawLine(i, static_cast<int>(yStep - ch1Value * yStep),
+                         i, static_cast<int>(yStep + ch2Value * yStep));
     }
 }
 
