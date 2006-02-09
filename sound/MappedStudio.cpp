@@ -1263,10 +1263,19 @@ MappedAudioInput::setProperty(const MappedObjectProperty &property,
 MappedPluginSlot::MappedPluginSlot(MappedObject *parent, MappedObjectId id) :
     MappedObject(parent, "MappedPluginSlot", PluginSlot, id)
 {
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedPluginSlot::MappedPluginSlot: id = " << id << std::endl;
+#endif
 }
 
 MappedPluginSlot::~MappedPluginSlot()
 {
+#ifdef DEBUG_MAPPEDSTUDIO
+    std::cerr << "MappedPluginSlot::~MappedPluginSlot: id = " << getId() << ", identifier = " << m_identifier << std::endl;
+#endif
+
+    assert(0);
+
     if (m_identifier != "") {
 
 	// shut down and remove the plugin instance we have running

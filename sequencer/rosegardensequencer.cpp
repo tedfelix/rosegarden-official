@@ -1071,9 +1071,17 @@ RosegardenSequencerApp::setLoop(long loopStartSec,
 // Return the status of the sound systems (audio and MIDI)
 //
 unsigned int
-RosegardenSequencerApp::getSoundDriverStatus()
+RosegardenSequencerApp::getSoundDriverStatus(const QString &guiVersion)
 {
-    return m_driver->getStatus();
+    unsigned int driverStatus = m_driver->getStatus();
+    if (guiVersion == VERSION) driverStatus |= Rosegarden::VERSION_OK;
+    else {
+	std::cerr << "WARNING: RosegardenSequencerApp::getSoundDriverStatus: "
+		  << "GUI version \"" << guiVersion
+		  << "\" does not match sequencer version \"" << VERSION
+		  << "\"" << std::endl;
+    }
+    return driverStatus;
 }
 
 

@@ -97,7 +97,7 @@ public:
 
     // Get the status of the Sequencer
     //
-    virtual unsigned int getSoundDriverStatus() = 0;
+    virtual unsigned int getSoundDriverStatus(const QString &guiVersion) = 0;
 
     // Add and delete audio files on the Sequencer
     //

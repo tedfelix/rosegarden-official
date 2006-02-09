@@ -99,8 +99,12 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
 
     m_doc->getComposition().addObserver(this);
 
-    // This check may throw an exception
-    checkSoundDriverStatus();
+    // The owner of this sequence manager will need to call
+    // checkSoundDriverStatus on it to set up its status appropriately
+    // immediately after construction; we used to do it from here but
+    // we're not well placed to handle reporting to the user if it
+    // throws an exception (and we don't want to leave the object half
+    // constructed).
 
     // Try to map the sequencer file
     //
@@ -1258,12 +1262,17 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 void
 SequenceManager::checkSoundDriverStatus()
 {
+    QByteArray data;
     QCString replyType;
     QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
 
-    if (! rgapp->sequencerCall("getSoundDriverStatus()", replyType, replyData)) {
+    streamOut << QString(VERSION);
+
+    if (! rgapp->sequencerCall("getSoundDriverStatus(QString)",
+			       replyType, replyData, data)) {
 	m_soundDriverStatus = NO_DRIVER;
-        return;
+	throw(Exception("Failed to query sound driver status from sequencer"));
     }
 
     QDataStream streamIn(replyData, IO_ReadOnly);
@@ -1271,11 +1280,17 @@ SequenceManager::checkSoundDriverStatus()
     streamIn >> result;
     m_soundDriverStatus = result;
 
+    std::cerr << "Sound driver status is: " << m_soundDriverStatus << std::endl;
+
     if (m_soundDriverStatus == NO_DRIVER)
         throw(Exception("MIDI and Audio subsystems have failed to initialise"));
 
     if (!(m_soundDriverStatus & MIDI_OK))
         throw(Exception("MIDI subsystem has failed to initialise"));
+
+    if (!(m_soundDriverStatus & VERSION_OK)) {
+	throw(Exception("Sequencer module version does not match GUI module version"));
+    }
 
     /*
       if (!(m_soundDriverStatus & AUDIO_OK))

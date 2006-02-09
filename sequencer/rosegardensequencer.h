@@ -155,7 +155,7 @@ public:
  
     // Return the Sound system status (audio/MIDI)
     //
-    virtual unsigned int getSoundDriverStatus();
+    virtual unsigned int getSoundDriverStatus(const QString &guiVersion);
 
     // Add and remove Audio files on the sequencer
     //

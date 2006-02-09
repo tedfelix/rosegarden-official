@@ -63,9 +63,10 @@ typedef enum
 //
 typedef enum
 {
-    NO_DRIVER = 0x00,          // Nothing's OK
-    AUDIO_OK  = 0x01,          // AUDIO's OK
-    MIDI_OK   = 0x02           // MIDI's OK
+    NO_DRIVER  = 0x00,          // Nothing's OK
+    AUDIO_OK   = 0x01,          // AUDIO's OK
+    MIDI_OK    = 0x02,          // MIDI's OK
+    VERSION_OK = 0x04           // GUI and sequencer versions match
 } SoundDriverStatus;
 
 

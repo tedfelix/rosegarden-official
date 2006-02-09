@@ -398,6 +398,16 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // transport is created by setupActions()
     m_seqManager = new Rosegarden::SequenceManager(m_doc, getTransport());
 
+    try {
+	m_seqManager->checkSoundDriverStatus();
+    } catch (Rosegarden::Exception e) {
+	KStartupLogo::hideIfStillThere();
+	CurrentProgressDialog::freeze();
+	KMessageBox::error(this, i18n("Sequencer startup failed: %1")
+			   .arg(strtoqstr(e.getMessage())));
+	CurrentProgressDialog::thaw();
+    }
+
     if (m_view) {
 	connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *)),
 		m_view, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *)));
@@ -4126,7 +4136,14 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
     if (isSequencerRunning())
     {
         RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already running - returning\n";
-        if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+	try {
+	    if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+	} catch (...) {
+	    // checkSoundDriverStatus can throw an exception, but the sequence
+	    // manager should have reported that to the user on startup, or
+	    // else we'll have had a failure report in the mean time.  No
+	    // benefit in duplicating that report here
+	}
         return true;
     }
 
@@ -4143,7 +4160,11 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
                  << "existing DCOP registered sequencer found\n";
 
 	if (useExisting) {
-	    if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+	    try {
+		if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+	    } catch (...) {
+		// as above
+	    }
 	    m_sequencerProcess = (KProcess*)SequencerExternal;
 	    return true;
 	}

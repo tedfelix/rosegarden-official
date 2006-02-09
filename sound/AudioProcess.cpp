@@ -904,6 +904,8 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
     // Not RT safe
 
+    std::cerr << "AudioInstrumentMixer::removePlugin(" << id << ", " << position << ")" << std::endl;
+
     RunnablePluginInstance *oldInstance = 0;
 
     if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
@@ -931,6 +933,8 @@ void
 AudioInstrumentMixer::removeAllPlugins()
 {
     // Not RT safe
+
+    std::cerr << "AudioInstrumentMixer::removeAllPlugins" << std::endl;
 
     for (SynthPluginMap::iterator i = m_synths.begin();
 	 i != m_synths.end(); ++i) {
