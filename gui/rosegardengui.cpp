@@ -7256,6 +7256,7 @@ RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
 
 	m_doc->getCommandHistory()->addCommand(command);
 	m_doc->syncDevices();
+	m_doc->initialiseStudio(); // The other document will have reset it
     }
 
     delete doc;
