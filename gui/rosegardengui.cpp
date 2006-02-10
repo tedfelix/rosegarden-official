@@ -234,6 +234,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_doc(0),
       m_sequencerProcess(0),
       m_sequencerCheckedIn(false),
+#ifdef HAVE_LIBJACK
+      m_jackProcess(0),
+#endif
       m_zoomSlider(0),
       m_seqManager(0),
       m_transport(0),
