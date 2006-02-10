@@ -1161,7 +1161,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
                       3, 0);
 
     QString jackPath = m_cfg->readEntry("jackcommand", 
-                                        "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2");
+//                                        "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2");
+                                        "/usr/bin/qjackctl -s");
     m_jackPath = new QLineEdit(jackPath, frame);
 
     layout->addMultiCellWidget(m_jackPath, 3, 3, 1, 3);
