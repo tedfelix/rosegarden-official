@@ -24,7 +24,7 @@
     downloadable package repositories.  Please consult your
     distribution's documentation for more details, and check that your
     distribution provides the latest available version (currently
-    Rosegarden-4-1.0) before downloading.  RedHat/Fedora users may
+    Rosegarden-4-1.2.3) before downloading.  RedHat/Fedora users may
     wish to consider the excellent <a
     href="http://www-ccrma.stanford.edu/planetccrma/software/">PlanetCCRMA</a>
     audio software package set.</p>
@@ -62,7 +62,7 @@
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
 href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=304969">Rosegarden
-release 1.0 source code</a>, 14th February 2005, for download from the
+release 1.2.3 source code</a>, 14th February 2006, for download from the
 SourceForge page.</li></ul>
 
     <h3>CVS development versions</h3>

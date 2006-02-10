@@ -44,60 +44,67 @@
       </li>
 -->
       <li><a href="http://music.dooglio.net/">R. Douglas Barbieri's Music Page</a>, "Music to Game By", soundtracks and more.
+
       <li><a href="http://www.alhazred.com/">Alhazred</a>, Brett McCoy's progressive metal project.
+
+      <li><a href="http://http://www.archive.org/details/Flutter/">Flutter</a> by Tim Hall.
+
+      <li><a href="http://music.wansti.de/">Marek's SuperTux Soundtrack</a> music and other compositions.
+
+      <li><a href="http://lam.fugal.net/">Music Made with Linux</a> -- a page full of links to music made with Linux music software, including Rosegarden and many other applications.
+
       <li>Your music here! <a href="/resources/authors/">Get in touch!</a></li>
       </ul>
 
       <h3>Related Sound Software</h3>
 
-      <p>
-      <a href="http://www.alsa-project.org">ALSA - Advanced Linux Sound Architecture</a> - drivers for your soundcards.
-      </p>
+      <ul>
 
-      <p>
-      <a href="http://jackit.sourceforge.net">JACK - JACK Audio Connection Kit</a> - an excellent low latency audio server used by Rosegarden-4.
-      </p>
+      <li><a href="http://www.alsa-project.org">ALSA - Advanced Linux Sound Architecture</a> - drivers for your soundcards.
 
-      <p>
-      <a href="http://www.plugin.org.uk">Steve Harris's plugin.org.uk</a>
-      - LADPSA plugins and lots of lovely little JACK apps that make your
-      Rosegarden (and JACK related) experience more pleasant.
-      </p>
+      <li><a href="http://jackit.sourceforge.net">JACK - JACK Audio
+      Connection Kit</a> - the excellent low latency audio server used
+      by Rosegarden-4.  Also, <a
+      href="http://qjackctl.sourceforge.net/">qjackctl</a> - the
+      essential GUI control panel for JACK.</p>
 
-      <p>
-      <a href="http://www.fluidsynth.org">Fluidsynth</a> - a soundfont
-      based softsynth for Linux.  Works as a MIDI target for Rosegarden-4.
-      </p>
+      <li><a href="http://www.plugin.org.uk">Steve Harris's
+      plugin.org.uk</a> - LADPSA plugins and lots of lovely little
+      JACK apps that make your Rosegarden (and JACK related)
+      experience more pleasant.
 
-      <p> <a href="http://qsynth.sourceforge.net/">qsynth</a> - a nice
-      GUI for Fluidsynth.</p>
+      <li><a href="http://www.fluidsynth.org">Fluidsynth</a> - a
+      soundfont based softsynth for Linux.  Works as a MIDI target for
+      Rosegarden-4. Also <a
+      href="http://qsynth.sourceforge.net/">qsynth</a> - a nice GUI
+      for Fluidsynth, from the same author as qjackctl.
 
-      <p> <a href="http://qjackctl.sourceforge.net/">qjackctl</a> - a
-      nice GUI for JACK, from the same author as qsynth.</p>
+      <li><a href="http://hydrogen.sourceforge.net/">Hydrogen</a> - a
+      pattern based drum machine and sample-based synth that can also
+      be played from Rosegarden.
 
-      <p>
-      <a href="http://hydrogen.sourceforge.net/">Hydrogen</a> - another
-      softsynth and pattern based drum machine that can also be used as
-      a MIDI target (i.e. MIDI controllable) from Rosegarden-4.
-      </p>
+      <li><a href="http://www.ardour.org/">Ardour</a> - the
+      professional hard-disk recorder application for Linux, for your
+      audio recording and studio needs.
 
-      <p> <a href="http://www.lilypond.org/">LilyPond</a> - a high
-      quality score typesetting system.  Rosegarden-4 can write LilyPond
+      <li><a href="http://jamin.sourceforge.net/">JAMin</a> - a
+      powerful audio mastering utility.
+
+      <li><a href="http://www.lilypond.org/">LilyPond</a> - a high
+      quality score typesetting system.  Rosegarden can write LilyPond
       files, and also uses fonts from the LilyPond project for screen
-      display.  </p>
+      display.
+      </ul>
 
-
-      <br/>
-
-      <h3>Development Tools We Use</h3>
+      <h3>Development Tools We Like</h3>
 
       <p>
       Rosegarden-4 uses and endorses the following development
       tools:
       </p>
 
-      <p>
-      <a href="http://distcc.samba.org">distcc</a> - distributed
+      <ul>
+      <li><a href="http://distcc.samba.org">distcc</a> - distributed
       compilation tool.  For speeding up our builds we use and
       recommend this tool to allow us to distribute compilation
       across two or more machines (i.e. a laptop and a desktop).
@@ -106,17 +113,15 @@
       you <i>hours</i> if not <i>days</i> of waiting around for
       compiles to finish.  Also check out
       <a href="http://ccache.samba.org">ccache</a>.
-      </p>
 
-      <p>
-      <a href="http://developer.kde.org/~sewardj/">Valgrind</a> - a
+      <li><a href="http://valgrind.org/">Valgrind</a> - a
       memory debugging tool incorporating the excellent <b>cachegrind</b>
       profiling tool.   Easy and quick to implement involving no
       recompilation of the target source - simply run inline with
       your program and generates masses of statistics.  Use <b>cachegrind</b>
       with the excellent visualisation tool
       <a href="http://kcachegrind.sourceforge.net/">kcachegrind</a>.
-      </p>
+      </ul>
 
 
     </div>
