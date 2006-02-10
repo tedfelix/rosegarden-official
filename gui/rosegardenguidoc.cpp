@@ -729,7 +729,9 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 
 void RosegardenGUIDoc::clearStudio()
 {
-    rgapp->sequencerSend("clearStudio()");
+    QCString replyType;
+    QByteArray replyData;
+    rgapp->sequencerCall("clearStudio()", replyType, replyData);
     RG_DEBUG << "cleared studio\n";
 }
 
