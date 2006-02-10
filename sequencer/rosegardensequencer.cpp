@@ -1820,7 +1820,7 @@ void
 RosegardenSequencerApp::incrementTransportToken()
 {
     ++m_transportToken;
-    std::cout << "RosegardenSequencerApp::incrementTransportToken: incrementing to " << m_transportToken << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::incrementTransportToken: incrementing to " << m_transportToken << endl;
 }
 
 

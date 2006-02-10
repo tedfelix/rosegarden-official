@@ -48,9 +48,9 @@
 #include <pthread.h>
 
 
-#define DEBUG_ALSA 1
+//#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
-#define MTC_DEBUG 1
+//#define MTC_DEBUG 1
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
@@ -3503,10 +3503,14 @@ AlsaDriver::startClocks()
 {
     int result;
 
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::startClocks" << std::endl;
+#endif
 
     if (m_needJackStart) {
+#ifdef DEBUG_ALSA
 	std::cerr << "AlsaDriver::startClocks: Need JACK start (m_playing = " << m_playing << ")" << std::endl;
+#endif
     }
     
 #ifdef HAVE_LIBJACK
@@ -3529,10 +3533,14 @@ AlsaDriver::startClocks()
 	if (m_needJackStart != NeedNoJackStart) {
 	    if (m_needJackStart == NeedJackStart ||
 		m_playing) {
+#ifdef DEBUG_ALSA
 		std::cerr << "AlsaDriver::startClocks: playing, prebuffer audio" << std::endl;
+#endif
 		m_jackDriver->prebufferAudio();
 	    } else {
+#ifdef DEBUG_ALSA
 		std::cerr << "AlsaDriver::startClocks: prepare audio only" << std::endl;
+#endif
 		m_jackDriver->prepareAudio();
 	    }
 	    bool rv;
@@ -3542,7 +3550,9 @@ AlsaDriver::startClocks()
 		rv = m_jackDriver->startTransport();
 	    }
 	    if (!rv) {
+#ifdef DEBUG_ALSA
 		std::cerr << "AlsaDriver::startClocks: Waiting for startClocksApproved" << std::endl;
+#endif
 		// need to wait for transport sync
 		_debug_jack_frame_count = m_jackDriver->getFramesProcessed();
 		return;
@@ -3559,7 +3569,9 @@ AlsaDriver::startClocks()
 	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
     }
 
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::startClocks: started clocks" << std::endl;
+#endif
 
     m_queueRunning = true;
 
@@ -3633,7 +3645,9 @@ AlsaDriver::startClocks()
 void
 AlsaDriver::startClocksApproved()
 {
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::startClocks: startClocksApproved" << std::endl;
+#endif
 
     //!!!
     m_needJackStart = NeedNoJackStart;
@@ -3659,7 +3673,9 @@ AlsaDriver::startClocksApproved()
 void
 AlsaDriver::stopClocks()
 {
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::stopClocks" << std::endl;
+#endif
 
     if (checkAlsaError(snd_seq_stop_queue(m_midiHandle, m_queue, NULL), "stopClocks(): stopping queue") < 0) {
 	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
@@ -3683,7 +3699,9 @@ AlsaDriver::stopClocks()
     // process that
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "stopClocks(): draining output to zpos queue");
 
+#ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::stopClocks: ALSA time now is " << getAlsaTime() << std::endl;
+#endif
 
     m_alsaPlayStartTime = RealTime::zeroTime;
 }
@@ -4662,9 +4680,11 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
     // Locate a suitable port
     //
     if (m_devicePortMap.find(id) == m_devicePortMap.end()) {
+#ifdef DEBUG_ALSA
 	audit << "AlsaDriver::setRecordDevice - "
 	      << "couldn't match device id (" << id << ") to ALSA port"
 	      << std::endl;
+#endif
         return;
     }
 
@@ -4681,26 +4701,30 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 	    {
 	    	if ((*i)->isRecording() && connectAction) 
 	    	{
+#ifdef DEBUG_ALSA
 		    audit << "AlsaDriver::setRecordDevice - "
 			  << "attempting to subscribe (" << id 
 			  << ") already subscribed" << std::endl;
-	    		
+#endif
 	    	    return;
 	    	}
 	    	if (!(*i)->isRecording() && !connectAction) 
 	    	{
+#ifdef DEBUG_ALSA
 		    audit << "AlsaDriver::setRecordDevice - "
 			  << "attempting to unsubscribe (" << id 
 			  << ") already unsubscribed" << std::endl;
-	    		
+#endif
 	    	    return;
 	    	}
 	    }
 	    else
 	    {
+#ifdef DEBUG_ALSA
 		audit << "AlsaDriver::setRecordDevice - "
 		      << "attempting to set play device (" << id 
 		      << ") to record device" << std::endl;
+#endif
 		return;
 	    }
 	    break;

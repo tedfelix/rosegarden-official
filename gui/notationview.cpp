@@ -3609,7 +3609,7 @@ void NotationView::updateViewCaption()
 
 	int trackPosition = -1;
 	if (track) trackPosition = track->getPosition();
-	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
+//	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
         setCaption(i18n("%1 - Segment Track #%2 - Notation")
                    .arg(getDocument()->getTitle())
                    .arg(trackPosition + 1));

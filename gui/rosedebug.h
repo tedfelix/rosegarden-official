@@ -179,7 +179,7 @@ operator << (kndbgstream& s, const QBrush& ) { return s; }
 #define ELAPSED_TIME \
   ((clock() - dbgStart) * 1000 / CLOCKS_PER_SEC)
 #define PRINT_ELAPSED(n) \
-  std::cerr << n << ": " << ELAPSED_TIME << "ms elapsed" << std::endl;
+  RG_DEBUG << n << ": " << ELAPSED_TIME << "ms elapsed" << endl;
 
 #else
 

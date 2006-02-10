@@ -82,7 +82,7 @@ void AudioPreviewUpdater::cancel()
 
 bool AudioPreviewUpdater::event(QEvent *e)
 {
-    std::cerr << "AudioPreviewUpdater(" << this << ")::event (" << this << ")" << std::endl;
+    RG_DEBUG << "AudioPreviewUpdater(" << this << ")::event (" << e << ")" << endl;
 
     if (e->type() == AudioPreviewThread::AudioPreviewReady) {
 	QCustomEvent *ev = dynamic_cast<QCustomEvent *>(e);

@@ -309,7 +309,7 @@ SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
 
     m_audioFiles.push_back(ins);
 
-    std::cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << std::endl;
+//    std::cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << std::endl;
 
     return true;
 }
@@ -350,8 +350,8 @@ SoundDriver::getAudioFile(unsigned int id)
 void
 SoundDriver::clearAudioFiles()
 {
-    std::cout << "SoundDriver::clearAudioFiles() - clearing down audio files"
-              << std::endl;
+//    std::cout << "SoundDriver::clearAudioFiles() - clearing down audio files"
+//              << std::endl;
 
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)

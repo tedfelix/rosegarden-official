@@ -287,8 +287,8 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
     if (m_selectedInstrument == 0)
         return;
 
-    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
-	      << dB << ")" << std::endl;
+//    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
+//	      << dB << ")" << std::endl;
 
     if (m_selectedInstrument->getType() == Instrument::Audio)
     {

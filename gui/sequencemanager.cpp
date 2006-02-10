@@ -1280,7 +1280,7 @@ SequenceManager::checkSoundDriverStatus()
     streamIn >> result;
     m_soundDriverStatus = result;
 
-    std::cerr << "Sound driver status is: " << m_soundDriverStatus << std::endl;
+    SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
 
     if (m_soundDriverStatus == NO_DRIVER)
         throw(Exception("MIDI and Audio subsystems have failed to initialise"));

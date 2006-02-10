@@ -618,9 +618,11 @@ void
 DSSIPluginInstance::connectPorts()
 {
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->connect_port) return;
+#ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::connectPorts: " << m_audioPortsIn.size() 
 	      << " audio ports in, " << m_audioPortsOut.size() << " out, "
 	      << m_outputBufferCount << " output buffers" << std::endl;
+#endif
 
     assert(sizeof(LADSPA_Data) == sizeof(float));
     assert(sizeof(sample_t) == sizeof(float));
