@@ -458,7 +458,8 @@ void DataBlockFile::prepareToWrite()
     std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
     if (!m_file.isWritable()) {
         m_file.close();
-        assert(m_file.open(IO_WriteOnly | IO_Append));
+	m_file.open(IO_WriteOnly | IO_Append);
+        assert(m_file.isWritable());
     }
 }
 
@@ -467,7 +468,8 @@ void DataBlockFile::prepareToRead()
     std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
     if (!m_file.isReadable()) {
         m_file.close();
-        assert(m_file.open(IO_ReadOnly));
+	m_file.open(IO_ReadOnly);
+        assert(m_file.isReadable());
     }
 }
 
