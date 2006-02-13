@@ -1,25 +1,23 @@
 # translation of ru.po to Russian
-# translation of Rosegarden to Russian
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) 2003 THE PACKAGE'S COPYRIGHT HOLDER.
+#
 # Alexandre Prokoudine <avp@altlinux.ru>, 2003, 2004.
 # Alexandre Prokoudine <techwriter@land.ru>, 2004.
 # Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2004, 2005, 2006.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-16 13:20+0000\n"
-"PO-Revision-Date: 2006-01-13 05:32+0300\n"
+"PO-Revision-Date: 2006-02-13 12:06+0000\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.11.1\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../gui/docs/en/tips.cpp:3
 msgid ""
@@ -642,9 +640,8 @@ msgid "Bank and Program details"
 msgstr "Подробнее о банке и программах"
 
 #: ../gui/bankeditor.cpp:309
-#, fuzzy
 msgid "Programs"
-msgstr "Программа"
+msgstr "Программы"
 
 #: ../gui/bankeditor.cpp:335 ../gui/instrumentparameterbox.cpp:669
 #: ../gui/matrixview.cpp:2540
@@ -676,9 +673,9 @@ msgid "LSB Value"
 msgstr "Значение LSB"
 
 #: ../gui/bankeditor.cpp:492 ../gui/bankeditor.cpp:792
-#, fuzzy, c-format
+#, c-format
 msgid "Key Mapping: %1"
-msgstr "Компоновка клавиатуры"
+msgstr "Компоновка клавиатуры: %1"
 
 #: ../gui/bankeditor.cpp:733
 msgid "<no key mapping>"
@@ -751,8 +748,7 @@ msgid "Export..."
 msgstr "Экспортировать"
 
 #: ../gui/bankeditor.cpp:1116
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Импортировать данные о банке и программах\n"
 "из файла Rosegarden в текущее устройство"
@@ -1501,13 +1497,12 @@ msgid "Delete this property"
 msgstr "Удалить это свойство"
 
 #: ../gui/dialogs.cpp:1636
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the \"%1\" property?\n"
 "\n"
 "Removing necessary properties may cause unexpected behavior."
 msgstr ""
-"Вы точно хотите удалить свойство \"%1\" ?\n"
+"Вы точно хотите удалить свойство \"%1\"?\n"
 "\n"
 "Удаление необходимых свойств может вызвать неадекватное поведение программы."
 
@@ -1942,8 +1937,7 @@ msgstr "Бемоль - установить значение %1"
 
 #: ../gui/dialogs.cpp:3917
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Переменный - установить %1 в макс. или мин. значение на переменных событиях"
+msgstr "Переменный - установить %1 в макс. или мин. значение на переменных событиях"
 
 #: ../gui/dialogs.cpp:3921
 msgid "Crescendo - set %1 rising from min to max"
@@ -2192,9 +2186,8 @@ msgid "Lilypond 2.4"
 msgstr "Lilypond 2.4"
 
 #: ../gui/dialogs.cpp:4868
-#, fuzzy
 msgid "Lilypond 2.6"
-msgstr "Lilypond 2.4"
+msgstr "Lilypond 2.6"
 
 #: ../gui/dialogs.cpp:4873
 msgid "Paper size to use in \\paper block"
@@ -2403,7 +2396,7 @@ msgstr "такт(ов)"
 
 #: ../gui/dialogs.cpp:5360
 msgid "Choose Text Encoding"
-msgstr ""
+msgstr "Выберите кодировку текста"
 
 #: ../gui/dialogs.cpp:5364
 msgid ""
@@ -2413,6 +2406,11 @@ msgid ""
 "Please select one of the following estimated text encodings\n"
 "for use with the text in this file:\n"
 msgstr ""
+"\n"
+"Этот файл содержит текст в неизвестной языковой кодировке.\n"
+"\n"
+"Выберите одну из приведённых ниже кодировок\n"
+"для использования в тексте этого файла:\n"
 
 #: ../gui/dialogs.cpp:5375 ../gui/dialogs.cpp:5391
 msgid "Japanese Shift-JIS"
@@ -2432,36 +2430,35 @@ msgstr ""
 
 #: ../gui/dialogs.cpp:5379
 msgid "Eastern Europe"
-msgstr ""
+msgstr "Восточная Европа"
 
 #: ../gui/dialogs.cpp:5380
 msgid "Southern Europe"
-msgstr ""
+msgstr "Южная Европа"
 
 #: ../gui/dialogs.cpp:5381
 msgid "Northern Europe"
-msgstr ""
+msgstr "Северная Европа"
 
 #: ../gui/dialogs.cpp:5382
-#, fuzzy
 msgid "Cyrillic"
-msgstr "Лирика"
+msgstr "Кириллица"
 
 #: ../gui/dialogs.cpp:5383
 msgid "Arabic"
-msgstr ""
+msgstr "Арабский"
 
 #: ../gui/dialogs.cpp:5384
 msgid "Greek"
-msgstr ""
+msgstr "Греческий"
 
 #: ../gui/dialogs.cpp:5385
 msgid "Hebrew"
-msgstr ""
+msgstr "Идиш"
 
 #: ../gui/dialogs.cpp:5386
 msgid "Turkish"
-msgstr ""
+msgstr "Турецкий"
 
 #: ../gui/dialogs.cpp:5387
 msgid "Nordic"
@@ -2469,54 +2466,52 @@ msgstr ""
 
 #: ../gui/dialogs.cpp:5388
 msgid "Thai"
-msgstr ""
+msgstr "Тайский"
 
 #: ../gui/dialogs.cpp:5389
-#, fuzzy
 msgid "Baltic"
-msgstr "Доля"
+msgstr "Балтийский"
 
 #: ../gui/dialogs.cpp:5390
 msgid "Celtic"
-msgstr ""
+msgstr "Кельтский"
 
 #: ../gui/dialogs.cpp:5392
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Традиционный китайский"
 
 #: ../gui/dialogs.cpp:5393
-#, fuzzy
 msgid "Simplified Chinese"
-msgstr "Перевод на упрощённый китайский"
+msgstr "Упрощённый китайский"
 
 #: ../gui/dialogs.cpp:5394
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: ../gui/dialogs.cpp:5395
 msgid "Ukrainian"
-msgstr ""
+msgstr "Украинская"
 
 #: ../gui/dialogs.cpp:5396
-#, fuzzy
 msgid "Tamil"
-msgstr "Название"
+msgstr "Тамильский"
 
 #: ../gui/dialogs.cpp:5411
 #, c-format
 msgid "Microsoft Code Page %1"
-msgstr ""
+msgstr "Кодовая страница Microsoft %1"
 
 #: ../gui/dialogs.cpp:5416
-#, fuzzy
 msgid "%1 (%2)"
-msgstr "&%1%2"
+msgstr "%1 (%2)"
 
 #: ../gui/dialogs.cpp:5434
 msgid ""
 "\n"
 "Example text from file:"
 msgstr ""
+"\n"
+"Пример текста из файла:"
 
 #: ../gui/editcommands.cpp:223
 msgid "(excerpt)"
@@ -2536,8 +2531,7 @@ msgstr "Вставить в существующий интервал [\"огр�
 
 #: ../gui/editcommands.cpp:418
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Стереть существующие события для освобождения пространства [\"просто\"]"
+msgstr "Стереть существующие события для освобождения пространства [\"просто\"]"
 
 #: ../gui/editcommands.cpp:420
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -2868,9 +2862,8 @@ msgstr "Нотные события"
 
 #: ../gui/eventfilter.cpp:92 ../gui/eventfilter.cpp:213
 #: ../gui/eventfilter.cpp:290
-#, fuzzy
 msgid "Enable"
-msgstr "Пример"
+msgstr "Включить"
 
 #: ../gui/eventfilter.cpp:100 ../gui/eventfilter.cpp:221
 #: ../gui/eventfilter.cpp:298
@@ -2908,23 +2901,20 @@ msgid "unlimited"
 msgstr "неограниченно"
 
 #: ../gui/eventfilter.cpp:227
-#, fuzzy
 msgid "Number:"
-msgstr "Имя:"
+msgstr "Число:"
 
 #: ../gui/eventfilter.cpp:230
-#, fuzzy
 msgid "Value:"
-msgstr "Значение"
+msgstr "Значение:"
 
 #: ../gui/eventfilter.cpp:286
-#, fuzzy
 msgid "Wheel Events"
-msgstr "Изменить размер событий"
+msgstr "События от колеса"
 
 #: ../gui/eventfilter.cpp:304
 msgid "Amount:"
-msgstr ""
+msgstr "Количество:"
 
 #: ../gui/eventfilter.cpp:347
 msgid "Include all"
@@ -3199,7 +3189,6 @@ msgid "Import device name"
 msgstr "Импортировать имя устройства"
 
 #: ../gui/importdevicedialog.cpp:162
-#, fuzzy
 msgid "Bank import behavior"
 msgstr "Поведение при импорте банка"
 
@@ -3385,7 +3374,7 @@ msgstr ""
 
 #: ../gui/main.cpp:380 ../gui/main.cpp:398
 msgid "Installation problem"
-msgstr "Проблема при инсталляции"
+msgstr "Проблема при установке"
 
 #: ../gui/main.cpp:386
 msgid "Rosegarden does not appear to have been installed."
@@ -3469,6 +3458,8 @@ msgid ""
 "Segment colours\n"
 "Other UI and bug fixes"
 msgstr ""
+"Цвета сегментов\n"
+"Прочие изменения в интерфейса и  исправление ошибок"
 
 #: ../gui/main.cpp:425
 msgid ""
@@ -3479,7 +3470,6 @@ msgstr ""
 "i18n-ization"
 
 #: ../gui/main.cpp:426
-#, fuzzy
 msgid ""
 "Spanish translation\n"
 "ALSA hacking and bug fixes\n"
@@ -3487,7 +3477,7 @@ msgid ""
 msgstr ""
 "Перевод на испанский язык\n"
 "Работа над поддержкой ALSA, исправление ошибок\n"
-"Запись по MIDI с нескольких входов"
+"Запись MIDI-событий с нескольких входов"
 
 #: ../gui/main.cpp:427 ../gui/main.cpp:428
 msgid "German translation"
@@ -3543,11 +3533,11 @@ msgstr "Перевод на упрощённый китайский"
 
 #: ../gui/main.cpp:441
 msgid "LIRC infrared remote-controller support"
-msgstr ""
+msgstr "Поддержка дистанционного управления через LIRC"
 
 #: ../gui/main.cpp:442
 msgid "MTC slave timing implementation"
-msgstr ""
+msgstr "Реализаций тайминга MTC slave"
 
 #: ../gui/main.cpp:443
 msgid "Czech translation"
@@ -3559,7 +3549,7 @@ msgstr "Система сборки SCons/bksys"
 
 #: ../gui/main.cpp:445
 msgid "icons, icons, icons"
-msgstr ""
+msgstr "Новые пиктограммы"
 
 #: ../gui/main.cpp:446 ../gui/main.cpp:447 ../gui/main.cpp:448
 #: ../gui/main.cpp:449
@@ -3567,13 +3557,12 @@ msgid "Spanish translation"
 msgstr "Перевод на испанский"
 
 #: ../gui/main.cpp:450 ../gui/main.cpp:451
-#, fuzzy
 msgid "Catalan translation"
-msgstr "Перевод на итальянский"
+msgstr "Перевод на каталонский"
 
 #: ../gui/main.cpp:452
 msgid "new splash screen photo (of Michael's rose garden)"
-msgstr ""
+msgstr "Новая фотография заставки (из розового сада Майкла)"
 
 #: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:455
 msgid ""
@@ -4847,38 +4836,32 @@ msgid "Switch to Insert Tool"
 msgstr "Вставка"
 
 #: ../gui/notationtool.cpp:1145
-#, fuzzy
 msgid "Collapse Rests"
-msgstr "&Объединить паузы"
+msgstr "Объединить паузы"
 
 #: ../gui/notationtool.cpp:1149
-#, fuzzy
 msgid "Respell as Flat"
-msgstr "Перечитать с %1"
+msgstr "Перечитать как бемоль"
 
 #: ../gui/notationtool.cpp:1153
-#, fuzzy
 msgid "Respell as Sharp"
-msgstr "Перечитать случайные знаки альтерации в&верх"
+msgstr "Перечитать как диез"
 
 #: ../gui/notationtool.cpp:1157
 msgid "Respell as Natural"
-msgstr ""
+msgstr "Перечитать как бекар"
 
 #: ../gui/notationtool.cpp:1161
-#, fuzzy
 msgid "Collapse Notes"
-msgstr "&Объединить паузы"
+msgstr "Объединить ноты"
 
 #: ../gui/notationtool.cpp:1169
-#, fuzzy
 msgid "Make Invisible"
-msgstr "Сделать &невидимым"
+msgstr "Сделать невидимым"
 
 #: ../gui/notationtool.cpp:1173
-#, fuzzy
 msgid "Make Visible"
-msgstr "Сделать &видимым"
+msgstr "Сделать видимым"
 
 #: ../gui/notationtool.cpp:1983
 msgid "Ready."
@@ -5591,8 +5574,7 @@ msgid "global element must precede note elements"
 msgstr "элемент global должен предшестовать элементу note"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "Элементы global и note могут содержать атрибут shape или charname, но не оба "
 "сразу"
@@ -5647,7 +5629,6 @@ msgid "Always use US names (e.g. quarter, 8th)"
 msgstr "Всегда использовать амер. единицы измерения (8th, quarter и т.д.)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:172
-#, fuzzy
 msgid "Localized (where available)"
 msgstr "Локализовано (где доступно)"
 
@@ -5672,7 +5653,6 @@ msgid "Event List"
 msgstr "Список событий"
 
 #: ../gui/rosegardenconfigurationpage.cpp:224
-#, fuzzy
 msgid "Behavior"
 msgstr "Поведение"
 
@@ -5705,9 +5685,8 @@ msgid "Notation font"
 msgstr "Шрифт для нот"
 
 #: ../gui/rosegardenconfigurationpage.cpp:344
-#, fuzzy
 msgid "Other fonts"
-msgstr "Другое"
+msgstr "Другие шрифты"
 
 #: ../gui/rosegardenconfigurationpage.cpp:345
 #: ../gui/rosegardenconfigurationpage.cpp:1941
@@ -5744,7 +5723,7 @@ msgstr "Автор разметки:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:404
 msgid "Rescan available fonts"
-msgstr ""
+msgstr "Перечитать доступные шрифты"
 
 #: ../gui/rosegardenconfigurationpage.cpp:449
 msgid "Text font"
@@ -6125,17 +6104,16 @@ msgid "Create post-fader outputs for submasters"
 msgstr "Создать пост-фейдерные выходы для субмастеров"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1363
-#, fuzzy
 msgid "Record audio files as:"
-msgstr "<нет звуковых файлов>"
+msgstr "Записать звуковые файлы как:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1365
 msgid "16-bit PCM WAV format (smaller files)"
-msgstr ""
+msgstr "16-bit PCM WAV (меньше размер)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1366
 msgid "32-bit float WAV format (higher quality)"
-msgstr ""
+msgstr "32-bit float WAV (лучше качество)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1389
 msgid "Record and Mix"
@@ -6187,7 +6165,7 @@ msgstr "Ведомый MTC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1478
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
+msgstr "Автоматически соединять выход со всеми используемыми устройствами"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1485
 msgid "Synchronisation"
@@ -6517,9 +6495,8 @@ msgid "Export &Lilypond file..."
 msgstr "Экспортировать в партитуру &Lilypond..."
 
 #: ../gui/rosegardengui.cpp:551
-#, fuzzy
 msgid "Pre&view Lilypond file..."
-msgstr "Идёт экспорт в партитуру Lilypond..."
+msgstr "Просмотр фай&ла Lilypond..."
 
 #: ../gui/rosegardengui.cpp:555
 msgid "Export Music&XML file..."
@@ -6538,13 +6515,12 @@ msgid "Play&list"
 msgstr "Список &воспроизведения"
 
 #: ../gui/rosegardengui.cpp:574
-#, fuzzy
 msgid "Rosegarden &Tutorial"
 msgstr "Электронный у&чебник по Rosegarden"
 
 #: ../gui/rosegardengui.cpp:578
 msgid "&Bug Reporting Guidelines"
-msgstr ""
+msgstr "&Руководство по сообщению об ошибках"
 
 #: ../gui/rosegardengui.cpp:616
 msgid "Show Trac&ks Toolbar"
@@ -6659,9 +6635,8 @@ msgid "Add &Track"
 msgstr "Добавить &дорожку"
 
 #: ../gui/rosegardengui.cpp:900
-#, fuzzy
 msgid "&Add Multiple Tracks..."
-msgstr "Добавить д&орожки..."
+msgstr "Добавить &несколько дорожек..."
 
 #: ../gui/rosegardengui.cpp:906
 msgid "D&elete Track"
@@ -6902,14 +6877,12 @@ msgid "Join tool not yet implemented"
 msgstr "Инструмент \"Объединение\" пока не закончен"
 
 #: ../gui/rosegardengui.cpp:3146
-#, fuzzy
 msgid "Add Multiple Tracks"
-msgstr "Приг&лушить все дорожки"
+msgstr "Добавка нескольких дорожек"
 
 #: ../gui/rosegardengui.cpp:3147
-#, fuzzy
 msgid "How many tracks do you want to add?"
-msgstr "Сколько дорожек вы хотите добавить? (макс. 24)"
+msgstr "Сколько дорожек вы хотите добавить?"
 
 #: ../gui/rosegardengui.cpp:3291
 msgid "Revert modified document to previous saved version?"
@@ -7047,7 +7020,7 @@ msgid "Export as..."
 msgstr "Экспортировать как..."
 
 #: ../gui/rosegardengui.cpp:4354
-#, fuzzy, c-format
+#, c-format
 msgid "Saving Rosegarden file to package failed: %1"
 msgstr "Не удалось сохранить файл Rosegarden в архив: %1"
 
@@ -7090,13 +7063,12 @@ msgid "Lilypond files"
 msgstr "Файлы Lilypond"
 
 #: ../gui/rosegardengui.cpp:4498
-#, fuzzy
 msgid "Previewing Lilypond file..."
-msgstr "Идёт экспорт в партитуру Lilypond..."
+msgstr "Просмотр партитуры Lilypond..."
 
 #: ../gui/rosegardengui.cpp:4503
 msgid "Failed to open a temporary file for Lilypond export."
-msgstr ""
+msgstr "Не удалось открыть временный файл для экспорта в партитуру Lilypond"
 
 #: ../gui/rosegardengui.cpp:4556 ../gui/rosegardengui.cpp:4569
 msgid "Exporting MusicXML file..."
@@ -7175,11 +7147,11 @@ msgstr "Список воспроизведения"
 
 #: ../gui/rosegardengui.cpp:6904
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
-msgstr ""
+msgstr "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 
 #: ../gui/rosegardengui.cpp:6911
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
-msgstr ""
+msgstr "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 
 #: ../gui/rosegardengui.cpp:6988
 msgid "Queueing MIDI panic events for tranmission..."
@@ -7196,8 +7168,7 @@ msgid "Saving current document as default studio..."
 msgstr "Документ сохраняется как стандартное описание студии..."
 
 #: ../gui/rosegardengui.cpp:7075
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Вы действительно хотите сделать этот документ стандартным \n"
 "описанием студии и отказаться от текущего описания?"
@@ -7247,9 +7218,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/audiomanagerdialog.cpp:1040 ../gui/rosegardenguidoc.cpp:442
-#, fuzzy
 msgid "File %1 could not be deleted."
-msgstr "Файл \"%1\" не существует"
+msgstr "Не получилось удалить файл \"%1\"."
 
 #: ../gui/rosegardenguidoc.cpp:500
 msgid "Can't open file '%1'"
@@ -7392,9 +7362,8 @@ msgstr ""
 "поэтому возможна несовместимость данных."
 
 #: ../gui/rosexmlhandler.cpp:1675
-#, fuzzy
 msgid "Loading plugins..."
-msgstr "Подсчитываются модули..."
+msgstr "Загружаются модули..."
 
 #: ../gui/segmentcommands.cpp:86
 msgid "Repeat Segments"
@@ -7628,8 +7597,7 @@ msgstr ""
 "может улучшить производительность Rosegarden."
 
 #: ../gui/sequencemanager.cpp:998
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Мощности процессора уже не хватает для работы в режиме \n"
 "реального времени.  Продолжение работы невозможно."
@@ -7648,8 +7616,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Подсистема JACK Audio теряет некоторые сэмплы."
 
 #: ../gui/sequencemanager.cpp:1062
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Не удалось своевременно прочитать звуковые данные с диска\n"
 "для обеспечения нормальной работы звуковой подсистемы."
@@ -7948,8 +7915,7 @@ msgstr ""
 "использовать Konqueror."
 
 #: ../gui/tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Щёлкните левой кнопкой мыши и назначьте \n"
 "инструмент для дорожки через появившееся меню."
@@ -8208,12 +8174,10 @@ msgid "Unload &all Audio Files"
 msgstr "Удалить в&се звуковые файлы"
 
 #: ../gui/audiomanagerdialog.cpp:234
-#, fuzzy
 msgid "Unload all &Unused Audio Files"
 msgstr "Удалить все &неиспользуемые звуковые файлы"
 
 #: ../gui/audiomanagerdialog.cpp:238
-#, fuzzy
 msgid "&Delete Unused Audio Files..."
 msgstr "Удалить все &неиспользуемые звуковые файлы"
 
@@ -8285,22 +8249,20 @@ msgid ""
 msgstr ""
 
 #: ../gui/audiomanagerdialog.cpp:944
-#, fuzzy
 msgid "Select Unused Audio Files"
-msgstr "Выберите звуковой файл"
+msgstr "Выберите неиспользуемые звуковые файлы"
 
 #: ../gui/audiomanagerdialog.cpp:952
-#, fuzzy
 msgid "File size"
-msgstr "Имя файла"
+msgstr "Размер файла"
 
 #: ../gui/audiomanagerdialog.cpp:953
 msgid "Last modified date"
-msgstr ""
+msgstr "Дата последнего изменения"
 
 #: ../gui/audiomanagerdialog.cpp:958
 msgid " (not found) "
-msgstr ""
+msgstr " (не найдено) "
 
 #: ../gui/audiomanagerdialog.cpp:1017
 msgid ""
@@ -8836,219 +8798,3 @@ msgstr "Panic (снять все события)"
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Перезагружает все MIDI-устройства при \"проглатывании\" нот"
 
-#~ msgid "You can't yet resize an audio segment!"
-#~ msgstr "Менять размер звуковых сегментов пока нельзя!"
-
-#~ msgid "Advanced Event Edit"
-#~ msgstr "Расширенный редактор событий"
-
-#~ msgid "Advanced Event Viewer"
-#~ msgstr "Расширенный просмотрщик событий"
-
-#~ msgid "  1 event selected "
-#~ msgstr "  1 событие выбрано "
-
-#, fuzzy
-#~ msgid "%1 - 1 Segment - %2"
-#~ msgstr "%1 - Все сегменты - %2"
-
-#, fuzzy
-#~ msgid "1 Input"
-#~ msgstr "%1 Вход"
-
-#, fuzzy
-#~ msgid "1 Submaster"
-#~ msgstr "Подмиксов: %1"
-
-#, fuzzy
-#~ msgid "1 pixel"
-#~ msgstr "%1 пиксел"
-
-#, fuzzy
-#~ msgid "%1 - Segment - Notation"
-#~ msgstr "%1 - 1 cегмент - Партитура"
-
-#, fuzzy
-#~ msgid "%1 on 1 track"
-#~ msgstr "%1 на %2 дорожке"
-
-#~ msgid "assorted icons"
-#~ msgstr "Ряд пиктограмм"
-
-#, fuzzy
-#~ msgid "%1 pixels"
-#~ msgstr "пикселов - %1"
-
-#~ msgid "Set Tempo"
-#~ msgstr "Установка темпа"
-
-#~ msgid "Modify Tempo"
-#~ msgstr "Смена темпа"
-
-#~ msgid "Change this tempo to"
-#~ msgstr "Изменить этот темп на"
-
-#~ msgid "Tempo at time"
-#~ msgstr "Темп за период"
-
-#~ msgid "is currently"
-#~ msgstr "сейчас"
-
-#~ msgid "Testing project packager..."
-#~ msgstr "Тестируется упаковщик проектов..."
-
-#~ msgid "Tracks to add"
-#~ msgstr "Добавляемые дорожки"
-
-#~ msgid "file://usr/share/doc/using-rosegarden/en/chapter-0.html"
-#~ msgstr "file://usr/share/doc/using-rosegarden/en/chapter-0.html"
-
-#~ msgid "Feta Pixmaps"
-#~ msgstr "Изображения Feta"
-
-#~ msgid "GNU Lilypond"
-#~ msgstr "GNU Lilypond"
-
-#~ msgid "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
-#~ msgstr "Авторские права (c) 1997--2003 Han-Wen Nienhuys и Jan Nieuwenhuizen"
-
-#~ msgid "Chris Cannam"
-#~ msgstr "Chris Cannam"
-
-#~ msgid "pixmap"
-#~ msgstr "изображение"
-
-#~ msgid "Feta"
-#~ msgstr "Feta"
-
-#~ msgid "scalable"
-#~ msgstr "масштабируемый"
-
-#~ msgid "Fughetta"
-#~ msgstr "Fughetta"
-
-#~ msgid ""
-#~ "Created by Blake Hodgetts; freely redistributable.  See http://www.efh."
-#~ "org/~bch/aboutfonts.html"
-#~ msgstr ""
-#~ "Автор - Blake Hodgetts; распространяется свободно.  См. http://www.efh."
-#~ "org/~bch/aboutfonts.html"
-
-#~ msgid "Copyright 1995-1999 Blake Hodgetts"
-#~ msgstr "Авторские права 1995-1999 Blake Hodgetts"
-
-#~ msgid "Inkpen"
-#~ msgstr "Inkpen"
-
-#~ msgid ""
-#~ "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-#~ msgstr ""
-#~ "Inkpen является частью Sibelius, но другие шрифты могут использовать те "
-#~ "же привязки."
-
-#~ msgid "Copyright Sibelius Software Ltd"
-#~ msgstr "Авторские права Sibelius Software Ltd"
-
-#~ msgid "Maestro"
-#~ msgstr "Maestro"
-
-#~ msgid "Maestro is part of Finale, but other fonts use the same mappings."
-#~ msgstr ""
-#~ "Maestro является частью Finale, но другие шрифты могут использовать те же "
-#~ "привязки."
-
-#~ msgid "Copyright Coda Inc"
-#~ msgstr "Авторское право у Coda Inc"
-
-#~ msgid "Opus"
-#~ msgstr "Opus"
-
-#~ msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-#~ msgstr ""
-#~ "Opus является частью Sibelius, но другие шрифты могут использовать те же "
-#~ "привязки."
-
-#~ msgid "Petrucci"
-#~ msgstr "Petrucci"
-
-#~ msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-#~ msgstr ""
-#~ "Petrucci является частью Finale, но другие шрифты могут использовать те "
-#~ "же привязки."
-
-#~ msgid "RG21"
-#~ msgstr "RG21"
-
-#~ msgid "Rosegarden 2.1"
-#~ msgstr "Rosegarden 2.1"
-
-#~ msgid "Copyright (c) 1994--2001 Chris Cannam"
-#~ msgstr "Авторские права (c) 1994-2001 Chris Cannam"
-
-#~ msgid "Sonata"
-#~ msgstr "Sonata"
-
-#~ msgid "Adobe"
-#~ msgstr "Adobe"
-
-#~ msgid "Copyright Adobe Inc"
-#~ msgstr "Авторское право у Adobe Inc"
-
-#~ msgid "Steinberg"
-#~ msgstr "Steinberg"
-
-#~ msgid "The Steinberg Notation font is part of Cubase."
-#~ msgstr "The Steinberg Notation font является частью Cubase."
-
-#~ msgid "Copyright Steinberg Inc"
-#~ msgstr "Copyright Steinberg Inc"
-
-#~ msgid "Xinfonia"
-#~ msgstr "Xinfonia"
-
-#~ msgid "xemo.org"
-#~ msgstr "xemo.org"
-
-#~ msgid "Copyright 2001-2003 Xemus Software LLC"
-#~ msgstr "Авторские права 2001-2003 Xemus Software LLC"
-
-#~ msgid "Classical"
-#~ msgstr "Классический"
-
-#~ msgid "Cross"
-#~ msgstr "Крестообразный"
-
-#~ msgid "Mensural"
-#~ msgstr "Мензуральный"
-
-#~ msgid "Triangle"
-#~ msgstr "Треугольный"
-
-#, fuzzy
-#~ msgid "%1 Inputs"
-#~ msgstr "%1 Вход"
-
-#~ msgid ""
-#~ "*.wav|WAV files (*.wav)\n"
-#~ "*.mp3|MP3 files (*.mp3)"
-#~ msgstr ""
-#~ "*.wav|Файлы WAV·(*.wav)\n"
-#~ "*.mp3|Файлы MP3·(*.mp3)"
-
-#~ msgid ""
-#~ "This will unload all audio files and remove their associated segments.  "
-#~ "Are you sure?"
-#~ msgstr ""
-#~ "Это приведёт к выгрузке всех звуковых файлов и удалению связанных с ними "
-#~ "сегментов. Вы точно хотите этого?"
-
-#~ msgid ""
-#~ "This will unload all audio files that have no segments used in this "
-#~ "composition.  Are you sure?"
-#~ msgstr ""
-#~ "Это приведёт к выгрузке всех звуковых файлов, не связанных с сегментами "
-#~ "композиции. Вы точно хотите этого?"
-
-#, fuzzy
-#~ msgid "%1 on %2 tracks"
-#~ msgstr "%1 на %2 дорожке"
