@@ -1211,6 +1211,8 @@ void
 SequenceManager::setPlayStartTime(const timeT &time)
 {
 
+    SEQMAN_DEBUG << "SequenceManager::setPlayStartTime(" << time << ")";
+
     // If already playing then stop
     //
     if (m_transportStatus == PLAYING ||
