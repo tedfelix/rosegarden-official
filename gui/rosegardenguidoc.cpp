@@ -2505,6 +2505,10 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
 
     delete progressDlg;
 
+    if (!recordSegment->getComposition()) {
+	getComposition().addSegment(recordSegment);
+    }
+
     m_commandHistory->addCommand
 	(new SegmentRecordCommand(recordSegment));
 
