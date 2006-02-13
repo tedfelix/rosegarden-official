@@ -1027,7 +1027,7 @@ AudioManagerDialog::slotDeleteUnused()
 	if (names.size() > 0) {
 	
 	    QString question =
-		i18n("About to delete %1 audio file permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover this file.\nAre you sure?", "About to delete %1 audio files permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover these files.\nAre you sure?", names.size()).arg(names.size());
+		i18n("About to delete 1 audio file permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover this file.\nAre you sure?", "About to delete %n audio files permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover these files.\nAre you sure?", names.size());
 	    
 	    int reply = KMessageBox::warningContinueCancel(this, question);
 

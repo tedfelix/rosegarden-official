@@ -109,8 +109,6 @@
         <Separator/>
         <Action name="manage_trigger_segments"/>
         <Action name="audio_manager"/>
-        <Separator/>
-        <Action name="debug_dump_segments"/>
   </Menu>
   <Menu name="Tracks">
         <text>Trac&amp;ks</text>
