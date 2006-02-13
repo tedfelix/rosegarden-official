@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-16 13:20+0000\n"
+"POT-Creation-Date: 2006-02-13 13:58+0000\n"
 "PO-Revision-Date: 2006-01-14 08:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@comhem.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -604,9 +604,9 @@ msgstr "Bibliotekarie"
 
 #: ../gui/audiomanagerdialog.cpp:254 ../gui/bankeditor.cpp:233
 #: ../gui/colourwidgets.cpp:46 ../gui/deviceeditor.cpp:62
-#: ../gui/dialogs.cpp:1348 ../gui/dialogs.cpp:4983
-#: ../gui/rosegardenconfigurationpage.cpp:1857
-#: ../gui/rosegardenconfigurationpage.cpp:1868
+#: ../gui/dialogs.cpp:1348 ../gui/dialogs.cpp:4993
+#: ../gui/rosegardenconfigurationpage.cpp:1879
+#: ../gui/rosegardenconfigurationpage.cpp:1890
 msgid "Name"
 msgstr "Namn"
 
@@ -695,7 +695,7 @@ msgid "MIDI Device"
 msgstr "MIDI-enhet"
 
 #: ../gui/bankeditor.cpp:1074 ../gui/deviceeditor.cpp:63
-#: ../gui/dialogs.cpp:1353 ../gui/rosegardenconfigurationpage.cpp:1994
+#: ../gui/dialogs.cpp:1353 ../gui/rosegardenconfigurationpage.cpp:2016
 msgid "Type"
 msgstr "Typ"
 
@@ -766,14 +766,14 @@ msgstr "Visa variantlista baserad på "
 
 #: ../gui/bankeditor.cpp:1256 ../gui/controleditor.cpp:315
 #: ../gui/devicemanager.cpp:202 ../gui/editviewbase.cpp:198
-#: ../gui/markereditor.cpp:389 ../gui/rosegardengui.cpp:592
+#: ../gui/markereditor.cpp:389 ../gui/rosegardengui.cpp:612
 #: ../gui/triggermanager.cpp:435
 msgid "Und&o"
 msgstr "Å&ngra"
 
 #: ../gui/bankeditor.cpp:1262 ../gui/controleditor.cpp:321
 #: ../gui/devicemanager.cpp:208 ../gui/editviewbase.cpp:204
-#: ../gui/markereditor.cpp:395 ../gui/rosegardengui.cpp:598
+#: ../gui/markereditor.cpp:395 ../gui/rosegardengui.cpp:618
 #: ../gui/triggermanager.cpp:441
 msgid "Re&do"
 msgstr "&Gör om"
@@ -811,12 +811,12 @@ msgid "Export Device as..."
 msgstr "Exportera enhet som..."
 
 #: ../gui/bankeditor.cpp:2596 ../gui/devicemanager.cpp:804
-#: ../gui/rosegardengui.cpp:2171
+#: ../gui/rosegardengui.cpp:2197
 msgid "You have specified a directory"
 msgstr "Du har angivit en katalog"
 
 #: ../gui/bankeditor.cpp:2603 ../gui/devicemanager.cpp:811
-#: ../gui/rosegardengui.cpp:2177
+#: ../gui/rosegardengui.cpp:2203
 msgid "The specified file exists.  Overwrite?"
 msgstr "Den angivna filen finns. Ska den skrivas över?"
 
@@ -849,11 +849,11 @@ msgstr ""
 
 #: ../gui/bankeditor.cpp:2684 ../gui/deviceeditor.cpp:61
 #: ../gui/devicemanager.cpp:88 ../gui/devicemanager.cpp:140
-#: ../gui/dialogs.cpp:4413
+#: ../gui/dialogs.cpp:4419
 msgid "Device"
 msgstr "Enhet"
 
-#: ../gui/bankeditor.cpp:2685 ../gui/dialogs.cpp:4442 ../gui/mixer.cpp:1789
+#: ../gui/bankeditor.cpp:2685 ../gui/dialogs.cpp:4448 ../gui/mixer.cpp:1789
 msgid "Instrument"
 msgstr "Instrument"
 
@@ -892,7 +892,7 @@ msgstr ""
 "Linjal för ackordnamn.\n"
 "Visa eller dölj den i menyn Inställningar -> Linjaler."
 
-#: ../gui/colourwidgets.cpp:47 ../gui/rosegardenconfigurationpage.h:430
+#: ../gui/colourwidgets.cpp:47 ../gui/rosegardenconfigurationpage.h:431
 #: ../gui/segmentparameterbox.cpp:86
 msgid "Color"
 msgstr "Färg"
@@ -901,7 +901,7 @@ msgstr "Färg"
 msgid "Modify Color Name"
 msgstr "Ändra färgnamn"
 
-#: ../gui/colourwidgets.cpp:64 ../gui/rosegardenconfigurationpage.cpp:2443
+#: ../gui/colourwidgets.cpp:64 ../gui/rosegardenconfigurationpage.cpp:2465
 #: ../gui/segmentparameterbox.cpp:888
 msgid "Enter new name"
 msgstr "Skriv in nytt namn"
@@ -909,6 +909,129 @@ msgstr "Skriv in nytt namn"
 #: ../gui/colourwidgets.cpp:107 ../gui/segmentparameterbox.cpp:339
 msgid "Default Color"
 msgstr "Förvald färg"
+
+#: ../gui/segmentcommands.cpp:86
+msgid "Repeat Segments"
+msgstr "Upprepa segment"
+
+#: ../gui/segmentcommands.cpp:150 ../gui/segmentcommands.cpp:162
+msgid "Erase Segment"
+msgstr "Ta bort segment"
+
+#: ../gui/editcommands.cpp:240 ../gui/segmentcommands.cpp:239
+msgid "%1 (copied)"
+msgstr "%1 (kopierad)"
+
+#: ../gui/segmentcommands.cpp:258
+msgid "Turn Repeats into Copies"
+msgstr "Omvandla upprepningar till kopior"
+
+#: ../gui/segmentcommands.cpp:338
+msgid "Turn Single Repeat into Copy"
+msgstr "Omvandla enkel upprepning till kopia"
+
+#: ../gui/segmentcommands.cpp:383 ../gui/segmentcommands.cpp:475
+#: ../gui/segmentcommands.cpp:489
+msgid "Create Segment"
+msgstr "Skapa segment"
+
+#: ../gui/segmentcommands.cpp:445
+msgid "%1 (inserted)"
+msgstr "%1 (infogad)"
+
+#: ../gui/segmentcommands.cpp:448
+msgid "unknown audio file"
+msgstr "okänd ljudfil"
+
+#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
+#: ../gui/segmentcommands.cpp:566 rc.cpp:311
+#, no-c-format
+msgid "Record"
+msgstr "Spela in"
+
+#: ../gui/segmentcommands.cpp:687 ../gui/segmentcommands.cpp:734
+msgid "Resize Segment"
+msgstr "Ändra storlek på segment"
+
+#: ../gui/segmentcommands.cpp:788
+msgid "Split Audio Segment"
+msgstr "Dela ljudsegment"
+
+#: ../gui/segmentcommands.cpp:849 ../gui/segmentcommands.cpp:983
+msgid "%1 (split)"
+msgstr "%1 (dela)"
+
+#: ../gui/segmentcommands.cpp:905
+msgid "Split Segment"
+msgstr "Dela segment"
+
+#: ../gui/segmentcommands.cpp:1127
+msgid "%1 (autosplit %2)"
+msgstr "%1 (dela automatiskt %2)"
+
+#: ../gui/segmentcommands.cpp:1268
+msgid "%1 (part)"
+msgstr "%1 (del)"
+
+#: ../gui/segmentcommands.cpp:1472
+msgid "%1 (rescaled)"
+msgstr "%1 (skalad)"
+
+#: ../gui/dialogs.cpp:4086 ../gui/segmentcommands.cpp:2115
+msgid "Split by Pitch"
+msgstr "Dela efter tonhöjd"
+
+#: ../gui/segmentcommands.cpp:2236
+msgid "%1 (upper)"
+msgstr "%1 (övre del)"
+
+#: ../gui/segmentcommands.cpp:2238
+msgid "%1 (lower)"
+msgstr "%1 (nedre del)"
+
+#: ../gui/segmentcommands.cpp:2342
+msgid "Label Segments"
+msgstr "Sätt namn på segment"
+
+#: ../gui/segmentcommands.cpp:2380
+msgid "Change Segment Color"
+msgstr "Ändra segmentfärg"
+
+#: ../gui/segmentcommands.cpp:2412
+msgid "Change Segment Color Map"
+msgstr "Ändra segmentfärgkarta"
+
+#: ../gui/segmentcommands.cpp:2443
+msgid "Add Triggered Segment"
+msgstr "Lägg till utlösande segment"
+
+#: ../gui/segmentcommands.cpp:2491
+msgid "Delete Triggered Segment"
+msgstr "Ta bort utlösande segment"
+
+#: ../gui/segmentcommands.cpp:2533
+msgid "Paste as New Triggered Segment"
+msgstr "Klistra in som nytt utlösande segment"
+
+#: ../gui/segmentcommands.cpp:2614
+msgid "Set Base Pitch"
+msgstr "Ange grundtonhöjd"
+
+#: ../gui/segmentcommands.cpp:2651
+msgid "Set Base Velocity"
+msgstr "Ange grundljudstyrka"
+
+#: ../gui/segmentcommands.cpp:2688
+msgid "Set Default Time Adjust"
+msgstr "Ange förvald tidsjustering"
+
+#: ../gui/segmentcommands.cpp:2727
+msgid "Set Default Retune"
+msgstr "Ange standardstämning"
+
+#: ../gui/segmentcommands.cpp:2763
+msgid "Set Tempos from Beat Segment"
+msgstr "Ställ in tempon från taktsegment"
 
 #: ../gui/controleditor.cpp:41
 msgid "<not showing>"
@@ -990,7 +1113,7 @@ msgstr "Egenskaper för styrhändelser"
 msgid "Name:"
 msgstr "Namn:"
 
-#: ../gui/controleditor.cpp:455 ../gui/rosegardenconfigurationpage.cpp:372
+#: ../gui/controleditor.cpp:455 ../gui/rosegardenconfigurationpage.cpp:393
 msgid "Type:"
 msgstr "Typ:"
 
@@ -1034,28 +1157,28 @@ msgstr "Infoga styrenhetshändelse"
 msgid "Erase Controller Event(s)"
 msgstr "Ta bort styrenhetshändelse"
 
-#: ../gui/controlruler.cpp:1697 ../gui/editview.cpp:842
+#: ../gui/controlruler.cpp:1680 ../gui/editview.cpp:842
 msgid "Unsupported Event Type"
 msgstr "Händelsetyp som inte stöds"
 
-#: ../gui/controlruler.cpp:1710 ../gui/editview.cpp:840
+#: ../gui/controlruler.cpp:1693 ../gui/editview.cpp:840
 #: ../gui/eventview.cpp:215 ../gui/midifilter.cpp:52 ../gui/midifilter.cpp:88
 msgid "Pitch Bend"
 msgstr "Tonhöjdsavvikelse"
 
-#: ../gui/controlruler.cpp:1715 ../gui/eventfilter.cpp:209
+#: ../gui/controlruler.cpp:1698 ../gui/eventfilter.cpp:209
 msgid "Controller Events"
 msgstr "Styrenhetshändelser"
 
-#: ../gui/controlruler.cpp:1804
+#: ../gui/controlruler.cpp:1777
 msgid "Controller Event Number"
 msgstr "Nummer på styrenhetshändelse"
 
-#: ../gui/controlruler.cpp:2005
+#: ../gui/controlruler.cpp:1978
 msgid "Add line of controllers"
 msgstr "Lägg till rad med styrenheter"
 
-#: ../gui/controlruler.cpp:2059
+#: ../gui/controlruler.cpp:2032
 msgid "%1 controller"
 msgstr "%1 styrenhet"
 
@@ -1090,16 +1213,10 @@ msgstr "Enhet %1"
 msgid "Play"
 msgstr "Spela"
 
-#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
-#: ../gui/segmentcommands.cpp:566 rc.cpp:311
-#, no-c-format
-msgid "Record"
-msgstr "Spela in"
-
 #: ../gui/deviceeditor.cpp:182 ../gui/deviceeditor.cpp:204
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:171
 #: ../gui/devicemanager.cpp:413 ../gui/devicemanager.cpp:425
-#: ../gui/dialogs.cpp:4433 ../gui/instrumentparameterbox.cpp:779
+#: ../gui/dialogs.cpp:4439 ../gui/instrumentparameterbox.cpp:779
 msgid "No connection"
 msgstr "Ingen anslutning"
 
@@ -1121,7 +1238,7 @@ msgid "Play devices"
 msgstr "Uppspelningsenheter"
 
 #: ../gui/devicemanager.cpp:98 ../gui/devicemanager.cpp:151
-#: ../gui/rosegardenconfigurationpage.cpp:2444
+#: ../gui/rosegardenconfigurationpage.cpp:2466
 #: ../gui/segmentparameterbox.cpp:889
 msgid "New"
 msgstr "Ny"
@@ -1450,9 +1567,9 @@ msgstr "Undergruppering: "
 msgid "Persistent properties"
 msgstr "Bestående egenskaper"
 
-#: ../gui/dialogs.cpp:1355 ../gui/dialogs.cpp:3936 ../gui/dialogs.cpp:3940
-#: ../gui/dialogs.cpp:3964 ../gui/rosegardenconfigurationpage.cpp:1858
-#: ../gui/rosegardenconfigurationpage.cpp:1869
+#: ../gui/dialogs.cpp:1355 ../gui/dialogs.cpp:3942 ../gui/dialogs.cpp:3946
+#: ../gui/dialogs.cpp:3970 ../gui/rosegardenconfigurationpage.cpp:1880
+#: ../gui/rosegardenconfigurationpage.cpp:1891
 msgid "Value"
 msgstr "Värde"
 
@@ -1796,8 +1913,8 @@ msgstr "Tenor"
 msgid "Bass"
 msgstr "Bas"
 
-#: ../gui/dialogs.cpp:3204 ../gui/rosegardenconfigurationpage.cpp:698
-#: ../gui/rosegardenconfigurationpage.cpp:2002
+#: ../gui/dialogs.cpp:3204 ../gui/rosegardenconfigurationpage.cpp:719
+#: ../gui/rosegardenconfigurationpage.cpp:2024
 #: ../gui/segmentparameterbox.cpp:83
 msgid "Quantize"
 msgstr "Kvantisera"
@@ -1894,365 +2011,361 @@ msgstr "Dela ljudsegment automatiskt"
 msgid "AutoSplit Segment \""
 msgstr "Dela segment automatiskt \""
 
-#: ../gui/dialogs.cpp:3503
+#: ../gui/dialogs.cpp:3505
 msgid "Threshold"
 msgstr "Tröskel"
 
-#: ../gui/dialogs.cpp:3565
+#: ../gui/dialogs.cpp:3566
 msgid "<no preview generated for this audio file>"
 msgstr "<ingen förhandsgranskning skapad för ljudfilen>"
 
-#: ../gui/dialogs.cpp:3791
+#: ../gui/dialogs.cpp:3797
 msgid "Edit Lyrics"
 msgstr "Redigera sångtext"
 
-#: ../gui/dialogs.cpp:3799
+#: ../gui/dialogs.cpp:3805
 msgid "Lyrics for this segment"
 msgstr "Sångtext för segmentet"
 
-#: ../gui/dialogs.cpp:3903
+#: ../gui/dialogs.cpp:3909
 msgid "Set the %1 property of the event selection:"
 msgstr "Ställ in egenskapen %1 för händelsemarkeringen:"
 
-#: ../gui/dialogs.cpp:3908
+#: ../gui/dialogs.cpp:3914
 msgid "Pattern"
 msgstr "Mönster"
 
-#: ../gui/dialogs.cpp:3913
+#: ../gui/dialogs.cpp:3919
 msgid "Flat - set %1 to value"
 msgstr "Jämn: Ställ in %1 till ett värde"
 
-#: ../gui/dialogs.cpp:3917
+#: ../gui/dialogs.cpp:3923
 msgid "Alternating - set %1 to max and min on alternate events"
 msgstr "Växlande: Ställ in %1 till maximum och minimum för varannan händelse"
 
-#: ../gui/dialogs.cpp:3921
+#: ../gui/dialogs.cpp:3927
 msgid "Crescendo - set %1 rising from min to max"
 msgstr "Crescendo: Ställ in %1 stigande från minimum till maximum"
 
-#: ../gui/dialogs.cpp:3925
+#: ../gui/dialogs.cpp:3931
 msgid "Diminuendo - set %1 falling from max to min"
 msgstr "Diminuendo: Ställ in %1 fallande från maximum till minimum"
 
-#: ../gui/dialogs.cpp:3929
+#: ../gui/dialogs.cpp:3935
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
 msgstr ""
 "Ringning: Ställ in %1 växlande från maximum till minimum med båda bortdöende "
 "till tystnad"
 
-#: ../gui/dialogs.cpp:3972 ../gui/dialogs.cpp:3999
+#: ../gui/dialogs.cpp:3978 ../gui/dialogs.cpp:4005
 msgid "First Value"
 msgstr "Första värdet"
 
-#: ../gui/dialogs.cpp:3973 ../gui/dialogs.cpp:4000
+#: ../gui/dialogs.cpp:3979 ../gui/dialogs.cpp:4006
 msgid "Second Value"
 msgstr "Andra värdet"
 
-#: ../gui/dialogs.cpp:3981 ../gui/dialogs.cpp:3991
+#: ../gui/dialogs.cpp:3987 ../gui/dialogs.cpp:3997
 msgid "Low Value"
 msgstr "Lägsta värdet"
 
-#: ../gui/dialogs.cpp:3982 ../gui/dialogs.cpp:3990
+#: ../gui/dialogs.cpp:3988 ../gui/dialogs.cpp:3996
 msgid "High Value"
 msgstr "Högsta värdet"
 
-#: ../gui/dialogs.cpp:4039
+#: ../gui/dialogs.cpp:4045
 msgid "Change Composition Length"
 msgstr "Ändra kompositionens längd"
 
-#: ../gui/dialogs.cpp:4045
+#: ../gui/dialogs.cpp:4051
 msgid "Set the Start and End bar markers for this Composition"
 msgstr "Ställ in markering av början och slut för kompositionen"
 
-#: ../gui/dialogs.cpp:4049
+#: ../gui/dialogs.cpp:4055
 msgid "Start Bar"
 msgstr "Första takten"
 
-#: ../gui/dialogs.cpp:4057
+#: ../gui/dialogs.cpp:4063
 msgid "End Bar"
 msgstr "Sista takten"
 
-#: ../gui/dialogs.cpp:4080 ../gui/segmentcommands.cpp:2038
-msgid "Split by Pitch"
-msgstr "Dela efter tonhöjd"
-
-#: ../gui/dialogs.cpp:4088
+#: ../gui/dialogs.cpp:4094
 msgid "Starting split pitch"
 msgstr "Börjar dela efter tonhöjd"
 
-#: ../gui/dialogs.cpp:4091
+#: ../gui/dialogs.cpp:4097
 msgid "Range up and down to follow music"
 msgstr "Flytta område upp och ner för att följa musiken"
 
-#: ../gui/dialogs.cpp:4097
+#: ../gui/dialogs.cpp:4103
 msgid "Duplicate non-note events"
 msgstr "Duplicera händelser utan noter"
 
-#: ../gui/dialogs.cpp:4100
+#: ../gui/dialogs.cpp:4106
 msgid "Clef handling:"
 msgstr "Klavhantering:"
 
-#: ../gui/dialogs.cpp:4103
+#: ../gui/dialogs.cpp:4109
 msgid "Leave clefs alone"
 msgstr "Låt klaver vara i fred"
 
-#: ../gui/dialogs.cpp:4104
+#: ../gui/dialogs.cpp:4110
 msgid "Guess new clefs"
 msgstr "Gissa nya klaver"
 
-#: ../gui/dialogs.cpp:4105
+#: ../gui/dialogs.cpp:4111
 msgid "Use treble and bass clefs"
 msgstr "Använd diskant- och basklav"
 
-#: ../gui/dialogs.cpp:4144 ../gui/notationtool.cpp:1165
+#: ../gui/dialogs.cpp:4150 ../gui/notationtool.cpp:1165
 msgid "Interpret"
 msgstr "Tolka"
 
-#: ../gui/dialogs.cpp:4150
+#: ../gui/dialogs.cpp:4156
 msgid "Interpretations to apply"
 msgstr "Tolkningar att tillämpa"
 
-#: ../gui/dialogs.cpp:4153
+#: ../gui/dialogs.cpp:4159
 msgid "Apply text dynamics (p, mf, ff etc)"
 msgstr "Tillämpa dynamikbeteckningar (p, mf, ff, etc.)"
 
-#: ../gui/dialogs.cpp:4155
+#: ../gui/dialogs.cpp:4161
 msgid "Apply hairpin dynamics"
 msgstr "Använd dynamikklykor"
 
-#: ../gui/dialogs.cpp:4157
+#: ../gui/dialogs.cpp:4163
 msgid "Stress beats"
 msgstr "Betona taktslag"
 
-#: ../gui/dialogs.cpp:4159
+#: ../gui/dialogs.cpp:4165
 msgid "Articulate slurs, staccato, tenuto etc"
 msgstr "Artikulationsbeteckningar"
 
-#: ../gui/dialogs.cpp:4161
+#: ../gui/dialogs.cpp:4167
 msgid "All available interpretations"
 msgstr "Alla tillgängliga tolkningar"
 
-#: ../gui/dialogs.cpp:4226 ../gui/rosegardenconfigurationpage.cpp:1016
+#: ../gui/dialogs.cpp:4232 ../gui/rosegardenconfigurationpage.cpp:1037
 msgid "Sequencer status"
 msgstr "Inspelarstatus"
 
-#: ../gui/dialogs.cpp:4230
+#: ../gui/dialogs.cpp:4236
 msgid "Sequencer status:"
 msgstr "Inspelarstatus:"
 
-#: ../gui/dialogs.cpp:4232
+#: ../gui/dialogs.cpp:4238
 msgid "Status not available."
 msgstr "Status inte tillgänglig."
 
-#: ../gui/dialogs.cpp:4239
+#: ../gui/dialogs.cpp:4245
 msgid "Sequencer is not running or is not responding."
 msgstr "Musikbehandlaren körs inte eller svarar inte."
 
-#: ../gui/dialogs.cpp:4246
+#: ../gui/dialogs.cpp:4252
 msgid "Sequencer is not returning a valid status report."
 msgstr "Musikbehandlaren returnerar inte en giltig statusrapport."
 
-#: ../gui/dialogs.cpp:4271
+#: ../gui/dialogs.cpp:4277
 msgid "Recording..."
 msgstr "Spelar in..."
 
-#: ../gui/dialogs.cpp:4279
+#: ../gui/dialogs.cpp:4285
 msgid "Recording time remaining:  "
 msgstr "Kvarvarande tid för inspelning:  "
 
-#: ../gui/dialogs.cpp:4325
+#: ../gui/dialogs.cpp:4331
 msgid "<timing has gone astray>"
 msgstr "<tidmätning har gått fel>"
 
-#: ../gui/dialogs.cpp:4344
+#: ../gui/dialogs.cpp:4350
 msgid "Just how big is your hard disk?"
 msgstr "Hur stor är din hårddisk egentligen?"
 
-#: ../gui/dialogs.cpp:4394 rc.cpp:321
+#: ../gui/dialogs.cpp:4400 rc.cpp:321
 #, no-c-format
 msgid "Metronome"
 msgstr "Metronom"
 
-#: ../gui/dialogs.cpp:4408
+#: ../gui/dialogs.cpp:4414
 msgid "Metronome Instrument"
 msgstr "Metronominstrument"
 
-#: ../gui/dialogs.cpp:4449
+#: ../gui/dialogs.cpp:4455
 msgid "Beats"
 msgstr "Taktslag"
 
-#: ../gui/audiomanagerdialog.cpp:259 ../gui/dialogs.cpp:4454
+#: ../gui/audiomanagerdialog.cpp:259 ../gui/dialogs.cpp:4460
 msgid "Resolution"
 msgstr "Upplösning"
 
-#: ../gui/dialogs.cpp:4456 ../gui/matrixview.cpp:2012
-#: ../gui/notationview.cpp:1237 ../gui/rosegardenconfigurationpage.cpp:529
-#: ../gui/rosegardenconfigurationpage.cpp:2134 ../gui/widgets.cpp:913
+#: ../gui/dialogs.cpp:4462 ../gui/matrixview.cpp:2012
+#: ../gui/notationview.cpp:1237 ../gui/rosegardenconfigurationpage.cpp:550
+#: ../gui/rosegardenconfigurationpage.cpp:2156 ../gui/widgets.cpp:913
 #: ../gui/widgets.cpp:1086
 msgid "None"
 msgstr "Inget"
 
-#: ../gui/dialogs.cpp:4457
+#: ../gui/dialogs.cpp:4463
 msgid "Bars only"
 msgstr "Bara takter"
 
-#: ../gui/dialogs.cpp:4458
+#: ../gui/dialogs.cpp:4464
 msgid "Bars and beats"
 msgstr "Takter och taktslag"
 
-#: ../gui/dialogs.cpp:4459
+#: ../gui/dialogs.cpp:4465
 msgid "Bars, beats, and divisions"
 msgstr "Takter, taktslag och delningar"
 
-#: ../gui/dialogs.cpp:4463
+#: ../gui/dialogs.cpp:4469
 msgid "Bar velocity"
 msgstr "Taktstyrka"
 
-#: ../gui/dialogs.cpp:4470
+#: ../gui/dialogs.cpp:4476
 msgid "Beat velocity"
 msgstr "Taktslagsstyrka"
 
-#: ../gui/dialogs.cpp:4477
+#: ../gui/dialogs.cpp:4483
 msgid "Sub-beat velocity"
 msgstr "Deltaktslagsstyrka"
 
-#: ../gui/dialogs.cpp:4486
+#: ../gui/dialogs.cpp:4492
 msgid "Pitch"
 msgstr "Tonhöjd"
 
-#: ../gui/dialogs.cpp:4491
+#: ../gui/dialogs.cpp:4497
 msgid "for Bar"
 msgstr "för takt"
 
-#: ../gui/dialogs.cpp:4492
+#: ../gui/dialogs.cpp:4498
 msgid "for Beat"
 msgstr "för taktslag"
 
-#: ../gui/dialogs.cpp:4493
+#: ../gui/dialogs.cpp:4499
 msgid "for Sub-beat"
 msgstr "för deltaktslag"
 
-#: ../gui/dialogs.cpp:4497
+#: ../gui/dialogs.cpp:4503
 msgid "Metronome Activated"
 msgstr "Metronom aktiverad"
 
-#: ../gui/dialogs.cpp:4498
+#: ../gui/dialogs.cpp:4504
 msgid "Playing"
 msgstr "Spelar"
 
-#: ../gui/dialogs.cpp:4499
+#: ../gui/dialogs.cpp:4505
 msgid "Recording"
 msgstr "Spelar in"
 
-#: ../gui/dialogs.cpp:4847
+#: ../gui/dialogs.cpp:4853
 msgid "Lilypond Export"
 msgstr "Lilypond-export"
 
-#: ../gui/dialogs.cpp:4852
+#: ../gui/dialogs.cpp:4858
 msgid "Lilypond export options"
 msgstr "Exportinställningar för Lilypond"
 
-#: ../gui/dialogs.cpp:4861
+#: ../gui/dialogs.cpp:4867
 msgid "Lilypond compatibility level"
 msgstr "Kompatibilitetsnivå för Lilypond"
 
-#: ../gui/dialogs.cpp:4864
+#: ../gui/dialogs.cpp:4870
 msgid "Lilypond 1.6 or 1.8"
 msgstr "Lilypond 1.6 eller 1.8"
 
-#: ../gui/dialogs.cpp:4865
+#: ../gui/dialogs.cpp:4871
 msgid "Lilypond 2.0"
 msgstr "Lilypond 2.0"
 
-#: ../gui/dialogs.cpp:4866
+#: ../gui/dialogs.cpp:4872
 msgid "Lilypond 2.2"
 msgstr "Lilypond 2.2"
 
-#: ../gui/dialogs.cpp:4867
+#: ../gui/dialogs.cpp:4873
 msgid "Lilypond 2.4"
 msgstr "Lilypond 2.4"
 
-#: ../gui/dialogs.cpp:4868
+#: ../gui/dialogs.cpp:4874
 msgid "Lilypond 2.6"
 msgstr "Lilypond 2.6"
 
-#: ../gui/dialogs.cpp:4873
+#: ../gui/dialogs.cpp:4879
 msgid "Paper size to use in \\paper block"
 msgstr "Pappersstorlek att använda i \\paper block"
 
-#: ../gui/dialogs.cpp:4876
+#: ../gui/dialogs.cpp:4882
 msgid "US Letter"
 msgstr "US Letter"
 
-#: ../gui/dialogs.cpp:4877
+#: ../gui/dialogs.cpp:4883
 msgid "A4"
 msgstr "A4"
 
-#: ../gui/dialogs.cpp:4878
+#: ../gui/dialogs.cpp:4884
 msgid "Legal"
 msgstr "Legal"
 
-#: ../gui/dialogs.cpp:4879
+#: ../gui/dialogs.cpp:4885
 msgid "do not specify"
 msgstr "ange inte"
 
-#: ../gui/dialogs.cpp:4884
+#: ../gui/dialogs.cpp:4890
 msgid "Lilypond font size"
 msgstr "Teckenstorlek för Lilypond"
 
-#: ../gui/dialogs.cpp:4898
+#: ../gui/dialogs.cpp:4904
 msgid "Export Document Properties as \\header block"
 msgstr "Exportera dokumentegenskaper som \\header-block"
 
-#: ../gui/dialogs.cpp:4903
+#: ../gui/dialogs.cpp:4909
 msgid "Export \\lyric blocks"
 msgstr "Exportera \\lyric-block"
 
-#: ../gui/dialogs.cpp:4908
+#: ../gui/dialogs.cpp:4918
 msgid "Do not export muted tracks"
 msgstr "Exportera inte tysta spår"
 
-#: ../gui/dialogs.cpp:4913
+#: ../gui/dialogs.cpp:4923
 msgid "Export \\midi block"
 msgstr "Exportera \\midi-block"
 
-#: ../gui/dialogs.cpp:4918
+#: ../gui/dialogs.cpp:4928
 msgid "Enable \"point and click\" debugging"
 msgstr "Aktivera felsökning med \"peka och klicka\""
 
-#: ../gui/dialogs.cpp:4923
+#: ../gui/dialogs.cpp:4933
 msgid "Write bar checks at end of measures"
 msgstr "Skriv taktkontroller i slutet av takter"
 
-#: ../gui/dialogs.cpp:4928
+#: ../gui/dialogs.cpp:4938
 msgid "Export beamings"
 msgstr "Exportera balkningar"
 
-#: ../gui/dialogs.cpp:4955
+#: ../gui/dialogs.cpp:4965
 msgid "Export Devices..."
 msgstr "Exportera enheter..."
 
-#: ../gui/dialogs.cpp:4960
+#: ../gui/dialogs.cpp:4970
 msgid "Export devices"
 msgstr "Exportera enheter"
 
-#: ../gui/dialogs.cpp:4962
+#: ../gui/dialogs.cpp:4972
 msgid "Export all devices"
 msgstr "Exportera alla enheter"
 
-#: ../gui/dialogs.cpp:4963
+#: ../gui/dialogs.cpp:4973
 msgid "Export selected device only"
 msgstr "Exportera bara markerade enheter"
 
-#: ../gui/dialogs.cpp:4964
+#: ../gui/dialogs.cpp:4974
 msgid "         (\"%1\")"
 msgstr "         (\"%1\")"
 
-#: ../gui/dialogs.cpp:4979 ../gui/notationviewslots.cpp:1634
+#: ../gui/dialogs.cpp:4989 ../gui/notationviewslots.cpp:1634
 msgid "Make Ornament"
 msgstr "Skapa ornament"
 
-#: ../gui/dialogs.cpp:4985
+#: ../gui/dialogs.cpp:4995
 msgid ""
 "The name is used to identify both the ornament\n"
 "and the triggered segment that stores\n"
@@ -2262,131 +2375,131 @@ msgstr ""
 "och det utlösande segmentet som lagrar ornamentets\n"
 "toner."
 
-#: ../gui/dialogs.cpp:4988
+#: ../gui/dialogs.cpp:4998
 msgid "Name:  "
 msgstr "Namn:  "
 
-#: ../gui/dialogs.cpp:4991 ../gui/eventview.cpp:762
+#: ../gui/dialogs.cpp:5001 ../gui/eventview.cpp:775
 #: ../gui/triggermanager.cpp:148
 msgid "Base pitch"
 msgstr "Grundtonhöjd"
 
-#: ../gui/dialogs.cpp:5009 ../gui/notationview.cpp:1274
+#: ../gui/dialogs.cpp:5019 ../gui/notationview.cpp:1274
 #: ../gui/notationviewslots.cpp:1672
 msgid "Use Ornament"
 msgstr "Använd utsmyckning"
 
-#: ../gui/dialogs.cpp:5016 ../gui/rosegardenconfigurationpage.cpp:207
-#: ../gui/rosegardenconfigurationpage.h:230
+#: ../gui/dialogs.cpp:5026 ../gui/rosegardenconfigurationpage.cpp:222
 #: ../gui/rosegardenconfigurationpage.h:231
+#: ../gui/rosegardenconfigurationpage.h:232
 msgid "Notation"
 msgstr "Notskrift"
 
-#: ../gui/dialogs.cpp:5021
+#: ../gui/dialogs.cpp:5031
 msgid "Display as:  "
 msgstr "Visa som:  "
 
-#: ../gui/dialogs.cpp:5037
+#: ../gui/dialogs.cpp:5047
 msgid "Trill"
 msgstr "Drill"
 
-#: ../gui/dialogs.cpp:5037
+#: ../gui/dialogs.cpp:5047
 msgid "Trill with line"
 msgstr "Drill med våglinje"
 
-#: ../gui/dialogs.cpp:5037
+#: ../gui/dialogs.cpp:5047
 msgid "Trill line only"
 msgstr "Bara våglinje"
 
-#: ../gui/dialogs.cpp:5038
+#: ../gui/dialogs.cpp:5048
 msgid "Turn"
 msgstr "Dubbelslag"
 
-#: ../gui/dialogs.cpp:5038
+#: ../gui/dialogs.cpp:5048
 msgid "Mordent"
 msgstr "Mordent"
 
-#: ../gui/dialogs.cpp:5038
+#: ../gui/dialogs.cpp:5048
 msgid "Inverted mordent"
 msgstr "Pralldrill"
 
-#: ../gui/dialogs.cpp:5039
+#: ../gui/dialogs.cpp:5049
 msgid "Long mordent"
 msgstr "Lång mordent"
 
-#: ../gui/dialogs.cpp:5039
+#: ../gui/dialogs.cpp:5049
 msgid "Long inverted mordent"
 msgstr "Lång pralldrill"
 
-#: ../gui/dialogs.cpp:5047
+#: ../gui/dialogs.cpp:5057
 msgid "Text mark"
 msgstr "Textmarkering"
 
-#: ../gui/dialogs.cpp:5051
+#: ../gui/dialogs.cpp:5061
 msgid "   Text:  "
 msgstr "   Text:  "
 
-#: ../gui/dialogs.cpp:5057
+#: ../gui/dialogs.cpp:5067
 msgid "Performance"
 msgstr "Utförande"
 
-#: ../gui/dialogs.cpp:5062
+#: ../gui/dialogs.cpp:5072
 msgid "Perform using triggered segment: "
 msgstr "Framför med utlösande segment: "
 
-#: ../gui/dialogs.cpp:5076 ../gui/dialogs.cpp:5235
+#: ../gui/dialogs.cpp:5086 ../gui/dialogs.cpp:5245
 msgid "Perform with timing: "
 msgstr "Framför med tid: "
 
-#: ../gui/dialogs.cpp:5082 ../gui/dialogs.cpp:5241
+#: ../gui/dialogs.cpp:5092 ../gui/dialogs.cpp:5251
 msgid "As stored"
 msgstr "Som lagrad"
 
-#: ../gui/dialogs.cpp:5083 ../gui/dialogs.cpp:5242
+#: ../gui/dialogs.cpp:5093 ../gui/dialogs.cpp:5252
 msgid "Truncate if longer than note"
 msgstr "Korta av om längre än ton"
 
-#: ../gui/dialogs.cpp:5084 ../gui/dialogs.cpp:5243
+#: ../gui/dialogs.cpp:5094 ../gui/dialogs.cpp:5253
 msgid "End at same time as note"
 msgstr "Sluta samtidigt som ton"
 
-#: ../gui/dialogs.cpp:5085 ../gui/dialogs.cpp:5244
+#: ../gui/dialogs.cpp:5095 ../gui/dialogs.cpp:5254
 msgid "Stretch or squash segment to note duration"
 msgstr "Sträck ut eller pressa ihop segment till notvärde"
 
-#: ../gui/dialogs.cpp:5087 ../gui/dialogs.cpp:5246
+#: ../gui/dialogs.cpp:5097 ../gui/dialogs.cpp:5256
 msgid "Adjust pitch to note"
 msgstr "Justera tonhöjd till ton"
 
-#: ../gui/dialogs.cpp:5212 ../gui/matrixview.cpp:2465
+#: ../gui/dialogs.cpp:5222 ../gui/matrixview.cpp:2465
 msgid "Trigger Segment"
 msgstr "Utlösande segment"
 
-#: ../gui/dialogs.cpp:5221
+#: ../gui/dialogs.cpp:5231
 msgid "Trigger segment: "
 msgstr "Utlösande segment: "
 
-#: ../gui/dialogs.cpp:5335
+#: ../gui/dialogs.cpp:5345
 msgid "Audio Segment Duration"
 msgstr "Längd för ljudsegment"
 
-#: ../gui/dialogs.cpp:5342
+#: ../gui/dialogs.cpp:5352
 msgid "The selected audio segment contains:"
 msgstr "Det markerade ljudsegmentet innehåller:"
 
-#: ../gui/dialogs.cpp:5351
+#: ../gui/dialogs.cpp:5361
 msgid "beat(s)"
 msgstr "taktslag"
 
-#: ../gui/dialogs.cpp:5352
+#: ../gui/dialogs.cpp:5362
 msgid "bar(s)"
 msgstr "takt(er)"
 
-#: ../gui/dialogs.cpp:5360
+#: ../gui/dialogs.cpp:5370
 msgid "Choose Text Encoding"
 msgstr "Välj textkodning"
 
-#: ../gui/dialogs.cpp:5364
+#: ../gui/dialogs.cpp:5374
 msgid ""
 "\n"
 "This file contains text in an unknown language encoding.\n"
@@ -2400,100 +2513,100 @@ msgstr ""
 "Välj en av följande antagna textkodningar\n"
 "att använda för texten i filen:\n"
 
-#: ../gui/dialogs.cpp:5375 ../gui/dialogs.cpp:5391
+#: ../gui/dialogs.cpp:5385 ../gui/dialogs.cpp:5401
 msgid "Japanese Shift-JIS"
 msgstr "Japansk skift-JIS"
 
-#: ../gui/dialogs.cpp:5376
+#: ../gui/dialogs.cpp:5386
 msgid "Unicode variable-width"
 msgstr "Unicode med variabel bredd"
 
-#: ../gui/dialogs.cpp:5377
+#: ../gui/dialogs.cpp:5387
 msgid "Western Europe"
 msgstr "Västeuropeisk"
 
-#: ../gui/dialogs.cpp:5378
+#: ../gui/dialogs.cpp:5388
 msgid "Western Europe + Euro"
 msgstr "Västeuropeisk med euro"
 
-#: ../gui/dialogs.cpp:5379
+#: ../gui/dialogs.cpp:5389
 msgid "Eastern Europe"
 msgstr "Östeuropeisk"
 
-#: ../gui/dialogs.cpp:5380
+#: ../gui/dialogs.cpp:5390
 msgid "Southern Europe"
 msgstr "Sydeuropeisk"
 
-#: ../gui/dialogs.cpp:5381
+#: ../gui/dialogs.cpp:5391
 msgid "Northern Europe"
 msgstr "Nordeuropeisk"
 
-#: ../gui/dialogs.cpp:5382
+#: ../gui/dialogs.cpp:5392
 msgid "Cyrillic"
 msgstr "Kyrillisk"
 
-#: ../gui/dialogs.cpp:5383
+#: ../gui/dialogs.cpp:5393
 msgid "Arabic"
 msgstr "Arabisk"
 
-#: ../gui/dialogs.cpp:5384
+#: ../gui/dialogs.cpp:5394
 msgid "Greek"
 msgstr "Grekisk"
 
-#: ../gui/dialogs.cpp:5385
+#: ../gui/dialogs.cpp:5395
 msgid "Hebrew"
 msgstr "Hebreisk"
 
-#: ../gui/dialogs.cpp:5386
+#: ../gui/dialogs.cpp:5396
 msgid "Turkish"
 msgstr "Turkisk"
 
-#: ../gui/dialogs.cpp:5387
+#: ../gui/dialogs.cpp:5397
 msgid "Nordic"
 msgstr "Nordisk"
 
-#: ../gui/dialogs.cpp:5388
+#: ../gui/dialogs.cpp:5398
 msgid "Thai"
 msgstr "Thailändsk"
 
-#: ../gui/dialogs.cpp:5389
+#: ../gui/dialogs.cpp:5399
 msgid "Baltic"
 msgstr "Baltisk"
 
-#: ../gui/dialogs.cpp:5390
+#: ../gui/dialogs.cpp:5400
 msgid "Celtic"
 msgstr "Keltisk"
 
-#: ../gui/dialogs.cpp:5392
+#: ../gui/dialogs.cpp:5402
 msgid "Traditional Chinese"
 msgstr "Traditionell kinesisk"
 
-#: ../gui/dialogs.cpp:5393
+#: ../gui/dialogs.cpp:5403
 msgid "Simplified Chinese"
 msgstr "Förenklad kinesisk"
 
-#: ../gui/dialogs.cpp:5394
+#: ../gui/dialogs.cpp:5404
 msgid "Russian"
 msgstr "Rysk"
 
-#: ../gui/dialogs.cpp:5395
+#: ../gui/dialogs.cpp:5405
 msgid "Ukrainian"
 msgstr "Ukrainsk"
 
-#: ../gui/dialogs.cpp:5396
+#: ../gui/dialogs.cpp:5406
 msgid "Tamil"
 msgstr "Tamilsk"
 
-#: ../gui/dialogs.cpp:5411
+#: ../gui/dialogs.cpp:5421
 #, c-format
 msgid "Microsoft Code Page %1"
 msgstr "Microsoft-kodsida %1"
 
-#: ../gui/dialogs.cpp:5416
+#: ../gui/dialogs.cpp:5426
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: ../gui/dialogs.cpp:5434
+#: ../gui/dialogs.cpp:5444
 msgid ""
 "\n"
 "Example text from file:"
@@ -2508,10 +2621,6 @@ msgstr "(utdrag)"
 #: ../gui/editcommands.cpp:236
 msgid "(copied)"
 msgstr "(kopierad)"
-
-#: ../gui/editcommands.cpp:240 ../gui/segmentcommands.cpp:239
-msgid "%1 (copied)"
-msgstr "%1 (kopierad)"
 
 #: ../gui/editcommands.cpp:416
 msgid "Paste into an existing gap [\"restricted\"]"
@@ -2542,7 +2651,7 @@ msgid "Grid &Quantize"
 msgstr "Rutnäts&kvantisering"
 
 #: ../gui/editcommands.cpp:870 ../gui/editcommands.cpp:1073
-#: ../gui/rosegardengui.cpp:822
+#: ../gui/rosegardengui.cpp:842
 msgid "&Quantize..."
 msgstr "&Kvantisera..."
 
@@ -2567,7 +2676,7 @@ msgid "C&ut and Close"
 msgstr "Klipp &ut och stäng"
 
 #: ../gui/editcommands.h:221 ../gui/matrixview.cpp:554
-#: ../gui/notationview.cpp:1409 ../gui/rosegardengui.cpp:710
+#: ../gui/notationview.cpp:1409 ../gui/rosegardengui.cpp:730
 msgid "&Erase"
 msgstr "Rad&era"
 
@@ -2607,7 +2716,7 @@ msgstr "Ner en okta&v"
 msgid "&Transpose..."
 msgstr "&Transponera..."
 
-#: ../gui/editcommands.h:426 ../gui/segmentcommands.h:419
+#: ../gui/editcommands.h:426 ../gui/segmentcommands.h:441
 msgid "Stretch or S&quash..."
 msgstr "Sträck eller tr&yck ihop..."
 
@@ -2647,11 +2756,11 @@ msgstr "&Ange nottyp "
 msgid "&Add Dot"
 msgstr "&Lägg till punkt"
 
-#: ../gui/editview.cpp:736 ../gui/rosegardengui.cpp:842
+#: ../gui/editview.cpp:736 ../gui/rosegardengui.cpp:862
 msgid "Jog &Left"
 msgstr "Knuffa åt &vänster"
 
-#: ../gui/editview.cpp:740 ../gui/rosegardengui.cpp:846
+#: ../gui/editview.cpp:740 ../gui/rosegardengui.cpp:866
 msgid "Jog &Right"
 msgstr "Knuffa åt &höger"
 
@@ -2751,7 +2860,7 @@ msgstr "&Undre oktav"
 msgid "Estimated time signature shown"
 msgstr "Uppskattad taktart visas"
 
-#: ../gui/editview.cpp:1415 ../gui/rosegardenconfigurationpage.cpp:2003
+#: ../gui/editview.cpp:1415 ../gui/rosegardenconfigurationpage.cpp:2025
 #: ../gui/segmentparameterbox.cpp:84
 msgid "Transpose"
 msgstr "Transponera"
@@ -2788,19 +2897,19 @@ msgstr "Knuffar åt vänster..."
 msgid "Jogging right..."
 msgstr "Knuffar åt höger..."
 
-#: ../gui/editviewbase.cpp:214 ../gui/rosegardengui.cpp:793
+#: ../gui/editviewbase.cpp:214 ../gui/rosegardengui.cpp:813
 msgid "Open in Matri&x Editor"
 msgstr "Öppna i m&atriseditor"
 
-#: ../gui/editviewbase.cpp:220 ../gui/rosegardengui.cpp:799
+#: ../gui/editviewbase.cpp:220 ../gui/rosegardengui.cpp:819
 msgid "Open in &Percussion Matrix Editor"
 msgstr "Öppna i slag&verksmatriseditor"
 
-#: ../gui/editviewbase.cpp:226 ../gui/rosegardengui.cpp:805
+#: ../gui/editviewbase.cpp:226 ../gui/rosegardengui.cpp:825
 msgid "Open in &Notation Editor"
 msgstr "Öppna i &notbehandlare"
 
-#: ../gui/editviewbase.cpp:232 ../gui/rosegardengui.cpp:811
+#: ../gui/editviewbase.cpp:232 ../gui/rosegardengui.cpp:831
 msgid "Open in &Event List Editor"
 msgstr "Öppna i ed&itor för händelselista"
 
@@ -2812,27 +2921,27 @@ msgstr "Ställ in starttid för segment..."
 msgid "Set Segment Duration..."
 msgstr "Ställ in längd för segment..."
 
-#: ../gui/editviewbase.cpp:500 ../gui/rosegardengui.cpp:2825
+#: ../gui/editviewbase.cpp:500 ../gui/rosegardengui.cpp:2862
 msgid "Toggle the toolbar..."
 msgstr "Växla verktygsraden..."
 
-#: ../gui/editviewbase.cpp:510 ../gui/rosegardengui.cpp:2962
+#: ../gui/editviewbase.cpp:510 ../gui/rosegardengui.cpp:2999
 msgid "Toggle the statusbar..."
 msgstr "Växla statusraden..."
 
-#: ../gui/editviewbase.cpp:652 ../gui/rosegardengui.cpp:2611
+#: ../gui/editviewbase.cpp:652 ../gui/rosegardengui.cpp:2638
 msgid "Segment Start Time"
 msgstr "Starttid för segment"
 
-#: ../gui/editviewbase.cpp:659 ../gui/rosegardengui.cpp:2622
+#: ../gui/editviewbase.cpp:659 ../gui/rosegardengui.cpp:2649
 msgid "Set Segment Start Time"
 msgstr "Ställ in starttid för segment"
 
-#: ../gui/editviewbase.cpp:677 ../gui/rosegardengui.cpp:2653
+#: ../gui/editviewbase.cpp:677 ../gui/rosegardengui.cpp:2680
 msgid "Segment Duration"
 msgstr "Segmentlängd"
 
-#: ../gui/editviewbase.cpp:685 ../gui/rosegardengui.cpp:2665
+#: ../gui/editviewbase.cpp:685 ../gui/rosegardengui.cpp:2692
 msgid "Set Segment Duration"
 msgstr "Ställ in segmentlängd"
 
@@ -3020,110 +3129,110 @@ msgstr "Typ (data1)  "
 msgid "Value (Data2)  "
 msgstr "Värde (data2)"
 
-#: ../gui/eventview.cpp:510
+#: ../gui/eventview.cpp:523
 msgid "(group %1)  "
 msgstr "(grupp %1)  "
 
-#: ../gui/eventview.cpp:564
+#: ../gui/eventview.cpp:577
 msgid "<no events at this filter level>"
 msgstr "<inga händelser på den här filternivån>"
 
-#: ../gui/eventview.cpp:566
+#: ../gui/eventview.cpp:579
 msgid "<no events>"
 msgstr "<inga händelser>"
 
-#: ../gui/eventview.cpp:741
+#: ../gui/eventview.cpp:754
 msgid "Segment label"
 msgstr "Segmentnamn"
 
-#: ../gui/eventview.cpp:741
+#: ../gui/eventview.cpp:754
 msgid "Label:"
 msgstr "Namn:"
 
-#: ../gui/eventview.cpp:798 ../gui/triggermanager.cpp:149
+#: ../gui/eventview.cpp:811 ../gui/triggermanager.cpp:149
 msgid "Base velocity"
 msgstr "Grundljudstyrka"
 
-#: ../gui/eventview.cpp:945 ../gui/matrixview.cpp:1486
+#: ../gui/eventview.cpp:958 ../gui/matrixview.cpp:1486
 #: ../gui/notationviewslots.cpp:489 ../gui/notationviewslots.cpp:537
-#: ../gui/rosegardengui.cpp:2307 ../gui/triggermanager.cpp:400
+#: ../gui/rosegardengui.cpp:2334 ../gui/triggermanager.cpp:400
 msgid "Clipboard is empty"
 msgstr "Klippbordet är tomt"
 
-#: ../gui/eventview.cpp:949 ../gui/matrixview.cpp:1490
+#: ../gui/eventview.cpp:962 ../gui/matrixview.cpp:1490
 #: ../gui/notationviewslots.cpp:497 ../gui/notationviewslots.cpp:541
-#: ../gui/rosegardengui.cpp:2310
+#: ../gui/rosegardengui.cpp:2337
 msgid "Inserting clipboard contents..."
 msgstr "Infogar klippbordets innehåll..."
 
-#: ../gui/eventview.cpp:982 ../gui/matrixview.cpp:1497
+#: ../gui/eventview.cpp:995 ../gui/matrixview.cpp:1497
 #: ../gui/notationtool.cpp:1980
 msgid "Couldn't paste at this point"
 msgstr "Kunde inte klistra in på den här platsen"
 
-#: ../gui/eventview.cpp:1202
+#: ../gui/eventview.cpp:1215
 msgid "&Insert Event"
 msgstr "&Infoga händelse"
 
-#: ../gui/eventview.cpp:1209
+#: ../gui/eventview.cpp:1222
 msgid "&Delete Event"
 msgstr "Ta &bort händelse"
 
-#: ../gui/eventview.cpp:1216
+#: ../gui/eventview.cpp:1229
 msgid "&Edit Event"
 msgstr "&Redigera händelse"
 
-#: ../gui/eventview.cpp:1223
+#: ../gui/eventview.cpp:1236
 msgid "&Advanced Event Editor"
 msgstr "&Avancerad händelseeditor"
 
-#: ../gui/eventview.cpp:1228 ../gui/matrixview.cpp:756
+#: ../gui/eventview.cpp:1241 ../gui/matrixview.cpp:756
 #: ../gui/notationview.cpp:2030
 msgid "&Filter Selection"
 msgstr "&Filtrera markering"
 
-#: ../gui/eventview.cpp:1232 ../gui/matrixview.cpp:635
+#: ../gui/eventview.cpp:1245 ../gui/matrixview.cpp:635
 #: ../gui/tempoview.cpp:633
 msgid "Select &All"
 msgstr "&Markera alla"
 
-#: ../gui/eventview.cpp:1236 ../gui/matrixview.cpp:751
+#: ../gui/eventview.cpp:1249 ../gui/matrixview.cpp:751
 #: ../gui/notationview.cpp:2023 ../gui/tempoview.cpp:637
 msgid "Clear Selection"
 msgstr "Rensa markering"
 
-#: ../gui/eventview.cpp:1248 ../gui/markereditor.cpp:410
+#: ../gui/eventview.cpp:1261 ../gui/markereditor.cpp:410
 #: ../gui/tempoview.cpp:649 ../gui/triggermanager.cpp:459
 msgid "&Musical Times"
 msgstr "&Metronomtider"
 
-#: ../gui/eventview.cpp:1257 ../gui/markereditor.cpp:419
+#: ../gui/eventview.cpp:1270 ../gui/markereditor.cpp:419
 #: ../gui/tempoview.cpp:658 ../gui/triggermanager.cpp:468
 msgid "&Real Times"
 msgstr "&Klocktider"
 
-#: ../gui/eventview.cpp:1266 ../gui/markereditor.cpp:428
+#: ../gui/eventview.cpp:1279 ../gui/markereditor.cpp:428
 #: ../gui/tempoview.cpp:667 ../gui/triggermanager.cpp:477
 msgid "Ra&w Times"
 msgstr "&Obehandlade tider"
 
-#: ../gui/eventview.cpp:1596
+#: ../gui/eventview.cpp:1609
 msgid "Open in Event Editor"
 msgstr "Öppna i händelseeditor"
 
-#: ../gui/eventview.cpp:1597
+#: ../gui/eventview.cpp:1610
 msgid "Open in Expert Event Editor"
 msgstr "Öppna i experthändelseeditor"
 
-#: ../gui/eventview.cpp:1662
+#: ../gui/eventview.cpp:1675
 msgid "%1 - Triggered Segment: %2"
 msgstr "%1 - utlösande segment: %2"
 
-#: ../gui/eventview.cpp:1676
+#: ../gui/eventview.cpp:1689
 msgid "%1 - Segment Track #%2 - Event List"
 msgstr "%1 - segment spår nummer %2 - händelselista"
 
-#: ../gui/eventview.cpp:1682
+#: ../gui/eventview.cpp:1695
 msgid "%1 - %2 Segments - Event List"
 msgstr "%1 - %2 segment - händelselista"
 
@@ -3135,9 +3244,9 @@ msgstr " importerad från Hydrogen "
 msgid "Import from Device..."
 msgstr "Importera från enhet..."
 
-#: ../gui/audiomanagerdialog.cpp:1275 ../gui/importdevicedialog.cpp:83
-#: ../gui/rosegardengui.cpp:2000 ../gui/rosegardengui.cpp:2060
-#: ../gui/rosegardengui.cpp:7116
+#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
+#: ../gui/rosegardengui.cpp:2026 ../gui/rosegardengui.cpp:2086
+#: ../gui/rosegardengui.cpp:7170
 #, c-format
 msgid "Cannot download file %1"
 msgstr "Kan inte ladda ner filen %1"
@@ -3224,8 +3333,8 @@ msgid "[ %1 ]"
 msgstr "[ %1 ]"
 
 #: ../gui/kde32_kfontrequester.cpp:42
-#: ../gui/rosegardenconfigurationpage.cpp:245
-#: ../gui/rosegardenconfigurationpage.cpp:2251
+#: ../gui/rosegardenconfigurationpage.cpp:260
+#: ../gui/rosegardenconfigurationpage.cpp:2273
 msgid "Choose..."
 msgstr "Välj..."
 
@@ -3261,7 +3370,7 @@ msgstr ""
 msgid "Close this tab"
 msgstr "Stäng fliken"
 
-#: ../gui/lilypondio.cpp:537
+#: ../gui/lilypondio.cpp:530
 msgid ""
 "Lilypond does not allow spaces or backslashes in filenames.\n"
 "\n"
@@ -3279,7 +3388,7 @@ msgstr ""
 "\n"
 " istället?"
 
-#: ../gui/lilypondio.cpp:947
+#: ../gui/lilypondio.cpp:949
 msgid ""
 "You encountered an enharmonic resolution bug somewhere during this "
 "operation.  You may wish to save a copy of your current composition and "
@@ -3295,11 +3404,11 @@ msgstr ""
 "Under tiden måste du troligen göra manuella justeringar i filen du just har "
 "exporterat."
 
-#: ../gui/lilypondio.cpp:1439
+#: ../gui/lilypondio.cpp:1441
 msgid "warning: overlong bar truncated here"
 msgstr "varning: alltför lång takt avkortad här"
 
-#: ../gui/lilypondio.cpp:1444
+#: ../gui/lilypondio.cpp:1446
 msgid "warning: bar too short, padding with rests"
 msgstr "varning: takt för kort, fyller ut med pauser"
 
@@ -3405,11 +3514,11 @@ msgstr ""
 "    du installerade i $HOME eller i en lokal tredjeparts paketkatalog\n"
 "    som /usr/local eller /opt."
 
-#: ../gui/main.cpp:409
+#: ../gui/main.cpp:411
 msgid "Rosegarden"
 msgstr "Rosegarden"
 
-#: ../gui/main.cpp:411
+#: ../gui/main.cpp:413
 msgid ""
 "Copyright 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
@@ -3422,11 +3531,11 @@ msgstr ""
 "Copyright av Lilypond-teckensnitt 1997 - 2005 Han-Wen Nienhuys och Jan "
 "Nieuwenhuizen"
 
-#: ../gui/main.cpp:421
+#: ../gui/main.cpp:423
 msgid "Chord labelling code"
 msgstr "Ackordbeteckningskod"
 
-#: ../gui/main.cpp:422
+#: ../gui/main.cpp:424
 msgid ""
 "Lilypond output\n"
 "assorted other patches\n"
@@ -3436,7 +3545,7 @@ msgstr ""
 "Diverse andra programfixar\n"
 "i18n anpassning"
 
-#: ../gui/main.cpp:423
+#: ../gui/main.cpp:425
 msgid ""
 "UI improvements\n"
 "bug fixes"
@@ -3444,7 +3553,7 @@ msgstr ""
 "Förbättringar av grafiskt gränssnitt\n"
 "Felrättningar"
 
-#: ../gui/main.cpp:424
+#: ../gui/main.cpp:426
 msgid ""
 "Segment colours\n"
 "Other UI and bug fixes"
@@ -3452,7 +3561,7 @@ msgstr ""
 "Segmentfärger\n"
 "Andra rättningar av användargränssnitt och fel"
 
-#: ../gui/main.cpp:425
+#: ../gui/main.cpp:427
 msgid ""
 "Russian translation\n"
 "i18n-ization"
@@ -3460,7 +3569,7 @@ msgstr ""
 "Översättning till ryska\n"
 "i18n anpassning"
 
-#: ../gui/main.cpp:426
+#: ../gui/main.cpp:428
 msgid ""
 "Spanish translation\n"
 "ALSA hacking and bug fixes\n"
@@ -3470,47 +3579,47 @@ msgstr ""
 "ALSA-kodning och felrättningar\n"
 "MIDI-inspelning med flera inkanaler"
 
-#: ../gui/main.cpp:427 ../gui/main.cpp:428
+#: ../gui/main.cpp:429 ../gui/main.cpp:430
 msgid "German translation"
 msgstr "Översättning till tyska"
 
-#: ../gui/main.cpp:429
+#: ../gui/main.cpp:431
 msgid "Welsh translation"
 msgstr "Översättning till walesiska"
 
-#: ../gui/main.cpp:430
+#: ../gui/main.cpp:432
 msgid "French translation"
 msgstr "Översättning till franska"
 
-#: ../gui/main.cpp:431 ../gui/main.cpp:432
+#: ../gui/main.cpp:433 ../gui/main.cpp:434
 msgid "Italian translation"
 msgstr "Översättning till italienska"
 
-#: ../gui/main.cpp:433
+#: ../gui/main.cpp:435 ../gui/main.cpp:436
 msgid "Swedish translation"
 msgstr "Översättning till svenska"
 
-#: ../gui/main.cpp:434
+#: ../gui/main.cpp:437
 msgid "Estonian translation"
 msgstr "Översättning till estniska"
 
-#: ../gui/main.cpp:435
+#: ../gui/main.cpp:438
 msgid "Dutch translation"
 msgstr "Översättning till holländska"
 
-#: ../gui/main.cpp:436
+#: ../gui/main.cpp:439
 msgid "HSpinBox class"
 msgstr "Klassen Nummerinmatningsruta"
 
-#: ../gui/main.cpp:437
+#: ../gui/main.cpp:440
 msgid "Original designs for rotary controllers"
 msgstr "Ursprunglig design för rattar"
 
-#: ../gui/main.cpp:438
+#: ../gui/main.cpp:441
 msgid "Japanese translation"
 msgstr "Översättning till japanska"
 
-#: ../gui/main.cpp:439
+#: ../gui/main.cpp:442
 msgid ""
 "Auto-scroll deceleration\n"
 "Rests outside staves and other bug fixes"
@@ -3518,50 +3627,50 @@ msgstr ""
 "Fartminskning för automatisk panorering\n"
 "Pauser utanför notsystem och andra felrättningar"
 
-#: ../gui/main.cpp:440
+#: ../gui/main.cpp:443
 msgid "Simplified Chinese translation"
 msgstr "Översättning till förenklad kinesiska"
 
-#: ../gui/main.cpp:441
+#: ../gui/main.cpp:444
 msgid "LIRC infrared remote-controller support"
 msgstr "Stöd för LIRC, infraröd fjärrkontroll"
 
-#: ../gui/main.cpp:442
+#: ../gui/main.cpp:445
 msgid "MTC slave timing implementation"
 msgstr "Implementering av MTC-slavtid"
 
-#: ../gui/main.cpp:443
+#: ../gui/main.cpp:446
 msgid "Czech translation"
 msgstr "Översättning till tjeckiska"
 
-#: ../gui/main.cpp:444
+#: ../gui/main.cpp:447
 msgid "SCons/bksys building system"
 msgstr "SCons/bksys-byggsystem"
 
-#: ../gui/main.cpp:445
+#: ../gui/main.cpp:448
 msgid "icons, icons, icons"
 msgstr "ikoner, ikoner, ikoner"
 
-#: ../gui/main.cpp:446 ../gui/main.cpp:447 ../gui/main.cpp:448
-#: ../gui/main.cpp:449
+#: ../gui/main.cpp:449 ../gui/main.cpp:450 ../gui/main.cpp:451
+#: ../gui/main.cpp:452
 msgid "Spanish translation"
 msgstr "Översättning till spanska"
 
-#: ../gui/main.cpp:450 ../gui/main.cpp:451
+#: ../gui/main.cpp:453 ../gui/main.cpp:454
 msgid "Catalan translation"
 msgstr "Översättning till katalanska"
 
-#: ../gui/main.cpp:452
+#: ../gui/main.cpp:455
 msgid "new splash screen photo (of Michael's rose garden)"
 msgstr "nytt vinjettfönsterfoto (av Michaels rosengård)"
 
-#: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:455
+#: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:458
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
 msgstr "Stefan Asserhäll,Erik Magnus Johansson"
 
-#: ../gui/_translatorinfo.cpp:3 ../gui/main.cpp:455
+#: ../gui/_translatorinfo.cpp:3 ../gui/main.cpp:458
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
@@ -3711,15 +3820,15 @@ msgid "Couldn't apply piano roll layout"
 msgstr "Kunde inte verkställa pianorulleutläggning"
 
 #: ../gui/matrixview.cpp:544 ../gui/notationview.cpp:1415
-#: ../gui/rosegardengui.cpp:700
+#: ../gui/rosegardengui.cpp:720
 msgid "&Select"
 msgstr "&Markera"
 
-#: ../gui/matrixview.cpp:549 ../gui/rosegardengui.cpp:705
+#: ../gui/matrixview.cpp:549 ../gui/rosegardengui.cpp:725
 msgid "&Draw"
 msgstr "&Rita"
 
-#: ../gui/matrixview.cpp:559 ../gui/rosegardengui.cpp:715
+#: ../gui/matrixview.cpp:559 ../gui/rosegardengui.cpp:735
 msgid "&Move"
 msgstr "&Flytta"
 
@@ -3735,7 +3844,7 @@ msgstr "Infogningsläge för &ackord"
 msgid "Ste&p Recording"
 msgstr "&Stegvis inspelning"
 
-#: ../gui/matrixview.cpp:589 ../gui/rosegardengui.cpp:826
+#: ../gui/matrixview.cpp:589 ../gui/rosegardengui.cpp:846
 msgid "Repeat Last Quantize"
 msgstr "Upprepa senaste kvantisering"
 
@@ -3808,32 +3917,32 @@ msgid "Cursor to &Playback Pointer"
 msgstr "Mark&ör till uppspelningspekare"
 
 #: ../gui/matrixview.cpp:693 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1675
-#: ../gui/notationview.cpp:1965 ../gui/rosegardengui.cpp:1013
+#: ../gui/notationview.cpp:1965 ../gui/rosegardengui.cpp:1033
 msgid "&Play"
 msgstr "S&pela"
 
 #: ../gui/matrixview.cpp:698 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1680
-#: ../gui/notationview.cpp:1970 ../gui/rosegardengui.cpp:1020
+#: ../gui/notationview.cpp:1970 ../gui/rosegardengui.cpp:1040
 msgid "&Stop"
 msgstr "&Stoppa"
 
 #: ../gui/matrixview.cpp:703 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1685
-#: ../gui/notationview.cpp:1975 ../gui/rosegardengui.cpp:1035
+#: ../gui/notationview.cpp:1975 ../gui/rosegardengui.cpp:1055
 msgid "Re&wind"
 msgstr "Spola &tillbaka"
 
 #: ../gui/matrixview.cpp:709 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1691
-#: ../gui/notationview.cpp:1981 ../gui/rosegardengui.cpp:1027
+#: ../gui/notationview.cpp:1981 ../gui/rosegardengui.cpp:1047
 msgid "&Fast Forward"
 msgstr "Spola &fram"
 
 #: ../gui/matrixview.cpp:715 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1697
-#: ../gui/notationview.cpp:1987 ../gui/rosegardengui.cpp:1056
+#: ../gui/notationview.cpp:1987 ../gui/rosegardengui.cpp:1076
 msgid "Rewind to &Beginning"
 msgstr "Spola tillbaka till &början"
 
 #: ../gui/matrixview.cpp:721 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1703
-#: ../gui/notationview.cpp:1993 ../gui/rosegardengui.cpp:1063
+#: ../gui/notationview.cpp:1993 ../gui/rosegardengui.cpp:1083
 msgid "Fast Forward to &End"
 msgstr "Spola fram till s&lutet"
 
@@ -3846,7 +3955,7 @@ msgid "&Solo"
 msgstr "S&olo"
 
 #: ../gui/matrixview.cpp:739 ../gui/notationview.cpp:2011
-#: ../gui/rosegardengui.cpp:1070
+#: ../gui/rosegardengui.cpp:1090
 msgid "Scro&ll to Follow Playback"
 msgstr "&Rulla för att följa uppspelning"
 
@@ -3974,7 +4083,7 @@ msgid "Cutting selection to clipboard..."
 msgstr "Klipper ut markering till klippbordet..."
 
 #: ../gui/matrixview.cpp:1475 ../gui/notationviewslots.cpp:457
-#: ../gui/rosegardengui.cpp:2297
+#: ../gui/rosegardengui.cpp:2324
 msgid "Copying selection to clipboard..."
 msgstr "Kopierar markering till klippbord..."
 
@@ -4016,7 +4125,7 @@ msgstr "Takt"
 msgid " Quantize: "
 msgstr " Kvantisera: "
 
-#: ../gui/matrixview.cpp:2110 ../gui/rosegardengui.cpp:5275
+#: ../gui/matrixview.cpp:2110 ../gui/rosegardengui.cpp:5329
 msgid "%1%"
 msgstr "%1 %"
 
@@ -4040,9 +4149,9 @@ msgstr "Ställer in ljudstyrkor..."
 msgid "Remove Triggers"
 msgstr "Ta bort utlösare"
 
-#: ../gui/matrixview.cpp:2539 ../gui/rosegardenconfigurationpage.cpp:208
-#: ../gui/rosegardenconfigurationpage.h:294
+#: ../gui/matrixview.cpp:2539 ../gui/rosegardenconfigurationpage.cpp:223
 #: ../gui/rosegardenconfigurationpage.h:295
+#: ../gui/rosegardenconfigurationpage.h:296
 msgid "Matrix"
 msgstr "Matris"
 
@@ -4142,7 +4251,7 @@ msgstr "Aiss%1"
 msgid "B%1"
 msgstr "H%1"
 
-#: ../gui/mixer.cpp:140 ../gui/mixer.cpp:1709 ../gui/rosegardengui.cpp:1049
+#: ../gui/mixer.cpp:140 ../gui/mixer.cpp:1709 ../gui/rosegardengui.cpp:1069
 msgid "&Record"
 msgstr "Spela &in"
 
@@ -4630,21 +4739,89 @@ msgstr "Återställ beräknade positioner"
 msgid "Set Visibility"
 msgstr "Ange synlighet"
 
-#: ../gui/notationstaff.cpp:453
-msgid "Rendering staff %1..."
-msgstr "Ritar upp notsystem %1..."
+#: ../gui/sequencemanager.cpp:1010 ../gui/sequencemanager.cpp:1143
+msgid ""
+"The JACK Audio subsystem has failed or it has stopped Rosegarden from "
+"processing audio.\n"
+"Please restart Rosegarden to continue working with audio.\n"
+"Quitting other running applications may improve Rosegarden's performance."
+msgstr ""
+"JACK-delsystemet för ljud har slutat fungera eller har stoppat Rosegarden "
+"att behandla ljud.\n"
+"Starta om Rosegarden för att fortsätta arbeta med ljud.\n"
+"Att avsluta andra program som körs kan förbättra Rosegardens prestanda."
 
-#: ../gui/notationstaff.cpp:515
-msgid "Rendering notes on staff %1..."
-msgstr "Ritar upp noter i notsystem %1..."
+#: ../gui/sequencemanager.cpp:1016 ../gui/sequencemanager.cpp:1149
+msgid ""
+"The JACK Audio subsystem has stopped Rosegarden from processing audio, "
+"probably because of a processing overload.\n"
+"An attempt to restart the audio service has been made, but some problems may "
+"remain.\n"
+"Quitting other running applications may improve Rosegarden's performance."
+msgstr ""
+"JACK-delsystemet för ljud har stoppat Rosegarden att behandla ljud, troligen "
+"på grund av en överbelastning.\n"
+"Ett försök att starta om ljudtjänsten har gjorts, men vissa problem kan vara "
+"kvar.\n"
+"Att avsluta andra program som körs kan förbättra Rosegardens prestanda."
 
-#: ../gui/notationstaff.cpp:573
-msgid "Positioning staff %1..."
-msgstr "Placerar notsystem %1..."
+#: ../gui/sequencemanager.cpp:1027
+msgid ""
+"Run out of processor power for real-time audio processing.  Cannot continue."
+msgstr ""
+"Slut på processorkraft för ljudbehandling i realtid. Kan inte fortsätta."
 
-#: ../gui/notationstaff.cpp:1206 ../gui/notationviewslots.cpp:1780
-msgid "Sustain"
-msgstr "Efterklang"
+#: ../gui/sequencemanager.cpp:1052
+msgid ""
+"A serious error has occurred in the ALSA MIDI subsystem.  It may not be "
+"possible to continue sequencing.  Please check console output for more "
+"information."
+msgstr ""
+"Ett allvarligt fel har inträffat i ALSA-MIDI-delsystemet. Det kanske inte är "
+"möjligt att fortsätta köra musikbehandlaren. Kontrollera terminalutmatningen "
+"för mer information."
+
+#: ../gui/sequencemanager.cpp:1073
+msgid "JACK Audio subsystem is losing sample frames."
+msgstr "JACK-ljudsystemet förlorar samplade ramar."
+
+#: ../gui/sequencemanager.cpp:1091
+msgid ""
+"Failed to read audio data from disc in time to service the audio subsystem."
+msgstr ""
+"Misslyckades läsa ljuddata snabbt från disk för att hantera ljudsystemet."
+
+#: ../gui/sequencemanager.cpp:1095
+msgid ""
+"Failed to write audio data to disc fast enough to service the audio "
+"subsystem."
+msgstr ""
+"Misslyckades skriva ljuddata snabbt nog till disk för att hantera "
+"ljudsystemet."
+
+#: ../gui/sequencemanager.cpp:1099
+msgid "The audio mixing subsystem is failing to keep up."
+msgstr "Ljudsystemet klarar inte av att hänga med."
+
+#: ../gui/sequencemanager.cpp:1103
+msgid "The audio subsystem is failing to keep up."
+msgstr "Ljudsystemet klarar inte av att hänga med."
+
+#: ../gui/sequencemanager.cpp:1107
+msgid "Unknown sequencer failure mode!"
+msgstr "Okänt fel i musikbehandlaren."
+
+#: ../gui/sequencemanager.cpp:1157
+msgid ""
+"<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
+"a high-resolution timing source for MIDI performance.</p><p>This may mean "
+"you are using a Linux system with the kernel timer resolution set too low.  "
+"Please contact your Linux distributor for more information.</p>"
+msgstr ""
+"<h3>Systemets tidupplösning är för låg</h3><p>Rosegarden kunde inte hitta en "
+"tidkälla med hög upplösning för MIDI-utförande.</p><p>Det kan betyda att du "
+"använder ett Linux-system där kärnans tidupplösning är inställd till ett för "
+"lågt värde. Kontakta din Linux-distributör för mer information.</p>"
 
 #: ../gui/notationstrings.cpp:42
 msgid "%1-dotted-%2"
@@ -4825,7 +5002,7 @@ msgstr "Punkterad paus"
 msgid "Switch to Inserting Notes"
 msgstr "Byt till att infoga noter"
 
-#: ../gui/notationtool.cpp:1051 ../gui/rosegardenconfigurationpage.cpp:614
+#: ../gui/notationtool.cpp:1051 ../gui/rosegardenconfigurationpage.cpp:635
 msgid "Collapse rests after erase"
 msgstr "Lägg ihop pauser efter radering"
 
@@ -4865,7 +5042,7 @@ msgstr "Gör synlig"
 msgid "Ready."
 msgstr "Klar."
 
-#: ../gui/notationview.cpp:378 ../gui/rosegardengui.cpp:437
+#: ../gui/notationview.cpp:378 ../gui/rosegardengui.cpp:451
 msgid "Starting..."
 msgstr "Startar..."
 
@@ -4969,7 +5146,7 @@ msgstr "Markera hela &notsystemet"
 msgid "Pa&ste..."
 msgstr "Klistra &in..."
 
-#: ../gui/notationview.cpp:1447 ../gui/rosegardengui.cpp:757
+#: ../gui/notationview.cpp:1447 ../gui/rosegardengui.cpp:777
 msgid "De&lete"
 msgstr "Ta &bort"
 
@@ -5021,7 +5198,7 @@ msgstr "Ta bort utsmyckning..."
 msgid "&None"
 msgstr "I&ngen"
 
-#: ../gui/notationview.cpp:1873 ../gui/rosegardengui.cpp:612
+#: ../gui/notationview.cpp:1873 ../gui/rosegardengui.cpp:632
 msgid "Show T&ools Toolbar"
 msgstr "Visa ver&ktygsrad med verktyg"
 
@@ -5053,7 +5230,7 @@ msgstr "Visa &gruppverktygsrad"
 msgid "Show &Layout Toolbar"
 msgstr "Visa ut&läggningsverktygsrad"
 
-#: ../gui/notationview.cpp:1885 ../gui/rosegardengui.cpp:624
+#: ../gui/notationview.cpp:1885 ../gui/rosegardengui.cpp:644
 msgid "Show Trans&port Toolbar"
 msgstr "Visa &överföringsverktygsrad"
 
@@ -5131,7 +5308,7 @@ msgid "  Spacing:  "
 msgstr "  Avstånd:  "
 
 #: ../gui/notationview.cpp:2504 ../gui/notationview.cpp:3224
-#: ../gui/rosegardengui.cpp:1179
+#: ../gui/rosegardengui.cpp:1199
 msgid "  Ready."
 msgstr "  Klar."
 
@@ -5212,11 +5389,11 @@ msgstr "Okänd teckenstorlek %1"
 msgid "Unknown font size action %1"
 msgstr "Okänd teckenstorleksåtgärd %1"
 
-#: ../gui/notationviewslots.cpp:402 ../gui/rosegardengui.cpp:2246
+#: ../gui/notationviewslots.cpp:402 ../gui/rosegardengui.cpp:2273
 msgid "Printing..."
 msgstr "Skriver ut..."
 
-#: ../gui/notationviewslots.cpp:419 ../gui/rosegardengui.cpp:2258
+#: ../gui/notationviewslots.cpp:419 ../gui/rosegardengui.cpp:2285
 msgid "Previewing..."
 msgstr "Förhandsgranskar..."
 
@@ -5477,6 +5654,10 @@ msgstr "Ta bort ornament"
 msgid "Estimated key signature shown"
 msgstr "Uppskattade fasta förtecken visas"
 
+#: ../gui/notationstaff.cpp:1206 ../gui/notationviewslots.cpp:1780
+msgid "Sustain"
+msgstr "Efterklang"
+
 #: ../gui/notationviewslots.cpp:1796
 msgid ""
 "There is no sustain controller defined for this device.\n"
@@ -5577,11 +5758,11 @@ msgstr ""
 "globala element och notelement kan ha egenskapen form eller teckennamn, men "
 "inte båda"
 
-#: ../gui/playlist.cpp:82 ../gui/rosegardenconfigurationpage.cpp:1894
+#: ../gui/playlist.cpp:82 ../gui/rosegardenconfigurationpage.cpp:1916
 msgid "Title"
 msgstr "Titel"
 
-#: ../gui/audiomanagerdialog.cpp:951 ../gui/playlist.cpp:83
+#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
 msgid "File name"
 msgstr "Filnamn"
 
@@ -5610,249 +5791,249 @@ msgstr "Misslyckades att ladda ljudsamplingar från %1"
 msgid "Note name style"
 msgstr "Notnamn"
 
-#: ../gui/rosegardenconfigurationpage.cpp:162
+#: ../gui/rosegardenconfigurationpage.cpp:167
 msgid "Base octave number for MIDI pitch display"
 msgstr "Nummer för oktaven under subkontraoktaven"
 
-#: ../gui/rosegardenconfigurationpage.cpp:166
+#: ../gui/rosegardenconfigurationpage.cpp:171
 msgid "Use textured backgrounds on canvas areas"
 msgstr "Använd virtuellt notskrivbord"
 
-#: ../gui/rosegardenconfigurationpage.cpp:167
+#: ../gui/rosegardenconfigurationpage.cpp:172
 msgid "    (takes effect only from next restart)"
 msgstr "(får effekt först vid nästa omstart)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:171
+#: ../gui/rosegardenconfigurationpage.cpp:176
 msgid "Always use US names (e.g. quarter, 8th)"
 msgstr "Använd alltid amerikanska namn (t.ex. quarter, 8th)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:172
+#: ../gui/rosegardenconfigurationpage.cpp:177
 msgid "Localized (where available)"
 msgstr "Lokala (om tillgängliga)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:189
+#: ../gui/rosegardenconfigurationpage.cpp:204
 msgid "Presentation"
 msgstr "Presentation"
 
-#: ../gui/rosegardenconfigurationpage.cpp:199
+#: ../gui/rosegardenconfigurationpage.cpp:214
 msgid "Default editor (for double-click on segment)"
 msgstr "Standardvy (för dubbelklick på segment)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:201
+#: ../gui/rosegardenconfigurationpage.cpp:216
 msgid "Number of count-in measures when recording"
 msgstr "Antal inräkningstakter vid inspelning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:203
+#: ../gui/rosegardenconfigurationpage.cpp:218
 msgid "Always use default studio when loading files"
 msgstr "Använd alltid standardstudio när filer laddas"
 
-#: ../gui/rosegardenconfigurationpage.cpp:209
+#: ../gui/rosegardenconfigurationpage.cpp:224
 msgid "Event List"
 msgstr "Händelselista"
 
-#: ../gui/rosegardenconfigurationpage.cpp:224
+#: ../gui/rosegardenconfigurationpage.cpp:239
 msgid "Behavior"
 msgstr "Beteende"
 
-#: ../gui/rosegardenconfigurationpage.cpp:234
+#: ../gui/rosegardenconfigurationpage.cpp:249
 msgid "External audio editor"
 msgstr "Extern ljudeditor"
 
-#: ../gui/rosegardenconfigurationpage.cpp:251
+#: ../gui/rosegardenconfigurationpage.cpp:266
 msgid "External Editors"
 msgstr "Externa editorer"
 
-#: ../gui/rosegardenconfigurationpage.cpp:261
+#: ../gui/rosegardenconfigurationpage.cpp:276
 msgid "Enable auto-save"
 msgstr "Aktivera spara automatiskt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:265
+#: ../gui/rosegardenconfigurationpage.cpp:280
 msgid "Auto-save interval (in seconds)"
 msgstr "Intervall för spara automatiskt (i sekunder)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:271
+#: ../gui/rosegardenconfigurationpage.cpp:286
 msgid "Auto-save"
 msgstr "Spara automatiskt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:278
+#: ../gui/rosegardenconfigurationpage.cpp:293
 msgid "External audio editor path"
 msgstr "Sökväg till extern ljudeditor"
 
-#: ../gui/rosegardenconfigurationpage.cpp:343
+#: ../gui/rosegardenconfigurationpage.cpp:364
 msgid "Notation font"
 msgstr "Notteckensnitt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:344
+#: ../gui/rosegardenconfigurationpage.cpp:365
 #, fuzzy
 msgid "Other fonts"
 msgstr "Annan"
 
-#: ../gui/rosegardenconfigurationpage.cpp:345
-#: ../gui/rosegardenconfigurationpage.cpp:1941
+#: ../gui/rosegardenconfigurationpage.cpp:366
+#: ../gui/rosegardenconfigurationpage.cpp:1963
 msgid "Description"
 msgstr "Beskrivning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:355
+#: ../gui/rosegardenconfigurationpage.cpp:376
 msgid "Font size for single-staff views"
 msgstr "Teckenstorlek för vyer med ett notlinjesystem"
 
-#: ../gui/rosegardenconfigurationpage.cpp:358
+#: ../gui/rosegardenconfigurationpage.cpp:379
 msgid "Font size for multi-staff views"
 msgstr "Teckenstorlek för vyer med flera notlinjesystem"
 
-#: ../gui/rosegardenconfigurationpage.cpp:361
+#: ../gui/rosegardenconfigurationpage.cpp:382
 msgid "Font size for printing (pt)"
 msgstr "Teckenstorlek för utskrift (punkter)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:369
+#: ../gui/rosegardenconfigurationpage.cpp:390
 msgid "Origin:"
 msgstr "Ursprung:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:370
+#: ../gui/rosegardenconfigurationpage.cpp:391
 msgid "Copyright:"
 msgstr "Copyright:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:371
+#: ../gui/rosegardenconfigurationpage.cpp:392
 msgid "Mapped by:"
 msgstr "Mappat av:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:404
+#: ../gui/rosegardenconfigurationpage.cpp:425
 msgid "Rescan available fonts"
 msgstr ""
 
-#: ../gui/rosegardenconfigurationpage.cpp:449
+#: ../gui/rosegardenconfigurationpage.cpp:470
 msgid "Text font"
 msgstr "Textteckensnitt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:452
+#: ../gui/rosegardenconfigurationpage.cpp:473
 msgid "Time Signature font"
 msgstr "Teckensnitt för taktartssignatur"
 
-#: ../gui/rosegardenconfigurationpage.cpp:483
+#: ../gui/rosegardenconfigurationpage.cpp:504
 msgid "Default layout mode"
 msgstr "Standardutläggning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:487
+#: ../gui/rosegardenconfigurationpage.cpp:508
 msgid "Linear layout"
 msgstr "Horisontell utläggning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:488
+#: ../gui/rosegardenconfigurationpage.cpp:509
 msgid "Continuous page layout"
 msgstr "Vertikal utläggning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:489
+#: ../gui/rosegardenconfigurationpage.cpp:510
 msgid "Multiple page layout"
 msgstr "Sidutläggning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:496
+#: ../gui/rosegardenconfigurationpage.cpp:517
 msgid "Default spacing"
 msgstr "Standardavstånd"
 
-#: ../gui/rosegardenconfigurationpage.cpp:517
+#: ../gui/rosegardenconfigurationpage.cpp:538
 msgid "Default duration factor"
 msgstr "Förvald notvärdesfaktor"
 
-#: ../gui/rosegardenconfigurationpage.cpp:530
+#: ../gui/rosegardenconfigurationpage.cpp:551
 msgid "Full"
 msgstr "Fullt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:541
+#: ../gui/rosegardenconfigurationpage.cpp:562
 msgid "Show non-notation events as question marks"
 msgstr "Visa händelser utan noter som frågetecken"
 
-#: ../gui/rosegardenconfigurationpage.cpp:547
+#: ../gui/rosegardenconfigurationpage.cpp:568
 msgid "Show notation-quantized notes in a different color"
 msgstr "Visa kvantiserade noter med en annan färg"
 
-#: ../gui/rosegardenconfigurationpage.cpp:553
+#: ../gui/rosegardenconfigurationpage.cpp:574
 msgid "Show \"invisible\" events in grey"
 msgstr "Visa \"osynliga\" händelser i grått"
 
-#: ../gui/rosegardenconfigurationpage.cpp:558
+#: ../gui/rosegardenconfigurationpage.cpp:579
 msgid "Layout"
 msgstr "Utläggning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:566
+#: ../gui/rosegardenconfigurationpage.cpp:587
 msgid "Default note style for new notes"
 msgstr "Standardstil för nya noter"
 
-#: ../gui/rosegardenconfigurationpage.cpp:591
+#: ../gui/rosegardenconfigurationpage.cpp:612
 msgid "When inserting notes..."
 msgstr "När noter infogas..."
 
-#: ../gui/rosegardenconfigurationpage.cpp:598
+#: ../gui/rosegardenconfigurationpage.cpp:619
 msgid "Split notes into ties to make durations match"
 msgstr "Dela upp för stora notvärden med hjälp av bindebågar"
 
-#: ../gui/rosegardenconfigurationpage.cpp:599
+#: ../gui/rosegardenconfigurationpage.cpp:620
 msgid "Ignore existing durations"
 msgstr "Ignorera befintliga notvärden"
 
-#: ../gui/rosegardenconfigurationpage.cpp:607
+#: ../gui/rosegardenconfigurationpage.cpp:628
 msgid "Auto-beam on insert when appropriate"
 msgstr "Lägg om lämpligt automatiskt till balkar vid infogning "
 
-#: ../gui/rosegardenconfigurationpage.cpp:620
+#: ../gui/rosegardenconfigurationpage.cpp:641
 msgid "Default paste type"
 msgstr "Förvald inklistringstyp"
 
-#: ../gui/rosegardenconfigurationpage.cpp:639
+#: ../gui/rosegardenconfigurationpage.cpp:660
 msgid "Editing"
 msgstr "Redigering"
 
-#: ../gui/rosegardenconfigurationpage.cpp:646
+#: ../gui/rosegardenconfigurationpage.cpp:667
 msgid "Accidentals in one octave..."
 msgstr "Tillfälliga förtecken i en oktav..."
 
-#: ../gui/rosegardenconfigurationpage.cpp:648
+#: ../gui/rosegardenconfigurationpage.cpp:669
 msgid "Affect only that octave"
 msgstr "gäller bara den oktaven"
 
-#: ../gui/rosegardenconfigurationpage.cpp:649
+#: ../gui/rosegardenconfigurationpage.cpp:670
 msgid "Require cautionaries in other octaves"
 msgstr "kräver förtydligande förtecken i andra oktaver"
 
-#: ../gui/rosegardenconfigurationpage.cpp:650
+#: ../gui/rosegardenconfigurationpage.cpp:671
 msgid "Affect all subsequent octaves"
 msgstr "påverkar alla andra oktaver"
 
-#: ../gui/rosegardenconfigurationpage.cpp:657
+#: ../gui/rosegardenconfigurationpage.cpp:678
 msgid "Accidentals in one bar..."
 msgstr "Tillfälliga förtecken i en takt..."
 
-#: ../gui/rosegardenconfigurationpage.cpp:659
+#: ../gui/rosegardenconfigurationpage.cpp:680
 msgid "Affect only that bar"
 msgstr "gäller bara den takten"
 
-#: ../gui/rosegardenconfigurationpage.cpp:660
+#: ../gui/rosegardenconfigurationpage.cpp:681
 msgid "Require cautionary resets in following bar"
 msgstr "kräver förtydligande återställningstecken i följande takt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:661
+#: ../gui/rosegardenconfigurationpage.cpp:682
 msgid "Require explicit resets in following bar"
 msgstr "kräver återställningstecken i följande takt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:668
+#: ../gui/rosegardenconfigurationpage.cpp:689
 msgid "Key signature cancellation style:"
 msgstr "Stil för Inga fasta förtecken:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:670
+#: ../gui/rosegardenconfigurationpage.cpp:691
 msgid "Cancel only when entering C major or A minor"
 msgstr "Inga fasta förtecken vid enbart C-dur eller A-moll"
 
-#: ../gui/rosegardenconfigurationpage.cpp:671
+#: ../gui/rosegardenconfigurationpage.cpp:692
 msgid "Cancel whenever removing sharps or flats"
 msgstr "Återställ när kors- eller b-förtecken tas bort"
 
-#: ../gui/rosegardenconfigurationpage.cpp:672
+#: ../gui/rosegardenconfigurationpage.cpp:693
 msgid "Cancel always"
 msgstr "Återställ alltid"
 
-#: ../gui/rosegardenconfigurationpage.cpp:679
+#: ../gui/rosegardenconfigurationpage.cpp:700
 msgid "Accidentals"
 msgstr "Tillfälliga förtecken"
 
-#: ../gui/rosegardenconfigurationpage.cpp:684
+#: ../gui/rosegardenconfigurationpage.cpp:705
 msgid ""
 "Rosegarden can apply automatic quantization to recorded or imported MIDI "
 "data for notation purposes only. This does not affect playback, and does not "
@@ -5862,25 +6043,25 @@ msgstr ""
 "eller importerad MIDI-data. Detta påverkar inte uppspelning, och påverkar "
 "inte redigering i någon av vyerna utom notvyn."
 
-#: ../gui/rosegardenconfigurationpage.cpp:794
+#: ../gui/rosegardenconfigurationpage.cpp:815
 msgid "%1 (smooth)"
 msgstr "%1 (jämnt)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:797
+#: ../gui/rosegardenconfigurationpage.cpp:818
 msgid "%1 (jaggy)"
 msgstr "%1 (ojämnt)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:875
-#: ../gui/rosegardenconfigurationpage.cpp:1111
+#: ../gui/rosegardenconfigurationpage.cpp:896
+#: ../gui/rosegardenconfigurationpage.cpp:1132
 #: ../gui/rosegardenconfigurationpage.h:183
 msgid "General"
 msgstr "Allmänt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:895
+#: ../gui/rosegardenconfigurationpage.cpp:916
 msgid "JACK latency"
 msgstr "JACK-latenstid"
 
-#: ../gui/rosegardenconfigurationpage.cpp:898
+#: ../gui/rosegardenconfigurationpage.cpp:919
 msgid ""
 "Use the \"Fetch JACK latencies\" button to discover the latency values set "
 "at\n"
@@ -5899,47 +6080,47 @@ msgstr ""
 "serverparametrar för JACK, ska du alltid hämta latenstidsvärden igen.\n"
 "Latenstidsvärden lagras av Rosegarden för användning nästa gång."
 
-#: ../gui/rosegardenconfigurationpage.cpp:902
+#: ../gui/rosegardenconfigurationpage.cpp:923
 msgid "JACK playback latency (in ms)"
 msgstr "Latenstid vid uppspelning med JACK (i ms)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:903
+#: ../gui/rosegardenconfigurationpage.cpp:924
 msgid "JACK record latency (in ms)"
 msgstr "Latenstid vid inspelning med JACK (i ms)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:905
+#: ../gui/rosegardenconfigurationpage.cpp:926
 msgid "Fetch JACK latencies"
 msgstr "Hämta latenstider från JACK"
 
-#: ../gui/rosegardenconfigurationpage.cpp:958
+#: ../gui/rosegardenconfigurationpage.cpp:979
 msgid "JACK Latency"
 msgstr "JACK-latenstid"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1018
+#: ../gui/rosegardenconfigurationpage.cpp:1039
 msgid "Unknown"
 msgstr "Okänd"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1024
+#: ../gui/rosegardenconfigurationpage.cpp:1045
 msgid "No MIDI, audio OK"
 msgstr "Inget MIDI, ljud ok"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1026
+#: ../gui/rosegardenconfigurationpage.cpp:1047
 msgid "MIDI OK, no audio"
 msgstr "MIDI ok, inget ljud"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1028
+#: ../gui/rosegardenconfigurationpage.cpp:1049
 msgid "MIDI OK, audio OK"
 msgstr "MIDI ok, ljud ok"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1030
+#: ../gui/rosegardenconfigurationpage.cpp:1051
 msgid "No driver"
 msgstr "Ingen drivrutin"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1036
+#: ../gui/rosegardenconfigurationpage.cpp:1057
 msgid "Show detailed status"
 msgstr "Visa detaljerad status"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1044
+#: ../gui/rosegardenconfigurationpage.cpp:1065
 msgid ""
 "Send all MIDI Controllers at start of playback\n"
 "     (will incur noticeable delay)"
@@ -5947,7 +6128,7 @@ msgstr ""
 "Skicka alla MIDI-styrenheter vid start av uppspelning\n"
 "(orsakar märkbar initial fördröjning)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1046
+#: ../gui/rosegardenconfigurationpage.cpp:1067
 msgid ""
 "Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI "
 "devices every\n"
@@ -5961,11 +6142,11 @@ msgstr ""
 "en\n"
 "fördröjning vid uppspelningens start, på grund av mängden data som skickas."
 
-#: ../gui/rosegardenconfigurationpage.cpp:1071
+#: ../gui/rosegardenconfigurationpage.cpp:1092
 msgid "Load SoundFont to SoundBlaster card at startup"
 msgstr "Ladda ljudsamplingar till Soundblaster-kort vid start"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1072
+#: ../gui/rosegardenconfigurationpage.cpp:1093
 msgid ""
 "Check this box to enable soundfont loading on EMU10K-based cards when "
 "Rosegarden is launched"
@@ -5973,15 +6154,15 @@ msgstr ""
 "Markera rutan för att aktivera laddning av ljudsamplingar till EMU10K-"
 "baserade kort när Rosegarden startas"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1080
+#: ../gui/rosegardenconfigurationpage.cpp:1101
 msgid "Path to 'asfxload' or 'sfxload' command"
 msgstr "Sökväg till kommandot 'asfxload' eller 'sfxload'"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1086
+#: ../gui/rosegardenconfigurationpage.cpp:1107
 msgid "SoundFont"
 msgstr "Ljudsamplingar"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1122
+#: ../gui/rosegardenconfigurationpage.cpp:1143
 msgid ""
 "Rosegarden can start the JACK audio daemon (jackd) for you\n"
 "automatically if it isn't already running when Rosegarden starts.\n"
@@ -6008,19 +6189,19 @@ msgstr ""
 "\n"
 "Till exempel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1135
+#: ../gui/rosegardenconfigurationpage.cpp:1156
 msgid "Start JACK when Rosegarden starts"
 msgstr "Starta JACK när Rosegarden startas"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1139
+#: ../gui/rosegardenconfigurationpage.cpp:1160
 msgid "JACK command (including path as necessary)"
 msgstr "JACK-kommando (inklusive sökvägar om nödvändigt)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1151
+#: ../gui/rosegardenconfigurationpage.cpp:1173
 msgid "Startup"
 msgstr "Start"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1174
+#: ../gui/rosegardenconfigurationpage.cpp:1196
 msgid ""
 "Longer buffers usually improve playback quality, but use more memory and "
 "slow response."
@@ -6028,339 +6209,339 @@ msgstr ""
 "Längre buffrar förbättrar oftast uppspelningskvaliteten, men använder mer "
 "minne och ger längre svarstider."
 
-#: ../gui/rosegardenconfigurationpage.cpp:1178
+#: ../gui/rosegardenconfigurationpage.cpp:1200
 msgid "Event read-ahead"
 msgstr "Läs händelser i förväg"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1179
+#: ../gui/rosegardenconfigurationpage.cpp:1201
 msgid "Audio mix buffer"
 msgstr "Buffer för ljudmixning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1180
+#: ../gui/rosegardenconfigurationpage.cpp:1202
 msgid "Audio file read buffer"
 msgstr "Buffer för läsning av ljudfil"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1181
+#: ../gui/rosegardenconfigurationpage.cpp:1203
 msgid "Audio file write buffer"
 msgstr "Buffer för skrivning av ljudfil"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1182
+#: ../gui/rosegardenconfigurationpage.cpp:1204
 msgid "Per-file limit for cacheable audio files"
 msgstr "Gräns för varje cachebar ljudfil"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1202
+#: ../gui/rosegardenconfigurationpage.cpp:1224
 msgid "20 msec"
 msgstr "20 ms"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1203
+#: ../gui/rosegardenconfigurationpage.cpp:1225
 msgid "5 sec"
 msgstr "5 s"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1236
-#: ../gui/rosegardenconfigurationpage.cpp:1561
+#: ../gui/rosegardenconfigurationpage.cpp:1258
+#: ../gui/rosegardenconfigurationpage.cpp:1583
 msgid "per audio instrument"
 msgstr "per instrument"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1261
-#: ../gui/rosegardenconfigurationpage.cpp:1570
+#: ../gui/rosegardenconfigurationpage.cpp:1283
+#: ../gui/rosegardenconfigurationpage.cpp:1592
 msgid "per file"
 msgstr "per fil"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1314
+#: ../gui/rosegardenconfigurationpage.cpp:1336
 msgid "32KB"
 msgstr "32 Kibyte"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1315
+#: ../gui/rosegardenconfigurationpage.cpp:1337
 msgid "32MB"
 msgstr "32 Mibyte"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1337
+#: ../gui/rosegardenconfigurationpage.cpp:1359
 msgid "Audio mix and monitor mode:"
 msgstr "Ljudmixer och övervakningsläge:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1339
+#: ../gui/rosegardenconfigurationpage.cpp:1361
 msgid "Low latency"
 msgstr "Låg latenstid"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1340
+#: ../gui/rosegardenconfigurationpage.cpp:1362
 msgid "Buffered"
 msgstr "Buffrad"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1346
+#: ../gui/rosegardenconfigurationpage.cpp:1368
 msgid "Create post-fader outputs for audio instruments"
 msgstr "Skapa utgångar för efternertoning för ljudinstrument"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1354
+#: ../gui/rosegardenconfigurationpage.cpp:1376
 msgid "Create post-fader outputs for submasters"
 msgstr "Skapa utgångar för efternertoning för delnivåer"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1363
+#: ../gui/rosegardenconfigurationpage.cpp:1385
 msgid "Record audio files as:"
 msgstr "Spela in ljudfiler som:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1365
+#: ../gui/rosegardenconfigurationpage.cpp:1387
 msgid "16-bit PCM WAV format (smaller files)"
 msgstr "WAV-format med 16-bitars PCM (mindre filer)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1366
+#: ../gui/rosegardenconfigurationpage.cpp:1388
 msgid "32-bit float WAV format (higher quality)"
 msgstr "WAV-format med 32-bitars flyttal (högre kvalitet)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1389
+#: ../gui/rosegardenconfigurationpage.cpp:1411
 msgid "Record and Mix"
 msgstr "Spela in och mixa"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1398
+#: ../gui/rosegardenconfigurationpage.cpp:1420
 msgid "Sequencer timer"
 msgstr "Tidtagare"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1415
+#: ../gui/rosegardenconfigurationpage.cpp:1437
 msgid "Send MIDI Clock and System messages"
 msgstr "Skicka MIDI-klockmeddelanden och systemmeddelanden"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1425
+#: ../gui/rosegardenconfigurationpage.cpp:1447
 msgid "JACK transport mode"
 msgstr "JACK-överföringsläge"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1431
+#: ../gui/rosegardenconfigurationpage.cpp:1453
 msgid "Ignore JACK transport"
 msgstr "Ignorera JACK-överföring"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1432
+#: ../gui/rosegardenconfigurationpage.cpp:1454
 msgid "Sync"
 msgstr "Synkronisera"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1448
+#: ../gui/rosegardenconfigurationpage.cpp:1470
 msgid "MIDI Machine Control mode"
 msgstr "MIDI-maskinstyrläge"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1455
+#: ../gui/rosegardenconfigurationpage.cpp:1477
 msgid "MMC Master"
 msgstr "MMC-huvudenhet"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1456
+#: ../gui/rosegardenconfigurationpage.cpp:1478
 msgid "MMC Slave"
 msgstr "MMC-slav"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1464
+#: ../gui/rosegardenconfigurationpage.cpp:1486
 msgid "MIDI Time Code mode"
 msgstr "MIDI-tidkodsläge"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1471
+#: ../gui/rosegardenconfigurationpage.cpp:1493
 msgid "MTC Master"
 msgstr "MTC-huvudenhet"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1472
+#: ../gui/rosegardenconfigurationpage.cpp:1494
 msgid "MTC Slave"
 msgstr "MTC-slav"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1478
+#: ../gui/rosegardenconfigurationpage.cpp:1500
 msgid "Automatically connect sync output to all devices in use"
 msgstr "Anslut synkroniseringsutmatning automatiskt till alla använda enheter"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1485
+#: ../gui/rosegardenconfigurationpage.cpp:1507
 msgid "Synchronisation"
 msgstr "Synkronisering"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1514
+#: ../gui/rosegardenconfigurationpage.cpp:1536
 msgid "%1 msec / %2 KB %3"
 msgstr "%1 ms / %2 Kibyte %3"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1517
+#: ../gui/rosegardenconfigurationpage.cpp:1539
 msgid "%1 msec / %2 MB %3"
 msgstr "%1 ms / %2 Mibyte %3"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1522
+#: ../gui/rosegardenconfigurationpage.cpp:1544
 msgid "%1 sec / %2 KB %3"
 msgstr "%1 s / %2 Kibyte %3"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1525
+#: ../gui/rosegardenconfigurationpage.cpp:1547
 msgid "%1 sec / %2 MB %3"
 msgstr "%1 sek / %2 Mibyte %3"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1531
+#: ../gui/rosegardenconfigurationpage.cpp:1553
 msgid "%1 msec"
 msgstr "%1 ms"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1533
+#: ../gui/rosegardenconfigurationpage.cpp:1555
 msgid "%1 sec"
 msgstr "%1 sek"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1588
+#: ../gui/rosegardenconfigurationpage.cpp:1610
 msgid "%1 KB"
 msgstr "%1 Kibyte"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1589
+#: ../gui/rosegardenconfigurationpage.cpp:1611
 msgid "%1 MB"
 msgstr "%1 Mibyte"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1626
+#: ../gui/rosegardenconfigurationpage.cpp:1648
 msgid "sfxload path"
 msgstr "Sökväg till sfxload"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1633
+#: ../gui/rosegardenconfigurationpage.cpp:1655
 msgid "Soundfont path"
 msgstr "Sökväg till ljudsamplingar"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1832
+#: ../gui/rosegardenconfigurationpage.cpp:1854
 msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 measures)"
 msgstr "%1 minuter %2.%3%4 sekunder (%5 enheter, %6 takter)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1890
+#: ../gui/rosegardenconfigurationpage.cpp:1912
 msgid "Copyright"
 msgstr "Copyright"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1892
+#: ../gui/rosegardenconfigurationpage.cpp:1914
 msgid "Composer"
 msgstr "Tonsättare"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1896
+#: ../gui/rosegardenconfigurationpage.cpp:1918
 msgid "Subtitle"
 msgstr "Undertitel"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1898
+#: ../gui/rosegardenconfigurationpage.cpp:1920
 msgid "Arranger"
 msgstr "Arrangör"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1927
+#: ../gui/rosegardenconfigurationpage.cpp:1949
 msgid "Add New Property"
 msgstr "Lägg till ny egenskap"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1931
+#: ../gui/rosegardenconfigurationpage.cpp:1953
 msgid "Delete Property"
 msgstr "Ta bort egenskap"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1959
+#: ../gui/rosegardenconfigurationpage.cpp:1981
 msgid "Filename:"
 msgstr "Filnamn:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1962
+#: ../gui/rosegardenconfigurationpage.cpp:1984
 msgid "Formal duration (to end marker):"
 msgstr "Formell längd (till slutmarkör):"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1967
+#: ../gui/rosegardenconfigurationpage.cpp:1989
 msgid "Playing duration:"
 msgstr "Uppspelningslängd:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1972
+#: ../gui/rosegardenconfigurationpage.cpp:1994
 msgid "Tracks:"
 msgstr "Spår:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1973
+#: ../gui/rosegardenconfigurationpage.cpp:1995
 msgid "%1 used, %2 total"
 msgstr "%1 använda, %2 totalt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1978
+#: ../gui/rosegardenconfigurationpage.cpp:2000
 msgid "Segments:"
 msgstr "Segment:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1979
+#: ../gui/rosegardenconfigurationpage.cpp:2001
 msgid "%1 MIDI, %2 audio, %3 total"
 msgstr "%1 MIDI, %2 ljud, %3 totalt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1987
+#: ../gui/rosegardenconfigurationpage.cpp:2009
 msgid "Statistics"
 msgstr "Statistik"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1995
+#: ../gui/rosegardenconfigurationpage.cpp:2017
 msgid "Track"
 msgstr "Spår"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1996
+#: ../gui/rosegardenconfigurationpage.cpp:2018
 #: ../gui/segmentparameterbox.cpp:81 ../gui/triggermanager.cpp:146
 msgid "Label"
 msgstr "Namn"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1997
+#: ../gui/rosegardenconfigurationpage.cpp:2019
 msgid "Time"
 msgstr "Tid"
 
 #: ../gui/audiomanagerdialog.cpp:255
-#: ../gui/rosegardenconfigurationpage.cpp:1998 ../gui/triggermanager.cpp:147
+#: ../gui/rosegardenconfigurationpage.cpp:2020 ../gui/triggermanager.cpp:147
 msgid "Duration"
 msgstr "Tonlängd"
 
-#: ../gui/rosegardenconfigurationpage.cpp:1999
+#: ../gui/rosegardenconfigurationpage.cpp:2021
 msgid "Events"
 msgstr "Händelser"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2000
+#: ../gui/rosegardenconfigurationpage.cpp:2022
 msgid "Polyphony"
 msgstr "Polyfoni"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2001
+#: ../gui/rosegardenconfigurationpage.cpp:2023
 #: ../gui/segmentparameterbox.cpp:82
 msgid "Repeat"
 msgstr "Upprepa"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2004
+#: ../gui/rosegardenconfigurationpage.cpp:2026
 #: ../gui/segmentparameterbox.cpp:85
 msgid "Delay"
 msgstr "Fördröjning"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2029
-#: ../gui/rosegardenconfigurationpage.h:387
+#: ../gui/rosegardenconfigurationpage.cpp:2051
+#: ../gui/rosegardenconfigurationpage.h:388
 msgid "Audio"
 msgstr "Ljud"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2029
+#: ../gui/rosegardenconfigurationpage.cpp:2051
 msgid "MIDI"
 msgstr "MIDI"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2142
+#: ../gui/rosegardenconfigurationpage.cpp:2164
 msgid "Segment Summary"
 msgstr "Segmentöversikt"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2154
+#: ../gui/rosegardenconfigurationpage.cpp:2176
 msgid "{new property %1}"
 msgstr "{ny egenskap %1}"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2154
+#: ../gui/rosegardenconfigurationpage.cpp:2176
 msgid "{new property}"
 msgstr "{ny egenskap}"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2159
+#: ../gui/rosegardenconfigurationpage.cpp:2181
 msgid "{undefined}"
 msgstr "{odefinierad}"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2246
+#: ../gui/rosegardenconfigurationpage.cpp:2268
 msgid "Audio file path:"
 msgstr "Sökväg för ljudfil:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2256
+#: ../gui/rosegardenconfigurationpage.cpp:2278
 msgid "Disk space remaining:"
 msgstr "Återstående diskutrymme:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2261
+#: ../gui/rosegardenconfigurationpage.cpp:2283
 msgid "Equivalent minutes of 16-bit stereo:"
 msgstr "Motsvarande minuter med 16-bitars stereo:"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2273
+#: ../gui/rosegardenconfigurationpage.cpp:2295
 msgid "Modify audio path"
 msgstr "Ändra ljudsökväg"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2296
+#: ../gui/rosegardenconfigurationpage.cpp:2318
 msgid "%1 out of %2 (%3% used)"
 msgstr "%1 av %2 (%3 % använt)"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2327
+#: ../gui/rosegardenconfigurationpage.cpp:2349
 msgid "minutes at"
 msgstr "minuter vid"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2385
+#: ../gui/rosegardenconfigurationpage.cpp:2407
 #: ../gui/segmentparameterbox.cpp:347
 msgid "Add New Color"
 msgstr "Lägg till ny färg"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2389
+#: ../gui/rosegardenconfigurationpage.cpp:2411
 msgid "Delete Color"
 msgstr "Ta bort färg"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2408
+#: ../gui/rosegardenconfigurationpage.cpp:2430
 msgid "Color Map"
 msgstr "Färgkarta"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2443
+#: ../gui/rosegardenconfigurationpage.cpp:2465
 #: ../gui/segmentparameterbox.cpp:888
 msgid "New Color Name"
 msgstr "Nytt färgnamn"
@@ -6369,27 +6550,27 @@ msgstr "Nytt färgnamn"
 msgid "General Configuration"
 msgstr "Allmänna inställningar"
 
-#: ../gui/rosegardenconfigurationpage.h:320
+#: ../gui/rosegardenconfigurationpage.h:321
 msgid "Latency"
 msgstr "Latenstid"
 
-#: ../gui/rosegardenconfigurationpage.h:321
+#: ../gui/rosegardenconfigurationpage.h:322
 msgid "Sequencer Latency"
 msgstr "Inspelar-latenstid"
 
-#: ../gui/rosegardenconfigurationpage.h:388
+#: ../gui/rosegardenconfigurationpage.h:389
 msgid "Audio Settings"
 msgstr "Ljudinställningar"
 
-#: ../gui/rosegardenconfigurationpage.h:431
+#: ../gui/rosegardenconfigurationpage.h:432
 msgid "Color Settings"
 msgstr "Färginställningar"
 
-#: ../gui/rosegardenconfigurationpage.h:465
+#: ../gui/rosegardenconfigurationpage.h:466
 msgid "Sequencer"
 msgstr "Musikbehandlare"
 
-#: ../gui/rosegardenconfigurationpage.h:466
+#: ../gui/rosegardenconfigurationpage.h:467
 msgid "Sequencer Settings"
 msgstr "Inspelarinställningar"
 
@@ -6401,7 +6582,7 @@ msgstr "Anpassa Rosegarden"
 msgid "Document Properties"
 msgstr "Dokumentegenskaper"
 
-#: ../gui/rosegardengui.cpp:296
+#: ../gui/rosegardengui.cpp:300
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
 "Please check configuration (Settings->Configure Rosegarden->Sequencer->JACK "
@@ -6413,319 +6594,324 @@ msgstr ""
 "Musikbehandlare -> JACK-styrning)\n"
 "och starta om."
 
-#: ../gui/rosegardengui.cpp:305
+#: ../gui/rosegardengui.cpp:309
 msgid "Starting sequencer..."
 msgstr "Startar musikbehandlare..."
 
-#: ../gui/rosegardengui.cpp:312
+#: ../gui/rosegardengui.cpp:316
 msgid "Initializing plugin manager..."
 msgstr "Initierar instickshantering..."
 
-#: ../gui/rosegardengui.cpp:317
+#: ../gui/rosegardengui.cpp:321
 msgid "Initializing view..."
 msgstr "Initierar vy..."
 
-#: ../gui/rosegardengui.cpp:333
+#: ../gui/rosegardengui.cpp:337
 msgid "Segment & Instrument Parameters"
 msgstr "Segment- och instrumentparametrar"
 
-#: ../gui/rosegardengui.cpp:395
+#: ../gui/rosegardengui.cpp:399
 msgid "Starting sequence manager..."
 msgstr "Startar inspelarhantering..."
 
-#: ../gui/rosegardengui.cpp:407
+#: ../gui/rosegardengui.cpp:409
+#, fuzzy, c-format
+msgid "Sequencer startup failed: %1"
+msgstr "Inspelarstatus:"
+
+#: ../gui/rosegardengui.cpp:421
 msgid "Getting sound driver status..."
 msgstr "Hämtar status för ljuddrivrutin..."
 
-#: ../gui/rosegardengui.cpp:418
+#: ../gui/rosegardengui.cpp:432
 msgid "Clearing studio data..."
 msgstr "Rensar studiodata..."
 
-#: ../gui/rosegardengui.cpp:507
+#: ../gui/rosegardengui.cpp:527
 msgid "Import Rosegarden &Project file..."
 msgstr "Importera Rosegarden-&projektfil..."
 
-#: ../gui/rosegardengui.cpp:511
+#: ../gui/rosegardengui.cpp:531
 msgid "Import &MIDI file..."
 msgstr "Importera &MIDI-fil..."
 
-#: ../gui/rosegardengui.cpp:515
+#: ../gui/rosegardengui.cpp:535
 msgid "Import &Rosegarden 2.1 file..."
 msgstr "Importera &Rosegarden-2.1-fil..."
 
-#: ../gui/rosegardengui.cpp:519
+#: ../gui/rosegardengui.cpp:539
 msgid "Import &Hydrogen file..."
 msgstr "Importera &Hydrogen-fil..."
 
-#: ../gui/rosegardengui.cpp:523
+#: ../gui/rosegardengui.cpp:543
 msgid "Merge &File..."
 msgstr "Sammanfoga &fil..."
 
-#: ../gui/rosegardengui.cpp:527
+#: ../gui/rosegardengui.cpp:547
 msgid "Merge &MIDI file..."
 msgstr "Sammanfoga &MIDI-fil..."
 
-#: ../gui/rosegardengui.cpp:531
+#: ../gui/rosegardengui.cpp:551
 msgid "Merge &Rosegarden 2.1 file..."
 msgstr "Sammanfoga &Rosegarden-2.1-fil..."
 
-#: ../gui/rosegardengui.cpp:535
+#: ../gui/rosegardengui.cpp:555
 msgid "Merge &Hydrogen file..."
 msgstr "Sammanfoga &Hydrogen-fil..."
 
-#: ../gui/rosegardengui.cpp:539
+#: ../gui/rosegardengui.cpp:559
 msgid "Export Rosegarden &Project file..."
 msgstr "Exportera Rosegarden-projektfil..."
 
-#: ../gui/rosegardengui.cpp:543
+#: ../gui/rosegardengui.cpp:563
 msgid "Export &MIDI file..."
 msgstr "Exportera &MIDI-fil..."
 
-#: ../gui/rosegardengui.cpp:547
+#: ../gui/rosegardengui.cpp:567
 msgid "Export &Lilypond file..."
 msgstr "Exportera &Lilypond-fil..."
 
-#: ../gui/rosegardengui.cpp:551
+#: ../gui/rosegardengui.cpp:571
 msgid "Pre&view Lilypond file..."
 msgstr "Förhands&granska Lilypond-fil..."
 
-#: ../gui/rosegardengui.cpp:555
+#: ../gui/rosegardengui.cpp:575
 msgid "Export Music&XML file..."
 msgstr "Exportera Music&XML-fil..."
 
-#: ../gui/rosegardengui.cpp:559
+#: ../gui/rosegardengui.cpp:579
 msgid "Export &Csound score file..."
 msgstr "Exportera &Csound-partiturfil..."
 
-#: ../gui/rosegardengui.cpp:563
+#: ../gui/rosegardengui.cpp:583
 msgid "Export M&up file..."
 msgstr "Exportera M&up-fil..."
 
-#: ../gui/rosegardengui.cpp:567
+#: ../gui/rosegardengui.cpp:587
 msgid "Play&list"
 msgstr "Spel&lista"
 
-#: ../gui/rosegardengui.cpp:574
+#: ../gui/rosegardengui.cpp:594
 msgid "Rosegarden &Tutorial"
 msgstr "Rosegarden-hand&ledning"
 
-#: ../gui/rosegardengui.cpp:578
+#: ../gui/rosegardengui.cpp:598
 msgid "&Bug Reporting Guidelines"
 msgstr "&Riktlinjer för felrapportering"
 
-#: ../gui/rosegardengui.cpp:616
+#: ../gui/rosegardengui.cpp:636
 msgid "Show Trac&ks Toolbar"
 msgstr "Visa s&pårverktygsrad"
 
-#: ../gui/rosegardengui.cpp:620
+#: ../gui/rosegardengui.cpp:640
 msgid "Show &Editors Toolbar"
 msgstr "Visa e&ditorverktygsrad"
 
-#: ../gui/rosegardengui.cpp:628
+#: ../gui/rosegardengui.cpp:648
 msgid "Show &Zoom Toolbar"
 msgstr "Visa &zoomverktygsrad"
 
-#: ../gui/rosegardengui.cpp:635
+#: ../gui/rosegardengui.cpp:655
 msgid "Show Tra&nsport"
 msgstr "Visa öv&erföring"
 
-#: ../gui/rosegardengui.cpp:640
+#: ../gui/rosegardengui.cpp:660
 msgid "Show Track &Labels"
 msgstr "Visa sp&årnamn"
 
-#: ../gui/rosegardengui.cpp:645
+#: ../gui/rosegardengui.cpp:665
 msgid "Show Playback Position R&uler"
 msgstr "Visa &uppspelningslinjal"
 
-#: ../gui/rosegardengui.cpp:650
+#: ../gui/rosegardengui.cpp:670
 msgid "Show Te&mpo Ruler"
 msgstr "Visa te&mpolinjal"
 
-#: ../gui/rosegardengui.cpp:655
+#: ../gui/rosegardengui.cpp:675
 msgid "Show Cho&rd Name Ruler"
 msgstr "Visa &linjal för ackordnamn"
 
-#: ../gui/rosegardengui.cpp:661
+#: ../gui/rosegardengui.cpp:681
 msgid "Show Segment Pre&views"
 msgstr "Visa &förhandsgranskningar av segment"
 
-#: ../gui/rosegardengui.cpp:666
+#: ../gui/rosegardengui.cpp:686
 msgid "Show Se&gment and Instrument Parameters"
 msgstr "Visa se&gment- och instrumentparametrar"
 
-#: ../gui/rosegardengui.cpp:722
+#: ../gui/rosegardengui.cpp:742
 msgid "&Resize"
 msgstr "&Ändra storlek"
 
-#: ../gui/rosegardengui.cpp:729
+#: ../gui/rosegardengui.cpp:749
 msgid "&Split"
 msgstr "&Dela"
 
-#: ../gui/rosegardengui.cpp:736 ../gui/segmentcommands.h:399
+#: ../gui/rosegardengui.cpp:756 ../gui/segmentcommands.h:421
 msgid "&Join"
 msgstr "&Sammanfoga"
 
-#: ../gui/rosegardengui.cpp:742
+#: ../gui/rosegardengui.cpp:762
 msgid "&Harmonize"
 msgstr "&Harmoniera"
 
-#: ../gui/rosegardengui.cpp:751
+#: ../gui/rosegardengui.cpp:771
 msgid "Open Tempo and Time Signature Editor"
 msgstr "Öppna tempo- och taktartsverktyget"
 
-#: ../gui/rosegardengui.cpp:761
+#: ../gui/rosegardengui.cpp:781
 msgid "Select &All Segments"
 msgstr "Markera &alla segment"
 
-#: ../gui/rosegardengui.cpp:775
+#: ../gui/rosegardengui.cpp:795
 msgid "Edit Mar&kers..."
 msgstr "&Redigera markörer..."
 
-#: ../gui/rosegardengui.cpp:779
+#: ../gui/rosegardengui.cpp:799
 msgid "Edit Document P&roperties..."
 msgstr "Redigera dokument&egenskaper..."
 
-#: ../gui/rosegardengui.cpp:787
+#: ../gui/rosegardengui.cpp:807
 msgid "Open in &Default Editor"
 msgstr "&Öppna i standardvy"
 
-#: ../gui/rosegardengui.cpp:850
+#: ../gui/rosegardengui.cpp:870
 msgid "Set Start Time..."
 msgstr "Ställ in starttid..."
 
-#: ../gui/rosegardengui.cpp:854
+#: ../gui/rosegardengui.cpp:874
 msgid "Set Duration..."
 msgstr "Ställ in längd..."
 
-#: ../gui/rosegardengui.cpp:863
+#: ../gui/rosegardengui.cpp:883
 msgid "Turn Re&peats into Copies"
 msgstr "Omvandla u&pprepningar till kopior"
 
-#: ../gui/rosegardengui.cpp:868
+#: ../gui/rosegardengui.cpp:888
 msgid "Manage Tri&ggered Segments"
 msgstr "Hantera &utlösande segment"
 
-#: ../gui/rosegardengui.cpp:872
+#: ../gui/rosegardengui.cpp:892
 msgid "Set Tempos from &Beat Segment"
 msgstr "Ställ in tempon från ta&ktsegment"
 
-#: ../gui/rosegardengui.cpp:876
+#: ../gui/rosegardengui.cpp:896
 msgid "Set &Tempo to Audio Segment Duration"
 msgstr "Ställ in &tempo till ljudsegmentets längd"
 
-#: ../gui/rosegardengui.cpp:882
+#: ../gui/rosegardengui.cpp:902
 msgid "Manage Files Associated with A&udio Segments"
 msgstr "Hantera filer som hör ihop med l&judsegment"
 
-#: ../gui/rosegardengui.cpp:887
+#: ../gui/rosegardengui.cpp:907
 msgid "Show Segment Labels"
 msgstr "Visa segmentnamn"
 
-#: ../gui/rosegardengui.cpp:896
+#: ../gui/rosegardengui.cpp:916
 msgid "Add &Track"
 msgstr "Lägg till &spår"
 
-#: ../gui/rosegardengui.cpp:900
+#: ../gui/rosegardengui.cpp:920
 msgid "&Add Multiple Tracks..."
 msgstr "&Lägg till flera spår..."
 
-#: ../gui/rosegardengui.cpp:906
+#: ../gui/rosegardengui.cpp:926
 msgid "D&elete Track"
 msgstr "&Ta bort spår"
 
-#: ../gui/rosegardengui.cpp:912
+#: ../gui/rosegardengui.cpp:932
 msgid "Move Track &Down"
 msgstr "Flytta &ner spår"
 
-#: ../gui/rosegardengui.cpp:918
+#: ../gui/rosegardengui.cpp:938
 msgid "Move Track &Up"
 msgstr "Flytta &upp spår"
 
-#: ../gui/rosegardengui.cpp:922
+#: ../gui/rosegardengui.cpp:942
 msgid "Select &Next Track"
 msgstr "&Markera nästa spår"
 
-#: ../gui/rosegardengui.cpp:927
+#: ../gui/rosegardengui.cpp:947
 msgid "Select &Previous Track"
 msgstr "Markera &föregående spår"
 
-#: ../gui/rosegardengui.cpp:934
+#: ../gui/rosegardengui.cpp:954
 msgid "&Mute all Tracks"
 msgstr "Tysta &alla spår"
 
-#: ../gui/rosegardengui.cpp:940
+#: ../gui/rosegardengui.cpp:960
 msgid "&Unmute all Tracks"
 msgstr "T&ysta inga spår"
 
-#: ../gui/rosegardengui.cpp:944
+#: ../gui/rosegardengui.cpp:964
 msgid "&Remap Instruments..."
 msgstr "Mappa &om instrument..."
 
-#: ../gui/rosegardengui.cpp:953
+#: ../gui/rosegardengui.cpp:973
 msgid "&Audio Mixer"
 msgstr "Lj&udmixer"
 
-#: ../gui/rosegardengui.cpp:959
+#: ../gui/rosegardengui.cpp:979
 msgid "Midi Mi&xer"
 msgstr "MIDI-mi&xer"
 
-#: ../gui/rosegardengui.cpp:965
+#: ../gui/rosegardengui.cpp:985
 msgid "Manage MIDI &Devices"
 msgstr "Hantera MIDI-en&heter"
 
-#: ../gui/rosegardengui.cpp:971
+#: ../gui/rosegardengui.cpp:991
 msgid "Manage S&ynth Plugins"
 msgstr "Hantera s&yntinsticksmoduler"
 
-#: ../gui/rosegardengui.cpp:975
+#: ../gui/rosegardengui.cpp:995
 msgid "Modify MIDI &Filters"
 msgstr "Ändra MIDI-&filter"
 
-#: ../gui/rosegardengui.cpp:981
+#: ../gui/rosegardengui.cpp:1001
 msgid "Manage &Metronome"
 msgstr "Hantera &metronom"
 
-#: ../gui/rosegardengui.cpp:985
+#: ../gui/rosegardengui.cpp:1005
 msgid "&Save Current Document as Default Studio"
 msgstr "&Spara nuvarande dokument som standardstudio"
 
-#: ../gui/rosegardengui.cpp:989
+#: ../gui/rosegardengui.cpp:1009
 msgid "&Import Default Studio"
 msgstr "&Importera standardstudio"
 
-#: ../gui/rosegardengui.cpp:993
+#: ../gui/rosegardengui.cpp:1013
 msgid "Im&port Studio from File..."
 msgstr "Im&portera studio från fil..."
 
-#: ../gui/rosegardengui.cpp:997
+#: ../gui/rosegardengui.cpp:1017
 msgid "&Reset MIDI Network"
 msgstr "&Återställ MIDI-nätverk"
 
-#: ../gui/rosegardengui.cpp:1042
+#: ../gui/rosegardengui.cpp:1062
 msgid "P&unch in Record"
 msgstr "Pu&nch in-inspelning"
 
-#: ../gui/rosegardengui.cpp:1075
+#: ../gui/rosegardengui.cpp:1095
 msgid "Segment Debug Dump "
 msgstr "Felsökningsutskrift av segment "
 
-#: ../gui/rosegardengui.cpp:1145
+#: ../gui/rosegardengui.cpp:1165
 msgid "  Zoom:  "
 msgstr "  Zooma:  "
 
-#: ../gui/rosegardengui.cpp:1550
+#: ../gui/rosegardengui.cpp:1576
 msgid "File \"%1\" does not exist"
 msgstr "Filen \"%1\" finns inte"
 
-#: ../gui/rosegardengui.cpp:1556
+#: ../gui/rosegardengui.cpp:1582
 msgid "File \"%1\" is actually a directory"
 msgstr "Filen \"%1\" är i själva verket en katalog"
 
-#: ../gui/rosegardengui.cpp:1565
+#: ../gui/rosegardengui.cpp:1591
 msgid "You do not have read permission for \"%1\""
 msgstr "Du har inte läsrättigheter till \"%1\""
 
-#: ../gui/rosegardengui.cpp:1633
+#: ../gui/rosegardengui.cpp:1659
 msgid ""
 "An auto-save file for this document has been found\n"
 "Do you want to open it instead ?"
@@ -6733,19 +6919,19 @@ msgstr ""
 "En automatiskt sparad fil för det här dokumentet har hittats.\n"
 "Vill du öppna den istället?"
 
-#: ../gui/rosegardengui.cpp:1734
+#: ../gui/rosegardengui.cpp:1760
 msgid "Example Files"
 msgstr "Exempelfiler"
 
-#: ../gui/rosegardengui.cpp:1938
+#: ../gui/rosegardengui.cpp:1964
 msgid "Opening a new application window..."
 msgstr "Öppnar ett nytt programfönster..."
 
-#: ../gui/rosegardengui.cpp:1948
+#: ../gui/rosegardengui.cpp:1974
 msgid "Creating new document..."
 msgstr "Skapar nytt dokument..."
 
-#: ../gui/rosegardengui.cpp:1991
+#: ../gui/rosegardengui.cpp:2017
 #, c-format
 msgid ""
 "Malformed URL\n"
@@ -6754,106 +6940,106 @@ msgstr ""
 "Felaktig webbadress\n"
 "%1"
 
-#: ../gui/rosegardengui.cpp:2015 ../gui/rosegardengui.cpp:2071
+#: ../gui/rosegardengui.cpp:2041 ../gui/rosegardengui.cpp:2097
 msgid "Opening file..."
 msgstr "Öppnar fil..."
 
-#: ../gui/rosegardengui.cpp:2037 ../gui/rosegardengui.cpp:2053
+#: ../gui/rosegardengui.cpp:2063 ../gui/rosegardengui.cpp:2079
 msgid "Open File"
 msgstr "Öppna fil"
 
-#: ../gui/rosegardengui.cpp:2088 ../gui/rosegardenguidoc.cpp:1109
+#: ../gui/rosegardengui.cpp:2114 ../gui/rosegardenguidoc.cpp:1110
 msgid "Saving file..."
 msgstr "Sparar fil..."
 
-#: ../gui/rosegardengui.cpp:2159
+#: ../gui/rosegardengui.cpp:2185
 msgid "This is not a valid filename.\n"
 msgstr "Detta är inte ett giltigt filnamn.\n"
 
-#: ../gui/rosegardengui.cpp:2164
+#: ../gui/rosegardengui.cpp:2190
 msgid "This is not a local file.\n"
 msgstr "Detta är inte en lokal fil.\n"
 
-#: ../gui/rosegardengui.cpp:2190
+#: ../gui/rosegardengui.cpp:2216
 msgid "Saving file with a new filename..."
 msgstr "Sparar fil med ett nytt namn..."
 
-#: ../gui/rosegardengui.cpp:2192
+#: ../gui/rosegardengui.cpp:2218
 msgid "Rosegarden-4 files"
 msgstr "Rosegarden-4-filer"
 
-#: ../gui/rosegardengui.cpp:2193 ../gui/rosegardengui.cpp:4340
-#: ../gui/rosegardengui.cpp:4383 ../gui/rosegardengui.cpp:4421
-#: ../gui/rosegardengui.cpp:4453 ../gui/rosegardengui.cpp:4486
-#: ../gui/rosegardengui.cpp:4560
+#: ../gui/rosegardengui.cpp:2219 ../gui/rosegardengui.cpp:4388
+#: ../gui/rosegardengui.cpp:4431 ../gui/rosegardengui.cpp:4469
+#: ../gui/rosegardengui.cpp:4501 ../gui/rosegardengui.cpp:4534
+#: ../gui/rosegardengui.cpp:4608
 msgid "All files"
 msgstr "Alla filer"
 
-#: ../gui/rosegardengui.cpp:2194
+#: ../gui/rosegardengui.cpp:2220
 msgid "Save as..."
 msgstr "Spara som..."
 
-#: ../gui/rosegardengui.cpp:2229
+#: ../gui/rosegardengui.cpp:2256
 msgid "Closing file..."
 msgstr "Stänger fil..."
 
-#: ../gui/rosegardengui.cpp:2265
+#: ../gui/rosegardengui.cpp:2292
 msgid "Exiting..."
 msgstr "Avslutar..."
 
-#: ../gui/rosegardengui.cpp:2287
+#: ../gui/rosegardengui.cpp:2314
 msgid "Cutting selection..."
 msgstr "Klipper ut markering..."
 
-#: ../gui/rosegardengui.cpp:2385
+#: ../gui/rosegardengui.cpp:2412
 msgid "This function needs no more than one segment to be selected."
 msgstr "Den här funktionen kräver att bara ett segment är markerat."
 
-#: ../gui/rosegardengui.cpp:2406
+#: ../gui/rosegardengui.cpp:2433
 msgid "Can't join Audio segments"
 msgstr "Kan inte sammanfoga ljudsegment"
 
-#: ../gui/rosegardengui.cpp:2509
+#: ../gui/rosegardengui.cpp:2536
 msgid "Jog Selection"
 msgstr "Knuffa markering"
 
-#: ../gui/rosegardengui.cpp:2621
+#: ../gui/rosegardengui.cpp:2648
 msgid "Set Segment Start Times"
 msgstr "Ställ in starttider för segment"
 
-#: ../gui/rosegardengui.cpp:2664
+#: ../gui/rosegardengui.cpp:2691
 msgid "Set Segment Durations"
 msgstr "Ställ in segmentlängder"
 
-#: ../gui/rosegardengui.cpp:2762 ../gui/rosegardengui.cpp:5350
+#: ../gui/rosegardengui.cpp:2799 ../gui/rosegardengui.cpp:5404
 msgid "Set Global Tempo"
 msgstr "Ställ in övergripande tempo"
 
-#: ../gui/rosegardengui.cpp:2835
+#: ../gui/rosegardengui.cpp:2872
 msgid "Toggle the tools toolbar..."
 msgstr "Växla verktygsrad med verktyg..."
 
-#: ../gui/rosegardengui.cpp:2845
+#: ../gui/rosegardengui.cpp:2882
 msgid "Toggle the tracks toolbar..."
 msgstr "Växla spårverktygsrad..."
 
-#: ../gui/rosegardengui.cpp:2856
+#: ../gui/rosegardengui.cpp:2893
 msgid "Toggle the editor toolbar..."
 msgstr "Växla editorverktygsrad..."
 
-#: ../gui/rosegardengui.cpp:2866
+#: ../gui/rosegardengui.cpp:2903
 msgid "Toggle the transport toolbar..."
 msgstr "Växla överföringsverktygsrad..."
 
-#: ../gui/rosegardengui.cpp:2876
+#: ../gui/rosegardengui.cpp:2913
 msgid "Toggle the zoom toolbar..."
 msgstr "Växla zoomverktygsrad..."
 
-#: ../gui/rosegardengui.cpp:2886
+#: ../gui/rosegardengui.cpp:2923
 msgid "Toggle the Transport"
 msgstr "Växla överföringsfönster"
 
-#: ../gui/rosegardengui.cpp:3021
+#: ../gui/rosegardengui.cpp:3058
 msgid ""
 "The join tool isn't implemented yet.  Instead please highlight the segments "
 "you want to join and then use the menu option:\n"
@@ -6865,23 +7051,23 @@ msgstr ""
 "\n"
 "Segment -> Sammanfoga segment.\n"
 
-#: ../gui/rosegardengui.cpp:3024
+#: ../gui/rosegardengui.cpp:3061
 msgid "Join tool not yet implemented"
 msgstr "Sammanfogningsverktyg ännu inte implementerat"
 
-#: ../gui/rosegardengui.cpp:3146
+#: ../gui/rosegardengui.cpp:3183
 msgid "Add Multiple Tracks"
 msgstr "Lägg till flera spår"
 
-#: ../gui/rosegardengui.cpp:3147
+#: ../gui/rosegardengui.cpp:3184
 msgid "How many tracks do you want to add?"
 msgstr "Hur många spår vill du lägga till?"
 
-#: ../gui/rosegardengui.cpp:3291
+#: ../gui/rosegardengui.cpp:3328
 msgid "Revert modified document to previous saved version?"
 msgstr "Återställ ändrat dokument till tidigare sparad version?"
 
-#: ../gui/rosegardengui.cpp:3305
+#: ../gui/rosegardengui.cpp:3342
 msgid ""
 "*.rgp|Rosegarden Project files\n"
 "*|All files"
@@ -6889,35 +7075,35 @@ msgstr ""
 "*.rgp|Rosegarden projektfiler\n"
 "*|Alla filer"
 
-#: ../gui/rosegardengui.cpp:3306
+#: ../gui/rosegardengui.cpp:3343
 msgid "Import Rosegarden Project File"
 msgstr "Importera Rosegarden-projektfil"
 
-#: ../gui/rosegardengui.cpp:3329
+#: ../gui/rosegardengui.cpp:3366
 msgid "Failed to import project file \"%1\""
 msgstr "Misslyckades att importera projektfilen \"%1\""
 
-#: ../gui/rosegardengui.cpp:3350
+#: ../gui/rosegardengui.cpp:3387
 msgid "Open MIDI File"
 msgstr "Öppna MIDI-fil"
 
-#: ../gui/rosegardengui.cpp:3365
+#: ../gui/rosegardengui.cpp:3402
 msgid "Merge MIDI File"
 msgstr "Sammanfoga MIDI-fil"
 
-#: ../gui/rosegardengui.cpp:3464
+#: ../gui/rosegardengui.cpp:3501
 msgid "Importing MIDI file..."
 msgstr "Importerar MIDI-fil..."
 
-#: ../gui/rosegardengui.cpp:3501
+#: ../gui/rosegardengui.cpp:3538
 msgid "Calculating notation..."
 msgstr "Beräknar notering..."
 
-#: ../gui/rosegardengui.cpp:3548
+#: ../gui/rosegardengui.cpp:3585
 msgid "Calculate Notation"
 msgstr "Beräkna notering"
 
-#: ../gui/rosegardengui.cpp:3588 ../gui/rosegardengui.cpp:3603
+#: ../gui/rosegardengui.cpp:3625 ../gui/rosegardengui.cpp:3640
 msgid ""
 "*.rose|Rosegarden-2 files\n"
 "*|All files"
@@ -6925,19 +7111,19 @@ msgstr ""
 "*.rose|Rosegarden-2-filer\n"
 "*|Alla filer"
 
-#: ../gui/rosegardengui.cpp:3589 ../gui/rosegardengui.cpp:3604
+#: ../gui/rosegardengui.cpp:3626 ../gui/rosegardengui.cpp:3641
 msgid "Open Rosegarden 2.1 File"
 msgstr "Öppna Rosegarden-2.1-fil"
 
-#: ../gui/rosegardengui.cpp:3619
+#: ../gui/rosegardengui.cpp:3656
 msgid "Importing Rosegarden 2.1 file..."
 msgstr "Importerar Rosegarden-2.1-fil..."
 
-#: ../gui/rosegardengui.cpp:3645
+#: ../gui/rosegardengui.cpp:3682
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
 msgstr "Kan inte ladda Rosegarden-2.1-fil. Den verkar vara skadad."
 
-#: ../gui/rosegardengui.cpp:3670 ../gui/rosegardengui.cpp:3685
+#: ../gui/rosegardengui.cpp:3707 ../gui/rosegardengui.cpp:3722
 msgid ""
 "*.h2song|Hydrogen files\n"
 "*|All files"
@@ -6945,35 +7131,35 @@ msgstr ""
 "*.h2song|Hydrogen-filer\n"
 "*|Alla filer"
 
-#: ../gui/rosegardengui.cpp:3671 ../gui/rosegardengui.cpp:3686
+#: ../gui/rosegardengui.cpp:3708 ../gui/rosegardengui.cpp:3723
 msgid "Open Hydrogen File"
 msgstr "Öppna Hydrogen-fil"
 
-#: ../gui/rosegardengui.cpp:3701
+#: ../gui/rosegardengui.cpp:3738
 msgid "Importing Hydrogen file..."
 msgstr "Importerar Hydrogen-fil..."
 
-#: ../gui/rosegardengui.cpp:3727
+#: ../gui/rosegardengui.cpp:3764
 msgid "Can't load Hydrogen file.  It appears to be corrupted."
 msgstr "Kan inte ladda Rosegarden-2.1-fil. Den verkar vara skadad."
 
-#: ../gui/rosegardengui.cpp:4167
+#: ../gui/rosegardengui.cpp:4215
 msgid "Starting the sequencer..."
 msgstr "Startar musikbehandlaren..."
 
-#: ../gui/rosegardengui.cpp:4193
+#: ../gui/rosegardengui.cpp:4241
 msgid "Couldn't start the sequencer"
 msgstr "Kunde inte starta musikbehandlaren"
 
-#: ../gui/rosegardengui.cpp:4269
+#: ../gui/rosegardengui.cpp:4317
 msgid "Clearing down jackd..."
 msgstr "Tar bort jackd..."
 
-#: ../gui/rosegardengui.cpp:4283
+#: ../gui/rosegardengui.cpp:4331
 msgid "Starting jackd..."
 msgstr "Startar jackd..."
 
-#: ../gui/rosegardengui.cpp:4321
+#: ../gui/rosegardengui.cpp:4369
 msgid ""
 "The Rosegarden sequencer process has exited unexpectedly.  Sound and "
 "recording will no longer be available for this session.\n"
@@ -6983,7 +7169,7 @@ msgstr ""
 "inte längre tillgängliga för den här sessionen.\n"
 "Avsluta och starta om Rosegarden för att återställa ljudfunktion."
 
-#: ../gui/rosegardengui.cpp:4325
+#: ../gui/rosegardengui.cpp:4373
 msgid ""
 "The Rosegarden sequencer could not be started, so sound and recording will "
 "be unavailable for this session.\n"
@@ -6995,80 +7181,80 @@ msgstr ""
 "För hjälp med riktig inställning av ljud och MIDI, besök http://"
 "rosegardenmusic.com."
 
-#: ../gui/rosegardengui.cpp:4336
+#: ../gui/rosegardengui.cpp:4384
 msgid "Exporting Rosegarden Project file..."
 msgstr "Exporterar Rosegarden-projektfil..."
 
-#: ../gui/rosegardengui.cpp:4339
+#: ../gui/rosegardengui.cpp:4387
 msgid "Rosegarden Project files\n"
 msgstr "Rosegarden-projektfiler\n"
 
-#: ../gui/rosegardengui.cpp:4341 ../gui/rosegardengui.cpp:4384
-#: ../gui/rosegardengui.cpp:4422 ../gui/rosegardengui.cpp:4454
-#: ../gui/rosegardengui.cpp:4487 ../gui/rosegardengui.cpp:4560
+#: ../gui/rosegardengui.cpp:4389 ../gui/rosegardengui.cpp:4432
+#: ../gui/rosegardengui.cpp:4470 ../gui/rosegardengui.cpp:4502
+#: ../gui/rosegardengui.cpp:4535 ../gui/rosegardengui.cpp:4608
 msgid "Export as..."
 msgstr "Exportera som..."
 
-#: ../gui/rosegardengui.cpp:4354
+#: ../gui/rosegardengui.cpp:4402
 #, c-format
 msgid "Saving Rosegarden file to package failed: %1"
 msgstr "Misslyckades spara Rosegarden-fil till paket: %1"
 
-#: ../gui/rosegardengui.cpp:4368
+#: ../gui/rosegardengui.cpp:4416
 msgid "Failed to export to project file \"%1\""
 msgstr "Misslyckades exportera projektfilen \"%1\""
 
-#: ../gui/rosegardengui.cpp:4379 ../gui/rosegardengui.cpp:4393
+#: ../gui/rosegardengui.cpp:4427 ../gui/rosegardengui.cpp:4441
 msgid "Exporting MIDI file..."
 msgstr "Exporterar MIDI-fil..."
 
-#: ../gui/rosegardengui.cpp:4382
+#: ../gui/rosegardengui.cpp:4430
 msgid "Standard MIDI files\n"
 msgstr "Standard-MIDI-filer\n"
 
-#: ../gui/rosegardengui.cpp:4413 ../gui/rosegardengui.cpp:4444
-#: ../gui/rosegardengui.cpp:4476 ../gui/rosegardengui.cpp:4547
-#: ../gui/rosegardengui.cpp:4583
+#: ../gui/rosegardengui.cpp:4461 ../gui/rosegardengui.cpp:4492
+#: ../gui/rosegardengui.cpp:4524 ../gui/rosegardengui.cpp:4595
+#: ../gui/rosegardengui.cpp:4631
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Export misslyckades. Filen kunde inte öppnas för skrivning."
 
-#: ../gui/rosegardengui.cpp:4419 ../gui/rosegardengui.cpp:4430
+#: ../gui/rosegardengui.cpp:4467 ../gui/rosegardengui.cpp:4478
 msgid "Exporting Csound score file..."
 msgstr "Exporterar Csound-partiturfil..."
 
-#: ../gui/rosegardengui.cpp:4450 ../gui/rosegardengui.cpp:4462
+#: ../gui/rosegardengui.cpp:4498 ../gui/rosegardengui.cpp:4510
 msgid "Exporting Mup file..."
 msgstr "Exporterar Mup-fil..."
 
-#: ../gui/rosegardengui.cpp:4453
+#: ../gui/rosegardengui.cpp:4501
 msgid "Mup files\n"
 msgstr " Mup-filer\n"
 
-#: ../gui/rosegardengui.cpp:4482 ../gui/rosegardengui.cpp:4533
+#: ../gui/rosegardengui.cpp:4530 ../gui/rosegardengui.cpp:4581
 msgid "Exporting Lilypond file..."
 msgstr "Exporterar Lilypond-fil..."
 
-#: ../gui/rosegardengui.cpp:4485
+#: ../gui/rosegardengui.cpp:4533
 msgid "Lilypond files"
 msgstr "Lilypond-filer"
 
-#: ../gui/rosegardengui.cpp:4498
+#: ../gui/rosegardengui.cpp:4546
 msgid "Previewing Lilypond file..."
 msgstr "Förhandsgranskar Lilypond-fil..."
 
-#: ../gui/rosegardengui.cpp:4503
+#: ../gui/rosegardengui.cpp:4551
 msgid "Failed to open a temporary file for Lilypond export."
 msgstr "Misslyckades öppna en tillfällig fil för export till Lilypond."
 
-#: ../gui/rosegardengui.cpp:4556 ../gui/rosegardengui.cpp:4569
+#: ../gui/rosegardengui.cpp:4604 ../gui/rosegardengui.cpp:4617
 msgid "Exporting MusicXML file..."
 msgstr "Exporterar MusicXML-fil..."
 
-#: ../gui/rosegardengui.cpp:4559
+#: ../gui/rosegardengui.cpp:4607
 msgid "XML files"
 msgstr "XML-filer"
 
-#: ../gui/rosegardengui.cpp:4818 ../gui/trackbuttons.cpp:624
+#: ../gui/rosegardengui.cpp:4871 ../gui/trackbuttons.cpp:624
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7080,12 +7266,12 @@ msgstr ""
 "innan ljud spelas in.\n"
 "Vill du ställa in den nu?"
 
-#: ../gui/rosegardengui.cpp:4820 ../gui/rosegardengui.cpp:4882
+#: ../gui/rosegardengui.cpp:4873 ../gui/rosegardengui.cpp:4935
 #: ../gui/trackbuttons.cpp:626
 msgid "Set audio file path"
 msgstr "Ange sökväg för ljudfil"
 
-#: ../gui/rosegardengui.cpp:4880
+#: ../gui/rosegardengui.cpp:4933
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7097,78 +7283,78 @@ msgstr ""
 "innan du börjar spela in ljud.\n"
 "Vill du ställa in den nu?"
 
-#: ../gui/rosegardengui.cpp:5333
+#: ../gui/rosegardengui.cpp:5387
 #, c-format
 msgid "Replace Tempo Change at %1"
 msgstr "Ersätt tempoändring vid %1"
 
-#: ../gui/rosegardengui.cpp:5367
+#: ../gui/rosegardengui.cpp:5421
 msgid "Set Global and Default Tempo"
 msgstr "Ställ in övergripande tempo och standardtempo"
 
-#: ../gui/rosegardengui.cpp:5752
+#: ../gui/rosegardengui.cpp:5806
 #, c-format
 msgid "Sequencer failed to add audio file %1"
 msgstr "Musikbehandlaren misslyckades med att lägga till ljudfilen %1"
 
-#: ../gui/rosegardengui.cpp:5780
+#: ../gui/rosegardengui.cpp:5834
 #, c-format
 msgid "Sequencer failed to remove audio file id %1"
 msgstr "Musikbehandlaren misslyckades med att ta bort ljudfilen med id %1"
 
-#: ../gui/rosegardengui.cpp:5837 ../gui/segmentparameterbox.cpp:930
+#: ../gui/rosegardengui.cpp:5891 ../gui/segmentparameterbox.cpp:930
 msgid "Modify Segment label"
 msgstr "Ändra segmentnamn"
 
-#: ../gui/rosegardengui.cpp:5838 ../gui/segmentparameterbox.cpp:931
+#: ../gui/rosegardengui.cpp:5892 ../gui/segmentparameterbox.cpp:931
 msgid "Modify Segments label"
 msgstr "Ändra segmentnamn"
 
-#: ../gui/rosegardengui.cpp:5840
+#: ../gui/rosegardengui.cpp:5894
 msgid "Relabelling selection..."
 msgstr "Ändrar namn på markering..."
 
-#: ../gui/audiomanagerdialog.cpp:1075 ../gui/rosegardengui.cpp:5854
+#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:5908
 #: ../gui/segmentparameterbox.cpp:941
 msgid "Enter new label"
 msgstr "Skriv in nytt namn"
 
-#: ../gui/rosegardengui.cpp:6876
+#: ../gui/rosegardengui.cpp:6930
 msgid "Play List"
 msgstr "Spellista"
 
-#: ../gui/rosegardengui.cpp:6904
+#: ../gui/rosegardengui.cpp:6958
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 msgstr "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 
-#: ../gui/rosegardengui.cpp:6911
+#: ../gui/rosegardengui.cpp:6965
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 msgstr "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 
-#: ../gui/rosegardengui.cpp:6988
+#: ../gui/rosegardengui.cpp:7042
 msgid "Queueing MIDI panic events for tranmission..."
 msgstr "Köar MIDI-panikhändelser för att skicka..."
 
-#: ../gui/rosegardengui.cpp:7046
+#: ../gui/rosegardengui.cpp:7100
 msgid "Are you sure you want to save this as your default studio?"
 msgstr "Är du säker på att du vill spara den här som standardstudio?"
 
-#: ../gui/rosegardengui.cpp:7050
+#: ../gui/rosegardengui.cpp:7104
 msgid "Saving current document as default studio..."
 msgstr "Sparar nuvarande dokument som standardstudio..."
 
-#: ../gui/rosegardengui.cpp:7075
+#: ../gui/rosegardengui.cpp:7129
 msgid ""
 "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Är du säker på att du vill importera din standardstudio och låta den "
 "nuvarande gå förlorad?"
 
-#: ../gui/rosegardengui.cpp:7110
+#: ../gui/rosegardengui.cpp:7164
 msgid "Import Studio from File"
 msgstr "Importera studio från fil"
 
-#: ../gui/rosegardengui.cpp:7143
+#: ../gui/rosegardengui.cpp:7197
 msgid "Import Studio"
 msgstr "Importera studio"
 
@@ -7180,7 +7366,8 @@ msgstr ""
 "Den aktuella filen har ändrats.\n"
 "Vill du spara den?"
 
-#: ../gui/rosegardenguidoc.cpp:398
+#: ../gui/rosegardenguidoc.cpp:397
+#, fuzzy
 msgid ""
 "_n: Delete the %1 audio file recorded during the unsaved session?\n"
 "Delete the %1 audio files recorded during the unsaved session?"
@@ -7188,7 +7375,7 @@ msgstr ""
 "Ta bort %1 ljudfil inspelad under sessionen?\n"
 "Ta bort %1 ljudfiler inspelade under sessionen?"
 
-#: ../gui/rosegardenguidoc.cpp:419
+#: ../gui/rosegardenguidoc.cpp:418
 msgid ""
 "The following audio files were recorded during this session but have been "
 "unloaded\n"
@@ -7207,7 +7394,8 @@ msgstr ""
 "\n"
 "Välj alla du vill ta bort permanent från hårddisken.\n"
 
-#: ../gui/rosegardenguidoc.cpp:434
+#: ../gui/rosegardenguidoc.cpp:433
+#, fuzzy
 msgid ""
 "_n: About to delete %1 audio file permanently from the hard disk.\n"
 "There will be no way to recover this file.\n"
@@ -7221,39 +7409,39 @@ msgstr ""
 "Ska just ta bort %1 ljudfiler permanent från hårddisken.</br>Åtgärden kan "
 "inte ångras, och det finns inget sätt att återfå filerna.</br>Är du säker?"
 
-#: ../gui/audiomanagerdialog.cpp:1040 ../gui/rosegardenguidoc.cpp:442
+#: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:441
 msgid "File %1 could not be deleted."
 msgstr "Filen %1 kunde inte tas bort."
 
-#: ../gui/rosegardenguidoc.cpp:500
+#: ../gui/rosegardenguidoc.cpp:499
 msgid "Can't open file '%1'"
 msgstr "Kan inte öppna filen '%1'"
 
-#: ../gui/rosegardenguidoc.cpp:505
+#: ../gui/rosegardenguidoc.cpp:504
 msgid "Reading file..."
 msgstr "Läser fil..."
 
-#: ../gui/rosegardenguidoc.cpp:523
+#: ../gui/rosegardenguidoc.cpp:522
 msgid "Could not open Rosegarden-4 file"
 msgstr "Kunde inte öppna Rosegarden-4-fil"
 
-#: ../gui/rosegardenguidoc.cpp:561
+#: ../gui/rosegardenguidoc.cpp:560
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "Fel vid tolkning av filen '%1': \"%2\""
 
-#: ../gui/rosegardenguidoc.cpp:609
+#: ../gui/rosegardenguidoc.cpp:608
 msgid "Generating audio previews..."
 msgstr "Skapar förhandsgranskning av ljud..."
 
-#: ../gui/rosegardenguidoc.cpp:655
+#: ../gui/rosegardenguidoc.cpp:654
 msgid "Merge"
 msgstr "Sammanfoga"
 
-#: ../gui/rosegardenguidoc.cpp:1490
+#: ../gui/rosegardenguidoc.cpp:1491
 msgid "File load cancelled"
 msgstr "Laddning av fil avbruten"
 
-#: ../gui/rosegardenguidoc.cpp:1498
+#: ../gui/rosegardenguidoc.cpp:1499
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -7266,7 +7454,7 @@ msgstr ""
 "Du rekommenderas att spara filen med den här versionen av Rosegarden,\n"
 "för att försäkra dig om att den kan laddas igen i framtida versioner."
 
-#: ../gui/rosegardenguidoc.cpp:1514
+#: ../gui/rosegardenguidoc.cpp:1515
 msgid ""
 "The following plugins could not be loaded:\n"
 "\n"
@@ -7274,36 +7462,36 @@ msgstr ""
 "Följande insticksmoduler kunde inte laddas:\n"
 "\n"
 
-#: ../gui/rosegardenguidoc.cpp:1522
+#: ../gui/rosegardenguidoc.cpp:1523
 msgid "--  %1 (from %2)\n"
 msgstr "--  %1 (från %2)\n"
 
-#: ../gui/rosegardenguidoc.cpp:1877
+#: ../gui/rosegardenguidoc.cpp:1878
 msgid "Insert Recorded MIDI"
 msgstr "Infoga inspelad MIDI"
 
-#: ../gui/rosegardenguidoc.cpp:2261
+#: ../gui/rosegardenguidoc.cpp:2262
 msgid "%1 (recorded)"
 msgstr "%1 (inspelad)"
 
-#: ../gui/audiomanagerdialog.cpp:1259 ../gui/rosegardenguidoc.cpp:2478
+#: ../gui/audiomanagerdialog.cpp:1262 ../gui/rosegardenguidoc.cpp:2479
 msgid "Generating audio preview..."
 msgstr "Skapar förhandsgranskning av ljud..."
 
-#: ../gui/rosegardenguiview.cpp:210
+#: ../gui/rosegardenguiview.cpp:211
 msgid "No non-audio segments in composition"
 msgstr "Inga segment utan ljud i kompositionen"
 
-#: ../gui/rosegardenguiview.cpp:307
+#: ../gui/rosegardenguiview.cpp:308
 msgid "Selection must contain only audio or non-audio segments"
 msgstr "Markering får bara innehålla segment med eller utan ljud"
 
-#: ../gui/rosegardenguiview.cpp:389 ../gui/rosegardenguiview.cpp:525
-#: ../gui/rosegardenguiview.cpp:560 ../gui/rosegardenguiview.cpp:714
+#: ../gui/rosegardenguiview.cpp:391 ../gui/rosegardenguiview.cpp:527
+#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:716
 msgid "No non-audio segments selected"
 msgstr "Inga segment utan ljud markerade"
 
-#: ../gui/rosegardenguiview.cpp:828
+#: ../gui/rosegardenguiview.cpp:830
 msgid ""
 "You've not yet defined an audio editor for Rosegarden to use.\n"
 "See Settings -> Configure Rosegarden -> General -> External Editors."
@@ -7311,37 +7499,37 @@ msgstr ""
 "Du har ännu inte definierat en ljudeditor som Rosegarden ska använda.\n"
 "Se Inställningar -> Anpassa Rosegarden -> Allmänt -> Externa editorer."
 
-#: ../gui/rosegardenguiview.cpp:1515 ../gui/rosegardenguiview.cpp:1519
+#: ../gui/rosegardenguiview.cpp:1517 ../gui/rosegardenguiview.cpp:1521
 msgid "Can't add dropped file. "
 msgstr "Kan inte lägga till släppt fil. "
 
-#: ../gui/rosegardentransportdialog.cpp:80 rc.cpp:244
+#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:244
 #, no-c-format
 msgid "Rosegarden Transport"
 msgstr "Rosegarden-överföring"
 
-#: ../gui/rosegardentransportdialog.cpp:742
-#: ../gui/rosegardentransportdialog.cpp:819
+#: ../gui/rosegardentransportdialog.cpp:757
+#: ../gui/rosegardentransportdialog.cpp:834
 msgid "PITCH WHEEL"
 msgstr "TONHJUL"
 
-#: ../gui/rosegardentransportdialog.cpp:748
-#: ../gui/rosegardentransportdialog.cpp:825
+#: ../gui/rosegardentransportdialog.cpp:763
+#: ../gui/rosegardentransportdialog.cpp:840
 msgid "CONTROLLER"
 msgstr "STYRENHET"
 
-#: ../gui/rosegardentransportdialog.cpp:753
-#: ../gui/rosegardentransportdialog.cpp:830
+#: ../gui/rosegardentransportdialog.cpp:768
+#: ../gui/rosegardentransportdialog.cpp:845
 msgid "PROG CHNGE"
 msgstr "PROG ÄNDR."
 
-#: ../gui/rosegardentransportdialog.cpp:760
-#: ../gui/rosegardentransportdialog.cpp:837
+#: ../gui/rosegardentransportdialog.cpp:775
+#: ../gui/rosegardentransportdialog.cpp:852
 msgid "PRESSURE"
 msgstr "TRYCK"
 
-#: ../gui/rosegardentransportdialog.cpp:766
-#: ../gui/rosegardentransportdialog.cpp:843
+#: ../gui/rosegardentransportdialog.cpp:781
+#: ../gui/rosegardentransportdialog.cpp:858
 msgid "SYS MESSAGE"
 msgstr "SYS MEDDEL."
 
@@ -7366,176 +7554,67 @@ msgstr ""
 msgid "Loading plugins..."
 msgstr "Laddar insticksmoduler..."
 
-#: ../gui/segmentcommands.cpp:86
-msgid "Repeat Segments"
-msgstr "Upprepa segment"
-
-#: ../gui/segmentcommands.cpp:150 ../gui/segmentcommands.cpp:162
-msgid "Erase Segment"
-msgstr "Ta bort segment"
-
-#: ../gui/segmentcommands.cpp:258
-msgid "Turn Repeats into Copies"
-msgstr "Omvandla upprepningar till kopior"
-
-#: ../gui/segmentcommands.cpp:338
-msgid "Turn Single Repeat into Copy"
-msgstr "Omvandla enkel upprepning till kopia"
-
-#: ../gui/segmentcommands.cpp:383 ../gui/segmentcommands.cpp:475
-#: ../gui/segmentcommands.cpp:489
-msgid "Create Segment"
-msgstr "Skapa segment"
-
-#: ../gui/segmentcommands.cpp:445
-msgid "%1 (inserted)"
-msgstr "%1 (infogad)"
-
-#: ../gui/segmentcommands.cpp:448
-msgid "unknown audio file"
-msgstr "okänd ljudfil"
-
-#: ../gui/segmentcommands.cpp:688
-msgid "Resize Segment"
-msgstr "Ändra storlek på segment"
-
-#: ../gui/segmentcommands.cpp:740
-msgid "Split Audio Segment"
-msgstr "Dela ljudsegment"
-
-#: ../gui/segmentcommands.cpp:798 ../gui/segmentcommands.cpp:927
-msgid "%1 (split)"
-msgstr "%1 (dela)"
-
-#: ../gui/segmentcommands.cpp:849
-msgid "Split Segment"
-msgstr "Dela segment"
-
-#: ../gui/segmentcommands.cpp:1051
-msgid "%1 (autosplit %2)"
-msgstr "%1 (dela automatiskt %2)"
-
-#: ../gui/segmentcommands.cpp:1191
-msgid "%1 (part)"
-msgstr "%1 (del)"
-
-#: ../gui/segmentcommands.cpp:1395
-msgid "%1 (rescaled)"
-msgstr "%1 (skalad)"
-
-#: ../gui/segmentcommands.cpp:2159
-msgid "%1 (upper)"
-msgstr "%1 (övre del)"
-
-#: ../gui/segmentcommands.cpp:2161
-msgid "%1 (lower)"
-msgstr "%1 (nedre del)"
-
-#: ../gui/segmentcommands.cpp:2265
-msgid "Label Segments"
-msgstr "Sätt namn på segment"
-
-#: ../gui/segmentcommands.cpp:2303
-msgid "Change Segment Color"
-msgstr "Ändra segmentfärg"
-
-#: ../gui/segmentcommands.cpp:2335
-msgid "Change Segment Color Map"
-msgstr "Ändra segmentfärgkarta"
-
-#: ../gui/segmentcommands.cpp:2366
-msgid "Add Triggered Segment"
-msgstr "Lägg till utlösande segment"
-
-#: ../gui/segmentcommands.cpp:2414
-msgid "Delete Triggered Segment"
-msgstr "Ta bort utlösande segment"
-
-#: ../gui/segmentcommands.cpp:2456
-msgid "Paste as New Triggered Segment"
-msgstr "Klistra in som nytt utlösande segment"
-
-#: ../gui/segmentcommands.cpp:2537
-msgid "Set Base Pitch"
-msgstr "Ange grundtonhöjd"
-
-#: ../gui/segmentcommands.cpp:2574
-msgid "Set Base Velocity"
-msgstr "Ange grundljudstyrka"
-
-#: ../gui/segmentcommands.cpp:2611
-msgid "Set Default Time Adjust"
-msgstr "Ange förvald tidsjustering"
-
-#: ../gui/segmentcommands.cpp:2650
-msgid "Set Default Retune"
-msgstr "Ange standardstämning"
-
-#: ../gui/segmentcommands.cpp:2686
-msgid "Set Tempos from Beat Segment"
-msgstr "Ställ in tempon från taktsegment"
-
 #: ../gui/segmentcommands.h:163
 msgid "Quick-Copy Segment"
 msgstr "Snabbkopiera segment"
 
-#: ../gui/segmentcommands.h:360 ../gui/segmentcommands.h:380
+#: ../gui/segmentcommands.h:382 ../gui/segmentcommands.h:402
 msgid "&Split on Silence"
 msgstr "&Dela vid tystnad"
 
-#: ../gui/segmentcommands.h:467
+#: ../gui/segmentcommands.h:489
 msgid "Add Time Si&gnature Change..."
 msgstr "Byt &taktart..."
 
-#: ../gui/segmentcommands.h:506
+#: ../gui/segmentcommands.h:528
 msgid "Remove &Time Signature Change..."
 msgstr "&Ta bort taktartsbyte..."
 
-#: ../gui/segmentcommands.h:530
+#: ../gui/segmentcommands.h:552
 msgid "Modify &Default Tempo..."
 msgstr "Ändra &standardtempo..."
 
-#: ../gui/segmentcommands.h:555
+#: ../gui/segmentcommands.h:577
 msgid "Remove &Tempo Change..."
 msgstr "&Ta bort tempoändring"
 
-#: ../gui/segmentcommands.h:584
+#: ../gui/segmentcommands.h:606
 msgid "Add Te&mpo Change..."
 msgstr "Byt te&mpo..."
 
-#: ../gui/segmentcommands.h:606
+#: ../gui/segmentcommands.h:628
 msgid "Add Tracks..."
 msgstr "Lägg till spår..."
 
-#: ../gui/segmentcommands.h:628
+#: ../gui/segmentcommands.h:650
 msgid "Delete Tracks..."
 msgstr "Ta bort spår..."
 
-#: ../gui/segmentcommands.h:650
+#: ../gui/segmentcommands.h:672
 msgid "Move Tracks..."
 msgstr "Flytta spår..."
 
-#: ../gui/segmentcommands.h:670
+#: ../gui/segmentcommands.h:692
 msgid "Rename Track"
 msgstr "Byt namn på spår"
 
-#: ../gui/segmentcommands.h:691
+#: ../gui/segmentcommands.h:713
 msgid "Change &Composition Start and End..."
 msgstr "Ändra &kompositionens början och slut..."
 
-#: ../gui/segmentcommands.h:722
+#: ../gui/segmentcommands.h:744
 msgid "Split by &Pitch..."
 msgstr "Dela &enligt tonhöjd"
 
-#: ../gui/segmentcommands.h:749
+#: ../gui/segmentcommands.h:771
 msgid "Re&label..."
 msgstr "&Ändra namn..."
 
-#: ../gui/segmentcommands.h:769
+#: ../gui/segmentcommands.h:791
 msgid "Change Segment Color..."
 msgstr "Ändra segmentfärg..."
 
-#: ../gui/segmentcommands.h:788
+#: ../gui/segmentcommands.h:810
 msgid "Change Segment Color Map..."
 msgstr "Ändra segmentets färgkarta..."
 
@@ -7563,97 +7642,13 @@ msgstr " ms"
 msgid "%1 ms"
 msgstr "%1 ms"
 
-#: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1000
+#: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1039
 msgid "Move Segment"
 msgstr "Flytta segment"
 
-#: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1001
+#: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1040
 msgid "Move Segments"
 msgstr "Flytta segment"
-
-#: ../gui/sequencemanager.cpp:981 ../gui/sequencemanager.cpp:1114
-msgid ""
-"The JACK Audio subsystem has failed or it has stopped Rosegarden from "
-"processing audio.\n"
-"Please restart Rosegarden to continue working with audio.\n"
-"Quitting other running applications may improve Rosegarden's performance."
-msgstr ""
-"JACK-delsystemet för ljud har slutat fungera eller har stoppat Rosegarden "
-"att behandla ljud.\n"
-"Starta om Rosegarden för att fortsätta arbeta med ljud.\n"
-"Att avsluta andra program som körs kan förbättra Rosegardens prestanda."
-
-#: ../gui/sequencemanager.cpp:987 ../gui/sequencemanager.cpp:1120
-msgid ""
-"The JACK Audio subsystem has stopped Rosegarden from processing audio, "
-"probably because of a processing overload.\n"
-"An attempt to restart the audio service has been made, but some problems may "
-"remain.\n"
-"Quitting other running applications may improve Rosegarden's performance."
-msgstr ""
-"JACK-delsystemet för ljud har stoppat Rosegarden att behandla ljud, troligen "
-"på grund av en överbelastning.\n"
-"Ett försök att starta om ljudtjänsten har gjorts, men vissa problem kan vara "
-"kvar.\n"
-"Att avsluta andra program som körs kan förbättra Rosegardens prestanda."
-
-#: ../gui/sequencemanager.cpp:998
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
-msgstr ""
-"Slut på processorkraft för ljudbehandling i realtid. Kan inte fortsätta."
-
-#: ../gui/sequencemanager.cpp:1023
-msgid ""
-"A serious error has occurred in the ALSA MIDI subsystem.  It may not be "
-"possible to continue sequencing.  Please check console output for more "
-"information."
-msgstr ""
-"Ett allvarligt fel har inträffat i ALSA-MIDI-delsystemet. Det kanske inte är "
-"möjligt att fortsätta köra musikbehandlaren. Kontrollera terminalutmatningen "
-"för mer information."
-
-#: ../gui/sequencemanager.cpp:1044
-msgid "JACK Audio subsystem is losing sample frames."
-msgstr "JACK-ljudsystemet förlorar samplade ramar."
-
-#: ../gui/sequencemanager.cpp:1062
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
-msgstr ""
-"Misslyckades läsa ljuddata snabbt från disk för att hantera ljudsystemet."
-
-#: ../gui/sequencemanager.cpp:1066
-msgid ""
-"Failed to write audio data to disc fast enough to service the audio "
-"subsystem."
-msgstr ""
-"Misslyckades skriva ljuddata snabbt nog till disk för att hantera "
-"ljudsystemet."
-
-#: ../gui/sequencemanager.cpp:1070
-msgid "The audio mixing subsystem is failing to keep up."
-msgstr "Ljudsystemet klarar inte av att hänga med."
-
-#: ../gui/sequencemanager.cpp:1074
-msgid "The audio subsystem is failing to keep up."
-msgstr "Ljudsystemet klarar inte av att hänga med."
-
-#: ../gui/sequencemanager.cpp:1078
-msgid "Unknown sequencer failure mode!"
-msgstr "Okänt fel i musikbehandlaren."
-
-#: ../gui/sequencemanager.cpp:1128
-msgid ""
-"<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
-"a high-resolution timing source for MIDI performance.</p><p>This may mean "
-"you are using a Linux system with the kernel timer resolution set too low.  "
-"Please contact your Linux distributor for more information.</p>"
-msgstr ""
-"<h3>Systemets tidupplösning är för låg</h3><p>Rosegarden kunde inte hitta en "
-"tidkälla med hög upplösning för MIDI-utförande.</p><p>Det kan betyda att du "
-"använder ett Linux-system där kärnans tidupplösning är inställd till ett för "
-"lågt värde. Kontakta din Linux-distributör för mer information.</p>"
 
 #: ../gui/studiocommands.h:60
 msgid "Modify &MIDI Bank"
@@ -7904,15 +7899,15 @@ msgstr "<namnlöst ljud>"
 msgid "<untitled>"
 msgstr "<namnlös>"
 
-#: ../gui/trackeditor.cpp:600
+#: ../gui/trackeditor.cpp:601
 msgid "Turn Repeating Segment into Real Copies"
 msgstr "Omvandla upprepat segment till riktiga kopior"
 
-#: ../gui/trackeditor.cpp:602
+#: ../gui/trackeditor.cpp:603
 msgid "Turn Repeating Segments into Real Copies"
 msgstr "Omvandla upprepade segment till riktiga kopior"
 
-#: ../gui/trackeditor.cpp:768
+#: ../gui/trackeditor.cpp:769
 msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
@@ -8171,7 +8166,8 @@ msgstr ""
 "samplingsfrekvensen i JACK-servern."
 
 #: ../gui/audiomanagerdialog.cpp:207
-msgid "&Add Audio File"
+#, fuzzy
+msgid "&Add Audio File..."
 msgstr "&Lägg till ljudfil"
 
 #: ../gui/audiomanagerdialog.cpp:210
@@ -8199,7 +8195,8 @@ msgid "&Delete Unused Audio Files..."
 msgstr "&Ta bort oanvända ljudfiler..."
 
 #: ../gui/audiomanagerdialog.cpp:242
-msgid "&Export Audio File"
+#, fuzzy
+msgid "&Export Audio File..."
 msgstr "&Exportera ljudfil"
 
 #: ../gui/audiomanagerdialog.cpp:246
@@ -8222,7 +8219,7 @@ msgstr "Kanaler"
 msgid "<no audio files>"
 msgstr "<inga ljudfiler>"
 
-#: ../gui/audiomanagerdialog.cpp:579 ../gui/audiomanagerdialog.cpp:792
+#: ../gui/audiomanagerdialog.cpp:579 ../gui/audiomanagerdialog.cpp:795
 msgid "*.wav|WAV files (*.wav)"
 msgstr "*.wav|WAV-filer (*.wav)"
 
@@ -8234,18 +8231,18 @@ msgstr "Välj ett namn att spara filen med"
 msgid "Exporting audio file..."
 msgstr "Exporterar ljudfil..."
 
-#: ../gui/audiomanagerdialog.cpp:699
+#: ../gui/audiomanagerdialog.cpp:702
 msgid ""
 "This will unload audio file \"%1\" and remove all associated segments.  Are "
 "you sure?"
 msgstr ""
 "Detta stänger ljudfilen \"%1\" och alla tillhörande ljudsegment. Är du säker?"
 
-#: ../gui/audiomanagerdialog.cpp:793
+#: ../gui/audiomanagerdialog.cpp:796
 msgid "Select one or more audio files"
 msgstr "Markera en eller flera ljudfiler"
 
-#: ../gui/audiomanagerdialog.cpp:853
+#: ../gui/audiomanagerdialog.cpp:856
 msgid ""
 "This will unload all audio files and remove their associated segments.\n"
 "This action cannot be undone, and associations with these files will be "
@@ -8259,7 +8256,7 @@ msgstr ""
 "Filerna tas inte bort från disken.\n"
 "Är du säker?"
 
-#: ../gui/audiomanagerdialog.cpp:894
+#: ../gui/audiomanagerdialog.cpp:897
 msgid ""
 "This will unload all audio files that are not associated with any segments "
 "in this composition.\n"
@@ -8275,23 +8272,23 @@ msgstr ""
 "Filerna tas inte bort från disken.\n"
 "Är du säker?"
 
-#: ../gui/audiomanagerdialog.cpp:944
+#: ../gui/audiomanagerdialog.cpp:947
 msgid "Select Unused Audio Files"
 msgstr "Markera oanvända ljudfiler"
 
-#: ../gui/audiomanagerdialog.cpp:952
+#: ../gui/audiomanagerdialog.cpp:955
 msgid "File size"
 msgstr "Filstorlek"
 
-#: ../gui/audiomanagerdialog.cpp:953
+#: ../gui/audiomanagerdialog.cpp:956
 msgid "Last modified date"
 msgstr "Senaste ändringsdatum"
 
-#: ../gui/audiomanagerdialog.cpp:958
+#: ../gui/audiomanagerdialog.cpp:961
 msgid " (not found) "
 msgstr " (hittades inte) "
 
-#: ../gui/audiomanagerdialog.cpp:1017
+#: ../gui/audiomanagerdialog.cpp:1020
 msgid ""
 "The following audio files are not used in the current composition.\n"
 "\n"
@@ -8301,7 +8298,8 @@ msgstr ""
 "\n"
 "Välj de du vill ta bort permanent från hårddisken.\n"
 
-#: ../gui/audiomanagerdialog.cpp:1027
+#: ../gui/audiomanagerdialog.cpp:1030
+#, fuzzy
 msgid ""
 "_n: About to delete %1 audio file permanently from the hard disk.\n"
 "This action cannot be undone, and there will be no way to recover this "
@@ -8317,21 +8315,33 @@ msgstr ""
 "Ska just ta bort %1 ljudfiler permanent från hårddisken.</br>Åtgärden kan "
 "inte ångras, och det finns inget sätt att återfå filerna.</br>Är du säker?"
 
-#: ../gui/audiomanagerdialog.cpp:1074
+#: ../gui/audiomanagerdialog.cpp:1077
 msgid "Change Audio File label"
 msgstr "Ändra ljudfilsbeteckning"
 
-#: ../gui/audiomanagerdialog.cpp:1289 ../gui/audiomanagerdialog.cpp:1298
+#: ../gui/audiomanagerdialog.cpp:1292 ../gui/audiomanagerdialog.cpp:1301
 msgid "Cannot add file %1: %2"
 msgstr "Kan inte lägga till filen %1: %2"
 
-#: ../gui/audiomanagerdialog.cpp:1318
+#: ../gui/audiomanagerdialog.cpp:1321
 msgid ""
 "Try copying this file to a directory where you have write permission and re-"
 "add it"
 msgstr ""
 "Försök att kopiera filen till en katalog där du har skrivrättighet och lägga "
 "till den igen"
+
+#: ../gui/notationstaff.cpp:453
+msgid "Rendering staff %1..."
+msgstr "Ritar upp notsystem %1..."
+
+#: ../gui/notationstaff.cpp:515
+msgid "Rendering notes on staff %1..."
+msgstr "Ritar upp noter i notsystem %1..."
+
+#: ../gui/notationstaff.cpp:573
+msgid "Positioning staff %1..."
+msgstr "Placerar notsystem %1..."
 
 #: rc.cpp:2
 #, no-c-format
@@ -8348,107 +8358,107 @@ msgstr "Allmän verktygsrad"
 msgid "Se&gment"
 msgstr "Seg&ment"
 
-#: rc.cpp:10 rc.cpp:36 rc.cpp:96 rc.cpp:198
+#: rc.cpp:10 rc.cpp:32 rc.cpp:96 rc.cpp:198
 #, no-c-format
 msgid "Edit &With"
 msgstr "Redigera &med"
 
-#: rc.cpp:12 rc.cpp:18 rc.cpp:64 rc.cpp:230 rc.cpp:236
+#: rc.cpp:12 rc.cpp:18 rc.cpp:60 rc.cpp:230 rc.cpp:236
 #, no-c-format
 msgid "Actions Toolbar"
 msgstr "Åtgärdsverktygsrad"
 
-#: rc.cpp:14 rc.cpp:24 rc.cpp:232 rc.cpp:242
+#: rc.cpp:14 rc.cpp:70 rc.cpp:232 rc.cpp:242
 #, no-c-format
 msgid "Time Toolbar"
 msgstr "Tidsverktygsrad"
 
-#: rc.cpp:16 rc.cpp:62 rc.cpp:74 rc.cpp:84 rc.cpp:162 rc.cpp:224 rc.cpp:234
+#: rc.cpp:16 rc.cpp:58 rc.cpp:74 rc.cpp:84 rc.cpp:162 rc.cpp:224 rc.cpp:234
 #, no-c-format
 msgid "Transport Toolbar"
 msgstr "Överföringsverktygsrad"
 
-#: rc.cpp:20 rc.cpp:66 rc.cpp:226 rc.cpp:238
+#: rc.cpp:20 rc.cpp:62 rc.cpp:226 rc.cpp:238
 #, no-c-format
 msgid "Zoom Toolbar"
 msgstr "Zoomverktygsrad"
 
-#: rc.cpp:28
+#: rc.cpp:24
 #, no-c-format
 msgid "&Grid"
 msgstr "&Rutnät"
 
-#: rc.cpp:30 rc.cpp:90
+#: rc.cpp:26 rc.cpp:90
 #, no-c-format
 msgid "Add Event Ruler"
 msgstr "Lägg till händelselinjal"
 
-#: rc.cpp:32 rc.cpp:92 rc.cpp:190
+#: rc.cpp:28 rc.cpp:92 rc.cpp:190
 #, no-c-format
 msgid "&Composition"
 msgstr "&Komposition"
 
-#: rc.cpp:34
+#: rc.cpp:30
 #, no-c-format
 msgid "&Segment"
 msgstr "Seg&ment"
 
-#: rc.cpp:38 rc.cpp:116
+#: rc.cpp:34 rc.cpp:116
 #, no-c-format
 msgid "Ad&just"
 msgstr "&Justera"
 
-#: rc.cpp:40 rc.cpp:128
+#: rc.cpp:36 rc.cpp:128
 #, no-c-format
 msgid "&Quantize"
 msgstr "&Kvantisera"
 
-#: rc.cpp:42
+#: rc.cpp:38
 #, no-c-format
 msgid "&Velocity"
 msgstr "Ha&stighet"
 
-#: rc.cpp:44 rc.cpp:130
+#: rc.cpp:40 rc.cpp:130
 #, no-c-format
 msgid "Trans&pose"
 msgstr "T&ransponera"
 
-#: rc.cpp:48 rc.cpp:140 rc.cpp:208
+#: rc.cpp:44 rc.cpp:140 rc.cpp:208
 #, no-c-format
 msgid "&Editor Tools"
 msgstr "R&edigeringsverktyg"
 
-#: rc.cpp:50 rc.cpp:150
+#: rc.cpp:46 rc.cpp:150
 #, no-c-format
 msgid "Local &Cursor"
 msgstr "Lokal &markör"
 
-#: rc.cpp:52 rc.cpp:72 rc.cpp:76 rc.cpp:152 rc.cpp:210
+#: rc.cpp:48 rc.cpp:72 rc.cpp:76 rc.cpp:152 rc.cpp:210
 #, no-c-format
 msgid "T&ransport"
 msgstr "&Överföring"
 
-#: rc.cpp:56 rc.cpp:156 rc.cpp:212
+#: rc.cpp:52 rc.cpp:156 rc.cpp:212
 #, no-c-format
 msgid "&Toolbars"
 msgstr "Verkt&ygsrader"
 
-#: rc.cpp:58 rc.cpp:158 rc.cpp:214
+#: rc.cpp:54 rc.cpp:158 rc.cpp:214
 #, no-c-format
 msgid "&Rulers"
 msgstr "Lin&jaler"
 
-#: rc.cpp:60 rc.cpp:160 rc.cpp:218
+#: rc.cpp:56 rc.cpp:160 rc.cpp:218
 #, no-c-format
 msgid "Tools Toolbar"
 msgstr "Verktygsrad med verktyg"
 
-#: rc.cpp:68 rc.cpp:180
+#: rc.cpp:64 rc.cpp:180
 #, no-c-format
 msgid "Control Ruler actions"
 msgstr "Styrlinjalhändelser"
 
-#: rc.cpp:70 rc.cpp:182
+#: rc.cpp:66 rc.cpp:182
 #, no-c-format
 msgid "Property Ruler actions"
 msgstr "Egenskapslinjalhändelser"
