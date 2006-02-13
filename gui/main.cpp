@@ -342,6 +342,10 @@ static int _x_errhandler( Display *dpy, XErrorEvent *err )
 }
 #endif
 
+// NOTE: to get a dump of the stack trace from KDE during program execution:
+// std::cerr << kdBacktrace() << std::endl
+// (see kdebug.h)
+
 void testInstalledVersion()
 {
     QString versionLocation = locate("appdata", "version.txt");

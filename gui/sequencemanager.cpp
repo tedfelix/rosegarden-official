@@ -391,6 +391,8 @@ SequenceManager::stopping()
     }
 
     SEQMAN_DEBUG << "SequenceManager::stopping() - preparing to stop\n";
+ 
+//    SEQMAN_DEBUG << kdBacktrace() << endl;
 
     stop();
 
