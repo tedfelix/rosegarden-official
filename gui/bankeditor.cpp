@@ -2261,7 +2261,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 
 	    for (Rosegarden::KeyMappingList::iterator i = kml.begin();
 		 i != kml.end(); ++i) {
-		if (i->getName() == oldName) {
+		if (i->getName() == qstrtostr(oldName)) {
 		    i->setName(qstrtostr(label));
 		    break;
 		}

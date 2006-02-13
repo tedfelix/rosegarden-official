@@ -4646,7 +4646,8 @@ AlsaDriver::checkForNewClients()
 		    if ((*k)->m_client == firstOther.first &&
 			(*k)->m_port == firstOther.second) {
 			m_devicePortMap[(*i)->getId()] = firstOther;
-			setConnectionToDevice(**i, (*k)->m_name, firstOther);
+			setConnectionToDevice(**i, (*k)->m_name.c_str(),
+					      firstOther);
 			madeChange = true;
 			break;
 		    }
