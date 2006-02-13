@@ -20,14 +20,16 @@ case $1 in
 	fi
 	;;
     *)
-	echo "$0: Build a release tarball of Rosegarden from CVS HEAD" 1>&2
+	echo 1>&2
+	echo "`basename $0`: Build a release tarball of Rosegarden from CVS HEAD" 1>&2
 	echo 1>&2
 	echo "Usage:" 1>&2
-	echo "    $0 <version>" 1>&2
-	echo "    $0 -e" 1>&2
+	echo "    `basename $0` <version>" 1>&2
+	echo "    `basename $0` -e" 1>&2
 	echo "Where <version> is a number such as 1.0 or 2.5.1-twiddly (without 4- prefix)." 1>&2
-	echo "Use -e to extract the version number from SConstruct.  Otherwise" 1>&2
-	echo "SConstruct will be updated with the new version number." 1>&2
+	echo "Use -e to extract the version number from SConstruct.  Otherwise SConstruct" 1>&2
+	echo "will be updated with the new version number." 1>&2
+	echo 1>&2
 	exit 1
 	;;
 esac
