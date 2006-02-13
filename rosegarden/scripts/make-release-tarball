@@ -25,7 +25,7 @@ case $1 in
 	echo "Usage:" 1>&2
 	echo "    $0 <version>" 1>&2
 	echo "    $0 -e" 1>&2
-	echo "Where <version> is a version number such as 1.0 or 2.5.1-twiddly." 1>&2
+	echo "Where <version> is a number such as 1.0 or 2.5.1-twiddly (without 4- prefix)." 1>&2
 	echo "Use -e to extract the version number from SConstruct.  Otherwise" 1>&2
 	echo "SConstruct will be updated with the new version number." 1>&2
 	exit 1
@@ -33,12 +33,12 @@ case $1 in
 esac
 
 tmpdir="release_tmp_$$"
-rgname="rosegarden-$version"
+rgname="rosegarden-4-$version"
 
 echo "Building tarball for $rgname..."
 
 tarname="$rgname.tar.bz2"
-cvstag=`echo "$version" | sed 's/[\.-]/_/g'`
+cvstag=RELEASE_V4_R`echo "$version" | sed 's/[\.-]/_/g'`
 
 echo "[Tarball file will be $tarname]"
 echo "[CVS tag will be $cvstag]"
@@ -58,7 +58,7 @@ mv rosegarden "$rgname"
 cd "$rgname"
 if [ -n "$update_version" ]; then
     echo "Updating version number in SConstruct..."
-    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "'"$version"'"/' SConstruct
+    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "4-'"$version"'"/' SConstruct
     cvs -z3 commit SConstruct
 fi
 
