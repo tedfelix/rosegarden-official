@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
                           I18N_NOOP("Copyright 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
                           "http://www.rosegardenmusic.com/",
-                          "rosegarden-devel@sf.net");
+                          "rosegarden-devel@lists.sourceforge.net");
 
     aboutData.addAuthor("Guillaume Laurent", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
     aboutData.addAuthor("Chris Cannam", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");

@@ -39,7 +39,6 @@
         <Action name="delete"/>
         <Separator/>
         <Action name="select_all"/>
-        <Separator/>
   </Menu>
   <Menu name="document">
   	<text>&amp;Composition</text>
