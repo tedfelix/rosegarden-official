@@ -40,8 +40,7 @@ scons configure debug=1; scons; scons configure ;
 """
 
 # Define the version
-VERSION = "4-1.2.3rc3"
-
+VERSION = "4-1.2.3rc4"
 import os
 import glob
 import fnmatch
