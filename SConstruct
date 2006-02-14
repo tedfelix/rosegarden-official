@@ -28,7 +28,7 @@ To uninstall the project
 To compile while being in a subdirectory
 -> cd src; scons -u
 
-To (re)configure the project and give particular arguments, use ie :
+To (re)configure the project and give particular arguments, use e.g. :
 -> scons configure debug=1
 -> scons configure prefix=/tmp/ita debug=full extraincludes=/usr/local/include:/tmp/include prefix=/usr/local
 The variables are saved automatically after the first run
@@ -40,7 +40,7 @@ scons configure debug=1; scons; scons configure ;
 """
 
 # Define the version
-VERSION = "4-1.2.3"
+VERSION = "4-1.3_cvs"
 
 import os
 import glob
