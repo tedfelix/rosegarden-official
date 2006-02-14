@@ -60,7 +60,7 @@ mv rosegarden "$rgname"
 cd "$rgname"
 if [ -n "$update_version" ]; then
     echo "Updating version number in SConstruct..."
-    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "4-'"$version"'"/' SConstruct
+    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "4-'"$version"'"\n/' SConstruct
     cvs -z3 commit -m "Update version number for $version" SConstruct
 fi
 
