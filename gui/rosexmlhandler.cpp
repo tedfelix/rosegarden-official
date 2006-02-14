@@ -541,6 +541,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	
 	Rosegarden::tempoT tempo = Rosegarden::Composition::getTempoForQpm(120.0);
 	QString tempoStr = atts.value("tempo");
+	QString targetStr = atts.value("target");
 	QString bphStr = atts.value("bph");
 	if (tempoStr) {
 	    tempo = tempoStr.toInt();
@@ -549,7 +550,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		(double(bphStr.toInt()) / 60.0);
 	}
 
-	getComposition().addTempoAtTime(t, tempo);
+	if (targetStr) {
+	    getComposition().addTempoAtTime(t, tempo, targetStr.toInt());
+	} else {
+	    getComposition().addTempoAtTime(t, tempo);
+	}	    
 
     } else if (lcName == "composition") {
 

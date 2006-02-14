@@ -261,9 +261,11 @@ RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,
                                Rosegarden::tempoT,
+                               Rosegarden::tempoT,
 			       TempoDialog::TempoDialogAction)),
 	    RosegardenGUIApp::self(),
             SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 Rosegarden::tempoT,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 
@@ -418,8 +420,10 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
     //
     connect(notationView, SIGNAL(changeTempo(Rosegarden::timeT,
 					     Rosegarden::tempoT,
+					     Rosegarden::tempoT,
 					     TempoDialog::TempoDialogAction)),
             RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT,
+							   Rosegarden::tempoT,
 							   Rosegarden::tempoT,
                                                            TempoDialog::TempoDialogAction)));
 
@@ -609,8 +613,10 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
     //
     connect(matrixView, SIGNAL(changeTempo(Rosegarden::timeT,
 					   Rosegarden::tempoT,
+					   Rosegarden::tempoT,
 					   TempoDialog::TempoDialogAction)),
 		    RosegardenGUIApp::self(), SLOT(slotChangeTempo(Rosegarden::timeT,
+								   Rosegarden::tempoT,
 								   Rosegarden::tempoT,
 								   TempoDialog::TempoDialogAction)));
 

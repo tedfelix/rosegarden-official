@@ -28,6 +28,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <cmath>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -51,6 +52,7 @@ const PropertyName Composition::BarNumberProperty = "BarNumber";
 
 const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "Tempo";
+const PropertyName Composition::TargetTempoProperty = "TargetTempo";
 const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
 
 
@@ -801,6 +803,39 @@ Composition::getTempoAtTime(timeT t) const
     
     tempoT tempo = (tempoT)((*i)->get<Int>(TempoProperty));
 
+    if ((*i)->has(TargetTempoProperty)) {
+
+	tempoT target = (tempoT)((*i)->get<Int>(TargetTempoProperty));
+	ReferenceSegment::iterator j = i;
+	++j;
+
+	if (target > 0 || (target == 0 && j != m_tempoSegment.end())) {
+
+	    timeT t0 = (*i)->getAbsoluteTime();
+	    timeT t1 = (j != m_tempoSegment.end() ?
+			(*j)->getAbsoluteTime() : getEndMarker());
+
+	    if (t1 < t0) return tempo;
+	    
+	    if (target == 0) {
+		target = (tempoT)((*j)->get<Int>(TempoProperty));
+	    }
+
+	    // tempo ramps are linear in 1/tempo
+	    double s0 = 1.0 / double(tempo);
+	    double s1 = 1.0 / double(target);
+	    double s = s0 + (t - t0) * ((s1 - s0) / (t1 - t0));
+	    
+	    tempoT result = tempoT((1.0 / s) + 0.01);
+
+#ifdef DEBUG_TEMPO_STUFF
+	    cerr << "Composition: Calculated tempo " << result << " at " << t << endl;
+#endif
+
+	    return result;
+	}
+    }
+
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition: Found tempo " << tempo << " at " << t << endl;
 #endif
@@ -808,15 +843,22 @@ Composition::getTempoAtTime(timeT t) const
 }
 
 int
-Composition::addTempoAtTime(timeT time, tempoT tempo)
+Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 {
     Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, tempo);
 
+    if (targetTempo >= 0) {
+	tempoEvent->set<Int>(TargetTempoProperty, targetTempo);
+    }
+
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
     if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+    if (targetTempo > 0 && targetTempo < m_minTempo) m_minTempo = targetTempo;
+
     if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+    if (targetTempo > 0 && targetTempo > m_maxTempo) m_maxTempo = targetTempo;
 
     m_tempoTimestampsNeedCalculating = true;
     updateRefreshStatuses();
@@ -851,22 +893,57 @@ Composition::getTempoChange(int n) const
 	 tempoT(m_tempoSegment[n]->get<Int>(TempoProperty)));
 }
 
+std::pair<bool, tempoT>
+Composition::getTempoRamping(int n, bool calculate) const
+{
+    tempoT target = -1;
+    if (m_tempoSegment[n]->has(TargetTempoProperty)) {
+	target = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
+    }
+    bool ramped = (target >= 0);
+    if (target == 0) {
+	if (calculate) {
+	    if (m_tempoSegment.size() > n+1) {
+		target = m_tempoSegment[n+1]->get<Int>(TempoProperty);
+	    }
+	}
+    }
+    if (target < 0 || (calculate && (target == 0))) {
+	target = m_tempoSegment[n]->get<Int>(TempoProperty);
+    }
+    return std::pair<bool, tempoT>(ramped, target);
+}
+
 void
 Composition::removeTempoChange(int n)
 {
     tempoT oldTempo = m_tempoSegment[n]->get<Int>(TempoProperty);
+    tempoT oldTarget = -1;
+
+    if (m_tempoSegment[n]->has(TargetTempoProperty)) {
+	oldTarget = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
+    }
+
     m_tempoSegment.erase(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
 
     if (oldTempo == m_minTempo ||
-	oldTempo == m_maxTempo) {
+	oldTempo == m_maxTempo ||
+	(oldTarget > 0 && oldTarget == m_minTempo) ||
+	(oldTarget > 0 && oldTarget == m_maxTempo)) {
 	m_minTempo = 0;
 	m_maxTempo = 0;
 	for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	     i != m_tempoSegment.end(); ++i) {
 	    tempoT tempo = (*i)->get<Int>(TempoProperty);
+	    tempoT target = -1;
+	    if ((*i)->has(TargetTempoProperty)) {
+		target = (*i)->get<Int>(TargetTempoProperty);
+	    }
 	    if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+	    if (target > 0 && target < m_minTempo) m_minTempo = target;
 	    if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+	    if (target > 0 && target > m_maxTempo) m_maxTempo = target;
 	}
     }
 
@@ -889,9 +966,24 @@ Composition::getElapsedRealTime(timeT t) const
 	}
     }
 
-    RealTime elapsed = getTempoTimestamp(*i) +
-	time2RealTime(t - (*i)->getAbsoluteTime(),
-		      tempoT((*i)->get<Int>(TempoProperty)));
+    RealTime elapsed;
+
+    tempoT target = -1;
+    timeT nextTempoTime = t;
+
+    if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
+
+    if (target > 0) {
+	elapsed = getTempoTimestamp(*i) +
+	    time2RealTime(t - (*i)->getAbsoluteTime(),
+			  tempoT((*i)->get<Int>(TempoProperty)),
+			  nextTempoTime - (*i)->getAbsoluteTime(),
+			  target);
+    } else {
+	elapsed = getTempoTimestamp(*i) +
+	    time2RealTime(t - (*i)->getAbsoluteTime(),
+			  tempoT((*i)->get<Int>(TempoProperty)));
+    }
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition::getElapsedRealTime: " << t << " -> "
@@ -915,9 +1007,23 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	}
     }
 
-    timeT elapsed = (*i)->getAbsoluteTime() +
-	realTime2Time(t - getTempoTimestamp(*i),
-		      (tempoT)((*i)->get<Int>(TempoProperty)));
+    timeT elapsed;
+
+    tempoT target = -1;
+    timeT nextTempoTime = 0;
+    if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
+
+    if (target > 0) {
+	elapsed = (*i)->getAbsoluteTime() +
+	    realTime2Time(t - getTempoTimestamp(*i),
+			  (tempoT)((*i)->get<Int>(TempoProperty)),
+			  nextTempoTime - (*i)->getAbsoluteTime(),
+			  target);
+    } else {
+	elapsed = (*i)->getAbsoluteTime() +
+	    realTime2Time(t - getTempoTimestamp(*i),
+			  (tempoT)((*i)->get<Int>(TempoProperty)));
+    }
 
 #ifdef DEBUG_TEMPO_STUFF
     static int doError = true;
@@ -945,6 +1051,7 @@ Composition::calculateTempoTimestamps() const
     RealTime lastRealTime;
 
     tempoT tempo = m_defaultTempo;
+    tempoT target = -1;
 
 #ifdef DEBUG_TEMPO_STUFF
     cerr << "Composition::calculateTempoTimestamps: Tempo events are:" << endl;
@@ -953,8 +1060,16 @@ Composition::calculateTempoTimestamps() const
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
-	RealTime myTime = lastRealTime +
-	    time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo);
+	RealTime myTime;
+
+	if (target > 0) {
+	    myTime = lastRealTime +
+		time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo,
+			      (*i)->getAbsoluteTime() - lastTimeT, target);
+	} else {
+	    myTime = lastRealTime +
+		time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo);
+	}
 
 	setTempoTimestamp(*i, myTime);
 
@@ -965,6 +1080,10 @@ Composition::calculateTempoTimestamps() const
 	lastRealTime = myTime;
 	lastTimeT = (*i)->getAbsoluteTime();
 	tempo = tempoT((*i)->get<Int>(TempoProperty));
+
+	target = -1;
+	timeT nextTempoTime = 0;
+	if (!getTempoTarget(i, target, nextTempoTime)) target = -1;
     }
 
     m_tempoTimestampsNeedCalculating = false;
@@ -1003,6 +1122,56 @@ Composition::time2RealTime(timeT t, tempoT tempo) const
     return rt;
 }
 
+RealTime
+Composition::time2RealTime(timeT time, tempoT tempo,
+			   timeT targetTime, tempoT targetTempo) const
+{
+    static timeT cdur = Note(Note::Crotchet).getDuration();
+
+    // The real time elapsed at musical time t, in seconds, during a
+    // smooth tempo change from "tempo" at musical time zero to
+    // "targetTempo" at musical time "targetTime", is
+    // 
+    //           2 
+    //     at + t (b - a)
+    //          ---------
+    //             2n
+    // where
+    // 
+    // a is the initial tempo in seconds per tick
+    // b is the target tempo in seconds per tick
+    // n is targetTime in ticks
+
+    // shouldn't happen, but just to avoid arithmetic error
+    if (targetTime == 0) return time2RealTime(time, targetTempo);
+
+    double a = (100000 * 60) / (double(tempo) * cdur);
+    double b = (100000 * 60) / (double(targetTempo) * cdur);
+    double t = time;
+    double n = targetTime;
+    double result = (a * t) + (t * t * (b - a)) / (2 * n);
+
+    int sec = int(result);
+    int nsec = int((result - sec) * 1000000000);
+   
+    RealTime rt(sec, nsec);
+
+#ifdef DEBUG_TEMPO_STUFF
+    if (!DEBUG_silence_recursive_tempo_printout) {
+	cerr << "Composition::time2RealTime[2]: time " << time << ", tempo "
+	     << tempo << ", targetTime " << targetTime << ", targetTempo "
+	     << targetTempo << ": rt " << rt << endl;
+	DEBUG_silence_recursive_tempo_printout = 1;
+//	RealTime nextRt = time2RealTime(targetTime, tempo, targetTime, targetTempo);
+	timeT ct = realTime2Time(rt, tempo, targetTime, targetTempo);
+	cerr << "cf. realTime2Time: rt " << rt << " -> " << ct << endl;
+	DEBUG_silence_recursive_tempo_printout=0;
+    }
+#endif
+
+    return rt;
+}
+
 timeT
 Composition::realTime2Time(RealTime rt, tempoT tempo) const
 {
@@ -1029,6 +1198,97 @@ Composition::realTime2Time(RealTime rt, tempoT tempo) const
 #endif
 
     return t;
+}
+
+timeT
+Composition::realTime2Time(RealTime rt, tempoT tempo,
+			   timeT targetTime, tempoT targetTempo) const
+{
+    static timeT cdur = Note(Note::Crotchet).getDuration();
+
+    // Inverse of the expression in time2RealTime above.
+    // 
+    // The musical time elapsed at real time t, in ticks, during a
+    // smooth tempo change from "tempo" at real time zero to
+    // "targetTempo" at real time "targetTime", is
+    // 
+    //          2na (+/-) sqrt((2nb)^2 + 8(b-a)tn)
+    //       -  ----------------------------------
+    //                       2(b-a)
+    // where
+    // 
+    // a is the initial tempo in seconds per tick
+    // b is the target tempo in seconds per tick
+    // n is target real time in ticks
+
+    double a = (100000 * 60) / (double(tempo) * cdur);
+    double b = (100000 * 60) / (double(targetTempo) * cdur);
+    double t = double(rt.sec) + double(rt.nsec) / 1e9;
+    double n = targetTime;
+
+    double term1 = 2.0 * n * a;
+    double term2 = (2.0 * n * a) * (2.0 * n * a) + 8 * (b - a) * t * n;
+
+    if (term2 < 0) { 
+	// We're screwed, but at least let's not crash
+	std::cerr << "ERROR: Composition::realTime2Time: term2 < 0 (it's " << term2 << ")" << std::endl;
+#ifdef DEBUG_TEMPO_STUFF
+	std::cerr << "rt = " << rt << ", tempo = " << tempo << ", targetTime = " << targetTime << ", targetTempo = " << targetTempo << std::endl;
+	std::cerr << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t <<std::endl;
+	std::cerr << "that's sqrt( (" << ((2.0*n*a*2.0*n*a)) << ") + "
+		  << (8*(b-a)*t*n) << " )" << endl;
+
+	std::cerr << "so our original expression was " << rt << " = "
+		  << a << "t + (t^2 * (" << b << " - " << a << ")) / " << 2*n << std::endl;
+#endif
+
+	return realTime2Time(rt, tempo);
+    }
+
+    double term3 = sqrt(term2);
+
+    // We only want the positive root
+    if (term3 > 0) term3 = -term3;
+
+    double result = - (term1 + term3) / (2 * (b - a));
+
+#ifdef DEBUG_TEMPO_STUFF
+    std::cerr << "Composition::realTime2Time:" <<endl;
+    std::cerr << "n = " << n << ", b = " << b << ", a = " << a << ", t = " << t <<std::endl;
+    std::cerr << "+/-sqrt(term2) = " << term3 << std::endl;
+    std::cerr << "result = " << result << endl;
+#endif
+
+    return long(result + 0.1);
+}
+
+bool
+Composition::getTempoTarget(ReferenceSegment::const_iterator i,
+			    tempoT &target,
+			    timeT &targetTime) const
+{
+    target = -1;
+    targetTime = 0;
+    bool have = false;
+
+    if ((*i)->has(TargetTempoProperty)) {
+	target = (*i)->get<Int>(TargetTempoProperty);
+	if (target >= 0) {
+	    ReferenceSegment::const_iterator j(i);
+	    if (++j != m_tempoSegment.end()) {
+		if (target == 0) target = (*j)->get<Int>(TempoProperty);
+		targetTime = (*j)->getAbsoluteTime();
+	    } else {
+		targetTime = getEndMarker();
+		if (targetTime < (*i)->getAbsoluteTime()) {
+		    target = -1;
+		}
+	    }
+	    if (target > 0) have = true;
+	}
+    }
+
+    return have;
 }
 
 RealTime
@@ -1444,9 +1704,17 @@ std::string Composition::toXmlString()
 	 i != m_tempoSegment.end(); ++i) {
 
 	tempoT tempo = tempoT((*i)->get<Int>(TempoProperty));
+	tempoT target = 0;
+	if ((*i)->has(TargetTempoProperty)) {
+	    target = tempoT((*i)->get<Int>(TargetTempoProperty));
+	}
 	composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
 		    << "\" bph=\"" << ((tempo * 6) / 10000)
-		    << "\" tempo=\"" << tempo << "\"/>" << endl;
+		    << "\" tempo=\"" << tempo;
+	if (target > 0) {
+	    composition << "\" target=\"" << target;
+	}
+	composition << "\"/>" << endl;
     }
 
     composition << endl;

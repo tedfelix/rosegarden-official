@@ -141,6 +141,7 @@ public:
 signals:
     void changeTempo(Rosegarden::timeT,  // tempo change time
                      Rosegarden::tempoT,  // tempo value
+                     Rosegarden::tempoT,  // target value
                      TempoDialog::TempoDialogAction); // tempo action
 
 public slots:

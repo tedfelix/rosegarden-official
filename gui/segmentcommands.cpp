@@ -1714,7 +1714,7 @@ AddTempoChangeCommand::execute()
         if (data.first == m_time) m_oldTempo = data.second;
     }
 
-    m_tempoChangeIndex = m_composition->addTempoAtTime(m_time, m_tempo);
+    m_tempoChangeIndex = m_composition->addTempoAtTime(m_time, m_tempo, m_target);
 }
 
 void

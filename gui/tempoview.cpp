@@ -520,9 +520,11 @@ TempoView::slotEditInsertTempo()
     connect(&dialog, 
 	    SIGNAL(changeTempo(Rosegarden::timeT,
                                Rosegarden::tempoT,
+                               Rosegarden::tempoT,
 			       TempoDialog::TempoDialogAction)),
 	    this,
             SIGNAL(changeTempo(Rosegarden::timeT,
+			       Rosegarden::tempoT,
 			       Rosegarden::tempoT,
 			       TempoDialog::TempoDialogAction)));
 
@@ -816,9 +818,11 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 	connect(&dialog, 
 		SIGNAL(changeTempo(Rosegarden::timeT,
 				   Rosegarden::tempoT,
+				   Rosegarden::tempoT,
 				   TempoDialog::TempoDialogAction)),
 		this,
 		SIGNAL(changeTempo(Rosegarden::timeT,
+				   Rosegarden::tempoT,
 				   Rosegarden::tempoT,
 				   TempoDialog::TempoDialogAction)));
 	

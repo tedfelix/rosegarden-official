@@ -505,7 +505,6 @@ RosegardenGUIApp::~RosegardenGUIApp()
 #endif     
 
     delete m_doc;
-
     Rosegarden::Profiles::getInstance()->dump();
 }
 
@@ -4092,6 +4091,7 @@ void RosegardenGUIApp::slotToggleTracking()
     m_view->getTrackEditor()->slotToggleTracking();
 }
 
+
 void RosegardenGUIApp::slotTestStartupTester()
 {
     RG_DEBUG << "RosegardenGUIApp::slotTestStartupTester" << endl;
@@ -5290,8 +5290,10 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
     connect(&tempoDialog,
             SIGNAL(changeTempo(Rosegarden::timeT,
                                Rosegarden::tempoT,
+                               Rosegarden::tempoT,
 			       TempoDialog::TempoDialogAction)),
             SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 Rosegarden::tempoT,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 
@@ -5357,8 +5359,11 @@ void RosegardenGUIApp::slotChangeZoom(int)
 void
 RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
                                   Rosegarden::tempoT value,
+                                  Rosegarden::tempoT target,
                                   TempoDialog::TempoDialogAction action)
 {
+    //!!! handle target
+
     Rosegarden::Composition &comp = m_doc->getComposition();
 
     // We define a macro command here and build up the command
@@ -5366,8 +5371,8 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     //
     if (action == TempoDialog::AddTempo)
     {
-        m_doc->getCommandHistory()->addCommand(new
-                AddTempoChangeCommand(&comp, time, value));
+        m_doc->getCommandHistory()->addCommand
+	    (new AddTempoChangeCommand(&comp, time, value, target));
     }
     else if (action == TempoDialog::ReplaceTempo)
     {
@@ -5377,8 +5382,8 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
         //
         if (index == -1)
         {
-            m_doc->getCommandHistory()->addCommand(new
-                    AddTempoChangeCommand(&comp, 0, value));
+            m_doc->getCommandHistory()->addCommand
+		(new AddTempoChangeCommand(&comp, 0, value, target));
             return;
         }
 
@@ -5389,7 +5394,8 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
             new KMacroCommand(i18n("Replace Tempo Change at %1").arg(time));
 
         macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
-        macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value));
+        macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value,
+						    target));
 
         m_doc->getCommandHistory()->addCommand(macro);
 
@@ -5398,7 +5404,7 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     {
         m_doc->getCommandHistory()->addCommand(new
                 AddTempoChangeCommand(&comp, comp.getBarStartForTime(time),
-                                      value));
+                                      value, target));
     }
     else if (action == TempoDialog::GlobalTempo ||
              action == TempoDialog::GlobalTempoWithDefault)
@@ -5414,7 +5420,7 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 
         // add tempo change at time zero
         //
-        macro->addCommand(new AddTempoChangeCommand(&comp, 0, value));
+        macro->addCommand(new AddTempoChangeCommand(&comp, 0, value, target));
 
         // are we setting default too?
         //

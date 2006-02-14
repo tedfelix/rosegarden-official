@@ -593,11 +593,13 @@ class AddTempoChangeCommand : public KNamedCommand
 public:
     AddTempoChangeCommand(Rosegarden::Composition *composition,
                           Rosegarden::timeT time,
-                          Rosegarden::tempoT tempo):
+                          Rosegarden::tempoT tempo,
+			  Rosegarden::tempoT target = -1):
 	KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
+	m_target(target),
         m_oldTempo(0),
         m_tempoChangeIndex(0) {}
 
@@ -612,6 +614,7 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_time;
     Rosegarden::tempoT m_tempo;
+    Rosegarden::tempoT m_target;
     Rosegarden::tempoT m_oldTempo;
     int m_tempoChangeIndex;
 };

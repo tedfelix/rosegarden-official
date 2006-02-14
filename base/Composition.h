@@ -43,7 +43,8 @@ namespace Rosegarden
 // thousandths of a quarter-note per minute).  This means the maximum
 // tempo in a 32-bit integer is about 21400 qpm.  We use a signed int
 // for compatibility with the Event integer type -- but note that we
-// use 0 (rather than -1) to indicate "tempo not set", by convention.
+// use 0 (rather than -1) to indicate "tempo not set", by convention
+// (though see usage of target tempo in e.g. addTempoAtTime).
 typedef int tempoT;
 
 class Quantizer;
@@ -505,7 +506,9 @@ public:
     static tempoT getTempoForQpm(double qpm) { return tempoT(qpm * 100000 + 0.01); }
 
     /**
-     * Return the tempo in effect at time t.
+     * Return the tempo in effect at time t.  If a ramped tempo change
+     * is in effect at the time, it will be properly interpolated and
+     * a computed value returned.
      */
     tempoT getTempoAtTime(timeT t) const;
 
@@ -526,8 +529,14 @@ public:
      * Removes any existing tempo event at that time.  Returns the
      * index of the new tempo event in a form suitable for passing to
      * removeTempoChange.
+     *
+     * If targetTempo == -1, adds a single constant tempo change.
+     * If targetTempo == 0, adds a smooth tempo ramp from this tempo
+     * change to the next.
+     * If targetTempo > 0, adds a smooth tempo ramp from this tempo
+     * ending at targetTempo at the time of the next tempo change.
      */
-    int addTempoAtTime(timeT time, tempoT tempo);
+    int addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo = -1);
 
     /**
      * Return the number of tempo changes in the composition.
@@ -543,9 +552,21 @@ public:
 
     /**
      * Return the absolute time of and tempo introduced by tempo
-     * change number n
+     * change number n.  If the tempo is ramped, this returns only
+     * the starting tempo.
      */
     std::pair<timeT, tempoT> getTempoChange(int n) const;
+
+    /**
+     * Return whether the tempo change number n is a ramped tempo or
+     * not, and if it is, return the target tempo for the ramp.
+     * 
+     * If calculate is false, return a target tempo of 0 if the tempo
+     * change is defined to ramp to the following tempo.  If calculate
+     * is true, return a target tempo equal to the following tempo in
+     * this case.
+     */
+    std::pair<bool, tempoT> getTempoRamping(int n, bool calculate = true) const;
 
     /**
      * Remove tempo change event n from the composition.
@@ -690,9 +711,6 @@ public:
     //
     virtual std::string toXmlString();
 
-    static RealTime getTempoTimestamp(const Event *e);
-    static void setTempoTimestamp(Event *e, RealTime r);
-
     // Who's making this racket?
     //
     Configuration &getMetadata() {
@@ -784,6 +802,7 @@ protected:
 
     static const std::string TempoEventType; 
     static const PropertyName TempoProperty;
+    static const PropertyName TargetTempoProperty;
 
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;
@@ -888,7 +907,18 @@ protected:
     void calculateTempoTimestamps() const;
     mutable bool m_tempoTimestampsNeedCalculating;
     RealTime time2RealTime(timeT time, tempoT tempo) const;
+    RealTime time2RealTime(timeT time, tempoT tempo,
+			   timeT targetTempoTime, tempoT targetTempo) const;
     timeT realTime2Time(RealTime rtime, tempoT tempo) const;
+    timeT realTime2Time(RealTime rtime, tempoT tempo,
+			timeT targetTempoTime, tempoT targetTempo) const;
+
+    bool getTempoTarget(ReferenceSegment::const_iterator i,
+			tempoT &target,
+			timeT &targetTime) const;
+
+    static RealTime getTempoTimestamp(const Event *e);
+    static void setTempoTimestamp(Event *e, RealTime r);
 
     typedef std::list<CompositionObserver *> ObserverSet;
     ObserverSet m_observers;

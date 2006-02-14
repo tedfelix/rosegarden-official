@@ -2495,9 +2495,11 @@ MatrixView::slotEditTempos(Rosegarden::timeT t)
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,
                                Rosegarden::tempoT,
+                               Rosegarden::tempoT,
 			       TempoDialog::TempoDialogAction)),
 	    RosegardenGUIApp::self(),
             SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 Rosegarden::tempoT,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 

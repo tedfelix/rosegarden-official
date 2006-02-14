@@ -481,12 +481,17 @@ public slots:
     virtual void slotOk();
     void slotActionChanged();
     void slotTempoChanged(const QString &);
+    void slotTempoConstantClicked();
+    void slotTempoRampToNextClicked();
+    void slotTempoRampToTargetClicked();
+    void slotTargetChanged(const QString &);
 
 signals:
     // Return results in this signal
     //
     void changeTempo(Rosegarden::timeT,  // tempo change time
                      Rosegarden::tempoT,  // tempo value
+		     Rosegarden::tempoT,  // target tempo value
                      TempoDialog::TempoDialogAction); // tempo action
 
 protected:
@@ -497,8 +502,12 @@ protected:
 
     RosegardenGUIDoc     *m_doc;
     Rosegarden::timeT     m_tempoTime;
-    double                m_tempoValue;
-    HSpinBox  	  	  *m_tempoValueSpinBox;
+    HSpinBox  	  	 *m_tempoValueSpinBox;
+
+    QRadioButton         *m_tempoConstant;
+    QRadioButton         *m_tempoRampToNext;
+    QRadioButton         *m_tempoRampToTarget;
+    HSpinBox             *m_tempoTargetSpinBox; 
 
     QLabel	         *m_tempoBeatLabel;
     QLabel	         *m_tempoBeat;
