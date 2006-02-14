@@ -87,10 +87,18 @@ SourceForge page.</li></ul>
 
     <ul><li><b>HEAD</b> - This is the default CVS branch used when no
     other branch name is given.  This contains the code that will
-    ultimately become the next official stable release of Rosegarden,
-    although of course that doesn't mean it'll be stable now.  (You
-    can return to this branch after updating from another one, with the
+    ultimately become the next official major release of Rosegarden.
+    It is likely to vary between horribly unstable and quite stable,
+    depending on how far away the next major release is.  (You can
+    return to this branch after updating from another one, with the
     "cvs update -A" command.)</li>
+
+    <li><b>stable_<i>&lt;version&gt;</i></b> - This is the branch used
+    to collect bug fixes for the next stable minor release.  It is
+    branched from the point where the previous major feature release
+    was completed.  At the time of writing, the current stable branch
+    is <b>stable_1_2_4</b> which is expected to become the 1.2.4
+    release.</li>
 
     <li><b>guitar_chord_editor</b> - This contains experimental
     development aimed at adding guitar chord fretboard editing and
@@ -103,12 +111,6 @@ SourceForge page.</li></ul>
     of Glasgow Pitch Tracker project</a>.  Note that this
     branch may be significantly out-of-date compared to HEAD in all
     areas other than the pitch tracker support.</li>
-
-    <li><b>experiments</b> - This is a general scratch area for
-    developers, that may contain daring experimental work of all
-    kinds.  The only limitation is that it should preferably still
-    compile.  Changes to this branch will usually be notified on the
-    Rosegarden development mailing list.</li>
     </ul>
     
     <p>Note that we have changed build system (from automake to scons)
