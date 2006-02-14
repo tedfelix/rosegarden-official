@@ -34,13 +34,16 @@ ALSA project's soundcard matrix
 (<URL:http://www.alsa-project.org/alsa-doc>).
 
 
-Does it support my language?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Is it available in my language?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Translations are included for Russian, German, Spanish, French,
-Italian, Estonian, Welsh, Swedish, Dutch, and Japanese.  These
-translations are provided by independent contributors and so may not
-always be up to date with the current state of the GUI.
+Italian, Estonian, Welsh, Swedish, Dutch, Japanese, simplified
+Chinese, Czech, and Catalan.
+
+These translations are provided and maintained by volunteer
+contributors, and so they may not always be up to date with the
+current state of the GUI.
 
 If you can help out with translating musical or technical
 documentation (no programming required, but it's quite hard work),
@@ -63,34 +66,6 @@ easy way to have a look is to use
 
 Compilation or installation problems
 ------------------------------------
-
-macro `AM_PATH_ALSA' not found in library
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This can happen only when building from CVS. It means you're missing
-the 'alsa.m4' file (usually in /usr/share/aclocal) which is normally
-part of libalsa (look for a libalsa2-devel package for your
-distribution). This causes the 'configure' file to be misconstructed
-because the 'aclocal.m4' file won't be properly generated.
-
-If you can't install libalsa, you can still compile Rosegarden by
-pre-building the aclocal.m4 file yourself, like this :
-
-  $ aclocal -I .
-
-(that's what the 'ac_include_me_if_no_alsa.m4' file is for.)
-
-Then restart make -f Makefile.cvs. You will still see the error
-message, but the 'configure' file will be properly generated.
-
-
-arts/artsmidi.idl not found
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You may be missing the kdemultimedia package (and associated -devel
-package, if appropriate to your distribution).  Note that you need
-this even if you're building --with-alsa.
-
 
 Rosegarden is crashing at startup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -151,42 +126,9 @@ dependency, resulting in a broken set of plugins.  If you find that
 installing sfftw2 fixes the problem, you might also want to submit a
 bug report to the maintainer of your distro's swh-plugins package.
 
-I'm having trouble with a missing 'gzgets' function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is a zlib function normally defined in zlib.h.  We've had reports
-about this error from people using Slackware or Gentoo.  It turned out
-that these distribs install more than one version of the zlib header,
-the older one not having this function.
-
-Our configure script actually checks that you have gzgets in your zlib
-library, so if the configure succeeds, you definitely have the right
-version somewhere -- the compiler is just picking up the wrong header.
-Simply making sure the compiler picks up the right one by either
-removing the old one or adding a
-'--with-extra-includes=/the/path/to/the/right/zlib.h' to your
-./configure parameters should work.
-
-Can't build MidiArts.h
-~~~~~~~~~~~~~~~~~~~~~~
-
-If the build fails with something like:
-
-  In file included from ArtsDriver.h:30,
-                   from Sequencer.cpp:40:
-                   MidiRecord.h:25:22: MidiArts.h: No such file or directory
-                   make[2]: *** [Sequencer.lo] Error 1
-
-then you've come across our aRts build dependency problem.
-Until we get around to fixing it the workaround is to:
-
-  $ ( cd sound ; make MidiArts.h )
-
-and then continue with the build as normal.
-
-
-I'm using RedHat version (whatever), what packages do I need?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I'm using RedHat/Fedora version (whatever), what packages do I need to build this?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is most often asked by someone who's also using GNOME and hasn't
 built a KDE application before, in which case the answer is that you
@@ -194,21 +136,9 @@ need the kdelibs, kdemultimedia and arts packages (yes, you currently
 need the arts package for trivial reasons even if you aren't building
 aRts support), plus the -dev versions of all of those.
 
-Note that at the time of writing RedHat don't ship ALSA 0.9.x, so if
-you want to build on a RedHat system with ALSA support you have to
+Note that RedHat 9 didn't ship a recent enough version of ALSA, so if
+you want to build on a RedHat 9 system with ALSA support you have to
 upgrade rather than using the ALSA packages they supply.
-
-ladspa.h: No such file or directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This is a known build problem that we haven't been able to fix.  You
-don't have LADSPA installed, so we shouldn't try to compile against
-it, but we can't get automake to behave, and it's doing the wrong
-thing.
-
-Your two possible remedies are to configure --with-ladspa=no or to
-scrounge up a ladspa.h from somewhere.  Many distros have a ladspa
-package, which will include this header.
 
 
 The Composition View
@@ -249,6 +179,13 @@ How do I rename a track?
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Double-click on the track label.
+
+How do I stop segments from snapping to the nearest beat when I move or resize them?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Hold down the Shift key while you move or resize the segment.  (Shift
+is also used to enable multiple selection, so sometimes you may have
+to press Shift only after you start dragging.)
 
 
 How do I make a composition more than 100 bars long!?
@@ -322,30 +259,18 @@ Playback and recording
 ----------------------
 
 
-aRts?  ALSA?  JACK?  Huh?
-~~~~~~~~~~~~~~~~~~~~~~~~~
+ALSA?  JACK?  Huh?
+~~~~~~~~~~~~~~~~~~
 
-Right, it's like this.  Rosegarden can be built without any sound
-support ("configure --disable-sound"), with ALSA support (the default
-configure option), or with aRts support ("configure --with-arts").
-You have to choose one option when you run configure: you can't
-currently have more than one compiled in.
+Rosegarden likes to use the ALSA Linux sound drivers for MIDI
+communication, and the JACK low-latency audio server for audio.  The
+build system should detect which of these you have available.
 
-ALSA (<URL:http://www.alsa-project.org/>) is the standard sound system
-in Linux 2.5+, and is available for installation on earlier versions
-of Linux.  (Some distributions also include it as an optional
-package.)  Rosegarden-4 supports ALSA version 0.9.0 (_not_ 0.5.x),
-with which it can play to outboard MIDI synths, onboard soundcard MIDI
-synths, and ALSA soft-synths, and can record from outboard MIDI
-devices.  For audio support, you will also need to obtain and use the
-JACK (<URL:http://jackit.sourceforge.net/>) audio system.
-
-aRts (<URL:http://www.arts-project.org/>) is the standard KDE sound
-server.  In theory, Rosegarden can use aRts for audio, MIDI soft
-synths and outboard MIDI devices.  In practice, this support is highly
-unlikely to work for you.
-
-We strongly recommend you use ALSA and JACK.
+If you have (or build with) ALSA but not JACK, you will be able to
+send and receive MIDI to or from outboard MIDI hardware and other MIDI
+applications such as soft synths, but you will not be able to use
+synth plugins in Rosegarden, nor to record or play back audio
+segments or apply effects plugins.
 
 
 My soundcard has no built-in MIDI synth and I have no external MIDI devices.  How can I get sound?
@@ -434,6 +359,90 @@ separately from the levels themselves: you can be on 100% but still
 muted.)
 
 
+What does "System timer resolution is too low" mean?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you see this message in an error dialog when Rosegarden starts up,
+then you are probably using a Linux kernel that doesn't offer
+sufficiently high-resolution system timers for MIDI use.
+
+Rosegarden uses ALSA sequencer queue scheduling (inside the Linux
+kernel) for its MIDI output.  The sequencer queue can use a variety of
+timing sources, of which the default is the kernel system timer.  The
+kernel system timer was 1000Hz in Linux 2.6 kernels up to 2.6.12, but
+as of 2.6.13 it's now 250Hz in mainline kernels.  This is not good
+enough for good MIDI timing.
+
+Your options are:
+
+ 1. Switch the sequencer to use a different timing source (Settings ->
+ Configure Rosegarden... -> Sequencer -> Synchronisation).  The best
+ one in theory is the RTC timer, which is only available if you have
+ snd-rtctimer loaded, but unfortunately that has a habit of totally
+ locking systems running real-time kernels.  Meanwhile, the PCM timers
+ only work if the JACK audio server is running, and suffer jitter
+ corresponding to the JACK buffer size.
+
+ 2. Recompile your kernel with HZ set to 1000.  Sadly there's no way
+ to change this without a recompile.  It's the best solution though.
+
+ 3. Switch to a different Linux distribution that provides a kernel
+ more appropriate for multimedia use.
+
+ 4. Put up with the poorer timing of a 250Hz timer (if you want to get
+ rid of the warning while continuing to use this timer, set the timer
+ source to "system timer" rather than "(auto)").
+
+Hopefully future versions of Rosegarden and/or the Linux kernel will
+provide better ways to solve this problem.
+
+
+Only notes at the very start of the composition are played at all
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If Rosegarden plays notes at time zero but then gets stuck and doesn't
+play anything else afterwards, you might have a non-running sequencer
+timer selected.
+
+Try going to Settings -> Configure Rosegarden... -> Sequencer ->
+Synchronisation and changing the "Sequencer timer" setting.
+
+
+How do I get audio to work?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you're using ALSA, then you need to obtain and install JACK
+(<URL:http://jackit.sourceforge.net/>) and run jackd before starting
+the Rosegarden sequencer.  If you give jackd the -v option, it will
+report when Rosegarden succeeds in connecting to it.
+
+Unfortunately getting the right combination of magic incantations to
+make JACK work is not always easy.  Good values for an SBLive and
+indeed on the built-in via868 on my Acer laptop as follows:
+
+  $ jackd -d alsa -d hw -r 44100 -p 2048 -n 2
+
+This will usually ensure that I don't get any xruns (JACK being
+unable to process audio in time) and provide reasonable latency.
+The '-r 44100' option sets the sample rate for the JACK server
+which will in turn define the rate at which WAV audio files will
+be recorded.  This is important if you want to transfer any of
+the WAVs directly to CD - 44100Hz (44.1KHz) is the sample rate
+that audio CDs work at.
+
+
+I'm not seeing the right program names for my MIDI device (or any at all)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Rosegarden has an internal Studio to map your MIDI Program Change
+information into meaningful instrument labels.  You need to set this
+up do this mapping in the MIDI device manager (Studio->Manage MIDI
+Devices->Banks or Import).  Once you've made changes in your current
+Rosegarden file you can save it as a default studio (replacing your
+autoload.rg file) so that all your subsequent sessions in Rosegarden
+utilise your specialised Studio settings.
+
+
 I've followed all your instructions but I still don't hear any sound
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -504,96 +513,6 @@ application itself.  Go to:
 
 
   Settings->Configure Rosegarden->Sequencer->General->Show detailed status
-
-
-What if I see Rosegarden itself in the client list when I start the sequencer?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Then you've probably got an old version of rosegardensequencer hanging
-around.  That can happen when Rosegarden exits abnormally or perhaps
-when there was a problem with the JACK server.  If you're having problems
-getting Rosegarden to play or record then close it down (and JACK too if
-you're running it) and look for any instances of rosegarden,
-rosegardensequencer or lt-rosegardensequencer in the process table.
-
-  $ ps -ef|grep rosegarden
-
-Kill any instances of rosegarden, rosegardensequencer or lt-rosegardensequencer
-that are still hanging around and try to restart Rosegarden.
-
-
-Playback is only happening once every second
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When built with optimisation using the gcc-3.3-pre compiler included
-with SuSE 8.2, Rosegarden-4 0.9.1 and earlier will incorrectly play
-all notes on one-second boundaries -- all notes happening during a
-second are played at once at the end of the second.  (More recent
-versions of Rosegarden will play correctly, but the transport window
-will still only update once per second.)
-
-To fix this, configure with
-
-  $ CXXFLAGS='-O0' ./configure
-
-to disable optimisation (a pity, but that's life).
-
-Note that this also affects the Rosegarden-4 0.8.5 package shipped
-included with the distribution itself.  Obviously nobody actually
-tested it.  (They also forgot to include the help file, icon etc --
-it's not a very well-made package.)
-
-
-Only notes at the very start of the composition are played at all
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If Rosegarden plays notes at time zero but then gets stuck and doesn't
-play anything else afterwards, you might have a non-running sequencer
-timer selected.
-
-Rosegarden can use one of a number of timing sources, and by default
-it tries to choose sensibly, but it can get confused especially if
-you're using JACK and you have JACK configured to output to a
-soundcard that is not the first one in your system.
-
-Try going to Settings -> Configure Rosegarden... -> Sequencer ->
-Synchronisation and changing the "Sequencer timer" setting from
-"(auto)" to one of the other options (system timer, RTC timer, or a
-PCM playback device timer).
-
-How do I get audio to work?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you're using ALSA, then you need to obtain and install JACK
-(<URL:http://jackit.sourceforge.net/>) and run jackd before starting
-the Rosegarden sequencer.  If you give jackd the -v option, it will
-report when Rosegarden succeeds in connecting to it.
-
-Unfortunately getting the right combination of magic incantations to
-make JACK work is not always easy.  Good values for an SBLive and
-indeed on the built-in via868 on my Acer laptop as follows:
-
-  $ jackd -d alsa -d hw -r 44100 -p 2048 -n 2
-
-This will usually ensure that I don't get any xruns (JACK being
-unable to process audio in time) and provide reasonable latency.
-The '-r 44100' option sets the sample rate for the JACK server
-which will in turn define the rate at which WAV audio files will
-be recorded.  This is important if you want to transfer any of
-the WAVs directly to CD - 44100Hz (44.1KHz) is the sample rate
-that audio CDs work at.
-
-
-I'm not seeing the right program names for my MIDI device (or any at all)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Rosegarden has an internal Studio to map your MIDI Program Change
-information into meaningful instrument labels.  You need to set this
-up do this mapping in the MIDI device manager (Studio->Manage MIDI
-Devices->Banks or Import).  Once you've made changes in your current
-Rosegarden file you can save it as a default studio (replacing your
-autoload.rg file) so that all your subsequent sessions in Rosegarden
-utilise your specialised Studio settings.
 
 
 Improving Performance
