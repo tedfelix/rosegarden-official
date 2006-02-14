@@ -402,7 +402,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_seqManager = new Rosegarden::SequenceManager(m_doc, getTransport());
 
     try {
-	m_seqManager->checkSoundDriverStatus();
+	if (m_useSequencer) {
+	    m_seqManager->checkSoundDriverStatus();
+	}
     } catch (Rosegarden::Exception e) {
 	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
