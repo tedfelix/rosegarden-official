@@ -282,7 +282,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
 	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
 	if (!m_refreshLinesOnly) {
-	    RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1 << endl;
+// 	    RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1 << endl;
 	    paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
 	}
 
