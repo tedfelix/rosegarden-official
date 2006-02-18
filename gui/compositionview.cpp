@@ -1064,28 +1064,28 @@ PixmapArray CompositionModelImpl::getAudioPreviewPixmap(const Rosegarden::Segmen
 
 void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-    RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
+//     RG_DEBUG << "CompositionModelImpl::eventAdded()\n";
     removePreviewCache(s);
     emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
 {
-    RG_DEBUG << "CompositionModelImpl::eventRemoved" << endl;
+//     RG_DEBUG << "CompositionModelImpl::eventRemoved" << endl;
     removePreviewCache(s);
     emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::appearanceChanged(const Rosegarden::Segment *s)
 {
-    RG_DEBUG << "CompositionModelImpl::appearanceChanged" << endl;
+//     RG_DEBUG << "CompositionModelImpl::appearanceChanged" << endl;
     clearInCache(s, true);
     emit needContentUpdate(computeSegmentRect(*s));
 }
 
 void CompositionModelImpl::endMarkerTimeChanged(const Rosegarden::Segment *s, bool shorten)
 {
-    RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")" << endl;
+//     RG_DEBUG << "CompositionModelImpl::endMarkerTimeChanged(" << shorten << ")" << endl;
     clearInCache(s, true);
     if (shorten) {
 	emit needContentUpdate(); // no longer know former segment dimension
@@ -2699,6 +2699,9 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
             drawCompRect(r, p, clipRect, intersectionLvl);
         }
 
+        if (intersections.size() > 10)
+            break; // put a limit on how many intersections we can compute and draw - this grows exponentially
+
         ++intersectionLvl;
 
         CompositionModel::rectcontainer intersections2;
@@ -2894,6 +2897,14 @@ void CompositionView::setPointerPos(int pos)
 
     m_pointerPos = pos;
     getModel()->setPointerPos(pos);
+
+    // automagically grow contents width if pointer position goes beyond right end
+    //
+    if (pos >= (contentsWidth() - m_stepSize)) {
+        resizeContents(pos + m_stepSize, contentsHeight());
+        getModel()->setLength(contentsWidth());
+    }
+
 
     // interesting -- isAutoScrolling() never seems to return true?
 //     RG_DEBUG << "CompositionView::setPointerPos(" << pos << "), isAutoScrolling " << isAutoScrolling() << ", contentsX " << contentsX() << ", m_lastPointerRefreshX " << m_lastPointerRefreshX << ", contentsHeight " << contentsHeight() << endl;

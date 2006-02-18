@@ -336,6 +336,17 @@ void TrackEditor::setCompositionModified(bool c)
 	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
+void TrackEditor::updateRulers()
+{
+    if (getTempoRuler() != 0)
+        getTempoRuler()->update();
+
+    if (getChordNameRuler() != 0)
+        getChordNameRuler()->update();
+
+    getTopBarButtons()->update();
+    getBottomBarButtons()->update();
+}
 
 void TrackEditor::paintEvent(QPaintEvent* e)
 {

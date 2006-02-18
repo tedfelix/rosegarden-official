@@ -99,6 +99,7 @@ public:
     MultiViewCommandHistory *getCommandHistory();
     void addCommandToHistory(KCommand *command);
 
+    void updateRulers();
 
 public slots:
 

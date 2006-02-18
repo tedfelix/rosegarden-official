@@ -1829,7 +1829,7 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 void
 RosegardenGUIDoc::stopRecordingMidi()
 {
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi\n";
 
     // If we've created nothing then do nothing with it
     //

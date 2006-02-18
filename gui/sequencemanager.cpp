@@ -874,11 +874,6 @@ punchin:
 	    //
 	    m_countdownTimer->start(1000);
 
-	    connect(m_countdownDialog, SIGNAL(stopped()),
-		    RosegardenGUIApp::self(), SLOT(slotStop()));
-	    connect(m_countdownDialog, SIGNAL(completed()),
-		    RosegardenGUIApp::self(), SLOT(slotStop()));
-
 	    // Pop-up the dialog (don't use exec())
 	    //
 	    m_countdownDialog->show();

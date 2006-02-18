@@ -854,6 +854,10 @@ signals:
     void stopped();   // someone pushed the stop button
 
 protected:
+    void setPastEndMode();
+
+    bool          m_pastEndMode;
+
     int           m_totalTime;
 
     QLabel       *m_label;

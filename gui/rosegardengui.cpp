@@ -3885,8 +3885,8 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 	callbackCount = 0;
     }
 
-    if (elapsedTime >= comp.getEndMarker())
-        slotStop();
+//     if (elapsedTime >= comp.getEndMarker())
+//         slotStop();
 }
 
 void
@@ -3978,10 +3978,21 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     {
         if (t > comp.getEndMarker())
         {
-            slotStop();
-            t = comp.getEndMarker();
-            m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
-            return;
+            if (m_seqManager->getTransportStatus() == PLAYING) {
+
+                slotStop();
+                t = comp.getEndMarker();
+                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
+                return;
+
+            } else { // if recording, increase composition duration
+                std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
+                timeT barDuration = timeRange.second - timeRange.first;
+                timeT newEndMarker = t + 10 * barDuration;
+                comp.setEndMarker(newEndMarker);
+                getView()->getTrackEditor()->slotReadjustCanvasSize();
+                getView()->getTrackEditor()->updateRulers();
+            }
         }
     }
 
@@ -3996,11 +4007,6 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
     catch(QString s)
     {
 	KMessageBox::error(this, s);
-    }
-
-    if (t != comp.getStartMarker() && t > comp.getEndMarker()) {
-        m_doc->slotSetPointerPosition(comp.getStartMarker());
-        return;
     }
 
     // and the time sig
@@ -4895,8 +4901,6 @@ RosegardenGUIApp::slotRecord()
                      m_seqManager->getCountdownDialog()->getAccelerators());
 
     connect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
-	    this, SLOT(slotStop()));
-    connect(m_seqManager->getCountdownDialog(), SIGNAL(completed()),
 	    this, SLOT(slotStop()));
 
     // Start the playback timer - this fetches the current sequencer position &c

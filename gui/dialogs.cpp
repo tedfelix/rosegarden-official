@@ -4365,6 +4365,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
 
 CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     QDialog(parent, "", false, WStyle_StaysOnTop | WStyle_DialogBorder),
+    m_pastEndMode(false),
     m_totalTime(seconds),
     m_progressBarWidth(150),
     m_progressBarHeight(15)
@@ -4424,8 +4425,9 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
 
     if (seconds < 0)
     {
-        m_time->setText(i18n("<timing has gone astray>"));
-        return;
+        seconds = - seconds;
+        if (!m_pastEndMode)
+            setPastEndMode();
     }
 
     QString h, m, s;
@@ -4448,15 +4450,29 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
 
     // Draw the progress bar
     //
-    int barPosition = m_progressBarWidth - 
-        (elapsedSeconds * m_progressBarWidth) / m_totalTime;
-    m_progressBar->setPosition(barPosition);
-
+    if (m_pastEndMode) {
+        m_progressBar->setPosition(m_progressBarWidth);
+    } else {
+        int barPosition = m_progressBarWidth - 
+            (elapsedSeconds * m_progressBarWidth) / m_totalTime;
+        m_progressBar->setPosition(barPosition);
+    }
+    
     // Dialog complete if the display time is zero
     if (seconds == 0) emit completed();
 
 }
 
+void
+CountdownDialog::setPastEndMode() 
+{
+    if (m_pastEndMode) // already called
+        return;
+
+    m_pastEndMode = true;
+    m_label->setText(i18n("Recording beyond end of composition:  "));
+    
+}
 
 // --- CountdownBar ---
 //
