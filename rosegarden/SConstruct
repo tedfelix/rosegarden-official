@@ -143,7 +143,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 
 	# icons
 	env.KDEinstallas('KDEICONS','/locolor/16x16/apps/x-rosegarden.xpm', "gui/pixmaps/icons/cc-hi16-rosegarden.xpm")
-	env.KDEinstallas('KDEICONS','/hicolor/16x16/apps/x-rosegarden.xpm', "gui/pixmaps/icons/rg-rwb-rose3-16x16.png")
+	env.KDEinstallas('KDEICONS','/hicolor/16x16/apps/x-rosegarden.png', "gui/pixmaps/icons/rg-rwb-rose3-16x16.png")
 
 	env.KDEinstallas('KDEICONS','/hicolor/48x48/apps/rosegarden.png', "gui/pixmaps/icons/rg-rwb-rose3-48x48.png")
 	env.KDEinstallas('KDEICONS','/hicolor/64x64/apps/rosegarden.png', "gui/pixmaps/icons/rg-rwb-rose3-64x64.png")
