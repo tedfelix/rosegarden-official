@@ -1485,53 +1485,6 @@ void EditView::slotJogRight()
 }
 
 void
-EditView::keyPressEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:
-            m_shiftDown = true;
-
-            break;
-
-        case Key_Control:
-            m_controlDown = true;
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-
-    if (m_bottomBarButtons)
-        m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
-}
-
-
-
-void
-EditView::keyReleaseEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:
-            m_shiftDown = false;
-            break;
-
-        case Key_Control:
-            m_controlDown = false;
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-
-    if (m_bottomBarButtons)
-        m_bottomBarButtons->getLoopRuler()->slotSetLoopingMode(m_shiftDown);
-}
-
-void
 EditView::slotFlipForwards()
 {
     RG_DEBUG << "EditView::slotFlipForwards" << endl;

@@ -1258,23 +1258,6 @@ RosegardenGUIView::updateMonitorMeters(SequencerMapper *mapper)
 }    
 
 void
-RosegardenGUIView::setControl(bool value)
-{
-    m_trackEditor->slotSetSelectCopy(value);
-}
-
-void
-RosegardenGUIView::setShift(bool value)
-{
-    m_trackEditor->slotSetSelectAdd(value);
-    m_trackEditor->getTopBarButtons()->getLoopRuler()->
-	slotSetLoopingMode(value);
-    m_trackEditor->getBottomBarButtons()->getLoopRuler()->
-	slotSetLoopingMode(value);
-    m_trackEditor->slotSetFineGrain(value);
-} 
-
-void
 RosegardenGUIView::slotSelectedSegments(const Rosegarden::SegmentSelection &segments)
 {
     // update the segment parameter box

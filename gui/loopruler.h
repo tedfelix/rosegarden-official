@@ -62,7 +62,6 @@ public:
     bool hasActiveMousePress() { return m_activeMousePress; }
 
 public slots:
-    void slotSetLoopingMode(bool value);
     void slotSetLoopMarker(Rosegarden::timeT startLoop,
 			   Rosegarden::timeT endLoop);
 
@@ -74,6 +73,10 @@ protected:
     virtual void mouseMoveEvent        (QMouseEvent*);
 
     virtual void paintEvent(QPaintEvent*);
+
+    void setLoopingMode(bool value) { m_loopingMode = value; }
+    void drawBarSections(QPainter*);
+    void drawLoopMarker(QPainter*);  // between loop positions
 
 signals:
     // The three main functions that this class performs
@@ -94,9 +97,7 @@ signals:
     void stopMouseMove();
     void mouseMove();
 
-private:
-    void drawBarSections(QPainter*);
-    void drawLoopMarker(QPainter*);  // between loop positions
+protected:
 
     //--------------- Data members ---------------------------------
     int  m_height;
@@ -109,7 +110,7 @@ private:
     Rosegarden::RulerScale *m_rulerScale;
     Rosegarden::SnapGrid    m_grid;
     
-    bool m_loop;
+    bool m_loopingMode;
     Rosegarden::timeT m_startLoop;
     Rosegarden::timeT m_endLoop;
 };

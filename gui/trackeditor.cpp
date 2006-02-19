@@ -520,24 +520,6 @@ TrackEditor::slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end)
     getBottomBarButtons()->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
-void
-TrackEditor::slotSetSelectAdd(bool value)
-{
-    m_segmentCanvas->slotSetSelectAdd(value);
-}
-
-void
-TrackEditor::slotSetSelectCopy(bool value)
-{
-     m_segmentCanvas->slotSetSelectCopy(value);
-}
-
-void
-TrackEditor::slotSetFineGrain(bool value)
-{
-     m_segmentCanvas->slotSetFineGrain(value);
-}
-
 MultiViewCommandHistory*
 TrackEditor::getCommandHistory()
 {

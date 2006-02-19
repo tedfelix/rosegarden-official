@@ -101,8 +101,6 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_havePendingPaintEvent(false),
     m_accelerators(0),
     m_configDialogPageIndex(0),
-    m_shiftDown(false),
-    m_controlDown(false),
     m_inCtor(true),
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
 {

@@ -4670,57 +4670,6 @@ RosegardenGUIApp::slotActivateTool(QString toolName)
     }
 }
 
-
-void
-RosegardenGUIApp::slotUpdateKeyModifiers(bool shift, bool ctrl)
-{
-    m_view->setShift(shift);
-    m_view->setControl(ctrl);
-}
-
-
-void
-RosegardenGUIApp::keyPressEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:  //  select add for segments
-            m_view->setShift(true);
-            break;
-
-        case Key_Control:   // select copy of segments
-            m_view->setControl(true);
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-
-}
-
-
-void
-RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Key_Shift:  //  select add for segments
-            m_view->setShift(false);
-            break;
-
-        case Key_Control:   // select copy of segments
-            m_view->setControl(false);
-            break;
-
-        default:
-            event->ignore();
-            break;
-    }
-
-}
-
-
 // Sets the play or record Metronome status according to
 // the current transport status
 //

@@ -135,17 +135,6 @@ public slots:
     void slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end);
 
     /**
-     * c.f. what we have in rosegardenguiview.h
-     * These are instrumental in passing through
-     * key presses from GUI front panel down to
-     * the SegmentCanvas.
-     *
-     */
-    void slotSetSelectAdd(bool value);
-    void slotSetSelectCopy(bool value);
-    void slotSetFineGrain(bool value);
-
-    /**
      * Add given number of tracks
      */
     void slotAddTracks(unsigned int nbTracks, Rosegarden::InstrumentId id);

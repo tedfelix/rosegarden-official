@@ -349,9 +349,6 @@ protected:
     /// Raise the transport along
     virtual void showEvent(QShowEvent*);
 
-    virtual void keyPressEvent(QKeyEvent*);
-    virtual void keyReleaseEvent(QKeyEvent*);
-
     /**
      * read general Options again and initialize all variables like
      * the recent file list
@@ -1386,8 +1383,6 @@ public slots:
     void slotShowPluginGUI(Rosegarden::InstrumentId, int index);
     void slotStopPluginGUI(Rosegarden::InstrumentId, int index);
     void slotPluginGUIExited(Rosegarden::InstrumentId, int index);
-
-    void slotUpdateKeyModifiers(bool shiftPressed, bool ctrlPressed);
 
     void slotDocumentDevicesResyncd();
 

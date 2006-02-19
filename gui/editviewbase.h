@@ -129,12 +129,6 @@ public:
      */
     EditToolBox* getToolBox() { return m_toolBox; }
 
-    /*
-     * Are these modifiers in use?
-     */
-    bool isShiftDown() { return m_shiftDown; }
-    bool isControlDown() { return m_controlDown; }
-
     /**
      * Let tools know if their current element has gone
      */
@@ -382,9 +376,6 @@ protected:
     QAccel      *m_accelerators;
 
     int          m_configDialogPageIndex;
-
-    bool         m_shiftDown;
-    bool         m_controlDown;
 
     bool         m_inCtor;
 

@@ -46,7 +46,7 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
       m_activeMousePress(false),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
-      m_loop(false),
+      m_loopingMode(false),
       m_startLoop(0), m_endLoop(0)
 {
     setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::LoopRulerBackground));
@@ -190,14 +190,13 @@ void
 LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
     Qt::ButtonState bs = mE->state();
-    RosegardenGUIApp::self()->slotUpdateKeyModifiers
-	(bs & Qt::ShiftButton, bs & Qt::ControlButton);
-
+    setLoopingMode((bs & Qt::ShiftButton) != 0);
+    
     if (mE->button() == LeftButton)
     {
 	double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
         
-        if (m_loop)
+        if (m_loopingMode)
             m_endLoop = m_startLoop = m_grid.snapX(x);
         else
 	    emit setPointerPosition(m_rulerScale->getTimeForX(x));
@@ -212,7 +211,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
     {
-        if (m_loop)
+        if (m_loopingMode)
         {
             // Cancel the loop if there was no drag
             //
@@ -243,7 +242,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
     double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
     if (x < 0) x = 0;
     
-    if (mE->button() == LeftButton && !m_loop)
+    if (mE->button() == LeftButton && !m_loopingMode)
         emit setPlayPosition(m_rulerScale->getTimeForX(x));
 }
 
@@ -253,7 +252,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
     if (x < 0) x = 0;
     
-    if (m_loop)
+    if (m_loopingMode)
     {
         if (m_grid.snapX(x) != m_endLoop)
         {
@@ -265,11 +264,6 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         emit dragPointerToPosition(m_rulerScale->getTimeForX(x));
 
     emit mouseMove();
-}
-
-void LoopRuler::slotSetLoopingMode(bool value)
-{
-    m_loop = value;
 }
 
 void LoopRuler::slotSetLoopMarker(Rosegarden::timeT startLoop,

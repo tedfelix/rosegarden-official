@@ -124,15 +124,6 @@ public:
     void selectTool(QString toolName);
 
     /**
-     * These two are just-passing-through methods called from
-     * the GUI when it has key presses that the SegmentCanvas
-     * or anything else downstairsis interested in.
-     *
-     */
-    void setShift(bool value);
-    void setControl(bool value);
-
-    /**
      * Show output levels
      */
     void showVisuals(const Rosegarden::MappedEvent *mE);

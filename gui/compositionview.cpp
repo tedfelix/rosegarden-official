@@ -1356,7 +1356,7 @@ void CompositionModelImpl::signalSelection()
 
 void CompositionModelImpl::signalContentChange()
 {
-    RG_DEBUG << "CompositionModelImpl::signalContentChange" << endl;
+//     RG_DEBUG << "CompositionModelImpl::signalContentChange" << endl;
     emit needContentUpdate();
 }
 
@@ -2802,8 +2802,9 @@ bool CompositionView::event(QEvent* e)
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 {
     Qt::ButtonState bs = e->state();
-    RosegardenGUIApp::self()->slotUpdateKeyModifiers
-	(bs & Qt::ShiftButton, bs & Qt::ControlButton);
+    slotSetSelectCopy((bs & Qt::ControlButton) != 0);
+    slotSetSelectAdd((bs & Qt::ShiftButton) != 0);
+    slotSetFineGrain((bs & Qt::ShiftButton) != 0);
 
     switch (e->button()) {
     case LeftButton:
