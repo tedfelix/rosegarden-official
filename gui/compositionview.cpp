@@ -2876,9 +2876,18 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     
     if (follow != RosegardenCanvasView::NoFollow) {
         doAutoScroll();
-
-        if (follow & RosegardenCanvasView::FollowHorizontal)
+        
+        if (follow & RosegardenCanvasView::FollowHorizontal) {
             slotScrollHorizSmallSteps(e->pos().x());
+
+            // enlarge composition if needed
+            if (horizontalScrollBar()->value() == horizontalScrollBar()->maxValue()) {
+                resizeContents(contentsWidth() + m_stepSize, contentsHeight());
+                setContentsPos(contentsX() + m_stepSize, contentsY());
+                getModel()->setLength(contentsWidth());
+                updateSize();
+            }
+        }
 
         if (follow & RosegardenCanvasView::FollowVertical)
             slotScrollVertSmallSteps(e->pos().y());
