@@ -1948,6 +1948,8 @@ RosegardenGUIDoc::prepareAudio()
 void
 RosegardenGUIDoc::slotSetPointerPosition(Rosegarden::timeT t)
 {
+    RG_DEBUG << "RosegardenGUIDoc::slotSetPointerPosition(" << t << ")" << endl;
+
     m_composition.setPosition(t);
     emit pointerPositionChanged(t);
 }

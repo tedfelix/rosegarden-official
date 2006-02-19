@@ -27,49 +27,15 @@
 
 #include <qcanvas.h>
 #include <qpainter.h>
+#include <qtooltip.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 
 using Rosegarden::RulerScale;
-
-
-
-class BarButtonsWidget : public QWidget, public HZoomable
-{
-public:
-    BarButtonsWidget(RosegardenGUIDoc *doc,
-                     Rosegarden::RulerScale *rulerScale,
-                     int buttonHeight,
-		     double xorigin = 0.0,
-                     QWidget* parent = 0,
-                     const char* name = 0,
-                     WFlags f=0);
-
-    virtual ~BarButtonsWidget();
-    
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
-
-    void scrollHoriz(int x);
-
-    void setWidth(int width) { m_width = width; }
-
-protected:
-    virtual void paintEvent(QPaintEvent*);
-
-    //--------------- Data members ---------------------------------
-    int m_barHeight;
-    double m_xorigin;
-    int m_currentXOffset;
-    int m_width;
-
-    QFont *m_barFont;
-
-    RosegardenGUIDoc       *m_doc;
-    Rosegarden::RulerScale *m_rulerScale;
-
-};
+using Rosegarden::timeT;
+using Rosegarden::GUIPalette;
+using Rosegarden::Composition;
 
 
 BarButtons::BarButtons(RosegardenGUIDoc *doc,
@@ -114,11 +80,22 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
 
 void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 {
+
+    RG_DEBUG << "BarButtons::connectRulerToDocPointer" << endl;
+
     // use the document as a hub for all pointer and loop related signals
     //
     QObject::connect
 	(m_loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
 	 doc, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    QObject::connect
+	(m_hButtonBar, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 doc, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+
+    QObject::connect
+	(m_hButtonBar, SIGNAL(editMarkers()),
+	 RosegardenGUIApp::self(), SLOT(slotEditMarkers()));
 
     QObject::connect
 	(m_loopRuler, SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
@@ -137,7 +114,7 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
          m_loopRuler,
          SLOT(slotSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
 
-    m_loopRuler->setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::PointerRuler));
+    m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
 }
 
 void BarButtons::slotScrollHoriz(int x)
@@ -303,12 +280,12 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 
     if (m_doc)
     {
-        Rosegarden::Composition &comp = m_doc->getComposition();
-        Rosegarden::Composition::markercontainer markers = comp.getMarkers();
-        Rosegarden::Composition::markerconstiterator it;
+        Composition &comp = m_doc->getComposition();
+        Composition::markercontainer markers = comp.getMarkers();
+        Composition::markerconstiterator it;
 
-	Rosegarden::timeT start = comp.getBarStart(firstBar);
-	Rosegarden::timeT end   = comp.getBarEnd(lastBar);
+	timeT start = comp.getBarStart(firstBar);
+	timeT end   = comp.getBarEnd(lastBar);
 
 	QFontMetrics metrics = painter.fontMetrics();
 
@@ -324,10 +301,13 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
                 painter.fillRect(static_cast<int>(x), 1,
 				 static_cast<int>(metrics.width(name) + 5),
 				 m_barHeight - 2, 
-                                 QBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::MarkerBackground)));
+                                 QBrush(GUIPalette::getColour(GUIPalette::MarkerBackground)));
+
+		painter.drawLine(int(x), 1, int(x), m_barHeight-2);
+		painter.drawLine(int(x)+1, 1, int(x)+1, m_barHeight-2);
 
 		QPoint textDrawPoint = painter.xForm
-		    (QPoint(static_cast<int>(x + 2), m_barHeight - 4));
+		    (QPoint(static_cast<int>(x + 3), m_barHeight - 4));
 
 		// disable worldXForm for text
                 bool enableXForm = painter.hasWorldXForm();
@@ -340,4 +320,75 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
         }
     }
 }
+
+void
+BarButtonsWidget::mousePressEvent(QMouseEvent *e)
+{
+    RG_DEBUG << "BarButtonsWidget::mousePressEvent: x = " << e->x() << endl;
+
+    if (!m_doc || !e) return;
+
+    Composition &comp = m_doc->getComposition();
+    Composition::markercontainer markers = comp.getMarkers();
+
+    QRect clipRect = visibleRect();
+
+    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
+					    m_currentXOffset -
+					    m_xorigin);
+    int  lastBar = m_rulerScale->getLastVisibleBar();
+    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
+	firstBar = m_rulerScale->getFirstVisibleBar();
+    }
+    
+    timeT start = comp.getBarStart(firstBar);
+    timeT end   = comp.getBarEnd(lastBar);
+
+    // need these to calculate the visible extents of a marker tag
+    QPainter painter(this);
+    painter.setFont(*m_barFont);
+    QFontMetrics metrics = painter.fontMetrics();
+    
+    for (Composition::markerconstiterator i = markers.begin();
+	 i != markers.end(); ++i) {
+
+	if ((*i)->getTime() >= start && (*i)->getTime() < end) {
+
+	    QString name(strtoqstr((*i)->getName()));
+	    
+	    int x = m_rulerScale->getXForTime((*i)->getTime()) 
+		+ m_xorigin + m_currentXOffset;
+
+	    int width = metrics.width(name) + 5;
+
+	    int nextX = -1;
+	    Composition::markerconstiterator j = i;
+	    ++j;
+	    if (j != markers.end()) {
+		nextX = m_rulerScale->getXForTime((*j)->getTime()) 
+		    + m_xorigin + m_currentXOffset;
+	    }
+
+	    if (e->x() >= x && e->x() <= x + width) {
+		
+		if (nextX < x || e->x() <= nextX) {
+
+		    RG_DEBUG << "BarButtonsWidget::mousePressEvent: setting pointer to " << (*i)->getTime() << endl;
+
+		    emit setPointerPosition((*i)->getTime());
+		    return;
+		}
+	    }
+        }
+    }
+}
+    
+void
+BarButtonsWidget::mouseDoubleClickEvent(QMouseEvent *)
+{
+    RG_DEBUG << "BarButtonsWidget::mouseDoubleClickEvent" << endl;
+
+    emit editMarkers();
+}
+
 #include "barbuttons.moc"

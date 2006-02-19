@@ -460,7 +460,7 @@ int main(int argc, char *argv[])
 //    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
-    
+
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
     KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
@@ -486,11 +486,15 @@ int main(int argc, char *argv[])
     //
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
+    KConfig *config = kapp->config();
+    config->setGroup("KDE Action Restrictions");
+    config->writeEntry("action/help_report_bug", false);
+
     // Show Startup logo
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
     //
-    KConfig* config = kapp->config();
+    config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     KStartupLogo* startLogo = 0L;
 

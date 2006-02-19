@@ -189,6 +189,8 @@ LoopRuler::drawLoopMarker(QPainter* paint)
 void
 LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
+    RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mE->x() << endl;
+
     Qt::ButtonState bs = mE->state();
     setLoopingMode((bs & Qt::ShiftButton) != 0);
     
@@ -198,8 +200,10 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         
         if (m_loopingMode)
             m_endLoop = m_startLoop = m_grid.snapX(x);
-        else
+        else {
+	    RG_DEBUG << "emitting setPointerPosition(" << m_rulerScale->getTimeForX(x) << ")" << endl;
 	    emit setPointerPosition(m_rulerScale->getTimeForX(x));
+	}
 
 	m_activeMousePress = true;
         emit startMouseMove(RosegardenCanvasView::FollowHorizontal);

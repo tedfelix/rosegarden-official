@@ -319,9 +319,13 @@ MarkerEditorDialog::slotDeleteAll()
 
     do
     {
+	MarkerEditorViewItem *ei = 
+	    dynamic_cast<MarkerEditorViewItem *>(item);
+	if (!ei) continue;
+
         RemoveMarkerCommand *rc = 
             new RemoveMarkerCommand(&m_doc->getComposition(),
-                                    item->text(0).toInt(),
+                                    ei->getRawTime(),
                                     qstrtostr(item->text(1)),
                                     qstrtostr(item->text(2)));
         command->addCommand(rc);
@@ -352,11 +356,14 @@ MarkerEditorDialog::slotDelete()
     RG_DEBUG << "MarkerEditorDialog::slotDelete" << endl;
     QListViewItem *item = m_listView->currentItem();
 
-    if (!item) return;
+    MarkerEditorViewItem *ei = 
+        dynamic_cast<MarkerEditorViewItem *>(item);
+
+    if (!ei) return;
 
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&m_doc->getComposition(),
-                                item->text(0).toInt(),
+                                ei->getRawTime(),
                                 qstrtostr(item->text(1)),
                                 qstrtostr(item->text(2)));
 
@@ -575,13 +582,15 @@ void
 MarkerEditorDialog::slotItemClicked(QListViewItem *item)
 {
     RG_DEBUG << "MarkerEditorDialog::slotItemClicked" << endl;
+    MarkerEditorViewItem *ei = 
+        dynamic_cast<MarkerEditorViewItem *>(item);
 
-    if (item)
+    if (ei)
     {
         RG_DEBUG << "MarkerEditorDialog::slotItemClicked - "
-                 << "jump to marker at " << item->text(0).toInt() << endl;
+                 << "jump to marker at " << ei->getRawTime() << endl;
 
-        emit jumpToMarker(Rosegarden::timeT(item->text(0).toInt()));
+        emit jumpToMarker(Rosegarden::timeT(ei->getRawTime()));
     }
 }
 

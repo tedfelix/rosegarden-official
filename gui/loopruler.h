@@ -27,7 +27,7 @@
 #include "SnapGrid.h"
 
 #include "rosegardenguidoc.h"
-#include "widgets.h"
+#include "hzoomable.h"
 
 namespace Rosegarden { class RulerScale; }
 

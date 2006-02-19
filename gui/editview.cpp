@@ -23,6 +23,7 @@
 #include <qpopupmenu.h>
 #include <qinputdialog.h>
 #include <qobjectlist.h>
+#include <qbutton.h>
 
 #include <kapp.h>
 #include <kconfig.h>

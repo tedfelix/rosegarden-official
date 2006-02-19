@@ -31,7 +31,7 @@
 #include "PropertyName.h"
 
 #include "rosegardencanvasview.h"
-#include "widgets.h"
+#include "hzoomable.h"
 
 namespace Rosegarden { class RulerScale; class EventSelection; class ControlParameter; }
 

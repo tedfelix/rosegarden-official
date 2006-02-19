@@ -23,8 +23,12 @@
 #define _BARBUTTONS_H_
 
 #include <qvbox.h>
-//#include "FastVector.h"
+#include <qwidget.h>
+
+#include "hzoomable.h"
+
 #include "rosegardenguidoc.h"
+
 
 namespace Rosegarden {
     class RulerScale;
@@ -32,6 +36,9 @@ namespace Rosegarden {
 class LoopRuler;
 class RosegardenGUIDoc;
 class BarButtonsWidget;
+
+//!!! Bad names.  BarButtonsWidget should be MarkerRuler or some such.
+// BarButtons... well, I'm not sure.
 
 class BarButtons : public QVBox
 {
@@ -78,6 +85,54 @@ private:
 
     BarButtonsWidget *m_hButtonBar;
     LoopRuler *m_loopRuler;
+};
+
+
+class BarButtonsWidget : public QWidget, public HZoomable
+{
+    Q_OBJECT
+
+public:
+    BarButtonsWidget(RosegardenGUIDoc *doc,
+                     Rosegarden::RulerScale *rulerScale,
+                     int buttonHeight,
+		     double xorigin = 0.0,
+                     QWidget* parent = 0,
+                     const char* name = 0,
+                     WFlags f=0);
+
+    virtual ~BarButtonsWidget();
+    
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+
+    void scrollHoriz(int x);
+
+    void setWidth(int width) { m_width = width; }
+
+signals:
+    /// Set the pointer position on mouse single click
+    void setPointerPosition(Rosegarden::timeT);
+
+    /// Open the marker editor window on double click
+    void editMarkers();
+
+protected:
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+
+    //--------------- Data members ---------------------------------
+    int m_barHeight;
+    double m_xorigin;
+    int m_currentXOffset;
+    int m_width;
+
+    QFont *m_barFont;
+
+    RosegardenGUIDoc       *m_doc;
+    Rosegarden::RulerScale *m_rulerScale;
+
 };
 
 #endif // _BARBUTTONS_H_

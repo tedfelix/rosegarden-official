@@ -53,6 +53,7 @@
 #include "barbuttons.h"
 #include "trackbuttons.h"
 #include "loopruler.h"
+#include "widgets.h"
 #include "segmenttool.h"
 #include "qdeferscrollview.h"
 #include "rosegardenguiview.h"
