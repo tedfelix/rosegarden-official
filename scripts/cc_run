@@ -2,6 +2,8 @@
 prefix=/opt/rosegarden-install
 if [ -d "$HOME/rosegarden/install" ]; then
     prefix=$HOME/rosegarden/install
+elif [ -d "/opt/rosegarden/install" ]; then
+    prefix=/opt/rosegarden/install
 fi
 debug=""
 tag=""
