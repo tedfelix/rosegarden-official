@@ -58,7 +58,7 @@
 
 #include "rosedebug.h"
 
-//#define DEBUG_PITCH
+#define DEBUG_PITCH
 
 using namespace Rosegarden::BaseProperties;
 using Rosegarden::Bool;
@@ -181,197 +181,22 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
     }
 }
 
-// processes input to produce a Lilypond-format note written correctly for all
-// keys and out-of-key accidental combinations.
-//
-// this code is deprecated, as it has been supplanted by the Pitch class,
-// but it remains, for the time being, as a necessary failsafe
+// processes input to produce a Lilypond-format note, using the Pitch class
 std::string
 LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 					 const Rosegarden::Key &key) 
 {
-    bool isFlatKeySignature = !key.isSharp();
-    int accidentalCount = key.getAccidentalCount();
-
+    Rosegarden::Pitch p(pitch, accidental);
     std::string lilyNote = "";
-    int pitchNote, c;
-    
-    // get raw semitone number
-    pitchNote = (pitch % 12);
-
-    // no accidental, or notes with Natural property
-    switch (pitchNote) {
-        case 0:  lilyNote = "c";
-                 break;
-        case 2:  lilyNote = "d";
-                 break;
-        case 4:  lilyNote = "e";
-                 break;
-        case 5:  lilyNote = "f";
-                 break;
-        case 7:  lilyNote = "g";
-                 break;
-        case 9:  lilyNote = "a";
-                 break;
-        case 11: lilyNote = "b";
-                 break;
-        // failsafe to deal with annoying fact that imported/recorded notes don't have
-        // persistent accidental properties
-        case 1:  lilyNote = (isFlatKeySignature) ? "des" : "cis";
-                 break;
-        case 3:  lilyNote = (isFlatKeySignature) ? "ees" : "dis";
-                 break;
-        case 6:  lilyNote = (isFlatKeySignature) ? "ges" : "fis";
-                 break;
-        case 8:  lilyNote = (isFlatKeySignature) ? "aes" : "gis";
-                 break;
-        case 10: lilyNote = (isFlatKeySignature) ? "bes" : "ais";
-                 break;
-    }
-        
-    // assign out-of-key accidentals first, by BaseProperty::ACCIDENTAL
-    if (accidental != "") {
-        if (accidental == Rosegarden::Accidentals::Sharp) {
-            switch (pitchNote) {
-                case  5: lilyNote = "eis"; // 5 + Sharp = E#
-                         break;
-                case  0: lilyNote = "bis"; // 0 + Sharp = B#
-                         break;
-                case  1: lilyNote = "cis";
-                         break;
-                case  3: lilyNote = "dis";
-                         break;
-                case  6: lilyNote = "fis";
-                         break;
-                case  8: lilyNote = "gis";
-                         break;
-                case 10: lilyNote = "ais";
-            }
-        } else if (accidental == Rosegarden::Accidentals::Flat) {
-            switch (pitchNote) {
-                case 11: lilyNote = "ces"; // 11 + Flat = Cb
-                         break;
-                case  4: lilyNote = "fes"; //  4 + Flat = Fb
-                         break;
-                case  1: lilyNote = "des";
-                         break;
-                case  3: lilyNote = "ees";
-                         break;
-                case  6: lilyNote = "ges";
-                         break;
-                case  8: lilyNote = "aes";
-                         break;
-                case 10: lilyNote = "bes";
-            }
-        } else if (accidental == Rosegarden::Accidentals::DoubleSharp) {
-            switch (pitchNote) {
-                case  1: lilyNote = "bisis"; // 1 + ## = B##
-                         break;
-                case  2: lilyNote = "cisis"; // 2 + ## = C##
-                         break;
-                case  4: lilyNote = "disis"; // 4 + ## = D##
-                         break;
-                case  6: lilyNote = "eisis"; // 6 + ## = E##
-                         break;
-                case  7: lilyNote = "fisis"; // 7 + ## = F##
-                         break;
-                case  9: lilyNote = "gisis"; // 9 + ## = G##
-                         break;
-                case 11: lilyNote = "aisis"; //11 + ## = A##
-                         break;
-            }
-        } else if (accidental == Rosegarden::Accidentals::DoubleFlat) {
-            switch (pitchNote) {
-                case 10: lilyNote = "ceses"; //10 + bb = Cbb
-                         break;
-                case  0: lilyNote = "deses"; // 0 + bb = Dbb
-                         break;
-                case  2: lilyNote = "eeses"; // 2 + bb = Ebb
-                         break;
-                case  3: lilyNote = "feses"; // 3 + bb = Fbb
-                         break;
-                case  5: lilyNote = "geses"; // 5 + bb = Gbb
-                         break;
-                case  7: lilyNote = "aeses"; // 7 + bb = Abb
-                         break;
-                case  9: lilyNote = "beses"; // 9 + bb = Bbb
-                         break;
-            }
-        } else if (accidental == Rosegarden::Accidentals::Natural) {
-            // do we have anything explicit left to do in this
-            // case?  probably not, but I'll leave this placeholder for now
-            //
-            // eg. note is B + Natural in key Cb, but since it has Natural
-            // it winds up here, instead of getting the Cb from the key below.
-            // since it will be called "b" from the first switch statement in
-            // the entry to this complex logic block, and nothing here changes it,
-            // the implicit handling to this point should resolve the case
-            // without further effort.
-        }
-    } else {  // no explicit accidental; note must be in-key
-        for (c = 0; c <= accidentalCount; c++) {
-            if (isFlatKeySignature) {                              // Flat Keys:
-                switch (c) {
-                    case 7: if (pitchNote ==  4) lilyNote = "fes"; // Fb 
-                    case 6: if (pitchNote == 11) lilyNote = "ces"; // Cb 
-                    case 5: if (pitchNote ==  6) lilyNote = "ges"; // Gb 
-                    case 4: if (pitchNote ==  1) lilyNote = "des"; // Db 
-                    case 3: if (pitchNote ==  3) lilyNote = "ees"; // Eb 
-                    case 2: if (pitchNote ==  8) lilyNote = "aes"; // Ab 
-                    case 1: if (pitchNote == 10) lilyNote = "bes"; // Bb 
-                }
-            } else {                                               // Sharp Keys:
-                switch (c) {                                       
-                    case 7: if (pitchNote ==  0) lilyNote = "bis"; // C# 
-                    case 6: if (pitchNote ==  5) lilyNote = "eis"; // F# 
-                    case 5: if (pitchNote == 10) lilyNote = "ais"; // B  
-                    case 3: if (pitchNote ==  8) lilyNote = "gis"; // A  
-                    case 4: if (pitchNote ==  3) lilyNote = "dis"; // D  
-                    case 2: if (pitchNote ==  1) lilyNote = "cis"; // D  
-                    case 1: if (pitchNote ==  6) lilyNote = "fis"; // G  
-                }
-           }
-       } 
-    }
-
-    // the failsafe's failsafe
-#ifndef DEBUG_PITCH
-    if (lilyNote == "") { 
-        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
-#else
-        std::cerr << "LilypondExporter::cPTLN() chewing on: "
-#endif	
-                  << std::endl << "pitch = " << pitchNote << "\tkey sig. = "
-                  << ((isFlatKeySignature) ? "flat" : "sharp") << "\tno. of accidentals = "
-                  << accidentalCount << "\textra accidental = \"" << accidental << "\""
-                  << std::endl;
-#ifndef DEBUG_PITCH
-	m_pitchBorked = true;
-    }
-#endif        
-
-    //!!! Alternative implementation in test:
-
-    Rosegarden::Pitch p(pitch, accidental);  // pitch + accidental, but no key? (DMM)
-    std::string origLilyNote = lilyNote;
-    lilyNote = "";
 
     lilyNote += (char)tolower(p.getNoteName(key));
-    Accidental acc = p.getAccidental(key.isSharp());
+    std::cout << "lilyNote: " << lilyNote << std::endl;  //REMOVE
+    Accidental acc = p.getAccidental(key);
     if      (acc == Rosegarden::Accidentals::DoubleFlat)  lilyNote += "eses";
     else if (acc == Rosegarden::Accidentals::Flat)        lilyNote += "es";
     else if (acc == Rosegarden::Accidentals::Sharp)       lilyNote += "is";
     else if (acc == Rosegarden::Accidentals::DoubleSharp) lilyNote += "isis";
     
-    if (lilyNote != origLilyNote) {
-	std::cerr << "WARNING: LilypondExporter::convertPitchToLilyNote: " << lilyNote << " != " << origLilyNote << std::endl;
-	lilyNote = origLilyNote;  // makes it return the correct value with my old, trusted code
-	                          // until I can fix this properly
-				  // (deferred until after 1.0 because users
-				  // don't care which version as long as it
-				  // works) - DMM
-    }
-
     return lilyNote;
 }
 
@@ -1385,8 +1210,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    try {
 		str << "\\key ";
 		key = Rosegarden::Key(**i);
-	    
-		str << convertPitchToLilyNote(key.getTonicPitch(), "", key);
+    		Rosegarden::Accidental accidental = Rosegarden::Accidentals::NoAccidental;
+	   
+		std::cout << "key tonic pitch: " << key.getTonicPitch() << std::endl; //REMOVE
+		str << convertPitchToLilyNote(key.getTonicPitch(), accidental,
+		           key.isSharp() ? Rosegarden::Key ("C major") : Rosegarden::Key ("A minor"));
 	    
 		if (key.isMinor()) {
 		    str << " \\minor";

@@ -1321,6 +1321,37 @@ Pitch::getAccidental(bool useSharps) const
 }
 
 Accidental
+Pitch::getAccidental(const Key &key) const
+{
+    // C major means use sharps, A minor means use flats
+    Key testKey = (key.isSharp() ? Key("C major") : Key("A minor"));
+    
+    // compare the note name in its own key against the note name in either C
+    // major or A minor, to see if it differs
+    std::string keyNote = "", rawNote = "";
+    keyNote += getNoteName(key);
+    rawNote += getNoteName(testKey);
+    
+    // if these two notes names don't match, we might have one of the hateful
+    // E#/F E/Fb B#/C B/Cb notes, which are enharmonics that use a *different*
+    // MIDI pitch, so we check for those first, as they will resolve to
+    // different notes/heights depending on their key signature
+    if      (keyNote == "E" && rawNote == "F") // E#
+	return Sharp;
+    else if (keyNote == "F" && rawNote == "E") // Fb
+	return Flat;
+    else if (keyNote == "B" && rawNote == "C") // B#
+	return Sharp;
+    else if (keyNote == "C" && rawNote == "B") // Cb
+	return Flat;
+    else
+    // if it wasn't, we don't really care about other enharmonics, which are
+    // all two notes that share the *same* MIDI pitch, so we just return an
+    // accidental against the caller's stated useSharps preference.
+	return getDisplayAccidental(testKey);
+}
+
+Accidental
 Pitch::getDisplayAccidental(const Key &key) const
 {
     int heightOnStaff;
@@ -1348,7 +1379,6 @@ Pitch::getNoteInScale(const Key &key) const
 char
 Pitch::getNoteName(const Key &key) const
 {
-    // DMM - get height w/o accidental? 
     int index = (getHeightOnStaff(Clef(Clef::Treble), key) + 72) % 7;
     return getNoteForIndex(index);
 }
@@ -1357,7 +1387,6 @@ int
 Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
 {
     int heightOnStaff;
-    // DMM - accidental coming in from m_accidental; where is that?
     Accidental accidental(m_accidental);
     rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental);
     return heightOnStaff;

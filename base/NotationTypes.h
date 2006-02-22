@@ -746,13 +746,25 @@ public:
     int getPerformancePitch() const;
 
     /**
-     * Return the accidental for this pitch.  This is the accidental
+     * Return the accidental for this pitch using a bool to prefer sharps over
+     * flats if there is any doubt.  This is the accidental
      * that would be used to display this pitch outside of the context
      * of any key; that is, it may duplicate an accidental actually in
-     * the current key.  The useSharps argument is used to decide
-     * whether to prefer sharps over flats if there is any doubt.
+     * the current key.  This should not be used if you need to get an
+     * explicit accidental returned for E#, Fb, B# or Cb.
+     *
+     * This version of the function exists to avoid breaking old code.
      */
     Accidental getAccidental(bool useSharps) const;
+    
+    /**
+     * Return the accidental for this pitch, using a key.  This should be used
+     * if you need an explicit accidental returned for E#, Fb, B# or Cb, which
+     * can't be resolved correctly without knowing that their key requires
+     * them to take an accidental.  The provided key will also be used to
+     * determine whether to prefer sharps over flats.
+     */
+    Accidental getAccidental(const Key &key) const;
 
     /**
      * Return the accidental that should be used to display this pitch
