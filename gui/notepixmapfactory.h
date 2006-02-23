@@ -35,6 +35,10 @@
 class NoteStyle;
 class NotePixmapCache;
 
+namespace guitar {
+    class Fingering;
+}
+
 class NotePixmapParameters
 {
 public:
@@ -183,6 +187,8 @@ public:
     QCanvasPixmap* makePedalUpPixmap();
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Rosegarden::Text &text);
+    QCanvasPixmap* makeFretboardPixmap(const guitar::Fingering &arrangement,
+				       int x, int y);
 
     // Printing methods -- draw direct to a paint device:
 

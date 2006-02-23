@@ -1,0 +1,5 @@
+Import( '*' )
+
+# fonts
+env.KDEinstall('KDEDATA','/rosegarden/fonts', env.KDEglob('*.pfa'))
+env.KDEinstall('KDEDATA','/rosegarden/fonts/mappings', env.KDEglob('*.xml', 'mappings'))

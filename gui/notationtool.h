@@ -29,6 +29,7 @@
 #include "notationelement.h"
 #include "notestyle.h"
 #include "notationstaff.h"
+#include "guitar/guitartabselector.h"
 
 class QCanvasRectangle;
 
@@ -508,6 +509,55 @@ protected:
 
     Rosegarden::EventSelection& m_selection;
 
+};
+
+
+/**
+ * This tool will insert fretboard on mouse click events
+*/
+class FretboardInserter : public NotationTool
+{
+    Q_OBJECT
+
+    friend class NotationToolBox;
+
+public:
+
+    virtual void handleLeftButtonPress(Rosegarden::timeT t,
+                                       int height,
+                                       int staffNo,
+                                       QMouseEvent* e,
+                                       Rosegarden::ViewElement *element);
+
+/*
+    virtual void handleMouseDoubleClick(Rosegarden::timeT,
+                                        int height, int staffNo,
+                                        QMouseEvent*,
+                                        Rosegarden::ViewElement* el);
+*/
+
+    static const QString ToolName;
+
+protected slots:
+    void slotFretboardSelected();
+    void slotEraseSelected();
+    void slotSelectSelected();
+
+    GuitarTabSelectorDialog m_guitarChord_ref;
+
+protected:
+    FretboardInserter(NotationView*);
+
+private:
+    void handleSelectedFretboard (Rosegarden::ViewElement* element,
+                                  NotationStaff *staff);
+
+    void createNewFretboard (Rosegarden::ViewElement* element,
+                             NotationStaff *staff,
+                             QMouseEvent* e);
+
+    bool processDialog (NotationStaff *staff,
+                        Rosegarden::timeT& insertionTime);
 };
 
 #endif

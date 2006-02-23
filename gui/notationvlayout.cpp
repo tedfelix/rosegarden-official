@@ -31,6 +31,7 @@
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
 #include "notationsets.h"
+#include "guitar/fingering.h"
 
 // for debugging purposes:
 #include <kmessagebox.h>
@@ -370,6 +371,10 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		} catch (...) {
 		    el->setLayoutY(staff.getLayoutYForHeight(-9) + displacedY);
 		}		    
+
+	    } else if (el->event()->isa(guitar::Fingering::EventType)) {
+
+		el->setLayoutY(staff.getLayoutYForHeight(22));
 	    }
         }
     }

@@ -30,7 +30,7 @@
 namespace Rosegarden 
 {
 
-enum PropertyType { Int, String, Bool, RealTimeT };
+enum PropertyType { Int, String, Bool, RealTimeT, UInt };
 
 template <PropertyType P>
 class PropertyDefn
@@ -107,6 +107,18 @@ public:
     static basic_type parse(std::string s);
     static std::string unparse(basic_type i);
 };
+
+template <>
+class PropertyDefn<UInt>
+{
+public:
+    typedef unsigned int basic_type;
+
+    static std::string typeName();
+    static basic_type parse(std::string s);
+    static std::string unparse(basic_type i);
+};
+
 
 class PropertyStoreBase {
 public:

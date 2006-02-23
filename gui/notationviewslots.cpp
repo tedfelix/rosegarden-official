@@ -2414,6 +2414,15 @@ void NotationView::slotText()
 }
 
 
+void NotationView::slotFretboard()
+{
+    m_currentNotePixmap->setPixmap
+    (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    setTool(m_toolBox->getTool(FretboardInserter::ToolName));
+    setMenuStates();	
+}
+
+
 //----------------------------------------
 // Editing Tools
 //----------------------------------------
@@ -2875,11 +2884,9 @@ NotationView::slotEditTempos(Rosegarden::timeT t)
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,
                                Rosegarden::tempoT,
-                               Rosegarden::tempoT,
 			       TempoDialog::TempoDialogAction)),
 	    RosegardenGUIApp::self(),
             SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 

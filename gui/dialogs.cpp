@@ -79,7 +79,10 @@
 
 #include "rosedebug.h"
 
+#include "guitar/fingering.h"
+
 using Rosegarden::Int;
+using Rosegarden::UInt;
 using Rosegarden::RealTimeT;
 using Rosegarden::Bool;
 using Rosegarden::String;
@@ -106,7 +109,7 @@ public:
 	return QSize(20, 20);
     }
 };
-    
+
 
 TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 					 Rosegarden::Composition *composition,
@@ -1422,7 +1425,7 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 
     Rosegarden::PropertyType type(m_originalEvent.getPropertyType(name));
     switch (type) {
-	
+
     case Int:
     {
 	int min = INT_MIN, max = INT_MAX;
@@ -1432,7 +1435,7 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	{
 	    min = 0;
 	    max = 127;
-	}    
+	}
 	QSpinBox *spinBox = new QSpinBox
 	    (min, max, 1, m_persistentGrid, strtoqstr(name));
 	spinBox->setValue(m_originalEvent.get<Int>(name));
@@ -1441,7 +1444,23 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	spinBox->show();
 	break;
     }
-    
+    case UInt:
+    {
+	int min = 0;
+	int max = UINT_MAX;
+	if (m_originalEvent.isa(Rosegarden::ProgramChange::EventType))
+	{
+	    min = 0;
+	    max = 65535;
+	}
+	QSpinBox *spinBox = new QSpinBox
+	    (min, max, 1, m_persistentGrid, strtoqstr(name));
+	spinBox->setValue(m_originalEvent.get<UInt>(name));
+	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
+			 this, SLOT(slotIntPropertyChanged(int)));
+	spinBox->show();
+	break;
+    }
     case RealTimeT:
     {
         Rosegarden::RealTime realTime = m_originalEvent.get<RealTimeT>(name);
@@ -1694,6 +1713,13 @@ EventEditDialog::slotPropertyMadePersistent()
 	     (qstrtostr(propertyName)));
 	break;
 
+    case UInt:
+	m_event.set<UInt>
+		(qstrtostr(propertyName),
+		 m_originalEvent.get<UInt>
+		 (qstrtostr(propertyName)));
+	break;
+
     case RealTimeT:
 	m_event.set<RealTimeT>
 	    (qstrtostr(propertyName),
@@ -1763,6 +1789,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 	m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventRestType));
 	m_typeCombo->insertItem(strtoqstr(Rosegarden::Clef::EventType));
 	m_typeCombo->insertItem(strtoqstr(Rosegarden::Key::EventType));
+	m_typeCombo->insertItem(strtoqstr(guitar::Fingering::EventType));
 	
 	// Connect up the combos
 	//
@@ -2357,6 +2384,41 @@ SimpleEventEditDialog::setupForEvent()
         m_metaEdit->hide();
 
         if (m_typeCombo) m_typeCombo->setCurrentItem(11);
+    }
+    else if (m_type == guitar::Fingering::EventType)
+    {
+        m_durationLabel->hide();
+        m_durationSpinBox->hide();
+	m_durationEditButton->hide();
+
+        m_pitchLabel->hide();
+        m_pitchSpinBox->hide();
+	m_pitchEditButton->hide();
+
+        m_controllerLabel->hide();
+        m_controllerLabelValue->hide();
+
+        m_velocityLabel->hide();
+        m_velocitySpinBox->hide();
+
+        m_metaLabel->hide();
+        m_metaEdit->hide();
+
+	// m_controllerLabel->setText(i18n("Text type:"));
+        // m_metaLabel->setText(i18n("Chord:"));
+
+        // get the fingering event
+        try
+        {
+            guitar::Fingering chord( m_event );
+        }
+        catch(...)
+        {
+            // m_controllerLabelValue->setText(i18n("<none>"));
+            // m_metaEdit->setText(i18n("<none>"));
+        }
+
+        if (m_typeCombo) m_typeCombo->setCurrentItem(12);
     }
     else
     {
@@ -4961,13 +5023,18 @@ ManageMetronomeDialog::slotPitchSelectorChanged(int selection)
     }
 }
 
-LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent) :
-    KDialogBase(parent, 0, true, i18n("Lilypond Export"), Ok | Cancel)
+LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
+					     QString windowCaption,
+					     QString heading) :
+    KDialogBase(parent, 0, true,
+		(windowCaption = "" ? i18n("Lilypond Export") : windowCaption),
+		Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
     
     QGroupBox *optionBox = new QGroupBox
-	(1, Horizontal, i18n("Lilypond export options"), vbox);
+	(1, Horizontal,
+	 (heading == "" ? i18n("Lilypond export options") : heading), vbox);
 
     KConfig *config = kapp->config();
     config->setGroup(NotationView::ConfigGroup);

@@ -55,6 +55,8 @@
 #include "notestyle.h"
 #include "spline.h"
 
+#include "guitar/fingering.h"
+
 // #define DUMP_STATS 1
 
 #include <iostream>
@@ -3001,6 +3003,33 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 
     drawTextAux(text, 0, 0, 0);
     return makeCanvasPixmap(QPoint(2, 2), true);
+}
+
+QCanvasPixmap*
+NotePixmapFactory::makeFretboardPixmap(const guitar::Fingering &arrangement,
+                                       int x,
+                                       int y)
+{
+    using namespace guitar;
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeFretboardPixmap");
+
+    int fretboardWidth = getLineSpacing() * 6;
+    int fretboardHeight = getLineSpacing() * 6;
+
+/*
+    std::cout << "Fretboard QRect height: " << fretboardHeight
+    << ", width: " << fretboardWidth
+    << std::endl;
+*/
+
+    createPixmapAndMask (fretboardWidth, fretboardHeight);
+
+    // m_generatedPixmap
+    m_p->painter().setBrush(Qt::black);
+
+    arrangement.drawContents(&(m_p->painter()), 4);
+
+    return makeCanvasPixmap( QPoint ( x, y ), true );
 }
 
 void

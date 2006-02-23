@@ -1,0 +1,83 @@
+#! /usr/bin/env python
+
+# -*- python -*-
+############################
+## load the config
+
+## use the myenv.ronment set in the top-level
+## SConstruct file
+
+Import('env')
+
+tobj=env.kobject('program', env)
+tobj.target='test_fingering'
+tobj.source='test_fingering.cpp'
+tobj.includes='../../base ../../ ../../..'
+tobj.libs='guitar kdeui base'
+tobj.libpaths='../../base .'
+tobj.execute()
+
+tobj=env.kobject('program', env)
+tobj.target='test_guitar'
+tobj.source='test_guitar.cpp'
+tobj.includes='../../base ../../ ../../..'
+tobj.libs='guitar kdeui base'
+tobj.libpaths='../../base .'
+tobj.execute()
+
+tobj=env.kobject('program', env)
+tobj.target='test_note'
+tobj.source='test_note.cpp'
+tobj.includes='../../base ../../ ../../..'
+tobj.libs='guitar kdeui base'
+tobj.libpaths='../../base .'
+tobj.execute()
+
+tobj=env.kobject('program', env)
+tobj.target='test_barre'
+tobj.source='test_barre.cpp'
+tobj.includes='../../base ../../ ../../..'
+tobj.libs='guitar kdeui base'
+tobj.libpaths='../../base .'
+tobj.execute()
+
+tobj=env.kobject('program', env)
+tobj.target='test_chordmap'
+tobj.source='test_chordmap.cpp'
+tobj.includes='../../base ../../ ../../..'
+tobj.libs='guitar kdeui base'
+tobj.libpaths='../../base .'
+tobj.execute()
+
+tobj=env.kobject('program', env)
+tobj.target='test_fingeringconstruct'
+tobj.source='test_fingeringconstruct.cpp'
+tobj.includes='../../base ../../ ../../..'
+tobj.libs='guitar kdeui base'
+tobj.libpaths='../../base .'
+tobj.execute()
+
+guitar_src="""
+barre.cpp
+barrelist.cpp
+chord.cpp
+chordmap.cpp
+chordname.cpp
+DuplicateException.cpp
+fingering.cpp
+fingers.cpp
+guitar.cpp
+guitarchordeditor.cpp
+guitartabselector.cpp
+guitarxmlhandler.cpp
+note.cpp
+symbols.cpp
+"""
+
+obj=env.kobject('staticlib', env)
+obj.target='libguitar'
+obj.source=guitar_src
+obj.libpaths='../../base .'
+obj.includes='../../base ../../ ../../..'
+obj.libs='kdeui ../../base/libbase.a'
+obj.execute()

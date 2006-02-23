@@ -60,6 +60,7 @@
 #include <kprocess.h>
 #include <kcolordialog.h>
 #include <kdiskfreesp.h>
+#include <kinputdialog.h>
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
 #include <kfontrequester.h>
 #else
@@ -1878,7 +1879,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     m_fixed = new KListView(frame);
     m_fixed->addColumn(i18n("Name"));
     m_fixed->addColumn(i18n("Value"));
-    m_fixed->setFullWidth();
+    m_fixed->setFullWidth(true);
     m_fixed->setItemsRenameable(true);
     m_fixed->setRenameable(1);
     m_fixed->setItemMargin(5);
@@ -1889,7 +1890,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     m_metadata = new KListView(frame);
     m_metadata->addColumn(i18n("Name"));
     m_metadata->addColumn(i18n("Value"));
-    m_metadata->setFullWidth();
+    m_metadata->setFullWidth(true);
     m_metadata->setItemsRenameable(true);
     m_metadata->setRenameable(0);
     m_metadata->setRenameable(1);
@@ -2462,8 +2463,11 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
-                                            i18n("New"), &ok);
+    QString newName = KInputDialog::getText(i18n("New Color Name"),
+					    i18n("Enter new name"),
+                                            i18n("New"),
+					    &ok);
+
     if ((ok == true) && (!newName.isEmpty()))
     {
         KColorDialog box(this, "", true);

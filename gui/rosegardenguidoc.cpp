@@ -393,9 +393,9 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
 	int reply = KMessageBox::warningYesNoCancel
 	    (0,
-	     i18n("Delete the %1 audio file recorded during the unsaved session?", 
-		  "Delete the %1 audio files recorded during the unsaved session?",
-		  orphans.size()).arg(orphans.size()));
+	     i18n("Delete the 1 audio file recorded during the unsaved session?", 
+		  "Delete the %n audio files recorded during the unsaved session?",
+		  orphans.size()));
 
 	switch (reply) {
 
@@ -430,7 +430,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     if (orphans.empty()) return true;
 
     QString question =
-	i18n("About to delete %1 audio file permanently from the hard disk.\nThere will be no way to recover this file.\nAre you sure?", "About to delete %1 audio files permanently from the hard disk.\nThere will be no way to recover these files.\nAre you sure?", orphans.size()).arg(orphans.size());
+	i18n("About to delete 1 audio file permanently from the hard disk.\nThere will be no way to recover this file.\nAre you sure?", "About to delete %n audio files permanently from the hard disk.\nThere will be no way to recover these files.\nAre you sure?", orphans.size());
 	    
     int reply = KMessageBox::warningContinueCancel(0, question);
 	    
@@ -1829,7 +1829,7 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 void
 RosegardenGUIDoc::stopRecordingMidi()
 {
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi\n";
+    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi" << endl;
 
     // If we've created nothing then do nothing with it
     //
@@ -1948,8 +1948,6 @@ RosegardenGUIDoc::prepareAudio()
 void
 RosegardenGUIDoc::slotSetPointerPosition(Rosegarden::timeT t)
 {
-    RG_DEBUG << "RosegardenGUIDoc::slotSetPointerPosition(" << t << ")" << endl;
-
     m_composition.setPosition(t);
     emit pointerPositionChanged(t);
 }

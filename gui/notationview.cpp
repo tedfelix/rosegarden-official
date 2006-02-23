@@ -545,7 +545,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setRewFFwdToAutoRepeat();
 
     slotCompositionStateUpdate();
-    
+
     NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }
 
@@ -1254,13 +1254,13 @@ void NotationView::setupActions()
 
     std::vector<NoteStyleName> styles
 	    (NoteStyleFactory::getAvailableStyleNames());
-    
+
     for (std::vector<NoteStyleName>::iterator i = styles.begin();
 	 i != styles.end(); ++i) {
 
 	QString styleQName(strtoqstr(*i));
 
-	KAction *styleAction = 
+	KAction *styleAction =
 	    new KAction
 	    (styleQName, 0, this, SLOT(slotSetStyleFromAction()),
 	     actionCollection(), "style_" + styleQName);
@@ -1400,6 +1400,12 @@ void NotationView::setupActions()
     noteAction = new KRadioAction(i18n("&Text"), icon, Key_F8, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
+    noteAction->setExclusiveGroup("notes");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    noteAction = new KRadioAction(i18n("&Fretboard"), icon, Key_F9, this,
+                                  SLOT(slotFretboard()),
+                                  actionCollection(), "fretboard");
     noteAction->setExclusiveGroup("notes");
 
 
@@ -1850,6 +1856,13 @@ void NotationView::setupActions()
 		    SLOT(slotAddSlashes()), actionCollection(),
 		    QString("slashes_%1").arg(i));
     }
+
+    new KAction(i18n("Add Fretboard"),
+		0,
+		this,
+		SLOT(slotAddFretboard()),
+		actionCollection(),
+		"add_fretboard");
 
     new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
@@ -3126,7 +3139,7 @@ NotationView::updateThumbnails(bool complete)
 	if (m_composer) m_composer->hide();
 	if (m_copyright) m_copyright->hide();
 
-	for (size_t page = 0; page < maxPageCount; ++page) {
+	for (size_t page = 0; page < static_cast<size_t>(maxPageCount); ++page) {
 
 	    bool havePageNumber = ((m_pageNumbers.size() > page) &&
 				   (m_pageNumbers[page] != 0));
@@ -3136,7 +3149,7 @@ NotationView::updateThumbnails(bool complete)
 			   topMargin * 2,
 			   pageWidth - leftMargin*3,
 			   pageHeight - topMargin*3);
-	
+
 	    QCanvas *canvas = getCanvasView()->canvas();
 	    canvas->drawArea(pageRect, &thumbPainter, false);
 

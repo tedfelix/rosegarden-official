@@ -92,9 +92,9 @@ MixerWindow::slotClose()
 
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 			 RosegardenGUIDoc *document):
-        MixerWindow(parent, document)
+        MixerWindow(parent, document),
+	m_mainBox (0)
 {
-    m_mainBox = 0;
     populate();
 
     KStdAction::close(this,

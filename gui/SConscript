@@ -159,7 +159,7 @@ obj=env.kobject('program',env)
 obj.target='rosegarden'
 obj.source=rgSources
 obj.includes='../ ../.. /usr/X11R6/include/X11/Xft /usr/include/freetype2 ../base ../sound'
-obj.libs='kdeui kdecore kdeprint kio Xft RosegardenSequencer RosegardenSound base'
-obj.libpaths='../base ../sound /usr/X11R6/lib'
+obj.libs='kdeui kdecore kdeprint kio Xft RosegardenSequencer RosegardenSound guitar base'
+obj.libpaths='../base ../sound ../gui/guitar /usr/X11R6/lib'
 obj.execute()
 

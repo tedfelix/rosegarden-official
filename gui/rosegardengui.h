@@ -190,7 +190,7 @@ public:
     /**
      * export a Lilypond file
      */
-    bool exportLilypondFile(QString url);
+    bool exportLilypondFile(QString url, bool forPreview = false);
 
     /**
      * export a MusicXml file
@@ -1180,7 +1180,7 @@ public slots:
      */
     void slotChangeTempo(Rosegarden::timeT time,
                          Rosegarden::tempoT value,      
-                         Rosegarden::tempoT target,      
+                         Rosegarden::tempoT target,
                          TempoDialog::TempoDialogAction action);
 
     /**

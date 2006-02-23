@@ -1925,6 +1925,144 @@ NotationSelector::getStaffForElement(NotationElement *elt)
     return 0;
 }
 
+//------------------------------
+
+FretboardInserter::FretboardInserter(NotationView* view)
+        : NotationTool("FretboardInserter", view),
+	m_guitarChord_ref (m_nParentView)
+{
+    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+                             makeToolbarPixmap("select")));
+
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
+
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
+
+    icon = QIconSet
+           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
+                                         makeToolbarPixmap("crotchet")));
+
+    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
+                SLOT(slotNoteSelected()), actionCollection(),
+                "notes");
+
+    m_guitarChord_ref.init();
+    createMenu("fretboardinserter.rc");
+}
+
+void FretboardInserter::slotFretboardSelected()
+{
+    // Switch to last selected Fretboard
+    // m_nParentView->slotLastFretboardAction();
+}
+
+void FretboardInserter::slotEraseSelected()
+{
+    m_parentView->actionCollection()->action("erase")->activate();
+}
+
+void FretboardInserter::slotSelectSelected()
+{
+    m_parentView->actionCollection()->action("select")->activate();
+}
+
+void FretboardInserter::handleLeftButtonPress(Rosegarden::timeT,
+        int,
+        int staffNo,
+        QMouseEvent* e,
+        ViewElement *element)
+{
+    std::cout << "FretboardInserter::handleLeftButtonPress" << std::endl;
+
+    if (staffNo < 0)
+    {
+        return;
+    }
+
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+
+    if (element && element->event()->isa(guitar::Fingering::EventType))
+    {
+        handleSelectedFretboard (element, staff);
+    }
+    else
+    {
+        createNewFretboard (element, staff, e);
+    }
+}
+
+bool FretboardInserter::processDialog( NotationStaff* staff,
+                                       Rosegarden::timeT& insertionTime)
+{
+    bool result = false;
+
+    if (m_guitarChord_ref.exec() == QDialog::Accepted)
+    {
+        guitar::Fingering m_chord = m_guitarChord_ref.getArrangement();
+
+        FretboardInsertionCommand *command =
+            new FretboardInsertionCommand
+            (staff->getSegment(), insertionTime, m_chord);
+
+        m_nParentView->addCommandToHistory(command);
+        result = true;
+    }
+
+    return result;
+}
+
+void FretboardInserter::handleSelectedFretboard (ViewElement* element, NotationStaff *staff)
+{
+    std::cout << "FretboardInserter::handleSelectedFretboard" << std::endl;
+
+
+    // Get time of where fretboard is inserted
+    timeT insertionTime = element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+
+    // edit an existing fretboard, if that's what we clicked on
+    try
+    {
+        guitar::Fingering existingFret (*element->event());
+
+        m_guitarChord_ref.setArrangement( &existingFret );
+        if ( processDialog( staff, insertionTime ) )
+        {
+            // Erase old fretboard
+            EraseEventCommand *command =
+                new EraseEventCommand(staff->getSegment(),
+                                      element->event(),
+                                      false);
+
+            m_nParentView->addCommandToHistory(command);
+        }
+    }
+    catch (Rosegarden::Exception e)
+    {}
+}
+
+void FretboardInserter::createNewFretboard (ViewElement* element, NotationStaff *staff, QMouseEvent* e)
+{
+    std::cout << "FretboardInserter::createNewFretboard" << std::endl;
+    Event *clef = 0, *key = 0;
+
+    NotationElementList::iterator closestElement =
+        staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+                                               clef, key, false, -1);
+
+    if (closestElement == staff->getViewElementList()->end())
+    {
+        return;
+    }
+
+    timeT insertionTime = (*closestElement)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+
+    processDialog( staff, insertionTime );
+}
+
 
 //------------------------------
 
@@ -1934,6 +2072,7 @@ const QString ClefInserter::ToolName     = "clefinserter";
 const QString TextInserter::ToolName     = "textinserter";
 const QString NotationEraser::ToolName   = "notationeraser";
 const QString NotationSelector::ToolName = "notationselector";
+const QString FretboardInserter::ToolName = "fretboardinserter";
 
 
 //----------------------------------------------------------------------

@@ -26,6 +26,7 @@
 #include "rosestrings.h"
 #include "basiccommand.h"
 #include "notestyle.h"
+#include "guitar/fingering.h"
 #include <klocale.h>
 
 
@@ -905,6 +906,23 @@ protected:
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_visible;
+};
+
+class FretboardInsertionCommand : public BasicCommand
+{
+public:
+    FretboardInsertionCommand(Rosegarden::Segment &segment,
+                              Rosegarden::timeT time,
+                              guitar::Fingering chord);
+    virtual ~FretboardInsertionCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+protected:
+    virtual void modifySegment();
+
+    guitar::Fingering m_chord;
+    Rosegarden::Event *m_lastInsertedEvent;
 };
 
 #endif

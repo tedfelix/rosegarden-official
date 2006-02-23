@@ -2038,4 +2038,28 @@ SetVisibilityCommand::modifySegment()
 }
 
 
+FretboardInsertionCommand::FretboardInsertionCommand(Segment &segment,
+        Rosegarden::timeT time,
+        guitar::Fingering chord) :
+        BasicCommand(i18n("Insert Fretboard"), segment, time, time + 1, true),
+        m_chord(chord)
+{
+    // nothing
+}
+
+FretboardInsertionCommand::~FretboardInsertionCommand()
+{}
+
+void
+FretboardInsertionCommand::modifySegment()
+{
+    Segment::iterator i = getSegment().insert(m_chord.getAsEvent(getStartTime()));
+    if (i != getSegment().end())
+    {
+        m_lastInsertedEvent = *i;
+    }
+}
+
+
+
 		

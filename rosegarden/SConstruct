@@ -80,8 +80,8 @@ env.AppendUnique(LIBS = ['qt-mt'])
 
 ## Threading is needed
 env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
-
 env.Append(CCFLAGS = '-DVERSION=\\"' + VERSION + '\\"')
+env.Append(CPPFLAGS = '-I../../..')
 
 ##!!! WTF? This is supposed to be defined if NDEBUG is set, which is supposed
 ## to happen if debug is not actively requested
@@ -95,9 +95,11 @@ def givedir(dir):
 
 SetOption('duplicate', 'soft-copy')
 dirs = env.Split("""
+        chords
 	sound
 	sequencer
 	gui
+	gui/guitar
 	base
 """)
 

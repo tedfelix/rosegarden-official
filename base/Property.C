@@ -27,7 +27,27 @@
 namespace Rosegarden 
 {
 using std::string;
-    
+
+string
+PropertyDefn<UInt>::typeName()
+{
+    return "UInt";
+}    
+
+PropertyDefn<UInt>::basic_type
+PropertyDefn<UInt>::parse(string s)
+{
+    return atoi(s.c_str());
+}
+
+string
+PropertyDefn<UInt>::unparse(PropertyDefn<UInt>::basic_type i)
+{
+    static char buffer[20]; sprintf(buffer, "%ld", i);
+    return buffer;
+}
+
+
 string
 PropertyDefn<Int>::typeName()
 {
@@ -107,6 +127,13 @@ PropertyDefn<RealTimeT>::unparse(PropertyDefn<RealTimeT>::basic_type i)
 
 PropertyStoreBase::~PropertyStoreBase()
 {
+}
+
+template <>
+size_t
+PropertyStore<UInt>::getStorageSize() const
+{
+    return sizeof(*this);
 }
 
 template <>

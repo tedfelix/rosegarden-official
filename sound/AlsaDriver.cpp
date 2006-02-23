@@ -34,6 +34,7 @@
 
 #include "AlsaDriver.h"
 #include "AlsaPort.h"
+#include "ExternalTransport.h"
 #include "MappedInstrument.h"
 #include "Midi.h"
 #include "MappedStudio.h"
@@ -5016,9 +5017,8 @@ AlsaDriver::runTasks()
 	snd_seq_get_queue_tempo(m_midiHandle, m_queue, q_ptr);
 
 	unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
-	unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
-	
 #ifdef DEBUG_ALSA
+	unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
 	if (!m_playing) {
 	    std::cerr << "Skew: " << t_skew << "/" << t_base;
 	}

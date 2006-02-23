@@ -52,6 +52,7 @@
 #include "BaseProperties.h"
 #include "Profiler.h"
 #include "Studio.h" // for studio stuff that determines whether a controller is sustain or not
+#include "guitar/fingering.h"
 
 using Rosegarden::timeT;
 using Rosegarden::Segment;
@@ -1233,7 +1234,37 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		    pixmap = m_notePixmapFactory->makeUnknownPixmap();
 		}
 	    }		
-	    
+	} else if (elt->event()->isa(guitar::Fingering::EventType)) {
+		// Create a fretboard pixmap
+		try {
+
+		    guitar::Fingering arrangement (*elt->event());
+
+/* UNUSED - for printing, just use a large pixmap as below
+		    if (m_printPainter) {
+
+			int length = m_notePixmapFactory->getTextWidth(text);
+			for (double w = -1, inc = 0; w != 0; inc += w) {
+			    w = setPainterClipping(m_printPainter,
+						   elt->getLayoutX(),
+						   int(elt->getLayoutY()),
+						   int(inc), length, coords,
+						   policy);
+			    m_notePixmapFactory->drawText
+				(text, *m_printPainter, int(coords.first), coords.second);
+			    m_printPainter->restore();
+			}
+		    } else {
+			*/
+
+		    pixmap = m_notePixmapFactory->makeFretboardPixmap (arrangement,
+			     int(coords.first),
+                             coords.second);
+//		    }
+		} catch (Rosegarden::Exception e) { // Text ctor failed
+		    NOTATION_DEBUG << "Bad fretboard event" << endl;
+		}
+    
 	} else {
 
 	    if (m_showUnknowns) {

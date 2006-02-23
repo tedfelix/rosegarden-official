@@ -41,7 +41,7 @@
 #include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kconfig.h>
 #include <kprocess.h>
 #include <kprinter.h>
@@ -612,13 +612,13 @@ void RosegardenGUIApp::setupActions()
     //
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::key(KStdAccel::Undo),
+                            KStdAccel::shortcut(KStdAccel::Undo),
                             actionCollection(),
                             KStdAction::stdName(KStdAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::key(KStdAccel::Redo),
+                            KStdAccel::shortcut(KStdAccel::Redo),
                             actionCollection(),
                             KStdAction::stdName(KStdAction::Redo));
     /////
@@ -2013,7 +2013,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
     QString netFile = url.prettyURL();
     RG_DEBUG << "RosegardenGUIApp::openURL: KURL " << netFile << endl;
 
-    if (url.isMalformed()) {
+    if (!url.isValid()) {
         QString string;
         string = i18n( "Malformed URL\n%1").arg(netFile);
 
@@ -2023,7 +2023,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
     QString target, caption(url.path());
 
-    if (KIO::NetAccess::download(url, target) == false) {
+    if (KIO::NetAccess::download(url, target, this) == false) {
         KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
         return;
     }
@@ -2083,7 +2083,7 @@ void RosegardenGUIApp::slotMerge()
     
     QString target;
 
-    if (KIO::NetAccess::download(url, target) == false) {
+    if (KIO::NetAccess::download(url, target, this) == false) {
         KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
         return;
     }
@@ -2182,7 +2182,7 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
 
     KURL *u = new KURL(name);
 
-    if (u->isMalformed()) {
+    if (!u->isValid()) {
         KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
         return "";
     }
@@ -3345,7 +3345,7 @@ void RosegardenGUIApp::slotImportProject()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
 
     importProject(tmpfile);
 
@@ -3389,7 +3389,7 @@ void RosegardenGUIApp::slotImportMIDI()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
     openFile(tmpfile, ImportMIDI); // does everything including setting the document
 
     KIO::NetAccess::removeTempFile( tmpfile );
@@ -3404,7 +3404,7 @@ void RosegardenGUIApp::slotMergeMIDI()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
     mergeFile(tmpfile, ImportMIDI);
 
     KIO::NetAccess::removeTempFile( tmpfile );
@@ -3628,7 +3628,7 @@ void RosegardenGUIApp::slotImportRG21()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
     openFile(tmpfile, ImportRG21);
 
     KIO::NetAccess::removeTempFile(tmpfile);
@@ -3643,7 +3643,7 @@ void RosegardenGUIApp::slotMergeRG21()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
     mergeFile(tmpfile, ImportRG21);
 
     KIO::NetAccess::removeTempFile( tmpfile );
@@ -3710,7 +3710,7 @@ RosegardenGUIApp::slotImportHydrogen()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
     openFile(tmpfile, ImportHydrogen);
 
     KIO::NetAccess::removeTempFile(tmpfile);
@@ -3725,7 +3725,7 @@ void RosegardenGUIApp::slotMergeHydrogen()
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
-    KIO::NetAccess::download(url, tmpfile);
+    KIO::NetAccess::download(url, tmpfile, this);
     mergeFile(tmpfile, ImportHydrogen);
 
     KIO::NetAccess::removeTempFile( tmpfile );
@@ -4559,7 +4559,7 @@ void RosegardenGUIApp::slotPreviewLilypond()
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
 	delete file;
     }
-    if (!exportLilypondFile(file->name())) {
+    if (!exportLilypondFile(file->name(), true)) {
 	return;
     }
     KProcess *proc = new KProcess;
@@ -4579,9 +4579,15 @@ void RosegardenGUIApp::slotLilypondViewProcessExited(KProcess *p)
     delete p;
 }
 
-bool RosegardenGUIApp::exportLilypondFile(QString file)
+bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
 {
-    LilypondOptionsDialog dialog(this);
+    QString caption = "", heading = "";
+    if (forPreview) {
+	caption = i18n("Lilypond Preview Options");
+	heading = i18n("Lilypond preview options");
+    }
+
+    LilypondOptionsDialog dialog(this, caption, heading);
     if (dialog.exec() != QDialog::Accepted) {
 	return false;
     }
@@ -4986,6 +4992,11 @@ void RosegardenGUIApp::slotPlay()
     }
     catch(QString s) {
         KMessageBox::error(this, s);
+        m_playTimer->stop();
+	m_stopTimer->start(100);
+    }
+    catch(Rosegarden::Exception e) {
+        KMessageBox::error(this, e.getMessage());
         m_playTimer->stop();
 	m_stopTimer->start(100);
     }
@@ -5865,7 +5876,7 @@ RosegardenGUIApp::slotRelabelSegments()
 
     bool ok = false;
 
-    QString newLabel = KLineEditDlg::getText(editLabel,
+    QString newLabel = KInputDialog::getText(editLabel,
                                              i18n("Enter new label"),
                                              label,
                                              &ok,
@@ -6054,7 +6065,6 @@ RosegardenGUIApp::slotOpenAudioMixer()
 
     m_audioMixer->show();
 }
-
 
 void
 RosegardenGUIApp::slotOpenMidiMixer()
@@ -7127,7 +7137,7 @@ RosegardenGUIApp::slotImportStudio()
     if (url.isEmpty()) return;
 
     QString target;
-    if (KIO::NetAccess::download(url, target) == false) {
+    if (KIO::NetAccess::download(url, target, this) == false) {
         KMessageBox::error(this, i18n("Cannot download file %1")
                            .arg(url.prettyURL()));
         return;
