@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Chord_Group SYSTEM "guitar.dtd">
+<Chord_Group>
+	<!-- C Major -->
+	<Chord>
+		<ChordName scale="C"/>
+		<StartFret number="1"/>
+		<Note string="1" action="open"/>
+		<Note string="2" fret="1"/>
+		<Note string="3" action="open"/>
+		<Note string="4" fret="2"/>
+		<!-- Tricky fingering -->
+		<Note string="5" fret="3" action="pressed"/>
+		<Note string="6" action="muted"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="C"/>
+		<StartFret number="1"/>
+		<Note string="1" fret="3"/>
+		<Note string="2" fret="3"/>
+		<Note string="3" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="5" fret="3"/>
+		<Note string="6" action="muted"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="C"/>
+		<StartFret number="7"/>
+		<Barre fret="8" start="6" end="1"/>
+		<Note string="3" fret="9"/>
+		<Note string="4" fret="10"/>
+		<Note string="5" fret="10"/>
+	</Chord>
+</Chord_Group>

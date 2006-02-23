@@ -1,0 +1,11 @@
+Chord_Group {
+	Chord {
+		ChordName { scale="A"; modifier="Major";  };
+		startFret="1";
+		Note { string="5"; action="open"; };
+		Note { string="4"; fret="2"; };
+		Note { string="3"; fret="2"; };
+		Note { string="2"; fret="2"; };
+		Note { string="1"; action="open"; };
+	};
+};
