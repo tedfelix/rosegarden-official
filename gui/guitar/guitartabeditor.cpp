@@ -83,8 +83,8 @@ void GuitarTabEditorWindow::populate ()
     QGroupBox *fingeringBox = new QGroupBox( 3, Vertical,
                               i18n( "Fingering" ), m_chordBox );
 
-    guitar::Guitar* guitar = new guitar::Guitar();
-    m_fingering = new guitar::FingeringConstructor ( guitar, fingeringBox );
+    Guitar::Guitar* guitar = new guitar::Guitar();
+    m_fingering = new Guitar::FingeringConstructor ( guitar, fingeringBox );
     fingeringBox->addSpace( 0 );
     fingeringBox->addSpace( 0 );
 
@@ -95,8 +95,8 @@ void GuitarTabEditorWindow::populate ()
     this->setupChordEditLists();
 
     // Connect signals
-    connect( this, SIGNAL( displayChord( guitar::Fingering* ) ),
-             m_fingering, SLOT( setFingering( guitar::Fingering* ) ) );
+    connect( this, SIGNAL( displayChord( Guitar::Fingering* ) ),
+             m_fingering, SLOT( setFingering( Guitar::Fingering* ) ) );
 
     connect ( m_nameList, SIGNAL( highlighted( int ) ),
               this, SLOT( slotSetupModifierList( int ) ) );
@@ -200,13 +200,13 @@ void GuitarTabEditorWindow::slotLoadChords ()
     //m_chordMap.save ( userDir );
 }
 
-guitar::Fingering
+Guitar::Fingering
 GuitarTabEditorWindow::getArrangement ( void ) const
 {
-    return guitar::Fingering( *( m_data->getPresentArrangement() ) );
+    return Guitar::Fingering( *( m_data->getPresentArrangement() ) );
 }
 
-void GuitarTabEditorWindow::setArrangement ( guitar::Fingering& chord )
+void GuitarTabEditorWindow::setArrangement ( Guitar::Fingering& chord )
 {
     m_data->setArrangement ( chord );
     emit displayChord ( m_data->getPresentArrangement() );

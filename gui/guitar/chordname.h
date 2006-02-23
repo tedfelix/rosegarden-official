@@ -27,7 +27,7 @@
 
 #include <vector>
 
-namespace guitar
+namespace Guitar
 {
     class ChordName
     {

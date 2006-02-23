@@ -23,7 +23,7 @@
 
 #include <qstring.h>
 
-namespace guitar
+namespace Guitar
 {
 class GuitarString
 {

@@ -1234,11 +1234,11 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		    pixmap = m_notePixmapFactory->makeUnknownPixmap();
 		}
 	    }		
-	} else if (elt->event()->isa(guitar::Fingering::EventType)) {
+	} else if (elt->event()->isa(Guitar::Fingering::EventType)) {
 		// Create a fretboard pixmap
 		try {
 
-		    guitar::Fingering arrangement (*elt->event());
+		    Guitar::Fingering arrangement (*elt->event());
 
 /* UNUSED - for printing, just use a large pixmap as below
 		    if (m_printPainter) {

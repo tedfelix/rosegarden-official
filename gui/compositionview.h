@@ -305,6 +305,7 @@ public:
     virtual void segmentAdded(const Rosegarden::Composition *, Rosegarden::Segment *);
     virtual void segmentRemoved(const Rosegarden::Composition *, Rosegarden::Segment *);
     virtual void segmentRepeatChanged(const Rosegarden::Composition *, Rosegarden::Segment *, bool);
+    virtual void endMarkerTimeChanged(const Rosegarden::Composition *, bool /*shorten*/);
 
     // SegmentObserver
     virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
@@ -315,6 +316,7 @@ public:
 
 signals:
     void selectedSegments(const Rosegarden::SegmentSelection &);
+    void needSizeUpdate();
 
 public slots:
     void slotAudioFileFinalized(Rosegarden::Segment*);
@@ -499,8 +501,6 @@ public:
 
     void setBackgroundPixmap(const QPixmap &m);
 
-    void updateSize(bool shrinkWidth=false);
-
     void endAudioPreviewGeneration();
 
 public slots:
@@ -547,6 +547,8 @@ public slots:
     // no longer used, see RosegardenGUIDoc::insertRecordedMidi
 //     void slotRecordMIDISegmentUpdated(Rosegarden::Segment*, Rosegarden::timeT updatedFrom);
     void slotStoppedRecording();
+
+    void slotUpdateSize();
 
 signals:
     void editSegment(Rosegarden::Segment*); // use default editor

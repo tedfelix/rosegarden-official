@@ -40,8 +40,8 @@ class GuitarChordEditor : public KDialogBase
     Q_OBJECT
 
 public:
-    GuitarChordEditor( guitar::Guitar* g_ptr,
-                       guitar::ChordMap* cMap,
+    GuitarChordEditor( Guitar::GuitarNeck* g_ptr,
+                       Guitar::ChordMap* cMap,
                        QWidget* parent = 0 );
 
     ~GuitarChordEditor() {}
@@ -52,7 +52,7 @@ public:
      * Set Chord object to be edited
      * @param  c_ptr Chord object pointer
      */
-    void setChord (guitar::Chord* c_ptr);
+    void setChord (Guitar::Chord* c_ptr);
 
 public slots:
     virtual void saveChord();
@@ -60,7 +60,7 @@ public slots:
     virtual void toggleMode();
 
 protected:
-    guitar::FingeringConstructor* fingerConstPtr;
+    Guitar::FingeringConstructor* fingerConstPtr;
     QTabWidget* tabWidget;
     KStatusBar* m_status;
 
@@ -71,7 +71,7 @@ protected slots:
 private:
 
     // Variables
-    guitar::ChordMap* m_map;
+    Guitar::ChordMap* m_map;
     QPixmap image0;
 
     typedef std::pair <QWidget*, ChordInfo*> InfoPair;
@@ -80,10 +80,10 @@ private:
 
     // Functions
     void createTab ( QString const& name );
-    guitar::ChordName* getChordName (void);
+    Guitar::ChordName* getChordName (void);
 
     // Present chord being modified
-    guitar::Chord* m_old_chord_ptr;
+    Guitar::Chord* m_old_chord_ptr;
 
 };
 

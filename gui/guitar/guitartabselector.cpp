@@ -34,9 +34,9 @@ GuitarTabSelectorDialog::GuitarTabSelectorDialog( QWidget *parent )
                        0,
                        KDialogBase::NoDefault,
                        true ),
-        m_chordMap ( new guitar::ChordMap () ),
-        m_guitar ( new guitar::Guitar() ),
-        m_arrangement ( new guitar::Fingering( m_guitar ) )
+        m_chordMap ( new Guitar::ChordMap () ),
+        m_guitar ( new Guitar::GuitarNeck() ),
+        m_arrangement ( new Guitar::Fingering( m_guitar ) )
 {}
 
 GuitarTabSelectorDialog::~ GuitarTabSelectorDialog()
@@ -52,7 +52,7 @@ void GuitarTabSelectorDialog::init ( void )
 void GuitarTabSelectorDialog::setupChordMap ( void )
 {
     std::vector<QString> chordFiles = this->getAvailableChordFiles();
-    guitar::GuitarXmlHandler handler;
+    Guitar::GuitarXmlHandler handler;
 
     // For each chord file
     //   read chord files and populate Chord map
@@ -64,7 +64,7 @@ void GuitarTabSelectorDialog::setupChordMap ( void )
         {
             std::cout << "GuitarTabSelectorDialog::setupChordList - reading "
             << *pos << std::endl;
-            guitar::ChordMap const* map_ptr = handler.parse ( *pos );
+            Guitar::ChordMap const* map_ptr = handler.parse ( *pos );
 
             /*
                        std::cout << " Found " << map_ptr->size() << " chords" << std::endl;
@@ -74,7 +74,7 @@ void GuitarTabSelectorDialog::setupChordMap ( void )
             */
             bool notDone = true;
             // Set beginning iterator to start of ChordMap
-            guitar::ChordMap::const_iterator pos = map_ptr->begin();
+            Guitar::ChordMap::const_iterator pos = map_ptr->begin();
             while ( notDone )
             {
                 try
@@ -83,7 +83,7 @@ void GuitarTabSelectorDialog::setupChordMap ( void )
 		    // We had a successful append so we can go to the next file
 		    notDone = false;
                 }
-                catch ( guitar::DuplicateException & de )
+                catch ( Guitar::DuplicateException & de )
                 {
                     // If a duplicate is found
                     // We report it to standard out
@@ -186,24 +186,24 @@ void GuitarTabSelectorDialog::setupNameList ( void )
 
 void GuitarTabSelectorDialog::slotDisplayChord ()
 {
-    guitar::ChordName * chord_id = new guitar::ChordName();
+    Guitar::ChordName * chord_id = new Guitar::ChordName();
     chord_id->setName ( m_scaleList->currentText(),
                         m_modifierList->currentText(),
                         m_suffixList->currentText(),
                         ( m_versionList->currentText() ).toInt() );
 
 
-    guitar::ChordMap::pair c_pos = m_chordMap->find( chord_id );
+    Guitar::ChordMap::pair c_pos = m_chordMap->find( chord_id );
     if ( c_pos.first )
     {
-        guitar::Chord * chord_ptr = c_pos.second;
+        Guitar::Chord * chord_ptr = c_pos.second;
         m_arrangement = chord_ptr->getArrangement();
         m_aliases->clear();
 
         // Print aliases
-        guitar::ChordName* cName = chord_ptr->getName();
-        std::vector<guitar::ChordName*> aliases = cName->getAliasList();
-        for ( std::vector<guitar::ChordName*>::const_iterator pos = aliases.begin();
+        Guitar::ChordName* cName = chord_ptr->getName();
+        std::vector<Guitar::ChordName*> aliases = cName->getAliasList();
+        for ( std::vector<Guitar::ChordName*>::const_iterator pos = aliases.begin();
                 pos != aliases.end();
                 ++pos )
         {
@@ -296,13 +296,13 @@ void GuitarTabSelectorDialog::populate ()
 
     // Fingering constructor
     m_fingering =
-        new guitar::FingeringConstructor( m_guitar,
+        new Guitar::FingeringConstructor( m_guitar,
                                           chordFrame,
-                                          guitar::FingeringConstructor::DISPLAY_ONLY );
+                                          Guitar::FingeringConstructor::DISPLAY_ONLY );
 
     chordFrameLayout->addMultiCellWidget( m_fingering, 2, 6, 0, 0 );
-    connect( this, SIGNAL( displayChord( guitar::Fingering* ) ),
-             m_fingering, SLOT( setFingering( guitar::Fingering* ) ) );
+    connect( this, SIGNAL( displayChord( Guitar::Fingering* ) ),
+             m_fingering, SLOT( setFingering( Guitar::Fingering* ) ) );
 }
 
 void GuitarTabSelectorDialog::slotSetupModifierList ( int index )
@@ -382,16 +382,16 @@ void GuitarTabSelectorDialog::clearChord()
     {
         delete m_arrangement;
     }
-    m_arrangement = new guitar::Fingering ( m_guitar );
+    m_arrangement = new Guitar::Fingering ( m_guitar );
     m_guitar->clear();
     m_aliases->clear();
     emit displayChord ( m_arrangement );
 }
 
-guitar::Fingering
+Guitar::Fingering
 GuitarTabSelectorDialog::getArrangement ( void ) const
 {
-    return guitar::Fingering( *m_arrangement );
+    return Guitar::Fingering( *m_arrangement );
 }
 
 /**
@@ -400,9 +400,9 @@ GuitarTabSelectorDialog::getArrangement ( void ) const
 	@todo: Fix error that does not display barre part of a chord in chord
 	       diagram
 */
-void GuitarTabSelectorDialog::setArrangement ( guitar::Fingering* chord )
+void GuitarTabSelectorDialog::setArrangement ( Guitar::Fingering* chord )
 {
-    m_arrangement = new guitar::Fingering (*chord);
+    m_arrangement = new Guitar::Fingering (*chord);
     emit displayChord ( m_arrangement );
 }
 
@@ -410,17 +410,17 @@ void GuitarTabSelectorDialog::modifyChord()
 {
     GuitarChordEditor m_edit ( m_guitar, m_chordMap, this );
 
-    guitar::ChordName * chord_id = new guitar::ChordName();
+    Guitar::ChordName * chord_id = new Guitar::ChordName();
     chord_id->setName ( m_scaleList->currentText(),
                         m_modifierList->currentText(),
                         m_suffixList->currentText(),
                         ( m_versionList->currentText() ).toInt() );
 
 
-    guitar::ChordMap::pair c_pos = m_chordMap->find( chord_id );
+    Guitar::ChordMap::pair c_pos = m_chordMap->find( chord_id );
     if ( c_pos.first )
     {
-        guitar::Chord * chord_ptr = c_pos.second;
+        Guitar::Chord * chord_ptr = c_pos.second;
         m_edit.setChord ( chord_ptr );
 	m_edit.disableResize();
 

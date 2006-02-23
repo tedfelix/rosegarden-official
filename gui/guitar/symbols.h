@@ -54,7 +54,7 @@
  * 	y = fret * Row Height
  **/
 
-namespace guitar
+namespace Guitar
 {
 
 class NoteSymbols
@@ -63,12 +63,12 @@ private:
     typedef FingeringConstructor FC;
     typedef std::pair<unsigned int, unsigned int> posPair;
 
-    static float const LEFT_BORDER_PERCENTAGE = 0.1;
-    static float const RIGHT_BORDER_PERCENTAGE = 0.1;
-    static float const FRETBOARD_WIDTH_PERCENTAGE = 0.8;
-    static float const TOP_BORDER_PERCENTAGE = 0.1;
-    static float const BOTTOM_BORDER_PERCENTAGE = 0.1;
-    static float const FRETBOARD_HEIGHT_PERCENTAGE = 0.8;
+    static float const LEFT_BORDER_PERCENTAGE;
+    static float const RIGHT_BORDER_PERCENTAGE;
+    static float const FRETBOARD_WIDTH_PERCENTAGE;
+    static float const TOP_BORDER_PERCENTAGE;
+    static float const BOTTOM_BORDER_PERCENTAGE;
+    static float const FRETBOARD_HEIGHT_PERCENTAGE;
 
 public:
 
@@ -153,7 +153,7 @@ private:
 
 };
 
-} /* namespace guitar */
+} /* namespace Guitar */
 
 #endif /* SYMBOLS_H_ */
 

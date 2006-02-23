@@ -24,7 +24,7 @@
 #include "barre.h"
 #include <vector>
 
-namespace guitar
+namespace Guitar
 {
     class BarreList
     {

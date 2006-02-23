@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iostream>
 
-namespace guitar
+namespace Guitar
 {
 
 ChordMap::~ChordMap ( void )

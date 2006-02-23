@@ -25,7 +25,7 @@
 #include "chordmap.h"
 #include <qdom.h>
 
-namespace guitar
+namespace Guitar
 {
 
     class GuitarXmlHandler
@@ -35,7 +35,7 @@ namespace guitar
         GuitarXmlHandler ();
 
         //! Return a chord map parsed from the given file
-        guitar::ChordMap const* parse (QString const& file);
+        Guitar::ChordMap const* parse (QString const& file);
 
     private:
 
@@ -44,11 +44,11 @@ namespace guitar
          *
          * \param obj Chord_Group to be parsed
          */
-        void handleChordGroup (guitar::ChordMap* chordMap, QDomNode const& obj);
+        void handleChordGroup (Guitar::ChordMap* chordMap, QDomNode const& obj);
 
     };
 
-} /* namespace guitar */
+} /* namespace Guitar */
 
 #endif /* GUITAR_XML_HANDLER_H_ */
 

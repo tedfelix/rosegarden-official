@@ -4,7 +4,7 @@
 #include "symbols.h"
 #include "base/Exception.h"
 
-namespace guitar
+namespace Guitar
 {
 const std::string Fingering::EventType = "fingering";
 const short Fingering::EventSubOrdering = -60;
@@ -13,17 +13,17 @@ const short Fingering::EventSubOrdering = -60;
 	Fingering
 ---------------------------------------------------------------*/
 Fingering::Fingering ()
-        : m_guitar ( new Guitar() ),
+        : m_guitar ( new GuitarNeck() ),
         m_startFret ( 1 )
 {}
 
-Fingering::Fingering( Guitar* gPtr )
-        : m_guitar ( new Guitar( *gPtr ) ),
+Fingering::Fingering( GuitarNeck* gPtr )
+        : m_guitar ( new GuitarNeck( *gPtr ) ),
         m_startFret ( 1 )
 {}
 
 Fingering::Fingering ( Fingering const& rhs )
-        : m_guitar( new Guitar( *rhs.m_guitar ) ),
+        : m_guitar( new GuitarNeck( *rhs.m_guitar ) ),
         m_startFret( rhs.m_startFret )
 {
     for ( BarreMap::const_iterator pos = rhs.m_barreFretMap.begin();
@@ -83,7 +83,7 @@ Fingering::Fingering ( Rosegarden::Event const& e_ref )
     << output.str() << std::endl;
 
 
-    // Restore Guitar pointer
+    // Restore GuitarNeck pointer
     unsigned int max_strings;
     unsigned int max_frets;
 
@@ -91,7 +91,7 @@ Fingering::Fingering ( Rosegarden::Event const& e_ref )
                                  max_frets );
     e_ref.get<Rosegarden::UInt>( Rosegarden::PropertyName( "GUITAR_MAXSTRINGS" ),
                                  max_strings );
-    m_guitar = new Guitar( max_strings, max_frets );
+    m_guitar = new GuitarNeck( max_strings, max_frets );
 
     // Resotre start fret
     unsigned int startFret;
@@ -272,7 +272,7 @@ void Fingering::drawContents ( QPainter* p, unsigned int frets_displayed ) const
     ns.drawFretHorizontalLines ( p, frets_displayed, m_guitar->getStringNumber() );
     ns.drawFretVerticalLines ( p, frets_displayed, m_guitar->getStringNumber() );
 
-    for ( Guitar::GuitarStringMap::const_iterator pos = m_guitar->begin();
+    for ( GuitarNeck::GuitarStringMap::const_iterator pos = m_guitar->begin();
             pos != m_guitar->end();
             ++pos )
     {
@@ -670,7 +670,7 @@ Fingering::getAsEvent ( Rosegarden::timeT absoluteTime )
             n_pos != m_notes.end();
             ++n_pos )
     {
-        guitar::Note const* n_ptr = ( *n_pos ).second;
+        Note const* n_ptr = ( *n_pos ).second;
 
         QString name = QString( "NOTE%1.%2" )
                        .arg( i )
@@ -685,7 +685,7 @@ Fingering::getAsEvent ( Rosegarden::timeT absoluteTime )
                                       n_ptr->getFret() );
 
         //   - Add name + value to event
-        guitar::GuitarString::Action note_act =
+        GuitarString::Action note_act =
             getStringStatus( n_ptr->getStringNumber() );
 
         name = QString( "NOTE%1.%2" )
@@ -708,7 +708,7 @@ Fingering::getAsEvent ( Rosegarden::timeT absoluteTime )
             b_pos != m_barreFretMap.end();
             ++b_pos )
     {
-        guitar::Barre const* b_ptr = ( *b_pos ).second;
+        Barre const* b_ptr = ( *b_pos ).second;
 
         QString name = QString( "BARRE%1.%2" )
                        .arg( i )

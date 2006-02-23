@@ -10,10 +10,10 @@ class QScrollBar;
 	KGuitar interface was used as a guideline for design the FingeringConstructor. Where the code
 	from the project was used is defined by comments.
 */
-namespace guitar
+namespace Guitar
 {
 class Fingering;
-class Guitar;
+class GuitarNeck;
 class NoteSymbols;
 class FC_Mode;
 class FC_InsertMode;
@@ -42,7 +42,7 @@ public:
          };
 
     //! Constructor
-    FingeringConstructor ( Guitar *instr,
+    FingeringConstructor ( GuitarNeck *instr,
                            QWidget *parent = 0,
                            Mode state = EDITABLE,
                            const char *name = 0 );
@@ -58,7 +58,7 @@ public slots:
      * Set fingering object to be displayed
      * @param  arrange Fingering object pointer
      */
-    void setFingering( guitar::Fingering* arrange );
+    void setFingering( Fingering* arrange );
 
     //! Get the displayed fingering object
     Fingering* getFingering ( void ) const;
@@ -95,7 +95,7 @@ protected:
     QSpinBox *m_fret_spinbox;
 
     //! Handle to the guitar associated with present fingering
-    Guitar *m_instr;
+    GuitarNeck *m_instr;
 
     //! Present mode
     Mode m_mode;

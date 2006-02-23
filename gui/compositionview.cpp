@@ -1140,6 +1140,11 @@ void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s,
     emit needContentUpdate();
 }
 
+void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
+{
+    emit needSizeUpdate();
+}
+
 CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
 {
     rectlist* npData = new rectlist();
@@ -1673,7 +1678,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     viewport()->setBackgroundMode(NoBackground);
     viewport()->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
-    updateSize();
+    slotUpdateSize();
     
     QScrollBar* hsb = horizontalScrollBar();
 
@@ -1697,6 +1702,8 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
             this, SLOT(slotUpdateSegmentsDrawBuffer(const QRect&)));
     connect(model, SIGNAL(needArtifactsUpdate()),
             this, SLOT(slotArtifactsDrawBufferNeedsRefresh()));
+    connect(model, SIGNAL(needSizeUpdate()),
+            this, SLOT(slotUpdateSize()));
 
     connect(doc, SIGNAL(docColoursChanged()),
             this, SLOT(slotRefreshColourCache()));
@@ -1749,7 +1756,7 @@ void CompositionView::initStepSize()
     m_stepSize = hsb->lineStep();
 }
 
-void CompositionView::updateSize(bool shrinkWidth)
+void CompositionView::slotUpdateSize()
 {
     int vStep = getModel()->grid().getYSnap();
     int height = std::max(getModel()->getNbRows(), 64u) * vStep;
@@ -1757,8 +1764,8 @@ void CompositionView::updateSize(bool shrinkWidth)
     Rosegarden::RulerScale *ruler = grid().getRulerScale();
     int width = int(nearbyint(ruler->getTotalWidth()));
 
-    if (!shrinkWidth && width < contentsWidth())
-        width = contentsWidth();
+//     if (!shrinkWidth && width < contentsWidth())
+//         width = contentsWidth();
 
     resizeContents(width, height);
 }
@@ -2885,7 +2892,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
                 resizeContents(contentsWidth() + m_stepSize, contentsHeight());
                 setContentsPos(contentsX() + m_stepSize, contentsY());
                 getModel()->setLength(contentsWidth());
-                updateSize();
+                slotUpdateSize();
             }
         }
 

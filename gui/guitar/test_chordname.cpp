@@ -7,7 +7,7 @@ using boost::unit_test::test_suite;
 
 void test_constructors (void)
 {
-    guitar::ChordName a;
+    Guitar::ChordName a;
 
     BOOST_CHECK_EQUAL (a.getName(), QString("C"));
     BOOST_CHECK_EQUAL (a.getModifier(), QString("Major"));

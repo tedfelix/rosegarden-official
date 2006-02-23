@@ -26,12 +26,12 @@
 #include <iostream>
 #include <sstream>
 
-namespace guitar
+namespace Guitar
 {
 /*---------------------------------------------------------------
               Guitar
   ---------------------------------------------------------------*/
-Guitar::Guitar ( unsigned int str_num, unsigned int fret_num )
+GuitarNeck::GuitarNeck ( unsigned int str_num, unsigned int fret_num )
         : m_string_num ( str_num ),
         m_fret_num ( fret_num )
 {
@@ -41,7 +41,7 @@ Guitar::Guitar ( unsigned int str_num, unsigned int fret_num )
     }
 }
 
-Guitar::Guitar ( Guitar const& rhs )
+GuitarNeck::GuitarNeck ( GuitarNeck const& rhs )
         : m_string_num ( rhs.m_string_num ),
         m_fret_num ( rhs.m_fret_num )
 {
@@ -54,7 +54,7 @@ Guitar::Guitar ( Guitar const& rhs )
     }
 }
 
-Guitar::~Guitar ( void )
+GuitarNeck::~GuitarNeck ( void )
 {
     for ( GuitarStringMap::iterator pos = m_setup.begin();
             pos != m_setup.end();
@@ -65,23 +65,23 @@ Guitar::~Guitar ( void )
 }
 
 void
-Guitar::setStringStatus ( unsigned int const string_num, GuitarString::Action const action )
+GuitarNeck::setStringStatus ( unsigned int const string_num, GuitarString::Action const action )
 {
     if ( ( string_num >= 1 ) && ( string_num <= m_string_num ) )
     {
         GuitarString * str_ptr = m_setup[ string_num ];
-        //std::cout << "Guitar::setStringStatus - set action for string #" << string_num << std::endl;
+        //std::cout << "GuitarNeck::setStringStatus - set action for string #" << string_num << std::endl;
         str_ptr->m_state = action;
     }
     else
     {
-        std::cerr << "Guitar::setStringStatus - warning: string number given ("
+        std::cerr << "GuitarNeck::setStringStatus - warning: string number given ("
         << string_num << ") is outside the range of 1 to " << m_string_num << std::endl;
     }
 }
 
 GuitarString::Action const&
-Guitar::getStringStatus ( unsigned int const& string_num ) const
+GuitarNeck::getStringStatus ( unsigned int const& string_num ) const
 {
     GuitarStringMap::const_iterator pos = m_setup.find( string_num );
     GuitarString * str_ptr = ( *pos ).second;
@@ -89,30 +89,30 @@ Guitar::getStringStatus ( unsigned int const& string_num ) const
 }
 
 unsigned int const&
-Guitar::getStringNumber ( void ) const
+GuitarNeck::getStringNumber ( void ) const
 {
     return m_string_num;
 }
 
-unsigned int const& Guitar::getFretNumber ( void ) const
+unsigned int const& GuitarNeck::getFretNumber ( void ) const
 {
     return m_fret_num;
 }
 
-Guitar::GuitarStringMap::const_iterator
-Guitar::begin ( void ) const
+GuitarNeck::GuitarStringMap::const_iterator
+GuitarNeck::begin ( void ) const
 {
     return m_setup.begin();
 }
 
-Guitar::GuitarStringMap::const_iterator
-Guitar::end ( void ) const
+GuitarNeck::GuitarStringMap::const_iterator
+GuitarNeck::end ( void ) const
 {
     return m_setup.end();
 }
 
 void
-Guitar::clear ( void )
+GuitarNeck::clear ( void )
 {
     for ( GuitarStringMap::iterator pos = m_setup.begin();
             pos != m_setup.end();
@@ -124,7 +124,7 @@ Guitar::clear ( void )
 }
 
 bool
-Guitar::operator== ( Guitar const& rhs ) const
+GuitarNeck::operator== ( GuitarNeck const& rhs ) const
 {
     bool result = true;
 
@@ -149,7 +149,7 @@ Guitar::operator== ( Guitar const& rhs ) const
 }
 
 std::string
-Guitar::toString ( void ) const
+GuitarNeck::toString ( void ) const
 {
     std::stringstream output;
     unsigned int i = 1;
@@ -172,5 +172,5 @@ Guitar::toString ( void ) const
     return output.str();
 }
 
-} /* namespace guitar */
+} /* namespace Guitar */
 

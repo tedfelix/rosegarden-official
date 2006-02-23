@@ -1,7 +1,7 @@
 #include "DuplicateException.h"
 #include "chord.h"
 
-namespace guitar
+namespace Guitar
 {
 
 DuplicateException ::DuplicateException ( Chord* dup_ptr, Chord* orig_ptr )

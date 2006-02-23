@@ -1789,7 +1789,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 	m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventRestType));
 	m_typeCombo->insertItem(strtoqstr(Rosegarden::Clef::EventType));
 	m_typeCombo->insertItem(strtoqstr(Rosegarden::Key::EventType));
-	m_typeCombo->insertItem(strtoqstr(guitar::Fingering::EventType));
+	m_typeCombo->insertItem(strtoqstr(Guitar::Fingering::EventType));
 	
 	// Connect up the combos
 	//
@@ -2385,7 +2385,7 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo) m_typeCombo->setCurrentItem(11);
     }
-    else if (m_type == guitar::Fingering::EventType)
+    else if (m_type == Guitar::Fingering::EventType)
     {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
@@ -2410,7 +2410,7 @@ SimpleEventEditDialog::setupForEvent()
         // get the fingering event
         try
         {
-            guitar::Fingering chord( m_event );
+            Guitar::Fingering chord( m_event );
         }
         catch(...)
         {

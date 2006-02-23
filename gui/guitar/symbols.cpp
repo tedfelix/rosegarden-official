@@ -1,6 +1,6 @@
 #include "symbols.h"
 
-namespace guitar
+namespace Guitar
 {
 NoteSymbols::posPair
 NoteSymbols::getX ( int imgWidth, unsigned int position, unsigned int string_num )
@@ -358,5 +358,13 @@ NoteSymbols::getFretNumber ( int imgHeight,
     return std::make_pair( valueOk, result );
 }
 
-} /* namespace guitar */
+float const NoteSymbols::LEFT_BORDER_PERCENTAGE = 0.1;
+float const NoteSymbols::RIGHT_BORDER_PERCENTAGE = 0.1;
+float const NoteSymbols::FRETBOARD_WIDTH_PERCENTAGE = 0.8;
+float const NoteSymbols::TOP_BORDER_PERCENTAGE = 0.1;
+float const NoteSymbols::BOTTOM_BORDER_PERCENTAGE = 0.1;
+float const NoteSymbols::FRETBOARD_HEIGHT_PERCENTAGE = 0.8;
+
+
+} /* namespace Guitar */
 

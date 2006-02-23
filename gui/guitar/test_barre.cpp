@@ -22,7 +22,7 @@
 
 #include "barre.h"
 
-using namespace guitar;
+using namespace Guitar;
 
 //--------------------
 //   Helper functions
@@ -46,7 +46,7 @@ createXMLNode (QDomDocument& doc,
 //--------------------
 void test_constructors ()
 {
-    guitar::Barre a;
+    Guitar::Barre a;
     bool result = true;
 
     if (a.getFret() != 0) { result = false; }
@@ -67,7 +67,7 @@ void test_load (void)
     // Valid Barre (fret#1, start: 2, end: 1)
     QDomDocument doc;
     QDomNode node = createXMLNode (doc, 1,2,1);
-    guitar::Barre a;
+    Guitar::Barre a;
     bool result = true;
 
     a.load (node);
@@ -94,7 +94,7 @@ void test_load (void)
 void
 test_save (void)
 {
-    guitar::Barre a;
+    Guitar::Barre a;
     bool result = true;
 
     a.setBarre (1, 2, 1);
@@ -151,7 +151,7 @@ test_save (void)
 
 void test_setFirstFret (void)
 {
-    guitar::Barre a;
+    Guitar::Barre a;
     bool result = true;
 
     a.setBarre (1, 2, 1);
@@ -175,7 +175,7 @@ void test_setFirstFret (void)
 void test_toString (void)
 {
     // Setup Note
-    guitar::Barre a;
+    Guitar::Barre a;
     a.setBarre (1, 2, 1);
     const QString testOutput = a.toString();
     const QString expectedOutput ("  Barre:  fret #1 start #2 end #1\n");
@@ -194,10 +194,10 @@ void test_toString (void)
 void test_equal ( void )
 {
     bool result = true;
-    guitar::Barre a;
+    Guitar::Barre a;
     if (!( a == a) ) { result = false; }
 
-    guitar::Barre b;
+    Guitar::Barre b;
     b.setBarre (1, 2, 1);
 
     if ( a == b ) { result = false; }

@@ -14,7 +14,7 @@
 
 #include <exception>
 
-namespace guitar
+namespace Guitar
 {
 
 class Chord;

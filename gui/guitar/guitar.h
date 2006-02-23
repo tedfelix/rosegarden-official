@@ -27,9 +27,9 @@
 #include "guitarstring.h"
 
 
-namespace guitar
+namespace Guitar
 {
-class Guitar
+class GuitarNeck
 {
 public:
     static const unsigned int MAX_STRING = 6;
@@ -38,12 +38,12 @@ public:
     typedef std::map<unsigned int, GuitarString*> GuitarStringMap;
 
     //! Constructor
-    Guitar ( unsigned int str_num = MAX_STRING,
+    GuitarNeck ( unsigned int str_num = MAX_STRING,
              unsigned int fret_num = MAX_FRET );
 
-    Guitar ( Guitar const& rhs );
+    GuitarNeck ( GuitarNeck const& rhs );
 
-    virtual ~Guitar();
+    virtual ~GuitarNeck();
 
     //! Set the action for a given string
     void setStringStatus ( unsigned int const string_num, GuitarString::Action const state );
@@ -67,7 +67,7 @@ public:
     void clear ( void );
 
     //! Return true if input guitar matches
-    bool operator== ( Guitar const& rhs ) const;
+    bool operator== ( GuitarNeck const& rhs ) const;
 
     std::string toString ( void ) const;
 
@@ -90,7 +90,7 @@ private:
 
 };
 
-} /* namespace guitar */
+} /* namespace Guitar */
 
 
 

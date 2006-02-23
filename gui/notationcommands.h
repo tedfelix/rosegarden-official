@@ -913,7 +913,7 @@ class FretboardInsertionCommand : public BasicCommand
 public:
     FretboardInsertionCommand(Rosegarden::Segment &segment,
                               Rosegarden::timeT time,
-                              guitar::Fingering chord);
+                              Guitar::Fingering chord);
     virtual ~FretboardInsertionCommand();
 
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
@@ -921,7 +921,7 @@ public:
 protected:
     virtual void modifySegment();
 
-    guitar::Fingering m_chord;
+    Guitar::Fingering m_chord;
     Rosegarden::Event *m_lastInsertedEvent;
 };
 

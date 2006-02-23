@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace guitar
+namespace Guitar
 {
 /*---------------------------------------------------------------
               Chord

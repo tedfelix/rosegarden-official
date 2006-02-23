@@ -10,7 +10,7 @@
 
 using namespace Rosegarden;
 
-namespace guitar
+namespace Guitar
 {
 const PropertyName Barre::BARRE_FRET = "barre_fret";
 const PropertyName Barre::BARRE_START = "barre_start";

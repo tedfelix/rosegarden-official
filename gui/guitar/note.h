@@ -30,9 +30,9 @@ namespace Rosegarden
 class PropertyName;
 }
 
-namespace guitar
+namespace Guitar
 {
-class Guitar;
+class GuitarNeck;
 
 class Note
 {
@@ -49,10 +49,10 @@ public:
     Note ( Note const& rhs );
 
     //! Create Note object from XML data
-    void load ( QDomNode const& obj, Guitar* arrangement );
+    void load ( QDomNode const& obj, GuitarNeck* arrangement );
 
     //! Save Note object as XML data
-    void save ( QDomNode& obj, Guitar* arrangement );
+    void save ( QDomNode& obj, GuitarNeck* arrangement );
 
     //! Set the base fret for Note
     //! fret_change: the difference between the existing first fret and the new location

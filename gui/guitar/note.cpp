@@ -11,7 +11,7 @@
 
 using namespace Rosegarden;
 
-namespace guitar
+namespace Guitar
 {
 
 const Rosegarden::PropertyName Note::NOTE_FRET = "note_fret";
@@ -35,7 +35,7 @@ Note::Note ( Note const& rhs )
 	m_fret ( rhs.m_fret )
 {}
 
-void Note::load ( QDomNode const& node, Guitar* g_ptr )
+void Note::load ( QDomNode const& node, GuitarNeck* g_ptr )
 {
     if ( ! node.hasAttributes() )
     {
@@ -82,7 +82,7 @@ void Note::load ( QDomNode const& node, Guitar* g_ptr )
     }
 }
 
-void Note::save ( QDomNode& parentNode, Guitar* g_ptr )
+void Note::save ( QDomNode& parentNode, GuitarNeck* g_ptr )
 {
     QDomDocument domDoc = parentNode.ownerDocument();
     QDomElement node = domDoc.createElement ( "Note" );
@@ -160,4 +160,4 @@ bool Note::operator== ( Note const& rhs ) const
            ( m_string == rhs.m_string );
 }
 
-} /* namespace guitar */
+} /* namespace Guitar */

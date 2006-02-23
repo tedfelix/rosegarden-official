@@ -1985,7 +1985,7 @@ void FretboardInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
 
-    if (element && element->event()->isa(guitar::Fingering::EventType))
+    if (element && element->event()->isa(Guitar::Fingering::EventType))
     {
         handleSelectedFretboard (element, staff);
     }
@@ -2002,7 +2002,7 @@ bool FretboardInserter::processDialog( NotationStaff* staff,
 
     if (m_guitarChord_ref.exec() == QDialog::Accepted)
     {
-        guitar::Fingering m_chord = m_guitarChord_ref.getArrangement();
+        Guitar::Fingering m_chord = m_guitarChord_ref.getArrangement();
 
         FretboardInsertionCommand *command =
             new FretboardInsertionCommand
@@ -2026,7 +2026,7 @@ void FretboardInserter::handleSelectedFretboard (ViewElement* element, NotationS
     // edit an existing fretboard, if that's what we clicked on
     try
     {
-        guitar::Fingering existingFret (*element->event());
+        Guitar::Fingering existingFret (*element->event());
 
         m_guitarChord_ref.setArrangement( &existingFret );
         if ( processDialog( staff, insertionTime ) )

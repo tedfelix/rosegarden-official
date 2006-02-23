@@ -3,7 +3,7 @@
 
 #include <sstream>
 
-namespace guitar
+namespace Guitar
 {
 /*---------------------------------------------------------------
               ChordName

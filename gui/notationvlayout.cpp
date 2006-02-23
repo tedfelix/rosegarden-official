@@ -372,7 +372,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		    el->setLayoutY(staff.getLayoutYForHeight(-9) + displacedY);
 		}		    
 
-	    } else if (el->event()->isa(guitar::Fingering::EventType)) {
+	    } else if (el->event()->isa(Guitar::Fingering::EventType)) {
 
 		el->setLayoutY(staff.getLayoutYForHeight(22));
 	    }

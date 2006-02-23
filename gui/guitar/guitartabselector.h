@@ -48,14 +48,14 @@ public:
 
     void init (void);
 
-    guitar::Fingering getArrangement (void) const;
+    Guitar::Fingering getArrangement (void) const;
 
-    void setArrangement (guitar::Fingering* chord);
+    void setArrangement (Guitar::Fingering* chord);
 
 signals:
 
     //! Display a given chord fingering
-    void displayChord (guitar::Fingering*);
+    void displayChord (Guitar::Fingering*);
 
 public slots:
 
@@ -101,16 +101,16 @@ private:
     std::vector<QString> readDirectory (QString chordDir);
 
     //! List of Chords
-    guitar::ChordMap* m_chordMap;
+    Guitar::ChordMap* m_chordMap;
 
     //! Guitar object
-    guitar::Guitar* m_guitar;
+    Guitar::GuitarNeck* m_guitar;
 
     //! Fingering constructor object
-    guitar::FingeringConstructor* m_fingering;
+    Guitar::FingeringConstructor* m_fingering;
 
     //! Presently selected arrangement
-    guitar::Fingering* m_arrangement;
+    Guitar::Fingering* m_arrangement;
 
     // Chord data
     QListBox* m_scaleList;

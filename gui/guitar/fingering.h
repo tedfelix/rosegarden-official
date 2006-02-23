@@ -29,7 +29,7 @@
 #include "barrelist.h"
 #include "Event.h"
 
-namespace guitar
+namespace Guitar
 {
 class Fingering
 {
@@ -40,7 +40,7 @@ public:
     //! Constructor
     Fingering ();
 
-    Fingering ( Guitar* gPtr );
+    Fingering ( GuitarNeck* gPtr );
 
     //! Constructor
     virtual ~Fingering ();
@@ -112,7 +112,7 @@ private:
     void setBarre ( unsigned int fretPos, unsigned int start, unsigned int end );
 
     //! Handle to Guitar object upon the fingering applies
-    Guitar* m_guitar;
+    GuitarNeck* m_guitar;
 
     //! Base fret number for fingering
     unsigned int m_startFret;

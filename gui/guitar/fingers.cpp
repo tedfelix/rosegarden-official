@@ -14,14 +14,14 @@
 
 #include <iostream>
 
-namespace guitar
+namespace Guitar
 {
 
 /*------------------------------------------
      Parent: Fingering Constructor
 -------------------------------------------*/
 FingeringConstructor::FingeringConstructor
-( Guitar *instr,
+( GuitarNeck *instr,
   QWidget *parent,
   Mode state,
   const char *name )
@@ -205,7 +205,7 @@ void FC_InsertMode::mouseRelease ( unsigned int release_string_num,
     unsigned int press_fret_num = m_finger->m_press_fret_num;
     unsigned int frets_displayed = m_finger->m_frets_displayed;
     Fingering* arrangement = m_finger->m_chord_arrangement;
-    Guitar* instr = m_finger->m_instr;
+    GuitarNeck* instr = m_finger->m_instr;
     QSpinBox* fret_spinbox = m_finger->m_fret_spinbox;
 
     if ( press_fret_num == release_fret_num )
@@ -320,7 +320,7 @@ void FC_DeleteMode::mouseRelease ( unsigned int release_string_num,
 
     unsigned int press_string_num = m_finger->m_press_string_num;
     unsigned int press_fret_num = m_finger->m_press_fret_num;
-    guitar::Fingering* arrangement = m_finger->m_chord_arrangement;
+    Guitar::Fingering* arrangement = m_finger->m_chord_arrangement;
 
     if ( ( press_fret_num == release_fret_num ) &&
             ( press_string_num == release_string_num ) )
@@ -361,4 +361,4 @@ bool FC_DeleteMode::change ( void )
     return true;
 }
 
-} /* namespace guitar */
+} /* namespace Guitar */

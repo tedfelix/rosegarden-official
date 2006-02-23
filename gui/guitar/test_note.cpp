@@ -22,7 +22,7 @@ createXMLNode ( QDomDocument& doc, unsigned int string_num, unsigned int fret_nu
 
 void test_constructors ( void )
 {
-    guitar::Note a;
+    Guitar::Note a;
     bool result = true;
 
     if ( a.getFret() != 0 ) { result = false; }
@@ -39,7 +39,7 @@ void test_constructors ( void )
 
 void test_setNote ( void )
 {
-    guitar::Note a;
+    Guitar::Note a;
     bool result = true;
 
     a.setNote ( 0, 0 );
@@ -62,12 +62,12 @@ void test_setNote ( void )
 
 void test_load ( void )
 {
-    guitar::Guitar g_ref;
+    Guitar::GuitarNeck g_ref;
 
     // Valid Node (string #0, fret#0, action: None)
     QDomDocument doc;
     QDomNode node = createXMLNode ( doc, 1, 1 );
-    guitar::Note a;
+    Guitar::Note a;
     bool result = true;
 
     a.load ( node, &g_ref );
@@ -92,11 +92,11 @@ void test_load ( void )
 
 void test_save ( void )
 {
-    guitar::Guitar g_ref;
+    Guitar::GuitarNeck g_ref;
     bool result = true;
 
     // Setup Note
-    guitar::Note a;
+    Guitar::Note a;
     a.setNote ( 1, 1 );
 
     // Run save test #1
@@ -155,7 +155,7 @@ void test_setFirstFret ( void )
     bool result = true;
 
     // Setup Note
-    guitar::Note a;
+    Guitar::Note a;
     a.setNote ( 1, 1 );
 
     a.setFirstFret ( 5 );
@@ -178,7 +178,7 @@ void test_setFirstFret ( void )
 void test_toString ( void )
 {
     // Setup Note
-    guitar::Note a;
+    Guitar::Note a;
     a.setNote ( 1, 1 );
     const QString testOutput = a.toString();
     const QString expectedOutput ( "  Note: string #1 fret #1\n" );
@@ -197,10 +197,10 @@ void test_toString ( void )
 void test_equal ( void )
 {
     bool result = true;
-    guitar::Note a;
+    Guitar::Note a;
     a.setNote ( 5, 3 );
 
-    guitar::Note b;
+    Guitar::Note b;
     b.setNote ( 5, 3 );
 
     if ( !( a == b ) )
@@ -208,7 +208,7 @@ void test_equal ( void )
         result = false;
     }
 
-    guitar::Note c;
+    Guitar::Note c;
     c.setNote ( 5, 4 );
 
     if ( c == a )

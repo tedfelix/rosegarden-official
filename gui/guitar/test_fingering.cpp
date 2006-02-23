@@ -22,14 +22,14 @@
 #include "fingering.h"
 #include <iostream>
 
-using namespace guitar;
+using namespace Guitar;
 
 //---------------------------
 //         TESTS
 //---------------------------
 void test_constructors ( void )
 {
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering a ( &g_ref );
 
     if ( a.getFirstFret() == 1 )
@@ -90,7 +90,7 @@ void test_addNote ( void )
 
 void test_addBarre ( void )
 {
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering a ( &g_ref );
 
     // Test #1 - Good barre added
@@ -125,7 +125,7 @@ void test_addBarre ( void )
 
 void test_equal ( void )
 {
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering a ( &g_ref );
     bool result = true;
 
@@ -176,7 +176,7 @@ void test_equal ( void )
 
 void test_setFirstFret ( void )
 {
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering finger_ref ( &g_ref );
 
     bool result = true;
@@ -233,7 +233,7 @@ void test_setFirstFret ( void )
 /*
 void test_deleteBarre ( void )
 {
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering a ( &g_ref );
     Barre b_1;
     b_1.setBarre ( 3, 2, 1 );
@@ -270,7 +270,7 @@ void test_load ( void )
     fingering.appendChild ( barre );
 
     // call Fingering::load
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering a ( &g_ref );
     a.load ( fingering.firstChild() );
 
@@ -287,7 +287,7 @@ void test_load ( void )
 
 void test_save ( void )
 {
-    Guitar g_ref;
+    GuitarNeck g_ref;
     Fingering a ( &g_ref );
 
     Note n_1;

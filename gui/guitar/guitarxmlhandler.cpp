@@ -26,7 +26,7 @@
 
 #include <qfile.h>
 
-namespace guitar
+namespace Guitar
 {
 GuitarXmlHandler::GuitarXmlHandler ()
 {}
@@ -34,7 +34,7 @@ GuitarXmlHandler::GuitarXmlHandler ()
 ChordMap const*
 GuitarXmlHandler::parse ( QString const& file )
 {
-    guitar::ChordMap * chordMap_ptr = new guitar::ChordMap();
+    Guitar::ChordMap * chordMap_ptr = new Guitar::ChordMap();
 
     std::cout << "GuitarXmlHandler::parse - file: " << file << std::endl;
 
@@ -89,7 +89,7 @@ GuitarXmlHandler::parse ( QString const& file )
     return chordMap_ptr;
 }
 
-void GuitarXmlHandler::handleChordGroup ( guitar::ChordMap* chordMap_ptr,
+void GuitarXmlHandler::handleChordGroup ( Guitar::ChordMap* chordMap_ptr,
         QDomNode const& chord_grp_ref )
 {
     // Parse each Chord
@@ -117,4 +117,4 @@ void GuitarXmlHandler::handleChordGroup ( guitar::ChordMap* chordMap_ptr,
         }
     }
 }
-} /* namespace guitar */
+} /* namespace Guitar */

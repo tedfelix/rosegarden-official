@@ -12,7 +12,7 @@
 #include "chordmap.h"
 #include "guitarxmlhandler.h"
 
-using namespace guitar;
+using namespace Guitar;
 
 void test_constructor()
 {

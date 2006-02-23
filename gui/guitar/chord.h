@@ -26,7 +26,7 @@
 
 #include <qdom.h>
 
-namespace guitar
+namespace Guitar
 {
     class Chord
     {

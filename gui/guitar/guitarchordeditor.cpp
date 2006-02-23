@@ -47,8 +47,8 @@ public:
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-GuitarChordEditor::GuitarChordEditor( guitar::Guitar* g_ptr,
-                                      guitar::ChordMap * cMap,
+GuitarChordEditor::GuitarChordEditor( Guitar::GuitarNeck* g_ptr,
+                                      Guitar::ChordMap * cMap,
                                       QWidget* parent )
         : KDialogBase( parent,
                        "guitarchordeditordialog",
@@ -101,9 +101,9 @@ GuitarChordEditor::GuitarChordEditor( guitar::Guitar* g_ptr,
     connect( modePushButton, SIGNAL( pressed() ), this, SLOT( toggleMode() ) );
 
     fingerConstPtr =
-        new guitar::FingeringConstructor ( g_ptr,
+        new Guitar::FingeringConstructor ( g_ptr,
                                            chordFrame,
-                                           guitar::FingeringConstructor::EDITABLE,
+                                           Guitar::FingeringConstructor::EDITABLE,
                                            "fingerConstPtr" );
 
     chordFrameLayout->addMultiCellWidget( fingerConstPtr, 0, 3, 0, 1 );
@@ -115,8 +115,8 @@ GuitarChordEditor::GuitarChordEditor( guitar::Guitar* g_ptr,
 
 void GuitarChordEditor::saveChord()
 {
-    guitar::ChordName * name_ptr = this->getChordName();
-    guitar::Fingering* arrangement = fingerConstPtr->getFingering();
+    Guitar::ChordName * name_ptr = this->getChordName();
+    Guitar::Fingering* arrangement = fingerConstPtr->getFingering();
 
     int answer = KMessageBox::questionYesNo ( this,
                  "Do you really want to save this chord?" );
@@ -136,14 +136,14 @@ void GuitarChordEditor::saveChord()
             m_old_chord_ptr = 0;
         }
 
-        guitar::Chord* newChord = new guitar::Chord ( name_ptr, arrangement );
+        Guitar::Chord* newChord = new Guitar::Chord ( name_ptr, arrangement );
         m_map->insert( newChord );
         this->accept();
     }
-    catch ( guitar::DuplicateException & de )
+    catch ( Guitar::DuplicateException & de )
     {
-        guitar::Chord * dup_ptr = de.getDuplicate();
-        guitar::ChordName* dup_name_ptr = dup_ptr->getName();
+        Guitar::Chord * dup_ptr = de.getDuplicate();
+        Guitar::ChordName* dup_name_ptr = dup_ptr->getName();
         std::stringstream error_msg;
 
         error_msg << "Duplicate chord found. " << std::endl
@@ -242,9 +242,9 @@ void GuitarChordEditor::createTab ( QString const& name )
     m_infoMap.push_back ( std::make_pair ( nameFrame, cInfo ) );
 }
 
-void GuitarChordEditor::setChord ( guitar::Chord* c_ptr )
+void GuitarChordEditor::setChord ( Guitar::Chord* c_ptr )
 {
-    m_old_chord_ptr = new guitar::Chord ( *c_ptr );
+    m_old_chord_ptr = new Guitar::Chord ( *c_ptr );
 
     // Setup FingeringConstructor with new arrangement
     fingerConstPtr->setFingering( c_ptr->getArrangement() );
@@ -255,7 +255,7 @@ void GuitarChordEditor::setChord ( guitar::Chord* c_ptr )
     We are expecting that when a Guitar Chord Editor is created that only
         one tab exists in the tab widget and therefore only one ChordInfo object.
     */
-    guitar::ChordName* name_ptr = c_ptr->getName();
+    Guitar::ChordName* name_ptr = c_ptr->getName();
     InfoMap::reverse_iterator m_pos = m_infoMap.rbegin();
     InfoPair map_pair = ( *m_pos );
     ChordInfo* info_ptr = map_pair.second;
@@ -264,8 +264,8 @@ void GuitarChordEditor::setChord ( guitar::Chord* c_ptr )
     info_ptr->suffixLineEdit->setText ( name_ptr->getSuffix() );
 
     // For all aliases in name
-    std::vector<guitar::ChordName*> aliases = name_ptr->getAliasList();
-    for ( std::vector<guitar::ChordName*>::const_iterator aPos = aliases.begin();
+    std::vector<Guitar::ChordName*> aliases = name_ptr->getAliasList();
+    for ( std::vector<Guitar::ChordName*>::const_iterator aPos = aliases.begin();
             aPos != aliases.end();
             ++aPos )
     {
@@ -280,7 +280,7 @@ void GuitarChordEditor::setChord ( guitar::Chord* c_ptr )
     }
 }
 
-guitar::ChordName*
+Guitar::ChordName*
 GuitarChordEditor::getChordName ( void )
 {
     // Main chord name
@@ -300,7 +300,7 @@ GuitarChordEditor::getChordName ( void )
         suffix = "None";
     }
 
-    guitar::ChordName* main = new guitar::ChordName();
+    Guitar::ChordName* main = new Guitar::ChordName();
 
     main->setName ( scale, mod, suffix );
     ++cInfo_pos;
@@ -308,7 +308,7 @@ GuitarChordEditor::getChordName ( void )
     // Handle Aliases
     while ( cInfo_pos != m_infoMap.end() )
     {
-        guitar::ChordName * alias = new guitar::ChordName();
+        Guitar::ChordName * alias = new Guitar::ChordName();
         map_pair = ( *cInfo_pos );
         scale = ( map_pair.second ) ->scaleComboBox->currentText();
         mod = ( map_pair.second ) ->modifierComboBox->currentText();

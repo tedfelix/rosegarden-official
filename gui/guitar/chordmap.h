@@ -28,7 +28,7 @@
 #include "chord.h"
 #include "DuplicateException.h"
 
-namespace guitar
+namespace Guitar
 {
 
 class ChordMap

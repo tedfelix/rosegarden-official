@@ -3006,11 +3006,11 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeFretboardPixmap(const guitar::Fingering &arrangement,
+NotePixmapFactory::makeFretboardPixmap(const Guitar::Fingering &arrangement,
                                        int x,
                                        int y)
 {
-    using namespace guitar;
+    using namespace Guitar;
     Rosegarden::Profiler profiler("NotePixmapFactory::makeFretboardPixmap");
 
     int fretboardWidth = getLineSpacing() * 6;

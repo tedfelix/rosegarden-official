@@ -291,7 +291,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
 void TrackEditor::slotReadjustCanvasSize()
 {
-    m_segmentCanvas->updateSize();
+    m_segmentCanvas->slotUpdateSize();
 }
 
 void TrackEditor::slotTrackButtonsWidthChanged()

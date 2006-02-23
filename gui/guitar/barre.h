@@ -30,7 +30,7 @@ namespace Rosegarden
 	class PropertyName;
 }
 
-namespace guitar
+namespace Guitar
 {
     class Barre
     {

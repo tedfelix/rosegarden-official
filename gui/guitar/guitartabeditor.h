@@ -48,14 +48,14 @@ public:
 
     void init (void);
 
-    guitar::Fingering getArrangement (void) const;
+    Guitar::Fingering getArrangement (void) const;
 
-    void setArrangement (guitar::Fingering& chord);
+    void setArrangement (Guitar::Fingering& chord);
 
 signals:
 
     //! Display a given chord fingering
-    void displayChord (guitar::Fingering*);
+    void displayChord (Guitar::Fingering*);
 
     //! Alert other objects to this window closing
     void closing();
@@ -92,7 +92,7 @@ private:
     GuitarTabBase* m_data;
 
     //! Fingering constructor object
-    guitar::FingeringConstructor* m_fingering;
+    Guitar::FingeringConstructor* m_fingering;
     QTabWidget* m_chord;
 
 };
