@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-note-style>
+
+<rosegarden-note-style>
+
+  <global shape="angled oval" filled="true" stem="true" flags="0"
+	  hfixpoint="normal" vfixpoint="middle"/>
+
+  <note type="hemidemisemiquaver" flags="4"/>
+  <note type="demisemiquaver" flags="3"/>
+  <note type="semiquaver" flags="2"/>
+  <note type="quaver" flags="1"/>
+  <note type="minim" filled="false"/>
+  <note type="semibreve" filled="false" shape="level oval" stem="false"/>
+  <note type="breve" filled="false" shape="breve" stem="false"/>
+
+</rosegarden-note-style>

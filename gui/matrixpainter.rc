@@ -1,0 +1,23 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MatrixTool" version="1230">
+
+<Menu name="MatrixPainter">
+  <Action name="select" />
+  <Action name="move"/>
+  <Action name="erase"/>
+  <Action name="resize"/>
+  <Separator/>
+  <Action name="half_speed"/>
+  <Action name="double_speed"/>
+  
+</Menu>
+
+<State name="have_selection">
+  <enable>
+    <Action name="half_speed"/>
+    <Action name="double_speed"/>
+  </enable>
+</State>
+
+</kpartgui>

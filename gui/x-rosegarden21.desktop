@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=Rosegarden 2.1 file
+Comment[fr]=Fichier Rosegarden 2.1
+Hidden=false
+Icon=midi
+MimeType=audio/x-rosegarden21
+Patterns=*.rose
+Type=MimeType

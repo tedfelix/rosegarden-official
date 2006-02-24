@@ -1,0 +1,37 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="MarkerEditor" version="1230">
+
+<MenuBar>
+
+  <Menu name="file">
+    <Action name="file_close_discard"/>
+  </Menu>
+
+  <Menu name="view"><text>&amp;View</text>
+    <Action name="time_musical"/>
+    <Action name="time_real"/>
+    <Action name="time_raw"/>
+  /Menu>
+
+</MenuBar>
+
+<ToolBar name="mainToolBar">
+   <Action name="file_close"/>
+</ToolBar>
+
+<ToolBar name="Time Toolbar">
+  <text>Time Toolbar</text>
+  <Action name="time_musical"/>
+  <Action name="time_real"/>
+  <Action name="time_raw"/>
+</ToolBar>
+
+<State name="on_control_item">
+     <enable>
+        <Action name="edit_insert"/>
+        <Action name="edit_delete"/>
+     </enable>
+</State>
+
+</kpartgui>

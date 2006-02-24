@@ -1,0 +1,118 @@
+#!Rosegarden
+#
+#  Musical Notation File
+#
+
+RV21
+
+
+Staves 5
+
+
+Name Staff 1
+Clef
+	Clef Name Treble
+: Minim 0 1 0 0
+Rest
+	Minim rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+End
+
+Name Staff 2
+Clef
+	Clef Name Tenor 
+Rest
+	Semibreve rest
+: Minim 0 1 7 0
+Rest
+	Minim rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+End
+
+Name Staff 3
+Clef
+	Clef Name Alto  
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+: Minim 0 1 7 0
+Rest
+	Minim rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+End
+
+Name Staff 4
+Clef
+	Clef Name Bass  
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+: Minim 0 1 14 0
+Rest
+	Minim rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+End
+
+Name Staff 5
+Clef
+	Clef Name Treble
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+Rest
+	Semibreve rest
+: Minim 0 1 0 0
+Clef
+	Clef Name Tenor 
+: Minim 0 1 7 0
+Clef
+	Clef Name Alto  
+: Minim 0 1 7 0
+Clef
+	Clef Name Bass  
+: Minim 0 1 14 0
+End
+
+Bar 0 0 time 4 4
+Bar 1 0 time 4 4
+Bar 2 0 time 4 4
+Bar 3 0 time 4 4
+Bar 4 0 time 4 4
+Stave 0 tags 1 1 connected 0 program 0
+Stave 1 tags 1 1 connected 0 program 0
+Stave 2 tags 1 1 connected 0 program 0
+Stave 3 tags 1 1 connected 0 program 0
+Stave 4 tags 1 1 connected 0 program 0
+
+End

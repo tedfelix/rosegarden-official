@@ -1,0 +1,374 @@
+#!Rosegarden
+#
+#  Musical Notation File
+#
+
+RV21
+
+
+Staves 2
+
+
+Name Piano
+Metronome
+	Crotchet 116
+Clef
+	Clef Name Treble
+Text
+	String mf
+	Position 6
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+Text
+	String Allegro moderato
+	Position 0
+Group
+	Beamed
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 0 0
+	: Quaver 0 1 2 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 0 0
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 4 2
+	: Quaver 0 1 2 0
+	End
+Text
+	String PRELUDE 2 FROM 12 PETITES PRELUDES
+	Position 1
+Group
+	Beamed
+	: Quaver 0 1 3 0
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 1 0
+	: Quaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 0
+	: Quaver 0 1 -2 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 4 0
+	: Quaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 8 0
+	: Quaver 0 1 6 0
+	End
+Text
+	String f
+	Position 6
+: Minim 0 3 2 0 5 0 7 0
+Rest
+	Crotchet rest
+: Crotchet 1 3 2 0 5 0 7 0
+: Minim 0 3 3 0 5 0 6 0
+Rest
+	Crotchet rest
+: Crotchet 1 3 3 0 5 0 6 0
+Group
+	Beamed
+	: Quaver 0 3 2 0 4 0 6 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 4 0
+	: Quaver 0 1 6 0
+	End
+: Crotchet 0 2 2 0 4 0
+: Crotchet 1 2 4 0 7 0
+: Minim 0 1 5 0
+Rest
+	Crotchet rest
+: Crotchet 0 3 0 0 3 0 5 0
+Mark start 0 Tie
+Group
+	Beamed
+	: Quaver 0 3 0 0 3 0 5 0
+	Mark end 0
+	: Quaver 0 1 -1 0
+	: Quaver 0 1 1 1
+	: Quaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 1 1
+	: Quaver 0 1 -1 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 4 0
+	: Quaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 8 0
+	: Quaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 8 1
+	End
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 10 0
+	: Quaver 0 1 8 1
+	End
+: Minim 0 3 4 0 6 0 9 0
+Rest
+	Crotchet rest
+: Crotchet 0 1 4 0
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 9 0
+	: Quaver 0 1 12 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 11 2
+	: Quaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 10 0
+	: Semiquaver 0 1 9 0
+	: Semiquaver 0 1 8 0
+	: Semiquaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 3 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 4 0
+	: Semiquaver 0 1 2 0
+	Mark start 1 Crescendo
+	: Semiquaver 0 1 3 0
+	: Semiquaver 0 1 4 0
+	End
+Group
+	Beamed
+	: Semiquaver 0 1 5 0
+	: Semiquaver 0 1 6 0
+	: Semiquaver 0 1 7 0
+	: Semiquaver 0 1 8 0
+	Mark end 1
+	End
+: Crotchet 1 1 9 0
+: Minim 0 2 2 0 5 0
+: Crotchet 0 2 -1 0 4 0
+: Semibreve 0 2 0 0 5 0
+End
+
+Name Piano
+Clef
+	Clef Name Bass  
+: Semibreve 0 2 -2 0 5 0
+Mark start 2 Tie
+: Semibreve 0 2 -2 0 5 0
+Mark end 2
+Mark start 3 Tie
+: Semibreve 0 2 -2 0 5 0
+Mark end 3
+Group
+	Beamed
+	Rest
+		Quaver rest
+	End
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 12 0
+	: Quaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	: Quaver 0 1 6 0
+	: Quaver 0 1 8 1
+	: Quaver 0 1 10 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 8 1
+	: Quaver 0 1 6 0
+	: Quaver 0 1 13 0
+	: Quaver 0 1 8 1
+	End
+: Minim 0 1 9 0
+Rest
+	Crotchet rest
+: Crotchet 0 1 9 0
+Group
+	Beamed
+	: Quaver 0 1 10 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 7 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 5 0
+	: Quaver 0 1 3 0
+	: Quaver 0 1 9 0
+	: Quaver 0 1 7 0
+	End
+: Minim 0 1 8 1
+Rest
+	Crotchet rest
+: Crotchet 0 1 6 0
+Group
+	Beamed
+	: Demisemiquaver 0 1 9 0
+	Mark start 4 Slur
+	: Demisemiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 9 0
+: Crotchet 1 1 2 0
+Mark end 4
+Group
+	Beamed
+	: Demisemiquaver 0 1 9 0
+	Mark start 5 Slur
+	: Demisemiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 9 0
+: Crotchet 1 1 2 0
+Mark end 5
+Group
+	Beamed
+	: Demisemiquaver 0 1 9 0
+	Mark start 6 Slur
+	: Demisemiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 9 0
+: Crotchet 1 1 2 0
+Mark end 6
+Group
+	Beamed
+	: Demisemiquaver 0 1 9 0
+	Mark start 7 Slur
+	: Demisemiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 9 0
+: Crotchet 1 1 2 0
+Mark end 7
+Group
+	Beamed
+	: Demisemiquaver 0 1 9 0
+	Mark start 8 Slur
+	: Demisemiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 9 0
+: Crotchet 1 1 2 0
+Mark end 8
+Group
+	Beamed
+	: Demisemiquaver 0 1 9 0
+	Mark start 9 Slur
+	: Demisemiquaver 0 1 8 0
+	End
+: Dotted quaver 0 1 9 0
+: Crotchet 1 1 2 0
+Mark end 9
+Group
+	Beamed
+	: Quaver 1 1 9 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 4 0
+	: Quaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 4 0
+	: Quaver 0 1 2 0
+	: Quaver 0 1 8 0
+	: Quaver 0 1 6 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 9 0
+	End
+Group
+	Beamed
+	: Quaver 0 1 7 0
+	: Quaver 0 1 5 0
+	: Quaver 0 1 12 0
+	: Quaver 0 1 7 0
+	End
+: Semibreve 0 1 8 0
+Mark start 10 Tie
+Group
+	Beamed
+	: Quaver 0 1 8 0
+	Mark end 10
+	: Quaver 0 1 6 0
+	: Quaver 0 1 7 0
+	: Quaver 0 1 5 0
+	End
+: Crotchet 0 1 9 0
+: Crotchet 0 1 2 0
+: Semibreve 0 1 -2 0
+End
+
+Bar 0 0 time 4 4
+Bar 1 0 time 4 4
+Stave 0 tags 1 1 connected 1 program 19
+Stave 1 tags 1 1 connected 0 program 7
+
+End

@@ -1,0 +1,133 @@
+
+<midi>
+    <bank id="0" name="General MIDI">
+        <program id="0" name="Acoustic Grand Piano"/>
+        <program id="1" name="Bright Acoustic Piano"/>
+        <program id="2" name="Electric Grand Piano"/>
+        <program id="3" name="Honky-tonk Piano"/>
+        <program id="4" name="Electric Piano 1"/>
+        <program id="5" name="Electric Piano 2"/>
+        <program id="6" name="Harpsichord"/>
+        <program id="7" name="Clavi"/>
+        <program id="8" name="Celesta"/>
+        <program id="9" name="Glockenspiel"/>
+        <program id="10" name="Music Box"/>
+        <program id="11" name="Vibraphone"/>
+        <program id="12" name="Marimba"/>
+        <program id="13" name="Xylophone"/>
+        <program id="14" name="Tubular Bells"/>
+        <program id="15" name="Dulcimer"/>
+        <program id="16" name="Drawbar Organ"/>
+        <program id="17" name="Percussive Organ"/>
+        <program id="18" name="Rock Organ"/>
+        <program id="19" name="Church Organ"/>
+        <program id="20" name="Reed Organ"/>
+        <program id="21" name="Accordion"/>
+        <program id="22" name="Harmonica"/>
+        <program id="23" name="Tango Accordion"/>
+        <program id="24" name="Acoustic Guitar (nylon)"/>
+        <program id="25" name="Acoustic Guitar (steel)"/>
+        <program id="26" name="Electric Guitar (jazz)"/>
+        <program id="27" name="Electric Guitar (clean)"/>
+        <program id="28" name="Electric Guitar (muted)"/>
+        <program id="29" name="Overdriven Guitar"/>
+        <program id="30" name="Distortion Guitar"/>
+        <program id="31" name="Guitar harmonics"/>
+        <program id="32" name="Acoustic Bass"/>
+        <program id="33" name="Fingered Bass"/>
+        <program id="34" name="Picked Bass"/>
+        <program id="35" name="Fretless Bass"/>
+        <program id="36" name="Slap Bass 1"/>
+        <program id="37" name="Slap Bass 2"/>
+        <program id="38" name="Synth Bass 1"/>
+        <program id="39" name="Synth Bass 2"/>
+        <program id="40" name="Violin"/>
+        <program id="41" name="Viola"/>
+        <program id="42" name="Cello"/>
+        <program id="43" name="Contrabass"/>
+        <program id="44" name="Tremolo Strings"/>
+        <program id="45" name="Pizzicato Strings"/>
+        <program id="46" name="Orchestral Harp"/>
+        <program id="47" name="Timpani"/>
+        <program id="48" name="String Ensemble 1"/>
+        <program id="49" name="String Ensemble 2"/>
+        <program id="50" name="SynthStrings 1"/>
+        <program id="51" name="SynthStrings 2"/>
+        <program id="52" name="Choir Aahs"/>
+        <program id="53" name="Voice Oohs"/>
+        <program id="54" name="Synth Voice"/>
+        <program id="55" name="Orchestra Hit"/>
+        <program id="56" name="Trumpet"/>
+        <program id="57" name="Trombone"/>
+        <program id="58" name="Tuba"/>
+        <program id="59" name="Muted Trumpet"/>
+        <program id="60" name="French Horn"/>
+        <program id="61" name="Brass Section"/>
+        <program id="62" name="SynthBrass 1"/>
+        <program id="63" name="SynthBrass 2"/>
+        <program id="64" name="Soprano Sax"/>
+        <program id="65" name="Alto Sax"/>
+        <program id="66" name="Tenor Sax"/>
+        <program id="67" name="Baritone Sax"/>
+        <program id="68" name="Oboe"/>
+        <program id="69" name="English Horn"/>
+        <program id="70" name="Bassoon"/>
+        <program id="71" name="Clarinet"/>
+        <program id="72" name="Piccolo"/>
+        <program id="73" name="Flute"/>
+        <program id="74" name="Recorder"/>
+        <program id="75" name="Pan Flute"/>
+        <program id="76" name="Blown Bottle"/>
+        <program id="77" name="Shakuhachi"/>
+        <program id="78" name="Whistle"/>
+        <program id="79" name="Ocarina"/>
+        <program id="80" name="Lead 1 (square)"/>
+        <program id="81" name="Lead 2 (sawtooth)"/>
+        <program id="82" name="Lead 3 (calliope)"/>
+        <program id="83" name="Lead 4 (chiff)"/>
+        <program id="84" name="Lead 5 (charang)"/>
+        <program id="85" name="Lead 6 (voice)"/>
+        <program id="86" name="Lead 7 (fifths)"/>
+        <program id="87" name="Lead 8 (bass + lead)"/>
+        <program id="88" name="Pad 1 (new age)"/>
+        <program id="89" name="Pad 2 (warm)"/>
+        <program id="90" name="Pad 3 (polysynth)"/>
+        <program id="91" name="Pad 4 (choir)"/>
+        <program id="92" name="Pad 5 (bowed)"/>
+        <program id="93" name="Pad 6 (metallic)"/>
+        <program id="94" name="Pad 7 (halo)"/>
+        <program id="95" name="Pad 8 (sweep)"/>
+        <program id="96" name="FX 1 (rain)"/>
+        <program id="97" name="FX 2 (soundtrack)"/>
+        <program id="98" name="FX 3 (crystal)"/>
+        <program id="99" name="FX 4 (atmosphere)"/>
+        <program id="100" name="FX 5 (brightness)"/>
+        <program id="101" name="FX 6 (goblins)"/>
+        <program id="102" name="FX 7 (echoes)"/>
+        <program id="103" name="FX 8 (sci-fi)"/>
+        <program id="104" name="Sitar"/>
+        <program id="105" name="Banjo"/>
+        <program id="106" name="Shamisen"/>
+        <program id="107" name="Koto"/>
+        <program id="108" name="Kalimba"/>
+        <program id="109" name="Bag pipe"/>
+        <program id="110" name="Fiddle"/>
+        <program id="111" name="Shanai"/>
+        <program id="112" name="Tinkle Bell"/>
+        <program id="113" name="Agogo"/>
+        <program id="114" name="Steel Drums"/>
+        <program id="115" name="Woodblock"/>
+        <program id="116" name="Taiko Drum"/>
+        <program id="117" name="Melodic Tom"/>
+        <program id="118" name="Synth Drum"/>
+        <program id="119" name="Reverse Cymbal"/>
+        <program id="120" name="Guitar Fret Noise"/>
+        <program id="121" name="Breath Noise"/>
+        <program id="122" name="Seashore"/>
+        <program id="123" name="Bird Tweet"/>
+        <program id="124" name="Telephone Ring"/>
+        <program id="125" name="Helicopter"/>
+        <program id="126" name="Applause"/>
+        <program id="127" name="Gunshot"/>
+    </bank>
+</midi>

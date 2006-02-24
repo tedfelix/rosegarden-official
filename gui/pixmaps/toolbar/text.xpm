@@ -1,0 +1,40 @@
+/* XPM */
+static char *text[] = {
+/* width height num_colors chars_per_pixel */
+"    20    23       10            1",
+/* colors */
+". c #000000",
+"# c #1d1d1d",
+"a c #393939",
+"b c #555555",
+"c c #727272",
+"d c #8e8e8e",
+"e c #aaaaaa",
+"f c #c7c7c7",
+"g c #e3e3e3",
+"h c None",
+/* pixels */
+"hhhhhhhhhhhhhhhhhhhh",
+"hhhhhhhhhhhhhhhhhhhh",
+"hhhhhhhhhhhhhhhhhhhh",
+"hhhheeeeeeeeeeeeehhh",
+"hhhe...ba...ba...hhh",
+"hhhe.#hhha.bhhe..hhh",
+"hhhe.fhhhb.bhhhb.hhh",
+"hhhe#hhhhb.bhhhf.hhh",
+"hhhcbhhhhb.bhhhh.hhh",
+"hhhbehhhhb.bhhhhaehh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhhhb.bhhhhhhhh",
+"hhhhhhhed#.#eehhhhhh",
+"hhhhhhfbbbbbbbhhhhhh",
+"hhhhhhhhhhhhhhhhhhhh",
+"hhhhhhhhhhhhhhhhhhhh",
+"hhhhhhhhhhhhhhhhhhhh"
+};
