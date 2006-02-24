@@ -1,0 +1,6 @@
+Import( "env KDElang" )
+myenv=env.Copy()
+
+myenv['APPNAME'] = "rosegarden"
+KDElang( [ 'cs', 'cy', 'de', 'en', 'en_GB', 'es', 'et', 'fr', 'it', 'ja', 'nl', 'ru', 'sv', 'zh_CN' ], myenv )
+
