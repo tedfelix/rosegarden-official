@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# NO LONGER RELEVANT see https://sourceforge.net/docs/E09/#backup for svn backup
+
 cd /home/glaurent/tmp
 
 # Keep yesterday's copy just in case
