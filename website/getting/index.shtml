@@ -65,33 +65,33 @@ href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=3049
 release 1.2.3 source code</a>, 14th February 2006, for download from the
 SourceForge page.</li></ul>
 
-    <h3>CVS development versions</h3>
+    <h3>SVN development versions</h3>
 
     <p>The latest, up-to-the-minute source code in use by Rosegarden
-    developers is always available by anonymous CVS from SourceForge.
-    <a href="http://sourceforge.net/cvs/?group_id=4932">Please read
+    developers is always available by anonymous svn from SourceForge.
+    <a href="http://sourceforge.net/svn/?group_id=4932">Please read
     the instructions here</a> for more details.  Note that this is
     always a work in progress, that might not build or run.</p>
 
-    <h3>CVS branches</h3>
+    <h3>SVN branches</h3>
 
     <p>Several "branches" of the Rosegarden source code are available
-    in CVS, containing different features for prospective developers
-    or other interested parties.  You can choose one of these by
-    adding the option "<code>-r </code><i>branchname</i>" to the end
-    of your CVS <code>checkout</code> or <code>update</code>
-    command.</p>
+    in SVN, containing different features for prospective developers
+    or other interested parties.  These branches are accessible in the
+    <code>branches/</code> directory of the svn repository, with the
+    following command :</p>
+    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH NAME&gt; rosegarden</code></p>
+    <p>The main branch (trunk) is accessible with</p>
+    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/trunk rosegarden</code></p>
 
     <p>The current
     active branches are:
 
-    <ul><li><b>HEAD</b> - This is the default CVS branch used when no
-    other branch name is given.  This contains the code that will
+    <ul><li><b>trunk</b> - Not a branch strictly speaking, the svn trunk
+    is where most of the development happens.  This contains the code that will
     ultimately become the next official major release of Rosegarden.
     It is likely to vary between horribly unstable and quite stable,
-    depending on how far away the next major release is.  (You can
-    return to this branch after updating from another one, with the
-    "cvs update -A" command.)</li>
+    depending on how far away the next major release is.</li>
 
     <li><b>stable_<i>&lt;version&gt;</i></b> - This is the branch used
     to collect bug fixes for the next stable minor release.  It is
@@ -99,12 +99,6 @@ SourceForge page.</li></ul>
     was completed.  At the time of writing, the current stable branch
     is <b>stable_1_2_4</b> which is expected to become the 1.2.4
     release.</li>
-
-    <li><b>guitar_chord_editor</b> - This contains experimental
-    development aimed at adding guitar chord fretboard editing and
-    printing within Rosegarden (by Stephen Torri).  Note that this
-    branch may be significantly out-of-date compared to HEAD in all
-    areas other than the guitar fretboard code.</li>
 
     <li><b>glasgow_pitchtracker</b> - This contains extensive custom work to support the <a
     href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University
