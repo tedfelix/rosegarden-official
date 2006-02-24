@@ -1,2 +1,0 @@
-make -f Makefile.cvs
-CXXFLAGS="-fexceptions" ./configure --enable-debug --with-qt-dir=/opt/kde2-gcc3/qt-2.3.0 --prefix=/opt/kde2-gcc3
