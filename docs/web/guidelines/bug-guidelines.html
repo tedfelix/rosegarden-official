@@ -159,10 +159,14 @@ need to perform a few steps.</P>
 (Konsole)&rdquo; from the KDE menu) and then issue these commands to
 allow for the creation of core dumps, and to bypass the KDE bug
 handler:</P>
+for bash and similar shells:
 <BLOCKQUOTE>ulimit -c unlimited</BLOCKQUOTE>
 <BLOCKQUOTE>ulimit -H -c unlimited</BLOCKQUOTE>
 <BLOCKQUOTE>export KDE_DEBUG=1 
 </BLOCKQUOTE>
+for tsch and similar shells:
+<BLOCKQUOTE>limit coredumpsize unlimited</BLOCKQUOTE>
+<BLOCKQUOTE>setenv KDEDEBUG 1</BLOCKQUOTE>
 <P>Now start rosegarden from this same command line, and reproduce
 the crash. You should now have a core file in your current directory.
 The core file is either named &quot;core&quot; or &quot;core.&lt;number&gt;&quot;.

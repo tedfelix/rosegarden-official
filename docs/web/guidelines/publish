@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# publish
+#
+# Copyright (c) 2006  D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+# Released under the GPL
+#
+#
+# Publishes the bug and feature request guidelines to the SF webspace where
+# they are hosted.  This script assumes it's being run by me.  Season to taste
+# if anyone else ever feels some need to republish these.
+
+# Publickify them, since I run with an abnormally restrictive umask
+chmod 644 *.html
+
+# Publish them
+scp *.html dmmcintyr@rosegarden.sourceforge.net:/home/groups/r/ro/rosegarden/htdocs/tutorial||echo Crap!
+
+echo Glee!
+exit 0
