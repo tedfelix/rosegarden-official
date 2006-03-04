@@ -55,7 +55,7 @@ def generate(env):
 		)
 	opts.Update(env)
 
-	if not env['HELP'] and (env['_CONFIGURE'] or not env.has_key('SNDISCONFIGURED') or not os.path.isfile('config.h')):
+	if not env['HELP'] and (env['_CONFIGURE'] or not env.has_key('SNDISCONFIGURED')):
 		## Configure stuff
 		conf = env.Configure(custom_tests = { 'Check_pkg_config' : Check_pkg_config, 'Check_package' : Check_package })
 
@@ -66,8 +66,6 @@ def generate(env):
 		if not conf.Check_pkg_config('0.15'):
 			print 'pkg-config >= 0.15 not found.'
 			env.Exit(1)
-
-		#os.popen(">config.h")
 
 		import sys
 		if 'nosound' in env['ARGS']:

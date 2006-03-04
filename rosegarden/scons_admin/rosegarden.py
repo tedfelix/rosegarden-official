@@ -46,7 +46,9 @@ def generate(env):
                 env.Append(LIRC_SOURCES = 1)
                 env.Append(OPTLIB_CCFLAGS = '-DHAVE_LIRC')
                 env.AppendUnique(OPTLIB_LDFLAGS = '-llirc_client')
-
+	    else:
+                env.Append(LIRC_SOURCES = 0)
+		    
         # optional libraries
         if env.has_key('OPTLIB_CCFLAGS'):
             env.AppendUnique(CCFLAGS = env['OPTLIB_CCFLAGS'] )
@@ -54,6 +56,8 @@ def generate(env):
         if env.has_key('OPTLIB_LDFLAGS'):
             env.AppendUnique(LINKFLAGS = env['OPTLIB_LDFLAGS'] )
 
+	# And finally save the options in the cache
+	opts.Save(cachefile, env)
 
 
 
