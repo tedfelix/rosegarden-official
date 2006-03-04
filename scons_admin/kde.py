@@ -533,7 +533,8 @@ def generate(env):
 	def KDEinstallas(lenv, restype, destfile, file):
 		if not env['_INSTALL']: return
 		dir = getInstDirForResType(lenv, restype)
-		install_list = lenv.InstallAs(lenv.join(dir, destfile), file)
+#		install_list = lenv.InstallAs(lenv.join(dir, destfile), file)
+                install_list = lenv.bksys_install(dir, [file], destfile)
                 env.Alias('install', install_list)
 		return install_list
 
