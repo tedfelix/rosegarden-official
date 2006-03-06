@@ -116,7 +116,7 @@ SourceForge page.</li></ul>
     <li><b>glasgow_pitchtracker</b> - This contains extensive custom work to support the <a
     href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University
     of Glasgow Pitch Tracker project</a>.  Note that this
-    branch may be significantly out-of-date compared to HEAD in all
+    branch may be significantly out-of-date compared to the trunk, in all
     areas other than the pitch tracker support.</li>
     </ul>
     
