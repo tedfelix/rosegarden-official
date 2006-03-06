@@ -90,4 +90,5 @@ void MatrixVLayout::finishLayout(timeT, timeT)
 {
 }
 
+const int MatrixVLayout::minMIDIPitch = 0;
 const int MatrixVLayout::maxMIDIPitch = 127;
