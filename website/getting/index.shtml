@@ -74,6 +74,9 @@ SourceForge page.</li></ul>
     instructions here</a> for more details.  Note that this is always
     a work in progress, that might not build or run.</p>
 
+    <p>You can also browse the source code in Subversion <a
+    href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/">here</a>.</p>
+
     <h3>Subversion branches available</h3>
 
     <p>Several "branches" of the Rosegarden source code are available
