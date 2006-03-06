@@ -109,6 +109,10 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 
         tool = new TextInserter(m_nParentView);
 
+    else if (toolNamelc == FretboardInserter::ToolName)
+
+        tool = new FretboardInserter(m_nParentView);
+
     else if (toolNamelc == NotationEraser::ToolName)
 
         tool = new NotationEraser(m_nParentView);
