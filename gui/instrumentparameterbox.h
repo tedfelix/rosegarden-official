@@ -103,6 +103,7 @@ signals:
     void showPluginGUI(Rosegarden::InstrumentId id, int index);
 
     void instrumentParametersChanged(Rosegarden::InstrumentId);
+    void instrumentPercussionSetChanged(Rosegarden::Instrument *);
 
 protected:
 

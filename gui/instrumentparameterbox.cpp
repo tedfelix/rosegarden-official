@@ -199,8 +199,9 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     if (instrument == 0)
     {
         m_widgetStack->raiseWidget(m_noInstrumentParameters);
+        emit instrumentPercussionSetChanged(instrument);
         return;
-    } 
+    }
 
     // ok
     m_selectedInstrument = instrument;
@@ -217,14 +218,17 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
         m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
 	m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+        emit instrumentPercussionSetChanged(instrument);
     }
-    
+
 }
 
 
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
 {
+    emit instrumentPercussionSetChanged(m_selectedInstrument);
+
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 

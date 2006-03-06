@@ -64,6 +64,8 @@ class QDeferScrollView;
 class QMouseEvent;
 class QLabel;
 class QWidget;
+class QWidgetStack;
+
 
 typedef std::vector<MatrixElement*> SelectedElements;
 
@@ -208,7 +210,12 @@ public:
      */
     void scrollToTime(Rosegarden::timeT t);
 
-signals:    
+    /**
+     * Get the local keyMapping (when in drum mode)
+     */
+    Rosegarden::MidiKeyMapping *getKeyMapping() { return m_localMapping; }
+
+signals:
     /**
      * Emitted when the selection has been cut or copied
      *
@@ -451,7 +458,12 @@ public slots:
 				     const Rosegarden::LevelInfo &);
 
 protected slots:
-     void slotCanvasBottomWidgetHeightChanged(int newHeight);
+    void slotCanvasBottomWidgetHeightChanged(int newHeight);
+
+    /**
+     * A new percussion key mapping has to be displayed
+     */
+    void slotPercussionSetChanged(Rosegarden::Instrument *);
 
     /**
      * Re-dock the parameters box to its initial position
@@ -543,6 +555,18 @@ protected:
 
     int computePostLayoutWidth();
 
+    /**
+     * Get min and max pitches of notes on matrix.
+     * Return false if no notes.
+     */
+    bool getMinMaxPitches(int& minPitch, int& maxPitch);
+
+    /**
+     * If necessary, extend local keymapping to contain
+     * all notes currently on staff
+     */
+    void MatrixView::extendKeyMapping();
+
     //--------------- Data members ---------------------------------
 
     std::vector<MatrixStaff*> m_staffs;
@@ -569,6 +593,9 @@ protected:
     MatrixCanvasView    *m_canvasView;
     QDeferScrollView    *m_pianoView;
     PitchRuler          *m_pitchRuler;
+
+    QWidgetStack        *m_pitchRulerStack;
+    Rosegarden::MidiKeyMapping *m_localMapping;
 
     // The last note we sent in case we're swooshing up and
     // down the keyboard and don't want repeat notes sending

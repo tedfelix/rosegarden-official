@@ -186,6 +186,6 @@ MatrixStaff::getKeyMapping() const
     Rosegarden::Instrument *instr = m_view->getDocument()->getStudio().
 	getInstrumentById(track->getInstrument());
     if (!instr) return 0;
-    return instr->getKeyMapping();
+    return m_view->getKeyMapping();
 }
 

@@ -63,6 +63,7 @@ public:
     virtual void finishLayout(Rosegarden::timeT = 0,
 			      Rosegarden::timeT = 0);
 
+    static const int minMIDIPitch;
     static const int maxMIDIPitch;
 
 protected:
