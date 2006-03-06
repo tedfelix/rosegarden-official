@@ -84,8 +84,8 @@ SourceForge page.</li></ul>
     or other interested parties.  These branches are accessible in the
     <code>branches/</code> directory of the svn repository, with the
     following command :</p>
-    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH NAME&gt;/rosegarden rosegarden</code></p>
-    <p>The main branch (trunk) is accessible with</p>
+    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH&gt;/rosegarden rosegarden</code></p>
+    <p>replacing <code>&lt;BRANCH&gt;</code> with the name of the branch you want.</p><p>The main branch (trunk) is accessible with</p>
     <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden rosegarden</code></p>
 
     <p>Note that the above commands will check out only the Rosegarden
