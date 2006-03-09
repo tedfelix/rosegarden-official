@@ -58,7 +58,7 @@ public slots:
      * Set fingering object to be displayed
      * @param  arrange Fingering object pointer
      */
-    void setFingering( Fingering* arrange );
+    void setFingering( Guitar::Fingering* arrange );
 
     //! Get the displayed fingering object
     Fingering* getFingering ( void ) const;
