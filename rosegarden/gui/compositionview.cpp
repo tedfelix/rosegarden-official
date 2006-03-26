@@ -172,8 +172,26 @@ bool operator<(const CompositionRect& a, const CompositionRect& b)
 
 bool operator<(const CompositionItem& a, const CompositionItem& b)
 {
-    return a->rect().width() < b->rect().width();
+	QRect ra = a->rect(), rb = b->rect();
+	if (ra.y() != rb.y())
+		return ra.y() < rb.y();
+	if (a->z() != b->z())
+		return a->z() < b->z();
+	return ra.x() < rb.x();
+	
+//    return a->rect().width() < b->rect().width();
 }
+
+unsigned int SegmentOrderer::getZForSegment(const Rosegarden::Segment* s)
+{
+    return m_segmentZs[s];
+}
+		
+void SegmentOrderer::segmentClicked(const Rosegarden::Segment* s)
+{
+    m_segmentZs[s] = ++m_currentMaxZ;
+    RG_DEBUG << "SegmentOrderer::segmentClicked() s = " << s << " - max Z = " << m_currentMaxZ << endl;
+}		
 
 
 //
@@ -457,6 +475,11 @@ void CompositionModelImpl::makeAudioPreviewRects(AudioPreviewDrawData* apRects, 
     }
 
     apRects->push_back(previewItem);
+}
+
+unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment* s)
+{
+	return m_segmentOrderer.getZForSegment(s);
 }
 
 void CompositionModelImpl::computeRepeatMarks(CompositionItem& item)
@@ -1290,26 +1313,49 @@ bool CompositionModelImpl::isRecording(const Segment* s) const
 }
 
 
+bool CompositionModel::CompositionItemCompare::operator()(const CompositionItem &c1, const CompositionItem &c2) const
+{
+//      return c1->hashKey() < c2->hashKey();
+//    RG_DEBUG << "compare " << c1->y() << " to " << c2->y() << endl;
+    if (c1->y() != c2->y())
+        return c1->y() < c2->y();
+    
+//    RG_DEBUG << "ys are equal - compare " << c1->z() << " to " << c2->z() << endl;
+    return c1->z() > c2->z();
+}
+
+
+
 CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& point)
 {
     itemcontainer res;
 
     const Composition::segmentcontainer& segments = m_composition.getSegments();
-
+    
     for(Composition::segmentcontainer::iterator i = segments.begin();
         i != segments.end(); ++i) {
 
         Segment* s = *i;
+        
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
-//             RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
-            res.insert(CompositionItem(new CompositionItemImpl(*s, sr)));
+//            RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s << endl;
+			CompositionItem item(new CompositionItemImpl(*s, sr));
+            unsigned int z = computeZForSegment(s);
+//            RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z << endl;
+			item->setZ(z);
+            res.insert(item);
         } else {
 //             RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
         }
         
     }
 
+    if (res.size() == 1) { // only one segment under click point
+        Segment* s = CompositionItemHelper::getSegment(*(res.begin()));
+        m_segmentOrderer.segmentClicked(s);
+    }
+    
     return res;
 }
 
@@ -1518,7 +1564,7 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
     return m_segmentRectMap[s];
 }
 
-CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
+CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool computeZ)
 {
 //    Rosegarden::Profiler profiler("CompositionModelImpl::computeSegmentRect", true);
 
@@ -1607,7 +1653,8 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s)
 //
 CompositionItemImpl::CompositionItemImpl(Segment& s, const CompositionRect& rect)
     : m_segment(s),
-      m_rect(rect)
+      m_rect(rect),
+      m_z(0)
 {
 }
 
