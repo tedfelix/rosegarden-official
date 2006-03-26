@@ -38,6 +38,10 @@ public:
     virtual void moveTo(int x, int y) = 0;
     virtual void setX(int x) = 0;
     virtual void setY(int y) = 0;
+    virtual void setZ(unsigned int z) = 0;
+    virtual int  x() = 0;
+    virtual int  y() = 0;
+    virtual unsigned int  z() = 0;
     virtual void setWidth(int w) = 0;
 
     // used by itemcontainer

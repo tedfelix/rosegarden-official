@@ -52,16 +52,16 @@ public:
     CompositionRect() : QRect(), m_selected(false),
                         m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
     CompositionRect(const QRect& r) : QRect(r), m_resized(false), m_selected(false),
-                                      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
+                                      m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
     CompositionRect(const QPoint & topLeft, const QPoint & bottomRight)
         : QRect(topLeft, bottomRight), m_resized(false), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
+          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
     CompositionRect(const QPoint & topLeft, const QSize & size)
         : QRect(topLeft, size), m_resized(false), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
+          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
     CompositionRect(int left, int top, int width, int height)
         : QRect(left, top, width, height), m_resized(false), m_selected(false),
-          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor) {};
+          m_needUpdate(false), m_brush(DefaultBrushColor), m_pen(DefaultPenColor), m_z(0) {};
 
     void setResized(bool s)       { m_resized = s; }
     bool isResized() const        { return m_resized; }
@@ -70,6 +70,9 @@ public:
     bool needsFullUpdate() const  { return m_needUpdate; }
     void setNeedsFullUpdate(bool s) { m_needUpdate = s; }
 
+    void setZ(int z) { m_z = z; }
+    int z() const { return m_z; }
+    
     // brush, pen draw info
     void setBrush(QBrush b)       { m_brush = b; }
     QBrush getBrush() const       { return m_brush; }
@@ -97,6 +100,7 @@ protected:
     repeatmarks m_repeatMarks;
     int         m_baseWidth;
     QString     m_label;
+    int         m_z;
 };
 
 class PreviewRect : public QRect {
@@ -123,14 +127,13 @@ class CompositionModel : public QObject, public Rosegarden::CompositionObserver,
 public:
 
     struct CompositionItemCompare {
-	bool operator()(const CompositionItem &c1, const CompositionItem &c2) const {
-	    return c1->hashKey() < c2->hashKey();
-	}
+	bool operator()(const CompositionItem &c1, const CompositionItem &c2) const;
     };
 
     typedef std::vector<QRect> rectlist;
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
+//    typedef std::set<CompositionItem> itemcontainer;
 
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
@@ -236,6 +239,21 @@ namespace Rosegarden { class Segment; class Studio; class SnapGrid; class RulerS
 class AudioPreviewThread;
 class AudioPreviewUpdater;
 
+class SegmentOrderer : public Rosegarden::CompositionObserver {
+public:
+    SegmentOrderer() : m_currentMaxZ(0) {};
+    
+	unsigned int getZForSegment(const Rosegarden::Segment*);
+
+	void segmentClicked(const Rosegarden::Segment *);
+	
+protected:
+
+    //--------------- Data members ---------------------------------
+	std::map<const Rosegarden::Segment*, unsigned int> m_segmentZs;
+	unsigned int m_currentMaxZ;
+};
+
 class CompositionModelImpl : public CompositionModel
 {
     Q_OBJECT
@@ -291,7 +309,7 @@ public:
     rectlist*            makeNotationPreviewDataCache(const Rosegarden::Segment *s);
     AudioPreviewData*    makeAudioPreviewDataCache(const Rosegarden::Segment *s);
 
-    CompositionRect computeSegmentRect(const Rosegarden::Segment&);
+    CompositionRect computeSegmentRect(const Rosegarden::Segment&, bool computeZ = false);
     QColor          computeSegmentPreviewColor(const Rosegarden::Segment*);
     QPoint          computeSegmentOrigin(const Rosegarden::Segment&);
     void            computeRepeatMarks(CompositionItem&);
@@ -334,6 +352,10 @@ protected:
     bool isRecording(const Rosegarden::Segment*) const;
     
     void computeRepeatMarks(CompositionRect& sr, const Rosegarden::Segment* s);
+	unsigned int computeZForSegment(const Rosegarden::Segment* s);
+	
+	// segment preview stuff
+
     void updatePreviewCacheForNotationSegment(const Rosegarden::Segment* s, rectlist*);
     void updatePreviewCacheForAudioSegment(const Rosegarden::Segment* s, AudioPreviewData*);
     rectlist* getNotationPreviewData(const Rosegarden::Segment* s);
@@ -393,6 +415,8 @@ protected:
     typedef std::map<const Rosegarden::Segment*, AudioPreviewUpdater *>
         AudioPreviewUpdaterMap;
     AudioPreviewUpdaterMap m_audioPreviewUpdaterMap;
+    
+    SegmentOrderer m_segmentOrderer;
 };
 
 
@@ -405,6 +429,10 @@ public:
     virtual void moveTo(int x, int y)             { m_rect.setRect(x, y, m_rect.width(), m_rect.height()); }
     virtual void setX(int x)                      { m_rect.setX(x); }
     virtual void setY(int y)                      { m_rect.setY(y); }
+    virtual void setZ(unsigned int z)             { m_z = z; }
+    virtual int x()                               { return m_rect.x(); }
+    virtual int y()                               { return m_rect.y(); }
+    virtual unsigned int z()                      { return m_z; }
     virtual void setWidth(int w)                  { m_rect.setWidth(w); }
     // use segment address as hash key
     virtual long hashKey()                        { return (long)getSegment(); }
@@ -418,6 +446,7 @@ protected:
     //--------------- Data members ---------------------------------
     Rosegarden::Segment& m_segment;
     CompositionRect m_rect;
+    unsigned int m_z;
 };
 
 class CompositionView : public RosegardenScrollView 
