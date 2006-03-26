@@ -106,7 +106,7 @@ dirs = env.Split("""
 bdirs=[]
 for d in dirs:
 	tmpdir = givedir(d)
-	env.BuildDir(tmpdir, d)
+	env.BuildDir(tmpdir, d, duplicate=0)
 	bdirs.append(tmpdir)
 env.subdirs(bdirs)
 
