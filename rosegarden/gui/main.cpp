@@ -318,6 +318,7 @@ static KCmdLineOptions options[] =
     { "nosplash", I18N_NOOP("Don't show the splash screen"), 0 },
     { "nofork", I18N_NOOP("Don't automatically run in the background"), 0 },
     { "existingsequencer", I18N_NOOP("Attach to a running sequencer process, if found"), 0 },
+    { "ignoreversion", I18N_NOOP("Ignore installed version - for devs only"), 0 },
     { "+[File]", I18N_NOOP("file to open"), 0 },
     { 0, 0, 0 }
 };
@@ -469,11 +470,6 @@ int main(int argc, char *argv[])
 
     RosegardenApplication app;
 
-    // Give up immediately if we haven't been installed or if the
-    // installation is out of date
-    //
-    testInstalledVersion();
-
     //
     // Ensure quit on last window close
     // Register main DCOP interface
@@ -485,6 +481,13 @@ int main(int argc, char *argv[])
     // Parse cmd line args
     //
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+	if (!args->isSet("ignoreversion")) {
+	  // Give up immediately if we haven't been installed or if the
+	  // installation is out of date
+	  //
+	  testInstalledVersion();
+	}	
 
     KConfig *config = kapp->config();
     config->setGroup("KDE Action Restrictions");
