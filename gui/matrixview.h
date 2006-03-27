@@ -64,7 +64,6 @@ class QDeferScrollView;
 class QMouseEvent;
 class QLabel;
 class QWidget;
-class QWidgetStack;
 
 
 typedef std::vector<MatrixElement*> SelectedElements;
@@ -594,7 +593,6 @@ protected:
     QDeferScrollView    *m_pianoView;
     PitchRuler          *m_pitchRuler;
 
-    QWidgetStack        *m_pitchRulerStack;
     Rosegarden::MidiKeyMapping *m_localMapping;
 
     // The last note we sent in case we're swooshing up and

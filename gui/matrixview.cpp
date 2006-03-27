@@ -207,28 +207,26 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             m_localMapping = new Rosegarden::MidiKeyMapping(*mapping);
             extendKeyMapping();
 	} else {
-	    RG_DEBUG << "MatrixView: Instrument has no key mapping" << endl;
+	    RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
 	}
     }
 
     m_pianoView = new QDeferScrollView(getCentralWidget());
 
-    m_pitchRulerStack = new QWidgetStack(m_pianoView->viewport());
+    QWidget* vport = m_pianoView->viewport();
 
     if (isDrumMode() && mapping &&
 	!m_localMapping->getMap().empty()) {
-	m_pitchRuler = new PercussionPitchRuler(m_pitchRulerStack,
+	m_pitchRuler = new PercussionPitchRuler(vport,
 						m_localMapping,
 						resolution); // line spacing
     } else {
-	m_pitchRuler = new PianoKeyboard(m_pitchRulerStack);
+	m_pitchRuler = new PianoKeyboard(vport);
     }
 
     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
     m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_pitchRulerStack->addWidget(m_pitchRuler);
-    m_pitchRulerStack->raiseWidget(m_pitchRuler);
-    m_pianoView->addChild(m_pitchRulerStack);
+    m_pianoView->addChild(m_pitchRuler);
     m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
 
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
@@ -508,9 +506,6 @@ MatrixView::~MatrixView()
 
     delete m_snapGrid;
 
-    m_pitchRulerStack->removeWidget(m_pitchRuler);
-    delete m_pitchRuler;
-    delete m_pitchRulerStack;
     if (m_localMapping) delete m_localMapping;
 }
 
@@ -2833,16 +2828,21 @@ MatrixView::slotPercussionSetChanged(Rosegarden::Instrument * newInstr)
 
     m_staffs[0]->setResolution(resolution);
 
+    delete m_pitchRuler;
+
+    QWidget *vport = m_pianoView->viewport();
+    
     // Create a new pitchruler widget
     PitchRuler *pitchRuler;
     if (newInstr && newInstr->getKeyMapping() &&
 	!newInstr->getKeyMapping()->getMap().empty()) {
-	pitchRuler = new PercussionPitchRuler(m_pitchRulerStack,
+	pitchRuler = new PercussionPitchRuler(vport,
 						m_localMapping,
 						resolution); // line spacing
     } else {
-	pitchRuler = new PianoKeyboard(m_pitchRulerStack);
+	pitchRuler = new PianoKeyboard(vport);
     }
+
 
     QObject::connect
         (pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
@@ -2861,12 +2861,10 @@ MatrixView::slotPercussionSetChanged(Rosegarden::Instrument * newInstr)
          this,         SLOT  (slotKeyReleased(unsigned int, bool)));
 
     // Replace the old pitchruler widget
-    m_pitchRulerStack->addWidget(pitchRuler);
-    m_pitchRulerStack->raiseWidget(pitchRuler);
-    m_pitchRulerStack->removeWidget(m_pitchRuler);
-    m_pianoView->setFixedWidth(pitchRuler->sizeHint().width());
-    delete m_pitchRuler;
     m_pitchRuler = pitchRuler;
+    m_pianoView->addChild(m_pitchRuler);
+    m_pitchRuler->show();
+    m_pianoView->setFixedWidth(pitchRuler->sizeHint().width());
 
     // Update matrix canvas
     readjustCanvasSize();
