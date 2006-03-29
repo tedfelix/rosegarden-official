@@ -263,10 +263,23 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 	    {
 		numBox = new QHBox(v);
 		QString numberText = QString("%1").arg(labelId + 1);
+		
+		if (tab == 0 && col == 0 && row == 0) {
+		    // Initial label; button to adjust whether labels start at 0 or 1
+		    m_initialLabel = new QPushButton(numberText, numBox);
+		    connect(m_initialLabel,
+			    SIGNAL(clicked()),
+			    this,
+			    SLOT(slotToggleInitialLabel()));
+		}
+		else {
+		    QLabel *label = new QLabel(numberText, numBox);
+		    label->setFixedWidth(40);
+		    label->setAlignment(AlignCenter);
+		    m_labels.push_back(label);
+		}
+ 
 
-		QLabel *label = new QLabel(numberText, numBox);
-		label->setFixedWidth(40);
-		label->setAlignment(AlignCenter);
 
 		if (showEntryButtons) {
 		    QPushButton *button = new QPushButton("", numBox, numberText);
@@ -299,6 +312,45 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 		     arg(tab * (128/tabs) + 1).
 		     arg((tab + 1) * (128 / tabs)));
     }
+
+    m_initialLabel->setMaximumSize(m_labels.front()->size());
+}
+
+void
+NameSetEditor::slotToggleInitialLabel()
+{
+    QString initial = m_initialLabel->text();
+
+    // strip some unrequested nice-ification.. urg!
+    if (initial.startsWith("&"))
+	{
+	    initial = initial.right(initial.length() - 1);
+	}
+    
+    bool ok;
+    unsigned index = initial.toUInt(&ok);
+
+    if (!ok)
+	{
+	    std::cerr << "conversion of '"
+		      << initial.ascii()
+		      << "' to number failed"
+		      << std::endl;
+	    return;
+	}
+
+    if (index == 0)
+	index = 1;
+    else
+	index = 0;
+
+    m_initialLabel->setText(QString("%1").arg(index++));
+    for (std::vector<QLabel*>::iterator it( m_labels.begin() );
+	 it != m_labels.end();
+	 ++it)
+	{
+	    (*it)->setText(QString("%1").arg(index++));
+	}
 }
 
 MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
