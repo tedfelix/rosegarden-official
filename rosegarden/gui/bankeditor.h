@@ -132,6 +132,7 @@ public:
 public slots:
     virtual void slotNameChanged(const QString&) = 0;
     virtual void slotEntryButtonPressed() = 0;
+    void slotToggleInitialLabel();
 
 protected:
     NameSetEditor(BankEditorDialog *bankEditor,
@@ -147,6 +148,8 @@ protected:
     QGridLayout             *m_mainLayout;
     BankEditorDialog*        m_bankEditor;
     KCompletion              m_completion;
+    QPushButton             *m_initialLabel;
+    std::vector<QLabel*>     m_labels;
     std::vector<KLineEdit*>  m_names;
     QFrame                  *m_mainFrame;
     QLabel                  *m_librarian;
