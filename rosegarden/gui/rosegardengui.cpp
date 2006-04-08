@@ -1329,8 +1329,8 @@ void RosegardenGUIApp::initView()
 		m_view, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *)));
     }
 
-    delete m_playList;
-    m_playList = 0;
+//    delete m_playList;
+//    m_playList = 0;
 
     delete m_deviceManager;
     m_deviceManager = 0;
