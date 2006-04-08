@@ -1274,8 +1274,6 @@ MappedPluginSlot::~MappedPluginSlot()
     std::cerr << "MappedPluginSlot::~MappedPluginSlot: id = " << getId() << ", identifier = " << m_identifier << std::endl;
 #endif
 
-    assert(0);
-
     if (m_identifier != "") {
 
 	// shut down and remove the plugin instance we have running
