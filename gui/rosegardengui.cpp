@@ -462,7 +462,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     try {
 	m_lircClient = new LircClient();
     } catch (Rosegarden::Exception e) {
-	RG_DEBUG << e.getMessage() << endl;
+	RG_DEBUG << e.getMessage().c_str() << endl;
 	// continue without
 	m_lircClient = 0;
     }
