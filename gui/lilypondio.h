@@ -79,8 +79,7 @@ protected:
 				       const Rosegarden::Key &key);
 
     // compose an appropriate Lilypond representation for various Marks
-    std::string composeLilyMark(std::string eventMark, bool stemUp,
-				int languageLevel);
+    std::string composeLilyMark(std::string eventMark, bool stemUp);
 
     // find/protect illegal characters in user-supplied strings
     std::string protectIllegalChars(std::string inStr);
@@ -94,7 +93,7 @@ protected:
 		   bool useRests,
 		   std::ofstream &);
 
-    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics, int languageLevel);
+    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
     void writePitch(const Rosegarden::Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
     void writeDuration(Rosegarden::timeT duration, std::ofstream &);
@@ -103,6 +102,24 @@ protected:
 private:
     static const int MAX_DOTS = 4;
     static const Rosegarden::PropertyName SKIP_PROPERTY;
+    
+    unsigned int m_paperSize;
+    unsigned int m_fontSize;
+    bool m_exportLyrics;
+    bool m_exportHeaders;
+    bool m_exportMidi;
+    bool m_exportUnmuted;
+    bool m_exportPointAndClick;
+    bool m_exportBarChecks;
+    bool m_exportBeams;
+
+	// languagelevel meaning:
+	// 0 -> Lilypond 1.6 or 1.8
+	// 1 -> Lilypond 2.0
+	// 2 -> Lilypond 2.2
+	// 3 -> Lilypond 2.4
+	// 4 -> Lilypond 2.6
+    int m_languageLevel;
 };
 
 
