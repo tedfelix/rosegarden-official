@@ -107,6 +107,9 @@ Quim Perez i Noguer <noguer@osona.com>
 Carolyn McIntyre <catma@adelphia.net>
     * new splash screen photo (of Michael McIntyre's rose garden)
 
+Heikki Johannes Junes <hjunes@cc.hut.fi>
+    * Finnish translation
+
 ##
 ## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##

@@ -458,6 +458,8 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
     aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("new splash screen photo (of Michael's rose garden)"), "catma@adelphia.net");
+    aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation"), "hjunes@cc.hut.fi");
+    
 //    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
