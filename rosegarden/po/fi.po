@@ -247,17 +247,13 @@ msgstr "Espanjalainen käännös"
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
-msgstr ""
-"_: NAME OF TRANSLATORS\n"
-"Sinun nimesi"
+msgstr "Heikki Junes"
 
 #: main.cpp:447 _translatorinfo.cpp:3
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr ""
-"_: EMAIL OF TRANSLATORS\n"
-"Sinun sähköpostiosoitteesi"
+msgstr "hjunes@cc.hut.fi"
 
 #: notationvlayout.cpp:447
 msgid ""
