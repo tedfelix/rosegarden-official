@@ -1,0 +1,49 @@
+#!/bin/bash
+unset LC_MESSAGES 
+unset LANG
+if [ "x$(basename $(pwd))" != "xpo" -o $(ls *.po 2>/dev/null|wc -w) -eq 0 ]; then
+    echo "Current directory doesn't seem to have any translations."
+    echo "Please, use this script from inside the po/ directory."
+    exit
+fi
+
+STATS=""
+TRANSLATED=0
+FUZZY=0
+UNTRANSLATED=0
+TOTAL=0
+
+function getValues() {
+    STATS=$(msgfmt --statistics $1 -o /dev/null 2>&1)
+    TRANSLATED=$(echo $STATS|awk '{print $1}')
+    FUZZY=$(echo $STATS|awk '{print $4}')
+    UNTRANSLATED=$(echo $STATS|awk '{print $7}')
+    let "TOTAL=${TRANSLATED:-0}+${FUZZY:-0}+${UNTRANSLATED:-0}"
+}
+
+echo -e "Translation status report for Rosegarden project"
+
+getValues "rosegarden.pot"
+POT=$TOTAL
+
+echo -e "\nrosegarden.pot has $POT messages"
+echo -e "\nLang \t Total \t Trans \t Fuzzy \t Pending"
+echo -e   "---- \t ----- \t ----- \t ----- \t -------"
+
+W=0
+
+for P in *.po; do
+    getValues $P
+    MSG=""
+    if [ $POT != $TOTAL ]; then
+	MSG="Warning!"
+	W=1
+    fi
+    echo -e "${P/.po/} \t $TOTAL \t $TRANSLATED \t $FUZZY \t $UNTRANSLATED \t $MSG"
+done
+
+if [ $W == 1 ]; then
+    echo -e "\nSome translations have more or less messages than rosegarden.pot"
+fi
+
+echo -e "\nReport produced at $(date -R)"
