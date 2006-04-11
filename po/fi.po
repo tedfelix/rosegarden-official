@@ -578,10 +578,10 @@ msgstr ""
 "<p>Määritelläksesi raidan soittamaan tiettyä instrumenttia:</p>\n"
 "&nbsp;&nbsp;* paina kohdistimella raidan nimen kohdalta ja odota hetki<br>\n"
 "&nbsp;&nbsp;* valitse ulostulolaite<br>\n"
-"&nbsp;&nbsp;* select one of that device's available instruments (#1 - #16)"
+"&nbsp;&nbsp;* valitse yksi laitteen vapaista instrumenteista (#1 - #16)"
 "<br>\n"
-"&nbsp;&nbsp;* adjust that instrument's output channel, program, bank, and\n"
-"controllers via the instrument parameters box\n"
+"&nbsp;&nbsp;* aseta instrumentin ulostulokanava, ohjelma, pankki, ja \n"
+"kontrollerit instrumentin ominaisuuslaatikosta\n"
 
 #: tips.cpp:13
 msgid ""
@@ -741,7 +741,7 @@ msgstr ""
 #: tips.cpp:102
 msgid ""
 "<p>...that Rosegarden can export files for use by Lilypond, the high-quality "
-"score typesetting system?\n"
+"score typesetting system?<br><br>\n"
 "From the <b>File</b> menu, navigate to <b>Export -> Export Lilypond File</"
 "b></p>\n"
 msgstr ""
@@ -770,6 +770,7 @@ msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
 "of\n"
 "your autoload.rg file?\n"
+"<br><br>\n"
 "Whether you prefer to start with three tracks or 43, create a document that\n"
 "contains the desired number of tracks, plus any other studio or document "
 "properties settings\n"
@@ -832,7 +833,7 @@ msgid ""
 "<b>Edit\n"
 "-> Change Composition Duration</b>?</p>\n"
 msgstr ""
-"<p>...että voit vaihtaa sävellyksen tahtien kokonaismäärää valitsemalla"
+"<p>...että voit vaihtaa sävellyksen tahtien kokonaismäärää valitsemalla "
 "<b>Muokkaa \n"
 "-> Muuta sävellyksen kestoa</b>?</p>\n"
 
@@ -1916,7 +1917,7 @@ msgstr "Vie M&up-tiedosto"
 
 #: rosegardengui.cpp:590
 msgid "Play&list"
-msgstr "Soitto&lista"
+msgstr "S&oittolista"
 
 #: rosegardengui.cpp:597
 msgid "Rosegarden Online &Tutorial"
@@ -1964,7 +1965,7 @@ msgstr "Näytä o&sien ja instrumenttien muuttujat"
 
 #: rosegardengui.cpp:724 matrixview.cpp:542
 msgid "&Draw"
-msgstr "&Piirrä"
+msgstr "P&iirrä"
 
 #: rosegardengui.cpp:734 matrixview.cpp:552
 msgid "&Move"
@@ -2100,7 +2101,7 @@ msgstr "Poista vai&mennus kaikista raidoista"
 
 #: rosegardengui.cpp:963
 msgid "&Remap Instruments..."
-msgstr "Ka&rtoita instrumentit uudelleen..."
+msgstr "Kartoita instrumentit &uudelleen..."
 
 #: rosegardengui.cpp:972
 msgid "&Audio Mixer"
@@ -5196,7 +5197,7 @@ msgstr "Nimeä raita uudelleen"
 
 #: segmentcommands.h:691
 msgid "Change &Composition Start and End..."
-msgstr "Muuta &sävellyksen alku- ja lopputahti..."
+msgstr "Muuta sä&vellyksen alku- ja lopputahti..."
 
 #: segmentcommands.h:722
 msgid "Split by &Pitch..."
