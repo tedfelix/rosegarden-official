@@ -27,8 +27,8 @@ getValues "rosegarden.pot"
 POT=$TOTAL
 
 echo -e "\nrosegarden.pot has $POT messages"
-echo -e "\nLang \t Total \t Trans \t Fuzzy \t Pending"
-echo -e   "---- \t ----- \t ----- \t ----- \t -------"
+echo -e "\nLang \t Total \t Done \t Fuzzy \t Pending"
+echo -e   "---- \t ----- \t ---- \t ----- \t -------"
 
 W=0
 
