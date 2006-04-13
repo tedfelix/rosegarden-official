@@ -1,21 +1,22 @@
+# translation of fi.po to 
 # Finnish translation of Rosegarden.
 # This file is put in the public domain.
-#
-#
 # Heikki Junes <hjunes@cc.hut.fi>, 2006.
 # Heikki Johannes Junes <hjunes@cc.hut.fi>, 2006.
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-13 01:00+0200\n"
-"PO-Revision-Date: 2006-04-09 05:01+0300\n"
-"Last-Translator: Heikki Johannes Junes <hjunes@cc.hut.fi>\n"
+"PO-Revision-Date: 2006-04-13 10:42+0300\n"
+"Last-Translator: Heikki Junes\n"
 "Language-Team:  <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.1\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: ../gui/docs/en/tips.cpp:3
 msgid ""
@@ -442,52 +443,46 @@ msgstr ""
 
 #: ../gui/guitar/guitarchordeditor.cpp:78
 #: ../gui/guitar/guitartabselector.cpp:275
-#, fuzzy
 msgid "&Clear"
-msgstr "&Avaimet"
+msgstr "&Tyhjää"
 
 #: ../gui/guitar/guitarchordeditor.cpp:83
 msgid "A&dd Alias"
-msgstr ""
+msgstr "L&isää Alias"
 
 #: ../gui/guitar/guitarchordeditor.cpp:88
 #: ../gui/guitar/guitartabselector.cpp:280
-#, fuzzy
 msgid "C&ancel"
-msgstr "Kanava"
+msgstr "&Peru"
 
 #: ../gui/guitar/guitarchordeditor.cpp:93
 #: ../gui/guitar/guitartabselector.cpp:285
 msgid "&Ok"
-msgstr ""
+msgstr "&Kyllä"
 
 #: ../gui/guitar/guitarchordeditor.cpp:98
-#, fuzzy
 msgid "Toggle &Mode"
-msgstr "Kytke piste"
+msgstr "Kytke &tila"
 
 #: ../gui/guitar/guitarchordeditor.cpp:191
 #: ../gui/guitar/guitartabselector.cpp:233
-#, fuzzy
 msgid "Scale"
-msgstr "Uudelleenskaalaa"
+msgstr "Asteikko"
 
 #: ../gui/guitar/guitarchordeditor.cpp:218
 #: ../gui/guitar/guitartabeditor.cpp:71
 #: ../gui/guitar/guitartabselector.cpp:241
-#, fuzzy
 msgid "Modifier"
-msgstr "&Muokkaa kirjanmerkkiä"
+msgstr "Muokkaaja"
 
 #: ../gui/guitar/guitarchordeditor.cpp:233
 #: ../gui/guitar/guitartabselector.cpp:249
 msgid "Suffix"
-msgstr ""
+msgstr "Pääte"
 
 #: ../gui/guitar/guitartabeditor.cpp:64
-#, fuzzy
 msgid "Chord Selector"
-msgstr "Sävelkorkeuden valitsin"
+msgstr "Soinnun valitsin"
 
 #: ../gui/dialogs.cpp:1099 ../gui/guitar/guitartabeditor.cpp:66
 msgid "Chord"
@@ -495,28 +490,24 @@ msgstr "Sointu"
 
 #: ../gui/guitar/guitartabeditor.cpp:74
 msgid "Additivies"
-msgstr ""
+msgstr "Lisät"
 
 #: ../gui/guitar/guitartabeditor.cpp:77
 #: ../gui/guitar/guitartabselector.cpp:257
-#, fuzzy
 msgid "Version"
-msgstr "Lyömäsoittimet"
+msgstr "Versio"
 
 #: ../gui/guitar/guitartabeditor.cpp:84
-#, fuzzy
 msgid "Fingering"
-msgstr "&Sormitukset"
+msgstr "&Sormitus"
 
 #: ../gui/guitar/guitartabselector.cpp:270
-#, fuzzy
 msgid "&New"
-msgstr "Uusi"
+msgstr "&Uusi"
 
 #: ../gui/guitar/guitartabselector.cpp:291
-#, fuzzy
 msgid "Aliases"
-msgstr "Vinoviivat"
+msgstr "Aliakset"
 
 #: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1039
 msgid "Move Segment"
@@ -527,8 +518,7 @@ msgid "Move Segments"
 msgstr "Siirrä osia"
 
 #: ../gui/tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Napauta ja pidä vasenta hiiren korvaa pohjassa liittääksesi instrumentin "
 "tälle raidalle."
@@ -947,7 +937,6 @@ msgid "Delete this property"
 msgstr "Poista tämä ominaisuus"
 
 #: ../gui/dialogs.cpp:1655
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the \"%1\" property?\n"
 "\n"
@@ -1007,7 +996,7 @@ msgstr "Kontrollerin nimi:"
 #: ../gui/mixer.cpp:650 ../gui/mixer.cpp:686 ../gui/mixer.cpp:862
 #: ../gui/triggermanager.cpp:322
 msgid "<none>"
-msgstr "<ei mitään>"
+msgstr "<tyhjä>"
 
 #: ../gui/dialogs.cpp:1853 ../gui/eventfilter.cpp:109
 msgid "Velocity:"
@@ -1150,22 +1139,20 @@ msgid "Insert Tempo Change"
 msgstr "Syötä tempon muutos"
 
 #: ../gui/dialogs.cpp:2809
-#, fuzzy
 msgid "New tempo:"
-msgstr "Uusi tempo"
+msgstr "Uusi tempo:"
 
 #: ../gui/dialogs.cpp:2816
-#, fuzzy
 msgid "Tempo is fixed until the following tempo change"
-msgstr "Olemassa olevat nuotit seuraavat sävellajin muutosta"
+msgstr "Tempo kiinnitettään seuraavaan tempon muutokseen asti"
 
 #: ../gui/dialogs.cpp:2817
 msgid "Tempo changes smoothly to following tempo"
-msgstr ""
+msgstr "Tempo muuttuu tasaisesti seuraavaan tempoon"
 
 #: ../gui/dialogs.cpp:2818
 msgid "Tempo changes smoothly to:"
-msgstr ""
+msgstr "Tempo, johon muututaan tasaisesti:"
 
 #: ../gui/dialogs.cpp:2855
 msgid "Time of tempo change"
@@ -1189,11 +1176,11 @@ msgstr "Sovella tämän tahdin alusta tätä tempoa"
 
 #: ../gui/dialogs.cpp:2887
 msgid "Apply this tempo to the whole composition"
-msgstr "Sovella koko sävellys alusta tätä tempoa"
+msgstr "Sovella koko sävellyksen alusta tätä tempoa"
 
 #: ../gui/dialogs.cpp:2892
 msgid "Also make this the default tempo"
-msgstr "Tee tämä tempo myös oletustempoksi"
+msgstr "Aseta tämä tempo myös oletustempoksi"
 
 #: ../gui/dialogs.cpp:2978
 msgid "%1.%2 s,"
@@ -1294,7 +1281,7 @@ msgstr "Edistynyt"
 
 #: ../gui/dialogs.cpp:3394
 msgid "Rescale"
-msgstr "Uudelleenskaalaa"
+msgstr "Uudelleenmitoita"
 
 #: ../gui/dialogs.cpp:3399
 msgid "Duration of selection"
@@ -1410,8 +1397,7 @@ msgstr "Alennus - aseta %1 arvoksi"
 
 #: ../gui/dialogs.cpp:4081
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
+msgstr "Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
 
 #: ../gui/dialogs.cpp:4085
 msgid "Crescendo - set %1 rising from min to max"
@@ -1552,9 +1538,8 @@ msgid "Just how big is your hard disk?"
 msgstr "Minkäkokoinen kiintolevysi olikaan?"
 
 #: ../gui/dialogs.cpp:4535
-#, fuzzy
 msgid "Recording beyond end of composition:  "
-msgstr "Nauhoitusaikaa jäljellä:  "
+msgstr "Nauhoitetaan sävellyksen jälkeiseen osaan:  "
 
 #: ../gui/dialogs.cpp:4574 rc.cpp:475
 #, no-c-format
@@ -1678,9 +1663,8 @@ msgid "Lilypond 2.4"
 msgstr "LilyPond 2.4"
 
 #: ../gui/dialogs.cpp:5053
-#, fuzzy
 msgid "Lilypond 2.6"
-msgstr "LilyPond 2.4"
+msgstr "LilyPond 2.6"
 
 #: ../gui/dialogs.cpp:5058
 msgid "Paper size to use in \\paper block"
@@ -1890,7 +1874,7 @@ msgstr "tahti/tahdit"
 
 #: ../gui/dialogs.cpp:5549
 msgid "Choose Text Encoding"
-msgstr ""
+msgstr "Valitse tekstin koodiaus"
 
 #: ../gui/dialogs.cpp:5553
 msgid ""
@@ -1900,110 +1884,112 @@ msgid ""
 "Please select one of the following estimated text encodings\n"
 "for use with the text in this file:\n"
 msgstr ""
+"\n"
+"Tässä tiedostossa on tuntemattomassa kielikoodauksessa olevaa tekstiä.\n"
+"\n"
+"Ole hyvä, ja valitse yksi seuraavista arvioiduista koodauksista\n"
+"tätä tekstiä varten käytettäväksi:\n"
 
 #: ../gui/dialogs.cpp:5564 ../gui/dialogs.cpp:5580
 msgid "Japanese Shift-JIS"
-msgstr ""
+msgstr "Japanilainen Shift-JIS"
 
 #: ../gui/dialogs.cpp:5565
 msgid "Unicode variable-width"
-msgstr ""
+msgstr "Unicode-muuttuva leveys"
 
 #: ../gui/dialogs.cpp:5566
 msgid "Western Europe"
-msgstr ""
+msgstr "Länsieurooppalainen"
 
 #: ../gui/dialogs.cpp:5567
 msgid "Western Europe + Euro"
-msgstr ""
+msgstr "Länsieurooppalainen + Euro"
 
 #: ../gui/dialogs.cpp:5568
 msgid "Eastern Europe"
-msgstr ""
+msgstr "Itäeurooppalainen"
 
 #: ../gui/dialogs.cpp:5569
 msgid "Southern Europe"
-msgstr ""
+msgstr "Eteläeurooppalainen"
 
 #: ../gui/dialogs.cpp:5570
 msgid "Northern Europe"
-msgstr ""
+msgstr "Pohjoiseurooppalainen"
 
 #: ../gui/dialogs.cpp:5571
-#, fuzzy
 msgid "Cyrillic"
-msgstr "Sanoitus"
+msgstr "Kyrillinen"
 
 #: ../gui/dialogs.cpp:5572
 msgid "Arabic"
-msgstr ""
+msgstr "Arabialainen"
 
 #: ../gui/dialogs.cpp:5573
 msgid "Greek"
-msgstr ""
+msgstr "Kreikkalainen"
 
 #: ../gui/dialogs.cpp:5574
 msgid "Hebrew"
-msgstr ""
+msgstr "Heprealainen"
 
 #: ../gui/dialogs.cpp:5575
 msgid "Turkish"
-msgstr ""
+msgstr "Turkkilainen"
 
 #: ../gui/dialogs.cpp:5576
 msgid "Nordic"
-msgstr ""
+msgstr "Pohjoismainen"
 
 #: ../gui/dialogs.cpp:5577
 msgid "Thai"
-msgstr ""
+msgstr "Thaimaalainen"
 
 #: ../gui/dialogs.cpp:5578
-#, fuzzy
 msgid "Baltic"
-msgstr "Isku"
+msgstr "Balttilainen"
 
 #: ../gui/dialogs.cpp:5579
 msgid "Celtic"
-msgstr ""
+msgstr "Kelttiläinen"
 
 #: ../gui/dialogs.cpp:5581
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Perinnekiinalainen"
 
 #: ../gui/dialogs.cpp:5582
-#, fuzzy
 msgid "Simplified Chinese"
-msgstr "Yksinkertaistettu kiinalainen käännös"
+msgstr "Yksinkertaistettu kiina"
 
 #: ../gui/dialogs.cpp:5583
 msgid "Russian"
-msgstr ""
+msgstr "Venäläinen"
 
 #: ../gui/dialogs.cpp:5584
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainalainen"
 
 #: ../gui/dialogs.cpp:5585
-#, fuzzy
 msgid "Tamil"
-msgstr "Otsikko"
+msgstr "Tamililainen"
 
 #: ../gui/dialogs.cpp:5600
 #, c-format
 msgid "Microsoft Code Page %1"
-msgstr ""
+msgstr "Microsoft-koodisivu %1"
 
 #: ../gui/dialogs.cpp:5605
-#, fuzzy
 msgid "%1 (%2)"
-msgstr "&%1%2"
+msgstr "%1 (%2)"
 
 #: ../gui/dialogs.cpp:5623
 msgid ""
 "\n"
 "Example text from file:"
 msgstr ""
+"\n"
+"Esimerkki teksti tiedostosta:"
 
 #: ../gui/rosegardenguidoc.cpp:289
 msgid ""
@@ -2019,6 +2005,8 @@ msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
 "Delete the %n audio files recorded during the unsaved session?"
 msgstr ""
+"Poista äänitiedosto, joka nauhoitettiin tallentamattoman session yhteydessä?\n"
+"Poista %n äänitiedostoa, jotka nauhoitettiin tallentamattoman session yhteydessä?"
 
 #: ../gui/rosegardenguidoc.cpp:418
 msgid ""
@@ -2031,6 +2019,12 @@ msgid ""
 "\n"
 "Please select any you wish to delete permanently from the hard disk.\n"
 msgstr ""
+"Seuraavat äänitiedostot najuhoitettiin tämän session aikana, mutta ne vapautettiin\n"
+"äänitiedoston hallitsijasta, ja niin ne eivät ole enää käytössä dokumentissa, jota juuri tallennat.\n"
+"\n"
+"Haluanet siivot nämä tiedostot säästääksesi levytilaa.\n"
+"\n"
+"Ole hyvä, ja valitse halutessasi mikä tahansa niistä poistaaksesi sen pysyvästi kovalevyltä.\n"
 
 #: ../gui/rosegardenguidoc.cpp:433
 #, c-format
@@ -2042,11 +2036,16 @@ msgid ""
 "There will be no way to recover these files.\n"
 "Are you sure?"
 msgstr ""
+"Ollaan poistamassa pysyvästi 1 äänitiedosto kovalevyltä.\n"
+"Tapoja palauttaa tiedosto takaisin ei ole.\n"
+"Oletko varma?\n"
+"Ollaan poistamassa %n äänitiedostoa pysyvästi kovalevyltä.\n"
+"Tapoja palauttaa näitä tiedostoja takaisin ei ole.\n"
+"Oletko varma?"
 
 #: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:441
-#, fuzzy
 msgid "File %1 could not be deleted."
-msgstr "Tiedosta \"%1\" ei ole olemassa"
+msgstr "Tiedostoa %1 ei voitu poistaa"
 
 #: ../gui/rosegardenguidoc.cpp:499
 msgid "Can't open file '%1'"
@@ -2172,13 +2171,14 @@ msgid ""
 "_n: %1 on 1 track\n"
 "%1 on %n tracks"
 msgstr ""
+"%1 1:llä raidalla\n"
+"%1 %n:lla raidalla"
 
 #: ../gui/triggermanager.cpp:336
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
+msgstr "Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
 
 #: ../gui/triggermanager.cpp:339
 msgid "Remove all triggered segments"
@@ -2189,14 +2189,16 @@ msgid "Trigger Segment Duration"
 msgstr "Sysäävän osan kesto"
 
 #: ../gui/triggermanager.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: This triggered segment is used 1 time in the current composition.  Are "
 "you sure you want to remove it?\n"
 "This triggered segment is used %n times in the current composition.  Are you "
 "sure you want to remove it?"
 msgstr ""
-"Tätä sysättävää osaa on käytetty %1 kertaa nykyisessä sävellyksessä.  "
+"Tätä sysättävää osaa on käytetty 1:n kerran nykyisessä sävellyksessä.  "
+"Haluatko varmasti poistaa sen?\n"
+"Tätä sysättävää osaa on käytetty %n kerran nykyisessä sävellyksessä.  "
 "Haluatko varmasti poistaa sen?"
 
 #: ../gui/eventview.cpp:958 ../gui/matrixview.cpp:1505
@@ -2427,9 +2429,8 @@ msgid "Cancel C&autionary Accidentals"
 msgstr "Lopeta v&aroitusetumerkkien käyttö"
 
 #: ../gui/notationcommands.cpp:2044
-#, fuzzy
 msgid "Insert Fretboard"
-msgstr "Lisää teksti"
+msgstr "Lisää otelauta"
 
 #: ../gui/editcommands.h:67
 msgid "Cu&t"
@@ -2592,9 +2593,9 @@ msgid "LSB Value"
 msgstr "LSB-arvo"
 
 #: ../gui/bankeditor.cpp:544 ../gui/bankeditor.cpp:844
-#, fuzzy, c-format
+#, c-format
 msgid "Key Mapping: %1"
-msgstr "Näppäimien kartoitus"
+msgstr "Näppäinkartta: %1"
 
 #: ../gui/bankeditor.cpp:785
 msgid "<no key mapping>"
@@ -2657,17 +2658,14 @@ msgid "Export..."
 msgstr "Vie..."
 
 #: ../gui/bankeditor.cpp:1168
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr ""
-"Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr "Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
 
 #: ../gui/bankeditor.cpp:1170
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
+msgstr "Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
 
 #: ../gui/bankeditor.cpp:1180
 msgid "Copy all Program names from current Bank to clipboard"
@@ -2747,8 +2745,7 @@ msgstr "Laite tai instrumentti"
 
 #: ../gui/bankeditor.cpp:2735
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr ""
-"Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
+msgstr "Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
 
 #: ../gui/bankeditor.cpp:2744
 msgid "Choose Source and Destination"
@@ -3277,17 +3274,21 @@ msgid ""
 "_n: 1 Input\n"
 "%n Inputs"
 msgstr ""
+"1 Sisääntulo\n"
+"%n Sisääntuloa"
 
 #: ../gui/mixer.cpp:184
 msgid "No Submasters"
 msgstr "Ei alakeskuksia"
 
 #: ../gui/mixer.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: 1 Submaster\n"
 "%n Submasters"
-msgstr "Alakeskusten &lukumäärä"
+msgstr ""
+"1 alakeskus\n"
+"%n alakeskusta"
 
 #: ../gui/mixer.cpp:267
 msgid "Audio Mixer"
@@ -3303,7 +3304,7 @@ msgstr "Ulostulos kohde"
 
 #: ../gui/mixer.cpp:320 ../gui/mixer.cpp:470
 msgid "Pan"
-msgstr "Stereovaaka"
+msgstr "Jako"
 
 #: ../gui/mixer.cpp:328 ../gui/mixer.cpp:329 ../gui/mixer.cpp:477
 #: ../gui/mixer.cpp:478 ../gui/studiowidgets.cpp:1068
@@ -3354,7 +3355,7 @@ msgstr "Äänen pääulostulotaso"
 #: ../gui/mixer.cpp:556 ../gui/studiowidgets.cpp:826
 #: ../gui/studiowidgets.cpp:848
 msgid "Master"
-msgstr "Haltija"
+msgstr "Keskus"
 
 #: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:338
 #: ../gui/instrumentparameterbox.cpp:570 ../gui/mixer.cpp:651
@@ -3803,23 +3804,23 @@ msgstr "Ei voitu lisätä nuottia: Kestoa ei oltu valittu"
 #: ../gui/studiowidgets.cpp:824
 #, c-format
 msgid "In %1"
-msgstr "Paikassa %1"
+msgstr "Tulo %1"
 
 #: ../gui/studiowidgets.cpp:834
 msgid "In %1 R"
-msgstr "Paikassa %1 R"
+msgstr "Tulo O%1"
 
 #: ../gui/studiowidgets.cpp:835
 msgid "In %1 L"
-msgstr "Paikassa %1 V"
+msgstr "Tulo V%1"
 
 #: ../gui/studiowidgets.cpp:837
 msgid "Master R"
-msgstr "Hallitseva O"
+msgstr "Keskus O"
 
 #: ../gui/studiowidgets.cpp:838
 msgid "Master L"
-msgstr "Hallitseva V"
+msgstr "Keskus V"
 
 #: ../gui/studiowidgets.cpp:840
 msgid "Sub %1 R"
@@ -3844,7 +3845,7 @@ msgstr "Muokkain"
 
 #: ../gui/studiowidgets.cpp:1063
 msgid "Set the audio pan position in the stereo field"
-msgstr "Aseta äänen sijainti stereokentässä"
+msgstr "Aseta äänen jakaantuminen stereokenttään"
 
 #: ../gui/studiowidgets.cpp:1064
 msgid "Open synth plugin's native editor"
@@ -3974,9 +3975,8 @@ msgstr ""
 "Esiin saattaa tulla joitain yhteensopimattomuuksia tiedostomuodossa."
 
 #: ../gui/rosexmlhandler.cpp:1680
-#, fuzzy
 msgid "Loading plugins..."
-msgstr "Numeroidaan lisäosat..."
+msgstr "Ladataan lisäosat..."
 
 #: ../gui/audioplugindialog.cpp:66
 msgid "Audio Plugin"
@@ -4223,8 +4223,7 @@ msgid "global element must precede note elements"
 msgstr "kaiken kattavien elementtien täytyy edeltää nuottielementtejä"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "kaikenkattavilla ja nuottielementeillä voi olla muoto- tai merkkinimi-"
 "ominaisuus, mutta ei molempia"
@@ -4259,38 +4258,32 @@ msgid "Switch to Insert Tool"
 msgstr "Vaihda syöttötyökaluun"
 
 #: ../gui/notationtool.cpp:1149
-#, fuzzy
 msgid "Collapse Rests"
-msgstr "&Luhista tauot"
+msgstr "Luhista tauot"
 
 #: ../gui/notationtool.cpp:1153
-#, fuzzy
 msgid "Respell as Flat"
-msgstr "Kirjoita %1"
+msgstr "Kirjoita alennettuna"
 
 #: ../gui/notationtool.cpp:1157
-#, fuzzy
 msgid "Respell as Sharp"
-msgstr "Kirjoita etumerkit &ylöspäisinä"
+msgstr "Kirjoita korotettuna"
 
 #: ../gui/notationtool.cpp:1161
 msgid "Respell as Natural"
-msgstr ""
+msgstr "Vaihda palautusmerkiksi"
 
 #: ../gui/notationtool.cpp:1165
-#, fuzzy
 msgid "Collapse Notes"
-msgstr "&Luhista tauot"
+msgstr "Luhista tauot"
 
 #: ../gui/notationtool.cpp:1173
-#, fuzzy
 msgid "Make Invisible"
-msgstr "Tee &näkymättömäksi"
+msgstr "Tee näkymättömäksi"
 
 #: ../gui/notationtool.cpp:1177
-#, fuzzy
 msgid "Make Visible"
-msgstr "Tee nä&kyväksi"
+msgstr "Tee näkyväksi"
 
 #: ../gui/eventview.cpp:995 ../gui/matrixview.cpp:1516
 #: ../gui/notationtool.cpp:2123
@@ -4329,8 +4322,7 @@ msgstr ""
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
 #: ../gui/sequencemanager.cpp:1024
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Prosessorin teho ei riittänyt tosiaikaiseen äänen prosessointiin.  Ei voitu "
 "jatkaa."
@@ -4350,10 +4342,8 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK ääni -alijärjestelmä hukkaa näytteiden kehyksiä."
 
 #: ../gui/sequencemanager.cpp:1088
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
-msgstr ""
-"Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
+msgstr "Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
 
 #: ../gui/sequencemanager.cpp:1092
 msgid ""
@@ -4382,6 +4372,9 @@ msgid ""
 "you are using a Linux system with the kernel timer resolution set too low.  "
 "Please contact your Linux distributor for more information.</p>"
 msgstr ""
+"<h3>Järjestelmän aikaerottelukyky on liian matala</h3><p>Rosegarden ei kyennyt "
+"korkeaerottelukykyiseen aikalähteeseen MIDI-esityksessä.</p><p>Tämä voi tarkoittaa, että käytät Linux-järjestelmää, jossa kernelin aikaerottelukyky on asetettu liian alhaiseksi.  "
+"Ole hyvä ja ota yhteyttä Linus-jakelijaasi saadaksesi lisää informaatiota.</p>"
 
 #: ../gui/segmentparameterbox.cpp:47
 msgid "Segment Parameters"
@@ -4634,7 +4627,7 @@ msgstr "Kiinnitä ajossa olevaan sekvensseriprosessiin, jos sellainen on"
 
 #: ../gui/main.cpp:321
 msgid "Ignore installed version - for devs only"
-msgstr ""
+msgstr "Sivuuta asennettu versio - vain kehittäjille"
 
 #: ../gui/main.cpp:322
 msgid "file to open"
@@ -4645,7 +4638,6 @@ msgid "Installation contains the wrong version of Rosegarden."
 msgstr "Asennus sisältää väärän Rosegarden-version"
 
 #: ../gui/main.cpp:373
-#, fuzzy
 msgid ""
 " The wrong versions of Rosegarden's data files were\n"
 " found in the standard KDE installation directories.\n"
@@ -4671,7 +4663,7 @@ msgstr ""
 "\n"
 " 1. Tämä on uusi Rosegarden-päivitys, ja sitaä ei ole vielä\n"
 "     asennettu.  Jos käänsit sen itse, tarkista että olet\n"
-"     ajanut \"make install\" ja että toimintosarja on päättynyt\n"
+"     ajanut \"scons install\" ja että toimintosarja on päättynyt\n"
 "     onnistuneesti.\n"
 "\n"
 " 2. Päivitys asennettiin epästandardiseen hakemistoon,\n"
@@ -4688,7 +4680,6 @@ msgid "Rosegarden does not appear to have been installed."
 msgstr "Rosegardenia ei nähtävästi ole asennettu."
 
 #: ../gui/main.cpp:392
-#, fuzzy
 msgid ""
 " One or more of Rosegarden's data files could not be\n"
 " found in the standard KDE installation directories.\n"
@@ -4711,7 +4702,7 @@ msgstr ""
 " Tämä voi tarkoittaa yhtä seuraavista:\n"
 "\n"
 " 1. Rosegarden ei asentunut kunnolla.  Jos käänsit sen itse,\n"
-"     tarkista että olet ajanut \"make install\" ja että\n"
+"     tarkista että olet ajanut \"scons install\" ja että\n"
 "     toimintosarja on onnistuneesti päättynyt.\n"
 "\n"
 " 2. Rosegarden on asennettu epästandardiin hakemistoon,\n"
@@ -4764,6 +4755,8 @@ msgid ""
 "Segment colours\n"
 "Other UI and bug fixes"
 msgstr ""
+"Osan värit\n"
+"Muut käyttöliittymä- ja bugikorjaukset"
 
 #: ../gui/main.cpp:432
 msgid ""
@@ -4837,11 +4830,11 @@ msgstr "Yksinkertaistettu kiinalainen käännös"
 
 #: ../gui/main.cpp:449
 msgid "LIRC infrared remote-controller support"
-msgstr ""
+msgstr "LIRC-infrapunakaukosäädintuki"
 
 #: ../gui/main.cpp:450
 msgid "MTC slave timing implementation"
-msgstr ""
+msgstr "MTC-seuraimen aikatoteutus"
 
 #: ../gui/main.cpp:451
 msgid "Czech translation"
@@ -4853,7 +4846,7 @@ msgstr "SCons/bksys käännösjärjestelmä"
 
 #: ../gui/main.cpp:453
 msgid "icons, icons, icons"
-msgstr ""
+msgstr "ikonit, ikonit, ikonit"
 
 #: ../gui/main.cpp:454 ../gui/main.cpp:455 ../gui/main.cpp:456
 #: ../gui/main.cpp:457
@@ -4861,18 +4854,16 @@ msgid "Spanish translation"
 msgstr "Espanjalainen käännös"
 
 #: ../gui/main.cpp:458 ../gui/main.cpp:459
-#, fuzzy
 msgid "Catalan translation"
-msgstr "Italialainen käännös"
+msgstr "Katalonialainen käännös"
 
 #: ../gui/main.cpp:460
 msgid "new splash screen photo (of Michael's rose garden)"
-msgstr ""
+msgstr "uusi roiskeruutukuva (Michaelin ruusupuisto)"
 
 #: ../gui/main.cpp:461
-#, fuzzy
 msgid "Finnish translation"
-msgstr "Espanjalainen käännös"
+msgstr "Suomenkielinen käännös"
 
 #: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:465
 msgid ""
@@ -4907,7 +4898,6 @@ msgid "Always use US names (e.g. quarter, 8th)"
 msgstr "Käytä aina US-nimiä (esim. quarter, 8th)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:178
-#, fuzzy
 msgid "Localized (where available)"
 msgstr "Paikallistettu (mahdollisuuksien mukaan)"
 
@@ -4932,7 +4922,6 @@ msgid "Event List"
 msgstr "Tapahtumalista"
 
 #: ../gui/rosegardenconfigurationpage.cpp:240
-#, fuzzy
 msgid "Behavior"
 msgstr "Käytös"
 
@@ -4971,9 +4960,8 @@ msgid "Notation font"
 msgstr "Nuotinnuskirjasin"
 
 #: ../gui/rosegardenconfigurationpage.cpp:366
-#, fuzzy
 msgid "Other fonts"
-msgstr "Muu"
+msgstr "Muut kirjasimet"
 
 #: ../gui/rosegardenconfigurationpage.cpp:367
 #: ../gui/rosegardenconfigurationpage.cpp:1964
@@ -5010,7 +4998,7 @@ msgstr "Tyyppi:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:426
 msgid "Rescan available fonts"
-msgstr ""
+msgstr "Kartoita fontit uudelleen"
 
 #: ../gui/rosegardenconfigurationpage.cpp:471
 msgid "Text font"
@@ -5243,7 +5231,7 @@ msgid ""
 "incur a\n"
 "delay at the start of playback due to the amount of data being transmitted."
 msgstr ""
-"Rosegarden voi lähettää kaikki MIDI-kontrollerit (Stereovaaka, kaiku jne.) "
+"Rosegarden voi lähettää kaikki MIDI-kontrollerit (Jako, kaiku jne.) "
 "kaikkiin MIDI-laitteisiin joka\n"
 "kerta kun toista, jos niin haluat.   Huomaa, että tämä valinta aiheuttaa "
 "tavallisesti viiveen\n"
@@ -5384,17 +5372,16 @@ msgid "Create post-fader outputs for submasters"
 msgstr "Luo jälkihäivytykselliset ulostulot alakeskuksille"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1386
-#, fuzzy
 msgid "Record audio files as:"
-msgstr "<ei äänitiedostoja>"
+msgstr "Nauhoita äänitiedostot nimellä:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1388
 msgid "16-bit PCM WAV format (smaller files)"
-msgstr ""
+msgstr "16-bittinen PCM WAV-muoto (pienemmät tiedostot)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1389
 msgid "32-bit float WAV format (higher quality)"
-msgstr ""
+msgstr "32-bittinen liukuluku WAV-muoto (korkeampi laatu)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1412
 msgid "Record and Mix"
@@ -5426,7 +5413,7 @@ msgstr "MIDI-koneen hallintatila"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1478
 msgid "MMC Master"
-msgstr "MMC haltija"
+msgstr "MMC Keskus"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1479
 msgid "MMC Slave"
@@ -5438,7 +5425,7 @@ msgstr "MIDI-aikakoodi -tila"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1494
 msgid "MTC Master"
-msgstr "MTC haltija"
+msgstr "MTC mestari"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1495
 msgid "MTC Slave"
@@ -5446,8 +5433,7 @@ msgstr "MTC seurain"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1501
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Yhdistä automaattisesti sync ulostulo kaikkiin käytössä oleviin laitteisiin"
+msgstr "Yhdistä automaattisesti sync ulostulo kaikkiin käytössä oleviin laitteisiin"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1508
 msgid "Synchronisation"
@@ -5778,7 +5764,7 @@ msgstr "Lukkiudu 1/16-osiin"
 
 #: ../gui/matrixview.cpp:790
 msgid "Snap to 1/12"
-msgstr "lukkiudu 1/12-osiin"
+msgstr "Lukkiudu 1/12-osiin"
 
 #: ../gui/matrixview.cpp:792
 msgid "Snap to 1/8"
@@ -5830,6 +5816,8 @@ msgid ""
 "_n:   1 event selected \n"
 "  %n events selected "
 msgstr ""
+"  1 tapahtuma valittu \n"
+"  %n tapahtumaa valittu "
 
 #: ../gui/matrixview.cpp:1112 ../gui/notationview.cpp:2759
 msgid "  No selection "
@@ -5912,11 +5900,12 @@ msgid "%1 - All Segments - %2"
 msgstr "%1 - kaikki osat - %2"
 
 #: ../gui/matrixview.cpp:2586
-#, fuzzy
 msgid ""
 "_n: %1 - 1 Segment - %2\n"
 "%1 - %n Segments - %2"
-msgstr "%1 - %2 osaa - %2"
+msgstr ""
+"%1 - 1 osa - %2\n"
+"%1 - %2 osaa - %2"
 
 #: ../gui/matrixview.cpp:2708
 msgid "Can't insert note: No grid duration selected"
@@ -6194,9 +6183,8 @@ msgid "Import device name"
 msgstr "Tuo laitenimi"
 
 #: ../gui/importdevicedialog.cpp:162
-#, fuzzy
 msgid "Bank import behavior"
-msgstr "Pankin tuontikäytös"
+msgstr "Pankin tuonnin käytös"
 
 #: ../gui/importdevicedialog.cpp:164
 msgid "Merge banks"
@@ -6249,8 +6237,7 @@ msgstr "Liitä olemassaolevaan väliin [\"rajoitettu\"]"
 
 #: ../gui/editcommands.cpp:418
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
+msgstr "Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
 
 #: ../gui/editcommands.cpp:420
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -6438,9 +6425,8 @@ msgid "&Text"
 msgstr "&Teksti"
 
 #: ../gui/notationview.cpp:1406
-#, fuzzy
 msgid "&Fretboard"
-msgstr "&Kelaa eteenpäin"
+msgstr "&Otelauta"
 
 #: ../gui/notationview.cpp:1433
 msgid "Select from Sta&rt"
@@ -6512,7 +6498,7 @@ msgstr "&Ei mikään"
 
 #: ../gui/notationview.cpp:1860
 msgid "Add Fretboard"
-msgstr ""
+msgstr "Lisää otelauta"
 
 #: ../gui/notationview.cpp:1886 ../gui/rosegardengui.cpp:633
 msgid "Show T&ools Toolbar"
@@ -6604,6 +6590,8 @@ msgid ""
 "_n: 1 pixel\n"
 "%n pixels"
 msgstr ""
+"1 kuvapiste\n"
+"%n kuvapistettä"
 
 #: ../gui/notationview.cpp:2166
 msgid "  Font:  "
@@ -6659,11 +6647,12 @@ msgid "%1 - All Segments - Notation"
 msgstr "%1 - Kaikki osat - Nuotinnus"
 
 #: ../gui/notationview.cpp:3637
-#, fuzzy
 msgid ""
 "_n: %1 - Segment - Notation\n"
 "%1 - %n Segments - Notation"
-msgstr "%1 - %2 Osat - Nuotinnus"
+msgstr ""
+"%1 - osa - nuotinnus\n"
+"%1 - %2 osaa - nuotinnus"
 
 #: ../gui/rosegardengui.cpp:300
 msgid ""
@@ -6699,9 +6688,9 @@ msgid "Starting sequence manager..."
 msgstr "Aloitetaan sekvensserinhallintaa..."
 
 #: ../gui/rosegardengui.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Sequencer startup failed: %1"
-msgstr "Sekvensserin tila:"
+msgstr "Sekvensserin aloitus epäonnistui: %1"
 
 #: ../gui/rosegardengui.cpp:423
 msgid "Getting sound driver status..."
@@ -6756,9 +6745,8 @@ msgid "Export &Lilypond file..."
 msgstr "Vie &LilyPond-tiedosto..."
 
 #: ../gui/rosegardengui.cpp:572
-#, fuzzy
 msgid "Pre&view Lilypond file..."
-msgstr "Viedään LilyPond-tiedosto..."
+msgstr "Viedään &LilyPond-tiedosto..."
 
 #: ../gui/rosegardengui.cpp:576
 msgid "Export Music&XML file..."
@@ -6777,13 +6765,12 @@ msgid "Play&list"
 msgstr "S&oittolista"
 
 #: ../gui/rosegardengui.cpp:595
-#, fuzzy
 msgid "Rosegarden &Tutorial"
-msgstr "Rosegarden-verkko-opastusohjelma"
+msgstr "Rosegarden-&opasohjelma"
 
 #: ../gui/rosegardengui.cpp:599
 msgid "&Bug Reporting Guidelines"
-msgstr ""
+msgstr "&Virheenraportointiohjeet"
 
 #: ../gui/rosegardengui.cpp:637
 msgid "Show Trac&ks Toolbar"
@@ -6902,9 +6889,8 @@ msgid "Add &Track"
 msgstr "Lisää &raita"
 
 #: ../gui/rosegardengui.cpp:921
-#, fuzzy
 msgid "&Add Multiple Tracks..."
-msgstr "&Lisää raitoja..."
+msgstr "&Lisää useita raitoja..."
 
 #: ../gui/rosegardengui.cpp:927
 msgid "D&elete Track"
@@ -7143,14 +7129,12 @@ msgid "Join tool not yet implemented"
 msgstr "Liitäntätyökalua ei ole toteutettu vielä"
 
 #: ../gui/rosegardengui.cpp:3184
-#, fuzzy
 msgid "Add Multiple Tracks"
-msgstr "&Vaimenna kaikki raidat"
+msgstr "Lisää &useita raitoja"
 
 #: ../gui/rosegardengui.cpp:3185
-#, fuzzy
 msgid "How many tracks do you want to add?"
-msgstr "Kuinka monta raitaa haluat lisätä? (maksimi on 24)"
+msgstr "Kuinka monta raitaa haluat lisätä?"
 
 #: ../gui/rosegardengui.cpp:3329
 msgid "Revert modified document to previous saved version?"
@@ -7210,8 +7194,7 @@ msgstr "Tuo Rosegarden 2.1 -tiedosto"
 
 #: ../gui/rosegardengui.cpp:3683
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
-msgstr ""
-"Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
+msgstr "Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
 
 #: ../gui/rosegardengui.cpp:3708 ../gui/rosegardengui.cpp:3723
 msgid ""
@@ -7330,23 +7313,20 @@ msgid "Lilypond files"
 msgstr "LilyPond-tiedostot"
 
 #: ../gui/rosegardengui.cpp:4554
-#, fuzzy
 msgid "Previewing Lilypond file..."
-msgstr "Viedään LilyPond-tiedosto..."
+msgstr "Esikatsellaan LilyPond-tiedostoa..."
 
 #: ../gui/rosegardengui.cpp:4559
 msgid "Failed to open a temporary file for Lilypond export."
-msgstr ""
+msgstr "Väliaikaisen tiedoston lataaminen LilyPond-vientiä varten epäonnistui"
 
 #: ../gui/rosegardengui.cpp:4586
-#, fuzzy
 msgid "Lilypond Preview Options"
-msgstr "LilyPond -viennin ominaisuudet"
+msgstr "LilyPond-esikatselun ominaisuudet"
 
 #: ../gui/rosegardengui.cpp:4587
-#, fuzzy
 msgid "Lilypond preview options"
-msgstr "LilyPond -viennin ominaisuudet"
+msgstr "LilyPond-esikatselun ominaisuudet"
 
 #: ../gui/rosegardengui.cpp:4618 ../gui/rosegardengui.cpp:4631
 msgid "Exporting MusicXML file..."
@@ -7414,11 +7394,11 @@ msgstr "Soittolista"
 
 #: ../gui/rosegardengui.cpp:6929
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
-msgstr ""
+msgstr "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 
 #: ../gui/rosegardengui.cpp:6936
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
-msgstr ""
+msgstr "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 
 #: ../gui/rosegardengui.cpp:7013
 msgid "Queueing MIDI panic events for tranmission..."
@@ -7433,10 +7413,8 @@ msgid "Saving current document as default studio..."
 msgstr "Tallennetaan nykyinen dokumentti oletusstudioksi..."
 
 #: ../gui/rosegardengui.cpp:7100
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
 
 #: ../gui/rosegardengui.cpp:7135
 msgid "Import Studio from File"
@@ -7515,7 +7493,7 @@ msgstr "Valitse kaikki ominaisuuksien arvot"
 
 #: ../gui/editview.cpp:836
 msgid "%1 Controller %2 %3"
-msgstr "%1 kontrolleri %2 %3"
+msgstr "%1 -kontrolleri %2 %3"
 
 #: ../gui/controlruler.cpp:1680 ../gui/editview.cpp:843
 msgid "Unsupported Event Type"
@@ -7719,7 +7697,7 @@ msgstr "Tee &sointu"
 
 #: ../gui/notationcommands.h:411
 msgid "&Normalize Rests"
-msgstr "&Tasaannuta tauot"
+msgstr "&Tasaa tauot"
 
 #: ../gui/notationcommands.h:428
 msgid "&Collapse Rests"
@@ -7939,11 +7917,13 @@ msgid ""
 "Please consider resampling such files externally, or adjusting the sample "
 "rate of the JACK server."
 msgstr ""
+"* Jotkin äänitiedostot on koodattu eri näytetaajuudella kuin mitä JACK-äänipalvelin käyttää.\n"
+"Rosegarden soittaa ne oikealla nopeudella, mutta ne kuulostavat kauhealta.\n"
+"Ole hyvä, ja harkitse sellaisten tiedostoja ulkoista uudistettua näytteenottoa, tai sovita JACK-palvelimen näytteenottotaajuus."
 
 #: ../gui/audiomanagerdialog.cpp:207
-#, fuzzy
 msgid "&Add Audio File..."
-msgstr "&Lisää äänitiedosto"
+msgstr "&Lisää äänitiedosto..."
 
 #: ../gui/audiomanagerdialog.cpp:210
 msgid "&Unload Audio File"
@@ -7962,19 +7942,16 @@ msgid "Unload &all Audio Files"
 msgstr "Vapauta &kaikki äänitiedostot"
 
 #: ../gui/audiomanagerdialog.cpp:234
-#, fuzzy
 msgid "Unload all &Unused Audio Files"
-msgstr "Vapauta &kaikki käyttämättömät äänitiedostot"
+msgstr "Vapauta kaikki käy&ttämättömät äänitiedostot"
 
 #: ../gui/audiomanagerdialog.cpp:238
-#, fuzzy
 msgid "&Delete Unused Audio Files..."
-msgstr "Vapauta &kaikki käyttämättömät äänitiedostot"
+msgstr "Poista &käyttämättömät äänitiedostot..."
 
 #: ../gui/audiomanagerdialog.cpp:242
-#, fuzzy
 msgid "&Export Audio File..."
-msgstr "&Vie äänitiedosto"
+msgstr "&Vie äänitiedosto..."
 
 #: ../gui/audiomanagerdialog.cpp:246
 msgid "Distribute Audio on &MIDI"
@@ -8028,6 +8005,10 @@ msgid ""
 "Files will not be removed from your disk.\n"
 "Are you sure?"
 msgstr ""
+"Tämä vapauttaa kaikki äänitiedostot ja poistaa niihin liitetyt osat.\n"
+"Tätä toimintoa ei voida perua, ja liitännät näihin tiedostoihin menetetään.\n"
+"Tiedostoja ei poisteta kovalevyltäsi.\n"
+"Oletko varma?"
 
 #: ../gui/audiomanagerdialog.cpp:897
 msgid ""
@@ -8038,24 +8019,26 @@ msgid ""
 "Files will not be removed from your disk.\n"
 "Are you sure?"
 msgstr ""
+"Tämä vapauttaa kaikki äänitiedostot, joita ei ole liitetty yhteenkään osaan tässä sävellyksessä.\n"
+"Tätä toimintoa ei voida perua, ja liitännät näihin tiedostoihin menetetään.\n"
+"Tiedostoja ei poisteta kovalevyltäsi.\n"
+"Oletko varma?"
 
 #: ../gui/audiomanagerdialog.cpp:947
-#, fuzzy
 msgid "Select Unused Audio Files"
-msgstr "Valitse äänitiedosto"
+msgstr "Valitse käyttämättömät äänitiedosto"
 
 #: ../gui/audiomanagerdialog.cpp:955
-#, fuzzy
 msgid "File size"
-msgstr "Tiedoston nimi"
+msgstr "Tiedoston koko"
 
 #: ../gui/audiomanagerdialog.cpp:956
 msgid "Last modified date"
-msgstr ""
+msgstr "Viimeisin muokkauspäivä"
 
 #: ../gui/audiomanagerdialog.cpp:961
 msgid " (not found) "
-msgstr ""
+msgstr " (ei löydy) "
 
 #: ../gui/audiomanagerdialog.cpp:1020
 msgid ""
@@ -8063,6 +8046,9 @@ msgid ""
 "\n"
 "Please select the ones you wish to delete permanently from the hard disk.\n"
 msgstr ""
+"Seuraavia äänitiedostoja ei ole käytetty nykyisessä sävellyksessä.\n"
+"\n"
+"Ole hyvä, ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kovalevyltäsi.\n"
 
 #: ../gui/audiomanagerdialog.cpp:1030
 #, c-format
@@ -8076,6 +8062,12 @@ msgid ""
 "files.\n"
 "Are you sure?"
 msgstr ""
+"Ollaan poistamassa pysyvästi 1 äänitiedosto kovalevyltä.\n"
+"Tätä toimintoa ei voida perua, ja tapoja palauttaa tätä tiedostoa ei ole.\n"
+"Oletko varma?\n"
+"Ollaan poistamassa pysyvästi %n äänitiedostoa kovalevyltä.\n"
+"Tätä toimintoa ei voida perua, ja tapoja palauttaa näitä tiedostoja ei ole.\n"
+"Oletko varma?"
 
 #: ../gui/audiomanagerdialog.cpp:1077
 msgid "Change Audio File label"
@@ -8250,9 +8242,8 @@ msgstr "Nuottitapahtumat"
 
 #: ../gui/eventfilter.cpp:92 ../gui/eventfilter.cpp:213
 #: ../gui/eventfilter.cpp:290
-#, fuzzy
 msgid "Enable"
-msgstr "Esimerkki"
+msgstr "Salli"
 
 #: ../gui/eventfilter.cpp:100 ../gui/eventfilter.cpp:221
 #: ../gui/eventfilter.cpp:298
@@ -8289,23 +8280,20 @@ msgid "Controller Events"
 msgstr "Kontrolleritapahtumia"
 
 #: ../gui/eventfilter.cpp:227
-#, fuzzy
 msgid "Number:"
-msgstr "Nimi:"
+msgstr "Numero:"
 
 #: ../gui/eventfilter.cpp:230
-#, fuzzy
 msgid "Value:"
-msgstr "Arvo"
+msgstr "Arvo:"
 
 #: ../gui/eventfilter.cpp:286
-#, fuzzy
 msgid "Wheel Events"
-msgstr "Muuta tapahtumien kokoa"
+msgstr "Rullatapahtumat"
 
 #: ../gui/eventfilter.cpp:304
 msgid "Amount:"
-msgstr ""
+msgstr "Määrä:"
 
 #: ../gui/eventfilter.cpp:347
 msgid "Include all"
@@ -8948,214 +8936,3 @@ msgstr "Paniikkinappula"
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Nollaa kaikki MIDI-laitteet, jos sait lukkiutuneita nuotteja."
 
-#~ msgid "assorted icons"
-#~ msgstr "valikoima ikoneja"
-
-#~ msgid "%1 pixel"
-#~ msgstr "%1 pikseli"
-
-#~ msgid "%1 pixels"
-#~ msgstr "%1 pikseliä"
-
-#~ msgid "  1 event selected "
-#~ msgstr "  1 tapahtuma valittu "
-
-#~ msgid "Set Tempo"
-#~ msgstr "Aseta tempo..."
-
-#~ msgid "Modify Tempo"
-#~ msgstr "Muuta tempoa..."
-
-#~ msgid "Change this tempo to"
-#~ msgstr "Aseta tämä tempo"
-
-#~ msgid "Tempo at time"
-#~ msgstr "Tempo ajankohdassa"
-
-#~ msgid "is currently"
-#~ msgstr "on nyt"
-
-#~ msgid "Testing project packager..."
-#~ msgstr "Kokeillaan projektipakkaajaa..."
-
-#~ msgid "Tracks to add"
-#~ msgstr "Lisättävät raidat"
-
-#~ msgid "file://usr/share/doc/using-rosegarden/en/chapter-0.html"
-#~ msgstr "file://usr/share/doc/using-rosegarden/en/chapter-0.html"
-
-#~ msgid "Advanced Event Edit"
-#~ msgstr "Edistynyt tapahtuman muokkain"
-
-#~ msgid "Advanced Event Viewer"
-#~ msgstr "Edistynyt tapahtumakatselija"
-
-#~ msgid "<timing has gone astray>"
-#~ msgstr "<ajoitus on mennyt harhaan>"
-
-#~ msgid "Feta Pixmaps"
-#~ msgstr "Feta pikselikartat"
-
-#~ msgid "GNU Lilypond"
-#~ msgstr "GNU LilyPond"
-
-#~ msgid "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
-#~ msgstr "Copyright (c) 1997--2003 Han-Wen Nienhuys ja Jan Nieuwenhuizen"
-
-#~ msgid "Chris Cannam"
-#~ msgstr "Chris Cannam"
-
-#~ msgid "pixmap"
-#~ msgstr "pikselikartta"
-
-#~ msgid "Feta"
-#~ msgstr "Feta"
-
-#~ msgid "scalable"
-#~ msgstr "skaalattaava"
-
-#~ msgid "Fughetta"
-#~ msgstr "Fughetta"
-
-#~ msgid ""
-#~ "Created by Blake Hodgetts; freely redistributable.  See http://www.efh."
-#~ "org/~bch/aboutfonts.html"
-#~ msgstr ""
-#~ "Tehnyt Blake Hodgetts; vapaasti levitettävissä.  Katso http://www.efh.org/"
-#~ "~bch/aboutfonts.html"
-
-#~ msgid "Copyright 1995-1999 Blake Hodgetts"
-#~ msgstr "Copyright 1995-1999 Blake Hodgetts"
-
-#~ msgid "Inkpen"
-#~ msgstr "Inkpen"
-
-#~ msgid ""
-#~ "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-#~ msgstr ""
-#~ "Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen "
-#~ "kirjasinkarttaa."
-
-#~ msgid "Copyright Sibelius Software Ltd"
-#~ msgstr "Copyright Sibelius Software Ltd"
-
-#~ msgid "Maestro"
-#~ msgstr "Maestro"
-
-#~ msgid "Maestro is part of Finale, but other fonts use the same mappings."
-#~ msgstr ""
-#~ "Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen "
-#~ "kirjasinkarttaa."
-
-#~ msgid "Copyright Coda Inc"
-#~ msgstr "Copyright Coda Inc"
-
-#~ msgid "Opus"
-#~ msgstr "Opus"
-
-#~ msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-#~ msgstr ""
-#~ "Opus on osa Finale:a, mutta muut kirjasimet voivat käyttää sen "
-#~ "kirjasinkarttaa."
-
-#~ msgid "Petrucci"
-#~ msgstr "Petrucci"
-
-#~ msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-#~ msgstr ""
-#~ "Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen "
-#~ "kirjasinkarttaa."
-
-#~ msgid "RG21"
-#~ msgstr "RG21"
-
-#~ msgid "Rosegarden 2.1"
-#~ msgstr "Rosegarden 2.1"
-
-#~ msgid "Copyright (c) 1994--2001 Chris Cannam"
-#~ msgstr "Copyright (c) 1994--2001 Chris Cannam"
-
-#~ msgid "Sonata"
-#~ msgstr "Sonata"
-
-#~ msgid "Adobe"
-#~ msgstr "Adobe"
-
-#~ msgid "Copyright Adobe Inc"
-#~ msgstr "Copyright Adobe Inc"
-
-#~ msgid "Steinberg"
-#~ msgstr "Steinberg"
-
-#~ msgid "The Steinberg Notation font is part of Cubase."
-#~ msgstr "Steinberg -nuotinnuskirjasin on osa Cubase:a."
-
-#~ msgid "Copyright Steinberg Inc"
-#~ msgstr "Copyright Steinberg Inc"
-
-#~ msgid "Xinfonia"
-#~ msgstr "Xinfonia"
-
-#~ msgid "xemo.org"
-#~ msgstr "xemo.org"
-
-#~ msgid "Copyright 2001-2003 Xemus Software LLC"
-#~ msgstr "Copyright 2001-2003 Xemus Software LLC"
-
-#~ msgid "Classical"
-#~ msgstr "Klassinen"
-
-#~ msgid "Cross"
-#~ msgstr "Risti"
-
-#~ msgid "Mensural"
-#~ msgstr "Mensuraali"
-
-#~ msgid "Triangle"
-#~ msgstr "Kolmio"
-
-#~ msgid "%1 Input"
-#~ msgstr "%1 syöte"
-
-#~ msgid "%1 Inputs"
-#~ msgstr "%1 syötettä"
-
-#~ msgid "%1 Submasters"
-#~ msgstr "%1 alakeskusta"
-
-#~ msgid "You can't yet resize an audio segment!"
-#~ msgstr "Et voi vielä muuttaa ääniosan kokoa!"
-
-#~ msgid ""
-#~ "Tempo and Time Signature Ruler.\n"
-#~ "Double click to insert an event."
-#~ msgstr ""
-#~ "Tempo- ja tahtiosoitus -viivain.\n"
-#~ "Kaksoisklikkaa syöttääksesi tapahtuman."
-
-#~ msgid ""
-#~ "*.wav|WAV files (*.wav)\n"
-#~ "*.mp3|MP3 files (*.mp3)"
-#~ msgstr ""
-#~ "*.wav|WAV-tiedostot (*.wav)\n"
-#~ "*.mp3|MP3-tiedostot (*.mp3)"
-
-#~ msgid ""
-#~ "This will unload all audio files and remove their associated segments.  "
-#~ "Are you sure?"
-#~ msgstr ""
-#~ "Tämä vapauttaa kaikki äänitiedostot ja poistaa niihin liitetyt osat.  "
-#~ "Oletko varma?"
-
-#~ msgid ""
-#~ "This will unload all audio files that have no segments used in this "
-#~ "composition.  Are you sure?"
-#~ msgstr ""
-#~ "Tämä vapauttaa kaikki äänitiedostot, joilla ei ole ääniosia käytössä "
-#~ "tässä sävellyksessä.  Oletko varma?"
-
-#~ msgid "%1 on %2 track"
-#~ msgstr "%1 raidalla %2"
-
-#~ msgid "%1 on %2 tracks"
-#~ msgstr "%1 raidoilla %2"
