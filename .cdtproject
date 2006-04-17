@@ -2,18 +2,18 @@
 <?eclipse-cdt version="2.0"?>
 
 <cdtproject id="org.eclipse.cdt.make.core.make">
-<extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.ELF"/>
-<extension point="org.eclipse.cdt.core.CIndexer" id="org.eclipse.cdt.core.domsourceindexer"/>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.domsourceindexer" point="org.eclipse.cdt.core.CIndexer"/>
 <data>
 <item id="scannerConfiguration">
-<autodiscovery enabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile" problemReportingEnabled="true"/>
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction useDefault="true" command="gcc" arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}"/>
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
@@ -23,7 +23,7 @@
 <parser enabled="false"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction useDefault="true" command="gcc" arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}"/>
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
 <parser enabled="false"/>
 </scannerInfoProvider>
 </profile>
@@ -33,7 +33,7 @@
 <parser enabled="false"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction useDefault="true" command="gcc" arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}"/>
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
 <parser enabled="false"/>
 </scannerInfoProvider>
 </profile>
@@ -43,17 +43,17 @@
 <parser enabled="false"/>
 </buildOutputProvider>
 <scannerInfoProvider id="makefileGenerator">
-<runAction useDefault="true" command="make" arguments="-f ${project_name}_scd.mk"/>
+<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
 <parser enabled="false"/>
 </scannerInfoProvider>
 </profile>
 </item>
 <item id="org.eclipse.cdt.core.pathentry">
-<pathentry kind="src" path="" excluding="base/old/|base/test/|cache/|.sconf_temp/|po/|RGbuild/|scons_admin/|scripts/"/>
-<pathentry kind="out" path=""/>
+<pathentry excluding="base/old/|base/test/|cache/|.sconf_temp/|po/|RGbuild/|scons_admin/|scripts/" kind="src" path=""/>
+<pathentry excluding=".sconf_temp/|cache/" kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
-<pathentry kind="mac" path="" name="slots" value=""/>
-<pathentry kind="mac" path="" name="signals" value="protected"/>
+<pathentry kind="mac" name="slots" path="" value=""/>
+<pathentry kind="mac" name="signals" path="" value="protected"/>
 </item>
 </data>
 </cdtproject>
