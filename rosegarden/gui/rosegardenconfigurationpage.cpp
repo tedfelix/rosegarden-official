@@ -1040,7 +1040,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     QString status(i18n("Unknown"));
     Rosegarden::SequenceManager *mgr = doc->getSequenceManager();
     if (mgr) {
-	int driverStatus = mgr->getSoundDriverStatus();
+	int driverStatus = mgr->getSoundDriverStatus() & (Rosegarden::AUDIO_OK | Rosegarden::MIDI_OK);
 	switch (driverStatus) {
 	case Rosegarden::AUDIO_OK:
 	    status = i18n("No MIDI, audio OK"); break;
