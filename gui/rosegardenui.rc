@@ -101,6 +101,7 @@
 	<text>&amp;Split or Join</text>
 	    <Action name="auto_split"/>
 	    <Action name="split_by_pitch"/>
+	    <Action name="split_by_recording"/>
 	    <Separator/>
 	    <Action name="join_segments"/>
 	</Menu>  
@@ -335,6 +336,7 @@
         <Action name="jog_right"/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
+        <Action name="split_by_recording"/>
         <Action name="join_segments"/>
         <Action name="relabel_segment"/>
         <Action name="set_segment_start"/>
@@ -364,6 +366,7 @@
         <Action name="repeat_quantize"/>
         <Action name="rescale"/>
         <Action name="split_by_pitch"/>
+        <Action name="split_by_recording"/>
         <Action name="join_segments"/>
         <Action name="collapse"/>
         <Action name="repeats_to_real_copies"/>

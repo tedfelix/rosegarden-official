@@ -787,6 +787,21 @@ private:
 };
 
 
+class SplitByRecordingSrcDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    
+    int getChannel();
+    int getDevice();
+    
+private:
+    std::vector<int> m_deviceIds;
+    KComboBox *m_channel;
+    KComboBox *m_device;
+};
+
 class InterpretDialog : public KDialogBase
 {
     Q_OBJECT

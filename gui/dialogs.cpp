@@ -4239,6 +4239,8 @@ CompositionLengthDialog::getEndMarker()
     return m_composition->getBarStart(m_endMarkerSpinBox->value());
 }
 
+// --------------------- SplitByPitchDialog ---------------------
+//
 
 SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     KDialogBase(parent, 0, true, i18n("Split by Pitch"), Ok | Cancel)
@@ -4302,7 +4304,79 @@ SplitByPitchDialog::getClefHandling()
     }
 }
 
+// --------------------- SplitByRecordingSrcDialog ---------------------
+//
 
+SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc) :
+    KDialogBase(parent, 0, true, i18n("Split by Recording Source"), Ok | Cancel )
+{
+    QVBox *vBox = makeVBoxMainWidget();
+
+    QFrame *frame = new QFrame(vBox);
+    QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
+
+    //QHBox *chanBox = new QHBox( vBox );
+    //new QLabel( i18n("Recording Channel:"), chanBox );
+    //m_channel = new KComboBox( chanBox );
+    layout->addWidget(new QLabel( i18n("Recording Channel:"), frame ), 0, 0);
+    m_channel = new KComboBox( frame );
+    layout->addWidget(m_channel, 0, 1);
+
+    m_channel->insertItem(i18n("any"));
+    for(int i=1; i<17; ++i) {
+        m_channel->insertItem(QString::number(i));
+    }
+    
+    //QHBox *devBox = new QHBox( vBox );
+    //new QLabel( i18n("Recording Device:"), devBox );
+    //m_device = new KComboBox(devBox);
+    layout->addWidget(new QLabel( i18n("Recording Device:"), frame ), 1, 0);
+    m_device = new KComboBox( frame );
+    layout->addWidget(m_device, 1, 1);
+    
+    
+    m_deviceIds.clear();
+    m_deviceIds.push_back(-1);
+    m_device->insertItem(i18n("any"));
+    
+    Rosegarden::DeviceList *devices = doc->getStudio().getDevices();
+    Rosegarden::DeviceListConstIterator it;
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        Rosegarden::MidiDevice *dev =
+            dynamic_cast<Rosegarden::MidiDevice*>(*it);
+        if (dev && dev->getDirection() == Rosegarden::MidiDevice::Record)
+        {
+            QString label = QString::number(dev->getId()); 
+            label += ": ";
+            label += strtoqstr(dev->getName());
+            QString connection = strtoqstr(dev->getConnection());
+            label += " - ";
+            if (connection == "") label += i18n("No connection");
+            else label += connection;
+            m_device->insertItem(label);
+            m_deviceIds.push_back(dev->getId());
+        }
+    }
+    
+    m_channel->setCurrentItem(0);
+    m_device->setCurrentItem(0);
+}
+
+int
+SplitByRecordingSrcDialog::getChannel()
+{
+    return m_channel->currentItem() - 1;
+}
+
+int
+SplitByRecordingSrcDialog::getDevice()
+{
+    return m_deviceIds[m_device->currentItem()];
+}
+
+// --------------------- InterpretDialog ---------------------
+//
 
 InterpretDialog::InterpretDialog(QWidget *parent) :
     KDialogBase(parent, 0, true, i18n("Interpret"), Ok | Cancel | Help)

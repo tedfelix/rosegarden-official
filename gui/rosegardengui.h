@@ -721,6 +721,11 @@ public slots:
     void slotSplitSelectionByPitch();
 
     /**
+     * Split the selected segments by recorded source
+     */
+    void slotSplitSelectionByRecordedSrc();
+
+    /**
      * Produce a harmony segment from the selected segments
      */
     void slotHarmonizeSelection();

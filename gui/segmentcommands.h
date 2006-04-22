@@ -763,6 +763,29 @@ private:
     bool m_executed;
 };
 
+class SegmentSplitByRecordingSrcCommand : public KNamedCommand
+{
+public:
+    SegmentSplitByRecordingSrcCommand(Rosegarden::Segment *segment,
+                                      int channel, int device);
+    virtual ~SegmentSplitByRecordingSrcCommand();
+    
+    static QString getGlobalName()
+        { return i18n("Split by &Recording Source..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Segment *m_segment;
+    Rosegarden::Segment *m_newSegmentA;
+    Rosegarden::Segment *m_newSegmentB;
+    int m_channel;
+    int m_device;
+    bool m_executed;
+};
+
 class SegmentLabelCommand : public KNamedCommand
 {
 public:
