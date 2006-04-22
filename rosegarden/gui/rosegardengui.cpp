@@ -860,6 +860,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSplitSelectionByPitch()), actionCollection(),
                 "split_by_pitch");
 
+    new KAction(SegmentSplitByRecordingSrcCommand::getGlobalName(), 0, this,
+                SLOT(slotSplitSelectionByRecordedSrc()), actionCollection(),
+                "split_by_recording");
+
     new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
                 SLOT(slotJogLeft()), actionCollection(),
                 "jog_left");
@@ -2625,6 +2629,37 @@ void RosegardenGUIApp::slotSplitSelectionByPitch()
     //!!! else complain
 }
 
+
+void
+RosegardenGUIApp::slotSplitSelectionByRecordedSrc() 
+{
+    if (!m_view->haveSelection()) return;
+
+    SplitByRecordingSrcDialog dialog(m_view, m_doc);
+    if (dialog.exec() != QDialog::Accepted) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+
+    KMacroCommand *command = new KMacroCommand
+        (SegmentSplitByRecordingSrcCommand::getGlobalName());
+
+    bool haveSomething = false;
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i) {
+
+        if ((*i)->getType() == Rosegarden::Segment::Audio) {
+            // nothing
+        } else {
+            command->addCommand
+                (new SegmentSplitByRecordingSrcCommand(*i,
+                                                       dialog.getChannel(),
+                                                       dialog.getDevice()));
+            haveSomething = true;
+        }
+    }
+    if (haveSomething) m_view->slotAddCommandToHistory(command);
+}
 
 void
 RosegardenGUIApp::slotSetSegmentStartTimes()
