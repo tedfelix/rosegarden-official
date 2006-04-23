@@ -1223,14 +1223,14 @@ EventView::setupActions()
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
     
-    pixmap.load(pixmapDir + "/toolbar/event-edit.xpm");
+    pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIconSet(pixmap);
 
     new KAction(i18n("&Edit Event"), icon, Key_E, this,
                 SLOT(slotEditEvent()), actionCollection(),
                 "edit_simple");
     
-    pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.xpm");
+    pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
     icon = QIconSet(pixmap);
 
     new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,

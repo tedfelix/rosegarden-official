@@ -1402,7 +1402,7 @@ void NotationView::setupActions()
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("fretboard")));
     noteAction = new KRadioAction(i18n("&Fretboard"), icon, Key_F9, this,
                                   SLOT(slotFretboard()),
                                   actionCollection(), "fretboard");

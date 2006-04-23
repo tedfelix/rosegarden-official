@@ -625,7 +625,7 @@ TempoView::setupActions()
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
     
-    pixmap.load(pixmapDir + "/toolbar/event-edit.xpm");
+    pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIconSet(pixmap);
 
     new KAction(i18n("&Edit Item"), icon, Key_E, this,
