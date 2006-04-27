@@ -63,6 +63,11 @@ c_builddir = 'RGbuild'
 ## Exit if configuration requested (scons configure)
 if 'configure' in COMMAND_LINE_TARGETS:
 	env.Exit(0)
+
+## Exit if help requested (scons --help)
+if env['HELP']:
+	env.Exit(0)
+
 #-----------------------------
 #        Environment
 #-----------------------------
