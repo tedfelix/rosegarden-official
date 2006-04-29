@@ -149,6 +149,7 @@
 	    <Action name="record"/>
 	    <Action name="recordtoggle"/>
 	    <Action name="toggle_tracking"/>
+	    <Action name="panic"/>
       </Menu>
       <Separator/>
       <Action name="reset_midi_network"/>
@@ -234,6 +235,7 @@
   <Action name="stop" />
   <Action name="record" />
   <Action name="toggle_tracking"/>
+  <Action name="panic"/>
 </ToolBar>
 
 <ToolBar name="Zoom Toolbar">

@@ -229,6 +229,7 @@ signals:
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
     void jumpPlaybackTo(Rosegarden::timeT);
+    void panic();
 
     void stepByStepTargetRequested(QObject *);
 

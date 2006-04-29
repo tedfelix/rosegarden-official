@@ -136,6 +136,7 @@
         <Action name="cursor_to_playback_pointer" />
         <Action name="toggle_solo"/>
         <Action name="toggle_tracking"/>
+        <Action name="panic"/>
     </Menu>
 
   <Separator/>
@@ -190,6 +191,7 @@
   <Action name="cursor_to_playback_pointer" />
   <Action name="toggle_solo"/>
   <Action name="toggle_tracking"/>
+  <Action name="panic"/>
 </ToolBar>
 
 <ToolBar name="Actions Toolbar">

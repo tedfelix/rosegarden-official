@@ -1096,6 +1096,11 @@ void RosegardenGUIApp::setupActions()
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(true);
 
+    pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
+    icon = QIconSet(pixmap);
+    new KAction( i18n("Panic"), icon, Key_P + CTRL + ALT, this, SLOT(slotPanic()), 
+                 actionCollection(), "panic");
+
     // DEBUG FACILITY
     new KAction(i18n("Segment Debug Dump "), 0, this,
                 SLOT(slotDebugDump()), actionCollection(),
@@ -6078,6 +6083,8 @@ RosegardenGUIApp::slotOpenAudioMixer()
 	    this, SLOT(slotRewindToBeginning()));
     connect(m_audioMixer, SIGNAL(record()),
 	    this, SLOT(slotRecord()));
+    connect(m_audioMixer, SIGNAL(panic()),
+            this, SLOT(slotPanic()));
 
     connect(m_audioMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
@@ -6139,6 +6146,8 @@ RosegardenGUIApp::slotOpenMidiMixer()
 	    this, SLOT(slotRewindToBeginning()));
     connect(m_midiMixer, SIGNAL(record()),
 	    this, SLOT(slotRecord()));
+    connect(m_midiMixer, SIGNAL(panic()),
+            this, SLOT(slotPanic()));
 
     connect(m_midiMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),

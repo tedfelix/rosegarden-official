@@ -141,6 +141,12 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 		SIGNAL(record()), actionCollection(),
 		"record");
 
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-panic")));
+    new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
+                SIGNAL(panic()), actionCollection(),
+                "panic");
+
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
     (new KToggleAction(i18n("Show Audio &Faders"), 0, this,
@@ -1709,6 +1715,12 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     new KAction(i18n("&Record"), icon, 0, this,
 		SIGNAL(record()), actionCollection(),
 		"record");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-panic")));
+    new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
+                SIGNAL(panic()), actionCollection(),
+                "panic");
 
     createGUI("midimixer.rc");
 

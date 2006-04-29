@@ -446,6 +446,9 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
             RosegardenGUIApp::self(), SLOT(slotFastForwardToEnd()));
     connect(notationView, SIGNAL(rewindPlaybackToBeginning()),
             RosegardenGUIApp::self(), SLOT(slotRewindToBeginning()));
+    connect(notationView, SIGNAL(panic()),
+            RosegardenGUIApp::self(), SLOT(slotPanic()));
+            
     connect(notationView, SIGNAL(saveFile()),
             RosegardenGUIApp::self(), SLOT(slotFileSave()));
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
@@ -638,6 +641,9 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 		    RosegardenGUIApp::self(), SLOT(slotFastForwardToEnd()));
     connect(matrixView, SIGNAL(rewindPlaybackToBeginning()),
 		    RosegardenGUIApp::self(), SLOT(slotRewindToBeginning()));
+    connect(matrixView, SIGNAL(panic()),
+                    RosegardenGUIApp::self(), SLOT(slotPanic()));
+
     connect(matrixView, SIGNAL(saveFile()),
 		    RosegardenGUIApp::self(), SLOT(slotFileSave()));
     connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
