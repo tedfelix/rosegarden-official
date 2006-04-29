@@ -719,6 +719,7 @@ signals:
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
     void jumpPlaybackTo(Rosegarden::timeT);
+    void panic();
 
     /// progress Report
     void setProgress(int);

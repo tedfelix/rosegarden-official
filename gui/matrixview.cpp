@@ -759,6 +759,11 @@ void MatrixView::setupActions()
 		       SLOT(slotToggleTracking()), actionCollection(),
 		       "toggle_tracking"))->setChecked(m_playTracking);
 
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-panic")));
+    new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
+                SIGNAL(panic()), actionCollection(), "panic");
+
     new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
 		SLOT(slotPreviewSelection()), actionCollection(),
 		"preview_selection");

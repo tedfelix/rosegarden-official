@@ -86,6 +86,7 @@ signals:
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
     void record();
+    void panic();
 
     // to be redirected to the instrument parameter box if necessary
     void instrumentParametersChanged(Rosegarden::InstrumentId);
@@ -245,6 +246,7 @@ signals:
     void fastForwardPlaybackToEnd();
     void rewindPlaybackToBeginning();
     void record();
+    void panic();
 
     // to be redirected to the instrument parameter box if necessary
     void instrumentParametersChanged(Rosegarden::InstrumentId);

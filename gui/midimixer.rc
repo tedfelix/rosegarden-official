@@ -13,6 +13,7 @@
   <Action name="playback_pointer_start" />
   <Action name="playback_pointer_end" />
   <Action name="record" />
+  <Action name="panic" />
   </Menu>
 
 </MenuBar>
@@ -26,6 +27,7 @@
   <Action name="playback_pointer_end" />
   <Action name="stop" />
   <Action name="record" />
+  <Action name="panic" />
 </ToolBar>
 
 </kpartgui>
