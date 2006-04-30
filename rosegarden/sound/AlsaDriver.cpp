@@ -3410,7 +3410,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 			   "processMidiOut(): output queued");
 
 	    if (now) {
-		if (!m_queueRunning && !m_playing) {
+		if (m_queueRunning && !m_playing) {
 		    // restart queue
 #ifdef DEBUG_PROCESS_MIDI_OUT
 		    std::cerr << "processMidiOut: restarting queue after now-event" << std::endl;
