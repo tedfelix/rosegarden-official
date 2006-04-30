@@ -3549,15 +3549,15 @@ AlsaDriver::startClocks()
 		rv = m_jackDriver->relocateTransport();
 	    } else {
 		rv = m_jackDriver->startTransport();
-	    }
-	    if (!rv) {
+	        if (!rv) {
 #ifdef DEBUG_ALSA
-		std::cerr << "AlsaDriver::startClocks: Waiting for startClocksApproved" << std::endl;
+                    std::cerr << "AlsaDriver::startClocks: Waiting for startClocksApproved" << std::endl;
 #endif
-		// need to wait for transport sync
-		_debug_jack_frame_count = m_jackDriver->getFramesProcessed();
-		return;
-	    }
+                    // need to wait for transport sync
+                    _debug_jack_frame_count = m_jackDriver->getFramesProcessed();
+                    return;
+                }
+            }
 	}
     }
 #endif
