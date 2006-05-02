@@ -962,6 +962,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			// and leaving an old one
 			if (groupType == GROUP_TYPE_TUPLED ||
 			    groupType == GROUP_TYPE_GRACE) {
+			    if (m_exportBeams) str << "] ";
 			    str << "} ";
 			} else if (groupType == GROUP_TYPE_BEAMED) {
 			    if (m_exportBeams) str << "] ";
@@ -986,13 +987,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			} else {
 			    str << "\\times " << numerator << "/" << denominator << " { ";
 			    tupletRatio = std::pair<int, int>(numerator, denominator);
+			    newBeamedGroup = true;
 			}
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
 			newBeamedGroup = true;
-			if (m_exportBeams && m_languageLevel < 1) {
-			    str << "[ ";
-			    newBeamedGroup = false;
-			}
 		    } else if (groupType == GROUP_TYPE_GRACE) {
 			str << "\\grace { ";
 		    }
@@ -1004,6 +1002,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    // leaving a beamed group
 		    if (groupType == GROUP_TYPE_TUPLED ||
 			groupType == GROUP_TYPE_GRACE) {
+	    		if (m_exportBeams) str << "] ";
 			str << "} ";
 			tupletRatio = std::pair<int, int>(1, 1);
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
@@ -1013,6 +1012,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    groupType = "";
 		}
 	    }
+	}
+	if (m_exportBeams && newBeamedGroup && m_languageLevel < 1) {
+	    str << "[ ";
+	    newBeamedGroup = false;
 	}
 
 	timeT soundingDuration = -1;
@@ -1256,7 +1259,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	}
 
 	// LilyPond 2.0 introduces postfix syntax for beaming
-	if (newBeamedGroup && m_exportBeams && m_languageLevel >= 1) {
+	if (m_exportBeams && newBeamedGroup && m_languageLevel >= 1) {
 	    str << "[ ";
 	    newBeamedGroup = false;
 	}
@@ -1272,6 +1275,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     if (groupId != -1) {
 	if (groupType == GROUP_TYPE_TUPLED ||
 	    groupType == GROUP_TYPE_GRACE) {
+	    if (m_exportBeams) str << "] ";
 	    str << "} ";
 	    tupletRatio = std::pair<int, int>(1, 1);
 	} else if (groupType == GROUP_TYPE_BEAMED) {
