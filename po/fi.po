@@ -4982,7 +4982,7 @@ msgstr "Kirjasinkoko tulostuksessa (pt)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:391
 msgid "Origin:"
-msgstr "Origo:"
+msgstr "Lähde:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:392
 msgid "Copyright:"
@@ -5642,7 +5642,7 @@ msgstr "&Sointujen syöttötila"
 
 #: ../gui/matrixview.cpp:598 ../gui/notationview.cpp:1427
 msgid "Ste&p Recording"
-msgstr "Askeleen nauhoitus"
+msgstr "Askelnauhoitus"
 
 #: ../gui/matrixview.cpp:608 ../gui/rosegardengui.cpp:847
 msgid "Repeat Last Quantize"
@@ -6346,7 +6346,7 @@ msgstr "Valmistetaan tulostusta..."
 
 #: ../gui/notationview.cpp:1177
 msgid "Note &Font"
-msgstr "Nuotin &kirjaisin"
+msgstr "Nuotin &kirjasin"
 
 #: ../gui/notationview.cpp:1199
 msgid "Si&ze"
@@ -6661,7 +6661,7 @@ msgid ""
 "control)\n"
 " and restart."
 msgstr ""
-"Yritys käynnistää JACK -äänitaustaprosessi epäonnistuis.  Ääni on pois "
+"Yritys käynnistää JACK-ääni -taustaprosessi epäonnistui.  Ääni on pois "
 "käytöstä.\n"
 "Tarkista asetukset (Asetukset -> Määritä Rosegarden -> Sekvensseri -> JACK "
 "hallinta)\n"
@@ -6746,7 +6746,7 @@ msgstr "Vie &LilyPond-tiedosto..."
 
 #: ../gui/rosegardengui.cpp:572
 msgid "Pre&view Lilypond file..."
-msgstr "Viedään &LilyPond-tiedosto..."
+msgstr "Esi&katsele LilyPond-tiedostoa..."
 
 #: ../gui/rosegardengui.cpp:576
 msgid "Export Music&XML file..."
@@ -6766,7 +6766,7 @@ msgstr "S&oittolista"
 
 #: ../gui/rosegardengui.cpp:595
 msgid "Rosegarden &Tutorial"
-msgstr "Rosegarden-&opasohjelma"
+msgstr "Rosegardenin &opetusohjelma"
 
 #: ../gui/rosegardengui.cpp:599
 msgid "&Bug Reporting Guidelines"
@@ -6782,7 +6782,7 @@ msgstr "Näytä &Editorit -työkalupalkki"
 
 #: ../gui/rosegardengui.cpp:649
 msgid "Show &Zoom Toolbar"
-msgstr "Näytä &Näkymäkoko -työkalupalkki"
+msgstr "Näytä &Suurennos -työkalupalkki"
 
 #: ../gui/rosegardengui.cpp:656
 msgid "Show Tra&nsport"
@@ -6942,11 +6942,11 @@ msgstr "Hallitse S&ynth lisäosia"
 
 #: ../gui/rosegardengui.cpp:996
 msgid "Modify MIDI &Filters"
-msgstr "Muuta MIDI-&filttereitä"
+msgstr "Muuta MIDI-&suodattimia"
 
 #: ../gui/rosegardengui.cpp:1002
 msgid "Manage &Metronome"
-msgstr "Hallitse &metronomia"
+msgstr "Hallitse &Metronomia"
 
 #: ../gui/rosegardengui.cpp:1006
 msgid "&Save Current Document as Default Studio"
@@ -6974,7 +6974,7 @@ msgstr "Osan virheiden kippaus korjausta varten"
 
 #: ../gui/rosegardengui.cpp:1166
 msgid "  Zoom:  "
-msgstr "  Näkymäkoko:  "
+msgstr "  Suurennos:  "
 
 #: ../gui/rosegardengui.cpp:1577
 msgid "File \"%1\" does not exist"
@@ -7106,7 +7106,7 @@ msgstr "Kytke Siirtymät -työkalupalkki..."
 
 #: ../gui/rosegardengui.cpp:2914
 msgid "Toggle the zoom toolbar..."
-msgstr "Kytke Näkymäkoko -työkalupalkki..."
+msgstr "Kytke Suurennos -työkalupalkki..."
 
 #: ../gui/rosegardengui.cpp:2924
 msgid "Toggle the Transport"
@@ -8259,7 +8259,7 @@ msgstr "paikkaan:"
 #: ../gui/eventfilter.cpp:131 ../gui/eventfilter.cpp:235
 #: ../gui/eventfilter.cpp:243 ../gui/eventfilter.cpp:309
 msgid "include"
-msgstr "sisältää"
+msgstr "sisällytä"
 
 #: ../gui/eventfilter.cpp:118 ../gui/eventfilter.cpp:125
 #: ../gui/eventfilter.cpp:132 ../gui/eventfilter.cpp:236
@@ -8547,7 +8547,7 @@ msgstr "Muokkaus -työkalupalkki"
 #: rc.cpp:81 rc.cpp:303 rc.cpp:327 rc.cpp:363
 #, no-c-format
 msgid "Zoom Toolbar"
-msgstr "Näkymäkoko -tyokalupalkki"
+msgstr "Suurennos -työkalupalkki"
 
 #: rc.cpp:87 rc.cpp:318 rc.cpp:339 rc.cpp:354
 #, no-c-format
