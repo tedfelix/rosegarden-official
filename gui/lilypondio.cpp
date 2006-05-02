@@ -427,11 +427,18 @@ LilypondExporter::write()
     // enable "point and click" debugging via xdvi to make finding the
     // unfortunately inevitable errors easier
     if (m_exportPointAndClick) {
-        str << "% point and click debugging:" << std::endl;
-	if (m_languageLevel >= 2) {
+        str << "% point and click debugging is enabled" << std::endl;
+	if (m_languageLevel >= 4) {
+            // line-column set by default
+	} else if (m_languageLevel >= 2) {
 	    str << "#(ly:set-point-and-click! 'line)" << std::endl;
 	} else {
 	    str << "#(set-point-and-click! 'line)" << std::endl;
+	}
+    } else {
+        str << "% point and click debugging is disabled" << std::endl;
+	if (m_languageLevel >= 4) {
+	    str << "#(ly:set-option point-and-click #f)" << std::endl;
 	}
     }
 
@@ -933,6 +940,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     std::pair<int, int> tupletRatio(1, 1);
 
     bool overlong = false;
+    bool newBeamedGroup = false;
 
     while (s->isBeforeEndMarker(i)) {
 
@@ -980,8 +988,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			    tupletRatio = std::pair<int, int>(numerator, denominator);
 			}
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
-			if (m_exportBeams) str << "[ "; //!!! wrong for 2.0
-
+			newBeamedGroup = true;
+			if (m_exportBeams && m_languageLevel < 1) {
+			    str << "[ ";
+			    newBeamedGroup = false;
+			}
 		    } else if (groupType == GROUP_TYPE_GRACE) {
 			str << "\\grace { ";
 		    }
@@ -1242,6 +1253,12 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		note_ended_with_a_lyric = true;
 
 	    handleText(*i, lilyText, lilyLyrics);
+	}
+
+	// LilyPond 2.0 introduces postfix syntax for beaming
+	if (newBeamedGroup && m_exportBeams && m_languageLevel >= 1) {
+	    str << "[ ";
+	    newBeamedGroup = false;
 	}
 
 	if ((*i)->isa(Indication::EventType)) {
