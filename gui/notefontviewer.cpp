@@ -303,8 +303,8 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     (void) new QLabel(i18n("  View: "), controls);
     m_view = new KComboBox(controls);
 
-    m_view->insertItem("Glyphs");
-    m_view->insertItem("Codes");
+    m_view->insertItem(i18n("Glyphs"));
+    m_view->insertItem(i18n("Codes"));
 
     (void) new QLabel(i18n("  Page: "), controls);
     m_rows = new KComboBox(controls);

@@ -3047,7 +3047,7 @@ TempoDialog::updateBeatLabels(double qpm)
 
     timeT beat = comp.getTimeSignatureAt(m_tempoTime).getBeatDuration();
     if (beat == Note(Note::Crotchet).getDuration()) {
-	m_tempoBeatLabel->setText(" bpm");
+	m_tempoBeatLabel->setText(i18n(" bpm"));
 	m_tempoBeatLabel->show();
 	m_tempoBeat->hide();
 	m_tempoBeatsPerMinute->hide();

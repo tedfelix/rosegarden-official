@@ -1620,9 +1620,9 @@ NotationView::slotMakeOrnament()
     QString name;
     int barNo = segment.getComposition()->getBarNumber(absTime);
     if (track) {
-	name = QString("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1);
+	name = QString(i18n("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1));
     } else {
-	name = QString("Ornament bar %1").arg(barNo + 1);
+	name = QString(i18n("Ornament bar %1").arg(barNo + 1));
     }
 
     MakeOrnamentDialog dialog(this, name, basePitch);
