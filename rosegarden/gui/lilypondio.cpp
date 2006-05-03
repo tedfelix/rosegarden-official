@@ -993,6 +993,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			newBeamedGroup = true;
 		    } else if (groupType == GROUP_TYPE_GRACE) {
 			str << "\\grace { ";
+			newBeamedGroup = true;
 		    }
 		}
 		
