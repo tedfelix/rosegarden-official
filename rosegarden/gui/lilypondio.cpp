@@ -438,7 +438,7 @@ LilypondExporter::write()
     } else {
         str << "% point and click debugging is disabled" << std::endl;
 	if (m_languageLevel >= 4) {
-	    str << "#(ly:set-option point-and-click #f)" << std::endl;
+	    str << "#(ly:set-option 'point-and-click #f)" << std::endl;
 	}
     }
 
