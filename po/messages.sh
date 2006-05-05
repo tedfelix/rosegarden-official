@@ -66,11 +66,25 @@ echo -e 'i18n("_: NAME OF TRANSLATORS\\n"\n"Your names")\ni18n("_: EMAIL OF TRAN
 # process the tips - $SRCDIR is supposed to be where the tips are living
 pushd $TIPSDIR; preparetips >tips.cpp; popd
 
-#$XGETTEXT `find $SRCDIR -name "*.cpp"` -o tmp.pot
-$XGETTEXT `find $SRCDIR -name "*.cpp" -o -name "*.h"` rc.cpp $TIPSDIR/tips.cpp -o tmp.pot
+# process the fonts mapping attributes
+FONTSDIR=$SRCDIR/fonts/mappings
+pushd $FONTSDIR
+cat *.xml | perl -e 'while (<STDIN>) { if(/(encoding name|origin|copyright|mapped-by|type)\s*=\s*\"(.*)\"/) { print "i18n(\"$2\")\;\n";} }' > fonts.cpp
+popd
+
+# process the note head style names
+STYLEDIR=$SRCDIR/styles
+pushd $STYLEDIR
+ls *.xml | perl -e 'while (<STDIN>) { if(/(.*)\.xml/) { print "i18n(\"$1\")\;\n";} }' > styles.cpp
+popd
+
+# extract the strings
+$XGETTEXT `find $SRCDIR -name "*.cpp" -o -name "*.h"` rc.cpp $TIPSDIR/tips.cpp $FONTSDIR/fonts.cpp $STYLEDIR/styles.cpp -o tmp.pot
 
 # remove the intermediate files
-rm -f $TIPSDIR/tips.cpp
+rm -f $TIPSDIR/tips.cpp 
+rm -f $FONTSDIR/fonts.cpp 
+rm -f $STYLEDIR/styles.cpp
 rm -f rc.cpp
 rm -f $SRCDIR/_translatorinfo.cpp
 
@@ -82,6 +96,9 @@ for i in `ls *.po`; do
     msgmerge $i tmp.pot -o $i || exit 1
 done
 
+# replacing the old template by the new one
+rm -f rosegarden.pot
+mv tmp.pot rosegarden.pot
+
 ## finished
 echo "Done"
-
