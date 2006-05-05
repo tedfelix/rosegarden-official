@@ -18,6 +18,8 @@
 
     Some restructuring by Chris Cannam.
 
+    Bug fixes on LilyPond 2.x export by Heikki Junes.
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
@@ -573,6 +575,13 @@ LilypondExporter::write()
 
     Rosegarden::Track *track = 0;
 
+    Composition::iterator i = m_composition->begin();
+    timeT compositionEndTime = (*i)->getEndMarkerTime();
+    for (; i != m_composition->end(); ++i) {
+	if (compositionEndTime < (*i)->getEndMarkerTime()) {
+	    compositionEndTime = (*i)->getEndMarkerTime();
+	}
+    }
     for (int trackPos = 0;
 	 (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
 	
@@ -633,7 +642,8 @@ LilypondExporter::write()
 		    // year old son pointed out to me that it "Looks really
 		    // stupid.  Why is it cancelling out four flats and then
 		    // adding five flats back?  That's brain damaged."
-		    str << (m_languageLevel >= 2 ? "\\set " : "\\property ")
+		    str << indent(col) 
+			<< (m_languageLevel >= 2 ? "\\set " : "\\property ")
 			<< "Staff.printKeyCancellation = ##f"
 			<< std::endl;
 		}
@@ -687,6 +697,7 @@ LilypondExporter::write()
 		    // a series of rests) at the start of writeBar, below.
 		    //!!! This doesn't cope correctly yet with time signature changes
 		    // during this skipped section.
+		    str << indent(col);
 		    writeSkip(timeSignature, 0, m_composition->getBarStart(firstBar),
 			      false, str);
 		}
@@ -707,19 +718,15 @@ LilypondExporter::write()
 		     barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
 		     ++barNo) {
 
-		    str << std::endl;
-
 		    writeBar(*i, barNo, col, key,
 			     lilyText, lilyLyrics,
 			     prevStyle, eventsInProgress, str, note_ended_with_a_lyric);
-
-		    if (m_exportBarChecks) {
-			str << " |";
-		    }
 		}
 
 		// closing bar
-		str << std::endl << indent(col) << " \\bar \"|.\"";
+    		if ((*i)->getEndMarkerTime() == compositionEndTime) {
+        	    str << std::endl << indent(col) << "\\bar \"|.\"";
+    		}
 
 		// close Voice context
 		str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
@@ -904,6 +911,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
     Segment::iterator i = s->findTime(barStart);
     if (!s->isBeforeEndMarker(i)) return;
+
+    str << std::endl;
 
     if ((barNo+1) % 5 == 0) {
 	str << "%% " << barNo+1 << std::endl << indent(col);
@@ -1305,6 +1314,9 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	writeSkip(timeSignature, writtenDuration,
 		  (barEnd - barStart) - writtenDuration, true, str);
     }
+    if (m_exportBarChecks) {
+	str << " |";
+    }
 }
 
 void
@@ -1331,6 +1343,7 @@ LilypondExporter::writeSkip(const Rosegarden::TimeSignature &timeSig,
 		writeDuration(t, str);
 
 		if (count > 1) str << "*" << count;
+		str << " ";
 	    }
 
 	    if (i != dlist.end()) {
@@ -1342,7 +1355,6 @@ LilypondExporter::writeSkip(const Rosegarden::TimeSignature &timeSig,
 	    ++count;
 	}
 
-	str << " ";
 	if (i == dlist.end()) break;
     }
 }
