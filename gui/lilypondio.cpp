@@ -262,9 +262,9 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         inStr = protectIllegalChars(Rosegarden::Marks::getFingeringFromMark(eventMark));
 	
 	if (m_languageLevel < 1) {
-	    inStr = "#'(italic \"" + inStr + "\")";
+	    inStr = "\\markup { \\fontsize #-3 \\number \"" + inStr + "\" } ";
 	} else {
-	    inStr = "\\markup { \\italic " + inStr + " } ";
+	    inStr = "\\markup { \\finger \"" + inStr + "\" } ";
 	}
 
         outStr = prefix + inStr;
