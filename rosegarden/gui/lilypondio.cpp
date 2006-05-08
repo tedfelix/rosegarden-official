@@ -256,8 +256,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
     } else if (Rosegarden::Marks::isFingeringMark(eventMark)) {
 	
-	// treat fingering marks like text marks for the moment,
-	// though they probably shouldn't be
+	// fingering marks
 
         inStr = protectIllegalChars(Rosegarden::Marks::getFingeringFromMark(eventMark));
 	
