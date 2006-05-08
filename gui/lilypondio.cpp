@@ -1329,7 +1329,12 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 
 	} else if (text.getTextType() == Text::Lyric) {
 
-	    lilyLyrics += "\"" + s + "\" ";
+	    // convert Rosegarden's lyric skip character to LilyPond's one
+	    if (s == ".") {
+		lilyLyrics += "_ ";
+	    } else {
+		lilyLyrics += "\"" + s + "\" ";
+	    }
 
 	} else if (text.getTextType() == Text::Dynamic) {
 
