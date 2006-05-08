@@ -4636,7 +4636,7 @@ bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
                                          100,
                                          this);
     
-    LilypondExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
+    LilypondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));

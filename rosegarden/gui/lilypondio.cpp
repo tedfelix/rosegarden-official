@@ -45,6 +45,7 @@
 #include <kapp.h>
 #include <kmessagebox.h>
 
+#include "Studio.h"
 #include "Composition.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
@@ -57,6 +58,7 @@
 #include "notationview.h"
 #include "widgets.h"
 #include "rgapplication.h"
+#include "rosegardenguidoc.h"
 
 #include "rosedebug.h"
 
@@ -84,10 +86,10 @@ const Rosegarden::PropertyName LilypondExporter::SKIP_PROPERTY
     = "LilypondExportSkipThisEvent";
 
 LilypondExporter::LilypondExporter(QObject *parent,
-                                   Composition *composition,
+                                   RosegardenGUIDoc *doc,
                                    std::string fileName) :
                                    ProgressReporter(parent, "lilypondExporter"),
-                                   m_composition(composition),
+                                   m_doc(doc),
                                    m_fileName(fileName)
 {
     m_pitchBorked = false;
@@ -96,6 +98,8 @@ LilypondExporter::LilypondExporter(QObject *parent,
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationView::ConfigGroup);
 
+    m_composition = &m_doc->getComposition();
+    m_studio = &m_doc->getStudio();
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
@@ -622,6 +626,18 @@ LilypondExporter::write()
 			<< (m_languageLevel >= 1 ? "\\set " : "\\property ")
 			<< "Staff.instrument = \""
 			<< staffName.str() <<"\"" << std::endl;
+
+		    if (m_exportMidi) {
+			// Set midi instrument for the Staff
+			std::ostringstream staffMidiName;
+			Rosegarden::Instrument *instr = m_studio->getInstrumentById(m_composition->getTrackById(lastTrackIndex)->getInstrument());
+			staffMidiName << instr->getProgramName();
+		   
+			str << indent(col)
+			    << (m_languageLevel >= 1 ? "\\set " : "\\property ")
+			    << "Staff.midiInstrument = \""
+			    << staffMidiName.str() <<"\"" << std::endl;
+		    }
 
 		    // turn off the stupid accidental cancelling business,
 		    // because we don't do that ourselves, and because my 11
