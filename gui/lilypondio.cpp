@@ -1314,6 +1314,7 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 
 	    // convert Rosegarden's lyric skip character to LilyPond's one
 	    if (s == ".") {
+		// is this point really reached?
 		lilyLyrics += "_ ";
 	    } else {
 		lilyLyrics += "\"" + s + "\" ";
