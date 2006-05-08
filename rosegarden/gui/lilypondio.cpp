@@ -708,7 +708,6 @@ LilypondExporter::write()
 		std::string lilyText = "";      // text events
 		std::string lilyLyrics = "";    // lyric events
 		std::string prevStyle = "";     // track note styles 
-		bool note_ended_with_a_lyric = true;
 		
 		Rosegarden::Key key;
 
@@ -718,7 +717,7 @@ LilypondExporter::write()
 
 		    writeBar(*i, barNo, col, key,
 			     lilyText, lilyLyrics,
-			     prevStyle, eventsInProgress, str, note_ended_with_a_lyric);
+			     prevStyle, eventsInProgress, str);
 		}
 
 		// closing bar
@@ -891,8 +890,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			   std::string &lilyLyrics,
 			   std::string &prevStyle,
 			   eventendlist &eventsInProgress,
-			   std::ofstream &str,
-			   bool &note_ended_with_a_lyric)
+			   std::ofstream &str)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
@@ -1064,11 +1062,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 		if ((*i)->isa(Text::EventType)) {
 
-		    std::string textType;
-		    if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
-			textType == Text::Lyric)
-			note_ended_with_a_lyric = true;
-
 		    handleText(*i, lilyText, lilyLyrics);
 
 		} else if ((*i)->isa(Note::EventType)) {
@@ -1084,11 +1077,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    bool noteTiedForward = false;
 		    (*i)->get<Bool>(TIED_FORWARD, noteTiedForward);
 		    if (noteTiedForward) tiedForward = true;
-
-		    if (!noteTiedForward) {
-			if (!note_ended_with_a_lyric) lilyLyrics += "_ ";
-			note_ended_with_a_lyric = false;
-		    }
 
 		    str << " ";
 		} else if ((*i)->isa(Indication::EventType)) {
@@ -1207,11 +1195,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	} else if ((*i)->isa(Text::EventType)) {
-
-	    std::string textType;
-	    if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
-		textType == Text::Lyric)
-		note_ended_with_a_lyric = true;
 
 	    handleText(*i, lilyText, lilyLyrics);
 	}
