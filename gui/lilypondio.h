@@ -33,6 +33,8 @@
 #include <vector>
 #include "Event.h"
 #include "Segment.h"
+#include "Studio.h"
+#include "rosegardenguidoc.h"
 #include "progressreporter.h"
 
 /**
@@ -46,14 +48,15 @@ public:
     typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventEndCmp> eventendlist;
 
 public:
-    LilypondExporter(QObject *parent, Rosegarden::Composition *,
-                     std::string fileName);
+    LilypondExporter(QObject *parent, RosegardenGUIDoc *, std::string fileName);
     ~LilypondExporter();
 
     bool write();
 
 protected:
+    RosegardenGUIDoc *m_doc;
     Rosegarden::Composition *m_composition;
+    Rosegarden::Studio *m_studio;
     std::string m_fileName;
     bool m_pitchBorked;
 
