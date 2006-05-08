@@ -256,14 +256,16 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
     } else if (Rosegarden::Marks::isFingeringMark(eventMark)) {
 	
-	// fingering marks
+	// fingering marks: use markup syntax only for non-trivial fingerings
 
         inStr = protectIllegalChars(Rosegarden::Marks::getFingeringFromMark(eventMark));
 	
-	if (m_languageLevel < 1) {
-	    inStr = "\\markup { \\fontsize #-3 \\number \"" + inStr + "\" } ";
-	} else {
-	    inStr = "\\markup { \\finger \"" + inStr + "\" } ";
+	if (inStr != "0" && inStr != "1" && inStr != "2" && inStr != "3" && inStr != "4" && inStr != "5" && inStr != "+" ) {
+	    if (m_languageLevel < 1) {
+		inStr = "\\markup { \\fontsize #-3 \\number \"" + inStr + "\" } ";
+	    } else {
+		inStr = "\\markup { \\finger \"" + inStr + "\" } ";
+	    }
 	}
 
         outStr = prefix + inStr;
