@@ -508,8 +508,7 @@ LilypondExporter::write()
     // (not the cleanest output but maybe the most reliable)
     // Incomplete: add an option to cram it all into one grand staff
     
-    // include appropriate paper file to make the specified paper/font sizes
-    // work...
+    // paper/font sizes
     int font = 20; // default, if config problem
     switch (m_fontSize) {
         case 0 : font = 11; break;
