@@ -700,7 +700,7 @@ LilypondExporter::write()
 			str << "\\lyricmode { " << std::endl;
 		    }
 		    str << indent(++col) << lilyLyrics << " " << std::endl;
-		    str << std::endl << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
+		    str << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
 		}
 	    }
 	}
