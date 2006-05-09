@@ -5120,7 +5120,6 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 	i18n("Lilypond compatibility level"), frame), 0, 0);
     
     m_lilyLanguage = new KComboBox(frame);
-    m_lilyLanguage->insertItem(i18n("Lilypond 2.0"));
     m_lilyLanguage->insertItem(i18n("Lilypond 2.2"));
     m_lilyLanguage->insertItem(i18n("Lilypond 2.4"));
     m_lilyLanguage->insertItem(i18n("Lilypond 2.6"));
