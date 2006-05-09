@@ -245,11 +245,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         } else if (inStr == "rf") {
             inStr = "\\rfz";
         } else {        
-	    if (m_languageLevel < 1) {
-		inStr = "#'(italic \"" + inStr + "\")";
-	    } else {
-		inStr = "\\markup { \\italic " + inStr + " } ";
-	    }
+	    inStr = "\\markup { \\italic " + inStr + " } ";
         }
 
         outStr = prefix + inStr;
@@ -261,11 +257,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         inStr = protectIllegalChars(Rosegarden::Marks::getFingeringFromMark(eventMark));
 	
 	if (inStr != "0" && inStr != "1" && inStr != "2" && inStr != "3" && inStr != "4" && inStr != "5" && inStr != "+" ) {
-	    if (m_languageLevel < 1) {
-		inStr = "\\markup { \\fontsize #-3 \\number \"" + inStr + "\" } ";
-	    } else {
-		inStr = "\\markup { \\finger \"" + inStr + "\" } ";
-	    }
+	    inStr = "\\markup { \\finger \"" + inStr + "\" } ";
 	}
 
         outStr = prefix + inStr;
@@ -350,7 +342,7 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
     // if lilypond version < 2.6, text output is encoded as latin1 
     // as before, but when it is 2.6, text output is encoded as utf8.
 
-    if (m_languageLevel < 3) {
+    if (m_languageLevel < 2) {
         static QTextCodec *codec(QTextCodec::codecForName("ISO8859-1"));
     	return codec->fromUnicode(tmpStr).data();
     } else {
@@ -398,29 +390,24 @@ LilypondExporter::write()
 
     switch (m_languageLevel) {
 
-	// 0 -> Lilypond 2.0
-	// 1 -> Lilypond 2.2
-	// 2 -> Lilypond 2.4
-	// 3 -> Lilypond 2.6
-	// 4 -> Lilypond 2.8
+	// 0 -> Lilypond 2.2
+	// 1 -> Lilypond 2.4
+	// 2 -> Lilypond 2.6
+	// 3 -> Lilypond 2.8
 
     case 0:
-	str << "\\version \"2.0.0\"" << std::endl;
-	break;
-
-    case 1:
 	str << "\\version \"2.2.0\"" << std::endl;
 	break;
 
-    case 2:
+    case 1:
 	str << "\\version \"2.4.0\"" << std::endl;
 	break;
 
-    case 3:
+    case 2:
 	str << "\\version \"2.6.0\"" << std::endl;
 	break;
 
-    case 4:
+    case 3:
 	str << "\\version \"2.8.0\"" << std::endl;
 	break;
 
@@ -428,23 +415,20 @@ LilypondExporter::write()
 	std::cerr << "ERROR: Unknown language level " << m_languageLevel
 		  << ", results may be unpredictable, "
 		  << "omitting \\version" << std::endl;
-	m_languageLevel = 3;
+	m_languageLevel = 2;
     }
 
     // enable "point and click" debugging via xdvi to make finding the
     // unfortunately inevitable errors easier
     if (m_exportPointAndClick) {
         str << "% point and click debugging is enabled" << std::endl;
-	if (m_languageLevel >= 3) {
-            // line-column set by default
-	} else if (m_languageLevel >= 1) {
+        // in newer versions line-column point-and-click set by default
+	if (m_languageLevel <= 1) {
 	    str << "#(ly:set-point-and-click 'line-column)" << std::endl;
-	} else {
-	    str << "#(set-point-and-click! 'line)" << std::endl;
 	}
     } else {
         str << "% point and click debugging is disabled" << std::endl;
-	if (m_languageLevel >= 3) {
+	if (m_languageLevel >= 2) {
 	    str << "#(ly:set-option 'point-and-click #f)" << std::endl;
 	}
     }
@@ -537,15 +521,11 @@ LilypondExporter::write()
         case 6 : font = 26; break;
     }
 
-    if (m_languageLevel >= 1) {
-	str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
-    } else {
-	str << indent(col) << "\\include \"paper" << font << ".ly\"" << std::endl;
-    }
+    str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
    
     // open \score section
     str << "\\score {" << std::endl;
-    if (m_languageLevel <= 1) {
+    if (m_languageLevel == 0) {
 	str << indent(++col) << "\\notes <<" << std::endl;  // indent+
     } else {
 	str << indent(++col) << "<<" << std::endl;  // indent+
@@ -554,11 +534,7 @@ LilypondExporter::write()
     // Make chords offset colliding notes by default
     str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;
     str << indent(col)
-	<< (m_languageLevel >= 1 ? "\\override " : "\\property ")
-	<< "Score.NoteColumn"
-	<< (m_languageLevel >= 1 ? " " : " \\override ")
-	<< "#\'force-hshift = #1.0"
-        << std::endl;
+	<< "\\override Score.NoteColumn #\'force-hshift = #1.0" << std::endl;
     
     // set initial time signature
     TimeSignature timeSignature = m_composition->
@@ -628,10 +604,7 @@ LilypondExporter::write()
 		    
 		    str << "<< " << std::endl;
 		    
-		    str << indent(++col)
-			<< (m_languageLevel >= 1 ? "\\set " : "\\property ")
-			<< "Staff.instrument = \""
-			<< staffName.str() <<"\"" << std::endl;
+		    str << indent(++col) << "\\set Staff.instrument = \"" << staffName.str() << "\"" << std::endl;
 
 		    if (m_exportMidi) {
 			// Set midi instrument for the Staff
@@ -639,10 +612,7 @@ LilypondExporter::write()
 			Rosegarden::Instrument *instr = m_studio->getInstrumentById(m_composition->getTrackById(lastTrackIndex)->getInstrument());
 			staffMidiName << instr->getProgramName();
 		   
-			str << indent(col)
-			    << (m_languageLevel >= 1 ? "\\set " : "\\property ")
-			    << "Staff.midiInstrument = \""
-			    << staffMidiName.str() <<"\"" << std::endl;
+			str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str() << "\"" << std::endl;
 		    }
 
 		    // turn off the stupid accidental cancelling business,
@@ -650,10 +620,7 @@ LilypondExporter::write()
 		    // year old son pointed out to me that it "Looks really
 		    // stupid.  Why is it cancelling out four flats and then
 		    // adding five flats back?  That's brain damaged."
-		    str << indent(col) 
-			<< (m_languageLevel >= 1 ? "\\set " : "\\property ")
-			<< "Staff.printKeyCancellation = ##f"
-			<< std::endl;
+		    str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
 		}
 		
 		// Temporary storage for non-atomic events (!BOOM)
@@ -671,9 +638,9 @@ LilypondExporter::write()
 		lyricNumber << "lyric " << voiceCounter++;
 
 		if (m_exportLyrics) {
-		    if (m_languageLevel <= 1) {
+		    if (m_languageLevel == 0) {
 			str << indent(col) << "\\addlyrics" << std::endl;
-		    } else if (m_languageLevel >= 2) {
+		    } else if (m_languageLevel >= 1) {
 			//!!! Looks like something we need to sort out before 2.6!
 			str << indent(col) << "\\oldaddlyrics" << std::endl;
 		    }
@@ -681,12 +648,7 @@ LilypondExporter::write()
 		str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
 		    << "\" {"; // indent+
 
-		str << std::endl << indent(col)
-		    << (m_languageLevel >= 1 ? "\\override " : "\\property ")
-		    << "Voice.TextScript"
-		    << (m_languageLevel >= 1 ? " " : " \\override ")
-		    << "#'padding = #2.0"
-		    << std::endl;
+		str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0" << std::endl;
 
 		Rosegarden::SegmentNotationHelper helper(**i);
 		helper.setNotationProperties();
@@ -732,7 +694,7 @@ LilypondExporter::write()
 		// desires
 		if (m_exportLyrics) {
 		    str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" ";
-		    if (m_languageLevel <= 1) {
+		    if (m_languageLevel == 0) {
 			str << "\\lyrics  { " << std::endl;
 		    } else {
 			str << "\\lyricmode { " << std::endl;
@@ -762,7 +724,7 @@ LilypondExporter::write()
         case 2 : paper += "legal\"";  break;
         case 3 : paper = "";          break; // "do not specify"
     }
-    if (m_languageLevel <= 1) {
+    if (m_languageLevel == 0) {
 	str << indent(col) << "\\paper { " << paper <<" }" << std::endl;
     } else {
 	str << indent(col) << "\\layout { " << paper <<" }" << std::endl;
@@ -1045,7 +1007,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		}
 	    } else {
 		if (lastStem != 0) {
-		    if (m_languageLevel <= 1) {
+		    if (m_languageLevel == 0) {
 			str << "\\stemBoth ";
 		    } else {
 			str << "\\stemNeutral ";
@@ -1066,7 +1028,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 		} else if ((*i)->isa(Note::EventType)) {
 
-		    if (m_languageLevel >= 2) {
+		    if (m_languageLevel >= 1) {
 			// only one override per chord, and that outside the <>
 			stylei = i;
 		    } else {
@@ -1089,7 +1051,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	    if (chord.size() > 1) str << "> ";
 		
-	    if (m_languageLevel >= 2) {
+	    if (m_languageLevel >= 1) {
 	        if (duration != prevDuration) {
 		    writeDuration(duration, str);
 		    str << " ";
@@ -1225,7 +1187,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     }
 
     if (lastStem != 0) {
-	if (m_languageLevel <= 1) {
+	if (m_languageLevel == 0) {
 	    str << "\\stemBoth ";
 	} else {
 	    str << "\\stemNeutral ";
@@ -1435,12 +1397,7 @@ LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevSty
 	    style = "default"; // failsafe default or explicit
 	}
 	
-	str << std::endl << indent(col)
-	    << (m_languageLevel >= 1 ? "\\override " : "\\property ")
-	    << "Voice.NoteHead"
-	    << (m_languageLevel >= 1 ? " " : " \\set ")
-	    << "#'style = #'"
-	    << style << std::endl << indent(col);
+	str << std::endl << indent(col) << "\\override Voice.NoteHead #'style = #'" << style << std::endl << indent(col);
     }
 }    
 
