@@ -109,6 +109,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
+    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 2);
     
@@ -506,7 +507,6 @@ LilypondExporter::write()
     // Lilypond Voice = Rosegarden Segment
     // Lilypond Staff = Rosegarden Track
     // (not the cleanest output but maybe the most reliable)
-    // Incomplete: add an option to cram it all into one grand staff
     
     // paper/font sizes
     int font = 20; // default, if config problem
@@ -524,11 +524,11 @@ LilypondExporter::write()
    
     // open \score section
     str << "\\score {" << std::endl;
-    if (m_languageLevel == 0) {
-	str << indent(++col) << "\\notes <<" << std::endl;  // indent+
-    } else {
-	str << indent(++col) << "<<" << std::endl;  // indent+
-    }	
+
+    // bind staffs together with or without staff group bracket
+    str << indent(++col) // indent+
+	<< (m_exportStaffGroup == true ? "\\new StaffGroup " : "")
+	<< (m_languageLevel == 0 ? "\\notes <<" : "<<") << std::endl;
 
     // Make chords offset colliding notes by default
     str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;

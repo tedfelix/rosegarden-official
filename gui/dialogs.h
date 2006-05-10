@@ -954,6 +954,7 @@ protected:
     QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBarChecks;
     QCheckBox *m_lilyExportBeams;
+    QCheckBox *m_lilyExportStaffGroup;
 };
 
 
