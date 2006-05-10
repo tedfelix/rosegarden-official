@@ -633,8 +633,8 @@ LilypondExporter::write()
 		// voiceCounter is a hack because Lilypond does not by default make 
 		// them unique
 		std::ostringstream voiceNumber, lyricNumber;
-		voiceNumber << "voice " << voiceCounter;
-		lyricNumber << "lyric " << voiceCounter++;
+		voiceNumber << "voice " << ++voiceCounter;
+		lyricNumber << "lyric " << voiceCounter;
 
 		if (m_exportLyrics) {
 		    if (m_languageLevel == 0) {
