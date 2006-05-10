@@ -117,11 +117,10 @@ private:
     bool m_exportBeams;
 
 	// languagelevel meaning:
-	// 0 -> Lilypond 1.6 or 1.8
-	// 1 -> Lilypond 2.0
-	// 2 -> Lilypond 2.2
-	// 3 -> Lilypond 2.4
-	// 4 -> Lilypond 2.6
+	// 0 -> Lilypond 2.2
+	// 1 -> Lilypond 2.4
+	// 2 -> Lilypond 2.6
+	// 3 -> Lilypond 2.8
     int m_languageLevel;
 };
 
