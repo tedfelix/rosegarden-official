@@ -5190,6 +5190,11 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
         i18n("Export beamings"), frame);
     m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
     layout->addWidget(m_lilyExportBeams, 5, 1);
+    
+    m_lilyExportStaffGroup = new QCheckBox(
+        i18n("Add staff group bracket"), frame);
+    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
+    layout->addWidget(m_lilyExportStaffGroup, 6, 1);
 }
 
 void
@@ -5208,6 +5213,7 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     config->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
+    config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
 
     accept();
 }
