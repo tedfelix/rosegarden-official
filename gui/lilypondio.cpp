@@ -599,7 +599,7 @@ LilypondExporter::write()
 		    
 		    str << std::endl
 			<< indent(col) << "\\context Staff = \"" << staffName.str()
-			<< " " << (voiceCounter +1) << "\" ";
+			<< " " << (trackPos +1) << "\" ";
 		    
 		    str << "<< " << std::endl;
 		    
