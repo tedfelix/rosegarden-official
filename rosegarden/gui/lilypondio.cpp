@@ -579,7 +579,7 @@ LilypondExporter::write()
 		if ((int) (*i)->getTrack() != lastTrackIndex) {
 		    if (lastTrackIndex != -1) {
 			// close the old track (Staff context)
-			str << std::endl << indent(--col) << ">> % Staff" << std::endl;  // indent-
+			str << indent(--col) << ">> % Staff" << std::endl;  // indent-
 		    }
 		    lastTrackIndex = (*i)->getTrack();
 
@@ -635,7 +635,7 @@ LilypondExporter::write()
 		std::ostringstream voiceNumber;
 		voiceNumber << "voice " << ++voiceCounter;
 
-		str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
+		str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
 		    << "\" {"; // indent+
 
 		str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0" << std::endl;
@@ -694,13 +694,13 @@ LilypondExporter::write()
     
     // close the last track (Staff context)
     if (voiceCounter > 0) {
-	str << std::endl << indent(--col) << ">> % Staff (final)";  // indent-
+	str << indent(--col) << ">> % Staff (final)";  // indent-
     } else {
         str << indent(--col) << "% (All staffs were muted.)" << std::endl;
     }
     
     // close \notes section
-    str << std::endl << indent(--col) << ">> % notes" << std::endl;; // indent-
+    str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-
 
     // write user-specified paper type in \paper block
     std::string paper = "papersize = \"";
