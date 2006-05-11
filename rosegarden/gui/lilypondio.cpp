@@ -638,7 +638,7 @@ LilypondExporter::write()
 		str << std::endl << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
 		    << "\" {"; // indent+
 
-		str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0" << std::endl;
+		str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
 
 		Rosegarden::SegmentNotationHelper helper(**i);
 		helper.setNotationProperties();
@@ -652,7 +652,7 @@ LilypondExporter::write()
 		    // a series of rests) at the start of writeBar, below.
 		    //!!! This doesn't cope correctly yet with time signature changes
 		    // during this skipped section.
-		    str << indent(col);
+		    str << std::endl << indent(col);
 		    writeSkip(timeSignature, 0, m_composition->getBarStart(firstBar),
 			      false, str);
 		}
