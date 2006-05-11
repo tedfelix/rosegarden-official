@@ -632,18 +632,9 @@ LilypondExporter::write()
 		// No worries about overlapping segments, because Voices can overlap
 		// voiceCounter is a hack because Lilypond does not by default make 
 		// them unique
-		std::ostringstream voiceNumber, lyricNumber;
+		std::ostringstream voiceNumber;
 		voiceNumber << "voice " << ++voiceCounter;
-		lyricNumber << "lyric " << voiceCounter;
 
-		if (m_exportLyrics) {
-		    if (m_languageLevel == 0) {
-			str << indent(col) << "\\addlyrics" << std::endl;
-		    } else if (m_languageLevel >= 1) {
-			//!!! Looks like something we need to sort out before 2.6!
-			str << indent(col) << "\\oldaddlyrics" << std::endl;
-		    }
-		}
 		str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
 		    << "\" {"; // indent+
 
@@ -692,12 +683,8 @@ LilypondExporter::write()
 		// write accumulated lyric events to the Lyric context, if user
 		// desires
 		if (m_exportLyrics) {
-		    str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" ";
-		    if (m_languageLevel == 0) {
-			str << "\\lyrics  { " << std::endl;
-		    } else {
-			str << "\\lyricmode { " << std::endl;
-		    }
+		    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
+			<< " \\new Lyrics \\lyricmode { " << std::endl;
 		    str << indent(++col) << lilyLyrics << " " << std::endl;
 		    str << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
 		}
