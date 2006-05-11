@@ -680,9 +680,9 @@ LilypondExporter::write()
 		// close Voice context
 		str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
             
-		// write accumulated lyric events to the Lyric context, if user
-		// desires
-		if (m_exportLyrics) {
+		// Write accumulated lyric events to the Lyric context, if user desires. 
+		// If no lyrics is found, do not reserve empty vertical space for lyrics.
+		if (m_exportLyrics && lilyLyrics != "") {
 		    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			<< " \\new Lyrics \\lyricmode { " << std::endl;
 		    str << indent(++col) << lilyLyrics << " " << std::endl;
