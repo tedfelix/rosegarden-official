@@ -1100,7 +1100,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    
 	    try {
 		// Incomplete: Set which note the clef should center on  (DMM - why?)
-		str << "\\clef ";
+		// To allow octavation of the clef, enclose the clefname always with quotes.
+		str << "\\clef \"";
 
 		Rosegarden::Clef clef(**i);
 	    
@@ -1113,8 +1114,16 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		} else if (clef.getClefType() == Clef::Bass) {
 		    str << "bass";
 		}
+
+		// Transpose the clef one or two octaves up or down, if specified.
+		int octaveOffset = clef.getOctaveOffset();
+		if (octaveOffset > 0) {
+		    str << "^" << 8*octaveOffset;
+		} else if (octaveOffset < 0) {
+		    str << "_" << -8*octaveOffset;
+		}
 	    
-		str << std::endl << indent(col);
+		str << "\"" << std::endl << indent(col);
 
 	    } catch (Rosegarden::Exception e) {
 		std::cerr << "Bad clef: " << e.getMessage() << std::endl;
