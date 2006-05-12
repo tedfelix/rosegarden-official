@@ -521,7 +521,48 @@ LilypondExporter::write()
     }
 
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
+
+    // Find out the printed length of the composition
+    Composition::iterator i = m_composition->begin();
+    timeT compositionEndTime = (*i)->getEndMarkerTime();
+    for (; i != m_composition->end(); ++i) {
+	if (compositionEndTime < (*i)->getEndMarkerTime()) {
+	    compositionEndTime = (*i)->getEndMarkerTime();
+	}
+    }
+
+    // define global context which is common for all staffs
+    str << indent(col++) << "global = { " << std::endl;
+    TimeSignature timeSignature = m_composition->
+	getTimeSignatureAt(m_composition->getStartMarker());
+    int leftBar = 0;
+    int rightBar = leftBar;
+    do {
+	bool isNew = false;
+	m_composition->getTimeSignatureInBar(rightBar+1, isNew);
+	
+	if (isNew || (m_composition->getBarStart(rightBar+1) >= compositionEndTime)) {
+	    //  - set initial time signature; further time signature changes 
+	    //    are defined within the segments, because they may be hidden
+	    str << indent(col) << (leftBar == 0 ? "" : "% ") << "\\time "
+		<< timeSignature.getNumerator() << "/"
+		<< timeSignature.getDenominator() << std::endl;
+	    //  - place skips upto the end of the composition; 
+	    //    this justifies the printed staffs
+	    str << indent(col);
+	    writeSkip(timeSignature, m_composition->getBarStart(leftBar), m_composition->getBarEnd(rightBar)-m_composition->getBarStart(leftBar), false, str);
+	    str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
+
+	    timeSignature = m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
+	    leftBar = rightBar + 1;
+	}
+    } while (m_composition->getBarStart(++rightBar) < compositionEndTime);
+    str << indent(--col) << "}" << std::endl;
    
+    // time signatures changes are in segments, reset initial value
+    timeSignature = m_composition->
+        getTimeSignatureAt(m_composition->getStartMarker());
+
     // open \score section
     str << "\\score {" << std::endl;
 
@@ -535,14 +576,6 @@ LilypondExporter::write()
     str << indent(col)
 	<< "\\override Score.NoteColumn #\'force-hshift = #1.0" << std::endl;
     
-    // set initial time signature
-    TimeSignature timeSignature = m_composition->
-            getTimeSignatureAt(m_composition->getStartMarker());
-
-    str << indent(col) << "\\time "
-        << timeSignature.getNumerator() << "/"
-        << timeSignature.getDenominator() << "" << std::endl;
-
     int lastTrackIndex = -1;
     int voiceCounter = 0;
 
@@ -553,13 +586,6 @@ LilypondExporter::write()
 
     Rosegarden::Track *track = 0;
 
-    Composition::iterator i = m_composition->begin();
-    timeT compositionEndTime = (*i)->getEndMarkerTime();
-    for (; i != m_composition->end(); ++i) {
-	if (compositionEndTime < (*i)->getEndMarkerTime()) {
-	    compositionEndTime = (*i)->getEndMarkerTime();
-	}
-    }
     for (int trackPos = 0;
 	 (track = m_composition->getTrackByPosition(trackPos)) != 0; ++trackPos) {
 	
@@ -620,6 +646,7 @@ LilypondExporter::write()
 		    // stupid.  Why is it cancelling out four flats and then
 		    // adding five flats back?  That's brain damaged."
 		    str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
+		    str << indent(col) << "\\new Voice \\global" << std::endl;
 		}
 		
 		// Temporary storage for non-atomic events (!BOOM)
