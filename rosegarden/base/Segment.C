@@ -1081,9 +1081,13 @@ void
 Segment::notifyRemove(Event *e) const
 {
     if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
-	ClefKeyList::iterator i = m_clefKeyList->find(e);
-	if (i != m_clefKeyList->end()) {
-	    m_clefKeyList->erase(i);
+	ClefKeyList::iterator i; 
+	for (i = m_clefKeyList->find(e); i != m_clefKeyList->end(); ++i) {
+            // fix for bug#1485643 (crash erasing a duplicated key signature)
+            if ((*i) == e) {
+	        m_clefKeyList->erase(i);
+                break;
+            }
 	}
     }
     
