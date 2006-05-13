@@ -1123,7 +1123,14 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    if (tiedForward) str << "~ ";
 	} else if ((*i)->isa(Note::EventRestType)) {
 
-	    str << "r";
+	    bool hiddenRest = false;
+	    if ((*i)->has(INVISIBLE)) {
+		if ((*i)->get<Bool>(INVISIBLE)) {
+		    hiddenRest = true;
+		}
+	    }
+
+	    str << (hiddenRest ? "s" : "r");
 	    if (duration != prevDuration) {
 		writeDuration(duration, str);
 		prevDuration = duration;
