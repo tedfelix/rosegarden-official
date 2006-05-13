@@ -457,10 +457,9 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("new splash screen photo (of Michael's rose garden)"), "catma@adelphia.net");
+    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo (of Michael's rose garden)\nnew splash screen photo (of Michael McIntyre's\ninstruments along with a rose from the garden of Hassell Arnold Hale, 1916-2006,\nmay he rest in peace)"), "catma@adelphia.net");
     aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation"), "hjunes@cc.hut.fi");
-    
-//    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
+    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 
