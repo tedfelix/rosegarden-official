@@ -1315,13 +1315,7 @@ bool CompositionModelImpl::isRecording(const Segment* s) const
 
 bool CompositionModel::CompositionItemCompare::operator()(const CompositionItem &c1, const CompositionItem &c2) const
 {
-//      return c1->hashKey() < c2->hashKey();
-//    RG_DEBUG << "compare " << c1->y() << " to " << c2->y() << endl;
-    if (c1->y() != c2->y())
-        return c1->y() < c2->y();
-    
-//    RG_DEBUG << "ys are equal - compare " << c1->z() << " to " << c2->z() << endl;
-    return c1->z() > c2->z();
+    return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
 }
 
 
@@ -1448,6 +1442,7 @@ void CompositionModelImpl::startChange(const CompositionItem& item, CompositionM
     
     // if an "identical" composition item has already been inserted, drop this one
     if (i != m_changingItems.end()) {
+        RG_DEBUG << "CompositionModelImpl::startChange : item already in\n";
         m_itemGC.push_back(item);
     } else {
         item->saveRect();
@@ -1478,7 +1473,7 @@ void CompositionModelImpl::endChange()
         delete *i;
     }
     m_itemGC.clear();
-    RG_DEBUG << "CompositionModelImpl::endChange" << endl;
+    RG_DEBUG << "CompositionModelImpl::endChange\n";
     emit needContentUpdate();
 }
 
@@ -1987,16 +1982,33 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
     CompositionModel::itemcontainer items = getModel()->getItemsAt(pos);
 
     if (items.size()) {
+        // find topmost item
         CompositionItem res = *(items.begin());
+        
+        unsigned int maxZ = res->z();
 
-        items.erase(items.begin());
+        CompositionModel::itemcontainer::iterator maxZItemPos = items.begin();
+        
+        for(CompositionModel::itemcontainer::iterator i = items.begin();
+            i != items.end(); ++i) {
+            CompositionItem ic = *i;
+            if (ic->z() > maxZ) {
+                RG_DEBUG << k_funcinfo << "found new topmost at z=" << ic->z() << endl;
+                res = ic;
+                maxZ = ic->z();
+                maxZItemPos = i;
+            }
+        }
 
         // get rid of the rest;
+        items.erase(maxZItemPos);
         for(CompositionModel::itemcontainer::iterator i = items.begin();
             i != items.end(); ++i)
             delete *i;
-
+ 
         return res;
+    } else {
+        RG_DEBUG << k_funcinfo << "no item under cursor\n";        
     }
     
     
@@ -2078,7 +2090,7 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
     QMemArray<QRect> rects = e->region().rects();
 
-    for (int i = 0; i < rects.size(); ++i) {
+    for (unsigned int i = 0; i < rects.size(); ++i) {
         viewportPaintRect(rects[i]);
     }
 }
