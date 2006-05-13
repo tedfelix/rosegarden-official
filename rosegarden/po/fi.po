@@ -129,9 +129,9 @@ msgid ""
 "</p>\n"
 msgstr ""
 "<p>Jos olet vahingossa nauhoittanut niin lyhyen osan, että sitä ei tahdo\n"
-"näkyä kankaalla, ja jonka vain kuulet seuraavilla nauhoituskerroilla,\n"
+"näkyä kankaalla ja jonka kuulet vain seuraavilla nauhoituskerroilla,\n"
 "pääset käsiksi siihen asettamalla <b>Sävellys -> Muuta dokumentin\n"
-"kestoa</b> ja asettamalla sitten sävellyksen alkukohdaksi negatiivisen luvun."
+"kestoa</b> ja määrittämällä sävellyksen alkukohdaksi negatiivisen luvun."
 "</p>\n"
 
 #: ../gui/docs/en/tips.cpp:67
@@ -197,7 +197,7 @@ msgid ""
 "in Notation Editor</b>.</p>\n"
 msgstr ""
 "<p>...että voit muokata useampia osia useammilla raidoilla samanaikaisesti\n"
-"nuotintajassa?  Valitse vain osa, ja käytä <b>Muokkaa -> Avaa nuotintaja</b>."
+"nuotintajassa?  Valitse vain osat, ja käytä <b>Muokkaa -> Avaa nuotintaja</b>."
 "</p>\n"
 
 #: ../gui/docs/en/tips.cpp:102
@@ -2914,7 +2914,7 @@ msgstr ""
 "osoittimen.\n"
 "Tee Shift + vasen klikkaus + veto asettaaksesi silmukkaosion.\n"
 "Tee Shift + vasen klikkaus poistaaksesi silmukkaosion (tai kytke pois "
-"silmukkanappi Siirtymät -työkalupalkista)"
+"silmukkanappi Siirto -työkalupalkista)"
 
 #: ../gui/midifilter.cpp:34
 msgid "Modify MIDI filters..."
@@ -3877,7 +3877,7 @@ msgstr "Ulos:"
 #: ../gui/notationtool.cpp:856 ../gui/notationtool.cpp:937
 #: ../gui/notationtool.cpp:1068 ../gui/notationtool.cpp:1941
 msgid "Switch to Select Tool"
-msgstr "Vaihda valintatyökaluun"
+msgstr "Vaihda Valitse -työkaluun"
 
 #: ../gui/matrixtool.cpp:177 ../gui/matrixtool.cpp:486
 #: ../gui/matrixtool.cpp:960 ../gui/matrixtool.cpp:1304
@@ -3885,17 +3885,17 @@ msgstr "Vaihda valintatyökaluun"
 #: ../gui/notationtool.cpp:860 ../gui/notationtool.cpp:941
 #: ../gui/notationtool.cpp:1138 ../gui/notationtool.cpp:1945
 msgid "Switch to Erase Tool"
-msgstr "Vaihda poistotyökaluun"
+msgstr "Vaihda Poista -työkaluun"
 
 #: ../gui/matrixtool.cpp:181 ../gui/matrixtool.cpp:424
 #: ../gui/matrixtool.cpp:490 ../gui/matrixtool.cpp:1308
 msgid "Switch to Move Tool"
-msgstr "Valitse Siirto-työkalu"
+msgstr "Valitse Siirrä -työkaluun"
 
 #: ../gui/matrixtool.cpp:187 ../gui/matrixtool.cpp:430
 #: ../gui/matrixtool.cpp:498 ../gui/matrixtool.cpp:966
 msgid "Switch to Resize Tool"
-msgstr "Valitse Koonmuutos -työkalu"
+msgstr "Valitse Muuta kokoa -työkaluun"
 
 #: ../gui/matrixtool.cpp:191 ../gui/matrixtool.cpp:434
 #: ../gui/matrixtool.cpp:502 ../gui/matrixtool.cpp:970
@@ -3912,7 +3912,7 @@ msgstr "Kaksoisnopeus"
 #: ../gui/matrixtool.cpp:420 ../gui/matrixtool.cpp:482
 #: ../gui/matrixtool.cpp:956 ../gui/matrixtool.cpp:1300
 msgid "Switch to Draw Tool"
-msgstr "Valitse Piirto -työkalu"
+msgstr "Valitse Piirrä -työkalu"
 
 #: ../gui/matrixtool.cpp:1207
 msgid "Move Event"
@@ -4255,7 +4255,7 @@ msgstr "Litistä tauot poistettaessa"
 
 #: ../gui/notationtool.cpp:1062 ../gui/notationtool.cpp:1134
 msgid "Switch to Insert Tool"
-msgstr "Vaihda syöttötyökaluun"
+msgstr "Vaihda Syötä -työkaluun"
 
 #: ../gui/notationtool.cpp:1149
 msgid "Collapse Rests"
@@ -6810,7 +6810,7 @@ msgstr "Näytä osien &esikatselu"
 
 #: ../gui/rosegardengui.cpp:687
 msgid "Show Se&gment and Instrument Parameters"
-msgstr "Näytä o&sien ja instrumenttien muuttujat"
+msgstr "Näytä O&sien ja instrumenttien ominaisuudet"
 
 #: ../gui/rosegardengui.cpp:743
 msgid "&Resize"
@@ -7102,7 +7102,7 @@ msgstr "Kytke Muokkain -työkalupalkki..."
 
 #: ../gui/rosegardengui.cpp:2904
 msgid "Toggle the transport toolbar..."
-msgstr "Kytke Siirtymät -työkalupalkki..."
+msgstr "Kytke Siirto -työkalupalkki..."
 
 #: ../gui/rosegardengui.cpp:2914
 msgid "Toggle the zoom toolbar..."
@@ -7110,7 +7110,7 @@ msgstr "Kytke Suurennos -työkalupalkki..."
 
 #: ../gui/rosegardengui.cpp:2924
 msgid "Toggle the Transport"
-msgstr "Kytke Siirtymät"
+msgstr "Kytke Siirto"
 
 #: ../gui/rosegardengui.cpp:3059
 msgid ""
@@ -8088,7 +8088,7 @@ msgstr ""
 #: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:366
 #, no-c-format
 msgid "Rosegarden Transport"
-msgstr "Rosegarden Siirtymät"
+msgstr "Rosegarden Siirto"
 
 #: ../gui/rosegardentransportdialog.cpp:757
 #: ../gui/rosegardentransportdialog.cpp:834
@@ -8403,7 +8403,7 @@ msgstr "varoitus: ylipitkä tahti katkaistiin tässä"
 
 #: ../gui/lilypondio.cpp:1281
 msgid "warning: bar too short, padding with rests"
-msgstr "varoitus: tahti liian lyhyt, vuorataan tauoilla"
+msgstr "varoitus: liian lyhyt tahti, täytetään tauoilla"
 
 #: ../gui/audiopluginoscgui.cpp:479
 msgid "Rosegarden Plugin"
@@ -8442,7 +8442,7 @@ msgstr "<ei nimeä>"
 #: rc.cpp:3 rc.cpp:57 rc.cpp:189 rc.cpp:282 rc.cpp:330
 #, no-c-format
 msgid "T&ransport"
-msgstr "&Siirtymät"
+msgstr "&Siirto"
 
 #: rc.cpp:9
 #, no-c-format
@@ -8457,7 +8457,7 @@ msgstr "Alakeskusten &lukumäärä"
 #: rc.cpp:15 rc.cpp:78 rc.cpp:204 rc.cpp:297 rc.cpp:321 rc.cpp:333 rc.cpp:357
 #, no-c-format
 msgid "Transport Toolbar"
-msgstr "Siirtymät -työkalupalkki"
+msgstr "Siirto -työkalupalkki"
 
 #: rc.cpp:18
 #, no-c-format
