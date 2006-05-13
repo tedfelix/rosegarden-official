@@ -5195,6 +5195,11 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
         i18n("Add staff group bracket"), frame);
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
     layout->addWidget(m_lilyExportStaffGroup, 6, 1);
+    
+    m_lilyExportStaffMerge = new QCheckBox(
+        i18n("Merge tracks with same non-zero name"), frame);
+    m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
+    layout->addWidget(m_lilyExportStaffMerge, 7, 0);
 }
 
 void
@@ -5214,6 +5219,7 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
     config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
+    config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
 
     accept();
 }

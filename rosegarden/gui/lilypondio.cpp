@@ -110,6 +110,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
     m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
+    m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 2);
     
@@ -615,17 +616,25 @@ LilypondExporter::write()
 		    // have a unique name, even if the
 		    // Staff.instrument property is the same for
 		    // multiple staffs...
+		    // Added an option to merge staffs with the same, non-empty
+		    // name. This option makes it possible to produce staffs
+		    // with polyphonic, and polyrhytmic, music. Polyrhytmic
+		    // music in a single staff is typical in piano, or
+		    // guitar music. (hjj)
 		    std::ostringstream staffName;
 		    staffName << protectIllegalChars(m_composition->
 						     getTrackById(lastTrackIndex)->getLabel());
 		   
-		    if (staffName.str() == "") {
+		    if (!m_exportStaffMerge || staffName.str() == "") {
 			staffName << "track";
+			str << std::endl << indent(col) 
+			    << "\\context Staff = \"" << staffName.str()
+			    << " " << (trackPos + 1) << "\" ";
+		    } else {
+			str << std::endl << indent(col) 
+			    << "\\context Staff = \"" << staffName.str()
+			    << "\" ";
 		    }
-		    
-		    str << std::endl
-			<< indent(col) << "\\context Staff = \"" << staffName.str()
-			<< " " << (trackPos +1) << "\" ";
 		    
 		    str << "<< " << std::endl;
 		    
