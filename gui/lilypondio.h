@@ -116,6 +116,7 @@ private:
     bool m_exportBarChecks;
     bool m_exportBeams;
     bool m_exportStaffGroup;
+    bool m_exportStaffMerge;
 
 	// languagelevel meaning:
 	// 0 -> Lilypond 2.2
