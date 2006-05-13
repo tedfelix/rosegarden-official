@@ -621,6 +621,8 @@ LilypondExporter::write()
 		    // with polyphonic, and polyrhytmic, music. Polyrhytmic
 		    // music in a single staff is typical in piano, or
 		    // guitar music. (hjj)
+		    // In the case of colliding note heads, user may define
+		    //  - DISPLACED_X -- for a note/chord
 		    std::ostringstream staffName;
 		    staffName << protectIllegalChars(m_composition->
 						     getTrackById(lastTrackIndex)->getLabel());
@@ -1014,6 +1016,12 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	    // Examine the following event, and truncate our duration
 	    // if we overlap it.
+
+	    if (e->has(DISPLACED_X)) {
+		double xDisplacement = 1+((double) e->get<Int>(DISPLACED_X))/1000;
+		str << "\\once \\override NoteColumn #'force-hshift = #"
+		    << xDisplacement << " ";
+	    }
 
 	    if (e->has(NotationProperties::STEM_UP)) {
 		if (e->get<Bool>(NotationProperties::STEM_UP)) {
