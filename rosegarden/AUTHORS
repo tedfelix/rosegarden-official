@@ -112,6 +112,7 @@ Carolyn McIntyre <catma@adelphia.net>
 
 Heikki Johannes Junes <hjunes@cc.hut.fi>
     * Finnish translation
+    * LilyPond 2.x export
 
 ##
 ## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
