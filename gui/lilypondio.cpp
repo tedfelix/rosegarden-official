@@ -1332,9 +1332,10 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 	} else if (text.getTextType() == Text::Dynamic) {
 
 	    // pass through only supported types
-	    if (s == "ppp" || s == "pp"  || s == "p"  ||
-		s == "mp"  || s == "mf"  || s == "f"  ||
-		s == "ff"  || s == "fff" || s == "rfz" ||
+	    if (s == "ppppp" || s == "pppp" || s == "ppp" ||
+		s == "pp"    || s == "p"    || s == "mp"  ||
+		s == "mf"    || s == "f"    || s == "ff"  ||
+		s == "fff"   || s == "ffff" || s == "rfz" || 
 		s == "sf") {
 	    
 		lilyText += "-\\" + s + " ";
