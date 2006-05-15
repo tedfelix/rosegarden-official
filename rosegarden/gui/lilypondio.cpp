@@ -18,7 +18,7 @@
 
     Some restructuring by Chris Cannam.
 
-    Bug fixes on LilyPond 2.x export by Heikki Junes.
+    Brain surgery to support LilyPond 2.x export by Heikki Junes.
 
     The moral right of the authors to claim authorship of this work
     has been asserted.
@@ -421,11 +421,11 @@ LilypondExporter::write()
 	m_languageLevel = 2;
     }
 
-    // enable "point and click" debugging via xdvi to make finding the
+    // enable "point and click" debugging via pdf to make finding the
     // unfortunately inevitable errors easier
     if (m_exportPointAndClick) {
         str << "% point and click debugging is enabled" << std::endl;
-        // in newer versions line-column point-and-click set by default
+        // in newer versions line-column point-and-click is set by default
 	if (m_languageLevel <= 1) {
 	    str << "#(ly:set-point-and-click 'line-column)" << std::endl;
 	}
@@ -568,7 +568,7 @@ LilypondExporter::write()
     // open \score section
     str << "\\score {" << std::endl;
 
-    // bind staffs together with or without staff group bracket
+    // bind staffs with or without staff group bracket
     str << indent(++col) // indent+
 	<< (m_exportStaffGroup == true ? "\\new StaffGroup " : "")
 	<< (m_languageLevel == 0 ? "\\notes <<" : "<<") << std::endl;
@@ -624,6 +624,7 @@ LilypondExporter::write()
 		    // guitar music. (hjj)
 		    // In the case of colliding note heads, user may define
 		    //  - DISPLACED_X -- for a note/chord
+		    //  - INVISIBLE -- for a rest
 		    std::ostringstream staffName;
 		    staffName << protectIllegalChars(m_composition->
 						     getTrackById(lastTrackIndex)->getLabel());
@@ -1208,7 +1209,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    handleText(*i, lilyText, lilyLyrics);
 	}
 
-	// LilyPond 2.0 introduces postfix syntax for beaming
+	// LilyPond 2.0 introduces required postfix syntax for beaming
 	if (m_exportBeams && newBeamedGroup) {
 	    str << "[ ";
 	    newBeamedGroup = false;
@@ -1383,7 +1384,7 @@ LilypondExporter::writePitch(const Rosegarden::Event *note,
     note->get<String>(ACCIDENTAL, accidental);
 
     // format of Lilypond note is:
-    // name + (duration) + octave + text markup
+    // name + octave + (duration) + text markup
     
     // calculate note name and write note
     std::string lilyNote;
