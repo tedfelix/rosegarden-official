@@ -1,35 +1,34 @@
-# translation of fi.po to 
+# translation of fi.po to
 # Finnish translation of Rosegarden.
 # This file is put in the public domain.
+#
+#
 # Heikki Junes <hjunes@cc.hut.fi>, 2006.
 # Heikki Johannes Junes <hjunes@cc.hut.fi>, 2006.
-#
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-14 22:42+0200\n"
-"PO-Revision-Date: 2006-04-13 10:42+0300\n"
-"Last-Translator: Heikki Junes\n"
+"PO-Revision-Date: 2006-05-15 10:41+0300\n"
+"Last-Translator: Heikki Johannes Junes <hjunes@cc.hut.fi>\n"
 "Language-Team:  <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: KBabel 1.11.1\n"
 
 #: ../gui/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
-msgstr ""
+msgstr "Feta pikselikartat"
 
 #: ../gui/fonts/mappings/fonts.cpp:2 ../gui/fonts/mappings/fonts.cpp:7
-#, fuzzy
 msgid "GNU Lilypond"
-msgstr "LilyPond 2.6"
+msgstr "GNU Lilypond"
 
 #: ../gui/fonts/mappings/fonts.cpp:3 ../gui/fonts/mappings/fonts.cpp:8
 msgid "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
-msgstr ""
+msgstr "Copyright (c) 1997--2003 Han-Wen Nienhuys ja Jan Nieuwenhuizen"
 
 #: ../gui/fonts/mappings/fonts.cpp:4 ../gui/fonts/mappings/fonts.cpp:9
 #: ../gui/fonts/mappings/fonts.cpp:14 ../gui/fonts/mappings/fonts.cpp:19
@@ -38,131 +37,125 @@ msgstr ""
 #: ../gui/fonts/mappings/fonts.cpp:44 ../gui/fonts/mappings/fonts.cpp:49
 #: ../gui/fonts/mappings/fonts.cpp:54
 msgid "Chris Cannam"
-msgstr ""
+msgstr "Chris Cannam"
 
 #: ../gui/fonts/mappings/fonts.cpp:5 ../gui/fonts/mappings/fonts.cpp:40
 msgid "pixmap"
-msgstr ""
+msgstr "pikselikartta"
 
 #: ../gui/fonts/mappings/fonts.cpp:6
 msgid "Feta"
-msgstr ""
+msgstr "Feta"
 
 #: ../gui/fonts/mappings/fonts.cpp:10 ../gui/fonts/mappings/fonts.cpp:15
 #: ../gui/fonts/mappings/fonts.cpp:20 ../gui/fonts/mappings/fonts.cpp:25
 #: ../gui/fonts/mappings/fonts.cpp:30 ../gui/fonts/mappings/fonts.cpp:35
 #: ../gui/fonts/mappings/fonts.cpp:45 ../gui/fonts/mappings/fonts.cpp:50
 #: ../gui/fonts/mappings/fonts.cpp:55
-#, fuzzy
 msgid "scalable"
-msgstr "Uudelleenmitoita"
+msgstr "skaalattava"
 
 #: ../gui/fonts/mappings/fonts.cpp:11
 msgid "Fughetta"
-msgstr ""
+msgstr "Fughetta"
 
 #: ../gui/fonts/mappings/fonts.cpp:12
 msgid ""
 "Created by Blake Hodgetts; freely redistributable.  See http://www.efh.org/"
 "~bch/aboutfonts.html"
-msgstr ""
+msgstr "Luonut Blake Hodgetts; vapaasti levitettävissä.  Katso http://www.efh.org/~bch/aboutfonts.html"
 
 #: ../gui/fonts/mappings/fonts.cpp:13
 msgid "Copyright 1995-1999 Blake Hodgetts"
-msgstr ""
+msgstr "Copyright 1995-1999 Blake Hodgetts"
 
 #: ../gui/fonts/mappings/fonts.cpp:16
 msgid "Inkpen"
-msgstr ""
+msgstr "Inkpen"
 
 #: ../gui/fonts/mappings/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
+msgstr "Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:18 ../gui/fonts/mappings/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
-msgstr ""
+msgstr "Copyright Sibelius Software Ltd"
 
 #: ../gui/fonts/mappings/fonts.cpp:21
-#, fuzzy
 msgid "Maestro"
-msgstr "Keskus"
+msgstr "Maestro"
 
 #: ../gui/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
+msgstr "Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:23 ../gui/fonts/mappings/fonts.cpp:33
-#, fuzzy
 msgid "Copyright Coda Inc"
-msgstr "Copyright"
+msgstr "Copyright Coda Inc"
 
 #: ../gui/fonts/mappings/fonts.cpp:26
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: ../gui/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
+msgstr "Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
-msgstr ""
+msgstr "Petrucci"
 
 #: ../gui/fonts/mappings/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr ""
+msgstr "Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:36
 msgid "RG21"
-msgstr ""
+msgstr "RG21"
 
 #: ../gui/fonts/mappings/fonts.cpp:37
-#, fuzzy
 msgid "Rosegarden 2.1"
-msgstr "Rosegarden: %1"
+msgstr "Rosegarden 2.1"
 
 #: ../gui/fonts/mappings/fonts.cpp:38
 msgid "Copyright (c) 1994--2001 Chris Cannam"
-msgstr ""
+msgstr "Copyright (c) 1994--2001 Chris Cannam"
 
 #: ../gui/fonts/mappings/fonts.cpp:41
 msgid "Sonata"
-msgstr ""
+msgstr "Sonata"
 
 #: ../gui/fonts/mappings/fonts.cpp:42
-#, fuzzy
 msgid "Adobe"
-msgstr "Ääni"
+msgstr "Adobe"
 
 #: ../gui/fonts/mappings/fonts.cpp:43
-#, fuzzy
 msgid "Copyright Adobe Inc"
-msgstr "Copyright"
+msgstr "Copyright Adobe Inc"
 
 #: ../gui/fonts/mappings/fonts.cpp:46
 msgid "Steinberg"
-msgstr ""
+msgstr "Steinberg"
 
 #: ../gui/fonts/mappings/fonts.cpp:47
 msgid "The Steinberg Notation font is part of Cubase."
-msgstr ""
+msgstr "Steinberg nuotinnuskirjasin on osa Cubase:a."
 
 #: ../gui/fonts/mappings/fonts.cpp:48
 msgid "Copyright Steinberg Inc"
-msgstr ""
+msgstr "Copyright Steinberg Inc"
 
 #: ../gui/fonts/mappings/fonts.cpp:51
 msgid "Xinfonia"
-msgstr ""
+msgstr "Xinfonia"
 
 #: ../gui/fonts/mappings/fonts.cpp:52
 msgid "xemo.org"
-msgstr ""
+msgstr "xemo.org"
 
 #: ../gui/fonts/mappings/fonts.cpp:53
 msgid "Copyright 2001-2003 Xemus Software LLC"
-msgstr ""
+msgstr "Copyright 2001-2003 Xemus Software LLC"
 
 #: ../gui/docs/en/tips.cpp:3
 msgid ""
@@ -589,22 +582,19 @@ msgstr ""
 
 #: ../gui/styles/styles.cpp:1
 msgid "Classical"
-msgstr ""
+msgstr "Klassinen"
 
 #: ../gui/styles/styles.cpp:2
-#, fuzzy
 msgid "Cross"
-msgstr "Hallitsimet"
+msgstr "Risti"
 
 #: ../gui/styles/styles.cpp:3
-#, fuzzy
 msgid "Mensural"
-msgstr "Yleinen"
+msgstr "Mensuraali"
 
 #: ../gui/styles/styles.cpp:4
-#, fuzzy
 msgid "Triangle"
-msgstr "Tripletti"
+msgstr "Kolmio"
 
 #: ../gui/guitar/guitarchordeditor.cpp:78
 #: ../gui/guitar/guitartabselector.cpp:275
@@ -683,8 +673,7 @@ msgid "Move Segments"
 msgstr "Siirrä osia"
 
 #: ../gui/tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Napauta ja pidä vasenta hiiren korvaa pohjassa liittääksesi instrumentin "
 "tälle raidalle."
@@ -1376,7 +1365,7 @@ msgstr "Muita tempon muutoksia ei ole."
 
 #: ../gui/dialogs.cpp:3050
 msgid " bpm"
-msgstr ""
+msgstr "bpm"
 
 #: ../gui/dialogs.cpp:3171 ../gui/dialogs.cpp:3180 ../gui/dialogs.cpp:3195
 #: ../gui/dialogs.cpp:3204
@@ -1567,8 +1556,7 @@ msgstr "Alennus - aseta %1 arvoksi"
 
 #: ../gui/dialogs.cpp:4081
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
+msgstr "Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
 
 #: ../gui/dialogs.cpp:4085
 msgid "Crescendo - set %1 rising from min to max"
@@ -1649,24 +1637,20 @@ msgid "Use treble and bass clefs"
 msgstr "Käytä diskantti- ja bassoavaimia"
 
 #: ../gui/dialogs.cpp:4311 ../gui/segmentcommands.cpp:2340
-#, fuzzy
 msgid "Split by Recording Source"
-msgstr "Nauhoitussisääntulon lähde"
+msgstr "Jaa nauhoituslähteen mukaan"
 
 #: ../gui/dialogs.cpp:4321
-#, fuzzy
 msgid "Recording Channel:"
-msgstr "Nauhoitetaan"
+msgstr "Nauhoituskanava:"
 
 #: ../gui/dialogs.cpp:4325 ../gui/dialogs.cpp:4340
-#, fuzzy
 msgid "any"
-msgstr "(mikä tahansa)"
+msgstr "vapaa"
 
 #: ../gui/dialogs.cpp:4333
-#, fuzzy
 msgid "Recording Device:"
-msgstr "Nauhoituslaitteet"
+msgstr "Nauhoituslaite:"
 
 #: ../gui/deviceeditor.cpp:182 ../gui/deviceeditor.cpp:204
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:171
@@ -1851,9 +1835,8 @@ msgid "Lilypond 2.6"
 msgstr "LilyPond 2.6"
 
 #: ../gui/dialogs.cpp:5126
-#, fuzzy
 msgid "Lilypond 2.8"
-msgstr "LilyPond 2.6"
+msgstr "LilyPond 2.8"
 
 #: ../gui/dialogs.cpp:5131
 msgid "Paper size to use in \\paper block"
@@ -1909,11 +1892,11 @@ msgstr "Vie palkitukset"
 
 #: ../gui/dialogs.cpp:5195
 msgid "Add staff group bracket"
-msgstr ""
+msgstr "Lisää viivastoja yhdistävä sulkumerkki"
 
 #: ../gui/dialogs.cpp:5200
 msgid "Merge tracks with same non-zero name"
-msgstr ""
+msgstr "Yhdistä raidat joilla on sama ei-tyhjä nimi"
 
 #: ../gui/dialogs.cpp:5229
 msgid "Export Devices..."
@@ -2380,8 +2363,7 @@ msgstr ""
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
+msgstr "Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
 
 #: ../gui/triggermanager.cpp:339
 msgid "Remove all triggered segments"
@@ -2861,17 +2843,14 @@ msgid "Export..."
 msgstr "Vie..."
 
 #: ../gui/bankeditor.cpp:1168
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr ""
-"Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr "Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
 
 #: ../gui/bankeditor.cpp:1170
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
+msgstr "Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
 
 #: ../gui/bankeditor.cpp:1180
 msgid "Copy all Program names from current Bank to clipboard"
@@ -2951,8 +2930,7 @@ msgstr "Laite tai instrumentti"
 
 #: ../gui/bankeditor.cpp:2735
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr ""
-"Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
+msgstr "Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
 
 #: ../gui/bankeditor.cpp:2744
 msgid "Choose Source and Destination"
@@ -3285,9 +3263,8 @@ msgid "Split by &Pitch..."
 msgstr "Jaa sävelkorkeuden mukaan..."
 
 #: ../gui/segmentcommands.h:774
-#, fuzzy
 msgid "Split by &Recording Source..."
-msgstr "Jaa sävelkorkeuden mukaan..."
+msgstr "Jaa &Nauhoituslähteen mukaan..."
 
 #: ../gui/segmentcommands.h:797
 msgid "Re&label..."
@@ -3462,9 +3439,8 @@ msgstr "&Nauhoita"
 
 #: ../gui/matrixview.cpp:764 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
 #: ../gui/notationview.cpp:2030 ../gui/rosegardengui.cpp:1101
-#, fuzzy
 msgid "Panic"
-msgstr "Jako"
+msgstr "Paniikki"
 
 #: ../gui/mixer.cpp:152
 msgid "Show Audio &Faders"
@@ -3994,12 +3970,12 @@ msgstr "Sormitus: "
 
 #: ../gui/notationviewslots.cpp:1623
 msgid "Ornament track %1 bar %2"
-msgstr ""
+msgstr "Koru raidalla %1 tahdissa %2"
 
 #: ../gui/notationviewslots.cpp:1625
-#, fuzzy, c-format
+#, c-format
 msgid "Ornament bar %1"
-msgstr "&Korut"
+msgstr "Koru tahdissa %1"
 
 #: ../gui/notationviewslots.cpp:1681
 msgid "Remove Ornaments"
@@ -4451,8 +4427,7 @@ msgid "global element must precede note elements"
 msgstr "kaiken kattavien elementtien täytyy edeltää nuottielementtejä"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "kaikenkattavilla ja nuottielementeillä voi olla muoto- tai merkkinimi-"
 "ominaisuus, mutta ei molempia"
@@ -4551,8 +4526,7 @@ msgstr ""
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
 #: ../gui/sequencemanager.cpp:1024
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Prosessorin teho ei riittänyt tosiaikaiseen äänen prosessointiin.  Ei voitu "
 "jatkaa."
@@ -4572,10 +4546,8 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK ääni -alijärjestelmä hukkaa näytteiden kehyksiä."
 
 #: ../gui/sequencemanager.cpp:1088
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
-msgstr ""
-"Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
+msgstr "Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
 
 #: ../gui/sequencemanager.cpp:1092
 msgid ""
@@ -5099,6 +5071,11 @@ msgid ""
 "2006,\n"
 "may he rest in peace)"
 msgstr ""
+"1.2.3 roiskeruutukuva (Michael'in ruusutarhasta)\n"
+"uusi roiskeruutuvua (Michael McIntyre's\n"
+"instrumenteista Hassell Arnold Hale -puiston ruusun kanssa, 1916-"
+"2006,\n"
+"levätköön rauhassa)"
 
 #: ../gui/main.cpp:461
 msgid "Finnish translation"
@@ -5106,7 +5083,7 @@ msgstr "Suomenkielinen käännös"
 
 #: ../gui/main.cpp:462
 msgid "guitar chord editor"
-msgstr ""
+msgstr "kitarasointueditori"
 
 #: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:464
 msgid ""
@@ -5676,8 +5653,7 @@ msgstr "MTC seurain"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1501
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Yhdistä automaattisesti sync ulostulo kaikkiin käytössä oleviin laitteisiin"
+msgstr "Yhdistä automaattisesti sync ulostulo kaikkiin käytössä oleviin laitteisiin"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1508
 msgid "Synchronisation"
@@ -6481,8 +6457,7 @@ msgstr "Liitä olemassaolevaan väliin [\"rajoitettu\"]"
 
 #: ../gui/editcommands.cpp:418
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
+msgstr "Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
 
 #: ../gui/editcommands.cpp:420
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -7439,8 +7414,7 @@ msgstr "Tuo Rosegarden 2.1 -tiedosto"
 
 #: ../gui/rosegardengui.cpp:3723
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
-msgstr ""
-"Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
+msgstr "Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
 
 #: ../gui/rosegardengui.cpp:3748 ../gui/rosegardengui.cpp:3763
 msgid ""
@@ -7659,10 +7633,8 @@ msgid "Saving current document as default studio..."
 msgstr "Tallennetaan nykyinen dokumentti oletusstudioksi..."
 
 #: ../gui/rosegardengui.cpp:7144
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
 
 #: ../gui/rosegardengui.cpp:7179
 msgid "Import Studio from File"
@@ -7701,12 +7673,11 @@ msgstr "  Näkymä: "
 
 #: ../gui/notefontviewer.cpp:306
 msgid "Glyphs"
-msgstr ""
+msgstr "Kuviot"
 
 #: ../gui/notefontviewer.cpp:307
-#, fuzzy
 msgid "Codes"
-msgstr "Sointu"
+msgstr "Koodit"
 
 #: ../gui/notefontviewer.cpp:309
 msgid "  Page: "
@@ -9197,11 +9168,3 @@ msgstr "Paniikkinappula"
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Nollaa kaikki MIDI-laitteet, jos sait lukkiutuneita nuotteja."
 
-#~ msgid "Lilypond 1.6 or 1.8"
-#~ msgstr "LilyPond 1.6 tai 1.8"
-
-#~ msgid "Lilypond 2.0"
-#~ msgstr "LilyPond 2.0"
-
-#~ msgid "new splash screen photo (of Michael's rose garden)"
-#~ msgstr "uusi roiskeruutukuva (Michaelin ruusupuisto)"
