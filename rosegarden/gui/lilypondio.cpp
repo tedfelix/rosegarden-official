@@ -414,9 +414,10 @@ LilypondExporter::write()
 	break;
 
     default:
+	// force the default version if there was an error
 	std::cerr << "ERROR: Unknown language level " << m_languageLevel
-		  << ", results may be unpredictable, "
-		  << "omitting \\version" << std::endl;
+		  << ", using \\version \"2.6.0\" instead" << std::endl;
+	str << "\\version \"2.6.0\"" << std::endl;
 	m_languageLevel = 2;
     }
 
