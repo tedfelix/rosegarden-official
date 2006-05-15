@@ -565,6 +565,43 @@ LilypondExporter::write()
     timeSignature = m_composition->
         getTimeSignatureAt(m_composition->getStartMarker());
 
+    // All the tempo changes are included in "globalTempo" context.
+    // This context contains only skip notes between the tempo changes.
+    // First tempo marking should still be include in \midi{ } block.
+    // If tempo marks are printed in future, they should probably be 
+    // included in this context and the note duration in the tempo
+    // mark should be according to the time signature. (hjj)
+    int tempoCount = m_composition->getTempoChangeCount();
+
+    if (tempoCount > 0) {
+
+	timeT prevTempoChangeTime = m_composition->getStartMarker();
+        int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(prevTempoChangeTime)));
+
+	str << indent(col++) << "globalTempo = {" << std::endl;
+	str << indent(col) << "\\tempo 4 = " << tempo << "  ";
+
+	for (int i = 0; i < tempoCount; ++i) {
+
+	    std::pair<Rosegarden::timeT, long> tempoChange = 
+		m_composition->getTempoChange(i);
+
+	    timeT tempoChangeTime = tempoChange.first;
+            
+	    tempo = int(Composition::getTempoQpm(tempoChange.second));
+
+	    writeSkip(m_composition->getTimeSignatureAt(tempoChangeTime), 
+		tempoChangeTime, tempoChangeTime-prevTempoChangeTime, false, str);
+	    str << std::endl << indent(col) << "\\tempo 4 = " << tempo << "  ";
+
+	    prevTempoChangeTime = tempoChangeTime;
+	}
+	writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime), 
+	    prevTempoChangeTime, compositionEndTime-prevTempoChangeTime, false, str);
+	str << std::endl;
+	str << indent(--col) << "}" << std::endl;
+    }
+
     // open \score section
     str << "\\score {" << std::endl;
 
@@ -660,6 +697,9 @@ LilypondExporter::write()
 		    // adding five flats back?  That's brain damaged."
 		    str << indent(col) << "\\set Staff.printKeyCancellation = ##f" << std::endl;
 		    str << indent(col) << "\\new Voice \\global" << std::endl;
+		    if (tempoCount > 0) {
+			str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
+		    }
 		}
 		
 		// Temporary storage for non-atomic events (!BOOM)
@@ -1504,43 +1544,3 @@ LilypondExporter::writeSlashes(const Rosegarden::Event *note, std::ofstream &str
 	str << length;
     }
 }
-
-// DMM
-// moved out of the way for enhanced readability when working out the indent()
-// stuff...
-//
-// Doing something with all of this is pretty non-trivial.  Initial
-// tempo goes into the \midi section, but subsequent tempo changes need to be
-// written along with the notes, and should probably only be written in one
-// staff context.  Dealing with all of that is certainly possible, but it's
-// a lot more trouble than I think it's worth, and I'm not going to do
-// anything with this unless pressed by user request.
-//
-//     int tempoCount = m_composition->getTempoChangeCount();
-
-//     if (tempoCount > 0) {
-
-//      str << "\nt ";
-
-//      for (int i = 0; i < tempoCount - 1; ++i) {
-
-//          std::pair<Rosegarden::timeT, long> tempoChange = 
-//              m_composition->getRawTempoChange(i);
-
-//          timeT myTime = tempoChange.first;
-//          timeT nextTime = myTime;
-//          if (i < m_composition->getTempoChangeCount()-1) {
-//              nextTime = m_composition->getRawTempoChange(i+1).first;
-//          }
-            
-//          int tempo = tempoChange.second / 60;
-
-//          str << convertTime(  myTime) << " " << tempo << " "
-//              << convertTime(nextTime) << " " << tempo << " ";
-//      }
-
-//      str << convertTime(m_composition->getRawTempoChange(tempoCount-1).first)
-//          << " "
-//          << m_composition->getRawTempoChange(tempoCount-1).second/60
-//          << std::endl;
-//     }
