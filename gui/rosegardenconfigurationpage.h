@@ -230,7 +230,7 @@ public:
 
     static QString iconLabel() { return i18n("Notation"); }
     static QString title()     { return i18n("Notation"); }
-    static QString iconName()  { return "fonts"; }
+    static QString iconName()  { return "music_eightnote"; }
 
 protected slots:
     void slotFontComboChanged(int);
