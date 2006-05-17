@@ -46,11 +46,7 @@ class QScrollBar;
 
 class KCommand;
 class KToggleAction;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
 class KTabWidget;
-#else
-namespace KDE32Backport { class KTabWidget; }
-#endif
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;

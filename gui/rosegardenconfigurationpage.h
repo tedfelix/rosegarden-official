@@ -44,21 +44,17 @@
 #include "widgets.h"
 #include "colourwidgets.h"
 
-class RosegardenGUIDoc;
 class QTabWidget;
 class QLineEdit;
 class QPushButton;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
-class RosegardenQuantizeParameters;
-class KListView;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
-class KFontRequester;
-#else
-namespace KDE32Backport { class KFontRequester; }
-#endif
 class QTable;
+class KListView;
+class KFontRequester;
+class RosegardenGUIDoc;
+class RosegardenQuantizeParameters;
 
 namespace Rosegarden
 {
