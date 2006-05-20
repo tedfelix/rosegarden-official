@@ -2495,10 +2495,11 @@ AlsaDriver::getMappedComposition()
                 break;
 
             case SND_SEQ_EVENT_START:
-                if (getMIDISyncStatus() == TRANSPORT_SLAVE) {
+                if ((getMIDISyncStatus() == TRANSPORT_SLAVE) && !isPlaying()) {
                     ExternalTransport *transport = getExternalTransportControl();
                     if (transport) {
-                        transport->transportChange(ExternalTransport::TransportStop);                    
+                        transport->transportJump(ExternalTransport::TransportStopAtTime, 
+                                                 RealTime::zeroTime);
                         transport->transportChange(ExternalTransport::TransportStart);                    
                     }
                 } 
@@ -2509,7 +2510,7 @@ AlsaDriver::getMappedComposition()
                break;
 
             case SND_SEQ_EVENT_CONTINUE:
-                if (getMIDISyncStatus() == TRANSPORT_SLAVE) {
+                if ((getMIDISyncStatus() == TRANSPORT_SLAVE) && !isPlaying()) {
                     ExternalTransport *transport = getExternalTransportControl();
                     if (transport) {
                         transport->transportChange(ExternalTransport::TransportPlay);                    
@@ -2522,7 +2523,7 @@ AlsaDriver::getMappedComposition()
                 break;
 
             case SND_SEQ_EVENT_STOP:
-                if (getMIDISyncStatus() == TRANSPORT_SLAVE) {
+                if ((getMIDISyncStatus() == TRANSPORT_SLAVE) && isPlaying()) {
                     ExternalTransport *transport = getExternalTransportControl();
                     if (transport) {
                         transport->transportChange(ExternalTransport::TransportStop);                    
