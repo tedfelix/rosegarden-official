@@ -1987,7 +1987,7 @@ SequenceManager::sendTransportControlStatuses()
     int mmcMode = config->readNumEntry("mmcmode", 0);
     int mtcMode = config->readNumEntry("mtcmode", 0);
 
-    bool midiClock = config->readBoolEntry("midiclock", false);
+    int midiClock = config->readNumEntry("midiclock", 0);
     bool midiSyncAuto = config->readBoolEntry("midisyncautoconnect", false);
 
     // Send JACK transport

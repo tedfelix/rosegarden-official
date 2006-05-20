@@ -383,6 +383,11 @@ public:
     void setMidiRecordDevice(DeviceId id) { m_midiRecordDevice = id; }
     DeviceId getMIDIRecordDevice() const { return m_midiRecordDevice; }
 
+    // MIDI Realtime Sync setting
+    //
+    TransportSyncStatus getMIDISyncStatus() const { return m_midiSyncStatus; }
+    void setMIDISyncStatus(TransportSyncStatus status) { m_midiSyncStatus = status; }
+
     // MMC master/slave setting
     //
     TransportSyncStatus getMMCStatus() const { return m_mmcStatus; }
@@ -501,6 +506,7 @@ protected:
 
     // MMC and MTC status and ID
     //
+    TransportSyncStatus          m_midiSyncStatus;
     TransportSyncStatus          m_mmcStatus;
     TransportSyncStatus          m_mtcStatus;
     MidiByte                     m_mmcId;      // device id

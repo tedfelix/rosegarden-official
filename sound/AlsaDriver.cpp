@@ -2489,12 +2489,19 @@ AlsaDriver::getMappedComposition()
 
             case SND_SEQ_EVENT_CLOCK:
 #ifdef DEBUG_ALSA
-               std::cerr << "AlsaDriver::getMappedComposition - "
+                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got realtime MIDI clock" << std::endl;
 #endif
-               break;
+                break;
 
             case SND_SEQ_EVENT_START:
+                if (getMIDISyncStatus() == TRANSPORT_SLAVE) {
+                    ExternalTransport *transport = getExternalTransportControl();
+                    if (transport) {
+                        transport->transportChange(ExternalTransport::TransportStop);                    
+                        transport->transportChange(ExternalTransport::TransportStart);                    
+                    }
+                } 
 #ifdef DEBUG_ALSA
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "START" << std::endl;
@@ -2502,18 +2509,30 @@ AlsaDriver::getMappedComposition()
                break;
 
             case SND_SEQ_EVENT_CONTINUE:
+                if (getMIDISyncStatus() == TRANSPORT_SLAVE) {
+                    ExternalTransport *transport = getExternalTransportControl();
+                    if (transport) {
+                        transport->transportChange(ExternalTransport::TransportPlay);                    
+                    }
+                } 
 #ifdef DEBUG_ALSA
-               std::cerr << "AlsaDriver::getMappedComposition - "
-                         << "CONTINUE" << std::endl;
+                std::cerr << "AlsaDriver::getMappedComposition - "
+                          << "CONTINUE" << std::endl;
 #endif
-               break;
+                break;
 
             case SND_SEQ_EVENT_STOP:
+                if (getMIDISyncStatus() == TRANSPORT_SLAVE) {
+                    ExternalTransport *transport = getExternalTransportControl();
+                    if (transport) {
+                        transport->transportChange(ExternalTransport::TransportStop);                    
+                    }
+                 } 
 #ifdef DEBUG_ALSA
-               std::cerr << "AlsaDriver::getMappedComposition - "
-                         << "STOP" << std::endl;
+                 std::cerr << "AlsaDriver::getMappedComposition - "
+                           << "STOP" << std::endl;
 #endif
-               break;
+                 break;
 
             case SND_SEQ_EVENT_SONGPOS:
 #ifdef DEBUG_ALSA
@@ -3873,23 +3892,37 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
         if ((*i)->getType() == MappedEvent::SystemMIDIClock)
         {
-            if ((*i)->getData1())
+            switch ((int)(*i)->getData1())
             {
-                m_midiClockEnabled = true;
+                case 0:
+                    m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MIDI CLOCK ENABLED"
-                          << std::endl;
+                    std::cerr << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden MIDI CLOCK, START and STOP DISABLED"
+                              << std::endl;
 #endif
-            }
-            else
-            {
-                m_midiClockEnabled = false;
+                    setMIDISyncStatus(TRANSPORT_OFF);
+                    break;
+                    
+                case 1:
+                    m_midiClockEnabled = true;
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::processEventsOut - "
-                          << "Rosegarden MIDI CLOCK DISABLED"
-                          << std::endl;
+                    std::cerr << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden send MIDI CLOCK, START and STOP ENABLED"
+                              << std::endl;
 #endif
+                    setMIDISyncStatus(TRANSPORT_MASTER);
+                    break;
+
+                case 2:
+                    m_midiClockEnabled = false;
+#ifdef DEBUG_ALSA
+                    std::cerr << "AlsaDriver::processEventsOut - "
+                              << "Rosegarden accept START and STOP ENABLED"
+                              << std::endl;
+#endif
+                    setMIDISyncStatus(TRANSPORT_SLAVE);
+                    break;
             }
         }
 

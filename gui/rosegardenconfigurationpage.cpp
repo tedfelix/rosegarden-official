@@ -1435,13 +1435,23 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // MIDI Clock
     //
-    label = new QLabel(i18n("Send MIDI Clock and System messages"), frame);
+    label = new QLabel(i18n("MIDI Clock and System messages"), frame);
     layout->addWidget(label, 2, 0);
-    m_midiClockEnabled = new QCheckBox(frame);
-    layout->addWidget(m_midiClockEnabled, 2, 1);
+    //m_midiClockEnabled = new QCheckBox(frame);
+    //layout->addWidget(m_midiClockEnabled, 2, 1);
+    m_midiSync = new KComboBox(frame);
+    layout->addWidget(m_midiSync, 2, 1);
+    
+    m_midiSync->insertItem(i18n("Off"));
+    m_midiSync->insertItem(i18n("Send MIDI Clock, Start and Stop"));
+    m_midiSync->insertItem(i18n("Accept Start and Stop"));
 
-    bool midiClock = m_cfg->readBoolEntry("midiclock", false);
-    m_midiClockEnabled->setChecked(midiClock);
+    //bool midiClock = m_cfg->readBoolEntry("midiclock", false);
+    //m_midiClockEnabled->setChecked(midiClock);
+
+    int midiClock = m_cfg->readNumEntry("midiclock", 0);
+    if (midiClock < 0 || midiClock > 2) midiClock = 0;
+    m_midiSync->setCurrentItem(midiClock);
 
     // JACK Transport
     //
@@ -1807,7 +1817,8 @@ SequencerConfigurationPage::apply()
 
     // ------------- MIDI Clock and System messages ------------
     //
-    bool midiClock = m_midiClockEnabled->isChecked();
+    //bool midiClock = m_midiClockEnabled->isChecked();
+    int midiClock = m_midiSync->currentItem();
     m_cfg->writeEntry("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)

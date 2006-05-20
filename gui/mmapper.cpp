@@ -1005,10 +1005,10 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    bool midiClock = config->readBoolEntry("midiclock", false);
-    bool mtcMaster = config->readBoolEntry("mtcmaster", false);
+    int midiClock = config->readNumEntry("midiclock", 0);
+    int mtcMode = config->readNumEntry("mtcmode", 0);
 
-    if (midiClock)
+    if (midiClock == 1)
     {
         using Rosegarden::Note;
         Rosegarden::timeT quarterNote = Note(Note::Crotchet).getDuration();
@@ -1024,7 +1024,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     }
 
 
-    if (mtcMaster)
+    if (mtcMode > 0)
     {
         // do something
     }
@@ -1070,14 +1070,14 @@ size_t MetronomeMmapper::computeMmappedSize()
 {
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    bool midiClock = config->readBoolEntry("midiclock", false);
-    bool mtcMaster = config->readBoolEntry("mtcmaster", false);
+    int midiClock = config->readNumEntry("midiclock", 0);
+    int mtcMode = config->readNumEntry("mtcmode", 0);
 
     // base size for Metronome ticks
     size_t size = m_ticks.size() * sizeof(MappedEvent);
     Composition& comp = m_doc->getComposition();
 
-    if (midiClock)
+    if (midiClock == 1)
     {
         using Rosegarden::Note;
 
@@ -1094,7 +1094,7 @@ size_t MetronomeMmapper::computeMmappedSize()
         size += clocks * sizeof(MappedEvent);
     }
 
-    if (mtcMaster)
+    if (mtcMode > 0)
     {
         // Allow room for MTC timing messages (how?)
     }
