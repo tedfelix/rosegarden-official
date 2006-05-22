@@ -60,7 +60,7 @@ protected:
     std::string m_fileName;
     bool m_pitchBorked;
 
-    void writeBar(Rosegarden::Segment *, int barNo, int col,
+    void writeBar(Rosegarden::Segment *, int barNo, int barStart, int barEnd, int col,
 		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
 		  std::string &prevStyle, eventendlist &eventsInProgress,
 		  std::ofstream &str);
