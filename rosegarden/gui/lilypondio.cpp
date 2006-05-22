@@ -526,8 +526,12 @@ LilypondExporter::write()
 
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();
+    timeT compositionStartTime = (*i)->getStartTime();
     timeT compositionEndTime = (*i)->getEndMarkerTime();
     for (; i != m_composition->end(); ++i) {
+	if (compositionStartTime > (*i)->getStartTime() && (*i)->getTrack() >= 0) {
+	    compositionStartTime = (*i)->getStartTime();
+	}
 	if (compositionEndTime < (*i)->getEndMarkerTime()) {
 	    compositionEndTime = (*i)->getEndMarkerTime();
 	}
@@ -537,6 +541,13 @@ LilypondExporter::write()
     str << indent(col++) << "global = { " << std::endl;
     TimeSignature timeSignature = m_composition->
 	getTimeSignatureAt(m_composition->getStartMarker());
+    if (m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime)) < compositionStartTime) {
+        str << indent(col) << "\\partial ";
+	// the following handles correctly dotted durations like "4.", but
+	// fails with multiples of durations like "8*5" (fixme!)
+	writeDuration(m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime)+1)-compositionStartTime,str);
+        str << std::endl;
+    }
     int leftBar = 0;
     int rightBar = leftBar;
     do {
@@ -552,7 +563,12 @@ LilypondExporter::write()
 	    //  - place skips upto the end of the composition; 
 	    //    this justifies the printed staffs
 	    str << indent(col);
-	    writeSkip(timeSignature, m_composition->getBarStart(leftBar), m_composition->getBarEnd(rightBar)-m_composition->getBarStart(leftBar), false, str);
+	    timeT leftTime = m_composition->getBarStart(leftBar);
+	    timeT rightTime = m_composition->getBarStart(rightBar);
+	    if (leftTime < compositionStartTime) {
+		leftTime = compositionStartTime;
+	    }
+	    writeSkip(timeSignature, leftTime, rightTime-leftTime, false, str);
 	    str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
 
 	    timeSignature = m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
@@ -590,11 +606,24 @@ LilypondExporter::write()
             
 	    tempo = int(Composition::getTempoQpm(tempoChange.second));
 
+	    // First tempo change may be before the first segment.
+	    // Do not apply it before the first segment appears.
+	    if (tempoChangeTime < compositionStartTime) {
+		tempoChangeTime = compositionStartTime;
+	    }
+	    if (prevTempoChangeTime < compositionStartTime) {
+		prevTempoChangeTime = compositionStartTime;
+	    }
 	    writeSkip(m_composition->getTimeSignatureAt(tempoChangeTime), 
 		tempoChangeTime, tempoChangeTime-prevTempoChangeTime, false, str);
 	    str << std::endl << indent(col) << "\\tempo 4 = " << tempo << "  ";
 
 	    prevTempoChangeTime = tempoChangeTime;
+	}
+	// First tempo change may be before the first segment.
+	// Do not apply it before the first segment appears.
+	if (prevTempoChangeTime < compositionStartTime) {
+	    prevTempoChangeTime = compositionStartTime;
 	}
 	writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime), 
 	    prevTempoChangeTime, compositionEndTime-prevTempoChangeTime, false, str);
@@ -733,7 +762,7 @@ LilypondExporter::write()
 		    //!!! This doesn't cope correctly yet with time signature changes
 		    // during this skipped section.
 		    str << std::endl << indent(col);
-		    writeSkip(timeSignature, 0, m_composition->getBarStart(firstBar),
+		    writeSkip(timeSignature, compositionStartTime, m_composition->getBarStart(firstBar) - compositionStartTime,
 			      false, str);
 		}
 
@@ -746,8 +775,13 @@ LilypondExporter::write()
 		for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
 		     barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
 		     ++barNo) {
+		    timeT barStart = m_composition->getBarStart(barNo);
+		    timeT barEnd = m_composition->getBarEnd(barNo);
+		    if (barStart < compositionStartTime) {
+			barStart = compositionStartTime;
+		    }
 
-		    writeBar(*i, barNo, col, key,
+		    writeBar(*i, barNo, barStart, barEnd, col, key,
 			     lilyText, lilyLyrics,
 			     prevStyle, eventsInProgress, str);
 		}
@@ -912,7 +946,7 @@ LilypondExporter::calculateDuration(Rosegarden::Segment *s,
 
 void
 LilypondExporter::writeBar(Rosegarden::Segment *s,
-			   int barNo, int col,
+			   int barNo, int barStart, int barEnd, int col,
 			   Rosegarden::Key &key,
 			   std::string &lilyText,
 			   std::string &lilyLyrics,
@@ -921,9 +955,6 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			   std::ofstream &str)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
-
-    timeT barStart = m_composition->getBarStart(barNo);
-    timeT barEnd = m_composition->getBarEnd(barNo);
 
     Segment::iterator i = s->findTime(barStart);
     if (!s->isBeforeEndMarker(i)) return;
