@@ -596,6 +596,7 @@ LilypondExporter::write()
 
 	str << indent(col++) << "globalTempo = {" << std::endl;
 	str << indent(col) << "\\tempo 4 = " << tempo << "  ";
+	int prevTempo = tempo;
 
 	for (int i = 0; i < tempoCount; ++i) {
 
@@ -616,8 +617,12 @@ LilypondExporter::write()
 	    }
 	    writeSkip(m_composition->getTimeSignatureAt(tempoChangeTime), 
 		tempoChangeTime, tempoChangeTime-prevTempoChangeTime, false, str);
-	    str << std::endl << indent(col) << "\\tempo 4 = " << tempo << "  ";
+	    // add new \tempo only if tempo was changed
+	    if (tempo != prevTempo) {
+		str << std::endl << indent(col) << "\\tempo 4 = " << tempo << "  ";
+	    }
 
+	    prevTempo = tempo;
 	    prevTempoChangeTime = tempoChangeTime;
 	}
 	// First tempo change may be before the first segment.
