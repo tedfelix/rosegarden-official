@@ -565,7 +565,7 @@ protected:
      * If necessary, extend local keymapping to contain
      * all notes currently on staff
      */
-    void MatrixView::extendKeyMapping();
+    void extendKeyMapping();
 
     //--------------- Data members ---------------------------------
 
