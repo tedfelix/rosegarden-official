@@ -102,6 +102,7 @@
 	    <Action name="auto_split"/>
 	    <Action name="split_by_pitch"/>
 	    <Action name="split_by_recording"/>
+	    <Action name="split_at_time"/>
 	    <Separator/>
 	    <Action name="join_segments"/>
 	</Menu>  
@@ -339,6 +340,7 @@
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
         <Action name="split_by_recording"/>
+        <Action name="split_at_time"/>
         <Action name="join_segments"/>
         <Action name="relabel_segment"/>
         <Action name="set_segment_start"/>
