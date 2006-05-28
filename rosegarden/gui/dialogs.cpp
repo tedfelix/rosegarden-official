@@ -4315,25 +4315,21 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
     QFrame *frame = new QFrame(vBox);
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
-    //QHBox *chanBox = new QHBox( vBox );
-    //new QLabel( i18n("Recording Channel:"), chanBox );
-    //m_channel = new KComboBox( chanBox );
     layout->addWidget(new QLabel( i18n("Recording Channel:"), frame ), 0, 0);
     m_channel = new KComboBox( frame );
+    m_channel->setSizeLimit( 17 );
     layout->addWidget(m_channel, 0, 1);
+    QSpacerItem *spacer = new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout->addItem( spacer, 0, 2 );
 
     m_channel->insertItem(i18n("any"));
     for(int i=1; i<17; ++i) {
         m_channel->insertItem(QString::number(i));
     }
     
-    //QHBox *devBox = new QHBox( vBox );
-    //new QLabel( i18n("Recording Device:"), devBox );
-    //m_device = new KComboBox(devBox);
     layout->addWidget(new QLabel( i18n("Recording Device:"), frame ), 1, 0);
     m_device = new KComboBox( frame );
-    layout->addWidget(m_device, 1, 1);
-    
+    layout->addMultiCellWidget( m_device, 1, 1, 1, 2 );
     
     m_deviceIds.clear();
     m_deviceIds.push_back(-1);
