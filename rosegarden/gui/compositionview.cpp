@@ -1804,10 +1804,11 @@ void CompositionView::slotUpdateSize()
     int height = std::max(getModel()->getNbRows(), 64u) * vStep;
     
     Rosegarden::RulerScale *ruler = grid().getRulerScale();
-    int width = int(nearbyint(ruler->getTotalWidth()));
 
-//     if (!shrinkWidth && width < contentsWidth())
-//         width = contentsWidth();
+    int minWidth = sizeHint().width();
+    int computedWidth = int(nearbyint(ruler->getTotalWidth()));
+    
+    int width = std::max(computedWidth, minWidth);
 
     resizeContents(width, height);
 }
