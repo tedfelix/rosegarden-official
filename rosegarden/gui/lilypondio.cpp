@@ -701,10 +701,9 @@ LilypondExporter::write()
 						     getTrackById(lastTrackIndex)->getLabel());
 		   
 		    if (!m_exportStaffMerge || staffName.str() == "") {
-			staffName << "track";
 			str << std::endl << indent(col) 
-			    << "\\context Staff = \"" << staffName.str()
-			    << " " << (trackPos + 1) << "\" ";
+			    << "\\context Staff = \"track "
+			    << (trackPos + 1) << "\" ";
 		    } else {
 			str << std::endl << indent(col) 
 			    << "\\context Staff = \"" << staffName.str()
