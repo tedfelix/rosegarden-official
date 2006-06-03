@@ -1348,12 +1348,17 @@ MidiFile::convertToMidi(Composition &comp)
     // file META information - this will get written out just like
     // any other MIDI track.
     //
-    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
+    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_COPYRIGHT_NOTICE,
+                              comp.getCopyrightNote());
+
+    m_midiComposition[trackNumber].push_back(midiEvent);
+
+    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_CUE_POINT,
                               "Created by Rosegarden");
 
     m_midiComposition[trackNumber].push_back(midiEvent);
 
-    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
+    midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_CUE_POINT,
                               "http://www.rosegardenmusic.com/");
 
     m_midiComposition[trackNumber].push_back(midiEvent);
@@ -1424,6 +1429,23 @@ MidiFile::convertToMidi(Composition &comp)
                                   MIDI_FILE_META_EVENT,
                                   MIDI_TIME_SIGNATURE,
                                   timeSigString);
+
+        m_midiComposition[trackNumber].push_back(midiEvent);
+    }
+
+    // Insert markers
+    // fix for bug#
+    Composition::markercontainer marks = comp.getMarkers();
+    
+    for (unsigned int i = 0; i < marks.size(); i++)
+    {
+        midiEventAbsoluteTime = marks[i]->getTime() * m_timingDivision
+                                 / crotchetDuration;
+
+        midiEvent = new MidiEvent( midiEventAbsoluteTime, 
+                                   MIDI_FILE_META_EVENT, 
+                                   MIDI_TEXT_MARKER,
+                                   marks[i]->getName() );
 
         m_midiComposition[trackNumber].push_back(midiEvent);
     }
