@@ -257,7 +257,7 @@ by the main Rosegarden GUI or manually if testing - it's sometimes
 more convenient to do the latter as the Sequencer needs to be connected
 up to the underlying sound system every time it is started.
 
-The Sequencer interfaces with aRTS (www.arts-project.org) sound system
+The Sequencer interfaces directly with ALSA
 and provides MIDI "play" and "record" ports which can be connected to
 other MIDI clients (MIDI IN and OUT hardware ports or aRTS synth devices)
 using the aRTS Midi Manager.  The Sequencer will also eventually  support
@@ -273,28 +273,14 @@ for definitions of the DCOP interfaces pertinent to the Sequencer
 and GUI.  The main DCOP operations from the GUI involve starting and
 stopping the Sequencer, playing and recording, fast forwarding and
 rewinding.  Once a play or record cycle is enabled it's the Sequencer
-that does most of the hard work.  To service a play() command the
-Sequencer fetches a slice of Events from the Rosegarden Composition
-(see getSequencerSlice()) and queues them up with the aRTS MidiEvent
-dispatcher.  Interlaced within the main Sequencer loop is a call
-which also services pending incoming MIDI events from the Rosegarden
-record port and forwards them upwards to the GUI.
-
-The Rosegarden record port is built around a specialisation of the
-Arts::MidiPort - see rosegarden/sequencer/MidiArts.idl for the 
-interface definition and check out the rosegarden/sequencer/Makefile.am
-for how it gets built.  This record port has to be run as part of the aRTS
-sound server - check out the documentation in:
-
-    rosegarden/docs/howtos/artsd-mcop-notes
-
-for more information about how to get this working.
+that does most of the hard work.  Events are read from (or written to, when recording)
+a set of mmapped files. 
 
 The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
 
  - libRosegardenSequencer holds everything pertinent to sequencing
-    for Rosegarden including the aRTS MCOP record interface and the
+    for Rosegarden including the
     Sequencer class itself.  This library is only linked into the
     Rosegarden Sequencer.
 
