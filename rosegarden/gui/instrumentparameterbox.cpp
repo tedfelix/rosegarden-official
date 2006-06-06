@@ -906,6 +906,13 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
 	if (rmi != m_rotaries.end()) {
 
+	    // Update the controller number that is associated with the
+	    // existing rotary widget.
+
+  	    rmi->first = it->getControllerValue();
+
+	    // Update the properties of the existing rotary widget.
+
 	    rotary = rmi->second.first;
 	    int redraw = 0; // 1 -> position, 2 -> all
 
@@ -928,6 +935,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 	    if (redraw == 2) {
 		rotary->repaint();
 	    }
+
+	    // Update the controller name that is associated with
+	    // with the existing rotary widget.
 
 	    QLabel *label = rmi->second.second;
 	    label->setText(strtoqstr(it->getName()));
