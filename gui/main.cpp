@@ -257,17 +257,16 @@ by the main Rosegarden GUI or manually if testing - it's sometimes
 more convenient to do the latter as the Sequencer needs to be connected
 up to the underlying sound system every time it is started.
 
-The Sequencer interfaces directly with ALSA
+The Sequencer interfaces directly with \link Rosegarden::AlsaDriver ALSA\endlink
 and provides MIDI "play" and "record" ports which can be connected to
-other MIDI clients (MIDI IN and OUT hardware ports or aRTS synth devices)
-using the aRTS Midi Manager.  The Sequencer will also eventually  support
-playing and recording of Audio sample files.
+other MIDI clients (MIDI IN and OUT hardware ports or ALSA synth devices)
+using any ALSA MIDI Connection Manager.  The Sequencer also supports 
+playing and recording of Audio sample files using \link Rosegarden::JackDriver Jack\endlink 
 
 The GUI and Sequencer communicate using the KDE DCOP communication framework.
 Look in:
-
-    rosegarden/gui/rosegardenguiiface.h
-    rosegarden/sequencer/rosegardensequenceriface.h
+ - \link rosegardenguiiface.h gui/rosegardenguiiface.h\endlink
+ - \link rosegardensequenceriface.h sequencer/rosegardensequenceriface.h\endlink
 
 for definitions of the DCOP interfaces pertinent to the Sequencer
 and GUI.  The main DCOP operations from the GUI involve starting and
