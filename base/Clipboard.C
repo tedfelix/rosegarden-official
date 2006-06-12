@@ -123,10 +123,19 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
 
     for (Segment::const_iterator i = ifrom;
 	 i != ito && i != copyFrom->end(); ++i) {
-	s->insert(new Event(**i));
+
+	if ((*i)->getAbsoluteTime() + (*i)->getDuration() > to) {
+	    s->insert(new Event(**i,
+				(*i)->getAbsoluteTime(),
+				to - (*i)->getAbsoluteTime()));
+	} else {
+	    s->insert(new Event(**i));
+	}
     }
 
-    if (s->getEndMarkerTime() > to) {
+    // need to call getEndMarkerTime() on copyFrom, not on s, because
+    // its return value may depend on the composition it's in
+    if (copyFrom->getEndMarkerTime() > to) {
 	s->setEndMarkerTime(to);
     }
 

@@ -211,8 +211,8 @@
 	<Separator/>
         <Action name="mute_all_tracks"/>
         <Action name="unmute_all_tracks"/>
-	<Separator/>
-<!--	<Action name="show_previews"/>
+<!--	<Separator/>
+	<Action name="show_previews"/>
 	<Action name="show_segment_labels"/>
 	<Action name="show_tracklabels"/>  -->
 </ToolBar>
@@ -223,10 +223,12 @@
         <Action name="edit_percussion_matrix"/>
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
+	<Action name="audio_manager"/>
+	<Separator/>
         <Action name="quantize_selection"/>
+	<Separator/>
 	<Action name="manage_devices"/>
 	<Action name="manage_synths"/>
-	<Action name="audio_manager"/>
         <Action name="midi_mixer"/>
         <Action name="audio_mixer"/>
 </ToolBar>
