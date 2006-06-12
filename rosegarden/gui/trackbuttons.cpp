@@ -653,7 +653,10 @@ TrackButtons::slotToggleRecordTrack(int position)
 	if (otherTrack &&
 	    otherTrack != track) {
 	    
-	    bool unselect;
+	    /* Obsolete code: audio, MIDI and plugin tracks behave the same now.
+               plcl, 06/2006 - Multitrack MIDI recording
+               
+            bool unselect;
 
 	    if (audio) {
 		unselect = (otherTrack->getInstrument() == track->getInstrument());
@@ -669,7 +672,9 @@ TrackButtons::slotToggleRecordTrack(int position)
 		unselect = !otherAudio;
 	    }
 
-	    if (unselect) {
+	    if (unselect) { */
+            
+            if (otherTrack->getInstrument() == track->getInstrument()) {
 		// found another record track of the same type (and
 		// with the same instrument, if audio): unselect that
 

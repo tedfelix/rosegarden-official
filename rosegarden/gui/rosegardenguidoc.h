@@ -406,7 +406,8 @@ public:
         { return (dynamic_cast<RosegardenGUIApp*>(parent()))
                                          ->getSequenceManager(); }
 
-    Rosegarden::Segment *getRecordMIDISegment() { return m_recordMIDISegment; }
+    //Obsolete: multitrack MIDI recording. plcl 06/2006.
+    //Rosegarden::Segment *getRecordMIDISegment() { return m_recordMIDISegment; }
 
     QStringList getTimers();
     QString getCurrentTimer();
@@ -553,6 +554,16 @@ protected:
 
     bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
 
+    /**
+     * Replace a recorded event in one or several segments
+     */
+    void replaceRecordedEvent(Rosegarden::Event *old, Rosegarden::Event *fresh);
+    
+    /**
+     * Insert a recorded event in one or several segments
+     */
+    void insertRecordedEvent(Rosegarden::Event *ev, int device, int channel);
+
     //--------------- Data members ---------------------------------
 
     /**
@@ -600,21 +611,24 @@ protected:
      */
     AudioPreviewThread m_audioPreviewThread;
 
-    /**
-     * a Segment onto which we can record MIDI events
+    typedef std::map<Rosegarden::InstrumentId, Rosegarden::Segment *> RecordingSegmentMap;
+
+    /** 
+     * Segments onto which we can record MIDI events
      */
-    Rosegarden::Segment *m_recordMIDISegment;
+    //Rosegarden::Segment *m_recordMIDISegment;
+    RecordingSegmentMap m_recordMIDISegments;
 
     /**
      * Segments for recording audio (per instrument)
      */
-    typedef std::map<Rosegarden::InstrumentId, Rosegarden::Segment *> RecordingSegmentMap;
     RecordingSegmentMap m_recordAudioSegments;
     
     /**
      * a map[Pitch] of Rosegarden::Event elements, for NoteOn calculations
      */
-    typedef std::map<int, Rosegarden::Segment::iterator>	PitchMap;
+    //typedef std::map<int, Rosegarden::Segment::iterator>	PitchMap;
+    typedef std::map<int, Rosegarden::Event*>                   PitchMap;
     
     /**
      * a map[Channel] of PitchMap

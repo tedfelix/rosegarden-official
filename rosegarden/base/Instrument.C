@@ -127,6 +127,7 @@ Instrument::Instrument(InstrumentId id,
     m_name(name),
     m_type(it),
     m_channel(0),
+    m_input_channel(-1),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
@@ -170,6 +171,7 @@ Instrument::Instrument(InstrumentId id,
     m_name(name),
     m_type(it),
     m_channel(channel),
+    m_input_channel(-1),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
@@ -224,6 +226,7 @@ Instrument::Instrument(const Instrument &ins):
     m_name(ins.getName()),
     m_type(ins.getType()),
     m_channel(ins.getMidiChannel()),
+    m_input_channel(ins.getMidiInputChannel()),
     m_program(ins.getProgram()),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
@@ -263,6 +266,7 @@ Instrument::operator=(const Instrument &ins)
     m_name = ins.getName();
     m_type = ins.getType();
     m_channel = ins.getMidiChannel();
+    m_input_channel = ins.getMidiInputChannel();
     m_program = ins.getProgram();
     m_transpose = ins.getMidiTranspose();
     m_pan = ins.getPan();

@@ -466,6 +466,21 @@ Segment::eraseSingle(Event* e)
 }
 
 
+bool
+Segment::eraseDuplicated(Event* e)
+{
+    iterator elPos = findDuplicated(e);
+
+    if (elPos != end()) {
+
+        erase(elPos);
+        return true;
+            
+    } else return false;
+    
+}
+
+
 Segment::iterator
 Segment::findSingle(Event* e) 
 {
@@ -475,6 +490,23 @@ Segment::findSingle(Event* e)
 
     for (iterator i = interval.first; i != interval.second; ++i) {
         if (*i == e) {
+            res = i;
+            break;
+        }
+    }
+    return res;
+}
+
+
+Segment::iterator
+Segment::findDuplicated(Event* e) 
+{
+    iterator res = end();
+
+    std::pair<iterator, iterator> interval = equal_range(e);
+
+    for (iterator i = interval.first; i != interval.second; ++i) {
+        if ((*i)->isDuplicated(e)) {
             res = i;
             break;
         }
