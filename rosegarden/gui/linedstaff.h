@@ -502,6 +502,49 @@ public:
     virtual void positionAllElements();
     
 
+    /* Some optional methods for the subclass. */
+
+
+    /**
+     * Return an iterator pointing to the nearest view element to the
+     * given canvas coordinates.
+     * 
+     * If notesAndRestsOnly is true, do not return any view element
+     * other than a note or rest.
+     *
+     * If the closest view element is further away than
+     * proximityThreshold pixels in either x or y axis, return end().
+     * If proximityThreshold is less than zero, treat it as infinite.
+     *
+     * Also return the clef and key in force at these coordinates.
+     *
+     * The subclass may decide whether to implement this method or not
+     * based on the intended usage of the class.
+     */
+    virtual Rosegarden::ViewElementList::iterator getClosestElementToCanvasCoords
+    (double x, int y, 
+     Rosegarden::Event *&clef, Rosegarden::Event *&key,
+     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
+	return getViewElementList()->end();
+    }
+
+    /**
+     * Return an iterator pointing to the element "under" the given
+     * canvas coordinates.
+     *
+     * Return end() if there is no such element.
+     *
+     * Also return the clef and key in force at these coordinates.
+     *
+     * The subclass may decide whether to implement this method or not
+     * based on the intended usage of the class.
+     */
+    virtual Rosegarden::ViewElementList::iterator getElementUnderCanvasCoords
+    (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key) {
+	return getViewElementList()->end();
+    }
+
+
 public:
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs

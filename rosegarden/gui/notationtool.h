@@ -550,13 +550,13 @@ protected:
 
 private:
     void handleSelectedFretboard (Rosegarden::ViewElement* element,
-                                  NotationStaff *staff);
+                                  Rosegarden::Staff *staff);
 
     void createNewFretboard (Rosegarden::ViewElement* element,
-                             NotationStaff *staff,
+                             Rosegarden::Staff *staff,
                              QMouseEvent* e);
 
-    bool processDialog (NotationStaff *staff,
+    bool processDialog (Rosegarden::Staff *staff,
                         Rosegarden::timeT& insertionTime);
 };
 

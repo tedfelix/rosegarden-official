@@ -1089,7 +1089,7 @@ void NotationView::positionPages()
 
 void NotationView::slotUpdateStaffName()
 {
-    NotationStaff *staff = getStaff(m_currentStaff);
+    NotationStaff *staff = getNotationStaff(m_currentStaff);
     staff->drawStaffName();
 }
 
@@ -2147,9 +2147,20 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
     }
 }
 
+LinedStaff *
+NotationView::getLinedStaff(int i) 
+{
+    return getNotationStaff(i);
+}
+
+LinedStaff *
+NotationView::getLinedStaff(const Rosegarden::Segment &segment)
+{
+    return getNotationStaff(segment);
+}
 
 NotationStaff *
-NotationView::getStaff(const Segment &segment)
+NotationView::getNotationStaff(const Segment &segment)
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (&(m_staffs[i]->getSegment()) == &segment) return m_staffs[i];
@@ -2428,7 +2439,7 @@ NotationView::scrollToTime(timeT t) {
     // Doesn't appear to matter which staff we use
     //!!! actually it probably does matter, if they don't have the same extents
     double notationViewCanvasCoord =
-	getStaff(0)->getCanvasCoordsForLayoutCoords
+	getLinedStaff(0)->getCanvasCoordsForLayoutCoords
 	(notationViewLayoutCoord, 0).first;
 
     // HK: I could have sworn I saw a hard-coded scroll happen somewhere
@@ -2709,13 +2720,13 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
 	    if (redrawNow) {
 		// recolour the events now
-		getStaff(segment)->positionElements(std::min(startA, startB),
+		getNotationStaff(segment)->positionElements(std::min(startA, startB),
 						    std::max(endA, endB));
 	    } else {
 		// mark refresh status and then request a repaint
 		segment.getRefreshStatus
 		    (m_segmentsRefreshStatusIds
-		     [getStaff(segment)->getId()]).
+		     [getNotationStaff(segment)->getId()]).
 		    push(std::min(startA, startB), std::max(endA, endB));
 	    }
 
@@ -2724,28 +2735,28 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
 	    if (redrawNow) {
 		// recolour the events now
-		getStaff(oldSelection->getSegment())->positionElements(startA,
+		getNotationStaff(oldSelection->getSegment())->positionElements(startA,
 								       endA);
 		
-		getStaff(s->getSegment())->positionElements(startB, endB);
+		getNotationStaff(s->getSegment())->positionElements(startB, endB);
 	    } else {
 		// mark refresh status and then request a repaint
 
 		oldSelection->getSegment().getRefreshStatus
 		    (m_segmentsRefreshStatusIds
-		     [getStaff(oldSelection->getSegment())->getId()]).
+		     [getNotationStaff(oldSelection->getSegment())->getId()]).
 		    push(startA, endA);
 		
 		s->getSegment().getRefreshStatus
 		    (m_segmentsRefreshStatusIds
-		     [getStaff(s->getSegment())->getId()]).
+		     [getNotationStaff(s->getSegment())->getId()]).
 		    push(startB, endB);
 	    }
 	}
 
 	if (s) {
 	    // make the staff containing the selection current
-	    int staffId = getStaff(s->getSegment())->getId();
+	    int staffId = getNotationStaff(s->getSegment())->getId();
 	    if (staffId != m_currentStaff) slotSetCurrentStaff(staffId);
 	}
     }
@@ -2874,14 +2885,14 @@ NotationCanvasView* NotationView::getCanvasView()
 Rosegarden::Segment *
 NotationView::getCurrentSegment()
 {
-    NotationStaff *staff = getStaff(m_currentStaff);
+    Rosegarden::Staff *staff = getCurrentStaff();
     return (staff ? &staff->getSegment() : 0);
 }
 
-Rosegarden::Staff *
-NotationView::getCurrentStaff()
+LinedStaff *
+NotationView::getCurrentLinedStaff()
 {
-    return getStaff(m_currentStaff);
+    return getLinedStaff(m_currentStaff);
 }
 
 timeT
@@ -2995,13 +3006,13 @@ void NotationView::print(bool previewOnly)
     // expand to fit.
 
     // Retain aspect ratio when scaling
-//    double ratioX = (double)pdm.width()  / (double)(pageWidth - leftMargin*2),
-//	   ratioY = (double)pdm.height() / (double)(pageHeight - topMargin*2);
-//    double ratio = std::min(ratioX, ratioY);
-//    printpainter.scale(ratio, ratio);
+    double ratioX = (double)pdm.width()  / (double)(pageWidth - leftMargin*2),
+	   ratioY = (double)pdm.height() / (double)(pageHeight - topMargin*2);
+    double ratio = std::min(ratioX, ratioY);
+    printpainter.scale(ratio, ratio);
 
-    printpainter.scale((double)pdm.width()  / (double)(pageWidth - leftMargin*2),
-		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
+//    printpainter.scale((double)pdm.width()  / (double)(pageWidth - leftMargin*2),
+//		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
     printpainter.translate(-leftMargin, -topMargin);
 
     QValueList<int> pages = printer.pageList();
@@ -3205,7 +3216,7 @@ void NotationView::refreshSegment(Segment *segment,
     emit usedSelection();
 
     if (segment) {
-        NotationStaff *staff = getStaff(*segment);
+        LinedStaff *staff = getLinedStaff(*segment);
         if (staff) applyLayout(staff->getId(), startTime, endTime);
     } else {
         applyLayout(-1, startTime, endTime);

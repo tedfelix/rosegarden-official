@@ -116,13 +116,29 @@ public:
     int getStaffCount() { return m_staffs.size(); }
 
     /// Return a pointer to the staff at the specified index
-    NotationStaff *getStaff(int i) {
+    Rosegarden::Staff *getStaff(int i) {
+	return getLinedStaff(i);
+    }
+
+    /// Return a pointer to the staff corresponding to the given segment
+    Rosegarden::Staff *getStaff(const Rosegarden::Segment &segment) {
+	return getLinedStaff(segment);
+    }
+
+    /// Return a pointer to the staff at the specified index
+    LinedStaff *getLinedStaff(int i);
+
+    /// Return a pointer to the staff corresponding to the given segment
+    LinedStaff *getLinedStaff(const Rosegarden::Segment &segment);
+
+    /// Return a pointer to the staff at the specified index
+    NotationStaff *getNotationStaff(int i) {
         if (i >= 0 && unsigned(i) < m_staffs.size()) return m_staffs[i];
         else return 0;
     }
 
     /// Return a pointer to the staff corresponding to the given segment
-    NotationStaff *getStaff(const Rosegarden::Segment &segment);
+    NotationStaff *getNotationStaff(const Rosegarden::Segment &segment);
 
     QCanvas* canvas() { return getCanvasView()->canvas(); }
     
@@ -852,7 +868,9 @@ protected:
     virtual NotationCanvasView* getCanvasView();
 
     virtual Rosegarden::Segment *getCurrentSegment();
-    virtual Rosegarden::Staff *getCurrentStaff();
+    virtual Rosegarden::Staff *getCurrentStaff() { return getCurrentLinedStaff(); }
+    virtual LinedStaff *getCurrentLinedStaff();
+	
 
     /**
      * Return the time at which the insert cursor may be found.
