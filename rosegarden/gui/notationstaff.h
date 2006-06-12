@@ -244,25 +244,6 @@ public:
      Rosegarden::Accidentals::NoAccidental) const;
 
     /**
-     * Find the NotationElement whose canvas coords are closest to
-     * (x,y).
-     *
-     * If notesAndRestsOnly is true, will return the closest note
-     * or rest but will never return any other kind of element.
-     * 
-     * If the closest event is further than \a proximityThreshold
-     * horizontally away from (x,y), in pixels, end() is returned.
-     * (If proximityThreshold is negative, there will be no limit
-     * to the distances that will be considered.)
-     *
-     * Also returns the clef and key in force at the given coordinates.
-     */
-    virtual Rosegarden::ViewElementList::iterator getClosestElementToCanvasCoords
-    (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key,
-     bool notesAndRestsOnly = false,
-     int proximityThreshold = 10);
-
-    /**
      * Find the NotationElement whose layout x-coord is closest to x,
      * without regard to its y-coord.
      *
@@ -280,14 +261,6 @@ public:
     (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
      int proximityThreshold = 10);
-
-    /**
-     * Find the NotationElement "under" the canvas coords (x,y).
-     *
-     * Also returns the clef and key in force at the given coordinates.
-     */
-    virtual Rosegarden::ViewElementList::iterator getElementUnderCanvasCoords
-    (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key);
 
     /**
      * Find the NotationElement "under" the given layout x-coord,

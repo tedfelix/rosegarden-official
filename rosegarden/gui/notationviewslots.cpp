@@ -2123,7 +2123,7 @@ NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
 
     slotSetCurrentStaff(x, y);
 
-    NotationStaff *staff = getNotationStaff(m_currentStaff);
+    LinedStaff *staff = getLinedStaff(m_currentStaff);
     Event *clefEvt, *keyEvt;
     NotationElementList::iterator i =
         staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
@@ -2817,7 +2817,7 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 
     for (size_t i = 0; i < m_staffs.size(); ++i) {
 
-	NotationStaff *staff = m_staffs[i];
+	LinedStaff *staff = m_staffs[i];
 
 	LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
 	    (cx0, 0);
@@ -2828,7 +2828,9 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 	timeT t0 = m_hlayout->getTimeForX(cc0.first);
 	timeT t1 = m_hlayout->getTimeForX(cc1.first);
 
-	if (staff->checkRendered(t0, t1)) something = true;
+	if (dynamic_cast<NotationStaff *>(staff)->checkRendered(t0, t1)) {
+	    something = true; //!!!
+	}
     }
 
     if (something) {

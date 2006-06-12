@@ -307,20 +307,6 @@ NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
 }
 
 Rosegarden::ViewElementList::iterator
-NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
-					       Rosegarden::Event *&clef,
-					       Rosegarden::Event *&key,
-					       bool notesAndRestsOnly,
-					       int proximityThreshold)
-{
-    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
-
-    return getClosestElementToLayoutX
-	(layoutCoords.first, clef, key, notesAndRestsOnly, proximityThreshold);
-}
-
-
-Rosegarden::ViewElementList::iterator
 NotationStaff::getClosestElementToLayoutX(double x,
 					  Rosegarden::Event *&clef,
 					  Rosegarden::Event *&key,
@@ -376,16 +362,6 @@ NotationStaff::getClosestElementToLayoutX(double x,
     PRINT_ELAPSED("NotationStaff::getClosestElementToLayoutX");
 
     return result;
-}
-
-
-Rosegarden::ViewElementList::iterator
-NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
-					   Rosegarden::Event *&clef,
-					   Rosegarden::Event *&key)
-{
-    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
-    return getElementUnderLayoutX(layoutCoords.first, clef, key);
 }
 
 Rosegarden::ViewElementList::iterator

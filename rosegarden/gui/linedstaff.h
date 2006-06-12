@@ -518,11 +518,37 @@ public:
      *
      * Also return the clef and key in force at these coordinates.
      *
-     * The subclass may decide whether to implement this method or not
-     * based on the intended usage of the class.
+     * The default implementation should suit for subclasses that only
+     * show a single element per layout X coordinate.
      */
     virtual Rosegarden::ViewElementList::iterator getClosestElementToCanvasCoords
     (double x, int y, 
+     Rosegarden::Event *&clef, Rosegarden::Event *&key,
+     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
+	LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+	return getClosestElementToLayoutX
+	    (layoutCoords.first, clef, key,
+	     notesAndRestsOnly, proximityThreshold);
+    }
+
+    /**
+     * Return an iterator pointing to the nearest view element to the
+     * given layout x-coordinate.
+     * 
+     * If notesAndRestsOnly is true, do not return any view element
+     * other than a note or rest.
+     *
+     * If the closest view element is further away than
+     * proximityThreshold pixels in either x or y axis, return end().
+     * If proximityThreshold is less than zero, treat it as infinite.
+     *
+     * Also return the clef and key in force at these coordinates.
+     *
+     * The subclass may decide whether to implement this method or not
+     * based on the semantics and intended usage of the class.
+     */
+    virtual Rosegarden::ViewElementList::iterator getClosestElementToLayoutX
+    (double x,
      Rosegarden::Event *&clef, Rosegarden::Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) {
 	return getViewElementList()->end();
@@ -536,13 +562,37 @@ public:
      *
      * Also return the clef and key in force at these coordinates.
      *
-     * The subclass may decide whether to implement this method or not
-     * based on the intended usage of the class.
+     *
+     * The default implementation should suit for subclasses that only
+     * show a single element per layout X coordinate.
      */
     virtual Rosegarden::ViewElementList::iterator getElementUnderCanvasCoords
     (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key) {
+	LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+	return getElementUnderLayoutX(layoutCoords.first, clef, key);
+    }
+
+    /**
+     * Return an iterator pointing to the element "under" the given
+     * canvas coordinates.
+     *
+     * Return end() if there is no such element.
+     *
+     * Also return the clef and key in force at these coordinates.
+     *
+     * The subclass may decide whether to implement this method or not
+     * based on the semantics and intended usage of the class.
+     */
+    virtual Rosegarden::ViewElementList::iterator getElementUnderLayoutX
+    (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key) {
 	return getViewElementList()->end();
     }
+
+    // The default implementation of the following is empty.  The
+    // subclass is presumed to know what the staff's name is and
+    // where to put it; this is simply called at some point during
+    // the staff-drawing process.
+    virtual void drawStaffName();
 
 
 public:
@@ -652,12 +702,6 @@ protected:
     // The default implementations of the following two are empty.
     virtual void deleteRepeatedClefsAndKeys();
     virtual void insertRepeatedClefAndKey(double layoutX, int barNo);
-
-    // The default implementation of the following is empty.  The
-    // subclass is presumed to know what the staff's name is and
-    // where to put it; this is simply called at some point during
-    // the staff-drawing process.
-    virtual void drawStaffName();
 
     void initCursors();
 

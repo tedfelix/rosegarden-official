@@ -1089,7 +1089,7 @@ void NotationView::positionPages()
 
 void NotationView::slotUpdateStaffName()
 {
-    NotationStaff *staff = getNotationStaff(m_currentStaff);
+    LinedStaff *staff = getLinedStaff(m_currentStaff);
     staff->drawStaffName();
 }
 
@@ -2720,13 +2720,13 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
 	    if (redrawNow) {
 		// recolour the events now
-		getNotationStaff(segment)->positionElements(std::min(startA, startB),
+		getLinedStaff(segment)->positionElements(std::min(startA, startB),
 						    std::max(endA, endB));
 	    } else {
 		// mark refresh status and then request a repaint
 		segment.getRefreshStatus
 		    (m_segmentsRefreshStatusIds
-		     [getNotationStaff(segment)->getId()]).
+		     [getLinedStaff(segment)->getId()]).
 		    push(std::min(startA, startB), std::max(endA, endB));
 	    }
 
@@ -2735,28 +2735,28 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
 	    if (redrawNow) {
 		// recolour the events now
-		getNotationStaff(oldSelection->getSegment())->positionElements(startA,
+		getLinedStaff(oldSelection->getSegment())->positionElements(startA,
 								       endA);
 		
-		getNotationStaff(s->getSegment())->positionElements(startB, endB);
+		getLinedStaff(s->getSegment())->positionElements(startB, endB);
 	    } else {
 		// mark refresh status and then request a repaint
 
 		oldSelection->getSegment().getRefreshStatus
 		    (m_segmentsRefreshStatusIds
-		     [getNotationStaff(oldSelection->getSegment())->getId()]).
+		     [getLinedStaff(oldSelection->getSegment())->getId()]).
 		    push(startA, endA);
 		
 		s->getSegment().getRefreshStatus
 		    (m_segmentsRefreshStatusIds
-		     [getNotationStaff(s->getSegment())->getId()]).
+		     [getLinedStaff(s->getSegment())->getId()]).
 		    push(startB, endB);
 	    }
 	}
 
 	if (s) {
 	    // make the staff containing the selection current
-	    int staffId = getNotationStaff(s->getSegment())->getId();
+	    int staffId = getLinedStaff(s->getSegment())->getId();
 	    if (staffId != m_currentStaff) slotSetCurrentStaff(staffId);
 	}
     }
@@ -2911,7 +2911,7 @@ NotationView::getInsertionTime(Rosegarden::Clef &clef,
     // the insert cursor.  We could get clef and key directly from
     // the segment but the staff has a more efficient lookup
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    LinedStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX < 0) layoutX = 0;
     Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
@@ -2932,13 +2932,13 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-	NotationStaff *s = m_staffs[i];
+	LinedStaff *s = m_staffs[i];
 
 //	NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): looking at staff " << i << endl;
 
         if (s->containsCanvasCoords(x, y)) {
 	    
-	    NotationStaff::LinedStaffCoords coords = 
+	    LinedStaff::LinedStaffCoords coords = 
 		s->getLayoutCoordsForCanvasCoords(x, y);
 
 //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): layout coords are (" << coords.first << "," << coords.second << ")" << endl;
@@ -3033,7 +3033,7 @@ void NotationView::print(bool previewOnly)
 	
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
-	    NotationStaff *staff = m_staffs[i];
+	    LinedStaff *staff = m_staffs[i];
 	    
 	    LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
 		(pageRect.x(), pageRect.y());
@@ -3077,7 +3077,7 @@ void NotationView::print(bool previewOnly)
 
 	for (size_t i = 0; i < m_staffs.size(); ++i) {
 
-	    NotationStaff *staff = m_staffs[i];
+	    LinedStaff *staff = m_staffs[i];
 	    
 	    LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
 		(pageRect.x(), pageRect.y());
@@ -3328,7 +3328,7 @@ void NotationView::readjustCanvasSize()
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-        NotationStaff &staff = *m_staffs[i];
+        LinedStaff &staff = *m_staffs[i];
 
         staff.sizeStaff(*m_hlayout);
 	UPDATE_PROGRESS(1);
