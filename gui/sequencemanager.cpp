@@ -683,7 +683,7 @@ punchin:
 	bool haveInstrument = false;
 	bool haveAudioInstrument = false;
 	bool haveMIDIInstrument = false;
-	Rosegarden::TrackId recordMIDITrack = 0;
+	//Rosegarden::TrackId recordMIDITrack = 0;
 
 	for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
 		 comp.getRecordTracks().begin();
@@ -700,7 +700,7 @@ punchin:
 		    break;
 		} else { // soft synths count as MIDI for our purposes here
 		    haveMIDIInstrument = true;
-		    recordMIDITrack = *i;
+		    //recordMIDITrack = *i;
 		}
 	    }
 	}
@@ -752,7 +752,16 @@ punchin:
 	    // from here for audio, because for audio the sequencer
 	    // calls back on createRecordAudioFiles so as to find out
 	    // what files it needs to write to.
-	    m_doc->addRecordMIDISegment(recordMIDITrack);
+	    /*m_doc->addRecordMIDISegment(recordMIDITrack);*/
+            for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
+                 comp.getRecordTracks().begin(); i != comp.getRecordTracks().end(); ++i) {
+                InstrumentId iid = comp.getTrackById(*i)->getInstrument();
+                Instrument *inst = studio.getInstrumentById(iid);
+                if (inst && (inst->getType() != Instrument::Audio)) {
+                    SEQMAN_DEBUG << "SequenceManager:  mdoc->addRecordMIDISegment(" << *i << ")" << endl;
+                    m_doc->addRecordMIDISegment(*i);
+                }
+            }
 	}
 
         // set the buttons

@@ -106,7 +106,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_modified(false),
       m_autoSaved(false),
       m_audioPreviewThread(&m_audioFileManager),
-      m_recordMIDISegment(0),
+      //m_recordMIDISegment(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_pluginManager(pluginManager),
       m_audioRecordLatency(0, 0),
@@ -1546,10 +1546,12 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
     // freed.
     //
 
-    Rosegarden::Track *midiRecordTrack = 0;
+    //Rosegarden::Track *midiRecordTrack = 0;
 
     const Rosegarden::Composition::recordtrackcontainer &tr =
 	getComposition().getRecordTracks();
+        
+    bool haveMIDIRecordTrack = false;
 
     for (Rosegarden::Composition::recordtrackcontainer::const_iterator i =
 	     tr.begin(); i != tr.end(); ++i) {
@@ -1560,24 +1562,29 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 		m_studio.getInstrumentById(track->getInstrument());
 	    if (instrument->getType() == Rosegarden::Instrument::Midi ||
 		instrument->getType() == Rosegarden::Instrument::SoftSynth) {
-		midiRecordTrack = track;
+		//midiRecordTrack = track;
+                haveMIDIRecordTrack = true;
+                if (!m_recordMIDISegments[track->getInstrument()]) {
+                    addRecordMIDISegment(track->getId());
+                }
 		break;
 	    }
 	}
     }
 
-    if (!midiRecordTrack) return;
+    if (!haveMIDIRecordTrack) return;
 
-    if (m_recordMIDISegment == 0) {
-	addRecordMIDISegment(midiRecordTrack->getId());
-    }
+    //if (m_recordMIDISegment == 0) {
+    //    addRecordMIDISegment(midiRecordTrack->getId());
+    //}
 
-    if (mC.size() > 0 && m_recordMIDISegment) 
+    //if (mC.size() > 0 && m_recordMIDISegment) 
+    if (mC.size() > 0)
     { 
         Rosegarden::MappedComposition::const_iterator i;
         Rosegarden::Event *rEvent = 0;
         timeT duration, absTime;
-	timeT updateFrom = m_recordMIDISegment->getEndTime();
+	timeT updateFrom = m_composition.getDuration(); // = m_recordMIDISegment->getEndTime();
 	bool haveNotes = false;
 
         // process all the incoming MappedEvents
@@ -1592,7 +1599,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 		}
 		continue;
 	    }
-
+            
             absTime = m_composition.getElapsedTimeForRealTime((*i)->getEventTime());
 
             /* This is incorrect, unless the tempo at absTime happens to
@@ -1647,12 +1654,13 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 
 			    // modify the previously held note-on event,
 			    // instead of assigning to rEvent
-			    Rosegarden::Event *oldEv = *mi->second;
+			    Rosegarden::Event *oldEv = mi->second;
 			    Rosegarden::Event *newEv = new Rosegarden::Event
 				(*oldEv, oldEv->getAbsoluteTime(), duration);
 			    newEv->set<Int>(RECORDED_CHANNEL, channel);
-			    m_recordMIDISegment->erase(mi->second);
-			    m_recordMIDISegment->insert(newEv);
+			    //m_recordMIDISegment->erase(mi->second);
+			    //m_recordMIDISegment->insert(newEv);
+                            replaceRecordedEvent(oldEv, newEv);
 			    pm->erase(mi);
 
 			    if (updateFrom > newEv->getAbsoluteTime()) {
@@ -1660,6 +1668,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 			    }
 
 			    haveNotes = true;
+                            delete newEv;
 
 			    // at this point we could quantize the bar if we were
 			    // tracking in a notation view
@@ -1702,6 +1711,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
                     break;
 
                 case Rosegarden::MappedEvent::MidiSystemMessage:
+                    channel = -1;
                     if ((*i)->getData1() == Rosegarden::MIDI_SYSTEM_EXCLUSIVE)
                     {
                         rEvent = Rosegarden::SystemExclusive
@@ -1746,18 +1756,25 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 
             // Set the proper start index (if we haven't before)
             //
-            if (m_recordMIDISegment->size() == 0)
-            {
-                m_recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
-                m_recordMIDISegment->fillWithRests(absTime);
+            for( RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
+                 it != m_recordMIDISegments.end(); ++it) {
+                Rosegarden::Segment *recordMIDISegment = it->second;
+                if (recordMIDISegment->size() == 0) {
+                    recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
+                    recordMIDISegment->fillWithRests(absTime);
+                }
             }
 
             // Now insert the new event
             //
 	    if (isNoteOn) {
-		m_noteOnEvents[device][channel][pitch] = m_recordMIDISegment->insert(rEvent);
+                //m_noteOnEvents[device][channel][pitch] = m_recordMIDISegment->insert(rEvent);
+		m_noteOnEvents[device][channel][pitch] = rEvent;
+                insertRecordedEvent(rEvent, device, channel); 
 	    } else {
-		m_recordMIDISegment->insert(rEvent);
+	        //m_recordMIDISegment->insert(rEvent);
+                insertRecordedEvent(rEvent, device, channel); 
+                delete rEvent;
 	    }
         }
 
@@ -1768,15 +1785,19 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 	    
 	    int tracking = config->readUnsignedNumEntry("recordtracking", 0);
 	    if (tracking == 1) { // notation
+                    for( RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
+                         it != m_recordMIDISegments.end(); ++it) {
+                        Rosegarden::Segment *recordMIDISegment = it->second;
 		
-		EventQuantizeCommand *command = new EventQuantizeCommand
-		    (*m_recordMIDISegment,
-		     updateFrom,
-		     m_recordMIDISegment->getEndTime(),
-		     "Notation Options",
-		     true);
-		// don't add to history
-		command->execute();
+        		EventQuantizeCommand *command = new EventQuantizeCommand
+        		    (*recordMIDISegment,
+        		     updateFrom,
+        		     recordMIDISegment->getEndTime(),
+        		     "Notation Options",
+        		     true);
+        		// don't add to history
+        		command->execute();
+                    }
 	    }
 
             // this signal is currently unused - leaving just in case
@@ -1791,10 +1812,10 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 {
 //     RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
 
-    if (!m_recordMIDISegment) {
+    if (m_recordMIDISegments.size() == 0) {
 	// make this call once to create one
 	insertRecordedMidi(Rosegarden::MappedComposition());
-	if (!m_recordMIDISegment) return; // not recording any MIDI
+	if (m_recordMIDISegments.size() == 0) return; // not recording any MIDI
     }
     
 //     RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
@@ -1810,19 +1831,62 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 
 	// anything in the note-on map should be tweaked so as to end
 	// at the recording pointer
-	Rosegarden::Event *ev = *pm->second;
+	Rosegarden::Event *oldEv = pm->second;
 	Rosegarden::Event *newEv = new Rosegarden::Event
-	    (*ev, ev->getAbsoluteTime(),
-	     m_composition.getPosition() - ev->getAbsoluteTime());
+	    (*oldEv, oldEv->getAbsoluteTime(),
+	     m_composition.getPosition() - oldEv->getAbsoluteTime());
 
-	m_recordMIDISegment->erase(pm->second);
-	tweakedNoteOnEvents[mi->first][cm->first][pm->first] = 
-		m_recordMIDISegment->insert(newEv);
+	//m_recordMIDISegment->erase(pm->second);
+        //m_recordMIDISegment->insert(newEv);
+	tweakedNoteOnEvents[mi->first][cm->first][pm->first] = newEv;
+        replaceRecordedEvent(oldEv, newEv);
     }
-
     m_noteOnEvents = tweakedNoteOnEvents;
 }
 
+
+void
+RosegardenGUIDoc::replaceRecordedEvent(Rosegarden::Event *old, Rosegarden::Event *fresh)
+{
+    for( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
+        i != m_recordMIDISegments.end(); ++i) 
+    {
+        Rosegarden::Segment *recordMIDISegment = i->second;
+        if (recordMIDISegment->eraseDuplicated(old)) {
+            recordMIDISegment->insert(new Rosegarden::Event(*fresh));
+        //    RG_DEBUG << "RosegardenGUIDoc::replaceRecordedEvent() - event replaced" << endl;
+        //} else {
+        //    RG_DEBUG << "RosegardenGUIDoc::replaceRecordedEvent() - old event not found" << endl;
+        }
+    }    
+}
+
+void
+RosegardenGUIDoc::insertRecordedEvent(Rosegarden::Event *ev, int device, int channel)
+{
+    for( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
+        i != m_recordMIDISegments.end(); ++i) 
+    {
+        Rosegarden::Segment *recordMIDISegment = i->second;
+        Rosegarden::TrackId tid = recordMIDISegment->getTrack();
+        Rosegarden::Track *track = getComposition().getTrackById(tid);
+        if (track) {
+            Rosegarden::Instrument *instrument = 
+                m_studio.getInstrumentById(track->getInstrument());
+            int filter = instrument->getMidiInputChannel();
+            if (filter < 0) { 
+                recordMIDISegment->insert(new Rosegarden::Event(*ev));
+            } else {
+                if (filter == channel) {
+                    recordMIDISegment->insert(new Rosegarden::Event(*ev));
+                    //RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - matches filter" << endl;
+                } else {
+                    //RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - unmatched event discarded" << endl;
+                }
+            }
+        }
+    }
+}
 
 // Tidy up a recorded Segment when we've finished recording
 //
@@ -1833,20 +1897,33 @@ RosegardenGUIDoc::stopRecordingMidi()
 
     // If we've created nothing then do nothing with it
     //
-    if (m_recordMIDISegment == 0)
+    if (m_recordMIDISegments.size() == 0)
         return;
+        
+    bool haveSegments = false;
+    timeT endTime = 0;
 
-    if (m_recordMIDISegment->size() == 0) {
-	if (m_recordMIDISegment->getComposition()) {
-	    m_recordMIDISegment->getComposition()->deleteSegment(m_recordMIDISegment);
-	} else {
-	    delete m_recordMIDISegment;
-	}
-	m_recordMIDISegment = 0;
-	return;
+    for( RecordingSegmentMap::iterator it = m_recordMIDISegments.begin();
+         it != m_recordMIDISegments.end(); ++it) {
+        Rosegarden::Segment *recordMIDISegment = it->second;
+        if (recordMIDISegment->size() == 0) {
+	    if (recordMIDISegment->getComposition()) {
+	        recordMIDISegment->getComposition()->deleteSegment(recordMIDISegment);
+	    } else {
+	        delete recordMIDISegment;
+	    }
+            m_recordMIDISegments.erase(it);
+        } else {
+          haveSegments = true;
+          if (endTime < recordMIDISegment->getEndTime()) {
+              endTime = recordMIDISegment->getEndTime();  
+          }
+        }
     }
+    
+    if (!haveSegments) return;
 
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have record MIDI segment" << endl;
+    //RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have record MIDI segment" << endl;
 
     // otherwise do something with it
     //
@@ -1859,48 +1936,55 @@ RosegardenGUIDoc::stopRecordingMidi()
     {
 	// anything remaining in the note-on map should be made to end at
 	// the end of the segment
-	Rosegarden::Event *oldEv = *pm->second;
+	Rosegarden::Event *oldEv = pm->second;
 	Rosegarden::Event *newEv = new Rosegarden::Event
 	    (*oldEv, oldEv->getAbsoluteTime(),
-	     m_recordMIDISegment->getEndTime() - oldEv->getAbsoluteTime());
-	m_recordMIDISegment->erase(pm->second);
-	m_recordMIDISegment->insert(newEv);
+	    endTime - oldEv->getAbsoluteTime());
+	//m_recordMIDISegment->erase(pm->second);
+	//m_recordMIDISegment->insert(newEv);
+        replaceRecordedEvent(oldEv, newEv);
+        delete newEv;
     }
     m_noteOnEvents.clear();
+                
+    for( RecordingSegmentMap::iterator it = m_recordMIDISegments.begin();
+         it != m_recordMIDISegments.end(); ++it) {
+                        
+        Rosegarden::Segment *recordMIDISegment = it->second;
+
+        // the record segment will have already been added to the
+        // composition if there was anything in it; otherwise we
+        // don't need to do so
+        if (recordMIDISegment->getComposition() != 0) {
         
-    // the record segment will have already been added to the
-    // composition if there was anything in it; otherwise we
-    // don't need to do so
-    if (m_recordMIDISegment->getComposition() != 0) {
+            // Quantize for notation only -- doesn't affect performance timings.
+            KMacroCommand *command = new KMacroCommand(i18n("Insert Recorded MIDI"));
+        
+            command->addCommand
+                (new EventQuantizeCommand
+	         (*recordMIDISegment,
+	          recordMIDISegment->getStartTime(),
+	          recordMIDISegment->getEndTime(),
+	          "Notation Options",
+	          true));
 
-	// Quantize for notation only -- doesn't affect performance timings.
-
-	KMacroCommand *command = new KMacroCommand(i18n("Insert Recorded MIDI"));
-
-	command->addCommand
-	    (new EventQuantizeCommand
-	     (*m_recordMIDISegment,
-	      m_recordMIDISegment->getStartTime(),
-	      m_recordMIDISegment->getEndTime(),
-	      "Notation Options",
-	      true));
-
-	command->addCommand
-	    (new AdjustMenuNormalizeRestsCommand
-	     (*m_recordMIDISegment,
-	      m_recordMIDISegment->getComposition()->getBarStartForTime
-	      (m_recordMIDISegment->getStartTime()),
-	      m_recordMIDISegment->getComposition()->getBarEndForTime
-	      (m_recordMIDISegment->getEndTime())));
+	    command->addCommand
+	        (new AdjustMenuNormalizeRestsCommand
+	         (*recordMIDISegment,
+	          recordMIDISegment->getComposition()->getBarStartForTime
+	          (recordMIDISegment->getStartTime()),
+	          recordMIDISegment->getComposition()->getBarEndForTime
+	          (recordMIDISegment->getEndTime())));
 	
-	command->addCommand
-	    (new SegmentRecordCommand
-	     (m_recordMIDISegment));
+	    command->addCommand
+	        (new SegmentRecordCommand
+	         (recordMIDISegment));
 
-	m_commandHistory->addCommand(command);
+	    m_commandHistory->addCommand(command);
+        }
+
+        m_recordMIDISegments.erase(it);
     }
-
-    m_recordMIDISegment = 0;
 
     emit stoppedMIDIRecording();
 
@@ -2236,11 +2320,12 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
 {
     RG_DEBUG << "RosegardenGUIDoc::addRecordMIDISegment(" << tid << ")" << endl;
 
-    delete m_recordMIDISegment;
+    //delete m_recordMIDISegment;
+    Rosegarden::Segment *recordMIDISegment;
 
-    m_recordMIDISegment = new Segment();
-    m_recordMIDISegment->setTrack(tid);
-    m_recordMIDISegment->setStartTime(m_recordStartTime);
+    recordMIDISegment = new Segment();
+    recordMIDISegment->setTrack(tid);
+    recordMIDISegment->setStartTime(m_recordStartTime);
 
     // Set an appropriate segment label
     //
@@ -2249,24 +2334,24 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
     Rosegarden::Track *track = m_composition.getTrackById(tid);
     if (track) {
 	if (track->getLabel() == "") {
-	    Rosegarden::Instrument *instr =
-		m_studio.getInstrumentById(track->getInstrument());
-	    
+            Rosegarden::Instrument *instr = 
+                m_studio.getInstrumentById(track->getInstrument());
 	    if (instr) {
 		label = m_studio.getSegmentName(instr->getId());
 	    }
 	} else {
 	    label = track->getLabel();
 	}
-	
 	label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
     }
     
-    m_recordMIDISegment->setLabel(label);
+    recordMIDISegment->setLabel(label);
     
-    m_composition.addSegment(m_recordMIDISegment);
+    m_composition.addSegment(recordMIDISegment);
+    
+    m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;
 
-    emit newMIDIRecordingSegment(m_recordMIDISegment);
+    emit newMIDIRecordingSegment(recordMIDISegment);
 }
 
 void
