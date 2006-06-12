@@ -257,7 +257,7 @@ public:
      *
      * Also returns the clef and key in force at the given coordinates.
      */
-    virtual NotationElementList::iterator getClosestElementToCanvasCoords
+    virtual Rosegarden::ViewElementList::iterator getClosestElementToCanvasCoords
     (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
      int proximityThreshold = 10);
@@ -276,7 +276,7 @@ public:
      *
      * Also returns the clef and key in force at the given coordinate.
      */
-    virtual NotationElementList::iterator getClosestElementToLayoutX
+    virtual Rosegarden::ViewElementList::iterator getClosestElementToLayoutX
     (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
      int proximityThreshold = 10);
@@ -286,7 +286,7 @@ public:
      *
      * Also returns the clef and key in force at the given coordinates.
      */
-    virtual NotationElementList::iterator getElementUnderCanvasCoords
+    virtual Rosegarden::ViewElementList::iterator getElementUnderCanvasCoords
     (double x, int y, Rosegarden::Event *&clef, Rosegarden::Event *&key);
 
     /**
@@ -295,7 +295,7 @@ public:
      *
      * Also returns the clef and key in force at the given coordinates.
      */
-    virtual NotationElementList::iterator getElementUnderLayoutX
+    virtual Rosegarden::ViewElementList::iterator getElementUnderLayoutX
     (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key);
 
     /**

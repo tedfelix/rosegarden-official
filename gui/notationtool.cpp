@@ -372,8 +372,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     double x = e->x();
     int y = (int)e->y();
 
-    NotationStaff *staff = dynamic_cast<NotationStaff *>
-	(m_nParentView->getStaffForCanvasCoords(e->x(), y));
+    LinedStaff *staff = m_nParentView->getStaffForCanvasCoords(e->x(), y);
     if (!staff) {
 	clearPreview();
 	return false;
@@ -496,7 +495,7 @@ NoteInserter::getOffsetWithinRest(int staffNo,
     // do that, we just haven't yet
     if (m_nParentView->isInTripletMode()) return 0;
 
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    Rosegarden::Staff *staff = m_nParentView->getStaff(staffNo);
     NotationElement* el = static_cast<NotationElement*>(*i);
     if (!el->getCanvasItem()) return 0;
     double offset = canvasX - el->getCanvasX();
@@ -906,7 +905,7 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
     if (staffNo < 0) return;
     Event *clef = 0, *key = 0;
 
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    LinedStaff *staff = m_nParentView->getLinedStaff(staffNo);
     
     NotationElementList::iterator closestElement =
 	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
@@ -980,7 +979,7 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 					 ViewElement *element)
 {
     if (staffNo < 0) return;
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    LinedStaff *staff = m_nParentView->getLinedStaff(staffNo);
     
     Rosegarden::Text defaultText(m_text);
     timeT insertionTime;
@@ -1247,7 +1246,7 @@ void NotationSelector::handleMouseDoubleClick(Rosegarden::timeT,
     NOTATION_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    NotationStaff *staff = m_nParentView->getNotationStaff(staffNo);
     if (!staff) return;
     m_selectedStaff = staff;
 
@@ -1289,7 +1288,7 @@ void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
     NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    NotationStaff *staff = m_nParentView->getNotationStaff(staffNo);
     if (!staff) return;
     m_selectedStaff = staff;
 
@@ -1433,8 +1432,7 @@ void NotationSelector::drag(int x, int y, bool final)
     }
     m_nParentView->setCurrentSelection(selection);
 
-    NotationStaff *targetStaff = dynamic_cast<NotationStaff *>
-	(m_nParentView->getStaffForCanvasCoords(x, y));
+    LinedStaff *targetStaff = m_nParentView->getStaffForCanvasCoords(x, y);
     if (!targetStaff) targetStaff = m_selectedStaff;
 
     // Calculate time and height
@@ -1462,7 +1460,7 @@ void NotationSelector::drag(int x, int y, bool final)
     NotationElementList::iterator itr =
 	targetStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
-    if (itr != targetStaff /* m_selectedStaff */ ->getViewElementList()->end()) {
+    if (itr != targetStaff->getViewElementList()->end()) {
 
 	NotationElement *elt = dynamic_cast<NotationElement *>(*itr);
 	dragTime = elt->getViewAbsoluteTime();
@@ -1922,7 +1920,7 @@ NotationStaff *
 NotationSelector::getStaffForElement(NotationElement *elt)
 {
     for (int i = 0; i < m_nParentView->getStaffCount(); ++i) {
-	NotationStaff *staff = m_nParentView->getStaff(i);
+	NotationStaff *staff = m_nParentView->getNotationStaff(i);
 	if (staff->getSegment().findSingle(elt->event()) !=
 	    staff->getSegment().end()) return staff;
     }
@@ -1987,7 +1985,7 @@ void FretboardInserter::handleLeftButtonPress(Rosegarden::timeT,
         return;
     }
 
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    Rosegarden::Staff *staff = m_nParentView->getStaff(staffNo);
 
     if (element && element->event()->isa(Guitar::Fingering::EventType))
     {
@@ -1999,7 +1997,7 @@ void FretboardInserter::handleLeftButtonPress(Rosegarden::timeT,
     }
 }
 
-bool FretboardInserter::processDialog( NotationStaff* staff,
+bool FretboardInserter::processDialog( Rosegarden::Staff* staff,
                                        Rosegarden::timeT& insertionTime)
 {
     bool result = false;
@@ -2019,7 +2017,7 @@ bool FretboardInserter::processDialog( NotationStaff* staff,
     return result;
 }
 
-void FretboardInserter::handleSelectedFretboard (ViewElement* element, NotationStaff *staff)
+void FretboardInserter::handleSelectedFretboard (ViewElement* element, Rosegarden::Staff *staff)
 {
     std::cout << "FretboardInserter::handleSelectedFretboard" << std::endl;
 
@@ -2048,14 +2046,16 @@ void FretboardInserter::handleSelectedFretboard (ViewElement* element, NotationS
     {}
 }
 
-void FretboardInserter::createNewFretboard (ViewElement* element, NotationStaff *staff, QMouseEvent* e)
+void FretboardInserter::createNewFretboard (ViewElement* element, Rosegarden::Staff *staff, QMouseEvent* e)
 {
     std::cout << "FretboardInserter::createNewFretboard" << std::endl;
     Event *clef = 0, *key = 0;
 
+    LinedStaff *s = dynamic_cast<LinedStaff *>(staff);
+
     NotationElementList::iterator closestElement =
-        staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-                                               clef, key, false, -1);
+        s->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
+					   clef, key, false, -1);
 
     if (closestElement == staff->getViewElementList()->end())
     {
@@ -2104,7 +2104,7 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
     if (staffNo < 0) return;
     Event *clef = 0, *key = 0;
 
-    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+    LinedStaff *staff = m_nParentView->getLinedStaff(staffNo);
     
     NotationElementList::iterator closestElement =
 	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),

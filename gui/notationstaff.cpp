@@ -306,7 +306,7 @@ NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
     }
 }
 
-NotationElementList::iterator
+Rosegarden::ViewElementList::iterator
 NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 					       Rosegarden::Event *&clef,
 					       Rosegarden::Event *&key,
@@ -320,7 +320,7 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 }
 
 
-NotationElementList::iterator
+Rosegarden::ViewElementList::iterator
 NotationStaff::getClosestElementToLayoutX(double x,
 					  Rosegarden::Event *&clef,
 					  Rosegarden::Event *&key,
@@ -379,7 +379,7 @@ NotationStaff::getClosestElementToLayoutX(double x,
 }
 
 
-NotationElementList::iterator
+Rosegarden::ViewElementList::iterator
 NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
 					   Rosegarden::Event *&clef,
 					   Rosegarden::Event *&key)
@@ -388,7 +388,7 @@ NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
     return getElementUnderLayoutX(layoutCoords.first, clef, key);
 }
 
-NotationElementList::iterator
+Rosegarden::ViewElementList::iterator
 NotationStaff::getElementUnderLayoutX(double x,
 				      Rosegarden::Event *&clef,
 				      Rosegarden::Event *&key)

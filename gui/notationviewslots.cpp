@@ -496,7 +496,7 @@ void NotationView::slotEditPaste()
 
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
     
     // Paste at cursor position
@@ -540,7 +540,7 @@ void NotationView::slotEditGeneralPaste()
 
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
 
     KConfig *config = kapp->config();
@@ -1608,7 +1608,7 @@ NotationView::slotMakeOrnament()
 	}
     }
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    Rosegarden::Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
     
     Rosegarden::timeT absTime = m_currentEventSelection->getStartTime();
@@ -1684,7 +1684,7 @@ NotationView::slotRemoveOrnament()
 
 void NotationView::slotEditAddClef()
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    Rosegarden::Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
     static Rosegarden::Clef lastClef;
     Rosegarden::Clef clef;
@@ -1711,7 +1711,7 @@ void NotationView::slotEditAddClef()
 
 void NotationView::slotEditAddKeySignature()
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    Rosegarden::Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
     Rosegarden::Clef clef;
     Rosegarden::Key key;
@@ -1756,7 +1756,7 @@ void NotationView::slotEditAddKeySignature()
  
 void NotationView::slotEditAddSustain(bool down)
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    Rosegarden::Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
     timeT insertionTime = getInsertionTime();
         
@@ -2123,7 +2123,7 @@ NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
 
     slotSetCurrentStaff(x, y);
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    NotationStaff *staff = getNotationStaff(m_currentStaff);
     Event *clefEvt, *keyEvt;
     NotationElementList::iterator i =
         staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
@@ -2189,7 +2189,7 @@ NotationView::doDeferredCursorMove()
     timeT t = m_insertionTime;
 
     if (m_staffs.size() == 0) return;
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
 
     if (t < segment.getStartTime()) {
@@ -2487,7 +2487,7 @@ void NotationView::slotToggleAnnotations()
 
 void NotationView::slotEditLyrics()
 {
-    NotationStaff *staff = m_staffs[m_currentStaff];
+    Rosegarden::Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
 
     LyricEditDialog dialog(this, &segment);
@@ -2551,8 +2551,7 @@ void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
 {
     if (e->type() != QEvent::MouseButtonDblClick) return;
 
-    NotationStaff *staff = dynamic_cast<NotationStaff *>
-	(getStaffForCanvasCoords(e->x(), e->y()));
+    Rosegarden::Staff *staff = getStaffForCanvasCoords(e->x(), e->y());
     if (!staff) return;
 
     NOTATION_DEBUG << "NotationView::slotNonNotationItemPressed(doubly)" << endl;
