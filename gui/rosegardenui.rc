@@ -38,6 +38,11 @@
   <Menu name="edit">
         <Action name="delete"/>
         <Separator/>
+        <Action name="cut_range"/>
+        <Action name="copy_range"/>
+        <Action name="paste_range"/>
+<!--        <Action name="delete_range"/>  -->
+        <Separator/>
         <Action name="select_all"/>
   </Menu>
   <Menu name="document">
@@ -354,6 +359,7 @@
 <State name="have_clipboard">
      <enable>
         <Action name="edit_paste"/>
+        <Action name="paste_range"/>
      </enable>
 </State>
 
@@ -416,5 +422,12 @@
     </enable>
 </State>
 
+<State name="have_range">
+    <enable>
+	 <Action name="cut_range"/>
+	 <Action name="copy_range"/>
+<!-- 	 <Action name="delete_range"/> -->
+    </enable>
+</State>
 
 </kpartgui>

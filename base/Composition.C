@@ -610,7 +610,7 @@ Composition::getBarRangeForTime(timeT t) const
 {
     return getBarRange(getBarNumber(t));
 }
-
+ 
 
 std::pair<timeT, timeT>
 Composition::getBarRange(int n) const
@@ -1766,6 +1766,14 @@ Composition::getTrackByPosition(int position) const
 
     return 0;
 
+}
+
+int
+Composition::getTrackPositionById(TrackId id) const
+{
+    Track *track = getTrackById(id);
+    if (!track) return -1;
+    return track->getPosition();
 }
 
 Rosegarden::TrackId

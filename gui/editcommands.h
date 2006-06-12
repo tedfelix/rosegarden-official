@@ -115,6 +115,12 @@ public:
     CopyCommand(Rosegarden::SegmentSelection &selection,
 		Rosegarden::Clipboard *clipboard);
 
+    /// Make a CopyCommand that copies a range of a Composition
+    CopyCommand(Rosegarden::Composition *composition,
+		Rosegarden::timeT beginTime,
+		Rosegarden::timeT endTime,
+		Rosegarden::Clipboard *clipboard);
+
     virtual ~CopyCommand();
 
     static QString getGlobalName() { return i18n("&Copy"); }
@@ -135,7 +141,8 @@ class PasteSegmentsCommand : public KNamedCommand
 public:
     PasteSegmentsCommand(Rosegarden::Composition *composition,
 			 Rosegarden::Clipboard *clipboard,
-			 Rosegarden::timeT pasteTime);
+			 Rosegarden::timeT pasteTime,
+			 Rosegarden::TrackId baseTrack);
 
     virtual ~PasteSegmentsCommand();
 
@@ -148,6 +155,7 @@ protected:
     Rosegarden::Composition *m_composition;
     Rosegarden::Clipboard *m_clipboard;
     Rosegarden::timeT m_pasteTime;
+    Rosegarden::TrackId m_baseTrack;
     std::vector<Rosegarden::Segment *> m_addedSegments;
     bool m_detached;
 };

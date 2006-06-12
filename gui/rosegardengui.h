@@ -672,6 +672,28 @@ public slots:
      * paste the clipboard into the document
      */
     void slotEditPaste();
+    
+    /**
+     * Cut a time range (sections of segments, tempo, and time
+     * signature events within that range).
+     */
+    void slotCutRange();
+
+    /**
+     * Copy a time range.
+     */
+    void slotCopyRange();
+
+    /**
+     * Paste the clipboard at the current pointer position, moving all
+     * subsequent material along to make space.
+     */
+    void slotPasteRange();
+    
+    /**
+     * Delete a time range.
+     */
+    void slotDeleteRange();
 
     /**
      * select all segments on all tracks

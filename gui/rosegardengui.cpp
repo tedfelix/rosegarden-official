@@ -775,6 +775,22 @@ void RosegardenGUIApp::setupActions()
     //
     // Edit menu
     //
+    new KAction(i18n("Cut Range"), Key_X + CTRL + SHIFT, this,
+                SLOT(slotCutRange()), actionCollection(),
+                "cut_range");
+
+    new KAction(i18n("Copy Range"), Key_C + CTRL + SHIFT, this,
+                SLOT(slotCopyRange()), actionCollection(),
+                "copy_range");
+
+    new KAction(i18n("Paste Range"), Key_V + CTRL + SHIFT, this,
+                SLOT(slotPasteRange()), actionCollection(),
+                "paste_range");
+
+    new KAction(i18n("Delete Range"), Key_Delete + SHIFT, this,
+                SLOT(slotDeleteRange()), actionCollection(),
+                "delete_range");
+
     new KAction(i18n("De&lete"), Key_Delete, this,
                 SLOT(slotDeleteSelectedSegments()), actionCollection(),
                 "delete");
@@ -1329,6 +1345,7 @@ void RosegardenGUIApp::initView()
         try
         {
             if (isUsingSequencer()) m_seqManager->setLoop(0, 0);
+	    stateChanged("have_range", KXMLGUIClient::StateReverse);
         }
         catch(QString s)
         {
@@ -2355,10 +2372,55 @@ void RosegardenGUIApp::slotEditPaste()
     timeT insertionTime = m_doc->getComposition().getPosition();
     m_doc->getCommandHistory()->addCommand
         (new PasteSegmentsCommand(&m_doc->getComposition(),
-                                  m_clipboard, insertionTime));
+                                  m_clipboard, insertionTime,
+				  m_doc->getComposition().getSelectedTrack()));
 
     // User preference? Update song pointer position on paste
     m_doc->slotSetPointerPosition(m_doc->getComposition().getPosition());
+}
+
+void RosegardenGUIApp::slotCutRange()
+{
+    timeT t0 = m_doc->getComposition().getLoopStart();
+    timeT t1 = m_doc->getComposition().getLoopEnd();
+
+    if (t0 == t1) return;
+    
+    m_doc->getCommandHistory()->addCommand
+	(new CutRangeCommand(&m_doc->getComposition(), t0, t1, m_clipboard));
+}
+
+void RosegardenGUIApp::slotCopyRange()
+{
+    timeT t0 = m_doc->getComposition().getLoopStart();
+    timeT t1 = m_doc->getComposition().getLoopEnd();
+
+    if (t0 == t1) return;
+    
+    m_doc->getCommandHistory()->addCommand
+	(new CopyCommand(&m_doc->getComposition(), t0, t1, m_clipboard));
+}
+
+void RosegardenGUIApp::slotPasteRange()
+{
+    if (m_clipboard->isEmpty()) return;
+
+    m_doc->getCommandHistory()->addCommand
+	(new PasteRangeCommand(&m_doc->getComposition(), m_clipboard,
+			       m_doc->getComposition().getPosition()));
+}
+
+void RosegardenGUIApp::slotDeleteRange()
+{
+    timeT t0 = m_doc->getComposition().getLoopStart();
+    timeT t1 = m_doc->getComposition().getLoopEnd();
+
+    if (t0 == t1) return;
+    
+    m_doc->getCommandHistory()->addCommand
+	(new DeleteRangeCommand(&m_doc->getComposition(), t0, t1));
+
+    m_doc->setLoop(0, 0);
 }
 
 void RosegardenGUIApp::slotSelectAll()
@@ -2866,7 +2928,8 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
         // New tempo is a minute divided by time of beat
 	// converted up (#1414252) to a sane value via getTempoFoQpm()
         //
-        double newTempo = comp.getTempoForQpm(60.0 * 1000000.0 / beatLengthUsec);
+	Rosegarden::tempoT newTempo =
+	    comp.getTempoForQpm(60.0 * 1000000.0 / beatLengthUsec);
 
 #ifdef DEBUG_TEMPO_FROM_AUDIO
 	RG_DEBUG << "RosegardenGUIApp::slotTempoToSegmentLength info: " << endl
@@ -4992,11 +5055,13 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
         m_seqManager->setLoop(lhs, rhs);
 
         // toggle the loop button
-        if (lhs != rhs)
+        if (lhs != rhs) {
             getTransport()->LoopButton()->setOn(true);
-        else
+	    stateChanged("have_range", KXMLGUIClient::StateNoReverse);
+	} else {
             getTransport()->LoopButton()->setOn(false);
-
+	    stateChanged("have_range", KXMLGUIClient::StateReverse);
+	}
     }
     catch(QString s)
     {

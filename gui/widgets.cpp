@@ -122,11 +122,13 @@ void RosegardenParameterBox::init()
 {
     QFont plainFont;
     plainFont.setPointSize(plainFont.pointSize() * 95 / 100);
+    if (plainFont.pixelSize() > 14) plainFont.setPixelSize(14);
     plainFont.setBold(false);
     m_font = plainFont;
 
     QFont boldFont;
     boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
+    if (boldFont.pixelSize() > 14) boldFont.setPixelSize(14);
     boldFont.setBold(true);
 
     setFont(boldFont);

@@ -126,6 +126,8 @@ public:
 
     Track* getTrackByPosition(int position) const;
  
+    int getTrackPositionById(TrackId track) const; // -1 if not found
+
     trackcontainer& getTracks() { return m_tracks; }
  
     const trackcontainer& getTracks() const { return m_tracks; }
@@ -475,7 +477,7 @@ public:
 
     /**
      * Return the index of the last time signature change before
-     * the given time, in a range suitable for passing to 
+     * or at the given time, in a range suitable for passing to 
      * getTimeSignatureChange.  Return -1 if there has been no
      * time signature by this time.
      */

@@ -1097,6 +1097,7 @@ public:
 
 private:
     friend class Composition;
+    friend class TimeTempoSelection;
 
     TimeSignature(const Event &e)
         /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;

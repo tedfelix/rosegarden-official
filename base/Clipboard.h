@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -23,6 +24,7 @@
 
 #include <set>
 #include "Segment.h"
+#include "Selection.h"
 
 namespace Rosegarden
 {
@@ -115,6 +117,17 @@ public:
     Segment *newSegment(const EventSelection *copyFrom);
 
     /**
+     * Add a time signature selection to this clipboard, replacing any
+     * that already exists.
+     */
+    void setTimeSignatureSelection(const TimeSignatureSelection &);
+
+    /**
+     * Remove any time signature selection from the clipboard.
+     */
+    void clearTimeSignatureSelection();
+
+    /**
      * Clear the current clipboard and re-fill it by copying from c.
      */
     void copyFrom(const Clipboard *c);
@@ -122,6 +135,9 @@ public:
 private:
     segmentcontainer m_segments;
     bool m_partial;
+
+    TimeSignatureSelection m_timeSigSelection;
+    bool m_haveTimeSigSelection;
 };
 
 }
