@@ -72,7 +72,7 @@ using Rosegarden::AudioFileManager;
  */
 
 
-SegmentCommand::SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>& segments)
+SegmentCommand::SegmentCommand(QString name, const std::vector<Segment*>& segments)
     : KNamedCommand(name)
 {
     m_segments.resize(segments.size());
@@ -81,7 +81,7 @@ SegmentCommand::SegmentCommand(QString name, const std::vector<Rosegarden::Segme
 
 // --------- Set Repeat on Segments --------
 //
-SegmentCommandRepeat::SegmentCommandRepeat(const std::vector<Rosegarden::Segment*>& segments,
+SegmentCommandRepeat::SegmentCommandRepeat(const std::vector<Segment*>& segments,
                                            bool repeat)
     : SegmentCommand(i18n("Repeat Segments"), segments),
       m_repeatState(repeat)
@@ -105,7 +105,7 @@ void SegmentCommandRepeat::unexecute()
         (*it)->setRepeating(!m_repeatState);
 }
 
-// SegmentCommandChangeTransposeValue::SegmentCommandChangeTransposeValue(const std::vector<Rosegarden::Segment*>& segments,
+// SegmentCommandChangeTransposeValue::SegmentCommandChangeTransposeValue(const std::vector<Segment*>& segments,
 //                                                                      int transposeValue)
 //     : SegmentCommand(i18n("Transpose Segments"), segments),
 //       m_transposeValue(transposeValue)
@@ -168,7 +168,7 @@ SegmentEraseCommand::SegmentEraseCommand(Segment *segment,
     // If this is an audio segment, we want to make a note of
     // its associated file name in case we need to undo and restore
     // the file.
-    if (m_segment->getType() == Rosegarden::Segment::Audio) {
+    if (m_segment->getType() == Segment::Audio) {
 	unsigned int id = m_segment->getAudioFileId();
 	Rosegarden::AudioFile *file = mgr->getAudioFile(id);
 	if (file) m_audioFileName = file->getFilename();
@@ -201,7 +201,7 @@ SegmentEraseCommand::unexecute()
     m_composition->addSegment(m_segment);
     m_detached = false;
 
-    if (m_segment->getType() == Rosegarden::Segment::Audio &&
+    if (m_segment->getType() == Segment::Audio &&
 	m_audioFileName != "" &&
 	m_mgr) {
 	int id = m_mgr->fileExists(m_audioFileName);
@@ -254,7 +254,7 @@ SegmentQuickCopyCommand::unexecute()
 //
 //
 SegmentRepeatToCopyCommand::SegmentRepeatToCopyCommand(
-        Rosegarden::Segment *segment):
+        Segment *segment):
     KNamedCommand(i18n("Turn Repeats into Copies")),
     m_composition(segment->getComposition()),
     m_segment(segment),
@@ -266,7 +266,7 @@ SegmentRepeatToCopyCommand::~SegmentRepeatToCopyCommand()
 {
     if (m_detached)
     {
-        std::vector<Rosegarden::Segment*>::iterator it =
+        std::vector<Segment*>::iterator it =
             m_newSegments.begin();
 
         for (; it != m_newSegments.end(); it++)
@@ -280,11 +280,11 @@ SegmentRepeatToCopyCommand::execute()
 {
     if (m_newSegments.size() == 0)
     {
-        Rosegarden::timeT newStartTime = m_segment->getEndMarkerTime();
-        Rosegarden::timeT newDuration =
+        timeT newStartTime = m_segment->getEndMarkerTime();
+        timeT newDuration =
             m_segment->getEndMarkerTime() - m_segment->getStartTime();
-        Rosegarden::Segment *newSegment;
-        Rosegarden::timeT repeatEndTime = m_segment->getRepeatEndTime();
+        Segment *newSegment;
+        timeT repeatEndTime = m_segment->getRepeatEndTime();
 
         while(newStartTime + newDuration < repeatEndTime)
         {
@@ -306,7 +306,7 @@ SegmentRepeatToCopyCommand::execute()
     }
     else
     {
-        std::vector<Rosegarden::Segment*>::iterator it =
+        std::vector<Segment*>::iterator it =
             m_newSegments.begin();
 
         for (; it != m_newSegments.end(); it++)
@@ -320,7 +320,7 @@ SegmentRepeatToCopyCommand::execute()
 void
 SegmentRepeatToCopyCommand::unexecute()
 {
-    std::vector<Rosegarden::Segment*>::iterator it =
+    std::vector<Segment*>::iterator it =
         m_newSegments.begin();
 
     for (; it != m_newSegments.end(); it++)
@@ -333,8 +333,8 @@ SegmentRepeatToCopyCommand::unexecute()
 
 
 SegmentSingleRepeatToCopyCommand::SegmentSingleRepeatToCopyCommand(
-        Rosegarden::Segment *segment,
-	Rosegarden::timeT time):
+        Segment *segment,
+	timeT time):
     KNamedCommand(i18n("Turn Single Repeat into Copy")),
     m_composition(segment->getComposition()),
     m_segment(segment),
@@ -408,7 +408,7 @@ AudioSegmentInsertCommand::execute()
     {
         // Create and insert Segment
         //
-        m_segment = new Segment(Rosegarden::Segment::Audio);
+        m_segment = new Segment(Segment::Audio);
         m_segment->setTrack(m_track);
         m_segment->setStartTime(m_startTime);
         m_segment->setAudioStartTime(m_audioStartTime);
@@ -483,8 +483,8 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 {
 }
 
-SegmentInsertCommand::SegmentInsertCommand(Rosegarden::Composition *composition,
-					   Rosegarden::Segment *segment,
+SegmentInsertCommand::SegmentInsertCommand(Composition *composition,
+					   Segment *segment,
                                            TrackId track):
     KNamedCommand(i18n("Create Segment")),
     m_composition(composition),
@@ -504,7 +504,7 @@ SegmentInsertCommand::~SegmentInsertCommand()
     }
 }
 
-Rosegarden::Segment *
+Segment *
 SegmentInsertCommand::getSegment() const
 {
     return m_segment;
@@ -807,7 +807,7 @@ AudioSegmentSplitCommand::execute()
 {
     if (!m_newSegment) {
 
-        m_newSegment = new Segment(Rosegarden::Segment::Audio);
+        m_newSegment = new Segment(Segment::Audio);
 
         // Basics
         //
@@ -846,8 +846,11 @@ AudioSegmentSplitCommand::execute()
         // Set labels
         //
         m_segmentLabel = m_segment->getLabel();
-	m_segment->setLabel(qstrtostr(i18n("%1 (split)").arg
-				      (strtoqstr(m_segmentLabel))));
+	QString newLabel = strtoqstr(m_segmentLabel);
+	if (!newLabel.endsWith(i18n(" (split)"))) {
+	    newLabel = i18n("%1 (split)").arg(newLabel);
+	}
+	m_segment->setLabel(qstrtostr(newLabel));
         m_newSegment->setLabel(m_segment->getLabel());
 
 	// Set color
@@ -980,8 +983,11 @@ SegmentSplitCommand::execute()
         // Set labels
         //
         m_segmentLabel = m_segment->getLabel();
-	m_segment->setLabel(qstrtostr(i18n("%1 (split)").arg
-				      (strtoqstr(m_segmentLabel))));
+	QString newLabel = strtoqstr(m_segmentLabel);
+	if (!newLabel.endsWith(i18n(" (split)"))) {
+	    newLabel = i18n("%1 (split)").arg(newLabel);
+	}
+	m_segment->setLabel(newLabel);
         m_newSegment->setLabel(m_segment->getLabel());
 	m_newSegment->setColourIndex(m_segment->getColourIndex());
         m_newSegment->setTranspose(m_segment->getTranspose());
@@ -1067,7 +1073,7 @@ AudioSegmentAutoSplitCommand::execute()
 
 	std::vector<AutoSplitPoint> splitPoints;
 
-	if (m_segment->getType() != Rosegarden::Segment::Audio)
+	if (m_segment->getType() != Segment::Audio)
 	    return;
 	
         // Auto split the audio file - we ask for a minimum
@@ -1083,7 +1089,7 @@ AudioSegmentAutoSplitCommand::execute()
                                Rosegarden::RealTime(0, 200000000));
 	
 	std::vector<Rosegarden::SplitPointPair>::iterator it;
-	Rosegarden::timeT absStartTime, absEndTime;
+	timeT absStartTime, absEndTime;
 	
 	char splitNumber[10];
 	int splitCount = 0;
@@ -1449,15 +1455,15 @@ SegmentRescaleCommand::~SegmentRescaleCommand()
     }
 }
 
-Rosegarden::timeT
-SegmentRescaleCommand::rescale(Rosegarden::timeT t)
+timeT
+SegmentRescaleCommand::rescale(timeT t)
 {
     // avoid overflows by using doubles
     double d = t;
     d *= m_multiplier;
     d /= m_divisor;
     d += 0.5;
-    return (Rosegarden::timeT)d;
+    return (timeT)d;
 }
 
 void
@@ -1510,7 +1516,7 @@ SegmentRescaleCommand::unexecute()
 }
 
 
-SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::timeT unit) :
+SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(timeT unit) :
     KNamedCommand(getGlobalName(unit)),
     m_unit(unit)
 {
@@ -1565,7 +1571,7 @@ SegmentChangeQuantizationCommand::unexecute()
 }
 
 void
-SegmentChangeQuantizationCommand::addSegment(Rosegarden::Segment *s)
+SegmentChangeQuantizationCommand::addSegment(Segment *s)
 {
     SegmentRec rec;
     rec.segment = s;
@@ -1575,12 +1581,12 @@ SegmentChangeQuantizationCommand::addSegment(Rosegarden::Segment *s)
 }
     
 QString
-SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::timeT unit)
+SegmentChangeQuantizationCommand::getGlobalName(timeT unit)
 {
     if (!unit) {
 	return "Unquantize";
     } else {
-	Rosegarden::timeT error = 0;
+	timeT error = 0;
 	QString label = NotationStrings::makeNoteMenuLabel(unit, true, error);
 	return QString("Quantize to %1").arg(label);
     }
@@ -1769,7 +1775,7 @@ ModifyDefaultTempoCommand::unexecute()
 
 // --------- Add Tracks --------
 //
-AddTracksCommand::AddTracksCommand(Rosegarden::Composition *composition,
+AddTracksCommand::AddTracksCommand(Composition *composition,
                                    unsigned int nbTracks,
                                    Rosegarden::InstrumentId id):
         KNamedCommand(getGlobalName()),
@@ -1807,7 +1813,7 @@ void AddTracksCommand::execute()
     }
 
     int highPosition = 0;
-    Rosegarden::Composition::trackiterator it =
+    Composition::trackiterator it =
         m_composition->getTracks().begin();
 
     for (; it != m_composition->getTracks().end(); ++it)
@@ -1853,7 +1859,7 @@ void AddTracksCommand::unexecute()
 // ------------ Delete Tracks -------------
 //
 
-DeleteTracksCommand::DeleteTracksCommand(Rosegarden::Composition *composition,
+DeleteTracksCommand::DeleteTracksCommand(Composition *composition,
                     std::vector<Rosegarden::TrackId> tracks):
     KNamedCommand(getGlobalName()),
     m_composition(composition),
@@ -1892,8 +1898,8 @@ void DeleteTracksCommand::execute()
     // Remap positions and track numbers
     //
 
-    Rosegarden::Composition::trackiterator tit;
-    Rosegarden::Composition::trackcontainer
+    Composition::trackiterator tit;
+    Composition::trackcontainer
                 &tracks = m_composition->getTracks();
 
     for (unsigned int i = 0; i < m_tracks.size(); ++i)
@@ -1953,9 +1959,9 @@ void DeleteTracksCommand::unexecute()
 
     // Remap positions and track numbers
     //
-    Rosegarden::Composition::trackcontainer
+    Composition::trackcontainer
                 &tracks = m_composition->getTracks();
-    Rosegarden::Composition::trackiterator tit;
+    Composition::trackiterator tit;
 
     std::vector<Rosegarden::Track*>::iterator otIt;
     for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
@@ -1992,7 +1998,7 @@ void DeleteTracksCommand::unexecute()
 
 // ------------------ MoveTracksCommand ---------------------
 //
-MoveTracksCommand::MoveTracksCommand(Rosegarden::Composition *composition,
+MoveTracksCommand::MoveTracksCommand(Composition *composition,
                                      Rosegarden::TrackId srcTrack,
                                      Rosegarden::TrackId destTrack):
     KNamedCommand(getGlobalName()),
@@ -2036,7 +2042,7 @@ MoveTracksCommand::unexecute()
 
 // ------------------ RenameTrackCommand ---------------------
 //
-RenameTrackCommand::RenameTrackCommand(Rosegarden::Composition *composition,
+RenameTrackCommand::RenameTrackCommand(Composition *composition,
 				       Rosegarden::TrackId trackId,
 				       std::string name) :
     KNamedCommand(getGlobalName()),
@@ -2078,9 +2084,9 @@ RenameTrackCommand::unexecute()
 // ------------------ ChangeCompositionLengthCommand ------------------
 //
 ChangeCompositionLengthCommand::ChangeCompositionLengthCommand(
-        Rosegarden::Composition *composition,
-        Rosegarden::timeT startTime,
-        Rosegarden::timeT endTime):
+        Composition *composition,
+        timeT startTime,
+        timeT endTime):
             KNamedCommand(getGlobalName()),
             m_composition(composition),
             m_startTime(startTime),
@@ -2547,7 +2553,7 @@ SegmentColourMapCommand::unexecute()
 
 
 AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
-						   Rosegarden::timeT duration,
+						   timeT duration,
 						   int basePitch,
 						   int baseVelocity) :
     KNamedCommand(i18n("Add Triggered Segment")),
@@ -2579,7 +2585,7 @@ AddTriggerSegmentCommand::execute()
     if (m_segment) {
 	m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
     } else {
-	m_segment = new Rosegarden::Segment();
+	m_segment = new Segment();
 	m_segment->setEndMarkerTime(m_duration);
 	Rosegarden::TriggerSegmentRec *rec = m_composition->addTriggerSegment
 	    (m_segment, m_basePitch, m_baseVelocity);
@@ -2635,7 +2641,7 @@ DeleteTriggerSegmentCommand::unexecute()
 }
 
 
-PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Rosegarden::Composition *composition,
+PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composition,
 							   Rosegarden::Clipboard *clipboard,
 							   QString label,
 							   int basePitch,
@@ -2668,7 +2674,7 @@ PasteToTriggerSegmentCommand::execute()
 	
 	if (m_clipboard->isEmpty()) return;
 	
-	m_segment = new Rosegarden::Segment();
+	m_segment = new Segment();
 	
 	timeT earliestStartTime = 0;
 	timeT latestEndTime = 0;
@@ -2688,7 +2694,7 @@ PasteToTriggerSegmentCommand::execute()
 	for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	     i != m_clipboard->end(); ++i) {
 	    
-	    for (Rosegarden::Segment::iterator si = (*i)->begin();
+	    for (Segment::iterator si = (*i)->begin();
 		 (*i)->isBeforeEndMarker(si); ++si) {
 		if (!(*si)->isa(Rosegarden::Note::EventRestType)) {
 		    m_segment->insert
@@ -2718,7 +2724,7 @@ PasteToTriggerSegmentCommand::unexecute()
 }
     
 
-SetTriggerSegmentBasePitchCommand::SetTriggerSegmentBasePitchCommand(Rosegarden::Composition *composition,
+SetTriggerSegmentBasePitchCommand::SetTriggerSegmentBasePitchCommand(Composition *composition,
 								     Rosegarden::TriggerSegmentId id,
 								     int newPitch) :
     KNamedCommand(i18n("Set Base Pitch")),
@@ -2755,7 +2761,7 @@ SetTriggerSegmentBasePitchCommand::unexecute()
 }
 
 
-SetTriggerSegmentBaseVelocityCommand::SetTriggerSegmentBaseVelocityCommand(Rosegarden::Composition *composition,
+SetTriggerSegmentBaseVelocityCommand::SetTriggerSegmentBaseVelocityCommand(Composition *composition,
 								     Rosegarden::TriggerSegmentId id,
 								     int newVelocity) :
     KNamedCommand(i18n("Set Base Velocity")),
@@ -2792,7 +2798,7 @@ SetTriggerSegmentBaseVelocityCommand::unexecute()
 }
 
 
-SetTriggerSegmentDefaultTimeAdjustCommand::SetTriggerSegmentDefaultTimeAdjustCommand(Rosegarden::Composition *composition,
+SetTriggerSegmentDefaultTimeAdjustCommand::SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,
 										     Rosegarden::TriggerSegmentId id,
 										     std::string newDefaultTimeAdjust) :
     KNamedCommand(i18n("Set Default Time Adjust")),
@@ -2831,7 +2837,7 @@ SetTriggerSegmentDefaultTimeAdjustCommand::unexecute()
 
 
 
-SetTriggerSegmentDefaultRetuneCommand::SetTriggerSegmentDefaultRetuneCommand(Rosegarden::Composition *composition,
+SetTriggerSegmentDefaultRetuneCommand::SetTriggerSegmentDefaultRetuneCommand(Composition *composition,
 									     Rosegarden::TriggerSegmentId id,
 									     bool newDefaultRetune) :
     KNamedCommand(i18n("Set Default Retune")),
@@ -2912,7 +2918,7 @@ CreateTempoMapFromSegmentCommand::unexecute()
 }
 
 void
-CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
+CreateTempoMapFromSegmentCommand::initialise(Segment *s)
 {
     m_oldTempi.clear();
     m_newTempi.clear();
@@ -2921,7 +2927,7 @@ CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
     // Let's work per-beat for the moment.  Even for this, we should
     // probably use TimeSignature.getDivisions()
 
-    std::vector<Rosegarden::timeT> beatTimeTs;
+    std::vector<timeT> beatTimeTs;
     std::vector<Rosegarden::RealTime> beatRealTimes;
 
     int startBar = m_composition->getBarNumber(s->getStartTime());
@@ -2957,7 +2963,7 @@ CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
     for (int i = m_composition->getTempoChangeNumberAt(*beatTimeTs.begin()-1) + 1;
 	 i <= m_composition->getTempoChangeNumberAt(*beatTimeTs.end()-1); ++i) {
 
-	std::pair<Rosegarden::timeT, Rosegarden::tempoT> tempoChange =
+	std::pair<timeT, Rosegarden::tempoT> tempoChange =
 	    m_composition->getTempoChange(i);
 	m_oldTempi[tempoChange.first] = tempoChange.second;
 	if (prevTempo == 0) prevTempo = tempoChange.second;
@@ -2965,11 +2971,11 @@ CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
 
     RG_DEBUG << "starting tempo: " << prevTempo << endl;
 
-    Rosegarden::timeT quarter = Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration();
+    timeT quarter = Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration();
 
     for (int beat = 1; beat < beatTimeTs.size(); ++beat) {
 
-	Rosegarden::timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat-1];
+	timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat-1];
 	Rosegarden::RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat-1];
 
 	// Calculate tempo to nearest qpm.
@@ -2993,3 +2999,304 @@ CreateTempoMapFromSegmentCommand::initialise(Rosegarden::Segment *s)
     }
 	
 }
+
+
+CutRangeCommand::CutRangeCommand(Composition *composition,
+				 timeT t0, timeT t1,
+				 Rosegarden::Clipboard *clipboard) :
+    KMacroCommand(i18n("Cut Range"))
+{
+    addCommand(new CopyCommand(composition, t0, t1, clipboard));
+    addCommand(new DeleteRangeCommand(composition, t0, t1));
+}
+
+PasteRangeCommand::PasteRangeCommand(Composition *composition,
+				     Rosegarden::Clipboard *clipboard,
+				     timeT t0) :
+    KMacroCommand(i18n("Paste Range"))
+{
+    timeT clipBeginTime = 0;
+
+    for (Rosegarden::Clipboard::iterator i = clipboard->begin(); 
+	 i != clipboard->end(); ++i) {
+	if (i == clipboard->begin() || (*i)->getStartTime() < clipBeginTime) {
+	    clipBeginTime = (*i)->getStartTime();
+	}
+    }
+
+    timeT duration = 0;
+
+    for (Rosegarden::Clipboard::iterator i = clipboard->begin(); 
+	 i != clipboard->end(); ++i) {
+	timeT durationHere = (*i)->getEndMarkerTime() - clipBeginTime;
+	if (i == clipboard->begin() || durationHere > duration) {
+	    duration = durationHere;
+	}
+    }
+
+    if (duration <= 0) return;
+    timeT t1 = t0 + duration;
+
+    // Need to split segments before opening, at t0
+
+    for (Composition::iterator i = composition->begin();
+	 i != composition->end(); ++i) {
+	
+	if ((*i)->getStartTime() >= t0 || (*i)->getEndMarkerTime() <= t0) {
+	    continue;
+	}
+
+	if ((*i)->getType() == Segment::Audio) {
+	    addCommand(new AudioSegmentSplitCommand(*i, t0));
+	} else {
+	    addCommand(new SegmentSplitCommand(*i, t0));
+	}
+    }
+
+    addCommand(new OpenRangeCommand(composition, t0, t1));
+    addCommand(new PasteSegmentsCommand(composition, clipboard, t0,
+					composition->getTrackByPosition(0)->getId()));
+
+    //!!! and paste time signatures and tempos...
+}
+
+
+DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
+				       timeT t0, timeT t1) :
+    KMacroCommand(i18n("Delete Range"))
+{
+    // First add commands to split the segments up.  Make a note of
+    // segments that will need rejoining with their neighbours
+    // afterwards.
+
+    std::vector<Segment *> rejoins;
+
+    for (int e = 0; e < 2; ++e) {
+
+	// Split all segments at the range end first, then the range
+	// begin afterwards.  This is because the split commands create
+	// new segments for the right part and leave the left parts in
+	// the original segments, so that we can use the same segment
+	// pointer to do the left split as we did for the right
+
+	timeT t = t1;
+	if (e == 1) t = t0;
+
+	for (Composition::iterator i = composition->begin();
+	     i != composition->end(); ++i) {
+
+	    if ((*i)->getStartTime() >= t || (*i)->getEndMarkerTime() <= t) {
+		continue;
+	    }
+
+	    if ((*i)->getType() == Segment::Audio) {
+		addCommand(new AudioSegmentSplitCommand(*i, t));
+	    } else {
+		addCommand(new SegmentSplitCommand(*i, t));
+
+		if (t == t0 && (*i)->getEndMarkerTime() > t1) {
+		    rejoins.push_back(*i);
+		}
+	    }
+	}
+    }
+
+    // Then commands to do the rest of the work
+
+    addCommand(new EraseSegmentsStartingInRangeCommand(composition, t0, t1));
+
+    addCommand(new CloseRangeCommand(composition, t0, t1));
+
+    for (std::vector<Segment *>::iterator i = rejoins.begin();
+	 i != rejoins.end(); ++i) {
+	addCommand(new RejoinCommand(composition, *i,
+				     (*i)->getEndMarkerTime() + t0 - t1));
+    }
+}
+
+DeleteRangeCommand::~DeleteRangeCommand()
+{
+}
+
+void
+DeleteRangeCommand::RejoinCommand::execute()
+{
+    if (m_joinCommand) {
+	m_joinCommand->execute();
+	return;
+    }
+
+    //!!! Need to remove the "(split)" names from the segment bits
+
+    for (Composition::iterator i = m_composition->begin();
+	 i != m_composition->end(); ++i) {
+	if ((*i) == m_segment) continue;
+	if ((*i)->getTrack() != m_segment->getTrack()) continue;
+	if ((*i)->getEndMarkerTime() != m_endMarkerTime) continue;
+	if ((*i)->getStartTime() <= m_segment->getStartTime()) continue;
+	Rosegarden::SegmentSelection selection;
+	selection.insert(m_segment);
+	selection.insert(*i);
+	m_joinCommand = new SegmentJoinCommand(selection);
+	m_joinCommand->execute();
+	break;
+    }
+}
+
+EraseSegmentsStartingInRangeCommand::EraseSegmentsStartingInRangeCommand(
+    Composition *composition,
+    timeT t0, timeT t1) :
+    KNamedCommand(i18n("Delete Range")),
+    m_composition(composition),
+    m_beginTime(t0),
+    m_endTime(t1),
+    m_detached(false)
+{
+}
+
+EraseSegmentsStartingInRangeCommand::~EraseSegmentsStartingInRangeCommand()
+{
+    if (m_detached) {
+	for (std::vector<Segment *>::iterator i = m_detaching.begin();
+	     i != m_detaching.end(); ++i) {
+	    delete *i;
+	}
+    }	
+}
+
+void
+EraseSegmentsStartingInRangeCommand::execute()
+{
+    if (m_detaching.empty()) {
+
+	for (Composition::iterator i = m_composition->begin();
+	     i != m_composition->end(); ++i) {
+	
+	    if ((*i)->getStartTime() >= m_beginTime &&
+		(*i)->getStartTime() < m_endTime) {
+		m_detaching.push_back(*i);
+	    }
+	}
+    }
+
+    for (std::vector<Segment *>::iterator i = m_detaching.begin();
+	 i != m_detaching.end(); ++i) {
+	m_composition->detachSegment(*i);
+    }
+
+    m_detached = true;
+}
+
+void
+EraseSegmentsStartingInRangeCommand::unexecute()
+{
+    for (std::vector<Segment *>::iterator i = m_detaching.begin();
+	 i != m_detaching.end(); ++i) {
+
+	m_composition->addSegment(*i);
+
+	//!!! see horrible code in SegmentEraseCommand::unexecute()
+	// to restore the audio file ID association in audio file mgr
+	// when an audio segment is restored.  Why is this necessary?
+	// What is the agency that removed the audio file association
+	// in the first place, and why?  Need to investigate that
+	// before heedlessly duplicating the same horrors here.
+
+    }
+    
+    m_detached = false;
+}
+
+
+OpenRangeCommand::OpenRangeCommand(Composition *composition,
+				   timeT rangeBegin,
+				   timeT rangeEnd) :
+    KNamedCommand(i18n("Open Range")),
+    m_composition(composition),
+    m_beginTime(rangeBegin),
+    m_endTime(rangeEnd)
+{
+}
+
+OpenRangeCommand::~OpenRangeCommand()
+{
+}
+
+void
+OpenRangeCommand::execute()
+{
+    if (m_moving.empty()) {
+
+	for (Composition::iterator i = m_composition->begin();
+	     i != m_composition->end(); ++i) {
+
+	    if ((*i)->getStartTime() >= m_beginTime) {
+		m_moving.push_back(*i);
+	    }
+	}
+    }
+
+    for (std::vector<Segment *>::iterator i = m_moving.begin();
+	 i != m_moving.end(); ++i) {
+	(*i)->setStartTime((*i)->getStartTime() + m_endTime - m_beginTime);
+    }
+
+    timeT musicEnd = m_composition->getDuration();
+    timeT compositionEnd = m_composition->getEndMarker();
+    timeT required = musicEnd + m_endTime - m_beginTime;
+    if (compositionEnd < required) m_composition->setEndMarker(required);
+}
+
+void
+OpenRangeCommand::unexecute()
+{
+    for (std::vector<Segment *>::iterator i = m_moving.begin();
+	 i != m_moving.end(); ++i) {
+	(*i)->setStartTime((*i)->getStartTime() + m_beginTime - m_endTime);
+    }
+}
+
+
+CloseRangeCommand::CloseRangeCommand(Composition *composition,
+				     timeT rangeBegin,
+				     timeT rangeEnd) :
+    KNamedCommand(i18n("Close Range")),
+    m_composition(composition),
+    m_beginTime(rangeBegin),
+    m_endTime(rangeEnd)
+{
+}
+
+CloseRangeCommand::~CloseRangeCommand()
+{
+}
+
+void
+CloseRangeCommand::execute()
+{
+    if (m_moving.empty()) {
+
+	for (Composition::iterator i = m_composition->begin();
+	     i != m_composition->end(); ++i) {
+
+	    if ((*i)->getStartTime() >= m_endTime) {
+		m_moving.push_back(*i);
+	    }
+	}
+    }
+
+    for (std::vector<Segment *>::iterator i = m_moving.begin();
+	 i != m_moving.end(); ++i) {
+	(*i)->setStartTime((*i)->getStartTime() + m_beginTime - m_endTime);
+    }
+}
+
+void
+CloseRangeCommand::unexecute()
+{
+    for (std::vector<Segment *>::iterator i = m_moving.begin();
+	 i != m_moving.end(); ++i) {
+	(*i)->setStartTime((*i)->getStartTime() + m_endTime - m_beginTime);
+    }
+}
+

@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -39,6 +41,13 @@ TrackLabel::TrackLabel(Rosegarden::TrackId id,
     m_id(id),
     m_position(position)
 {
+    QFont font;
+    font.setPointSize(font.pointSize() * 95 / 100);
+    if (font.pixelSize() > 14) font.setPixelSize(14);
+    font.setBold(false);
+    m_instrumentLabel->setFont(font);
+    m_trackLabel->setFont(font);
+
     addWidget(m_instrumentLabel, ShowInstrument);
     addWidget(m_trackLabel, ShowTrack);
     raiseWidget(ShowTrack);

@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -25,7 +26,8 @@ namespace Rosegarden
 {
 
 Clipboard::Clipboard() :
-    m_partial(false)
+    m_partial(false),
+    m_haveTimeSigSelection(false)
 {
     // nothing
 }
@@ -55,19 +57,20 @@ Clipboard::clear()
 	delete *i;
     }
     m_segments.clear();
+    clearTimeSignatureSelection();
     m_partial = false;
 }
 
 bool
 Clipboard::isEmpty() const
 {
-    return (m_segments.size() == 0);
+    return (m_segments.size() == 0 && !m_haveTimeSigSelection);
 }
 
 bool
 Clipboard::isSingleSegment() const
 {
-    return (m_segments.size() == 1);
+    return (m_segments.size() == 1 && !m_haveTimeSigSelection);
 }
 
 Segment *
@@ -118,8 +121,13 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     Segment::const_iterator ifrom = copyFrom->findTime(from);
     Segment::const_iterator ito   = copyFrom->findTime(to);
 
-    for (Segment::const_iterator i = ifrom; i != ito && i != copyFrom->end(); ++i) {
+    for (Segment::const_iterator i = ifrom;
+	 i != ito && i != copyFrom->end(); ++i) {
 	s->insert(new Event(**i));
+    }
+
+    if (s->getEndMarkerTime() > to) {
+	s->setEndMarkerTime(to);
     }
 
     m_segments.insert(s);
@@ -146,6 +154,20 @@ Clipboard::newSegment(const EventSelection *copyFrom)
 }
 
 void
+Clipboard::setTimeSignatureSelection(const TimeSignatureSelection &ts)
+{
+    m_timeSigSelection = ts;
+    m_haveTimeSigSelection = true;
+}
+
+void
+Clipboard::clearTimeSignatureSelection()
+{
+    m_timeSigSelection = TimeSignatureSelection();
+    m_haveTimeSigSelection = false;
+}
+    
+void
 Clipboard::copyFrom(const Clipboard *c)
 {
     if (c == this) return;
@@ -156,6 +178,9 @@ Clipboard::copyFrom(const Clipboard *c)
     }
 
     m_partial = c->m_partial;
+
+    m_timeSigSelection = c->m_timeSigSelection;
+    m_haveTimeSigSelection = c->m_haveTimeSigSelection;
 }
 
 }

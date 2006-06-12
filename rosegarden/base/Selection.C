@@ -234,4 +234,33 @@ bool SegmentSelection::hasNonAudioSegment() const
 }
 
 
+TimeSignatureSelection::TimeSignatureSelection() { }
+
+TimeSignatureSelection::TimeSignatureSelection(Composition &composition,
+					       timeT beginTime,
+					       timeT endTime)
+{
+    int n = composition.getTimeSignatureNumberAt(endTime);
+
+    for (int i = composition.getTimeSignatureNumberAt(beginTime);
+	 i < n;
+	 ++i) {
+
+	std::pair<timeT, TimeSignature> sig =
+	    composition.getTimeSignatureChange(i);
+
+	if (sig.first >= beginTime) {
+	    addTimeSignature(sig.first, sig.second);
+	}
+    }
+}
+
+TimeSignatureSelection::~TimeSignatureSelection() { }
+
+void
+TimeSignatureSelection::addTimeSignature(timeT t, TimeSignature timeSig)
+{
+    m_timeSignatures.insert(timesigcontainer::value_type(t, timeSig));
+}
+
 }

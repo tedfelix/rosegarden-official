@@ -242,6 +242,27 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
     }
 }
 
+CopyCommand::CopyCommand(Rosegarden::Composition *composition,
+			 Rosegarden::timeT beginTime,
+			 Rosegarden::timeT endTime,
+			 Rosegarden::Clipboard *clipboard) :
+    KNamedCommand(i18n("Copy Range")),
+    m_targetClipboard(clipboard)
+{
+    m_sourceClipboard = new Rosegarden::Clipboard();
+
+    for (Rosegarden::Composition::iterator i = composition->begin();
+	 i != composition->end(); ++i) {
+	if ((*i)->getStartTime() < endTime &&
+	    (*i)->getEndMarkerTime() > beginTime) {
+	    m_sourceClipboard->newSegment(*i, beginTime, endTime);
+	}
+    }
+
+    Rosegarden::TimeSignatureSelection tsel(*composition, beginTime, endTime);
+    m_sourceClipboard->setTimeSignatureSelection(tsel);
+}
+
 CopyCommand::~CopyCommand()
 {
     delete m_sourceClipboard;
@@ -270,11 +291,13 @@ CopyCommand::unexecute()
 
 PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
 					   Rosegarden::Clipboard *clipboard,
-					   Rosegarden::timeT pasteTime) :
+					   Rosegarden::timeT pasteTime,
+					   Rosegarden::TrackId baseTrack) :
     KNamedCommand(getGlobalName()),
     m_composition(composition),
     m_clipboard(clipboard),
     m_pasteTime(pasteTime),
+    m_baseTrack(baseTrack),
     m_detached(false)
 {
     // nothing else
@@ -295,7 +318,6 @@ PasteSegmentsCommand::execute()
     if (m_addedSegments.size() > 0) {
 	// been here before
 	for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
-            m_addedSegments[i]->setTrack(m_composition->getSelectedTrack());
 	    m_composition->addSegment(m_addedSegments[i]);
 	}
 	return;
@@ -305,11 +327,11 @@ PasteSegmentsCommand::execute()
 
     // We want to paste such that the earliest Segment starts at
     // m_pasteTime and the others start at the same times relative
-    // to that as they did before
+    // to that as they did before.  Likewise for track.
 
     timeT earliestStartTime = 0;
     timeT latestEndTime = 0;
-    int trackOffset = 0;
+    int lowestTrackPos = -1;
 
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	 i != m_clipboard->end(); ++i) {
@@ -317,25 +339,38 @@ PasteSegmentsCommand::execute()
 	if (i == m_clipboard->begin() ||
 	    (*i)->getStartTime() < earliestStartTime) {
 	    earliestStartTime = (*i)->getStartTime();
-            trackOffset = (*i)->getTrack();
 	}
 
-        if ((*i)->getEndMarkerTime() > latestEndTime)
+	int trackPos = m_composition->getTrackPositionById((*i)->getTrack());
+	if (trackPos >= 0 &&
+	    (lowestTrackPos < 0 || trackPos < lowestTrackPos)) {
+	    lowestTrackPos = trackPos;
+	}
+
+        if ((*i)->getEndMarkerTime() > latestEndTime) {
             latestEndTime = (*i)->getEndMarkerTime();
+	}
     }
 
+    if (lowestTrackPos < 0) lowestTrackPos = 0;
     timeT offset = m_pasteTime - earliestStartTime;
+    int baseTrackPos = m_composition->getTrackPositionById(m_baseTrack);
+    int trackOffset = baseTrackPos - lowestTrackPos;
 
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	 i != m_clipboard->end(); ++i) {
 
-        TrackId newTrackId = m_composition->getSelectedTrack() 
-            + (*i)->getTrack()
-            - trackOffset;
+	int newTrackPos = trackOffset +
+	    m_composition->getTrackPositionById((*i)->getTrack());
 
-        // needs to check for valid id
-        if (newTrackId < m_composition->getMinTrackId() ||
-            newTrackId > m_composition->getMaxTrackId()) continue;
+	Rosegarden::Track *track = m_composition->getTrackByPosition(newTrackPos);
+
+	if (!track) {
+	    newTrackPos = 0;
+	    track = m_composition->getTrackByPosition(newTrackPos);
+	}
+
+	TrackId newTrackId = track->getId();
 
 	Segment *segment = new Segment(**i);
 	segment->setStartTime(segment->getStartTime() + offset);
@@ -343,7 +378,7 @@ PasteSegmentsCommand::execute()
         m_composition->addSegment(segment);
 	if (m_clipboard->isPartial()) {
 	    segment->normalizeRests(segment->getStartTime(),
-				    segment->getEndMarkerTime() + offset);
+				    segment->getEndMarkerTime());
 	}
 	m_addedSegments.push_back(segment);
     }

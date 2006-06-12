@@ -1021,7 +1021,133 @@ private:
     TempoMap m_newTempi;
 };
     
+
+class CutRangeCommand : public KMacroCommand
+{
+public:
+    CutRangeCommand(Rosegarden::Composition *composition,
+		    Rosegarden::timeT begin,
+		    Rosegarden::timeT end,
+		    Rosegarden::Clipboard *clipboard);
+};
     
+
+class PasteRangeCommand : public KMacroCommand
+{
+public:
+    PasteRangeCommand(Rosegarden::Composition *composition,
+		      Rosegarden::Clipboard *clipboard,
+		      Rosegarden::timeT pasteTime);
+};
+    
+
+class DeleteRangeCommand : public KMacroCommand
+{
+public:
+    DeleteRangeCommand(Rosegarden::Composition *composition,
+		       Rosegarden::timeT begin,
+		       Rosegarden::timeT end);
+    virtual ~DeleteRangeCommand();
+
+private:
+    class RejoinCommand : public KNamedCommand
+    {
+    public:
+	// This command rejoins s on to a subsequent segment on the same
+	// track that ends at endMarkerTime (presumably the original end
+	// marker time of s, with the range duration subtracted).
+
+	RejoinCommand(Rosegarden::Composition *c,
+		      Rosegarden::Segment *s,
+		      Rosegarden::timeT endMarkerTime) :
+	    KNamedCommand(i18n("Rejoin Command")),
+	    m_composition(c), m_segment(s), m_endMarkerTime(endMarkerTime),
+	    m_joinCommand(0) { }
+
+	~RejoinCommand() { delete m_joinCommand; }
+
+	void execute();
+	void unexecute() { if (m_joinCommand) m_joinCommand->unexecute(); }
+
+    private:
+	Rosegarden::Composition *m_composition;
+	Rosegarden::Segment *m_segment;
+	Rosegarden::timeT m_endMarkerTime;
+
+	SegmentJoinCommand *m_joinCommand;
+    };
+};
+
+
+class EraseSegmentsStartingInRangeCommand : public KNamedCommand
+{
+public:
+    EraseSegmentsStartingInRangeCommand(Rosegarden::Composition *composition,
+					Rosegarden::timeT begin,
+					Rosegarden::timeT end);
+    virtual ~EraseSegmentsStartingInRangeCommand();
+    
+    virtual void execute();
+    virtual void unexecute();
+    
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::timeT m_beginTime;
+    Rosegarden::timeT m_endTime;
+    
+    bool m_detached;
+    std::vector<Rosegarden::Segment *> m_detaching;
+};
+
+
+/**
+ * Push all segments, time sigs, tempos etc starting after the start of
+ * a given range forward by the duration of that range, so as to create
+ * the range duration's worth of empty space.
+ */
+class OpenRangeCommand : public KNamedCommand
+{
+public:
+    OpenRangeCommand(Rosegarden::Composition *composition,
+		     Rosegarden::timeT rangeBegin,
+		     Rosegarden::timeT rangeEnd);
+    virtual ~OpenRangeCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::timeT m_beginTime;
+    Rosegarden::timeT m_endTime;
+
+    std::vector<Rosegarden::Segment *> m_moving;
+};
+
+
+/**
+ * Pull all segments, time sigs, tempos etc starting after the end of
+ * a given range back by the duration of that range, so as to fill in
+ * the (presumably empty) range itself.
+ */
+class CloseRangeCommand : public KNamedCommand
+{
+public:
+    CloseRangeCommand(Rosegarden::Composition *composition,
+		      Rosegarden::timeT rangeBegin,
+		      Rosegarden::timeT rangeEnd);
+    virtual ~CloseRangeCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::timeT m_beginTime;
+    Rosegarden::timeT m_endTime;
+
+    std::vector<Rosegarden::Segment *> m_moving;
+};
 
 
 #endif  // _SEGMENTCOMMANDS_H_

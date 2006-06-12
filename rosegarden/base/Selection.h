@@ -26,11 +26,10 @@
 #include "PropertyName.h"
 #include "Event.h"
 #include "Segment.h"
+#include "NotationTypes.h"
+#include "Composition.h"
 
 namespace Rosegarden {
-
-class Composition;
-
 
 /**
  * EventSelection records a (possibly non-contiguous) selection
@@ -166,6 +165,43 @@ class SegmentSelection : public std::set<Segment *>
 public:
     bool hasNonAudioSegment() const;
 };
+
+
+/**
+ * A selection that includes (only) time signatures.  Unlike
+ * EventSelection, this does copy its contents, not just refer to
+ * them.
+ */
+
+class TimeSignatureSelection
+{
+public:
+    /**
+     * Construct an empty TimeSignatureSelection.
+     */
+    TimeSignatureSelection();
+
+    /**
+     * Construct a TimeSignatureSelection containing all the time
+     * signatures in the given range of the given Composition.
+     */
+    TimeSignatureSelection(Composition &, timeT beginTime, timeT endTime);
+
+    virtual ~TimeSignatureSelection();
+
+    /**
+     * Add a time signature to the selection.
+     */
+    void addTimeSignature(timeT t, TimeSignature timeSig);
+    
+    typedef std::multimap<timeT, TimeSignature> timesigcontainer;
+
+    const timesigcontainer &getTimeSignatures() const { return m_timeSignatures; }
+
+protected:
+    timesigcontainer m_timeSignatures;
+};
+    
 
 
 }
