@@ -543,10 +543,13 @@ LilypondExporter::write()
 	getTimeSignatureAt(m_composition->getStartMarker());
     if (m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime)) < compositionStartTime) {
         str << indent(col) << "\\partial ";
-	// the following handles correctly dotted durations like "4.", but
-	// fails with multiples of durations like "8*5" (fixme!)
-	writeDuration(m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime)+1)-compositionStartTime,str);
-        str << std::endl;
+        // Arbitrary partial durations are handled by the following way: 
+        // split the partial duration to 64th notes: instead of "4" write "64*16". (hjj)
+        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+        int partialDuration = m_composition->getBarStart(m_composition->getBarNumber(compositionStartTime)+1)-compositionStartTime;
+        writeDuration(1,str);
+        str << "*" << ((int)(partialDuration / partialNote.getDuration()))
+            << std::endl;
     }
     int leftBar = 0;
     int rightBar = leftBar;
