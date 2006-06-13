@@ -295,7 +295,7 @@ PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
 					   Rosegarden::TrackId baseTrack) :
     KNamedCommand(getGlobalName()),
     m_composition(composition),
-    m_clipboard(clipboard),
+    m_clipboard(new Rosegarden::Clipboard(*clipboard)),
     m_pasteTime(pasteTime),
     m_baseTrack(baseTrack),
     m_detached(false)
@@ -310,6 +310,8 @@ PasteSegmentsCommand::~PasteSegmentsCommand()
 	    delete m_addedSegments[i];
 	}
     }
+
+    delete m_clipboard;
 }
 
 void
@@ -329,17 +331,12 @@ PasteSegmentsCommand::execute()
     // m_pasteTime and the others start at the same times relative
     // to that as they did before.  Likewise for track.
 
-    timeT earliestStartTime = 0;
+    timeT earliestStartTime = m_clipboard->getBaseTime();
     timeT latestEndTime = 0;
     int lowestTrackPos = -1;
 
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	 i != m_clipboard->end(); ++i) {
-
-	if (i == m_clipboard->begin() ||
-	    (*i)->getStartTime() < earliestStartTime) {
-	    earliestStartTime = (*i)->getStartTime();
-	}
 
 	int trackPos = m_composition->getTrackPositionById((*i)->getTrack());
 	if (trackPos >= 0 &&
@@ -408,7 +405,7 @@ PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
     BasicCommand(getGlobalName(), segment, pasteTime,
 		 getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),
-    m_clipboard(clipboard),
+    m_clipboard(new Rosegarden::Clipboard(*clipboard)),
     m_pasteType(pasteType)
 {
     if (pasteType != OpenAndPaste) {
@@ -436,9 +433,14 @@ PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
 				       PasteType pasteType) :
     BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
     m_relayoutEndTime(getEndTime()),
-    m_clipboard(clipboard),
+    m_clipboard(new Rosegarden::Clipboard(*clipboard)),
     m_pasteType(pasteType)
 {
+}
+
+PasteEventsCommand::~PasteEventsCommand()
+{
+    delete m_clipboard;
 }
 
 PasteEventsCommand::PasteTypeMap
