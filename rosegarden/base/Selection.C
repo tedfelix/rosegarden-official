@@ -263,4 +263,36 @@ TimeSignatureSelection::addTimeSignature(timeT t, TimeSignature timeSig)
     m_timeSignatures.insert(timesigcontainer::value_type(t, timeSig));
 }
 
+TempoSelection::TempoSelection() { }
+
+TempoSelection::TempoSelection(Composition &composition,
+			       timeT beginTime,
+			       timeT endTime)
+{
+    int n = composition.getTempoChangeNumberAt(endTime);
+
+    for (int i = composition.getTempoChangeNumberAt(beginTime);
+	 i < n;
+	 ++i) {
+
+	std::pair<timeT, tempoT> change = composition.getTempoChange(i);
+
+	if (change.first >= beginTime) {
+	    std::pair<bool, tempoT> ramping =
+		composition.getTempoRamping(i, false);
+	    addTempo(change.first, change.second,
+		     ramping.first ? ramping.second : -1);
+	}
+    }
+}
+
+TempoSelection::~TempoSelection() { }
+
+void
+TempoSelection::addTempo(timeT t, tempoT tempo, tempoT targetTempo)
+{
+    m_tempos.insert(tempocontainer::value_type
+		    (t, tempochange(tempo, targetTempo)));
+}
+
 }

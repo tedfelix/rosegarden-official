@@ -27,7 +27,8 @@ namespace Rosegarden
 
 Clipboard::Clipboard() :
     m_partial(false),
-    m_haveTimeSigSelection(false)
+    m_haveTimeSigSelection(false),
+    m_haveTempoSelection(false)
 {
     // nothing
 }
@@ -58,19 +59,24 @@ Clipboard::clear()
     }
     m_segments.clear();
     clearTimeSignatureSelection();
+    clearTempoSelection();
     m_partial = false;
 }
 
 bool
 Clipboard::isEmpty() const
 {
-    return (m_segments.size() == 0 && !m_haveTimeSigSelection);
+    return (m_segments.size() == 0 &&
+	    !m_haveTimeSigSelection &&
+	    !m_haveTempoSelection);
 }
 
 bool
 Clipboard::isSingleSegment() const
 {
-    return (m_segments.size() == 1 && !m_haveTimeSigSelection);
+    return (m_segments.size() == 1 &&
+	    !m_haveTimeSigSelection &&
+	    !m_haveTempoSelection);
 }
 
 Segment *
@@ -175,6 +181,32 @@ Clipboard::clearTimeSignatureSelection()
     m_timeSigSelection = TimeSignatureSelection();
     m_haveTimeSigSelection = false;
 }
+
+const TimeSignatureSelection &
+Clipboard::getTimeSignatureSelection() const
+{
+    return m_timeSigSelection;
+}
+ 
+void
+Clipboard::setTempoSelection(const TempoSelection &ts)
+{
+    m_tempoSelection = ts;
+    m_haveTempoSelection = true;
+}
+
+void
+Clipboard::clearTempoSelection()
+{
+    m_tempoSelection = TempoSelection();
+    m_haveTempoSelection = false;
+}
+
+const TempoSelection &
+Clipboard::getTempoSelection() const
+{
+    return m_tempoSelection;
+}
     
 void
 Clipboard::copyFrom(const Clipboard *c)
@@ -190,6 +222,34 @@ Clipboard::copyFrom(const Clipboard *c)
 
     m_timeSigSelection = c->m_timeSigSelection;
     m_haveTimeSigSelection = c->m_haveTimeSigSelection;
+
+    m_tempoSelection = c->m_tempoSelection;
+    m_haveTempoSelection = c->m_haveTempoSelection;
+}
+
+timeT
+Clipboard::getBaseTime() const
+{
+    timeT t = 0;
+    for (iterator i = begin(); i != end(); ++i) {
+	if (i == begin() || (*i)->getStartTime() < t) {
+	    t = (*i)->getStartTime();
+	}
+    }
+
+    if (m_haveTimeSigSelection && !m_timeSigSelection.empty()) {
+	if (m_timeSigSelection.begin()->first < t) {
+	    t = m_timeSigSelection.begin()->first;
+	}
+    }
+
+    if (m_haveTempoSelection && !m_tempoSelection.empty()) {
+	if (m_tempoSelection.begin()->first < t) {
+	    t = m_tempoSelection.begin()->first;
+	}
+    }
+    
+    return t;
 }
 
 }

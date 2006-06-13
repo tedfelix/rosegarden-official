@@ -172,7 +172,6 @@ public:
  * EventSelection, this does copy its contents, not just refer to
  * them.
  */
-
 class TimeSignatureSelection
 {
 public:
@@ -197,9 +196,50 @@ public:
     typedef std::multimap<timeT, TimeSignature> timesigcontainer;
 
     const timesigcontainer &getTimeSignatures() const { return m_timeSignatures; }
+    timesigcontainer::const_iterator begin() const { return m_timeSignatures.begin(); }
+    timesigcontainer::const_iterator end() const { return m_timeSignatures.end(); }
+    bool empty() const { return begin() == end(); }
 
 protected:
     timesigcontainer m_timeSignatures;
+};
+ 
+
+/**
+ * A selection that includes (only) tempo changes.
+ */
+
+class TempoSelection
+{
+public:
+    /**
+     * Construct an empty TempoSelection.
+     */
+    TempoSelection();
+
+    /**
+     * Construct a TempoSelection containing all the time
+     * signatures in the given range of the given Composition.
+     */
+    TempoSelection(Composition &, timeT beginTime, timeT endTime);
+
+    virtual ~TempoSelection();
+
+    /**
+     * Add a time signature to the selection.
+     */
+    void addTempo(timeT t, tempoT tempo, tempoT targetTempo = -1);
+
+    typedef std::pair<tempoT, tempoT> tempochange;
+    typedef std::multimap<timeT, tempochange> tempocontainer;
+
+    const tempocontainer &getTempos() const { return m_tempos; }
+    tempocontainer::const_iterator begin() const { return m_tempos.begin(); }
+    tempocontainer::const_iterator end() const { return m_tempos.end(); }
+    bool empty() const { return begin() == end(); }
+
+protected:
+    tempocontainer m_tempos;
 };
     
 

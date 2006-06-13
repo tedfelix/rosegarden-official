@@ -128,9 +128,35 @@ public:
     void clearTimeSignatureSelection();
 
     /**
+     * Retrieve any time signature selection found in the clipboard.
+     */
+    const TimeSignatureSelection &getTimeSignatureSelection() const;
+
+    /**
+     * Add a tempo selection to this clipboard, replacing any
+     * that already exists.
+     */
+    void setTempoSelection(const TempoSelection &);
+
+    /**
+     * Remove any tempo selection from the clipboard.
+     */
+    void clearTempoSelection();
+
+    /**
+     * Retrieve any tempo selection found in the clipboard.
+     */
+    const TempoSelection &getTempoSelection() const;
+
+    /**
      * Clear the current clipboard and re-fill it by copying from c.
      */
     void copyFrom(const Clipboard *c);
+
+    /**
+     * Get the earliest start time for anything in this clipboard.
+     */
+    timeT getBaseTime() const;
 
 private:
     segmentcontainer m_segments;
@@ -138,6 +164,9 @@ private:
 
     TimeSignatureSelection m_timeSigSelection;
     bool m_haveTimeSigSelection;
+
+    TempoSelection m_tempoSelection;
+    bool m_haveTempoSelection;
 };
 
 }

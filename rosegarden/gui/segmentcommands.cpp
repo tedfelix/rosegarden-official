@@ -2648,7 +2648,7 @@ PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composit
 							   int baseVelocity) :
     KNamedCommand(i18n("Paste as New Triggered Segment")),
     m_composition(composition),
-    m_clipboard(clipboard),
+    m_clipboard(new Rosegarden::Clipboard(*clipboard)),
     m_label(label),
     m_basePitch(basePitch),
     m_baseVelocity(baseVelocity),
@@ -2661,6 +2661,7 @@ PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composit
 PasteToTriggerSegmentCommand::~PasteToTriggerSegmentCommand()
 {
     if (m_detached) delete m_segment;
+    delete m_clipboard;
 }
 
 void
@@ -3053,11 +3054,10 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
 	}
     }
 
-    addCommand(new OpenRangeCommand(composition, t0, t1));
+    addCommand(new OpenOrCloseRangeCommand(composition, t0, t1, true));
     addCommand(new PasteSegmentsCommand(composition, clipboard, t0,
 					composition->getTrackByPosition(0)->getId()));
-
-    //!!! and paste time signatures and tempos...
+    addCommand(new PasteConductorDataCommand(composition, clipboard, t0));
 }
 
 
@@ -3105,7 +3105,7 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
 
     addCommand(new EraseSegmentsStartingInRangeCommand(composition, t0, t1));
 
-    addCommand(new CloseRangeCommand(composition, t0, t1));
+    addCommand(new OpenOrCloseRangeCommand(composition, t0, t1, false));
 
     for (std::vector<Segment *>::iterator i = rejoins.begin();
 	 i != rejoins.end(); ++i) {
@@ -3207,96 +3207,197 @@ EraseSegmentsStartingInRangeCommand::unexecute()
     m_detached = false;
 }
 
-
-OpenRangeCommand::OpenRangeCommand(Composition *composition,
-				   timeT rangeBegin,
-				   timeT rangeEnd) :
-    KNamedCommand(i18n("Open Range")),
-    m_composition(composition),
-    m_beginTime(rangeBegin),
-    m_endTime(rangeEnd)
-{
-}
-
-OpenRangeCommand::~OpenRangeCommand()
-{
-}
-
-void
-OpenRangeCommand::execute()
-{
-    if (m_moving.empty()) {
-
-	for (Composition::iterator i = m_composition->begin();
-	     i != m_composition->end(); ++i) {
-
-	    if ((*i)->getStartTime() >= m_beginTime) {
-		m_moving.push_back(*i);
-	    }
-	}
-    }
-
-    for (std::vector<Segment *>::iterator i = m_moving.begin();
-	 i != m_moving.end(); ++i) {
-	(*i)->setStartTime((*i)->getStartTime() + m_endTime - m_beginTime);
-    }
-
-    timeT musicEnd = m_composition->getDuration();
-    timeT compositionEnd = m_composition->getEndMarker();
-    timeT required = musicEnd + m_endTime - m_beginTime;
-    if (compositionEnd < required) m_composition->setEndMarker(required);
-}
-
-void
-OpenRangeCommand::unexecute()
-{
-    for (std::vector<Segment *>::iterator i = m_moving.begin();
-	 i != m_moving.end(); ++i) {
-	(*i)->setStartTime((*i)->getStartTime() + m_beginTime - m_endTime);
-    }
-}
-
-
-CloseRangeCommand::CloseRangeCommand(Composition *composition,
-				     timeT rangeBegin,
-				     timeT rangeEnd) :
+OpenOrCloseRangeCommand::OpenOrCloseRangeCommand(Composition *composition,
+						 timeT rangeBegin,
+						 timeT rangeEnd,
+						 bool open) :
     KNamedCommand(i18n("Close Range")),
     m_composition(composition),
     m_beginTime(rangeBegin),
-    m_endTime(rangeEnd)
+    m_endTime(rangeEnd),
+    m_prepared(false),
+    m_opening(open)
 {
 }
 
-CloseRangeCommand::~CloseRangeCommand()
+OpenOrCloseRangeCommand::~OpenOrCloseRangeCommand()
 {
 }
 
 void
-CloseRangeCommand::execute()
+OpenOrCloseRangeCommand::execute()
 {
-    if (m_moving.empty()) {
+    timeT offset = m_endTime - m_beginTime;
+    if (!m_opening) offset = -offset;
+
+    if (!m_prepared) {
+
+	timeT movingFrom = m_beginTime;
+	if (!m_opening) movingFrom = m_endTime;
 
 	for (Composition::iterator i = m_composition->begin();
 	     i != m_composition->end(); ++i) {
 
-	    if ((*i)->getStartTime() >= m_endTime) {
+	    if ((*i)->getStartTime() >= movingFrom) {
 		m_moving.push_back(*i);
 	    }
 	}
+
+	m_timesigsPre = Rosegarden::TimeSignatureSelection
+	    (*m_composition, movingFrom,
+	     m_composition->getEndMarker());
+
+	m_temposPre = Rosegarden::TempoSelection
+	    (*m_composition, movingFrom,
+	     m_composition->getEndMarker());
+
+	for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i = 
+		 m_timesigsPre.begin(); i != m_timesigsPre.end(); ++i) {
+
+	    timeT t = i->first;
+	    Rosegarden::TimeSignature sig = i->second;
+	    m_timesigsPost.addTimeSignature(t + offset, sig);
+	}
+
+	for (Rosegarden::TempoSelection::tempocontainer::const_iterator i = 
+		 m_temposPre.begin(); i != m_temposPre.end(); ++i) {
+
+	    timeT t = i->first;
+	    Rosegarden::TempoSelection::tempochange change = i->second;
+	    m_temposPost.addTempo(t + offset, change.first, change.second);
+	}
+
+	m_prepared = true;
     }
 
     for (std::vector<Segment *>::iterator i = m_moving.begin();
 	 i != m_moving.end(); ++i) {
-	(*i)->setStartTime((*i)->getStartTime() + m_beginTime - m_endTime);
+	(*i)->setStartTime((*i)->getStartTime() + offset);
+    }
+
+    for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i = 
+	     m_timesigsPre.begin(); i != m_timesigsPre.end(); ++i) {
+	int n = m_composition->getTimeSignatureNumberAt(i->first);
+	if (n >= 0) m_composition->removeTimeSignature(n);
+    }
+
+    for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i = 
+	     m_timesigsPost.begin(); i != m_timesigsPost.end(); ++i) {
+	m_composition->addTimeSignature(i->first, i->second);
+    }
+
+    for (Rosegarden::TempoSelection::tempocontainer::const_iterator i = 
+	     m_temposPre.begin(); i != m_temposPre.end(); ++i) {
+	int n = m_composition->getTempoChangeNumberAt(i->first);
+	if (n >= 0) m_composition->removeTempoChange(n);
+    }
+
+    for (Rosegarden::TempoSelection::tempocontainer::const_iterator i = 
+	     m_temposPost.begin(); i != m_temposPost.end(); ++i) {
+	m_composition->addTempoAtTime(i->first, i->second.first, i->second.second);
     }
 }
 
 void
-CloseRangeCommand::unexecute()
+OpenOrCloseRangeCommand::unexecute()
 {
+    timeT offset = m_beginTime - m_endTime;
+    if (!m_opening) offset = -offset;
+
     for (std::vector<Segment *>::iterator i = m_moving.begin();
 	 i != m_moving.end(); ++i) {
-	(*i)->setStartTime((*i)->getStartTime() + m_endTime - m_beginTime);
+	(*i)->setStartTime((*i)->getStartTime() + offset);
+    }
+
+    for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i = 
+	     m_timesigsPost.begin(); i != m_timesigsPost.end(); ++i) {
+	int n = m_composition->getTimeSignatureNumberAt(i->first);
+	if (n >= 0) m_composition->removeTimeSignature(n);
+    }
+
+    for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i = 
+	     m_timesigsPre.begin(); i != m_timesigsPre.end(); ++i) {
+	m_composition->addTimeSignature(i->first, i->second);
+    }
+
+    for (Rosegarden::TempoSelection::tempocontainer::const_iterator i = 
+	     m_temposPost.begin(); i != m_temposPost.end(); ++i) {
+	int n = m_composition->getTempoChangeNumberAt(i->first);
+	if (n >= 0) m_composition->removeTempoChange(n);
+    }
+
+    for (Rosegarden::TempoSelection::tempocontainer::const_iterator i = 
+	     m_temposPre.begin(); i != m_temposPre.end(); ++i) {
+	m_composition->addTempoAtTime(i->first, i->second.first, i->second.second);
+    }
+}
+
+
+PasteConductorDataCommand::PasteConductorDataCommand(Composition *composition,
+						     Rosegarden::Clipboard *clipboard,
+						     timeT t) :
+    KNamedCommand(i18n("Paste Tempos and Time Signatures")),
+    m_composition(composition),
+    m_clipboard(new Rosegarden::Clipboard(*clipboard)),
+    m_t0(t)
+{
+}
+ 
+PasteConductorDataCommand::~PasteConductorDataCommand()
+{
+    delete m_clipboard;
+}
+
+void
+PasteConductorDataCommand::execute()
+{
+    //!!! current implementation of execute and unexecute require
+    // that the target area of the composition be empty of tempo and
+    // timesig data before the command is executed
+
+    for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i =
+	     m_clipboard->getTimeSignatureSelection().begin();
+	 i != m_clipboard->getTimeSignatureSelection().end(); ++i) {
+
+	timeT t = i->first;
+	Rosegarden::TimeSignature sig = i->second;
+
+	m_composition->addTimeSignature(t, sig);
+    }
+
+    for (Rosegarden::TempoSelection::tempocontainer::const_iterator i =
+	     m_clipboard->getTempoSelection().begin();
+	 i != m_clipboard->getTempoSelection().end(); ++i) {
+
+	timeT t = i->first;
+	Rosegarden::tempoT tempo = i->second.first;
+	Rosegarden::tempoT targetTempo = i->second.second;
+
+	m_composition->addTempoAtTime(t, tempo, targetTempo);
+    }
+}
+
+void
+PasteConductorDataCommand::unexecute()
+{
+    //!!! see note above
+
+    for (Rosegarden::TimeSignatureSelection::timesigcontainer::const_iterator i =
+	     m_clipboard->getTimeSignatureSelection().begin();
+	 i != m_clipboard->getTimeSignatureSelection().end(); ++i) {
+
+	timeT t = i->first;
+	int n = m_composition->getTimeSignatureNumberAt(t);
+	if (n >= 0) m_composition->removeTimeSignature(n);
+    }
+
+    for (Rosegarden::TempoSelection::tempocontainer::const_iterator i =
+	     m_clipboard->getTempoSelection().begin();
+	 i != m_clipboard->getTempoSelection().end(); ++i) {
+
+	timeT t = i->first;
+	int n = m_composition->getTempoChangeNumberAt(t);
+	if (n >= 0) m_composition->removeTempoChange(n);
     }
 }
 

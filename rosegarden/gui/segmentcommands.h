@@ -1099,44 +1099,19 @@ private:
     std::vector<Rosegarden::Segment *> m_detaching;
 };
 
-
-/**
- * Push all segments, time sigs, tempos etc starting after the start of
- * a given range forward by the duration of that range, so as to create
- * the range duration's worth of empty space.
- */
-class OpenRangeCommand : public KNamedCommand
-{
-public:
-    OpenRangeCommand(Rosegarden::Composition *composition,
-		     Rosegarden::timeT rangeBegin,
-		     Rosegarden::timeT rangeEnd);
-    virtual ~OpenRangeCommand();
-
-    virtual void execute();
-    virtual void unexecute();
-
-private:
-    Rosegarden::Composition *m_composition;
-    Rosegarden::timeT m_beginTime;
-    Rosegarden::timeT m_endTime;
-
-    std::vector<Rosegarden::Segment *> m_moving;
-};
-
-
 /**
  * Pull all segments, time sigs, tempos etc starting after the end of
  * a given range back by the duration of that range, so as to fill in
  * the (presumably empty) range itself.
  */
-class CloseRangeCommand : public KNamedCommand
+class OpenOrCloseRangeCommand : public KNamedCommand
 {
 public:
-    CloseRangeCommand(Rosegarden::Composition *composition,
-		      Rosegarden::timeT rangeBegin,
-		      Rosegarden::timeT rangeEnd);
-    virtual ~CloseRangeCommand();
+    OpenOrCloseRangeCommand(Rosegarden::Composition *composition,
+			    Rosegarden::timeT rangeBegin,
+			    Rosegarden::timeT rangeEnd,
+			    bool open);
+    virtual ~OpenOrCloseRangeCommand();
 
     virtual void execute();
     virtual void unexecute();
@@ -1146,7 +1121,38 @@ private:
     Rosegarden::timeT m_beginTime;
     Rosegarden::timeT m_endTime;
 
+    bool m_prepared;
+    bool m_opening;
+
     std::vector<Rosegarden::Segment *> m_moving;
+
+    Rosegarden::TimeSignatureSelection m_timesigsPre;
+    Rosegarden::TimeSignatureSelection m_timesigsPost;
+
+    Rosegarden::TempoSelection m_temposPre;
+    Rosegarden::TempoSelection m_temposPost;
+};
+
+
+/**
+ * Paste time signature and tempo data from the given clipboard into
+ * the given composition starting at the given time.
+ */
+class PasteConductorDataCommand : public KNamedCommand
+{
+public:
+    PasteConductorDataCommand(Rosegarden::Composition *composition,
+			      Rosegarden::Clipboard *clipboard,
+			      Rosegarden::timeT t);
+    virtual ~PasteConductorDataCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Clipboard *m_clipboard;
+    Rosegarden::timeT m_t0;
 };
 
 

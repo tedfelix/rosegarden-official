@@ -201,6 +201,8 @@ public:
 		       Rosegarden::timeT pasteEndTime,
 		       PasteType pasteType);
 
+    virtual ~PasteEventsCommand();
+
     static QString getGlobalName() { return i18n("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
