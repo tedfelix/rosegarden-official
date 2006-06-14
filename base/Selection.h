@@ -183,8 +183,15 @@ public:
     /**
      * Construct a TimeSignatureSelection containing all the time
      * signatures in the given range of the given Composition.
+     *
+     * If includeOpeningTimeSig is true, the selection will start with
+     * a duplicate of the time signature (if any) that is already in
+     * force at beginTime.  Otherwise the selection will only start
+     * with a time signature at beginTime if there is an explicit
+     * signature there in the source composition.
      */
-    TimeSignatureSelection(Composition &, timeT beginTime, timeT endTime);
+    TimeSignatureSelection(Composition &, timeT beginTime, timeT endTime,
+			   bool includeOpeningTimeSig);
 
     virtual ~TimeSignatureSelection();
 
@@ -220,8 +227,15 @@ public:
     /**
      * Construct a TempoSelection containing all the time
      * signatures in the given range of the given Composition.
+     *
+     * If includeOpeningTempo is true, the selection will start with a
+     * duplicate of the tempo (if any) that is already in force at
+     * beginTime.  Otherwise the selection will only start with a
+     * tempo at beginTime if there is an explicit tempo change there
+     * in the source composition.
      */
-    TempoSelection(Composition &, timeT beginTime, timeT endTime);
+    TempoSelection(Composition &, timeT beginTime, timeT endTime,
+		   bool includeOpeningTempo);
 
     virtual ~TempoSelection();
 

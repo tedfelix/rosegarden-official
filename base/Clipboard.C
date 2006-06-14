@@ -116,9 +116,35 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     // create with copy ctor so as to inherit track, instrument etc
     Segment *s = new Segment(*copyFrom);
 
-    if (from == s->getStartTime() && to == s->getEndTime()) {
+    if (from <= s->getStartTime() && to >= s->getEndTime()) {
 	m_segments.insert(s);
 	// don't change m_partial
+	return s;
+    }
+
+    if (s->getType() == Segment::Audio) {
+	
+	Composition *c = copyFrom->getComposition();
+	if (from > s->getStartTime()) {
+	    if (c) {
+		s->setAudioStartTime
+		    (s->getAudioStartTime() +
+		     c->getRealTimeDifference(s->getStartTime(),
+					      from));
+	    }
+	    s->setStartTime(from);
+	}
+	if (to < copyFrom->getEndMarkerTime()) {
+	    s->setEndMarkerTime(to);
+	    if (c) {
+		s->setAudioEndTime
+		    (s->getAudioStartTime() +
+		     c->getRealTimeDifference(s->getStartTime(),
+					      to));
+	    }
+	}
+	m_segments.insert(s);
+
 	return s;
     }
 

@@ -219,6 +219,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
+    m_savedClipboard = 0;
     m_sourceClipboard->newSegment(&selection)->setLabel
 	(selection.getSegment().getLabel() + " " + qstrtostr(i18n("(excerpt)")));
 }
@@ -229,6 +230,7 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
+    m_savedClipboard = 0;
 
     for (SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
@@ -249,7 +251,8 @@ CopyCommand::CopyCommand(Rosegarden::Composition *composition,
     KNamedCommand(i18n("Copy Range")),
     m_targetClipboard(clipboard)
 {
-    m_sourceClipboard = new Rosegarden::Clipboard();
+    m_sourceClipboard = new Rosegarden::Clipboard;
+    m_savedClipboard = 0;
 
     for (Rosegarden::Composition::iterator i = composition->begin();
 	 i != composition->end(); ++i) {
@@ -259,45 +262,49 @@ CopyCommand::CopyCommand(Rosegarden::Composition *composition,
 	}
     }
 
-    Rosegarden::TimeSignatureSelection tsel(*composition, beginTime, endTime);
-    m_sourceClipboard->setTimeSignatureSelection(tsel);
+    Rosegarden::TimeSignatureSelection tsigsel
+	(*composition, beginTime, endTime, true);
+    m_sourceClipboard->setTimeSignatureSelection(tsigsel);
+
+    Rosegarden::TempoSelection temposel
+	(*composition, beginTime, endTime, true);
+    m_sourceClipboard->setTempoSelection(temposel);
 }
 
 CopyCommand::~CopyCommand()
 {
     delete m_sourceClipboard;
+    delete m_savedClipboard;
 }
 
 void
 CopyCommand::execute()
 {
-//    RG_DEBUG << "CopyCommand::execute" << endl;
+    if (!m_savedClipboard) {
+	m_savedClipboard = new Rosegarden::Clipboard(*m_targetClipboard);
+    }
 
-    Rosegarden::Clipboard temp(*m_targetClipboard);
     m_targetClipboard->copyFrom(m_sourceClipboard);
-    m_sourceClipboard->copyFrom(&temp);
 }
 
 void
 CopyCommand::unexecute()
 {
-//    RG_DEBUG << "CopyCommand::unexecute" << endl;
-
-    Rosegarden::Clipboard temp(*m_sourceClipboard);
-    m_sourceClipboard->copyFrom(m_targetClipboard);
-    m_targetClipboard->copyFrom(&temp);
+    m_targetClipboard->copyFrom(m_savedClipboard);
 }
 
 
 PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
 					   Rosegarden::Clipboard *clipboard,
 					   Rosegarden::timeT pasteTime,
-					   Rosegarden::TrackId baseTrack) :
+					   Rosegarden::TrackId baseTrack,
+					   bool useExactTracks) :
     KNamedCommand(getGlobalName()),
     m_composition(composition),
     m_clipboard(new Rosegarden::Clipboard(*clipboard)),
     m_pasteTime(pasteTime),
     m_baseTrack(baseTrack),
+    m_exactTracks(useExactTracks),
     m_detached(false)
 {
     // nothing else
@@ -328,8 +335,9 @@ PasteSegmentsCommand::execute()
     if (m_clipboard->isEmpty()) return;
 
     // We want to paste such that the earliest Segment starts at
-    // m_pasteTime and the others start at the same times relative
-    // to that as they did before.  Likewise for track.
+    // m_pasteTime and the others start at the same times relative to
+    // that as they did before.  Likewise for track, unless
+    // m_exactTracks is set.
 
     timeT earliestStartTime = m_clipboard->getBaseTime();
     timeT latestEndTime = 0;
@@ -349,6 +357,7 @@ PasteSegmentsCommand::execute()
 	}
     }
 
+    if (m_exactTracks) lowestTrackPos = 0;
     if (lowestTrackPos < 0) lowestTrackPos = 0;
     timeT offset = m_pasteTime - earliestStartTime;
     int baseTrackPos = m_composition->getTrackPositionById(m_baseTrack);
