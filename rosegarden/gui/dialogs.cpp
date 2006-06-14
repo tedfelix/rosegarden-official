@@ -4484,10 +4484,12 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
 {
     QVBox *vBox = makeVBoxMainWidget();
 
-    QFrame *frame = new QFrame(vBox);
+    QGroupBox *groupBox = new QGroupBox
+	(1, Horizontal, i18n("Recording Source"), vBox);
+    QFrame *frame = new QFrame(groupBox);
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
-    layout->addWidget(new QLabel( i18n("Recording Channel:"), frame ), 0, 0);
+    layout->addWidget(new QLabel( i18n("Channel:"), frame ), 0, 0);
     m_channel = new KComboBox( frame );
     m_channel->setSizeLimit( 17 );
     layout->addWidget(m_channel, 0, 1);
@@ -4499,7 +4501,7 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
         m_channel->insertItem(QString::number(i));
     }
     
-    layout->addWidget(new QLabel( i18n("Recording Device:"), frame ), 1, 0);
+    layout->addWidget(new QLabel( i18n("Device:"), frame ), 1, 0);
     m_device = new KComboBox( frame );
     layout->addMultiCellWidget( m_device, 1, 1, 1, 2 );
     
