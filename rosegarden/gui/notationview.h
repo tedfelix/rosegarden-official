@@ -710,6 +710,9 @@ public slots:
     // Open tempo editor
     void slotEditTempos(Rosegarden::timeT t);
 
+    // Lilypond Directive slots
+    void slotBeginLilypondRepeat();
+
 signals:
     /**
      * Emitted when the note selected in the palette changes

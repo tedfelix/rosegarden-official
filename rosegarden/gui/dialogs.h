@@ -264,19 +264,35 @@ public slots:
     void slotTextChanged(const QString &);
     void slotTypeChanged(const QString &);
 
+    // convenience canned dynamic texts
+    void slotDynamicShortcutChanged(const QString &);
+
+    // convenience canned tempo texts
+    void slotTempoShortcutChanged(const QString &);
+
+    // special Lilypond directives
+    void slotLilypondDirectiveChanged(const QString &);
+
 protected:
 
     //--------------- Data members ---------------------------------
 
     QLineEdit *m_text;
     KComboBox *m_typeCombo;
+    KComboBox *m_dynamicShortcutCombo;
+    KComboBox *m_tempoShortcutCombo;
+    KComboBox *m_lilypondDirectiveCombo;
 
     QLabel *m_staffAboveLabel;
     QLabel *m_textExampleLabel;
     QLabel *m_staffBelowLabel;
+    QLabel *m_dynamicShortcutLabel;
+    QLabel *m_tempoShortcutLabel;
+    QLabel *m_directiveLabel;
 
     NotePixmapFactory *m_notePixmapFactory;
     std::vector<std::string> m_styles;
+    std::vector<std::string> m_directives;
 
     std::string getTextType() const;
     std::string getTextString() const;

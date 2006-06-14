@@ -746,18 +746,36 @@ const int Text::EventSubOrdering = -70;
 const PropertyName Text::TextPropertyName = "text";
 const PropertyName Text::TextTypePropertyName = "type";
 
-const std::string Text::UnspecifiedType = "unspecified";
-const std::string Text::StaffName       = "staffname";
-const std::string Text::ChordName       = "chordname";
-const std::string Text::KeyName         = "keyname";
-const std::string Text::Dynamic         = "dynamic";
-const std::string Text::Lyric           = "lyric";
-const std::string Text::Chord           = "chord";
-const std::string Text::Direction       = "direction";
-const std::string Text::LocalDirection  = "local_direction";
-const std::string Text::Tempo           = "tempo";
-const std::string Text::LocalTempo      = "local_tempo";
-const std::string Text::Annotation      = "annotation";
+// text styles
+const std::string Text::UnspecifiedType   = "unspecified";
+const std::string Text::StaffName         = "staffname";
+const std::string Text::ChordName         = "chordname";
+const std::string Text::KeyName           = "keyname";
+const std::string Text::Dynamic           = "dynamic";
+const std::string Text::Lyric             = "lyric";
+const std::string Text::Chord             = "chord";
+const std::string Text::Direction         = "direction";
+const std::string Text::LocalDirection    = "local_direction";
+const std::string Text::Tempo             = "tempo";
+const std::string Text::LocalTempo        = "local_tempo";
+const std::string Text::Annotation        = "annotation";
+const std::string Text::LilypondDirective = "lilypond_directive";
+
+// special Lilypond directives
+const std::string Text::BeginRepeat = "ly_begin_repeat";
+const std::string Text::EndRepeat   = "ly_end_repeat";
+const std::string Text::Segno       = "ly_segno";
+const std::string Text::Fine        = "ly_fine";
+// WIP - list still under consideration
+// 1st ending
+// 2nd ending
+// DC al fine
+// DC al coda
+// DS al fine
+// DS al coda
+// coda
+// cadenza?
+// rest_is_part_of_multi_bar (or just make multi-bar automatic when possible?)
 
 Text::Text(const Event &e)
 {
@@ -822,7 +840,22 @@ Text::getUserStyles()
     v.push_back(Chord);
     v.push_back(Lyric);
     v.push_back(Annotation);
+    v.push_back(LilypondDirective);
 
+    return v;
+}
+
+std::vector<std::string>
+Text::getLilypondDirectives()
+{
+    std::vector<std::string> v;
+
+    v.push_back(BeginRepeat);
+    v.push_back(EndRepeat);
+    v.push_back(Segno);
+    v.push_back(Fine);
+    // etc. etc. etc.
+    
     return v;
 }
 

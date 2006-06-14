@@ -113,6 +113,10 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 
         tool = new FretboardInserter(m_nParentView);
 
+/*    else if (toolNamelc == LilypondDirectiveInserter::ToolName)
+
+        tool = new LilypondDirectiveInserter(m_nParentView);*/
+
     else if (toolNamelc == NotationEraser::ToolName)
 
         tool = new NotationEraser(m_nParentView);

@@ -178,7 +178,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_segmentCanvas->setBottomFixedWidget(m_bottomBarButtons);
 
     grid->addWidget(m_segmentCanvas, 3, 1);
-    grid->setColStretch(1, 10);
+///DMM    grid->setColStretch(1, 10);
+grid->setColStretch(1, 10);
   
     // Track Buttons
     //

@@ -1051,7 +1051,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 				 int maxLength) :
     KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel | Help),
     m_notePixmapFactory(npf),
-    m_styles(Text::getUserStyles())
+    m_styles(Text::getUserStyles()),
+    m_directives(Text::getLilypondDirectives())
 {
     setHelp("nv-text");
     QVBox *vbox = makeVBoxMainWidget();
@@ -1068,6 +1069,54 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_text->setText(strtoqstr(defaultText.getText()));
     if (maxLength > 0) m_text->setMaxLength(maxLength);
 
+    // dynamic shortcuts combo; this convenience widget feeds text to m_text
+    // to save typing the same things over and over, when the Dynamic style is
+    // active (leaves text entry box editable)
+    m_dynamicShortcutLabel = new QLabel(i18n("Dynamic:  "), entryGrid);
+    m_dynamicShortcutLabel->hide();
+
+    m_dynamicShortcutCombo = new KComboBox(entryGrid);
+    m_dynamicShortcutCombo->insertItem(i18n("ppppp"));
+    m_dynamicShortcutCombo->insertItem(i18n("pppp"));
+    m_dynamicShortcutCombo->insertItem(i18n("ppp"));
+    m_dynamicShortcutCombo->insertItem(i18n("pp"));
+    m_dynamicShortcutCombo->insertItem(i18n("p"));
+    m_dynamicShortcutCombo->insertItem(i18n("mp"));
+    m_dynamicShortcutCombo->insertItem(i18n("mf"));
+    m_dynamicShortcutCombo->insertItem(i18n("f"));
+    m_dynamicShortcutCombo->insertItem(i18n("ff"));
+    m_dynamicShortcutCombo->insertItem(i18n("fff"));
+    m_dynamicShortcutCombo->insertItem(i18n("ffff"));
+    m_dynamicShortcutCombo->insertItem(i18n("fffff"));
+    m_dynamicShortcutCombo->insertItem(i18n("rfz"));
+    m_dynamicShortcutCombo->insertItem(i18n("sf"));
+    m_dynamicShortcutCombo->hide();
+
+    // tempo shortcuts combo; this convenience widget feeds text to m_text to
+    // save typing the same things over and over, when the Tempo style is
+    // active (leaves text entry box editable)
+    m_tempoShortcutLabel = new QLabel(i18n("Tempo:  "), entryGrid);
+    m_tempoShortcutLabel->hide();
+
+    m_tempoShortcutCombo = new KComboBox(entryGrid);
+    m_tempoShortcutCombo->insertItem(i18n("Grave"));
+    m_tempoShortcutCombo->insertItem(i18n("Adagio"));
+    m_tempoShortcutCombo->insertItem(i18n("Largo"));
+    m_tempoShortcutCombo->insertItem(i18n("Lento"));
+    m_tempoShortcutCombo->insertItem(i18n("Andante"));
+    m_tempoShortcutCombo->insertItem(i18n("Moderato"));
+    m_tempoShortcutCombo->insertItem(i18n("Allegretto"));
+    m_tempoShortcutCombo->insertItem(i18n("Allegro"));
+    m_tempoShortcutCombo->insertItem(i18n("Vivace"));
+    m_tempoShortcutCombo->insertItem(i18n("Presto"));
+    m_tempoShortcutCombo->insertItem(i18n("Prestissimo"));
+    m_tempoShortcutCombo->insertItem(i18n("Maestoso"));
+    m_tempoShortcutCombo->insertItem(i18n("Sostenuto"));
+    m_tempoShortcutCombo->insertItem(i18n("Tempo Primo"));
+    m_tempoShortcutCombo->hide();
+
+
+    // style combo    
     new QLabel(i18n("Style:  "), entryGrid);
     m_typeCombo = new KComboBox(entryGrid);
 
@@ -1101,6 +1150,9 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 	} else if (style == Text::Annotation) {
 	    m_typeCombo->insertItem(i18n("Annotation"));
 
+	} else if (style == Text::LilypondDirective) {
+	    m_typeCombo->insertItem(i18n("Lilypond Directive"));
+
 	} else {
 	    // not i18n()-able
 
@@ -1121,6 +1173,62 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 	if (style == defaultText.getTextType()) {
 	    m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
 	}
+    }
+
+    // Lilypond directive combo; feeds text to m_text, changes m_text to read
+    // only    
+    m_directiveLabel = new QLabel(i18n("Directive:  "), entryGrid);    
+    m_directiveLabel->hide();
+
+    m_lilypondDirectiveCombo = new KComboBox(entryGrid);
+    m_lilypondDirectiveCombo->hide();
+
+    for (unsigned int i = 0; i < m_directives.size(); ++i) {
+
+	std::string directive = m_directives[i];
+
+	// if the directive is in this list, we can i18n it (kludgy):
+
+	if (directive == Text::BeginRepeat) {
+	    m_lilypondDirectiveCombo->insertItem(i18n("Begin Repeat"));
+
+	} else if (directive == Text::EndRepeat) {
+	    m_lilypondDirectiveCombo->insertItem(i18n("End Repeat"));
+
+	} else if (directive == Text::Segno) {
+	    m_lilypondDirectiveCombo->insertItem(i18n("Segno"));
+
+	} else if (directive == Text::Fine) {
+	    m_lilypondDirectiveCombo->insertItem(i18n("Fine"));
+
+	} else {
+	    // not i18n()-able
+	    //
+	    // probably superfluous, flagrantly block copied code here; is
+	    // there any possibility whatsoever of winding up with an
+	    // un-i18nable special Lilypond directive?
+	    //
+
+	    std::string directiveName;
+	    directiveName += (char)toupper(directive[0]);
+	    directiveName += directive.substr(1);
+	    
+	    int uindex = directiveName.find('_');
+	    if (uindex > 0) {
+		directiveName =
+		    directiveName.substr(0, uindex) + " " +
+		    directiveName.substr(uindex + 1);
+	    }
+	    
+	    m_lilypondDirectiveCombo->insertItem(strtoqstr(directiveName));
+	}
+
+// probably not needed here:
+//
+//	if (style == defaultText.getTextType()) {
+//	    m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
+//	}
+//
     }
 
     QVBox *exampleVBox = new QVBox(exampleBox);
@@ -1164,9 +1272,16 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 		     this, SLOT(slotTextChanged(const QString &)));
     QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
 		     this, SLOT(slotTypeChanged(const QString &)));
+    QObject::connect(m_lilypondDirectiveCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotLilypondDirectiveChanged(const QString &)));
+    QObject::connect(m_dynamicShortcutCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotDynamicShortcutChanged(const QString &)));
+    QObject::connect(m_tempoShortcutCombo, SIGNAL(activated(const QString &)),
+		     this, SLOT(slotTempoShortcutChanged(const QString &)));
 
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
+//stupid    slotLilypondDirectiveChanged(m_lilypondDirectiveCombo->currentText());
 }
 
 std::string
@@ -1210,20 +1325,77 @@ TextEventDialog::slotTypeChanged(const QString &)
     m_textExampleLabel->setPixmap
 	(NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
 
-    if (type == Text::Dynamic ||
-	type == Text::LocalDirection ||
-	type == Text::UnspecifiedType ||
-	type == Text::Lyric ||
-	type == Text::Annotation) {
-
-	m_staffAboveLabel->show();
-	m_staffBelowLabel->hide();
-
+    // hide dynamic shortcut widgets if not needed
+    if (type == Text::Dynamic) {
+	m_dynamicShortcutLabel->show();
+	m_dynamicShortcutCombo->show();
     } else {
+	m_dynamicShortcutLabel->hide();
+	m_dynamicShortcutCombo->hide();
+    }
 
+    // hide tempo shortcut widgets if not needed
+    if (type == Text::Tempo) {
+	m_tempoShortcutLabel->show();
+	m_tempoShortcutCombo->show();
+    } else {
+	m_tempoShortcutLabel->hide();
+	m_tempoShortcutCombo->hide();
+    }
+
+    if (type == Text::LilypondDirective) {
+	m_lilypondDirectiveCombo->show();
+	m_directiveLabel->show();
 	m_staffAboveLabel->hide();
 	m_staffBelowLabel->show();
+	m_text->setReadOnly(true);
+    } else {
+	m_lilypondDirectiveCombo->hide();
+	m_directiveLabel->hide();
+	m_text->setReadOnly(false);
+	text = "Sample"; //!!! the pre-directive text should be restored instead, see comment further down
+
+	if (type == Text::Dynamic ||
+	    type == Text::LocalDirection ||
+	    type == Text::UnspecifiedType ||
+	    type == Text::Lyric ||
+	    type == Text::Annotation) {
+
+	    m_staffAboveLabel->show();
+	    m_staffBelowLabel->hide();
+
+	} else {
+	    m_staffAboveLabel->hide();
+	    m_staffBelowLabel->show();
+
+	}
     }
+}
+
+
+void
+TextEventDialog::slotDynamicShortcutChanged(const QString &)
+{
+    m_text->setText(strtoqstr(m_dynamicShortcutCombo->currentText()));
+}
+
+
+void
+TextEventDialog::slotTempoShortcutChanged(const QString &)
+{
+    m_text->setText(strtoqstr(m_tempoShortcutCombo->currentText()));
+}
+
+
+void
+TextEventDialog::slotLilypondDirectiveChanged(const QString &)
+{
+    m_text->setText(strtoqstr(m_lilypondDirectiveCombo->currentText()));
+    //!!!  This should save the text from before this change somewhere, and
+    //restore it after this combo is no longer active, or something...  there
+    //are still some quirks to work out behavior wise, but it's good enough
+    //for now to leave it and carry on to the next part of this special
+    //directives implementation
 }
 
 

@@ -620,6 +620,9 @@ public:
     static const PropertyName TextPropertyName;
     static const PropertyName TextTypePropertyName;
 
+    /**
+     * Text styles
+     */
     static const std::string UnspecifiedType;
     static const std::string StaffName;
     static const std::string ChordName;
@@ -632,6 +635,16 @@ public:
     static const std::string Tempo;
     static const std::string LocalTempo;
     static const std::string Annotation;
+    static const std::string LilypondDirective;
+
+    /**
+     * Special Lilypond directives
+     */
+    static const std::string BeginRepeat;
+    static const std::string EndRepeat;
+    static const std::string Segno;
+    static const std::string Fine;
+    // etc. etc. etc.
 
     Text(const Event &e)
 	/* throw (Event::NoData, Event::BadType) */;
@@ -651,6 +664,11 @@ public:
      * specify directly and visually
      */
     static std::vector<std::string> getUserStyles();
+
+    /**
+     * Return a list of available special Lilypond directives
+     */
+    static std::vector<std::string> getLilypondDirectives();
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
