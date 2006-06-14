@@ -88,6 +88,11 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
     m_position(position), m_textHeight(12)
 {
     setAlignment(AlignCenter);
+
+    QFont font;
+    if (font.pixelSize() > 14) font.setPixelSize(14);
+    font.setBold(false);
+    setFont(font);
 }
 
 
