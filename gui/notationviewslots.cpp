@@ -1922,6 +1922,10 @@ void NotationView::slotEditElement(NotationStaff *staff,
     }
 }                       
 
+void NotationView::slotBeginLilypondRepeat()
+{
+}
+
 void NotationView::slotDebugDump()
 {
     if (m_currentEventSelection) {
@@ -2421,6 +2425,14 @@ void NotationView::slotFretboard()
     setTool(m_toolBox->getTool(FretboardInserter::ToolName));
     setMenuStates();	
 }
+
+/*void NotationView::slotLilypondDirective()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond_directive")));
+    setTool(m_toolBox->getTool(LilypondDirectiveInserter::ToolName));
+    setMenuStates();
+}*/
 
 
 //----------------------------------------

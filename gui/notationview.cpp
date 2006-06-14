@@ -1408,6 +1408,12 @@ void NotationView::setupActions()
                                   actionCollection(), "fretboard");
     noteAction->setExclusiveGroup("notes");
 
+/*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
+    noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Key_F9, this,
+                                  SLOT(slotLilypondDirective()),
+                                  actionCollection(), "lilypond_directive");
+    noteAction->setExclusiveGroup("notes"); */
+
 
     //
     // Edition tools (eraser, selector...)

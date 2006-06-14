@@ -2933,7 +2933,8 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
      * LocalDirection:     Small bold italic, below staff (by barline?)
      * Tempo:              Large bold roman, above staff
      * LocalTempo:         Small bold roman, above staff
-     * Annotation:         Very small sans-serif, in a box
+     * Annotation:         Very small sans-serif, in a yellow box
+     * LilypondDirective:  Very small sans-serif, in a green box
      */
 	
     int weight = QFont::Normal;
@@ -2964,7 +2965,8 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
     QFont textFont = config->readFontEntry("textfont", &defaultTextFont);
     textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault | QFont::PreferMatch));
 
-    if (type == Rosegarden::Text::Annotation) {
+    if (type == Rosegarden::Text::Annotation||
+	type == Rosegarden::Text::LilypondDirective) {
 	serif = false;
 	textFont = QFont("lucida");
     }
@@ -2997,8 +2999,9 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 
     std::string type(text.getTextType());
 
-    if (type == Rosegarden::Text::Annotation) {
-	return makeAnnotationPixmap(text);
+    if (type == Rosegarden::Text::Annotation ||
+	type == Rosegarden::Text::LilypondDirective) {
+	return makeAnnotationPixmap(text, (type == Rosegarden::Text::LilypondDirective));
     }
 
     drawTextAux(text, 0, 0, 0);
@@ -3043,8 +3046,9 @@ NotePixmapFactory::drawText(const Rosegarden::Text &text,
 
     std::string type(text.getTextType());
 
-    if (type == Rosegarden::Text::Annotation) {
-	QCanvasPixmap *map = makeAnnotationPixmap(text);
+    if (type == Rosegarden::Text::Annotation ||
+	type == Rosegarden::Text::LilypondDirective) {
+	QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Rosegarden::Text::LilypondDirective));
 	painter.drawPixmap(x, y, *map);
 	return;
     }
@@ -3088,9 +3092,15 @@ NotePixmapFactory::drawTextAux(const Rosegarden::Text &text,
 	painter->restore();
     }
 }
-    
+
 QCanvasPixmap*
 NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
+{
+    makeAnnotationPixmap(text, false);
+}
+    
+QCanvasPixmap*
+NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text, const bool isLilypondDirective)
 {
     QString s(strtoqstr(text.getText()));
 
@@ -3118,7 +3128,12 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
     m_p->painter().setFont(textFont);
     if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
 
-    m_p->painter().setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextAnnotationBackground));
+    if (isLilypondDirective) {
+        m_p->painter().setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextLilypondDirectiveBackground));
+    } else {
+        m_p->painter().setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextAnnotationBackground));
+    }
+
     m_p->drawRect(0, 0, pixmapWidth, pixmapHeight);
 
     m_p->painter().setBrush(Qt::black);

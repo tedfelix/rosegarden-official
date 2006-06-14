@@ -320,6 +320,7 @@ protected:
     QFont getTextFont(const Rosegarden::Text &text) const;
 
     QCanvasPixmap* makeAnnotationPixmap(const Rosegarden::Text &text);
+    QCanvasPixmap* makeAnnotationPixmap(const Rosegarden::Text &text, const bool isLilypondDirective);
 
     void createPixmapAndMask(int width, int height,
 			     int maskWidth = -1,

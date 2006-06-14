@@ -138,6 +138,8 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[TextAnnotationBackground] = QColor(255, 255, 180);
 
+    m_defaultsMap[TextLilypondDirectiveBackground] = QColor(95, 157, 87);
+
     m_defaultsMap[AudioCountdownBackground] = Qt::darkGray;
     m_defaultsMap[AudioCountdownForeground] = Qt::red;
 
@@ -246,6 +248,8 @@ const int GUIPalette::TriggerNoteHue = 4;
 const int GUIPalette::TriggerNoteMinValue = 140;
 
 const char* const GUIPalette::TextAnnotationBackground = "textannotationbackground";
+
+const char* const GUIPalette::TextLilypondDirectiveBackground = "textlilyponddirectivebackground";
 
 const char* const GUIPalette::AudioCountdownBackground = "audiocountdownbackground";
 const char* const GUIPalette::AudioCountdownForeground = "audiocountdownforeground";
