@@ -122,6 +122,8 @@ public:
      */
     void setTimeSignatureSelection(const TimeSignatureSelection &);
 
+    bool hasTimeSignatureSelection() const { return m_haveTimeSigSelection; }
+
     /**
      * Remove any time signature selection from the clipboard.
      */
@@ -137,6 +139,8 @@ public:
      * that already exists.
      */
     void setTempoSelection(const TempoSelection &);
+
+    bool hasTempoSelection() const { return m_haveTempoSelection; }
 
     /**
      * Remove any tempo selection from the clipboard.

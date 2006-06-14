@@ -295,6 +295,8 @@ protected:
     void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
 
 private:
+    bool operator==(const Event &);
+
     struct EventData // Data that are shared between shallow-copied instances
     {
 	EventData(const std::string &type,

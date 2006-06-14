@@ -238,18 +238,28 @@ TimeSignatureSelection::TimeSignatureSelection() { }
 
 TimeSignatureSelection::TimeSignatureSelection(Composition &composition,
 					       timeT beginTime,
-					       timeT endTime)
+					       timeT endTime,
+					       bool includeOpeningTimeSig)
 {
     int n = composition.getTimeSignatureNumberAt(endTime);
 
     for (int i = composition.getTimeSignatureNumberAt(beginTime);
-	 i < n;
+	 i <= n;
 	 ++i) {
+
+	if (i < 0) continue;
 
 	std::pair<timeT, TimeSignature> sig =
 	    composition.getTimeSignatureChange(i);
 
-	if (sig.first >= beginTime) {
+	if (sig.first < endTime) {
+	    if (sig.first < beginTime) {
+		if (includeOpeningTimeSig) {
+		    sig.first = beginTime;
+		} else {
+		    continue;
+		}
+	    }
 	    addTimeSignature(sig.first, sig.second);
 	}
     }
@@ -267,17 +277,27 @@ TempoSelection::TempoSelection() { }
 
 TempoSelection::TempoSelection(Composition &composition,
 			       timeT beginTime,
-			       timeT endTime)
+			       timeT endTime,
+			       bool includeOpeningTempo)
 {
     int n = composition.getTempoChangeNumberAt(endTime);
 
     for (int i = composition.getTempoChangeNumberAt(beginTime);
-	 i < n;
+	 i <= n;
 	 ++i) {
+
+	if (i < 0) continue;
 
 	std::pair<timeT, tempoT> change = composition.getTempoChange(i);
 
-	if (change.first >= beginTime) {
+	if (change.first < endTime) {
+	    if (change.first < beginTime) {
+		if (includeOpeningTempo) {
+		    change.first = beginTime;
+		} else {
+		    continue;
+		}
+	    }
 	    std::pair<bool, tempoT> ramping =
 		composition.getTempoRamping(i, false);
 	    addTempo(change.first, change.second,

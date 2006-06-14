@@ -131,6 +131,7 @@ public:
 protected:
     Rosegarden::Clipboard *m_sourceClipboard;
     Rosegarden::Clipboard *m_targetClipboard;
+    Rosegarden::Clipboard *m_savedClipboard;
 };
 
 
@@ -142,7 +143,8 @@ public:
     PasteSegmentsCommand(Rosegarden::Composition *composition,
 			 Rosegarden::Clipboard *clipboard,
 			 Rosegarden::timeT pasteTime,
-			 Rosegarden::TrackId baseTrack);
+			 Rosegarden::TrackId baseTrack,
+			 bool useExactTracks);
 
     virtual ~PasteSegmentsCommand();
 
@@ -156,6 +158,7 @@ protected:
     Rosegarden::Clipboard *m_clipboard;
     Rosegarden::timeT m_pasteTime;
     Rosegarden::TrackId m_baseTrack;
+    bool m_exactTracks;
     std::vector<Rosegarden::Segment *> m_addedSegments;
     bool m_detached;
 };
