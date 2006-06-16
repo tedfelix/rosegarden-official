@@ -117,6 +117,9 @@ public slots:
     void slotSetBackground(QColor);
     void slotResetBackground();
 
+    void slotSetStartLoopingPointAtMarkerPos();
+    void slotSetStopLoopingPointAtMarkerPos();
+
 signals:
     void closed();
 
@@ -124,6 +127,9 @@ signals:
     //
     void setLoop();
     void unsetLoop();
+    void setLoopStartTime();
+    void setLoopStopTime();
+
     void editTempo(QWidget *);
     void scrollTempo(int);
     void editTimeSignature(QWidget *);

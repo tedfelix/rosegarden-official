@@ -1108,13 +1108,19 @@ public slots:
      */
     void slotToggleSolo(bool);
 
-
     /**
      * Set and unset the loop from the transport loop button with
      * these slots.
      */
     void slotSetLoop();
     void slotUnsetLoop();
+
+    /**
+     * Set and unset the loop start/end time from the transport loop start/stop buttons with
+     * these slots.
+     */
+    void slotSetLoopStart();
+    void slotSetLoopStop();
 
     /**
      * Toggle the track labels on the TrackEditor
