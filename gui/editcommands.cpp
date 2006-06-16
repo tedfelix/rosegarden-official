@@ -257,8 +257,8 @@ CopyCommand::CopyCommand(Rosegarden::Composition *composition,
     for (Rosegarden::Composition::iterator i = composition->begin();
 	 i != composition->end(); ++i) {
 	if ((*i)->getStartTime() < endTime &&
-	    (*i)->getEndMarkerTime() > beginTime) {
-	    m_sourceClipboard->newSegment(*i, beginTime, endTime);
+	    (*i)->getRepeatEndTime() > beginTime) {
+	    m_sourceClipboard->newSegment(*i, beginTime, endTime, true);
 	}
     }
 
@@ -269,6 +269,8 @@ CopyCommand::CopyCommand(Rosegarden::Composition *composition,
     Rosegarden::TempoSelection temposel
 	(*composition, beginTime, endTime, true);
     m_sourceClipboard->setTempoSelection(temposel);
+
+    m_sourceClipboard->setNominalRange(beginTime, endTime);
 }
 
 CopyCommand::~CopyCommand()

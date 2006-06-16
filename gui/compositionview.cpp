@@ -657,7 +657,8 @@ void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segm
     if (m_audioPreviewThread) {
 //	std::cerr << "CompositionModelImpl::updatePreviewCacheForAudioSegment() - new audio preview started" << std::endl;
 
-        QRect segRect = computeSegmentRect(*segment);
+	CompositionRect segRect = computeSegmentRect(*segment);
+	segRect.setWidth(segRect.getBaseWidth()); // don't use repeating area
         segRect.moveTopLeft(QPoint(0,0));
 	
 	if (apData) apData->setSegmentRect(segRect);
@@ -850,16 +851,11 @@ void AudioPreviewPainter::paintPreviewImage()
 	haveTempoChange = true;
     }
 
-/*!!! Leave this commented out until after 1.2.3, as the option in the
-      config dialog introduces a new translation string
-
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
     bool meterLevels = (config->readUnsignedNumEntry("audiopreviewstyle", 1)
 			== 1);
-*/
-    bool meterLevels = true;
 
     for (int i = 0; i < m_rect.getBaseWidth(); ++i) {
 

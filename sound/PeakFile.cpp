@@ -36,7 +36,12 @@ using std::cerr;
 using std::endl;
 
 //#define DEBUG_PEAKFILE 1
+//#define DEBUG_PEAKFILE_BRIEF 1
 //#define DEBUG_PEAKFILE_CACHE 1
+
+#ifdef DEBUG_PEAKFILE
+#define DEBUG_PEAKFILE_BRIEF 1
+#endif
 
 namespace Rosegarden
 {
@@ -657,7 +662,7 @@ PeakFile::getPreview(const RealTime &startTime,
                      int width,
                      bool showMinima)
 {
-#ifdef DEBUG_PEAKFILE
+#ifdef DEBUG_PEAKFILE_BRIEF
     std::cout << "PeakFile::getPreview - "
               << "startTime = " << startTime
               << ", endTime = " << endTime
@@ -742,7 +747,7 @@ PeakFile::getPreview(const RealTime &startTime,
     std::string peakData;
     int peakNumber;
 
-#ifdef DEBUG_PEAKFILE
+#ifdef DEBUG_PEAKFILE_BRIEF
     std::cout << "PeakFile::getPreview - getting preview for \""
               << m_audioFile->getFilename() << "\"" << endl;
 #endif
@@ -761,7 +766,7 @@ PeakFile::getPreview(const RealTime &startTime,
             break;
 
         default:
-#ifdef DEBUG_PEAKFILE
+#ifdef DEBUG_PEAKFILE_BRIEF
             std::cout << "PeakFile::getPreview - "
                       << "unsupported peak length format (" << m_format << ")"
                       << endl;
@@ -789,7 +794,8 @@ PeakFile::getPreview(const RealTime &startTime,
 	    }
 	}
 #ifdef DEBUG_PEAKFILE
-	std::cout << "PeakFile::getPreview: step is " << step << ", format * pointsPerValue * channels is " << (m_format * m_pointsPerValue * m_channels) << std::endl;
+	std::cout << "PeakFile::getPreview: step is " << step << ", format * pointsPerValue * chans is " << (m_format * m_pointsPerValue * m_channels) << std::endl;
+	std::cout << "i = " << i << ", peakNumber = " << peakNumber << ", nextPeakNumber = " << nextPeakNumber << std::endl;
 #endif
 
 	for (int ch = 0; ch < m_channels; ch++) {
@@ -892,7 +898,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
 	    float value = hiValues[ch] / divisor;
 
-#ifdef DEBUG_PEAKFILE
+#ifdef DEBUG_PEAKFILE_BRIEF
 	    std::cout << "VALUE = " << hiValues[ch] / divisor << std::endl;
 #endif
 
@@ -920,7 +926,7 @@ done:
     m_lastPreviewWidth = width;
     m_lastPreviewShowMinima = showMinima;
 
-#ifdef DEBUG_PEAKFILE
+#ifdef DEBUG_PEAKFILE_BRIEF
     std::cout << "Returning " << m_lastPreviewCache.size() << " items" << std::endl;
 #endif
 

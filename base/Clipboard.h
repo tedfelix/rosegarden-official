@@ -104,11 +104,19 @@ public:
     Segment *newSegment(const Segment *copyFrom);
 
     /**
-     * Add a new segment to the clipboard, containing copies of
-     * the events in copyFrom found between from and to.
-     * (The clipboard retains ownership of the new segment.)
+     * Add one or more new segments to the clipboard, containing
+     * copies of the events in copyFrom found between from and to.  If
+     * expandRepeats is true, include any events found in the
+     * repeating trail of the segment within this time.  (The
+     * clipboard retains ownership of the new segment(s).)
+     *
+     * This may insert more than one new segment, if it is required to
+     * insert a repeating section of an audio segment.  For this
+     * reason it does not return the inserted segment (even though in
+     * most situations it will only insert one).
      */
-    Segment *newSegment(const Segment *copyFrom, timeT from, timeT to);
+    void newSegment(const Segment *copyFrom, timeT from, timeT to,
+		    bool expandRepeats);
 
     /**
      * Add a new segment to the clipboard, containing copied of
@@ -158,9 +166,23 @@ public:
     void copyFrom(const Clipboard *c);
 
     /**
-     * Get the earliest start time for anything in this clipboard.
+     * Get the earliest start time for anything in this clipboard,
+     * or the start of the nominal range if there is one.
      */
     timeT getBaseTime() const;
+
+    /**
+     * Set nominal start and end times for the range in the clipboard,
+     * if it is intended to cover a particular time range regardless
+     * of whether the data in it covers the full range or not.
+     */
+    void setNominalRange(timeT start, timeT end);
+
+    void clearNominalRange() { setNominalRange(0, 0); }
+
+    bool hasNominalRange() const { return m_nominalStart != m_nominalEnd; }
+    
+    void getNominalRange(timeT &start, timeT &end);
 
 private:
     segmentcontainer m_segments;
@@ -171,6 +193,9 @@ private:
 
     TempoSelection m_tempoSelection;
     bool m_haveTempoSelection;
+
+    timeT m_nominalStart;
+    timeT m_nominalEnd;
 };
 
 }
