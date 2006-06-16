@@ -3016,27 +3016,30 @@ PasteRangeCommand::PasteRangeCommand(Composition *composition,
 				     timeT t0) :
     KMacroCommand(i18n("Paste Range"))
 {
-    timeT clipBeginTime = 0;
+    timeT clipBeginTime = clipboard->getBaseTime();
 
-    for (Rosegarden::Clipboard::iterator i = clipboard->begin(); 
-	 i != clipboard->end(); ++i) {
-	if (i == clipboard->begin() || (*i)->getStartTime() < clipBeginTime) {
-	    clipBeginTime = (*i)->getStartTime();
+    timeT t1 = t0;
+
+    if (clipboard->hasNominalRange()) {
+
+	clipboard->getNominalRange(clipBeginTime, t1);
+	t1 = t0 + (t1 - clipBeginTime);
+
+    } else {
+
+	timeT duration = 0;
+
+	for (Rosegarden::Clipboard::iterator i = clipboard->begin(); 
+	     i != clipboard->end(); ++i) {
+	    timeT durationHere = (*i)->getEndMarkerTime() - clipBeginTime;
+	    if (i == clipboard->begin() || durationHere > duration) {
+		duration = durationHere;
+	    }
 	}
+
+	if (duration <= 0) return;
+	t1 = t0 + duration;
     }
-
-    timeT duration = 0;
-
-    for (Rosegarden::Clipboard::iterator i = clipboard->begin(); 
-	 i != clipboard->end(); ++i) {
-	timeT durationHere = (*i)->getEndMarkerTime() - clipBeginTime;
-	if (i == clipboard->begin() || durationHere > duration) {
-	    duration = durationHere;
-	}
-    }
-
-    if (duration <= 0) return;
-    timeT t1 = t0 + duration;
 
     // Need to split segments before opening, at t0
 
@@ -3231,6 +3234,15 @@ OpenOrCloseRangeCommand::execute()
 {
     timeT offset = m_endTime - m_beginTime;
     if (!m_opening) offset = -offset;
+
+    if (m_opening) {
+	if (offset + m_composition->getDuration() >
+	    m_composition->getEndMarker()) {
+	    m_composition->setEndMarker
+		(m_composition->getBarEndForTime
+		 (m_composition->getDuration() + offset));
+	}
+    }
 
     if (!m_prepared) {
 

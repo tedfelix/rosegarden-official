@@ -28,7 +28,9 @@ namespace Rosegarden
 Clipboard::Clipboard() :
     m_partial(false),
     m_haveTimeSigSelection(false),
-    m_haveTempoSelection(false)
+    m_haveTempoSelection(false),
+    m_nominalStart(0),
+    m_nominalEnd(0)
 {
     // nothing
 }
@@ -60,6 +62,7 @@ Clipboard::clear()
     m_segments.clear();
     clearTimeSignatureSelection();
     clearTempoSelection();
+    clearNominalRange();
     m_partial = false;
 }
 
@@ -68,7 +71,8 @@ Clipboard::isEmpty() const
 {
     return (m_segments.size() == 0 &&
 	    !m_haveTimeSigSelection &&
-	    !m_haveTempoSelection);
+	    !m_haveTempoSelection &&
+	    m_nominalStart == m_nominalEnd);
 }
 
 bool
@@ -110,58 +114,125 @@ Clipboard::newSegment(const Segment *copyFrom)
     return s;
 }
 
-Segment *
-Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
+void
+Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
+		      bool expandRepeats)
 {
     // create with copy ctor so as to inherit track, instrument etc
     Segment *s = new Segment(*copyFrom);
 
-    if (from <= s->getStartTime() && to >= s->getEndTime()) {
+    if (from <= s->getStartTime() && to >= s->getEndMarkerTime()) {
 	m_segments.insert(s);
+	s->setEndTime(s->getEndMarkerTime());
 	// don't change m_partial
-	return s;
+	return;
     }
 
+    timeT segStart = copyFrom->getStartTime();
+    timeT segEnd = copyFrom->getEndMarkerTime();
+    timeT segDuration = segEnd - segStart;
+    
+    int firstRepeat = 0;
+    int lastRepeat = 0;
+
+    if (!copyFrom->isRepeating() || segDuration <= 0) {
+	expandRepeats = false;
+    }
+
+    if (expandRepeats) {
+	firstRepeat = (from - segStart) / segDuration;
+	lastRepeat = (to - segStart) / segDuration;
+	to = std::min(to, copyFrom->getRepeatEndTime());
+    }
+
+    s->setRepeating(false);
+    
     if (s->getType() == Segment::Audio) {
 	
 	Composition *c = copyFrom->getComposition();
-	if (from > s->getStartTime()) {
-	    if (c) {
-		s->setAudioStartTime
-		    (s->getAudioStartTime() +
-		     c->getRealTimeDifference(s->getStartTime(),
-					      from));
-	    }
-	    s->setStartTime(from);
-	}
-	if (to < copyFrom->getEndMarkerTime()) {
-	    s->setEndMarkerTime(to);
-	    if (c) {
-		s->setAudioEndTime
-		    (s->getAudioStartTime() +
-		     c->getRealTimeDifference(s->getStartTime(),
-					      to));
-	    }
-	}
-	m_segments.insert(s);
 
-	return s;
+	for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
+
+	    timeT wrappedFrom = segStart;
+	    timeT wrappedTo = segEnd;
+
+	    if (!expandRepeats) {
+		wrappedFrom = from;
+		wrappedTo = to;
+	    } else {
+		if (repeat == firstRepeat) {
+		    wrappedFrom = segStart + (from - segStart) % segDuration;
+		}
+		if (repeat == lastRepeat) {
+		    wrappedTo = segStart + (to - segStart) % segDuration;
+		}
+	    }
+
+	    if (wrappedFrom > segStart) {
+		if (c) {
+		    s->setAudioStartTime
+			(s->getAudioStartTime() +
+			 c->getRealTimeDifference(segStart + repeat * segDuration,
+						  from));
+		}
+		s->setStartTime(from);
+	    } else {
+		s->setStartTime(segStart + repeat * segDuration);
+	    }
+
+	    if (wrappedTo < segEnd) {
+		s->setEndMarkerTime(to);
+		if (c) {
+		    s->setAudioEndTime
+			(s->getAudioStartTime() +
+			 c->getRealTimeDifference(segStart + repeat * segDuration,
+						  to));
+		}
+	    } else {
+		s->setEndMarkerTime(segStart + (repeat + 1) * segDuration);
+	    }
+
+	    m_segments.insert(s);
+	    if (repeat < lastRepeat) {
+		s = new Segment(*copyFrom);
+		s->setRepeating(false);
+	    }
+	}
+
+	m_partial = true;
+	return;
     }
 
     s->erase(s->begin(), s->end());
 
-    Segment::const_iterator ifrom = copyFrom->findTime(from);
-    Segment::const_iterator ito   = copyFrom->findTime(to);
+    for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
-    for (Segment::const_iterator i = ifrom;
-	 i != ito && i != copyFrom->end(); ++i) {
+	Segment::const_iterator ifrom = copyFrom->begin();
+	Segment::const_iterator ito = copyFrom->end();
 
-	if ((*i)->getAbsoluteTime() + (*i)->getDuration() > to) {
-	    s->insert(new Event(**i,
-				(*i)->getAbsoluteTime(),
-				to - (*i)->getAbsoluteTime()));
+	if (!expandRepeats) {
+	    ifrom = copyFrom->findTime(from);
+	    ito = copyFrom->findTime(to);
 	} else {
-	    s->insert(new Event(**i));
+	    if (repeat == firstRepeat) {
+		ifrom = copyFrom->findTime
+		    (segStart + (from - segStart) % segDuration);
+	    }
+	    if (repeat == lastRepeat) {
+		ito = copyFrom->findTime
+		    (segStart + (to - segStart) % segDuration);
+	    }
+	}
+
+	for (Segment::const_iterator i = ifrom;
+	     i != ito && copyFrom->isBeforeEndMarker(i); ++i) {
+
+	    timeT absTime = (*i)->getAbsoluteTime() + repeat * segDuration;
+	    timeT duration = (*i)->getDuration();
+
+	    if (absTime + duration > to) duration = to - absTime;
+
+	    s->insert(new Event(**i, absTime, duration));
 	}
     }
 
@@ -173,7 +244,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
 
     m_segments.insert(s);
     m_partial = true;
-    return s;
+    return;
 }
 
 Segment *
@@ -251,12 +322,20 @@ Clipboard::copyFrom(const Clipboard *c)
 
     m_tempoSelection = c->m_tempoSelection;
     m_haveTempoSelection = c->m_haveTempoSelection;
+    
+    m_nominalStart = c->m_nominalStart;
+    m_nominalEnd = c->m_nominalEnd;
 }
 
 timeT
 Clipboard::getBaseTime() const
 {
+    if (hasNominalRange()) {
+	return m_nominalStart;
+    }
+
     timeT t = 0;
+
     for (iterator i = begin(); i != end(); ++i) {
 	if (i == begin() || (*i)->getStartTime() < t) {
 	    t = (*i)->getStartTime();
@@ -276,6 +355,20 @@ Clipboard::getBaseTime() const
     }
     
     return t;
+}
+
+void
+Clipboard::setNominalRange(timeT start, timeT end)
+{
+    m_nominalStart = start;
+    m_nominalEnd = end;
+}
+
+void
+Clipboard::getNominalRange(timeT &start, timeT &end)
+{
+    start = m_nominalStart;
+    end = m_nominalEnd;
 }
 
 }
