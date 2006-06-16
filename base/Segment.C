@@ -226,9 +226,12 @@ Segment::setStartTime(timeT t)
 	events.push_back(e);
     }
 
+    timeT previousEndTime = m_endTime;
+
     erase(begin(), end());
+
+    m_endTime = previousEndTime + dt;
     if (m_endMarkerTime) *m_endMarkerTime += dt;
-    m_endTime += dt;
 
     if (m_composition) m_composition->setSegmentStartTime(this, t);
     else m_startTime = t;
