@@ -3213,7 +3213,7 @@ OpenOrCloseRangeCommand::OpenOrCloseRangeCommand(Composition *composition,
 						 timeT rangeBegin,
 						 timeT rangeEnd,
 						 bool open) :
-    KNamedCommand(i18n("Close Range")),
+    KNamedCommand(i18n("Open or Close Range")),
     m_composition(composition),
     m_beginTime(rangeBegin),
     m_endTime(rangeEnd),
@@ -3276,6 +3276,7 @@ OpenOrCloseRangeCommand::execute()
 
     for (std::vector<Segment *>::iterator i = m_moving.begin();
 	 i != m_moving.end(); ++i) {
+//	RG_DEBUG << "Moving segment on track " << (*i)->getTrack() << " from " << (*i)->getStartTime() << " to " << ((*i)->getStartTime() + offset) << " (current end time is " << (*i)->getEndTime() << ", end marker is " << (*i)->getEndMarkerTime() << ")" << endl;
 	(*i)->setStartTime((*i)->getStartTime() + offset);
     }
 

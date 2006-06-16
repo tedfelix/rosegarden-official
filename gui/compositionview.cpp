@@ -496,6 +496,13 @@ void CompositionModelImpl::computeRepeatMarks(CompositionRect& sr, const Segment
         timeT startTime = s->getStartTime();
         timeT endTime = s->getEndMarkerTime();
         timeT repeatInterval = endTime - startTime;
+
+	if (repeatInterval <= 0) {
+//	    std::cerr << "WARNING: CompositionModelImpl::computeRepeatMarks: Segment at " << startTime << " has repeatInterval " << repeatInterval << std::endl;
+//	    std::cerr << kdBacktrace() << std::endl;
+	    return;
+	}
+
         timeT repeatStart = endTime;
         timeT repeatEnd = s->getRepeatEndTime();
         sr.setWidth(int(nearbyint(m_grid.getRulerScale()->getWidthForDuration(startTime,
