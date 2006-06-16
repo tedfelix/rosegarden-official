@@ -3995,40 +3995,6 @@
         </widget>
         <widget class="QPushButton">
             <property name="name">
-                <cstring>ToEndButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>3</x>
-                    <y>26</y>
-                    <width>25</width>
-                    <height>25</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <family>lucida</family>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image12</pixmap>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="flat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Display time to end</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
                 <cstring>PanelOpenButton</cstring>
             </property>
             <property name="geometry">
@@ -4049,7 +4015,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image13</pixmap>
+                <pixmap>image12</pixmap>
             </property>
             <property name="toggleButton">
                 <bool>true</bool>
@@ -4086,7 +4052,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image14</pixmap>
+                <pixmap>image13</pixmap>
             </property>
             <property name="autoRepeat">
                 <bool>true</bool>
@@ -4120,7 +4086,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image15</pixmap>
+                <pixmap>image14</pixmap>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Rewind to beginning</string>
@@ -4151,7 +4117,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image16</pixmap>
+                <pixmap>image15</pixmap>
             </property>
             <property name="toggleButton">
                 <bool>true</bool>
@@ -4188,7 +4154,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image17</pixmap>
+                <pixmap>image16</pixmap>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Stop</string>
@@ -4219,7 +4185,7 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image18</pixmap>
+                <pixmap>image17</pixmap>
             </property>
             <property name="autoRepeat">
                 <bool>true</bool>
@@ -4253,13 +4219,47 @@
                 <string></string>
             </property>
             <property name="pixmap">
-                <pixmap>image19</pixmap>
+                <pixmap>image18</pixmap>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Fast forward to end</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>ToEndButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>3</x>
+                    <y>28</y>
+                    <width>25</width>
+                    <height>25</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>lucida</family>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>image19</pixmap>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="flat">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Display time to end</string>
             </property>
         </widget>
     </widget>
@@ -4320,31 +4320,31 @@
         <data format="PNG" length="83">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac77260000001a49444154189563602013fc87629c624ca49836aa986cc5240100b319040db65cea050000000049454e44ae426082</data>
     </image>
     <image name="image12">
-        <data format="PNG" length="155">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac772600000062494441541895a5d0cb0980400c45d1a3b8746593b6623dd6611f8268093a6e14469951c407817c6e42127e2a24e200e50b78510c9f6091838b1bd862c58605fd7d48886cc41cef19fbd5d171163a0ca8d13ced1f3065f2c9c35385ecebb29ff8ac1d37bc1e2a162452d80000000049454e44ae426082</data>
-    </image>
-    <image name="image13">
         <data format="PNG" length="113">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac7726000000384944415418956360a0156084d2ff8951cb82c4f1c1a3700b32c71b8fe9ffa1f228009b06ac0ab169c0ab10ae818385832885c836d011000071460bb64f8d4c3f0000000049454e44ae426082</data>
     </image>
-    <image name="image14">
+    <image name="image13">
         <data format="PNG" length="248">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000bf49444154388dedd3b16a42311840e18fe2e050e82c38f7110a6eb6601ddcfa767d81ce5dba74ea26143a17bab9585727471d222236f9d3e8e2e0814b86737312fecbe5c239708ba7235c353ac773a3731544ef3045afd1814e107dc74da3db91bbf1c9d15cf821d818b93fec8f628c577433eff5f15670551658179e55e05e72b1fd514cf05b38f43370d7b5f0178685c03270590e3fde0f06dbf590c855c330c33dbe1b5d354cfa5507d26c5b5c354c9aeb233e1addbfe9627484bb90d80042ac3405a2aa17210000000049454e44ae426082</data>
     </image>
-    <image name="image15">
+    <image name="image14">
         <data format="PNG" length="226">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000a949444154388dedd3210a02411406e00f316c50bc8547106c2aa8c1e6dd148cdec06c320b66c166d164f0046b70c3b2e830bb2a88f8c3f0c29bf9e63130fcf3ed69635ae6c00c695643e8098b32709a5b8fd2c125eb3f84eb656ecba16bb4429b6a9f40cbc2835894f8a718638524768ad8899701b4f90a3cc1f949aff10abc432f805786e1806e56df0ac3117decdf0d73ffc65d6cabc0f3422de68a113615068b4a82e1a7f01fc90dab2a1b4817a92dca0000000049454e44ae426082</data>
     </image>
-    <image name="image16">
+    <image name="image15">
         <data format="PNG" length="240">89504e470d0a1a0a0000000d4948445200000024000000140806000000e57a9f35000000b7494441544889edd4b109c2401886e107c546b4b372033b47b0710d67710d4b577009b1b2b6138434e20236b1300195e44c882629f2c20fc71d1fbcf71d1c1d61fa81b309a264bd47fc7f9d30d34422c601b36675de8562dcb1c6a040f6351705f62a09a573c4bc4d4245daaa5d289d13966d124a6783719b84625cb0a82ad40b085d4b5e608851c94c698ab6b3f36c342bf7b3272b2274c3ea4bae36a1cf561a13ca6ba511a1adfc566a153acbfe006b27ebd3eb6894072e56ba3745befe0b0000000049454e44ae426082</data>
     </image>
-    <image name="image17">
+    <image name="image16">
         <data format="PNG" length="105">89504e470d0a1a0a0000000d4948445200000024000000140806000000e57a9f3500000030494441544889edceb10d000008024175ff9d75041209dd5f4ff82ac0d3c676131ff3088922482148214821482108483b655f0118dca7db050000000049454e44ae426082</data>
     </image>
-    <image name="image18">
+    <image name="image17">
         <data format="PNG" length="249">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c049444154388dedd33d6a42411440e18f68914210ecdc804b10d249305aa473776e203bb0b1b20b08a9035980a6b1b0b21253f843c03777de08761e1806e63087cbc0f0e0de3412e713ecb1297459a658a157e82e3c05ae8b4ff40b5d360c1dcc1381c865c3d00e02495727fc3ff05ae8ae98e250b17698056e9c0b7f242e9f0329f77b0ea49ea295385f6319b8f75c387571806de0be4ac33f7839edb55cb346f41b43c7df56dbe5265e9ea6a98a462e0c2f3052fda6910b79c3f30deec1357f84474343c1d303120000000049454e44ae426082</data>
     </image>
-    <image name="image19">
+    <image name="image18">
         <data format="PNG" length="243">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000ba49444154388dedd3316a02411487f11f89458a848087f008829d48d4c2cebb2958e61069acac7381c01e402b0b0f209b62151665dcb7d94db71f0c036f1edffb33ccd0f1df3c27ea4b9c716c7be0067b0c1ef4ac905ff65ae25c917898e8c94beb8ea78a017d6c1fc8935489e1fd2ff288b82c9fb42dbecabf306f227e4bd45ff0d944fc9aa81fb088887b91a692748c2cd21cbde30ca3a89458e21f7c287e6298aac4df8aa4b5a455e21d663825ced7377b88a9e2697534e717602c1d33e8c59cfe0000000049454e44ae426082</data>
     </image>
+    <image name="image19">
+        <data format="PNG" length="155">89504e470d0a1a0a0000000d494844520000000b0000000b0806000000a9ac772600000062494441541895a5d0cb0980400c45d1a3b8746593b6623dd6611f8268093a6e14469951c407817c6e42127e2a24e200e50b78510c9f6091838b1bd862c58605fd7d48886cc41cef19fbd5d171163a0ca8d13ced1f3065f2c9c35385ecebb29ff8ac1d37bc1e2a162452d80000000049454e44ae426082</data>
+    </image>
     <image name="image20">
-        <data format="PNG" length="378">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000014149444154388d9d55318ec3300ca30d0d1a6fed98b1efc898afdedad11f28d039e38df9820701be21506abb52e0742290c80445ca56783d5f80002098f84773c902300135de2985b3739425838951e3468b4956e32a7361026ef208fd79260631312080e208698d5aaf1d284fcc920102b264b7ed115c652eca03c25bb1a7d4f3d212b1ca5cb4be526c93d61dd5b87b6b9ddbff47263e82b094f619bceb1993a40ff28d967228bea25445a8a7967210107e9f3f65c4d39ad4aaef3d8f9e479e52bfb396873e03189febd6fbf6ff80629bf4268f705617cf145bedf7e9bb8afb5435ed3352c53d3057319bdeedc1b4dfbdb9ed454c928239c7aaa426574ffd1bd7cdb1bec7d6dd9f2485abef74a3d84bbff5f0dab4847a838c04368acd7b6c05f62dc6fea6dd29052bfd33eceb2749c1dc794c7cec32cf9e7ad7e9b46cb414f5f81f54272b0963fff8380000000049454e44ae426082</data>
+        <data format="PNG" length="324">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000010b49444154388d9d95311284200c453f4c0acbad2d3d0e67dd9a2358ec21283dc316ccb0858b136302a24d66243e7ffe4771ebbaa2756d14ca37031301bc2e88aef51c8dc0784d3994898039eb2ff04fa0bc6e144a42284df028f4348180530fba203ae47f13ab5a7fcaa154ef0fc5a301cd393a4df9c98a843d88bbd03ab606df685ff3c098d22aa2050700f7febcca2854eb979e7bcba3112870f59ab431f8d5da8260fd72bdabd882ca2f4eaefb96626d7c99bea958a65ad36e4135f845b17613d883d1c6b7fe15b24fddc7550987574fad2f4edae9ad660e9741f5e007d84a5f0634b25b1c3f41ee0476b79efec75a604febe504a99e8e4064ff9ca373bdc3d4b2473beb360aa5deff0164ca87a1385f32640000000049454e44ae426082</data>
     </image>
 </images>
 <tabstops>
