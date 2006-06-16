@@ -1872,6 +1872,30 @@ public:
     SegmentDataItem(QTable *t, QString s) :
 	QTableItem(t, QTableItem::Never, s) { }
     virtual int alignment() const { return Qt::AlignCenter; }
+
+    virtual QString key() const {
+
+	// It doesn't seem to be possible to specify a comparator so
+	// as to get the right sorting for numeric items (what am I
+	// missing here?), only to override this function to return a
+	// string for comparison.  So for integer items we'll return a
+	// string that starts with a single digit corresponding to the
+	// number of digits in the integer, which should ensure that
+	// dictionary sorting works correctly.
+	// 
+	// This relies on the assumption that any item whose text
+	// starts with a digit will contain nothing other than a
+	// single non-negative integer of no more than 9 digits.  That
+	// assumption should hold for all current uses of this class,
+	// but may need checking for future uses...
+
+	QString s(text());
+	if (s[0].digitValue() >= 0) {
+	    return QString("%1%2").arg(s.length()).arg(s);
+	} else {
+	    return s;
+	}
+    }
 };
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
@@ -2020,6 +2044,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
     QTable *table = new QTable(1, 11, frame, "Segment Table");
     table->setSelectionMode(QTable::NoSelection);
+    table->setSorting(true);
     table->horizontalHeader()->setLabel(0, i18n("Type"));
     table->horizontalHeader()->setLabel(1, i18n("Track"));
     table->horizontalHeader()->setLabel(2, i18n("Label"));
