@@ -169,6 +169,10 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_panelOpen = *m_transport->PanelOpenButton->pixmap();
     m_panelClosed = *m_transport->PanelCloseButton->pixmap();
 
+
+    connect(m_transport->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
+    connect(m_transport->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
+
     // clear labels
     //
     slotClearMidiInLabel();
@@ -913,6 +917,22 @@ RosegardenTransportDialog::slotLoopButtonClicked()
     }
 }
 
+// Send signal setLoopStartTime() when button is pressed
+//
+void
+RosegardenTransportDialog::slotSetStartLoopingPointAtMarkerPos()
+{
+    emit setLoopStartTime();
+}
+
+// Send signal setLoopStopTime() when button is pressed
+//
+void
+RosegardenTransportDialog::slotSetStopLoopingPointAtMarkerPos()
+{
+    emit setLoopStopTime();
+}
+
 void
 RosegardenTransportDialog::slotPanelOpenButtonClicked()
 {
@@ -1009,6 +1029,5 @@ RosegardenTransportDialog::slotResetBackground()
 const char* const RosegardenTransportDialog::ConfigGroup = "Transport Controls";
 
 }
-
 
 #include "rosegardentransportdialog.moc"

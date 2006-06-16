@@ -2653,6 +2653,12 @@ void RosegardenGUIApp::createAndSetupTransport()
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
             SLOT(slotEditTimeSignature(QWidget*)));
 
+
+    // Handle set loop start/stop time buttons.
+    //
+    connect(m_transport, SIGNAL(setLoopStartTime()), SLOT(slotSetLoopStart()));
+    connect(m_transport, SIGNAL(setLoopStopTime()), SLOT(slotSetLoopStop()));
+
     if (m_seqManager != 0)
         m_seqManager->setTransport(m_transport);
     
@@ -5244,6 +5250,39 @@ RosegardenGUIApp::slotUnsetLoop()
     m_doc->setLoop(0, 0);
 }
 
+// Set the loop start time.
+//
+void
+RosegardenGUIApp::slotSetLoopStart()
+{
+    // Check so that start time is before endtime, othervise move upp the
+    // endtime to that same pos.
+    if( m_doc->getComposition().getPosition() < m_doc->getComposition().getLoopEnd() )
+    {
+        m_doc->setLoop(m_doc->getComposition().getPosition(), m_doc->getComposition().getLoopEnd());
+    }
+    else
+    {
+        m_doc->setLoop(m_doc->getComposition().getPosition(), m_doc->getComposition().getPosition());
+    }
+}
+
+// Set the loop stop time.
+//
+void
+RosegardenGUIApp::slotSetLoopStop()
+{
+    // Check so that end time is after start time, othervise move upp the
+    // start time to that same pos.
+    if( m_doc->getComposition().getLoopStart() < m_doc->getComposition().getPosition() )
+    {
+        m_doc->setLoop(m_doc->getComposition().getLoopStart(),m_doc->getComposition().getPosition());
+    }
+    else
+    {
+        m_doc->setLoop(m_doc->getComposition().getPosition(), m_doc->getComposition().getPosition());
+    }
+}
 
 // Just set the solo value in the Composition equal to the state
 // of the button
