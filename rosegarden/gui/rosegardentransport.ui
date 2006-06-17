@@ -4358,8 +4358,4 @@
     <tabstop>FfwdEndButton</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>rosegardenlabel.h</includehint>
-    <includehint>rosegardenlabel.h</includehint>
-</includehints>
 </UI>
