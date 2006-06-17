@@ -264,13 +264,24 @@ public slots:
     void slotTextChanged(const QString &);
     void slotTypeChanged(const QString &);
 
-    // convenience canned dynamic texts
+    /*
+     * Save previous state of assorted widgets for restoration in the next
+     * instance
+     */
+    void slotOK();
+
+    // convenience canned texts
     void slotDynamicShortcutChanged(const QString &);
-
-    // convenience canned tempo texts
+    void slotDirectionShortcutChanged(const QString &);
+    void slotLocalDirectionShortcutChanged(const QString &);
     void slotTempoShortcutChanged(const QString &);
+    void slotLocalTempoShortcutChanged(const QString &);
 
-    // special Lilypond directives
+    //
+    // special Lilypond directives, initial phase, as cheap text events; will
+    // eventually move out of Rosegarden::Text, and out of this dialog into
+    // some other less cheesy interface 
+    //
     void slotLilypondDirectiveChanged(const QString &);
 
 protected:
@@ -280,15 +291,28 @@ protected:
     QLineEdit *m_text;
     KComboBox *m_typeCombo;
     KComboBox *m_dynamicShortcutCombo;
+    KComboBox *m_directionShortcutCombo;
+    KComboBox *m_localDirectionShortcutCombo;
     KComboBox *m_tempoShortcutCombo;
+    KComboBox *m_localTempoShortcutCombo;
+    // temporary home:
     KComboBox *m_lilypondDirectiveCombo;
+
 
     QLabel *m_staffAboveLabel;
     QLabel *m_textExampleLabel;
     QLabel *m_staffBelowLabel;
     QLabel *m_dynamicShortcutLabel;
+    QLabel *m_directionShortcutLabel;
+    QLabel *m_localDirectionShortcutLabel;
     QLabel *m_tempoShortcutLabel;
+    QLabel *m_localTempoShortcutLabel;
+    // temporary home:
     QLabel *m_directiveLabel;
+
+    QString m_prevChord;
+    QString m_prevLyric;
+    QString m_prevAnnotation;
 
     NotePixmapFactory *m_notePixmapFactory;
     std::vector<std::string> m_styles;
