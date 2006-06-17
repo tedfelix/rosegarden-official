@@ -1651,28 +1651,25 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 			PitchMap::iterator mi = pm->find(pitch);
 
 			if (mi != pm->end()) {
-
 			    // modify the previously held note-on event,
 			    // instead of assigning to rEvent
-			    Rosegarden::Event *oldEv = mi->second;
-			    Rosegarden::Event *newEv = new Rosegarden::Event
-				(*oldEv, oldEv->getAbsoluteTime(), duration);
-			    newEv->set<Int>(RECORDED_CHANNEL, channel);
-			    //m_recordMIDISegment->erase(mi->second);
-			    //m_recordMIDISegment->insert(newEv);
-                            replaceRecordedEvent(oldEv, newEv);
+                            NoteOnRecSet rec_vec = mi->second;
+                            Rosegarden::Event *oldEv = *rec_vec[0].m_segmentIterator;
+                            Rosegarden::Event *newEv = new Rosegarden::Event
+                                (*oldEv, oldEv->getAbsoluteTime(), duration);
+                                    
+                            newEv->set<Int>(RECORDED_CHANNEL, channel);
+                            NoteOnRecSet *replaced = 
+                                replaceRecordedEvent(rec_vec, newEv);
+                            delete replaced;
 			    pm->erase(mi);
-
 			    if (updateFrom > newEv->getAbsoluteTime()) {
 				updateFrom = newEv->getAbsoluteTime();
-			    }
-
+                            }
 			    haveNotes = true;
                             delete newEv;
-
 			    // at this point we could quantize the bar if we were
 			    // tracking in a notation view
-
 			} else {
 			    std::cerr << " WARNING: NOTE OFF received without corresponding NOTE ON" << std::endl;
 			}
@@ -1767,15 +1764,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 
             // Now insert the new event
             //
-	    if (isNoteOn) {
-                //m_noteOnEvents[device][channel][pitch] = m_recordMIDISegment->insert(rEvent);
-		m_noteOnEvents[device][channel][pitch] = rEvent;
-                insertRecordedEvent(rEvent, device, channel); 
-	    } else {
-	        //m_recordMIDISegment->insert(rEvent);
-                insertRecordedEvent(rEvent, device, channel); 
-                delete rEvent;
-	    }
+            insertRecordedEvent(rEvent, device, channel, isNoteOn); 
+            delete rEvent;
         }
 
 	if (haveNotes) {
@@ -1810,7 +1800,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 void
 RosegardenGUIDoc::updateRecordingMIDISegment()
 {
-//     RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
+    //RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
 
     if (m_recordMIDISegments.size() == 0) {
 	// make this call once to create one
@@ -1818,7 +1808,7 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 	if (m_recordMIDISegments.size() == 0) return; // not recording any MIDI
     }
     
-//     RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
+    //RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
 
     NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
@@ -1831,39 +1821,51 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 
 	// anything in the note-on map should be tweaked so as to end
 	// at the recording pointer
-	Rosegarden::Event *oldEv = pm->second;
-	Rosegarden::Event *newEv = new Rosegarden::Event
-	    (*oldEv, oldEv->getAbsoluteTime(),
-	     m_composition.getPosition() - oldEv->getAbsoluteTime());
+        NoteOnRecSet rec_vec = pm->second;
+        if (rec_vec.size() > 0) {
+            Rosegarden::Event *oldEv = *rec_vec[0].m_segmentIterator;
+	    Rosegarden::Event *newEv = new Rosegarden::Event(
+                *oldEv, oldEv->getAbsoluteTime(),
+	        m_composition.getPosition() - oldEv->getAbsoluteTime() );
 
-	//m_recordMIDISegment->erase(pm->second);
-        //m_recordMIDISegment->insert(newEv);
-	tweakedNoteOnEvents[mi->first][cm->first][pm->first] = newEv;
-        replaceRecordedEvent(oldEv, newEv);
+	    tweakedNoteOnEvents[mi->first][cm->first][pm->first] = 
+                *replaceRecordedEvent(rec_vec, newEv);
+            delete newEv;
+        }
     }
     m_noteOnEvents = tweakedNoteOnEvents;
 }
 
 
-void
-RosegardenGUIDoc::replaceRecordedEvent(Rosegarden::Event *old, Rosegarden::Event *fresh)
+RosegardenGUIDoc::NoteOnRecSet *
+RosegardenGUIDoc::replaceRecordedEvent(NoteOnRecSet& rec_vec, Rosegarden::Event *fresh)
 {
-    for( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
-        i != m_recordMIDISegments.end(); ++i) 
-    {
-        Rosegarden::Segment *recordMIDISegment = i->second;
-        if (recordMIDISegment->eraseDuplicated(old)) {
-            recordMIDISegment->insert(new Rosegarden::Event(*fresh));
-        //    RG_DEBUG << "RosegardenGUIDoc::replaceRecordedEvent() - event replaced" << endl;
-        //} else {
-        //    RG_DEBUG << "RosegardenGUIDoc::replaceRecordedEvent() - old event not found" << endl;
-        }
-    }    
+    NoteOnRecSet *new_vector = new NoteOnRecSet(); 
+    for( NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+        Rosegarden::Segment *recordMIDISegment = i->m_segment;
+        recordMIDISegment->erase(i->m_segmentIterator);
+        NoteOnRec noteRec;
+        noteRec.m_segment = recordMIDISegment;
+        noteRec.m_segmentIterator = recordMIDISegment->insert(new Rosegarden::Event(*fresh));
+        new_vector->push_back(noteRec);
+    }
+    return new_vector;
 }
 
 void
-RosegardenGUIDoc::insertRecordedEvent(Rosegarden::Event *ev, int device, int channel)
+RosegardenGUIDoc::storeNoteOnEvent(Rosegarden::Segment *s, Rosegarden::Segment::iterator it, int device, int channel) 
 {
+    NoteOnRec record;
+    record.m_segment = s;
+    record.m_segmentIterator = it;
+    int pitch = (*it)->get<Int>(PITCH);
+    m_noteOnEvents[device][channel][pitch].push_back(record);
+}
+
+void
+RosegardenGUIDoc::insertRecordedEvent(Rosegarden::Event *ev, int device, int channel, bool isNoteOn)
+{
+    Rosegarden::Segment::iterator it;
     for( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
         i != m_recordMIDISegments.end(); ++i) 
     {
@@ -1875,12 +1877,18 @@ RosegardenGUIDoc::insertRecordedEvent(Rosegarden::Event *ev, int device, int cha
                 m_studio.getInstrumentById(track->getInstrument());
             int filter = instrument->getMidiInputChannel();
             if (filter < 0) { 
-                recordMIDISegment->insert(new Rosegarden::Event(*ev));
+                it = recordMIDISegment->insert(new Rosegarden::Event(*ev));
+                if (isNoteOn) {
+                    storeNoteOnEvent(recordMIDISegment, it, device, channel);
+                }
             } else {
                 if (filter == channel) {
-                    recordMIDISegment->insert(new Rosegarden::Event(*ev));
+                    it = recordMIDISegment->insert(new Rosegarden::Event(*ev));
+                    if (isNoteOn) {
+                        storeNoteOnEvent(recordMIDISegment, it, device, channel);
+                    }
                     //RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - matches filter" << endl;
-                } else {
+                //} else {
                     //RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - unmatched event discarded" << endl;
                 }
             }
@@ -1936,14 +1944,17 @@ RosegardenGUIDoc::stopRecordingMidi()
     {
 	// anything remaining in the note-on map should be made to end at
 	// the end of the segment
-	Rosegarden::Event *oldEv = pm->second;
-	Rosegarden::Event *newEv = new Rosegarden::Event
-	    (*oldEv, oldEv->getAbsoluteTime(),
-	    endTime - oldEv->getAbsoluteTime());
-	//m_recordMIDISegment->erase(pm->second);
-	//m_recordMIDISegment->insert(newEv);
-        replaceRecordedEvent(oldEv, newEv);
-        delete newEv;
+        NoteOnRecSet rec_vec = pm->second;
+        if (rec_vec.size() > 0) {
+            Rosegarden::Event *oldEv = *rec_vec[0].m_segmentIterator;
+	    Rosegarden::Event *newEv = new Rosegarden::Event
+                (*oldEv, oldEv->getAbsoluteTime(),
+                endTime - oldEv->getAbsoluteTime());
+            NoteOnRecSet *replaced =
+                replaceRecordedEvent(rec_vec, newEv);
+            delete newEv;
+            delete replaced;
+        }
     }
     m_noteOnEvents.clear();
                 

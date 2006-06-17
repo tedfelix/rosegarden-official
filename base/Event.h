@@ -275,11 +275,6 @@ public:
 #endif
     static void dumpStats(std::ostream&);
 
-    /**
-     * Compares the shared data of two events to see if they are duplicates
-     */
-    bool isDuplicated(Event *other);
-
 protected:
     // these are for subclasses such as XmlStorableEvent
 
@@ -352,10 +347,6 @@ private:
 	}
     }
     
-    bool is_shared(const Event &e) {
-        return (m_data == e.m_data);
-    }
-
     void lose() {
 	if (--m_data->m_refCount == 0) delete m_data;
 	delete m_nonPersistentProperties;
