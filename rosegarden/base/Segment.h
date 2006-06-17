@@ -315,12 +315,6 @@ public:
     bool eraseSingle(Event*);
 
     /**
-     * Looks up a duplicated Event and if it finds it, erases it.
-     * @return true if the event was found and erased, false otherwise.
-     */
-    bool eraseDuplicated(Event*); 
-
-    /**
      * Returns an iterator pointing to that specific element,
      * end() otherwise
      */
@@ -329,17 +323,6 @@ public:
     const_iterator findSingle(Event *e) const {
 	return const_iterator(((Segment *)this)->findSingle(e));
     }
-
-    /**
-     * Returns an iterator pointing to a duplicated event,
-     * end() otherwise
-     */
-    iterator findDuplicated(Event*);
-
-    const_iterator findDuplicated(Event *e) const {
-        return const_iterator(((Segment *)this)->findDuplicated(e));
-    }
-
 
     /**
      * Returns an iterator pointing to the first element starting at

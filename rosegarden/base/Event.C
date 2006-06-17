@@ -442,10 +442,4 @@ operator<(const Event &a, const Event &b)
     else return a.getSubOrdering() < b.getSubOrdering();
 }
 
-bool
-Event::isDuplicated(Event *other)
-{
-    return is_shared(*other);
-}
-
 }

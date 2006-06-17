@@ -554,15 +554,38 @@ protected:
 
     bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
 
+
     /**
-     * Replace a recorded event in one or several segments
+     * A struct formed by a Segment pointer and an iterator to the same 
+     * Segment, used in NoteOn calculations when recording MIDI.
      */
-    void replaceRecordedEvent(Rosegarden::Event *old, Rosegarden::Event *fresh);
+    struct NoteOnRec {
+        Rosegarden::Segment *m_segment;
+        Rosegarden::Segment::iterator m_segmentIterator;
+    };
+
+    /**
+     * A vector of NoteOnRec elements, necessary in multitrack MIDI 
+     * recording for NoteOn calculations
+     */
+    typedef std::vector<NoteOnRec>  NoteOnRecSet;
+
+    /**
+     * Store a single NoteOnRec element in the m_noteOnEvents map
+     */
+    void storeNoteOnEvent( Rosegarden::Segment *s, Rosegarden::Segment::iterator it, 
+                           int device, int channel );
+
+    /**
+     * Replace recorded Note events in one or several segments, returning the
+     * resulting NoteOnRecSet
+     */
+    NoteOnRecSet* replaceRecordedEvent(NoteOnRecSet &rec_vec, Rosegarden::Event *fresh);
     
     /**
      * Insert a recorded event in one or several segments
      */
-    void insertRecordedEvent(Rosegarden::Event *ev, int device, int channel);
+    void insertRecordedEvent(Rosegarden::Event *ev, int device, int channel, bool isNoteOn);
 
     //--------------- Data members ---------------------------------
 
@@ -625,10 +648,9 @@ protected:
     RecordingSegmentMap m_recordAudioSegments;
     
     /**
-     * a map[Pitch] of Rosegarden::Event elements, for NoteOn calculations
+     * a map[Pitch] of NoteOnRecSet elements, for NoteOn calculations
      */
-    //typedef std::map<int, Rosegarden::Segment::iterator>	PitchMap;
-    typedef std::map<int, Rosegarden::Event*>                   PitchMap;
+    typedef std::map<int, NoteOnRecSet>                         PitchMap;
     
     /**
      * a map[Channel] of PitchMap
