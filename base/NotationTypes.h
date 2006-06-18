@@ -640,11 +640,11 @@ public:
     /**
      * Special Lilypond directives
      */
-    static const std::string BeginRepeat;
-    static const std::string EndRepeat;
+    static const std::string Alternate1;
+    static const std::string Alternate2;
     static const std::string Segno;
-    static const std::string Fine;
-    // etc. etc. etc.
+    static const std::string Coda;
+    static const std::string MultiRest;
 
     Text(const Event &e)
 	/* throw (Event::NoData, Event::BadType) */;
