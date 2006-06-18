@@ -102,14 +102,13 @@
         <Action name="jog_left"/>
         <Action name="jog_right"/>
 	<Separator/>
-	<Menu name="split_and_join">
-	<text>&amp;Split or Join</text>
+        <Action name="join_segments"/>
+	<Menu name="split">
+	<text>&amp;Split...</text>
 	    <Action name="auto_split"/>
 	    <Action name="split_by_pitch"/>
 	    <Action name="split_by_recording"/>
 	    <Action name="split_at_time"/>
-	    <Separator/>
-	    <Action name="join_segments"/>
 	</Menu>  
         <Action name="repeats_to_real_copies"/>
         <Separator/>
