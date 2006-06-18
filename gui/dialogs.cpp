@@ -1496,33 +1496,53 @@ TextEventDialog::slotOK()
 
 
 void
-TextEventDialog::slotDynamicShortcutChanged(const QString &)
+TextEventDialog::slotDynamicShortcutChanged(const QString &text)
 {
-    m_text->setText(strtoqstr(m_dynamicShortcutCombo->currentText()));
+    if (text == "" || text == "Sample") {
+	m_text->setText(strtoqstr(m_dynamicShortcutCombo->currentText()));
+    } else {
+	m_text->setText(text);
+    }
 }
 
 void
-TextEventDialog::slotDirectionShortcutChanged(const QString &)
+TextEventDialog::slotDirectionShortcutChanged(const QString &text)
 {
-    m_text->setText(strtoqstr(m_directionShortcutCombo->currentText()));
+    if (text == "" || text == "Sample") {
+	m_text->setText(strtoqstr(m_directionShortcutCombo->currentText()));
+    } else {
+	m_text->setText(text);
+    }
 }
 
 void
-TextEventDialog::slotLocalDirectionShortcutChanged(const QString &)
+TextEventDialog::slotLocalDirectionShortcutChanged(const QString &text)
 {
-    m_text->setText(strtoqstr(m_localDirectionShortcutCombo->currentText()));
+    if (text == "" || text == "Sample") {
+	m_text->setText(strtoqstr(m_localDirectionShortcutCombo->currentText()));
+    } else {
+	m_text->setText(text);
+    }
 }
 
 void
-TextEventDialog::slotTempoShortcutChanged(const QString &)
+TextEventDialog::slotTempoShortcutChanged(const QString &text)
 {
-    m_text->setText(strtoqstr(m_tempoShortcutCombo->currentText()));
+    if (text == "" || text == "Sample") {
+	m_text->setText(strtoqstr(m_tempoShortcutCombo->currentText()));
+    } else {
+	m_text->setText(text);
+    }
 }
 
 void
-TextEventDialog::slotLocalTempoShortcutChanged(const QString &)
+TextEventDialog::slotLocalTempoShortcutChanged(const QString &text)
 {
-    m_text->setText(strtoqstr(m_localTempoShortcutCombo->currentText()));
+    if (text == "" || text == "Sample") {
+	m_text->setText(strtoqstr(m_localTempoShortcutCombo->currentText()));
+    } else {
+	m_text->setText(text);
+    }
 }
 
 
