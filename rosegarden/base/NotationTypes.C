@@ -762,20 +762,11 @@ const std::string Text::Annotation        = "annotation";
 const std::string Text::LilypondDirective = "lilypond_directive";
 
 // special Lilypond directives
-const std::string Text::BeginRepeat = "ly_begin_repeat";
-const std::string Text::EndRepeat   = "ly_end_repeat";
+const std::string Text::Alternate1  = "ly_alternate_1";
+const std::string Text::Alternate2  = "ly_alternate_2";
 const std::string Text::Segno       = "ly_segno";
-const std::string Text::Fine        = "ly_fine";
-// WIP - list still under consideration
-// 1st ending
-// 2nd ending
-// DC al fine
-// DC al coda
-// DS al fine
-// DS al coda
-// coda
-// cadenza?
-// rest_is_part_of_multi_bar (or just make multi-bar automatic when possible?)
+const std::string Text::Coda        = "ly_coda";
+const std::string Text::MultiRest   = "multi_rest";
 
 Text::Text(const Event &e)
 {
@@ -850,11 +841,11 @@ Text::getLilypondDirectives()
 {
     std::vector<std::string> v;
 
-    v.push_back(BeginRepeat);
-    v.push_back(EndRepeat);
+    v.push_back(Alternate1);
+    v.push_back(Alternate2);
     v.push_back(Segno);
-    v.push_back(Fine);
-    // etc. etc. etc.
+    v.push_back(Coda);
+    v.push_back(MultiRest);
     
     return v;
 }
