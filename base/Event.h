@@ -141,7 +141,7 @@ public:
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
-	  timeT notationAbsoluteTime, timeT notationDuration):
+	  timeT notationAbsoluteTime, timeT notationDuration) :
 	m_nonPersistentProperties(0) {
 	share(e);
 	unshare();
@@ -153,6 +153,15 @@ public:
     }
 
     ~Event() { lose(); }
+
+    Event *copyMoving(timeT offset) const {
+	return new Event(*this,
+			 m_data->m_absoluteTime + offset,
+			 m_data->m_duration,
+			 m_data->m_subOrdering,
+			 getNotationAbsoluteTime() + offset,
+			 getNotationDuration());
+    }
 
     Event &operator=(const Event &e) {
 	if (&e != this) { lose(); share(e); }
@@ -290,7 +299,7 @@ protected:
     void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
 
 private:
-    bool operator==(const Event &);
+    bool operator==(const Event &); // not implemented
 
     struct EventData // Data that are shared between shallow-copied instances
     {

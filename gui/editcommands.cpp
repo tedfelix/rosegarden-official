@@ -124,13 +124,7 @@ CutAndCloseCommand::CloseCommand::execute()
 
     for (Segment::iterator i = m_segment->findTime(m_gapEnd);
 	 m_segment->isBeforeEndMarker(i); ++i) {
-	events.push_back(new Event
-			 (**i,
-			  (*i)->getAbsoluteTime() - timeDifference,
-			  (*i)->getDuration(),
-			  (*i)->getSubOrdering(),
-			  (*i)->getNotationAbsoluteTime() - timeDifference,
-			  (*i)->getNotationDuration()));
+	events.push_back((*i)->copyMoving(-timeDifference));
     }
 
     timeT oldEndTime = m_segment->getEndTime();
@@ -189,13 +183,7 @@ CutAndCloseCommand::CloseCommand::unexecute()
     for (Segment::iterator i = starti; m_segment->isBeforeEndMarker(i); ) {
 	Segment::iterator j(i);
 	++j;
-	events.push_back(new Event
-			 (**i,
-			  (*i)->getAbsoluteTime() + timeDifference,
-			  (*i)->getDuration(),
-			  (*i)->getSubOrdering(),
-			  (*i)->getNotationAbsoluteTime() + timeDifference,
-			  (*i)->getNotationDuration()));
+	events.push_back((*i)->copyMoving(timeDifference));
 	m_segment->erase(i);
 	i = j;
     }
@@ -584,7 +572,7 @@ PasteEventsCommand::modifySegment()
 	std::vector<Event *> copies;
 	for (Segment::iterator i = destination->findTime(pasteTime);
 	     i != destination->end(); ++i) {
-	    Event *e = new Event(**i, (*i)->getAbsoluteTime() + duration);
+	    Event *e = (*i)->copyMoving(duration);
 	    if (e->has(BEAMED_GROUP_ID)) {
 		e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
 	    }
@@ -604,24 +592,15 @@ PasteEventsCommand::modifySegment()
     case NoteOverlay:
 	for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	    if ((*i)->isa(Note::EventRestType)) continue;
+	    Event *e = (*i)->copyMoving(pasteTime - origin);
+	    if (e->has(BEAMED_GROUP_ID)) {
+		e->set<Int>(BEAMED_GROUP_ID,
+			    groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
+	    }
 	    if ((*i)->isa(Note::EventType)) {
-		Event *e = new Event(**i,
-				     (*i)->getAbsoluteTime() - origin + pasteTime,
-				     (*i)->getDuration(),
-				     (*i)->getSubOrdering(),
-				     (*i)->getNotationAbsoluteTime() - origin + pasteTime,
-				     (*i)->getNotationDuration());
-		if (e->has(BEAMED_GROUP_ID)) {
-		    e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
-		}
 		helper.insertNote(e); // e is model event: we retain ownership of it
 		delete e;
 	    } else {
-		Event *e = new Event
-		    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
-		if (e->has(BEAMED_GROUP_ID)) {
-		    e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
-		}
 		destination->insert(e);
 	    }
 	}
@@ -634,8 +613,7 @@ PasteEventsCommand::modifySegment()
 
 	    if ((*i)->isa(Note::EventRestType)) continue;
 
-	    Event *e = new Event
-		(**i, (*i)->getAbsoluteTime() - origin + pasteTime);
+	    Event *e = (*i)->copyMoving(pasteTime - origin);
 
 	    if (e->has(BEAMED_GROUP_TYPE) &&
 		e->get<String>(BEAMED_GROUP_TYPE) == GROUP_TYPE_BEAMED) {
@@ -659,8 +637,7 @@ PasteEventsCommand::modifySegment()
     RG_DEBUG << "PasteEventsCommand::modifySegment() - inserting\n";
 
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
-	Event *e = new Event
-	    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
+	Event *e = (*i)->copyMoving(pasteTime - origin);
 	if (e->has(BEAMED_GROUP_ID)) {
 	    e->set<Int>(BEAMED_GROUP_ID, groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
 	}
@@ -1414,7 +1391,7 @@ RescaleCommand::modifySegment()
 	     i != segment.end(); ++i) {
 	    // move all events including any following the end marker
 	    toErase.push_back(*i);
-	    toInsert.push_back(new Event(**i, (*i)->getAbsoluteTime() + diff));
+	    toInsert.push_back((*i)->copyMoving(diff));
 	}
     }
 
