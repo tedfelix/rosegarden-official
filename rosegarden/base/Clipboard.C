@@ -230,9 +230,22 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
 	    timeT absTime = (*i)->getAbsoluteTime() + repeat * segDuration;
 	    timeT duration = (*i)->getDuration();
 
-	    if (absTime + duration > to) duration = to - absTime;
+	    Event *e = (*i)->copyMoving(repeat * segDuration);
 
-	    s->insert(new Event(**i, absTime, duration));
+	    if (absTime + duration <= to) {
+
+		s->insert(e);
+
+	    } else {
+
+		s->insert(new Event(*e,
+				    e->getAbsoluteTime(),
+				    duration,
+				    e->getSubOrdering(),
+				    e->getNotationAbsoluteTime(),
+				    e->getNotationDuration()));
+		delete e;
+	    }
 	}
     }
 

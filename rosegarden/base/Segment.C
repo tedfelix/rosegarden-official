@@ -216,14 +216,7 @@ Segment::setStartTime(timeT t)
     FastVector<Event *> events;
 
     for (iterator i = begin(); i != end(); ++i) {
-	Event *e = new Event
-	    (**i,
-	     (*i)->getAbsoluteTime() + dt,
-	     (*i)->getDuration(),
-	     (*i)->getSubOrdering(),
-	     (*i)->getNotationAbsoluteTime() + dt,
-	     (*i)->getNotationDuration());
-	events.push_back(e);
+	events.push_back((*i)->copyMoving(dt));
     }
 
     timeT previousEndTime = m_endTime;

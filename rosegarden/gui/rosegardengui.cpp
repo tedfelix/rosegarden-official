@@ -29,6 +29,7 @@
 #include <qlayout.h>
 #include <qvaluevector.h>
 #include <qtextcodec.h>
+#include <qtabwidget.h>
 
 // include files for KDE
 #include <kcursor.h>
@@ -355,10 +356,29 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     QFrame* vbox = new QFrame(m_dockLeft);
     QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
     m_dockLeft->setWidget(vbox);
+
+/*
     m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
     vboxLayout->addWidget(m_segmentParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
     vboxLayout->addWidget(m_instrumentParameterBox);
+*/
+
+    // Create a list of parameter-box tabs.
+
+    QTabWidget* tabs = new QTabWidget(vbox, "IPB");
+
+    // Add the tabs to the parent frame of the IPB.
+
+    vboxLayout->addWidget(tabs);
+
+    // Populate the tabs with the respective parameter box widgets.
+
+    m_segmentParameterBox = new SegmentParameterBox(doc, tabs);
+    tabs->addTab(m_segmentParameterBox, "Segment");
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, tabs);
+    tabs->addTab(m_instrumentParameterBox, "Instrument");
+
     vboxLayout->addStretch();
 
     connect(m_instrumentParameterBox,
