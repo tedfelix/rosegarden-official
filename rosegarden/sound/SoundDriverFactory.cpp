@@ -18,15 +18,15 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NO_SOUND
+//#ifdef NO_SOUND
 #include "DummyDriver.h"
-#else
+//#else
 #ifdef HAVE_ALSA
 #include "AlsaDriver.h"
 #else
 #include "ArtsDriver.h"
 #endif
-#endif
+//#endif
 
 #include "SoundDriver.h"
 #include "SoundDriverFactory.h"
@@ -37,7 +37,7 @@ SoundDriver *
 SoundDriverFactory::createDriver(MappedStudio *studio)
 {
     SoundDriver *driver = 0;
-
+    bool initialised = false;
 #ifdef NO_SOUND
     driver = new DummyDriver(studio);
 #else
@@ -48,8 +48,19 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
 #endif
 #endif
 
-    driver->initialise();
+    initialised = driver->initialise();
 	
+    if ( ! initialised ) {
+	driver->shutdown();
+	delete driver;
+        
+	// if the driver couldn't be initialised, then
+        // fall to the DummyDriver as a last chance,
+        // so GUI can still be used for notation.
+        //
+        driver = new DummyDriver(studio);
+        driver->initialise();
+    }
     return driver;
 }
 
