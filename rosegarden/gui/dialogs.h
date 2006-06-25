@@ -316,7 +316,7 @@ protected:
 
     NotePixmapFactory *m_notePixmapFactory;
     std::vector<std::string> m_styles;
-    std::vector<std::string> m_directives;
+//    std::vector<std::string> m_directives;
 
     std::string getTextType() const;
     std::string getTextString() const;

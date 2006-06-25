@@ -226,6 +226,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_selectionCounter(0),
     m_insertModeLabel(0),
     m_annotationsLabel(0),
+    m_lilypondDirectivesLabel(0),
     m_progressBar(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -252,6 +253,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_tempoRuler(0),
     m_rawNoteRuler(0),
     m_annotationsVisible(false),
+    m_lilypondDirectivesVisible(true),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeCombo(0),
@@ -583,6 +585,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_tempoRuler(0),
     m_rawNoteRuler(0),
     m_annotationsVisible(false),
+    m_lilypondDirectivesVisible(true),
     m_selectDefaultNote(0),
     m_fontCombo(0),
     m_fontSizeCombo(0),
@@ -1101,6 +1104,7 @@ void NotationView::slotSaveOptions()
     m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler",      getToggleAction("show_tempo_ruler")->isChecked());
     m_config->writeEntry("Show Annotations", m_annotationsVisible);
+    m_config->writeEntry("Show LilyPond Directives", m_lilypondDirectivesVisible);
 
     m_config->sync();
 }
@@ -1158,6 +1162,11 @@ void NotationView::readOptions()
     getToggleAction("show_annotations")->setChecked(opt);
     slotUpdateAnnotationsStatus();
 //    slotToggleAnnotations();
+    
+    opt = m_config->readBoolEntry("Show LilyPond Directives", true);
+    m_lilypondDirectivesVisible = opt;
+    getToggleAction("show_lilypond_directives")->setChecked(opt);
+    slotUpdateLilyPondDirectivesStatus();
 }
 
 void NotationView::setupActions()
@@ -1506,6 +1515,10 @@ void NotationView::setupActions()
     new KToggleAction(i18n("Show &Annotations"), 0, this,
                       SLOT(slotToggleAnnotations()),
                       actionCollection(), "show_annotations");
+
+    new KToggleAction(i18n("Show Lily&Pond Directives"), 0, this,
+                      SLOT(slotToggleLilyPondDirectives()),
+                      actionCollection(), "show_lilypond_directives");
 
     new KAction(i18n("Open L&yric Editor"), 0, this, SLOT(slotEditLyrics()),
 		actionCollection(), "lyric_editor");
@@ -2283,6 +2296,7 @@ void NotationView::initStatusBar()
     m_currentNotePixmap->setMinimumWidth(20);
     m_insertModeLabel = new QLabel(hbox);
     m_annotationsLabel = new QLabel(hbox);
+    m_lilypondDirectivesLabel = new QLabel(hbox);
     sb->addWidget(hbox);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),

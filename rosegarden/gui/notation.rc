@@ -424,6 +424,7 @@
 	</Menu>
 	<Separator                                   append="show_merge" />
 	<Action name="show_annotations"              append="show_merge" />
+	<Action name="show_lilypond_directives"      append="show_merge" />
 </Menu> 
 
 </MenuBar>

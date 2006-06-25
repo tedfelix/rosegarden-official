@@ -211,6 +211,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 	# examples
 	examples="""
 	gui/testfiles/glazunov.rg
+	gui/testfiles/lilypond-alternative-endings.rg
 	gui/testfiles/notation-for-string-orchestra-in-D-minor.rg
 	gui/testfiles/ravel-pc-gmaj-adagio.rg
 	gui/testfiles/perfect-moment.rg

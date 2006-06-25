@@ -112,6 +112,27 @@ NotationView::slotUpdateAnnotationsStatus()
 }
 
 void
+NotationView::slotUpdateLilyPondDirectivesStatus()
+{
+    if (!areLilyPondDirectivesVisible()) {
+        for (int i = 0; i < getStaffCount(); ++i) {
+            Segment &s = getStaff(i)->getSegment();
+            for (Segment::iterator j = s.begin(); j != s.end(); ++j) {
+                if ((*j)->isa(Rosegarden::Text::EventType) &&
+                    ((*j)->get<Rosegarden::String>
+                     (Rosegarden::Text::TextTypePropertyName)
+                     == Rosegarden::Text::LilypondDirective)) {
+                    m_annotationsLabel->setText(i18n("Hidden LilyPond directives"));
+                    return;
+                }
+            }
+        }
+    }
+    m_lilypondDirectivesLabel->setText("");
+    getToggleAction("show_lilypond_directives")->setChecked(areLilyPondDirectivesVisible());
+}
+
+void
 NotationView::slotChangeSpacingFromStringValue(const QString& spacingT)
 {
     // spacingT has a '%' at the end
@@ -2493,6 +2514,14 @@ void NotationView::slotToggleAnnotations()
 {
     m_annotationsVisible = !m_annotationsVisible;
     slotUpdateAnnotationsStatus();
+//!!! use refresh mechanism
+    refreshSegment(0, 0, 0);
+}
+
+void NotationView::slotToggleLilyPondDirectives()
+{
+    m_lilypondDirectivesVisible = !m_lilypondDirectivesVisible;
+    slotUpdateLilyPondDirectivesStatus();
 //!!! use refresh mechanism
     refreshSegment(0, 0, 0);
 }

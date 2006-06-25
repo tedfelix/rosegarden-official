@@ -184,6 +184,11 @@ public:
     bool areAnnotationsVisible() { return m_annotationsVisible; }
 
     /**
+     * Discover whether LilyPond directives are being displayed or not
+     */
+    bool areLilyPondDirectivesVisible() { return m_lilypondDirectivesVisible; }
+
+    /**
      * Set the current event selection.
      *
      * If preview is true, sound the selection as well.
@@ -413,6 +418,7 @@ public slots:
     /// status stuff
     void slotUpdateInsertModeStatus();
     void slotUpdateAnnotationsStatus();
+    void slotUpdateLilyPondDirectivesStatus();
 
     /// edit menu
     void slotPreviewSelection();
@@ -431,6 +437,7 @@ public slots:
     void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
     void slotToggleAnnotations();
+    void slotToggleLilyPondDirectives();
     void slotEditLyrics();
 
     /// group slots
@@ -916,6 +923,9 @@ protected:
     /// Displayed in the status bar, shows when annotations are hidden
     QLabel *m_annotationsLabel;
 
+    /// Displayed in the status bar, shows when LilyPond directives are hidden
+    QLabel *m_lilypondDirectivesLabel;
+
     /// Displayed in the status bar, shows progress of current operation
     RosegardenProgressBar *m_progressBar;
 
@@ -965,6 +975,7 @@ protected:
     QWidget *m_tempoRuler;
     RawNoteRuler *m_rawNoteRuler;
     bool m_annotationsVisible;
+    bool m_lilypondDirectivesVisible;
     
     KAction* m_selectDefaultNote;
 

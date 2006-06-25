@@ -24,14 +24,15 @@
     <Menu name="export" append="new_merge"><text>&amp;Export</text>
       <Action name="file_export_project" />
       <Separator/>
+      <Action name="file_export_lilypond" />
+      <Separator/>
       <Action name="file_export_midi" />
+      <Separator/>
       <Action name="file_export_csound" />
       <Action name="file_export_mup" />
       <Action name="file_export_musicxml" />
-      <Separator/>
-      <Action name="file_export_lilypond" />
-      <Action name="file_preview_lilypond" />
     </Menu>
+    <Action name="file_preview_lilypond" append="print_merge" />
   <Separator/>
   <Action name="file_show_playlist" />
   </Menu>

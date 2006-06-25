@@ -1051,8 +1051,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 				 int maxLength) :
     KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel | Help),
     m_notePixmapFactory(npf),
-    m_styles(Text::getUserStyles()),
-    m_directives(Text::getLilypondDirectives())
+    m_styles(Text::getUserStyles()) /*,
+    //m_directives(Text::getLilypondDirectives()) */
 {
     setHelp("nv-text");
     QVBox *vbox = makeVBoxMainWidget();
@@ -1149,8 +1149,13 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_directionShortcutLabel = new QLabel(i18n("Direction:  "), entryGrid);
     m_directionShortcutLabel->hide();
 
-    m_directionShortcutCombo = new KComboBox(entryGrid); 
-    m_directionShortcutCombo->insertItem(i18n(","));
+    m_directionShortcutCombo = new KComboBox(entryGrid);
+    // note, the "  ," is a breath mark; the extra spaces are a cheap hack to
+    // try to improve the probability of Rosegarden drawing the blasted thing
+    // where it's supposed to go, without the need to micro-diddle each and
+    // every bliffin' one.  (Micro-diddling is not exportable to Lilypond
+    // either, is it?  I rather doubt it.)
+    m_directionShortcutCombo->insertItem(i18n("  ,"));
     m_directionShortcutCombo->insertItem(i18n("D.C. al Fine"));
     m_directionShortcutCombo->insertItem(i18n("D.S. al Fine"));
     m_directionShortcutCombo->insertItem(i18n("Fine"));
@@ -1164,6 +1169,10 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_localDirectionShortcutLabel->hide();
 
     m_localDirectionShortcutCombo = new KComboBox(entryGrid);
+    m_localDirectionShortcutCombo->insertItem(i18n("accel."));
+    m_localDirectionShortcutCombo->insertItem(i18n("ritard."));
+    m_localDirectionShortcutCombo->insertItem(i18n("ralletando"));
+    m_localDirectionShortcutCombo->insertItem(i18n("a tempo"));
     m_localDirectionShortcutCombo->insertItem(i18n("legato"));
     m_localDirectionShortcutCombo->insertItem(i18n("simile"));
     m_localDirectionShortcutCombo->insertItem(i18n("pizz."));
@@ -1200,15 +1209,28 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_tempoShortcutCombo->insertItem(i18n("Tempo Primo"));
     m_tempoShortcutCombo->hide();
 
-    // local tempo shortcuts combo
+    // local tempo shortcuts combo (duplicates the non-local version, because
+    // nobody is actually sure what is supposed to distinguish Tempo from
+    // Local Tempo, or what this text style is supposed to be good for in the
+    // way of standard notation)
     m_localTempoShortcutLabel = new QLabel(i18n("Local Tempo:  "), entryGrid);
     m_localTempoShortcutLabel->hide();
 
     m_localTempoShortcutCombo = new KComboBox(entryGrid);
-    m_localTempoShortcutCombo->insertItem(i18n("accel."));
-    m_localTempoShortcutCombo->insertItem(i18n("ritard."));
-    m_localTempoShortcutCombo->insertItem(i18n("ralletando"));
-    m_localTempoShortcutCombo->insertItem(i18n("a tempo"));
+    m_localTempoShortcutCombo->insertItem(i18n("Grave"));
+    m_localTempoShortcutCombo->insertItem(i18n("Adagio"));
+    m_localTempoShortcutCombo->insertItem(i18n("Largo"));
+    m_localTempoShortcutCombo->insertItem(i18n("Lento"));
+    m_localTempoShortcutCombo->insertItem(i18n("Andante"));
+    m_localTempoShortcutCombo->insertItem(i18n("Moderato"));
+    m_localTempoShortcutCombo->insertItem(i18n("Allegretto"));
+    m_localTempoShortcutCombo->insertItem(i18n("Allegro"));
+    m_localTempoShortcutCombo->insertItem(i18n("Vivace"));
+    m_localTempoShortcutCombo->insertItem(i18n("Presto"));
+    m_localTempoShortcutCombo->insertItem(i18n("Prestissimo"));
+    m_localTempoShortcutCombo->insertItem(i18n("Maestoso"));
+    m_localTempoShortcutCombo->insertItem(i18n("Sostenuto"));
+    m_localTempoShortcutCombo->insertItem(i18n("Tempo Primo"));
     m_localTempoShortcutCombo->hide();
 
     // WIP //////////////////////////////////////////////////////
@@ -1220,50 +1242,13 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_lilypondDirectiveCombo = new KComboBox(entryGrid);
     m_lilypondDirectiveCombo->hide();
 
-    for (unsigned int i = 0; i < m_directives.size(); ++i) {
-
-	std::string directive = m_directives[i];
-
-	// if the directive is in this list, we can i18n it (kludgy):
-
-	if (directive == Text::Alternate1) {
-	    m_lilypondDirectiveCombo->insertItem(i18n("Ending 1"));
-
-	} else if (directive == Text::Alternate2) {
-	    m_lilypondDirectiveCombo->insertItem(i18n("Ending 2"));
-
-	} else if (directive == Text::Segno) {
-	    m_lilypondDirectiveCombo->insertItem(i18n("Segno"));
-
-	} else if (directive == Text::Coda) {
-	    m_lilypondDirectiveCombo->insertItem(i18n("Coda"));
-
-	} else if (directive == Text::MultiRest) {
-	    m_lilypondDirectiveCombo->insertItem(i18n("Multi Rest"));
-
-	} else {
-	    // not i18n()-able
-	    //
-	    // probably superfluous, flagrantly block copied code here; is
-	    // there any possibility whatsoever of winding up with an
-	    // un-i18nable special Lilypond directive?
-	    //
-
-	    std::string directiveName;
-	    directiveName += (char)toupper(directive[0]);
-	    directiveName += directive.substr(1);
-	    
-	    int uindex = directiveName.find('_');
-	    if (uindex > 0) {
-		directiveName =
-		    directiveName.substr(0, uindex) + " " +
-		    directiveName.substr(uindex + 1);
-	    }
-	    
-	    m_lilypondDirectiveCombo->insertItem(strtoqstr(directiveName));
-	}
-    }
-    // WIP //////////////////////////////////////////////////////
+    // not i18nable, because the directive exporter currently depends on the
+    // textual contents of these strings, not some more abstract associated
+    // type label
+    m_lilypondDirectiveCombo->insertItem(Text::Alternate1);
+    m_lilypondDirectiveCombo->insertItem(Text::Alternate2);
+    m_lilypondDirectiveCombo->insertItem(Text::Segno);
+    m_lilypondDirectiveCombo->insertItem(Text::Coda);
 
     QVBox *exampleVBox = new QVBox(exampleBox);
     
@@ -5426,14 +5411,14 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 					     QString windowCaption,
 					     QString heading) :
     KDialogBase(parent, 0, true,
-		(windowCaption = "" ? i18n("Lilypond Export") : windowCaption),
+		(windowCaption = "" ? i18n("LilyPond Export/Preview") : windowCaption),
 		Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
     
     QGroupBox *optionBox = new QGroupBox
 	(1, Horizontal,
-	 (heading == "" ? i18n("Lilypond export options") : heading), vbox);
+	 (heading == "" ? i18n("LilyPond export/preview options") : heading), vbox);
 
     KConfig *config = kapp->config();
     config->setGroup(NotationView::ConfigGroup);
@@ -5442,13 +5427,13 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QGridLayout *layout = new QGridLayout(frame, 9, 2, 10, 5);
 
     layout->addWidget(new QLabel(
-	i18n("Lilypond compatibility level"), frame), 0, 0);
+	i18n("LilyPond compatibility level"), frame), 0, 0); 
     
     m_lilyLanguage = new KComboBox(frame);
-    m_lilyLanguage->insertItem(i18n("Lilypond 2.2"));
-    m_lilyLanguage->insertItem(i18n("Lilypond 2.4"));
-    m_lilyLanguage->insertItem(i18n("Lilypond 2.6"));
-    m_lilyLanguage->insertItem(i18n("Lilypond 2.8"));
+    m_lilyLanguage->insertItem(i18n("LilyPond 2.2"));
+    m_lilyLanguage->insertItem(i18n("LilyPond 2.4"));
+    m_lilyLanguage->insertItem(i18n("LilyPond 2.6"));
+    m_lilyLanguage->insertItem(i18n("LilyPond 2.8"));
     m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 1));
     layout->addWidget(m_lilyLanguage, 0, 1);
 
