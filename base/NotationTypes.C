@@ -762,11 +762,16 @@ const std::string Text::Annotation        = "annotation";
 const std::string Text::LilypondDirective = "lilypond_directive";
 
 // special Lilypond directives
-const std::string Text::Alternate1  = "ly_alternate_1";
-const std::string Text::Alternate2  = "ly_alternate_2";
-const std::string Text::Segno       = "ly_segno";
-const std::string Text::Coda        = "ly_coda";
-const std::string Text::MultiRest   = "multi_rest";
+const std::string Text::Alternate1  = "Alt1 ->";
+const std::string Text::Alternate2  = "Alt2 ->";
+const std::string Text::Segno       = "Segno";
+const std::string Text::Coda        = "Coda";
+const std::string Text::MultiRest   = "MultiRest";  // use code instead
+// "\% ->"
+// "|| ->"
+// "|: ->"
+// ":| ->"
+// "|. ->"
 
 Text::Text(const Event &e)
 {

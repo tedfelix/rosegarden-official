@@ -779,22 +779,78 @@ LilypondExporter::write()
 		
 		Rosegarden::Key key;
 
+	        bool haveRepeating = false;
+		bool nextBarIsAlt1 = false;
+		bool nextBarIsAlt2 = false;
+		bool prevBarWasAlt2 = false;
+		bool haveAlternates = false;
+
 		for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
 		     barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
 		     ++barNo) {
+		
 		    timeT barStart = m_composition->getBarStart(barNo);
 		    timeT barEnd = m_composition->getBarEnd(barNo);
 		    if (barStart < compositionStartTime) {
 			barStart = compositionStartTime;
 		    }
 
+		    // open \repeat section if this is the first bar in the
+		    // repeat
+		    if ((*i)->isRepeating() && !haveRepeating) {
+
+			haveRepeating = true;
+
+			//!!! calculate the number of times this segment
+			//repeats and make the following variable meaningful
+			int numRepeats = 2;
+
+			str << std::endl << indent(col++) << "\\repeat volta " << numRepeats << " {";
+		    }
+
+		    // open the \alternative section if this bar is alternative ending 1
+		    // ending (because there was an "Alt1" flag in the
+		    // previous bar to the left of where we are right now)
+		    //
+		    // Alt1 remains in effect until we run into Alt2, which
+		    // runs to the end of the segment
+		    if (nextBarIsAlt1) {
+			str << std::endl << indent(--col) << "} \% repeat close (before alternatives) ";
+                        str << std::endl << indent(col++) <<  "\\alternative { \% open alternative 1 ";
+			str << std::endl << indent(col++) << " { ";
+			nextBarIsAlt1 = false;
+			haveAlternates = true;
+		    } else if (nextBarIsAlt2) {
+			if (!prevBarWasAlt2) {
+				str << std::endl << indent(--col) <<  " } \% close alternative 1 "
+				    << std::endl << indent(col++) << " {  \% open alternative 2";
+			}
+			prevBarWasAlt2 = true;
+	            }
+
+		    // write out a bar's worth of events
 		    writeBar(*i, barNo, barStart, barEnd, col, key,
 			     lilyText, lilyLyrics,
-			     prevStyle, eventsInProgress, str);
+			     prevStyle, eventsInProgress, str,
+			     nextBarIsAlt1, nextBarIsAlt2);
+
+		}
+		
+		// close \repeat
+		if (haveRepeating) {
+
+		    // close \alternative section if present
+		    if (haveAlternates) {
+			str << std::endl << indent(--col) << " } \% close alternative 2 ";
+		    }
+
+		    // close \repeat section in either case
+		    str << std::endl << indent(--col) << " } \% close "
+			<< (haveAlternates ? "alternatives" : "repeat");
 		}
 
 		// closing bar
-    		if ((*i)->getEndMarkerTime() == compositionEndTime) {
+    		if (((*i)->getEndMarkerTime() == compositionEndTime) && !haveRepeating) {
         	    str << std::endl << indent(col) << "\\bar \"|.\"";
     		}
 
@@ -959,7 +1015,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			   std::string &lilyLyrics,
 			   std::string &prevStyle,
 			   eventendlist &eventsInProgress,
-			   std::ofstream &str)
+			   std::ofstream &str,
+			   bool &nextBarIsAlt1, bool &nextBarIsAlt2)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
@@ -1133,8 +1190,9 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
 		if ((*i)->isa(Text::EventType)) {
-
-		    handleText(*i, lilyText, lilyLyrics);
+		    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2)) {
+   	                handleText(*i, lilyText, lilyLyrics);
+		    }
 
 		} else if ((*i)->isa(Note::EventType)) {
 
@@ -1284,7 +1342,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	} else if ((*i)->isa(Text::EventType)) {
 
-	    handleText(*i, lilyText, lilyLyrics);
+	    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2)) {
+		handleText(*i, lilyText, lilyLyrics);
+	    }
+	    //handleText(*i, lilyText, lilyLyrics);
 	}
 
 	// LilyPond 2.0 introduces required postfix syntax for beaming
@@ -1378,6 +1439,32 @@ LilypondExporter::writeSkip(const Rosegarden::TimeSignature &timeSig,
     }
 }
 
+bool
+LilypondExporter::handleDirective(const Rosegarden::Event *textEvent,
+	                          std::string &lilyText,
+				  bool &nextBarIsAlt1,
+				  bool &nextBarIsAlt2)
+{
+    Rosegarden::Text text(*textEvent);
+
+    if (text.getTextType() == Text::LilypondDirective) {
+	std::string directive = text.getText();
+	if (directive == Text::Segno) {
+	    lilyText += "^\\markup { \\musicglyph #\"scripts.segno\" } ";
+	} else if (directive == Text::Coda) {
+	    lilyText += "^\\markup { \\musicglyph #\"scripts.coda\" } ";
+	} else if (directive == Text::Alternate1) {
+	    nextBarIsAlt1 = true;
+	} else if (directive == Text::Alternate2) {
+	    nextBarIsAlt1 = false;
+	    nextBarIsAlt2 = true;
+	}
+	return true;
+    } else {
+	return false;
+    }
+}
+
 void
 LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 			     std::string &lilyText, std::string &lilyLyrics)
@@ -1426,8 +1513,17 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
         
 	} else if (text.getTextType() == Text::Direction) {
 
-	    // print above staff, large
-	    lilyText += "^\\markup { \\large \"" + s + "\" } ";
+	    // export "  ," as a LilyPond "\breathe" directive
+	    //!!! it would probably be most appropriate to make this behavior
+	    // configurable, and to make "  ," some kind of constant too,
+	    // since it has special meaning, and that meaning carries across
+	    // several files, but I didn't bother with either (DMM)
+	    if (s == "  ,") {
+		lilyText += " \\breathe ";
+	    } else {
+   	        // print above staff, large
+	        lilyText += "^\\markup { \\large \"" + s + "\" } ";
+	    }
 
 	} else if (text.getTextType() == Text::LocalDirection) {
 
