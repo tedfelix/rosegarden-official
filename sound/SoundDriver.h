@@ -148,7 +148,7 @@ public:
     SoundDriver(MappedStudio *studio, const std::string &name);
     virtual ~SoundDriver();
 
-    virtual void initialise() = 0;
+    virtual bool initialise() = 0;
     virtual void shutdown() { }
 
     virtual void initialisePlayback(const RealTime &position) = 0;

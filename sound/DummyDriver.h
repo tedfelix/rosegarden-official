@@ -39,9 +39,10 @@ public:
         SoundDriver(studio, std::string("DummyDriver: " + name)) { }
     virtual ~DummyDriver() { }
 
-    virtual void initialise()  { m_recordComposition.clear();}
+    virtual bool initialise()  { m_recordComposition.clear(); return true; }
     virtual void initialisePlayback(const RealTime & /*position*/) { }
     virtual void stopPlayback() { }
+    virtual void punchOut() { }
     virtual void resetPlayback(const RealTime & /*old position*/,
 			       const RealTime & /*position*/) { }
     virtual void allNotesOff()  { }
@@ -59,7 +60,9 @@ public:
 
     // Activate a recording state
     //
-    virtual bool record(RecordStatus /*recordStatus*/)
+    virtual bool record(RecordStatus /*recordStatus*/,
+                        const std::vector<InstrumentId> */*armedInstruments = 0*/,
+                        const std::vector<QString> */*audioFileNames = 0*/)
         { return false; }
 
     // Process anything that's pending

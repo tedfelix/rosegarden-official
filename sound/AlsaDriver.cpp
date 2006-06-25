@@ -1632,18 +1632,22 @@ AlsaDriver::setCurrentTimer(QString timer)
     m_firstTimerCheck = true;
 }
 
-void
+bool
 AlsaDriver::initialise()
 {
+    bool result = true;
+
     initialiseAudio();
-    initialiseMidi();
+    result = initialiseMidi();
+
+    return result;
 }
 
 
 
 // Set up queue, client and port
 //
-void
+bool
 AlsaDriver::initialiseMidi()
 { 
     Audit audit;
@@ -1655,10 +1659,11 @@ AlsaDriver::initialiseMidi()
                      SND_SEQ_OPEN_DUPLEX,
                      SND_SEQ_NONBLOCK) < 0) {
         audit << "AlsaDriver::initialiseMidi - "
-                  << "couldn't open sequencer - " << snd_strerror(errno)
-                  << std::endl;
+	      << "couldn't open sequencer - " << snd_strerror(errno) 
+              << " - perhaps you need to modprobe snd-seq-midi."
+              << std::endl;
 	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
-	return;
+	return false;
     }
 
     snd_seq_set_client_name(m_midiHandle, "rosegarden");
@@ -1669,7 +1674,7 @@ AlsaDriver::initialiseMidi()
         std::cerr << "AlsaDriver::initialiseMidi - can't create client"
                   << std::endl;
 #endif
-        return;
+        return false;
     }
 
     // Create a queue
@@ -1681,7 +1686,7 @@ AlsaDriver::initialiseMidi()
         std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
                   << std::endl;
 #endif
-        return;
+        return false;
     }
 
     // Create the input port
@@ -1702,7 +1707,7 @@ AlsaDriver::initialiseMidi()
 
     if (checkAlsaError(snd_seq_create_port(m_midiHandle, pinfo), 
                        "initialiseMidi - can't create input port") < 0)
-        return;
+        return false;
     m_inputPort = snd_seq_port_info_get_port(pinfo);
 
     // Subscribe the input port to the ALSA Announce port
@@ -1723,7 +1728,7 @@ AlsaDriver::initialiseMidi()
                   << "can't modify pool parameters"
                   << std::endl;
 #endif
-        return;
+        return false;
     }
 
     // Create sync output now as well
@@ -1762,7 +1767,7 @@ AlsaDriver::initialiseMidi()
     if (checkAlsaError(snd_seq_start_queue(m_midiHandle, m_queue, NULL), 
                        "initialiseMidi(): couldn't start queue") < 0) {
 	reportFailure(Rosegarden::MappedEvent::FailureALSACallFailed);
-	return;
+	return false;
     }
 
     m_queueRunning = true;
@@ -1772,6 +1777,8 @@ AlsaDriver::initialiseMidi()
 
     audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
               << std::endl << std::endl;
+
+    return true;
 }
 
 // We don't even attempt to use ALSA audio.  We just use JACK instead.

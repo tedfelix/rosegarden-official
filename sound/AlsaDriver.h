@@ -56,7 +56,7 @@ public:
     // shutdown everything that's currently open
     void shutdown();
 
-    virtual void initialise();
+    virtual bool initialise();
     virtual void initialisePlayback(const RealTime &position);
     virtual void stopPlayback();
     virtual void punchOut();
@@ -99,7 +99,7 @@ public:
 
     // initialise subsystems
     //
-    void initialiseMidi();
+    bool initialiseMidi();
     void initialiseAudio();
 
     // Some stuff to help us debug this
