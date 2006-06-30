@@ -100,22 +100,14 @@ RosegardenSpinBox::mapTextToValue(bool * /*ok*/)
 }
 
 
-RosegardenParameterBox::RosegardenParameterBox(int strips,
-                                               Orientation orientation,
-                                               QString label,
+RosegardenParameterBox::RosegardenParameterBox(const QString &label,
 					       QWidget *parent,
 					       const char *name) :
-    QGroupBox(strips, orientation, label, parent, name)
+  QFrame(parent, name),
+  m_label(label),
+  m_mode(LANDSCAPE_MODE)
 {
-    init();
-}
-
-RosegardenParameterBox::RosegardenParameterBox(QString label,
-					       QWidget *parent,
-					       const char *name) :
-    QGroupBox(label, parent, name)
-{
-    init();
+  init();
 }
 
 void RosegardenParameterBox::init()
@@ -134,6 +126,12 @@ void RosegardenParameterBox::init()
     setFont(boldFont);
 }
 
+// Return the string that should be used to label a given parameter box.
+
+QString RosegardenParameterBox::getLabel() const
+{
+  return m_label;
+}
 
 bool RosegardenProgressDialog::m_modalVisible = false;
 

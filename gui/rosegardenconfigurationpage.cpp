@@ -92,6 +92,7 @@
 #include "audiopluginmanager.h"
 #include "segmentcommands.h"
 #include "rgapplication.h"
+#include "rosegardenparameterarea.h"
 
 #include "rosegardenconfigurationpage.h"
 
@@ -156,7 +157,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                             5, 2, // nbrow, nbcol -- one extra row improves layout
+                             6, 2, // nbrow, nbcol -- one extra row improves layout
                              10, 5);
     layout->addWidget(new QLabel(i18n("Note name style"),
                                  frame), 0, 0);
@@ -169,6 +170,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     new QLabel(i18n("Use textured backgrounds on canvas areas"), box);
     new QLabel(i18n("    (takes effect only from next restart)"), box);
     layout->addWidget(box, 3, 0);
+
+    layout->addWidget(new QLabel(i18n("The organization of the side-bar"),
+                                 frame), 4, 0);
 
     m_nameStyle = new KComboBox(frame);
     m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
@@ -194,6 +198,16 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_backgroundTextures->setChecked(m_cfg->readBoolEntry("backgroundtextures",
                                                           true));
+
+    m_sidebarStyle = new KComboBox(frame);
+    m_sidebarStyle->insertItem(i18n("Display parameter groups tiled vertically"),
+			       RosegardenParameterArea::CLASSIC_STYLE);
+    m_sidebarStyle->insertItem(i18n("Display parameter groups under tabs"),
+			       RosegardenParameterArea::TAB_BOX_STYLE);
+
+    m_sidebarStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("sidebarstyle",
+							       1));
+    layout->addWidget(m_sidebarStyle, 4, 1);
 
     addTab(frame, i18n("Presentation"));
 
@@ -311,6 +325,10 @@ void GeneralConfigurationPage::apply()
     m_cfg->writeEntry("audiopreviewstyle", previewstyle);
 
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
+
+    int sidebarStyle = m_sidebarStyle->currentItem();
+    m_cfg->writeEntry("sidebarstyle", sidebarStyle);
+    emit updateSidebarStyle(sidebarStyle);
 
     m_cfg->writeEntry("autosave", m_autosave->isChecked());
 

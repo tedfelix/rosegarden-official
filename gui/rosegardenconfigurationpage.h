@@ -188,6 +188,7 @@ public:
 
 signals:
     void updateAutoSaveInterval(unsigned int);
+    void updateSidebarStyle(unsigned int);
 
 protected slots:
     void slotFileDialog();
@@ -208,6 +209,7 @@ protected:
     QSpinBox*  m_autosaveInterval;
     QComboBox* m_nameStyle;
     QComboBox* m_previewStyle;
+    QComboBox* m_sidebarStyle;
 
 };
 

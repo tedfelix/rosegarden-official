@@ -68,7 +68,7 @@ using Rosegarden::MidiDevice;
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
-    : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
+  : RosegardenParameterBox(i18n("Instrument"), parent),
       m_widgetStack(new QWidgetStack(this)),
       m_noInstrumentParameters(new QVBox(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
@@ -132,6 +132,12 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    this,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)));
+
+// Layout the groups left to right.
+
+    QBoxLayout* layout = new QVBoxLayout(this);
+    layout->addWidget(m_widgetStack);
+
 }
 
 InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc, 
@@ -651,7 +657,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_rotaryMapper(new QSignalMapper(this))
 {
     //m_mainGrid = new QGridLayout(this, 9, 3, 8, 1);
-    m_mainGrid = new QGridLayout(this, 9, 3, 2, 1);
+    m_mainGrid = new QGridLayout(this, 10, 4, 2, 1);
     QGridLayout *m_channelGrid = new QGridLayout(this, 1, 4, 1, 6);
 
     m_connectionLabel = new QLabel(this);
@@ -683,6 +689,15 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     int width = metrics.width("Acoustic Grand Piano 123");
     m_bankValue->setMinimumWidth(width);
     m_programValue->setMinimumWidth(width);
+
+    // Configure the empty final row to accomodate any extra vertical space.
+
+    m_mainGrid->setRowStretch(m_mainGrid->numRows()-1, 1);
+
+    // Configure the empty final column to accomodate any extra horizontal
+    // space.
+
+    m_mainGrid->setColStretch(m_mainGrid->numCols()-1, 1);
 
     m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
     m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);

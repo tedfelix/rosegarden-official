@@ -29,7 +29,6 @@
 #include <qlayout.h>
 #include <qvaluevector.h>
 #include <qtextcodec.h>
-#include <qtabwidget.h>
 
 // include files for KDE
 #include <kcursor.h>
@@ -262,11 +261,12 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif
       m_playTimer(new QTimer(this)),
       m_stopTimer(new QTimer(this)),
-      m_startupTester(0)
+      m_startupTester(0),
 #ifdef HAVE_LIRC
-    , m_lircClient(0),
-      m_lircCommander(0)
+      m_lircClient(0),
+      m_lircCommander(0),
 #endif
+      m_parameterArea(0)
 {
     m_myself = this;
 
@@ -353,33 +353,26 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
-    QFrame* vbox = new QFrame(m_dockLeft);
-    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
-    m_dockLeft->setWidget(vbox);
+    m_parameterArea = new RosegardenParameterArea(m_dockLeft);
+    m_dockLeft->setWidget(m_parameterArea);
 
-/*
-    m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
-    vboxLayout->addWidget(m_segmentParameterBox);
-    m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
-    vboxLayout->addWidget(m_instrumentParameterBox);
-*/
+    // Populate the parameter-box area with the respective
+    // parameter box widgets.
 
-    // Create a list of parameter-box tabs.
+    m_segmentParameterBox = new SegmentParameterBox(doc, m_parameterArea);
+    m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
+    m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
 
-    QTabWidget* tabs = new QTabWidget(vbox, "IPB");
+    // Lookup the configuration parameter that specifies the default
+    // arrangement, and instantiate it.
 
-    // Add the tabs to the parent frame of the IPB.
-
-    vboxLayout->addWidget(tabs);
-
-    // Populate the tabs with the respective parameter box widgets.
-
-    m_segmentParameterBox = new SegmentParameterBox(doc, tabs);
-    tabs->addTab(m_segmentParameterBox, "Segment");
-    m_instrumentParameterBox = new InstrumentParameterBox(doc, tabs);
-    tabs->addTab(m_instrumentParameterBox, "Instrument");
-
-    vboxLayout->addStretch();
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
+       kapp->config()->readUnsignedNumEntry("sidebarstyle",
+       RosegardenParameterArea::TAB_BOX_STYLE));
+    
+    m_dockLeft->update();
 
     connect(m_instrumentParameterBox,
 	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
@@ -5394,6 +5387,8 @@ void RosegardenGUIApp::slotConfigure()
 
     connect(configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
+    connect(configDlg, SIGNAL(updateSidebarStyle(unsigned int)),
+            this, SLOT(slotUpdateSidebarStyle(unsigned int)));
 
     configDlg->show();
 }
@@ -7503,6 +7498,14 @@ RosegardenGUIApp::slotUpdateAutoSaveInterval(unsigned int interval)
     RG_DEBUG << "RosegardenGUIApp::slotUpdateAutoSaveInterval - "
              << "changed interval to " << interval << endl;
     m_autoSaveTimer->changeInterval(int(interval) * 1000);
+}
+
+void
+RosegardenGUIApp::slotUpdateSidebarStyle(unsigned int style)
+{
+    RG_DEBUG << "RosegardenGUIApp::slotUpdateSidebarStyle - "
+             << "changed style to " << style << endl;
+    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement) style);
 }
 
 

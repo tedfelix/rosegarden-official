@@ -66,6 +66,7 @@ public:
                     const char *name=0);
 signals:
     void updateAutoSaveInterval(unsigned int);
+    void updateSidebarStyle(unsigned int);
 };
 
 class DocumentConfigureDialog : public ConfigureDialogBase
