@@ -762,16 +762,20 @@ const std::string Text::Annotation        = "annotation";
 const std::string Text::LilypondDirective = "lilypond_directive";
 
 // special Lilypond directives
+const std::string Text::Segno       = "Segno";  
+const std::string Text::Coda        = "Coda";
 const std::string Text::Alternate1  = "Alt1 ->";
 const std::string Text::Alternate2  = "Alt2 ->";
-const std::string Text::Segno       = "Segno";
-const std::string Text::Coda        = "Coda";
-const std::string Text::MultiRest   = "MultiRest";  // use code instead
-// "\% ->"
-// "|| ->"
-// "|: ->"
-// ":| ->"
-// "|. ->"
+const std::string Text::BarDouble   = "|| ->";  
+const std::string Text::BarEnd      = "|. ->";
+const std::string Text::BarDot      = ":  ->";
+const std::string Text::Gliss       = "Gliss.";
+const std::string Text::Arpeggio    = "Arp.";
+//const std::string Text::ArpeggioUp  = "Arp.^";
+//const std::string Text::ArpeggioDn  = "Arp._";
+const std::string Text::Tiny        = "tiny ->";
+const std::string Text::Small       = "small ->";
+const std::string Text::NormalSize  = "norm. ->";
 
 Text::Text(const Event &e)
 {
@@ -850,7 +854,16 @@ Text::getLilypondDirectives()
     v.push_back(Alternate2);
     v.push_back(Segno);
     v.push_back(Coda);
-    v.push_back(MultiRest);
+    v.push_back(BarDouble);  
+    v.push_back(BarEnd);     
+    v.push_back(BarDot);     
+    v.push_back(Gliss);      
+    v.push_back(Arpeggio);   
+//    v.push_back(ArpeggioUp); 
+//    v.push_back(ArpeggioDn); 
+    v.push_back(Tiny);       
+    v.push_back(Small);      
+    v.push_back(NormalSize); 
     
     return v;
 }

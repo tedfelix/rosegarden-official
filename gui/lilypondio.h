@@ -63,7 +63,8 @@ protected:
     void writeBar(Rosegarden::Segment *, int barNo, int barStart, int barEnd, int col,
 		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
 		  std::string &prevStyle, eventendlist &eventsInProgress,
-		  std::ofstream &str, bool &nextBarIsAlt1, bool &nextBarIsAlt2);
+		  std::ofstream &str, bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+		  bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
     
     Rosegarden::timeT calculateDuration(Rosegarden::Segment *s,
 					const Rosegarden::Segment::iterator &i,
@@ -102,8 +103,8 @@ protected:
      */
     bool handleDirective(const Rosegarden::Event *textEvent,
 	                 std::string &lilyText,
-		         bool &nextBarIsAlt1,
-		         bool &nextBarIsAlt2);
+		         bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+			 bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
 
     void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
     void writePitch(const Rosegarden::Event *note, const Rosegarden::Key &key, std::ofstream &);

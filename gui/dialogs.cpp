@@ -1104,7 +1104,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 	    m_typeCombo->insertItem(i18n("Annotation"));        // 7
 
 	} else if (style == Text::LilypondDirective) {
-	    m_typeCombo->insertItem(i18n("Lilypond Directive"));// 8
+	    m_typeCombo->insertItem(i18n("LilyPond Directive"));// 8
 
 	} else {
 	    // not i18n()-able
@@ -1153,7 +1153,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // note, the "  ," is a breath mark; the extra spaces are a cheap hack to
     // try to improve the probability of Rosegarden drawing the blasted thing
     // where it's supposed to go, without the need to micro-diddle each and
-    // every bliffin' one.  (Micro-diddling is not exportable to Lilypond
+    // every bliffin' one.  (Micro-diddling is not exportable to LilyPond
     // either, is it?  I rather doubt it.)
     m_directionShortcutCombo->insertItem(i18n("  ,"));
     m_directionShortcutCombo->insertItem(i18n("D.C. al Fine"));
@@ -1186,6 +1186,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_localDirectionShortcutCombo->insertItem(i18n("ordinario"));
     m_localDirectionShortcutCombo->insertItem(i18n("Muta in "));
     m_localDirectionShortcutCombo->insertItem(i18n("volti subito "));
+    m_localDirectionShortcutCombo->insertItem(i18n("soli"));
+    m_localDirectionShortcutCombo->insertItem(i18n("div."));
     m_localDirectionShortcutCombo->hide();
 
     // tempo shortcuts combo
@@ -1233,8 +1235,6 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_localTempoShortcutCombo->insertItem(i18n("Tempo Primo"));
     m_localTempoShortcutCombo->hide();
 
-    // WIP //////////////////////////////////////////////////////
-    // temporary home:
     // Lilypond directive combo
     m_directiveLabel = new QLabel(i18n("Directive:  "), entryGrid);    
     m_directiveLabel->hide();
@@ -1245,11 +1245,21 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // not i18nable, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
-    m_lilypondDirectiveCombo->insertItem(Text::Alternate1);
-    m_lilypondDirectiveCombo->insertItem(Text::Alternate2);
     m_lilypondDirectiveCombo->insertItem(Text::Segno);
     m_lilypondDirectiveCombo->insertItem(Text::Coda);
-
+    m_lilypondDirectiveCombo->insertItem(Text::Alternate1);
+    m_lilypondDirectiveCombo->insertItem(Text::Alternate2);
+    m_lilypondDirectiveCombo->insertItem(Text::BarDouble); 
+    m_lilypondDirectiveCombo->insertItem(Text::BarEnd);    
+    m_lilypondDirectiveCombo->insertItem(Text::BarDot);    
+    m_lilypondDirectiveCombo->insertItem(Text::Gliss);     
+    m_lilypondDirectiveCombo->insertItem(Text::Arpeggio);  
+//    m_lilypondDirectiveCombo->insertItem(Text::ArpeggioUp);
+//    m_lilypondDirectiveCombo->insertItem(Text::ArpeggioDn);
+    m_lilypondDirectiveCombo->insertItem(Text::Tiny);      
+    m_lilypondDirectiveCombo->insertItem(Text::Small);     
+    m_lilypondDirectiveCombo->insertItem(Text::NormalSize);
+    
     QVBox *exampleVBox = new QVBox(exampleBox);
     
     int ls = m_notePixmapFactory->getLineSpacing();
@@ -1318,7 +1328,6 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 		     this, SLOT(slotTempoShortcutChanged(const QString &)));
     QObject::connect(m_localTempoShortcutCombo, SIGNAL(activated(const QString &)),
 		     this, SLOT(slotLocalTempoShortcutChanged(const QString &)));    
-    // temporary home:
     QObject::connect(m_lilypondDirectiveCombo, SIGNAL(activated(const QString &)),
 		     this, SLOT(slotLilypondDirectiveChanged(const QString &)));
 
@@ -5449,7 +5458,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layout->addWidget(m_lilyPaperSize, 1, 1);
 
     layout->addWidget(new QLabel(
-        i18n("Lilypond font size"), frame), 2, 0);
+        i18n("LilyPond font size"), frame), 2, 0);
 
     m_lilyFontSize = new KComboBox(frame);
     m_lilyFontSize->insertItem("11");

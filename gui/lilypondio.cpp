@@ -780,10 +780,15 @@ LilypondExporter::write()
 		Rosegarden::Key key;
 
 	        bool haveRepeating = false;
+		bool haveAlternates = false;
+
 		bool nextBarIsAlt1 = false;
 		bool nextBarIsAlt2 = false;
 		bool prevBarWasAlt2 = false;
-		bool haveAlternates = false;
+
+		bool nextBarIsDouble = false;
+		bool nextBarIsEnd = false;
+		bool nextBarIsDot = false;
 
 		for (int barNo = m_composition->getBarNumber((*i)->getStartTime());
 		     barNo <= m_composition->getBarNumber((*i)->getEndMarkerTime());
@@ -814,16 +819,18 @@ LilypondExporter::write()
 		    //
 		    // Alt1 remains in effect until we run into Alt2, which
 		    // runs to the end of the segment
-		    if (nextBarIsAlt1) {
+		    if (nextBarIsAlt1 && haveRepeating) {
 			str << std::endl << indent(--col) << "} \% repeat close (before alternatives) ";
-                        str << std::endl << indent(col++) <<  "\\alternative { \% open alternative 1 ";
-			str << std::endl << indent(col++) << " { ";
+                        str << std::endl << indent(col++) <<  "\\alternative {";
+			str << std::endl << indent(col++) << "{  \% open alternative 1 ";
 			nextBarIsAlt1 = false;
 			haveAlternates = true;
-		    } else if (nextBarIsAlt2) {
+		    } else if (nextBarIsAlt2 && haveRepeating) {
 			if (!prevBarWasAlt2) {
-				str << std::endl << indent(--col) <<  " } \% close alternative 1 "
-				    << std::endl << indent(col++) << " {  \% open alternative 2";
+			    col--;
+			    str << std::endl << indent(--col) <<  "} \% close alternative 1 "
+			        << std::endl << indent(col++) << "{  \% open alternative 2";
+			    col++;
 			}
 			prevBarWasAlt2 = true;
 	            }
@@ -832,7 +839,7 @@ LilypondExporter::write()
 		    writeBar(*i, barNo, barStart, barEnd, col, key,
 			     lilyText, lilyLyrics,
 			     prevStyle, eventsInProgress, str,
-			     nextBarIsAlt1, nextBarIsAlt2);
+			     nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble, nextBarIsEnd, nextBarIsDot);
 
 		}
 		
@@ -1016,7 +1023,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			   std::string &prevStyle,
 			   eventendlist &eventsInProgress,
 			   std::ofstream &str,
-			   bool &nextBarIsAlt1, bool &nextBarIsAlt2)
+			   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+			   bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
@@ -1190,9 +1198,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
 		if ((*i)->isa(Text::EventType)) {
-		    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2)) {
+		    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2,
+                                	 nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
+
    	                handleText(*i, lilyText, lilyLyrics);
-		    }
+   		    }
 
 		} else if ((*i)->isa(Note::EventType)) {
 
@@ -1342,10 +1352,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	} else if ((*i)->isa(Text::EventType)) {
 
-	    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2)) {
+	    if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2,
+			         nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
 		handleText(*i, lilyText, lilyLyrics);
 	    }
-	    //handleText(*i, lilyText, lilyLyrics);
 	}
 
 	// LilyPond 2.0 introduces required postfix syntax for beaming
@@ -1395,7 +1405,19 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		  (barEnd - barStart) - writtenDuration, true, str);
     }
     if (m_exportBarChecks) {
-	str << " |";
+	if (!nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
+            str << " |";
+	}
+    }
+    if (nextBarIsDouble) {
+	str << "\\bar \"||\" ";
+	nextBarIsDouble = false;
+    } else if (nextBarIsEnd) {
+	str << "\\bar \"|.\" ";
+	nextBarIsEnd = false;
+    } else if (nextBarIsDot) {
+	str << "\\bar \":\" ";
+	nextBarIsDot = false;
     }
 }
 
@@ -1442,8 +1464,8 @@ LilypondExporter::writeSkip(const Rosegarden::TimeSignature &timeSig,
 bool
 LilypondExporter::handleDirective(const Rosegarden::Event *textEvent,
 	                          std::string &lilyText,
-				  bool &nextBarIsAlt1,
-				  bool &nextBarIsAlt2)
+				  bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+				  bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
 {
     Rosegarden::Text text(*textEvent);
 
@@ -1458,6 +1480,17 @@ LilypondExporter::handleDirective(const Rosegarden::Event *textEvent,
 	} else if (directive == Text::Alternate2) {
 	    nextBarIsAlt1 = false;
 	    nextBarIsAlt2 = true;
+	} else if (directive == Text::BarDouble) {
+	    nextBarIsDouble = true;
+	} else if (directive == Text::BarEnd) {
+	    nextBarIsEnd = true;
+	} else if (directive == Text::BarDot) {
+	    nextBarIsDot = true;
+	} else {
+	    // pass along less special directives for handling as plain text,
+	    // so they can be attached to chords and whatlike without
+	    // redundancy
+	    return false;
 	}
 	return true;
     } else {
@@ -1472,7 +1505,12 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
     try {
 	
 	Rosegarden::Text text(*textEvent);
-	std::string s = protectIllegalChars(text.getText());
+	std::string s = text.getText();
+
+	// only protect illegal chars if this is Text, rather than
+	// LilypondDirective
+	if ((*textEvent).isa(Text::EventType)) 
+  	    s = protectIllegalChars(s);
 	
 	if (text.getTextType() == Text::Tempo) {
 
@@ -1530,8 +1568,22 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 	    // print below staff, bold italics, small
 	    lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
 
+	 // LilyPond directives that don't require special handling across
+	 // barlines are handled here along with ordinary text types.  These
+	 // can be injected wherever they happen to occur, and should get
+	 // attached to the right bits in due course without extra effort.
+	 //
+	} else if (text.getText() == Text::Gliss) {
+	    lilyText += "\\glissando ";
+	} else if (text.getText() == Text::Arpeggio) {
+	    lilyText += "\\arpeggio ";
+	} else if (text.getText() == Text::Tiny) {
+	    lilyText += "\\tiny ";
+	} else if (text.getText() == Text::Small) {
+	    lilyText += "\\small ";
+	} else if (text.getText() == Text::NormalSize) {
+	    lilyText += "\\normalsize ";
 	} else {
-
 	    textEvent->get<String>(Text::TextTypePropertyName, s);
 	    std::cerr << "LilypondExporter::write() - unhandled text type: "
 		      << s << std::endl;
