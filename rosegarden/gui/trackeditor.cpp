@@ -181,7 +181,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     //!!! THE FOLLOWING LINE STILL CAUSES AN IRRITATING GREY BAR FOR SILVAN!
     // (who almost committed this file with this stupid line commented out)
-    grid->setColStretch(1, 15);
+    grid->setColStretch(1, 10);
   
     // Track Buttons
     //
