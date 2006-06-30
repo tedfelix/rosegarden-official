@@ -44,7 +44,7 @@ using Rosegarden::Note;
 
 SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
                                          QWidget *parent)
-    : RosegardenParameterBox(i18n("Segment Parameters"), parent),
+  : RosegardenParameterBox(i18n("Segment"), parent),
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_doc(doc),
       m_transposeRange(24)
@@ -76,7 +76,7 @@ SegmentParameterBox::initBox()
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
 //    QFrame *frame = new QFrame(this);
-    QGridLayout *gridLayout = new QGridLayout(this, 6, 4, 4, 2);
+    QGridLayout *gridLayout = new QGridLayout(this, 6, 5, 4, 2);
 
     QLabel *label = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
@@ -88,21 +88,17 @@ SegmentParameterBox::initBox()
     m_fadeInLabel          = new QLabel(i18n("Fade in"), this);
     m_fadeOutLabel         = new QLabel(i18n("Fade out"), this);
 
-    // HBox for label
-    //
-    QHBox *hbox = new QHBox(this);
-
     // Label ..
-    m_label = new QLabel(hbox);
+    m_label = new QLabel(this);
     m_label->setFont(font);
     m_label->setFixedWidth(120);
     m_label->setFixedHeight(comboHeight);
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
-    m_labelButton = new QPushButton("...", hbox);
+    m_labelButton = new QPushButton(i18n("Edit"), this);
     m_labelButton->setFont(font);
-    m_labelButton->setFixedWidth(25);
+    m_labelButton->setFixedWidth(50);
 
     connect(m_labelButton, SIGNAL(released()),
             SLOT(slotEditSegmentLabel()));
@@ -197,7 +193,8 @@ SegmentParameterBox::initBox()
     gridLayout->addRowSpacing(0, 12);
 
     gridLayout->addWidget(label, 1, 0, AlignRight);
-    gridLayout->addMultiCellWidget(hbox, 1, 1, 1, 3, AlignLeft);
+    gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 2, AlignLeft);
+    gridLayout->addWidget(m_labelButton, 1, 3, AlignLeft);
 
     gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
@@ -222,6 +219,15 @@ SegmentParameterBox::initBox()
 
     gridLayout->addWidget(m_fadeOutLabel,  5, 2, AlignRight);
     gridLayout->addWidget(m_fadeOutSpin, 5, 3);
+
+    // Configure the empty final row to accomodate any extra vertical space.
+
+    gridLayout->setRowStretch(gridLayout->numRows()-1, 1);
+
+    // Configure the empty final column to accomodate any extra horizontal
+    // space.
+
+    gridLayout->setColStretch(gridLayout->numCols()-1, 1);
 
     // populate the quantize combo
     //

@@ -32,6 +32,7 @@
 #include "dialogs.h"
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
+#include "rosegardenparameterarea.h"
 
 #include "AudioFile.h"
 #include "Sound.h"
@@ -1304,6 +1305,10 @@ public slots:
     //
     void slotUpdateAutoSaveInterval(unsigned int interval);
 
+    // Update the side-bar when the configuration page changes its style.
+    //
+    void slotUpdateSidebarStyle(unsigned int style);
+
     /**
      * called when the PlayList is being closed
      */
@@ -1553,6 +1558,8 @@ private:
     QTimer *m_stopTimer;
 
     StartupTester *m_startupTester;
+
+    RosegardenParameterArea *m_parameterArea;
 
 #ifdef HAVE_LIRC        
     LircClient *m_lircClient;
