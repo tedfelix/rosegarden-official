@@ -1,37 +1,145 @@
 # translation of ca.po to Català
 # This file is distributed under the same license as the PACKAGE package.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
+# Quim Perez i Noguer, 2006.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 # Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>, 2003, 2004.
 # D. Michael McIntyre <dmmcintyr@users.sourceforge.net>, 2003, 2004.
 # Feliu Ferrer <mrverges@copc.es>, 2005.
 # Maria-Rosa Vergés <mrverges@copc.es>, 2005.
-# Quim Perez Noguer <noguer@osona.com>, 2005
+# Quim Perez Noguer <noguer@osona.com>, 2005.
+# Quim Perez i Noguer, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ca\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-14 22:42+0200\n"
-"PO-Revision-Date: 2005-10-21 00:30+0200\n"
-"Last-Translator: Quim Perez Noguer <noguer@osona.com>\n"
-"Language-Team: Català <openoffice@softcatala.org>\n"
+"PO-Revision-Date: 2006-06-30 23:32+0200\n"
+"Last-Translator: Quim Perez i Noguer\n"
+"Language-Team: Català <gimp@softcatala.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.0\n"
+"X-Generator: KBabel 1.10.2\n"
 
 #: ../gui/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
-msgstr ""
+msgstr "Imatges Feta"
 
 #: ../gui/fonts/mappings/fonts.cpp:2 ../gui/fonts/mappings/fonts.cpp:7
-#, fuzzy
 msgid "GNU Lilypond"
-msgstr "Lilypond 2.2"
+msgstr "GNU Lilypond"
 
 #: ../gui/fonts/mappings/fonts.cpp:3 ../gui/fonts/mappings/fonts.cpp:8
 msgid "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
-msgstr ""
+msgstr "Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen"
 
 #: ../gui/fonts/mappings/fonts.cpp:4 ../gui/fonts/mappings/fonts.cpp:9
 #: ../gui/fonts/mappings/fonts.cpp:14 ../gui/fonts/mappings/fonts.cpp:19
@@ -40,129 +148,125 @@ msgstr ""
 #: ../gui/fonts/mappings/fonts.cpp:44 ../gui/fonts/mappings/fonts.cpp:49
 #: ../gui/fonts/mappings/fonts.cpp:54
 msgid "Chris Cannam"
-msgstr ""
+msgstr "Chris Cannam"
 
 #: ../gui/fonts/mappings/fonts.cpp:5 ../gui/fonts/mappings/fonts.cpp:40
 msgid "pixmap"
-msgstr ""
+msgstr "imatge"
 
 #: ../gui/fonts/mappings/fonts.cpp:6
 msgid "Feta"
-msgstr ""
+msgstr "Feta"
 
 #: ../gui/fonts/mappings/fonts.cpp:10 ../gui/fonts/mappings/fonts.cpp:15
 #: ../gui/fonts/mappings/fonts.cpp:20 ../gui/fonts/mappings/fonts.cpp:25
 #: ../gui/fonts/mappings/fonts.cpp:30 ../gui/fonts/mappings/fonts.cpp:35
 #: ../gui/fonts/mappings/fonts.cpp:45 ../gui/fonts/mappings/fonts.cpp:50
 #: ../gui/fonts/mappings/fonts.cpp:55
-#, fuzzy
 msgid "scalable"
-msgstr "Canvia d'escala"
+msgstr "escalable"
 
 #: ../gui/fonts/mappings/fonts.cpp:11
 msgid "Fughetta"
-msgstr ""
+msgstr "Fughetta"
 
 #: ../gui/fonts/mappings/fonts.cpp:12
 msgid ""
 "Created by Blake Hodgetts; freely redistributable.  See http://www.efh.org/"
 "~bch/aboutfonts.html"
-msgstr ""
+msgstr "Creat per en Blake Hodgetts; Es pot distribuir lliurement. Consulteu http://www.efh.org/~bch/aboutfonts.html"
 
 #: ../gui/fonts/mappings/fonts.cpp:13
 msgid "Copyright 1995-1999 Blake Hodgetts"
-msgstr ""
+msgstr "Copyright 1995-1999 Blake Hodgetts"
 
 #: ../gui/fonts/mappings/fonts.cpp:16
 msgid "Inkpen"
-msgstr ""
+msgstr "Inkpen"
 
 #: ../gui/fonts/mappings/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
+msgstr "Inkpen és part del Sibelius, però aquesta codificació també pot ser utilitzada en altres fonts."
 
 #: ../gui/fonts/mappings/fonts.cpp:18 ../gui/fonts/mappings/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
-msgstr ""
+msgstr "Copyright Sibelius Software Ltd"
 
 #: ../gui/fonts/mappings/fonts.cpp:21
-#, fuzzy
 msgid "Maestro"
-msgstr "Master"
+msgstr "Maestro"
 
 #: ../gui/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
+msgstr "Maestro és part del Finale, però aquesta codificació també pot ser utilitzada en altres fonts."
 
 #: ../gui/fonts/mappings/fonts.cpp:23 ../gui/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
-msgstr ""
+msgstr "Copyright Coda Inc"
 
 #: ../gui/fonts/mappings/fonts.cpp:26
 msgid "Opus"
-msgstr ""
+msgstr "Opus"
 
 #: ../gui/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
+msgstr "Opus és una part del Sibelius, però aquesta codificació també pot ser utilitzada en altres fonts."
 
 #: ../gui/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
-msgstr ""
+msgstr "Petrucci"
 
 #: ../gui/fonts/mappings/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr ""
+msgstr "Petrucci és part del Finale, però aquesta codificació també pot ser utilitzada en altres fonts."
 
 #: ../gui/fonts/mappings/fonts.cpp:36
 msgid "RG21"
-msgstr ""
+msgstr "RG21"
 
 #: ../gui/fonts/mappings/fonts.cpp:37
-#, fuzzy
 msgid "Rosegarden 2.1"
-msgstr "Rosegarden: %1"
+msgstr "Rosegarden 2.1"
 
 #: ../gui/fonts/mappings/fonts.cpp:38
 msgid "Copyright (c) 1994--2001 Chris Cannam"
-msgstr ""
+msgstr "Copyright (c) 1994--2001 Chris Cannam"
 
 #: ../gui/fonts/mappings/fonts.cpp:41
 msgid "Sonata"
-msgstr ""
+msgstr "Sonata"
 
 #: ../gui/fonts/mappings/fonts.cpp:42
-#, fuzzy
 msgid "Adobe"
-msgstr "Àudio %1"
+msgstr "Adobe"
 
 #: ../gui/fonts/mappings/fonts.cpp:43
 msgid "Copyright Adobe Inc"
-msgstr ""
+msgstr "Copyright Adobe Inc"
 
 #: ../gui/fonts/mappings/fonts.cpp:46
 msgid "Steinberg"
-msgstr ""
+msgstr "Steinberg"
 
 #: ../gui/fonts/mappings/fonts.cpp:47
 msgid "The Steinberg Notation font is part of Cubase."
-msgstr ""
+msgstr "La notació Steinberg és part del Cubase."
 
 #: ../gui/fonts/mappings/fonts.cpp:48
 msgid "Copyright Steinberg Inc"
-msgstr ""
+msgstr "Copyright Steinberg Inc"
 
 #: ../gui/fonts/mappings/fonts.cpp:51
 msgid "Xinfonia"
-msgstr ""
+msgstr "Xinfonia"
 
 #: ../gui/fonts/mappings/fonts.cpp:52
 msgid "xemo.org"
-msgstr ""
+msgstr "xemo.org"
 
 #: ../gui/fonts/mappings/fonts.cpp:53
 msgid "Copyright 2001-2003 Xemus Software LLC"
-msgstr ""
+msgstr "Copyright 2001-2003 Xemus Software LLC"
 
 #: ../gui/docs/en/tips.cpp:3
 msgid ""
@@ -264,6 +368,12 @@ msgid ""
 ">\n"
 "Behaviour -> Always use default studio when loading files</b>.</p>\n"
 msgstr ""
+"<p>Si la configuració del teu estudi no el canvies mai, i prefereixes que \n"
+" el teu estudi sigui el primer a carregar de tots els estudis de <b>autoload."
+"rg</b>,\n"
+"podeu configurar el teu autoload perquè sigui el predeterminat dins \n"
+"<b>Configuració -> Configura el Rosegarden -> Comportament ->\n"
+" Sempre utilitza l'estudi per defecte quan carreguis fitxers</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:59
 msgid ""
@@ -274,6 +384,10 @@ msgid ""
 "Duration</b> and then setting the composition to start at a negative number."
 "</p>\n"
 msgstr ""
+"<p>Si, accidentalment, heu gravat un fragment tant curt que ni tan sols \n"
+"es veu, però que el sentiu igualment, podeu seleccionar-lo anant a\n"
+" <b>Composició -> Canvia la durada del document </b> i posant un número\n"
+" negatiu en el punt d'inici de la composició.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:67
 msgid ""
@@ -292,8 +406,8 @@ msgid ""
 "selecting\n"
 "one or more notes and using Ctrl-PageUp and Ctrl-PageDown?</p>\n"
 msgstr ""
-"<p>...que podeu canviar la direcció de les pliques en l'editor de partitures "
-"seleccionant\n"
+"<p>...que podeu canviar la direcció de les vírgules en l'editor de "
+"partitures seleccionant\n"
 "una o més notes i fent servir Ctrl-RePàg i Ctrl-AvPàg?</p>\n"
 
 #: ../gui/docs/en/tips.cpp:78
@@ -303,8 +417,7 @@ msgid ""
 "it and using the up and down arrow keys with both Ctrl and Shift pressed?</"
 "p>\n"
 msgstr ""
-"<p>...que podeu canviar el signe d'alteració d'una nota en l'editor de "
-"partitures\n"
+"<p>...que podeu canviar l'accident d'una nota en l'editor de partitures\n"
 " (sense canviar l'altura de la nota) seleccionant-la i fent servir les "
 "tecles\n"
 "de desplaçament, amunt i avall amb Ctrl i majúscules premudes simultàniament?"
@@ -348,7 +461,6 @@ msgstr ""
 "servir <b>Edita->Obre a l'editor de partitures</b></p>\n"
 
 #: ../gui/docs/en/tips.cpp:102
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden can export files for use by Lilypond, the high-quality "
 "score typesetting system?<br><br>\n"
@@ -357,7 +469,7 @@ msgid ""
 msgstr ""
 "<p>...que el Rosegarden pot exportar fitxers per a ser usat amb el Lilypond, "
 "el sistema\n"
-"d'edició de partitures d'alta qualitat?\n"
+"d'edició de partitures d'alta qualitat?<br><br>\n"
 "Des del menú <b>Fitxer</b>, navega a <b>Exporta -> Exporta a fitxer del "
 "Lilypond</b></p>\n"
 
@@ -382,7 +494,6 @@ msgstr ""
 "controls en la caixa Paràmetres del fragment de la finestra principal?</p>\n"
 
 #: ../gui/docs/en/tips.cpp:119
-#, fuzzy
 msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
 "of\n"
@@ -397,7 +508,7 @@ msgid ""
 msgstr ""
 "<p>...que el número de pistes en els documents nous està basat en el \n"
 "contingut del seu fitxer autoload.rg?\n"
-"\n"
+"<br><br>\n"
 "Si preferiu començar amb 3 o amb 43 pistes, creeu un document que contingui\n"
 " el número de pistes desitjat, a més de qualssevol altres preferències "
 "d'estudi\n"
@@ -533,7 +644,6 @@ msgstr ""
 " visible, utilitzeu <b>Preferències -> Mostra els regles</b>.)</p>\n"
 
 #: ../gui/docs/en/tips.cpp:192
-#, fuzzy
 msgid ""
 "<p>...that if you're editing a section in the matrix or notation view, you "
 "can set that section to loop while you edit it?  Select it and use <b>Tools -"
@@ -543,8 +653,8 @@ msgstr ""
 "partitures,\n"
 " podeu definir aquesta secció com a repetició, mentre l'esteu editant?  "
 "Seleccioneu\n"
-"i feu servir <b>Mou -> Defineix la repetició en la selecció</b>, i després "
-"feu clic sobre Reprodueix.</p>\n"
+"i feu servir <b>Eines -> Cursor local -> Defineix la repetició en la "
+"selecció</b>, i després feu clic sobre Reprodueix.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:197
 msgid ""
@@ -613,133 +723,118 @@ msgstr ""
 
 #: ../gui/styles/styles.cpp:1
 msgid "Classical"
-msgstr ""
+msgstr "Clàssica"
 
 #: ../gui/styles/styles.cpp:2
-#, fuzzy
 msgid "Cross"
-msgstr "Controls"
+msgstr "Creu"
 
 #: ../gui/styles/styles.cpp:3
-#, fuzzy
 msgid "Mensural"
-msgstr "En el compàs:"
+msgstr "Mensural"
 
 #: ../gui/styles/styles.cpp:4
-#, fuzzy
 msgid "Triangle"
-msgstr "&Treset"
+msgstr "Triangle"
 
 #: ../gui/guitar/guitarchordeditor.cpp:78
 #: ../gui/guitar/guitartabselector.cpp:275
-#, fuzzy
 msgid "&Clear"
-msgstr "Clau"
+msgstr "&Neteja"
 
 #: ../gui/guitar/guitarchordeditor.cpp:83
 msgid "A&dd Alias"
-msgstr ""
+msgstr "A&fegeix un àlies"
 
 #: ../gui/guitar/guitarchordeditor.cpp:88
 #: ../gui/guitar/guitartabselector.cpp:280
-#, fuzzy
 msgid "C&ancel"
-msgstr "Canal"
+msgstr "C&ancel·la"
 
 #: ../gui/guitar/guitarchordeditor.cpp:93
 #: ../gui/guitar/guitartabselector.cpp:285
 msgid "&Ok"
-msgstr ""
+msgstr "D'ac&ord"
 
 #: ../gui/guitar/guitarchordeditor.cpp:98
-#, fuzzy
 msgid "Toggle &Mode"
-msgstr "Commuta el punt"
+msgstr "Canvia el &mode"
 
 #: ../gui/guitar/guitarchordeditor.cpp:191
 #: ../gui/guitar/guitartabselector.cpp:233
-#, fuzzy
 msgid "Scale"
-msgstr "Canvia d'escala"
+msgstr "Escala"
 
 #: ../gui/guitar/guitarchordeditor.cpp:218
 #: ../gui/guitar/guitartabeditor.cpp:71
 #: ../gui/guitar/guitartabselector.cpp:241
-#, fuzzy
 msgid "Modifier"
-msgstr "&Modifica el marcador"
+msgstr "Alteració"
 
 #: ../gui/guitar/guitarchordeditor.cpp:233
 #: ../gui/guitar/guitartabselector.cpp:249
 msgid "Suffix"
-msgstr ""
+msgstr "Sufix"
 
 #: ../gui/guitar/guitartabeditor.cpp:64
-#, fuzzy
 msgid "Chord Selector"
-msgstr "Selector de l'alçada de la nota"
+msgstr "Selector d'acords"
 
 #: ../gui/dialogs.cpp:1099 ../gui/guitar/guitartabeditor.cpp:66
 msgid "Chord"
 msgstr "Acord"
 
 #: ../gui/guitar/guitartabeditor.cpp:74
+#, fuzzy
 msgid "Additivies"
-msgstr ""
+msgstr "Aditius"
 
 #: ../gui/guitar/guitartabeditor.cpp:77
 #: ../gui/guitar/guitartabselector.cpp:257
-#, fuzzy
 msgid "Version"
-msgstr "Percussió"
+msgstr "Versió"
 
 #: ../gui/guitar/guitartabeditor.cpp:84
-#, fuzzy
 msgid "Fingering"
-msgstr "Afegeix la digitació &%1"
+msgstr "Digitació"
 
 #: ../gui/guitar/guitartabselector.cpp:270
-#, fuzzy
 msgid "&New"
-msgstr "Nou"
+msgstr "&Nou"
 
 #: ../gui/guitar/guitartabselector.cpp:291
-#, fuzzy
 msgid "Aliases"
-msgstr "Barres inverses"
+msgstr "Àlies"
 
 #: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1039
-#, fuzzy
 msgid "Move Segment"
-msgstr "Mou l'esdeveniment"
+msgstr "Mou el fragment"
 
 #: ../gui/segmenttool.cpp:497 ../gui/segmenttool.cpp:1040
-#, fuzzy
 msgid "Move Segments"
-msgstr "Mou els esdeveniments"
+msgstr "Mou els fragments"
 
 #: ../gui/tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
+"Feu clic durant uns segons amb el botó esquerra per assignar aquesta pista a "
+"un instrument."
 
 #: ../gui/tracklabel.cpp:181
 msgid "Change track name"
-msgstr ""
+msgstr "Canvia el nom de la pista"
 
 #: ../gui/tracklabel.cpp:182
-#, fuzzy
 msgid "Enter new track name"
-msgstr "Introdueix un nom nou"
+msgstr "Introduïu un nom nou per a la pista"
 
 #: ../gui/hydrogenio.cpp:311
 msgid " imported from Hydrogen "
 msgstr " importat de l'Hydrogen "
 
 #: ../gui/tempoview.cpp:128
-#, fuzzy
 msgid "Filter"
-msgstr "Filtre d'esdeveniments"
+msgstr "Filtre"
 
 #: ../gui/dialogs.cpp:1090 ../gui/dialogs.cpp:2803 ../gui/tempoview.cpp:130
 msgid "Tempo"
@@ -754,66 +849,56 @@ msgid "Time  "
 msgstr "Temps  "
 
 #: ../gui/tempoview.cpp:157
-#, fuzzy
 msgid "Type  "
 msgstr "Tipus"
 
 #: ../gui/tempoview.cpp:158
-#, fuzzy
 msgid "Value  "
 msgstr "Valor"
 
 #: ../gui/tempoview.cpp:159
-#, fuzzy
 msgid "Properties  "
-msgstr "Propietats de l'esdeveniment"
+msgstr "Propietats"
 
 #: ../gui/tempoview.cpp:240
 msgid "Common, hidden"
-msgstr ""
+msgstr "Comú, ocult"
 
 #: ../gui/tempoview.cpp:241
 msgid "Hidden"
-msgstr ""
+msgstr "Ocult"
 
 #: ../gui/tempoview.cpp:243
-#, fuzzy
 msgid "Common"
-msgstr "mono"
+msgstr "Comú"
 
 #: ../gui/tempoview.cpp:250
-#, fuzzy
 msgid "Time Signature   "
-msgstr "Indicació de compàs"
+msgstr "Indicació del compàs"
 
 #: ../gui/tempoview.cpp:275
-#, fuzzy
 msgid "%1.%2%3"
-msgstr "&%1%2"
+msgstr "%1.%2%3"
 
 #: ../gui/tempoview.cpp:285
 msgid "%1.%2%3 qpm (%4.%5%6 bpm)   "
-msgstr ""
+msgstr "%1.%2%3 qpm (%4.%5%6 bpm)   "
 
 #: ../gui/tempoview.cpp:294
-#, fuzzy
 msgid "Tempo   "
-msgstr "Tempo"
+msgstr "Tempo   "
 
 #: ../gui/tempoview.cpp:302
-#, fuzzy
 msgid "<nothing at this filter level>"
-msgstr "<no s'han trobat esdeveniments en aquest nivell de filtrat>"
+msgstr "<res en aquest nivell de filtrat>"
 
 #: ../gui/tempoview.cpp:493
-#, fuzzy
 msgid "Delete Tempo or Time Signature"
-msgstr "Indicació de compàs"
+msgstr "Suprimeix el tempo i la indicació del compàs"
 
 #: ../gui/tempoview.cpp:631
-#, fuzzy
 msgid "&Edit Item"
-msgstr "&Edita l'esdeveniment"
+msgstr "&Edita"
 
 #: ../gui/eventview.cpp:1245 ../gui/matrixview.cpp:654
 #: ../gui/tempoview.cpp:635
@@ -828,7 +913,7 @@ msgstr "Neteja la selecció"
 #: ../gui/eventview.cpp:1261 ../gui/markereditor.cpp:417
 #: ../gui/tempoview.cpp:651 ../gui/triggermanager.cpp:459
 msgid "&Musical Times"
-msgstr "Temps &musicals"
+msgstr "Temps &musical"
 
 #: ../gui/eventview.cpp:1270 ../gui/markereditor.cpp:426
 #: ../gui/tempoview.cpp:660 ../gui/triggermanager.cpp:468
@@ -837,23 +922,20 @@ msgstr "Temps &reals"
 
 #: ../gui/eventview.cpp:1279 ../gui/markereditor.cpp:435
 #: ../gui/tempoview.cpp:669 ../gui/triggermanager.cpp:477
-#, fuzzy
 msgid "Ra&w Times"
-msgstr "Temps cr&ús"
+msgstr "Temps t&otal"
 
 #: ../gui/tempoview.cpp:865
 msgid "%1 - Tempo and Time Signature Editor"
-msgstr ""
+msgstr "%1 - Editor del tempo i de la indicació del compàs"
 
 #: ../gui/rosegardenconfiguredialog.cpp:152
-#, fuzzy
 msgid "Configure Rosegarden"
-msgstr "Rosegarden"
+msgstr "Configuració del Rosegarden"
 
 #: ../gui/rosegardenconfiguredialog.cpp:221
-#, fuzzy
 msgid "Document Properties"
-msgstr "Propietats de l'esdeveniment"
+msgstr "Propietats del document"
 
 #: ../gui/dialogs.cpp:143
 msgid "Time signature"
@@ -945,12 +1027,11 @@ msgstr "Altera amb diesi"
 
 #: ../gui/dialogs.cpp:427
 msgid "Major"
-msgstr ""
+msgstr "Major"
 
 #: ../gui/dialogs.cpp:428
-#, fuzzy
 msgid "Minor"
-msgstr "Tenor"
+msgstr "Menor"
 
 #: ../gui/dialogs.cpp:442
 msgid "Apply to current segment only"
@@ -966,7 +1047,7 @@ msgstr "Manté els tons actuals"
 
 #: ../gui/dialogs.cpp:459
 msgid "Maintain current accidentals"
-msgstr "Manté les alteracions actuals"
+msgstr "Manté els accidents actuals"
 
 #: ../gui/dialogs.cpp:462
 msgid "Transpose into this key"
@@ -1098,9 +1179,8 @@ msgid "Duration: "
 msgstr "Duració: "
 
 #: ../gui/dialogs.cpp:1337
-#, fuzzy
 msgid "Sub-ordering: "
-msgstr "Subordenació: "
+msgstr "Subordre: "
 
 #: ../gui/dialogs.cpp:1348
 msgid "Persistent properties"
@@ -1156,7 +1236,6 @@ msgid "Delete this property"
 msgstr "Suprimeix aquesta propietat"
 
 #: ../gui/dialogs.cpp:1655
-#, fuzzy
 msgid ""
 "Are you sure you want to delete the \"%1\" property?\n"
 "\n"
@@ -1164,7 +1243,7 @@ msgid ""
 msgstr ""
 "Esteu segur de voler suprimir la propietat \"%1\"?\n"
 "\n"
-"La supressió de propietats necessàries pot causar un comportament inesperat."
+"La supressió d'una propietat necessària pot causar un comportament inesperat."
 
 #: ../gui/dialogs.cpp:1658 ../gui/dialogs.cpp:1689
 msgid "Edit Event"
@@ -1360,22 +1439,20 @@ msgid "Insert Tempo Change"
 msgstr "Afegeix el canvi de tempo"
 
 #: ../gui/dialogs.cpp:2809
-#, fuzzy
 msgid "New tempo:"
-msgstr "Nou tempo"
+msgstr "Nou tempo:"
 
 #: ../gui/dialogs.cpp:2816
-#, fuzzy
 msgid "Tempo is fixed until the following tempo change"
-msgstr "Notes existents a continuació del canvi de clau"
+msgstr "El tempo no varia fins que canvia el tempo següent"
 
 #: ../gui/dialogs.cpp:2817
 msgid "Tempo changes smoothly to following tempo"
-msgstr ""
+msgstr "El tempo canvia suaument per arribar al tempo següent"
 
 #: ../gui/dialogs.cpp:2818
 msgid "Tempo changes smoothly to:"
-msgstr ""
+msgstr "El tempo canvia suaument per:"
 
 #: ../gui/dialogs.cpp:2855
 msgid "Time of tempo change"
@@ -1433,7 +1510,7 @@ msgstr "No hi han altres canvis de tempo."
 
 #: ../gui/dialogs.cpp:3050
 msgid " bpm"
-msgstr ""
+msgstr " bpm"
 
 #: ../gui/dialogs.cpp:3171 ../gui/dialogs.cpp:3180 ../gui/dialogs.cpp:3195
 #: ../gui/dialogs.cpp:3204
@@ -1516,7 +1593,7 @@ msgstr "Duració de la selecció"
 
 #: ../gui/dialogs.cpp:3404
 msgid "Adjust times of following events accordingly"
-msgstr ""
+msgstr "Ajusta els temps dels següents esdeveniments"
 
 #: ../gui/dialogs.cpp:3507
 msgid "Merge File"
@@ -1567,11 +1644,12 @@ msgstr ""
 "Voleu intentar buscar i localitzar-lo o voleu ometre'l?"
 
 #: ../gui/dialogs.cpp:3577
-#, fuzzy
 msgid ""
 "%1|Requested file (%2)\n"
 "*.wav|WAV files (*.wav)"
-msgstr "*.wav|fitxers WAV (*.wav)"
+msgstr ""
+"%1|Fitxer demanat (%2)\n"
+"*.wav|fitxers WAV (*.wav)"
 
 #: ../gui/dialogs.cpp:3580
 msgid "Select an Audio File"
@@ -1623,15 +1701,13 @@ msgstr "Bemoll - defineix %1 al valor"
 
 #: ../gui/dialogs.cpp:4081
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Alternant - defineix %1 al màxim i mínim en els esdeveniments alternats"
+msgstr "Alternant - defineix %1 al màxim i mínim en els esdeveniments alternats"
 
 #: ../gui/dialogs.cpp:4085
 msgid "Crescendo - set %1 rising from min to max"
 msgstr "Crescendo - defineix %1 creixent des del mínim fins al màxim"
 
 #: ../gui/dialogs.cpp:4089
-#, fuzzy
 msgid "Diminuendo - set %1 falling from max to min"
 msgstr "Diminuendo - defineix %1 descendent des del màxim fins al mínim"
 
@@ -1650,14 +1726,12 @@ msgid "Second Value"
 msgstr "Segon valor"
 
 #: ../gui/dialogs.cpp:4145 ../gui/dialogs.cpp:4155
-#, fuzzy
 msgid "Low Value"
-msgstr "Valor LSB"
+msgstr "Valor baix"
 
 #: ../gui/dialogs.cpp:4146 ../gui/dialogs.cpp:4154
-#, fuzzy
 msgid "High Value"
-msgstr "Primer valor"
+msgstr "Primer alt"
 
 #: ../gui/dialogs.cpp:4203
 msgid "Change Composition Length"
@@ -1665,8 +1739,7 @@ msgstr "Canvia la duració de la composició"
 
 #: ../gui/dialogs.cpp:4209
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Estableix els marcadors dels compassos inicial i final per aquesta composició"
+msgstr "Estableix els marcadors dels compassos inicial i final per aquesta composició"
 
 #: ../gui/dialogs.cpp:4213
 msgid "Start Bar"
@@ -1709,24 +1782,20 @@ msgid "Use treble and bass clefs"
 msgstr "Fes servir claus de soprano i de baix"
 
 #: ../gui/dialogs.cpp:4311 ../gui/segmentcommands.cpp:2340
-#, fuzzy
 msgid "Split by Recording Source"
-msgstr "Origen de l'entrada del registre"
+msgstr "Divideix segons l'origen"
 
 #: ../gui/dialogs.cpp:4321
-#, fuzzy
 msgid "Recording Channel:"
-msgstr "S'està enregistrant..."
+msgstr "Canal de gravació:"
 
 #: ../gui/dialogs.cpp:4325 ../gui/dialogs.cpp:4340
-#, fuzzy
 msgid "any"
-msgstr "(qualsevol)"
+msgstr "qualsevol"
 
 #: ../gui/dialogs.cpp:4333
-#, fuzzy
 msgid "Recording Device:"
-msgstr "Dispositius de registre"
+msgstr "Dispositiu de gravació:"
 
 #: ../gui/deviceeditor.cpp:182 ../gui/deviceeditor.cpp:204
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:171
@@ -1754,7 +1823,7 @@ msgstr "Aplica les matisacions graduals"
 
 #: ../gui/dialogs.cpp:4395
 msgid "Stress beats"
-msgstr "Reforça les notes a temps"
+msgstr "Estressa les pulsacions"
 
 #: ../gui/dialogs.cpp:4397
 msgid "Articulate slurs, staccato, tenuto etc"
@@ -1797,9 +1866,8 @@ msgid "Just how big is your hard disk?"
 msgstr "Quina és la capacitat del vostre disc dur?"
 
 #: ../gui/dialogs.cpp:4609
-#, fuzzy
 msgid "Recording beyond end of composition:  "
-msgstr "Temps restant de l'enregistrament:  "
+msgstr "Grava fins i tot després del final de la composició:  "
 
 #: ../gui/dialogs.cpp:4648 rc.cpp:475
 #, no-c-format
@@ -1864,33 +1932,28 @@ msgid "Pitch"
 msgstr "Altura"
 
 #: ../gui/dialogs.cpp:4745
-#, fuzzy
 msgid "for Bar"
-msgstr "Compàs inicial"
+msgstr "per al compàs"
 
 #: ../gui/dialogs.cpp:4746
-#, fuzzy
 msgid "for Beat"
-msgstr "Part"
+msgstr "Per pulsació"
 
 #: ../gui/dialogs.cpp:4747
 msgid "for Sub-beat"
-msgstr ""
+msgstr "Per subpulsació"
 
 #: ../gui/dialogs.cpp:4751
-#, fuzzy
 msgid "Metronome Activated"
-msgstr "Metrònom"
+msgstr "Metrònom activat"
 
 #: ../gui/dialogs.cpp:4752
-#, fuzzy
 msgid "Playing"
-msgstr "Reprodueix"
+msgstr "S'està reproduint"
 
 #: ../gui/dialogs.cpp:4753
-#, fuzzy
 msgid "Recording"
-msgstr "S'està enregistrant..."
+msgstr "S'està enregistrant"
 
 #: ../gui/dialogs.cpp:5104
 msgid "Lilypond Export"
@@ -1909,19 +1972,16 @@ msgid "Lilypond 2.2"
 msgstr "Lilypond 2.2"
 
 #: ../gui/dialogs.cpp:5124
-#, fuzzy
 msgid "Lilypond 2.4"
-msgstr "Lilypond 2.2"
+msgstr "Lilypond 2.4"
 
 #: ../gui/dialogs.cpp:5125
-#, fuzzy
 msgid "Lilypond 2.6"
-msgstr "Lilypond 2.2"
+msgstr "Lilypond 2.6"
 
 #: ../gui/dialogs.cpp:5126
-#, fuzzy
 msgid "Lilypond 2.8"
-msgstr "Lilypond 2.2"
+msgstr "Lilypond 2.8"
 
 #: ../gui/dialogs.cpp:5131
 msgid "Paper size to use in \\paper block"
@@ -1973,15 +2033,15 @@ msgstr "Grava la barra de comprovació al final dels compassos"
 
 #: ../gui/dialogs.cpp:5190
 msgid "Export beamings"
-msgstr "Exporta les agrupacions"
+msgstr "Exporta les barres d'agrupació"
 
 #: ../gui/dialogs.cpp:5195
 msgid "Add staff group bracket"
-msgstr ""
+msgstr "Afegeix "
 
 #: ../gui/dialogs.cpp:5200
 msgid "Merge tracks with same non-zero name"
-msgstr ""
+msgstr "Ajunta les pistes que tinguin el mateix nom (no buit)"
 
 #: ../gui/dialogs.cpp:5229
 msgid "Export Devices..."
@@ -2139,7 +2199,7 @@ msgstr "compàs(assos)"
 
 #: ../gui/dialogs.cpp:5634
 msgid "Choose Text Encoding"
-msgstr ""
+msgstr "Selecciona la codificació del text"
 
 #: ../gui/dialogs.cpp:5638
 msgid ""
@@ -2149,115 +2209,120 @@ msgid ""
 "Please select one of the following estimated text encodings\n"
 "for use with the text in this file:\n"
 msgstr ""
+"\n"
+"Aquest fitxer conté text en un codificació desconeguda.\n"
+"\n"
+"Seleccioneu un de les següents codificacions possibles\n"
+"per utilitzar-la amb aquest fitxer:\n"
 
 #: ../gui/dialogs.cpp:5649 ../gui/dialogs.cpp:5665
 msgid "Japanese Shift-JIS"
-msgstr ""
+msgstr "Japonès Shift-JIS"
 
 #: ../gui/dialogs.cpp:5650
 msgid "Unicode variable-width"
-msgstr ""
+msgstr "Unicode de mida varible"
 
 #: ../gui/dialogs.cpp:5651
 msgid "Western Europe"
-msgstr ""
+msgstr "Europa occidental"
 
 #: ../gui/dialogs.cpp:5652
 msgid "Western Europe + Euro"
-msgstr ""
+msgstr "Europa occidental + Euro"
 
 #: ../gui/dialogs.cpp:5653
 msgid "Eastern Europe"
-msgstr ""
+msgstr "Europa de l'Est"
 
 #: ../gui/dialogs.cpp:5654
 msgid "Southern Europe"
-msgstr ""
+msgstr "Sud d'Europa"
 
 #: ../gui/dialogs.cpp:5655
 msgid "Northern Europe"
-msgstr ""
+msgstr "Nord d'Europa"
 
 #: ../gui/dialogs.cpp:5656
-#, fuzzy
 msgid "Cyrillic"
-msgstr "Lírica"
+msgstr "Ciríl·lic"
 
 #: ../gui/dialogs.cpp:5657
 msgid "Arabic"
-msgstr ""
+msgstr "Àrab"
 
 #: ../gui/dialogs.cpp:5658
 msgid "Greek"
-msgstr ""
+msgstr "Grec"
 
 #: ../gui/dialogs.cpp:5659
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreu"
 
 #: ../gui/dialogs.cpp:5660
 msgid "Turkish"
-msgstr ""
+msgstr "Turc"
 
 #: ../gui/dialogs.cpp:5661
 msgid "Nordic"
-msgstr ""
+msgstr "Nòrdic"
 
 #: ../gui/dialogs.cpp:5662
 msgid "Thai"
-msgstr ""
+msgstr "Tai"
 
 #: ../gui/dialogs.cpp:5663
-#, fuzzy
 msgid "Baltic"
-msgstr "Part"
+msgstr "Bàltic"
 
 #: ../gui/dialogs.cpp:5664
 msgid "Celtic"
-msgstr ""
+msgstr "Celta"
 
 #: ../gui/dialogs.cpp:5666
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Xinès tradicional"
 
 #: ../gui/dialogs.cpp:5667
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Xinès simplificat"
 
 #: ../gui/dialogs.cpp:5668
 msgid "Russian"
-msgstr ""
+msgstr "Rus"
 
 #: ../gui/dialogs.cpp:5669
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ucraïnès"
 
 #: ../gui/dialogs.cpp:5670
-#, fuzzy
 msgid "Tamil"
-msgstr "Títol"
+msgstr "Tàmil"
 
 #: ../gui/dialogs.cpp:5685
 #, c-format
 msgid "Microsoft Code Page %1"
-msgstr ""
+msgstr "Còdi de pàgina Microsoft %1"
 
 #: ../gui/dialogs.cpp:5690
-#, fuzzy
 msgid "%1 (%2)"
-msgstr "&%1%2"
+msgstr "%1 (%2)"
 
 #: ../gui/dialogs.cpp:5708
 msgid ""
 "\n"
 "Example text from file:"
 msgstr ""
+"\n"
+"Exemple del text del fitxer:"
 
 #: ../gui/rosegardenguidoc.cpp:289
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
 msgstr ""
+"El fitxer actual s'ha modificat.\n"
+"Voleu desar-lo?"
 
 #: ../gui/rosegardenguidoc.cpp:397
 #, c-format
@@ -2265,6 +2330,10 @@ msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
 "Delete the %n audio files recorded during the unsaved session?"
 msgstr ""
+"_n: Voleu esborrar el fitxer d'àudio enregistrat durant la sessió sense "
+"desar?\n"
+"Voleu esborrar els %n fitxers d'àudio enregistrats durant la sessió sense "
+"desar?"
 
 #: ../gui/rosegardenguidoc.cpp:418
 msgid ""
@@ -2277,6 +2346,14 @@ msgid ""
 "\n"
 "Please select any you wish to delete permanently from the hard disk.\n"
 msgstr ""
+"Els següents fitxers d'àudio s'han enregistrat durant aquesta sessió,però no "
+"consten \n"
+"en el gestor de fitxers d'àudio, i per tant no tenen utilitat en el document "
+"que voleu desar.\n"
+"\n"
+"Pot ser voleu suprimir aquests fitxers.\n"
+"\n"
+"Seleccioneu de la llista els fitxers que voleu esborrar del disc dur.\n"
 
 #: ../gui/rosegardenguidoc.cpp:433
 #, c-format
@@ -2288,46 +2365,48 @@ msgid ""
 "There will be no way to recover these files.\n"
 "Are you sure?"
 msgstr ""
+"_n: S'esborrarà el fitxer d'àudio permanentment.\n"
+"No es podrà recuperar.\n"
+"Voleu continuar?\n"
+"S'esborraran els %n fitxers d'àudio permanentment.\n"
+"No es podran recuperar.\n"
+"Voleu continuar?"
 
 #: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:441
 msgid "File %1 could not be deleted."
-msgstr ""
+msgstr "No s'ha pogut esborrar el fitxer %1"
 
 #: ../gui/rosegardenguidoc.cpp:499
-#, fuzzy
 msgid "Can't open file '%1'"
-msgstr "No s'ha pogut obrir el fitxer %1"
+msgstr "No s'ha pogut obrir el fitxer '%1'"
 
 #: ../gui/rosegardenguidoc.cpp:504
-#, fuzzy
 msgid "Reading file..."
-msgstr "S'està fent visible..."
+msgstr "S'està llegint el fitxer..."
 
 #: ../gui/rosegardenguidoc.cpp:522
 msgid "Could not open Rosegarden-4 file"
-msgstr ""
+msgstr "No s'ha pogut obrir el fitxer Rosegarden-4"
 
 #: ../gui/rosegardenguidoc.cpp:560
 msgid "Error when parsing file '%1': \"%2\""
-msgstr ""
+msgstr "No s'ha pogut processar el fitxer '%1: \"%2\""
 
 #: ../gui/rosegardenguidoc.cpp:608
 msgid "Generating audio previews..."
-msgstr ""
+msgstr "S'estan generant mostres d'àudio..."
 
 #: ../gui/rosegardenguidoc.cpp:654
-#, fuzzy
 msgid "Merge"
-msgstr "Fusiona el fitxer"
+msgstr "Fusiona"
 
 #: ../gui/rosegardengui.cpp:2124 ../gui/rosegardenguidoc.cpp:1110
-#, fuzzy
 msgid "Saving file..."
-msgstr "S'està fent visible..."
+msgstr "Desa el fitxer..."
 
 #: ../gui/rosegardenguidoc.cpp:1491
 msgid "File load cancelled"
-msgstr ""
+msgstr "S'ha avortat la càrrega del fitxer"
 
 #: ../gui/rosegardenguidoc.cpp:1499
 msgid ""
@@ -2336,84 +2415,81 @@ msgid ""
 "We recommend you re-save this file from this version of Rosegarden to ensure "
 "that it can still be re-loaded in future versions."
 msgstr ""
+"Aquest fitxer conté un o més tipus d'elements anticuats i que ara estan "
+"desaconsellats.\n"
+"En properes versions del Rosegarden aquests elements desapareixeran.\n"
+"Es recomana que ho torneu desar amb aquesta versió del Rosegarden per així "
+"estar segurs que funcionarà en properes versions. "
 
 #: ../gui/rosegardenguidoc.cpp:1515
 msgid ""
 "The following plugins could not be loaded:\n"
 "\n"
 msgstr ""
+"Els connectors següents no s'han pogut carregar:\n"
+"\n"
 
 #: ../gui/rosegardenguidoc.cpp:1523
 msgid "--  %1 (from %2)\n"
-msgstr ""
+msgstr "--  %1 (des de %2)\n"
 
 #: ../gui/rosegardenguidoc.cpp:1878
 msgid "Insert Recorded MIDI"
-msgstr ""
+msgstr "Insereix el MIDI enregistrat"
 
 #: ../gui/rosegardenguidoc.cpp:2262
-#, fuzzy
 msgid "%1 (recorded)"
-msgstr "%1 (copiat)"
+msgstr "%1 (enregistrat)"
 
 #: ../gui/audiomanagerdialog.cpp:1262 ../gui/rosegardenguidoc.cpp:2479
 msgid "Generating audio preview..."
-msgstr ""
+msgstr "S'està generant una mostra d'àudio..."
 
 #: ../gui/audiocommands.h:57
 msgid "Distribute Audio Segments over MIDI"
 msgstr "Envia els fragments d'àudio al dispositiu MIDI"
 
 #: ../gui/triggermanager.cpp:141
-#, fuzzy
 msgid "Manage Triggered Segments"
-msgstr "Fragment activable"
+msgstr "Gestiona els fragments activables"
 
 #: ../gui/triggermanager.cpp:145
-#, fuzzy
 msgid "ID"
-msgstr "I"
+msgstr "Id"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2019
 #: ../gui/segmentparameterbox.cpp:81 ../gui/triggermanager.cpp:146
-#, fuzzy
 msgid "Label"
-msgstr "Etiqueta:"
+msgstr "Etiqueta"
 
 #: ../gui/audiomanagerdialog.cpp:255
 #: ../gui/rosegardenconfigurationpage.cpp:2021 ../gui/triggermanager.cpp:147
-#, fuzzy
 msgid "Duration"
-msgstr "Duració:"
+msgstr "Durada"
 
 #: ../gui/eventview.cpp:811 ../gui/triggermanager.cpp:149
 msgid "Base velocity"
 msgstr "Velocitat de base"
 
 #: ../gui/triggermanager.cpp:150
-#, fuzzy
 msgid "Triggers"
-msgstr "Suprimeix els activadors"
+msgstr "Activadors"
 
 #: ../gui/triggermanager.cpp:170
-#, fuzzy
 msgid "Add a Triggered Segment"
-msgstr "Fragment activable"
+msgstr "Afegeix un fragment activable"
 
 #: ../gui/triggermanager.cpp:173
-#, fuzzy
 msgid "Delete a Triggered Segment"
-msgstr "Fragment activable"
+msgstr "Suprimeix un fragment activable"
 
 #: ../gui/triggermanager.cpp:176
-#, fuzzy
 msgid "Delete All Triggered Segments"
-msgstr "%1 - Fragment activable: %2"
+msgstr "Suprimeix tots els fragment activables"
 
 #: ../gui/triggermanager.cpp:179
-#, fuzzy
 msgid "Close the Triggered Segment Manager"
-msgstr "%1 - Fragment activable: %2"
+msgstr "Tanca tots els fragment activables"
 
 #: ../gui/eventview.cpp:249 ../gui/triggermanager.cpp:294
 msgid "<no label>"
@@ -2424,22 +2500,24 @@ msgid ""
 "_n: %1 on 1 track\n"
 "%1 on %n tracks"
 msgstr ""
+"%1 en 1 pista\n"
+"%1 en %n pistes"
 
 #: ../gui/triggermanager.cpp:336
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
 msgstr ""
+"Aquesta acció eliminarà tots els fragments activables de tota la composició. "
+"Voleu continuar?"
 
 #: ../gui/triggermanager.cpp:339
-#, fuzzy
 msgid "Remove all triggered segments"
-msgstr "Interpreta amb el fragment activable: "
+msgstr "S'estan suprimint tots els fragment activables"
 
 #: ../gui/triggermanager.cpp:363
-#, fuzzy
 msgid "Trigger Segment Duration"
-msgstr "Defineix la durada del fragment"
+msgstr "Durada del fragment activable"
 
 #: ../gui/triggermanager.cpp:385
 #, c-format
@@ -2449,6 +2527,10 @@ msgid ""
 "This triggered segment is used %n times in the current composition.  Are you "
 "sure you want to remove it?"
 msgstr ""
+"_n: Aquest fragment activable només es fa servir un únic cop en tota la "
+"composició. Voleu suprimir-lo tot i així?\n"
+" Aquest fragment activable es fa servir %n cops en la composició. Voleu "
+"suprimir-lo tot i així?"
 
 #: ../gui/eventview.cpp:958 ../gui/matrixview.cpp:1510
 #: ../gui/notationviewslots.cpp:489 ../gui/notationviewslots.cpp:537
@@ -2471,9 +2553,8 @@ msgid "Re&do"
 msgstr "&Refés"
 
 #: ../gui/triggermanager.cpp:447
-#, fuzzy
 msgid "Pa&ste as New Triggered Segment"
-msgstr "%1 - Fragment activable: %2"
+msgstr "Enganxa com un nou fragment activable"
 
 #: ../gui/matrixcommands.cpp:43 ../gui/notationcommands.cpp:73
 msgid "Insert Note"
@@ -2516,19 +2597,16 @@ msgid "Add Double Octave Down"
 msgstr "Afegeix una doble-octava inferior"
 
 #: ../gui/notationcommands.cpp:830
-#, fuzzy
 msgid "Add &Crescendo"
-msgstr "S'està afegint el crescendo..."
+msgstr "Afegeix un &crescendo"
 
 #: ../gui/notationcommands.cpp:832
-#, fuzzy
 msgid "Add &Decrescendo"
-msgstr "S'està afegint el decrescendo..."
+msgstr "Afegeix un &decrescendo..."
 
 #: ../gui/notationcommands.cpp:834
-#, fuzzy
 msgid "Add &Glissando"
-msgstr "S'està afegint el glissando..."
+msgstr "Afegeix el &glissando"
 
 #: ../gui/notationcommands.cpp:837
 msgid "Add &%1%2"
@@ -2659,32 +2737,34 @@ msgstr "Ca&p"
 
 #: ../gui/notationcommands.cpp:1894
 msgid "Respell Accidentals &Upward"
-msgstr "Força les alteracions &cap amunt"
+msgstr "Força els accidents &cap amunt"
 
 #: ../gui/notationcommands.cpp:1897
 msgid "Respell Accidentals &Downward"
-msgstr "Força les alteracions cap a&vall"
+msgstr "Força els accidents cap a&vall"
 
 #: ../gui/notationcommands.cpp:1900
 msgid "&Restore Computed Accidentals"
-msgstr "&Restaura les alteracions calculades"
+msgstr "&Restaura els accidents calculats"
 
 #: ../gui/notationcommands.cpp:1903
 msgid "Respell Accidentals"
-msgstr "Força les alteracions"
+msgstr "Reescriu els accidents"
 
 #: ../gui/notationcommands.cpp:1969
+#, fuzzy
 msgid "Use &Cautionary Accidentals"
-msgstr "Fes servir les alteracions de pre&caució"
+msgstr "Fes servir els accidents de pre&caució"
 
 #: ../gui/notationcommands.cpp:1970
+#, fuzzy
 msgid "Cancel C&autionary Accidentals"
-msgstr "Cancel·la les&alteracions de precaució"
+msgstr "Cancel·la els &accidents de precaució"
 
 #: ../gui/notationcommands.cpp:2044
 #, fuzzy
 msgid "Insert Fretboard"
-msgstr "Afegeix un silenci"
+msgstr "Afegeix un tabulat"
 
 #: ../gui/editcommands.h:67
 msgid "Cu&t"
@@ -2776,9 +2856,8 @@ msgid "&Add Dot"
 msgstr "&Afegeix el punt"
 
 #: ../gui/bankeditor.cpp:86 ../gui/bankeditor.cpp:142
-#, fuzzy
 msgid "Percussion Bank"
-msgstr "Percussió"
+msgstr "Banc de percussió"
 
 #: ../gui/bankeditor.cpp:86 ../gui/bankeditor.cpp:142
 #: ../gui/instrumentparameterbox.cpp:669
@@ -2786,9 +2865,8 @@ msgid "Bank"
 msgstr "Banc"
 
 #: ../gui/bankeditor.cpp:94 ../gui/bankeditor.cpp:196
-#, fuzzy
 msgid "Key Mapping"
-msgstr "Canvi de clau"
+msgstr "Dreceres"
 
 #: ../gui/bankeditor.cpp:229
 msgid "Librarian"
@@ -2799,7 +2877,6 @@ msgid "Email"
 msgstr "Correu electrònic"
 
 #: ../gui/bankeditor.cpp:240
-#, fuzzy
 msgid ""
 "The librarian maintains the Rosegarden device data for this device.\n"
 "If you've made modifications to suit your own device, it might be worth\n"
@@ -2807,9 +2884,8 @@ msgid ""
 "benefit\n"
 "of others."
 msgstr ""
-"El bibliotecari manté la informació genèrica de bancs i programes per aquest "
-"dispositiu.\n"
-"Si feu modificacions a un banc per adequar-lo al vostre propi dispositiu, \n"
+"El bibliotecari manté la informació la informació del dispositiu.\n"
+"Si heu fet modificacions per adequar-la al vostre propi dispositiu, \n"
 "pot ser interessant comunicar-ho al bibliotecari per a benefici d'altres."
 
 #: ../gui/bankeditor.cpp:360 ../gui/bankeditor.cpp:464
@@ -2817,9 +2893,8 @@ msgid "Bank and Program details"
 msgstr "Detalls del banc i del programa"
 
 #: ../gui/bankeditor.cpp:361
-#, fuzzy
 msgid "Programs"
-msgstr "Programa"
+msgstr "Programes"
 
 #: ../gui/bankeditor.cpp:387 ../gui/instrumentparameterbox.cpp:673
 #: ../gui/matrixview.cpp:2566
@@ -2853,20 +2928,19 @@ msgstr "Valor LSB"
 #: ../gui/bankeditor.cpp:544 ../gui/bankeditor.cpp:844
 #, c-format
 msgid "Key Mapping: %1"
-msgstr ""
+msgstr "Drecera: %1"
 
 #: ../gui/bankeditor.cpp:785
 msgid "<no key mapping>"
-msgstr ""
+msgstr "<sense definir>"
 
 #: ../gui/bankeditor.cpp:935 ../gui/bankeditor.cpp:959
 msgid "Key Mapping details"
-msgstr ""
+msgstr "Detalls de la drecera"
 
 #: ../gui/bankeditor.cpp:936
-#, fuzzy
 msgid "Pitches"
-msgstr "Altura"
+msgstr "Altures"
 
 #: ../gui/bankeditor.cpp:1094
 msgid "Manage MIDI Banks and Programs"
@@ -2885,33 +2959,28 @@ msgid "LSB"
 msgstr "LSB"
 
 #: ../gui/bankeditor.cpp:1137
-#, fuzzy
 msgid "Add Bank"
-msgstr "Afegeix una &pista"
+msgstr "Afegeix un dispositiu"
 
 #: ../gui/bankeditor.cpp:1138
-#, fuzzy
 msgid "Add Key Mapping"
-msgstr "Afegeix el canvi de &to..."
+msgstr "Afegeix una drecera"
 
 #: ../gui/bankeditor.cpp:1149
 msgid "Add a Bank to the current device"
 msgstr "Afegeix un banc al dispositiu actual"
 
 #: ../gui/bankeditor.cpp:1152
-#, fuzzy
 msgid "Add a Percussion Key Mapping to the current device"
-msgstr "Afegeix un banc al dispositiu actual"
+msgstr "Afegeix una drecera de percussió per al dispositiu actual"
 
 #: ../gui/bankeditor.cpp:1155
-#, fuzzy
 msgid "Delete the current Bank or Key Mapping"
-msgstr "Esborra el banc actual"
+msgstr "Suprimeix el banc o drecera actuals"
 
 #: ../gui/bankeditor.cpp:1158
-#, fuzzy
 msgid "Delete all Banks and Key Mappings from the current Device"
-msgstr "Esborra tots els bancs del dispositiu actual"
+msgstr "Esborra tots els bancs o dreceres del dispositiu actual"
 
 #: ../gui/bankeditor.cpp:1160 ../gui/devicemanager.cpp:100
 msgid "Import..."
@@ -2922,8 +2991,7 @@ msgid "Export..."
 msgstr "Exporta..."
 
 #: ../gui/bankeditor.cpp:1168
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importa dades del banc i del programa des d'un fitxer del Rosegarden cap al "
 "dispositiu actual"
@@ -2953,23 +3021,20 @@ msgid "<new bank>"
 msgstr "<nou banc>"
 
 #: ../gui/bankeditor.cpp:2035
-#, fuzzy
 msgid "<new mapping>"
-msgstr "<nou banc>"
+msgstr "<nova drecera>"
 
 #: ../gui/bankeditor.cpp:2036
-#, fuzzy
 msgid "<new mapping %1>"
-msgstr "<nou banc>"
+msgstr "<nova drecera %1>"
 
 #: ../gui/bankeditor.cpp:2077
 msgid "Really delete this bank?"
 msgstr "Confirmeu l'eliminació d'aquest banc?"
 
 #: ../gui/bankeditor.cpp:2127
-#, fuzzy
 msgid "Really delete this key mapping?"
-msgstr "Confirmeu l'eliminació d'aquest banc?"
+msgstr "Voleu suprimir aquest banc?"
 
 #: ../gui/bankeditor.cpp:2176
 msgid "Really delete all banks for "
@@ -3041,11 +3106,11 @@ msgstr "<no hi ha cap dispositiu>"
 #: ../gui/rosegardenconfigurationpage.cpp:1133
 #: ../gui/rosegardenconfigurationpage.h:183
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: ../gui/rosegardenconfigurationpage.h:184
 msgid "General Configuration"
-msgstr ""
+msgstr "Configuració general"
 
 #: ../gui/matrixview.cpp:2565 ../gui/rosegardenconfigurationpage.cpp:224
 #: ../gui/rosegardenconfigurationpage.h:295
@@ -3055,23 +3120,20 @@ msgstr "Matriu"
 
 #: ../gui/rosegardenconfigurationpage.h:321
 msgid "Latency"
-msgstr ""
+msgstr "Latència"
 
 #: ../gui/rosegardenconfigurationpage.h:322
-#, fuzzy
 msgid "Sequencer Latency"
-msgstr "Estat del seqüenciador"
+msgstr "Latència del seqüenciador"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2052
 #: ../gui/rosegardenconfigurationpage.h:388
-#, fuzzy
 msgid "Audio"
-msgstr "Àudio %1"
+msgstr "Àudio"
 
 #: ../gui/rosegardenconfigurationpage.h:389
-#, fuzzy
 msgid "Audio Settings"
-msgstr "Durada del fragment d'àudio"
+msgstr "Configuració de l'àudio"
 
 #: ../gui/colourwidgets.cpp:47 ../gui/rosegardenconfigurationpage.h:431
 #: ../gui/segmentparameterbox.cpp:86
@@ -3079,19 +3141,16 @@ msgid "Color"
 msgstr "Color"
 
 #: ../gui/rosegardenconfigurationpage.h:432
-#, fuzzy
 msgid "Color Settings"
-msgstr "Neteja la selecció"
+msgstr "Configuració dels colors"
 
 #: ../gui/rosegardenconfigurationpage.h:466
-#, fuzzy
 msgid "Sequencer"
-msgstr "Estat del seqüenciador"
+msgstr "Seqüenciador"
 
 #: ../gui/rosegardenconfigurationpage.h:467
-#, fuzzy
 msgid "Sequencer Settings"
-msgstr "Estat del seqüenciador"
+msgstr "Configuració del seqüenciador"
 
 #: ../gui/deviceeditor.cpp:49 ../gui/devicemanager.cpp:79
 msgid "Manage MIDI Devices"
@@ -3144,8 +3203,7 @@ msgstr ""
 
 #: ../gui/devicemanager.cpp:116
 msgid "View and edit Banks and Programs for the selected device"
-msgstr ""
-"Visualitza i edita els bancs i els programes per al dispositiu seleccionat"
+msgstr "Visualitza i edita els bancs i els programes per al dispositiu seleccionat"
 
 #: ../gui/devicemanager.cpp:118
 msgid ""
@@ -3245,9 +3303,8 @@ msgid "Open in Matri&x Editor"
 msgstr "Obre a l'editor de matri&us"
 
 #: ../gui/editviewbase.cpp:218 ../gui/rosegardengui.cpp:820
-#, fuzzy
 msgid "Open in &Percussion Matrix Editor"
-msgstr "Obre a l'editor de matri&us"
+msgstr "Obre en l'editor matriu de percussió"
 
 #: ../gui/editviewbase.cpp:224 ../gui/rosegardengui.cpp:826
 msgid "Open in &Notation Editor"
@@ -3290,9 +3347,8 @@ msgid "Set Segment Duration"
 msgstr "Defineix la durada del fragment"
 
 #: ../gui/matrixcommands.cpp:73
-#, fuzzy
 msgid "Insert Percussion Note"
-msgstr "Afegeix una nota activadora"
+msgstr "Afegeix una nota de percusió"
 
 #: ../gui/matrixcommands.cpp:215
 msgid "Erase Note"
@@ -3308,188 +3364,164 @@ msgstr "Modifica la nota"
 
 #: ../gui/segmentcommands.h:163
 msgid "Quick-Copy Segment"
-msgstr ""
+msgstr "Copia ràpidament el fragment"
 
 #: ../gui/segmentcommands.h:382 ../gui/segmentcommands.h:402
 msgid "&Split on Silence"
-msgstr ""
+msgstr "Divideix el &silenci"
 
 #: ../gui/rosegardengui.cpp:757 ../gui/segmentcommands.h:421
-#, fuzzy
 msgid "&Join"
-msgstr "&Res"
+msgstr "&Ajunta"
 
 #: ../gui/segmentcommands.h:489
-#, fuzzy
 msgid "Add Time Si&gnature Change..."
-msgstr "Afegeix el canvi de &to..."
+msgstr "&Canvia d'indicació de compàs..."
 
 #: ../gui/segmentcommands.h:528
-#, fuzzy
 msgid "Remove &Time Signature Change..."
-msgstr "Indicació de compàs"
+msgstr "&Elimina el canvi d'indicació de compàs..."
 
 #: ../gui/segmentcommands.h:552
-#, fuzzy
 msgid "Modify &Default Tempo..."
-msgstr "Modifica els filtres MIDI..."
+msgstr "Modifica el tempo per &defecte..."
 
 #: ../gui/segmentcommands.h:577
-#, fuzzy
 msgid "Remove &Tempo Change..."
-msgstr "Afegeix el canvi de tempo"
+msgstr "Elimina el canvi de &tempo..."
 
 #: ../gui/segmentcommands.h:608
-#, fuzzy
 msgid "Add Te&mpo Change..."
-msgstr "Afegeix el ca&nvi de clau..."
+msgstr "Afegeix un ca&nvi de tempo..."
 
 #: ../gui/segmentcommands.h:631
-#, fuzzy
 msgid "Add Tracks..."
-msgstr "Afegeix la marca de te&xt..."
+msgstr "Afegeix pistes..."
 
 #: ../gui/segmentcommands.h:653
 msgid "Delete Tracks..."
-msgstr ""
+msgstr "Esborra les pistes..."
 
 #: ../gui/segmentcommands.h:675
-#, fuzzy
 msgid "Move Tracks..."
-msgstr "Suprimeix els activadors..."
+msgstr "Mou les pistes..."
 
 #: ../gui/segmentcommands.h:695
 msgid "Rename Track"
-msgstr ""
+msgstr "Canvia el nom de la pista"
 
 #: ../gui/segmentcommands.h:716
-#, fuzzy
 msgid "Change &Composition Start and End..."
-msgstr "Canvia la duració de la composició"
+msgstr "&Canvia l'inici i el final de la composició..."
 
 #: ../gui/segmentcommands.h:747
-#, fuzzy
 msgid "Split by &Pitch..."
-msgstr "Divideix pel to"
+msgstr "Divideix se&gons to..."
 
 #: ../gui/segmentcommands.h:774
-#, fuzzy
 msgid "Split by &Recording Source..."
-msgstr "Divideix pel to"
+msgstr "Divideix segons l'&origen..."
 
 #: ../gui/segmentcommands.h:797
-#, fuzzy
 msgid "Re&label..."
-msgstr "S'està canviant la mida..."
+msgstr "Canvia &l'etiqueta..."
 
 #: ../gui/segmentcommands.h:817
-#, fuzzy
 msgid "Change Segment Color..."
-msgstr "Activa el &fragment activable..."
+msgstr "Canvia el color del fragment..."
 
 #: ../gui/segmentcommands.h:836
-#, fuzzy
 msgid "Change Segment Color Map..."
-msgstr "Defineix la duració del fragment..."
+msgstr "Canvia el mapa de colors del fragment..."
 
 #: ../gui/rgapplication.cpp:86
 #, c-format
 msgid "Failed to load soundfont %1"
-msgstr ""
+msgstr "No s'ha pogut carregar el fitxer de so %1"
 
 #: ../gui/timewidget.cpp:85
-#, fuzzy
 msgid "Note:"
-msgstr "Nota"
+msgstr "Nota:"
 
 #: ../gui/timewidget.cpp:92 ../gui/timewidget.cpp:128
 msgid "<inexact>"
-msgstr ""
+msgstr "<inexacte>"
 
 #: ../gui/timewidget.cpp:134
-#, fuzzy
 msgid "Units:"
-msgstr "Unitat"
+msgstr "Unitats:"
 
 #: ../gui/timewidget.cpp:156
-#, fuzzy
 msgid "Time:"
-msgstr "Temps  "
+msgstr "Temps:"
 
 #: ../gui/timewidget.cpp:167
-#, fuzzy
 msgid "units"
-msgstr "Unitat"
+msgstr "unitats"
 
 #: ../gui/timewidget.cpp:176
-#, fuzzy
 msgid "Measures:"
-msgstr "En el compàs:"
+msgstr "Mesures:"
 
 #: ../gui/timewidget.cpp:176
-#, fuzzy
 msgid "Measure:"
-msgstr "En el compàs:"
+msgstr "Mesura:"
 
 #: ../gui/timewidget.cpp:194
-#, fuzzy
 msgid "beats:"
-msgstr "pulsació(ons)"
+msgstr "pulsacions:"
 
 #: ../gui/timewidget.cpp:194
-#, fuzzy
 msgid "beat:"
-msgstr "Part"
+msgstr "pulsació:"
 
 #: ../gui/timewidget.cpp:212
-#, fuzzy
 msgid "%1:"
-msgstr "%1"
+msgstr "%1:"
 
 #: ../gui/timewidget.cpp:236
-#, fuzzy
 msgid "Seconds:"
-msgstr "Segon valor"
+msgstr "Segons:"
 
 #: ../gui/timewidget.cpp:254
-#, fuzzy
 msgid "msec:"
-msgstr "Nom:"
+msgstr "Milisegons:"
 
 #: ../gui/timewidget.cpp:366 ../gui/timewidget.cpp:477
 msgid "(%1/%2 time)"
-msgstr ""
+msgstr "(%1/%2 temps)"
 
 #: ../gui/timewidget.cpp:407
 msgid "(starting %1.%2 qpm, %2.%3 bpm)"
-msgstr ""
+msgstr "(inici %1.%2 qpm, %2.%3 bpm)"
 
 #: ../gui/timewidget.cpp:413
 msgid "(starting %1.%2 bpm)"
-msgstr ""
+msgstr "(inici %1.%2 bpm)"
 
 #: ../gui/timewidget.cpp:419
 msgid "(%1.%2 qpm, %2.%3 bpm)"
-msgstr ""
+msgstr "(%1.%2 qpm, %2.%3 bpm)"
 
 #: ../gui/timewidget.cpp:425
-#, fuzzy
 msgid "(%1.%2 bpm)"
-msgstr "%1.%2 s,"
+msgstr "(%1.%2 bpm)"
 
 #: ../gui/trackeditor.cpp:595
 msgid "Turn Repeating Segment into Real Copies"
-msgstr ""
+msgstr "Converteix el fragment repetit en un còpia"
 
 #: ../gui/trackeditor.cpp:597
 msgid "Turn Repeating Segments into Real Copies"
-msgstr ""
+msgstr "Converteix els fragments repetits en còpies"
 
 #: ../gui/trackeditor.cpp:763
 msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
 msgstr ""
+"No podeu arrossegar fitxers cap al Rosegarden des d'aquest client. Proveu-ho "
+"de fer amb el Konqueror."
 
 #: ../gui/multiviewcommandhistory.cpp:301
 msgid "Nothing to undo"
@@ -3513,14 +3545,13 @@ msgstr "Re&fer %1"
 
 #: ../gui/notationstaff.cpp:454
 msgid "Rendering staff %1..."
-msgstr "S'està processant el pentagrama %1..."
+msgstr "S'està dibuixant el pentagrama %1..."
 
 #: ../gui/notationstaff.cpp:516
 msgid "Rendering notes on staff %1..."
-msgstr "S'està representant les notes en el pentagrama %1..."
+msgstr "S'estan dibuixant les notes en el pentagrama %1..."
 
 #: ../gui/notationstaff.cpp:574
-#, fuzzy
 msgid "Positioning staff %1..."
 msgstr "S'està ubicant %1..."
 
@@ -3564,17 +3595,16 @@ msgstr "En&registra"
 
 #: ../gui/matrixview.cpp:764 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
 #: ../gui/notationview.cpp:2030 ../gui/rosegardengui.cpp:1101
-#, fuzzy
 msgid "Panic"
-msgstr "Balanç"
+msgstr "Pànic"
 
 #: ../gui/mixer.cpp:152
 msgid "Show Audio &Faders"
-msgstr "Mostra els reguladors de corredora d'à&udio"
+msgstr "Mostra els reguladors d'à&udio"
 
 #: ../gui/mixer.cpp:157
 msgid "Show Synth &Faders"
-msgstr "Mostra els reguladors de corredora del &sintetitzador"
+msgstr "Mostra els reguladors del &sintetitzador"
 
 #: ../gui/mixer.cpp:162
 msgid "Show &Submasters"
@@ -3594,6 +3624,8 @@ msgid ""
 "_n: 1 Input\n"
 "%n Inputs"
 msgstr ""
+"_n: 1 entrada\n"
+"%n entrades"
 
 #: ../gui/mixer.cpp:190
 msgid "No Submasters"
@@ -3605,6 +3637,8 @@ msgid ""
 "_n: 1 Submaster\n"
 "%n Submasters"
 msgstr ""
+"_n: 1 Submaster\n"
+"%n Submasters"
 
 #: ../gui/mixer.cpp:273
 msgid "Audio Mixer"
@@ -3882,19 +3916,16 @@ msgid "Making invisible..."
 msgstr "S'està fent invisible..."
 
 #: ../gui/notationviewslots.cpp:821
-#, fuzzy
 msgid "Beaming group..."
-msgstr "A&grupa les pliques"
+msgstr "S'està posant una barra al grup..."
 
 #: ../gui/notationviewslots.cpp:830
-#, fuzzy
 msgid "Auto-beaming selection..."
-msgstr "S'està eliminant la selecció..."
+msgstr "S'està posant les barres automàticament a la selecció..."
 
 #: ../gui/notationviewslots.cpp:839
-#, fuzzy
 msgid "Breaking groups..."
-msgstr "S'està fent el legato..."
+msgstr "S'està separant els grups"
 
 #: ../gui/notationviewslots.cpp:924
 #, fuzzy
@@ -3902,164 +3933,136 @@ msgid "Untupleting..."
 msgstr "&Divideix els grups irregulars..."
 
 #: ../gui/notationviewslots.cpp:933
-#, fuzzy
 msgid "Making grace notes..."
-msgstr "S'està fent el legato..."
+msgstr "S'està posant notes d'adornament..."
 
 #: ../gui/notationviewslots.cpp:941
-#, fuzzy
 msgid "Making non-grace notes..."
-msgstr "S'està fent el legato..."
+msgstr "S'està posant demés notes..."
 
 #: ../gui/notationviewslots.cpp:953
-#, fuzzy
 msgid "Adding slur..."
-msgstr "Afegeix el lligat de &fraseig"
+msgstr "S'està afegint el lligat..."
 
 #: ../gui/notationviewslots.cpp:954
 msgid "slur"
-msgstr ""
+msgstr "lligat"
 
 #: ../gui/notationviewslots.cpp:959
-#, fuzzy
 msgid "Adding phrasing slur..."
-msgstr "Afegeix el lligat de &fraseig"
+msgstr "S'està afegeixint el lligat de la frase..."
 
 #: ../gui/notationviewslots.cpp:960
-#, fuzzy
 msgid "phrasing slur"
-msgstr "Afegeix el lligat de &fraseig"
+msgstr "lligat de frase"
 
 #: ../gui/notationviewslots.cpp:965
-#, fuzzy
 msgid "Adding glissando..."
 msgstr "S'està afegint el glissando..."
 
 #: ../gui/notationviewslots.cpp:966
-#, fuzzy
 msgid "glissando"
-msgstr "S'està afegint el glissando..."
+msgstr "glissando"
 
 #: ../gui/notationviewslots.cpp:971
-#, fuzzy
 msgid "Adding crescendo..."
-msgstr "S'està afegint el decrescendo..."
+msgstr "S'està afegint el crescendo..."
 
 #: ../gui/notationviewslots.cpp:972 ../gui/notationviewslots.cpp:978
-#, fuzzy
 msgid "dynamic"
 msgstr "Dinàmica"
 
 #: ../gui/notationviewslots.cpp:977
-#, fuzzy
 msgid "Adding decrescendo..."
 msgstr "S'està afegint el decrescendo..."
 
 #: ../gui/notationviewslots.cpp:983 ../gui/notationviewslots.cpp:989
 #: ../gui/notationviewslots.cpp:995 ../gui/notationviewslots.cpp:1001
-#, fuzzy
 msgid "Adding octave..."
-msgstr "Afegeix una octava s&uperior"
+msgstr "S'està afegint una octava"
 
 #: ../gui/notationviewslots.cpp:984 ../gui/notationviewslots.cpp:990
 #: ../gui/notationviewslots.cpp:996 ../gui/notationviewslots.cpp:1002
 msgid "ottava"
-msgstr ""
+msgstr "octava"
 
 #: ../gui/notationviewslots.cpp:1017
 msgid "Can't add overlapping %1 indications"
-msgstr ""
+msgstr "No es poden afegir les %1 indicacions solapades"
 
 #: ../gui/notationviewslots.cpp:1025
-#, fuzzy
 msgid "Making chord..."
-msgstr "S'està fent el legato..."
+msgstr "S'està creant l'acord..."
 
 #: ../gui/notationviewslots.cpp:1041
-#, fuzzy
 msgid "Normalizing rests..."
-msgstr "&Normalitza els silencis"
+msgstr "S'estan normalitzant els silencis..."
 
 #: ../gui/notationviewslots.cpp:1050
-#, fuzzy
 msgid "Collapsing rests..."
-msgstr "S'està eliminant notes..."
+msgstr "S'estan eliminant els sinlencis..."
 
 #: ../gui/matrixview.cpp:1244 ../gui/notationviewslots.cpp:1059
 msgid "Collapsing notes..."
 msgstr "S'està eliminant notes..."
 
 #: ../gui/notationviewslots.cpp:1068
-#, fuzzy
 msgid "Tying notes..."
-msgstr "S'està eliminant notes..."
+msgstr "S'estan eliminant notes..."
 
 #: ../gui/notationviewslots.cpp:1077
-#, fuzzy
 msgid "Untying notes..."
-msgstr "S'està eliminant notes..."
+msgstr "S'estan deslligant les notes..."
 
 #: ../gui/notationviewslots.cpp:1086
-#, fuzzy
 msgid "Making notes viable..."
-msgstr "S'està fent invisible..."
+msgstr "S'estan fent les notes viables..."
 
 #: ../gui/notationviewslots.cpp:1095
-#, fuzzy
 msgid "Removing counterpoint..."
-msgstr "S'està restaurant les posicions calculades..."
+msgstr "S'està eliminant el contrapunt..."
 
 #: ../gui/notationviewslots.cpp:1104
-#, fuzzy
 msgid "Pointing stems up..."
-msgstr "S'està ubicant %1..."
+msgstr "S'estan dibuixant les vírgules cap amunt..."
 
 #: ../gui/notationviewslots.cpp:1113
-#, fuzzy
 msgid "Pointing stems down..."
-msgstr "S'està empenyent la selecció cap avall..."
+msgstr "S'estan dibuixant les vírgules cap avall..."
 
 #: ../gui/notationviewslots.cpp:1123
-#, fuzzy
 msgid "Restoring computed stem directions..."
-msgstr "S'està restaurant les posicions calculades..."
+msgstr "S'està restaurant l'orientació de les vírgules..."
 
 #: ../gui/notationviewslots.cpp:1132 ../gui/notationviewslots.cpp:1141
-#, fuzzy
 msgid "Positioning slurs..."
-msgstr "S'està ubicant %1..."
+msgstr "S'estan dibuixant els lligats..."
 
 #: ../gui/notationviewslots.cpp:1151
-#, fuzzy
 msgid "Restoring slur positions..."
-msgstr "S'està restaurant les posicions calculades..."
+msgstr "S'està restaurant les posicions dels lligats..."
 
 #: ../gui/notationviewslots.cpp:1160
-#, fuzzy
 msgid "Fixing notation quantization..."
-msgstr "Fi&xa la quantificació de la partitura"
+msgstr "S'està quantificant la notació..."
 
 #: ../gui/notationviewslots.cpp:1169
-#, fuzzy
 msgid "Removing notation quantization..."
-msgstr "Suprimeix la &quantificació de la partitura"
+msgstr "S'està suprimeix la quantificació de la partitura..."
 
 #: ../gui/notationviewslots.cpp:1185
-#, fuzzy
 msgid "Changing to %1 style..."
-msgstr "Canvia al &to %1..."
+msgstr "S'està canviant a l'estil %1..."
 
 #: ../gui/notationviewslots.cpp:1193
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown style action %1"
-msgstr "Es desconeix l'acció %1"
+msgstr "Es desconeix l'acció d'estil %1"
 
 #: ../gui/notationviewslots.cpp:1206 ../gui/notationviewslots.cpp:1247
 #: ../gui/notationviewslots.cpp:1303
-#, fuzzy
 msgid "No note duration selected"
-msgstr ""
-"No s'ha pogut afegir una nota: No hi ha seleccionada una durada de graella."
+msgstr "No s'ha seleccionat cap durada de nota"
 
 #: ../gui/matrixview.cpp:1713 ../gui/notationviewslots.cpp:1225
 #, c-format
@@ -4072,39 +4075,32 @@ msgid "Inserting note"
 msgstr "S'està afegint una nota"
 
 #: ../gui/notationviewslots.cpp:1268
-#, fuzzy
 msgid "No rest duration selected"
-msgstr ""
-"No s'ha pogut afegir una nota: No hi ha seleccionada una durada de graella."
+msgstr "No s'ha seleccionat cap durada de silenci"
 
 #: ../gui/notationviewslots.cpp:1352
-#, fuzzy
 msgid "No note or rest duration selected"
-msgstr ""
-"No s'ha pogut afegir una nota: No hi ha seleccionada una durada de graella."
+msgstr "No s'ha seleccionat cap durada ni de nota ni de silenci"
 
 #: ../gui/notationviewslots.cpp:1362 ../gui/notationviewslots.cpp:1372
 #: ../gui/notationviewslots.cpp:1382 ../gui/notationviewslots.cpp:1392
 #: ../gui/notationviewslots.cpp:1402 ../gui/notationviewslots.cpp:1412
 #: ../gui/notationviewslots.cpp:1422
-#, fuzzy
 msgid "Forcing accidentals..."
-msgstr "Sense alteracions"
+msgstr "S'estan forçant els accidents..."
 
 #: ../gui/notationviewslots.cpp:1432
-#, fuzzy
 msgid "Restoring accidentals..."
-msgstr "Força les alteracions"
+msgstr "S'estan recuperant els accidents..."
 
 #: ../gui/notationviewslots.cpp:1442
 #, fuzzy
 msgid "Showing cautionary accidentals..."
-msgstr "Fes servir les alteracions de pre&caució"
+msgstr "S'estan mostrant els accidents de pre&caució..."
 
 #: ../gui/notationviewslots.cpp:1451
-#, fuzzy
 msgid "Cancelling cautionary accidentals..."
-msgstr "Cancel·la les&alteracions de precaució"
+msgstr "S'estan cancel·lant els accidents de precaució..."
 
 #: ../gui/matrixview.cpp:1222 ../gui/matrixview.cpp:1235
 #: ../gui/matrixview.cpp:1965 ../gui/notationviewslots.cpp:1465
@@ -4112,48 +4108,41 @@ msgid "Quantizing..."
 msgstr "S'està quantificant..."
 
 #: ../gui/notationviewslots.cpp:1479
-#, fuzzy
 msgid "Interpreting selection..."
-msgstr "S'està eliminant la selecció..."
+msgstr "S'està interpretant la selecció..."
 
 #: ../gui/notationviewslots.cpp:1490
-#, fuzzy
 msgid "Setting note durations..."
-msgstr "Defineix la duració del fragment..."
+msgstr "S'està definint la durada de les notes..."
 
 #: ../gui/notationviewslots.cpp:1497 ../gui/notationviewslots.cpp:1504
-#, fuzzy
 msgid "Adding dot..."
-msgstr "Afegeix un punt"
+msgstr "S'està afegeix un punt..."
 
 #: ../gui/notationviewslots.cpp:1526
-#, fuzzy
 msgid "Text: "
-msgstr "Text:  "
+msgstr "Text: "
 
 #: ../gui/notationviewslots.cpp:1540
-#, fuzzy
 msgid "Fingering: "
-msgstr "Afegeix la digitació &%1"
+msgstr "Digitació: "
 
 #: ../gui/notationviewslots.cpp:1623
 msgid "Ornament track %1 bar %2"
-msgstr ""
+msgstr "Ornament a la pista %1 compàs %2"
 
 #: ../gui/notationviewslots.cpp:1625
-#, fuzzy, c-format
+#, c-format
 msgid "Ornament bar %1"
-msgstr "Fes servir l'ornamentació"
+msgstr "Ornament al compàs %1"
 
 #: ../gui/notationviewslots.cpp:1681
-#, fuzzy
 msgid "Remove Ornaments"
-msgstr "Suprimeix l'ornament..."
+msgstr "Suprimeix els ornaments"
 
 #: ../gui/notationviewslots.cpp:1729
-#, fuzzy
 msgid "Estimated key signature shown"
-msgstr "Es mostra la indicació de compàs estimada"
+msgstr "Mostra la clau recomanada"
 
 #: ../gui/notationviewslots.cpp:1796
 msgid ""
@@ -4161,52 +4150,48 @@ msgid ""
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
 "dialog in the main window."
 msgstr ""
+"No hi ha cap controlador definit per aquest dispositiu.\n"
+"Mireu si el dispositiu està ben configurat en el gestor de dispositius MIDI"
 
 #: ../gui/notationviewslots.cpp:2662
-#, fuzzy, c-format
+#, c-format
 msgid "Time: %1"
-msgstr "Temps  "
+msgstr "Temps: %1"
 
 #: ../gui/notationviewslots.cpp:2699
-#, fuzzy
 msgid "Can't insert note: No note duration selected"
 msgstr ""
-"No s'ha pogut afegir una nota: No hi ha seleccionada una durada de graella."
+"No s'ha pogut afegir una nota: No hi ha seleccionada s'ha seleccionat cap "
+"durada"
 
 #: ../gui/studiowidgets.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "In %1"
-msgstr "Id: %1"
+msgstr "Entrada %1"
 
 #: ../gui/studiowidgets.cpp:834
-#, fuzzy
 msgid "In %1 R"
-msgstr "Id: %1"
+msgstr "Entrada %1 D"
 
 #: ../gui/studiowidgets.cpp:835
-#, fuzzy
 msgid "In %1 L"
-msgstr "Id: %1"
+msgstr "Entrada %1 E"
 
 #: ../gui/studiowidgets.cpp:837
-#, fuzzy
 msgid "Master R"
-msgstr "Master"
+msgstr "Master D"
 
 #: ../gui/studiowidgets.cpp:838
-#, fuzzy
 msgid "Master L"
-msgstr "Master"
+msgstr "Master E"
 
 #: ../gui/studiowidgets.cpp:840
-#, fuzzy
 msgid "Sub %1 R"
-msgstr "Sub %1"
+msgstr "Sub %1 D"
 
 #: ../gui/studiowidgets.cpp:841
-#, fuzzy
 msgid "Sub %1 L"
-msgstr "Sub %1"
+msgstr "Sub %1 E"
 
 #: ../gui/instrumentparameterbox.cpp:335 ../gui/instrumentparameterbox.cpp:566
 #: ../gui/studiowidgets.cpp:1003
@@ -4214,45 +4199,41 @@ msgid "<no synth>"
 msgstr "<sense sintetitzador>"
 
 #: ../gui/studiowidgets.cpp:1004
-#, fuzzy
 msgid "Synth plugin button"
-msgstr "Connectors de sintetitzadors"
+msgstr "Botó del sintonitzador"
 
 #: ../gui/audioplugindialog.cpp:89 ../gui/studiowidgets.cpp:1047
 msgid "Editor"
 msgstr "Editor"
 
 #: ../gui/studiowidgets.cpp:1063
+#, fuzzy
 msgid "Set the audio pan position in the stereo field"
-msgstr ""
+msgstr "Ubica la posició d'inici de l'àudio en el camp estéreo."
 
 #: ../gui/studiowidgets.cpp:1064
-#, fuzzy
 msgid "Open synth plugin's native editor"
-msgstr "Obre a l'editor de matri&us"
+msgstr "Obre a l'editor natiu del connector del sintonitzador"
 
 #: ../gui/studiowidgets.cpp:1065
-#, fuzzy
 msgid "Mono or Stereo Instrument"
-msgstr "Instrument del metrònom"
+msgstr "Instrument mono o stereo"
 
 #: ../gui/studiowidgets.cpp:1066
-#, fuzzy
 msgid "Record level"
-msgstr "Dispositius de registre"
+msgstr "Volum d'enregistrament"
 
 #: ../gui/studiowidgets.cpp:1067
-#, fuzzy
 msgid "Playback level"
-msgstr "Dispositius de reproducció"
+msgstr "Volum de reproducció"
 
 #: ../gui/studiowidgets.cpp:1075
 msgid "In:"
-msgstr ""
+msgstr "Entrada:"
 
 #: ../gui/studiowidgets.cpp:1078
 msgid "Out:"
-msgstr ""
+msgstr "Sortida:"
 
 #: ../gui/matrixtool.cpp:173 ../gui/matrixtool.cpp:416
 #: ../gui/matrixtool.cpp:952 ../gui/matrixtool.cpp:1296
@@ -4344,6 +4325,8 @@ msgid ""
 "This file was written by Rosegarden %1, and it uses\n"
 "a different file format that cannot be read by this version."
 msgstr ""
+"Aquest fitxer s'ha escrit amb el Rosegarden %1, i fa servir \n"
+"un format diferent que no es pot llegir amb aquesta versió."
 
 #: ../gui/rosexmlhandler.cpp:440
 msgid ""
@@ -4351,11 +4334,13 @@ msgid ""
 "version.\n"
 "There may be some incompatibilities with the file format."
 msgstr ""
+"Aquest fitxer s'ha escrit amb el Rosegarden %1, que és una versió més nova "
+"que aquesta.\n"
+"Poden haver-hi algunes incompatibilitats amb el format del fitxer."
 
 #: ../gui/rosexmlhandler.cpp:1680
-#, fuzzy
 msgid "Loading plugins..."
-msgstr "S'està abaixant les velocitats..."
+msgstr "S'estan carregant els connectors..."
 
 #: ../gui/audioplugindialog.cpp:66
 msgid "Audio Plugin"
@@ -4461,16 +4446,16 @@ msgid ""
 "Spanned note at %1 has no HEIGHT_ON_STAFF property!\n"
 "This is a bug (the program would previously have crashed by now)"
 msgstr ""
+"La nota de %1 no té la propietat HEIGHT_ON_STAFF!\n"
+"Això és un bug del programa (el programa es pot haver penjat)"
 
 #: ../gui/segmentcommands.cpp:86
-#, fuzzy
 msgid "Repeat Segments"
-msgstr "Fragment activable"
+msgstr "Repeteix el fragment"
 
 #: ../gui/segmentcommands.cpp:150 ../gui/segmentcommands.cpp:162
-#, fuzzy
 msgid "Erase Segment"
-msgstr "Fragment activable"
+msgstr "Esborra el fragment"
 
 #: ../gui/editcommands.cpp:240 ../gui/segmentcommands.cpp:239
 msgid "%1 (copied)"
@@ -4478,27 +4463,24 @@ msgstr "%1 (copiat)"
 
 #: ../gui/segmentcommands.cpp:258
 msgid "Turn Repeats into Copies"
-msgstr ""
+msgstr "Converteix les repeticions en còpies"
 
 #: ../gui/segmentcommands.cpp:338
 msgid "Turn Single Repeat into Copy"
-msgstr ""
+msgstr "Converteix les repeticions d'un sol cop en còpies"
 
 #: ../gui/segmentcommands.cpp:383 ../gui/segmentcommands.cpp:475
 #: ../gui/segmentcommands.cpp:489
-#, fuzzy
 msgid "Create Segment"
-msgstr "Fragment activable"
+msgstr "Crea un fragment"
 
 #: ../gui/segmentcommands.cpp:445
-#, fuzzy
 msgid "%1 (inserted)"
-msgstr "%1 (copiat)"
+msgstr "%1 (inserit)"
 
 #: ../gui/segmentcommands.cpp:448
-#, fuzzy
 msgid "unknown audio file"
-msgstr "Busca el fitxer d'àudio"
+msgstr "Fitxer d'àudio desconegut"
 
 #: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
 #: ../gui/segmentcommands.cpp:566 rc.cpp:461
@@ -4507,127 +4489,117 @@ msgid "Record"
 msgstr "Registra"
 
 #: ../gui/segmentcommands.cpp:687 ../gui/segmentcommands.cpp:734
-#, fuzzy
 msgid "Resize Segment"
-msgstr "Redimensiona l'esdeveniment"
+msgstr "Redimensiona el fragment"
 
 #: ../gui/segmentcommands.cpp:788
-#, fuzzy
 msgid "Split Audio Segment"
-msgstr "Divideix automàticament el fragment d'àudio"
+msgstr "Divideix el fragment d'àudio"
 
 #: ../gui/segmentcommands.cpp:849 ../gui/segmentcommands.cpp:983
 #: ../gui/segmentcommands.cpp:2416 ../gui/segmentcommands.cpp:2418
-#, fuzzy
 msgid "%1 (split)"
-msgstr "%1 (copiat)"
+msgstr "%1 (dividit)"
 
 #: ../gui/segmentcommands.cpp:905
-#, fuzzy
 msgid "Split Segment"
-msgstr "Divideix automàticament el fragment \""
+msgstr "Divideix el fragment"
 
 #: ../gui/segmentcommands.cpp:1127
 msgid "%1 (autosplit %2)"
-msgstr ""
+msgstr "%1 (dividit automàtic %2)"
 
 #: ../gui/segmentcommands.cpp:1268
-#, fuzzy
 msgid "%1 (part)"
-msgstr "&%1%2"
+msgstr "%1 (partició)"
 
 #: ../gui/segmentcommands.cpp:1472
-#, fuzzy
 msgid "%1 (rescaled)"
-msgstr "%1 (copiat)"
+msgstr "%1 (escalat)"
 
 #: ../gui/segmentcommands.cpp:2236
-#, fuzzy
 msgid "%1 (upper)"
-msgstr "%1 (copiat)"
+msgstr "%1 (augmentat)"
 
 #: ../gui/segmentcommands.cpp:2238
-#, fuzzy
 msgid "%1 (lower)"
-msgstr "%1 (copiat)"
+msgstr "%1 (disminuït)"
 
 #: ../gui/segmentcommands.cpp:2452
-#, fuzzy
 msgid "Label Segments"
-msgstr "Fragment activable"
+msgstr "Fragments activables"
 
 #: ../gui/segmentcommands.cpp:2490
 msgid "Change Segment Color"
-msgstr ""
+msgstr "Canvia el color del fragment"
 
 #: ../gui/segmentcommands.cpp:2522
 msgid "Change Segment Color Map"
-msgstr ""
+msgstr "Canvia el mapa de colors del fragment"
 
 #: ../gui/segmentcommands.cpp:2553
 #, fuzzy
 msgid "Add Triggered Segment"
-msgstr "Fragment activable"
+msgstr "Afegeix un fragment activable"
 
 #: ../gui/segmentcommands.cpp:2601
 #, fuzzy
 msgid "Delete Triggered Segment"
-msgstr "Fragment activable"
+msgstr "Suprimeix el fragment activable"
 
 #: ../gui/segmentcommands.cpp:2643
 #, fuzzy
 msgid "Paste as New Triggered Segment"
-msgstr "%1 - Fragment activable: %2"
+msgstr "Enganxa com un nou fragment activable"
 
 #: ../gui/segmentcommands.cpp:2724
-#, fuzzy
 msgid "Set Base Pitch"
-msgstr "Altura de la base"
+msgstr "Altura de base"
 
 #: ../gui/segmentcommands.cpp:2761
-#, fuzzy
 msgid "Set Base Velocity"
 msgstr "Velocitat de base"
 
 #: ../gui/segmentcommands.cpp:2798
 msgid "Set Default Time Adjust"
-msgstr ""
+msgstr "Ajust de temps per defecte"
 
 #: ../gui/segmentcommands.cpp:2837
 #, fuzzy
 msgid "Set Default Retune"
-msgstr "Valor per omissió:"
+msgstr "Defineix un to per defecte"
 
 #: ../gui/segmentcommands.cpp:2873
 msgid "Set Tempos from Beat Segment"
-msgstr ""
+msgstr "Extreu el Tempo del fragment de pulsacions"
 
 #: ../gui/notestyle.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Can't open style file %1"
-msgstr "No s'ha pogut obrir el fitxer %1"
+msgstr "No s'ha pogut obrir el fitxer d'estil %1"
 
 #: ../gui/notestyle.cpp:589
 msgid "type is a required attribute of note"
-msgstr ""
+msgstr "el tipus és un atribut obligatori de la nota"
 
 #: ../gui/notestyle.cpp:598
 #, c-format
 msgid "Unrecognised note name %1"
-msgstr ""
+msgstr "No s'ha reconegut el nom de la nota %1"
 
 #: ../gui/notestyle.cpp:605
 msgid "global element must precede note elements"
-msgstr ""
+msgstr "l'element global ha de precedir els elements de la nota"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
+"els elements globals i de la nota han de tenir una forma o un atribut nom-"
+"del-caràcter, però no els dos "
 
 #: ../gui/notationtool.cpp:184
 msgid "Auto-Beam when appropriate"
-msgstr "Lliga automàticament on sigui apropiat"
+msgstr "Posa les barres d'agrupació automàticament on sigui apropiat"
 
 #: ../gui/notationtool.cpp:205
 msgid "Dotted note"
@@ -4655,38 +4627,32 @@ msgid "Switch to Insert Tool"
 msgstr "Agafa l'eina per a afegir"
 
 #: ../gui/notationtool.cpp:1149
-#, fuzzy
 msgid "Collapse Rests"
-msgstr "&Redueix els silencis"
+msgstr "Redueix els silencis"
 
 #: ../gui/notationtool.cpp:1153
-#, fuzzy
 msgid "Respell as Flat"
-msgstr "Força les alteracions amb %1"
+msgstr "Reescriu en bemoll"
 
 #: ../gui/notationtool.cpp:1157
-#, fuzzy
 msgid "Respell as Sharp"
-msgstr "Força les alteracions &cap amunt"
+msgstr "Reescriu en sostingut"
 
 #: ../gui/notationtool.cpp:1161
 msgid "Respell as Natural"
-msgstr ""
+msgstr "Reescriu de la forma natural"
 
 #: ../gui/notationtool.cpp:1165
-#, fuzzy
 msgid "Collapse Notes"
-msgstr "&Redueix els silencis"
+msgstr "Redueix les notes"
 
 #: ../gui/notationtool.cpp:1173
-#, fuzzy
 msgid "Make Invisible"
-msgstr "Fes &invisible"
+msgstr "Fes invisible"
 
 #: ../gui/notationtool.cpp:1177
-#, fuzzy
 msgid "Make Visible"
-msgstr "Fes &visible"
+msgstr "Fes visible"
 
 #: ../gui/eventview.cpp:995 ../gui/matrixview.cpp:1521
 #: ../gui/notationtool.cpp:2123
@@ -4704,6 +4670,11 @@ msgid ""
 "Please restart Rosegarden to continue working with audio.\n"
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
+"El subsistema d'àudio del JACK ha fallat o s'ha desconnectat l'àudio del "
+"Rosegarden des de la consola JACK.\n"
+"Reinicieu el Rosegarden per tornar a tenir l'àudio funcionant.\n"
+"Si sortiu de les altres aplicacions que estan corrent, millorareu el "
+"rendiment del Rosegarden."
 
 #: ../gui/sequencemanager.cpp:1013 ../gui/sequencemanager.cpp:1146
 msgid ""
@@ -4713,11 +4684,18 @@ msgid ""
 "remain.\n"
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
+"El subsistema d'àudio del JACK ha parat de processar l'àudio del Rosegarden, "
+"segurament perquè el sistema està sobrecarregat.\n"
+"S'ha provat de reiniciar el Rosegarden però no ha anat bé, encara deu haver-"
+"hi algun problema.\n"
+"Si sortiu de les altres aplicacions que estan corrent, millorareu el "
+"rendiment del Rosegarden."
 
 #: ../gui/sequencemanager.cpp:1024
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
+"No es té prou potència per al processat de l'àudio en temps real. No es pot "
+"continuar."
 
 #: ../gui/sequencemanager.cpp:1049
 msgid ""
@@ -4725,33 +4703,38 @@ msgid ""
 "possible to continue sequencing.  Please check console output for more "
 "information."
 msgstr ""
+"El subsistema ALSA MIDI ha tingut un problema seriós. No es podrà continuar "
+"amb la seqüenciació. Si voleu més informació mireu la consola de sortida."
 
 #: ../gui/sequencemanager.cpp:1070
 msgid "JACK Audio subsystem is losing sample frames."
-msgstr ""
+msgstr "El subsitema d'àudio JACK no dóna l'abast."
 
 #: ../gui/sequencemanager.cpp:1088
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
+"No s'ha pogut llegir les dades del disc a temps per servir-les al subsistema "
+"d'àudio."
 
 #: ../gui/sequencemanager.cpp:1092
 msgid ""
 "Failed to write audio data to disc fast enough to service the audio "
 "subsystem."
 msgstr ""
+"No s'ha pogut escriure les dades del disc a temps per servir-les al "
+"subsistema d'àudio."
 
 #: ../gui/sequencemanager.cpp:1096
 msgid "The audio mixing subsystem is failing to keep up."
-msgstr ""
+msgstr "El subsistema mesclador d'àudio no ha pogut continuar"
 
 #: ../gui/sequencemanager.cpp:1100
 msgid "The audio subsystem is failing to keep up."
-msgstr ""
+msgstr "El subsistema d'àudio no ha pogut continuar"
 
 #: ../gui/sequencemanager.cpp:1104
 msgid "Unknown sequencer failure mode!"
-msgstr ""
+msgstr "El seqüenciador té un problema desconegut!"
 
 #: ../gui/sequencemanager.cpp:1154
 msgid ""
@@ -4760,17 +4743,20 @@ msgid ""
 "you are using a Linux system with the kernel timer resolution set too low.  "
 "Please contact your Linux distributor for more information.</p>"
 msgstr ""
+"<h3>El rellotge del sistema és massa lent</h3><p>El Rosegarden no ha pogut "
+"trobar un rellotge d'alta freqüència per millorar l'eficència del MIDI.</"
+"p><p>Això vol dir que esteu fent servir un sistema Linux amb el kernel "
+"configurat perquè el rellotge del sistema vagi lent.  Demaneu ajuda al "
+"vostre distribuidor Linux.</p>"
 
 #: ../gui/segmentparameterbox.cpp:47
-#, fuzzy
 msgid "Segment Parameters"
-msgstr "Paràmetres de l'instrument"
+msgstr "Paràmetres del fragment"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2024
 #: ../gui/segmentparameterbox.cpp:82
-#, fuzzy
 msgid "Repeat"
-msgstr "Reinicia"
+msgstr "Repeteix"
 
 #: ../gui/editview.cpp:1418 ../gui/rosegardenconfigurationpage.cpp:2026
 #: ../gui/segmentparameterbox.cpp:84
@@ -4779,30 +4765,29 @@ msgstr "Transposa"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2027
 #: ../gui/segmentparameterbox.cpp:85
-#, fuzzy
 msgid "Delay"
-msgstr "Reprodueix"
+msgstr "Retard"
 
 #: ../gui/segmentparameterbox.cpp:87
+#, fuzzy
 msgid "Audio auto-fade"
-msgstr ""
+msgstr "Entrada o sortida progressiva (auto)"
 
 #: ../gui/segmentparameterbox.cpp:88
 msgid "Fade in"
-msgstr ""
+msgstr "Entrada progressiva"
 
 #: ../gui/segmentparameterbox.cpp:89
 msgid "Fade out"
-msgstr ""
+msgstr "Sortida regressiva"
 
 #: ../gui/segmentparameterbox.cpp:175 ../gui/segmentparameterbox.cpp:182
 msgid " ms"
-msgstr ""
+msgstr " ms"
 
 #: ../gui/segmentparameterbox.cpp:277 ../gui/segmentparameterbox.cpp:612
-#, fuzzy
 msgid "%1 ms"
-msgstr "%1.%2 s,"
+msgstr "%1 ms"
 
 #: ../gui/colourwidgets.cpp:107 ../gui/segmentparameterbox.cpp:339
 msgid "Default Color"
@@ -4811,13 +4796,12 @@ msgstr "Color per defecte"
 #: ../gui/rosegardenconfigurationpage.cpp:2408
 #: ../gui/segmentparameterbox.cpp:347
 msgid "Add New Color"
-msgstr ""
+msgstr "Afegeix un nou color"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2466
 #: ../gui/segmentparameterbox.cpp:888
-#, fuzzy
 msgid "New Color Name"
-msgstr "Modifica el nom del color"
+msgstr "Anomena el color"
 
 #: ../gui/colourwidgets.cpp:64 ../gui/rosegardenconfigurationpage.cpp:2467
 #: ../gui/segmentparameterbox.cpp:888
@@ -4825,20 +4809,17 @@ msgid "Enter new name"
 msgstr "Introdueix un nom nou"
 
 #: ../gui/rosegardengui.cpp:5903 ../gui/segmentparameterbox.cpp:930
-#, fuzzy
 msgid "Modify Segment label"
-msgstr "Etiqueta del fragment"
+msgstr "Canvia l'etiqueta del fragment"
 
 #: ../gui/rosegardengui.cpp:5904 ../gui/segmentparameterbox.cpp:931
-#, fuzzy
 msgid "Modify Segments label"
-msgstr "Etiqueta del fragment"
+msgstr "Canvia l'etiqueta dels fragments"
 
 #: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:5920
 #: ../gui/segmentparameterbox.cpp:941
-#, fuzzy
 msgid "Enter new label"
-msgstr "Introdueix un nom nou"
+msgstr "Introduïu una nova etiqueta"
 
 #: ../gui/notationstrings.cpp:42
 msgid "%1-dotted-%2"
@@ -5020,18 +5001,17 @@ msgstr "Si hi és, adjunta'l a un procés actiu del seqüenciador"
 
 #: ../gui/main.cpp:321
 msgid "Ignore installed version - for devs only"
-msgstr ""
+msgstr "Ignora la versió instal·lada - només per devs"
 
 #: ../gui/main.cpp:322
 msgid "file to open"
-msgstr "Fitxer per obrir"
+msgstr "fitxer per obrir"
 
 #: ../gui/main.cpp:372
 msgid "Installation contains the wrong version of Rosegarden."
 msgstr "La instal·lació conté una versió.incorrecta del Rosegarden"
 
 #: ../gui/main.cpp:373
-#, fuzzy
 msgid ""
 " The wrong versions of Rosegarden's data files were\n"
 " found in the standard KDE installation directories.\n"
@@ -5075,7 +5055,6 @@ msgid "Rosegarden does not appear to have been installed."
 msgstr "Sembla que el Rosegarden no s'ha instal·lat bé."
 
 #: ../gui/main.cpp:392
-#, fuzzy
 msgid ""
 " One or more of Rosegarden's data files could not be\n"
 " found in the standard KDE installation directories.\n"
@@ -5113,17 +5092,16 @@ msgid "Rosegarden"
 msgstr "Rosegarden"
 
 #: ../gui/main.cpp:418
-#, fuzzy
 msgid ""
 "Copyright 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
 "Lilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"
 msgstr ""
-"Copyright: 2000 - 2004 Guillaume Laurent, Chris Cannam, Richard Bown\n"
+"Copyright: 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Parts del copyright: 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
-"Tipus de lletra de Lilypond: copyright 1997 - 2004 Han-Wen Nienhuys i Jan "
+"Tipus de lletra de Lilypond: copyright 1997 - 2005 Han-Wen Nienhuys i Jan "
 "Nieuwenhuizen"
 
 #: ../gui/main.cpp:428
@@ -5153,6 +5131,8 @@ msgid ""
 "Segment colours\n"
 "Other UI and bug fixes"
 msgstr ""
+"Colors del fragment\n"
+"Interfície i correcció de bugs"
 
 #: ../gui/main.cpp:432
 msgid ""
@@ -5163,7 +5143,6 @@ msgstr ""
 "internacionalització"
 
 #: ../gui/main.cpp:433
-#, fuzzy
 msgid ""
 "Spanish translation\n"
 "ALSA hacking and bug fixes\n"
@@ -5218,43 +5197,41 @@ msgid ""
 "Auto-scroll deceleration\n"
 "Rests outside staves and other bug fixes"
 msgstr ""
+"Desacceleració dels desplaçaments\n"
+"Silencis fora de lloc i altres bugs"
 
 #: ../gui/main.cpp:448
-#, fuzzy
 msgid "Simplified Chinese translation"
-msgstr "traducció al suec"
+msgstr "traducció al xinès simplificat"
 
 #: ../gui/main.cpp:449
 msgid "LIRC infrared remote-controller support"
-msgstr ""
+msgstr "Connexió a controladors remots d'infrarojos LIRC"
 
 #: ../gui/main.cpp:450
 msgid "MTC slave timing implementation"
-msgstr ""
+msgstr "Implementació del temporitzador MTC esclau"
 
 #: ../gui/main.cpp:451
-#, fuzzy
 msgid "Czech translation"
-msgstr "traducció al francès"
+msgstr "traducció al txec"
 
 #: ../gui/main.cpp:452
 msgid "SCons/bksys building system"
-msgstr ""
+msgstr "Sistema constructor SCons/bksys"
 
 #: ../gui/main.cpp:453
 msgid "icons, icons, icons"
-msgstr ""
+msgstr "icones, icones, icones"
 
 #: ../gui/main.cpp:454 ../gui/main.cpp:455 ../gui/main.cpp:456
 #: ../gui/main.cpp:457
-#, fuzzy
 msgid "Spanish translation"
-msgstr "traducció al suec"
+msgstr "traducció a l'espanyol"
 
 #: ../gui/main.cpp:458 ../gui/main.cpp:459
-#, fuzzy
 msgid "Catalan translation"
-msgstr "traducció a l'italià"
+msgstr "traducció al català"
 
 #: ../gui/main.cpp:460
 msgid ""
@@ -5264,15 +5241,18 @@ msgid ""
 "2006,\n"
 "may he rest in peace)"
 msgstr ""
+"1.2.3 foto en la pantalla flaix (del jardi de roses d'en Michael)\n"
+"nova foto  en la pantalla flaix (dels instrumetns d'en Michael McIntyre\n"
+"junt amb una rosa del jardí d'en Hassell Arnold Hale, 1916-2006,\n"
+"ara descansa en pau) "
 
 #: ../gui/main.cpp:461
-#, fuzzy
 msgid "Finnish translation"
-msgstr "traducció al suec"
+msgstr "traducció al finès"
 
 #: ../gui/main.cpp:462
 msgid "guitar chord editor"
-msgstr ""
+msgstr "editor d'acords de guitarra"
 
 #: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:464
 msgid ""
@@ -5287,59 +5267,56 @@ msgid ""
 msgstr "mverge2@pie.xtec.es,noguer@osona.com"
 
 #: ../gui/rosegardenconfigurationpage.cpp:161
-#, fuzzy
 msgid "Note name style"
-msgstr "&Estil de la nota"
+msgstr "Estil del nom de la nota"
 
 #: ../gui/rosegardenconfigurationpage.cpp:168
 msgid "Base octave number for MIDI pitch display"
-msgstr ""
+msgstr "Número d'octava de referència per al monitor de MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:172
 msgid "Use textured backgrounds on canvas areas"
-msgstr ""
+msgstr "Fes servir textures com a fons"
 
 #: ../gui/rosegardenconfigurationpage.cpp:173
 msgid "    (takes effect only from next restart)"
-msgstr ""
+msgstr "    (tindrà efecte quan es torni a engegar)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:177
 msgid "Always use US names (e.g. quarter, 8th)"
-msgstr ""
+msgstr "Utilitza l'estil americà (p.e. quarter, 8th)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:178
 msgid "Localized (where available)"
-msgstr ""
+msgstr "Localitzat (quan sigui possible)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:205
-#, fuzzy
 msgid "Presentation"
-msgstr "Durada del fragment"
+msgstr "Presentació"
 
 #: ../gui/rosegardenconfigurationpage.cpp:215
 msgid "Default editor (for double-click on segment)"
-msgstr ""
+msgstr "Editor per defecte (quan es faci doble clic en un fragment)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:217
 msgid "Number of count-in measures when recording"
-msgstr ""
+msgstr "Nombre de mesures internet quan s'està gravant"
 
 #: ../gui/rosegardenconfigurationpage.cpp:219
 msgid "Always use default studio when loading files"
-msgstr ""
+msgstr "Sempre utilitza l'estudi per defecte quan es carreguin fitxers"
 
 #: ../gui/rosegardenconfigurationpage.cpp:225
-#, fuzzy
 msgid "Event List"
-msgstr "Filtre d'esdeveniments"
+msgstr "Llista d'esdeveniments"
 
 #: ../gui/rosegardenconfigurationpage.cpp:240
 msgid "Behavior"
-msgstr ""
+msgstr "Comportament"
 
 #: ../gui/rosegardenconfigurationpage.cpp:250
 msgid "External audio editor"
-msgstr ""
+msgstr "Editor d'àudio extern"
 
 #: ../gui/kde32_kfontrequester.cpp:42
 #: ../gui/rosegardenconfigurationpage.cpp:261
@@ -5349,64 +5326,60 @@ msgstr "Tria... "
 
 #: ../gui/rosegardenconfigurationpage.cpp:267
 msgid "External Editors"
-msgstr ""
+msgstr "Editors externs"
 
 #: ../gui/rosegardenconfigurationpage.cpp:277
 msgid "Enable auto-save"
-msgstr ""
+msgstr "Desa automàticament"
 
 #: ../gui/rosegardenconfigurationpage.cpp:281
 msgid "Auto-save interval (in seconds)"
-msgstr ""
+msgstr "Cada quan cal desar automàticament (en segons)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:287
-#, fuzzy
 msgid "Auto-save"
-msgstr "&Agrupa les pliques automàticament"
+msgstr "Desa automàticament"
 
 #: ../gui/rosegardenconfigurationpage.cpp:294
 msgid "External audio editor path"
-msgstr ""
+msgstr "Ubicació de l'editor d'àudio extern"
 
 #: ../gui/rosegardenconfigurationpage.cpp:365
-#, fuzzy
 msgid "Notation font"
-msgstr "Partitura"
+msgstr "Tipus de notes"
 
 #: ../gui/rosegardenconfigurationpage.cpp:366
-#, fuzzy
 msgid "Other fonts"
-msgstr "Altre"
+msgstr "Altres tipus de notes"
 
 #: ../gui/rosegardenconfigurationpage.cpp:367
 #: ../gui/rosegardenconfigurationpage.cpp:1964
-#, fuzzy
 msgid "Description"
-msgstr "Descripció:"
+msgstr "Descripció"
 
 #: ../gui/rosegardenconfigurationpage.cpp:377
 msgid "Font size for single-staff views"
-msgstr ""
+msgstr "Mida de lletra quan hi hagi una única vista"
 
 #: ../gui/rosegardenconfigurationpage.cpp:380
 msgid "Font size for multi-staff views"
-msgstr ""
+msgstr "Mida de lletra quan hi hagi vàries vistes"
 
 #: ../gui/rosegardenconfigurationpage.cpp:383
 msgid "Font size for printing (pt)"
-msgstr ""
+msgstr "Mida de lletra per a imprimir (pt)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:391
 msgid "Origin:"
-msgstr ""
+msgstr "Origen:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:392
 msgid "Copyright:"
-msgstr ""
+msgstr "Copyright:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:393
 msgid "Mapped by:"
-msgstr ""
+msgstr "Mapajat per:"
 
 #: ../gui/controleditor.cpp:455 ../gui/rosegardenconfigurationpage.cpp:394
 msgid "Type:"
@@ -5414,158 +5387,139 @@ msgstr "Tipus:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:426
 msgid "Rescan available fonts"
-msgstr ""
+msgstr "Recarrega els tipus de lletra"
 
 #: ../gui/rosegardenconfigurationpage.cpp:471
-#, fuzzy
 msgid "Text font"
-msgstr "Tipus de text:"
+msgstr "Tipus de lletra"
 
 #: ../gui/rosegardenconfigurationpage.cpp:474
-#, fuzzy
 msgid "Time Signature font"
-msgstr "Indicació de compàs"
+msgstr "Estil de l'indicació de compàs"
 
 #: ../gui/rosegardenconfigurationpage.cpp:505
-#, fuzzy
 msgid "Default layout mode"
-msgstr "Valor per omissió:"
+msgstr "Format per defecte"
 
 #: ../gui/rosegardenconfigurationpage.cpp:509
-#, fuzzy
 msgid "Linear layout"
 msgstr "Format &lineal"
 
 #: ../gui/rosegardenconfigurationpage.cpp:510
-#, fuzzy
 msgid "Continuous page layout"
-msgstr "Format de pàgina &continu"
+msgstr "Format de pàgina continu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:511
-#, fuzzy
 msgid "Multiple page layout"
-msgstr "Format de pàgina &múltiple"
+msgstr "Format de pàgina múltiple"
 
 #: ../gui/rosegardenconfigurationpage.cpp:518
-#, fuzzy
 msgid "Default spacing"
-msgstr "Per omissió  "
+msgstr "Espaiat per defecte"
 
 #: ../gui/rosegardenconfigurationpage.cpp:539
-#, fuzzy
 msgid "Default duration factor"
-msgstr "Factor de du&ració"
+msgstr "Factor de durada per defecte"
 
 #: ../gui/rosegardenconfigurationpage.cpp:552
 msgid "Full"
-msgstr ""
+msgstr "Ple"
 
 #: ../gui/rosegardenconfigurationpage.cpp:563
 msgid "Show non-notation events as question marks"
-msgstr ""
+msgstr "Mostra els esdeveniments que no siguin del compas com a interrogants"
 
 #: ../gui/rosegardenconfigurationpage.cpp:569
 msgid "Show notation-quantized notes in a different color"
-msgstr ""
+msgstr "Mostra les notes del compàs quantificables en un altre color"
 
 #: ../gui/rosegardenconfigurationpage.cpp:575
 msgid "Show \"invisible\" events in grey"
-msgstr ""
+msgstr "Mostra els esdeveniments \"invisibles\" en gris"
 
 #: ../gui/rosegardenconfigurationpage.cpp:580
-#, fuzzy
 msgid "Layout"
-msgstr "Format &lineal"
+msgstr "Format"
 
 #: ../gui/rosegardenconfigurationpage.cpp:588
 msgid "Default note style for new notes"
-msgstr ""
+msgstr "Estil de les notes per defecte per a les noves notes"
 
 #: ../gui/rosegardenconfigurationpage.cpp:613
-#, fuzzy
 msgid "When inserting notes..."
-msgstr "S'està afegint una nota"
+msgstr "Quan s'afegeixi notes..."
 
 #: ../gui/rosegardenconfigurationpage.cpp:620
 msgid "Split notes into ties to make durations match"
-msgstr ""
+msgstr "Separa les notes ajuntades per fer quadrar les durades "
 
 #: ../gui/rosegardenconfigurationpage.cpp:621
-#, fuzzy
 msgid "Ignore existing durations"
-msgstr "Duració de la notació:"
+msgstr "Ignora les durades existents"
 
 #: ../gui/rosegardenconfigurationpage.cpp:629
-#, fuzzy
 msgid "Auto-beam on insert when appropriate"
-msgstr "Lliga automàticament on sigui apropiat"
+msgstr "Posa les barres d'agrupació automàticament quan sigui apropiat"
 
 #: ../gui/rosegardenconfigurationpage.cpp:642
-#, fuzzy
 msgid "Default paste type"
-msgstr "Enganxa d'aquesta forma a partir d'ara"
+msgstr "Forma d'enganxar per defecte"
 
 #: ../gui/rosegardenconfigurationpage.cpp:661
-#, fuzzy
 msgid "Editing"
-msgstr "Editor"
+msgstr "S'està editant"
 
 #: ../gui/rosegardenconfigurationpage.cpp:668
-#, fuzzy
 msgid "Accidentals in one octave..."
-msgstr "S'està transposant una octava cap amunt..."
+msgstr "Accidents en una octava..."
 
 #: ../gui/rosegardenconfigurationpage.cpp:670
-#, fuzzy
 msgid "Affect only that octave"
-msgstr "%1 una octava avall"
+msgstr "Afecta només aquella octava"
 
 #: ../gui/rosegardenconfigurationpage.cpp:671
-#, fuzzy
 msgid "Require cautionaries in other octaves"
-msgstr "No hi han altres canvis de tempo."
+msgstr "Necessita accidents preventius en altres octaves"
 
 #: ../gui/rosegardenconfigurationpage.cpp:672
 msgid "Affect all subsequent octaves"
-msgstr ""
+msgstr "Afecta totes les octaves que segueixin"
 
 #: ../gui/rosegardenconfigurationpage.cpp:679
-#, fuzzy
 msgid "Accidentals in one bar..."
-msgstr "Mostra la barra d'eines de les &alteracions"
+msgstr "Accidents en una barra..."
 
 #: ../gui/rosegardenconfigurationpage.cpp:681
 msgid "Affect only that bar"
-msgstr ""
+msgstr "Afecta només aquest compàs"
 
 #: ../gui/rosegardenconfigurationpage.cpp:682
 msgid "Require cautionary resets in following bar"
-msgstr ""
+msgstr "Necessita silencis preventius en els compassos posteriors"
 
 #: ../gui/rosegardenconfigurationpage.cpp:683
 msgid "Require explicit resets in following bar"
-msgstr ""
+msgstr "Necessita silencis explícits en el compàs posterior"
 
 #: ../gui/rosegardenconfigurationpage.cpp:690
 msgid "Key signature cancellation style:"
-msgstr ""
+msgstr "Estil del canvi de clau:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:692
 msgid "Cancel only when entering C major or A minor"
-msgstr ""
+msgstr "Atura només quan entri un Do major o un La menor"
 
 #: ../gui/rosegardenconfigurationpage.cpp:693
 msgid "Cancel whenever removing sharps or flats"
-msgstr ""
+msgstr "Atura només quan es suprimeixin sostinguts o bemolls"
 
 #: ../gui/rosegardenconfigurationpage.cpp:694
 msgid "Cancel always"
-msgstr ""
+msgstr "Atura sempre"
 
 #: ../gui/rosegardenconfigurationpage.cpp:701
-#, fuzzy
 msgid "Accidentals"
-msgstr "Sense alteracions"
+msgstr "Accidents"
 
 #: ../gui/rosegardenconfigurationpage.cpp:706
 msgid ""
@@ -5573,18 +5527,22 @@ msgid ""
 "data for notation purposes only. This does not affect playback, and does not "
 "affect editing in any of the views except notation."
 msgstr ""
+"El Rosegarden pot quantificar automàticament les dades MIDI gravades o "
+"importades, amb el propòsit d'arreglar la notació. Això no afecta la "
+"reproducció de la peça ni l'editor."
 
 #: ../gui/rosegardenconfigurationpage.cpp:816
 msgid "%1 (smooth)"
-msgstr ""
+msgstr "%1 (suau)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:819
+#, fuzzy
 msgid "%1 (jaggy)"
-msgstr ""
+msgstr "%1 (jaggy)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:917
 msgid "JACK latency"
-msgstr ""
+msgstr "Latència del JACK"
 
 #: ../gui/rosegardenconfigurationpage.cpp:920
 msgid ""
@@ -5598,52 +5556,61 @@ msgid ""
 "again.\n"
 "The latency values will be stored by Rosegarden for use next time."
 msgstr ""
+"Fes servir el botó \"Comprova les latències del JACK\" per veure quines \n"
+"latències fa servir el seqüenciador. Es recomana que utilitzeu aquests \n"
+"valors, tot i que podeu modificar-los. Si canvieu els valors, haureu de "
+"tornar \n"
+"a comprovar les latències del JACK de nou. Els valors de latències les "
+"desa \n"
+"el Rosegarden per utilitzar-les la propera vegada."
 
 #: ../gui/rosegardenconfigurationpage.cpp:924
 msgid "JACK playback latency (in ms)"
-msgstr ""
+msgstr "Latència de reproducció del JACK (en ms)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:925
 msgid "JACK record latency (in ms)"
-msgstr ""
+msgstr "Latència de gravació del JACK (en ms)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:927
 msgid "Fetch JACK latencies"
-msgstr ""
+msgstr "Comprova les latències del JACK"
 
 #: ../gui/rosegardenconfigurationpage.cpp:980
 msgid "JACK Latency"
-msgstr ""
+msgstr "Latència del JACK"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1040
 msgid "Unknown"
-msgstr ""
+msgstr "Desconegut/da"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1046
 msgid "No MIDI, audio OK"
-msgstr ""
+msgstr "No hi ha MIDI, l'àudio va bé"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1048
 msgid "MIDI OK, no audio"
-msgstr ""
+msgstr "El MIDI va bé, l'àudio no"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1050
 msgid "MIDI OK, audio OK"
-msgstr ""
+msgstr "El MIDI va bé, l'àudio també"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1052
 msgid "No driver"
-msgstr ""
+msgstr "Sense dispositiu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1058
 msgid "Show detailed status"
-msgstr ""
+msgstr "Mostra l'estat detalladament"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1066
 msgid ""
 "Send all MIDI Controllers at start of playback\n"
 "     (will incur noticeable delay)"
 msgstr ""
+"Envia tots els controls MIDI a l'inici de la reproducció\n"
+"     (pot fer que us hagueu d'esperar més)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1068
 msgid ""
@@ -5653,24 +5620,31 @@ msgid ""
 "incur a\n"
 "delay at the start of playback due to the amount of data being transmitted."
 msgstr ""
+"El Rosegarden pot enviar tots els controladors MIDI (?) a tots els "
+"dispositius \n"
+"MIDI cada cop que reproduïu una peça, si voleu. Cal tenir en compta que \n"
+"això pot provocar un retard degut al volum de dades a transferir als "
+"dispositius."
 
 #: ../gui/rosegardenconfigurationpage.cpp:1093
 msgid "Load SoundFont to SoundBlaster card at startup"
-msgstr ""
+msgstr "Carrega la taula de sons a la targeta SoundBlaster a l'inici"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1094
 msgid ""
 "Check this box to enable soundfont loading on EMU10K-based cards when "
 "Rosegarden is launched"
 msgstr ""
+"Marca aquest casella per fer que es carregui la taula de sons en les "
+"targetes basades en EMU10K cada cop que el Rosegarden s'iniciï"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1102
 msgid "Path to 'asfxload' or 'sfxload' command"
-msgstr ""
+msgstr "Ubicació de l'ordre 'asfxload' o 'sfxload'"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1108
 msgid "SoundFont"
-msgstr ""
+msgstr "Taula de sons"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1144
 msgid ""
@@ -5687,360 +5661,347 @@ msgid ""
 "\n"
 "For example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"
 msgstr ""
+"El Rosegarden pot iniciar el servei d'àudio JACK (jackd) per tu, \n"
+"automàticament, si aquest no es troba en l'inici del Rosegarden.\n"
+"\n"
+"Aquesta opció és la recomanada pels principiants i aquells qui volen \n"
+"fer servir el Rosegarden com a principal aplicació d'àudio, però no per a "
+"usuaris avançats.\n"
+"\n"
+"Si voleu que s'iniciï el JACK automàticament, cal que informeu la "
+"correctament \n"
+"de quina és la línia d'ordres per engagar-lo.\n"
+"\n"
+"Per exemple: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1157
 msgid "Start JACK when Rosegarden starts"
-msgstr ""
+msgstr "Inicia el JACK quan s'iniciï el Rosegarden"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1161
 msgid "JACK command (including path as necessary)"
-msgstr ""
+msgstr "Línia d'ordres del JACK (amb la ubicació i tot si cal) "
 
 #: ../gui/rosegardenconfigurationpage.cpp:1174
-#, fuzzy
 msgid "Startup"
-msgstr "Diesi"
+msgstr "Inici"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1197
 msgid ""
 "Longer buffers usually improve playback quality, but use more memory and "
 "slow response."
 msgstr ""
+"Si utilitzeu una memòria intermèdia gran millorareu la qualitat del so, però "
+"en canvi gastareu més memòria i la resposta serà més lenta."
 
 #: ../gui/rosegardenconfigurationpage.cpp:1201
 msgid "Event read-ahead"
-msgstr ""
+msgstr "Llegeix els esdeveniments previsorament"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1202
-#, fuzzy
 msgid "Audio mix buffer"
-msgstr "Mesclador d'àudio"
+msgstr "Memòria per al mesclador d'àudio"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1203
 msgid "Audio file read buffer"
-msgstr ""
+msgstr "Memòria per la lectura de fitxers d'àudio"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1204
 msgid "Audio file write buffer"
-msgstr ""
+msgstr "Memòria per l'escriptura de fitxers d'àudio"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1205
 msgid "Per-file limit for cacheable audio files"
-msgstr ""
+msgstr "Límit de cada fitxer en la memòria cau"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1225
 msgid "20 msec"
-msgstr ""
+msgstr "20 ms"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1226
 msgid "5 sec"
-msgstr ""
+msgstr "5 s"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1259
 #: ../gui/rosegardenconfigurationpage.cpp:1584
-#, fuzzy
 msgid "per audio instrument"
-msgstr "<cap instrument>"
+msgstr "per a cada instrument"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1284
 #: ../gui/rosegardenconfigurationpage.cpp:1593
-#, fuzzy
 msgid "per file"
-msgstr "Fusiona el fitxer"
+msgstr "per fitxer"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1337
 msgid "32KB"
-msgstr ""
+msgstr "32KB"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1338
 msgid "32MB"
-msgstr ""
+msgstr "32MB"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1360
 msgid "Audio mix and monitor mode:"
-msgstr ""
+msgstr "Mode mesclador i monitor:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1362
-#, fuzzy
 msgid "Low latency"
-msgstr "Valor LSB"
+msgstr "Latència baixa"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1363
 msgid "Buffered"
-msgstr ""
+msgstr "En memòria intermèdia"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1369
 msgid "Create post-fader outputs for audio instruments"
-msgstr ""
+msgstr "Crea sortides progressives per als instruments d'àudio"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1377
 msgid "Create post-fader outputs for submasters"
-msgstr ""
+msgstr "Crea sortides d'acabada per als submasters"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1386
-#, fuzzy
 msgid "Record audio files as:"
-msgstr "Busca el fitxer d'àudio"
+msgstr "Grava el fitxer d'àudio com a:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1388
 msgid "16-bit PCM WAV format (smaller files)"
-msgstr ""
+msgstr "Format en 16-bit PCM WAV (fitxers més petits)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1389
 msgid "32-bit float WAV format (higher quality)"
-msgstr ""
+msgstr "Format en 32-bit decimals WAV (alta qualitat)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1412
-#, fuzzy
 msgid "Record and Mix"
-msgstr "Dispositius de registre"
+msgstr "Grava i mescla"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1421
-#, fuzzy
 msgid "Sequencer timer"
-msgstr "Estat del seqüenciador"
+msgstr "Rellotge del seqüenciador"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1438
 msgid "Send MIDI Clock and System messages"
-msgstr ""
+msgstr "Envia els missatges del sistema i el rellotge MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1448
 msgid "JACK transport mode"
-msgstr ""
+msgstr "Mode de transport JACK"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1454
 msgid "Ignore JACK transport"
-msgstr ""
+msgstr "Ignora el transport del JACK"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1455
 msgid "Sync"
-msgstr ""
+msgstr "Sincronitza"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1471
-#, fuzzy
 msgid "MIDI Machine Control mode"
-msgstr "Gestiona els esdeveniments de control"
+msgstr "Mode de control de la màquina MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1478
-#, fuzzy
 msgid "MMC Master"
-msgstr "Master"
+msgstr "Master MMC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1479
 msgid "MMC Slave"
-msgstr ""
+msgstr "Esclau MMC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1487
 msgid "MIDI Time Code mode"
-msgstr ""
+msgstr "Mode codificador de temps MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1494
-#, fuzzy
 msgid "MTC Master"
-msgstr "Master"
+msgstr "Master MTC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1495
 msgid "MTC Slave"
-msgstr ""
+msgstr "Esclau MTC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1501
 msgid "Automatically connect sync output to all devices in use"
 msgstr ""
+"Automàticament connecta la sortida sincronitzada a tots els dispositius "
+"utilitzats"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1508
-#, fuzzy
 msgid "Synchronisation"
-msgstr "traducció al francès"
+msgstr "Sincronització"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1537
 msgid "%1 msec / %2 KB %3"
-msgstr ""
+msgstr "%1 ms / %2 KB %3"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1540
 msgid "%1 msec / %2 MB %3"
-msgstr ""
+msgstr "%1 ms / %2 MB %3"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1545
 msgid "%1 sec / %2 KB %3"
-msgstr ""
+msgstr "%1 s / %2 KB %3"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1548
 msgid "%1 sec / %2 MB %3"
-msgstr ""
+msgstr "%1 s / %2 MB %3"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1554
 msgid "%1 msec"
-msgstr ""
+msgstr "%1 ms"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1556
 msgid "%1 sec"
-msgstr ""
+msgstr "%1 s"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1611
 msgid "%1 KB"
-msgstr ""
+msgstr "%1 KB"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1612
 msgid "%1 MB"
-msgstr ""
+msgstr "%1 MB"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1649
 msgid "sfxload path"
-msgstr ""
+msgstr "Ubicació sfxload"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1656
 msgid "Soundfont path"
-msgstr ""
+msgstr "Ubicació taula de sons"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1855
 msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 measures)"
-msgstr ""
+msgstr "%1 minuts %2.%3%4 segons (%5 unitats, %6 mesures)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1913
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1915
-#, fuzzy
 msgid "Composer"
-msgstr "Color"
+msgstr "Compositor"
 
 #: ../gui/playlist.cpp:82 ../gui/rosegardenconfigurationpage.cpp:1917
-#, fuzzy
 msgid "Title"
-msgstr "Ll&igats"
+msgstr "Títol"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1919
 msgid "Subtitle"
-msgstr ""
+msgstr "Subtítol"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1921
 msgid "Arranger"
-msgstr ""
+msgstr "Retocs"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1950
-#, fuzzy
 msgid "Add New Property"
-msgstr "Defineix la &propietat"
+msgstr "Afegeix una nova propietat"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1954
-#, fuzzy
 msgid "Delete Property"
 msgstr "Suprimeix aquesta propietat"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1982
-#, fuzzy
 msgid "Filename:"
-msgstr "Nom de la clau:"
+msgstr "Nom del fitxer:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1985
 msgid "Formal duration (to end marker):"
-msgstr ""
+msgstr "Durada formal (fins la marca de fi):"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1990
-#, fuzzy
 msgid "Playing duration:"
-msgstr "Duració de la notació:"
+msgstr "Durada de reproducció:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1995
 msgid "Tracks:"
-msgstr ""
+msgstr "Pistes:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1996
-#, fuzzy
 msgid "%1 used, %2 total"
-msgstr "%1 entrades, %2 sortides"
+msgstr "%1 utilitzats, %2 totals"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2001
-#, fuzzy
 msgid "Segments:"
-msgstr "Etiqueta del fragment"
+msgstr "Fragments:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2002
 msgid "%1 MIDI, %2 audio, %3 total"
-msgstr ""
+msgstr "%1 MIDI, %2 àudio, %3 total"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2010
-#, fuzzy
 msgid "Statistics"
-msgstr "To d'inici de divisió"
+msgstr "Estadístiques"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2018
 msgid "Track"
-msgstr ""
+msgstr "Pista"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2020
-#, fuzzy
 msgid "Time"
-msgstr "Temps  "
+msgstr "Temps"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2022
-#, fuzzy
 msgid "Events"
-msgstr "Esdeveniments de nota"
+msgstr "Esdeveniments"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2023
 msgid "Polyphony"
-msgstr ""
+msgstr "Polifonia"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2052
-#, fuzzy
 msgid "MIDI"
-msgstr "II"
+msgstr "MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2165
-#, fuzzy
 msgid "Segment Summary"
-msgstr "Temps d'inici del fragment"
+msgstr "Resum del fragment"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2177
-#, fuzzy
 msgid "{new property %1}"
-msgstr "Dibuixa una línia de propietat"
+msgstr "{nova propietat %1}"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2177
-#, fuzzy
 msgid "{new property}"
-msgstr "Defineix la &propietat"
+msgstr "{nova propietat}"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2182
 msgid "{undefined}"
-msgstr ""
+msgstr "{indefinit}"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2269
 msgid "Audio file path:"
-msgstr ""
+msgstr "Ubicació del fitxer d'àudio:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2279
 msgid "Disk space remaining:"
-msgstr ""
+msgstr "Espai de disc lliure:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2284
+#, fuzzy
 msgid "Equivalent minutes of 16-bit stereo:"
-msgstr ""
+msgstr "Minuts que equivalen a 16-bits stereo:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2296
-#, fuzzy
 msgid "Modify audio path"
-msgstr "Modifica la nota"
+msgstr "Canvia l'ubicació de l'àudio"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2319
 msgid "%1 out of %2 (%3% used)"
-msgstr ""
+msgstr "%1 de %2 (%3% utilitzat)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2350
 msgid "minutes at"
-msgstr ""
+msgstr "minuts a"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2412
-#, fuzzy
 msgid "Delete Color"
-msgstr "Color per defecte"
+msgstr "Suprimeix el color"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2431
-#, fuzzy
 msgid "Color Map"
-msgstr "Color  "
+msgstr "Mapa de colors"
 
 #: ../gui/kde32_ktabbar.cpp:209
 msgid "Close this tab"
@@ -6219,7 +6180,7 @@ msgstr "Desplaça a la &unitat"
 
 #: ../gui/matrixview.cpp:807
 msgid "Snap to Bea&t"
-msgstr "Deplaça a la par&t"
+msgstr "&Quadra amb pulsació"
 
 #: ../gui/matrixview.cpp:809
 msgid "Snap to &Bar"
@@ -6247,6 +6208,8 @@ msgid ""
 "_n:   1 event selected \n"
 "  %n events selected "
 msgstr ""
+"_n:   1 esdeveniment seleccionat\n"
+"  %n esdeveniments seleccionats"
 
 #: ../gui/matrixview.cpp:1117 ../gui/notationview.cpp:2764
 msgid "  No selection "
@@ -6286,7 +6249,7 @@ msgstr "Unitat"
 
 #: ../gui/matrixview.cpp:2040
 msgid "Beat"
-msgstr "Part"
+msgstr "Pulsació"
 
 #: ../gui/matrixview.cpp:2042
 msgid "Bar"
@@ -6321,35 +6284,32 @@ msgid "Remove Triggers"
 msgstr "Suprimeix els activadors"
 
 #: ../gui/matrixview.cpp:2577
-#, fuzzy
 msgid "%1 - Segment Track #%2 - %3"
-msgstr "%1 - Fragment de pista #%2 - Matriu"
+msgstr "%1 - Fragment de pista #%2 - %3"
 
 #: ../gui/matrixview.cpp:2584
-#, fuzzy
 msgid "%1 - All Segments - %2"
-msgstr "%1 - Tots els fragments - Matriu"
+msgstr "%1 - Tots els fragments - %2"
 
 #: ../gui/matrixview.cpp:2591
 msgid ""
 "_n: %1 - 1 Segment - %2\n"
 "%1 - %n Segments - %2"
 msgstr ""
+"_n: %1 - 1 fragment - %2\n"
+"%1 - %n fragments - %2"
 
 #: ../gui/matrixview.cpp:2713
 msgid "Can't insert note: No grid duration selected"
-msgstr ""
-"No s'ha pogut afegir una nota: No hi ha seleccionada una durada de graella."
+msgstr "No s'ha pogut afegir una nota: No hi ha seleccionada una durada de graella."
 
 #: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
-#, fuzzy
 msgid "File name"
-msgstr "Nom de la clau:"
+msgstr "Nom del fitxer"
 
 #: ../gui/playlist.cpp:141
-#, fuzzy
 msgid "Add..."
-msgstr "..."
+msgstr "Afegeix..."
 
 #: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
 #: ../gui/playlist.cpp:142
@@ -6357,18 +6317,16 @@ msgid "Play"
 msgstr "Reprodueix"
 
 #: ../gui/playlist.cpp:143
-#, fuzzy
 msgid "Move Up"
-msgstr "&Mou"
+msgstr "Mou amunt"
 
 #: ../gui/playlist.cpp:144
-#, fuzzy
 msgid "Move Down"
-msgstr "Mou la nota"
+msgstr "Mou avall"
 
 #: ../gui/playlist.cpp:189
 msgid "Select one or more Rosegarden files"
-msgstr ""
+msgstr "Selecciona un o més fitxers del Rosegarden"
 
 #: ../gui/deviceeditor.cpp:80
 msgid "Add Play Device"
@@ -6396,172 +6354,155 @@ msgid "<new device>"
 msgstr "<nou dispositiu>"
 
 #: ../gui/widgets.cpp:142 ../gui/widgets.cpp:147 ../gui/widgets.cpp:169
-#, fuzzy
 msgid "Processing..."
-msgstr "Visualització prèvia..."
+msgstr "S'està processant..."
 
 #: ../gui/widgets.cpp:414
 msgid ""
 "Click and drag up and down or left and right to modify.\n"
 "Double click to edit value directly."
 msgstr ""
+"Clica i arrossega-ho amunt i avall o d'esquerra a dreta per modificar-lo.\n"
+"Fes doble clic per editar el valor directament."
 
 #: ../gui/widgets.cpp:724
-#, fuzzy
 msgid "Select a new value"
-msgstr "Selecciona tots els valors de propietat"
+msgstr "Seleccioneu un nou valor"
 
 #: ../gui/widgets.cpp:725
-#, fuzzy
 msgid "Enter a new value"
-msgstr "Introdueix un nom nou"
+msgstr "Introduïu un nou valor"
 
 #: ../gui/widgets.cpp:866
-#, fuzzy
 msgid "Quantizer"
-msgstr "Quantificació"
+msgstr "Quantificador"
 
 #: ../gui/widgets.cpp:872
-#, fuzzy
 msgid "Quantizer type:"
-msgstr "Quantificació"
+msgstr "Tipus de quantificador:"
 
 #: ../gui/widgets.cpp:874
 #, fuzzy
 msgid "Grid quantizer"
-msgstr "Graella de &Quantificació"
+msgstr "Quantifica graelles"
 
 #: ../gui/widgets.cpp:875
-#, fuzzy
 msgid "Legato quantizer"
-msgstr "Repeteix l'última quantificació"
+msgstr "Quantifica legatos"
 
 #: ../gui/widgets.cpp:876
-#, fuzzy
 msgid "Heuristic notation quantizer"
-msgstr "&Quantificació heurística"
+msgstr "Quantifica compassos heurístics"
 
 #: ../gui/widgets.cpp:880
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr ""
+msgstr "Només quantifica els compassos (deixa la qualitat sense canvis)"
 
 #: ../gui/widgets.cpp:889
-#, fuzzy
 msgid "Notation parameters"
-msgstr "Propietats de la notació"
+msgstr "Propietats del compàs"
 
 #: ../gui/widgets.cpp:894 ../gui/widgets.cpp:935
 msgid "Base grid unit:"
-msgstr ""
+msgstr "Unitat bàsica de la graella:"
 
 #: ../gui/widgets.cpp:899
 msgid "Complexity:"
-msgstr ""
+msgstr "Complexitat:"
 
 #: ../gui/widgets.cpp:903
 msgid "Very high"
-msgstr ""
+msgstr "Molt alta"
 
 #: ../gui/widgets.cpp:904
 msgid "High"
-msgstr ""
+msgstr "Alta"
 
 #: ../gui/widgets.cpp:905
-#, fuzzy
 msgid "Normal"
-msgstr "Becaire"
+msgstr "Normal"
 
 #: ../gui/widgets.cpp:906
 msgid "Low"
-msgstr ""
+msgstr "Baixa"
 
 #: ../gui/widgets.cpp:907
 msgid "Very low"
-msgstr ""
+msgstr "Molt baixa"
 
 #: ../gui/widgets.cpp:910
 #, fuzzy
 msgid "Tuplet level:"
-msgstr "Grup irregular"
+msgstr "Nivell de tuplet:"
 
 #: ../gui/widgets.cpp:914
-#, fuzzy
 msgid "2-in-the-time-of-3"
-msgstr "en el temps de  "
+msgstr "2 en el temps de 3"
 
 #: ../gui/widgets.cpp:915
-#, fuzzy
 msgid "Triplet"
-msgstr "&Treset"
+msgstr "Treset"
 
 #: ../gui/widgets.cpp:923
 msgid "Any"
-msgstr ""
+msgstr "Qualsevol"
 
 #: ../gui/widgets.cpp:926
 msgid "Permit counterpoint"
-msgstr ""
+msgstr "Permet contrapnt"
 
 #: ../gui/widgets.cpp:930
-#, fuzzy
 msgid "Grid parameters"
-msgstr "Copia els paràmetres del connector"
+msgstr "Paràmetres de la graella"
 
 #: ../gui/widgets.cpp:939
+#, fuzzy
 msgid "Swing:"
-msgstr ""
+msgstr "Swing:"
 
 #: ../gui/widgets.cpp:944
-#, fuzzy
 msgid "Iterative amount:"
-msgstr "Mordent invertit"
+msgstr "Quantitat iterativa:"
 
 #: ../gui/widgets.cpp:950
 msgid "Quantize durations as well as start times"
-msgstr ""
+msgstr "Quantifica la duració tant com el temps d'inici"
 
 #: ../gui/widgets.cpp:954
 msgid "After quantization"
-msgstr ""
+msgstr "Després de quantificar"
 
 #: ../gui/widgets.cpp:968
-#, fuzzy
 msgid "Show advanced options"
-msgstr "Mostra les &anotacions"
+msgstr "Mostra les opcions avançades"
 
 #: ../gui/widgets.cpp:977
 msgid "Re-beam"
-msgstr ""
+msgstr "Torna a posar les barres d'agrupació"
 
 #: ../gui/widgets.cpp:979
-#, fuzzy
 msgid "Add articulations (staccato, tenuto, slurs)"
-msgstr "Articula les lligadures, els staccato, els tenuto, etc"
+msgstr "Afegeix articulacions (staccato, els tenuto, lligats)"
 
 #: ../gui/widgets.cpp:980
-#, fuzzy
 msgid "Tie notes at barlines etc"
-msgstr "Lliga les notes a les &barres de compàs"
+msgstr "Lliga les notes a les barres etc"
 
 #: ../gui/widgets.cpp:981
-#, fuzzy
 msgid "Split-and-tie overlapping chords"
-msgstr "Divideix-i-lliga els a&cords encavalcats"
+msgstr "Divideix-i-lliga els acords encavalcats"
 
 #: ../gui/widgets.cpp:1092
-#, fuzzy
 msgid "Full quantize"
-msgstr " Quantificació: "
+msgstr "Quantificació total"
 
 #: ../gui/widgets.cpp:1235
-#, fuzzy
 msgid "Show Advanced Options"
-msgstr "Mostra les &anotacions"
+msgstr "Mostra les opcions avançades"
 
 #: ../gui/widgets.cpp:1239
-#, fuzzy
 msgid "Hide Advanced Options"
-msgstr "Anotacions ocultes"
+msgstr "Oculta les opcions avançades"
 
 #: ../gui/kde32_kfontrequester.cpp:105
 msgid "Click to select a font"
@@ -6625,9 +6566,8 @@ msgid "Import banks"
 msgstr "Importa bancs"
 
 #: ../gui/importdevicedialog.cpp:152
-#, fuzzy
 msgid "Import key mappings"
-msgstr "Exporta les agrupacions"
+msgstr "Importa dreceres"
 
 #: ../gui/importdevicedialog.cpp:153
 msgid "Import controllers"
@@ -6638,7 +6578,6 @@ msgid "Import device name"
 msgstr "Nom del dispositiu importat"
 
 #: ../gui/importdevicedialog.cpp:162
-#, fuzzy
 msgid "Bank import behavior"
 msgstr "Comportament de la importació de bancs"
 
@@ -6655,30 +6594,30 @@ msgid "Bank %1:%2"
 msgstr "Banc %1 %2"
 
 #: ../gui/rosegardenguiview.cpp:211
-#, fuzzy
 msgid "No non-audio segments in composition"
-msgstr "Des del final d'una composició ja existent"
+msgstr "No hi han fragments de no-àudio en la composició"
 
 #: ../gui/rosegardenguiview.cpp:310
 msgid "Selection must contain only audio or non-audio segments"
-msgstr ""
+msgstr "La selecció només pot tenir fragments d'àudio o de no-àudio"
 
 #: ../gui/rosegardenguiview.cpp:393 ../gui/rosegardenguiview.cpp:534
 #: ../gui/rosegardenguiview.cpp:569 ../gui/rosegardenguiview.cpp:728
-#, fuzzy
 msgid "No non-audio segments selected"
-msgstr "  1 esdeveniment seleccionat "
+msgstr "No s'ha seleccionat cap fragment de no-àudio"
 
 #: ../gui/rosegardenguiview.cpp:842
 msgid ""
 "You've not yet defined an audio editor for Rosegarden to use.\n"
 "See Settings -> Configure Rosegarden -> General -> External Editors."
 msgstr ""
+"Encara no heu definit un editor d'àudio per utilitzar-lo amb el Rosegarden.\n"
+"Mireu Configuració -> Configuració del Rosegarden -> General -> Editors "
+"externs."
 
 #: ../gui/rosegardenguiview.cpp:1512 ../gui/rosegardenguiview.cpp:1516
-#, fuzzy
 msgid "Can't add dropped file. "
-msgstr "No s'ha pogut obrir el fitxer %1"
+msgstr "No s'ha pogut afegir el fitxer deixat. "
 
 #: ../gui/editcommands.cpp:223
 msgid "(excerpt)"
@@ -6694,8 +6633,7 @@ msgstr "Enganxa a una ranura existent [\"restringit\"]"
 
 #: ../gui/editcommands.cpp:418
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Esborra els esdeveniments existents, per tenir espai lliure [\"simple\"]"
+msgstr "Esborra els esdeveniments existents, per tenir espai lliure [\"simple\"]"
 
 #: ../gui/editcommands.cpp:420
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -6703,13 +6641,11 @@ msgstr "Mou els esdeveniments existents fora del seu lloc [\"obre-i-enganxa\"]"
 
 #: ../gui/editcommands.cpp:422
 msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
-msgstr ""
-"Sobreposa les notes, enllaçant-les amb les que ja existeixen [\"sobreposa\"]"
+msgstr "Sobreposa les notes, enllaçant-les amb les que ja existeixen [\"sobreposa\"]"
 
 #: ../gui/editcommands.cpp:424
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Sobreposa les notes, ignorant les que ja existeixen [\"sobreposa en matriu\"]"
+msgstr "Sobreposa les notes, ignorant les que ja existeixen [\"sobreposa en matriu\"]"
 
 #: ../gui/editcommands.cpp:864
 msgid "Heuristic Notation &Quantize"
@@ -6838,11 +6774,11 @@ msgstr "Canvia un silenci per una nota"
 
 #: ../gui/notationview.cpp:1345
 msgid "No accidental"
-msgstr "Sense alteracions"
+msgstr "Sense accidents"
 
 #: ../gui/notationview.cpp:1346
 msgid "Follow previous accidental"
-msgstr "Segueix l'alteració anterior"
+msgstr "Segueix l'accident anterior"
 
 #: ../gui/notationview.cpp:1347
 msgid "Sharp"
@@ -6887,7 +6823,7 @@ msgstr "&Text"
 #: ../gui/notationview.cpp:1406
 #, fuzzy
 msgid "&Fretboard"
-msgstr "Avanç &ràpid"
+msgstr "&Tabulat"
 
 #: ../gui/notationview.cpp:1433
 msgid "Select from Sta&rt"
@@ -6959,7 +6895,7 @@ msgstr "&Res"
 
 #: ../gui/notationview.cpp:1860
 msgid "Add Fretboard"
-msgstr ""
+msgstr "Afegeix un tabulat"
 
 #: ../gui/notationview.cpp:1886 ../gui/rosegardengui.cpp:633
 msgid "Show T&ools Toolbar"
@@ -6975,7 +6911,7 @@ msgstr "Mostra la barra d'eines dels &silencis"
 
 #: ../gui/notationview.cpp:1889
 msgid "Show &Accidentals Toolbar"
-msgstr "Mostra la barra d'eines de les &alteracions"
+msgstr "Mostra la barra d'eines d'&accidents"
 
 #: ../gui/notationview.cpp:1890
 msgid "Show Cle&fs Toolbar"
@@ -7051,6 +6987,8 @@ msgid ""
 "_n: 1 pixel\n"
 "%n pixels"
 msgstr ""
+"_n: 1 píxel\n"
+"%n píxels"
 
 #: ../gui/notationview.cpp:2171
 msgid "  Font:  "
@@ -7106,11 +7044,12 @@ msgid "%1 - All Segments - Notation"
 msgstr "%1 - Tots els fragments - Partitura"
 
 #: ../gui/notationview.cpp:3642
-#, fuzzy
 msgid ""
 "_n: %1 - Segment - Notation\n"
 "%1 - %n Segments - Notation"
-msgstr "%1 - Fragment de la pista #%2 - Partitura"
+msgstr ""
+"_n: %1 - Fragment - Notació\n"
+"%2 - %n Fragments - Notació"
 
 #: ../gui/rosegardengui.cpp:300
 msgid ""
@@ -7119,214 +7058,186 @@ msgid ""
 "control)\n"
 " and restart."
 msgstr ""
+"No s'ha pogut iniciar el servei d'àudio JACK.  L'àudio no funcionarà.\n"
+"Comproveu la configuració (Configuració -> Configuració del Rosegarden \n"
+"-> Seqüenciador -> Control del JACK) i torneu a engegar."
 
 #: ../gui/rosegardengui.cpp:309
-#, fuzzy
 msgid "Starting sequencer..."
-msgstr "S'està iniciant..."
+msgstr "S'està iniciant el seqüenciador..."
 
 #: ../gui/rosegardengui.cpp:316
 msgid "Initializing plugin manager..."
-msgstr ""
+msgstr "S'està iniciant el gestor de connectors..."
 
 #: ../gui/rosegardengui.cpp:321
-#, fuzzy
 msgid "Initializing view..."
-msgstr "S'està quantificant..."
+msgstr "S'està carregant la vista..."
 
 #: ../gui/rosegardengui.cpp:337
-#, fuzzy
 msgid "Segment & Instrument Parameters"
-msgstr "Paràmetres de l'instrument"
+msgstr "Paràmetres de l'instrument i el fragment"
 
 #: ../gui/rosegardengui.cpp:399
 msgid "Starting sequence manager..."
-msgstr ""
+msgstr "S'està inicial el gestor del seqüenciador..."
 
 #: ../gui/rosegardengui.cpp:411
-#, fuzzy, c-format
+#, c-format
 msgid "Sequencer startup failed: %1"
-msgstr "Estat del seqüenciador:"
+msgstr "No s'ha pogut engegar el seqüenciador: %1"
 
 #: ../gui/rosegardengui.cpp:423
 msgid "Getting sound driver status..."
-msgstr ""
+msgstr "S'està obtenint l'estat del dispositiu de so..."
 
 #: ../gui/rosegardengui.cpp:434
-#, fuzzy
 msgid "Clearing studio data..."
-msgstr "S'està preparant per imprimir..."
+msgstr "S'està netejant les dades de l'estudi..."
 
 #: ../gui/rosegardengui.cpp:528
 msgid "Import Rosegarden &Project file..."
-msgstr ""
+msgstr "Importa el fitxer de &projecte Rosegarden..."
 
 #: ../gui/rosegardengui.cpp:532
-#, fuzzy
 msgid "Import &MIDI file..."
-msgstr "Modifica els filtres MIDI..."
+msgstr "Importa el fitxer &MIDI..."
 
 #: ../gui/rosegardengui.cpp:536
 msgid "Import &Rosegarden 2.1 file..."
-msgstr ""
+msgstr "Importa el fitxer &Rosegarden 2.1..."
 
 #: ../gui/rosegardengui.cpp:540
-#, fuzzy
 msgid "Import &Hydrogen file..."
-msgstr "Importa des del dispositiu..."
+msgstr "Importa el fitxer &Hydrogen..."
 
 #: ../gui/rosegardengui.cpp:544
-#, fuzzy
 msgid "Merge &File..."
-msgstr "Fusiona el fitxer"
+msgstr "&Fusiona el fitxer..."
 
 #: ../gui/rosegardengui.cpp:548
-#, fuzzy
 msgid "Merge &MIDI file..."
-msgstr "Modifica els filtres MIDI..."
+msgstr "Fusiona el fitxer &MIDI..."
 
 #: ../gui/rosegardengui.cpp:552
 msgid "Merge &Rosegarden 2.1 file..."
-msgstr ""
+msgstr "Fusiona el fitxer &Rosegarden 2.1..."
 
 #: ../gui/rosegardengui.cpp:556
-#, fuzzy
 msgid "Merge &Hydrogen file..."
-msgstr "Fusiona el nou fitxer  "
+msgstr "Fusiona el fitxer &Hydrogen..."
 
 #: ../gui/rosegardengui.cpp:560
 msgid "Export Rosegarden &Project file..."
-msgstr ""
+msgstr "Exporta el fitxer de &projecte Rosegarden..."
 
 #: ../gui/rosegardengui.cpp:564
-#, fuzzy
 msgid "Export &MIDI file..."
-msgstr "Exporta els dispositius..."
+msgstr "Exporta el fitxer &MIDI..."
 
 #: ../gui/rosegardengui.cpp:568
 msgid "Export &Lilypond file..."
-msgstr ""
+msgstr "Exporta el fitxer &Lilypond..."
 
 #: ../gui/rosegardengui.cpp:572
-#, fuzzy
 msgid "Pre&view Lilypond file..."
-msgstr "Visualització prèvia..."
+msgstr "&Visualització prèvia del fitxer Lilypond..."
 
 #: ../gui/rosegardengui.cpp:576
-#, fuzzy
 msgid "Export Music&XML file..."
-msgstr "Exporta els dispositius..."
+msgstr "Exporta el fitxer Music&XML..."
 
 #: ../gui/rosegardengui.cpp:580
 msgid "Export &Csound score file..."
-msgstr ""
+msgstr "Exporta el fitxer &Csound score..."
 
 #: ../gui/rosegardengui.cpp:584
-#, fuzzy
 msgid "Export M&up file..."
-msgstr "Exporta els dispositius..."
+msgstr "Exporta el fitxer M&up..."
 
 #: ../gui/rosegardengui.cpp:588
-#, fuzzy
 msgid "Play&list"
-msgstr "Reprodueix"
+msgstr "&Llista de peces"
 
 #: ../gui/rosegardengui.cpp:595
-#, fuzzy
 msgid "Rosegarden &Tutorial"
-msgstr "Connector del Rosegarden"
+msgstr "&Tutorial del Rosegarden"
 
 #: ../gui/rosegardengui.cpp:599
 msgid "&Bug Reporting Guidelines"
-msgstr ""
+msgstr "Guia per enviar &bugs descoberts"
 
 #: ../gui/rosegardengui.cpp:637
-#, fuzzy
 msgid "Show Trac&ks Toolbar"
-msgstr "Mostra la barra d'eines dels &marcadors"
+msgstr "Mostra la barra de &pistes"
 
 #: ../gui/rosegardengui.cpp:641
-#, fuzzy
 msgid "Show &Editors Toolbar"
-msgstr "M&ostra la barra d'eines de les eines"
+msgstr "M&ostra la barra d'&edició"
 
 #: ../gui/rosegardengui.cpp:649
-#, fuzzy
 msgid "Show &Zoom Toolbar"
-msgstr "M&ostra la barra d'eines de les eines"
+msgstr "M&ostra la barra de zoom"
 
 #: ../gui/rosegardengui.cpp:656
-#, fuzzy
 msgid "Show Tra&nsport"
-msgstr "Mostra la barra d'eines de les &tecles de reproducció"
+msgstr "Mostra la barra de tra&nsport"
 
 #: ../gui/rosegardengui.cpp:661
 msgid "Show Track &Labels"
-msgstr ""
+msgstr "Mostra les eti&quetes de les pistes"
 
 #: ../gui/rosegardengui.cpp:666
-#, fuzzy
 msgid "Show Playback Position R&uler"
-msgstr "Punt de reproducció al &cursor"
+msgstr "Mostra el regle del &puntejat"
 
 #: ../gui/rosegardengui.cpp:671
-#, fuzzy
 msgid "Show Te&mpo Ruler"
-msgstr "Mostra el regle del &tempo"
+msgstr "Mostra el regle del te&mpo"
 
 #: ../gui/rosegardengui.cpp:676
-#, fuzzy
 msgid "Show Cho&rd Name Ruler"
-msgstr "M&ostra el regle de noms d'acord"
+msgstr "M&ostra el regle dels acords"
 
 #: ../gui/rosegardengui.cpp:682
-#, fuzzy
 msgid "Show Segment Pre&views"
-msgstr "Mostra els paràmetres de l'instrument"
+msgstr "Mostra &maquetes dels fragments"
 
 #: ../gui/rosegardengui.cpp:687
-#, fuzzy
 msgid "Show Se&gment and Instrument Parameters"
-msgstr "Mostra els paràmetres de l'instrument"
+msgstr "Mostra els paràmetres de l'instrument i del fragment"
 
 #: ../gui/rosegardengui.cpp:743
-#, fuzzy
 msgid "&Resize"
-msgstr "Redimensi&ona"
+msgstr "&Redimensiona"
 
 #: ../gui/rosegardengui.cpp:750
-#, fuzzy
 msgid "&Split"
-msgstr "&Selecciona"
+msgstr "&Divideix"
 
 #: ../gui/rosegardengui.cpp:763
 msgid "&Harmonize"
-msgstr ""
+msgstr "&Harmonitza"
 
 #: ../gui/rosegardengui.cpp:772
-#, fuzzy
 msgid "Open Tempo and Time Signature Editor"
-msgstr "Obre en l'editor d'esdeveniments"
+msgstr "Obre en l'editor del tempo i de l'indicador del compàs"
 
 #: ../gui/rosegardengui.cpp:782
-#, fuzzy
 msgid "Select &All Segments"
-msgstr "Selecciona-ho &tot"
+msgstr "Selecciona &tots els fragments"
 
 #: ../gui/rosegardengui.cpp:796
-#, fuzzy
 msgid "Edit Mar&kers..."
-msgstr "Edita el marcador"
+msgstr "Edita els marcadors..."
 
 #: ../gui/rosegardengui.cpp:800
-#, fuzzy
 msgid "Edit Document P&roperties..."
-msgstr "Propietats de l'esdeveniment"
+msgstr "Edita les propietats del document..."
 
 #: ../gui/rosegardengui.cpp:808
-#, fuzzy
 msgid "Open in &Default Editor"
-msgstr "Obre en l'editor d'esdeveniments"
+msgstr "Obre en l'editor per &defecte"
 
 #: ../gui/editview.cpp:737 ../gui/rosegardengui.cpp:867
 msgid "Jog &Left"
@@ -7337,177 +7248,163 @@ msgid "Jog &Right"
 msgstr "Mou a la d&reta"
 
 #: ../gui/rosegardengui.cpp:875
-#, fuzzy
 msgid "Set Start Time..."
-msgstr "Defineix el temps d'inici del fragment..."
+msgstr "Defineix el temps d'inici..."
 
 #: ../gui/rosegardengui.cpp:879
-#, fuzzy
 msgid "Set Duration..."
-msgstr "Defineix la duració del fragment..."
+msgstr "Defineix la durada..."
 
 #: ../gui/rosegardengui.cpp:888
 msgid "Turn Re&peats into Copies"
-msgstr ""
+msgstr "Transforma les re&peticions en còpies"
 
 #: ../gui/rosegardengui.cpp:893
 #, fuzzy
 msgid "Manage Tri&ggered Segments"
-msgstr "Acti&va el fragment activable"
+msgstr "Gestiona els &fragments activables"
 
 #: ../gui/rosegardengui.cpp:897
 msgid "Set Tempos from &Beat Segment"
-msgstr ""
+msgstr "Agafa el tempo del fragment de &pulsacions"
 
 #: ../gui/rosegardengui.cpp:901
 #, fuzzy
 msgid "Set &Tempo to Audio Segment Duration"
-msgstr "Durada del fragment d'àudio"
+msgstr "Posa el &tempo a la durada del fragment d'àudio"
 
 #: ../gui/rosegardengui.cpp:907
 msgid "Manage Files Associated with A&udio Segments"
-msgstr ""
+msgstr "Gestiona els fitxers associats amb el fragmetn d'àudio"
 
 #: ../gui/rosegardengui.cpp:912
-#, fuzzy
 msgid "Show Segment Labels"
-msgstr "Etiqueta del fragment"
+msgstr "Mostra les etiquetes del fragment"
 
 #: ../gui/rosegardengui.cpp:921
-#, fuzzy
 msgid "Add &Track"
 msgstr "Afegeix una &pista"
 
 #: ../gui/rosegardengui.cpp:925
 msgid "&Add Multiple Tracks..."
-msgstr ""
+msgstr "&Afageix vàries pistes..."
 
 #: ../gui/rosegardengui.cpp:931
-#, fuzzy
 msgid "D&elete Track"
-msgstr "Suprimeix un marcador"
+msgstr "&Suprimeix una pista"
 
 #: ../gui/rosegardengui.cpp:937
 msgid "Move Track &Down"
-msgstr ""
+msgstr "Mou la pista a&vall"
 
 #: ../gui/rosegardengui.cpp:943
 msgid "Move Track &Up"
-msgstr ""
+msgstr "Mou la pista am&unt"
 
 #: ../gui/rosegardengui.cpp:947
 msgid "Select &Next Track"
-msgstr ""
+msgstr "Seleccio&na la pista següent"
 
 #: ../gui/rosegardengui.cpp:952
 msgid "Select &Previous Track"
-msgstr ""
+msgstr "Selecciona la &pista anterior"
 
 #: ../gui/rosegardengui.cpp:959
 msgid "&Mute all Tracks"
-msgstr ""
+msgstr "&posa en silenci les pistes"
 
 #: ../gui/rosegardengui.cpp:965
 msgid "&Unmute all Tracks"
-msgstr ""
+msgstr "&treu el silenci de les pistes"
 
 #: ../gui/rosegardengui.cpp:969
-#, fuzzy
 msgid "&Remap Instruments..."
-msgstr "Redefineix l'assignació dels instruments."
+msgstr "&Assignació dels instruments...."
 
 #: ../gui/rosegardengui.cpp:978
-#, fuzzy
 msgid "&Audio Mixer"
-msgstr "Mesclador d'àudio"
+msgstr "Mescl&ador d'àudio"
 
 #: ../gui/rosegardengui.cpp:984
-#, fuzzy
 msgid "Midi Mi&xer"
-msgstr "Mesclador d'àudio"
+msgstr "Me&sclador de MIDI"
 
 #: ../gui/rosegardengui.cpp:990
-#, fuzzy
 msgid "Manage MIDI &Devices"
-msgstr "Gestiona els dispositius MIDI"
+msgstr "Gestiona els &dispositius MIDI"
 
 #: ../gui/rosegardengui.cpp:996
-#, fuzzy
 msgid "Manage S&ynth Plugins"
-msgstr "Gestiona els connectors dels sintetitzadors"
+msgstr "Gestiona els s&intetitzadors"
 
 #: ../gui/rosegardengui.cpp:1000
-#, fuzzy
 msgid "Modify MIDI &Filters"
-msgstr "Modifica els filtres MIDI..."
+msgstr "Modifica els &filtres MIDI"
 
 #: ../gui/rosegardengui.cpp:1006
-#, fuzzy
 msgid "Manage &Metronome"
-msgstr "Metrònom"
+msgstr "Gestiona el &metrònom"
 
 #: ../gui/rosegardengui.cpp:1010
 msgid "&Save Current Document as Default Studio"
-msgstr ""
+msgstr "&Desa el document actual com a estudi per defecte"
 
 #: ../gui/rosegardengui.cpp:1014
 msgid "&Import Default Studio"
-msgstr ""
+msgstr "&Importa l'estudi per defecte"
 
 #: ../gui/rosegardengui.cpp:1018
-#, fuzzy
 msgid "Im&port Studio from File..."
-msgstr "Importa des del dispositiu..."
+msgstr "Im&porta l'estudi del fitxer..."
 
 #: ../gui/rosegardengui.cpp:1022
 msgid "&Reset MIDI Network"
-msgstr ""
+msgstr "&Reinicia la xarxa MIDI"
 
 #: ../gui/rosegardengui.cpp:1067
 #, fuzzy
 msgid "P&unch in Record"
-msgstr "En&registra"
+msgstr "Activa gra&vació"
 
 #: ../gui/rosegardengui.cpp:1105
 msgid "Segment Debug Dump "
-msgstr ""
+msgstr "Llista la depuració del fragment "
 
 #: ../gui/rosegardengui.cpp:1175
-#, fuzzy
 msgid "  Zoom:  "
-msgstr "  Font:  "
+msgstr "  Zoom:  "
 
 #: ../gui/rosegardengui.cpp:1586
 msgid "File \"%1\" does not exist"
-msgstr ""
+msgstr "El fitxer \"%1\" no existeix"
 
 #: ../gui/rosegardengui.cpp:1592
 msgid "File \"%1\" is actually a directory"
-msgstr ""
+msgstr "El fitxer \"%1\" és una carpeta"
 
 #: ../gui/rosegardengui.cpp:1601
 msgid "You do not have read permission for \"%1\""
-msgstr ""
+msgstr "No teniu permisos per llegir \"%1\""
 
 #: ../gui/rosegardengui.cpp:1669
 msgid ""
 "An auto-save file for this document has been found\n"
 "Do you want to open it instead ?"
 msgstr ""
+"S'ha trobat un fitxer desat automàticament per a aquest\n"
+"document. El voleu obrir en lloc d'aquest document ?"
 
 #: ../gui/rosegardengui.cpp:1770
-#, fuzzy
 msgid "Example Files"
-msgstr "Exemple"
+msgstr "Fitxers d'exemple"
 
 #: ../gui/rosegardengui.cpp:1974
-#, fuzzy
 msgid "Opening a new application window..."
-msgstr "S'està empenyent la selecció cap avall..."
+msgstr "S'està obrint una nova finestra de l'aplicació..."
 
 #: ../gui/rosegardengui.cpp:1984
 msgid "Creating new document..."
-msgstr ""
+msgstr "S'està creant un nou document..."
 
 #: ../gui/rosegardengui.cpp:2027
 #, c-format
@@ -7515,240 +7412,225 @@ msgid ""
 "Malformed URL\n"
 "%1"
 msgstr ""
+"El URL està mal fet\n"
+"%1"
 
 #: ../gui/rosegardengui.cpp:2051 ../gui/rosegardengui.cpp:2107
-#, fuzzy
 msgid "Opening file..."
-msgstr "S'està fent visible..."
+msgstr "S'està obrint el fitxer..."
 
 #: ../gui/rosegardengui.cpp:2073 ../gui/rosegardengui.cpp:2089
-#, fuzzy
 msgid "Open File"
-msgstr "Filtre d'esdeveniments"
+msgstr "Obre el fitxer"
 
 #: ../gui/rosegardengui.cpp:2195
 msgid "This is not a valid filename.\n"
-msgstr ""
+msgstr "No és un nom de fitxer vàlid.\n"
 
 #: ../gui/rosegardengui.cpp:2200
 msgid "This is not a local file.\n"
-msgstr ""
+msgstr "No és un fitxer local.\n"
 
 #: ../gui/rosegardengui.cpp:2226
 msgid "Saving file with a new filename..."
-msgstr ""
+msgstr "S'està desant el fitxer amb un nou nom..."
 
 #: ../gui/rosegardengui.cpp:2228
-#, fuzzy
 msgid "Rosegarden-4 files"
-msgstr "Rosegarden"
+msgstr "Fitxes del Rosegarden-4"
 
 #: ../gui/rosegardengui.cpp:2229 ../gui/rosegardengui.cpp:4436
 #: ../gui/rosegardengui.cpp:4479 ../gui/rosegardengui.cpp:4517
 #: ../gui/rosegardengui.cpp:4549 ../gui/rosegardengui.cpp:4582
 #: ../gui/rosegardengui.cpp:4662
 msgid "All files"
-msgstr ""
+msgstr "Tots els fitxers"
 
 #: ../gui/rosegardengui.cpp:2230
-#, fuzzy
 msgid "Save as..."
-msgstr "Desa les dades"
+msgstr "Anomena i desa..."
 
 #: ../gui/rosegardengui.cpp:2266
-#, fuzzy
 msgid "Closing file..."
-msgstr "Mou a l'esquerra..."
+msgstr "S'està tancant el fitxer..."
 
 #: ../gui/rosegardengui.cpp:2302
-#, fuzzy
 msgid "Exiting..."
-msgstr "S'està imprimint..."
+msgstr "S'està sortint..."
 
 #: ../gui/rosegardengui.cpp:2324
-#, fuzzy
 msgid "Cutting selection..."
-msgstr "S'està eliminant la selecció..."
+msgstr "S'està retallant la selecció..."
 
 #: ../gui/rosegardengui.cpp:2422
 msgid "This function needs no more than one segment to be selected."
-msgstr ""
+msgstr "Aquesta funció només necessita que se seleccioni un sol fragment."
 
 #: ../gui/rosegardengui.cpp:2443
-#, fuzzy
 msgid "Can't join Audio segments"
-msgstr "Divideix automàticament el fragment d'àudio"
+msgstr "No es poden ajunar fragments d'àudio"
 
 #: ../gui/rosegardengui.cpp:2546
 #, fuzzy
 msgid "Jog Selection"
-msgstr "Neteja la selecció"
+msgstr "Toca la selecció"
 
 #: ../gui/rosegardengui.cpp:2689
-#, fuzzy
 msgid "Set Segment Start Times"
 msgstr "Defineix el temps d'inici del fragment"
 
 #: ../gui/rosegardengui.cpp:2732
-#, fuzzy
 msgid "Set Segment Durations"
 msgstr "Defineix la durada del fragment"
 
 #: ../gui/rosegardengui.cpp:2840 ../gui/rosegardengui.cpp:5416
-#, fuzzy
 msgid "Set Global Tempo"
-msgstr "Tempo local"
+msgstr "Defineix el tempo global"
 
 #: ../gui/rosegardengui.cpp:2913
-#, fuzzy
 msgid "Toggle the tools toolbar..."
 msgstr "Commuta la barra d'eines..."
 
 #: ../gui/rosegardengui.cpp:2923
-#, fuzzy
 msgid "Toggle the tracks toolbar..."
-msgstr "Commuta la barra d'eines..."
+msgstr "Commuta la barra de pistes..."
 
 #: ../gui/rosegardengui.cpp:2934
-#, fuzzy
 msgid "Toggle the editor toolbar..."
-msgstr "Commuta la barra d'eines..."
+msgstr "Commuta la barra d'edició..."
 
 #: ../gui/rosegardengui.cpp:2944
-#, fuzzy
 msgid "Toggle the transport toolbar..."
-msgstr "Commuta la barra d'eines..."
+msgstr "Commuta la barra de transport..."
 
 #: ../gui/rosegardengui.cpp:2954
-#, fuzzy
 msgid "Toggle the zoom toolbar..."
-msgstr "Commuta la barra d'eines..."
+msgstr "Commuta la barra de zoom..."
 
 #: ../gui/rosegardengui.cpp:2964
-#, fuzzy
 msgid "Toggle the Transport"
-msgstr "Commuta la barra d'estat..."
+msgstr "Commuta el transport..."
 
 #: ../gui/rosegardengui.cpp:3099
+#, fuzzy
 msgid ""
 "The join tool isn't implemented yet.  Instead please highlight the segments "
 "you want to join and then use the menu option:\n"
 "\n"
 "        Segments->Collapse Segments.\n"
 msgstr ""
+"L'eina per ajuntar encara no està implementada. En comptes d'això "
+"seleccioneu els fragments que voleu ajuntar i feu servir l'opció de menú:\n"
+"\n"
+"             Fragments->Col·lapsa els fragments.\n"
 
 #: ../gui/rosegardengui.cpp:3102
 msgid "Join tool not yet implemented"
-msgstr ""
+msgstr "L'eina per ajuntar encara no està implementada"
 
 #: ../gui/rosegardengui.cpp:3224
 msgid "Add Multiple Tracks"
-msgstr ""
+msgstr "Afegeix vàries pistes"
 
 #: ../gui/rosegardengui.cpp:3225
 msgid "How many tracks do you want to add?"
-msgstr ""
+msgstr "Quantes pistes voleu afegir?"
 
 #: ../gui/rosegardengui.cpp:3369
 msgid "Revert modified document to previous saved version?"
-msgstr ""
+msgstr "Voleu recuperar la versió anterior del document modificat?"
 
 #: ../gui/rosegardengui.cpp:3383
 msgid ""
 "*.rgp|Rosegarden Project files\n"
 "*|All files"
 msgstr ""
+"*.rgp|Fitxers de projecte del Rosegarden\n"
+"*|Tots els fitxers"
 
 #: ../gui/rosegardengui.cpp:3384
-#, fuzzy
 msgid "Import Rosegarden Project File"
-msgstr "Importa bancs"
+msgstr "Importa el fitxer de projecte Rosegarden"
 
 #: ../gui/rosegardengui.cpp:3407
 msgid "Failed to import project file \"%1\""
-msgstr ""
+msgstr "No s'ha pogut importar el fitxer de projecte \"%1\""
 
 #: ../gui/rosegardengui.cpp:3428
 msgid "Open MIDI File"
-msgstr ""
+msgstr "Obre el fitxer MIDI"
 
 #: ../gui/rosegardengui.cpp:3443
-#, fuzzy
 msgid "Merge MIDI File"
-msgstr "Fusiona el fitxer"
+msgstr "Fusiona el fitxer MIDI"
 
 #: ../gui/rosegardengui.cpp:3542
-#, fuzzy
 msgid "Importing MIDI file..."
-msgstr "Modifica els filtres MIDI..."
+msgstr "S'està important el fitxer MIDI..."
 
 #: ../gui/rosegardengui.cpp:3579
-#, fuzzy
 msgid "Calculating notation..."
-msgstr "S'està eliminant notes..."
+msgstr "S'estan calculant els compassos..."
 
 #: ../gui/rosegardengui.cpp:3626
-#, fuzzy
 msgid "Calculate Notation"
-msgstr "Partitura"
+msgstr "Calcula els compassos"
 
 #: ../gui/rosegardengui.cpp:3666 ../gui/rosegardengui.cpp:3681
 msgid ""
 "*.rose|Rosegarden-2 files\n"
 "*|All files"
 msgstr ""
+"*.rose|Fitxers del Rosegarden-2\n"
+"*|Tots els fitxers"
 
 #: ../gui/rosegardengui.cpp:3667 ../gui/rosegardengui.cpp:3682
-#, fuzzy
 msgid "Open Rosegarden 2.1 File"
-msgstr "Rosegarden: %1"
+msgstr "Obre el fitxer Rosegarden 2.1"
 
 #: ../gui/rosegardengui.cpp:3697
 msgid "Importing Rosegarden 2.1 file..."
-msgstr ""
+msgstr "S'està important el fitxer Rosegarden 2.1..."
 
 #: ../gui/rosegardengui.cpp:3723
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
-msgstr ""
+msgstr "No es pot carregar el fitxer Rosegarden 2.1. Sembla que que està malament."
 
 #: ../gui/rosegardengui.cpp:3748 ../gui/rosegardengui.cpp:3763
 msgid ""
 "*.h2song|Hydrogen files\n"
 "*|All files"
 msgstr ""
+"*.h2song|Fitxers Hydrogen\n"
+"*|Tots els fitxers"
 
 #: ../gui/rosegardengui.cpp:3749 ../gui/rosegardengui.cpp:3764
-#, fuzzy
 msgid "Open Hydrogen File"
-msgstr "Fusiona el fitxer"
+msgstr "Obre el fitxer Hydrogen"
 
 #: ../gui/rosegardengui.cpp:3779
-#, fuzzy
 msgid "Importing Hydrogen file..."
-msgstr "Importa des del dispositiu..."
+msgstr "S'està important el fitxer Hydrogen..."
 
 #: ../gui/rosegardengui.cpp:3805
 msgid "Can't load Hydrogen file.  It appears to be corrupted."
-msgstr ""
+msgstr "No es pot carregar el fitxer Hydrogen. Sembla que està malament."
 
 #: ../gui/rosegardengui.cpp:4263
-#, fuzzy
 msgid "Starting the sequencer..."
-msgstr "S'està iniciant..."
+msgstr "S'està iniciant el seqüenciador..."
 
 #: ../gui/rosegardengui.cpp:4289
-#, fuzzy
 msgid "Couldn't start the sequencer"
-msgstr "No s'ha pogut enganxar en aquest punt"
+msgstr "No s'ha pogut engegar el seqüenciador"
 
 #: ../gui/rosegardengui.cpp:4365
 msgid "Clearing down jackd..."
-msgstr ""
+msgstr "Netejant el jackd..."
 
 #: ../gui/rosegardengui.cpp:4379
-#, fuzzy
 msgid "Starting jackd..."
-msgstr "S'està iniciant..."
+msgstr "S'està iniciant el jackd..."
 
 #: ../gui/rosegardengui.cpp:4417
 msgid ""
@@ -7756,6 +7638,10 @@ msgid ""
 "recording will no longer be available for this session.\n"
 "Please exit and restart Rosegarden to restore sound capability."
 msgstr ""
+"El procés seqüenciador del Rosegarden ha acabat de forma sobtada. El so i "
+"l'enregistrament han deixat de funcionar per aquesta sessió.\n"
+"Heu de sortir i tornar a iniciar el Rosegarden per restaurar el sistema de "
+"so."
 
 #: ../gui/rosegardengui.cpp:4421
 msgid ""
@@ -7764,98 +7650,91 @@ msgid ""
 "For assistance with correct audio and MIDI configuration, go to http://"
 "rosegardenmusic.com."
 msgstr ""
+"El seqüenciador del Rosegarden no s'ha pogut engegar,  per tant el so i "
+"l'enregistrament \n"
+"no funcionaran. Si necessiteu ajuda en la configuració del so aneu a http://"
+"rosegardenmusic.com."
 
 #: ../gui/rosegardengui.cpp:4432
 msgid "Exporting Rosegarden Project file..."
-msgstr ""
+msgstr "S'està exportant el fitxer de projecte Rosegarden..."
 
 #: ../gui/rosegardengui.cpp:4435
-#, fuzzy
 msgid "Rosegarden Project files\n"
-msgstr "Connector del Rosegarden"
+msgstr "Fitxers de projecte Rosegarden\n"
 
 #: ../gui/rosegardengui.cpp:4437 ../gui/rosegardengui.cpp:4480
 #: ../gui/rosegardengui.cpp:4518 ../gui/rosegardengui.cpp:4550
 #: ../gui/rosegardengui.cpp:4583 ../gui/rosegardengui.cpp:4662
-#, fuzzy
 msgid "Export as..."
-msgstr "Exporta..."
+msgstr "Exporta com..."
 
 #: ../gui/rosegardengui.cpp:4450
 #, c-format
 msgid "Saving Rosegarden file to package failed: %1"
-msgstr ""
+msgstr "No s'ha pogut desar el fitxer Rosegarden al paquet: %1"
 
 #: ../gui/rosegardengui.cpp:4464
 msgid "Failed to export to project file \"%1\""
-msgstr ""
+msgstr "No s'ha pogut exportar el fitxer de projecte \"%1\""
 
 #: ../gui/rosegardengui.cpp:4475 ../gui/rosegardengui.cpp:4489
-#, fuzzy
 msgid "Exporting MIDI file..."
-msgstr "Modifica els filtres MIDI..."
+msgstr "S'està exportant el fitxer MIDI..."
 
 #: ../gui/rosegardengui.cpp:4478
-#, fuzzy
 msgid "Standard MIDI files\n"
-msgstr "Gestiona els dispositius MIDI"
+msgstr "Fitxers de MIDI estàndars\n"
 
 #: ../gui/rosegardengui.cpp:4509 ../gui/rosegardengui.cpp:4540
 #: ../gui/rosegardengui.cpp:4572 ../gui/rosegardengui.cpp:4649
 #: ../gui/rosegardengui.cpp:4685
 msgid "Export failed.  The file could not be opened for writing."
-msgstr ""
+msgstr "No s'ha pogut exportar.  El fitxer no s'ha pogut obrir per escriure'l."
 
 #: ../gui/rosegardengui.cpp:4515 ../gui/rosegardengui.cpp:4526
-#, fuzzy
 msgid "Exporting Csound score file..."
-msgstr "S'està donant format a la partitura..."
+msgstr "S'està exportant el fitxer Csound score..."
 
 #: ../gui/rosegardengui.cpp:4546 ../gui/rosegardengui.cpp:4558
-#, fuzzy
 msgid "Exporting Mup file..."
-msgstr "Exporta els dispositius..."
+msgstr "S'està exportant el fitxer Mup..."
 
 #: ../gui/rosegardengui.cpp:4549
 msgid "Mup files\n"
-msgstr ""
+msgstr "Fitxers Mup\n"
 
 #: ../gui/rosegardengui.cpp:4578 ../gui/rosegardengui.cpp:4635
 msgid "Exporting Lilypond file..."
-msgstr ""
+msgstr "S'està exportant el fitxer Lilypond..."
 
 #: ../gui/rosegardengui.cpp:4581
-#, fuzzy
 msgid "Lilypond files"
-msgstr "Mida de la lletra Lilypond"
+msgstr "Fitxers Lilypond"
 
 #: ../gui/rosegardengui.cpp:4594
-#, fuzzy
 msgid "Previewing Lilypond file..."
-msgstr "Visualització prèvia..."
+msgstr "S'està visualitzant el fitxer Lilypond..."
 
 #: ../gui/rosegardengui.cpp:4599
 msgid "Failed to open a temporary file for Lilypond export."
-msgstr ""
+msgstr "No s'ha pogut obrir un fitxer temportal per exportar com a Lilypond."
 
 #: ../gui/rosegardengui.cpp:4626
-#, fuzzy
 msgid "Lilypond Preview Options"
-msgstr "Opcions d'exportació al Lilypond"
+msgstr "Opcions Lilypond de la mostra prèvia "
 
 #: ../gui/rosegardengui.cpp:4627
-#, fuzzy
 msgid "Lilypond preview options"
-msgstr "Opcions d'exportació al Lilypond"
+msgstr "Opcions Lilypond de la mostra prèvia "
 
 #: ../gui/rosegardengui.cpp:4658 ../gui/rosegardengui.cpp:4671
-#, fuzzy
 msgid "Exporting MusicXML file..."
-msgstr "Exporta els dispositius..."
+msgstr "S'està exportant el fitxer MusicXML..."
 
 #: ../gui/rosegardengui.cpp:4661
 msgid "XML files"
-msgstr ""
+msgstr "Fitxers XML"
 
 #: ../gui/rosegardengui.cpp:4874 ../gui/trackbuttons.cpp:624
 msgid ""
@@ -7864,12 +7743,15 @@ msgid ""
 "before recording audio.\n"
 "Would you like to set it now?"
 msgstr ""
+"La ubicació del fitxer d'àudio no existeix o no s'hi pot escriure.\n"
+"Seleccioneu una ubicació correcta, en les propietats del document abans de "
+"gravar l'àudio.\n"
+"Voleu configurar-ho ara?"
 
 #: ../gui/rosegardengui.cpp:4876 ../gui/rosegardengui.cpp:4936
 #: ../gui/trackbuttons.cpp:626
-#, fuzzy
 msgid "Set audio file path"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Selecciona una ubicació per al fitxer"
 
 #: ../gui/rosegardengui.cpp:4934
 msgid ""
@@ -7878,114 +7760,109 @@ msgid ""
 "before you start to record audio.\n"
 "Would you like to set it now?"
 msgstr ""
+"La ubicació del fitxer d'àudio no existeix o no s'hi pot escriure.\n"
+"Seleccioneu una ubicació correcta, en les propietats del document abans de "
+"gravar l'àudio.\n"
+"Voleu configurar-ho ara?"
 
 #: ../gui/rosegardengui.cpp:5398
-#, fuzzy, c-format
+#, c-format
 msgid "Replace Tempo Change at %1"
-msgstr "Reemplaça l'últim canvi de tempo"
+msgstr "Reemplaça l'últim canvi de tempo a %1"
 
 #: ../gui/rosegardengui.cpp:5433
-#, fuzzy
 msgid "Set Global and Default Tempo"
-msgstr "Estableix els valors predeterminats"
+msgstr "Estableix el tempo global i per defecte"
 
 #: ../gui/rosegardengui.cpp:5818
 #, c-format
 msgid "Sequencer failed to add audio file %1"
-msgstr ""
+msgstr "El seqüenciador no ha pogut afegir el fitxer d'àduio %1"
 
 #: ../gui/rosegardengui.cpp:5846
 #, c-format
 msgid "Sequencer failed to remove audio file id %1"
-msgstr ""
+msgstr "El seqüenciador no ha pogut suprimir el fitxer d'àduio %1"
 
 #: ../gui/rosegardengui.cpp:5906
-#, fuzzy
 msgid "Relabelling selection..."
-msgstr "S'està eliminant la selecció..."
+msgstr "S'estan canviant les etiquetes de la selecció..."
 
 #: ../gui/rosegardengui.cpp:6945
-#, fuzzy
 msgid "Play List"
-msgstr "Reprodueix "
+msgstr "Llista de peces"
 
 #: ../gui/rosegardengui.cpp:6973
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
-msgstr ""
+msgstr "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 
 #: ../gui/rosegardengui.cpp:6980
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
-msgstr ""
+msgstr "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 
 #: ../gui/rosegardengui.cpp:7057
 msgid "Queueing MIDI panic events for tranmission..."
-msgstr ""
+msgstr "S'estan encuant els esdeveniments de pànic MIDI per la transmissió..."
 
 #: ../gui/rosegardengui.cpp:7115
 msgid "Are you sure you want to save this as your default studio?"
-msgstr ""
+msgstr "Voleu desar-ho com a estudi per defecte?"
 
 #: ../gui/rosegardengui.cpp:7119
 msgid "Saving current document as default studio..."
-msgstr ""
+msgstr "S'està desant el document actual com a estudi per defecte..."
 
 #: ../gui/rosegardengui.cpp:7144
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "Voleu importar el vostre estudi per defecte i perdre l'actual?"
 
 #: ../gui/rosegardengui.cpp:7179
-#, fuzzy
 msgid "Import Studio from File"
-msgstr "Importa des de: "
+msgstr "Importa l'estudi des d'un fitxer"
 
 #: ../gui/rosegardengui.cpp:7212
-#, fuzzy
 msgid "Import Studio"
-msgstr "Importa des de: "
+msgstr "Importa l'estudi"
 
 #: ../gui/notefontviewer.cpp:99
 #, c-format
 msgid "Error: Unable to match font name %1"
-msgstr ""
+msgstr "Error: no s'ha pogut trobar el tipus de lletra %1"
 
 #: ../gui/notefontviewer.cpp:107
 msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr ""
+msgstr "Avís: no s'ha trobat el tipus de lletra %1 (però es ferà servir %2) "
 
 #: ../gui/notefontviewer.cpp:115
 #, c-format
 msgid "Error: Unable to open best-match font %1"
-msgstr ""
+msgstr "Error: no s'ha pogut obrir el tipus de lletra alternatiu %1"
 
 #: ../gui/notefontviewer.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Note Font Viewer: %1"
-msgstr "&Font de notes"
+msgstr "Visualitzador de font de notes: %1"
 
 #: ../gui/notefontviewer.cpp:295
-#, fuzzy
 msgid "  Component: "
-msgstr "  Font:  "
+msgstr "  Component: "
 
 #: ../gui/notefontviewer.cpp:303
-#, fuzzy
 msgid "  View: "
-msgstr "  Mida:  "
+msgstr "  Visualitza: "
 
 #: ../gui/notefontviewer.cpp:306
+#, fuzzy
 msgid "Glyphs"
-msgstr ""
+msgstr "Figures"
 
 #: ../gui/notefontviewer.cpp:307
-#, fuzzy
 msgid "Codes"
-msgstr "Acord"
+msgstr "Codis"
 
 #: ../gui/notefontviewer.cpp:309
-#, fuzzy
 msgid "  Page: "
-msgstr "  Espaiat:  "
+msgstr "  Pàgina:  "
 
 #: ../gui/editview.cpp:747
 msgid "Show Velocity Property Ruler"
@@ -8128,47 +8005,40 @@ msgid "Insert Event"
 msgstr "Afegeix l'esdeveniment"
 
 #: ../gui/studiocommands.h:60
-#, fuzzy
 msgid "Modify &MIDI Bank"
-msgstr "&Modifica el marcador"
+msgstr "Modifica el banc &MIDI"
 
 #: ../gui/studiocommands.h:105
 msgid "Modify &Device Mapping"
-msgstr ""
+msgstr "Modifica el mapa de &dispositius"
 
 #: ../gui/studiocommands.h:126
 msgid "Modify &Instrument Mapping"
-msgstr ""
+msgstr "Modifica el mapa d'&instruments"
 
 #: ../gui/studiocommands.h:155
-#, fuzzy
 msgid "Rename Device"
-msgstr "Nou dispositiu"
+msgstr "Canvia el nom del dispositiu"
 
 #: ../gui/studiocommands.h:191
-#, fuzzy
 msgid "Create Device"
-msgstr "Suprimeix el dispositiu"
+msgstr "Crea un dispositiu"
 
 #: ../gui/studiocommands.h:219
-#, fuzzy
 msgid "Reconnect Device"
-msgstr "Suprimeix el dispositiu"
+msgstr "Torna a connectar el dispositiu"
 
 #: ../gui/studiocommands.h:248
-#, fuzzy
 msgid "&Add Control Parameter"
-msgstr "Edita el paràmetre de control"
+msgstr "&Afegeix un paràmetre de control"
 
 #: ../gui/studiocommands.h:275
-#, fuzzy
 msgid "&Remove Control Parameter"
-msgstr "Edita el paràmetre de control"
+msgstr "&Suprimeix un paràmetre de control"
 
 #: ../gui/studiocommands.h:302
-#, fuzzy
 msgid "&Modify Control Parameter"
-msgstr "Edita el paràmetre de control"
+msgstr "&Modifica el paràmetre de control"
 
 #: ../gui/chordnameruler.cpp:94
 msgid ""
@@ -8200,15 +8070,15 @@ msgstr "Afegeix el pedal lliu&re"
 
 #: ../gui/notationcommands.h:245
 msgid "&Beam Group"
-msgstr "A&grupa les pliques"
+msgstr "&Barra d'agrupació"
 
 #: ../gui/notationcommands.h:262
 msgid "&Auto-Beam"
-msgstr "&Agrupa les pliques automàticament"
+msgstr "Barres d'agrupació &automàtiques"
 
 #: ../gui/notationcommands.h:276
 msgid "&Unbeam"
-msgstr "De&sagrupa les pliques"
+msgstr "Tre&u les barres d'agrupació"
 
 #: ../gui/notationcommands.h:294
 msgid "&Triplet"
@@ -8260,15 +8130,15 @@ msgstr "Divideix-i-lliga els a&cords encavalcats"
 
 #: ../gui/notationcommands.h:534
 msgid "Stems &Up"
-msgstr "Pliques cap &amunt"
+msgstr "Vírgules cap &amunt"
 
 #: ../gui/notationcommands.h:534
 msgid "Stems &Down"
-msgstr "Pliques cap a&vall"
+msgstr "Vírgules cap a&vall"
 
 #: ../gui/notationcommands.h:553
 msgid "&Restore Computed Stems"
-msgstr "&Restaura la direcció calculada de les pliques"
+msgstr "&Restaura la direcció calculada de les vírgules"
 
 #: ../gui/notationcommands.h:571
 msgid "Slur &Above"
@@ -8315,7 +8185,6 @@ msgid "&Interpret..."
 msgstr "&Interpreta..."
 
 #: ../gui/notationcommands.h:866
-#, fuzzy
 msgid "Fine Reposition"
 msgstr "Reubicació precisa"
 
@@ -8429,26 +8298,25 @@ msgstr "Posició de la caixa de paràmetres de l'instrument"
 
 #: ../gui/notefont.cpp:72
 msgid "unknown error"
-msgstr ""
+msgstr "error desconegut"
 
 #: ../gui/notefont.cpp:98
 #, fuzzy
 msgid "Can't open font mapping file %1 or %2"
-msgstr "No s'ha pogut obrir el fitxer %1"
+msgstr "No s'ha pogut obrir el fitxer de tipus de lletra %1 o %2"
 
 #: ../gui/notefont.cpp:102
 #, fuzzy, c-format
 msgid "Can't open font mapping file %1"
-msgstr "No s'ha pogut obrir el fitxer %1"
+msgstr "No s'ha pogut obrir el fitxer de tipus de lletra %1"
 
 #: ../gui/notefont.cpp:1873
 msgid "Can't obtain a default font -- no fonts found"
-msgstr ""
+msgstr "No s'ha trobat el tipus de lletre per defecte -- no hi ha cap tipus de lletra"
 
 #: ../gui/audiomanagerdialog.cpp:180
-#, fuzzy
 msgid "Audio File Manager"
-msgstr "Mesclador d'àudio"
+msgstr "Gestor de fitxers d'àudio"
 
 #: ../gui/audiomanagerdialog.cpp:201
 msgid ""
@@ -8459,94 +8327,86 @@ msgid ""
 "Please consider resampling such files externally, or adjusting the sample "
 "rate of the JACK server."
 msgstr ""
+"* Alguns fitxers d'àudio estan codificats en un mostreig diferent del del "
+"JACK.\n"
+"El Rosegarden el reproduirà a la velocitat normal, però sonarà malament.\n"
+"Caldria reeditar els fitxers i ajustar el mostreig com el del servidor JACK."
 
 #: ../gui/audiomanagerdialog.cpp:207
-#, fuzzy
 msgid "&Add Audio File..."
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "&Afegeix un fitxer d'àudio..."
 
 #: ../gui/audiomanagerdialog.cpp:210
-#, fuzzy
 msgid "&Unload Audio File"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Descarrega &un fitxer d'àudio"
 
 #: ../gui/audiomanagerdialog.cpp:215
-#, fuzzy
 msgid "&Play Preview"
-msgstr "Dispositius de reproducció"
+msgstr "&Reprodueix una mostra"
 
 #: ../gui/audiomanagerdialog.cpp:226
 msgid "&Insert into Selected Audio Track"
-msgstr ""
+msgstr "&Insereix dins de la pista d'àudio seleccionada"
 
 #: ../gui/audiomanagerdialog.cpp:230
-#, fuzzy
 msgid "Unload &all Audio Files"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Desc&arrega tots els fitxers d'àudio"
 
 #: ../gui/audiomanagerdialog.cpp:234
-#, fuzzy
 msgid "Unload all &Unused Audio Files"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Descarrega tots els fitxers d'à&udio en desús"
 
 #: ../gui/audiomanagerdialog.cpp:238
-#, fuzzy
 msgid "&Delete Unused Audio Files..."
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Esborra tots els fitxers &d'àudio en desús..."
 
 #: ../gui/audiomanagerdialog.cpp:242
-#, fuzzy
 msgid "&Export Audio File..."
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "&Exporta un fitxer d'àudio..."
 
 #: ../gui/audiomanagerdialog.cpp:246
-#, fuzzy
 msgid "Distribute Audio on &MIDI"
-msgstr "Envia els fragments d'àudio al dispositiu MIDI"
+msgstr "Envia l'àudio al MIDI"
 
 #: ../gui/audiomanagerdialog.cpp:256
 msgid "Envelope"
-msgstr ""
+msgstr "Sobre"
 
 #: ../gui/audiomanagerdialog.cpp:257
-#, fuzzy
 msgid "Sample rate"
-msgstr "Desa les dades"
+msgstr "Mostreig"
 
 #: ../gui/audiomanagerdialog.cpp:258
-#, fuzzy
 msgid "Channels"
-msgstr "Canal"
+msgstr "Canals"
 
 #: ../gui/audiomanagerdialog.cpp:361
-#, fuzzy
 msgid "<no audio files>"
-msgstr "Busca el fitxer d'àudio"
+msgstr "<cap fitxer d'àudio>"
 
 #: ../gui/audiomanagerdialog.cpp:579 ../gui/audiomanagerdialog.cpp:795
-#, fuzzy
 msgid "*.wav|WAV files (*.wav)"
 msgstr "*.wav|fitxers WAV (*.wav)"
 
 #: ../gui/audiomanagerdialog.cpp:580
 msgid "Choose a name to save this file as"
-msgstr ""
+msgstr "Escolliu un nom per desar el fitxer"
 
 #: ../gui/audiomanagerdialog.cpp:590
-#, fuzzy
 msgid "Exporting audio file..."
-msgstr "S'està reproduint el fitxer d'àudio"
+msgstr "S'està exportant el fitxer d'àudio..."
 
 #: ../gui/audiomanagerdialog.cpp:702
 msgid ""
 "This will unload audio file \"%1\" and remove all associated segments.  Are "
 "you sure?"
 msgstr ""
+"Això descarregarà el fitxer d''audio \"%1\" i esborrarà tots els fragments "
+"associats. Voleu continuar?"
 
 #: ../gui/audiomanagerdialog.cpp:796
-#, fuzzy
 msgid "Select one or more audio files"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Selecciona un o més fitxers d'àudio"
 
 #: ../gui/audiomanagerdialog.cpp:856
 msgid ""
@@ -8556,6 +8416,11 @@ msgid ""
 "Files will not be removed from your disk.\n"
 "Are you sure?"
 msgstr ""
+"Això descarregarà tots els fitxers d''audio i esborrarà tots els fragments "
+"associats. \n"
+"Aquesta acció no es pot desfer, i les fitxers associats es perdran.\n"
+"Tot i així els fitxers no s'esborraran del disc.\n"
+"Voleu continuar?"
 
 #: ../gui/audiomanagerdialog.cpp:897
 msgid ""
@@ -8566,24 +8431,27 @@ msgid ""
 "Files will not be removed from your disk.\n"
 "Are you sure?"
 msgstr ""
+"Això descarregarà tots els fitxes d'àudio que no estan associats a cap "
+"fragment de la composició.\n"
+"Aquesta acció no es pot desfer, i els fitxers associats es perdran.\n"
+"Tot i així els fitxers no s'esborraran del disc.\n"
+"Voleu continuar?"
 
 #: ../gui/audiomanagerdialog.cpp:947
-#, fuzzy
 msgid "Select Unused Audio Files"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Selecciona els fitxers d'àudio en desús"
 
 #: ../gui/audiomanagerdialog.cpp:955
-#, fuzzy
 msgid "File size"
-msgstr "Redimensi&ona"
+msgstr "Mida del fitxer"
 
 #: ../gui/audiomanagerdialog.cpp:956
 msgid "Last modified date"
-msgstr ""
+msgstr "Data de l'últim canvi"
 
 #: ../gui/audiomanagerdialog.cpp:961
 msgid " (not found) "
-msgstr ""
+msgstr " (no s'ha trobat) "
 
 #: ../gui/audiomanagerdialog.cpp:1020
 msgid ""
@@ -8591,6 +8459,9 @@ msgid ""
 "\n"
 "Please select the ones you wish to delete permanently from the hard disk.\n"
 msgstr ""
+"Els fitxers d'àudio següents no s'utilitzen en la composició.\n"
+"\n"
+"Seleccioneu els que voleu esborrar permanentment del disc dur.\n"
 
 #: ../gui/audiomanagerdialog.cpp:1030
 #, c-format
@@ -8604,52 +8475,58 @@ msgid ""
 "files.\n"
 "Are you sure?"
 msgstr ""
+"_n: Si esborreu el fitxer d'àudio permanentment del disc dur,\n"
+"no podreu desfer aquesta acció i no es podrà recuperar el fitxer.\n"
+"Voleu continuar?\n"
+"_n: Si esborreu %n fitxers d'àudio permanentment del disc dur,\n"
+"no podreu desfer aquesta acció i no es podran recuperar els fitxers.\n"
+"Voleu continuar?"
 
 #: ../gui/audiomanagerdialog.cpp:1077
-#, fuzzy
 msgid "Change Audio File label"
-msgstr "Selecciona un fitxer d'àudio"
+msgstr "Canvia l'etiqueta del fitxer d'àudio"
 
 #: ../gui/audiomanagerdialog.cpp:1292 ../gui/audiomanagerdialog.cpp:1301
-#, fuzzy
 msgid "Cannot add file %1: %2"
-msgstr "No s'ha pogut descarregar el fitxer %1"
+msgstr "No s'ha pogut afegir el fitxer %1: %2"
 
 #: ../gui/audiomanagerdialog.cpp:1321
 msgid ""
 "Try copying this file to a directory where you have write permission and re-"
 "add it"
 msgstr ""
+"Mireu de copiar aquest fitxer en una carpeta on tingueu permisos i torneu a "
+"afegir-lo."
 
 #: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:366
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Rosegarden Transport"
-msgstr "Rosegarden"
+msgstr "Transport del Rosegarden"
 
 #: ../gui/rosegardentransportdialog.cpp:757
 #: ../gui/rosegardentransportdialog.cpp:834
 msgid "PITCH WHEEL"
-msgstr ""
+msgstr "PITCH WHEEL"
 
 #: ../gui/rosegardentransportdialog.cpp:763
 #: ../gui/rosegardentransportdialog.cpp:840
 msgid "CONTROLLER"
-msgstr ""
+msgstr "CONTROLLER"
 
 #: ../gui/rosegardentransportdialog.cpp:768
 #: ../gui/rosegardentransportdialog.cpp:845
 msgid "PROG CHNGE"
-msgstr ""
+msgstr "PROG CHNGE"
 
 #: ../gui/rosegardentransportdialog.cpp:775
 #: ../gui/rosegardentransportdialog.cpp:852
 msgid "PRESSURE"
-msgstr ""
+msgstr "PRESSURE"
 
 #: ../gui/rosegardentransportdialog.cpp:781
 #: ../gui/rosegardentransportdialog.cpp:858
 msgid "SYS MESSAGE"
-msgstr ""
+msgstr "SYS MESSAGE"
 
 #: ../gui/eventview.cpp:210
 msgid "Event filters"
@@ -8962,433 +8839,431 @@ msgstr "Ranura de connector %1"
 
 #: ../gui/trackbuttons.cpp:277
 msgid "Mute track"
-msgstr ""
+msgstr "Posa la pista en silenci"
 
 #: ../gui/trackbuttons.cpp:282
-#, fuzzy
 msgid "Record on this track"
-msgstr "Origen de l'entrada del registre"
+msgstr "Grava en aquesta pista"
 
 #: ../gui/trackbuttons.cpp:312 ../gui/trackbuttons.cpp:554
 msgid "<untitled audio>"
-msgstr ""
+msgstr "<àudio sense nom>"
 
 #: ../gui/trackbuttons.cpp:314 ../gui/trackbuttons.cpp:556
-#, fuzzy
 msgid "<untitled>"
-msgstr "il·limitada"
+msgstr "<sense nom>"
 
 #: rc.cpp:3 rc.cpp:57 rc.cpp:189 rc.cpp:282 rc.cpp:330
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T&ransport"
-msgstr "Transposa"
+msgstr "T&ransport"
 
 #: rc.cpp:9
 #, no-c-format
 msgid "Number of Stereo &Inputs"
-msgstr ""
+msgstr "Nombre d'&entrades d'estéreo"
 
 #: rc.cpp:12
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Number of Submasters"
-msgstr "Cap submaster"
+msgstr "&Nombre de submasters"
 
 #: rc.cpp:15 rc.cpp:78 rc.cpp:204 rc.cpp:297 rc.cpp:321 rc.cpp:333 rc.cpp:357
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Transport Toolbar"
-msgstr "Mostra la barra d'eines de les &tecles de reproducció"
+msgstr "Barra de transport"
 
 #: rc.cpp:18
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Import"
-msgstr "Importa..."
+msgstr "&Importa"
 
 #: rc.cpp:21
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Merge"
-msgstr "Fusiona el fitxer"
+msgstr "&Fusiona"
 
 #: rc.cpp:24
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Export"
-msgstr "Exporta..."
+msgstr "&Exporta"
 
 #: rc.cpp:27 rc.cpp:99 rc.cpp:252
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Composition"
-msgstr "Posició del punter"
+msgstr "&Composició"
 
 #: rc.cpp:30
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Studio"
-msgstr "&Atura"
+msgstr "E&studi"
 
 #: rc.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Tempo and Time Signature"
-msgstr "Indicació de compàs"
+msgstr "&Tempo i indicació de compàs"
 
 #: rc.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Se&gments"
-msgstr "Etiqueta del fragment"
+msgstr "Fra&gments"
 
 #: rc.cpp:39 rc.cpp:105 rc.cpp:258 rc.cpp:348
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Edit &With"
-msgstr "Edita l'altura"
+msgstr "Edita &amb"
 
 #: rc.cpp:42
 #, no-c-format
 msgid "&Split or Join"
-msgstr ""
+msgstr "&Divideix i ajunta"
 
 #: rc.cpp:45
 #, no-c-format
 msgid "Trac&ks"
-msgstr ""
+msgstr "&Pistes"
 
 #: rc.cpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Set &Instrument"
-msgstr "Instrument"
+msgstr "Posa un &instrument"
 
 #: rc.cpp:54 rc.cpp:171 rc.cpp:276
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Editor Tools"
-msgstr "Editor >>"
+msgstr "&Eines de l'editor"
 
 #: rc.cpp:60 rc.cpp:195 rc.cpp:288
 #, no-c-format
 msgid "&Toolbars"
-msgstr ""
+msgstr "B&arra d'eines"
 
 #: rc.cpp:63 rc.cpp:198 rc.cpp:291
 #, no-c-format
 msgid "&Rulers"
-msgstr ""
+msgstr "&Regles"
 
 #: rc.cpp:69 rc.cpp:201 rc.cpp:294
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tools Toolbar"
-msgstr "M&ostra la barra d'eines de les eines"
+msgstr "Barra d'eines"
 
 #: rc.cpp:72
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Tracks Toolbar"
-msgstr "Mostra la barra d'eines dels &marcadors"
+msgstr "Barra d'eines de les pistes"
 
 #: rc.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Editors Toolbar"
-msgstr "Mostra la barra d'eines dels &marcadors"
+msgstr "Barra d'editors"
 
 #: rc.cpp:81 rc.cpp:303 rc.cpp:327 rc.cpp:363
 #, fuzzy, no-c-format
 msgid "Zoom Toolbar"
-msgstr "Mostra la barra d'eines del &grup"
+msgstr "Barra de zoom"
 
 #: rc.cpp:87 rc.cpp:318 rc.cpp:339 rc.cpp:354
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Time Toolbar"
-msgstr "Mostra la barra d'eines M&eta"
+msgstr "Barra del temps"
 
 #: rc.cpp:93
 #, no-c-format
 msgid "&Layout Mode"
-msgstr ""
+msgstr "&Format"
 
 #: rc.cpp:96 rc.cpp:249
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Add Event Ruler"
-msgstr "Filtre d'esdeveniments"
+msgstr "Afegeix un regle d'esdeveniments"
 
 #: rc.cpp:102 rc.cpp:345
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Se&gment"
-msgstr "Etiqueta del fragment"
+msgstr "Fra&gment"
 
 #: rc.cpp:108
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "N&otes"
-msgstr "Nota"
+msgstr "N&otes"
 
 #: rc.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Beams"
-msgstr "Pulsacions"
+msgstr "&Barres d'agrupació"
 
 #: rc.cpp:114
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Octaves"
-msgstr "Octava &inferior"
+msgstr "&Octaves"
 
 #: rc.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Indications"
-msgstr "Indicació"
+msgstr "&Indicacions"
 
 #: rc.cpp:120
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Slur &Position"
-msgstr "Posició del punter"
+msgstr "&Posició del lligat"
 
 #: rc.cpp:123
 #, no-c-format
 msgid "Mar&ks"
-msgstr ""
+msgstr "Mar&ques"
 
 #: rc.cpp:126
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Ornaments"
-msgstr "Fes servir l'ornamentació"
+msgstr "&Ornaments"
 
 #: rc.cpp:129
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Fingerings"
-msgstr "Suprimeix les&digitacions"
+msgstr "&Digitacions"
 
 #: rc.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "S&lashes"
-msgstr "Barres inverses"
+msgstr "S&lash"
 
 #: rc.cpp:135 rc.cpp:261
 #, no-c-format
 msgid "Ad&just"
-msgstr ""
+msgstr "A&justa"
 
 #: rc.cpp:138 rc.cpp:180
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Accidentals"
-msgstr "&Accent"
+msgstr "&Accidents"
 
 #: rc.cpp:141
 #, no-c-format
 msgid "Trip&lets and Tuplets"
-msgstr ""
+msgstr "Tresets i &grups irregulars"
 
 #: rc.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "S&tem Direction"
-msgstr "Direcció"
+msgstr "Direcció de la &vírgula"
 
 #: rc.cpp:147
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "R&ests"
-msgstr "Silenci"
+msgstr "Sil&encis"
 
 #: rc.cpp:150 rc.cpp:174
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Notes"
-msgstr "Nota"
+msgstr "&Notes"
 
 #: rc.cpp:153 rc.cpp:264
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Quantize"
-msgstr "Quantificació"
+msgstr "&Quantifica"
 
 #: rc.cpp:156 rc.cpp:270
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Trans&pose"
-msgstr "Transposa"
+msgstr "Trans&posa"
 
 #: rc.cpp:159
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Fine Positioning"
-msgstr "Reubicació precisa"
+msgstr "&Ubicació precisa"
 
 #: rc.cpp:162
 #, no-c-format
 msgid "Fine Ti&ming"
-msgstr ""
+msgstr "Te&mps precís"
 
 #: rc.cpp:165
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Visibility"
-msgstr "Estableix la visibilitat"
+msgstr "&Visibilitat"
 
 #: rc.cpp:177
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Rests"
-msgstr "Silenci"
+msgstr "&Silencis"
 
 #: rc.cpp:183
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Clefs"
-msgstr "Clau"
+msgstr "&Clau"
 
 #: rc.cpp:186 rc.cpp:279
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Local &Cursor"
-msgstr ""
+msgstr "&Cursor local"
 
 #: rc.cpp:207
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Notes Toolbar"
-msgstr "Mostra la barra d'eines de les&notes"
+msgstr "Barra de &notes"
 
 #: rc.cpp:210
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Rests Toolbar"
-msgstr "Mostra la barra d'eines dels &silencis"
+msgstr "Barra de silencis"
 
 #: rc.cpp:213
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Clefs Toolbar"
-msgstr "Mostra la barra d'eines de les cla&us"
+msgstr "Barra de claus"
 
 #: rc.cpp:216
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Accidentals Toolbar"
-msgstr "Mostra la barra d'eines de les &alteracions"
+msgstr "Barra d'accidents"
 
 #: rc.cpp:219
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Group Toolbar"
-msgstr "Mostra la barra d'eines del &grup"
+msgstr "Barra de grups"
 
 #: rc.cpp:222
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Marks Toolbar"
-msgstr "Mostra la barra d'eines dels &marcadors"
+msgstr "Barra de màrques"
 
 #: rc.cpp:225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Meta Toolbar"
-msgstr "Mostra la barra d'eines M&eta"
+msgstr "Barra d'eines Meta"
 
 #: rc.cpp:228
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Layout Toolbar"
-msgstr "Mostra la barra d'eines del &format"
+msgstr "Barra de formats"
 
 #: rc.cpp:231 rc.cpp:306
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Control Ruler actions"
-msgstr "Controlador d'esdeveniments"
+msgstr "Accions del regle de control"
 
 #: rc.cpp:234 rc.cpp:309
 #, no-c-format
 msgid "Property Ruler actions"
-msgstr ""
+msgstr "Accions del regle de propietats"
 
 #: rc.cpp:237
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Action"
-msgstr "Direcció"
+msgstr "&Acció"
 
 #: rc.cpp:240
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "General Toolbar"
-msgstr "Mostra la barra d'eines M&eta"
+msgstr "Barra d'eines general"
 
 #: rc.cpp:246
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Grid"
-msgstr " Graella: "
+msgstr "&Graella"
 
 #: rc.cpp:255
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Segment"
-msgstr "&Selecciona"
+msgstr "&Fragment"
 
 #: rc.cpp:267
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Velocity"
-msgstr "Velocitat:"
+msgstr "&Velocitat"
 
 #: rc.cpp:300 rc.cpp:315 rc.cpp:324 rc.cpp:351 rc.cpp:360
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Actions Toolbar"
-msgstr "Mostra la barra d'eines de les &alteracions"
+msgstr "Barra d'accions"
 
 #: rc.cpp:369
 #, no-c-format
 msgid "SIG"
-msgstr ""
+msgstr "SIG"
 
 #: rc.cpp:372
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "DIV"
-msgstr "IV"
+msgstr "DIV"
 
 #: rc.cpp:375
 #, no-c-format
 msgid "/16"
-msgstr ""
+msgstr "/16"
 
 #: rc.cpp:378
 #, no-c-format
 msgid "TEMPO"
-msgstr ""
+msgstr "TEMPO"
 
 #: rc.cpp:381
 #, no-c-format
 msgid "END"
-msgstr ""
+msgstr "END"
 
 #: rc.cpp:384
 #, no-c-format
 msgid "BAR"
-msgstr ""
+msgstr "BAR"
 
 #: rc.cpp:388
 #, no-c-format
 msgid "Switch between real time, musical time, and frame count"
-msgstr ""
+msgstr "Commuta entre temps real, temps musical i comptador de trams"
 
 #: rc.cpp:392
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Display time to end"
-msgstr "Visualitza com:  "
+msgstr "Mostra el temps que queda"
 
 #: rc.cpp:396
 #, no-c-format
 msgid "Show additional controls"
-msgstr ""
+msgstr "Mostra els controls addicionals"
 
 #: rc.cpp:403
 #, no-c-format
 msgid "Stops playback or recording."
-msgstr ""
+msgstr "Para de reproduir o de gravar."
 
 #: rc.cpp:407
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Play/Pause"
-msgstr "&Calderó"
+msgstr "Reprodueix/pausa"
 
 #: rc.cpp:410
 #, no-c-format
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
-msgstr ""
+msgstr "Toca des de la posició actual, o para de reproduir si estava en marxa."
 
 #: rc.cpp:414
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Rewind"
-msgstr "Re&bobina"
+msgstr "Rebobina"
 
 #: rc.cpp:417
 #, no-c-format
 msgid "Moves the current pointer position back one bar."
-msgstr ""
+msgstr "Mou la posició una compàs enrere."
 
 #: rc.cpp:421
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fast forward"
-msgstr "Avanç &ràpid"
+msgstr "Avança ràpidament"
 
 #: rc.cpp:424
 #, no-c-format
 msgid "Moves the current pointer position forwards one bar."
-msgstr ""
+msgstr "Mou la posició una compàs endavant."
 
 #: rc.cpp:428
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Rewind to beginning"
-msgstr "Re&bobina fins al començament"
+msgstr "Rebobina fins al començament"
 
 #: rc.cpp:431
 #, no-c-format
@@ -9396,11 +9271,13 @@ msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
 msgstr ""
+"Torna al principi de la composició. (Això pot voler dir que es mou endavant, "
+"en cas que la posició actual era més enrere del principi.)"
 
 #: rc.cpp:435
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fast forward to end"
-msgstr "Avanç rà&pid al final"
+msgstr "Avança ràpidament fins al final"
 
 #: rc.cpp:438
 #, no-c-format
@@ -9408,98 +9285,97 @@ msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
 msgstr ""
+"Va al final de la composició. (Això pot voler dir que es mou endarrere, en "
+"cas que la posició actual sigui més enllà del final.)"
 
 #: rc.cpp:441
 #, no-c-format
 msgid "Shows MIDI activity in and out of Rosegarden"
-msgstr ""
+msgstr "Mostra l'activiatat d'entrada i sortida del MIDI del Rosegarden "
 
 #: rc.cpp:444 rc.cpp:453
 #, no-c-format
 msgid "NO EVENTS"
-msgstr ""
+msgstr "Sense esdeveniments"
 
 #: rc.cpp:447
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IN"
-msgstr "I"
+msgstr "Entrada"
 
 #: rc.cpp:450
 #, no-c-format
 msgid "OUT"
-msgstr ""
+msgstr "Sortida"
 
 #: rc.cpp:457
 #, no-c-format
 msgid "Hide additional controls"
-msgstr ""
+msgstr "Amaga els controls addicionals"
 
 #: rc.cpp:464
 #, no-c-format
 msgid "Record either MIDI or audio"
-msgstr ""
+msgstr "Grava o MIDI o àudio"
 
 #: rc.cpp:468
 #, no-c-format
 msgid "Loop"
-msgstr ""
+msgstr "Bucle de repetició"
 
 #: rc.cpp:471
 #, no-c-format
 msgid "Turn on and off the loop markers (if set)"
-msgstr ""
+msgstr "Commuta les marques dels bucles (si n'hi ha)"
 
 #: rc.cpp:478
 #, no-c-format
 msgid "Provides a metronome click for you to play along with"
-msgstr ""
+msgstr "Us dóna un tic-tac de metrònom per ajudar-vos a tocar conjutament"
 
 #: rc.cpp:485
 #, no-c-format
 msgid "Mutes all but the currently selected track"
-msgstr ""
+msgstr "Posa silencia a totes les pistes excepte la seleccionada"
 
 #: rc.cpp:489
 #, no-c-format
 msgid "Panic Button"
-msgstr ""
+msgstr "Botó de pànic"
 
 #: rc.cpp:492
 #, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
-msgstr ""
+msgstr "Fa callar tots els dispositius MIDI si teniu cap nota clavada"
 
-#~ msgid "Lilypond 1.6 or 1.8"
-#~ msgstr "Lilypond 1.6 o 1.8"
+msgid "Lilypond 1.6 or 1.8"
+msgstr "Lilypond 1.6 o 1.8"
 
-#~ msgid "Lilypond 2.0"
-#~ msgstr "Lilypond 2.0"
+msgid "Lilypond 2.0"
+msgstr "Lilypond 2.0"
 
-#~ msgid "<timing has gone astray>"
-#~ msgstr "<el temps s'ha esgarriat>"
-
-#~ msgid "Advanced Event Edit"
-#~ msgstr "Editor avançat d'esdeveniments"
-
-#~ msgid "Advanced Event Viewer"
-#~ msgstr "Visualitzador avançat d'esdeveniments"
+msgid "<timing has gone astray>"
+msgstr "<el temps s'ha esgarriat>"
 
 #, fuzzy
-#~ msgid "%1 - 1 Segment - %2"
-#~ msgstr "%1 - Tots els fragments - Matriu"
+msgid "Advanced Event Edit"
+msgstr "Editor &avançat d'esdeveniments"
 
-#, fuzzy
-#~ msgid "1 Input"
-#~ msgstr "%1 Entrada"
+msgid "Advanced Event Viewer"
+msgstr "Vista &avançada d'esdeveniments"
 
-#, fuzzy
-#~ msgid "1 Submaster"
-#~ msgstr "%1 Submasters"
+msgid "%1 - 1 Segment - %2"
+msgstr "%1 - 1 fragment - %2"
 
-#, fuzzy
-#~ msgid "1 pixel"
-#~ msgstr "%1 píxel"
+msgid "1 Input"
+msgstr "1 Entrada"
 
-#, fuzzy
-#~ msgid "%1 - Segment - Notation"
-#~ msgstr "%1 - %2 Fragments - Partitura"
+msgid "1 Submaster"
+msgstr "Cap submaster"
+
+msgid "1 pixel"
+msgstr "1 píxel"
+
+msgid "%1 - Segment - Notation"
+msgstr "%1 - Fragment - Partitura"
+
