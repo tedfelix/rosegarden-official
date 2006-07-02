@@ -121,6 +121,7 @@
 #include "sequencermapper.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
+#include "trackparameterbox.h"
 #include "audioplugindialog.h"
 #include "audiosynthmanager.h"
 #include "startuptester.h"
@@ -359,6 +360,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // Populate the parameter-box area with the respective
     // parameter box widgets.
 
+    m_trackParameterBox = new TrackParameterBox(doc, m_parameterArea);
+    m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
     m_segmentParameterBox = new SegmentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
@@ -369,8 +372,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-       kapp->config()->readUnsignedNumEntry("sidebarstyle",
-       RosegardenParameterArea::TAB_BOX_STYLE));
+        kapp->config()->readUnsignedNumEntry("sidebarstyle",
+        RosegardenParameterArea::TAB_BOX_STYLE));
     
     m_dockLeft->update();
 
@@ -1275,7 +1278,8 @@ void RosegardenGUIApp::initView()
     
     m_swapView = new RosegardenGUIView(m_viewTrackLabels->isChecked(),
                                        m_segmentParameterBox,
-                                       m_instrumentParameterBox, this);
+                                       m_instrumentParameterBox, 
+                                       m_trackParameterBox, this);
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
@@ -1471,6 +1475,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     if (m_markerEditor) m_markerEditor->setDocument(m_doc);
     if (m_triggerSegmentManager) m_triggerSegmentManager->setDocument(m_doc);
 
+    m_trackParameterBox->setDocument(m_doc);
     m_segmentParameterBox->setDocument(m_doc);
     m_instrumentParameterBox->setDocument(m_doc);
 
@@ -4527,6 +4532,7 @@ bool RosegardenGUIApp::launchJack()
 void RosegardenGUIApp::slotDocumentDevicesResyncd()
 {
     m_sequencerCheckedIn = true;
+    m_trackParameterBox->populateDeviceLists();
 }
 
 void RosegardenGUIApp::slotSequencerExited(KProcess*)
@@ -7518,4 +7524,5 @@ RosegardenGUIApp::slotShowTip()
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 const char* const RosegardenGUIApp::MainWindowConfigGroup = "MainView";
+
 #include "rosegardengui.moc"

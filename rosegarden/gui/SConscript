@@ -138,6 +138,7 @@ trackbuttons.cpp
 trackeditor.cpp 
 trackheader.cpp 
 tracklabel.cpp 
+trackparameterbox.cpp
 trackseditoriface.skel
 triggermanager.cpp 
 velocitycolour.cpp 

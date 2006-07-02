@@ -20,7 +20,7 @@
 */
 
 #include <iostream>
-
+#include <qlayout.h>
 #include <klocale.h>
 
 #include "rosegardenparameterarea.h"
@@ -52,7 +52,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 {
   // Check that the box hasn't been added before.
 
-  for(int i=0; i<m_parameter_boxes.size(); i++) {
+  for(unsigned int i=0; i<m_parameter_boxes.size(); i++) {
     if(m_parameter_boxes[i] == b)
       return;
   }
@@ -66,8 +66,13 @@ void RosegardenParameterArea::addRosegardenParameterBox(
   // and outline, in classic mode. Add this container to an array that
   // parallels the above array of parameter boxes.
 
-  m_group_boxes.push_back(new QVGroupBox(b->getLabel() + i18n(" Parameters"),
-					 m_classic));
+  QVGroupBox *box = new QVGroupBox( b->getLabel() + i18n(" Parameters"),
+                                   m_classic);
+  box->layout()->setMargin( 4 ); // about half the default value
+  QFont f;
+  f.setBold( true );
+  box->setFont( f );
+  m_group_boxes.push_back(box);
 
   // Add the parameter box to the current container of the displayed
   // widgets, unless the current container has been set up yet.
@@ -107,7 +112,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
     // Move the parameter boxes from the old container to the new one.
 
-    for(int i=0; i<m_parameter_boxes.size(); i++)
+    for(unsigned int i=0; i<m_parameter_boxes.size(); i++)
       moveWidget(m_active, container, i);
 
     // Switch the widget stack to displaying the new container.
