@@ -90,7 +90,8 @@ TrackVUMeter::TrackVUMeter(QWidget *parent,
     setAlignment(AlignCenter);
 
     QFont font;
-    if (font.pixelSize() > 14) font.setPixelSize(14);
+    font.setPointSize(font.pointSize() * 95 / 100);
+    if (font.pointSize() > 14) font.setPointSize(14);
     font.setBold(false);
     setFont(font);
 }
@@ -719,11 +720,11 @@ TrackButtons::setRecordButton(int position, bool state)
 void
 TrackButtons::selectLabel(int position)
 {
-    if (m_lastSelected >= 0 && m_lastSelected < m_trackLabels.size()) {
+    if (m_lastSelected >= 0 && m_lastSelected < (int)m_trackLabels.size()) {
         m_trackLabels[m_lastSelected]->setSelected(false);
     }
 
-    if (position >= 0 && position < m_trackLabels.size()) {
+    if (position >= 0 && position < (int)m_trackLabels.size()) {
 	m_trackLabels[position]->setSelected(true);
 	m_lastSelected = position;
     }
@@ -763,9 +764,9 @@ TrackButtons::slotRenameTrack(QString newName, Rosegarden::TrackId trackId)
 void
 TrackButtons::slotSetTrackMeter(float value, int position)
 {
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Studio &studio = m_doc->getStudio();
-    Rosegarden::Track *track;
+    //Rosegarden::Composition &comp = m_doc->getComposition();
+    //Rosegarden::Studio &studio = m_doc->getStudio();
+    //Rosegarden::Track *track;
 
     for (unsigned int i = 0; i < m_trackMeters.size(); ++i)
     {
@@ -786,7 +787,7 @@ TrackButtons::slotSetMetersByInstrument(float value,
                                         Rosegarden::InstrumentId id)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Studio &studio = m_doc->getStudio();
+    //Rosegarden::Studio &studio = m_doc->getStudio();
     Rosegarden::Track *track;
 
     for (unsigned int i = 0; i < m_trackMeters.size(); ++i)
@@ -1208,7 +1209,16 @@ TrackButtons::setMuteButton(TrackId track, bool value)
     m_muteLeds[pos]->setState(value ? KLed::Off : KLed::On);
 }
 
+void 
+TrackButtons::slotTrackInstrumentSelection(Rosegarden::TrackId trackId, int item) 
+{
+    RG_DEBUG << "TrackButtons::slotTrackInstrumentSelection(" << trackId << ")\n";
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    int position = comp.getTrackById(trackId)->getPosition();
+    m_popupItem = position;
+    slotInstrumentPopupActivated( item );
+}
 
 
 #include "trackbuttons.moc"

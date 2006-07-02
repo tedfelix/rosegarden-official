@@ -73,6 +73,7 @@ class TriggerSegmentManager;
 class PlayListDialog;
 class SegmentParameterBox;
 class InstrumentParameterBox;
+class TrackParameterBox;
 
 class StartupTester;
 
@@ -1533,6 +1534,7 @@ private:
 
     SegmentParameterBox		  *m_segmentParameterBox;
     InstrumentParameterBox	  *m_instrumentParameterBox;
+    TrackParameterBox             *m_trackParameterBox;
 
     PlayListDialog        *m_playList;
     DeviceManagerDialog   *m_deviceManager;

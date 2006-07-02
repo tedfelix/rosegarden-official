@@ -59,6 +59,7 @@
 #include "chordnameruler.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
+#include "trackparameterbox.h"
 #include "rosegardenconfigurationpage.h"
 #include "rosegardenconfiguredialog.h"
 #include "eventview.h"
@@ -92,13 +93,15 @@ static int maxEditorsToOpen = 8;
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      SegmentParameterBox* segmentParameterBox,
                                      InstrumentParameterBox* instrumentParameterBox,
+                                     TrackParameterBox* trackParameterBox,
                                      QWidget *parent,
                                      const char* /*name*/)
     : QVBox(parent),
       m_rulerScale(0),
       m_trackEditor(0),
       m_segmentParameterBox(segmentParameterBox),
-      m_instrumentParameterBox(instrumentParameterBox)
+      m_instrumentParameterBox(instrumentParameterBox),
+      m_trackParameterBox(trackParameterBox)
 {
     RosegardenGUIDoc* doc = getDocument();
     Composition *comp = &doc->getComposition();
@@ -165,6 +168,26 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             this,
             SLOT(slotChangeInstrumentLabel(Rosegarden::InstrumentId, QString)));
 
+    connect(m_instrumentParameterBox,
+            SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
+            m_trackParameterBox,
+            SLOT(slotInstrumentLabelChanged(Rosegarden::InstrumentId, QString)));
+            
+    connect(m_trackEditor->getTrackButtons(),
+            SIGNAL(nameChanged()),
+            m_trackParameterBox,
+            SLOT(slotSelectedTrackNameChanged()));            
+
+    connect(m_trackEditor->getTrackButtons(),
+            SIGNAL(instrumentSelected(int)),
+            m_trackParameterBox,
+            SLOT(slotUpdateControls(int)));
+            
+    connect(m_trackParameterBox,
+            SIGNAL(instrumentSelected(Rosegarden::TrackId, int)),
+            m_trackEditor->getTrackButtons(),
+            SLOT(slotTrackInstrumentSelection(Rosegarden::TrackId, int)));
+            
     connect(this, SIGNAL(controllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)),
 	    this, SLOT(slotControllerDeviceEventReceived(Rosegarden::MappedEvent *, const void *)));
 
@@ -951,6 +974,8 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     // Store the selected Track in the Composition
     //
     comp.setSelectedTrack(trackId);
+
+    m_trackParameterBox->slotSelectedTrackChanged();
 
     slotUpdateInstrumentParameterBox(comp.getTrackById(trackId)->
                                      getInstrument());

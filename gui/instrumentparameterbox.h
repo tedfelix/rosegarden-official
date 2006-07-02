@@ -193,6 +193,7 @@ signals:
     void selectPlugin(QWidget *, Rosegarden::InstrumentId, int index);
     void instrumentParametersChanged(Rosegarden::InstrumentId);
     void showPluginGUI(Rosegarden::InstrumentId, int index);
+    void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
 protected:
     //--------------- Data members ---------------------------------

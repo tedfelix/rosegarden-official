@@ -55,6 +55,7 @@ class KPrinter;
 class KDockWidget;
 class SegmentParameterBox;
 class InstrumentParameterBox;
+class TrackParameterBox;
 class MultiViewCommandHistory;
 class KCommand;
 class NotationView;
@@ -85,6 +86,7 @@ public:
     RosegardenGUIView(bool showTrackLabels,
                       SegmentParameterBox*,
                       InstrumentParameterBox*,
+                      TrackParameterBox*,
                       QWidget *parent = 0,
                       const char *name=0);
 
@@ -334,6 +336,7 @@ protected:
 
     SegmentParameterBox		  *m_segmentParameterBox;
     InstrumentParameterBox	  *m_instrumentParameterBox;
+    TrackParameterBox             *m_trackParameterBox;
 
     static const QWidget          *m_lastActiveMainWindow;
 };

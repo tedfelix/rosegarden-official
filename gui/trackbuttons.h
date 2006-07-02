@@ -188,7 +188,8 @@ public slots:
 
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);
-
+    void slotTrackInstrumentSelection(Rosegarden::TrackId, int);
+    
     // ensure track buttons match the Composition
     //
     void slotSynchroniseWithComposition();

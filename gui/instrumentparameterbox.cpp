@@ -125,7 +125,12 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
 
-    connect(m_midiInstrumentParameters, SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
+    connect(m_midiInstrumentParameters, 
+            SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
+            this, SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)));
+
+    connect(m_audioInstrumentParameters, 
+            SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this, SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)));
 
     connect(m_midiInstrumentParameters,
@@ -336,7 +341,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
     // updates synth gui button &c:
     m_audioFader->slotSetInstrument(&m_doc->getStudio(), m_selectedInstrument);
 
-    if (index == Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
+    if (index == (int)Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
 	button = m_audioFader->m_synthButton;
 	noneText = i18n("<no synth>");
     } else {
@@ -373,6 +378,10 @@ AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instr
         bypassed = inst->isBypassed();
 
     setButtonColour(index, bypassed, pluginBackgroundColour);
+    
+    if (index == (int)Rosegarden::Instrument::SYNTH_PLUGIN_POSITION) {
+        emit changeInstrumentLabel(instrumentId, button->text());
+    }
 }
 
 void
@@ -645,8 +654,9 @@ AudioInstrumentParameterPanel::slotAudioRoutingChanged()
 void
 AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 {
-    if (m_selectedInstrument)
+    if (m_selectedInstrument) {
 	emit selectPlugin(0, m_selectedInstrument->getId(), index);
+    }
 }
 
 
