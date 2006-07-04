@@ -171,7 +171,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     new QLabel(i18n("    (takes effect only from next restart)"), box);
     layout->addWidget(box, 3, 0);
 
-    layout->addWidget(new QLabel(i18n("The organization of the side-bar"),
+    layout->addWidget(new QLabel(i18n("Side-bar parameter box layout"),
                                  frame), 4, 0);
 
     m_nameStyle = new KComboBox(frame);
@@ -200,9 +200,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                                           true));
 
     m_sidebarStyle = new KComboBox(frame);
-    m_sidebarStyle->insertItem(i18n("Display parameter groups tiled vertically"),
+    m_sidebarStyle->insertItem(i18n("Vertically stacked"),
 			       RosegardenParameterArea::CLASSIC_STYLE);
-    m_sidebarStyle->insertItem(i18n("Display parameter groups under tabs"),
+    m_sidebarStyle->insertItem(i18n("Tabbed"),
 			       RosegardenParameterArea::TAB_BOX_STYLE);
 
     m_sidebarStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("sidebarstyle",
