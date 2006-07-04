@@ -28,7 +28,6 @@
 #include <qtimer.h>
 #include <qinputdialog.h>
 #include <qpixmap.h>
-#include <qwidgetstack.h>
 
 #include <kapp.h>
 #include <kaction.h>
