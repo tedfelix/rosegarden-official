@@ -1206,11 +1206,17 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 		} else if ((*i)->isa(Note::EventType)) {
 
-		    if (m_languageLevel >= 1) {
+		    if (m_languageLevel >= 3) {
+			// one \tweak per each chord note
+			if (chord.size() > 1)
+			    writeStyle(*i, prevStyle, col, str, true);
+			else
+			    writeStyle(*i, prevStyle, col, str, false);
+		    } else if (m_languageLevel >= 1) {
 			// only one override per chord, and that outside the <>
 			stylei = i;
 		    } else {
-			writeStyle(*i, prevStyle, col, str);
+			writeStyle(*i, prevStyle, col, str, false);
 		    }
 		    writePitch(*i, key, str);
 
@@ -1229,22 +1235,17 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
 	    if (chord.size() > 1) str << "> ";
 		
-	    if (m_languageLevel >= 1) {
-	        if (duration != prevDuration) {
-		    writeDuration(duration, str);
-		    str << " ";
-		    prevDuration = duration;
-	        }
+	    if (duration != prevDuration) {
+		writeDuration(duration, str);
+		str << " ";
+		prevDuration = duration;
+	    }
+
+	    if (m_languageLevel >= 1 && m_languageLevel < 3) {
 	        // only one override per chord, and that outside the <>
 	        if (stylei != s->end()) {
-		    writeStyle(*stylei, prevStyle, col, str);
+		    writeStyle(*stylei, prevStyle, col, str, false);
 		    stylei = s->end();
-		}
-	    } else {
-		if (duration != prevDuration) {
-		    writeDuration(duration, str);
-		    str << " ";
-		    prevDuration = duration;
 		}
 	    }
 
@@ -1641,7 +1642,7 @@ LilypondExporter::writePitch(const Rosegarden::Event *note,
 
 void
 LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevStyle,
-			     int col, std::ofstream &str)
+			     int col, std::ofstream &str, bool isInChord)
 {
     // some hard-coded styles in order to provide rudimentary style export support
     // note that this is technically bad practice, as style names are not supposed
@@ -1660,7 +1661,7 @@ LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevSty
 
 	if (style == styleClassical && prevStyle == "") return;
 
-	prevStyle = style;
+	if (!isInChord) prevStyle = style;
 
 	if (style == styleMensural) {
 	    style = "mensural";
@@ -1672,7 +1673,11 @@ LilypondExporter::writeStyle(const Rosegarden::Event *note, std::string &prevSty
 	    style = "default"; // failsafe default or explicit
 	}
 	
-	str << std::endl << indent(col) << "\\override Voice.NoteHead #'style = #'" << style << std::endl << indent(col);
+	if (!isInChord) {
+	    str << std::endl << indent(col) << "\\override Voice.NoteHead #'style = #'" << style << std::endl << indent(col);
+	} else {
+	    str << "\\tweak #'style #'" << style << " ";
+	}
     }
 }    
 
