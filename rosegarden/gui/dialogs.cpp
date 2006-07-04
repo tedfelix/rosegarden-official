@@ -5516,7 +5516,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layout->addWidget(m_lilyExportStaffGroup, 6, 1);
     
     m_lilyExportStaffMerge = new QCheckBox(
-        i18n("Merge tracks with same non-zero name"), frame);
+        i18n("Merge tracks that have the same name"), frame);
     m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
     layout->addWidget(m_lilyExportStaffMerge, 7, 0);
 }
