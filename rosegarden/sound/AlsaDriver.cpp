@@ -89,6 +89,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_alsaRecordStartTime(0, 0),
     m_loopStartTime(0, 0),
     m_loopEndTime(0, 0),
+    m_eat_mtc(0),
     m_looping(false),
     m_haveShutdown(false)
 #ifdef HAVE_LIBJACK
@@ -1819,6 +1820,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     if (getMMCStatus() == TRANSPORT_MASTER) {
         sendMMC(127, MIDI_MMC_PLAY, true, "");
+	m_eat_mtc = 0;
     }
 
     if (getMTCStatus() == TRANSPORT_MASTER) {
@@ -1843,6 +1845,8 @@ AlsaDriver::stopPlayback()
     if (getMMCStatus() == TRANSPORT_MASTER)
     {
         sendMMC(127, MIDI_MMC_STOP, true, "");
+	//<VN> need to throw away the next MTC event
+	m_eat_mtc = 3;
     }
 
     allNotesOff();
@@ -1953,6 +1957,37 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 #ifdef DEBUG_ALSA
     std::cerr << "\n\nAlsaDriver - resetPlayback(" << position << ")" << std::endl;
 #endif
+
+    if (getMMCStatus() == TRANSPORT_MASTER)
+    {
+	unsigned char t_sec = (unsigned char) position.sec % 60;
+	unsigned char t_min = (unsigned char) (position.sec / 60) % 60;
+	unsigned char t_hrs = (unsigned char) (position.sec / 3600);
+#define STUPID_BROKEN_EQUIPMENT
+#ifdef STUPID_BROKEN_EQUIPMENT
+	// Some recorders assume you are talking in 30fps...
+	unsigned char t_frm = (unsigned char) (position.nsec /  33333333U);
+	unsigned char t_sbf = (unsigned char) ((position.nsec / 333333U) % 100U);
+#else
+	// We always send at 25fps, it's the easiest to avoid rounding problems
+	unsigned char t_frm = (unsigned char) (position.nsec /  40000000U);
+	unsigned char t_sbf = (unsigned char) ((position.nsec / 400000U) % 100U);
+#endif
+	
+	std::cerr << "\n Jump using MMC LOCATE to" << position << std::endl;
+	std::cerr << "\t which is " << int(t_hrs) <<":" << int(t_min) << ":" << int(t_sec) << "." << int(t_frm) << "." << int(t_sbf) << std::endl;
+	unsigned char locateDataArr[7] = {
+	    0x06,
+	    0x01,
+	    0x60 + t_hrs,   // (30fps flag) + hh
+	    t_min,	    // mm
+	    t_sec,	    // ss
+	    t_frm,	    // frames
+	    t_sbf	    // subframes
+	};
+	
+        sendMMC(127, MIDI_MMC_LOCATE, true, std::string((const char *) locateDataArr, 7));
+    }
 
     m_playStartPosition = position;
     m_alsaPlayStartTime = getAlsaTime();
@@ -2717,7 +2752,9 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
                 calibrateMTC();
 
                 RealTime t_diff = m_mtcEncodedTime - m_mtcReceiveTime;
+#ifdef MTC_DEBUG
                 std::cerr << "Diff: "<< t_diff << endl; 
+#endif
 
                 /* -ve diff means ALSA time ahead of MTC time */
 
@@ -2745,7 +2782,12 @@ AlsaDriver::handleMTCQFrame(unsigned int data_byte, RealTime the_time)
 			}
                 }
                 
-            } else {
+            } else if (m_eat_mtc > 0) {
+#ifdef MTC_DEBUG
+		std::cerr << "MTC: Received quarter frame just after issuing MMC stop - ignore it" << std::endl;
+#endif
+		--m_eat_mtc;
+	    } else {	
 		/* If we're not playing, we should be. */
 #ifdef MTC_DEBUG
 		std::cerr << "MTC: Received quarter frame while not playing - starting now" << std::endl;
