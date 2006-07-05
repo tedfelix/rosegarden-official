@@ -466,6 +466,7 @@ private:
 
     // MIDI Time Code handling:
 
+    unsigned int                 m_eat_mtc;
     // Received/emitted MTC data breakdown:
     RealTime                     m_mtcReceiveTime;
     RealTime                     m_mtcEncodedTime;
