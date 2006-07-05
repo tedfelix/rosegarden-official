@@ -415,7 +415,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"),"<markh@linuxfromscratch.org>");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translation\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
+    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("ALSA hacking and bug fixes\nmulti-input MIDI recording\nformer Spanish translator"), "plcl@users.sourceforge.net");
     aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
     aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
