@@ -531,6 +531,11 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 	    size_t scanFrame = RealTime::realTime2Frame(m_currentScanPoint,
 							m_targetSampleRate);
 
+	    if (scanFrame >= cframes) {
+		m_fileEnded = true;
+		return 0;
+	    }
+
 	    size_t endFrame = scanFrame + nframes;
 	    size_t n = nframes;
 
@@ -798,7 +803,8 @@ PlayableAudioFile::updateBuffers()
     RealTime block = RealTime::frame2RealTime(nframes, m_targetSampleRate);
     if (m_currentScanPoint + block >= m_startIndex + m_duration) {
 	block = m_startIndex + m_duration - m_currentScanPoint;
-	nframes = RealTime::realTime2Frame(block, m_targetSampleRate);
+	if (block <= RealTime::zeroTime) nframes = 0;
+	else nframes = RealTime::realTime2Frame(block, m_targetSampleRate);
 	m_fileEnded = true;
     }
 
