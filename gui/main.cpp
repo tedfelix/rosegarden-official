@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("William", I18N_NOOP("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
     aboutData.addCredit("Liu Songhe", I18N_NOOP("Simplified Chinese translation"), "jackliu9999@msn.com");
     aboutData.addCredit("Toni Arnold", I18N_NOOP("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
-    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince-rg@bulbous.freeserve.co.uk");
+    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince.negri@gmail.com");
     aboutData.addCredit("Jan Bína", I18N_NOOP("Czech translation"), "jbina@sky.cz");
     aboutData.addCredit("Thomas Nagy", I18N_NOOP("SCons/bksys building system"), "tnagy256@yahoo.fr");
     aboutData.addCredit("Vladimir Savic", I18N_NOOP("icons, icons, icons"), "vladimir@vladimirsavic.net");
