@@ -34,6 +34,7 @@ namespace Rosegarden {
 class QFont;
 class QFontMetrics;
 class RosegardenGUIDoc;
+class RosegardenTextFloat;
 
 
 /**
@@ -94,6 +95,7 @@ private:
 
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;
+    RosegardenTextFloat *m_textFloat;
 
     QFont m_font;
     QFont m_boldFont;

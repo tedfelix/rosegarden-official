@@ -31,6 +31,7 @@
 #include "RulerScale.h"
 
 #include "tempocolour.h"
+#include "widgets.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Composition;
@@ -67,6 +68,9 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_boldFont.setPixelSize(m_height * 2 / 5);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
+
+    m_textFloat = new RosegardenTextFloat(this);
+    m_textFloat->hide();
 
 //    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
     setBackgroundMode(Qt::NoBackground);
@@ -147,6 +151,7 @@ TempoRuler::leaveEvent(QEvent *)
     setMouseTracking(false);
     m_illuminate = -1;
     m_refreshLinesOnly = true;
+    m_textFloat->hide();
     update();
 }    
 
@@ -320,6 +325,25 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    paint.setPen(illuminate ? Qt::black : Qt::white);
 	    paint.drawPoint(x, y);
+
+	    if (illuminate) {
+		long qpm = long(m_composition->getTempoQpm(tempo));
+		m_textFloat->setText(i18n("%1 bpm").arg(qpm)); //!!! qpm
+		QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
+		std::cerr << "cp = " << cp.x() << "," << cp.y() << std::endl;
+		QPoint mp = cp + pos();
+		QWidget *parent = parentWidget();
+		while (parent->parentWidget() &&
+		       !parent->isTopLevel() &&
+		       !parent->isDialog()) { 
+		    mp += parent->pos();
+		    parent = parent->parentWidget();
+		}
+		int yoff = cp.y() + m_textFloat->height() + 3;
+		mp = QPoint(mp.x() + 10, mp.y() > yoff ? mp.y() - yoff : 0);
+		m_textFloat->move(mp);
+		m_textFloat->show();
+	    }
 	}
 
 	lastx = int(x0) + 1;
