@@ -720,7 +720,7 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
 void
 RosegardenRotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 {
-    RosegardenFloatEdit *dialog = new RosegardenFloatEdit(this,
+    RosegardenFloatEdit dialog(this,
             i18n("Select a new value"),
             i18n("Enter a new value"),
             m_minValue,
@@ -728,14 +728,13 @@ RosegardenRotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
             m_position,
             m_step);
 
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog.exec() == QDialog::Accepted)
     {
-        m_position = dialog->getValue();
+        m_position = dialog.getValue();
         snapPosition();
         update();
 
         emit valueChanged(m_snapPosition);
-
     }
 }
 
