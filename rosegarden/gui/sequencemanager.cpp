@@ -885,7 +885,8 @@ punchin:
 
 	    // Pop-up the dialog (don't use exec())
 	    //
-	    m_countdownDialog->show();
+	    // bug #1505805, abolish recording countdown dialog
+	    //m_countdownDialog->show();
 
         } else {
             // Stop immediately - turn off buttons in parent
