@@ -9,6 +9,8 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
 
+    This file Copyright 2006 Martin Shepherd <mcs@astro.caltech.edu>
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
