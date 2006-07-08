@@ -76,7 +76,7 @@ SegmentParameterBox::initBox()
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
 //    QFrame *frame = new QFrame(this);
-    QGridLayout *gridLayout = new QGridLayout(this, 6, 5, 4, 2);
+    QGridLayout *gridLayout = new QGridLayout(this, 6, 6, 4, 2);
 
     QLabel *label = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
@@ -98,7 +98,7 @@ SegmentParameterBox::initBox()
     // .. and edit button
     m_labelButton = new QPushButton(i18n("Edit"), this);
     m_labelButton->setFont(font);
-    m_labelButton->setFixedWidth(50);
+//    m_labelButton->setFixedWidth(50);
 
     connect(m_labelButton, SIGNAL(released()),
             SLOT(slotEditSegmentLabel()));
@@ -193,33 +193,33 @@ SegmentParameterBox::initBox()
     gridLayout->addRowSpacing(0, 12);
 
     gridLayout->addWidget(label, 1, 0, AlignRight);
-    gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 2, AlignLeft);
-    gridLayout->addWidget(m_labelButton, 1, 3, AlignLeft);
+    gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 4, AlignLeft);
+    gridLayout->addWidget(m_labelButton, 1, 5, AlignLeft);
 
     gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
 
-    gridLayout->addWidget(transposeLabel, 2, 2, AlignRight);
-    gridLayout->addWidget(m_transposeValue, 2, 3);
+    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 1, 3, AlignRight);
+    gridLayout->addMultiCellWidget(m_transposeValue, 2, 2, 4, 5);
 
     gridLayout->addWidget(quantizeLabel, 3, 0, AlignRight);
-    gridLayout->addWidget(m_quantizeValue, 3, 1);
+    gridLayout->addMultiCellWidget(m_quantizeValue, 3, 3, 1, 2, AlignLeft);
 
-    gridLayout->addWidget(delayLabel, 3, 2, AlignRight);
-    gridLayout->addWidget(m_delayValue, 3, 3);
+    gridLayout->addWidget(delayLabel, 3, 3, AlignRight);
+    gridLayout->addMultiCellWidget(m_delayValue, 3, 3, 4, 5);
 
     gridLayout->addWidget(colourLabel, 4, 0, AlignRight);
-    gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 3);
+    gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 5);
 
     m_autoFadeLabel->hide();
     m_autoFadeBox->hide();
-
+/*
     gridLayout->addWidget(m_fadeInLabel,   5, 0, AlignRight);
     gridLayout->addWidget(m_fadeInSpin,  5, 1);
 
     gridLayout->addWidget(m_fadeOutLabel,  5, 2, AlignRight);
     gridLayout->addWidget(m_fadeOutSpin, 5, 3);
-
+*/
     // Configure the empty final row to accomodate any extra vertical space.
 
     gridLayout->setRowStretch(gridLayout->numRows()-1, 1);
