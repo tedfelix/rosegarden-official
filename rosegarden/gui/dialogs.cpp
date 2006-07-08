@@ -1311,7 +1311,6 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_prevChord = config->readEntry("previous_chord", "");
     m_prevLyric = config->readEntry("previous_lyric", "");
     m_prevAnnotation = config->readEntry("previous_annotation", "");
-
     
     QObject::connect(m_text, SIGNAL(textChanged(const QString &)),
 		     this, SLOT(slotTextChanged(const QString &)));
@@ -1333,6 +1332,13 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
+
+    // a hacky little fix for #1512143, to restore the capability to edit
+    // existing annotations and other whatnots
+    //!!! tacking another one of these on the bottom strikes me as lame in the
+    // extreme, but it works, and it costs little, and other solutions I can
+    // imagine would cost so much more.
+    m_text->setText(strtoqstr(defaultText.getText()));
 }
 
 std::string
