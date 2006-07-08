@@ -58,14 +58,6 @@
     <a href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/docs/">Rosegarden SVN</a> itself.
     </p>
 
-    <h3>General MIDI and Audio information</h3>
-
-    <p>
-    For general information on how to set up your home studio you can
-    consult <a href="http://www.linuxmusician.com/index.php?option=displaypage&Itemid=51&op=page">the Linux Musician Guide to Home Recording</a>.  It's a bit Windows-centric still but it has some useful
-    information for beginners to the world of home recording.
-    </p>
-
     <h3>Bug and RFE Priorities on the SourceForge tracker</h3>
     <p>If you've submitted a bug report or a feature request, you can use the following tables to determine whether someone has looked at the report yet, and how soon the Rosegarden team expects to do something about the issue or request.<p>
     <p><a href="http://rosegarden.sourceforge.net/tutorial/bug-priorities.html">bug

@@ -11,7 +11,6 @@
         <div class="rightbox">
         <div align="center">
         <a href="http://www.linuxdj.com/audio/lad/" target="_blank"><img src="/images/ladbutton.gif" width="90" height="31" vspace="5" alt="LAD" border="0"/></a>
-        <a href="http://www.linuxmusician.com" target="_blank"><img src="/images/lmbutton.png" width="90" vspace="5" alt="Linux Musician" border="0"/></a><br/>
         <a href="http://www.linux-sound.org" target="_blank"><img src="/images/lsmbutton.png" width="88" height="28" vspace="5" alt="Linux Sound and Midi Pages" border="0"/></a><br/>
         <a href="http://ccrma-www.stanford.edu/planetccrma/software/" target="_blank"><img src="/images/ccrmabutton.png" width="90" height="23" border="0" alt="Planet CCRMA at Stanford" vspace="5"/></a><br/>
         <a href="http://www.djcj.org/LAU/guide/" target="_blank"><img src="/images/logo-lau.gif" width="79" height="55" alt="Linux Audio User's Guide" border="0" vspace="5"/></a><br/>
