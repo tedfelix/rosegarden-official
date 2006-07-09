@@ -715,7 +715,7 @@ public slots:
     void slotUpdateStaffName();
 
     // Open tempo editor
-    void slotEditTempos(Rosegarden::timeT t);
+    /*void slotEditTempos(Rosegarden::timeT t);*/
 
     // Lilypond Directive slots
     void slotBeginLilypondRepeat();
