@@ -988,6 +988,14 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 		!m_notationView->areAnnotationsVisible()) {
 
 		// nothing I guess
+		 
+            } else if (elt->event()->has(Rosegarden::Text::TextTypePropertyName) &&
+		       elt->event()->get<String>
+		       (Rosegarden::Text::TextTypePropertyName) ==
+		       Rosegarden::Text::LilypondDirective &&
+		       !m_notationView->areLilyPondDirectivesVisible()) {
+
+		// nothing here either
 
 	    } else {
 
