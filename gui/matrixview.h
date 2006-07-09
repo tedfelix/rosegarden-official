@@ -234,6 +234,8 @@ signals:
     void stepByStepTargetRequested(QObject *);
 
     void editTriggerSegment(int);
+    
+    void editTimeSignature(Rosegarden::timeT);
 
 public slots:
 
@@ -486,7 +488,7 @@ protected slots:
     void slotCheckTrackAssignments();
 
     // Open tempo editor
-    void slotEditTempos(Rosegarden::timeT t);
+    /*void slotEditTempos(Rosegarden::timeT t);*/
     
 protected:
     virtual Rosegarden::RulerScale* getHLayout();

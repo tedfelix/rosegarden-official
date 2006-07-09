@@ -442,7 +442,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // make tempo ruler double click editable
     connect(m_tempoRuler,
 	    SIGNAL(doubleClicked(Rosegarden::timeT)),
-	    SLOT(slotEditTempos(Rosegarden::timeT)));
+	    //SLOT(slotEditTempos(Rosegarden::timeT)));
+            SIGNAL(editTimeSignature(Rosegarden::timeT)));
 
     // Scroll view to centre middle-C and warp to pointer position
     //
@@ -2510,7 +2511,7 @@ MatrixView::slotToggleTempoRuler()
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
 
-void
+/*void
 MatrixView::slotEditTempos(Rosegarden::timeT t)
 {
     TempoView *tempoView = new TempoView(getDocument(), this, t);
@@ -2530,7 +2531,7 @@ MatrixView::slotEditTempos(Rosegarden::timeT t)
 	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
 
     tempoView->show();
-}
+}*/
 
 void
 MatrixView::paintEvent(QPaintEvent* e)

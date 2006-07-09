@@ -341,7 +341,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // make tempo ruler double click editable
     connect(m_tempoRuler,
 	    SIGNAL(doubleClicked(Rosegarden::timeT)),
-	    SLOT(slotEditTempos(Rosegarden::timeT)));
+//	    SLOT(slotEditTempos(Rosegarden::timeT)));
+            SIGNAL(editTimeSignature(Rosegarden::timeT)));
 
     m_rawNoteRuler = new RawNoteRuler
 	(m_hlayout, segments[0], m_leftGutter, 20, getCentralWidget());

@@ -681,6 +681,8 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 	    this, SLOT(slotEditTriggerSegment(int)));
     connect(matrixView, SIGNAL(toggleSolo(bool)),
             RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
+    connect(matrixView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
+            this, SLOT(slotEditTempos(Rosegarden::timeT)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
