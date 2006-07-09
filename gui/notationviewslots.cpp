@@ -122,7 +122,7 @@ NotationView::slotUpdateLilyPondDirectivesStatus()
                     ((*j)->get<Rosegarden::String>
                      (Rosegarden::Text::TextTypePropertyName)
                      == Rosegarden::Text::LilypondDirective)) {
-                    m_annotationsLabel->setText(i18n("Hidden LilyPond directives"));
+                    m_lilypondDirectivesLabel->setText(i18n("Hidden LilyPond directives"));
                     return;
                 }
             }
