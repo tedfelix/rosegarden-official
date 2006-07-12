@@ -43,6 +43,13 @@ public:
     void setDocument( RosegardenGUIDoc *doc );
     void populateDeviceLists();
 
+    int getClef() { return m_defClef->currentItem(); }
+    int getTransposition() {return ( m_defTransposition->currentItem() - 24 ); }
+    int  getColor() { return 0; }
+    // getMaxPlayable();
+    // getMinPlayable();
+
+
 public slots:
     void slotSelectedTrackChanged();
     void slotSelectedTrackNameChanged();
@@ -60,10 +67,18 @@ protected:
 
 private:
     RosegardenGUIDoc    *m_doc;
+
     KComboBox           *m_playDevice;
     KComboBox           *m_instrument;
     KComboBox           *m_recDevice;
     KComboBox           *m_recChannel;
+    KComboBox		*m_presetCombo;
+    KComboBox		*m_defClef;
+    KComboBox		*m_defTransposition;
+    KComboBox		*m_defColor;
+
+    QLabel   		*m_maxPlayable;
+    QLabel   		*m_minPlayable;
     QLabel              *m_trackLabel;
     
     typedef std::vector<Rosegarden::DeviceId> IdsVector;
