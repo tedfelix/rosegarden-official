@@ -56,63 +56,157 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     title_font.setBold(true);
     
     QGridLayout *mainLayout = new QGridLayout(this, 9, 4, 4, 2);
+
+    int row = 0;
     
-    // row 0 - track label
+    // track label
     //
     //mainLayout->setRowSpacing(0, 2);
     m_trackLabel = new QLabel(i18n("<untitled>"), this);
-    mainLayout->addMultiCellWidget(m_trackLabel, 0, 0, 0, 2, AlignCenter);
+    mainLayout->addMultiCellWidget(m_trackLabel, row, row, 0, 2, AlignCenter);
 
-    // row 1 - playback group title
+    // playback group title
     //
+    row = 1;
     QLabel *plyHeader = new QLabel(i18n("Playback parameters"), this);
     plyHeader->setFont(title_font);
-    mainLayout->addMultiCellWidget(plyHeader, 1, 1, 0, 2, AlignLeft);
+    mainLayout->addMultiCellWidget(plyHeader, row, row, 0, 2, AlignLeft);
 
-    // row 2 - playback device
+    // playback device
     //
-    mainLayout->addWidget(new QLabel(i18n("Device"), this), 2, 0, AlignLeft);
+    row = 2;
+    mainLayout->addWidget(new QLabel(i18n("Device"), this), row, 0, AlignLeft);
     m_playDevice = new KComboBox(this);
     m_playDevice->setMinimumWidth(minwidth25);
-    mainLayout->addMultiCellWidget(m_playDevice, 2, 2, 1, 2, AlignRight);
+    mainLayout->addMultiCellWidget(m_playDevice, row, row, 1, 2, AlignRight);
     
-    // row 3 - playback instrument
+    // playback instrument
     //
-    mainLayout->addMultiCellWidget(new QLabel(i18n("Instrument"), this), 3, 3, 0, 1, AlignLeft);
+    row = 3;
+    mainLayout->addMultiCellWidget(new QLabel(i18n("Instrument"), this), row, row, 0, 1, AlignLeft);
     m_instrument = new KComboBox(this);
     m_instrument->setSizeLimit( 16 );
     m_instrument->setMinimumWidth(minwidth22);
-    mainLayout->addWidget(m_instrument, 3, 2, AlignRight);
+    mainLayout->addWidget(m_instrument, row,  2, AlignRight);
 
-    // row 4 - group separator
+    // group separator 1
     //
-    QFrame *separator = new QFrame( this );
-    separator->setFrameShape( QFrame::HLine );
-    separator->setLineWidth( 1 );
-    separator->setMidLineWidth( 2 );
-    separator->setFrameShadow( QFrame::Sunken );
-    separator->setMinimumHeight( 4 );
-    mainLayout->addMultiCellWidget( separator, 4, 4, 0, 2 );
+    row = 4;
+    QFrame *separator1 = new QFrame( this );
+    separator1->setFrameShape( QFrame::HLine );
+    separator1->setLineWidth( 1 );
+    separator1->setMidLineWidth( 2 );
+    separator1->setFrameShadow( QFrame::Sunken );
+    separator1->setMinimumHeight( 4 );
+    mainLayout->addMultiCellWidget( separator1, row, row, 0, 2 );
     
-    // row 5 - recording group title
+    // recording group title
     //
+    row = 5;
     QLabel *recHeader = new QLabel(i18n("Recording filters"), this);
     recHeader->setFont(title_font);
-    mainLayout->addMultiCellWidget(recHeader, 5, 5, 0, 2, AlignLeft);
+    mainLayout->addMultiCellWidget(recHeader, row, row, 0, 2, AlignLeft);
     
-    // row 6 - recording device
+    // recording device
     //
-    mainLayout->addWidget(new QLabel(i18n("Device"), this), 6, 0, AlignLeft);
+    row = 6;
+    mainLayout->addWidget(new QLabel(i18n("Device"), this), row, 0, AlignLeft);
     m_recDevice = new KComboBox(this);
     m_recDevice->setMinimumWidth(minwidth25);
-    mainLayout->addMultiCellWidget(m_recDevice, 6, 6, 1, 2, AlignRight);
+    mainLayout->addMultiCellWidget(m_recDevice, row, row, 1, 2, AlignRight);
     
-    // row 7 - recording channel
+    // recording channel
     //
-    mainLayout->addMultiCellWidget(new QLabel(i18n("Channel"), this), 7, 7, 0, 1, AlignLeft);
+    row = 7;
+    mainLayout->addMultiCellWidget(new QLabel(i18n("Channel"), this), row, row, 0, 1, AlignLeft);
     m_recChannel = new KComboBox(this);
     m_recChannel->setSizeLimit( 17 );
-    mainLayout->addWidget(m_recChannel, 7, 2, AlignRight);
+    mainLayout->addWidget(m_recChannel, row, 2, AlignRight);
+    
+    // group separator 2
+    //
+    row = 8;
+    QFrame *separator2 = new QFrame( this );
+    separator2->setFrameShape( QFrame::HLine );
+    separator2->setLineWidth( 1 );
+    separator2->setMidLineWidth( 2 );
+    separator2->setFrameShadow( QFrame::Sunken );
+    separator2->setMinimumHeight( 4 ); 
+    mainLayout->addMultiCellWidget( separator2, row, row, 0, 2 );
+
+    // default segment segment parameters group title
+    //
+    row = 9;
+    QLabel *segHeader = new QLabel(i18n("Parameters for new segments"), this);
+    segHeader->setFont(title_font);
+    mainLayout->addMultiCellWidget(segHeader, row, row, 0, 2, AlignLeft);
+
+    // preset picker
+    //
+    row = 10;
+    mainLayout->addWidget(new QLabel(i18n("Preset"), this), row, 0, AlignLeft);
+    m_presetCombo = new KComboBox(this);
+    m_presetCombo->setMinimumWidth(minwidth25);
+    m_presetCombo->insertItem(i18n("none"));
+    // populatePresets() see eventfilter.cpp for template
+    mainLayout->addMultiCellWidget(m_presetCombo, row, row, 1, 2, AlignRight);
+    
+    // default clef
+    //
+    row = 11;
+    mainLayout->addWidget(new QLabel(i18n("Default clef"), this), row, 0, AlignLeft);
+    m_defClef = new KComboBox(this);
+    m_defClef->setMinimumWidth(minwidth25);
+    m_defClef->insertItem(i18n("treble"));
+    m_defClef->insertItem(i18n("bass"));
+    // soprano
+    // alto
+    // tenor
+    mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 2, AlignRight);
+
+    // default transposition
+    //
+    row = 12;
+    mainLayout->addWidget(new QLabel(i18n("Default transposition"), this), row, 0, AlignLeft);
+    m_defTransposition = new KComboBox(this);
+    m_defTransposition->setMinimumWidth(minwidth25);
+    
+    // populate the transpose combo
+    //
+    int transposeRange = 24;  //!!! should change if segmentparameters m_transposeRange ever does
+    for(int i = -transposeRange; i < transposeRange + 1; i++) {
+        m_defTransposition->insertItem(/*noMap, */QString("%1").arg(i));
+//        if (i == 0) m_defTransposition->setCurrentItem(m_transposeValue->count() - 1);
+    }
+
+    mainLayout->addMultiCellWidget(m_defTransposition, row, row, 1, 2, AlignRight);
+
+    // default color
+    //
+    row = 13;
+    mainLayout->addWidget(new QLabel(i18n("Default color"), this), row, 0, AlignLeft);
+    m_defColor = new KComboBox(this);
+    m_defColor->setMinimumWidth(minwidth25);
+    m_defColor->insertItem("color widget");
+    mainLayout->addMultiCellWidget(m_defColor, row, row, 1, 2, AlignRight);
+
+    // highest playable note
+    //
+    row = 14;
+    mainLayout->addWidget(new QLabel(i18n("Highest Playable"), this), row, 0, AlignLeft);
+    /* Display note as letter + number, eg. C#4 as in notation view
+       Pick note via a [...] box calling a pitch picker, as in selection event filter dialog
+    */
+
+    // lowest playable note
+    //
+    row = 15;
+    mainLayout->addWidget(new QLabel(i18n("Lowest Playable"), this), row, 0, AlignLeft);
+    // same as above
+    
+    //!!! temporary dummy label to take up space in the layout
+    row = 16;
+    mainLayout->addWidget(new QLabel("", this), row, 0, AlignLeft);
     
     // Configure the empty final row to accomodate any extra vertical space.
     //
