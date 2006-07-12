@@ -2159,7 +2159,7 @@ msgstr ""
 "Skutečně chcete soubor odstranit?\n"
 "Chystáte se trvale odstranit z pevného disku %n zvukové(ých) soubory(ů).\n"
 "Neexistuje způsob, jak jednou odstraněné soubory obnovit.\n"
-"Skutečně chcete soubory odstranit?\n"
+"Skutečně chcete soubory odstranit?"
 
 #: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:441
 msgid "File %1 could not be deleted."
@@ -2320,7 +2320,7 @@ msgstr ""
 "_n: Tento spouštěný segment je použit v aktuální skladbě %1 krát.  Skutečně jej "
 "chcete odebrat?\n"
 "Tento spouštěný segment je použit v aktuální skladbě %n krát.  Skutečně jej "
-"chcete odebrat?\n"
+"chcete odebrat?"
 
 #: ../gui/eventview.cpp:958 ../gui/matrixview.cpp:1486
 #: ../gui/notationviewslots.cpp:489 ../gui/notationviewslots.cpp:537
