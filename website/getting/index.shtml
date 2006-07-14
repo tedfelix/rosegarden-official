@@ -24,7 +24,7 @@
     downloadable package repositories.  Please consult your
     distribution's documentation for more details, and check that your
     distribution provides the latest available version (currently
-    Rosegarden-4-1.2.3) before downloading.  RedHat/Fedora users may
+    Rosegarden-1.2.4) before downloading.  RedHat/Fedora users may
     wish to consider the excellent <a
     href="http://www-ccrma.stanford.edu/planetccrma/software/">PlanetCCRMA</a>
     audio software package set.</p>
@@ -61,8 +61,8 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=304969">Rosegarden
-release 1.2.3 source code</a>, 14th February 2006, for download from the
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=431923">Rosegarden
+release 1.2.4 source code</a>, 14th July 2006, for download from the
 SourceForge page.</li></ul>
 
     <h3>Development code from Subversion</h3>
@@ -109,9 +109,9 @@ SourceForge page.</li></ul>
     <li><b>stable_<i>&lt;version&gt;</i></b> - This is the branch used
     to collect bug fixes for the next stable minor release.  It is
     branched from the point where the previous major feature release
-    was completed.  At the time of writing, the current stable branch
-    is <b>stable_1_2_4</b> which is expected to become the 1.2.4
-    release.</li>
+    was completed.  The most recent stable branch was
+    <b>stable_1_2_4</b>, but use of this branch ended with the release
+    of 1.2.4 and a new stable branch has not yet been opened.</li>
 
     <li><b>glasgow_pitchtracker</b> - This contains extensive custom work to support the <a
     href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University

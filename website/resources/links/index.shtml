@@ -63,7 +63,7 @@
 
       <li><a href="http://jackit.sourceforge.net">JACK - JACK Audio
       Connection Kit</a> - the excellent low latency audio server used
-      by Rosegarden-4.  Also, <a
+      by Rosegarden.  Also, <a
       href="http://qjackctl.sourceforge.net/">qjackctl</a> - the
       essential GUI control panel for JACK.</p>
 
@@ -74,7 +74,7 @@
 
       <li><a href="http://www.fluidsynth.org">Fluidsynth</a> - a
       soundfont based softsynth for Linux.  Works as a MIDI target for
-      Rosegarden-4. Also <a
+      Rosegarden. Also <a
       href="http://qsynth.sourceforge.net/">qsynth</a> - a nice GUI
       for Fluidsynth, from the same author as qjackctl.
 
@@ -98,7 +98,7 @@
       <h3>Development Tools We Like</h3>
 
       <p>
-      Rosegarden-4 uses and endorses the following development
+      Rosegarden uses and endorses the following development
       tools:
       </p>
 

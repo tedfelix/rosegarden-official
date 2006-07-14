@@ -26,11 +26,11 @@
 
     For those of you looking to create voice mappings for your own
     MIDI hardware, here is a <a href="rgd-HOWTO.shtml">mini-HOWTO for
-    creating voice definitions for Rosegarden-4</a>.  You should also
+    creating voice definitions for Rosegarden</a>.  You should also
     check out the ever-growing <a
     href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/gui/library/">device
     library</a> (a snapshot of which is included with each
-    Rosegarden-4 release) to make sure your device hasn't already been
+    Rosegarden release) to make sure your device hasn't already been
     mapped.
 
     </p>
@@ -44,7 +44,7 @@
 
     </p>
 
-    <h3>Developer Documentation for Rosegarden-4</h3>
+    <h3>Developer Documentation for Rosegarden</h3>
 
     <p>
     Automatically generated class hierarchies and extracted code
