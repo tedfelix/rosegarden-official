@@ -556,7 +556,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     // Populate IPB position combo
     //
     m_ipbPosition->insertItem(notShowing);
-    for (unsigned int i = 0; i < 16; i++)
+    for (unsigned int i = 0; i < 32; i++)
         m_ipbPosition->insertItem(QString("%1").arg(i));
 
     if (m_control->getType() == Rosegarden::Controller::EventType)

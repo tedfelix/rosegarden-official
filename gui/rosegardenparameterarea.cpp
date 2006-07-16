@@ -114,8 +114,10 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
     // Move the parameter boxes from the old container to the new one.
 
-    for(unsigned int i=0; i<m_parameter_boxes.size(); i++)
+    for(unsigned int i=0; i<m_parameter_boxes.size(); i++) {
       moveWidget(m_active, container, i);
+      m_parameter_boxes[i]->showAdditionalControls(style == TAB_BOX_STYLE);
+    }
 
     // Switch the widget stack to displaying the new container.
 

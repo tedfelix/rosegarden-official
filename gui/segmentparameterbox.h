@@ -85,6 +85,8 @@ public:
     virtual void segmentRemoved(const Rosegarden::Composition *,
 				Rosegarden::Segment *);
 
+    virtual void showAdditionalControls(bool showThem);
+
 public slots:
     void slotRepeatPressed();
     void slotQuantizeSelected(int);

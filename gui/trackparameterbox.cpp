@@ -59,7 +59,10 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     setFont(m_font);
     title_font.setBold(true);
     
-    QGridLayout *mainLayout = new QGridLayout(this, 9, 4, 4, 2);
+    // Size of the layout grid:
+    //  number of rows = 17
+    //  number of columns = 4
+    QGridLayout *mainLayout = new QGridLayout(this, 17, 4, 4, 2);
 
     int row = 0;
     
@@ -71,14 +74,14 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // playback group title
     //
-    row = 1;
+    row++;
     QLabel *plyHeader = new QLabel(i18n("Playback parameters"), this);
     plyHeader->setFont(title_font);
     mainLayout->addMultiCellWidget(plyHeader, row, row, 0, 2, AlignLeft);
 
     // playback device
     //
-    row = 2;
+    row++;
     mainLayout->addWidget(new QLabel(i18n("Device"), this), row, 0, AlignLeft);
     m_playDevice = new KComboBox(this);
     m_playDevice->setMinimumWidth(minwidth25);
@@ -86,7 +89,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // playback instrument
     //
-    row = 3;
+    row++;
     mainLayout->addMultiCellWidget(new QLabel(i18n("Instrument"), this), row, row, 0, 1, AlignLeft);
     m_instrument = new KComboBox(this);
     m_instrument->setSizeLimit( 16 );
@@ -95,7 +98,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // group separator 1
     //
-    row = 4;
+    row++;
     QFrame *separator1 = new QFrame( this );
     separator1->setFrameShape( QFrame::HLine );
     separator1->setLineWidth( 1 );
@@ -106,14 +109,14 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // recording group title
     //
-    row = 5;
+    row++;
     QLabel *recHeader = new QLabel(i18n("Recording filters"), this);
     recHeader->setFont(title_font);
     mainLayout->addMultiCellWidget(recHeader, row, row, 0, 2, AlignLeft);
     
     // recording device
     //
-    row = 6;
+    row++;
     mainLayout->addWidget(new QLabel(i18n("Device"), this), row, 0, AlignLeft);
     m_recDevice = new KComboBox(this);
     m_recDevice->setMinimumWidth(minwidth25);
@@ -121,7 +124,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // recording channel
     //
-    row = 7;
+    row++;
     mainLayout->addMultiCellWidget(new QLabel(i18n("Channel"), this), row, row, 0, 1, AlignLeft);
     m_recChannel = new KComboBox(this);
     m_recChannel->setSizeLimit( 17 );
@@ -129,33 +132,35 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // group separator 2
     //
-    row = 8;
-    QFrame *separator2 = new QFrame( this );
-    separator2->setFrameShape( QFrame::HLine );
-    separator2->setLineWidth( 1 );
-    separator2->setMidLineWidth( 2 );
-    separator2->setFrameShadow( QFrame::Sunken );
-    separator2->setMinimumHeight( 4 ); 
-    mainLayout->addMultiCellWidget( separator2, row, row, 0, 2 );
+    row++;
+    m_separator2 = new QFrame( this );
+    m_separator2->setFrameShape( QFrame::HLine );
+    m_separator2->setLineWidth( 1 );
+    m_separator2->setMidLineWidth( 2 );
+    m_separator2->setFrameShadow( QFrame::Sunken );
+    m_separator2->setMinimumHeight( 4 ); 
+    mainLayout->addMultiCellWidget( m_separator2, row, row, 0, 2 );
 
     // default segment segment parameters group title
     //
-    row = 9;
-    QLabel *segHeader = new QLabel(i18n("Parameters for new segments"), this);
-    segHeader->setFont(title_font);
-    mainLayout->addMultiCellWidget(segHeader, row, row, 0, 2, AlignLeft);
+    row++;
+    m_segHeader = new QLabel(i18n("Parameters for new segments"), this);
+    m_segHeader->setFont(title_font);
+    mainLayout->addMultiCellWidget( m_segHeader, row, row, 0, 2, AlignLeft);
 
     // preset picker
     //
-    row = 10;
-    mainLayout->addWidget(new QLabel(i18n("Preset"), this), row, 0, AlignLeft);
+    row++;
+    m_presetLbl = new QLabel(i18n("Preset"), this);
+    mainLayout->addWidget(m_presetLbl, row, 0, AlignLeft);
     m_presetButton = new QPushButton(this);
     mainLayout->addMultiCellWidget(m_presetButton, row, row, 1, 2, AlignRight);
     
     // default clef
     //
-    row = 11;
-    mainLayout->addWidget(new QLabel(i18n("Default clef"), this), row, 0, AlignLeft);
+    row++;
+    m_clefLbl = new QLabel(i18n("Default clef"), this);
+    mainLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
     m_defClef = new KComboBox(this);
     m_defClef->setMinimumWidth(minwidth25);
     m_defClef->insertItem(i18n("treble"));
@@ -166,8 +171,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // default transpose
     //
-    row = 12;
-    mainLayout->addWidget(new QLabel(i18n("Default transpose"), this), row, 0, AlignLeft);
+    row++;
+    m_transpLbl = new QLabel(i18n("Default transpose"), this);
+    mainLayout->addWidget(m_transpLbl, row, 0, AlignLeft);
     m_defTranspose = new QSpinBox(this);
     m_defTranspose->setMinValue(-24);
     m_defTranspose->setMaxValue(24);
@@ -178,8 +184,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // default color
     //
-    row = 13;
-    mainLayout->addWidget(new QLabel(i18n("Default color"), this), row, 0, AlignLeft);
+    row++;
+    m_colorLbl = new QLabel(i18n("Default color"), this);
+    mainLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
     m_defColor = new KComboBox(false, this);
     m_defColor->setMinimumWidth(minwidth25);
     mainLayout->addMultiCellWidget(m_defColor, row, row, 1, 2, AlignRight);
@@ -190,21 +197,23 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // highest playable note
     //
-    row = 14;
-    mainLayout->addWidget(new QLabel(i18n("Highest Playable"), this), row, 0, AlignLeft);
+    row++;
+    m_highLbl = new QLabel(i18n("Highest Playable"), this);
+    mainLayout->addWidget(m_highLbl, row, 0, AlignLeft);
     /* Display note as letter + number, eg. C#4 as in notation view
        Pick note via a [...] box calling a pitch picker, as in selection event filter dialog
     */
 
     // lowest playable note
     //
-    row = 15;
-    mainLayout->addWidget(new QLabel(i18n("Lowest Playable"), this), row, 0, AlignLeft);
+    row++;
+    m_lowLbl = new QLabel(i18n("Lowest Playable"), this);
+    mainLayout->addWidget(m_lowLbl, row, 0, AlignLeft);
     // same as above
     
     //!!! temporary dummy label to take up space in the layout
-    row = 16;
-    mainLayout->addWidget(new QLabel("", this), row, 0, AlignLeft);
+    //row = 16;
+    //mainLayout->addWidget(new QLabel("", this), row, 0, AlignLeft);
     
     // Configure the empty final row to accomodate any extra vertical space.
     //
@@ -541,6 +550,37 @@ TrackParameterBox::slotDocColoursChanged()
     m_defColor->setCurrentItem(0);
 }
 
+void 
+TrackParameterBox::showAdditionalControls(bool showThem)
+{
+    if (showThem) {
+        m_separator2->show();
+        m_segHeader->show();
+        m_presetLbl->show();
+        m_presetButton->show();
+        m_clefLbl->show();
+        m_defClef->show();
+        m_transpLbl->show();
+        m_defTranspose->show();
+        m_colorLbl->show();
+        m_defColor->show();
+        m_highLbl->show();
+        m_lowLbl->show();
+    } else {
+        m_separator2->hide();
+        m_segHeader->hide();
+        m_presetLbl->hide();
+        m_presetButton->hide();
+        m_clefLbl->hide();
+        m_defClef->hide();
+        m_transpLbl->hide();
+        m_defTranspose->hide();
+        m_colorLbl->hide();
+        m_defColor->hide();
+        m_highLbl->hide();
+        m_lowLbl->hide();
+    }
+}
 
 // code copied/adapted from segmentparameterbox.cpp on 16 July 2006
 void
