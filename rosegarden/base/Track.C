@@ -40,7 +40,12 @@ Track::Track():
    m_muted(false),
    m_position(-1),
    m_instrument(0),
-   m_owningComposition(0)
+   m_owningComposition(0),
+   m_clef(0),
+   m_color(0),
+   m_transpose(0),
+   m_highestPlayable(127),
+   m_lowestPlayable(0)
 {
 }
 
@@ -54,7 +59,12 @@ Track::Track(TrackId id,
    m_label(label),
    m_position(position),
    m_instrument(instrument),
-   m_owningComposition(0)
+   m_owningComposition(0),
+   m_clef(0),
+   m_color(0),
+   m_transpose(0),
+   m_highestPlayable(127),
+   m_lowestPlayable(0)
 {
 }
 
@@ -107,6 +117,12 @@ std::string Track::toXmlString()
         track << "\"false\"";
 
     track << " instrument=\"" << m_instrument << "\"";
+
+    track << " defaultClef=\"" << m_clef << "\"";
+    track << " defaultTranspose=\"" << m_transpose << "\"";
+    track << " defaultColor=\"" << m_color << "\"";
+    track << " defaultHighesttPlayable=\"" << m_highestPlayable << "\"";
+    track << " defaultLowestPlayable=\"" << m_lowestPlayable << "\"";
 
 #if (__GNUC__ < 3)
     track << "/>"<< std::ends;

@@ -89,6 +89,22 @@ public:
 
     Composition* getOwningComposition() { return m_owningComposition; }
 
+    int getClef() { return m_clef; }
+    void setClef(int clef) { m_clef = clef; }
+
+    int getTranspose() { return m_transpose; }
+    void setTranspose(int transpose) { m_transpose = transpose; }
+
+    int getColor() { return m_color; }
+    void setColor(int color) { m_color = color; }
+
+    int getHighestPlayable() { return m_highestPlayable; }
+    void setHighestPlayable(int pitch) { m_highestPlayable = pitch; }
+    
+    int getLowestPlayable() { return m_lowestPlayable; }
+    void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
+
+
 protected: // For Composition use only
     void setOwningComposition(Composition* comp) { m_owningComposition = comp; }
 
@@ -102,6 +118,13 @@ private:
     InstrumentId   m_instrument;
 
     Composition*   m_owningComposition;
+
+    // default parameters for new segments associated with this track
+    int		   m_clef;
+    int		   m_transpose;
+    int		   m_color;
+    int		   m_highestPlayable;
+    int		   m_lowestPlayable;
 };
 
 }
