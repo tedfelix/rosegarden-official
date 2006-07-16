@@ -553,33 +553,18 @@ TrackParameterBox::slotDocColoursChanged()
 void 
 TrackParameterBox::showAdditionalControls(bool showThem)
 {
-    if (showThem) {
-        m_separator2->show();
-        m_segHeader->show();
-        m_presetLbl->show();
-        m_presetButton->show();
-        m_clefLbl->show();
-        m_defClef->show();
-        m_transpLbl->show();
-        m_defTranspose->show();
-        m_colorLbl->show();
-        m_defColor->show();
-        m_highLbl->show();
-        m_lowLbl->show();
-    } else {
-        m_separator2->hide();
-        m_segHeader->hide();
-        m_presetLbl->hide();
-        m_presetButton->hide();
-        m_clefLbl->hide();
-        m_defClef->hide();
-        m_transpLbl->hide();
-        m_defTranspose->hide();
-        m_colorLbl->hide();
-        m_defColor->hide();
-        m_highLbl->hide();
-        m_lowLbl->hide();
-    }
+    m_separator2->setShown(showThem);
+    m_segHeader->setShown(showThem);
+    m_presetLbl->setShown(showThem);
+    m_presetButton->setShown(showThem);
+    m_clefLbl->setShown(showThem);
+    m_defClef->setShown(showThem);
+    m_transpLbl->setShown(showThem);
+    m_defTranspose->setShown(showThem);
+    m_colorLbl->setShown(showThem);
+    m_defColor->setShown(showThem);
+    m_highLbl->setShown(showThem);
+    m_lowLbl->setShown(showThem);
 }
 
 // code copied/adapted from segmentparameterbox.cpp on 16 July 2006

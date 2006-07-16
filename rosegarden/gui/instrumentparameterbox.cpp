@@ -75,7 +75,8 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(0),
-      m_doc(doc)
+      m_doc(doc),
+      m_lastShowAdditionalControlsArg(false)
 {
     m_widgetStack->setFont(m_font);
     m_noInstrumentParameters->setFont(m_font);
@@ -229,8 +230,10 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     } else { // Midi
 
         m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
+        m_midiInstrumentParameters->showAdditionalControls(m_lastShowAdditionalControlsArg);
 	m_widgetStack->raiseWidget(m_midiInstrumentParameters);
         emit instrumentPercussionSetChanged(instrument);
+        
     }
 
 }
@@ -278,6 +281,7 @@ void
 InstrumentParameterBox::showAdditionalControls(bool showThem)
 {
     m_midiInstrumentParameters->showAdditionalControls(showThem);
+    m_lastShowAdditionalControlsArg = showThem;
 }
 
 
@@ -1803,17 +1807,9 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
     int index = 0;
     for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it)
     {
-        if (showThem) {
-            it->second.first->parentWidget()->show();
-            it->second.first->show();
-            it->second.second->show();      
-        } else {
-            if (index > 7) {
-                it->second.first->parentWidget()->hide();
-                it->second.first->hide();
-                it->second.second->hide();      
-            }      
-        }
+        it->second.first->parentWidget()->setShown(showThem || (index < 8));
+        //it->second.first->setShown(showThem || (index < 8));
+        //it->second.second->setShown(showThem || (index < 8));
         index++;
     }
 }

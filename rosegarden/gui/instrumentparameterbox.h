@@ -120,7 +120,7 @@ protected:
     // So we can setModified()
     //
     RosegardenGUIDoc                *m_doc;
-
+    bool                            m_lastShowAdditionalControlsArg;
 };
 
 // Global references
