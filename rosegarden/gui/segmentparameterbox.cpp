@@ -1033,4 +1033,11 @@ SegmentParameterBox::slotFadeOutChanged(int value)
     emit documentModified();
 }
 
+void 
+SegmentParameterBox::showAdditionalControls(bool showThem)
+{
+    // nothing to show or hide, here?        
+}
+
+
 #include "segmentparameterbox.moc"

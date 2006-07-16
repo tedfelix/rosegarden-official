@@ -127,6 +127,8 @@ public:
 
   QString getLabel() const;
 
+  virtual void showAdditionalControls(bool) = 0; 
+
 protected:
   void init();
 

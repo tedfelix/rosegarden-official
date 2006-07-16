@@ -77,6 +77,8 @@ public:
 		       float recDBleft, float recDBright);
 
     void setDocument(RosegardenGUIDoc* doc);
+    
+    virtual void showAdditionalControls(bool showThem);
 
 public slots:
 
@@ -138,6 +140,8 @@ public:
     virtual void setupForInstrument(Rosegarden::Instrument*) = 0;
 
     void setDocument(RosegardenGUIDoc* doc);
+
+    void showAdditionalControls(bool showThem);
 
 signals:
     void updateAllBoxes();
@@ -217,6 +221,8 @@ public:
     void setupControllers(Rosegarden::MidiDevice *); // setup ControlParameters on box
 
     virtual void setupForInstrument(Rosegarden::Instrument*);
+
+    void showAdditionalControls(bool showThem);
 
 signals:
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);

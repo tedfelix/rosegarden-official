@@ -45,6 +45,7 @@ public:
     
     void setDocument( RosegardenGUIDoc *doc );
     void populateDeviceLists();
+    virtual void showAdditionalControls(bool showThem);
 
 public slots:
     void slotSelectedTrackChanged();
@@ -111,6 +112,16 @@ private:
     std::map<Rosegarden::DeviceId, QStringList> m_instrumentNames;
     
     Rosegarden::TrackId m_selectedTrackId;
+    
+    // Additional elements that may be hidden in vertical stacked mode
+    QFrame              *m_separator2;
+    QLabel              *m_segHeader;
+    QLabel              *m_presetLbl;
+    QLabel              *m_clefLbl;
+    QLabel              *m_transpLbl;
+    QLabel              *m_colorLbl;
+    QLabel              *m_highLbl;
+    QLabel              *m_lowLbl;    
 };
 
 #endif /*TRACKPARAMETERBOX_H_*/

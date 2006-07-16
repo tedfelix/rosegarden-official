@@ -38,6 +38,7 @@
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <ksqueezedtextlabel.h>
 
 #include <algorithm>
 
@@ -272,6 +273,13 @@ InstrumentParameterBox::slotInstrumentParametersChanged(Rosegarden::InstrumentId
 
     blockSignals(false);
 }
+
+void 
+InstrumentParameterBox::showAdditionalControls(bool showThem)
+{
+    m_midiInstrumentParameters->showAdditionalControls(showThem);
+}
+
 
 
 
@@ -1016,7 +1024,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 	    rotary->setKnobColour(knobColour);
 
 	    // Add a label
-	    QLabel *label = new QLabel(strtoqstr(it->getName()), hbox);
+	    QLabel *label = new KSqueezedTextLabel(strtoqstr(it->getName()), hbox);
 
 	    RG_DEBUG << "Adding new widget at " << (count/2) << "," << (count%2) << endl;
 
@@ -1788,5 +1796,27 @@ MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
 
     return -1;
 }
+
+void 
+MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
+{
+    int index = 0;
+    for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it)
+    {
+        if (showThem) {
+            it->second.first->parentWidget()->show();
+            it->second.first->show();
+            it->second.second->show();      
+        } else {
+            if (index > 7) {
+                it->second.first->parentWidget()->hide();
+                it->second.first->hide();
+                it->second.second->hide();      
+            }      
+        }
+        index++;
+    }
+}
+
 
 #include "instrumentparameterbox.moc"
