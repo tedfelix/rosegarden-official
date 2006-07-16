@@ -26,10 +26,13 @@
 #define TRACKPARAMETERBOX_H_
 
 #include "widgets.h"
+#include "colours.h"
 
 class RosegardenGUIDoc;
+class Rosegarden::Track;
 class KComboBox;
 class QLabel;
+class RosegardenColourTable;
 
 class TrackParameterBox : public RosegardenParameterBox
 {
@@ -43,13 +46,6 @@ public:
     void setDocument( RosegardenGUIDoc *doc );
     void populateDeviceLists();
 
-    int getClef() { return m_defClef->currentItem(); }
-    int getTransposition() {return ( m_defTransposition->currentItem() - 24 ); }
-    int  getColor() { return 0; }
-    // getMaxPlayable();
-    // getMinPlayable();
-
-
 public slots:
     void slotSelectedTrackChanged();
     void slotSelectedTrackNameChanged();
@@ -57,6 +53,11 @@ public slots:
     void slotInstrumentChanged(int index);
     void slotUpdateControls(int);
     void slotInstrumentLabelChanged(Rosegarden::InstrumentId id, QString label);
+
+    void slotClefChanged(int clef);
+    void slotTransposeChanged(int transpose);
+    void slotDocColoursChanged();
+    void slotColorChanged(int index);
 
 signals:
     void instrumentSelected(Rosegarden::TrackId, int);
@@ -72,13 +73,33 @@ private:
     KComboBox           *m_instrument;
     KComboBox           *m_recDevice;
     KComboBox           *m_recChannel;
-    KComboBox		*m_presetCombo;
+
+    // will launch a new dialog to load presets
+    ///////////////////////////////////
+    QPushButton		*m_presetButton;
+    ///////////////////////////////////
+
     KComboBox		*m_defClef;
-    KComboBox		*m_defTransposition;
+
+    //!!! using a spin box for this one to avoid the complications of a combo box; I guess the SPB
+    // uses a combo box for visual uniformity, but forget that for now.
+    QSpinBox		*m_defTranspose;
+
     KComboBox		*m_defColor;
 
-    QLabel   		*m_maxPlayable;
-    QLabel   		*m_minPlayable;
+    // need to work out widgets for the pitch pickers and stuff for
+    // highest/lowest playable; store actual value as int MIDI pitch, but
+    // display in user friendly way if practical, and pick pitches as on event
+    // filter dialog with picker widget
+    //
+    QLabel   		*m_lowestPlayable;
+    QLabel   		*m_highestPlayable;
+    /////////////////////////////////////////////////////////////////
+
+    int			m_addColourPos;
+    RosegardenColourTable::ColourList  m_colourList;
+
+    
     QLabel              *m_trackLabel;
     
     typedef std::vector<Rosegarden::DeviceId> IdsVector;

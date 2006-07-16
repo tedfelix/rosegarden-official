@@ -294,6 +294,41 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 
 	Rosegarden::Segment *segment = command->getSegment();
 
+	// add a clef to the start of the segment (tracks initialize to a
+	// default of 0 for this property, so treble will be the default if it
+	// is not specified elsewhere)
+	//
+	//!!! this means it is no longer possible to create a segment that
+	// doesn't have a clef of some sort.  Is this bad?  I think a segment
+	// with no explicit clef that is displaying with a de facto unwritten
+	// treble clef is misleading anyway, so I'm not taking steps to
+	// continue to draw new segments with no clef if there is no track
+	// property (there is no "no clef" track property either, for the same
+	// reason, so all of this only matters for old tracks created before
+	// there were track properties)
+	switch (track->getClef()) {
+	    //!!! clef is based on combo box index, which somebody should probably rework
+	    // down the line, to make it more obvious that 0 == treble and so
+	    // on, but I'm not bothering with that right now
+	    case 0: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
+		                  (segment->getStartTime()));
+		    break;
+
+	    case 1: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
+		                  (segment->getStartTime()));
+		    break;
+	    case 2: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
+		                  (segment->getStartTime()));
+		    break;
+	    case 3: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
+		                  (segment->getStartTime()));
+        }
+
+	segment->setTranspose(track->getTranspose());
+	segment->setColourIndex(track->getColor());
+//	segment->setLowestPlayable(track->getLowestPlayable());
+//	segment->setHighestPlayable(track->getHighestPlayable());
+
         CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->setSelected(item);

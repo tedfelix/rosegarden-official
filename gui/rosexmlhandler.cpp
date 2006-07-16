@@ -734,12 +734,42 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (instrumentStr) {
             instrument = instrumentStr.toInt();
         }
-       
+
         Rosegarden::Track *track = new Rosegarden::Track(id,
                                                          instrument,
                                                          position,
                                                          label,
                                                          muted);
+
+	// track properties affecting newly created segments are initialized
+	// to default values in the ctor, so they don't need to be initialized
+	// here
+	// 
+	QString clefStr = atts.value("defaultClef");
+	if (clefStr) {
+	    track->setClef(clefStr.toInt());
+	}
+
+	QString transposeStr = atts.value("defaultTranspose");
+	if (transposeStr) {
+	    track->setTranspose(transposeStr.toInt());
+	}
+
+	QString colorStr = atts.value("defaultColor");
+	if (colorStr) {
+	    track->setColor(transposeStr.toInt());
+	}
+
+	QString highplayStr = atts.value("highestPlayable");
+	if (highplayStr) {
+	    track->setHighestPlayable(highplayStr.toInt());
+	}
+      
+	QString lowplayStr = atts.value("lowestPlayable");
+	if (lowplayStr) {
+	    track->setLowestPlayable(lowplayStr.toInt());
+	}
+
         getComposition().addTrack(track);
 
 

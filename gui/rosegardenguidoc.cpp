@@ -2357,6 +2357,30 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
     }
     
     recordMIDISegment->setLabel(label);
+
+    // insert an intial clef from track parameters
+    switch (track->getClef()) {
+	//!!! clef is based on combo box index, which somebody should probably rework
+	// down the line, to make it more obvious that 0 == treble and so
+	// on, but I'm not bothering with that right now
+	case 0: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
+			      (recordMIDISegment->getStartTime()));
+		break;
+
+	case 1: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
+			      (recordMIDISegment->getStartTime()));
+		break;
+	case 2: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
+			      (recordMIDISegment->getStartTime()));
+		break;
+	case 3: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
+			      (recordMIDISegment->getStartTime()));
+    }
+
+    recordMIDISegment->setTranspose(track->getTranspose());
+    recordMIDISegment->setColourIndex(track->getColor());
+    //high range
+    //low range  
     
     m_composition.addSegment(recordMIDISegment);
     

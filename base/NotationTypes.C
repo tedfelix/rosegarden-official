@@ -322,7 +322,7 @@ bool Clef::isValid(const Event &e)
     return true;
 }
 
-int Clef::getTransposition() const
+int Clef::getTranspose() const
 {
 //!!! plus or minus?
     return getOctave() * 12 - getPitchOffset();

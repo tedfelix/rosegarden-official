@@ -27,6 +27,8 @@
 #include <qgroupbox.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
+#include <qspinbox.h>
+#include <qpixmap.h>
 #include <klocale.h>
 #include <kcombobox.h>
 
@@ -36,6 +38,8 @@
 #include "Instrument.h"
 #include "AudioPluginInstance.h"
 #include "PluginIdentifier.h"
+#include "colours.h"
+#include "colourwidgets.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -145,11 +149,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row = 10;
     mainLayout->addWidget(new QLabel(i18n("Preset"), this), row, 0, AlignLeft);
-    m_presetCombo = new KComboBox(this);
-    m_presetCombo->setMinimumWidth(minwidth25);
-    m_presetCombo->insertItem(i18n("none"));
-    // populatePresets() see eventfilter.cpp for template
-    mainLayout->addMultiCellWidget(m_presetCombo, row, row, 1, 2, AlignRight);
+    m_presetButton = new QPushButton(this);
+    mainLayout->addMultiCellWidget(m_presetButton, row, row, 1, 2, AlignRight);
     
     // default clef
     //
@@ -159,36 +160,33 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_defClef->setMinimumWidth(minwidth25);
     m_defClef->insertItem(i18n("treble"));
     m_defClef->insertItem(i18n("bass"));
-    // soprano
-    // alto
-    // tenor
+    m_defClef->insertItem(i18n("alto"));
+    m_defClef->insertItem(i18n("tenor"));
     mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 2, AlignRight);
 
-    // default transposition
+    // default transpose
     //
     row = 12;
-    mainLayout->addWidget(new QLabel(i18n("Default transposition"), this), row, 0, AlignLeft);
-    m_defTransposition = new KComboBox(this);
-    m_defTransposition->setMinimumWidth(minwidth25);
-    
-    // populate the transpose combo
-    //
-    int transposeRange = 24;  //!!! should change if segmentparameters m_transposeRange ever does
-    for(int i = -transposeRange; i < transposeRange + 1; i++) {
-        m_defTransposition->insertItem(/*noMap, */QString("%1").arg(i));
-//        if (i == 0) m_defTransposition->setCurrentItem(m_transposeValue->count() - 1);
-    }
-
-    mainLayout->addMultiCellWidget(m_defTransposition, row, row, 1, 2, AlignRight);
+    mainLayout->addWidget(new QLabel(i18n("Default transpose"), this), row, 0, AlignLeft);
+    m_defTranspose = new QSpinBox(this);
+    m_defTranspose->setMinValue(-24);
+    m_defTranspose->setMaxValue(24);
+    m_defTranspose->setValue(0);
+    m_defTranspose->setButtonSymbols(QSpinBox::PlusMinus);
+    m_defTranspose->setMinimumWidth(minwidth25);    
+    mainLayout->addMultiCellWidget(m_defTranspose, row, row, 1, 2, AlignRight);
 
     // default color
     //
     row = 13;
     mainLayout->addWidget(new QLabel(i18n("Default color"), this), row, 0, AlignLeft);
-    m_defColor = new KComboBox(this);
+    m_defColor = new KComboBox(false, this);
     m_defColor->setMinimumWidth(minwidth25);
-    m_defColor->insertItem("color widget");
     mainLayout->addMultiCellWidget(m_defColor, row, row, 1, 2, AlignRight);
+
+    // populate combo from doc colors
+    slotDocColoursChanged();
+
 
     // highest playable note
     //
@@ -222,6 +220,21 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
              
     connect( m_instrument, SIGNAL(activated(int)),
              this, SLOT(slotInstrumentChanged(int)));
+    
+    connect( m_defClef, SIGNAL(activated(int)),
+             this, SLOT(slotClefChanged(int)));
+    
+    connect( m_defTranspose, SIGNAL(valueChanged(int)),
+             this, SLOT(slotTransposeChanged(int)));
+
+    // Detect when the document colours are updated
+    connect(m_doc, SIGNAL(docColoursChanged()),
+            this, SLOT(slotDocColoursChanged()));
+
+    // handle colour combo changes
+    connect(m_defColor, SIGNAL(activated(int)),
+            SLOT(slotColorChanged(int)));
+
 }
 
 TrackParameterBox::~TrackParameterBox() {}
@@ -358,6 +371,16 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";        
     slotPlaybackDeviceChanged(-1);
     slotInstrumentChanged(-1);
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
+    if (!trk) return;
+
+    m_defClef->setCurrentItem(trk->getClef());
+    m_defTranspose->setValue(trk->getTranspose());
+    m_defColor->setCurrentItem(trk->getColor());
+    // highest
+    // lowest
 }
 
 void 
@@ -379,13 +402,18 @@ TrackParameterBox::slotSelectedTrackNameChanged()
     RG_DEBUG << "TrackParameterBox::sotSelectedTrackNameChanged()\n";
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
-    QString trkName = trk->getLabel();
-    if (trkName.isEmpty()) 
-       trkName = i18n("<untitled>");
+    QString m_trackName = trk->getLabel();
+    if (m_trackName.isEmpty()) 
+       m_trackName = i18n("<untitled>");
     else
-       trkName.truncate(20);
-    int trkNum = m_selectedTrackId + 1;
-    m_trackLabel->setText(i18n("[ Track#%1 - %2 ]").arg(trkNum).arg(trkName));
+       m_trackName.truncate(20);
+    int m_trackNum = m_selectedTrackId + 1;
+    m_trackLabel->setText(i18n("[ Track#%1 - %2 ]").arg(m_trackNum).arg(m_trackName));
+    m_defClef->setCurrentItem(trk->getClef());
+    m_defTranspose->setValue(trk->getTranspose());    
+    // color
+    // lowestPlayable
+    // highestPlayable
 }
 
 void 
@@ -428,7 +456,7 @@ TrackParameterBox::slotInstrumentChanged(int index)
     Rosegarden::Instrument *inst;
     if (index == -1) {
         Rosegarden::Composition &comp = m_doc->getComposition();
-        Rosegarden::Track *trk = comp.getTrackById(comp.getSelectedTrack());
+        Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
         if (!trk) return;
         inst = m_doc->getStudio().getInstrumentById(trk->getInstrument());
         if (!inst) return;
@@ -462,6 +490,118 @@ TrackParameterBox::slotInstrumentLabelChanged(Rosegarden::InstrumentId id, QStri
     RG_DEBUG << "TrackParameterBox::slotInstrumentLabelChanged(" << id << ") = " << label << "\n";        
     populatePlaybackDeviceList();
     slotUpdateControls(-1);
+}
+
+void
+TrackParameterBox::slotClefChanged(int clef)
+{
+    RG_DEBUG << "TrackParameterBox::slotClefChanged(" << clef << ")" << endl;        
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    trk->setClef(clef);
+}
+
+void
+TrackParameterBox::slotTransposeChanged(int transpose)
+{
+    RG_DEBUG << "TrackParameterBox::slotTransposeChanged(" << transpose << ")" << endl;        
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    trk->setTranspose(transpose);
+}   
+
+// code copied/adapted from segmentparameterbox.cpp on 16 July 2006
+void
+TrackParameterBox::slotDocColoursChanged()
+{
+    RG_DEBUG << "TrackParameterBox::slotDocColoursChanged()" << endl;
+	
+    m_defColor->clear();
+    m_colourList.clear();
+    // Populate it from composition.m_segmentColourMap
+    Rosegarden::ColourMap temp = m_doc->getComposition().getSegmentColourMap();
+
+    unsigned int i=0;
+
+    for (Rosegarden::RCMap::const_iterator it=temp.begin(); it != temp.end(); ++it)
+    {
+        QPixmap colour(15,15);
+        colour.fill(Rosegarden::GUIPalette::convertColour(it->second.first));
+        if (it->second.second == std::string(""))
+            m_defColor->insertItem(colour, i18n("Default Color"), i);
+        else
+            m_defColor->insertItem(colour, strtoqstr(it->second.second), i);
+        m_colourList[it->first] = i; // maps colour number to menu index
+        ++i;
+    }
+
+    m_addColourPos = i;
+    m_defColor->insertItem(i18n("Add New Color"), m_addColourPos);
+
+    m_defColor->setCurrentItem(0);
+}
+
+
+// code copied/adapted from segmentparameterbox.cpp on 16 July 2006
+void
+TrackParameterBox::slotColorChanged(int index)
+{
+    RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")" << endl;        
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    trk->setColor(index);
+/*
+    if (value != m_addColourPos)
+    {
+        unsigned int temp = 0;
+
+	RosegardenColourTable::ColourList::const_iterator pos;
+	for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
+	    if (pos->second == value) {
+		temp = pos->first;
+		break;
+	    }
+	}
+
+        Rosegarden::SegmentSelection segments;
+        std::vector<Rosegarden::Segment*>::iterator it;
+
+        for (it = m_segments.begin(); it != m_segments.end(); ++it)
+        {
+           segments.insert(*it);
+        }
+
+        SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
+
+        addCommandToHistory(command);
+    }
+    else
+    {
+        Rosegarden::ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
+        QColor newColour;
+        bool ok = false;
+        QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
+                                                i18n("New"), &ok);
+        if ((ok == true) && (!newName.isEmpty()))
+        {
+            KColorDialog box(this, "", true);
+
+            int result = box.getColor(newColour);
+
+            if (result == KColorDialog::Accepted)
+            {
+                Rosegarden::Colour newRColour = Rosegarden::GUIPalette::convertColour(newColour);
+                newMap.addItem(newRColour, qstrtostr(newName));
+                SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
+                addCommandToHistory(command);
+                slotDocColoursChanged();
+            }
+        }
+        // Else we don't do anything as they either didn't give a name·
+        //  or didn't give a colour
+    }
+
+*/
 }
 
 #include "trackparameterbox.moc"

@@ -296,16 +296,16 @@ public:
      * have to be lowered by in order to be drawn with the same height
      * and accidental in this clef
      */
-    int getTransposition() const;
+    int getTranspose() const;
 
     /**
-     * Return the octave component of getTransposition(), i.e. the number
+     * Return the octave component of getTranspose(), i.e. the number
      * of octaves difference in pitch between this clef and the treble
      */
     int getOctave() const;
 
     /**
-     * Return the intra-octave component of getTransposition(), i.e. the
+     * Return the intra-octave component of getTranspose(), i.e. the
      * number of semitones this clef is distinct in pitch from the treble
      * besides the different in octaves
      */
