@@ -41,9 +41,11 @@ Track::Track():
    m_position(-1),
    m_instrument(0),
    m_owningComposition(0),
+   m_input_device(Device::ALL_DEVICES),
+   m_input_channel(-1),
    m_clef(0),
-   m_color(0),
    m_transpose(0),
+   m_color(0),
    m_highestPlayable(127),
    m_lowestPlayable(0)
 {
@@ -60,9 +62,11 @@ Track::Track(TrackId id,
    m_position(position),
    m_instrument(instrument),
    m_owningComposition(0),
+   m_input_device(Device::ALL_DEVICES),
+   m_input_channel(-1),
    m_clef(0),
-   m_color(0),
    m_transpose(0),
+   m_color(0),
    m_highestPlayable(127),
    m_lowestPlayable(0)
 {

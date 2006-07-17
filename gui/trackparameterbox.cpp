@@ -45,6 +45,7 @@
 #include "rosegardenguidoc.h"
 #include "trackparameterbox.h"
 #include "rosedebug.h"
+#include "studiowidgets.h"
 
 TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                       QWidget *parent)
@@ -54,6 +55,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     QFont font(m_font);
     QFont title_font(m_font);
     QFontMetrics metrics(font);
+    int minwidth11 = metrics.width("12345678901");
     int minwidth22 = metrics.width("1234567890123456789012");
     int minwidth25 = metrics.width("1234567890123456789012345");
     setFont(m_font);
@@ -128,6 +130,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     mainLayout->addMultiCellWidget(new QLabel(i18n("Channel"), this), row, row, 0, 1, AlignLeft);
     m_recChannel = new KComboBox(this);
     m_recChannel->setSizeLimit( 17 );
+    m_recChannel->setMinimumWidth(minwidth11);
     mainLayout->addWidget(m_recChannel, row, 2, AlignRight);
     
     // group separator 2
@@ -144,7 +147,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default segment segment parameters group title
     //
     row++;
-    m_segHeader = new QLabel(i18n("Parameters for new segments"), this);
+    m_segHeader = new QLabel(i18n("Default parameters"), this);
     m_segHeader->setFont(title_font);
     mainLayout->addMultiCellWidget( m_segHeader, row, row, 0, 2, AlignLeft);
 
@@ -159,36 +162,35 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default clef
     //
     row++;
-    m_clefLbl = new QLabel(i18n("Default clef"), this);
-    mainLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
+    m_clefLbl = new QLabel(i18n("Clef"), this);
+    mainLayout->addMultiCellWidget(m_clefLbl, row, row, 0, 1, AlignLeft);
     m_defClef = new KComboBox(this);
-    m_defClef->setMinimumWidth(minwidth25);
+    m_defClef->setMinimumWidth(minwidth11);
     m_defClef->insertItem(i18n("treble"));
     m_defClef->insertItem(i18n("bass"));
     m_defClef->insertItem(i18n("alto"));
     m_defClef->insertItem(i18n("tenor"));
-    mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 2, AlignRight);
+    mainLayout->addWidget(m_defClef, row, 2, AlignRight);
 
     // default transpose
     //
     row++;
-    m_transpLbl = new QLabel(i18n("Default transpose"), this);
-    mainLayout->addWidget(m_transpLbl, row, 0, AlignLeft);
+    m_transpLbl = new QLabel(i18n("Transpose"), this);
+    mainLayout->addMultiCellWidget(m_transpLbl, row, row, 0, 1, AlignLeft);
     m_defTranspose = new QSpinBox(this);
     m_defTranspose->setMinValue(-24);
     m_defTranspose->setMaxValue(24);
     m_defTranspose->setValue(0);
     m_defTranspose->setButtonSymbols(QSpinBox::PlusMinus);
-    m_defTranspose->setMinimumWidth(minwidth25);    
-    mainLayout->addMultiCellWidget(m_defTranspose, row, row, 1, 2, AlignRight);
+    mainLayout->addWidget(m_defTranspose, row, 2, AlignRight);
 
     // default color
     //
     row++;
-    m_colorLbl = new QLabel(i18n("Default color"), this);
+    m_colorLbl = new QLabel(i18n("Color"), this);
     mainLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
     m_defColor = new KComboBox(false, this);
-    m_defColor->setMinimumWidth(minwidth25);
+    //m_defColor->setMinimumWidth(minwidth22);
     mainLayout->addMultiCellWidget(m_defColor, row, row, 1, 2, AlignRight);
 
     // populate combo from doc colors
@@ -199,7 +201,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row++;
     m_highLbl = new QLabel(i18n("Highest Playable"), this);
-    mainLayout->addWidget(m_highLbl, row, 0, AlignLeft);
+    mainLayout->addMultiCellWidget(m_highLbl, row, row, 0, 2, AlignLeft);
     /* Display note as letter + number, eg. C#4 as in notation view
        Pick note via a [...] box calling a pitch picker, as in selection event filter dialog
     */
@@ -208,12 +210,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row++;
     m_lowLbl = new QLabel(i18n("Lowest Playable"), this);
-    mainLayout->addWidget(m_lowLbl, row, 0, AlignLeft);
+    mainLayout->addMultiCellWidget(m_lowLbl, row, row, 0, 2, AlignLeft);
     // same as above
-    
-    //!!! temporary dummy label to take up space in the layout
-    //row = 16;
-    //mainLayout->addWidget(new QLabel("", this), row, 0, AlignLeft);
     
     // Configure the empty final row to accomodate any extra vertical space.
     //
@@ -229,6 +227,12 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
              
     connect( m_instrument, SIGNAL(activated(int)),
              this, SLOT(slotInstrumentChanged(int)));
+
+    connect( m_recDevice, SIGNAL(activated(int)),
+             this, SLOT(slotRecordingDeviceChanged(int)));
+             
+    connect( m_recChannel, SIGNAL(activated(int)),
+             this, SLOT(slotRecordingChannelChanged(int)));
     
     connect( m_defClef, SIGNAL(activated(int)),
              this, SLOT(slotClefChanged(int)));
@@ -261,8 +265,9 @@ TrackParameterBox::populateDeviceLists()
 {
     RG_DEBUG << "TrackParameterBox::populateDeviceLists()\n";
     populatePlaybackDeviceList();
-    populateRecordingDeviceList();
+    //populateRecordingDeviceList();
     slotUpdateControls(-1);
+    m_lastInstrumentType = -1;
 }
 
 void 
@@ -326,6 +331,7 @@ TrackParameterBox::populatePlaybackDeviceList()
         if (pname != "") iname += " (" + pname + ")";
         m_instrumentIds[currentDevId].push_back((*it)->getId());
         m_instrumentNames[currentDevId].append(iname);
+        
     }
     
     m_playDevice->setCurrentItem(-1);
@@ -336,41 +342,77 @@ void
 TrackParameterBox::populateRecordingDeviceList()
 {
     RG_DEBUG << "TrackParameterBox::populateRecordingDeviceList()\n";
-    m_recDevice->clear();
-    m_recDeviceIds.clear();
-    m_recChannel->clear();
 
-    m_recDeviceIds.push_back(Rosegarden::Device::ALL_DEVICES);
-    m_recDevice->insertItem(i18n("All"));
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
+    if (!trk) return;
     
-    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
-    Rosegarden::DeviceListConstIterator it;
-    for (it = devices->begin(); it != devices->end(); it++)
-    {
-        Rosegarden::MidiDevice *dev =
-            dynamic_cast<Rosegarden::MidiDevice*>(*it);
-        if (dev) {
-            if (dev->getDirection() == Rosegarden::MidiDevice::Record
-                && dev->isRecording()) 
+    Rosegarden::Instrument *inst = m_doc->getStudio().getInstrumentById(trk->getInstrument());
+    if (!inst) return;
+    
+    if (m_lastInstrumentType != (char)inst->getInstrumentType()) {
+        m_lastInstrumentType = (char)inst->getInstrumentType();
+
+        m_recDevice->clear();
+        m_recDeviceIds.clear();
+        m_recChannel->clear();
+    
+        if (inst->getInstrumentType() == Rosegarden::Instrument::Audio) {
+        
+            m_recDeviceIds.push_back(Rosegarden::Device::NO_DEVICE);
+            m_recDevice->insertItem(i18n("Audio"));
+            m_recChannel->insertItem(i18n("Audio"));
+
+            m_recDevice->setEnabled(false);
+            m_recChannel->setEnabled(false);
+
+        } else { // InstrumentType::Midi and InstrumentType::SoftSynth
+
+            m_recDeviceIds.push_back(Rosegarden::Device::ALL_DEVICES);
+            m_recDevice->insertItem(i18n("All"));
+            
+            Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+            Rosegarden::DeviceListConstIterator it;
+            for (it = devices->begin(); it != devices->end(); it++)
             {
-                QString connection = strtoqstr(dev->getConnection());
-                // remove trailing "(duplex)", "(read only)", "(write only)" etc
-                connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
-                m_recDevice->insertItem(connection);
-                m_recDeviceIds.push_back(dev->getId());
-            } 
+                Rosegarden::MidiDevice *dev =
+                    dynamic_cast<Rosegarden::MidiDevice*>(*it);
+                if (dev) {
+                    if (dev->getDirection() == Rosegarden::MidiDevice::Record
+                        && dev->isRecording()) 
+                    {
+                        QString connection = strtoqstr(dev->getConnection());
+                        // remove trailing "(duplex)", "(read only)", "(write only)" etc
+                        connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
+                        m_recDevice->insertItem(connection);
+                        m_recDeviceIds.push_back(dev->getId());
+                    } 
+                }
+            }
+            
+            m_recChannel->insertItem(i18n("All"));
+            for(int i=1; i<17; ++i) {
+               m_recChannel->insertItem(QString::number(i));
+            }
+
+            m_recDevice->setEnabled(true);
+            m_recChannel->setEnabled(true);
         }
     }
     
-    m_recChannel->insertItem(i18n("All"));
-    for(int i=1; i<17; ++i) {
-        m_recChannel->insertItem(QString::number(i));
+    if (inst->getInstrumentType() == Rosegarden::Instrument::Audio) {
+        m_recDevice->setCurrentItem(0);
+        m_recChannel->setCurrentItem(0);
+    } else {
+        m_recDevice->setCurrentItem(0);
+        m_recChannel->setCurrentItem((int)trk->getMidiInputChannel()+1);
+        for(unsigned int i = 0; i < m_recDeviceIds.size(); ++i) {
+            if (m_recDeviceIds[i] == trk->getMidiInputDevice()) {
+               m_recDevice->setCurrentItem(i);
+               break;
+            }
+        }
     }
-    
-    m_recDevice->setEnabled(false);
-    m_recChannel->setEnabled(false);
-    m_recDevice->setCurrentItem(-1);
-    m_recChannel->setCurrentItem(-1);
 }
 
 
@@ -450,6 +492,8 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     
     m_instrument->clear();
     m_instrument->insertStringList(m_instrumentNames[devId]);
+
+    populateRecordingDeviceList();
     
     if (index != -1) {
         m_instrument->setCurrentItem(0);
@@ -494,12 +538,63 @@ TrackParameterBox::slotInstrumentChanged(int index)
 }
 
 void 
+TrackParameterBox::slotRecordingDeviceChanged(int index)
+{
+    RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")" << endl;        
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    if (!trk) return;
+    Rosegarden::Instrument *inst = m_doc->getStudio().getInstrumentById(trk->getInstrument());
+    if (!inst) return;
+    if (inst->getInstrumentType() == Rosegarden::Instrument::Audio) {    
+        //Not implemented yet
+    } else {
+        trk->setMidiInputDevice(m_recDeviceIds[index]);
+    }
+}
+
+void 
+TrackParameterBox::slotRecordingChannelChanged(int index)
+{
+    RG_DEBUG << "TrackParameterBox::slotRecordingChannelChanged(" << index << ")" << endl;        
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    if (!trk) return;
+    Rosegarden::Instrument *inst = m_doc->getStudio().getInstrumentById(trk->getInstrument());
+    if (!inst) return;
+    if (inst->getInstrumentType() == Rosegarden::Instrument::Audio) {    
+        //Not implemented yet
+    } else {
+        trk->setMidiInputChannel(index - 1);
+    }
+}
+
+void 
 TrackParameterBox::slotInstrumentLabelChanged(Rosegarden::InstrumentId id, QString label)
 {
     RG_DEBUG << "TrackParameterBox::slotInstrumentLabelChanged(" << id << ") = " << label << "\n";        
     populatePlaybackDeviceList();
     slotUpdateControls(-1);
 }
+
+void 
+TrackParameterBox::showAdditionalControls(bool showThem)
+{
+    m_separator2->setShown(showThem);
+    m_segHeader->setShown(showThem);
+    m_presetLbl->setShown(showThem);
+    m_presetButton->setShown(showThem);
+    m_clefLbl->setShown(showThem);
+    m_defClef->setShown(showThem);
+    m_transpLbl->setShown(showThem);
+    m_defTranspose->setShown(showThem);
+    m_colorLbl->setShown(showThem);
+    m_defColor->setShown(showThem);
+    m_highLbl->setShown(showThem);
+    m_lowLbl->setShown(showThem);
+}
+
+
 
 void
 TrackParameterBox::slotClefChanged(int clef)
@@ -548,23 +643,6 @@ TrackParameterBox::slotDocColoursChanged()
     m_defColor->insertItem(i18n("Add New Color"), m_addColourPos);
 
     m_defColor->setCurrentItem(0);
-}
-
-void 
-TrackParameterBox::showAdditionalControls(bool showThem)
-{
-    m_separator2->setShown(showThem);
-    m_segHeader->setShown(showThem);
-    m_presetLbl->setShown(showThem);
-    m_presetButton->setShown(showThem);
-    m_clefLbl->setShown(showThem);
-    m_defClef->setShown(showThem);
-    m_transpLbl->setShown(showThem);
-    m_defTranspose->setShown(showThem);
-    m_colorLbl->setShown(showThem);
-    m_defColor->setShown(showThem);
-    m_highLbl->setShown(showThem);
-    m_lowLbl->setShown(showThem);
 }
 
 // code copied/adapted from segmentparameterbox.cpp on 16 July 2006

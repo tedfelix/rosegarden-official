@@ -142,8 +142,8 @@ public:
     void setMidiChannel(MidiByte mC) { m_channel = mC; }
     MidiByte getMidiChannel() const { return m_channel; }
 
-    void setMidiInputChannel(char ic) { m_input_channel = ic; }
-    char getMidiInputChannel() const { return m_input_channel; }
+    //void setMidiInputChannel(char ic) { m_input_channel = ic; }
+    //char getMidiInputChannel() const { return m_input_channel; }
 
     void setMidiTranspose(MidiByte mT) { m_transpose = mT; }
     MidiByte getMidiTranspose() const { return m_transpose; }
@@ -245,7 +245,7 @@ private:
     // Standard MIDI controllers and parameters
     //
     MidiByte        m_channel;
-    char            m_input_channel;
+    //char            m_input_channel;
     MidiProgram     m_program;
     MidiByte        m_transpose;
     MidiByte        m_pan;  // required by audio

@@ -27,6 +27,7 @@
 
 #include "widgets.h"
 #include "colours.h"
+#include "Instrument.h"
 
 class RosegardenGUIDoc;
 class Rosegarden::Track;
@@ -52,6 +53,8 @@ public slots:
     void slotSelectedTrackNameChanged();
     void slotPlaybackDeviceChanged(int index);
     void slotInstrumentChanged(int index);
+    void slotRecordingDeviceChanged(int index);
+    void slotRecordingChannelChanged(int index);
     void slotUpdateControls(int);
     void slotInstrumentLabelChanged(Rosegarden::InstrumentId id, QString label);
 
@@ -99,7 +102,6 @@ private:
 
     int			m_addColourPos;
     RosegardenColourTable::ColourList  m_colourList;
-
     
     QLabel              *m_trackLabel;
     
@@ -112,6 +114,8 @@ private:
     std::map<Rosegarden::DeviceId, QStringList> m_instrumentNames;
     
     Rosegarden::TrackId m_selectedTrackId;
+    
+    char                m_lastInstrumentType;
     
     // Additional elements that may be hidden in vertical stacked mode
     QFrame              *m_separator2;
