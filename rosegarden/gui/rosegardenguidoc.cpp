@@ -1875,22 +1875,17 @@ RosegardenGUIDoc::insertRecordedEvent(Rosegarden::Event *ev, int device, int cha
         if (track) {
             Rosegarden::Instrument *instrument = 
                 m_studio.getInstrumentById(track->getInstrument());
-            int filter = instrument->getMidiInputChannel();
-            if (filter < 0) { 
+            int chan_filter = track->getMidiInputChannel();
+            int dev_filter = track->getMidiInputDevice();
+            if (((chan_filter < 0) || (chan_filter == channel)) &&
+                ((dev_filter == int(Rosegarden::Device::ALL_DEVICES)) || (dev_filter == device))) {
                 it = recordMIDISegment->insert(new Rosegarden::Event(*ev));
                 if (isNoteOn) {
                     storeNoteOnEvent(recordMIDISegment, it, device, channel);
                 }
+                RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - matches filter" << endl;
             } else {
-                if (filter == channel) {
-                    it = recordMIDISegment->insert(new Rosegarden::Event(*ev));
-                    if (isNoteOn) {
-                        storeNoteOnEvent(recordMIDISegment, it, device, channel);
-                    }
-                    //RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - matches filter" << endl;
-                //} else {
-                    //RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - unmatched event discarded" << endl;
-                }
+                RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - unmatched event discarded" << endl;
             }
         }
     }

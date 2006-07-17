@@ -233,7 +233,7 @@ public slots:
     void slotSelectBank(int index);
     void slotSelectVariation(int index);
     void slotSelectChannel(int index);
-    void slotSelectInputChannel(int index);
+    //void slotSelectInputChannel(int index);
 
     void slotControllerChanged(int index);
 
@@ -270,7 +270,7 @@ protected:
     KComboBox          *m_variationValue;
     KComboBox          *m_channelValue;
     KComboBox          *m_programValue;
-    KComboBox          *m_channelInValue;
+    //KComboBox          *m_channelInValue;
 
     QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;

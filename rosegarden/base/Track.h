@@ -31,6 +31,7 @@
 
 #include "XmlExportable.h"
 #include "Instrument.h"
+#include "Device.h"
 
 namespace Rosegarden
 {
@@ -89,6 +90,12 @@ public:
 
     Composition* getOwningComposition() { return m_owningComposition; }
 
+    void setMidiInputDevice(DeviceId id) { m_input_device = id; }
+    DeviceId getMidiInputDevice() const { return m_input_device; }
+
+    void setMidiInputChannel(char ic) { m_input_channel = ic; }
+    char getMidiInputChannel() const { return m_input_channel; }
+
     int getClef() { return m_clef; }
     void setClef(int clef) { m_clef = clef; }
 
@@ -118,6 +125,9 @@ private:
     InstrumentId   m_instrument;
 
     Composition*   m_owningComposition;
+
+    DeviceId       m_input_device;
+    char           m_input_channel;
 
     // default parameters for new segments associated with this track
     int		   m_clef;
