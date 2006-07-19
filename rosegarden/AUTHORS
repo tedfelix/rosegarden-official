@@ -4,9 +4,10 @@ Chris Cannam <cannam@all-day-breakfast.com>
 Richard Bown <bownie@bownie.com>
 Guillaume Laurent <glaurent@telegraph-road.org>
 
-Adjunct developers:
+Developers:
 
 D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
 
 
 Contributors:
@@ -33,11 +34,6 @@ Mark Hymers <markh@linuxfromscratch.org>
 Alexandre Prokoudine <alexandre.prokoudine@gmail.com>
     * Russian translation
     * i18n-ization
-    
-Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
-    * ALSA hacking and bug fixes
-    * multi-input MIDI recording
-    * former Spanish translator
     
 Jörg Schumann <jrschumann@gmx.de>
 Eckhard Jokisch <e.jokisch@u-code.de>
@@ -113,6 +109,7 @@ Carolyn McIntyre <catma@adelphia.net>
 Heikki Johannes Junes <hjunes@cc.hut.fi>
     * Finnish translation
     * LilyPond 2.x export
+    * LilyPond bug fixes/enhancements
 
 ##
 ## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()

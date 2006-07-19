@@ -340,12 +340,17 @@ SegmentParameterBox::slotDocColoursChanged()
 
     for (Rosegarden::RCMap::const_iterator it=temp.begin(); it != temp.end(); ++it)
     {
+        QString qtrunc(strtoqstr(it->second.second));
         QPixmap colour(15,15);
         colour.fill(Rosegarden::GUIPalette::convertColour(it->second.first));
-        if (it->second.second == std::string(""))
-            m_colourValue->insertItem(colour, i18n("Default Color"), i);
-        else
-            m_colourValue->insertItem(colour, strtoqstr(it->second.second), i);
+        if (qtrunc == "") {
+            m_colourValue->insertItem(colour, i18n("Default"), i);
+        } else {
+            // truncate name to 15 characters to avoid the combo forcing the
+            // whole kit and kaboodle too wide
+            if (qtrunc.length() > 15) qtrunc = qtrunc.left(12) + "...";
+            m_colourValue->insertItem(colour, qtrunc, i);
+        }
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }

@@ -29,8 +29,11 @@
 #include <qfontmetrics.h>
 #include <qspinbox.h>
 #include <qpixmap.h>
+
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kcolordialog.h>
+#include <klineeditdlg.h>
 
 #include "Device.h"
 #include "MidiDevice.h"
@@ -147,7 +150,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default segment segment parameters group title
     //
     row++;
-    m_segHeader = new QLabel(i18n("Default parameters"), this);
+    m_segHeader = new QLabel(i18n("Create segments with:"), this);
     m_segHeader->setFont(title_font);
     mainLayout->addMultiCellWidget( m_segHeader, row, row, 0, 2, AlignLeft);
 
@@ -158,6 +161,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     mainLayout->addWidget(m_presetLbl, row, 0, AlignLeft);
     m_presetButton = new QPushButton(this);
     mainLayout->addMultiCellWidget(m_presetButton, row, row, 1, 2, AlignRight);
+    m_presetLbl->hide();
+    m_presetButton->hide();
     
     // default clef
     //
@@ -190,7 +195,6 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_colorLbl = new QLabel(i18n("Color"), this);
     mainLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
     m_defColor = new KComboBox(false, this);
-    //m_defColor->setMinimumWidth(minwidth22);
     mainLayout->addMultiCellWidget(m_defColor, row, row, 1, 2, AlignRight);
 
     // populate combo from doc colors
@@ -582,8 +586,8 @@ TrackParameterBox::showAdditionalControls(bool showThem)
 {
     m_separator2->setShown(showThem);
     m_segHeader->setShown(showThem);
-    m_presetLbl->setShown(showThem);
-    m_presetButton->setShown(showThem);
+//    m_presetLbl->setShown(showThem);
+//    m_presetButton->setShown(showThem);
     m_clefLbl->setShown(showThem);
     m_defClef->setShown(showThem);
     m_transpLbl->setShown(showThem);
@@ -627,14 +631,18 @@ TrackParameterBox::slotDocColoursChanged()
 
     unsigned int i=0;
 
-    for (Rosegarden::RCMap::const_iterator it=temp.begin(); it != temp.end(); ++it)
-    {
+    for (Rosegarden::RCMap::const_iterator it=temp.begin(); it != temp.end(); ++it) {
+        QString qtrunc(strtoqstr(it->second.second));
         QPixmap colour(15,15);
         colour.fill(Rosegarden::GUIPalette::convertColour(it->second.first));
-        if (it->second.second == std::string(""))
-            m_defColor->insertItem(colour, i18n("Default Color"), i);
-        else
-            m_defColor->insertItem(colour, strtoqstr(it->second.second), i);
+        if (qtrunc == "") {
+            m_defColor->insertItem(colour, i18n("Default"), i);
+	} else {
+	    // truncate name to 15 characters to avoid the combo forcing the
+	    // whole kit and kaboodle too wide
+	    if (qtrunc.length() > 15) qtrunc = qtrunc.left(12) + "...";
+            m_defColor->insertItem(colour, qtrunc, i);
+	}
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
@@ -653,58 +661,27 @@ TrackParameterBox::slotColorChanged(int index)
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
     trk->setColor(index);
-/*
-    if (value != m_addColourPos)
-    {
-        unsigned int temp = 0;
 
-	RosegardenColourTable::ColourList::const_iterator pos;
-	for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
-	    if (pos->second == value) {
-		temp = pos->first;
-		break;
-	    }
-	}
-
-        Rosegarden::SegmentSelection segments;
-        std::vector<Rosegarden::Segment*>::iterator it;
-
-        for (it = m_segments.begin(); it != m_segments.end(); ++it)
-        {
-           segments.insert(*it);
-        }
-
-        SegmentColourCommand *command = new SegmentColourCommand(segments, temp);
-
-        addCommandToHistory(command);
-    }
-    else
-    {
+    if (index == m_addColourPos) {
         Rosegarden::ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
         QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
                                                 i18n("New"), &ok);
-        if ((ok == true) && (!newName.isEmpty()))
-        {
+        if ((ok == true) && (!newName.isEmpty())) {
             KColorDialog box(this, "", true);
 
             int result = box.getColor(newColour);
 
-            if (result == KColorDialog::Accepted)
-            {
+            if (result == KColorDialog::Accepted) {
                 Rosegarden::Colour newRColour = Rosegarden::GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
-                SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
-                addCommandToHistory(command);
                 slotDocColoursChanged();
             }
         }
         // Else we don't do anything as they either didn't give a name·
-        //  or didn't give a colour
+        // or didn't give a colour
     }
-
-*/
 }
 
 #include "trackparameterbox.moc"
