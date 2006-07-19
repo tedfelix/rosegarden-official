@@ -23,8 +23,8 @@
 #define _ROSEGARDEN_SEQUENCER_APP_H_
  
 // RosegardenSequencerApp is the sequencer application for Rosegarden.
-// It owns a Rosegarden::Sequencer object which wraps the ALSA, JACK,
-// aRTS etc. level funtionality.  At this level we deal with comms with
+// It owns a Rosegarden::Sequencer object which wraps the ALSA 
+// and JACK funtionality.  At this level we deal with comms with
 // the Rosegarden GUI application, the high level marshalling of data 
 // and main event loop of the sequencer.  [rwb]
 //

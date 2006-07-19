@@ -18,17 +18,12 @@
     COPYING included with this distribution for more information.
 */
 
-//#ifdef NO_SOUND
 #include "DummyDriver.h"
-//#else
+
 #ifdef HAVE_ALSA
 #include "AlsaDriver.h"
-#else
-#include "ArtsDriver.h"
 #endif
-//#endif
 
-#include "SoundDriver.h"
 #include "SoundDriverFactory.h"
 
 namespace Rosegarden {
@@ -43,8 +38,6 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
 #else
 #ifdef HAVE_ALSA
     driver = new AlsaDriver(studio);
-#else
-    driver = new ArtsDriver(studio);
 #endif
 #endif
 

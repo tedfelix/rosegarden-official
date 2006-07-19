@@ -90,8 +90,8 @@ RosegardenSequencerApp::RosegardenSequencerApp() :
     //
     initialiseStudio();
 
-    // Creating this object also initialises the Rosegarden aRts or
-    // ALSA/JACK interface for both playback and recording. MappedStudio
+    // Creating this object also initialises the Rosegarden ALSA/JACK 
+    // interface for both playback and recording. MappedStudio
     // aduio faders are also created.
     //
     m_driver = Rosegarden::SoundDriverFactory::createDriver(m_studio);
