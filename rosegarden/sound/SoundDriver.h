@@ -32,7 +32,7 @@
 #include "Scavenger.h"
 #include "RIFFAudioFile.h" // for SubFormat enum
 
-// Abstract base to support SoundDrivers such as aRts and ALSA.
+// Abstract base to support SoundDrivers, such as ALSA.
 //
 // This base class provides the generic driver support for
 // these drivers with the Sequencer class owning an instance
