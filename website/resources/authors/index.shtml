@@ -13,7 +13,8 @@
 
     <h2>Authors</h2> <p>Rosegarden has three core developers who
     between them are to blame for most of the application as you find
-    it now, plus one long-term adjunct developer and writer.  Their
+    it now, plus a crack team of distinguished, long-term contributors who
+    have been doing assorted jobs around here for years.  Their
     email addresses are shown below in obfuscated form - change the
     "at" to "@" and the "dot" to "." to form the valid addresses.
     </p>
@@ -42,14 +43,19 @@
 
     <h4><a href="http://www.bownie.com/">Richard Bown</a>, bownie at bownie dot com</h4>
 
-    <p><img style="float:right; margin-top: 0px; margin-left: 12px; margin-right:0px; margin-bottom:8px" src="http://www.bownie.com/rosegarden-author-pic.png" alt=" "/>Richard has been working on Rosegarden since the end of
-    1995, when he was drafted in to take over the Unix sequencer.  He has been
-    responsible for the Rosegarden MIDI, audio, sequencing and
-    recording code, and significant parts of the GUI.</p>
+    <p><img style="float:right; margin-top: 0px; margin-left: 12px;
+    margin-right:0px; margin-bottom:8px"
+    src="http://www.bownie.com/rosegarden-author-pic.png" alt=" "/>Richard
+    began  working on Rosegarden at the end of 1995, when he was drafted in to
+    take over the Unix sequencer.  He was responsible for the Rosegarden MIDI,
+    audio, sequencing and recording code, and significant parts of the GUI.
+    He has been on a protracted sabbatical from development work on the
+    project since the release of 1.0, but his influence remains to be seen in
+    every corner of the application.</p>
 
-    <p>Richard is available to talk to about commercial and
-    non-commercial activities involving music technology (including
-    Rosegarden) and also to give demos.  </p>
+    <p>Richard is available to talk to about commercial and non-commercial
+    activities involving music technology (including Rosegarden) and also to
+    give demos.  </p>
 
 
     <h4><a href="http://www.telegraph-road.org">Guillaume Laurent</a>, glaurent at telegraph-road dot org</h4>
@@ -70,33 +76,55 @@
     he works as a software engineer.
     </p>
 
-    <h4><a href="http://www.geocities.com/Paris/Rue/5407/">D. Michael
-	    McIntyre</a>, dmmcintyr at users dot sourceforge dot net</h4>
+    <h4>D. Michael McIntyre, dmmcintyr at users dot sourceforge dot net</h4>
 
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://users.adelphia.net/~silvan/silvan-headshot.jpg"
-    alt=" "/>Michael lives in Christiansburg, Virginia, in the United States of
-    America.  He got his first taste of Linux toward the end of 2001.  He came to work at Rosegarden in December 2002, after being shamed
-    into doing something more useful than complaining, as a consequence of his
-    <a href="http://lalists.stanford.edu/lau/2002/11/0317.html">infamous
+    src="http://users.adelphia.net/~silvan/silvan-headshot.jpg" alt="
+    "/>Michael lives in Christiansburg, Virginia, in the United States of
+    America.  He got his first taste of Linux toward the end of 2001.  He came
+    to work at Rosegarden in December 2002, after being shamed into doing
+    something more useful than complaining, as a consequence of his <a
+	href="http://lalists.stanford.edu/lau/2002/11/0317.html">infamous
 	posting</a> on the Linux Audio Users mailing list.  That discussion
-    lead him to begin writing a <a href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> for Rosegarden, which has since grown into a
-    full-fledged <a href="http://bomots.de/vorschau.htm">book</a>.</p>
-    <p>In
-    addition to his writings, he fancies himself to be the project's finish
-    carpenter.  Lacking the skill and experience to erect large pieces of the
-    structure, he nevertheless has found plenty to do adding chair rails and
-    straightening out the crown moulding.  He has even built a small wall or
-    two.  All of this is somewhat surprising, considering that his formal training is
-    in foreign languages, and he labours by day, at least for the time being, as an over-the-road truck
-    driver.
-    </p>
+    lead him to begin writing a <a
+	href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> for
+    Rosegarden, which has since grown into a full-fledged <a
+	href="http://bomots.de/vorschau.htm">book</a>.</p> <p>In addition to
+    his writings, he has found himself increasingly immersed in development
+    work around the project.  Unlike everyone else who has chipped in to help
+    build Rosegarden, Michael is not a programmer by trade, or training.  He
+    has managed to get things done through some mixture of desperation and
+    determination that hearkens back to his childhood roots, growing up in the
+    era when PCs were expensive business computers, and home users got
+    software for their TRS-80s, Apples, and Commodores by writing it
+    themselves, or laboriously typing page after page of listings out of fan
+    magazines.</p>
+
+    <h4>Pedro Lopez-Cabanillas, pedro dot lopez dot cabanillas at gmail dot com</h4>
+
+    <p><img style="float:right; margin-top: 0px; margin-left: 12px;
+    margin-right:0px; margin-bottom:8px"
+    src="http://users.adelphia.net/~silvan/pedro-headshot.jpg" alt=" "/>
+    
+    Pedro lives in Barcelona, Spain. He tried Rosegarden the first time a few
+    days  after the <a
+	href="http://lalists.stanford.edu/lau/2002/11/0317.html">infamous
+	post</a> from Michael. He soon felt that the project was  <a
+	href="http://lalists.stanford.edu/lau/2002/12/0413.html">worthy of his
+	interest,</a> and started to actively help and contribute.  Pedro
+    works as a professional developer for a transnational company, and in his
+    spare time contributes to several libre software projects as <a
+	href="http://kmetronome.sourceforge.net">KMetronome</a> and <a
+	href="http://kmetronome.sourceforge.net/kmidimon/">KMidimon.</a>  He
+    is also an amateur musician, playing pop and classical music with flutes,
+    and some MIDI instruments.  </p>
+
     <h3>Friends of Rosegarden</h3>
     <p>There is an ever-growing list of people who are helping out
     with coding, documenting, translating and testing who also merit a 
     mention and can be said to be <i>true friends of Rosegarden</i>. 
-    For the moment you can keep up to date with who the core contributors 
+    For the moment you can keep up to date with who the contributors 
     are by having a look at the latest <a href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/AUTHORS?rev=HEAD&content-type=text/vnd.viewcvs-markup">AUTHORS</a> file.
     </p>
 
