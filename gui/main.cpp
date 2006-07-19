@@ -405,17 +405,17 @@ int main(int argc, char *argv[])
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
 
-    aboutData.addAuthor("Guillaume Laurent", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
-    aboutData.addAuthor("Chris Cannam", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
-    aboutData.addAuthor("Richard Bown", 0, "bownie@bownie.com", "http://bownie.com");
-    aboutData.addAuthor("D. Michael McIntyre (adjunct)", 0, "dmmcintyr@users.sourceforge.net", "http://www.geocities.com/Paris/Rue/5407");
+    aboutData.addAuthor("Guillaume Laurent (lead)", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
+    aboutData.addAuthor("Chris Cannam (lead)", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
+    aboutData.addAuthor("Richard Bown (lead)", 0, "bownie@bownie.com", "http://bownie.com");
+    aboutData.addAuthor("D. Michael McIntyre", 0, "dmmcintyr@users.sourceforge.net");
+    aboutData.addAuthor("Pedro Lopez-Cabanillas", 0, "plcl@users.sourceforge.net");
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
     aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"),"<markh@linuxfromscratch.org>");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("ALSA hacking and bug fixes\nmulti-input MIDI recording\nformer Spanish translator"), "plcl@users.sourceforge.net");
     aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
     aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
@@ -443,7 +443,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
     aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo (of Michael's rose garden)\nnew splash screen photo (of Michael McIntyre's\ninstruments along with a rose from the garden of Hassell Arnold Hale, 1916-2006,\nmay he rest in peace)"), "catma@adelphia.net");
-    aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation"), "hjunes@cc.hut.fi");
+    aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation\nLilyPond export fixes/improvements"), "hjunes@cc.hut.fi");
     aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));

@@ -326,8 +326,8 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 
 	segment->setTranspose(track->getTranspose());
 	segment->setColourIndex(track->getColor());
-//	segment->setLowestPlayable(track->getLowestPlayable());
-//	segment->setHighestPlayable(track->getHighestPlayable());
+	segment->setLowestPlayable(track->getLowestPlayable());
+	segment->setHighestPlayable(track->getHighestPlayable());
 
         CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);
         m_canvas->getModel()->clearSelected();

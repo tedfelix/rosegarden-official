@@ -142,6 +142,32 @@ public:
      */
     int getNextId() const;
 
+    /**
+     * Returns a MIDI pitch representing the highest suggested playable note for
+     * notation contained in this segment, as a convenience reminder to composers.
+     *
+     * This property, and its corresponding lowest note counterpart, initialize by
+     * default such that no limitation is imposed.  (lowest = 0, highest = 127)
+     */
+    int getHighestPlayable() { return m_highestPlayable; }
+
+    /**
+     * Set the highest suggested playable note for this segment
+     */
+    void setHighestPlayable(int pitch) { m_highestPlayable = pitch; }
+
+    /**
+     * Returns a MIDI pitch representing the lowest suggested playable note for
+     * notation contained in this segment, as a convenience reminder to composers
+     */
+    int getLowestPlayable() { return m_lowestPlayable; }
+
+    /**
+     * Set the highest suggested playable note for this segment
+     */
+    void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
+
+
 
     //////
     //
@@ -606,6 +632,9 @@ private:
     int m_transpose;            // all Events tranpose
     timeT m_delay;              // all Events delay
     RealTime m_realTimeDelay;   // all Events delay (the delays are cumulative)
+
+    int m_highestPlayable;      // suggestion for highest playable note (notation)
+    int m_lowestPlayable;       // suggestion for lowest playable note (notation)
 
     RefreshStatusArray<SegmentRefreshStatus> m_refreshStatusArray;
 

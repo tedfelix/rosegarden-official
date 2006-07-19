@@ -2372,10 +2372,11 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
 			      (recordMIDISegment->getStartTime()));
     }
 
+    // set segment transpose, color, highest/lowest playable from track parameters
     recordMIDISegment->setTranspose(track->getTranspose());
     recordMIDISegment->setColourIndex(track->getColor());
-    //high range
-    //low range  
+    recordMIDISegment->setHighestPlayable(track->getHighestPlayable());
+    recordMIDISegment->setLowestPlayable(track->getLowestPlayable());
     
     m_composition.addSegment(recordMIDISegment);
     

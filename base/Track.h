@@ -129,7 +129,7 @@ private:
     DeviceId       m_input_device;
     char           m_input_channel;
 
-    // default parameters for new segments associated with this track
+    // default parameters for new segments created belonging to this track
     int		   m_clef;
     int		   m_transpose;
     int		   m_color;
