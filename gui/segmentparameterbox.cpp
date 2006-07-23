@@ -81,7 +81,7 @@ SegmentParameterBox::initBox()
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
 //    QFrame *frame = new QFrame(this);
-    QGridLayout *gridLayout = new QGridLayout(this, 8, 6, 4, 2);
+    QGridLayout *gridLayout = new QGridLayout(this, 8, 7, 4, 2);
 
     QLabel *label	   = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
