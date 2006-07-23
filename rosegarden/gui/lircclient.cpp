@@ -49,6 +49,10 @@ LircClient::LircClient(void)
     if (m_socket == -1) {
 	throw Rosegarden::Exception("Failed to connect to LIRC");
     }
+
+    if(lirc_readconfig(NULL, &m_config, NULL)==-1) {
+        throw Rosegarden::Exception("Failed reading LIRC config file");
+    }
     
     fcntl(m_socket, F_GETOWN, getpid());
     socketFlags = fcntl(m_socket, F_GETFL, 0);
@@ -56,8 +60,6 @@ LircClient::LircClient(void)
     {
         fcntl(socketFlags, F_SETFL, socketFlags|O_NONBLOCK);
     }    
-    
-    if(lirc_readconfig(NULL, &m_config, NULL)==-1) exit(EXIT_FAILURE);
     
     m_socketNotifier = new QSocketNotifier(m_socket, QSocketNotifier::Read, 0);
     connect(m_socketNotifier, SIGNAL(activated(int)), this, SLOT(readButton()) );
