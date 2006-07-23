@@ -119,6 +119,7 @@ private:
     QLabel              *m_transpLbl;
     QLabel              *m_colorLbl;
     QLabel		*m_rangeLbl;
+    QLabel              *m_psetLbl;
 };
 
 #endif /*TRACKPARAMETERBOX_H_*/
