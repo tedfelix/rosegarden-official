@@ -508,7 +508,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 7, 2, 10, 5);
+    layout = new QGridLayout(frame, 8, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
@@ -584,6 +584,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     bool defaultShowInvisibles = m_cfg->readBoolEntry("showinvisibles", true);
     m_showInvisibles->setChecked(defaultShowInvisibles);
     layout->addWidget(m_showInvisibles, 5, 1);
+
+    m_showRanges = new QCheckBox
+	(i18n("Show notes outside suggested playable range in red"), frame);
+    bool defaultShowRanges = m_cfg->readBoolEntry("showranges", true);
+    m_showRanges->setChecked(defaultShowRanges);
+    layout->addWidget(m_showRanges, 6, 1);
 
     addTab(frame, i18n("Layout"));
 
@@ -875,6 +881,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
+    m_cfg->writeEntry("showranges", m_showRanges->isChecked());
     m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());

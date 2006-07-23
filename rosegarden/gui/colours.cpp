@@ -135,6 +135,8 @@ GUIPalette::GUIPalette()
     const int QuantizedNoteMinValue = 140;
     const int TriggerNoteHue = 4;
     const int TriggerNoteMinValue = 140;
+    const int OutRangeNoteHue = 0;
+    const int OutRangeNoteMinValue = 200;
 
     m_defaultsMap[TextAnnotationBackground] = QColor(255, 255, 180);
 
@@ -246,6 +248,8 @@ const int GUIPalette::QuantizedNoteHue = 69;
 const int GUIPalette::QuantizedNoteMinValue = 140;
 const int GUIPalette::TriggerNoteHue = 4;
 const int GUIPalette::TriggerNoteMinValue = 140;
+const int GUIPalette::OutRangeNoteHue = 0;
+const int GUIPalette::OutRangeNoteMinValue = 200;
 
 const char* const GUIPalette::TextAnnotationBackground = "textannotationbackground";
 

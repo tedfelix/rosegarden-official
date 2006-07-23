@@ -62,6 +62,8 @@ public slots:
     void slotTransposeChanged(int transpose);
     void slotDocColoursChanged();
     void slotColorChanged(int index);
+    void slotHighestPressed();
+    void slotLowestPressed();
 
 signals:
     void instrumentSelected(Rosegarden::TrackId, int);
@@ -69,6 +71,7 @@ signals:
 protected:
     void populatePlaybackDeviceList();
     void populateRecordingDeviceList();
+    void updateHighLow();
 
 private:
     RosegardenGUIDoc    *m_doc;
@@ -78,29 +81,20 @@ private:
     KComboBox           *m_recDevice;
     KComboBox           *m_recChannel;
 
-    // will launch a new dialog to load presets
-    ///////////////////////////////////
     QPushButton		*m_presetButton;
-    ///////////////////////////////////
+    QPushButton		*m_highButton;
+    QPushButton		*m_lowButton;
 
     KComboBox		*m_defClef;
+    KComboBox		*m_defColor;
 
     //!!! using a spin box for this one to avoid the complications of a combo box; I guess the SPB
     // uses a combo box for visual uniformity, but forget that for now.
     QSpinBox		*m_defTranspose;
 
-    KComboBox		*m_defColor;
-
-    // need to work out widgets for the pitch pickers and stuff for
-    // highest/lowest playable; store actual value as int MIDI pitch, but
-    // display in user friendly way if practical, and pick pitches as on event
-    // filter dialog with picker widget
-    //
-    QLabel   		*m_lowestPlayable;
-    QLabel   		*m_highestPlayable;
-    /////////////////////////////////////////////////////////////////
-
     int			m_addColourPos;
+    int			m_highestPlayable;
+    int 		m_lowestPlayable;
     RosegardenColourTable::ColourList  m_colourList;
     
     QLabel              *m_trackLabel;
@@ -124,8 +118,7 @@ private:
     QLabel              *m_clefLbl;
     QLabel              *m_transpLbl;
     QLabel              *m_colorLbl;
-    QLabel              *m_highLbl;
-    QLabel              *m_lowLbl;    
+    QLabel		*m_rangeLbl;
 };
 
 #endif /*TRACKPARAMETERBOX_H_*/

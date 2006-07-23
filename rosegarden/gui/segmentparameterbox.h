@@ -107,6 +107,9 @@ public slots:
     void slotFadeInChanged(int);
     void slotFadeOutChanged(int);
 
+    void slotHighestPressed();
+    void slotLowestPressed();
+
     virtual void update();
 
 signals:
@@ -116,9 +119,12 @@ signals:
 protected:
     void initBox();
     void populateBoxFromSegments();
+    void updateHighLow();
 
     QLabel                     *m_label;
     QPushButton                *m_labelButton;
+    QPushButton		       *m_highButton;
+    QPushButton		       *m_lowButton;
     RosegardenTristateCheckBox *m_repeatValue;
     KComboBox                  *m_quantizeValue;
     KComboBox                  *m_transposeValue;
@@ -135,6 +141,11 @@ protected:
     QSpinBox                   *m_fadeOutSpin;
 
     int                        m_addColourPos;
+
+    // used to keep track of highest/lowest as there is no associated spinbox
+    // to query for its value
+    int			       m_highestPlayable;
+    int			       m_lowestPlayable;
 
     std::vector<Rosegarden::Segment*> m_segments;
     std::vector<Rosegarden::timeT> m_standardQuantizations;

@@ -231,7 +231,8 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_tuplingLineWidth(0),
     m_tuplingLineGradient(0.0),
     m_tied(false),
-    m_tieLength(0)
+    m_tieLength(0),
+    m_inRange(true)
 {
     // nothing else
 }
@@ -699,7 +700,8 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 	(charName,
 	 params.m_highlighted ? HighlightedColour :
 	 params.m_quantized ? QuantizedColour :
-	 params.m_trigger ? TriggerColour : PlainColour,
+	 params.m_trigger ? TriggerColour :
+	 params.m_inRange ? PlainColour : OutRangeColour,
 	 inverted);
 
     QPoint bodyLocation(m_left - m_borderX,
@@ -1988,7 +1990,13 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     QFont octaveFont = config->readFontEntry("textfont", &defaultOctaveFont);
     octaveFont.setPixelSize(getLineSpacing() * 3 / 2);
     QFontMetrics octaveFontMetrics(octaveFont);
-    QString text = QString("%1").arg(8 * (oct < 0 ? -oct : oct));
+
+    // fix #1522784 and use 15 rather than 16 for double octave offset
+    int adjustedOctave = (8 * (oct < 0 ? -oct : oct));   
+    if (adjustedOctave > 8) adjustedOctave--;
+    else if (adjustedOctave < 8) adjustedOctave++;
+
+    QString text = QString("%1").arg(adjustedOctave);
     QRect rect = octaveFontMetrics.boundingRect(text);
     
     createPixmapAndMask(plain.getWidth(),
@@ -3247,6 +3255,13 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
 	    (name,
 	     Rosegarden::GUIPalette::TriggerNoteHue,
 	     Rosegarden::GUIPalette::TriggerNoteMinValue,
+	     ch, charType, inverted);
+
+    case OutRangeColour:
+	return m_font->getCharacterColoured
+	    (name,
+	     Rosegarden::GUIPalette::OutRangeNoteHue,
+	     Rosegarden::GUIPalette::OutRangeNoteMinValue,
 	     ch, charType, inverted);
     }
 

@@ -29,11 +29,13 @@
 #include <qfontmetrics.h>
 #include <qspinbox.h>
 #include <qpixmap.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kcolordialog.h>
 #include <klineeditdlg.h>
+#include <kconfig.h>
 
 #include "Device.h"
 #include "MidiDevice.h"
@@ -43,17 +45,22 @@
 #include "PluginIdentifier.h"
 #include "colours.h"
 #include "colourwidgets.h"
+#include "NotationTypes.h"
+#include "dialogs.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "trackparameterbox.h"
 #include "rosedebug.h"
 #include "studiowidgets.h"
+#include "constants.h"
 
 TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                       QWidget *parent)
     : RosegardenParameterBox(i18n("Track"), parent),
-      m_doc(doc)
+      m_doc(doc),
+      m_highestPlayable(127),
+      m_lowestPlayable(0)
 {
     QFont font(m_font);
     QFont title_font(m_font);
@@ -61,6 +68,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     int minwidth11 = metrics.width("12345678901");
     int minwidth22 = metrics.width("1234567890123456789012");
     int minwidth25 = metrics.width("1234567890123456789012345");
+    int minwidthHigh = metrics.width(i18n("High: ----"));
     setFont(m_font);
     title_font.setBold(true);
     
@@ -157,12 +165,31 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // preset picker
     //
     row++;
-    m_presetLbl = new QLabel(i18n("Preset"), this);
-    mainLayout->addWidget(m_presetLbl, row, 0, AlignLeft);
-    m_presetButton = new QPushButton(this);
-    mainLayout->addMultiCellWidget(m_presetButton, row, row, 1, 2, AlignRight);
-    m_presetLbl->hide();
-    m_presetButton->hide();
+
+    /* explanation of intention:
+     *
+     * [Load Preset]  Label showing the preset that was loaded
+     *
+     * Loading a preset will have too many levels of choices to fit in the
+     * TPB, so it will spin off into a separate dialog that will inject its
+     * results into the appropriate TPB controls
+     *
+     * This label is going to be hugely too wide.  I've picked the worst
+     * example so you have some idea what we have to accommodate with this
+     * somehow.  Maybe we could limit it to n characters and have the whole
+     * text revealed as a tooltip or something?  I'm open to any idea how to
+     * make it all less obnoxious.  I'll just get the guts working.
+     */
+
+    m_presetButton = new QPushButton(i18n("Load Preset"), this);
+    mainLayout->addMultiCellWidget(m_presetButton, row, row, 0, 1, AlignLeft);
+
+    int longestPresetName = metrics.width("Electronic organ (manual) (treble)");
+    m_presetLbl = new QLabel(i18n("None"), this);
+    m_presetLbl->setMinimumWidth(longestPresetName);
+    mainLayout->addMultiCellWidget(m_presetLbl, row, row, 2, 4, AlignRight);
+//    m_presetButton->hide();
+//    m_presetLbl->hide();
     
     // default clef
     //
@@ -200,22 +227,21 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // populate combo from doc colors
     slotDocColoursChanged();
 
-
-    // highest playable note
+    // highest/lowest playable note
     //
     row++;
-    m_highLbl = new QLabel(i18n("Highest Playable"), this);
-    mainLayout->addMultiCellWidget(m_highLbl, row, row, 0, 2, AlignLeft);
-    /* Display note as letter + number, eg. C#4 as in notation view
-       Pick note via a [...] box calling a pitch picker, as in selection event filter dialog
-    */
+    m_rangeLbl = new QLabel(i18n("Range"), this);
+    mainLayout->addWidget(m_rangeLbl, row, 0, AlignLeft);
 
-    // lowest playable note
-    //
-    row++;
-    m_lowLbl = new QLabel(i18n("Lowest Playable"), this);
-    mainLayout->addMultiCellWidget(m_lowLbl, row, row, 0, 2, AlignLeft);
-    // same as above
+    m_highButton = new QPushButton(i18n("High: ---"), this);
+    QToolTip::add(m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
+    mainLayout->addWidget(m_highButton, row, 1);
+
+    m_lowButton = new QPushButton(i18n("Low: ----"), this);
+    QToolTip::add(m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
+    mainLayout->addWidget(m_lowButton, row, 2);
+
+    updateHighLow();
     
     // Configure the empty final row to accomodate any extra vertical space.
     //
@@ -252,6 +278,11 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     connect(m_defColor, SIGNAL(activated(int)),
             SLOT(slotColorChanged(int)));
 
+    connect(m_highButton, SIGNAL(released()),
+            SLOT(slotHighestPressed()));
+
+    connect(m_lowButton, SIGNAL(released()),
+            SLOT(slotLowestPressed())); 
 }
 
 TrackParameterBox::~TrackParameterBox() {}
@@ -419,6 +450,24 @@ TrackParameterBox::populateRecordingDeviceList()
     }
 }
 
+void
+TrackParameterBox::updateHighLow()
+{
+    // Key of C major and NoAccidental means any "black key" notes will be
+    // written as sharps.
+    Rosegarden::Accidental accidental = Rosegarden::Accidentals::NoAccidental;
+    Rosegarden::Key key = Rosegarden::Key("C major");
+
+    Rosegarden::Pitch highest(m_highestPlayable, accidental);
+    Rosegarden::Pitch lowest(m_lowestPlayable, accidental);
+
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    int base = config->readNumEntry("midipitchoctave", -2);
+
+    m_highButton->setText(QString("High: %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
+    m_lowButton->setText(QString("Low: %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+}
 
 void 
 TrackParameterBox::slotUpdateControls(int /*dummy*/)
@@ -434,8 +483,8 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_defClef->setCurrentItem(trk->getClef());
     m_defTranspose->setValue(trk->getTranspose());
     m_defColor->setCurrentItem(trk->getColor());
-    // highest
-    // lowest
+    m_highestPlayable = trk->getHighestPlayable();
+    m_lowestPlayable = trk->getLowestPlayable();
 }
 
 void 
@@ -464,11 +513,6 @@ TrackParameterBox::slotSelectedTrackNameChanged()
        m_trackName.truncate(20);
     int m_trackNum = m_selectedTrackId + 1;
     m_trackLabel->setText(i18n("[ Track#%1 - %2 ]").arg(m_trackNum).arg(m_trackName));
-    m_defClef->setCurrentItem(trk->getClef());
-    m_defTranspose->setValue(trk->getTranspose());    
-    // color
-    // lowestPlayable
-    // highestPlayable
 }
 
 void 
@@ -586,16 +630,17 @@ TrackParameterBox::showAdditionalControls(bool showThem)
 {
     m_separator2->setShown(showThem);
     m_segHeader->setShown(showThem);
-//    m_presetLbl->setShown(showThem);
-//    m_presetButton->setShown(showThem);
+    m_presetLbl->setShown(showThem);
+    m_presetButton->setShown(showThem);
     m_clefLbl->setShown(showThem);
     m_defClef->setShown(showThem);
     m_transpLbl->setShown(showThem);
     m_defTranspose->setShown(showThem);
     m_colorLbl->setShown(showThem);
     m_defColor->setShown(showThem);
-    m_highLbl->setShown(showThem);
-    m_lowLbl->setShown(showThem);
+    m_rangeLbl->setShown(showThem);
+    m_highButton->setShown(showThem);
+    m_lowButton->setShown(showThem);
 }
 
 
@@ -658,6 +703,7 @@ void
 TrackParameterBox::slotColorChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")" << endl;        
+
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
     trk->setColor(index);
@@ -684,4 +730,41 @@ TrackParameterBox::slotColorChanged(int index)
     }
 }
 
+void
+TrackParameterBox::slotHighestPressed()
+{
+    RG_DEBUG << "TrackParameterBox::slotHighestPressed()" << endl;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    if (!trk) return;
+
+    PitchPickerDialog dialog(0, m_highestPlayable, i18n("Highest playable note"));
+
+    if (dialog.exec() == QDialog::Accepted) {
+        m_highestPlayable = dialog.getPitch();
+	updateHighLow();
+
+	trk->setHighestPlayable(m_highestPlayable);
+    }
+}
+
+void
+TrackParameterBox::slotLowestPressed()
+{
+    RG_DEBUG << "TrackParameterBox::slotLowestPressed()" << endl;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    if (!trk) return;
+
+    PitchPickerDialog dialog(0, m_lowestPlayable, i18n("Lowest playable note"));
+
+    if (dialog.exec() == QDialog::Accepted) {
+        m_lowestPlayable = dialog.getPitch();
+	updateHighLow();
+
+	trk->setLowestPlayable(m_lowestPlayable);
+    }
+}
 #include "trackparameterbox.moc"

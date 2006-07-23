@@ -91,6 +91,8 @@ public:
 
     void setMarks(const std::vector<Rosegarden::Mark> &marks);
     void removeMarks();
+
+    void setInRange(bool inRange)         { m_inRange          = inRange;    }
     
     std::vector<Rosegarden::Mark> getNormalMarks() const;
     std::vector<Rosegarden::Mark> getAboveMarks() const; // bowings, pause etc
@@ -139,6 +141,8 @@ private:
 
     bool    m_tied;
     int     m_tieLength;
+
+    bool    m_inRange;
     
     std::vector<Rosegarden::Mark> m_marks;
 };    
@@ -331,7 +335,8 @@ protected:
 	PlainColour,
 	QuantizedColour,
 	HighlightedColour,
-	TriggerColour
+	TriggerColour,
+	OutRangeColour
     };
 
     /// draws selected/shaded status from m_selected/m_shaded:
