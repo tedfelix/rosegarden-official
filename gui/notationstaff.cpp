@@ -95,15 +95,19 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_barNumbersEvery(0),
     m_colourQuantize(true),
     m_showUnknowns(true),
+    m_showRanges(true),
     m_printPainter(0),
     m_ready(false)
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationView::ConfigGroup);
     m_colourQuantize = config->readBoolEntry("colourquantize", false);
-    // Shouldn't change this one during the lifetime of the staff, really:
+
+    // Shouldn't change these  during the lifetime of the staff, really:
     m_showUnknowns = config->readBoolEntry("showunknowns", false);
+    m_showRanges = config->readBoolEntry("showranges", true);
     m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
+
     changeFont(fontName, resolution);
 }
 
@@ -1484,6 +1488,18 @@ NotationStaff::renderNote(Rosegarden::ViewElementList::iterator &vli)
     bool trigger = false;
     if (elt->event()->has(TRIGGER_SEGMENT_ID)) trigger = true;
     params.setTrigger(trigger);
+
+    bool inRange = true;
+    Rosegarden::Pitch p(*elt->event()); 
+    Rosegarden::Segment *segment = &getSegment();
+    if (m_showRanges) {
+	int pitch = p.getPerformancePitch();
+	if (pitch > segment->getHighestPlayable() ||
+	    pitch < segment->getLowestPlayable()) {
+	    inRange = false;
+	}
+    }
+    params.setInRange(inRange);
 
     params.setNoteType(note);
     params.setDots(dots);

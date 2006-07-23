@@ -46,6 +46,7 @@
 #include "BaseProperties.h"     // "
 #include "Event.h"              // "
 #include "rosedebug.h"          // debug stream
+#include "dialogs.h"            // PitchPickerDialog
 
 
 #define COMPILE_DEPRECATED      // will compile the useless 1.0 features
@@ -603,7 +604,7 @@ EventFilterDialog::slotWheelToChanged(int value)
 void
 EventFilterDialog::slotPitchFromChooser()
 {
-    PitchPickerDialog dialog(this, m_pitchFromSpinBox->value(), true);
+    PitchPickerDialog dialog(this, m_pitchFromSpinBox->value(), i18n("Pitch from"));
 
     if (dialog.exec() == QDialog::Accepted)
     {
@@ -614,7 +615,7 @@ EventFilterDialog::slotPitchFromChooser()
 void
 EventFilterDialog::slotPitchToChooser()
 {
-    PitchPickerDialog dialog(this, m_pitchToSpinBox->value(), false);
+    PitchPickerDialog dialog(this, m_pitchToSpinBox->value(), i18n("Pitch to"));
 
     if (dialog.exec() == QDialog::Accepted)
     {
@@ -799,6 +800,8 @@ EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
     return false;
 }
 
+/*  MOVING TO DIALOGS.CPP
+ *
 // PitchPickerDialog
 //
 // Constructs a dialog to contain a RosegardenPitchChooser widget to feed back
@@ -822,7 +825,7 @@ PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, bool isF
 PitchPickerDialog::~PitchPickerDialog()
 {
     // Nothing here...
-}
+} */
 
 #include "eventfilter.moc"
 

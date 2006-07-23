@@ -114,6 +114,8 @@ public:
     static const int QuantizedNoteMinValue;
     static const int TriggerNoteHue;
     static const int TriggerNoteMinValue;
+    static const int OutRangeNoteHue;
+    static const int OutRangeNoteMinValue;
 
     static const char* const TextAnnotationBackground;
 

@@ -27,6 +27,7 @@
 #include <kcombobox.h>
 #include <kcolordialog.h>
 #include <klineeditdlg.h>
+#include <kconfig.h>
 
 #include "Segment.h"
 #include "Quantizer.h"
@@ -39,12 +40,16 @@
 #include "segmentparameterbox.h"
 #include "notationstrings.h"
 #include "rosegardenguiview.h"
+#include "dialogs.h"
+#include "constants.h"
 
 using Rosegarden::Note;
 
 SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
                                          QWidget *parent)
   : RosegardenParameterBox(i18n("Segment"), parent),
+      m_highestPlayable(127),
+      m_lowestPlayable(0),
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_doc(doc),
       m_transposeRange(24)
@@ -76,9 +81,9 @@ SegmentParameterBox::initBox()
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
 //    QFrame *frame = new QFrame(this);
-    QGridLayout *gridLayout = new QGridLayout(this, 6, 6, 4, 2);
+    QGridLayout *gridLayout = new QGridLayout(this, 8, 6, 4, 2);
 
-    QLabel *label = new QLabel(i18n("Label"), this);
+    QLabel *label	   = new QLabel(i18n("Label"), this);
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
     QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
@@ -87,6 +92,7 @@ SegmentParameterBox::initBox()
     m_autoFadeLabel        = new QLabel(i18n("Audio auto-fade"), this);
     m_fadeInLabel          = new QLabel(i18n("Fade in"), this);
     m_fadeOutLabel         = new QLabel(i18n("Fade out"), this);
+    QLabel *rangeLabel     = new QLabel(i18n("Range"), this);
 
     // Label ..
     m_label = new QLabel(this);
@@ -96,7 +102,7 @@ SegmentParameterBox::initBox()
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
-    m_labelButton = new QPushButton(i18n("Edit"), this);
+    m_labelButton = new QPushButton(i18n("edit"), this);
     m_labelButton->setFont(font);
 //    m_labelButton->setFixedWidth(50);
 
@@ -153,10 +159,34 @@ SegmentParameterBox::initBox()
     m_colourValue = new KComboBox(false, this);
     m_colourValue->setFont(font);
     m_colourValue->setFixedHeight(comboHeight);
+//    m_colourValue->setMaximumWidth(width);
 
     // handle colour combo changes
     connect(m_colourValue, SIGNAL(activated(int)),
             SLOT(slotColourSelected(int)));
+
+    // pre-set width of buttons so they don't grow later
+    int width = fontMetrics.width(i18n("used internally for spacing", "High: ----"));
+
+    // highest playable note
+    //
+    m_highButton = new QPushButton(i18n("High: ---"), this);
+    QToolTip::add(m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
+    m_highButton->setFont(font);
+    m_highButton->setMinimumWidth(width);
+
+    connect(m_highButton, SIGNAL(released()),
+            SLOT(slotHighestPressed()));
+
+    // lowest playable note
+    //
+    m_lowButton = new QPushButton(i18n("Low: ----"), this);
+    QToolTip::add(m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
+    m_lowButton->setFont(font);
+    m_lowButton->setMinimumWidth(width);
+
+    connect(m_lowButton, SIGNAL(released()),
+            SLOT(slotLowestPressed()));
 
     // Audio autofade enabled
     //
@@ -189,12 +219,13 @@ SegmentParameterBox::initBox()
     m_autoFadeLabel->setFont(font);
     m_fadeInLabel->setFont(font);
     m_fadeOutLabel->setFont(font);
+    rangeLabel->setFont(font);
 
     gridLayout->addRowSpacing(0, 12);
 
     gridLayout->addWidget(label, 1, 0, AlignRight);
     gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 4, AlignLeft);
-    gridLayout->addWidget(m_labelButton, 1, 5, AlignLeft);
+    gridLayout->addWidget(m_labelButton, 1, 4, AlignLeft);
 
     gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
@@ -210,6 +241,10 @@ SegmentParameterBox::initBox()
 
     gridLayout->addWidget(colourLabel, 4, 0, AlignRight);
     gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 5);
+
+    gridLayout->addWidget(rangeLabel, 5, 0, AlignRight);
+    gridLayout->addMultiCellWidget(m_lowButton, 5, 5, 1, 2);
+    gridLayout->addMultiCellWidget(m_highButton, 5, 5, 3, 4);
 
     m_autoFadeLabel->hide();
     m_autoFadeBox->hide();
@@ -400,7 +435,10 @@ SegmentParameterBox::populateBoxFromSegments()
     Tristate transposed = NotApplicable;
     Tristate delayed = NotApplicable;
     Tristate diffcolours = NotApplicable;
+    Tristate highlow = NotApplicable;
     unsigned int myCol = 0;
+    unsigned int myHigh = 127;
+    unsigned int myLow = 0;
 
     Rosegarden::timeT qntzLevel = 0;
     // At the moment we have no negative delay, so we use negative
@@ -421,6 +459,7 @@ SegmentParameterBox::populateBoxFromSegments()
 	if (transposed == NotApplicable) transposed = None;
 	if (delayed == NotApplicable) delayed = None;
 	if (diffcolours == NotApplicable) diffcolours = None;
+	if (highlow == NotApplicable) highlow = None;
 
         // Set label to "*" when multiple labels don't match
         //
@@ -533,6 +572,22 @@ SegmentParameterBox::populateBoxFromSegments()
             if (myCol != (*it)->getColourIndex());
                 diffcolours = All;
         }
+
+	// Highest/Lowest playable
+	//
+	if (it == m_segments.begin())
+	{
+	    myHigh = (*it)->getHighestPlayable();
+	    myLow = (*it)->getLowestPlayable();
+	}
+	else
+	{
+	    if (myHigh != (*it)->getHighestPlayable() ||
+		myLow  != (*it)->getLowestPlayable())
+	    {
+	        highlow = All;
+	    }
+	}
 
     }
 
@@ -660,6 +715,25 @@ SegmentParameterBox::populateBoxFromSegments()
     }
 
     m_colourValue->setEnabled(diffcolours != NotApplicable);
+
+    switch(highlow)
+    {
+        case All:
+	      updateHighLow();		
+            break;
+
+        case Some:
+	case None:
+	default:
+            m_highButton->setText(i18n("High: ---"));
+ 	    m_lowButton->setText(i18n("Low: ----"));
+	    highlow = NotApplicable;
+	    break;
+    }
+
+    m_highButton->setEnabled(highlow != NotApplicable);
+    m_lowButton->setEnabled(highlow != NotApplicable);
+
 
     // Enable or disable the fade in/out params
     if (m_segments.size() == 1 && 
@@ -919,6 +993,65 @@ SegmentParameterBox::slotColourSelected(int value)
     }
 
 
+}
+
+void
+SegmentParameterBox::updateHighLow()
+{
+    // Key of C major and NoAccidental means any "black key" notes will be
+    // written as sharps.
+    Rosegarden::Accidental accidental = Rosegarden::Accidentals::NoAccidental;
+    Rosegarden::Key key = Rosegarden::Key("C major");
+
+    Rosegarden::Pitch highest(m_highestPlayable, accidental);
+    Rosegarden::Pitch lowest(m_lowestPlayable, accidental);
+
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    int base = config->readNumEntry("midipitchoctave", -2);
+
+    m_highButton->setText(QString("&High:   %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
+    m_lowButton->setText(QString("&Low:   %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+}
+
+void
+SegmentParameterBox::slotHighestPressed()
+{
+    RG_DEBUG << "SegmentParameterBox::slotHighestPressed()" << endl;
+
+    PitchPickerDialog dialog(0, m_highestPlayable, i18n("Highest playable note"));
+    std::vector<Rosegarden::Segment*>::iterator it;
+
+    if (dialog.exec() == QDialog::Accepted) {
+        m_highestPlayable = dialog.getPitch();
+	updateHighLow();
+
+	for (it = m_segments.begin(); it != m_segments.end(); it++) {
+	    (*it)->setHighestPlayable(m_highestPlayable);
+	}
+
+	emit documentModified();
+    }
+}
+
+void
+SegmentParameterBox::slotLowestPressed()
+{
+    RG_DEBUG << "SegmentParameterBox::slotLowestPressed()" << endl;
+
+    PitchPickerDialog dialog(0, m_lowestPlayable, i18n("Lowest playable note"));
+    std::vector<Rosegarden::Segment*>::iterator it;
+
+    if (dialog.exec() == QDialog::Accepted) {
+        m_lowestPlayable = dialog.getPitch();
+	updateHighLow();
+
+	for (it = m_segments.begin(); it != m_segments.end(); it++) {
+	    (*it)->setLowestPlayable(m_lowestPlayable);
+	}
+
+	emit documentModified();
+    }
 }
 
 MultiViewCommandHistory*

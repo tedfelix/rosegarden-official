@@ -34,7 +34,7 @@
 #include "qcombobox.h"
 #include "qcheckbox.h"
 #include "kconfig.h"
-#include "widgets.h"
+#include "dialogs.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -223,7 +223,7 @@ protected slots:
 
 /*
  * Creates a small dialog box containing a RosegardenPitchChooser widget
- */
+ *
 class PitchPickerDialog : public KDialogBase
 {
     Q_OBJECT
@@ -238,6 +238,6 @@ public:
 private:
     RosegardenPitchChooser* m_pitch;
 };
-
+*/
 
 #endif // _eventfilter_H_

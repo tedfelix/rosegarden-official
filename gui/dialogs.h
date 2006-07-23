@@ -35,6 +35,7 @@
 #include "notepixmapfactory.h"
 #include "commondialogs.h" // HSpinBox
 #include "Composition.h" // tempoT
+#include "widgets.h" // RosegardenPitchChooser
 
 class QWidget;
 class QLineEdit;
@@ -1124,4 +1125,23 @@ protected:
 };
 
 
+/*
+ * Creates a small dialog box containing a RosegardenPitchChooser widget.  The
+ * info paramter provides extra information as a reminder what this particular
+ * picker is for, eg. Highest, Lowest, From, To
+ */
+class PitchPickerDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+
+    PitchPickerDialog(QWidget* parent, int initialPitch, QString info);
+    ~PitchPickerDialog();
+
+    int getPitch() { return m_pitch->getPitch(); }
+    
+private:
+    RosegardenPitchChooser* m_pitch;
+};
 #endif
