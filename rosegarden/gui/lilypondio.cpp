@@ -524,8 +524,31 @@ LilypondExporter::write()
 
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
 
+    // write user-specified paper type in \layout block
+    std::string paper = "papersize = \"";
+    switch (m_paperSize) {
+        case 0 : paper += "letter\""; break;
+        case 1 : paper += "a4\"";     break;
+        case 2 : paper += "legal\"";  break;
+        case 3 : paper = "";          break; // "do not specify"
+    }
+    
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();
+    if ((*i) == NULL) { 
+        str << indent(col) << "\\score {" << std::endl;
+    	str << indent(++col) << "% no segments found" << std::endl;
+	// bind staffs with or without staff group bracket
+	str << indent(col) // indent
+	    << (m_languageLevel == 0 ? "\\notes <<" : "<<") << " s4 " << ">>" << std::endl;
+	if (m_languageLevel == 0) {
+	    str << indent(col) << "\\paper { " << paper <<" }" << std::endl;
+	} else {
+	    str << indent(col) << "\\layout { " << paper <<" }" << std::endl;
+	}
+        str << indent(--col) << "}" << std::endl;
+	return true;
+    }    
     timeT compositionStartTime = (*i)->getStartTime();
     timeT compositionEndTime = (*i)->getEndMarkerTime();
     for (; i != m_composition->end(); ++i) {
@@ -886,14 +909,7 @@ LilypondExporter::write()
     // close \notes section
     str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-
 
-    // write user-specified paper type in \paper block
-    std::string paper = "papersize = \"";
-    switch (m_paperSize) {
-        case 0 : paper += "letter\""; break;
-        case 1 : paper += "a4\"";     break;
-        case 2 : paper += "legal\"";  break;
-        case 3 : paper = "";          break; // "do not specify"
-    }
+    // write user-specified paper type in \layout block
     if (m_languageLevel == 0) {
 	str << indent(col) << "\\paper { " << paper <<" }" << std::endl;
     } else {
