@@ -2769,6 +2769,10 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 
     // First, if we're in chord mode, there's no problem.
 
+    static int numberOfNotesOn = 0;
+    static timeT insertionTime = getInsertionTime();
+    static time_t lastInsertionTime = 0;
+    
     if (isInChordMode()) {
 	if (!noteOn) return;
 	NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
@@ -2778,8 +2782,9 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 
     } else {
 
-	if (noteOn) {
-
+	if (!noteOn) {
+	    numberOfNotesOn--;
+	} else if (noteOn) {
 	    // Rules:
 	    //
 	    // * If no other note event has turned up within half a
@@ -2793,9 +2798,30 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 	    //   we need to wait for the note-off events: if the second
 	    //   note happened less than half way through the first,
 	    //   it's a chord.
+	    //
+	    // hjj: (FIXME:)
+	    // * The timer really should not be here, since note painting 
+	    //   of pending notes is veery slow with my laptop's processor. 
+	    //   Therefore, I have set the time difference between 
+	    //   overlapping notes initially to 0.0 s.
+	    //   Set this to a larger value (0.5 s or 10.0 s) in order to 
+	    //   insert chords for overlapping notes in the step-by-step mode. 
+	    //   There should probably be an option for this new mode.
+
+	    time_t now;
+	    time (&now);
+	    double elapsed = difftime(now,lastInsertionTime);
+	    time (&lastInsertionTime);
+
+	    if (numberOfNotesOn <= 0 || elapsed >= 0.0) {
+		numberOfNotesOn = 0;
+		insertionTime = getInsertionTime();
+	    } 
+	    numberOfNotesOn++;
 
 	    // We haven't implemented these yet... For now:
-	    noteInserter->insertNote(segment, getInsertionTime(), pitch,
+	    // noteInserter->insertNote(segment, getInsertionTime(), pitch,
+	    noteInserter->insertNote(segment, insertionTime, pitch,
 				     Rosegarden::Accidentals::NoAccidental,
 				     true);
 	}
