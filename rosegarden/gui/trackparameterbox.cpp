@@ -216,8 +216,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_transpLbl = new QLabel(i18n("Transpose"), this);
     mainLayout->addMultiCellWidget(m_transpLbl, row, row, 0, 1, AlignLeft);
     m_defTranspose = new QSpinBox(this);
-    m_defTranspose->setMinValue(-24);
-    m_defTranspose->setMaxValue(24);
+    m_defTranspose->setMinValue(-48);
+    m_defTranspose->setMaxValue(48);
     m_defTranspose->setValue(0);
     m_defTranspose->setButtonSymbols(QSpinBox::PlusMinus);
     mainLayout->addMultiCellWidget(m_defTranspose, row, row, 2, 5, AlignRight);
