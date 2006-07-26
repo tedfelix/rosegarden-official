@@ -80,6 +80,12 @@ NotationView::slotUpdateInsertModeStatus()
         } else {
             message = i18n(" Chord");
         }
+    } else if (isInChordOverlappingMode()) {
+        if (isInTripletMode()) {
+            message = i18n(" Triplet Chord Overlapping notes");
+        } else {
+            message = i18n(" Chord Overlapping notes");
+        }
     } else {
         if (isInTripletMode()) {
             message = i18n(" Triplet");
@@ -2799,31 +2805,36 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 	    //   note happened less than half way through the first,
 	    //   it's a chord.
 	    //
-	    // hjj: (FIXME:)
-	    // * The timer really should not be here, since note painting 
-	    //   of pending notes is veery slow with my laptop's processor. 
-	    //   Therefore, I have set the time difference between 
-	    //   overlapping notes initially to 0.0 s.
-	    //   Set this to a larger value (0.5 s or 10.0 s) in order to 
-	    //   insert chords for overlapping notes in the step-by-step mode. 
-	    //   There should probably be an option for this new mode.
+	    // We haven't implemented these yet... For now:
+	    //
+	    // hjj:
+	    //
+	    // * If chord_overlapping is toggled, overlapping notes
+	    //   are included in to the chord.
+	    //
+	    // * The timer resets the numberOfNotesOn, if noteOff signals were
+	    //   drop out for some reason (which has not been encountered yet). 
 
 	    time_t now;
 	    time (&now);
 	    double elapsed = difftime(now,lastInsertionTime);
 	    time (&lastInsertionTime);
 
-	    if (numberOfNotesOn <= 0 || elapsed >= 0.0) {
+	    if (numberOfNotesOn <= 0 && 
+                ~isInChordOverlappingMode() && elapsed < 10.0 ) {
 		numberOfNotesOn = 0;
 		insertionTime = getInsertionTime();
 	    } 
 	    numberOfNotesOn++;
 
-	    // We haven't implemented these yet... For now:
-	    // noteInserter->insertNote(segment, getInsertionTime(), pitch,
+	    // if ( isInChordOverlappingMode() )
 	    noteInserter->insertNote(segment, insertionTime, pitch,
 				     Rosegarden::Accidentals::NoAccidental,
 				     true);
+	    // else 
+	    // noteInserter->insertNote(segment, getInsertionTime(), pitch,
+			//	     Rosegarden::Accidentals::NoAccidental,
+			//	     true);
 	}
     }
 }
