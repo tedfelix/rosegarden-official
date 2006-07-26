@@ -52,7 +52,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
       m_lowestPlayable(0),
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
       m_doc(doc),
-      m_transposeRange(24)
+      m_transposeRange(48)
 {
     initBox();
 
