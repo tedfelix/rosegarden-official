@@ -1573,8 +1573,8 @@ void NotationView::setupActions()
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord"))); // FIXME: change icon
-    (new KToggleAction(i18n("Chord o&verlapping"), icon, Key_H + CTRL,
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord-overlapping")));
+    (new KToggleAction(i18n("Chord O&verlapping Notes"), icon, Key_H + CTRL,
 		       this, SLOT(slotUpdateInsertModeStatus()),
 		      actionCollection(), "chord_overlapping"))->
 	setChecked(false);
