@@ -82,9 +82,9 @@ NotationView::slotUpdateInsertModeStatus()
         }
     } else if (isInChordOverlappingMode()) {
         if (isInTripletMode()) {
-            message = i18n(" Triplet Chord Overlapping notes");
+            message = i18n(" Triplet Chord Overlapping Notes");
         } else {
-            message = i18n(" Chord Overlapping notes");
+            message = i18n(" Chord Overlapping Notes");
         }
     } else {
         if (isInTripletMode()) {
