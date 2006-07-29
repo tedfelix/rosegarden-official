@@ -553,7 +553,7 @@ void EditViewBase::setCompositionModified(bool c)
 	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
-bool EditViewBase::getSegmentsOnlyRests()
+bool EditViewBase::getSegmentsOnlyRestsAndClefs()
 {
     using Rosegarden::Segment;
 
@@ -564,7 +564,8 @@ bool EditViewBase::getSegmentsOnlyRests()
         for (Segment::iterator iter = segment->begin();
              iter != segment->end(); ++iter) {
 
-            if ((*iter)->getType() != Rosegarden::Note::EventRestType)
+            if (((*iter)->getType() != Rosegarden::Note::EventRestType)
+                 && ((*iter)->getType() != Rosegarden::Clef::EventType))
                 return false;
         }
         

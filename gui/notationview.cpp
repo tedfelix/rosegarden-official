@@ -502,7 +502,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     stateChanged("rest_insert_tool_current", KXMLGUIClient::StateReverse);
     slotTestClipboard();
 
-    if (getSegmentsOnlyRests()) {
+    if (getSegmentsOnlyRestsAndClefs()) {
         m_selectDefaultNote->activate();
 	stateChanged("note_insert_tool_current", 
 		     KXMLGUIClient::StateNoReverse);

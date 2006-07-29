@@ -829,7 +829,7 @@ void MatrixView::setupActions()
 
     createGUI(getRCFileName(), false);
 
-    if (getSegmentsOnlyRests())
+    if (getSegmentsOnlyRestsAndClefs())
         actionCollection()->action("draw")->activate();
     else
         actionCollection()->action("select")->activate();
