@@ -50,3 +50,5 @@ mirror
 update_i18n_messages - update the translation source files
 
 preset-xmlify - convert the preset.conf human editable text file to XML
+
+dehumanize - convert F#3 and such to MIDI pitches by crude brute force

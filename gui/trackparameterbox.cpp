@@ -48,6 +48,7 @@
 #include "colourwidgets.h"
 #include "NotationTypes.h"
 #include "dialogs.h"
+#include "presethandler.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -184,9 +185,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_psetLbl = new QLabel(i18n("Preset"), this);
     mainLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
-    //int longestPresetName = metrics.width("Electronic organ (manual) (treble)");
+    //TODO: load the label bit from parameters once they exist
     m_presetLbl = new KSqueezedTextLabel(i18n("Electronic organ (manual) (treble)"), this);
-    //m_presetLbl->setMinimumWidth(longestPresetName);
     QToolTip::add( m_presetLbl, i18n("Electronic organ (manual) (treble)") );
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     mainLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
@@ -194,8 +194,6 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_presetButton = new QPushButton(i18n("Load"), this);
     mainLayout->addMultiCellWidget(m_presetButton, row, row, 5, 5, AlignRight);
 
-//    m_presetButton->hide();
-//    m_presetLbl->hide();
     
     // default clef
     //
@@ -208,6 +206,14 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_defClef->insertItem(i18n("bass"));
     m_defClef->insertItem(i18n("alto"));
     m_defClef->insertItem(i18n("tenor"));
+    m_defClef->insertItem(i18n("guitar"));
+    m_defClef->insertItem(i18n("xylophone"));
+    m_defClef->insertItem(i18n("celesta"));
+    m_defClef->insertItem(i18n("old celesta"));
+/*  clef types in the datbase that are not yet supported must be ignored for
+ *  now:
+    m_defClef->insertItem(i18n("soprano"));
+    m_defClef->insertItem(i18n("two bar")); */
     mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 5, AlignRight);
 
     // default transpose
@@ -289,6 +295,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     connect(m_lowButton, SIGNAL(released()),
             SLOT(slotLowestPressed())); 
+
+    connect(m_presetButton, SIGNAL(released()),
+	    SLOT(slotPresetPressed()));
 }
 
 TrackParameterBox::~TrackParameterBox() {}
@@ -774,4 +783,14 @@ TrackParameterBox::slotLowestPressed()
 	trk->setLowestPlayable(m_lowestPlayable);
     }
 }
+
+void
+TrackParameterBox::slotPresetPressed()
+{
+    RG_DEBUG << "TrackParameterBox::slotPresetPressed()" << endl;
+//    RosegardenPresetDialog dialog = new RosegardenPresetDialog(this);
+//    dialog.exec()
+//    handle results (see the callers of eventfilterdialog for examples)
+}
+
 #include "trackparameterbox.moc"

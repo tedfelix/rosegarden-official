@@ -35,6 +35,7 @@
 #include "compositionitemhelper.h"
 #include "colours.h"
 #include "rosegardencanvasview.h"
+#include "clefindex.h"
 
 #include "rosegardengui.h"
 #include "rosedebug.h"
@@ -307,21 +308,24 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 	// reason, so all of this only matters for old tracks created before
 	// there were track properties)
 	switch (track->getClef()) {
-	    //!!! clef is based on combo box index, which somebody should probably rework
-	    // down the line, to make it more obvious that 0 == treble and so
-	    // on, but I'm not bothering with that right now
-	    case 0: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
+	    case TrebleClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
 		                  (segment->getStartTime()));
-		    break;
+    	 	   	   break;
 
-	    case 1: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
+	    case BassClef: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
 		                  (segment->getStartTime()));
-		    break;
-	    case 2: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
+		           break;
+	    case AltoClef: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
 		                  (segment->getStartTime()));
-		    break;
-	    case 3: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
+		           break;
+	    case TenorClef:
+		           segment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
 		                  (segment->getStartTime()));
+			   break;
+	    case GuitarClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, -12).getAsEvent
+				   (segment->getStartTime())); 
         }
 
 	segment->setTranspose(track->getTranspose());

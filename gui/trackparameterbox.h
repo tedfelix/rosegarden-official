@@ -64,6 +64,7 @@ public slots:
     void slotColorChanged(int index);
     void slotHighestPressed();
     void slotLowestPressed();
+    void slotPresetPressed();
 
 signals:
     void instrumentSelected(Rosegarden::TrackId, int);

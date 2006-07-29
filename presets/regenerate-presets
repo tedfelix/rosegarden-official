@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# regenerate-presets
+#
+# Copyright (c) 2006  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: ../scripts/preset-xmlify ../scripts/dehumanize
+#
+#
+# PURPOSE: to run the above scripts without a lot of bothersome typing
+#
+#
+#
+
+rm -f presets.xml
+
+../scripts/preset-xmlify < presets-editable.conf > presets.xml&& \
+../scripts/dehumanize presets.xml|| \
+echo "Something went wrong.  presets.xml is probably mangled."
+
+chmod -w presets.xml
+echo presets.xml updated successfully

@@ -1,0 +1,5 @@
+This directory contains the source for the instrument definition presets.  I
+am maintaining it in plain text "conf file" format for ease of editing.  If
+you make changes to the file, you must generate a new presets.xml by running
+
+./regenerate-presets
