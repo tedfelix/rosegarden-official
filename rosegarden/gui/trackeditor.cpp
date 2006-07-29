@@ -179,10 +179,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     grid->addWidget(m_segmentCanvas, 3, 1);
 
-    //!!! THE FOLLOWING LINE STILL CAUSES AN IRRITATING GREY BAR FOR SILVAN!
-    // (who finally DID commit this file with this stupid line commented out
-    //  enough is enough already with the grey bar!)
-//    grid->setColStretch(1, 10);
+    grid->setColStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
+    // loading a file which has a low zoom factor
   
     // Track Buttons
     //
@@ -203,7 +201,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_trackButtonScroll->addChild(m_trackButtons);
     m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
     m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
-    m_trackButtonScroll->setMinimumWidth(m_trackButtonScroll->contentsWidth());
+    m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
     m_trackButtonScroll->setBottomMargin(m_bottomBarButtons->height() +
                                          m_segmentCanvas->horizontalScrollBar()->height());
 
