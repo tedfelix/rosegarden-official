@@ -2659,6 +2659,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
             QBrush b = p->brush();
             b.setColor(fillColor);
             p->setBrush(b);
+//            RG_DEBUG << "CompositionView::drawRect : selected color : " << fillColor << endl;
         }
     
         if (intersectLvl > 0) {
@@ -2667,6 +2668,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
             QBrush b = p->brush();
             b.setColor(fillColor);
             p->setBrush(b);
+//            RG_DEBUG << "CompositionView::drawRect : intersected color : " << fillColor << " isSelected : " << isSelected << endl;
         }
     } else {
         p->setBrush(Qt::NoBrush);
@@ -2749,6 +2751,7 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
                                                                          intersections.end(), ri);
                 if (t == intersections.end()) {
                     ri.setBrush(mixBrushes(testRect.getBrush(), i->getBrush()));
+                    ri.setSelected(testRect.isSelected() || i->isSelected());
                     intersections.push_back(ri);
                 }
                 
