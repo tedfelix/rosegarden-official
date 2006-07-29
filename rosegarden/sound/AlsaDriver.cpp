@@ -1826,6 +1826,41 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     if (getMTCStatus() == TRANSPORT_MASTER) {
 	insertMTCFullFrame(position);
     }
+    
+    // If MIDI Sync is enabled then adjust for the MIDI Clock to 
+    // synchronise the sequencer with the clock.
+    //
+    if (getMIDISyncStatus() == TRANSPORT_MASTER) {
+        // Send the Song Position Pointer for MIDI CLOCK positioning
+        //
+        // Get time from current alsa time to start of alsa timing -
+        // add the initial starting point and divide by the MIDI Beat
+        // length.  The SPP is is the MIDI Beat upon which to start the song. 
+        // Songs are always assumed to start on a MIDI Beat of 0. Each MIDI 
+        // Beat spans 6 MIDI Clocks. In other words, each MIDI Beat is a 16th 
+        // note (since there are 24 MIDI Clocks in a quarter note).
+        //
+        long spp =
+          long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
+                 m_midiClockInterval) / 6.0 );
+
+        // Ok now we have the new SPP - stop the transport and restart with the
+        // new value.
+        //
+        sendSystemDirect(SND_SEQ_EVENT_STOP, NULL);
+
+        signed int args = spp;
+        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, &args);
+
+        // Now send the START/CONTINUE
+        //
+        if (m_playStartPosition == RealTime::zeroTime)
+            sendSystemQueued(SND_SEQ_EVENT_START, "",
+                             m_alsaPlayStartTime);
+        else
+            sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
+                             m_alsaPlayStartTime);
+    }
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
@@ -1841,6 +1876,10 @@ AlsaDriver::stopPlayback()
 #ifdef DEBUG_ALSA
     std::cerr << "\n\nAlsaDriver - stopPlayback" << std::endl;
 #endif
+
+    if (getMIDISyncStatus() == TRANSPORT_MASTER) {
+        sendSystemDirect(SND_SEQ_EVENT_STOP, NULL);
+    }
 
     if (getMMCStatus() == TRANSPORT_MASTER)
     {
@@ -1866,10 +1905,6 @@ AlsaDriver::stopPlayback()
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_INPUT|
                                               SND_SEQ_REMOVE_OUTPUT);
     snd_seq_remove_events(m_midiHandle, info);
-
-    // Send system stop to duplex MIDI devices
-    //
-    if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_STOP, "");
 
     // send sounds-off to all play devices
     //
@@ -3651,63 +3686,6 @@ AlsaDriver::startClocks()
     }
 #endif
 
-    // If the clock is enabled then adjust for the MIDI Clock to 
-    // synchronise the sequencer with the clock.
-    //
-    if (m_midiClockEnabled)
-    {
-        // Send the Song Position Pointer for MIDI CLOCK positioning
-        //
-        // Deconstruct the spp into two midi bytes which we still
-        // reconstruct this side of ALSA - yes, I know it's a bit
-        // of a waste of time but with no or little ALSA seq documentation
-        // and this being the manner of constructing the SPP MIDI
-        // message it _feels_ right.  The sendSystemDirect reconstruction
-        // was worked out by guesswork.
-
-        // Get time from current alsa time to start of alsa timing -
-        // add the initial starting point and divide by the total
-        // single clock length.  Divide this result by 6 for the SPP
-        // position.
-        //
-        long spp =
-          long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
-                     m_midiClockInterval) / 6.0);
-
-        MidiByte lsb = spp & 0x7f;
-        MidiByte msb = (spp >> 7) & 0x7f;
-        std::string args;
-        args += lsb;
-        args += msb;
-
-        // Ok now we have the new SPP - stop the transport and restart with the
-        // new value.
-        //
-        sendSystemDirect(SND_SEQ_EVENT_STOP, "");
-
-        sendSystemDirect(SND_SEQ_EVENT_SONGPOS, args);
-
-        /*
-        std::cout << "AlsaDriver::startClocks - "
-                  << " sending song position pointer = " 
-                  << getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition
-                  << "s, spp  = "
-                  << spp 
-                  << ", msb = " << int(msb)
-                  << ", lsb = " << int(lsb)
-                  << std::endl;
-        */
-
-        // Now send the START/CONTINUE
-        //
-        if (m_playStartPosition == RealTime::zeroTime)
-            sendSystemQueued(SND_SEQ_EVENT_START, "",
-                             m_alsaPlayStartTime);
-        else
-            sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
-                             m_alsaPlayStartTime);
-    }
-
     // process pending MIDI events
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocks(): draining");
 }
@@ -4948,7 +4926,7 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 // Send a system real-time message from the sync output port
 //
 void
-AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
+AlsaDriver::sendSystemDirect(MidiByte command, int *args)
 {
     snd_seq_event_t event;
 
@@ -4962,25 +4940,10 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
     event.type = command;
 
     // set args if we have them
-    switch(args.length())
-    {
-    case 0:
-	break;
-	
-    case 1:
-	event.data.control.value = args[0];
-	break;
-	
-    case 2:
-	event.data.control.value = int(args[0]) | (int(args[1]) << 7);
-	break;
-	
-    default: // do nothing
-	std::cerr << "AlsaDriver::sendSystemDirect - "
-		  << "too many argument bytes" << std::endl;
-	break;
+    if (args) {
+	event.data.control.value = *args;
     }
-
+    
     int error = snd_seq_event_output_direct(m_midiHandle, &event);
 
     if (error < 0)
