@@ -20,6 +20,10 @@ while (<>) {
     $value =~ s/^"(.*)"\s*$/$1/;
     $ininstrument = 1;
     print "  <instrument name=\"$value\">\n";
+  } elsif ($key eq 'clef') {
+    print "    <clef type=\"$value\" />\n";
+  } elsif ($key eq 'transposition') {
+    print "    <transpose value=\"$value\" />\n";
   } elsif ($key eq 'lowest A') {
     print "    <range class=\"amateur\" low=\"$value\" ";
   } elsif ($key eq 'lowest P') {
@@ -27,7 +31,7 @@ while (<>) {
   } elsif ($key eq 'highest A' or $key eq 'highest P') {
     print "high=\"$value\"/>\n";
   } else {
-    print "    <$key>$value</$key>\n";
+#    print "    <$key>$value</$key>\n";
   }
 }
 $ininstrument and print "  </instrument>\n";

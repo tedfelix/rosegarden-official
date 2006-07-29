@@ -94,6 +94,7 @@ pianokeyboard.cpp
 pitchruler.cpp
 pixmapfunctions.cpp 
 playlist.cpp
+presethandler.cpp
 progressreporter.cpp
 qcanvasgroupableitem.cpp 
 qcanvassimplesprite.cpp 
