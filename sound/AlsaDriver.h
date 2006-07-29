@@ -315,8 +315,7 @@ public:
 
     // Send a System message straight away
     //
-    void sendSystemDirect(MidiByte command,
-                          const std::string &args);
+    void sendSystemDirect(MidiByte command, int *arg);
 
     // Scheduled system message with arguments
     //
