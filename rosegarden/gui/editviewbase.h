@@ -321,9 +321,9 @@ protected:
 
     /**
      * Returns true if all of the segments contain
-     * only rests
+     * only rests and clefs events
      */
-    bool getSegmentsOnlyRests();
+    bool getSegmentsOnlyRestsAndClefs();
 
     /// Convenience function around actionCollection()->action()
     KToggleAction* getToggleAction(const QString& actionName);
