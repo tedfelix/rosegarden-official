@@ -648,7 +648,7 @@ Fingering::getAsEvent ( Rosegarden::timeT absoluteTime )
 {
     // Add Fretboard information to the event
     Rosegarden::Event * e_ptr =
-        new Rosegarden::Event ( Fingering::EventType, absoluteTime, EventSubOrdering );
+        new Rosegarden::Event ( Fingering::EventType, absoluteTime, 0, EventSubOrdering );
 
     // - Save guitar
     e_ptr->set<Rosegarden::UInt>( Rosegarden::PropertyName( "GUITAR_MAXFRETS" ),
