@@ -92,6 +92,8 @@
 
 #include "rosedebug.h"
 
+#include <sys/time.h>
+
 using Rosegarden::Segment;
 using Rosegarden::EventSelection;
 using Rosegarden::timeT;
@@ -593,6 +595,12 @@ void MatrixView::setupActions()
 		       actionCollection(), "chord_mode"))->
 	setChecked(false);
 
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord-overlapping")));
+    (new KToggleAction(i18n("Chord O&verlapping Notes"), icon, Key_H + CTRL,
+		       this, SLOT(slotUpdateInsertModeStatus()),
+		      actionCollection(), "chord_overlapping"))->
+	setChecked(false);
+
     pixmap.load(pixmapDir + "/toolbar/step_by_step.xpm");
     icon = QIconSet(pixmap);
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
@@ -839,6 +847,13 @@ bool
 MatrixView::isInChordMode()
 {
     return ((KToggleAction *)actionCollection()->action("chord_mode"))->
+	isChecked();
+}
+
+bool
+MatrixView::isInChordOverlappingMode()
+{
+    return ((KToggleAction *)actionCollection()->action("chord_overlapping"))->
 	isChecked();
 }
 
@@ -2666,7 +2681,18 @@ void MatrixView::extendKeyMapping()
 void
 MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
-    if (!noteOn) return;
+    // hjj:
+    // Chord Overlapping Notes mode is implemented equivalently in
+    // notationviewslots.cpp:
+    //  - proceed if notes do not overlap
+    //  - make the chord if notes do overlap, and do not proceed
+
+    static int numberOfNotesOn = 0;
+    static time_t lastInsertionTime = 0;
+    if (!noteOn) {
+	numberOfNotesOn--;
+	return;
+    }
 
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
@@ -2699,14 +2725,25 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     Rosegarden::Event modelEvent(Rosegarden::Note::EventType, 0, 1);
     modelEvent.set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
-    Rosegarden::timeT time(getInsertionTime());
-    if (time >= segment.getEndMarkerTime()) {
+    static Rosegarden::timeT insertionTime(getInsertionTime());
+    if (insertionTime >= segment.getEndMarkerTime()) {
 	MATRIX_DEBUG << "WARNING: off end of segment" << endl;
 	return;
     }
-    Rosegarden::timeT endTime(time + m_snapGrid->getSnapTime(time));
+    time_t now;
+    time (&now);
+    double elapsed = difftime(now,lastInsertionTime);
+    time (&lastInsertionTime);
 
-    if (endTime <= time) {
+    if (numberOfNotesOn <= 0 || 
+        !isInChordOverlappingMode() || elapsed > 10.0 ) {
+      numberOfNotesOn = 0;
+      insertionTime = getInsertionTime();
+    }
+    numberOfNotesOn++;
+    Rosegarden::timeT endTime(insertionTime + m_snapGrid->getSnapTime(insertionTime));
+
+    if (endTime <= insertionTime) {
 	static bool showingError = false;
 	if (showingError) return;
 	showingError = true;
@@ -2716,7 +2753,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     }
 
     MatrixInsertionCommand* command = 
-	new MatrixInsertionCommand(segment, time, endTime, &modelEvent);
+	new MatrixInsertionCommand(segment, insertionTime, endTime, &modelEvent);
 
     addCommandToHistory(command);
     
@@ -2761,6 +2798,8 @@ MatrixView::slotUpdateInsertModeStatus()
     QString message;
     if (isInChordMode()) {
 	message = i18n(" Chord");
+    } else if (isInChordOverlappingMode()) {
+	message = i18n(" Chord Overlapping Notes");
     } else {
 	message = "";
     }
