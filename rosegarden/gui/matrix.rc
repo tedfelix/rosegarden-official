@@ -142,6 +142,7 @@
   <Separator/>
   <Action name="insert_note_actionmenu"/>
   <Action name="chord_mode"/>
+  <Action name="chord_overlapping"/>
 
   <Separator/>
   <Action name="toggle_step_by_step"/>

@@ -2820,8 +2820,8 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 	    double elapsed = difftime(now,lastInsertionTime);
 	    time (&lastInsertionTime);
 
-	    if (numberOfNotesOn <= 0 && 
-                ~isInChordOverlappingMode() && elapsed < 10.0 ) {
+	    if (numberOfNotesOn <= 0 || 
+                !isInChordOverlappingMode() || elapsed > 10.0 ) {
 		numberOfNotesOn = 0;
 		insertionTime = getInsertionTime();
 	    } 
