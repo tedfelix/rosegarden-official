@@ -36,6 +36,7 @@
 #include "Profiler.h"
 #include "Composition.h"
 #include "SegmentNotationHelper.h"
+#include "guitar/fingering.h"
 
 #include <cmath> // for fabs()
 #include <set>
@@ -1461,6 +1462,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 		el->setLayoutX(ix + displacedX);
 		el->setLayoutAirspace(ix, delta - (ix - x));
+
+            } else if (el->event()->isa(Guitar::Fingering::EventType)) {
+
+                int fretboardWidth = m_npf->getLineSpacing() * 6;
+                el->setLayoutX(x - (fretboardWidth / 2));
 
 	    } else {    
 
