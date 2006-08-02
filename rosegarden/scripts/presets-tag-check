@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# presets-tag-check
+#
+# Copyright (c) 2006  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: 
+#
+#
+# PURPOSE: to make sure the A and P tags all match up after correcting dozens
+# of errors
+#
+#
+#
+
+for f in "A highest" "A lowest" "P highest" "P lowest";do
+    printf "$f:\t" 
+    grep -c "$f" presets-editable.conf
+done  
+
+exit 0

@@ -26,11 +26,9 @@
 #ifndef _PRESET_HANDLER_H_
 #define _PRESET_HANDLER_H_
 
-#include <string>
 #include <vector>
 
 #include <qstring.h>
-#include <qlayout.h>
 #include <qxml.h>
 
 #include "Exception.h"
@@ -40,6 +38,22 @@
 #include <kconfig.h>
 
 #include "clefindex.h"
+
+class QWidget;
+class QVBox;
+class QVBoxLayout;
+class QLabel;
+class QVBox;
+class QGridLayout;
+class QLabel;
+class QFrame;
+class KComboBox;
+
+class CategoryElement;
+class PresetElement;
+
+typedef std::vector<CategoryElement> CategoriesContainer;
+typedef std::vector<PresetElement> ElementContainer;
 
 /*
  * A container class for storing a set of data describing a real world
@@ -99,12 +113,12 @@ public:
 
     QString getName() { return m_name; }
 
-    // returns a pointer to the PresetElement at index
-    PresetElement* getPresetByIndex(int index);
+    ElementContainer getPresets() { return m_categoryPresets; }
+    PresetElement getPresetByIndex(int index) { return m_categoryPresets [index]; }
 
 private:
     QString m_name;
-    std::vector<PresetElement> m_presets;
+    ElementContainer m_categoryPresets;
 }; // CategoryElement
 
 
@@ -115,27 +129,29 @@ private:
 class PresetGroup : public QXmlDefaultHandler
 {
 public:
-    typedef Rosegarden::Exception MappingFileReadFailed;
+    typedef Rosegarden::Exception PresetFileReadFailed;
 
     PresetGroup(); // load and parse the XML mapping file
     ~PresetGroup();
+
+    CategoriesContainer  getCategories() { return m_categories; }
+    //CategoryElement getCategoryByIndex(int index) { return m_categories [index]; }
 
     // Xml handler methods:
 
     virtual bool startElement (const QString& namespaceURI, const QString& localName,
                                const QString& qName, const QXmlAttributes& atts);
 
-//    virtual bool characters(QString &);
-
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
 
-//    void dump() const;
+    // I don't think I have anything to do with this, but it must return true?
+//    bool characters(const QString &) { return true; }
 
 private:
 
     //--------------- Data members ---------------------------------
-    std::vector<CategoryElement> m_categories;
+    CategoriesContainer m_categories;
 
     // For use when reading the XML file:
     QString m_errorString;
@@ -163,16 +179,6 @@ private:
 
 }; // PresetGroup
 
-/*
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QCheckBox;
-class QComboBox;
-class QLabel;
-class QPushButton;
-class QSpinBox; */
-
 class PresetHandlerDialog : public KDialogBase
 {
     Q_OBJECT
@@ -181,6 +187,9 @@ public:
 
     PresetHandlerDialog(QWidget* parent);
     ~PresetHandlerDialog();
+
+    PresetGroup *m_presets;
+    CategoriesContainer m_categories;
 
     KConfig *cfg;
 
@@ -208,8 +217,6 @@ protected:
 
     static const char * const ConfigGroup;
     
-    QGridLayout* layout;
-
     KComboBox	*m_categoryCombo;
     KComboBox	*m_instrumentCombo;
     KComboBox	*m_playerCombo;

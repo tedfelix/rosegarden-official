@@ -170,6 +170,9 @@ if 'install' in COMMAND_LINE_TARGETS:
 	#for s in glob.glob("gui/styles/*.xml"):
 	env.KDEinstall('KDEDATA','/rosegarden/styles', glob.glob("gui/styles/*.xml"))
 
+	# presets
+	env.KDEinstall('KDEDATA','/rosegarden/presets', glob.glob("presets/*.xml"))
+
 	# fonts
 	#for s in glob.glob("gui/fonts/*.pfa"):
 	env.KDEinstall('KDEDATA','/rosegarden/fonts', glob.glob("gui/fonts/*.pfa"))

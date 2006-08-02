@@ -25,7 +25,7 @@
 
 // used variously by TPB, SPB, PresetHandler to correlate combo box indices to
 // clef types
-enum { TrebleClef, BassClef, AltoClef, TenorClef, GuitarClef, XylophoneClef,
+enum { TrebleClef, BassClef, AltoClef, TenorClef, GuitarClef, XylophoneClef, ContrabassClef, 
        CelestaClef, OldCelestaClef, SopranoClef, TwoBarClef };
 
 #endif // _CLEF_INDEX_H_

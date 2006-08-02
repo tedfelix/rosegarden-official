@@ -298,15 +298,6 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 	// add a clef to the start of the segment (tracks initialize to a
 	// default of 0 for this property, so treble will be the default if it
 	// is not specified elsewhere)
-	//
-	//!!! this means it is no longer possible to create a segment that
-	// doesn't have a clef of some sort.  Is this bad?  I think a segment
-	// with no explicit clef that is displaying with a de facto unwritten
-	// treble clef is misleading anyway, so I'm not taking steps to
-	// continue to draw new segments with no clef if there is no track
-	// property (there is no "no clef" track property either, for the same
-	// reason, so all of this only matters for old tracks created before
-	// there were track properties)
 	switch (track->getClef()) {
 	    case TrebleClef:
 			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
@@ -324,7 +315,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 		                  (segment->getStartTime()));
 			   break;
 	    case GuitarClef:
-			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, -12).getAsEvent
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, -16).getAsEvent
 				   (segment->getStartTime())); 
         }
 
