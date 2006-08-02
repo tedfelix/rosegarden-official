@@ -111,7 +111,7 @@ private:
 
     int getYForTempo(Rosegarden::tempoT tempo);
     Rosegarden::tempoT getTempoForY(int y);
-    void showTextFloat(Rosegarden::tempoT tempo);
+    void showTextFloat(Rosegarden::tempoT tempo, Rosegarden::timeT time = -1);
 
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;
