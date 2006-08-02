@@ -222,14 +222,13 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	    }
 	}
 
-	showTextFloat(newTempo);
+	showTextFloat(newTempo, m_dragStartTime);
 	m_composition->addTempoAtTime(m_dragStartTime, newTempo, newTarget);
 	update();
 
     } else {
 	
 	int x = e->x() + 1;
-	int y = e->y();
 	timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
 	int tcn = m_composition->getTempoChangeNumberAt(t);
 
@@ -245,7 +244,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	m_illuminate = tcn;
 	m_refreshLinesOnly = true;
 
-	showTextFloat(tc.second);
+	showTextFloat(tc.second, tc.first);
 
 	update();
     }
@@ -275,14 +274,41 @@ TempoRuler::leaveEvent(QEvent *)
 }    
 
 void
-TempoRuler::showTextFloat(tempoT tempo)
+TempoRuler::showTextFloat(tempoT tempo, timeT time)
 {
     float qpm = m_composition->getTempoQpm(tempo);
     int qi = int(qpm + 0.0001);
     int q0 = int(qpm * 10 + 0.0001) % 10;
     int q00 = int(qpm * 100 + 0.0001) % 10;
 
-    m_textFloat->setText(i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00)); //!!! qpm
+    bool haveSet = false;
+
+    if (time >= 0) {
+
+	Rosegarden::TimeSignature sig =
+	    m_composition->getTimeSignatureAt(time);
+
+	if (sig.getBeatDuration() != 
+	    Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()) {
+
+	    float bpm =
+		(qpm *
+		 Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration())
+		/ sig.getBeatDuration();
+	    int bi = int(bpm + 0.0001);
+	    int b0 = int(bpm * 10 + 0.0001) % 10;
+	    int b00 = int(bpm * 100 + 0.0001) % 10;
+
+	    m_textFloat->setText(i18n("%1.%2%3 (%4.%5%6 bpm)")
+				 .arg(qi).arg(q0).arg(q00)
+				 .arg(bi).arg(b0).arg(b00));
+	    haveSet = true;
+	}
+    }
+
+    if (!haveSet) {
+	m_textFloat->setText(i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00));
+    }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
     std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
@@ -505,10 +531,6 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    paint.setPen(illuminate ? Qt::black : Qt::white);
 	    paint.drawPoint(x, y);
-
-//	    if (illuminate) {
-//		showTextFloat(tempo);
-//	    }
 	}
 
 	lastx = int(x0) + 1;
