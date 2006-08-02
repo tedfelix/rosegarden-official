@@ -21,6 +21,7 @@
 
 #include "devicemanager.h"
 #include "constants.h"
+#include "dialogs.h"
 
 #include <qtable.h>
 #include <qvbox.h>

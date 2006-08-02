@@ -25,11 +25,12 @@
 #include <vector>
 
 #include <qaccel.h>
+#include <qwmatrix.h>
 
 #include <kdeversion.h>
 
 #include "editviewbase.h"
-#include "dialogs.h" // ugh -- for TempoDialog::TempoDialogAction
+#include "tempodialog.h"
 
 #include "Event.h"
 #include "Selection.h"
@@ -383,11 +384,7 @@ protected:
     BarButtons   *m_topBarButtons;
     BarButtons   *m_bottomBarButtons;
     ControlRuler *m_controlRuler;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
     KTabWidget   *m_controlRulers;
-#else
-    KDE32Backport::KTabWidget   *m_controlRulers;
-#endif
     QWMatrix      m_currentRulerZoomMatrix;
 
     static const unsigned int RULERS_ROW;

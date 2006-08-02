@@ -61,11 +61,7 @@
 #include <kcolordialog.h>
 #include <kdiskfreesp.h>
 #include <kinputdialog.h>
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
 #include <kfontrequester.h>
-#else
-#include "kde32_kfontrequester.h"
-#endif
 #include "constants.h"
 #include "colours.h"
 #include "rosestrings.h"
@@ -482,13 +478,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         (new QLabel(i18n("Time Signature font"), frame),
          1, 0);
 
-#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-    m_textFont = new KDE32Backport::KFontRequester(frame);
-    m_timeSigFont = new KDE32Backport::KFontRequester(frame);
-#else
     m_textFont = new KFontRequester(frame);
     m_timeSigFont = new KFontRequester(frame);
-#endif
 
     QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
         defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);

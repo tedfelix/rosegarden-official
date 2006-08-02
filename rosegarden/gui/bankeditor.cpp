@@ -54,6 +54,7 @@
 #include <kio/netaccess.h>
 
 #include "bankeditor.h"
+#include "dialogs.h"
 #include "constants.h"
 #include "widgets.h"
 #include "rosestrings.h"

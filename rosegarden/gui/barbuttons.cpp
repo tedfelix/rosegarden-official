@@ -28,6 +28,7 @@
 #include <qcanvas.h>
 #include <qpainter.h>
 #include <qtooltip.h>
+#include <klocale.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"

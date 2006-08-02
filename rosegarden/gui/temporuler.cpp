@@ -22,6 +22,8 @@
 #include <qpainter.h>
 #include <qtooltip.h>
 
+#include <klocale.h>
+
 #include "temporuler.h"
 #include "colours.h"
 #include "rosestrings.h"
@@ -122,6 +124,8 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 
     m_dragging = true;
     m_dragStartY = e->y();
+    m_dragStartTempo = -1;
+    m_dragStartTarget = -1;
 }
 
 void
@@ -130,6 +134,12 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
     if (m_dragging) {
 	mouseMoveEvent(e);
 	m_dragging = false;
+
+	if (e->x() < 0 || e->x() >= width() ||
+	    e->y() < 0 || e->y() >= height()) {
+	    leaveEvent(0);
+	}
+	
 	return;
     }
 }
@@ -145,19 +155,38 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
     if (tcn < 0 || tcn >= m_composition->getTempoChangeCount()) return;
 
     std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+    std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
 
     if (m_dragging) {
 
+	if (m_dragStartTempo < 0) {
+	    m_dragStartTempo = tc.second;
+	    m_dragStartTarget = tr.second;
+	}
+
 	int diff = m_dragStartY - y; // +ve for upwards drag
-	tempoT newTempo = tc.second;
+	tempoT newTempo = m_dragStartTempo;
+	tempoT newTarget = m_dragStartTarget;
+
 	if (diff != 0) {
-	    float qpm = m_composition->getTempoQpm(tc.second);
+
+	    float qpm = m_composition->getTempoQpm(newTempo);
 	    float qdiff = diff * (qpm / 240.0);
 	    qpm += qdiff;
 	    if (qpm < 1) qpm = 1;
-	    newTempo = m_composition->getTempoForQpm(qpm + qdiff);
+	    newTempo = m_composition->getTempoForQpm(qpm + 0.0001);
+
+	    if (newTarget >= 0) {
+		qpm = m_composition->getTempoQpm(newTarget);
+		qpm += qdiff;
+		if (qpm < 1) qpm = 1;
+		newTarget = m_composition->getTempoForQpm(qpm + 0.0001);
+	    }
 	}
+
 	showTextFloat(newTempo);
+	m_composition->addTempoAtTime(tc.first, newTempo, newTarget);
+	update();
 
     } else {
 	
@@ -190,20 +219,22 @@ TempoRuler::enterEvent(QEvent *)
 void
 TempoRuler::leaveEvent(QEvent *)
 {
-    setMouseTracking(false);
-    m_illuminate = -1;
-    m_refreshLinesOnly = true;
-    m_textFloat->hide();
-    update();
+    if (!m_dragging) {
+	setMouseTracking(false);
+	m_illuminate = -1;
+	m_refreshLinesOnly = true;
+	m_textFloat->hide();
+	update();
+    }
 }    
 
 void
 TempoRuler::showTextFloat(tempoT tempo)
 {
     float qpm = m_composition->getTempoQpm(tempo);
-    int qi = int(qpm);
-    int q0 = int(qpm * 10) % 10;
-    int q00 = int(qpm * 100) % 10;
+    int qi = int(qpm + 0.0001);
+    int q0 = int(qpm * 10 + 0.0001) % 10;
+    int q00 = int(qpm * 100 + 0.0001) % 10;
 
     m_textFloat->setText(i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00)); //!!! qpm
 
