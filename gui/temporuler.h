@@ -25,10 +25,10 @@
 
 #include <qwidget.h>
 #include "Event.h"
+#include "Composition.h"
 
 namespace Rosegarden {
     class RulerScale;
-    class Composition;
 }
 
 class QFont;
@@ -92,6 +92,13 @@ private:
     bool m_small;
     int  m_illuminate;
     bool m_refreshLinesOnly;
+
+    bool m_dragging;
+    int  m_dragStartY;
+
+    int getYForTempo(Rosegarden::tempoT tempo);
+    Rosegarden::tempoT getTempoForY(int y);
+    void showTextFloat(Rosegarden::tempoT tempo);
 
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;

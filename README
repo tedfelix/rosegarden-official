@@ -1,8 +1,10 @@
 
-Rosegarden-4 v1.2.3
-===================
+Rosegarden v1.2.4
+=================
 
-Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
+Rosegarden is a MIDI and audio sequencer and musical notation editor.
+
+  http://www.rosegardenmusic.com/
 
 Please keep an eye on the FAQ for known problems and workarounds:
 
@@ -12,6 +14,45 @@ When you find bugs, first check whether a newer version of Rosegarden
 has been released yet; if not, please continue on to:
 
   http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html
+
+
+About this release
+------------------
+
+Release 1.2.4 of Rosegarden is a bug-fix release that fixes several
+issues with the prior 1.2.3 (which was a major feature release).
+These fixes include, briefly:
+
+ * Avoid crash on startup if /dev/snd/seq does not exist
+ * Fix incorrect sequencer status report ("no driver")
+ * Fix MIDI Text Marker export
+ * Fix text encoding for Lilypond 2.6 (UTF8 instead of ISO-8859-1)
+ * Fix stuck notes in matrix after pressing a stop button
+ * Fix crash when erasing a duplicated key signature
+ * Fix crash when switching documents with a tempo editor window open
+ * Fix incorrect sorting and insertion logic in marker editor
+ * Fix hang in main canvas when a segment has zero duration
+ * Fix audio preview display for repeating audio segments
+ * Update percussion matrix when a different drum mapping is selected
+ * Avoid crash when deleting a device with percussion matrix open
+ * Fix matrix display for notes outside range of current key mapping
+ * Ensure correct segment is acted on when clicking overlapping segments
+ * Fix sequencer crash when playing back tiny audio files
+ * Avoid display hang when too many segments overlap
+ * Fix several build system bugs, and compilation with gcc-4.1.2
+
+This release also includes several new MIDI device definition (.rgd)
+files, as well as updates for Catalan, Russian, Swedish, Czech and
+Italian translations and a completely new Finnish translation.
+
+Finally, with this release the name of the project has officially
+changed to Rosegarden.  Formerly it was referred to as Rosegarden-4 in
+order to mark the current application as newer than the long-obsolete
+"Rosegarden 2.1", a quite different and more basic application.  
+We have been phasing out the use of the 4 suffix in online
+documentation and other places, and we have now officially dropped it.
+Whereas the previous release was "Rosegarden-4 v1.2.3", this release is
+"Rosegarden v1.2.4".  Any remaining references to Rosegarden-4 are bugs.
 
 
 Build requirements
@@ -104,7 +145,7 @@ SPECIAL NOTES FOR PACKAGE MAINTAINERS
 
 DSSI
 
-Many distros released their packages of Rosegarden-4 v1.0 compiled
+Many distros released their packages of Rosegarden v1.0 compiled
 without the optional DSSI/synth plugin support.  We received a lot of
 complaints on our lists from your users and ours about your packages
 being built without this feature.
@@ -152,17 +193,17 @@ subdirectory, including:
 Authors and copyright
 ---------------------
 
-* Rosegarden-4 is Copyright 2000-2006 Guillaume Laurent, Chris Cannam
+* Rosegarden is Copyright 2000-2006 Guillaume Laurent, Chris Cannam
   and Richard Bown.
 
 * The moral right of Guillaume Laurent, Chris Cannam and Richard Bown
   to be identified as the authors of this work has been asserted.
 
-* Parts of Rosegarden-4 are derived from Rosegarden 2.1, which is
+* Parts of Rosegarden are derived from X11 Rosegarden 2.1, which is
   Copyright 1994 - 2001 Chris Cannam, Andrew Green, Richard Bown and
   Guillaume Laurent.
 
-* For musical notation display Rosegarden-4 uses pixmaps derived from
+* For musical notation display Rosegarden uses pixmaps derived from
   the Feta font, part of the Lilypond software (http://lilypond.org/)
   which is Copyright 1997 - 2004 Jan Nieuwenhuizen and Han-Wen Nienhuys.
 
@@ -174,7 +215,7 @@ Authors and copyright
   used by permission.  (It is a photograph of a rose growing in Michael
   McIntyre's real live rose garden.)
 
-Rosegarden-4 is free software; you can redistribute it and/or modify
+Rosegarden is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.  See the file COPYING included with
