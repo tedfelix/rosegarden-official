@@ -1064,9 +1064,10 @@ void RosegardenGUIDoc::initialiseStudio()
 // MINOR -> 2 : plugins on busses
 // MINOR -> 3 : key mappings for percussion instruments
 // POINT -> 1 : tempo resolution increased (but we still save old format too)
+// MINOR -> 4 : default segment properties in track
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 3;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 1;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 4;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
 
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
