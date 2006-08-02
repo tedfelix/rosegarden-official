@@ -219,7 +219,7 @@
     </authorgroup>
 
     <copyright>
-      <year>2002-2004</year>
+      <year>2002-2006</year>
       <holder>Chris Cannam, Richard Bown, Guillaume Laurent</holder>
     </copyright>
 
@@ -3985,7 +3985,7 @@
 		  <guimenu>File</guimenu>
 		  <guimenuitem>Open</guimenuitem>
 		</menuchoice></term>
-	      <listitem><para><action>Opens an existing composition from a Rosegarden-4 (.rg) file.</action></para></listitem>
+	      <listitem><para><action>Opens an existing composition from a Rosegarden (.rg) file.</action></para></listitem>
 	    </varlistentry>
 
 	    <varlistentry id="commands-main-file-import">
@@ -5716,7 +5716,7 @@ Changing the Time Signature
       <para>You can also use these mapping files to define new
 	pixmap-based fonts, in which every shape in a particular size is
 	loaded from a separate pixmap file.  The two standard notation
-	fonts supplied with Rosegarden-4 are pixmap fonts defined in
+	fonts supplied with Rosegarden are pixmap fonts defined in
 	exactly this way.
       </para>
 
@@ -6530,7 +6530,7 @@ Changing the Time Signature
 	<listitem>
 	  <para>
 
-	    Rosegarden-4 is Copyright 2000-2004 Guillaume Laurent,
+	    Rosegarden is Copyright 2000-2006 Guillaume Laurent,
 	    Chris Cannam and Richard Bown.  The moral rights of
 	    Guillaume Laurent, Chris Cannam and Richard Bown to be
 	    identified as the authors of this work have been asserted.
@@ -6541,7 +6541,7 @@ Changing the Time Signature
 	<listitem>
 	  <para>
 
-	    Parts of Rosegarden-4 are derived from Rosegarden 2.1,
+	    Parts of Rosegarden are derived from X11 Rosegarden 2.1,
 	    which is Copyright 1994 &ndash; 2001 Chris Cannam, Andrew Green,
 	    Richard Bown and Guillaume Laurent.
 
@@ -6551,7 +6551,7 @@ Changing the Time Signature
 	<listitem>
 	  <para>
 
-	    For musical notation display Rosegarden-4 uses pixmaps
+	    For musical notation display Rosegarden uses pixmaps
 	    derived from the Feta font, part of the <ulink
 	      url="http://lilypond.org/">Lilypond</ulink> software,
 	    which is Copyright 1997 &ndash; 2001 Jan Nieuwenhuizen and
@@ -6564,7 +6564,8 @@ Changing the Time Signature
 	  <para>
 
 	    Other major contributors include Randall Farmer, Ron
-	    Kuris, Hans Kieserman, and Michael McIntyre.
+	    Kuris, Hans Kieserman, Michael McIntyre, and Pedro
+            Lopez-Cabanillas.
 
 	  </para>
 	</listitem>
@@ -6572,9 +6573,8 @@ Changing the Time Signature
 	<listitem>
 	  <para>
 
-	    The Rosegarden splash-screen image is from a 1900 postcard
-	    of Thornden Park at Syracuse University, Syracuse, NY,
-	    used with thanks to the staff of Syracuse University.
+  The Rosegarden splash-screen image is Copyright 2005 Carolyn H. McIntyre,
+  used by permission.
 
 	  </para>
 	</listitem>
@@ -6583,7 +6583,7 @@ Changing the Time Signature
     </para>
 
     <para>
-      Documentation copyright 2002-2004 Chris Cannam, Richard Bown, Guillaume Laurent
+      Documentation copyright 2002-2006 Chris Cannam, Richard Bown, Guillaume Laurent
     </para>
     <!--
     <para>
@@ -6612,9 +6612,18 @@ Changing the Time Signature
     ItemizedList instead for this list of revisions to the app. -->
 
     <chapter id="rosegarden-revhistory">
-      <title>Rosegarden-4 Revision History</title>
+      <title>Rosegarden Revision History</title>
       <para>
 	<itemizedlist>
+	  <listitem><para>
+	      1.2.4 &ndash; July 2006: bug fixes
+	  </para></listitem>
+	  <listitem><para>
+	      1.2.3 &ndash; February 2006: new segment canvas, percussion matrix, multi-track audio recording, project packager, external MIDI controllers, MTC sync, proper ALSA MIDI ports, new icons, new build system
+	  </para></listitem>
+	  <listitem><para>
+	      1.0 &ndash; February 2005: many fixes, DSSI effects, latency compensation
+	  </para></listitem>
 	  <listitem><para>
 	      0.9.9 &ndash; July 2004: plugin synths, triggered segments, notation improvements
 	  </para></listitem>

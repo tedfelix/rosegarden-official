@@ -111,8 +111,27 @@ TempoRuler::slotScrollHoriz(int x)
 
 
 void
+TempoRuler::mousePressEvent(QMouseEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonDblClick) {
+	timeT t = m_rulerScale->getTimeForX
+	    (e->x() - m_currentXOffset - m_xorigin);
+	emit doubleClicked(t);
+	return;
+    }
+
+    m_dragging = true;
+    m_dragStartY = e->y();
+}
+
+void
 TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (m_dragging) {
+	mouseMoveEvent(e);
+	m_dragging = false;
+	return;
+    }
 }
 
 void
@@ -122,14 +141,37 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
     int y = e->y();
     timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
     int tcn = m_composition->getTempoChangeNumberAt(t);
-    if (tcn >= 0 && tcn < m_composition->getTempoChangeCount()) {
-	std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+
+    if (tcn < 0 || tcn >= m_composition->getTempoChangeCount()) return;
+
+    std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+
+    if (m_dragging) {
+
+	int diff = m_dragStartY - y; // +ve for upwards drag
+	tempoT newTempo = tc.second;
+	if (diff != 0) {
+	    float qpm = m_composition->getTempoQpm(tc.second);
+	    float qdiff = diff * (qpm / 240.0);
+	    qpm += qdiff;
+	    if (qpm < 1) qpm = 1;
+	    newTempo = m_composition->getTempoForQpm(qpm + qdiff);
+	}
+	showTextFloat(newTempo);
+
+    } else {
+	
 	int bar, beat, fraction, remainder;
+
 	m_composition->getMusicalTimeForAbsoluteTime(tc.first, bar, beat,
 						     fraction, remainder);
 	RG_DEBUG << "Tempo change: tempo " << m_composition->getTempoQpm(tc.second) << " at " << bar << ":" << beat << ":" << fraction << ":" << remainder << endl;
+
 	m_illuminate = tcn;
 	m_refreshLinesOnly = true;
+
+	showTextFloat(tc.second);
+
 	update();
     }
 }
@@ -156,13 +198,32 @@ TempoRuler::leaveEvent(QEvent *)
 }    
 
 void
-TempoRuler::mousePressEvent(QMouseEvent *e)
+TempoRuler::showTextFloat(tempoT tempo)
 {
-    if (e->type() == QEvent::MouseButtonDblClick) {
-	timeT t = m_rulerScale->getTimeForX
-	    (e->x() - m_currentXOffset - m_xorigin);
-	emit doubleClicked(t);
+    float qpm = m_composition->getTempoQpm(tempo);
+    int qi = int(qpm);
+    int q0 = int(qpm * 10) % 10;
+    int q00 = int(qpm * 100) % 10;
+
+    m_textFloat->setText(i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00)); //!!! qpm
+
+    QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
+    std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
+    QPoint mp = cp + pos();
+
+    QWidget *parent = parentWidget();
+    while (parent->parentWidget() &&
+	   !parent->isTopLevel() &&
+	   !parent->isDialog()) { 
+	mp += parent->pos();
+	parent = parent->parentWidget();
     }
+
+    int yoff = cp.y() + m_textFloat->height() + 3;
+    mp = QPoint(mp.x() + 10, mp.y() > yoff ? mp.y() - yoff : 0);
+
+    m_textFloat->move(mp);
+    m_textFloat->show();
 }
 
 QSize
@@ -185,6 +246,42 @@ TempoRuler::minimumSizeHint() const
     QSize res = QSize(int(firstBarWidth), m_height);
     return res;
 }
+
+int
+TempoRuler::getYForTempo(tempoT tempo)
+{
+    int drawh = height() - 4;
+    int y = drawh / 2;
+
+    tempoT minTempo = m_composition->getMinTempo();
+    tempoT maxTempo = m_composition->getMaxTempo();
+
+    if (maxTempo > minTempo) {
+	y = drawh - 
+	    int((double(tempo - minTempo) / double(maxTempo - minTempo))
+		* drawh + 0.5);
+    }
+
+    return y;
+}
+
+tempoT
+TempoRuler::getTempoForY(int y)
+{
+    int drawh = height() - 4;
+
+    tempoT minTempo = m_composition->getMinTempo();
+    tempoT maxTempo = m_composition->getMaxTempo();
+
+    tempoT tempo = minTempo;
+
+    if (maxTempo > minTempo) {
+	tempo = (maxTempo - minTempo) *
+	    (double(drawh - y) / double(drawh)) + minTempo + 0.5;
+    }
+
+    return tempo;
+}    
 
 void
 TempoRuler::paintEvent(QPaintEvent* e)
@@ -242,8 +339,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     int lastx = 0, lasty = 0;
     bool haveSome = false;
-    tempoT minTempo = m_composition->getMinTempo();
-    tempoT maxTempo = m_composition->getMaxTempo();
+//    tempoT minTempo = m_composition->getMinTempo();
+//    tempoT maxTempo = m_composition->getMaxTempo();
     bool illuminate = false;
 
     if (m_illuminate >= 0) {
@@ -291,6 +388,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
 	}
 
+	int y = getYForTempo(tempo);
+/*!!!
 	int drawh = height() - 4;
 	int y = drawh / 2;
 	if (maxTempo > minTempo) {
@@ -298,6 +397,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 		int((double(tempo - minTempo) / double(maxTempo - minTempo))
 		    * drawh + 0.5);
 	}
+*/
 	y += 2;
 
 	if (haveSome) {
@@ -308,10 +408,13 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    paint.setPen(illuminate ? Qt::white : Qt::black);
 
 	    if (ramping.first) {
+		ry = getYForTempo(ramping.second);
+/*!!!
 		ry = drawh - 
 		    int((double(ramping.second - minTempo) /
 			 double(maxTempo - minTempo))
 			* drawh + 0.5);
+*/
 	    }
 
 	    paint.drawLine(lastx + 1, lasty, x - 2, ry);
@@ -326,24 +429,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    paint.setPen(illuminate ? Qt::black : Qt::white);
 	    paint.drawPoint(x, y);
 
-	    if (illuminate) {
-		long qpm = long(m_composition->getTempoQpm(tempo));
-		m_textFloat->setText(i18n("%1 bpm").arg(qpm)); //!!! qpm
-		QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
-		std::cerr << "cp = " << cp.x() << "," << cp.y() << std::endl;
-		QPoint mp = cp + pos();
-		QWidget *parent = parentWidget();
-		while (parent->parentWidget() &&
-		       !parent->isTopLevel() &&
-		       !parent->isDialog()) { 
-		    mp += parent->pos();
-		    parent = parent->parentWidget();
-		}
-		int yoff = cp.y() + m_textFloat->height() + 3;
-		mp = QPoint(mp.x() + 10, mp.y() > yoff ? mp.y() - yoff : 0);
-		m_textFloat->move(mp);
-		m_textFloat->show();
-	    }
+//	    if (illuminate) {
+//		showTextFloat(tempo);
+//	    }
 	}
 
 	lastx = int(x0) + 1;
