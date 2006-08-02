@@ -1674,7 +1674,8 @@ std::string Composition::toXmlString()
     composition << "\" pointer=\"" << m_position;
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
-                << std::setprecision(4) << (((m_defaultTempo / 10) * 6) / 10000);
+                << std::setprecision(4)
+		<< getTempoQpm(m_defaultTempo);
     composition << "\" compositionDefaultTempo=\"";
     composition << m_defaultTempo;
 
