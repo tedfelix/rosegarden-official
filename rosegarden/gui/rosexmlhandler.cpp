@@ -755,7 +755,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    track->setTranspose(transposeStr.toInt());
 	}
 
-	QString colorStr = atts.value("defaultColor");
+	QString colorStr = atts.value("defaultColour");
 	if (colorStr) {
 	    track->setColor(transposeStr.toInt());
 	}

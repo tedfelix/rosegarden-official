@@ -124,8 +124,8 @@ std::string Track::toXmlString()
 
     track << " defaultClef=\"" << m_clef << "\"";
     track << " defaultTranspose=\"" << m_transpose << "\"";
-    track << " defaultColor=\"" << m_color << "\"";
-    track << " defaultHighesttPlayable=\"" << m_highestPlayable << "\"";
+    track << " defaultColour=\"" << m_color << "\"";
+    track << " defaultHighestPlayable=\"" << m_highestPlayable << "\"";
     track << " defaultLowestPlayable=\"" << m_lowestPlayable << "\"";
 
 #if (__GNUC__ < 3)
