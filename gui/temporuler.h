@@ -24,6 +24,7 @@
 #define _TEMPORULER_H_
 
 #include <qwidget.h>
+#include "tempodialog.h"
 #include "Event.h"
 #include "Composition.h"
 
@@ -48,11 +49,11 @@ class TempoRuler : public QWidget
 
 public:
     /**
-     * Construct a TempoRuler that displays the tempo changes found
-     * in the given Composition at positions calculated by the given
-     * RulerScale.
+     * Construct a TempoRuler that displays and allows editing of the
+     * tempo changes found in the given Composition, with positions
+     * calculated by the given RulerScale.
      *
-     * The RulerScale will not be destroyed along with the TextRuler.
+     * The RulerScale will not be destroyed along with the TempoRuler.
      */
     TempoRuler(Rosegarden::RulerScale *rulerScale,
 	       RosegardenGUIDoc *doc,
@@ -71,6 +72,11 @@ public:
 
 signals:
     void doubleClicked(Rosegarden::timeT);
+
+    void changeTempo(Rosegarden::timeT,  // tempo change time
+                     Rosegarden::tempoT,  // tempo value
+                     Rosegarden::tempoT,  // tempo target
+                     TempoDialog::TempoDialogAction); // tempo action
 
 public slots:
     void slotScrollHoriz(int x);
@@ -95,6 +101,9 @@ private:
 
     bool m_dragging;
     int  m_dragStartY;
+
+    Rosegarden::tempoT m_dragStartTempo;
+    Rosegarden::tempoT m_dragStartTarget;
 
     int getYForTempo(Rosegarden::tempoT tempo);
     Rosegarden::tempoT getTempoForY(int y);

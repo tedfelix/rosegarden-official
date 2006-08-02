@@ -22,6 +22,7 @@
 #include <cmath>
 #include <qpainter.h>
 #include <qbitmap.h>
+#include <qregexp.h>
 
 #include <kmessagebox.h>
 #include <kconfig.h>

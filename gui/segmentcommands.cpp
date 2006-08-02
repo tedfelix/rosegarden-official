@@ -24,6 +24,7 @@
 #include "rosedebug.h"
 #include "notationcommands.h"
 #include "notationstrings.h"
+#include "editcommands.h"
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
 #include "Property.h"

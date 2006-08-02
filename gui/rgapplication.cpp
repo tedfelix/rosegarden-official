@@ -25,6 +25,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kstatusbar.h>
+#include <klocale.h>
 
 #include "constants.h"
 #include "rgapplication.h"

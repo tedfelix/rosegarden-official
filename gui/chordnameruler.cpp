@@ -21,6 +21,7 @@
 
 #include <qpainter.h>
 #include <qtooltip.h>
+#include <klocale.h>
 
 #include "chordnameruler.h"
 #include "colours.h"

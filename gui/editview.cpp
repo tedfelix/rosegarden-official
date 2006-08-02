@@ -33,11 +33,7 @@
 #include <kstatusbar.h>
 #include <klistbox.h>
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
 #include <ktabwidget.h>
-#else
-#include "kde32_ktabwidget.h"
-#endif
 
 #include <kiconloader.h>
 
@@ -62,6 +58,8 @@
 #include "segmentcommands.h"
 #include "controlruler.h"
 #include "loopruler.h"
+#include "editcommands.h"
+#include "dialogs.h"
 
 #include "rosedebug.h"
 
@@ -94,11 +92,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_controlRuler(0),
-#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-    m_controlRulers(new KDE32Backport::KTabWidget(getBottomWidget(), "controlrulers"))
-#else
     m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
-#endif
 {
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false); 
@@ -189,12 +183,7 @@ void EditView::setControlRulersCurrentSegment()
     bool visible = m_controlRulers->isVisible();
 
     delete m_controlRulers;
-    
-#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-    m_controlRulers = new KDE32Backport::KTabWidget(getBottomWidget(), "controlrulers");
-#else
     m_controlRulers = new KTabWidget(getBottomWidget(), "controlrulers");
-#endif
 
     bool haveTabs = setupControllerTabs();
     setupAddControlRulerMenu();

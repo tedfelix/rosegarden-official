@@ -23,7 +23,7 @@
 #define _TEMPOVIEW_H_
 
 #include "editviewbase.h"
-#include "dialogs.h"
+#include "tempodialog.h"
 #include "Composition.h"
 #include <vector>
 

@@ -845,6 +845,28 @@ Composition::getTempoAtTime(timeT t) const
 int
 Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 {
+    // If there's an existing tempo at this time, the ReferenceSegment
+    // object will remove the duplicate, but we have to ensure that
+    // the minimum and maximum tempos are updated if necessary.
+
+    bool fullTempoUpdate = false;
+
+    int n = getTempoChangeNumberAt(time);
+    if (n >= 0) {
+	std::pair<timeT, tempoT> tc = getTempoChange(n);
+	if (tc.first == time) {
+	    if (tc.second == m_minTempo || tc.second == m_maxTempo) {
+		fullTempoUpdate = true;
+	    } else {
+		std::pair<bool, tempoT> tr = getTempoRamping(n);
+		if (tr.first &&
+		    (tr.second == m_minTempo || tr.second == m_maxTempo)) {
+		    fullTempoUpdate = true;
+		}
+	    }
+	}
+    }
+
     Event *tempoEvent = new Event(TempoEventType, time);
     tempoEvent->set<Int>(TempoProperty, tempo);
 
@@ -854,11 +876,18 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
-    if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
-    if (targetTempo > 0 && targetTempo < m_minTempo) m_minTempo = targetTempo;
+    if (fullTempoUpdate) {
+	
+	updateExtremeTempos();
 
-    if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
-    if (targetTempo > 0 && targetTempo > m_maxTempo) m_maxTempo = targetTempo;
+    } else {
+
+	if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+	if (targetTempo > 0 && targetTempo < m_minTempo) m_minTempo = targetTempo;
+
+	if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+	if (targetTempo > 0 && targetTempo > m_maxTempo) m_maxTempo = targetTempo;
+    }
 
     m_tempoTimestampsNeedCalculating = true;
     updateRefreshStatuses();
@@ -931,26 +960,35 @@ Composition::removeTempoChange(int n)
 	oldTempo == m_maxTempo ||
 	(oldTarget > 0 && oldTarget == m_minTempo) ||
 	(oldTarget > 0 && oldTarget == m_maxTempo)) {
-	m_minTempo = 0;
-	m_maxTempo = 0;
-	for (ReferenceSegment::iterator i = m_tempoSegment.begin();
-	     i != m_tempoSegment.end(); ++i) {
-	    tempoT tempo = (*i)->get<Int>(TempoProperty);
-	    tempoT target = -1;
-	    if ((*i)->has(TargetTempoProperty)) {
-		target = (*i)->get<Int>(TargetTempoProperty);
-	    }
-	    if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
-	    if (target > 0 && target < m_minTempo) m_minTempo = target;
-	    if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
-	    if (target > 0 && target > m_maxTempo) m_maxTempo = target;
-	}
+	updateExtremeTempos();
     }
 
     updateRefreshStatuses();
     notifyTempoChanged();
 }
 
+void
+Composition::updateExtremeTempos()
+{
+    m_minTempo = 0;
+    m_maxTempo = 0;
+    for (ReferenceSegment::iterator i = m_tempoSegment.begin();
+	 i != m_tempoSegment.end(); ++i) {
+	tempoT tempo = (*i)->get<Int>(TempoProperty);
+	tempoT target = -1;
+	if ((*i)->has(TargetTempoProperty)) {
+	    target = (*i)->get<Int>(TargetTempoProperty);
+	}
+	if (tempo < m_minTempo || m_minTempo == 0) m_minTempo = tempo;
+	if (target > 0 && target < m_minTempo) m_minTempo = target;
+	if (tempo > m_maxTempo || m_maxTempo == 0) m_maxTempo = tempo;
+	if (target > 0 && target > m_maxTempo) m_maxTempo = target;
+    }
+    if (m_minTempo == 0) {
+	m_minTempo = m_defaultTempo;
+	m_maxTempo = m_defaultTempo;
+    }
+}
 
 RealTime
 Composition::getElapsedRealTime(timeT t) const

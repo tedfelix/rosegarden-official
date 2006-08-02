@@ -33,6 +33,7 @@
 #include <qlabel.h>
 #include <qaccel.h>
 #include <qiconset.h>
+#include <qcanvas.h>
 
 #include "markereditor.h"
 #include "rosegardenguidoc.h"

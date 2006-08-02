@@ -130,7 +130,8 @@ startuptester.cpp
 studiocommands.cpp 
 studiocontrol.cpp 
 studiowidgets.cpp 
-tempocolour.cpp 
+tempocolour.cpp
+tempodialog.cpp 
 temporuler.cpp 
 tempoview.cpp 
 textruler.cpp 

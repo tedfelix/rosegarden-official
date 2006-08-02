@@ -4021,6 +4021,8 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 
     Rosegarden::RealTime position = mapper->getPositionPointer();
 
+    std::cerr << "RosegardenGUIApp::slotUpdatePlaybackPosition: mapper pos = " << position << std::endl;
+
     Rosegarden::Composition &comp = m_doc->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
 

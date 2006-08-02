@@ -34,6 +34,7 @@
 #include <qlabel.h>
 #include <qaccel.h>
 #include <qiconset.h>
+#include <qcanvas.h>
 
 #include "triggermanager.h"
 #include "rosegardenguidoc.h"
@@ -43,6 +44,7 @@
 #include "segmentcommands.h"
 #include "widgets.h"
 #include "midipitchlabel.h"
+#include "dialogs.h"
 
 #include "CompositionTimeSliceAdapter.h"
 #include "BaseProperties.h"

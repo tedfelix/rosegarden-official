@@ -29,7 +29,7 @@
 #include <kdockwidget.h>
 #include <kaccel.h>
 
-#include "dialogs.h"
+#include "tempodialog.h"
 #include "rosegardendcop.h"
 #include "rosegardenguiiface.h"
 #include "rosegardenparameterarea.h"
@@ -64,6 +64,7 @@ namespace Rosegarden
     class RosegardenTransportDialog;
     class SequenceManager;
     class Clipboard;
+    class SegmentSelection;
 }
 
 class RosegardenProgressBar;

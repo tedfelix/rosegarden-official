@@ -942,6 +942,8 @@ protected:
     void notifyTempoChanged() const;
     void notifySourceDeletion() const;
 
+    void updateExtremeTempos();
+
     BasicQuantizer                   *m_basicQuantizer;
     NotationQuantizer                *m_notationQuantizer;
 

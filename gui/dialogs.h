@@ -34,7 +34,6 @@
 #include "editcommands.h"
 #include "notepixmapfactory.h"
 #include "commondialogs.h" // HSpinBox
-#include "Composition.h" // tempoT
 #include "widgets.h" // RosegardenPitchChooser
 
 class QWidget;
@@ -495,77 +494,6 @@ protected:
     QLineEdit               *m_metaEdit;
 
     bool                     m_modified;
-};
-
-
-class TempoDialog : public KDialogBase
-{
-    Q_OBJECT
-public:
-    typedef enum{
-        AddTempo,
-        ReplaceTempo,
-        AddTempoAtBarStart,
-        GlobalTempo,
-        GlobalTempoWithDefault
-    } TempoDialogAction;
-
-    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
-		bool timeEditable = false);
-    ~TempoDialog();
-
-    // Set the position at which we're checking the tempo
-    //
-    void setTempoPosition(Rosegarden::timeT time);
-
-public slots:
-    virtual void slotOk();
-    void slotActionChanged();
-    void slotTempoChanged(const QString &);
-    void slotTempoConstantClicked();
-    void slotTempoRampToNextClicked();
-    void slotTempoRampToTargetClicked();
-    void slotTargetChanged(const QString &);
-
-signals:
-    // Return results in this signal
-    //
-    void changeTempo(Rosegarden::timeT,  // tempo change time
-                     Rosegarden::tempoT,  // tempo value
-		     Rosegarden::tempoT,  // target tempo value
-                     TempoDialog::TempoDialogAction); // tempo action
-
-protected:
-    void populateTempo();
-    void updateBeatLabels(double newTempo);
-
-    //--------------- Data members ---------------------------------
-
-    RosegardenGUIDoc     *m_doc;
-    Rosegarden::timeT     m_tempoTime;
-    HSpinBox  	  	 *m_tempoValueSpinBox;
-
-    QRadioButton         *m_tempoConstant;
-    QRadioButton         *m_tempoRampToNext;
-    QRadioButton         *m_tempoRampToTarget;
-    HSpinBox             *m_tempoTargetSpinBox; 
-
-    QLabel	         *m_tempoBeatLabel;
-    QLabel	         *m_tempoBeat;
-    QLabel	         *m_tempoBeatsPerMinute;
-
-    RosegardenTimeWidget *m_timeEditor;
-
-    QLabel               *m_tempoTimeLabel;
-    QLabel               *m_tempoBarLabel;
-    QLabel               *m_tempoStatusLabel;
-    
-    QRadioButton         *m_tempoChangeHere;
-    QRadioButton         *m_tempoChangeBefore;
-    QLabel	         *m_tempoChangeBeforeAt;
-    QRadioButton         *m_tempoChangeStartOfBar;
-    QRadioButton         *m_tempoChangeGlobal;
-    QCheckBox            *m_defaultBox;
 };
 
 

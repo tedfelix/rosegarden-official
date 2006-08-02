@@ -244,13 +244,8 @@ protected:
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
     KFontRequester* m_textFont;
     KFontRequester* m_timeSigFont;
-#else
-    KDE32Backport::KFontRequester* m_textFont;
-    KDE32Backport::KFontRequester* m_timeSigFont;
-#endif
     QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;
