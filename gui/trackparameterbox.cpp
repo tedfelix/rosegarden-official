@@ -37,6 +37,7 @@
 #include <klineeditdlg.h>
 #include <kconfig.h>
 #include <ksqueezedtextlabel.h>
+#include <kmessagebox.h>
 
 #include "Device.h"
 #include "MidiDevice.h"
@@ -48,6 +49,7 @@
 #include "colourwidgets.h"
 #include "NotationTypes.h"
 #include "dialogs.h"
+#include "clefindex.h"
 #include "presethandler.h"
 
 #include "rosestrings.h"
@@ -56,6 +58,7 @@
 #include "rosedebug.h"
 #include "studiowidgets.h"
 #include "constants.h"
+#include "Exception.h"
 
 TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                       QWidget *parent)
@@ -167,27 +170,10 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row++;
 
-    /* explanation of intention:
-     *
-     * [Load Preset]  Label showing the preset that was loaded
-     *
-     * Loading a preset will have too many levels of choices to fit in the
-     * TPB, so it will spin off into a separate dialog that will inject its
-     * results into the appropriate TPB controls
-     *
-     * This label is going to be hugely too wide.  I've picked the worst
-     * example so you have some idea what we have to accommodate with this
-     * somehow.  Maybe we could limit it to n characters and have the whole
-     * text revealed as a tooltip or something?  I'm open to any idea how to
-     * make it all less obnoxious.  I'll just get the guts working.
-     */
-
     m_psetLbl = new QLabel(i18n("Preset"), this);
     mainLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
-    //TODO: load the label bit from parameters once they exist
-    m_presetLbl = new KSqueezedTextLabel(i18n("Electronic organ (manual) (treble)"), this);
-    QToolTip::add( m_presetLbl, i18n("Electronic organ (manual) (treble)") );
+    m_presetLbl = new KSqueezedTextLabel(i18n("None"), this);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     mainLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
 
@@ -202,18 +188,19 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     mainLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
     m_defClef = new KComboBox(this);
     m_defClef->setMinimumWidth(minwidth11);
-    m_defClef->insertItem(i18n("treble"));
-    m_defClef->insertItem(i18n("bass"));
-    m_defClef->insertItem(i18n("alto"));
-    m_defClef->insertItem(i18n("tenor"));
-    m_defClef->insertItem(i18n("guitar"));
-    m_defClef->insertItem(i18n("xylophone"));
-    m_defClef->insertItem(i18n("celesta"));
-    m_defClef->insertItem(i18n("old celesta"));
+    m_defClef->insertItem(i18n("treble"), TrebleClef);
+    m_defClef->insertItem(i18n("bass"), BassClef);
+    m_defClef->insertItem(i18n("alto"), AltoClef);
+    m_defClef->insertItem(i18n("tenor"), TenorClef);
+    m_defClef->insertItem(i18n("guitar"), GuitarClef);
+    m_defClef->insertItem(i18n("xylophone"), XylophoneClef);
+    m_defClef->insertItem(i18n("contrabass"), ContrabassClef);
+    m_defClef->insertItem(i18n("celesta"), CelestaClef);
+    m_defClef->insertItem(i18n("old celesta"), OldCelestaClef);
 /*  clef types in the datbase that are not yet supported must be ignored for
  *  now:
-    m_defClef->insertItem(i18n("soprano"));
-    m_defClef->insertItem(i18n("two bar")); */
+    m_defClef->insertItem(i18n("soprano"), SopranoClef);
+    m_defClef->insertItem(i18n("two bar"), TwoBarClef); */
     mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 5, AlignRight);
 
     // default transpose
@@ -788,9 +775,29 @@ void
 TrackParameterBox::slotPresetPressed()
 {
     RG_DEBUG << "TrackParameterBox::slotPresetPressed()" << endl;
-//    RosegardenPresetDialog dialog = new RosegardenPresetDialog(this);
-//    dialog.exec()
-//    handle results (see the callers of eventfilterdialog for examples)
+
+    PresetHandlerDialog dialog(this);
+
+        try {
+	    if (dialog.exec() == QDialog::Accepted) {
+		m_presetLbl->setText(dialog.getName());
+		m_defClef->setCurrentItem(dialog.getClef());
+		m_defTranspose->setValue(dialog.getTranspose());
+
+		m_highestPlayable = dialog.getHighRange();
+		m_lowestPlayable = dialog.getLowRange();
+		updateHighLow();		
+		//!!! check if any slots need to be run manually, and/or track
+		// parmeters set manually (eg. highest/lowest) here
+	    }
+	} catch (Rosegarden::Exception e) {
+	    //!!! This should be a more verbose error to pass along the
+	    // row/column of the corruption, but I can't be bothered to work
+	    // that out just at the moment.  Hopefully this code will never
+	    // execute anyway.
+	    KMessageBox::sorry(0, i18n("The instrument preset database is corrupt.  Check your installation."));
+	}
+      
 }
 
 #include "trackparameterbox.moc"

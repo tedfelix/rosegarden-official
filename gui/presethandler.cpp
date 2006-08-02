@@ -22,33 +22,30 @@
     COPYING included with this distribution for more information.
 */
  
-//#include <string>
-//#include <set>
-//#include <map>
 #include <vector>
 
 #include <qstring.h>
 #include <qxml.h>
 #include <qfileinfo.h>
+#include <qlabel.h>
+#include <qframe.h>
+#include <qvbox.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <kconfig.h>
+#include <kcombobox.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "clefindex.h"
 
-//#include "Exception.h"
+#include "Exception.h"
 
 #include "presethandler.h"
 
-using std::string;
-//using std::map;
-//using std::set;
-//using std::cout;
-//using std::cerr;
-//using std::endl;
 
 ////////////////////
 //                //
@@ -112,9 +109,9 @@ CategoryElement::addPreset(QString name,
 {
     RG_DEBUG << "CategoryElement::addPreset(...): adding new PresetElement" << endl;
 
-    PresetElement *e  = new PresetElement(name, clef, transpose, highAm, lowAm,
-	                                  highPro, lowPro);
-    m_presets.push_back(*e);
+    PresetElement e(name, clef, transpose, highAm, lowAm,
+	            highPro, lowPro);
+    m_categoryPresets.push_back(e);
 }
 
 
@@ -137,7 +134,7 @@ PresetGroup::PresetGroup() :
     m_currentCategory(-1),
     m_lastInstrument(-1),
     m_currentInstrument(-1),
-    m_name(""),
+    m_name(false),
     m_clef(false),
     m_transpose(false),
     m_amateur(false),
@@ -145,31 +142,29 @@ PresetGroup::PresetGroup() :
 {
     m_presetDirectory = KGlobal::dirs()->findResource("appdata", "presets/");
 
-    QString mapFileName = QString("%1/presets.xml")
+    QString presetFileName = QString("%1/presets.xml")
         .arg(m_presetDirectory);
 
-    QFileInfo mapFileInfo(mapFileName);
+    QFileInfo presetFileInfo(presetFileName);
 
-    if (!mapFileInfo.isReadable()) {
-	throw MappingFileReadFailed
+    if (!presetFileInfo.isReadable()) {
+	throw PresetFileReadFailed
 	    (qstrtostr(i18n("Can't open preset file %1").
-		       arg(mapFileName)));
+		       arg(presetFileName)));
     }
 
-    QFile mapFile(mapFileName);
+    QFile presetFile(presetFileName);
 
-    QXmlInputSource source(mapFile);
+    QXmlInputSource source(presetFile);
     QXmlSimpleReader reader;
     reader.setContentHandler(this);
     reader.setErrorHandler(this);
     bool ok = reader.parse(source);
-    mapFile.close();
+    presetFile.close();
 
     if (!ok) {
-        throw MappingFileReadFailed(qstrtostr(m_errorString));
+        throw PresetFileReadFailed(qstrtostr(m_errorString));
     }
-
-//    m_categories = new
 }
 
 PresetGroup::~PresetGroup()
@@ -187,14 +182,13 @@ PresetGroup::startElement(const QString &, const QString &,
 {
     QString lcName = qName.lower();
 
-    // if we have the start of a category tag
-    if (lcName = "category") {
+    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName << endl;
 
-	// try to extract the name attribute
+    if (lcName == "category") {
+
 	QString s = attributes.value("name");
 	if (s) { 
 	    m_elCategoryName = s;
-
 	    // increment the current category number
 	    m_lastCategory = m_currentCategory;
             m_currentCategory++;
@@ -208,15 +202,12 @@ PresetGroup::startElement(const QString &, const QString &,
 
 	    // add new CategoryElement to m_categories, in order to contain
 	    // subsequent PresetElements
-	    CategoryElement *ce = new CategoryElement(m_elCategoryName);
-	    m_categories.push_back(*ce);
+	    CategoryElement ce(m_elCategoryName);
+	    m_categories.push_back(ce);
 	}
-    }
 
-    // if we have the start of an instrument tag
-    if (lcName = "instrument") {
+    } else if (lcName == "instrument") {
 
-	// try to extract the name attribute
 	QString s = attributes.value("name");
 	if (s) {
 	    m_elInstrumentName = s;
@@ -226,10 +217,8 @@ PresetGroup::startElement(const QString &, const QString &,
 	    m_lastInstrument = m_currentInstrument;
 	    m_currentInstrument++;
 	 }
-    }
 
-    // convert text clef name to combo box index using the enum in clefindex.h
-    if (lcName = "clef") {
+    } else if (lcName == "clef") {
 	QString s = attributes.value("type");
 	if (s) {
 	    if (s == "treble") m_elClef = TrebleClef;
@@ -244,17 +233,15 @@ PresetGroup::startElement(const QString &, const QString &,
 	    else if (s == "two-bar") m_elClef = TwoBarClef;
 	    m_clef = true;
 	}
-    }
 
-    if (lcName = "transpose") {
+    } else if (lcName == "transpose") {
 	QString s = attributes.value("value");
 	if (s) {
 	    m_elTranspose = s.toInt();
 	    m_transpose = true;
 	}
-    }
 
-    if (lcName = "range") {
+    } else if (lcName == "range") {
 	QString s = attributes.value("class");
 
 	if (s == "amateur") {
@@ -268,7 +255,7 @@ PresetGroup::startElement(const QString &, const QString &,
 	    if (s && m_amateur) {
 		m_elHighAm = s.toInt();
 	    } else {
-		// critical error
+		return false;
 	    }
 
 	} else if (s == "professional") {
@@ -282,12 +269,19 @@ PresetGroup::startElement(const QString &, const QString &,
 	    if (s && m_pro) {
 		m_elHighPro = s.toInt();
 	    } else {
-		// critical error
+		return false;
 	    }
 	} else {
-	    // critical error
+	    return false;
 	}
     }
+
+    RG_DEBUG << "PresetGroup::startElement(): accumulating flags:" << endl
+	     << "     name: " << (m_name ? "true" : "false") << endl
+             << "     clef: " << (m_clef ? "true" : "false") << endl
+	     << "transpose: " << (m_transpose ? "true" : "false") << endl
+	     << "  am. rng: " << (m_amateur ? "true" : "false") << endl
+	     << "  pro rng: " << (m_pro ? "true" : "false") << endl;
 
     // once we have assembled all the bits, create a new PresetElement
     if (m_name && m_clef && m_transpose && m_amateur && m_pro) {
@@ -308,14 +302,18 @@ PresetGroup::startElement(const QString &, const QString &,
 	m_clef = false;
 	m_transpose = false;
 	m_amateur = false;
-	m_pro = false;
-    }
+	m_pro = false; 
+    } 
+
+    return true;
 
 } // startElement
 
 bool
 PresetGroup::error(const QXmlParseException& exception)
 {
+    RG_DEBUG << "PresetGroup::error(): jubilation and glee, we have an error, whee!" << endl;
+
     m_errorString = QString("%1 at line %2, column %3: %4")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
@@ -327,6 +325,7 @@ PresetGroup::error(const QXmlParseException& exception)
 bool
 PresetGroup::fatalError(const QXmlParseException& exception)
 {
+    RG_DEBUG << "PresetGroup::fatalError(): double your jubilation, and triple your glee, a fatal error doth it be!" << endl;
     m_errorString = QString("%1 at line %2, column %3: %4")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
@@ -345,18 +344,60 @@ PresetHandlerDialog::PresetHandlerDialog(QWidget *parent)
     : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok|Cancel, Ok)/*,
     cfg(kapp->config()) */
 {
+    m_presets = new PresetGroup();
+    m_categories = m_presets->getCategories();
+
     initDialog();
 }
 
 PresetHandlerDialog::~PresetHandlerDialog()
 {
-    // nothing
+    // delete m_presets?
 }
 
 void
 PresetHandlerDialog::initDialog()
 {
-    // make a little dialog with three combos in it and plumb it up
+    RG_DEBUG << "PresetHandlerDialog::initDialog()" << endl;
+
+    QVBox *vBox = makeVBoxMainWidget();
+
+    QFrame *frame = new QFrame(vBox);
+
+    QGridLayout *layout = new QGridLayout(frame, 5, 5, 10, 5);
+
+    QLabel *title = new QLabel(i18n("Select preset track parameters for:"), frame);
+
+    QLabel *catlabel = new QLabel(i18n("Category"),frame);
+    m_categoryCombo = new KComboBox(frame);
+    
+    QLabel *inslabel = new QLabel(i18n("Instrument"),frame);
+    m_instrumentCombo = new KComboBox(frame);
+
+    QLabel *plylabel = new QLabel(i18n("Player Ability"), frame);
+    m_playerCombo = new KComboBox(frame);
+    m_playerCombo->insertItem(i18n("Amateur"));
+    m_playerCombo->insertItem(i18n("Professional"));
+
+    layout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
+    layout->addWidget(catlabel, 1, 0, AlignRight);
+    layout->addWidget(m_categoryCombo, 1, 1);
+    layout->addWidget(inslabel, 2, 0, AlignRight);
+    layout->addWidget(m_instrumentCombo, 2, 1);
+    layout->addWidget(plylabel, 3, 0, AlignRight);
+    layout->addWidget(m_playerCombo, 3, 1);
+
+    populateCategoryCombo();
+
+    //!!
+    // read category and player ability from KConfig and pre-set combos
+    //
+   
+    // populate the instrument combo
+    slotCategoryIndexChanged(m_categoryCombo->currentItem());
+
+    connect(m_categoryCombo, SIGNAL(activated(int)),
+            SLOT(slotCategoryIndexChanged(int)));
 }
 
 QString
@@ -368,43 +409,81 @@ PresetHandlerDialog::getName()
 int
 PresetHandlerDialog::getClef()
 {
-    // TODO
+    PresetElement p = m_categories[m_categoryCombo->currentItem()].
+	getPresetByIndex(m_instrumentCombo->currentItem());
+
+    return p.getClef();
 }
 
 int
 PresetHandlerDialog::getTranspose()
 {
-    // return:
-    // PresetElement->getTranspose() for the preset element at instrument combo index
-    // in the category element at category combo index in the PresetGroup n
-    //
-    // group->category(cat_comboIndex)->element(ins_comboIndex)->getTranspose()
+    PresetElement p = m_categories[m_categoryCombo->currentItem()].
+	getPresetByIndex(m_instrumentCombo->currentItem());
+
+    return p.getTranspose();
 }
 
 int
 PresetHandlerDialog::getLowRange()
 {
-    // if range combo is amateur use high/lowAm
-    // else high/lowPro
+    PresetElement p = m_categories[m_categoryCombo->currentItem()].
+	getPresetByIndex(m_instrumentCombo->currentItem());
+    // 0 == amateur
+    // 1 == pro
+    if (m_playerCombo->currentItem() == 0) {
+	return p.getLowAm();
+    } else {
+	return p.getLowPro();
+    }
 }
 
 int
 PresetHandlerDialog::getHighRange()
 {
-    // as above
+    PresetElement p = m_categories[m_categoryCombo->currentItem()].
+	getPresetByIndex(m_instrumentCombo->currentItem());
+    // 0 == amateur
+    // 1 == pro
+    if (m_playerCombo->currentItem() == 0) {
+	return p.getHighAm();
+    } else {
+	return p.getHighPro();
+    }
 }
 
 void
- PresetHandlerDialog::populateCategoryCombo()
+PresetHandlerDialog::populateCategoryCombo()
 {
-    // new ParameterGroup
-    // for iterator thingie { populate the combo}
+    RG_DEBUG << "PresetHandlerDialog::populateCategoryCombo()" << endl;
+
+    for (CategoriesContainer::iterator i = m_categories.begin();
+	 i != m_categories.end(); ++i) {
+
+	RG_DEBUG << "    adding category: " << (*i).getName() << endl;
+
+	m_categoryCombo->insertItem((*i).getName());
+    } 
 }
 
 void
 PresetHandlerDialog::slotCategoryIndexChanged(int index)
 {
-    // for category [index] { populate the instrument combo }
+    RG_DEBUG << "PresetHandlerDialog::slotCategoryIndexChanged(" << index << ")" << endl;
+
+    CategoryElement e = m_categories[index];
+    ElementContainer c = e.getPresets();
+
+    m_instrumentCombo->clear();
+
+    for (ElementContainer::iterator i = c.begin();
+	 i != c.end(); ++i) {
+
+	RG_DEBUG << "    adding instrument: " << (*i).getName() << endl;
+
+	m_instrumentCombo->insertItem((*i).getName());
+    }
+
 }
 
 /*void
