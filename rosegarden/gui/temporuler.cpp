@@ -56,6 +56,13 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_small(small),
     m_illuminate(-1),
     m_refreshLinesOnly(false),
+    m_dragging(false),
+    m_dragStartY(0),
+    m_dragFine(false),
+    m_dragStartTempo(-1),
+    m_dragStartTarget(-1),
+    m_dragOriginalTempo(-1),
+    m_dragOriginalTarget(-1),
     m_composition(&doc->getComposition()),
     m_rulerScale(rulerScale),
     m_fontMetrics(m_boldFont)
@@ -122,10 +129,25 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 	return;
     }
 
+    int x = e->x() + 1;
+    int y = e->y();
+    timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
+    int tcn = m_composition->getTempoChangeNumberAt(t);
+
+    if (tcn < 0 || tcn >= m_composition->getTempoChangeCount()) return;
+
+    std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+    std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
+
+    m_dragStartY = y;
+    m_dragStartTime = tc.first;
+    m_dragStartTempo = tc.second;
+    m_dragStartTarget = tr.first ? tr.second : -1;
+    m_dragOriginalTempo = m_dragStartTempo;
+    m_dragOriginalTarget = m_dragStartTarget;
+    m_dragFine = ((e->state() & Qt::ShiftButton) != 0);
+
     m_dragging = true;
-    m_dragStartY = e->y();
-    m_dragStartTempo = -1;
-    m_dragStartTarget = -1;
 }
 
 void
@@ -139,7 +161,22 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 	    e->y() < 0 || e->y() >= height()) {
 	    leaveEvent(0);
 	}
+
+	// First we make a note of the values that we just set and
+	// restore the tempo to whatever it was previously, so that
+	// the undo for any following command will work correctly.
+	// Then we emit so that our user can issue the right command.
 	
+	int tcn = m_composition->getTempoChangeNumberAt(m_dragStartTime);
+	std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+	std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
+	m_composition->addTempoAtTime(m_dragStartTime,
+				      m_dragOriginalTempo,
+				      m_dragOriginalTarget);
+	emit changeTempo(m_dragStartTime, tc.second,
+			 tr.first ? tr.second : -1,
+			 TempoDialog::AddTempo);
+
 	return;
     }
 }
@@ -147,31 +184,32 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 void
 TempoRuler::mouseMoveEvent(QMouseEvent *e)
 {
-    int x = e->x() + 1;
-    int y = e->y();
-    timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
-    int tcn = m_composition->getTempoChangeNumberAt(t);
-
-    if (tcn < 0 || tcn >= m_composition->getTempoChangeCount()) return;
-
-    std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
-    std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
-
     if (m_dragging) {
 
-	if (m_dragStartTempo < 0) {
+	bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
+
+	if (shiftPressed != m_dragFine) {
+
+	    m_dragFine = shiftPressed;
+	    m_dragStartY = e->y();
+
+	    // reset the start tempi to whatever we last updated them
+	    // to as we switch into or out of fine mode
+	    int tcn = m_composition->getTempoChangeNumberAt(m_dragStartTime);
+	    std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+	    std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
 	    m_dragStartTempo = tc.second;
-	    m_dragStartTarget = tr.second;
+	    m_dragStartTarget = tr.first ? tr.second : -1;
 	}
 
-	int diff = m_dragStartY - y; // +ve for upwards drag
+	int diff = m_dragStartY - e->y(); // +ve for upwards drag
 	tempoT newTempo = m_dragStartTempo;
 	tempoT newTarget = m_dragStartTarget;
 
 	if (diff != 0) {
 
 	    float qpm = m_composition->getTempoQpm(newTempo);
-	    float qdiff = diff * (qpm / 240.0);
+	    float qdiff = (m_dragFine ? diff * 0.05 : diff * 0.5);
 	    qpm += qdiff;
 	    if (qpm < 1) qpm = 1;
 	    newTempo = m_composition->getTempoForQpm(qpm + 0.0001);
@@ -185,13 +223,21 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	}
 
 	showTextFloat(newTempo);
-	m_composition->addTempoAtTime(tc.first, newTempo, newTarget);
+	m_composition->addTempoAtTime(m_dragStartTime, newTempo, newTarget);
 	update();
 
     } else {
 	
-	int bar, beat, fraction, remainder;
+	int x = e->x() + 1;
+	int y = e->y();
+	timeT t = m_rulerScale->getTimeForX(x - m_currentXOffset - m_xorigin);
+	int tcn = m_composition->getTempoChangeNumberAt(t);
 
+	if (tcn < 0 || tcn >= m_composition->getTempoChangeCount()) return;
+
+	std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+
+	int bar, beat, fraction, remainder;
 	m_composition->getMusicalTimeForAbsoluteTime(tc.first, bar, beat,
 						     fraction, remainder);
 	RG_DEBUG << "Tempo change: tempo " << m_composition->getTempoQpm(tc.second) << " at " << bar << ":" << beat << ":" << fraction << ":" << remainder << endl;

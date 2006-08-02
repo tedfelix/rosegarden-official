@@ -101,9 +101,13 @@ private:
 
     bool m_dragging;
     int  m_dragStartY;
+    bool m_dragFine;
 
+    Rosegarden::timeT m_dragStartTime;
     Rosegarden::tempoT m_dragStartTempo;
     Rosegarden::tempoT m_dragStartTarget;
+    Rosegarden::tempoT m_dragOriginalTempo;
+    Rosegarden::tempoT m_dragOriginalTarget;
 
     int getYForTempo(Rosegarden::tempoT tempo);
     Rosegarden::tempoT getTempoForY(int y);
