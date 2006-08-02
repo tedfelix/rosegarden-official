@@ -1180,8 +1180,9 @@ Composition::time2RealTime(timeT time, tempoT tempo,
     // b is the target tempo in seconds per tick
     // n is targetTime in ticks
 
-    // shouldn't happen, but just to avoid arithmetic error
-    if (targetTime == 0) return time2RealTime(time, targetTempo);
+    if (targetTime == 0 || targetTempo == tempo) {
+	return time2RealTime(time, targetTempo);
+    }
 
     double a = (100000 * 60) / (double(tempo) * cdur);
     double b = (100000 * 60) / (double(targetTempo) * cdur);
@@ -1216,7 +1217,7 @@ Composition::realTime2Time(RealTime rt, tempoT tempo) const
     static timeT cdur = Note(Note::Crotchet).getDuration();
 
     double tsec = (double(rt.sec) * cdur) * (tempo / (60.0 * 100000.0));
-    double tnsec = ((double)rt.nsec * cdur) * (tempo / 100000.0);
+    double tnsec = (double(rt.nsec) * cdur) * (tempo / 100000.0);
 
     double dt = tsec + (tnsec / 60000000000.0);
     timeT t = (timeT)(dt + (dt < 0 ? -1e-6 : 1e-6));
@@ -1258,6 +1259,8 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
     // a is the initial tempo in seconds per tick
     // b is the target tempo in seconds per tick
     // n is target real time in ticks
+
+    if (targetTempo == tempo) return realTime2Time(rt, tempo);
 
     double a = (100000 * 60) / (double(tempo) * cdur);
     double b = (100000 * 60) / (double(targetTempo) * cdur);
