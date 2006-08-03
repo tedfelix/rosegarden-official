@@ -121,12 +121,6 @@ public:
     bool isInChordMode();
 
     /**
-     * Discover whether chord-mode insertions are enabled 
-     * for overlapping notes (as opposed forced chord-mode and melody-mode)
-     */
-    bool isInChordOverlappingMode();
-
-    /**
      * Set the current event selection.
      *
      * If preview is true, sound the selection as well.

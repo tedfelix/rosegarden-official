@@ -392,7 +392,6 @@
   -->
 
   <Action name="chord_mode"/>
-  <Action name="chord_overlapping"/>
   <Action name="triplet_mode"/>
 
   <Separator/>
@@ -480,7 +479,6 @@
   <Separator/>
 
   <Action name="chord_mode"/>
-  <Action name="chord_overlapping"/>
   <Action name="triplet_mode" />
 </ToolBar>
 

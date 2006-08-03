@@ -1573,12 +1573,6 @@ void NotationView::setupActions()
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord-overlapping")));
-    (new KToggleAction(i18n("Chord O&verlapping Notes"), icon, Key_H + CTRL,
-		       this, SLOT(slotUpdateInsertModeStatus()),
-		      actionCollection(), "chord_overlapping"))->
-	setChecked(false);
-
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("group-grace")));
@@ -2122,13 +2116,6 @@ bool
 NotationView::isInChordMode()
 {
     return ((KToggleAction *)actionCollection()->action("chord_mode"))->
-	isChecked();
-}
-
-bool
-NotationView::isInChordOverlappingMode()
-{
-    return ((KToggleAction *)actionCollection()->action("chord_overlapping"))->
 	isChecked();
 }
 

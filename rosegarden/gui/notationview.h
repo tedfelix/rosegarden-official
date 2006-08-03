@@ -174,12 +174,6 @@ public:
     bool isInChordMode();
     
     /**
-     * Discover whether chord-mode insertions are enabled 
-     * for overlapping notes (as opposed forced chord-mode and melody-mode)
-     */
-    bool isInChordOverlappingMode();
-
-    /**
      * Discover whether triplet-mode insertions are enabled
      */
     bool isInTripletMode();

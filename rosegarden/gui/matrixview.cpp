@@ -595,12 +595,6 @@ void MatrixView::setupActions()
 		       actionCollection(), "chord_mode"))->
 	setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord-overlapping")));
-    (new KToggleAction(i18n("Chord O&verlapping Notes"), icon, Key_H + CTRL,
-		       this, SLOT(slotUpdateInsertModeStatus()),
-		      actionCollection(), "chord_overlapping"))->
-	setChecked(false);
-
     pixmap.load(pixmapDir + "/toolbar/step_by_step.xpm");
     icon = QIconSet(pixmap);
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
@@ -847,13 +841,6 @@ bool
 MatrixView::isInChordMode()
 {
     return ((KToggleAction *)actionCollection()->action("chord_mode"))->
-	isChecked();
-}
-
-bool
-MatrixView::isInChordOverlappingMode()
-{
-    return ((KToggleAction *)actionCollection()->action("chord_overlapping"))->
 	isChecked();
 }
 
@@ -2682,7 +2669,7 @@ void
 MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
 {
     // hjj:
-    // Chord Overlapping Notes mode is implemented equivalently in
+    // The default insertion mode is implemented equivalently in
     // notationviewslots.cpp:
     //  - proceed if notes do not overlap
     //  - make the chord if notes do overlap, and do not proceed
@@ -2735,8 +2722,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     double elapsed = difftime(now,lastInsertionTime);
     time (&lastInsertionTime);
 
-    if (numberOfNotesOn <= 0 || 
-        !isInChordOverlappingMode() || elapsed > 10.0 ) {
+    if (numberOfNotesOn <= 0 || elapsed > 10.0 ) {
       numberOfNotesOn = 0;
       insertionTime = getInsertionTime();
     }
@@ -2798,8 +2784,6 @@ MatrixView::slotUpdateInsertModeStatus()
     QString message;
     if (isInChordMode()) {
 	message = i18n(" Chord");
-    } else if (isInChordOverlappingMode()) {
-	message = i18n(" Chord Overlapping Notes");
     } else {
 	message = "";
     }
