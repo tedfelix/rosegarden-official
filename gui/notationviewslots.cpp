@@ -80,12 +80,6 @@ NotationView::slotUpdateInsertModeStatus()
         } else {
             message = i18n(" Chord");
         }
-    } else if (isInChordOverlappingMode()) {
-        if (isInTripletMode()) {
-            message = i18n(" Triplet Chord Overlapping Notes");
-        } else {
-            message = i18n(" Chord Overlapping Notes");
-        }
     } else {
         if (isInTripletMode()) {
             message = i18n(" Triplet");
@@ -2807,10 +2801,10 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 	    //
 	    // We haven't implemented these yet... For now:
 	    //
-	    // hjj:
+	    // Rules (hjj):
 	    //
-	    // * If chord_overlapping is toggled, overlapping notes
-	    //   are included in to the chord.
+	    // * The overlapping notes are always included in to a chord.
+	    //   This is the most convenient for step inserting of chords.
 	    //
 	    // * The timer resets the numberOfNotesOn, if noteOff signals were
 	    //   drop out for some reason (which has not been encountered yet). 
@@ -2820,21 +2814,15 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 	    double elapsed = difftime(now,lastInsertionTime);
 	    time (&lastInsertionTime);
 
-	    if (numberOfNotesOn <= 0 || 
-                !isInChordOverlappingMode() || elapsed > 10.0 ) {
+	    if (numberOfNotesOn <= 0 || elapsed > 10.0 ) {
 		numberOfNotesOn = 0;
 		insertionTime = getInsertionTime();
 	    } 
 	    numberOfNotesOn++;
 
-	    // if ( isInChordOverlappingMode() )
 	    noteInserter->insertNote(segment, insertionTime, pitch,
 				     Rosegarden::Accidentals::NoAccidental,
 				     true);
-	    // else 
-	    // noteInserter->insertNote(segment, getInsertionTime(), pitch,
-			//	     Rosegarden::Accidentals::NoAccidental,
-			//	     true);
 	}
     }
 }
