@@ -166,11 +166,18 @@ protected:
 class MultiKeyInsertionCommand : public KMacroCommand
 {
 public:
+    
+    /*
+     * Inserts a key change into multiple segments at the same time, taking
+     * individual segment transpose into account (fixes #1520716).  The key
+     * inserted should be expressed in concert pitch, even if it is being
+     * inserted into a tranposed segment.
+     */
     MultiKeyInsertionCommand(Rosegarden::Composition &composition,
 			     Rosegarden::timeT time,
 			     Rosegarden::Key key,
 			     bool shouldConvert,
-			     bool shouldTranspose);
+			     bool shouldTranspose); 
     virtual ~MultiKeyInsertionCommand();
 
     static QString getGlobalName(Rosegarden::Key *key = 0) {
