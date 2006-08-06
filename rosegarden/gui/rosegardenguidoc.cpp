@@ -1874,8 +1874,8 @@ RosegardenGUIDoc::insertRecordedEvent(Rosegarden::Event *ev, int device, int cha
         Rosegarden::TrackId tid = recordMIDISegment->getTrack();
         Rosegarden::Track *track = getComposition().getTrackById(tid);
         if (track) {
-            Rosegarden::Instrument *instrument = 
-                m_studio.getInstrumentById(track->getInstrument());
+            //Rosegarden::Instrument *instrument = 
+            //    m_studio.getInstrumentById(track->getInstrument());
             int chan_filter = track->getMidiInputChannel();
             int dev_filter = track->getMidiInputDevice();
             if (((chan_filter < 0) || (chan_filter == channel)) &&

@@ -1646,6 +1646,11 @@ Composition::setTrackRecording(TrackId track, bool recording)
     } else {
 	m_recordTracks.erase(track);
     }
+    Track *t = getTrackById(track);
+    if (t) {
+        t->setArmed(recording);
+        notifyTrackChanged(t);
+    }
 }
 
 bool

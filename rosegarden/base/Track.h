@@ -110,7 +110,9 @@ public:
     
     int getLowestPlayable() { return m_lowestPlayable; }
     void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
-
+    
+    bool isArmed() const { return m_armed; }
+    void setArmed(bool armed) { m_armed = armed; } 
 
 protected: // For Composition use only
     void setOwningComposition(Composition* comp) { m_owningComposition = comp; }
@@ -128,6 +130,7 @@ private:
 
     DeviceId       m_input_device;
     char           m_input_channel;
+    bool           m_armed;
 
     // default parameters for new segments created belonging to this track
     int		   m_clef;

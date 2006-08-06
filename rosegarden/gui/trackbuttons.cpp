@@ -636,8 +636,7 @@ TrackButtons::slotToggleRecordTrack(int position)
     }
 
     // can have any number of audio instruments armed, but only one
-    // track armed per instrument; can only have one midi or soft
-    // synth track armed at all
+    // track armed per instrument.
 
     // Need to copy this container, as we're implicitly modifying it
     // through calls to comp.setTrackRecording

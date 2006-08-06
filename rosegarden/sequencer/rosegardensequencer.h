@@ -360,9 +360,18 @@ public:
     //
     void sleep(const Rosegarden::RealTime &rt);
 
+    // Removes from a MappedComposition the events not matching
+    // the supplied filer.
+    //
     void applyFiltering(Rosegarden::MappedComposition *mC,
 			Rosegarden::MidiFilter filter,
 			bool filterControlDevice);
+
+    // This method assigns an Instrument to each MappedEvent 
+    // belongin to the MappedComposition, and sends the 
+    // transformed events to the driver to be played.
+    //
+    void routeEvents(Rosegarden::MappedComposition *mC);
 
     // Are we looping?
     //
