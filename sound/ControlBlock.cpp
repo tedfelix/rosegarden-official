@@ -31,6 +31,7 @@ namespace Rosegarden
 ControlBlock::ControlBlock(unsigned int maxTrackId)
     : m_maxTrackId(maxTrackId),
       m_solo(false),
+      m_routingMode(MIDI_ROUTING_ARMED_TRACKS),
       m_thruFilter(0),
       m_recordFilter(0),
       m_selectedTrack(0)
@@ -40,6 +41,7 @@ ControlBlock::ControlBlock(unsigned int maxTrackId)
     for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i) {
 	m_trackInfo[i].muted = true;
 	m_trackInfo[i].deleted = true;
+        m_trackInfo[i].armed = true;
 	m_trackInfo[i].instrumentId = 0;
     }
 }
@@ -54,8 +56,11 @@ void ControlBlock::updateTrackData(Track* t)
 {
     if (t) {
         setInstrumentForTrack(t->getId(), t->getInstrument());
+        setTrackArmed(t->getId(), t->isArmed());
         setTrackMuted(t->getId(), t->isMuted());
 	setTrackDeleted(t->getId(), false);
+        setTrackChannelFilter(t->getId(), t->getMidiInputChannel());
+        setTrackDeviceFilter(t->getId(), t->getMidiInputDevice());
 	if (t->getId() > m_maxTrackId) m_maxTrackId = t->getId();
     }
 }
@@ -82,6 +87,17 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
     return true;
 }
 
+void ControlBlock::setTrackArmed(TrackId trackId, bool armed)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].armed = armed;
+}
+
+bool ControlBlock::isTrackArmed(TrackId trackId) const
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].armed;
+    return true;
+}
+
 void ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].deleted = deleted;
@@ -91,6 +107,28 @@ bool ControlBlock::isTrackDeleted(TrackId trackId) const
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].deleted;
     return true;
+}
+
+void ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].channelFilter = channel;
+}
+
+char ControlBlock::getTrackChannelFilter(TrackId trackId) const
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].channelFilter;        
+    return -1;
+}
+    
+void ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInfo[trackId].deviceFilter = device;
+}
+
+DeviceId ControlBlock::getTrackDeviceFilter(TrackId trackId) const
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].deviceFilter;        
+    return Device::ALL_DEVICES;
 }
 
 bool ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
@@ -110,5 +148,21 @@ bool ControlBlock::isInstrumentUnused(InstrumentId instrumentId) const
     }
     return true;
 }
+
+InstrumentId ControlBlock::getInstrumentForEvent(unsigned int dev, unsigned int chan)
+{
+    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
+        if (!m_trackInfo[i].deleted && m_trackInfo[i].armed) {
+            if( (m_trackInfo[i].deviceFilter != Device::ALL_DEVICES) &&
+                (m_trackInfo[i].deviceFilter == dev) &&
+                (m_trackInfo[i].channelFilter != -1) &&
+                (m_trackInfo[i].channelFilter == chan) )
+                return m_trackInfo[i].instrumentId;
+        }     
+    }
+    // There is not a matching filter, return the selected track instrument
+    return getInstrumentForTrack(getSelectedTrack());
+}
+
 
 }

@@ -46,9 +46,16 @@ public:
     // delegate ControlBlock's interface
     InstrumentId getInstrumentForTrack(unsigned int trackId) 
         { return m_controlBlock->getInstrumentForTrack(trackId); }
+        
+    InstrumentId getInstrumentForEvent(unsigned int dev, 
+                                       unsigned int chan)
+        { return m_controlBlock->getInstrumentForEvent(dev, chan); }
 
     bool isTrackMuted(unsigned int trackId)
         { return m_controlBlock->isTrackMuted(trackId); }
+        
+    bool isTrackArmed(unsigned int trackId)
+        { return m_controlBlock->isTrackArmed(trackId); }
 
     InstrumentId getInstrumentForMetronome() 
         { return m_controlBlock->getInstrumentForMetronome(); }
@@ -56,6 +63,12 @@ public:
     bool isMetronomeMuted() { return m_controlBlock->isMetronomeMuted(); }
 
     bool isSolo()  { return m_controlBlock->isSolo(); }
+
+    bool isMidiRoutingEnabled() 
+        { return m_controlBlock->isMidiRoutingEnabled(); }
+        
+    Rosegarden::MidiRoutingMode getMidiRoutingMode()
+        { return m_controlBlock->getMidiRoutingMode(); }
 
     Rosegarden::TrackId getSelectedTrack()
         { return m_controlBlock->getSelectedTrack(); }

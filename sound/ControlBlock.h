@@ -35,9 +35,17 @@ struct TrackInfo
 {
     bool deleted;
     bool muted;
+    bool armed;
+    char channelFilter;
+    DeviceId deviceFilter;
     InstrumentId instrumentId;
 };
 
+typedef enum {
+    MIDI_ROUTING_DISABLED,
+    MIDI_ROUTING_SELECTED_TRACK,
+    MIDI_ROUTING_ARMED_TRACKS
+} MidiRoutingMode;
 
 
 #define CONTROLBLOCK_MAX_NB_TRACKS 1024 // can't be a symbol
@@ -60,11 +68,20 @@ public:
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
     InstrumentId getInstrumentForTrack(TrackId trackId) const;
 
+    void setTrackArmed(TrackId trackId, bool);
+    bool isTrackArmed(TrackId trackId) const;
+
     void setTrackMuted(TrackId trackId, bool);
     bool isTrackMuted(TrackId trackId) const;
 
     void setTrackDeleted(TrackId trackId, bool);
     bool isTrackDeleted(TrackId trackId) const;
+    
+    void setTrackChannelFilter(TrackId trackId, char);
+    char getTrackChannelFilter(TrackId trackId) const;
+    
+    void setTrackDeviceFilter(TrackId trackId, DeviceId);
+    DeviceId getTrackDeviceFilter(TrackId trackId) const;
     
     bool isInstrumentMuted(InstrumentId instrumentId) const;
     bool isInstrumentUnused(InstrumentId instrumentId) const;
@@ -85,12 +102,20 @@ public:
 
     void setRecordFilter(MidiFilter filter) { m_recordFilter = filter; }
     MidiFilter getRecordFilter() const { return m_recordFilter; }
+    
+    void setMidiRoutingMode(MidiRoutingMode mode) { m_routingMode = mode; }
+    MidiRoutingMode getMidiRoutingMode() const { return m_routingMode; }
+    bool isMidiRoutingEnabled() const { return m_routingMode != MIDI_ROUTING_DISABLED; } 
+    
+    InstrumentId getInstrumentForEvent(unsigned int dev, 
+                                       unsigned int chan);
 
 protected:
     //--------------- Data members ---------------------------------
     // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
-    int m_maxTrackId;
+    unsigned int m_maxTrackId;
     bool m_solo;
+    MidiRoutingMode m_routingMode;
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;
     TrackId m_selectedTrack;

@@ -489,19 +489,42 @@ RosegardenSequencerApp::processRecordedMidi()
     if (mC->empty() || !m_controlBlockMmapper) return;
 
     applyFiltering(mC, m_controlBlockMmapper->getRecordFilter(), false);
-    int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
-	(m_controlBlockMmapper->getSelectedTrack());
-    for (Rosegarden::MappedComposition::iterator i = mC->begin();
-	 i != mC->end(); ++i) {
-	(*i)->setInstrument(instrumentId);
-    }
-
     m_sequencerMapper.updateRecordingBuffer(mC);
 
-    applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
-    m_driver->processEventsOut(*mC);
+    if (m_controlBlockMmapper->isMidiRoutingEnabled()) {
+        applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
+        routeEvents(mC);
+    }
 }
 
+void
+RosegardenSequencerApp::routeEvents(Rosegarden::MappedComposition *mC)
+{
+    switch(m_controlBlockMmapper->getMidiRoutingMode()) {
+        
+        case Rosegarden::MIDI_ROUTING_SELECTED_TRACK:
+            int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
+                (m_controlBlockMmapper->getSelectedTrack());
+            for (Rosegarden::MappedComposition::iterator i = mC->begin();
+                i != mC->end(); ++i) {
+                (*i)->setInstrument(instrumentId);
+            }
+            break;
+            
+        case Rosegarden::MIDI_ROUTING_ARMED_TRACKS:
+            for (Rosegarden::MappedComposition::iterator i = mC->begin();
+                i != mC->end(); ++i) {
+                int instrumentId = m_controlBlockMmapper->getInstrumentForEvent
+                    ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
+                (*i)->setInstrument(instrumentId);
+            }
+            break;
+            
+        default:
+            return;
+    }
+    m_driver->processEventsOut(*mC);
+}
 
 // Send an update
 //
