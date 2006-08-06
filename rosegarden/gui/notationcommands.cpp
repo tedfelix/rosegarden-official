@@ -427,12 +427,144 @@ MultiKeyInsertionCommand::MultiKeyInsertionCommand(Rosegarden::Composition &c,
 {
     for (Rosegarden::Composition::iterator i = c.begin(); i != c.end(); ++i) {
 	Rosegarden::Segment *segment = *i;
+
+	// calculate the offset key for tranposing segments, fixes #1520716
+	//
+	//!!! causes potentially confusing behavior, which needs an
+	// explanation somehow, but I haven't worked how or where or whether
+	int segTranspose = segment->getTranspose();	
+
+	// get minor from the original key to pass along; we don't care about
+	// that here
+	bool minor = key.isMinor();
+	bool sharp = false;
+
+	// strip off any extra octave(s)
+	segTranspose %= 12;
+	
+	int newAcc = 0;
+
+	// use a ghastly switch statement from hell to create a case by case
+	// lookup table, because I can't figure out any other way to get
+	// there, and something ugly that works is better than the most
+	// compact and beautiful code in the world, if that prettier code has
+	// even one bug
+	switch (segTranspose) {
+	    case 0:
+		break;
+	    case 1:
+		sharp = true;
+		newAcc = 5;
+		break;
+	    case 2:
+		sharp = false;
+		newAcc = 2;
+		break;
+	    case 3:
+		sharp = true;
+		newAcc = 3;
+		break;
+	    case 4:
+		sharp = false;
+		newAcc = 4;
+		break;
+	    case 5:
+		sharp = true;
+		newAcc = 1;
+		break;
+	    case 6:
+		sharp = false;
+		newAcc =6;
+		break;
+	    case 7:
+		sharp = false;
+		newAcc = 1;
+		break;
+	    case 8:
+		sharp = true;
+		newAcc = 4;
+		break;
+	    case 9:
+		sharp = false;
+		newAcc = 3;
+		break;
+	    case 10:
+		sharp = true;
+		newAcc = 2;
+		break;
+	    case 11:
+		sharp = false;
+		newAcc = 5;
+		break;
+	    case -1:
+		sharp = false;
+		newAcc = 5;
+		break;
+	    case -2:
+		sharp = true;
+		newAcc = 2;
+		break;
+	    case -3:
+		sharp = false;
+		newAcc = 3;
+		break;
+	    case -4:
+		sharp = true;
+		newAcc = 4;
+		break;
+	    case -5:
+		sharp = false;
+		newAcc = 1;
+		break;
+	    case -6:
+		sharp = false;
+		newAcc = 6;
+		break;
+	    case -7:
+		sharp = true;
+		newAcc = 1;
+		break;
+	    case -8:
+		sharp = false;
+		newAcc = 4;
+		break;
+	    case -9:
+		sharp = true;
+		newAcc = 3;
+		break;
+	    case -10:
+		sharp = false;
+		newAcc = 2;
+		break;
+	    case -11:
+		sharp = true;
+		newAcc = 5;
+		break;
+	    default:
+		RG_DEBUG << "I defaulted in this switch statement, this is probably a BUG." << endl;
+	}
+
+	// failsafe should never be needed, but creating a key with bad
+	// parameters causes an immediate crash, so we insure against that
+	// anyway
+	if (newAcc > 7 || newAcc < 0) {
+	    RG_DEBUG << "MultiKeyInsertionCommand: tried to create an illegal key!  Using C major failsafe!" << endl;
+	    minor = false;
+	    sharp = true;
+	    newAcc = 0;
+	}
+
+	// create the transposed key
+	Rosegarden::Key k(newAcc, sharp, minor);
+	RG_DEBUG << "MultiKeyInsertCommand: created key with " << newAcc 
+	         << (sharp ? " sharp(s)" : " flat(s)") << endl;
+
 	// no harm in using getEndTime instead of getEndMarkerTime here:
 	if (segment->getStartTime() <= time && segment->getEndTime() > time) {
-	    addCommand(new KeyInsertionCommand(*segment, time, key, convert, transpose));
+	    addCommand(new KeyInsertionCommand(*segment, time, k, convert, transpose));
 	} else if (segment->getStartTime() > time) {
 	    addCommand(new KeyInsertionCommand(*segment, segment->getStartTime(),
-					       key, convert, transpose));
+					       k, convert, transpose));
 	}
     }
 }
