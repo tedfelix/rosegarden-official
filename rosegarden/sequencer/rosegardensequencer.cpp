@@ -503,12 +503,14 @@ RosegardenSequencerApp::routeEvents(Rosegarden::MappedComposition *mC)
     switch(m_controlBlockMmapper->getMidiRoutingMode()) {
         
         case Rosegarden::MIDI_ROUTING_SELECTED_TRACK:
-            int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
-                (m_controlBlockMmapper->getSelectedTrack());
-            for (Rosegarden::MappedComposition::iterator i = mC->begin();
-                i != mC->end(); ++i) {
-                (*i)->setInstrument(instrumentId);
-            }
+	    {
+        	int instrumentId = m_controlBlockMmapper->getInstrumentForTrack
+        	    (m_controlBlockMmapper->getSelectedTrack());
+        	for (Rosegarden::MappedComposition::iterator i = mC->begin();
+        	    i != mC->end(); ++i) {
+        	    (*i)->setInstrument(instrumentId);
+		}
+	    }
             break;
             
         case Rosegarden::MIDI_ROUTING_ARMED_TRACKS:
