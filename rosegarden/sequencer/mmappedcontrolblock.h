@@ -67,9 +67,6 @@ public:
     bool isMidiRoutingEnabled() 
         { return m_controlBlock->isMidiRoutingEnabled(); }
         
-    Rosegarden::MidiRoutingMode getMidiRoutingMode()
-        { return m_controlBlock->getMidiRoutingMode(); }
-
     Rosegarden::TrackId getSelectedTrack()
         { return m_controlBlock->getSelectedTrack(); }
 

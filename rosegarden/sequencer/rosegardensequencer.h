@@ -371,7 +371,7 @@ public:
     // belongin to the MappedComposition, and sends the 
     // transformed events to the driver to be played.
     //
-    void routeEvents(Rosegarden::MappedComposition *mC);
+    void routeEvents(Rosegarden::MappedComposition *mC, bool useSelectedTrack);
 
     // Are we looping?
     //

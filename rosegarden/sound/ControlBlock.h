@@ -41,13 +41,6 @@ struct TrackInfo
     InstrumentId instrumentId;
 };
 
-typedef enum {
-    MIDI_ROUTING_DISABLED,
-    MIDI_ROUTING_SELECTED_TRACK,
-    MIDI_ROUTING_ARMED_TRACKS
-} MidiRoutingMode;
-
-
 #define CONTROLBLOCK_MAX_NB_TRACKS 1024 // can't be a symbol
 
 /**
@@ -103,10 +96,17 @@ public:
     void setRecordFilter(MidiFilter filter) { m_recordFilter = filter; }
     MidiFilter getRecordFilter() const { return m_recordFilter; }
     
-    void setMidiRoutingMode(MidiRoutingMode mode) { m_routingMode = mode; }
-    MidiRoutingMode getMidiRoutingMode() const { return m_routingMode; }
-    bool isMidiRoutingEnabled() const { return m_routingMode != MIDI_ROUTING_DISABLED; } 
+    void setMidiRoutingEnabled(bool enabled) { m_routing = enabled; }
+    bool isMidiRoutingEnabled() const { return m_routing; } 
     
+    /**
+     * Gets an InstrumentId for the given DeviceId and Channel. If there
+     * is an armed track having a matching device and channel filters, 
+     * this method returns the instrument assigned to the track, even if 
+     * there are more tracks matching the same filters. If there is not a
+     * single match, it returns the instrument assigned to the selected
+     * track.
+     */
     InstrumentId getInstrumentForEvent(unsigned int dev, 
                                        unsigned int chan);
 
@@ -115,7 +115,7 @@ protected:
     // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
     unsigned int m_maxTrackId;
     bool m_solo;
-    MidiRoutingMode m_routingMode;
+    bool m_routing;
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;
     TrackId m_selectedTrack;

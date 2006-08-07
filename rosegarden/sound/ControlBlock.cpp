@@ -31,7 +31,7 @@ namespace Rosegarden
 ControlBlock::ControlBlock(unsigned int maxTrackId)
     : m_maxTrackId(maxTrackId),
       m_solo(false),
-      m_routingMode(MIDI_ROUTING_ARMED_TRACKS),
+      m_routing(true),
       m_thruFilter(0),
       m_recordFilter(0),
       m_selectedTrack(0)
@@ -153,10 +153,10 @@ InstrumentId ControlBlock::getInstrumentForEvent(unsigned int dev, unsigned int 
 {
     for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
         if (!m_trackInfo[i].deleted && m_trackInfo[i].armed) {
-            if( (m_trackInfo[i].deviceFilter != Device::ALL_DEVICES) &&
-                (m_trackInfo[i].deviceFilter == dev) &&
-                (m_trackInfo[i].channelFilter != -1) &&
-                (m_trackInfo[i].channelFilter == chan) )
+            if(((m_trackInfo[i].deviceFilter == Device::ALL_DEVICES) ||
+                (m_trackInfo[i].deviceFilter == dev)) &&
+               ((m_trackInfo[i].channelFilter == -1) ||
+                (m_trackInfo[i].channelFilter == chan)))
                 return m_trackInfo[i].instrumentId;
         }     
     }
