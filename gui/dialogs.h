@@ -134,6 +134,7 @@ public:
     Rosegarden::Key getKey() const;
 
     bool shouldApplyToAll() const;
+    bool shouldBeTransposed() const; 
     ConversionType getConversionType() const;
 
 public slots:
@@ -163,6 +164,7 @@ protected:
     QLabel *m_explanatoryLabel;
 
     QRadioButton *m_applyToAllButton;
+    QRadioButton *m_yesTransposeButton;
 
     QRadioButton *m_noConversionButton;
     QRadioButton *m_convertButton;
@@ -505,7 +507,7 @@ public:
     enum ConversionType {
 	NoConversion,
 	ChangeOctave,
-	Transpose
+	Transpose,
     };
 
     ClefDialog(QWidget *parent,

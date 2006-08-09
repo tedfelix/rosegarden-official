@@ -9,53 +9,53 @@
 
 Import('env')
 
-tobj=env.kobject('program', env)
-tobj.target='test_fingering'
-tobj.source='test_fingering.cpp'
-tobj.includes='../../base ../../ ../../..'
-tobj.libs='guitar kdeui base'
-tobj.libpaths='../../base .'
-tobj.execute()
+#obj=env.kobject('program', env)
+#obj.target='test_fingering'
+#obj.source='test_fingering.cpp'
+#obj.includes='../../base ../../ ../../..'
+#obj.libs='guitar kdeui base'
+#obj.libpaths='../../base .'
+#obj.execute()
 
-tobj=env.kobject('program', env)
-tobj.target='test_guitar'
-tobj.source='test_guitar.cpp'
-tobj.includes='../../base ../../ ../../..'
-tobj.libs='guitar kdeui base'
-tobj.libpaths='../../base .'
-tobj.execute()
+#obj=env.kobject('program', env)
+#obj.target='test_guitar'
+#obj.source='test_guitar.cpp'
+#obj.includes='../../base ../../ ../../..'
+#obj.libs='guitar kdeui base'
+#obj.libpaths='../../base .'
+#obj.execute()
 
-tobj=env.kobject('program', env)
-tobj.target='test_note'
-tobj.source='test_note.cpp'
-tobj.includes='../../base ../../ ../../..'
-tobj.libs='guitar kdeui base'
-tobj.libpaths='../../base .'
-tobj.execute()
+#obj=env.kobject('program', env)
+#obj.target='test_note'
+#obj.source='test_note.cpp'
+#obj.includes='../../base ../../ ../../..'
+#obj.libs='guitar kdeui base'
+#obj.libpaths='../../base .'
+#obj.execute()
 
-tobj=env.kobject('program', env)
-tobj.target='test_barre'
-tobj.source='test_barre.cpp'
-tobj.includes='../../base ../../ ../../..'
-tobj.libs='guitar kdeui base'
-tobj.libpaths='../../base .'
-tobj.execute()
+#obj=env.kobject('program', env)
+#obj.target='test_barre'
+#obj.source='test_barre.cpp'
+#obj.includes='../../base ../../ ../../..'
+#obj.libs='guitar kdeui base'
+#obj.libpaths='../../base .'
+#obj.execute()
 
-tobj=env.kobject('program', env)
-tobj.target='test_chordmap'
-tobj.source='test_chordmap.cpp'
-tobj.includes='../../base ../../ ../../..'
-tobj.libs='guitar kdeui base'
-tobj.libpaths='../../base .'
-tobj.execute()
+#obj=env.kobject('program', env)
+#obj.target='test_chordmap'
+#obj.source='test_chordmap.cpp'
+#obj.includes='../../base ../../ ../../..'
+#obj.libs='guitar kdeui base'
+#obj.libpaths='../../base .'
+#obj.execute()
 
-tobj=env.kobject('program', env)
-tobj.target='test_fingeringconstruct'
-tobj.source='test_fingeringconstruct.cpp'
-tobj.includes='../../base ../../ ../../..'
-tobj.libs='guitar kdeui base'
-tobj.libpaths='../../base .'
-tobj.execute()
+#obj=env.kobject('program', env)
+#obj.target='test_fingeringconstruct'
+#obj.source='test_fingeringconstruct.cpp'
+#obj.includes='../../base ../../ ../../..'
+#obj.libs='guitar kdeui base'
+#obj.libpaths='../../base .'
+#obj.execute()
 
 guitar_src="""
 barre.cpp

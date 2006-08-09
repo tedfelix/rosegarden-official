@@ -94,6 +94,14 @@ void Track::setLabel(const std::string &label)
         m_owningComposition->notifyTrackChanged(this);
 }
 
+void Track::setPresetLabel(const std::string &label)
+{
+    m_presetLabel = label;
+
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+}
+
 void Track::setInstrument(InstrumentId instrument)
 {
     m_instrument = instrument;

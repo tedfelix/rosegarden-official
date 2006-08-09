@@ -1755,6 +1755,7 @@ void NotationView::slotEditAddKeySignature()
         KeySignatureDialog::ConversionType conversion =
             dialog.getConversionType();
         
+	bool transposeKey = dialog.shouldBeTransposed();
         bool applyToAll = dialog.shouldApplyToAll();
         
         if (applyToAll) {
@@ -1763,14 +1764,16 @@ void NotationView::slotEditAddKeySignature()
                  (getDocument()->getComposition(),
                   insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
-                  conversion == KeySignatureDialog::Transpose));
+                  conversion == KeySignatureDialog::Transpose,
+		  transposeKey));
         } else {
             addCommandToHistory
                 (new KeyInsertionCommand
                  (segment,
                   insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
-                  conversion == KeySignatureDialog::Transpose));
+                  conversion == KeySignatureDialog::Transpose,
+		  transposeKey));
         }
     }
 }                      
@@ -1887,7 +1890,8 @@ void NotationView::slotEditElement(NotationStaff *staff,
 			 (staff->getSegment(),
 			  element->event()->getAbsoluteTime(), dialog.getKey(),
 			  conversion == KeySignatureDialog::Convert,
-			  conversion == KeySignatureDialog::Transpose));
+			  conversion == KeySignatureDialog::Transpose,
+			  dialog.shouldBeTransposed()));
 		}
 
 	} catch (Rosegarden::Exception e) {

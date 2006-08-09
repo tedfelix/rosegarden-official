@@ -399,6 +399,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QGroupBox *keyFrame = new QGroupBox
 	(1, Horizontal, i18n("Key signature"), vbox);
 
+    QGroupBox *transposeFrame = new QButtonGroup
+	(1, Horizontal, i18n("Transposition"), vbox);
+
     QGroupBox *buttonFrame = new QButtonGroup
 	(1, Horizontal, i18n("Scope"), vbox);
     
@@ -436,6 +439,16 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     m_keyLabel->setMinimumWidth(m_keyLabel->pixmap()->width());
     m_keyLabel->setMinimumHeight(m_keyLabel->pixmap()->height());
+
+    m_yesTransposeButton =
+	    new QRadioButton(i18n("Transpose key relative to transposed segments"),
+		             transposeFrame);
+    QRadioButton *noTransposeButton =
+	    new QRadioButton(i18n("Use specified key.  Do not transpose."), transposeFrame);
+    m_yesTransposeButton->setChecked(true);
+
+    // just to shut up the compiler warning about unused variable:
+    noTransposeButton->setChecked(false);
 
     if (showApplyToAll) {
 	QRadioButton *applyToOneButton =
@@ -495,6 +508,12 @@ bool
 KeySignatureDialog::shouldApplyToAll() const
 {
     return m_applyToAllButton && m_applyToAllButton->isChecked();
+}
+
+bool
+KeySignatureDialog::shouldBeTransposed() const
+{
+    return m_yesTransposeButton && m_yesTransposeButton->isChecked();
 }
 
 void
@@ -3304,6 +3323,7 @@ ClefDialog::redrawClefPixmap()
 
     std::string type = m_clef.getClefType();
     if (type == Rosegarden::Clef::Treble) name = name.arg(i18n("Treble"));
+    else if (type == Rosegarden::Clef::Soprano) name = name.arg(i18n("Soprano"));
     else if (type == Rosegarden::Clef::Alto) name = name.arg(i18n("Alto"));
     else if (type == Rosegarden::Clef::Tenor) name = name.arg(i18n("Tenor"));
     else if (type == Rosegarden::Clef::Bass) name = name.arg(i18n("Bass"));

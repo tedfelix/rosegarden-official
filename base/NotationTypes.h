@@ -236,6 +236,7 @@ public:
     typedef Exception BadClefName;
 
     static const std::string Treble;
+    static const std::string Soprano;
     static const std::string Tenor;
     static const std::string Alto;
     static const std::string Bass;
@@ -281,7 +282,7 @@ public:
     static bool isValid(const Event &e);
 
     /**
-     * Return the basic clef type (Treble, Tenor, Alto, Bass)
+     * Return the basic clef type (Treble, Soprano, Tenor, Alto, Bass)
      */
     std::string getClefType() const { return m_clef; }
 
@@ -307,7 +308,7 @@ public:
     /**
      * Return the intra-octave component of getTranspose(), i.e. the
      * number of semitones this clef is distinct in pitch from the treble
-     * besides the different in octaves
+     * besides the difference in octaves
      */
     int getPitchOffset() const;
 

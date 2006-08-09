@@ -173,7 +173,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_psetLbl = new QLabel(i18n("Preset"), this);
     mainLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
-    m_presetLbl = new KSqueezedTextLabel(i18n("None"), this);
+    m_presetLbl = new KSqueezedTextLabel(i18n("<none>"), this);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     mainLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
 
@@ -190,16 +190,17 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_defClef->setMinimumWidth(minwidth11);
     m_defClef->insertItem(i18n("treble"), TrebleClef);
     m_defClef->insertItem(i18n("bass"), BassClef);
-    m_defClef->insertItem(i18n("alto"), AltoClef);
-    m_defClef->insertItem(i18n("tenor"), TenorClef);
-    m_defClef->insertItem(i18n("guitar"), GuitarClef);
+    m_defClef->insertItem(i18n("crotales"), CrotalesClef);
     m_defClef->insertItem(i18n("xylophone"), XylophoneClef);
+    m_defClef->insertItem(i18n("guitar"), GuitarClef);
     m_defClef->insertItem(i18n("contrabass"), ContrabassClef);
     m_defClef->insertItem(i18n("celesta"), CelestaClef);
     m_defClef->insertItem(i18n("old celesta"), OldCelestaClef);
+    m_defClef->insertItem(i18n("soprano"), SopranoClef);
+    m_defClef->insertItem(i18n("alto"), AltoClef);
+    m_defClef->insertItem(i18n("tenor"), TenorClef);
 /*  clef types in the datbase that are not yet supported must be ignored for
  *  now:
-    m_defClef->insertItem(i18n("soprano"), SopranoClef);
     m_defClef->insertItem(i18n("two bar"), TwoBarClef); */
     mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 5, AlignRight);
 
@@ -232,13 +233,13 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_rangeLbl = new QLabel(i18n("Range"), this);
     mainLayout->addWidget(m_rangeLbl, row, 0, AlignLeft);
 
-    m_highButton = new QPushButton(i18n("High: ---"), this);
-    QToolTip::add(m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
-    mainLayout->addMultiCellWidget(m_highButton, row, row, 1, 3, AlignRight);
-
     m_lowButton = new QPushButton(i18n("Low: ----"), this);
     QToolTip::add(m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
-    mainLayout->addMultiCellWidget(m_lowButton, row, row, 4, 5, AlignLeft);
+    mainLayout->addMultiCellWidget(m_lowButton, row, row, 1, 3, AlignRight);
+
+    m_highButton = new QPushButton(i18n("High: ---"), this);
+    QToolTip::add(m_highButton, i18n("Choose the lowest suggested playable note, using a staff"));
+    mainLayout->addMultiCellWidget(m_highButton, row, row, 4, 5, AlignLeft);
 
     updateHighLow();
     
@@ -469,6 +470,8 @@ TrackParameterBox::updateHighLow()
 
     m_highButton->setText(QString("High: %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
     m_lowButton->setText(QString("Low: %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+
+    m_presetLbl->setEnabled(false);
 }
 
 void 
@@ -482,6 +485,8 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
     if (!trk) return;
 
+    m_presetLbl->setText(trk->getPresetLabel());
+    m_presetLbl->setEnabled(true);
     m_defClef->setCurrentItem(trk->getClef());
     m_defTranspose->setValue(trk->getTranspose());
     m_defColor->setCurrentItem(trk->getColor());
@@ -496,6 +501,7 @@ TrackParameterBox::slotSelectedTrackChanged()
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::TrackId newTrack = comp.getSelectedTrack();
     if ( newTrack != m_selectedTrackId ) {
+	m_presetLbl->setEnabled(true);
         m_selectedTrackId = newTrack;
         slotSelectedTrackNameChanged();
         slotUpdateControls(-1);
@@ -655,6 +661,7 @@ TrackParameterBox::slotClefChanged(int clef)
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
     trk->setClef(clef);
+    m_presetLbl->setEnabled(false);
 }
 
 void
@@ -664,6 +671,7 @@ TrackParameterBox::slotTransposeChanged(int transpose)
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
     trk->setTranspose(transpose);
+    m_presetLbl->setEnabled(false);
 }   
 
 // code copied/adapted from segmentparameterbox.cpp on 16 July 2006
@@ -709,7 +717,11 @@ TrackParameterBox::slotColorChanged(int index)
 
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
-    trk->setColor(index);
+
+    //!!! Tentative fix for #1527462.  I haven't worked out where the -1
+    // comes from, but it is consistent.  I'm going to try a +1 here to see if
+    // it cures this, though I don't quite understand why it would.
+    trk->setColor(index + 1);
 
     if (index == m_addColourPos) {
         Rosegarden::ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
@@ -750,6 +762,8 @@ TrackParameterBox::slotHighestPressed()
 
 	trk->setHighestPlayable(m_highestPlayable);
     }
+    
+    m_presetLbl->setEnabled(false);
 }
 
 void
@@ -769,6 +783,8 @@ TrackParameterBox::slotLowestPressed()
 
 	trk->setLowestPlayable(m_lowestPlayable);
     }
+
+    m_presetLbl->setEnabled(false);
 }
 
 void
@@ -776,19 +792,30 @@ TrackParameterBox::slotPresetPressed()
 {
     RG_DEBUG << "TrackParameterBox::slotPresetPressed()" << endl;
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    if (!trk) return;
+
     PresetHandlerDialog dialog(this);
 
         try {
 	    if (dialog.exec() == QDialog::Accepted) {
 		m_presetLbl->setText(dialog.getName());
+		trk->setPresetLabel(dialog.getName());
 		m_defClef->setCurrentItem(dialog.getClef());
 		m_defTranspose->setValue(dialog.getTranspose());
 
 		m_highestPlayable = dialog.getHighRange();
 		m_lowestPlayable = dialog.getLowRange();
 		updateHighLow();		
-		//!!! check if any slots need to be run manually, and/or track
-		// parmeters set manually (eg. highest/lowest) here
+		slotClefChanged(dialog.getClef());
+		slotTransposeChanged(dialog.getTranspose());
+
+		// the preceding slots will have set this disabled, so we
+		// re-enable it until it is subsequently re-disabled by the
+		// user overriding the preset, calling one of the above slots
+		// in the normal course
+		m_presetLbl->setEnabled(true);
 	    }
 	} catch (Rosegarden::Exception e) {
 	    //!!! This should be a more verbose error to pass along the

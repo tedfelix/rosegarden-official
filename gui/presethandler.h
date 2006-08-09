@@ -191,7 +191,7 @@ public:
     PresetGroup *m_presets;
     CategoriesContainer m_categories;
 
-    KConfig *cfg;
+    KConfig *m_config;
 
     //-------[ accessor functions ]------------------------
 
@@ -228,7 +228,7 @@ protected slots:
     void slotCategoryIndexChanged(int index);
 
     // write out settings to kconfig data for next time and call accept()
-//    virtual void slotOk();
+    void slotOk();
 
 }; // PresetHandlerDialog
 
