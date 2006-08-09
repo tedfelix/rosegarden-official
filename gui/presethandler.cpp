@@ -512,7 +512,7 @@ PresetHandlerDialog::slotOk()
     m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentItem());
     m_config->writeEntry("player_combo_index", m_playerCombo->currentItem());
 
-    slotApply();
+    QDialog::accept();
 }
 
 #include "presethandler.moc"
