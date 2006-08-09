@@ -38,6 +38,7 @@
 #include <kconfig.h>
 #include <kcombobox.h>
 
+#include "constants.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "clefindex.h"
@@ -169,10 +170,7 @@ PresetGroup::PresetGroup() :
 
 PresetGroup::~PresetGroup()
 {
-/*    for (SystemFontMap::iterator i = m_systemFontCache.begin();
-	 i != m_systemFontCache.end(); ++i) {
-	delete i->second;
-    } */
+    //!!! do I have anything to do here?
 }
 
 bool
@@ -223,14 +221,19 @@ PresetGroup::startElement(const QString &, const QString &,
 	if (s) {
 	    if (s == "treble") m_elClef = TrebleClef;
 	    else if (s == "bass") m_elClef = BassClef;
-	    else if (s == "alto") m_elClef = AltoClef;
-	    else if (s == "tenor") m_elClef = TenorClef;
-	    else if (s == "guitar") m_elClef = GuitarClef;
+	    else if (s == "crotales") m_elClef = CrotalesClef;
 	    else if (s == "xylophone") m_elClef = XylophoneClef;
+	    else if (s == "guitar") m_elClef = GuitarClef;
+	    else if (s == "contrabass") m_elClef = ContrabassClef;
 	    else if (s == "celesta") m_elClef = CelestaClef;
 	    else if (s == "oldCelesta") m_elClef = OldCelestaClef;
 	    else if (s == "soprano") m_elClef = SopranoClef;
+	    else if (s == "alto") m_elClef = AltoClef;
+	    else if (s == "tenor") m_elClef = TenorClef;
 	    else if (s == "two-bar") m_elClef = TwoBarClef;
+	    else {
+		RG_DEBUG << "startElement: processed unrecognized clef type: " << s << endl;
+	    }
 	    m_clef = true;
 	}
 
@@ -288,10 +291,10 @@ PresetGroup::startElement(const QString &, const QString &,
 	m_categories[m_currentCategory].addPreset(m_elInstrumentName,
 		                                   m_elClef,
 						   m_elTranspose,
-						   m_elLowAm,
 						   m_elHighAm,
-						   m_elLowPro,	
-						   m_elHighPro);
+						   m_elLowAm,
+						   m_elHighPro,
+						   m_elLowPro);	
 	// increment the current instrument 
 	//!!! (is this ever going to be needed?)
 	m_lastInstrument = m_currentInstrument;
@@ -341,8 +344,8 @@ PresetGroup::fatalError(const QXmlParseException& exception)
 //                     //
 /////////////////////////
 PresetHandlerDialog::PresetHandlerDialog(QWidget *parent)
-    : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok|Cancel, Ok)/*,
-    cfg(kapp->config()) */
+    : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok|Cancel, Ok),
+    m_config(kapp->config()) 
 {
     m_presets = new PresetGroup();
     m_categories = m_presets->getCategories();
@@ -352,7 +355,10 @@ PresetHandlerDialog::PresetHandlerDialog(QWidget *parent)
 
 PresetHandlerDialog::~PresetHandlerDialog()
 {
-    // delete m_presets?
+    // delete m_presets
+    if (m_presets != NULL) {
+	delete m_presets;
+    }
 }
 
 void
@@ -388,13 +394,20 @@ PresetHandlerDialog::initDialog()
     layout->addWidget(m_playerCombo, 3, 1);
 
     populateCategoryCombo();
+    // try to set to same category used previously
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    m_categoryCombo->setCurrentItem(m_config->readNumEntry("category_combo_index", 0));
 
-    //!!
-    // read category and player ability from KConfig and pre-set combos
-    //
-   
     // populate the instrument combo
     slotCategoryIndexChanged(m_categoryCombo->currentItem());
+
+    // try to set to same instrument used previously
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    m_instrumentCombo->setCurrentItem(m_config->readNumEntry("instrument_combo_index", 0));
+
+    // set to same player used previously (this one can't fail, unlike the
+    // others, because the contents of this combo are static)
+    m_playerCombo->setCurrentItem(m_config->readNumEntry("player_combo_index", 0));
 
     connect(m_categoryCombo, SIGNAL(activated(int)),
             SLOT(slotCategoryIndexChanged(int)));
@@ -462,7 +475,12 @@ PresetHandlerDialog::populateCategoryCombo()
 
 	RG_DEBUG << "    adding category: " << (*i).getName() << endl;
 
-	m_categoryCombo->insertItem((*i).getName());
+	//!!! don't add "Unpitched Percussion" category, because we don't have a
+	// TwoBar clef yet, and it's impossible to do anything sensible with
+	// these database entries at this time.
+	if ((*i).getName() != "Unpitched Percussion") {
+	    m_categoryCombo->insertItem((*i).getName());
+	}
     } 
 }
 
@@ -486,11 +504,15 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
 
 }
 
-/*void
-PresetHandlerDialog::slotOK()
+void
+PresetHandlerDialog::slotOk()
 {
-    // write the amateur/pro setting to config and
+    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    m_config->writeEntry("category_combo_index", m_categoryCombo->currentItem());
+    m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentItem());
+    m_config->writeEntry("player_combo_index", m_playerCombo->currentItem());
+
     slotApply();
-}*/
+}
 
 #include "presethandler.moc"

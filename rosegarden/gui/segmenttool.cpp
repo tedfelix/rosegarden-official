@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <string.h>
+
 #include <qpopupmenu.h>
 #include <qcursor.h>
 
@@ -39,6 +41,7 @@
 
 #include "rosegardengui.h"
 #include "rosedebug.h"
+#include "rosestrings.h"
 
 using Rosegarden::TrackId;
 using Rosegarden::timeT;
@@ -303,10 +306,37 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
 		                  (segment->getStartTime()));
     	 	   	   break;
-
 	    case BassClef: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
 		                  (segment->getStartTime()));
 		           break;
+	    case CrotalesClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, 2).getAsEvent
+				   (segment->getStartTime())); 
+			   break;
+	    case XylophoneClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, 1).getAsEvent
+				   (segment->getStartTime())); 
+			   break;
+	    case GuitarClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, -2).getAsEvent
+				   (segment->getStartTime())); 
+			   break;
+	    case ContrabassClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass, -1).getAsEvent
+				   (segment->getStartTime())); 
+			   break;
+	    case CelestaClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass, 2).getAsEvent
+				   (segment->getStartTime())); 
+			   break;
+	    case OldCelestaClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass, 1).getAsEvent
+				   (segment->getStartTime())); 
+			   break;
+	    case SopranoClef:
+			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Soprano).getAsEvent
+				  (segment->getStartTime()));
+			   break;
 	    case AltoClef: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
 		                  (segment->getStartTime()));
 		           break;
@@ -314,15 +344,19 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 		           segment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
 		                  (segment->getStartTime()));
 			   break;
-	    case GuitarClef:
-			   segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, -16).getAsEvent
-				   (segment->getStartTime())); 
+	    default: segment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
+				  (segment->getStartTime()));
         }
 
 	segment->setTranspose(track->getTranspose());
 	segment->setColourIndex(track->getColor());
 	segment->setLowestPlayable(track->getLowestPlayable());
 	segment->setHighestPlayable(track->getHighestPlayable());
+
+	std::string label = qstrtostr(track->getPresetLabel());
+	if (label != "") {
+            segment->setLabel(qstrtostr(track->getPresetLabel()));
+	}
 
         CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);
         m_canvas->getModel()->clearSelected();

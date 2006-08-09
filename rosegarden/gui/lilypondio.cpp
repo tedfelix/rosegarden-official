@@ -1323,6 +1323,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    
 		if (clef.getClefType() == Clef::Treble) {
 		    str << "treble";
+		} else if (clef.getClefType() == Clef::Soprano) {
+		    str << "soprano";
 		} else if (clef.getClefType() == Clef::Tenor) {
 		    str << "tenor";
 		} else if (clef.getClefType() == Clef::Alto) {

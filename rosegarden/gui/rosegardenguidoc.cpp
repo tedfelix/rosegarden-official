@@ -81,6 +81,7 @@
 #include "kstartuplogo.h"
 #include "AudioPluginInstance.h"
 #include "notationcommands.h" // for normalize rests
+#include "clefindex.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;
@@ -2340,7 +2341,9 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
     
     Rosegarden::Track *track = m_composition.getTrackById(tid);
     if (track) {
-	if (track->getLabel() == "") {
+	if (track->getPresetLabel() != "") {
+	    label = track->getPresetLabel();
+	} else if (track->getLabel() == "") {
             Rosegarden::Instrument *instr = 
                 m_studio.getInstrumentById(track->getInstrument());
 	    if (instr) {
@@ -2356,20 +2359,49 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
 
     // insert an intial clef from track parameters
     switch (track->getClef()) {
-	//!!! clef is based on combo box index, which somebody should probably rework
-	// down the line, to make it more obvious that 0 == treble and so
-	// on, but I'm not bothering with that right now
-	case 0: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
+	case TrebleClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
 			      (recordMIDISegment->getStartTime()));
-		break;
-
-	case 1: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
+		       break;
+	case BassClef: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass).getAsEvent
 			      (recordMIDISegment->getStartTime()));
-		break;
-	case 2: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
+		       break;
+	case CrotalesClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, 2).getAsEvent
+			       (recordMIDISegment->getStartTime())); 
+		       break;
+	case XylophoneClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, 1).getAsEvent
+			       (recordMIDISegment->getStartTime())); 
+		       break;
+	case GuitarClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble, -2).getAsEvent
+			       (recordMIDISegment->getStartTime())); 
+		       break;
+	case ContrabassClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass, -1).getAsEvent
+			       (recordMIDISegment->getStartTime())); 
+		       break;
+	case CelestaClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass, 2).getAsEvent
+			       (recordMIDISegment->getStartTime())); 
+		       break;
+	case OldCelestaClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Bass, 1).getAsEvent
+			       (recordMIDISegment->getStartTime())); 
+		       break;
+	case SopranoClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Soprano).getAsEvent
 			      (recordMIDISegment->getStartTime()));
-		break;
-	case 3: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
+		       break;
+	case AltoClef: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Alto).getAsEvent
+			      (recordMIDISegment->getStartTime()));
+		       break;
+	case TenorClef:
+		       recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Tenor).getAsEvent
+			      (recordMIDISegment->getStartTime()));
+		       break;
+	default: recordMIDISegment->insert(Rosegarden::Clef(Rosegarden::Clef::Treble).getAsEvent
 			      (recordMIDISegment->getStartTime()));
     }
 
@@ -2378,7 +2410,7 @@ RosegardenGUIDoc::addRecordMIDISegment(Rosegarden::TrackId tid)
     recordMIDISegment->setColourIndex(track->getColor());
     recordMIDISegment->setHighestPlayable(track->getHighestPlayable());
     recordMIDISegment->setLowestPlayable(track->getLowestPlayable());
-    
+
     m_composition.addSegment(recordMIDISegment);
     
     m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;

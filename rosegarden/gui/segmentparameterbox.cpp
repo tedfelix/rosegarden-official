@@ -1012,6 +1012,11 @@ SegmentParameterBox::updateHighLow()
 
     m_highButton->setText(QString("&High:   %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
     m_lowButton->setText(QString("&Low:   %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+
+    //!!! These really should exist, but I don't have time to make them work
+    // correctly before 1.3, so I'm temporarily hiding them.
+    m_highButton->hide();
+    m_lowButton->hide();
 }
 
 void
