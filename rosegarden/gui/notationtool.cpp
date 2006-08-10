@@ -607,16 +607,19 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
 	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 
-	    // Attempted fix to bug reported on rg-user by SlowPic
-	    // <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
-	    if ((*i)->isa(Rosegarden::Note::EventRestType) &&
-		(*i)->getNotationDuration() > (note.getDuration() * 3)) {
-		// split the rest
-		command->addCommand(new RestInsertionCommand
-				    (segment, time,
-				     time + note.getDuration() * 2,
-				     Note::getNearestNote(note.getDuration() * 2)));
-	    }
+	    //## Attempted fix to bug reported on rg-user by SlowPic
+	    //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
+	    //# HJJ: Comment out this attempt. It breaks the splitting of 
+	    //#      the first bars into rests.
+	    //## if ((*i)->isa(Rosegarden::Note::EventRestType) &&
+		//## (*i)->getNotationDuration() > (note.getDuration() * 3)) {
+	    // split the rest
+	    command->addCommand(new RestInsertionCommand
+				(segment, time,
+				time + note.getDuration() * 2,
+				Note::getNearestNote(note.getDuration() * 2)));
+	    //## }
+	    //# These comments should probably be deleted.
 
 	    command->addCommand(new AdjustMenuTupletCommand
 				(segment, time, note.getDuration(),
