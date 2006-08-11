@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+my $total = 0;
 my $category = '';
 my $ininstrument = 0;
 my $incategory = 0;
@@ -21,6 +22,7 @@ while (<>) {
     $value =~ s/^"(.*)"\s*$/$1/;
     $ininstrument = 1;
     print "    <instrument name=\"$value\">\n";
+    $total++;
   } elsif ($key eq 'clef') {
     print "      <clef type=\"$value\" />\n";
   } elsif ($key eq 'transposition') {
@@ -38,4 +40,5 @@ while (<>) {
 $ininstrument and print "    </instrument>\n";
 $incategory and print "  </category>\n";
 print "</presets>\n";
+print "<!-- IMPORTED $total INSTRUMENTS -->\n";
 

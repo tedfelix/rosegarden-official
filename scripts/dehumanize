@@ -75,11 +75,11 @@ done
 # get rid of the + on +3, and only keep the - on -3
 replace + "" $1
 
-# for every octave in 0 to 11, iterate through the letters and increment a
-# pitch along the way until it tops out at 127, then sed the string for the
-# value of $pitch to dehumanize the results
-pitch=0
-for ((octave = 0; octave <= 11; octave++)); do
+# piano middle C is MIDI pitch 60
+# A0 is MIDI pitch 43
+# 
+pitch=-12
+for ((octave = -2; octave < 20; octave++)); do
     for note in C C\# D D\# E F F\# G G\# A A\# B; do
 	if [ $pitch -gt 127 ]; then
 	    continue
