@@ -92,7 +92,7 @@ SegmentParameterBox::initBox()
     m_autoFadeLabel        = new QLabel(i18n("Audio auto-fade"), this);
     m_fadeInLabel          = new QLabel(i18n("Fade in"), this);
     m_fadeOutLabel         = new QLabel(i18n("Fade out"), this);
-    QLabel *rangeLabel     = new QLabel(i18n("Range"), this);
+    m_rangeLabel           = new QLabel(i18n("Range"), this);
 
     // Label ..
     m_label = new QLabel(this);
@@ -219,7 +219,7 @@ SegmentParameterBox::initBox()
     m_autoFadeLabel->setFont(font);
     m_fadeInLabel->setFont(font);
     m_fadeOutLabel->setFont(font);
-    rangeLabel->setFont(font);
+    m_rangeLabel->setFont(font);
 
     gridLayout->addRowSpacing(0, 12);
 
@@ -242,7 +242,7 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(colourLabel, 4, 0, AlignRight);
     gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 5);
 
-    gridLayout->addWidget(rangeLabel, 5, 0, AlignRight);
+    gridLayout->addWidget(m_rangeLabel, 5, 0, AlignRight);
     gridLayout->addMultiCellWidget(m_lowButton, 5, 5, 1, 2);
     gridLayout->addMultiCellWidget(m_highButton, 5, 5, 3, 4);
 
@@ -1180,6 +1180,9 @@ void
 SegmentParameterBox::showAdditionalControls(bool showThem)
 {
     // nothing to show or hide, here?        
+    m_highButton->setShown(showThem);
+    m_lowButton->setShown(showThem);
+    m_rangeLabel->setShown(showThem);
 }
 
 

@@ -122,6 +122,7 @@ protected:
     void updateHighLow();
 
     QLabel                     *m_label;
+    QLabel                     *m_rangeLabel;
     QPushButton                *m_labelButton;
     QPushButton		       *m_highButton;
     QPushButton		       *m_lowButton;
