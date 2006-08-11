@@ -1292,10 +1292,10 @@ SequenceManager::checkSoundDriverStatus()
     SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
 
     if (m_soundDriverStatus == NO_DRIVER)
-        throw(Exception("MIDI and Audio subsystems have failed to initialise"));
+        throw(Exception("MIDI and Audio subsystems have failed to initialize.  Try running alsaconf."));
 
     if (!(m_soundDriverStatus & MIDI_OK))
-        throw(Exception("MIDI subsystem has failed to initialise"));
+        throw(Exception("MIDI subsystem has failed to initialize.  Try running \" modprobe snd-seq-midi\""));
 
     if (!(m_soundDriverStatus & VERSION_OK)) {
 	throw(Exception("Sequencer module version does not match GUI module version"));
