@@ -1036,6 +1036,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Modify MIDI &Filters"), "filter", 0, this,
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
+                
+    m_enableMIDIrouting = new KToggleAction(i18n("MIDI Thru Routing"), 0, this,
+                SLOT(slotEnableMIDIThruRouting()),
+                actionCollection(), "enable_midi_routing");
 
     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
     icon = QIconSet(pixmap);
@@ -1779,13 +1783,14 @@ void RosegardenGUIApp::slotSaveOptions()
     kapp->config()->writeEntry("Show Previews",                m_viewPreviews->isChecked());
     kapp->config()->writeEntry("Show Segment Labels",          m_viewSegmentLabels->isChecked());
     kapp->config()->writeEntry("Show Parameters",              m_dockVisible);
+    kapp->config()->writeEntry("MIDI Thru Routing",            m_enableMIDIrouting->isChecked());
 
 #ifdef SETTING_LOG_DEBUG
     RG_DEBUG << "SHOW PARAMETERS = " << m_dockVisible << endl;
 #endif
 
     m_fileRecent->saveEntries(kapp->config());
-
+    
 //     saveMainWindowSettings(kapp->config(), RosegardenGUIApp::MainWindowConfigGroup); - no need to, done by KMainWindow
     kapp->config()->sync();
 }
@@ -1895,6 +1900,11 @@ void RosegardenGUIApp::readOptions()
         stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
         m_dockVisible = false;
     }
+    
+    // MIDI Thru routing
+    opt = kapp->config()->readBoolEntry("MIDI Thru Routing", true);
+    m_enableMIDIrouting->setChecked(opt);
+    slotEnableMIDIThruRouting();
 
     // initialise the recent file list
     //
@@ -7526,6 +7536,12 @@ RosegardenGUIApp::slotShowTip()
 {
     RG_DEBUG << "RosegardenGUIApp::slotShowTip" << endl;
     KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true);
+}
+
+void
+RosegardenGUIApp::slotEnableMIDIThruRouting()
+{
+    m_seqManager->enableMIDIThruRouting(m_enableMIDIrouting->isChecked());
 }
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;

@@ -58,6 +58,7 @@
 		<Action name="manage_metronome"/>
 		<Separator/>
 		<Action name="modify_midi_filters"/>
+		<Action name="enable_midi_routing"/>
 		<Separator/>
 		<Action name="save_default_studio"/>
 		<Action name="load_default_studio"/>
