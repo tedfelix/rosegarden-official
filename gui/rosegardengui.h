@@ -1432,8 +1432,20 @@ public slots:
     void slotDocumentDevicesResyncd();
 
     void slotTestStartupTester();
-
+    
     void slotDebugDump();
+
+    /**
+     * Enable or disable the internal MIDI Thru routing. 
+     * 
+     * This policy is implemented at the sequencer side, controlled 
+     * by this flag and also by the MIDI Thru filters.
+     * 
+     * @see ControlBlock::isMidiRoutingEnabled()
+     * @see RosegardenSequencerApp::processAsynchronousEvents()
+     * @see RosegardenSequencerApp::processRecordedEvents()
+     */
+    void slotEnableMIDIThruRouting();
 
 private:
 
@@ -1482,6 +1494,7 @@ private:
     KToggleAction* m_viewChordNameRuler;
     KToggleAction* m_viewPreviews;
     KToggleAction* m_viewSegmentLabels;
+    KToggleAction* m_enableMIDIrouting;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

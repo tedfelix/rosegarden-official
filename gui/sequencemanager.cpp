@@ -2074,7 +2074,11 @@ SequenceManager::slotFoundMountPoint(const QString&,
     m_diskSpaceKBAvail = kBAvail;
 }
 
-
+void
+SequenceManager::enableMIDIThruRouting(bool state)
+{
+    m_controlBlockMmapper->enableMIDIThruRouting(state);
+}
 
 
 }

@@ -234,6 +234,12 @@ void ControlBlockMmapper::setFileSize(size_t size)
     
 }
 
+void 
+ControlBlockMmapper::enableMIDIThruRouting(bool state)
+{
+    m_controlBlock->setMidiRoutingEnabled(state);
+}
+
 //----------------------------------------
 
 SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,

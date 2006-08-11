@@ -66,6 +66,7 @@ public:
     void updateMidiFilters(Rosegarden::MidiFilter thruFilter,
 			   Rosegarden::MidiFilter recordFilter);
     void setDocument(RosegardenGUIDoc*);
+    void enableMIDIThruRouting(bool state);
 
 protected:
     void initControlBlock();

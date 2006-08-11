@@ -209,6 +209,8 @@ public:
 
     void setTransport(RosegardenTransportDialog* t) { m_transport = t; }
     
+    void enableMIDIThruRouting(bool state);
+    
 public slots:
 
     void update();
