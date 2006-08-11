@@ -398,6 +398,50 @@ KeyInsertionCommand::modifySegment()
 	//
 	int segTranspose = getSegment().getTranspose();	
 
+	// semitones from C major baseline
+	 
+	int semi = segTranspose;
+	int origAcc = m_key.getAccidentalCount();
+	bool origSharp = m_key.isSharp();
+
+	// calculate for sharp keys first
+	switch (origAcc) {
+	    case 7: // C major to C# major = +1 semitone
+		    semi += 1;
+		    break;
+	    case 6: // C major to F# major = +5 semitones
+		    semi += 5;
+		    break;
+	    case 5: // C major to B major = -1 semitones
+		    semi -= 1;
+		    break;
+	    case 4: // C major to E major = +4 semitones
+		    semi += 4;
+		    break;
+	    case 3: // C major to A major = +9 semitones
+		    semi += 9;
+		    break;
+	    case 2: // C major to D major = +2 semitones
+		    semi += 2;
+		    break;
+	    case 1: // C major to G major = +7 semitones
+		    semi += 7;
+	}
+
+	segTranspose = semi;
+
+	// for flat keys, the relationship is exactly the opposite case by
+	// case, so we reverse the semitones from C major offset
+	if (!origSharp) semi *= -1;
+
+	// we add the segment transpose to the semitone offset calculated
+	// above to calculate the total distance of our move, in semitones
+	//
+	// eg. if our starting key is C# major, that's +1 over baseline, and
+	// if the segment is at -2, -2 + +1 = -1 semitone in the offset key,
+	// which works out to a transposed key of B major
+//	segTranspose += semi;
+
 	bool sharp = false;
 
 	// we don't really care about major/minor for this, so pass it through

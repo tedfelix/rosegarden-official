@@ -456,10 +456,8 @@ TrackParameterBox::populateRecordingDeviceList()
 void
 TrackParameterBox::updateHighLow()
 {
-    // Key of C major and NoAccidental means any "black key" notes will be
-    // written as sharps.
     Rosegarden::Accidental accidental = Rosegarden::Accidentals::NoAccidental;
-    Rosegarden::Key key = Rosegarden::Key("C major");
+//    Rosegarden::Key key = Rosegarden::Key("C major");
 
     Rosegarden::Pitch highest(m_highestPlayable, accidental);
     Rosegarden::Pitch lowest(m_lowestPlayable, accidental);
@@ -467,9 +465,11 @@ TrackParameterBox::updateHighLow()
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     int base = config->readNumEntry("midipitchoctave", -2);
+    bool useSharps = true;
+    bool includeOctave = true;
 
-    m_highButton->setText(QString("High: %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
-    m_lowButton->setText(QString("Low: %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+    m_highButton->setText(QString("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
+    m_lowButton->setText(QString("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
 
     m_presetLbl->setEnabled(false);
 }
