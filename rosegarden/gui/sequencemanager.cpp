@@ -1292,13 +1292,13 @@ SequenceManager::checkSoundDriverStatus()
     SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
 
     if (m_soundDriverStatus == NO_DRIVER)
-        throw(Exception("MIDI and Audio subsystems have failed to initialize.  Try running alsaconf."));
+        throw(Exception("MIDI and Audio subsystems have failed to initialize.  You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future."));
 
     if (!(m_soundDriverStatus & MIDI_OK))
-        throw(Exception("MIDI subsystem has failed to initialize.  Try running \" modprobe snd-seq-midi\""));
+        throw(Exception("MIDI subsystem has failed to initialize.  You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future."));
 
     if (!(m_soundDriverStatus & VERSION_OK)) {
-	throw(Exception("Sequencer module version does not match GUI module version"));
+	throw(Exception("Sequencer module version does not match GUI module version.  You have probably mixed up different builds of Rosegarden.  Please check your installation."));
     }
 
     /*

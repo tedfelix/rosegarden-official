@@ -475,12 +475,7 @@ PresetHandlerDialog::populateCategoryCombo()
 
 	RG_DEBUG << "    adding category: " << (*i).getName() << endl;
 
-	//!!! don't add "Unpitched Percussion" category, because we don't have a
-	// TwoBar clef yet, and it's impossible to do anything sensible with
-	// these database entries at this time.
-	if ((*i).getName() != "Unpitched Percussion") {
-	    m_categoryCombo->insertItem((*i).getName());
-	}
+        m_categoryCombo->insertItem((*i).getName());
     } 
 }
 
