@@ -1649,7 +1649,6 @@ Composition::setTrackRecording(TrackId track, bool recording)
     Track *t = getTrackById(track);
     if (t) {
         t->setArmed(recording);
-        notifyTrackChanged(t);
     }
 }
 

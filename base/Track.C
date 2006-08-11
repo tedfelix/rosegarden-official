@@ -111,6 +111,31 @@ void Track::setInstrument(InstrumentId instrument)
 }
 
 
+void Track::setArmed(bool armed) 
+{ 
+    m_armed = armed; 
+    
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+} 
+
+void Track::setMidiInputDevice(DeviceId id) 
+{ 
+    m_input_device = id; 
+
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+}
+
+void Track::setMidiInputChannel(char ic) 
+{ 
+    m_input_channel = ic; 
+
+    if (m_owningComposition)
+        m_owningComposition->notifyTrackChanged(this);
+}
+
+
 // Our virtual method for exporting Xml.
 //
 //
