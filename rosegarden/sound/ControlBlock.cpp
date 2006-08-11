@@ -95,7 +95,7 @@ void ControlBlock::setTrackArmed(TrackId trackId, bool armed)
 bool ControlBlock::isTrackArmed(TrackId trackId) const
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInfo[trackId].armed;
-    return true;
+    return false;
 }
 
 void ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)

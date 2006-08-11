@@ -93,10 +93,10 @@ public:
 
     Composition* getOwningComposition() { return m_owningComposition; }
 
-    void setMidiInputDevice(DeviceId id) { m_input_device = id; }
+    void setMidiInputDevice(DeviceId id);
     DeviceId getMidiInputDevice() const { return m_input_device; }
 
-    void setMidiInputChannel(char ic) { m_input_channel = ic; }
+    void setMidiInputChannel(char ic);
     char getMidiInputChannel() const { return m_input_channel; }
 
     int getClef() { return m_clef; }
@@ -115,7 +115,7 @@ public:
     void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
     
     bool isArmed() const { return m_armed; }
-    void setArmed(bool armed) { m_armed = armed; } 
+    void setArmed(bool armed);
 
 protected: // For Composition use only
     void setOwningComposition(Composition* comp) { m_owningComposition = comp; }
