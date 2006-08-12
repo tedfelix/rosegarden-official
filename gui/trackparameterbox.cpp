@@ -456,8 +456,14 @@ TrackParameterBox::populateRecordingDeviceList()
 void
 TrackParameterBox::updateHighLow()
 {
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *trk  = comp.getTrackById(comp.getSelectedTrack());
+    if (!trk) return;
+
+    trk->setHighestPlayable(m_highestPlayable);
+    trk->setLowestPlayable(m_lowestPlayable);
+
     Rosegarden::Accidental accidental = Rosegarden::Accidentals::NoAccidental;
-//    Rosegarden::Key key = Rosegarden::Key("C major");
 
     Rosegarden::Pitch highest(m_highestPlayable, accidental);
     Rosegarden::Pitch lowest(m_lowestPlayable, accidental);
@@ -759,8 +765,6 @@ TrackParameterBox::slotHighestPressed()
     if (dialog.exec() == QDialog::Accepted) {
         m_highestPlayable = dialog.getPitch();
 	updateHighLow();
-
-	trk->setHighestPlayable(m_highestPlayable);
     }
     
     m_presetLbl->setEnabled(false);
@@ -780,8 +784,6 @@ TrackParameterBox::slotLowestPressed()
     if (dialog.exec() == QDialog::Accepted) {
         m_lowestPlayable = dialog.getPitch();
 	updateHighLow();
-
-	trk->setLowestPlayable(m_lowestPlayable);
     }
 
     m_presetLbl->setEnabled(false);

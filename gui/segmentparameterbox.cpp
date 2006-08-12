@@ -324,6 +324,13 @@ SegmentParameterBox::initBox()
 
     // populate m_colourValue
     slotDocColoursChanged();
+
+    //!!! disabled until after 1.3
+    m_highButton->hide();
+    m_lowButton->hide();
+    m_rangeLabel->hide();
+    //////////////////////////////
+
 }
 
 void
@@ -716,6 +723,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
     m_colourValue->setEnabled(diffcolours != NotApplicable);
 
+    //!!! this is all borked up and useless; sort out after 1.3
     switch(highlow)
     {
         case All:
@@ -747,6 +755,9 @@ SegmentParameterBox::populateBoxFromSegments()
       incomplete to finish for this release.
 
       (Or for the next one after the one the previous comment referred to.)
+
+      (Or for the one after the one after that.  Will we ever get those
+      working, or should Rich's final legacy simply be quietly disappeared?)
 
         m_fadeInLabel->show();
         m_fadeInSpin->show();
@@ -1009,14 +1020,11 @@ SegmentParameterBox::updateHighLow()
     KConfig *config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     int base = config->readNumEntry("midipitchoctave", -2);
-
+//!!! FIXME this code is broken, and needs to be fixed after the fashion of
+//the TPB, but I'm not bothering with that at this time, because they are
+//going to be hidden for 1.3 anyway
     m_highButton->setText(QString("&High:   %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
     m_lowButton->setText(QString("&Low:   %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
-
-    //!!! These really should exist, but I don't have time to make them work
-    // correctly before 1.3, so I'm temporarily hiding them.
-    m_highButton->hide();
-    m_lowButton->hide();
 }
 
 void
@@ -1179,10 +1187,10 @@ SegmentParameterBox::slotFadeOutChanged(int value)
 void 
 SegmentParameterBox::showAdditionalControls(bool showThem)
 {
-    // nothing to show or hide, here?        
-    m_highButton->setShown(showThem);
+//!!! disabled until after 1.3
+/*    m_highButton->setShown(showThem);
     m_lowButton->setShown(showThem);
-    m_rangeLabel->setShown(showThem);
+    m_rangeLabel->setShown(showThem); */
 }
 
 
