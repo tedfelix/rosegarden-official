@@ -78,7 +78,8 @@ SegmentParameterBox::initBox()
 
     QFontMetrics fontMetrics(font);
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
-    int comboHeight = std::max(fontMetrics.height(), 13) + 10;
+    //int comboHeight = std::max(fontMetrics.height(), 13) + 10;
+    int width = fontMetrics.width("12345678901234567890");
 
 //    QFrame *frame = new QFrame(this);
     QGridLayout *gridLayout = new QGridLayout(this, 8, 7, 4, 2);
@@ -97,8 +98,8 @@ SegmentParameterBox::initBox()
     // Label ..
     m_label = new QLabel(this);
     m_label->setFont(font);
-    m_label->setFixedWidth(120);
-    m_label->setFixedHeight(comboHeight);
+    m_label->setFixedWidth(width);
+    //m_label->setFixedHeight(comboHeight);
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
@@ -111,7 +112,7 @@ SegmentParameterBox::initBox()
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(font);
-    m_repeatValue->setFixedHeight(comboHeight);
+    //m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
@@ -119,7 +120,7 @@ SegmentParameterBox::initBox()
     // non-reversing motif style read-only combo
     m_quantizeValue = new KComboBox(this);
     m_quantizeValue->setFont(font);
-    m_quantizeValue->setFixedHeight(comboHeight);
+    //m_quantizeValue->setFixedHeight(comboHeight);
 
     // handle quantize changes from drop down
     connect(m_quantizeValue, SIGNAL(activated(int)),
@@ -128,7 +129,7 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_transposeValue = new KComboBox(this);
     m_transposeValue->setFont(font);
-    m_transposeValue->setFixedHeight(comboHeight);
+    //m_transposeValue->setFixedHeight(comboHeight);
 
     // handle transpose combo changes
     connect(m_transposeValue, SIGNAL(activated(int)),
@@ -141,7 +142,7 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_delayValue = new KComboBox(this);
     m_delayValue->setFont(font);
-    m_delayValue->setFixedHeight(comboHeight);
+    //m_delayValue->setFixedHeight(comboHeight);
 
     // handle delay combo changes
     connect(m_delayValue, SIGNAL(activated(int)),
@@ -158,7 +159,7 @@ SegmentParameterBox::initBox()
     // set up combo box for colours
     m_colourValue = new KComboBox(false, this);
     m_colourValue->setFont(font);
-    m_colourValue->setFixedHeight(comboHeight);
+    //m_colourValue->setFixedHeight(comboHeight);
 //    m_colourValue->setMaximumWidth(width);
 
     // handle colour combo changes
@@ -166,7 +167,7 @@ SegmentParameterBox::initBox()
             SLOT(slotColourSelected(int)));
 
     // pre-set width of buttons so they don't grow later
-    int width = fontMetrics.width(i18n("used internally for spacing", "High: ----"));
+    width = fontMetrics.width(i18n("used internally for spacing", "High: ----"));
 
     // highest playable note
     //
@@ -225,12 +226,12 @@ SegmentParameterBox::initBox()
 
     gridLayout->addWidget(label, 1, 0, AlignRight);
     gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 4, AlignLeft);
-    gridLayout->addWidget(m_labelButton, 1, 4, AlignLeft);
+    gridLayout->addWidget(m_labelButton, 1, 5, AlignLeft);
 
     gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
 
-    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 1, 3, AlignRight);
+    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 2, 3, AlignRight);
     gridLayout->addMultiCellWidget(m_transposeValue, 2, 2, 4, 5);
 
     gridLayout->addWidget(quantizeLabel, 3, 0, AlignRight);

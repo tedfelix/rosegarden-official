@@ -71,6 +71,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     QFont title_font(m_font);
     QFontMetrics metrics(font);
     int minwidth11 = metrics.width("12345678901");
+    int minwidth20 = metrics.width("12345678901234567890");
     int minwidth22 = metrics.width("1234567890123456789012");
     int minwidth25 = metrics.width("1234567890123456789012345");
     setFont(m_font);
@@ -86,7 +87,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // track label
     //
     //mainLayout->setRowSpacing(0, 2);
-    m_trackLabel = new QLabel(i18n("<untitled>"), this);
+    m_trackLabel = new KSqueezedTextLabel(i18n("<untitled>"), this);
+    m_trackLabel->setFixedWidth(minwidth25);
+    m_trackLabel->setAlignment(Qt::AlignCenter);
     mainLayout->addMultiCellWidget(m_trackLabel, row, row, 0, 5, AlignCenter);
 
     // playback group title
@@ -120,7 +123,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     separator1->setFrameShape( QFrame::HLine );
     separator1->setLineWidth( 1 );
     separator1->setMidLineWidth( 2 );
-    separator1->setFrameShadow( QFrame::Sunken );
+    separator1->setFrameShadow( QFrame::Raised );
     separator1->setMinimumHeight( 4 );
     mainLayout->addMultiCellWidget( separator1, row, row, 0, 5 );
     
@@ -155,7 +158,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_separator2->setFrameShape( QFrame::HLine );
     m_separator2->setLineWidth( 1 );
     m_separator2->setMidLineWidth( 2 );
-    m_separator2->setFrameShadow( QFrame::Sunken );
+    m_separator2->setFrameShadow( QFrame::Raised );
     m_separator2->setMinimumHeight( 4 ); 
     mainLayout->addMultiCellWidget( m_separator2, row, row, 0, 5 );
 
@@ -173,8 +176,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_psetLbl = new QLabel(i18n("Preset"), this);
     mainLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
-    m_presetLbl = new KSqueezedTextLabel(i18n("<none>"), this);
+    m_presetLbl = new QLabel(i18n("<none>"), this);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_presetLbl->setFixedWidth(minwidth20);
     mainLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
 
     m_presetButton = new QPushButton(i18n("Load"), this);
