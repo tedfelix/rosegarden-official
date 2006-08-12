@@ -95,9 +95,6 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     if (!contains)
         instrumentParamBoxes.push_back(this);
 
-    QLabel *label = new QLabel(i18n("<no instrument>"), m_noInstrumentParameters);
-    label->setAlignment(label->alignment() | Qt::AlignHCenter);
-
     m_widgetStack->addWidget(m_midiInstrumentParameters);
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
@@ -150,10 +147,15 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc, 
                                                    QWidget* parent)
     : QFrame(parent),
-      m_instrumentLabel(new QLabel(this)),
+      m_instrumentLabel(new KSqueezedTextLabel(this)),
       m_selectedInstrument(0),
       m_doc(doc)
 {
+    QFontMetrics metrics(m_instrumentLabel->fontMetrics());
+    int width25 = metrics.width("1234567890123456789012345");
+      
+    m_instrumentLabel->setFixedWidth(width25);
+    m_instrumentLabel->setAlignment(Qt::AlignCenter);
 }
 
 void
@@ -678,14 +680,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_rotaryFrame(0),
     m_rotaryMapper(new QSignalMapper(this))
 {
-    //m_mainGrid = new QGridLayout(this, 9, 3, 8, 1);
     m_mainGrid = new QGridLayout(this, 10, 4, 2, 1);
-    //QGridLayout *m_channelGrid = new QGridLayout(this, 1, 4, 1, 6);
 
-    m_connectionLabel = new QLabel(this);
+    m_connectionLabel = new KSqueezedTextLabel(this);
     m_bankValue = new KComboBox(this);
     m_channelValue = new KComboBox(this);
-    //m_channelInValue = new KComboBox(this);
     m_programValue = new KComboBox(this);
     m_variationValue = new KComboBox(this);
     m_bankCheckBox = new QCheckBox(this);
@@ -701,16 +700,20 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_variationLabel = new QLabel(i18n("Variation"), this);
     m_programLabel = new QLabel(i18n("Program"), this);
     QLabel *channelLabel = new QLabel(i18n("Channel out"), this);
-    //QLabel *channelInLabel = new QLabel(i18n("In"), this);
-    //QLabel *channelOutLabel = new QLabel(i18n("Out"), this);
     QLabel *percussionLabel = new QLabel(i18n("Percussion"), this);
 
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
     QFontMetrics metrics(m_programValue->font());
-    int width = metrics.width("Acoustic Grand Piano 123");
-    m_bankValue->setMinimumWidth(width);
-    m_programValue->setMinimumWidth(width);
+    int width22 = metrics.width("1234567890123456789012");
+    int width25 = metrics.width("1234567890123456789012345");
+    
+    m_bankValue->setFixedWidth(width22);
+    m_programValue->setFixedWidth(width22);
+    m_variationValue->setFixedWidth(width22);
+    
+    m_connectionLabel->setFixedWidth(width25);
+    m_connectionLabel->setAlignment(Qt::AlignCenter);
 
     // Configure the empty final row to accomodate any extra vertical space.
 
@@ -725,14 +728,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);
 
     m_mainGrid->addMultiCellWidget(channelLabel, 2, 2, 0, 1, AlignLeft);
-    //m_mainGrid->addMultiCellLayout(m_channelGrid, 2, 2, 1, 2, AlignRight);
-    //m_channelGrid->addWidget(channelInLabel,   0, 0, AlignCenter);
-    //m_channelGrid->addWidget(m_channelInValue, 0, 1, AlignRight);
-    //m_channelGrid->addWidget(channelOutLabel,  0, 2, AlignCenter);
-    //m_channelGrid->addWidget(m_channelValue,   0, 3, AlignRight);
     m_mainGrid->addWidget(m_channelValue,   2, 2, AlignRight);
     
-    //m_mainGrid->addWidget(percussionLabel, 3, 0, AlignLeft);
     m_mainGrid->addMultiCellWidget(percussionLabel, 3, 3, 0, 1, AlignLeft);
     m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, AlignRight);
 
@@ -750,14 +747,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     // Populate channel lists
     //
-    //m_channelInValue->insertItem(i18n("All"));
     for (int i = 0; i < 16; i++) {
         m_channelValue->insertItem(QString("%1").arg(i+1));
-    //    m_channelInValue->insertItem(QString("%1").arg(i+1));
     }
         
     m_channelValue->setSizeLimit(16);
-   // m_channelInValue->setSizeLimit(19);
+
     // Disable these by default - they are activate by their
     // checkboxes
     //
@@ -801,15 +796,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectChannel(int)));
 
-    //connect(m_channelInValue, SIGNAL(activated(int)),
-    //        this, SLOT(slotSelectInputChannel(int)));
-
     // don't select any of the options in any dropdown
     m_programValue->setCurrentItem(-1);
     m_bankValue->setCurrentItem(-1);
     m_channelValue->setCurrentItem(-1);
     m_variationValue->setCurrentItem(-1);
-    //m_channelInValue->setCurrentItem(-1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
@@ -845,7 +836,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 	connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
 	
 	QString text = i18n("[ %1 ]").arg(connection);
-	QString origText(text);
+	/*QString origText(text);
 	
 	QFontMetrics metrics(m_connectionLabel->fontMetrics());
 	int maxwidth = metrics.width
@@ -857,7 +848,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 	    text = origText.left(hlen) + "..." + origText.right(hlen);
 	}
 	
-	if (text.length() > origText.length() - 7) text = origText;
+	if (text.length() > origText.length() - 7) text = origText;*/
 	m_connectionLabel->setText(text);
     }
 
@@ -878,7 +869,6 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     // Basic parameters
     //
     m_channelValue->setCurrentItem((int)instrument->getMidiChannel());
-    //m_channelInValue->setCurrentItem((int)instrument->getMidiInputChannel()+1);
 
     // Check for program change
     //
@@ -1107,20 +1097,6 @@ MIDIInstrumentParameterPanel::slotSelectChannel(int index)
             Rosegarden::MappedInstrument(m_selectedInstrument));
     emit updateAllBoxes();
 }
-
-/*void
-MIDIInstrumentParameterPanel::slotSelectInputChannel(int index)
-{
-    if (m_selectedInstrument == 0)
-        return;
-
-    //m_selectedInstrument->setMidiInputChannel(index - 1);
-
-    // don't use the emit - use this method instead
-    Rosegarden::StudioControl::sendMappedInstrument(
-            Rosegarden::MappedInstrument(m_selectedInstrument));
-    emit updateAllBoxes();
-}*/
 
 void
 MIDIInstrumentParameterPanel::populateBankList()
