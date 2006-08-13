@@ -446,6 +446,17 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	    SIGNAL(doubleClicked(Rosegarden::timeT)),
 	    //SLOT(slotEditTempos(Rosegarden::timeT)));
             SIGNAL(editTimeSignature(Rosegarden::timeT)));
+    
+    connect(m_tempoRuler,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               Rosegarden::tempoT,
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 Rosegarden::tempoT,
+                                 Rosegarden::tempoT,
+				 TempoDialog::TempoDialogAction)));
 
     // Scroll view to centre middle-C and warp to pointer position
     //
