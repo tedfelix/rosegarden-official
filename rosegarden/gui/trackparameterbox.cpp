@@ -70,128 +70,154 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     QFont font(m_font);
     QFont title_font(m_font);
     QFontMetrics metrics(font);
-    int minwidth11 = metrics.width("12345678901");
-    int minwidth20 = metrics.width("12345678901234567890");
-    int minwidth22 = metrics.width("1234567890123456789012");
-    int minwidth25 = metrics.width("1234567890123456789012345");
+    int width11 = metrics.width("12345678901");
+    int width20 = metrics.width("12345678901234567890");
+    int width22 = metrics.width("1234567890123456789012");
+    int width25 = metrics.width("1234567890123456789012345");
     setFont(m_font);
     title_font.setBold(true);
     
     // Size of the layout grid:
     //  number of rows = 17
     //  number of columns = 7
-    QGridLayout *mainLayout = new QGridLayout(this, 17, 7, 4, 2);
+    //QGridLayout *mainLayout = new Q(this, 17, 7, 4, 2);
+    QGridLayout *mainLayout = new QGridLayout(this, 5, 2, 2, 2);
 
     int row = 0;
     
     // track label
     //
-    //mainLayout->setRowSpacing(0, 2);
     m_trackLabel = new KSqueezedTextLabel(i18n("<untitled>"), this);
-    m_trackLabel->setFixedWidth(minwidth25);
     m_trackLabel->setAlignment(Qt::AlignCenter);
-    mainLayout->addMultiCellWidget(m_trackLabel, row, row, 0, 5, AlignCenter);
+    //mainLayout->addMultiCellWidget(m_trackLabel, 0, 0, 0, 5, AlignCenter);
+    mainLayout->addWidget(m_trackLabel, 0, 0);
 
+    // playback group
+    //
+    m_playbackGroup = new QFrame(this);
+    m_playbackGroup->setFrameShape( QFrame::StyledPanel );
+    m_playbackGroup->setFrameShadow( QFrame::Raised );
+    QGridLayout *groupLayout = new QGridLayout(m_playbackGroup, 3, 3, 3, 2);
+    
     // playback group title
     //
-    row++;
-    QLabel *plyHeader = new QLabel(i18n("Playback parameters"), this);
+    row = 0;
+    QLabel *plyHeader = new QLabel(i18n("Playback parameters"), m_playbackGroup);
     plyHeader->setFont(title_font);
-    mainLayout->addMultiCellWidget(plyHeader, row, row, 0, 5, AlignLeft);
+    groupLayout->addMultiCellWidget(plyHeader, row, row, 0, 2);
 
     // playback device
     //
     row++;
-    mainLayout->addWidget(new QLabel(i18n("Device"), this), row, 0, AlignLeft);
-    m_playDevice = new KComboBox(this);
-    m_playDevice->setMinimumWidth(minwidth25);
-    mainLayout->addMultiCellWidget(m_playDevice, row, row, 1, 5, AlignRight);
+    QLabel *devLabel = new QLabel(i18n("Device"), m_playbackGroup);
+    groupLayout->addWidget(devLabel, row, 0); 
+    m_playDevice = new KComboBox(m_playbackGroup);
+    m_playDevice->setMinimumWidth(width25);
+    groupLayout->addMultiCellWidget(m_playDevice, row, row, 1, 2);
     
     // playback instrument
     //
     row++;
-    mainLayout->addMultiCellWidget(new QLabel(i18n("Instrument"), this), row, row, 0, 1, AlignLeft);
-    m_instrument = new KComboBox(this);
+    QLabel *insLabel = new QLabel(i18n("Instrument"), m_playbackGroup);
+    groupLayout->addMultiCellWidget(insLabel, row, row, 0, 1);
+    m_instrument = new KComboBox(m_playbackGroup);
     m_instrument->setSizeLimit( 16 );
-    m_instrument->setMinimumWidth(minwidth22);
-    mainLayout->addMultiCellWidget(m_instrument, row, row, 2, 5, AlignRight);
+    m_instrument->setMinimumWidth(width22);
+    groupLayout->addWidget(m_instrument, row, 2);
+
+    mainLayout->addWidget(m_playbackGroup, 1, 0);
 
     // group separator 1
     //
-    row++;
+    /*row++;
     QFrame *separator1 = new QFrame( this );
     separator1->setFrameShape( QFrame::HLine );
     separator1->setLineWidth( 1 );
     separator1->setMidLineWidth( 2 );
     separator1->setFrameShadow( QFrame::Raised );
     separator1->setMinimumHeight( 4 );
-    mainLayout->addMultiCellWidget( separator1, row, row, 0, 5 );
+    groupLayout->addMultiCellWidget( separator1, row, row, 0, 5 );*/
+    
+    // record group
+    //
+    m_recordGroup = new QFrame(this);
+    m_recordGroup->setFrameShape( QFrame::StyledPanel );
+    m_recordGroup->setFrameShadow( QFrame::Raised );
+    groupLayout = new QGridLayout(m_recordGroup, 3, 3, 3, 2);
     
     // recording group title
     //
-    row++;
-    QLabel *recHeader = new QLabel(i18n("Recording filters"), this);
+    row = 0;
+    QLabel *recHeader = new QLabel(i18n("Recording filters"), m_recordGroup);
     recHeader->setFont(title_font);
-    mainLayout->addMultiCellWidget(recHeader, row, row, 0, 5, AlignLeft);
+    groupLayout->addMultiCellWidget(recHeader, row, row, 0, 2);
     
     // recording device
     //
     row++;
-    mainLayout->addWidget(new QLabel(i18n("Device"), this), row, 0, AlignLeft);
-    m_recDevice = new KComboBox(this);
-    m_recDevice->setMinimumWidth(minwidth25);
-    mainLayout->addMultiCellWidget(m_recDevice, row, row, 1, 5, AlignRight);
+    groupLayout->addWidget(new QLabel(i18n("Device"), m_recordGroup), row, 0);
+    m_recDevice = new KComboBox(m_recordGroup);
+    m_recDevice->setMinimumWidth(width25);
+    groupLayout->addMultiCellWidget(m_recDevice, row, row, 1, 2);
     
     // recording channel
     //
     row++;
-    mainLayout->addMultiCellWidget(new QLabel(i18n("Channel"), this), row, row, 0, 1, AlignLeft);
-    m_recChannel = new KComboBox(this);
+    groupLayout->addMultiCellWidget(new QLabel(i18n("Channel"), m_recordGroup), row, row, 0, 1);
+    m_recChannel = new KComboBox(m_recordGroup);
     m_recChannel->setSizeLimit( 17 );
-    m_recChannel->setMinimumWidth(minwidth11);
-    mainLayout->addMultiCellWidget(m_recChannel, row, row, 2, 5, AlignRight);
+    m_recChannel->setMinimumWidth(width11);
+    groupLayout->addWidget(m_recChannel, row, 2);
+    
+    mainLayout->addWidget(m_recordGroup, 2, 0);
+    
     
     // group separator 2
     //
-    row++;
+    /*row++;
     m_separator2 = new QFrame( this );
     m_separator2->setFrameShape( QFrame::HLine );
     m_separator2->setLineWidth( 1 );
     m_separator2->setMidLineWidth( 2 );
     m_separator2->setFrameShadow( QFrame::Raised );
     m_separator2->setMinimumHeight( 4 ); 
-    mainLayout->addMultiCellWidget( m_separator2, row, row, 0, 5 );
+    groupLayout->addMultiCellWidget( m_separator2, row, row, 0, 5 );*/
+    
+    // default segment group
+    //
+    m_defaultsGroup = new QFrame(this);
+    m_defaultsGroup->setFrameShape( QFrame::StyledPanel );
+    m_defaultsGroup->setFrameShadow( QFrame::Raised );
+    groupLayout = new QGridLayout(m_defaultsGroup, 6, 6, 3, 2);
 
     // default segment segment parameters group title
     //
-    row++;
-    m_segHeader = new QLabel(i18n("Create segments with:"), this);
+    row = 0;
+    m_segHeader = new QLabel(i18n("Create segments with:"), m_defaultsGroup);
     m_segHeader->setFont(title_font);
-    mainLayout->addMultiCellWidget( m_segHeader, row, row, 0, 5, AlignLeft);
+    groupLayout->addMultiCellWidget( m_segHeader, row, row, 0, 5);
 
     // preset picker
     //
     row++;
+    m_psetLbl = new QLabel(i18n("Preset"), m_defaultsGroup);
+    groupLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
-    m_psetLbl = new QLabel(i18n("Preset"), this);
-    mainLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
-
-    m_presetLbl = new QLabel(i18n("<none>"), this);
+    m_presetLbl = new QLabel(i18n("<none>"), m_defaultsGroup);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_presetLbl->setFixedWidth(minwidth20);
-    mainLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
+    m_presetLbl->setFixedWidth(width20);
+    groupLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
 
-    m_presetButton = new QPushButton(i18n("Load"), this);
-    mainLayout->addMultiCellWidget(m_presetButton, row, row, 5, 5, AlignRight);
-
+    m_presetButton = new QPushButton(i18n("Load"), m_defaultsGroup);
+    groupLayout->addMultiCellWidget(m_presetButton, row, row, 5, 5, AlignRight);
     
     // default clef
     //
     row++;
-    m_clefLbl = new QLabel(i18n("Clef"), this);
-    mainLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
-    m_defClef = new KComboBox(this);
-    m_defClef->setMinimumWidth(minwidth11);
+    m_clefLbl = new QLabel(i18n("Clef"), m_defaultsGroup);
+    groupLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
+    m_defClef = new KComboBox(m_defaultsGroup);
+    m_defClef->setMinimumWidth(width11);
     m_defClef->insertItem(i18n("treble"), TrebleClef);
     m_defClef->insertItem(i18n("bass"), BassClef);
     m_defClef->insertItem(i18n("crotales"), CrotalesClef);
@@ -206,27 +232,27 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 /*  clef types in the datbase that are not yet supported must be ignored for
  *  now:
     m_defClef->insertItem(i18n("two bar"), TwoBarClef); */
-    mainLayout->addMultiCellWidget(m_defClef, row, row, 1, 5, AlignRight);
+    groupLayout->addMultiCellWidget(m_defClef, row, row, 1, 5, AlignRight);
 
     // default transpose
     //
     row++;
-    m_transpLbl = new QLabel(i18n("Transpose"), this);
-    mainLayout->addMultiCellWidget(m_transpLbl, row, row, 0, 1, AlignLeft);
-    m_defTranspose = new QSpinBox(this);
+    m_transpLbl = new QLabel(i18n("Transpose"), m_defaultsGroup);
+    groupLayout->addMultiCellWidget(m_transpLbl, row, row, 0, 1);
+    m_defTranspose = new QSpinBox(m_defaultsGroup);
     m_defTranspose->setMinValue(-48);
     m_defTranspose->setMaxValue(48);
     m_defTranspose->setValue(0);
     m_defTranspose->setButtonSymbols(QSpinBox::PlusMinus);
-    mainLayout->addMultiCellWidget(m_defTranspose, row, row, 2, 5, AlignRight);
+    groupLayout->addMultiCellWidget(m_defTranspose, row, row, 2, 5, AlignRight);
 
     // default color
     //
     row++;
-    m_colorLbl = new QLabel(i18n("Color"), this);
-    mainLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
-    m_defColor = new KComboBox(false, this);
-    mainLayout->addMultiCellWidget(m_defColor, row, row, 1, 5, AlignRight);
+    m_colorLbl = new QLabel(i18n("Color"), m_defaultsGroup);
+    groupLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
+    m_defColor = new KComboBox(false, m_defaultsGroup);
+    groupLayout->addMultiCellWidget(m_defColor, row, row, 1, 5, AlignRight);
 
     // populate combo from doc colors
     slotDocColoursChanged();
@@ -234,18 +260,20 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // highest/lowest playable note
     //
     row++;
-    m_rangeLbl = new QLabel(i18n("Range"), this);
-    mainLayout->addWidget(m_rangeLbl, row, 0, AlignLeft);
+    m_rangeLbl = new QLabel(i18n("Range"), m_defaultsGroup);
+    groupLayout->addWidget(m_rangeLbl, row, 0);
 
-    m_lowButton = new QPushButton(i18n("Low: ----"), this);
+    m_lowButton = new QPushButton(i18n("Low: ----"), m_defaultsGroup);
     QToolTip::add(m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
-    mainLayout->addMultiCellWidget(m_lowButton, row, row, 1, 3, AlignRight);
+    groupLayout->addMultiCellWidget(m_lowButton, row, row, 1, 3, AlignRight);
 
-    m_highButton = new QPushButton(i18n("High: ---"), this);
-    QToolTip::add(m_highButton, i18n("Choose the lowest suggested playable note, using a staff"));
-    mainLayout->addMultiCellWidget(m_highButton, row, row, 4, 5, AlignLeft);
+    m_highButton = new QPushButton(i18n("High: ---"), m_defaultsGroup);
+    QToolTip::add(m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
+    groupLayout->addMultiCellWidget(m_highButton, row, row, 4, 5, AlignLeft);
 
     updateHighLow();
+
+    mainLayout->addWidget(m_defaultsGroup, 3, 0);
     
     // Configure the empty final row to accomodate any extra vertical space.
     //
@@ -646,7 +674,8 @@ TrackParameterBox::slotInstrumentLabelChanged(Rosegarden::InstrumentId id, QStri
 void 
 TrackParameterBox::showAdditionalControls(bool showThem)
 {
-    m_separator2->setShown(showThem);
+    m_defaultsGroup->setShown(showThem);
+    /*m_separator2->setShown(showThem);
     m_segHeader->setShown(showThem);
     m_presetLbl->setShown(showThem);
     m_presetButton->setShown(showThem);
@@ -659,7 +688,7 @@ TrackParameterBox::showAdditionalControls(bool showThem)
     m_rangeLbl->setShown(showThem);
     m_highButton->setShown(showThem);
     m_lowButton->setShown(showThem);
-    m_psetLbl->setShown(showThem);
+    m_psetLbl->setShown(showThem);*/
 }
 
 

@@ -113,7 +113,10 @@ private:
     char                m_lastInstrumentType;
     
     // Additional elements that may be hidden in vertical stacked mode
-    QFrame              *m_separator2;
+    //QFrame              *m_separator2;
+    QFrame              *m_playbackGroup;
+    QFrame              *m_recordGroup;
+    QFrame              *m_defaultsGroup;
     QLabel              *m_segHeader;
     QLabel              *m_presetLbl;
     QLabel              *m_clefLbl;
