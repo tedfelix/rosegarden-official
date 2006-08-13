@@ -394,179 +394,130 @@ KeyInsertionCommand::modifySegment()
 
     // transpose if desired, according to new dialog option
     if (m_transposeKey) {
-	// calculate the offset key for tranposing segments, fixes #1520716
-	//
+	// we don't really care about major/minor for this, so pass it through
+	// from the original key
+	bool keyIsMinor = m_key.isMinor();
+
+	// get whether the original key is flat or sharp, so we know what to
+	// prefer for the new key
+	bool keyIsSharp = m_key.isSharp();
+
+	// get the tonic pitch of the user-specified key, reported as a 0-11 int, then
+	// add an extra octave to it to avoid winding up with negative numbers
+	// (the octave will be stripped back off)
+	int specifiedKeyTonic = m_key.getTonicPitch() + 12;
+
+	// get the transpose factor for the segment we're working on
 	int segTranspose = getSegment().getTranspose();	
 
-	// semitones from C major baseline
-	 
-	int semi = segTranspose;
-	int origAcc = m_key.getAccidentalCount();
-	bool origSharp = m_key.isSharp();
-
-	// calculate for sharp keys first
-	switch (origAcc) {
-	    case 7: // C major to C# major = +1 semitone
-		    semi += 1;
-		    break;
-	    case 6: // C major to F# major = +5 semitones
-		    semi += 5;
-		    break;
-	    case 5: // C major to B major = -1 semitones
-		    semi -= 1;
-		    break;
-	    case 4: // C major to E major = +4 semitones
-		    semi += 4;
-		    break;
-	    case 3: // C major to A major = +9 semitones
-		    semi += 9;
-		    break;
-	    case 2: // C major to D major = +2 semitones
-		    semi += 2;
-		    break;
-	    case 1: // C major to G major = +7 semitones
-		    semi += 7;
-	}
-
-	segTranspose = semi;
-
-	// for flat keys, the relationship is exactly the opposite case by
-	// case, so we reverse the semitones from C major offset
-	if (!origSharp) semi *= -1;
-
-	// we add the segment transpose to the semitone offset calculated
-	// above to calculate the total distance of our move, in semitones
+	// subtract the transpose factor from the tonic pitch of the
+	// user-specified key, because we want to move in the opposite
+	// direction for notation (eg. notation is in C major concert, at Bb
+	// transposition, we have -2 from the segment, and want to go +2 for
+	// the key, from tonic pitch 0 (C) to tonic pitch 2 (D) for the key as
+	// written for a Bb instrument
 	//
-	// eg. if our starting key is C# major, that's +1 over baseline, and
-	// if the segment is at -2, -2 + +1 = -1 semitone in the offset key,
-	// which works out to a transposed key of B major
-//	segTranspose += semi;
+	// sanity check: 0 == C; 0 + 12 == 12; (12 - -2) % 12 == 2; 2 == D
+	int transposedKeyTonic = (specifiedKeyTonic - segTranspose) % 12;
 
-	bool sharp = false;
+	// create a new key with the new tonic pitch, and major/minor from the
+	// original key
+	std::string newKeyName = "";
 
-	// we don't really care about major/minor for this, so pass it through
-	bool minor = m_key.isMinor();
-
-	// strip off any extra octave(s)
-	segTranspose %= 12;
-	
-	int newAcc = 0;
-
-	// use a ghastly switch statement from hell to create a case by case
-	// lookup table, because I can't figure out any other way to get
-	// there, and something ugly that works is better than the most
-	// compact and beautiful code in the world, if that prettier code has
-	// even one bug
-	switch (segTranspose) {
-	    case 0:
-		break;
-	    case 1:
-		sharp = true;
-		newAcc = 5;
-		break;
-	    case 2:
-		sharp = false;
-		newAcc = 2;
-		break;
-	    case 3:
-		sharp = true;
-		newAcc = 3;
-		break;
-	    case 4:
-		sharp = false;
-		newAcc = 4;
-		break;
-	    case 5:
-		sharp = true;
-		newAcc = 1;
-		break;
-	    case 6:
-		sharp = false;
-		newAcc =6;
-		break;
-	    case 7:
-		sharp = false;
-		newAcc = 1;
-		break;
-	    case 8:
-		sharp = true;
-		newAcc = 4;
-		break;
-	    case 9:
-		sharp = false;
-		newAcc = 3;
-		break;
-	    case 10:
-		sharp = true;
-		newAcc = 2;
-		break;
-	    case 11:
-		sharp = false;
-		newAcc = 5;
-		break;
-	    case -1:
-		sharp = false;
-		newAcc = 5;
-		break;
-	    case -2:
-		sharp = true;
-		newAcc = 2;
-		break;
-	    case -3:
-		sharp = false;
-		newAcc = 3;
-		break;
-	    case -4:
-		sharp = true;
-		newAcc = 4;
-		break;
-	    case -5:
-		sharp = false;
-		newAcc = 1;
-		break;
-	    case -6:
-		sharp = false;
-		newAcc = 6;
-		break;
-	    case -7:
-		sharp = true;
-		newAcc = 1;
-		break;
-	    case -8:
-		sharp = false;
-		newAcc = 4;
-		break;
-	    case -9:
-		sharp = true;
-		newAcc = 3;
-		break;
-	    case -10:
-		sharp = false;
-		newAcc = 2;
-		break;
-	    case -11:
-		sharp = true;
-		newAcc = 5;
-		break;
+	switch (transposedKeyTonic) {
+	// 0 C | 1 C# | 2 D | 3 D# | 4 E | 5 F | 6 F# | 7 G | 8 G# | 9 A | 10 A# | 11 B
+	    case 0 : // C
+		     newKeyName = "C";
+		     break;
+	    case 2 : // D
+		     newKeyName = "D";
+		     break;
+	    case 4 : // E
+		     newKeyName = "E";
+		     break;
+	    case 5 : // F
+		     newKeyName = "F";
+		     break;
+	    case 7 : // G
+		     newKeyName = "G";
+		     break;
+	    case 9 : // A
+		     newKeyName = "A";
+		     break;
+	    case 11: // B
+		     newKeyName = "B";
+		     break;
+	    // the glorious, glorious black keys need special treatment
+	    // again, so we pick flat or sharp spellings based on the
+	    // condition of the original, user-specified key we're
+	    // transposing
+	    case 1 : // C#/Db
+		     newKeyName = (keyIsSharp ? "C#" : "Db");
+		     break;
+	    case 3 : // D#/Eb
+		     newKeyName = (keyIsSharp ? "D#" : "Eb");
+		     break;
+	    case 6 : // F#/Gb
+		     newKeyName = (keyIsSharp ? "F#" : "Gb");
+		     break;
+	    case 8 : // G#/Ab
+		     newKeyName = (keyIsSharp ? "G#" : "Ab");
+		     break;
+	    case 10:  // A#/Bb
+		     newKeyName = (keyIsSharp ? "A#" : "Bb");
+		     break;
 	    default:
-		RG_DEBUG << "I defaulted in this switch statement, this is probably a BUG." << endl;
+		     // if this fails, we won't have a valid key name, and
+		     // there will be some crashing exception I don't know how
+		     // to intercept and avoid, so I'm doing this lame failsafe
+		     // instead, which should never, ever actually run under
+		     // any conceivable cirumstance anyway
+		     RG_DEBUG << "KeyInsertionCommand: by the pricking of my thumbs, something wicked this way comes.  :("
+			      << endl;
+		     return;
 	}
 
-	// failsafe should never be needed, but creating a key with bad
-	// parameters causes an immediate crash, so we insure against that
-	// anyway
-	if (newAcc > 7 || newAcc < 0) {
-	    RG_DEBUG << "KeyInsertionCommand: tried to create an illegal key!  Using C major failsafe!" << endl;
-	    minor = false;
-	    sharp = true;
-	    newAcc = 0;
-	}
+	newKeyName += (keyIsMinor ? " minor" : " major");
 
-	// create a new key with the newly calculated variables
-	Rosegarden::Key k(newAcc, sharp, minor);
-	RG_DEBUG << "KeyInsertCommand: created key with " << newAcc 
-		 << (sharp ? " sharp(s)" : " flat(s)") << endl;
+	//for f in C# D# E# F# G# A# B# Cb Db Eb Fb Gb Ab Bb;do grep "$f
+	//major" NotationTypes.C > /dev/null||echo "invalid key: $f
+	//major";grep "$f minor" NotationTypes.C > /dev/null||echo "invalid
+	//key: $f minor";done|sort
+	//invalid key: A# major
+	//invalid key: B# major
+	//invalid key: B# minor
+	//invalid key: Cb minor
+	//invalid key: Db minor
+	//invalid key: D# major
+	//invalid key: E# major
+	//invalid key: E# minor
+	//invalid key: Fb major
+	//invalid key: Fb minor
+	//invalid key: Gb minor
+	//invalid key: G# major
+	
+	// some kludgery to avoid creating invalid key names with some if/then
+	// swapping to manually respell things generated incorrectly by the
+	// above, rather than adding all kinds of nonsense to avoid this
+	// necessity
+	if (newKeyName == "A# major") newKeyName = "Bb major";
+	else if (newKeyName == "B# major") newKeyName = "C major";
+	else if (newKeyName == "Cb minor") newKeyName = "B minor";
+	else if (newKeyName == "Db minor") newKeyName = "C# minor";
+	else if (newKeyName == "D# major") newKeyName = "Eb major";
+	else if (newKeyName == "E# major") newKeyName = "F major";
+	else if (newKeyName == "E# minor") newKeyName = "F minor";
+	else if (newKeyName == "Fb major") newKeyName = "E major";
+	else if (newKeyName == "Fb minor") newKeyName = "E minor";
+	else if (newKeyName == "Gb minor") newKeyName = "F# minor";
+	else if (newKeyName == "G# major") newKeyName = "G# major";
 
+	// create a new key with the newly derived name, and swap it for the
+	// user-specified version
+	Rosegarden::Key k(newKeyName);
+	RG_DEBUG << "KeyInsertCommand: inserting transposed key" << endl
+	         << "        user key was: " << m_key.getName() << endl
+		 << "    tranposed key is: " << k.getName() << endl;
 	m_key = k;
     } // if (m_transposeKey)
 

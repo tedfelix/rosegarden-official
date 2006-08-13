@@ -233,11 +233,23 @@
       <range class="amateur" low="36" high="65"/>
       <range class="professional" low="36" high="69"/>
     </instrument>
-    <instrument name="Transverse flute">
+    <instrument name="Transverse flute (D foot)">
       <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="62" high="89"/>
       <range class="professional" low="62" high="93"/>
+    </instrument>
+    <instrument name="Transverse flute (C foot)">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="62" high="89"/>
+      <range class="professional" low="60" high="84"/>
+    </instrument>
+    <instrument name="Transverse flute (B foot)">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="62" high="89"/>
+      <range class="professional" low="59" high="84"/>
     </instrument>
     <instrument name="Alto transverse flute">
       <clef type="treble" />
@@ -1519,4 +1531,4 @@
     </instrument>
   </category>
 </presets>
-<!-- IMPORTED 249 INSTRUMENTS -->
+<!-- IMPORTED 251 INSTRUMENTS -->
