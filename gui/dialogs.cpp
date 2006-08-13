@@ -400,7 +400,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 	(1, Horizontal, i18n("Key signature"), vbox);
 
     QGroupBox *transposeFrame = new QButtonGroup
-	(1, Horizontal, i18n("Transposition"), vbox);
+	(1, Horizontal, i18n("Key transposition"), vbox);
 
     QGroupBox *buttonFrame = new QButtonGroup
 	(1, Horizontal, i18n("Scope"), vbox);
@@ -441,10 +441,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_keyLabel->setMinimumHeight(m_keyLabel->pixmap()->height());
 
     m_yesTransposeButton =
-	    new QRadioButton(i18n("Transpose key relative to transposed segments"),
+	    new QRadioButton(i18n("Transpose key according to segment transposition"),
 		             transposeFrame);
     QRadioButton *noTransposeButton =
-	    new QRadioButton(i18n("Use specified key.  Do not transpose."), transposeFrame);
+	    new QRadioButton(i18n("Use specified key.  Do not transpose"), transposeFrame);
     m_yesTransposeButton->setChecked(true);
 
     // just to shut up the compiler warning about unused variable:
@@ -639,6 +639,8 @@ void
 KeySignatureDialog::slotKeyNameChanged(const QString &s)
 {
     if (m_ignoreComboChanges) return;
+
+    if (m_explanatoryLabel) m_explanatoryLabel->hide();
 
     std::string name(getKeyName(s, m_key.isMinor()));
     
