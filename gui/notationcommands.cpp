@@ -510,7 +510,7 @@ KeyInsertionCommand::modifySegment()
 	else if (newKeyName == "Fb major") newKeyName = "E major";
 	else if (newKeyName == "Fb minor") newKeyName = "E minor";
 	else if (newKeyName == "Gb minor") newKeyName = "F# minor";
-	else if (newKeyName == "G# major") newKeyName = "G# major";
+	else if (newKeyName == "G# major") newKeyName = "Ab major";
 
 	// create a new key with the newly derived name, and swap it for the
 	// user-specified version
