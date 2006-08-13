@@ -224,26 +224,26 @@ SegmentParameterBox::initBox()
 
     gridLayout->addRowSpacing(0, 12);
 
-    gridLayout->addWidget(label, 1, 0, AlignRight);
-    gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 4, AlignLeft);
-    gridLayout->addWidget(m_labelButton, 1, 5, AlignLeft);
+    gridLayout->addWidget(label, 1, 0);//, AlignRight);
+    gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 4);//, AlignLeft);
+    gridLayout->addWidget(m_labelButton, 1, 5);//, AlignLeft);
 
-    gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
-    gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
+    gridLayout->addWidget(repeatLabel, 2, 0);//, AlignRight);
+    gridLayout->addWidget(m_repeatValue, 2, 1);//, AlignLeft);
 
-    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 2, 3, AlignRight);
+    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 2, 3);//, AlignRight);
     gridLayout->addMultiCellWidget(m_transposeValue, 2, 2, 4, 5);
 
-    gridLayout->addWidget(quantizeLabel, 3, 0, AlignRight);
-    gridLayout->addMultiCellWidget(m_quantizeValue, 3, 3, 1, 2, AlignLeft);
+    gridLayout->addWidget(quantizeLabel, 3, 0);//, AlignRight);
+    gridLayout->addMultiCellWidget(m_quantizeValue, 3, 3, 1, 2);//, AlignLeft);
 
-    gridLayout->addWidget(delayLabel, 3, 3, AlignRight);
+    gridLayout->addWidget(delayLabel, 3, 3);//, AlignRight);
     gridLayout->addMultiCellWidget(m_delayValue, 3, 3, 4, 5);
 
-    gridLayout->addWidget(colourLabel, 4, 0, AlignRight);
+    gridLayout->addWidget(colourLabel, 4, 0);//, AlignRight);
     gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 5);
 
-    gridLayout->addWidget(m_rangeLabel, 5, 0, AlignRight);
+    gridLayout->addWidget(m_rangeLabel, 5, 0);//, AlignRight);
     gridLayout->addMultiCellWidget(m_lowButton, 5, 5, 1, 2);
     gridLayout->addMultiCellWidget(m_highButton, 5, 5, 3, 4);
 
