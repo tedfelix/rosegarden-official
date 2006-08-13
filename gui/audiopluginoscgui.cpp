@@ -820,7 +820,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 	    while ((info = i.current()) != 0) {
 		
 		RG_DEBUG << "Looking at " << info->fileName() << " in path "
-			 << info->filePath() << " for suffix " << suffixes[k] << ", fuzzy " << fuzzy << endl;
+			 << info->filePath() << " for suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << ", fuzzy " << fuzzy << endl;
 
 		++i;
 
@@ -839,10 +839,10 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 		}
 
 		if (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k])) {
-		    RG_DEBUG << "(ends with suffix " << suffixes[k] << " or out of suffixes)" << endl;
+		    RG_DEBUG << "(ends with suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << " or out of suffixes)" << endl;
 		    return info->filePath();
 		}
-		RG_DEBUG << "(doesn't end with suffix " << suffixes[k] << ")" << endl;
+		RG_DEBUG << "(doesn't end with suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << ")" << endl;
 	    }
 	}
     }
