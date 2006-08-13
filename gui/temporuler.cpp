@@ -395,7 +395,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
-
+    
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
@@ -440,7 +440,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	}
     }
 
-    int lastx = 0, lasty = 0;
+    int lastx = 0, lasty = 0, lastx1 = 0;
     bool haveSome = false;
 //    tempoT minTempo = m_composition->getMinTempo();
 //    tempoT maxTempo = m_composition->getMaxTempo();
@@ -479,13 +479,19 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    ramping = m_composition->getTempoRamping(tcn - 1);
 	}
 
+	double x0, x1;
+	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
+	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
+
+	if (x0 > e->rect().x()) {
+	    paint.fillRect(e->rect().x(), 0, x0 - e->rect().x(), height(),
+			   paletteBackgroundColor());
+	}
+
 	QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
         paint.setBrush(colour);
 
-	double x0, x1;
-	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
-	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
 	if (!m_refreshLinesOnly) {
 // 	    RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1 << endl;
 	    paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
@@ -534,9 +540,16 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	}
 
 	lastx = int(x0) + 1;
+	lastx1 = int(x1) + 1;
 	lasty = y;
 	if (i == timePoints.end()) break;
 	haveSome = true;
+    }
+
+    if (lastx1 < e->rect().x() + e->rect().width()) {
+	paint.fillRect(lastx1, 0,
+		       e->rect().x() + e->rect().width() - lastx1, height(),
+		       paletteBackgroundColor());
     }
 
     if (haveSome) {
