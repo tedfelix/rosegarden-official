@@ -400,7 +400,8 @@ TempoView::makeTimeString(Rosegarden::timeT time, int timeMode)
     {
 	Rosegarden::RealTime rt =
 	    getDocument()->getComposition().getElapsedRealTime(time);
-	return QString("%1   ").arg(rt.toString().c_str());
+//	return QString("%1   ").arg(rt.toString().c_str());
+	return QString("%1   ").arg(rt.toText().c_str());
     }
 
     default:

@@ -1225,6 +1225,12 @@ public slots:
                          TempoDialog::TempoDialogAction action);
 
     /**
+     * Move a tempo change
+     */
+    void slotMoveTempo(Rosegarden::timeT oldTime,
+		       Rosegarden::timeT newTime);
+
+    /**
      * Document modified
      */
     void slotDocumentModified(bool modified = true);

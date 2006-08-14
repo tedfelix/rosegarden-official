@@ -31,6 +31,7 @@
 #include "rosegardenguidoc.h"
 #include "Composition.h"
 #include "RulerScale.h"
+#include "SnapGrid.h"
 
 #include "tempocolour.h"
 #include "widgets.h"
@@ -39,6 +40,8 @@ using Rosegarden::RulerScale;
 using Rosegarden::Composition;
 using Rosegarden::timeT;
 using Rosegarden::tempoT;
+using Rosegarden::RealTime;
+using Rosegarden::SnapGrid;
 
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
@@ -55,9 +58,12 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_width(-1),
     m_small(small),
     m_illuminate(-1),
+    m_illuminatePoint(false),
     m_refreshLinesOnly(false),
-    m_dragging(false),
+    m_dragVert(false),
+    m_dragHoriz(false),
     m_dragStartY(0),
+    m_dragStartX(0),
     m_dragFine(false),
     m_dragStartTempo(-1),
     m_dragStartTarget(-1),
@@ -140,22 +146,32 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
     std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
 
     m_dragStartY = y;
+    m_dragStartX = x;
     m_dragStartTime = tc.first;
+    m_dragPreviousTime = m_dragStartTime;
     m_dragStartTempo = tc.second;
     m_dragStartTarget = tr.first ? tr.second : -1;
     m_dragOriginalTempo = m_dragStartTempo;
     m_dragOriginalTarget = m_dragStartTarget;
     m_dragFine = ((e->state() & Qt::ShiftButton) != 0);
 
-    m_dragging = true;
+    int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
+    if (x >= px && x < px + 5) {
+	m_dragHoriz = true;
+	m_dragVert = false;
+    } else {
+	m_dragVert = true;
+	m_dragHoriz = false;
+    }
 }
 
 void
 TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (m_dragging) {
+    if (m_dragVert) {
+
 	mouseMoveEvent(e);
-	m_dragging = false;
+	m_dragVert = false;
 
 	if (e->x() < 0 || e->x() >= width() ||
 	    e->y() < 0 || e->y() >= height()) {
@@ -178,15 +194,41 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 			 TempoDialog::AddTempo);
 
 	return;
-    }
+
+    } else if (m_dragHoriz) {
+
+	mouseMoveEvent(e);
+	m_dragHoriz = false;
+
+	if (e->x() < 0 || e->x() >= width() ||
+	    e->y() < 0 || e->y() >= height()) {
+	    leaveEvent(0);
+	}
+
+	if (m_dragPreviousTime != m_dragStartTime) {
+
+	    // As above, restore the original tempo and then emit a
+	    // signal to ensure a proper command happens.
+
+	    int tcn = m_composition->getTempoChangeNumberAt(m_dragPreviousTime);
+	    m_composition->removeTempoChange(tcn);
+	    m_composition->addTempoAtTime(m_dragStartTime,
+					  m_dragStartTempo,
+					  m_dragStartTarget);
+
+	    emit moveTempo(m_dragStartTime, m_dragPreviousTime);
+	}
+
+	return;
+    }	
 }
 
 void
 TempoRuler::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_dragging) {
+    bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
 
-	bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
+    if (m_dragVert) {
 
 	if (shiftPressed != m_dragFine) {
 
@@ -226,6 +268,37 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	m_composition->addTempoAtTime(m_dragStartTime, newTempo, newTarget);
 	update();
 
+    } else if (m_dragHoriz) {
+
+	int x = e->x();
+
+	SnapGrid grid(m_rulerScale);
+	if (shiftPressed) {
+	    grid.setSnapTime(SnapGrid::NoSnap);
+	} else {
+	    grid.setSnapTime(SnapGrid::SnapToUnit);
+	}
+	timeT newTime = grid.snapX(x - m_currentXOffset - m_xorigin,
+				   SnapGrid::SnapEither);
+
+	int tcn = m_composition->getTempoChangeNumberAt(m_dragPreviousTime);
+	int ncn = m_composition->getTempoChangeNumberAt(newTime);
+	if (ncn > tcn || ncn < tcn - 1) return;
+	if (ncn >= 0 && ncn == tcn - 1) {
+	    std::pair<timeT, tempoT> nc = m_composition->getTempoChange(ncn);
+	    if (nc.first == newTime) return;
+	}
+
+	std::cerr << " -> " << newTime << std::endl;
+
+	m_composition->removeTempoChange(tcn);
+	m_composition->addTempoAtTime(newTime,
+				      m_dragStartTempo,
+				      m_dragStartTarget);
+	showTextFloat(m_dragStartTempo, newTime, true);
+	m_dragPreviousTime = newTime;
+	update();
+
     } else {
 	
 	int x = e->x() + 1;
@@ -242,9 +315,15 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	RG_DEBUG << "Tempo change: tempo " << m_composition->getTempoQpm(tc.second) << " at " << bar << ":" << beat << ":" << fraction << ":" << remainder << endl;
 
 	m_illuminate = tcn;
+	m_illuminatePoint = false;
 	m_refreshLinesOnly = true;
 
-	showTextFloat(tc.second, tc.first);
+	int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
+	if (x >= px && x < px + 5) {
+	    m_illuminatePoint = true;
+	}	    
+
+	showTextFloat(tc.second, tc.first, m_illuminatePoint);
 
 	update();
     }
@@ -264,9 +343,10 @@ TempoRuler::enterEvent(QEvent *)
 void
 TempoRuler::leaveEvent(QEvent *)
 {
-    if (!m_dragging) {
+    if (!m_dragVert && !m_dragHoriz) {
 	setMouseTracking(false);
 	m_illuminate = -1;
+	m_illuminatePoint = false;
 	m_refreshLinesOnly = true;
 	m_textFloat->hide();
 	update();
@@ -274,7 +354,7 @@ TempoRuler::leaveEvent(QEvent *)
 }    
 
 void
-TempoRuler::showTextFloat(tempoT tempo, timeT time)
+TempoRuler::showTextFloat(tempoT tempo, timeT time, bool showTime)
 {
     float qpm = m_composition->getTempoQpm(tempo);
     int qi = int(qpm + 0.0001);
@@ -283,7 +363,33 @@ TempoRuler::showTextFloat(tempoT tempo, timeT time)
 
     bool haveSet = false;
 
+    QString tempoText, timeText;
+
     if (time >= 0) {
+
+	if (showTime) {
+	    int bar, beat, fraction, remainder;
+	    m_composition->getMusicalTimeForAbsoluteTime
+		(time, bar, beat, fraction, remainder);
+	    RealTime rt = m_composition->getElapsedRealTime(time);
+
+	    // blargh -- duplicated with TempoView::makeTimeString
+	    timeText = QString("%1%2%3-%4%5-%6%7-%8%9")
+		.arg(bar/100)
+		.arg((bar%100)/10)
+		.arg(bar%10)
+		.arg(beat/10)
+		.arg(beat%10)
+		.arg(fraction/10)
+		.arg(fraction%10)
+		.arg(remainder/10)
+		.arg(remainder%10);
+	    
+	    timeText = QString("%1\n%2")
+		.arg(timeText)
+//		.arg(rt.toString().c_str());
+		.arg(rt.toText(true).c_str());
+	}
 
 	Rosegarden::TimeSignature sig =
 	    m_composition->getTimeSignatureAt(time);
@@ -299,15 +405,21 @@ TempoRuler::showTextFloat(tempoT tempo, timeT time)
 	    int b0 = int(bpm * 10 + 0.0001) % 10;
 	    int b00 = int(bpm * 100 + 0.0001) % 10;
 
-	    m_textFloat->setText(i18n("%1.%2%3 (%4.%5%6 bpm)")
-				 .arg(qi).arg(q0).arg(q00)
-				 .arg(bi).arg(b0).arg(b00));
+	    tempoText = i18n("%1.%2%3 (%4.%5%6 bpm)")
+		.arg(qi).arg(q0).arg(q00)
+		.arg(bi).arg(b0).arg(b00);
 	    haveSet = true;
 	}
     }
 
     if (!haveSet) {
-	m_textFloat->setText(i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00));
+	tempoText = i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
+    }
+
+    if (showTime && time >= 0) {
+	m_textFloat->setText(QString("%1\n%2").arg(timeText).arg(tempoText));
+    } else {
+	m_textFloat->setText(tempoText);
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
@@ -482,12 +594,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	double x0, x1;
 	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
 	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
-
+/*!!!
 	if (x0 > e->rect().x()) {
 	    paint.fillRect(e->rect().x(), 0, x0 - e->rect().x(), height(),
 			   paletteBackgroundColor());
 	}
-
+*/
 	QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
         paint.setBrush(colour);
@@ -514,7 +626,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    int x = int(x0) + 1;
 	    int ry = lasty;
 
-	    paint.setPen(illuminate ? Qt::white : Qt::black);
+	    bool illuminateLine = (illuminate && !m_illuminatePoint);
+
+	    paint.setPen(illuminateLine ? Qt::white : Qt::black);
 
 	    if (ramping.first) {
 		ry = getYForTempo(ramping.second);
@@ -532,10 +646,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
 		illuminate = (m_illuminate == tcn);
 	    }
 
-	    paint.setPen(illuminate ? Qt::white : Qt::black);
+	    bool illuminatePoint = (illuminate && m_illuminatePoint);
+
+	    paint.setPen(illuminatePoint ? Qt::white : Qt::black);
 	    paint.drawRect(x - 1, y - 1, 3, 3);
 
-	    paint.setPen(illuminate ? Qt::black : Qt::white);
+	    paint.setPen(illuminatePoint ? Qt::black : Qt::white);
 	    paint.drawPoint(x, y);
 	}
 
@@ -547,13 +663,16 @@ TempoRuler::paintEvent(QPaintEvent* e)
     }
 
     if (lastx1 < e->rect().x() + e->rect().width()) {
+/*!!!
 	paint.fillRect(lastx1, 0,
 		       e->rect().x() + e->rect().width() - lastx1, height(),
 		       paletteBackgroundColor());
+*/
     }
 
     if (haveSome) {
-	paint.setPen(illuminate ? Qt::white : Qt::black);
+	bool illuminateLine = (illuminate && !m_illuminatePoint);
+	paint.setPen(illuminateLine ? Qt::white : Qt::black);
 	paint.drawLine(lastx + 1, lasty, width(), lasty);
     } else if (!m_refreshLinesOnly) {
 	tempoT tempo = m_composition->getTempoAtTime(from);

@@ -355,6 +355,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 
+    connect(m_tempoRuler,
+            SIGNAL(moveTempo(Rosegarden::timeT,
+			     Rosegarden::timeT)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotMoveTempo(Rosegarden::timeT,
+			       Rosegarden::timeT)));
+
     m_rawNoteRuler = new RawNoteRuler
 	(m_hlayout, segments[0], m_leftGutter, 20, getCentralWidget());
     addRuler(m_rawNoteRuler);

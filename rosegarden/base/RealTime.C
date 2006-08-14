@@ -84,7 +84,7 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 }
 
 std::string
-RealTime::toString() const
+RealTime::toString(bool align) const
 {
     std::stringstream out;
     out << *this;
@@ -95,8 +95,64 @@ RealTime::toString() const
 
     std::string s = out.str();
 
+    if (!align && *this >= RealTime::zeroTime) {
+        // remove leading " "
+        s = s.substr(1, s.length() - 1);
+    }
+
     // remove trailing R
     return s.substr(0, s.length() - 1);
+}
+
+std::string
+RealTime::toText(bool fixedDp) const
+{
+    if (*this < RealTime::zeroTime) return "-" + (-*this).toText();
+
+    std::stringstream out;
+
+    if (sec >= 3600) {
+	out << (sec / 3600) << ":";
+    }
+
+    if (sec >= 60) {
+	out << (sec % 3600) / 60 << ":";
+    }
+
+    if (sec >= 10) {
+	out << ((sec % 60) / 10);
+    }
+
+    out << (sec % 10);
+    
+    int ms = msec();
+
+    if (ms != 0) {
+	out << ".";
+	out << (ms / 100);
+	ms = ms % 100;
+	if (ms != 0) {
+	    out << (ms / 10);
+	    ms = ms % 10;
+	} else if (fixedDp) {
+	    out << "0";
+	}
+	if (ms != 0) {
+	    out << ms;
+	} else if (fixedDp) {
+	    out << "0";
+	}
+    } else if (fixedDp) {
+	out << ".000";
+    }
+	
+#if (__GNUC__ < 3)
+    out << std::ends;
+#endif
+
+    std::string s = out.str();
+
+    return s;
 }
 
 RealTime

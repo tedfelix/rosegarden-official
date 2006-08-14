@@ -5627,6 +5627,33 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 }
 
 void
+RosegardenGUIApp::slotMoveTempo(Rosegarden::timeT oldTime,
+				Rosegarden::timeT newTime)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    int index = comp.getTempoChangeNumberAt(oldTime);
+
+    if (index < 0) return;
+
+    KMacroCommand *macro =
+	new KMacroCommand(i18n("Move Tempo Change"));
+    
+    std::pair<Rosegarden::timeT, Rosegarden::tempoT> tc =
+	comp.getTempoChange(index);
+    std::pair<bool, Rosegarden::tempoT> tr =
+	comp.getTempoRamping(index, false);
+
+    macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
+    macro->addCommand(new AddTempoChangeCommand(&comp,
+						newTime,
+						tc.second,
+						tr.first ? tr.second : -1));
+
+    m_doc->getCommandHistory()->addCommand(macro);
+}
+
+
+void
 RosegardenGUIApp::slotDocumentModified(bool m)
 {
     RG_DEBUG << "RosegardenGUIApp::slotDocumentModified(" << m << ") - doc path = "

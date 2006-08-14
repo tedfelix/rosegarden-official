@@ -1327,6 +1327,14 @@ RosegardenTextFloat::paintEvent(QPaintEvent *e)
     paint.setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RotaryFloatBackground));
 
     QFontMetrics metrics(paint.fontMetrics());
+
+    QRect r = metrics.boundingRect(0, 0, 400, 400, Qt::AlignAuto, m_text);
+    resize(r.width() + 7, r.height() + 7);
+    paint.drawRect(0, 0, r.width() + 6, r.height() + 6);
+    paint.setPen(Qt::black);
+    paint.drawText(QRect(3, 3, r.width(), r.height()), Qt::AlignAuto, m_text);
+
+/*
     QRect textBound = metrics.boundingRect(m_text);
 
     resize(textBound.width() + 7, textBound.height() + 7);
@@ -1334,6 +1342,7 @@ RosegardenTextFloat::paintEvent(QPaintEvent *e)
 
     paint.setPen(Qt::black);
     paint.drawText(3, textBound.height() + 3, m_text);
+*/
 }
 
 
