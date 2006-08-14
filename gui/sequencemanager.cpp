@@ -1879,7 +1879,7 @@ void SequenceManager::processRemovedSegment(Segment* s)
 
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
-    resetMetronomeMmapper();
+//    resetMetronomeMmapper();
     resetCompositionMmapper();
 }
 
