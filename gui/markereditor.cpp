@@ -213,7 +213,7 @@ MarkerEditorDialog::updatePosition()
 
     QString realTime, secsStr;
     if (hours) realTime += QString("%1h ").arg(hours);
-    if (mins) realTime += QString("%1m ").arg(hours);
+    if (mins) realTime += QString("%1m ").arg(mins);
     secsStr.sprintf("%ld.%03lds", secs, msecs);
     realTime += secsStr;
 
@@ -622,7 +622,8 @@ MarkerEditorDialog::makeTimeString(Rosegarden::timeT time, int timeMode)
     {
         Rosegarden::RealTime rt =
             m_doc->getComposition().getElapsedRealTime(time);
-        return QString("%1   ").arg(rt.toString().c_str());
+//        return QString("%1   ").arg(rt.toString().c_str());
+        return QString("%1   ").arg(rt.toText().c_str());
     }
 
     default:

@@ -588,7 +588,8 @@ TriggerSegmentManager::makeDurationString(Rosegarden::timeT time,
 	Rosegarden::RealTime rt =
 	    m_doc->getComposition().getRealTimeDifference
 	    (time, time + duration);
-	return QString("%1  ").arg(rt.toString().c_str());
+//	return QString("%1  ").arg(rt.toString().c_str());
+	return QString("%1  ").arg(rt.toText().c_str());
     }
 
     default:

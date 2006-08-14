@@ -53,6 +53,9 @@ struct RealTime
     RealTime operator-(const RealTime &r) const {
 	return RealTime(sec - r.sec, nsec - r.nsec);
     }
+    RealTime operator-() const {
+	return RealTime(-sec, -nsec);
+    }
 
     bool operator <(const RealTime &r) const {
 	if (sec == r.sec) return nsec < r.nsec;
@@ -88,7 +91,17 @@ struct RealTime
     //
     double operator/(const RealTime &r) const;
 
-    std::string toString() const;
+    // Return a human-readable debug-type string to full precision
+    // (probably not a format to show to a user directly).  If align
+    // is true, prepend " " to the start of positive values so that
+    // they line up with negative ones (which start with "-").
+    // 
+    std::string toString(bool align = false) const;
+
+    // Return a user-readable string to the nearest millisecond
+    // in a form like HH:MM:SS.mmm
+    //
+    std::string toText(bool fixedDp = false) const;
 
     // Convenience functions for handling sample frames
     //

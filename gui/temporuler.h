@@ -78,6 +78,9 @@ signals:
                      Rosegarden::tempoT,  // tempo target
                      TempoDialog::TempoDialogAction); // tempo action
 
+    void moveTempo(Rosegarden::timeT, // old time
+		   Rosegarden::timeT); // new time
+
 public slots:
     void slotScrollHoriz(int x);
 
@@ -97,13 +100,17 @@ private:
     int  m_width;
     bool m_small;
     int  m_illuminate;
+    bool m_illuminatePoint;
     bool m_refreshLinesOnly;
 
-    bool m_dragging;
+    bool m_dragVert;
+    bool m_dragHoriz;
     int  m_dragStartY;
+    int  m_dragStartX;
     bool m_dragFine;
 
-    Rosegarden::timeT m_dragStartTime;
+    Rosegarden::timeT  m_dragStartTime;
+    Rosegarden::timeT  m_dragPreviousTime;
     Rosegarden::tempoT m_dragStartTempo;
     Rosegarden::tempoT m_dragStartTarget;
     Rosegarden::tempoT m_dragOriginalTempo;
@@ -111,7 +118,9 @@ private:
 
     int getYForTempo(Rosegarden::tempoT tempo);
     Rosegarden::tempoT getTempoForY(int y);
-    void showTextFloat(Rosegarden::tempoT tempo, Rosegarden::timeT time = -1);
+    void showTextFloat(Rosegarden::tempoT tempo,
+		       Rosegarden::timeT time = -1,
+		       bool showTime = false);
 
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;

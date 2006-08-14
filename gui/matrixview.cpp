@@ -458,6 +458,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 
+    connect(m_tempoRuler,
+            SIGNAL(moveTempo(Rosegarden::timeT,
+			     Rosegarden::timeT)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotMoveTempo(Rosegarden::timeT,
+			       Rosegarden::timeT)));
+
     // Scroll view to centre middle-C and warp to pointer position
     //
     m_canvasView->scrollBy(0, m_staffs[0]->getCanvasYForHeight(60) / 2);

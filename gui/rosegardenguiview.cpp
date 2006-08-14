@@ -159,6 +159,13 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 
+    connect(m_trackEditor->getTempoRuler(),
+            SIGNAL(moveTempo(Rosegarden::timeT,
+			     Rosegarden::timeT)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotMoveTempo(Rosegarden::timeT,
+			       Rosegarden::timeT)));
+
     connect(m_trackEditor,
             SIGNAL(droppedDocument(QString)),
             parent,

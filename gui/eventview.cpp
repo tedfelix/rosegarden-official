@@ -688,7 +688,8 @@ EventView::makeTimeString(Rosegarden::timeT time, int timeMode)
     {
 	Rosegarden::RealTime rt =
 	    getDocument()->getComposition().getElapsedRealTime(time);
-	return QString("%1  ").arg(rt.toString().c_str());
+//	return QString("%1  ").arg(rt.toString().c_str());
+	return QString("%1  ").arg(rt.toText().c_str());
     }
 
     default:
@@ -724,7 +725,8 @@ EventView::makeDurationString(Rosegarden::timeT time,
 	Rosegarden::RealTime rt =
 	    getDocument()->getComposition().getRealTimeDifference
 	    (time, time + duration);
-	return QString("%1  ").arg(rt.toString().c_str());
+//	return QString("%1  ").arg(rt.toString().c_str());
+	return QString("%1  ").arg(rt.toText().c_str());
     }
 
     default:
