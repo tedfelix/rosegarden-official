@@ -59,8 +59,10 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_small(small),
     m_illuminate(-1),
     m_illuminatePoint(false),
+    m_illuminateTarget(false),
     m_refreshLinesOnly(false),
     m_dragVert(false),
+    m_dragTarget(false),
     m_dragHoriz(false),
     m_dragStartY(0),
     m_dragStartX(0),
@@ -159,7 +161,20 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
     if (x >= px && x < px + 5) {
 	m_dragHoriz = true;
 	m_dragVert = false;
+	setCursor(Qt::SplitHCursor);
     } else {
+	timeT nt = m_composition->getEndMarker();
+	if (tcn < m_composition->getTempoChangeCount() - 1) {
+	    nt = m_composition->getTempoChange(tcn + 1).first;
+	}
+	int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset + m_xorigin;
+	if (x > px + 5 && x > nx - 5) {
+	    m_dragTarget = true;
+	    setCursor(Qt::SizeVerCursor);
+	} else {
+	    m_dragTarget = false;
+	    setCursor(Qt::SplitVCursor);
+	}
 	m_dragVert = true;
 	m_dragHoriz = false;
     }
@@ -172,6 +187,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 
 	mouseMoveEvent(e);
 	m_dragVert = false;
+	unsetCursor();
 
 	if (e->x() < 0 || e->x() >= width() ||
 	    e->y() < 0 || e->y() >= height()) {
@@ -189,6 +205,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 	m_composition->addTempoAtTime(m_dragStartTime,
 				      m_dragOriginalTempo,
 				      m_dragOriginalTarget);
+
 	emit changeTempo(m_dragStartTime, tc.second,
 			 tr.first ? tr.second : -1,
 			 TempoDialog::AddTempo);
@@ -199,6 +216,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 
 	mouseMoveEvent(e);
 	m_dragHoriz = false;
+	unsetCursor();
 
 	if (e->x() < 0 || e->x() >= width() ||
 	    e->y() < 0 || e->y() >= height()) {
@@ -251,20 +269,33 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	if (diff != 0) {
 
 	    float qpm = m_composition->getTempoQpm(newTempo);
+
+	    if (m_dragTarget && newTarget > 0) {
+		qpm = m_composition->getTempoQpm(newTarget);
+	    }
+
 	    float qdiff = (m_dragFine ? diff * 0.05 : diff * 0.5);
 	    qpm += qdiff;
 	    if (qpm < 1) qpm = 1;
-	    newTempo = m_composition->getTempoForQpm(qpm + 0.0001);
 
-	    if (newTarget >= 0) {
-		qpm = m_composition->getTempoQpm(newTarget);
-		qpm += qdiff;
-		if (qpm < 1) qpm = 1;
+	    if (m_dragTarget) {
+
 		newTarget = m_composition->getTempoForQpm(qpm + 0.0001);
+
+	    } else {
+
+		newTempo = m_composition->getTempoForQpm(qpm + 0.0001);
+
+		if (newTarget >= 0) {
+		    qpm = m_composition->getTempoQpm(newTarget);
+		    qpm += qdiff;
+		    if (qpm < 1) qpm = 1;
+		    newTarget = m_composition->getTempoForQpm(qpm + 0.0001);
+		}
 	    }
 	}
 
-	showTextFloat(newTempo, m_dragStartTime);
+	showTextFloat(newTempo, newTarget, m_dragStartTime);
 	m_composition->addTempoAtTime(m_dragStartTime, newTempo, newTarget);
 	update();
 
@@ -295,7 +326,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	m_composition->addTempoAtTime(newTime,
 				      m_dragStartTempo,
 				      m_dragStartTarget);
-	showTextFloat(m_dragStartTempo, newTime, true);
+	showTextFloat(m_dragStartTempo, m_dragStartTarget, newTime, true);
 	m_dragPreviousTime = newTime;
 	update();
 
@@ -308,6 +339,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	if (tcn < 0 || tcn >= m_composition->getTempoChangeCount()) return;
 
 	std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
+	std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, false);
 
 	int bar, beat, fraction, remainder;
 	m_composition->getMusicalTimeForAbsoluteTime(tc.first, bar, beat,
@@ -316,14 +348,30 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 
 	m_illuminate = tcn;
 	m_illuminatePoint = false;
+	m_illuminateTarget = false;
 	m_refreshLinesOnly = true;
+
+	//!!! merge this test with the one in mousePressEvent as
+	//isCloseToStart or equiv, and likewise for close to end
 
 	int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
 	if (x >= px && x < px + 5) {
 	    m_illuminatePoint = true;
-	}	    
+	} else {
+	    timeT nt = m_composition->getEndMarker();
+	    if (tcn < m_composition->getTempoChangeCount() - 1) {
+		nt = m_composition->getTempoChange(tcn + 1).first;
+	    }
+	    int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset + m_xorigin;
+	    if (x > px + 5 && x > nx - 5) {
+		m_illuminateTarget = true;
+	    }
 
-	showTextFloat(tc.second, tc.first, m_illuminatePoint);
+	    std::cerr << "nt = " << nt << ", nx = " << nx << ", x = " << x << ", m_illuminateTarget = " << m_illuminateTarget << std::endl;
+	}
+
+	showTextFloat(tc.second, tr.first ? tr.second : -1,
+		      tc.first, m_illuminatePoint);
 
 	update();
     }
@@ -354,7 +402,8 @@ TempoRuler::leaveEvent(QEvent *)
 }    
 
 void
-TempoRuler::showTextFloat(tempoT tempo, timeT time, bool showTime)
+TempoRuler::showTextFloat(tempoT tempo, tempoT target,
+			  timeT time, bool showTime)
 {
     float qpm = m_composition->getTempoQpm(tempo);
     int qi = int(qpm + 0.0001);
@@ -414,6 +463,14 @@ TempoRuler::showTextFloat(tempoT tempo, timeT time, bool showTime)
 
     if (!haveSet) {
 	tempoText = i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
+    }
+
+    if (target > 0 && target != tempo) {
+	float tq = m_composition->getTempoQpm(target);
+	int tqi = int(tq + 0.0001);
+	int tq0 = int(tq * 10 + 0.0001) % 10;
+	int tq00 = int(tq * 100 + 0.0001) % 10;
+	tempoText = i18n("%1 - %2.%3%4").arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
     }
 
     if (showTime && time >= 0) {
@@ -626,7 +683,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    int x = int(x0) + 1;
 	    int ry = lasty;
 
-	    bool illuminateLine = (illuminate && !m_illuminatePoint);
+	    bool illuminateLine = (illuminate &&
+				   !m_illuminatePoint && !m_illuminateTarget);
 
 	    paint.setPen(illuminateLine ? Qt::white : Qt::black);
 
@@ -641,6 +699,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    }
 
 	    paint.drawLine(lastx + 1, lasty, x - 2, ry);
+
+	    if (!illuminateLine && illuminate && m_illuminateTarget) {
+		paint.setPen(Qt::white);
+		paint.drawLine(x - 6, ry - ((ry - lasty) * 6) / (x - lastx),
+			       x - 2, ry);
+	    }
 
 	    if (m_illuminate >= 0) {
 		illuminate = (m_illuminate == tcn);

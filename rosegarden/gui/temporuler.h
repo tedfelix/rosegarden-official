@@ -101,9 +101,11 @@ private:
     bool m_small;
     int  m_illuminate;
     bool m_illuminatePoint;
+    bool m_illuminateTarget;
     bool m_refreshLinesOnly;
 
     bool m_dragVert;
+    bool m_dragTarget;
     bool m_dragHoriz;
     int  m_dragStartY;
     int  m_dragStartX;
@@ -119,6 +121,7 @@ private:
     int getYForTempo(Rosegarden::tempoT tempo);
     Rosegarden::tempoT getTempoForY(int y);
     void showTextFloat(Rosegarden::tempoT tempo,
+		       Rosegarden::tempoT target = -1,
 		       Rosegarden::timeT time = -1,
 		       bool showTime = false);
 
