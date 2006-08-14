@@ -265,18 +265,23 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
         throw Rosegarden::Exception("Couldn't open " + qstrtostr(m_fileName));
     }
 
-    SEQMAN_DEBUG << "SegmentMmapper : mmap size = " << m_mmappedSize
-                 << endl;
+//    SEQMAN_DEBUG << "SegmentMmapper : mmap size = " << m_mmappedSize
+//                 << endl;
 }
 
 void SegmentMmapper::init()
 {
     m_mmappedSize = computeMmappedSize() + sizeof(size_t);
-
+    
     if (m_mmappedSize > 0) {
         setFileSize(m_mmappedSize);
         doMmap();
         dump();
+        if (m_segment != 0) {
+            SEQMAN_DEBUG << "SegmentMmapper::init : mmap size = " << m_mmappedSize
+                         << " for segment " << m_segment->getLabel() << endl;
+        }
+        
     } else {
         SEQMAN_DEBUG << "SegmentMmapper::init : mmap size = 0 - skipping mmapping for now\n";
     }
