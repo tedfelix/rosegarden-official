@@ -1643,7 +1643,7 @@
                 <pixmap>image6</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Start loop here</string>
+                <string>Start loop or range here</string>
             </property>
         </widget>
         <widget class="QPushButton">
@@ -1665,7 +1665,7 @@
                 <pixmap>image7</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>End loop here</string>
+                <string>End loop or range here</string>
             </property>
         </widget>
     </widget>
