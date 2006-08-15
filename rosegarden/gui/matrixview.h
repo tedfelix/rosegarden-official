@@ -486,9 +486,6 @@ protected slots:
      * The instrument for this track may have changed
      */
     void slotCheckTrackAssignments();
-
-    // Open tempo editor
-    /*void slotEditTempos(Rosegarden::timeT t);*/
     
 protected:
     virtual Rosegarden::RulerScale* getHLayout();

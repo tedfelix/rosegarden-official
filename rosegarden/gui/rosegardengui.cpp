@@ -114,6 +114,7 @@
 #include "midifilter.h"
 #include "controleditor.h"
 #include "markereditor.h"
+#include "tempoview.h"
 #include "triggermanager.h"
 #include "studiocommands.h"
 #include "rgapplication.h"
@@ -256,6 +257,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_midiMixer(0),
       m_bankEditor(0),
       m_markerEditor(0),
+      m_tempoView(0),
       m_triggerSegmentManager(0),
 #ifdef HAVE_LIBLO
       m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
@@ -780,8 +782,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotHarmonizeSelection()), actionCollection(),
                 "harmonize_selection");
 
+    pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
+    icon = QIconSet(pixmap);
     new KAction(AddTimeSignatureCommand::getGlobalName(),
-                0,
+                icon, 0,
                 this, SLOT(slotEditTimeSignature()),
                 actionCollection(), "add_time_signature");
 
@@ -815,8 +819,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
+    pixmap.load(pixmapDir + "/toolbar/event-insert-tempo.png");
+    icon = QIconSet(pixmap);
     new KAction(AddTempoChangeCommand::getGlobalName(),
-                0,
+                icon, 0,
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
     
@@ -1398,6 +1404,9 @@ void RosegardenGUIApp::initView()
     delete m_markerEditor;
     m_markerEditor = 0;
 
+    delete m_tempoView;
+    m_tempoView = 0;
+
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = 0;
 
@@ -1477,6 +1486,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
         m_seqManager->setDocument(m_doc);
 
     if (m_markerEditor) m_markerEditor->setDocument(m_doc);
+    if (m_tempoView) { delete m_tempoView; m_tempoView = 0; }
     if (m_triggerSegmentManager) m_triggerSegmentManager->setDocument(m_doc);
 
     m_trackParameterBox->setDocument(m_doc);
@@ -3028,12 +3038,7 @@ void RosegardenGUIApp::slotEditInEventList()
 
 void RosegardenGUIApp::slotEditTempos()
 {
-    m_view->slotEditTempos(m_doc->getComposition().getPosition());
-}
-
-void RosegardenGUIApp::slotEditTempos(Rosegarden::timeT openAtTime)
-{
-    m_view->slotEditTempos(openAtTime);
+    slotEditTempos(m_doc->getComposition().getPosition());
 }
 
 void RosegardenGUIApp::slotToggleToolBar()
@@ -5462,12 +5467,17 @@ void RosegardenGUIApp::slotEditTempo()
     slotEditTempo(this);
 }
 
-void RosegardenGUIApp::slotEditTimeSignature()
+void RosegardenGUIApp::slotEditTempo(Rosegarden::timeT atTime)
 {
-    slotEditTimeSignature(this);
+    slotEditTempo(this, atTime);
 }
 
 void RosegardenGUIApp::slotEditTempo(QWidget *parent)
+{
+    slotEditTempo(parent, m_doc->getComposition().getPosition());
+}
+
+void RosegardenGUIApp::slotEditTempo(QWidget *parent, Rosegarden::timeT atTime)
 {
     RG_DEBUG << "RosegardenGUIApp::slotEditTempo\n";
 
@@ -5483,15 +5493,30 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
                                  Rosegarden::tempoT,
 				 TempoDialog::TempoDialogAction)));
 
-    tempoDialog.setTempoPosition(m_doc->getComposition().getPosition());
+    tempoDialog.setTempoPosition(atTime);
     tempoDialog.exec();
+}
+
+void RosegardenGUIApp::slotEditTimeSignature()
+{
+    slotEditTimeSignature(this);
+}
+
+void RosegardenGUIApp::slotEditTimeSignature(Rosegarden::timeT atTime)
+{
+    slotEditTimeSignature(this, atTime);
 }
 
 void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
 {
+    slotEditTimeSignature(parent, m_doc->getComposition().getPosition());
+}
+
+void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent,
+					     Rosegarden::timeT time)
+{
     Rosegarden::Composition &composition(m_doc->getComposition());
 
-    Rosegarden::timeT time = composition.getPosition();
     Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
 
     TimeSignatureDialog dialog(parent, &composition, time, sig);
@@ -5650,6 +5675,18 @@ RosegardenGUIApp::slotMoveTempo(Rosegarden::timeT oldTime,
 						tr.first ? tr.second : -1));
 
     m_doc->getCommandHistory()->addCommand(macro);
+}
+
+void
+RosegardenGUIApp::slotDeleteTempo(Rosegarden::timeT t)
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    int index = comp.getTempoChangeNumberAt(t);
+
+    if (index < 0) return;
+
+    m_doc->getCommandHistory()->addCommand(new RemoveTempoChangeCommand
+					   (&comp, index));
 }
 
 
@@ -6497,6 +6534,50 @@ RosegardenGUIApp::slotMarkerEditorClosed()
     RG_DEBUG << "RosegardenGUIApp::slotMarkerEditorClosed" << endl;
 
     m_markerEditor = 0;
+}
+
+void
+RosegardenGUIApp::slotEditTempos(Rosegarden::timeT t)
+{
+    if (m_tempoView) {
+	m_tempoView->show();
+	m_tempoView->raise();
+	m_tempoView->setActiveWindow();
+	return;
+    }
+
+    m_tempoView = new TempoView(m_doc, getView(), t);
+
+    connect(m_tempoView, SIGNAL(closing()),
+            SLOT(slotTempoViewClosed()));
+
+    connect(m_tempoView, SIGNAL(windowActivated()),
+	    getView(), SLOT(slotActiveMainWindowChanged()));
+
+    connect(m_tempoView,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               Rosegarden::tempoT,
+                               Rosegarden::tempoT,
+			       TempoDialog::TempoDialogAction)),
+	    this,
+            SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 Rosegarden::tempoT,
+                                 Rosegarden::tempoT,
+				 TempoDialog::TempoDialogAction)));
+
+    connect(m_tempoView, SIGNAL(saveFile()), this, SLOT(slotFileSave()));
+
+    plugAccelerators(m_tempoView, m_tempoView->getAccelerators());
+
+    m_tempoView->show();
+}
+
+void
+RosegardenGUIApp::slotTempoViewClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotTempoViewClosed" << endl;
+
+    m_tempoView = 0;
 }
 
 void

@@ -335,32 +335,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) m_chordNameRuler->show();
 
     m_tempoRuler = new TempoRuler
-	(m_hlayout, doc, m_leftGutter, 24, false, getCentralWidget());
+	(m_hlayout, doc, factory(), m_leftGutter, 24, false, getCentralWidget());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
-    // make tempo ruler double click editable
-    connect(m_tempoRuler,
-	    SIGNAL(doubleClicked(Rosegarden::timeT)),
-//	    SLOT(slotEditTempos(Rosegarden::timeT)));
-            SIGNAL(editTimeSignature(Rosegarden::timeT)));
-    
-    connect(m_tempoRuler,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               Rosegarden::tempoT,
-                               Rosegarden::tempoT,
-			       TempoDialog::TempoDialogAction)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
-                                 Rosegarden::tempoT,
-				 TempoDialog::TempoDialogAction)));
-
-    connect(m_tempoRuler,
-            SIGNAL(moveTempo(Rosegarden::timeT,
-			     Rosegarden::timeT)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotMoveTempo(Rosegarden::timeT,
-			       Rosegarden::timeT)));
+    static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
 
     m_rawNoteRuler = new RawNoteRuler
 	(m_hlayout, segments[0], m_leftGutter, 20, getCentralWidget());
