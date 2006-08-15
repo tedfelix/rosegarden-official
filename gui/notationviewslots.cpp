@@ -2947,24 +2947,3 @@ NotationView::slotRenderSomething()
     updateThumbnails(true);
 }
 
-/*void
-NotationView::slotEditTempos(Rosegarden::timeT t)
-{
-    TempoView *tempoView = new TempoView(getDocument(), this, t);
-
-    connect(tempoView,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               Rosegarden::tempoT,
-                               Rosegarden::tempoT,
-			       TempoDialog::TempoDialogAction)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
-                                 Rosegarden::tempoT,
-				 TempoDialog::TempoDialogAction)));
-
-    connect(tempoView, SIGNAL(saveFile()),
-	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
-
-    tempoView->show();
-}*/

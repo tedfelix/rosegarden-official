@@ -438,32 +438,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, doc, 0, 24, false, getCentralWidget());
+	(&m_hlayout, doc, factory(), 0, 24, false, getCentralWidget());
+    static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
     addRuler(m_tempoRuler);
-
-    // make tempo ruler double click editable
-    connect(m_tempoRuler,
-	    SIGNAL(doubleClicked(Rosegarden::timeT)),
-	    //SLOT(slotEditTempos(Rosegarden::timeT)));
-            SIGNAL(editTimeSignature(Rosegarden::timeT)));
-    
-    connect(m_tempoRuler,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               Rosegarden::tempoT,
-                               Rosegarden::tempoT,
-			       TempoDialog::TempoDialogAction)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
-                                 Rosegarden::tempoT,
-				 TempoDialog::TempoDialogAction)));
-
-    connect(m_tempoRuler,
-            SIGNAL(moveTempo(Rosegarden::timeT,
-			     Rosegarden::timeT)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotMoveTempo(Rosegarden::timeT,
-			       Rosegarden::timeT)));
 
     // Scroll view to centre middle-C and warp to pointer position
     //
@@ -2530,28 +2507,6 @@ MatrixView::slotToggleTempoRuler()
 {
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
 }
-
-/*void
-MatrixView::slotEditTempos(Rosegarden::timeT t)
-{
-    TempoView *tempoView = new TempoView(getDocument(), this, t);
-
-    connect(tempoView,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               Rosegarden::tempoT,
-                               Rosegarden::tempoT,
-			       TempoDialog::TempoDialogAction)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
-                                 Rosegarden::tempoT,
-				 TempoDialog::TempoDialogAction)));
-
-    connect(tempoView, SIGNAL(saveFile()),
-	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
-
-    tempoView->show();
-}*/
 
 void
 MatrixView::paintEvent(QPaintEvent* e)

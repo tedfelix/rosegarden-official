@@ -70,6 +70,7 @@ namespace Rosegarden
 class RosegardenProgressBar;
 class ControlEditorDialog;
 class MarkerEditorDialog;
+class TempoView;
 class TriggerSegmentManager;
 class PlayListDialog;
 class SegmentParameterBox;
@@ -821,13 +822,17 @@ public slots:
      * Edit the tempo - called from a Transport signal
      */
     void slotEditTempo();
+    void slotEditTempo(Rosegarden::timeT atTime);
     void slotEditTempo(QWidget *parent);
+    void slotEditTempo(QWidget *parent, Rosegarden::timeT atTime);
 
     /**
      * Edit the time signature - called from a Transport signal
      */
     void slotEditTimeSignature();
+    void slotEditTimeSignature(Rosegarden::timeT atTime);
     void slotEditTimeSignature(QWidget *parent);
+    void slotEditTimeSignature(QWidget *parent, Rosegarden::timeT atTime);
 
     /**
      * Change the length of the composition
@@ -1231,6 +1236,11 @@ public slots:
 		       Rosegarden::timeT newTime);
 
     /**
+     * Remove a tempo change
+     */
+    void slotDeleteTempo(Rosegarden::timeT time);
+
+    /**
      * Document modified
      */
     void slotDocumentModified(bool modified = true);
@@ -1352,6 +1362,11 @@ public slots:
      * when MarkerEditor is being closed
      */
     void slotMarkerEditorClosed();
+
+    /**
+     * when TempoView is being closed
+     */
+    void slotTempoViewClosed();
 
     /**
      * when TriggerManager is being closed
@@ -1563,6 +1578,7 @@ private:
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
     MarkerEditorDialog    *m_markerEditor;
+    TempoView             *m_tempoView;
     TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;

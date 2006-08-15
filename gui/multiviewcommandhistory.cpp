@@ -305,6 +305,7 @@ MultiViewCommandHistory::updateButton(bool undo,
 	    action->setEnabled(true);
 	    QString commandName = stack.top()->name();
 	    commandName.replace(QRegExp("&"), "");
+	    commandName.replace(QRegExp("\\.\\.\\.$"), "");
 	    if (undo) text = i18n("Und&o %1").arg(commandName);
 	    else      text = i18n("Re&do %1").arg(commandName);
 	    action->setText(text);
@@ -342,6 +343,7 @@ MultiViewCommandHistory::updateMenu(bool undo,
 
 	    QString commandName = command->name();
 	    commandName.replace(QRegExp("&"), "");
+	    commandName.replace(QRegExp("\\.\\.\\.$"), "");
 
 	    QString text;
 	    if (undo) text = i18n("Und&o %1").arg(commandName);

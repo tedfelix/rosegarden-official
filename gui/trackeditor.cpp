@@ -119,12 +119,15 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_tempoRuler = new TempoRuler(m_rulerScale,
 				  m_doc,
+				  RosegardenGUIApp::self()->factory(),
 				  0.0,
 				  24,
 				  true,
 				  this);
 
     grid->addWidget(m_tempoRuler, 1, 1);
+
+    m_tempoRuler->connectSignals();
 
     //
     // Top Bar Buttons

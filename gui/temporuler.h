@@ -28,14 +28,18 @@
 #include "Event.h"
 #include "Composition.h"
 
+#include <kxmlguiclient.h>
+
 namespace Rosegarden {
     class RulerScale;
 }
 
 class QFont;
 class QFontMetrics;
+class QPopupMenu;
 class RosegardenGUIDoc;
 class RosegardenTextFloat;
+class KXMLGUIFactory;
 
 
 /**
@@ -43,7 +47,7 @@ class RosegardenTextFloat;
  * x-coordinates corresponding to tempo changes in a Composition.
  */
 
-class TempoRuler : public QWidget
+class TempoRuler : public QWidget, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -57,6 +61,7 @@ public:
      */
     TempoRuler(Rosegarden::RulerScale *rulerScale,
 	       RosegardenGUIDoc *doc,
+	       KXMLGUIFactory *factory,
 	       double xorigin = 0.0,
 	       int height = 0,
 	       bool small = false,
@@ -70,6 +75,8 @@ public:
 
     void setMinimumWidth(int width) { m_width = width; }
 
+    void connectSignals();
+
 signals:
     void doubleClicked(Rosegarden::timeT);
 
@@ -81,8 +88,24 @@ signals:
     void moveTempo(Rosegarden::timeT, // old time
 		   Rosegarden::timeT); // new time
 
+    void deleteTempo(Rosegarden::timeT);
+
+    void editTempo(Rosegarden::timeT);
+    void editTimeSignature(Rosegarden::timeT);
+    void editTempos(Rosegarden::timeT);
+
 public slots:
     void slotScrollHoriz(int x);
+
+protected slots:
+    void slotInsertTempoHere();
+    void slotInsertTempoAtPointer();
+    void slotDeleteTempoChange();
+    void slotRampToNext();
+    void slotUnramp();
+    void slotEditTempo();
+    void slotEditTimeSignature();
+    void slotEditTempos();
 
 protected:
     virtual void paintEvent(QPaintEvent *);
@@ -110,6 +133,7 @@ private:
     int  m_dragStartY;
     int  m_dragStartX;
     bool m_dragFine;
+    int  m_clickX;
 
     Rosegarden::timeT  m_dragStartTime;
     Rosegarden::timeT  m_dragPreviousTime;
@@ -128,6 +152,7 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::RulerScale *m_rulerScale;
     RosegardenTextFloat *m_textFloat;
+    QPopupMenu *m_menu;
 
     QFont m_font;
     QFont m_boldFont;

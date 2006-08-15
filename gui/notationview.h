@@ -714,9 +714,6 @@ public slots:
     // Update notation view based on track/staff name change
     void slotUpdateStaffName();
 
-    // Open tempo editor
-    /*void slotEditTempos(Rosegarden::timeT t);*/
-
     // Lilypond Directive slots
     void slotBeginLilypondRepeat();
 

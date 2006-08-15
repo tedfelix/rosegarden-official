@@ -66,7 +66,6 @@
 #include "dialogs.h"
 #include "sequencemanager.h"
 #include "sequencermapper.h"
-#include "tempoview.h"
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
@@ -141,30 +140,8 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SLOT(slotEditSegmentEventList(Rosegarden::Segment*)));
 
     connect(m_trackEditor->getSegmentCanvas(),
-            SIGNAL(editRepeat(Rosegarden::Segment*, Rosegarden::timeT)),
+            SIGNAL(editRepeat(Rosegarden::Segment*, timeT)),
             SLOT(slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT)));
-
-    connect(m_trackEditor->getTempoRuler(),
-	    SIGNAL(doubleClicked(Rosegarden::timeT)),
-	    SLOT(slotEditTempos(Rosegarden::timeT)));
-
-    connect(m_trackEditor->getTempoRuler(),
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               Rosegarden::tempoT,
-                               Rosegarden::tempoT,
-			       TempoDialog::TempoDialogAction)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
-                                 Rosegarden::tempoT,
-				 TempoDialog::TempoDialogAction)));
-
-    connect(m_trackEditor->getTempoRuler(),
-            SIGNAL(moveTempo(Rosegarden::timeT,
-			     Rosegarden::timeT)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotMoveTempo(Rosegarden::timeT,
-			       Rosegarden::timeT)));
 
     connect(m_trackEditor,
             SIGNAL(droppedDocument(QString)),
@@ -289,31 +266,6 @@ RosegardenGUIView::getSelection()
 void RosegardenGUIView::updateSelectionContents()
 {
     m_trackEditor->getSegmentCanvas()->updateSelectionContents();
-}
-
-void
-RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
-{
-    TempoView *tempoView = new TempoView(getDocument(), this, t);
-
-    connect(tempoView, SIGNAL(windowActivated()),
-	    this, SLOT(slotActiveMainWindowChanged()));
-
-    connect(tempoView,
-            SIGNAL(changeTempo(Rosegarden::timeT,
-                               Rosegarden::tempoT,
-                               Rosegarden::tempoT,
-			       TempoDialog::TempoDialogAction)),
-	    RosegardenGUIApp::self(),
-            SLOT(slotChangeTempo(Rosegarden::timeT,
-                                 Rosegarden::tempoT,
-                                 Rosegarden::tempoT,
-				 TempoDialog::TempoDialogAction)));
-
-    connect(tempoView, SIGNAL(saveFile()),
-	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
-
-    tempoView->show();
 }
 
 void
@@ -502,8 +454,6 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *>)));
     connect(notationView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
 	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
-    connect(notationView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
-	    this, SLOT(slotEditTempos(Rosegarden::timeT)));
     connect(notationView, SIGNAL(editMetadata(QString)),
 	    this, SLOT(slotEditMetadata(QString)));
     connect(notationView, SIGNAL(editTriggerSegment(int)),
@@ -512,6 +462,8 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
 	    this, SLOT(slotChangeTrackLabel(Rosegarden::TrackId, QString)));
     connect(notationView, SIGNAL(toggleSolo(bool)),
             RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
+    connect(notationView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
+            RosegardenGUIApp::self(), SLOT(slotEditTempos(Rosegarden::timeT)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -700,7 +652,7 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
     connect(matrixView, SIGNAL(toggleSolo(bool)),
             RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
     connect(matrixView, SIGNAL(editTimeSignature(Rosegarden::timeT)),
-            this, SLOT(slotEditTempos(Rosegarden::timeT)));
+            RosegardenGUIApp::self(), SLOT(slotEditTempos(Rosegarden::timeT)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 

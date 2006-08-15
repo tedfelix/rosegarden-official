@@ -162,7 +162,6 @@ public slots:
     void slotEditSegmentAudio(Rosegarden::Segment*);
     void slotSegmentAutoSplit(Rosegarden::Segment*);
     void slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT);
-    void slotEditTempos(Rosegarden::timeT);
     void slotEditMetadata(QString);
 
     /**
