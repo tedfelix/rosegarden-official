@@ -1805,7 +1805,7 @@ void CompositionView::initStepSize()
 void CompositionView::slotUpdateSize()
 {
     int vStep = getModel()->grid().getYSnap();
-    int height = std::max(getModel()->getNbRows(), 64u) * vStep;
+    int height = getModel()->getNbRows() * vStep;
     
     Rosegarden::RulerScale *ruler = grid().getRulerScale();
 
