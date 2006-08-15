@@ -506,8 +506,8 @@ TrackParameterBox::updateHighLow()
     bool useSharps = true;
     bool includeOctave = true;
 
-    m_highButton->setText(QString("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
-    m_lowButton->setText(QString("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
+    m_highButton->setText(i18n("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
+    m_lowButton->setText(i18n("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
 
     m_presetLbl->setEnabled(false);
 }
