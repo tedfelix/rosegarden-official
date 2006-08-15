@@ -6189,6 +6189,7 @@ RosegardenGUIApp::slotChangeCompositionLength()
                     dialog.getStartMarker(),
                     dialog.getEndMarker());
 
+        m_view->getTrackEditor()->getSegmentCanvas()->clearSegmentRectsCache(true);
         m_doc->getCommandHistory()->addCommand(command);
     }
 }
