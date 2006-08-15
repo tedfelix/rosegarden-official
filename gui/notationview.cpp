@@ -513,6 +513,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setCurrentSelection(0, false, true);
     slotUpdateInsertModeStatus();
     m_chordNameRuler->repaint();
+    m_tempoRuler->repaint();
     m_rawNoteRuler->repaint();
     m_inhibitRefresh = false;
 

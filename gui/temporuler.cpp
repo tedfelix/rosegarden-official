@@ -672,6 +672,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
+
+    if (m_xorigin > 0) {
+	paint.fillRect(0, 0, m_xorigin, height(), paletteBackgroundColor());
+    }
     
     QRect clipRect = paint.clipRegion().boundingRect();
 

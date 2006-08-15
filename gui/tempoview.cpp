@@ -179,6 +179,13 @@ TempoView::~TempoView()
 }
 
 void
+TempoView::closeEvent(QCloseEvent *e)
+{
+    emit closing();
+    EditViewBase::closeEvent(e);
+}
+
+void
 TempoView::tempoChanged(const Rosegarden::Composition *comp)
 {
     if (m_ignoreUpdates) return;
