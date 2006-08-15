@@ -362,10 +362,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // Populate the parameter-box area with the respective
     // parameter box widgets.
 
-    m_trackParameterBox = new TrackParameterBox(doc, m_parameterArea);
-    m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
     m_segmentParameterBox = new SegmentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
+    m_trackParameterBox = new TrackParameterBox(doc, m_parameterArea);
+    m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
 
