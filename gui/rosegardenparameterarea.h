@@ -38,53 +38,53 @@
  */
 class RosegardenParameterArea : public QWidgetStack
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
 
-  // Create the parameter display area.
+    // Create the parameter display area.
 
-  RosegardenParameterArea(QWidget *parent=0, const char *name=0, WFlags f=0);
+    RosegardenParameterArea(QWidget *parent=0, const char *name=0, WFlags f=0);
 
-  // Add a rosegarden parameter box to the list that are to be displayed.
+    // Add a rosegarden parameter box to the list that are to be displayed.
 
-  void addRosegardenParameterBox(RosegardenParameterBox *b);
+    void addRosegardenParameterBox(RosegardenParameterBox *b);
 
 
-  // List the supported methods of arranging the various parameter-box
-  // widgets within the parameter area.
+    // List the supported methods of arranging the various parameter-box
+    // widgets within the parameter area.
 
-  enum Arrangement {
-    CLASSIC_STYLE,  // A simple vertical tiling of parameter-box widgets.
-    TAB_BOX_STYLE   // A horizontal list of tabs, displaying one box at a time.
-  };
+    enum Arrangement {
+	CLASSIC_STYLE,  // A simple vertical tiling of parameter-box widgets.
+	TAB_BOX_STYLE   // A horizontal list of tabs, displaying one box at a time.
+    };
 
-  // Redisplay the widgets with a different layout style.
+    // Redisplay the widgets with a different layout style.
 
-  void setArrangement(Arrangement style);
+    void setArrangement(Arrangement style);
 
 protected:
 private:
-  Arrangement m_style;                // The current layout style.
+    Arrangement m_style;                // The current layout style.
 
-  // The list of parameter box widgets that are being displayed by this
-  // widget.
+    // The list of parameter box widgets that are being displayed by this
+    // widget.
 
-  std::vector<RosegardenParameterBox *>  m_parameter_boxes;
+    std::vector<RosegardenParameterBox *>  m_parameter_boxes;
 
-  // Create a parallel array of group boxes, to be used when the
-  // corresponding parameter box widget needs to be enclosed by a
-  // titled outline.
+    // Create a parallel array of group boxes, to be used when the
+    // corresponding parameter box widget needs to be enclosed by a
+    // titled outline.
 
-  std::vector<QVGroupBox *> m_group_boxes;
+    std::vector<QVGroupBox *> m_group_boxes;
 
-  // Move a RosegardenParameterBox widget from one container to another.
+    // Move a RosegardenParameterBox widget from one container to another.
 
-  void moveWidget(QWidget *old_container, QWidget *new_container,
-		  int index);
+    void moveWidget(QWidget *old_container, QWidget *new_container,
+		    int index);
 
-  QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.
-  KTabWidget *m_tab_box;     // The container widget for m_style==TAB_BOX_STYLE.
-  QWidget *m_active;         // The current container widget.
+    QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.
+    KTabWidget *m_tab_box;     // The container widget for m_style==TAB_BOX_STYLE.
+    QWidget *m_active;         // The current container widget.
 
 };
 
