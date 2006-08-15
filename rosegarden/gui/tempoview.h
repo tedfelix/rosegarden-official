@@ -89,6 +89,8 @@ signals:
                      Rosegarden::tempoT,  // tempo target
                      TempoDialog::TempoDialogAction); // tempo action
 
+    void closing();
+
 public slots:
     // standard slots
     virtual void slotEditCut();
@@ -127,6 +129,8 @@ protected:
     QString makeTimeString(Rosegarden::timeT time, int timeMode);
     virtual Rosegarden::Segment *getCurrentSegment();
     virtual void updateViewCaption();
+
+    virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
     KListView   *m_list;
