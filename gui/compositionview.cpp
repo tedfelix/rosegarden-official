@@ -1805,7 +1805,7 @@ void CompositionView::initStepSize()
 void CompositionView::slotUpdateSize()
 {
     int vStep = getModel()->grid().getYSnap();
-    int height = getModel()->getNbRows() * vStep;
+    int height = std::max(getModel()->getNbRows() * vStep, (unsigned)visibleHeight());
     
     Rosegarden::RulerScale *ruler = grid().getRulerScale();
 
@@ -2082,6 +2082,8 @@ void CompositionView::slotStoppedRecording()
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
     QScrollView::resizeEvent(e);
+    slotUpdateSize();
+        
     int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());
     int h = std::max(m_segmentsDrawBuffer.height(), visibleHeight());
     
@@ -2361,7 +2363,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
                 QColor col = interval.color.isValid() ? interval.color : defaultCol;
                 p->setBrush(col);
                 p->setPen(col);
-//                 RG_DEBUG << "CompositionView::drawArea : drawing rect at x = " << pr.x() << endl;
+//                RG_DEBUG << "CompositionView::drawArea : drawing preview rect at x = " << pr.x() << endl;
                 p->drawRect(pr);
             }
             p->restore();
