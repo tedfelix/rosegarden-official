@@ -436,6 +436,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
+    m_topBarButtons->connectRulerToDocPointer(doc);
     m_bottomBarButtons->connectRulerToDocPointer(doc);
 
     QObject::connect
