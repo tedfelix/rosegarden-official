@@ -86,6 +86,16 @@ public:
     void clear();
 
     /**
+     * Return true if the queue is empty.
+     */
+    bool empty() const;
+
+    /**
+     * Return the total number of files in the queue.  (May be slow.)
+     */
+    size_t size() const;
+
+    /**
      * Look up the files playing during a given slice and return them
      * in the passed FileSet.  The pointers returned are still owned
      * by me and the caller should not delete them.

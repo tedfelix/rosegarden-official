@@ -204,6 +204,18 @@ AudioPlayQueue::clear()
     m_maxBuffers = 0;
 }
 
+bool
+AudioPlayQueue::empty() const
+{
+    return m_unscheduled.empty() && m_files.empty();
+}
+
+size_t 
+AudioPlayQueue::size() const
+{
+    return m_unscheduled.size() + m_files.size();
+}
+
 void
 AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
 				const RealTime &sliceDuration,

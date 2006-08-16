@@ -23,7 +23,9 @@
 #define _SCAVENGER_H_
 
 #include <vector>
+#include <list>
 #include <sys/time.h>
+#include <pthread.h>
 #include <iostream>
 
 namespace Rosegarden
@@ -45,10 +47,18 @@ class Scavenger
 {
 public:
     Scavenger(int sec = 2, int defaultObjectListSize = 200);
+    ~Scavenger();
 
     /**
-     * Call from an RT thread etc., to pass ownership of t to us.
-     * Only one thread should be calling this on any given scavenger.
+     * Call from an RT thread etc., to pass ownership of t to us for
+     * later disposal.  Only one thread should be calling this on any
+     * given scavenger.
+     * 
+     * This is only lock-free so long as a slot is available in the
+     * object list; otherwise it takes a lock and allocates memory.
+     * Scavengers should always be used with an object list size
+     * sufficient to ensure that enough slots are always available in
+     * normal use.
      */
     void claim(T *t);
 
@@ -63,6 +73,12 @@ protected:
     typedef std::vector<ObjectTimePair> ObjectTimeList;
     ObjectTimeList m_objects;
     int m_sec;
+
+    typedef std::list<T *> ObjectList;
+    ObjectList m_excess;
+    pthread_mutex_t m_excessMutex;
+    void pushExcess(T *);
+    void clearExcess();
 
     unsigned int m_claimed;
     unsigned int m_scavenged;
@@ -91,6 +107,27 @@ Scavenger<T>::Scavenger(int sec, int defaultObjectListSize) :
     m_claimed(0),
     m_scavenged(0)
 {
+    pthread_mutex_init(&m_excessMutex, NULL);
+}
+
+template <typename T>
+Scavenger<T>::~Scavenger()
+{
+    if (m_scavenged < m_claimed) {
+	for (size_t i = 0; i < m_objects.size(); ++i) {
+	    ObjectTimePair &pair = m_objects[i];
+	    if (pair.first != 0) {
+		T *ot = pair.first;
+		pair.first = 0;
+		delete ot;
+		++m_scavenged;
+	    }
+	}
+    }
+
+    clearExcess();
+
+    pthread_mutex_destroy(&m_excessMutex);
 }
 
 template <typename T>
@@ -111,21 +148,9 @@ Scavenger<T>::claim(T *t)
 	}
     }
 
-    // Oh no -- run out of slots!  Warn and discard something at
-    // random (without deleting it -- it's probably safer to leak).
-
-    std::cerr << "WARNING: Scavenger::claim(" << t << "): run out of slots"
-	      << std::endl;
-    for (size_t i = 0; i < m_objects.size(); ++i) {
-	ObjectTimePair &pair = m_objects[i];
-	if (pair.first != 0) {
-	    pair.first = 0;
-	    pair.second = sec;
-	    pair.first = t;
-	    ++m_claimed;
-	    ++m_scavenged;
-	}
-    }
+    std::cerr << "WARNING: Scavenger::claim(" << t << "): run out of slots, "
+	      << "using non-RT-safe method" << std::endl;
+    pushExcess(t);
 }
 
 template <typename T>
@@ -147,6 +172,30 @@ Scavenger<T>::scavenge()
 	    ++m_scavenged;
 	}
     }
+
+    clearExcess();
+}
+
+template <typename T>
+void
+Scavenger<T>::pushExcess(T *t)
+{
+    pthread_mutex_lock(&m_excessMutex);
+    m_excess.push_back(t);
+    pthread_mutex_unlock(&m_excessMutex);
+}
+
+template <typename T>
+void
+Scavenger<T>::clearExcess()
+{
+    pthread_mutex_lock(&m_excessMutex);
+    for (typename ObjectList::iterator i = m_excess.begin();
+	 i != m_excess.end(); ++i) {
+	delete *i;
+    }
+    m_excess.clear();
+    pthread_mutex_unlock(&m_excessMutex);
 }
 
 }
