@@ -4036,12 +4036,12 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 
     Rosegarden::RealTime position = mapper->getPositionPointer();
 
-    std::cerr << "RosegardenGUIApp::slotUpdatePlaybackPosition: mapper pos = " << position << std::endl;
+//    std::cerr << "RosegardenGUIApp::slotUpdatePlaybackPosition: mapper pos = " << position << std::endl;
 
     Rosegarden::Composition &comp = m_doc->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
 
-    std::cerr << "RosegardenGUIApp::slotUpdatePlaybackPosition: mapper timeT = " << elapsedTime << std::endl;
+//    std::cerr << "RosegardenGUIApp::slotUpdatePlaybackPosition: mapper timeT = " << elapsedTime << std::endl;
 
     if (m_seqManager->getTransportStatus() == RECORDING) {
 
@@ -4158,7 +4158,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
     if (!m_seqManager) return;
 
-    std::cerr << "RosegardenGUIApp::slotSetPointerPosition: t = " << t << std::endl;
+//    std::cerr << "RosegardenGUIApp::slotSetPointerPosition: t = " << t << std::endl;
 
     Rosegarden::Composition &comp = m_doc->getComposition();
 
