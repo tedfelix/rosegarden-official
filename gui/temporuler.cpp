@@ -293,7 +293,6 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 {
     if (m_dragVert) {
 
-	mouseMoveEvent(e);
 	m_dragVert = false;
 	unsetCursor();
 
@@ -310,19 +309,20 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 	int tcn = m_composition->getTempoChangeNumberAt(m_dragStartTime);
 	std::pair<timeT, tempoT> tc = m_composition->getTempoChange(tcn);
 	std::pair<bool, tempoT> tr = m_composition->getTempoRamping(tcn, true);
-	m_composition->addTempoAtTime(m_dragStartTime,
-				      m_dragOriginalTempo,
-				      m_dragOriginalTarget);
 
-	emit changeTempo(m_dragStartTime, tc.second,
-			 tr.first ? tr.second : -1,
-			 TempoDialog::AddTempo);
+	if (tc.second != m_dragOriginalTempo) {
+	    m_composition->addTempoAtTime(m_dragStartTime,
+					  m_dragOriginalTempo,
+					  m_dragOriginalTarget);
+	    emit changeTempo(m_dragStartTime, tc.second,
+			     tr.first ? tr.second : -1,
+			     TempoDialog::AddTempo);
+	}
 
 	return;
 
     } else if (m_dragHoriz) {
 
-	mouseMoveEvent(e);
 	m_dragHoriz = false;
 	unsetCursor();
 
@@ -388,17 +388,17 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 
 	    if (m_dragTarget) {
 
-		newTarget = m_composition->getTempoForQpm(qpm + 0.0001);
+		newTarget = m_composition->getTempoForQpm(qpm);
 
 	    } else {
 
-		newTempo = m_composition->getTempoForQpm(qpm + 0.0001);
+		newTempo = m_composition->getTempoForQpm(qpm);
 
 		if (newTarget >= 0) {
 		    qpm = m_composition->getTempoQpm(newTarget);
 		    qpm += qdiff;
 		    if (qpm < 1) qpm = 1;
-		    newTarget = m_composition->getTempoForQpm(qpm + 0.0001);
+		    newTarget = m_composition->getTempoForQpm(qpm);
 		}
 	    }
 	}
