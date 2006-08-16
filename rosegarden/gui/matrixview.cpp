@@ -413,14 +413,15 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     BarButtons *bottomBarButtons = new BarButtons(getDocument(),
                                                   &m_hlayout, 0, 25,
                                                   true, getBottomWidget());
-    topBarButtons->connectRulerToDocPointer(doc);
-    bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
 
     connect(bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_canvasView, SLOT(startAutoScroll(int)));
     connect(bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
+
+    topBarButtons->connectRulerToDocPointer(doc);
+    bottomBarButtons->connectRulerToDocPointer(doc);
 
     // Force height for the moment
     //
@@ -451,6 +452,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     slotTestClipboard();
+
+    Rosegarden::timeT start = doc->getComposition().getLoopStart();
+    Rosegarden::timeT end = doc->getComposition().getLoopEnd();
+    m_topBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_bottomBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
 
     setCurrentSelection(0, false);
 

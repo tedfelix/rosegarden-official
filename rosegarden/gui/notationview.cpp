@@ -509,6 +509,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 		     KXMLGUIClient::StateReverse);
     }
 
+    Rosegarden::timeT start = doc->getComposition().getLoopStart();
+    Rosegarden::timeT end = doc->getComposition().getLoopEnd();
+    m_topBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_bottomBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
+
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
     setCurrentSelection(0, false, true);
