@@ -76,9 +76,10 @@ protected:
 
     typedef std::list<T *> ObjectList;
     ObjectList m_excess;
+    int m_lastExcess;
     pthread_mutex_t m_excessMutex;
     void pushExcess(T *);
-    void clearExcess();
+    void clearExcess(int);
 
     unsigned int m_claimed;
     unsigned int m_scavenged;
@@ -104,6 +105,7 @@ template <typename T>
 Scavenger<T>::Scavenger(int sec, int defaultObjectListSize) :
     m_objects(ObjectTimeList(defaultObjectListSize)),
     m_sec(sec),
+    m_lastExcess(0),
     m_claimed(0),
     m_scavenged(0)
 {
@@ -125,7 +127,7 @@ Scavenger<T>::~Scavenger()
 	}
     }
 
-    clearExcess();
+    clearExcess(0);
 
     pthread_mutex_destroy(&m_excessMutex);
 }
@@ -173,7 +175,9 @@ Scavenger<T>::scavenge()
 	}
     }
 
-    clearExcess();
+    if (sec > m_lastExcess + m_sec) {
+	clearExcess(sec);
+    }
 }
 
 template <typename T>
@@ -182,12 +186,15 @@ Scavenger<T>::pushExcess(T *t)
 {
     pthread_mutex_lock(&m_excessMutex);
     m_excess.push_back(t);
+    struct timeval tv;
+    (void)gettimeofday(&tv, 0);
+    m_lastExcess = tv.tv_sec;
     pthread_mutex_unlock(&m_excessMutex);
 }
 
 template <typename T>
 void
-Scavenger<T>::clearExcess()
+Scavenger<T>::clearExcess(int sec)
 {
     pthread_mutex_lock(&m_excessMutex);
     for (typename ObjectList::iterator i = m_excess.begin();
@@ -195,6 +202,7 @@ Scavenger<T>::clearExcess()
 	delete *i;
     }
     m_excess.clear();
+    m_lastExcess = sec;
     pthread_mutex_unlock(&m_excessMutex);
 }
 
