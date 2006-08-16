@@ -66,8 +66,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
             SLOT(slotTempoChanged(const QString &)));
 
     m_tempoConstant = new QRadioButton(i18n("Tempo is fixed until the following tempo change"), frame);
-    m_tempoRampToNext = new QRadioButton(i18n("Tempo changes smoothly to following tempo"), frame);
-    m_tempoRampToTarget = new QRadioButton(i18n("Tempo changes smoothly to:"), frame);
+    m_tempoRampToNext = new QRadioButton(i18n("Tempo ramps to the following tempo"), frame);
+    m_tempoRampToTarget = new QRadioButton(i18n("Tempo ramps to:"), frame);
 
 //    m_tempoTargetCheckBox = new QCheckBox(i18n("Ramping to:"), frame);
     m_tempoTargetSpinBox = new HSpinBox(frame, 0, 100000, 0.0, 1000.0, 5);
