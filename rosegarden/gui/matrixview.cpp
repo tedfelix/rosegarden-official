@@ -413,6 +413,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     BarButtons *bottomBarButtons = new BarButtons(getDocument(),
                                                   &m_hlayout, 0, 25,
                                                   true, getBottomWidget());
+    topBarButtons->connectRulerToDocPointer(doc);
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
 
