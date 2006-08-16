@@ -995,6 +995,8 @@ void RosegardenSequencerApp::closeAllSegments()
 
 void RosegardenSequencerApp::remapTracks()
 {
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::remapTracks" << endl;
+
     rationalisePlayingAudio();
 }
 

@@ -182,6 +182,17 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 	}
     }
 
+    std::cout << "SoundDriver::initialiseAudioQueue -- new queue has "
+	      << newQueue->size() << " files" 
+	      << std::endl;
+
+    if (newQueue->empty()) {
+	if (m_audioQueue->empty()) {
+	    delete newQueue;
+	    return;
+	}
+    }
+
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
     if (oldQueue) m_audioQueueScavenger.claim(oldQueue);
@@ -190,6 +201,10 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 void
 SoundDriver::clearAudioQueue()
 {
+    std::cout << "SoundDriver::clearAudioQueue" << std::endl;
+
+    if (m_audioQueue->empty()) return;
+
     AudioPlayQueue *newQueue = new AudioPlayQueue();
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
