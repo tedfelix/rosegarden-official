@@ -1982,6 +1982,7 @@ void SequenceManager::tempoChanged(const Composition *c)
     m_tempoSegmentMmapper->refresh();
 
     if (c->isLooping()) setLoop(c->getLoopStart(), c->getLoopEnd());
+    else m_doc->slotSetPointerPosition(c->getPosition());
 }
 
 void
