@@ -14,73 +14,94 @@
     Notes on style and terminology for Rosegarden handbook
     ======================================================
 
+     * Try to use British spelling and idiom as much as you possibly
+       can, so the American bits don't stick out like a sore
+       thumb.  Realise, not realize, colour, not color, though of
+       course an American is going to miss using colorful (oops)
+       British sayings like "a bit naff," and won't have any idea
+       what the bloody hell (that was good, but a bit too vulgar, of
+       course) words like "heuristic" mean.
+
      * Aim to be clear, brief and direct, but be informal.
 
      * Write instructions in the second person.
 
-       Good:     "You can select segments by clicking on
-                  them with the arrow tool."
+       Good:     "You can select segments by clicking on them with
+                 the arrow tool."
 
-       Bad:      "Segments can be selected by clicking on
-                  them with the arrow tool."
+       Bad:      "Segments can be selected by clicking on them with
+                 the arrow tool."
 
-       Very bad: "The arrow tool allows the user to select
-                  segments by clicking on them."
+       Very bad: "The arrow tool allows the user to select segments
+                 by clicking on them."
 
-       If you dislike the first of these because you want to
-       make the phrase "the arrow tool" more obvious by placing
-       it at the start of the sentence, then perhaps you
-       should be using a variablelist instead and making
-       "the arrow tool" a list item.
+       If you dislike the first of these because you want to make the
+       phrase "the arrow tool" more obvious by placing it at the
+       start of the sentence, then perhaps you should be using a
+       variablelist instead and making "the arrow tool" a list item.
 
      * It's perfectly permissible to detour to explain why
-       something is the way it is, particularly if it might
-       not be obvious.
+       something is the way it is, particularly if it might not be
+       obvious.
 
      * It's also entirely permissible to omit advanced stuff
-       from the "Using Rosegarden" section and document it
-       only in the reference section.  "Using Rosegarden"
-       should be about understanding how and why, not about
-       knowing every last clever detail.
+       from the "Using Rosegarden" section and document it only in
+       the reference section.  "Using Rosegarden" should be about
+       understanding how and why, not about knowing every last clever
+       detail.
 
      * Bear in mind we can link extensively from any part of
-       the handbook to any other.  Unfortunately DocBook won't
-       allow you to write a link to a target that doesn't
-       exist yet, so if you want to link to something that's
-       not yet been written, either make a note of the planned
-       link in an XML comment, or go and create a stub for the
-       bit that hasn't been written yet, or else just write in
-       a way that allows for a link to be easily added later
-       (we could do an editing phase specially for links).
+       the handbook to any other.  Unfortunately DocBook won't allow
+       you to write a link to a target that doesn't exist yet, so if
+       you want to link to something that's not yet been written,
+       either make a note of the planned link in an XML comment, or
+       go and create a stub for the bit that hasn't been written yet,
+       or else just write in a way that allows for a link to be
+       easily added later (we could do an editing phase specially for
+       links).
 
      * Be strict about using the correct terminology for
-       Rosegarden data structures (segment, event, track,
-       instrument, composition), but don't capitalise the
-       words.  Capitalisation is useful in technical documents
-       to make it clear that you're referring to a precise
-       concept, but you shouldn't have to do it to make your
-       meaning clear in user documentation.  If something
-       seems ambiguous without, try rewording it instead.
+       Rosegarden data structures (segment, event, track, instrument,
+       composition), but don't capitalise the words.  Capitalisation
+       is useful in technical documents to make it clear that you're
+       referring to a precise concept, but you shouldn't have to do
+       it to make your meaning clear in user documentation.  If
+       something seems ambiguous without, try rewording it instead.
 
 
-    About Screenshots
-    =================
+    About Screenshots =================
 
-    Screenshots used with this documentation should use the
-    following style, colour and font settings:
+    We recommend saving your current user preferences as a new theme
+    using the KDE theme manager, so you can restore your usual
+    desktop after your work on this manual is done.  Then we
+    recommend that you spare yourself some effort, and use the
+    "Rosegarden Handbook" KDE theme I just created, and put here:
+    	
+	http://rosegarden.sourceforge.net/Rosegarden\ Handbook.kth
+
+    If you can't use the theme for some reason, you must dial in
+    these changes by hand.  Screenshots used with this documentation
+    should use the following style, colour and font settings:
+
+    (NOTE: These specs are from the KDE 2.x era, surely, and make no
+    particular mention of icon themes.  I have no idea what icons
+    were used in the original version of this document, since it was
+    not specified.  I have used the new default "Crystal SVG" icons
+    in creating the theme above.  This will probably result in a
+    mis-match, but I find I really don't care.)
 
      * KDE Style: "Light Style, 3rd Revision"
 
      * Colour scheme: "Blue Slate", with high-contrast
-       setting and with the standard widget background set
-       to white.  (I have this saved as a new scheme.)
+       setting and with the standard widget background set to white.
+       (I have this saved as a new scheme.)
 
      * Fonts: Verdana 11px for general use and menus; Verdana
-       11px bold for window titles; antialiasing on, but
-       sub-pixel antialiasing off.  (For pictures of the
-       segment and instrument parameter boxes I usually turn
-       the size up to 13px, which perhaps says something about
-       our use of font size in these boxes.)
+       11px bold for window titles; antialiasing on, but sub-pixel
+       antialiasing off.  (For pictures of the segment and instrument
+       parameter boxes I usually turn the size up to 13px, which
+       perhaps says something about our use of font size in these
+       boxes.)
 
      * Window Decorations: "Quartz"
 
@@ -93,10 +114,10 @@
     distinct from the user's own window decorations surrounding the
     help text.
 
-    Screenshots of the whole program or of whole matrix or
-    notation windows may be taken using different themes if
-    desired, but screenshots of individual dialogs or window
-    components must use the above scheme.
+    Screenshots of the whole program or of whole matrix or notation
+    windows may be taken using different themes if desired, but
+    screenshots of individual dialogs or window components must use
+    the above scheme.
 
 -->
 
@@ -126,9 +147,6 @@
       having to use RG for MIDI routing and being unable to use RG
       for audio routing.
 
-    * Uh, Pedro implemented this multiport recording but we can't
-      actually split the results can we?
-
     Troubleshooting
     ===============
 
@@ -143,7 +161,7 @@
 -->
 
 <!--
-    Still to do
+    Still to do (yeah right, in 30 to 75 years)
     ===========
 
     * Control rulers
@@ -223,8 +241,8 @@
       <holder>Chris Cannam, Richard Bown, Guillaume Laurent</holder>
     </copyright>
 
-    <date>2005-08-04</date>
-    <releaseinfo>1.2.0</releaseinfo>
+    <date>2006-09-15</date>
+    <releaseinfo>1.3.0</releaseinfo>
 
     <abstract>
       <para>
@@ -375,6 +393,11 @@
       handle a number of other standard file formats.
     </para>
 
+    <para>
+     Many users have complained about our opaque binary file
+     format.  It is, in fact, nothing more than gzipped XML.
+    </para>
+
     <sect1 id="file-creating">
       <title>New compositions</title>
       <para>
@@ -414,7 +437,12 @@
 	MIDI, it does not store MIDI data internally.  You should
 	generally prefer to save files in &rosegarden;'s own format,
 	as &rosegarden; stores quite a lot of information that will
-	be lost when exporting to MIDI.
+	be lost when exporting to MIDI.  This also applies if you merely
+	import a file, and then immediately export it back out.  &rosegarden;
+	translates the raw MIDI to its internal format, and then translates that format
+	back into MIDI.  Some details of the file structure can and do get
+	lost or rearranged in this translation, but the resulting performances
+	should be functionally identical.
       </para>
       <para>
 	When a MIDI file is loaded, &rosegarden; splits out the
@@ -469,15 +497,15 @@
 	scores.  Even so, it is designed to be a screen editor and not
 	primarily a typesetter.  If you want to produce true
 	print-quality scores you should consider using <ulink
-	  url="http://www.lilypond.org">Lilypond</ulink> in conjunction
-	with &rosegarden;.  Lilypond is music typesetting software
+	  url="http://www.lilypond.org">LilyPond</ulink> in conjunction
+	with &rosegarden;.  LilyPond is music typesetting software
 	that reads a specialised text file format and produces
 	high-quality typeset output.  &rosegarden; is capable of
-	writing Lilypond files using the
+	writing LilyPond files using the
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Export</guimenuitem>
-	  <guimenuitem>Export Lilypond</guimenuitem>
+	  <guimenuitem>Export LilyPond</guimenuitem>
 	</menuchoice>
 	function.  </para> </sect1>
 
@@ -515,6 +543,15 @@
       </screenshot>
       </para>
 
+      <para>
+	Tracks govern what sort of segment you can create in a particular
+	place.  If you create a segment on an audio track, it will be an audio
+	segment, no matter where that segment subsequently moves.  If you
+	create a segment on a &MIDI; track, it will always be a &MIDI;
+	segment.  You can set <link linkend="track-parameters">
+	track parameters</link> to pre-select various segment properties at the track
+	level, and to exercise fine control over &MIDI; recording.
+      </para>
       <para>
 	Tracks can be assigned to a range of &MIDI;, plugin synth, or
 	audio instruments.  In the picture above we see three segments
@@ -601,7 +638,10 @@
 	to &MIDI; or synth plugin instruments, and those containing
 	audio to audio instruments.  You can assign more than one
 	track to the same instrument, in which case the multiple
-	tracks will use the same sounds.
+	tracks will produce sounds in the same way (&MIDI; tracks playing
+	panned to the left with a flute, or audio tracks playing with the same
+	volume levels, through the same stack of <link linkend="studio-plugins">
+	plugins</link>.)
       </para>
       <para>
 	You can change various properties of the instrument
@@ -617,6 +657,13 @@
 	for more about instruments.
       </para>
 	
+    </sect1>
+
+    <sect1 id="track-parameters">
+      <title>Track parameters</title>
+	<para>
+	  Foo diddle
+	</para>
     </sect1>
 
     <sect1 id="segment-view-creating">
@@ -702,7 +749,12 @@
       sensible audio file search path (via <menuchoice><guimenu
       lang="en">Composition</guimenu><guimenuitem>Edit Document
       Properties...</guimenuitem><guimenuitem>Audio</guimenuitem></menuchoice>)
-      so as to keep your audio files accessible together.</para>
+      so as to keep your audio files accessible together.  You can also export
+      your project to a &rosegarden; project package file (.rpp) via
+      <menuchoice><guimenu lang="en">File</guimenu>
+      <guimenuitem>Export...</guimenuitem><guimenuitem>Export Rosegarden Project File
+      </guimenuitem></menuchoice> to collect any scattered audio files
+      together in one place.</para>
 
       <para>The audio manager dialog also shows the sample-rate and other
       information for each audio file, and marks with an asterisk any
@@ -885,17 +937,17 @@
       <title>Recording</title>
       <para>
 	To record a new segment into a track, first make sure the
-	right track is selected for recording by selecting the red
+	right tracks are selected for recording by selecting the red
 	(for audio tracks) or yellow (for MIDI tracks) LED-style
 	button on the track label, and then use the Transport's record
 	control.  This has the effect of both starting the transport,
 	thus playing the existing composition, and recording into the
-	appropriate track.
+	appropriate tracks.
       </para>
       <para>
-	You can only select a single MIDI track for recording, but you
-	can record any number of audio tracks at once so long as your
-	computer is powerful enough.  You can also select a MIDI track
+	You can record any number of &MIDI; and audio tracks at once so long as your
+	computer is powerful enough, and you have enough disk space.
+	You can also select a MIDI track
 	and one or more audio tracks at the same time.  Be careful not
 	to accidentally leave tracks selected when you have finished
 	using them and are trying to record somewhere else.
@@ -1750,7 +1802,7 @@
 
 
   <chapter id="segment-instrument-parameters">
-    <title>Segment and Instrument Parameters</title>
+    <title>Special Parameters</title>
 
     <sect1 id="segment-view-segmentparameterbox">
       <title>The Segment Parameter Box</title>
@@ -1769,9 +1821,9 @@
       </para>
 
       <para>
-	The segment parameter box lives at the left side of the Rosegarden main window.  (If you can't see it, try using 	<menuchoice>
+	The segment parameter box can be found at the left side of the Rosegarden main window.  (If you can't see it, try using 	<menuchoice>
 	  <guimenu lang="en">Settings</guimenu>
-	  <guimenuitem>Show Segment and Instrument Parameters</guimenuitem>
+	  <guimenuitem>Show Special Parameters</guimenuitem>
 	</menuchoice>.)
  It allows you to modify some aspects of the
 	selected segments.</para><para>If a single segment is currently selected, its
@@ -1786,7 +1838,7 @@
 	    <term>Label</term>
 	    <listitem>
 	      <para>Shows the label of the selected segment (or segments, if
-		they all have the same label).  Click the "..." button to edit
+		they all have the same label).  Click the "Edit" button to edit
 		the label.</para>
 	    </listitem>
 	  </varlistentry>
@@ -1835,7 +1887,10 @@
 		to the selected segments.  This transposition is applied when
 		the segment is played, and is not shown in the notes displayed
 		in the matrix, notation or event list editors.  You can use
-		this to quickly change the pitch of part or all of a composition.</para>
+		this to quickly change the pitch of part or all of a
+		composition, and it is commonly used with segments containing
+		notation written for transposing instruments, such as the
+		clarinet.</para>
 	    </listitem>
 	  </varlistentry>
 
@@ -1896,12 +1951,12 @@
     <sect1 id="segment-view-instrumentparameterbox">
       <title>The Instrument Parameter Box</title>
       <para>
-	The instrument parameter box can be found at the lower left of
-	the Rosegarden main window, below the <link
+	The instrument parameter box can be found at the left side of
+	the Rosegarden main window, near the <link
 	linkend="segment-view-segmentparameterbox">Segment Parameter
 	Box</link>.  (If you can't see it, try using
 	<menuchoice> <guimenu lang="en">Settings</guimenu>
-	<guimenuitem>Show Segment and Instrument
+	<guimenuitem>Show Special
 	Parameters</guimenuitem> </menuchoice>.)</para>
 
       <para>It shows you
@@ -2372,7 +2427,7 @@
 
 	<para>
 	  To start entering notes from a MIDI keyboard, first make
-	  sure the keyboard is configured as your default MIDI
+	  sure the keyboard is configured as a MIDI
 	  record device.  Then make sure you have the right Grid
 	  setting in the View menu or toolbar, as this controls the
 	  note duration.  Then press the <!-- !!!  image of button
@@ -2484,7 +2539,7 @@
 	on, it does not provide as much fine control over layout
 	(especially in contrapuntal music) as a dedicated score
 	editing program might. &rosegarden; does not aim to produce
-	typeset-quality score, although it can export Lilypond files,
+	typeset-quality score, although it can export LilyPond files,
 	which may form a good basis for typesetting.
 
       </para>
@@ -2568,7 +2623,10 @@
 	  Cursors</link>), and this is the staff on which any editing
 	operations that use the insert cursor will take place.  The
 	topmost staff is the current one by default, but you can
-	switch to a different staff by ctrl-clicking on it <!--- !!! check this --> or by using the Move Cursor Up Staff and Move Cursor Down Staff menu functions.
+	switch to a different staff by ctrl-clicking on it, or by using the
+	<guimenu>Tools</guimenu><guimenuitem>Local
+	    Cursor...</guimenuitem><guimenuitem>Cursor Up Staff</guimenuitem> and
+	<guimenuitem>Cursor Down Staff</guimenuitem> menu functions.
       </para>
 
     </sect1>
@@ -2634,13 +2692,34 @@
       <title>Rulers and cursors</title>
 
       <para>
-	The &rosegarden; Notation editor window includes two rulers
-	and two cursors.  The rulers are the horizontal strips
+	The &rosegarden; Notation editor window includes two graduated rulers,
+	each associated with its own cursor.  The rulers are the horizontal strips
 	divided up with tickmarks at top and bottom of the main
 	notation canvas, and the cursors are the coloured vertical
 	lines shown initially at the start of the top staff in the
-	editor.  <!-- !!! screenshot -->
+	editor.  In addition to these main two, there are the <guimenuitem>chord
+	    name</guimenuitem> ruler, the <guimenuitem>tempo</guimenuitem> ruler,
+	and the <guimenuitem>raw note</guimenuitem> ruler.
+    </para>
+      <para>
+	Note that the rulers are only shown in <link
+	  linkend="nv-layout">Linear layout</link> mode, and several of them
+      are not displayed by default.
       </para>
+
+
+    <para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rg-cursors.png" format="PNG"/>
+    </imageobject>
+      <textobject>
+	<phrase>The notation editor's two cursors</phrase>
+      </textobject>
+    </mediaobject>
+    </screenshot>
+    </para>
 
       <para>
 	The purple cursor is the insert cursor.  It shows the point
@@ -2663,13 +2742,62 @@
 	The blue cursor is the playback pointer.  Just like the
 	similar cursors in the main window and the matrix views,
 	this shows the location of the current playback or record
-	position.  It can be repositioned using the bottom ruler.
+	position, and it sweeps across the notation while the transport is
+	rolling.  It can be repositioned using the bottom ruler.
       </para>
-
-      <para>
-	Note that the rulers are only shown in <link
-	  linkend="nv-layout">Linear layout</link> mode.
-      </para>
+      <sect2 id="nv-raw-note-ruler">
+	  <title>The raw note ruler</title>
+	  <para>The raw note ruler is particularly
+	      useful when editing quantized notation where the display duration on
+	      the page differs from the duration of the actual performance.
+	      Enabled via
+	      <guimenu>Settings</guimenu> <guimenuitem>Rulers...</guimenuitem> <guimenuitem>
+		  Show Raw Note Ruler</guimenuitem>, it draws a small bar above
+	      each note, similar to the way notes appear in the matrix.  In this
+	      example screenshot, you can see how interpreted, quantized notes
+	      appear on this ruler.  The tenuto notes have full performance
+	      durations, while the staccato notes are considerably shorter, and
+	      the accented notes have a higher velocity (more red colour) than
+	      their neighbors.
+	  </para>
+	  <para>
+	      <screenshot>
+		  <mediaobject>
+		      <imageobject>
+			  <imagedata
+			    fileref="rg-rawnoteruler.png" format="PNG"/>
+		      </imageobject>
+		      <textobject>
+			  <phrase>The raw note ruler,
+			showing notation whose performance duration value differs
+			from what appears on the staff</phrase>
+		      </textobject>
+		  </mediaobject>
+	      </screenshot>
+	  </para>
+      </sect2>
+      <sect2 id="nv-chord-name-ruler">
+	  <title>The chord name ruler</title>
+	<para>The chord name ruler analyzes the tonality of the piece, and
+	    attempts to display which chords are sounding.  This is for
+	    informational purposes only, and you can neither print nor edit the
+	    contents of this ruler.
+	    <!-- !!! throw in a link to how to do proper chords with text, and
+	    should probably get into fretboards too, but I'm not going to mention
+	    fretboards in this manual at this time (for 1.3) because it's too
+	    rough, and I just don't care to get into that yet -->
+	</para>
+    </sect2>
+    <sect2 id="nv-tempo-ruler">
+	<title>The tempo ruler</title>
+	<para>The tempo ruler displays the global tempo, and provides a vehicle
+	    for entering, editing, and manipulating it.
+	    <!-- !!! CHRIS we really need to talk about the tempo ruler somewhere.
+	    Here?  Link from here to some whole new dedicated something?
+	    (probably my vote) I'm just doing a stub here, because it seems reasonable. -->
+	</para>
+	<para>This section is merely a stub, as is probably obvious.</para>
+    </sect2>
 
     </sect1>
 
@@ -2696,6 +2824,22 @@
 	      The basic tools are the selection tool, the erase
 	      tool, and those for inserting notes, rests, text and so
 	      on, which are usually accessed from the toolbar buttons.
+	  </para>
+	  <para>
+	      <screenshot>
+		  <mediaobject>
+		      <imageobject>
+			  <imagedata
+			    fileref="rg-notationtools.png" format="PNG"/>
+		      </imageobject>
+		      <textobject>
+			  <phrase>The insert, erase, text, and fretboard tools</phrase>
+		      </textobject>
+		  </mediaobject>
+	      </screenshot>
+	  </para>
+
+	    <para>
 	      Choosing a tool changes the default behaviour of the
 	      mouse buttons on the main notation canvas, at least
 	      until another tool is chosen instead.  For example,
@@ -2788,6 +2932,19 @@
       <para>To insert a note, select one of the note tools by clicking
       on a particular duration of note on the toolbar, and then click
       on the staff at the point where you want to add the note.</para>
+      <para>
+	  <screenshot>
+	      <mediaobject>
+		  <imageobject>
+		      <imagedata
+			fileref="rg-notation-toolbars.png" format="PNG"/>
+		  </imageobject>
+		  <textobject>
+		      <phrase>The duration, rests, and accidentals toolbars</phrase>
+		  </textobject>
+	      </mediaobject>
+	  </screenshot>
+      </para>
 
       <para>You can also select one of the accidentals on the toolbar
       to insert sharpened or flattened notes.  If no accidental is
@@ -2996,7 +3153,7 @@
 	keys. In order to simplify managing playback and recording as
 	well as notation, &rosegarden; requires that when the tempo or
 	time signature changes, it does so in all staffs at once.  You
-	can't have one staff in 3/4 and another in 4/4 simultaneously,
+	can't have one staff in 2/4 and another in 6/8 simultaneously,
 	or one staff playing at 120 to the beat and another at 90.
 	This applies only to time: there is no such restriction on the
 	use of clef and key changes.</para>
@@ -3090,6 +3247,79 @@
 	</mediaobject>
 	</screenshot>
 	</para>
+	<para>The dialog allows you to choose a key signature, but also
+	  to choose how you want the key signature to be applied.  You
+	  must choose among the following:
+	</para>
+
+	  <variablelist>
+
+	    <varlistentry>
+	      <term>Key signature</term>
+	      <listitem>
+		<para>
+		  Used to dial up the actual key signature.  The dialog will
+		  attempt to analyze the tonality of the piece, and guess at
+		  the key signature if no key is already in effect at that
+		  point in the notation.
+		</para>
+	      </listitem>
+	    </varlistentry>
+	    
+	    <varlistentry>
+	      <term>Key transposition</term>
+	      <listitem>
+		<para>You must choose whether to transpose the key according
+		    to segment transposition, or to use the key exactly as
+		    specified.
+		</para>
+		<para>
+		  For example, if you are inserting a key of Bb major into a
+		  transposed Bb trumpet part that's sounding at a
+		  transposition of -2, you use this option to tell
+		  &rosegarden; whether the key of Bb you have entered should
+		  be written as a Bb (concert Ab), or should be transposed
+		  against the segment to result in the trumpet key of C major
+		  (concert Bb).
+		</para>
+	      </listitem>
+            </varlistentry>
+
+	    <varlistentry>
+		<term>Scope</term>
+		<listitem>
+		    <para>
+			You must choose whether to apply this key signature to
+			the current segment only, or to all segments, on all
+			tracks, at this time.
+		    </para>
+		    <para>
+			If you elect to apply the change to all segments at
+			this time, the previous key transposition choice will
+			govern whether all segments receive the specified key,
+			or a key appropriately transposed segment by segment.
+			(This is a convenient way to deal with notation for
+			transposing instruments, because it frees you to think
+			of all keys in concert pitch, and allow &rosegarden;
+			to work out what key is used for what transposition.)
+		    </para>
+		</listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+		<term>Existing notes following key change</term>
+		<listitem>
+		    <para>
+			You must choose whether any existing notes following
+			this key change will maintain their current pitches,
+			maintain their current accidentals in the key, or
+			whether Rosegarden should make an attempt to transpose
+			the part into the new key.
+		    </para>
+		</listitem>
+	    </varlistentry>
+	    
+	  </variablelist>
       </sect2>
       
     </sect1>
@@ -3097,59 +3327,91 @@
     <!-- Text -->
 
     <sect1 id="nv-text">
-      <title>Text and lyrics</title>
+      <title>Text, Lyrics, and LilyPond directives</title>
       
       <para>A staff can contain various sorts of text, in text
-	events.  There are two basic classes of text event: single
-	text items used for point annotations etc., and lyrics.  The
-	former can be created (and so associated with a particular
+	events.  There are two basic classes of user-editable text event: single
+	text items used for point annotations etc., and lyrics, plus a third
+	type used especially for tweaking LilyPond export.  User-editable
+	types can be created (and so associated with a particular
 	time in the staff) using the Text tool, which is available on
-	the button marked with a big <guilabel>T</guilabel> in the toolbar.  Lyrics can
+	the
+	<inlinemediaobject>
+	    <imageobject>
+		<imagedata fileref="rg-text-cursor.png" format="PNG"/>
+      	    </imageobject>
+  	</inlinemediaobject>
+	button in the toolbar.  Lyrics can
 	also be created this way, but are more easily created using
 	the <link linkend="nv-text-lyrics">lyric editor</link>.</para>
 
       <para>To add a piece of text, select the Text tool and click
-	at the point where you want to add it.  A dialog box will
-	appear, into which you can type the text and choose its
-	intended purpose.  (Rosegarden prefers to store what the text
-	is for, rather than how it should look; this is so that in
-	future we may be able to configure how the various sorts of
-	text are presented for each individual user.) The available
+	at the point where you want to add it.  If you want the text
+	associated with a particular note or rest, it may be helpful to click
+	the T cursor directly on that note, so as to ensure proper placement
+	in time.  A dialog box will appear, into which you can type the text
+	and choose its intended purpose.  (Rosegarden prefers to store what
+	the text is for, rather than how it should look; this is so that in
+	future we may be able to configure how the various sorts of text are
+	presented for each individual user.)
+
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-textdialog.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s text dialog</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
+	
+	The available
 	purposes (or styles) are:</para>
 
-      <variablelist>
+    <variablelist>
+
+	<!-- NOTE: I have removed the "by default" in the following
+	descriptions.  There is no "by default" to this.  It does
+	what it does, and there is no changing it without editing
+	source code. (dmm) -->
 
 	<varlistentry><term>Dynamic</term><listitem><para> Used for
 	      minor local indications such as the dynamic marks "p", "mf"
 	      etc. Shown below the staff in small italic
-	      type by default.  </para></listitem></varlistentry>
+	      type.  </para></listitem></varlistentry>
 
 	<varlistentry><term>Direction</term><listitem><para> Used
 	      when indicating significant changes in style or mood.  Shown
-	      above the staff in large roman type by default.
+	      above the staff in large roman type.
 	    </para></listitem></varlistentry>
 
 	<varlistentry><term>Local Direction</term><listitem><para>
 	      Used to indicate less significant changes in style or mood.
-	      Shown below the staff in a smaller bold-italic roman type by
-	      default.  </para></listitem></varlistentry>
+	      Shown below the staff in a smaller bold-italic roman
+	      type. </para></listitem></varlistentry>
 
 	<varlistentry><term>Tempo</term><listitem><para> Used to
 	      indicate significant changes in tempo.  Shown above the
-	      staff in large bold roman type by default.
+	      staff in large bold roman type.
 	    </para></listitem></varlistentry>
 
 	<varlistentry><term>Local Tempo</term><listitem><para> Used
 	      to indicate more minor or local changes in tempo.  Shown
-	      above the staff in a small bold roman type by default.
+	      above the staff in a small bold roman type.
+        </para></listitem></varlistentry>
+
+	<varlistentry><term>Chord</term><listitem><para> Used
+	      to indicate chord changes for guitarists, etc.  Shown
+	      above the staff in a small bold roman type.
 	    </para></listitem></varlistentry>
 
 	<varlistentry><term>Lyric</term><listitem><para> Although
 	      lyrics are usually created in the <link
 		linkend="nv-text-lyrics">lyric editor</link>, they can also
 	      be entered word by word if necessary using this style.  This
-	      style is shown below the text in a small roman type by
-	      default.  (Warning: if you enter lyrics this way and later
+	      style is shown below the text in a small roman typet.
+	      (Warning: if you enter lyrics this way and later
 	      edit the staff's lyrics using the lyric editor, any lyrics
 	      entered this way may be modified or moved if their
 	      positioning is not compatible with that expected by the
@@ -3158,10 +3420,30 @@
 	<varlistentry><term>Annotation</term><listitem><para> Used
 	      for helpful text that is not strictly considered part of the
 	      score.  Shown below the staff, boxed-out in a yellow
-	      sticky-label-style box by default.
+	      sticky-label-style box.  These may not be visible
+	      initially, and can be turned on via
+	      <guimenu>Settings</guimenu>
+	      <guimenuitem>Show Annotations</guimenuitem>
 	    </para></listitem></varlistentry>
 
-      </variablelist>
+	<varlistentry><term>LilyPond Directive</term><listitem><para> Used
+	      as the mechanism for exporting special tags that are
+	      only understood by the LilyPond exporter.  These
+	      provide a means to extend &rosegarden;'s capabilities
+	      beyond what it can do within its own native interface.
+	      Shown above the staff, in a green box.  These may not be visible
+	      initially, and can be turned on via
+	      <guimenu>Settings</guimenu>
+	      <guimenuitem>Show LilyPond Directives</guimenuitem>
+	    </para></listitem></varlistentry>
+	</variablelist>
+
+      <para>For many of the styles, a new combo box will appear that allows
+	  you to select from a variety of commonly-used texts appropriate for
+	  that style, such as "Allegro" and "ritardando."  Selecting one of
+	  these texts saves typing, but in no way impedes your ability to type
+	  your own text by hand, should you so desire.
+      </para>
 
       <para>You can also edit text after creating it, by clicking on
 	the existing text with the text tool.</para>
@@ -3216,7 +3498,128 @@
 	  saved files should continue to be compatible.</para>
 
       </sect2>
+      <sect2 id="nv-lilypond-directives">
+	  <title>Using special LilyPond directives</title>
+	  <para>LilyPond directives are a special kind of text that you can
+	      use to export .ly files that take advantage of
+	      functionality not yet available directly through &rosegarden;'s
+	      own native interface.
+	  </para>
+	  <para>Some of these are a bit fiddly with respect to how their
+	      placement in time affects their function.  It is not always
+	      immediately apparent at a glance just where they are, or what notes
+	      or barlines they will affect, so I have made placement suggestions
+	      to help ease the process of getting them in the right spot.
+	  </para>
+	  <para>
+	  	These directives are:
+	  </para>
 
+	  <variablelist>
+	      <varlistentry>
+		  <term>Segno</term><listitem><para>used to export a 
+		    <inlinemediaobject>
+			<imageobject>
+			    <imagedata fileref="rg-segno.png" format="PNG"/>
+			</imageobject>
+		    </inlinemediaobject>
+		   </para></listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		  <term>Coda</term><listitem><para>used to export a 
+		    <inlinemediaobject>
+			<imageobject>
+			    <imagedata fileref="rg-coda.png" format="PNG"/>
+			</imageobject>
+		    </inlinemediaobject>
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>Alt1</term><listitem><para>Placed anywhere in a
+			  measure, designates that the measure(s)
+			  that follow this one should be exported as the
+			  first alternate ending (see file 
+			  lilypond-alternative-endings.rg for example)
+		   </para></listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		  <term>Alt2</term><listitem><para>Placed anywhere in a
+			  measure, designates that the measure(s)
+			  that follow this one should be exported as the
+			  second alternate ending (see file 
+			  lilypond-alterantive-endings.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>|| -></term><listitem><para>Placed anywhere in a
+			  measure, designates that the next calculated barline will be
+			  rendered as a double barline (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>|. -></term><listitem><para>Placed anywhere in a
+			  measure, designates that the next calculated barline will be
+			  rendered as a terminating barline (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		  <term>: -></term><listitem><para>Placed anywhere in a
+			  measure, designates that the next calculated barline will be
+			  rendered as a dashed barline (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>Gliss.</term><listitem><para>Placed by clicking
+			  directly on a notehead, draws a glissando between
+			  the target note and the note immediately following (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>Arp.</term><listitem><para>Placed by clicking
+			  directly on a chord, draws a wavy line arpeggio
+			  symbol immediately to the left of the affected chord (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>Tiny ->.</term><listitem><para>Placed anywhere,
+			  designates that notation immediately following this
+			  directive should be rendered at the "tiny" size (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>Small ->.</term><listitem><para>Placed anywhere,
+			  designates that notation immediately following this
+			  directive should be rendered at the "small" size (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+
+	      <varlistentry>
+		  <term>Norm. ->.</term><listitem><para>Placed anywhere,
+			  designates that notation immediately following this
+			  directive should be rendered at the normal size;
+			  usually used to cancel a Tiny -> or Small ->. (see file
+			  lilypond-directives.rg for example)
+		   </para></listitem>
+	       </varlistentry>
+	   </variablelist>
+      </sect2>
     </sect1>
 
     <!-- Indications -->
@@ -3224,13 +3627,25 @@
     <sect1 id="nv-indication">
       <title>Slurs and hairpins</title>
 
-      <para>Slur and hairpin dynamic markings are stored as events,
+      <para>Slur and hairpin (crescendo/decrescendo) dynamic markings are stored as events,
 	just like notes or rests.  To create one, select the area you
 	want it to cover (a series of notes or whatever), and then use
 	the <guimenuitem>Add Slur</guimenuitem>, 
 	<guimenuitem>Add Crescendo</guimenuitem> or 
 	<guimenuitem>Add Decrescendo</guimenuitem> options from
 	the <guimenu>Group</guimenu> menu.</para>
+
+     <para>Placement of hairpins can be somewhat tricky, and this is
+	 especially so with haripins that run in line with dynamic markings.
+	 It is commonly the case that a hairpin that doesn't quite look right
+	 in &rosegarden;'s own notation editor will nevertheless come out just
+	 fine once exported to LilyPond.  &rosegarden;'s slurs generally come
+	 out best when all the stems are running in the same direction, and
+	 occasionally need to be <link
+	     linkend="nv-microposition">repositioned</link> by hand to achieve
+	 better placement.  Slurs also tend to fare slightly better once
+	 exported to LilyPond.
+     </para>
 
       <para>You remove a slur or hairpin in the same way as any
 	other event: either select it with the selection tool and then
@@ -3482,6 +3897,13 @@
 	  </para>
 	</sect3>
 <!--
+
+!!! Some of this looks like it ought to be mentioned, but it all refers to
+actions whose names and locations have changed radically since whenever this
+was written.  Someone has already commented this out, and I'm leaving it out,
+but not without a vague feeling that I really ought to go work out what modern
+actions all of this is talking about, and bring this bit up to date.
+
 	    <varlistentry id="commands-nv-menu-transforms-make-viable">
 	      <term><menuchoice>
 		  <guimenu>Transforms</guimenu>
@@ -3554,16 +3976,31 @@
 	    </varlistentry>
 -->
       </sect2>
+
+      <sect2>
+	  <title id="nv-microposition">Repositioning notation elements</title>
+	  <para>
+	      You may occasionally wish to to nudge the positioning of some
+	      element of notation that Rosegarden's layout algorithm has not
+	      placed in an optimal location.  Ctrl-click and drag slurs, hairpins,
+	      text events, and several others.  You may not reposition notes in
+	      this fashion.
+	  </para>
+      </sect2>
+
+
+
     </sect1>
 
     <sect1 id="nv-interpret">
       <title>Interpreting Performance Cues in Notation</title>
       <!-- !!! -->
       <para>
-	You can use the Interpret function <!-- !!! menu location --> to modify the velocities
-	and timings of notes according to any written or indicated
-	dynamics found. The selection of interpretations available is
-	as follows:
+	  You can use the Interpret function
+	  <guimenu>Adjust</guimenu><guimenuitem>Notes...</guimenuitem><guimenuitem>Interpret</guimenuitem>
+	  to modify the velocities and timings of notes according to any
+	  written or indicated dynamics found. The selection of
+	  interpretations available is as follows:
 	
 	<variablelist>
 	  <varlistentry>
@@ -3825,8 +4262,6 @@
 	</sect3>
       </sect2>
     </sect1>
-
-
     <sect1 id="nv-note-styles">
       <title>Note styles</title>
 
@@ -3865,7 +4300,7 @@
       <title>Note fonts</title>
       <para>
 	&rosegarden; is supplied with a single scalable notation
-	font, the Feta font developed by the Lilypond project.  Feta
+	font, the Feta font developed by the LilyPond project.  Feta
 	is an extremely high quality font that should be suitable
 	for nearly all classical work.
       </para>
@@ -3907,9 +4342,7 @@
 	for more information.
 
       </para>
-    </sect1>
-
-
+  </sect1>
   </chapter>
 
   <chapter id="event-view">
@@ -4082,9 +4515,9 @@
 		  <varlistentry id="commands-main-file-export-lilypond">
 		    <term><menuchoice>
 			<guimenu>Export</guimenu>
-			<guimenuitem>Export Lilypond file...</guimenuitem>
+			<guimenuitem>Export LilyPond file...</guimenuitem>
 		      </menuchoice></term>
-		    <listitem><para><action>Saves the contents of the current composition into a new Lilypond file.</action>  This can then be processed by the <ulink url="http://www.lilypond.org/">Lilypond</ulink> system to produce typeset-quality music, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Lilypond format.</para></listitem>
+		    <listitem><para><action>Saves the contents of the current composition into a new LilyPond file.</action>  This can then be processed by the <ulink url="http://www.lilypond.org/">LilyPond</ulink> system to produce typeset-quality music, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the LilyPond format.</para></listitem>
 		  </varlistentry>
 
 		  <varlistentry id="commands-main-file-export-mup">
@@ -4145,7 +4578,7 @@
 		  <guimenu>File</guimenu>
 		  <guimenuitem>Print</guimenuitem>
 		</menuchoice></term>
-	      <listitem><para><action>Prints the current composition.</action> At the time of writing, the print function is incomplete.  We recommend using the <link linkend="commands-main-file-export-lilypond">Export Lilypond file</link> function and printing with Lilypond instead.</para></listitem>
+	      <listitem><para><action>Prints the current composition.</action> At the time of writing, the print function is incomplete.  We recommend using the <link linkend="commands-main-file-export-lilypond">Export LilyPond file</link> function and printing with LilyPond instead.</para></listitem>
 	    </varlistentry>
 
 	    <varlistentry id="commands-main-file-quit">
@@ -6553,7 +6986,7 @@ Changing the Time Signature
 
 	    For musical notation display Rosegarden uses pixmaps
 	    derived from the Feta font, part of the <ulink
-	      url="http://lilypond.org/">Lilypond</ulink> software,
+	      url="http://lilypond.org/">LilyPond</ulink> software,
 	    which is Copyright 1997 &ndash; 2001 Jan Nieuwenhuizen and
 	    Han-Wen Nienhuys.
 
@@ -6573,7 +7006,7 @@ Changing the Time Signature
 	<listitem>
 	  <para>
 
-  The Rosegarden splash-screen image is Copyright 2005 Carolyn H. McIntyre,
+  The Rosegarden splash-screen image is Copyright 2006 Carolyn H. McIntyre,
   used by permission.
 
 	  </para>
@@ -6614,7 +7047,17 @@ Changing the Time Signature
     <chapter id="rosegarden-revhistory">
       <title>Rosegarden Revision History</title>
       <para>
-	<itemizedlist>
+        <itemizedlist>
+	  <listitem><para>
+              1.3 &ndash; September 2006: LilyPond export vastly improved,
+	      exportable LilyPond directives, cut/copy/paste by ranges that
+	      include tempo and time data, tempo entry and manipulation vastly
+	      improved, multi-track MIDI recording, MIDI recording filters,
+	      track paramter box, create segments using preset parameters from
+	      a database of over 300 real-world instruments, texts like
+	      "Allegro" offered as a parallel alternative to typing, LilyPond
+	      preview, assorted smaller features, many bug fixes
+          </para></listitem>
 	  <listitem><para>
 	      1.2.4 &ndash; July 2006: bug fixes
 	  </para></listitem>
@@ -6637,7 +7080,7 @@ Changing the Time Signature
 	      0.9.6 &ndash; December 2003: bug fixes
 	  </para></listitem>
 	  <listitem><para>
-	      0.9.5 &ndash; November 2003: a great many stuff
+	      0.9.5 &ndash; November 2003: a great lot of stuff
 	  </para></listitem>
 	  <listitem><para>
 	      0.9.1 &ndash; May 2003: step recording, Mup export, many many bug fixes
@@ -6655,7 +7098,7 @@ Changing the Time Signature
 	      0.2.0 &ndash; August 2002: WAV file support, sweep selections, contrapuntal staves
 	  </para></listitem>
 	  <listitem><para>
-	      0.1.6 &ndash; June 2002: configuration dialog, Lilypond support, quantize dialog
+	      0.1.6 &ndash; June 2002: configuration dialog, LilyPond support, quantize dialog
 	  </para></listitem>
 	  <listitem><para>
 	      0.1.5 &ndash; May 2002: KDE 3, ALSA support, JACK audio support
