@@ -338,7 +338,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     setMainDockWidget(m_mainDockWidget); // master dockwidget
 
     m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
-                                  i18n("Segment & Instrument Parameters"));
+                                  i18n("Special Parameters"));
     m_dockLeft->manualDock(m_mainDockWidget,            // dock target
                            KDockWidget::DockLeft, // dock site
                            20);                   // relation target/this (in percent)
@@ -702,7 +702,7 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
-    new KAction(i18n("Show Se&gment and Instrument Parameters"), Key_P, this,
+    new KAction(i18n("Show Special &Parameters"), Key_P, this,
                 SLOT(slotDockParametersBack()),
                 actionCollection(),
                 "show_inst_segment_parameters");
