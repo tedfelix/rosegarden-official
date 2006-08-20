@@ -436,7 +436,13 @@ TrackParameterBox::populateRecordingDeviceList()
             m_recDevice->setEnabled(false);
             m_recChannel->setEnabled(false);
 
+	    // hide these for audio instruments
+	    m_defaultsGroup->setShown(false);
+
         } else { // InstrumentType::Midi and InstrumentType::SoftSynth
+
+	    // show these if not audio instrument
+	    m_defaultsGroup->setShown(true);
 
             m_recDeviceIds.push_back(Rosegarden::Device::ALL_DEVICES);
             m_recDevice->insertItem(i18n("All"));

@@ -863,7 +863,7 @@
 		<imagedata fileref="rg-timesigdialog.png" format="PNG"/>
 	</imageobject>
 	  <textobject>
-	    <phrase>&rosegarden;'s time signature dialog</phrase>
+	      <phrase>&rosegarden;'s time signature dialog</phrase>
 	  </textobject>
 	</mediaobject>
 	</screenshot>
@@ -928,38 +928,51 @@
     <sect1 id="recording">
       <title>Recording</title>
       <para>
-	To record a new segment into a track, first make sure the
-	right tracks are selected for recording by selecting the red
-	(for audio tracks) or yellow (for MIDI tracks) LED-style
-	button on the track label, and then use the Transport's record
-	control.  This has the effect of both starting the transport,
-	thus playing the existing composition, and recording into the
-	appropriate tracks.
+        <screenshot>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="rg-trackbuttons.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>Track buttons in various states of recording readiness</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
       </para>
       <para>
-	You can record any number of &MIDI; and audio tracks at once so long as your
-	computer is powerful enough, and you have enough disk space.
-	You can also select a MIDI track
-	and one or more audio tracks at the same time.  Be careful not
-	to accidentally leave tracks selected when you have finished
-	using them and are trying to record somewhere else.
+	To record a new segment into a track, first make sure the
+	right tracks are armed for recording by selecting the red
+	(for audio tracks) or yellow (for MIDI tracks) LED-style
+	buttons on the track labels, and then use the <link
+	    linkend="transport-overview">Transport's</link> record
+	control.  This has the effect of both starting the transport,
+	thus playing the existing composition, and recording into the
+	appropriate track, or tracks.
+      </para>
+      <para>
+	You can record any number of &MIDI; and audio tracks at once so long
+	as your computer is powerful enough, and you have enough disk space.
+	Be careful not to accidentally leave tracks selected when you have
+	finished using them and are trying to record somewhere else.
       </para>
       <para>
 	Alternatively you can use punch-in record to separate the acts
 	of starting the transport and entering record mode.  Punch-in
-	record is toggled with the Space bar.  You can press Space
+	record is toggled with the <keycap>Space</keycap> bar.  You can press
+	<keycap>Space</keycap>
 	while playing a composition to switch instantly between
 	playback and recording without stopping the transport, or you
-	can use Space to arm for recording when the transport is
+	can use <keycap>Space</keycap> to arm for recording when the transport is
 	stopped, so that a subsequent Play will in fact record as
 	well.  (The latter is handy when synchronising to an <link
 	linkend="transport-external">external transport</link>.)
       </para>
       <para>
-	If you record to a MIDI track, your recording will be from all
-	of the MIDI devices that are selected for recording in the
+	If you record to a MIDI track, you will record from the 
+	MIDI devices that are selected for recording in the
 	<link linkend="studio-device-editor">MIDI device
-	manager</link>.
+	    manager</link>, as filtered through the <link
+	    linkend="track-parameters">track level recording filter</link>
       </para>
       <para>
 	If you record to audio tracks, your recording to each track
