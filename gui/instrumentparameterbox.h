@@ -238,9 +238,9 @@ public slots:
     void slotControllerChanged(int index);
 
     void slotTogglePercussion(bool value);
-  /*void slotToggleProgramChange(bool value);
+    void slotToggleProgramChange(bool value);
     void slotToggleBank(bool value);
-    void slotToggleVariation(bool value);*/
+    void slotToggleVariation(bool value);
 
 protected:
 
@@ -261,25 +261,6 @@ protected:
 
     // set rotary to value
     void setRotaryToValue(int controller, int value);
-    
-    // set Bank number
-    void setBank(int bank);
-
-    // get Bank number
-    int getBank();
-    
-    // set Program number
-    void setProgram(int program);
-    
-    // get Program number
-    int getProgram();
-
-    // set Variation number
-    void setVariation(int variation);
-
-    // get Variation number
-    int getVariation();
-
 
     //--------------- Data members ---------------------------------
 
@@ -292,9 +273,9 @@ protected:
     //KComboBox          *m_channelInValue;
 
     QCheckBox          *m_percussionCheckBox;
-  /*QCheckBox          *m_bankCheckBox;
+    QCheckBox          *m_bankCheckBox;
     QCheckBox          *m_variationCheckBox;
-    QCheckBox          *m_programCheckBox;*/
+    QCheckBox          *m_programCheckBox;
 
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
