@@ -658,14 +658,6 @@
       </para>
 	
     </sect1>
-
-    <sect1 id="track-parameters">
-      <title>Track parameters</title>
-	<para>
-	  Foo diddle
-	</para>
-    </sect1>
-
     <sect1 id="segment-view-creating">
       <title>Creating segments</title>
       <para>
@@ -1800,9 +1792,219 @@
 
   </chapter>
 
-
   <chapter id="segment-instrument-parameters">
     <title>Special Parameters</title>
+    
+    <sect1 id="track-parameters">
+      <title>The Track Parameter Box</title>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-trackparameterbox.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s track parameter box</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+	<para>
+	  The track parameter box can be found at the left side of the
+	  &rosegarden; main window.  It displays the parameters for the
+	  currently selected track.  (If you can't see it, try using 	<menuchoice>
+	  <guimenu lang="en">Settings</guimenu>
+	  <guimenuitem>Show Special Parameters</guimenuitem>
+	</menuchoice>.)
+    </para>
+    <para>
+	It allows you to assign instruments to tracks, control what
+	incoming &MIDI; data from which sources will be recorded to
+	particular tracks, and make selections that govern how &MIDI; segments
+	will be created for each track that is assigned to a non-audio
+	instrument.
+    </para>
+    <para>This box is divided into three sections:</para>
+	<sect2 id="track-playback-parameters">
+	    <title>Playback parameters</title>
+	    <para>
+		These provide an alternative mechanism to the <link
+		    linkend="segment-view-instruments">menu-based
+		    system</link> of instrument assignment.
+	    </para>
+	</sect2>
+	<sect2 id="track-recording-filters">
+	    <title>Track recording filters</title>
+	    <para>
+		These provide you a way to control what gets recorded
+		to this track.
+	    </para>
+	    <para>
+		You can record from only one of the
+		available devices marked for recording in the <link
+		    linkend="studio-device-editor">device
+		    manager</link>, or from all of them
+		simultaenously.
+	    </para>
+	    <para>
+		You can record from all channels, or limit recording
+		to a single channel. (You can't record from just
+		channels 1, 3 and 5, for example, using this
+		mechanism.  It is limited to any one of the 16
+		available channels, or all of them.)
+	    </para>
+	</sect2>
+	<sect2 id="track-create-with">
+	    <title>Create segments with</title>
+	    <para>
+		These provide you with a means of controlling many of
+		the <link
+		    linkend="segment-view-segmentparameterbox">segment
+		    parameters</link> for segments that don't yet
+		exist.  They are aimed especially at notation users,
+		and they facilitate operations that require you to use
+		more than one segment on a track (as when using
+		<!-- link -->repeats, or <link
+		    linkend="nv-lilypond-directives">alternative
+		    endings</link>), by allowing you to create a series of new
+		segments that all have the same properties by default.
+	    </para>
+	    <para>
+		<variablelist>
+
+		    <varlistentry>
+			<term>Preset</term>
+			<listitem>
+			    <para>
+				The <guimenuitem>Load</guimenuitem> button
+				launches a dialog that allows you to pick
+				a pre-defined collection of parameters
+				that provide guidelines for how you should
+				write parts for real-world instruments.
+			    </para>
+			    <para>
+			    <inlinemediaobject>
+				<imageobject>
+				    <imagedata fileref="rg-loadpreset.png" format="PNG"/>
+				</imageobject>
+			    </inlinemediaobject>
+			    </para>
+			    <para>
+				You first pick a Category, then an
+				Instrument, and finally choose whether you
+				wish to write a part for an amateur or a
+				professional player. <footnote><para>This database was
+				compiled by Magnus Johansson, who deserves
+				all the special mention we can muster for
+				his outstanding effort on this.</para></footnote>
+				Clicking the <guimenuitem>OK</guimenuitem>
+				button injects the appropriate parameters
+				into the remaining widgets in this part of
+				the track parameters box, where you can
+				tweak them if you desire.<footnote><para>No
+				    facility is provided at this time for
+				    assembling your own database of presets,
+				    or customizing the existing ones in a
+				    permanent way.</para></footnote>
+			    </para>
+			    <para>
+				Once you have loaded a preset, the name of
+				your chosen preset will be used as the label
+				for any segments you subsequently draw or
+				record on this track, even if you change some
+				or all of the associated parameters away from
+				the values you just loaded.
+			    </para>
+			</listitem>
+		    </varlistentry> 
+
+		    <varlistentry>
+			<term>Clef</term>
+			<listitem>
+			    <para>This lets you choose the clef for any
+				segments you subsequently draw or record on
+				this track.  Clefs are events, not properties.
+				Your segments will be created with an initial
+				clef event of the appropriate type (which you
+				may subsequently alter or delete, should you
+				have some occasion to do so.)
+			    </para>
+			    <para>
+				The clefs available include a variety of named
+				clefs representing standard clefs with various
+				octave offsets.
+			    </para>
+			    <!-- !!! I would enumerate this list, but I have
+			    no idea how to do it in docbook.  I'm just winging
+			    it by the seat of my pants here.  Why do you think
+			    I avoided touching this hateful mess until now?  I
+			    wrote Rosegarden Companion using OO.o, and didn't
+			    touch tag one.  Wah. -->
+			</listitem>
+		    </varlistentry>
+
+		    <varlistentry>
+			<term>Transpose</term>
+			<listitem>
+			    <para>
+				This causes segments on this track to be
+				created so that their note events sound at a
+				given transposition.  Useful, especially, for
+				writing parts for transposing instruments.
+			    </para>
+			</listitem>
+		    </varlistentry>
+
+		    <varlistentry>
+			<term>Colour</term>
+			<listitem>
+			    <para>
+				This causes segments on this track to be
+				created using a given colour.
+			    </para>
+			</listitem>
+		    </varlistentry>
+
+		    <varlistentry>
+			<term>Range</term>
+			<listitem>
+			    <para>
+				The <guimenuitem>Low:</guimenuitem> and 
+				<guimenuitem>High:</guimenuitem> buttons,
+				launch a dialog that allows you to pick a
+				pitch using a staff.  The lowest and highest pitches
+				you select will then appear right on these
+				buttons.
+			    </para>
+			    <para>
+				These represent the lowest and highest
+				playable notes, respectively, on the instrument for which you
+				are writing notation.  In some cases, these
+				limits will be hard and fast, like the low B
+				on a Transverse Flute (B foot).  In others,
+				they may only serve as guidelines to help you
+				make good choices for instruments with which
+				you are not intimately familiar.
+			    </para>
+			    <para>
+				If you enter, record, or import data that has
+				pitches exceeding the values specified, the
+				note heads will appear in red by default.  You
+				can turn this behavior off with
+				<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+					Rosegarden</guimenuitem><guimenuitem>Notation</guimenuitem>
+				    <guimenuitem>Behaviour</guimenuitem><guimenuitem>Show
+					notes outside playable range in
+					red</guimenuitem></menuchoice>
+			    </para>
+			</listitem>
+		    </varlistentry>
+
+		</variablelist>
+	    </para>
+	</sect2>
+
+    </sect1>
 
     <sect1 id="segment-view-segmentparameterbox">
       <title>The Segment Parameter Box</title>
@@ -2748,11 +2950,12 @@
       <sect2 id="nv-raw-note-ruler">
 	  <title>The raw note ruler</title>
 	  <para>The raw note ruler is particularly
-	      useful when editing quantized notation where the display duration on
-	      the page differs from the duration of the actual performance.
-	      Enabled via
+	      useful when editing <link linkend="nv-quantization">quantized
+		  notation</link> where the display duration on the page
+	      differs from the duration of the actual performance.
+	      Enabled via<menuchoice>
 	      <guimenu>Settings</guimenu> <guimenuitem>Rulers...</guimenuitem> <guimenuitem>
-		  Show Raw Note Ruler</guimenuitem>, it draws a small bar above
+		  Show Raw Note Ruler</guimenuitem></menuchoice>, it draws a small bar above
 	      each note, similar to the way notes appear in the matrix.  In this
 	      example screenshot, you can see how interpreted, quantized notes
 	      appear on this ruler.  The tenuto notes have full performance
@@ -3996,8 +4199,9 @@ actions all of this is talking about, and bring this bit up to date.
       <title>Interpreting Performance Cues in Notation</title>
       <!-- !!! -->
       <para>
-	  You can use the Interpret function
-	  <guimenu>Adjust</guimenu><guimenuitem>Notes...</guimenuitem><guimenuitem>Interpret</guimenuitem>
+	  You can use the Interpret function<menuchoice>
+	      <guimenu>Adjust</guimenu><guimenuitem>Notes...</guimenuitem><guimenuitem>Interpret</guimenuitem>
+	  </menuchoice>
 	  to modify the velocities and timings of notes according to any
 	  written or indicated dynamics found. The selection of
 	  interpretations available is as follows:
@@ -4009,7 +4213,9 @@ actions all of this is talking about, and bring this bit up to date.
 	    <listitem><para> Sets a velocity to each note
 		based on the last piece of text of "Dynamic"
 		type seen on the same staff (only texts of the
-		form pp, p, mp, mf, f, ff, fff etc are matched).
+		form pp, p, mp, mf, f, ff, fff, etc., are matched; these are
+		the texts that are available by default when entering text events
+		of this style).
 	      </para></listitem>
 	  </varlistentry>
 	  
@@ -4083,8 +4289,9 @@ actions all of this is talking about, and bring this bit up to date.
 
       <para>
 	There are two ways to see which notes have been quantized
-	for notation.  By default, each notation view contains a Raw
-	Note Ruler (in the group of rulers above the score) showing
+	for notation.  By default, each notation view contains a <link
+	    linkend="nv-raw-note-ruler">raw
+	    note ruler</link> (in the group of rulers above the score) showing
 	a rectangular block for each note.  This block is positioned
 	so as to represent the time and duration of the note as
 	performed, but with the top and bottom edges of the
