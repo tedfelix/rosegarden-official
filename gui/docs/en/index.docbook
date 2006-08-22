@@ -968,11 +968,12 @@
 	linkend="transport-external">external transport</link>.)
       </para>
       <para>
-	If you record to a MIDI track, you will record from the 
+	If you record to MIDI tracks, you will record from the 
 	MIDI devices that are selected for recording in the
 	<link linkend="studio-device-editor">MIDI device
-	    manager</link>, as filtered through the <link
-	    linkend="track-parameters">track level recording filter</link>
+        manager</link>, as filtered through the <link
+        linkend="track-recording-filters">track level recording filter</link>
+        and the global <link linkend="studio-midi-filters">MIDI filters</link>.
       </para>
       <para>
 	If you record to audio tracks, your recording to each track
@@ -1418,6 +1419,33 @@
       linkend="studio-plugins">audio plugins</link> sections.</para>
     </sect1>
 
+    <sect1 id="studio-midi-routing">
+      <title>MIDI Routing</title>
+      <para>&rosegarden; is able to instantly send incoming MIDI events to 
+      some output device and MIDI channel. This feature is known as MIDI Thru.</para>
+      <para>MIDI Thru is enabled by default in &rosegarden;. You may want 
+      to globally disable it using the menu option <menuchoice>
+      <guimenu lang="en">Composition</guimenu><guimenuitem>Studio</guimenuitem>
+      <guimenuitem>MIDI Thru Routing</guimenuitem></menuchoice>, if you prefer 
+      to use an external MIDI routing system. There is also a global filter by 
+      MIDI event type, which you may use to ignore some event types and let other
+      types to be routed. It is explained in the section <link linkend="studio-midi-filters">
+      MIDI filters</link>.</para>
+      <para>MIDI Thru routing works quite differently when &rosegarden; is playing 
+      or stopped than when it is recording.</para>
+      <itemizedlist>
+        <listitem><para>When &rosegarden; is playing or in stopped state, the MIDI 
+        thru function routes events to the selected track instrument. The selected 
+        track has its track name highlighted.</para></listitem>
+        <listitem><para>When &rosegarden; is recording, the MIDI events are routed 
+        to the armed track instruments, based on the <link linkend="track-recording-filters">
+        recording filters</link>. It doesn't
+        matter which track is selected. Only one instrument is selected for each event,
+        corresponding to the first track with a matching record filter.</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+
     <sect1 id="studio-audio-mixer">
       <title>The Audio Mixer</title>
       <para>
@@ -1849,23 +1877,28 @@
 	<sect2 id="track-recording-filters">
 	    <title>Track recording filters</title>
 	    <para>
-		These provide you a way to control what gets recorded
-		to this track.
-	    </para>
-	    <para>
-		You can record from only one of the
-		available devices marked for recording in the <link
-		    linkend="studio-device-editor">device
-		    manager</link>, or from all of them
-		simultaenously.
-	    </para>
-	    <para>
-		You can record from all channels, or limit recording
-		to a single channel. (You can't record from just
-		channels 1, 3 and 5, for example, using this
-		mechanism.  It is limited to any one of the 16
-		available channels, or all of them.)
-	    </para>
+               These provide you a way to control what events are recorded to this track. If you leave the default values ("all") for both parameters, every received event will be stored in the track. This setting is safe and convenient if you are recording only one MIDI track. Otherwise, you should adjust one or both parameters to select only the desired events for the track.
+            </para>
+	    <variablelist>
+		    <varlistentry>
+			<term>Device</term>
+			<listitem>
+			    <para>You can record from only one of the available devices marked for recording in the  <link linkend="studio-device-editor">device manager</link>, or from all of them simultaneously.</para>
+			</listitem>
+		    </varlistentry>
+		    <varlistentry>
+			<term>Channel</term>
+			<listitem>
+			    <para>You can record from all channels, or limit recording to only one of the 16 available MIDI channels. In this case, only MIDI channel messages matching the channel number will be recorded, and system messages not having a channel (as system exclusive events) will be discarded.</para>
+			</listitem>
+		    </varlistentry>
+	     </variablelist>
+	     <para>
+               Both parameters are cummulative: you can filter only a device, only a channel, or both a device and a channel simultaneously. It is not mandatory to ensure mutually exclusive selections for all the armed tracks, but if you don't do so you will find duplicated events at several recorded tracks.
+             </para>
+	     <para>
+		The recording filters are also used to <link linkend="studio-midi-routing">route MIDI events </link> to the assigned track instrument when you are recording.
+             </para>
 	</sect2>
 	<sect2 id="track-create-with">
 	    <title>Create segments with</title>
