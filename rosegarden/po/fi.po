@@ -1,22 +1,21 @@
-# translation of fi.po to
+# translation of fi.po to Suomi
 # Finnish translation of Rosegarden.
 # This file is put in the public domain.
 #
 #
-# Heikki Junes <hjunes@cc.hut.fi>, 2006.
 # Heikki Johannes Junes <hjunes@cc.hut.fi>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-22 22:44+0200\n"
-"PO-Revision-Date: 2006-05-15 10:41+0300\n"
-"Last-Translator: Heikki Johannes Junes <hjunes@cc.hut.fi>\n"
-"Language-Team:  <fi@li.org>\n"
+"PO-Revision-Date: 2006-08-23 01:47+0300\n"
+"Last-Translator: Heikki Junes <hjunes@cc.hut.fi>\n"
+"Language-Team: Suomi <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.1\n"
+"X-Generator: KBabel 1.11.2\n"
 
 #: ../gui/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
@@ -77,8 +76,7 @@ msgstr "Inkpen"
 
 #: ../gui/fonts/mappings/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:18 ../gui/fonts/mappings/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
@@ -90,8 +88,7 @@ msgstr "Maestro"
 
 #: ../gui/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:23 ../gui/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -103,8 +100,7 @@ msgstr "Opus"
 
 #: ../gui/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
@@ -112,8 +108,7 @@ msgstr "Petrucci"
 
 #: ../gui/fonts/mappings/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../gui/fonts/mappings/fonts.cpp:36
 msgid "RG21"
@@ -220,7 +215,6 @@ msgstr ""
 "ladataan aina kun luot uuden dokumentin tai tuot MIDI tiedoston?</p>\n"
 
 #: ../gui/docs/en/tips.cpp:36
-#, fuzzy
 msgid ""
 "<p>Because your default studio is a complete Rosegarden composition, it can\n"
 "contain default instrument assignments, document properties, LilyPond "
@@ -229,10 +223,10 @@ msgid ""
 "each\n"
 "new document you create.</p>\n"
 msgstr ""
-"<p>Koska oletusstudiosi on täydellinen Rosegarden sävellys, se voi\n"
-"sisältää oletus instrumenttiliitoksia, dokumentin ominaisuuksia, tai "
+"<p>Koska oletusstudiosi on täydellinen Rosegarden-sävellys, se voi\n"
+"sisältää oletusinstrumenttiliitoksia, dokumentin ominaisuuksia, tai "
 "Lilypond otsakkeita,\n"
-"ja monia muita asioita joita saatat toivoa olevan käsillä oletuksena "
+"ja monia muita asioita, joita saatat toivoa olevan oletuksena "
 "kussakin\n"
 "uudessa dokumentissa, jonka luot.</p>\n"
 
@@ -266,7 +260,6 @@ msgstr ""
 "Käytös -> Käytä aina oletusstudiota tiedostoja ladatessa</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:59
-#, fuzzy
 msgid ""
 "<p>If you have accidentally recorded a segment so short that it does not\n"
 "appear on the canvas, which you can only hear during subsequent recording\n"
@@ -275,9 +268,9 @@ msgid ""
 "negative number.</p>\n"
 msgstr ""
 "<p>Jos olet vahingossa nauhoittanut niin lyhyen osan, että sitä ei tahdo\n"
-"näkyä kankaalla ja jonka kuulet vain seuraavilla nauhoituskerroilla,\n"
+"näkyä kankaalla, ja jonka kuulet vain seuraavilla nauhoituskerroilla,\n"
 "pääset käsiksi siihen asettamalla <b>Sävellys -> Muuta dokumentin\n"
-"kestoa</b> ja määrittämällä sävellyksen alkukohdaksi negatiivisen luvun.</"
+"alku ja loppu</b> ja määrittämällä sävellyksen alkukohdaksi negatiivisen luvun.</"
 "p>\n"
 
 #: ../gui/docs/en/tips.cpp:67
@@ -347,7 +340,6 @@ msgstr ""
 "b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:102
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden can export files for use by LilyPond, the high-quality "
 "score typesetting system?<br><br>\n"
@@ -359,7 +351,6 @@ msgstr ""
 "Suunnista <b>Tiedosto</b>-valikosta <b>Vie -> Vie Lilypond-tiedosto</b></p>\n"
 
 #: ../gui/docs/en/tips.cpp:108
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden can print via LilyPond, the high-quality score "
 "typesetting system?<br><br>\n"
@@ -369,9 +360,11 @@ msgid ""
 "of\n"
 "several other PDF viewers, where it can then be printed as well.</p>\n"
 msgstr ""
-"<p>...että Rosegarden voi viedä tiedostoja Lilypond-ohjelmalle, joka on "
+"<p>...että Rosegarden voi tulostaa käyttäen Lilypond-ohjelmaa, joka on "
 "korkealaatuinen nuottien ladontaohjelma?\n"
-"Suunnista <b>Tiedosto</b>-valikosta <b>Vie -> Vie Lilypond-tiedosto</b></p>\n"
+"Suunnista <b>Tiedosto</b>-valikosta <b>Esikatsele Lilypondilla</b></p>. \n"
+"Tiedosto viedään, hahmonnetaan, ja esikatsellaan KGhostView-ohjelmalla tai "
+"yhdellä monista muista PDF-katselijoilla, joissa se voidaan sitten myös tulostaa.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:116
 msgid ""
@@ -437,7 +430,6 @@ msgstr ""
 "muokkaus-ikkuna <b>Käytös</b> liuskasta.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:149
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
 "contributions from around the world?<br><br>\n"
@@ -451,13 +443,14 @@ msgid ""
 msgstr ""
 "<p>...että Rosegardenia kehitetään yhteistyössä, jossa\n"
 "panokset tulevat ympäri maailmaa?<br><br>\n"
-"Pääkehittäjät asuvat Iso-Britanniassa ja Ranskassa, ja olemme saaneet "
-"panoksia\n"
-"Yhdysvalloista, Espanjasta, Saksasta, Venäjältä, Sloveniasta, ja muualta... "
-"</p>\n"
+"Pääkehittäjät asuvat Lontoossa (Iso-Britanniassa), Cannesissa, Barseloonassa,\n"
+"ja ... Christiansburgissa?  (Christainsburg on 50 000 asukkaan kaupunki\n"
+"lounais-Virginiassa, Yhdysvalloissa.)<br><br>\n"
+"Olemme saaneet panoksia myös muualta Yhdysvalloista, Iso-Britanniasta, Espanjasta, "
+"Meksikosta, Argentiinasta, Saksasta,\n"
+"Ruotsista, Venäjältä, Japanista, Suomesta, ja Italiasta, vain muutamia mainitakseni..</p>\n"
 
 #: ../gui/docs/en/tips.cpp:160
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden is available in Spanish, French, German, Russian, "
 "Welsh, Swedish, Italian and Estonian\n"
@@ -467,20 +460,19 @@ msgid ""
 "line at <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 msgstr ""
 "<p>...että Rosegarden on saatavilla espanjaksi, ranskaksi, saksaksi, "
-"venäjäksi, walesiksi, ruotsiksi, italiaksi ja viroksi?<br><br>\n"
+"venäjäksi, walesiksi, ruotsiksi, italiaksi ja viroksi? (vain muutamia mainitakseni.)<br><br>\n"
 "Jos olet kiinnostunut kääntämään Rosegardenin toiselle kielelle, tipauta "
 "meille\n"
 "rivi osoitteeseen <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:168
-#, fuzzy
 msgid ""
 "<p>...that you can change the total number of bars in the composition via\n"
 "<b>Composition -> Change Composition Start and End</b>?</p>\n"
 msgstr ""
 "<p>...että voit vaihtaa sävellyksen tahtien kokonaismäärää valitsemalla "
 "<b>Muokkaa \n"
-"-> Muuta sävellyksen kestoa</b>?</p>\n"
+"-> Muuta sävellyksen alku ja loppu</b>?</p>\n"
 
 #: ../gui/docs/en/tips.cpp:174
 msgid ""
@@ -539,7 +531,6 @@ msgstr ""
 "<b>Asetukset -> Näytä viivaimet</b>.)</p>\n"
 
 #: ../gui/docs/en/tips.cpp:203
-#, fuzzy
 msgid ""
 "<p>...that if you're editing a section in the matrix or notation view, you "
 "can\n"
@@ -550,9 +541,11 @@ msgid ""
 "audio.</i>\n"
 msgstr ""
 "<p>...että jos olet muokkaamassa osaa matriisi- tai nuottinäkymässä, voit "
-"asettaa sen välin silmukaksi kun muokkaat sitä?  Valitse se ja aseta "
+"asettaa sen osan silmukaksi kun muokkaat sitä?  Valitse se ja aseta "
 "<b>Työkalut -> Paikallinen osoitin -> Aseta silmukka valinnalle</b>, ja "
-"napauta Play.</p>\n"
+"napauta Play.</p><br><br>\n"
+"<i>Tämä ominaisuus ei toimi aivan yhtä hyvin sävellyksissa, joissa on "
+"ääninäytteitä.</i>\n"
 
 #: ../gui/docs/en/tips.cpp:212
 msgid ""
@@ -580,6 +573,13 @@ msgid ""
 "be confused and unhappy.  This is an old bug that has been on our TODO list\n"
 "for years.  Sorry about that, folks.  Patches welcome.</i>\n"
 msgstr ""
+"<p>Nuotinnusnäkymä näyttää sinulle nuotit käyttäen niiden näyttökestoa, "
+"kun taas matriisinäkymä sallii niiden soittokeston muuttamisen.</p><br><br>\n"
+"<i>Ole varovainen sidottujen nuottien kanssa matriisissa.  Ei ole ilmeistä että "
+"ne ovat sidottuja, ja jos katkaiset nuottiparin sidoksen, seuraava nuottinäkymä "
+"tulee sekaiseksi ja onnettomaksi.  Tämä on vanha ohjelmointivirhe, joka on ollut "
+"meidän TODO (tehtävänä) -listallamme vuosia.  Pahoittelut siitä, kotiväki.  "
+"Korjaukset ovat tervetulleita.</i>\n"
 
 #: ../gui/docs/en/tips.cpp:230
 msgid ""
@@ -613,6 +613,11 @@ msgid ""
 "<b>End\n"
 "Bar</b> to the end of your notation.</p>\n"
 msgstr ""
+"<p>Kun viedään LilyPondiin, näet ylimääräisiä tyhjiä tahteja, jos "
+"Rosegarden-sävellyksen kesto on pitempi kuin sen sisältämien "
+"soivien nuottien kesto.  Korjataksesi tämän, suunnista\n"
+"<b>Sävellys->Vaihda sävellyksen alku ja loppu...</b> ja sovita "
+"sitten <b>Lopputahti</b> nuotinnuksesi loppuun.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:247
 msgid ""
@@ -631,6 +636,18 @@ msgid ""
 "within\n"
 "the notation view.</i></p>\n"
 msgstr ""
+"<p>Rosegarden voi nyt viedä tiettyjä asioita LilyPondiin, joita se ei voi vielä\n"
+"näyttää sen omassa käyttöliittymässään.  Nämä uudet käskyt voidaan syöttää "
+"käyttäen <b>T</b> tekstinsyöttö-työkalua nuottinäkymäss.<br><br>\n"
+"Avaa esimerkkitiedostot\n"
+"<b>lilypond-alternative-endings.rg</b> ja <b>lilypond-directives.rg</b> "
+"nähdäksesi\n"
+"havaintoesityksen kuinka käyttää uusia vietäviä käskyjä.<br><br>\n"
+"Käytä <b>Tiedosto -> Esikatsele LilyPondilla</b>\n"
+"nähdäksesi miltä ne näyttävät viedyllä sivulla.<br><br>\n"
+"<i>Varmista että\n"
+"<b>Asetukset -> Näytä LilyPond-käskyt</b> ja <b>Näytä muistiinpanot</b> "
+"ovat asetettuina nuottinäkymässä.</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:262
 msgid ""
@@ -645,6 +662,15 @@ msgid ""
 "parameters.<br><br>\n"
 "<i>These parameters do not apply to audio tracks.</i></p>\n"
 msgstr ""
+"<p>Rosegardenissa on nyt raidan ominaisuudet kun <b>Luodaan osa:</b> "
+"tietyillä\n"
+"ominaisuuksilla.  Voita esivalita avaimen, sävellajisiirron, värin, ja "
+"määritellä\n"
+"korkeimman ja alimman soitettavan nuotin (nuotit tämän alueen ulkopuolella näkyvät\n"
+"punaisella oletuksena).  Sitten piirtäessäsi osia kynällä, tai nauhoitat osan, kukin "
+"uusi luotu osa, joka on luotu tälle raidalle, saa nämä ominaisuudet osan\n"
+"ominaisuuksina.<br><br>\n"
+"<i>Näitä ominaisuuksia eivät sovelleta ääniraidoille.</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:273
 msgid ""
@@ -660,6 +686,17 @@ msgid ""
 "Magnus\n"
 "Johansson for assembling this extraordinary database.)</i></p>\n"
 msgstr ""
+"<p>Rosegardenilla on nyt tietokanta etukäteen asetetuista ominaisuuksista, jotka "
+"kuvaavat yli 300\n"
+"musiikki-instrumenttia ympäri maailman, ryhmiteltyinä muutamaan sopivaan\n"
+"luokkaan.  Kukin esiasetus sisältää avaimen, sävellajisiirron, ja soittoääniala-\n"
+"ehdotuksen sekä harrastelija- että ammattilaissoittajille.<br><br>Napauta \n"
+"<b>Lataa</b>-painiketta uuden raidan ominaisuuslaatikossa aloittaaksesi! <i> "
+"(Jos et\n"
+"nää <b>Lataa</b>-painiketta, varmista että ominaisuussivupalkkisi on asetettu\n"
+"lehtiömuotoon, kasamuodon asemesta.)</i> <br><br> <i>(Erityiskiitokset "
+"Magnus\n"
+"Johanssonille tämän ainutlaatuisen tietokannan kokoamisesta.)</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:285
 msgid ""
@@ -675,6 +712,13 @@ msgid ""
 "with LilyPond.<br><br>\n"
 "<i>The tracks must have a non-default name for this to work.</i>\n"
 msgstr ""
+"<p>Voit viedä raitoja, joilla on sama nimi, yhteen yhdistettyyn nuottiviivastoon "
+"Lilypondissa.  Esimerkiksi jos yhdessä osassa on kolme ääntä, kirjoita "
+"kukin\n"
+"ääni riippumattomalle osalle/nuottiviivastolle, kukin eri raidalle.   Anna kaikille\n"
+"kolmelle ridalle sama nimi, ja valitse <b>[x] Yhdistä raidat joilla on sama nimi\n"
+"<b> valintaikkunasta, joka ilmestyy kun viet tai esikatselet LilyPondilla.<br><br>\n"
+"<i>Raidoille on annettava jokin ei-oletusnimi, jotta tämä toimisi.</i>\n"
 
 #: ../gui/styles/styles.cpp:1
 msgid "Classical"
@@ -765,51 +809,44 @@ msgid "Insert Tempo Change"
 msgstr "Syötä tempon muutos"
 
 #: ../gui/temporuler.cpp:115
-#, fuzzy
 msgid "Insert Tempo Change at Playback Position"
-msgstr "Syötä tempon muutos"
+msgstr "Syötä tempomuutos toisto-osoittimen kohdalle"
 
 #: ../gui/temporuler.cpp:120
-#, fuzzy
 msgid "Delete Tempo Change"
-msgstr "Syötä tempon muutos"
+msgstr "Poista tempomuutos"
 
 #: ../gui/temporuler.cpp:124
 msgid "Ramp Tempo to Next Tempo"
-msgstr ""
+msgstr "Vietä tempo seuraavaan tempoon"
 
 #: ../gui/temporuler.cpp:128
 msgid "Un-Ramp Tempo"
-msgstr ""
+msgstr "Poista tempon viettäminen"
 
 #: ../gui/temporuler.cpp:133
-#, fuzzy
 msgid "Edit Tempo..."
-msgstr "Muuta &oletustempoa..."
+msgstr "Muuta tempoa..."
 
 #: ../gui/temporuler.cpp:137
-#, fuzzy
 msgid "Edit Time Signature..."
-msgstr "Tahtilajimerkintä"
+msgstr "Muuta Tahtilajimerkintää..."
 
 #: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:141
 msgid "Open Tempo and Time Signature Editor"
 msgstr "Avaa tempo- ja tahtilajimerkinnän muokkain"
 
 #: ../gui/temporuler.cpp:565
-#, fuzzy
 msgid "%1.%2%3 (%4.%5%6 bpm)"
-msgstr "%1.%2%3 qpm (%4.%5%6 bpm)   "
+msgstr "%1.%2%3 (%4.%5%6 bpm)"
 
 #: ../gui/temporuler.cpp:573
-#, fuzzy
 msgid "%1.%2%3 bpm"
-msgstr "(%1.%2 bpm)"
+msgstr "%1.%2%3 bpm"
 
 #: ../gui/temporuler.cpp:581
-#, fuzzy
 msgid "%1 - %2.%3%4"
-msgstr "%1.%2%3"
+msgstr "%1 - %2.%3%4"
 
 #: ../gui/segmenttool.cpp:561 ../gui/segmenttool.cpp:1103
 msgid "Move Segment"
@@ -820,8 +857,7 @@ msgid "Move Segments"
 msgstr "Siirrä osia"
 
 #: ../gui/tracklabel.cpp:63
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Napauta ja pidä vasenta hiiren korvaa pohjassa liittääksesi instrumentin "
 "tälle raidalle."
@@ -1016,9 +1052,8 @@ msgid "Key signature"
 msgstr "Sävellajimerkintä"
 
 #: ../gui/dialogs.cpp:403
-#, fuzzy
 msgid "Key transposition"
-msgstr "Walesilainen käännös"
+msgstr "Avaimen muutos"
 
 #: ../gui/dialogs.cpp:409
 msgid "Existing notes following key change"
@@ -1046,11 +1081,11 @@ msgstr "Molli"
 
 #: ../gui/dialogs.cpp:444
 msgid "Transpose key according to segment transposition"
-msgstr ""
+msgstr "Muuta avain osan sävelkorkeusmuutoksen mukaan"
 
 #: ../gui/dialogs.cpp:447
 msgid "Use specified key.  Do not transpose"
-msgstr ""
+msgstr "Käytä tiettyä avainta.  Älä aseta sävelkorkeusmuutosta"
 
 #: ../gui/dialogs.cpp:455
 msgid "Apply to current segment only"
@@ -1173,254 +1208,228 @@ msgid "Annotation"
 msgstr "Huomautus"
 
 #: ../gui/dialogs.cpp:1128
-#, fuzzy
 msgid "LilyPond Directive"
-msgstr "LilyPond-tiedostot"
+msgstr "LilyPond-käsky"
 
 #: ../gui/dialogs.cpp:1153
-#, fuzzy
 msgid "Dynamic:  "
-msgstr "Voimakkuusmerkintä"
+msgstr "Voimakkuusmerkintä:  "
 
 #: ../gui/dialogs.cpp:1157
 msgid "ppp"
-msgstr ""
+msgstr "ppp"
 
 #: ../gui/dialogs.cpp:1158
 msgid "pp"
-msgstr ""
+msgstr "pp"
 
 #: ../gui/dialogs.cpp:1159
 msgid "p"
-msgstr ""
+msgstr "p"
 
 #: ../gui/dialogs.cpp:1160
 msgid "mp"
-msgstr ""
+msgstr "mp"
 
 #: ../gui/dialogs.cpp:1161
 msgid "mf"
-msgstr ""
+msgstr "mf"
 
 #: ../gui/dialogs.cpp:1162
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: ../gui/dialogs.cpp:1163
 msgid "ff"
-msgstr ""
+msgstr "ff"
 
 #: ../gui/dialogs.cpp:1164
 msgid "fff"
-msgstr ""
+msgstr "fff"
 
 #: ../gui/dialogs.cpp:1165
 msgid "rfz"
-msgstr ""
+msgstr "rfz"
 
 #: ../gui/dialogs.cpp:1166
 msgid "sf"
-msgstr ""
+msgstr "sf"
 
 #: ../gui/dialogs.cpp:1170
-#, fuzzy
 msgid "Direction:  "
-msgstr "Suunta"
+msgstr "Suunta:  "
 
 #: ../gui/dialogs.cpp:1179
 msgid "  ,"
-msgstr ""
+msgstr "  ,"
 
 #: ../gui/dialogs.cpp:1180
 msgid "D.C. al Fine"
-msgstr ""
+msgstr "D.C. al Fine"
 
 #: ../gui/dialogs.cpp:1181
 msgid "D.S. al Fine"
-msgstr ""
+msgstr "D.S. al Fine"
 
 #: ../gui/dialogs.cpp:1182
-#, fuzzy
 msgid "Fine"
-msgstr "&Sormitus"
+msgstr "Fine"
 
 #: ../gui/dialogs.cpp:1183
 msgid "D.S. al Coda"
-msgstr ""
+msgstr "D.S. al Coda"
 
 #: ../gui/dialogs.cpp:1184
-#, fuzzy
 msgid "to Coda"
-msgstr " Sointu"
+msgstr "Codaan asti"
 
 #: ../gui/dialogs.cpp:1185
-#, fuzzy
 msgid "Coda"
-msgstr "Koodit"
+msgstr "Coda"
 
 #: ../gui/dialogs.cpp:1189
-#, fuzzy
 msgid "Local Direction:  "
-msgstr "Paikallinen suunta"
+msgstr "Paikallinen suunta:  "
 
 #: ../gui/dialogs.cpp:1193
-#, fuzzy
 msgid "accel."
-msgstr "&Peru"
+msgstr "accel."
 
 #: ../gui/dialogs.cpp:1194
 msgid "ritard."
-msgstr ""
+msgstr "ritard."
 
 #: ../gui/dialogs.cpp:1195
 msgid "ralletando"
-msgstr ""
+msgstr "ralletando"
 
 #: ../gui/dialogs.cpp:1196
-#, fuzzy
 msgid "a tempo"
-msgstr "Uusi tempo:"
+msgstr "a tempo"
 
 #: ../gui/dialogs.cpp:1197
-#, fuzzy
 msgid "legato"
-msgstr "&Sitoen"
+msgstr "legato"
 
 #: ../gui/dialogs.cpp:1198
-#, fuzzy
 msgid "simile"
-msgstr "Aika"
+msgstr "simile"
 
 #: ../gui/dialogs.cpp:1199
 msgid "pizz."
-msgstr ""
+msgstr "pizz."
 
 #: ../gui/dialogs.cpp:1200
-#, fuzzy
 msgid "arco"
-msgstr "&Merkaten"
+msgstr "arco"
 
 #: ../gui/dialogs.cpp:1201
 msgid "non vib."
-msgstr ""
+msgstr "non vib."
 
 #: ../gui/dialogs.cpp:1202
 msgid "sul pont."
-msgstr ""
+msgstr "sul pont."
 
 #: ../gui/dialogs.cpp:1203 ../gui/dialogs.cpp:1205
 msgid "sul tasto"
-msgstr ""
+msgstr "sul taso"
 
 #: ../gui/dialogs.cpp:1204
 msgid "con legno"
-msgstr ""
+msgstr "con legno"
 
 #: ../gui/dialogs.cpp:1206
 msgid "sul G"
-msgstr ""
+msgstr "sul G"
 
 #: ../gui/dialogs.cpp:1207
 msgid "ordinario"
-msgstr ""
+msgstr "ordinario"
 
 #: ../gui/dialogs.cpp:1208
-#, fuzzy
 msgid "Muta in "
-msgstr "Pedaali"
+msgstr "Muta in "
 
 #: ../gui/dialogs.cpp:1209
 msgid "volti subito "
-msgstr ""
+msgstr "volti subito "
 
 #: ../gui/dialogs.cpp:1210
 msgid "soli"
-msgstr ""
+msgstr "soli"
 
 #: ../gui/dialogs.cpp:1211
 msgid "div."
-msgstr ""
+msgstr "div."
 
 #: ../gui/dialogs.cpp:1215
-#, fuzzy
 msgid "Tempo:  "
-msgstr "Tempo   "
+msgstr "Temmpo:  "
 
 #: ../gui/dialogs.cpp:1219 ../gui/dialogs.cpp:1243
-#, fuzzy
 msgid "Grave"
-msgstr "Kreikkalainen"
+msgstr "Grave"
 
 #: ../gui/dialogs.cpp:1220 ../gui/dialogs.cpp:1244
-#, fuzzy
 msgid "Adagio"
-msgstr "Ääni"
+msgstr "Adagio"
 
 #: ../gui/dialogs.cpp:1221 ../gui/dialogs.cpp:1245
 msgid "Largo"
-msgstr ""
+msgstr "Largo"
 
 #: ../gui/dialogs.cpp:1222 ../gui/dialogs.cpp:1246
-#, fuzzy
 msgid "Lento"
-msgstr "&Sitoen"
+msgstr "Lento"
 
 #: ../gui/dialogs.cpp:1223 ../gui/dialogs.cpp:1247
-#, fuzzy
 msgid "Andante"
-msgstr "Edistynyt"
+msgstr "Andante"
 
 #: ../gui/dialogs.cpp:1224 ../gui/dialogs.cpp:1248
-#, fuzzy
 msgid "Moderato"
-msgstr "Pureutuminen"
+msgstr "Moderato"
 
 #: ../gui/dialogs.cpp:1225 ../gui/dialogs.cpp:1249
 msgid "Allegretto"
-msgstr ""
+msgstr "Allegretto"
 
 #: ../gui/dialogs.cpp:1226 ../gui/dialogs.cpp:1250
 msgid "Allegro"
-msgstr ""
+msgstr "Allegro"
 
 #: ../gui/dialogs.cpp:1227 ../gui/dialogs.cpp:1251
 msgid "Vivace"
-msgstr ""
+msgstr "Vivace"
 
 #: ../gui/dialogs.cpp:1228 ../gui/dialogs.cpp:1252
-#, fuzzy
 msgid "Presto"
-msgstr "tauko"
+msgstr "Presto"
 
 #: ../gui/dialogs.cpp:1229 ../gui/dialogs.cpp:1253
-#, fuzzy
 msgid "Prestissimo"
-msgstr "Esitys"
+msgstr "Prestissimo"
 
 #: ../gui/dialogs.cpp:1230 ../gui/dialogs.cpp:1254
-#, fuzzy
 msgid "Maestoso"
-msgstr "Maestro"
+msgstr "Maestoso"
 
 #: ../gui/dialogs.cpp:1231 ../gui/dialogs.cpp:1255
-#, fuzzy
 msgid "Sostenuto"
-msgstr "P&idättäen"
+msgstr "Sostenuto"
 
 #: ../gui/dialogs.cpp:1232 ../gui/dialogs.cpp:1256
-#, fuzzy
 msgid "Tempo Primo"
-msgstr "Tempo   "
+msgstr "Tempo Primo"
 
 #: ../gui/dialogs.cpp:1239
-#, fuzzy
 msgid "Local Tempo:  "
-msgstr "Paikallinen temp"
+msgstr "Paikallinen tempo:  "
 
 #: ../gui/dialogs.cpp:1260
-#, fuzzy
 msgid "Directive:  "
-msgstr "Suunta"
+msgstr "Käsky:  "
 
 #: ../gui/dialogs.cpp:1316
 msgid "Example"
@@ -1750,9 +1759,8 @@ msgid "Treble"
 msgstr "Diskantti"
 
 #: ../gui/dialogs.cpp:3328
-#, fuzzy
 msgid "Soprano"
-msgstr "V&oimakkaasti"
+msgstr "Soprano"
 
 #: ../gui/dialogs.cpp:3329
 msgid "Alto"
@@ -1894,8 +1902,7 @@ msgstr "Alennus - aseta %1 arvoksi"
 
 #: ../gui/dialogs.cpp:4057
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
+msgstr "Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
 
 #: ../gui/dialogs.cpp:4061
 msgid "Crescendo - set %1 rising from min to max"
@@ -1980,23 +1987,20 @@ msgid "Split by Recording Source"
 msgstr "Jaa nauhoituslähteen mukaan"
 
 #: ../gui/dialogs.cpp:4292
-#, fuzzy
 msgid "Recording Source"
-msgstr "Nauhoitussisääntulon lähde"
+msgstr "Nauhoittava lähde"
 
 #: ../gui/dialogs.cpp:4296
-#, fuzzy
 msgid "Channel:"
-msgstr "Kanava"
+msgstr "Kanava:"
 
 #: ../gui/dialogs.cpp:4303 ../gui/dialogs.cpp:4314
 msgid "any"
 msgstr "vapaa"
 
 #: ../gui/dialogs.cpp:4308
-#, fuzzy
 msgid "Device:"
-msgstr "Laite"
+msgstr "Laite:"
 
 #: ../gui/deviceeditor.cpp:182 ../gui/deviceeditor.cpp:204
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:172
@@ -2160,37 +2164,30 @@ msgid "Recording"
 msgstr "Nauhoitetaan"
 
 #: ../gui/dialogs.cpp:5078
-#, fuzzy
 msgid "LilyPond Export/Preview"
-msgstr "LilyPond -vienti"
+msgstr "LilyPond -vienti/esikatselu"
 
 #: ../gui/dialogs.cpp:5085
-#, fuzzy
 msgid "LilyPond export/preview options"
-msgstr "LilyPond-esikatselun ominaisuudet"
+msgstr "LilyPond-viennin/esikatselun ominaisuudet"
 
 #: ../gui/dialogs.cpp:5094
-#, fuzzy
 msgid "LilyPond compatibility level"
-msgstr "LilyPond -yhteensopivuustaso"
+msgstr "LilyPond-yhteensopivuustaso"
 
 #: ../gui/dialogs.cpp:5097
-#, fuzzy
 msgid "LilyPond 2.2"
 msgstr "LilyPond 2.2"
 
 #: ../gui/dialogs.cpp:5098
-#, fuzzy
 msgid "LilyPond 2.4"
 msgstr "LilyPond 2.4"
 
 #: ../gui/dialogs.cpp:5099
-#, fuzzy
 msgid "LilyPond 2.6"
 msgstr "LilyPond 2.6"
 
 #: ../gui/dialogs.cpp:5100
-#, fuzzy
 msgid "LilyPond 2.8"
 msgstr "LilyPond 2.8"
 
@@ -2215,9 +2212,8 @@ msgid "do not specify"
 msgstr "ei määritelty"
 
 #: ../gui/dialogs.cpp:5116
-#, fuzzy
 msgid "LilyPond font size"
-msgstr "LilyPond -kirjasinkoko"
+msgstr "LilyPond-kirjasinkoko"
 
 #: ../gui/dialogs.cpp:5130
 msgid "Export Document Properties as \\header block"
@@ -2252,9 +2248,8 @@ msgid "Add staff group bracket"
 msgstr "Lisää viivastoja yhdistävä sulkumerkki"
 
 #: ../gui/dialogs.cpp:5174
-#, fuzzy
 msgid "Merge tracks that have the same name"
-msgstr "Yhdistä raidat joilla on sama ei-tyhjä nimi"
+msgstr "Yhdistä raidat joilla on sama nimi"
 
 #: ../gui/dialogs.cpp:5203
 msgid "Export Devices..."
@@ -2725,8 +2720,7 @@ msgstr ""
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
+msgstr "Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
 
 #: ../gui/triggermanager.cpp:341
 msgid "Remove all triggered segments"
@@ -3206,17 +3200,14 @@ msgid "Export..."
 msgstr "Vie..."
 
 #: ../gui/bankeditor.cpp:1169
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr ""
-"Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr "Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
 
 #: ../gui/bankeditor.cpp:1171
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
+msgstr "Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
 
 #: ../gui/bankeditor.cpp:1181
 msgid "Copy all Program names from current Bank to clipboard"
@@ -3296,8 +3287,7 @@ msgstr "Laite tai instrumentti"
 
 #: ../gui/bankeditor.cpp:2736
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr ""
-"Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
+msgstr "Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
 
 #: ../gui/bankeditor.cpp:2745
 msgid "Choose Source and Destination"
@@ -3458,17 +3448,14 @@ msgid "Import from Device in File"
 msgstr "Tuo laitetiedostosta"
 
 #: ../gui/barbuttons.cpp:78
-#, fuzzy
 msgid ""
 "Left Click to position the playback pointer.\n"
 "Shift + Left Click + Drag to select a range for looping or editing.\n"
 "Shift + Left Click to clear the loop or range."
 msgstr ""
-"Klikkaa vasemmalla hiiren korvalla merkintöjä sijoittaaksesi toisto-"
-"osoittimen.\n"
+"Klikkaa vasemmalla hiiren korvalla sijoittaaksesi toisto-osoittimen.\n"
 "Tee Shift + vasen klikkaus + veto asettaaksesi silmukkaosion.\n"
-"Tee Shift + vasen klikkaus poistaaksesi silmukkaosion (tai kytke pois "
-"silmukkanappi Siirto -työkalupalkista)"
+"Tee Shift + vasen klikkaus poistaaksesi silmukkaosion."
 
 #: ../gui/midifilter.cpp:34
 msgid "Modify MIDI filters..."
@@ -3752,9 +3739,8 @@ msgid "Remove &Tempo Change..."
 msgstr "Poista &temponmuutos..."
 
 #: ../gui/segmentcommands.h:608
-#, fuzzy
 msgid "Change Te&mpo..."
-msgstr "Muuta osan väriä..."
+msgstr "Muuta te&mpoa..."
 
 #: ../gui/segmentcommands.h:631
 msgid "Add Tracks..."
@@ -3798,7 +3784,7 @@ msgstr "Muuta osan värikarttaa"
 
 #: ../gui/segmentcommands.h:1063
 msgid "Rejoin Command"
-msgstr ""
+msgstr "Uudelleenliittämiskomento"
 
 #: ../gui/rgapplication.cpp:87
 #, c-format
@@ -4173,7 +4159,7 @@ msgstr "Piiloitetut huomautukset"
 
 #: ../gui/notationviewslots.cpp:125
 msgid "Hidden LilyPond directives"
-msgstr ""
+msgstr "Piilota LilyPond-käskyt"
 
 #: ../gui/notationviewslots.cpp:157
 #, c-format
@@ -4668,9 +4654,8 @@ msgid "Program"
 msgstr "Ohjelma"
 
 #: ../gui/instrumentparameterbox.cpp:702
-#, fuzzy
 msgid "Channel out"
-msgstr "Kanava"
+msgstr "Kanava ulos"
 
 #: ../gui/instrumentparameterbox.cpp:832 ../gui/instrumentparameterbox.cpp:838
 msgid "[ %1 ]"
@@ -4853,9 +4838,8 @@ msgid "Split Audio Segment"
 msgstr "Jaa ääniosa"
 
 #: ../gui/segmentcommands.cpp:851 ../gui/segmentcommands.cpp:988
-#, fuzzy
 msgid " (split)"
-msgstr "%1 (jaettu)"
+msgstr " (jaettu)"
 
 #: ../gui/segmentcommands.cpp:852 ../gui/segmentcommands.cpp:989
 #: ../gui/segmentcommands.cpp:2423 ../gui/segmentcommands.cpp:2425
@@ -4931,29 +4915,25 @@ msgid "Set Tempos from Beat Segment"
 msgstr "Aseta tempot iskuosista"
 
 #: ../gui/rosegardengui.cpp:798 ../gui/segmentcommands.cpp:3009
-#, fuzzy
 msgid "Cut Range"
-msgstr "&Leikkaa ja sulje"
+msgstr "Leikkaa alue"
 
 #: ../gui/rosegardengui.cpp:806 ../gui/segmentcommands.cpp:3018
-#, fuzzy
 msgid "Paste Range"
-msgstr "Liittämistyyppi"
+msgstr "Liitä alue"
 
 #: ../gui/rosegardengui.cpp:810 ../gui/segmentcommands.cpp:3072
 #: ../gui/segmentcommands.cpp:3155
-#, fuzzy
 msgid "Delete Range"
-msgstr "Poista kirjanmerkki"
+msgstr "Poista alue"
 
 #: ../gui/segmentcommands.cpp:3220
 msgid "Open or Close Range"
-msgstr ""
+msgstr "Avaa tai sulje alue"
 
 #: ../gui/segmentcommands.cpp:3357
-#, fuzzy
 msgid "Paste Tempos and Time Signatures"
-msgstr "&Tempo- ja tahtilajimerkinnät"
+msgstr "Liitä Tempo- ja tahtilajimerkinnät"
 
 #: ../gui/notestyle.cpp:554
 #, c-format
@@ -4974,8 +4954,7 @@ msgid "global element must precede note elements"
 msgstr "kaiken kattavien elementtien täytyy edeltää nuottielementtejä"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "kaikenkattavilla ja nuottielementeillä voi olla muoto- tai merkkinimi-"
 "ominaisuus, mutta ei molempia"
@@ -5074,8 +5053,7 @@ msgstr ""
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
 #: ../gui/sequencemanager.cpp:1034
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Prosessorin teho ei riittänyt tosiaikaiseen äänen prosessointiin.  Ei voitu "
 "jatkaa."
@@ -5095,10 +5073,8 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK ääni -alijärjestelmä hukkaa näytteiden kehyksiä."
 
 #: ../gui/sequencemanager.cpp:1098
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
-msgstr ""
-"Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
+msgstr "Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
 
 #: ../gui/sequencemanager.cpp:1102
 msgid ""
@@ -5134,9 +5110,8 @@ msgstr ""
 "Linus-jakelijaasi saadaksesi lisää informaatiota.</p>"
 
 #: ../gui/segmentparameterbox.cpp:50
-#, fuzzy
 msgid "Segment"
-msgstr "&Osa"
+msgstr "Osa"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2061
 #: ../gui/segmentparameterbox.cpp:88
@@ -5166,39 +5141,38 @@ msgid "Fade out"
 msgstr "Hiljennä kuulumattomiin"
 
 #: ../gui/segmentparameterbox.cpp:96 ../gui/trackparameterbox.cpp:263
-#, fuzzy
 msgid "Range"
-msgstr "Kolmio"
+msgstr "Alue"
 
 #: ../gui/segmentparameterbox.cpp:106
-#, fuzzy
 msgid "edit"
-msgstr "Muokkain"
+msgstr "muokkaa"
 
 #: ../gui/segmentparameterbox.cpp:170
 msgid ""
 "_: used internally for spacing\n"
 "High: ----"
 msgstr ""
+"_: käytetty sisäisesti välistykseen\n"
+"Korkea: ---"
 
 #: ../gui/segmentparameterbox.cpp:174 ../gui/segmentparameterbox.cpp:737
 #: ../gui/trackparameterbox.cpp:270
-#, fuzzy
 msgid "High: ---"
-msgstr "Korkea"
+msgstr "Korkea: ---"
 
 #: ../gui/segmentparameterbox.cpp:175 ../gui/trackparameterbox.cpp:271
 msgid "Choose the highest suggested playable note, using a staff"
-msgstr ""
+msgstr "Valitse korkein ehdotettu soiva nuotti, joka on viivastolla"
 
 #: ../gui/segmentparameterbox.cpp:184 ../gui/segmentparameterbox.cpp:738
 #: ../gui/trackparameterbox.cpp:266
 msgid "Low: ----"
-msgstr ""
+msgstr "Matala: ----"
 
 #: ../gui/segmentparameterbox.cpp:185 ../gui/trackparameterbox.cpp:267
 msgid "Choose the lowest suggested playable note, using a staff"
-msgstr ""
+msgstr "Valitse alin ehdotettu soiva nuotti, joka on viivastolla"
 
 #: ../gui/segmentparameterbox.cpp:203 ../gui/segmentparameterbox.cpp:210
 msgid " ms"
@@ -5225,11 +5199,11 @@ msgstr "Syötä uusi nimi"
 
 #: ../gui/segmentparameterbox.cpp:1036 ../gui/trackparameterbox.cpp:802
 msgid "Highest playable note"
-msgstr ""
+msgstr "Korkein soiva nuotti"
 
 #: ../gui/segmentparameterbox.cpp:1056 ../gui/trackparameterbox.cpp:821
 msgid "Lowest playable note"
-msgstr ""
+msgstr "Alin soiva nuotti"
 
 #: ../gui/rosegardengui.cpp:6149 ../gui/segmentparameterbox.cpp:1089
 msgid "Modify Segment label"
@@ -5513,14 +5487,13 @@ msgid "Rosegarden"
 msgstr "Rosegarden"
 
 #: ../gui/main.cpp:403
-#, fuzzy
 msgid ""
 "Copyright 2000 - 2006 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
 "Lilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"
 msgstr ""
-"Copyright 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\n"
+"Copyright 2000 - 2006 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
 "Lilypond-kirjasimet copyright 1997 - 2005 Han-Wen Nienhuys and Jan "
@@ -5663,6 +5636,8 @@ msgid ""
 "Finnish translation\n"
 "LilyPond export fixes/improvements"
 msgstr ""
+"Suomalainen käännös\n"
+"LilyPond-viennin korjauksia/parannuksia"
 
 #: ../gui/main.cpp:447
 msgid "guitar chord editor"
@@ -5685,9 +5660,8 @@ msgid "Note name style"
 msgstr "Nuottinimen tyyli"
 
 #: ../gui/rosegardenconfigurationpage.cpp:160
-#, fuzzy
 msgid "Audio preview scale"
-msgstr "Äänen taso"
+msgstr "Ääniesikatselun asteikko"
 
 #: ../gui/rosegardenconfigurationpage.cpp:162
 msgid "Base octave number for MIDI pitch display"
@@ -5703,7 +5677,7 @@ msgstr "    (vaikuttaa vasta uudelleenkäynnistyksen jälkeen)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:170
 msgid "Side-bar parameter box layout"
-msgstr ""
+msgstr "Sivupalkin ominaisuuslaatikon asettelu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:174
 msgid "Always use US names (e.g. quarter, 8th)"
@@ -5715,19 +5689,19 @@ msgstr "Paikallistettu (mahdollisuuksien mukaan)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:180
 msgid "Linear - easier to see loud peaks"
-msgstr ""
+msgstr "Lineaarinen - helpompi nähdä melupiikit"
 
 #: ../gui/rosegardenconfigurationpage.cpp:181
 msgid "Meter scaling - easier to see quiet activity"
-msgstr ""
+msgstr "Metrijakoinen mitta - helpompi nähdä hiljaisuustoiminta"
 
 #: ../gui/rosegardenconfigurationpage.cpp:199
 msgid "Vertically stacked"
-msgstr ""
+msgstr "Pystysuoraan pinottu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:201
 msgid "Tabbed"
-msgstr ""
+msgstr "Välilehdet"
 
 #: ../gui/rosegardenconfigurationpage.cpp:208
 msgid "Presentation"
@@ -5877,7 +5851,7 @@ msgstr "Näytä \"näkymättömät\" tapahtumat harmaalla"
 
 #: ../gui/rosegardenconfigurationpage.cpp:580
 msgid "Show notes outside suggested playable range in red"
-msgstr ""
+msgstr "Näytä nuotit ehdotetun soittoalueen ulkopuolelta punaisina"
 
 #: ../gui/rosegardenconfigurationpage.cpp:585
 msgid "Layout"
@@ -6223,18 +6197,16 @@ msgid "Sequencer timer"
 msgstr "Sekvensseriaika"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1444
-#, fuzzy
 msgid "MIDI Clock and System messages"
-msgstr "Lähetä MIDI-kello ja järjestelmä-viestit"
+msgstr "MIDI-kello ja järjestelmä-viestit"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1450
-#, fuzzy
 msgid "Send MIDI Clock, Start and Stop"
-msgstr "Lähetä MIDI-kello ja järjestelmä-viestit"
+msgstr "Lähetä MIDI-kello, Aloitus ja Lopetus"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1451
 msgid "Accept Start, Stop and Continue"
-msgstr ""
+msgstr "Hyväksy Aloita, Lopeta ja Jatka"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1459
 msgid "JACK transport mode"
@@ -6274,8 +6246,7 @@ msgstr "MTC seurain"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1512
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Yhdistä automaattisesti sync ulostulo kaikkiin käytössä oleviin laitteisiin"
+msgstr "Yhdistä automaattisesti sync ulostulo kaikkiin käytössä oleviin laitteisiin"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1519
 msgid "Synchronisation"
@@ -6479,9 +6450,8 @@ msgid "Initializing view..."
 msgstr "Alustetaan näkymää..."
 
 #: ../gui/rosegardengui.cpp:341
-#, fuzzy
 msgid "Special Parameters"
-msgstr "Osan ominaisuudet"
+msgstr "Erikoisominaisuudet"
 
 #: ../gui/rosegardengui.cpp:417
 msgid "Starting sequence manager..."
@@ -6561,9 +6531,8 @@ msgid "Export M&up file..."
 msgstr "Vie M&up-tiedosto"
 
 #: ../gui/rosegardengui.cpp:602
-#, fuzzy
 msgid "Preview with Lil&yPond..."
-msgstr "Esikatsellaan LilyPond-tiedostoa..."
+msgstr "Esikatsele LilyPondilla..."
 
 #: ../gui/rosegardengui.cpp:606
 msgid "Play&list"
@@ -6622,9 +6591,8 @@ msgid "Show Segment Pre&views"
 msgstr "Näytä osien &esikatselu"
 
 #: ../gui/rosegardengui.cpp:705
-#, fuzzy
 msgid "Show Special &Parameters"
-msgstr "Näytä instrumentin ominaisuudet"
+msgstr "Näytä erikois&ominaisuudet"
 
 #: ../gui/matrixview.cpp:567 ../gui/notationview.cpp:1440
 #: ../gui/rosegardengui.cpp:739
@@ -6652,9 +6620,8 @@ msgid "&Harmonize"
 msgstr "&Harmonisoi"
 
 #: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
-#, fuzzy
 msgid "Copy Range"
-msgstr "Sävellajin muutos"
+msgstr "Kopioi alue"
 
 #: ../gui/notationview.cpp:1472 ../gui/rosegardengui.cpp:814
 msgid "De&lete"
@@ -6686,9 +6653,8 @@ msgid "Repeat Last Quantize"
 msgstr "Uusi viimeinen yksiköinti"
 
 #: ../gui/rosegardengui.cpp:905
-#, fuzzy
 msgid "Split at Time..."
-msgstr "Aseta alkuaika..."
+msgstr "Jaa ajan kohdalla..."
 
 #: ../gui/editview.cpp:726 ../gui/rosegardengui.cpp:909
 msgid "Jog &Left"
@@ -6792,7 +6758,7 @@ msgstr "Muuta MIDI-&suodattimia"
 
 #: ../gui/rosegardengui.cpp:1046
 msgid "MIDI Thru Routing"
-msgstr ""
+msgstr "MIDI Thru -reititys"
 
 #: ../gui/rosegardengui.cpp:1052
 msgid "Manage &Metronome"
@@ -6944,14 +6910,12 @@ msgid "Jog Selection"
 msgstr "Askella valinta"
 
 #: ../gui/rosegardengui.cpp:2793
-#, fuzzy
 msgid "Split Segments at Time"
-msgstr "Aseta osan alkuaika"
+msgstr "Jaa osat ajan kohdalla"
 
 #: ../gui/rosegardengui.cpp:2794
-#, fuzzy
 msgid "Split Segment at Time"
-msgstr "Aseta osan alkuaika"
+msgstr "Jaa osa ajan kohdalla"
 
 #: ../gui/rosegardengui.cpp:2836
 msgid "Set Segment Start Times"
@@ -7071,8 +7035,7 @@ msgstr "Tuo Rosegarden 2.1 -tiedosto"
 
 #: ../gui/rosegardengui.cpp:3866
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
-msgstr ""
-"Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
+msgstr "Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
 
 #: ../gui/rosegardengui.cpp:3891 ../gui/rosegardengui.cpp:3906
 msgid ""
@@ -7257,9 +7220,8 @@ msgid "Set Global and Default Tempo"
 msgstr "Aseta yleinen ja oletustempo"
 
 #: ../gui/rosegardengui.cpp:5664
-#, fuzzy
 msgid "Move Tempo Change"
-msgstr "Poista &temponmuutos..."
+msgstr "Siirrä tempomuutos"
 
 #: ../gui/rosegardengui.cpp:6064
 #, c-format
@@ -7300,10 +7262,8 @@ msgid "Saving current document as default studio..."
 msgstr "Tallennetaan nykyinen dokumentti oletusstudioksi..."
 
 #: ../gui/rosegardengui.cpp:7435
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
 
 #: ../gui/rosegardengui.cpp:7470
 msgid "Import Studio from File"
@@ -7643,104 +7603,94 @@ msgid "<untitled>"
 msgstr "<ei nimeä>"
 
 #: ../gui/trackparameterbox.cpp:105
-#, fuzzy
 msgid "Playback parameters"
-msgstr "Toistotaso"
+msgstr "Toiston ominaisuudet"
 
 #: ../gui/trackparameterbox.cpp:151
-#, fuzzy
 msgid "Recording filters"
-msgstr "Nauhoituslaite:"
+msgstr "Nauhoitussuodattimet"
 
 #: ../gui/trackparameterbox.cpp:166
 msgid "Channel"
 msgstr "Kanava"
 
 #: ../gui/trackparameterbox.cpp:196
-#, fuzzy
 msgid "Create segments with:"
-msgstr "Luo osa"
+msgstr "Luo osat:"
 
 #: ../gui/trackparameterbox.cpp:203
-#, fuzzy
 msgid "Preset"
-msgstr "tauko"
+msgstr "Esiasetus"
 
 #: ../gui/trackparameterbox.cpp:211
-#, fuzzy
 msgid "Load"
-msgstr "Lataa tiedot"
+msgstr "Lataa"
 
 #: ../gui/trackparameterbox.cpp:221
-#, fuzzy
 msgid "treble"
-msgstr "Diskantti"
+msgstr "diskantti"
 
 #: ../gui/trackparameterbox.cpp:222
-#, fuzzy
 msgid "bass"
-msgstr "Basso"
+msgstr "basso"
 
 #: ../gui/trackparameterbox.cpp:223
-#, fuzzy
 msgid "crotales"
-msgstr "&Oktaavit"
+msgstr "crotales"
 
 #: ../gui/trackparameterbox.cpp:224
 msgid "xylophone"
-msgstr ""
+msgstr "ksylofoni"
 
 #: ../gui/trackparameterbox.cpp:225
 msgid "guitar"
-msgstr ""
+msgstr "kitarakitara"
 
 #: ../gui/trackparameterbox.cpp:226
 msgid "contrabass"
-msgstr ""
+msgstr "kontrabasso"
 
 #: ../gui/trackparameterbox.cpp:227
 msgid "celesta"
-msgstr ""
+msgstr "celesta"
 
 #: ../gui/trackparameterbox.cpp:228
 msgid "old celesta"
-msgstr ""
+msgstr "vanha celesta"
 
 #: ../gui/trackparameterbox.cpp:229
 msgid "soprano"
-msgstr ""
+msgstr "sopraano"
 
 #: ../gui/trackparameterbox.cpp:230
-#, fuzzy
 msgid "alto"
-msgstr "Altto"
+msgstr "altto"
 
 #: ../gui/trackparameterbox.cpp:231
-#, fuzzy
 msgid "tenor"
-msgstr "Tenori"
+msgstr "tenori"
 
 #: ../gui/trackparameterbox.cpp:448 ../gui/trackparameterbox.cpp:469
 msgid "All"
-msgstr ""
+msgstr "Kaikki"
 
 #: ../gui/trackparameterbox.cpp:515
-#, fuzzy, c-format
+#, c-format
 msgid "High: %1"
-msgstr "Korkea"
+msgstr "Korkea: %1"
 
 #: ../gui/trackparameterbox.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "Low: %1"
-msgstr "Id: %1"
+msgstr "Matala: %1"
 
 #: ../gui/trackparameterbox.cpp:567
 msgid "[ Track#%1 - %2 ]"
-msgstr ""
+msgstr "[ Raita #%1 - %2 ]"
 
 #: ../gui/trackparameterbox.cpp:866
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
+msgstr "Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi."
 
 #: ../gui/importdevicedialog.cpp:54
 msgid "Import from Device..."
@@ -7835,8 +7785,7 @@ msgstr "Liitä olemassaolevaan väliin [\"rajoitettu\"]"
 
 #: ../gui/editcommands.cpp:454
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
+msgstr "Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
 
 #: ../gui/editcommands.cpp:456
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -8056,7 +8005,7 @@ msgstr "Näytä &huomatukset"
 
 #: ../gui/notationview.cpp:1523
 msgid "Show Lily&Pond Directives"
-msgstr ""
+msgstr "Näytä Lily&Pond-käskyt"
 
 #: ../gui/notationview.cpp:1527
 msgid "Open L&yric Editor"
@@ -8236,37 +8185,33 @@ msgid "unknown error"
 msgstr "tuntematon virhe"
 
 #: ../gui/presethandler.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Can't open preset file %1"
-msgstr "Ei voitu avata tyylitiedostoa %1"
+msgstr "Ei voitu avata esiasetustiedostoa %1"
 
 #: ../gui/presethandler.cpp:347
 msgid "Load track parameters preset"
-msgstr ""
+msgstr "Lataa osan esiasetetut ominaisuudet"
 
 #: ../gui/presethandler.cpp:375
 msgid "Select preset track parameters for:"
-msgstr ""
+msgstr "Valitse esiasetetut raidan ominaisuudet:"
 
 #: ../gui/presethandler.cpp:377
-#, fuzzy
 msgid "Category"
-msgstr "Luokka:"
+msgstr "Luokka"
 
 #: ../gui/presethandler.cpp:383
-#, fuzzy
 msgid "Player Ability"
-msgstr "S&oittolista"
+msgstr "Soittokyky"
 
 #: ../gui/presethandler.cpp:385
-#, fuzzy
 msgid "Amateur"
-msgstr "Keskus"
+msgstr "Harrastaja"
 
 #: ../gui/presethandler.cpp:386
-#, fuzzy
 msgid "Professional"
-msgstr "Käsitellään..."
+msgstr "Ammattilainen"
 
 #: ../gui/notefontviewer.cpp:99
 #, c-format
@@ -9172,14 +9117,12 @@ msgid "0"
 msgstr "0"
 
 #: ../gui/eventfilter.cpp:607
-#, fuzzy
 msgid "Pitch from"
-msgstr "Sävelkorkeus  "
+msgstr "Sävelkorkeus alkaen"
 
 #: ../gui/eventfilter.cpp:618
-#, fuzzy
 msgid "Pitch to"
-msgstr "Sävelkorkeus  "
+msgstr "Sävelkorkeus päättyen"
 
 #: ../gui/controlruler.cpp:540
 msgid "Control Change"
@@ -9299,9 +9242,8 @@ msgid "<no instrument>"
 msgstr "<ei instrumenttia>"
 
 #: ../gui/rosegardenparameterarea.cpp:71
-#, fuzzy
 msgid " Parameters"
-msgstr "Ruudukon ominaisuudet"
+msgstr " Ominaisuudet"
 
 #: ../gui/tempodialog.cpp:61
 msgid "New tempo:"
@@ -9312,14 +9254,12 @@ msgid "Tempo is fixed until the following tempo change"
 msgstr "Tempo kiinnitettään seuraavaan tempon muutokseen asti"
 
 #: ../gui/tempodialog.cpp:69
-#, fuzzy
 msgid "Tempo ramps to the following tempo"
-msgstr "Tempo muuttuu tasaisesti seuraavaan tempoon"
+msgstr "Tempo viettyy seuraavaan tempoon"
 
 #: ../gui/tempodialog.cpp:70
-#, fuzzy
 msgid "Tempo ramps to:"
-msgstr "Tempo   "
+msgstr "Tempo viettyy:"
 
 #: ../gui/tempodialog.cpp:107
 msgid "Time of tempo change"
@@ -9440,9 +9380,9 @@ msgid "Edit &With"
 msgstr "Muokkaa työkalulla"
 
 #: rc.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Split..."
-msgstr "&Jaa"
+msgstr "&Jaa..."
 
 #: rc.cpp:45
 #, no-c-format
@@ -9767,12 +9707,12 @@ msgstr "Vaimentaa kaikki muut paitsi valitut raidat"
 #: rc.cpp:424
 #, no-c-format
 msgid "Start loop or range here"
-msgstr ""
+msgstr "Aloita silmukka tai alue täältä"
 
 #: rc.cpp:428
 #, no-c-format
 msgid "End loop or range here"
-msgstr ""
+msgstr "Lopeta silmukka tai alue tänne"
 
 #: rc.cpp:431
 #, no-c-format
@@ -9886,90 +9826,3 @@ msgstr ""
 msgid "Display time to end"
 msgstr "Näytä lopun kestoaika"
 
-#~ msgid ""
-#~ "<p>A Rosegarden composition is not infinite, and does not automatically "
-#~ "expand\n"
-#~ "if you attempt to insert events beyond the end of it.  While recording, "
-#~ "you will see a\n"
-#~ "countdown showing you how much time you have remaining.  In order to "
-#~ "extend\n"
-#~ "this, use <b>Composition -> Change Composition Duration</b></p>\n"
-#~ msgstr ""
-#~ "<p>Rosegarden-sävellys ei ole ääretön, ja ei laajene automaattisesti\n"
-#~ "jos yrität syöttää tapahtumia sen lopun taakse.  Kun nauhoitat, näet "
-#~ "laskurin\n"
-#~ "joka näyttää sinulle kuinka paljon aikaa on jäljellä.  Laajentaaksesi "
-#~ "tätä, aseta <b>Sävellys -> Muuta sävellyksen kestoa</b></p>\n"
-
-#~ msgid ""
-#~ "<p>The notation view shows you notes using their display duration, while "
-#~ "the\n"
-#~ "matrix allows you to edit their performance duration.</p>\n"
-#~ msgstr ""
-#~ "<p>Nuottinäkymä näyttää sinulle nuottien näytetyn keston, kun taas\n"
-#~ "matriisissa voit muokata niiden esityskestoa.</p>\n"
-
-#~ msgid "Tempo changes smoothly to:"
-#~ msgstr "Tempo, johon muututaan tasaisesti:"
-
-#~ msgid "Recording Channel:"
-#~ msgstr "Nauhoituskanava:"
-
-#~ msgid "Lilypond export options"
-#~ msgstr "LilyPond -viennin ominaisuudet"
-
-#~ msgid "Add Te&mpo Change..."
-#~ msgstr "Lisää te&mponmuutos..."
-
-#~ msgid ""
-#~ "Spanish translation\n"
-#~ "ALSA hacking and bug fixes\n"
-#~ "multi-input MIDI recording"
-#~ msgstr ""
-#~ "Espanjalainen käännös\n"
-#~ "ALSA hakkerointi ja bugien korjaukset\n"
-#~ "monilähteinen MIDI-nauhoitus"
-
-#~ msgid "Finnish translation"
-#~ msgstr "Suomenkielinen käännös"
-
-#~ msgid "Close this tab"
-#~ msgstr "Sulje tämä välilehti"
-
-#~ msgid "Click to select a font"
-#~ msgstr "Klikkaa valitaksesi kirjasimen"
-
-#~ msgid "Preview of the selected font"
-#~ msgstr "Valitun kirjasimen esikatselija"
-
-#~ msgid ""
-#~ "This is a preview of the selected font. You can change it by clicking the "
-#~ "\"Choose...\" button."
-#~ msgstr ""
-#~ "Tämä on valitun kirjasimen esikatselija. Voit muuttaa sen klikkaamalla "
-#~ "\"Valitse...\" -näppäintä"
-
-#~ msgid "Preview of the \"%1\" font"
-#~ msgstr "Kirjasimen \"%1\" esikatselu"
-
-#~ msgid ""
-#~ "This is a preview of the \"%1\" font. You can change it by clicking the "
-#~ "\"Choose...\" button."
-#~ msgstr ""
-#~ "Tämä on kirjasimen \"%1\" esikatselu. Voit muuttaa sen klikkaamalla "
-#~ "\"Valitse...\" -näppäintä."
-
-#~ msgid "Segment & Instrument Parameters"
-#~ msgstr "Osa- & instrumenttimuuttujat"
-
-#~ msgid "Pre&view Lilypond file..."
-#~ msgstr "Esi&katsele LilyPond-tiedostoa..."
-
-#~ msgid "Show Se&gment and Instrument Parameters"
-#~ msgstr "Näytä O&sien ja instrumenttien ominaisuudet"
-
-#~ msgid "%1 Pitch"
-#~ msgstr "%1 sävelkorkeus"
-
-#~ msgid "&Split or Join"
-#~ msgstr "&Jaa tai yhdistä"
