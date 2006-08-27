@@ -236,6 +236,9 @@ protected slots:
                              unsigned long kBSize,
                              unsigned long kBUsed,
                              unsigned long kBAvail);
+
+    void slotScheduledCompositionMmapperReset() { resetCompositionMmapper(); }
+    
 protected:
 
     void resetCompositionMmapper();
@@ -284,6 +287,11 @@ protected:
     SegmentRefreshMap m_triggerSegments;
     unsigned int m_compositionRefreshStatusId;
     bool m_updateRequested;
+
+    // used to schedule a composition mmapper reset when the composition end time marker changes
+    // this can be caused by a window resize, and since the reset is potentially expensive we want to collapse
+    // several following requests into one.
+    QTimer                    *m_compositionMmapperResetTimer;
 
     // Information that the sequencer is providing to us - for the moment
     // it's only the position pointer.
