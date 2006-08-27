@@ -68,13 +68,14 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_transport(transport),
     m_lastRewoundAt(clock()),
     m_countdownDialog(0),
-    m_countdownTimer(new QTimer(doc)),
+    m_countdownTimer(new QTimer(m_doc)),
     m_shownOverrunWarning(false),
     m_recordTime(new QTime()),
     m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true),
+    m_compositionMmapperResetTimer(new QTimer(m_doc)),
     m_sequencerMapper(0),
-    m_reportTimer(new QTimer(doc)),
+    m_reportTimer(new QTimer(m_doc)),
     m_canReport(true),
     m_lastLowLatencySwitchSent(false)
 {
@@ -90,9 +91,12 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
 
-    m_reportTimer->stop();
     connect(m_reportTimer, SIGNAL(timeout()),
             this, SLOT(slotAllowReport()));
+
+    connect(m_compositionMmapperResetTimer, SIGNAL(timeout()),
+            this, SLOT(slotScheduledCompositionMmapperReset()));
+
 
     connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
@@ -145,6 +149,7 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     //
     delete m_countdownDialog;
     delete m_countdownTimer;
+    delete m_compositionMmapperResetTimer;
 
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
@@ -160,12 +165,11 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     connect(m_countdownTimer, SIGNAL(timeout()),
             this, SLOT(slotCountdownTimerTimeout()));
 
-    if (m_doc) {
 	m_compositionRefreshStatusId = comp.getNewRefreshStatusId();
-        comp.addObserver(this);
+    comp.addObserver(this);
 
-        connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
-                this, SLOT(update()));
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+            this, SLOT(update()));
 
 	for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
 
@@ -182,8 +186,12 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
 				     ((*i)->getSegment(),
 				      (*i)->getSegment()->getNewRefreshStatusId()));
 	}
-    }
 
+
+    m_compositionMmapperResetTimer = new QTimer(m_doc);
+    connect(m_compositionMmapperResetTimer, SIGNAL(timeout()),
+        this, SLOT(slotScheduledCompositionMmapperReset()));
+    
     resetCompositionMmapper();
 
     // Try to map the sequencer file
@@ -1879,8 +1887,8 @@ void SequenceManager::processRemovedSegment(Segment* s)
 
 void SequenceManager::endMarkerTimeChanged(const Composition *, bool /*shorten*/)
 {
-//    resetMetronomeMmapper();
-    resetCompositionMmapper();
+    SEQMAN_DEBUG << "SequenceManager::endMarkerTimeChanged()\n";
+    m_compositionMmapperResetTimer->start(500, true); // schedule a composition mmapper reset in 0.5s
 }
 
 void SequenceManager::timeSignatureChanged(const Composition *)
