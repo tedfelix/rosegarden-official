@@ -31,6 +31,7 @@
 #include <qframe.h>
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -121,6 +122,7 @@ CategoryElement::addPreset(QString name,
 // PresetGroup //
 //             //
 /////////////////
+
 PresetGroup::PresetGroup() :
     m_errorString(i18n("unknown error")),
     m_elCategoryName(""),
@@ -143,15 +145,35 @@ PresetGroup::PresetGroup() :
 {
     m_presetDirectory = KGlobal::dirs()->findResource("appdata", "presets/");
 
-    QString presetFileName = QString("%1/presets.xml")
-        .arg(m_presetDirectory);
+    QString language = KGlobal::locale()->language();
 
-    QFileInfo presetFileInfo(presetFileName);
+    QString presetFileName = QString("%1/presets-%2.xml")
+        .arg(m_presetDirectory).arg(language);
 
-    if (!presetFileInfo.isReadable()) {
-	throw PresetFileReadFailed
-	    (qstrtostr(i18n("Can't open preset file %1").
-		       arg(presetFileName)));
+    if (!QFileInfo(presetFileName).isReadable()) {
+	
+	RG_DEBUG << "Failed to open " << presetFileName << endl;
+
+	language.replace(QRegExp("_.*$"), "");
+	presetFileName = QString("%1/presets-%2.xml")
+	    .arg(m_presetDirectory).arg(language);
+
+	if (!QFileInfo(presetFileName).isReadable()) {
+	
+	    RG_DEBUG << "Failed to open " << presetFileName << endl;
+
+	    presetFileName = QString("%1/presets.xml")
+		.arg(m_presetDirectory);
+	    
+	    if (!QFileInfo(presetFileName).isReadable()) {
+
+		RG_DEBUG << "Failed to open " << presetFileName << endl;
+
+		throw PresetFileReadFailed
+		    (qstrtostr(i18n("Can't open preset file %1").
+			       arg(presetFileName)));
+	    }
+	}
     }
 
     QFile presetFile(presetFileName);
@@ -180,7 +202,7 @@ PresetGroup::startElement(const QString &, const QString &,
 {
     QString lcName = qName.lower();
 
-    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName << endl;
+//    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName << endl;
 
     if (lcName == "category") {
 
@@ -279,12 +301,12 @@ PresetGroup::startElement(const QString &, const QString &,
 	}
     }
 
-    RG_DEBUG << "PresetGroup::startElement(): accumulating flags:" << endl
-	     << "     name: " << (m_name ? "true" : "false") << endl
-             << "     clef: " << (m_clef ? "true" : "false") << endl
-	     << "transpose: " << (m_transpose ? "true" : "false") << endl
-	     << "  am. rng: " << (m_amateur ? "true" : "false") << endl
-	     << "  pro rng: " << (m_pro ? "true" : "false") << endl;
+//    RG_DEBUG << "PresetGroup::startElement(): accumulating flags:" << endl
+//	     << "     name: " << (m_name ? "true" : "false") << endl
+//             << "     clef: " << (m_clef ? "true" : "false") << endl
+//	     << "transpose: " << (m_transpose ? "true" : "false") << endl
+//	     << "  am. rng: " << (m_amateur ? "true" : "false") << endl
+//	     << "  pro rng: " << (m_pro ? "true" : "false") << endl;
 
     // once we have assembled all the bits, create a new PresetElement
     if (m_name && m_clef && m_transpose && m_amateur && m_pro) {
