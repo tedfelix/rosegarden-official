@@ -140,7 +140,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SLOT(slotEditSegmentEventList(Rosegarden::Segment*)));
 
     connect(m_trackEditor->getSegmentCanvas(),
-            SIGNAL(editRepeat(Rosegarden::Segment*, timeT)),
+            SIGNAL(editRepeat(Rosegarden::Segment*, Rosegarden::timeT)),
             SLOT(slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT)));
 
     connect(m_trackEditor,
