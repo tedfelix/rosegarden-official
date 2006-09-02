@@ -2988,7 +2988,9 @@ void CompositionView::setPointerPos(int pos)
     //
     if (pos >= (contentsWidth() - m_stepSize)) {
         resizeContents(pos + m_stepSize, contentsHeight());
-        getModel()->setLength(contentsWidth());
+        // grow composition too, if needed (it may not be the case if 
+        if (getModel()->getLength() < contentsWidth()) 
+            getModel()->setLength(contentsWidth());
     }
 
 
