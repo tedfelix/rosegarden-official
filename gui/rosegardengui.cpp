@@ -5566,6 +5566,17 @@ void RosegardenGUIApp::slotChangeZoom(int)
     }
 }
 
+void
+RosegardenGUIApp::slotZoomIn()
+{
+    m_zoomSlider->increment();
+}
+
+void
+RosegardenGUIApp::slotZoomOut()
+{
+    m_zoomSlider->decrement();
+}
 
 void
 RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
