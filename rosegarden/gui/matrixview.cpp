@@ -312,6 +312,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     connect(m_canvasView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(slotVerticalScrollPianoKeyboard(int)));
 
+    connect(m_canvasView, SIGNAL(zoomIn()), this, SLOT(slotZoomIn()));
+    connect(m_canvasView, SIGNAL(zoomOut()), this, SLOT(slotZoomOut()));
+
     connect(m_pianoView, SIGNAL(gotWheelEvent(QWheelEvent*)),
             m_canvasView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
@@ -2179,6 +2182,18 @@ MatrixView::slotChangeHorizontalZoom(int)
     // hasn't changed
     //
     getCanvasView()->polish();
+}
+
+void
+MatrixView::slotZoomIn()
+{
+    m_hZoomSlider->increment();
+}
+
+void
+MatrixView::slotZoomOut()
+{
+    m_hZoomSlider->decrement();
 }
 
 /// Scrolls the view such that the given time is centered

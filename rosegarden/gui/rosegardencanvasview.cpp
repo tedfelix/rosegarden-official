@@ -422,6 +422,16 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
     }
 }
 
+void RosegardenCanvasView::wheelEvent(QWheelEvent *e)
+{
+    if (e->state() & ControlButton) {
+	if (e->delta() > 0) emit zoomIn();
+	else if (e->delta() < 0) emit zoomOut();
+	return;
+    }
+    QCanvasView::wheelEvent(e);
+}
+
 //----------------------------------------------------------------------
 
 CanvasCursor::CanvasCursor(QCanvas* c, int width)

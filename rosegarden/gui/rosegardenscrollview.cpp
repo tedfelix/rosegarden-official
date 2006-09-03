@@ -419,7 +419,7 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
     if (e->state() & ControlButton) {
 	if (e->delta() > 0) emit zoomIn();
 	else if (e->delta() < 0) emit zoomOut();
-	else return;
+	return;
     }
     QScrollView::wheelEvent(e);
 }

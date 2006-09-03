@@ -79,6 +79,10 @@ public:
 
     void setScrollDirectionConstraint(int d) { m_scrollDirectionConstraint = d; }
 
+    bool isAutoScrolling() const { return m_autoScrolling; }
+
+    virtual void wheelEvent(QWheelEvent *);
+
 public slots:
     /// Update the RosegardenCanvasView after a change of content
     virtual void slotUpdate();
@@ -120,10 +124,11 @@ public slots:
     void stopAutoScroll();
     void doAutoScroll();
 
-    bool isAutoScrolling() const { return m_autoScrolling; }
-
 signals:
     void bottomWidgetHeightChanged(int);
+
+    void zoomIn();
+    void zoomOut();
 
 protected:
     

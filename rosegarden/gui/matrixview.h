@@ -434,6 +434,9 @@ public slots:
      */
     void slotChangeHorizontalZoom(int);
 
+    void slotZoomIn();
+    void slotZoomOut();
+
     /**
      * Select all
      */
