@@ -326,6 +326,29 @@ NotationView::slotChangeFontSizeFromStringValue(const QString& sizeT)
     slotChangeFont(m_fontName, size);
 }
 
+void
+NotationView::slotZoomIn()
+{
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
+    for (int i = 0; i + 1 < sizes.size(); ++i) {
+	if (sizes[i] == m_fontSize) {
+	    slotChangeFontSize(sizes[i+1]);
+	    return;
+	}
+    }
+}
+
+void
+NotationView::slotZoomOut()
+{
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
+    for (int i = 1; i < sizes.size(); ++i) {
+	if (sizes[i] == m_fontSize) {
+	    slotChangeFontSize(sizes[i-1]);
+	    return;
+	}
+    }
+}
 
 void
 NotationView::slotChangeFont(std::string newName, int newSize)

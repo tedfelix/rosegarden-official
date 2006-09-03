@@ -472,6 +472,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
          this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
     QObject::connect
+	(getCanvasView(), SIGNAL(zoomIn()), this, SLOT(slotZoomIn()));
+
+    QObject::connect
+	(getCanvasView(), SIGNAL(zoomOut()), this, SLOT(slotZoomOut()));
+
+    QObject::connect
 	(m_pannerDialog->scrollbox(), SIGNAL(valueChanged(const QPoint &)),
 	 getCanvasView(), SLOT(slotSetScrollPos(const QPoint &)));
 

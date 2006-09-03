@@ -670,6 +670,12 @@ public slots:
     /// Changes the font size of the staffs on the view to the nth size in the available size list
     void slotChangeFontSizeFromStringValue(const QString&);
 
+    /// Changes to the next font size up
+    void slotZoomIn();
+
+    /// Changes to the next font size down
+    void slotZoomOut();
+
     /// Changes the hlayout spacing of the staffs on the view
     void slotChangeSpacing(int newSpacing);
 
