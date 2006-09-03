@@ -280,6 +280,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview,
             SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
+    connect(m_segmentCanvas, SIGNAL(zoomIn()),
+	    RosegardenGUIApp::self(), SLOT(slotZoomIn()));
+    connect(m_segmentCanvas, SIGNAL(zoomOut()),
+	    RosegardenGUIApp::self(), SLOT(slotZoomOut()));
+
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
 

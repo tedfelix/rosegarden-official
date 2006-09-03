@@ -51,12 +51,15 @@ public:
     virtual ~ZoomSlider();
     
     void reinitialise(const std::vector<T> &sizes, T defaultValue);
-    void setToDefault(); // restore the initial value
-
-    void setSize(T size);
 
     const T &getCurrentSize() const;
     const T &getDefault() const;
+
+public slots:
+    void setToDefault(); // restore the initial value
+    void setSize(T size);
+    void increment();
+    void decrement();
         
 protected:
     static int getIndex(const std::vector<T> &, T size);
@@ -125,6 +128,22 @@ void
 ZoomSlider<T>::setSize(T size)
 {
     setValue(getIndex(m_sizes, size));
+}
+
+template <class T>
+void
+ZoomSlider<T>::increment()
+{
+    if (value() + 1 >= m_sizes.size()) return;
+    setValue(value() + 1);
+}
+
+template <class T>
+void
+ZoomSlider<T>::decrement()
+{
+    if (value() <= 0) return;
+    setValue(value() - 1);
 }
 
 template <class T>

@@ -413,4 +413,15 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
     }
     
 }
+
+void RosegardenScrollView::wheelEvent(QWheelEvent *e)
+{
+    if (e->state() & ControlButton) {
+	if (e->delta() > 0) emit zoomIn();
+	else if (e->delta() < 0) emit zoomOut();
+	else return;
+    }
+    QScrollView::wheelEvent(e);
+}
+
 #include "rosegardenscrollview.moc"

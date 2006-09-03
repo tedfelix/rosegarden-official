@@ -1221,6 +1221,9 @@ public slots:
      */
     void slotChangeZoom(int index);
 
+    void slotZoomIn();
+    void slotZoomOut();
+
     /**
      * Modify tempo
      */

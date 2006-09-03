@@ -78,6 +78,8 @@ public:
 
     int getDeltaScroll() { return m_minDeltaScroll; }
 
+    virtual void wheelEvent(QWheelEvent *);
+
 public slots:
     /**
      * Scroll horizontally to make the given position visible,
@@ -120,6 +122,9 @@ public slots:
 
 signals:
     void bottomWidgetHeightChanged(int);
+
+    void zoomIn();
+    void zoomOut();
 
 protected:
     
