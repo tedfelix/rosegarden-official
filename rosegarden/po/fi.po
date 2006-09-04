@@ -3415,7 +3415,7 @@ msgid ""
 msgstr ""
 "Katso ja muokkaa valitun laitteen hallintatapahtumia - nämä ovat "
 "erikoistapahtumatyyppejä, jotka voit määrittää laitekohtaisesti ja joita "
-"voit hallita Hallinta -viivaimista tai Instrumenttimuuttujat -laatikosta"
+"voit hallita Hallinta-viivaimista tai Instrumenttimuuttujat-laatikosta"
 
 #: ../gui/devicemanager.cpp:134
 msgid "Record devices"
@@ -5006,7 +5006,7 @@ msgstr "Vaihda palautusmerkiksi"
 
 #: ../gui/notationtool.cpp:1171
 msgid "Collapse Notes"
-msgstr "Luhista tauot"
+msgstr "Luhista nuotit"
 
 #: ../gui/notationtool.cpp:1179
 msgid "Make Invisible"
@@ -6584,7 +6584,7 @@ msgstr "Näytä Te&mpo-viivain"
 
 #: ../gui/rosegardengui.cpp:694
 msgid "Show Cho&rd Name Ruler"
-msgstr "Näytä Soi&ntunimi -viivain"
+msgstr "Näytä Soi&ntunimi-viivain"
 
 #: ../gui/rosegardengui.cpp:700
 msgid "Show Segment Pre&views"
@@ -7444,11 +7444,11 @@ msgstr "Näytä instrumentin ominaisuudet"
 
 #: ../gui/matrixview.cpp:826 ../gui/notationview.cpp:1507
 msgid "Show Ch&ord Name Ruler"
-msgstr "Näytä S&ointunimi -viivain"
+msgstr "Näytä S&ointunimi-viivain"
 
 #: ../gui/matrixview.cpp:830 ../gui/notationview.cpp:1515
 msgid "Show &Tempo Ruler"
-msgstr "Näytä &Tempo -viivain"
+msgstr "Näytä &Tempo-viivain"
 
 #: ../gui/matrixview.cpp:1119 ../gui/notationview.cpp:2797
 #, c-format
@@ -8254,7 +8254,7 @@ msgstr "  Sivu: "
 
 #: ../gui/editview.cpp:736
 msgid "Show Velocity Property Ruler"
-msgstr "Näytä Nopeusmuuttujat -viivain"
+msgstr "Näytä Nopeusmuuttujat-viivain"
 
 #: ../gui/editview.cpp:755
 msgid "Insert item"
@@ -8437,7 +8437,7 @@ msgid ""
 "Chord name ruler.\n"
 "Turn it on and off from the Settings->Rulers menu."
 msgstr ""
-"Sointunimi -viivain.\n"
+"Sointunimi-viivain.\n"
 "Kytke se päälle ja pois kohdasta Asetukset->Viivaimet -valikko"
 
 #: ../gui/notationcommands.h:154
@@ -9442,7 +9442,7 @@ msgstr "&Taittotila"
 #: rc.cpp:96 rc.cpp:249
 #, no-c-format
 msgid "Add Event Ruler"
-msgstr "Lisää Tapahtuma -viivain"
+msgstr "Lisää Tapahtuma-viivain"
 
 #: rc.cpp:102 rc.cpp:345
 #, no-c-format
@@ -9612,7 +9612,7 @@ msgstr "Hallitse Viivaimien toimintoja"
 #: rc.cpp:234 rc.cpp:309
 #, no-c-format
 msgid "Property Ruler actions"
-msgstr "Ominaisuus -viivaimen toiminnot"
+msgstr "Ominaisuus-viivaimen toiminnot"
 
 #: rc.cpp:237
 #, no-c-format
