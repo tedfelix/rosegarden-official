@@ -42,6 +42,7 @@
 #include "rosegardenguiview.h"
 #include "dialogs.h"
 #include "constants.h"
+#include "widgets.h"
 
 using Rosegarden::Note;
 
@@ -1194,5 +1195,15 @@ SegmentParameterBox::showAdditionalControls(bool showThem)
     m_rangeLabel->setShown(showThem); */
 }
 
+
+QString
+SegmentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
+{
+    if (arrangement == RosegardenParameterArea::CLASSIC_STYLE) {
+	return "";
+    } else {
+	return i18n("Instrument");
+    }
+}
 
 #include "segmentparameterbox.moc"

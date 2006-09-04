@@ -23,23 +23,35 @@
 
 #include <iostream>
 #include <qlayout.h>
+#include <qvbox.h>
 #include <klocale.h>
+#include <qscrollview.h>
+#include <qvgroupbox.h>
+
+#include <set>
+#include <vector>
 
 #include "rosegardenparameterarea.h"
+#include "rosegardenparameterbox.h"
 
 RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
 						 const char *name, WFlags f)
     : QWidgetStack(parent, name, f),
       m_style(RosegardenParameterArea::CLASSIC_STYLE),
-      m_classic(new QVBox(this)),
+      m_scrollView(new QScrollView(this, 0, Qt::WStaticContents)),
+      m_classic(new QVBox(m_scrollView->viewport())),
       m_tabBox(new KTabWidget(this)),
       m_active(0),
       m_spacing(0)
 {
+    m_scrollView->addChild(m_classic);
+    m_scrollView->setHScrollBarMode(QScrollView::AlwaysOff);
+    m_scrollView->setVScrollBarMode(QScrollView::Auto);
+    m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
 
     // Install the classic-style VBox widget in the widget-stack.
 
-    addWidget(m_classic, CLASSIC_STYLE);
+    addWidget(m_scrollView, CLASSIC_STYLE);
 
     // Install the widget that implements the tab-style to the widget-stack.
 
@@ -64,6 +76,9 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 
     m_parameterBoxes.push_back(b);
 
+    m_scrollView->setMinimumWidth(std::max(m_scrollView->minimumWidth(),
+					   b->sizeHint().width()) + 8);
+
     // Create a titled group box for the parameter box, parented by the
     // classic layout widget, so that it can be used to provide a title
     // and outline, in classic mode. Add this container to an array that
@@ -84,8 +99,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // Add the parameter box to the current container of the displayed
     // widgets, unless the current container has been set up yet.
 
-    if (m_active)
-	moveWidget(0, m_active, m_parameterBoxes.size()-1);
+    if (m_active) moveWidget(0, m_active, b);
 
     // Queue a redisplay of the parameter area, to incorporate the new box.
 
@@ -120,15 +134,46 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
 	// Move the parameter boxes from the old container to the new one.
 
+	std::vector<RosegardenParameterBox *> sorted;
+	std::set<RosegardenParameterBox *> unsorted;
+
 	for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
-	    moveWidget(m_active, container, i);
-	    m_parameterBoxes[i]->showAdditionalControls(style == TAB_BOX_STYLE);
+	    unsorted.insert(m_parameterBoxes[i]);
+	}
+
+	QString previous = "";
+
+	while (!unsorted.empty()) {
+	    std::set<RosegardenParameterBox *>::iterator i = unsorted.begin();
+	    bool have = false;
+	    while (i != unsorted.end()) {
+		if ((*i)->getPreviousBox(style) == previous) {
+		    sorted.push_back(*i);
+		    previous = (*i)->getLabel();
+		    unsorted.erase(i);
+		    have = true;
+		    break;
+		}
+		++i;
+	    }
+	    if (!have) {
+		while (!unsorted.empty()) {
+		    sorted.push_back(*unsorted.begin());
+		    unsorted.erase(unsorted.begin());
+		}
+		break;
+	    }
+	}
+
+	for (std::vector<RosegardenParameterBox *>::iterator i = sorted.begin();
+	     i != sorted.end(); ++i) {
+	    moveWidget(m_active, container, *i);
+	    (*i)->showAdditionalControls(style == TAB_BOX_STYLE);
 	}
 
 	// Switch the widget stack to displaying the new container.
 
 	raiseWidget(style);
-
     }
 
     // Record the identity of the active container, and the associated
@@ -142,29 +187,32 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
 void RosegardenParameterArea::moveWidget(QWidget *old_container,
 					 QWidget *new_container,
-					 int index)
+					 RosegardenParameterBox *box)
 {
-    // Get the parameter box widget that is to be moved.
-
-    RosegardenParameterBox *b = m_parameterBoxes[index];
-
     // Remove any state that is associated with the parameter boxes,
     // from the active container.
 
     if (old_container == m_classic) {
 	;
     } else if (old_container == m_tabBox) {
-	m_tabBox->removePage(b);
+	m_tabBox->removePage(box);
     }
 
-    // Reparent the paramter box, and perform any container-specific
+    // Reparent the parameter box, and perform any container-specific
     // configuration.
 
     if (new_container == m_classic) {
-	b->reparent(m_groupBoxes[index], 0, QPoint(0,0), FALSE);
-    } else if(new_container == m_tabBox) {
-	b->reparent(new_container, 0, QPoint(0,0), FALSE);
-	m_tabBox->insertTab(b, b->getLabel());
+	int index = 0;
+	while (index < m_parameterBoxes.size()) {
+	    if (box == m_parameterBoxes[index]) break;
+	    ++index;
+	}
+	if (index < m_parameterBoxes.size()) {
+	    box->reparent(m_groupBoxes[index], 0, QPoint(0,0), FALSE);
+	}
+    } else if (new_container == m_tabBox) {
+	box->reparent(new_container, 0, QPoint(0,0), FALSE);
+	m_tabBox->insertTab(box, box->getLabel());
     }
 }
 

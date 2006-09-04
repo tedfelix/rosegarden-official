@@ -19,8 +19,10 @@
     COPYING included with this distribution for more information.
 */
 
-#include <vector>
+#ifndef _SEGMENTPARAMETERBOX_H_
+#define _SEGMENTPARAMETERBOX_H_
 
+#include <vector>
 
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -34,7 +36,7 @@
 
 #include "Selection.h"
 #include "colourwidgets.h"
-#include "widgets.h"
+#include "rosegardenparameterbox.h"
 
 
 // Provides a mechanism for viewing and modifying the parameters
@@ -46,9 +48,8 @@ namespace Rosegarden { class Segment; }
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 class KCommand;
-
-#ifndef _SEGMENTPARAMETERBOX_H_
-#define _SEGMENTPARAMETERBOX_H_
+class RosegardenTristateCheckBox;
+class QSpinBox;
 
 class SegmentParameterBox : public RosegardenParameterBox,
 			    public Rosegarden::CompositionObserver
@@ -86,6 +87,8 @@ public:
 				Rosegarden::Segment *);
 
     virtual void showAdditionalControls(bool showThem);
+
+    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 
 public slots:
     void slotRepeatPressed();

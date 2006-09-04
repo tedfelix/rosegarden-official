@@ -63,6 +63,7 @@
 
 #include "studiocontrol.h"
 #include "studiowidgets.h"
+#include "widgets.h"
 
 using Rosegarden::Instrument;
 using Rosegarden::MidiDevice;
@@ -178,6 +179,12 @@ InstrumentParameterBox::~InstrumentParameterBox()
             break;
         }
     }
+}
+
+QString
+InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
+{
+    return i18n("Track");
 }
 
 void
@@ -1793,6 +1800,5 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
         index++;
     }
 }
-
 
 #include "instrumentparameterbox.moc"

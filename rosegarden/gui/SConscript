@@ -114,6 +114,7 @@ rosegardenguiiface.cpp
 rosegardenguiiface.skel
 rosegardenguiview.cpp
 rosegardenparameterarea.cpp
+rosegardenparameterbox.cpp
 rosegardenscrollview.cpp 
 rosegardentransport.ui 
 rosegardentransportdialog.cpp 

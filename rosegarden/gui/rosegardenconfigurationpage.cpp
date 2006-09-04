@@ -202,7 +202,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 			       RosegardenParameterArea::TAB_BOX_STYLE);
 
     m_sidebarStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("sidebarstyle",
-							       1));
+							       0));
     layout->addWidget(m_sidebarStyle, 4, 1);
 
     addTab(frame, i18n("Presentation"));

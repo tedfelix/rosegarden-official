@@ -110,42 +110,6 @@ protected:
 };
 
 
-/**
- * An flat QFrame, in which a group of parameters can be laid out.
- * Virtual method functions are defined for for requesting a layout
- * style, and returning the single-word to use for labelling the
- * box.
- */
-class RosegardenParameterBox : public QFrame
-{
-  Q_OBJECT
-public:
-  RosegardenParameterBox(const QString &label, QWidget *parent = 0,
-			 const char *name = 0);
-
-  // Ask for a one-word string that can be used to label the widget.
-
-  QString getLabel() const;
-
-  virtual void showAdditionalControls(bool) = 0; 
-
-protected:
-  void init();
-
-  // List the layout styles that may be requested via a call to setStyle().
-
-  enum LayoutMode {
-    LANDSCAPE_MODE,  // Optimize the layout for a tall and narrow parent.
-    PORTRAIT_MODE    // Optimize the layout for a short and wide parent.
-  };
-
-  void setLayoutMode(LayoutMode mode);
-
-  QFont m_font;
-  QString m_label;    // The string that containers can use for labelling.
-  LayoutMode m_mode;  // The current layout mode.
-};
-
 class RosegardenProgressDialog : public KProgressDialog
 {
     Q_OBJECT
