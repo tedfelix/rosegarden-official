@@ -30,7 +30,7 @@
 #include "MappedCommon.h"
 #include "MidiProgram.h"
 
-#include "widgets.h"
+#include "rosegardenparameterbox.h"
 
 class QCheckBox;
 class QSlider;
@@ -43,6 +43,7 @@ class RosegardenGUIDoc;
 class QWidgetStack;
 class AudioVUMeter;
 class AudioFaderBox;
+class RosegardenRotary;
 
 namespace Rosegarden
 {
@@ -79,6 +80,8 @@ public:
     void setDocument(RosegardenGUIDoc* doc);
     
     virtual void showAdditionalControls(bool showThem);
+
+    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 
 public slots:
 

@@ -99,40 +99,6 @@ RosegardenSpinBox::mapTextToValue(bool * /*ok*/)
     return 120; // default
 }
 
-
-RosegardenParameterBox::RosegardenParameterBox(const QString &label,
-					       QWidget *parent,
-					       const char *name) :
-  QFrame(parent, name),
-  m_label(label),
-  m_mode(LANDSCAPE_MODE)
-{
-  init();
-}
-
-void RosegardenParameterBox::init()
-{
-    QFont plainFont;
-    plainFont.setPointSize(plainFont.pointSize() * 95 / 100);
-    if (plainFont.pixelSize() > 14) plainFont.setPixelSize(14);
-    plainFont.setBold(false);
-    m_font = plainFont;
-
-    QFont boldFont;
-    boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
-    if (boldFont.pixelSize() > 14) boldFont.setPixelSize(14);
-    boldFont.setBold(true);
-
-    setFont(boldFont);
-}
-
-// Return the string that should be used to label a given parameter box.
-
-QString RosegardenParameterBox::getLabel() const
-{
-  return m_label;
-}
-
 bool RosegardenProgressDialog::m_modalVisible = false;
 
 RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,

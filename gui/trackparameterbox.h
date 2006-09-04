@@ -25,7 +25,7 @@
 #ifndef TRACKPARAMETERBOX_H_
 #define TRACKPARAMETERBOX_H_
 
-#include "widgets.h"
+#include "rosegardenparameterbox.h"
 #include "colours.h"
 #include "Instrument.h"
 
@@ -48,6 +48,8 @@ public:
     void populateDeviceLists();
     virtual void showAdditionalControls(bool showThem);
 
+    virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
+
 public slots:
     void slotSelectedTrackChanged();
     void slotSelectedTrackNameChanged();
@@ -60,6 +62,8 @@ public slots:
 
     void slotClefChanged(int clef);
     void slotTransposeChanged(int transpose);
+    void slotTransposeIndexChanged(int index);
+    void slotTransposeTextChanged(QString text);
     void slotDocColoursChanged();
     void slotColorChanged(int index);
     void slotHighestPressed();
@@ -89,9 +93,7 @@ private:
     KComboBox		*m_defClef;
     KComboBox		*m_defColor;
 
-    //!!! using a spin box for this one to avoid the complications of a combo box; I guess the SPB
-    // uses a combo box for visual uniformity, but forget that for now.
-    QSpinBox		*m_defTranspose;
+    KComboBox		*m_defTranspose;
 
     int			m_addColourPos;
     int			m_highestPlayable;

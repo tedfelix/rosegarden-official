@@ -30,7 +30,9 @@
 #include <ktabwidget.h>
 #include <qvgroupbox.h>
 
-#include "widgets.h"
+class RosegardenParameterBox;
+class QScrollView;
+class QVBox;
 
 /**
  * A widget that arranges a set of Rosegarden parameter-box widgets
@@ -80,8 +82,9 @@ private:
     // Move a RosegardenParameterBox widget from one container to another.
 
     void moveWidget(QWidget *old_container, QWidget *new_container,
-		    int index);
+		    RosegardenParameterBox *box);
 
+    QScrollView *m_scrollView; // Holds the m_classic container
     QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.
     KTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
     QWidget *m_active;         // The current container widget.

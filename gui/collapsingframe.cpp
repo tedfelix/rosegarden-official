@@ -31,13 +31,15 @@
 
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kconfig.h>
+#include <kapplication.h>
 
 #include <rosedebug.h>
 
 #include <cassert>
 
-CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *name) :
-    QFrame(parent, name),
+CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) :
+    QFrame(parent, n),
     m_widget(0),
     m_collapsed(false)
 {
@@ -47,11 +49,9 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *nam
     m_toggleButton->setTextLabel(label);
     m_toggleButton->setUsesTextLabel(true);
     m_toggleButton->setUsesBigPixmap(false);
-//    m_toggleButton->setToggleButton(true);
     m_toggleButton->setTextPosition(QToolButton::BesideIcon);
     m_toggleButton->setAutoRaise(true);
-    m_toggleButton->setOn(true);
-    
+
     QFont font(m_toggleButton->font());
     font.setBold(true);
     m_toggleButton->setFont(font);
@@ -59,12 +59,10 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *nam
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QPixmap pixmap(pixmapDir + "/misc/arrow-expanded.png");
     m_toggleButton->setIconSet(pixmap);
-//    m_toggleButton->setPixmap(pixmap);
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
     m_layout->addMultiCellWidget(m_toggleButton, 0, 0, 0, 2);
-//    m_toggleButton->setFlat(true);
 }
 
 CollapsingFrame::~CollapsingFrame()
@@ -77,14 +75,24 @@ CollapsingFrame::setWidget(QWidget *widget)
     assert(!m_widget);
     m_widget = widget;
     m_layout->addWidget(widget, 1, 1);
+
+    bool expanded = true;
+    if (name(0)) {
+	KConfig *config = kapp->config();
+	QString groupTemp = config->group();
+	config->setGroup("CollapsingFrame");
+	expanded = config->readBoolEntry(name(), true);
+	config->setGroup(groupTemp);
+    }
+    if (expanded != !m_collapsed) toggle();
 }
 
 void
 CollapsingFrame::toggle()
 {
-    if (m_collapsed) m_widget->show();
-    else m_widget->hide();
     m_collapsed = !m_collapsed;
+
+    m_widget->setShown(!m_collapsed);
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QPixmap pixmap;
@@ -93,6 +101,14 @@ CollapsingFrame::toggle()
 	pixmap = QPixmap(pixmapDir + "/misc/arrow-contracted.png");
     } else {
 	pixmap = QPixmap(pixmapDir + "/misc/arrow-expanded.png");
+    }
+
+    if (name(0)) {
+	KConfig *config = kapp->config();
+	QString groupTemp = config->group();
+	config->setGroup("CollapsingFrame");
+	config->writeEntry(name(), !m_collapsed);
+	config->setGroup(groupTemp);
     }
 
     m_toggleButton->setIconSet(pixmap);

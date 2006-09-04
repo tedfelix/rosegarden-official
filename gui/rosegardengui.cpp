@@ -375,7 +375,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
         kapp->config()->readUnsignedNumEntry("sidebarstyle",
-        RosegardenParameterArea::TAB_BOX_STYLE));
+        RosegardenParameterArea::CLASSIC_STYLE));
     
     m_dockLeft->update();
 

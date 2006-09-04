@@ -78,6 +78,18 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     setFont(m_font);
     title_font.setBold(true);
     
+    // Set up default expansions for the collapsing elements
+    KConfig *config = kapp->config();
+    QString groupTemp = config->group();
+    config->setGroup("CollapsingFrame");
+    bool expanded = config->readBoolEntry("trackparametersplayback", true);
+    config->writeEntry("trackparametersplayback", expanded);
+    expanded = config->readBoolEntry("trackparametersrecord", false);
+    config->writeEntry("trackparametersrecord", expanded);
+    expanded = config->readBoolEntry("trackparametersdefaults", false);
+    config->writeEntry("trackparametersdefaults", expanded);
+    config->setGroup(groupTemp);
+
     // Size of the layout grid:
     //  number of rows = 17
     //  number of columns = 7
@@ -95,11 +107,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // playback group
     //
-//!!!    m_playbackGroup = new QFrame(this);
-//    m_playbackGroup->setFrameShape( QFrame::StyledPanel );
-//    m_playbackGroup->setFrameShadow( QFrame::Raised );
     CollapsingFrame *cframe = new CollapsingFrame(i18n("Playback parameters"),
-						  this);
+						  this, "trackparametersplayback");
     m_playbackGroup = new QFrame(cframe);
     cframe->setWidget(m_playbackGroup);
     QGridLayout *groupLayout = new QGridLayout(m_playbackGroup, 3, 3, 3, 2);
@@ -145,10 +154,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // record group
     //
-//!!!    m_recordGroup = new QFrame(this);
-//    m_recordGroup->setFrameShape( QFrame::StyledPanel );
-//    m_recordGroup->setFrameShadow( QFrame::Raised );
-    cframe = new CollapsingFrame(i18n("Recording filters"), this);
+    cframe = new CollapsingFrame(i18n("Recording filters"), this,
+				 "trackparametersrecord");
     m_recordGroup = new QFrame(cframe);
     cframe->setWidget(m_recordGroup);
     groupLayout = new QGridLayout(m_recordGroup, 3, 3, 3, 2);
@@ -193,10 +200,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // default segment group
     //
-//!!!    m_defaultsGroup = new QFrame(this);
-//    m_defaultsGroup->setFrameShape( QFrame::StyledPanel );
-//    m_defaultsGroup->setFrameShadow( QFrame::Raised );
-    cframe = new CollapsingFrame(i18n("Create segments with:"), this);
+    cframe = new CollapsingFrame(i18n("Create segments with:"), this,
+				 "trackparametersdefaults");
     m_defaultsGroup = new QFrame(cframe);
     cframe->setWidget(m_defaultsGroup);
     groupLayout = new QGridLayout(m_defaultsGroup, 6, 6, 3, 2);
@@ -250,11 +255,17 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     row++;
     m_transpLbl = new QLabel(i18n("Transpose"), m_defaultsGroup);
     groupLayout->addMultiCellWidget(m_transpLbl, row, row, 0, 1);
-    m_defTranspose = new QSpinBox(m_defaultsGroup);
-    m_defTranspose->setMinValue(-48);
-    m_defTranspose->setMaxValue(48);
-    m_defTranspose->setValue(0);
-    m_defTranspose->setButtonSymbols(QSpinBox::PlusMinus);
+    m_defTranspose = new KComboBox(m_defaultsGroup);
+    
+    connect(m_defTranspose, SIGNAL(activated(int)),
+            SLOT(slotTransposeIndexChanged(int)));
+
+    int transposeRange = 48;
+    for (int i = -transposeRange; i < transposeRange + 1; i++) {
+        m_defTranspose->insertItem(QString("%1").arg(i));
+	if (i == 0) m_defTranspose->setCurrentItem(m_defTranspose->count() - 1);
+    }
+
     groupLayout->addMultiCellWidget(m_defTranspose, row, row, 2, 5, AlignRight);
 
     // default color
@@ -309,9 +320,6 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     connect( m_defClef, SIGNAL(activated(int)),
              this, SLOT(slotClefChanged(int)));
-    
-    connect( m_defTranspose, SIGNAL(valueChanged(int)),
-             this, SLOT(slotTransposeChanged(int)));
 
     // Detect when the document colours are updated
     connect(m_doc, SIGNAL(docColoursChanged()),
@@ -448,12 +456,12 @@ TrackParameterBox::populateRecordingDeviceList()
             m_recChannel->setEnabled(false);
 
 	    // hide these for audio instruments
-	    m_defaultsGroup->setShown(false);
+	    m_defaultsGroup->parentWidget()->setShown(false);
 
         } else { // InstrumentType::Midi and InstrumentType::SoftSynth
 
 	    // show these if not audio instrument
-	    m_defaultsGroup->setShown(true);
+	    m_defaultsGroup->parentWidget()->setShown(true);
 
             m_recDeviceIds.push_back(Rosegarden::Device::ALL_DEVICES);
             m_recDevice->insertItem(i18n("All"));
@@ -543,7 +551,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_presetLbl->setText(trk->getPresetLabel());
     m_presetLbl->setEnabled(true);
     m_defClef->setCurrentItem(trk->getClef());
-    m_defTranspose->setValue(trk->getTranspose());
+    m_defTranspose->setCurrentItem(QString("%1").arg(trk->getTranspose()), true);
     m_defColor->setCurrentItem(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
@@ -691,21 +699,7 @@ TrackParameterBox::slotInstrumentLabelChanged(Rosegarden::InstrumentId id, QStri
 void 
 TrackParameterBox::showAdditionalControls(bool showThem)
 {
-    m_defaultsGroup->setShown(showThem);
-    /*m_separator2->setShown(showThem);
-    m_segHeader->setShown(showThem);
-    m_presetLbl->setShown(showThem);
-    m_presetButton->setShown(showThem);
-    m_clefLbl->setShown(showThem);
-    m_defClef->setShown(showThem);
-    m_transpLbl->setShown(showThem);
-    m_defTranspose->setShown(showThem);
-    m_colorLbl->setShown(showThem);
-    m_defColor->setShown(showThem);
-    m_rangeLbl->setShown(showThem);
-    m_highButton->setShown(showThem);
-    m_lowButton->setShown(showThem);
-    m_psetLbl->setShown(showThem);*/
+//    m_defaultsGroup->parentWidget()->setShown(showThem);
 }
 
 
@@ -729,6 +723,20 @@ TrackParameterBox::slotTransposeChanged(int transpose)
     trk->setTranspose(transpose);
     m_presetLbl->setEnabled(false);
 }   
+
+void
+TrackParameterBox::slotTransposeIndexChanged(int index)
+{
+    slotTransposeTextChanged(m_defTranspose->text(index));
+}
+
+void
+TrackParameterBox::slotTransposeTextChanged(QString text)
+{
+    if (text.isEmpty()) return;
+    int value = text.toInt();
+    slotTransposeChanged(value);
+}
 
 // code copied/adapted from segmentparameterbox.cpp on 16 July 2006
 void
@@ -855,7 +863,8 @@ TrackParameterBox::slotPresetPressed()
 		m_presetLbl->setText(dialog.getName());
 		trk->setPresetLabel(dialog.getName());
 		m_defClef->setCurrentItem(dialog.getClef());
-		m_defTranspose->setValue(dialog.getTranspose());
+		m_defTranspose->setCurrentItem(QString("%1").arg
+					       (dialog.getTranspose()), true);
 
 		m_highestPlayable = dialog.getHighRange();
 		m_lowestPlayable = dialog.getLowRange();
@@ -877,6 +886,16 @@ TrackParameterBox::slotPresetPressed()
 	    KMessageBox::sorry(0, i18n("The instrument preset database is corrupt.  Check your installation."));
 	}
       
+}
+
+QString
+TrackParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
+{
+    if (arrangement == RosegardenParameterArea::CLASSIC_STYLE) {
+	return i18n("Segment");
+    } else {
+	return "";
+    }
 }
 
 #include "trackparameterbox.moc"
