@@ -69,13 +69,13 @@ private:
     // The list of parameter box widgets that are being displayed by this
     // widget.
 
-    std::vector<RosegardenParameterBox *>  m_parameter_boxes;
+    std::vector<RosegardenParameterBox *>  m_parameterBoxes;
 
     // Create a parallel array of group boxes, to be used when the
     // corresponding parameter box widget needs to be enclosed by a
     // titled outline.
 
-    std::vector<QVGroupBox *> m_group_boxes;
+    std::vector<QVGroupBox *> m_groupBoxes;
 
     // Move a RosegardenParameterBox widget from one container to another.
 
@@ -83,9 +83,9 @@ private:
 		    int index);
 
     QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.
-    KTabWidget *m_tab_box;     // The container widget for m_style==TAB_BOX_STYLE.
+    KTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
     QWidget *m_active;         // The current container widget.
-
+    QWidget *m_spacing;
 };
 
 #endif // _ROSEGARDENPARAMETERS_H_
