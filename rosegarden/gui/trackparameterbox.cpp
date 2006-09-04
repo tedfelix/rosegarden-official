@@ -51,6 +51,7 @@
 #include "dialogs.h"
 #include "clefindex.h"
 #include "presethandler.h"
+#include "collapsingframe.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -94,21 +95,25 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // playback group
     //
-    m_playbackGroup = new QFrame(this);
-    m_playbackGroup->setFrameShape( QFrame::StyledPanel );
-    m_playbackGroup->setFrameShadow( QFrame::Raised );
+//!!!    m_playbackGroup = new QFrame(this);
+//    m_playbackGroup->setFrameShape( QFrame::StyledPanel );
+//    m_playbackGroup->setFrameShadow( QFrame::Raised );
+    CollapsingFrame *cframe = new CollapsingFrame(i18n("Playback parameters"),
+						  this);
+    m_playbackGroup = new QFrame(cframe);
+    cframe->setWidget(m_playbackGroup);
     QGridLayout *groupLayout = new QGridLayout(m_playbackGroup, 3, 3, 3, 2);
     
     // playback group title
     //
     row = 0;
-    QLabel *plyHeader = new QLabel(i18n("Playback parameters"), m_playbackGroup);
-    plyHeader->setFont(title_font);
-    groupLayout->addMultiCellWidget(plyHeader, row, row, 0, 2);
+//    QLabel *plyHeader = new QLabel(i18n("Playback parameters"), m_playbackGroup);
+//    plyHeader->setFont(title_font);
+//    groupLayout->addMultiCellWidget(plyHeader, row, row, 0, 2);
 
     // playback device
     //
-    row++;
+//    row++;
     QLabel *devLabel = new QLabel(i18n("Device"), m_playbackGroup);
     groupLayout->addWidget(devLabel, row, 0); 
     m_playDevice = new KComboBox(m_playbackGroup);
@@ -125,7 +130,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
 
-    mainLayout->addWidget(m_playbackGroup, 1, 0);
+    mainLayout->addWidget(cframe, 1, 0);
 
     // group separator 1
     //
@@ -140,21 +145,24 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // record group
     //
-    m_recordGroup = new QFrame(this);
-    m_recordGroup->setFrameShape( QFrame::StyledPanel );
-    m_recordGroup->setFrameShadow( QFrame::Raised );
+//!!!    m_recordGroup = new QFrame(this);
+//    m_recordGroup->setFrameShape( QFrame::StyledPanel );
+//    m_recordGroup->setFrameShadow( QFrame::Raised );
+    cframe = new CollapsingFrame(i18n("Recording filters"), this);
+    m_recordGroup = new QFrame(cframe);
+    cframe->setWidget(m_recordGroup);
     groupLayout = new QGridLayout(m_recordGroup, 3, 3, 3, 2);
     
     // recording group title
     //
     row = 0;
-    QLabel *recHeader = new QLabel(i18n("Recording filters"), m_recordGroup);
-    recHeader->setFont(title_font);
-    groupLayout->addMultiCellWidget(recHeader, row, row, 0, 2);
+//    QLabel *recHeader = new QLabel(i18n("Recording filters"), m_recordGroup);
+//    recHeader->setFont(title_font);
+//    groupLayout->addMultiCellWidget(recHeader, row, row, 0, 2);
     
     // recording device
     //
-    row++;
+//    row++;
     groupLayout->addWidget(new QLabel(i18n("Device"), m_recordGroup), row, 0);
     m_recDevice = new KComboBox(m_recordGroup);
     m_recDevice->setMinimumWidth(width25);
@@ -169,7 +177,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
     
-    mainLayout->addWidget(m_recordGroup, 2, 0);
+    mainLayout->addWidget(cframe, 2, 0);
     
     
     // group separator 2
@@ -185,21 +193,24 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     
     // default segment group
     //
-    m_defaultsGroup = new QFrame(this);
-    m_defaultsGroup->setFrameShape( QFrame::StyledPanel );
-    m_defaultsGroup->setFrameShadow( QFrame::Raised );
+//!!!    m_defaultsGroup = new QFrame(this);
+//    m_defaultsGroup->setFrameShape( QFrame::StyledPanel );
+//    m_defaultsGroup->setFrameShadow( QFrame::Raised );
+    cframe = new CollapsingFrame(i18n("Create segments with:"), this);
+    m_defaultsGroup = new QFrame(cframe);
+    cframe->setWidget(m_defaultsGroup);
     groupLayout = new QGridLayout(m_defaultsGroup, 6, 6, 3, 2);
 
     // default segment segment parameters group title
     //
     row = 0;
-    m_segHeader = new QLabel(i18n("Create segments with:"), m_defaultsGroup);
-    m_segHeader->setFont(title_font);
-    groupLayout->addMultiCellWidget( m_segHeader, row, row, 0, 5);
+//    m_segHeader = new QLabel(i18n("Create segments with:"), m_defaultsGroup);
+//    m_segHeader->setFont(title_font);
+//    groupLayout->addMultiCellWidget( m_segHeader, row, row, 0, 5);
 
     // preset picker
     //
-    row++;
+//    row++;
     m_psetLbl = new QLabel(i18n("Preset"), m_defaultsGroup);
     groupLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
@@ -273,7 +284,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     updateHighLow();
 
-    mainLayout->addWidget(m_defaultsGroup, 3, 0);
+    mainLayout->addWidget(cframe, 3, 0);
     
     // Configure the empty final row to accomodate any extra vertical space.
     //

@@ -27,6 +27,7 @@ bankeditor.cpp
 barbuttons.cpp 
 basiccommand.cpp 
 chordnameruler.cpp
+collapsingframe.cpp
 colours.cpp 
 colourwidgets.cpp 
 commondialogs.cpp
