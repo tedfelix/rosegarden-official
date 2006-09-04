@@ -1378,6 +1378,11 @@ int MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
     if (!m_currentElement || !m_currentStaff) return RosegardenCanvasView::NoFollow;
     timeT newDuration = newTime - m_currentElement->getViewAbsoluteTime();
 
+    if (newDuration == 0) {
+	newDuration += m_mParentView->getSnapGrid().getSnapTime
+	    (m_currentElement->getViewAbsoluteTime());
+    }
+
     int initialWidth = m_currentElement->getWidth();
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
 
@@ -1400,10 +1405,8 @@ int MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
         {
             int newWidth = element->getWidth() - diffWidth;
 
-            /*
             MATRIX_DEBUG << "MatrixResizer::handleMouseMove - "
                          << "new width = " << newWidth << endl;
-                         */
 
             element->setWidth(newWidth);
             m_currentStaff->positionElement(element);
@@ -1447,11 +1450,11 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
             timeT eventTime = (*it)->getAbsoluteTime();
             timeT eventDuration = (*it)->getDuration() + diffDuration;
 
-            /*
+
             MATRIX_DEBUG << "MatrixResizer::handleMouseRelease - "
                          << "Time = " << eventTime
                          << ", Duration = " << eventDuration << endl;
-                         */
+
 
             if (eventDuration < 0)
             {
@@ -1459,11 +1462,10 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
                 eventDuration = -eventDuration;
             }
 
-
-            // ensure the duration is always (arbitrary) positive
-            //if (eventDuration == 0)
-                //eventDuration = 60;
-                //m_mParentView->getSnapGrid().getSnapTime(e->x());
+	    if (eventDuration == 0) {
+		eventDuration += m_mParentView->getSnapGrid().getSnapTime
+		    (eventTime);
+	    }
             
             Rosegarden::Event *newEvent =
                 new Rosegarden::Event(**it,
