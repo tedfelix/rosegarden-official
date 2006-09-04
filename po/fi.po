@@ -4592,7 +4592,7 @@ msgstr "Ulos:"
 #: ../gui/notationtool.cpp:862 ../gui/notationtool.cpp:943
 #: ../gui/notationtool.cpp:1074 ../gui/notationtool.cpp:1946
 msgid "Switch to Select Tool"
-msgstr "Vaihda Valitse -työkaluun"
+msgstr "Vaihda Valitse-työkaluun"
 
 #: ../gui/matrixtool.cpp:177 ../gui/matrixtool.cpp:486
 #: ../gui/matrixtool.cpp:960 ../gui/matrixtool.cpp:1304
@@ -4600,17 +4600,17 @@ msgstr "Vaihda Valitse -työkaluun"
 #: ../gui/notationtool.cpp:866 ../gui/notationtool.cpp:947
 #: ../gui/notationtool.cpp:1144 ../gui/notationtool.cpp:1950
 msgid "Switch to Erase Tool"
-msgstr "Vaihda Poista -työkaluun"
+msgstr "Vaihda Poista-työkaluun"
 
 #: ../gui/matrixtool.cpp:181 ../gui/matrixtool.cpp:424
 #: ../gui/matrixtool.cpp:490 ../gui/matrixtool.cpp:1308
 msgid "Switch to Move Tool"
-msgstr "Valitse Siirrä -työkaluun"
+msgstr "Vaihda Siirrä-työkaluun"
 
 #: ../gui/matrixtool.cpp:187 ../gui/matrixtool.cpp:430
 #: ../gui/matrixtool.cpp:498 ../gui/matrixtool.cpp:966
 msgid "Switch to Resize Tool"
-msgstr "Valitse Muuta kokoa -työkaluun"
+msgstr "Vaihda Muuta kokoa -työkaluun"
 
 #: ../gui/matrixtool.cpp:191 ../gui/matrixtool.cpp:434
 #: ../gui/matrixtool.cpp:502 ../gui/matrixtool.cpp:970
@@ -4627,7 +4627,7 @@ msgstr "Kaksoisnopeus"
 #: ../gui/matrixtool.cpp:420 ../gui/matrixtool.cpp:482
 #: ../gui/matrixtool.cpp:956 ../gui/matrixtool.cpp:1300
 msgid "Switch to Draw Tool"
-msgstr "Valitse Piirrä -työkalu"
+msgstr "Vaihda Piirrä-työkaluun"
 
 #: ../gui/matrixtool.cpp:1207
 msgid "Move Event"
@@ -4986,7 +4986,7 @@ msgstr "Litistä tauot poistettaessa"
 
 #: ../gui/notationtool.cpp:1068 ../gui/notationtool.cpp:1140
 msgid "Switch to Insert Tool"
-msgstr "Vaihda Syötä -työkaluun"
+msgstr "Vaihda Syötä-työkaluun"
 
 #: ../gui/notationtool.cpp:1155
 msgid "Collapse Rests"
