@@ -107,6 +107,10 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 	 doc, SLOT(slotSetPlayPosition(Rosegarden::timeT)));
 
     QObject::connect
+	(m_hButtonBar, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+	 doc, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
+    QObject::connect
 	(m_loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
 	 doc, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
 
@@ -328,9 +332,35 @@ BarButtonsWidget::mousePressEvent(QMouseEvent *e)
     RG_DEBUG << "BarButtonsWidget::mousePressEvent: x = " << e->x() << endl;
 
     if (!m_doc || !e) return;
+    bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
 
     Composition &comp = m_doc->getComposition();
     Composition::markercontainer markers = comp.getMarkers();
+
+    if (shiftPressed) {
+
+	timeT t = m_rulerScale->getTimeForX
+	    (e->x() - m_xorigin - m_currentXOffset);
+
+	timeT prev = 0;
+
+	for (Composition::markerconstiterator i = markers.begin();
+	     i != markers.end(); ++i) {
+
+	    timeT cur = (*i)->getTime();
+
+	    if (cur >= t) {
+		emit setLoop(prev, cur);
+		return;
+	    }
+
+	    prev = cur;
+	}
+
+	if (prev > 0) emit setLoop(prev, comp.getEndMarker());
+
+	return;
+    }
 
     QRect clipRect = visibleRect();
 

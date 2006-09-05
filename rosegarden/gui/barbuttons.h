@@ -117,6 +117,9 @@ signals:
     /// Open the marker editor window on double click
     void editMarkers();
 
+    /// Set a loop range
+    void setLoop(Rosegarden::timeT, Rosegarden::timeT);
+
 protected:
     virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent(QMouseEvent *e);
