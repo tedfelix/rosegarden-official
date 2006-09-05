@@ -29,6 +29,7 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kmainwindow.h>
 
 #include "temporuler.h"
 #include "colours.h"
@@ -48,7 +49,6 @@ using Rosegarden::timeT;
 using Rosegarden::tempoT;
 using Rosegarden::RealTime;
 using Rosegarden::SnapGrid;
-
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
 		       RosegardenGUIDoc *doc,
@@ -81,6 +81,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_dragOriginalTarget(-1),
     m_composition(&doc->getComposition()),
     m_rulerScale(rulerScale),
+    m_menu(0),
+    m_factory(0),
     m_fontMetrics(m_boldFont)
 {
 //    m_font.setPointSize(m_small ? 9 : 11);
@@ -104,62 +106,58 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
 	 this, SLOT(update()));
 
+    m_menu = new QPopupMenu;
+    
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon;
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
-    new KAction(i18n("Insert Tempo Change"), icon, 0, this,
-		SLOT(slotInsertTempoHere()), actionCollection(),
-		"insert_tempo_here");
+    (new KAction(i18n("Insert Tempo Change"), icon, 0, this,
+		 SLOT(slotInsertTempoHere()), actionCollection(),
+		 "insert_tempo_here"))->plug(m_menu);
 
-    new KAction(i18n("Insert Tempo Change at Playback Position"), 0, 0, this,
-		SLOT(slotInsertTempoAtPointer()), actionCollection(),
-		"insert_tempo_at_pointer");
+    (new KAction(i18n("Insert Tempo Change at Playback Position"), 0, 0, this,
+		 SLOT(slotInsertTempoAtPointer()), actionCollection(),
+		 "insert_tempo_at_pointer"))->plug(m_menu);
+
+    m_menu->insertSeparator();
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    new KAction(i18n("Delete Tempo Change"), icon, 0, this,
-		SLOT(slotDeleteTempoChange()), actionCollection(),
-		"delete_tempo");
+    (new KAction(i18n("Delete Tempo Change"), icon, 0, this,
+		 SLOT(slotDeleteTempoChange()), actionCollection(),
+		 "delete_tempo"))->plug(m_menu);
 
-    new KAction(i18n("Ramp Tempo to Next Tempo"), 0, 0, this,
-		SLOT(slotRampToNext()), actionCollection(),
-		"ramp_to_next");
+    m_menu->insertSeparator();
 
-    new KAction(i18n("Un-Ramp Tempo"), 0, 0, this,
-		SLOT(slotUnramp()), actionCollection(),
-		"unramp");
+    (new KAction(i18n("Ramp Tempo to Next Tempo"), 0, 0, this,
+		 SLOT(slotRampToNext()), actionCollection(),
+		 "ramp_to_next"))->plug(m_menu);
+
+    (new KAction(i18n("Un-Ramp Tempo"), 0, 0, this,
+		 SLOT(slotUnramp()), actionCollection(),
+		 "unramp"))->plug(m_menu);
+
+    m_menu->insertSeparator();
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    new KAction(i18n("Edit Tempo..."), icon, 0, this,
-		SLOT(slotEditTempo()), actionCollection(),
-		"edit_tempo");
+    (new KAction(i18n("Edit Tempo..."), icon, 0, this,
+		 SLOT(slotEditTempo()), actionCollection(),
+		 "edit_tempo"))->plug(m_menu);
 
-    new KAction(i18n("Edit Time Signature..."), 0, 0, this,
-		SLOT(slotEditTimeSignature()), actionCollection(),
-		"edit_time_signature");
+    (new KAction(i18n("Edit Time Signature..."), 0, 0, this,
+		 SLOT(slotEditTimeSignature()), actionCollection(),
+		 "edit_time_signature"))->plug(m_menu);
 
-    new KAction(i18n("Open Tempo and Time Signature Editor"), 0, 0, this,
-		SLOT(slotEditTempos()), actionCollection(),
-		"edit_tempos");
-
-    setXMLFile("temporuler.rc");
-
-    if (factory) {
-	factory->addClient(this);
-	m_menu = dynamic_cast<QPopupMenu *>(factory->container("TempoRuler", this));
-	if (!m_menu) {
-	    RG_DEBUG << "WARNING: No menu TempoRuler in temporuler.rc" << endl;
-	}
-    } else {
-	RG_DEBUG << "WARNING: No XML GUI factory found in app" << endl;
-    }	
+    (new KAction(i18n("Open Tempo and Time Signature Editor"), 0, 0, this,
+		 SLOT(slotEditTempos()), actionCollection(),
+		 "edit_tempos"))->plug(m_menu);
 
     setMouseTracking(false);
 }
 
 TempoRuler::~TempoRuler()
 {
-    // nothing
+    delete m_menu;
 }
 
 void

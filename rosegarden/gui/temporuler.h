@@ -153,6 +153,7 @@ private:
     Rosegarden::RulerScale *m_rulerScale;
     RosegardenTextFloat *m_textFloat;
     QPopupMenu *m_menu;
+    KXMLGUIFactory *m_factory;
 
     QFont m_font;
     QFont m_boldFont;
