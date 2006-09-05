@@ -351,8 +351,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          SLOT(slotMouseReleased(Rosegarden::timeT, int, QMouseEvent*)));
 
     QObject::connect
-        (getCanvasView(), SIGNAL(hoveredOverNoteChanged(int)),
-         this, SLOT(slotHoveredOverNoteChanged(int)));
+        (getCanvasView(), SIGNAL(hoveredOverNoteChanged(int, bool, Rosegarden::timeT)),
+         this, SLOT(slotHoveredOverNoteChanged(int, bool, Rosegarden::timeT)));
 
     QObject::connect
         (m_pitchRuler, SIGNAL(hoveredOverKeyChanged(unsigned int)),
@@ -1387,11 +1387,44 @@ void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEven
 }
 
 void
-MatrixView::slotHoveredOverNoteChanged(int evPitch)
+MatrixView::slotHoveredOverNoteChanged(int evPitch, bool haveEvent,
+				       Rosegarden::timeT evTime)
 {
     Rosegarden::MidiPitchLabel label(evPitch);
-    m_hoveredOverNoteName->setText(QString("%1 (%2)").
-            arg(label.getQString()).arg(evPitch));
+
+    QString timeStr;
+
+    if (haveEvent) {
+
+	int bar, beat, fraction, remainder;
+	getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+	    (evTime, bar, beat, fraction, remainder);
+
+	Rosegarden::RealTime rt =
+	    getDocument()->getComposition().getElapsedRealTime(evTime);
+	long ms = rt.msec();
+
+	timeStr = i18n("%1 (%2.%3s)")
+	    .arg(QString("%1-%2-%3-%4")
+		 .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
+		 .arg(QString("%1").arg(beat).rightJustify(2, '0'))
+		 .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
+		 .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
+	    .arg(rt.sec)
+	    .arg(QString("%1").arg(ms).rightJustify(3, '0'));
+    }
+
+    if (timeStr != "") {
+	m_hoveredOverNoteName->setText(i18n("%1 (%2): %3")
+				       .arg(label.getQString())
+				       .arg(evPitch)
+				       .arg(timeStr));
+    } else {
+	m_hoveredOverNoteName->setText(i18n("%1 (%2)")
+				       .arg(label.getQString())
+				       .arg(evPitch));
+    }				       
+
     m_pitchRuler->drawHoverNote(evPitch);
 }
 
@@ -1414,6 +1447,11 @@ void
 MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
+
+    int bar, beat, fraction, remainder;
+    getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+	(t, bar, beat, fraction, remainder);
+
     Rosegarden::RealTime rt =
 	getDocument()->getComposition().getElapsedRealTime(t);
     long ms = rt.msec();
@@ -1421,8 +1459,15 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     // At the advice of doc.trolltech.com/3.0/qstring.html#sprintf
     // we replaced this    QString format("%ld (%ld.%03lds)");
     // to support Unicode
-    QString msString=QString("%1").arg(ms);
-    QString message = i18n("Time: %1 (%2.%3s)").arg(t).arg(rt.sec).arg(msString.rightJustify(3,'0'));
+
+    QString message = i18n("Time: %1 (%2.%3s)")
+	.arg(QString("%1-%2-%3-%4")
+	     .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
+	     .arg(QString("%1").arg(beat).rightJustify(2, '0'))
+	     .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
+	     .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
+	.arg(rt.sec)
+	.arg(QString("%1").arg(ms).rightJustify(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }

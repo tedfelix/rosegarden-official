@@ -151,14 +151,41 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
 
+    timeT stTime = m_staff.getSegment().getStartTime();
+    if (evTime < stTime) evTime = stTime;
+
     if (evTime != m_previousEvTime) {
         emit hoveredOverAbsoluteTimeChanged(evTime);
         m_previousEvTime = evTime;
     }
 
-    if (evPitch != m_previousEvPitch) {
+    MATRIX_DEBUG << "moved thingy" << endl;
+
+    QCanvasItemList itemList = canvas()->collisions(p);
+    MatrixElement* mel = 0;
+
+    for (QCanvasItemList::iterator it = itemList.begin();
+	 it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+        QCanvasMatrixRectangle *mRect = 0;
+
+        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
+            if (!mRect->rect().contains(p, true)) continue;
+            mel = &(mRect->getMatrixElement());
+	    MATRIX_DEBUG << "have element" << endl;
+            break;
+	}	
+    }
+
+    if (evPitch != m_previousEvPitch || mel) {
 	Rosegarden::MidiPitchLabel label(evPitch);
-        emit hoveredOverNoteChanged(evPitch);
+	if (mel) {
+	    emit hoveredOverNoteChanged(evPitch, true,
+					mel->event()->getAbsoluteTime());
+	} else {
+	    emit hoveredOverNoteChanged(evPitch, false, 0);
+	}
         m_previousEvPitch = evPitch;
     }
 
