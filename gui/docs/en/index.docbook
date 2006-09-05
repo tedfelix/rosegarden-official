@@ -838,8 +838,77 @@
 
     <sect1 id="segment-view-tempo-timesig">
       <title>Tempo and Time Signature</title>
+
       <sect2 id="tempo">
-	<title>Tempo</title>
+	<title>Tempo in Rosegarden</title>
+	<para>
+	  &rosegarden; considers a composition to be accompanied by a
+	  single stream of "tempo changes" and "time signature
+	  changes", which you can edit to adjust the tempo and the
+	  number and structure of beats in each bar.</para>
+
+	<para>A tempo change
+	  can be to a constant fixed tempo, or it can be "ramped"
+	  &mdash; changing smoothly to a different target tempo at a
+	  given future time.  Each tempo change takes effect until the
+	  following one is reached, so any two consecutive tempo changes
+	  together describe a region that will be played at a constant
+	  or smoothly ramping tempo.
+	</para>
+
+	<para>
+	  Tempo and time signature are related, because &rosegarden;
+	  displays tempo in beats per minute, and the duration of a
+	  beat depends on the time signature.  &rosegarden; only
+	  permits a single time signature to be in effect in any given
+	  bar (that is, you can't have different time signatures in
+	  different tracks).  Each new time signature causes a new bar
+	  to start, so you can place two time signatures closer
+	  together than the natural bar duration in order to obtain a
+	  partial bar.
+	</para>
+      </sect2>
+
+      <sect2 id="tempo-ruler">
+	<title>Tempo Rulers</title>
+	<para>
+	  The &rosegarden; <link linkend="segment-view">track editor</link>, <link
+	  linkend="matrix-view">matrix editor</link> and <link
+	  linkend="notation-view">notation editor</link> each contain
+	  a tempo ruler, which can be optionally displayed at the top
+	  of the editing area.</para>
+
+	<!-- !!! PICTURE -->
+
+	<para>The tempo ruler shows changes to tempo and time
+	signature throughout the composition, and can be used for
+	editing tempo.</para>
+
+	<para>To increase or decrease the tempo within the range of a
+	single tempo change, click and drag the horizontal line (or
+	sloped line, for ramped tempos) representing that tempo
+	upwards or downwards.</para>
+
+	<para>To insert a new tempo change, right-click on the ruler
+	for a menu and select <guimenuitem>Insert Tempo
+	Change</guimenuitem>.  This will insert a new tempo change
+	with the same tempo as the prior one, which you can then drag
+	to increase or decrease.</para>
+
+	<para>You can also click and drag the starting point of a
+	tempo change left or right to move that tempo change to a
+	different time, and you can click and drag the ending point of
+	a tempo change up or down to make the tempo ramp gradually
+	towards an ending tempo value.</para>
+
+	<para>Double-click on the tempo ruler to open the tempo and
+	time signature editor.</para>
+      </sect2>
+
+      <!-- !!! tidy this up -->
+
+      <sect2 id="tempo-edit">
+	<title>Tempo Editor</title>
 	<para>
 	  <screenshot>
 	    <mediaobject>
@@ -868,6 +937,103 @@
 	</mediaobject>
 	</screenshot>
 	</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="markers-ranges-loops">
+      <title>Markers, ranges, and loops</title>
+      <sect2 id="markers">
+	<title>Markers</title>
+
+	<para>Markers are moments in time that have labels.  You can
+	create any number of markers in your &rosegarden; composition,
+	to define particular points that you wish to remember the
+	locations of.  Marker positions and labels will be saved in
+	your &rosegarden; file.</para>
+
+	<para>Markers are shown in the main ruler at the top of each
+	of &rosegarden;'s editor windows. <!-- !!! PICTURE --> To add
+	a new marker, double-click on the marker area (top half) of
+	the ruler to open the marker editor.  Make sure &rosegarden;'s
+	playback pointer (see <link linkend="transport">The
+	Transport</link>) is in the location you want to add the
+	marker at, and then click the Add button to add a new marker
+	at the playback position.  You can then double-click on the
+	marker's entry in the marker editor window to edit its name or
+	adjust its location.</para>
+
+	<para>Click on the text of a marker in the marker ruler to
+	move the playback pointer directly to that marker.</para>
+
+	<para>You can set a <link linkend="ranges-loops">loop range</link>
+	between two marker positions, by clicking in the area between
+	the markers in the marker ruler with the Shift key
+	pressed.</para>
+      </sect2>
+
+      <sect2 id="ranges-loops">
+	<title>Ranges and loops</title>
+	<para>
+	  &rosegarden; allows you to highlight a period of time in the
+	  main ruler, which will be used as a "range" for editing
+	  operations and which will be looped during playback.
+	</para>
+
+	<para>To set the current range, click and drag with the Shift
+	key pressed on the subdivided area of the main ruler at the
+	top of the editing window.  The range that you drag will be
+	highlighted in white as you drag it, and will snap to the
+	nearest beat boundary at both ends.  Any subsequent playback
+	will then be constrained to looping this range.
+	</para>
+	
+	<para>You can also set a range between two <link
+	linkend="markers">markers</link> by shift-clicking between the
+	marker positions in the marker ruler, or set a range using the
+	<link linkend="transport-overview">Transport</link> window.
+	The Transport contains small buttons to set the start and end
+	of the current range to the current playback pointer position.
+	Either of these methods allows you to set more precise end
+	points for your range than you can with click-drag.</para>
+
+	<para>To clear a range and restore normal playback, click on
+	the subdivided area of the main ruler with the Shift key
+	pressed, or toggle the loop button on the Transport.</para>
+
+	<para>Note that playback looping when a range is defined is
+	not the same thing as the <link
+	linkend="segment-view-segmentparameterbox">repeating
+	segment</link> function available in the segment parameters
+	(which seamlessly repeats individual segments rather than
+	causing the transport to jump).</para>
+
+	<sect3 id="range-operations">
+	  <title>Range editing</title>
+
+	  <para>You can carry out edits
+	    on the current range in order to cut and paste sections
+	    of music that include the relevant parts of all
+	    segments, tempos and time signatures within the range.
+	  </para>
+
+	  <para>Set a range and then use the <menuchoice> <guimenu
+	  lang="en">Edit</guimenu> <guimenuitem>Cut
+	  Range</guimenuitem> </menuchoice> or
+	  <menuchoice><guimenuitem>Copy
+	  Range</guimenuitem></menuchoice> menu functions to cut or
+	  copy the range to the clipboard.</para>
+
+	  <para>You can paste a range using the standard <menuchoice>
+	  <guimenu lang="en">Edit</guimenu>
+	  <guimenuitem>Paste</guimenuitem></menuchoice> menu function
+	  to overlay its contents onto the rest of the composition at
+	  the current playback pointer position, or you can use
+	  <menuchoice> <guimenu lang="en">Edit</guimenu>
+	  <guimenuitem>Paste Range</guimenuitem></menuchoice> to
+	  insert the range from the clipboard into the composition at
+	  the current playback pointer position.</para>
+
+	</sect3>
       </sect2>
     </sect1>
   </chapter>
@@ -984,10 +1150,10 @@
 	input or an audio submaster or master (for performing
 	mixdowns).  If it's an external input, it will by default
 	record from your soundcard's first available physical record
-	in.  You may wish to use <!-- !!! link
-	linkend="studio-audio-routing" --> a JACK connection tool to
+	in.  You may wish to use a JACK connection tool to
 	connect some other JACK audio application to the input
-	instead.
+	instead.  See also <link
+	linkend="studio-audio-routing">Audio Routing</link>.
       </para>
     </sect1>
     <sect1 id="transport-external">
@@ -1803,7 +1969,7 @@
 
 
     <sect1 id="studio-external-controllers">
-      <title>External MIDI controllers</title>
+      <title>External MIDI control surfaces</title>
       <para>
 	Rosegarden's audio and MIDI mixer windows and main canvas can
 	also be controlled to some degree by an external MIDI device.
@@ -2279,7 +2445,7 @@
 	  them is a playback level meter.
 	</para>
 	<para>The two menus at the top of the box are used to select
-	the input and output <!-- !!! link --> audio routing for this
+	the input and output <link linkend="studio-audio-routing">audio routing</link> for this
 	instrument.  Below them you can select whether the instrument
 	is mono or stereo, and the pan setting for position in the
 	stereo field.  (Audio instruments are always ultimately
@@ -2289,8 +2455,7 @@
 	  </para>
 	<para>The column of five buttons at lower left are the effects
 	slots.  Click on them to select and activate plugin effects
-	for this audio instrument, and to control them using the <!--
-	!!! link -->plugin editor dialog.  These are insert effects,
+	for this audio instrument, and to control them using the <link linkend="studio-plugins">plugin editor dialog</link>.  These are insert effects,
 	applied in order from top to bottom before the fader and pan.
 	</para>
       </sect2>
@@ -2319,7 +2484,7 @@
 	left (saying Xsynth in the above picture) which shows the name
 	of the synth plugin in use for this instrument.  Click this to
 	select a particular synth and control it in the standard
-	Rosegarden <!-- !!! link --> plugin editor dialog.  Once
+	Rosegarden <link linkend="studio-plugins">plugin editor dialog</link>.  Once
 	you've selected a plugin, you may also be able to click the
 	Editor button below it in order to open a dedicated GUI editor
 	for the particular plugin (if the plugin has one).
@@ -3038,14 +3203,12 @@
 	</para>
     </sect2>
     <sect2 id="nv-tempo-ruler">
-	<title>The tempo ruler</title>
-	<para>The tempo ruler displays the global tempo, and provides a vehicle
-	    for entering, editing, and manipulating it.
-	    <!-- !!! CHRIS we really need to talk about the tempo ruler somewhere.
-	    Here?  Link from here to some whole new dedicated something?
-	    (probably my vote) I'm just doing a stub here, because it seems reasonable. -->
-	</para>
-	<para>This section is merely a stub, as is probably obvious.</para>
+	<title>The tempo ruler</title> <para>The tempo ruler displays
+	the global tempo, and provides a vehicle for entering,
+	editing, and manipulating it.  It works the same way as the
+	tempo rulers in the main window and the matrix editor.  See
+	<link linkend="tempo-ruler">Tempo Rulers</link> for more
+	information.</para>
     </sect2>
 
     </sect1>
@@ -3405,7 +3568,7 @@
 	can't have one staff in 2/4 and another in 6/8 simultaneously,
 	or one staff playing at 120 to the beat and another at 90.
 	This applies only to time: there is no such restriction on the
-	use of clef and key changes.</para>
+	use of clef and key changes.  See also <link linkend="tempo">Tempo in Rosegarden</link>.</para>
 
       <para>To change the clef, key, tempo or time signature within a
       notation editor window, position the <link
