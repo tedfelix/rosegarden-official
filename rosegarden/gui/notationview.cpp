@@ -1025,7 +1025,7 @@ void NotationView::positionPages()
     if (m_config->readBoolEntry("backgroundtextures", true)) {
 	QString pixmapDir =
 	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	if (background.load(QString("%1/misc/bg-paper-white.xpm").
+	if (background.load(QString("%1/misc/bg-paper-cream.xpm").
 			    arg(pixmapDir))) {
 	    haveBackground = true;
 	}
