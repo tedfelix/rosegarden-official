@@ -1229,8 +1229,24 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 	    if ((*it)->has(PITCH)) {
 		newPitch = (*it)->get<Rosegarden::Int>(PITCH) + diffPitch;
 	    }
+
+	    Rosegarden::Event *newEvent = 0;
             
-            Rosegarden::Event *newEvent = new Rosegarden::Event(**it, newTime);
+	    if (newTime < segment.getStartTime()) {
+		newTime = segment.getStartTime();
+	    }
+
+	    if (newTime + (*it)->getDuration() >= segment.getEndMarkerTime()) {
+		newTime = m_mParentView->getSnapGrid().snapTime
+		    (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
+		timeT newDuration = std::min
+		    ((*it)->getDuration(),
+		     segment.getEndMarkerTime() - newTime);
+		newEvent = new Rosegarden::Event(**it, newTime, newDuration);
+	    } else {
+		newEvent = new Rosegarden::Event(**it, newTime);
+	    }
+
             newEvent->set<Rosegarden::Int>
                 (Rosegarden::BaseProperties::PITCH,newPitch);
 
@@ -1481,6 +1497,13 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 		    (eventTime);
 	    }
             
+	    if (eventTime + eventDuration >= segment.getEndMarkerTime()) {
+		eventTime = m_mParentView->getSnapGrid().snapTime
+		    (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
+		eventDuration = std::min(eventDuration,
+					 segment.getEndMarkerTime() - eventTime);
+	    }
+
             Rosegarden::Event *newEvent =
                 new Rosegarden::Event(**it,
                                       eventTime,
