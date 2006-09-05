@@ -60,7 +60,8 @@ signals:
      * Emitted when the mouse cursor moves to a different height
      * on the staff.  Returns the new pitch.
      */
-    void hoveredOverNoteChanged(int evPitch);
+    void hoveredOverNoteChanged(int evPitch, bool haveEvent,
+				Rosegarden::timeT evTime);
 
     /**
      * Emitted when the mouse cursor moves to a note which is at a

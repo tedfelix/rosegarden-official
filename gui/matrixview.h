@@ -321,7 +321,8 @@ public slots:
      *
      * @see MatrixCanvasView#hoveredOverNoteChanged()
      */
-    void slotHoveredOverNoteChanged(int evPitch);
+    void slotHoveredOverNoteChanged(int evPitch, bool haveEvent,
+				    Rosegarden::timeT evTime);
 
     /**
      * Called when the mouse cursor moves over a different key on

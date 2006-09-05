@@ -44,6 +44,7 @@
 #include "dialogs.h"
 
 using Rosegarden::EventSelection;
+using Rosegarden::Segment;
 using Rosegarden::SnapGrid;
 using Rosegarden::Event;
 using Rosegarden::Note;
@@ -227,7 +228,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element))
     {
-        MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element\n";
+        MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element" << endl;
         return;
     }
 
@@ -342,7 +343,7 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
 	    if (endTime > segmentEndTime) endTime = segmentEndTime;
 
 	    Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-	    MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
+	    MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()" << endl;
 	
 	    MatrixInsertionCommand* command = 
 		new MatrixInsertionCommand(m_currentStaff->getSegment(),
@@ -910,7 +911,7 @@ EventSelection* MatrixSelector::getSelection()
 {
     if (!m_selectionRect->visible()) return 0;
 
-    Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
+    Segment& originalSegment = m_currentStaff->getSegment();
     EventSelection* selection = new EventSelection(originalSegment);
 
     // get the selections
@@ -1152,7 +1153,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
                                      QMouseEvent*)
 {
     MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - newPitch = "
-                 << newPitch << '\n';
+                 << newPitch << endl;
 
     if (!m_currentElement || !m_currentStaff) return;
 
@@ -1162,7 +1163,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
         newPitch = 0;
 
     MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - corrected newPitch = "
-                 << newPitch << '\n';
+                 << newPitch << endl;
 
     int y = m_currentStaff->getLayoutYForHeight(newPitch)
         - m_currentStaff->getElementHeight() / 2;
@@ -1214,8 +1215,12 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
         Rosegarden::EventSelection::eventcontainer::iterator it =
             selection->getSegmentEvents().begin();
 
-        EventSelection *newSelection = 
-            new EventSelection(m_currentStaff->getSegment());
+	Segment &segment = m_currentStaff->getSegment();
+
+        EventSelection *newSelection = new EventSelection(segment);
+
+	timeT normalizeStart = selection->getStartTime();
+	timeT normalizeEnd = selection->getEndTime();
 
         for (; it != selection->getSegmentEvents().end(); it++)
         {
@@ -1230,7 +1235,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
                 (Rosegarden::BaseProperties::PITCH,newPitch);
 
             macro->addCommand(
-                    new MatrixModifyCommand(m_currentStaff->getSegment(),
+                    new MatrixModifyCommand(segment,
                                             (*it),
                                             newEvent,
                                             true,
@@ -1238,7 +1243,12 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
             newSelection->addEvent(newEvent);
         }
 
-	macro->addCommand(new AdjustMenuNormalizeRestsCommand(*newSelection));
+	normalizeStart = std::min(normalizeStart, newSelection->getStartTime());
+	normalizeEnd = std::max(normalizeEnd, newSelection->getEndTime());
+
+	macro->addCommand(new AdjustMenuNormalizeRestsCommand(segment,
+							      normalizeStart,
+							      normalizeEnd));
 
         m_mParentView->setCurrentSelection(0, false, false);
         m_mParentView->addCommandToHistory(macro);
@@ -1442,8 +1452,12 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
         Rosegarden::EventSelection::eventcontainer::iterator it =
             selection->getSegmentEvents().begin();
 
-        EventSelection *newSelection = 
-            new EventSelection(m_currentStaff->getSegment());
+	Segment &segment = m_currentStaff->getSegment();
+
+        EventSelection *newSelection = new EventSelection(segment);
+
+	timeT normalizeStart = selection->getStartTime();
+	timeT normalizeEnd = selection->getEndTime();
 
         for (; it != selection->getSegmentEvents().end(); it++)
         {
@@ -1472,17 +1486,21 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
                                       eventTime,
                                       eventDuration);
 
-            macro->addCommand(
-                    new MatrixModifyCommand(m_currentStaff->getSegment(),
-                                            *it,
-                                            newEvent,
-                                            false,
-					    false));
+            macro->addCommand(new MatrixModifyCommand(segment,
+						      *it,
+						      newEvent,
+						      false,
+						      false));
 
             newSelection->addEvent(newEvent);
         }
 
-	macro->addCommand(new AdjustMenuNormalizeRestsCommand(*newSelection));
+	normalizeStart = std::min(normalizeStart, newSelection->getStartTime());
+	normalizeEnd = std::max(normalizeEnd, newSelection->getEndTime());
+
+	macro->addCommand(new AdjustMenuNormalizeRestsCommand(segment,
+							      normalizeStart,
+							      normalizeEnd));
 
         m_mParentView->setCurrentSelection(0, false, false);
         m_mParentView->addCommandToHistory(macro);

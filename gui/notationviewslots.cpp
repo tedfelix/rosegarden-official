@@ -2724,10 +2724,23 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
         getDocument()->getComposition().getElapsedRealTime(t);
     long ms = rt.msec();
 
-    QString message;
-    QString format("%ld (%ld.%03lds)");
-    format = i18n("Time: %1").arg(format);
-    message.sprintf(format, t, rt.sec, ms);
+    int bar, beat, fraction, remainder;
+    getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+	(t, bar, beat, fraction, remainder);
+
+//    QString message;
+//    QString format("%ld (%ld.%03lds)");
+//    format = i18n("Time: %1").arg(format);
+//    message.sprintf(format, t, rt.sec, ms);
+
+    QString message = i18n("Time: %1 (%2.%3s)")
+	.arg(QString("%1-%2-%3-%4")
+	     .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
+	     .arg(QString("%1").arg(beat).rightJustify(2, '0'))
+	     .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
+	     .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
+	.arg(rt.sec)
+	.arg(QString("%1").arg(ms).rightJustify(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
