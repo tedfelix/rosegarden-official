@@ -196,7 +196,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     
     if (mE->button() == LeftButton)
     {
-	double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
+	double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
         
         if (m_loopingMode)
             m_endLoop = m_startLoop = m_grid.snapX(x);
@@ -243,9 +243,11 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
-    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
+    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
     if (x < 0) x = 0;
     
+    RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode << endl;
+
     if (mE->button() == LeftButton && !m_loopingMode)
         emit setPlayPosition(m_rulerScale->getTimeForX(x));
 }
@@ -253,7 +255,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 {
-    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
+    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
     if (x < 0) x = 0;
     
     if (m_loopingMode)

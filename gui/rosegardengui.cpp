@@ -4933,7 +4933,14 @@ RosegardenGUIApp::slotFastForwardToEnd()
 void
 RosegardenGUIApp::slotSetPlayPosition(Rosegarden::timeT time)
 {
-    m_seqManager->setPlayStartTime(time);
+    RG_DEBUG << "RosegardenGUIApp::slotSetPlayPosition(" << time << ")" << endl;
+    if (m_seqManager->getTransportStatus() == RECORDING) return;
+
+    m_doc->slotSetPointerPosition(time);
+    
+    if (m_seqManager->getTransportStatus() == PLAYING) return;
+
+    slotPlay();
 }
 
 // This method is a callback from the Sequencer to update the GUI

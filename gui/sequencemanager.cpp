@@ -1216,32 +1216,6 @@ SequenceManager::fastForwardToEnd()
     m_doc->slotSetPointerPosition(comp.getDuration());
 }
 
-
-// Called from the LoopRuler (usually a double click)
-// to set position and start playing
-//
-void
-SequenceManager::setPlayStartTime(const timeT &time)
-{
-
-    SEQMAN_DEBUG << "SequenceManager::setPlayStartTime(" << time << ")";
-
-    // If already playing then stop
-    //
-    if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING )
-    {
-        stopping();
-        return;
-    }
-    
-    // otherwise off we go
-    //
-    m_doc->slotSetPointerPosition(time);
-    play();
-}
-
-
 void
 SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 {
