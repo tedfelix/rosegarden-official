@@ -4281,6 +4281,13 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
 }
 
 
+bool
+RosegardenGUIApp::isTrackEditorPlayTracking() const
+{
+    return m_view->getTrackEditor()->isTracking();
+}
+
+
 void RosegardenGUIApp::slotToggleTracking()
 {
     m_view->getTrackEditor()->slotToggleTracking();

@@ -307,6 +307,8 @@ public:
      */
     virtual void setCursor(const QCursor&);
 
+    bool isTrackEditorPlayTracking() const;
+
 protected:
 
     /**** File handling code that we don't want the outside world to use ****/

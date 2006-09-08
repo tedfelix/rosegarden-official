@@ -101,6 +101,8 @@ public:
 
     void updateRulers();
 
+    bool isTracking() const { return m_playTracking; }
+
 public slots:
 
     /**

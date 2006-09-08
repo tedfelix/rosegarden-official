@@ -1964,7 +1964,19 @@ void SequenceManager::tempoChanged(const Composition *c)
     m_tempoSegmentMmapper->refresh();
 
     if (c->isLooping()) setLoop(c->getLoopStart(), c->getLoopEnd());
-    else m_doc->slotSetPointerPosition(c->getPosition());
+    else if (m_transportStatus == PLAYING) {
+	// If the tempo changes during playback, reset the pointer
+	// position because the sequencer keeps track of position in
+	// real time and we want to maintain the same position in 
+	// musical time.  Turn off play tracking while this happens,
+	// so that we don't jump about in the main window while the
+	// user's trying to drag the tempo in it.  (That doesn't help
+	// for matrix or notation though, sadly)
+	bool tracking = RosegardenGUIApp::self()->isTrackEditorPlayTracking();
+	if (tracking) RosegardenGUIApp::self()->slotToggleTracking();
+	m_doc->slotSetPointerPosition(c->getPosition());
+	if (tracking) RosegardenGUIApp::self()->slotToggleTracking();
+    }
 }
 
 void

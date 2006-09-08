@@ -73,8 +73,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_dragHoriz(false),
     m_dragStartY(0),
     m_dragStartX(0),
-    m_clickX(0),
     m_dragFine(false),
+    m_clickX(0),
     m_dragStartTempo(-1),
     m_dragStartTarget(-1),
     m_dragOriginalTempo(-1),
@@ -99,8 +99,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_textFloat = new RosegardenTextFloat(this);
     m_textFloat->hide();
 
-    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
-//    setBackgroundMode(Qt::NoBackground);
+//    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
+    setBackgroundMode(Qt::NoBackground);
 
     QObject::connect
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
@@ -426,7 +426,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	    if (nc.first == newTime) return;
 	}
 
-	std::cerr << " -> " << newTime << std::endl;
+//	std::cerr << " -> " << newTime << std::endl;
 
 	m_composition->removeTempoChange(tcn);
 	m_composition->addTempoAtTime(newTime,
@@ -473,7 +473,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 		m_illuminateTarget = true;
 	    }
 
-	    std::cerr << "nt = " << nt << ", nx = " << nx << ", x = " << x << ", m_illuminateTarget = " << m_illuminateTarget << std::endl;
+//	    std::cerr << "nt = " << nt << ", nx = " << nx << ", x = " << x << ", m_illuminateTarget = " << m_illuminateTarget << std::endl;
 	}
 
 	showTextFloat(tc.second, tr.first ? tr.second : -1,
@@ -586,7 +586,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
-    std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
+//    std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
     QPoint mp = cp + pos();
 
     QWidget *parent = parentWidget();
@@ -664,18 +664,25 @@ TempoRuler::getTempoForY(int y)
 void
 TempoRuler::paintEvent(QPaintEvent* e)
 {
-    QPainter paint(this);
+    QRect clipRect = e->rect();
+
+    if (m_buffer.width() < width() || m_buffer.height() < height()) {
+	m_buffer = QPixmap(width(), height());
+    }
+
+    m_buffer.fill(Rosegarden::GUIPalette::getColour
+		  (Rosegarden::GUIPalette::TextRulerBackground));
+
+    QPainter paint(&m_buffer);
     paint.setPen(Rosegarden::GUIPalette::getColour
 		 (Rosegarden::GUIPalette::TextRulerForeground));
 
     paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
+    paint.setClipRect(clipRect);
 
     if (m_xorigin > 0) {
 	paint.fillRect(0, 0, m_xorigin, height(), paletteBackgroundColor());
     }
-    
-    QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
 	(clipRect.x() - m_currentXOffset - 100 - m_xorigin);
@@ -922,6 +929,17 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	    prevEndX = x + bounds.width();
 	}
     }
+
+    paint.end();
+
+    QPainter dbpaint(this);
+//    dbpaint.drawPixmap(0, 0, m_buffer);
+    dbpaint.drawPixmap(clipRect.x(), clipRect.y(),
+		       m_buffer,
+		       clipRect.x(), clipRect.y(),
+		       clipRect.width(), clipRect.height());
+		       
+    dbpaint.end();
 
     m_refreshLinesOnly = false;
 }
