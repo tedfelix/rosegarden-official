@@ -99,8 +99,8 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_textFloat = new RosegardenTextFloat(this);
     m_textFloat->hide();
 
-//    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
-    setBackgroundMode(Qt::NoBackground);
+    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
+//    setBackgroundMode(Qt::NoBackground);
 
     QObject::connect
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
@@ -455,7 +455,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 	m_illuminate = tcn;
 	m_illuminatePoint = false;
 	m_illuminateTarget = false;
-	m_refreshLinesOnly = true;
+//!!!	m_refreshLinesOnly = true;
 
 	//!!! merge this test with the one in mousePressEvent as
 	//isCloseToStart or equiv, and likewise for close to end
@@ -501,7 +501,7 @@ TempoRuler::leaveEvent(QEvent *)
 	setMouseTracking(false);
 	m_illuminate = -1;
 	m_illuminatePoint = false;
-	m_refreshLinesOnly = true;
+//!!!	m_refreshLinesOnly = true;
 	m_textFloat->hide();
 	update();
     }
