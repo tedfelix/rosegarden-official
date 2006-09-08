@@ -158,6 +158,7 @@ private:
     QFont m_font;
     QFont m_boldFont;
     QFontMetrics m_fontMetrics;
+    QPixmap m_buffer;
 };
 
 #endif // _TEMPORULER_H_
