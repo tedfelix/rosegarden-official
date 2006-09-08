@@ -88,7 +88,7 @@ public:
     //
 
     /// returns true if the call actually paused playback
-    bool  play();
+    bool play();
 
     // We don't call stop() directly - using stopping() and then
     // call stop().
@@ -102,7 +102,6 @@ public:
     void rewindToBeginning();
     void fastForwardToEnd();
 
-    void setPlayStartTime(const timeT &time);
     void setLoop(const timeT &lhs, const timeT &rhs);
     void notifySequencerStatus(TransportStatus status);
     void sendSequencerJump(const RealTime &time);

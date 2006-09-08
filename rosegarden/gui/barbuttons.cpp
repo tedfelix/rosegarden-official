@@ -104,7 +104,7 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 
     QObject::connect
 	(m_loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),
-	 doc, SLOT(slotSetPlayPosition(Rosegarden::timeT)));
+	 RosegardenGUIApp::self(), SLOT(slotSetPlayPosition(Rosegarden::timeT)));
 
     QObject::connect
 	(m_hButtonBar, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),

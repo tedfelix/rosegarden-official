@@ -400,9 +400,33 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                                false, getCentralWidget());
     setTopBarButtons(topBarButtons);
 
+    BarButtons *bottomBarButtons = new BarButtons(getDocument(),
+                                                  &m_hlayout, 0, 25,
+                                                  true, getBottomWidget());
+    setBottomBarButtons(bottomBarButtons);
+
+    topBarButtons->connectRulerToDocPointer(doc);
+    bottomBarButtons->connectRulerToDocPointer(doc);
+
+    // Disconnect the default connections for these signals from the
+    // top ruler, and connect our own instead
+
+    QObject::disconnect
+	(topBarButtons->getLoopRuler(),
+	 SIGNAL(setPointerPosition(Rosegarden::timeT)), 0, 0);
+
+    QObject::disconnect
+	(topBarButtons->getLoopRuler(),
+	 SIGNAL(dragPointerToPosition(Rosegarden::timeT)), 0, 0);
+
     QObject::connect
 	(topBarButtons->getLoopRuler(),
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+
+    QObject::connect
+	(topBarButtons->getLoopRuler(),
+	 SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
     topBarButtons->getLoopRuler()->setBackgroundColor
@@ -413,18 +437,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     connect(topBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
 
-    BarButtons *bottomBarButtons = new BarButtons(getDocument(),
-                                                  &m_hlayout, 0, 25,
-                                                  true, getBottomWidget());
-    setBottomBarButtons(bottomBarButtons);
-
     connect(bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_canvasView, SLOT(startAutoScroll(int)));
     connect(bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
-
-    topBarButtons->connectRulerToDocPointer(doc);
-    bottomBarButtons->connectRulerToDocPointer(doc);
 
     // Force height for the moment
     //
