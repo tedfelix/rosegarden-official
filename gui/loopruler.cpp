@@ -263,6 +263,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         if (m_grid.snapX(x) != m_endLoop)
         {
            m_endLoop = m_grid.snapX(x);
+           emit dragLoopToPosition(m_rulerScale->getTimeForX(x));
            update();
         }
     }

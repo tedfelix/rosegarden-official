@@ -294,6 +294,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
 	    this, SLOT(slotPointerDraggedToPosition(Rosegarden::timeT)));
  
+    connect(m_doc, SIGNAL(loopDraggedToPosition(Rosegarden::timeT)),
+            this, SLOT(slotLoopDraggedToPosition(Rosegarden::timeT)));
+ 
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,
                                       Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
@@ -432,10 +435,14 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 void
 TrackEditor::slotCanvasScrolled(int x, int y)
 {
+    // update the pointer position if the user is dragging it from the loop ruler
     if ((m_topBarButtons && m_topBarButtons->getLoopRuler() &&
-	 m_topBarButtons->getLoopRuler()->hasActiveMousePress()) ||
+	 m_topBarButtons->getLoopRuler()->hasActiveMousePress() &&
+         !m_topBarButtons->getLoopRuler()->getLoopingMode()) ||
 	(m_bottomBarButtons && m_bottomBarButtons->getLoopRuler() &&
-	 m_bottomBarButtons->getLoopRuler()->hasActiveMousePress())) {
+	 m_bottomBarButtons->getLoopRuler()->hasActiveMousePress() &&
+         !m_bottomBarButtons->getLoopRuler()->getLoopingMode()
+         )) {
 
 	int mx = m_segmentCanvas->viewport()->mapFromGlobal(QCursor::pos()).x();
         m_segmentCanvas->setPointerPos(x + mx);
@@ -488,36 +495,56 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 void
 TrackEditor::slotPointerDraggedToPosition(Rosegarden::timeT position)
 {
+    int currentPointerPos = m_segmentCanvas->getPointerPos();
+
+    double newPosition;
+    
+    if (handleAutoScroll(currentPointerPos, position, newPosition))
+        m_segmentCanvas->setPointerPos(int(newPosition));    
+}
+
+void
+TrackEditor::slotLoopDraggedToPosition(Rosegarden::timeT position)
+{
+    if (m_doc) {
+        int currentEndLoopPos = m_doc->getComposition().getLoopEnd();
+        double dummy;
+        handleAutoScroll(currentEndLoopPos, position, dummy);
+    }
+}
+
+bool TrackEditor::handleAutoScroll(int currentPosition, Rosegarden::timeT newTimePosition, double &newPosition)
+{
     Rosegarden::SimpleRulerScale *ruler = 
         dynamic_cast<Rosegarden::SimpleRulerScale*>(m_rulerScale);
 
-    if (!ruler) return;
+    if (!ruler) return false;
 
-    double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
+    newPosition = m_segmentCanvas->grid().getRulerScale()->getXForTime(newTimePosition);
+    
+    double distance = fabs(newPosition - currentPosition);
 
-    int currentPointerPos = m_segmentCanvas->getPointerPos();
-
-    double distance = pos - currentPointerPos;
-    if (distance < 0.0) distance = -distance;
-
-    if (distance >= 1.0) {
+    bool moveDetected = distance >= 1.0;
+    
+    if (moveDetected) {
 
         if (m_doc && m_doc->getSequenceManager() &&
             (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
             if (m_playTracking) {
-                getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+                getSegmentCanvas()->slotScrollHoriz(int(double(newTimePosition) / ruler->getUnitsPerPixel()));
             }
         } else {
-            int newpos = int(double(position) / ruler->getUnitsPerPixel());
+            int newpos = int(double(newTimePosition) / ruler->getUnitsPerPixel());
             getSegmentCanvas()->slotScrollHorizSmallSteps(newpos);
             getSegmentCanvas()->doAutoScroll();
         }
-
-        m_segmentCanvas->setPointerPos(pos);
+        
     }
-    
+
+    return moveDetected;
 }
+
 void
 TrackEditor::slotToggleTracking()
 {

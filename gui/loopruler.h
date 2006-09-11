@@ -61,6 +61,8 @@ public:
 
     bool hasActiveMousePress() { return m_activeMousePress; }
 
+    bool getLoopingMode() { return m_loopingMode; }
+    
 public slots:
     void slotSetLoopMarker(Rosegarden::timeT startLoop,
 			   Rosegarden::timeT endLoop);
@@ -92,6 +94,9 @@ signals:
 
     /// Set a playing loop
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
+
+    /// Set the loop end position on mouse drag
+    void dragLoopToPosition(Rosegarden::timeT);
 
     void startMouseMove(int directionConstraint);
     void stopMouseMove();
