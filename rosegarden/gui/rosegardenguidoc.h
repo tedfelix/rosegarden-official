@@ -474,6 +474,11 @@ signals:
     void pointerDraggedToPosition(Rosegarden::timeT);
 
     /**
+     * Emitted when pointer is dragged on the loop ruler
+     */
+    void loopDraggedToPosition(Rosegarden::timeT);
+
+    /**
      * Emitted during recording, to indicate that some new notes (it's
      * only emitted for notes) have appeared in the recording segment
      * and anything tracking should track.  updatedFrom gives the

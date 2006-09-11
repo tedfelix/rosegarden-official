@@ -122,6 +122,12 @@ public slots:
     void slotPointerDraggedToPosition(Rosegarden::timeT position);
 
     /**
+     * Update the loop end position as it is being dragged along
+     * This changes how the segment canvas will scroll to follow the pointer
+     */
+    void slotLoopDraggedToPosition(Rosegarden::timeT position);
+
+    /**
      * Act on a canvas scroll event
      */
     void slotCanvasScrolled(int, int);
@@ -203,6 +209,9 @@ protected:
 
     bool isCompositionModified();
     void setCompositionModified(bool);
+    
+    /// return true if an actual move occurred between current and new position, newPosition contains the horiz. pos corresponding to newTimePosition
+    bool handleAutoScroll(int currentPosition, Rosegarden::timeT newTimePosition, double& newPosition);
     
     //--------------- Data members ---------------------------------
 
