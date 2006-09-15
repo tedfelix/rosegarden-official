@@ -621,6 +621,7 @@ LilypondExporter::write()
         int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(prevTempoChangeTime)));
 
 	str << indent(col++) << "globalTempo = {" << std::endl;
+	str << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t" << std::endl;
 	str << indent(col) << "\\tempo 4 = " << tempo << "  ";
 	int prevTempo = tempo;
 
