@@ -637,9 +637,13 @@ LilypondExporter::write()
 	    // Do not apply it before the first segment appears.
 	    if (tempoChangeTime < compositionStartTime) {
 		tempoChangeTime = compositionStartTime;
+	    } else if (tempoChangeTime >= compositionEndTime) {
+	    	tempoChangeTime = compositionEndTime;
 	    }
 	    if (prevTempoChangeTime < compositionStartTime) {
 		prevTempoChangeTime = compositionStartTime;
+	    } else if (prevTempoChangeTime >= compositionEndTime) {
+	    	prevTempoChangeTime = compositionEndTime;
 	    }
 	    writeSkip(m_composition->getTimeSignatureAt(tempoChangeTime), 
 		tempoChangeTime, tempoChangeTime-prevTempoChangeTime, false, str);
@@ -650,6 +654,7 @@ LilypondExporter::write()
 
 	    prevTempo = tempo;
 	    prevTempoChangeTime = tempoChangeTime;
+	    if (prevTempoChangeTime == compositionEndTime) break;
 	}
 	// First tempo change may be before the first segment.
 	// Do not apply it before the first segment appears.
