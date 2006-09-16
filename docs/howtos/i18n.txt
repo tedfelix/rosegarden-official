@@ -63,7 +63,7 @@ translation should be found in ru.po.  A locale-specific example is
 en_GB.po, which is British English.
 
 The rosegarden.pot file is available from CVS, or on the web at
-<URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/po/>.
+<URL:http://svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/po/>.
 
 Discussion regarding translations is handled for the moment on
 rosegarden-devel@lists.sourceforge.net, although a translation-only
