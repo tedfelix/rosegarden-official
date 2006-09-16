@@ -131,6 +131,12 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
 	    Indication i(**m);
 
 	    if (i.getIndicationType() == Indication::Slur) {
+#ifdef SKIP_AS_LONG_AS_IT_IS_NOT_POSSIBLE_TO_SET_SLUR_DIRECTION_IN_ROSEGARDEN
+                if (*m)->get<Bool>(NotationProperties::SLUR_ABOVE))
+		  str << "^";
+	        else
+		  str << "_";
+#endif
 		str << "( ";
 	    } else if (i.getIndicationType() == Indication::PhrasingSlur) {
 		str << "\\( ";
