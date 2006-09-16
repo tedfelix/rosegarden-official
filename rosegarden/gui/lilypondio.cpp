@@ -62,8 +62,6 @@
 
 #include "rosedebug.h"
 
-#define DEBUG_PITCH
-
 using namespace Rosegarden::BaseProperties;
 using Rosegarden::Bool;
 using Rosegarden::Clef;
@@ -215,7 +213,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
     std::string lilyNote = "";
 
     lilyNote += (char)tolower(p.getNoteName(key));
-    std::cout << "lilyNote: " << lilyNote << std::endl;  //REMOVE
+//    std::cout << "lilyNote: " << lilyNote << std::endl;
     Accidental acc = p.getAccidental(key);
     if      (acc == Rosegarden::Accidentals::DoubleFlat)  lilyNote += "eses";
     else if (acc == Rosegarden::Accidentals::Flat)        lilyNote += "es";
@@ -1576,28 +1574,19 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
         
 	} else if (text.getTextType() == Text::Direction) {
 
-	    // export "  ," as a LilyPond "\breathe" directive
-	    //!!! it would probably be most appropriate to make this behavior
-	    // configurable, and to make "  ," some kind of constant too,
-	    // since it has special meaning, and that meaning carries across
-	    // several files, but I didn't bother with either (DMM)
-	    if (s == "  ,") {
-		lilyText += " \\breathe ";
-	    } else {
-   	        // print above staff, large
-	        lilyText += "^\\markup { \\large \"" + s + "\" } ";
-	    }
+	    // print above staff, large
+	    lilyText += "^\\markup { \\large \"" + s + "\" } ";
 
 	} else if (text.getTextType() == Text::LocalDirection) {
 
 	    // print below staff, bold italics, small
 	    lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
 
-	 // LilyPond directives that don't require special handling across
-	 // barlines are handled here along with ordinary text types.  These
-	 // can be injected wherever they happen to occur, and should get
-	 // attached to the right bits in due course without extra effort.
-	 //
+	// LilyPond directives that don't require special handling across
+	// barlines are handled here along with ordinary text types.  These
+	// can be injected wherever they happen to occur, and should get
+	// attached to the right bits in due course without extra effort.
+	//
 	} else if (text.getText() == Text::Gliss) {
 	    lilyText += "\\glissando ";
 	} else if (text.getText() == Text::Arpeggio) {
