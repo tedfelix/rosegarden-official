@@ -1090,6 +1090,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
     bool overlong = false;
     bool newBeamedGroup = false;
+    int notesInBeamedGroup = 0;
 
     while (s->isBeforeEndMarker(i)) {
 
@@ -1099,7 +1100,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	// before we consider how to write the event itself (at least
 	// for pre-2.0 Lilypond output)
 
-	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType) ||
+	    (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType)) {
 	    
 	    long newGroupId = -1;
 	    if ((*i)->get<Int>(BEAMED_GROUP_ID, newGroupId)) {
@@ -1111,10 +1113,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			// and leaving an old one
 			if (groupType == GROUP_TYPE_TUPLED ||
 			    groupType == GROUP_TYPE_GRACE) {
-			    if (m_exportBeams) str << "] ";
+			    if (m_exportBeams && notesInBeamedGroup > 0) str << "] ";
 			    str << "} ";
 			} else if (groupType == GROUP_TYPE_BEAMED) {
-			    if (m_exportBeams) str << "] ";
+			    if (m_exportBeams && notesInBeamedGroup > 0) str << "] ";
 			}
 		    }
 		    
@@ -1136,13 +1138,13 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			} else {
 			    str << "\\times " << numerator << "/" << denominator << " { ";
 			    tupletRatio = std::pair<int, int>(numerator, denominator);
-			    newBeamedGroup = true;
+			    newBeamedGroup = true; notesInBeamedGroup = 0;
 			}
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
-			newBeamedGroup = true;
+			newBeamedGroup = true; notesInBeamedGroup = 0;
 		    } else if (groupType == GROUP_TYPE_GRACE) {
 			str << "\\grace { ";
-			newBeamedGroup = true;
+			newBeamedGroup = true; notesInBeamedGroup = 0;
 		    }
 		}
 		
@@ -1152,11 +1154,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    // leaving a beamed group
 		    if (groupType == GROUP_TYPE_TUPLED ||
 			groupType == GROUP_TYPE_GRACE) {
-	    		if (m_exportBeams) str << "] ";
+	    		if (m_exportBeams && notesInBeamedGroup > 0) str << "] ";
 			str << "} ";
 			tupletRatio = std::pair<int, int>(1, 1);
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
-			if (m_exportBeams) str << "] ";
+			if (m_exportBeams && notesInBeamedGroup > 0) str << "] ";
 		    }
 		    groupId = -1;
 		    groupType = "";
@@ -1295,6 +1297,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    handleStartingEvents(eventsToStart, str);
 
 	    if (tiedForward) str << "~ ";
+
+	    if (newBeamedGroup) notesInBeamedGroup++;
 	} else if ((*i)->isa(Note::EventRestType)) {
 
 	    bool hiddenRest = false;
@@ -1321,6 +1325,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    handleEndingEvents(eventsInProgress, i, str);
 	    handleStartingEvents(eventsToStart, str);
 
+	    if (newBeamedGroup) notesInBeamedGroup++;
 	} else if ((*i)->isa(Clef::EventType)) {
 	    
 	    try {
@@ -1387,7 +1392,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	}
 
 	// LilyPond 2.0 introduces required postfix syntax for beaming
-	if (m_exportBeams && newBeamedGroup) {
+	if (m_exportBeams && newBeamedGroup && notesInBeamedGroup > 0) {
 	    str << "[ ";
 	    newBeamedGroup = false;
 	}
@@ -1403,11 +1408,11 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     if (groupId != -1) {
 	if (groupType == GROUP_TYPE_TUPLED ||
 	    groupType == GROUP_TYPE_GRACE) {
-	    if (m_exportBeams) str << "] ";
+	    if (m_exportBeams && notesInBeamedGroup > 0) str << "] ";
 	    str << "} ";
 	    tupletRatio = std::pair<int, int>(1, 1);
 	} else if (groupType == GROUP_TYPE_BEAMED) {
-	    if (m_exportBeams) str << "] ";
+	    if (m_exportBeams && notesInBeamedGroup > 0) str << "] ";
 	}
     }
 
