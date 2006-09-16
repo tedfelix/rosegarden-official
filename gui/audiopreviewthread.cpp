@@ -26,6 +26,7 @@
 
 #include <qapplication.h>
 
+//#define DEBUG_AUDIO_PREVIEW_THREAD 1
 
 AudioPreviewThread::AudioPreviewThread(Rosegarden::AudioFileManager *manager) :
     m_manager(manager),
@@ -40,7 +41,9 @@ AudioPreviewThread::run()
 {
     bool emptyQueueSignalled = false;
 
-    RG_DEBUG << "AudioPreviewThread::run entering\n";
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::run entering\n";
+#endif
 
     while (!m_exiting) {
 
@@ -57,7 +60,9 @@ AudioPreviewThread::run()
         }
     }
 
-    RG_DEBUG << "AudioPreviewThread::run exiting\n";
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::run exiting\n";
+#endif
 }
 
 void
@@ -69,7 +74,9 @@ AudioPreviewThread::finish()
 bool
 AudioPreviewThread::process()
 {
-    RG_DEBUG << "AudioPreviewThread::process()\n";
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::process()\n";
+#endif
 
     if (!m_queue.empty()) {
 
@@ -94,7 +101,9 @@ AudioPreviewThread::process()
         std::vector<float> results;
     
         try {
-            RG_DEBUG << "AudioPreviewThread::process() file id " << req.audioFileId << endl;
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+            std::cerr << "AudioPreviewThread::process() file id " << req.audioFileId << std::endl;
+#endif
 
             // Requires thread-safe AudioFileManager::getPreview
             results = m_manager->getPreview(req.audioFileId,
@@ -104,7 +113,9 @@ AudioPreviewThread::process()
                                             req.showMinima);
         } catch (Rosegarden::AudioFileManager::BadAudioPathException e) {
 	    
-	    RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage() << endl;
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+	    std::cerr << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage() << std::endl;
+#endif
 	
             // OK, we hope this just means we're still recording -- so
             // leave this one in the queue
@@ -112,7 +123,9 @@ AudioPreviewThread::process()
 
         } catch (Rosegarden::PeakFileManager::BadPeakFileException e) {
 	
-	    RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage() << endl;
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+	    std::cerr << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage() << std::endl;
+#endif
 	
             // As above
             ++failed;
@@ -145,12 +158,16 @@ AudioPreviewThread::process()
         m_mutex.unlock();
 
 	if (failed > 0 && failed == inQueue) {
-            RG_DEBUG << "AudioPreviewThread::process() - return true\n";
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+            std::cerr << "AudioPreviewThread::process() - return true\n";
+#endif
 	    return true; // delay and try again
 	}
     }
 
-    RG_DEBUG << "AudioPreviewThread::process() - return false\n";
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::process() - return false\n";
+#endif
     return false;
 }
 
@@ -159,7 +176,9 @@ AudioPreviewThread::requestPreview(const Request &request)
 {
     m_mutex.lock();
 
-    RG_DEBUG << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify << endl;
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::requestPreview for file id " << request.audioFileId << ", start " << request.audioStartTime << ", end " << request.audioEndTime << ", width " << request.width << ", notify " << request.notify << std::endl;
+#endif
 /*!!!
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
 	if (i->second.second.notify == request.notify) {
@@ -176,10 +195,12 @@ AudioPreviewThread::requestPreview(const Request &request)
 
 //     if (!running()) start();
 
-    RG_DEBUG << "AudioPreviewThread::requestPreview : thread running : " << running()
-             << " - thread finished : " << finished() << endl;
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::requestPreview : thread running : " << running()
+             << " - thread finished : " << finished() << std::endl;
 
-    RG_DEBUG << "AudioPreviewThread::requestPreview - token = " << token << endl;
+    std::cerr << "AudioPreviewThread::requestPreview - token = " << token << std::endl;
+#endif
     return token;
 }
 
@@ -188,7 +209,9 @@ AudioPreviewThread::cancelPreview(int token)
 {
     m_mutex.lock();
 
-    RG_DEBUG << "AudioPreviewThread::cancelPreview for token " << token << endl;
+#ifdef DEBUG_AUDIO_PREVIEW_THREAD
+    std::cerr << "AudioPreviewThread::cancelPreview for token " << token << std::endl;
+#endif
     
     for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
 	if (i->second.first == token) {

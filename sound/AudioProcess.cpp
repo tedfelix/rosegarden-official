@@ -2077,7 +2077,7 @@ AudioFileWriter::openRecordFile(InstrumentId id,
 
     if (m_files[id].first) {
 	releaseLock();
-	std::cerr << "AudioFileWriter::openRecordFile: already have record file!" << std::endl;
+	std::cerr << "AudioFileWriter::openRecordFile: already have record file for instrument " << id << "!" << std::endl;
 	return false; // already have one
     }
 
