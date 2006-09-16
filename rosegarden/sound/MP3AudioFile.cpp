@@ -95,7 +95,7 @@ MP3AudioFile::open()
     {
         parseHeader();
     }
-    catch(std::string s)
+    catch(BadSoundFileException s)
     {
         throw(s);
     }

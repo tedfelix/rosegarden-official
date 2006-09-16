@@ -32,6 +32,8 @@
 #include <fstream>
 #include <string>
 
+#include "Exception.h"
+
 namespace Rosegarden
 {
 
@@ -43,6 +45,24 @@ class SoundFile
 public:
     SoundFile(const std::string &fileName);
     virtual ~SoundFile();
+
+    class BadSoundFileException : public Exception
+    {
+    public:
+	BadSoundFileException(std::string path) :
+	    Exception("Bad sound file " + path), m_path(path) { }
+	BadSoundFileException(std::string path, std::string message) :
+	    Exception("Bad sound file " + path + ": " + message), m_path(path) { }
+	BadSoundFileException(std::string path, std::string file, int line) :
+	    Exception("Bad sound file " + path, file, line), m_path(path) { }
+
+	~BadSoundFileException() throw() { }
+
+	std::string getPath() const { return m_path; }
+
+    private:
+	std::string m_path;
+    };
 
     // All files should be able open, write and close
     virtual bool open() = 0;

@@ -92,7 +92,7 @@ BWFAudioFile::open()
     {
         parseHeader();
     }
-    catch(std::string s)
+    catch (BadSoundFileException s)
     {
         //throw(s);
         return false;

@@ -315,21 +315,22 @@ SoundDriver::getMappedDevice(DeviceId id)
 bool
 SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
 {
-    AudioFile *ins = new WAVAudioFile(id, fileName, fileName);
-    try
-    {
-        ins->open();
-    }
-    catch(std::string s)
-    {
-        return false;
-    }
+    AudioFile *ins = 0;
 
-    m_audioFiles.push_back(ins);
+    try {
+	ins = new WAVAudioFile(id, fileName, fileName);
+        ins->open();
+	m_audioFiles.push_back(ins);
 
 //    std::cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << std::endl;
 
-    return true;
+	return true;
+
+    } catch (SoundFile::BadSoundFileException e) {
+	std::cerr << "SoundDriver::addAudioFile: Failed to add audio file " << fileName << ": " << e.getMessage() << std::endl;
+	delete ins;
+	return false;
+    }
 }
 
 bool

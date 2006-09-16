@@ -605,7 +605,10 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 	std::ifstream file(m_audioFile->getFilename().c_str(),
 			   std::ios::in | std::ios::binary);
 
-	if (!file) throw(std::string("PlayableAudioFile - can't open file"));
+	if (!file) {
+	    std::cerr << "ERROR: PlayableAudioFile::checkSmallFileCache: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
+	    return;
+	}
 
 #ifdef DEBUG_PLAYABLE
 	std::cerr << "PlayableAudioFile::checkSmallFileCache: Adding file to small file cache" << std::endl;
@@ -677,7 +680,6 @@ PlayableAudioFile::fillBuffers()
 				   std::ios::in | std::ios::binary);
 	if (!*m_file) {
 	    std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
-//	    throw(std::string("PlayableAudioFile - can't open file"));
 	    delete m_file;
 	    m_file = 0;
 	    return;
@@ -721,7 +723,6 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 				   std::ios::in | std::ios::binary);
 	if (!*m_file) {
 	    std::cerr << "ERROR: PlayableAudioFile::fillBuffers: Failed to open audio file " << m_audioFile->getFilename() << std::endl;
-//	    throw(std::string("PlayableAudioFile - can't open file"));
 	    delete m_file;
 	    m_file = 0;
 	    return false;

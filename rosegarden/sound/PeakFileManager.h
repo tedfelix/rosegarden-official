@@ -58,6 +58,24 @@ public:
     //
     PeakFileManager();
     virtual ~PeakFileManager();
+    
+    class BadPeakFileException : public Exception
+    {
+    public:
+	BadPeakFileException(std::string path) :
+	    Exception("Bad peak file " + path), m_path(path) { }
+	BadPeakFileException(std::string path, std::string file, int line) :
+	    Exception("Bad peak file " + path, file, line), m_path(path) { }
+	BadPeakFileException(const SoundFile::BadSoundFileException &e) :
+	    Exception("Bad peak file (malformed audio?) " + e.getPath()), m_path(e.getPath()) { }
+
+	~BadPeakFileException() throw() { }
+
+	std::string getPath() const { return m_path; }
+
+    private:
+	std::string m_path;
+    };
 
 private:
     PeakFileManager(const PeakFileManager &pFM);
@@ -67,8 +85,8 @@ public:
     // Check that a given audio file has a valid and up to date
     // peak file or peak chunk.
     //
-    //
     bool hasValidPeaks(AudioFile *audioFile);
+    // throw BadSoundFileException, BadPeakFileException
 
     // Generate a peak file from file details - if the peak file already
     // exists _and_ it's up to date then we don't do anything.  For BWF
@@ -77,6 +95,7 @@ public:
     //
     void generatePeaks(AudioFile *audioFile,
                        unsigned short updatePercentage);
+    // throw BadSoundFileException, BadPeakFileException
 
     // Get a vector of floats as the preview
     //
@@ -85,6 +104,7 @@ public:
                                   const RealTime &endTime,
                                   int   width,
                                   bool  showMinima);
+    // throw BadSoundFileException, BadPeakFileException
     
     // Remove cache for a single audio file (if audio file to be deleted etc)
     // 

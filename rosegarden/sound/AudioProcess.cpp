@@ -2102,23 +2102,32 @@ AudioFileWriter::openRecordFile(InstrumentId id,
         int bytesPerSample = (format == RIFFAudioFile::PCM ? 2 : 4) * channels;
         int bitsPerSample  = (format == RIFFAudioFile::PCM ? 16 : 32);
 
-        AudioFile *recordFile =
-            new WAVAudioFile(fileName,
-                             channels,             // channels
-                             m_sampleRate,      // samples per second
-                             m_sampleRate *
-                                  bytesPerSample,  // bytes per second
-                             bytesPerSample,       // bytes per sample
-                             bitsPerSample);       // bits per sample
+        AudioFile *recordFile = 0;
 
-        // open the file for writing
-        //
-	if (!recordFile->write()) {
-	    std::cerr << "AudioFileWriter::openRecordFile: failed to open " << fileName << " for writing" << std::endl;
+	try {
+	    recordFile =
+		new WAVAudioFile(fileName,
+				 channels,            // channels
+				 m_sampleRate,        // samples per second
+				 m_sampleRate *
+				     bytesPerSample,  // bytes per second
+				 bytesPerSample,      // bytes per sample
+				 bitsPerSample);      // bits per sample
+
+	    // open the file for writing
+	    //
+	    if (!recordFile->write()) {
+		std::cerr << "AudioFileWriter::openRecordFile: failed to open " << fileName << " for writing" << std::endl;
+		delete recordFile;
+		releaseLock();
+		return false;
+	    }
+	} catch (SoundFile::BadSoundFileException e) {
+	    std::cerr << "AudioFileWriter::openRecordFile: failed to open " << fileName << " for writing: " << e.getMessage() << std::endl;
 	    delete recordFile;
 	    releaseLock();
 	    return false;
-	}
+	}	    
 
 	RecordableAudioFile *raf = new RecordableAudioFile(recordFile,
 							   bufferSamples);

@@ -85,10 +85,9 @@ WAVAudioFile::open()
     {
         parseHeader();
     }
-    catch(std::string s)
+    catch (BadSoundFileException e)
     {
-        //throw(s);
-        std::cerr << "ERROR: WAVAudioFile::open(): parseHeader: " << s << endl;
+        std::cerr << "ERROR: WAVAudioFile::open(): parseHeader: " << e.getMessage() << endl;
         return false;
     }
 

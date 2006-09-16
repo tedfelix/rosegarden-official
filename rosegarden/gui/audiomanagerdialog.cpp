@@ -406,7 +406,7 @@ AudioManagerDialog::slotPopulateFileList()
                                 (*it)->getLength(),
                                 audioPixmap);
         }
-        catch(std::string e)
+        catch (Rosegarden::Exception e)
         {
             audioPixmap->fill(); // white
             QPainter p(audioPixmap);
@@ -504,7 +504,7 @@ AudioManagerDialog::slotPopulateFileList()
                                                (*iit)->getAudioEndTime(),
                                                audioPixmap);
                 }
-                catch(std::string e)
+                catch (Rosegarden::Exception e)
                 {
                     // should already be set to "no file"
                 }
@@ -1285,16 +1285,16 @@ AudioManagerDialog::addFile(const KURL& kurl)
         id = m_doc->
             getAudioFileManager().addFile(std::string(newFilePath.data()));
     }
-    catch(std::string e)
+    catch (AudioFileManager::BadAudioPathException e)
     {
         CurrentProgressDialog::freeze();
 
         QString errorString = i18n("Cannot add file %1: %2")
-	    .arg(kurl.prettyURL()).arg(strtoqstr(e));
+	    .arg(kurl.prettyURL()).arg(strtoqstr(e.getMessage()));
         KMessageBox::sorry(this, errorString);
         return false;
     }
-    catch(QString e)
+    catch (QString e) //???
     {
         CurrentProgressDialog::freeze();
 
@@ -1313,11 +1313,11 @@ AudioManagerDialog::addFile(const KURL& kurl)
     {
         m_doc->getAudioFileManager().generatePreview(id);
     }
-    catch(std::string e)
+    catch (Rosegarden::Exception e)
     {
         CurrentProgressDialog::freeze();
 
-        QString message = strtoqstr(e) + "\n\n" +
+        QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           i18n("Try copying this file to a directory where you have write permission and re-add it");
         KMessageBox::information(this, message);
         //return false;

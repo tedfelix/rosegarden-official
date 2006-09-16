@@ -127,61 +127,65 @@ AudioFileManager::addFile(const std::string &filePath)
 #ifdef DEBUG_AUDIOFILEMANAGER
             std::cout << "FOUND BWF" << std::endl;
 #endif
-            aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
+	    try {
+		aF = new BWFAudioFile(id, getShortFilename(filePath), filePath);
+	    } catch (SoundFile::BadSoundFileException e) {
+		delete aF;
+		throw BadAudioPathException(e);
+	    }
         }
         else if (subType == WAV)
         {
-            aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
+	    try {
+		aF = new WAVAudioFile(id, getShortFilename(filePath), filePath);
+	    } catch (SoundFile::BadSoundFileException e) {
+		delete aF;
+		throw BadAudioPathException(e);
+	    }
         }
 
         // Ensure we have a valid file handle
         //
         if (aF == 0) {
-	    throw i18n("Unsupported audio file type."); 
+	    std::cerr << "AudioFileManager: Unknown WAV audio file subtype in " << filePath << std::endl;
+	    throw BadAudioPathException(filePath, __FILE__, __LINE__);
 	}
 
         // Add file type on extension
-        try
-        { 
-            if (aF->open() == false)
-            {
-                delete aF;
-                throw(i18n("Failed to open audio file."));
-            }
-        }
-        catch(std::string e)
-        {
-            // catch and rethrow
-            //
-            delete aF;
-            throw(e);
-        }
+	try {
+	    if (aF->open() == false)
+	    {
+		delete aF;
+		std::cerr << "AudioFileManager: Malformed audio file in " << filePath << std::endl;
+		throw BadAudioPathException(filePath, __FILE__, __LINE__);
+	    }
+	} catch (SoundFile::BadSoundFileException e) {
+	    delete aF;
+	    throw BadAudioPathException(e);
+	}
     }
 #ifdef HAVE_LIBMAD
     else if (ext == "mp3")
     {
-        aF = new MP3AudioFile(id, getShortFilename(filePath), filePath);
+	try {
+	    aF = new MP3AudioFile(id, getShortFilename(filePath), filePath);
 
-        try
-        { 
-            if (aF->open() == false)
-            {
-                delete aF;
-                throw(i18n("Problem opening MP3 file"));
-            }
-        }
-        catch(std::string e)
-        {
-            // catch and rethrow
-            //
-            delete aF;
-            throw(e);
-        }
+	    if (aF->open() == false)
+	    {
+		delete aF;
+		std::cerr << "AudioFileManager: Malformed mp3 audio file in " << filePath << std::endl;
+		throw BadAudioPathException(filePath, __FILE__, __LINE__);
+	    }
+	} catch (SoundFile::BadSoundFileException e) {
+	    delete aF;
+	    throw BadAudioPathException(e);
+	}
     }
 #endif // HAVE_LIBMAD
     else
     {
-        throw(i18n("Unsupported audio file format \"%1\".").arg(ext));
+	std::cerr << "AudioFileManager: Unsupported audio file extension in " << filePath << std::endl;
+        throw BadAudioPathException(filePath, __FILE__, __LINE__);
     }
 
     if (aF)
@@ -252,17 +256,26 @@ AudioFileManager::insertFile(const std::string &name,
 
     AudioFileId id = getFirstUnusedID();
 
-    WAVAudioFile *aF = new WAVAudioFile(id, name, foundFileName);
+    WAVAudioFile *aF = 0;
 
-    // if we don't recognise the file then don't insert it
-    //
-    if (aF->open() == false)
-    {
-        delete aF;
-        throw(std::string(
-                "AudioFileManager::insertFile - don't recognise file type"));
+    try {
+
+	aF = new WAVAudioFile(id, name, foundFileName);
+
+	// if we don't recognise the file then don't insert it
+	//
+	if (aF->open() == false)
+	{
+	    delete aF;
+	    std::cerr << "AudioFileManager::insertFile - don't recognise file type in " << foundFileName << std::endl;
+	    throw BadAudioPathException(foundFileName, __FILE__, __LINE__);
+	}
+	m_audioFiles.push_back(aF);
+
+    } catch (SoundFile::BadSoundFileException e) {
+	delete aF;
+	throw BadAudioPathException(e);
     }
-    m_audioFiles.push_back(aF);
 
     return id;
 }
@@ -344,16 +357,26 @@ AudioFileManager::insertFile(const std::string &name,
     removeFile(id);
 
     // and insert
-    WAVAudioFile *aF = new WAVAudioFile(id, name, foundFileName);
+    WAVAudioFile *aF = 0;
 
-    // Test the file
-    if (aF->open() == false)
-    {
-        delete aF;
-        return false;
+    try {
+
+	aF = new WAVAudioFile(id, name, foundFileName);
+
+	// Test the file
+	if (aF->open() == false)
+	{
+	    delete aF;
+	    return false;
+	}
+
+	m_audioFiles.push_back(aF);
+
+    } catch (SoundFile::BadSoundFileException e) {
+	delete aF;
+	throw BadAudioPathException(e);
     }
 
-    m_audioFiles.push_back(aF);
     return true;
 }
 
@@ -506,9 +529,16 @@ AudioFileManager::createRecordingAudioFile()
     }
 
     // insert file into vector
-    WAVAudioFile *aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + fileName.data());
-    m_audioFiles.push_back(aF);
-    m_recordedAudioFiles.insert(aF);
+    WAVAudioFile *aF = 0;
+
+    try {
+	aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + fileName.data());
+	m_audioFiles.push_back(aF);
+	m_recordedAudioFiles.insert(aF);
+    } catch (SoundFile::BadSoundFileException e) {
+	delete aF;
+	throw BadAudioPathException(e);
+    }
 
     return aF;
 } 
@@ -744,8 +774,11 @@ AudioFileManager::getPreview(AudioFileId id,
         return std::vector<float>();
     }
 
-    if (!m_peakManager.hasValidPeaks(audioFile))
-        throw std::string("<no peakfile>");
+    if (!m_peakManager.hasValidPeaks(audioFile)) {
+	std::cerr << "AudioFileManager::getPreview: No peaks for audio file " << audioFile->getFilename() << std::endl;
+        throw PeakFileManager::BadPeakFileException
+	    (audioFile->getFilename(), __FILE__, __LINE__);
+    }
 
     return m_peakManager.getPreview(audioFile,
                                     startTime,
@@ -763,9 +796,12 @@ AudioFileManager::drawPreview(AudioFileId id,
     MutexLock lock(&_audioFileManagerLock);
 
     AudioFile *audioFile = getAudioFile(id);
+    if (!audioFile) return;
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
-        throw std::string("<no peakfile>");
+	std::cerr << "AudioFileManager::getPreview: No peaks for audio file " << audioFile->getFilename() << std::endl;
+        throw PeakFileManager::BadPeakFileException
+	    (audioFile->getFilename(), __FILE__, __LINE__);
     }
 
     std::vector<float> values = m_peakManager.getPreview
@@ -838,9 +874,13 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
     MutexLock lock(&_audioFileManagerLock);
 
     AudioFile *audioFile = getAudioFile(id);
+    if (!audioFile) return;
 
-    if (!m_peakManager.hasValidPeaks(audioFile))
-        throw std::string("<no peakfile>");
+    if (!m_peakManager.hasValidPeaks(audioFile)) {
+	std::cerr << "AudioFileManager::getPreview: No peaks for audio file " << audioFile->getFilename() << std::endl;
+        throw PeakFileManager::BadPeakFileException
+	    (audioFile->getFilename(), __FILE__, __LINE__);
+    }
 
     std::vector<float> values = m_peakManager.getPreview
                                         (audioFile,
