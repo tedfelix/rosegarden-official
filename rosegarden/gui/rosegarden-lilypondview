@@ -152,7 +152,7 @@ echo "Lilypond version is $lilypond_version, file version is $fileversion"
 	if [ -n "$graphical" ] ; then
 
 	    # special bar comment syntax RG exports -- hopefully benign if absent
-	    bars=`grep '^%% [0-9][0-9]*$' "$base" | sort +1 -n | tail -1 | awk '{ print $2; }'`
+	    bars=`grep '^%% [0-9][0-9]*$' "$base" | sort -k 1 -n | tail -1 | awk '{ print $2; }'`
 	
 	    if [ -z "$bars" ]; then
 		staffs=`grep 'Staff *[=<]' "$base" | wc -l`
