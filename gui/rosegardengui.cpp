@@ -5874,13 +5874,21 @@ RosegardenGUIApp::setCursor(const QCursor& cursor)
 QString
 RosegardenGUIApp::createNewAudioFile()
 {
-    Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().createRecordingAudioFile();
-    if (!aF) {
-	// createRecordingAudioFile doesn't actually write to the disk,
-	// and in principle it shouldn't fail
+    Rosegarden::AudioFile *aF = 0;
+    try {
+	aF = m_doc->getAudioFileManager().createRecordingAudioFile();
+	if (!aF) {
+	    // createRecordingAudioFile doesn't actually write to the disk,
+	    // and in principle it shouldn't fail
+	    std::cerr << "ERROR: RosegardenGUIApp::createNewAudioFile: Failed to create recording audio file" << std::endl;
+	    return "";
+	} else {
+	    return aF->getFilename().c_str();
+	}
+    } catch (Rosegarden::AudioFileManager::BadAudioPathException e) {
+	delete aF;
+	std::cerr << "ERROR: RosegardenGUIApp::createNewAudioFile: Failed to create recording audio file: " << e.getMessage() << std::endl;
 	return "";
-    } else {
-	return aF->getFilename().c_str();
     }
 }
 
@@ -5889,13 +5897,23 @@ RosegardenGUIApp::createRecordAudioFiles(const QValueVector<Rosegarden::Instrume
 {
     QValueVector<QString> qv;
     for (unsigned int i = 0; i < recordInstruments.size(); ++i) {
-	Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().createRecordingAudioFile();
-	if (aF) {
-	    // createRecordingAudioFile doesn't actually write to the disk,
-	    // and in principle it shouldn't fail
-	    qv.push_back(aF->getFilename().c_str());
-	    m_doc->addRecordAudioSegment(recordInstruments[i],
-					 aF->getId());
+	Rosegarden::AudioFile *aF = 0;
+	try {
+	    aF = m_doc->getAudioFileManager().createRecordingAudioFile();
+	    if (aF) {
+		// createRecordingAudioFile doesn't actually write to the disk,
+		// and in principle it shouldn't fail
+		qv.push_back(aF->getFilename().c_str());
+		m_doc->addRecordAudioSegment(recordInstruments[i],
+					     aF->getId());
+	    } else {
+		std::cerr << "ERROR: RosegardenGUIApp::createRecordAudioFiles: Failed to create recording audio file" << std::endl;
+		return qv;
+	    }
+	} catch (Rosegarden::AudioFileManager::BadAudioPathException e) {
+	    delete aF;
+	    std::cerr << "ERROR: RosegardenGUIApp::createRecordAudioFiles: Failed to create recording audio file: " << e.getMessage() << std::endl;
+	    return qv;
 	}
     }
     return qv;

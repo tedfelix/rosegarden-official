@@ -96,11 +96,11 @@ PeakFile::open()
     {
         parseHeader();
     }
-    catch(std::string s)
+    catch (BadSoundFileException s)
     {
 
 #ifdef DEBUG_PEAKFILE
-        cerr << "PeakFile::open - EXCEPTION \"" << s << "\""
+        cerr << "PeakFile::open - EXCEPTION \"" << s.getMessage() << "\""
              << endl;
 #endif
         return false;
@@ -126,7 +126,7 @@ PeakFile::parseHeader()
     if (header.compare(0, 4, Rosegarden::AUDIO_BWF_PEAK_ID) != 0)
 #endif
     {
-        throw(std::string("PeakFile::parseHeader - can't find LEVL identifier"));
+        throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't find LEVL identifier"));
     }
 
     int length = getIntegerFromLittleEndian(header.substr(4, 4));
@@ -134,7 +134,7 @@ PeakFile::parseHeader()
     // Get the length of the header minus the first 8 bytes
     //
     if (length == 0)
-        throw(std::string("PeakFile::parseHeader - can't get header length"));
+        throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't get header length"));
 
     // Get the file information
     //
@@ -218,10 +218,10 @@ PeakFile::write(unsigned short updatePercentage)
         if (!m_audioFile->open())
             return false;
     }
-    catch(std::string e)
+    catch(BadSoundFileException e)
     {
 #ifdef DEBUG_PEAKFILE
-        std::cerr << "PeakFile::write - \"" << e << "\"" << std::endl;
+        std::cerr << "PeakFile::write - \"" << e.getMessage() << "\"" << std::endl;
 #endif
         return false;
     }
@@ -526,15 +526,14 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
     while(m_keepProcessing)
     {
-        try
-        {
-            samples = m_audioFile->
-                getBytes(m_blockSize * channels * bytes);
-        }
-        catch (std::string e)
-        {
-            // do nothing
-        }
+	try {
+	    samples = m_audioFile->
+		getBytes(m_blockSize * channels * bytes);
+	} catch (BadSoundFileException e) {
+	    std::cerr << "PeakFile::writePeaks: " << e.getMessage()
+		      << std::endl;
+	    break;
+	}
 
         // If no bytes or less than the total number of bytes are returned
         // then break out
@@ -595,7 +594,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 		}
                 else
                 {
-                    throw(std::string("PeakFile::writePeaks - unsupported bit depth"));
+                    throw(BadSoundFileException(m_fileName, "PeakFile::writePeaks - unsupported bit depth"));
                 }
 
                 // First time for each channel
@@ -688,18 +687,12 @@ PeakFile::getPreview(const RealTime &startTime,
         {
             // Scan to start of peak data
             scanToPeak(0);
-            try
-            {
-                m_peakCache = getBytes(m_inFile, getSize() - 128);
-            }
-            catch(std::string e)
-            {
-
-#ifdef DEBUG_PEAKFILE_CACHE
-                std::cerr << "PeakFile::getPreview - generating peak cache - "
-                          << e << std::endl;
-#endif
-            }
+	    try {
+		m_peakCache = getBytes(m_inFile, getSize() - 128);
+	    } catch (BadSoundFileException e) {
+		std::cerr << "PeakFile::getPreview: " << e.getMessage()
+			  << std::endl;
+	    }
 
 #ifdef DEBUG_PEAKFILE_CACHE
 	    std::cout << "PeakFile::getPreview - generated peak cache - " 
@@ -813,12 +806,12 @@ PeakFile::getPreview(const RealTime &startTime,
 
 		    try {
 			peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-		    } catch (std::string e) {
+		    } catch (BadSoundFileException e) {
 			// Problem with the get - probably an EOF
 			// return the results so far.
 			//
 #ifdef DEBUG_PEAKFILE
-			std::cout << "PeakFile::getPreview - \"" << e << "\"\n"
+			std::cout << "PeakFile::getPreview - \"" << e.getMessage() << "\"\n"
 				  << endl;
 #endif
 			goto done;
@@ -999,8 +992,10 @@ PeakFile::getSplitPoints(const RealTime &startTime,
             {
                 peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
             }
-            catch (std::string e)
+            catch (BadSoundFileException e)
             {
+		std::cerr << "PeakFile::getSplitPoints: "
+			  << e.getMessage() << std::endl;
                 break;
             }
 

@@ -65,9 +65,11 @@ public:
     {
     public:
 	BadAudioPathException(std::string path) :
-	    Exception("Bad audio file path"), m_path(path) { }
+	    Exception("Bad audio file path " + path), m_path(path) { }
 	BadAudioPathException(std::string path, std::string file, int line) :
-	    Exception("Bad audio file path", file, line), m_path(path) { }
+	    Exception("Bad audio file path " + path, file, line), m_path(path) { }
+	BadAudioPathException(const SoundFile::BadSoundFileException &e) :
+	    Exception("Bad audio file path (malformed file?) " + e.getPath()), m_path(e.getPath()) { }
 
 	~BadAudioPathException() throw() { }
 
@@ -87,6 +89,7 @@ public:
     // to add an actual file.
     //
     AudioFileId addFile(const std::string &filePath);
+    // throw BadAudioPathException
 
     // Insert an audio file into the AudioFileManager and get the
     // first allocated id for it.  Used from the RG file as we already
@@ -94,11 +97,13 @@ public:
     //
     AudioFileId insertFile(const std::string &name,
                            const std::string &fileName);
+    // throw BadAudioPathException
 
     // And insert an AudioFile and specify an id
     //
     bool insertFile(const std::string &name, const std::string &fileName,
                     AudioFileId id);
+    // throw BadAudioPathException
 
     // Remove a file from the AudioManager by id
     //
@@ -140,10 +145,12 @@ public:
     // Get a new audio filename at the audio record path
     //
     AudioFile *createRecordingAudioFile();
+    // throw BadAudioPathException
 
     // Get a set of new audio filenames at the audio record path
     //
     std::vector<std::string> createRecordingAudioFiles(unsigned int number);
+    // throw BadAudioPathException
 
     // Return whether a file was created by recording within this "session"
     //
@@ -165,10 +172,12 @@ public:
     // Convenience function generate all previews on the audio file.
     //
     void generatePreviews();
+    // throw BadSoundFileException, BadPeakFileException
 
     // Generate for a single audio file
     //
     bool generatePreview(AudioFileId id);
+    // throw BadSoundFileException, BadPeakFileException
 
     // Get a preview for an AudioFile adjusted to Segment start and
     // end parameters (assuming they fall within boundaries).
@@ -181,6 +190,7 @@ public:
                                   const RealTime &endTime,
                                   int width,
                                   bool withMinima);
+    // throw BadPeakFileException, BadAudioPathException
 
     // Draw a fixed size (fixed by QPixmap) preview of an audio file
     //
@@ -188,6 +198,7 @@ public:
                      const RealTime &startTime, 
                      const RealTime &endTime,
                      QPixmap *pixmap);
+    // throw BadPeakFileException, BadAudioPathException
 
     // Usually used to show how an audio Segment makes up part of
     // an audio file.
@@ -198,6 +209,7 @@ public:
                                 const RealTime &highlightStart,
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
+    // throw BadPeakFileException, BadAudioPathException
 
     // Get a short file name from a long one (with '/'s)
     //
@@ -226,6 +238,7 @@ public:
                        const RealTime &endTime,
                        int threshold,
                        const RealTime &minTime = RealTime(0, 100000000));
+    // throw BadPeakFileException, BadAudioPathException
 
     // Get the peak file manager
     //

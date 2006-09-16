@@ -615,11 +615,11 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
     }
-    catch(std::string e)
+    catch (Rosegarden::Exception e)
     {
 	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
-        KMessageBox::error(0, strtoqstr(e));
+        KMessageBox::error(0, strtoqstr(e.getMessage()));
 	CurrentProgressDialog::thaw();
     }
 
@@ -2644,11 +2644,11 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::InstrumentId iid)
 	//!!! mtr just for now?: or better to do this once after the fact?
 //!!!	m_audioFileManager.generatePreviews();
     }
-    catch(std::string e)
+    catch (Rosegarden::Exception e)
     {
 	KStartupLogo::hideIfStillThere();
 	CurrentProgressDialog::freeze();
-        KMessageBox::error(0, strtoqstr(e));
+        KMessageBox::error(0, strtoqstr(e.getMessage()));
 	CurrentProgressDialog::thaw();
     }
 

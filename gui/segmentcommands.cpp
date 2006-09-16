@@ -1081,13 +1081,21 @@ AudioSegmentAutoSplitCommand::execute()
         // result file size of 0.2secs - that's probably fair
         // enough.
         //
-	std::vector<Rosegarden::SplitPointPair> rtSplitPoints =
-	    m_audioFileManager->
+	std::vector<Rosegarden::SplitPointPair> rtSplitPoints;
+
+	try {
+	    rtSplitPoints =
+		m_audioFileManager->
                 getSplitPoints(m_segment->getAudioFileId(),
                                m_segment->getAudioStartTime(),
                                m_segment->getAudioEndTime(),
                                m_threshold,
                                Rosegarden::RealTime(0, 200000000));
+	} catch (Rosegarden::AudioFileManager::BadAudioPathException e) {
+	    std::cerr << "ERROR: AudioSegmentAutoSplitCommand: Bad audio path: " << e.getMessage() << std::endl;
+	} catch (Rosegarden::PeakFileManager::BadPeakFileException e) {
+	    std::cerr << "ERROR: AudioSegmentAutoSplitCommand: Bad peak file: " << e.getMessage() << std::endl;
+	}	    
 	
 	std::vector<Rosegarden::SplitPointPair>::iterator it;
 	timeT absStartTime, absEndTime;
@@ -1155,8 +1163,10 @@ AudioSegmentAutoSplitCommand::execute()
     for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
 	m_composition->addSegment(m_newSegments[i]);
     }
-	    
-    m_composition->detachSegment(m_segment);
+
+    if (m_newSegments.size() > 0) {
+	m_composition->detachSegment(m_segment);
+    }
 
     m_detached = true;
 }
@@ -1167,7 +1177,9 @@ AudioSegmentAutoSplitCommand::unexecute()
     for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
 	m_composition->detachSegment(m_newSegments[i]);
     }
-    m_composition->addSegment(m_segment);
+    if (m_newSegments.size() > 0) { // otherwise it was never detached
+	m_composition->addSegment(m_segment);
+    }
     m_detached = false;
 }
 

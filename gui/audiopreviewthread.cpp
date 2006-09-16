@@ -74,12 +74,14 @@ AudioPreviewThread::process()
     if (!m_queue.empty()) {
 
 	int failed = 0;
+	int inQueue = 0;
         int count = 0;
 
-        // process 1st request and leave
-        RequestQueue::iterator i = m_queue.begin();
-
         m_mutex.lock();
+
+        // process 1st request and leave
+	inQueue = m_queue.size();
+        RequestQueue::iterator i = m_queue.begin();
 
         // i->first is width, which we use only to provide an ordering to
         // ensure we do smaller previews first.  We don't use it here.
@@ -100,12 +102,19 @@ AudioPreviewThread::process()
                                             req.audioEndTime,
                                             req.width,
                                             req.showMinima);
-        } catch (std::string e) {
-	
-	    RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ":\n" << e.c_str() << endl;
+        } catch (Rosegarden::AudioFileManager::BadAudioPathException e) {
+	    
+	    RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad audio path: " << e.getMessage() << endl;
 	
             // OK, we hope this just means we're still recording -- so
             // leave this one in the queue
+            ++failed;
+
+        } catch (Rosegarden::PeakFileManager::BadPeakFileException e) {
+	
+	    RG_DEBUG << "AudioPreviewThread::process: failed to update preview for audio file " << req.audioFileId << ": bad peak file: " << e.getMessage() << endl;
+	
+            // As above
             ++failed;
         }
     
@@ -124,7 +133,8 @@ AudioPreviewThread::process()
         }
 
         if (found) {
-            unsigned int channels = m_manager->getAudioFile(req.audioFileId)->getChannels();
+            unsigned int channels =
+		m_manager->getAudioFile(req.audioFileId)->getChannels();
             m_results[token] = ResultsPair(channels, results);
             QObject *notify = req.notify;
             QApplication::postEvent
@@ -134,7 +144,7 @@ AudioPreviewThread::process()
 
         m_mutex.unlock();
 
-	if (failed > 0 && failed == m_queue.size()) {
+	if (failed > 0 && failed == inQueue) {
             RG_DEBUG << "AudioPreviewThread::process() - return true\n";
 	    return true; // delay and try again
 	}

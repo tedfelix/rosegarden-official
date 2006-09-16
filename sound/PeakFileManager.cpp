@@ -196,10 +196,9 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         //
         if(m_currentPeakFile->write(updatePercentage) == false)
         {
-            std::string rS = std::string("Can't write peak file for \"") +
-                             audioFile->getFilename() +
-                             std::string("\" - no preview generated");
-            throw(rS);
+	    std::cerr << "Can't write peak file for " << audioFile->getFilename() << " - no preview generated" << std::endl;
+	    throw BadPeakFileException
+		(audioFile->getFilename(), __FILE__, __LINE__);
         }
 
         // The m_currentPeakFile might have been cancelled (see stopPreview())
@@ -256,7 +255,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
                                       width,
                                       showMinima);
         }
-        catch(std::string e)
+        catch (SoundFile::BadSoundFileException e)
         {
 #ifdef DEBUG_PEAKFILEMANAGER
             std::cout << "PeakFileManager::getPreview "
@@ -264,6 +263,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
 #else
             ;
 #endif
+	    throw BadPeakFileException(e);
         }
     }
     else if (audioFile->getType() == BWF)

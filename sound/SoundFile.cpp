@@ -70,7 +70,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
         //
         file->clear();
 
-        throw(std::string("SoundFile::getBytes() - EOF encountered"));
+        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes() - EOF encountered"));
     }
 
     if (!(*file)) {
@@ -126,7 +126,7 @@ std::string
 SoundFile::getBytes(unsigned int numberOfBytes)
 {
     if (m_inFile == 0)
-        throw(std::string("SoundFile::getBytes - no open file handle"));
+        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes - no open file handle"));
 
     if (m_inFile->eof())
     {
@@ -134,7 +134,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
         //
         m_inFile->clear();
 
-        throw(std::string("SoundFile::getBytes() - EOF encountered"));
+        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes() - EOF encountered"));
     }
 
 

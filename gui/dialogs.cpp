@@ -3692,7 +3692,7 @@ AudioSplitDialog::drawPreview()
                                 m_previewWidth,
                                 false);
     }
-    catch(std::string e)
+    catch(Rosegarden::Exception e)
     {
         QCanvasText *text = new QCanvasText(m_canvas);
         text->setColor(kapp->palette().

@@ -1505,8 +1505,8 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 
         try {
             audioFileId = aFM.addFile(qstrtostr(audioFile));
-        } catch(std::string e) {
-            QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e);
+        } catch(Rosegarden::AudioFileManager::BadAudioPathException e) {
+            QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e.getMessage());
             KMessageBox::sorry(this, errorString);
             return;
         } catch(QString e) {

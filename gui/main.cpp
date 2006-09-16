@@ -576,6 +576,10 @@ int main(int argc, char *argv[])
     {
         RG_DEBUG << "RosegardenGUI - " << e << endl;
     }
+    catch(Rosegarden::Exception e)
+    {
+        RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
+    }	
 
     if (startLogo) {
         

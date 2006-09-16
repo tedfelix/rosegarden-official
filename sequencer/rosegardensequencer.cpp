@@ -719,6 +719,12 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 		SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
 				<< "unrecognised type returned for createNewAudioFiles" << endl;
 	    }
+
+	    if (audioFileNames.size() != audioInstruments.size()) {
+		std::cerr << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")" << std::endl;
+		stop();
+		return 0;
+	    }
 	}
 
 	std::vector<Rosegarden::InstrumentId> armedInstrumentsVec;

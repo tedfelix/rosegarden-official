@@ -58,7 +58,7 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
 
     if (bitsPerSample == 16) m_subFormat = PCM;
     else if (bitsPerSample == 32) m_subFormat = FLOAT;
-    else throw(std::string("Rosegarden currently only supports 16-bit PCM or IEEE floating-point RIFF files for writing"));
+    else throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports 16-bit PCM or IEEE floating-point RIFF files for writing"));
 
 }
 
@@ -185,11 +185,11 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 #endif
 
     }
-    catch(std::string s)
+    catch (BadSoundFileException s)
     {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::scanTo - EXCEPTION - \""
-                  << s << "\"" << std::endl;
+                  << s.getMessage() << "\"" << std::endl;
 #endif
         return false;
     }
@@ -243,7 +243,7 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
 
     try {
 	return getBytes(file, totalBytes);
-    } catch (std::string s) {
+    } catch (BadSoundFileException s) {
 	return "";
     }
 }
@@ -255,7 +255,7 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, char *buf,
     if (file == 0) return 0;
     try {
 	return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
-    } catch (std::string s) {
+    } catch (BadSoundFileException s) {
 	return 0;
     }
 }
@@ -283,7 +283,7 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
     
     try {
 	return getBytes(file, totalBytes);
-    } catch (std::string s) {
+    } catch (BadSoundFileException s) {
 	return "";
     }
 }
@@ -361,7 +361,7 @@ RIFFAudioFile::readFormatChunk()
         std::cerr << "RIFFAudioFile::readFormatChunk - "
                   << "can't find RIFF identifier\n";
 #endif
-        throw((std::string("RIFFAudioFile::readFormatChunk - can't find RIFF identifier")));
+        throw(BadSoundFileException(m_fileName, "RIFFAudioFile::readFormatChunk - can't find RIFF identifier"));
     }
 
     // Look for the WAV identifier
@@ -375,7 +375,7 @@ RIFFAudioFile::readFormatChunk()
 #ifdef DEBUG_RIFF
         std::cerr << "Can't find WAV identifier\n";
 #endif
-        throw((std::string("Can't find WAV identifier")));
+        throw(BadSoundFileException(m_fileName, "Can't find WAV identifier"));
     }
 
     // Look for the FORMAT identifier - note that this doesn't actually
@@ -392,7 +392,7 @@ RIFFAudioFile::readFormatChunk()
 #ifdef DEBUG_RIFF
         std::cerr << "Can't find FORMAT identifier\n";
 #endif
-        throw((std::string("Can't find FORMAT identifier")));
+        throw(BadSoundFileException(m_fileName, "Can't find FORMAT identifier"));
     }
 
     // Little endian conversion of length bytes into file length
@@ -436,7 +436,7 @@ RIFFAudioFile::readFormatChunk()
 #endif
 
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
-        //throw(std::string("Format chunk too short"));
+        //throw(BadSoundFileException(m_fileName, "Format chunk too short"));
     }
 
 
@@ -449,7 +449,7 @@ RIFFAudioFile::readFormatChunk()
     } else if (subFormat == 0x03) {
 	m_subFormat = FLOAT;
     } else {
-        throw(std::string("Rosegarden currently only supports PCM or IEEE floating-point RIFF files"));
+        throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports PCM or IEEE floating-point RIFF files"));
     }
 
     // We seem to have a good looking .WAV file - extract the
@@ -466,7 +466,7 @@ RIFFAudioFile::readFormatChunk()
 
         default:
             {
-                throw(std::string("Unsupported number of channels"));
+                throw(BadSoundFileException(m_fileName, "Unsupported number of channels"));
             }
             break;
     }
@@ -480,11 +480,11 @@ RIFFAudioFile::readFormatChunk()
 
     if (m_subFormat == PCM) {
 	if (m_bitsPerSample != 8 && m_bitsPerSample != 16 && m_bitsPerSample != 24) {
-	    throw std::string("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files");
+	    throw BadSoundFileException("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files");
 	}
     } else if (m_subFormat == FLOAT) {
 	if (m_bitsPerSample != 32) {
-	    throw std::string("Rosegarden currently only supports 32-bit floating-point in RIFF files");
+	    throw BadSoundFileException("Rosegarden currently only supports 32-bit floating-point in RIFF files");
 	}
     }
 
