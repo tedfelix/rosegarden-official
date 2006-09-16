@@ -48,7 +48,9 @@ using Rosegarden::Note;
 
 SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
                                          QWidget *parent)
-  : RosegardenParameterBox(i18n("Segment"), parent),
+  : RosegardenParameterBox(i18n("Segment"),
+			   i18n("Segment Parameters"),
+			   parent),
       m_highestPlayable(127),
       m_lowestPlayable(0),
       m_standardQuantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),

@@ -63,7 +63,9 @@
 
 TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                       QWidget *parent)
-    : RosegardenParameterBox(i18n("Track"), parent),
+    : RosegardenParameterBox(i18n("Track"),
+			     i18n("Track Parameters"),
+			     parent),
       m_doc(doc),
       m_highestPlayable(127),
       m_lowestPlayable(0)
