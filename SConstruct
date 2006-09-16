@@ -40,7 +40,7 @@ scons configure debug=1; scons; scons configure ;
 """
 
 # Define the version
-VERSION = "1.3pre1"
+VERSION = "1.4.0pre2"
 
 import os
 import glob
