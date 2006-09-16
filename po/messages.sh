@@ -40,7 +40,7 @@ SRCDIR=../gui # srcdir is the directory containing the source code
 TIPSDIR=$SRCDIR/docs/en # tipsdir is the directory containing the tips
 
 KDEDIR=`kde-config --prefix`
-EXTRACTRC=extractrc
+EXTRACTRC=extractrc # from kdesdk-scripts (on Debian Sarge)
 KDEPOT=$KDEDIR/include/kde.pot
 if [ ! -f "$KDEPOT" ] && [ -f /usr/include/kde/kde.pot ]; then
     KDEPOT=/usr/include/kde/kde.pot

@@ -1,18 +1,20 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1998-04-30 22:50-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-09-16 11:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: lib/error.c:103
 msgid "Unknown system error"
@@ -206,11 +208,11 @@ msgstr ""
 msgid "warning: this message is not used"
 msgstr ""
 
-#: src/msgcmp.c:355 src/msgfmt.c:632 src/msgmerge.c:493 src/xgettext.c:1063
+#: src/msgcmp.c:355 src/msgfmt.c:632 src/msgmerge.c:493 src/xgettext.c:1113
 msgid "duplicate message definition"
 msgstr ""
 
-#: src/msgcmp.c:356 src/msgfmt.c:633 src/msgmerge.c:494 src/xgettext.c:1064
+#: src/msgcmp.c:356 src/msgfmt.c:633 src/msgmerge.c:494 src/xgettext.c:1114
 msgid "...this is the location of the first definition"
 msgstr ""
 
@@ -221,7 +223,7 @@ msgstr ""
 
 #. We are about to construct the absolute path to the
 #. directory for the output files but asprintf failed.
-#: src/msgcomm.c:238 src/xgettext.c:340 src/xgettext.c:1258
+#: src/msgcomm.c:238 src/xgettext.c:340 src/xgettext.c:1308
 msgid "while preparing output"
 msgstr ""
 
@@ -293,13 +295,13 @@ msgid ""
 "preserved.\n"
 msgstr ""
 
-#: src/msgcomm.c:476 src/msgunfmt.c:357 src/po-lex.c:74 src/xget-lex.c:159
-#: src/xget-lex.c:174 src/xget-lex.c:191 src/xgettext.c:618
+#: src/msgcomm.c:476 src/msgunfmt.c:357 src/po-lex.c:74 src/xget-lex.c:160
+#: src/xget-lex.c:175 src/xget-lex.c:192 src/xgettext.c:618
 #, c-format
 msgid "error while opening \"%s\" for reading"
 msgstr ""
 
-#: src/msgcomm.c:557 src/xgettext.c:660 src/xgettext.c:970
+#: src/msgcomm.c:557 src/xgettext.c:660 src/xgettext.c:1020
 msgid "this file may not contain domain directives"
 msgstr ""
 
@@ -465,8 +467,8 @@ msgstr ""
 #: src/msgmerge.c:772
 #, c-format
 msgid ""
-"%sRead %d old + %d reference, merged %d, fuzzied %d, missing %d, obsolete "
-"%d.\n"
+"%sRead %d old + %d reference, merged %d, fuzzied %d, missing %d, obsolete %"
+"d.\n"
 msgstr ""
 
 #: src/msgmerge.c:778
@@ -499,7 +501,7 @@ msgid ""
 "By default the output is written to standard output.\n"
 msgstr ""
 
-#: src/msgunfmt.c:266 src/msgunfmt.c:330 src/po-lex.c:185 src/xget-lex.c:254
+#: src/msgunfmt.c:266 src/msgunfmt.c:330 src/po-lex.c:185 src/xget-lex.c:255
 #, c-format
 msgid "error while reading \"%s\""
 msgstr ""
@@ -549,16 +551,16 @@ msgstr ""
 msgid "end-of-file within string"
 msgstr ""
 
-#: src/xget-lex.c:150
+#: src/xget-lex.c:151
 msgid "standard input"
 msgstr ""
 
-#: src/xget-lex.c:892
+#: src/xget-lex.c:893
 #, c-format
 msgid "%s:%d: warning: unterminated character constant"
 msgstr ""
 
-#: src/xget-lex.c:914
+#: src/xget-lex.c:915
 #, c-format
 msgid "%s:%d: warning: unterminated string literal"
 msgstr ""
@@ -627,7 +629,7 @@ msgid ""
 "If INPUTFILE is -, standard input is read.\n"
 msgstr ""
 
-#: src/xgettext.c:1344
+#: src/xgettext.c:1394
 #, c-format
 msgid "language `%s' unknown"
 msgstr ""

@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-22 22:44+0200\n"
+"POT-Creation-Date: 2006-09-16 11:44+0100\n"
 "PO-Revision-Date: 2006-07-11 17:34+0200\n"
 "Last-Translator: Jan Bina <jbina@sky.cz>\n"
 "Language-Team: čestina <cs@li.org>\n"
@@ -197,7 +197,7 @@ msgstr ""
 "&nbsp;&nbsp;* upravte výstupní kanál tohoto nástroje, program, banku a\n"
 "ovládací prvky pomocí okna s parametry nástroje\n"
 
-#: ../gui/docs/en/tips.cpp:13
+#: ../gui/docs/en/tips.cpp:12
 msgid ""
 "<p>...that Rosegarden has an autosave feature?<br><br>\n"
 "You can select your autosave interval from <b>Settings->Configure\n"
@@ -218,7 +218,7 @@ msgstr ""
 "kterým jste pracovali, a budou vám nabídnuty možnosti\n"
 "otevřít automaticky uloženou verzi nebo otevřít nezměněný originál.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:23
+#: ../gui/docs/en/tips.cpp:21
 msgid ""
 "<p>\n"
 "You can save the current document as your default studio by using\n"
@@ -230,7 +230,7 @@ msgstr ""
 "<b>Skladba -> Studio -> Uložit aktuální dokument jako výchozí studio</b>.</"
 "p>\n"
 
-#: ../gui/docs/en/tips.cpp:30
+#: ../gui/docs/en/tips.cpp:27
 msgid ""
 "<p>...that your default studio is a complete Rosegarden composition that "
 "gets\n"
@@ -240,7 +240,7 @@ msgstr ""
 "načítá pokaždé při vytváření nového dokumentu nebo při importu souboru MIDI?"
 "</p>\n"
 
-#: ../gui/docs/en/tips.cpp:36
+#: ../gui/docs/en/tips.cpp:32
 #, fuzzy
 msgid ""
 "<p>Because your default studio is a complete Rosegarden composition, it can\n"
@@ -257,7 +257,7 @@ msgstr ""
 "nastavení\n"
 "při vytváření každého nového dokumentu.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:44
+#: ../gui/docs/en/tips.cpp:39
 msgid ""
 "<p>...that Rosegarden will detect and create a default connection for ALSA "
 "soft\n"
@@ -268,7 +268,7 @@ msgstr ""
 "syntetizéry ALSA, které se spouští potom, co je již spuštěna aplikace "
 "Rosegarden?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:50
+#: ../gui/docs/en/tips.cpp:44
 msgid ""
 "<p>If your studio setup does not change very often, and  you would prefer "
 "for\n"
@@ -288,7 +288,7 @@ msgstr ""
 "Použijte <b>Nastavení -> Konfigurace aplikace Rosegarden - Chování ->\n"
 "Při načítání souborů vždy používat výchozí studio</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:59
+#: ../gui/docs/en/tips.cpp:52
 #, fuzzy
 msgid ""
 "<p>If you have accidentally recorded a segment so short that it does not\n"
@@ -304,7 +304,7 @@ msgstr ""
 "dokumentu</b> a následného nastavení skladby tak, aby začínala záporným "
 "číslem.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:67
+#: ../gui/docs/en/tips.cpp:59
 msgid ""
 "<p>...that if you place a note at the wrong pitch using the notation editor, "
 "you can move it one semitone at a time with the up and down arrow keys on "
@@ -314,7 +314,7 @@ msgstr ""
 "ji přesunout o půl tónu výš nebo níž pomocí kurzorových šipek na klávesnici?"
 "</p>\n"
 
-#: ../gui/docs/en/tips.cpp:72
+#: ../gui/docs/en/tips.cpp:63
 msgid ""
 "<p>...that you can toggle stem directions in the notation editor by "
 "selecting\n"
@@ -324,7 +324,7 @@ msgstr ""
 "jednu nebo více not a použijete kombinaci kláves Ctrl-PageUp a Ctrl-PageDown?"
 "</p>\n"
 
-#: ../gui/docs/en/tips.cpp:78
+#: ../gui/docs/en/tips.cpp:68
 msgid ""
 "<p>...that you can change the accidental used for a note in the notation "
 "editor (without changing the pitch of the note) by selecting\n"
@@ -336,7 +336,7 @@ msgstr ""
 "a použijete kurzorové šipky nahoru nebo dolů společně se stisknutými "
 "klávesami Ctrl a Shift?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:84
+#: ../gui/docs/en/tips.cpp:73
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning segments on "
 "the\n"
@@ -348,7 +348,7 @@ msgstr ""
 "ploše segmentů, abyste se vyhnuli efektu \"přichytávání\" a mohli provést "
 "jemnější doladění pozice?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:90
+#: ../gui/docs/en/tips.cpp:78
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning or resizing "
 "events in the\n"
@@ -360,7 +360,7 @@ msgstr ""
 "v maticovém pohledu, abyste se vyhnuli efektu \"přichytávání\" a mohli "
 "provést jemnější doladění pozice či velikosti?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:96
+#: ../gui/docs/en/tips.cpp:83
 msgid ""
 "<p>...that you can edit multiple segments on multiple tracks simultaneously "
 "in\n"
@@ -372,7 +372,7 @@ msgstr ""
 "Jednoduše vyberte segmenty a použijte možnost <b>Upravit -> Otevřít v "
 "notovém editoru</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:102
+#: ../gui/docs/en/tips.cpp:88
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden can export files for use by LilyPond, the high-quality "
@@ -386,7 +386,7 @@ msgstr ""
 "Z nabídky <b>Soubor</b> projděte k možnosti <b>Exportovat -> Exportovat "
 "soubor Lilypond</b></p>\n"
 
-#: ../gui/docs/en/tips.cpp:108
+#: ../gui/docs/en/tips.cpp:93
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden can print via LilyPond, the high-quality score "
@@ -403,7 +403,7 @@ msgstr ""
 "Z nabídky <b>Soubor</b> projděte k možnosti <b>Exportovat -> Exportovat "
 "soubor Lilypond</b></p>\n"
 
-#: ../gui/docs/en/tips.cpp:116
+#: ../gui/docs/en/tips.cpp:100
 msgid ""
 "<p>...that if you use the quantizer from within the notation view, you can "
 "tell it to quantize only the timing used for notation -- making it possible "
@@ -413,7 +413,7 @@ msgstr ""
 "aby kvantizoval pouze dělení dob použité v notaci -- čímž se dá dosáhnout "
 "hezkého vzhledu notového zápisu <b>a</b> a lidského výkonu MIDI?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:121
+#: ../gui/docs/en/tips.cpp:104
 msgid ""
 "<p>...that you can change segment labels using the controls on the Segment "
 "Parameters box\n"
@@ -423,7 +423,7 @@ msgstr ""
 "Parametry segmentu\n"
 "v hlavním okně?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:127
+#: ../gui/docs/en/tips.cpp:109
 msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
 "of\n"
@@ -447,7 +447,7 @@ msgstr ""
 "aktuální dokument jako výchozí\n"
 "studio</b> toto nové nastavení určete jako výchozí.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:138
+#: ../gui/docs/en/tips.cpp:119
 msgid ""
 "<p>...that you can change the name of a track by double clicking on the "
 "label?  (The\n"
@@ -456,7 +456,7 @@ msgstr ""
 "<p>...že můžete změnit název stopy poklepáním na popisek?  (Popisek\n"
 "musí být pro tuto operaci viditelný.)</p>\n"
 
-#: ../gui/docs/en/tips.cpp:144
+#: ../gui/docs/en/tips.cpp:124
 msgid ""
 "<p>...that you can configure what happens when you double-click on a "
 "segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your "
@@ -466,7 +466,7 @@ msgstr ""
 "Přejděte na možnost <b>Nastavení -> Konfigurace aplikace Rosegarden</b> a "
 "vyberte svoje oblíbené editační okno na záložce <b>Chování</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:149
+#: ../gui/docs/en/tips.cpp:128
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
@@ -484,7 +484,7 @@ msgstr ""
 "Primární vývojáři žijí ve Velké Británii a Francii. Přispěvatelé pocházejí\n"
 "z USA, Španělska, Německa, Ruska, Slovinska a dalších zemí... </p>\n"
 
-#: ../gui/docs/en/tips.cpp:160
+#: ../gui/docs/en/tips.cpp:138
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden is available in Spanish, French, German, Russian, "
@@ -500,7 +500,7 @@ msgstr ""
 "a\n"
 "na adresu <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:168
+#: ../gui/docs/en/tips.cpp:145
 #, fuzzy
 msgid ""
 "<p>...that you can change the total number of bars in the composition via\n"
@@ -510,7 +510,7 @@ msgstr ""
 "<b>Upravit\n"
 "-> Změnit délku skladby</b>?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:174
+#: ../gui/docs/en/tips.cpp:150
 msgid ""
 "<p>...that you can see the difference between performance and display "
 "duration\n"
@@ -526,7 +526,7 @@ msgstr ""
 "zapnout.<br><br>\n"
 "<i>Tato funkce nefunguje v pohledu stránkového uspořádání.</i></p>\n"
 
-#: ../gui/docs/en/tips.cpp:183
+#: ../gui/docs/en/tips.cpp:158
 msgid ""
 "<p>...that you can add tempo and time-signature changes by double-clicking "
 "on the values displayed in the transport window or tempo rulers?</p>\n"
@@ -534,7 +534,7 @@ msgstr ""
 "<p>...že můžete přidat změny tempa a taktového označení poklepáním na "
 "hodnoty zobrazené v okně transportu nebo na pravítcích tempa?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:188
+#: ../gui/docs/en/tips.cpp:162
 msgid ""
 "<p>...that the transport window can display musical time, sample frame "
 "count, and a visual metronome as well as real time?  Just click on the small "
@@ -544,7 +544,7 @@ msgstr ""
 "rámců a vizuální metronom stejně jako skutečný čas?  Stačí klepnout na  malé "
 "tlačítko v okně úplně nahoře vlevo.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:193
+#: ../gui/docs/en/tips.cpp:166
 msgid ""
 "<p>...that you can select all notes of a particular pitch in the matrix "
 "view, by shift-clicking on that pitch on the piano keyboard at the left?  If "
@@ -555,7 +555,7 @@ msgstr ""
 "klaviatuře vlevo?  Chcete-li, můžete klepnutím, současným podržením klávesy "
 "Shift a tažením kurzoru vybírat také celé rozsahy.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:198
+#: ../gui/docs/en/tips.cpp:170
 msgid ""
 "<p>...that you can set a loop in the main window by clicking-and-dragging on "
 "the time ruler with Shift pressed?  (If the ruler isn't visible, use "
@@ -565,7 +565,7 @@ msgstr ""
 "časovém pravítku při současném stisknutí klávesy Shift?  (Není-li pravítko "
 "viditelné, použijte možnost <b>Nastavení -> Zobrazit pravítka</b>.)</p>\n"
 
-#: ../gui/docs/en/tips.cpp:203
+#: ../gui/docs/en/tips.cpp:174
 #, fuzzy
 msgid ""
 "<p>...that if you're editing a section in the matrix or notation view, you "
@@ -581,7 +581,7 @@ msgstr ""
 "Vyberte ji, použijte možnost <b>Nástroje -> Lokální kurzor -> Nastavit "
 "opakování výběru</b> a potom stiskněte Přehrát.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:212
+#: ../gui/docs/en/tips.cpp:182
 msgid ""
 "<p>...if you have more than one note or controller event at the same time, "
 "you\n"
@@ -597,7 +597,7 @@ msgstr ""
 "a pravítek rychlosti, abyste událost, kterou chcete upravit, mohli\n"
 "zaměřit.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:220
+#: ../gui/docs/en/tips.cpp:189
 msgid ""
 "<p>The notation view shows you notes using their display duration, while "
 "the\n"
@@ -610,7 +610,7 @@ msgid ""
 "for years.  Sorry about that, folks.  Patches welcome.</i>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:230
+#: ../gui/docs/en/tips.cpp:198
 msgid ""
 "<p>If you're working with a human performance and you need to insert some "
 "new\n"
@@ -631,7 +631,7 @@ msgstr ""
 "dodat době trvání jejich provedení\n"
 "poněkud méně mechanický výraz.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:239
+#: ../gui/docs/en/tips.cpp:206
 msgid ""
 "<p>When exporting to LilyPond, you will see extra empty bars if the "
 "Rosegarden\n"
@@ -642,7 +642,7 @@ msgid ""
 "Bar</b> to the end of your notation.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:247
+#: ../gui/docs/en/tips.cpp:213
 msgid ""
 "<p>Rosegarden can now export certain things to LilyPond that it cannot yet\n"
 "display within its own native interface.  These new directives can be "
@@ -660,7 +660,7 @@ msgid ""
 "the notation view.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:262
+#: ../gui/docs/en/tips.cpp:227
 msgid ""
 "<p>Rosegarden now has track parameters to <b>Create segments with:</b> "
 "certain\n"
@@ -674,7 +674,7 @@ msgid ""
 "<i>These parameters do not apply to audio tracks.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:273
+#: ../gui/docs/en/tips.cpp:237
 msgid ""
 "<p>Rosegarden now has a database of preset parameters describing more than "
 "300\n"
@@ -689,7 +689,7 @@ msgid ""
 "Johansson for assembling this extraordinary database.)</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:285
+#: ../gui/docs/en/tips.cpp:248
 msgid ""
 "<p>You can export tracks that have the same name onto a single, merged staff "
 "in\n"
@@ -701,7 +701,14 @@ msgid ""
 "name</b> from the options dialog that appears when you export to, or "
 "preview\n"
 "with LilyPond.<br><br>\n"
-"<i>The tracks must have a non-default name for this to work.</i>\n"
+"<i>The tracks must have a non-default name for this to work.</i></p>\n"
+msgstr ""
+
+#: ../gui/docs/en/tips.cpp:258
+msgid ""
+"<p>You can use the mouse wheel to scroll up and down, or to scroll left and "
+"right (by holding the Alt key at the same time), or to zoom in and out (by "
+"holding the Control key).</p>\n"
 msgstr ""
 
 #: ../gui/styles/styles.cpp:1
@@ -798,53 +805,53 @@ msgstr "Nový"
 msgid "Aliases"
 msgstr "Tremolo"
 
-#: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:111
+#: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:115
 msgid "Insert Tempo Change"
 msgstr "Vložit změnu tempa"
 
-#: ../gui/temporuler.cpp:115
+#: ../gui/temporuler.cpp:119
 #, fuzzy
 msgid "Insert Tempo Change at Playback Position"
 msgstr "Vložit změnu tempa"
 
-#: ../gui/temporuler.cpp:120
+#: ../gui/temporuler.cpp:126
 #, fuzzy
 msgid "Delete Tempo Change"
 msgstr "Vložit změnu tempa"
 
-#: ../gui/temporuler.cpp:124
+#: ../gui/temporuler.cpp:132
 msgid "Ramp Tempo to Next Tempo"
 msgstr ""
 
-#: ../gui/temporuler.cpp:128
+#: ../gui/temporuler.cpp:136
 msgid "Un-Ramp Tempo"
 msgstr ""
 
-#: ../gui/temporuler.cpp:133
+#: ../gui/temporuler.cpp:143
 #, fuzzy
 msgid "Edit Tempo..."
 msgstr "Upravit &výchozí tempo..."
 
-#: ../gui/temporuler.cpp:137
+#: ../gui/temporuler.cpp:147
 #, fuzzy
 msgid "Edit Time Signature..."
 msgstr "Taktové označení"
 
-#: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:141
+#: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:151
 msgid "Open Tempo and Time Signature Editor"
 msgstr "Otevřít editor tempa a taktového označení"
 
-#: ../gui/temporuler.cpp:565
+#: ../gui/temporuler.cpp:563
 #, fuzzy
 msgid "%1.%2%3 (%4.%5%6 bpm)"
 msgstr "%1.%2%3 qpm (%4.%5%6 bpm)   "
 
-#: ../gui/temporuler.cpp:573
+#: ../gui/temporuler.cpp:571
 #, fuzzy
 msgid "%1.%2%3 bpm"
 msgstr "(%1.%2 bpm)"
 
-#: ../gui/temporuler.cpp:581
+#: ../gui/temporuler.cpp:579
 #, fuzzy
 msgid "%1 - %2.%3%4"
 msgstr "%1.%2%3"
@@ -943,13 +950,13 @@ msgstr "Odstranit tempo nebo taktové označení"
 msgid "&Edit Item"
 msgstr "&Upravit položku"
 
-#: ../gui/eventview.cpp:1247 ../gui/matrixview.cpp:658
+#: ../gui/eventview.cpp:1247 ../gui/matrixview.cpp:677
 #: ../gui/tempoview.cpp:643
 msgid "Select &All"
 msgstr "Vybrat &vše"
 
-#: ../gui/eventview.cpp:1251 ../gui/matrixview.cpp:779
-#: ../gui/notationview.cpp:2064 ../gui/tempoview.cpp:647
+#: ../gui/eventview.cpp:1251 ../gui/matrixview.cpp:798
+#: ../gui/notationview.cpp:2086 ../gui/tempoview.cpp:647
 msgid "Clear Selection"
 msgstr "Vymazat výběr"
 
@@ -1586,7 +1593,7 @@ msgstr "Absolutní čas:"
 msgid "Duration:"
 msgstr "Doba trvání:"
 
-#: ../gui/dialogs.cpp:2179 ../gui/eventfilter.cpp:107 ../gui/widgets.cpp:1512
+#: ../gui/dialogs.cpp:2179 ../gui/eventfilter.cpp:107 ../gui/widgets.cpp:1478
 msgid "Pitch:"
 msgstr "Výška tónu:"
 
@@ -1599,7 +1606,7 @@ msgstr "Název ovládacího prvku:"
 #: ../gui/dialogs.cpp:2648 ../gui/dialogs.cpp:2692 ../gui/dialogs.cpp:2725
 #: ../gui/markereditor.cpp:299 ../gui/mixer.cpp:372 ../gui/mixer.cpp:497
 #: ../gui/mixer.cpp:656 ../gui/mixer.cpp:692 ../gui/mixer.cpp:868
-#: ../gui/trackparameterbox.cpp:206 ../gui/triggermanager.cpp:324
+#: ../gui/trackparameterbox.cpp:224 ../gui/triggermanager.cpp:324
 msgid "<none>"
 msgstr "<žádný>"
 
@@ -1740,7 +1747,7 @@ msgid "Save System Exclusive data to..."
 msgstr "Uložit systémová exkluzivní data do..."
 
 #: ../gui/dialogs.cpp:3146 ../gui/dialogs.cpp:3155 ../gui/dialogs.cpp:3170
-#: ../gui/dialogs.cpp:3179 ../gui/trackparameterbox.cpp:217
+#: ../gui/dialogs.cpp:3179 ../gui/trackparameterbox.cpp:235
 msgid "Clef"
 msgstr "Klíč"
 
@@ -1807,7 +1814,7 @@ msgstr "Basový"
 
 #: ../gui/dialogs.cpp:3338 ../gui/rosegardenconfigurationpage.cpp:725
 #: ../gui/rosegardenconfigurationpage.cpp:2062
-#: ../gui/segmentparameterbox.cpp:89
+#: ../gui/segmentparameterbox.cpp:92
 msgid "Quantize"
 msgstr "Kvantizovat"
 
@@ -2042,7 +2049,7 @@ msgstr "Zařízení"
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:172
 #: ../gui/devicemanager.cpp:414 ../gui/devicemanager.cpp:426
 #: ../gui/dialogs.cpp:4329 ../gui/dialogs.cpp:4661
-#: ../gui/instrumentparameterbox.cpp:832
+#: ../gui/instrumentparameterbox.cpp:841
 msgid "No connection"
 msgstr "Není připojení"
 
@@ -2111,7 +2118,7 @@ msgstr "Jak je velký váš pevný disk?"
 msgid "Recording beyond end of composition:  "
 msgstr "Zbývající záznamový čas:  "
 
-#: ../gui/dialogs.cpp:4622 rc.cpp:381
+#: ../gui/dialogs.cpp:4622 rc.cpp:255
 #, no-c-format
 msgid "Metronome"
 msgstr "Metronom"
@@ -2122,14 +2129,15 @@ msgstr "Nástroj metronomu"
 
 #: ../gui/bankeditor.cpp:2737 ../gui/deviceeditor.cpp:61
 #: ../gui/devicemanager.cpp:89 ../gui/devicemanager.cpp:141
-#: ../gui/dialogs.cpp:4641 ../gui/trackparameterbox.cpp:112
-#: ../gui/trackparameterbox.cpp:158
+#: ../gui/dialogs.cpp:4641 ../gui/trackparameterbox.cpp:128
+#: ../gui/trackparameterbox.cpp:175
 msgid "Device"
 msgstr "Zařízení"
 
 #: ../gui/bankeditor.cpp:2738 ../gui/dialogs.cpp:4670
-#: ../gui/instrumentparameterbox.cpp:72 ../gui/mixer.cpp:1801
-#: ../gui/presethandler.cpp:380 ../gui/trackparameterbox.cpp:121
+#: ../gui/instrumentparameterbox.cpp:73 ../gui/mixer.cpp:1801
+#: ../gui/presethandler.cpp:402 ../gui/segmentparameterbox.cpp:1207
+#: ../gui/trackparameterbox.cpp:137
 msgid "Instrument"
 msgstr "Nástroj"
 
@@ -2141,10 +2149,10 @@ msgstr "Doby"
 msgid "Resolution"
 msgstr "Rozlišení"
 
-#: ../gui/dialogs.cpp:4684 ../gui/matrixview.cpp:2040
-#: ../gui/notationview.cpp:1250 ../gui/rosegardenconfigurationpage.cpp:550
-#: ../gui/rosegardenconfigurationpage.cpp:2194 ../gui/widgets.cpp:912
-#: ../gui/widgets.cpp:1085
+#: ../gui/dialogs.cpp:4684 ../gui/matrixview.cpp:2104
+#: ../gui/notationview.cpp:1272 ../gui/rosegardenconfigurationpage.cpp:550
+#: ../gui/rosegardenconfigurationpage.cpp:2194 ../gui/widgets.cpp:878
+#: ../gui/widgets.cpp:1051
 msgid "None"
 msgstr "Žádný"
 
@@ -2316,7 +2324,7 @@ msgstr "Exportovat pouze vybraná zařízení"
 msgid "         (\"%1\")"
 msgstr "         (\"%1\")"
 
-#: ../gui/dialogs.cpp:5227 ../gui/notationviewslots.cpp:1655
+#: ../gui/dialogs.cpp:5227 ../gui/notationviewslots.cpp:1678
 msgid "Make Ornament"
 msgstr "Vytvořit melodickou ozdobu"
 
@@ -2339,8 +2347,8 @@ msgstr "Název:  "
 msgid "Base pitch"
 msgstr "Základní výška tónu"
 
-#: ../gui/dialogs.cpp:5257 ../gui/notationview.cpp:1287
-#: ../gui/notationviewslots.cpp:1693
+#: ../gui/dialogs.cpp:5257 ../gui/notationview.cpp:1309
+#: ../gui/notationviewslots.cpp:1716
 msgid "Use Ornament"
 msgstr "Použít melodickou ozdobu"
 
@@ -2426,7 +2434,7 @@ msgstr "Prodloužit nebo zkrátit segment podle doby trvání noty"
 msgid "Adjust pitch to note"
 msgstr "Přizpůsobit výšku tónu notě"
 
-#: ../gui/dialogs.cpp:5460 ../gui/matrixview.cpp:2493
+#: ../gui/dialogs.cpp:5460 ../gui/matrixview.cpp:2569
 msgid "Trigger Segment"
 msgstr "Spouštěcí segment"
 
@@ -2557,7 +2565,7 @@ msgstr "Tamilština"
 msgid "Microsoft Code Page %1"
 msgstr "Kódová stránka Microsoft %1"
 
-#: ../gui/dialogs.cpp:5663
+#: ../gui/dialogs.cpp:5663 ../gui/matrixview.cpp:1439
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
@@ -2582,7 +2590,7 @@ msgstr ""
 "Chcete jej uložit?"
 
 #: ../gui/rosegardenguidoc.cpp:398
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
 "Delete the %n audio files recorded during the unsaved session?"
@@ -2612,7 +2620,7 @@ msgstr ""
 "Vyberte kterékoli z těch, které chcete z pevného disku trvale odstranit.\n"
 
 #: ../gui/rosegardenguidoc.cpp:434
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "_n: About to delete 1 audio file permanently from the hard disk.\n"
 "There will be no way to recover this file.\n"
@@ -2621,12 +2629,14 @@ msgid ""
 "There will be no way to recover these files.\n"
 "Are you sure?"
 msgstr ""
-"_n: Chystáte se trvale odstranit z pevného disku 1 zvukový soubor.\n"
-"Neexistuje způsob, jak jednou odstraněný soubor obnovit.\n"
-"Skutečně chcete soubor odstranit?\n"
-"Chystáte se trvale odstranit z pevného disku %n zvukové(ých) soubory(ů).\n"
-"Neexistuje způsob, jak jednou odstraněné soubory obnovit.\n"
-"Skutečně chcete soubory odstranit?"
+"_n: Chystáte se z pevného disku trvale odstranit 1 zvukový soubor.\n"
+"Tuto akci nelze vrátit zpět a neexistuje způsob, jak tento soubor později "
+"obnovit.\n"
+"Skutečně chcete pokračovat?\n"
+"Chystáte se z pevného disku trvale odstranit %n zvukové(ých) soubory(ů).\n"
+"Tuto akci nelze vrátit zpět a neexistuje způsob, jak tyto soubory později "
+"obnovit.\n"
+"Skutečně chcete pokračovat?"
 
 #: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:442
 msgid "File %1 could not be deleted."
@@ -2715,7 +2725,7 @@ msgid "ID"
 msgstr "ID"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2056
-#: ../gui/segmentparameterbox.cpp:87 ../gui/triggermanager.cpp:148
+#: ../gui/segmentparameterbox.cpp:90 ../gui/triggermanager.cpp:148
 msgid "Label"
 msgstr "Popisek"
 
@@ -2777,7 +2787,7 @@ msgid "Trigger Segment Duration"
 msgstr "Doba trvání spouštěcího segmentu"
 
 #: ../gui/triggermanager.cpp:387
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "_n: This triggered segment is used 1 time in the current composition.  Are "
 "you sure you want to remove it?\n"
@@ -2789,8 +2799,8 @@ msgstr ""
 "Tento spouštěný segment je použit v aktuální skladbě %n krát.  Skutečně jej "
 "chcete odebrat?"
 
-#: ../gui/eventview.cpp:960 ../gui/matrixview.cpp:1514
-#: ../gui/notationviewslots.cpp:510 ../gui/notationviewslots.cpp:558
+#: ../gui/eventview.cpp:960 ../gui/matrixview.cpp:1578
+#: ../gui/notationviewslots.cpp:533 ../gui/notationviewslots.cpp:581
 #: ../gui/rosegardengui.cpp:2403 ../gui/triggermanager.cpp:402
 msgid "Clipboard is empty"
 msgstr "Schránka je prázdná"
@@ -3025,12 +3035,12 @@ msgstr "Vložit pomlku"
 msgid "Cu&t"
 msgstr "Vyjmou&t"
 
-#: ../gui/editcommands.h:79 ../gui/notationview.cpp:1464
+#: ../gui/editcommands.h:79 ../gui/notationview.cpp:1486
 msgid "C&ut and Close"
 msgstr "Vyjmout a &zavřít"
 
-#: ../gui/editcommands.h:234 ../gui/matrixview.cpp:577
-#: ../gui/notationview.cpp:1434 ../gui/rosegardengui.cpp:749
+#: ../gui/editcommands.h:234 ../gui/matrixview.cpp:596
+#: ../gui/notationview.cpp:1456 ../gui/rosegardengui.cpp:749
 msgid "&Erase"
 msgstr "&Vymazat"
 
@@ -3115,7 +3125,7 @@ msgid "Percussion Bank"
 msgstr "Banka bicích"
 
 #: ../gui/bankeditor.cpp:87 ../gui/bankeditor.cpp:143
-#: ../gui/instrumentparameterbox.cpp:699
+#: ../gui/instrumentparameterbox.cpp:708
 msgid "Bank"
 msgstr "Banka"
 
@@ -3153,8 +3163,8 @@ msgstr "Podrobnosti banky a programů"
 msgid "Programs"
 msgstr "Programy"
 
-#: ../gui/bankeditor.cpp:388 ../gui/instrumentparameterbox.cpp:703
-#: ../gui/matrixview.cpp:2548
+#: ../gui/bankeditor.cpp:388 ../gui/instrumentparameterbox.cpp:712
+#: ../gui/matrixview.cpp:2624
 msgid "Percussion"
 msgstr "Bicí"
 
@@ -3367,7 +3377,7 @@ msgstr "Obecné"
 msgid "General Configuration"
 msgstr "Obecná konfigurace"
 
-#: ../gui/matrixview.cpp:2547 ../gui/rosegardenconfigurationpage.cpp:227
+#: ../gui/matrixview.cpp:2623 ../gui/rosegardenconfigurationpage.cpp:227
 #: ../gui/rosegardenconfigurationpage.h:289
 #: ../gui/rosegardenconfigurationpage.h:290
 msgid "Matrix"
@@ -3382,8 +3392,8 @@ msgid "Sequencer Latency"
 msgstr "Latence sekvenceru"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2089
-#: ../gui/rosegardenconfigurationpage.h:382 ../gui/trackparameterbox.cpp:433
-#: ../gui/trackparameterbox.cpp:434
+#: ../gui/rosegardenconfigurationpage.h:382 ../gui/trackparameterbox.cpp:454
+#: ../gui/trackparameterbox.cpp:455
 msgid "Audio"
 msgstr "Zvuk"
 
@@ -3392,7 +3402,7 @@ msgid "Audio Settings"
 msgstr "Nastavení zvuku"
 
 #: ../gui/colourwidgets.cpp:47 ../gui/rosegardenconfigurationpage.h:425
-#: ../gui/segmentparameterbox.cpp:92 ../gui/trackparameterbox.cpp:252
+#: ../gui/segmentparameterbox.cpp:95 ../gui/trackparameterbox.cpp:276
 msgid "Color"
 msgstr "Barva"
 
@@ -3423,7 +3433,7 @@ msgstr "Připojení"
 
 #: ../gui/devicemanager.cpp:99 ../gui/devicemanager.cpp:152
 #: ../gui/rosegardenconfigurationpage.cpp:2505
-#: ../gui/segmentparameterbox.cpp:987 ../gui/trackparameterbox.cpp:776
+#: ../gui/segmentparameterbox.cpp:990 ../gui/trackparameterbox.cpp:797
 msgid "New"
 msgstr "Nový"
 
@@ -3555,154 +3565,6 @@ msgstr "Exkluzivní systémový"
 #: ../gui/midifilter.cpp:82
 msgid "RECORD events to ignore"
 msgstr "Záznamové události RECORD, které se mají ignorovat"
-
-#: ../gui/widgets.cpp:142 ../gui/widgets.cpp:147 ../gui/widgets.cpp:169
-msgid "Processing..."
-msgstr "Probíhá zpracování..."
-
-#: ../gui/widgets.cpp:414
-msgid ""
-"Click and drag up and down or left and right to modify.\n"
-"Double click to edit value directly."
-msgstr ""
-"Klepnutím a tažením nahoru/dolů nebo doprava/doleva provedete změny.\n"
-"Poklepáním můžete upravit hodnotu přímo."
-
-#: ../gui/widgets.cpp:724
-msgid "Select a new value"
-msgstr "Vybrat novou hodnotu"
-
-#: ../gui/widgets.cpp:725
-msgid "Enter a new value"
-msgstr "Zadat novou hodnotu"
-
-#: ../gui/widgets.cpp:865
-msgid "Quantizer"
-msgstr "Kvantizér"
-
-#: ../gui/widgets.cpp:871
-msgid "Quantizer type:"
-msgstr "Typ kvantizéru:"
-
-#: ../gui/widgets.cpp:873
-msgid "Grid quantizer"
-msgstr "Rastrový kvantizér"
-
-#: ../gui/widgets.cpp:874
-msgid "Legato quantizer"
-msgstr "Legatový kvantizér"
-
-#: ../gui/widgets.cpp:875
-msgid "Heuristic notation quantizer"
-msgstr "Heuristický kvantizér notace"
-
-#: ../gui/widgets.cpp:879
-msgid "Quantize for notation only (leave performance unchanged)"
-msgstr "Kvantizovat pouze notaci (neměnit provedení)"
-
-#: ../gui/widgets.cpp:888
-msgid "Notation parameters"
-msgstr "Parametry notace"
-
-#: ../gui/widgets.cpp:893 ../gui/widgets.cpp:934
-msgid "Base grid unit:"
-msgstr "Základní jednotka rastru:"
-
-#: ../gui/widgets.cpp:898
-msgid "Complexity:"
-msgstr "Složitost:"
-
-#: ../gui/widgets.cpp:902
-msgid "Very high"
-msgstr "Velmi vysoká"
-
-#: ../gui/widgets.cpp:903
-msgid "High"
-msgstr "Vysoká"
-
-#: ../gui/widgets.cpp:904
-msgid "Normal"
-msgstr "Normální"
-
-#: ../gui/widgets.cpp:905
-msgid "Low"
-msgstr "Nízká"
-
-#: ../gui/widgets.cpp:906
-msgid "Very low"
-msgstr "Velmi nízká"
-
-#: ../gui/widgets.cpp:909
-msgid "Tuplet level:"
-msgstr "Úroveň rytmické notové skupiny:"
-
-#: ../gui/widgets.cpp:913
-msgid "2-in-the-time-of-3"
-msgstr "2-na-dobu-3"
-
-#: ../gui/widgets.cpp:914
-msgid "Triplet"
-msgstr "Triola"
-
-#: ../gui/widgets.cpp:922
-msgid "Any"
-msgstr "Jakákoli"
-
-#: ../gui/widgets.cpp:925
-msgid "Permit counterpoint"
-msgstr "Povolit kontrapunkt"
-
-#: ../gui/widgets.cpp:929
-msgid "Grid parameters"
-msgstr "Parametry rastru"
-
-#: ../gui/widgets.cpp:938
-msgid "Swing:"
-msgstr "Swing:"
-
-#: ../gui/widgets.cpp:943
-msgid "Iterative amount:"
-msgstr "Iterativní množství:"
-
-#: ../gui/widgets.cpp:949
-msgid "Quantize durations as well as start times"
-msgstr "Kvantizovat doby trvání i počáteční časy"
-
-#: ../gui/widgets.cpp:953
-msgid "After quantization"
-msgstr "Po kvantizaci"
-
-#: ../gui/widgets.cpp:967
-msgid "Show advanced options"
-msgstr "Zobrazit rozšířené možnosti"
-
-#: ../gui/widgets.cpp:976
-msgid "Re-beam"
-msgstr "Znovu upravit trámce"
-
-#: ../gui/widgets.cpp:978
-msgid "Add articulations (staccato, tenuto, slurs)"
-msgstr "Přidat artikulaci (staccato, tenuto, legato)"
-
-#: ../gui/widgets.cpp:979
-msgid "Tie notes at barlines etc"
-msgstr "Svázat noty ligaturou na taktových čárách atd."
-
-#: ../gui/widgets.cpp:980
-msgid "Split-and-tie overlapping chords"
-msgstr "Rozdělit-a-svázat ligaturou překrývající se akordy"
-
-#: ../gui/widgets.cpp:1091
-msgid "Full quantize"
-msgstr "Úplná kvantizace"
-
-#: ../gui/widgets.cpp:1234
-msgid "Show Advanced Options"
-msgstr "Zobrazit rozšířené možnosti"
-
-#: ../gui/widgets.cpp:1238
-msgid "Hide Advanced Options"
-msgstr "Skrýt rozšířené možnosti"
 
 #: ../gui/editviewbase.cpp:212 ../gui/rosegardengui.cpp:852
 msgid "Open in Matri&x Editor"
@@ -3919,15 +3781,15 @@ msgstr "(%1.%2 qpm, %2.%3 bpm)"
 msgid "(%1.%2 bpm)"
 msgstr "(%1.%2 bpm)"
 
-#: ../gui/trackeditor.cpp:600
+#: ../gui/trackeditor.cpp:632
 msgid "Turn Repeating Segment into Real Copies"
 msgstr "Převést opakující se segment na skutečné kopie"
 
-#: ../gui/trackeditor.cpp:602
+#: ../gui/trackeditor.cpp:634
 msgid "Turn Repeating Segments into Real Copies"
 msgstr "Převést opakující se segmenty na skutečné kopie"
 
-#: ../gui/trackeditor.cpp:768
+#: ../gui/trackeditor.cpp:800
 msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
@@ -3967,37 +3829,37 @@ msgstr "Probíhá vykreslování not na osnově %1..."
 msgid "Positioning staff %1..."
 msgstr "Probíhá umísťování osnovy %1..."
 
-#: ../gui/notationstaff.cpp:1195 ../gui/notationviewslots.cpp:1804
+#: ../gui/notationstaff.cpp:1195 ../gui/notationviewslots.cpp:1827
 msgid "Sustain"
 msgstr "Držet tón"
 
-#: ../gui/matrixview.cpp:716 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1681
-#: ../gui/notationview.cpp:2001 ../gui/rosegardengui.cpp:1084
+#: ../gui/matrixview.cpp:735 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1681
+#: ../gui/notationview.cpp:2023 ../gui/rosegardengui.cpp:1084
 msgid "&Play"
 msgstr "&Přehrát"
 
-#: ../gui/matrixview.cpp:721 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1686
-#: ../gui/notationview.cpp:2006 ../gui/rosegardengui.cpp:1091
+#: ../gui/matrixview.cpp:740 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1686
+#: ../gui/notationview.cpp:2028 ../gui/rosegardengui.cpp:1091
 msgid "&Stop"
 msgstr "&Stop"
 
-#: ../gui/matrixview.cpp:726 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1691
-#: ../gui/notationview.cpp:2011 ../gui/rosegardengui.cpp:1106
+#: ../gui/matrixview.cpp:745 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1691
+#: ../gui/notationview.cpp:2033 ../gui/rosegardengui.cpp:1106
 msgid "Re&wind"
 msgstr "Ukazatel přehrávání o takt &zpět"
 
-#: ../gui/matrixview.cpp:732 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1697
-#: ../gui/notationview.cpp:2017 ../gui/rosegardengui.cpp:1098
+#: ../gui/matrixview.cpp:751 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1697
+#: ../gui/notationview.cpp:2039 ../gui/rosegardengui.cpp:1098
 msgid "&Fast Forward"
 msgstr "Ukazatel přehrávání o takt &dopředu"
 
-#: ../gui/matrixview.cpp:738 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1703
-#: ../gui/notationview.cpp:2023 ../gui/rosegardengui.cpp:1127
+#: ../gui/matrixview.cpp:757 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1703
+#: ../gui/notationview.cpp:2045 ../gui/rosegardengui.cpp:1127
 msgid "Rewind to &Beginning"
 msgstr "Ukazatel přehrávání na z&ačátek"
 
-#: ../gui/matrixview.cpp:744 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1709
-#: ../gui/notationview.cpp:2029 ../gui/rosegardengui.cpp:1134
+#: ../gui/matrixview.cpp:763 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1709
+#: ../gui/notationview.cpp:2051 ../gui/rosegardengui.cpp:1134
 msgid "Fast Forward to &End"
 msgstr "Ukazatel přehrávání na &konec"
 
@@ -4005,8 +3867,8 @@ msgstr "Ukazatel přehrávání na &konec"
 msgid "&Record"
 msgstr "&Zaznamenat"
 
-#: ../gui/matrixview.cpp:768 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
-#: ../gui/notationview.cpp:2053 ../gui/rosegardengui.cpp:1147
+#: ../gui/matrixview.cpp:787 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
+#: ../gui/notationview.cpp:2075 ../gui/rosegardengui.cpp:1147
 #, fuzzy
 msgid "Panic"
 msgstr "Pan"
@@ -4082,7 +3944,7 @@ msgstr "Mono nebo stereo"
 msgid "Mute"
 msgstr "Ztlumit"
 
-#: ../gui/mixer.cpp:358 rc.cpp:417
+#: ../gui/mixer.cpp:358 rc.cpp:280
 #, no-c-format
 msgid "Solo"
 msgstr "Sólo"
@@ -4120,8 +3982,8 @@ msgstr "Zvuková řídící výstupní úroveň"
 msgid "Master"
 msgstr "Řídící sek."
 
-#: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:363
-#: ../gui/instrumentparameterbox.cpp:599 ../gui/mixer.cpp:657
+#: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:372
+#: ../gui/instrumentparameterbox.cpp:608 ../gui/mixer.cpp:657
 #: ../gui/mixer.cpp:693 ../gui/mixer.cpp:869 ../gui/studiowidgets.cpp:992
 msgid "<no plugin>"
 msgstr "<žádný zásuvný modul>"
@@ -4206,7 +4068,7 @@ msgstr "Popis:"
 msgid " Triplet Chord"
 msgstr " Akord v triolách"
 
-#: ../gui/matrixview.cpp:2766 ../gui/notationviewslots.cpp:81
+#: ../gui/matrixview.cpp:2842 ../gui/notationviewslots.cpp:81
 msgid " Chord"
 msgstr " Akord"
 
@@ -4247,29 +4109,29 @@ msgstr "Neznámá velikost písma - %1"
 msgid "Unknown font size action %1"
 msgstr "Akce s neznámou velikostí písma - %1"
 
-#: ../gui/notationviewslots.cpp:423 ../gui/rosegardengui.cpp:2342
+#: ../gui/notationviewslots.cpp:446 ../gui/rosegardengui.cpp:2342
 msgid "Printing..."
 msgstr "Probíhá tisk..."
 
-#: ../gui/notationviewslots.cpp:440 ../gui/rosegardengui.cpp:2354
+#: ../gui/notationviewslots.cpp:463 ../gui/rosegardengui.cpp:2354
 msgid "Previewing..."
 msgstr "Náhled..."
 
-#: ../gui/matrixview.cpp:1494 ../gui/notationviewslots.cpp:461
-#: ../gui/notationviewslots.cpp:487
+#: ../gui/matrixview.cpp:1558 ../gui/notationviewslots.cpp:484
+#: ../gui/notationviewslots.cpp:510
 msgid "Cutting selection to clipboard..."
 msgstr "Probíhá vyjmutí výběru do schránky..."
 
-#: ../gui/matrixview.cpp:1534 ../gui/notationviewslots.cpp:470
+#: ../gui/matrixview.cpp:1598 ../gui/notationviewslots.cpp:493
 msgid "Deleting selection..."
 msgstr "Probíhá odstranění výběru..."
 
-#: ../gui/matrixview.cpp:1503 ../gui/notationviewslots.cpp:478
+#: ../gui/matrixview.cpp:1567 ../gui/notationviewslots.cpp:501
 #: ../gui/rosegardengui.cpp:2393
 msgid "Copying selection to clipboard..."
 msgstr "Probíhá kopírování výběru do schránky..."
 
-#: ../gui/notationviewslots.cpp:494
+#: ../gui/notationviewslots.cpp:517
 msgid ""
 "The Restricted paste type requires enough empty\n"
 "space (containing only rests) at the paste position\n"
@@ -4290,276 +4152,276 @@ msgstr ""
 "nabídky Upravit. Můžete také změnit výchozí typ\n"
 "vkládání na jiný než Omezený."
 
-#: ../gui/notationviewslots.cpp:514
+#: ../gui/notationviewslots.cpp:537
 msgid "Can't paste multiple Segments into one"
 msgstr "Nelze vložit několik segmentů do jednoho"
 
-#: ../gui/eventview.cpp:964 ../gui/matrixview.cpp:1518
-#: ../gui/notationviewslots.cpp:518 ../gui/notationviewslots.cpp:562
+#: ../gui/eventview.cpp:964 ../gui/matrixview.cpp:1582
+#: ../gui/notationviewslots.cpp:541 ../gui/notationviewslots.cpp:585
 #: ../gui/rosegardengui.cpp:2406
 msgid "Inserting clipboard contents..."
 msgstr "Probíhá vkládání obsahu schránky..."
 
-#: ../gui/notationviewslots.cpp:542 ../gui/notationviewslots.cpp:594
+#: ../gui/notationviewslots.cpp:565 ../gui/notationviewslots.cpp:617
 msgid "Couldn't paste at this point."
 msgstr "Nebylo možné provést vložení na tomto místě."
 
-#: ../gui/notationviewslots.cpp:696
+#: ../gui/notationviewslots.cpp:719
 msgid "Pushing selection left..."
 msgstr "Probíhá odsunutí výběru doleva..."
 
-#: ../gui/notationviewslots.cpp:706
+#: ../gui/notationviewslots.cpp:729
 msgid "Pushing selection right..."
 msgstr "Probíhá odsunutí výběru doprava..."
 
-#: ../gui/notationviewslots.cpp:716
+#: ../gui/notationviewslots.cpp:739
 msgid "Pushing selection up..."
 msgstr "Probíhá odsunutí výběru nahoru..."
 
-#: ../gui/notationviewslots.cpp:726
+#: ../gui/notationviewslots.cpp:749
 msgid "Pushing selection down..."
 msgstr "Probíhá odsunutí výběru dolů..."
 
-#: ../gui/notationviewslots.cpp:736
+#: ../gui/notationviewslots.cpp:759
 msgid "Restoring computed positions..."
 msgstr "Probíhá obnova vypočtených pozic..."
 
-#: ../gui/notationviewslots.cpp:744
+#: ../gui/notationviewslots.cpp:767
 msgid "Making visible..."
 msgstr "Probíhá zviditelnění..."
 
-#: ../gui/notationviewslots.cpp:752
+#: ../gui/notationviewslots.cpp:775
 msgid "Making invisible..."
 msgstr "Probíhá zneviditelnění..."
 
-#: ../gui/notationviewslots.cpp:842
+#: ../gui/notationviewslots.cpp:865
 msgid "Beaming group..."
 msgstr "Probíhá spojování skupiny trámcem..."
 
-#: ../gui/notationviewslots.cpp:851
+#: ../gui/notationviewslots.cpp:874
 msgid "Auto-beaming selection..."
 msgstr "Probíhá automatické spojování výběru trámcem..."
 
-#: ../gui/notationviewslots.cpp:860
+#: ../gui/notationviewslots.cpp:883
 msgid "Breaking groups..."
 msgstr "Probíhá rozdělování skupin..."
 
-#: ../gui/notationviewslots.cpp:945
+#: ../gui/notationviewslots.cpp:968
 msgid "Untupleting..."
 msgstr "Probíhá rušení rytmických notových skupin..."
 
-#: ../gui/notationviewslots.cpp:954
+#: ../gui/notationviewslots.cpp:977
 msgid "Making grace notes..."
 msgstr "Uhlazuje se vzhled not..."
 
-#: ../gui/notationviewslots.cpp:962
+#: ../gui/notationviewslots.cpp:985
 msgid "Making non-grace notes..."
 msgstr "Ruší se uhlazený vzhled not..."
 
-#: ../gui/notationviewslots.cpp:974
+#: ../gui/notationviewslots.cpp:997
 msgid "Adding slur..."
 msgstr "Probíhá přidání legata..."
 
-#: ../gui/notationviewslots.cpp:975
+#: ../gui/notationviewslots.cpp:998
 msgid "slur"
 msgstr "legato"
 
-#: ../gui/notationviewslots.cpp:980
+#: ../gui/notationviewslots.cpp:1003
 msgid "Adding phrasing slur..."
 msgstr "Probíhá přidání frázovacího legata..."
 
-#: ../gui/notationviewslots.cpp:981
+#: ../gui/notationviewslots.cpp:1004
 msgid "phrasing slur"
 msgstr "frázovací legato"
 
-#: ../gui/notationviewslots.cpp:986
+#: ../gui/notationviewslots.cpp:1009
 msgid "Adding glissando..."
 msgstr "Probíhá přidání glissanda..."
 
-#: ../gui/notationviewslots.cpp:987
+#: ../gui/notationviewslots.cpp:1010
 msgid "glissando"
 msgstr "glissando"
 
-#: ../gui/notationviewslots.cpp:992
+#: ../gui/notationviewslots.cpp:1015
 msgid "Adding crescendo..."
 msgstr "Probíhá přidání crescenda..."
 
-#: ../gui/notationviewslots.cpp:993 ../gui/notationviewslots.cpp:999
+#: ../gui/notationviewslots.cpp:1016 ../gui/notationviewslots.cpp:1022
 msgid "dynamic"
 msgstr "dynamika"
 
-#: ../gui/notationviewslots.cpp:998
+#: ../gui/notationviewslots.cpp:1021
 msgid "Adding decrescendo..."
 msgstr "Probíhá přidání decrescenda..."
 
-#: ../gui/notationviewslots.cpp:1004 ../gui/notationviewslots.cpp:1010
-#: ../gui/notationviewslots.cpp:1016 ../gui/notationviewslots.cpp:1022
+#: ../gui/notationviewslots.cpp:1027 ../gui/notationviewslots.cpp:1033
+#: ../gui/notationviewslots.cpp:1039 ../gui/notationviewslots.cpp:1045
 msgid "Adding octave..."
 msgstr "Probíhá přidání oktávy..."
 
-#: ../gui/notationviewslots.cpp:1005 ../gui/notationviewslots.cpp:1011
-#: ../gui/notationviewslots.cpp:1017 ../gui/notationviewslots.cpp:1023
+#: ../gui/notationviewslots.cpp:1028 ../gui/notationviewslots.cpp:1034
+#: ../gui/notationviewslots.cpp:1040 ../gui/notationviewslots.cpp:1046
 msgid "ottava"
 msgstr "ottava"
 
-#: ../gui/notationviewslots.cpp:1038
+#: ../gui/notationviewslots.cpp:1061
 msgid "Can't add overlapping %1 indications"
 msgstr "Nelze přidat překrývající se označení způsobu hry - %1"
 
-#: ../gui/notationviewslots.cpp:1046
+#: ../gui/notationviewslots.cpp:1069
 msgid "Making chord..."
 msgstr "Probíhá vytváření akordu..."
 
-#: ../gui/notationviewslots.cpp:1062
+#: ../gui/notationviewslots.cpp:1085
 msgid "Normalizing rests..."
 msgstr "Probíhá normalizace pomlk..."
 
-#: ../gui/notationviewslots.cpp:1071
+#: ../gui/notationviewslots.cpp:1094
 msgid "Collapsing rests..."
 msgstr "Probíhá sjednocování pomlk..."
 
-#: ../gui/matrixview.cpp:1248 ../gui/notationviewslots.cpp:1080
+#: ../gui/matrixview.cpp:1267 ../gui/notationviewslots.cpp:1103
 msgid "Collapsing notes..."
 msgstr "Probíhá sjednocování not..."
 
-#: ../gui/notationviewslots.cpp:1089
+#: ../gui/notationviewslots.cpp:1112
 msgid "Tying notes..."
 msgstr "Probíhá svazování not ligaturou..."
 
-#: ../gui/notationviewslots.cpp:1098
+#: ../gui/notationviewslots.cpp:1121
 msgid "Untying notes..."
 msgstr "Probíhá rušení vázání not ligaturou..."
 
-#: ../gui/notationviewslots.cpp:1107
+#: ../gui/notationviewslots.cpp:1130
 msgid "Making notes viable..."
 msgstr "Probíhá úprava not do realizovatelné podoby..."
 
-#: ../gui/notationviewslots.cpp:1116
+#: ../gui/notationviewslots.cpp:1139
 msgid "Removing counterpoint..."
 msgstr "Probíhá odstranění kontrapunktu..."
 
-#: ../gui/notationviewslots.cpp:1125
+#: ../gui/notationviewslots.cpp:1148
 msgid "Pointing stems up..."
 msgstr "Probíhá otáčení nožiček nahoru..."
 
-#: ../gui/notationviewslots.cpp:1134
+#: ../gui/notationviewslots.cpp:1157
 msgid "Pointing stems down..."
 msgstr "Probíhá otáčení nožiček dolů..."
 
-#: ../gui/notationviewslots.cpp:1144
+#: ../gui/notationviewslots.cpp:1167
 msgid "Restoring computed stem directions..."
 msgstr "Probíhá obnovení vypočtených směrů nožiček..."
 
-#: ../gui/notationviewslots.cpp:1153 ../gui/notationviewslots.cpp:1162
+#: ../gui/notationviewslots.cpp:1176 ../gui/notationviewslots.cpp:1185
 msgid "Positioning slurs..."
 msgstr "Probíhá umísťování legata..."
 
-#: ../gui/notationviewslots.cpp:1172
+#: ../gui/notationviewslots.cpp:1195
 msgid "Restoring slur positions..."
 msgstr "Probíhá obnova pozic legata..."
 
-#: ../gui/notationviewslots.cpp:1181
+#: ../gui/notationviewslots.cpp:1204
 msgid "Fixing notation quantization..."
 msgstr "Probíhá oprava kvantizace notace..."
 
-#: ../gui/notationviewslots.cpp:1190
+#: ../gui/notationviewslots.cpp:1213
 msgid "Removing notation quantization..."
 msgstr "Probíhá odstranění kvantizace notace..."
 
-#: ../gui/notationviewslots.cpp:1206
+#: ../gui/notationviewslots.cpp:1229
 msgid "Changing to %1 style..."
 msgstr "Probíhá změna na styl %1..."
 
-#: ../gui/notationviewslots.cpp:1214
+#: ../gui/notationviewslots.cpp:1237
 #, c-format
 msgid "Unknown style action %1"
 msgstr "Akce s neznámým stylem - %1"
 
-#: ../gui/notationviewslots.cpp:1227 ../gui/notationviewslots.cpp:1268
-#: ../gui/notationviewslots.cpp:1324
+#: ../gui/notationviewslots.cpp:1250 ../gui/notationviewslots.cpp:1291
+#: ../gui/notationviewslots.cpp:1347
 msgid "No note duration selected"
 msgstr "Nebyla vybrána doba trvání noty"
 
-#: ../gui/matrixview.cpp:1717 ../gui/notationviewslots.cpp:1246
+#: ../gui/matrixview.cpp:1781 ../gui/notationviewslots.cpp:1269
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "Akce vložení neznámé noty %1"
 
-#: ../gui/matrixview.cpp:1721 ../gui/matrixview.cpp:2689
-#: ../gui/notationviewslots.cpp:1250
+#: ../gui/matrixview.cpp:1785 ../gui/matrixview.cpp:2765
+#: ../gui/notationviewslots.cpp:1273
 msgid "Inserting note"
 msgstr "Probíhá vložení noty"
 
-#: ../gui/notationviewslots.cpp:1289
+#: ../gui/notationviewslots.cpp:1312
 msgid "No rest duration selected"
 msgstr "Nebyla vybrána doba trvání pomlky"
 
-#: ../gui/notationviewslots.cpp:1373
+#: ../gui/notationviewslots.cpp:1396
 msgid "No note or rest duration selected"
 msgstr "Nebyla vybrána doba trvání noty nebo pomlky"
 
-#: ../gui/notationviewslots.cpp:1383 ../gui/notationviewslots.cpp:1393
-#: ../gui/notationviewslots.cpp:1403 ../gui/notationviewslots.cpp:1413
-#: ../gui/notationviewslots.cpp:1423 ../gui/notationviewslots.cpp:1433
-#: ../gui/notationviewslots.cpp:1443
+#: ../gui/notationviewslots.cpp:1406 ../gui/notationviewslots.cpp:1416
+#: ../gui/notationviewslots.cpp:1426 ../gui/notationviewslots.cpp:1436
+#: ../gui/notationviewslots.cpp:1446 ../gui/notationviewslots.cpp:1456
+#: ../gui/notationviewslots.cpp:1466
 msgid "Forcing accidentals..."
 msgstr "Probíhá nucená úprava posuvek..."
 
-#: ../gui/notationviewslots.cpp:1453
+#: ../gui/notationviewslots.cpp:1476
 msgid "Restoring accidentals..."
 msgstr "Probíhá obnovení posuvek..."
 
-#: ../gui/notationviewslots.cpp:1463
+#: ../gui/notationviewslots.cpp:1486
 msgid "Showing cautionary accidentals..."
 msgstr "Probíhá zobrazení varovných posuvek..."
 
-#: ../gui/notationviewslots.cpp:1472
+#: ../gui/notationviewslots.cpp:1495
 msgid "Cancelling cautionary accidentals..."
 msgstr "Probíhá rušení varovných posuvek..."
 
-#: ../gui/matrixview.cpp:1226 ../gui/matrixview.cpp:1239
-#: ../gui/matrixview.cpp:1969 ../gui/notationviewslots.cpp:1486
+#: ../gui/matrixview.cpp:1245 ../gui/matrixview.cpp:1258
+#: ../gui/matrixview.cpp:2033 ../gui/notationviewslots.cpp:1509
 msgid "Quantizing..."
 msgstr "Probíhá kvantizace..."
 
-#: ../gui/notationviewslots.cpp:1500
+#: ../gui/notationviewslots.cpp:1523
 msgid "Interpreting selection..."
 msgstr "Probíhá interpretace výběru..."
 
-#: ../gui/notationviewslots.cpp:1511
+#: ../gui/notationviewslots.cpp:1534
 msgid "Setting note durations..."
 msgstr "Probíhá nastavení dob trvání not..."
 
-#: ../gui/notationviewslots.cpp:1518 ../gui/notationviewslots.cpp:1525
+#: ../gui/notationviewslots.cpp:1541 ../gui/notationviewslots.cpp:1548
 msgid "Adding dot..."
 msgstr "Probíhá přidání tečky..."
 
-#: ../gui/notationviewslots.cpp:1547
+#: ../gui/notationviewslots.cpp:1570
 msgid "Text: "
 msgstr "Text: "
 
-#: ../gui/notationviewslots.cpp:1561
+#: ../gui/notationviewslots.cpp:1584
 msgid "Fingering: "
 msgstr "Prstoklad: "
 
-#: ../gui/notationviewslots.cpp:1644
+#: ../gui/notationviewslots.cpp:1667
 msgid "Ornament track %1 bar %2"
 msgstr "Melodická ozdoba - stopa %1, taktová čára %2"
 
-#: ../gui/notationviewslots.cpp:1646
+#: ../gui/notationviewslots.cpp:1669
 #, c-format
 msgid "Ornament bar %1"
 msgstr "Taktová čára melodické ozdoby %1"
 
-#: ../gui/notationviewslots.cpp:1702
+#: ../gui/notationviewslots.cpp:1725
 msgid "Remove Ornaments"
 msgstr "Odstranit melodické ozdoby"
 
-#: ../gui/notationviewslots.cpp:1750
+#: ../gui/notationviewslots.cpp:1773
 msgid "Estimated key signature shown"
 msgstr "Zobrazené odhadované předznamenání"
 
-#: ../gui/notationviewslots.cpp:1820
+#: ../gui/notationviewslots.cpp:1843
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
@@ -4569,12 +4431,11 @@ msgstr ""
 "Ujistěte se, že je zařízení správně konfigurováno v dialogu Správa zařízení "
 "MIDI v hlavním okně."
 
-#: ../gui/notationviewslots.cpp:2706
-#, c-format
-msgid "Time: %1"
-msgstr "Čas: %1"
+#: ../gui/matrixview.cpp:1479 ../gui/notationviewslots.cpp:2736
+msgid "Time: %1 (%2.%3s)"
+msgstr "Čas: %1 (%2.%3s)"
 
-#: ../gui/notationviewslots.cpp:2743
+#: ../gui/notationviewslots.cpp:2779
 msgid "Can't insert note: No note duration selected"
 msgstr "Nelze vložit notu. Nebyla vybrána doba trvání noty"
 
@@ -4607,7 +4468,7 @@ msgstr "Sub %1 R"
 msgid "Sub %1 L"
 msgstr "Sub %1 L"
 
-#: ../gui/instrumentparameterbox.cpp:360 ../gui/instrumentparameterbox.cpp:595
+#: ../gui/instrumentparameterbox.cpp:369 ../gui/instrumentparameterbox.cpp:604
 #: ../gui/studiowidgets.cpp:1003
 msgid "<no synth>"
 msgstr "<žádný syntetizér>"
@@ -4648,79 +4509,88 @@ msgstr "Vstup:"
 msgid "Out:"
 msgstr "Výstup:"
 
-#: ../gui/matrixtool.cpp:173 ../gui/matrixtool.cpp:416
-#: ../gui/matrixtool.cpp:952 ../gui/matrixtool.cpp:1296
+#: ../gui/matrixtool.cpp:174 ../gui/matrixtool.cpp:417
+#: ../gui/matrixtool.cpp:953 ../gui/matrixtool.cpp:1322
 #: ../gui/notationtool.cpp:215 ../gui/notationtool.cpp:774
 #: ../gui/notationtool.cpp:862 ../gui/notationtool.cpp:943
 #: ../gui/notationtool.cpp:1074 ../gui/notationtool.cpp:1946
 msgid "Switch to Select Tool"
 msgstr "Přepnout na nástroj pro výběr"
 
-#: ../gui/matrixtool.cpp:177 ../gui/matrixtool.cpp:486
-#: ../gui/matrixtool.cpp:960 ../gui/matrixtool.cpp:1304
+#: ../gui/matrixtool.cpp:178 ../gui/matrixtool.cpp:487
+#: ../gui/matrixtool.cpp:961 ../gui/matrixtool.cpp:1330
 #: ../gui/notationtool.cpp:219 ../gui/notationtool.cpp:778
 #: ../gui/notationtool.cpp:866 ../gui/notationtool.cpp:947
 #: ../gui/notationtool.cpp:1144 ../gui/notationtool.cpp:1950
 msgid "Switch to Erase Tool"
 msgstr "Přepnout na nástroj pro mazání"
 
-#: ../gui/matrixtool.cpp:181 ../gui/matrixtool.cpp:424
-#: ../gui/matrixtool.cpp:490 ../gui/matrixtool.cpp:1308
+#: ../gui/matrixtool.cpp:182 ../gui/matrixtool.cpp:425
+#: ../gui/matrixtool.cpp:491 ../gui/matrixtool.cpp:1334
 msgid "Switch to Move Tool"
 msgstr "Přepnout na nástroj pro přesun"
 
-#: ../gui/matrixtool.cpp:187 ../gui/matrixtool.cpp:430
-#: ../gui/matrixtool.cpp:498 ../gui/matrixtool.cpp:966
+#: ../gui/matrixtool.cpp:188 ../gui/matrixtool.cpp:431
+#: ../gui/matrixtool.cpp:499 ../gui/matrixtool.cpp:967
 msgid "Switch to Resize Tool"
 msgstr "Přepnout na nástroj pro změnu velikosti"
 
-#: ../gui/matrixtool.cpp:191 ../gui/matrixtool.cpp:434
-#: ../gui/matrixtool.cpp:502 ../gui/matrixtool.cpp:970
-#: ../gui/matrixtool.cpp:1312
+#: ../gui/matrixtool.cpp:192 ../gui/matrixtool.cpp:435
+#: ../gui/matrixtool.cpp:503 ../gui/matrixtool.cpp:971
+#: ../gui/matrixtool.cpp:1338
 msgid "Half Speed"
 msgstr "Poloviční rychlost"
 
-#: ../gui/matrixtool.cpp:195 ../gui/matrixtool.cpp:438
-#: ../gui/matrixtool.cpp:506 ../gui/matrixtool.cpp:974
-#: ../gui/matrixtool.cpp:1316
+#: ../gui/matrixtool.cpp:196 ../gui/matrixtool.cpp:439
+#: ../gui/matrixtool.cpp:507 ../gui/matrixtool.cpp:975
+#: ../gui/matrixtool.cpp:1342
 msgid "Double Speed"
 msgstr "Dvojitá rychlost"
 
-#: ../gui/matrixtool.cpp:420 ../gui/matrixtool.cpp:482
-#: ../gui/matrixtool.cpp:956 ../gui/matrixtool.cpp:1300
+#: ../gui/matrixtool.cpp:421 ../gui/matrixtool.cpp:483
+#: ../gui/matrixtool.cpp:957 ../gui/matrixtool.cpp:1326
 msgid "Switch to Draw Tool"
 msgstr "Přepnout na nástroj pro kreslení"
 
-#: ../gui/matrixtool.cpp:1207
+#: ../gui/matrixtool.cpp:1208
 msgid "Move Event"
 msgstr "Přesunout událost"
 
-#: ../gui/matrixtool.cpp:1210
+#: ../gui/matrixtool.cpp:1211
 msgid "Move Events"
 msgstr "Přesunout události"
 
-#: ../gui/matrixtool.cpp:1432
+#: ../gui/matrixtool.cpp:1461
 msgid "Resize Event"
 msgstr "Změnit velikost události"
 
-#: ../gui/matrixtool.cpp:1435
+#: ../gui/matrixtool.cpp:1464
 msgid "Resize Events"
 msgstr "Změnit velikost událostí"
 
-#: ../gui/instrumentparameterbox.cpp:700
+#: ../gui/instrumentparameterbox.cpp:74 ../gui/matrixview.cpp:137
+msgid "Instrument Parameters"
+msgstr "Parametry nástroje"
+
+#: ../gui/instrumentparameterbox.cpp:189
+#: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:66
+msgid "Track"
+msgstr "Stopa"
+
+#: ../gui/instrumentparameterbox.cpp:709
 msgid "Variation"
 msgstr "Rozdíl"
 
-#: ../gui/instrumentparameterbox.cpp:701
+#: ../gui/instrumentparameterbox.cpp:710
 msgid "Program"
 msgstr "Program"
 
-#: ../gui/instrumentparameterbox.cpp:702
+#: ../gui/instrumentparameterbox.cpp:711
 #, fuzzy
 msgid "Channel out"
 msgstr "Kanál"
 
-#: ../gui/instrumentparameterbox.cpp:832 ../gui/instrumentparameterbox.cpp:838
+#: ../gui/instrumentparameterbox.cpp:841 ../gui/instrumentparameterbox.cpp:847
 msgid "[ %1 ]"
 msgstr "[ %1 ]"
 
@@ -4887,7 +4757,7 @@ msgid "unknown audio file"
 msgstr "neznámý zvukový soubor"
 
 #: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
-#: ../gui/segmentcommands.cpp:567 rc.cpp:403
+#: ../gui/segmentcommands.cpp:567 rc.cpp:270
 #, no-c-format
 msgid "Record"
 msgstr "Zaznamenat"
@@ -5085,7 +4955,7 @@ msgstr "Zneviditelnit"
 msgid "Make Visible"
 msgstr "Zviditelnit"
 
-#: ../gui/eventview.cpp:997 ../gui/matrixview.cpp:1525
+#: ../gui/eventview.cpp:997 ../gui/matrixview.cpp:1589
 #: ../gui/notationtool.cpp:2130
 msgid "Couldn't paste at this point"
 msgstr "Nebylo možné provést vložení na tomto místě"
@@ -5094,7 +4964,7 @@ msgstr "Nebylo možné provést vložení na tomto místě"
 msgid "Ready."
 msgstr "Připraven."
 
-#: ../gui/sequencemanager.cpp:1017 ../gui/sequencemanager.cpp:1150
+#: ../gui/sequencemanager.cpp:1025 ../gui/sequencemanager.cpp:1158
 msgid ""
 "The JACK Audio subsystem has failed or it has stopped Rosegarden from "
 "processing audio.\n"
@@ -5107,7 +4977,7 @@ msgstr ""
 "Ukončení ostatních běžících aplikací by mohlo zlepšit výkon aplikace "
 "Rosegarden."
 
-#: ../gui/sequencemanager.cpp:1023 ../gui/sequencemanager.cpp:1156
+#: ../gui/sequencemanager.cpp:1031 ../gui/sequencemanager.cpp:1164
 msgid ""
 "The JACK Audio subsystem has stopped Rosegarden from processing audio, "
 "probably because of a processing overload.\n"
@@ -5122,14 +4992,14 @@ msgstr ""
 "Ukončení ostatních běžících aplikací by mohlo zlepšit výkon aplikace "
 "Rosegarden."
 
-#: ../gui/sequencemanager.cpp:1034
+#: ../gui/sequencemanager.cpp:1042
 msgid ""
 "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Procesor nemá dostatečný výkon na zpracování zvuku v reálném čase.  Nelze "
 "pokračovat."
 
-#: ../gui/sequencemanager.cpp:1059
+#: ../gui/sequencemanager.cpp:1067
 msgid ""
 "A serious error has occurred in the ALSA MIDI subsystem.  It may not be "
 "possible to continue sequencing.  Please check console output for more "
@@ -5138,18 +5008,18 @@ msgstr ""
 "V subsystému ALSA MIDI dolšo k vážné chybě. Nemusí být dále možné pokračovat "
 "v práci (sekvencer). Více informací naleznete na konzolovém výstupu."
 
-#: ../gui/sequencemanager.cpp:1080
+#: ../gui/sequencemanager.cpp:1088
 msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Zvukový subsystém JACK ztrácí vzorkové rámce."
 
-#: ../gui/sequencemanager.cpp:1098
+#: ../gui/sequencemanager.cpp:1106
 msgid ""
 "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Načítání zvukových dat z disku selhalo z časových důvodu a nebylo tedy možné "
 "obsloužit zvukový subsystém."
 
-#: ../gui/sequencemanager.cpp:1102
+#: ../gui/sequencemanager.cpp:1110
 msgid ""
 "Failed to write audio data to disc fast enough to service the audio "
 "subsystem."
@@ -5157,19 +5027,19 @@ msgstr ""
 "Zápis zvukových dat na disk selhal, protože nebyl dostatečně rychlý na to, "
 "aby bylo možné obsloužit zvukový subsystém."
 
-#: ../gui/sequencemanager.cpp:1106
+#: ../gui/sequencemanager.cpp:1114
 msgid "The audio mixing subsystem is failing to keep up."
 msgstr "Zvukový směšovací subsystém nestačí svým výkonem držet krok."
 
-#: ../gui/sequencemanager.cpp:1110
+#: ../gui/sequencemanager.cpp:1118
 msgid "The audio subsystem is failing to keep up."
 msgstr "Zvukový subsystém nestačí svým výkonem držet krok."
 
-#: ../gui/sequencemanager.cpp:1114
+#: ../gui/sequencemanager.cpp:1122
 msgid "Unknown sequencer failure mode!"
 msgstr "Neznámý režim selhání sekvenceru!"
 
-#: ../gui/sequencemanager.cpp:1164
+#: ../gui/sequencemanager.cpp:1172
 msgid ""
 "<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
 "a high-resolution timing source for MIDI performance.</p><p>This may mean "
@@ -5182,114 +5052,119 @@ msgstr ""
 "časovače v jádře (kernel) na příliš nízkou hodnotu. Více informací získáte u "
 "svého distributora Linuxu.</p>"
 
-#: ../gui/segmentparameterbox.cpp:50
+#: ../gui/segmentparameterbox.cpp:51 ../gui/trackparameterbox.cpp:897
 #, fuzzy
 msgid "Segment"
 msgstr "Se&gment"
 
+#: ../gui/segmentparameterbox.cpp:52
+#, fuzzy
+msgid "Segment Parameters"
+msgstr "Parametry nástroje"
+
 #: ../gui/rosegardenconfigurationpage.cpp:2061
-#: ../gui/segmentparameterbox.cpp:88
+#: ../gui/segmentparameterbox.cpp:91
 msgid "Repeat"
 msgstr "Opakovat"
 
 #: ../gui/editview.cpp:1407 ../gui/rosegardenconfigurationpage.cpp:2063
-#: ../gui/segmentparameterbox.cpp:90 ../gui/trackparameterbox.cpp:240
+#: ../gui/segmentparameterbox.cpp:93 ../gui/trackparameterbox.cpp:258
 msgid "Transpose"
 msgstr "Transponovat"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2064
-#: ../gui/segmentparameterbox.cpp:91
+#: ../gui/segmentparameterbox.cpp:94
 msgid "Delay"
 msgstr "Zpoždění"
 
-#: ../gui/segmentparameterbox.cpp:93
+#: ../gui/segmentparameterbox.cpp:96
 msgid "Audio auto-fade"
 msgstr "Automatické zeslabení zvuku"
 
-#: ../gui/segmentparameterbox.cpp:94
+#: ../gui/segmentparameterbox.cpp:97
 msgid "Fade in"
 msgstr "Zeslabit vstup"
 
-#: ../gui/segmentparameterbox.cpp:95
+#: ../gui/segmentparameterbox.cpp:98
 msgid "Fade out"
 msgstr "Zeslabit výstup"
 
-#: ../gui/segmentparameterbox.cpp:96 ../gui/trackparameterbox.cpp:263
+#: ../gui/segmentparameterbox.cpp:99 ../gui/trackparameterbox.cpp:287
 #, fuzzy
 msgid "Range"
 msgstr "Trojúhelníkový"
 
-#: ../gui/segmentparameterbox.cpp:106
+#: ../gui/segmentparameterbox.cpp:109
 #, fuzzy
 msgid "edit"
 msgstr "Editor"
 
-#: ../gui/segmentparameterbox.cpp:170
+#: ../gui/segmentparameterbox.cpp:173
 msgid ""
 "_: used internally for spacing\n"
 "High: ----"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:174 ../gui/segmentparameterbox.cpp:737
-#: ../gui/trackparameterbox.cpp:270
+#: ../gui/segmentparameterbox.cpp:177 ../gui/segmentparameterbox.cpp:740
+#: ../gui/trackparameterbox.cpp:294
 #, fuzzy
 msgid "High: ---"
 msgstr "Vysoká"
 
-#: ../gui/segmentparameterbox.cpp:175 ../gui/trackparameterbox.cpp:271
+#: ../gui/segmentparameterbox.cpp:178 ../gui/trackparameterbox.cpp:295
 msgid "Choose the highest suggested playable note, using a staff"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:184 ../gui/segmentparameterbox.cpp:738
-#: ../gui/trackparameterbox.cpp:266
+#: ../gui/segmentparameterbox.cpp:187 ../gui/segmentparameterbox.cpp:741
+#: ../gui/trackparameterbox.cpp:290
 msgid "Low: ----"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:185 ../gui/trackparameterbox.cpp:267
+#: ../gui/segmentparameterbox.cpp:188 ../gui/trackparameterbox.cpp:291
 msgid "Choose the lowest suggested playable note, using a staff"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:203 ../gui/segmentparameterbox.cpp:210
+#: ../gui/segmentparameterbox.cpp:206 ../gui/segmentparameterbox.cpp:213
 msgid " ms"
 msgstr " ms"
 
-#: ../gui/segmentparameterbox.cpp:320 ../gui/segmentparameterbox.cpp:687
+#: ../gui/segmentparameterbox.cpp:323 ../gui/segmentparameterbox.cpp:690
 msgid "%1 ms"
 msgstr "%1 ms"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2445
-#: ../gui/segmentparameterbox.cpp:402 ../gui/trackparameterbox.cpp:752
+#: ../gui/segmentparameterbox.cpp:405 ../gui/trackparameterbox.cpp:773
 msgid "Add New Color"
 msgstr "Přidat novou barvu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2503
-#: ../gui/segmentparameterbox.cpp:986 ../gui/trackparameterbox.cpp:775
+#: ../gui/segmentparameterbox.cpp:989 ../gui/trackparameterbox.cpp:796
 msgid "New Color Name"
 msgstr "Název nové barvy"
 
 #: ../gui/colourwidgets.cpp:64 ../gui/rosegardenconfigurationpage.cpp:2504
-#: ../gui/segmentparameterbox.cpp:986 ../gui/trackparameterbox.cpp:775
+#: ../gui/segmentparameterbox.cpp:989 ../gui/trackparameterbox.cpp:796
 msgid "Enter new name"
 msgstr "Zadejte nový název"
 
-#: ../gui/segmentparameterbox.cpp:1036 ../gui/trackparameterbox.cpp:802
+#: ../gui/segmentparameterbox.cpp:1039 ../gui/trackparameterbox.cpp:823
 msgid "Highest playable note"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:1056 ../gui/trackparameterbox.cpp:821
+#: ../gui/segmentparameterbox.cpp:1059 ../gui/trackparameterbox.cpp:842
 msgid "Lowest playable note"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:6149 ../gui/segmentparameterbox.cpp:1089
+#: ../gui/rosegardengui.cpp:6174 ../gui/segmentparameterbox.cpp:1092
 msgid "Modify Segment label"
 msgstr "Upravit popisek segmentu"
 
-#: ../gui/rosegardengui.cpp:6150 ../gui/segmentparameterbox.cpp:1090
+#: ../gui/rosegardengui.cpp:6175 ../gui/segmentparameterbox.cpp:1093
 msgid "Modify Segments label"
 msgstr "Upravit popisky segmentu"
 
-#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:6166
-#: ../gui/segmentparameterbox.cpp:1100
+#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:6191
+#: ../gui/segmentparameterbox.cpp:1103
 msgid "Enter new label"
 msgstr "Zadat nový popisek"
 
@@ -6429,10 +6304,6 @@ msgstr "%1 MIDI, %2 zvuk, %3 celkem"
 msgid "Statistics"
 msgstr "Statistika"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:65
-msgid "Track"
-msgstr "Stopa"
-
 #: ../gui/rosegardenconfigurationpage.cpp:2057
 msgid "Time"
 msgstr "Čas"
@@ -6497,6 +6368,1035 @@ msgstr "Odstranit barvu"
 msgid "Color Map"
 msgstr "Barevná mapa"
 
+#: ../gui/matrixview.cpp:387 ../gui/matrixview.cpp:2957
+msgid "Couldn't apply piano roll layout"
+msgstr "Nebylo možné použít rozložení klavírního válce"
+
+#: ../gui/matrixview.cpp:586 ../gui/notationview.cpp:1462
+#: ../gui/rosegardengui.cpp:739
+msgid "&Select"
+msgstr "&Vybrat"
+
+#: ../gui/matrixview.cpp:591 ../gui/rosegardengui.cpp:744
+msgid "&Draw"
+msgstr "&Kreslit"
+
+#: ../gui/matrixview.cpp:601 ../gui/rosegardengui.cpp:754
+msgid "&Move"
+msgstr "&Přesunout"
+
+#: ../gui/matrixview.cpp:608
+msgid "Resi&ze"
+msgstr "&Změnit velikost"
+
+#: ../gui/matrixview.cpp:614 ../gui/notationview.cpp:1596
+msgid "C&hord Insert Mode"
+msgstr "Režim vkládání &akordů"
+
+#: ../gui/matrixview.cpp:621 ../gui/notationview.cpp:1468
+msgid "Ste&p Recording"
+msgstr "&Krokový záznam"
+
+#: ../gui/matrixview.cpp:631 ../gui/rosegardengui.cpp:885
+msgid "Repeat Last Quantize"
+msgstr "Opakovat poslední kvantizaci"
+
+#: ../gui/matrixview.cpp:639
+msgid "&Legato"
+msgstr "&Legato"
+
+#: ../gui/matrixview.cpp:643
+msgid "&Halve Speed"
+msgstr "&Poloviční rychlost"
+
+#: ../gui/matrixview.cpp:647
+msgid "&Double Speed"
+msgstr "&Dvojitá rychlost"
+
+#: ../gui/matrixview.cpp:665
+msgid "Set Event &Velocities..."
+msgstr "Nastavit &rychlosti událostí..."
+
+#: ../gui/matrixview.cpp:669
+msgid "Trigger Se&gment..."
+msgstr "&Spouštěcí segment..."
+
+#: ../gui/matrixview.cpp:673
+msgid "Remove Triggers..."
+msgstr "Odebrat spouštěcí značky..."
+
+#: ../gui/matrixview.cpp:685 ../gui/notationview.cpp:1959
+msgid "Cursor &Back"
+msgstr "Kurzor &zpět"
+
+#: ../gui/matrixview.cpp:689 ../gui/notationview.cpp:1963
+msgid "Cursor &Forward"
+msgstr "Kurzor &vpřed"
+
+#: ../gui/matrixview.cpp:693 ../gui/notationview.cpp:1967
+msgid "Cursor Ba&ck Bar"
+msgstr "Kurzor na &předchozí taktovou čáru"
+
+#: ../gui/matrixview.cpp:697 ../gui/notationview.cpp:1971
+msgid "Cursor For&ward Bar"
+msgstr "Kurzor na &následující taktovou čáru"
+
+#: ../gui/matrixview.cpp:701 ../gui/notationview.cpp:1975
+msgid "Cursor Back and Se&lect"
+msgstr "Kurzor zpět a vy&brat"
+
+#: ../gui/matrixview.cpp:705 ../gui/notationview.cpp:1979
+msgid "Cursor Forward and &Select"
+msgstr "Kurzor vpřed a v&ybrat"
+
+#: ../gui/matrixview.cpp:709 ../gui/notationview.cpp:1983
+msgid "Cursor Back Bar and Select"
+msgstr "Kurzor na předchozí taktovou čáru a vybrat"
+
+#: ../gui/matrixview.cpp:713 ../gui/notationview.cpp:1987
+msgid "Cursor Forward Bar and Select"
+msgstr "Kurzor na následující taktovou čáru a vybrat"
+
+#: ../gui/matrixview.cpp:717 ../gui/notationview.cpp:1997
+msgid "Cursor to St&art"
+msgstr "Kurzor na z&ačátek"
+
+#: ../gui/matrixview.cpp:723 ../gui/notationview.cpp:2003
+msgid "Cursor to &End"
+msgstr "Kurzor na &konec"
+
+#: ../gui/matrixview.cpp:729 ../gui/notationview.cpp:2017
+msgid "Cursor to &Playback Pointer"
+msgstr "Kurzor na pozici &ukazatele přehrávání"
+
+#: ../gui/matrixview.cpp:769 ../gui/notationview.cpp:2057
+msgid "Playback Pointer to &Cursor"
+msgstr "Ukazatel přehrávání na pozici k&urzoru"
+
+#: ../gui/matrixview.cpp:775 ../gui/notationview.cpp:2063
+msgid "&Solo"
+msgstr "&Sólo"
+
+#: ../gui/matrixview.cpp:781 ../gui/notationview.cpp:2069
+#: ../gui/rosegardengui.cpp:1141
+msgid "Scro&ll to Follow Playback"
+msgstr "Ro&lovat podle přehrávání"
+
+#: ../gui/matrixview.cpp:790 ../gui/notationview.cpp:2078
+msgid "Set Loop to Selection"
+msgstr "Nastavit opakování výběru"
+
+#: ../gui/matrixview.cpp:794 ../gui/notationview.cpp:2082
+msgid "Clear L&oop"
+msgstr "Vymazat &opakování"
+
+#: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:803
+#: ../gui/notationview.cpp:2093
+msgid "&Filter Selection"
+msgstr "Výběr &filtru"
+
+#: ../gui/matrixview.cpp:808
+msgid "Snap to 1/64"
+msgstr "Přichytávat se na 1/64"
+
+#: ../gui/matrixview.cpp:810
+msgid "Snap to 1/48"
+msgstr "Přichytávat se na 1/48"
+
+#: ../gui/matrixview.cpp:812
+msgid "Snap to 1/32"
+msgstr "Přichytávat se na 1/32"
+
+#: ../gui/matrixview.cpp:814
+msgid "Snap to 1/24"
+msgstr "Přichytávat se na 1/24"
+
+#: ../gui/matrixview.cpp:816
+msgid "Snap to 1/16"
+msgstr "Přichytávat se na 1/16"
+
+#: ../gui/matrixview.cpp:818
+msgid "Snap to 1/12"
+msgstr "Přichytávat se na 1/12"
+
+#: ../gui/matrixview.cpp:820
+msgid "Snap to 1/8"
+msgstr "Přichytávat se na 1/8"
+
+#: ../gui/matrixview.cpp:822
+msgid "Snap to 1/6"
+msgstr "Přichytávat se na 1/6"
+
+#: ../gui/matrixview.cpp:824
+msgid "Snap to 1/4"
+msgstr "Přichytávat se na 1/4"
+
+#: ../gui/matrixview.cpp:826
+msgid "Snap to 1/2"
+msgstr "Přichytávat se na 1/2"
+
+#: ../gui/matrixview.cpp:828
+msgid "Snap to &Unit"
+msgstr "Přichytávat se na &jednotku"
+
+#: ../gui/matrixview.cpp:830
+msgid "Snap to Bea&t"
+msgstr "Přichytávat se na &dobu"
+
+#: ../gui/matrixview.cpp:832
+msgid "Snap to &Bar"
+msgstr "Přichytávat se na &taktovou čáru"
+
+#: ../gui/matrixview.cpp:834
+msgid "&No Snap"
+msgstr "&Bez přichytávání"
+
+#: ../gui/matrixview.cpp:840
+msgid "Show Instrument Parameters"
+msgstr "Zobrazit parametry nástroje"
+
+#: ../gui/matrixview.cpp:845 ../gui/notationview.cpp:1529
+msgid "Show Ch&ord Name Ruler"
+msgstr "Zobrazit pravítko názvů &akordů"
+
+#: ../gui/matrixview.cpp:849 ../gui/notationview.cpp:1537
+msgid "Show &Tempo Ruler"
+msgstr "Zobrazit pravítko &tempa"
+
+#: ../gui/matrixview.cpp:1138 ../gui/notationview.cpp:2819
+#, c-format
+msgid ""
+"_n:   1 event selected \n"
+"  %n events selected "
+msgstr ""
+"_n:  je vybrána 1 událost \n"
+"  je vybráno %n událostí(i)"
+
+#: ../gui/matrixview.cpp:1140 ../gui/notationview.cpp:2821
+msgid "  No selection "
+msgstr "  Žádný výběr "
+
+#: ../gui/matrixview.cpp:1280
+msgid "Making legato..."
+msgstr "Probíhá vytváření legata..."
+
+#: ../gui/matrixview.cpp:1291
+msgid "Halving speed..."
+msgstr "Snižuje se rychlost na polovinu..."
+
+#: ../gui/matrixview.cpp:1304
+msgid "Doubling speed..."
+msgstr "Zvyšuje se rychlost na dvojnásobek..."
+
+#: ../gui/matrixview.cpp:1326
+msgid "Rescaling..."
+msgstr "Probíhá změna délky..."
+
+#: ../gui/matrixview.cpp:1423
+#, fuzzy
+msgid "%1 (%2.%3s)"
+msgstr "Čas: %1 (%2.%3s)"
+
+#: ../gui/matrixview.cpp:1434
+#, fuzzy
+msgid "%1 (%2): %3"
+msgstr "%1 (%2)"
+
+#: ../gui/matrixview.cpp:2047
+msgid "Unquantizing..."
+msgstr "Probíhá rušení kvantizace..."
+
+#: ../gui/matrixview.cpp:2077
+msgid " Grid: "
+msgstr " Rastr: "
+
+#: ../gui/matrixview.cpp:2106
+msgid "Unit"
+msgstr "Jednotka"
+
+#: ../gui/matrixview.cpp:2108
+msgid "Beat"
+msgstr "Doba"
+
+#: ../gui/matrixview.cpp:2110
+msgid "Bar"
+msgstr "Taktová čára"
+
+#: ../gui/matrixview.cpp:2129
+msgid " Quantize: "
+msgstr " Kvantizovat: "
+
+#: ../gui/matrixview.cpp:2202 ../gui/rosegardengui.cpp:5558
+msgid "%1%"
+msgstr "%1%"
+
+#: ../gui/matrixview.cpp:2497
+msgid "Raising velocities..."
+msgstr "Probíhá zvětšování rychlostí..."
+
+#: ../gui/matrixview.cpp:2506
+msgid "Lowering velocities..."
+msgstr "Probíhá zmenšování rychlostí..."
+
+#: ../gui/matrixview.cpp:2540
+msgid "Set Event Velocities"
+msgstr "Nastavit rychlosti událostí"
+
+#: ../gui/matrixview.cpp:2545
+msgid "Setting Velocities..."
+msgstr "Probíhá nastavování rychlostí..."
+
+#: ../gui/matrixview.cpp:2578
+msgid "Remove Triggers"
+msgstr "Odebrat spouštěcí značky"
+
+#: ../gui/matrixview.cpp:2635
+msgid "%1 - Segment Track #%2 - %3"
+msgstr "%1 - Stopa segmentu #%2 - %3"
+
+#: ../gui/matrixview.cpp:2642
+msgid "%1 - All Segments - %2"
+msgstr "%1 - Všechny segmenty - %2"
+
+#: ../gui/matrixview.cpp:2649
+msgid ""
+"_n: %1 - 1 Segment - %2\n"
+"%1 - %n Segments - %2"
+msgstr ""
+"_n: %1 - 1 Segment - %2\n"
+"%1 - %n Segmenty(ů) - %2"
+
+#: ../gui/matrixview.cpp:2792
+msgid "Can't insert note: No grid duration selected"
+msgstr "Nelze vložit notu: nebyla vybrána doba trvání v rastru"
+
+#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
+msgid "File name"
+msgstr "Název souboru"
+
+#: ../gui/playlist.cpp:141
+msgid "Add..."
+msgstr "Přidat..."
+
+#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
+#: ../gui/playlist.cpp:142
+msgid "Play"
+msgstr "Přehrát"
+
+#: ../gui/playlist.cpp:143
+msgid "Move Up"
+msgstr "Posunout nahoru"
+
+#: ../gui/playlist.cpp:144
+msgid "Move Down"
+msgstr "Posunout dolů"
+
+#: ../gui/playlist.cpp:189
+msgid "Select one or more Rosegarden files"
+msgstr "Vybrat jeden nebo více souborů aplikace Rosegarden"
+
+#: ../gui/deviceeditor.cpp:80
+msgid "Add Play Device"
+msgstr "Přidat přehrávací zařízení"
+
+#: ../gui/deviceeditor.cpp:81
+msgid "Add Record Device"
+msgstr "Přidat záznamové zařízení"
+
+#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
+msgid "Delete Device"
+msgstr "Odstranit zařízení"
+
+#: ../gui/deviceeditor.cpp:135 ../gui/importdevicedialog.cpp:136
+#, c-format
+msgid "Device %1"
+msgstr "Zařízení %1"
+
+#: ../gui/deviceeditor.cpp:244
+msgid "Apply pending changes?"
+msgstr "Chcete použít dosud nezpracované změny?"
+
+#: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
+msgid "<new device>"
+msgstr "<nové zařízení>"
+
+#: ../gui/widgets.cpp:108 ../gui/widgets.cpp:113 ../gui/widgets.cpp:135
+msgid "Processing..."
+msgstr "Probíhá zpracování..."
+
+#: ../gui/widgets.cpp:380
+msgid ""
+"Click and drag up and down or left and right to modify.\n"
+"Double click to edit value directly."
+msgstr ""
+"Klepnutím a tažením nahoru/dolů nebo doprava/doleva provedete změny.\n"
+"Poklepáním můžete upravit hodnotu přímo."
+
+#: ../gui/widgets.cpp:690
+msgid "Select a new value"
+msgstr "Vybrat novou hodnotu"
+
+#: ../gui/widgets.cpp:691
+msgid "Enter a new value"
+msgstr "Zadat novou hodnotu"
+
+#: ../gui/widgets.cpp:831
+msgid "Quantizer"
+msgstr "Kvantizér"
+
+#: ../gui/widgets.cpp:837
+msgid "Quantizer type:"
+msgstr "Typ kvantizéru:"
+
+#: ../gui/widgets.cpp:839
+msgid "Grid quantizer"
+msgstr "Rastrový kvantizér"
+
+#: ../gui/widgets.cpp:840
+msgid "Legato quantizer"
+msgstr "Legatový kvantizér"
+
+#: ../gui/widgets.cpp:841
+msgid "Heuristic notation quantizer"
+msgstr "Heuristický kvantizér notace"
+
+#: ../gui/widgets.cpp:845
+msgid "Quantize for notation only (leave performance unchanged)"
+msgstr "Kvantizovat pouze notaci (neměnit provedení)"
+
+#: ../gui/widgets.cpp:854
+msgid "Notation parameters"
+msgstr "Parametry notace"
+
+#: ../gui/widgets.cpp:859 ../gui/widgets.cpp:900
+msgid "Base grid unit:"
+msgstr "Základní jednotka rastru:"
+
+#: ../gui/widgets.cpp:864
+msgid "Complexity:"
+msgstr "Složitost:"
+
+#: ../gui/widgets.cpp:868
+msgid "Very high"
+msgstr "Velmi vysoká"
+
+#: ../gui/widgets.cpp:869
+msgid "High"
+msgstr "Vysoká"
+
+#: ../gui/widgets.cpp:870
+msgid "Normal"
+msgstr "Normální"
+
+#: ../gui/widgets.cpp:871
+msgid "Low"
+msgstr "Nízká"
+
+#: ../gui/widgets.cpp:872
+msgid "Very low"
+msgstr "Velmi nízká"
+
+#: ../gui/widgets.cpp:875
+msgid "Tuplet level:"
+msgstr "Úroveň rytmické notové skupiny:"
+
+#: ../gui/widgets.cpp:879
+msgid "2-in-the-time-of-3"
+msgstr "2-na-dobu-3"
+
+#: ../gui/widgets.cpp:880
+msgid "Triplet"
+msgstr "Triola"
+
+#: ../gui/widgets.cpp:888
+msgid "Any"
+msgstr "Jakákoli"
+
+#: ../gui/widgets.cpp:891
+msgid "Permit counterpoint"
+msgstr "Povolit kontrapunkt"
+
+#: ../gui/widgets.cpp:895
+msgid "Grid parameters"
+msgstr "Parametry rastru"
+
+#: ../gui/widgets.cpp:904
+msgid "Swing:"
+msgstr "Swing:"
+
+#: ../gui/widgets.cpp:909
+msgid "Iterative amount:"
+msgstr "Iterativní množství:"
+
+#: ../gui/widgets.cpp:915
+msgid "Quantize durations as well as start times"
+msgstr "Kvantizovat doby trvání i počáteční časy"
+
+#: ../gui/widgets.cpp:919
+msgid "After quantization"
+msgstr "Po kvantizaci"
+
+#: ../gui/widgets.cpp:933
+msgid "Show advanced options"
+msgstr "Zobrazit rozšířené možnosti"
+
+#: ../gui/widgets.cpp:942
+msgid "Re-beam"
+msgstr "Znovu upravit trámce"
+
+#: ../gui/widgets.cpp:944
+msgid "Add articulations (staccato, tenuto, slurs)"
+msgstr "Přidat artikulaci (staccato, tenuto, legato)"
+
+#: ../gui/widgets.cpp:945
+msgid "Tie notes at barlines etc"
+msgstr "Svázat noty ligaturou na taktových čárách atd."
+
+#: ../gui/widgets.cpp:946
+msgid "Split-and-tie overlapping chords"
+msgstr "Rozdělit-a-svázat ligaturou překrývající se akordy"
+
+#: ../gui/widgets.cpp:1057
+msgid "Full quantize"
+msgstr "Úplná kvantizace"
+
+#: ../gui/widgets.cpp:1200
+msgid "Show Advanced Options"
+msgstr "Zobrazit rozšířené možnosti"
+
+#: ../gui/widgets.cpp:1204
+msgid "Hide Advanced Options"
+msgstr "Skrýt rozšířené možnosti"
+
+#: ../gui/importdevicedialog.cpp:54
+msgid "Import from Device..."
+msgstr "Importovat ze zařízení..."
+
+#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
+#: ../gui/rosegardengui.cpp:2095 ../gui/rosegardengui.cpp:2155
+#: ../gui/rosegardengui.cpp:7501
+#, c-format
+msgid "Cannot download file %1"
+msgstr "Nelze stáhnout soubor %1"
+
+#: ../gui/importdevicedialog.cpp:95
+#, c-format
+msgid "Cannot open file %1"
+msgstr "Nelze otevřít soubor %1"
+
+#: ../gui/importdevicedialog.cpp:102
+#, c-format
+msgid "No devices found in file %1"
+msgstr "V souboru %1 nebyla nalezena žádná zařízení"
+
+#: ../gui/importdevicedialog.cpp:109
+msgid "Source device"
+msgstr "Zdrojové zařízení"
+
+#: ../gui/importdevicedialog.cpp:114
+msgid "Import from: "
+msgstr "Importovat z: "
+
+#: ../gui/importdevicedialog.cpp:151
+msgid "Import banks"
+msgstr "Importovat banky"
+
+#: ../gui/importdevicedialog.cpp:152
+msgid "Import key mappings"
+msgstr "Importovat mapování tónin"
+
+#: ../gui/importdevicedialog.cpp:153
+msgid "Import controllers"
+msgstr "Importovat ovládací prvky"
+
+#: ../gui/importdevicedialog.cpp:156
+msgid "Import device name"
+msgstr "Importovat název zařízení"
+
+#: ../gui/importdevicedialog.cpp:162
+msgid "Bank import behavior"
+msgstr "Chování při importu banky"
+
+#: ../gui/importdevicedialog.cpp:164
+msgid "Merge banks"
+msgstr "Připojit banky"
+
+#: ../gui/importdevicedialog.cpp:165
+msgid "Overwrite banks"
+msgstr "Přepsat banky"
+
+#: ../gui/importdevicedialog.cpp:365
+msgid "Bank %1:%2"
+msgstr "Banka %1:%2"
+
+#: ../gui/rosegardenguiview.cpp:229
+msgid "No non-audio segments in composition"
+msgstr "Ve skladbě nejsou žádné nezvukové segmenty"
+
+#: ../gui/rosegardenguiview.cpp:303
+msgid "Selection must contain only audio or non-audio segments"
+msgstr "Výběr musí obsahovat pouze zvukové nebo nezvukové segmenty"
+
+#: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
+#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
+msgid "No non-audio segments selected"
+msgstr "Nebyly vybrány žádné nezvukové segmenty"
+
+#: ../gui/rosegardenguiview.cpp:837
+msgid ""
+"You've not yet defined an audio editor for Rosegarden to use.\n"
+"See Settings -> Configure Rosegarden -> General -> External Editors."
+msgstr ""
+"Dosud jste nedefinovali zvukový editor, který má aplikace Rosegarden "
+"použít.\n"
+"Viz Nastavení -> Konfigurace aplikace Rosegarden -> Obecné -> Externí "
+"editory."
+
+#: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
+msgid "Can't add dropped file. "
+msgstr "Nelze přidat vyřazený soubor. "
+
+#: ../gui/editcommands.cpp:212
+msgid "(excerpt)"
+msgstr "(výňatek)"
+
+#: ../gui/editcommands.cpp:226
+msgid "(copied)"
+msgstr "(zkopírováno)"
+
+#: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
+#, fuzzy
+msgid "Copy Range"
+msgstr "Změna tóniny"
+
+#: ../gui/editcommands.cpp:452
+msgid "Paste into an existing gap [\"restricted\"]"
+msgstr "Vložit do existující mezery [\"omezeno\"]"
+
+#: ../gui/editcommands.cpp:454
+msgid "Erase existing events to make room [\"simple\"]"
+msgstr "Vymazat existující události a uvolnit tak místo [\"jednoduché\"]"
+
+#: ../gui/editcommands.cpp:456
+msgid "Move existing events out of the way [\"open-n-paste\"]"
+msgstr "Odsunout existující události [\"otevřít a vložit\"]"
+
+#: ../gui/editcommands.cpp:458
+msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
+msgstr "Překrýt noty a svázat s existujícími notami [\"notové překrytí\"]"
+
+#: ../gui/editcommands.cpp:460
+msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
+msgstr "Překrýt noty a ignorovat existující noty [\"maticové překrytí\"]"
+
+#: ../gui/editcommands.cpp:889
+msgid "Heuristic Notation &Quantize"
+msgstr "Heuristická &kvantizace notace"
+
+#: ../gui/editcommands.cpp:891
+msgid "Grid &Quantize"
+msgstr "Rastrová &kvantizace"
+
+#: ../gui/editcommands.cpp:895 ../gui/editcommands.cpp:1098
+#: ../gui/rosegardengui.cpp:881
+msgid "&Quantize..."
+msgstr "&Kvantizovat..."
+
+#: ../gui/editcommands.cpp:1054 ../gui/editcommands.cpp:1065
+msgid "Unquantize Events"
+msgstr "Zrušit kvantizaci událostí"
+
+#: ../gui/editcommands.cpp:1565
+msgid "&Move Events to Other Segment"
+msgstr "&Přesunout události do jiného segmentu"
+
+#: ../gui/editcommands.cpp:1798
+msgid "Insert Trigger Note"
+msgstr "Vložit spouštěcí notu"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "C%1"
+msgstr "C%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "C#%1"
+msgstr "C#%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "D%1"
+msgstr "D%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "D#%1"
+msgstr "D#%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "E%1"
+msgstr "E%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "F%1"
+msgstr "F%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "F#%1"
+msgstr "F#%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "G%1"
+msgstr "G%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "G#%1"
+msgstr "G#%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "A%1"
+msgstr "A%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "A#%1"
+msgstr "A#%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "B%1"
+msgstr "H%1"
+
+#: ../gui/notationview.cpp:377 ../gui/rosegardengui.cpp:471
+msgid "Starting..."
+msgstr "Spouští se..."
+
+#: ../gui/notationview.cpp:692
+msgid "Preparing to print..."
+msgstr "Probíhá příprava tisku..."
+
+#: ../gui/notationview.cpp:1212
+msgid "Note &Font"
+msgstr "Notové &písmo"
+
+#: ../gui/notationview.cpp:1234
+msgid "Si&ze"
+msgstr "V&elikost"
+
+#: ../gui/notationview.cpp:1241
+msgid "S&pacing"
+msgstr "&Rozestupy"
+
+#: ../gui/notationview.cpp:1263
+msgid "Du&ration Factor"
+msgstr "Faktor doby &trvání"
+
+#: ../gui/notationview.cpp:1288
+msgid "Note &Style"
+msgstr "&Styl not"
+
+#: ../gui/notationview.cpp:1314
+msgid "Insert Rest"
+msgstr "Vložit pomlku"
+
+#: ../gui/notationview.cpp:1318
+msgid "Switch from Note to Rest"
+msgstr "Přepnout z noty na pomlku"
+
+#: ../gui/notationview.cpp:1323
+msgid "Switch from Rest to Note"
+msgstr "Přepnout z pomlky na notu"
+
+#: ../gui/notationview.cpp:1380
+msgid "No accidental"
+msgstr "Žádná posuvka"
+
+#: ../gui/notationview.cpp:1381
+msgid "Follow previous accidental"
+msgstr "Podle předchozí posuvky"
+
+#: ../gui/notationview.cpp:1382
+msgid "Sharp"
+msgstr "Křížek"
+
+#: ../gui/notationview.cpp:1383
+msgid "Flat"
+msgstr "Béčko"
+
+#: ../gui/notationview.cpp:1384
+msgid "Natural"
+msgstr "Přirozené"
+
+#: ../gui/notationview.cpp:1385
+msgid "Double sharp"
+msgstr "Dvojitý křížek"
+
+#: ../gui/notationview.cpp:1386
+msgid "Double flat"
+msgstr "Dvojité béčko"
+
+#: ../gui/notationview.cpp:1407
+msgid "&Treble Clef"
+msgstr "&Houslový klíč"
+
+#: ../gui/notationview.cpp:1414
+msgid "Te&nor Clef"
+msgstr "&Tenorový klíč"
+
+#: ../gui/notationview.cpp:1421
+msgid "&Alto Clef"
+msgstr "&Violový klíč"
+
+#: ../gui/notationview.cpp:1428
+msgid "&Bass Clef"
+msgstr "&Basový klíč"
+
+#: ../gui/notationview.cpp:1435
+msgid "&Text"
+msgstr "&Text"
+
+#: ../gui/notationview.cpp:1441
+#, fuzzy
+msgid "&Fretboard"
+msgstr "Ukazatel přehrávání o takt &dopředu"
+
+#: ../gui/notationview.cpp:1474
+msgid "Select from Sta&rt"
+msgstr "Vybrat od &začátku"
+
+#: ../gui/notationview.cpp:1478
+msgid "Select to &End"
+msgstr "Vybrat do &konce"
+
+#: ../gui/notationview.cpp:1482
+msgid "Select Whole St&aff"
+msgstr "Vybrat celou &osnovu"
+
+#: ../gui/notationview.cpp:1490
+msgid "Pa&ste..."
+msgstr "&Vložit..."
+
+#: ../gui/notationview.cpp:1494 ../gui/rosegardengui.cpp:814
+msgid "De&lete"
+msgstr "&Odstranit"
+
+#: ../gui/notationview.cpp:1508
+msgid "&Linear Layout"
+msgstr "&Lineární uspořádání"
+
+#: ../gui/notationview.cpp:1516
+msgid "&Continuous Page Layout"
+msgstr "&Nekonečná stránka"
+
+#: ../gui/notationview.cpp:1524
+msgid "&Multiple Page Layout"
+msgstr "&Stránkové uspořádání"
+
+#: ../gui/notationview.cpp:1533
+msgid "Show Ra&w Note Ruler"
+msgstr "Zobrazit pravítko z&drojových not"
+
+#: ../gui/notationview.cpp:1541
+msgid "Show &Annotations"
+msgstr "Zobrazit &anotace"
+
+#: ../gui/notationview.cpp:1545
+msgid "Show Lily&Pond Directives"
+msgstr ""
+
+#: ../gui/notationview.cpp:1549
+msgid "Open L&yric Editor"
+msgstr "Otevřít editor te&xtu melodie"
+
+#: ../gui/notationview.cpp:1590
+msgid "Trip&let Insert Mode"
+msgstr "Režim vkládání &triol"
+
+#: ../gui/notationview.cpp:1816
+msgid "&Dump selected events to stderr"
+msgstr "&Vypsat vybrané události do stderr"
+
+#: ../gui/notationview.cpp:1884
+msgid "Ma&ke Ornament..."
+msgstr "&Vytvořit melodickou ozdobu..."
+
+#: ../gui/notationview.cpp:1888
+msgid "Trigger &Ornament..."
+msgstr "Spouštěcí melodická &ozdoba..."
+
+#: ../gui/notationview.cpp:1892
+msgid "Remove Ornament..."
+msgstr "Odstranit melodickou ozdobu..."
+
+#: ../gui/notationview.cpp:1897
+msgid "&None"
+msgstr "Žá&dná"
+
+#: ../gui/notationview.cpp:1905
+msgid "Add Fretboard"
+msgstr ""
+
+#: ../gui/notationview.cpp:1931 ../gui/rosegardengui.cpp:651
+msgid "Show T&ools Toolbar"
+msgstr "Zobrazit nástrojovou lištu ovládacích &nástrojů"
+
+#: ../gui/notationview.cpp:1932
+msgid "Show &Notes Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro &noty"
+
+#: ../gui/notationview.cpp:1933
+msgid "Show &Rests Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro po&mlky"
+
+#: ../gui/notationview.cpp:1934
+msgid "Show &Accidentals Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro &posuvky"
+
+#: ../gui/notationview.cpp:1935
+msgid "Show Cle&fs Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro notové &klíče"
+
+#: ../gui/notationview.cpp:1937
+msgid "Show &Marks Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro &značky"
+
+#: ../gui/notationview.cpp:1939
+msgid "Show &Group Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro &skupiny"
+
+#: ../gui/notationview.cpp:1941
+msgid "Show &Layout Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro &uspořádání"
+
+#: ../gui/notationview.cpp:1943 ../gui/rosegardengui.cpp:663
+msgid "Show Trans&port Toolbar"
+msgstr "Zobrazit nástrojovou lištu pro trans&port"
+
+#: ../gui/notationview.cpp:1945
+msgid "Show M&eta Toolbar"
+msgstr "Zobrazit nástrojovou lištu m&eta"
+
+#: ../gui/notationview.cpp:2007
+msgid "Cursor &Up Staff"
+msgstr "Posunout kurzor v osnově &nahoru"
+
+#: ../gui/notationview.cpp:2011
+msgid "Cursor &Down Staff"
+msgstr "Posunout kurzor v osnově &dolů"
+
+#: ../gui/notationview.cpp:2097
+msgid "Push &Left"
+msgstr "Odsunout v&levo"
+
+#: ../gui/notationview.cpp:2101
+msgid "Push &Right"
+msgstr "Odsunout v&pravo"
+
+#: ../gui/notationview.cpp:2105
+msgid "Push &Up"
+msgstr "Odsunout &nahoru"
+
+#: ../gui/notationview.cpp:2109
+msgid "Push &Down"
+msgstr "Odsunout &dolů"
+
+#: ../gui/notationview.cpp:2113
+msgid "Restore &Computed Positions"
+msgstr "Obnovit &vypočtené pozice"
+
+#: ../gui/notationview.cpp:2117
+msgid "Make &Invisible"
+msgstr "Z&neviditelnit"
+
+#: ../gui/notationview.cpp:2121
+msgid "Make &Visible"
+msgstr "Z&viditelnit"
+
+#: ../gui/notationview.cpp:2125
+msgid "Toggle Dot"
+msgstr "Přepnout tečku"
+
+#: ../gui/notationview.cpp:2129 ../gui/notationview.cpp:2133
+msgid "Add Dot"
+msgstr "Přidat tečku"
+
+#: ../gui/notationview.cpp:2184
+#, c-format
+msgid ""
+"_n: 1 pixel\n"
+"%n pixels"
+msgstr ""
+"_n: 1 pixel\n"
+"%n pixely(ů)"
+
+#: ../gui/notationview.cpp:2227
+msgid "  Font:  "
+msgstr "  Písmo:  "
+
+#: ../gui/notationview.cpp:2254
+msgid "Unknown font \"%1\", using default"
+msgstr "Písmo \"%1\" je neznámé, použije se výchozí"
+
+#: ../gui/notationview.cpp:2262
+msgid "  Size:  "
+msgstr "  Velikost:  "
+
+#: ../gui/notationview.cpp:2284
+msgid "  Spacing:  "
+msgstr "  Rozestupy:  "
+
+#: ../gui/notationview.cpp:2579 ../gui/notationview.cpp:3299
+#: ../gui/rosegardengui.cpp:1255
+msgid "  Ready."
+msgstr "  Připraven."
+
+#: ../gui/notationview.cpp:2584
+msgid "Laying out score..."
+msgstr "Probíhá uspořádání partitury..."
+
+#: ../gui/notationview.cpp:2596
+msgid "Laying out staff %1..."
+msgstr "Probíhá uspořádání osnovy %1..."
+
+#: ../gui/notationview.cpp:2605
+msgid "Reconciling staffs..."
+msgstr "Probíhá vyrovnání osnov..."
+
+#: ../gui/notationview.cpp:3369
+msgid "Sizing and allocating canvas..."
+msgstr "Probíhá nastavení velikosti a přidělení zobrazovací plochy..."
+
+#: ../gui/notationview.cpp:3529
+msgid "note"
+msgstr "nota"
+
+#: ../gui/notationview.cpp:3529
+msgid "rest"
+msgstr "pomlka"
+
+#: ../gui/notationview.cpp:3688
+msgid "%1 - Segment Track #%2 - Notation"
+msgstr "%1 - Stopa segmentu #%2 - Notový zápis"
+
+#: ../gui/notationview.cpp:3694
+msgid "%1 - All Segments - Notation"
+msgstr "%1 - Všechny segmenty - Notový zápis"
+
+#: ../gui/notationview.cpp:3699
+msgid ""
+"_n: %1 - Segment - Notation\n"
+"%1 - %n Segments - Notation"
+msgstr ""
+"_n: %1 - Segment - Notový zápis\n"
+"%1 - %n Segmenty(ů) - Notový zápis"
+
 #: ../gui/rosegardengui.cpp:304
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
@@ -6542,10 +7442,6 @@ msgstr "Zjišťuje se stav zvukového ovladače..."
 #: ../gui/rosegardengui.cpp:452
 msgid "Clearing studio data..."
 msgstr "Probíhá mazání dat studia..."
-
-#: ../gui/notationview.cpp:377 ../gui/rosegardengui.cpp:471
-msgid "Starting..."
-msgstr "Spouští se..."
 
 #: ../gui/rosegardengui.cpp:546
 msgid "Import Rosegarden &Project file..."
@@ -6620,10 +7516,6 @@ msgstr "&Cvičení v ovládání aplikace Rosegarden"
 msgid "&Bug Reporting Guidelines"
 msgstr "Pravidla a návody pro hlášení chy&b"
 
-#: ../gui/notationview.cpp:1909 ../gui/rosegardengui.cpp:651
-msgid "Show T&ools Toolbar"
-msgstr "Zobrazit nástrojovou lištu ovládacích &nástrojů"
-
 #: ../gui/rosegardengui.cpp:655
 msgid "Show Trac&ks Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &stopy"
@@ -6631,10 +7523,6 @@ msgstr "Zobrazit nástrojovou lištu pro &stopy"
 #: ../gui/rosegardengui.cpp:659
 msgid "Show &Editors Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &editory"
-
-#: ../gui/notationview.cpp:1921 ../gui/rosegardengui.cpp:663
-msgid "Show Trans&port Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro trans&port"
 
 #: ../gui/rosegardengui.cpp:667
 msgid "Show &Zoom Toolbar"
@@ -6669,19 +7557,6 @@ msgstr "Zobrazit &náhledy segmentu"
 msgid "Show Special &Parameters"
 msgstr "Zobrazit parametry nástroje"
 
-#: ../gui/matrixview.cpp:567 ../gui/notationview.cpp:1440
-#: ../gui/rosegardengui.cpp:739
-msgid "&Select"
-msgstr "&Vybrat"
-
-#: ../gui/matrixview.cpp:572 ../gui/rosegardengui.cpp:744
-msgid "&Draw"
-msgstr "&Kreslit"
-
-#: ../gui/matrixview.cpp:582 ../gui/rosegardengui.cpp:754
-msgid "&Move"
-msgstr "&Přesunout"
-
 #: ../gui/rosegardengui.cpp:761
 msgid "&Resize"
 msgstr "&Změnit velikost"
@@ -6693,15 +7568,6 @@ msgstr "&Rozdělit"
 #: ../gui/rosegardengui.cpp:781
 msgid "&Harmonize"
 msgstr "&Harmonizovat"
-
-#: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
-#, fuzzy
-msgid "Copy Range"
-msgstr "Změna tóniny"
-
-#: ../gui/notationview.cpp:1472 ../gui/rosegardengui.cpp:814
-msgid "De&lete"
-msgstr "&Odstranit"
 
 #: ../gui/rosegardengui.cpp:818
 msgid "Select &All Segments"
@@ -6718,15 +7584,6 @@ msgstr "Upravit vlas&tnosti dokumentu..."
 #: ../gui/rosegardengui.cpp:846
 msgid "Open in &Default Editor"
 msgstr "Otevřít ve &výchozím editoru"
-
-#: ../gui/editcommands.cpp:895 ../gui/editcommands.cpp:1098
-#: ../gui/rosegardengui.cpp:881
-msgid "&Quantize..."
-msgstr "&Kvantizovat..."
-
-#: ../gui/matrixview.cpp:612 ../gui/rosegardengui.cpp:885
-msgid "Repeat Last Quantize"
-msgstr "Opakovat poslední kvantizaci"
 
 #: ../gui/rosegardengui.cpp:905
 #, fuzzy
@@ -6861,11 +7718,6 @@ msgstr "Provést &reset sítě MIDI"
 msgid "P&unch in Record"
 msgstr "&Díra v záznamu"
 
-#: ../gui/matrixview.cpp:762 ../gui/notationview.cpp:2047
-#: ../gui/rosegardengui.cpp:1141
-msgid "Scro&ll to Follow Playback"
-msgstr "Ro&lovat podle přehrávání"
-
 #: ../gui/rosegardengui.cpp:1151
 msgid "Segment Debug Dump "
 msgstr "Výpis chyb segmentu (debug dump)"
@@ -6873,11 +7725,6 @@ msgstr "Výpis chyb segmentu (debug dump)"
 #: ../gui/rosegardengui.cpp:1221
 msgid "  Zoom:  "
 msgstr "  Zoom:  "
-
-#: ../gui/notationview.cpp:2557 ../gui/notationview.cpp:3277
-#: ../gui/rosegardengui.cpp:1255
-msgid "  Ready."
-msgstr "  Připraven."
 
 #: ../gui/rosegardengui.cpp:1639
 msgid "File \"%1\" does not exist"
@@ -6920,13 +7767,6 @@ msgstr ""
 "Chybně formulovaná adresa URL\n"
 "%1"
 
-#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
-#: ../gui/rosegardengui.cpp:2095 ../gui/rosegardengui.cpp:2155
-#: ../gui/rosegardengui.cpp:7476
-#, c-format
-msgid "Cannot download file %1"
-msgstr "Nelze stáhnout soubor %1"
-
 #: ../gui/rosegardengui.cpp:2110 ../gui/rosegardengui.cpp:2166
 msgid "Opening file..."
 msgstr "Otevírá se soubor..."
@@ -6951,10 +7791,10 @@ msgstr "Probíhá uložení souboru s novým názvem..."
 msgid "Rosegarden-4 files"
 msgstr "Soubory aplikace Rosegarden-4"
 
-#: ../gui/rosegardengui.cpp:2288 ../gui/rosegardengui.cpp:4586
-#: ../gui/rosegardengui.cpp:4629 ../gui/rosegardengui.cpp:4667
-#: ../gui/rosegardengui.cpp:4699 ../gui/rosegardengui.cpp:4732
-#: ../gui/rosegardengui.cpp:4812
+#: ../gui/rosegardengui.cpp:2288 ../gui/rosegardengui.cpp:4593
+#: ../gui/rosegardengui.cpp:4636 ../gui/rosegardengui.cpp:4674
+#: ../gui/rosegardengui.cpp:4706 ../gui/rosegardengui.cpp:4739
+#: ../gui/rosegardengui.cpp:4819
 msgid "All files"
 msgstr "Všechny soubory"
 
@@ -7004,7 +7844,7 @@ msgstr "Nastavit počáteční časy segmentu"
 msgid "Set Segment Durations"
 msgstr "Nastavit doby trvání segmentu"
 
-#: ../gui/rosegardengui.cpp:2988 ../gui/rosegardengui.cpp:5623
+#: ../gui/rosegardengui.cpp:2988 ../gui/rosegardengui.cpp:5648
 msgid "Set Global Tempo"
 msgstr "Nastavit globální tempo"
 
@@ -7136,23 +7976,23 @@ msgstr "Probíhá import souboru Hydrogen..."
 msgid "Can't load Hydrogen file.  It appears to be corrupted."
 msgstr "Nelze načíst soubor Hydrogen.  Zdá se, že je poškozený."
 
-#: ../gui/rosegardengui.cpp:4412
+#: ../gui/rosegardengui.cpp:4419
 msgid "Starting the sequencer..."
 msgstr "Spouští se sekvencer..."
 
-#: ../gui/rosegardengui.cpp:4438
+#: ../gui/rosegardengui.cpp:4445
 msgid "Couldn't start the sequencer"
 msgstr "Nebylo možné spustit sekvencer"
 
-#: ../gui/rosegardengui.cpp:4514
+#: ../gui/rosegardengui.cpp:4521
 msgid "Clearing down jackd..."
 msgstr "Probíhá ukončení démonu jackd..."
 
-#: ../gui/rosegardengui.cpp:4528
+#: ../gui/rosegardengui.cpp:4535
 msgid "Starting jackd..."
 msgstr "Spouští se démon jackd..."
 
-#: ../gui/rosegardengui.cpp:4567
+#: ../gui/rosegardengui.cpp:4574
 msgid ""
 "The Rosegarden sequencer process has exited unexpectedly.  Sound and "
 "recording will no longer be available for this session.\n"
@@ -7162,7 +8002,7 @@ msgstr ""
 "nebude pro tuto relaci dostupný.\n"
 "Chcete-li obnovit funkci zvuku, ukončete a znovu spusťte aplikaci Rosegarden."
 
-#: ../gui/rosegardengui.cpp:4571
+#: ../gui/rosegardengui.cpp:4578
 msgid ""
 "The Rosegarden sequencer could not be started, so sound and recording will "
 "be unavailable for this session.\n"
@@ -7174,88 +8014,88 @@ msgstr ""
 "Informace o správné konfiguraci zvuku a MIDI naleznete na adrese http://"
 "rosegardenmusic.com."
 
-#: ../gui/rosegardengui.cpp:4582
+#: ../gui/rosegardengui.cpp:4589
 msgid "Exporting Rosegarden Project file..."
 msgstr "Probíhá export souboru projektu aplikace Rosegarden..."
 
-#: ../gui/rosegardengui.cpp:4585
+#: ../gui/rosegardengui.cpp:4592
 msgid "Rosegarden Project files\n"
 msgstr "Soubory projektů aplikace Rosegarden\n"
 
-#: ../gui/rosegardengui.cpp:4587 ../gui/rosegardengui.cpp:4630
-#: ../gui/rosegardengui.cpp:4668 ../gui/rosegardengui.cpp:4700
-#: ../gui/rosegardengui.cpp:4733 ../gui/rosegardengui.cpp:4812
+#: ../gui/rosegardengui.cpp:4594 ../gui/rosegardengui.cpp:4637
+#: ../gui/rosegardengui.cpp:4675 ../gui/rosegardengui.cpp:4707
+#: ../gui/rosegardengui.cpp:4740 ../gui/rosegardengui.cpp:4819
 msgid "Export as..."
 msgstr "Exportovat jako..."
 
-#: ../gui/rosegardengui.cpp:4600
+#: ../gui/rosegardengui.cpp:4607
 #, c-format
 msgid "Saving Rosegarden file to package failed: %1"
 msgstr "Ukládání souboru aplikace Rosegarden do balíku selhalo: %1"
 
-#: ../gui/rosegardengui.cpp:4614
+#: ../gui/rosegardengui.cpp:4621
 msgid "Failed to export to project file \"%1\""
 msgstr "Export do souboru projektu \"%1\" selhal"
 
-#: ../gui/rosegardengui.cpp:4625 ../gui/rosegardengui.cpp:4639
+#: ../gui/rosegardengui.cpp:4632 ../gui/rosegardengui.cpp:4646
 msgid "Exporting MIDI file..."
 msgstr "Probíhá export souboru MIDI..."
 
-#: ../gui/rosegardengui.cpp:4628
+#: ../gui/rosegardengui.cpp:4635
 msgid "Standard MIDI files\n"
 msgstr "Standardní soubory MIDI\n"
 
-#: ../gui/rosegardengui.cpp:4659 ../gui/rosegardengui.cpp:4690
-#: ../gui/rosegardengui.cpp:4722 ../gui/rosegardengui.cpp:4799
-#: ../gui/rosegardengui.cpp:4835
+#: ../gui/rosegardengui.cpp:4666 ../gui/rosegardengui.cpp:4697
+#: ../gui/rosegardengui.cpp:4729 ../gui/rosegardengui.cpp:4806
+#: ../gui/rosegardengui.cpp:4842
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Export selhal.  Soubor nebylo možné otevřít pro zápis."
 
-#: ../gui/rosegardengui.cpp:4665 ../gui/rosegardengui.cpp:4676
+#: ../gui/rosegardengui.cpp:4672 ../gui/rosegardengui.cpp:4683
 msgid "Exporting Csound score file..."
 msgstr "Probíhá export partiturového souboru score pro Csound..."
 
-#: ../gui/rosegardengui.cpp:4696 ../gui/rosegardengui.cpp:4708
+#: ../gui/rosegardengui.cpp:4703 ../gui/rosegardengui.cpp:4715
 msgid "Exporting Mup file..."
 msgstr "Probíhá export souboru Mup..."
 
-#: ../gui/rosegardengui.cpp:4699
+#: ../gui/rosegardengui.cpp:4706
 msgid "Mup files\n"
 msgstr "Soubory Mup\n"
 
-#: ../gui/rosegardengui.cpp:4728 ../gui/rosegardengui.cpp:4785
+#: ../gui/rosegardengui.cpp:4735 ../gui/rosegardengui.cpp:4792
 msgid "Exporting Lilypond file..."
 msgstr "Probíhá export souboru aplikace Lilypond..."
 
-#: ../gui/rosegardengui.cpp:4731
+#: ../gui/rosegardengui.cpp:4738
 msgid "Lilypond files"
 msgstr "Soubory aplikace Lilypond"
 
-#: ../gui/rosegardengui.cpp:4744
+#: ../gui/rosegardengui.cpp:4751
 msgid "Previewing Lilypond file..."
 msgstr "Zobrazuje se náhled souboru aplikace Lilypond..."
 
-#: ../gui/rosegardengui.cpp:4749
+#: ../gui/rosegardengui.cpp:4756
 msgid "Failed to open a temporary file for Lilypond export."
 msgstr "Nepodařilo se otevřít dočasný soubor pro export do aplikace Lilypond."
 
-#: ../gui/rosegardengui.cpp:4776
+#: ../gui/rosegardengui.cpp:4783
 msgid "Lilypond Preview Options"
 msgstr "Možnosti zobrazení náhledu pro aplikaci Lilypond"
 
-#: ../gui/rosegardengui.cpp:4777
+#: ../gui/rosegardengui.cpp:4784
 msgid "Lilypond preview options"
 msgstr "Možnosti zobrazení náhledu pro aplikaci Lilypond"
 
-#: ../gui/rosegardengui.cpp:4808 ../gui/rosegardengui.cpp:4821
+#: ../gui/rosegardengui.cpp:4815 ../gui/rosegardengui.cpp:4828
 msgid "Exporting MusicXML file..."
 msgstr "Probíhá export souboru MusicXML..."
 
-#: ../gui/rosegardengui.cpp:4811
+#: ../gui/rosegardengui.cpp:4818
 msgid "XML files"
 msgstr "Soubory XML"
 
-#: ../gui/rosegardengui.cpp:5024 ../gui/trackbuttons.cpp:630
+#: ../gui/rosegardengui.cpp:5038 ../gui/trackbuttons.cpp:630
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7267,12 +8107,12 @@ msgstr ""
 "dokumentu před pořizováním zvukového záznamu.\n"
 "Chcete cestu nastavit nyní?"
 
-#: ../gui/rosegardengui.cpp:5026 ../gui/rosegardengui.cpp:5086
+#: ../gui/rosegardengui.cpp:5040 ../gui/rosegardengui.cpp:5100
 #: ../gui/trackbuttons.cpp:632
 msgid "Set audio file path"
 msgstr "Nastavit cestu ke zvukovému souboru"
 
-#: ../gui/rosegardengui.cpp:5084
+#: ../gui/rosegardengui.cpp:5098
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7284,1031 +8124,70 @@ msgstr ""
 "dokumentu před začátkem pořizování zvukového záznamu.\n"
 "Chcete cestu nastavit nyní?"
 
-#: ../gui/matrixview.cpp:2138 ../gui/rosegardengui.cpp:5544
-msgid "%1%"
-msgstr "%1%"
-
-#: ../gui/rosegardengui.cpp:5605
+#: ../gui/rosegardengui.cpp:5630
 #, c-format
 msgid "Replace Tempo Change at %1"
 msgstr "Nahradit změnu tempa na místě %1"
 
-#: ../gui/rosegardengui.cpp:5640
+#: ../gui/rosegardengui.cpp:5665
 msgid "Set Global and Default Tempo"
 msgstr "Nastavit globální a výchozí tempo"
 
-#: ../gui/rosegardengui.cpp:5664
+#: ../gui/rosegardengui.cpp:5689
 #, fuzzy
 msgid "Move Tempo Change"
 msgstr "Odstranit změnu &tempa..."
 
-#: ../gui/rosegardengui.cpp:6064
+#: ../gui/rosegardengui.cpp:6089
 #, c-format
 msgid "Sequencer failed to add audio file %1"
 msgstr "Sekvenceru se nepodařilo přidat zvukový soubor %1"
 
-#: ../gui/rosegardengui.cpp:6092
+#: ../gui/rosegardengui.cpp:6117
 #, c-format
 msgid "Sequencer failed to remove audio file id %1"
 msgstr "Sekvenceru se nepodařilo odebrat id zvukového souboru %1"
 
-#: ../gui/rosegardengui.cpp:6152
+#: ../gui/rosegardengui.cpp:6177
 msgid "Relabelling selection..."
 msgstr "Probíhá změna popisků výběru..."
 
-#: ../gui/rosegardengui.cpp:7236
+#: ../gui/rosegardengui.cpp:7261
 msgid "Play List"
 msgstr "Seznam přehrávání"
 
-#: ../gui/rosegardengui.cpp:7264
+#: ../gui/rosegardengui.cpp:7289
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 msgstr "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 
-#: ../gui/rosegardengui.cpp:7271
+#: ../gui/rosegardengui.cpp:7296
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 msgstr "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 
-#: ../gui/rosegardengui.cpp:7348
+#: ../gui/rosegardengui.cpp:7373
 msgid "Queueing MIDI panic events for tranmission..."
 msgstr "Probíhá řazení nouzových událostí MIDI do fronty pro přenos..."
 
-#: ../gui/rosegardengui.cpp:7406
+#: ../gui/rosegardengui.cpp:7431
 msgid "Are you sure you want to save this as your default studio?"
 msgstr "Skutečně chcete toto uložit jako svoje výchozí studio?"
 
-#: ../gui/rosegardengui.cpp:7410
+#: ../gui/rosegardengui.cpp:7435
 msgid "Saving current document as default studio..."
 msgstr "Probíhá ukládání aktuálního dokumentu jako výchozího studia..."
 
-#: ../gui/rosegardengui.cpp:7435
+#: ../gui/rosegardengui.cpp:7460
 msgid ""
 "Are you sure you want to import your default studio and lose the current one?"
 msgstr "Skutečně chcete importovat svoje výchozí studio a ztratit to aktuální?"
 
-#: ../gui/rosegardengui.cpp:7470
+#: ../gui/rosegardengui.cpp:7495
 msgid "Import Studio from File"
 msgstr "Importovat studio ze souboru"
 
-#: ../gui/rosegardengui.cpp:7503
+#: ../gui/rosegardengui.cpp:7528
 msgid "Import Studio"
 msgstr "Importovat studio"
-
-#: ../gui/matrixview.cpp:137
-msgid "Instrument Parameters"
-msgstr "Parametry nástroje"
-
-#: ../gui/matrixview.cpp:384 ../gui/matrixview.cpp:2881
-msgid "Couldn't apply piano roll layout"
-msgstr "Nebylo možné použít rozložení klavírního válce"
-
-#: ../gui/matrixview.cpp:589
-msgid "Resi&ze"
-msgstr "&Změnit velikost"
-
-#: ../gui/matrixview.cpp:595 ../gui/notationview.cpp:1574
-msgid "C&hord Insert Mode"
-msgstr "Režim vkládání &akordů"
-
-#: ../gui/matrixview.cpp:602 ../gui/notationview.cpp:1446
-msgid "Ste&p Recording"
-msgstr "&Krokový záznam"
-
-#: ../gui/matrixview.cpp:620
-msgid "&Legato"
-msgstr "&Legato"
-
-#: ../gui/matrixview.cpp:624
-msgid "&Halve Speed"
-msgstr "&Poloviční rychlost"
-
-#: ../gui/matrixview.cpp:628
-msgid "&Double Speed"
-msgstr "&Dvojitá rychlost"
-
-#: ../gui/matrixview.cpp:646
-msgid "Set Event &Velocities..."
-msgstr "Nastavit &rychlosti událostí..."
-
-#: ../gui/matrixview.cpp:650
-msgid "Trigger Se&gment..."
-msgstr "&Spouštěcí segment..."
-
-#: ../gui/matrixview.cpp:654
-msgid "Remove Triggers..."
-msgstr "Odebrat spouštěcí značky..."
-
-#: ../gui/matrixview.cpp:666 ../gui/notationview.cpp:1937
-msgid "Cursor &Back"
-msgstr "Kurzor &zpět"
-
-#: ../gui/matrixview.cpp:670 ../gui/notationview.cpp:1941
-msgid "Cursor &Forward"
-msgstr "Kurzor &vpřed"
-
-#: ../gui/matrixview.cpp:674 ../gui/notationview.cpp:1945
-msgid "Cursor Ba&ck Bar"
-msgstr "Kurzor na &předchozí taktovou čáru"
-
-#: ../gui/matrixview.cpp:678 ../gui/notationview.cpp:1949
-msgid "Cursor For&ward Bar"
-msgstr "Kurzor na &následující taktovou čáru"
-
-#: ../gui/matrixview.cpp:682 ../gui/notationview.cpp:1953
-msgid "Cursor Back and Se&lect"
-msgstr "Kurzor zpět a vy&brat"
-
-#: ../gui/matrixview.cpp:686 ../gui/notationview.cpp:1957
-msgid "Cursor Forward and &Select"
-msgstr "Kurzor vpřed a v&ybrat"
-
-#: ../gui/matrixview.cpp:690 ../gui/notationview.cpp:1961
-msgid "Cursor Back Bar and Select"
-msgstr "Kurzor na předchozí taktovou čáru a vybrat"
-
-#: ../gui/matrixview.cpp:694 ../gui/notationview.cpp:1965
-msgid "Cursor Forward Bar and Select"
-msgstr "Kurzor na následující taktovou čáru a vybrat"
-
-#: ../gui/matrixview.cpp:698 ../gui/notationview.cpp:1975
-msgid "Cursor to St&art"
-msgstr "Kurzor na z&ačátek"
-
-#: ../gui/matrixview.cpp:704 ../gui/notationview.cpp:1981
-msgid "Cursor to &End"
-msgstr "Kurzor na &konec"
-
-#: ../gui/matrixview.cpp:710 ../gui/notationview.cpp:1995
-msgid "Cursor to &Playback Pointer"
-msgstr "Kurzor na pozici &ukazatele přehrávání"
-
-#: ../gui/matrixview.cpp:750 ../gui/notationview.cpp:2035
-msgid "Playback Pointer to &Cursor"
-msgstr "Ukazatel přehrávání na pozici k&urzoru"
-
-#: ../gui/matrixview.cpp:756 ../gui/notationview.cpp:2041
-msgid "&Solo"
-msgstr "&Sólo"
-
-#: ../gui/matrixview.cpp:771 ../gui/notationview.cpp:2056
-msgid "Set Loop to Selection"
-msgstr "Nastavit opakování výběru"
-
-#: ../gui/matrixview.cpp:775 ../gui/notationview.cpp:2060
-msgid "Clear L&oop"
-msgstr "Vymazat &opakování"
-
-#: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:784
-#: ../gui/notationview.cpp:2071
-msgid "&Filter Selection"
-msgstr "Výběr &filtru"
-
-#: ../gui/matrixview.cpp:789
-msgid "Snap to 1/64"
-msgstr "Přichytávat se na 1/64"
-
-#: ../gui/matrixview.cpp:791
-msgid "Snap to 1/48"
-msgstr "Přichytávat se na 1/48"
-
-#: ../gui/matrixview.cpp:793
-msgid "Snap to 1/32"
-msgstr "Přichytávat se na 1/32"
-
-#: ../gui/matrixview.cpp:795
-msgid "Snap to 1/24"
-msgstr "Přichytávat se na 1/24"
-
-#: ../gui/matrixview.cpp:797
-msgid "Snap to 1/16"
-msgstr "Přichytávat se na 1/16"
-
-#: ../gui/matrixview.cpp:799
-msgid "Snap to 1/12"
-msgstr "Přichytávat se na 1/12"
-
-#: ../gui/matrixview.cpp:801
-msgid "Snap to 1/8"
-msgstr "Přichytávat se na 1/8"
-
-#: ../gui/matrixview.cpp:803
-msgid "Snap to 1/6"
-msgstr "Přichytávat se na 1/6"
-
-#: ../gui/matrixview.cpp:805
-msgid "Snap to 1/4"
-msgstr "Přichytávat se na 1/4"
-
-#: ../gui/matrixview.cpp:807
-msgid "Snap to 1/2"
-msgstr "Přichytávat se na 1/2"
-
-#: ../gui/matrixview.cpp:809
-msgid "Snap to &Unit"
-msgstr "Přichytávat se na &jednotku"
-
-#: ../gui/matrixview.cpp:811
-msgid "Snap to Bea&t"
-msgstr "Přichytávat se na &dobu"
-
-#: ../gui/matrixview.cpp:813
-msgid "Snap to &Bar"
-msgstr "Přichytávat se na &taktovou čáru"
-
-#: ../gui/matrixview.cpp:815
-msgid "&No Snap"
-msgstr "&Bez přichytávání"
-
-#: ../gui/matrixview.cpp:821
-msgid "Show Instrument Parameters"
-msgstr "Zobrazit parametry nástroje"
-
-#: ../gui/matrixview.cpp:826 ../gui/notationview.cpp:1507
-msgid "Show Ch&ord Name Ruler"
-msgstr "Zobrazit pravítko názvů &akordů"
-
-#: ../gui/matrixview.cpp:830 ../gui/notationview.cpp:1515
-msgid "Show &Tempo Ruler"
-msgstr "Zobrazit pravítko &tempa"
-
-#: ../gui/matrixview.cpp:1119 ../gui/notationview.cpp:2797
-#, c-format
-msgid ""
-"_n:   1 event selected \n"
-"  %n events selected "
-msgstr ""
-"_n:  je vybrána 1 událost \n"
-"  je vybráno %n událostí(i)"
-
-#: ../gui/matrixview.cpp:1121 ../gui/notationview.cpp:2799
-msgid "  No selection "
-msgstr "  Žádný výběr "
-
-#: ../gui/matrixview.cpp:1261
-msgid "Making legato..."
-msgstr "Probíhá vytváření legata..."
-
-#: ../gui/matrixview.cpp:1272
-msgid "Halving speed..."
-msgstr "Snižuje se rychlost na polovinu..."
-
-#: ../gui/matrixview.cpp:1285
-msgid "Doubling speed..."
-msgstr "Zvyšuje se rychlost na dvojnásobek..."
-
-#: ../gui/matrixview.cpp:1307
-msgid "Rescaling..."
-msgstr "Probíhá změna délky..."
-
-#: ../gui/matrixview.cpp:1422
-msgid "Time: %1 (%2.%3s)"
-msgstr "Čas: %1 (%2.%3s)"
-
-#: ../gui/matrixview.cpp:1983
-msgid "Unquantizing..."
-msgstr "Probíhá rušení kvantizace..."
-
-#: ../gui/matrixview.cpp:2013
-msgid " Grid: "
-msgstr " Rastr: "
-
-#: ../gui/matrixview.cpp:2042
-msgid "Unit"
-msgstr "Jednotka"
-
-#: ../gui/matrixview.cpp:2044
-msgid "Beat"
-msgstr "Doba"
-
-#: ../gui/matrixview.cpp:2046
-msgid "Bar"
-msgstr "Taktová čára"
-
-#: ../gui/matrixview.cpp:2065
-msgid " Quantize: "
-msgstr " Kvantizovat: "
-
-#: ../gui/matrixview.cpp:2421
-msgid "Raising velocities..."
-msgstr "Probíhá zvětšování rychlostí..."
-
-#: ../gui/matrixview.cpp:2430
-msgid "Lowering velocities..."
-msgstr "Probíhá zmenšování rychlostí..."
-
-#: ../gui/matrixview.cpp:2464
-msgid "Set Event Velocities"
-msgstr "Nastavit rychlosti událostí"
-
-#: ../gui/matrixview.cpp:2469
-msgid "Setting Velocities..."
-msgstr "Probíhá nastavování rychlostí..."
-
-#: ../gui/matrixview.cpp:2502
-msgid "Remove Triggers"
-msgstr "Odebrat spouštěcí značky"
-
-#: ../gui/matrixview.cpp:2559
-msgid "%1 - Segment Track #%2 - %3"
-msgstr "%1 - Stopa segmentu #%2 - %3"
-
-#: ../gui/matrixview.cpp:2566
-msgid "%1 - All Segments - %2"
-msgstr "%1 - Všechny segmenty - %2"
-
-#: ../gui/matrixview.cpp:2573
-msgid ""
-"_n: %1 - 1 Segment - %2\n"
-"%1 - %n Segments - %2"
-msgstr ""
-"_n: %1 - 1 Segment - %2\n"
-"%1 - %n Segmenty(ů) - %2"
-
-#: ../gui/matrixview.cpp:2716
-msgid "Can't insert note: No grid duration selected"
-msgstr "Nelze vložit notu: nebyla vybrána doba trvání v rastru"
-
-#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
-msgid "File name"
-msgstr "Název souboru"
-
-#: ../gui/playlist.cpp:141
-msgid "Add..."
-msgstr "Přidat..."
-
-#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
-#: ../gui/playlist.cpp:142
-msgid "Play"
-msgstr "Přehrát"
-
-#: ../gui/playlist.cpp:143
-msgid "Move Up"
-msgstr "Posunout nahoru"
-
-#: ../gui/playlist.cpp:144
-msgid "Move Down"
-msgstr "Posunout dolů"
-
-#: ../gui/playlist.cpp:189
-msgid "Select one or more Rosegarden files"
-msgstr "Vybrat jeden nebo více souborů aplikace Rosegarden"
-
-#: ../gui/deviceeditor.cpp:80
-msgid "Add Play Device"
-msgstr "Přidat přehrávací zařízení"
-
-#: ../gui/deviceeditor.cpp:81
-msgid "Add Record Device"
-msgstr "Přidat záznamové zařízení"
-
-#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
-msgid "Delete Device"
-msgstr "Odstranit zařízení"
-
-#: ../gui/deviceeditor.cpp:135 ../gui/importdevicedialog.cpp:136
-#, c-format
-msgid "Device %1"
-msgstr "Zařízení %1"
-
-#: ../gui/deviceeditor.cpp:244
-msgid "Apply pending changes?"
-msgstr "Chcete použít dosud nezpracované změny?"
-
-#: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
-msgid "<new device>"
-msgstr "<nové zařízení>"
-
-#: ../gui/trackbuttons.cpp:320 ../gui/trackbuttons.cpp:562
-#: ../gui/trackparameterbox.cpp:90 ../gui/trackparameterbox.cpp:563
-msgid "<untitled>"
-msgstr "<bez názvu>"
-
-#: ../gui/trackparameterbox.cpp:105
-#, fuzzy
-msgid "Playback parameters"
-msgstr "Přehrávací úroveň"
-
-#: ../gui/trackparameterbox.cpp:151
-#, fuzzy
-msgid "Recording filters"
-msgstr "Probíhá záznam"
-
-#: ../gui/trackparameterbox.cpp:166
-msgid "Channel"
-msgstr "Kanál"
-
-#: ../gui/trackparameterbox.cpp:196
-#, fuzzy
-msgid "Create segments with:"
-msgstr "Vytvořit segment"
-
-#: ../gui/trackparameterbox.cpp:203
-#, fuzzy
-msgid "Preset"
-msgstr "pomlka"
-
-#: ../gui/trackparameterbox.cpp:211
-#, fuzzy
-msgid "Load"
-msgstr "Načíst data"
-
-#: ../gui/trackparameterbox.cpp:221
-#, fuzzy
-msgid "treble"
-msgstr "Houslový"
-
-#: ../gui/trackparameterbox.cpp:222
-#, fuzzy
-msgid "bass"
-msgstr "Basový"
-
-#: ../gui/trackparameterbox.cpp:223
-#, fuzzy
-msgid "crotales"
-msgstr "&Oktávy"
-
-#: ../gui/trackparameterbox.cpp:224
-msgid "xylophone"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:225
-msgid "guitar"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:226
-msgid "contrabass"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:227
-msgid "celesta"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:228
-msgid "old celesta"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:229
-msgid "soprano"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:230
-#, fuzzy
-msgid "alto"
-msgstr "Violový"
-
-#: ../gui/trackparameterbox.cpp:231
-#, fuzzy
-msgid "tenor"
-msgstr "Tenorový"
-
-#: ../gui/trackparameterbox.cpp:448 ../gui/trackparameterbox.cpp:469
-msgid "All"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:515
-#, fuzzy, c-format
-msgid "High: %1"
-msgstr "Vysoká"
-
-#: ../gui/trackparameterbox.cpp:516
-#, fuzzy, c-format
-msgid "Low: %1"
-msgstr "Id: %1"
-
-#: ../gui/trackparameterbox.cpp:567
-msgid "[ Track#%1 - %2 ]"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:866
-msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
-
-#: ../gui/importdevicedialog.cpp:54
-msgid "Import from Device..."
-msgstr "Importovat ze zařízení..."
-
-#: ../gui/importdevicedialog.cpp:95
-#, c-format
-msgid "Cannot open file %1"
-msgstr "Nelze otevřít soubor %1"
-
-#: ../gui/importdevicedialog.cpp:102
-#, c-format
-msgid "No devices found in file %1"
-msgstr "V souboru %1 nebyla nalezena žádná zařízení"
-
-#: ../gui/importdevicedialog.cpp:109
-msgid "Source device"
-msgstr "Zdrojové zařízení"
-
-#: ../gui/importdevicedialog.cpp:114
-msgid "Import from: "
-msgstr "Importovat z: "
-
-#: ../gui/importdevicedialog.cpp:151
-msgid "Import banks"
-msgstr "Importovat banky"
-
-#: ../gui/importdevicedialog.cpp:152
-msgid "Import key mappings"
-msgstr "Importovat mapování tónin"
-
-#: ../gui/importdevicedialog.cpp:153
-msgid "Import controllers"
-msgstr "Importovat ovládací prvky"
-
-#: ../gui/importdevicedialog.cpp:156
-msgid "Import device name"
-msgstr "Importovat název zařízení"
-
-#: ../gui/importdevicedialog.cpp:162
-msgid "Bank import behavior"
-msgstr "Chování při importu banky"
-
-#: ../gui/importdevicedialog.cpp:164
-msgid "Merge banks"
-msgstr "Připojit banky"
-
-#: ../gui/importdevicedialog.cpp:165
-msgid "Overwrite banks"
-msgstr "Přepsat banky"
-
-#: ../gui/importdevicedialog.cpp:365
-msgid "Bank %1:%2"
-msgstr "Banka %1:%2"
-
-#: ../gui/rosegardenguiview.cpp:229
-msgid "No non-audio segments in composition"
-msgstr "Ve skladbě nejsou žádné nezvukové segmenty"
-
-#: ../gui/rosegardenguiview.cpp:303
-msgid "Selection must contain only audio or non-audio segments"
-msgstr "Výběr musí obsahovat pouze zvukové nebo nezvukové segmenty"
-
-#: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
-#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
-msgid "No non-audio segments selected"
-msgstr "Nebyly vybrány žádné nezvukové segmenty"
-
-#: ../gui/rosegardenguiview.cpp:837
-msgid ""
-"You've not yet defined an audio editor for Rosegarden to use.\n"
-"See Settings -> Configure Rosegarden -> General -> External Editors."
-msgstr ""
-"Dosud jste nedefinovali zvukový editor, který má aplikace Rosegarden "
-"použít.\n"
-"Viz Nastavení -> Konfigurace aplikace Rosegarden -> Obecné -> Externí "
-"editory."
-
-#: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
-msgid "Can't add dropped file. "
-msgstr "Nelze přidat vyřazený soubor. "
-
-#: ../gui/editcommands.cpp:212
-msgid "(excerpt)"
-msgstr "(výňatek)"
-
-#: ../gui/editcommands.cpp:226
-msgid "(copied)"
-msgstr "(zkopírováno)"
-
-#: ../gui/editcommands.cpp:452
-msgid "Paste into an existing gap [\"restricted\"]"
-msgstr "Vložit do existující mezery [\"omezeno\"]"
-
-#: ../gui/editcommands.cpp:454
-msgid "Erase existing events to make room [\"simple\"]"
-msgstr "Vymazat existující události a uvolnit tak místo [\"jednoduché\"]"
-
-#: ../gui/editcommands.cpp:456
-msgid "Move existing events out of the way [\"open-n-paste\"]"
-msgstr "Odsunout existující události [\"otevřít a vložit\"]"
-
-#: ../gui/editcommands.cpp:458
-msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
-msgstr "Překrýt noty a svázat s existujícími notami [\"notové překrytí\"]"
-
-#: ../gui/editcommands.cpp:460
-msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr "Překrýt noty a ignorovat existující noty [\"maticové překrytí\"]"
-
-#: ../gui/editcommands.cpp:889
-msgid "Heuristic Notation &Quantize"
-msgstr "Heuristická &kvantizace notace"
-
-#: ../gui/editcommands.cpp:891
-msgid "Grid &Quantize"
-msgstr "Rastrová &kvantizace"
-
-#: ../gui/editcommands.cpp:1054 ../gui/editcommands.cpp:1065
-msgid "Unquantize Events"
-msgstr "Zrušit kvantizaci událostí"
-
-#: ../gui/editcommands.cpp:1565
-msgid "&Move Events to Other Segment"
-msgstr "&Přesunout události do jiného segmentu"
-
-#: ../gui/editcommands.cpp:1798
-msgid "Insert Trigger Note"
-msgstr "Vložit spouštěcí notu"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "C%1"
-msgstr "C%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "C#%1"
-msgstr "C#%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "D%1"
-msgstr "D%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "D#%1"
-msgstr "D#%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "E%1"
-msgstr "E%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "F%1"
-msgstr "F%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "F#%1"
-msgstr "F#%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "G%1"
-msgstr "G%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "G#%1"
-msgstr "G#%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "A%1"
-msgstr "A%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "A#%1"
-msgstr "A#%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "B%1"
-msgstr "H%1"
-
-#: ../gui/notationview.cpp:670
-msgid "Preparing to print..."
-msgstr "Probíhá příprava tisku..."
-
-#: ../gui/notationview.cpp:1190
-msgid "Note &Font"
-msgstr "Notové &písmo"
-
-#: ../gui/notationview.cpp:1212
-msgid "Si&ze"
-msgstr "V&elikost"
-
-#: ../gui/notationview.cpp:1219
-msgid "S&pacing"
-msgstr "&Rozestupy"
-
-#: ../gui/notationview.cpp:1241
-msgid "Du&ration Factor"
-msgstr "Faktor doby &trvání"
-
-#: ../gui/notationview.cpp:1266
-msgid "Note &Style"
-msgstr "&Styl not"
-
-#: ../gui/notationview.cpp:1292
-msgid "Insert Rest"
-msgstr "Vložit pomlku"
-
-#: ../gui/notationview.cpp:1296
-msgid "Switch from Note to Rest"
-msgstr "Přepnout z noty na pomlku"
-
-#: ../gui/notationview.cpp:1301
-msgid "Switch from Rest to Note"
-msgstr "Přepnout z pomlky na notu"
-
-#: ../gui/notationview.cpp:1358
-msgid "No accidental"
-msgstr "Žádná posuvka"
-
-#: ../gui/notationview.cpp:1359
-msgid "Follow previous accidental"
-msgstr "Podle předchozí posuvky"
-
-#: ../gui/notationview.cpp:1360
-msgid "Sharp"
-msgstr "Křížek"
-
-#: ../gui/notationview.cpp:1361
-msgid "Flat"
-msgstr "Béčko"
-
-#: ../gui/notationview.cpp:1362
-msgid "Natural"
-msgstr "Přirozené"
-
-#: ../gui/notationview.cpp:1363
-msgid "Double sharp"
-msgstr "Dvojitý křížek"
-
-#: ../gui/notationview.cpp:1364
-msgid "Double flat"
-msgstr "Dvojité béčko"
-
-#: ../gui/notationview.cpp:1385
-msgid "&Treble Clef"
-msgstr "&Houslový klíč"
-
-#: ../gui/notationview.cpp:1392
-msgid "Te&nor Clef"
-msgstr "&Tenorový klíč"
-
-#: ../gui/notationview.cpp:1399
-msgid "&Alto Clef"
-msgstr "&Violový klíč"
-
-#: ../gui/notationview.cpp:1406
-msgid "&Bass Clef"
-msgstr "&Basový klíč"
-
-#: ../gui/notationview.cpp:1413
-msgid "&Text"
-msgstr "&Text"
-
-#: ../gui/notationview.cpp:1419
-#, fuzzy
-msgid "&Fretboard"
-msgstr "Ukazatel přehrávání o takt &dopředu"
-
-#: ../gui/notationview.cpp:1452
-msgid "Select from Sta&rt"
-msgstr "Vybrat od &začátku"
-
-#: ../gui/notationview.cpp:1456
-msgid "Select to &End"
-msgstr "Vybrat do &konce"
-
-#: ../gui/notationview.cpp:1460
-msgid "Select Whole St&aff"
-msgstr "Vybrat celou &osnovu"
-
-#: ../gui/notationview.cpp:1468
-msgid "Pa&ste..."
-msgstr "&Vložit..."
-
-#: ../gui/notationview.cpp:1486
-msgid "&Linear Layout"
-msgstr "&Lineární uspořádání"
-
-#: ../gui/notationview.cpp:1494
-msgid "&Continuous Page Layout"
-msgstr "&Nekonečná stránka"
-
-#: ../gui/notationview.cpp:1502
-msgid "&Multiple Page Layout"
-msgstr "&Stránkové uspořádání"
-
-#: ../gui/notationview.cpp:1511
-msgid "Show Ra&w Note Ruler"
-msgstr "Zobrazit pravítko z&drojových not"
-
-#: ../gui/notationview.cpp:1519
-msgid "Show &Annotations"
-msgstr "Zobrazit &anotace"
-
-#: ../gui/notationview.cpp:1523
-msgid "Show Lily&Pond Directives"
-msgstr ""
-
-#: ../gui/notationview.cpp:1527
-msgid "Open L&yric Editor"
-msgstr "Otevřít editor te&xtu melodie"
-
-#: ../gui/notationview.cpp:1568
-msgid "Trip&let Insert Mode"
-msgstr "Režim vkládání &triol"
-
-#: ../gui/notationview.cpp:1794
-msgid "&Dump selected events to stderr"
-msgstr "&Vypsat vybrané události do stderr"
-
-#: ../gui/notationview.cpp:1862
-msgid "Ma&ke Ornament..."
-msgstr "&Vytvořit melodickou ozdobu..."
-
-#: ../gui/notationview.cpp:1866
-msgid "Trigger &Ornament..."
-msgstr "Spouštěcí melodická &ozdoba..."
-
-#: ../gui/notationview.cpp:1870
-msgid "Remove Ornament..."
-msgstr "Odstranit melodickou ozdobu..."
-
-#: ../gui/notationview.cpp:1875
-msgid "&None"
-msgstr "Žá&dná"
-
-#: ../gui/notationview.cpp:1883
-msgid "Add Fretboard"
-msgstr ""
-
-#: ../gui/notationview.cpp:1910
-msgid "Show &Notes Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro &noty"
-
-#: ../gui/notationview.cpp:1911
-msgid "Show &Rests Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro po&mlky"
-
-#: ../gui/notationview.cpp:1912
-msgid "Show &Accidentals Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro &posuvky"
-
-#: ../gui/notationview.cpp:1913
-msgid "Show Cle&fs Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro notové &klíče"
-
-#: ../gui/notationview.cpp:1915
-msgid "Show &Marks Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro &značky"
-
-#: ../gui/notationview.cpp:1917
-msgid "Show &Group Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro &skupiny"
-
-#: ../gui/notationview.cpp:1919
-msgid "Show &Layout Toolbar"
-msgstr "Zobrazit nástrojovou lištu pro &uspořádání"
-
-#: ../gui/notationview.cpp:1923
-msgid "Show M&eta Toolbar"
-msgstr "Zobrazit nástrojovou lištu m&eta"
-
-#: ../gui/notationview.cpp:1985
-msgid "Cursor &Up Staff"
-msgstr "Posunout kurzor v osnově &nahoru"
-
-#: ../gui/notationview.cpp:1989
-msgid "Cursor &Down Staff"
-msgstr "Posunout kurzor v osnově &dolů"
-
-#: ../gui/notationview.cpp:2075
-msgid "Push &Left"
-msgstr "Odsunout v&levo"
-
-#: ../gui/notationview.cpp:2079
-msgid "Push &Right"
-msgstr "Odsunout v&pravo"
-
-#: ../gui/notationview.cpp:2083
-msgid "Push &Up"
-msgstr "Odsunout &nahoru"
-
-#: ../gui/notationview.cpp:2087
-msgid "Push &Down"
-msgstr "Odsunout &dolů"
-
-#: ../gui/notationview.cpp:2091
-msgid "Restore &Computed Positions"
-msgstr "Obnovit &vypočtené pozice"
-
-#: ../gui/notationview.cpp:2095
-msgid "Make &Invisible"
-msgstr "Z&neviditelnit"
-
-#: ../gui/notationview.cpp:2099
-msgid "Make &Visible"
-msgstr "Z&viditelnit"
-
-#: ../gui/notationview.cpp:2103
-msgid "Toggle Dot"
-msgstr "Přepnout tečku"
-
-#: ../gui/notationview.cpp:2107 ../gui/notationview.cpp:2111
-msgid "Add Dot"
-msgstr "Přidat tečku"
-
-#: ../gui/notationview.cpp:2162
-#, c-format
-msgid ""
-"_n: 1 pixel\n"
-"%n pixels"
-msgstr ""
-"_n: 1 pixel\n"
-"%n pixely(ů)"
-
-#: ../gui/notationview.cpp:2205
-msgid "  Font:  "
-msgstr "  Písmo:  "
-
-#: ../gui/notationview.cpp:2232
-msgid "Unknown font \"%1\", using default"
-msgstr "Písmo \"%1\" je neznámé, použije se výchozí"
-
-#: ../gui/notationview.cpp:2240
-msgid "  Size:  "
-msgstr "  Velikost:  "
-
-#: ../gui/notationview.cpp:2262
-msgid "  Spacing:  "
-msgstr "  Rozestupy:  "
-
-#: ../gui/notationview.cpp:2562
-msgid "Laying out score..."
-msgstr "Probíhá uspořádání partitury..."
-
-#: ../gui/notationview.cpp:2574
-msgid "Laying out staff %1..."
-msgstr "Probíhá uspořádání osnovy %1..."
-
-#: ../gui/notationview.cpp:2583
-msgid "Reconciling staffs..."
-msgstr "Probíhá vyrovnání osnov..."
-
-#: ../gui/notationview.cpp:3347
-msgid "Sizing and allocating canvas..."
-msgstr "Probíhá nastavení velikosti a přidělení zobrazovací plochy..."
-
-#: ../gui/notationview.cpp:3507
-msgid "note"
-msgstr "nota"
-
-#: ../gui/notationview.cpp:3507
-msgid "rest"
-msgstr "pomlka"
-
-#: ../gui/notationview.cpp:3666
-msgid "%1 - Segment Track #%2 - Notation"
-msgstr "%1 - Stopa segmentu #%2 - Notový zápis"
-
-#: ../gui/notationview.cpp:3672
-msgid "%1 - All Segments - Notation"
-msgstr "%1 - Všechny segmenty - Notový zápis"
-
-#: ../gui/notationview.cpp:3677
-msgid ""
-"_n: %1 - Segment - Notation\n"
-"%1 - %n Segments - Notation"
-msgstr ""
-"_n: %1 - Segment - Notový zápis\n"
-"%1 - %n Segmenty(ů) - Notový zápis"
-
-#: ../gui/notefont.cpp:72 ../gui/presethandler.cpp:125
-msgid "unknown error"
-msgstr "neznámá chyba"
-
-#: ../gui/presethandler.cpp:153
-#, fuzzy, c-format
-msgid "Can't open preset file %1"
-msgstr "Nelze otevřít soubor stylu %1"
-
-#: ../gui/presethandler.cpp:347
-msgid "Load track parameters preset"
-msgstr ""
-
-#: ../gui/presethandler.cpp:375
-msgid "Select preset track parameters for:"
-msgstr ""
-
-#: ../gui/presethandler.cpp:377
-#, fuzzy
-msgid "Category"
-msgstr "Kategorie:"
-
-#: ../gui/presethandler.cpp:383
-#, fuzzy
-msgid "Player Ability"
-msgstr "Seznam &přehrávání"
-
-#: ../gui/presethandler.cpp:385
-#, fuzzy
-msgid "Amateur"
-msgstr "Řídící sek."
-
-#: ../gui/presethandler.cpp:386
-#, fuzzy
-msgid "Professional"
-msgstr "Probíhá zpracování..."
 
 #: ../gui/notefontviewer.cpp:99
 #, c-format
@@ -8785,6 +8664,10 @@ msgstr "Barva:"
 msgid "Instrument Parameter Box position:"
 msgstr "Pozice pole s parametry nástroje:"
 
+#: ../gui/notefont.cpp:72 ../gui/presethandler.cpp:127
+msgid "unknown error"
+msgstr "neznámá chyba"
+
 #: ../gui/notefont.cpp:98
 msgid "Can't open font mapping file %1 or %2"
 msgstr "Nelze otevřít soubor %1 nebo %2 pro mapování písma"
@@ -8985,7 +8868,7 @@ msgstr ""
 "Zkuste zkopírovat tento soubor do adresáře, ve kterém máte oprávnění k "
 "zápisu,a vyzkoušejte jej přidat znovu"
 
-#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:366
+#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:244
 #, no-c-format
 msgid "Rosegarden Transport"
 msgstr "Transport aplikace Rosegarden"
@@ -9284,7 +9167,7 @@ msgstr ""
 "\n"
 " namísto těchto znaků?"
 
-#: ../gui/lilypondio.cpp:936
+#: ../gui/lilypondio.cpp:942
 msgid ""
 "You encountered an enharmonic resolution bug somewhere during this "
 "operation.  You may wish to save a copy of your current composition and "
@@ -9299,11 +9182,11 @@ msgstr ""
 "\n"
 "Mezitím budete pravděpodobně muset upravit právě exportovaný soubor ručně."
 
-#: ../gui/lilypondio.cpp:1416
+#: ../gui/lilypondio.cpp:1422
 msgid "warning: overlong bar truncated here"
 msgstr "varování: příliš dlouhý takt byl zde zkrácen"
 
-#: ../gui/lilypondio.cpp:1421
+#: ../gui/lilypondio.cpp:1427
 msgid "warning: bar too short, padding with rests"
 msgstr "varování: takt je příliš krátký, bude doplněn pomlkami"
 
@@ -9337,15 +9220,153 @@ msgstr "Zaznamenat na tuto stopu"
 msgid "<untitled audio>"
 msgstr "<zvuk bez názvu>"
 
+#: ../gui/trackbuttons.cpp:320 ../gui/trackbuttons.cpp:562
+#: ../gui/trackparameterbox.cpp:105 ../gui/trackparameterbox.cpp:584
+msgid "<untitled>"
+msgstr "<bez názvu>"
+
 #: ../gui/trackbuttons.cpp:351 ../gui/trackbuttons.cpp:427
 #: ../gui/trackbuttons.cpp:814 ../gui/trackbuttons.cpp:1163
 msgid "<no instrument>"
 msgstr "<žádný nástroj>"
 
-#: ../gui/rosegardenparameterarea.cpp:71
+#: ../gui/trackparameterbox.cpp:67
 #, fuzzy
-msgid " Parameters"
+msgid "Track Parameters"
 msgstr "Parametry rastru"
+
+#: ../gui/trackparameterbox.cpp:112
+#, fuzzy
+msgid "Playback parameters"
+msgstr "Přehrávací úroveň"
+
+#: ../gui/trackparameterbox.cpp:159
+#, fuzzy
+msgid "Recording filters"
+msgstr "Probíhá záznam"
+
+#: ../gui/trackparameterbox.cpp:183
+msgid "Channel"
+msgstr "Kanál"
+
+#: ../gui/trackparameterbox.cpp:205
+#, fuzzy
+msgid "Create segments with:"
+msgstr "Vytvořit segment"
+
+#: ../gui/trackparameterbox.cpp:221
+#, fuzzy
+msgid "Preset"
+msgstr "pomlka"
+
+#: ../gui/trackparameterbox.cpp:229
+#, fuzzy
+msgid "Load"
+msgstr "Načíst data"
+
+#: ../gui/trackparameterbox.cpp:239
+#, fuzzy
+msgid "treble"
+msgstr "Houslový"
+
+#: ../gui/trackparameterbox.cpp:240
+#, fuzzy
+msgid "bass"
+msgstr "Basový"
+
+#: ../gui/trackparameterbox.cpp:241
+#, fuzzy
+msgid "crotales"
+msgstr "&Oktávy"
+
+#: ../gui/trackparameterbox.cpp:242
+msgid "xylophone"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:243
+msgid "guitar"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:244
+msgid "contrabass"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:245
+msgid "celesta"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:246
+msgid "old celesta"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:247
+msgid "soprano"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:248
+#, fuzzy
+msgid "alto"
+msgstr "Violový"
+
+#: ../gui/trackparameterbox.cpp:249
+#, fuzzy
+msgid "tenor"
+msgstr "Tenorový"
+
+#: ../gui/trackparameterbox.cpp:469 ../gui/trackparameterbox.cpp:490
+msgid "All"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:536
+#, fuzzy, c-format
+msgid "High: %1"
+msgstr "Vysoká"
+
+#: ../gui/trackparameterbox.cpp:537
+#, fuzzy, c-format
+msgid "Low: %1"
+msgstr "Id: %1"
+
+#: ../gui/trackparameterbox.cpp:588
+msgid "[ Track#%1 - %2 ]"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:888
+msgid "The instrument preset database is corrupt.  Check your installation."
+msgstr ""
+
+#: ../gui/presethandler.cpp:173
+#, fuzzy, c-format
+msgid "Can't open preset file %1"
+msgstr "Nelze otevřít soubor stylu %1"
+
+#: ../gui/presethandler.cpp:369
+msgid "Load track parameters preset"
+msgstr ""
+
+#: ../gui/presethandler.cpp:397
+msgid "Select preset track parameters for:"
+msgstr ""
+
+#: ../gui/presethandler.cpp:399
+#, fuzzy
+msgid "Category"
+msgstr "Kategorie:"
+
+#: ../gui/presethandler.cpp:405
+#, fuzzy
+msgid "Player Ability"
+msgstr "Seznam &přehrávání"
+
+#: ../gui/presethandler.cpp:407
+#, fuzzy
+msgid "Amateur"
+msgstr "Řídící sek."
+
+#: ../gui/presethandler.cpp:408
+#, fuzzy
+msgid "Professional"
+msgstr "Probíhá zpracování..."
 
 #: ../gui/tempodialog.cpp:61
 #, fuzzy
@@ -9424,457 +9445,461 @@ msgstr "Neexistují další změny tempa."
 msgid " bpm"
 msgstr " bpm"
 
-#: rc.cpp:3 rc.cpp:57 rc.cpp:189 rc.cpp:282 rc.cpp:330
+#: ../gui/expandablegroupbox.cpp:38
+msgid "[+]"
+msgstr ""
+
+#: rc.cpp:2 rc.cpp:38 rc.cpp:126 rc.cpp:188 rc.cpp:220
 #, no-c-format
 msgid "T&ransport"
 msgstr "T&ransport"
 
-#: rc.cpp:9
+#: rc.cpp:6
 #, no-c-format
 msgid "Number of Stereo &Inputs"
 msgstr "Počet stereo v&stupů"
 
-#: rc.cpp:12
+#: rc.cpp:8
 #, no-c-format
 msgid "&Number of Submasters"
 msgstr "&Počet řízených sekvencerů"
 
-#: rc.cpp:15 rc.cpp:78 rc.cpp:204 rc.cpp:297 rc.cpp:321 rc.cpp:333 rc.cpp:357
+#: rc.cpp:10 rc.cpp:52 rc.cpp:136 rc.cpp:198 rc.cpp:214 rc.cpp:222 rc.cpp:238
 #, no-c-format
 msgid "Transport Toolbar"
 msgstr "Nástrojová lišta pro transport"
 
-#: rc.cpp:18
+#: rc.cpp:12
 #, no-c-format
 msgid "&Import"
 msgstr "&Importovat"
 
-#: rc.cpp:21
+#: rc.cpp:14
 #, no-c-format
 msgid "&Merge"
 msgstr "&Připojit"
 
-#: rc.cpp:24
+#: rc.cpp:16
 #, no-c-format
 msgid "&Export"
 msgstr "&Exportovat"
 
-#: rc.cpp:27 rc.cpp:99 rc.cpp:252
+#: rc.cpp:18 rc.cpp:66 rc.cpp:168
 #, no-c-format
 msgid "&Composition"
 msgstr "&Skladba"
 
-#: rc.cpp:30
+#: rc.cpp:20
 #, no-c-format
 msgid "&Studio"
 msgstr "&Studio"
 
-#: rc.cpp:33
+#: rc.cpp:22
 #, no-c-format
 msgid "&Tempo and Time Signature"
 msgstr "&Tempo a taktového označení"
 
-#: rc.cpp:36
+#: rc.cpp:24
 #, no-c-format
 msgid "Se&gments"
 msgstr "Se&gmenty"
 
-#: rc.cpp:39 rc.cpp:105 rc.cpp:258 rc.cpp:348
+#: rc.cpp:26 rc.cpp:70 rc.cpp:172 rc.cpp:232
 #, no-c-format
 msgid "Edit &With"
 msgstr "Upravit &pomocí"
 
-#: rc.cpp:42
+#: rc.cpp:28
 #, fuzzy, no-c-format
 msgid "&Split..."
 msgstr "&Rozdělit"
 
-#: rc.cpp:45
+#: rc.cpp:30
 #, no-c-format
 msgid "Trac&ks"
 msgstr "S&topy"
 
-#: rc.cpp:48
+#: rc.cpp:32
 #, no-c-format
 msgid "Set &Instrument"
 msgstr "Nastavit &nástroj"
 
-#: rc.cpp:54 rc.cpp:171 rc.cpp:276
+#: rc.cpp:36 rc.cpp:114 rc.cpp:184
 #, no-c-format
 msgid "&Editor Tools"
 msgstr "Ovládací nástroje &editoru"
 
-#: rc.cpp:60 rc.cpp:195 rc.cpp:288
+#: rc.cpp:40 rc.cpp:130 rc.cpp:192
 #, no-c-format
 msgid "&Toolbars"
 msgstr "&Nástrojové lišty"
 
-#: rc.cpp:63 rc.cpp:198 rc.cpp:291
+#: rc.cpp:42 rc.cpp:132 rc.cpp:194
 #, no-c-format
 msgid "&Rulers"
 msgstr "&Pravítka"
 
-#: rc.cpp:69 rc.cpp:201 rc.cpp:294
+#: rc.cpp:46 rc.cpp:134 rc.cpp:196
 #, no-c-format
 msgid "Tools Toolbar"
 msgstr "Nástrojová lišta ovládacích nástrojů"
 
-#: rc.cpp:72
+#: rc.cpp:48
 #, no-c-format
 msgid "Tracks Toolbar"
 msgstr "Nástrojová lišta pro stopy"
 
-#: rc.cpp:75
+#: rc.cpp:50
 #, no-c-format
 msgid "Editors Toolbar"
 msgstr "Nástrojová lišta pro editory"
 
-#: rc.cpp:81 rc.cpp:303 rc.cpp:327 rc.cpp:363
+#: rc.cpp:54 rc.cpp:202 rc.cpp:218 rc.cpp:242
 #, no-c-format
 msgid "Zoom Toolbar"
 msgstr "Nástrojová lišta pro zoom"
 
-#: rc.cpp:87 rc.cpp:318 rc.cpp:339 rc.cpp:354
+#: rc.cpp:58 rc.cpp:212 rc.cpp:226 rc.cpp:236
 #, no-c-format
 msgid "Time Toolbar"
 msgstr "Nástrojová lišta pro čas"
 
-#: rc.cpp:93
+#: rc.cpp:62
 #, no-c-format
 msgid "&Layout Mode"
 msgstr "Režim &uspořádání"
 
-#: rc.cpp:96 rc.cpp:249
+#: rc.cpp:64 rc.cpp:166
 #, no-c-format
 msgid "Add Event Ruler"
 msgstr "Přidat pravítko událostí"
 
-#: rc.cpp:102 rc.cpp:345
+#: rc.cpp:68 rc.cpp:230
 #, no-c-format
 msgid "Se&gment"
 msgstr "Se&gment"
 
-#: rc.cpp:108
+#: rc.cpp:72
 #, no-c-format
 msgid "N&otes"
 msgstr "N&oty"
 
-#: rc.cpp:111
+#: rc.cpp:74
 #, no-c-format
 msgid "&Beams"
 msgstr "&Trámce"
 
-#: rc.cpp:114
+#: rc.cpp:76
 #, no-c-format
 msgid "&Octaves"
 msgstr "&Oktávy"
 
-#: rc.cpp:117
+#: rc.cpp:78
 #, no-c-format
 msgid "&Indications"
 msgstr "Označení &způsobu hry"
 
-#: rc.cpp:120
+#: rc.cpp:80
 #, no-c-format
 msgid "Slur &Position"
 msgstr "&Pozice legata"
 
-#: rc.cpp:123
+#: rc.cpp:82
 #, no-c-format
 msgid "Mar&ks"
 msgstr "Znač&ky"
 
-#: rc.cpp:126
+#: rc.cpp:84
 #, no-c-format
 msgid "&Ornaments"
 msgstr "Melodické &ozdoby"
 
-#: rc.cpp:129
+#: rc.cpp:86
 #, no-c-format
 msgid "&Fingerings"
 msgstr "P&rstoklady"
 
-#: rc.cpp:132
+#: rc.cpp:88
 #, no-c-format
 msgid "S&lashes"
 msgstr "Tremo&la"
 
-#: rc.cpp:135 rc.cpp:261
+#: rc.cpp:90 rc.cpp:174
 #, no-c-format
 msgid "Ad&just"
 msgstr "&Přizpůsobit"
 
-#: rc.cpp:138 rc.cpp:180
+#: rc.cpp:92 rc.cpp:120
 #, no-c-format
 msgid "&Accidentals"
 msgstr "Po&suvky"
 
-#: rc.cpp:141
+#: rc.cpp:94
 #, no-c-format
 msgid "Trip&lets and Tuplets"
 msgstr "Trio&ly a rytmické notové skupiny"
 
-#: rc.cpp:144
+#: rc.cpp:96
 #, no-c-format
 msgid "S&tem Direction"
 msgstr "S&měr nožiček"
 
-#: rc.cpp:147
+#: rc.cpp:98
 #, no-c-format
 msgid "R&ests"
 msgstr "P&omlky"
 
-#: rc.cpp:150 rc.cpp:174
+#: rc.cpp:100 rc.cpp:116
 #, no-c-format
 msgid "&Notes"
 msgstr "&Noty"
 
-#: rc.cpp:153 rc.cpp:264
+#: rc.cpp:102 rc.cpp:176
 #, no-c-format
 msgid "&Quantize"
 msgstr "&Kvantizovat"
 
-#: rc.cpp:156 rc.cpp:270
+#: rc.cpp:104 rc.cpp:180
 #, no-c-format
 msgid "Trans&pose"
 msgstr "&Transponovat"
 
-#: rc.cpp:159
+#: rc.cpp:106
 #, no-c-format
 msgid "&Fine Positioning"
 msgstr "&Jemné doladění pozice"
 
-#: rc.cpp:162
+#: rc.cpp:108
 #, no-c-format
 msgid "Fine Ti&ming"
 msgstr "Je&mné časování"
 
-#: rc.cpp:165
+#: rc.cpp:110
 #, no-c-format
 msgid "&Visibility"
 msgstr "&Viditelnost"
 
-#: rc.cpp:177
+#: rc.cpp:118
 #, no-c-format
 msgid "&Rests"
 msgstr "P&omlky"
 
-#: rc.cpp:183
+#: rc.cpp:122
 #, no-c-format
 msgid "&Clefs"
 msgstr "Notové &klíče"
 
-#: rc.cpp:186 rc.cpp:279
+#: rc.cpp:124 rc.cpp:186
 #, no-c-format
 msgid "Local &Cursor"
 msgstr "Lokální &kurzor"
 
-#: rc.cpp:207
+#: rc.cpp:138
 #, no-c-format
 msgid "Notes Toolbar"
 msgstr "Nástrojová lišta pro noty"
 
-#: rc.cpp:210
+#: rc.cpp:140
 #, no-c-format
 msgid "Rests Toolbar"
 msgstr "Nástrojová lišta pro pomlky"
 
-#: rc.cpp:213
+#: rc.cpp:142
 #, no-c-format
 msgid "Clefs Toolbar"
 msgstr "Nástrojová lišta pro notové klíče"
 
-#: rc.cpp:216
+#: rc.cpp:144
 #, no-c-format
 msgid "Accidentals Toolbar"
 msgstr "Nástrojová lišta pro posuvky"
 
-#: rc.cpp:219
+#: rc.cpp:146
 #, no-c-format
 msgid "Group Toolbar"
 msgstr "Nástrojová lišta pro skupinu"
 
-#: rc.cpp:222
+#: rc.cpp:148
 #, no-c-format
 msgid "Marks Toolbar"
 msgstr "Nástrojová lišta pro značky"
 
-#: rc.cpp:225
+#: rc.cpp:150
 #, no-c-format
 msgid "Meta Toolbar"
 msgstr "Nástrojová lišta meta"
 
-#: rc.cpp:228
+#: rc.cpp:152
 #, no-c-format
 msgid "Layout Toolbar"
 msgstr "Nástrojová lišta pro uspořádání"
 
-#: rc.cpp:231 rc.cpp:306
+#: rc.cpp:154 rc.cpp:204
 #, no-c-format
 msgid "Control Ruler actions"
 msgstr "Akce ovládacího pravítka"
 
-#: rc.cpp:234 rc.cpp:309
+#: rc.cpp:156 rc.cpp:206
 #, no-c-format
 msgid "Property Ruler actions"
 msgstr "Akce pravítka vlastností"
 
-#: rc.cpp:237
+#: rc.cpp:158
 #, no-c-format
 msgid "&Action"
 msgstr "&Akce"
 
-#: rc.cpp:240
+#: rc.cpp:160
 #, no-c-format
 msgid "General Toolbar"
 msgstr "Obecná nástrojová lišta"
 
-#: rc.cpp:246
+#: rc.cpp:164
 #, no-c-format
 msgid "&Grid"
 msgstr "&Rastr"
 
-#: rc.cpp:255
+#: rc.cpp:170
 #, no-c-format
 msgid "&Segment"
 msgstr "&Segment"
 
-#: rc.cpp:267
+#: rc.cpp:178
 #, no-c-format
 msgid "&Velocity"
 msgstr "&Rychlost"
 
-#: rc.cpp:300 rc.cpp:315 rc.cpp:324 rc.cpp:351 rc.cpp:360
+#: rc.cpp:200 rc.cpp:210 rc.cpp:216 rc.cpp:234 rc.cpp:240
 #, no-c-format
 msgid "Actions Toolbar"
 msgstr "Nástrojová lišta pro akce"
 
-#: rc.cpp:370
+#: rc.cpp:247
 #, no-c-format
 msgid "Hide additional controls"
 msgstr "Skrýt dodatečné ovládací prvky"
 
-#: rc.cpp:374
+#: rc.cpp:250
 #, no-c-format
 msgid "Panic Button"
 msgstr "Tlačítko nouzového zastavení v případě zaseknutí nástroje"
 
-#: rc.cpp:377
+#: rc.cpp:252
 #, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Resetuje všechna zařízení MIDI, pokud došlo k zaseknutí not"
 
-#: rc.cpp:384
+#: rc.cpp:257
 #, no-c-format
 msgid "Provides a metronome click for you to play along with"
 msgstr "Poskytuje tikot metronomu pro hraní s metronomem"
 
-#: rc.cpp:387
+#: rc.cpp:259
 #, no-c-format
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr "Zobrazuje vstupní a výstupní aktivity MIDI pro aplikaci Rosegarden"
 
-#: rc.cpp:390
+#: rc.cpp:261
 #, no-c-format
 msgid "IN"
 msgstr "VSTUP"
 
-#: rc.cpp:393
+#: rc.cpp:263
 #, no-c-format
 msgid "OUT"
 msgstr "VÝSTUP"
 
-#: rc.cpp:396 rc.cpp:399
+#: rc.cpp:265 rc.cpp:267
 #, no-c-format
 msgid "NO EVENTS"
 msgstr "ŽÁDNÉ UDÁLOSTI"
 
-#: rc.cpp:406
+#: rc.cpp:272
 #, no-c-format
 msgid "Record either MIDI or audio"
 msgstr "Záznam MIDI nebo zvuku"
 
-#: rc.cpp:410
+#: rc.cpp:275
 #, no-c-format
 msgid "Loop"
 msgstr "Opakování"
 
-#: rc.cpp:413
+#: rc.cpp:277
 #, no-c-format
 msgid "Turn on and off the loop markers (if set)"
 msgstr "Zapínání a vypínání značek opakování (jsou-li nastaveny)"
 
-#: rc.cpp:420
+#: rc.cpp:282
 #, no-c-format
 msgid "Mutes all but the currently selected track"
 msgstr "Ztlumení všech stop kromě aktuálně vybrané"
 
-#: rc.cpp:424
+#: rc.cpp:285
 #, no-c-format
 msgid "Start loop or range here"
 msgstr ""
 
-#: rc.cpp:428
+#: rc.cpp:288
 #, no-c-format
 msgid "End loop or range here"
 msgstr ""
 
-#: rc.cpp:431
+#: rc.cpp:290
 #, no-c-format
 msgid "SIG"
 msgstr "SIG"
 
-#: rc.cpp:434
+#: rc.cpp:292
 #, no-c-format
 msgid "DIV"
 msgstr "DIV"
 
-#: rc.cpp:437
+#: rc.cpp:294
 #, no-c-format
 msgid "/16"
 msgstr "/16"
 
-#: rc.cpp:440
+#: rc.cpp:296
 #, no-c-format
 msgid "TEMPO"
 msgstr "TEMPO"
 
-#: rc.cpp:443
+#: rc.cpp:298
 #, no-c-format
 msgid "END"
 msgstr "KONEC"
 
-#: rc.cpp:446
+#: rc.cpp:300
 #, no-c-format
 msgid "BAR"
 msgstr "TAKTOVÁ ČÁRA"
 
-#: rc.cpp:450
+#: rc.cpp:303
 #, no-c-format
 msgid "Switch between real time, musical time, and frame count"
 msgstr "Přepínání mezi skutečným časem, hudebním časem a počtem rámců"
 
-#: rc.cpp:454
+#: rc.cpp:306
 #, no-c-format
 msgid "Show additional controls"
 msgstr "Zobrazit dodatečné ovládací prvky"
 
-#: rc.cpp:458
+#: rc.cpp:309
 #, no-c-format
 msgid "Rewind"
 msgstr "Ukazatel přehrávání o takt zpět"
 
-#: rc.cpp:461
+#: rc.cpp:311
 #, no-c-format
 msgid "Moves the current pointer position back one bar."
 msgstr "Posune pozici aktuálního ukazatele o jednu taktovou čáru zpět."
 
-#: rc.cpp:465
+#: rc.cpp:314
 #, no-c-format
 msgid "Rewind to beginning"
 msgstr "Ukazatel přehrávání na začátek"
 
-#: rc.cpp:468
+#: rc.cpp:316
 #, no-c-format
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
@@ -9883,12 +9908,12 @@ msgstr ""
 "Posune pozici ukazatele na začátek skladby.  (To může znamenat i posun "
 "směrem vpřed, pokud se ukazatel nachází před začátkem skladby.)"
 
-#: rc.cpp:472
+#: rc.cpp:319
 #, no-c-format
 msgid "Play/Pause"
 msgstr "Přehrát/pauza"
 
-#: rc.cpp:475
+#: rc.cpp:321
 #, no-c-format
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
@@ -9897,27 +9922,27 @@ msgstr ""
 "Přehrává od současné pozice ukazatele nebo pozastaví přehrávání, pokud již "
 "probíhá."
 
-#: rc.cpp:482
+#: rc.cpp:326
 #, no-c-format
 msgid "Stops playback or recording."
 msgstr "Zastaví přehrávání nebo záznam."
 
-#: rc.cpp:486
+#: rc.cpp:329
 #, no-c-format
 msgid "Fast forward"
 msgstr "Ukazatel přehrávání o takt dopředu"
 
-#: rc.cpp:489
+#: rc.cpp:331
 #, no-c-format
 msgid "Moves the current pointer position forwards one bar."
 msgstr "Posune pozici aktuálního ukazatele o jednu taktovou čáru dopředu."
 
-#: rc.cpp:493
+#: rc.cpp:334
 #, no-c-format
 msgid "Fast forward to end"
 msgstr "Ukazatel přehrávání na konec"
 
-#: rc.cpp:496
+#: rc.cpp:336
 #, no-c-format
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
@@ -9926,10 +9951,68 @@ msgstr ""
 "Posune pozici ukazatele na konec skladby.  (To může znamenat i posun směrem "
 "vzad, pokud se ukazatel nachází za koncem skladby.)"
 
-#: rc.cpp:500
+#: rc.cpp:339
 #, no-c-format
 msgid "Display time to end"
 msgstr "Zobrazit čas zbývající do konce"
+
+#, fuzzy
+#~ msgid "Advanced Event Edit"
+#~ msgstr "&Rozšířené úpravy události"
+
+#, fuzzy
+#~ msgid "Advanced Event Viewer"
+#~ msgstr "&Rozšířené úpravy události"
+
+#, fuzzy
+#~ msgid ""
+#~ "About to delete 1 audio file permanently from the hard disk.\n"
+#~ "There will be no way to recover this file.\n"
+#~ "Are you sure?"
+#~ msgstr ""
+#~ "_n: Chystáte se trvale odstranit z pevného disku 1 zvukový soubor.\n"
+#~ "Neexistuje způsob, jak jednou odstraněný soubor obnovit.\n"
+#~ "Skutečně chcete soubor odstranit?\n"
+#~ "Chystáte se trvale odstranit z pevného disku %n zvukové(ých) soubory(ů).\n"
+#~ "Neexistuje způsob, jak jednou odstraněné soubory obnovit.\n"
+#~ "Skutečně chcete soubory odstranit?"
+
+#, fuzzy
+#~ msgid "%1 on 1 track"
+#~ msgstr "Zaznamenat na tuto stopu"
+
+#, fuzzy
+#~ msgid "1 Submaster"
+#~ msgstr "Žádné řízené sekvencery"
+
+#, fuzzy
+#~ msgid "  1 event selected "
+#~ msgstr "Nebyly vybrány žádné nezvukové segmenty"
+
+#, fuzzy
+#~ msgid "%1 - 1 Segment - %2"
+#~ msgstr "%1 - Všechny segmenty - %2"
+
+#, fuzzy
+#~ msgid "%1 - Segment - Notation"
+#~ msgstr "%1 - Všechny segmenty - Notový zápis"
+
+#, fuzzy
+#~ msgid ""
+#~ "About to delete 1 audio file permanently from the hard disk.\n"
+#~ "This action cannot be undone, and there will be no way to recover this "
+#~ "file.\n"
+#~ "Are you sure?"
+#~ msgstr ""
+#~ "_n: Chystáte se trvale odstranit z pevného disku 1 zvukový soubor.\n"
+#~ "Neexistuje způsob, jak jednou odstraněný soubor obnovit.\n"
+#~ "Skutečně chcete soubor odstranit?\n"
+#~ "Chystáte se trvale odstranit z pevného disku %n zvukové(ých) soubory(ů).\n"
+#~ "Neexistuje způsob, jak jednou odstraněné soubory obnovit.\n"
+#~ "Skutečně chcete soubory odstranit?"
+
+#~ msgid "Time: %1"
+#~ msgstr "Čas: %1"
 
 #~ msgid ""
 #~ "<p>A Rosegarden composition is not infinite, and does not automatically "

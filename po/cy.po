@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-22 22:44+0200\n"
+"POT-Creation-Date: 2006-09-16 11:44+0100\n"
 "PO-Revision-Date: 2003-12-02 16:23+0000\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -178,7 +178,7 @@ msgid ""
 "controllers via the instrument parameters box\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:13
+#: ../gui/docs/en/tips.cpp:12
 msgid ""
 "<p>...that Rosegarden has an autosave feature?<br><br>\n"
 "You can select your autosave interval from <b>Settings->Configure\n"
@@ -197,7 +197,7 @@ msgstr ""
 "ac mi fyddwch yn cael y dewisiad i lwytho'r fersiwn wedi'i hunan-gadw,\n"
 "neu'r ffeil gwreiddiol heb ei addasu.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:23
+#: ../gui/docs/en/tips.cpp:21
 msgid ""
 "<p>\n"
 "You can save the current document as your default studio by using\n"
@@ -205,7 +205,7 @@ msgid ""
 "p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:30
+#: ../gui/docs/en/tips.cpp:27
 msgid ""
 "<p>...that your default studio is a complete Rosegarden composition that "
 "gets\n"
@@ -216,7 +216,7 @@ msgstr ""
 "ei lwytho bob tro yr ydych yn creu dogfen newydd neu yn mewnforio ffeil MIDI?"
 "</p>\n"
 
-#: ../gui/docs/en/tips.cpp:36
+#: ../gui/docs/en/tips.cpp:32
 #, fuzzy
 msgid ""
 "<p>Because your default studio is a complete Rosegarden composition, it can\n"
@@ -233,7 +233,7 @@ msgstr ""
 "a llawer o bethau eraill y byddwch eisiau fod ar gael o'r dechrau ym mhob\n"
 "dogfen newydd yr ydych yn ei chreu.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:44
+#: ../gui/docs/en/tips.cpp:39
 msgid ""
 "<p>...that Rosegarden will detect and create a default connection for ALSA "
 "soft\n"
@@ -243,7 +243,7 @@ msgstr ""
 "synthau-meddal ALSA\n"
 "sy'n cael eu cychwyn ar ôl i Rosegarden ei hun gychwyn?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:50
+#: ../gui/docs/en/tips.cpp:44
 msgid ""
 "<p>If your studio setup does not change very often, and  you would prefer "
 "for\n"
@@ -255,7 +255,7 @@ msgid ""
 "Behaviour -> Always use default studio when loading files</b>.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:59
+#: ../gui/docs/en/tips.cpp:52
 msgid ""
 "<p>If you have accidentally recorded a segment so short that it does not\n"
 "appear on the canvas, which you can only hear during subsequent recording\n"
@@ -264,7 +264,7 @@ msgid ""
 "negative number.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:67
+#: ../gui/docs/en/tips.cpp:59
 msgid ""
 "<p>...that if you place a note at the wrong pitch using the notation editor, "
 "you can move it one semitone at a time with the up and down arrow keys on "
@@ -274,7 +274,7 @@ msgstr ""
 "golygydd nodiant, cewch ei symud un hanner-ton ar y pryd efo'r allweddau "
 "saeth i fyny ac i lawr ar eich bysellfwrdd?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:72
+#: ../gui/docs/en/tips.cpp:63
 msgid ""
 "<p>...that you can toggle stem directions in the notation editor by "
 "selecting\n"
@@ -283,7 +283,7 @@ msgstr ""
 "<p>...y gallwch newid cyfeiriad coesau yn y golygydd nodiant gan ddewis\n"
 "un neu mwy o nodau gan ddefnyddio Ctrl-PageUp a Ctrl-PageDown?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:78
+#: ../gui/docs/en/tips.cpp:68
 msgid ""
 "<p>...that you can change the accidental used for a note in the notation "
 "editor (without changing the pitch of the note) by selecting\n"
@@ -295,7 +295,7 @@ msgstr ""
 " a defnyddio'r allweddau saeth i fyny ac i lawr ar ôl gwasgu Ctrl a Shift "
 "efo'u gilydd?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:84
+#: ../gui/docs/en/tips.cpp:73
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning segments on "
 "the\n"
@@ -307,7 +307,7 @@ msgstr ""
 "cynfas cylchran er mwyn osgoi'r effaith \"cipio-i\" a cael rheolaeth fainach?"
 "</p>\n"
 
-#: ../gui/docs/en/tips.cpp:90
+#: ../gui/docs/en/tips.cpp:78
 #, fuzzy
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning or resizing "
@@ -320,7 +320,7 @@ msgstr ""
 "cynfas cylchran er mwyn osgoi'r effaith \"cipio-i\" a cael rheolaeth fainach?"
 "</p>\n"
 
-#: ../gui/docs/en/tips.cpp:96
+#: ../gui/docs/en/tips.cpp:83
 msgid ""
 "<p>...that you can edit multiple segments on multiple tracks simultaneously "
 "in\n"
@@ -332,7 +332,7 @@ msgstr ""
 "y golygydd nodiant?  'Sdim angen ond dewis y cylchrannau, ac wedyn defnyddio "
 "<b>Golygu  -> Agor yn y Golygydd Nodiad</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:102
+#: ../gui/docs/en/tips.cpp:88
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden can export files for use by LilyPond, the high-quality "
@@ -347,7 +347,7 @@ msgstr ""
 "O'r ddewislen <b>Ffeil</b>, ewch i <b>Allforio -> Allforio Ffeil Lilypond</"
 "b></p>\n"
 
-#: ../gui/docs/en/tips.cpp:108
+#: ../gui/docs/en/tips.cpp:93
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden can print via LilyPond, the high-quality score "
@@ -365,7 +365,7 @@ msgstr ""
 "O'r ddewislen <b>Ffeil</b>, ewch i <b>Allforio -> Allforio Ffeil Lilypond</"
 "b></p>\n"
 
-#: ../gui/docs/en/tips.cpp:116
+#: ../gui/docs/en/tips.cpp:100
 #, fuzzy
 msgid ""
 "<p>...that if you use the quantizer from within the notation view, you can "
@@ -377,7 +377,7 @@ msgstr ""
 "gwneud hi'n bosibl i gael nodiad sy'n edrych yn dda <b>a</b> perfformiad "
 "MIDI hollol ddynol?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:121
+#: ../gui/docs/en/tips.cpp:104
 msgid ""
 "<p>...that you can change segment labels using the controls on the Segment "
 "Parameters box\n"
@@ -387,7 +387,7 @@ msgstr ""
 "blwch Paramedrau Cylchran\n"
 "yn y prif ffenestr?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:127
+#: ../gui/docs/en/tips.cpp:109
 #, fuzzy
 msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
@@ -412,7 +412,7 @@ msgstr ""
 "<b>Stiwdio -> Cadw'r Ddogfen Gyfredol fel Stiwdio Rhagosodedig </b> er mwyn "
 "gwneud hyn eich rhagosodiad newydd.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:138
+#: ../gui/docs/en/tips.cpp:119
 msgid ""
 "<p>...that you can change the name of a track by double clicking on the "
 "label?  (The\n"
@@ -421,7 +421,7 @@ msgstr ""
 "<p>...y gallwch newid enw trac gan glicio dwywaith ar y label?\n"
 "(Rhaid i'r label fod yn weladwy i hyn weithio.)</p>\n"
 
-#: ../gui/docs/en/tips.cpp:144
+#: ../gui/docs/en/tips.cpp:124
 msgid ""
 "<p>...that you can configure what happens when you double-click on a "
 "segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your "
@@ -431,7 +431,7 @@ msgstr ""
 "Ewch i <b>Gosodiadau -> Ffurfweddu Rosegarden</b> a dewiswch eich ffenestr "
 "olygu ddymunol dan y tab <b>Ymddygiad</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:149
+#: ../gui/docs/en/tips.cpp:128
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
@@ -450,7 +450,7 @@ msgstr ""
 "cael cyfrannwyr\n"
 "o'r UD, Sbaen, yr Almaen, Rwsia, a gwledydd eraill... </p>\n"
 
-#: ../gui/docs/en/tips.cpp:160
+#: ../gui/docs/en/tips.cpp:138
 #, fuzzy
 msgid ""
 "<p>...that Rosegarden is available in Spanish, French, German, Russian, "
@@ -467,7 +467,7 @@ msgstr ""
 "cysylltwch a ni wrth\n"
 "<b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:168
+#: ../gui/docs/en/tips.cpp:145
 #, fuzzy
 msgid ""
 "<p>...that you can change the total number of bars in the composition via\n"
@@ -476,7 +476,7 @@ msgstr ""
 "<p>...y gallwch newid cyfanswm y bariau yn y cyfansoddiad drwy <b>Golygu -> "
 "Newid Parhad y Cyfansoddiad</b>?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:174
+#: ../gui/docs/en/tips.cpp:150
 msgid ""
 "<p>...that you can see the difference between performance and display "
 "duration\n"
@@ -493,7 +493,7 @@ msgstr ""
 "<i>Noder: nid yw'r nodwedd yma yn gweithio yn y golwg sy'n dangos haenlun y "
 "dudalen.</i></p>\n"
 
-#: ../gui/docs/en/tips.cpp:183
+#: ../gui/docs/en/tips.cpp:158
 #, fuzzy
 msgid ""
 "<p>...that you can add tempo and time-signature changes by double-clicking "
@@ -502,7 +502,7 @@ msgstr ""
 "<p>...y gallwch ychwanegu newidiadau tempo ac arwydd amseriad gan glicio "
 "dwywaith ar y gwerthoedd sy'n cael eu dangos yn y ffenestr cludiant?</p>\n"
 
-#: ../gui/docs/en/tips.cpp:188
+#: ../gui/docs/en/tips.cpp:162
 #, fuzzy
 msgid ""
 "<p>...that the transport window can display musical time, sample frame "
@@ -513,7 +513,7 @@ msgstr ""
 "cerddorol) a fframiau 24-fps SMPTE frames wrth ymyl amser go iawn?  'Sdim "
 "angen ond clicio ar y botwm bach wrth pen chwith y ffenestr.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:193
+#: ../gui/docs/en/tips.cpp:166
 msgid ""
 "<p>...that you can select all notes of a particular pitch in the matrix "
 "view, by shift-clicking on that pitch on the piano keyboard at the left?  If "
@@ -523,7 +523,7 @@ msgstr ""
 "shift-glicio ar y traw yna ar y cyweirfwrdd piano wrth y chwith?  Os byddwch "
 "yn shift-glicio a tynnu, gallwch dewis amrediadau cyfan hefyd.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:198
+#: ../gui/docs/en/tips.cpp:170
 msgid ""
 "<p>...that you can set a loop in the main window by clicking-and-dragging on "
 "the time ruler with Shift pressed?  (If the ruler isn't visible, use "
@@ -533,7 +533,7 @@ msgstr ""
 "rhesydd amseriad wrth wasgu Shift?  (Os nad yw'r rhesydd yn weladwy, "
 "defnyddiwch <b>Gosodiadau -> Dangos Rhesyddion</b>.)</p>\n"
 
-#: ../gui/docs/en/tips.cpp:203
+#: ../gui/docs/en/tips.cpp:174
 #, fuzzy
 msgid ""
 "<p>...that if you're editing a section in the matrix or notation view, you "
@@ -548,7 +548,7 @@ msgstr ""
 "y rhan yna i ddolennu wrth i chi ei olygu?  Dewis y rhan a defnyddiwch "
 "<b>Symud -> Gosod Dolen i Ddewisiad</b>, ac wedyn gwthio Chwarae.</p>\n"
 
-#: ../gui/docs/en/tips.cpp:212
+#: ../gui/docs/en/tips.cpp:182
 msgid ""
 "<p>...if you have more than one note or controller event at the same time, "
 "you\n"
@@ -558,7 +558,7 @@ msgid ""
 "focus.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:220
+#: ../gui/docs/en/tips.cpp:189
 msgid ""
 "<p>The notation view shows you notes using their display duration, while "
 "the\n"
@@ -571,7 +571,7 @@ msgid ""
 "for years.  Sorry about that, folks.  Patches welcome.</i>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:230
+#: ../gui/docs/en/tips.cpp:198
 msgid ""
 "<p>If you're working with a human performance and you need to insert some "
 "new\n"
@@ -584,7 +584,7 @@ msgid ""
 "durations to something less mechanical.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:239
+#: ../gui/docs/en/tips.cpp:206
 msgid ""
 "<p>When exporting to LilyPond, you will see extra empty bars if the "
 "Rosegarden\n"
@@ -595,7 +595,7 @@ msgid ""
 "Bar</b> to the end of your notation.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:247
+#: ../gui/docs/en/tips.cpp:213
 msgid ""
 "<p>Rosegarden can now export certain things to LilyPond that it cannot yet\n"
 "display within its own native interface.  These new directives can be "
@@ -613,7 +613,7 @@ msgid ""
 "the notation view.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:262
+#: ../gui/docs/en/tips.cpp:227
 msgid ""
 "<p>Rosegarden now has track parameters to <b>Create segments with:</b> "
 "certain\n"
@@ -627,7 +627,7 @@ msgid ""
 "<i>These parameters do not apply to audio tracks.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:273
+#: ../gui/docs/en/tips.cpp:237
 msgid ""
 "<p>Rosegarden now has a database of preset parameters describing more than "
 "300\n"
@@ -642,7 +642,7 @@ msgid ""
 "Johansson for assembling this extraordinary database.)</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:285
+#: ../gui/docs/en/tips.cpp:248
 msgid ""
 "<p>You can export tracks that have the same name onto a single, merged staff "
 "in\n"
@@ -654,7 +654,14 @@ msgid ""
 "name</b> from the options dialog that appears when you export to, or "
 "preview\n"
 "with LilyPond.<br><br>\n"
-"<i>The tracks must have a non-default name for this to work.</i>\n"
+"<i>The tracks must have a non-default name for this to work.</i></p>\n"
+msgstr ""
+
+#: ../gui/docs/en/tips.cpp:258
+msgid ""
+"<p>You can use the mouse wheel to scroll up and down, or to scroll left and "
+"right (by holding the Alt key at the same time), or to zoom in and out (by "
+"holding the Control key).</p>\n"
 msgstr ""
 
 #: ../gui/styles/styles.cpp:1
@@ -755,54 +762,54 @@ msgstr "Newydd"
 msgid "Aliases"
 msgstr "Slaesau"
 
-#: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:111
+#: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:115
 msgid "Insert Tempo Change"
 msgstr "Mewnosod Newid Tempo"
 
-#: ../gui/temporuler.cpp:115
+#: ../gui/temporuler.cpp:119
 #, fuzzy
 msgid "Insert Tempo Change at Playback Position"
 msgstr "Mewnosod Newid Tempo"
 
-#: ../gui/temporuler.cpp:120
+#: ../gui/temporuler.cpp:126
 #, fuzzy
 msgid "Delete Tempo Change"
 msgstr "Mewnosod Newid Tempo"
 
-#: ../gui/temporuler.cpp:124
+#: ../gui/temporuler.cpp:132
 msgid "Ramp Tempo to Next Tempo"
 msgstr ""
 
-#: ../gui/temporuler.cpp:128
+#: ../gui/temporuler.cpp:136
 msgid "Un-Ramp Tempo"
 msgstr ""
 
-#: ../gui/temporuler.cpp:133
+#: ../gui/temporuler.cpp:143
 #, fuzzy
 msgid "Edit Tempo..."
 msgstr "Addasu Tempo Rhag&osodedig..."
 
-#: ../gui/temporuler.cpp:137
+#: ../gui/temporuler.cpp:147
 #, fuzzy
 msgid "Edit Time Signature..."
 msgstr "Arwydd Amseriad"
 
-#: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:141
+#: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:151
 #, fuzzy
 msgid "Open Tempo and Time Signature Editor"
 msgstr "Agor yn y Golygydd Digwyddiadau"
 
-#: ../gui/temporuler.cpp:565
+#: ../gui/temporuler.cpp:563
 #, fuzzy
 msgid "%1.%2%3 (%4.%5%6 bpm)"
 msgstr "%1.%2 s,"
 
-#: ../gui/temporuler.cpp:573
+#: ../gui/temporuler.cpp:571
 #, fuzzy
 msgid "%1.%2%3 bpm"
 msgstr "%1.%2 s,"
 
-#: ../gui/temporuler.cpp:581
+#: ../gui/temporuler.cpp:579
 #, fuzzy
 msgid "%1 - %2.%3%4"
 msgstr "&%1%2"
@@ -910,13 +917,13 @@ msgstr "Arwydd Amseriad"
 msgid "&Edit Item"
 msgstr "Golygu Digw&yddiad"
 
-#: ../gui/eventview.cpp:1247 ../gui/matrixview.cpp:658
+#: ../gui/eventview.cpp:1247 ../gui/matrixview.cpp:677
 #: ../gui/tempoview.cpp:643
 msgid "Select &All"
 msgstr "Dewis &Popeth"
 
-#: ../gui/eventview.cpp:1251 ../gui/matrixview.cpp:779
-#: ../gui/notationview.cpp:2064 ../gui/tempoview.cpp:647
+#: ../gui/eventview.cpp:1251 ../gui/matrixview.cpp:798
+#: ../gui/notationview.cpp:2086 ../gui/tempoview.cpp:647
 msgid "Clear Selection"
 msgstr "Gwaredu'r Dewisiad"
 
@@ -1562,7 +1569,7 @@ msgstr "Amseriad llwyr:"
 msgid "Duration:"
 msgstr "Parhad:"
 
-#: ../gui/dialogs.cpp:2179 ../gui/eventfilter.cpp:107 ../gui/widgets.cpp:1512
+#: ../gui/dialogs.cpp:2179 ../gui/eventfilter.cpp:107 ../gui/widgets.cpp:1478
 msgid "Pitch:"
 msgstr "Traw:"
 
@@ -1575,7 +1582,7 @@ msgstr "Enw'r rheolydd:"
 #: ../gui/dialogs.cpp:2648 ../gui/dialogs.cpp:2692 ../gui/dialogs.cpp:2725
 #: ../gui/markereditor.cpp:299 ../gui/mixer.cpp:372 ../gui/mixer.cpp:497
 #: ../gui/mixer.cpp:656 ../gui/mixer.cpp:692 ../gui/mixer.cpp:868
-#: ../gui/trackparameterbox.cpp:206 ../gui/triggermanager.cpp:324
+#: ../gui/trackparameterbox.cpp:224 ../gui/triggermanager.cpp:324
 msgid "<none>"
 msgstr "<dim>"
 
@@ -1729,7 +1736,7 @@ msgid "Save System Exclusive data to..."
 msgstr "Cyfyngedig i'r Cysawd"
 
 #: ../gui/dialogs.cpp:3146 ../gui/dialogs.cpp:3155 ../gui/dialogs.cpp:3170
-#: ../gui/dialogs.cpp:3179 ../gui/trackparameterbox.cpp:217
+#: ../gui/dialogs.cpp:3179 ../gui/trackparameterbox.cpp:235
 msgid "Clef"
 msgstr "Cleff"
 
@@ -1799,7 +1806,7 @@ msgstr "Bas"
 
 #: ../gui/dialogs.cpp:3338 ../gui/rosegardenconfigurationpage.cpp:725
 #: ../gui/rosegardenconfigurationpage.cpp:2062
-#: ../gui/segmentparameterbox.cpp:89
+#: ../gui/segmentparameterbox.cpp:92
 msgid "Quantize"
 msgstr "Cwanteiddio"
 
@@ -2037,7 +2044,7 @@ msgstr "Dyfais"
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:172
 #: ../gui/devicemanager.cpp:414 ../gui/devicemanager.cpp:426
 #: ../gui/dialogs.cpp:4329 ../gui/dialogs.cpp:4661
-#: ../gui/instrumentparameterbox.cpp:832
+#: ../gui/instrumentparameterbox.cpp:841
 msgid "No connection"
 msgstr "Dim cysylltiad"
 
@@ -2108,7 +2115,7 @@ msgstr "Faint mor fawr yn union yw'ch disg galed?"
 msgid "Recording beyond end of composition:  "
 msgstr "Amser recordio sain ar ol:"
 
-#: ../gui/dialogs.cpp:4622 rc.cpp:381
+#: ../gui/dialogs.cpp:4622 rc.cpp:255
 #, no-c-format
 msgid "Metronome"
 msgstr "Metronom"
@@ -2120,14 +2127,15 @@ msgstr "Gosod Offeryn"
 
 #: ../gui/bankeditor.cpp:2737 ../gui/deviceeditor.cpp:61
 #: ../gui/devicemanager.cpp:89 ../gui/devicemanager.cpp:141
-#: ../gui/dialogs.cpp:4641 ../gui/trackparameterbox.cpp:112
-#: ../gui/trackparameterbox.cpp:158
+#: ../gui/dialogs.cpp:4641 ../gui/trackparameterbox.cpp:128
+#: ../gui/trackparameterbox.cpp:175
 msgid "Device"
 msgstr "Dyfais"
 
 #: ../gui/bankeditor.cpp:2738 ../gui/dialogs.cpp:4670
-#: ../gui/instrumentparameterbox.cpp:72 ../gui/mixer.cpp:1801
-#: ../gui/presethandler.cpp:380 ../gui/trackparameterbox.cpp:121
+#: ../gui/instrumentparameterbox.cpp:73 ../gui/mixer.cpp:1801
+#: ../gui/presethandler.cpp:402 ../gui/segmentparameterbox.cpp:1207
+#: ../gui/trackparameterbox.cpp:137
 msgid "Instrument"
 msgstr "Offeryn"
 
@@ -2140,10 +2148,10 @@ msgstr "Curiad"
 msgid "Resolution"
 msgstr "Cydraniad"
 
-#: ../gui/dialogs.cpp:4684 ../gui/matrixview.cpp:2040
-#: ../gui/notationview.cpp:1250 ../gui/rosegardenconfigurationpage.cpp:550
-#: ../gui/rosegardenconfigurationpage.cpp:2194 ../gui/widgets.cpp:912
-#: ../gui/widgets.cpp:1085
+#: ../gui/dialogs.cpp:4684 ../gui/matrixview.cpp:2104
+#: ../gui/notationview.cpp:1272 ../gui/rosegardenconfigurationpage.cpp:550
+#: ../gui/rosegardenconfigurationpage.cpp:2194 ../gui/widgets.cpp:878
+#: ../gui/widgets.cpp:1051
 msgid "None"
 msgstr "Dim"
 
@@ -2327,7 +2335,7 @@ msgstr ""
 msgid "         (\"%1\")"
 msgstr ""
 
-#: ../gui/dialogs.cpp:5227 ../gui/notationviewslots.cpp:1655
+#: ../gui/dialogs.cpp:5227 ../gui/notationviewslots.cpp:1678
 #, fuzzy
 msgid "Make Ornament"
 msgstr "Enw'r arwydd"
@@ -2350,8 +2358,8 @@ msgstr "Enw:"
 msgid "Base pitch"
 msgstr "Traw'r cywair:"
 
-#: ../gui/dialogs.cpp:5257 ../gui/notationview.cpp:1287
-#: ../gui/notationviewslots.cpp:1693
+#: ../gui/dialogs.cpp:5257 ../gui/notationview.cpp:1309
+#: ../gui/notationviewslots.cpp:1716
 msgid "Use Ornament"
 msgstr ""
 
@@ -2445,7 +2453,7 @@ msgstr ""
 msgid "Adjust pitch to note"
 msgstr ""
 
-#: ../gui/dialogs.cpp:5460 ../gui/matrixview.cpp:2493
+#: ../gui/dialogs.cpp:5460 ../gui/matrixview.cpp:2569
 #, fuzzy
 msgid "Trigger Segment"
 msgstr "Dileu Cylchran"
@@ -2580,7 +2588,7 @@ msgstr "&Siglnod"
 msgid "Microsoft Code Page %1"
 msgstr ""
 
-#: ../gui/dialogs.cpp:5663
+#: ../gui/dialogs.cpp:5663 ../gui/matrixview.cpp:1439
 #, fuzzy
 msgid "%1 (%2)"
 msgstr "&%1%2"
@@ -2723,7 +2731,7 @@ msgid "ID"
 msgstr "I"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2056
-#: ../gui/segmentparameterbox.cpp:87 ../gui/triggermanager.cpp:148
+#: ../gui/segmentparameterbox.cpp:90 ../gui/triggermanager.cpp:148
 msgid "Label"
 msgstr "Labelu"
 
@@ -2795,8 +2803,8 @@ msgid ""
 "sure you want to remove it?"
 msgstr ""
 
-#: ../gui/eventview.cpp:960 ../gui/matrixview.cpp:1514
-#: ../gui/notationviewslots.cpp:510 ../gui/notationviewslots.cpp:558
+#: ../gui/eventview.cpp:960 ../gui/matrixview.cpp:1578
+#: ../gui/notationviewslots.cpp:533 ../gui/notationviewslots.cpp:581
 #: ../gui/rosegardengui.cpp:2403 ../gui/triggermanager.cpp:402
 msgid "Clipboard is empty"
 msgstr "Mae'r gludfwrdd yn wag"
@@ -3047,12 +3055,12 @@ msgstr "Mewnosod Saib"
 msgid "Cu&t"
 msgstr "To&rri"
 
-#: ../gui/editcommands.h:79 ../gui/notationview.cpp:1464
+#: ../gui/editcommands.h:79 ../gui/notationview.cpp:1486
 msgid "C&ut and Close"
 msgstr "To&rri a Cau"
 
-#: ../gui/editcommands.h:234 ../gui/matrixview.cpp:577
-#: ../gui/notationview.cpp:1434 ../gui/rosegardengui.cpp:749
+#: ../gui/editcommands.h:234 ../gui/matrixview.cpp:596
+#: ../gui/notationview.cpp:1456 ../gui/rosegardengui.cpp:749
 msgid "&Erase"
 msgstr "&Dileu"
 
@@ -3142,7 +3150,7 @@ msgid "Percussion Bank"
 msgstr "Trawiad"
 
 #: ../gui/bankeditor.cpp:87 ../gui/bankeditor.cpp:143
-#: ../gui/instrumentparameterbox.cpp:699
+#: ../gui/instrumentparameterbox.cpp:708
 msgid "Bank"
 msgstr "Rheng"
 
@@ -3184,8 +3192,8 @@ msgstr "Manylion Rheng a Rhaglen"
 msgid "Programs"
 msgstr "Rhaglen"
 
-#: ../gui/bankeditor.cpp:388 ../gui/instrumentparameterbox.cpp:703
-#: ../gui/matrixview.cpp:2548
+#: ../gui/bankeditor.cpp:388 ../gui/instrumentparameterbox.cpp:712
+#: ../gui/matrixview.cpp:2624
 msgid "Percussion"
 msgstr "Trawiad"
 
@@ -3406,7 +3414,7 @@ msgstr "Cyffredinol"
 msgid "General Configuration"
 msgstr "Ffurfweddiad Cyffredinol"
 
-#: ../gui/matrixview.cpp:2547 ../gui/rosegardenconfigurationpage.cpp:227
+#: ../gui/matrixview.cpp:2623 ../gui/rosegardenconfigurationpage.cpp:227
 #: ../gui/rosegardenconfigurationpage.h:289
 #: ../gui/rosegardenconfigurationpage.h:290
 msgid "Matrix"
@@ -3421,8 +3429,8 @@ msgid "Sequencer Latency"
 msgstr "Hwyrni Dilyniannydd"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2089
-#: ../gui/rosegardenconfigurationpage.h:382 ../gui/trackparameterbox.cpp:433
-#: ../gui/trackparameterbox.cpp:434
+#: ../gui/rosegardenconfigurationpage.h:382 ../gui/trackparameterbox.cpp:454
+#: ../gui/trackparameterbox.cpp:455
 msgid "Audio"
 msgstr "Sain"
 
@@ -3431,7 +3439,7 @@ msgid "Audio Settings"
 msgstr "Gosodiadau Sain"
 
 #: ../gui/colourwidgets.cpp:47 ../gui/rosegardenconfigurationpage.h:425
-#: ../gui/segmentparameterbox.cpp:92 ../gui/trackparameterbox.cpp:252
+#: ../gui/segmentparameterbox.cpp:95 ../gui/trackparameterbox.cpp:276
 msgid "Color"
 msgstr "Lliw"
 
@@ -3463,7 +3471,7 @@ msgstr "Cysylltiad"
 
 #: ../gui/devicemanager.cpp:99 ../gui/devicemanager.cpp:152
 #: ../gui/rosegardenconfigurationpage.cpp:2505
-#: ../gui/segmentparameterbox.cpp:987 ../gui/trackparameterbox.cpp:776
+#: ../gui/segmentparameterbox.cpp:990 ../gui/trackparameterbox.cpp:797
 msgid "New"
 msgstr "Newydd"
 
@@ -3594,162 +3602,6 @@ msgstr "Cyfyngedig i'r Cysawd"
 #: ../gui/midifilter.cpp:82
 msgid "RECORD events to ignore"
 msgstr "Digwyddiadau RECORD i anwybyddu"
-
-#: ../gui/widgets.cpp:142 ../gui/widgets.cpp:147 ../gui/widgets.cpp:169
-msgid "Processing..."
-msgstr "Prosesu..."
-
-#: ../gui/widgets.cpp:414
-msgid ""
-"Click and drag up and down or left and right to modify.\n"
-"Double click to edit value directly."
-msgstr ""
-
-#: ../gui/widgets.cpp:724
-#, fuzzy
-msgid "Select a new value"
-msgstr "Dileu'r priodwedd yma"
-
-#: ../gui/widgets.cpp:725
-#, fuzzy
-msgid "Enter a new value"
-msgstr "Mewnosod enw newydd"
-
-#: ../gui/widgets.cpp:865
-#, fuzzy
-msgid "Quantizer"
-msgstr "Cwanteiddio"
-
-#: ../gui/widgets.cpp:871
-#, fuzzy
-msgid "Quantizer type:"
-msgstr "Math y Cwanteiddydd"
-
-#: ../gui/widgets.cpp:873
-msgid "Grid quantizer"
-msgstr "Cwanteiddydd Rhwydell"
-
-#: ../gui/widgets.cpp:874
-#, fuzzy
-msgid "Legato quantizer"
-msgstr "Cwanteiddydd Rhwydell"
-
-#: ../gui/widgets.cpp:875
-msgid "Heuristic notation quantizer"
-msgstr "Cwanteiddydd nodiant darganfyddol"
-
-#: ../gui/widgets.cpp:879
-msgid "Quantize for notation only (leave performance unchanged)"
-msgstr "Cwanteiddio am nodiant yn unig (dim newid i'r perfformiad)"
-
-#: ../gui/widgets.cpp:888
-msgid "Notation parameters"
-msgstr "Paramedrau Nodiant"
-
-#: ../gui/widgets.cpp:893 ../gui/widgets.cpp:934
-msgid "Base grid unit:"
-msgstr "Uned rhwydell sail:"
-
-#: ../gui/widgets.cpp:898
-msgid "Complexity:"
-msgstr "Cymhlethder:"
-
-#: ../gui/widgets.cpp:902
-msgid "Very high"
-msgstr "Uchel iawn"
-
-#: ../gui/widgets.cpp:903
-msgid "High"
-msgstr "Uchel"
-
-#: ../gui/widgets.cpp:904
-msgid "Normal"
-msgstr "Arferol"
-
-#: ../gui/widgets.cpp:905
-msgid "Low"
-msgstr "Isel"
-
-#: ../gui/widgets.cpp:906
-msgid "Very low"
-msgstr "Isel iawn"
-
-#: ../gui/widgets.cpp:909
-msgid "Tuplet level:"
-msgstr "Safon plygyn:"
-
-#: ../gui/widgets.cpp:913
-msgid "2-in-the-time-of-3"
-msgstr "2-yn-amseriad-3"
-
-#: ../gui/widgets.cpp:914
-msgid "Triplet"
-msgstr "Tripled"
-
-#: ../gui/widgets.cpp:922
-msgid "Any"
-msgstr "Unrhyw"
-
-#: ../gui/widgets.cpp:925
-#, fuzzy
-msgid "Permit counterpoint"
-msgstr "Gwaredu gwrthpwynt"
-
-#: ../gui/widgets.cpp:929
-msgid "Grid parameters"
-msgstr "Paramedrau Rhwydell"
-
-#: ../gui/widgets.cpp:938
-msgid "Swing:"
-msgstr ""
-
-#: ../gui/widgets.cpp:943
-msgid "Iterative amount:"
-msgstr ""
-
-#: ../gui/widgets.cpp:949
-msgid "Quantize durations as well as start times"
-msgstr "Cwanteiddio parhadau wrth ymyl amserau dechrau"
-
-#: ../gui/widgets.cpp:953
-msgid "After quantization"
-msgstr "Ar ol cwanteiddio"
-
-#: ../gui/widgets.cpp:967
-#, fuzzy
-msgid "Show advanced options"
-msgstr "Dangos &Anodiadau"
-
-#: ../gui/widgets.cpp:976
-msgid "Re-beam"
-msgstr "Ail-drawstio"
-
-#: ../gui/widgets.cpp:978
-msgid "Add articulations (staccato, tenuto, slurs)"
-msgstr "Ychwanegu seiniadau (staccato, tenuto, llithriadau)"
-
-#: ../gui/widgets.cpp:979
-msgid "Tie notes at barlines etc"
-msgstr "Clymu nodau wrth linellau bar ayyb"
-
-#: ../gui/widgets.cpp:980
-msgid "Split-and-tie overlapping chords"
-msgstr "Hollti-a-clymu cordiau sy'n croesi"
-
-#: ../gui/widgets.cpp:1091
-#, fuzzy
-msgid "Full quantize"
-msgstr "Cwanteiddydd Rhwydell"
-
-#: ../gui/widgets.cpp:1234
-#, fuzzy
-msgid "Show Advanced Options"
-msgstr "Dangos &Anodiadau"
-
-#: ../gui/widgets.cpp:1238
-#, fuzzy
-msgid "Hide Advanced Options"
-msgstr "Anodiadau cudd"
 
 #: ../gui/editviewbase.cpp:212 ../gui/rosegardengui.cpp:852
 msgid "Open in Matri&x Editor"
@@ -3988,15 +3840,15 @@ msgstr ""
 msgid "(%1.%2 bpm)"
 msgstr "%1.%2 s,"
 
-#: ../gui/trackeditor.cpp:600
+#: ../gui/trackeditor.cpp:632
 msgid "Turn Repeating Segment into Real Copies"
 msgstr "Trosi Cylchran wedi ei Ailadrodd i mewn i Copiau go Iawn"
 
-#: ../gui/trackeditor.cpp:602
+#: ../gui/trackeditor.cpp:634
 msgid "Turn Repeating Segments into Real Copies"
 msgstr "Trosi Cylchrannau wedi ei Ailadrodd i mewn i Copiau go Iawn"
 
-#: ../gui/trackeditor.cpp:768
+#: ../gui/trackeditor.cpp:800
 msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
@@ -4035,37 +3887,37 @@ msgstr "Trosi erwydd %1..."
 msgid "Positioning staff %1..."
 msgstr "Lleoli erwydd %1..."
 
-#: ../gui/notationstaff.cpp:1195 ../gui/notationviewslots.cpp:1804
+#: ../gui/notationstaff.cpp:1195 ../gui/notationviewslots.cpp:1827
 msgid "Sustain"
 msgstr ""
 
-#: ../gui/matrixview.cpp:716 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1681
-#: ../gui/notationview.cpp:2001 ../gui/rosegardengui.cpp:1084
+#: ../gui/matrixview.cpp:735 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1681
+#: ../gui/notationview.cpp:2023 ../gui/rosegardengui.cpp:1084
 msgid "&Play"
 msgstr "&Chwarae"
 
-#: ../gui/matrixview.cpp:721 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1686
-#: ../gui/notationview.cpp:2006 ../gui/rosegardengui.cpp:1091
+#: ../gui/matrixview.cpp:740 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1686
+#: ../gui/notationview.cpp:2028 ../gui/rosegardengui.cpp:1091
 msgid "&Stop"
 msgstr "&Aros"
 
-#: ../gui/matrixview.cpp:726 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1691
-#: ../gui/notationview.cpp:2011 ../gui/rosegardengui.cpp:1106
+#: ../gui/matrixview.cpp:745 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1691
+#: ../gui/notationview.cpp:2033 ../gui/rosegardengui.cpp:1106
 msgid "Re&wind"
 msgstr "Ail-&ddirwyn"
 
-#: ../gui/matrixview.cpp:732 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1697
-#: ../gui/notationview.cpp:2017 ../gui/rosegardengui.cpp:1098
+#: ../gui/matrixview.cpp:751 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1697
+#: ../gui/notationview.cpp:2039 ../gui/rosegardengui.cpp:1098
 msgid "&Fast Forward"
 msgstr "&Brys Ymlaen "
 
-#: ../gui/matrixview.cpp:738 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1703
-#: ../gui/notationview.cpp:2023 ../gui/rosegardengui.cpp:1127
+#: ../gui/matrixview.cpp:757 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1703
+#: ../gui/notationview.cpp:2045 ../gui/rosegardengui.cpp:1127
 msgid "Rewind to &Beginning"
 msgstr "Ail-ddirwyn i'r &Dechrau"
 
-#: ../gui/matrixview.cpp:744 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1709
-#: ../gui/notationview.cpp:2029 ../gui/rosegardengui.cpp:1134
+#: ../gui/matrixview.cpp:763 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1709
+#: ../gui/notationview.cpp:2051 ../gui/rosegardengui.cpp:1134
 msgid "Fast Forward to &End"
 msgstr "Brys Ymlaen i'r Diw&edd"
 
@@ -4073,8 +3925,8 @@ msgstr "Brys Ymlaen i'r Diw&edd"
 msgid "&Record"
 msgstr "&Recordio"
 
-#: ../gui/matrixview.cpp:768 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
-#: ../gui/notationview.cpp:2053 ../gui/rosegardengui.cpp:1147
+#: ../gui/matrixview.cpp:787 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
+#: ../gui/notationview.cpp:2075 ../gui/rosegardengui.cpp:1147
 #, fuzzy
 msgid "Panic"
 msgstr "Tremio"
@@ -4154,7 +4006,7 @@ msgstr ""
 msgid "Mute"
 msgstr ""
 
-#: ../gui/mixer.cpp:358 rc.cpp:417
+#: ../gui/mixer.cpp:358 rc.cpp:280
 #, no-c-format
 msgid "Solo"
 msgstr "Unawd"
@@ -4195,8 +4047,8 @@ msgstr "Ychwanegu Ffeil Sain"
 msgid "Master"
 msgstr "Meistr MMC"
 
-#: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:363
-#: ../gui/instrumentparameterbox.cpp:599 ../gui/mixer.cpp:657
+#: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:372
+#: ../gui/instrumentparameterbox.cpp:608 ../gui/mixer.cpp:657
 #: ../gui/mixer.cpp:693 ../gui/mixer.cpp:869 ../gui/studiowidgets.cpp:992
 msgid "<no plugin>"
 msgstr "<dim ategyn>"
@@ -4284,7 +4136,7 @@ msgstr "Disgrifiad:"
 msgid " Triplet Chord"
 msgstr "Cord Tripled"
 
-#: ../gui/matrixview.cpp:2766 ../gui/notationviewslots.cpp:81
+#: ../gui/matrixview.cpp:2842 ../gui/notationviewslots.cpp:81
 msgid " Chord"
 msgstr "Cord"
 
@@ -4325,29 +4177,29 @@ msgstr "Maint ffont anhysbys %1"
 msgid "Unknown font size action %1"
 msgstr "Gweithrediad maint ffont anhysbys %1"
 
-#: ../gui/notationviewslots.cpp:423 ../gui/rosegardengui.cpp:2342
+#: ../gui/notationviewslots.cpp:446 ../gui/rosegardengui.cpp:2342
 msgid "Printing..."
 msgstr "Argraffu..."
 
-#: ../gui/notationviewslots.cpp:440 ../gui/rosegardengui.cpp:2354
+#: ../gui/notationviewslots.cpp:463 ../gui/rosegardengui.cpp:2354
 msgid "Previewing..."
 msgstr "Rhagolygu..."
 
-#: ../gui/matrixview.cpp:1494 ../gui/notationviewslots.cpp:461
-#: ../gui/notationviewslots.cpp:487
+#: ../gui/matrixview.cpp:1558 ../gui/notationviewslots.cpp:484
+#: ../gui/notationviewslots.cpp:510
 msgid "Cutting selection to clipboard..."
 msgstr "Torri'r dewisiad i'r gludfwrdd... "
 
-#: ../gui/matrixview.cpp:1534 ../gui/notationviewslots.cpp:470
+#: ../gui/matrixview.cpp:1598 ../gui/notationviewslots.cpp:493
 msgid "Deleting selection..."
 msgstr "Dileu'r dewisiad..."
 
-#: ../gui/matrixview.cpp:1503 ../gui/notationviewslots.cpp:478
+#: ../gui/matrixview.cpp:1567 ../gui/notationviewslots.cpp:501
 #: ../gui/rosegardengui.cpp:2393
 msgid "Copying selection to clipboard..."
 msgstr "Copio'r dewisiad i'r gludfwrdd..."
 
-#: ../gui/notationviewslots.cpp:494
+#: ../gui/notationviewslots.cpp:517
 msgid ""
 "The Restricted paste type requires enough empty\n"
 "space (containing only rests) at the paste position\n"
@@ -4369,310 +4221,309 @@ msgstr ""
 "rhagosodedig i rhwybeth arall yn lle Cyfyngedig\n"
 "os hoffech chi."
 
-#: ../gui/notationviewslots.cpp:514
+#: ../gui/notationviewslots.cpp:537
 msgid "Can't paste multiple Segments into one"
 msgstr "Methu gludo Cylchrannau lluosol i mewn i un"
 
-#: ../gui/eventview.cpp:964 ../gui/matrixview.cpp:1518
-#: ../gui/notationviewslots.cpp:518 ../gui/notationviewslots.cpp:562
+#: ../gui/eventview.cpp:964 ../gui/matrixview.cpp:1582
+#: ../gui/notationviewslots.cpp:541 ../gui/notationviewslots.cpp:585
 #: ../gui/rosegardengui.cpp:2406
 msgid "Inserting clipboard contents..."
 msgstr "Mewnosod cynnyws y gludfwrdd..."
 
-#: ../gui/notationviewslots.cpp:542 ../gui/notationviewslots.cpp:594
+#: ../gui/notationviewslots.cpp:565 ../gui/notationviewslots.cpp:617
 msgid "Couldn't paste at this point."
 msgstr "Methu gludo wrth y fan yma."
 
-#: ../gui/notationviewslots.cpp:696
+#: ../gui/notationviewslots.cpp:719
 #, fuzzy
 msgid "Pushing selection left..."
 msgstr "Torri'r dewisiad..."
 
-#: ../gui/notationviewslots.cpp:706
+#: ../gui/notationviewslots.cpp:729
 #, fuzzy
 msgid "Pushing selection right..."
 msgstr "Torri'r dewisiad..."
 
-#: ../gui/notationviewslots.cpp:716
+#: ../gui/notationviewslots.cpp:739
 #, fuzzy
 msgid "Pushing selection up..."
 msgstr "Torri'r dewisiad..."
 
-#: ../gui/notationviewslots.cpp:726
+#: ../gui/notationviewslots.cpp:749
 #, fuzzy
 msgid "Pushing selection down..."
 msgstr "Torri'r dewisiad..."
 
-#: ../gui/notationviewslots.cpp:736
+#: ../gui/notationviewslots.cpp:759
 #, fuzzy
 msgid "Restoring computed positions..."
 msgstr "Adfer cyfeiriadau coesau a gyfrifwyd..."
 
-#: ../gui/notationviewslots.cpp:744
+#: ../gui/notationviewslots.cpp:767
 #, fuzzy
 msgid "Making visible..."
 msgstr "Gwneud nodau yn ddichonol"
 
-#: ../gui/notationviewslots.cpp:752
+#: ../gui/notationviewslots.cpp:775
 #, fuzzy
 msgid "Making invisible..."
 msgstr "Gwneud nodau yn ddichonol"
 
-#: ../gui/notationviewslots.cpp:842
+#: ../gui/notationviewslots.cpp:865
 msgid "Beaming group..."
 msgstr "Trawstio'r casgliad..."
 
-#: ../gui/notationviewslots.cpp:851
+#: ../gui/notationviewslots.cpp:874
 msgid "Auto-beaming selection..."
 msgstr "Hunan-drawstio'r dewisiad..."
 
-#: ../gui/notationviewslots.cpp:860
+#: ../gui/notationviewslots.cpp:883
 msgid "Breaking groups..."
 msgstr "Torri casgliadau..."
 
-#: ../gui/notationviewslots.cpp:945
+#: ../gui/notationviewslots.cpp:968
 msgid "Untupleting..."
 msgstr "Dad-wneud plygyn..."
 
-#: ../gui/notationviewslots.cpp:954
+#: ../gui/notationviewslots.cpp:977
 msgid "Making grace notes..."
 msgstr "Gwneud addurnodau..."
 
-#: ../gui/notationviewslots.cpp:962
+#: ../gui/notationviewslots.cpp:985
 msgid "Making non-grace notes..."
 msgstr "Gwneud nodau sydd ddim yn addurnodau..."
 
-#: ../gui/notationviewslots.cpp:974
+#: ../gui/notationviewslots.cpp:997
 msgid "Adding slur..."
 msgstr "Ychwanegu llithriad..."
 
-#: ../gui/notationviewslots.cpp:975
+#: ../gui/notationviewslots.cpp:998
 msgid "slur"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:980
+#: ../gui/notationviewslots.cpp:1003
 #, fuzzy
 msgid "Adding phrasing slur..."
 msgstr "Ychwanegu llithriad..."
 
-#: ../gui/notationviewslots.cpp:981
+#: ../gui/notationviewslots.cpp:1004
 msgid "phrasing slur"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:986
+#: ../gui/notationviewslots.cpp:1009
 #, fuzzy
 msgid "Adding glissando..."
 msgstr "Ychwanegu crescendo..."
 
-#: ../gui/notationviewslots.cpp:987
+#: ../gui/notationviewslots.cpp:1010
 #, fuzzy
 msgid "glissando"
 msgstr "Ychwanegu crescendo..."
 
-#: ../gui/notationviewslots.cpp:992
+#: ../gui/notationviewslots.cpp:1015
 msgid "Adding crescendo..."
 msgstr "Ychwanegu crescendo..."
 
-#: ../gui/notationviewslots.cpp:993 ../gui/notationviewslots.cpp:999
+#: ../gui/notationviewslots.cpp:1016 ../gui/notationviewslots.cpp:1022
 #, fuzzy
 msgid "dynamic"
 msgstr "Dinamig"
 
-#: ../gui/notationviewslots.cpp:998
+#: ../gui/notationviewslots.cpp:1021
 msgid "Adding decrescendo..."
 msgstr "Ychwanegu decrescendo..."
 
-#: ../gui/notationviewslots.cpp:1004 ../gui/notationviewslots.cpp:1010
-#: ../gui/notationviewslots.cpp:1016 ../gui/notationviewslots.cpp:1022
+#: ../gui/notationviewslots.cpp:1027 ../gui/notationviewslots.cpp:1033
+#: ../gui/notationviewslots.cpp:1039 ../gui/notationviewslots.cpp:1045
 #, fuzzy
 msgid "Adding octave..."
 msgstr "Ychwanegu crescendo..."
 
-#: ../gui/notationviewslots.cpp:1005 ../gui/notationviewslots.cpp:1011
-#: ../gui/notationviewslots.cpp:1017 ../gui/notationviewslots.cpp:1023
+#: ../gui/notationviewslots.cpp:1028 ../gui/notationviewslots.cpp:1034
+#: ../gui/notationviewslots.cpp:1040 ../gui/notationviewslots.cpp:1046
 msgid "ottava"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1038
+#: ../gui/notationviewslots.cpp:1061
 msgid "Can't add overlapping %1 indications"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1046
+#: ../gui/notationviewslots.cpp:1069
 #, fuzzy
 msgid "Making chord..."
 msgstr "Gwneud addurnodau..."
 
-#: ../gui/notationviewslots.cpp:1062
+#: ../gui/notationviewslots.cpp:1085
 msgid "Normalizing rests..."
 msgstr "Normaleiddio seibiau"
 
-#: ../gui/notationviewslots.cpp:1071
+#: ../gui/notationviewslots.cpp:1094
 msgid "Collapsing rests..."
 msgstr "Dat-ehangu seibiau..."
 
-#: ../gui/matrixview.cpp:1248 ../gui/notationviewslots.cpp:1080
+#: ../gui/matrixview.cpp:1267 ../gui/notationviewslots.cpp:1103
 msgid "Collapsing notes..."
 msgstr "Dat-ehangu nodau..."
 
-#: ../gui/notationviewslots.cpp:1089
+#: ../gui/notationviewslots.cpp:1112
 msgid "Tying notes..."
 msgstr "Clymu nodau..."
 
-#: ../gui/notationviewslots.cpp:1098
+#: ../gui/notationviewslots.cpp:1121
 msgid "Untying notes..."
 msgstr "Dad-glymu nodau..."
 
-#: ../gui/notationviewslots.cpp:1107
+#: ../gui/notationviewslots.cpp:1130
 msgid "Making notes viable..."
 msgstr "Gwneud nodau yn ddichonol"
 
-#: ../gui/notationviewslots.cpp:1116
+#: ../gui/notationviewslots.cpp:1139
 msgid "Removing counterpoint..."
 msgstr "Gwaredu gwrthpwynt"
 
-#: ../gui/notationviewslots.cpp:1125
+#: ../gui/notationviewslots.cpp:1148
 msgid "Pointing stems up..."
 msgstr "Pwyntio coesau i fyny..."
 
-#: ../gui/notationviewslots.cpp:1134
+#: ../gui/notationviewslots.cpp:1157
 msgid "Pointing stems down..."
 msgstr "Pwyntio coesau i lawr..."
 
-#: ../gui/notationviewslots.cpp:1144
+#: ../gui/notationviewslots.cpp:1167
 msgid "Restoring computed stem directions..."
 msgstr "Adfer cyfeiriadau coesau a gyfrifwyd..."
 
-#: ../gui/notationviewslots.cpp:1153 ../gui/notationviewslots.cpp:1162
+#: ../gui/notationviewslots.cpp:1176 ../gui/notationviewslots.cpp:1185
 #, fuzzy
 msgid "Positioning slurs..."
 msgstr "Lleoli erwydd %1..."
 
-#: ../gui/notationviewslots.cpp:1172
+#: ../gui/notationviewslots.cpp:1195
 #, fuzzy
 msgid "Restoring slur positions..."
 msgstr "Adfer cyfeiriadau coesau a gyfrifwyd..."
 
-#: ../gui/notationviewslots.cpp:1181
+#: ../gui/notationviewslots.cpp:1204
 msgid "Fixing notation quantization..."
 msgstr "Trwsio cwanteiddio'r nodiant..."
 
-#: ../gui/notationviewslots.cpp:1190
+#: ../gui/notationviewslots.cpp:1213
 #, fuzzy
 msgid "Removing notation quantization..."
 msgstr "Trwsio cwanteiddio'r nodiant..."
 
-#: ../gui/notationviewslots.cpp:1206
+#: ../gui/notationviewslots.cpp:1229
 msgid "Changing to %1 style..."
 msgstr "Newid i arddull %1..."
 
-#: ../gui/notationviewslots.cpp:1214
+#: ../gui/notationviewslots.cpp:1237
 #, c-format
 msgid "Unknown style action %1"
 msgstr "Gweithrediad arddull anhysbys %1"
 
-#: ../gui/notationviewslots.cpp:1227 ../gui/notationviewslots.cpp:1268
-#: ../gui/notationviewslots.cpp:1324
+#: ../gui/notationviewslots.cpp:1250 ../gui/notationviewslots.cpp:1291
+#: ../gui/notationviewslots.cpp:1347
 msgid "No note duration selected"
 msgstr "Dim parhad nodau wedi'i ddewis"
 
-#: ../gui/matrixview.cpp:1717 ../gui/notationviewslots.cpp:1246
+#: ../gui/matrixview.cpp:1781 ../gui/notationviewslots.cpp:1269
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "Gweithrediad anhysbys %1 wrth fewnosod nodyn"
 
-#: ../gui/matrixview.cpp:1721 ../gui/matrixview.cpp:2689
-#: ../gui/notationviewslots.cpp:1250
+#: ../gui/matrixview.cpp:1785 ../gui/matrixview.cpp:2765
+#: ../gui/notationviewslots.cpp:1273
 msgid "Inserting note"
 msgstr "Mewnosod nodyn"
 
-#: ../gui/notationviewslots.cpp:1289
+#: ../gui/notationviewslots.cpp:1312
 msgid "No rest duration selected"
 msgstr "Dim parhad saib wedi'i ddewis"
 
-#: ../gui/notationviewslots.cpp:1373
+#: ../gui/notationviewslots.cpp:1396
 #, fuzzy
 msgid "No note or rest duration selected"
 msgstr "Dim parhad saib wedi'i ddewis"
 
-#: ../gui/notationviewslots.cpp:1383 ../gui/notationviewslots.cpp:1393
-#: ../gui/notationviewslots.cpp:1403 ../gui/notationviewslots.cpp:1413
-#: ../gui/notationviewslots.cpp:1423 ../gui/notationviewslots.cpp:1433
-#: ../gui/notationviewslots.cpp:1443
+#: ../gui/notationviewslots.cpp:1406 ../gui/notationviewslots.cpp:1416
+#: ../gui/notationviewslots.cpp:1426 ../gui/notationviewslots.cpp:1436
+#: ../gui/notationviewslots.cpp:1446 ../gui/notationviewslots.cpp:1456
+#: ../gui/notationviewslots.cpp:1466
 msgid "Forcing accidentals..."
 msgstr "Gorfod hapnodau..."
 
-#: ../gui/notationviewslots.cpp:1453
+#: ../gui/notationviewslots.cpp:1476
 msgid "Restoring accidentals..."
 msgstr "Adfer hapnodau..."
 
-#: ../gui/notationviewslots.cpp:1463
+#: ../gui/notationviewslots.cpp:1486
 #, fuzzy
 msgid "Showing cautionary accidentals..."
 msgstr "Gorfod hapnodau..."
 
-#: ../gui/notationviewslots.cpp:1472
+#: ../gui/notationviewslots.cpp:1495
 #, fuzzy
 msgid "Cancelling cautionary accidentals..."
 msgstr "Gorfod hapnodau..."
 
-#: ../gui/matrixview.cpp:1226 ../gui/matrixview.cpp:1239
-#: ../gui/matrixview.cpp:1969 ../gui/notationviewslots.cpp:1486
+#: ../gui/matrixview.cpp:1245 ../gui/matrixview.cpp:1258
+#: ../gui/matrixview.cpp:2033 ../gui/notationviewslots.cpp:1509
 msgid "Quantizing..."
 msgstr "Cwanteiddio..."
 
-#: ../gui/notationviewslots.cpp:1500
+#: ../gui/notationviewslots.cpp:1523
 msgid "Interpreting selection..."
 msgstr "Dehongli dewisiad..."
 
-#: ../gui/notationviewslots.cpp:1511
+#: ../gui/notationviewslots.cpp:1534
 #, fuzzy
 msgid "Setting note durations..."
 msgstr "Gosod &Tempo i Barhad Cylchran Sain"
 
-#: ../gui/notationviewslots.cpp:1518 ../gui/notationviewslots.cpp:1525
+#: ../gui/notationviewslots.cpp:1541 ../gui/notationviewslots.cpp:1548
 #, fuzzy
 msgid "Adding dot..."
 msgstr "Ychwanegu crescendo..."
 
-#: ../gui/notationviewslots.cpp:1547
+#: ../gui/notationviewslots.cpp:1570
 msgid "Text: "
 msgstr "Testun:"
 
-#: ../gui/notationviewslots.cpp:1561
+#: ../gui/notationviewslots.cpp:1584
 msgid "Fingering: "
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1644
+#: ../gui/notationviewslots.cpp:1667
 msgid "Ornament track %1 bar %2"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1646
+#: ../gui/notationviewslots.cpp:1669
 #, fuzzy, c-format
 msgid "Ornament bar %1"
 msgstr "Cylch&rannau"
 
-#: ../gui/notationviewslots.cpp:1702
+#: ../gui/notationviewslots.cpp:1725
 #, fuzzy
 msgid "Remove Ornaments"
 msgstr "&Gwaredu Pob Arwydd"
 
-#: ../gui/notationviewslots.cpp:1750
+#: ../gui/notationviewslots.cpp:1773
 msgid "Estimated key signature shown"
 msgstr "Dangos arwydd cywair wedi'i amcangyfrif"
 
-#: ../gui/notationviewslots.cpp:1820
+#: ../gui/notationviewslots.cpp:1843
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
 "dialog in the main window."
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:2706
-#, c-format
-msgid "Time: %1"
-msgstr "Amser: %1"
+#: ../gui/matrixview.cpp:1479 ../gui/notationviewslots.cpp:2736
+msgid "Time: %1 (%2.%3s)"
+msgstr "Amser: %1 (%2.%3s)"
 
-#: ../gui/notationviewslots.cpp:2743
+#: ../gui/notationviewslots.cpp:2779
 #, fuzzy
 msgid "Can't insert note: No note duration selected"
 msgstr "Dim parhad nodau wedi'i ddewis"
@@ -4710,7 +4561,7 @@ msgstr ""
 msgid "Sub %1 L"
 msgstr ""
 
-#: ../gui/instrumentparameterbox.cpp:360 ../gui/instrumentparameterbox.cpp:595
+#: ../gui/instrumentparameterbox.cpp:369 ../gui/instrumentparameterbox.cpp:604
 #: ../gui/studiowidgets.cpp:1003
 #, fuzzy
 msgid "<no synth>"
@@ -4758,83 +4609,93 @@ msgstr ""
 msgid "Out:"
 msgstr ""
 
-#: ../gui/matrixtool.cpp:173 ../gui/matrixtool.cpp:416
-#: ../gui/matrixtool.cpp:952 ../gui/matrixtool.cpp:1296
+#: ../gui/matrixtool.cpp:174 ../gui/matrixtool.cpp:417
+#: ../gui/matrixtool.cpp:953 ../gui/matrixtool.cpp:1322
 #: ../gui/notationtool.cpp:215 ../gui/notationtool.cpp:774
 #: ../gui/notationtool.cpp:862 ../gui/notationtool.cpp:943
 #: ../gui/notationtool.cpp:1074 ../gui/notationtool.cpp:1946
 msgid "Switch to Select Tool"
 msgstr "Newid i Erfyn Dewis"
 
-#: ../gui/matrixtool.cpp:177 ../gui/matrixtool.cpp:486
-#: ../gui/matrixtool.cpp:960 ../gui/matrixtool.cpp:1304
+#: ../gui/matrixtool.cpp:178 ../gui/matrixtool.cpp:487
+#: ../gui/matrixtool.cpp:961 ../gui/matrixtool.cpp:1330
 #: ../gui/notationtool.cpp:219 ../gui/notationtool.cpp:778
 #: ../gui/notationtool.cpp:866 ../gui/notationtool.cpp:947
 #: ../gui/notationtool.cpp:1144 ../gui/notationtool.cpp:1950
 msgid "Switch to Erase Tool"
 msgstr "Newid i Erfyn Dileu"
 
-#: ../gui/matrixtool.cpp:181 ../gui/matrixtool.cpp:424
-#: ../gui/matrixtool.cpp:490 ../gui/matrixtool.cpp:1308
+#: ../gui/matrixtool.cpp:182 ../gui/matrixtool.cpp:425
+#: ../gui/matrixtool.cpp:491 ../gui/matrixtool.cpp:1334
 #, fuzzy
 msgid "Switch to Move Tool"
 msgstr "Newid i Erfyn Dileu"
 
-#: ../gui/matrixtool.cpp:187 ../gui/matrixtool.cpp:430
-#: ../gui/matrixtool.cpp:498 ../gui/matrixtool.cpp:966
+#: ../gui/matrixtool.cpp:188 ../gui/matrixtool.cpp:431
+#: ../gui/matrixtool.cpp:499 ../gui/matrixtool.cpp:967
 #, fuzzy
 msgid "Switch to Resize Tool"
 msgstr "Newid i Erfyn Dileu"
 
-#: ../gui/matrixtool.cpp:191 ../gui/matrixtool.cpp:434
-#: ../gui/matrixtool.cpp:502 ../gui/matrixtool.cpp:970
-#: ../gui/matrixtool.cpp:1312
+#: ../gui/matrixtool.cpp:192 ../gui/matrixtool.cpp:435
+#: ../gui/matrixtool.cpp:503 ../gui/matrixtool.cpp:971
+#: ../gui/matrixtool.cpp:1338
 msgid "Half Speed"
 msgstr ""
 
-#: ../gui/matrixtool.cpp:195 ../gui/matrixtool.cpp:438
-#: ../gui/matrixtool.cpp:506 ../gui/matrixtool.cpp:974
-#: ../gui/matrixtool.cpp:1316
+#: ../gui/matrixtool.cpp:196 ../gui/matrixtool.cpp:439
+#: ../gui/matrixtool.cpp:507 ../gui/matrixtool.cpp:975
+#: ../gui/matrixtool.cpp:1342
 #, fuzzy
 msgid "Double Speed"
 msgstr "Llon &Dwbl"
 
-#: ../gui/matrixtool.cpp:420 ../gui/matrixtool.cpp:482
-#: ../gui/matrixtool.cpp:956 ../gui/matrixtool.cpp:1300
+#: ../gui/matrixtool.cpp:421 ../gui/matrixtool.cpp:483
+#: ../gui/matrixtool.cpp:957 ../gui/matrixtool.cpp:1326
 #, fuzzy
 msgid "Switch to Draw Tool"
 msgstr "Newid i Erfyn Dileu"
 
-#: ../gui/matrixtool.cpp:1207
+#: ../gui/matrixtool.cpp:1208
 msgid "Move Event"
 msgstr "Symud Digwyddiad"
 
-#: ../gui/matrixtool.cpp:1210
+#: ../gui/matrixtool.cpp:1211
 msgid "Move Events"
 msgstr "Symud Digwyddiadau"
 
-#: ../gui/matrixtool.cpp:1432
+#: ../gui/matrixtool.cpp:1461
 msgid "Resize Event"
 msgstr "Ail-feintio Digwyddiad"
 
-#: ../gui/matrixtool.cpp:1435
+#: ../gui/matrixtool.cpp:1464
 msgid "Resize Events"
 msgstr "Ail-feintio Digwyddiadau"
 
-#: ../gui/instrumentparameterbox.cpp:700
+#: ../gui/instrumentparameterbox.cpp:74 ../gui/matrixview.cpp:137
+msgid "Instrument Parameters"
+msgstr "Paramedrau Offerynnau"
+
+#: ../gui/instrumentparameterbox.cpp:189
+#: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:66
+#, fuzzy
+msgid "Track"
+msgstr "Tra&ciau"
+
+#: ../gui/instrumentparameterbox.cpp:709
 msgid "Variation"
 msgstr "Amrywiad"
 
-#: ../gui/instrumentparameterbox.cpp:701
+#: ../gui/instrumentparameterbox.cpp:710
 msgid "Program"
 msgstr "Rhaglen"
 
-#: ../gui/instrumentparameterbox.cpp:702
+#: ../gui/instrumentparameterbox.cpp:711
 #, fuzzy
 msgid "Channel out"
 msgstr "Sianel"
 
-#: ../gui/instrumentparameterbox.cpp:832 ../gui/instrumentparameterbox.cpp:838
+#: ../gui/instrumentparameterbox.cpp:841 ../gui/instrumentparameterbox.cpp:847
 msgid "[ %1 ]"
 msgstr "[ %1 ]"
 
@@ -5004,7 +4865,7 @@ msgid "unknown audio file"
 msgstr "ffeil sain anhysbys"
 
 #: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
-#: ../gui/segmentcommands.cpp:567 rc.cpp:403
+#: ../gui/segmentcommands.cpp:567 rc.cpp:270
 #, no-c-format
 msgid "Record"
 msgstr "Recordio"
@@ -5212,7 +5073,7 @@ msgstr "Gwneud Nodau yn Ddic&honol"
 msgid "Make Visible"
 msgstr "Gwneud Nodau yn Ddic&honol"
 
-#: ../gui/eventview.cpp:997 ../gui/matrixview.cpp:1525
+#: ../gui/eventview.cpp:997 ../gui/matrixview.cpp:1589
 #: ../gui/notationtool.cpp:2130
 msgid "Couldn't paste at this point"
 msgstr "Methu gludo wrth y fan yma"
@@ -5221,7 +5082,7 @@ msgstr "Methu gludo wrth y fan yma"
 msgid "Ready."
 msgstr "Yn barod."
 
-#: ../gui/sequencemanager.cpp:1017 ../gui/sequencemanager.cpp:1150
+#: ../gui/sequencemanager.cpp:1025 ../gui/sequencemanager.cpp:1158
 msgid ""
 "The JACK Audio subsystem has failed or it has stopped Rosegarden from "
 "processing audio.\n"
@@ -5229,7 +5090,7 @@ msgid ""
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1023 ../gui/sequencemanager.cpp:1156
+#: ../gui/sequencemanager.cpp:1031 ../gui/sequencemanager.cpp:1164
 msgid ""
 "The JACK Audio subsystem has stopped Rosegarden from processing audio, "
 "probably because of a processing overload.\n"
@@ -5238,49 +5099,49 @@ msgid ""
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1034
+#: ../gui/sequencemanager.cpp:1042
 msgid ""
 "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1059
+#: ../gui/sequencemanager.cpp:1067
 msgid ""
 "A serious error has occurred in the ALSA MIDI subsystem.  It may not be "
 "possible to continue sequencing.  Please check console output for more "
 "information."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1080
+#: ../gui/sequencemanager.cpp:1088
 #, fuzzy
 msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Nid yw'r is-gysawd sain ar gael - methu recordio sain"
 
-#: ../gui/sequencemanager.cpp:1098
+#: ../gui/sequencemanager.cpp:1106
 msgid ""
 "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1102
+#: ../gui/sequencemanager.cpp:1110
 msgid ""
 "Failed to write audio data to disc fast enough to service the audio "
 "subsystem."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1106
+#: ../gui/sequencemanager.cpp:1114
 #, fuzzy
 msgid "The audio mixing subsystem is failing to keep up."
 msgstr "Nid yw'r is-gysawd sain ar gael - methu recordio sain"
 
-#: ../gui/sequencemanager.cpp:1110
+#: ../gui/sequencemanager.cpp:1118
 #, fuzzy
 msgid "The audio subsystem is failing to keep up."
 msgstr "Nid yw'r is-gysawd sain ar gael - methu recordio sain"
 
-#: ../gui/sequencemanager.cpp:1114
+#: ../gui/sequencemanager.cpp:1122
 msgid "Unknown sequencer failure mode!"
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1164
+#: ../gui/sequencemanager.cpp:1172
 msgid ""
 "<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
 "a high-resolution timing source for MIDI performance.</p><p>This may mean "
@@ -5288,115 +5149,120 @@ msgid ""
 "Please contact your Linux distributor for more information.</p>"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:50
+#: ../gui/segmentparameterbox.cpp:51 ../gui/trackparameterbox.cpp:897
 #, fuzzy
 msgid "Segment"
 msgstr "Cylch&rannau"
 
+#: ../gui/segmentparameterbox.cpp:52
+#, fuzzy
+msgid "Segment Parameters"
+msgstr "Paramedrau Cylchrannau"
+
 #: ../gui/rosegardenconfigurationpage.cpp:2061
-#: ../gui/segmentparameterbox.cpp:88
+#: ../gui/segmentparameterbox.cpp:91
 msgid "Repeat"
 msgstr "Ailadrodd"
 
 #: ../gui/editview.cpp:1407 ../gui/rosegardenconfigurationpage.cpp:2063
-#: ../gui/segmentparameterbox.cpp:90 ../gui/trackparameterbox.cpp:240
+#: ../gui/segmentparameterbox.cpp:93 ../gui/trackparameterbox.cpp:258
 msgid "Transpose"
 msgstr "Trawsgyweirio"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2064
-#: ../gui/segmentparameterbox.cpp:91
+#: ../gui/segmentparameterbox.cpp:94
 msgid "Delay"
 msgstr "Oedi"
 
-#: ../gui/segmentparameterbox.cpp:93
+#: ../gui/segmentparameterbox.cpp:96
 msgid "Audio auto-fade"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:94
+#: ../gui/segmentparameterbox.cpp:97
 msgid "Fade in"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:95
+#: ../gui/segmentparameterbox.cpp:98
 msgid "Fade out"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:96 ../gui/trackparameterbox.cpp:263
+#: ../gui/segmentparameterbox.cpp:99 ../gui/trackparameterbox.cpp:287
 #, fuzzy
 msgid "Range"
 msgstr "Tripled"
 
-#: ../gui/segmentparameterbox.cpp:106
+#: ../gui/segmentparameterbox.cpp:109
 #, fuzzy
 msgid "edit"
 msgstr "Golygu"
 
-#: ../gui/segmentparameterbox.cpp:170
+#: ../gui/segmentparameterbox.cpp:173
 msgid ""
 "_: used internally for spacing\n"
 "High: ----"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:174 ../gui/segmentparameterbox.cpp:737
-#: ../gui/trackparameterbox.cpp:270
+#: ../gui/segmentparameterbox.cpp:177 ../gui/segmentparameterbox.cpp:740
+#: ../gui/trackparameterbox.cpp:294
 #, fuzzy
 msgid "High: ---"
 msgstr "Uchel"
 
-#: ../gui/segmentparameterbox.cpp:175 ../gui/trackparameterbox.cpp:271
+#: ../gui/segmentparameterbox.cpp:178 ../gui/trackparameterbox.cpp:295
 msgid "Choose the highest suggested playable note, using a staff"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:184 ../gui/segmentparameterbox.cpp:738
-#: ../gui/trackparameterbox.cpp:266
+#: ../gui/segmentparameterbox.cpp:187 ../gui/segmentparameterbox.cpp:741
+#: ../gui/trackparameterbox.cpp:290
 msgid "Low: ----"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:185 ../gui/trackparameterbox.cpp:267
+#: ../gui/segmentparameterbox.cpp:188 ../gui/trackparameterbox.cpp:291
 msgid "Choose the lowest suggested playable note, using a staff"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:203 ../gui/segmentparameterbox.cpp:210
+#: ../gui/segmentparameterbox.cpp:206 ../gui/segmentparameterbox.cpp:213
 #, fuzzy
 msgid " ms"
 msgstr "%1 ms"
 
-#: ../gui/segmentparameterbox.cpp:320 ../gui/segmentparameterbox.cpp:687
+#: ../gui/segmentparameterbox.cpp:323 ../gui/segmentparameterbox.cpp:690
 msgid "%1 ms"
 msgstr "%1 ms"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2445
-#: ../gui/segmentparameterbox.cpp:402 ../gui/trackparameterbox.cpp:752
+#: ../gui/segmentparameterbox.cpp:405 ../gui/trackparameterbox.cpp:773
 msgid "Add New Color"
 msgstr "Ychwanegu Lliw Newydd"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2503
-#: ../gui/segmentparameterbox.cpp:986 ../gui/trackparameterbox.cpp:775
+#: ../gui/segmentparameterbox.cpp:989 ../gui/trackparameterbox.cpp:796
 msgid "New Color Name"
 msgstr "Enw'r Lliw Newydd"
 
 #: ../gui/colourwidgets.cpp:64 ../gui/rosegardenconfigurationpage.cpp:2504
-#: ../gui/segmentparameterbox.cpp:986 ../gui/trackparameterbox.cpp:775
+#: ../gui/segmentparameterbox.cpp:989 ../gui/trackparameterbox.cpp:796
 msgid "Enter new name"
 msgstr "Mewnosod enw newydd"
 
-#: ../gui/segmentparameterbox.cpp:1036 ../gui/trackparameterbox.cpp:802
+#: ../gui/segmentparameterbox.cpp:1039 ../gui/trackparameterbox.cpp:823
 msgid "Highest playable note"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:1056 ../gui/trackparameterbox.cpp:821
+#: ../gui/segmentparameterbox.cpp:1059 ../gui/trackparameterbox.cpp:842
 msgid "Lowest playable note"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:6149 ../gui/segmentparameterbox.cpp:1089
+#: ../gui/rosegardengui.cpp:6174 ../gui/segmentparameterbox.cpp:1092
 msgid "Modify Segment label"
 msgstr "Addasu label Cylchran"
 
-#: ../gui/rosegardengui.cpp:6150 ../gui/segmentparameterbox.cpp:1090
+#: ../gui/rosegardengui.cpp:6175 ../gui/segmentparameterbox.cpp:1093
 msgid "Modify Segments label"
 msgstr "Addasu label Cylchrannau"
 
-#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:6166
-#: ../gui/segmentparameterbox.cpp:1100
+#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:6191
+#: ../gui/segmentparameterbox.cpp:1103
 msgid "Enter new label"
 msgstr "Mewnosod label newydd"
 
@@ -6571,11 +6437,6 @@ msgstr ""
 msgid "Statistics"
 msgstr "Ystadegau"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:65
-#, fuzzy
-msgid "Track"
-msgstr "Tra&ciau"
-
 #: ../gui/rosegardenconfigurationpage.cpp:2057
 #, fuzzy
 msgid "Time"
@@ -6644,6 +6505,1078 @@ msgstr "Dileu Lliw"
 msgid "Color Map"
 msgstr "Map Lliw"
 
+#: ../gui/matrixview.cpp:387 ../gui/matrixview.cpp:2957
+msgid "Couldn't apply piano roll layout"
+msgstr "Methu gweithredu haenlun rholyn piano"
+
+#: ../gui/matrixview.cpp:586 ../gui/notationview.cpp:1462
+#: ../gui/rosegardengui.cpp:739
+msgid "&Select"
+msgstr "&Dewis"
+
+#: ../gui/matrixview.cpp:591 ../gui/rosegardengui.cpp:744
+msgid "&Draw"
+msgstr "&Dylunio"
+
+#: ../gui/matrixview.cpp:601 ../gui/rosegardengui.cpp:754
+msgid "&Move"
+msgstr "&Symud"
+
+#: ../gui/matrixview.cpp:608
+msgid "Resi&ze"
+msgstr "Ail-f&eintio"
+
+#: ../gui/matrixview.cpp:614 ../gui/notationview.cpp:1596
+msgid "C&hord Insert Mode"
+msgstr "Modd Mewnosod &Cord"
+
+#: ../gui/matrixview.cpp:621 ../gui/notationview.cpp:1468
+msgid "Ste&p Recording"
+msgstr "Recordio Cama&u"
+
+#: ../gui/matrixview.cpp:631 ../gui/rosegardengui.cpp:885
+msgid "Repeat Last Quantize"
+msgstr ""
+
+#: ../gui/matrixview.cpp:639
+#, fuzzy
+msgid "&Legato"
+msgstr "Cyfreithiol"
+
+#: ../gui/matrixview.cpp:643
+msgid "&Halve Speed"
+msgstr ""
+
+#: ../gui/matrixview.cpp:647
+#, fuzzy
+msgid "&Double Speed"
+msgstr "Llon &Dwbl"
+
+#: ../gui/matrixview.cpp:665
+msgid "Set Event &Velocities..."
+msgstr "Gosod &Buaneddau Digwyddiadau"
+
+#: ../gui/matrixview.cpp:669
+#, fuzzy
+msgid "Trigger Se&gment..."
+msgstr "Dileu Cylchran"
+
+#: ../gui/matrixview.cpp:673
+#, fuzzy
+msgid "Remove Triggers..."
+msgstr "Gwaredu Newid &Tempo..."
+
+#: ../gui/matrixview.cpp:685 ../gui/notationview.cpp:1959
+msgid "Cursor &Back"
+msgstr "Cyrchydd Yn &Ol"
+
+#: ../gui/matrixview.cpp:689 ../gui/notationview.cpp:1963
+msgid "Cursor &Forward"
+msgstr "Cyrchydd Ym&laen"
+
+#: ../gui/matrixview.cpp:693 ../gui/notationview.cpp:1967
+msgid "Cursor Ba&ck Bar"
+msgstr "Cyrchydd Y&n Ol Un Far"
+
+#: ../gui/matrixview.cpp:697 ../gui/notationview.cpp:1971
+msgid "Cursor For&ward Bar"
+msgstr "Cyrchydd Y&mlaen Un Far"
+
+#: ../gui/matrixview.cpp:701 ../gui/notationview.cpp:1975
+msgid "Cursor Back and Se&lect"
+msgstr "Cyrchydd Yn Ol a De&wis"
+
+#: ../gui/matrixview.cpp:705 ../gui/notationview.cpp:1979
+msgid "Cursor Forward and &Select"
+msgstr "Cyrchydd Ymlaen a D&ewis"
+
+#: ../gui/matrixview.cpp:709 ../gui/notationview.cpp:1983
+msgid "Cursor Back Bar and Select"
+msgstr "Cyrchydd Yn Ol Un Far a Dewis"
+
+#: ../gui/matrixview.cpp:713 ../gui/notationview.cpp:1987
+msgid "Cursor Forward Bar and Select"
+msgstr "Cyrchydd Ymlaen Un Far a Dewis"
+
+#: ../gui/matrixview.cpp:717 ../gui/notationview.cpp:1997
+msgid "Cursor to St&art"
+msgstr "Cyrchydd i'r De&chrau"
+
+#: ../gui/matrixview.cpp:723 ../gui/notationview.cpp:2003
+msgid "Cursor to &End"
+msgstr "Cyrchydd i'r Diwe&dd"
+
+#: ../gui/matrixview.cpp:729 ../gui/notationview.cpp:2017
+msgid "Cursor to &Playback Pointer"
+msgstr "Cyrchydd i'r &Pwyntydd Chwarae"
+
+#: ../gui/matrixview.cpp:769 ../gui/notationview.cpp:2057
+msgid "Playback Pointer to &Cursor"
+msgstr "Pwyntydd Chwarae i'r &Cyrchydd"
+
+#: ../gui/matrixview.cpp:775 ../gui/notationview.cpp:2063
+msgid "&Solo"
+msgstr "&Unawd"
+
+#: ../gui/matrixview.cpp:781 ../gui/notationview.cpp:2069
+#: ../gui/rosegardengui.cpp:1141
+msgid "Scro&ll to Follow Playback"
+msgstr ""
+
+#: ../gui/matrixview.cpp:790 ../gui/notationview.cpp:2078
+msgid "Set Loop to Selection"
+msgstr "Gosod Dolen i'r Dewisiad"
+
+#: ../gui/matrixview.cpp:794 ../gui/notationview.cpp:2082
+msgid "Clear L&oop"
+msgstr "Gwaredu'r Dd&olen"
+
+#: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:803
+#: ../gui/notationview.cpp:2093
+msgid "&Filter Selection"
+msgstr "Dewisiad &Hidlen"
+
+#: ../gui/matrixview.cpp:808
+msgid "Snap to 1/64"
+msgstr "Cipio at 1/64"
+
+#: ../gui/matrixview.cpp:810
+#, fuzzy
+msgid "Snap to 1/48"
+msgstr "Cipio at 1/8"
+
+#: ../gui/matrixview.cpp:812
+msgid "Snap to 1/32"
+msgstr "Cipio at 1/32"
+
+#: ../gui/matrixview.cpp:814
+#, fuzzy
+msgid "Snap to 1/24"
+msgstr "Cipio at 1/4"
+
+#: ../gui/matrixview.cpp:816
+msgid "Snap to 1/16"
+msgstr "Cipio at 1/16"
+
+#: ../gui/matrixview.cpp:818
+#, fuzzy
+msgid "Snap to 1/12"
+msgstr "Cipio at 1/2"
+
+#: ../gui/matrixview.cpp:820
+msgid "Snap to 1/8"
+msgstr "Cipio at 1/8"
+
+#: ../gui/matrixview.cpp:822
+#, fuzzy
+msgid "Snap to 1/6"
+msgstr "Cipio at 1/64"
+
+#: ../gui/matrixview.cpp:824
+msgid "Snap to 1/4"
+msgstr "Cipio at 1/4"
+
+#: ../gui/matrixview.cpp:826
+msgid "Snap to 1/2"
+msgstr "Cipio at 1/2"
+
+#: ../gui/matrixview.cpp:828
+msgid "Snap to &Unit"
+msgstr "Cipio at &Uned"
+
+#: ../gui/matrixview.cpp:830
+msgid "Snap to Bea&t"
+msgstr "Cipio at Curia&d"
+
+#: ../gui/matrixview.cpp:832
+msgid "Snap to &Bar"
+msgstr "Cipio at &Far"
+
+#: ../gui/matrixview.cpp:834
+msgid "&No Snap"
+msgstr "&Dim Cipio"
+
+#: ../gui/matrixview.cpp:840
+#, fuzzy
+msgid "Show Instrument Parameters"
+msgstr "Dangos Paramedrau &Offerynnau"
+
+#: ../gui/matrixview.cpp:845 ../gui/notationview.cpp:1529
+msgid "Show Ch&ord Name Ruler"
+msgstr "Dangos Rhesydd Enwau C&ordiau"
+
+#: ../gui/matrixview.cpp:849 ../gui/notationview.cpp:1537
+msgid "Show &Tempo Ruler"
+msgstr "Dangos Rhesydd &Tempo"
+
+#: ../gui/matrixview.cpp:1138 ../gui/notationview.cpp:2819
+#, c-format
+msgid ""
+"_n:   1 event selected \n"
+"  %n events selected "
+msgstr ""
+
+#: ../gui/matrixview.cpp:1140 ../gui/notationview.cpp:2821
+msgid "  No selection "
+msgstr "   Dim dewisiad"
+
+#: ../gui/matrixview.cpp:1280
+#, fuzzy
+msgid "Making legato..."
+msgstr "Gwneud addurnodau..."
+
+#: ../gui/matrixview.cpp:1291
+#, fuzzy
+msgid "Halving speed..."
+msgstr "Cadw ffeil..."
+
+#: ../gui/matrixview.cpp:1304
+#, fuzzy
+msgid "Doubling speed..."
+msgstr "Dileu'r dewisiad..."
+
+#: ../gui/matrixview.cpp:1326
+#, fuzzy
+msgid "Rescaling..."
+msgstr "Ail-&raddu..."
+
+#: ../gui/matrixview.cpp:1423
+#, fuzzy
+msgid "%1 (%2.%3s)"
+msgstr "Amser: %1 (%2.%3s)"
+
+#: ../gui/matrixview.cpp:1434
+#, fuzzy
+msgid "%1 (%2): %3"
+msgstr "&%1%2"
+
+#: ../gui/matrixview.cpp:2047
+msgid "Unquantizing..."
+msgstr "Dad-gwanteiddio..."
+
+#: ../gui/matrixview.cpp:2077
+msgid " Grid: "
+msgstr "Rhwydell:"
+
+#: ../gui/matrixview.cpp:2106
+msgid "Unit"
+msgstr "Uned"
+
+#: ../gui/matrixview.cpp:2108
+msgid "Beat"
+msgstr "Curiad"
+
+#: ../gui/matrixview.cpp:2110
+msgid "Bar"
+msgstr "Bar"
+
+#: ../gui/matrixview.cpp:2129
+msgid " Quantize: "
+msgstr "Cwanteiddio:"
+
+#: ../gui/matrixview.cpp:2202 ../gui/rosegardengui.cpp:5558
+msgid "%1%"
+msgstr "%1%"
+
+#: ../gui/matrixview.cpp:2497
+msgid "Raising velocities..."
+msgstr "Codi buaneddau..."
+
+#: ../gui/matrixview.cpp:2506
+msgid "Lowering velocities..."
+msgstr "Iselhau buaneddau..."
+
+#: ../gui/matrixview.cpp:2540
+msgid "Set Event Velocities"
+msgstr "Gosod Buaneddau Digwyddiadau"
+
+#: ../gui/matrixview.cpp:2545
+msgid "Setting Velocities..."
+msgstr "Gosod Buaneddau..."
+
+#: ../gui/matrixview.cpp:2578
+#, fuzzy
+msgid "Remove Triggers"
+msgstr "&Gwaredu Arwydd"
+
+#: ../gui/matrixview.cpp:2635
+msgid "%1 - Segment Track #%2 - %3"
+msgstr ""
+
+#: ../gui/matrixview.cpp:2642
+#, fuzzy
+msgid "%1 - All Segments - %2"
+msgstr "Parhad"
+
+#: ../gui/matrixview.cpp:2649
+#, fuzzy
+msgid ""
+"_n: %1 - 1 Segment - %2\n"
+"%1 - %n Segments - %2"
+msgstr "Parhad"
+
+#: ../gui/matrixview.cpp:2792
+#, fuzzy
+msgid "Can't insert note: No grid duration selected"
+msgstr "Dim parhad nodau wedi'i ddewis"
+
+#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
+#, fuzzy
+msgid "File name"
+msgstr "Enw ffeil:"
+
+#: ../gui/playlist.cpp:141
+#, fuzzy
+msgid "Add..."
+msgstr "..."
+
+#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
+#: ../gui/playlist.cpp:142
+msgid "Play"
+msgstr "Chwarae"
+
+#: ../gui/playlist.cpp:143
+#, fuzzy
+msgid "Move Up"
+msgstr "Symud Trac i &Fyny"
+
+#: ../gui/playlist.cpp:144
+#, fuzzy
+msgid "Move Down"
+msgstr "Symud Trac i &Lawr"
+
+#: ../gui/playlist.cpp:189
+#, fuzzy
+msgid "Select one or more Rosegarden files"
+msgstr "Dewis un neu mwy o Ffeiliau Sain"
+
+#: ../gui/deviceeditor.cpp:80
+msgid "Add Play Device"
+msgstr "Ychwanegu Dyfais Chwarae"
+
+#: ../gui/deviceeditor.cpp:81
+msgid "Add Record Device"
+msgstr "Ychwanegu Dyfais Recordio"
+
+#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
+msgid "Delete Device"
+msgstr "Dileu Dyfais"
+
+#: ../gui/deviceeditor.cpp:135 ../gui/importdevicedialog.cpp:136
+#, c-format
+msgid "Device %1"
+msgstr "Dyfais %1"
+
+#: ../gui/deviceeditor.cpp:244
+msgid "Apply pending changes?"
+msgstr "Gweithredu newidiadau sy'n disgwyl? "
+
+#: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
+msgid "<new device>"
+msgstr "<dyfais newydd>"
+
+#: ../gui/widgets.cpp:108 ../gui/widgets.cpp:113 ../gui/widgets.cpp:135
+msgid "Processing..."
+msgstr "Prosesu..."
+
+#: ../gui/widgets.cpp:380
+msgid ""
+"Click and drag up and down or left and right to modify.\n"
+"Double click to edit value directly."
+msgstr ""
+
+#: ../gui/widgets.cpp:690
+#, fuzzy
+msgid "Select a new value"
+msgstr "Dileu'r priodwedd yma"
+
+#: ../gui/widgets.cpp:691
+#, fuzzy
+msgid "Enter a new value"
+msgstr "Mewnosod enw newydd"
+
+#: ../gui/widgets.cpp:831
+#, fuzzy
+msgid "Quantizer"
+msgstr "Cwanteiddio"
+
+#: ../gui/widgets.cpp:837
+#, fuzzy
+msgid "Quantizer type:"
+msgstr "Math y Cwanteiddydd"
+
+#: ../gui/widgets.cpp:839
+msgid "Grid quantizer"
+msgstr "Cwanteiddydd Rhwydell"
+
+#: ../gui/widgets.cpp:840
+#, fuzzy
+msgid "Legato quantizer"
+msgstr "Cwanteiddydd Rhwydell"
+
+#: ../gui/widgets.cpp:841
+msgid "Heuristic notation quantizer"
+msgstr "Cwanteiddydd nodiant darganfyddol"
+
+#: ../gui/widgets.cpp:845
+msgid "Quantize for notation only (leave performance unchanged)"
+msgstr "Cwanteiddio am nodiant yn unig (dim newid i'r perfformiad)"
+
+#: ../gui/widgets.cpp:854
+msgid "Notation parameters"
+msgstr "Paramedrau Nodiant"
+
+#: ../gui/widgets.cpp:859 ../gui/widgets.cpp:900
+msgid "Base grid unit:"
+msgstr "Uned rhwydell sail:"
+
+#: ../gui/widgets.cpp:864
+msgid "Complexity:"
+msgstr "Cymhlethder:"
+
+#: ../gui/widgets.cpp:868
+msgid "Very high"
+msgstr "Uchel iawn"
+
+#: ../gui/widgets.cpp:869
+msgid "High"
+msgstr "Uchel"
+
+#: ../gui/widgets.cpp:870
+msgid "Normal"
+msgstr "Arferol"
+
+#: ../gui/widgets.cpp:871
+msgid "Low"
+msgstr "Isel"
+
+#: ../gui/widgets.cpp:872
+msgid "Very low"
+msgstr "Isel iawn"
+
+#: ../gui/widgets.cpp:875
+msgid "Tuplet level:"
+msgstr "Safon plygyn:"
+
+#: ../gui/widgets.cpp:879
+msgid "2-in-the-time-of-3"
+msgstr "2-yn-amseriad-3"
+
+#: ../gui/widgets.cpp:880
+msgid "Triplet"
+msgstr "Tripled"
+
+#: ../gui/widgets.cpp:888
+msgid "Any"
+msgstr "Unrhyw"
+
+#: ../gui/widgets.cpp:891
+#, fuzzy
+msgid "Permit counterpoint"
+msgstr "Gwaredu gwrthpwynt"
+
+#: ../gui/widgets.cpp:895
+msgid "Grid parameters"
+msgstr "Paramedrau Rhwydell"
+
+#: ../gui/widgets.cpp:904
+msgid "Swing:"
+msgstr ""
+
+#: ../gui/widgets.cpp:909
+msgid "Iterative amount:"
+msgstr ""
+
+#: ../gui/widgets.cpp:915
+msgid "Quantize durations as well as start times"
+msgstr "Cwanteiddio parhadau wrth ymyl amserau dechrau"
+
+#: ../gui/widgets.cpp:919
+msgid "After quantization"
+msgstr "Ar ol cwanteiddio"
+
+#: ../gui/widgets.cpp:933
+#, fuzzy
+msgid "Show advanced options"
+msgstr "Dangos &Anodiadau"
+
+#: ../gui/widgets.cpp:942
+msgid "Re-beam"
+msgstr "Ail-drawstio"
+
+#: ../gui/widgets.cpp:944
+msgid "Add articulations (staccato, tenuto, slurs)"
+msgstr "Ychwanegu seiniadau (staccato, tenuto, llithriadau)"
+
+#: ../gui/widgets.cpp:945
+msgid "Tie notes at barlines etc"
+msgstr "Clymu nodau wrth linellau bar ayyb"
+
+#: ../gui/widgets.cpp:946
+msgid "Split-and-tie overlapping chords"
+msgstr "Hollti-a-clymu cordiau sy'n croesi"
+
+#: ../gui/widgets.cpp:1057
+#, fuzzy
+msgid "Full quantize"
+msgstr "Cwanteiddydd Rhwydell"
+
+#: ../gui/widgets.cpp:1200
+#, fuzzy
+msgid "Show Advanced Options"
+msgstr "Dangos &Anodiadau"
+
+#: ../gui/widgets.cpp:1204
+#, fuzzy
+msgid "Hide Advanced Options"
+msgstr "Anodiadau cudd"
+
+#: ../gui/importdevicedialog.cpp:54
+#, fuzzy
+msgid "Import from Device..."
+msgstr "Mewnforio Rhengau oddiwrth Dyfais ..."
+
+#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
+#: ../gui/rosegardengui.cpp:2095 ../gui/rosegardengui.cpp:2155
+#: ../gui/rosegardengui.cpp:7501
+#, c-format
+msgid "Cannot download file %1"
+msgstr "Methu lawrlwytho ffeil %1"
+
+#: ../gui/importdevicedialog.cpp:95
+#, fuzzy, c-format
+msgid "Cannot open file %1"
+msgstr "Methu agor ffeil '%1'"
+
+#: ../gui/importdevicedialog.cpp:102
+#, fuzzy, c-format
+msgid "No devices found in file %1"
+msgstr "Ni chanfuwyd Dyfais yn y ffeil"
+
+#: ../gui/importdevicedialog.cpp:109
+msgid "Source device"
+msgstr "Dyfais tarddiad"
+
+#: ../gui/importdevicedialog.cpp:114
+#, fuzzy
+msgid "Import from: "
+msgstr "Mewnforio Stiwdio o Ffeil"
+
+#: ../gui/importdevicedialog.cpp:151
+#, fuzzy
+msgid "Import banks"
+msgstr "Mewnforio Rhengau"
+
+#: ../gui/importdevicedialog.cpp:152
+#, fuzzy
+msgid "Import key mappings"
+msgstr "Allforio trawstiau"
+
+#: ../gui/importdevicedialog.cpp:153
+#, fuzzy
+msgid "Import controllers"
+msgstr "rheolydd %1"
+
+#: ../gui/importdevicedialog.cpp:156
+msgid "Import device name"
+msgstr "Mewnforio dyfais o'r enw"
+
+#: ../gui/importdevicedialog.cpp:162
+#, fuzzy
+msgid "Bank import behavior"
+msgstr "Ymddygiad mewnforio"
+
+#: ../gui/importdevicedialog.cpp:164
+#, fuzzy
+msgid "Merge banks"
+msgstr "Cyfuno Rhengau"
+
+#: ../gui/importdevicedialog.cpp:165
+#, fuzzy
+msgid "Overwrite banks"
+msgstr "Ysgrifennu dros Rhengau"
+
+#: ../gui/importdevicedialog.cpp:365
+msgid "Bank %1:%2"
+msgstr "Rheng %1:%2"
+
+#: ../gui/rosegardenguiview.cpp:229
+msgid "No non-audio segments in composition"
+msgstr "Dim cylchrannau di-sain yn y cyfansoddiad"
+
+#: ../gui/rosegardenguiview.cpp:303
+msgid "Selection must contain only audio or non-audio segments"
+msgstr "Rhaid i'r dewisiad gynnwys dim ond cylchrannau sain neu di-sain"
+
+#: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
+#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
+msgid "No non-audio segments selected"
+msgstr "Dim cylchrannau di-sain wedi'w dewis"
+
+#: ../gui/rosegardenguiview.cpp:837
+msgid ""
+"You've not yet defined an audio editor for Rosegarden to use.\n"
+"See Settings -> Configure Rosegarden -> General -> External Editors."
+msgstr ""
+
+#: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
+#, fuzzy
+msgid "Can't add dropped file. "
+msgstr "Methu agor ffeil '%1'"
+
+#: ../gui/editcommands.cpp:212
+msgid "(excerpt)"
+msgstr "(dyfyniad)"
+
+#: ../gui/editcommands.cpp:226
+msgid "(copied)"
+msgstr "(wedi'i gopio)"
+
+#: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
+#, fuzzy
+msgid "Copy Range"
+msgstr "Newid Allwedd"
+
+#: ../gui/editcommands.cpp:452
+msgid "Paste into an existing gap [\"restricted\"]"
+msgstr "Gludo i mewn i fwlch sy'n bodoli [\"cyfyngedig\"]"
+
+#: ../gui/editcommands.cpp:454
+msgid "Erase existing events to make room [\"simple\"]"
+msgstr "Dileu digwyddiadau sy'n bodoli er mwyn creu lle [\"syml\"]"
+
+#: ../gui/editcommands.cpp:456
+msgid "Move existing events out of the way [\"open-n-paste\"]"
+msgstr "Symud digwyddiadau sy'n bodoli allan o'r ffordd [\"agor-a-gludo\"]"
+
+#: ../gui/editcommands.cpp:458
+msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
+msgstr ""
+"Trosgaenu nodau, gan glymu yn erbyn nodau presennol [\"trosgaen-nodau\"]"
+
+#: ../gui/editcommands.cpp:460
+msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
+msgstr "Trosgaenu nodau, gan anywbyddu nodau presennol [\"trosgaen-matrics\"]"
+
+#: ../gui/editcommands.cpp:889
+msgid "Heuristic Notation &Quantize"
+msgstr "&Cwanteiddio Nodiant Darganfyddol"
+
+#: ../gui/editcommands.cpp:891
+msgid "Grid &Quantize"
+msgstr "C&wanteiddio Rhwydell"
+
+#: ../gui/editcommands.cpp:895 ../gui/editcommands.cpp:1098
+#: ../gui/rosegardengui.cpp:881
+msgid "&Quantize..."
+msgstr "Cw&anteiddio..."
+
+#: ../gui/editcommands.cpp:1054 ../gui/editcommands.cpp:1065
+msgid "Unquantize Events"
+msgstr "Dad-gwanteiddio Digwyddiadau"
+
+#: ../gui/editcommands.cpp:1565
+#, fuzzy
+msgid "&Move Events to Other Segment"
+msgstr "Wedi cael digwyddiad tu allan o Gylchran"
+
+#: ../gui/editcommands.cpp:1798
+#, fuzzy
+msgid "Insert Trigger Note"
+msgstr "Mewnosod Nodyn"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "C%1"
+msgstr "C%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "C#%1"
+msgstr "C#%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "D%1"
+msgstr "D%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "D#%1"
+msgstr "D#%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "E%1"
+msgstr "E%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "F%1"
+msgstr "F%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "F#%1"
+msgstr "F#%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "G%1"
+msgstr "G%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "G#%1"
+msgstr "G#%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "A%1"
+msgstr "A%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "A#%1"
+msgstr "A#%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "B%1"
+msgstr "B%1"
+
+#: ../gui/notationview.cpp:377 ../gui/rosegardengui.cpp:471
+msgid "Starting..."
+msgstr "Dechrau..."
+
+#: ../gui/notationview.cpp:692
+msgid "Preparing to print..."
+msgstr "Paratoi argraffu..."
+
+#: ../gui/notationview.cpp:1212
+msgid "Note &Font"
+msgstr "&Ffont i'r Nodau"
+
+#: ../gui/notationview.cpp:1234
+msgid "Si&ze"
+msgstr "Ma&int"
+
+#: ../gui/notationview.cpp:1241
+#, fuzzy
+msgid "S&pacing"
+msgstr "B&ylchu"
+
+#: ../gui/notationview.cpp:1263
+#, fuzzy
+msgid "Du&ration Factor"
+msgstr "Parhad"
+
+#: ../gui/notationview.cpp:1288
+msgid "Note &Style"
+msgstr "A&rddull y Nodau"
+
+#: ../gui/notationview.cpp:1314
+msgid "Insert Rest"
+msgstr "Mewnosod Saib"
+
+#: ../gui/notationview.cpp:1318
+msgid "Switch from Note to Rest"
+msgstr "Newid o Nodyn i Saib"
+
+#: ../gui/notationview.cpp:1323
+msgid "Switch from Rest to Note"
+msgstr "Newid o Saib i Nodyn"
+
+#: ../gui/notationview.cpp:1380
+msgid "No accidental"
+msgstr "Dim hapnod"
+
+#: ../gui/notationview.cpp:1381
+#, fuzzy
+msgid "Follow previous accidental"
+msgstr "Gorfod hapnodau..."
+
+#: ../gui/notationview.cpp:1382
+msgid "Sharp"
+msgstr "Llon"
+
+#: ../gui/notationview.cpp:1383
+msgid "Flat"
+msgstr "Lleddf"
+
+#: ../gui/notationview.cpp:1384
+msgid "Natural"
+msgstr "Naturiol"
+
+#: ../gui/notationview.cpp:1385
+msgid "Double sharp"
+msgstr "Llon dwbl"
+
+#: ../gui/notationview.cpp:1386
+msgid "Double flat"
+msgstr "Lleddf dwbl"
+
+#: ../gui/notationview.cpp:1407
+msgid "&Treble Clef"
+msgstr "Cleff y &Trebl"
+
+#: ../gui/notationview.cpp:1414
+msgid "Te&nor Clef"
+msgstr "Cleff y Te&nor"
+
+#: ../gui/notationview.cpp:1421
+msgid "&Alto Clef"
+msgstr "Cleff yr &Alto"
+
+#: ../gui/notationview.cpp:1428
+msgid "&Bass Clef"
+msgstr "Cleff y &Bas"
+
+#: ../gui/notationview.cpp:1435
+msgid "&Text"
+msgstr "&Testun"
+
+#: ../gui/notationview.cpp:1441
+#, fuzzy
+msgid "&Fretboard"
+msgstr "&Brys Ymlaen "
+
+#: ../gui/notationview.cpp:1474
+msgid "Select from Sta&rt"
+msgstr "Dewis o Dech&rau"
+
+#: ../gui/notationview.cpp:1478
+msgid "Select to &End"
+msgstr "Dewis i Ddi&wedd"
+
+#: ../gui/notationview.cpp:1482
+msgid "Select Whole St&aff"
+msgstr "Dewis yr Holl E&rwydd"
+
+#: ../gui/notationview.cpp:1490
+msgid "Pa&ste..."
+msgstr "Gl&udo..."
+
+#: ../gui/notationview.cpp:1494 ../gui/rosegardengui.cpp:814
+msgid "De&lete"
+msgstr "Di&leu"
+
+#: ../gui/notationview.cpp:1508
+msgid "&Linear Layout"
+msgstr "&Haenlun Llinellol"
+
+#: ../gui/notationview.cpp:1516
+msgid "&Continuous Page Layout"
+msgstr "Haenlun &Tudalen Barhaus"
+
+#: ../gui/notationview.cpp:1524
+msgid "&Multiple Page Layout"
+msgstr "Haenlun &Tudalennau Lluosol"
+
+#: ../gui/notationview.cpp:1533
+msgid "Show Ra&w Note Ruler"
+msgstr "Dangos Rhesydd Nodau C&raidd"
+
+#: ../gui/notationview.cpp:1541
+msgid "Show &Annotations"
+msgstr "Dangos &Anodiadau"
+
+#: ../gui/notationview.cpp:1545
+msgid "Show Lily&Pond Directives"
+msgstr ""
+
+#: ../gui/notationview.cpp:1549
+msgid "Open L&yric Editor"
+msgstr "Agor Golygydd G&eiriau"
+
+#: ../gui/notationview.cpp:1590
+msgid "Trip&let Insert Mode"
+msgstr "Modd Mewnosod Tri&pled"
+
+#: ../gui/notationview.cpp:1816
+msgid "&Dump selected events to stderr"
+msgstr "&Dadlwytho digwyddiadau dewisiedig i stderr"
+
+#: ../gui/notationview.cpp:1884
+#, fuzzy
+msgid "Ma&ke Ornament..."
+msgstr "Gwneud addurnodau..."
+
+#: ../gui/notationview.cpp:1888
+msgid "Trigger &Ornament..."
+msgstr ""
+
+#: ../gui/notationview.cpp:1892
+#, fuzzy
+msgid "Remove Ornament..."
+msgstr "Gwaredu gwrthpwynt"
+
+#: ../gui/notationview.cpp:1897
+msgid "&None"
+msgstr "&Dim"
+
+#: ../gui/notationview.cpp:1905
+msgid "Add Fretboard"
+msgstr ""
+
+#: ../gui/notationview.cpp:1931 ../gui/rosegardengui.cpp:651
+msgid "Show T&ools Toolbar"
+msgstr "Dangos Bar &Offer"
+
+#: ../gui/notationview.cpp:1932
+msgid "Show &Notes Toolbar"
+msgstr "Dangos Bar &Nodau"
+
+#: ../gui/notationview.cpp:1933
+msgid "Show &Rests Toolbar"
+msgstr "Dangos Bar &Seibiau"
+
+#: ../gui/notationview.cpp:1934
+msgid "Show &Accidentals Toolbar"
+msgstr "Dangos Bar &Hapnodau"
+
+#: ../gui/notationview.cpp:1935
+msgid "Show Cle&fs Toolbar"
+msgstr "Dangos Bar &Cleffau"
+
+#: ../gui/notationview.cpp:1937
+msgid "Show &Marks Toolbar"
+msgstr "Dangos Bar &Arwyddion"
+
+#: ../gui/notationview.cpp:1939
+msgid "Show &Group Toolbar"
+msgstr "Dangos Bar &Casglu"
+
+#: ../gui/notationview.cpp:1941
+msgid "Show &Layout Toolbar"
+msgstr "Dangos Bar &Haenlunio"
+
+#: ../gui/notationview.cpp:1943 ../gui/rosegardengui.cpp:663
+msgid "Show Trans&port Toolbar"
+msgstr "Dangos Bar C&ludydd"
+
+#: ../gui/notationview.cpp:1945
+msgid "Show M&eta Toolbar"
+msgstr "Dangos Bar &Meta"
+
+#: ../gui/notationview.cpp:2007
+msgid "Cursor &Up Staff"
+msgstr "Cyrchydd i &Fyny Un Erwydd"
+
+#: ../gui/notationview.cpp:2011
+msgid "Cursor &Down Staff"
+msgstr "Cyrchydd i &Lawr Un Erwydd"
+
+#: ../gui/notationview.cpp:2097
+msgid "Push &Left"
+msgstr ""
+
+#: ../gui/notationview.cpp:2101
+msgid "Push &Right"
+msgstr ""
+
+#: ../gui/notationview.cpp:2105
+msgid "Push &Up"
+msgstr ""
+
+#: ../gui/notationview.cpp:2109
+#, fuzzy
+msgid "Push &Down"
+msgstr "Coesau I &Lawr"
+
+#: ../gui/notationview.cpp:2113
+#, fuzzy
+msgid "Restore &Computed Positions"
+msgstr "&Adfer Coesau a Gyfrifwyd"
+
+#: ../gui/notationview.cpp:2117
+#, fuzzy
+msgid "Make &Invisible"
+msgstr "Gwneud Nodau yn Ddic&honol"
+
+#: ../gui/notationview.cpp:2121
+#, fuzzy
+msgid "Make &Visible"
+msgstr "Gwneud Nodau yn Ddic&honol"
+
+#: ../gui/notationview.cpp:2125
+#, fuzzy
+msgid "Toggle Dot"
+msgstr "nodyn cyfan"
+
+#: ../gui/notationview.cpp:2129 ../gui/notationview.cpp:2133
+#, fuzzy
+msgid "Add Dot"
+msgstr "Ychwanegu %1"
+
+#: ../gui/notationview.cpp:2184
+#, c-format
+msgid ""
+"_n: 1 pixel\n"
+"%n pixels"
+msgstr ""
+
+#: ../gui/notationview.cpp:2227
+msgid "  Font:  "
+msgstr "Ffont:"
+
+#: ../gui/notationview.cpp:2254
+msgid "Unknown font \"%1\", using default"
+msgstr "Ffont anhysbys \"%1\"; yn defnyddio'r rhagosod"
+
+#: ../gui/notationview.cpp:2262
+msgid "  Size:  "
+msgstr "Maint:"
+
+#: ../gui/notationview.cpp:2284
+msgid "  Spacing:  "
+msgstr "Bylchu:"
+
+#: ../gui/notationview.cpp:2579 ../gui/notationview.cpp:3299
+#: ../gui/rosegardengui.cpp:1255
+msgid "  Ready."
+msgstr "  Yn Barod."
+
+#: ../gui/notationview.cpp:2584
+msgid "Laying out score..."
+msgstr "Haenlunio'r sgor..."
+
+#: ../gui/notationview.cpp:2596
+msgid "Laying out staff %1..."
+msgstr "Haenlunio erwydd %1..."
+
+#: ../gui/notationview.cpp:2605
+msgid "Reconciling staffs..."
+msgstr "Cysoni erwyddau..."
+
+#: ../gui/notationview.cpp:3369
+msgid "Sizing and allocating canvas..."
+msgstr "Meintio a dosrannu'r cynfas..."
+
+#: ../gui/notationview.cpp:3529
+msgid "note"
+msgstr "nodyn"
+
+#: ../gui/notationview.cpp:3529
+msgid "rest"
+msgstr "saib"
+
+#: ../gui/notationview.cpp:3688
+msgid "%1 - Segment Track #%2 - Notation"
+msgstr ""
+
+#: ../gui/notationview.cpp:3694
+#, fuzzy
+msgid "%1 - All Segments - Notation"
+msgstr "Parhad"
+
+#: ../gui/notationview.cpp:3699
+#, fuzzy
+msgid ""
+"_n: %1 - Segment - Notation\n"
+"%1 - %n Segments - Notation"
+msgstr "Parhad"
+
 #: ../gui/rosegardengui.cpp:304
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
@@ -6691,10 +7624,6 @@ msgstr "Nol cyflwr y gyrrydd swn..."
 #: ../gui/rosegardengui.cpp:452
 msgid "Clearing studio data..."
 msgstr "Gwaredu data stiwdio..."
-
-#: ../gui/notationview.cpp:377 ../gui/rosegardengui.cpp:471
-msgid "Starting..."
-msgstr "Dechrau..."
 
 #: ../gui/rosegardengui.cpp:546
 #, fuzzy
@@ -6775,10 +7704,6 @@ msgstr "Rosegarden"
 msgid "&Bug Reporting Guidelines"
 msgstr ""
 
-#: ../gui/notationview.cpp:1909 ../gui/rosegardengui.cpp:651
-msgid "Show T&ools Toolbar"
-msgstr "Dangos Bar &Offer"
-
 #: ../gui/rosegardengui.cpp:655
 msgid "Show Trac&ks Toolbar"
 msgstr "Dangos Bar Tra&ciau"
@@ -6786,10 +7711,6 @@ msgstr "Dangos Bar Tra&ciau"
 #: ../gui/rosegardengui.cpp:659
 msgid "Show &Editors Toolbar"
 msgstr "Dangos Bar &Golygyddion"
-
-#: ../gui/notationview.cpp:1921 ../gui/rosegardengui.cpp:663
-msgid "Show Trans&port Toolbar"
-msgstr "Dangos Bar C&ludydd"
 
 #: ../gui/rosegardengui.cpp:667
 msgid "Show &Zoom Toolbar"
@@ -6825,19 +7746,6 @@ msgstr "Dangos Rha&golygon Cylchrannau"
 msgid "Show Special &Parameters"
 msgstr "Dangos Paramedrau &Offerynnau"
 
-#: ../gui/matrixview.cpp:567 ../gui/notationview.cpp:1440
-#: ../gui/rosegardengui.cpp:739
-msgid "&Select"
-msgstr "&Dewis"
-
-#: ../gui/matrixview.cpp:572 ../gui/rosegardengui.cpp:744
-msgid "&Draw"
-msgstr "&Dylunio"
-
-#: ../gui/matrixview.cpp:582 ../gui/rosegardengui.cpp:754
-msgid "&Move"
-msgstr "&Symud"
-
 #: ../gui/rosegardengui.cpp:761
 msgid "&Resize"
 msgstr "&Ail-feintio"
@@ -6849,15 +7757,6 @@ msgstr "&Hollti"
 #: ../gui/rosegardengui.cpp:781
 msgid "&Harmonize"
 msgstr "&Cydgordio"
-
-#: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
-#, fuzzy
-msgid "Copy Range"
-msgstr "Newid Allwedd"
-
-#: ../gui/notationview.cpp:1472 ../gui/rosegardengui.cpp:814
-msgid "De&lete"
-msgstr "Di&leu"
 
 #: ../gui/rosegardengui.cpp:818
 msgid "Select &All Segments"
@@ -6875,15 +7774,6 @@ msgstr "Golygu Priod&weddau'r Ddogfen..."
 #: ../gui/rosegardengui.cpp:846
 msgid "Open in &Default Editor"
 msgstr "Agor yn y &Golygydd Rhagosodedig"
-
-#: ../gui/editcommands.cpp:895 ../gui/editcommands.cpp:1098
-#: ../gui/rosegardengui.cpp:881
-msgid "&Quantize..."
-msgstr "Cw&anteiddio..."
-
-#: ../gui/matrixview.cpp:612 ../gui/rosegardengui.cpp:885
-msgid "Repeat Last Quantize"
-msgstr ""
 
 #: ../gui/rosegardengui.cpp:905
 #, fuzzy
@@ -7034,11 +7924,6 @@ msgstr ""
 msgid "P&unch in Record"
 msgstr "Recordio gan Ddisg&yn i Mewn"
 
-#: ../gui/matrixview.cpp:762 ../gui/notationview.cpp:2047
-#: ../gui/rosegardengui.cpp:1141
-msgid "Scro&ll to Follow Playback"
-msgstr ""
-
 #: ../gui/rosegardengui.cpp:1151
 msgid "Segment Debug Dump "
 msgstr ""
@@ -7046,11 +7931,6 @@ msgstr ""
 #: ../gui/rosegardengui.cpp:1221
 msgid "  Zoom:  "
 msgstr "Chwyddo:"
-
-#: ../gui/notationview.cpp:2557 ../gui/notationview.cpp:3277
-#: ../gui/rosegardengui.cpp:1255
-msgid "  Ready."
-msgstr "  Yn Barod."
 
 #: ../gui/rosegardengui.cpp:1639
 #, fuzzy
@@ -7095,13 +7975,6 @@ msgstr ""
 "URL annilys\n"
 "%1"
 
-#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
-#: ../gui/rosegardengui.cpp:2095 ../gui/rosegardengui.cpp:2155
-#: ../gui/rosegardengui.cpp:7476
-#, c-format
-msgid "Cannot download file %1"
-msgstr "Methu lawrlwytho ffeil %1"
-
 #: ../gui/rosegardengui.cpp:2110 ../gui/rosegardengui.cpp:2166
 msgid "Opening file..."
 msgstr "Agor ffeil..."
@@ -7126,10 +7999,10 @@ msgstr "Cadw'r ffeil efo enw ffeil newydd..."
 msgid "Rosegarden-4 files"
 msgstr "Ffeiliau Rosegarden-4"
 
-#: ../gui/rosegardengui.cpp:2288 ../gui/rosegardengui.cpp:4586
-#: ../gui/rosegardengui.cpp:4629 ../gui/rosegardengui.cpp:4667
-#: ../gui/rosegardengui.cpp:4699 ../gui/rosegardengui.cpp:4732
-#: ../gui/rosegardengui.cpp:4812
+#: ../gui/rosegardengui.cpp:2288 ../gui/rosegardengui.cpp:4593
+#: ../gui/rosegardengui.cpp:4636 ../gui/rosegardengui.cpp:4674
+#: ../gui/rosegardengui.cpp:4706 ../gui/rosegardengui.cpp:4739
+#: ../gui/rosegardengui.cpp:4819
 msgid "All files"
 msgstr "Pob ffeil"
 
@@ -7182,7 +8055,7 @@ msgstr "Dangos Paramedrau &Cylchrannau"
 msgid "Set Segment Durations"
 msgstr "Gosod &Tempo i Barhad Cylchran Sain"
 
-#: ../gui/rosegardengui.cpp:2988 ../gui/rosegardengui.cpp:5623
+#: ../gui/rosegardengui.cpp:2988 ../gui/rosegardengui.cpp:5648
 msgid "Set Global Tempo"
 msgstr "Gosod Tempo Eang"
 
@@ -7322,30 +8195,30 @@ msgstr "Mewnforio ffeil Rosegarden 2.1..."
 msgid "Can't load Hydrogen file.  It appears to be corrupted."
 msgstr "Methu llwytho'r ffeil Rosegarden 2.1.  Ymddengys ei fod yn llygredig."
 
-#: ../gui/rosegardengui.cpp:4412
+#: ../gui/rosegardengui.cpp:4419
 msgid "Starting the sequencer..."
 msgstr "Cychwyn y dilyniannydd..."
 
-#: ../gui/rosegardengui.cpp:4438
+#: ../gui/rosegardengui.cpp:4445
 msgid "Couldn't start the sequencer"
 msgstr "Methu cychwyn y dilyniannydd"
 
-#: ../gui/rosegardengui.cpp:4514
+#: ../gui/rosegardengui.cpp:4521
 msgid "Clearing down jackd..."
 msgstr "Gwaredu data jackd..."
 
-#: ../gui/rosegardengui.cpp:4528
+#: ../gui/rosegardengui.cpp:4535
 msgid "Starting jackd..."
 msgstr "Dechrau jackd..."
 
-#: ../gui/rosegardengui.cpp:4567
+#: ../gui/rosegardengui.cpp:4574
 msgid ""
 "The Rosegarden sequencer process has exited unexpectedly.  Sound and "
 "recording will no longer be available for this session.\n"
 "Please exit and restart Rosegarden to restore sound capability."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4571
+#: ../gui/rosegardengui.cpp:4578
 msgid ""
 "The Rosegarden sequencer could not be started, so sound and recording will "
 "be unavailable for this session.\n"
@@ -7353,93 +8226,93 @@ msgid ""
 "rosegardenmusic.com."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4582
+#: ../gui/rosegardengui.cpp:4589
 #, fuzzy
 msgid "Exporting Rosegarden Project file..."
 msgstr "Mewnforio ffeil Rosegarden 2.1..."
 
-#: ../gui/rosegardengui.cpp:4585
+#: ../gui/rosegardengui.cpp:4592
 #, fuzzy
 msgid "Rosegarden Project files\n"
 msgstr "Ffeiliau Rosegarden-4"
 
-#: ../gui/rosegardengui.cpp:4587 ../gui/rosegardengui.cpp:4630
-#: ../gui/rosegardengui.cpp:4668 ../gui/rosegardengui.cpp:4700
-#: ../gui/rosegardengui.cpp:4733 ../gui/rosegardengui.cpp:4812
+#: ../gui/rosegardengui.cpp:4594 ../gui/rosegardengui.cpp:4637
+#: ../gui/rosegardengui.cpp:4675 ../gui/rosegardengui.cpp:4707
+#: ../gui/rosegardengui.cpp:4740 ../gui/rosegardengui.cpp:4819
 msgid "Export as..."
 msgstr "Allforio fel..."
 
-#: ../gui/rosegardengui.cpp:4600
+#: ../gui/rosegardengui.cpp:4607
 #, c-format
 msgid "Saving Rosegarden file to package failed: %1"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4614
+#: ../gui/rosegardengui.cpp:4621
 msgid "Failed to export to project file \"%1\""
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4625 ../gui/rosegardengui.cpp:4639
+#: ../gui/rosegardengui.cpp:4632 ../gui/rosegardengui.cpp:4646
 msgid "Exporting MIDI file..."
 msgstr "Allforio ffeil MIDI..."
 
-#: ../gui/rosegardengui.cpp:4628
+#: ../gui/rosegardengui.cpp:4635
 msgid "Standard MIDI files\n"
 msgstr "Ffeiliau MIDI safonol\n"
 
-#: ../gui/rosegardengui.cpp:4659 ../gui/rosegardengui.cpp:4690
-#: ../gui/rosegardengui.cpp:4722 ../gui/rosegardengui.cpp:4799
-#: ../gui/rosegardengui.cpp:4835
+#: ../gui/rosegardengui.cpp:4666 ../gui/rosegardengui.cpp:4697
+#: ../gui/rosegardengui.cpp:4729 ../gui/rosegardengui.cpp:4806
+#: ../gui/rosegardengui.cpp:4842
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Methodd yr allforio.  Methu agor y ffeil i ysgrifennu."
 
-#: ../gui/rosegardengui.cpp:4665 ../gui/rosegardengui.cpp:4676
+#: ../gui/rosegardengui.cpp:4672 ../gui/rosegardengui.cpp:4683
 msgid "Exporting Csound score file..."
 msgstr "Allforio ffeil sgor Csound..."
 
-#: ../gui/rosegardengui.cpp:4696 ../gui/rosegardengui.cpp:4708
+#: ../gui/rosegardengui.cpp:4703 ../gui/rosegardengui.cpp:4715
 msgid "Exporting Mup file..."
 msgstr "Allforio ffeil Mup..."
 
-#: ../gui/rosegardengui.cpp:4699
+#: ../gui/rosegardengui.cpp:4706
 msgid "Mup files\n"
 msgstr "Ffeiliau Mup\n"
 
-#: ../gui/rosegardengui.cpp:4728 ../gui/rosegardengui.cpp:4785
+#: ../gui/rosegardengui.cpp:4735 ../gui/rosegardengui.cpp:4792
 msgid "Exporting Lilypond file..."
 msgstr "Allforio ffeil Lilypond..."
 
-#: ../gui/rosegardengui.cpp:4731
+#: ../gui/rosegardengui.cpp:4738
 msgid "Lilypond files"
 msgstr "Ffeiliau Lilypond"
 
-#: ../gui/rosegardengui.cpp:4744
+#: ../gui/rosegardengui.cpp:4751
 #, fuzzy
 msgid "Previewing Lilypond file..."
 msgstr "Allforio ffeil Lilypond..."
 
-#: ../gui/rosegardengui.cpp:4749
+#: ../gui/rosegardengui.cpp:4756
 msgid "Failed to open a temporary file for Lilypond export."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4776
+#: ../gui/rosegardengui.cpp:4783
 #, fuzzy
 msgid "Lilypond Preview Options"
 msgstr "Maint ffont Lilypad"
 
-#: ../gui/rosegardengui.cpp:4777
+#: ../gui/rosegardengui.cpp:4784
 #, fuzzy
 msgid "Lilypond preview options"
 msgstr "Maint ffont Lilypad"
 
-#: ../gui/rosegardengui.cpp:4808 ../gui/rosegardengui.cpp:4821
+#: ../gui/rosegardengui.cpp:4815 ../gui/rosegardengui.cpp:4828
 msgid "Exporting MusicXML file..."
 msgstr "Allforio ffeil MusicXML..."
 
-#: ../gui/rosegardengui.cpp:4811
+#: ../gui/rosegardengui.cpp:4818
 msgid "XML files"
 msgstr "Ffeiliau XML"
 
-#: ../gui/rosegardengui.cpp:5024 ../gui/trackbuttons.cpp:630
+#: ../gui/rosegardengui.cpp:5038 ../gui/trackbuttons.cpp:630
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7447,13 +8320,13 @@ msgid ""
 "Would you like to set it now?"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:5026 ../gui/rosegardengui.cpp:5086
+#: ../gui/rosegardengui.cpp:5040 ../gui/rosegardengui.cpp:5100
 #: ../gui/trackbuttons.cpp:632
 #, fuzzy
 msgid "Set audio file path"
 msgstr "Llwybr ffeil sain:"
 
-#: ../gui/rosegardengui.cpp:5084
+#: ../gui/rosegardengui.cpp:5098
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7461,1069 +8334,73 @@ msgid ""
 "Would you like to set it now?"
 msgstr ""
 
-#: ../gui/matrixview.cpp:2138 ../gui/rosegardengui.cpp:5544
-msgid "%1%"
-msgstr "%1%"
-
-#: ../gui/rosegardengui.cpp:5605
+#: ../gui/rosegardengui.cpp:5630
 #, c-format
 msgid "Replace Tempo Change at %1"
 msgstr "Ailosod Newid Tempo wrth %1"
 
-#: ../gui/rosegardengui.cpp:5640
+#: ../gui/rosegardengui.cpp:5665
 msgid "Set Global and Default Tempo"
 msgstr "Gosod Tempo Eang a Rhagosodedig"
 
-#: ../gui/rosegardengui.cpp:5664
+#: ../gui/rosegardengui.cpp:5689
 #, fuzzy
 msgid "Move Tempo Change"
 msgstr "Gwaredu Newid &Tempo..."
 
-#: ../gui/rosegardengui.cpp:6064
+#: ../gui/rosegardengui.cpp:6089
 #, c-format
 msgid "Sequencer failed to add audio file %1"
 msgstr "Methodd y dilyniannydd ychwanegu ffeil sain %1"
 
-#: ../gui/rosegardengui.cpp:6092
+#: ../gui/rosegardengui.cpp:6117
 #, c-format
 msgid "Sequencer failed to remove audio file id %1"
 msgstr "Methodd y dilyniannydd waredu ffeil sain %1"
 
-#: ../gui/rosegardengui.cpp:6152
+#: ../gui/rosegardengui.cpp:6177
 msgid "Relabelling selection..."
 msgstr "Ail-labelu dewisiad..."
 
-#: ../gui/rosegardengui.cpp:7236
+#: ../gui/rosegardengui.cpp:7261
 #, fuzzy
 msgid "Play List"
 msgstr "Chwarae"
 
-#: ../gui/rosegardengui.cpp:7264
+#: ../gui/rosegardengui.cpp:7289
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:7271
+#: ../gui/rosegardengui.cpp:7296
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:7348
+#: ../gui/rosegardengui.cpp:7373
 msgid "Queueing MIDI panic events for tranmission..."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:7406
+#: ../gui/rosegardengui.cpp:7431
 msgid "Are you sure you want to save this as your default studio?"
 msgstr "Ydych yn sicr yr ydych eisiau cadw hwn fel eich stiwdio rhagosodedig?"
 
-#: ../gui/rosegardengui.cpp:7410
+#: ../gui/rosegardengui.cpp:7435
 msgid "Saving current document as default studio..."
 msgstr "Cadw'r ddogfen cyfredol fel stiwdio rhagosodedig..."
 
-#: ../gui/rosegardengui.cpp:7435
+#: ../gui/rosegardengui.cpp:7460
 #, fuzzy
 msgid ""
 "Are you sure you want to import your default studio and lose the current one?"
 msgstr "Ydych yn sicr yr ydych eisiau cadw hwn fel eich stiwdio rhagosodedig?"
 
-#: ../gui/rosegardengui.cpp:7470
+#: ../gui/rosegardengui.cpp:7495
 msgid "Import Studio from File"
 msgstr "Mewnforio Stiwdio o Ffeil"
 
-#: ../gui/rosegardengui.cpp:7503
+#: ../gui/rosegardengui.cpp:7528
 #, fuzzy
 msgid "Import Studio"
 msgstr "Mewnforio Stiwdio o Ffeil"
-
-#: ../gui/matrixview.cpp:137
-msgid "Instrument Parameters"
-msgstr "Paramedrau Offerynnau"
-
-#: ../gui/matrixview.cpp:384 ../gui/matrixview.cpp:2881
-msgid "Couldn't apply piano roll layout"
-msgstr "Methu gweithredu haenlun rholyn piano"
-
-#: ../gui/matrixview.cpp:589
-msgid "Resi&ze"
-msgstr "Ail-f&eintio"
-
-#: ../gui/matrixview.cpp:595 ../gui/notationview.cpp:1574
-msgid "C&hord Insert Mode"
-msgstr "Modd Mewnosod &Cord"
-
-#: ../gui/matrixview.cpp:602 ../gui/notationview.cpp:1446
-msgid "Ste&p Recording"
-msgstr "Recordio Cama&u"
-
-#: ../gui/matrixview.cpp:620
-#, fuzzy
-msgid "&Legato"
-msgstr "Cyfreithiol"
-
-#: ../gui/matrixview.cpp:624
-msgid "&Halve Speed"
-msgstr ""
-
-#: ../gui/matrixview.cpp:628
-#, fuzzy
-msgid "&Double Speed"
-msgstr "Llon &Dwbl"
-
-#: ../gui/matrixview.cpp:646
-msgid "Set Event &Velocities..."
-msgstr "Gosod &Buaneddau Digwyddiadau"
-
-#: ../gui/matrixview.cpp:650
-#, fuzzy
-msgid "Trigger Se&gment..."
-msgstr "Dileu Cylchran"
-
-#: ../gui/matrixview.cpp:654
-#, fuzzy
-msgid "Remove Triggers..."
-msgstr "Gwaredu Newid &Tempo..."
-
-#: ../gui/matrixview.cpp:666 ../gui/notationview.cpp:1937
-msgid "Cursor &Back"
-msgstr "Cyrchydd Yn &Ol"
-
-#: ../gui/matrixview.cpp:670 ../gui/notationview.cpp:1941
-msgid "Cursor &Forward"
-msgstr "Cyrchydd Ym&laen"
-
-#: ../gui/matrixview.cpp:674 ../gui/notationview.cpp:1945
-msgid "Cursor Ba&ck Bar"
-msgstr "Cyrchydd Y&n Ol Un Far"
-
-#: ../gui/matrixview.cpp:678 ../gui/notationview.cpp:1949
-msgid "Cursor For&ward Bar"
-msgstr "Cyrchydd Y&mlaen Un Far"
-
-#: ../gui/matrixview.cpp:682 ../gui/notationview.cpp:1953
-msgid "Cursor Back and Se&lect"
-msgstr "Cyrchydd Yn Ol a De&wis"
-
-#: ../gui/matrixview.cpp:686 ../gui/notationview.cpp:1957
-msgid "Cursor Forward and &Select"
-msgstr "Cyrchydd Ymlaen a D&ewis"
-
-#: ../gui/matrixview.cpp:690 ../gui/notationview.cpp:1961
-msgid "Cursor Back Bar and Select"
-msgstr "Cyrchydd Yn Ol Un Far a Dewis"
-
-#: ../gui/matrixview.cpp:694 ../gui/notationview.cpp:1965
-msgid "Cursor Forward Bar and Select"
-msgstr "Cyrchydd Ymlaen Un Far a Dewis"
-
-#: ../gui/matrixview.cpp:698 ../gui/notationview.cpp:1975
-msgid "Cursor to St&art"
-msgstr "Cyrchydd i'r De&chrau"
-
-#: ../gui/matrixview.cpp:704 ../gui/notationview.cpp:1981
-msgid "Cursor to &End"
-msgstr "Cyrchydd i'r Diwe&dd"
-
-#: ../gui/matrixview.cpp:710 ../gui/notationview.cpp:1995
-msgid "Cursor to &Playback Pointer"
-msgstr "Cyrchydd i'r &Pwyntydd Chwarae"
-
-#: ../gui/matrixview.cpp:750 ../gui/notationview.cpp:2035
-msgid "Playback Pointer to &Cursor"
-msgstr "Pwyntydd Chwarae i'r &Cyrchydd"
-
-#: ../gui/matrixview.cpp:756 ../gui/notationview.cpp:2041
-msgid "&Solo"
-msgstr "&Unawd"
-
-#: ../gui/matrixview.cpp:771 ../gui/notationview.cpp:2056
-msgid "Set Loop to Selection"
-msgstr "Gosod Dolen i'r Dewisiad"
-
-#: ../gui/matrixview.cpp:775 ../gui/notationview.cpp:2060
-msgid "Clear L&oop"
-msgstr "Gwaredu'r Dd&olen"
-
-#: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:784
-#: ../gui/notationview.cpp:2071
-msgid "&Filter Selection"
-msgstr "Dewisiad &Hidlen"
-
-#: ../gui/matrixview.cpp:789
-msgid "Snap to 1/64"
-msgstr "Cipio at 1/64"
-
-#: ../gui/matrixview.cpp:791
-#, fuzzy
-msgid "Snap to 1/48"
-msgstr "Cipio at 1/8"
-
-#: ../gui/matrixview.cpp:793
-msgid "Snap to 1/32"
-msgstr "Cipio at 1/32"
-
-#: ../gui/matrixview.cpp:795
-#, fuzzy
-msgid "Snap to 1/24"
-msgstr "Cipio at 1/4"
-
-#: ../gui/matrixview.cpp:797
-msgid "Snap to 1/16"
-msgstr "Cipio at 1/16"
-
-#: ../gui/matrixview.cpp:799
-#, fuzzy
-msgid "Snap to 1/12"
-msgstr "Cipio at 1/2"
-
-#: ../gui/matrixview.cpp:801
-msgid "Snap to 1/8"
-msgstr "Cipio at 1/8"
-
-#: ../gui/matrixview.cpp:803
-#, fuzzy
-msgid "Snap to 1/6"
-msgstr "Cipio at 1/64"
-
-#: ../gui/matrixview.cpp:805
-msgid "Snap to 1/4"
-msgstr "Cipio at 1/4"
-
-#: ../gui/matrixview.cpp:807
-msgid "Snap to 1/2"
-msgstr "Cipio at 1/2"
-
-#: ../gui/matrixview.cpp:809
-msgid "Snap to &Unit"
-msgstr "Cipio at &Uned"
-
-#: ../gui/matrixview.cpp:811
-msgid "Snap to Bea&t"
-msgstr "Cipio at Curia&d"
-
-#: ../gui/matrixview.cpp:813
-msgid "Snap to &Bar"
-msgstr "Cipio at &Far"
-
-#: ../gui/matrixview.cpp:815
-msgid "&No Snap"
-msgstr "&Dim Cipio"
-
-#: ../gui/matrixview.cpp:821
-#, fuzzy
-msgid "Show Instrument Parameters"
-msgstr "Dangos Paramedrau &Offerynnau"
-
-#: ../gui/matrixview.cpp:826 ../gui/notationview.cpp:1507
-msgid "Show Ch&ord Name Ruler"
-msgstr "Dangos Rhesydd Enwau C&ordiau"
-
-#: ../gui/matrixview.cpp:830 ../gui/notationview.cpp:1515
-msgid "Show &Tempo Ruler"
-msgstr "Dangos Rhesydd &Tempo"
-
-#: ../gui/matrixview.cpp:1119 ../gui/notationview.cpp:2797
-#, c-format
-msgid ""
-"_n:   1 event selected \n"
-"  %n events selected "
-msgstr ""
-
-#: ../gui/matrixview.cpp:1121 ../gui/notationview.cpp:2799
-msgid "  No selection "
-msgstr "   Dim dewisiad"
-
-#: ../gui/matrixview.cpp:1261
-#, fuzzy
-msgid "Making legato..."
-msgstr "Gwneud addurnodau..."
-
-#: ../gui/matrixview.cpp:1272
-#, fuzzy
-msgid "Halving speed..."
-msgstr "Cadw ffeil..."
-
-#: ../gui/matrixview.cpp:1285
-#, fuzzy
-msgid "Doubling speed..."
-msgstr "Dileu'r dewisiad..."
-
-#: ../gui/matrixview.cpp:1307
-#, fuzzy
-msgid "Rescaling..."
-msgstr "Ail-&raddu..."
-
-#: ../gui/matrixview.cpp:1422
-msgid "Time: %1 (%2.%3s)"
-msgstr "Amser: %1 (%2.%3s)"
-
-#: ../gui/matrixview.cpp:1983
-msgid "Unquantizing..."
-msgstr "Dad-gwanteiddio..."
-
-#: ../gui/matrixview.cpp:2013
-msgid " Grid: "
-msgstr "Rhwydell:"
-
-#: ../gui/matrixview.cpp:2042
-msgid "Unit"
-msgstr "Uned"
-
-#: ../gui/matrixview.cpp:2044
-msgid "Beat"
-msgstr "Curiad"
-
-#: ../gui/matrixview.cpp:2046
-msgid "Bar"
-msgstr "Bar"
-
-#: ../gui/matrixview.cpp:2065
-msgid " Quantize: "
-msgstr "Cwanteiddio:"
-
-#: ../gui/matrixview.cpp:2421
-msgid "Raising velocities..."
-msgstr "Codi buaneddau..."
-
-#: ../gui/matrixview.cpp:2430
-msgid "Lowering velocities..."
-msgstr "Iselhau buaneddau..."
-
-#: ../gui/matrixview.cpp:2464
-msgid "Set Event Velocities"
-msgstr "Gosod Buaneddau Digwyddiadau"
-
-#: ../gui/matrixview.cpp:2469
-msgid "Setting Velocities..."
-msgstr "Gosod Buaneddau..."
-
-#: ../gui/matrixview.cpp:2502
-#, fuzzy
-msgid "Remove Triggers"
-msgstr "&Gwaredu Arwydd"
-
-#: ../gui/matrixview.cpp:2559
-msgid "%1 - Segment Track #%2 - %3"
-msgstr ""
-
-#: ../gui/matrixview.cpp:2566
-#, fuzzy
-msgid "%1 - All Segments - %2"
-msgstr "Parhad"
-
-#: ../gui/matrixview.cpp:2573
-#, fuzzy
-msgid ""
-"_n: %1 - 1 Segment - %2\n"
-"%1 - %n Segments - %2"
-msgstr "Parhad"
-
-#: ../gui/matrixview.cpp:2716
-#, fuzzy
-msgid "Can't insert note: No grid duration selected"
-msgstr "Dim parhad nodau wedi'i ddewis"
-
-#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
-#, fuzzy
-msgid "File name"
-msgstr "Enw ffeil:"
-
-#: ../gui/playlist.cpp:141
-#, fuzzy
-msgid "Add..."
-msgstr "..."
-
-#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
-#: ../gui/playlist.cpp:142
-msgid "Play"
-msgstr "Chwarae"
-
-#: ../gui/playlist.cpp:143
-#, fuzzy
-msgid "Move Up"
-msgstr "Symud Trac i &Fyny"
-
-#: ../gui/playlist.cpp:144
-#, fuzzy
-msgid "Move Down"
-msgstr "Symud Trac i &Lawr"
-
-#: ../gui/playlist.cpp:189
-#, fuzzy
-msgid "Select one or more Rosegarden files"
-msgstr "Dewis un neu mwy o Ffeiliau Sain"
-
-#: ../gui/deviceeditor.cpp:80
-msgid "Add Play Device"
-msgstr "Ychwanegu Dyfais Chwarae"
-
-#: ../gui/deviceeditor.cpp:81
-msgid "Add Record Device"
-msgstr "Ychwanegu Dyfais Recordio"
-
-#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
-msgid "Delete Device"
-msgstr "Dileu Dyfais"
-
-#: ../gui/deviceeditor.cpp:135 ../gui/importdevicedialog.cpp:136
-#, c-format
-msgid "Device %1"
-msgstr "Dyfais %1"
-
-#: ../gui/deviceeditor.cpp:244
-msgid "Apply pending changes?"
-msgstr "Gweithredu newidiadau sy'n disgwyl? "
-
-#: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
-msgid "<new device>"
-msgstr "<dyfais newydd>"
-
-#: ../gui/trackbuttons.cpp:320 ../gui/trackbuttons.cpp:562
-#: ../gui/trackparameterbox.cpp:90 ../gui/trackparameterbox.cpp:563
-msgid "<untitled>"
-msgstr "<di-deitl>"
-
-#: ../gui/trackparameterbox.cpp:105
-#, fuzzy
-msgid "Playback parameters"
-msgstr "Safon chwarae ="
-
-#: ../gui/trackparameterbox.cpp:151
-#, fuzzy
-msgid "Recording filters"
-msgstr "<dim dyfeisiau recordio>"
-
-#: ../gui/trackparameterbox.cpp:166
-msgid "Channel"
-msgstr "Sianel"
-
-#: ../gui/trackparameterbox.cpp:196
-#, fuzzy
-msgid "Create segments with:"
-msgstr "Creu Cylchran"
-
-#: ../gui/trackparameterbox.cpp:203
-#, fuzzy
-msgid "Preset"
-msgstr "saib"
-
-#: ../gui/trackparameterbox.cpp:211
-msgid "Load"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:221
-#, fuzzy
-msgid "treble"
-msgstr "Trebl"
-
-#: ../gui/trackparameterbox.cpp:222
-#, fuzzy
-msgid "bass"
-msgstr "Bas"
-
-#: ../gui/trackparameterbox.cpp:223
-#, fuzzy
-msgid "crotales"
-msgstr "Wythfed &Is"
-
-#: ../gui/trackparameterbox.cpp:224
-msgid "xylophone"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:225
-msgid "guitar"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:226
-msgid "contrabass"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:227
-#, fuzzy
-msgid "celesta"
-msgstr "Di&leu"
-
-#: ../gui/trackparameterbox.cpp:228
-msgid "old celesta"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:229
-msgid "soprano"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:230
-#, fuzzy
-msgid "alto"
-msgstr "Alto"
-
-#: ../gui/trackparameterbox.cpp:231
-#, fuzzy
-msgid "tenor"
-msgstr "Tenor"
-
-#: ../gui/trackparameterbox.cpp:448 ../gui/trackparameterbox.cpp:469
-msgid "All"
-msgstr "Popeth"
-
-#: ../gui/trackparameterbox.cpp:515
-#, fuzzy, c-format
-msgid "High: %1"
-msgstr "Uchel"
-
-#: ../gui/trackparameterbox.cpp:516
-#, fuzzy, c-format
-msgid "Low: %1"
-msgstr "Ychwanegu %1"
-
-#: ../gui/trackparameterbox.cpp:567
-msgid "[ Track#%1 - %2 ]"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:866
-msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
-
-#: ../gui/importdevicedialog.cpp:54
-#, fuzzy
-msgid "Import from Device..."
-msgstr "Mewnforio Rhengau oddiwrth Dyfais ..."
-
-#: ../gui/importdevicedialog.cpp:95
-#, fuzzy, c-format
-msgid "Cannot open file %1"
-msgstr "Methu agor ffeil '%1'"
-
-#: ../gui/importdevicedialog.cpp:102
-#, fuzzy, c-format
-msgid "No devices found in file %1"
-msgstr "Ni chanfuwyd Dyfais yn y ffeil"
-
-#: ../gui/importdevicedialog.cpp:109
-msgid "Source device"
-msgstr "Dyfais tarddiad"
-
-#: ../gui/importdevicedialog.cpp:114
-#, fuzzy
-msgid "Import from: "
-msgstr "Mewnforio Stiwdio o Ffeil"
-
-#: ../gui/importdevicedialog.cpp:151
-#, fuzzy
-msgid "Import banks"
-msgstr "Mewnforio Rhengau"
-
-#: ../gui/importdevicedialog.cpp:152
-#, fuzzy
-msgid "Import key mappings"
-msgstr "Allforio trawstiau"
-
-#: ../gui/importdevicedialog.cpp:153
-#, fuzzy
-msgid "Import controllers"
-msgstr "rheolydd %1"
-
-#: ../gui/importdevicedialog.cpp:156
-msgid "Import device name"
-msgstr "Mewnforio dyfais o'r enw"
-
-#: ../gui/importdevicedialog.cpp:162
-#, fuzzy
-msgid "Bank import behavior"
-msgstr "Ymddygiad mewnforio"
-
-#: ../gui/importdevicedialog.cpp:164
-#, fuzzy
-msgid "Merge banks"
-msgstr "Cyfuno Rhengau"
-
-#: ../gui/importdevicedialog.cpp:165
-#, fuzzy
-msgid "Overwrite banks"
-msgstr "Ysgrifennu dros Rhengau"
-
-#: ../gui/importdevicedialog.cpp:365
-msgid "Bank %1:%2"
-msgstr "Rheng %1:%2"
-
-#: ../gui/rosegardenguiview.cpp:229
-msgid "No non-audio segments in composition"
-msgstr "Dim cylchrannau di-sain yn y cyfansoddiad"
-
-#: ../gui/rosegardenguiview.cpp:303
-msgid "Selection must contain only audio or non-audio segments"
-msgstr "Rhaid i'r dewisiad gynnwys dim ond cylchrannau sain neu di-sain"
-
-#: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
-#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
-msgid "No non-audio segments selected"
-msgstr "Dim cylchrannau di-sain wedi'w dewis"
-
-#: ../gui/rosegardenguiview.cpp:837
-msgid ""
-"You've not yet defined an audio editor for Rosegarden to use.\n"
-"See Settings -> Configure Rosegarden -> General -> External Editors."
-msgstr ""
-
-#: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
-#, fuzzy
-msgid "Can't add dropped file. "
-msgstr "Methu agor ffeil '%1'"
-
-#: ../gui/editcommands.cpp:212
-msgid "(excerpt)"
-msgstr "(dyfyniad)"
-
-#: ../gui/editcommands.cpp:226
-msgid "(copied)"
-msgstr "(wedi'i gopio)"
-
-#: ../gui/editcommands.cpp:452
-msgid "Paste into an existing gap [\"restricted\"]"
-msgstr "Gludo i mewn i fwlch sy'n bodoli [\"cyfyngedig\"]"
-
-#: ../gui/editcommands.cpp:454
-msgid "Erase existing events to make room [\"simple\"]"
-msgstr "Dileu digwyddiadau sy'n bodoli er mwyn creu lle [\"syml\"]"
-
-#: ../gui/editcommands.cpp:456
-msgid "Move existing events out of the way [\"open-n-paste\"]"
-msgstr "Symud digwyddiadau sy'n bodoli allan o'r ffordd [\"agor-a-gludo\"]"
-
-#: ../gui/editcommands.cpp:458
-msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
-msgstr ""
-"Trosgaenu nodau, gan glymu yn erbyn nodau presennol [\"trosgaen-nodau\"]"
-
-#: ../gui/editcommands.cpp:460
-msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr "Trosgaenu nodau, gan anywbyddu nodau presennol [\"trosgaen-matrics\"]"
-
-#: ../gui/editcommands.cpp:889
-msgid "Heuristic Notation &Quantize"
-msgstr "&Cwanteiddio Nodiant Darganfyddol"
-
-#: ../gui/editcommands.cpp:891
-msgid "Grid &Quantize"
-msgstr "C&wanteiddio Rhwydell"
-
-#: ../gui/editcommands.cpp:1054 ../gui/editcommands.cpp:1065
-msgid "Unquantize Events"
-msgstr "Dad-gwanteiddio Digwyddiadau"
-
-#: ../gui/editcommands.cpp:1565
-#, fuzzy
-msgid "&Move Events to Other Segment"
-msgstr "Wedi cael digwyddiad tu allan o Gylchran"
-
-#: ../gui/editcommands.cpp:1798
-#, fuzzy
-msgid "Insert Trigger Note"
-msgstr "Mewnosod Nodyn"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "C%1"
-msgstr "C%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "C#%1"
-msgstr "C#%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "D%1"
-msgstr "D%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "D#%1"
-msgstr "D#%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "E%1"
-msgstr "E%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "F%1"
-msgstr "F%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "F#%1"
-msgstr "F#%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "G%1"
-msgstr "G%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "G#%1"
-msgstr "G#%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "A%1"
-msgstr "A%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "A#%1"
-msgstr "A#%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "B%1"
-msgstr "B%1"
-
-#: ../gui/notationview.cpp:670
-msgid "Preparing to print..."
-msgstr "Paratoi argraffu..."
-
-#: ../gui/notationview.cpp:1190
-msgid "Note &Font"
-msgstr "&Ffont i'r Nodau"
-
-#: ../gui/notationview.cpp:1212
-msgid "Si&ze"
-msgstr "Ma&int"
-
-#: ../gui/notationview.cpp:1219
-#, fuzzy
-msgid "S&pacing"
-msgstr "B&ylchu"
-
-#: ../gui/notationview.cpp:1241
-#, fuzzy
-msgid "Du&ration Factor"
-msgstr "Parhad"
-
-#: ../gui/notationview.cpp:1266
-msgid "Note &Style"
-msgstr "A&rddull y Nodau"
-
-#: ../gui/notationview.cpp:1292
-msgid "Insert Rest"
-msgstr "Mewnosod Saib"
-
-#: ../gui/notationview.cpp:1296
-msgid "Switch from Note to Rest"
-msgstr "Newid o Nodyn i Saib"
-
-#: ../gui/notationview.cpp:1301
-msgid "Switch from Rest to Note"
-msgstr "Newid o Saib i Nodyn"
-
-#: ../gui/notationview.cpp:1358
-msgid "No accidental"
-msgstr "Dim hapnod"
-
-#: ../gui/notationview.cpp:1359
-#, fuzzy
-msgid "Follow previous accidental"
-msgstr "Gorfod hapnodau..."
-
-#: ../gui/notationview.cpp:1360
-msgid "Sharp"
-msgstr "Llon"
-
-#: ../gui/notationview.cpp:1361
-msgid "Flat"
-msgstr "Lleddf"
-
-#: ../gui/notationview.cpp:1362
-msgid "Natural"
-msgstr "Naturiol"
-
-#: ../gui/notationview.cpp:1363
-msgid "Double sharp"
-msgstr "Llon dwbl"
-
-#: ../gui/notationview.cpp:1364
-msgid "Double flat"
-msgstr "Lleddf dwbl"
-
-#: ../gui/notationview.cpp:1385
-msgid "&Treble Clef"
-msgstr "Cleff y &Trebl"
-
-#: ../gui/notationview.cpp:1392
-msgid "Te&nor Clef"
-msgstr "Cleff y Te&nor"
-
-#: ../gui/notationview.cpp:1399
-msgid "&Alto Clef"
-msgstr "Cleff yr &Alto"
-
-#: ../gui/notationview.cpp:1406
-msgid "&Bass Clef"
-msgstr "Cleff y &Bas"
-
-#: ../gui/notationview.cpp:1413
-msgid "&Text"
-msgstr "&Testun"
-
-#: ../gui/notationview.cpp:1419
-#, fuzzy
-msgid "&Fretboard"
-msgstr "&Brys Ymlaen "
-
-#: ../gui/notationview.cpp:1452
-msgid "Select from Sta&rt"
-msgstr "Dewis o Dech&rau"
-
-#: ../gui/notationview.cpp:1456
-msgid "Select to &End"
-msgstr "Dewis i Ddi&wedd"
-
-#: ../gui/notationview.cpp:1460
-msgid "Select Whole St&aff"
-msgstr "Dewis yr Holl E&rwydd"
-
-#: ../gui/notationview.cpp:1468
-msgid "Pa&ste..."
-msgstr "Gl&udo..."
-
-#: ../gui/notationview.cpp:1486
-msgid "&Linear Layout"
-msgstr "&Haenlun Llinellol"
-
-#: ../gui/notationview.cpp:1494
-msgid "&Continuous Page Layout"
-msgstr "Haenlun &Tudalen Barhaus"
-
-#: ../gui/notationview.cpp:1502
-msgid "&Multiple Page Layout"
-msgstr "Haenlun &Tudalennau Lluosol"
-
-#: ../gui/notationview.cpp:1511
-msgid "Show Ra&w Note Ruler"
-msgstr "Dangos Rhesydd Nodau C&raidd"
-
-#: ../gui/notationview.cpp:1519
-msgid "Show &Annotations"
-msgstr "Dangos &Anodiadau"
-
-#: ../gui/notationview.cpp:1523
-msgid "Show Lily&Pond Directives"
-msgstr ""
-
-#: ../gui/notationview.cpp:1527
-msgid "Open L&yric Editor"
-msgstr "Agor Golygydd G&eiriau"
-
-#: ../gui/notationview.cpp:1568
-msgid "Trip&let Insert Mode"
-msgstr "Modd Mewnosod Tri&pled"
-
-#: ../gui/notationview.cpp:1794
-msgid "&Dump selected events to stderr"
-msgstr "&Dadlwytho digwyddiadau dewisiedig i stderr"
-
-#: ../gui/notationview.cpp:1862
-#, fuzzy
-msgid "Ma&ke Ornament..."
-msgstr "Gwneud addurnodau..."
-
-#: ../gui/notationview.cpp:1866
-msgid "Trigger &Ornament..."
-msgstr ""
-
-#: ../gui/notationview.cpp:1870
-#, fuzzy
-msgid "Remove Ornament..."
-msgstr "Gwaredu gwrthpwynt"
-
-#: ../gui/notationview.cpp:1875
-msgid "&None"
-msgstr "&Dim"
-
-#: ../gui/notationview.cpp:1883
-msgid "Add Fretboard"
-msgstr ""
-
-#: ../gui/notationview.cpp:1910
-msgid "Show &Notes Toolbar"
-msgstr "Dangos Bar &Nodau"
-
-#: ../gui/notationview.cpp:1911
-msgid "Show &Rests Toolbar"
-msgstr "Dangos Bar &Seibiau"
-
-#: ../gui/notationview.cpp:1912
-msgid "Show &Accidentals Toolbar"
-msgstr "Dangos Bar &Hapnodau"
-
-#: ../gui/notationview.cpp:1913
-msgid "Show Cle&fs Toolbar"
-msgstr "Dangos Bar &Cleffau"
-
-#: ../gui/notationview.cpp:1915
-msgid "Show &Marks Toolbar"
-msgstr "Dangos Bar &Arwyddion"
-
-#: ../gui/notationview.cpp:1917
-msgid "Show &Group Toolbar"
-msgstr "Dangos Bar &Casglu"
-
-#: ../gui/notationview.cpp:1919
-msgid "Show &Layout Toolbar"
-msgstr "Dangos Bar &Haenlunio"
-
-#: ../gui/notationview.cpp:1923
-msgid "Show M&eta Toolbar"
-msgstr "Dangos Bar &Meta"
-
-#: ../gui/notationview.cpp:1985
-msgid "Cursor &Up Staff"
-msgstr "Cyrchydd i &Fyny Un Erwydd"
-
-#: ../gui/notationview.cpp:1989
-msgid "Cursor &Down Staff"
-msgstr "Cyrchydd i &Lawr Un Erwydd"
-
-#: ../gui/notationview.cpp:2075
-msgid "Push &Left"
-msgstr ""
-
-#: ../gui/notationview.cpp:2079
-msgid "Push &Right"
-msgstr ""
-
-#: ../gui/notationview.cpp:2083
-msgid "Push &Up"
-msgstr ""
-
-#: ../gui/notationview.cpp:2087
-#, fuzzy
-msgid "Push &Down"
-msgstr "Coesau I &Lawr"
-
-#: ../gui/notationview.cpp:2091
-#, fuzzy
-msgid "Restore &Computed Positions"
-msgstr "&Adfer Coesau a Gyfrifwyd"
-
-#: ../gui/notationview.cpp:2095
-#, fuzzy
-msgid "Make &Invisible"
-msgstr "Gwneud Nodau yn Ddic&honol"
-
-#: ../gui/notationview.cpp:2099
-#, fuzzy
-msgid "Make &Visible"
-msgstr "Gwneud Nodau yn Ddic&honol"
-
-#: ../gui/notationview.cpp:2103
-#, fuzzy
-msgid "Toggle Dot"
-msgstr "nodyn cyfan"
-
-#: ../gui/notationview.cpp:2107 ../gui/notationview.cpp:2111
-#, fuzzy
-msgid "Add Dot"
-msgstr "Ychwanegu %1"
-
-#: ../gui/notationview.cpp:2162
-#, c-format
-msgid ""
-"_n: 1 pixel\n"
-"%n pixels"
-msgstr ""
-
-#: ../gui/notationview.cpp:2205
-msgid "  Font:  "
-msgstr "Ffont:"
-
-#: ../gui/notationview.cpp:2232
-msgid "Unknown font \"%1\", using default"
-msgstr "Ffont anhysbys \"%1\"; yn defnyddio'r rhagosod"
-
-#: ../gui/notationview.cpp:2240
-msgid "  Size:  "
-msgstr "Maint:"
-
-#: ../gui/notationview.cpp:2262
-msgid "  Spacing:  "
-msgstr "Bylchu:"
-
-#: ../gui/notationview.cpp:2562
-msgid "Laying out score..."
-msgstr "Haenlunio'r sgor..."
-
-#: ../gui/notationview.cpp:2574
-msgid "Laying out staff %1..."
-msgstr "Haenlunio erwydd %1..."
-
-#: ../gui/notationview.cpp:2583
-msgid "Reconciling staffs..."
-msgstr "Cysoni erwyddau..."
-
-#: ../gui/notationview.cpp:3347
-msgid "Sizing and allocating canvas..."
-msgstr "Meintio a dosrannu'r cynfas..."
-
-#: ../gui/notationview.cpp:3507
-msgid "note"
-msgstr "nodyn"
-
-#: ../gui/notationview.cpp:3507
-msgid "rest"
-msgstr "saib"
-
-#: ../gui/notationview.cpp:3666
-msgid "%1 - Segment Track #%2 - Notation"
-msgstr ""
-
-#: ../gui/notationview.cpp:3672
-#, fuzzy
-msgid "%1 - All Segments - Notation"
-msgstr "Parhad"
-
-#: ../gui/notationview.cpp:3677
-#, fuzzy
-msgid ""
-"_n: %1 - Segment - Notation\n"
-"%1 - %n Segments - Notation"
-msgstr "Parhad"
-
-#: ../gui/notefont.cpp:72 ../gui/presethandler.cpp:125
-#, fuzzy
-msgid "unknown error"
-msgstr "Anhysbys"
-
-#: ../gui/presethandler.cpp:153
-#, fuzzy, c-format
-msgid "Can't open preset file %1"
-msgstr "Methu agor ffeil arddull %1"
-
-#: ../gui/presethandler.cpp:347
-msgid "Load track parameters preset"
-msgstr ""
-
-#: ../gui/presethandler.cpp:375
-msgid "Select preset track parameters for:"
-msgstr ""
-
-#: ../gui/presethandler.cpp:377
-msgid "Category"
-msgstr ""
-
-#: ../gui/presethandler.cpp:383
-#, fuzzy
-msgid "Player Ability"
-msgstr "Chwarae"
-
-#: ../gui/presethandler.cpp:385
-#, fuzzy
-msgid "Amateur"
-msgstr "Meistr MMC"
-
-#: ../gui/presethandler.cpp:386
-#, fuzzy
-msgid "Professional"
-msgstr "Prosesu..."
 
 #: ../gui/notefontviewer.cpp:99
 #, c-format
@@ -9033,6 +8910,11 @@ msgstr "Lliw:"
 msgid "Instrument Parameter Box position:"
 msgstr "Paramedrau Offerynnau"
 
+#: ../gui/notefont.cpp:72 ../gui/presethandler.cpp:127
+#, fuzzy
+msgid "unknown error"
+msgstr "Anhysbys"
+
 #: ../gui/notefont.cpp:98
 msgid "Can't open font mapping file %1 or %2"
 msgstr "Methu agor ffeil mapio wynebfathau %1 neu %2"
@@ -9218,7 +9100,7 @@ msgstr ""
 "Ceisiwch copio'r ffeil yma i gyfeiriadur lle mae ganddoch ganiatadau "
 "ysgrifennu, a'i ail-ychwanegu."
 
-#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:366
+#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:244
 #, no-c-format
 msgid "Rosegarden Transport"
 msgstr "Cludiant Rosegarden"
@@ -9533,7 +9415,7 @@ msgstr ""
 "\n"
 "yn lle?"
 
-#: ../gui/lilypondio.cpp:936
+#: ../gui/lilypondio.cpp:942
 msgid ""
 "You encountered an enharmonic resolution bug somewhere during this "
 "operation.  You may wish to save a copy of your current composition and "
@@ -9543,11 +9425,11 @@ msgid ""
 "file you've just exported."
 msgstr ""
 
-#: ../gui/lilypondio.cpp:1416
+#: ../gui/lilypondio.cpp:1422
 msgid "warning: overlong bar truncated here"
 msgstr "rhybudd: bar sy'n or-hir wedi'i dorri yma"
 
-#: ../gui/lilypondio.cpp:1421
+#: ../gui/lilypondio.cpp:1427
 msgid "warning: bar too short, padding with rests"
 msgstr "rhybudd: bar sy'n rhy gwta, wedi ei lenwi efo seibiau"
 
@@ -9585,15 +9467,152 @@ msgstr ""
 msgid "<untitled audio>"
 msgstr "<di-deitl>"
 
+#: ../gui/trackbuttons.cpp:320 ../gui/trackbuttons.cpp:562
+#: ../gui/trackparameterbox.cpp:105 ../gui/trackparameterbox.cpp:584
+msgid "<untitled>"
+msgstr "<di-deitl>"
+
 #: ../gui/trackbuttons.cpp:351 ../gui/trackbuttons.cpp:427
 #: ../gui/trackbuttons.cpp:814 ../gui/trackbuttons.cpp:1163
 msgid "<no instrument>"
 msgstr "<dim offeryn>"
 
-#: ../gui/rosegardenparameterarea.cpp:71
+#: ../gui/trackparameterbox.cpp:67
 #, fuzzy
-msgid " Parameters"
+msgid "Track Parameters"
 msgstr "Paramedrau Rhwydell"
+
+#: ../gui/trackparameterbox.cpp:112
+#, fuzzy
+msgid "Playback parameters"
+msgstr "Safon chwarae ="
+
+#: ../gui/trackparameterbox.cpp:159
+#, fuzzy
+msgid "Recording filters"
+msgstr "<dim dyfeisiau recordio>"
+
+#: ../gui/trackparameterbox.cpp:183
+msgid "Channel"
+msgstr "Sianel"
+
+#: ../gui/trackparameterbox.cpp:205
+#, fuzzy
+msgid "Create segments with:"
+msgstr "Creu Cylchran"
+
+#: ../gui/trackparameterbox.cpp:221
+#, fuzzy
+msgid "Preset"
+msgstr "saib"
+
+#: ../gui/trackparameterbox.cpp:229
+msgid "Load"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:239
+#, fuzzy
+msgid "treble"
+msgstr "Trebl"
+
+#: ../gui/trackparameterbox.cpp:240
+#, fuzzy
+msgid "bass"
+msgstr "Bas"
+
+#: ../gui/trackparameterbox.cpp:241
+#, fuzzy
+msgid "crotales"
+msgstr "Wythfed &Is"
+
+#: ../gui/trackparameterbox.cpp:242
+msgid "xylophone"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:243
+msgid "guitar"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:244
+msgid "contrabass"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:245
+#, fuzzy
+msgid "celesta"
+msgstr "Di&leu"
+
+#: ../gui/trackparameterbox.cpp:246
+msgid "old celesta"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:247
+msgid "soprano"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:248
+#, fuzzy
+msgid "alto"
+msgstr "Alto"
+
+#: ../gui/trackparameterbox.cpp:249
+#, fuzzy
+msgid "tenor"
+msgstr "Tenor"
+
+#: ../gui/trackparameterbox.cpp:469 ../gui/trackparameterbox.cpp:490
+msgid "All"
+msgstr "Popeth"
+
+#: ../gui/trackparameterbox.cpp:536
+#, fuzzy, c-format
+msgid "High: %1"
+msgstr "Uchel"
+
+#: ../gui/trackparameterbox.cpp:537
+#, fuzzy, c-format
+msgid "Low: %1"
+msgstr "Ychwanegu %1"
+
+#: ../gui/trackparameterbox.cpp:588
+msgid "[ Track#%1 - %2 ]"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:888
+msgid "The instrument preset database is corrupt.  Check your installation."
+msgstr ""
+
+#: ../gui/presethandler.cpp:173
+#, fuzzy, c-format
+msgid "Can't open preset file %1"
+msgstr "Methu agor ffeil arddull %1"
+
+#: ../gui/presethandler.cpp:369
+msgid "Load track parameters preset"
+msgstr ""
+
+#: ../gui/presethandler.cpp:397
+msgid "Select preset track parameters for:"
+msgstr ""
+
+#: ../gui/presethandler.cpp:399
+msgid "Category"
+msgstr ""
+
+#: ../gui/presethandler.cpp:405
+#, fuzzy
+msgid "Player Ability"
+msgstr "Chwarae"
+
+#: ../gui/presethandler.cpp:407
+#, fuzzy
+msgid "Amateur"
+msgstr "Meistr MMC"
+
+#: ../gui/presethandler.cpp:408
+#, fuzzy
+msgid "Professional"
+msgstr "Prosesu..."
 
 #: ../gui/tempodialog.cpp:61
 #, fuzzy
@@ -9675,457 +9694,461 @@ msgstr "Nid oes newidiadau tempo eraill."
 msgid " bpm"
 msgstr ""
 
-#: rc.cpp:3 rc.cpp:57 rc.cpp:189 rc.cpp:282 rc.cpp:330
+#: ../gui/expandablegroupbox.cpp:38
+msgid "[+]"
+msgstr ""
+
+#: rc.cpp:2 rc.cpp:38 rc.cpp:126 rc.cpp:188 rc.cpp:220
 #, no-c-format
 msgid "T&ransport"
 msgstr "C&ludydd"
 
-#: rc.cpp:9
+#: rc.cpp:6
 #, fuzzy, no-c-format
 msgid "Number of Stereo &Inputs"
 msgstr "Nifer o fewnbynnau sain JACK"
 
-#: rc.cpp:12
+#: rc.cpp:8
 #, fuzzy, no-c-format
 msgid "&Number of Submasters"
 msgstr "Nifer o fewnbynnau sain JACK"
 
-#: rc.cpp:15 rc.cpp:78 rc.cpp:204 rc.cpp:297 rc.cpp:321 rc.cpp:333 rc.cpp:357
+#: rc.cpp:10 rc.cpp:52 rc.cpp:136 rc.cpp:198 rc.cpp:214 rc.cpp:222 rc.cpp:238
 #, no-c-format
 msgid "Transport Toolbar"
 msgstr "Bar Cludydd"
 
-#: rc.cpp:18
+#: rc.cpp:12
 #, no-c-format
 msgid "&Import"
 msgstr "&Mewnforio"
 
-#: rc.cpp:21
+#: rc.cpp:14
 #, no-c-format
 msgid "&Merge"
 msgstr "&Cyfuno"
 
-#: rc.cpp:24
+#: rc.cpp:16
 #, no-c-format
 msgid "&Export"
 msgstr "&Allforio"
 
-#: rc.cpp:27 rc.cpp:99 rc.cpp:252
+#: rc.cpp:18 rc.cpp:66 rc.cpp:168
 #, fuzzy, no-c-format
 msgid "&Composition"
 msgstr "Lleoliad y cyrchydd"
 
-#: rc.cpp:30
+#: rc.cpp:20
 #, no-c-format
 msgid "&Studio"
 msgstr "&Stiwdio"
 
-#: rc.cpp:33
+#: rc.cpp:22
 #, fuzzy, no-c-format
 msgid "&Tempo and Time Signature"
 msgstr "Agor yn y Golygydd Digwyddiadau"
 
-#: rc.cpp:36
+#: rc.cpp:24
 #, fuzzy, no-c-format
 msgid "Se&gments"
 msgstr "Cylch&rannau"
 
-#: rc.cpp:39 rc.cpp:105 rc.cpp:258 rc.cpp:348
+#: rc.cpp:26 rc.cpp:70 rc.cpp:172 rc.cpp:232
 #, fuzzy, no-c-format
 msgid "Edit &With"
 msgstr "%1 Traw"
 
-#: rc.cpp:42
+#: rc.cpp:28
 #, fuzzy, no-c-format
 msgid "&Split..."
 msgstr "&Hollti"
 
-#: rc.cpp:45
+#: rc.cpp:30
 #, no-c-format
 msgid "Trac&ks"
 msgstr "Tra&ciau"
 
-#: rc.cpp:48
+#: rc.cpp:32
 #, fuzzy, no-c-format
 msgid "Set &Instrument"
 msgstr "Gosod Offeryn"
 
-#: rc.cpp:54 rc.cpp:171 rc.cpp:276
+#: rc.cpp:36 rc.cpp:114 rc.cpp:184
 #, fuzzy, no-c-format
 msgid "&Editor Tools"
 msgstr "Bar Golygyddion"
 
-#: rc.cpp:60 rc.cpp:195 rc.cpp:288
+#: rc.cpp:40 rc.cpp:130 rc.cpp:192
 #, fuzzy, no-c-format
 msgid "&Toolbars"
 msgstr "Bar Ffontiau"
 
-#: rc.cpp:63 rc.cpp:198 rc.cpp:291
+#: rc.cpp:42 rc.cpp:132 rc.cpp:194
 #, fuzzy, no-c-format
 msgid "&Rulers"
 msgstr "Dangos Rhes&yddion"
 
-#: rc.cpp:69 rc.cpp:201 rc.cpp:294
+#: rc.cpp:46 rc.cpp:134 rc.cpp:196
 #, no-c-format
 msgid "Tools Toolbar"
 msgstr "Bar Offer"
 
-#: rc.cpp:72
+#: rc.cpp:48
 #, no-c-format
 msgid "Tracks Toolbar"
 msgstr "Bar Traciau"
 
-#: rc.cpp:75
+#: rc.cpp:50
 #, no-c-format
 msgid "Editors Toolbar"
 msgstr "Bar Golygyddion"
 
-#: rc.cpp:81 rc.cpp:303 rc.cpp:327 rc.cpp:363
+#: rc.cpp:54 rc.cpp:202 rc.cpp:218 rc.cpp:242
 #, no-c-format
 msgid "Zoom Toolbar"
 msgstr "Bar Chwyddo"
 
-#: rc.cpp:87 rc.cpp:318 rc.cpp:339 rc.cpp:354
+#: rc.cpp:58 rc.cpp:212 rc.cpp:226 rc.cpp:236
 #, fuzzy, no-c-format
 msgid "Time Toolbar"
 msgstr "Bar Chwyddo"
 
-#: rc.cpp:93
+#: rc.cpp:62
 #, fuzzy, no-c-format
 msgid "&Layout Mode"
 msgstr "Haenlun"
 
-#: rc.cpp:96 rc.cpp:249
+#: rc.cpp:64 rc.cpp:166
 #, fuzzy, no-c-format
 msgid "Add Event Ruler"
 msgstr "Hidlen Ddigwyddiadau"
 
-#: rc.cpp:102 rc.cpp:345
+#: rc.cpp:68 rc.cpp:230
 #, fuzzy, no-c-format
 msgid "Se&gment"
 msgstr "Cylch&rannau"
 
-#: rc.cpp:108
+#: rc.cpp:72
 #, fuzzy, no-c-format
 msgid "N&otes"
 msgstr "&Nodau"
 
-#: rc.cpp:111
+#: rc.cpp:74
 #, fuzzy, no-c-format
 msgid "&Beams"
 msgstr "Curiad"
 
-#: rc.cpp:114
+#: rc.cpp:76
 #, fuzzy, no-c-format
 msgid "&Octaves"
 msgstr "Wythfed &Is"
 
-#: rc.cpp:117
+#: rc.cpp:78
 #, fuzzy, no-c-format
 msgid "&Indications"
 msgstr "Dangosiad"
 
-#: rc.cpp:120
+#: rc.cpp:80
 #, fuzzy, no-c-format
 msgid "Slur &Position"
 msgstr "Lleoliad y cyrchydd"
 
-#: rc.cpp:123
+#: rc.cpp:82
 #, no-c-format
 msgid "Mar&ks"
 msgstr "Ar&wyddion"
 
-#: rc.cpp:126
+#: rc.cpp:84
 #, fuzzy, no-c-format
 msgid "&Ornaments"
 msgstr "Cylch&rannau"
 
-#: rc.cpp:129
+#: rc.cpp:86
 #, fuzzy, no-c-format
 msgid "&Fingerings"
 msgstr "Ychwanegu llithriad..."
 
-#: rc.cpp:132
+#: rc.cpp:88
 #, no-c-format
 msgid "S&lashes"
 msgstr "S&laesau"
 
-#: rc.cpp:135 rc.cpp:261
+#: rc.cpp:90 rc.cpp:174
 #, no-c-format
 msgid "Ad&just"
 msgstr ""
 
-#: rc.cpp:138 rc.cpp:180
+#: rc.cpp:92 rc.cpp:120
 #, no-c-format
 msgid "&Accidentals"
 msgstr "&Hapnodau"
 
-#: rc.cpp:141
+#: rc.cpp:94
 #, fuzzy, no-c-format
 msgid "Trip&lets and Tuplets"
 msgstr "Plygyn &Syml"
 
-#: rc.cpp:144
+#: rc.cpp:96
 #, no-c-format
 msgid "S&tem Direction"
 msgstr "Cyfeiriad y C&oes"
 
-#: rc.cpp:147
+#: rc.cpp:98
 #, fuzzy, no-c-format
 msgid "R&ests"
 msgstr "&Seibiau"
 
-#: rc.cpp:150 rc.cpp:174
+#: rc.cpp:100 rc.cpp:116
 #, no-c-format
 msgid "&Notes"
 msgstr "&Nodau"
 
-#: rc.cpp:153 rc.cpp:264
+#: rc.cpp:102 rc.cpp:176
 #, fuzzy, no-c-format
 msgid "&Quantize"
 msgstr "Cwanteiddio"
 
-#: rc.cpp:156 rc.cpp:270
+#: rc.cpp:104 rc.cpp:180
 #, no-c-format
 msgid "Trans&pose"
 msgstr "Traws&gyweirio"
 
-#: rc.cpp:159
+#: rc.cpp:106
 #, fuzzy, no-c-format
 msgid "&Fine Positioning"
 msgstr "Lleoliad y cyrchydd"
 
-#: rc.cpp:162
+#: rc.cpp:108
 #, fuzzy, no-c-format
 msgid "Fine Ti&ming"
 msgstr "Ychwanegu llithriad..."
 
-#: rc.cpp:165
+#: rc.cpp:110
 #, fuzzy, no-c-format
 msgid "&Visibility"
 msgstr "&Buanedd"
 
-#: rc.cpp:177
+#: rc.cpp:118
 #, no-c-format
 msgid "&Rests"
 msgstr "&Seibiau"
 
-#: rc.cpp:183
+#: rc.cpp:122
 #, no-c-format
 msgid "&Clefs"
 msgstr "&Cleffau"
 
-#: rc.cpp:186 rc.cpp:279
+#: rc.cpp:124 rc.cpp:186
 #, no-c-format
 msgid "Local &Cursor"
 msgstr ""
 
-#: rc.cpp:207
+#: rc.cpp:138
 #, no-c-format
 msgid "Notes Toolbar"
 msgstr "Bar Nodau"
 
-#: rc.cpp:210
+#: rc.cpp:140
 #, no-c-format
 msgid "Rests Toolbar"
 msgstr "Bar Seibiau"
 
-#: rc.cpp:213
+#: rc.cpp:142
 #, no-c-format
 msgid "Clefs Toolbar"
 msgstr "Bar Cleffau"
 
-#: rc.cpp:216
+#: rc.cpp:144
 #, no-c-format
 msgid "Accidentals Toolbar"
 msgstr "Bar Hapnodau"
 
-#: rc.cpp:219
+#: rc.cpp:146
 #, no-c-format
 msgid "Group Toolbar"
 msgstr "Bar Casgliadau"
 
-#: rc.cpp:222
+#: rc.cpp:148
 #, no-c-format
 msgid "Marks Toolbar"
 msgstr "Bar Arwyddion"
 
-#: rc.cpp:225
+#: rc.cpp:150
 #, no-c-format
 msgid "Meta Toolbar"
 msgstr "Bar Meta"
 
-#: rc.cpp:228
+#: rc.cpp:152
 #, no-c-format
 msgid "Layout Toolbar"
 msgstr "Bar Offer &Haenlunio"
 
-#: rc.cpp:231 rc.cpp:306
+#: rc.cpp:154 rc.cpp:204
 #, fuzzy, no-c-format
 msgid "Control Ruler actions"
 msgstr "Rheolydd"
 
-#: rc.cpp:234 rc.cpp:309
+#: rc.cpp:156 rc.cpp:206
 #, fuzzy, no-c-format
 msgid "Property Ruler actions"
 msgstr "Rheolydd"
 
-#: rc.cpp:237
+#: rc.cpp:158
 #, fuzzy, no-c-format
 msgid "&Action"
 msgstr "Cyfeiriad"
 
-#: rc.cpp:240
+#: rc.cpp:160
 #, fuzzy, no-c-format
 msgid "General Toolbar"
 msgstr "Bar Meta"
 
-#: rc.cpp:246
+#: rc.cpp:164
 #, no-c-format
 msgid "&Grid"
 msgstr "&Rhwydell"
 
-#: rc.cpp:255
+#: rc.cpp:170
 #, fuzzy, no-c-format
 msgid "&Segment"
 msgstr "Cylch&rannau"
 
-#: rc.cpp:267
+#: rc.cpp:178
 #, no-c-format
 msgid "&Velocity"
 msgstr "&Buanedd"
 
-#: rc.cpp:300 rc.cpp:315 rc.cpp:324 rc.cpp:351 rc.cpp:360
+#: rc.cpp:200 rc.cpp:210 rc.cpp:216 rc.cpp:234 rc.cpp:240
 #, no-c-format
 msgid "Actions Toolbar"
 msgstr "Bar Gweithrediadau"
 
-#: rc.cpp:370
+#: rc.cpp:247
 #, no-c-format
 msgid "Hide additional controls"
 msgstr "Cuddio rheolau ychwanegol"
 
-#: rc.cpp:374
+#: rc.cpp:250
 #, no-c-format
 msgid "Panic Button"
 msgstr "Botwm Dychryn"
 
-#: rc.cpp:377
+#: rc.cpp:252
 #, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Ail-osod pob dyfais MIDI os mae ganddoch nodau glynedig"
 
-#: rc.cpp:384
+#: rc.cpp:257
 #, no-c-format
 msgid "Provides a metronome click for you to play along with"
 msgstr "Darparu clic metronom i chi chwarae ynghyd a fo"
 
-#: rc.cpp:387
+#: rc.cpp:259
 #, no-c-format
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr "Dangos gweithgarwch MIDI i mewn ac allan o Rosegarden"
 
-#: rc.cpp:390
+#: rc.cpp:261
 #, no-c-format
 msgid "IN"
 msgstr "I MEWN"
 
-#: rc.cpp:393
+#: rc.cpp:263
 #, no-c-format
 msgid "OUT"
 msgstr "ALLAN"
 
-#: rc.cpp:396 rc.cpp:399
+#: rc.cpp:265 rc.cpp:267
 #, no-c-format
 msgid "NO EVENTS"
 msgstr "DIM DIGWYDDIADAU"
 
-#: rc.cpp:406
+#: rc.cpp:272
 #, no-c-format
 msgid "Record either MIDI or audio"
 msgstr "Recordio ai MIDI neu sain"
 
-#: rc.cpp:410
+#: rc.cpp:275
 #, no-c-format
 msgid "Loop"
 msgstr "Dolen"
 
-#: rc.cpp:413
+#: rc.cpp:277
 #, no-c-format
 msgid "Turn on and off the loop markers (if set)"
 msgstr "Dangos a cuddio'r nodwyr dolen (os ar osod)"
 
-#: rc.cpp:420
+#: rc.cpp:282
 #, no-c-format
 msgid "Mutes all but the currently selected track"
 msgstr "Distewi pob un trac ond yr yn sydd wedi'i ddewis yn gyfredol"
 
-#: rc.cpp:424
+#: rc.cpp:285
 #, no-c-format
 msgid "Start loop or range here"
 msgstr ""
 
-#: rc.cpp:428
+#: rc.cpp:288
 #, no-c-format
 msgid "End loop or range here"
 msgstr ""
 
-#: rc.cpp:431
+#: rc.cpp:290
 #, no-c-format
 msgid "SIG"
 msgstr "SIG"
 
-#: rc.cpp:434
+#: rc.cpp:292
 #, no-c-format
 msgid "DIV"
 msgstr "DIV"
 
-#: rc.cpp:437
+#: rc.cpp:294
 #, no-c-format
 msgid "/16"
 msgstr "/16"
 
-#: rc.cpp:440
+#: rc.cpp:296
 #, no-c-format
 msgid "TEMPO"
 msgstr "TEMPO"
 
-#: rc.cpp:443
+#: rc.cpp:298
 #, no-c-format
 msgid "END"
 msgstr "DIWEDD"
 
-#: rc.cpp:446
+#: rc.cpp:300
 #, no-c-format
 msgid "BAR"
 msgstr "BAR"
 
-#: rc.cpp:450
+#: rc.cpp:303
 #, fuzzy, no-c-format
 msgid "Switch between real time, musical time, and frame count"
 msgstr "Newid rhwng amser gwir, amser cerddorol, a fframiau SMPTE"
 
-#: rc.cpp:454
+#: rc.cpp:306
 #, no-c-format
 msgid "Show additional controls"
 msgstr "Dangos rheolau ychwanegol"
 
-#: rc.cpp:458
+#: rc.cpp:309
 #, no-c-format
 msgid "Rewind"
 msgstr "Ail-ddirwyn"
 
-#: rc.cpp:461
+#: rc.cpp:311
 #, no-c-format
 msgid "Moves the current pointer position back one bar."
 msgstr "Symud lle'r pwyntydd cyfredol yn ol un far."
 
-#: rc.cpp:465
+#: rc.cpp:314
 #, no-c-format
 msgid "Rewind to beginning"
 msgstr "Ail-ddirwyn i'r dechrau"
 
-#: rc.cpp:468
+#: rc.cpp:316
 #, no-c-format
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
@@ -10134,39 +10157,39 @@ msgstr ""
 "Symud lle y pwyntydd i ddechrau'r cyfansoddiad.  (Gall hyn olygu symud "
 "ymlaen os mae'r pwyntydd cyn y dechreuad ar hyn o bryd.)"
 
-#: rc.cpp:472
+#: rc.cpp:319
 #, no-c-format
 msgid "Play/Pause"
 msgstr "Chwarae/Seibio"
 
-#: rc.cpp:475
+#: rc.cpp:321
 #, no-c-format
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
 msgstr "Chwarae o le y pwyntydd cyfredol, neu seibio chwarae os ar fynd."
 
-#: rc.cpp:482
+#: rc.cpp:326
 #, no-c-format
 msgid "Stops playback or recording."
 msgstr "Aros chwarae neu recordio."
 
-#: rc.cpp:486
+#: rc.cpp:329
 #, no-c-format
 msgid "Fast forward"
 msgstr "Brys ymlaen"
 
-#: rc.cpp:489
+#: rc.cpp:331
 #, no-c-format
 msgid "Moves the current pointer position forwards one bar."
 msgstr "Symud lle y pwyntydd cyfredol ymlaen un far."
 
-#: rc.cpp:493
+#: rc.cpp:334
 #, no-c-format
 msgid "Fast forward to end"
 msgstr "Brys ymlaen i'r diwedd"
 
-#: rc.cpp:496
+#: rc.cpp:336
 #, no-c-format
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
@@ -10175,10 +10198,13 @@ msgstr ""
 "Symud y pwyntydd i ddiwedd y cyfansoddiad.  (Gall hyn olygu symud yn ol os "
 "mae'r pwyntydd tu hwnt i'r diwedd yn barod.)"
 
-#: rc.cpp:500
+#: rc.cpp:339
 #, no-c-format
 msgid "Display time to end"
 msgstr "Dangos amser i'r diwedd"
+
+#~ msgid "Time: %1"
+#~ msgstr "Amser: %1"
 
 #, fuzzy
 #~ msgid "Recording Channel:"
@@ -10968,10 +10994,6 @@ msgstr "Dangos amser i'r diwedd"
 #, fuzzy
 #~ msgid "Rosegarden::SequenceManager"
 #~ msgstr "Rheolydd Ffeiliau Sain Rosegarden"
-
-#, fuzzy
-#~ msgid "SegmentParameterBox"
-#~ msgstr "Paramedrau Cylchrannau"
 
 #, fuzzy
 #~ msgid "RemapInstrumentDialog"
