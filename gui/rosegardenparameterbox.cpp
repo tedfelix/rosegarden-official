@@ -21,11 +21,13 @@
 
 #include "rosegardenparameterbox.h"
 
-RosegardenParameterBox::RosegardenParameterBox(const QString &label,
+RosegardenParameterBox::RosegardenParameterBox(const QString &shortLabel,
+					       const QString &longLabel,
 					       QWidget *parent,
 					       const char *name) :
     QFrame(parent, name),
-    m_label(label),
+    m_shortLabel(shortLabel),
+    m_longLabel(longLabel),
     m_mode(LANDSCAPE_MODE)
 {
     init();
@@ -49,9 +51,14 @@ void RosegardenParameterBox::init()
 
 // Return the string that should be used to label a given parameter box.
 
-QString RosegardenParameterBox::getLabel() const
+QString RosegardenParameterBox::getShortLabel() const
 {
-    return m_label;
+    return m_shortLabel;
+}
+
+QString RosegardenParameterBox::getLongLabel() const
+{
+    return m_longLabel;
 }
 
 QString RosegardenParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement) const

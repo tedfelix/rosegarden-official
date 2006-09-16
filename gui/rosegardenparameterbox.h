@@ -39,13 +39,18 @@ class RosegardenParameterBox : public QFrame
 {
     Q_OBJECT
 public:
-    RosegardenParameterBox(const QString &label, QWidget *parent = 0,
+    RosegardenParameterBox(const QString &shortLabel, // e.g. i18n("Track")
+			   const QString &longLabel,  // e.g. i18n("Track Parameters")
+			   QWidget *parent = 0,
 			   const char *name = 0);
 
     // Ask for a one-word string that can be used to label the widget.
-    QString getLabel() const;
+    QString getShortLabel() const;
 
-    // Get the label of the following parameter box (to establish an ordering)
+    // Ask for the full label (e.g. short-label "Parameters")
+    QString getLongLabel() const;
+
+    // Get the short label of the prior parameter box (to establish an ordering)
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
 
     virtual void showAdditionalControls(bool) = 0; 
@@ -63,7 +68,8 @@ protected:
     void setLayoutMode(LayoutMode mode);
 
     QFont m_font;
-    QString m_label;    // The string that containers can use for labelling.
+    QString m_shortLabel;    // The string that containers can use for labelling and identification
+    QString m_longLabel;    // The full title
     LayoutMode m_mode;  // The current layout mode.
 };
 

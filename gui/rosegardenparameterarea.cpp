@@ -84,8 +84,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // and outline, in classic mode. Add this container to an array that
     // parallels the above array of parameter boxes.
 
-    QVGroupBox *box = new QVGroupBox( i18n("%1 Parameters").arg(b->getLabel()),
-				      m_classic);
+    QVGroupBox *box = new QVGroupBox(b->getLongLabel(), m_classic);
     box->layout()->setMargin( 4 ); // about half the default value
     QFont f;
     f.setBold( true );
@@ -149,7 +148,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 	    while (i != unsorted.end()) {
 		if ((*i)->getPreviousBox(style) == previous) {
 		    sorted.push_back(*i);
-		    previous = (*i)->getLabel();
+		    previous = (*i)->getShortLabel();
 		    unsorted.erase(i);
 		    have = true;
 		    break;
@@ -212,7 +211,7 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
 	}
     } else if (new_container == m_tabBox) {
 	box->reparent(new_container, 0, QPoint(0,0), FALSE);
-	m_tabBox->insertTab(box, box->getLabel());
+	m_tabBox->insertTab(box, box->getShortLabel());
     }
 }
 

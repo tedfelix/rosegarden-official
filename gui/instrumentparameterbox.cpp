@@ -70,7 +70,9 @@ using Rosegarden::MidiDevice;
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
-  : RosegardenParameterBox(i18n("Instrument"), parent),
+  : RosegardenParameterBox(i18n("Instrument"),
+			   i18n("Instrument Parameters"),
+			   parent),
       m_widgetStack(new QWidgetStack(this)),
       m_noInstrumentParameters(new QVBox(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
