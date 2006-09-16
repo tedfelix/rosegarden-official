@@ -268,7 +268,7 @@
 <Menu name="Tools">
   <text>&amp;Tools</text>
   <Action name="text" />
-  <Action name="fretboard" />
+<!--  <Action name="fretboard" /> -->
   <Separator/>
   <Menu name="edit_tools">
   	<text>&amp;Editor Tools</text>
@@ -434,7 +434,7 @@
   <Action name="select" />
   <Action name="erase" />
   <Action name="text" />
-  <Action name="fretboard" />
+<!--  <Action name="fretboard" /> -->
   <Separator/>
   <Action name="toggle_step_by_step"/>
   <Action name="filter_selection"/>
