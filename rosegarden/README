@@ -1,6 +1,6 @@
 
-Rosegarden v1.2.4
-=================
+Rosegarden v1.4.0pre2
+=====================
 
 Rosegarden is a MIDI and audio sequencer and musical notation editor.
 
@@ -19,40 +19,19 @@ has been released yet; if not, please continue on to:
 About this release
 ------------------
 
-Release 1.2.4 of Rosegarden is a bug-fix release that fixes several
-issues with the prior 1.2.3 (which was a major feature release).
-These fixes include, briefly:
+Rosegarden 1.4.0 is a major feature release.
 
- * Avoid crash on startup if /dev/snd/seq does not exist
- * Fix incorrect sequencer status report ("no driver")
- * Fix MIDI Text Marker export
- * Fix text encoding for Lilypond 2.6 (UTF8 instead of ISO-8859-1)
- * Fix stuck notes in matrix after pressing a stop button
- * Fix crash when erasing a duplicated key signature
- * Fix crash when switching documents with a tempo editor window open
- * Fix incorrect sorting and insertion logic in marker editor
- * Fix hang in main canvas when a segment has zero duration
- * Fix audio preview display for repeating audio segments
- * Update percussion matrix when a different drum mapping is selected
- * Avoid crash when deleting a device with percussion matrix open
- * Fix matrix display for notes outside range of current key mapping
- * Ensure correct segment is acted on when clicking overlapping segments
- * Fix sequencer crash when playing back tiny audio files
- * Avoid display hang when too many segments overlap
- * Fix several build system bugs, and compilation with gcc-4.1.2
+This is a particularly exciting release for the Rosegarden project.
+It includes a number of interesting new features, many of which we
+expect to build upon further in future releases.  It also contains
+significant code contributions from a greater number of people than
+any previous Rosegarden release, including D. Michael McIntyre, Pedro
+Lopez-Cabanillas, Heikki Junes, Stephen Torri, Magnus Johansson, Vince
+Negri and Martin Shepherd as well as Chris Cannam, Guillaume Laurent,
+and a number of active translators.
 
-This release also includes several new MIDI device definition (.rgd)
-files, as well as updates for Catalan, Russian, Swedish, Czech and
-Italian translations and a completely new Finnish translation.
-
-Finally, with this release the name of the project has officially
-changed to Rosegarden.  Formerly it was referred to as Rosegarden-4 in
-order to mark the current application as newer than the long-obsolete
-"Rosegarden 2.1", a quite different and more basic application.  
-We have been phasing out the use of the 4 suffix in online
-documentation and other places, and we have now officially dropped it.
-Whereas the previous release was "Rosegarden-4 v1.2.3", this release is
-"Rosegarden v1.2.4".  Any remaining references to Rosegarden-4 are bugs.
+Please see the release notes for details of new features in this
+release.
 
 
 Build requirements
@@ -208,12 +187,12 @@ Authors and copyright
   which is Copyright 1997 - 2004 Jan Nieuwenhuizen and Han-Wen Nienhuys.
 
 * Other major contributors include Randall Farmer, Ron Kuris, Hans
-  Kieserman, Michael McIntyre, and Pedro Lopez-Cabanillas.  See AUTHORS for
-  more details, and the individual source files for copyright attributions.
+  Kieserman, Michael McIntyre, Pedro Lopez-Cabanillas, Heikki Junes,
+  Stephen Torri, Magnus Johansson, Vince Negri and Martin Shepherd.
+  See AUTHORS for more details, and the individual source files for
+  copyright attributions.
 
-* The Rosegarden splash-screen image is Copyright 2005 Carolyn H. McIntyre,
-  used by permission.  (It is a photograph of a rose growing in Michael
-  McIntyre's real live rose garden.)
+* The Rosegarden splash-screen image is Copyright 2006 D Michael McIntyre.
 
 Rosegarden is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
