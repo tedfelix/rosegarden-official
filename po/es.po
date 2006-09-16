@@ -16,13 +16,13 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-16 11:44+0100\n"
-"PO-Revision-Date: 2006-08-23 02:43-0400\n"
+"PO-Revision-Date: 2006-09-16 09:01-0400\n"
 "Last-Translator: D. Michael McIntyre <rosegarden.trumpeter@gmail.com>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../gui/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
@@ -97,8 +97,7 @@ msgstr "Maestro"
 
 #: ../gui/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro es parte de Finale, pero otras tipografías pueden usar el mismo mapa."
+msgstr "Maestro es parte de Finale, pero otras tipografías pueden usar el mismo mapa."
 
 #: ../gui/fonts/mappings/fonts.cpp:23 ../gui/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -110,8 +109,7 @@ msgstr "Opus"
 
 #: ../gui/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus es parte de Sibelius, pero otras tipografías pueden usar el mismo mapa."
+msgstr "Opus es parte de Sibelius, pero otras tipografías pueden usar el mismo mapa."
 
 #: ../gui/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
@@ -710,7 +708,6 @@ msgstr ""
 "profesional.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:248
-#, fuzzy
 msgid ""
 "<p>You can export tracks that have the same name onto a single, merged staff "
 "in\n"
@@ -732,7 +729,7 @@ msgid ""
 "<p>You can use the mouse wheel to scroll up and down, or to scroll left and "
 "right (by holding the Alt key at the same time), or to zoom in and out (by "
 "holding the Control key).</p>\n"
-msgstr ""
+msgstr "<p>Puedes emplear la rueda del ratón para hacer avanzar o retroceder el contendio de la pantalla, o para hacer un zoom.  Puedes hacer avanzar y retroceder por el derecho y por el izquierdo pulsando Alt y haciendo un clic.  Puedes hacer un zoom pulsando Control y haciendo un clic.</p>\n"
 
 #: ../gui/styles/styles.cpp:1
 msgid "Classical"
@@ -871,8 +868,7 @@ msgid "Move Segments"
 msgstr "Mover Segmentos"
 
 #: ../gui/tracklabel.cpp:63
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Pulsar y mantener el botón izquierdo del ratón para asignar esta pista a un "
 "instrumento"
@@ -1928,8 +1924,7 @@ msgstr "Crescendo - establecer %1 creciendo desde el mínimo al máximo"
 
 #: ../gui/dialogs.cpp:4065
 msgid "Diminuendo - set %1 falling from max to min"
-msgstr ""
-"Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
+msgstr "Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
 
 #: ../gui/dialogs.cpp:4069
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
@@ -1959,8 +1954,7 @@ msgstr "Cambiar Duración de la Composición"
 
 #: ../gui/dialogs.cpp:4185
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Establecer los marcadores de compás Inicial y Final para esta Composición"
+msgstr "Establecer los marcadores de compás Inicial y Final para esta Composición"
 
 #: ../gui/dialogs.cpp:4189
 msgid "Start Bar"
@@ -3218,8 +3212,7 @@ msgid "Export..."
 msgstr "Exportar..."
 
 #: ../gui/bankeditor.cpp:1169
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importar datos de Banco y Programa desde un archivo de Rosegarden para el "
 "dispositivo actual"
@@ -4847,8 +4840,7 @@ msgid "global element must precede note elements"
 msgstr "elemento global debe preceder a elementos de nota"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "elementos globales y notas pueden tener forma o nombre de carácter, pero no "
 "ambos"
@@ -4948,8 +4940,7 @@ msgstr ""
 "Rosegarden."
 
 #: ../gui/sequencemanager.cpp:1042
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Se ha sobrepasado la capacidad de proceso para audio en tiempo real. No es "
 "posible continuar."
@@ -4969,8 +4960,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Subsistema de audio JACK está perdiendo muestras."
 
 #: ../gui/sequencemanager.cpp:1106
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema "
 "de audio."
@@ -5013,9 +5003,8 @@ msgid "Segment"
 msgstr "Segmento"
 
 #: ../gui/segmentparameterbox.cpp:52
-#, fuzzy
 msgid "Segment Parameters"
-msgstr "Parámetros de Instrumento"
+msgstr "Parámetros de Segmento"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2061
 #: ../gui/segmentparameterbox.cpp:91
@@ -6556,14 +6545,12 @@ msgid "Rescaling..."
 msgstr "Reescalando..."
 
 #: ../gui/matrixview.cpp:1423
-#, fuzzy
 msgid "%1 (%2.%3s)"
-msgstr "Tiempo: %1 (%2.%3s)"
+msgstr "%1 (%2.%3s)"
 
 #: ../gui/matrixview.cpp:1434
-#, fuzzy
 msgid "%1 (%2): %3"
-msgstr "%1 (%2)"
+msgstr "%1 (%2): %3"
 
 #: ../gui/matrixview.cpp:2047
 msgid "Unquantizing..."
@@ -6631,8 +6618,7 @@ msgstr ""
 
 #: ../gui/matrixview.cpp:2792
 msgid "Can't insert note: No grid duration selected"
-msgstr ""
-"No es posible insertar nota: No hay una duración de rejilla seleccionada"
+msgstr "No es posible insertar nota: No hay una duración de rejilla seleccionada"
 
 #: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
 msgid "File name"
@@ -6727,8 +6713,7 @@ msgstr "Cuantificador heurístico de partitura"
 
 #: ../gui/widgets.cpp:845
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr ""
-"Cuantificar para la partitura solamente (dejar la interpretación intacta)"
+msgstr "Cuantificar para la partitura solamente (dejar la interpretación intacta)"
 
 #: ../gui/widgets.cpp:854
 msgid "Notation parameters"
@@ -6950,8 +6935,7 @@ msgstr "Solapar notas, enlazando con las preexistentes [\"solapamiento\"]"
 
 #: ../gui/editcommands.cpp:460
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr ""
-"Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
+msgstr "Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
 
 #: ../gui/editcommands.cpp:889
 msgid "Heuristic Notation &Quantize"
@@ -8008,8 +7992,7 @@ msgstr "Archivos MIDI Estándar\n"
 #: ../gui/rosegardengui.cpp:4729 ../gui/rosegardengui.cpp:4806
 #: ../gui/rosegardengui.cpp:4842
 msgid "Export failed.  The file could not be opened for writing."
-msgstr ""
-"Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
+msgstr "Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
 
 #: ../gui/rosegardengui.cpp:4672 ../gui/rosegardengui.cpp:4683
 msgid "Exporting Csound score file..."
@@ -8138,10 +8121,8 @@ msgid "Saving current document as default studio..."
 msgstr "Guardando el documento actual como Estudio predeterminado..."
 
 #: ../gui/rosegardengui.cpp:7460
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"¿Está seguro de querer importar el estudio por omisión y perder el actual?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "¿Está seguro de querer importar el estudio por omisión y perder el actual?"
 
 #: ../gui/rosegardengui.cpp:7495
 msgid "Import Studio from File"
@@ -9199,9 +9180,8 @@ msgid "<no instrument>"
 msgstr "<sin instrumento>"
 
 #: ../gui/trackparameterbox.cpp:67
-#, fuzzy
 msgid "Track Parameters"
-msgstr "Parámetros"
+msgstr "Parámetros de Pista"
 
 #: ../gui/trackparameterbox.cpp:112
 msgid "Playback parameters"
@@ -9398,7 +9378,7 @@ msgstr " tpm"
 
 #: ../gui/expandablegroupbox.cpp:38
 msgid "[+]"
-msgstr ""
+msgstr "[+]"
 
 #: rc.cpp:2 rc.cpp:38 rc.cpp:126 rc.cpp:188 rc.cpp:220
 #, no-c-format
@@ -9907,5 +9887,3 @@ msgstr ""
 msgid "Display time to end"
 msgstr "Muestra tiempo restante"
 
-#~ msgid "Time: %1"
-#~ msgstr "Tiempo: %1"
