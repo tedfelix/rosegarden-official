@@ -389,13 +389,11 @@
     <para>
       &rosegarden; stores each composition in its own document, using
       its own internal format.  When you save a document it is stored
-      on disc as a file with the .rg extension.  &rosegarden; can also
+      on disc as a file with the .rg extension.<footnote><para>
+	 Many users have complained about our opaque binary file
+	 format.  It is, in fact, nothing more than gzipped XML.
+     </para></footnote>  &rosegarden; can also
       handle a number of other standard file formats.
-    </para>
-
-    <para>
-     Many users have complained about our opaque binary file
-     format.  It is, in fact, nothing more than gzipped XML.
     </para>
 
     <sect1 id="file-creating">
@@ -457,8 +455,8 @@
     <sect1 id="file-merge">
       <title>Merging files</title> <para>As well as loading or
 	importing files, you can also merge them into the current
-	document, adding the segments found in the file to the ones
-	already there.
+	document, loading or importing the data from the file, as necessary,
+	and adding it to the existing composition.
       </para>
       
       <para>To merge a file, just use the relevant option on the
@@ -493,21 +491,22 @@
 	  data</link>.)
       </para>
 
-      <para>&rosegarden; is capable of producing very readable
-	scores.  Even so, it is designed to be a screen editor and not
-	primarily a typesetter.  If you want to produce true
-	print-quality scores you should consider using <ulink
-	  url="http://www.lilypond.org">LilyPond</ulink> in conjunction
-	with &rosegarden;.  LilyPond is music typesetting software
-	that reads a specialised text file format and produces
-	high-quality typeset output.  &rosegarden; is capable of
-	writing LilyPond files using the
-	<menuchoice>
-	  <guimenu lang="en">File</guimenu>
-	  <guimenuitem>Export</guimenuitem>
-	  <guimenuitem>Export LilyPond</guimenuitem>
-	</menuchoice>
-	function.  </para> </sect1>
+      <para>&rosegarden; is capable of producing very readable scores.  Even
+	  so, it is designed to be a screen editor and not primarily a
+	  typesetter.  If you want to produce true print-quality scores you
+	  should consider using <ulink
+	      url="http://www.lilypond.org">LilyPond</ulink> in conjunction
+	  with &rosegarden;.  LilyPond is music typesetting software that
+	  reads a specialised text file format and produces high-quality
+	  typeset output.  &rosegarden; is capable of writing LilyPond files
+	  using the <menuchoice> <guimenu lang="en">File</guimenu>
+	      <guimenuitem>Export</guimenuitem> <guimenuitem>Export
+		  LilyPond</guimenuitem> </menuchoice> function, and it
+	  features special <link linkend="nv-lilypond-directives">exportable
+	      directives</link> that provide access to LilyPond features for
+	  which there is currently no parallel within &rosegarden;'s own
+	  native interface.</para>
+      </sect1>
 
   </chapter>
 
@@ -662,7 +661,8 @@
       <title>Creating segments</title>
       <para>
 	To create an empty segment, in order to begin composing
-	something new, you need to use the pencil tool.  Click on
+	something new, you need to use the pencil tool (which is normally the
+	default active tool when you first start &rosegarden;).  Click on
 	the pencil on the toolbar, and then click at the point where
 	you want the segment to start (at the correct height for the
 	track you want the segment to be on, and at a distance
@@ -670,11 +670,24 @@
 	and drag rightwards until the segment is the right number of
 	bars long.
       </para>
+      <para>If you want to draw a segment longer than the visible
+	portion of the canvas, the canvas will scroll automatically once you
+	reach its edge.  If you keep dragging past the end of the entire
+	composition, you can keep dragging, and will push the end marker right along
+	with you.  (This is a welcome contrast to earlier version of
+	&rosegarden;.)
+      </para>
 
       <para>
 	Usually each new segment starts on a barline and extends bar
 	by bar, but this snap-to-grid effect can be prevented by
 	holding down Shift while clicking and dragging.
+      </para>
+
+      <para>New segments are created in a green colour, with a treble clef by
+	  default.  You may wish to jump ahead and have a look at <link
+	      linkend="track-parameters">track parameters</link> to explore
+	  other possibilities.
       </para>
 
       <para>
@@ -3911,8 +3924,12 @@
 
       </sect2>
       <sect2 id="nv-lilypond-directives">
+	  <!-- text has a link here because the reading chain is:
+	  intro -> lilypond directives, which puts you at a point well away
+	  from any explanation of the whole text dialog and whatnot -->
 	  <title>Using special LilyPond directives</title>
-	  <para>LilyPond directives are a special kind of text that you can
+	  <para>LilyPond directives are a special kind of <link
+		  linkend="nv-text">text</link> that you can
 	      use to export .ly files that take advantage of
 	      functionality not yet available directly through &rosegarden;'s
 	      own native interface.
