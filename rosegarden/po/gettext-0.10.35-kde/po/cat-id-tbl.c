@@ -197,8 +197,8 @@ comments and file positions will be preserved.  Where an exact match\n\
 cannot be found, fuzzy matching is used to produce better results.  The\n\
 results are written to stdout unless an output file is specified.\n", 69},
   {"\
-%sRead %d old + %d reference, merged %d, fuzzied %d, missing %d, obsolete \
-%d.\n", 70},
+%sRead %d old + %d reference, merged %d, fuzzied %d, missing %d, obsolete %\
+d.\n", 70},
   {" done.\n", 71},
   {"\
 Usage: %s [OPTION] [FILE]...\n\

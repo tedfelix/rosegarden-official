@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rosegarden4 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-22 22:44+0200\n"
+"POT-Creation-Date: 2006-09-16 11:44+0100\n"
 "PO-Revision-Date: 2005-02-01 19:15+0800\n"
 "Last-Translator: Liu Songhe <jack@linux.net.cn>\n"
 "Language-Team: Simplified Chinese <i18n-translation@lists.linux.net.cn>\n"
@@ -166,7 +166,7 @@ msgid ""
 "controllers via the instrument parameters box\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:13
+#: ../gui/docs/en/tips.cpp:12
 msgid ""
 "<p>...that Rosegarden has an autosave feature?<br><br>\n"
 "You can select your autosave interval from <b>Settings->Configure\n"
@@ -177,7 +177,7 @@ msgid ""
 "option to load the autosaved version, or the unmodified original.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:23
+#: ../gui/docs/en/tips.cpp:21
 msgid ""
 "<p>\n"
 "You can save the current document as your default studio by using\n"
@@ -185,14 +185,14 @@ msgid ""
 "p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:30
+#: ../gui/docs/en/tips.cpp:27
 msgid ""
 "<p>...that your default studio is a complete Rosegarden composition that "
 "gets\n"
 "loaded every time you create a new document or import a MIDI file?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:36
+#: ../gui/docs/en/tips.cpp:32
 msgid ""
 "<p>Because your default studio is a complete Rosegarden composition, it can\n"
 "contain default instrument assignments, document properties, LilyPond "
@@ -202,14 +202,14 @@ msgid ""
 "new document you create.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:44
+#: ../gui/docs/en/tips.cpp:39
 msgid ""
 "<p>...that Rosegarden will detect and create a default connection for ALSA "
 "soft\n"
 "synths that are started after Rosegarden is already running?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:50
+#: ../gui/docs/en/tips.cpp:44
 msgid ""
 "<p>If your studio setup does not change very often, and  you would prefer "
 "for\n"
@@ -221,7 +221,7 @@ msgid ""
 "Behaviour -> Always use default studio when loading files</b>.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:59
+#: ../gui/docs/en/tips.cpp:52
 msgid ""
 "<p>If you have accidentally recorded a segment so short that it does not\n"
 "appear on the canvas, which you can only hear during subsequent recording\n"
@@ -230,14 +230,14 @@ msgid ""
 "negative number.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:67
+#: ../gui/docs/en/tips.cpp:59
 msgid ""
 "<p>...that if you place a note at the wrong pitch using the notation editor, "
 "you can move it one semitone at a time with the up and down arrow keys on "
 "your keyboard?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:72
+#: ../gui/docs/en/tips.cpp:63
 #, fuzzy
 msgid ""
 "<p>...that you can toggle stem directions in the notation editor by "
@@ -247,7 +247,7 @@ msgstr ""
 "<p>……按住Shift键，再按Page Up或Page Down键，\n"
 "可以按页面大小卷动以查看屏幕上以前的记录。\n"
 
-#: ../gui/docs/en/tips.cpp:78
+#: ../gui/docs/en/tips.cpp:68
 msgid ""
 "<p>...that you can change the accidental used for a note in the notation "
 "editor (without changing the pitch of the note) by selecting\n"
@@ -255,7 +255,7 @@ msgid ""
 "p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:84
+#: ../gui/docs/en/tips.cpp:73
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning segments on "
 "the\n"
@@ -263,7 +263,7 @@ msgid ""
 "control?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:90
+#: ../gui/docs/en/tips.cpp:78
 msgid ""
 "<p>...that you can hold down the Shift key while repositioning or resizing "
 "events in the\n"
@@ -271,7 +271,7 @@ msgid ""
 "</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:96
+#: ../gui/docs/en/tips.cpp:83
 msgid ""
 "<p>...that you can edit multiple segments on multiple tracks simultaneously "
 "in\n"
@@ -279,7 +279,7 @@ msgid ""
 "in Notation Editor</b>.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:102
+#: ../gui/docs/en/tips.cpp:88
 msgid ""
 "<p>...that Rosegarden can export files for use by LilyPond, the high-quality "
 "score typesetting system?<br><br>\n"
@@ -287,7 +287,7 @@ msgid ""
 "b></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:108
+#: ../gui/docs/en/tips.cpp:93
 msgid ""
 "<p>...that Rosegarden can print via LilyPond, the high-quality score "
 "typesetting system?<br><br>\n"
@@ -298,21 +298,21 @@ msgid ""
 "several other PDF viewers, where it can then be printed as well.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:116
+#: ../gui/docs/en/tips.cpp:100
 msgid ""
 "<p>...that if you use the quantizer from within the notation view, you can "
 "tell it to quantize only the timing used for notation -- making it possible "
 "to have good looking notation <b>and</b> a human MIDI performance?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:121
+#: ../gui/docs/en/tips.cpp:104
 msgid ""
 "<p>...that you can change segment labels using the controls on the Segment "
 "Parameters box\n"
 "in the main window?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:127
+#: ../gui/docs/en/tips.cpp:109
 msgid ""
 "<p>...that the number of tracks in new documents is based on the contents "
 "of\n"
@@ -326,21 +326,21 @@ msgid ""
 "Studio</b> to make this your new default.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:138
+#: ../gui/docs/en/tips.cpp:119
 msgid ""
 "<p>...that you can change the name of a track by double clicking on the "
 "label?  (The\n"
 "label must be visible for this to work.)</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:144
+#: ../gui/docs/en/tips.cpp:124
 msgid ""
 "<p>...that you can configure what happens when you double-click on a "
 "segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your "
 "preferred editing window under the <b>Behaviour</b> tab.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:149
+#: ../gui/docs/en/tips.cpp:128
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
 "contributions from around the world?<br><br>\n"
@@ -353,7 +353,7 @@ msgid ""
 "Sweden, Russia, Japan, Finland, and Italy, just to name a few...</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:160
+#: ../gui/docs/en/tips.cpp:138
 msgid ""
 "<p>...that Rosegarden is available in Spanish, French, German, Russian, "
 "Welsh, Swedish, Italian and Estonian\n"
@@ -363,13 +363,13 @@ msgid ""
 "line at <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:168
+#: ../gui/docs/en/tips.cpp:145
 msgid ""
 "<p>...that you can change the total number of bars in the composition via\n"
 "<b>Composition -> Change Composition Start and End</b>?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:174
+#: ../gui/docs/en/tips.cpp:150
 msgid ""
 "<p>...that you can see the difference between performance and display "
 "duration\n"
@@ -379,34 +379,34 @@ msgid ""
 "<i>Note that this feature does not work in page layout view.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:183
+#: ../gui/docs/en/tips.cpp:158
 msgid ""
 "<p>...that you can add tempo and time-signature changes by double-clicking "
 "on the values displayed in the transport window or tempo rulers?</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:188
+#: ../gui/docs/en/tips.cpp:162
 msgid ""
 "<p>...that the transport window can display musical time, sample frame "
 "count, and a visual metronome as well as real time?  Just click on the small "
 "button at the extreme top left of the window.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:193
+#: ../gui/docs/en/tips.cpp:166
 msgid ""
 "<p>...that you can select all notes of a particular pitch in the matrix "
 "view, by shift-clicking on that pitch on the piano keyboard at the left?  If "
 "you shift-click-drag, you can select whole ranges too.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:198
+#: ../gui/docs/en/tips.cpp:170
 msgid ""
 "<p>...that you can set a loop in the main window by clicking-and-dragging on "
 "the time ruler with Shift pressed?  (If the ruler isn't visible, use "
 "<b>Settings -> Show Rulers</b>.)</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:203
+#: ../gui/docs/en/tips.cpp:174
 msgid ""
 "<p>...that if you're editing a section in the matrix or notation view, you "
 "can\n"
@@ -417,7 +417,7 @@ msgid ""
 "audio.</i>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:212
+#: ../gui/docs/en/tips.cpp:182
 msgid ""
 "<p>...if you have more than one note or controller event at the same time, "
 "you\n"
@@ -427,7 +427,7 @@ msgid ""
 "focus.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:220
+#: ../gui/docs/en/tips.cpp:189
 msgid ""
 "<p>The notation view shows you notes using their display duration, while "
 "the\n"
@@ -440,7 +440,7 @@ msgid ""
 "for years.  Sorry about that, folks.  Patches welcome.</i>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:230
+#: ../gui/docs/en/tips.cpp:198
 msgid ""
 "<p>If you're working with a human performance and you need to insert some "
 "new\n"
@@ -453,7 +453,7 @@ msgid ""
 "durations to something less mechanical.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:239
+#: ../gui/docs/en/tips.cpp:206
 msgid ""
 "<p>When exporting to LilyPond, you will see extra empty bars if the "
 "Rosegarden\n"
@@ -464,7 +464,7 @@ msgid ""
 "Bar</b> to the end of your notation.</p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:247
+#: ../gui/docs/en/tips.cpp:213
 msgid ""
 "<p>Rosegarden can now export certain things to LilyPond that it cannot yet\n"
 "display within its own native interface.  These new directives can be "
@@ -482,7 +482,7 @@ msgid ""
 "the notation view.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:262
+#: ../gui/docs/en/tips.cpp:227
 msgid ""
 "<p>Rosegarden now has track parameters to <b>Create segments with:</b> "
 "certain\n"
@@ -496,7 +496,7 @@ msgid ""
 "<i>These parameters do not apply to audio tracks.</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:273
+#: ../gui/docs/en/tips.cpp:237
 msgid ""
 "<p>Rosegarden now has a database of preset parameters describing more than "
 "300\n"
@@ -511,7 +511,7 @@ msgid ""
 "Johansson for assembling this extraordinary database.)</i></p>\n"
 msgstr ""
 
-#: ../gui/docs/en/tips.cpp:285
+#: ../gui/docs/en/tips.cpp:248
 msgid ""
 "<p>You can export tracks that have the same name onto a single, merged staff "
 "in\n"
@@ -523,7 +523,14 @@ msgid ""
 "name</b> from the options dialog that appears when you export to, or "
 "preview\n"
 "with LilyPond.<br><br>\n"
-"<i>The tracks must have a non-default name for this to work.</i>\n"
+"<i>The tracks must have a non-default name for this to work.</i></p>\n"
+msgstr ""
+
+#: ../gui/docs/en/tips.cpp:258
+msgid ""
+"<p>You can use the mouse wheel to scroll up and down, or to scroll left and "
+"right (by holding the Alt key at the same time), or to zoom in and out (by "
+"holding the Control key).</p>\n"
 msgstr ""
 
 #: ../gui/styles/styles.cpp:1
@@ -622,54 +629,54 @@ msgstr "新建"
 msgid "Aliases"
 msgstr "斜线"
 
-#: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:111
+#: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:115
 msgid "Insert Tempo Change"
 msgstr "插入节拍变化"
 
-#: ../gui/temporuler.cpp:115
+#: ../gui/temporuler.cpp:119
 #, fuzzy
 msgid "Insert Tempo Change at Playback Position"
 msgstr "插入节拍变化"
 
-#: ../gui/temporuler.cpp:120
+#: ../gui/temporuler.cpp:126
 #, fuzzy
 msgid "Delete Tempo Change"
 msgstr "插入节拍变化"
 
-#: ../gui/temporuler.cpp:124
+#: ../gui/temporuler.cpp:132
 msgid "Ramp Tempo to Next Tempo"
 msgstr ""
 
-#: ../gui/temporuler.cpp:128
+#: ../gui/temporuler.cpp:136
 msgid "Un-Ramp Tempo"
 msgstr ""
 
-#: ../gui/temporuler.cpp:133
+#: ../gui/temporuler.cpp:143
 #, fuzzy
 msgid "Edit Tempo..."
 msgstr "修改默认节拍(&D)..."
 
-#: ../gui/temporuler.cpp:137
+#: ../gui/temporuler.cpp:147
 #, fuzzy
 msgid "Edit Time Signature..."
 msgstr "时间标记"
 
-#: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:141
+#: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:151
 #, fuzzy
 msgid "Open Tempo and Time Signature Editor"
 msgstr "以事件列表编辑器打开(&E)"
 
-#: ../gui/temporuler.cpp:565
+#: ../gui/temporuler.cpp:563
 #, fuzzy
 msgid "%1.%2%3 (%4.%5%6 bpm)"
 msgstr "%1.%2 秒，"
 
-#: ../gui/temporuler.cpp:573
+#: ../gui/temporuler.cpp:571
 #, fuzzy
 msgid "%1.%2%3 bpm"
 msgstr "%1.%2 秒，"
 
-#: ../gui/temporuler.cpp:581
+#: ../gui/temporuler.cpp:579
 #, fuzzy
 msgid "%1 - %2.%3%4"
 msgstr "&%1%2"
@@ -786,13 +793,13 @@ msgstr "时间标记"
 msgid "&Edit Item"
 msgstr "编辑事件"
 
-#: ../gui/eventview.cpp:1247 ../gui/matrixview.cpp:658
+#: ../gui/eventview.cpp:1247 ../gui/matrixview.cpp:677
 #: ../gui/tempoview.cpp:643
 msgid "Select &All"
 msgstr "全部选择(&A)"
 
-#: ../gui/eventview.cpp:1251 ../gui/matrixview.cpp:779
-#: ../gui/notationview.cpp:2064 ../gui/tempoview.cpp:647
+#: ../gui/eventview.cpp:1251 ../gui/matrixview.cpp:798
+#: ../gui/notationview.cpp:2086 ../gui/tempoview.cpp:647
 msgid "Clear Selection"
 msgstr "清除选择"
 
@@ -1428,7 +1435,7 @@ msgstr "绝对时间："
 msgid "Duration:"
 msgstr "音长："
 
-#: ../gui/dialogs.cpp:2179 ../gui/eventfilter.cpp:107 ../gui/widgets.cpp:1512
+#: ../gui/dialogs.cpp:2179 ../gui/eventfilter.cpp:107 ../gui/widgets.cpp:1478
 msgid "Pitch:"
 msgstr "音色："
 
@@ -1441,7 +1448,7 @@ msgstr "控制器名称："
 #: ../gui/dialogs.cpp:2648 ../gui/dialogs.cpp:2692 ../gui/dialogs.cpp:2725
 #: ../gui/markereditor.cpp:299 ../gui/mixer.cpp:372 ../gui/mixer.cpp:497
 #: ../gui/mixer.cpp:656 ../gui/mixer.cpp:692 ../gui/mixer.cpp:868
-#: ../gui/trackparameterbox.cpp:206 ../gui/triggermanager.cpp:324
+#: ../gui/trackparameterbox.cpp:224 ../gui/triggermanager.cpp:324
 msgid "<none>"
 msgstr "<无>"
 
@@ -1583,7 +1590,7 @@ msgid "Save System Exclusive data to..."
 msgstr "保存系统独占数据到..."
 
 #: ../gui/dialogs.cpp:3146 ../gui/dialogs.cpp:3155 ../gui/dialogs.cpp:3170
-#: ../gui/dialogs.cpp:3179 ../gui/trackparameterbox.cpp:217
+#: ../gui/dialogs.cpp:3179 ../gui/trackparameterbox.cpp:235
 msgid "Clef"
 msgstr "谱号(音部记号)"
 
@@ -1650,7 +1657,7 @@ msgstr "低音"
 
 #: ../gui/dialogs.cpp:3338 ../gui/rosegardenconfigurationpage.cpp:725
 #: ../gui/rosegardenconfigurationpage.cpp:2062
-#: ../gui/segmentparameterbox.cpp:89
+#: ../gui/segmentparameterbox.cpp:92
 msgid "Quantize"
 msgstr "量化"
 
@@ -1884,7 +1891,7 @@ msgstr "设备"
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:172
 #: ../gui/devicemanager.cpp:414 ../gui/devicemanager.cpp:426
 #: ../gui/dialogs.cpp:4329 ../gui/dialogs.cpp:4661
-#: ../gui/instrumentparameterbox.cpp:832
+#: ../gui/instrumentparameterbox.cpp:841
 msgid "No connection"
 msgstr "没有连接"
 
@@ -1953,7 +1960,7 @@ msgstr "您的硬盘到底有多大？"
 msgid "Recording beyond end of composition:  "
 msgstr "录制时间剩余："
 
-#: ../gui/dialogs.cpp:4622 rc.cpp:381
+#: ../gui/dialogs.cpp:4622 rc.cpp:255
 #, no-c-format
 msgid "Metronome"
 msgstr "节拍器"
@@ -1964,14 +1971,15 @@ msgstr "节拍器乐器"
 
 #: ../gui/bankeditor.cpp:2737 ../gui/deviceeditor.cpp:61
 #: ../gui/devicemanager.cpp:89 ../gui/devicemanager.cpp:141
-#: ../gui/dialogs.cpp:4641 ../gui/trackparameterbox.cpp:112
-#: ../gui/trackparameterbox.cpp:158
+#: ../gui/dialogs.cpp:4641 ../gui/trackparameterbox.cpp:128
+#: ../gui/trackparameterbox.cpp:175
 msgid "Device"
 msgstr "设备"
 
 #: ../gui/bankeditor.cpp:2738 ../gui/dialogs.cpp:4670
-#: ../gui/instrumentparameterbox.cpp:72 ../gui/mixer.cpp:1801
-#: ../gui/presethandler.cpp:380 ../gui/trackparameterbox.cpp:121
+#: ../gui/instrumentparameterbox.cpp:73 ../gui/mixer.cpp:1801
+#: ../gui/presethandler.cpp:402 ../gui/segmentparameterbox.cpp:1207
+#: ../gui/trackparameterbox.cpp:137
 msgid "Instrument"
 msgstr "乐器"
 
@@ -1983,10 +1991,10 @@ msgstr "拍音"
 msgid "Resolution"
 msgstr "分辨率"
 
-#: ../gui/dialogs.cpp:4684 ../gui/matrixview.cpp:2040
-#: ../gui/notationview.cpp:1250 ../gui/rosegardenconfigurationpage.cpp:550
-#: ../gui/rosegardenconfigurationpage.cpp:2194 ../gui/widgets.cpp:912
-#: ../gui/widgets.cpp:1085
+#: ../gui/dialogs.cpp:4684 ../gui/matrixview.cpp:2104
+#: ../gui/notationview.cpp:1272 ../gui/rosegardenconfigurationpage.cpp:550
+#: ../gui/rosegardenconfigurationpage.cpp:2194 ../gui/widgets.cpp:878
+#: ../gui/widgets.cpp:1051
 msgid "None"
 msgstr "无"
 
@@ -2165,7 +2173,7 @@ msgstr "仅导出选定的设备"
 msgid "         (\"%1\")"
 msgstr "         (“%1”)"
 
-#: ../gui/dialogs.cpp:5227 ../gui/notationviewslots.cpp:1655
+#: ../gui/dialogs.cpp:5227 ../gui/notationviewslots.cpp:1678
 msgid "Make Ornament"
 msgstr "制作修饰符"
 
@@ -2185,8 +2193,8 @@ msgstr "名称： "
 msgid "Base pitch"
 msgstr ""
 
-#: ../gui/dialogs.cpp:5257 ../gui/notationview.cpp:1287
-#: ../gui/notationviewslots.cpp:1693
+#: ../gui/dialogs.cpp:5257 ../gui/notationview.cpp:1309
+#: ../gui/notationviewslots.cpp:1716
 msgid "Use Ornament"
 msgstr "使用修饰符"
 
@@ -2272,7 +2280,7 @@ msgstr ""
 msgid "Adjust pitch to note"
 msgstr ""
 
-#: ../gui/dialogs.cpp:5460 ../gui/matrixview.cpp:2493
+#: ../gui/dialogs.cpp:5460 ../gui/matrixview.cpp:2569
 msgid "Trigger Segment"
 msgstr "触发片段"
 
@@ -2402,7 +2410,7 @@ msgstr "颤音"
 msgid "Microsoft Code Page %1"
 msgstr ""
 
-#: ../gui/dialogs.cpp:5663
+#: ../gui/dialogs.cpp:5663 ../gui/matrixview.cpp:1439
 #, fuzzy
 msgid "%1 (%2)"
 msgstr "%1 (以上)"
@@ -2538,7 +2546,7 @@ msgid "ID"
 msgstr "ID"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2056
-#: ../gui/segmentparameterbox.cpp:87 ../gui/triggermanager.cpp:148
+#: ../gui/segmentparameterbox.cpp:90 ../gui/triggermanager.cpp:148
 msgid "Label"
 msgstr "标注"
 
@@ -2604,8 +2612,8 @@ msgid ""
 "sure you want to remove it?"
 msgstr ""
 
-#: ../gui/eventview.cpp:960 ../gui/matrixview.cpp:1514
-#: ../gui/notationviewslots.cpp:510 ../gui/notationviewslots.cpp:558
+#: ../gui/eventview.cpp:960 ../gui/matrixview.cpp:1578
+#: ../gui/notationviewslots.cpp:533 ../gui/notationviewslots.cpp:581
 #: ../gui/rosegardengui.cpp:2403 ../gui/triggermanager.cpp:402
 msgid "Clipboard is empty"
 msgstr "剪贴板是空的"
@@ -2862,12 +2870,12 @@ msgstr "插入休止符"
 msgid "Cu&t"
 msgstr "剪切(&T)"
 
-#: ../gui/editcommands.h:79 ../gui/notationview.cpp:1464
+#: ../gui/editcommands.h:79 ../gui/notationview.cpp:1486
 msgid "C&ut and Close"
 msgstr "剪切并关闭(&U)"
 
-#: ../gui/editcommands.h:234 ../gui/matrixview.cpp:577
-#: ../gui/notationview.cpp:1434 ../gui/rosegardengui.cpp:749
+#: ../gui/editcommands.h:234 ../gui/matrixview.cpp:596
+#: ../gui/notationview.cpp:1456 ../gui/rosegardengui.cpp:749
 msgid "&Erase"
 msgstr "擦除(&E)"
 
@@ -2953,7 +2961,7 @@ msgid "Percussion Bank"
 msgstr "打击乐器"
 
 #: ../gui/bankeditor.cpp:87 ../gui/bankeditor.cpp:143
-#: ../gui/instrumentparameterbox.cpp:699
+#: ../gui/instrumentparameterbox.cpp:708
 msgid "Bank"
 msgstr "库"
 
@@ -2992,8 +3000,8 @@ msgstr "库和指令列细节"
 msgid "Programs"
 msgstr "指令列"
 
-#: ../gui/bankeditor.cpp:388 ../gui/instrumentparameterbox.cpp:703
-#: ../gui/matrixview.cpp:2548
+#: ../gui/bankeditor.cpp:388 ../gui/instrumentparameterbox.cpp:712
+#: ../gui/matrixview.cpp:2624
 msgid "Percussion"
 msgstr "打击乐器"
 
@@ -3207,7 +3215,7 @@ msgstr "常规"
 msgid "General Configuration"
 msgstr "常规配置"
 
-#: ../gui/matrixview.cpp:2547 ../gui/rosegardenconfigurationpage.cpp:227
+#: ../gui/matrixview.cpp:2623 ../gui/rosegardenconfigurationpage.cpp:227
 #: ../gui/rosegardenconfigurationpage.h:289
 #: ../gui/rosegardenconfigurationpage.h:290
 msgid "Matrix"
@@ -3222,8 +3230,8 @@ msgid "Sequencer Latency"
 msgstr "音序发生器潜伏期"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2089
-#: ../gui/rosegardenconfigurationpage.h:382 ../gui/trackparameterbox.cpp:433
-#: ../gui/trackparameterbox.cpp:434
+#: ../gui/rosegardenconfigurationpage.h:382 ../gui/trackparameterbox.cpp:454
+#: ../gui/trackparameterbox.cpp:455
 msgid "Audio"
 msgstr "音频"
 
@@ -3232,7 +3240,7 @@ msgid "Audio Settings"
 msgstr "音频设置"
 
 #: ../gui/colourwidgets.cpp:47 ../gui/rosegardenconfigurationpage.h:425
-#: ../gui/segmentparameterbox.cpp:92 ../gui/trackparameterbox.cpp:252
+#: ../gui/segmentparameterbox.cpp:95 ../gui/trackparameterbox.cpp:276
 msgid "Color"
 msgstr "配色"
 
@@ -3264,7 +3272,7 @@ msgstr "连接"
 
 #: ../gui/devicemanager.cpp:99 ../gui/devicemanager.cpp:152
 #: ../gui/rosegardenconfigurationpage.cpp:2505
-#: ../gui/segmentparameterbox.cpp:987 ../gui/trackparameterbox.cpp:776
+#: ../gui/segmentparameterbox.cpp:990 ../gui/trackparameterbox.cpp:797
 msgid "New"
 msgstr "新建"
 
@@ -3389,162 +3397,6 @@ msgstr "系统独占"
 #: ../gui/midifilter.cpp:82
 msgid "RECORD events to ignore"
 msgstr "要忽略的录制事件"
-
-#: ../gui/widgets.cpp:142 ../gui/widgets.cpp:147 ../gui/widgets.cpp:169
-msgid "Processing..."
-msgstr "正在处理..."
-
-#: ../gui/widgets.cpp:414
-msgid ""
-"Click and drag up and down or left and right to modify.\n"
-"Double click to edit value directly."
-msgstr ""
-
-#: ../gui/widgets.cpp:724
-#, fuzzy
-msgid "Select a new value"
-msgstr "删除该属性"
-
-#: ../gui/widgets.cpp:725
-#, fuzzy
-msgid "Enter a new value"
-msgstr "输入新名称"
-
-#: ../gui/widgets.cpp:865
-#, fuzzy
-msgid "Quantizer"
-msgstr "量化"
-
-#: ../gui/widgets.cpp:871
-#, fuzzy
-msgid "Quantizer type:"
-msgstr "量化类型"
-
-#: ../gui/widgets.cpp:873
-msgid "Grid quantizer"
-msgstr "栅格量化"
-
-#: ../gui/widgets.cpp:874
-#, fuzzy
-msgid "Legato quantizer"
-msgstr "栅格量化"
-
-#: ../gui/widgets.cpp:875
-msgid "Heuristic notation quantizer"
-msgstr "启发记号量化"
-
-#: ../gui/widgets.cpp:879
-msgid "Quantize for notation only (leave performance unchanged)"
-msgstr "仅对记号量化(保持性能不变)"
-
-#: ../gui/widgets.cpp:888
-msgid "Notation parameters"
-msgstr "记号参数"
-
-#: ../gui/widgets.cpp:893 ../gui/widgets.cpp:934
-msgid "Base grid unit:"
-msgstr "基础栅格单元："
-
-#: ../gui/widgets.cpp:898
-msgid "Complexity:"
-msgstr "复杂度："
-
-#: ../gui/widgets.cpp:902
-msgid "Very high"
-msgstr "非常高"
-
-#: ../gui/widgets.cpp:903
-msgid "High"
-msgstr "高"
-
-#: ../gui/widgets.cpp:904
-msgid "Normal"
-msgstr "正常"
-
-#: ../gui/widgets.cpp:905
-msgid "Low"
-msgstr "低"
-
-#: ../gui/widgets.cpp:906
-msgid "Very low"
-msgstr "非常低"
-
-#: ../gui/widgets.cpp:909
-msgid "Tuplet level:"
-msgstr "连音级别："
-
-#: ../gui/widgets.cpp:913
-msgid "2-in-the-time-of-3"
-msgstr ""
-
-#: ../gui/widgets.cpp:914
-msgid "Triplet"
-msgstr "三连音"
-
-#: ../gui/widgets.cpp:922
-msgid "Any"
-msgstr "任意"
-
-#: ../gui/widgets.cpp:925
-#, fuzzy
-msgid "Permit counterpoint"
-msgstr "正在删除配合旋律(对位音)..."
-
-#: ../gui/widgets.cpp:929
-msgid "Grid parameters"
-msgstr "删格参数"
-
-#: ../gui/widgets.cpp:938
-msgid "Swing:"
-msgstr ""
-
-#: ../gui/widgets.cpp:943
-msgid "Iterative amount:"
-msgstr ""
-
-#: ../gui/widgets.cpp:949
-msgid "Quantize durations as well as start times"
-msgstr "量化音长及起始时间"
-
-#: ../gui/widgets.cpp:953
-msgid "After quantization"
-msgstr "在量化后"
-
-#: ../gui/widgets.cpp:967
-#, fuzzy
-msgid "Show advanced options"
-msgstr "高级选项"
-
-#: ../gui/widgets.cpp:976
-msgid "Re-beam"
-msgstr "重新分开符尾"
-
-#: ../gui/widgets.cpp:978
-msgid "Add articulations (staccato, tenuto, slurs)"
-msgstr "添加辅音(断音、持续、连音)"
-
-#: ../gui/widgets.cpp:979
-msgid "Tie notes at barlines etc"
-msgstr "将音符捆绑于进程线等等"
-
-#: ../gui/widgets.cpp:980
-msgid "Split-and-tie overlapping chords"
-msgstr "分割与捆绑重叠和弦"
-
-#: ../gui/widgets.cpp:1091
-#, fuzzy
-msgid "Full quantize"
-msgstr "栅格量化"
-
-#: ../gui/widgets.cpp:1234
-#, fuzzy
-msgid "Show Advanced Options"
-msgstr "高级选项"
-
-#: ../gui/widgets.cpp:1238
-#, fuzzy
-msgid "Hide Advanced Options"
-msgstr "高级选项"
 
 #: ../gui/editviewbase.cpp:212 ../gui/rosegardengui.cpp:852
 msgid "Open in Matri&x Editor"
@@ -3770,15 +3622,15 @@ msgstr ""
 msgid "(%1.%2 bpm)"
 msgstr "%1.%2 秒，"
 
-#: ../gui/trackeditor.cpp:600
+#: ../gui/trackeditor.cpp:632
 msgid "Turn Repeating Segment into Real Copies"
 msgstr "将重复的小节转换为真实的副本"
 
-#: ../gui/trackeditor.cpp:602
+#: ../gui/trackeditor.cpp:634
 msgid "Turn Repeating Segments into Real Copies"
 msgstr "将重复的小节转换为真实的副本"
 
-#: ../gui/trackeditor.cpp:768
+#: ../gui/trackeditor.cpp:800
 msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
@@ -3817,37 +3669,37 @@ msgstr "正在绘制五线谱 %1..."
 msgid "Positioning staff %1..."
 msgstr "正在布置五线谱 %1..."
 
-#: ../gui/notationstaff.cpp:1195 ../gui/notationviewslots.cpp:1804
+#: ../gui/notationstaff.cpp:1195 ../gui/notationviewslots.cpp:1827
 msgid "Sustain"
 msgstr "持续"
 
-#: ../gui/matrixview.cpp:716 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1681
-#: ../gui/notationview.cpp:2001 ../gui/rosegardengui.cpp:1084
+#: ../gui/matrixview.cpp:735 ../gui/mixer.cpp:106 ../gui/mixer.cpp:1681
+#: ../gui/notationview.cpp:2023 ../gui/rosegardengui.cpp:1084
 msgid "&Play"
 msgstr "播放(&P)"
 
-#: ../gui/matrixview.cpp:721 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1686
-#: ../gui/notationview.cpp:2006 ../gui/rosegardengui.cpp:1091
+#: ../gui/matrixview.cpp:740 ../gui/mixer.cpp:111 ../gui/mixer.cpp:1686
+#: ../gui/notationview.cpp:2028 ../gui/rosegardengui.cpp:1091
 msgid "&Stop"
 msgstr "停止(&S)"
 
-#: ../gui/matrixview.cpp:726 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1691
-#: ../gui/notationview.cpp:2011 ../gui/rosegardengui.cpp:1106
+#: ../gui/matrixview.cpp:745 ../gui/mixer.cpp:116 ../gui/mixer.cpp:1691
+#: ../gui/notationview.cpp:2033 ../gui/rosegardengui.cpp:1106
 msgid "Re&wind"
 msgstr "回绕(&W)"
 
-#: ../gui/matrixview.cpp:732 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1697
-#: ../gui/notationview.cpp:2017 ../gui/rosegardengui.cpp:1098
+#: ../gui/matrixview.cpp:751 ../gui/mixer.cpp:122 ../gui/mixer.cpp:1697
+#: ../gui/notationview.cpp:2039 ../gui/rosegardengui.cpp:1098
 msgid "&Fast Forward"
 msgstr "快进(&F)"
 
-#: ../gui/matrixview.cpp:738 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1703
-#: ../gui/notationview.cpp:2023 ../gui/rosegardengui.cpp:1127
+#: ../gui/matrixview.cpp:757 ../gui/mixer.cpp:128 ../gui/mixer.cpp:1703
+#: ../gui/notationview.cpp:2045 ../gui/rosegardengui.cpp:1127
 msgid "Rewind to &Beginning"
 msgstr "回绕到起点(&B)"
 
-#: ../gui/matrixview.cpp:744 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1709
-#: ../gui/notationview.cpp:2029 ../gui/rosegardengui.cpp:1134
+#: ../gui/matrixview.cpp:763 ../gui/mixer.cpp:134 ../gui/mixer.cpp:1709
+#: ../gui/notationview.cpp:2051 ../gui/rosegardengui.cpp:1134
 msgid "Fast Forward to &End"
 msgstr "快进到末尾(&E)"
 
@@ -3855,8 +3707,8 @@ msgstr "快进到末尾(&E)"
 msgid "&Record"
 msgstr "录制(&R)"
 
-#: ../gui/matrixview.cpp:768 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
-#: ../gui/notationview.cpp:2053 ../gui/rosegardengui.cpp:1147
+#: ../gui/matrixview.cpp:787 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
+#: ../gui/notationview.cpp:2075 ../gui/rosegardengui.cpp:1147
 #, fuzzy
 msgid "Panic"
 msgstr "音相"
@@ -3932,7 +3784,7 @@ msgstr "单声道或立体声"
 msgid "Mute"
 msgstr "静音"
 
-#: ../gui/mixer.cpp:358 rc.cpp:417
+#: ../gui/mixer.cpp:358 rc.cpp:280
 #, no-c-format
 msgid "Solo"
 msgstr "独奏"
@@ -3971,8 +3823,8 @@ msgstr "音频控制器输出电平"
 msgid "Master"
 msgstr "控制器"
 
-#: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:363
-#: ../gui/instrumentparameterbox.cpp:599 ../gui/mixer.cpp:657
+#: ../gui/audioplugindialog.cpp:353 ../gui/instrumentparameterbox.cpp:372
+#: ../gui/instrumentparameterbox.cpp:608 ../gui/mixer.cpp:657
 #: ../gui/mixer.cpp:693 ../gui/mixer.cpp:869 ../gui/studiowidgets.cpp:992
 msgid "<no plugin>"
 msgstr "<没有插件>"
@@ -4067,7 +3919,7 @@ msgstr "描述："
 msgid " Triplet Chord"
 msgstr " 三连音和弦"
 
-#: ../gui/matrixview.cpp:2766 ../gui/notationviewslots.cpp:81
+#: ../gui/matrixview.cpp:2842 ../gui/notationviewslots.cpp:81
 msgid " Chord"
 msgstr " 和弦"
 
@@ -4108,30 +3960,30 @@ msgstr "未知的字体大小 %1"
 msgid "Unknown font size action %1"
 msgstr "未知的字体大小行为 %1"
 
-#: ../gui/notationviewslots.cpp:423 ../gui/rosegardengui.cpp:2342
+#: ../gui/notationviewslots.cpp:446 ../gui/rosegardengui.cpp:2342
 msgid "Printing..."
 msgstr "正在打印..."
 
-#: ../gui/notationviewslots.cpp:440 ../gui/rosegardengui.cpp:2354
+#: ../gui/notationviewslots.cpp:463 ../gui/rosegardengui.cpp:2354
 #, fuzzy
 msgid "Previewing..."
 msgstr "正在打印..."
 
-#: ../gui/matrixview.cpp:1494 ../gui/notationviewslots.cpp:461
-#: ../gui/notationviewslots.cpp:487
+#: ../gui/matrixview.cpp:1558 ../gui/notationviewslots.cpp:484
+#: ../gui/notationviewslots.cpp:510
 msgid "Cutting selection to clipboard..."
 msgstr "正在把选中区剪切到剪贴板..."
 
-#: ../gui/matrixview.cpp:1534 ../gui/notationviewslots.cpp:470
+#: ../gui/matrixview.cpp:1598 ../gui/notationviewslots.cpp:493
 msgid "Deleting selection..."
 msgstr "正在删除选择区..."
 
-#: ../gui/matrixview.cpp:1503 ../gui/notationviewslots.cpp:478
+#: ../gui/matrixview.cpp:1567 ../gui/notationviewslots.cpp:501
 #: ../gui/rosegardengui.cpp:2393
 msgid "Copying selection to clipboard..."
 msgstr "正在把选中区复制到剪贴板..."
 
-#: ../gui/notationviewslots.cpp:494
+#: ../gui/notationviewslots.cpp:517
 msgid ""
 "The Restricted paste type requires enough empty\n"
 "space (containing only rests) at the paste position\n"
@@ -4144,311 +3996,311 @@ msgid ""
 "you wish."
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:514
+#: ../gui/notationviewslots.cpp:537
 msgid "Can't paste multiple Segments into one"
 msgstr "无法将多个小节粘贴入一个文件"
 
-#: ../gui/eventview.cpp:964 ../gui/matrixview.cpp:1518
-#: ../gui/notationviewslots.cpp:518 ../gui/notationviewslots.cpp:562
+#: ../gui/eventview.cpp:964 ../gui/matrixview.cpp:1582
+#: ../gui/notationviewslots.cpp:541 ../gui/notationviewslots.cpp:585
 #: ../gui/rosegardengui.cpp:2406
 msgid "Inserting clipboard contents..."
 msgstr "正在插入剪贴板内容..."
 
-#: ../gui/notationviewslots.cpp:542 ../gui/notationviewslots.cpp:594
+#: ../gui/notationviewslots.cpp:565 ../gui/notationviewslots.cpp:617
 msgid "Couldn't paste at this point."
 msgstr "无法粘贴到这点。"
 
-#: ../gui/notationviewslots.cpp:696
+#: ../gui/notationviewslots.cpp:719
 #, fuzzy
 msgid "Pushing selection left..."
 msgstr "正在剪切选中区..."
 
-#: ../gui/notationviewslots.cpp:706
+#: ../gui/notationviewslots.cpp:729
 #, fuzzy
 msgid "Pushing selection right..."
 msgstr "正在剪切选中区..."
 
-#: ../gui/notationviewslots.cpp:716
+#: ../gui/notationviewslots.cpp:739
 #, fuzzy
 msgid "Pushing selection up..."
 msgstr "正在剪切选中区..."
 
-#: ../gui/notationviewslots.cpp:726
+#: ../gui/notationviewslots.cpp:749
 #, fuzzy
 msgid "Pushing selection down..."
 msgstr "正在剪切选中区..."
 
-#: ../gui/notationviewslots.cpp:736
+#: ../gui/notationviewslots.cpp:759
 #, fuzzy
 msgid "Restoring computed positions..."
 msgstr "正在恢复计算过的符干方向...."
 
-#: ../gui/notationviewslots.cpp:744
+#: ../gui/notationviewslots.cpp:767
 #, fuzzy
 msgid "Making visible..."
 msgstr "正在使音符生效..."
 
-#: ../gui/notationviewslots.cpp:752
+#: ../gui/notationviewslots.cpp:775
 #, fuzzy
 msgid "Making invisible..."
 msgstr "正在使音符生效..."
 
-#: ../gui/notationviewslots.cpp:842
+#: ../gui/notationviewslots.cpp:865
 msgid "Beaming group..."
 msgstr "正在分开全部符尾..."
 
-#: ../gui/notationviewslots.cpp:851
+#: ../gui/notationviewslots.cpp:874
 msgid "Auto-beaming selection..."
 msgstr "正在对选中部分自动分开符尾..."
 
-#: ../gui/notationviewslots.cpp:860
+#: ../gui/notationviewslots.cpp:883
 msgid "Breaking groups..."
 msgstr "正在打散分组..."
 
-#: ../gui/notationviewslots.cpp:945
+#: ../gui/notationviewslots.cpp:968
 msgid "Untupleting..."
 msgstr "正在取消连音..."
 
-#: ../gui/notationviewslots.cpp:954
+#: ../gui/notationviewslots.cpp:977
 msgid "Making grace notes..."
 msgstr "正在制作美化音符..."
 
-#: ../gui/notationviewslots.cpp:962
+#: ../gui/notationviewslots.cpp:985
 msgid "Making non-grace notes..."
 msgstr "正在制作非美化音符..."
 
-#: ../gui/notationviewslots.cpp:974
+#: ../gui/notationviewslots.cpp:997
 msgid "Adding slur..."
 msgstr "正在添加连音线..."
 
-#: ../gui/notationviewslots.cpp:975
+#: ../gui/notationviewslots.cpp:998
 msgid "slur"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:980
+#: ../gui/notationviewslots.cpp:1003
 #, fuzzy
 msgid "Adding phrasing slur..."
 msgstr "正在添加连音线..."
 
-#: ../gui/notationviewslots.cpp:981
+#: ../gui/notationviewslots.cpp:1004
 msgid "phrasing slur"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:986
+#: ../gui/notationviewslots.cpp:1009
 #, fuzzy
 msgid "Adding glissando..."
 msgstr "正在添加渐强..."
 
-#: ../gui/notationviewslots.cpp:987
+#: ../gui/notationviewslots.cpp:1010
 msgid "glissando"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:992
+#: ../gui/notationviewslots.cpp:1015
 msgid "Adding crescendo..."
 msgstr "正在添加渐强..."
 
-#: ../gui/notationviewslots.cpp:993 ../gui/notationviewslots.cpp:999
+#: ../gui/notationviewslots.cpp:1016 ../gui/notationviewslots.cpp:1022
 msgid "dynamic"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:998
+#: ../gui/notationviewslots.cpp:1021
 msgid "Adding decrescendo..."
 msgstr "正在添加渐弱..."
 
-#: ../gui/notationviewslots.cpp:1004 ../gui/notationviewslots.cpp:1010
-#: ../gui/notationviewslots.cpp:1016 ../gui/notationviewslots.cpp:1022
+#: ../gui/notationviewslots.cpp:1027 ../gui/notationviewslots.cpp:1033
+#: ../gui/notationviewslots.cpp:1039 ../gui/notationviewslots.cpp:1045
 #, fuzzy
 msgid "Adding octave..."
 msgstr "正在添加渐强..."
 
-#: ../gui/notationviewslots.cpp:1005 ../gui/notationviewslots.cpp:1011
-#: ../gui/notationviewslots.cpp:1017 ../gui/notationviewslots.cpp:1023
+#: ../gui/notationviewslots.cpp:1028 ../gui/notationviewslots.cpp:1034
+#: ../gui/notationviewslots.cpp:1040 ../gui/notationviewslots.cpp:1046
 msgid "ottava"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1038
+#: ../gui/notationviewslots.cpp:1061
 msgid "Can't add overlapping %1 indications"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1046
+#: ../gui/notationviewslots.cpp:1069
 #, fuzzy
 msgid "Making chord..."
 msgstr "正在制作美化音符..."
 
-#: ../gui/notationviewslots.cpp:1062
+#: ../gui/notationviewslots.cpp:1085
 msgid "Normalizing rests..."
 msgstr "正在规格化休止符..."
 
-#: ../gui/notationviewslots.cpp:1071
+#: ../gui/notationviewslots.cpp:1094
 msgid "Collapsing rests..."
 msgstr "正在压缩休止符..."
 
-#: ../gui/matrixview.cpp:1248 ../gui/notationviewslots.cpp:1080
+#: ../gui/matrixview.cpp:1267 ../gui/notationviewslots.cpp:1103
 msgid "Collapsing notes..."
 msgstr "正在压缩音符..."
 
-#: ../gui/notationviewslots.cpp:1089
+#: ../gui/notationviewslots.cpp:1112
 msgid "Tying notes..."
 msgstr "正在捆绑音符..."
 
-#: ../gui/notationviewslots.cpp:1098
+#: ../gui/notationviewslots.cpp:1121
 msgid "Untying notes..."
 msgstr "正在松解音符..."
 
-#: ../gui/notationviewslots.cpp:1107
+#: ../gui/notationviewslots.cpp:1130
 msgid "Making notes viable..."
 msgstr "正在使音符生效..."
 
-#: ../gui/notationviewslots.cpp:1116
+#: ../gui/notationviewslots.cpp:1139
 msgid "Removing counterpoint..."
 msgstr "正在删除配合旋律(对位音)..."
 
-#: ../gui/notationviewslots.cpp:1125
+#: ../gui/notationviewslots.cpp:1148
 msgid "Pointing stems up..."
 msgstr "正在使符干向上指..."
 
-#: ../gui/notationviewslots.cpp:1134
+#: ../gui/notationviewslots.cpp:1157
 msgid "Pointing stems down..."
 msgstr "正在使符干向下指..."
 
-#: ../gui/notationviewslots.cpp:1144
+#: ../gui/notationviewslots.cpp:1167
 msgid "Restoring computed stem directions..."
 msgstr "正在恢复计算过的符干方向...."
 
-#: ../gui/notationviewslots.cpp:1153 ../gui/notationviewslots.cpp:1162
+#: ../gui/notationviewslots.cpp:1176 ../gui/notationviewslots.cpp:1185
 #, fuzzy
 msgid "Positioning slurs..."
 msgstr "正在布置五线谱 %1..."
 
-#: ../gui/notationviewslots.cpp:1172
+#: ../gui/notationviewslots.cpp:1195
 #, fuzzy
 msgid "Restoring slur positions..."
 msgstr "正在恢复计算过的符干方向...."
 
-#: ../gui/notationviewslots.cpp:1181
+#: ../gui/notationviewslots.cpp:1204
 #, fuzzy
 msgid "Fixing notation quantization..."
 msgstr "启发记号量化"
 
-#: ../gui/notationviewslots.cpp:1190
+#: ../gui/notationviewslots.cpp:1213
 #, fuzzy
 msgid "Removing notation quantization..."
 msgstr "启发记号量化"
 
-#: ../gui/notationviewslots.cpp:1206
+#: ../gui/notationviewslots.cpp:1229
 msgid "Changing to %1 style..."
 msgstr "正在变更为 %1 样式..."
 
-#: ../gui/notationviewslots.cpp:1214
+#: ../gui/notationviewslots.cpp:1237
 #, c-format
 msgid "Unknown style action %1"
 msgstr "未知的样式行为 %1"
 
-#: ../gui/notationviewslots.cpp:1227 ../gui/notationviewslots.cpp:1268
-#: ../gui/notationviewslots.cpp:1324
+#: ../gui/notationviewslots.cpp:1250 ../gui/notationviewslots.cpp:1291
+#: ../gui/notationviewslots.cpp:1347
 msgid "No note duration selected"
 msgstr "没有音符音长被选中"
 
-#: ../gui/matrixview.cpp:1717 ../gui/notationviewslots.cpp:1246
+#: ../gui/matrixview.cpp:1781 ../gui/notationviewslots.cpp:1269
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "未知的音符插入行为 %1"
 
-#: ../gui/matrixview.cpp:1721 ../gui/matrixview.cpp:2689
-#: ../gui/notationviewslots.cpp:1250
+#: ../gui/matrixview.cpp:1785 ../gui/matrixview.cpp:2765
+#: ../gui/notationviewslots.cpp:1273
 msgid "Inserting note"
 msgstr "正在插入音符"
 
-#: ../gui/notationviewslots.cpp:1289
+#: ../gui/notationviewslots.cpp:1312
 msgid "No rest duration selected"
 msgstr "没有已选中的休止符时长"
 
-#: ../gui/notationviewslots.cpp:1373
+#: ../gui/notationviewslots.cpp:1396
 #, fuzzy
 msgid "No note or rest duration selected"
 msgstr "没有已选中的休止符时长"
 
-#: ../gui/notationviewslots.cpp:1383 ../gui/notationviewslots.cpp:1393
-#: ../gui/notationviewslots.cpp:1403 ../gui/notationviewslots.cpp:1413
-#: ../gui/notationviewslots.cpp:1423 ../gui/notationviewslots.cpp:1433
-#: ../gui/notationviewslots.cpp:1443
+#: ../gui/notationviewslots.cpp:1406 ../gui/notationviewslots.cpp:1416
+#: ../gui/notationviewslots.cpp:1426 ../gui/notationviewslots.cpp:1436
+#: ../gui/notationviewslots.cpp:1446 ../gui/notationviewslots.cpp:1456
+#: ../gui/notationviewslots.cpp:1466
 #, fuzzy
 msgid "Forcing accidentals..."
 msgstr "不使用临时记号"
 
-#: ../gui/notationviewslots.cpp:1453
+#: ../gui/notationviewslots.cpp:1476
 #, fuzzy
 msgid "Restoring accidentals..."
 msgstr "不使用临时记号"
 
-#: ../gui/notationviewslots.cpp:1463
+#: ../gui/notationviewslots.cpp:1486
 #, fuzzy
 msgid "Showing cautionary accidentals..."
 msgstr "不使用临时记号"
 
-#: ../gui/notationviewslots.cpp:1472
+#: ../gui/notationviewslots.cpp:1495
 #, fuzzy
 msgid "Cancelling cautionary accidentals..."
 msgstr "不使用临时记号"
 
-#: ../gui/matrixview.cpp:1226 ../gui/matrixview.cpp:1239
-#: ../gui/matrixview.cpp:1969 ../gui/notationviewslots.cpp:1486
+#: ../gui/matrixview.cpp:1245 ../gui/matrixview.cpp:1258
+#: ../gui/matrixview.cpp:2033 ../gui/notationviewslots.cpp:1509
 msgid "Quantizing..."
 msgstr "正在量化..."
 
-#: ../gui/notationviewslots.cpp:1500
+#: ../gui/notationviewslots.cpp:1523
 msgid "Interpreting selection..."
 msgstr "正在解析选择区..."
 
-#: ../gui/notationviewslots.cpp:1511
+#: ../gui/notationviewslots.cpp:1534
 #, fuzzy
 msgid "Setting note durations..."
 msgstr "音长"
 
-#: ../gui/notationviewslots.cpp:1518 ../gui/notationviewslots.cpp:1525
+#: ../gui/notationviewslots.cpp:1541 ../gui/notationviewslots.cpp:1548
 #, fuzzy
 msgid "Adding dot..."
 msgstr "正在添加渐强..."
 
-#: ../gui/notationviewslots.cpp:1547
+#: ../gui/notationviewslots.cpp:1570
 msgid "Text: "
 msgstr "文本："
 
-#: ../gui/notationviewslots.cpp:1561
+#: ../gui/notationviewslots.cpp:1584
 msgid "Fingering: "
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1644
+#: ../gui/notationviewslots.cpp:1667
 msgid "Ornament track %1 bar %2"
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:1646
+#: ../gui/notationviewslots.cpp:1669
 #, fuzzy, c-format
 msgid "Ornament bar %1"
 msgstr "小节(&M)"
 
-#: ../gui/notationviewslots.cpp:1702
+#: ../gui/notationviewslots.cpp:1725
 #, fuzzy
 msgid "Remove Ornaments"
 msgstr "删除所有标记(&R)"
 
-#: ../gui/notationviewslots.cpp:1750
+#: ../gui/notationviewslots.cpp:1773
 msgid "Estimated key signature shown"
 msgstr "估计的基调标记显示为"
 
-#: ../gui/notationviewslots.cpp:1820
+#: ../gui/notationviewslots.cpp:1843
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
 "dialog in the main window."
 msgstr ""
 
-#: ../gui/notationviewslots.cpp:2706
-#, c-format
-msgid "Time: %1"
+#: ../gui/matrixview.cpp:1479 ../gui/notationviewslots.cpp:2736
+#, fuzzy
+msgid "Time: %1 (%2.%3s)"
 msgstr "时间：%1"
 
-#: ../gui/notationviewslots.cpp:2743
+#: ../gui/notationviewslots.cpp:2779
 #, fuzzy
 msgid "Can't insert note: No note duration selected"
 msgstr "没有音符音长被选中"
@@ -4484,7 +4336,7 @@ msgstr ""
 msgid "Sub %1 L"
 msgstr ""
 
-#: ../gui/instrumentparameterbox.cpp:360 ../gui/instrumentparameterbox.cpp:595
+#: ../gui/instrumentparameterbox.cpp:369 ../gui/instrumentparameterbox.cpp:604
 #: ../gui/studiowidgets.cpp:1003
 #, fuzzy
 msgid "<no synth>"
@@ -4531,84 +4383,93 @@ msgstr ""
 msgid "Out:"
 msgstr "输出："
 
-#: ../gui/matrixtool.cpp:173 ../gui/matrixtool.cpp:416
-#: ../gui/matrixtool.cpp:952 ../gui/matrixtool.cpp:1296
+#: ../gui/matrixtool.cpp:174 ../gui/matrixtool.cpp:417
+#: ../gui/matrixtool.cpp:953 ../gui/matrixtool.cpp:1322
 #: ../gui/notationtool.cpp:215 ../gui/notationtool.cpp:774
 #: ../gui/notationtool.cpp:862 ../gui/notationtool.cpp:943
 #: ../gui/notationtool.cpp:1074 ../gui/notationtool.cpp:1946
 msgid "Switch to Select Tool"
 msgstr "切换到选择工具"
 
-#: ../gui/matrixtool.cpp:177 ../gui/matrixtool.cpp:486
-#: ../gui/matrixtool.cpp:960 ../gui/matrixtool.cpp:1304
+#: ../gui/matrixtool.cpp:178 ../gui/matrixtool.cpp:487
+#: ../gui/matrixtool.cpp:961 ../gui/matrixtool.cpp:1330
 #: ../gui/notationtool.cpp:219 ../gui/notationtool.cpp:778
 #: ../gui/notationtool.cpp:866 ../gui/notationtool.cpp:947
 #: ../gui/notationtool.cpp:1144 ../gui/notationtool.cpp:1950
 msgid "Switch to Erase Tool"
 msgstr "切换到擦除工具"
 
-#: ../gui/matrixtool.cpp:181 ../gui/matrixtool.cpp:424
-#: ../gui/matrixtool.cpp:490 ../gui/matrixtool.cpp:1308
+#: ../gui/matrixtool.cpp:182 ../gui/matrixtool.cpp:425
+#: ../gui/matrixtool.cpp:491 ../gui/matrixtool.cpp:1334
 #, fuzzy
 msgid "Switch to Move Tool"
 msgstr "切换到擦除工具"
 
-#: ../gui/matrixtool.cpp:187 ../gui/matrixtool.cpp:430
-#: ../gui/matrixtool.cpp:498 ../gui/matrixtool.cpp:966
+#: ../gui/matrixtool.cpp:188 ../gui/matrixtool.cpp:431
+#: ../gui/matrixtool.cpp:499 ../gui/matrixtool.cpp:967
 #, fuzzy
 msgid "Switch to Resize Tool"
 msgstr "切换到擦除工具"
 
-#: ../gui/matrixtool.cpp:191 ../gui/matrixtool.cpp:434
-#: ../gui/matrixtool.cpp:502 ../gui/matrixtool.cpp:970
-#: ../gui/matrixtool.cpp:1312
+#: ../gui/matrixtool.cpp:192 ../gui/matrixtool.cpp:435
+#: ../gui/matrixtool.cpp:503 ../gui/matrixtool.cpp:971
+#: ../gui/matrixtool.cpp:1338
 msgid "Half Speed"
 msgstr ""
 
-#: ../gui/matrixtool.cpp:195 ../gui/matrixtool.cpp:438
-#: ../gui/matrixtool.cpp:506 ../gui/matrixtool.cpp:974
-#: ../gui/matrixtool.cpp:1316
+#: ../gui/matrixtool.cpp:196 ../gui/matrixtool.cpp:439
+#: ../gui/matrixtool.cpp:507 ../gui/matrixtool.cpp:975
+#: ../gui/matrixtool.cpp:1342
 #, fuzzy
 msgid "Double Speed"
 msgstr "双重锐化"
 
-#: ../gui/matrixtool.cpp:420 ../gui/matrixtool.cpp:482
-#: ../gui/matrixtool.cpp:956 ../gui/matrixtool.cpp:1300
+#: ../gui/matrixtool.cpp:421 ../gui/matrixtool.cpp:483
+#: ../gui/matrixtool.cpp:957 ../gui/matrixtool.cpp:1326
 #, fuzzy
 msgid "Switch to Draw Tool"
 msgstr "切换到擦除工具"
 
-#: ../gui/matrixtool.cpp:1207
+#: ../gui/matrixtool.cpp:1208
 msgid "Move Event"
 msgstr "移动事件"
 
-#: ../gui/matrixtool.cpp:1210
+#: ../gui/matrixtool.cpp:1211
 msgid "Move Events"
 msgstr "移动事件"
 
-#: ../gui/matrixtool.cpp:1432
+#: ../gui/matrixtool.cpp:1461
 msgid "Resize Event"
 msgstr "改变事件大小"
 
-#: ../gui/matrixtool.cpp:1435
+#: ../gui/matrixtool.cpp:1464
 msgid "Resize Events"
 msgstr "改变事件大小"
 
-#: ../gui/instrumentparameterbox.cpp:700
+#: ../gui/instrumentparameterbox.cpp:74 ../gui/matrixview.cpp:137
+msgid "Instrument Parameters"
+msgstr "乐器参数"
+
+#: ../gui/instrumentparameterbox.cpp:189
+#: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:66
+msgid "Track"
+msgstr "轨道"
+
+#: ../gui/instrumentparameterbox.cpp:709
 #, fuzzy
 msgid "Variation"
 msgstr "音长"
 
-#: ../gui/instrumentparameterbox.cpp:701
+#: ../gui/instrumentparameterbox.cpp:710
 msgid "Program"
 msgstr "指令列"
 
-#: ../gui/instrumentparameterbox.cpp:702
+#: ../gui/instrumentparameterbox.cpp:711
 #, fuzzy
 msgid "Channel out"
 msgstr "通道"
 
-#: ../gui/instrumentparameterbox.cpp:832 ../gui/instrumentparameterbox.cpp:838
+#: ../gui/instrumentparameterbox.cpp:841 ../gui/instrumentparameterbox.cpp:847
 msgid "[ %1 ]"
 msgstr ""
 
@@ -4772,7 +4633,7 @@ msgid "unknown audio file"
 msgstr "未知的音频文件"
 
 #: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:368
-#: ../gui/segmentcommands.cpp:567 rc.cpp:403
+#: ../gui/segmentcommands.cpp:567 rc.cpp:270
 #, no-c-format
 msgid "Record"
 msgstr "录制"
@@ -4979,7 +4840,7 @@ msgstr "使音符生效(&V)"
 msgid "Make Visible"
 msgstr "使音符生效(&V)"
 
-#: ../gui/eventview.cpp:997 ../gui/matrixview.cpp:1525
+#: ../gui/eventview.cpp:997 ../gui/matrixview.cpp:1589
 #: ../gui/notationtool.cpp:2130
 msgid "Couldn't paste at this point"
 msgstr "无法粘贴到这点"
@@ -4988,7 +4849,7 @@ msgstr "无法粘贴到这点"
 msgid "Ready."
 msgstr "已就绪。"
 
-#: ../gui/sequencemanager.cpp:1017 ../gui/sequencemanager.cpp:1150
+#: ../gui/sequencemanager.cpp:1025 ../gui/sequencemanager.cpp:1158
 msgid ""
 "The JACK Audio subsystem has failed or it has stopped Rosegarden from "
 "processing audio.\n"
@@ -4996,7 +4857,7 @@ msgid ""
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1023 ../gui/sequencemanager.cpp:1156
+#: ../gui/sequencemanager.cpp:1031 ../gui/sequencemanager.cpp:1164
 msgid ""
 "The JACK Audio subsystem has stopped Rosegarden from processing audio, "
 "probably because of a processing overload.\n"
@@ -5005,46 +4866,46 @@ msgid ""
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1034
+#: ../gui/sequencemanager.cpp:1042
 msgid ""
 "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1059
+#: ../gui/sequencemanager.cpp:1067
 msgid ""
 "A serious error has occurred in the ALSA MIDI subsystem.  It may not be "
 "possible to continue sequencing.  Please check console output for more "
 "information."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1080
+#: ../gui/sequencemanager.cpp:1088
 msgid "JACK Audio subsystem is losing sample frames."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1098
+#: ../gui/sequencemanager.cpp:1106
 msgid ""
 "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1102
+#: ../gui/sequencemanager.cpp:1110
 msgid ""
 "Failed to write audio data to disc fast enough to service the audio "
 "subsystem."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1106
+#: ../gui/sequencemanager.cpp:1114
 msgid "The audio mixing subsystem is failing to keep up."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1110
+#: ../gui/sequencemanager.cpp:1118
 msgid "The audio subsystem is failing to keep up."
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1114
+#: ../gui/sequencemanager.cpp:1122
 msgid "Unknown sequencer failure mode!"
 msgstr ""
 
-#: ../gui/sequencemanager.cpp:1164
+#: ../gui/sequencemanager.cpp:1172
 msgid ""
 "<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
 "a high-resolution timing source for MIDI performance.</p><p>This may mean "
@@ -5052,115 +4913,120 @@ msgid ""
 "Please contact your Linux distributor for more information.</p>"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:50
+#: ../gui/segmentparameterbox.cpp:51 ../gui/trackparameterbox.cpp:897
 #, fuzzy
 msgid "Segment"
 msgstr "小节(&M)"
 
+#: ../gui/segmentparameterbox.cpp:52
+#, fuzzy
+msgid "Segment Parameters"
+msgstr "乐器参数"
+
 #: ../gui/rosegardenconfigurationpage.cpp:2061
-#: ../gui/segmentparameterbox.cpp:88
+#: ../gui/segmentparameterbox.cpp:91
 msgid "Repeat"
 msgstr "重复"
 
 #: ../gui/editview.cpp:1407 ../gui/rosegardenconfigurationpage.cpp:2063
-#: ../gui/segmentparameterbox.cpp:90 ../gui/trackparameterbox.cpp:240
+#: ../gui/segmentparameterbox.cpp:93 ../gui/trackparameterbox.cpp:258
 msgid "Transpose"
 msgstr "变调"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2064
-#: ../gui/segmentparameterbox.cpp:91
+#: ../gui/segmentparameterbox.cpp:94
 msgid "Delay"
 msgstr "延迟"
 
-#: ../gui/segmentparameterbox.cpp:93
+#: ../gui/segmentparameterbox.cpp:96
 #, fuzzy
 msgid "Audio auto-fade"
 msgstr "音频输入"
 
-#: ../gui/segmentparameterbox.cpp:94
+#: ../gui/segmentparameterbox.cpp:97
 msgid "Fade in"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:95
+#: ../gui/segmentparameterbox.cpp:98
 msgid "Fade out"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:96 ../gui/trackparameterbox.cpp:263
+#: ../gui/segmentparameterbox.cpp:99 ../gui/trackparameterbox.cpp:287
 #, fuzzy
 msgid "Range"
 msgstr "三连音"
 
-#: ../gui/segmentparameterbox.cpp:106
+#: ../gui/segmentparameterbox.cpp:109
 #, fuzzy
 msgid "edit"
 msgstr "编辑器"
 
-#: ../gui/segmentparameterbox.cpp:170
+#: ../gui/segmentparameterbox.cpp:173
 msgid ""
 "_: used internally for spacing\n"
 "High: ----"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:174 ../gui/segmentparameterbox.cpp:737
-#: ../gui/trackparameterbox.cpp:270
+#: ../gui/segmentparameterbox.cpp:177 ../gui/segmentparameterbox.cpp:740
+#: ../gui/trackparameterbox.cpp:294
 #, fuzzy
 msgid "High: ---"
 msgstr "高"
 
-#: ../gui/segmentparameterbox.cpp:175 ../gui/trackparameterbox.cpp:271
+#: ../gui/segmentparameterbox.cpp:178 ../gui/trackparameterbox.cpp:295
 msgid "Choose the highest suggested playable note, using a staff"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:184 ../gui/segmentparameterbox.cpp:738
-#: ../gui/trackparameterbox.cpp:266
+#: ../gui/segmentparameterbox.cpp:187 ../gui/segmentparameterbox.cpp:741
+#: ../gui/trackparameterbox.cpp:290
 msgid "Low: ----"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:185 ../gui/trackparameterbox.cpp:267
+#: ../gui/segmentparameterbox.cpp:188 ../gui/trackparameterbox.cpp:291
 msgid "Choose the lowest suggested playable note, using a staff"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:203 ../gui/segmentparameterbox.cpp:210
+#: ../gui/segmentparameterbox.cpp:206 ../gui/segmentparameterbox.cpp:213
 msgid " ms"
 msgstr " ms"
 
-#: ../gui/segmentparameterbox.cpp:320 ../gui/segmentparameterbox.cpp:687
+#: ../gui/segmentparameterbox.cpp:323 ../gui/segmentparameterbox.cpp:690
 msgid "%1 ms"
 msgstr "%1 ms"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2445
-#: ../gui/segmentparameterbox.cpp:402 ../gui/trackparameterbox.cpp:752
+#: ../gui/segmentparameterbox.cpp:405 ../gui/trackparameterbox.cpp:773
 msgid "Add New Color"
 msgstr "添加新配色"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2503
-#: ../gui/segmentparameterbox.cpp:986 ../gui/trackparameterbox.cpp:775
+#: ../gui/segmentparameterbox.cpp:989 ../gui/trackparameterbox.cpp:796
 msgid "New Color Name"
 msgstr "新配色名"
 
 #: ../gui/colourwidgets.cpp:64 ../gui/rosegardenconfigurationpage.cpp:2504
-#: ../gui/segmentparameterbox.cpp:986 ../gui/trackparameterbox.cpp:775
+#: ../gui/segmentparameterbox.cpp:989 ../gui/trackparameterbox.cpp:796
 msgid "Enter new name"
 msgstr "输入新名称"
 
-#: ../gui/segmentparameterbox.cpp:1036 ../gui/trackparameterbox.cpp:802
+#: ../gui/segmentparameterbox.cpp:1039 ../gui/trackparameterbox.cpp:823
 msgid "Highest playable note"
 msgstr ""
 
-#: ../gui/segmentparameterbox.cpp:1056 ../gui/trackparameterbox.cpp:821
+#: ../gui/segmentparameterbox.cpp:1059 ../gui/trackparameterbox.cpp:842
 msgid "Lowest playable note"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:6149 ../gui/segmentparameterbox.cpp:1089
+#: ../gui/rosegardengui.cpp:6174 ../gui/segmentparameterbox.cpp:1092
 msgid "Modify Segment label"
 msgstr "修改小节标签"
 
-#: ../gui/rosegardengui.cpp:6150 ../gui/segmentparameterbox.cpp:1090
+#: ../gui/rosegardengui.cpp:6175 ../gui/segmentparameterbox.cpp:1093
 msgid "Modify Segments label"
 msgstr "修改小节标签"
 
-#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:6166
-#: ../gui/segmentparameterbox.cpp:1100
+#: ../gui/audiomanagerdialog.cpp:1078 ../gui/rosegardengui.cpp:6191
+#: ../gui/segmentparameterbox.cpp:1103
 msgid "Enter new label"
 msgstr "输入新标签"
 
@@ -6267,10 +6133,6 @@ msgstr "MIDI %1，音频 %2，总共 %3"
 msgid "Statistics"
 msgstr "统计"
 
-#: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:65
-msgid "Track"
-msgstr "轨道"
-
 #: ../gui/rosegardenconfigurationpage.cpp:2057
 msgid "Time"
 msgstr "时间"
@@ -6338,6 +6200,1083 @@ msgstr "删除风格"
 msgid "Color Map"
 msgstr "风格映射"
 
+#: ../gui/matrixview.cpp:387 ../gui/matrixview.cpp:2957
+msgid "Couldn't apply piano roll layout"
+msgstr "无法应用钢琴谱布局"
+
+#: ../gui/matrixview.cpp:586 ../gui/notationview.cpp:1462
+#: ../gui/rosegardengui.cpp:739
+msgid "&Select"
+msgstr "选择(&S)"
+
+#: ../gui/matrixview.cpp:591 ../gui/rosegardengui.cpp:744
+msgid "&Draw"
+msgstr "绘制(&D)"
+
+#: ../gui/matrixview.cpp:601 ../gui/rosegardengui.cpp:754
+msgid "&Move"
+msgstr "移动(&M)"
+
+#: ../gui/matrixview.cpp:608
+#, fuzzy
+msgid "Resi&ze"
+msgstr "改变大小"
+
+#: ../gui/matrixview.cpp:614 ../gui/notationview.cpp:1596
+msgid "C&hord Insert Mode"
+msgstr "和弦插入模式(&H)"
+
+#: ../gui/matrixview.cpp:621 ../gui/notationview.cpp:1468
+#, fuzzy
+msgid "Ste&p Recording"
+msgstr "正在录音"
+
+#: ../gui/matrixview.cpp:631 ../gui/rosegardengui.cpp:885
+msgid "Repeat Last Quantize"
+msgstr ""
+
+#: ../gui/matrixview.cpp:639
+#, fuzzy
+msgid "&Legato"
+msgstr "法定"
+
+#: ../gui/matrixview.cpp:643
+msgid "&Halve Speed"
+msgstr ""
+
+#: ../gui/matrixview.cpp:647
+#, fuzzy
+msgid "&Double Speed"
+msgstr "双重锐化"
+
+#: ../gui/matrixview.cpp:665
+msgid "Set Event &Velocities..."
+msgstr "设定事件力度(&V)..."
+
+#: ../gui/matrixview.cpp:669
+#, fuzzy
+msgid "Trigger Se&gment..."
+msgstr "擦除小节"
+
+#: ../gui/matrixview.cpp:673
+#, fuzzy
+msgid "Remove Triggers..."
+msgstr "删除节拍变更(&T)..."
+
+#: ../gui/matrixview.cpp:685 ../gui/notationview.cpp:1959
+msgid "Cursor &Back"
+msgstr "光标后退(&B)"
+
+#: ../gui/matrixview.cpp:689 ../gui/notationview.cpp:1963
+msgid "Cursor &Forward"
+msgstr "光标前进(&F)"
+
+#: ../gui/matrixview.cpp:693 ../gui/notationview.cpp:1967
+msgid "Cursor Ba&ck Bar"
+msgstr "光标沿进程条后退(&C)"
+
+#: ../gui/matrixview.cpp:697 ../gui/notationview.cpp:1971
+msgid "Cursor For&ward Bar"
+msgstr "光标沿进程条前进(&W)"
+
+#: ../gui/matrixview.cpp:701 ../gui/notationview.cpp:1975
+msgid "Cursor Back and Se&lect"
+msgstr "光标后退并选中(&L)"
+
+#: ../gui/matrixview.cpp:705 ../gui/notationview.cpp:1979
+msgid "Cursor Forward and &Select"
+msgstr "光标前进并选中(&S)"
+
+#: ../gui/matrixview.cpp:709 ../gui/notationview.cpp:1983
+msgid "Cursor Back Bar and Select"
+msgstr "光标沿进程条后退并选中"
+
+#: ../gui/matrixview.cpp:713 ../gui/notationview.cpp:1987
+msgid "Cursor Forward Bar and Select"
+msgstr "光标沿进程条前进并选中"
+
+#: ../gui/matrixview.cpp:717 ../gui/notationview.cpp:1997
+msgid "Cursor to St&art"
+msgstr "光标移到起点(&A)"
+
+#: ../gui/matrixview.cpp:723 ../gui/notationview.cpp:2003
+msgid "Cursor to &End"
+msgstr "光标移到末尾(&E)"
+
+#: ../gui/matrixview.cpp:729 ../gui/notationview.cpp:2017
+msgid "Cursor to &Playback Pointer"
+msgstr "光标移到回放点(&P)"
+
+#: ../gui/matrixview.cpp:769 ../gui/notationview.cpp:2057
+msgid "Playback Pointer to &Cursor"
+msgstr "从回放点到光标(&C)"
+
+#: ../gui/matrixview.cpp:775 ../gui/notationview.cpp:2063
+msgid "&Solo"
+msgstr "独奏(&S)"
+
+#: ../gui/matrixview.cpp:781 ../gui/notationview.cpp:2069
+#: ../gui/rosegardengui.cpp:1141
+msgid "Scro&ll to Follow Playback"
+msgstr ""
+
+#: ../gui/matrixview.cpp:790 ../gui/notationview.cpp:2078
+msgid "Set Loop to Selection"
+msgstr "设置循环选择区"
+
+#: ../gui/matrixview.cpp:794 ../gui/notationview.cpp:2082
+msgid "Clear L&oop"
+msgstr "清除循环(&O)"
+
+#: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:803
+#: ../gui/notationview.cpp:2093
+msgid "&Filter Selection"
+msgstr "过滤器选择(&F)"
+
+#: ../gui/matrixview.cpp:808
+msgid "Snap to 1/64"
+msgstr "快速切换到 1/64"
+
+#: ../gui/matrixview.cpp:810
+#, fuzzy
+msgid "Snap to 1/48"
+msgstr "快速切换到 1/8"
+
+#: ../gui/matrixview.cpp:812
+msgid "Snap to 1/32"
+msgstr "快速切换到 1/32"
+
+#: ../gui/matrixview.cpp:814
+#, fuzzy
+msgid "Snap to 1/24"
+msgstr "快速切换到 1/4"
+
+#: ../gui/matrixview.cpp:816
+msgid "Snap to 1/16"
+msgstr "快速切换到 1/16"
+
+#: ../gui/matrixview.cpp:818
+#, fuzzy
+msgid "Snap to 1/12"
+msgstr "快速切换到 1/2"
+
+#: ../gui/matrixview.cpp:820
+msgid "Snap to 1/8"
+msgstr "快速切换到 1/8"
+
+#: ../gui/matrixview.cpp:822
+#, fuzzy
+msgid "Snap to 1/6"
+msgstr "快速切换到 1/64"
+
+#: ../gui/matrixview.cpp:824
+msgid "Snap to 1/4"
+msgstr "快速切换到 1/4"
+
+#: ../gui/matrixview.cpp:826
+msgid "Snap to 1/2"
+msgstr "快速切换到 1/2"
+
+#: ../gui/matrixview.cpp:828
+msgid "Snap to &Unit"
+msgstr "快速切换到小节(&U)"
+
+#: ../gui/matrixview.cpp:830
+msgid "Snap to Bea&t"
+msgstr "快速切换到节拍(&T)"
+
+#: ../gui/matrixview.cpp:832
+msgid "Snap to &Bar"
+msgstr "快速切换到进程条(&B)"
+
+#: ../gui/matrixview.cpp:834
+msgid "&No Snap"
+msgstr "无快速切换(&N)"
+
+#: ../gui/matrixview.cpp:840
+#, fuzzy
+msgid "Show Instrument Parameters"
+msgstr "显示设备参数(&I)"
+
+#: ../gui/matrixview.cpp:845 ../gui/notationview.cpp:1529
+msgid "Show Ch&ord Name Ruler"
+msgstr "显示和弦名称标尺(&O)"
+
+#: ../gui/matrixview.cpp:849 ../gui/notationview.cpp:1537
+msgid "Show &Tempo Ruler"
+msgstr "显示节拍标尺(&T)"
+
+#: ../gui/matrixview.cpp:1138 ../gui/notationview.cpp:2819
+#, c-format
+msgid ""
+"_n:   1 event selected \n"
+"  %n events selected "
+msgstr ""
+
+#: ../gui/matrixview.cpp:1140 ../gui/notationview.cpp:2821
+msgid "  No selection "
+msgstr "  没有选中 "
+
+#: ../gui/matrixview.cpp:1280
+#, fuzzy
+msgid "Making legato..."
+msgstr "正在制作美化音符..."
+
+#: ../gui/matrixview.cpp:1291
+#, fuzzy
+msgid "Halving speed..."
+msgstr "正在保存文件..."
+
+#: ../gui/matrixview.cpp:1304
+#, fuzzy
+msgid "Doubling speed..."
+msgstr "正在删除选择区..."
+
+#: ../gui/matrixview.cpp:1326
+#, fuzzy
+msgid "Rescaling..."
+msgstr "重新调整(&R)..."
+
+#: ../gui/matrixview.cpp:1423
+#, fuzzy
+msgid "%1 (%2.%3s)"
+msgstr "时间：%1"
+
+#: ../gui/matrixview.cpp:1434
+#, fuzzy
+msgid "%1 (%2): %3"
+msgstr "%1 (以上)"
+
+#: ../gui/matrixview.cpp:2047
+msgid "Unquantizing..."
+msgstr "正在解除量化..."
+
+#: ../gui/matrixview.cpp:2077
+msgid " Grid: "
+msgstr " 栅格："
+
+#: ../gui/matrixview.cpp:2106
+msgid "Unit"
+msgstr "小节"
+
+#: ../gui/matrixview.cpp:2108
+msgid "Beat"
+msgstr "节拍"
+
+#: ../gui/matrixview.cpp:2110
+msgid "Bar"
+msgstr "进程条"
+
+#: ../gui/matrixview.cpp:2129
+msgid " Quantize: "
+msgstr " 量化："
+
+#: ../gui/matrixview.cpp:2202 ../gui/rosegardengui.cpp:5558
+msgid "%1%"
+msgstr "%1%"
+
+#: ../gui/matrixview.cpp:2497
+msgid "Raising velocities..."
+msgstr "正在提升力度..."
+
+#: ../gui/matrixview.cpp:2506
+msgid "Lowering velocities..."
+msgstr "正在降低力度..."
+
+#: ../gui/matrixview.cpp:2540
+msgid "Set Event Velocities"
+msgstr "设定事件力度"
+
+#: ../gui/matrixview.cpp:2545
+msgid "Setting Velocities..."
+msgstr "正在设定力度..."
+
+#: ../gui/matrixview.cpp:2578
+#, fuzzy
+msgid "Remove Triggers"
+msgstr "删除所有标记(&R)"
+
+#: ../gui/matrixview.cpp:2635
+msgid "%1 - Segment Track #%2 - %3"
+msgstr ""
+
+#: ../gui/matrixview.cpp:2642
+#, fuzzy
+msgid "%1 - All Segments - %2"
+msgstr "音长"
+
+#: ../gui/matrixview.cpp:2649
+#, fuzzy
+msgid ""
+"_n: %1 - 1 Segment - %2\n"
+"%1 - %n Segments - %2"
+msgstr "音长"
+
+#: ../gui/matrixview.cpp:2792
+#, fuzzy
+msgid "Can't insert note: No grid duration selected"
+msgstr "没有音符音长被选中"
+
+#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
+#, fuzzy
+msgid "File name"
+msgstr "文件名："
+
+#: ../gui/playlist.cpp:141
+#, fuzzy
+msgid "Add..."
+msgstr "添加轨道..."
+
+#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
+#: ../gui/playlist.cpp:142
+msgid "Play"
+msgstr "播放"
+
+#: ../gui/playlist.cpp:143
+#, fuzzy
+msgid "Move Up"
+msgstr "上移轨道(&U)"
+
+#: ../gui/playlist.cpp:144
+#, fuzzy
+msgid "Move Down"
+msgstr "下移轨道(&D)"
+
+#: ../gui/playlist.cpp:189
+#, fuzzy
+msgid "Select one or more Rosegarden files"
+msgstr "选择一个或更多音频文件"
+
+#: ../gui/deviceeditor.cpp:80
+msgid "Add Play Device"
+msgstr "添加播放设备"
+
+#: ../gui/deviceeditor.cpp:81
+msgid "Add Record Device"
+msgstr "添加录制设备"
+
+#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
+msgid "Delete Device"
+msgstr "删除设备"
+
+#: ../gui/deviceeditor.cpp:135 ../gui/importdevicedialog.cpp:136
+#, c-format
+msgid "Device %1"
+msgstr "设备 %1"
+
+#: ../gui/deviceeditor.cpp:244
+msgid "Apply pending changes?"
+msgstr "应用待执行的修改吗？"
+
+#: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
+msgid "<new device>"
+msgstr "<新设备>"
+
+#: ../gui/widgets.cpp:108 ../gui/widgets.cpp:113 ../gui/widgets.cpp:135
+msgid "Processing..."
+msgstr "正在处理..."
+
+#: ../gui/widgets.cpp:380
+msgid ""
+"Click and drag up and down or left and right to modify.\n"
+"Double click to edit value directly."
+msgstr ""
+
+#: ../gui/widgets.cpp:690
+#, fuzzy
+msgid "Select a new value"
+msgstr "删除该属性"
+
+#: ../gui/widgets.cpp:691
+#, fuzzy
+msgid "Enter a new value"
+msgstr "输入新名称"
+
+#: ../gui/widgets.cpp:831
+#, fuzzy
+msgid "Quantizer"
+msgstr "量化"
+
+#: ../gui/widgets.cpp:837
+#, fuzzy
+msgid "Quantizer type:"
+msgstr "量化类型"
+
+#: ../gui/widgets.cpp:839
+msgid "Grid quantizer"
+msgstr "栅格量化"
+
+#: ../gui/widgets.cpp:840
+#, fuzzy
+msgid "Legato quantizer"
+msgstr "栅格量化"
+
+#: ../gui/widgets.cpp:841
+msgid "Heuristic notation quantizer"
+msgstr "启发记号量化"
+
+#: ../gui/widgets.cpp:845
+msgid "Quantize for notation only (leave performance unchanged)"
+msgstr "仅对记号量化(保持性能不变)"
+
+#: ../gui/widgets.cpp:854
+msgid "Notation parameters"
+msgstr "记号参数"
+
+#: ../gui/widgets.cpp:859 ../gui/widgets.cpp:900
+msgid "Base grid unit:"
+msgstr "基础栅格单元："
+
+#: ../gui/widgets.cpp:864
+msgid "Complexity:"
+msgstr "复杂度："
+
+#: ../gui/widgets.cpp:868
+msgid "Very high"
+msgstr "非常高"
+
+#: ../gui/widgets.cpp:869
+msgid "High"
+msgstr "高"
+
+#: ../gui/widgets.cpp:870
+msgid "Normal"
+msgstr "正常"
+
+#: ../gui/widgets.cpp:871
+msgid "Low"
+msgstr "低"
+
+#: ../gui/widgets.cpp:872
+msgid "Very low"
+msgstr "非常低"
+
+#: ../gui/widgets.cpp:875
+msgid "Tuplet level:"
+msgstr "连音级别："
+
+#: ../gui/widgets.cpp:879
+msgid "2-in-the-time-of-3"
+msgstr ""
+
+#: ../gui/widgets.cpp:880
+msgid "Triplet"
+msgstr "三连音"
+
+#: ../gui/widgets.cpp:888
+msgid "Any"
+msgstr "任意"
+
+#: ../gui/widgets.cpp:891
+#, fuzzy
+msgid "Permit counterpoint"
+msgstr "正在删除配合旋律(对位音)..."
+
+#: ../gui/widgets.cpp:895
+msgid "Grid parameters"
+msgstr "删格参数"
+
+#: ../gui/widgets.cpp:904
+msgid "Swing:"
+msgstr ""
+
+#: ../gui/widgets.cpp:909
+msgid "Iterative amount:"
+msgstr ""
+
+#: ../gui/widgets.cpp:915
+msgid "Quantize durations as well as start times"
+msgstr "量化音长及起始时间"
+
+#: ../gui/widgets.cpp:919
+msgid "After quantization"
+msgstr "在量化后"
+
+#: ../gui/widgets.cpp:933
+#, fuzzy
+msgid "Show advanced options"
+msgstr "高级选项"
+
+#: ../gui/widgets.cpp:942
+msgid "Re-beam"
+msgstr "重新分开符尾"
+
+#: ../gui/widgets.cpp:944
+msgid "Add articulations (staccato, tenuto, slurs)"
+msgstr "添加辅音(断音、持续、连音)"
+
+#: ../gui/widgets.cpp:945
+msgid "Tie notes at barlines etc"
+msgstr "将音符捆绑于进程线等等"
+
+#: ../gui/widgets.cpp:946
+msgid "Split-and-tie overlapping chords"
+msgstr "分割与捆绑重叠和弦"
+
+#: ../gui/widgets.cpp:1057
+#, fuzzy
+msgid "Full quantize"
+msgstr "栅格量化"
+
+#: ../gui/widgets.cpp:1200
+#, fuzzy
+msgid "Show Advanced Options"
+msgstr "高级选项"
+
+#: ../gui/widgets.cpp:1204
+#, fuzzy
+msgid "Hide Advanced Options"
+msgstr "高级选项"
+
+#: ../gui/importdevicedialog.cpp:54
+#, fuzzy
+msgid "Import from Device..."
+msgstr "从设备导入库..."
+
+#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
+#: ../gui/rosegardengui.cpp:2095 ../gui/rosegardengui.cpp:2155
+#: ../gui/rosegardengui.cpp:7501
+#, c-format
+msgid "Cannot download file %1"
+msgstr "无法下载文件 %1"
+
+#: ../gui/importdevicedialog.cpp:95
+#, fuzzy, c-format
+msgid "Cannot open file %1"
+msgstr "无法打开文件“%1”"
+
+#: ../gui/importdevicedialog.cpp:102
+#, fuzzy, c-format
+msgid "No devices found in file %1"
+msgstr "没有找到设备于文件"
+
+#: ../gui/importdevicedialog.cpp:109
+msgid "Source device"
+msgstr "源设备"
+
+#: ../gui/importdevicedialog.cpp:114
+#, fuzzy
+msgid "Import from: "
+msgstr "导出音频文件"
+
+#: ../gui/importdevicedialog.cpp:151
+#, fuzzy
+msgid "Import banks"
+msgstr "导入库"
+
+#: ../gui/importdevicedialog.cpp:152
+#, fuzzy
+msgid "Import key mappings"
+msgstr "导出"
+
+#: ../gui/importdevicedialog.cpp:153
+#, fuzzy
+msgid "Import controllers"
+msgstr "%1 控制器"
+
+#: ../gui/importdevicedialog.cpp:156
+#, fuzzy
+msgid "Import device name"
+msgstr "导出设备为..."
+
+#: ../gui/importdevicedialog.cpp:162
+#, fuzzy
+msgid "Bank import behavior"
+msgstr "导入行为"
+
+#: ../gui/importdevicedialog.cpp:164
+#, fuzzy
+msgid "Merge banks"
+msgstr "合并库"
+
+#: ../gui/importdevicedialog.cpp:165
+#, fuzzy
+msgid "Overwrite banks"
+msgstr "覆盖库"
+
+#: ../gui/importdevicedialog.cpp:365
+msgid "Bank %1:%2"
+msgstr ""
+
+#: ../gui/rosegardenguiview.cpp:229
+msgid "No non-audio segments in composition"
+msgstr "作品里没有非音频片段"
+
+#: ../gui/rosegardenguiview.cpp:303
+msgid "Selection must contain only audio or non-audio segments"
+msgstr "选择只能包括音频或非音频片段"
+
+#: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
+#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
+msgid "No non-audio segments selected"
+msgstr "没有非音频片段被选中"
+
+#: ../gui/rosegardenguiview.cpp:837
+msgid ""
+"You've not yet defined an audio editor for Rosegarden to use.\n"
+"See Settings -> Configure Rosegarden -> General -> External Editors."
+msgstr ""
+
+#: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
+#, fuzzy
+msgid "Can't add dropped file. "
+msgstr "无法打开文件“%1”"
+
+#: ../gui/editcommands.cpp:212
+msgid "(excerpt)"
+msgstr "(摘要)"
+
+#: ../gui/editcommands.cpp:226
+msgid "(copied)"
+msgstr "(复件)"
+
+#: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
+#, fuzzy
+msgid "Copy Range"
+msgstr "基调修改"
+
+#: ../gui/editcommands.cpp:452
+msgid "Paste into an existing gap [\"restricted\"]"
+msgstr "粘贴到一个现有空隙[“限定”]"
+
+#: ../gui/editcommands.cpp:454
+msgid "Erase existing events to make room [\"simple\"]"
+msgstr "擦除现有事件腾出空间[“简化”]"
+
+#: ../gui/editcommands.cpp:456
+msgid "Move existing events out of the way [\"open-n-paste\"]"
+msgstr "把现有事件移动出去[“打开并粘贴”]"
+
+#: ../gui/editcommands.cpp:458
+msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
+msgstr "修饰音符，紧缩现有音符[“音符修饰”]"
+
+#: ../gui/editcommands.cpp:460
+msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
+msgstr "修饰音符，忽略现有音符[“字模修饰”]"
+
+#: ../gui/editcommands.cpp:889
+msgid "Heuristic Notation &Quantize"
+msgstr "启发记号量化(&Q)"
+
+#: ../gui/editcommands.cpp:891
+msgid "Grid &Quantize"
+msgstr "栅格量化(&Q)"
+
+#: ../gui/editcommands.cpp:895 ../gui/editcommands.cpp:1098
+#: ../gui/rosegardengui.cpp:881
+msgid "&Quantize..."
+msgstr "量化(&Q)..."
+
+#: ../gui/editcommands.cpp:1054 ../gui/editcommands.cpp:1065
+msgid "Unquantize Events"
+msgstr "未量化事件"
+
+#: ../gui/editcommands.cpp:1565
+msgid "&Move Events to Other Segment"
+msgstr "移动事件到其他片段(&M)"
+
+#: ../gui/editcommands.cpp:1798
+msgid "Insert Trigger Note"
+msgstr "插入触发记号"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "C%1"
+msgstr "C%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "C#%1"
+msgstr "C#%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "D%1"
+msgstr "D%1"
+
+#: ../gui/midipitchlabel.cpp:33
+#, c-format
+msgid "D#%1"
+msgstr "D#%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "E%1"
+msgstr "E%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "F%1"
+msgstr "F%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "F#%1"
+msgstr "F#%1"
+
+#: ../gui/midipitchlabel.cpp:34
+#, c-format
+msgid "G%1"
+msgstr "G%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "G#%1"
+msgstr "G#%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "A%1"
+msgstr "A%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "A#%1"
+msgstr "A#%1"
+
+#: ../gui/midipitchlabel.cpp:35
+#, c-format
+msgid "B%1"
+msgstr "B%1"
+
+#: ../gui/notationview.cpp:377 ../gui/rosegardengui.cpp:471
+msgid "Starting..."
+msgstr "已开始..."
+
+#: ../gui/notationview.cpp:692
+#, fuzzy
+msgid "Preparing to print..."
+msgstr "正在清除音频数据..."
+
+#: ../gui/notationview.cpp:1212
+msgid "Note &Font"
+msgstr "音符字体(&F)"
+
+#: ../gui/notationview.cpp:1234
+msgid "Si&ze"
+msgstr "大小(&Z)"
+
+#: ../gui/notationview.cpp:1241
+#, fuzzy
+msgid "S&pacing"
+msgstr "间距"
+
+#: ../gui/notationview.cpp:1263
+#, fuzzy
+msgid "Du&ration Factor"
+msgstr "音长  "
+
+#: ../gui/notationview.cpp:1288
+msgid "Note &Style"
+msgstr "音符样式(&S)"
+
+#: ../gui/notationview.cpp:1314
+msgid "Insert Rest"
+msgstr "插入休止符"
+
+#: ../gui/notationview.cpp:1318
+msgid "Switch from Note to Rest"
+msgstr "从音符切换到休止符"
+
+#: ../gui/notationview.cpp:1323
+msgid "Switch from Rest to Note"
+msgstr "从休止符切换到音符"
+
+#: ../gui/notationview.cpp:1380
+msgid "No accidental"
+msgstr "不使用临时记号"
+
+#: ../gui/notationview.cpp:1381
+#, fuzzy
+msgid "Follow previous accidental"
+msgstr "临时记号(&A)"
+
+#: ../gui/notationview.cpp:1382
+msgid "Sharp"
+msgstr "锐化"
+
+#: ../gui/notationview.cpp:1383
+msgid "Flat"
+msgstr "平坦化"
+
+#: ../gui/notationview.cpp:1384
+msgid "Natural"
+msgstr "自然化"
+
+#: ../gui/notationview.cpp:1385
+msgid "Double sharp"
+msgstr "双重锐化"
+
+#: ../gui/notationview.cpp:1386
+msgid "Double flat"
+msgstr "双重扁平化"
+
+#: ../gui/notationview.cpp:1407
+msgid "&Treble Clef"
+msgstr "高音谱号(&T)"
+
+#: ../gui/notationview.cpp:1414
+msgid "Te&nor Clef"
+msgstr "次中音谱号(&N)"
+
+#: ../gui/notationview.cpp:1421
+msgid "&Alto Clef"
+msgstr "次高音谱号(&A)"
+
+#: ../gui/notationview.cpp:1428
+msgid "&Bass Clef"
+msgstr "低音谱号(&B)"
+
+#: ../gui/notationview.cpp:1435
+msgid "&Text"
+msgstr "文本(&T)"
+
+#: ../gui/notationview.cpp:1441
+#, fuzzy
+msgid "&Fretboard"
+msgstr "快进(&F)"
+
+#: ../gui/notationview.cpp:1474
+msgid "Select from Sta&rt"
+msgstr "从开头到当前位置选中(&R)"
+
+#: ../gui/notationview.cpp:1478
+msgid "Select to &End"
+msgstr "从当前位置到结尾选中(&E)"
+
+#: ../gui/notationview.cpp:1482
+msgid "Select Whole St&aff"
+msgstr "选中整个五线谱(&A)"
+
+#: ../gui/notationview.cpp:1490
+msgid "Pa&ste..."
+msgstr "粘贴(&S)..."
+
+#: ../gui/notationview.cpp:1494 ../gui/rosegardengui.cpp:814
+msgid "De&lete"
+msgstr "删除(&L)"
+
+#: ../gui/notationview.cpp:1508
+msgid "&Linear Layout"
+msgstr "谱线布局(&L)"
+
+#: ../gui/notationview.cpp:1516
+#, fuzzy
+msgid "&Continuous Page Layout"
+msgstr "页面布局(&P)"
+
+#: ../gui/notationview.cpp:1524
+#, fuzzy
+msgid "&Multiple Page Layout"
+msgstr "页面布局(&P)"
+
+#: ../gui/notationview.cpp:1533
+msgid "Show Ra&w Note Ruler"
+msgstr "显示未加工音符标尺(&W)"
+
+#: ../gui/notationview.cpp:1541
+msgid "Show &Annotations"
+msgstr "显示标注(&A)"
+
+#: ../gui/notationview.cpp:1545
+msgid "Show Lily&Pond Directives"
+msgstr ""
+
+#: ../gui/notationview.cpp:1549
+msgid "Open L&yric Editor"
+msgstr "用 ge_dit 打开"
+
+#: ../gui/notationview.cpp:1590
+#, fuzzy
+msgid "Trip&let Insert Mode"
+msgstr "三连音符插入模式(&P)"
+
+#: ../gui/notationview.cpp:1816
+msgid "&Dump selected events to stderr"
+msgstr "转储选中的事件到标准错误<stderr>(&D)"
+
+#: ../gui/notationview.cpp:1884
+#, fuzzy
+msgid "Ma&ke Ornament..."
+msgstr "正在制作美化音符..."
+
+#: ../gui/notationview.cpp:1888
+msgid "Trigger &Ornament..."
+msgstr ""
+
+#: ../gui/notationview.cpp:1892
+#, fuzzy
+msgid "Remove Ornament..."
+msgstr "正在删除配合旋律(对位音)..."
+
+#: ../gui/notationview.cpp:1897
+msgid "&None"
+msgstr "无(&N)"
+
+#: ../gui/notationview.cpp:1905
+msgid "Add Fretboard"
+msgstr ""
+
+#: ../gui/notationview.cpp:1931 ../gui/rosegardengui.cpp:651
+msgid "Show T&ools Toolbar"
+msgstr "显示工具工具栏(&O)"
+
+#: ../gui/notationview.cpp:1932
+msgid "Show &Notes Toolbar"
+msgstr "显示音符工具栏(&N)"
+
+#: ../gui/notationview.cpp:1933
+msgid "Show &Rests Toolbar"
+msgstr "显示休止符工具栏(&R)"
+
+#: ../gui/notationview.cpp:1934
+msgid "Show &Accidentals Toolbar"
+msgstr "显示临时记号工具栏(&A)"
+
+#: ../gui/notationview.cpp:1935
+msgid "Show Cle&fs Toolbar"
+msgstr "显示谱号工具栏(&F)"
+
+#: ../gui/notationview.cpp:1937
+msgid "Show &Marks Toolbar"
+msgstr "显示标记工具栏(&M)"
+
+#: ../gui/notationview.cpp:1939
+msgid "Show &Group Toolbar"
+msgstr "显示分组工具栏(&G)"
+
+#: ../gui/notationview.cpp:1941
+msgid "Show &Layout Toolbar"
+msgstr "显示布局工具栏(&L)"
+
+#: ../gui/notationview.cpp:1943 ../gui/rosegardengui.cpp:663
+msgid "Show Trans&port Toolbar"
+msgstr "显示传送工具栏(&P)"
+
+#: ../gui/notationview.cpp:1945
+#, fuzzy
+msgid "Show M&eta Toolbar"
+msgstr "显示休止符工具栏(&R)"
+
+#: ../gui/notationview.cpp:2007
+msgid "Cursor &Up Staff"
+msgstr "光标上移五线谱(&U)"
+
+#: ../gui/notationview.cpp:2011
+msgid "Cursor &Down Staff"
+msgstr "光标下移五线谱(&D)"
+
+#: ../gui/notationview.cpp:2097
+msgid "Push &Left"
+msgstr ""
+
+#: ../gui/notationview.cpp:2101
+msgid "Push &Right"
+msgstr ""
+
+#: ../gui/notationview.cpp:2105
+msgid "Push &Up"
+msgstr ""
+
+#: ../gui/notationview.cpp:2109
+#, fuzzy
+msgid "Push &Down"
+msgstr "符干向下(&D)"
+
+#: ../gui/notationview.cpp:2113
+#, fuzzy
+msgid "Restore &Computed Positions"
+msgstr "恢复计算好的符干(&R)"
+
+#: ../gui/notationview.cpp:2117
+#, fuzzy
+msgid "Make &Invisible"
+msgstr "使音符生效(&V)"
+
+#: ../gui/notationview.cpp:2121
+#, fuzzy
+msgid "Make &Visible"
+msgstr "使音符生效(&V)"
+
+#: ../gui/notationview.cpp:2125
+#, fuzzy
+msgid "Toggle Dot"
+msgstr "全音符"
+
+#: ../gui/notationview.cpp:2129 ../gui/notationview.cpp:2133
+#, fuzzy
+msgid "Add Dot"
+msgstr "添加 %1"
+
+#: ../gui/notationview.cpp:2184
+#, c-format
+msgid ""
+"_n: 1 pixel\n"
+"%n pixels"
+msgstr ""
+
+#: ../gui/notationview.cpp:2227
+msgid "  Font:  "
+msgstr "  字体： "
+
+#: ../gui/notationview.cpp:2254
+msgid "Unknown font \"%1\", using default"
+msgstr "未知的字体“%1”，使用默认值"
+
+#: ../gui/notationview.cpp:2262
+msgid "  Size:  "
+msgstr "  大小： "
+
+#: ../gui/notationview.cpp:2284
+msgid "  Spacing:  "
+msgstr "  间隔： "
+
+#: ../gui/notationview.cpp:2579 ../gui/notationview.cpp:3299
+#: ../gui/rosegardengui.cpp:1255
+msgid "  Ready."
+msgstr "  已就绪。"
+
+#: ../gui/notationview.cpp:2584
+msgid "Laying out score..."
+msgstr "正在布置乐谱..."
+
+#: ../gui/notationview.cpp:2596
+msgid "Laying out staff %1..."
+msgstr "正在布置五线谱 %1..."
+
+#: ../gui/notationview.cpp:2605
+msgid "Reconciling staffs..."
+msgstr "正在调和五线谱..."
+
+#: ../gui/notationview.cpp:3369
+msgid "Sizing and allocating canvas..."
+msgstr "正在估计规模和分配画布..."
+
+#: ../gui/notationview.cpp:3529
+msgid "note"
+msgstr "音符"
+
+#: ../gui/notationview.cpp:3529
+msgid "rest"
+msgstr "休止符"
+
+#: ../gui/notationview.cpp:3688
+msgid "%1 - Segment Track #%2 - Notation"
+msgstr ""
+
+#: ../gui/notationview.cpp:3694
+#, fuzzy
+msgid "%1 - All Segments - Notation"
+msgstr "音长"
+
+#: ../gui/notationview.cpp:3699
+#, fuzzy
+msgid ""
+"_n: %1 - Segment - Notation\n"
+"%1 - %n Segments - Notation"
+msgstr "音长"
+
 #: ../gui/rosegardengui.cpp:304
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
@@ -6381,10 +7320,6 @@ msgstr "正在获取声音驱动状态..."
 #: ../gui/rosegardengui.cpp:452
 msgid "Clearing studio data..."
 msgstr "正在清除工作环境数据..."
-
-#: ../gui/notationview.cpp:377 ../gui/rosegardengui.cpp:471
-msgid "Starting..."
-msgstr "已开始..."
 
 #: ../gui/rosegardengui.cpp:546
 #, fuzzy
@@ -6463,10 +7398,6 @@ msgstr "玫瑰园插件"
 msgid "&Bug Reporting Guidelines"
 msgstr ""
 
-#: ../gui/notationview.cpp:1909 ../gui/rosegardengui.cpp:651
-msgid "Show T&ools Toolbar"
-msgstr "显示工具工具栏(&O)"
-
 #: ../gui/rosegardengui.cpp:655
 msgid "Show Trac&ks Toolbar"
 msgstr "显示轨道工具栏(&K)"
@@ -6474,10 +7405,6 @@ msgstr "显示轨道工具栏(&K)"
 #: ../gui/rosegardengui.cpp:659
 msgid "Show &Editors Toolbar"
 msgstr "显示编辑工具栏(&E)"
-
-#: ../gui/notationview.cpp:1921 ../gui/rosegardengui.cpp:663
-msgid "Show Trans&port Toolbar"
-msgstr "显示传送工具栏(&P)"
 
 #: ../gui/rosegardengui.cpp:667
 msgid "Show &Zoom Toolbar"
@@ -6513,19 +7440,6 @@ msgstr "显示小节预览(&V)"
 msgid "Show Special &Parameters"
 msgstr "显示设备参数(&I)"
 
-#: ../gui/matrixview.cpp:567 ../gui/notationview.cpp:1440
-#: ../gui/rosegardengui.cpp:739
-msgid "&Select"
-msgstr "选择(&S)"
-
-#: ../gui/matrixview.cpp:572 ../gui/rosegardengui.cpp:744
-msgid "&Draw"
-msgstr "绘制(&D)"
-
-#: ../gui/matrixview.cpp:582 ../gui/rosegardengui.cpp:754
-msgid "&Move"
-msgstr "移动(&M)"
-
 #: ../gui/rosegardengui.cpp:761
 msgid "&Resize"
 msgstr "重定义大小(&R)"
@@ -6537,15 +7451,6 @@ msgstr "分割(&R)"
 #: ../gui/rosegardengui.cpp:781
 msgid "&Harmonize"
 msgstr "调合(&H)"
-
-#: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
-#, fuzzy
-msgid "Copy Range"
-msgstr "基调修改"
-
-#: ../gui/notationview.cpp:1472 ../gui/rosegardengui.cpp:814
-msgid "De&lete"
-msgstr "删除(&L)"
 
 #: ../gui/rosegardengui.cpp:818
 msgid "Select &All Segments"
@@ -6563,15 +7468,6 @@ msgstr "编辑文档属性(&R)..."
 #: ../gui/rosegardengui.cpp:846
 msgid "Open in &Default Editor"
 msgstr "以默认编辑器打开(&D)"
-
-#: ../gui/editcommands.cpp:895 ../gui/editcommands.cpp:1098
-#: ../gui/rosegardengui.cpp:881
-msgid "&Quantize..."
-msgstr "量化(&Q)..."
-
-#: ../gui/matrixview.cpp:612 ../gui/rosegardengui.cpp:885
-msgid "Repeat Last Quantize"
-msgstr ""
 
 #: ../gui/rosegardengui.cpp:905
 #, fuzzy
@@ -6717,11 +7613,6 @@ msgstr ""
 msgid "P&unch in Record"
 msgstr ""
 
-#: ../gui/matrixview.cpp:762 ../gui/notationview.cpp:2047
-#: ../gui/rosegardengui.cpp:1141
-msgid "Scro&ll to Follow Playback"
-msgstr ""
-
 #: ../gui/rosegardengui.cpp:1151
 msgid "Segment Debug Dump "
 msgstr ""
@@ -6729,11 +7620,6 @@ msgstr ""
 #: ../gui/rosegardengui.cpp:1221
 msgid "  Zoom:  "
 msgstr "  缩放："
-
-#: ../gui/notationview.cpp:2557 ../gui/notationview.cpp:3277
-#: ../gui/rosegardengui.cpp:1255
-msgid "  Ready."
-msgstr "  已就绪。"
 
 #: ../gui/rosegardengui.cpp:1639
 #, fuzzy
@@ -6779,13 +7665,6 @@ msgstr ""
 "不正确的 URL\n"
 "%1"
 
-#: ../gui/audiomanagerdialog.cpp:1278 ../gui/importdevicedialog.cpp:83
-#: ../gui/rosegardengui.cpp:2095 ../gui/rosegardengui.cpp:2155
-#: ../gui/rosegardengui.cpp:7476
-#, c-format
-msgid "Cannot download file %1"
-msgstr "无法下载文件 %1"
-
 #: ../gui/rosegardengui.cpp:2110 ../gui/rosegardengui.cpp:2166
 msgid "Opening file..."
 msgstr "正在打开文件..."
@@ -6810,10 +7689,10 @@ msgstr "正在用新文件名保存..."
 msgid "Rosegarden-4 files"
 msgstr "玫瑰园-4 文件"
 
-#: ../gui/rosegardengui.cpp:2288 ../gui/rosegardengui.cpp:4586
-#: ../gui/rosegardengui.cpp:4629 ../gui/rosegardengui.cpp:4667
-#: ../gui/rosegardengui.cpp:4699 ../gui/rosegardengui.cpp:4732
-#: ../gui/rosegardengui.cpp:4812
+#: ../gui/rosegardengui.cpp:2288 ../gui/rosegardengui.cpp:4593
+#: ../gui/rosegardengui.cpp:4636 ../gui/rosegardengui.cpp:4674
+#: ../gui/rosegardengui.cpp:4706 ../gui/rosegardengui.cpp:4739
+#: ../gui/rosegardengui.cpp:4819
 msgid "All files"
 msgstr "所有文件"
 
@@ -6866,7 +7745,7 @@ msgstr "显示小节参数(&S)"
 msgid "Set Segment Durations"
 msgstr "设置片段音长"
 
-#: ../gui/rosegardengui.cpp:2988 ../gui/rosegardengui.cpp:5623
+#: ../gui/rosegardengui.cpp:2988 ../gui/rosegardengui.cpp:5648
 msgid "Set Global Tempo"
 msgstr "设置全局节拍"
 
@@ -7004,32 +7883,32 @@ msgstr "正在导入玫瑰园 2.1 文件..."
 msgid "Can't load Hydrogen file.  It appears to be corrupted."
 msgstr "无法载入玫瑰园 2.1 文件。该文件似乎已损坏。"
 
-#: ../gui/rosegardengui.cpp:4412
+#: ../gui/rosegardengui.cpp:4419
 msgid "Starting the sequencer..."
 msgstr "正在启动音序发生器..."
 
-#: ../gui/rosegardengui.cpp:4438
+#: ../gui/rosegardengui.cpp:4445
 msgid "Couldn't start the sequencer"
 msgstr "无法启动音序发生器"
 
-#: ../gui/rosegardengui.cpp:4514
+#: ../gui/rosegardengui.cpp:4521
 #, fuzzy
 msgid "Clearing down jackd..."
 msgstr "正在清除音频数据..."
 
-#: ../gui/rosegardengui.cpp:4528
+#: ../gui/rosegardengui.cpp:4535
 #, fuzzy
 msgid "Starting jackd..."
 msgstr "已开始..."
 
-#: ../gui/rosegardengui.cpp:4567
+#: ../gui/rosegardengui.cpp:4574
 msgid ""
 "The Rosegarden sequencer process has exited unexpectedly.  Sound and "
 "recording will no longer be available for this session.\n"
 "Please exit and restart Rosegarden to restore sound capability."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4571
+#: ../gui/rosegardengui.cpp:4578
 msgid ""
 "The Rosegarden sequencer could not be started, so sound and recording will "
 "be unavailable for this session.\n"
@@ -7037,93 +7916,93 @@ msgid ""
 "rosegardenmusic.com."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4582
+#: ../gui/rosegardengui.cpp:4589
 #, fuzzy
 msgid "Exporting Rosegarden Project file..."
 msgstr "正在导入玫瑰园 2.1 文件..."
 
-#: ../gui/rosegardengui.cpp:4585
+#: ../gui/rosegardengui.cpp:4592
 #, fuzzy
 msgid "Rosegarden Project files\n"
 msgstr "玫瑰园-4 文件"
 
-#: ../gui/rosegardengui.cpp:4587 ../gui/rosegardengui.cpp:4630
-#: ../gui/rosegardengui.cpp:4668 ../gui/rosegardengui.cpp:4700
-#: ../gui/rosegardengui.cpp:4733 ../gui/rosegardengui.cpp:4812
+#: ../gui/rosegardengui.cpp:4594 ../gui/rosegardengui.cpp:4637
+#: ../gui/rosegardengui.cpp:4675 ../gui/rosegardengui.cpp:4707
+#: ../gui/rosegardengui.cpp:4740 ../gui/rosegardengui.cpp:4819
 msgid "Export as..."
 msgstr "导出为..."
 
-#: ../gui/rosegardengui.cpp:4600
+#: ../gui/rosegardengui.cpp:4607
 #, c-format
 msgid "Saving Rosegarden file to package failed: %1"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4614
+#: ../gui/rosegardengui.cpp:4621
 msgid "Failed to export to project file \"%1\""
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4625 ../gui/rosegardengui.cpp:4639
+#: ../gui/rosegardengui.cpp:4632 ../gui/rosegardengui.cpp:4646
 msgid "Exporting MIDI file..."
 msgstr " 正在导出 MIDI 文件..."
 
-#: ../gui/rosegardengui.cpp:4628
+#: ../gui/rosegardengui.cpp:4635
 msgid "Standard MIDI files\n"
 msgstr "标准 MIDI 文件\n"
 
-#: ../gui/rosegardengui.cpp:4659 ../gui/rosegardengui.cpp:4690
-#: ../gui/rosegardengui.cpp:4722 ../gui/rosegardengui.cpp:4799
-#: ../gui/rosegardengui.cpp:4835
+#: ../gui/rosegardengui.cpp:4666 ../gui/rosegardengui.cpp:4697
+#: ../gui/rosegardengui.cpp:4729 ../gui/rosegardengui.cpp:4806
+#: ../gui/rosegardengui.cpp:4842
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "导出失败。无法打开文件以写入。"
 
-#: ../gui/rosegardengui.cpp:4665 ../gui/rosegardengui.cpp:4676
+#: ../gui/rosegardengui.cpp:4672 ../gui/rosegardengui.cpp:4683
 msgid "Exporting Csound score file..."
 msgstr "正在导出 Csound 乐谱文件..."
 
-#: ../gui/rosegardengui.cpp:4696 ../gui/rosegardengui.cpp:4708
+#: ../gui/rosegardengui.cpp:4703 ../gui/rosegardengui.cpp:4715
 msgid "Exporting Mup file..."
 msgstr " 正在导出 Mup 文件..."
 
-#: ../gui/rosegardengui.cpp:4699
+#: ../gui/rosegardengui.cpp:4706
 msgid "Mup files\n"
 msgstr "Mup 文件\n"
 
-#: ../gui/rosegardengui.cpp:4728 ../gui/rosegardengui.cpp:4785
+#: ../gui/rosegardengui.cpp:4735 ../gui/rosegardengui.cpp:4792
 msgid "Exporting Lilypond file..."
 msgstr "正在导出 Lilypond 文件..."
 
-#: ../gui/rosegardengui.cpp:4731
+#: ../gui/rosegardengui.cpp:4738
 msgid "Lilypond files"
 msgstr "Lilypond 文件"
 
-#: ../gui/rosegardengui.cpp:4744
+#: ../gui/rosegardengui.cpp:4751
 #, fuzzy
 msgid "Previewing Lilypond file..."
 msgstr "正在导出 Lilypond 文件..."
 
-#: ../gui/rosegardengui.cpp:4749
+#: ../gui/rosegardengui.cpp:4756
 msgid "Failed to open a temporary file for Lilypond export."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:4776
+#: ../gui/rosegardengui.cpp:4783
 #, fuzzy
 msgid "Lilypond Preview Options"
 msgstr "Lilypond 导出选项"
 
-#: ../gui/rosegardengui.cpp:4777
+#: ../gui/rosegardengui.cpp:4784
 #, fuzzy
 msgid "Lilypond preview options"
 msgstr "Lilypond 导出选项"
 
-#: ../gui/rosegardengui.cpp:4808 ../gui/rosegardengui.cpp:4821
+#: ../gui/rosegardengui.cpp:4815 ../gui/rosegardengui.cpp:4828
 msgid "Exporting MusicXML file..."
 msgstr "正在导出 MusicXML 文章..."
 
-#: ../gui/rosegardengui.cpp:4811
+#: ../gui/rosegardengui.cpp:4818
 msgid "XML files"
 msgstr "XML 文件"
 
-#: ../gui/rosegardengui.cpp:5024 ../gui/trackbuttons.cpp:630
+#: ../gui/rosegardengui.cpp:5038 ../gui/trackbuttons.cpp:630
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7131,13 +8010,13 @@ msgid ""
 "Would you like to set it now?"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:5026 ../gui/rosegardengui.cpp:5086
+#: ../gui/rosegardengui.cpp:5040 ../gui/rosegardengui.cpp:5100
 #: ../gui/trackbuttons.cpp:632
 #, fuzzy
 msgid "Set audio file path"
 msgstr "声音文件路径"
 
-#: ../gui/rosegardengui.cpp:5084
+#: ../gui/rosegardengui.cpp:5098
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -7145,1078 +8024,74 @@ msgid ""
 "Would you like to set it now?"
 msgstr ""
 
-#: ../gui/matrixview.cpp:2138 ../gui/rosegardengui.cpp:5544
-msgid "%1%"
-msgstr "%1%"
-
-#: ../gui/rosegardengui.cpp:5605
+#: ../gui/rosegardengui.cpp:5630
 #, c-format
 msgid "Replace Tempo Change at %1"
 msgstr "替换节拍修改于 %1"
 
-#: ../gui/rosegardengui.cpp:5640
+#: ../gui/rosegardengui.cpp:5665
 msgid "Set Global and Default Tempo"
 msgstr "设置全局和默认节拍"
 
-#: ../gui/rosegardengui.cpp:5664
+#: ../gui/rosegardengui.cpp:5689
 #, fuzzy
 msgid "Move Tempo Change"
 msgstr "删除节拍变更(&T)..."
 
-#: ../gui/rosegardengui.cpp:6064
+#: ../gui/rosegardengui.cpp:6089
 #, c-format
 msgid "Sequencer failed to add audio file %1"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:6092
+#: ../gui/rosegardengui.cpp:6117
 #, c-format
 msgid "Sequencer failed to remove audio file id %1"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:6152
+#: ../gui/rosegardengui.cpp:6177
 msgid "Relabelling selection..."
 msgstr "正在重新标记选择区..."
 
-#: ../gui/rosegardengui.cpp:7236
+#: ../gui/rosegardengui.cpp:7261
 #, fuzzy
 msgid "Play List"
 msgstr "播放"
 
-#: ../gui/rosegardengui.cpp:7264
+#: ../gui/rosegardengui.cpp:7289
 msgid "http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:7271
+#: ../gui/rosegardengui.cpp:7296
 msgid "http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html"
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:7348
+#: ../gui/rosegardengui.cpp:7373
 msgid "Queueing MIDI panic events for tranmission..."
 msgstr ""
 
-#: ../gui/rosegardengui.cpp:7406
+#: ../gui/rosegardengui.cpp:7431
 msgid "Are you sure you want to save this as your default studio?"
 msgstr "您确定要将其保存为您的默认工作环境吗？"
 
-#: ../gui/rosegardengui.cpp:7410
+#: ../gui/rosegardengui.cpp:7435
 msgid "Saving current document as default studio..."
 msgstr "将当前文挡保存为默认工作环境..."
 
-#: ../gui/rosegardengui.cpp:7435
+#: ../gui/rosegardengui.cpp:7460
 #, fuzzy
 msgid ""
 "Are you sure you want to import your default studio and lose the current one?"
 msgstr "您确定要将其保存为您的默认工作环境吗？"
 
-#: ../gui/rosegardengui.cpp:7470
+#: ../gui/rosegardengui.cpp:7495
 #, fuzzy
 msgid "Import Studio from File"
 msgstr "导出音频文件"
 
-#: ../gui/rosegardengui.cpp:7503
+#: ../gui/rosegardengui.cpp:7528
 #, fuzzy
 msgid "Import Studio"
 msgstr "导出音频文件"
-
-#: ../gui/matrixview.cpp:137
-msgid "Instrument Parameters"
-msgstr "乐器参数"
-
-#: ../gui/matrixview.cpp:384 ../gui/matrixview.cpp:2881
-msgid "Couldn't apply piano roll layout"
-msgstr "无法应用钢琴谱布局"
-
-#: ../gui/matrixview.cpp:589
-#, fuzzy
-msgid "Resi&ze"
-msgstr "改变大小"
-
-#: ../gui/matrixview.cpp:595 ../gui/notationview.cpp:1574
-msgid "C&hord Insert Mode"
-msgstr "和弦插入模式(&H)"
-
-#: ../gui/matrixview.cpp:602 ../gui/notationview.cpp:1446
-#, fuzzy
-msgid "Ste&p Recording"
-msgstr "正在录音"
-
-#: ../gui/matrixview.cpp:620
-#, fuzzy
-msgid "&Legato"
-msgstr "法定"
-
-#: ../gui/matrixview.cpp:624
-msgid "&Halve Speed"
-msgstr ""
-
-#: ../gui/matrixview.cpp:628
-#, fuzzy
-msgid "&Double Speed"
-msgstr "双重锐化"
-
-#: ../gui/matrixview.cpp:646
-msgid "Set Event &Velocities..."
-msgstr "设定事件力度(&V)..."
-
-#: ../gui/matrixview.cpp:650
-#, fuzzy
-msgid "Trigger Se&gment..."
-msgstr "擦除小节"
-
-#: ../gui/matrixview.cpp:654
-#, fuzzy
-msgid "Remove Triggers..."
-msgstr "删除节拍变更(&T)..."
-
-#: ../gui/matrixview.cpp:666 ../gui/notationview.cpp:1937
-msgid "Cursor &Back"
-msgstr "光标后退(&B)"
-
-#: ../gui/matrixview.cpp:670 ../gui/notationview.cpp:1941
-msgid "Cursor &Forward"
-msgstr "光标前进(&F)"
-
-#: ../gui/matrixview.cpp:674 ../gui/notationview.cpp:1945
-msgid "Cursor Ba&ck Bar"
-msgstr "光标沿进程条后退(&C)"
-
-#: ../gui/matrixview.cpp:678 ../gui/notationview.cpp:1949
-msgid "Cursor For&ward Bar"
-msgstr "光标沿进程条前进(&W)"
-
-#: ../gui/matrixview.cpp:682 ../gui/notationview.cpp:1953
-msgid "Cursor Back and Se&lect"
-msgstr "光标后退并选中(&L)"
-
-#: ../gui/matrixview.cpp:686 ../gui/notationview.cpp:1957
-msgid "Cursor Forward and &Select"
-msgstr "光标前进并选中(&S)"
-
-#: ../gui/matrixview.cpp:690 ../gui/notationview.cpp:1961
-msgid "Cursor Back Bar and Select"
-msgstr "光标沿进程条后退并选中"
-
-#: ../gui/matrixview.cpp:694 ../gui/notationview.cpp:1965
-msgid "Cursor Forward Bar and Select"
-msgstr "光标沿进程条前进并选中"
-
-#: ../gui/matrixview.cpp:698 ../gui/notationview.cpp:1975
-msgid "Cursor to St&art"
-msgstr "光标移到起点(&A)"
-
-#: ../gui/matrixview.cpp:704 ../gui/notationview.cpp:1981
-msgid "Cursor to &End"
-msgstr "光标移到末尾(&E)"
-
-#: ../gui/matrixview.cpp:710 ../gui/notationview.cpp:1995
-msgid "Cursor to &Playback Pointer"
-msgstr "光标移到回放点(&P)"
-
-#: ../gui/matrixview.cpp:750 ../gui/notationview.cpp:2035
-msgid "Playback Pointer to &Cursor"
-msgstr "从回放点到光标(&C)"
-
-#: ../gui/matrixview.cpp:756 ../gui/notationview.cpp:2041
-msgid "&Solo"
-msgstr "独奏(&S)"
-
-#: ../gui/matrixview.cpp:771 ../gui/notationview.cpp:2056
-msgid "Set Loop to Selection"
-msgstr "设置循环选择区"
-
-#: ../gui/matrixview.cpp:775 ../gui/notationview.cpp:2060
-msgid "Clear L&oop"
-msgstr "清除循环(&O)"
-
-#: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:784
-#: ../gui/notationview.cpp:2071
-msgid "&Filter Selection"
-msgstr "过滤器选择(&F)"
-
-#: ../gui/matrixview.cpp:789
-msgid "Snap to 1/64"
-msgstr "快速切换到 1/64"
-
-#: ../gui/matrixview.cpp:791
-#, fuzzy
-msgid "Snap to 1/48"
-msgstr "快速切换到 1/8"
-
-#: ../gui/matrixview.cpp:793
-msgid "Snap to 1/32"
-msgstr "快速切换到 1/32"
-
-#: ../gui/matrixview.cpp:795
-#, fuzzy
-msgid "Snap to 1/24"
-msgstr "快速切换到 1/4"
-
-#: ../gui/matrixview.cpp:797
-msgid "Snap to 1/16"
-msgstr "快速切换到 1/16"
-
-#: ../gui/matrixview.cpp:799
-#, fuzzy
-msgid "Snap to 1/12"
-msgstr "快速切换到 1/2"
-
-#: ../gui/matrixview.cpp:801
-msgid "Snap to 1/8"
-msgstr "快速切换到 1/8"
-
-#: ../gui/matrixview.cpp:803
-#, fuzzy
-msgid "Snap to 1/6"
-msgstr "快速切换到 1/64"
-
-#: ../gui/matrixview.cpp:805
-msgid "Snap to 1/4"
-msgstr "快速切换到 1/4"
-
-#: ../gui/matrixview.cpp:807
-msgid "Snap to 1/2"
-msgstr "快速切换到 1/2"
-
-#: ../gui/matrixview.cpp:809
-msgid "Snap to &Unit"
-msgstr "快速切换到小节(&U)"
-
-#: ../gui/matrixview.cpp:811
-msgid "Snap to Bea&t"
-msgstr "快速切换到节拍(&T)"
-
-#: ../gui/matrixview.cpp:813
-msgid "Snap to &Bar"
-msgstr "快速切换到进程条(&B)"
-
-#: ../gui/matrixview.cpp:815
-msgid "&No Snap"
-msgstr "无快速切换(&N)"
-
-#: ../gui/matrixview.cpp:821
-#, fuzzy
-msgid "Show Instrument Parameters"
-msgstr "显示设备参数(&I)"
-
-#: ../gui/matrixview.cpp:826 ../gui/notationview.cpp:1507
-msgid "Show Ch&ord Name Ruler"
-msgstr "显示和弦名称标尺(&O)"
-
-#: ../gui/matrixview.cpp:830 ../gui/notationview.cpp:1515
-msgid "Show &Tempo Ruler"
-msgstr "显示节拍标尺(&T)"
-
-#: ../gui/matrixview.cpp:1119 ../gui/notationview.cpp:2797
-#, c-format
-msgid ""
-"_n:   1 event selected \n"
-"  %n events selected "
-msgstr ""
-
-#: ../gui/matrixview.cpp:1121 ../gui/notationview.cpp:2799
-msgid "  No selection "
-msgstr "  没有选中 "
-
-#: ../gui/matrixview.cpp:1261
-#, fuzzy
-msgid "Making legato..."
-msgstr "正在制作美化音符..."
-
-#: ../gui/matrixview.cpp:1272
-#, fuzzy
-msgid "Halving speed..."
-msgstr "正在保存文件..."
-
-#: ../gui/matrixview.cpp:1285
-#, fuzzy
-msgid "Doubling speed..."
-msgstr "正在删除选择区..."
-
-#: ../gui/matrixview.cpp:1307
-#, fuzzy
-msgid "Rescaling..."
-msgstr "重新调整(&R)..."
-
-#: ../gui/matrixview.cpp:1422
-#, fuzzy
-msgid "Time: %1 (%2.%3s)"
-msgstr "时间：%1"
-
-#: ../gui/matrixview.cpp:1983
-msgid "Unquantizing..."
-msgstr "正在解除量化..."
-
-#: ../gui/matrixview.cpp:2013
-msgid " Grid: "
-msgstr " 栅格："
-
-#: ../gui/matrixview.cpp:2042
-msgid "Unit"
-msgstr "小节"
-
-#: ../gui/matrixview.cpp:2044
-msgid "Beat"
-msgstr "节拍"
-
-#: ../gui/matrixview.cpp:2046
-msgid "Bar"
-msgstr "进程条"
-
-#: ../gui/matrixview.cpp:2065
-msgid " Quantize: "
-msgstr " 量化："
-
-#: ../gui/matrixview.cpp:2421
-msgid "Raising velocities..."
-msgstr "正在提升力度..."
-
-#: ../gui/matrixview.cpp:2430
-msgid "Lowering velocities..."
-msgstr "正在降低力度..."
-
-#: ../gui/matrixview.cpp:2464
-msgid "Set Event Velocities"
-msgstr "设定事件力度"
-
-#: ../gui/matrixview.cpp:2469
-msgid "Setting Velocities..."
-msgstr "正在设定力度..."
-
-#: ../gui/matrixview.cpp:2502
-#, fuzzy
-msgid "Remove Triggers"
-msgstr "删除所有标记(&R)"
-
-#: ../gui/matrixview.cpp:2559
-msgid "%1 - Segment Track #%2 - %3"
-msgstr ""
-
-#: ../gui/matrixview.cpp:2566
-#, fuzzy
-msgid "%1 - All Segments - %2"
-msgstr "音长"
-
-#: ../gui/matrixview.cpp:2573
-#, fuzzy
-msgid ""
-"_n: %1 - 1 Segment - %2\n"
-"%1 - %n Segments - %2"
-msgstr "音长"
-
-#: ../gui/matrixview.cpp:2716
-#, fuzzy
-msgid "Can't insert note: No grid duration selected"
-msgstr "没有音符音长被选中"
-
-#: ../gui/audiomanagerdialog.cpp:954 ../gui/playlist.cpp:83
-#, fuzzy
-msgid "File name"
-msgstr "文件名："
-
-#: ../gui/playlist.cpp:141
-#, fuzzy
-msgid "Add..."
-msgstr "添加轨道..."
-
-#: ../gui/deviceeditor.cpp:143 ../gui/deviceeditor.cpp:350
-#: ../gui/playlist.cpp:142
-msgid "Play"
-msgstr "播放"
-
-#: ../gui/playlist.cpp:143
-#, fuzzy
-msgid "Move Up"
-msgstr "上移轨道(&U)"
-
-#: ../gui/playlist.cpp:144
-#, fuzzy
-msgid "Move Down"
-msgstr "下移轨道(&D)"
-
-#: ../gui/playlist.cpp:189
-#, fuzzy
-msgid "Select one or more Rosegarden files"
-msgstr "选择一个或更多音频文件"
-
-#: ../gui/deviceeditor.cpp:80
-msgid "Add Play Device"
-msgstr "添加播放设备"
-
-#: ../gui/deviceeditor.cpp:81
-msgid "Add Record Device"
-msgstr "添加录制设备"
-
-#: ../gui/deviceeditor.cpp:82 ../gui/studiocommands.h:191
-msgid "Delete Device"
-msgstr "删除设备"
-
-#: ../gui/deviceeditor.cpp:135 ../gui/importdevicedialog.cpp:136
-#, c-format
-msgid "Device %1"
-msgstr "设备 %1"
-
-#: ../gui/deviceeditor.cpp:244
-msgid "Apply pending changes?"
-msgstr "应用待执行的修改吗？"
-
-#: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
-msgid "<new device>"
-msgstr "<新设备>"
-
-#: ../gui/trackbuttons.cpp:320 ../gui/trackbuttons.cpp:562
-#: ../gui/trackparameterbox.cpp:90 ../gui/trackparameterbox.cpp:563
-msgid "<untitled>"
-msgstr "<未命名>"
-
-#: ../gui/trackparameterbox.cpp:105
-#, fuzzy
-msgid "Playback parameters"
-msgstr "回放音量 = "
-
-#: ../gui/trackparameterbox.cpp:151
-#, fuzzy
-msgid "Recording filters"
-msgstr "录制设备"
-
-#: ../gui/trackparameterbox.cpp:166
-msgid "Channel"
-msgstr "通道"
-
-#: ../gui/trackparameterbox.cpp:196
-#, fuzzy
-msgid "Create segments with:"
-msgstr "创建小节"
-
-#: ../gui/trackparameterbox.cpp:203
-#, fuzzy
-msgid "Preset"
-msgstr "休止符"
-
-#: ../gui/trackparameterbox.cpp:211
-#, fuzzy
-msgid "Load"
-msgstr "载入数据"
-
-#: ../gui/trackparameterbox.cpp:221
-#, fuzzy
-msgid "treble"
-msgstr "高音"
-
-#: ../gui/trackparameterbox.cpp:222
-#, fuzzy
-msgid "bass"
-msgstr "低音"
-
-#: ../gui/trackparameterbox.cpp:223
-#, fuzzy
-msgid "crotales"
-msgstr "八度音阶(&O)"
-
-#: ../gui/trackparameterbox.cpp:224
-msgid "xylophone"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:225
-msgid "guitar"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:226
-msgid "contrabass"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:227
-#, fuzzy
-msgid "celesta"
-msgstr "删除(&L)"
-
-#: ../gui/trackparameterbox.cpp:228
-msgid "old celesta"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:229
-msgid "soprano"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:230
-#, fuzzy
-msgid "alto"
-msgstr "女低音"
-
-#: ../gui/trackparameterbox.cpp:231
-#, fuzzy
-msgid "tenor"
-msgstr "男高音"
-
-#: ../gui/trackparameterbox.cpp:448 ../gui/trackparameterbox.cpp:469
-msgid "All"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:515
-#, fuzzy, c-format
-msgid "High: %1"
-msgstr "高"
-
-#: ../gui/trackparameterbox.cpp:516
-#, fuzzy, c-format
-msgid "Low: %1"
-msgstr "Id：%1"
-
-#: ../gui/trackparameterbox.cpp:567
-msgid "[ Track#%1 - %2 ]"
-msgstr ""
-
-#: ../gui/trackparameterbox.cpp:866
-msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
-
-#: ../gui/importdevicedialog.cpp:54
-#, fuzzy
-msgid "Import from Device..."
-msgstr "从设备导入库..."
-
-#: ../gui/importdevicedialog.cpp:95
-#, fuzzy, c-format
-msgid "Cannot open file %1"
-msgstr "无法打开文件“%1”"
-
-#: ../gui/importdevicedialog.cpp:102
-#, fuzzy, c-format
-msgid "No devices found in file %1"
-msgstr "没有找到设备于文件"
-
-#: ../gui/importdevicedialog.cpp:109
-msgid "Source device"
-msgstr "源设备"
-
-#: ../gui/importdevicedialog.cpp:114
-#, fuzzy
-msgid "Import from: "
-msgstr "导出音频文件"
-
-#: ../gui/importdevicedialog.cpp:151
-#, fuzzy
-msgid "Import banks"
-msgstr "导入库"
-
-#: ../gui/importdevicedialog.cpp:152
-#, fuzzy
-msgid "Import key mappings"
-msgstr "导出"
-
-#: ../gui/importdevicedialog.cpp:153
-#, fuzzy
-msgid "Import controllers"
-msgstr "%1 控制器"
-
-#: ../gui/importdevicedialog.cpp:156
-#, fuzzy
-msgid "Import device name"
-msgstr "导出设备为..."
-
-#: ../gui/importdevicedialog.cpp:162
-#, fuzzy
-msgid "Bank import behavior"
-msgstr "导入行为"
-
-#: ../gui/importdevicedialog.cpp:164
-#, fuzzy
-msgid "Merge banks"
-msgstr "合并库"
-
-#: ../gui/importdevicedialog.cpp:165
-#, fuzzy
-msgid "Overwrite banks"
-msgstr "覆盖库"
-
-#: ../gui/importdevicedialog.cpp:365
-msgid "Bank %1:%2"
-msgstr ""
-
-#: ../gui/rosegardenguiview.cpp:229
-msgid "No non-audio segments in composition"
-msgstr "作品里没有非音频片段"
-
-#: ../gui/rosegardenguiview.cpp:303
-msgid "Selection must contain only audio or non-audio segments"
-msgstr "选择只能包括音频或非音频片段"
-
-#: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
-#: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
-msgid "No non-audio segments selected"
-msgstr "没有非音频片段被选中"
-
-#: ../gui/rosegardenguiview.cpp:837
-msgid ""
-"You've not yet defined an audio editor for Rosegarden to use.\n"
-"See Settings -> Configure Rosegarden -> General -> External Editors."
-msgstr ""
-
-#: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
-#, fuzzy
-msgid "Can't add dropped file. "
-msgstr "无法打开文件“%1”"
-
-#: ../gui/editcommands.cpp:212
-msgid "(excerpt)"
-msgstr "(摘要)"
-
-#: ../gui/editcommands.cpp:226
-msgid "(copied)"
-msgstr "(复件)"
-
-#: ../gui/editcommands.cpp:452
-msgid "Paste into an existing gap [\"restricted\"]"
-msgstr "粘贴到一个现有空隙[“限定”]"
-
-#: ../gui/editcommands.cpp:454
-msgid "Erase existing events to make room [\"simple\"]"
-msgstr "擦除现有事件腾出空间[“简化”]"
-
-#: ../gui/editcommands.cpp:456
-msgid "Move existing events out of the way [\"open-n-paste\"]"
-msgstr "把现有事件移动出去[“打开并粘贴”]"
-
-#: ../gui/editcommands.cpp:458
-msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
-msgstr "修饰音符，紧缩现有音符[“音符修饰”]"
-
-#: ../gui/editcommands.cpp:460
-msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr "修饰音符，忽略现有音符[“字模修饰”]"
-
-#: ../gui/editcommands.cpp:889
-msgid "Heuristic Notation &Quantize"
-msgstr "启发记号量化(&Q)"
-
-#: ../gui/editcommands.cpp:891
-msgid "Grid &Quantize"
-msgstr "栅格量化(&Q)"
-
-#: ../gui/editcommands.cpp:1054 ../gui/editcommands.cpp:1065
-msgid "Unquantize Events"
-msgstr "未量化事件"
-
-#: ../gui/editcommands.cpp:1565
-msgid "&Move Events to Other Segment"
-msgstr "移动事件到其他片段(&M)"
-
-#: ../gui/editcommands.cpp:1798
-msgid "Insert Trigger Note"
-msgstr "插入触发记号"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "C%1"
-msgstr "C%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "C#%1"
-msgstr "C#%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "D%1"
-msgstr "D%1"
-
-#: ../gui/midipitchlabel.cpp:33
-#, c-format
-msgid "D#%1"
-msgstr "D#%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "E%1"
-msgstr "E%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "F%1"
-msgstr "F%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "F#%1"
-msgstr "F#%1"
-
-#: ../gui/midipitchlabel.cpp:34
-#, c-format
-msgid "G%1"
-msgstr "G%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "G#%1"
-msgstr "G#%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "A%1"
-msgstr "A%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "A#%1"
-msgstr "A#%1"
-
-#: ../gui/midipitchlabel.cpp:35
-#, c-format
-msgid "B%1"
-msgstr "B%1"
-
-#: ../gui/notationview.cpp:670
-#, fuzzy
-msgid "Preparing to print..."
-msgstr "正在清除音频数据..."
-
-#: ../gui/notationview.cpp:1190
-msgid "Note &Font"
-msgstr "音符字体(&F)"
-
-#: ../gui/notationview.cpp:1212
-msgid "Si&ze"
-msgstr "大小(&Z)"
-
-#: ../gui/notationview.cpp:1219
-#, fuzzy
-msgid "S&pacing"
-msgstr "间距"
-
-#: ../gui/notationview.cpp:1241
-#, fuzzy
-msgid "Du&ration Factor"
-msgstr "音长  "
-
-#: ../gui/notationview.cpp:1266
-msgid "Note &Style"
-msgstr "音符样式(&S)"
-
-#: ../gui/notationview.cpp:1292
-msgid "Insert Rest"
-msgstr "插入休止符"
-
-#: ../gui/notationview.cpp:1296
-msgid "Switch from Note to Rest"
-msgstr "从音符切换到休止符"
-
-#: ../gui/notationview.cpp:1301
-msgid "Switch from Rest to Note"
-msgstr "从休止符切换到音符"
-
-#: ../gui/notationview.cpp:1358
-msgid "No accidental"
-msgstr "不使用临时记号"
-
-#: ../gui/notationview.cpp:1359
-#, fuzzy
-msgid "Follow previous accidental"
-msgstr "临时记号(&A)"
-
-#: ../gui/notationview.cpp:1360
-msgid "Sharp"
-msgstr "锐化"
-
-#: ../gui/notationview.cpp:1361
-msgid "Flat"
-msgstr "平坦化"
-
-#: ../gui/notationview.cpp:1362
-msgid "Natural"
-msgstr "自然化"
-
-#: ../gui/notationview.cpp:1363
-msgid "Double sharp"
-msgstr "双重锐化"
-
-#: ../gui/notationview.cpp:1364
-msgid "Double flat"
-msgstr "双重扁平化"
-
-#: ../gui/notationview.cpp:1385
-msgid "&Treble Clef"
-msgstr "高音谱号(&T)"
-
-#: ../gui/notationview.cpp:1392
-msgid "Te&nor Clef"
-msgstr "次中音谱号(&N)"
-
-#: ../gui/notationview.cpp:1399
-msgid "&Alto Clef"
-msgstr "次高音谱号(&A)"
-
-#: ../gui/notationview.cpp:1406
-msgid "&Bass Clef"
-msgstr "低音谱号(&B)"
-
-#: ../gui/notationview.cpp:1413
-msgid "&Text"
-msgstr "文本(&T)"
-
-#: ../gui/notationview.cpp:1419
-#, fuzzy
-msgid "&Fretboard"
-msgstr "快进(&F)"
-
-#: ../gui/notationview.cpp:1452
-msgid "Select from Sta&rt"
-msgstr "从开头到当前位置选中(&R)"
-
-#: ../gui/notationview.cpp:1456
-msgid "Select to &End"
-msgstr "从当前位置到结尾选中(&E)"
-
-#: ../gui/notationview.cpp:1460
-msgid "Select Whole St&aff"
-msgstr "选中整个五线谱(&A)"
-
-#: ../gui/notationview.cpp:1468
-msgid "Pa&ste..."
-msgstr "粘贴(&S)..."
-
-#: ../gui/notationview.cpp:1486
-msgid "&Linear Layout"
-msgstr "谱线布局(&L)"
-
-#: ../gui/notationview.cpp:1494
-#, fuzzy
-msgid "&Continuous Page Layout"
-msgstr "页面布局(&P)"
-
-#: ../gui/notationview.cpp:1502
-#, fuzzy
-msgid "&Multiple Page Layout"
-msgstr "页面布局(&P)"
-
-#: ../gui/notationview.cpp:1511
-msgid "Show Ra&w Note Ruler"
-msgstr "显示未加工音符标尺(&W)"
-
-#: ../gui/notationview.cpp:1519
-msgid "Show &Annotations"
-msgstr "显示标注(&A)"
-
-#: ../gui/notationview.cpp:1523
-msgid "Show Lily&Pond Directives"
-msgstr ""
-
-#: ../gui/notationview.cpp:1527
-msgid "Open L&yric Editor"
-msgstr "用 ge_dit 打开"
-
-#: ../gui/notationview.cpp:1568
-#, fuzzy
-msgid "Trip&let Insert Mode"
-msgstr "三连音符插入模式(&P)"
-
-#: ../gui/notationview.cpp:1794
-msgid "&Dump selected events to stderr"
-msgstr "转储选中的事件到标准错误<stderr>(&D)"
-
-#: ../gui/notationview.cpp:1862
-#, fuzzy
-msgid "Ma&ke Ornament..."
-msgstr "正在制作美化音符..."
-
-#: ../gui/notationview.cpp:1866
-msgid "Trigger &Ornament..."
-msgstr ""
-
-#: ../gui/notationview.cpp:1870
-#, fuzzy
-msgid "Remove Ornament..."
-msgstr "正在删除配合旋律(对位音)..."
-
-#: ../gui/notationview.cpp:1875
-msgid "&None"
-msgstr "无(&N)"
-
-#: ../gui/notationview.cpp:1883
-msgid "Add Fretboard"
-msgstr ""
-
-#: ../gui/notationview.cpp:1910
-msgid "Show &Notes Toolbar"
-msgstr "显示音符工具栏(&N)"
-
-#: ../gui/notationview.cpp:1911
-msgid "Show &Rests Toolbar"
-msgstr "显示休止符工具栏(&R)"
-
-#: ../gui/notationview.cpp:1912
-msgid "Show &Accidentals Toolbar"
-msgstr "显示临时记号工具栏(&A)"
-
-#: ../gui/notationview.cpp:1913
-msgid "Show Cle&fs Toolbar"
-msgstr "显示谱号工具栏(&F)"
-
-#: ../gui/notationview.cpp:1915
-msgid "Show &Marks Toolbar"
-msgstr "显示标记工具栏(&M)"
-
-#: ../gui/notationview.cpp:1917
-msgid "Show &Group Toolbar"
-msgstr "显示分组工具栏(&G)"
-
-#: ../gui/notationview.cpp:1919
-msgid "Show &Layout Toolbar"
-msgstr "显示布局工具栏(&L)"
-
-#: ../gui/notationview.cpp:1923
-#, fuzzy
-msgid "Show M&eta Toolbar"
-msgstr "显示休止符工具栏(&R)"
-
-#: ../gui/notationview.cpp:1985
-msgid "Cursor &Up Staff"
-msgstr "光标上移五线谱(&U)"
-
-#: ../gui/notationview.cpp:1989
-msgid "Cursor &Down Staff"
-msgstr "光标下移五线谱(&D)"
-
-#: ../gui/notationview.cpp:2075
-msgid "Push &Left"
-msgstr ""
-
-#: ../gui/notationview.cpp:2079
-msgid "Push &Right"
-msgstr ""
-
-#: ../gui/notationview.cpp:2083
-msgid "Push &Up"
-msgstr ""
-
-#: ../gui/notationview.cpp:2087
-#, fuzzy
-msgid "Push &Down"
-msgstr "符干向下(&D)"
-
-#: ../gui/notationview.cpp:2091
-#, fuzzy
-msgid "Restore &Computed Positions"
-msgstr "恢复计算好的符干(&R)"
-
-#: ../gui/notationview.cpp:2095
-#, fuzzy
-msgid "Make &Invisible"
-msgstr "使音符生效(&V)"
-
-#: ../gui/notationview.cpp:2099
-#, fuzzy
-msgid "Make &Visible"
-msgstr "使音符生效(&V)"
-
-#: ../gui/notationview.cpp:2103
-#, fuzzy
-msgid "Toggle Dot"
-msgstr "全音符"
-
-#: ../gui/notationview.cpp:2107 ../gui/notationview.cpp:2111
-#, fuzzy
-msgid "Add Dot"
-msgstr "添加 %1"
-
-#: ../gui/notationview.cpp:2162
-#, c-format
-msgid ""
-"_n: 1 pixel\n"
-"%n pixels"
-msgstr ""
-
-#: ../gui/notationview.cpp:2205
-msgid "  Font:  "
-msgstr "  字体： "
-
-#: ../gui/notationview.cpp:2232
-msgid "Unknown font \"%1\", using default"
-msgstr "未知的字体“%1”，使用默认值"
-
-#: ../gui/notationview.cpp:2240
-msgid "  Size:  "
-msgstr "  大小： "
-
-#: ../gui/notationview.cpp:2262
-msgid "  Spacing:  "
-msgstr "  间隔： "
-
-#: ../gui/notationview.cpp:2562
-msgid "Laying out score..."
-msgstr "正在布置乐谱..."
-
-#: ../gui/notationview.cpp:2574
-msgid "Laying out staff %1..."
-msgstr "正在布置五线谱 %1..."
-
-#: ../gui/notationview.cpp:2583
-msgid "Reconciling staffs..."
-msgstr "正在调和五线谱..."
-
-#: ../gui/notationview.cpp:3347
-msgid "Sizing and allocating canvas..."
-msgstr "正在估计规模和分配画布..."
-
-#: ../gui/notationview.cpp:3507
-msgid "note"
-msgstr "音符"
-
-#: ../gui/notationview.cpp:3507
-msgid "rest"
-msgstr "休止符"
-
-#: ../gui/notationview.cpp:3666
-msgid "%1 - Segment Track #%2 - Notation"
-msgstr ""
-
-#: ../gui/notationview.cpp:3672
-#, fuzzy
-msgid "%1 - All Segments - Notation"
-msgstr "音长"
-
-#: ../gui/notationview.cpp:3677
-#, fuzzy
-msgid ""
-"_n: %1 - Segment - Notation\n"
-"%1 - %n Segments - Notation"
-msgstr "音长"
-
-#: ../gui/notefont.cpp:72 ../gui/presethandler.cpp:125
-#, fuzzy
-msgid "unknown error"
-msgstr "未知"
-
-#: ../gui/presethandler.cpp:153
-#, fuzzy, c-format
-msgid "Can't open preset file %1"
-msgstr "无法打开样式文件 %1"
-
-#: ../gui/presethandler.cpp:347
-msgid "Load track parameters preset"
-msgstr ""
-
-#: ../gui/presethandler.cpp:375
-msgid "Select preset track parameters for:"
-msgstr ""
-
-#: ../gui/presethandler.cpp:377
-#, fuzzy
-msgid "Category"
-msgstr "类别："
-
-#: ../gui/presethandler.cpp:383
-#, fuzzy
-msgid "Player Ability"
-msgstr "播放列表"
-
-#: ../gui/presethandler.cpp:385
-#, fuzzy
-msgid "Amateur"
-msgstr "控制器"
-
-#: ../gui/presethandler.cpp:386
-#, fuzzy
-msgid "Professional"
-msgstr "正在处理..."
 
 #: ../gui/notefontviewer.cpp:99
 #, c-format
@@ -8715,6 +8590,11 @@ msgstr "配色："
 msgid "Instrument Parameter Box position:"
 msgstr "乐器参数框位置："
 
+#: ../gui/notefont.cpp:72 ../gui/presethandler.cpp:127
+#, fuzzy
+msgid "unknown error"
+msgstr "未知"
+
 #: ../gui/notefont.cpp:98
 #, fuzzy
 msgid "Can't open font mapping file %1 or %2"
@@ -8892,7 +8772,7 @@ msgid ""
 "add it"
 msgstr "尝试复制此文件到一个您拥有写权限的目录里并重新添加它"
 
-#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:366
+#: ../gui/rosegardentransportdialog.cpp:82 rc.cpp:244
 #, no-c-format
 msgid "Rosegarden Transport"
 msgstr "玫瑰园播放控制器"
@@ -9195,7 +9075,7 @@ msgstr ""
 "\n"
 " 来代替吗？"
 
-#: ../gui/lilypondio.cpp:936
+#: ../gui/lilypondio.cpp:942
 msgid ""
 "You encountered an enharmonic resolution bug somewhere during this "
 "operation.  You may wish to save a copy of your current composition and "
@@ -9205,11 +9085,11 @@ msgid ""
 "file you've just exported."
 msgstr ""
 
-#: ../gui/lilypondio.cpp:1416
+#: ../gui/lilypondio.cpp:1422
 msgid "warning: overlong bar truncated here"
 msgstr "警告：过长的进程条截断于此处"
 
-#: ../gui/lilypondio.cpp:1421
+#: ../gui/lilypondio.cpp:1427
 msgid "warning: bar too short, padding with rests"
 msgstr "警告：进程条太短，以休止符填充"
 
@@ -9245,15 +9125,154 @@ msgstr ""
 msgid "<untitled audio>"
 msgstr "<未命名>"
 
+#: ../gui/trackbuttons.cpp:320 ../gui/trackbuttons.cpp:562
+#: ../gui/trackparameterbox.cpp:105 ../gui/trackparameterbox.cpp:584
+msgid "<untitled>"
+msgstr "<未命名>"
+
 #: ../gui/trackbuttons.cpp:351 ../gui/trackbuttons.cpp:427
 #: ../gui/trackbuttons.cpp:814 ../gui/trackbuttons.cpp:1163
 msgid "<no instrument>"
 msgstr "<没有乐器>"
 
-#: ../gui/rosegardenparameterarea.cpp:71
+#: ../gui/trackparameterbox.cpp:67
 #, fuzzy
-msgid " Parameters"
+msgid "Track Parameters"
 msgstr "删格参数"
+
+#: ../gui/trackparameterbox.cpp:112
+#, fuzzy
+msgid "Playback parameters"
+msgstr "回放音量 = "
+
+#: ../gui/trackparameterbox.cpp:159
+#, fuzzy
+msgid "Recording filters"
+msgstr "录制设备"
+
+#: ../gui/trackparameterbox.cpp:183
+msgid "Channel"
+msgstr "通道"
+
+#: ../gui/trackparameterbox.cpp:205
+#, fuzzy
+msgid "Create segments with:"
+msgstr "创建小节"
+
+#: ../gui/trackparameterbox.cpp:221
+#, fuzzy
+msgid "Preset"
+msgstr "休止符"
+
+#: ../gui/trackparameterbox.cpp:229
+#, fuzzy
+msgid "Load"
+msgstr "载入数据"
+
+#: ../gui/trackparameterbox.cpp:239
+#, fuzzy
+msgid "treble"
+msgstr "高音"
+
+#: ../gui/trackparameterbox.cpp:240
+#, fuzzy
+msgid "bass"
+msgstr "低音"
+
+#: ../gui/trackparameterbox.cpp:241
+#, fuzzy
+msgid "crotales"
+msgstr "八度音阶(&O)"
+
+#: ../gui/trackparameterbox.cpp:242
+msgid "xylophone"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:243
+msgid "guitar"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:244
+msgid "contrabass"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:245
+#, fuzzy
+msgid "celesta"
+msgstr "删除(&L)"
+
+#: ../gui/trackparameterbox.cpp:246
+msgid "old celesta"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:247
+msgid "soprano"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:248
+#, fuzzy
+msgid "alto"
+msgstr "女低音"
+
+#: ../gui/trackparameterbox.cpp:249
+#, fuzzy
+msgid "tenor"
+msgstr "男高音"
+
+#: ../gui/trackparameterbox.cpp:469 ../gui/trackparameterbox.cpp:490
+msgid "All"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:536
+#, fuzzy, c-format
+msgid "High: %1"
+msgstr "高"
+
+#: ../gui/trackparameterbox.cpp:537
+#, fuzzy, c-format
+msgid "Low: %1"
+msgstr "Id：%1"
+
+#: ../gui/trackparameterbox.cpp:588
+msgid "[ Track#%1 - %2 ]"
+msgstr ""
+
+#: ../gui/trackparameterbox.cpp:888
+msgid "The instrument preset database is corrupt.  Check your installation."
+msgstr ""
+
+#: ../gui/presethandler.cpp:173
+#, fuzzy, c-format
+msgid "Can't open preset file %1"
+msgstr "无法打开样式文件 %1"
+
+#: ../gui/presethandler.cpp:369
+msgid "Load track parameters preset"
+msgstr ""
+
+#: ../gui/presethandler.cpp:397
+msgid "Select preset track parameters for:"
+msgstr ""
+
+#: ../gui/presethandler.cpp:399
+#, fuzzy
+msgid "Category"
+msgstr "类别："
+
+#: ../gui/presethandler.cpp:405
+#, fuzzy
+msgid "Player Ability"
+msgstr "播放列表"
+
+#: ../gui/presethandler.cpp:407
+#, fuzzy
+msgid "Amateur"
+msgstr "控制器"
+
+#: ../gui/presethandler.cpp:408
+#, fuzzy
+msgid "Professional"
+msgstr "正在处理..."
 
 #: ../gui/tempodialog.cpp:61
 #, fuzzy
@@ -9333,506 +9352,513 @@ msgstr "没有其他节拍变化。"
 msgid " bpm"
 msgstr ""
 
-#: rc.cpp:3 rc.cpp:57 rc.cpp:189 rc.cpp:282 rc.cpp:330
+#: ../gui/expandablegroupbox.cpp:38
+msgid "[+]"
+msgstr ""
+
+#: rc.cpp:2 rc.cpp:38 rc.cpp:126 rc.cpp:188 rc.cpp:220
 #, no-c-format
 msgid "T&ransport"
 msgstr "播放控制器(&R)"
 
-#: rc.cpp:9
+#: rc.cpp:6
 #, no-c-format
 msgid "Number of Stereo &Inputs"
 msgstr "立体声输入数量(&I)"
 
-#: rc.cpp:12
+#: rc.cpp:8
 #, no-c-format
 msgid "&Number of Submasters"
 msgstr "副控制器数量(&N)"
 
-#: rc.cpp:15 rc.cpp:78 rc.cpp:204 rc.cpp:297 rc.cpp:321 rc.cpp:333 rc.cpp:357
+#: rc.cpp:10 rc.cpp:52 rc.cpp:136 rc.cpp:198 rc.cpp:214 rc.cpp:222 rc.cpp:238
 #, no-c-format
 msgid "Transport Toolbar"
 msgstr "播放控制器工具栏"
 
-#: rc.cpp:18
+#: rc.cpp:12
 #, no-c-format
 msgid "&Import"
 msgstr "导入(&I)"
 
-#: rc.cpp:21
+#: rc.cpp:14
 #, no-c-format
 msgid "&Merge"
 msgstr "并入(&M)"
 
-#: rc.cpp:24
+#: rc.cpp:16
 #, no-c-format
 msgid "&Export"
 msgstr "导出(&E)"
 
-#: rc.cpp:27 rc.cpp:99 rc.cpp:252
+#: rc.cpp:18 rc.cpp:66 rc.cpp:168
 #, fuzzy, no-c-format
 msgid "&Composition"
 msgstr "插入到作品中"
 
-#: rc.cpp:30
+#: rc.cpp:20
 #, no-c-format
 msgid "&Studio"
 msgstr "工作环境(&S)"
 
-#: rc.cpp:33
+#: rc.cpp:22
 #, fuzzy, no-c-format
 msgid "&Tempo and Time Signature"
 msgstr "以事件列表编辑器打开(&E)"
 
-#: rc.cpp:36
+#: rc.cpp:24
 #, no-c-format
 msgid "Se&gments"
 msgstr "片段(&G)"
 
-#: rc.cpp:39 rc.cpp:105 rc.cpp:258 rc.cpp:348
+#: rc.cpp:26 rc.cpp:70 rc.cpp:172 rc.cpp:232
 #, fuzzy, no-c-format
 msgid "Edit &With"
 msgstr "根据音色拆分"
 
-#: rc.cpp:42
+#: rc.cpp:28
 #, fuzzy, no-c-format
 msgid "&Split..."
 msgstr "分割(&R)"
 
-#: rc.cpp:45
+#: rc.cpp:30
 #, no-c-format
 msgid "Trac&ks"
 msgstr "轨道(&K)"
 
-#: rc.cpp:48
+#: rc.cpp:32
 #, no-c-format
 msgid "Set &Instrument"
 msgstr "设置乐器(&I)"
 
-#: rc.cpp:54 rc.cpp:171 rc.cpp:276
+#: rc.cpp:36 rc.cpp:114 rc.cpp:184
 #, no-c-format
 msgid "&Editor Tools"
 msgstr "编辑器工具(&E)"
 
-#: rc.cpp:60 rc.cpp:195 rc.cpp:288
+#: rc.cpp:40 rc.cpp:130 rc.cpp:192
 #, no-c-format
 msgid "&Toolbars"
 msgstr "工具栏(&T)"
 
-#: rc.cpp:63 rc.cpp:198 rc.cpp:291
+#: rc.cpp:42 rc.cpp:132 rc.cpp:194
 #, no-c-format
 msgid "&Rulers"
 msgstr "标尺(&R)"
 
-#: rc.cpp:69 rc.cpp:201 rc.cpp:294
+#: rc.cpp:46 rc.cpp:134 rc.cpp:196
 #, no-c-format
 msgid "Tools Toolbar"
 msgstr "工具工具栏"
 
-#: rc.cpp:72
+#: rc.cpp:48
 #, no-c-format
 msgid "Tracks Toolbar"
 msgstr "轨道工具栏"
 
-#: rc.cpp:75
+#: rc.cpp:50
 #, no-c-format
 msgid "Editors Toolbar"
 msgstr "编辑器工具栏"
 
-#: rc.cpp:81 rc.cpp:303 rc.cpp:327 rc.cpp:363
+#: rc.cpp:54 rc.cpp:202 rc.cpp:218 rc.cpp:242
 #, no-c-format
 msgid "Zoom Toolbar"
 msgstr "缩放工具栏"
 
-#: rc.cpp:87 rc.cpp:318 rc.cpp:339 rc.cpp:354
+#: rc.cpp:58 rc.cpp:212 rc.cpp:226 rc.cpp:236
 #, no-c-format
 msgid "Time Toolbar"
 msgstr "时间工具栏"
 
-#: rc.cpp:93
+#: rc.cpp:62
 #, no-c-format
 msgid "&Layout Mode"
 msgstr "布局模式(&L)"
 
-#: rc.cpp:96 rc.cpp:249
+#: rc.cpp:64 rc.cpp:166
 #, no-c-format
 msgid "Add Event Ruler"
 msgstr "添加事件标尺"
 
-#: rc.cpp:102 rc.cpp:345
+#: rc.cpp:68 rc.cpp:230
 #, fuzzy, no-c-format
 msgid "Se&gment"
 msgstr "小节(&M)"
 
-#: rc.cpp:108
+#: rc.cpp:72
 #, no-c-format
 msgid "N&otes"
 msgstr "音符(&O)"
 
-#: rc.cpp:111
+#: rc.cpp:74
 #, fuzzy, no-c-format
 msgid "&Beams"
 msgstr "节拍"
 
-#: rc.cpp:114
+#: rc.cpp:76
 #, no-c-format
 msgid "&Octaves"
 msgstr "八度音阶(&O)"
 
-#: rc.cpp:117
+#: rc.cpp:78
 #, fuzzy, no-c-format
 msgid "&Indications"
 msgstr "指示"
 
-#: rc.cpp:120
+#: rc.cpp:80
 #, fuzzy, no-c-format
 msgid "Slur &Position"
 msgstr "插入到作品中"
 
-#: rc.cpp:123
+#: rc.cpp:82
 #, no-c-format
 msgid "Mar&ks"
 msgstr "标记(&K)"
 
-#: rc.cpp:126
+#: rc.cpp:84
 #, fuzzy, no-c-format
 msgid "&Ornaments"
 msgstr "小节(&M)"
 
-#: rc.cpp:129
+#: rc.cpp:86
 #, fuzzy, no-c-format
 msgid "&Fingerings"
 msgstr "正在添加连音线..."
 
-#: rc.cpp:132
+#: rc.cpp:88
 #, no-c-format
 msgid "S&lashes"
 msgstr "斜线(&L)"
 
-#: rc.cpp:135 rc.cpp:261
+#: rc.cpp:90 rc.cpp:174
 #, no-c-format
 msgid "Ad&just"
 msgstr ""
 
-#: rc.cpp:138 rc.cpp:180
+#: rc.cpp:92 rc.cpp:120
 #, no-c-format
 msgid "&Accidentals"
 msgstr "临时记号(&A)"
 
-#: rc.cpp:141
+#: rc.cpp:94
 #, fuzzy, no-c-format
 msgid "Trip&lets and Tuplets"
 msgstr "简单连音(&S)"
 
-#: rc.cpp:144
+#: rc.cpp:96
 #, no-c-format
 msgid "S&tem Direction"
 msgstr "符干方向(&T)"
 
-#: rc.cpp:147
+#: rc.cpp:98
 #, fuzzy, no-c-format
 msgid "R&ests"
 msgstr "休止符(&R)"
 
-#: rc.cpp:150 rc.cpp:174
+#: rc.cpp:100 rc.cpp:116
 #, no-c-format
 msgid "&Notes"
 msgstr "音符(&N)"
 
-#: rc.cpp:153 rc.cpp:264
+#: rc.cpp:102 rc.cpp:176
 #, fuzzy, no-c-format
 msgid "&Quantize"
 msgstr "量化"
 
-#: rc.cpp:156 rc.cpp:270
+#: rc.cpp:104 rc.cpp:180
 #, no-c-format
 msgid "Trans&pose"
 msgstr "变调(&P)"
 
-#: rc.cpp:159
+#: rc.cpp:106
 #, fuzzy, no-c-format
 msgid "&Fine Positioning"
 msgstr "插入到作品中"
 
-#: rc.cpp:162
+#: rc.cpp:108
 #, fuzzy, no-c-format
 msgid "Fine Ti&ming"
 msgstr "插入到作品中"
 
-#: rc.cpp:165
+#: rc.cpp:110
 #, fuzzy, no-c-format
 msgid "&Visibility"
 msgstr "力度(&V)"
 
-#: rc.cpp:177
+#: rc.cpp:118
 #, no-c-format
 msgid "&Rests"
 msgstr "休止符(&R)"
 
-#: rc.cpp:183
+#: rc.cpp:122
 #, no-c-format
 msgid "&Clefs"
 msgstr "谱号(&C)"
 
-#: rc.cpp:186 rc.cpp:279
+#: rc.cpp:124 rc.cpp:186
 #, no-c-format
 msgid "Local &Cursor"
 msgstr ""
 
-#: rc.cpp:207
+#: rc.cpp:138
 #, no-c-format
 msgid "Notes Toolbar"
 msgstr "音符工具栏"
 
-#: rc.cpp:210
+#: rc.cpp:140
 #, no-c-format
 msgid "Rests Toolbar"
 msgstr "休止符工具栏"
 
-#: rc.cpp:213
+#: rc.cpp:142
 #, no-c-format
 msgid "Clefs Toolbar"
 msgstr "谱号工具栏"
 
-#: rc.cpp:216
+#: rc.cpp:144
 #, no-c-format
 msgid "Accidentals Toolbar"
 msgstr "临时记号工具栏"
 
-#: rc.cpp:219
+#: rc.cpp:146
 #, no-c-format
 msgid "Group Toolbar"
 msgstr "分组工具栏"
 
-#: rc.cpp:222
+#: rc.cpp:148
 #, no-c-format
 msgid "Marks Toolbar"
 msgstr "标记工具栏"
 
-#: rc.cpp:225
+#: rc.cpp:150
 #, no-c-format
 msgid "Meta Toolbar"
 msgstr "元(数据)工具栏"
 
-#: rc.cpp:228
+#: rc.cpp:152
 #, no-c-format
 msgid "Layout Toolbar"
 msgstr "布局工具栏"
 
-#: rc.cpp:231 rc.cpp:306
+#: rc.cpp:154 rc.cpp:204
 #, no-c-format
 msgid "Control Ruler actions"
 msgstr "控制器标尺行为"
 
-#: rc.cpp:234 rc.cpp:309
+#: rc.cpp:156 rc.cpp:206
 #, no-c-format
 msgid "Property Ruler actions"
 msgstr "属性标尺行为"
 
-#: rc.cpp:237
+#: rc.cpp:158
 #, fuzzy, no-c-format
 msgid "&Action"
 msgstr "符干方向(&T)"
 
-#: rc.cpp:240
+#: rc.cpp:160
 #, fuzzy, no-c-format
 msgid "General Toolbar"
 msgstr "元(数据)工具栏"
 
-#: rc.cpp:246
+#: rc.cpp:164
 #, no-c-format
 msgid "&Grid"
 msgstr "栅格(&G)"
 
-#: rc.cpp:255
+#: rc.cpp:170
 #, fuzzy, no-c-format
 msgid "&Segment"
 msgstr "小节(&M)"
 
-#: rc.cpp:267
+#: rc.cpp:178
 #, no-c-format
 msgid "&Velocity"
 msgstr "力度(&V)"
 
-#: rc.cpp:300 rc.cpp:315 rc.cpp:324 rc.cpp:351 rc.cpp:360
+#: rc.cpp:200 rc.cpp:210 rc.cpp:216 rc.cpp:234 rc.cpp:240
 #, no-c-format
 msgid "Actions Toolbar"
 msgstr "行为工具栏"
 
-#: rc.cpp:370
+#: rc.cpp:247
 #, no-c-format
 msgid "Hide additional controls"
 msgstr "隐藏额外控件"
 
-#: rc.cpp:374
+#: rc.cpp:250
 #, no-c-format
 msgid "Panic Button"
 msgstr "应急按钮"
 
-#: rc.cpp:377
+#: rc.cpp:252
 #, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr ""
 
-#: rc.cpp:384
+#: rc.cpp:257
 #, no-c-format
 msgid "Provides a metronome click for you to play along with"
 msgstr "提供一个节拍器滴答声以便您能跟随它播放"
 
-#: rc.cpp:387
+#: rc.cpp:259
 #, no-c-format
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr "于玫瑰园内或外显示 MIDI 激活"
 
-#: rc.cpp:390
+#: rc.cpp:261
 #, no-c-format
 msgid "IN"
 msgstr "内"
 
-#: rc.cpp:393
+#: rc.cpp:263
 #, no-c-format
 msgid "OUT"
 msgstr "外"
 
-#: rc.cpp:396 rc.cpp:399
+#: rc.cpp:265 rc.cpp:267
 #, no-c-format
 msgid "NO EVENTS"
 msgstr "没有事件"
 
-#: rc.cpp:406
+#: rc.cpp:272
 #, no-c-format
 msgid "Record either MIDI or audio"
 msgstr "录制 MIDI 或音频"
 
-#: rc.cpp:410
+#: rc.cpp:275
 #, no-c-format
 msgid "Loop"
 msgstr "循环"
 
-#: rc.cpp:413
+#: rc.cpp:277
 #, no-c-format
 msgid "Turn on and off the loop markers (if set)"
 msgstr "开启或关闭循环标记(如果设置的话)"
 
-#: rc.cpp:420
+#: rc.cpp:282
 #, no-c-format
 msgid "Mutes all but the currently selected track"
 msgstr "除了当前选中的轨道外全部静音"
 
-#: rc.cpp:424
+#: rc.cpp:285
 #, fuzzy, no-c-format
 msgid "Start loop or range here"
 msgstr "从这里开始进程条 %1"
 
-#: rc.cpp:428
-#, no-c-format
+#: rc.cpp:288
+#, fuzzy, no-c-format
 msgid "End loop or range here"
-msgstr ""
+msgstr "从这里开始进程条 %1"
 
-#: rc.cpp:431
+#: rc.cpp:290
 #, no-c-format
 msgid "SIG"
 msgstr "标记"
 
-#: rc.cpp:434
+#: rc.cpp:292
 #, no-c-format
 msgid "DIV"
 msgstr "DIV"
 
-#: rc.cpp:437
+#: rc.cpp:294
 #, no-c-format
 msgid "/16"
 msgstr "/16"
 
-#: rc.cpp:440
+#: rc.cpp:296
 #, no-c-format
 msgid "TEMPO"
 msgstr "节拍"
 
-#: rc.cpp:443
+#: rc.cpp:298
 #, no-c-format
 msgid "END"
 msgstr "结束"
 
-#: rc.cpp:446
+#: rc.cpp:300
 #, no-c-format
 msgid "BAR"
 msgstr "进程条"
 
-#: rc.cpp:450
+#: rc.cpp:303
 #, no-c-format
 msgid "Switch between real time, musical time, and frame count"
 msgstr "在真实时间、音乐时间和帧计数之间切换"
 
-#: rc.cpp:454
+#: rc.cpp:306
 #, no-c-format
 msgid "Show additional controls"
 msgstr "显示额外控件"
 
-#: rc.cpp:458
+#: rc.cpp:309
 #, no-c-format
 msgid "Rewind"
 msgstr "回绕"
 
-#: rc.cpp:461
+#: rc.cpp:311
 #, no-c-format
 msgid "Moves the current pointer position back one bar."
 msgstr "将当前指针位置向后移动一个进程条"
 
-#: rc.cpp:465
+#: rc.cpp:314
 #, no-c-format
 msgid "Rewind to beginning"
 msgstr "回绕到起点"
 
-#: rc.cpp:468
+#: rc.cpp:316
 #, no-c-format
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
 msgstr ""
 
-#: rc.cpp:472
+#: rc.cpp:319
 #, no-c-format
 msgid "Play/Pause"
 msgstr "播放/暂停"
 
-#: rc.cpp:475
+#: rc.cpp:321
 #, no-c-format
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
 msgstr "从当前的指针位置播放，或者如果正在播放则暂停回放。"
 
-#: rc.cpp:482
+#: rc.cpp:326
 #, no-c-format
 msgid "Stops playback or recording."
 msgstr "停止播放或录音。"
 
-#: rc.cpp:486
+#: rc.cpp:329
 #, no-c-format
 msgid "Fast forward"
 msgstr "快进"
 
-#: rc.cpp:489
+#: rc.cpp:331
 #, no-c-format
 msgid "Moves the current pointer position forwards one bar."
 msgstr "将当前指针位置向前移动一个进程条。"
 
-#: rc.cpp:493
+#: rc.cpp:334
 #, no-c-format
 msgid "Fast forward to end"
 msgstr "快进至终点"
 
-#: rc.cpp:496
+#: rc.cpp:336
 #, no-c-format
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
 msgstr ""
 
-#: rc.cpp:500
+#: rc.cpp:339
 #, no-c-format
 msgid "Display time to end"
 msgstr "以倒计时方式显示时间"
+
+#~ msgid "Time: %1"
+#~ msgstr "时间：%1"
 
 #, fuzzy
 #~ msgid "Recording Channel:"
