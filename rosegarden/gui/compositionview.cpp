@@ -1071,7 +1071,7 @@ CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const R
 CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
 {
 //    Rosegarden::Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
-//     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
+     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
 
     AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
 
@@ -1079,6 +1079,7 @@ CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(co
         apData = makeAudioPreviewDataCache(s);
     }
 
+     RG_DEBUG << "CompositionModelImpl::getAudioPreviewData returning\n";
     return apData;
 }
 
