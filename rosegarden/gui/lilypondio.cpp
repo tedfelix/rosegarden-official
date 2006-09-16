@@ -279,6 +279,11 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
             outStr += "\\marcato";
         } else if (eventMark == Rosegarden::Marks::Trill) {
             outStr += "\\trill";
+	} else if (eventMark == Rosegarden::Marks::LongTrill) {
+	    //!!! this is not correct, but it is better than ignoring
+	    // the trill entirely.  This needs to be reworked with
+	    // \startTrillSpan and \stopTrillSpan
+	    outStr += "\\trill";
         } else if (eventMark == Rosegarden::Marks::Turn) {
             outStr += "\\turn";
         } else if (eventMark == Rosegarden::Marks::Pause) {
