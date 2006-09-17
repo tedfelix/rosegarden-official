@@ -220,7 +220,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 	gui/testfiles/notation-for-string-orchestra-in-D-minor.rg
 	gui/testfiles/ravel-pc-gmaj-adagio.rg
 	gui/testfiles/perfect-moment.rg
-	gui/testfiles/bwv-1060-brass-band-1-allegro.rg
+	gui/testfiles/bwv-1060-trumpet-duet-excerpt.rg
 	gui/testfiles/bogus-surf-jam.rg
 	gui/testfiles/the-rose-garden.rg
 	gui/testfiles/children.rg
