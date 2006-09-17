@@ -1248,6 +1248,10 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			writeStyle(*i, prevStyle, col, str, false);
 		    }
 		    writePitch(*i, key, str);
+		    
+		    bool noteHasCautionaryAccidental = false;
+		    (*i)->get<Bool>(NotationProperties::USE_CAUTIONARY_ACCIDENTAL, noteHasCautionaryAccidental);
+		    if (noteHasCautionaryAccidental) str << "?";
 
 		    bool noteTiedForward = false;
 		    (*i)->get<Bool>(TIED_FORWARD, noteTiedForward);
