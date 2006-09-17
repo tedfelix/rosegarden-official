@@ -282,11 +282,10 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
             outStr += "\\marcato";
         } else if (eventMark == Rosegarden::Marks::Trill) {
             outStr += "\\trill";
-	} else if (eventMark == Rosegarden::Marks::LongTrill) {
-	    //!!! this is not correct, but it is better than ignoring
-	    // the trill entirely.  This needs to be reworked with
-	    // \startTrillSpan and \stopTrillSpan
-	    outStr += "\\trill";
+        } else if (eventMark == Rosegarden::Marks::LongTrill) {
+		    // span trill up to the next note: 
+		    // tweak the beginning of the next note using an invisible rest having zero length 
+	        outStr += "\\startTrillSpan s4*0 \\stopTrillSpan";
         } else if (eventMark == Rosegarden::Marks::Turn) {
             outStr += "\\turn";
         } else if (eventMark == Rosegarden::Marks::Pause) {
