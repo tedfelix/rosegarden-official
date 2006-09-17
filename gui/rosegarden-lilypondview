@@ -23,12 +23,12 @@ fi
 
 lilypond_version="`lilypond --version`"
 if [ "$?" != "0" ]; then
-    echo "rosegarden-lilypondview: Lilypond unavailable" 1>&2
+    echo "rosegarden-lilypondview: LilyPond unavailable" 1>&2
 else
     lilypond_version="`lilypond --version | grep LilyPond | head -1 | sed 's/^.* //'`"
     case "$lilypond_version" in
 	1.*|2.0.*)
-	    echo "rosegarden-lilypondview: Unsupported Lilypond version ($lilypond_version)" 1>&2;;
+	    echo "rosegarden-lilypondview: Unsupported LilyPond version ($lilypond_version)" 1>&2;;
 	*)
 	    prog_lilypond=lilypond;;
     esac
@@ -121,7 +121,7 @@ cp "$input" "$tmpdir/" || exit 1
 
 	args=""
 	convert=""
-echo "Lilypond version is $lilypond_version, file version is $fileversion"
+echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	case "$lilypond_version" in
 	    2.2.*)
 		args="--no-pdf"
@@ -139,7 +139,7 @@ echo "Lilypond version is $lilypond_version, file version is $fileversion"
 	cat </dev/null >"$logfile"
 
 	if [ -n "$convert" ]; then
-	    echo "File version is $fileversion against Lilypond version $version -- converting..." 1>&2
+	    echo "File version is $fileversion against LilyPond version $version -- converting..." 1>&2
 	    for srcfile in "$base" $includes; do
 		if [ -n "$graphical" ]; then
 		    convert-ly "$srcfile" > "${srcfile}_converted" 2> "$logfile" && mv "${srcfile}_converted" "$srcfile"
@@ -167,6 +167,7 @@ echo "Lilypond version is $lilypond_version, file version is $fileversion"
 	    indev=/dev/pts/0
 	    if [ ! -c "$indev" ]; then indev=/dev/ptya0; fi
 
+#	    echo "Running $prog_lilypond $args \"$base\""
 	    $prog_lilypond $args "$base" <$indev 2>&1 | tee -a "$logfile" | \
 	      perl -e '
 		$| = 1;
@@ -178,12 +179,14 @@ echo "Lilypond version is $lilypond_version, file version is $fileversion"
 		while (defined ($key = getc)) {
 		    if ($key eq "[") {
 			if ($state == 3) {
-			    print "XXX\nProcessing Lilypond file...\n\\n\n$m\nXXX\n";
+			    print "XXX\nProcessing LilyPond file...\n\\n\n$m\nXXX\n";
 			}
 			$state = 1;
 	            } elsif ($key eq "]") {
 			$state = 2;
-			print int( ($base + $n) * 100 / '$count' );
+			$val = int( ($base + $n) * 100 / '$count' );
+			if ($val > 100) { $val = 100; }
+			print "$val";
 			print "\n";
 			$n = "";
 		    } elsif ($key eq "\n") {
@@ -197,9 +200,10 @@ echo "Lilypond version is $lilypond_version, file version is $fileversion"
 		    } elsif ($state == 3) {
 			$m = $m . $key;
 	            }
-		}' | \
-	      $prog_xdialog --title "Processing" --gauge "Processing Lilypond file..." 10 60
+		}' |  \
+	      $prog_xdialog --title "Processing" --gauge "Processing LilyPond file..." 10 60
 	else
+#	    echo "running $prog_lilypond $args \"$base\"..."
 	    $prog_lilypond $args "$base"
 	fi
 
@@ -211,17 +215,17 @@ echo "Lilypond version is $lilypond_version, file version is $fileversion"
 	elif [ -n "$graphical" ]; then
 	    cat $logfile 1>&2
 	    echo 1>&2
-	    echo "Lilypond failed" 1>&2
+	    echo "LilyPond failed" 1>&2
 	    if [ -n "$graphical" ]; then
 		( echo 
-		  echo "  ERROR: Lilypond processing failed."
-		  echo "  Lilypond output follows:"
+		  echo "  ERROR: LilyPond processing failed."
+		  echo "  LilyPond output follows:"
 		  echo 
 		  cat "$logfile" ) | $prog_xdialog --no-cancel --fixed-font --textbox - 0 0
 	    fi
 	else
 	    echo 1>&2
-	    echo "Lilypond processing failed." 1>&2
+	    echo "LilyPond processing failed." 1>&2
 	fi
 	exit 1
 )
