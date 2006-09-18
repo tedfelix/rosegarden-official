@@ -21,12 +21,12 @@ case $1 in
 	;;
     *)
 	echo 1>&2
-	echo "`basename $0`: Build a release tarball of Rosegarden from CVS HEAD" 1>&2
+	echo "`basename $0`: Build a release tarball of Rosegarden from the Subversion trunk" 1>&2
 	echo 1>&2
 	echo "Usage:" 1>&2
 	echo "    `basename $0` <version>" 1>&2
 	echo "    `basename $0` -e" 1>&2
-	echo "Where <version> is a number such as 1.0 or 2.5.1rc2 (without 4- prefix)." 1>&2
+	echo "Where <version> is a number such as 1.0 or 2.5.1rc2." 1>&2
 	echo "Use -e to extract the version number from SConstruct.  Otherwise SConstruct" 1>&2
 	echo "will be updated with the new version number." 1>&2
 	echo 1>&2
@@ -35,15 +35,15 @@ case $1 in
 esac
 
 tmpdir="release_tmp_$$"
-rgname="rosegarden-4-$version"
+rgname="rosegarden-$version"
 
 echo "Building tarball for $rgname..."
 
 tarname="$rgname.tar.bz2"
-cvstag=RELEASE_V4_R`echo "$version" | sed 's/[\.-]/_/g'`
+cvstag=RELEASE_`echo "$version" | sed 's/[\.-]/_/g'`
 
 echo "[Tarball file will be $tarname]"
-echo "[CVS tag will be $cvstag]"
+echo "[Subversion tag will be $cvstag]"
 
 if [ -f "$tarname" ]; then
     echo "ERROR: Tarball file $tarname already exists, exiting" 1>&2
@@ -53,23 +53,24 @@ fi
 mkdir "$tmpdir" || exit 1
 cd "$tmpdir"
 
-echo "Checking out current CVS HEAD..."
-CVSROOT=`cat ../CVS/Root` cvs -z3 co -P rosegarden
-mv rosegarden "$rgname"
+echo "Checking out current Subversion trunk..."
+svn co https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden "$rgname"
 
 cd "$rgname"
 if [ -n "$update_version" ]; then
     echo "Updating version number in SConstruct..."
-    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "4-'"$version"'"\n/' SConstruct
-    cvs -z3 commit -m "Update version number for $version" SConstruct
+    perl -i -p -e 's/^VERSION = "[^"]*"\s*$/VERSION = "'"$version"'"\n/' SConstruct
+    svn commit -m "Update version number for $version" SConstruct
 fi
 
-echo "Tagging CVS with tag $cvstag..."
+echo "Tagging Subversion with tag $cvstag..."
+svn copy https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden \
+        "https://svn.sourceforge.net/svnroot/rosegarden/tags/$cvstag"
 cvs rtag "$cvstag" .
 
 echo "Bundling up..."
 cd ..
-tar cvjf "$tarname" "$rgname" --exclude=RGbuild --exclude=CVS --exclude=.svn --exclude=web --exclude=docs/test --exclude=admin || exit 1
+tar cvjf "$tarname" "$rgname" --exclude=RGbuild --exclude=CVS --exclude=.svn --exclude=web --exclude=docs/test --exclude=admin --exclude=gettext-0.10.35-kde || exit 1
 
 echo "Tidying..."
 cd ..
