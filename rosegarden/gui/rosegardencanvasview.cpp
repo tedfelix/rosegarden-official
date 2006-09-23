@@ -203,13 +203,10 @@ void RosegardenCanvasView::doAutoScroll()
 
 
 const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 10;
-const int RosegardenCanvasView::DefaultMinDeltaScroll = 1.2;
+const double RosegardenCanvasView::DefaultMinDeltaScroll = 1.2;
 
 bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
-    static int desktopWidth = QApplication::desktop()->width(),
-        desktopHeight = QApplication::desktop()->height();
-
     if (m_smoothScroll) {
         int ta = m_scrollAccelerationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
