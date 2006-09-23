@@ -1518,9 +1518,6 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    connect(m_doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
-            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-
     connect(m_doc, SIGNAL(documentModified(bool)),
             this,   SLOT(slotDocumentModified(bool)));
 

@@ -446,7 +446,6 @@ public slots:
     void slotAutoSave();
 
     void slotSetPointerPosition(Rosegarden::timeT);
-    void slotDragPointerToPosition(Rosegarden::timeT);
     void slotSetPlayPosition(Rosegarden::timeT t) { setPlayPosition(t); }
     void slotSetLoop(Rosegarden::timeT s, Rosegarden::timeT e) {setLoop(s,e);}
 
@@ -467,16 +466,6 @@ signals:
      * as well as when pointer is moved via a click on the loop ruler.
      */
     void pointerPositionChanged(Rosegarden::timeT);
-
-    /**
-     * Emitted when pointer is dragged on the loop ruler
-     */
-    void pointerDraggedToPosition(Rosegarden::timeT);
-
-    /**
-     * Emitted when pointer is dragged on the loop ruler
-     */
-    void loopDraggedToPosition(Rosegarden::timeT);
 
     /**
      * Emitted during recording, to indicate that some new notes (it's

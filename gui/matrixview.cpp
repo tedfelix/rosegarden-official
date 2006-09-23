@@ -377,9 +377,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-    QObject::connect
-	(doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     MATRIX_DEBUG << "MatrixView : applying layout\n";
 
@@ -408,16 +405,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     topBarButtons->connectRulerToDocPointer(doc);
     bottomBarButtons->connectRulerToDocPointer(doc);
 
-    // Disconnect the default connections for these signals from the
+    // Disconnect the default connections for this signal from the
     // top ruler, and connect our own instead
 
     QObject::disconnect
 	(topBarButtons->getLoopRuler(),
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)), 0, 0);
-
-    QObject::disconnect
-	(topBarButtons->getLoopRuler(),
-	 SIGNAL(dragPointerToPosition(Rosegarden::timeT)), 0, 0);
 
     QObject::connect
 	(topBarButtons->getLoopRuler(),
@@ -425,9 +418,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
     QObject::connect
-	(topBarButtons->getLoopRuler(),
-	 SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+        (topBarButtons,
+         SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
+         this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
     topBarButtons->getLoopRuler()->setBackgroundColor
 	(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::InsertCursorRuler));
@@ -441,6 +434,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             m_canvasView, SLOT(startAutoScroll(int)));
     connect(bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
+    connect(m_bottomBarButtons, SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
+            this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     // Force height for the moment
     //

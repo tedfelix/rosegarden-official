@@ -160,8 +160,8 @@ protected:
     int m_scrollDirectionConstraint;
     bool m_autoScrolling;
 
-    static const int DefaultSmoothScrollTimeInterval;
-    static const int DefaultMinDeltaScroll;
+    static const int    DefaultSmoothScrollTimeInterval;
+    static const double DefaultMinDeltaScroll;
 
     static const int AutoscrollMargin;
     static const int InitialScrollTime;

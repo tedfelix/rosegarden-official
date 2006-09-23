@@ -84,7 +84,9 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 
     RG_DEBUG << "BarButtons::connectRulerToDocPointer" << endl;
 
-    // use the document as a hub for all pointer and loop related signals
+    // use the document as a hub for pointer and loop set related signals
+    // pointer and loop drag signals are specific to the current view,
+    // so they are re-emitted from the loop ruler by this widget
     //
     QObject::connect
 	(m_loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
@@ -100,11 +102,11 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 
     QObject::connect
 	(m_loopRuler, SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
-	 doc, SLOT(slotDragPointerToPosition(Rosegarden::timeT)));
+	 this, SIGNAL(dragPointerToPosition(Rosegarden::timeT)));
 
     QObject::connect
         (m_loopRuler, SIGNAL(dragLoopToPosition(Rosegarden::timeT)),
-         doc, SIGNAL(loopDraggedToPosition(Rosegarden::timeT)));
+         this, SIGNAL(dragLoopToPosition(Rosegarden::timeT)));
 
     QObject::connect
 	(m_loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),

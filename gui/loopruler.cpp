@@ -234,6 +234,13 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
                 emit setLoop(m_endLoop, m_startLoop);
             else
                 emit setLoop(m_startLoop, m_endLoop);
+        } else {
+          // we need to re-emit this signal so that when the user releases the button
+          // after dragging the pointer, the pointer's position is updated again in the
+          // other views (typically, in the seg. canvas while the user has dragged the pointer
+          // in an edit view)
+          //
+          emit setPointerPosition(m_rulerScale->getTimeForX(mE->x()));
         }
         emit stopMouseMove();
 	m_activeMousePress = false;

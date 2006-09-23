@@ -434,16 +434,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons->connectRulerToDocPointer(doc);
     m_bottomBarButtons->connectRulerToDocPointer(doc);
 
-    // Disconnect the default connections for these signals from the
+    // Disconnect the default connection for this signal from the
     // top ruler, and connect our own instead
 
     QObject::disconnect
 	(m_topBarButtons->getLoopRuler(),
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)), 0, 0);
-
-    QObject::disconnect
-	(m_topBarButtons->getLoopRuler(),
-	 SIGNAL(dragPointerToPosition(Rosegarden::timeT)), 0, 0);
 
     QObject::connect
 	(m_topBarButtons->getLoopRuler(),
@@ -451,9 +447,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
     QObject::connect
-	(m_topBarButtons->getLoopRuler(),
-	 SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+        (m_topBarButtons,
+         SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
+         this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+
+    connect(m_bottomBarButtons, SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
+            this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
@@ -507,9 +506,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
-	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-    QObject::connect
-	(doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     stateChanged("have_selection", KXMLGUIClient::StateReverse);

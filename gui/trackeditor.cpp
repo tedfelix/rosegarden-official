@@ -291,10 +291,17 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    connect(m_doc, SIGNAL(pointerDraggedToPosition(Rosegarden::timeT)),
+    //
+    // pointer and loop drag signals from top and bottom bar buttons (loop rulers actually)
+    //
+    connect(m_topBarButtons, SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
+            this, SLOT(slotPointerDraggedToPosition(Rosegarden::timeT)));
+    connect(m_bottomBarButtons, SIGNAL(dragPointerToPosition(Rosegarden::timeT)),
 	    this, SLOT(slotPointerDraggedToPosition(Rosegarden::timeT)));
  
-    connect(m_doc, SIGNAL(loopDraggedToPosition(Rosegarden::timeT)),
+    connect(m_topBarButtons, SIGNAL(dragLoopToPosition(Rosegarden::timeT)),
+            this, SLOT(slotLoopDraggedToPosition(Rosegarden::timeT)));
+    connect(m_bottomBarButtons, SIGNAL(dragLoopToPosition(Rosegarden::timeT)),
             this, SLOT(slotLoopDraggedToPosition(Rosegarden::timeT)));
  
     connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,

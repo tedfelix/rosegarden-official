@@ -71,6 +71,14 @@ public:
 public slots:
     void slotScrollHoriz(int x);
 
+signals:
+    /// reflected from the loop ruler
+    void dragPointerToPosition(Rosegarden::timeT);
+
+    /// reflected from the loop ruler
+    void dragLoopToPosition(Rosegarden::timeT);
+
+
 protected:
     virtual void paintEvent(QPaintEvent *);
 
