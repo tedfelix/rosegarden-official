@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::TempoView" version="1230">
+<kpartgui name="Rosegarden::TempoView" version="1500">
 
 <MenuBar>
 
@@ -76,6 +76,9 @@
     <Action name="transpose_up_octave"/>
     <Action name="transpose_down_octave"/>
     <Action name="general_transpose"/>
+    <Action name="invert"/>
+    <Action name="retrograde"/>
+    <Action name="retrograde_invert"/>
     <Action name="preview_selection"/>
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>

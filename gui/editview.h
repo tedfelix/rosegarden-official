@@ -180,6 +180,11 @@ public slots:
     void slotTransposeDown();
     void slotTransposeDownOctave();
 
+    // invert
+    void slotInvert();
+    void slotRetrograde();
+    void slotRetrogradeInvert();
+
     // jog events
     void slotJogLeft();
     void slotJogRight();

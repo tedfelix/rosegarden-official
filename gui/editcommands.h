@@ -429,6 +429,72 @@ private:
 };
 
 
+class InvertCommand : public BasicSelectionCommand
+{
+public:
+    InvertCommand(int semitones, Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(semitones), selection, true),
+	m_selection(&selection), m_semitones(semitones) { }
+
+    static QString getGlobalName(int semitones = 0) {
+	switch (semitones) {
+	default:  return i18n("&Invert");
+	}
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_semitones;
+};
+
+
+class RetrogradeCommand : public BasicSelectionCommand
+{
+public:
+    RetrogradeCommand(int semitones, Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(semitones), selection, true),
+	m_selection(&selection), m_semitones(semitones) { }
+
+    static QString getGlobalName(int semitones = 0) {
+	switch (semitones) {
+	default:  return i18n("&Retrograde");
+	}
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_semitones;
+};
+
+
+class RetrogradeInvertCommand : public BasicSelectionCommand
+{
+public:
+    RetrogradeInvertCommand(int semitones, Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(semitones), selection, true),
+	m_selection(&selection), m_semitones(semitones) { }
+
+    static QString getGlobalName(int semitones = 0) {
+	switch (semitones) {
+	default:  return i18n("Re&trograde Invert");
+	}
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    int m_semitones;
+};
+
+
 class RescaleCommand : public BasicCommand
 {
 public:

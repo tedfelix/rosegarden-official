@@ -723,6 +723,18 @@ EditView::setupActions()
                 SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
 
+    new KAction(InvertCommand::getGlobalName(0), 0, this,
+                SLOT(slotInvert()), actionCollection(),
+                "invert");
+
+    new KAction(RetrogradeCommand::getGlobalName(0), 0, this,
+                SLOT(slotRetrograde()), actionCollection(),
+                "retrograde");
+
+    new KAction(RetrogradeInvertCommand::getGlobalName(0), 0, this,
+                SLOT(slotRetrogradeInvert()), actionCollection(),
+                "retrograde_invert");
+
     new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
                 SLOT(slotJogLeft()), actionCollection(),
                 "jog_left");
@@ -1444,6 +1456,39 @@ void EditView::slotTransposeDownOctave()
     KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
 
     addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
+}
+
+void EditView::slotInvert()
+{
+    if (!m_currentEventSelection) return;
+
+    int semitones = 0;
+
+    KTmpStatusMsg msg(i18n("Inverting..."), this);
+    addCommandToHistory(new InvertCommand
+                        (semitones, *m_currentEventSelection));
+}
+
+void EditView::slotRetrograde()
+{
+    if (!m_currentEventSelection) return;
+
+    int semitones = 0;
+
+    KTmpStatusMsg msg(i18n("Retrograding..."), this);
+    addCommandToHistory(new RetrogradeCommand
+                        (semitones, *m_currentEventSelection));
+}
+
+void EditView::slotRetrogradeInvert()
+{
+    if (!m_currentEventSelection) return;
+
+    int semitones = 0;
+
+    KTmpStatusMsg msg(i18n("Retrograde inverting..."), this);
+    addCommandToHistory(new RetrogradeInvertCommand
+                        (semitones, *m_currentEventSelection));
 }
 
 void EditView::slotJogLeft()
