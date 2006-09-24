@@ -770,7 +770,6 @@
 <Menu name="rests"/>
 <Menu name="transform_notes"/>
 <Menu name="quantize_notes"/>
-<Menu name="Transpose"/>
   </enable>
 </State>
 
