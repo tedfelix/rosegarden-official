@@ -240,7 +240,8 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
           // other views (typically, in the seg. canvas while the user has dragged the pointer
           // in an edit view)
           //
-          emit setPointerPosition(m_rulerScale->getTimeForX(mE->x()));
+          double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
+          emit setPointerPosition(m_rulerScale->getTimeForX(x));
         }
         emit stopMouseMove();
 	m_activeMousePress = false;
