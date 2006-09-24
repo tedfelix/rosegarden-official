@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Notation" version="1230">
+<kpartgui name="Rosegarden::Notation" version="1500">
 
 <MenuBar>
 
@@ -238,7 +238,15 @@
 	      <Separator/>
 	      <Action name="general_transpose"/>
 	</Menu>
-	<Separator/>
+        <Menu name="Convert">
+	      <text>Convert</text>
+	      <Separator/>
+	      <Action name="invert"/>
+	      <Separator/>
+ 	      <Action name="retrograde"/>
+	      <Separator/>
+	      <Action name="retrograde_invert"/>
+	</Menu>
 	<Menu name="fine_positioning">
 		<text>&amp;Fine Positioning</text>
 		<Action name="fine_position_restore"/>
@@ -248,11 +256,6 @@
 		<Action name="fine_position_up"/>
 		<Action name="fine_position_down"/>
 	</Menu>
-    <!--
-      <Separator/>
-      <Action name="invert"/>
-      <Action name="retrograde"/>
-    -->
 	<Menu name="fine_timing">
 		<text>Fine Ti&amp;ming</text>
 	        <Action name="jog_left"/>
@@ -745,9 +748,11 @@
     <Action name="general_transpose"/>
     <Action name="invert"/>
     <Action name="retrograde"/>
+    <Action name="retrograde_invert"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>
+    <Menu name="Convert"/>
 <Menu name="Notes"/>
 <Menu name="beams"/>
 <Menu name="octaves"/>

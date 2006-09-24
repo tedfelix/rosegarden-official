@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Matrix" version="1230">
+<kpartgui name="Rosegarden::Matrix" version="1500">
   
 <MenuBar>
 
@@ -90,6 +90,14 @@
     <Action name="transpose_down_octave"/>
     <Separator/>
     <Action name="general_transpose"/>
+  </Menu>
+  <Menu name="Convert">
+    <text>Convert</text>
+    <Action name="invert"/>
+    <Separator/>
+    <Action name="retrograde"/>
+    <Separator/>
+    <Action name="retrograde_invert"/>
   </Menu>
   <Action name="trigger_segment"/>
   <Action name="remove_trigger"/>
@@ -246,6 +254,9 @@
     <Action name="transpose_up_octave"/>
     <Action name="transpose_down_octave"/>
     <Action name="general_transpose"/>
+    <Action name="invert"/>
+    <Action name="retrograde"/>
+    <Action name="retrograde_invert"/>
     <Action name="preview_selection"/>
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>
