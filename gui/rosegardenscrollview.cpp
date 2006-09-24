@@ -82,6 +82,7 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
 const int RosegardenScrollView::AutoscrollMargin = 16;
 const int RosegardenScrollView::InitialScrollTime = 30;
 const int RosegardenScrollView::InitialScrollAccel = 5;
+const int RosegardenScrollView::QuietScrollMaxCount = 20;
 const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenScrollView::ScrollAccelValue = 1.04;// acceleration rate
 
@@ -96,9 +97,9 @@ void RosegardenScrollView::startAutoScroll()
         m_autoScrollTimer.start( m_autoScrollTime );
     }
 
-    m_autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
-    m_autoScrollYMargin = m_autoScrollStartPoint.y() / 10;
-    m_autoScrollXMargin = m_autoScrollStartPoint.x() / 10;
+    QPoint autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
+    m_autoScrollYMargin = autoScrollStartPoint.y() / 10;
+    m_autoScrollXMargin = autoScrollStartPoint.x() / 10;
 
     m_autoScrolling = true;
 }
@@ -124,12 +125,11 @@ void RosegardenScrollView::doAutoScroll()
 {
 //     RG_DEBUG << "RosegardenScrollView::doAutoScroll()\n";
 
-    static QPoint previousP;
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
-    QPoint dp = p - previousP;
-    previousP = p;
+    QPoint dp = p - m_previousP;
+    m_previousP = p;
     
-    static int quiet = 0;
+    m_quiet = 0;
 
     m_autoScrollTimer.start( m_autoScrollTime );
     ScrollDirection scrollDirection = None;
@@ -146,18 +146,21 @@ void RosegardenScrollView::doAutoScroll()
     }
     bool startDecelerating = false;
     if (m_scrollDirectionConstraint & FollowHorizontal) {
+
+//        RG_DEBUG << "p.x() : " << p.x() << " - visibleWidth : " << visibleWidth() << " - autoScrollXMargin : " << m_autoScrollXMargin << endl;
+        
         if ( p.x() < m_autoScrollXMargin ) {
-	    if ( dp.x() > 0 ) {
-		startDecelerating = true;
-	        m_minDeltaScroll /= ScrollAccelValue;
-	    }
+            if ( dp.x() > 0 ) {
+                startDecelerating = true;
+                m_minDeltaScroll /= ScrollAccelValue;
+            }
             dx = -(int(m_minDeltaScroll));
             scrollDirection = Left;
         } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
-	    if ( dp.x() < 0 ) {
-		startDecelerating = true;
-	        m_minDeltaScroll /= ScrollAccelValue;
-	    }
+            if ( dp.x() < 0 ) {
+                startDecelerating = true;
+                m_minDeltaScroll /= ScrollAccelValue;
+            }
             dx = +(int(m_minDeltaScroll));
             scrollDirection = Right;
         }
@@ -168,33 +171,33 @@ void RosegardenScrollView::doAutoScroll()
     if ( (dx || dy) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
         scrollBy(dx,dy);
-	if ( startDecelerating )
+        if ( startDecelerating )
            m_minDeltaScroll /= ScrollAccelValue;
-	else
+        else
            m_minDeltaScroll *= ScrollAccelValue;
-	if (m_minDeltaScroll > MaxScrollDelta )
-	    m_minDeltaScroll = MaxScrollDelta;
+        if (m_minDeltaScroll > MaxScrollDelta )
+            m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
 
     } else if (dx || dy) {
-	// Don't automatically stopAutoScroll() here, the mouse button
-	// is presumably still pressed.
-	m_minDeltaScroll = DefaultMinDeltaScroll;
-	m_currentScrollDirection = None;
+        // Don't automatically stopAutoScroll() here, the mouse button
+        // is presumably still pressed.
+        m_minDeltaScroll = DefaultMinDeltaScroll;
+        m_currentScrollDirection = None;
     }
 
-    if (dx || dy) quiet = 0;
-    else ++quiet;
+    if (dx || dy) m_quiet = 0;
+    else ++m_quiet;
 
-    if (quiet == 20) {
-	stopAutoScroll();
-	quiet = 0;
+    if (m_quiet == QuietScrollMaxCount) {
+        stopAutoScroll();
+        m_quiet = 0;
     }
 }
 
 
 const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
-const int RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
+const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
 
 bool RosegardenScrollView::isTimeForSmoothScroll()
 {

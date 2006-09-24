@@ -153,12 +153,13 @@ protected:
     QTimer m_autoScrollTimer;
     int m_autoScrollTime;
     int m_autoScrollAccel;
-    QPoint m_autoScrollStartPoint;
+    int m_quiet;
+    QPoint m_previousP;
     int m_autoScrollXMargin;
     int m_autoScrollYMargin;
     ScrollDirection m_currentScrollDirection;
     int m_scrollDirectionConstraint;
-    bool m_autoScrolling;
+    bool m_autoScrolling;    
 
     static const int    DefaultSmoothScrollTimeInterval;
     static const double DefaultMinDeltaScroll;
@@ -167,6 +168,7 @@ protected:
     static const int InitialScrollTime;
     static const int InitialScrollAccel;
     static const int MaxScrollDelta;
+    static const int QuietScrollMaxCount;
     static const double ScrollAccelValue;
 
 };
