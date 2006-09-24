@@ -40,6 +40,7 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
       m_minDeltaScroll(DefaultMinDeltaScroll),
       m_autoScrollTime(InitialScrollTime),
       m_autoScrollAccel(InitialScrollAccel),
+      m_quiet(0),
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
@@ -91,6 +92,7 @@ void RosegardenCanvasView::slotUpdate()
 const int RosegardenCanvasView::AutoscrollMargin = 16;
 const int RosegardenCanvasView::InitialScrollTime = 30;
 const int RosegardenCanvasView::InitialScrollAccel = 5;
+const int RosegardenCanvasView::QuietScrollMaxCount = 20;
 const int RosegardenCanvasView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenCanvasView::ScrollAccelValue = 1.04;// acceleration rate
 
@@ -105,9 +107,9 @@ void RosegardenCanvasView::startAutoScroll()
         m_autoScrollTimer.start( m_autoScrollTime );
     }
 
-    m_autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
-    m_autoScrollYMargin = m_autoScrollStartPoint.y() / 10;
-    m_autoScrollXMargin = m_autoScrollStartPoint.x() / 10;
+    QPoint autoScrollStartPoint = viewport()->mapFromGlobal( QCursor::pos() );
+    m_autoScrollYMargin = autoScrollStartPoint.y() / 10;
+    m_autoScrollXMargin = autoScrollStartPoint.x() / 10;
 
     m_autoScrolling = true;
 }
@@ -133,12 +135,11 @@ void RosegardenCanvasView::doAutoScroll()
 {
     RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
 
-    static QPoint previousP;
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
-    QPoint dp = p - previousP;
-    previousP = p;
+    QPoint dp = p - m_previousP;
+    m_previousP = p;
     
-    static int quiet = 0;
+    m_quiet = 0;
 
     m_autoScrollTimer.start( m_autoScrollTime );
     ScrollDirection scrollDirection = None;
@@ -155,6 +156,9 @@ void RosegardenCanvasView::doAutoScroll()
     }
     bool startDecelerating = false;
     if (m_scrollDirectionConstraint & FollowHorizontal) {
+
+//        RG_DEBUG << "p.x() : " << p.x() << " - visibleWidth : " << visibleWidth() << " - autoScrollXMargin : " << m_autoScrollXMargin << endl;
+        
         if ( p.x() < m_autoScrollXMargin ) {
 	    if ( dp.x() > 0 ) {
 		startDecelerating = true;
@@ -192,12 +196,12 @@ void RosegardenCanvasView::doAutoScroll()
 	m_currentScrollDirection = None;
     }
 
-    if (dx || dy) quiet = 0;
-    else ++quiet;
+    if (dx || dy) m_quiet = 0;
+    else ++m_quiet;
 
-    if (quiet == 20) {
+    if (m_quiet == QuietScrollMaxCount) {
 	stopAutoScroll();
-	quiet = 0;
+	m_quiet = 0;
     }
 }
 
