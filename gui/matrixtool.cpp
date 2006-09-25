@@ -145,19 +145,6 @@ MatrixTool::slotDrawSelected()
     m_parentView->actionCollection()->action("draw")->activate();
 }
 
-void
-MatrixTool::slotHalfSpeed()
-{
-    m_parentView->actionCollection()->action("half_speed")->activate();
-}
-
-void
-MatrixTool::slotDoubleSpeed()
-{
-    m_parentView->actionCollection()->action("double_speed")->activate();
-}
-
-
 
 //------------------------------
 
@@ -188,14 +175,6 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
-
-    new KAction(i18n("Half Speed"), 0, 0, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
-
-    new KAction(i18n("Double Speed"), 0, 0, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
 
     createMenu("matrixpainter.rc");
 }
@@ -432,14 +411,6 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
 
-    new KAction(i18n("Half Speed"), 0, 0, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
-
-    new KAction(i18n("Double Speed"), 0, 0, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
-
     createMenu("matrixeraser.rc");
 }
 
@@ -499,14 +470,6 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
-
-    new KAction(i18n("Half Speed"), 0, 0, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
-
-    new KAction(i18n("Double Speed"), 0, 0, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
 
     createMenu("matrixselector.rc");
 }
@@ -968,14 +931,6 @@ MatrixMover::MatrixMover(MatrixView* parent)
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
 
-    new KAction(i18n("Half Speed"), 0, 0, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
-
-    new KAction(i18n("Double Speed"), 0, 0, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
-
     createMenu("matrixmover.rc");
 }
 
@@ -1334,14 +1289,6 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
     new KAction(i18n("Switch to Move Tool"), "move", 0, this,
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
-
-    new KAction(i18n("Half Speed"), 0, 0, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
-
-    new KAction(i18n("Double Speed"), 0, 0, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
 
     createMenu("matrixresizer.rc");
 }

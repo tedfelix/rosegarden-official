@@ -288,9 +288,6 @@ public slots:
     void slotTransformsQuantize();
     void slotTransformsRepeatQuantize();
     void slotTransformsLegato();
-    void slotRescale();
-    void slotDoubleSpeed();
-    void slotHalfSpeed();
     void slotVelocityUp();
     void slotVelocityDown();
 

@@ -173,6 +173,11 @@ public slots:
     virtual void slotShowControllerEventsRuler();
     virtual void slotShowPropertyControlRuler();
 
+    // rescale
+    void slotHalfSpeed();
+    void slotDoubleSpeed();
+    void slotRescale();
+
     // transpose
     void slotTranspose();
     void slotTransposeUp();

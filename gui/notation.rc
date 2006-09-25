@@ -228,6 +228,13 @@
 	        <Action name="remove_quantization"/>
 	</Menu>
         <Separator/>
+	<Menu name="Rescale">
+	      <text>Rescale</text>
+	      <Action name="half_speed"/>
+	      <Action name="double_speed"/>
+	      <Separator/>
+	      <Action name="rescale"/>
+	</Menu>
         <Menu name="Transpose">
 	      <text>Trans&amp;pose</text>
 	      <Action name="transpose_up"/>
