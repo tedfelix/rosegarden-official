@@ -110,7 +110,7 @@ private:
     std::map<Rosegarden::DeviceId, IdsVector>   m_instrumentIds;
     std::map<Rosegarden::DeviceId, QStringList> m_instrumentNames;
     
-    Rosegarden::TrackId m_selectedTrackId;
+    int                 m_selectedTrackId;
     
     char                m_lastInstrumentType;
     
