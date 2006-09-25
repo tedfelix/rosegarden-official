@@ -68,7 +68,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 			     parent),
       m_doc(doc),
       m_highestPlayable(127),
-      m_lowestPlayable(0)
+      m_lowestPlayable(0),
+      m_selectedTrackId(-1)
 {
     QFont font(m_font);
     QFont title_font(m_font);
@@ -346,9 +347,11 @@ TrackParameterBox::~TrackParameterBox() {}
 void 
 TrackParameterBox::setDocument( RosegardenGUIDoc *doc )
 {
-    RG_DEBUG << "TrackParameterBox::setDocument\n";
-    m_doc = doc;
-    populateDeviceLists();
+    if (m_doc != doc) {
+        RG_DEBUG << "TrackParameterBox::setDocument\n";
+        m_doc = doc;
+        populateDeviceLists();
+    }
 }
 
 void 
@@ -434,6 +437,7 @@ TrackParameterBox::populateRecordingDeviceList()
 {
     RG_DEBUG << "TrackParameterBox::populateRecordingDeviceList()\n";
 
+    if (m_selectedTrackId < 0) return;
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
     if (!trk) return;
@@ -545,7 +549,8 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     RG_DEBUG << "TrackParameterBox::slotUpdateControls()\n";        
     slotPlaybackDeviceChanged(-1);
     slotInstrumentChanged(-1);
-
+    
+    if (m_selectedTrackId < 0) return;    
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
     if (!trk) return;
@@ -594,6 +599,7 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     RG_DEBUG << "TrackParameterBox::slotPlaybackDeviceChanged(" << index << ")\n";               
     Rosegarden::DeviceId devId;
     if (index == -1) {
+        if (m_selectedTrackId < 0) return;
         Rosegarden::Composition &comp = m_doc->getComposition();
         Rosegarden::Track *trk = comp.getTrackById(m_selectedTrackId);
         if (!trk) return;
