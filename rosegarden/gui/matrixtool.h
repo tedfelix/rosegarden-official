@@ -69,11 +69,6 @@ protected slots:
     void slotResizeSelected();
     void slotDrawSelected();
 
-    // Two transforms
-    //
-    void slotHalfSpeed();
-    void slotDoubleSpeed();
-
 protected:
     MatrixTool(const QString& menuName, MatrixView*);
 

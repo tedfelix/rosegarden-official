@@ -67,10 +67,6 @@
   </Menu>
   <Action name="collapse_notes"/>
   <Separator/>
-  <Action name="half_speed"/>
-  <Action name="double_speed"/>
-  <Action name="rescale"/>
-  <Separator/>
   <Action name="jog_left"/>
   <Action name="jog_right"/>
   <Separator/>
@@ -80,6 +76,13 @@
     <Action name="velocity_down"/>
     <Separator/>
     <Action name="set_velocities"/>
+  </Menu>
+  <Menu name="Rescale">
+    <text>Rescale</text>
+    <Action name="half_speed"/>
+    <Action name="double_speed"/>
+    <Separator/>
+    <Action name="rescale"/>
   </Menu>
   <Menu name="Transpose">
     <text>Trans&amp;pose</text>

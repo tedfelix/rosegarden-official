@@ -7,17 +7,16 @@
   <Action name="move"/>
   <Action name="erase"/>
   <Action name="resize"/>
-  <Separator/>
-  <Action name="half_speed"/>
-  <Action name="double_speed"/>
-  
+<!-- <Separator/> -->
+<!-- Defunct: <Action name="half_speed"/> -->
+<!-- Defunct: <Action name="double_speed"/> -->
 </Menu>
 
-<State name="have_selection">
-  <enable>
-    <Action name="half_speed"/>
-    <Action name="double_speed"/>
-  </enable>
-</State>
+<!-- Defunct: <State name="have_selection"> -->
+<!--  <enable> -->
+<!--    <Action name="half_speed"/> -->
+<!--    <Action name="double_speed"/> -->
+<!--  </enable> -->
+<!--</State> -->
 
 </kpartgui>

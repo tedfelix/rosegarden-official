@@ -635,18 +635,6 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsLegato()), actionCollection(),
                 "legatoize");
 
-    new KAction(i18n("&Halve Speed"), Key_Less, this,
-		SLOT(slotHalfSpeed()), actionCollection(),
-		"half_speed");
-
-    new KAction(i18n("&Double Speed"), Key_Greater, this,
-		SLOT(slotDoubleSpeed()), actionCollection(),
-		"double_speed");
-
-    new KAction(RescaleCommand::getGlobalName(), 0, this,
-		SLOT(slotRescale()), actionCollection(),
-		"rescale");
-
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
 		Key_Up + SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
@@ -1277,55 +1265,6 @@ void MatrixView::slotTransformsLegato()
 			(*m_currentEventSelection,
 			 new Rosegarden::LegatoQuantizer(0))); // no quantization
 }
-
-void
-MatrixView::slotHalfSpeed()
-{
-    if (!m_currentEventSelection) return;
-
-    KTmpStatusMsg msg(i18n("Halving speed..."), this);
-
-    addCommandToHistory(
-            new RescaleCommand(*m_currentEventSelection,
-                m_currentEventSelection->getTotalDuration() * 2,
-                false));
-}
-
-void
-MatrixView::slotDoubleSpeed()
-{
-    if (!m_currentEventSelection) return;
-
-    KTmpStatusMsg msg(i18n("Doubling speed..."), this);
-
-    addCommandToHistory(
-            new RescaleCommand(*m_currentEventSelection,
-                m_currentEventSelection->getTotalDuration() / 2,
-                 false));
-}
-
-void
-MatrixView::slotRescale()
-{
-    if (!m_currentEventSelection) return;
-
-    RescaleDialog dialog
-	(this,
-	 &getDocument()->getComposition(),
-	 m_currentEventSelection->getStartTime(),
-	 m_currentEventSelection->getEndTime() -
-	 m_currentEventSelection->getStartTime(),
-	 true);
-
-    if (dialog.exec() == QDialog::Accepted) {
-	KTmpStatusMsg msg(i18n("Rescaling..."), this);
-	addCommandToHistory(new RescaleCommand
-			    (*m_currentEventSelection,
-			     dialog.getNewDuration(),
-			     dialog.shouldCloseGap()));
-    }
-}
-
 
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
                                   QMouseEvent* e, MatrixElement* el)
