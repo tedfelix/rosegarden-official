@@ -82,7 +82,6 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
 const int RosegardenScrollView::AutoscrollMargin = 16;
 const int RosegardenScrollView::InitialScrollTime = 30;
 const int RosegardenScrollView::InitialScrollAccel = 5;
-const int RosegardenScrollView::QuietScrollMaxCount = 20;
 const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenScrollView::ScrollAccelValue = 1.04;// acceleration rate
 
@@ -129,8 +128,6 @@ void RosegardenScrollView::doAutoScroll()
     QPoint dp = p - m_previousP;
     m_previousP = p;
     
-    m_quiet = 0;
-
     m_autoScrollTimer.start( m_autoScrollTime );
     ScrollDirection scrollDirection = None;
 
@@ -179,20 +176,13 @@ void RosegardenScrollView::doAutoScroll()
             m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
 
-    } else if (dx || dy) {
+    } else {
         // Don't automatically stopAutoScroll() here, the mouse button
         // is presumably still pressed.
         m_minDeltaScroll = DefaultMinDeltaScroll;
         m_currentScrollDirection = None;
     }
 
-    if (dx || dy) m_quiet = 0;
-    else ++m_quiet;
-
-    if (m_quiet == QuietScrollMaxCount) {
-        stopAutoScroll();
-        m_quiet = 0;
-    }
 }
 
 
