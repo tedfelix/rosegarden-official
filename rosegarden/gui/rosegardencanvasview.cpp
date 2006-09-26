@@ -40,7 +40,6 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
       m_minDeltaScroll(DefaultMinDeltaScroll),
       m_autoScrollTime(InitialScrollTime),
       m_autoScrollAccel(InitialScrollAccel),
-      m_quiet(0),
       m_autoScrollXMargin(0),
       m_autoScrollYMargin(0),
       m_currentScrollDirection(None),
@@ -92,14 +91,13 @@ void RosegardenCanvasView::slotUpdate()
 const int RosegardenCanvasView::AutoscrollMargin = 16;
 const int RosegardenCanvasView::InitialScrollTime = 30;
 const int RosegardenCanvasView::InitialScrollAccel = 5;
-const int RosegardenCanvasView::QuietScrollMaxCount = 20;
 const int RosegardenCanvasView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenCanvasView::ScrollAccelValue = 1.04;// acceleration rate
 
 /// Copied from QScrollView
 void RosegardenCanvasView::startAutoScroll()
 {
-    RG_DEBUG << "RosegardenCanvasView::startAutoScroll()\n";
+//    RG_DEBUG << "RosegardenCanvasView::startAutoScroll()\n";
 
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
@@ -122,7 +120,7 @@ void RosegardenCanvasView::startAutoScroll(int directionConstraint)
 
 void RosegardenCanvasView::stopAutoScroll()
 {
-    RG_DEBUG << "RosegardenCanvasView::stopAutoScroll()\n";
+//    RG_DEBUG << "RosegardenCanvasView::stopAutoScroll()\n";
 
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
@@ -133,14 +131,12 @@ void RosegardenCanvasView::stopAutoScroll()
 
 void RosegardenCanvasView::doAutoScroll()
 {
-    RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
+//    RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
 
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
     QPoint dp = p - m_previousP;
     m_previousP = p;
     
-    m_quiet = 0;
-
     m_autoScrollTimer.start( m_autoScrollTime );
     ScrollDirection scrollDirection = None;
 
@@ -189,20 +185,13 @@ void RosegardenCanvasView::doAutoScroll()
 	    m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
 
-    } else if (dx || dy) {
+    } else {
 	// Don't automatically stopAutoScroll() here, the mouse button
 	// is presumably still pressed.
 	m_minDeltaScroll = DefaultMinDeltaScroll;
 	m_currentScrollDirection = None;
     }
 
-    if (dx || dy) m_quiet = 0;
-    else ++m_quiet;
-
-    if (m_quiet == QuietScrollMaxCount) {
-	stopAutoScroll();
-	m_quiet = 0;
-    }
 }
 
 
