@@ -5174,6 +5174,19 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
         i18n("Merge tracks that have the same name"), frame);
     m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
     layout->addWidget(m_lilyExportStaffMerge, 7, 0);
+
+    // a layout on a widget
+    QHBoxLayout *hbox = new QHBoxLayout( frame );
+    QLabel *label = new QLabel( i18n("Export tempo marks"), frame );
+    hbox->addWidget( label );
+
+    m_lilyTempoMarks = new KComboBox( frame );
+    m_lilyTempoMarks->insertItem(i18n("None"));
+    m_lilyTempoMarks->insertItem(i18n("First"));
+    m_lilyTempoMarks->insertItem(i18n("All"));
+    m_lilyTempoMarks->setCurrentItem(config->readUnsignedNumEntry("lilyexporttempomarks", 0));
+    hbox->addWidget(m_lilyTempoMarks);
+    layout->addLayout(hbox, 7, 1);
 }
 
 void
@@ -5188,6 +5201,7 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
     config->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
     config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
+    config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentItem());
     config->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
     config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     config->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());

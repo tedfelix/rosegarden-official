@@ -103,6 +103,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
     m_exportHeaders = cfg->readBoolEntry("lilyexportheaders", true);
     m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
+    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
     m_exportUnmuted = cfg->readBoolEntry("lilyexportunmuted", false);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
@@ -626,9 +627,13 @@ LilypondExporter::write()
 
 	timeT prevTempoChangeTime = m_composition->getStartMarker();
         int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(prevTempoChangeTime)));
+        bool tempoMarksInvisible = false;
 
 	str << indent(col++) << "globalTempo = {" << std::endl;
-	str << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t" << std::endl;
+	if (m_exportTempoMarks == 0 && tempoMarksInvisible == false) {
+	    str << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t" << std::endl;
+	    tempoMarksInvisible = true;
+	}
 	str << indent(col) << "\\tempo 4 = " << tempo << "  ";
 	int prevTempo = tempo;
 
@@ -657,6 +662,10 @@ LilypondExporter::write()
 		tempoChangeTime, tempoChangeTime-prevTempoChangeTime, false, str);
 	    // add new \tempo only if tempo was changed
 	    if (tempo != prevTempo) {
+		if (m_exportTempoMarks == 1 && tempoMarksInvisible == false) {
+		    str << std::endl << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t";
+		    tempoMarksInvisible = true;
+		}
 		str << std::endl << indent(col) << "\\tempo 4 = " << tempo << "  ";
 	    }
 
