@@ -121,6 +121,12 @@ private:
     bool m_exportLyrics;
     bool m_exportHeaders;
     bool m_exportMidi;
+
+	// exportTempoMarks meaning:
+	// 0 -> none
+	// 1 -> first
+	// 2 -> all
+    unsigned int m_exportTempoMarks;
     bool m_exportUnmuted;
     bool m_exportPointAndClick;
     bool m_exportBarChecks;

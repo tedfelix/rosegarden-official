@@ -918,6 +918,7 @@ protected:
     QComboBox *m_lilyLanguage;
     QComboBox *m_lilyPaperSize;
     QComboBox *m_lilyFontSize;
+    QComboBox *m_lilyTempoMarks;
     QCheckBox *m_lilyExportHeaders;
     QCheckBox *m_lilyExportLyrics;
     QCheckBox *m_lilyExportMidi;
