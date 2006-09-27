@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-16 11:44+0100\n"
-"PO-Revision-Date: 2006-07-11 17:34+0200\n"
+"PO-Revision-Date: 2006-09-27 21:43+0200\n"
 "Last-Translator: Jan Bina <jbina@sky.cz>\n"
 "Language-Team: čestina <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -241,7 +241,6 @@ msgstr ""
 "</p>\n"
 
 #: ../gui/docs/en/tips.cpp:32
-#, fuzzy
 msgid ""
 "<p>Because your default studio is a complete Rosegarden composition, it can\n"
 "contain default instrument assignments, document properties, LilyPond "
@@ -289,7 +288,6 @@ msgstr ""
 "Při načítání souborů vždy používat výchozí studio</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:52
-#, fuzzy
 msgid ""
 "<p>If you have accidentally recorded a segment so short that it does not\n"
 "appear on the canvas, which you can only hear during subsequent recording\n"
@@ -298,11 +296,10 @@ msgid ""
 "negative number.</p>\n"
 msgstr ""
 "<p>Pokud jste náhodou zaznamenali tak krátký segment, že se neobjevuje\n"
-"na zobrazovací ploše, což uslyšíte pouze během následující nahrávací\n"
-"relace, můžete si tento segment zpřístupnit pomocí <b>Skladba -> Změnit "
-"délku\n"
-"dokumentu</b> a následného nastavení skladby tak, aby začínala záporným "
-"číslem.</p>\n"
+"na zobrazovací ploše, což uslyšíte pouze během následujících nahrávacích\n"
+"relací, můžete si tento segment zpřístupnit pomocí <b>Skladba -> Změnit\n"
+"začátek a konec skladby</b> a následného nastavení skladby tak, aby začínala "
+"záporným číslem.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:59
 msgid ""
@@ -373,7 +370,6 @@ msgstr ""
 "notovém editoru</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:88
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden can export files for use by LilyPond, the high-quality "
 "score typesetting system?<br><br>\n"
@@ -381,13 +377,11 @@ msgid ""
 "b></p>\n"
 msgstr ""
 "<p>...že aplikace Rosegarden může exportovat soubory pro použití v aplikaci "
-"Lilypond, špičkovém systému pro sazby partitur?\n"
-"\n"
+"Lilypond, špičkovém systému pro sazby partitur?<br><br>\n"
 "Z nabídky <b>Soubor</b> projděte k možnosti <b>Exportovat -> Exportovat "
 "soubor Lilypond</b></p>\n"
 
 #: ../gui/docs/en/tips.cpp:93
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden can print via LilyPond, the high-quality score "
 "typesetting system?<br><br>\n"
@@ -398,10 +392,11 @@ msgid ""
 "several other PDF viewers, where it can then be printed as well.</p>\n"
 msgstr ""
 "<p>...že aplikace Rosegarden může exportovat soubory pro použití v aplikaci "
-"Lilypond, špičkovém systému pro sazby partitur?\n"
-"\n"
-"Z nabídky <b>Soubor</b> projděte k možnosti <b>Exportovat -> Exportovat "
-"soubor Lilypond</b></p>\n"
+"Lilypond, špičkovém systému pro sazby partitur?<br><br>\n"
+"Z nabídky <b>Soubor</b> projděte k možnosti <b>Náhled s aplikací LilyPond</b>. "
+"Soubor\n"
+"bude vyexportován, vykreslen a zobrazen v náhledu v aplikaci KGhostView nebo\n"
+"v některém jiném prohlížeči souborů PDF, odkud jej můžete také vytisknout.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:100
 msgid ""
@@ -467,7 +462,6 @@ msgstr ""
 "vyberte svoje oblíbené editační okno na záložce <b>Chování</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:128
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden is being developed as a community effort with\n"
 "contributions from around the world?<br><br>\n"
@@ -481,11 +475,15 @@ msgid ""
 msgstr ""
 "<p>...že aplikace Rosegarden je vyvíjena jako komunitní projekt,\n"
 "do kterého přispívají lidé z celého světa?<br><br>\n"
-"Primární vývojáři žijí ve Velké Británii a Francii. Přispěvatelé pocházejí\n"
-"z USA, Španělska, Německa, Ruska, Slovinska a dalších zemí... </p>\n"
+"Čtyři nejaktivnější vývojáři žijí v Londýně (Anglie), Cannes, "
+"Barceloně,\n"
+"a... Christiansburg? (Christiansburg je město s asi 50 000 obyvateli\n"
+"v jihozápadní Virginii, USA.)<br><br>\n"
+"Měli jsme různé přispěvatele pocházející\n"
+"z USA, UK, Španělska, Mexika, Argentiny, Německa,\n"
+"Švédska, Ruska, Japonska, Finska a Itálie, abychom jmenovali alespoň několik z nich... </p>\n"
 
 #: ../gui/docs/en/tips.cpp:138
-#, fuzzy
 msgid ""
 "<p>...that Rosegarden is available in Spanish, French, German, Russian, "
 "Welsh, Swedish, Italian and Estonian\n"
@@ -495,20 +493,19 @@ msgid ""
 "line at <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 msgstr ""
 "<p>...že aplikace Rosegarden je dostupná ve španělštině, francouzštině, "
-"němčině, ruštině, welštině, švédštině, italštině a estonštině?<br><br>\n"
+"němčině, ruštině, welštině, švédštině, italštině a estonštině?\n"
+"(Abychom jmenovali alespoň některé jazyky.)<br><br>\n"
 "Máte-li zájem přeložit aplikaci Rosegarden do jiného jazyka, dejte nám vědět "
 "a\n"
 "na adresu <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:145
-#, fuzzy
 msgid ""
 "<p>...that you can change the total number of bars in the composition via\n"
 "<b>Composition -> Change Composition Start and End</b>?</p>\n"
 msgstr ""
 "<p>...že lze změnit celkový počet taktových čar ve skladbě přes možnost "
-"<b>Upravit\n"
-"-> Změnit délku skladby</b>?</p>\n"
+"<b>Skladba -> Změnit začátek a konec skladby</b>?</p>\n"
 
 #: ../gui/docs/en/tips.cpp:150
 msgid ""
@@ -566,7 +563,6 @@ msgstr ""
 "viditelné, použijte možnost <b>Nastavení -> Zobrazit pravítka</b>.)</p>\n"
 
 #: ../gui/docs/en/tips.cpp:174
-#, fuzzy
 msgid ""
 "<p>...that if you're editing a section in the matrix or notation view, you "
 "can\n"
@@ -577,9 +573,13 @@ msgid ""
 "audio.</i>\n"
 msgstr ""
 "<p>...že pokud upravujete sekci v maticovém nebo notovém pohledu, můžete "
-"nastavit, aby se sekce opakovala i v průběhu, kdy provádíte její úpravu?  "
+"nastavit,\n"
+"aby se sekce opakovala i v průběhu, kdy provádíte její úpravu?\n"
 "Vyberte ji, použijte možnost <b>Nástroje -> Lokální kurzor -> Nastavit "
-"opakování výběru</b> a potom stiskněte Přehrát.</p>\n"
+"opakování výběru</b> a potom stiskněte Přehrát.</p><br><br>\n"
+"<i>Tato funkce však nefunguje zcela správně pro skladby, které obsahují "
+"vzorkované\n"
+"audio.<i>\n"
 
 #: ../gui/docs/en/tips.cpp:182
 msgid ""
@@ -609,6 +609,12 @@ msgid ""
 "be confused and unhappy.  This is an old bug that has been on our TODO list\n"
 "for years.  Sorry about that, folks.  Patches welcome.</i>\n"
 msgstr ""
+"<p>Notační pohled zobrazuje noty s použitím jejich zobrazované délky, zatímco\n"
+"matice umožňuje editovat jejich délku trvání.</p><br><br>\n"
+"<i>Opatrně se svázanými notami v matici. Není to na první pohled zřejmé, že jsou\n"
+"svázané, a pokud rozpojíte pár svázaných not, následné notační pohledy budou\n"
+"zmatené a nebude se jim to líbit. Toto je stará chyba, která je v našem úkolníčku\n"
+"již léta. Omlouváme se. Opravy jsou vítané.</i>\n"
 
 #: ../gui/docs/en/tips.cpp:198
 msgid ""
@@ -641,6 +647,11 @@ msgid ""
 "<b>End\n"
 "Bar</b> to the end of your notation.</p>\n"
 msgstr ""
+"<p>Při exportu do aplikace LilyPond uvidíte několik prázdných taktových čar navíc,\n"
+"pokud je skladba v aplikaci Rosegarden delší než notový zápis, který obsahuje.\n"
+"Tento problém lze vyřešit tak, že přejdete na možnost <b>Skladba -> Změnit začátek a konec "
+"skladby...</b> a potom nastavíte\n"
+"<b>Koncovou taktovou čáru</b> na konec notového zápisu.</p>\n"
 
 #: ../gui/docs/en/tips.cpp:213
 msgid ""
@@ -659,6 +670,16 @@ msgid ""
 "within\n"
 "the notation view.</i></p>\n"
 msgstr ""
+"<p>Aplikace Rosegarden může nyní jisté věci, které dosud neumí zobrazit ve svém rozhraní,\n"
+"exportovat do aplikace LilyPond. Tyto nové direktivy lze vložit přes nástroj pro vkládání\n"
+"textu <b>T</b> v notačním pohledu.<br><br>\n"
+"Načtěte soubory s příkladem <b>lilypond-alternative-endings.rg</b> a <b>lilypond-directives.rg</b>,\n"
+"abyste si vyzkoušeli, jak používat nové exportovatelné direktivy.<br><br>\n"
+"Pomocí možnosti <b>Soubor -> Náhled s aplikací LilyPond</p> si prohlédněte, jak budou na exportované "
+"stránce vypadat.<br><br>\n"
+"<i>Zapněte při tom možnost\n"
+"<b>Nastavení -> Zobrazit direktivy LilyPond</b> a <b>Zobrazit anotace</b>\n"
+"v notačním pohledu.</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:227
 msgid ""
@@ -673,6 +694,14 @@ msgid ""
 "parameters.<br><br>\n"
 "<i>These parameters do not apply to audio tracks.</i></p>\n"
 msgstr ""
+"<p>Aplikace Rosegarden obsahuje nyní čísla stop, aby bylo možné <b>Vytvářet segmenty s:</b>\n"
+"určitými vlastnostmi. Lze předvolit klíč, transpozici, barvu a specifikovat\n"
+"nejvyšší a nejnižší hratelné noty (noty vně tohoto rozsahu se budou zobrazovat\n"
+"ve výchozím nastavení červeně). Potom pomocí tužky nakreslete nějaký segment nebo jej "
+"nahrajte.\n"
+"Jakékoli nové segmenty na této stopě budou mít potom tyto vlastnosti jako parametry\n"
+"segmentu.<br><br>\n"
+"<i>Tyto parametry se nevztahují na zvukové stopy.</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:237
 msgid ""
@@ -688,6 +717,16 @@ msgid ""
 "Magnus\n"
 "Johansson for assembling this extraordinary database.)</i></p>\n"
 msgstr ""
+"<p>Aplikace Rosegarden má nyní databází přednastavených parametrů, která popisuje"
+"více než 300\n"
+"skutečných hudebních nástrojů, seskupených do několika příhodných kategorií.\n"
+"Každý přednastavený nástroj obsahuje klíč, transpozici a návrhy hratelných\n"
+"rozsahů pro amatérské i profesionální hráče.<br><br>Klepnutím na tlačítko\n"
+"<b>Načíst</b> v okénku nových parametrů stopy můžete začít! <i>(Pokud nevidíte\n"
+"tlačítko <b>Načíst</b>, ujistěte se, že panel parametrů je nastavený do záložkového\n"
+"režimu a ne do zarovnávacího režimu.)</i> <br><br> <i>(Zvláštní dík patří"
+"Magnusi\n"
+"Johanssonovi za sestavení této výjimečné databáze.)</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:248
 msgid ""
@@ -703,6 +742,12 @@ msgid ""
 "with LilyPond.<br><br>\n"
 "<i>The tracks must have a non-default name for this to work.</i></p>\n"
 msgstr ""
+"<p>Stopy se stejným názvem můžete exportovat na jedinou, spojenou osnovu\n"
+"v aplikaci LilyPond.  Například, existují-li tři hlasy v jednom partu, zapište každý z nich\n"
+"jako nezávislý segment/osnovu, každý na samostatnou stopu.   Všechny tyto tři stopy\n"
+"pojmenujte stejně a z dialogu možností, který se objeví při exportu do nebo při náhledu\n"
+"s aplikací LilyPond, vyberte možnost <b>[x] Spojit stopy se stejným názvem</b><br><br>\n"
+"<i>Stopy musí mít jiný než výchozí název, aby tato funkce fungovala správně.</i></p>\n"
 
 #: ../gui/docs/en/tips.cpp:258
 msgid ""
@@ -710,6 +755,8 @@ msgid ""
 "right (by holding the Alt key at the same time), or to zoom in and out (by "
 "holding the Control key).</p>\n"
 msgstr ""
+"<p>Kolečkem myši lze procházet nahoru a dolů, nebo vpravo a vlevo (současně je třeba podržet "
+"klávesu Alt), nebo přibližovat a oddalovat obraz (současně je potřeba podržet klávesu Ctrl).</p>\n"
 
 #: ../gui/styles/styles.cpp:1
 msgid "Classical"
@@ -729,52 +776,46 @@ msgstr "Trojúhelníkový"
 
 #: ../gui/guitar/guitarchordeditor.cpp:78
 #: ../gui/guitar/guitartabselector.cpp:275
-#, fuzzy
 msgid "&Clear"
-msgstr "Notové &klíče"
+msgstr "&Vymazat"
 
 #: ../gui/guitar/guitarchordeditor.cpp:83
 msgid "A&dd Alias"
-msgstr ""
+msgstr "Při&dat alias"
 
 #: ../gui/guitar/guitarchordeditor.cpp:88
 #: ../gui/guitar/guitartabselector.cpp:280
-#, fuzzy
 msgid "C&ancel"
-msgstr "Kanál"
+msgstr "&Zrušit"
 
 #: ../gui/guitar/guitarchordeditor.cpp:93
 #: ../gui/guitar/guitartabselector.cpp:285
 msgid "&Ok"
-msgstr ""
+msgstr "&Ok"
 
 #: ../gui/guitar/guitarchordeditor.cpp:98
-#, fuzzy
 msgid "Toggle &Mode"
-msgstr "Přepnout tečku"
+msgstr "Přepnout &režim"
 
 #: ../gui/guitar/guitarchordeditor.cpp:191
 #: ../gui/guitar/guitartabselector.cpp:233
-#, fuzzy
 msgid "Scale"
-msgstr "Změnit délku"
+msgstr "Tónika"
 
 #: ../gui/guitar/guitarchordeditor.cpp:218
 #: ../gui/guitar/guitartabeditor.cpp:71
 #: ../gui/guitar/guitartabselector.cpp:241
-#, fuzzy
 msgid "Modifier"
-msgstr "&Upravit záložku"
+msgstr "Modifikátor"
 
 #: ../gui/guitar/guitarchordeditor.cpp:233
 #: ../gui/guitar/guitartabselector.cpp:249
 msgid "Suffix"
-msgstr ""
+msgstr "Přípona"
 
 #: ../gui/guitar/guitartabeditor.cpp:64
-#, fuzzy
 msgid "Chord Selector"
-msgstr "Selektor výšky tónu"
+msgstr "Selektor akordu"
 
 #: ../gui/dialogs.cpp:1122 ../gui/guitar/guitartabeditor.cpp:66
 msgid "Chord"
@@ -782,79 +823,68 @@ msgstr "Akord"
 
 #: ../gui/guitar/guitartabeditor.cpp:74
 msgid "Additivies"
-msgstr ""
+msgstr "Přípona"
 
 #: ../gui/guitar/guitartabeditor.cpp:77
 #: ../gui/guitar/guitartabselector.cpp:257
-#, fuzzy
 msgid "Version"
-msgstr "Bicí"
+msgstr "Verze"
 
 #: ../gui/guitar/guitartabeditor.cpp:84
-#, fuzzy
 msgid "Fingering"
-msgstr "Prstoklad: "
+msgstr "Prstoklad"
 
 #: ../gui/guitar/guitartabselector.cpp:270
-#, fuzzy
 msgid "&New"
-msgstr "Nový"
+msgstr "&Nový"
 
 #: ../gui/guitar/guitartabselector.cpp:291
-#, fuzzy
 msgid "Aliases"
-msgstr "Tremolo"
+msgstr "Aliasy"
 
 #: ../gui/tempodialog.cpp:48 ../gui/temporuler.cpp:115
 msgid "Insert Tempo Change"
 msgstr "Vložit změnu tempa"
 
 #: ../gui/temporuler.cpp:119
-#, fuzzy
 msgid "Insert Tempo Change at Playback Position"
-msgstr "Vložit změnu tempa"
+msgstr "Vložit změnu tempa na pozici přehrávání"
 
 #: ../gui/temporuler.cpp:126
-#, fuzzy
 msgid "Delete Tempo Change"
-msgstr "Vložit změnu tempa"
+msgstr "Odstranit změnu tempa"
 
 #: ../gui/temporuler.cpp:132
 msgid "Ramp Tempo to Next Tempo"
-msgstr ""
+msgstr "Přejít z dosavadního na následující tempo"
 
 #: ../gui/temporuler.cpp:136
 msgid "Un-Ramp Tempo"
-msgstr ""
+msgstr "Zrušit změnu tempa"
 
 #: ../gui/temporuler.cpp:143
-#, fuzzy
 msgid "Edit Tempo..."
-msgstr "Upravit &výchozí tempo..."
+msgstr "Upravit tempo..."
 
 #: ../gui/temporuler.cpp:147
-#, fuzzy
 msgid "Edit Time Signature..."
-msgstr "Taktové označení"
+msgstr "Upravit taktové označení..."
 
 #: ../gui/rosegardengui.cpp:792 ../gui/temporuler.cpp:151
 msgid "Open Tempo and Time Signature Editor"
 msgstr "Otevřít editor tempa a taktového označení"
 
 #: ../gui/temporuler.cpp:563
-#, fuzzy
 msgid "%1.%2%3 (%4.%5%6 bpm)"
-msgstr "%1.%2%3 qpm (%4.%5%6 bpm)   "
+msgstr "%1.%2%3 (%4.%5%6 bpm)"
 
 #: ../gui/temporuler.cpp:571
-#, fuzzy
 msgid "%1.%2%3 bpm"
-msgstr "(%1.%2 bpm)"
+msgstr "%1.%2%3 bpm"
 
 #: ../gui/temporuler.cpp:579
-#, fuzzy
 msgid "%1 - %2.%3%4"
-msgstr "%1.%2%3"
+msgstr "%1 - %2.%3%4"
 
 #: ../gui/segmenttool.cpp:561 ../gui/segmenttool.cpp:1103
 msgid "Move Segment"
@@ -865,10 +895,8 @@ msgid "Move Segments"
 msgstr "Přesunout segmenty"
 
 #: ../gui/tracklabel.cpp:63
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
-msgstr ""
-"Klepnutím a podržením levého tlačítka myši přiřadíte tuto stopu nástroji."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
+msgstr "Klepnutím a podržením levého tlačítka myši přiřadíte tuto stopu nástroji."
 
 #: ../gui/tracklabel.cpp:190
 msgid "Change track name"
@@ -1060,9 +1088,8 @@ msgid "Key signature"
 msgstr "Předznamenání"
 
 #: ../gui/dialogs.cpp:403
-#, fuzzy
 msgid "Key transposition"
-msgstr "Welšský překlad"
+msgstr "Transpozice tóniny"
 
 #: ../gui/dialogs.cpp:409
 msgid "Existing notes following key change"
@@ -1090,11 +1117,11 @@ msgstr "Moll"
 
 #: ../gui/dialogs.cpp:444
 msgid "Transpose key according to segment transposition"
-msgstr ""
+msgstr "Transponovat tóninu podle transpozice segmentu"
 
 #: ../gui/dialogs.cpp:447
 msgid "Use specified key.  Do not transpose"
-msgstr ""
+msgstr "Použít zadanou tóninu.  Netransponovat"
 
 #: ../gui/dialogs.cpp:455
 msgid "Apply to current segment only"
@@ -1217,253 +1244,228 @@ msgid "Annotation"
 msgstr "Anotace"
 
 #: ../gui/dialogs.cpp:1128
-#, fuzzy
 msgid "LilyPond Directive"
-msgstr "Soubory aplikace Lilypond"
+msgstr "Direktiva aplikace Lilypond"
 
 #: ../gui/dialogs.cpp:1153
-#, fuzzy
 msgid "Dynamic:  "
-msgstr "Dynamika"
+msgstr "Dynamika:"
 
 #: ../gui/dialogs.cpp:1157
 msgid "ppp"
-msgstr ""
+msgstr "ppp"
 
 #: ../gui/dialogs.cpp:1158
 msgid "pp"
-msgstr ""
+msgstr "pp"
 
 #: ../gui/dialogs.cpp:1159
 msgid "p"
-msgstr ""
+msgstr "p"
 
 #: ../gui/dialogs.cpp:1160
 msgid "mp"
-msgstr ""
+msgstr "mp"
 
 #: ../gui/dialogs.cpp:1161
 msgid "mf"
-msgstr ""
+msgstr "mf"
 
 #: ../gui/dialogs.cpp:1162
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: ../gui/dialogs.cpp:1163
 msgid "ff"
-msgstr ""
+msgstr "ff"
 
 #: ../gui/dialogs.cpp:1164
 msgid "fff"
-msgstr ""
+msgstr "fff"
 
 #: ../gui/dialogs.cpp:1165
 msgid "rfz"
-msgstr ""
+msgstr "rfz"
 
 #: ../gui/dialogs.cpp:1166
 msgid "sf"
-msgstr ""
+msgstr "sf"
 
 #: ../gui/dialogs.cpp:1170
-#, fuzzy
 msgid "Direction:  "
-msgstr "Směr"
+msgstr "Směr:"
 
 #: ../gui/dialogs.cpp:1179
 msgid "  ,"
-msgstr ""
+msgstr "  ,"
 
 #: ../gui/dialogs.cpp:1180
 msgid "D.C. al Fine"
-msgstr ""
+msgstr "D.C. al Fine"
 
 #: ../gui/dialogs.cpp:1181
 msgid "D.S. al Fine"
-msgstr ""
+msgstr "D.S. al Fine"
 
 #: ../gui/dialogs.cpp:1182
-#, fuzzy
 msgid "Fine"
-msgstr "Název souboru"
+msgstr "Fine"
 
 #: ../gui/dialogs.cpp:1183
 msgid "D.S. al Coda"
-msgstr ""
+msgstr "D.S. al Coda"
 
 #: ../gui/dialogs.cpp:1184
-#, fuzzy
 msgid "to Coda"
-msgstr " Akord"
+msgstr "k označení Coda"
 
 #: ../gui/dialogs.cpp:1185
-#, fuzzy
 msgid "Coda"
-msgstr "Kódy"
+msgstr "Coda"
 
 #: ../gui/dialogs.cpp:1189
-#, fuzzy
 msgid "Local Direction:  "
-msgstr "Lokální směr"
+msgstr "Lokální směr:"
 
 #: ../gui/dialogs.cpp:1193
 msgid "accel."
-msgstr ""
+msgstr "accel."
 
 #: ../gui/dialogs.cpp:1194
 msgid "ritard."
-msgstr ""
+msgstr "ritard."
 
 #: ../gui/dialogs.cpp:1195
 msgid "ralletando"
-msgstr ""
+msgstr "ralletando"
 
 #: ../gui/dialogs.cpp:1196
-#, fuzzy
 msgid "a tempo"
-msgstr "Nové tempo"
+msgstr "a tempo"
 
 #: ../gui/dialogs.cpp:1197
-#, fuzzy
 msgid "legato"
-msgstr "&Legato"
+msgstr "legato"
 
 #: ../gui/dialogs.cpp:1198
-#, fuzzy
 msgid "simile"
-msgstr "Čas"
+msgstr "simile"
 
 #: ../gui/dialogs.cpp:1199
 msgid "pizz."
-msgstr ""
+msgstr "pizz."
 
 #: ../gui/dialogs.cpp:1200
-#, fuzzy
 msgid "arco"
-msgstr "&Marcato"
+msgstr "arco"
 
 #: ../gui/dialogs.cpp:1201
 msgid "non vib."
-msgstr ""
+msgstr "non vib."
 
 #: ../gui/dialogs.cpp:1202
 msgid "sul pont."
-msgstr ""
+msgstr "sul pont."
 
 #: ../gui/dialogs.cpp:1203 ../gui/dialogs.cpp:1205
 msgid "sul tasto"
-msgstr ""
+msgstr "sul tasto"
 
 #: ../gui/dialogs.cpp:1204
 msgid "con legno"
-msgstr ""
+msgstr "con legno"
 
 #: ../gui/dialogs.cpp:1206
 msgid "sul G"
-msgstr ""
+msgstr "sul G"
 
 #: ../gui/dialogs.cpp:1207
 msgid "ordinario"
-msgstr ""
+msgstr "ordinario"
 
 #: ../gui/dialogs.cpp:1208
-#, fuzzy
 msgid "Muta in "
-msgstr "Držet tón"
+msgstr "Muta in "
 
 #: ../gui/dialogs.cpp:1209
 msgid "volti subito "
-msgstr ""
+msgstr "volti subito "
 
 #: ../gui/dialogs.cpp:1210
 msgid "soli"
-msgstr ""
+msgstr "soli"
 
 #: ../gui/dialogs.cpp:1211
 msgid "div."
-msgstr ""
+msgstr "div."
 
 #: ../gui/dialogs.cpp:1215
-#, fuzzy
 msgid "Tempo:  "
-msgstr "Tempo   "
+msgstr "Tempo:"
 
 #: ../gui/dialogs.cpp:1219 ../gui/dialogs.cpp:1243
-#, fuzzy
 msgid "Grave"
-msgstr "Řečtina"
+msgstr "Grave"
 
 #: ../gui/dialogs.cpp:1220 ../gui/dialogs.cpp:1244
-#, fuzzy
 msgid "Adagio"
-msgstr "Zvuk"
+msgstr "Adagio"
 
 #: ../gui/dialogs.cpp:1221 ../gui/dialogs.cpp:1245
 msgid "Largo"
-msgstr ""
+msgstr "Largo"
 
 #: ../gui/dialogs.cpp:1222 ../gui/dialogs.cpp:1246
-#, fuzzy
 msgid "Lento"
-msgstr "&Legato"
+msgstr "Lento"
 
 #: ../gui/dialogs.cpp:1223 ../gui/dialogs.cpp:1247
-#, fuzzy
 msgid "Andante"
-msgstr "Rozšířené možnosti"
+msgstr "Andante"
 
 #: ../gui/dialogs.cpp:1224 ../gui/dialogs.cpp:1248
-#, fuzzy
 msgid "Moderato"
-msgstr "Mordent"
+msgstr "Moderato"
 
 #: ../gui/dialogs.cpp:1225 ../gui/dialogs.cpp:1249
 msgid "Allegretto"
-msgstr ""
+msgstr "Allegretto"
 
 #: ../gui/dialogs.cpp:1226 ../gui/dialogs.cpp:1250
 msgid "Allegro"
-msgstr ""
+msgstr "Allegro"
 
 #: ../gui/dialogs.cpp:1227 ../gui/dialogs.cpp:1251
 msgid "Vivace"
-msgstr ""
+msgstr "Vivace"
 
 #: ../gui/dialogs.cpp:1228 ../gui/dialogs.cpp:1252
-#, fuzzy
 msgid "Presto"
-msgstr "pomlka"
+msgstr "Presto"
 
 #: ../gui/dialogs.cpp:1229 ../gui/dialogs.cpp:1253
-#, fuzzy
 msgid "Prestissimo"
-msgstr "Prezentace"
+msgstr "Prestissimo"
 
 #: ../gui/dialogs.cpp:1230 ../gui/dialogs.cpp:1254
-#, fuzzy
 msgid "Maestoso"
-msgstr "Maestro"
+msgstr "Maestoso"
 
 #: ../gui/dialogs.cpp:1231 ../gui/dialogs.cpp:1255
-#, fuzzy
 msgid "Sostenuto"
-msgstr "T&enuto"
+msgstr "Sostenuto"
 
 #: ../gui/dialogs.cpp:1232 ../gui/dialogs.cpp:1256
-#, fuzzy
 msgid "Tempo Primo"
-msgstr "Tempo   "
+msgstr "Tempo Primo"
 
 #: ../gui/dialogs.cpp:1239
-#, fuzzy
 msgid "Local Tempo:  "
-msgstr "Lokální tempo"
+msgstr "Lokální tempo:"
 
 #: ../gui/dialogs.cpp:1260
-#, fuzzy
 msgid "Directive:  "
-msgstr "Směr"
+msgstr "Direktiva:"
 
 #: ../gui/dialogs.cpp:1316
 msgid "Example"
@@ -1796,9 +1798,8 @@ msgid "Treble"
 msgstr "Houslový"
 
 #: ../gui/dialogs.cpp:3328
-#, fuzzy
 msgid "Soprano"
-msgstr "S&forzando"
+msgstr "Soprano"
 
 #: ../gui/dialogs.cpp:3329
 msgid "Alto"
@@ -1824,7 +1825,7 @@ msgstr "Rozšířené možnosti"
 
 #: ../gui/dialogs.cpp:3370
 msgid "Rescale"
-msgstr "Změnit délku"
+msgstr "Transponovat"
 
 #: ../gui/dialogs.cpp:3375
 msgid "Duration of selection"
@@ -1940,8 +1941,7 @@ msgstr "Ploché - nastavit %1 na hodnotu"
 
 #: ../gui/dialogs.cpp:4057
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Střídavé - nastavit %1 střídavě na maximum a minimum při střídání událostí"
+msgstr "Střídavé - nastavit %1 střídavě na maximum a minimum při střídání událostí"
 
 #: ../gui/dialogs.cpp:4061
 msgid "Crescendo - set %1 rising from min to max"
@@ -1953,8 +1953,7 @@ msgstr "Diminuendo - nastavit %1 na zmenšující se od maxima po minimum"
 
 #: ../gui/dialogs.cpp:4069
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
-msgstr ""
-"Vyzvánění - nastavit %1 na střídání od maxima po minimum s ukončením na nule"
+msgstr "Vyzvánění - nastavit %1 na střídání od maxima po minimum s ukončením na nule"
 
 #: ../gui/dialogs.cpp:4112 ../gui/dialogs.cpp:4139
 msgid "First Value"
@@ -2021,29 +2020,24 @@ msgid "Use treble and bass clefs"
 msgstr "Použít houslové a basové klíče"
 
 #: ../gui/dialogs.cpp:4287 ../gui/segmentcommands.cpp:2347
-#, fuzzy
 msgid "Split by Recording Source"
-msgstr "Záznamový vstupní zdroj"
+msgstr "Rozdělit podle záznamového zdroje"
 
 #: ../gui/dialogs.cpp:4292
-#, fuzzy
 msgid "Recording Source"
-msgstr "Záznamový vstupní zdroj"
+msgstr "Záznamový zdroj"
 
 #: ../gui/dialogs.cpp:4296
-#, fuzzy
 msgid "Channel:"
-msgstr "Kanál"
+msgstr "Kanál:"
 
 #: ../gui/dialogs.cpp:4303 ../gui/dialogs.cpp:4314
-#, fuzzy
 msgid "any"
-msgstr "(jakýkoli)"
+msgstr "jakýkoli"
 
 #: ../gui/dialogs.cpp:4308
-#, fuzzy
 msgid "Device:"
-msgstr "Zařízení"
+msgstr "Zařízení:"
 
 #: ../gui/deviceeditor.cpp:182 ../gui/deviceeditor.cpp:204
 #: ../gui/deviceeditor.cpp:216 ../gui/devicemanager.cpp:172
@@ -2114,9 +2108,8 @@ msgid "Just how big is your hard disk?"
 msgstr "Jak je velký váš pevný disk?"
 
 #: ../gui/dialogs.cpp:4583
-#, fuzzy
 msgid "Recording beyond end of composition:  "
-msgstr "Zbývající záznamový čas:  "
+msgstr "Záznam za koncem skladby:  "
 
 #: ../gui/dialogs.cpp:4622 rc.cpp:255
 #, no-c-format
@@ -2209,39 +2202,32 @@ msgid "Recording"
 msgstr "Probíhá záznam"
 
 #: ../gui/dialogs.cpp:5078
-#, fuzzy
 msgid "LilyPond Export/Preview"
-msgstr "Export do aplikace Lilypond"
+msgstr "Export/náhled do aplikace LilyPond"
 
 #: ../gui/dialogs.cpp:5085
-#, fuzzy
 msgid "LilyPond export/preview options"
-msgstr "Možnosti zobrazení náhledu pro aplikaci Lilypond"
+msgstr "Možnosti exportu/náhledu pro aplikaci LilyPond"
 
 #: ../gui/dialogs.cpp:5094
-#, fuzzy
 msgid "LilyPond compatibility level"
-msgstr "Úroveň kompatibility s aplikací Lilypond"
+msgstr "Úroveň kompatibility s aplikací LilyPond"
 
 #: ../gui/dialogs.cpp:5097
-#, fuzzy
 msgid "LilyPond 2.2"
-msgstr "Lilypond 2.2"
+msgstr "LilyPond 2.2"
 
 #: ../gui/dialogs.cpp:5098
-#, fuzzy
 msgid "LilyPond 2.4"
-msgstr "Lilypond 2.4"
+msgstr "LilyPond 2.4"
 
 #: ../gui/dialogs.cpp:5099
-#, fuzzy
 msgid "LilyPond 2.6"
-msgstr "Lilypond 2.6"
+msgstr "LilyPond 2.6"
 
 #: ../gui/dialogs.cpp:5100
-#, fuzzy
 msgid "LilyPond 2.8"
-msgstr "Lilypond 2.0"
+msgstr "LilyPond 2.8"
 
 #: ../gui/dialogs.cpp:5105
 msgid "Paper size to use in \\paper block"
@@ -2264,9 +2250,8 @@ msgid "do not specify"
 msgstr "nespecifikováno"
 
 #: ../gui/dialogs.cpp:5116
-#, fuzzy
 msgid "LilyPond font size"
-msgstr "Velikost písma v aplikaci Lilypond"
+msgstr "Velikost písma v aplikaci LilyPond"
 
 #: ../gui/dialogs.cpp:5130
 msgid "Export Document Properties as \\header block"
@@ -2298,11 +2283,11 @@ msgstr "Exportovat trámce"
 
 #: ../gui/dialogs.cpp:5169
 msgid "Add staff group bracket"
-msgstr ""
+msgstr "Přidat skupinovou svorku osnovy"
 
 #: ../gui/dialogs.cpp:5174
 msgid "Merge tracks that have the same name"
-msgstr ""
+msgstr "Spojit stopy se stejným názvem"
 
 #: ../gui/dialogs.cpp:5203
 msgid "Export Devices..."
@@ -2590,7 +2575,7 @@ msgstr ""
 "Chcete jej uložit?"
 
 #: ../gui/rosegardenguidoc.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
 "Delete the %n audio files recorded during the unsaved session?"
@@ -2620,7 +2605,7 @@ msgstr ""
 "Vyberte kterékoli z těch, které chcete z pevného disku trvale odstranit.\n"
 
 #: ../gui/rosegardenguidoc.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: About to delete 1 audio file permanently from the hard disk.\n"
 "There will be no way to recover this file.\n"
@@ -2630,12 +2615,10 @@ msgid ""
 "Are you sure?"
 msgstr ""
 "_n: Chystáte se z pevného disku trvale odstranit 1 zvukový soubor.\n"
-"Tuto akci nelze vrátit zpět a neexistuje způsob, jak tento soubor později "
-"obnovit.\n"
+"Neexistuje způsob, jak tento soubor později obnovit.\n"
 "Skutečně chcete pokračovat?\n"
 "Chystáte se z pevného disku trvale odstranit %n zvukové(ých) soubory(ů).\n"
-"Tuto akci nelze vrátit zpět a neexistuje způsob, jak tyto soubory později "
-"obnovit.\n"
+"Neexistuje způsob, jak tyto soubory později obnovit.\n"
 "Skutečně chcete pokračovat?"
 
 #: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:442
@@ -2787,7 +2770,7 @@ msgid "Trigger Segment Duration"
 msgstr "Doba trvání spouštěcího segmentu"
 
 #: ../gui/triggermanager.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: This triggered segment is used 1 time in the current composition.  Are "
 "you sure you want to remove it?\n"
@@ -3027,9 +3010,8 @@ msgid "Cancel C&autionary Accidentals"
 msgstr "Zrušit v&arovné posuvky"
 
 #: ../gui/notationcommands.cpp:2178
-#, fuzzy
 msgid "Insert Fretboard"
-msgstr "Vložit pomlku"
+msgstr "Vložit hmatník"
 
 #: ../gui/editcommands.h:67
 msgid "Cu&t"
@@ -3258,8 +3240,7 @@ msgid "Export..."
 msgstr "Export..."
 
 #: ../gui/bankeditor.cpp:1169
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importovat data banky a programů ze souboru aplikace Rosegarden do "
 "aktuálního zařízení"
@@ -3513,17 +3494,14 @@ msgid "Import from Device in File"
 msgstr "Importovat ze zařízení v souboru"
 
 #: ../gui/barbuttons.cpp:78
-#, fuzzy
 msgid ""
 "Left Click to position the playback pointer.\n"
 "Shift + Left Click + Drag to select a range for looping or editing.\n"
 "Shift + Left Click to clear the loop or range."
 msgstr ""
-"Klepnutí levým tlačítkem v oblasti stupnice značek umístí ukazatel "
-"přehrávání.\n"
-"Shift + levé tlačítko myši + tažení nastaví opakující se úsek.\n"
-"Shift + levé tlačítko myši zruší nastavené opakování (nebo lze také vypnout "
-"tlačítko opakovací smyčky v panelu Transport)."
+"Klepnutí levým tlačítkem umístí ukazatel přehrávání.\n"
+"Shift + levé tlačítko myši + tažení nastaví úsek k opakování nebo k úpravám.\n"
+"Shift + levé tlačítko myši zruší nastavené opakování nebo úsek."
 
 #: ../gui/midifilter.cpp:34
 msgid "Modify MIDI filters..."
@@ -3659,9 +3637,8 @@ msgid "Remove &Tempo Change..."
 msgstr "Odstranit změnu &tempa..."
 
 #: ../gui/segmentcommands.h:608
-#, fuzzy
 msgid "Change Te&mpo..."
-msgstr "Změnit barvu segmentu..."
+msgstr "Změnit te&mpo..."
 
 #: ../gui/segmentcommands.h:631
 msgid "Add Tracks..."
@@ -3688,9 +3665,8 @@ msgid "Split by &Pitch..."
 msgstr "Rozdělit podle &výšky tónu..."
 
 #: ../gui/segmentcommands.h:774
-#, fuzzy
 msgid "Split by &Recording Source..."
-msgstr "Rozdělit podle &výšky tónu..."
+msgstr "Rozdělit podle záznamového zd&roje..."
 
 #: ../gui/segmentcommands.h:797
 msgid "Re&label..."
@@ -3706,7 +3682,7 @@ msgstr "Změnit barevnou mapu segmentu..."
 
 #: ../gui/segmentcommands.h:1063
 msgid "Rejoin Command"
-msgstr ""
+msgstr "Příkaz k opětovnému spojení"
 
 #: ../gui/rgapplication.cpp:87
 #, c-format
@@ -3869,9 +3845,8 @@ msgstr "&Zaznamenat"
 
 #: ../gui/matrixview.cpp:787 ../gui/mixer.cpp:146 ../gui/mixer.cpp:1721
 #: ../gui/notationview.cpp:2075 ../gui/rosegardengui.cpp:1147
-#, fuzzy
 msgid "Panic"
-msgstr "Pan"
+msgstr "Nouzové zastavení"
 
 #: ../gui/mixer.cpp:152
 msgid "Show Audio &Faders"
@@ -4082,7 +4057,7 @@ msgstr "Skryté anotace"
 
 #: ../gui/notationviewslots.cpp:125
 msgid "Hidden LilyPond directives"
-msgstr ""
+msgstr "Skryté direktivy aplikace LilyPond"
 
 #: ../gui/notationviewslots.cpp:157
 #, c-format
@@ -4586,9 +4561,8 @@ msgid "Program"
 msgstr "Program"
 
 #: ../gui/instrumentparameterbox.cpp:711
-#, fuzzy
 msgid "Channel out"
-msgstr "Kanál"
+msgstr "Výstupní kanál"
 
 #: ../gui/instrumentparameterbox.cpp:841 ../gui/instrumentparameterbox.cpp:847
 msgid "[ %1 ]"
@@ -4771,9 +4745,8 @@ msgid "Split Audio Segment"
 msgstr "Rozdělit zvukový segment"
 
 #: ../gui/segmentcommands.cpp:851 ../gui/segmentcommands.cpp:988
-#, fuzzy
 msgid " (split)"
-msgstr "%1 (rozděleno)"
+msgstr " (rozděleno)"
 
 #: ../gui/segmentcommands.cpp:852 ../gui/segmentcommands.cpp:989
 #: ../gui/segmentcommands.cpp:2423 ../gui/segmentcommands.cpp:2425
@@ -4794,7 +4767,7 @@ msgstr "%1 (část)"
 
 #: ../gui/segmentcommands.cpp:1479
 msgid "%1 (rescaled)"
-msgstr "%1 (změněna délka)"
+msgstr "%1 (transponováno)"
 
 #: ../gui/segmentcommands.cpp:2243
 msgid "%1 (upper)"
@@ -4849,29 +4822,25 @@ msgid "Set Tempos from Beat Segment"
 msgstr "Nastavit tempa ze segmentu doby"
 
 #: ../gui/rosegardengui.cpp:798 ../gui/segmentcommands.cpp:3009
-#, fuzzy
 msgid "Cut Range"
-msgstr "Vyjmout a &zavřít"
+msgstr "Vyjmout úsek"
 
 #: ../gui/rosegardengui.cpp:806 ../gui/segmentcommands.cpp:3018
-#, fuzzy
 msgid "Paste Range"
-msgstr "Typ vložení"
+msgstr "Vložit úsek"
 
 #: ../gui/rosegardengui.cpp:810 ../gui/segmentcommands.cpp:3072
 #: ../gui/segmentcommands.cpp:3155
-#, fuzzy
 msgid "Delete Range"
-msgstr "Odstranit záložku"
+msgstr "Odstranit úsek"
 
 #: ../gui/segmentcommands.cpp:3220
 msgid "Open or Close Range"
-msgstr ""
+msgstr "Otevřít nebo zavřít úsek"
 
 #: ../gui/segmentcommands.cpp:3357
-#, fuzzy
 msgid "Paste Tempos and Time Signatures"
-msgstr "&Tempo a taktového označení"
+msgstr "Vložit tempa a taktová označení"
 
 #: ../gui/notestyle.cpp:554
 #, c-format
@@ -4892,8 +4861,7 @@ msgid "global element must precede note elements"
 msgstr "globální prvek musí předcházet notovým prvkům"
 
 #: ../gui/notestyle.cpp:634
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "globální a notové prvky mohou mít atributy tvaru nebo názvu znaku, ale "
 "nemohou mít obojí"
@@ -4993,8 +4961,7 @@ msgstr ""
 "Rosegarden."
 
 #: ../gui/sequencemanager.cpp:1042
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Procesor nemá dostatečný výkon na zpracování zvuku v reálném čase.  Nelze "
 "pokračovat."
@@ -5013,8 +4980,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Zvukový subsystém JACK ztrácí vzorkové rámce."
 
 #: ../gui/sequencemanager.cpp:1106
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Načítání zvukových dat z disku selhalo z časových důvodu a nebylo tedy možné "
 "obsloužit zvukový subsystém."
@@ -5053,14 +5019,12 @@ msgstr ""
 "svého distributora Linuxu.</p>"
 
 #: ../gui/segmentparameterbox.cpp:51 ../gui/trackparameterbox.cpp:897
-#, fuzzy
 msgid "Segment"
-msgstr "Se&gment"
+msgstr "Segment"
 
 #: ../gui/segmentparameterbox.cpp:52
-#, fuzzy
 msgid "Segment Parameters"
-msgstr "Parametry nástroje"
+msgstr "Parametry segmentu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:2061
 #: ../gui/segmentparameterbox.cpp:91
@@ -5090,39 +5054,38 @@ msgid "Fade out"
 msgstr "Zeslabit výstup"
 
 #: ../gui/segmentparameterbox.cpp:99 ../gui/trackparameterbox.cpp:287
-#, fuzzy
 msgid "Range"
-msgstr "Trojúhelníkový"
+msgstr "Úsek"
 
 #: ../gui/segmentparameterbox.cpp:109
-#, fuzzy
 msgid "edit"
-msgstr "Editor"
+msgstr "upravit"
 
 #: ../gui/segmentparameterbox.cpp:173
 msgid ""
 "_: used internally for spacing\n"
 "High: ----"
 msgstr ""
+"_: použito interně pro mezery\n"
+"Vysoká: ----"
 
 #: ../gui/segmentparameterbox.cpp:177 ../gui/segmentparameterbox.cpp:740
 #: ../gui/trackparameterbox.cpp:294
-#, fuzzy
 msgid "High: ---"
-msgstr "Vysoká"
+msgstr "Vysoká: ---"
 
 #: ../gui/segmentparameterbox.cpp:178 ../gui/trackparameterbox.cpp:295
 msgid "Choose the highest suggested playable note, using a staff"
-msgstr ""
+msgstr "Pomocí osnovy vyberte nejvyšší navrhovanou, hratelnou notu"
 
 #: ../gui/segmentparameterbox.cpp:187 ../gui/segmentparameterbox.cpp:741
 #: ../gui/trackparameterbox.cpp:290
 msgid "Low: ----"
-msgstr ""
+msgstr "Nízká: ----"
 
 #: ../gui/segmentparameterbox.cpp:188 ../gui/trackparameterbox.cpp:291
 msgid "Choose the lowest suggested playable note, using a staff"
-msgstr ""
+msgstr "Pomocí osnovy vyberte nejnižší navrhovanou, hratelnou notu"
 
 #: ../gui/segmentparameterbox.cpp:206 ../gui/segmentparameterbox.cpp:213
 msgid " ms"
@@ -5149,11 +5112,11 @@ msgstr "Zadejte nový název"
 
 #: ../gui/segmentparameterbox.cpp:1039 ../gui/trackparameterbox.cpp:823
 msgid "Highest playable note"
-msgstr ""
+msgstr "Nejvyšší hratelná nota"
 
 #: ../gui/segmentparameterbox.cpp:1059 ../gui/trackparameterbox.cpp:842
 msgid "Lowest playable note"
-msgstr ""
+msgstr "Nejnižší hratelná nota"
 
 #: ../gui/rosegardengui.cpp:6174 ../gui/segmentparameterbox.cpp:1092
 msgid "Modify Segment label"
@@ -5348,7 +5311,7 @@ msgstr "Připojit ke spuštěnému procesu sekvenceru, je-li nalezen"
 
 #: ../gui/main.cpp:306
 msgid "Ignore installed version - for devs only"
-msgstr ""
+msgstr "Ignorovat instalovanou verzi - pouze pro vývojáře"
 
 #: ../gui/main.cpp:307
 msgid "file to open"
@@ -5437,14 +5400,13 @@ msgid "Rosegarden"
 msgstr "Rosegarden"
 
 #: ../gui/main.cpp:403
-#, fuzzy
 msgid ""
 "Copyright 2000 - 2006 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
 "Lilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"
 msgstr ""
-"Copyright 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\n"
+"Copyright 2000 - 2006 Guillaume Laurent, Chris Cannam, Richard Bown\n"
 "Částečný copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
 "Písma Lilypond - copyright 1997 - 2005 Han-Wen Nienhuys a Jan Nieuwenhuizen"
@@ -5576,16 +5538,23 @@ msgid ""
 "2006,\n"
 "may he rest in peace)"
 msgstr ""
+"1.2.3 fotografie na úvodní obrazovce (Michaelova růžová zahrada)\n"
+"nová fotografie na úvodní obrazovce (nástroje Michaela McIntyra\n"
+"společně s růží ze zahrady Hassella Arnolda Hale, 1916-"
+"2006,\n"
+"nechť odpočívá v pokoji)"
 
 #: ../gui/main.cpp:446
 msgid ""
 "Finnish translation\n"
 "LilyPond export fixes/improvements"
 msgstr ""
+"Finský překlad\n"
+"Opravy/vylepšení exportu pro LilyPond"
 
 #: ../gui/main.cpp:447
 msgid "guitar chord editor"
-msgstr ""
+msgstr "editor kytarových akordů"
 
 #: ../gui/_translatorinfo.cpp:1 ../gui/main.cpp:449
 msgid ""
@@ -5604,9 +5573,8 @@ msgid "Note name style"
 msgstr "Styl názvu noty"
 
 #: ../gui/rosegardenconfigurationpage.cpp:160
-#, fuzzy
 msgid "Audio preview scale"
-msgstr "Zvuková úroveň"
+msgstr "Rozsah zvukového náhledu"
 
 #: ../gui/rosegardenconfigurationpage.cpp:162
 msgid "Base octave number for MIDI pitch display"
@@ -5622,7 +5590,7 @@ msgstr "    (projeví se až po příštím spuštění)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:170
 msgid "Side-bar parameter box layout"
-msgstr ""
+msgstr "Rozvržení okna parametrů boční lišty"
 
 #: ../gui/rosegardenconfigurationpage.cpp:174
 msgid "Always use US names (e.g. quarter, 8th)"
@@ -5634,19 +5602,19 @@ msgstr "Lokalizováno (je-li lokalizace dostupná)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:180
 msgid "Linear - easier to see loud peaks"
-msgstr ""
+msgstr "Lineární - snáze lze vidět hlasité špičky"
 
 #: ../gui/rosegardenconfigurationpage.cpp:181
 msgid "Meter scaling - easier to see quiet activity"
-msgstr ""
+msgstr "Měřítko ukazatele - snadněji lze vidět tiché aktivity"
 
 #: ../gui/rosegardenconfigurationpage.cpp:199
 msgid "Vertically stacked"
-msgstr ""
+msgstr "Vertikálně seřazeno na sobě"
 
 #: ../gui/rosegardenconfigurationpage.cpp:201
 msgid "Tabbed"
-msgstr ""
+msgstr "Se záložkami"
 
 #: ../gui/rosegardenconfigurationpage.cpp:208
 msgid "Presentation"
@@ -5796,7 +5764,7 @@ msgstr "Zobrazit \"neviditelné\" události šedou barvou"
 
 #: ../gui/rosegardenconfigurationpage.cpp:580
 msgid "Show notes outside suggested playable range in red"
-msgstr ""
+msgstr "Zobrazit noty mimo navržený hratelný rozsah červeně"
 
 #: ../gui/rosegardenconfigurationpage.cpp:585
 msgid "Layout"
@@ -6142,18 +6110,16 @@ msgid "Sequencer timer"
 msgstr "Časovač sekvenceru"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1444
-#, fuzzy
 msgid "MIDI Clock and System messages"
-msgstr "Odeslat čas a systémová hlášení MIDI"
+msgstr "Čas a systémová hlášení MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1450
-#, fuzzy
 msgid "Send MIDI Clock, Start and Stop"
-msgstr "Odeslat čas a systémová hlášení MIDI"
+msgstr "Odeslat čas, začátek a konec MIDI"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1451
 msgid "Accept Start, Stop and Continue"
-msgstr ""
+msgstr "Přijmout začátek, konec a pokračování"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1459
 msgid "JACK transport mode"
@@ -6193,8 +6159,7 @@ msgstr "Řízené MTC"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1512
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Automaticky připojit synchronizovaný výstup ke všem používaným zařízením"
+msgstr "Automaticky připojit synchronizovaný výstup ke všem používaným zařízením"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1519
 msgid "Synchronisation"
@@ -6593,14 +6558,12 @@ msgid "Rescaling..."
 msgstr "Probíhá změna délky..."
 
 #: ../gui/matrixview.cpp:1423
-#, fuzzy
 msgid "%1 (%2.%3s)"
-msgstr "Čas: %1 (%2.%3s)"
+msgstr "%1 (%2.%3s)"
 
 #: ../gui/matrixview.cpp:1434
-#, fuzzy
 msgid "%1 (%2): %3"
-msgstr "%1 (%2)"
+msgstr "%1 (%2): %3"
 
 #: ../gui/matrixview.cpp:2047
 msgid "Unquantizing..."
@@ -6965,9 +6928,8 @@ msgid "(copied)"
 msgstr "(zkopírováno)"
 
 #: ../gui/editcommands.cpp:239 ../gui/rosegardengui.cpp:802
-#, fuzzy
 msgid "Copy Range"
-msgstr "Změna tóniny"
+msgstr "Kopírovat úsek"
 
 #: ../gui/editcommands.cpp:452
 msgid "Paste into an existing gap [\"restricted\"]"
@@ -7163,9 +7125,8 @@ msgid "&Text"
 msgstr "&Text"
 
 #: ../gui/notationview.cpp:1441
-#, fuzzy
 msgid "&Fretboard"
-msgstr "Ukazatel přehrávání o takt &dopředu"
+msgstr "&Hmatník"
 
 #: ../gui/notationview.cpp:1474
 msgid "Select from Sta&rt"
@@ -7209,7 +7170,7 @@ msgstr "Zobrazit &anotace"
 
 #: ../gui/notationview.cpp:1545
 msgid "Show Lily&Pond Directives"
-msgstr ""
+msgstr "Zobrazit direktivy Lily&Pond"
 
 #: ../gui/notationview.cpp:1549
 msgid "Open L&yric Editor"
@@ -7241,7 +7202,7 @@ msgstr "Žá&dná"
 
 #: ../gui/notationview.cpp:1905
 msgid "Add Fretboard"
-msgstr ""
+msgstr "Přidat hmatník"
 
 #: ../gui/notationview.cpp:1931 ../gui/rosegardengui.cpp:651
 msgid "Show T&ools Toolbar"
@@ -7422,9 +7383,8 @@ msgid "Initializing view..."
 msgstr "Probíhá inicializace zobrazení..."
 
 #: ../gui/rosegardengui.cpp:341
-#, fuzzy
 msgid "Special Parameters"
-msgstr "Parametry segmentu"
+msgstr "Speciální parametry"
 
 #: ../gui/rosegardengui.cpp:417
 msgid "Starting sequence manager..."
@@ -7500,9 +7460,8 @@ msgid "Export M&up file..."
 msgstr "Exportovat soubor M&up..."
 
 #: ../gui/rosegardengui.cpp:602
-#, fuzzy
 msgid "Preview with Lil&yPond..."
-msgstr "Zobrazuje se náhled souboru aplikace Lilypond..."
+msgstr "Náhled s aplikací Lily&Pond..."
 
 #: ../gui/rosegardengui.cpp:606
 msgid "Play&list"
@@ -7553,9 +7512,8 @@ msgid "Show Segment Pre&views"
 msgstr "Zobrazit &náhledy segmentu"
 
 #: ../gui/rosegardengui.cpp:705
-#, fuzzy
 msgid "Show Special &Parameters"
-msgstr "Zobrazit parametry nástroje"
+msgstr "Zobrazit speciální &parametry"
 
 #: ../gui/rosegardengui.cpp:761
 msgid "&Resize"
@@ -7586,9 +7544,8 @@ msgid "Open in &Default Editor"
 msgstr "Otevřít ve &výchozím editoru"
 
 #: ../gui/rosegardengui.cpp:905
-#, fuzzy
 msgid "Split at Time..."
-msgstr "Nastavit počáteční čas..."
+msgstr "Rozdělit na době..."
 
 #: ../gui/editview.cpp:726 ../gui/rosegardengui.cpp:909
 msgid "Jog &Left"
@@ -7692,7 +7649,7 @@ msgstr "Upravit &filtry MIDI"
 
 #: ../gui/rosegardengui.cpp:1046
 msgid "MIDI Thru Routing"
-msgstr ""
+msgstr "Směrování MIDI Thru"
 
 #: ../gui/rosegardengui.cpp:1052
 msgid "Manage &Metronome"
@@ -7827,14 +7784,12 @@ msgid "Jog Selection"
 msgstr "Krokový posun výběru"
 
 #: ../gui/rosegardengui.cpp:2793
-#, fuzzy
 msgid "Split Segments at Time"
-msgstr "Nastavit počáteční čas segmentu"
+msgstr "Rozdělit segmenty na době"
 
 #: ../gui/rosegardengui.cpp:2794
-#, fuzzy
 msgid "Split Segment at Time"
-msgstr "Nastavit počáteční čas segmentu"
+msgstr "Rozdělit segment na době"
 
 #: ../gui/rosegardengui.cpp:2836
 msgid "Set Segment Start Times"
@@ -8134,9 +8089,8 @@ msgid "Set Global and Default Tempo"
 msgstr "Nastavit globální a výchozí tempo"
 
 #: ../gui/rosegardengui.cpp:5689
-#, fuzzy
 msgid "Move Tempo Change"
-msgstr "Odstranit změnu &tempa..."
+msgstr "Přesunout změnu tempa"
 
 #: ../gui/rosegardengui.cpp:6089
 #, c-format
@@ -8177,8 +8131,7 @@ msgid "Saving current document as default studio..."
 msgstr "Probíhá ukládání aktuálního dokumentu jako výchozího studia..."
 
 #: ../gui/rosegardengui.cpp:7460
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr "Skutečně chcete importovat svoje výchozí studio a ztratit to aktuální?"
 
 #: ../gui/rosegardengui.cpp:7495
@@ -9099,14 +9052,12 @@ msgid "0"
 msgstr "0"
 
 #: ../gui/eventfilter.cpp:607
-#, fuzzy
 msgid "Pitch from"
-msgstr "Výška tónu  "
+msgstr "Výška tónu od"
 
 #: ../gui/eventfilter.cpp:618
-#, fuzzy
 msgid "Pitch to"
-msgstr "Výška tónu  "
+msgstr "Výška tónu do"
 
 #: ../gui/controlruler.cpp:540
 msgid "Control Change"
@@ -9231,161 +9182,143 @@ msgid "<no instrument>"
 msgstr "<žádný nástroj>"
 
 #: ../gui/trackparameterbox.cpp:67
-#, fuzzy
 msgid "Track Parameters"
-msgstr "Parametry rastru"
+msgstr "Parametry stopy"
 
 #: ../gui/trackparameterbox.cpp:112
-#, fuzzy
 msgid "Playback parameters"
-msgstr "Přehrávací úroveň"
+msgstr "Parametry přehrávání"
 
 #: ../gui/trackparameterbox.cpp:159
-#, fuzzy
 msgid "Recording filters"
-msgstr "Probíhá záznam"
+msgstr "Záznamové filtry"
 
 #: ../gui/trackparameterbox.cpp:183
 msgid "Channel"
 msgstr "Kanál"
 
 #: ../gui/trackparameterbox.cpp:205
-#, fuzzy
 msgid "Create segments with:"
-msgstr "Vytvořit segment"
+msgstr "Vytvořit segmenty s:"
 
 #: ../gui/trackparameterbox.cpp:221
-#, fuzzy
 msgid "Preset"
-msgstr "pomlka"
+msgstr "Přednastavit"
 
 #: ../gui/trackparameterbox.cpp:229
-#, fuzzy
 msgid "Load"
-msgstr "Načíst data"
+msgstr "Načíst"
 
 #: ../gui/trackparameterbox.cpp:239
-#, fuzzy
 msgid "treble"
-msgstr "Houslový"
+msgstr "houslový"
 
 #: ../gui/trackparameterbox.cpp:240
-#, fuzzy
 msgid "bass"
-msgstr "Basový"
+msgstr "basový"
 
 #: ../gui/trackparameterbox.cpp:241
-#, fuzzy
 msgid "crotales"
-msgstr "&Oktávy"
+msgstr "chrastítka"
 
 #: ../gui/trackparameterbox.cpp:242
 msgid "xylophone"
-msgstr ""
+msgstr "xylofon"
 
 #: ../gui/trackparameterbox.cpp:243
 msgid "guitar"
-msgstr ""
+msgstr "kytara"
 
 #: ../gui/trackparameterbox.cpp:244
 msgid "contrabass"
-msgstr ""
+msgstr "kontrabas"
 
 #: ../gui/trackparameterbox.cpp:245
 msgid "celesta"
-msgstr ""
+msgstr "celesta"
 
 #: ../gui/trackparameterbox.cpp:246
 msgid "old celesta"
-msgstr ""
+msgstr "stará celesta"
 
 #: ../gui/trackparameterbox.cpp:247
 msgid "soprano"
-msgstr ""
+msgstr "sopránový"
 
 #: ../gui/trackparameterbox.cpp:248
-#, fuzzy
 msgid "alto"
-msgstr "Violový"
+msgstr "violový"
 
 #: ../gui/trackparameterbox.cpp:249
-#, fuzzy
 msgid "tenor"
-msgstr "Tenorový"
+msgstr "tenorový"
 
 #: ../gui/trackparameterbox.cpp:469 ../gui/trackparameterbox.cpp:490
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 #: ../gui/trackparameterbox.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "High: %1"
-msgstr "Vysoká"
+msgstr "Vysoká: %1"
 
 #: ../gui/trackparameterbox.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Low: %1"
-msgstr "Id: %1"
+msgstr "Nízká: %1"
 
 #: ../gui/trackparameterbox.cpp:588
 msgid "[ Track#%1 - %2 ]"
-msgstr ""
+msgstr "[ Stopa#%1 - %2 ]"
 
 #: ../gui/trackparameterbox.cpp:888
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
+msgstr "Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci."
 
 #: ../gui/presethandler.cpp:173
-#, fuzzy, c-format
+#, c-format
 msgid "Can't open preset file %1"
-msgstr "Nelze otevřít soubor stylu %1"
+msgstr "Nelze otevřít soubor přednastavení %1"
 
 #: ../gui/presethandler.cpp:369
 msgid "Load track parameters preset"
-msgstr ""
+msgstr "Načíst přednastavené parametry stopy"
 
 #: ../gui/presethandler.cpp:397
 msgid "Select preset track parameters for:"
-msgstr ""
+msgstr "Vybrat přednastavené parametry stopy pro:"
 
 #: ../gui/presethandler.cpp:399
-#, fuzzy
 msgid "Category"
-msgstr "Kategorie:"
+msgstr "Kategorie"
 
 #: ../gui/presethandler.cpp:405
-#, fuzzy
 msgid "Player Ability"
-msgstr "Seznam &přehrávání"
+msgstr "Pokročilost hráče"
 
 #: ../gui/presethandler.cpp:407
-#, fuzzy
 msgid "Amateur"
-msgstr "Řídící sek."
+msgstr "Amatér"
 
 #: ../gui/presethandler.cpp:408
-#, fuzzy
 msgid "Professional"
-msgstr "Probíhá zpracování..."
+msgstr "Profesionál"
 
 #: ../gui/tempodialog.cpp:61
-#, fuzzy
 msgid "New tempo:"
-msgstr "Nové tempo"
+msgstr "Nové tempo:"
 
 #: ../gui/tempodialog.cpp:68
-#, fuzzy
 msgid "Tempo is fixed until the following tempo change"
-msgstr "Existující noty následující za změnou tóniny"
+msgstr "Tempo je pevně dané až do následující změny tempa"
 
 #: ../gui/tempodialog.cpp:69
 msgid "Tempo ramps to the following tempo"
-msgstr ""
+msgstr "Tempo přechází do následujícího tempa"
 
 #: ../gui/tempodialog.cpp:70
-#, fuzzy
 msgid "Tempo ramps to:"
-msgstr "Tempo   "
+msgstr "Tempo přechází do:"
 
 #: ../gui/tempodialog.cpp:107
 msgid "Time of tempo change"
@@ -9447,7 +9380,7 @@ msgstr " bpm"
 
 #: ../gui/expandablegroupbox.cpp:38
 msgid "[+]"
-msgstr ""
+msgstr "[+]"
 
 #: rc.cpp:2 rc.cpp:38 rc.cpp:126 rc.cpp:188 rc.cpp:220
 #, no-c-format
@@ -9510,9 +9443,9 @@ msgid "Edit &With"
 msgstr "Upravit &pomocí"
 
 #: rc.cpp:28
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "&Split..."
-msgstr "&Rozdělit"
+msgstr "&Rozdělit..."
 
 #: rc.cpp:30
 #, no-c-format
@@ -9837,12 +9770,12 @@ msgstr "Ztlumení všech stop kromě aktuálně vybrané"
 #: rc.cpp:285
 #, no-c-format
 msgid "Start loop or range here"
-msgstr ""
+msgstr "Zde začít opakování nebo rozsah"
 
 #: rc.cpp:288
 #, no-c-format
 msgid "End loop or range here"
-msgstr ""
+msgstr "Zde ukončit opakování nebo rozsah"
 
 #: rc.cpp:290
 #, no-c-format
@@ -9956,155 +9889,3 @@ msgstr ""
 msgid "Display time to end"
 msgstr "Zobrazit čas zbývající do konce"
 
-#, fuzzy
-#~ msgid "Advanced Event Edit"
-#~ msgstr "&Rozšířené úpravy události"
-
-#, fuzzy
-#~ msgid "Advanced Event Viewer"
-#~ msgstr "&Rozšířené úpravy události"
-
-#, fuzzy
-#~ msgid ""
-#~ "About to delete 1 audio file permanently from the hard disk.\n"
-#~ "There will be no way to recover this file.\n"
-#~ "Are you sure?"
-#~ msgstr ""
-#~ "_n: Chystáte se trvale odstranit z pevného disku 1 zvukový soubor.\n"
-#~ "Neexistuje způsob, jak jednou odstraněný soubor obnovit.\n"
-#~ "Skutečně chcete soubor odstranit?\n"
-#~ "Chystáte se trvale odstranit z pevného disku %n zvukové(ých) soubory(ů).\n"
-#~ "Neexistuje způsob, jak jednou odstraněné soubory obnovit.\n"
-#~ "Skutečně chcete soubory odstranit?"
-
-#, fuzzy
-#~ msgid "%1 on 1 track"
-#~ msgstr "Zaznamenat na tuto stopu"
-
-#, fuzzy
-#~ msgid "1 Submaster"
-#~ msgstr "Žádné řízené sekvencery"
-
-#, fuzzy
-#~ msgid "  1 event selected "
-#~ msgstr "Nebyly vybrány žádné nezvukové segmenty"
-
-#, fuzzy
-#~ msgid "%1 - 1 Segment - %2"
-#~ msgstr "%1 - Všechny segmenty - %2"
-
-#, fuzzy
-#~ msgid "%1 - Segment - Notation"
-#~ msgstr "%1 - Všechny segmenty - Notový zápis"
-
-#, fuzzy
-#~ msgid ""
-#~ "About to delete 1 audio file permanently from the hard disk.\n"
-#~ "This action cannot be undone, and there will be no way to recover this "
-#~ "file.\n"
-#~ "Are you sure?"
-#~ msgstr ""
-#~ "_n: Chystáte se trvale odstranit z pevného disku 1 zvukový soubor.\n"
-#~ "Neexistuje způsob, jak jednou odstraněný soubor obnovit.\n"
-#~ "Skutečně chcete soubor odstranit?\n"
-#~ "Chystáte se trvale odstranit z pevného disku %n zvukové(ých) soubory(ů).\n"
-#~ "Neexistuje způsob, jak jednou odstraněné soubory obnovit.\n"
-#~ "Skutečně chcete soubory odstranit?"
-
-#~ msgid "Time: %1"
-#~ msgstr "Čas: %1"
-
-#~ msgid ""
-#~ "<p>A Rosegarden composition is not infinite, and does not automatically "
-#~ "expand\n"
-#~ "if you attempt to insert events beyond the end of it.  While recording, "
-#~ "you will see a\n"
-#~ "countdown showing you how much time you have remaining.  In order to "
-#~ "extend\n"
-#~ "this, use <b>Composition -> Change Composition Duration</b></p>\n"
-#~ msgstr ""
-#~ "<p>Skladba Rosegarden není nekonečná a nerozšiřuje se automaticky,\n"
-#~ "pokud se pokoušíte vložit události za její konec.  Při záznamu uvidíte\n"
-#~ "odpočet ukazující zbývající čas.  Chcete-li tuto hodnotu rozšířit,\n"
-#~ "použijte možnost <b>Skladba -> Změnit délku skladby</b></p>\n"
-
-#~ msgid ""
-#~ "<p>The notation view shows you notes using their display duration, while "
-#~ "the\n"
-#~ "matrix allows you to edit their performance duration.</p>\n"
-#~ msgstr ""
-#~ "<p>Notový pohled ukazuje noty pomocí jejich zobrazené doby trvání,\n"
-#~ "zatímco maticový pohled vám umožňuje měnit jejich délku při provedení.</"
-#~ "p>\n"
-
-#~ msgid ""
-#~ "Tempo and Time Signature Ruler.\n"
-#~ "Double click to insert an event."
-#~ msgstr ""
-#~ "Pravítko tempa a taktového označení.\n"
-#~ "Poklepáním vložíte událost."
-
-#~ msgid "<timing has gone astray>"
-#~ msgstr "<dělení dob je nesprávné>"
-
-#~ msgid "Lilypond export options"
-#~ msgstr "Možnosti exportu do aplikace Lilypond"
-
-#~ msgid "Lilypond 1.6 or 1.8"
-#~ msgstr "Lilypond 1.6 nebo 1.8"
-
-#~ msgid "Add Te&mpo Change..."
-#~ msgstr "Přidat změnu te&mpa..."
-
-#~ msgid ""
-#~ "Spanish translation\n"
-#~ "ALSA hacking and bug fixes\n"
-#~ "multi-input MIDI recording"
-#~ msgstr ""
-#~ "Španělský překlad\n"
-#~ "ALSA hacking a opravy chyb\n"
-#~ "více vstupový MIDI záznam"
-
-#~ msgid "new splash screen photo (of Michael's rose garden)"
-#~ msgstr "nová fotografie úvodní obrazovky (Michaelovy růžové zahrady)"
-
-#~ msgid "Close this tab"
-#~ msgstr "Zavřít tuto kartu"
-
-#~ msgid "Click to select a font"
-#~ msgstr "Klepnutím vyberte písmo"
-
-#~ msgid "Preview of the selected font"
-#~ msgstr "Náhled vybraného písma"
-
-#~ msgid ""
-#~ "This is a preview of the selected font. You can change it by clicking the "
-#~ "\"Choose...\" button."
-#~ msgstr ""
-#~ "Toto je náhled vybraného písma. Můžete jej změnit klepnutím na tlačítko "
-#~ "\"Vybrat...\"."
-
-#~ msgid "Preview of the \"%1\" font"
-#~ msgstr "Náhled písma \"%1\""
-
-#~ msgid ""
-#~ "This is a preview of the \"%1\" font. You can change it by clicking the "
-#~ "\"Choose...\" button."
-#~ msgstr ""
-#~ "Toto je náhled písma \"%1\". Můžete jej změnit klepnutím na tlačítko "
-#~ "\"Vybrat...\"."
-
-#~ msgid "Segment & Instrument Parameters"
-#~ msgstr "Parametry segmentu & nástroje"
-
-#~ msgid "Pre&view Lilypond file..."
-#~ msgstr "Zobrazit &náhled souboru aplikace Lilypond..."
-
-#~ msgid "Show Se&gment and Instrument Parameters"
-#~ msgstr "Zobrazit parametry se&gmentu a nástroje"
-
-#~ msgid "%1 Pitch"
-#~ msgstr "%1 Výška tónu"
-
-#~ msgid "&Split or Join"
-#~ msgstr "Roz&dělit nebo spojit"
