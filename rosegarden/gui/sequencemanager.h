@@ -306,6 +306,8 @@ protected:
     unsigned long              m_diskSpaceKBAvail;
 
     bool                       m_lastLowLatencySwitchSent;
+
+    Rosegarden::timeT          m_lastTransportStartPosition;
 };
 
 }

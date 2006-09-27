@@ -77,7 +77,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_sequencerMapper(0),
     m_reportTimer(new QTimer(m_doc)),
     m_canReport(true),
-    m_lastLowLatencySwitchSent(false)
+    m_lastLowLatencySwitchSent(false),
+    m_lastTransportStartPosition(0)
 {
     // Replaced this with a call to cleanup() from composition mmapper ctor:
     // if done here, this removes the mmapped versions of any segments stored
@@ -250,6 +251,8 @@ SequenceManager::play()
     //
     preparePlayback();
 
+    m_lastTransportStartPosition = comp.getPosition();
+
     // Update play metronome status
     // 
     m_controlBlockMmapper->updateMetronomeData
@@ -379,10 +382,13 @@ SequenceManager::stopping()
     //
     if (m_transportStatus == STOPPED)
     {
+/*!!!
         if (m_doc->getComposition().isLooping())
             m_doc->slotSetPointerPosition(m_doc->getComposition().getLoopStart());
         else
             m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
+*/
+	m_doc->slotSetPointerPosition(m_lastTransportStartPosition);
 
         return;
     }
@@ -683,6 +689,8 @@ SequenceManager::record(bool toggled)
         }
 
     } else {
+
+	m_lastTransportStartPosition = comp.getPosition();
 
 punchin:
 

@@ -64,9 +64,9 @@ if [ -n "$update_version" ]; then
 fi
 
 echo "Tagging Subversion with tag $cvstag..."
-svn copy https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden \
+svn copy -m "Tag for release $version" \
+         https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden \
         "https://svn.sourceforge.net/svnroot/rosegarden/tags/$cvstag"
-cvs rtag "$cvstag" .
 
 echo "Bundling up..."
 cd ..
