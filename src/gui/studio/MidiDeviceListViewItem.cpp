@@ -1,0 +1,88 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+ 
+    This program is Copyright 2000-2006
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+ 
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+ 
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+ 
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+
+#include "MidiDeviceListViewItem.h"
+
+#include <klocale.h>
+#include "base/Device.h"
+#include <qlistview.h>
+#include <qstring.h>
+
+
+namespace Rosegarden
+{
+
+MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
+        QListView* parent, QString name)
+        : KListViewItem(parent, name),
+        m_deviceId(deviceId)
+{}
+
+MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
+        QListViewItem* parent, QString name,
+        bool percussion,
+        int msb, int lsb)
+        : KListViewItem(parent, name,
+                        QString(percussion ? i18n("Percussion Bank") : i18n("Bank")),
+                        QString().setNum(msb), QString().setNum(lsb)),
+        m_deviceId(deviceId)
+{}
+
+MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
+        QListViewItem* parent, QString name)
+: KListViewItem(parent, name, i18n("Key Mapping"), "", ""),
+m_deviceId(deviceId)
+{}
+
+int MidiDeviceListViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    MidiDeviceListViewItem* item = dynamic_cast<MidiDeviceListViewItem*>(i);
+    if (!item)
+        return QListViewItem::compare(i, col, ascending);
+    if (col == 0)
+        return
+            getDeviceId() > item->getDeviceId() ? 1 :
+            getDeviceId() == item->getDeviceId() ? 0 :
+            -1;
+
+    int thisVal = text(col).toInt(),
+                  otherVal = item->text(col).toInt();
+
+    if (thisVal == otherVal) {
+        if (col == 2) { // if sorting on MSB, suborder with LSB
+            return compare(i, 3, ascending);
+        } else {
+            return 0;
+        }
+    }
+
+    // 'ascending' should be ignored according to Qt docs
+    //
+    return (thisVal > otherVal) ? 1 : -1;
+
+    //!!! how to use percussion here?
+}
+
+}

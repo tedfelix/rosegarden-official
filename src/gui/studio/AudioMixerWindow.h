@@ -1,0 +1,191 @@
+
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+
+    This program is Copyright 2000-2006
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef _RG_AUDIOMIXERWINDOW_H_
+#define _RG_AUDIOMIXERWINDOW_H_
+
+#include "base/MidiProgram.h"
+#include <map>
+#include "MixerWindow.h"
+#include <qpixmap.h>
+#include <vector>
+
+
+class QWidget;
+class QVBox;
+class QPushButton;
+class QHBox;
+class QFrame;
+
+
+namespace Rosegarden
+{
+
+class SequencerMapper;
+class Rotary;
+class RosegardenGUIDoc;
+class MappedEvent;
+class Fader;
+class AudioVUMeter;
+class AudioRouteMenu;
+
+
+class AudioMixerWindow : public MixerWindow
+{
+    Q_OBJECT
+
+public:
+    AudioMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    ~AudioMixerWindow();
+
+    void updateMeters(SequencerMapper *mapper);
+    void updateMonitorMeters(SequencerMapper *mapper);
+
+public slots:
+    void slotControllerDeviceEventReceived(MappedEvent *,
+					   const void *);
+
+signals:
+    void selectPlugin(QWidget *, InstrumentId id, int index);
+
+    void play();
+    void stop();
+    void fastForwardPlayback();
+    void rewindPlayback();
+    void fastForwardPlaybackToEnd();
+    void rewindPlaybackToBeginning();
+    void record();
+    void panic();
+
+    // to be redirected to the instrument parameter box if necessary
+    void instrumentParametersChanged(InstrumentId);
+
+protected slots:
+    void slotFaderLevelChanged(float level);
+    void slotPanChanged(float value);
+    void slotInputChanged();
+    void slotOutputChanged();
+    void slotChannelsChanged();
+    void slotSoloChanged();
+    void slotMuteChanged();
+    void slotRecordChanged();
+    void slotSelectPlugin();
+    
+    // to be called if something changes in an instrument parameter box
+    void slotUpdateInstrument(InstrumentId);
+
+    void slotTrackAssignmentsChanged();
+
+    // from Plugin dialog
+    void slotPluginSelected(InstrumentId id, int index, int plugin);
+    void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
+
+    void slotSetInputCountFromAction();
+    void slotSetSubmasterCountFromAction();
+
+    void slotToggleFaders();
+    void slotToggleSynthFaders();
+    void slotToggleSubmasters();
+    void slotTogglePluginButtons();
+    void slotToggleUnassignedFaders();
+
+    void slotUpdateFaderVisibility();
+    void slotUpdateSynthFaderVisibility();
+    void slotUpdateSubmasterVisibility();
+    void slotUpdatePluginButtonVisibility();
+
+protected:
+    virtual void sendControllerRefresh();
+
+private:
+
+    void toggleNamedWidgets(bool show, const char* const);
+    
+
+    // manage the various bits of it in horizontal/vertical slices
+    // with other faders:
+
+    struct FaderRec {
+
+	FaderRec() :
+	    m_populated(false),
+	    m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
+	    m_muteButton(0), m_soloButton(0), m_recordButton(0),
+	    m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
+	{ }
+
+        void setVisible(bool);
+        void setPluginButtonsVisible(bool);
+        
+	bool m_populated;
+
+	AudioRouteMenu *m_input;
+	AudioRouteMenu *m_output;
+
+	Rotary *m_pan;
+	Fader *m_fader;
+	AudioVUMeter *m_meter;
+
+	QPushButton *m_muteButton;
+	QPushButton *m_soloButton;
+	QPushButton *m_recordButton;
+	QPushButton *m_stereoButton;
+	bool m_stereoness;
+
+	QVBox *m_pluginBox;
+	std::vector<QPushButton *> m_plugins;
+    };
+
+    QHBox *m_surroundBox;
+    QFrame *m_mainBox;
+
+    typedef std::map<InstrumentId, FaderRec> FaderMap;
+    FaderMap m_faders;
+
+    typedef std::vector<FaderRec> FaderVector;
+    FaderVector m_submasters;
+    FaderRec m_monitor;
+    FaderRec m_master;
+
+    void depopulate();
+    void populate();
+
+    bool isInstrumentAssigned(InstrumentId id);
+
+    void updateFader(int id); // instrument id if large enough, monitor if -1, master/sub otherwise
+    void updateRouteButtons(int id);
+    void updateStereoButton(int id);
+    void updatePluginButtons(int id);
+    void updateMiscButtons(int id);
+
+    QPixmap m_monoPixmap;
+    QPixmap m_stereoPixmap;
+};
+
+
+
+}
+
+#endif
