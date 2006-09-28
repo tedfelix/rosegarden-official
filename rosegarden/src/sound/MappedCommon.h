@@ -54,15 +54,15 @@ typedef enum
     Duplex
 } PortDirection;
 
+QDataStream& operator>>(QDataStream& s, MappedObjectIdList&);
+QDataStream& operator<<(QDataStream&, const MappedObjectIdList&);
+
+QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
+QDataStream& operator<<(QDataStream&, const MappedObjectPropertyList&);
+
+QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
+QDataStream& operator<<(QDataStream&, const MappedObjectValueList&);
+
 }
-
-QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectIdList&);
-QDataStream& operator<<(QDataStream&, const Rosegarden::MappedObjectIdList&);
-
-QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectPropertyList&);
-QDataStream& operator<<(QDataStream&, const Rosegarden::MappedObjectPropertyList&);
-
-QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectValueList&);
-QDataStream& operator<<(QDataStream&, const Rosegarden::MappedObjectValueList&);
 
 #endif // _MAPPEDCOMMON_H_
