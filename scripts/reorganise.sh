@@ -636,6 +636,7 @@ for hfile in $candidate_h ; do
 	sed -e 's/^[^:]*://' -e 's/[^A-Za-z: ]//g' -e 's/virtual\|public\|protected\|private//g'`; do
 	[ "$baseclass" = "KDockMainWindow" ] && baseclass=KDockWidget
 	[ "$baseclass" = "KNamedCommand" ] && baseclass=KCommand
+	[ "$baseclass" = "KProgressDialog" ] && baseclass=KProgress
 	header="`get_header_for_class $baseclass $dir`"
 	inc="$header $inc"
 	classes=" $baseclass $classes "
@@ -686,6 +687,7 @@ for hfile in $candidate_h ; do
 	fmt -1 | \
 	egrep '[A-Z].*[\*&]$' | sed 's/[\*&]$//' | sort | uniq`; do
 	[ "$declclass" = "timeT" ] && continue
+	[ "$declclass" = "MappedObjectProperty" ] && continue
 	if ! echo " $classes " | grep -q " $declclass " ; then
 	    header="`get_header_for_class $declclass $dir`"
 	    if [ -n "$header" ]; then
