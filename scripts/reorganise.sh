@@ -44,8 +44,18 @@ cd gui
 s=../src
 g=$s/gui
 #mv *.rc *.ui $g/ui/
-mv kde*.{cpp,h} ktmp*.{cpp,h} kstart*.{cpp,h} rgled.cpp qcanvas*.{cpp,h} $g/kdeext/
+#mv kde*.{cpp,h} ktmp*.{cpp,h} kstart*.{cpp,h} rgled.cpp qcanvas*.{cpp,h} $g/kdeext/
 #mv rosegarden-lilypondview rosegarden-project-package $s/helpers/
+
+mv kstartuplogo.cpp $g/kdeext/KStartupLogo.cpp
+mv kstartuplogo.h $g/kdeext/KStartupLogo.h
+mv ktmpstatusmsg.cpp $g/kdeext/KTmpStatusMsg.cpp
+mv ktmpstatusmsg.h $g/kdeext/KTmpStatusMsg.h
+mv rgled.cpp $g/kdeext/RGLed.cpp
+mv qcanvasgroupableitem.cpp $g/kdeext/QCanvasGroupableItem.cpp
+mv qcanvasgroupableitem.h $g/kdeext/QCanvasGroupableItem.h
+mv qcanvassimplesprite.cpp $g/kdeext/QCanvasSimpleSprite.cpp
+mv qcanvassimplesprite.h $g/kdeext/QCanvasSimpleSprite.h
 
 mv clefindex.h $g/general/ClefIndex.h
 mv constants.h $s/document/ConfigGroups.h
@@ -158,7 +168,7 @@ extract_class_from_cpp() {
 		push @classdata, @provisional;
 		$inclass=1;
 		$rightclass=1;
-	    } elsif (/^([a-zA-Z:]+ )?[a-zA-Z]+\:\:/) { 
+	    } elsif (/^([a-zA-Z:]+ )?[a-zA-Z]+\:\:/ and !/^Rosegarden::/) { 
 		$inclass=1;
 		@provisional=();
 	    } elsif (/^}/) {
@@ -681,7 +691,7 @@ for hfile in $candidate_h ; do
     for declclass in `\
 	cat $hfile | tr '\t' ' ' | egrep -v '^ */[/\*]' | \
 	egrep '[A-Za-z_] *[\*&]' | \
-	sed 's/ *\([\*&]\)/\1 /g' | \
+	sed 's/  *\([\*&]\)/\1 /g' | \
 	sed 's/^ *//' | \
 	sed 's/[^A-Za-z_\*&]/ /g' | \
 	fmt -1 | \
@@ -716,7 +726,14 @@ for hfile in $candidate_h ; do
 
     cfile=`dirname $hfile`/`basename $hfile .h`.cpp
 
+    add_include_if_tag_both $hfile $cfile "base/Event.h" timeT
+    add_include_if_tag_both $hfile $cfile "/qxml.h" QXml
+    add_include_if_tag_both $hfile $cfile "sound/Midi.h" MIDI_
+    add_include_if_tag_both $hfile $cfile "gui/editors/segment/TrackEditor.h" getTrackEditor
+    add_include_if_tag_both $hfile $cfile "gui/editors/segment/TrackButtons.h" getTrackButtons
+    add_include_if_tag_both $hfile $cfile "base/BaseProperties.h" BaseProperties
     add_include_if_tag_both $hfile $cfile "/klocale.h" i18n
+    add_include_if_tag_both $hfile $cfile "/kstddirs.h" KGlobal::dirs
     add_include_if_tag_both $hfile $cfile "misc/Debug.h" RG_DEBUG
     add_include_if_tag_both $hfile $cfile "misc/Strings.h" qstrtostr strtoqstr
     add_include_if_tag_both $hfile $cfile "gui/general/ClefIndex.h" TrebleClef BassClef CrotalesClef XylophoneClef GuitarClef ContrabassClef CelestaClef OldCelestaClef SopranoClef AltoClef TenorClef TwoBarClef   
@@ -767,6 +784,7 @@ cat ../gui/rosestrings.cpp | sed -e 's/#include "\([A-Z]\)/#include "base\/\1/' 
 add_includes document/MultiViewCommandHistory.cpp /kpopupmenu.h
 add_includes gui/application/RosegardenGUIApp.h sound/AudioFile.h
 add_includes gui/studio/AudioPluginManager.h AudioPlugin.h
+add_includes document/RosegardenGUIDoc.cpp gui/widgets/ProgressBar.h
 
 echo Formatting at `date`... 1>&2    
 
