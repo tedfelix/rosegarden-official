@@ -27,8 +27,6 @@
 
 #include "PeakFile.h"
 #include "AudioFile.h"
-#include "Audio.h"
-#include "Sound.h"
 #include "Profiler.h"
 
 using std::cout;

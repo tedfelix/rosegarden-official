@@ -38,6 +38,22 @@ namespace Rosegarden
 {
 
 
+// Constants related to RIFF/WAV files
+//
+const std::string AUDIO_RIFF_ID = "RIFF";
+const std::string AUDIO_WAVE_ID = "WAVE";
+const std::string AUDIO_FORMAT_ID = "fmt ";   // Always four bytes
+
+const std::string AUDIO_BWF_ID = "bext";       // BWF chunk id
+const std::string AUDIO_BWF_PEAK_ID = "levl";  // BWF peak chunk id
+
+
+const float SAMPLE_MAX_8BIT  = (float)(0xff);
+const float SAMPLE_MAX_16BIT = (float)(0xffff/2);
+const float SAMPLE_MAX_24BIT = (float)(0xffffff/2);
+
+
+
 typedef unsigned char FileByte; 
 
 class SoundFile

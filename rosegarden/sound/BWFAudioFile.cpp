@@ -19,10 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Audio.h"
 #include "BWFAudioFile.h"
 #include "RealTime.h"
-#include "Sound.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>

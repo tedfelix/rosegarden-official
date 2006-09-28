@@ -35,7 +35,6 @@
 #include "rosegardenparameterarea.h"
 
 #include "AudioFile.h"
-#include "Sound.h"
 #include "MappedEvent.h"
 #include "MappedCommon.h"
 #include "Device.h"
