@@ -7,45 +7,45 @@ cd reorganise_tmp || exit 1
 startdate=`date`
 echo Starting at $startdate... 1>&2    
 
-mkdir data
-mv chords data/chords
-mv gui/testfiles data/examples
-mv gui/fonts data/fonts
-mv gui/library data/library
-mv gui/pixmaps data/pixmaps
-mv presets data/presets
-mv gui/styles data/styles
-mkdir data/desktop
-mv gui/*.desktop data/desktop/
-mv gui/docs .
+#mkdir data
+#mv chords data/chords
+#mv gui/testfiles data/examples
+#mv gui/fonts data/fonts
+#mv gui/library data/library
+#mv gui/pixmaps data/pixmaps
+#mv presets data/presets
+#mv gui/styles data/styles
+#mkdir data/desktop
+#mv gui/*.desktop data/desktop/
+#mv gui/docs .
 
-mkdir src
-mv base src/base
-rm -rf src/base/old
-mv sound src/sound
-mv sequencer src/sequencer
+#mkdir src
+#mv base src/base
+#rm -rf src/base/old
+#mv sound src/sound
+#mv sequencer src/sequencer
 
-for x in document document/io commands gui helpers; do
-    mkdir -p src/$x
-done
-for x in audio edit event matrix notation segment studio; do
-    mkdir -p src/commands/$x
-done
-for x in application configuration dialogs editors general kdeext rulers seqmanager studio ui widgets; do
-    mkdir -p src/gui/$x
-done
-for x in eventlist matrix notation parameters segment guitar markers tempo; do
-    mkdir -p src/gui/editors/$x
-done
+#for x in document document/io commands gui helpers; do
+#    mkdir -p src/$x
+#done
+#for x in audio edit event matrix notation segment studio; do
+#    mkdir -p src/commands/$x
+#done
+#for x in application configuration dialogs editors general kdeext rulers seqmanager studio ui widgets; do
+#    mkdir -p src/gui/$x
+#done
+#for x in eventlist matrix notation parameters segment guitar markers tempo; do
+#    mkdir -p src/gui/editors/$x
+#done
 
-mkdir src/misc
+#mkdir src/misc
 
 cd gui
 s=../src
 g=$s/gui
-mv *.rc *.ui $g/ui/
+#mv *.rc *.ui $g/ui/
 mv kde*.{cpp,h} ktmp*.{cpp,h} kstart*.{cpp,h} rgled.cpp qcanvas*.{cpp,h} $g/kdeext/
-mv rosegarden-lilypondview rosegarden-project-package $s/helpers/
+#mv rosegarden-lilypondview rosegarden-project-package $s/helpers/
 
 mv clefindex.h $g/general/ClefIndex.h
 mv constants.h $s/document/ConfigGroups.h
