@@ -379,7 +379,7 @@ public:
 
     // Report a failure back to the GUI
     //
-    virtual void reportFailure(Rosegarden::MappedEvent::FailureCode code);
+    virtual void reportFailure(MappedEvent::FailureCode code);
 
 protected:
     typedef std::vector<AlsaPortDescription *> AlsaPortList;
@@ -424,7 +424,7 @@ private:
 
     // Locally convenient to control our devices
     //
-    void sendDeviceController(Rosegarden::DeviceId device,
+    void sendDeviceController(DeviceId device,
                               MidiByte byte1,
                               MidiByte byte2);
 			      
@@ -439,7 +439,7 @@ private:
 
     int                          m_inputPort;
     
-    typedef std::map<Rosegarden::DeviceId, int> DeviceIntMap;
+    typedef std::map<DeviceId, int> DeviceIntMap;
     DeviceIntMap                 m_outputPorts;
 
     int                          m_syncOutputPort;
@@ -494,7 +494,7 @@ private:
     Scavenger<RunnablePluginInstance> m_pluginScavenger;
 
     //!!! -- hoist to SoundDriver w/setter?
-    typedef std::set<Rosegarden::InstrumentId> InstrumentSet;
+    typedef std::set<InstrumentId> InstrumentSet;
     InstrumentSet m_recordingInstruments;
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;

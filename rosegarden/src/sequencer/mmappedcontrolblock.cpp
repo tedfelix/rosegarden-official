@@ -2,15 +2,15 @@
 /*
   Rosegarden-4
   A sequencer and musical notation editor.
-
+ 
   This program is Copyright 2000-2006
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
-
+ 
   The moral right of the authors to claim authorship of this work
   has been asserted.
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -27,19 +27,19 @@
 #include "rosedebug.h"
 
 ControlBlockMmapper::ControlBlockMmapper(QString fileName)
-    : m_fileName(fileName),
-      m_fd(-1),
-      m_mmappedBuffer(0),
-      m_mmappedSize(sizeof(ControlBlock)),
-      m_controlBlock(0)
+        : m_fileName(fileName),
+        m_fd( -1),
+        m_mmappedBuffer(0),
+        m_mmappedSize(sizeof(ControlBlock)),
+        m_controlBlock(0)
 {
     m_fd = ::open(m_fileName.latin1(), O_RDWR);
 
     if (m_fd < 0) {
         SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't open " << m_fileName
-                     << endl;
-        throw Rosegarden::Exception(std::string("Couldn't open ") 
-                + m_fileName.latin1());
+        << endl;
+        throw Exception(std::string("Couldn't open ")
+                        + m_fileName.latin1());
     }
 
     //
@@ -48,16 +48,16 @@ ControlBlockMmapper::ControlBlockMmapper(QString fileName)
     m_mmappedBuffer = (char*)::mmap(0, m_mmappedSize,
                                     PROT_READ, MAP_SHARED, m_fd, 0);
 
-    if (m_mmappedBuffer == (void*)-1) {
+    if (m_mmappedBuffer == (void*) - 1) {
 
         SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").
-            arg(errno).arg(strerror(errno));
+        arg(errno).arg(strerror(errno));
 
-        throw Rosegarden::Exception("mmap failed");
+        throw Exception("mmap failed");
     }
 
     SEQMAN_DEBUG << "ControlBlockMmapper : mmap size : " << m_mmappedSize
-                 << " at " << (void*)m_mmappedBuffer << endl;
+    << " at " << (void*)m_mmappedBuffer << endl;
 
     // Create new control block on file
     m_controlBlock = new (m_mmappedBuffer) ControlBlock;

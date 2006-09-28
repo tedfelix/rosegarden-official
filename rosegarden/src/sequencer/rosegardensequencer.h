@@ -23,7 +23,7 @@
 #define _ROSEGARDEN_SEQUENCER_APP_H_
  
 // RosegardenSequencerApp is the sequencer application for Rosegarden.
-// It owns a Rosegarden::Sequencer object which wraps the ALSA 
+// It owns a Sequencer object which wraps the ALSA 
 // and JACK funtionality.  At this level we deal with comms with
 // the Rosegarden GUI application, the high level marshalling of data 
 // and main event loop of the sequencer.  [rwb]
@@ -67,7 +67,7 @@ namespace Rosegarden { class MappedInstrument; class SoundDriver; }
  */
 class RosegardenSequencerApp : public KMainWindow,
                                virtual public RosegardenSequencerIface,
-			       public Rosegarden::ExternalTransport
+			       public ExternalTransport
 {
     Q_OBJECT
 
@@ -85,27 +85,27 @@ public:
 
     // Based on RealTime timestamps
     //
-    int play(const Rosegarden::RealTime &position,
-             const Rosegarden::RealTime &readAhead,
-	     const Rosegarden::RealTime &audioMix,
-	     const Rosegarden::RealTime &audioRead,
-	     const Rosegarden::RealTime &audioWrite,
+    int play(const RealTime &position,
+             const RealTime &readAhead,
+	     const RealTime &audioMix,
+	     const RealTime &audioRead,
+	     const RealTime &audioWrite,
 	     long smallFileSize);
 
     // recording
-    int record(const Rosegarden::RealTime &position,
-               const Rosegarden::RealTime &readAhead,
-	       const Rosegarden::RealTime &audioMix,
-	       const Rosegarden::RealTime &audioRead,
-	       const Rosegarden::RealTime &audioWrite,
+    int record(const RealTime &position,
+               const RealTime &readAhead,
+	       const RealTime &audioMix,
+	       const RealTime &audioRead,
+	       const RealTime &audioWrite,
 	       long smallFileSize,
                long recordMode);
 
     virtual int punchOut();
 
     // looping
-    void setLoop(const Rosegarden::RealTime &loopStart,
-                 const Rosegarden::RealTime &loopEnd);
+    void setLoop(const RealTime &loopStart,
+                 const RealTime &loopEnd);
 
 
     // Play wrapper for DCOP
@@ -174,7 +174,7 @@ public:
     // The sequencer will process the MappedComposition as soon as it
     // gets the chance.
     //
-    virtual void processSequencerSlice(Rosegarden::MappedComposition mC);
+    virtual void processSequencerSlice(MappedComposition mC);
 
     // Yeuch!
     //
@@ -191,10 +191,10 @@ public:
 
     // And now do it properly
     //
-    virtual void processMappedEvent(Rosegarden::MappedEvent mE);
+    virtual void processMappedEvent(MappedEvent mE);
 
     virtual unsigned int getDevices();
-    virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id);
+    virtual MappedDevice getMappedDevice(unsigned int id);
 
     virtual int canReconnect(int deviceType);
     virtual unsigned int addDevice(int type, unsigned int direction);
@@ -216,8 +216,8 @@ public:
 
     // Audio latencies
     //
-    virtual Rosegarden::MappedRealTime getAudioPlayLatency();
-    virtual Rosegarden::MappedRealTime getAudioRecordLatency();
+    virtual MappedRealTime getAudioPlayLatency();
+    virtual MappedRealTime getAudioRecordLatency();
 
     // Set a MappedObject 
     //
@@ -227,9 +227,9 @@ public:
 
     // Set many properties on many MappedObjects
     //
-    virtual void setMappedProperties(const Rosegarden::MappedObjectIdList &ids,
-				     const Rosegarden::MappedObjectPropertyList &properties,
-				     const Rosegarden::MappedObjectValueList &values);
+    virtual void setMappedProperties(const MappedObjectIdList &ids,
+				     const MappedObjectPropertyList &properties,
+				     const MappedObjectValueList &values);
 
     // Set a MappedObject to a string
     //
@@ -241,7 +241,7 @@ public:
     //
     virtual void setMappedPropertyList(int id,
 				       const QString &property,
-				       const Rosegarden::MappedObjectPropertyList &values);
+				       const MappedObjectPropertyList &values);
 
     // Get a MappedObject for a type
     //
@@ -338,7 +338,7 @@ public:
     void notifySequencerStatus();
 
     // Send latest slice information back to GUI for display
-    void notifyVisuals(Rosegarden::MappedComposition *mC);
+    void notifyVisuals(MappedComposition *mC);
 
     // These two methods process any pending MIDI or audio
     // and send them up to the gui for storage and display
@@ -358,20 +358,20 @@ public:
     // implementation of this call would return right away when an
     // incoming MIDI event needed to be handled.
     //
-    void sleep(const Rosegarden::RealTime &rt);
+    void sleep(const RealTime &rt);
 
     // Removes from a MappedComposition the events not matching
     // the supplied filer.
     //
-    void applyFiltering(Rosegarden::MappedComposition *mC,
-			Rosegarden::MidiFilter filter,
+    void applyFiltering(MappedComposition *mC,
+			MidiFilter filter,
 			bool filterControlDevice);
 
     // This method assigns an Instrument to each MappedEvent 
     // belongin to the MappedComposition, and sends the 
     // transformed events to the driver to be played.
     //
-    void routeEvents(Rosegarden::MappedComposition *mC, bool useSelectedTrack);
+    void routeEvents(MappedComposition *mC, bool useSelectedTrack);
 
     // Are we looping?
     //
@@ -383,14 +383,14 @@ public:
     /*
     // Audio latencies
     //
-    Rosegarden::RealTime getAudioPlaybackLatency()
+    RealTime getAudioPlaybackLatency()
         { return m_audioPlayLatency; }
-    void setAudioPlaybackLatency(const Rosegarden::RealTime &latency)
+    void setAudioPlaybackLatency(const RealTime &latency)
         { m_audioPlayLatency = latency; }
 
-    Rosegarden::RealTime getAudioRecordLatency()
+    RealTime getAudioRecordLatency()
         { return m_audioRecordLatency; }
-    void setAudioRecordLatency(const Rosegarden::RealTime &latency)
+    void setAudioRecordLatency(const RealTime &latency)
         { m_audioRecordLatency = latency; }
     */
 
@@ -407,7 +407,7 @@ public:
     // and requires sychronising with the GUI.
     
     TransportToken transportChange(TransportRequest);
-    TransportToken transportJump(TransportRequest, Rosegarden::RealTime);
+    TransportToken transportJump(TransportRequest, RealTime);
     bool isTransportSyncComplete(TransportToken token);
     TransportToken getInvalidTransportToken() const { return 0; }
 
@@ -421,21 +421,21 @@ protected:
 
     // get events whilst handling loop
     //
-    void fetchEvents(Rosegarden::MappedComposition &,
-		     const Rosegarden::RealTime &start,
-		     const Rosegarden::RealTime &end,
+    void fetchEvents(MappedComposition &,
+		     const RealTime &start,
+		     const RealTime &end,
 		     bool firstFetch);
 
     // just get a slice of events between markers
     //
-    void getSlice(Rosegarden::MappedComposition &,
-		  const Rosegarden::RealTime &start,
-		  const Rosegarden::RealTime &end,
+    void getSlice(MappedComposition &,
+		  const RealTime &start,
+		  const RealTime &end,
 		  bool firstFetch);
 
     // adjust event times according to relative instrument latencies
     //
-    void applyLatencyCompensation(Rosegarden::MappedComposition &);
+    void applyLatencyCompensation(MappedComposition &);
 
     // mmap-related stuff
     MmappedSegment* mmapSegment(const QString&);
@@ -449,17 +449,17 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    Rosegarden::SoundDriver *m_driver;
+    SoundDriver *m_driver;
     TransportStatus m_transportStatus;
 
     // Position pointer
-    Rosegarden::RealTime m_songPosition;
-    Rosegarden::RealTime m_lastFetchSongPosition;
+    RealTime m_songPosition;
+    RealTime m_lastFetchSongPosition;
 
-    Rosegarden::RealTime m_readAhead;
-    Rosegarden::RealTime m_audioMix;
-    Rosegarden::RealTime m_audioRead;
-    Rosegarden::RealTime m_audioWrite;
+    RealTime m_readAhead;
+    RealTime m_audioMix;
+    RealTime m_audioRead;
+    RealTime m_audioWrite;
     int m_smallFileSize;
 
     /*
@@ -471,27 +471,27 @@ protected:
     // ALSA and JACK we need to use these additional values
     // to help time-keeping.
     //
-    Rosegarden::RealTime m_audioPlayLatency;
-    Rosegarden::RealTime m_audioRecordLatency;
+    RealTime m_audioPlayLatency;
+    RealTime m_audioRecordLatency;
 
     */
 
 
-    Rosegarden::RealTime m_loopStart;
-    Rosegarden::RealTime m_loopEnd;
+    RealTime m_loopStart;
+    RealTime m_loopEnd;
 
-    std::vector<Rosegarden::MappedInstrument*> m_instruments;
+    std::vector<MappedInstrument*> m_instruments;
 
     // MappedStudio holds all of our session-persistent information -
     // sliders and what have you.  It's also streamable over DCOP
     // so you can reconstruct it at either end of the link for 
     // presentation, storage etc.
     //
-    Rosegarden::MappedStudio       *m_studio;
+    MappedStudio       *m_studio;
 
     // Slice revert storage
     //
-    Rosegarden::RealTime            m_oldSliceSize;
+    RealTime            m_oldSliceSize;
     QTimer                         *m_sliceTimer;
 
     // Timer to check for new clients
@@ -503,13 +503,13 @@ protected:
     QString                         m_segmentFilesPath;
     MmappedSegmentsMetaIterator::mmappedsegments    m_mmappedSegments;
     MmappedSegmentsMetaIterator*    m_metaIterator;
-    Rosegarden::RealTime            m_lastStartTime;
+    RealTime            m_lastStartTime;
 
-    Rosegarden::MappedComposition   m_mC;
+    MappedComposition   m_mC;
     ControlBlockMmapper            *m_controlBlockMmapper;
     SequencerMmapper                m_sequencerMapper;
 
-    typedef std::pair<TransportRequest, Rosegarden::RealTime> TransportPair;
+    typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair>       m_transportRequests;
     TransportToken                  m_transportToken;
 

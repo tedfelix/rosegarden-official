@@ -2,15 +2,15 @@
 /*
   Rosegarden-4
   A sequencer and musical notation editor.
-
+ 
   This program is Copyright 2000-2006
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
-
+ 
   The moral right of the authors to claim authorship of this work
   has been asserted.
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -55,34 +55,33 @@
 //
 //
 RosegardenSequencerApp::RosegardenSequencerApp() :
-    DCOPObject("RosegardenSequencerIface"),
-    m_driver(0),
-    m_transportStatus(STOPPED),
-    m_songPosition(0, 0),
-    m_lastFetchSongPosition(0, 0),
-    m_readAhead(0, 80000000),         // default value
-    m_audioMix(0, 60000000),         // default value
-    m_audioRead(0, 100000000),         // default value
-    m_audioWrite(0, 200000000),         // default value
-    m_smallFileSize(128),
-    m_loopStart(0, 0),
-    m_loopEnd(0, 0),
-    m_studio(new Rosegarden::MappedStudio()),
-    m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").last()),
-    m_metaIterator(0),
-    m_controlBlockMmapper(0),
-    m_transportToken(1),
-    m_isEndOfCompReached(false)
+        DCOPObject("RosegardenSequencerIface"),
+        m_driver(0),
+        m_transportStatus(STOPPED),
+        m_songPosition(0, 0),
+        m_lastFetchSongPosition(0, 0),
+        m_readAhead(0, 80000000),          // default value
+        m_audioMix(0, 60000000),          // default value
+        m_audioRead(0, 100000000),          // default value
+        m_audioWrite(0, 200000000),          // default value
+        m_smallFileSize(128),
+        m_loopStart(0, 0),
+        m_loopEnd(0, 0),
+        m_studio(new MappedStudio()),
+        m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").last()),
+        m_metaIterator(0),
+        m_controlBlockMmapper(0),
+        m_transportToken(1),
+        m_isEndOfCompReached(false)
 {
     SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
 
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
 
-    if (realAppId.isNull())
-    {
+    if (realAppId.isNull()) {
         SEQUENCER_DEBUG << "RosegardenSequencer cannot register "
-                        << "with DCOP server" << endl;
+        << "with DCOP server" << endl;
         close();
     }
 
@@ -90,22 +89,21 @@ RosegardenSequencerApp::RosegardenSequencerApp() :
     //
     initialiseStudio();
 
-    // Creating this object also initialises the Rosegarden ALSA/JACK 
+    // Creating this object also initialises the Rosegarden ALSA/JACK
     // interface for both playback and recording. MappedStudio
     // aduio faders are also created.
     //
-    m_driver = Rosegarden::SoundDriverFactory::createDriver(m_studio);
+    m_driver = SoundDriverFactory::createDriver(m_studio);
     m_studio->setSoundDriver(m_driver);
 
-    if (!m_driver)
-    {
+    if (!m_driver) {
         SEQUENCER_DEBUG << "RosegardenSequencer object could not be allocated"
-                        << endl;
+        << endl;
         close();
     }
 
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
-				     m_smallFileSize);
+                                  m_smallFileSize);
 
     m_driver->setSequencerDataBlock(m_sequencerMapper.getSequencerDataBlock());
     m_driver->setExternalTransportControl(this);
@@ -162,23 +160,23 @@ RosegardenSequencerApp::stop()
 
     cleanupMmapData();
 
-    Rosegarden::Profiles::getInstance()->dump();
-    
+    Profiles::getInstance()->dump();
+
     incrementTransportToken();
 }
 
 // Get a slice of events from the GUI
 //
 void
-RosegardenSequencerApp::fetchEvents(Rosegarden::MappedComposition &composition,
-				    const Rosegarden::RealTime &start,
-                                    const Rosegarden::RealTime &end,
+RosegardenSequencerApp::fetchEvents(MappedComposition &composition,
+                                    const RealTime &start,
+                                    const RealTime &end,
                                     bool firstFetch)
 {
     // Always return nothing if we're stopped
     //
     if ( m_transportStatus == STOPPED || m_transportStatus == STOPPING )
-        return;
+        return ;
 
     // If we're looping then we should get as much of the rest of
     // the right hand of the loop as possible and also events from
@@ -187,88 +185,89 @@ RosegardenSequencerApp::fetchEvents(Rosegarden::MappedComposition &composition,
     // finished with them.
     //
     //
-/*
-    if (isLooping() == true && end >= m_loopEnd)
-    {
-        Rosegarden::RealTime loopOverlap = end - m_loopEnd;
-
-        Rosegarden::MappedComposition *endLoop = 0;
-
-	if (m_loopEnd > start) {
-	    endLoop = getSlice(start, m_loopEnd, firstFetch);
-	}
-
-	if (loopOverlap > Rosegarden::RealTime::zeroTime) { 
-
-	    Rosegarden::MappedComposition *beginLoop =
-		getSlice(m_loopStart, m_loopStart + loopOverlap, true);
-
-	    // move the start time of the begin section one loop width
-	    // into the future and ensure that we keep the clocks level
-	    // until this time has passed
-	    //
-	    beginLoop->moveStartTime(m_loopEnd - m_loopStart);
-
-	    if (endLoop) {
-		(*endLoop) = (*endLoop) + (*beginLoop);
-		delete beginLoop;
-	    } else {
-		endLoop = beginLoop;
-	    }
-	}
-
-	if (endLoop) return endLoop;
-	else return new Rosegarden::MappedComposition();
-    }
-    else
-*/
+    /*
+        if (isLooping() == true && end >= m_loopEnd)
+        {
+            RealTime loopOverlap = end - m_loopEnd;
+     
+            MappedComposition *endLoop = 0;
+     
+    	if (m_loopEnd > start) {
+    	    endLoop = getSlice(start, m_loopEnd, firstFetch);
+    	}
+     
+    	if (loopOverlap > RealTime::zeroTime) { 
+     
+    	    MappedComposition *beginLoop =
+    		getSlice(m_loopStart, m_loopStart + loopOverlap, true);
+     
+    	    // move the start time of the begin section one loop width
+    	    // into the future and ensure that we keep the clocks level
+    	    // until this time has passed
+    	    //
+    	    beginLoop->moveStartTime(m_loopEnd - m_loopStart);
+     
+    	    if (endLoop) {
+    		(*endLoop) = (*endLoop) + (*beginLoop);
+    		delete beginLoop;
+    	    } else {
+    		endLoop = beginLoop;
+    	    }
+    	}
+     
+    	if (endLoop) return endLoop;
+    	else return new MappedComposition();
+        }
+        else
+    */
     getSlice(composition, start, end, firstFetch);
     applyLatencyCompensation(composition);
 }
 
 
 void
-RosegardenSequencerApp::getSlice(Rosegarden::MappedComposition &composition,
-				 const Rosegarden::RealTime &start,
-                                 const Rosegarden::RealTime &end,
+RosegardenSequencerApp::getSlice(MappedComposition &composition,
+                                 const RealTime &start,
+                                 const RealTime &end,
                                  bool firstFetch)
 {
-//    SEQUENCER_DEBUG << "RosegardenSequencerApp::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
+    //    SEQUENCER_DEBUG << "RosegardenSequencerApp::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
 
     if (firstFetch || (start < m_lastStartTime)) {
-	SEQUENCER_DEBUG << "[calling jumpToTime on start]" << endl;
+        SEQUENCER_DEBUG << "[calling jumpToTime on start]" << endl;
         m_metaIterator->jumpToTime(start);
     }
 
     (void)m_metaIterator->fillCompositionWithEventsUntil
-	(firstFetch, &composition, start, end);
+    (firstFetch, &composition, start, end);
 
-//     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
-// playing stops right after it starts.
+    //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
+    // playing stops right after it starts.
 
     m_lastStartTime = start;
 }
 
 
 void
-RosegardenSequencerApp::applyLatencyCompensation(Rosegarden::MappedComposition &composition)
+RosegardenSequencerApp::applyLatencyCompensation(MappedComposition &composition)
 {
-    Rosegarden::RealTime maxLatency = m_driver->getMaximumPlayLatency();
-    if (maxLatency == Rosegarden::RealTime::zeroTime) return;
+    RealTime maxLatency = m_driver->getMaximumPlayLatency();
+    if (maxLatency == RealTime::zeroTime)
+        return ;
 
-    for (Rosegarden::MappedComposition::iterator i = composition.begin();
-	 i != composition.end(); ++i) {
+    for (MappedComposition::iterator i = composition.begin();
+            i != composition.end(); ++i) {
 
-	Rosegarden::RealTime instrumentLatency =
-	    m_driver->getInstrumentPlayLatency((*i)->getInstrument());
+        RealTime instrumentLatency =
+            m_driver->getInstrumentPlayLatency((*i)->getInstrument());
 
-//	std::cerr << "RosegardenSequencerApp::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency << std::endl;
+        //	std::cerr << "RosegardenSequencerApp::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency << std::endl;
 
-	(*i)->setEventTime((*i)->getEventTime() +
-			   maxLatency - instrumentLatency);
+        (*i)->setEventTime((*i)->getEventTime() +
+                           maxLatency - instrumentLatency);
     }
 }
-	     
+
 
 // The first fetch of events from the core/ and initialisation for
 // this session of playback.  We fetch up to m_readAhead ahead at
@@ -293,12 +292,12 @@ RosegardenSequencerApp::startPlaying()
     //
     m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
 
-    std::vector<Rosegarden::MappedEvent> audioEvents;
+    std::vector<MappedEvent> audioEvents;
     m_metaIterator->getAudioEvents(audioEvents);
     m_driver->initialiseAudioQueue(audioEvents);
 
-//    SEQUENCER_DEBUG << "RosegardenSequencerApp::startPlaying: pausing to simulate high-load environment" << endl;
-//    ::sleep(2);
+    //    SEQUENCER_DEBUG << "RosegardenSequencerApp::startPlaying: pausing to simulate high-load environment" << endl;
+    //    ::sleep(2);
 
     // and only now do we signal to start the clock
     //
@@ -312,16 +311,16 @@ RosegardenSequencerApp::startPlaying()
 bool
 RosegardenSequencerApp::keepPlaying()
 {
-    Rosegarden::Profiler profiler("RosegardenSequencerApp::keepPlaying");
+    Profiler profiler("RosegardenSequencerApp::keepPlaying");
 
     m_mC.clear();
 
-    Rosegarden::RealTime fetchEnd = m_songPosition + m_readAhead;
+    RealTime fetchEnd = m_songPosition + m_readAhead;
     if (isLooping() && fetchEnd >= m_loopEnd) {
-	fetchEnd = m_loopEnd - Rosegarden::RealTime(0, 1);
+        fetchEnd = m_loopEnd - RealTime(0, 1);
     }
     if (fetchEnd > m_lastFetchSongPosition) {
-	fetchEvents(m_mC, m_lastFetchSongPosition, fetchEnd, false);
+        fetchEvents(m_mC, m_lastFetchSongPosition, fetchEnd, false);
     }
 
     // Again, process whether we need to or not to keep
@@ -330,9 +329,9 @@ RosegardenSequencerApp::keepPlaying()
     m_driver->processEventsOut(m_mC, m_lastFetchSongPosition, fetchEnd);
 
     if (fetchEnd > m_lastFetchSongPosition) {
-	m_lastFetchSongPosition = fetchEnd;
+        m_lastFetchSongPosition = fetchEnd;
     }
-    
+
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
@@ -341,58 +340,55 @@ RosegardenSequencerApp::keepPlaying()
 void
 RosegardenSequencerApp::updateClocks()
 {
-    Rosegarden::Profiler profiler("RosegardenSequencerApp::updateClocks");
+    Profiler profiler("RosegardenSequencerApp::updateClocks");
 
     m_driver->runTasks();
 
     checkExternalTransport();
 
-//SEQUENCER_DEBUG << "RosegardenSequencerApp::updateClocks" << endl; 
+    //SEQUENCER_DEBUG << "RosegardenSequencerApp::updateClocks" << endl;
 
     // If we're not playing etc. then that's all we need to do
     //
     if (m_transportStatus != PLAYING &&
-        m_transportStatus != RECORDING)
-        return;
+            m_transportStatus != RECORDING)
+        return ;
 
-    Rosegarden::RealTime newPosition = m_driver->getSequencerTime();
+    RealTime newPosition = m_driver->getSequencerTime();
 
     // Go around the loop if we've reached the end
     //
-    if (isLooping() && newPosition >= m_loopEnd)
-    {
-	Rosegarden::RealTime oldPosition = m_songPosition;
+    if (isLooping() && newPosition >= m_loopEnd) {
+        RealTime oldPosition = m_songPosition;
 
         // Remove the loop width from the song position and send
         // this position to the GUI
         //
         newPosition = m_songPosition = m_lastFetchSongPosition = m_loopStart;
 
-	m_driver->stopClocks();
+        m_driver->stopClocks();
 
         // Reset playback using this jump
         //
         m_driver->resetPlayback(oldPosition, m_songPosition);
 
-	m_mC.clear();
-	fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+        m_mC.clear();
+        fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
 
-	m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
+        m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
 
-	m_driver->startClocks();
-    }
-    else
-    {
+        m_driver->startClocks();
+    } else {
         m_songPosition = newPosition;
 
         if (m_songPosition <= m_driver->getStartPosition())
             newPosition = m_driver->getStartPosition();
     }
 
-    Rosegarden::RealTime maxLatency = m_driver->getMaximumPlayLatency();
-    if (maxLatency != Rosegarden::RealTime::zeroTime) {
-//	std::cerr << "RosegardenSequencerApp::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency << std::endl;
-	newPosition = newPosition - maxLatency;
+    RealTime maxLatency = m_driver->getMaximumPlayLatency();
+    if (maxLatency != RealTime::zeroTime) {
+        //	std::cerr << "RosegardenSequencerApp::updateClocks: latency compensation moving " << newPosition << " to " << newPosition - maxLatency << std::endl;
+        newPosition = newPosition - maxLatency;
     }
 
     // Remap the position pointer
@@ -412,11 +408,10 @@ RosegardenSequencerApp::notifySequencerStatus()
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "notifySequencerStatus(int)",
-                                  data)) 
-    {
+                                  data)) {
         SEQUENCER_DEBUG << "RosegardenSequencer::notifySequencerStatus()"
-                        << " - can't send to RosegardenGUI client"
-                        << endl;
+        << " - can't send to RosegardenGUI client"
+        << endl;
 
         // Stop the sequencer
         //
@@ -425,13 +420,13 @@ RosegardenSequencerApp::notifySequencerStatus()
 }
 
 void
-RosegardenSequencerApp::sleep(const Rosegarden::RealTime &rt)
+RosegardenSequencerApp::sleep(const RealTime &rt)
 {
     m_driver->sleep(rt);
 }
 
 
-// Sets the Sequencer object and this object to the new time 
+// Sets the Sequencer object and this object to the new time
 // from where playback can continue.
 //
 void
@@ -440,43 +435,43 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
     SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo(" << posSec << ", " << posNsec << ")\n";
 
     if (posSec < 0 && posNsec < 0)
-        return;
+        return ;
 
     m_driver->stopClocks();
 
-    Rosegarden::RealTime oldPosition = m_songPosition;
+    RealTime oldPosition = m_songPosition;
 
     m_songPosition = m_lastFetchSongPosition =
-	Rosegarden::RealTime(posSec, posNsec);
+                         RealTime(posSec, posNsec);
 
     if (m_sequencerMapper.getSequencerDataBlock()) {
-	m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
-	    (m_songPosition);
+        m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
+        (m_songPosition);
     }
 
     m_driver->resetPlayback(oldPosition, m_songPosition);
 
     if (m_driver->isPlaying()) {
-    
-	// Now prebuffer as in startPlaying:
 
-	m_mC.clear();
-	fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+        // Now prebuffer as in startPlaying:
 
-	// process whether we need to or not as this also processes
-	// the audio queue for us
-	//
-	m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
+        m_mC.clear();
+        fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+
+        // process whether we need to or not as this also processes
+        // the audio queue for us
+        //
+        m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
     }
-    
+
     incrementTransportToken();
 
-//    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
-//    ::sleep(1);
+    //    SEQUENCER_DEBUG << "RosegardenSequencerApp::jumpTo: pausing to simulate high-load environment" << endl;
+    //    ::sleep(1);
 
     m_driver->startClocks();
 
-    return;
+    return ;
 }
 
 // Send the last recorded MIDI block
@@ -484,9 +479,10 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
 void
 RosegardenSequencerApp::processRecordedMidi()
 {
-    Rosegarden::MappedComposition *mC = m_driver->getMappedComposition();
+    MappedComposition *mC = m_driver->getMappedComposition();
 
-    if (mC->empty() || !m_controlBlockMmapper) return;
+    if (mC->empty() || !m_controlBlockMmapper)
+        return ;
 
     applyFiltering(mC, m_controlBlockMmapper->getRecordFilter(), false);
     m_sequencerMapper.updateRecordingBuffer(mC);
@@ -498,23 +494,23 @@ RosegardenSequencerApp::processRecordedMidi()
 }
 
 void
-RosegardenSequencerApp::routeEvents(Rosegarden::MappedComposition *mC, bool useSelectedTrack)
+RosegardenSequencerApp::routeEvents(MappedComposition *mC, bool useSelectedTrack)
 {
     InstrumentId instrumentId;
-           
-    if(useSelectedTrack) {
+
+    if (useSelectedTrack) {
         instrumentId = m_controlBlockMmapper->getInstrumentForTrack
-            (m_controlBlockMmapper->getSelectedTrack());
-        for (Rosegarden::MappedComposition::iterator i = mC->begin();
-            i != mC->end(); ++i) {
-        	(*i)->setInstrument(instrumentId);
-	}
+                       (m_controlBlockMmapper->getSelectedTrack());
+        for (MappedComposition::iterator i = mC->begin();
+                i != mC->end(); ++i) {
+            (*i)->setInstrument(instrumentId);
+        }
     } else {
-        for (Rosegarden::MappedComposition::iterator i = mC->begin();
-            i != mC->end(); ++i) {
+        for (MappedComposition::iterator i = mC->begin();
+                i != mC->end(); ++i) {
             instrumentId = m_controlBlockMmapper->getInstrumentForEvent
-                ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
-                (*i)->setInstrument(instrumentId);
+                           ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
+            (*i)->setInstrument(instrumentId);
         }
     }
     m_driver->processEventsOut(*mC);
@@ -539,47 +535,47 @@ RosegardenSequencerApp::processAsynchronousEvents()
 {
     if (!m_controlBlockMmapper) {
 
-	// If the control block mmapper doesn't exist, we'll just
-	// return here.  But we want to ensure we don't check again
-	// immediately, because we're probably waiting for the GUI to
-	// start up.
+        // If the control block mmapper doesn't exist, we'll just
+        // return here.  But we want to ensure we don't check again
+        // immediately, because we're probably waiting for the GUI to
+        // start up.
 
-	static bool lastChecked = false;
-	static struct timeval lastCheckedAt;
+        static bool lastChecked = false;
+        static struct timeval lastCheckedAt;
 
-	struct timeval tv;
-	(void)gettimeofday(&tv, 0);
+        struct timeval tv;
+        (void)gettimeofday(&tv, 0);
 
-	if (lastChecked &&
-	    tv.tv_sec == lastCheckedAt.tv_sec) {
-	    lastCheckedAt = tv;
-	    return;
-	}
+        if (lastChecked &&
+                tv.tv_sec == lastCheckedAt.tv_sec) {
+            lastCheckedAt = tv;
+            return ;
+        }
 
-	lastChecked = true;
-	lastCheckedAt = tv;
+        lastChecked = true;
+        lastCheckedAt = tv;
 
-	try {
-	    m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").last()
-                                                            + "/rosegarden_control_block");
-	} catch (Rosegarden::Exception e) {
-	    // Assume that the control block simply hasn't been
-	    // created yet because the GUI's still starting up.
-	    // If there's a real problem with the mmapper, it
-	    // will show up in play() instead.
-	    return;
-	}
-	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
+        try {
+            m_controlBlockMmapper = new ControlBlockMmapper(KGlobal::dirs()->resourceDirs("tmp").last()
+                                    + "/rosegarden_control_block");
+        } catch (Exception e) {
+            // Assume that the control block simply hasn't been
+            // created yet because the GUI's still starting up.
+            // If there's a real problem with the mmapper, it
+            // will show up in play() instead.
+            return ;
+        }
+        m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
-    Rosegarden::MappedComposition *mC = m_driver->getMappedComposition();
+    MappedComposition *mC = m_driver->getMappedComposition();
 
     if (mC->empty()) {
-	m_driver->processPending();
-	return;
+        m_driver->processPending();
+        return ;
     }
 
-//    std::cerr << "processAsynchronousEvents: have " << mC->size() << " events" << std::endl;
+    //    std::cerr << "processAsynchronousEvents: have " << mC->size() << " events" << std::endl;
 
     QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
@@ -590,14 +586,13 @@ RosegardenSequencerApp::processAsynchronousEvents()
         routeEvents(mC, true);
     }
 
-//    std::cerr << "processAsynchronousEvents: sent " << mC->size() << " events" << std::endl;
+    //    std::cerr << "processAsynchronousEvents: sent " << mC->size() << " events" << std::endl;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                 ROSEGARDEN_GUI_IFACE_NAME,
-                                 "processAsynchronousMidi(Rosegarden::MappedComposition)", data))
-    {
+                                  ROSEGARDEN_GUI_IFACE_NAME,
+                                  "processAsynchronousMidi(MappedComposition)", data)) {
         SEQUENCER_DEBUG << "RosegardenSequencer::processAsynchronousEvents() - "
-                        << "can't call RosegardenGUI client" << endl;
+        << "can't call RosegardenGUI client" << endl;
 
         // Stop the sequencer so we can see if we can try again later
         //
@@ -612,31 +607,31 @@ RosegardenSequencerApp::processAsynchronousEvents()
 
 
 void
-RosegardenSequencerApp::applyFiltering(Rosegarden::MappedComposition *mC,
-				       Rosegarden::MidiFilter filter,
-				       bool filterControlDevice)
+RosegardenSequencerApp::applyFiltering(MappedComposition *mC,
+                                       MidiFilter filter,
+                                       bool filterControlDevice)
 {
-    for (Rosegarden::MappedComposition::iterator i = mC->begin();
-	 i != mC->end(); ) { // increment in loop
-	Rosegarden::MappedComposition::iterator j = i;
-	++j;
-	if (((*i)->getType() & filter) ||
-	    (filterControlDevice && ((*i)->getRecordedDevice() ==
-				     Rosegarden::Device::CONTROL_DEVICE))) {
-	    mC->erase(i);
-	}
-	i = j;
+    for (MappedComposition::iterator i = mC->begin();
+            i != mC->end(); ) { // increment in loop
+        MappedComposition::iterator j = i;
+        ++j;
+        if (((*i)->getType() & filter) ||
+                (filterControlDevice && ((*i)->getRecordedDevice() ==
+                                         Device::CONTROL_DEVICE))) {
+            mC->erase(i);
+        }
+        i = j;
     }
-}    
+}
 
 
 int
-RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
-                               const Rosegarden::RealTime &readAhead,
-                               const Rosegarden::RealTime &audioMix,
-                               const Rosegarden::RealTime &audioRead,
-                               const Rosegarden::RealTime &audioWrite,
-			       long smallFileSize,
+RosegardenSequencerApp::record(const RealTime &time,
+                               const RealTime &readAhead,
+                               const RealTime &audioMix,
+                               const RealTime &audioRead,
+                               const RealTime &audioWrite,
+                               long smallFileSize,
                                long recordMode)
 {
     TransportStatus localRecordMode = (TransportStatus) recordMode;
@@ -646,108 +641,105 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     // punch in recording
     if (m_transportStatus == PLAYING) {
         if (localRecordMode == STARTING_TO_RECORD) {
-	    SEQUENCER_DEBUG << "RosegardenSequencerApp::record: punching in" << endl;
-	    localRecordMode = RECORDING; // no need to start playback
-	}
+            SEQUENCER_DEBUG << "RosegardenSequencerApp::record: punching in" << endl;
+            localRecordMode = RECORDING; // no need to start playback
+        }
     }
 
     // For audio recording we need to retrieve audio
     // file names from the GUI
     //
     if (localRecordMode == STARTING_TO_RECORD ||
-	localRecordMode == RECORDING)
-    {
+            localRecordMode == RECORDING) {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
-                        << " - starting to record" << endl;
+        << " - starting to record" << endl;
 
-	QValueVector<Rosegarden::InstrumentId> armedInstruments;
-	QValueVector<QString> audioFileNames;
+        QValueVector<InstrumentId> armedInstruments;
+        QValueVector<QString> audioFileNames;
 
-	{
-	    QByteArray data, replyData;
-	    QCString replyType;
-	    QDataStream arg(data, IO_WriteOnly);
-	    
-	    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-					  ROSEGARDEN_GUI_IFACE_NAME,
-					  "getArmedInstruments()",
-					  data, replyType, replyData, true)) {
-		SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-				<< " - can't call RosegardenGUI client for getArmedInstruments"
-				<< endl;
-	    }
+        {
+            QByteArray data, replyData;
+            QCString replyType;
+            QDataStream arg(data, IO_WriteOnly);
 
-	    QDataStream reply(replyData, IO_ReadOnly);
-	    if (replyType == "QValueVector<Rosegarden::InstrumentId>") {
-		reply >> armedInstruments;
-	    } else {
-		SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
-				<< "unrecognised type returned for getArmedInstruments" << endl;
-	    }
-	}
+            if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                          ROSEGARDEN_GUI_IFACE_NAME,
+                                          "getArmedInstruments()",
+                                          data, replyType, replyData, true)) {
+                SEQUENCER_DEBUG << "RosegardenSequencer::record()"
+                << " - can't call RosegardenGUI client for getArmedInstruments"
+                << endl;
+            }
 
-	QValueVector<Rosegarden::InstrumentId> audioInstruments;
+            QDataStream reply(replyData, IO_ReadOnly);
+            if (replyType == "QValueVector<InstrumentId>") {
+                reply >> armedInstruments;
+            } else {
+                SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
+                << "unrecognised type returned for getArmedInstruments" << endl;
+            }
+        }
 
-	for (unsigned int i = 0; i < armedInstruments.size(); ++i) {
-	    if (armedInstruments[i] >= Rosegarden::AudioInstrumentBase &&
-		armedInstruments[i] <  Rosegarden::MidiInstrumentBase) {
-		audioInstruments.push_back(armedInstruments[i]);
-	    }
-	}
+        QValueVector<InstrumentId> audioInstruments;
 
-	if (audioInstruments.size() > 0) {
-	    
-	    QByteArray data, replyData;
-	    QCString replyType;
-	    QDataStream arg(data, IO_WriteOnly);
-	    
-	    arg << audioInstruments;
+        for (unsigned int i = 0; i < armedInstruments.size(); ++i) {
+            if (armedInstruments[i] >= AudioInstrumentBase &&
+                    armedInstruments[i] < MidiInstrumentBase) {
+                audioInstruments.push_back(armedInstruments[i]);
+            }
+        }
 
-	    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-					  ROSEGARDEN_GUI_IFACE_NAME,
-					  "createRecordAudioFiles(QValueVector<Rosegarden::InstrumentId>)",
-					  data, replyType, replyData, true)) {
-		SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-				<< " - can't call RosegardenGUI client for createNewAudioFiles"
-				<< endl;
-	    }
+        if (audioInstruments.size() > 0) {
 
-	    QDataStream reply(replyData, IO_ReadOnly);
-	    if (replyType == "QValueVector<QString>") {
-		reply >> audioFileNames;
-	    } else {
-		SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
-				<< "unrecognised type returned for createNewAudioFiles" << endl;
-	    }
+            QByteArray data, replyData;
+            QCString replyType;
+            QDataStream arg(data, IO_WriteOnly);
 
-	    if (audioFileNames.size() != audioInstruments.size()) {
-		std::cerr << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")" << std::endl;
-		stop();
-		return 0;
-	    }
-	}
+            arg << audioInstruments;
 
-	std::vector<Rosegarden::InstrumentId> armedInstrumentsVec;
-	std::vector<QString> audioFileNamesVec;
-	for (int i = 0; i < armedInstruments.size(); ++i) {
-	    armedInstrumentsVec.push_back(armedInstruments[i]);
-	}
-	for (int i = 0; i < audioFileNames.size(); ++i) {
-	    audioFileNamesVec.push_back(audioFileNames[i]);
-	}
+            if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                          ROSEGARDEN_GUI_IFACE_NAME,
+                                          "createRecordAudioFiles(QValueVector<InstrumentId>)",
+                                          data, replyType, replyData, true)) {
+                SEQUENCER_DEBUG << "RosegardenSequencer::record()"
+                << " - can't call RosegardenGUI client for createNewAudioFiles"
+                << endl;
+            }
+
+            QDataStream reply(replyData, IO_ReadOnly);
+            if (replyType == "QValueVector<QString>") {
+                reply >> audioFileNames;
+            } else {
+                SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
+                << "unrecognised type returned for createNewAudioFiles" << endl;
+            }
+
+            if (audioFileNames.size() != audioInstruments.size()) {
+                std::cerr << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")" << std::endl;
+                stop();
+                return 0;
+            }
+        }
+
+        std::vector<InstrumentId> armedInstrumentsVec;
+        std::vector<QString> audioFileNamesVec;
+        for (int i = 0; i < armedInstruments.size(); ++i) {
+            armedInstrumentsVec.push_back(armedInstruments[i]);
+        }
+        for (int i = 0; i < audioFileNames.size(); ++i) {
+            audioFileNamesVec.push_back(audioFileNames[i]);
+        }
 
         // Get the Sequencer to prepare itself for recording - if
         // this fails we stop.
         //
-        if (m_driver->record(Rosegarden::RECORD_ON,
-			     &armedInstrumentsVec,
-			     &audioFileNamesVec) == false) {
+        if (m_driver->record(RECORD_ON,
+                             &armedInstrumentsVec,
+                             &audioFileNamesVec) == false) {
             stop();
             return 0;
         }
-    }
-    else
-    {
+    } else {
         // unrecognised type - return a problem
         return 0;
     }
@@ -758,14 +750,14 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     m_transportStatus = localRecordMode;
 
     if (localRecordMode == RECORDING) { // punch in
-	return 1;
+        return 1;
     } else {
 
-	// Ensure that playback is initialised
-	//
-	m_driver->initialisePlayback(m_songPosition);
+        // Ensure that playback is initialised
+        //
+        m_driver->initialisePlayback(m_songPosition);
 
-	return play(time, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
+        return play(time, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
     }
 }
 
@@ -773,26 +765,26 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 // basis of our first fetch of events from the GUI core.  Assuming
 // this works we set our internal state to PLAYING and go ahead
 // and play the piece until we get a signal to stop.
-// 
+//
 // DCOP wants us to use an int as a return type instead of a bool.
 //
 int
-RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
-                             const Rosegarden::RealTime &readAhead,
-                             const Rosegarden::RealTime &audioMix,
-                             const Rosegarden::RealTime &audioRead,
-                             const Rosegarden::RealTime &audioWrite,
-			     long smallFileSize)
+RosegardenSequencerApp::play(const RealTime &time,
+                             const RealTime &readAhead,
+                             const RealTime &audioMix,
+                             const RealTime &audioRead,
+                             const RealTime &audioWrite,
+                             long smallFileSize)
 {
     if (m_transportStatus == PLAYING ||
-	m_transportStatus == STARTING_TO_PLAY)
+            m_transportStatus == STARTING_TO_PLAY)
         return true;
 
     // Check for record toggle (punch out)
     //
     if (m_transportStatus == RECORDING) {
         m_transportStatus = PLAYING;
-	return punchOut();
+        return punchOut();
     }
 
     // To play from the given song position sets up the internal
@@ -802,13 +794,12 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     m_songPosition = time;
 
     if (m_sequencerMapper.getSequencerDataBlock()) {
-	m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
-	    (m_songPosition);
+        m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
+        (m_songPosition);
     }
 
     if (m_transportStatus != RECORDING &&
-        m_transportStatus != STARTING_TO_RECORD)
-    {
+            m_transportStatus != STARTING_TO_RECORD) {
         m_transportStatus = STARTING_TO_PLAY;
     }
 
@@ -817,7 +808,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     // Set up buffer size
     //
     m_readAhead = readAhead;
-    if (m_readAhead == Rosegarden::RealTime::zeroTime)
+    if (m_readAhead == RealTime::zeroTime)
         m_readAhead.sec = 1;
 
     m_audioMix = audioMix;
@@ -826,7 +817,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     m_smallFileSize = smallFileSize;
 
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
-				     m_smallFileSize);
+                                  m_smallFileSize);
 
     cleanupMmapData();
 
@@ -841,11 +832,11 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
 
     // Map metronome
     //
-    QString metronomeFileName =  tmpDir + "/rosegarden_metronome";
+    QString metronomeFileName = tmpDir + "/rosegarden_metronome";
     QFileInfo metronomeFileInfo(metronomeFileName);
     if (metronomeFileInfo.exists())
         mmapSegment(metronomeFileName);
-    else 
+    else
         SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no metronome found\n";
 
     // Map tempo segment
@@ -854,7 +845,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     QFileInfo tempoSegmentFileInfo(tempoSegmentFileName);
     if (tempoSegmentFileInfo.exists())
         mmapSegment(tempoSegmentFileName);
-    else 
+    else
         SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no tempo segment found\n";
 
     // Map time sig segment
@@ -863,14 +854,14 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     QFileInfo timeSigSegmentFileInfo(timeSigSegmentFileName);
     if (timeSigSegmentFileInfo.exists())
         mmapSegment(timeSigSegmentFileName);
-    else 
+    else
         SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - no time sig segment found\n";
 
     // Map control block if necessary
     //
     if (!m_controlBlockMmapper) {
-	m_controlBlockMmapper = new ControlBlockMmapper(tmpDir + "/rosegarden_control_block");
-	m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
+        m_controlBlockMmapper = new ControlBlockMmapper(tmpDir + "/rosegarden_control_block");
+        m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
     initMetaIterator();
@@ -880,12 +871,12 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     SEQUENCER_DEBUG << "RosegardenSequencerApp::play() - starting to play\n";
 
     // Test bits
-//     m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
-//     Rosegarden::MappedComposition testCompo;
-//     m_metaIterator->fillCompositionWithEventsUntil(&testCompo,
-//                                                    Rosegarden::RealTime(2,0));
+    //     m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
+    //     MappedComposition testCompo;
+    //     m_metaIterator->fillCompositionWithEventsUntil(&testCompo,
+    //                                                    RealTime(2,0));
 
-//     dumpFirstSegment();
+    //     dumpFirstSegment();
 
     // keep it simple
     return true;
@@ -897,7 +888,7 @@ RosegardenSequencerApp::punchOut()
     // Check for record toggle (punch out)
     //
     if (m_transportStatus == RECORDING) {
-	m_driver->punchOut();
+        m_driver->punchOut();
         m_transportStatus = PLAYING;
         return true;
     }
@@ -907,16 +898,16 @@ RosegardenSequencerApp::punchOut()
 MmappedSegment* RosegardenSequencerApp::mmapSegment(const QString& file)
 {
     MmappedSegment* m = 0;
-    
+
     try {
         m = new MmappedSegment(file);
-    } catch (Rosegarden::Exception e) {
+    } catch (Exception e) {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::mmapSegment() - couldn't map file " << file
-                        << " : " << e.getMessage().c_str() << endl;
+        << " : " << e.getMessage().c_str() << endl;
         return 0;
     }
-    
-    
+
+
     m_mmappedSegments[file] = m;
     return m;
 }
@@ -929,8 +920,8 @@ void RosegardenSequencerApp::initMetaIterator()
 
 void RosegardenSequencerApp::cleanupMmapData()
 {
-    for(MmappedSegmentsMetaIterator::mmappedsegments::iterator i = 
-            m_mmappedSegments.begin(); i != m_mmappedSegments.end(); ++i)
+    for (MmappedSegmentsMetaIterator::mmappedsegments::iterator i =
+                m_mmappedSegments.begin(); i != m_mmappedSegments.end(); ++i)
         delete i->second;
 
     m_mmappedSegments.clear();
@@ -941,7 +932,8 @@ void RosegardenSequencerApp::cleanupMmapData()
 
 void RosegardenSequencerApp::remapSegment(const QString& filename, size_t newSize)
 {
-    if (m_transportStatus != PLAYING) return;
+    if (m_transportStatus != PLAYING)
+        return ;
 
     SEQUENCER_DEBUG << "RosegardenSequencerApp::remapSegment(" << filename << ")\n";
 
@@ -952,7 +944,8 @@ void RosegardenSequencerApp::remapSegment(const QString& filename, size_t newSiz
 
 void RosegardenSequencerApp::addSegment(const QString& filename)
 {
-    if (m_transportStatus != PLAYING) return;
+    if (m_transportStatus != PLAYING)
+        return ;
 
     SEQUENCER_DEBUG << "MmappedSegment::addSegment(" << filename << ")\n";
 
@@ -964,7 +957,8 @@ void RosegardenSequencerApp::addSegment(const QString& filename)
 
 void RosegardenSequencerApp::deleteSegment(const QString& filename)
 {
-    if (m_transportStatus != PLAYING) return;
+    if (m_transportStatus != PLAYING)
+        return ;
 
     SEQUENCER_DEBUG << "MmappedSegment::deleteSegment(" << filename << ")\n";
 
@@ -983,7 +977,7 @@ void RosegardenSequencerApp::closeAllSegments()
 {
     SEQUENCER_DEBUG << "MmappedSegment::closeAllSegments()\n";
 
-    for(MmappedSegmentsMetaIterator::mmappedsegments::iterator 
+    for (MmappedSegmentsMetaIterator::mmappedsegments::iterator
             i = m_mmappedSegments.begin();
             i != m_mmappedSegments.end(); ++i) {
         if (m_metaIterator)
@@ -1006,9 +1000,9 @@ void RosegardenSequencerApp::remapTracks()
     rationalisePlayingAudio();
 }
 
-// DCOP Wrapper for play(Rosegarden::RealTime,
-//                       Rosegarden::RealTime,
-//                       Rosegarden::RealTime)
+// DCOP Wrapper for play(RealTime,
+//                       RealTime,
+//                       RealTime)
 //
 //
 int
@@ -1016,28 +1010,28 @@ RosegardenSequencerApp::play(long timeSec,
                              long timeNSec,
                              long readAheadSec,
                              long readAheadNSec,
-			     long audioMixSec,
-			     long audioMixNsec,
-			     long audioReadSec,
-			     long audioReadNsec,
-			     long audioWriteSec,
-			     long audioWriteNsec,
-			     long smallFileSize)
+                             long audioMixSec,
+                             long audioMixNsec,
+                             long audioReadSec,
+                             long audioReadNsec,
+                             long audioWriteSec,
+                             long audioWriteNsec,
+                             long smallFileSize)
 
 {
-    return play(Rosegarden::RealTime(timeSec, timeNSec),
-                Rosegarden::RealTime(readAheadSec, readAheadNSec),
-		Rosegarden::RealTime(audioMixSec, audioMixNsec),
-		Rosegarden::RealTime(audioReadSec, audioReadNsec),
-		Rosegarden::RealTime(audioWriteSec, audioWriteNsec),
-		smallFileSize);
+    return play(RealTime(timeSec, timeNSec),
+                RealTime(readAheadSec, readAheadNSec),
+                RealTime(audioMixSec, audioMixNsec),
+                RealTime(audioReadSec, audioReadNsec),
+                RealTime(audioWriteSec, audioWriteNsec),
+                smallFileSize);
 }
 
 
 
-// Wrapper for record(Rosegarden::RealTime,
-//                    Rosegarden::RealTime,
-//                    Rosegarden::RealTime,
+// Wrapper for record(RealTime,
+//                    RealTime,
+//                    RealTime,
 //                    recordMode);
 //
 //
@@ -1046,29 +1040,29 @@ RosegardenSequencerApp::record(long timeSec,
                                long timeNSec,
                                long readAheadSec,
                                long readAheadNSec,
-			       long audioMixSec,
-			       long audioMixNsec,
-			       long audioReadSec,
-			       long audioReadNsec,
-			       long audioWriteSec,
-			       long audioWriteNsec,
-			       long smallFileSize,
+                               long audioMixSec,
+                               long audioMixNsec,
+                               long audioReadSec,
+                               long audioReadNsec,
+                               long audioWriteSec,
+                               long audioWriteNsec,
+                               long smallFileSize,
                                long recordMode)
 
 {
-    return record(Rosegarden::RealTime(timeSec, timeNSec),
-                  Rosegarden::RealTime(readAheadSec, readAheadNSec),
-		  Rosegarden::RealTime(audioMixSec, audioMixNsec),
-		  Rosegarden::RealTime(audioReadSec, audioReadNsec),
-		  Rosegarden::RealTime(audioWriteSec, audioWriteNsec),
-		  smallFileSize,
+    return record(RealTime(timeSec, timeNSec),
+                  RealTime(readAheadSec, readAheadNSec),
+                  RealTime(audioMixSec, audioMixNsec),
+                  RealTime(audioReadSec, audioReadNsec),
+                  RealTime(audioWriteSec, audioWriteNsec),
+                  smallFileSize,
                   recordMode);
 }
 
 
 void
-RosegardenSequencerApp::setLoop(const Rosegarden::RealTime &loopStart,
-                                const Rosegarden::RealTime &loopEnd)
+RosegardenSequencerApp::setLoop(const RealTime &loopStart,
+                                const RealTime &loopEnd)
 {
     m_loopStart = loopStart;
     m_loopEnd = loopEnd;
@@ -1083,8 +1077,8 @@ RosegardenSequencerApp::setLoop(long loopStartSec,
                                 long loopEndSec,
                                 long loopEndNSec)
 {
-    setLoop(Rosegarden::RealTime(loopStartSec, loopStartNSec),
-            Rosegarden::RealTime(loopEndSec, loopEndNSec));
+    setLoop(RealTime(loopStartSec, loopStartNSec),
+            RealTime(loopEndSec, loopEndNSec));
 }
 
 
@@ -1094,12 +1088,13 @@ unsigned int
 RosegardenSequencerApp::getSoundDriverStatus(const QString &guiVersion)
 {
     unsigned int driverStatus = m_driver->getStatus();
-    if (guiVersion == VERSION) driverStatus |= Rosegarden::VERSION_OK;
+    if (guiVersion == VERSION)
+        driverStatus |= VERSION_OK;
     else {
-	std::cerr << "WARNING: RosegardenSequencerApp::getSoundDriverStatus: "
-		  << "GUI version \"" << guiVersion
-		  << "\" does not match sequencer version \"" << VERSION
-		  << "\"" << std::endl;
+        std::cerr << "WARNING: RosegardenSequencerApp::getSoundDriverStatus: "
+        << "GUI version \"" << guiVersion
+        << "\" does not match sequencer version \"" << VERSION
+        << "\"" << std::endl;
     }
     return driverStatus;
 }
@@ -1109,13 +1104,13 @@ RosegardenSequencerApp::getSoundDriverStatus(const QString &guiVersion)
 int
 RosegardenSequencerApp::addAudioFile(const QString &fileName, int id)
 {
-    return((int)m_driver->addAudioFile(fileName.utf8().data(), id));
+    return ((int)m_driver->addAudioFile(fileName.utf8().data(), id));
 }
 
 int
 RosegardenSequencerApp::removeAudioFile(int id)
 {
-    return((int)m_driver->removeAudioFile(id));
+    return ((int)m_driver->removeAudioFile(id));
 }
 
 void
@@ -1126,15 +1121,15 @@ RosegardenSequencerApp::clearAllAudioFiles()
 
 void
 RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
-                                            unsigned int id)
+        unsigned int id)
 {
     InstrumentId mID = (InstrumentId)id;
-    Rosegarden::Instrument::InstrumentType mType = 
-        (Rosegarden::Instrument::InstrumentType)type;
-    Rosegarden::MidiByte mChannel = (Rosegarden::MidiByte)channel;
+    Instrument::InstrumentType mType =
+        (Instrument::InstrumentType)type;
+    MidiByte mChannel = (MidiByte)channel;
 
     m_driver->setMappedInstrument(
-            new Rosegarden::MappedInstrument (mType, mChannel, mID));
+        new MappedInstrument (mType, mChannel, mID));
 
 }
 
@@ -1142,7 +1137,7 @@ RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
 // immediate effect
 //
 void
-RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
+RosegardenSequencerApp::processSequencerSlice(MappedComposition mC)
 {
     // Use the "now" API
     //
@@ -1151,29 +1146,29 @@ RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
 
 void
 RosegardenSequencerApp::processMappedEvent(unsigned int id,
-                                           int type,
-                                           unsigned char pitch,
-                                           unsigned char velocity,
-                                           long absTimeSec,
-                                           long absTimeNsec,
-                                           long durationSec,
-                                           long durationNsec,
-                                           long audioStartMarkerSec,
-                                           long audioStartMarkerNSec)
+        int type,
+        unsigned char pitch,
+        unsigned char velocity,
+        long absTimeSec,
+        long absTimeNsec,
+        long durationSec,
+        long durationNsec,
+        long audioStartMarkerSec,
+        long audioStartMarkerNSec)
 {
     MappedEvent *mE =
         new MappedEvent(
             (InstrumentId)id,
             (MappedEvent::MappedEventType)type,
-            (Rosegarden::MidiByte)pitch,
-            (Rosegarden::MidiByte)velocity,
-            Rosegarden::RealTime(absTimeSec, absTimeNsec),
-            Rosegarden::RealTime(durationSec, durationNsec),
-            Rosegarden::RealTime(audioStartMarkerSec, audioStartMarkerNSec));
+            (MidiByte)pitch,
+            (MidiByte)velocity,
+            RealTime(absTimeSec, absTimeNsec),
+            RealTime(durationSec, durationNsec),
+            RealTime(audioStartMarkerSec, audioStartMarkerNSec));
 
-    Rosegarden::MappedComposition mC;
+    MappedComposition mC;
 
-//    SEQUENCER_DEBUG << "processMappedEvent(data) - sending out single event at time " << mE->getEventTime() << endl;
+    //    SEQUENCER_DEBUG << "processMappedEvent(data) - sending out single event at time " << mE->getEventTime() << endl;
 
     /*
     std::cout << "ID = " << mE->getInstrument() << std::endl;
@@ -1190,7 +1185,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 void
 RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
 {
-    Rosegarden::MappedComposition mC;
+    MappedComposition mC;
     mC.insert(new MappedEvent(mE));
     SEQUENCER_DEBUG << "processMappedEvent(ev) - sending out single event at time " << mE.getEventTime() << endl;
 
@@ -1199,7 +1194,7 @@ RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
 
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
 //
-Rosegarden::MappedDevice
+MappedDevice
 RosegardenSequencerApp::getMappedDevice(unsigned int id)
 {
     return m_driver->getMappedDevice(id);
@@ -1214,14 +1209,14 @@ RosegardenSequencerApp::getDevices()
 int
 RosegardenSequencerApp::canReconnect(int type)
 {
-    return m_driver->canReconnect((Rosegarden::Device::DeviceType)type);
+    return m_driver->canReconnect((Device::DeviceType)type);
 }
 
 unsigned int
 RosegardenSequencerApp::addDevice(int type, unsigned int direction)
 {
-    return m_driver->addDevice((Rosegarden::Device::DeviceType)type,
-			       (Rosegarden::MidiDevice::DeviceDirection)direction);
+    return m_driver->addDevice((Device::DeviceType)type,
+                               (MidiDevice::DeviceDirection)direction);
 }
 
 void
@@ -1239,29 +1234,29 @@ RosegardenSequencerApp::renameDevice(unsigned int deviceId, QString name)
 unsigned int
 RosegardenSequencerApp::getConnections(int type, unsigned int direction)
 {
-    return m_driver->getConnections((Rosegarden::Device::DeviceType)type,
-				    (Rosegarden::MidiDevice::DeviceDirection)direction);
+    return m_driver->getConnections((Device::DeviceType)type,
+                                    (MidiDevice::DeviceDirection)direction);
 }
 
 QString
 RosegardenSequencerApp::getConnection(int type, unsigned int direction,
-				      unsigned int connectionNo)
+                                      unsigned int connectionNo)
 {
-    return m_driver->getConnection((Rosegarden::Device::DeviceType)type,
-				   (Rosegarden::MidiDevice::DeviceDirection)direction,
-				   connectionNo);
+    return m_driver->getConnection((Device::DeviceType)type,
+                                   (MidiDevice::DeviceDirection)direction,
+                                   connectionNo);
 }
 
 void
 RosegardenSequencerApp::setConnection(unsigned int deviceId,
-				      QString connection)
+                                      QString connection)
 {
     m_driver->setConnection(deviceId, connection);
 }
 
 void
 RosegardenSequencerApp::setPlausibleConnection(unsigned int deviceId,
-					       QString connection)
+        QString connection)
 {
     m_driver->setPlausibleConnection(deviceId, connection);
 }
@@ -1300,39 +1295,37 @@ void
 RosegardenSequencerApp::sequencerAlive()
 {
     if (!kapp->dcopClient()->
-        isApplicationRegistered(QCString(ROSEGARDEN_GUI_APP_NAME)))
-    {
+            isApplicationRegistered(QCString(ROSEGARDEN_GUI_APP_NAME))) {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::sequencerAlive() - "
-                        << "waiting for GUI to register" << endl;
-        return;
+        << "waiting for GUI to register" << endl;
+        return ;
     }
 
     QByteArray data;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
-                                 "alive()",
-                                  data))
-    {
+                                  "alive()",
+                                  data)) {
         SEQUENCER_DEBUG << "RosegardenSequencer::alive()"
-                        << " - can't call RosegardenGUI client"
-                        << endl;
+        << " - can't call RosegardenGUI client"
+        << endl;
     }
 
     SEQUENCER_DEBUG << "RosegardenSequencerApp::sequencerAlive() - "
-                    << "trying to tell GUI that we're alive" << endl;
+    << "trying to tell GUI that we're alive" << endl;
 }
 
-Rosegarden::MappedRealTime
+MappedRealTime
 RosegardenSequencerApp::getAudioPlayLatency()
 {
-    return Rosegarden::MappedRealTime(m_driver->getAudioPlayLatency());
+    return MappedRealTime(m_driver->getAudioPlayLatency());
 }
 
-Rosegarden::MappedRealTime
+MappedRealTime
 RosegardenSequencerApp::getAudioRecordLatency()
 {
-    return Rosegarden::MappedRealTime(m_driver->getAudioRecordLatency());
+    return MappedRealTime(m_driver->getAudioRecordLatency());
 }
 
 // Initialise the virtual studio with a few audio faders and
@@ -1351,56 +1344,56 @@ RosegardenSequencerApp::initialiseStudio()
 
 void
 RosegardenSequencerApp::setMappedProperty(int id,
-                                          const QString &property,
-                                          float value)
+        const QString &property,
+        float value)
 {
 
-//    SEQUENCER_DEBUG << "setProperty: id = " << id
-//                    << " : property = \"" << property << "\""
-//		    << ", value = " << value << endl;
+    //    SEQUENCER_DEBUG << "setProperty: id = " << id
+    //                    << " : property = \"" << property << "\""
+    //		    << ", value = " << value << endl;
 
 
-    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+    MappedObject *object = m_studio->getObjectById(id);
 
     if (object)
         object->setProperty(property, value);
 }
 
 void
-RosegardenSequencerApp::setMappedProperties(const Rosegarden::MappedObjectIdList &ids,
-					    const Rosegarden::MappedObjectPropertyList &properties,
-					    const Rosegarden::MappedObjectValueList &values)
+RosegardenSequencerApp::setMappedProperties(const MappedObjectIdList &ids,
+        const MappedObjectPropertyList &properties,
+        const MappedObjectValueList &values)
 {
-    Rosegarden::MappedObject *object = 0;
-    Rosegarden::MappedObjectId prevId = 0;
+    MappedObject *object = 0;
+    MappedObjectId prevId = 0;
 
     for (size_t i = 0;
-	 i < ids.size() && i < properties.size() && i < values.size();
-	 ++i) {
+            i < ids.size() && i < properties.size() && i < values.size();
+            ++i) {
 
-	if (i == 0 || ids[i] != prevId) {
-	    object = m_studio->getObjectById(ids[i]);
-	    prevId = ids[i];
-	}
+        if (i == 0 || ids[i] != prevId) {
+            object = m_studio->getObjectById(ids[i]);
+            prevId = ids[i];
+        }
 
-	if (object) {
-	    object->setProperty(properties[i], values[i]);
-	}
+        if (object) {
+            object->setProperty(properties[i], values[i]);
+        }
     }
 }
 
 void
 RosegardenSequencerApp::setMappedProperty(int id,
-                                          const QString &property,
-                                          const QString &value)
+        const QString &property,
+        const QString &value)
 {
 
     SEQUENCER_DEBUG << "setProperty: id = " << id
-                    << " : property = \"" << property << "\""
-		    << ", value = " << value << endl;
+    << " : property = \"" << property << "\""
+    << ", value = " << value << endl;
 
 
-    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+    MappedObject *object = m_studio->getObjectById(id);
 
     if (object)
         object->setProperty(property, value);
@@ -1408,41 +1401,40 @@ RosegardenSequencerApp::setMappedProperty(int id,
 
 void
 RosegardenSequencerApp::setMappedPropertyList(int id, const QString &property,
-					      const Rosegarden::MappedObjectPropertyList &values)
+        const MappedObjectPropertyList &values)
 {
     SEQUENCER_DEBUG << "setPropertyList: id = " << id
-                    << " : property list size = \"" << values.size()
-                    << "\"" << endl;
+    << " : property list size = \"" << values.size()
+    << "\"" << endl;
 
-    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+    MappedObject *object = m_studio->getObjectById(id);
 
     if (object) {
-	try {
-	    object->setPropertyList(property, values);
-	} catch (QString err) {
-	    QByteArray data;
-	    QDataStream arg(data, IO_WriteOnly);
-	    arg << err;
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "showError(QString)",
-				     data);
-	}
+        try {
+            object->setPropertyList(property, values);
+        } catch (QString err) {
+            QByteArray data;
+            QDataStream arg(data, IO_WriteOnly);
+            arg << err;
+            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                     ROSEGARDEN_GUI_IFACE_NAME,
+                                     "showError(QString)",
+                                     data);
+        }
     }
 }
-	
+
 
 int
 RosegardenSequencerApp::getMappedObjectId(int type)
 {
     int value = -1;
 
-    Rosegarden::MappedObject *object =
+    MappedObject *object =
         m_studio->getObjectOfType(
-                Rosegarden::MappedObject::MappedObjectType(type));
+            MappedObject::MappedObjectType(type));
 
-    if (object)
-    {
+    if (object) {
         value = int(object->getId());
     }
 
@@ -1456,16 +1448,15 @@ RosegardenSequencerApp::getPropertyList(int id,
 {
     std::vector<QString> list;
 
-    Rosegarden::MappedObject *object =
+    MappedObject *object =
         m_studio->getObjectById(id);
 
-    if (object)
-    {
+    if (object) {
         list = object->getPropertyList(property);
     }
 
     SEQUENCER_DEBUG << "getPropertyList - return " << list.size()
-                    << " items" << endl;
+    << " items" << endl;
 
     return list;
 }
@@ -1475,7 +1466,7 @@ RosegardenSequencerApp::getPluginInformation()
 {
     std::vector<QString> list;
 
-    Rosegarden::PluginFactory::enumerateAllPlugins(list);
+    PluginFactory::enumerateAllPlugins(list);
 
     return list;
 }
@@ -1483,14 +1474,14 @@ RosegardenSequencerApp::getPluginInformation()
 QString
 RosegardenSequencerApp::getPluginProgram(int id, int bank, int program)
 {
-    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+    MappedObject *object = m_studio->getObjectById(id);
 
     if (object) {
-	Rosegarden::MappedPluginSlot *slot =
-	    dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
-	if (slot) {
-	    return slot->getProgram(bank, program);
-	}
+        MappedPluginSlot *slot =
+            dynamic_cast<MappedPluginSlot *>(object);
+        if (slot) {
+            return slot->getProgram(bank, program);
+        }
     }
 
     return QString();
@@ -1499,14 +1490,14 @@ RosegardenSequencerApp::getPluginProgram(int id, int bank, int program)
 unsigned long
 RosegardenSequencerApp::getPluginProgram(int id, const QString &name)
 {
-    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+    MappedObject *object = m_studio->getObjectById(id);
 
     if (object) {
-	Rosegarden::MappedPluginSlot *slot =
-	    dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
-	if (slot) {
-	    return slot->getProgram(name);
-	}
+        MappedPluginSlot *slot =
+            dynamic_cast<MappedPluginSlot *>(object);
+        if (slot) {
+            return slot->getProgram(name);
+        }
     }
 
     return 0;
@@ -1523,18 +1514,17 @@ RosegardenSequencerApp::getSampleRate() const
 
 // Creates an object of a type
 //
-int 
+int
 RosegardenSequencerApp::createMappedObject(int type)
 {
-    Rosegarden::MappedObject *object =
-              m_studio->createObject(
-                      Rosegarden::MappedObject::MappedObjectType(type));
+    MappedObject *object =
+        m_studio->createObject(
+            MappedObject::MappedObjectType(type));
 
-    if (object)
-    {
+    if (object) {
         SEQUENCER_DEBUG << "createMappedObject - type = "
-                        << type << ", object id = "
-                        << object->getId() << endl;
+        << type << ", object id = "
+        << object->getId() << endl;
         return object->getId();
     }
 
@@ -1543,10 +1533,10 @@ RosegardenSequencerApp::createMappedObject(int type)
 
 // Destroy an object
 //
-int 
+int
 RosegardenSequencerApp::destroyMappedObject(int id)
 {
-    return(int(m_studio->destroyObject(Rosegarden::MappedObjectId(id))));
+    return (int(m_studio->destroyObject(MappedObjectId(id))));
 }
 
 // Connect two objects
@@ -1554,25 +1544,25 @@ RosegardenSequencerApp::destroyMappedObject(int id)
 void
 RosegardenSequencerApp::connectMappedObjects(int id1, int id2)
 {
-    m_studio->connectObjects(Rosegarden::MappedObjectId(id1),
-			     Rosegarden::MappedObjectId(id2));
-    
+    m_studio->connectObjects(MappedObjectId(id1),
+                             MappedObjectId(id2));
+
     // When this happens we need to resynchronise our audio processing,
     // and this is the easiest (and most brutal) way to do it.
     if (m_transportStatus == PLAYING ||
-	m_transportStatus == RECORDING) {
-	Rosegarden::RealTime seqTime = m_driver->getSequencerTime();
-	jumpTo(seqTime.sec, seqTime.nsec);
+            m_transportStatus == RECORDING) {
+        RealTime seqTime = m_driver->getSequencerTime();
+        jumpTo(seqTime.sec, seqTime.nsec);
     }
 }
-    
+
 // Disconnect two objects
 //
 void
 RosegardenSequencerApp::disconnectMappedObjects(int id1, int id2)
 {
-    m_studio->disconnectObjects(Rosegarden::MappedObjectId(id1),
-				Rosegarden::MappedObjectId(id2));
+    m_studio->disconnectObjects(MappedObjectId(id1),
+                                MappedObjectId(id2));
 }
 
 // Disconnect an object from everything
@@ -1580,7 +1570,7 @@ RosegardenSequencerApp::disconnectMappedObjects(int id1, int id2)
 void
 RosegardenSequencerApp::disconnectMappedObject(int id)
 {
-    m_studio->disconnectObject(Rosegarden::MappedObjectId(id));
+    m_studio->disconnectObject(MappedObjectId(id));
 }
 
 
@@ -1591,23 +1581,23 @@ RosegardenSequencerApp::clearStudio()
     m_studio->clear();
     m_sequencerMapper.getSequencerDataBlock()->clearTemporaries();
 
-} 
+}
 
 void
 RosegardenSequencerApp::setMappedPort(int pluginId,
                                       unsigned long portId,
                                       float value)
 {
-    Rosegarden::MappedObject *object =
+    MappedObject *object =
         m_studio->getObjectById(pluginId);
 
-    Rosegarden::MappedPluginSlot *slot = 
-        dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
+    MappedPluginSlot *slot =
+        dynamic_cast<MappedPluginSlot *>(object);
 
     if (slot) {
         slot->setPort(portId, value);
     } else {
-	SEQUENCER_DEBUG << "no such slot" << endl;
+        SEQUENCER_DEBUG << "no such slot" << endl;
     }
 }
 
@@ -1615,18 +1605,18 @@ float
 RosegardenSequencerApp::getMappedPort(int pluginId,
                                       unsigned long portId)
 {
-    Rosegarden::MappedObject *object =
+    MappedObject *object =
         m_studio->getObjectById(pluginId);
 
-    Rosegarden::MappedPluginSlot *slot = 
-        dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
+    MappedPluginSlot *slot =
+        dynamic_cast<MappedPluginSlot *>(object);
 
     if (slot) {
         return slot->getPort(portId);
     } else {
-	SEQUENCER_DEBUG << "no such slot" << endl;
+        SEQUENCER_DEBUG << "no such slot" << endl;
     }
-    
+
     return 0;
 }
 
@@ -1636,11 +1626,10 @@ RosegardenSequencerApp::slotCheckForNewClients()
     // Don't do this check if any of these conditions hold
     //
     if (m_transportStatus == PLAYING ||
-        m_transportStatus == RECORDING)
-        return;
+            m_transportStatus == RECORDING)
+        return ;
 
-    if (m_driver->checkForNewClients())
-    {
+    if (m_driver->checkForNewClients()) {
         SEQUENCER_DEBUG << "client list changed" << endl;
     }
 }
@@ -1652,10 +1641,10 @@ void
 RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeNSec)
 {
     SEQUENCER_DEBUG << "RosegardenSequencerApp::setQuarterNoteLength"
-                    << Rosegarden::RealTime(timeSec, timeNSec) << endl;
+    << RealTime(timeSec, timeNSec) << endl;
 
     m_driver->setMIDIClockInterval(
-            Rosegarden::RealTime(timeSec, timeNSec) / 24);
+        RealTime(timeSec, timeNSec) / 24);
 }
 
 QString
@@ -1677,14 +1666,14 @@ void RosegardenSequencerApp::dumpFirstSegment()
     for (; !it.atEnd(); ++it) {
 
         MappedEvent evt = (*it);
-        SEQUENCER_DEBUG << i << " : inst = "  << evt.getInstrument()
-                        << " - type = "       << evt.getType()
-                        << " - data1 = "      << (unsigned int)evt.getData1()
-                        << " - data2 = "      << (unsigned int)evt.getData2()
-                        << " - time = "       << evt.getEventTime()
-                        << " - duration = "   << evt.getDuration()
-                        << " - audio mark = " << evt.getAudioStartMarker()
-                        << endl;
+        SEQUENCER_DEBUG << i << " : inst = " << evt.getInstrument()
+        << " - type = " << evt.getType()
+        << " - data1 = " << (unsigned int)evt.getData1()
+        << " - data2 = " << (unsigned int)evt.getData2()
+        << " - time = " << evt.getEventTime()
+        << " - duration = " << evt.getDuration()
+        << " - audio mark = " << evt.getAudioStartMarker()
+        << endl;
 
         ++i;
     }
@@ -1697,35 +1686,39 @@ void RosegardenSequencerApp::dumpFirstSegment()
 void
 RosegardenSequencerApp::rationalisePlayingAudio()
 {
-    std::vector<Rosegarden::MappedEvent> audioEvents;
+    std::vector<MappedEvent> audioEvents;
     m_metaIterator->getAudioEvents(audioEvents);
     m_driver->initialiseAudioQueue(audioEvents);
 }
 
 
-Rosegarden::ExternalTransport::TransportToken
+ExternalTransport::TransportToken
 RosegardenSequencerApp::transportChange(TransportRequest request)
 {
-    TransportPair pair(request, Rosegarden::RealTime::zeroTime);
+    TransportPair pair(request, RealTime::zeroTime);
     m_transportRequests.push_back(pair);
 
     std::cout << "RosegardenSequencerApp::transportChange: " << request << std::endl;
 
-    if (request == TransportNoChange) return m_transportToken;
-    else return m_transportToken + 1;
+    if (request == TransportNoChange)
+        return m_transportToken;
+    else
+        return m_transportToken + 1;
 }
 
-Rosegarden::ExternalTransport::TransportToken
+ExternalTransport::TransportToken
 RosegardenSequencerApp::transportJump(TransportRequest request,
-				      Rosegarden::RealTime rt)
+                                      RealTime rt)
 {
     TransportPair pair(request, rt);
     m_transportRequests.push_back(pair);
 
     std::cout << "RosegardenSequencerApp::transportJump: " << request << ", " << rt << std::endl;
 
-    if (request == TransportNoChange) return m_transportToken + 1;
-    else return m_transportToken + 2;
+    if (request == TransportNoChange)
+        return m_transportToken + 1;
+    else
+        return m_transportToken + 2;
 }
 
 bool
@@ -1742,95 +1735,92 @@ RosegardenSequencerApp::checkExternalTransport()
 
     while (!m_transportRequests.empty()) {
 
-	TransportPair pair = *m_transportRequests.begin();
-	m_transportRequests.pop_front();
+        TransportPair pair = *m_transportRequests.begin();
+        m_transportRequests.pop_front();
 
-	QByteArray data;
+        QByteArray data;
 
-	switch (pair.first) {
-	    
-	case TransportNoChange:
-	    break;
-	
-	case TransportStop:
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "stop()",
-				     data);
-	    break;
-	
-	case TransportStart:
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "play()",
-				     data);
-	    break;
-	
-	case TransportPlay:
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "play()",
-				     data);
-	    break;
-	
-	case TransportRecord:
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "record()",
-				     data);
-	    break;
-	
-	case TransportJumpToTime:
-	{
-	    QDataStream arg(data, IO_WriteOnly);
-	    arg << (int)pair.second.sec;
-	    arg << (int)pair.second.usec();
-	    
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "jumpToTime(int, int)",
-				     data);
+        switch (pair.first) {
 
-	    if (m_transportStatus == PLAYING ||
-		m_transportStatus != RECORDING) {
-		jumpTo(pair.second.sec, pair.second.usec() * 1000);
-	    }
+        case TransportNoChange:
+            break;
 
-	    incrementTransportToken();
-	    break;
-	}
-	
-	case TransportStartAtTime:
-	{
-	    QDataStream arg(data, IO_WriteOnly);
-	    arg << (int)pair.second.sec;
-	    arg << (int)pair.second.usec();
-	    
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "startAtTime(int, int)",
-				     data);
-	    break;
-	}
-	
-	case TransportStopAtTime:
-	{
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "stop()",
-				     data);
+        case TransportStop:
+            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                     ROSEGARDEN_GUI_IFACE_NAME,
+                                     "stop()",
+                                     data);
+            break;
 
-	    QDataStream arg(data, IO_WriteOnly);
-	    arg << (int)pair.second.sec;
-	    arg << (int)pair.second.usec();
-	    
-	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-				     ROSEGARDEN_GUI_IFACE_NAME,
-				     "jumpToTime(int, int)",
-				     data);
-	    break;
-	}
-	}
+        case TransportStart:
+            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                     ROSEGARDEN_GUI_IFACE_NAME,
+                                     "play()",
+                                     data);
+            break;
+
+        case TransportPlay:
+            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                     ROSEGARDEN_GUI_IFACE_NAME,
+                                     "play()",
+                                     data);
+            break;
+
+        case TransportRecord:
+            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                     ROSEGARDEN_GUI_IFACE_NAME,
+                                     "record()",
+                                     data);
+            break;
+
+        case TransportJumpToTime: {
+                QDataStream arg(data, IO_WriteOnly);
+                arg << (int)pair.second.sec;
+                arg << (int)pair.second.usec();
+
+                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                         ROSEGARDEN_GUI_IFACE_NAME,
+                                         "jumpToTime(int, int)",
+                                         data);
+
+                if (m_transportStatus == PLAYING ||
+                        m_transportStatus != RECORDING) {
+                    jumpTo(pair.second.sec, pair.second.usec() * 1000);
+                }
+
+                incrementTransportToken();
+                break;
+            }
+
+        case TransportStartAtTime: {
+                QDataStream arg(data, IO_WriteOnly);
+                arg << (int)pair.second.sec;
+                arg << (int)pair.second.usec();
+
+                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                         ROSEGARDEN_GUI_IFACE_NAME,
+                                         "startAtTime(int, int)",
+                                         data);
+                break;
+            }
+
+        case TransportStopAtTime: {
+                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                         ROSEGARDEN_GUI_IFACE_NAME,
+                                         "stop()",
+                                         data);
+
+                QDataStream arg(data, IO_WriteOnly);
+                arg << (int)pair.second.sec;
+                arg << (int)pair.second.usec();
+
+                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                                         ROSEGARDEN_GUI_IFACE_NAME,
+                                         "jumpToTime(int, int)",
+                                         data);
+                break;
+            }
+        }
     }
 
     return rv;

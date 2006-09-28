@@ -47,23 +47,23 @@ class MappedComposition : public std::multiset<MappedEvent *,
 public:
     MappedComposition():m_startTime(0, 0), m_endTime(0, 0) {;}
 
-    MappedComposition(const Rosegarden::RealTime &sT,
-                      const Rosegarden::RealTime &eT):
+    MappedComposition(const RealTime &sT,
+                      const RealTime &eT):
         m_startTime(sT), m_endTime(eT) {;}
 
     MappedComposition(const MappedComposition &mC);
 
     ~MappedComposition();
 
-    const Rosegarden::RealTime getStartTime() const { return m_startTime; }
-    const Rosegarden::RealTime getEndTime() const { return m_endTime; }
-    void setStartTime(const Rosegarden::RealTime &sT) { m_startTime = sT; }
-    void setEndTime(const Rosegarden::RealTime &eT) { m_endTime = eT; }
+    const RealTime getStartTime() const { return m_startTime; }
+    const RealTime getEndTime() const { return m_endTime; }
+    void setStartTime(const RealTime &sT) { m_startTime = sT; }
+    void setEndTime(const RealTime &eT) { m_endTime = eT; }
 
     // When we're looping we want to be able to move the start
     // time of MappedEvents around in this container
     //
-    void moveStartTime(const Rosegarden::RealTime &mT);
+    void moveStartTime(const RealTime &mT);
 
     MappedComposition& operator+(const MappedComposition &mC);
     MappedComposition& operator=(const MappedComposition &mC);
@@ -80,8 +80,8 @@ public:
     void clear();
 
 private:
-    Rosegarden::RealTime m_startTime;
-    Rosegarden::RealTime m_endTime;
+    RealTime m_startTime;
+    RealTime m_endTime;
 
 };
 

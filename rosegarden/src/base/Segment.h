@@ -679,8 +679,8 @@ private: // assignment operator not provided
     // Audio autofading
     //
     bool                  m_autoFade;
-    Rosegarden::RealTime  m_fadeInTime;
-    Rosegarden::RealTime  m_fadeOutTime;
+    RealTime  m_fadeInTime;
+    RealTime  m_fadeOutTime;
 
 };
 

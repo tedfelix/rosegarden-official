@@ -2,15 +2,15 @@
 /*
   Rosegarden-4
   A sequencer and musical notation editor.
-
+ 
   This program is Copyright 2000-2006
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
-
+ 
   The moral right of the authors to claim authorship of this work
   has been asserted.
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -30,28 +30,25 @@ namespace Rosegarden
 {
 
 SoundFile::SoundFile(const std::string &fileName):
-    m_fileName(fileName),
-    m_readChunkPtr(-1),
-    m_readChunkSize(4096), // 4k blocks
-    m_inFile(0),
-    m_outFile(0),
-    m_loseBuffer(false),
-    m_fileSize(0)
-{
-}
+        m_fileName(fileName),
+        m_readChunkPtr( -1),
+        m_readChunkSize(4096),  // 4k blocks
+        m_inFile(0),
+        m_outFile(0),
+        m_loseBuffer(false),
+        m_fileSize(0)
+{}
 
 // Tidies up for any dervied classes
 //
 SoundFile::~SoundFile()
 {
-    if (m_inFile)
-    {
+    if (m_inFile) {
         m_inFile->close();
         delete m_inFile;
     }
 
-    if (m_outFile)
-    {
+    if (m_outFile) {
         m_outFile->close();
         delete m_outFile;
     }
@@ -64,8 +61,7 @@ SoundFile::~SoundFile()
 std::string
 SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 {
-    if (file->eof())
-    {
+    if (file->eof()) {
         // Reset the input stream so it's operational again
         //
         file->clear();
@@ -76,7 +72,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
     if (!(*file)) {
         std::cerr << "SoundFile::getBytes() -  stream is not well";
     }
-    
+
 
     std::string rS;
     char *fileBytes = new char[numberOfBytes];
@@ -91,8 +87,8 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
     //
     if (rS.length() < numberOfBytes)
         std::cerr << "SoundFile::getBytes() - couldn't get all bytes ("
-                  << rS.length() << " from " << numberOfBytes << ")"
-                  << std::endl;
+        << rS.length() << " from " << numberOfBytes << ")"
+        << std::endl;
 #endif
 
     // clear down
@@ -108,14 +104,14 @@ SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
 {
     if (!(*file)) {
         std::cerr << "SoundFile::getBytes() -  stream is not well";
-	return 0;
+        return 0;
     }
 
     if (file->eof()) {
         file->clear();
-	return 0;
+        return 0;
     }
-    
+
     file->read(buf, n);
     return file->gcount();
 }
@@ -128,8 +124,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     if (m_inFile == 0)
         throw(BadSoundFileException(m_fileName, "SoundFile::getBytes - no open file handle"));
 
-    if (m_inFile->eof())
-    {
+    if (m_inFile->eof()) {
         // Reset the input stream so it's operational again
         //
         m_inFile->clear();
@@ -142,8 +137,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     // should be set if specialised class is scanning about
     // when we're doing buffered reads
     //
-    if (m_loseBuffer)
-    {
+    if (m_loseBuffer) {
         m_readChunkPtr = -1;
         m_loseBuffer = false;
     }
@@ -152,10 +146,8 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     char *fileBytes = new char[m_readChunkSize];
     int oldLength;
 
-    while (rS.length() < numberOfBytes && !m_inFile->eof())
-    {
-        if (m_readChunkPtr == -1)
-        {
+    while (rS.length() < numberOfBytes && !m_inFile->eof()) {
+        if (m_readChunkPtr == -1) {
             // clear buffer
             m_readBuffer = "";
 
@@ -169,7 +161,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
             // file->gcount holds the number of bytes we've actually read
             // so copy them across into our string
             //
-            for (int i = 0; i< m_inFile->gcount(); i++)
+            for (int i = 0; i < m_inFile->gcount(); i++)
                 m_readBuffer += (unsigned char)fileBytes[i];
         }
 
@@ -178,17 +170,14 @@ SoundFile::getBytes(unsigned int numberOfBytes)
         // m_readChunkPtr keeps our position for next time.
         //
         if (numberOfBytes - rS.length() <= m_readBuffer.length() -
-                                           m_readChunkPtr)
-        {
+                m_readChunkPtr) {
             oldLength = rS.length();
 
             rS += m_readBuffer.substr(m_readChunkPtr,
                                       numberOfBytes - oldLength);
 
             m_readChunkPtr += rS.length() - oldLength;
-        }
-        else
-        {
+        } else {
             // Fill all we can this time and reset the m_readChunkPtr
             // so that we fetch another chunk of bytes from the file.
             //
@@ -200,8 +189,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
         // If we're EOF here we must've read and copied across everything
         // we can do.  Reset and break out.
         //
-        if (m_inFile->eof())
-        {
+        if (m_inFile->eof()) {
             m_inFile->clear();
             break;
         }
@@ -213,9 +201,9 @@ SoundFile::getBytes(unsigned int numberOfBytes)
     //
     if (rS.length() < numberOfBytes)
         std::cerr << "SoundFile::getBytes() buffered - couldn't get all bytes ("
-                  << rS.length() << " from " << numberOfBytes << ")"
-                  << std::endl;
-#endif 
+        << rS.length() << " from " << numberOfBytes << ")"
+        << std::endl;
+#endif
 
     delete [] fileBytes;
 
@@ -266,27 +254,24 @@ SoundFile::getIntegerFromLittleEndian(const std::string &s)
 {
     int r = 0;
 
-    for (unsigned int i = 0; i < s.length(); i++)
-    {
+    for (unsigned int i = 0; i < s.length(); i++) {
         r += (int)(((FileByte)s[i]) << (i * 8));
     }
 
     return r;
-}   
+}
 
 
 // Turn a value into a little endian string of "length"
-//  
+//
 std::string
 SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
-{   
+{
     std::string r = "";
-    
-    do
-    {
+
+    do {
         r += (unsigned char)((long)((value >> (8 * r.length())) & 0xff));
-    }
-    while (r.length() < length);
+    } while (r.length() < length);
 
     return r;
 }

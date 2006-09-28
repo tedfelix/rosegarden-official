@@ -42,7 +42,7 @@
 using std::cerr;
 using std::endl;
 using std::cout;
-using Rosegarden::MappedEvent;
+using MappedEvent;
 
 namespace Rosegarden { class MappedComposition; }
 
@@ -129,7 +129,7 @@ public:
 
     /// reset all iterators to beginning
     void reset();
-    bool jumpToTime(const Rosegarden::RealTime&);
+    bool jumpToTime(const RealTime&);
 
     /**
      * Fill mapped composition with events from current point until
@@ -137,9 +137,9 @@ public:
      * remaining, false if end of composition was reached
      */
     bool fillCompositionWithEventsUntil(bool firstFetch,
-                                        Rosegarden::MappedComposition*,
-                                        const Rosegarden::RealTime& start,
-                                        const Rosegarden::RealTime& end);
+                                        MappedComposition*,
+                                        const RealTime& start,
+                                        const RealTime& end);
 
     void resetIteratorForSegment(const QString& filename);
 
@@ -155,7 +155,7 @@ public:
     //
     //!!! to be obsoleted, hopefully
     std::vector<MappedEvent>& getPlayingAudioFiles
-    (const Rosegarden::RealTime &songPosition);
+    (const RealTime &songPosition);
 
 protected:
     bool acceptEvent(MappedEvent*, bool evtIsFromMetronome);
@@ -163,13 +163,13 @@ protected:
     /// Delete all iterators
     void clear();
     bool moveIteratorToTime(MmappedSegment::iterator&,
-                            const Rosegarden::RealTime&);
+                            const RealTime&);
 
     //--------------- Data members ---------------------------------
 
     ControlBlockMmapper* m_controlBlockMmapper;
 
-    Rosegarden::RealTime m_currentTime;
+    RealTime m_currentTime;
     mmappedsegments& m_segments;
 
     typedef std::vector<MmappedSegment::iterator*> segmentiterators;

@@ -168,7 +168,7 @@ private:
 };
 
 
-// MidiFilter is a bitmask of Rosegarden::MappedEvent::MappedEventType.
+// MidiFilter is a bitmask of MappedEvent::MappedEventType.
 // Look in sound/MappedEvent.h
 //
 typedef unsigned int MidiFilter;

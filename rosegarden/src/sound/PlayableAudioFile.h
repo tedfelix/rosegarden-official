@@ -151,11 +151,11 @@ public:
     void setAutoFade(bool value) { m_autoFade = value; }
 
     RealTime getFadeInTime() const { return m_fadeInTime; }
-    void setFadeInTime(const Rosegarden::RealTime &time) 
+    void setFadeInTime(const RealTime &time) 
         { m_fadeInTime = time; }
 
     RealTime getFadeOutTime() const { return m_fadeOutTime; }
-    void setFadeOutTime(const Rosegarden::RealTime &time) 
+    void setFadeOutTime(const RealTime &time) 
         { m_fadeOutTime = time; }
 
 
@@ -206,8 +206,8 @@ protected:
     RealTime              m_currentScanPoint;
 
     bool                  m_autoFade;
-    Rosegarden::RealTime  m_fadeInTime;
-    Rosegarden::RealTime  m_fadeOutTime;
+    RealTime  m_fadeInTime;
+    RealTime  m_fadeOutTime;
 
 private:
     PlayableAudioFile(const PlayableAudioFile &pAF); // not provided

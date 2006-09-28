@@ -3,15 +3,15 @@
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
-
+ 
     This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-
+ 
     The moral right of the authors to claim authorship of this work
     has been asserted.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -40,7 +40,7 @@ namespace Rosegarden
 BWFAudioFile::BWFAudioFile(const unsigned int &id,
                            const std::string &name,
                            const std::string &fileName):
-    RIFFAudioFile(id, name, fileName)
+        RIFFAudioFile(id, name, fileName)
 {
     m_type = WAV;
 
@@ -52,7 +52,7 @@ BWFAudioFile::BWFAudioFile(const std::string &fileName,
                            unsigned int bytesPerSecond = 6000,
                            unsigned int bytesPerFrame = 2,
                            unsigned int bitsPerSample = 16):
-    RIFFAudioFile(0, "", fileName)
+        RIFFAudioFile(0, "", fileName)
 {
     m_type = WAV;
     m_bitsPerSample = bitsPerSample;
@@ -63,8 +63,7 @@ BWFAudioFile::BWFAudioFile(const std::string &fileName,
 }
 
 BWFAudioFile::~BWFAudioFile()
-{
-}
+{}
 
 bool
 BWFAudioFile::open()
@@ -76,8 +75,7 @@ BWFAudioFile::open()
     m_inFile = new std::ifstream(m_fileName.c_str(),
                                  std::ios::in | std::ios::binary);
 
-    if (!(*m_inFile))
-    {
+    if (!(*m_inFile)) {
         m_type = UNKNOWN;
         return false;
     }
@@ -86,12 +84,9 @@ BWFAudioFile::open()
     //
     m_fileSize = m_fileInfo->size();
 
-    try
-    {
+    try {
         parseHeader();
-    }
-    catch (BadSoundFileException s)
-    {
+    } catch (BadSoundFileException s) {
         //throw(s);
         return false;
     }
@@ -107,8 +102,7 @@ bool
 BWFAudioFile::write()
 {
     // close if we're open
-    if (m_outFile)
-    {
+    if (m_outFile) {
         m_outFile->close();
         delete m_outFile;
     }
@@ -131,7 +125,7 @@ void
 BWFAudioFile::close()
 {
     if (m_outFile == 0)
-        return;
+        return ;
 
     m_outFile->seekp(0, std::ios::end);
     unsigned int totalSize = m_outFile->tellp();
@@ -163,7 +157,7 @@ BWFAudioFile::parseHeader()
     // file only has this chunk.  Exceptions tumble through.
     //
     readFormatChunk();
-   
+
 }
 
 std::streampos

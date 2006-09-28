@@ -3,15 +3,15 @@
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
-
+ 
     This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-
+ 
     The moral right of the authors to claim authorship of this work
     has been asserted.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -24,10 +24,11 @@
 
 namespace Rosegarden
 {
-      
+
 SequencerDataBlock::SequencerDataBlock(bool initialise)
 {
-    if (initialise) clearTemporaries();
+    if (initialise)
+        clearTemporaries();
 }
 
 bool
@@ -36,13 +37,14 @@ SequencerDataBlock::getVisual(MappedEvent &ev) const
     static int eventIndex = 0;
 
     if (!m_haveVisualEvent) {
-	return false;
+        return false;
     } else {
-	int thisEventIndex = m_visualEventIndex;
-	if (thisEventIndex == eventIndex) return false;
-	ev = *((MappedEvent *)&m_visualEvent);
-	eventIndex = thisEventIndex;
-	return true;
+        int thisEventIndex = m_visualEventIndex;
+        if (thisEventIndex == eventIndex)
+            return false;
+        ev = *((MappedEvent *) & m_visualEvent);
+        eventIndex = thisEventIndex;
+        return true;
     }
 }
 
@@ -51,9 +53,9 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 {
     m_haveVisualEvent = false;
     if (ev) {
-	*((MappedEvent *)&m_visualEvent) = *ev;
-	++m_visualEventIndex;
-	m_haveVisualEvent = true;
+        *((MappedEvent *)&m_visualEvent) = *ev;
+        ++m_visualEventIndex;
+        m_haveVisualEvent = true;
     }
 }
 
@@ -63,19 +65,20 @@ SequencerDataBlock::getRecordedEvents(MappedComposition &mC) const
     static int readIndex = -1;
 
     if (readIndex == -1) {
-	readIndex = m_recordEventIndex;
-	return 0;
+        readIndex = m_recordEventIndex;
+        return 0;
     }
 
     int currentIndex = m_recordEventIndex;
     int count = 0;
-    
+
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
     while (readIndex != currentIndex) {
-	mC.insert(new MappedEvent(recordBuffer[readIndex]));
-	if (++readIndex == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE) readIndex = 0;
-	++count;
+        mC.insert(new MappedEvent(recordBuffer[readIndex]));
+        if (++readIndex == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
+            readIndex = 0;
+        ++count;
     }
 
     return count;
@@ -89,8 +92,9 @@ SequencerDataBlock::addRecordedEvents(MappedComposition *mC)
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
     for (MappedComposition::iterator i = mC->begin(); i != mC->end(); ++i) {
-	recordBuffer[index] = **i;
-	if (++index == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE) index = 0;
+        recordBuffer[index] = **i;
+        if (++index == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
+            index = 0;
     }
 
     m_recordEventIndex = index;
@@ -102,7 +106,8 @@ SequencerDataBlock::instrumentToIndex(InstrumentId id) const
     int i;
 
     for (i = 0; i < m_knownInstrumentCount; ++i) {
-	if (m_knownInstruments[i] == id) return i;
+        if (m_knownInstruments[i] == id)
+            return i;
     }
 
     return -1;
@@ -114,13 +119,14 @@ SequencerDataBlock::instrumentToIndexCreating(InstrumentId id)
     int i;
 
     for (i = 0; i < m_knownInstrumentCount; ++i) {
-	if (m_knownInstruments[i] == id) return i;
+        if (m_knownInstruments[i] == id)
+            return i;
     }
 
     if (i == SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS) {
-	std::cerr << "ERROR: SequencerDataBlock::instrumentToIndexCreating("
-		  << id << "): out of instrument index space" << std::endl;
-	return -1;
+        std::cerr << "ERROR: SequencerDataBlock::instrumentToIndexCreating("
+        << id << "): out of instrument index space" << std::endl;
+        return -1;
     }
 
     m_knownInstruments[i] = id;
@@ -129,15 +135,15 @@ SequencerDataBlock::instrumentToIndexCreating(InstrumentId id)
 }
 
 bool
-SequencerDataBlock::getInstrumentLevel(InstrumentId id, 
-        LevelInfo &info) const
+SequencerDataBlock::getInstrumentLevel(InstrumentId id,
+                                       LevelInfo &info) const
 {
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int index = instrumentToIndex(id);
     if (index < 0) {
-	info.level = info.levelRight = 0;
-	return false;
+        info.level = info.levelRight = 0;
+        return false;
     }
 
     int currentUpdateIndex = m_levelUpdateIndices[index];
@@ -150,33 +156,33 @@ SequencerDataBlock::getInstrumentLevel(InstrumentId id,
               */
 
     if (lastUpdateIndex[index] != currentUpdateIndex) {
-	lastUpdateIndex[index]  = currentUpdateIndex;
-	return true;
+        lastUpdateIndex[index] = currentUpdateIndex;
+        return true;
     } else {
-	return false; // no change
+        return false; // no change
     }
 }
 
 bool
-SequencerDataBlock::getInstrumentLevelForMixer(InstrumentId id, 
+SequencerDataBlock::getInstrumentLevelForMixer(InstrumentId id,
         LevelInfo &info) const
 {
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 
     int index = instrumentToIndex(id);
     if (index < 0) {
-	info.level = info.levelRight = 0;
-	return false;
+        info.level = info.levelRight = 0;
+        return false;
     }
 
     int currentUpdateIndex = m_levelUpdateIndices[index];
     info = m_levels[index];
 
     if (lastUpdateIndex[index] != currentUpdateIndex) {
-	lastUpdateIndex[index]  = currentUpdateIndex;
-	return true;
+        lastUpdateIndex[index] = currentUpdateIndex;
+        return true;
     } else {
-	return false; // no change
+        return false; // no change
     }
 }
 
@@ -184,7 +190,8 @@ void
 SequencerDataBlock::setInstrumentLevel(InstrumentId id, const LevelInfo &info)
 {
     int index = instrumentToIndexCreating(id);
-    if (index < 0) return;
+    if (index < 0)
+        return ;
 
     m_levels[index] = info;
     ++m_levelUpdateIndices[index];
@@ -197,18 +204,18 @@ SequencerDataBlock::getInstrumentRecordLevel(InstrumentId id, LevelInfo &info) c
 
     int index = instrumentToIndex(id);
     if (index < 0) {
-	info.level = info.levelRight = 0;
-	return false;
+        info.level = info.levelRight = 0;
+        return false;
     }
 
     int currentUpdateIndex = m_recordLevelUpdateIndices[index];
     info = m_recordLevels[index];
 
     if (lastUpdateIndex[index] != currentUpdateIndex) {
-	lastUpdateIndex[index]  = currentUpdateIndex;
-	return true;
+        lastUpdateIndex[index] = currentUpdateIndex;
+        return true;
     } else {
-	return false; // no change
+        return false; // no change
     }
 }
 
@@ -219,18 +226,18 @@ SequencerDataBlock::getInstrumentRecordLevelForMixer(InstrumentId id, LevelInfo 
 
     int index = instrumentToIndex(id);
     if (index < 0) {
-	info.level = info.levelRight = 0;
-	return false;
+        info.level = info.levelRight = 0;
+        return false;
     }
 
     int currentUpdateIndex = m_recordLevelUpdateIndices[index];
     info = m_recordLevels[index];
 
     if (lastUpdateIndex[index] != currentUpdateIndex) {
-	lastUpdateIndex[index]  = currentUpdateIndex;
-	return true;
+        lastUpdateIndex[index] = currentUpdateIndex;
+        return true;
     } else {
-	return false; // no change
+        return false; // no change
     }
 }
 
@@ -238,7 +245,8 @@ void
 SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &info)
 {
     int index = instrumentToIndexCreating(id);
-    if (index < 0) return;
+    if (index < 0)
+        return ;
 
     m_recordLevels[index] = info;
     ++m_recordLevelUpdateIndices[index];
@@ -248,7 +256,7 @@ void
 SequencerDataBlock::setTrackLevel(TrackId id, const LevelInfo &info)
 {
     if (m_controlBlock) {
-	setInstrumentLevel(m_controlBlock->getInstrumentForTrack(id), info);
+        setInstrumentLevel(m_controlBlock->getInstrumentForTrack(id), info);
     }
 }
 
@@ -258,8 +266,8 @@ SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
     info.level = info.levelRight = 0;
 
     if (m_controlBlock) {
-	return getInstrumentLevel(m_controlBlock->getInstrumentForTrack(id),
-				  info);
+        return getInstrumentLevel(m_controlBlock->getInstrumentForTrack(id),
+                                  info);
     }
 
     return false;
@@ -271,18 +279,18 @@ SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const
     static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
 
     if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
-	info.level = info.levelRight = 0;
-	return false;
+        info.level = info.levelRight = 0;
+        return false;
     }
 
     int currentUpdateIndex = m_submasterLevelUpdateIndices[submaster];
     info = m_submasterLevels[submaster];
 
     if (lastUpdateIndex[submaster] != currentUpdateIndex) {
-	lastUpdateIndex[submaster]  = currentUpdateIndex;
-	return true;
+        lastUpdateIndex[submaster] = currentUpdateIndex;
+        return true;
     } else {
-	return false; // no change
+        return false; // no change
     }
 }
 
@@ -290,7 +298,7 @@ void
 SequencerDataBlock::setSubmasterLevel(int submaster, const LevelInfo &info)
 {
     if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
-	return;
+        return ;
     }
 
     m_submasterLevels[submaster] = info;
@@ -306,10 +314,10 @@ SequencerDataBlock::getMasterLevel(LevelInfo &level) const
     level = m_masterLevel;
 
     if (lastUpdateIndex != currentIndex) {
-	lastUpdateIndex  = currentIndex;
-	return true;
+        lastUpdateIndex = currentIndex;
+        return true;
     } else {
-	return false;
+        return false;
     }
 }
 
@@ -330,8 +338,8 @@ SequencerDataBlock::clearTemporaries()
     *((MappedEvent *)&m_visualEvent) = MappedEvent();
     m_haveVisualEvent = false;
     m_recordEventIndex = 0;
-//!!!    m_recordLevel.level = 0;
-//!!!    m_recordLevel.levelRight = 0;
+    //!!!    m_recordLevel.level = 0;
+    //!!!    m_recordLevel.levelRight = 0;
     memset(m_knownInstruments, 0,
            SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(InstrumentId));
     m_knownInstrumentCount = 0;

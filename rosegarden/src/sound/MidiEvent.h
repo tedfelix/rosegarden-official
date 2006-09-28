@@ -25,14 +25,14 @@
 #include "Midi.h"
 #include "Event.h"
 
-// MidiEvent holds MIDI and Rosegarden::Event data during MIDI file I/O.
+// MidiEvent holds MIDI and Event data during MIDI file I/O.
 // We don't use this class at all for playback or recording of MIDI -
 // for that look at MappedEvent and MappedComposition.
 //
 // Rosegarden doesn't have any internal concept of MIDI events, only
-// Rosegarden::Events which are a superset of MIDI functionality.
+// Events which are a superset of MIDI functionality.
 //
-// Check out Rosegarden::Event in base/ for more information.
+// Check out Event in base/ for more information.
 //
 //
 //
@@ -47,32 +47,32 @@ public:
 
     // No data event
     //
-    MidiEvent(Rosegarden::timeT deltaTime,
+    MidiEvent(timeT deltaTime,
               MidiByte eventCode);
 
     // single data byte case
     //
-    MidiEvent(Rosegarden::timeT deltaTime,
+    MidiEvent(timeT deltaTime,
               MidiByte eventCode,
               MidiByte data1);
 
     // double data byte
     //
-    MidiEvent(Rosegarden::timeT deltaTime,
+    MidiEvent(timeT deltaTime,
               MidiByte eventCode,
               MidiByte data1,
               MidiByte data2);
 
     // Meta event
     //
-    MidiEvent(Rosegarden::timeT deltaTime,
+    MidiEvent(timeT deltaTime,
               MidiByte eventCode,
               MidiByte metaEventCode,
               const std::string &metaMessage);
 
     // Sysex style constructor
     //
-    MidiEvent(Rosegarden::timeT deltaTime,
+    MidiEvent(timeT deltaTime,
               MidiByte eventCode,
               const std::string &sysEx);
 
@@ -84,9 +84,9 @@ public:
     void print();
 
 
-    void setTime(const Rosegarden::timeT &time) { m_deltaTime = time; }
-    void setDuration(const Rosegarden::timeT& duration) {m_duration = duration;}
-    Rosegarden::timeT addTime(const Rosegarden::timeT &time);
+    void setTime(const timeT &time) { m_deltaTime = time; }
+    void setDuration(const timeT& duration) {m_duration = duration;}
+    timeT addTime(const timeT &time);
 
     MidiByte getMessageType() const
         { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
@@ -94,8 +94,8 @@ public:
     MidiByte getChannelNumber() const
         { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
 
-    Rosegarden::timeT getTime() const { return m_deltaTime; }
-    Rosegarden::timeT getDuration() const { return m_duration; }
+    timeT getTime() const { return m_deltaTime; }
+    timeT getDuration() const { return m_duration; }
 
     MidiByte getPitch() const { return m_data1; }
     MidiByte getVelocity() const { return m_data2; }
@@ -115,8 +115,8 @@ private:
 
     MidiEvent& operator=(const MidiEvent);
 
-    Rosegarden::timeT m_deltaTime;
-    Rosegarden::timeT m_duration;
+    timeT m_deltaTime;
+    timeT m_duration;
     MidiByte          m_eventCode;
     MidiByte          m_data1;         // or Note
     MidiByte          m_data2;         // or Velocity

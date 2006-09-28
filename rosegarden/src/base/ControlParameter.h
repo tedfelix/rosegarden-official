@@ -53,14 +53,14 @@ public:
     //
     struct ControlPositionCmp
     {
-        bool operator()(Rosegarden::ControlParameter *c1,
-                        Rosegarden::ControlParameter *c2)
+        bool operator()(ControlParameter *c1,
+                        ControlParameter *c2)
         {
             return (c1->getIPBPosition() < c2->getIPBPosition());
         }
 
-        bool operator()(const Rosegarden::ControlParameter &c1,
-                        const Rosegarden::ControlParameter &c2)
+        bool operator()(const ControlParameter &c1,
+                        const ControlParameter &c2)
         {
             return (c1.getIPBPosition() < c2.getIPBPosition());
         }

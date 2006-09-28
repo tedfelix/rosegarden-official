@@ -32,45 +32,45 @@ public:
     SequencerMmapper();
     ~SequencerMmapper();
     
-    void updatePositionPointer(Rosegarden::RealTime time) {
+    void updatePositionPointer(RealTime time) {
 	m_sequencerDataBlock->setPositionPointer(time);
     }
 
-    void updateVisual(Rosegarden::MappedEvent *ev) {
+    void updateVisual(MappedEvent *ev) {
 	m_sequencerDataBlock->setVisual(ev);
     }
 
-    void updateRecordingBuffer(Rosegarden::MappedComposition *mC) {
+    void updateRecordingBuffer(MappedComposition *mC) {
 	m_sequencerDataBlock->addRecordedEvents(mC);
     }
 
-    void setTrackLevel(Rosegarden::TrackId track, const Rosegarden::LevelInfo &info) {
+    void setTrackLevel(TrackId track, const LevelInfo &info) {
 	m_sequencerDataBlock->setTrackLevel(track, info);
     }
 
-    void setInstrumentLevel(Rosegarden::InstrumentId id,
-			    const Rosegarden::LevelInfo &info) {
+    void setInstrumentLevel(InstrumentId id,
+			    const LevelInfo &info) {
 	m_sequencerDataBlock->setInstrumentLevel(id, info);
     }
 
-    void setInstrumentRecordLevel(Rosegarden::InstrumentId id,
-				  const Rosegarden::LevelInfo &info) {
+    void setInstrumentRecordLevel(InstrumentId id,
+				  const LevelInfo &info) {
 	m_sequencerDataBlock->setInstrumentRecordLevel(id, info);
     }
 
     void setSubmasterLevel(int submaster,
-			   const Rosegarden::LevelInfo &info) {
+			   const LevelInfo &info) {
 	m_sequencerDataBlock->setSubmasterLevel(submaster, info);
     }
 
-    void setMasterLevel(const Rosegarden::LevelInfo &info) {
+    void setMasterLevel(const LevelInfo &info) {
 	m_sequencerDataBlock->setMasterLevel(info);
     }
 
-    Rosegarden::SequencerDataBlock *getSequencerDataBlock() {
+    SequencerDataBlock *getSequencerDataBlock() {
 	return m_sequencerDataBlock;
     }
-    void setControlBlock(Rosegarden::ControlBlock *cb) {
+    void setControlBlock(ControlBlock *cb) {
 	m_sequencerDataBlock->setControlBlock(cb);
     }
 
@@ -85,7 +85,7 @@ protected:
     int                   m_fd;
     void*                 m_mmappedBuffer;
     size_t                m_mmappedSize;
-    Rosegarden::SequencerDataBlock *m_sequencerDataBlock;
+    SequencerDataBlock *m_sequencerDataBlock;
 };
 
 

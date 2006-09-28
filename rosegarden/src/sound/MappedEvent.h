@@ -21,7 +21,7 @@
 
 #include <qdatastream.h>
 
-#include "Composition.h" // for Rosegarden::RealTime
+#include "Composition.h" // for RealTime
 #include "Event.h"
 
 
@@ -207,8 +207,8 @@ public:
                    m_isPersistent(false),
                    m_runtimeSegmentId(-1),
                    m_autoFade(false),
-                   m_fadeInTime(Rosegarden::RealTime::zeroTime),
-                   m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+                   m_fadeInTime(RealTime::zeroTime),
+                   m_fadeOutTime(RealTime::zeroTime),
                    m_recordedChannel(0),
                    m_recordedDevice(0) {}
 
@@ -243,8 +243,8 @@ public:
         m_isPersistent(false),
         m_runtimeSegmentId(-1),
         m_autoFade(false),
-        m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_fadeInTime(RealTime::zeroTime),
+        m_fadeOutTime(RealTime::zeroTime),
         m_recordedChannel(0),
         m_recordedDevice(0) {}
 
@@ -267,8 +267,8 @@ public:
          m_isPersistent(false),
          m_runtimeSegmentId(-1),
          m_autoFade(false),
-         m_fadeInTime(Rosegarden::RealTime::zeroTime),
-         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+         m_fadeInTime(RealTime::zeroTime),
+         m_fadeOutTime(RealTime::zeroTime),
          m_recordedChannel(0),
          m_recordedDevice(0) {}
 
@@ -291,8 +291,8 @@ public:
          m_isPersistent(false),
          m_runtimeSegmentId(-1),
          m_autoFade(false),
-         m_fadeInTime(Rosegarden::RealTime::zeroTime),
-         m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+         m_fadeInTime(RealTime::zeroTime),
+         m_fadeOutTime(RealTime::zeroTime),
          m_recordedChannel(0),
          m_recordedDevice(0) {}
 
@@ -311,8 +311,8 @@ public:
         m_isPersistent(false),
         m_runtimeSegmentId(-1),
         m_autoFade(false),
-        m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_fadeInTime(RealTime::zeroTime),
+        m_fadeOutTime(RealTime::zeroTime),
         m_recordedChannel(0),
         m_recordedDevice(0) {}
 
@@ -333,8 +333,8 @@ public:
         m_isPersistent(false),
         m_runtimeSegmentId(-1),
         m_autoFade(false),
-        m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
+        m_fadeInTime(RealTime::zeroTime),
+        m_fadeOutTime(RealTime::zeroTime),
         m_recordedChannel(0),
         m_recordedDevice(0) {}
 
@@ -482,11 +482,11 @@ public:
     void setAutoFade(bool value) { m_autoFade = value; }
 
     RealTime getFadeInTime() const { return m_fadeInTime; }
-    void setFadeInTime(const Rosegarden::RealTime &time)
+    void setFadeInTime(const RealTime &time)
             { m_fadeInTime = time; }
 
     RealTime getFadeOutTime() const { return m_fadeOutTime; }
-    void setFadeOutTime(const Rosegarden::RealTime &time)
+    void setFadeOutTime(const RealTime &time)
             { m_fadeOutTime = time; }
     
     // Original event input channel as it was recorded
@@ -528,8 +528,8 @@ private:
     // Audio autofading
     //
     bool                  m_autoFade;
-    Rosegarden::RealTime  m_fadeInTime;
-    Rosegarden::RealTime  m_fadeOutTime;
+    RealTime  m_fadeInTime;
+    RealTime  m_fadeOutTime;
 
     // input event original data,
     // stored as it was recorded

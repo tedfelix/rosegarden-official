@@ -39,12 +39,12 @@ namespace Rosegarden
 
 class MappedInstrument;
 
-class MappedDevice : public std::vector<Rosegarden::MappedInstrument*>
+class MappedDevice : public std::vector<MappedInstrument*>
 {
 public:
     MappedDevice();
-    MappedDevice(Rosegarden::DeviceId id,
-                 Rosegarden::Device::DeviceType type,
+    MappedDevice(DeviceId id,
+                 Device::DeviceType type,
                  std::string name,
 		 std::string connection = "");
 
@@ -66,11 +66,11 @@ public:
     std::string getName() const { return m_name; }
     void setName(const std::string &name) { m_name = name; }
 
-    Rosegarden::DeviceId getId() const { return m_id; }
-    void setId(Rosegarden::DeviceId id) { m_id = id; }
+    DeviceId getId() const { return m_id; }
+    void setId(DeviceId id) { m_id = id; }
 
-    Rosegarden::Device::DeviceType getType() const { return m_type; }
-    void setType(Rosegarden::Device::DeviceType type) { m_type = type; }
+    Device::DeviceType getType() const { return m_type; }
+    void setType(Device::DeviceType type) { m_type = type; }
 
     std::string getConnection() const { return m_connection; }
     void setConnection(std::string connection) { m_connection = connection; }
@@ -83,18 +83,18 @@ public:
 
 protected:
 
-    Rosegarden::DeviceId            m_id;
-    Rosegarden::Device::DeviceType  m_type;
+    DeviceId            m_id;
+    Device::DeviceType  m_type;
     std::string                     m_name;
     std::string                     m_connection;
     MidiDevice::DeviceDirection     m_direction;
     bool			    m_recording;
 };
 
-typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator
+typedef std::vector<MappedInstrument*>::const_iterator
     MappedDeviceConstIterator;
 
-typedef std::vector<Rosegarden::MappedInstrument*>::iterator
+typedef std::vector<MappedInstrument*>::iterator
     MappedDeviceIterator;
 
 }

@@ -30,10 +30,10 @@
 using std::cerr;
 using std::endl;
 using std::cout;
-using Rosegarden::MappedEvent;
+using MappedEvent;
 
-using Rosegarden::InstrumentId;
-using Rosegarden::ControlBlock;
+using InstrumentId;
+using ControlBlock;
 
 class ControlBlockMmapper
 {
@@ -67,17 +67,17 @@ public:
     bool isMidiRoutingEnabled() 
         { return m_controlBlock->isMidiRoutingEnabled(); }
         
-    Rosegarden::TrackId getSelectedTrack()
+    TrackId getSelectedTrack()
         { return m_controlBlock->getSelectedTrack(); }
 
-    Rosegarden::MidiFilter getThruFilter()
+    MidiFilter getThruFilter()
         { return m_controlBlock->getThruFilter(); }
 
-    Rosegarden::MidiFilter getRecordFilter()
+    MidiFilter getRecordFilter()
         { return m_controlBlock->getRecordFilter(); }
 
     // for transfer to SequencerMmapper
-    Rosegarden::ControlBlock *getControlBlock()
+    ControlBlock *getControlBlock()
         { return m_controlBlock; }
 
 protected:

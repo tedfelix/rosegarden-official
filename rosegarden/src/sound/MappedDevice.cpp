@@ -3,15 +3,15 @@
 /*
   Rosegarden-4
   A sequencer and musical notation editor.
-
+ 
   This program is Copyright 2000-2006
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
-
+ 
   The moral right of the authors to claim authorship of this work
   has been asserted.
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -27,36 +27,33 @@ namespace Rosegarden
 {
 
 MappedDevice::MappedDevice():
-    std::vector<Rosegarden::MappedInstrument*>(),
-    m_id(Rosegarden::Device::NO_DEVICE),
-    m_type(Rosegarden::Device::Midi),
-    m_name("Unconfigured device"),
-    m_connection(""),
-    m_direction(MidiDevice::Play),
-    m_recording(false)
-{
-}
+        std::vector<MappedInstrument*>(),
+        m_id(Device::NO_DEVICE),
+        m_type(Device::Midi),
+        m_name("Unconfigured device"),
+        m_connection(""),
+        m_direction(MidiDevice::Play),
+        m_recording(false)
+{}
 
-MappedDevice::MappedDevice(Rosegarden::DeviceId id,
-                           Rosegarden::Device::DeviceType type,
+MappedDevice::MappedDevice(DeviceId id,
+                           Device::DeviceType type,
                            std::string name,
-			   std::string connection):
-    std::vector<Rosegarden::MappedInstrument*>(),
-    m_id(id),
-    m_type(type),
-    m_name(name),
-    m_connection(connection),
-    m_direction(MidiDevice::Play),
-    m_recording(false)
-{
-}
+                           std::string connection):
+        std::vector<MappedInstrument*>(),
+        m_id(id),
+        m_type(type),
+        m_name(name),
+        m_connection(connection),
+        m_direction(MidiDevice::Play),
+        m_recording(false)
+{}
 
 MappedDevice::~MappedDevice()
-{
-}
+{}
 
 MappedDevice::MappedDevice(const MappedDevice &mD):
-    std::vector<Rosegarden::MappedInstrument*>()
+        std::vector<MappedInstrument*>()
 {
     clear();
 
@@ -94,7 +91,8 @@ MappedDevice::operator+(const MappedDevice &mD)
 MappedDevice&
 MappedDevice::operator=(const MappedDevice &mD)
 {
-    if (&mD == this) return *this;
+    if (&mD == this)
+        return * this;
 
     clear();
 
@@ -119,8 +117,7 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     dS >> instruments;
 
     MappedInstrument mI;
-    while (!dS.atEnd() && instruments)
-    {
+    while (!dS.atEnd() && instruments) {
         dS >> mI;
         mD->push_back(new MappedInstrument(mI));
         instruments--;
@@ -139,17 +136,17 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     dS >> direction;
     dS >> recording;
     mD->setId(id);
-    mD->setType(Rosegarden::Device::DeviceType(dType));
+    mD->setType(Device::DeviceType(dType));
     mD->setName(std::string(name.data()));
     mD->setConnection(connection.data());
     mD->setDirection(MidiDevice::DeviceDirection(direction));
     mD->setRecording((bool)recording);
 
 #ifdef DEBUG_MAPPEDDEVICE
-    if (instruments)
-    {
+
+    if (instruments) {
         std::cerr << "MappedDevice::operator>> - "
-                  << "wrong number of events received" << std::endl;
+        << "wrong number of events received" << std::endl;
     }
 #endif
 
@@ -165,8 +162,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 
     MappedInstrument mI;
 
-    while (!dS.atEnd() && instruments)
-    {
+    while (!dS.atEnd() && instruments) {
         dS >> mI;
         mD.push_back(new MappedInstrument(mI));
         instruments--;
@@ -185,17 +181,17 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     dS >> direction;
     dS >> recording;
     mD.setId(id);
-    mD.setType(Rosegarden::Device::DeviceType(dType));
+    mD.setType(Device::DeviceType(dType));
     mD.setName(std::string(name.data()));
     mD.setConnection(connection.data());
     mD.setDirection(MidiDevice::DeviceDirection(direction));
     mD.setRecording((bool)recording);
 
 #ifdef DEBUG_MAPPEDDEVICE
-    if (instruments)
-    {
+
+    if (instruments) {
         std::cerr << "MappedDevice::operator>> - "
-                  << "wrong number of events received" << std::endl;
+        << "wrong number of events received" << std::endl;
     }
 #endif
 
@@ -218,8 +214,9 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << (unsigned int)(mD->isRecording());
 
 #ifdef DEBUG_MAPPEDDEVICE
+
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD->getConnection() << "\""
-	      << std::endl;
+    << std::endl;
 #endif
 
     return dS;
@@ -241,8 +238,9 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << (unsigned int)(mD.isRecording());
 
 #ifdef DEBUG_MAPPEDDEVICE
+
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD.getConnection() << "\""
-	      << std::endl;
+    << std::endl;
 #endif
 
     return dS;

@@ -3,15 +3,15 @@
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
-
+ 
     This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-
+ 
     The moral right of the authors to claim authorship of this work
     has been asserted.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -39,18 +39,18 @@
 
 namespace Rosegarden
 {
- 
+
 LADSPAPluginFactory::LADSPAPluginFactory()
-{
-}
- 
+{}
+
 LADSPAPluginFactory::~LADSPAPluginFactory()
 {
-    for (std::set<RunnablePluginInstance *>::iterator i = m_instances.begin();
-	 i != m_instances.end(); ++i) {
-	(*i)->setFactory(0);
-	delete *i;
-    }
+    for (std::set
+                <RunnablePluginInstance *>::iterator i = m_instances.begin();
+                i != m_instances.end(); ++i) {
+            (*i)->setFactory(0);
+            delete *i;
+        }
     m_instances.clear();
     unloadUnusedLibraries();
 }
@@ -65,69 +65,69 @@ void
 LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 {
     for (std::vector<QString>::iterator i = m_identifiers.begin();
-	 i != m_identifiers.end(); ++i) {
+            i != m_identifiers.end(); ++i) {
 
-	const LADSPA_Descriptor *descriptor = getLADSPADescriptor(*i);
+        const LADSPA_Descriptor *descriptor = getLADSPADescriptor(*i);
 
-	if (!descriptor) {
-	    std::cerr << "WARNING: LADSPAPluginFactory::enumeratePlugins: couldn't get descriptor for identifier " << *i << std::endl;
-	    continue;
-	}
-	
-	list.push_back(*i);
-	list.push_back(descriptor->Name);
-	list.push_back(QString("%1").arg(descriptor->UniqueID));
-	list.push_back(descriptor->Label);
-	list.push_back(descriptor->Maker);
-	list.push_back(descriptor->Copyright);
-	list.push_back("false"); // is synth
-	list.push_back("false"); // is grouped
-	
-	if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
-	    m_taxonomy[descriptor->UniqueID] != "") {
-//		std::cerr << "LADSPAPluginFactory: cat for " << *i<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
-	    list.push_back(m_taxonomy[descriptor->UniqueID]);
+        if (!descriptor) {
+            std::cerr << "WARNING: LADSPAPluginFactory::enumeratePlugins: couldn't get descriptor for identifier " << *i << std::endl;
+            continue;
+        }
 
-	} else if (m_fallbackCategories.find(*i) !=
-		   m_fallbackCategories.end()) {
-	    list.push_back(m_fallbackCategories[*i]);
-//		std::cerr << "LADSPAPluginFactory: cat for " << *i  <<" found in fallbacks as " << m_fallbackCategories[*i] << std::endl;
+        list.push_back(*i);
+        list.push_back(descriptor->Name);
+        list.push_back(QString("%1").arg(descriptor->UniqueID));
+        list.push_back(descriptor->Label);
+        list.push_back(descriptor->Maker);
+        list.push_back(descriptor->Copyright);
+        list.push_back("false"); // is synth
+        list.push_back("false"); // is grouped
 
-	} else {
-	    list.push_back("");
-//		std::cerr << "LADSPAPluginFactory: cat for " << *i << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
-	    
-	}
+        if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
+                m_taxonomy[descriptor->UniqueID] != "") {
+            //		std::cerr << "LADSPAPluginFactory: cat for " << *i<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
+            list.push_back(m_taxonomy[descriptor->UniqueID]);
 
-	list.push_back(QString("%1").arg(descriptor->PortCount));
+        } else if (m_fallbackCategories.find(*i) !=
+                   m_fallbackCategories.end()) {
+            list.push_back(m_fallbackCategories[*i]);
+            //		std::cerr << "LADSPAPluginFactory: cat for " << *i  <<" found in fallbacks as " << m_fallbackCategories[*i] << std::endl;
 
-	for (unsigned long p = 0; p < descriptor->PortCount; ++p) {
+        } else {
+            list.push_back("");
+            //		std::cerr << "LADSPAPluginFactory: cat for " << *i << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
 
-	    int type = 0;
-	    if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[p])) {
-		type |= PluginPort::Control;
-	    } else {
-		type |= PluginPort::Audio;
-	    }
-	    if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[p])) {
-		type |= PluginPort::Input;
-	    } else {
-		type |= PluginPort::Output;
-	    }
+        }
 
-	    list.push_back(QString("%1").arg(p));
-	    list.push_back(descriptor->PortNames[p]);
-	    list.push_back(QString("%1").arg(type));
-	    list.push_back(QString("%1").arg(getPortDisplayHint(descriptor, p)));
-	    list.push_back(QString("%1").arg(getPortMinimum(descriptor, p)));
-	    list.push_back(QString("%1").arg(getPortMaximum(descriptor, p)));
-	    list.push_back(QString("%1").arg(getPortDefault(descriptor, p)));
-	}
+        list.push_back(QString("%1").arg(descriptor->PortCount));
+
+        for (unsigned long p = 0; p < descriptor->PortCount; ++p) {
+
+            int type = 0;
+            if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[p])) {
+                type |= PluginPort::Control;
+            } else {
+                type |= PluginPort::Audio;
+            }
+            if (LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[p])) {
+                type |= PluginPort::Input;
+            } else {
+                type |= PluginPort::Output;
+            }
+
+            list.push_back(QString("%1").arg(p));
+            list.push_back(descriptor->PortNames[p]);
+            list.push_back(QString("%1").arg(type));
+            list.push_back(QString("%1").arg(getPortDisplayHint(descriptor, p)));
+            list.push_back(QString("%1").arg(getPortMinimum(descriptor, p)));
+            list.push_back(QString("%1").arg(getPortMaximum(descriptor, p)));
+            list.push_back(QString("%1").arg(getPortDefault(descriptor, p)));
+        }
     }
 
     unloadUnusedLibraries();
 }
-	
+
 
 void
 LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot)
@@ -135,65 +135,65 @@ LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &sl
     const LADSPA_Descriptor *descriptor = getLADSPADescriptor(identifier);
 
     if (descriptor) {
-	
-	slot.setProperty(MappedPluginSlot::Label, descriptor->Label);
-	slot.setProperty(MappedPluginSlot::PluginName, descriptor->Name);
-	slot.setProperty(MappedPluginSlot::Author, descriptor->Maker);
-	slot.setProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
-	slot.setProperty(MappedPluginSlot::PortCount, descriptor->PortCount);
 
-	if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
-	    m_taxonomy[descriptor->UniqueID] != "") {
-//		std::cerr << "LADSPAPluginFactory: cat for " << identifier<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
-	    slot.setProperty(MappedPluginSlot::Category,
-			     m_taxonomy[descriptor->UniqueID]);
+        slot.setProperty(MappedPluginSlot::Label, descriptor->Label);
+        slot.setProperty(MappedPluginSlot::PluginName, descriptor->Name);
+        slot.setProperty(MappedPluginSlot::Author, descriptor->Maker);
+        slot.setProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
+        slot.setProperty(MappedPluginSlot::PortCount, descriptor->PortCount);
 
-	} else if (m_fallbackCategories.find(identifier) !=
-		   m_fallbackCategories.end()) {
-//		std::cerr << "LADSPAPluginFactory: cat for " << identifier  <<" found in fallbacks as " << m_fallbackCategories[identifier] << std::endl;
-	    slot.setProperty(MappedPluginSlot::Category,
-			     m_fallbackCategories[identifier]);
+        if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
+                m_taxonomy[descriptor->UniqueID] != "") {
+            //		std::cerr << "LADSPAPluginFactory: cat for " << identifier<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
+            slot.setProperty(MappedPluginSlot::Category,
+                             m_taxonomy[descriptor->UniqueID]);
 
-	} else {
-//		std::cerr << "LADSPAPluginFactory: cat for " << identifier << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
-	    slot.setProperty(MappedPluginSlot::Category, "");
-	}
+        } else if (m_fallbackCategories.find(identifier) !=
+                   m_fallbackCategories.end()) {
+            //		std::cerr << "LADSPAPluginFactory: cat for " << identifier  <<" found in fallbacks as " << m_fallbackCategories[identifier] << std::endl;
+            slot.setProperty(MappedPluginSlot::Category,
+                             m_fallbackCategories[identifier]);
 
-	slot.destroyChildren();
-	
-	for (unsigned long i = 0; i < descriptor->PortCount; i++) {
+        } else {
+            //		std::cerr << "LADSPAPluginFactory: cat for " << identifier << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
+            slot.setProperty(MappedPluginSlot::Category, "");
+        }
 
-	    if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]) &&
-		LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i])) {
+        slot.destroyChildren();
 
-		MappedStudio *studio = dynamic_cast<MappedStudio *>(slot.getParent());
-		if (!studio) {
-		    std::cerr << "WARNING: LADSPAPluginFactory::populatePluginSlot: can't find studio" << std::endl;
-		    return;
-		}
+        for (unsigned long i = 0; i < descriptor->PortCount; i++) {
 
-		MappedPluginPort *port = 
-		    dynamic_cast<MappedPluginPort *>
-		    (studio->createObject(MappedObject::PluginPort));
-		    
-		slot.addChild(port);
-		port->setParent(&slot);
-		
-		port->setProperty(MappedPluginPort::PortNumber, i);
-		port->setProperty(MappedPluginPort::Name,
-				  descriptor->PortNames[i]);
-		port->setProperty(MappedPluginPort::Maximum,
-				  getPortMaximum(descriptor, i));
-		port->setProperty(MappedPluginPort::Minimum,
-				  getPortMinimum(descriptor, i));
-		port->setProperty(MappedPluginPort::Default,
-				  getPortDefault(descriptor, i));
-		port->setProperty(MappedPluginPort::DisplayHint,
-				  getPortDisplayHint(descriptor, i));
-	    }
-	}
+            if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]) &&
+                    LADSPA_IS_PORT_INPUT(descriptor->PortDescriptors[i])) {
+
+                MappedStudio *studio = dynamic_cast<MappedStudio *>(slot.getParent());
+                if (!studio) {
+                    std::cerr << "WARNING: LADSPAPluginFactory::populatePluginSlot: can't find studio" << std::endl;
+                    return ;
+                }
+
+                MappedPluginPort *port =
+                    dynamic_cast<MappedPluginPort *>
+                    (studio->createObject(MappedObject::PluginPort));
+
+                slot.addChild(port);
+                port->setParent(&slot);
+
+                port->setProperty(MappedPluginPort::PortNumber, i);
+                port->setProperty(MappedPluginPort::Name,
+                                  descriptor->PortNames[i]);
+                port->setProperty(MappedPluginPort::Maximum,
+                                  getPortMaximum(descriptor, i));
+                port->setProperty(MappedPluginPort::Minimum,
+                                  getPortMinimum(descriptor, i));
+                port->setProperty(MappedPluginPort::Default,
+                                  getPortDefault(descriptor, i));
+                port->setProperty(MappedPluginPort::DisplayHint,
+                                  getPortDisplayHint(descriptor, i));
+            }
+        }
     }
-    
+
     //!!! leak here if the plugin is not instantiated too...?
 }
 
@@ -201,20 +201,20 @@ MappedObjectValue
 LADSPAPluginFactory::getPortMinimum(const LADSPA_Descriptor *descriptor, int port)
 {
     LADSPA_PortRangeHintDescriptor d =
-	descriptor->PortRangeHints[port].HintDescriptor;
+        descriptor->PortRangeHints[port].HintDescriptor;
 
     MappedObjectValue minimum = 0.0;
-		
+
     if (LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
-	MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
-	minimum = lb;
+        MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
+        minimum = lb;
     } else if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
-	MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
-	minimum = std::min(0.0, ub - 1.0);
+        MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
+        minimum = std::min(0.0, ub - 1.0);
     }
-    
+
     if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
-	minimum *= m_sampleRate;
+        minimum *= m_sampleRate;
     }
 
     return minimum;
@@ -224,20 +224,20 @@ MappedObjectValue
 LADSPAPluginFactory::getPortMaximum(const LADSPA_Descriptor *descriptor, int port)
 {
     LADSPA_PortRangeHintDescriptor d =
-	descriptor->PortRangeHints[port].HintDescriptor;
+        descriptor->PortRangeHints[port].HintDescriptor;
 
     MappedObjectValue maximum = 1.0;
-    
+
     if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
-	MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
-	maximum = ub;
+        MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
+        maximum = ub;
     } else {
-	MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
-	maximum = lb + 1.0;
+        MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
+        maximum = lb + 1.0;
     }
-    
+
     if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
-	maximum *= m_sampleRate;
+        maximum *= m_sampleRate;
     }
 
     return maximum;
@@ -250,85 +250,87 @@ LADSPAPluginFactory::getPortDefault(const LADSPA_Descriptor *descriptor, int por
     MappedObjectValue maximum = getPortMaximum(descriptor, port);
     MappedObjectValue deft;
 
-    if (m_portDefaults.find(descriptor->UniqueID) != 
-	m_portDefaults.end()) {
-	if (m_portDefaults[descriptor->UniqueID].find(port) !=
-	    m_portDefaults[descriptor->UniqueID].end()) {
+    if (m_portDefaults.find(descriptor->UniqueID) !=
+            m_portDefaults.end()) {
+        if (m_portDefaults[descriptor->UniqueID].find(port) !=
+                m_portDefaults[descriptor->UniqueID].end()) {
 
-	    deft = m_portDefaults[descriptor->UniqueID][port];
-	    if (deft < minimum) deft = minimum;
-	    if (deft > maximum) deft = maximum;
-	    return deft;
-	}
+            deft = m_portDefaults[descriptor->UniqueID][port];
+            if (deft < minimum)
+                deft = minimum;
+            if (deft > maximum)
+                deft = maximum;
+            return deft;
+        }
     }
 
     LADSPA_PortRangeHintDescriptor d =
-	descriptor->PortRangeHints[port].HintDescriptor;
+        descriptor->PortRangeHints[port].HintDescriptor;
 
     bool logarithmic = LADSPA_IS_HINT_LOGARITHMIC(d);
-    
+
     if (!LADSPA_IS_HINT_HAS_DEFAULT(d)) {
-	
-	deft = minimum;
-	
+
+        deft = minimum;
+
     } else if (LADSPA_IS_HINT_DEFAULT_MINIMUM(d)) {
-	
-	deft = minimum;
-	
+
+        deft = minimum;
+
     } else if (LADSPA_IS_HINT_DEFAULT_LOW(d)) {
-	
-	if (logarithmic) {
-	    deft = powf(10, log10(minimum) * 0.75 +
-			    log10(maximum) * 0.25);
-	} else {
-	    deft = minimum * 0.75 + maximum * 0.25;
-	}
-	
+
+        if (logarithmic) {
+            deft = powf(10, log10(minimum) * 0.75 +
+                        log10(maximum) * 0.25);
+        } else {
+            deft = minimum * 0.75 + maximum * 0.25;
+        }
+
     } else if (LADSPA_IS_HINT_DEFAULT_MIDDLE(d)) {
-	
-	if (logarithmic) {
-	    deft = powf(10, log10(minimum) * 0.5 +
-		   	    log10(maximum) * 0.5);
-	} else {
-	    deft = minimum * 0.5 + maximum * 0.5;
-	}
-	
+
+        if (logarithmic) {
+            deft = powf(10, log10(minimum) * 0.5 +
+                        log10(maximum) * 0.5);
+        } else {
+            deft = minimum * 0.5 + maximum * 0.5;
+        }
+
     } else if (LADSPA_IS_HINT_DEFAULT_HIGH(d)) {
-	
-	if (logarithmic) {
-	    deft = powf(10, log10(minimum) * 0.25 +
-			    log10(maximum) * 0.75);
-	} else {
-	    deft = minimum * 0.25 + maximum * 0.75;
-	}
-	
+
+        if (logarithmic) {
+            deft = powf(10, log10(minimum) * 0.25 +
+                        log10(maximum) * 0.75);
+        } else {
+            deft = minimum * 0.25 + maximum * 0.75;
+        }
+
     } else if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(d)) {
-	
-	deft = maximum;
-	
+
+        deft = maximum;
+
     } else if (LADSPA_IS_HINT_DEFAULT_0(d)) {
-	
-	deft = 0.0;
-	
+
+        deft = 0.0;
+
     } else if (LADSPA_IS_HINT_DEFAULT_1(d)) {
-	
-	deft = 1.0;
-	
+
+        deft = 1.0;
+
     } else if (LADSPA_IS_HINT_DEFAULT_100(d)) {
-	
-	deft = 100.0;
-	
+
+        deft = 100.0;
+
     } else if (LADSPA_IS_HINT_DEFAULT_440(d)) {
-	
-	deft = 440.0;
-	
+
+        deft = 440.0;
+
     } else {
-	
-	deft = minimum;
+
+        deft = minimum;
     }
-    
+
     if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
-	deft *= m_sampleRate;
+        deft *= m_sampleRate;
     }
 
     return deft;
@@ -338,12 +340,15 @@ int
 LADSPAPluginFactory::getPortDisplayHint(const LADSPA_Descriptor *descriptor, int port)
 {
     LADSPA_PortRangeHintDescriptor d =
-	descriptor->PortRangeHints[port].HintDescriptor;
+        descriptor->PortRangeHints[port].HintDescriptor;
     int hint = PluginPort::NoHint;
 
-    if (LADSPA_IS_HINT_TOGGLED(d)) hint |= PluginPort::Toggled;
-    if (LADSPA_IS_HINT_INTEGER(d)) hint |= PluginPort::Integer;
-    if (LADSPA_IS_HINT_LOGARITHMIC(d)) hint |= PluginPort::Logarithmic;
+    if (LADSPA_IS_HINT_TOGGLED(d))
+        hint |= PluginPort::Toggled;
+    if (LADSPA_IS_HINT_INTEGER(d))
+        hint |= PluginPort::Integer;
+    if (LADSPA_IS_HINT_LOGARITHMIC(d))
+        hint |= PluginPort::Logarithmic;
 
     return hint;
 }
@@ -351,24 +356,24 @@ LADSPAPluginFactory::getPortDisplayHint(const LADSPA_Descriptor *descriptor, int
 
 RunnablePluginInstance *
 LADSPAPluginFactory::instantiatePlugin(QString identifier,
-				       int instrument,
-				       int position,
-				       unsigned int sampleRate,
-				       unsigned int blockSize,
-				       unsigned int channels)
+                                       int instrument,
+                                       int position,
+                                       unsigned int sampleRate,
+                                       unsigned int blockSize,
+                                       unsigned int channels)
 {
     const LADSPA_Descriptor *descriptor = getLADSPADescriptor(identifier);
 
     if (descriptor) {
 
-	LADSPAPluginInstance *instance =
-	    new LADSPAPluginInstance
-	    (this, instrument, identifier, position, sampleRate, blockSize, channels,
-	     descriptor);
+        LADSPAPluginInstance *instance =
+            new LADSPAPluginInstance
+            (this, instrument, identifier, position, sampleRate, blockSize, channels,
+             descriptor);
 
-	m_instances.insert(instance);
+        m_instances.insert(instance);
 
-	return instance;
+        return instance;
     }
 
     return 0;
@@ -376,12 +381,12 @@ LADSPAPluginFactory::instantiatePlugin(QString identifier,
 
 void
 LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
-				   QString identifier)
+                                   QString identifier)
 {
     if (m_instances.find(instance) == m_instances.end()) {
-	std::cerr << "WARNING: LADSPAPluginFactory::releasePlugin: Not one of mine!"
-		  << std::endl;
-	return;
+        std::cerr << "WARNING: LADSPAPluginFactory::releasePlugin: Not one of mine!"
+        << std::endl;
+        return ;
     }
 
     QString type, soname, label;
@@ -391,20 +396,21 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
 
     bool stillInUse = false;
 
-    for (std::set<RunnablePluginInstance *>::iterator ii = m_instances.begin();
-	 ii != m_instances.end(); ++ii) {
-	QString itype, isoname, ilabel;
-	PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
-	if (isoname == soname) {
-//	    std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " is still in use for plugin " << ilabel << std::endl;
-	    stillInUse = true;
-	    break;
-	}
-    }
-    
+    for (std::set
+                <RunnablePluginInstance *>::iterator ii = m_instances.begin();
+                ii != m_instances.end(); ++ii) {
+            QString itype, isoname, ilabel;
+            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+            if (isoname == soname) {
+                //	    std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " is still in use for plugin " << ilabel << std::endl;
+                stillInUse = true;
+                break;
+            }
+        }
+
     if (!stillInUse) {
-//	std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " no longer in use, unloading" << std::endl;
-	unloadLibrary(soname);
+        //	std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " no longer in use, unloading" << std::endl;
+        unloadLibrary(soname);
     }
 }
 
@@ -415,29 +421,30 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
     PluginIdentifier::parseIdentifier(identifier, type, soname, label);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
-	loadLibrary(soname);
-	if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
-	    std::cerr << "WARNING: LADSPAPluginFactory::getLADSPADescriptor: loadLibrary failed for " << soname << std::endl;
-	    return 0;
-	}
+        loadLibrary(soname);
+        if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
+            std::cerr << "WARNING: LADSPAPluginFactory::getLADSPADescriptor: loadLibrary failed for " << soname << std::endl;
+            return 0;
+        }
     }
 
     void *libraryHandle = m_libraryHandles[soname];
 
     LADSPA_Descriptor_Function fn = (LADSPA_Descriptor_Function)
-	dlsym(libraryHandle, "ladspa_descriptor");
+                                    dlsym(libraryHandle, "ladspa_descriptor");
 
     if (!fn) {
-	std::cerr << "WARNING: LADSPAPluginFactory::getLADSPADescriptor: No descriptor function in library " << soname << std::endl;
-	return 0;
+        std::cerr << "WARNING: LADSPAPluginFactory::getLADSPADescriptor: No descriptor function in library " << soname << std::endl;
+        return 0;
     }
 
     const LADSPA_Descriptor *descriptor = 0;
-    
+
     int index = 0;
     while ((descriptor = fn(index))) {
-	if (descriptor->Label == label) return descriptor;
-	++index;
+        if (descriptor->Label == label)
+            return descriptor;
+        ++index;
     }
 
     std::cerr << "WARNING: LADSPAPluginFactory::getLADSPADescriptor: No such plugin as " << label << " in library " << soname << std::endl;
@@ -449,7 +456,8 @@ void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
     void *libraryHandle = dlopen(soName.data(), RTLD_NOW);
-    if (libraryHandle) m_libraryHandles[soName] = libraryHandle;
+    if (libraryHandle)
+        m_libraryHandles[soName] = libraryHandle;
 }
 
 void
@@ -457,9 +465,9 @@ LADSPAPluginFactory::unloadLibrary(QString soName)
 {
     LibraryHandleMap::iterator li = m_libraryHandles.find(soName);
     if (li != m_libraryHandles.end()) {
-//	std::cerr << "unloading " << soName << std::endl;
-	dlclose(m_libraryHandles[soName]);
-	m_libraryHandles.erase(li);
+        //	std::cerr << "unloading " << soName << std::endl;
+        dlclose(m_libraryHandles[soName]);
+        m_libraryHandles.erase(li);
     }
 }
 
@@ -469,27 +477,29 @@ LADSPAPluginFactory::unloadUnusedLibraries()
     std::vector<QString> toUnload;
 
     for (LibraryHandleMap::iterator i = m_libraryHandles.begin();
-	 i != m_libraryHandles.end(); ++i) {
+            i != m_libraryHandles.end(); ++i) {
 
-	bool stillInUse = false;
+        bool stillInUse = false;
 
-	for (std::set<RunnablePluginInstance *>::iterator ii = m_instances.begin();
-	     ii != m_instances.end(); ++ii) {
+        for (std::set
+                    <RunnablePluginInstance *>::iterator ii = m_instances.begin();
+                    ii != m_instances.end(); ++ii) {
 
-	    QString itype, isoname, ilabel;
-	    PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
-	    if (isoname == i->first) {
-		stillInUse = true;
-		break;
-	    }
-	}
+                QString itype, isoname, ilabel;
+                PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+                if (isoname == i->first) {
+                    stillInUse = true;
+                    break;
+                }
+            }
 
-	if (!stillInUse) toUnload.push_back(i->first);
+        if (!stillInUse)
+            toUnload.push_back(i->first);
     }
 
     for (std::vector<QString>::iterator i = toUnload.begin();
-	 i != toUnload.end(); ++i) {
-	unloadLibrary(*i);
+            i != toUnload.end(); ++i) {
+        unloadLibrary(*i);
     }
 }
 
@@ -509,21 +519,23 @@ LADSPAPluginFactory::getPluginPath()
     std::string path;
 
     char *cpath = getenv("LADSPA_PATH");
-    if (cpath) path = cpath;
+    if (cpath)
+        path = cpath;
 
     if (path == "") {
-	path = "/usr/local/lib/ladspa:/usr/lib/ladspa";
-	char *home = getenv("HOME");
-	if (home) path = std::string(home) + "/.ladspa:" + path;
+        path = "/usr/local/lib/ladspa:/usr/lib/ladspa";
+        char *home = getenv("HOME");
+        if (home)
+            path = std::string(home) + "/.ladspa:" + path;
     }
 
     std::string::size_type index = 0, newindex = 0;
 
     while ((newindex = path.find(':', index)) < path.size()) {
-	pathList.push_back(path.substr(index, newindex - index).c_str());
-	index = newindex + 1;
+        pathList.push_back(path.substr(index, newindex - index).c_str());
+        index = newindex + 1;
     }
-    
+
     pathList.push_back(path.substr(index).c_str());
 
     return pathList;
@@ -541,13 +553,13 @@ LADSPAPluginFactory::getLRDFPath(QString &baseUri)
     lrdfPaths.push_back("/usr/share/ladspa/rdf");
 
     for (std::vector<QString>::iterator i = pathList.begin();
-	 i != pathList.end(); ++i) {
-	lrdfPaths.push_back(*i + "/rdf");
+            i != pathList.end(); ++i) {
+        lrdfPaths.push_back(*i + "/rdf");
     }
 
     baseUri = LADSPA_BASE;
     return lrdfPaths;
-}    
+}
 #endif
 
 void
@@ -555,16 +567,16 @@ LADSPAPluginFactory::discoverPlugins()
 {
     std::vector<QString> pathList = getPluginPath();
 
-//    std::cerr << "LADSPAPluginFactory::discoverPlugins - "
-//	      << "discovering plugins; path is ";
+    //    std::cerr << "LADSPAPluginFactory::discoverPlugins - "
+    //	      << "discovering plugins; path is ";
     for (std::vector<QString>::iterator i = pathList.begin();
-	 i != pathList.end(); ++i) {
-	std::cerr << "[" << *i << "] ";
+            i != pathList.end(); ++i) {
+        std::cerr << "[" << *i << "] ";
     }
     std::cerr << std::endl;
 
 #ifdef HAVE_LIBLRDF
-    // Initialise liblrdf and read the description files 
+    // Initialise liblrdf and read the description files
     //
     lrdf_init();
 
@@ -574,30 +586,30 @@ LADSPAPluginFactory::discoverPlugins()
     bool haveSomething = false;
 
     for (size_t i = 0; i < lrdfPaths.size(); ++i) {
-	QDir dir(lrdfPaths[i], "*.rdf;*.rdfs");
-	for (unsigned int j = 0; j < dir.count(); ++j) {
-	    if (!lrdf_read_file(QString("file:" + lrdfPaths[i] + "/" + dir[j]).data())) {
-//		std::cerr << "LADSPAPluginFactory: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
-		haveSomething = true;
-	    }
-	}
+        QDir dir(lrdfPaths[i], "*.rdf;*.rdfs");
+        for (unsigned int j = 0; j < dir.count(); ++j) {
+            if (!lrdf_read_file(QString("file:" + lrdfPaths[i] + "/" + dir[j]).data())) {
+                //		std::cerr << "LADSPAPluginFactory: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
+                haveSomething = true;
+            }
+        }
     }
 
     if (haveSomething) {
-	generateTaxonomy(baseUri + "Plugin", "");
+        generateTaxonomy(baseUri + "Plugin", "");
     }
 #endif // HAVE_LIBLRDF
 
     generateFallbackCategories();
 
     for (std::vector<QString>::iterator i = pathList.begin();
-	 i != pathList.end(); ++i) {
+            i != pathList.end(); ++i) {
 
-	QDir pluginDir(*i, "*.so");
+        QDir pluginDir(*i, "*.so");
 
-	for (unsigned int j = 0; j < pluginDir.count(); ++j) {
-	    discoverPlugins(QString("%1/%2").arg(*i).arg(pluginDir[j]));
-	}
+        for (unsigned int j = 0; j < pluginDir.count(); ++j) {
+            discoverPlugins(QString("%1/%2").arg(*i).arg(pluginDir[j]));
+        }
     }
 
 #ifdef HAVE_LIBLRDF
@@ -614,81 +626,81 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
 
     if (!libraryHandle) {
         std::cerr << "WARNING: LADSPAPluginFactory::discoverPlugins: couldn't dlopen "
-                  << soName << " - " << dlerror() << std::endl;
-        return;
+        << soName << " - " << dlerror() << std::endl;
+        return ;
     }
 
     LADSPA_Descriptor_Function fn = (LADSPA_Descriptor_Function)
-	dlsym(libraryHandle, "ladspa_descriptor");
+                                    dlsym(libraryHandle, "ladspa_descriptor");
 
     if (!fn) {
-	std::cerr << "WARNING: LADSPAPluginFactory::discoverPlugins: No descriptor function in " << soName << std::endl;
-	return;
+        std::cerr << "WARNING: LADSPAPluginFactory::discoverPlugins: No descriptor function in " << soName << std::endl;
+        return ;
     }
 
     const LADSPA_Descriptor *descriptor = 0;
-    
+
     int index = 0;
     while ((descriptor = fn(index))) {
 
 #ifdef HAVE_LIBLRDF
-	char *def_uri = 0;
-	lrdf_defaults *defs = 0;
-		
-	QString category = m_taxonomy[descriptor->UniqueID];
-	
-	if (category == "" && descriptor->Name != 0) {
-	    std::string name = descriptor->Name;
-	    if (name.length() > 4 &&
-		name.substr(name.length() - 4) == " VST") {
-		category = "VST effects";
-		m_taxonomy[descriptor->UniqueID] = category;
-	    }
-	}
-	
-//	std::cerr << "Plugin id is " << descriptor->UniqueID
-//		  << ", category is \"" << (category ? category : QString("(none)"))
-//		  << "\", name is " << descriptor->Name
-//		  << ", label is " << descriptor->Label
-//		  << std::endl;
-	
-	def_uri = lrdf_get_default_uri(descriptor->UniqueID);
-	if (def_uri) {
-	    defs = lrdf_get_setting_values(def_uri);
-	}
+        char * def_uri = 0;
+        lrdf_defaults *defs = 0;
 
-	int controlPortNumber = 1;
-	
-	for (unsigned long i = 0; i < descriptor->PortCount; i++) {
-	    
-	    if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i])) {
-		
-		if (def_uri && defs) {
-		    
-		    for (int j = 0; j < defs->count; j++) {
-			if (defs->items[j].pid == controlPortNumber) {
-//			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << descriptor->PortNames[i] << std::endl;
-			    m_portDefaults[descriptor->UniqueID][i] =
-				defs->items[j].value;
-			}
-		    }
-		}
-		
-		++controlPortNumber;
-	    }
-	}
+        QString category = m_taxonomy[descriptor->UniqueID];
+
+        if (category == "" && descriptor->Name != 0) {
+            std::string name = descriptor->Name;
+            if (name.length() > 4 &&
+                    name.substr(name.length() - 4) == " VST") {
+                category = "VST effects";
+                m_taxonomy[descriptor->UniqueID] = category;
+            }
+        }
+
+        //	std::cerr << "Plugin id is " << descriptor->UniqueID
+        //		  << ", category is \"" << (category ? category : QString("(none)"))
+        //		  << "\", name is " << descriptor->Name
+        //		  << ", label is " << descriptor->Label
+        //		  << std::endl;
+
+        def_uri = lrdf_get_default_uri(descriptor->UniqueID);
+        if (def_uri) {
+            defs = lrdf_get_setting_values(def_uri);
+        }
+
+        int controlPortNumber = 1;
+
+        for (unsigned long i = 0; i < descriptor->PortCount; i++) {
+
+            if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i])) {
+
+                if (def_uri && defs) {
+
+                    for (int j = 0; j < defs->count; j++) {
+                        if (defs->items[j].pid == controlPortNumber) {
+                            //			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << descriptor->PortNames[i] << std::endl;
+                            m_portDefaults[descriptor->UniqueID][i] =
+                                defs->items[j].value;
+                        }
+                    }
+                }
+
+                ++controlPortNumber;
+            }
+        }
 #endif // HAVE_LIBLRDF
 
-	QString identifier = PluginIdentifier::createIdentifier
-	    ("ladspa", soName, descriptor->Label);
-	m_identifiers.push_back(identifier);
+        QString identifier = PluginIdentifier::createIdentifier
+                             ("ladspa", soName, descriptor->Label);
+        m_identifiers.push_back(identifier);
 
-	++index;
+        ++index;
     }
 
     if (dlclose(libraryHandle) != 0) {
         std::cerr << "WARNING: LADSPAPluginFactory::discoverPlugins - can't unload " << libraryHandle << std::endl;
-        return;
+        return ;
     }
 }
 
@@ -699,44 +711,44 @@ LADSPAPluginFactory::generateFallbackCategories()
     std::vector<QString> path;
 
     for (size_t i = 0; i < pluginPath.size(); ++i) {
-	if (pluginPath[i].contains("/lib/")) {
-	    QString p(pluginPath[i]);
-	    p.replace("/lib/", "/share/");
-	    path.push_back(p);
-//	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << p << std::endl;
-	}
-	path.push_back(pluginPath[i]);
-//	std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << pluginPath[i] << std::endl;
+        if (pluginPath[i].contains("/lib/")) {
+            QString p(pluginPath[i]);
+            p.replace("/lib/", "/share/");
+            path.push_back(p);
+            //	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << p << std::endl;
+        }
+        path.push_back(pluginPath[i]);
+        //	std::cerr << "LADSPAPluginFactory::generateFallbackCategories: path element " << pluginPath[i] << std::endl;
     }
 
     for (size_t i = 0; i < path.size(); ++i) {
 
-	QDir dir(path[i], "*.cat");
+        QDir dir(path[i], "*.cat");
 
-//	std::cerr << "LADSPAPluginFactory::generateFallbackCategories: directory " << path[i] << " has " << dir.count() << " .cat files" << std::endl;
-	for (unsigned int j = 0; j < dir.count(); ++j) {
+        //	std::cerr << "LADSPAPluginFactory::generateFallbackCategories: directory " << path[i] << " has " << dir.count() << " .cat files" << std::endl;
+        for (unsigned int j = 0; j < dir.count(); ++j) {
 
-	    QFile file(path[i] + "/" + dir[j]);
+            QFile file(path[i] + "/" + dir[j]);
 
-//	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: about to open " << (path[i] + "/" + dir[j]) << std::endl;
+            //	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: about to open " << (path[i] + "/" + dir[j]) << std::endl;
 
-	    if (file.open(IO_ReadOnly)) {
-//		    std::cerr << "...opened" << std::endl;
-		QTextStream stream(&file);
-		QString line;
+            if (file.open(IO_ReadOnly)) {
+                //		    std::cerr << "...opened" << std::endl;
+                QTextStream stream(&file);
+                QString line;
 
-		while (!stream.eof()) {
-		    line = stream.readLine();
-//		    std::cerr << "line is: \"" << line << "\"" << std::endl;
-		    QString id = line.section("::", 0, 0);
-		    QString cat = line.section("::", 1, 1);
-		    m_fallbackCategories[id] = cat;
-//		    std::cerr << "set id \"" << id << "\" to cat \"" << cat << "\"" << std::endl;
-		}
-	    }
-	}
+                while (!stream.eof()) {
+                    line = stream.readLine();
+                    //		    std::cerr << "line is: \"" << line << "\"" << std::endl;
+                    QString id = line.section("::", 0, 0);
+                    QString cat = line.section("::", 1, 1);
+                    m_fallbackCategories[id] = cat;
+                    //		    std::cerr << "set id \"" << id << "\" to cat \"" << cat << "\"" << std::endl;
+                }
+            }
+        }
     }
-}    
+}
 
 void
 LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
@@ -745,25 +757,25 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
     lrdf_uris *uris = lrdf_get_instances(uri.data());
 
     if (uris != NULL) {
-	for (int i = 0; i < uris->count; ++i) {
-	    m_taxonomy[lrdf_get_uid(uris->items[i])] = base;
-	}
-	lrdf_free_uris(uris);
+        for (int i = 0; i < uris->count; ++i) {
+            m_taxonomy[lrdf_get_uid(uris->items[i])] = base;
+        }
+        lrdf_free_uris(uris);
     }
 
     uris = lrdf_get_subclasses(uri.data());
 
     if (uris != NULL) {
-	for (int i = 0; i < uris->count; ++i) {
-	    char *label = lrdf_get_label(uris->items[i]);
-	    generateTaxonomy(uris->items[i],
-			     base + (base.length() > 0 ? " > " : "") + label);
-	}
-	lrdf_free_uris(uris);
+        for (int i = 0; i < uris->count; ++i) {
+            char *label = lrdf_get_label(uris->items[i]);
+            generateTaxonomy(uris->items[i],
+                             base + (base.length() > 0 ? " > " : "") + label);
+        }
+        lrdf_free_uris(uris);
     }
 #endif
 }
-    
+
 }
 
 #endif // HAVE_LADSPA
