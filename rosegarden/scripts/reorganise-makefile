@@ -1,0 +1,67 @@
+
+KDEDIR		= /usr
+QTDIR		= $(KDEDIR)
+
+KDEINC		= /usr/include/kde
+KDELIB		= /usr/lib
+
+QTINC		= /usr/include/qt3
+QTLIB		= /usr/lib
+
+CCDIR		= /usr
+
+CCACHE		= 
+CC		= $(CCACHE) $(CCDIR)/bin/cc
+CXX		= $(CCACHE) $(CCDIR)/bin/c++
+LD		= $(CXX)
+MOC		= $(QTDIR)/bin/moc-qt3
+
+#CXXFLAGS	= -w1 -wr748 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g 
+CXXFLAGS	= -Wall -O0 -g -DQT_THREAD_SUPPORT
+LDFLAGS		= 
+
+INCLUDES	= \
+		-I$(CCDIR)/include \
+		-I/usr/local/include \
+		-I$(QTINC) \
+		-I$(KDEINC) \
+		-I/usr/include/freetype2 \
+                -Ibase \
+		-I.
+
+LDLIBS		= \
+		-L$(CCDIR)/lib \
+		-L$(KDELIB) \
+		-L$(QTLIB) \
+		-lkdeprint -lkdeui -lkdecore -lqt-mt \
+		-ljack -lasound -llo -llrdf -lraptor -lmad -llirc_client
+
+HEADERS		= $(wildcard */*.h */*/*.h)
+QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
+SOURCES		= $(wildcard */*.cpp */*/*.cpp)
+OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
+QSOURCES	= $(patsubst %.h,$(BUILD_DIR)/%.moc,$(QHEADERS))
+
+all:	$(OBJECTS) $(QOBJECTS) $(LIBRARIES) $(EXECUTABLES)
+
+#clean:
+#	rm -rf $(BUILD_DIR)/*
+
+#directories:
+#	@mkdir -p $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,base gui sound sequencer lib)
+
+%.moc: %.h
+	$(MOC) $< -o $@
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+#$(BUILD_DIR)/lib/%.a: $(OBJECTS) $(QOBJECTS)
+#	$(AR) r $@ $(BUILD_DIR)/$*/*.o
+
+$(BUILD_DIR)/rosegarden: $(BUILD_DIR)/lib/gui.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a
+	$(LD) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(BUILD_DIR)/rosegardensequencer: $(BUILD_DIR)/lib/sequencer.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a
+	$(LD) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
