@@ -300,7 +300,7 @@ SynthPluginManagerDialog::slotPluginChanged(int index)
 
 		// set ports to defaults
 
-		Rosegarden::PortIterator it = plugin->begin();
+		Rosegarden::AudioPlugin::PortIterator it = plugin->begin();
 		int count = 0;
 
 		for (; it != plugin->end(); ++it) {
