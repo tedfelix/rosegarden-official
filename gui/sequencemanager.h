@@ -28,7 +28,6 @@
 #include "rosegardendcop.h"
 
 #include "Midi.h"
-#include "Sound.h"
 #include "Track.h"
 #include "MappedComposition.h"
 #include "MappedCommon.h"

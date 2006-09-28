@@ -19,10 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Audio.h"
 #include "RIFFAudioFile.h"
 #include "RealTime.h"
-#include "Sound.h"
 #include "Profiler.h"
 
 using std::cout;
