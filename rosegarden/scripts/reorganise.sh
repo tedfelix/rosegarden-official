@@ -308,7 +308,7 @@ echo commands: `date`... 1>&2
 commandfiles="*commands.h"
 
 for file in $commandfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     target=`echo $file | sed 's/command.*$//'`
 #    if [ "$target" = "basic" ]; then target="base"; fi
     mkdir -p "$s/commands/$target"
@@ -329,7 +329,7 @@ echo widgets: `date`... 1>&2
 widgetfiles="*widget*.h scrollbox.h vumeter.h zoomslider.h qdeferscrollview.h eventfilter.h collapsingframe.h " 
 
 for file in $widgetfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	if echo $class | grep -q '^Rosegarden[A-Za-z]'; then
@@ -347,7 +347,7 @@ echo dialogs: `date`... 1>&2
 dialogfiles="*dialog*.h " 
 
 for file in $dialogfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	if echo $class | grep -q '^Rosegarden[A-Za-z]'; then
@@ -365,7 +365,7 @@ echo io: `date`... 1>&2
 iofiles="*io.h"
 
 for file in $iofiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$s/document/io/$targetfile.h"
@@ -379,7 +379,7 @@ echo ruler: `date`... 1>&2
 rulerfiles="*ruler.h tempocolour.h velocitycolour.h"
 
 for file in $rulerfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/rulers/$targetfile.h"
@@ -393,7 +393,7 @@ echo notation: `date`... 1>&2
 notationfiles="not*.h"
 
 for file in $notationfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/editors/notation/$targetfile.h"
@@ -411,7 +411,7 @@ echo matrix: `date`... 1>&2
 matrixfiles="matrix*.h pianokeyboard.h"
 
 for file in $matrixfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/editors/matrix/$targetfile.h"
@@ -425,7 +425,7 @@ echo preferences: `date`... 1>&2
 preferencesfiles="*config*.h"
 
 for file in $preferencesfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	if echo $class | grep -q '^Rosegarden[A-Za-z]'; then
@@ -443,7 +443,7 @@ echo event: `date`... 1>&2
 eventfiles="event*.h"
 
 for file in $eventfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/editors/eventlist/$targetfile.h"
@@ -457,7 +457,7 @@ echo tempo: `date`... 1>&2
 tempofiles="tempoview.h"
 
 for file in $tempofiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/editors/tempo/$targetfile.h"
@@ -471,7 +471,7 @@ echo parameter: `date`... 1>&2
 parameterfiles="segmentparameter*.h trackparameterbox.h instrumentparameterbox.h rosegardenparameterarea.h rosegardenparameterbox.h"
 
 for file in $parameterfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//' | sed 's/{/ /g'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//' | sed 's/{/ /g'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/editors/parameters/$targetfile.h"
@@ -485,7 +485,7 @@ echo segment: `date`... 1>&2
 segmentfiles="track*.h segment[^c]*.h audiopr*.h composition*.h barbuttons.h instrumentparameterbox.h markereditor.h playlist.h triggermanager.h controleditor.h"
 
 for file in $segmentfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//' | sed 's/{/ /g'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//' | sed 's/{/ /g'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/editors/segment/$targetfile.h"
@@ -499,7 +499,7 @@ echo main: `date`... 1>&2
 docfiles="rosegardenguidoc.h rosexmlhandler.h xmlstorableevent.h multivi*.h basiccommand* "
 
 for file in $docfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$s/document/$targetfile.h"
@@ -511,7 +511,7 @@ done
 mainfiles="rgapplication.h rosegardenguidoc.h rosegardengui.h rosegardenguiiface.h rosegardenguiview.h lirc*.h rosexmlhandler.h xmlstorableevent.h rosegardendcop.h startuptester.h"
 
 for file in $mainfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/application/$targetfile.h"
@@ -527,7 +527,7 @@ echo studio: `date`... 1>&2
 studiofiles="audio[^cp]*.h audiopl*.h device*.h bank*.h *mixer*.h studio*.h"
 
 for file in $studiofiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/studio/$targetfile.h"
@@ -541,7 +541,7 @@ echo seqmanager: `date`... 1>&2
 seqmanagerfiles="sequence*.h mmap*.h midif*.h"
 
 for file in $seqmanagerfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/seqmanager/$targetfile.h"
@@ -555,7 +555,7 @@ echo general: `date`... 1>&2
 generalfiles="hzoomable.h colours.h constants.h edit*.h lined*.h pixmapf*.h progres*.h qcanvas*.h rosegardenscrollview.h spline.h staffline.h rosegardencanvasview.h clefindex.h midipitchlabel.h presethandler.h"
 
 for file in $generalfiles; do 
-    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed 's/^\(class|struct\) //' | sed 's/:.*$//'`
+    classes=`egrep '^(class|struct)' $file | grep -v ';' | sed -e 's/^class //' -e 's/^struct //' | sed 's/:.*$//'`
     for class in $classes; do
 	targetfile=$class
 	extract_class_from_header "$class" "$file" > "$g/general/$targetfile.h"
