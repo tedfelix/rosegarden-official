@@ -49,8 +49,6 @@
 namespace Rosegarden
 {
 
-typedef std::vector<PluginPort*>::iterator PortIterator;
-
 // We use this to remember what we're copying and pasting
 //
 struct AudioPluginClipboard
@@ -101,6 +99,8 @@ public:
                  PortData lowerBound,
                  PortData upperBound,
 		 PortData defaultVale);
+
+    typedef std::vector<PluginPort*>::iterator PortIterator;
 
     PortIterator begin() { return m_ports.begin(); }
     PortIterator end() { return m_ports.end(); }

@@ -372,7 +372,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     int portCount = 0;
     if (plugin) {
-        for (PortIterator it = plugin->begin(); it != plugin->end(); ++it) {
+        for (AudioPlugin::PortIterator it = plugin->begin(); it != plugin->end(); ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
 		((*it)->getType() & PluginPort::Input)) ++portCount;
 	}
@@ -419,7 +419,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
 	inst->setIdentifier(identifier);
 
-        PortIterator it = plugin->begin();
+	AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
 	int ins = 0, outs = 0;
 
@@ -493,7 +493,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 	    m_programCombo->show();
 	}
 
-        PortIterator it = plugin->begin();
+	AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
 	
         for (; it != plugin->end(); ++it)
@@ -857,7 +857,7 @@ AudioPluginDialog::slotDefault()
     for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
 	 i != m_pluginWidgets.end(); ++i) {
 
-	for (PortIterator pi = plugin->begin(); pi != plugin->end(); ++pi) {
+	for (AudioPlugin::PortIterator pi = plugin->begin(); pi != plugin->end(); ++pi) {
 	    if ((*pi)->getNumber() == (*i)->getIndex()) {
 		(*i)->setValue((*pi)->getDefaultValue(), true); // and emit
 		break;
