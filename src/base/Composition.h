@@ -170,19 +170,19 @@ public:
     /**
      * Delete a Track by index
      */
-    void deleteTrack(Rosegarden::TrackId track);
+    void deleteTrack(TrackId track);
 
     /**
      * Detach a Track (revert ownership of the Track object to the
      * caller).
      */
-    bool detachTrack(Rosegarden::Track *track);
+    bool detachTrack(Track *track);
 
     /**
      * Get the highest running track id (generated and kept
      * through addTrack)
      */
-    Rosegarden::TrackId getNewTrackId() const;
+    TrackId getNewTrackId() const;
 
 
     //////
@@ -196,15 +196,15 @@ public:
      * Add a new Marker.  The Composition takes ownership of the
      * marker object.
      */
-    void addMarker(Rosegarden::Marker *marker);
+    void addMarker(Marker *marker);
 
     /**
      * Detach a Marker (revert ownership of the Marker object to the
      * caller).
      */
-    bool detachMarker(Rosegarden::Marker *marker);
+    bool detachMarker(Marker *marker);
 
-    bool isMarkerAtPosition(Rosegarden::timeT time) const;
+    bool isMarkerAtPosition(timeT time) const;
 
     void clearMarkers();
 
@@ -744,12 +744,12 @@ public:
     // Colour stuff
     ColourMap& getSegmentColourMap() { return m_segmentColourMap; }
     const ColourMap& getSegmentColourMap() const { return m_segmentColourMap; }
-    void setSegmentColourMap(Rosegarden::ColourMap &newmap);
+    void setSegmentColourMap(ColourMap &newmap);
 
     // General colourmap for non-segments
     //
     ColourMap& getGeneralColourMap() { return m_generalColourMap; }
-    void setGeneralColourMap(Rosegarden::ColourMap &newmap);
+    void setGeneralColourMap(ColourMap &newmap);
 
 
     //////
@@ -850,7 +850,7 @@ protected:
     // Are we soloing and if so which Track?
     //
     bool                              m_solo;
-    Rosegarden::TrackId               m_selectedTrack;
+    TrackId               m_selectedTrack;
 
     /**
      * This is a bit like a segment, but can only contain one sort of

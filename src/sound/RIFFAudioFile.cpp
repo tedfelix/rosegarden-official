@@ -3,15 +3,15 @@
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
-
+ 
     This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-
+ 
     The moral right of the authors to claim authorship of this work
     has been asserted.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -36,9 +36,8 @@ namespace Rosegarden
 RIFFAudioFile::RIFFAudioFile(unsigned int id,
                              const std::string &name,
                              const std::string &fileName):
-    AudioFile(id, name, fileName)
-{
-}
+        AudioFile(id, name, fileName)
+{}
 
 RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
                              unsigned int channels = 1,
@@ -46,7 +45,7 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
                              unsigned int bytesPerSecond = 6000,
                              unsigned int bytesPerFrame = 2,
                              unsigned int bitsPerSample = 16):
-    AudioFile(0, "", fileName)
+        AudioFile(0, "", fileName)
 {
     m_bitsPerSample = bitsPerSample;
     m_sampleRate = sampleRate;
@@ -54,15 +53,17 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
     m_bytesPerFrame = bytesPerFrame;
     m_channels = channels;
 
-    if (bitsPerSample == 16) m_subFormat = PCM;
-    else if (bitsPerSample == 32) m_subFormat = FLOAT;
-    else throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports 16-bit PCM or IEEE floating-point RIFF files for writing"));
+    if (bitsPerSample == 16)
+        m_subFormat = PCM;
+    else if (bitsPerSample == 32)
+        m_subFormat = FLOAT;
+    else
+        throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports 16-bit PCM or IEEE floating-point RIFF files for writing"));
 
 }
 
 RIFFAudioFile::~RIFFAudioFile()
-{
-}
+{}
 
 
 // Show some stats on this file
@@ -70,14 +71,14 @@ RIFFAudioFile::~RIFFAudioFile()
 void
 RIFFAudioFile::printStats()
 {
-    cout << "filename         : " << m_fileName  << endl
-         << "channels         : " << m_channels << endl
-         << "sample rate      : " << m_sampleRate << endl
-         << "bytes per second : " << m_bytesPerSecond << endl
-         << "bits per sample  : " << m_bitsPerSample << endl
-         << "bytes per frame  : " << m_bytesPerFrame << endl
-         << "file length      : " << m_fileSize << " bytes" << endl
-         << endl;
+    cout << "filename         : " << m_fileName << endl
+    << "channels         : " << m_channels << endl
+    << "sample rate      : " << m_sampleRate << endl
+    << "bytes per second : " << m_bytesPerSecond << endl
+    << "bits per sample  : " << m_bitsPerSample << endl
+    << "bytes per frame  : " << m_bytesPerFrame << endl
+    << "file length      : " << m_fileSize << " bytes" << endl
+    << endl;
 }
 
 bool
@@ -106,10 +107,11 @@ bool
 RIFFAudioFile::scanForward(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (file == 0) return false;
+    if (file == 0)
+        return false;
 
     unsigned int totalSamples = m_sampleRate * time.sec +
-                            ( ( m_sampleRate * time.usec() ) / 1000000 );
+                                ( ( m_sampleRate * time.usec() ) / 1000000 );
     unsigned int totalBytes = totalSamples * m_bytesPerFrame;
 
     m_loseBuffer = true;
@@ -146,7 +148,8 @@ bool
 RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (file == 0) return false;
+    if (file == 0)
+        return false;
 
     // whatever we do here we invalidate the read buffer
     //
@@ -162,36 +165,36 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     unsigned int lengthOfFormat = 0;
 
     try {
-	lengthOfFormat = getIntegerFromLittleEndian(getBytes(file, 4));
-	file->seekg(lengthOfFormat, std::ios::cur);
+        lengthOfFormat = getIntegerFromLittleEndian(getBytes(file, 4));
+        file->seekg(lengthOfFormat, std::ios::cur);
 
         // check we've got data chunk start
-        if (getBytes(file, 4) != "data")
-        {
+        if (getBytes(file, 4) != "data") {
 #ifdef DEBUG_RIFF
             std::cerr << "RIFFAudioFile::scanTo() - can't find data chunk where "
-                      << "it was expected" << std::endl;
+            << "it was expected" << std::endl;
 #endif
+
             return false;
         }
 
         // get the length of the data chunk, and scan past it as a side-effect
-	int dataChunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
+        int dataChunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
+
         std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
-                  << dataChunkLength << std::endl;
+        << dataChunkLength << std::endl;
 #endif
 
-    }
-    catch (BadSoundFileException s)
-    {
+    } catch (BadSoundFileException s) {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::scanTo - EXCEPTION - \""
-                  << s.getMessage() << "\"" << std::endl;
+        << s.getMessage() << "\"" << std::endl;
 #endif
+
         return false;
     }
-        
+
     // Ok, we're past all the header information in the data chunk.
     // Now, how much do we scan forward?
     //
@@ -201,22 +204,22 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
     // When using seekg we have to keep an eye on the boundaries ourselves
     //
-    if (totalBytes > m_fileSize - (lengthOfFormat + 16 + 8))
-    {
+    if (totalBytes > m_fileSize - (lengthOfFormat + 16 + 8)) {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::scanTo() - attempting to move past end of "
-                  << "data block" << std::endl;
+        << "data block" << std::endl;
 #endif
+
         return false;
     }
 
 #ifdef DEBUG_RIFF
     std::cout << "RIFFAudioFile::scanTo - seeking to " << time
-              << " (" << totalBytes << " bytes from current " << file->tellg()
-	      << ")" << std::endl;
+    << " (" << totalBytes << " bytes from current " << file->tellg()
+    << ")" << std::endl;
 #endif
 
-    file->seekg(totalBytes,  std::ios::cur);
+    file->seekg(totalBytes, std::ios::cur);
 
     return true;
 }
@@ -232,7 +235,8 @@ std::string
 RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
 {
     // sanity
-    if (file == 0) return std::string("");
+    if (file == 0)
+        return std::string("");
 
     // Bytes per sample already takes into account the number
     // of channels we're using
@@ -240,21 +244,22 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
     long totalBytes = frames * m_bytesPerFrame;
 
     try {
-	return getBytes(file, totalBytes);
+        return getBytes(file, totalBytes);
     } catch (BadSoundFileException s) {
-	return "";
+        return "";
     }
 }
 
 unsigned int
 RIFFAudioFile::getSampleFrames(std::ifstream *file, char *buf,
-			       unsigned int frames)
+                               unsigned int frames)
 {
-    if (file == 0) return 0;
+    if (file == 0)
+        return 0;
     try {
-	return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
+        return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
     } catch (BadSoundFileException s) {
-	return 0;
+        return 0;
     }
 }
 
@@ -274,15 +279,16 @@ std::string
 RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (file == 0) return std::string("");
+    if (file == 0)
+        return std::string("");
 
     long totalFrames = RealTime::realTime2Frame(time, m_sampleRate);
     long totalBytes = totalFrames * m_bytesPerFrame;
-    
+
     try {
-	return getBytes(file, totalBytes);
+        return getBytes(file, totalBytes);
     } catch (BadSoundFileException s) {
-	return "";
+        return "";
     }
 }
 
@@ -294,7 +300,7 @@ RIFFAudioFile::getSampleFrameSlice(const RealTime &time)
     } else {
         return std::string("");
     }
-}    
+}
 
 RealTime
 RIFFAudioFile::getLength()
@@ -303,15 +309,14 @@ RIFFAudioFile::getLength()
     //
     unsigned int headerLength = 44;
 
-    if (m_inFile)
-    {
+    if (m_inFile) {
         m_inFile->seekg(16, std::ios::beg);
         headerLength = getIntegerFromLittleEndian(getBytes(m_inFile, 4));
         m_inFile->seekg(headerLength, std::ios::cur);
         headerLength += (16 + 8);
     }
 
-    double frames = (m_fileSize - headerLength)/m_bytesPerFrame;
+    double frames = (m_fileSize - headerLength) / m_bytesPerFrame;
     double seconds = frames / ((double)m_sampleRate);
 
     int secs = int(seconds);
@@ -336,7 +341,7 @@ void
 RIFFAudioFile::readFormatChunk()
 {
     if (m_inFile == 0)
-        return;
+        return ;
 
     m_loseBuffer = true;
 
@@ -350,29 +355,36 @@ RIFFAudioFile::readFormatChunk()
     // Look for the RIFF identifier and bomb out if we don't find it
     //
 #if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) != 0)
+
+    if (hS.compare(AUDIO_RIFF_ID, 0, 4) != 0)
 #else
-    if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
+
+    if (hS.compare(0, 4, AUDIO_RIFF_ID) != 0)
 #endif
+
     {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
-                  << "can't find RIFF identifier\n";
+        << "can't find RIFF identifier\n";
 #endif
+
         throw(BadSoundFileException(m_fileName, "RIFFAudioFile::readFormatChunk - can't find RIFF identifier"));
     }
 
     // Look for the WAV identifier
     //
 #if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) != 0)
+    if (hS.compare(AUDIO_WAVE_ID, 8, 4) != 0)
 #else
-    if (hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
+
+    if (hS.compare(8, 4, AUDIO_WAVE_ID) != 0)
 #endif
+
     {
 #ifdef DEBUG_RIFF
         std::cerr << "Can't find WAV identifier\n";
 #endif
+
         throw(BadSoundFileException(m_fileName, "Can't find WAV identifier"));
     }
 
@@ -382,29 +394,31 @@ RIFFAudioFile::readFormatChunk()
     //
     //
 #if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_FORMAT_ID, 12, 4) != 0)
+    if (hS.compare(AUDIO_FORMAT_ID, 12, 4) != 0)
 #else
-    if (hS.compare(12, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
+
+    if (hS.compare(12, 4, AUDIO_FORMAT_ID) != 0)
 #endif
+
     {
 #ifdef DEBUG_RIFF
         std::cerr << "Can't find FORMAT identifier\n";
 #endif
+
         throw(BadSoundFileException(m_fileName, "Can't find FORMAT identifier"));
     }
 
     // Little endian conversion of length bytes into file length
-    // (add on eight for RIFF id and length field and compare to 
+    // (add on eight for RIFF id and length field and compare to
     // real file size).
     //
-    unsigned int length = getIntegerFromLittleEndian(hS.substr(4,4)) + 8;
+    unsigned int length = getIntegerFromLittleEndian(hS.substr(4, 4)) + 8;
 
-    if (length != m_fileSize)
-    {
-	std::cerr << "WARNING: RIFFAudioFile: incorrect length ("
-		  << length << ", file size is " << m_fileSize << "), ignoring"
-		  << std::endl;
-	length = m_fileSize;
+    if (length != m_fileSize) {
+        std::cerr << "WARNING: RIFFAudioFile: incorrect length ("
+        << length << ", file size is " << m_fileSize << "), ignoring"
+        << std::endl;
+        length = m_fileSize;
     }
 
     // Check the format length
@@ -414,23 +428,20 @@ RIFFAudioFile::readFormatChunk()
     // Make sure we step to the end of the format chunk ignoring the
     // tail if it exists
     //
-    if (lengthOfFormat > 0x10)
-    {
+    if (lengthOfFormat > 0x10) {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
-                  << "extended Format Chunk (" << lengthOfFormat << ")"
-                  << std::endl;
+        << "extended Format Chunk (" << lengthOfFormat << ")"
+        << std::endl;
 #endif
 
-        // ignore any overlapping bytes 
+        // ignore any overlapping bytes
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
-    }
-    else if (lengthOfFormat < 0x10)
-    {
+    } else if (lengthOfFormat < 0x10) {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
-                  << "truncated Format Chunk (" << lengthOfFormat << ")"
-                  << std::endl;
+        << "truncated Format Chunk (" << lengthOfFormat << ")"
+        << std::endl;
 #endif
 
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
@@ -443,9 +454,9 @@ RIFFAudioFile::readFormatChunk()
     unsigned int subFormat = getIntegerFromLittleEndian(hS.substr(20, 2));
 
     if (subFormat == 0x01) {
-	m_subFormat = PCM;
+        m_subFormat = PCM;
     } else if (subFormat == 0x03) {
-	m_subFormat = FLOAT;
+        m_subFormat = FLOAT;
     } else {
         throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports PCM or IEEE floating-point RIFF files"));
     }
@@ -453,37 +464,35 @@ RIFFAudioFile::readFormatChunk()
     // We seem to have a good looking .WAV file - extract the
     // sample information and populate this locally
     //
-    unsigned int channelNumbers =  getIntegerFromLittleEndian(hS.substr(22,2));
-    
-    switch(channelNumbers)
-    {
-        case 0x01:
-        case 0x02:
-            m_channels = channelNumbers;
-            break;
+    unsigned int channelNumbers = getIntegerFromLittleEndian(hS.substr(22, 2));
 
-        default:
-            {
-                throw(BadSoundFileException(m_fileName, "Unsupported number of channels"));
-            }
-            break;
+    switch (channelNumbers) {
+    case 0x01:
+    case 0x02:
+        m_channels = channelNumbers;
+        break;
+
+    default: {
+            throw(BadSoundFileException(m_fileName, "Unsupported number of channels"));
+        }
+        break;
     }
 
     // Now the rest of the information
     //
-    m_sampleRate = getIntegerFromLittleEndian(hS.substr(24,4));
-    m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
-    m_bytesPerFrame = getIntegerFromLittleEndian(hS.substr(32,2));
-    m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
+    m_sampleRate = getIntegerFromLittleEndian(hS.substr(24, 4));
+    m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28, 4));
+    m_bytesPerFrame = getIntegerFromLittleEndian(hS.substr(32, 2));
+    m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34, 2));
 
     if (m_subFormat == PCM) {
-	if (m_bitsPerSample != 8 && m_bitsPerSample != 16 && m_bitsPerSample != 24) {
-	    throw BadSoundFileException("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files");
-	}
+        if (m_bitsPerSample != 8 && m_bitsPerSample != 16 && m_bitsPerSample != 24) {
+            throw BadSoundFileException("Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files");
+        }
     } else if (m_subFormat == FLOAT) {
-	if (m_bitsPerSample != 32) {
-	    throw BadSoundFileException("Rosegarden currently only supports 32-bit floating-point in RIFF files");
-	}
+        if (m_bitsPerSample != 32) {
+            throw BadSoundFileException("Rosegarden currently only supports 32-bit floating-point in RIFF files");
+        }
     }
 
     //printStats();
@@ -496,7 +505,7 @@ void
 RIFFAudioFile::writeFormatChunk()
 {
     if (m_outFile == 0 || m_type != WAV)
-        return;
+        return ;
 
     std::string outString;
 
@@ -521,9 +530,9 @@ RIFFAudioFile::writeFormatChunk()
 
     // 1 for PCM, 3 for float
     if (m_subFormat == PCM) {
-	outString += getLittleEndianFromInteger(0x01, 2);
+        outString += getLittleEndianFromInteger(0x01, 2);
     } else {
-	outString += getLittleEndianFromInteger(0x03, 2);
+        outString += getLittleEndianFromInteger(0x03, 2);
     }
 
     // channel
@@ -578,29 +587,33 @@ RIFFAudioFile::identifySubType(const std::string &filename)
     // Test for BWF first because it's an extension of a plain WAV
     //
 #if (__GNUC__ < 3)
-    if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) == 0 &&
-        hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) == 0 &&
-        hS.compare(Rosegarden::AUDIO_BWF_ID, 12, 4) == 0)
+
+    if (hS.compare(AUDIO_RIFF_ID, 0, 4) == 0 &&
+            hS.compare(AUDIO_WAVE_ID, 8, 4) == 0 &&
+            hS.compare(AUDIO_BWF_ID, 12, 4) == 0)
 #else
-    if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) == 0 &&
-        hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) == 0 &&
-        hS.compare(12, 4, Rosegarden::AUDIO_BWF_ID) == 0)
+
+    if (hS.compare(0, 4, AUDIO_RIFF_ID) == 0 &&
+            hS.compare(8, 4, AUDIO_WAVE_ID) == 0 &&
+            hS.compare(12, 4, AUDIO_BWF_ID) == 0)
 #endif
+
     {
         type = BWF;
     }
     // Now for a WAV
 #if (__GNUC__ < 3)
-    else if (hS.compare(Rosegarden::AUDIO_RIFF_ID, 0, 4) == 0 &&
-             hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) == 0)
+    else if (hS.compare(AUDIO_RIFF_ID, 0, 4) == 0 &&
+             hS.compare(AUDIO_WAVE_ID, 8, 4) == 0)
 #else
-    else if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) == 0 &&
-             hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) == 0)
+
+    else if (hS.compare(0, 4, AUDIO_RIFF_ID) == 0 &&
+             hS.compare(8, 4, AUDIO_WAVE_ID) == 0)
 #endif
+
     {
         type = WAV;
-    }
-    else
+    } else
         type = UNKNOWN;
 
     testFile->close();
@@ -613,45 +626,41 @@ float
 RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
 {
     switch (getBitsPerSample()) {
-	
-    case 8:
-    {
-	// WAV stores 8-bit samples unsigned, other sizes signed.
-	return (float)(ubuf[0] - 128.0) / 128.0;
-    }
-    
-    case 16:
-    {
-	// Two's complement little-endian 16-bit integer.
-	// We convert endianness (if necessary) but assume 16-bit short.
-	unsigned char b2 = ubuf[0];
-	unsigned char b1 = ubuf[1];
-	unsigned int bits = (b1 << 8) + b2;
-	return (float)(short(bits)) / 32767.0;
-    }
 
-    case 24:
-    {
-	// Two's complement little-endian 24-bit integer.
-	// Again, convert endianness but assume 32-bit int.
-	unsigned char b3 = ubuf[0];
-	unsigned char b2 = ubuf[1];
-	unsigned char b1 = ubuf[2];
-	// Rotate 8 bits too far in order to get the sign bit
-	// in the right place; this gives us a 32-bit value,
-	// hence the larger float divisor
-	unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
-	return (float)(int(bits)) / 2147483647.0;
-    }
+    case 8: {
+            // WAV stores 8-bit samples unsigned, other sizes signed.
+            return (float)(ubuf[0] - 128.0) / 128.0;
+        }
 
-    case 32:
-    {
-	// IEEE floating point
-	return *(float *)ubuf;
-    }
-    
+    case 16: {
+            // Two's complement little-endian 16-bit integer.
+            // We convert endianness (if necessary) but assume 16-bit short.
+            unsigned char b2 = ubuf[0];
+            unsigned char b1 = ubuf[1];
+            unsigned int bits = (b1 << 8) + b2;
+            return (float)(short(bits)) / 32767.0;
+        }
+
+    case 24: {
+            // Two's complement little-endian 24-bit integer.
+            // Again, convert endianness but assume 32-bit int.
+            unsigned char b3 = ubuf[0];
+            unsigned char b2 = ubuf[1];
+            unsigned char b1 = ubuf[2];
+            // Rotate 8 bits too far in order to get the sign bit
+            // in the right place; this gives us a 32-bit value,
+            // hence the larger float divisor
+            unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
+            return (float)(int(bits)) / 2147483647.0;
+        }
+
+    case 32: {
+            // IEEE floating point
+            return *(float *)ubuf;
+        }
+
     default:
-	return 0.0f;
+        return 0.0f;
     }
 }
 

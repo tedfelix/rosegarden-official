@@ -46,7 +46,7 @@ public:
 
     virtual bool isOK() const { return m_instanceHandles.size() != 0; }
 
-    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
+    InstrumentId getInstrument() const { return m_instrument; }
     virtual QString getIdentifier() const { return m_identifier; }
     int getPosition() const { return m_position; }
 
@@ -76,7 +76,7 @@ protected:
     // Constructor that creates the buffers internally
     // 
     LADSPAPluginInstance(PluginFactory *factory,
-			 Rosegarden::InstrumentId instrument,
+			 InstrumentId instrument,
 			 QString identifier,
                          int position,
 			 unsigned long sampleRate,
@@ -87,7 +87,7 @@ protected:
     // Constructor that uses shared buffers
     // 
     LADSPAPluginInstance(PluginFactory *factory,
-			 Rosegarden::InstrumentId instrument,
+			 InstrumentId instrument,
 			 QString identifier,
                          int position,
 			 unsigned long sampleRate,
@@ -106,7 +106,7 @@ protected:
     //
     void connectPorts();
     
-    Rosegarden::InstrumentId   m_instrument;
+    InstrumentId   m_instrument;
     int                        m_position;
     std::vector<LADSPA_Handle> m_instanceHandles;
     size_t                     m_instanceCount;

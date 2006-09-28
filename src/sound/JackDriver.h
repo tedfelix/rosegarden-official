@@ -132,9 +132,9 @@ public:
     // explicitly close the file eventually though to make sure
     // the integrity is correct (sample sizes must be written).
     //
-    bool openRecordFile(Rosegarden::InstrumentId id,
+    bool openRecordFile(InstrumentId id,
 			const std::string &fileName);
-    bool closeRecordFile(Rosegarden::InstrumentId id,
+    bool closeRecordFile(InstrumentId id,
 			 AudioFileId &returnedId);
 
     // Set or change the number of audio inputs and outputs.
@@ -197,7 +197,7 @@ public:
 
     // Report back to GUI via the AlsaDriver
     //
-    void reportFailure(Rosegarden::MappedEvent::FailureCode code);
+    void reportFailure(MappedEvent::FailureCode code);
 
 protected:
 
@@ -219,7 +219,7 @@ protected:
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
-    int          jackProcessRecord(Rosegarden::InstrumentId id,
+    int          jackProcessRecord(InstrumentId id,
 				   jack_nframes_t nframes,
 				   sample_t *, sample_t *, bool);
     int          jackProcessEmpty(jack_nframes_t nframes);
@@ -278,7 +278,7 @@ protected:
 	RecordInputDesc(int i = 1000, int c = -1, float l = 0.0f) :
 	    input(i), channel(c), level(l) { }
     };
-    typedef std::map<Rosegarden::InstrumentId, RecordInputDesc> RecordInputMap;
+    typedef std::map<InstrumentId, RecordInputDesc> RecordInputMap;
     RecordInputMap               m_recordInputs;
 
     time_t                       m_kickedOutAt;

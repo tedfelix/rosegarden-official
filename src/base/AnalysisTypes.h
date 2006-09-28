@@ -134,7 +134,7 @@ public:
      * the timeslice in the given CompositionTimeSliceAdapter.
      */
     void labelChords(CompositionTimeSliceAdapter &c, Segment &s,
-		     const Rosegarden::Quantizer *quantizer);
+		     const Quantizer *quantizer);
 
     /**
      * Returns a time signature that is probably reasonable for the

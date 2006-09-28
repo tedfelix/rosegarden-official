@@ -173,7 +173,7 @@ public:
     virtual ~GenericChord();
 
     virtual int getMarkCountForChord() const;
-    virtual std::vector<Rosegarden::Mark> getMarksForChord() const;
+    virtual std::vector<Mark> getMarksForChord() const;
     virtual std::vector<int> getPitches() const;
     virtual bool contains(const Iterator &) const;
 
@@ -589,7 +589,7 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
 	     i = std::vector<typename Container::iterator>::begin(); i != std::vector<typename Container::iterator>::end(); ++i) {
 	if (getAsEvent(*i)->has(BaseProperties::PITCH)) {
 	    int pitch = get__Int
-		(getAsEvent(*i), Rosegarden::BaseProperties::PITCH);
+		(getAsEvent(*i), BaseProperties::PITCH);
 	    if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
 		continue;
 	    pitches.push_back(pitch);

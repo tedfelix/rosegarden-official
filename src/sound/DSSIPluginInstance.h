@@ -46,7 +46,7 @@ public:
 
     virtual bool isOK() const { return m_instanceHandle != 0; }
 
-    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
+    InstrumentId getInstrument() const { return m_instrument; }
     virtual QString getIdentifier() const { return m_identifier; }
     int getPosition() const { return m_position; }
 
@@ -89,7 +89,7 @@ protected:
     // Constructor that creates the buffers internally
     // 
     DSSIPluginInstance(PluginFactory *factory,
-		       Rosegarden::InstrumentId instrument,
+		       InstrumentId instrument,
 		       QString identifier,
 		       int position,
 		       unsigned long sampleRate,
@@ -100,7 +100,7 @@ protected:
     // Constructor that uses shared buffers
     // 
     DSSIPluginInstance(PluginFactory *factory,
-		       Rosegarden::InstrumentId instrument,
+		       InstrumentId instrument,
 		       QString identifier,
 		       int position,
 		       unsigned long sampleRate,
@@ -124,7 +124,7 @@ protected:
     void initialiseGroupMembership();
     void runGrouped(const RealTime &);
 
-    Rosegarden::InstrumentId   m_instrument;
+    InstrumentId   m_instrument;
     int                        m_position;
     LADSPA_Handle              m_instanceHandle;
     const DSSI_Descriptor     *m_descriptor;

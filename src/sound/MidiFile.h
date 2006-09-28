@@ -34,7 +34,7 @@
 #include "Composition.h"
 #include "SoundFile.h"
 
-// Conversion class for Rosegarden::Composition to and
+// Conversion class for Composition to and
 // from MIDI Files.  Despite the fact you can reuse this
 // object it's probably safer just to create it for a
 // single way conversion and then throw it away (MIDI
@@ -106,13 +106,13 @@ public:
      * Convert a MIDI file to a Rosegarden composition.  Return true
      * for success.
      */
-    bool convertToRosegarden(Rosegarden::Composition &c, ConversionType type);
+    bool convertToRosegarden(Composition &c, ConversionType type);
 
     /**
      * Convert a Rosegarden composition to MIDI format, storing the
      * result internally for later writing.
      */
-    void convertToMidi(Rosegarden::Composition &comp);
+    void convertToMidi(Composition &comp);
 
 signals:
     void setProgress(int);
@@ -145,7 +145,7 @@ private:
     bool writeHeader(std::ofstream* midiFile);
     bool writeTrack(std::ofstream* midiFile, unsigned int trackNum);
 
-    bool consolidateNoteOffEvents(Rosegarden::TrackId track);
+    bool consolidateNoteOffEvents(TrackId track);
 
     // Internal convenience functions
     //

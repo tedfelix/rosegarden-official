@@ -4,15 +4,15 @@
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
-
+ 
     This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-
+ 
     The moral right of the authors to claim authorship of this work
     has been asserted.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -25,7 +25,8 @@
 
 //#define DEBUG_AUDIO_CACHE 1
 
-namespace Rosegarden {
+namespace Rosegarden
+{
 
 AudioCache::~AudioCache()
 {
@@ -41,7 +42,8 @@ AudioCache::has(void *index)
 float **
 AudioCache::getData(void *index, size_t &channels, size_t &frames)
 {
-    if (m_cache.find(index) == m_cache.end()) return 0;
+    if (m_cache.find(index) == m_cache.end())
+        return 0;
     CacheRec *rec = m_cache[index];
     channels = rec->channels;
     frames = rec->nframes;
@@ -56,10 +58,10 @@ AudioCache::addData(void *index, size_t channels, size_t nframes, float **data)
 #endif
 
     if (m_cache.find(index) != m_cache.end()) {
-	std::cerr << "WARNING: AudioCache::addData(" << index << ", "
-		  << channels << ", " << nframes
-		  << ": already cached" << std::endl;
-	return;
+        std::cerr << "WARNING: AudioCache::addData(" << index << ", "
+        << channels << ", " << nframes
+        << ": already cached" << std::endl;
+        return ;
     }
 
     m_cache[index] = new CacheRec(data, channels, nframes);
@@ -69,13 +71,14 @@ void
 AudioCache::incrementReference(void *index)
 {
     if (m_cache.find(index) == m_cache.end()) {
-	std::cerr << "WARNING: AudioCache::incrementReference(" << index
-		  << "): not found" << std::endl;
-	return;
+        std::cerr << "WARNING: AudioCache::incrementReference(" << index
+        << "): not found" << std::endl;
+        return ;
     }
     ++m_cache[index]->refCount;
 
 #ifdef DEBUG_AUDIO_CACHE
+
     std::cerr << "AudioCache::incrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]" << std::endl;
 #endif
 }
@@ -86,21 +89,25 @@ AudioCache::decrementReference(void *index)
     std::map<void *, CacheRec *>::iterator i = m_cache.find(index);
 
     if (i == m_cache.end()) {
-	std::cerr << "WARNING: AudioCache::decrementReference(" << index
-		  << "): not found" << std::endl;
-	return;
+        std::cerr << "WARNING: AudioCache::decrementReference(" << index
+        << "): not found" << std::endl;
+        return ;
     }
     if (i->second->refCount <= 1) {
-	delete i->second;
-	m_cache.erase(i);
+        delete i->second;
+        m_cache.erase(i);
 #ifdef DEBUG_AUDIO_CACHE
-	std::cerr << "AudioCache::decrementReference(" << index << ") [deleting]" << std::endl;
+
+        std::cerr << "AudioCache::decrementReference(" << index << ") [deleting]" << std::endl;
 #endif
+
     } else {
-	--i->second->refCount;
+        --i->second->refCount;
 #ifdef DEBUG_AUDIO_CACHE
-	std::cerr << "AudioCache::decrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]" << std::endl;
+
+        std::cerr << "AudioCache::decrementReference(" << index << ") [to " << (m_cache[index]->refCount) << "]" << std::endl;
 #endif
+
     }
 }
 
@@ -110,19 +117,20 @@ AudioCache::clear()
 #ifdef DEBUG_AUDIO_CACHE
     std::cerr << "AudioCache::clear()" << std::endl;
 #endif
-    
+
     for (std::map<void *, CacheRec *>::iterator i = m_cache.begin();
-	 i != m_cache.end(); ++i) {
-	if (i->second->refCount > 0) {
-	    std::cerr << "WARNING: AudioCache::clear: deleting cached data with refCount " << i->second->refCount << std::endl;
-	}
+            i != m_cache.end(); ++i) {
+        if (i->second->refCount > 0) {
+            std::cerr << "WARNING: AudioCache::clear: deleting cached data with refCount " << i->second->refCount << std::endl;
+        }
     }
     m_cache.clear();
 }
 
 AudioCache::CacheRec::~CacheRec()
 {
-    for (size_t j = 0; j < channels; ++j) delete[] data[j];
+    for (size_t j = 0; j < channels; ++j)
+        delete[] data[j];
     delete[] data;
 }
 

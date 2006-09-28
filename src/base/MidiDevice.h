@@ -152,8 +152,8 @@ public:
     //
     virtual ControlParameter *getControlParameter(int index);
     virtual const ControlParameter *getControlParameter(int index) const;
-    virtual ControlParameter *getControlParameter(const std::string &type, Rosegarden::MidiByte controllerNumber);
-    virtual const ControlParameter *getControlParameter(const std::string &type, Rosegarden::MidiByte controllerNumber) const;
+    virtual ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber);
+    virtual const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber) const;
 
     // Modify ControlParameters
     //

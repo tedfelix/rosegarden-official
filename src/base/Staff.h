@@ -74,7 +74,7 @@ public:
     /**
      * Return the location of the given event in this Staff
      */
-    ViewElementList::iterator findEvent(Rosegarden::Event *);
+    ViewElementList::iterator findEvent(Event *);
 
     /**
      * SegmentObserver method - called after the event has been added to

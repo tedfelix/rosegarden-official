@@ -40,7 +40,7 @@ public:
     // Resolution defines the meaning of ScriptTime units.  If set to
     // the QuantizedNN values, each ScriptTime unit will correspond to
     // the duration of an NN-th note.  If Unquantized, ScriptTime will
-    // correspond to Rosegarden::timeT, i.e. 960 to a quarter note.
+    // correspond to timeT, i.e. 960 to a quarter note.
     // And Notation is like Quantized64 except that the times are
     // obtained from the notation time and duration properties of each
     // event instead of the raw ones.

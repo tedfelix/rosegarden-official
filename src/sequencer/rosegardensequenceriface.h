@@ -115,7 +115,7 @@ public:
     // The GUI can use this method to process an immediate selection
     // of MappedEvents (Program Changes, SysExs, async Events etc).
     //
-    virtual void processSequencerSlice(Rosegarden::MappedComposition mC) = 0;
+    virtual void processSequencerSlice(MappedComposition mC) = 0;
 
 
     // Horrible ugly ugly ugly interface for single MappedEvents
@@ -134,7 +134,7 @@ public:
 
     // The proper implementation
     //
-    virtual void processMappedEvent(Rosegarden::MappedEvent mE) = 0;
+    virtual void processMappedEvent(MappedEvent mE) = 0;
 
     // Return device id following last existing one -- you can treat
     // this as "number of devices" but there might be some holes if
@@ -145,7 +145,7 @@ public:
 
     // Return device by number
     //
-    virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id) = 0;
+    virtual MappedDevice getMappedDevice(unsigned int id) = 0;
 
     // Query whether the driver implements device reconnection.
     // Returns a non-zero value if the addDevice, removeDevice,
@@ -229,8 +229,8 @@ public:
 
     // Fetch audio play latencies
     //
-    virtual Rosegarden::MappedRealTime getAudioPlayLatency() = 0;
-    virtual Rosegarden::MappedRealTime getAudioRecordLatency() = 0;
+    virtual MappedRealTime getAudioPlayLatency() = 0;
+    virtual MappedRealTime getAudioRecordLatency() = 0;
 
     // Set a property on a MappedObject
     //
@@ -240,9 +240,9 @@ public:
 
     // Set many properties on many MappedObjects
     //
-    virtual void setMappedProperties(const Rosegarden::MappedObjectIdList &ids,
-				     const Rosegarden::MappedObjectPropertyList &properties,
-				     const Rosegarden::MappedObjectValueList &values) = 0;
+    virtual void setMappedProperties(const MappedObjectIdList &ids,
+				     const MappedObjectPropertyList &properties,
+				     const MappedObjectValueList &values) = 0;
 
     // Set a string property on a MappedObject
     //
@@ -255,7 +255,7 @@ public:
     virtual void setMappedPropertyList(
                                int id,
                                const QString &property,
-                               const Rosegarden::MappedObjectPropertyList &values) = 0;
+                               const MappedObjectPropertyList &values) = 0;
 
     // Get a mapped object id for a object type
     //

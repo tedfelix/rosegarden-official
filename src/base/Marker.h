@@ -45,15 +45,15 @@ public:
     Marker():m_time(0), m_name(std::string("<unnamed>")), 
              m_description(std::string("<none>")) { }
 
-    Marker(Rosegarden::timeT time, const std::string &name,
+    Marker(timeT time, const std::string &name,
            const std::string &description):
         m_time(time), m_name(name), m_description(description) { }
 
-    Rosegarden::timeT getTime() const { return m_time; }
+    timeT getTime() const { return m_time; }
     std::string getName() const { return m_name; }
     std::string getDescription() const { return m_description; }
 
-    void setTime(Rosegarden::timeT time) { m_time = time; }
+    void setTime(timeT time) { m_time = time; }
     void setName(const std::string &name) { m_name = name; }
     void setDescription(const std::string &des) { m_description = des; }
 
@@ -62,7 +62,7 @@ public:
 
 protected:
 
-    Rosegarden::timeT    m_time;
+    timeT    m_time;
     std::string          m_name;
     std::string          m_description;
 

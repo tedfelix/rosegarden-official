@@ -3,15 +3,15 @@
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
-
+ 
     This program is Copyright 2000-2006
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-
+ 
     The moral right of the authors to claim authorship of this work
     has been asserted.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -40,7 +40,7 @@ namespace Rosegarden
 WAVAudioFile::WAVAudioFile(const unsigned int &id,
                            const std::string &name,
                            const std::string &fileName):
-    RIFFAudioFile(id, name, fileName)
+        RIFFAudioFile(id, name, fileName)
 {
     m_type = WAV;
 }
@@ -51,14 +51,13 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
                            unsigned int bytesPerSecond = 6000,
                            unsigned int bytesPerFrame = 2,
                            unsigned int bitsPerSample = 16):
-    RIFFAudioFile(fileName, channels, sampleRate, bytesPerSecond, bytesPerFrame, bitsPerSample)
+        RIFFAudioFile(fileName, channels, sampleRate, bytesPerSecond, bytesPerFrame, bitsPerSample)
 {
     m_type = WAV;
 }
 
 WAVAudioFile::~WAVAudioFile()
-{
-}
+{}
 
 bool
 WAVAudioFile::open()
@@ -70,8 +69,7 @@ WAVAudioFile::open()
     m_inFile = new std::ifstream(m_fileName.c_str(),
                                  std::ios::in | std::ios::binary);
 
-    if (!(*m_inFile))
-    {
+    if (!(*m_inFile)) {
         m_type = UNKNOWN;
         return false;
     }
@@ -79,12 +77,9 @@ WAVAudioFile::open()
     // Get the file size and store it for comparison later
     m_fileSize = m_fileInfo->size();
 
-    try
-    {
+    try {
         parseHeader();
-    }
-    catch (BadSoundFileException e)
-    {
+    } catch (BadSoundFileException e) {
         std::cerr << "ERROR: WAVAudioFile::open(): parseHeader: " << e.getMessage() << endl;
         return false;
     }
@@ -100,8 +95,7 @@ bool
 WAVAudioFile::write()
 {
     // close if we're open
-    if (m_outFile)
-    {
+    if (m_outFile) {
         m_outFile->close();
         delete m_outFile;
     }
@@ -124,7 +118,7 @@ void
 WAVAudioFile::close()
 {
     if (m_outFile == 0)
-        return;
+        return ;
 
     m_outFile->seekp(0, std::ios::end);
     unsigned int totalSize = m_outFile->tellp();
@@ -156,7 +150,7 @@ WAVAudioFile::parseHeader()
     // file only has this chunk.  Exceptions tumble through.
     //
     readFormatChunk();
-   
+
 }
 
 std::streampos
@@ -167,12 +161,12 @@ WAVAudioFile::getDataOffset()
 
 bool
 WAVAudioFile::decode(const unsigned char *ubuf,
-		     size_t sourceBytes,
-		     size_t targetSampleRate,
-		     size_t targetChannels,
-		     size_t nframes,
-		     std::vector<float *> &target,
-		     bool adding)
+                     size_t sourceBytes,
+                     size_t targetSampleRate,
+                     size_t targetChannels,
+                     size_t nframes,
+                     std::vector<float *> &target,
+                     bool adding)
 {
     size_t sourceChannels = getChannels();
     size_t sourceSampleRate = getSampleRate();
@@ -180,12 +174,12 @@ WAVAudioFile::decode(const unsigned char *ubuf,
 
     int bitsPerSample = getBitsPerSample();
     if (bitsPerSample != 8 &&
-	bitsPerSample != 16 &&
-	bitsPerSample != 24 && 
-	bitsPerSample != 32) { // 32-bit is IEEE-float (enforced in RIFFAudioFile)
-	std::cerr << "WAVAudioFile::decode: unsupported " <<
-	    bitsPerSample << "-bit sample size" << std::endl;
-	return false;
+            bitsPerSample != 16 &&
+            bitsPerSample != 24 &&
+            bitsPerSample != 32) { // 32-bit is IEEE-float (enforced in RIFFAudioFile)
+        std::cerr << "WAVAudioFile::decode: unsupported " <<
+        bitsPerSample << "-bit sample size" << std::endl;
+        return false;
     }
 
 #ifdef DEBUG_DECODE
@@ -198,58 +192,61 @@ WAVAudioFile::decode(const unsigned char *ubuf,
     // we just copy across the ones that do match and zero the rest.
 
     bool reduceToMono = (targetChannels == 1 && sourceChannels == 2);
-    
+
     for (size_t ch = 0; ch < sourceChannels; ++ch) {
 
-	if (!reduceToMono || ch == 0) {
-	    if (ch >= targetChannels) break;
-	    if (!adding) memset(target[ch], 0, nframes * sizeof(float));
-	}
+        if (!reduceToMono || ch == 0) {
+            if (ch >= targetChannels)
+                break;
+            if (!adding)
+                memset(target[ch], 0, nframes * sizeof(float));
+        }
 
-	int tch = ch; // target channel for this data
-	if (reduceToMono && ch == 1) {
-	    tch = 0;
-	}
+        int tch = ch; // target channel for this data
+        if (reduceToMono && ch == 1) {
+            tch = 0;
+        }
 
-	float ratio = 1.0;
-	if (sourceSampleRate != targetSampleRate) {
-	    ratio = float(sourceSampleRate) / float(targetSampleRate);
-	}
+        float ratio = 1.0;
+        if (sourceSampleRate != targetSampleRate) {
+            ratio = float(sourceSampleRate) / float(targetSampleRate);
+        }
 
-	for (size_t i = 0; i < nframes; ++i) {
+        for (size_t i = 0; i < nframes; ++i) {
 
-	    size_t j = i;
-	    if (sourceSampleRate != targetSampleRate) {
-		j = size_t(i * ratio);
-	    }
-	    if (j >= fileFrames) j = fileFrames - 1;
+            size_t j = i;
+            if (sourceSampleRate != targetSampleRate) {
+                j = size_t(i * ratio);
+            }
+            if (j >= fileFrames)
+                j = fileFrames - 1;
 
-	    target[tch][i] += convertBytesToSample
-		(&ubuf[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
-	}
+            target[tch][i] += convertBytesToSample
+                              (&ubuf[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
+        }
     }
 
     // Now deal with any excess target channels
 
     for (int ch = sourceChannels; ch < targetChannels; ++ch) {
-	if (ch == 1 && targetChannels == 2) {
-	    // copy mono to stereo
-	    if (!adding) {
-		memcpy(target[ch], target[ch-1], nframes * sizeof(float));
-	    } else {
-		for (size_t i = 0; i < nframes; ++i) {
-		    target[ch][i] += target[ch-1][i];
-		}
-	    }
-	} else {
-	    if (!adding) {
-		memset(target[ch], 0, nframes * sizeof(float));
-	    }
-	}
+        if (ch == 1 && targetChannels == 2) {
+            // copy mono to stereo
+            if (!adding) {
+                memcpy(target[ch], target[ch - 1], nframes * sizeof(float));
+            } else {
+                for (size_t i = 0; i < nframes; ++i) {
+                    target[ch][i] += target[ch - 1][i];
+                }
+            }
+        } else {
+            if (!adding) {
+                memset(target[ch], 0, nframes * sizeof(float));
+            }
+        }
     }
 
     return true;
 }
 
-    
+
 }

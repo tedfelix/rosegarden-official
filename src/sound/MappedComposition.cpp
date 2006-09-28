@@ -3,15 +3,15 @@
 /*
   Rosegarden-4
   A sequencer and musical notation editor.
-
+ 
   This program is Copyright 2000-2006
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
-
+ 
   The moral right of the authors to claim authorship of this work
   has been asserted.
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -39,7 +39,7 @@ MappedComposition::~MappedComposition()
 
 // copy constructor
 MappedComposition::MappedComposition(const MappedComposition &mC):
-  std::multiset<MappedEvent *, MappedEvent::MappedEventCmp>()
+        std::multiset<MappedEvent *, MappedEvent::MappedEventCmp>()
 {
     clear();
 
@@ -58,7 +58,7 @@ operator<<(QDataStream &dS, MappedComposition *mC)
     dS << int(mC->size());
 
     for (MappedCompositionIterator it = mC->begin(); it != mC->end(); ++it )
-	dS << (*it);
+        dS << (*it);
 
     return dS;
 }
@@ -70,7 +70,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
     dS << int(mC.size());
 
     for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); ++it )
-	dS << (*it);
+        dS << (*it);
 
     return dS;
 }
@@ -78,7 +78,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
 
 // Turn a QDataStream into a MappedComposition
 //
-QDataStream& 
+QDataStream&
 operator>>(QDataStream &dS, MappedComposition *mC)
 {
     int sliceSize;
@@ -86,32 +86,30 @@ operator>>(QDataStream &dS, MappedComposition *mC)
 
     dS >> sliceSize;
 
-    while (!dS.atEnd() && sliceSize)
-    {
+    while (!dS.atEnd() && sliceSize) {
         mE = new MappedEvent();
-	dS >> mE;
+        dS >> mE;
 
-        try
-        {
-	    mC->insert(mE);
+        try {
+            mC->insert(mE);
+        } catch (...) {
+            ;
         }
-        catch(...) {;}
 
-	sliceSize--;
+        sliceSize--;
 
     }
 
 #ifdef DEBUG_MAPPEDCOMPOSITION
-    if (sliceSize)
-    {
-	cerr << "operator>> - wrong number of events received" << endl;
+    if (sliceSize) {
+        cerr << "operator>> - wrong number of events received" << endl;
     }
 #endif
 
     return dS;
 }
 
-QDataStream& 
+QDataStream&
 operator>>(QDataStream &dS, MappedComposition &mC)
 {
     int sliceSize;
@@ -119,29 +117,27 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 
     dS >> sliceSize;
 
-    while (!dS.atEnd() && sliceSize)
-    {
+    while (!dS.atEnd() && sliceSize) {
         mE = new MappedEvent();
 
-	dS >> mE;
+        dS >> mE;
 
-        try
-        {
-	    mC.insert(mE);
+        try {
+            mC.insert(mE);
+        } catch (...) {
+            ;
         }
-        catch(...) {;}
 
-	sliceSize--;
+        sliceSize--;
 
     }
 
 #ifdef DEBUG_MAPPEDCOMPOSITION
-    if (sliceSize)
-    {
-	cerr << "operator>> - wrong number of events received" << endl;
+    if (sliceSize) {
+        cerr << "operator>> - wrong number of events received" << endl;
     }
 #endif
-    
+
 
     return dS;
 }
@@ -151,12 +147,11 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 //
 //
 void
-MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
+MappedComposition::moveStartTime(const RealTime &mT)
 {
     MappedCompositionIterator it;
 
-    for (it = this->begin(); it != this->end(); ++it)
-    {
+    for (it = this->begin(); it != this->end(); ++it) {
         // Reset start time and duration
         //
         (*it)->setEventTime((*it)->getEventTime() + mT);
@@ -190,7 +185,8 @@ MappedComposition::operator+(const MappedComposition &mC)
 MappedComposition&
 MappedComposition::operator=(const MappedComposition &mC)
 {
-    if (&mC == this) return *this;
+    if (&mC == this)
+        return * this;
 
     clear();
 
@@ -207,7 +203,8 @@ MappedComposition::clear()
     // Only clear if the events aren't persistent
     //
     for (MappedCompositionIterator it = this->begin(); it != this->end(); it++)
-        if (!(*it)->isPersistent()) delete (*it);
+        if (!(*it)->isPersistent())
+            delete (*it);
 
     this->erase(this->begin(), this->end());
 }

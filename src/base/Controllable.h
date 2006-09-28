@@ -37,7 +37,7 @@ public:
     virtual const ControlList &getControlParameters() const = 0;
     virtual const ControlParameter *getControlParameter(int index) const = 0;
     virtual const ControlParameter *getControlParameter(const std::string &type,
-							Rosegarden::MidiByte controllerNumber) const = 0;
+							MidiByte controllerNumber) const = 0;
 
 protected:
     Controllable() { }

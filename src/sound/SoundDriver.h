@@ -431,7 +431,7 @@ public:
 
     // Report a failure back to the GUI - ideally.  Default does nothing.
     //
-    virtual void reportFailure(Rosegarden::MappedEvent::FailureCode) { }
+    virtual void reportFailure(MappedEvent::FailureCode) { }
 
 protected:
     // Helper functions to be implemented by subclasses

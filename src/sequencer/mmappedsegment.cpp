@@ -2,15 +2,15 @@
 /*
   Rosegarden-4
   A sequencer and musical notation editor.
-
+ 
   This program is Copyright 2000-2006
   Guillaume Laurent   <glaurent@telegraph-road.org>,
   Chris Cannam        <cannam@all-day-breakfast.com>,
   Richard Bown        <bownie@bownie.com>
-
+ 
   The moral right of the authors to claim authorship of this work
   has been asserted.
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -27,18 +27,18 @@
 using std::cerr;
 using std::endl;
 using std::cout;
-using Rosegarden::MappedEvent;
+using MappedEvent;
 
 //#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
 
 
 MmappedSegment::MmappedSegment(const QString filename)
-    : m_fd(-1),
-      m_mmappedSize(0),
-      m_mmappedRegion(0),
-      m_mmappedEventBuffer((MappedEvent*)0),
-      m_filename(filename)
+        : m_fd( -1),
+        m_mmappedSize(0),
+        m_mmappedRegion(0),
+        m_mmappedEventBuffer((MappedEvent*)0),
+        m_filename(filename)
 {
     SEQUENCER_DEBUG << "mmapping " << filename << endl;
 
@@ -57,7 +57,7 @@ void MmappedSegment::map()
     QFileInfo fInfo(m_filename);
     if (!fInfo.exists()) {
         SEQUENCER_DEBUG << "MmappedSegment::map() : file " << m_filename << " doesn't exist\n";
-        throw Rosegarden::Exception("file not found");
+        throw Exception("file not found");
     }
 
     m_mmappedSize = fInfo.size();
@@ -66,18 +66,18 @@ void MmappedSegment::map()
 
     m_mmappedRegion = ::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
-    if (m_mmappedRegion == (void*)-1) {
+    if (m_mmappedRegion == (void*) - 1) {
 
         SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").
-            arg(errno).arg(strerror(errno));
+        arg(errno).arg(strerror(errno));
 
-        throw Rosegarden::Exception("mmap failed");
+        throw Exception("mmap failed");
     }
 
     m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
 
     SEQUENCER_DEBUG << "MmappedSegment::map() : "
-                    << (void*)m_mmappedRegion << "," << m_mmappedSize << endl;
+    << (void*)m_mmappedRegion << "," << m_mmappedSize << endl;
 
 }
 
@@ -96,35 +96,36 @@ size_t
 MmappedSegment::getNbMappedEvents() const
 {
     if (m_mmappedRegion || !m_mmappedSize) {
-	
-	// The shared memory area consists of one size_t giving the
-	// number of following mapped events, followed by the mapped
-	// events themselves.  
 
-	// So this is the number of mapped events that we expect:
-	size_t nominal = *(size_t *)m_mmappedRegion;
+        // The shared memory area consists of one size_t giving the
+        // number of following mapped events, followed by the mapped
+        // events themselves.
 
-	// But we want to be sure not to read off the end of the
-	// shared memory area, so just in case, this is the number of
-	// events that can actually be accommodated in the memory area
-	// as we see it:
-	size_t actual = (m_mmappedSize - sizeof(size_t)) /
-	    sizeof(MappedEvent);
+        // So this is the number of mapped events that we expect:
+        size_t nominal = *(size_t *)m_mmappedRegion;
 
-	return std::min(nominal, actual);
+        // But we want to be sure not to read off the end of the
+        // shared memory area, so just in case, this is the number of
+        // events that can actually be accommodated in the memory area
+        // as we see it:
+        size_t actual = (m_mmappedSize - sizeof(size_t)) /
+                        sizeof(MappedEvent);
 
-    } else return 0;
+        return std::min(nominal, actual);
+
+    } else
+        return 0;
 }
 
 bool MmappedSegment::remap(size_t newSize)
 {
     SEQUENCER_DEBUG << "remap() from " << m_mmappedSize << " to "
-                    << newSize << endl;
+    << newSize << endl;
 
     if (m_mmappedSize == newSize) {
 
         SEQUENCER_DEBUG << "remap() : sizes are identical, remap not forced - "
-                        << "nothing to do\n";
+        << "nothing to do\n";
         return false;
     }
 
@@ -132,22 +133,22 @@ bool MmappedSegment::remap(size_t newSize)
     void *oldRegion = m_mmappedRegion;
     m_mmappedRegion = (MappedEvent*)::mremap(m_mmappedRegion, m_mmappedSize, newSize, MREMAP_MAYMOVE);
     if (m_mmappedRegion != oldRegion) {
-	SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldRegion <<
-	    " to " << (void *)m_mmappedRegion << endl;
+        SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldRegion <<
+        " to " << (void *)m_mmappedRegion << endl;
     }
 #else
     ::munmap(m_mmappedRegion, m_mmappedSize);
     m_mmappedRegion = (MappedEvent*)::mmap(0, newSize, PROT_READ, MAP_SHARED, m_fd, 0);
 #endif
 
-    if (m_mmappedRegion == (void*)-1) {
+    if (m_mmappedRegion == (void*) - 1) {
 
-            SEQUENCER_DEBUG << QString("mremap failed : (%1) %2\n").
-                arg(errno).arg(strerror(errno));
+        SEQUENCER_DEBUG << QString("mremap failed : (%1) %2\n").
+        arg(errno).arg(strerror(errno));
 
-            throw Rosegarden::Exception("mremap failed");
+        throw Exception("mremap failed");
     }
-    
+
     m_mmappedEventBuffer = (MappedEvent *)((size_t *)m_mmappedRegion + 1);
     m_mmappedSize = newSize;
 
@@ -155,13 +156,13 @@ bool MmappedSegment::remap(size_t newSize)
 }
 
 MmappedSegment::iterator::iterator(MmappedSegment* s)
-    : m_s(s), m_currentEvent(m_s->getBuffer())
-{
-}
+        : m_s(s), m_currentEvent(m_s->getBuffer())
+{}
 
 MmappedSegment::iterator& MmappedSegment::iterator::operator=(const iterator& it)
 {
-    if (&it == this) return *this;
+    if (&it == this)
+        return * this;
 
     m_s = it.m_s;
     m_currentEvent = it.m_currentEvent;
@@ -182,7 +183,7 @@ MmappedSegment::iterator& MmappedSegment::iterator::operator++()
     } else {
 
         SEQUENCER_DEBUG << "MmappedSegment::iterator::operator++() " << this
-                        << " - reached end of stream\n";
+        << " - reached end of stream\n";
 
     }
 
@@ -210,7 +211,7 @@ MmappedSegment::iterator& MmappedSegment::iterator::operator+=(int offset)
     if (atEnd()) {
         m_currentEvent = m_s->getBuffer() + m_s->getNbMappedEvents();
     }
-    
+
     return *this;
 }
 
@@ -220,7 +221,7 @@ MmappedSegment::iterator& MmappedSegment::iterator::operator-=(int offset)
     if (m_currentEvent < m_s->getBuffer()) {
         m_currentEvent = m_s->getBuffer();
     }
-    
+
     return *this;
 }
 
@@ -243,18 +244,18 @@ const MappedEvent &MmappedSegment::iterator::operator*()
 bool MmappedSegment::iterator::atEnd() const
 {
     return (m_currentEvent == 0) ||
-	(m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1));
+           (m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1));
 }
 
 // Ew ew ew - move this to base
 // [or rather, this is a dup of code in base]
 kdbgstream&
-operator<<(kdbgstream &out, const Rosegarden::RealTime &rt)
+operator<<(kdbgstream &out, const RealTime &rt)
 {
-    if (rt < Rosegarden::RealTime::zeroTime) {
-	out << "-";
+    if (rt < RealTime::zeroTime) {
+        out << "-";
     } else {
-	out << " ";
+        out << " ";
     }
 
     int s = (rt.sec < 0 ? -rt.sec : rt.sec);
@@ -263,12 +264,14 @@ operator<<(kdbgstream &out, const Rosegarden::RealTime &rt)
     out << s << ".";
 
     int nn(n);
-    if (nn == 0) out << "00000000";
-    else while (nn < (1000000000 / 10)) {
-	out << "0";
-	nn *= 10;
-    }
-    
+    if (nn == 0)
+        out << "00000000";
+    else
+        while (nn < (1000000000 / 10)) {
+            out << "0";
+            nn *= 10;
+        }
+
     out << n << "R";
     return out;
 }
@@ -276,13 +279,13 @@ operator<<(kdbgstream &out, const Rosegarden::RealTime &rt)
 //----------------------------------------
 
 MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(
-        mmappedsegments& segments,
-        ControlBlockMmapper* controlBlockMmapper)
-    :m_controlBlockMmapper(controlBlockMmapper),
-     m_segments(segments)
+    mmappedsegments& segments,
+    ControlBlockMmapper* controlBlockMmapper)
+        : m_controlBlockMmapper(controlBlockMmapper),
+        m_segments(segments)
 {
-    for(mmappedsegments::iterator i = m_segments.begin();
-        i != m_segments.end(); ++i)
+    for (mmappedsegments::iterator i = m_segments.begin();
+            i != m_segments.end(); ++i)
         m_iterators.push_back(new MmappedSegment::iterator(i->second));
 }
 
@@ -300,10 +303,10 @@ void MmappedSegmentsMetaIterator::addSegment(MmappedSegment* ms)
 
 void MmappedSegmentsMetaIterator::deleteSegment(MmappedSegment* ms)
 {
-    for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
+    for (segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
         if ((*i)->getSegment() == ms) {
             SEQUENCER_DEBUG << "deleteSegment : found segment to delete : "
-                            << ms->getFileName() << endl;
+            << ms->getFileName() << endl;
             delete (*i);
             m_iterators.erase(i);
             break;
@@ -313,7 +316,7 @@ void MmappedSegmentsMetaIterator::deleteSegment(MmappedSegment* ms)
 
 void MmappedSegmentsMetaIterator::clear()
 {
-    for(unsigned int i = 0; i < m_iterators.size(); ++i)
+    for (unsigned int i = 0; i < m_iterators.size(); ++i)
         delete m_iterators[i];
 
     m_iterators.clear();
@@ -323,13 +326,13 @@ void MmappedSegmentsMetaIterator::reset()
 {
     m_currentTime.sec = m_currentTime.nsec = 0;
 
-    for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
+    for (segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
         (*i)->reset();
     }
-    
+
 }
 
-bool MmappedSegmentsMetaIterator::jumpToTime(const Rosegarden::RealTime& startTime)
+bool MmappedSegmentsMetaIterator::jumpToTime(const RealTime& startTime)
 {
     SEQUENCER_DEBUG << "jumpToTime(" << startTime << ")\n";
 
@@ -339,19 +342,20 @@ bool MmappedSegmentsMetaIterator::jumpToTime(const Rosegarden::RealTime& startTi
 
     m_currentTime = startTime;
 
-    for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i)
-        if (!moveIteratorToTime(*(*i), startTime)) res = false;
+    for (segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i)
+        if (!moveIteratorToTime(*(*i), startTime))
+            res = false;
 
     return res;
 }
 
 bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& iter,
-                                                     const Rosegarden::RealTime& startTime)
+        const RealTime& startTime)
 {
     while ((!iter.atEnd()) &&
-           (iter.peek()->getEventTime() < startTime) &&
-           ((iter.peek()->getEventTime() + iter.peek()->getDuration()) < startTime)
-           ) {
+            (iter.peek()->getEventTime() < startTime) &&
+            ((iter.peek()->getEventTime() + iter.peek()->getDuration()) < startTime)
+          ) {
         ++iter;
     }
     bool res = !iter.atEnd();
@@ -361,44 +365,44 @@ bool MmappedSegmentsMetaIterator::moveIteratorToTime(MmappedSegment::iterator& i
 
 bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMetronome)
 {
-    if (evt->getType() == 0) return false; // discard those right away
+    if (evt->getType() == 0)
+        return false; // discard those right away
 
-    if (evtIsFromMetronome)
-    {
-        if (evt->getType() == MappedEvent::MidiSystemMessage && 
-                evt->getData1() == Rosegarden::MIDI_TIMING_CLOCK)
-        {
+    if (evtIsFromMetronome) {
+        if (evt->getType() == MappedEvent::MidiSystemMessage &&
+                evt->getData1() == MIDI_TIMING_CLOCK) {
             /*
             std::cout << "MmappedSegmentsMetaIterator::acceptEvent - " 
                       << "found clock" << std::endl;
-                      */
+                      */ 
             return true;
         }
 
         return !m_controlBlockMmapper->isMetronomeMuted();
     }
-        
+
     // else, evt is not from metronome : first check if we're soloing (i.e. playing only the selected track)
     if (m_controlBlockMmapper->isSolo())
         return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
 
     // finally we're not soloing, so check if track is muted
-    Rosegarden::TrackId track = evt->getTrackId();
+    TrackId track = evt->getTrackId();
     bool muted = m_controlBlockMmapper->isTrackMuted(evt->getTrackId());
 
 #ifdef DEBUG_META_ITERATOR
+
     SEQUENCER_DEBUG << "MSMI::acceptEvent: track " << track << " muted status: " << muted << endl;
 #endif
-    
+
     return !muted;
 }
 
 
 bool
 MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
-                                                            Rosegarden::MappedComposition* c,
-                                                            const Rosegarden::RealTime& startTime,
-                                                            const Rosegarden::RealTime& endTime)
+        MappedComposition* c,
+        const RealTime& startTime,
+        const RealTime& endTime)
 {
 #ifdef DEBUG_META_ITERATOR
     SEQUENCER_DEBUG << "MSMI::fillCompositionWithEventsUntil " << startTime << " -> " << endTime << endl;
@@ -408,33 +412,34 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
     // keep track of the segments which still have valid events
     std::vector<bool> validSegments;
-    for(unsigned int i = 0; i < m_segments.size(); ++i)
+    for (unsigned int i = 0; i < m_segments.size(); ++i)
         validSegments.push_back(true);
 
     bool foundOneEvent = false, eventsRemaining = false;
 
-    do 
-    {
+    do {
         foundOneEvent = false;
 
-        for(unsigned int i = 0; i < m_iterators.size(); ++i) {
+        for (unsigned int i = 0; i < m_iterators.size(); ++i) {
 
             MmappedSegment::iterator* iter = m_iterators[i];
 
             //std::cerr << "Iterating on Segment #" << i << std::endl;
 
 #ifdef DEBUG_META_ITERATOR
+
             SEQUENCER_DEBUG << "MSMI::fillCompositionWithEventsUntil : "
-                            << "checking segment #" << i << " " 
-                            << iter->getSegment()->getFileName() << endl;
+            << "checking segment #" << i << " "
+            << iter->getSegment()->getFileName() << endl;
 #endif
 
             if (!validSegments[i]) {
 #ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "MSMI::fillCompositionWithEventsUntil : "
-                                << "no more events to get for this slice "
-                                << "in segment #" << i << endl;
+                << "no more events to get for this slice "
+                << "in segment #" << i << endl;
 #endif
+
                 continue; // skip this segment
             }
 
@@ -442,11 +447,12 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
             if (iter->atEnd()) {
 #ifdef DEBUG_META_ITERATOR
-                SEQUENCER_DEBUG << "MSMI::fillCompositionWithEventsUntil : " 
-                                << endTime
-                                << " reached end of segment #"
-                                << i << endl;
+                SEQUENCER_DEBUG << "MSMI::fillCompositionWithEventsUntil : "
+                << endTime
+                << " reached end of segment #"
+                << i << endl;
 #endif
+
                 continue;
             } else if (!evtIsFromMetronome) {
                 eventsRemaining = true;
@@ -454,65 +460,65 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
             if ((**iter).getEventTime() < endTime) {
 
-		MappedEvent *evt = new MappedEvent(*(*iter));
+                MappedEvent *evt = new MappedEvent(*(*iter));
 
                 // set event's instrument
-                // 
+                //
                 if (evtIsFromMetronome) {
 
                     evt->setInstrument(m_controlBlockMmapper->
-                            getInstrumentForMetronome());
+                                       getInstrumentForMetronome());
 
                 } else {
 
                     evt->setInstrument(m_controlBlockMmapper->
-                            getInstrumentForTrack(evt->getTrackId()));
+                                       getInstrumentForTrack(evt->getTrackId()));
 
                 }
-                
+
 #ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "MSMI::fillCompositionWithEventsUntil : " << endTime
-                                << " inserting evt from segment #"
-                                << i
-                                << " : trackId: " << evt->getTrackId()
-                                << " - inst: " << evt->getInstrument()
-                                << " - type: " << evt->getType()
-                                << " - time: " << evt->getEventTime()
-                                << " - duration: " << evt->getDuration()
-                                << " - data1: " << (unsigned int)evt->getData1()
-                                << " - data2: " << (unsigned int)evt->getData2()
-                                << " - metronome event: " << evtIsFromMetronome
-                                << endl;
+                << " inserting evt from segment #"
+                << i
+                << " : trackId: " << evt->getTrackId()
+                << " - inst: " << evt->getInstrument()
+                << " - type: " << evt->getType()
+                << " - time: " << evt->getEventTime()
+                << " - duration: " << evt->getDuration()
+                << " - data1: " << (unsigned int)evt->getData1()
+                << " - data2: " << (unsigned int)evt->getData2()
+                << " - metronome event: " << evtIsFromMetronome
+                << endl;
 #endif
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
 
-		    // Process time sig and tempo changes along with
-		    // everything else, as the sound driver probably
-		    // wants to know when they happen
+                    // Process time sig and tempo changes along with
+                    // everything else, as the sound driver probably
+                    // wants to know when they happen
 
-		    c->insert(evt);
+                    c->insert(evt);
 
                 } else if (evt->getType() == MappedEvent::Tempo) {
 
-		    c->insert(evt);
+                    c->insert(evt);
 
                 } else if (evt->getType() == MappedEvent::MidiSystemMessage &&
 
-			   // #1048388:
-			   // Ensure sysex heeds mute status, but ensure
-			   // clocks etc still get through
-			   evt->getData1() != Rosegarden::MIDI_SYSTEM_EXCLUSIVE) {
+                           // #1048388:
+                           // Ensure sysex heeds mute status, but ensure
+                           // clocks etc still get through
+                           evt->getData1() != MIDI_SYSTEM_EXCLUSIVE) {
 
                     c->insert(evt);
 
                 } else if (acceptEvent(evt, evtIsFromMetronome) &&
 
-			   ((evt->getEventTime() + evt->getDuration() > startTime) ||
-			    (evt->getDuration() == Rosegarden::RealTime::zeroTime &&
-			     evt->getEventTime() == startTime))) {
+                           ((evt->getEventTime() + evt->getDuration() > startTime) ||
+                            (evt->getDuration() == RealTime::zeroTime &&
+                             evt->getEventTime() == startTime))) {
 
-//                    std::cout << "inserting event" << std::endl;
+                    //                    std::cout << "inserting event" << std::endl;
 
                     /*
                     std::cout << "Inserting event (type = "
@@ -523,26 +529,29 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
                     c->insert(evt);
 
                 } else {
-                    
+
 #ifdef DEBUG_META_ITERATOR
                     std::cout << "MSMI: skipping event"
-                        << " - event time = " << evt->getEventTime()
-                        << ", duration = " << evt->getDuration()
-                        << ", startTime = " << startTime << std::endl;
+                    << " - event time = " << evt->getEventTime()
+                    << ", duration = " << evt->getDuration()
+                    << ", startTime = " << startTime << std::endl;
 #endif
 
-		    delete evt;
+                    delete evt;
                 }
-            
-                if (!evtIsFromMetronome) foundOneEvent = true;
+
+                if (!evtIsFromMetronome)
+                    foundOneEvent = true;
                 ++(*iter);
 
             } else {
                 validSegments[i] = false; // no more events to get from this segment
 #ifdef DEBUG_META_ITERATOR
+
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"
-                                << i << endl;
+                << i << endl;
 #endif
+
             }
 
         }
@@ -550,6 +559,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
     } while (foundOneEvent);
 
 #ifdef DEBUG_META_ITERATOR
+
     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
 #endif
 
@@ -558,11 +568,11 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
 void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filename)
 {
-    for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
+    for (segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i) {
         MmappedSegment::iterator* iter = *i;
 
         if (iter->getSegment()->getFileName() == filename) {
-             SEQUENCER_DEBUG << "MSMI::resetIteratorForSegment(" << filename << ") : found iterator\n";
+            SEQUENCER_DEBUG << "MSMI::resetIteratorForSegment(" << filename << ") : found iterator\n";
             // delete iterator and create another one
             MmappedSegment* ms = (*i)->getSegment();
             delete iter;
@@ -580,122 +590,124 @@ void
 MmappedSegmentsMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
 {
     v.clear();
-    
+
     for (mmappedsegments::iterator i = m_segments.begin();
-	 i != m_segments.end(); ++i) {
+            i != m_segments.end(); ++i) {
 
         MmappedSegment::iterator itr(i->second);
 
         while (!itr.atEnd()) {
-	    
-	    if ((*itr).getType() != MappedEvent::Audio) {
-		++itr;
-		continue;
-	    }
-	    
+
+            if ((*itr).getType() != MappedEvent::Audio) {
+                ++itr;
+                continue;
+            }
+
             MappedEvent evt(*itr);
-	    ++itr;
+            ++itr;
 
             if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId())) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getAudioEvents - "
-                          << "track " << evt.getTrackId() << " is muted" << std::endl;
+                << "track " << evt.getTrackId() << " is muted" << std::endl;
 #endif
-		continue;
-            }
 
-            if (m_controlBlockMmapper->isSolo() == true && 
-                evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack()) {
-#ifdef DEBUG_PLAYING_AUDIO_FILES
-                std::cout << "MSMI::getAudioEvents - "
-                          << "track " << evt.getTrackId() << " is not solo track" << std::endl;
-#endif
                 continue;
             }
 
-	    v.push_back(evt);
+            if (m_controlBlockMmapper->isSolo() == true &&
+                    evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack()) {
+#ifdef DEBUG_PLAYING_AUDIO_FILES
+                std::cout << "MSMI::getAudioEvents - "
+                << "track " << evt.getTrackId() << " is not solo track" << std::endl;
+#endif
+
+                continue;
+            }
+
+            v.push_back(evt);
         }
     }
 }
 
 
-std::vector<MappedEvent>& 
-MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &
-						  songPosition)
+std::vector<MappedEvent>&
+MmappedSegmentsMetaIterator::getPlayingAudioFiles(const RealTime &
+        songPosition)
 {
     // Clear playing audio segments
     //
     m_playingAudioSegments.clear();
 
 #ifdef DEBUG_PLAYING_AUDIO_FILES
+
     std::cout << "MSMI::getPlayingAudioFiles" << std::endl;
 #endif
 
     for (mmappedsegments::iterator i = m_segments.begin();
-	 i != m_segments.end(); ++i) {
+            i != m_segments.end(); ++i) {
 
         MmappedSegment::iterator iter(i->second);
 
         bool found = false;
 
-	//!!! any point to this loop at all? can found ever fail?
+        //!!! any point to this loop at all? can found ever fail?
         for (segmentiterators::iterator sI = m_iterators.begin();
-	     sI != m_iterators.end(); ++sI) {
+                sI != m_iterators.end(); ++sI) {
             if ((*sI)->getSegment() == iter.getSegment())
                 found = true;
         }
 
-        if (!found) continue;
+        if (!found)
+            continue;
 
-        while (!iter.atEnd())
-        {
-	    if ((*iter).getType() != MappedEvent::Audio) {
-		++iter;
-		continue;
-	    }
-	    
+        while (!iter.atEnd()) {
+            if ((*iter).getType() != MappedEvent::Audio) {
+                ++iter;
+                continue;
+            }
+
             //std::cout << "CONSTRUCTING MAPPEDEVENT" << std::endl;
             MappedEvent evt(*iter);
 
             // Check for this track being muted or soloed
             //
-            if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == true)
-            {
+            if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == true) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getPlayingAudioFiles - "
-                          << "track " << evt.getTrackId() << " is muted" << std::endl;
+                << "track " << evt.getTrackId() << " is muted" << std::endl;
 #endif
+
                 ++iter;
                 continue;
             }
 
-            if (m_controlBlockMmapper->isSolo() == true && 
-                evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack())
-            {
+            if (m_controlBlockMmapper->isSolo() == true &&
+                    evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getPlayingAudioFiles - "
-                          << "track " << evt.getTrackId() << " is not solo track" << std::endl;
+                << "track " << evt.getTrackId() << " is not solo track" << std::endl;
 #endif
+
                 ++iter;
                 continue;
             }
 
             // If there's an audio event and it should be playing at this time
             // then flag as such.
-            // 
-            if (songPosition > evt.getEventTime() - Rosegarden::RealTime(1, 0) &&
-                songPosition < evt.getEventTime() + evt.getDuration())
-            {
+            //
+            if (songPosition > evt.getEventTime() - RealTime(1, 0) &&
+                    songPosition < evt.getEventTime() + evt.getDuration()) {
 
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getPlayingAudioFiles - "
-                          << "instrument id = " << evt.getInstrument() << std::endl;
+                << "instrument id = " << evt.getInstrument() << std::endl;
 
 
                 std::cout << "MSMI::getPlayingAudioFiles - "
-                          << " id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime() << std::endl;
+                << " id " << evt.getRuntimeSegmentId() << ", audio event time     = " << evt.getEventTime() << std::endl;
                 std::cout << "MSMI::getPlayingAudioFiles - "
-                          << "audio event duration = " << evt.getDuration() << std::endl;
+                << "audio event duration = " << evt.getDuration() << std::endl;
 
 
 #endif // DEBUG_PLAYING_AUDIO_FILES
