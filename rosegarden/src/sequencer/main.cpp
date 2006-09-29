@@ -19,6 +19,8 @@
   COPYING included with this distribution for more information.
 */
 
+#include "rosegardensequencer.h"
+
 #include <signal.h>
 #include <iostream>
 #include <unistd.h>
@@ -29,11 +31,11 @@
 #include <klocale.h>
 #include <dcopclient.h>
 
-#include "Profiler.h"
-#include "MappedComposition.h"
-#include "rosegardendcop.h"
-#include "rosegardensequencer.h"
-#include "rosedebug.h"
+#include "base/Profiler.h"
+#include "sound/MappedComposition.h"
+
+#include "gui/application/RosegardenDCOP.h"
+#include "debug/Debug.h"
 
 using std::cout;
 using std::cerr;
