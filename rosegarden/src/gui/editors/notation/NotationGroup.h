@@ -29,6 +29,7 @@
 #include "base/Sets.h"
 #include <utility>
 #include "base/Event.h"
+#include "NotationElement.h"
 
 
 
@@ -46,7 +47,7 @@ class Clef;
 /// Several sorts of "Beamed Group"
 
 class NotationGroup : public AbstractSet<NotationElement,
-                                                     NotationElementList>
+                                         NotationElementList>
 {
 public:
     typedef NotationElementList::iterator NELIterator;

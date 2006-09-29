@@ -28,7 +28,7 @@
 
 #include "base/PropertyName.h"
 #include <kdialogbase.h>
-
+#include "commands/edit/SelectionPropertyCommand.h"
 
 class QWidget;
 class QString;

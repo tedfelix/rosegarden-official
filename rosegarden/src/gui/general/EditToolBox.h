@@ -27,6 +27,7 @@
 #define _RG_EDITTOOLBOX_H_
 
 #include "BaseToolBox.h"
+#include "EditTool.h"
 
 
 class QString;
@@ -36,7 +37,6 @@ namespace Rosegarden
 {
 
 class EditView;
-class EditTool;
 
 
 /**

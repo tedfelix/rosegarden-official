@@ -13,6 +13,8 @@
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 
+    This file Copyright 2006 Martin Shepherd <mcs@astro.caltech.edu>.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
 

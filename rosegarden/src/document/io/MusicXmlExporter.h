@@ -10,6 +10,10 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
 
+    This file is Copyright 2002
+        Hans Kieserman      <hkieserman@mail.com>
+    with heavy lifting from csoundio as it was on 13/5/2002.
+
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 

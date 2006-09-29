@@ -12,6 +12,10 @@
 
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
+ 
+    This file is Copyright 2006
+        Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+        D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.

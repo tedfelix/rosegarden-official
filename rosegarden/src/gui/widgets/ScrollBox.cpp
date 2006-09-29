@@ -12,6 +12,10 @@
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
  
+    This file is based on code from KGhostView, Copyright 1997-2002
+        Markkhu Hihnala     <mah@ee.oulu.fi>
+        and the KGhostView authors.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
  

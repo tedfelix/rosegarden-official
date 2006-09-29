@@ -12,6 +12,10 @@
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
  
+    Parts of this file are from KDE Konqueror : KonqMainWindowIface
+    Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
+    Copyright (C) 2000 David Faure <faure@kde.org>
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
  

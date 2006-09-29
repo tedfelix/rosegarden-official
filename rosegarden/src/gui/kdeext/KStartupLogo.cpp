@@ -8,6 +8,9 @@
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
+
+    This file contains code borrowed from KDevelop 2.0
+    Copyright (c) The KDevelop Development Team.
  
     The moral right of the authors to claim authorship of this work
     has been asserted.
@@ -19,9 +22,6 @@
     COPYING included with this distribution for more information.
 */
 
-// This file contains code borrowed from KDevelop 2.0
-// (c) The KDevelop Development Team
-
 #include <unistd.h>
 
 #include <qpainter.h>
@@ -32,9 +32,8 @@
 #include <kconfig.h>
 #include <ktip.h>
 
-#include "kstartuplogo.h"
-#include "constants.h"
-#include "rosedebug.h"
+#include "KStartupLogo.h"
+#include "misc/Debug.h"
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
         : QWidget(parent, name,

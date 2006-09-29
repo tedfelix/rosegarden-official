@@ -32,6 +32,7 @@
 #include <qpixmap.h>
 #include "document/ConfigGroups.h"
 #include "gui/ui/RosegardenTransport.h"
+#include "base/Composition.h" // for tempoT
 
 class RosegardenTransport;
 class QWidget;

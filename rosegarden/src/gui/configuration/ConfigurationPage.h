@@ -13,6 +13,9 @@
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 
+    Parts of the configuration classes are taken from KMail.
+    Copyright (C) 2000 The KMail Development Team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
 

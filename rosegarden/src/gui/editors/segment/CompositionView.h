@@ -28,6 +28,7 @@
 
 #include "base/Selection.h"
 #include "CompositionModel.h"
+#include "CompositionItem.h"
 #include "gui/general/RosegardenScrollView.h"
 #include <qbrush.h>
 #include <qcolor.h>
