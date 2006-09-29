@@ -25,7 +25,7 @@
 
 #include "FloatEdit.h"
 
-#include "HSpinBox.h"
+#include "gui/widgets/HSpinBox.h"
 #include <kdialogbase.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
@@ -69,3 +69,4 @@ FloatEdit::getValue() const
 }
 
 }
+#include "FloatEdit.moc"

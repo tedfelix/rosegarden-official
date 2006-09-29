@@ -1000,7 +1000,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     // create the key event
                     //
                     try {
-                        rosegardenEvent = Key
+                        rosegardenEvent = Rosegarden::Key
                                           (accidentals, isSharp, isMinor).
                                           getAsEvent(rosegardenTime);
                     }
@@ -1247,11 +1247,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
             bool haveKeySig = false;
             for (Segment::iterator i = rosegardenSegment->begin();
                     i != rosegardenSegment->end(); ++i) {
-                if (!(*i)->isa(Key::EventType) &&
+                if (!(*i)->isa(Rosegarden::Key::EventType) &&
                         !(*i)->isa(Note::EventRestType)) {
                     keySigsOnly = false;
                     break;
-                } else if ((*i)->isa(Key::EventType)) {
+                } else if ((*i)->isa(Rosegarden::Key::EventType)) {
                     haveKeySig = true;
                 }
             }
@@ -1661,8 +1661,8 @@ MidiFile::convertToMidi(Composition &comp)
                                           pb.getLSB(), pb.getMSB());
 
                         m_midiComposition[trackNumber].push_back(midiEvent);
-                    } else if ((*el)->isa(Key::EventType)) {
-                        Key key(**el);
+                    } else if ((*el)->isa(Rosegarden::Key::EventType)) {
+                        Rosegarden::Key key(**el);
 
                         int accidentals = key.getAccidentalCount();
                         if (!key.isSharp())

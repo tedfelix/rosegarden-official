@@ -29,6 +29,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "base/Sets.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/guitar/Fingering.h"

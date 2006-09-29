@@ -69,3 +69,4 @@ MatrixTool::slotDrawSelected()
 }
 
 }
+#include "MatrixTool.moc"

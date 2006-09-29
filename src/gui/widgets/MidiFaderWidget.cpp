@@ -38,3 +38,4 @@
 namespace Rosegarden
 {
 }
+#include "MidiFaderWidget.moc"

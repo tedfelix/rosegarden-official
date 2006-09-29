@@ -817,3 +817,4 @@ const char *const DeviceManagerDialog::DeviceManagerConfigGroup =
     }
 
     }
+#include "DeviceManagerDialog.moc"

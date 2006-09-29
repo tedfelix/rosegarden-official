@@ -34,6 +34,8 @@
 #include <qcstring.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <kapplication.h>
+#include <dcopclient.h>
 
 
 namespace Rosegarden

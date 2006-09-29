@@ -29,16 +29,11 @@
 #include <qobject.h>
 #include <qspinbox.h>
 #include <qstring.h>
-
-
-class QWidget;
-class NULL;
+#include <qvalidator.h>
 
 
 namespace Rosegarden
 {
-
-
 
 class HSpinBox : public QSpinBox
 {

@@ -26,9 +26,7 @@
 #ifndef _RG_QCANVASMATRIXRECTANGLE_H_
 #define _RG_QCANVASMATRIXRECTANGLE_H_
 
-
-
-class QCanvas;
+#include <qcanvas.h>
 
 
 namespace Rosegarden

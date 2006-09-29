@@ -21,7 +21,7 @@
 
 #include <qtimer.h>
 #include <sys/time.h>
-#include "RealTime.h"
+#include "base/RealTime.h"
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -33,14 +33,14 @@
 #include <ktip.h>
 #include <kprocess.h>
 
-#include "constants.h"
-#include "rosestrings.h"
-#include "rosedebug.h"
-#include "rosegardengui.h"
-#include "rosegardenguidoc.h"
-#include "kstartuplogo.h"
+#include "document/ConfigGroups.h"
+#include "misc/Strings.h"
+#include "misc/Debug.h"
+#include "gui/application/RosegardenGUIApp.h"
+#include "document/RosegardenGUIDoc.h"
+#include "kdeext/KStartupLogo.h"
 
-#include "rgapplication.h"
+#include "gui/application/RosegardenApplication.h"
 
 /*! \mainpage Rosegarden-4 global design
  

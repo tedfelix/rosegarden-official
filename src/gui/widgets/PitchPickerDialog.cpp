@@ -60,3 +60,4 @@ PitchPickerDialog::~PitchPickerDialog()
 * /
 
 }
+#include "PitchPickerDialog.moc"

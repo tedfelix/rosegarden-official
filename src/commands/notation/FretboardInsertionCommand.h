@@ -28,8 +28,7 @@
 
 #include "document/BasicCommand.h"
 #include "base/Event.h"
-
-
+#include "gui/editors/guitar/Fingering.h"
 
 
 namespace Rosegarden

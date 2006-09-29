@@ -47,6 +47,7 @@
 #include <qtabwidget.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
@@ -271,3 +272,4 @@ void GeneralConfigurationPage::apply()
 }
 
 }
+#include "GeneralConfigurationPage.moc"

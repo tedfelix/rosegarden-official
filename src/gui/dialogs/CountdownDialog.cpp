@@ -146,3 +146,4 @@ CountdownDialog::setPastEndMode()
 }
 
 }
+#include "CountdownDialog.moc"

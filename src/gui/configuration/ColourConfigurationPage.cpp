@@ -32,6 +32,7 @@
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
@@ -44,6 +45,7 @@
 #include <qstring.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
@@ -160,3 +162,4 @@ ColourConfigurationPage::slotDelete()
 }
 
 }
+#include "ColourConfigurationPage.moc"

@@ -181,3 +181,4 @@ RemapInstrumentDialog::getCommandHistory()
 }
 
 }
+#include "RemapInstrumentDialog.moc"

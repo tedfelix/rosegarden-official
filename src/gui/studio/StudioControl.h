@@ -44,6 +44,7 @@ class MappedInstrument;
 class MappedEvent;
 class MappedComposition;
 
+typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
 
 class StudioControl
 {

@@ -49,3 +49,4 @@ void QDeferScrollView::contentsWheelEvent(QWheelEvent* e)
 }
 
 }
+#include "QDeferScrollView.moc"

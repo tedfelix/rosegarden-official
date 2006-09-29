@@ -1,7 +1,5 @@
-#include "fingers.h"
-#include "fingers.moc"
-#include "fingering.h"
-#include "symbols.h"
+#include "Fingering.h"
+#include "NoteSymbols.h"
 
 #include <qpainter.h>
 #include <qdrawutil.h>
@@ -13,6 +11,9 @@
 #include <kcursor.h>
 
 #include <iostream>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -334,3 +335,8 @@ bool FC_DeleteMode::change ( void )
 }
 
 } /* namespace Guitar */
+
+}
+
+#include "FingeringConstructor.moc"
+

@@ -153,3 +153,4 @@ void LatencyConfigurationPage::slotFetchLatencyValues()
 }
 
 }
+#include "LatencyConfigurationPage.moc"

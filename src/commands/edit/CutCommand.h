@@ -28,8 +28,7 @@
 
 #include <qstring.h>
 #include <klocale.h>
-
-
+#include <kcommand.h>
 
 
 namespace Rosegarden

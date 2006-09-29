@@ -1,5 +1,5 @@
-#include "barre.h"
-#include "symbols.h"
+#include "Barre.h"
+#include "NoteSymbols.h"
 #include "base/Exception.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -8,7 +8,8 @@
 #include <iostream>
 #include <sstream>
 
-using namespace Rosegarden;
+namespace Rosegarden;
+{
 
 namespace Guitar
 {
@@ -128,6 +129,8 @@ bool Barre::operator== ( Barre const& rhs ) const
     return ( m_fret == rhs.m_fret ) &&
            ( m_start == rhs.m_start ) &&
            ( m_end == rhs.m_end );
+}
+
 }
 
 }

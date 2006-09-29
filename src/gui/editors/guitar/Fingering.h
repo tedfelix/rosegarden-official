@@ -18,16 +18,20 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_FINGERING_H_
 #define GUITAR_FINGERING_H_
 
 #include <qdom.h>
 
-#include "guitar.h"
-#include "note.h"
-#include "barre.h"
-#include "barrelist.h"
-#include "Event.h"
+#include "GuitarNeck.h"
+#include "Note.h"
+#include "Barre.h"
+#include "BarreList.h"
+#include "base/Event.h"
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -132,6 +136,8 @@ private:
     typedef std::pair<unsigned int, Note*> NoteMapPair;
     NoteMap m_notes;
 };
+
+}
 
 }
 

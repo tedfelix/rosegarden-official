@@ -58,8 +58,8 @@ public:
     KeySignatureDialog(QWidget *parent,
 		       NotePixmapFactory *npf,
 		       Clef clef,
-		       Key defaultKey =
-		       Key::DefaultKey,
+		       Rosegarden::Key defaultKey =
+		       Rosegarden::Key::DefaultKey,
 		       bool showApplyToAll = true,
 		       bool showConversionOptions = true,
 		       QString explanatoryText = 0);
@@ -87,7 +87,7 @@ protected:
 
     NotePixmapFactory *m_notePixmapFactory;
 
-    Key m_key;
+    Rosegarden::Key m_key;
     Clef m_clef;
     bool m_valid;
     bool m_ignoreComboChanges;

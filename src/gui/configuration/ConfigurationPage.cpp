@@ -33,3 +33,4 @@
 namespace Rosegarden
 {
 }
+#include "ConfigurationPage.moc"

@@ -74,9 +74,9 @@ protected slots:
     void slotEraseSelected();
     void slotSelectSelected();
 
+protected:
     GuitarTabSelectorDialog m_guitarChord_ref;
 
-protected:
     FretboardInserter(NotationView*);
 
 private:

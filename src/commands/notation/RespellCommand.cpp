@@ -29,11 +29,14 @@
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "base/BaseProperties.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+using namespace BaseProperties;
+using namespace Accidentals;
 
 QString
 RespellCommand::getGlobalName(Type type, Accidental accidental)

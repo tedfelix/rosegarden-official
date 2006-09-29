@@ -126,3 +126,4 @@ void ClefInserter::handleLeftButtonPress(timeT,
 }
 
 }
+#include "ClefInserter.moc"

@@ -163,3 +163,4 @@ void TextInserter::handleLeftButtonPress(timeT,
 }
 
 }
+#include "TextInserter.moc"

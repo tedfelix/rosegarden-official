@@ -71,3 +71,4 @@ void CurrentProgressDialog::slotCurrentProgressDialogDestroyed()
 }
 
 }
+#include "CurrentProgressDialog.moc"

@@ -1,8 +1,11 @@
-#include "chord.h"
+#include "Chord.h"
 #include "base/Exception.h"
 
 #include <iostream>
 #include <sstream>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -146,4 +149,8 @@ Chord::toString ( void ) const
     output << m_arrangement->toString() << std::endl;
     return output.str();
 }
+
 }
+
+}
+

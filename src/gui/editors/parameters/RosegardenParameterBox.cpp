@@ -86,3 +86,4 @@ QString RosegardenParameterBox::getPreviousBox(RosegardenParameterArea::Arrangem
 }
 
 }
+#include "RosegardenParameterBox.moc"

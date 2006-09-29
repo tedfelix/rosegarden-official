@@ -31,11 +31,15 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
+#include "base/BaseProperties.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
+
 
 KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
         Key key,

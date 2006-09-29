@@ -199,3 +199,4 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 }
 
 }
+#include "TrackLabel.moc"

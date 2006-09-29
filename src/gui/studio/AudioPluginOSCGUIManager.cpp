@@ -22,6 +22,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef HAVE_LIBLO
 
 #include "AudioPluginOSCGUIManager.h"
 
@@ -674,3 +675,5 @@ done:
 }
 
 }
+
+#endif

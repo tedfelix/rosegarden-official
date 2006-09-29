@@ -27,14 +27,11 @@
 #define _RG_CONTROLPARAMETERITEM_H_
 
 #include <qstring.h>
-
-
-class QListView;
+#include <klistview.h>
 
 
 namespace Rosegarden
 {
-
 
 
 class ControlParameterItem : public KListViewItem

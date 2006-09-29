@@ -400,3 +400,4 @@ DeviceEditorDialog::slotValueChanged(int, int)
 }
 
 }
+#include "DeviceEditorDialog.moc"

@@ -7552,3 +7552,4 @@ RosegardenGUIApp::slotEnableMIDIThruRouting()
 }
 
 }
+#include "RosegardenGUIApp.moc"

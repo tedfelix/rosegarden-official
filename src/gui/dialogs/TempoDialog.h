@@ -28,6 +28,7 @@
 
 #include <kdialogbase.h>
 #include "base/Event.h"
+#include "base/Composition.h"
 
 
 class QWidget;

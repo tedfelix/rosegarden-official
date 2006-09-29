@@ -274,3 +274,4 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 }
 
 }
+#include "MatrixCanvasView.moc"

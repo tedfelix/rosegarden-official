@@ -29,8 +29,7 @@
 #include "base/Exception.h"
 #include <map>
 #include <vector>
-
-
+#include "NoteStyle.h"
 
 
 namespace Rosegarden
@@ -38,7 +37,6 @@ namespace Rosegarden
 
 class NoteStyle;
 class Event;
-
 
 class NoteStyleFactory
 {

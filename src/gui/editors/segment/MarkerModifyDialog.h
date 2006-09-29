@@ -28,10 +28,9 @@
 
 #include <kdialogbase.h>
 #include <qstring.h>
+#include <qlineedit.h>
 
-
-class QWidget;
-class QLineEdit;
+#include "gui/widgets/TimeWidget.h"
 
 
 namespace Rosegarden

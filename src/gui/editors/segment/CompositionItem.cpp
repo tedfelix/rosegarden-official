@@ -23,7 +23,7 @@
 */
 
 
-#include "_CompositionItem.h"
+#include "CompositionItem.h"
 
 #include <qobject.h>
 #include <qrect.h>

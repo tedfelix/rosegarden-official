@@ -23,9 +23,11 @@
 
 #include <map>
 
-#include "note.h"
-#include "guitarstring.h"
+#include "Note.h"
+#include "GuitarString.h"
 
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -93,6 +95,6 @@ private:
 } /* namespace Guitar */
 
 
-
+}
 
 #endif /* GUITAR_H_ */

@@ -635,3 +635,4 @@ TimeWidget::slotSecOrMSecChanged(int)
 }
 
 }
+#include "TimeWidget.moc"

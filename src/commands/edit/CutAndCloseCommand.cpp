@@ -31,6 +31,7 @@
 #include "base/Selection.h"
 #include "CutCommand.h"
 #include <qstring.h>
+#include "misc/Debug.h"
 
 
 namespace Rosegarden

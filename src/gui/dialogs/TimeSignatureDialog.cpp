@@ -311,3 +311,4 @@ TimeSignatureDialog::shouldNormalizeRests() const
 }
 
 }
+#include "TimeSignatureDialog.moc"

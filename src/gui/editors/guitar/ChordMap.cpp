@@ -1,11 +1,14 @@
-#include "chordmap.h"
-#include "chordname.h"
+#include "ChordMap.h"
+#include "ChordName.h"
 #include "base/Exception.h"
 
 #include <qfile.h>
 
 #include <sstream>
 #include <iostream>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -551,6 +554,8 @@ void ChordMap::eraseChordName ( ChordName* namePtr )
     VersionMap::iterator vPos = ver_ptr->find ( namePtr->getVersion() );
 
     ver_ptr->erase ( vPos );
+}
+
 }
 
 }

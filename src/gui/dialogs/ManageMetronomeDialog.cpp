@@ -503,3 +503,4 @@ ManageMetronomeDialog::slotPitchSelectorChanged(int selection)
 }
 
 }
+#include "ManageMetronomeDialog.moc"

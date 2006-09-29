@@ -31,6 +31,7 @@
 #include <vector>
 #include "base/Event.h"
 #include "document/ConfigGroups.h"
+#include <qcheckbox.h>
 
 
 class QWidget;
@@ -38,9 +39,7 @@ class QSpinBox;
 class QPushButton;
 class QGridLayout;
 class QComboBox;
-class QCheckBox;
 class KConfig;
-class filterRange;
 
 
 namespace Rosegarden
@@ -220,10 +219,6 @@ protected slots:
     void slotPitchToChooser();
 };
 
-
-/*
- * Creates a small dialog box containing a PitchChooser widget
- *
 
 }
 

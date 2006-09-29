@@ -579,3 +579,4 @@ MarkerEditorDialog::slotRawTime()
 }
 
 }
+#include "MarkerEditorDialog.moc"

@@ -31,12 +31,15 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
+#include "base/BaseProperties.h"
 #include "document/BasicCommand.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
         Clef clef,

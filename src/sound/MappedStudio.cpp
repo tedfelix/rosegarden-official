@@ -29,6 +29,9 @@
 
 //#define DEBUG_MAPPEDSTUDIO 1
 
+namespace Rosegarden
+{
+
 static pthread_mutex_t _mappedObjectContainerLock;
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -128,9 +131,6 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectValueList& v)
         s << *it;
     return s;
 }
-
-namespace Rosegarden
-{
 
 // Define our object properties - these can be queried and set.
 //
@@ -1714,5 +1714,6 @@ MappedPluginPort::setProperty(const MappedObjectProperty &property,
 
 
 }
+
 
 

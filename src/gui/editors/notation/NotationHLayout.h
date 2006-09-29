@@ -28,6 +28,7 @@
 
 #include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
+#include "NotationElement.h"
 #include "gui/general/ProgressReporter.h"
 #include <map>
 #include <vector>

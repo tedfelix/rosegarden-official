@@ -33,6 +33,7 @@
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qstring.h>
+#include "gui/application/RosegardenApplication.h"
 
 
 namespace Rosegarden

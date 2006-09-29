@@ -491,3 +491,4 @@ QuantizeParameters::slotTypeChanged(int index)
 }
 
 }
+#include "QuantizeParameters.moc"

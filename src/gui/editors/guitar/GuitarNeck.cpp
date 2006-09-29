@@ -19,12 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include "fingers.h"
-#include "guitar.h"
-#include "guitarxmlhandler.h"
-#include "symbols.h"
+#include "Fingering.h"
+#include "GuitarNeck.h"
+#include "GuitarXmlhandler.h"
+#include "NoteSymbols"
 #include <iostream>
 #include <sstream>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -169,3 +172,4 @@ GuitarNeck::toString ( void ) const
 
 } /* namespace Guitar */
 
+}

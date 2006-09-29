@@ -6,8 +6,12 @@
 
 #include <iostream>
 
-#include "guitar.h"
-#include "fingers.h"
+#include "GuitarNeck.h"
+#include "Fingering.h"
+#include "FingeringConstructor.h"
+
+namespace Rosegarden
+{
 
 /**
  *----------------------------------------
@@ -154,6 +158,8 @@ private:
 };
 
 } /* namespace Guitar */
+
+}
 
 #endif /* SYMBOLS_H_ */
 

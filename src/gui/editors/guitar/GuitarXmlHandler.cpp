@@ -19,12 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include "guitarxmlhandler.h"
+#include "GuitarXmlHandler.h"
 #include "base/Exception.h"
 
 #include <iostream>
 
 #include <qfile.h>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -105,3 +108,5 @@ void GuitarXmlHandler::handleChordGroup ( Guitar::ChordMap* chordMap_ptr,
     }
 }
 } /* namespace Guitar */
+
+}

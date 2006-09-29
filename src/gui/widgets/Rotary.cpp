@@ -513,3 +513,4 @@ Rotary::setPosition(float position)
 }
 
 }
+#include "Rotary.moc"

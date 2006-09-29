@@ -355,3 +355,4 @@ const char *const SynthPluginManagerDialog::SynthPluginManagerConfigGroup =
     }
 
     }
+#include "SynthPluginManagerDialog.moc"

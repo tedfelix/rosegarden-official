@@ -70,3 +70,4 @@ MakeOrnamentDialog::getBasePitch() const
 }
 
 }
+#include "MakeOrnamentDialog.moc"

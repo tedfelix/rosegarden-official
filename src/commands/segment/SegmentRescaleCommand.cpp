@@ -27,6 +27,7 @@
 
 #include "misc/Strings.h"
 #include "base/Event.h"
+#include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include <qstring.h>

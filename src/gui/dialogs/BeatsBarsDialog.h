@@ -27,17 +27,14 @@
 #define _RG_BEATSBARSDIALOG_H_
 
 #include <kdialogbase.h>
-
+#include <qspinbox.h>
+#include <kcombobox.h>
 
 class QWidget;
-class QSpinBox;
-class KComboBox;
 
 
 namespace Rosegarden
 {
-
-
 
 /**
  * ask the user to give us information about the selected audio segment for

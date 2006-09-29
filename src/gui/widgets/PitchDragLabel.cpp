@@ -186,3 +186,4 @@ PitchDragLabel::calculatePixmap(bool useSharps) const
 }
 
 }
+#include "PitchDragLabel.moc"

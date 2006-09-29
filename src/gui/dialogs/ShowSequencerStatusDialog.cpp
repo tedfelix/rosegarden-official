@@ -34,6 +34,7 @@
 #include <qtextedit.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include "gui/application/RosegardenApplication.h"
 
 
 namespace Rosegarden
@@ -75,3 +76,4 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
 }
 
 }
+#include "ShowSequencerStatusDialog.moc"

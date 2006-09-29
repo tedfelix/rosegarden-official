@@ -32,3 +32,4 @@
 namespace Rosegarden
 {
 }
+#include "Label.moc"

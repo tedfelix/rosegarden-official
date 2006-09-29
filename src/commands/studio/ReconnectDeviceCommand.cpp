@@ -26,11 +26,13 @@
 #include "ReconnectDeviceCommand.h"
 
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Device.h"
 #include "base/Studio.h"
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qstring.h>
+#include "gui/application/RosegardenApplication.h"
 
 
 namespace Rosegarden

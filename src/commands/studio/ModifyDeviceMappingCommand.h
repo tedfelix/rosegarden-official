@@ -27,6 +27,7 @@
 #define _RG_MODIFYDEVICEMAPPINGCOMMAND_H_
 
 #include "base/Device.h"
+#include "base/Track.h"
 #include <kcommand.h>
 #include <qstring.h>
 #include <vector>
@@ -61,8 +62,7 @@ protected:
     DeviceId     m_fromDevice;
     DeviceId     m_toDevice;
 
-    std::vector<std::pair<TrackId, InstrumentId> >
-                             m_mapping;
+    std::vector<std::pair<TrackId, InstrumentId> > m_mapping;
 };
 
 

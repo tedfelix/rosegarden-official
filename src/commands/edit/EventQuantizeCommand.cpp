@@ -35,10 +35,15 @@
 #include "document/BasicCommand.h"
 #include <kconfig.h>
 #include <qstring.h>
+#include "base/BaseProperties.h"
+#include "gui/application/RosegardenApplication.h"
+#include <kapplication.h>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
         timeT startTime,
@@ -262,3 +267,4 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
 }
 
 }
+#include "EventQuantizeCommand.moc"

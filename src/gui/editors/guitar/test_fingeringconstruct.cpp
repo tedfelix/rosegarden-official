@@ -19,12 +19,13 @@
     COPYING included with this distribution for more information.
 */
 
-#include "guitar.h"
-#include "fingers.h"
-#include "fingering.h"
+#include "GuitarNeck.h"
+#include "Fingering.h"
+#include "FingeringConstructor.h"
 #include <iostream>
 
-using namespace Guitar;
+using namespace Rosegarden;
+using namespace Rosegarden::Guitar;
 
 //---------------------------
 //         TESTS

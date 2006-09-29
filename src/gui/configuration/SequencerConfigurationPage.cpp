@@ -26,6 +26,7 @@
 #include "SequencerConfigurationPage.h"
 
 #include "sound/Midi.h"
+#include "sound/SoundDriver.h"
 #include "document/ConfigGroups.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
@@ -33,6 +34,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
@@ -48,6 +50,7 @@
 #include <qlineedit.h>
 #include <qobject.h>
 #include <qpushbutton.h>
+#include <qlayout.h>
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qstring.h>
@@ -898,3 +901,4 @@ SequencerConfigurationPage::apply()
 }
 
 }
+#include "SequencerConfigurationPage.moc"

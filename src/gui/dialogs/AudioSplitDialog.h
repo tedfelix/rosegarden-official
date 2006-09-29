@@ -28,10 +28,10 @@
 
 #include <kdialogbase.h>
 #include <vector>
+#include <qspinbox.h>
 
 
 class QWidget;
-class QSpinBox;
 class QCanvasView;
 class QCanvasRectangle;
 class QCanvas;

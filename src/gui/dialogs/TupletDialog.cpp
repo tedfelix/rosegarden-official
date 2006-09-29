@@ -360,3 +360,4 @@ TupletDialog::slotTupledChanged(const QString &)
 }
 
 }
+#include "TupletDialog.moc"

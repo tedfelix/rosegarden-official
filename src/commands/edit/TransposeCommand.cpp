@@ -29,10 +29,13 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
+#include "base/BaseProperties.h"
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 void
 TransposeCommand::modifySegment()

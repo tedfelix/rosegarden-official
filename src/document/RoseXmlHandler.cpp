@@ -31,6 +31,7 @@
 #include "misc/Strings.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
+#include "base/BaseProperties.h"
 #include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Composition.h"
@@ -48,6 +49,7 @@
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
 #include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/FileLocateDialog.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/kdeext/KStartupLogo.h"
@@ -70,6 +72,169 @@
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
+
+class XmlSubHandler
+{
+public:
+    XmlSubHandler();
+    virtual ~XmlSubHandler();
+    
+    virtual bool startElement(const QString& namespaceURI,
+                              const QString& localName,
+                              const QString& qName,
+                              const QXmlAttributes& atts) = 0;
+
+    /**
+     * @param finished : if set to true on return, means that
+     * the handler should be deleted
+     */
+    virtual bool endElement(const QString& namespaceURI,
+                            const QString& localName,
+                            const QString& qName,
+                            bool& finished) = 0;
+
+    virtual bool characters(const QString& ch) = 0;
+};
+
+XmlSubHandler::XmlSubHandler()
+{
+}
+
+XmlSubHandler::~XmlSubHandler()
+{
+}
+
+//----------------------------------------
+
+class ConfigurationXmlSubHandler : public XmlSubHandler
+{
+public:
+    ConfigurationXmlSubHandler(const QString &elementName,
+			       Rosegarden::Configuration *configuration);
+    
+    virtual bool startElement(const QString& namespaceURI,
+                              const QString& localName,
+                              const QString& qName,
+                              const QXmlAttributes& atts);
+
+    virtual bool endElement(const QString& namespaceURI,
+                            const QString& localName,
+                            const QString& qName,
+                            bool& finished);
+
+    virtual bool characters(const QString& ch);
+
+    //--------------- Data members ---------------------------------
+
+    Rosegarden::Configuration *m_configuration;
+
+    QString m_elementName;
+    QString m_propertyName;
+    QString m_propertyType;
+};
+
+ConfigurationXmlSubHandler::ConfigurationXmlSubHandler(const QString &elementName,
+						       Rosegarden::Configuration *configuration)
+    : m_configuration(configuration),
+      m_elementName(elementName)
+{
+}
+
+bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
+                                              const QString& lcName,
+                                              const QXmlAttributes& atts)
+{
+    m_propertyName = lcName;
+    m_propertyType = atts.value("type");
+
+    if (m_propertyName == "property") {
+	// handle alternative encoding for properties with arbitrary names
+	m_propertyName = atts.value("name");
+	QString value = atts.value("value");
+	if (value) {
+	    m_propertyType = "String";
+	    m_configuration->set<String>(qstrtostr(m_propertyName),
+					 qstrtostr(value));
+	}
+    }
+
+    return true;
+}
+
+bool ConfigurationXmlSubHandler::characters(const QString& chars)
+{
+    QString ch = chars.stripWhiteSpace();
+    // this method is also called on newlines - skip these cases
+    if (ch.isEmpty()) return true;
+
+
+    if (m_propertyType == "Int") {
+        long i = ch.toInt();
+        RG_DEBUG << "\"" << m_propertyName << "\" "
+                 << "value = " << i << endl;
+        m_configuration->set<Int>(qstrtostr(m_propertyName), i);
+
+        return true;
+    }
+    
+    if (m_propertyType == "RealTime") {
+        Rosegarden::RealTime rt;
+        int sepIdx = ch.find(',');
+        
+        rt.sec = ch.left(sepIdx).toInt();
+        rt.nsec = ch.mid(sepIdx + 1).toInt();
+
+        RG_DEBUG << "\"" << m_propertyName << "\" "
+                 << "sec = " << rt.sec << ", nsec = " << rt.nsec << endl;
+
+        m_configuration->set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
+
+        return true;
+    }
+
+    if (m_propertyType == "Bool") {
+        QString chLc = ch.lower();
+        
+        bool b = (chLc == "true" ||
+                  chLc == "1"    ||
+                  chLc == "on");
+        
+        m_configuration->set<Rosegarden::Bool>(qstrtostr(m_propertyName), b);
+
+        return true;
+    }
+
+    if (!m_propertyType ||
+	m_propertyType == "String") {
+        
+        m_configuration->set<Rosegarden::String>(qstrtostr(m_propertyName),
+						 qstrtostr(ch));
+
+        return true;
+    }
+    
+
+    return true;
+}
+
+bool
+ConfigurationXmlSubHandler::endElement(const QString&,
+                                       const QString&,
+                                       const QString& lcName,
+                                       bool& finished)
+{
+    m_propertyName = "";
+    m_propertyType = "";
+    finished = (lcName == m_elementName);
+    return true;
+}
+
+
+//----------------------------------------
+
+
 
 RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
                                unsigned int elementCount,
@@ -109,6 +274,30 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
 RoseXmlHandler::~RoseXmlHandler()
 {
     delete m_subHandler;
+}
+
+Composition &
+RoseXmlHandler::getComposition()
+{
+    return m_doc->getComposition();
+}
+
+Studio &
+RoseXmlHandler::getStudio()
+{
+    return m_doc->getStudio();
+}
+
+AudioFileManager &
+RoseXmlHandler::getAudioFileManager()
+{
+    return m_doc->getAudioFileManager();
+}
+
+AudioPluginManager *
+RoseXmlHandler::getAudioPluginManager()
+{
+    return m_doc->getPluginManager();
 }
 
 bool

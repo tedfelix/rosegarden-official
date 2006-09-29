@@ -29,6 +29,7 @@
 #include <kcommand.h>
 #include <qstring.h>
 #include "base/Event.h"
+#include "base/Composition.h" // for tempoT
 #include <klocale.h>
 
 
@@ -36,9 +37,6 @@
 
 namespace Rosegarden
 {
-
-class Composition;
-
 
 class AddTempoChangeCommand : public KNamedCommand
 {

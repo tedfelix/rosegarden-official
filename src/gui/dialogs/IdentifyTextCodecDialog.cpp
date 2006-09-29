@@ -145,3 +145,4 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
 }
 
 }
+#include "IdentifyTextCodecDialog.moc"

@@ -31,6 +31,7 @@
 #include "base/Event.h"
 #include <klocale.h>
 #include "misc/Strings.h"
+#include <kcommand.h>
 
 
 class Add;

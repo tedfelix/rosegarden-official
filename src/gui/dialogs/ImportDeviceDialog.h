@@ -31,6 +31,7 @@
 #include <kdialogbase.h>
 #include <qstring.h>
 #include <vector>
+#include <kurl.h>
 
 
 class QWidget;

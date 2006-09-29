@@ -33,6 +33,7 @@
 #include "gui/widgets/ZoomSlider.h"
 #include "MatrixHLayout.h"
 #include "MatrixVLayout.h"
+#include "MatrixCanvasView.h"
 #include <kdockwidget.h>
 #include <qpoint.h>
 #include <qsize.h>
@@ -48,7 +49,6 @@ class QMouseEvent;
 class QLabel;
 class QCursor;
 class QCanvas;
-class LevelInfo;
 class KComboBox;
 
 
@@ -66,12 +66,12 @@ class PitchRuler;
 class MidiKeyMapping;
 class MatrixStaff;
 class MatrixElement;
-class MatrixCanvasView;
 class InstrumentParameterBox;
 class Instrument;
 class EventSelection;
 class Event;
 class ChordNameRuler;
+class LevelInfo;
 
 
 /**

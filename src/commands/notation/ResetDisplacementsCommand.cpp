@@ -27,11 +27,14 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "base/BaseProperties.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 void
 ResetDisplacementsCommand::modifySegment()

@@ -130,7 +130,7 @@ protected:
     unsigned int m_currentSegmentTime;
     unsigned int m_currentSegmentNb;
     Clef m_currentClef;
-    Key m_currentKey;
+    Rosegarden::Key m_currentKey;
     InstrumentId m_currentInstrumentId;
 
     typedef std::map<int, Event *> EventIdMap;

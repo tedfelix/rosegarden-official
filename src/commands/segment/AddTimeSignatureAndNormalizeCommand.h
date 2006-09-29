@@ -28,8 +28,7 @@
 
 #include "base/NotationTypes.h"
 #include "base/Event.h"
-
-
+#include <kcommand.h>
 
 
 namespace Rosegarden

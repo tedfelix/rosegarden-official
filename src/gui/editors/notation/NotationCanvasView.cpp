@@ -473,3 +473,4 @@ NotationCanvasView::slotRenderComplete()
 }
 
 }
+#include "NotationCanvasView.moc"

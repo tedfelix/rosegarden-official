@@ -18,6 +18,7 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_CHORD_NAME_H_
 #define GUITAR_CHORD_NAME_H_
 
@@ -26,6 +27,9 @@
 #include <qdom.h>
 
 #include <vector>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -98,6 +102,8 @@ namespace Guitar
 	//! List of alias names for chord
         std::vector<ChordName*> m_aliases;
     };
+
+}
 
 }
 

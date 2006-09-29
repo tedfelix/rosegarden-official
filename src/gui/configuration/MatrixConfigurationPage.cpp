@@ -36,7 +36,7 @@
 #include <qstring.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
-
+#include <qlayout.h>
 
 namespace Rosegarden
 {
@@ -64,3 +64,4 @@ void MatrixConfigurationPage::apply()
 }
 
 }
+#include "MatrixConfigurationPage.moc"

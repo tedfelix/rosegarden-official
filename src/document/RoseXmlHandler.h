@@ -37,7 +37,6 @@
 #include <qxml.h>
 
 
-class XmlSubHandler;
 class QXmlParseException;
 class QXmlAttributes;
 
@@ -46,6 +45,7 @@ namespace Rosegarden
 {
 
 class XmlStorableEvent;
+class XmlSubHandler;
 class Studio;
 class Segment;
 class RosegardenGUIDoc;
@@ -121,16 +121,12 @@ public:
 
 protected:
 
-    // just for convenience
+    // just for convenience -- just call to the document
     //
-    Composition& getComposition()
-        { return m_doc->getComposition(); }
-    Studio& getStudio()
-        { return m_doc->getStudio(); }
-    AudioFileManager& getAudioFileManager()
-        { return m_doc->getAudioFileManager(); }
-    AudioPluginManager* getAudioPluginManager()
-        { return m_doc->getPluginManager(); }
+    Composition& getComposition();
+    Studio& getStudio();
+    AudioFileManager& getAudioFileManager();
+    AudioPluginManager* getAudioPluginManager();
 
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }

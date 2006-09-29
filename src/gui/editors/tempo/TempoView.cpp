@@ -830,3 +830,4 @@ TempoView::updateViewCaption()
 }
 
 }
+#include "TempoView.moc"

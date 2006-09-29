@@ -29,10 +29,10 @@
 #include "TabbedConfigurationPage.h"
 #include <qstring.h>
 #include <klocale.h>
+#include <qslider.h>
 
 
 class QWidget;
-class QSlider;
 class QPushButton;
 class KConfig;
 

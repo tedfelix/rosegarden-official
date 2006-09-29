@@ -1,13 +1,5 @@
-/****************************************************************************
-** Form implementation generated from reading ui file 'guitarchordeditor.ui'
-**
-** Created: Sun Nov 13 13:08:11 2005
-**      by: The User Interface Compiler ($Id: guitarchordeditor.cpp 7158 2006-02-23 22:50:58Z glaurent $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
 
-#include "guitarchordeditor.h"
+#include "GuitarChordEditor.h"
 
 #include <qvariant.h>
 #include <qpushbutton.h>
@@ -25,10 +17,11 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include "guitarchordeditor.moc"
-
 #include <vector>
 #include <sstream>
+
+namespace Rosegarden
+{
 
 class ChordInfo
 {
@@ -325,3 +318,8 @@ void GuitarChordEditor::toggleMode()
         m_status->message( "MODE: Delete" );
     }
 }
+
+}
+
+#include "GuitarChordEditor.moc"
+

@@ -41,15 +41,6 @@ namespace Rosegarden
 class Rotary;
 class PluginPort;
 class AudioPluginManager;
-
-
-#endif
-
-namespace Rosegarden
-{
-
-class PluginPort;
-class AudioPluginManager;
 class Studio;
 
 class PluginControl : public QObject

@@ -29,15 +29,12 @@
 #include <kcommand.h>
 #include <qstring.h>
 #include <klocale.h>
+#include "base/Composition.h" // for tempoT
 
-
-class Modify;
 
 
 namespace Rosegarden
 {
-
-class Composition;
 
 
 class ModifyDefaultTempoCommand : public KNamedCommand

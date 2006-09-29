@@ -28,18 +28,17 @@
 
 #include "base/ViewElement.h"
 #include <qbrush.h>
+#include <qcanvas.h>
 
 
 class QColor;
-class QCanvas;
 
 
 namespace Rosegarden
 {
 
-class QCanvasMatrixRectangle;
 class Event;
-
+class QCanvasMatrixRectangle;
 
 class MatrixElement : public ViewElement
 {

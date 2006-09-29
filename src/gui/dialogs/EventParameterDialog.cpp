@@ -182,3 +182,4 @@ EventParameterDialog::getValue2()
 }
 
 }
+#include "EventParameterDialog.moc"

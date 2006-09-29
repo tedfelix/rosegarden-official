@@ -290,3 +290,4 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 }
 
 }
+#include "SegmentPencil.moc"

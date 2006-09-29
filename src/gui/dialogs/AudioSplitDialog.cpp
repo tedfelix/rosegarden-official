@@ -32,6 +32,7 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "sound/AudioFileManager.h"
 #include <kdialogbase.h>
 #include <qcanvas.h>
@@ -334,3 +335,4 @@ AudioSplitDialog::slotThresholdChanged(int threshold)
 }
 
 }
+#include "AudioSplitDialog.moc"

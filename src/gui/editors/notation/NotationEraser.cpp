@@ -109,3 +109,4 @@ void NotationEraser::slotSelectSelected()
 }
 
 }
+#include "NotationEraser.moc"

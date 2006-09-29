@@ -36,6 +36,7 @@
 #include <qstring.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <kapplication.h>
 
 
 namespace Rosegarden
@@ -123,3 +124,4 @@ RescaleDialog::slotToChanged(int i)
 }
 
 }
+#include "RescaleDialog.moc"

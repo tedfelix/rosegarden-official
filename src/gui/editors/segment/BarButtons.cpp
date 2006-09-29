@@ -157,3 +157,4 @@ void BarButtons::paintEvent(QPaintEvent *e)
 }
 
 }
+#include "BarButtons.moc"

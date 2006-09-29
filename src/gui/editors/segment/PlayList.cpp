@@ -246,3 +246,4 @@ void PlayList::restore()
 }
 
 }
+#include "PlayList.moc"

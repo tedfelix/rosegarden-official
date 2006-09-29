@@ -525,3 +525,4 @@ EventEditDialog::slotPropertyMadePersistent()
 }
 
 }
+#include "EventEditDialog.moc"

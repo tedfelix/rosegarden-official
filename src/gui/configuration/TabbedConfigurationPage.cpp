@@ -32,33 +32,33 @@
 #include <qstring.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
 {
 
-namespace Rosegarden
-            TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
-                    QWidget *parent,
-                    const char *name)
-            : ConfigurationPage(doc, parent, name)
+TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
+                                                 QWidget *parent,
+                                                 const char *name)
+    : ConfigurationPage(doc, parent, name)
 {
-init();
+    init();
 }
 
 TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
-        QWidget *parent,
-        const char *name)
-        : ConfigurationPage(cfg, parent, name)
+                                                 QWidget *parent,
+                                                 const char *name)
+    : ConfigurationPage(cfg, parent, name)
 {
     init();
 }
 
 TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
-        KConfig *cfg,
-        QWidget *parent,
-        const char *name)
-        : ConfigurationPage(doc, cfg, parent, name)
+                                                 KConfig *cfg,
+                                                 QWidget *parent,
+                                                 const char *name)
+    : ConfigurationPage(doc, cfg, parent, name)
 {
     init();
 }
@@ -76,3 +76,4 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 }
 
 }
+#include "TabbedConfigurationPage.moc"

@@ -432,3 +432,4 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 }
 
 }
+#include "SegmentSelector.moc"

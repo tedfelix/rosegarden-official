@@ -377,3 +377,4 @@ AudioRouteMenu::slotEntrySelected(int i)
 }
 
 }
+#include "AudioRouteMenu.moc"

@@ -18,11 +18,15 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_BARRE_LIST_H_
 #define GUITAR_BARRE_LIST_H_
 
-#include "barre.h"
+#include "Barre.h"
 #include <vector>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -58,6 +62,8 @@ namespace Guitar
 	//! List of contained Barre objects
         std::vector<Barre*> m_data;
     };
+
+}
 
 }
 

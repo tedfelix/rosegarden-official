@@ -18,6 +18,7 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_BARRE_H_
 #define GUITAR_BARRE_H_
 
@@ -27,8 +28,7 @@
 
 namespace Rosegarden
 {
-	class PropertyName;
-}
+    class PropertyName;
 
 namespace Guitar
 {
@@ -83,6 +83,8 @@ namespace Guitar
 	unsigned int m_end;
 
     };
+
+}
 
 }
 

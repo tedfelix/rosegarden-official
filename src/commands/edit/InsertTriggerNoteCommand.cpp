@@ -30,14 +30,17 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/SegmentMatrixHelper.h"
+#include "base/Composition.h"
 #include "base/TriggerSegment.h"
 #include "document/BasicCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
-
+#include "base/BaseProperties.h"
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 InsertTriggerNoteCommand::InsertTriggerNoteCommand(Segment &segment,
         timeT time,

@@ -28,11 +28,14 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include "base/BaseProperties.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 void
 BreakCommand::modifySegment()

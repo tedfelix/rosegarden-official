@@ -41,8 +41,6 @@ class QPoint;
 namespace Rosegarden
 {
 
-
-
 class CompositionRect : public QRect
 {
 public:

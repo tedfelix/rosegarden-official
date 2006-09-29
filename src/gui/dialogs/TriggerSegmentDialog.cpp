@@ -40,6 +40,7 @@
 #include <qstring.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
@@ -175,3 +176,4 @@ TriggerSegmentDialog::slotOk()
 }
 
 }
+#include "TriggerSegmentDialog.moc"

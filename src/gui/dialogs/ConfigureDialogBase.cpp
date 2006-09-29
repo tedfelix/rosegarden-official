@@ -73,3 +73,4 @@ ConfigureDialogBase::slotCancelOrClose()
 {}
 
 }
+#include "ConfigureDialogBase.moc"

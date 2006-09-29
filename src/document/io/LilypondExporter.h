@@ -30,7 +30,7 @@
 #include "base/PropertyName.h"
 #include "base/Segment.h"
 #include "gui/general/ProgressReporter.h"
-#include <ofstream>
+#include <fstream>
 #include <set>
 #include <string>
 #include <utility>
@@ -73,7 +73,7 @@ protected:
     bool m_pitchBorked;
 
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
-		  Key &key, std::string &lilyText, std::string &lilyLyrics,
+		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
 		  std::string &prevStyle, eventendlist &eventsInProgress,
 		  std::ofstream &str, bool &nextBarIsAlt1, bool &nextBarIsAlt2,
 		  bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
@@ -92,7 +92,7 @@ protected:
     // convert note pitch into Lilypond format note string
     std::string convertPitchToLilyNote(int pitch,
                                        Accidental accidental,
-				       const Key &key);
+				       const Rosegarden::Key &key);
 
     // compose an appropriate Lilypond representation for various Marks
     std::string composeLilyMark(std::string eventMark, bool stemUp);
@@ -119,7 +119,7 @@ protected:
 			 bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
 
     void handleText(const Event *, std::string &lilyText, std::string &lilyLyrics);
-    void writePitch(const Event *note, const Key &key, std::ofstream &);
+    void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
     void writeDuration(timeT duration, std::ofstream &);
     void writeSlashes(const Event *note, std::ofstream &);

@@ -221,3 +221,4 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
 }
 
 }
+#include "RosegardenParameterArea.moc"

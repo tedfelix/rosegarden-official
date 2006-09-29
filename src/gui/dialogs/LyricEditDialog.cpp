@@ -147,3 +147,4 @@ LyricEditDialog::getLyricData()
 }
 
 }
+#include "LyricEditDialog.moc"

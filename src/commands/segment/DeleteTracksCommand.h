@@ -30,8 +30,7 @@
 #include <qstring.h>
 #include <vector>
 #include <klocale.h>
-
-
+#include "base/Track.h"
 
 
 namespace Rosegarden

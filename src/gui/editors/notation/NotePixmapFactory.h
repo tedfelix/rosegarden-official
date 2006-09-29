@@ -49,6 +49,8 @@ class Accidental;
 namespace Rosegarden
 {
 
+namespace Guitar { class Fingering; }
+
 class TimeSignature;
 class Text;
 class NoteStyle;

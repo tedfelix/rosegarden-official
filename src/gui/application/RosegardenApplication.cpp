@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
+#include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenDCOP.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "RosegardenGUIApp.h"
@@ -40,6 +41,7 @@
 #include <qeventloop.h>
 #include <qsessionmanager.h>
 #include <qstring.h>
+#include <dcopclient.h>
 
 
 namespace Rosegarden

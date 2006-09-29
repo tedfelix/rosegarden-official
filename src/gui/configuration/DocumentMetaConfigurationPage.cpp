@@ -51,10 +51,55 @@
 #include <qtable.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
 {
+
+static QString durationToString(Rosegarden::Composition &comp,
+				Rosegarden::timeT absTime,
+				Rosegarden::timeT duration,
+				Rosegarden::RealTime rt)
+{
+    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
+	.arg(rt.sec / 60).arg(rt.sec % 60)
+	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
+	.arg(duration).arg(comp.getBarNumber(absTime + duration) -
+			   comp.getBarNumber(absTime));
+}
+
+class SegmentDataItem : public QTableItem
+{
+public:
+    SegmentDataItem(QTable *t, QString s) :
+	QTableItem(t, QTableItem::Never, s) { }
+    virtual int alignment() const { return Qt::AlignCenter; }
+
+    virtual QString key() const {
+
+	// It doesn't seem to be possible to specify a comparator so
+	// as to get the right sorting for numeric items (what am I
+	// missing here?), only to override this function to return a
+	// string for comparison.  So for integer items we'll return a
+	// string that starts with a single digit corresponding to the
+	// number of digits in the integer, which should ensure that
+	// dictionary sorting works correctly.
+	// 
+	// This relies on the assumption that any item whose text
+	// starts with a digit will contain nothing other than a
+	// single non-negative integer of no more than 9 digits.  That
+	// assumption should hold for all current uses of this class,
+	// but may need checking for future uses...
+
+	QString s(text());
+	if (s[0].digitValue() >= 0) {
+	    return QString("%1%2").arg(s.length()).arg(s);
+	} else {
+	    return s;
+	}
+    }
+};
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
         QWidget *parent,
@@ -457,3 +502,4 @@ DocumentMetaConfigurationPage::selectMetadata(QString name)
 }
 
 }
+#include "DocumentMetaConfigurationPage.moc"

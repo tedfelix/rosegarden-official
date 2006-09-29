@@ -1,7 +1,7 @@
-#include "note.h"
-#include "fingers.h"
-#include "symbols.h"
-#include "guitar.h"
+#include "Note.h"
+#include "Fingering.h"
+#include "NoteSymbols.h"
+#include "GuitarNeck.h"
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
@@ -9,7 +9,8 @@
 
 #include <sstream>
 
-using namespace Rosegarden;
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -150,3 +151,5 @@ bool Note::operator== ( Note const& rhs ) const
 }
 
 } /* namespace Guitar */
+
+}

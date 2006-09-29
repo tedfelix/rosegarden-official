@@ -205,3 +205,4 @@ void ProgressDialog::processEvents()
 }
 
 }
+#include "ProgressDialog.moc"

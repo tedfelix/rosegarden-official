@@ -25,6 +25,8 @@
 
 #include "LircClient.h"
 
+#ifdef HAVE_LIRC
+
 #include "misc/Debug.h"
 #include "base/Exception.h"
 #include <qobject.h>
@@ -90,3 +92,7 @@ void LircClient::readButton()
 }
 
 }
+
+#include "LircClient.moc"
+
+#endif

@@ -29,6 +29,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
+#include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/Configuration.h"
 #include "base/Event.h"
@@ -38,10 +39,12 @@
 #include "base/PropertyName.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
+#include "base/Sets.h"
 #include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NotationView.h"
@@ -54,10 +57,14 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qtextcodec.h>
+#include <kapplication.h>
+#include <sstream>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 LilypondExporter::LilypondExporter(QObject *parent,
                                    RosegardenGUIDoc *doc,
@@ -185,8 +192,9 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
     }
 }
 
+std::string
 LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
-        const Key &key)
+        const Rosegarden::Key &key)
 {
     Pitch p(pitch, accidental);
     std::string lilyNote = "";
@@ -206,6 +214,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
     return lilyNote;
 }
 
+std::string
 LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp)
 {
 
@@ -277,6 +286,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp)
     return outStr;
 }
 
+std::string
 LilypondExporter::indent(const int &column)
 {
     std::string outStr = "";
@@ -286,6 +296,7 @@ LilypondExporter::indent(const int &column)
     return outStr;
 }
 
+std::string
 LilypondExporter::protectIllegalChars(std::string inStr)
 {
 
@@ -813,7 +824,7 @@ LilypondExporter::write()
                 std::string lilyLyrics = "";    // lyric events
                 std::string prevStyle = "";     // track note styles
 
-                Key key;
+                Rosegarden::Key key;
 
                 bool haveRepeating = false;
                 bool haveAlternates = false;
@@ -1049,7 +1060,7 @@ LilypondExporter::calculateDuration(Segment *s,
 void
 LilypondExporter::writeBar(Segment *s,
                            int barNo, int barStart, int barEnd, int col,
-                           Key &key,
+                           Rosegarden::Key &key,
                            std::string &lilyText,
                            std::string &lilyLyrics,
                            std::string &prevStyle,
@@ -1110,7 +1121,7 @@ LilypondExporter::writeBar(Segment *s,
         // for pre-2.0 Lilypond output)
 
         if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType) ||
-                (*i)->isa(Clef::EventType) || (*i)->isa(Key::EventType)) {
+                (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType)) {
 
             long newGroupId = -1;
             if ((*i)->get
@@ -1402,16 +1413,16 @@ LilypondExporter::writeBar(Segment *s,
                 std::cerr << "Bad clef: " << e.getMessage() << std::endl;
             }
 
-        } else if ((*i)->isa(Key::EventType)) {
+        } else if ((*i)->isa(Rosegarden::Key::EventType)) {
 
             try {
                 str << "\\key ";
-                key = Key(**i);
+                key = Rosegarden::Key(**i);
                 Accidental accidental = Accidentals::NoAccidental;
 
                 std::cout << "key tonic pitch: " << key.getTonicPitch() << std::endl; //REMOVE
                 str << convertPitchToLilyNote(key.getTonicPitch(), accidental,
-                                              key.isSharp() ? Key ("C major") : Key ("A minor"));
+                                              key.isSharp() ? Rosegarden::Key ("C major") : Rosegarden::Key ("A minor"));
 
                 if (key.isMinor()) {
                     str << " \\minor";
@@ -1667,7 +1678,7 @@ LilypondExporter::handleText(const Event *textEvent,
 
 void
 LilypondExporter::writePitch(const Event *note,
-                             const Key &key,
+                             const Rosegarden::Key &key,
                              std::ofstream &str)
 {
     // Note pitch (need name as well as octave)

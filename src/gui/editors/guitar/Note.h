@@ -28,7 +28,6 @@
 namespace Rosegarden
 {
 class PropertyName;
-}
 
 namespace Guitar
 {
@@ -91,6 +90,8 @@ private:
     QString noteName ( void );
 
 };
+
+}
 
 }
 

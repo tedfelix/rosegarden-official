@@ -95,3 +95,4 @@ MatrixParameterBox::useInstrument(Instrument *instrument)
 }
 
 }
+#include "MatrixParameterBox.moc"

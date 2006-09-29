@@ -427,3 +427,4 @@ AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 }
 
 }
+#include "AudioInstrumentParameterPanel.moc"

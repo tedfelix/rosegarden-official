@@ -28,6 +28,7 @@
 #include "misc/Strings.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
@@ -44,6 +45,7 @@
 #include <qstring.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
@@ -179,3 +181,4 @@ AudioConfigurationPage::apply()
 }
 
 }
+#include "AudioConfigurationPage.moc"

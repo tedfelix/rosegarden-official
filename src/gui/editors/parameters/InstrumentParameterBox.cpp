@@ -248,3 +248,4 @@ InstrumentParameterBox::showAdditionalControls(bool showThem)
 }
 
 }
+#include "InstrumentParameterBox.moc"

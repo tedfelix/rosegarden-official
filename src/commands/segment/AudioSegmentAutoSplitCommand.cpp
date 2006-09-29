@@ -40,6 +40,16 @@
 namespace Rosegarden
 {
 
+struct AutoSplitPoint
+{
+    timeT time;
+    timeT lastSoundTime;
+    Clef clef;
+    Rosegarden::Key key;
+    AutoSplitPoint(timeT t, timeT lst, Clef c, Rosegarden::Key k) :
+	time(t), lastSoundTime(lst), clef(c), key(k) { }
+};
+
 AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
     RosegardenGUIDoc *doc,
     Segment *segment,

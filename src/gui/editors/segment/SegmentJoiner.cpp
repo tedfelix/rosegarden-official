@@ -67,3 +67,4 @@ SegmentJoiner::contentsMouseDoubleClickEvent(QMouseEvent*)
 {}
 
 }
+#include "SegmentJoiner.moc"

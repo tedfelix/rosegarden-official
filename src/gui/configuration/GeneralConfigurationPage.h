@@ -30,13 +30,13 @@
 #include "TabbedConfigurationPage.h"
 #include <qstring.h>
 #include <klocale.h>
+#include <qcheckbox.h>
+#include <qspinbox.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
 
 
 class QWidget;
-class QSpinBox;
-class QLineEdit;
-class QComboBox;
-class QCheckBox;
 class KConfig;
 
 

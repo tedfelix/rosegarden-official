@@ -29,7 +29,7 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "gui/general/ProgressReporter.h"
-#include <ofstream>
+#include <fstream>
 #include <set>
 #include <string>
 
@@ -70,7 +70,7 @@ protected:
     void writeNote(Event *e, timeT lastNoteTime,
 		   AccidentalTable &table,
 		   const Clef &clef,
-		   const Key &key,
+		   const Rosegarden::Key &key,
 		   std::ofstream &str);
 
  private:

@@ -21,10 +21,9 @@
 #ifndef GUITAR_TAB_EDITOR_H_
 #define GUITAR_TAB_EDITOR_H_
 
-#include "fingering.h"
-#include "chordmap.h"
-#include "fingers.h"
-#include "guitartabbase.h"
+#include "Fingering.h"
+#include "ChordMap.h"
+#include "GuitarTabBase.h"
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <qvbox.h>
@@ -32,7 +31,6 @@
 namespace Rosegarden
 {
     class Event;
-}
 
 class GuitarTabEditorWindow : public KDialog
 {
@@ -96,5 +94,7 @@ private:
     QTabWidget* m_chord;
 
 };
+
+}
 
 #endif /* GUITAR_TAB_EDITOR_H_ */

@@ -259,3 +259,4 @@ ClefDialog::redrawClefPixmap()
 }
 
 }
+#include "ClefDialog.moc"
