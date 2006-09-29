@@ -21,20 +21,20 @@ namespace Rosegarden
  * Originally x = position * scale + FC::BORDER + FC::CIRCBORD + FC::FRETTEXT
  *
  * The last three can be condense into on term called XBorder
- * 	XBorder = FC::BORDER + FC::CIRCBORD + FC::FRETTEXT
- *	       = 5 + 2 + 10 (see fingers.h)
+ *      XBorder = FC::BORDER + FC::CIRCBORD + FC::FRETTEXT
+ *             = 5 + 2 + 10 (see fingers.h)
  *             = 17
  *
  * The drawable fretboard space on the x-axis:
- * 	XFretboard = pixmap width - XBorder
- * 	          = width - 17
+ *      XFretboard = pixmap width - XBorder
+ *                = width - 17
  *
  * The fretboard x-axis is broken up into colums which represent the drawable
  * space for a fretboard component (e.g. note, barre)
- * 	Column Width = XFretboard / number of strings
+ *      Column Width = XFretboard / number of strings
  *
  * Therefore a new x can be calculated from the position and the column width
- * 	x = (position * Column Width) + XBorder
+ *      x = (position * Column Width) + XBorder
  *
  *-------------------------------------------
  * Finding Y position on fretboard pixmap
@@ -44,18 +44,18 @@ namespace Rosegarden
  *
  * As with the x-axis the equation can be separated into the position plus the border. In
  * this case YBorder
- * 	YBorder = (FC::BORDER*scale) + (2*FC::SPACER) + FC::CIRCBORD
+ *      YBorder = (FC::BORDER*scale) + (2*FC::SPACER) + FC::CIRCBORD
  *              = 17 (If we want to use the same border as the x-axis)
  *
  * The drawable fretboard space on the y-axis:
- * 	YFretboard = pixmap height - YBorder
+ *      YFretboard = pixmap height - YBorder
  *
  * The fretboard y-axis is broken up into rows which represent the drawable
  * space for a fretboard component (e.g. note, barre)
- *	Row Height = YFretboard / number of frets
+ *      Row Height = YFretboard / number of frets
  *
  * Therefore a new y can be calculated from the fret position and the row height
- * 	y = fret * Row Height
+ *      y = fret * Row Height
  **/
 
 namespace Guitar

@@ -45,10 +45,10 @@ class ClefInsertionCommand : public BasicCommand
 {
 public:
     ClefInsertionCommand(Segment &segment,
-			 timeT time,
-			 Clef clef,
-			 bool shouldChangeOctave = false,
-			 bool shouldTranspose = false);
+                         timeT time,
+                         Clef clef,
+                         bool shouldChangeOctave = false,
+                         bool shouldTranspose = false);
     virtual ~ClefInsertionCommand();
 
     static QString getGlobalName(Clef *clef = 0);

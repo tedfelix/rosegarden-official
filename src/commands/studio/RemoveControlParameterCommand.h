@@ -45,11 +45,11 @@ class RemoveControlParameterCommand : public KNamedCommand
 {
 public:
     RemoveControlParameterCommand(Studio *studio,
-				  DeviceId device,
+                                  DeviceId device,
                                   int id):
         KNamedCommand(getGlobalName()),
         m_studio(studio),
-	m_device(device),
+        m_device(device),
         m_id(id) { }
 
     ~RemoveControlParameterCommand();

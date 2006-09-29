@@ -95,12 +95,12 @@ public:
     virtual void changeFont(std::string fontName, int resolution);
 
     void setLegerLineCount(int legerLineCount) {
-	if (legerLineCount == -1) m_legerLineCount = 8;
-	else m_legerLineCount = legerLineCount;
+        if (legerLineCount == -1) m_legerLineCount = 8;
+        else m_legerLineCount = legerLineCount;
     }
 
     void setBarNumbersEvery(int barNumbersEvery) {
-	m_barNumbersEvery = barNumbersEvery;
+        m_barNumbersEvery = barNumbersEvery;
     }
 
     LinedStaff::setPageMode;
@@ -117,7 +117,7 @@ public:
      * treat the returned reference as if it were const anyway.
      */
     virtual NotePixmapFactory& getNotePixmapFactory(bool grace) {
-	return grace ? *m_graceNotePixmapFactory : *m_notePixmapFactory;
+        return grace ? *m_graceNotePixmapFactory : *m_notePixmapFactory;
     }
 
     /**
@@ -132,7 +132,7 @@ public:
      * changed range and the entire remainder of the staff.
      */
     virtual void renderElements(NotationElementList::iterator from,
-				NotationElementList::iterator to);
+                                NotationElementList::iterator to);
 
     
     /**
@@ -167,7 +167,7 @@ public:
      * passed to renderElements.
      */
     virtual void positionElements(timeT from,
-				  timeT to);
+                                  timeT to);
 
     /**
      * Re-render and position elements as necessary, based on the
@@ -180,7 +180,7 @@ public:
      * Returns true if something needed re-rendering.
      */
     virtual bool checkRendered(timeT from,
-			       timeT to);
+                               timeT to);
 
     /**
      * Find something between the given times that has not yet been
@@ -189,7 +189,7 @@ public:
      * procedure for rendering not-yet-visible areas of notation.
      */
     virtual bool doRenderWork(timeT from,
-			      timeT to);
+                              timeT to);
 
     /**
      * Mark a region of staff as changed, for use by the on-demand
@@ -201,8 +201,8 @@ public:
      * relayout.
      */
     virtual void markChanged(timeT from = 0,
-			     timeT to = 0,
-			     bool movedOnly = false);
+                             timeT to = 0,
+                             bool movedOnly = false);
 
     /**
      * Set a painter as the printer output.  If this painter is
@@ -219,13 +219,13 @@ public:
      * set, do nothing.
      */
     virtual void renderPrintable(timeT from,
-				 timeT to);
+                                 timeT to);
     
     /**
      * Insert time signature at x-coordinate \a x.
      */
     virtual void insertTimeSignature(double layoutX,
-				     const TimeSignature &timeSig);
+                                     const TimeSignature &timeSig);
 
     /**
      * Delete all time signatures
@@ -258,8 +258,8 @@ public:
      * coordinates
      */
     virtual void getClefAndKeyAtCanvasCoords(double x, int y,
-					     Clef &clef,
-					     Key &key) const;
+                                             Clef &clef,
+                                             Key &key) const;
 
     /**
      * Return the note name (C4, Bb3, whatever) corresponding to the
@@ -303,7 +303,7 @@ public:
      * an insert. 
      */
     virtual void showPreviewNote(double layoutX, int heightOnStaff,
-				 const Note &note);
+                                 const Note &note);
 
     /**
      * Remove any visible preview note.
@@ -349,9 +349,9 @@ protected:
      * the correct pitch for the key)
      */
     virtual void renderSingleElement(ViewElementList::iterator &,
-				     const Clef &,
-				     const Key &,
-				     bool selected);
+                                     const Clef &,
+                                     const Key &,
+                                     bool selected);
 
     bool isDirectlyPrintable(ViewElement *elt);
 
@@ -401,9 +401,9 @@ protected:
     virtual bool elementShiftedOnly(NotationElementList::iterator);
 
     enum FitPolicy {
-	PretendItFittedAllAlong = 0,
-	MoveBackToFit,
-	SplitToFit
+        PretendItFittedAllAlong = 0,
+        MoveBackToFit,
+        SplitToFit
     };
 
     /**
@@ -420,8 +420,8 @@ protected:
      * painter.restore() after use.
      */
     virtual double setPainterClipping(QPainter *, double layoutX, int layoutY,
-				      double dx, double w, LinedStaffCoords &coords,
-				      FitPolicy policy);
+                                      double dx, double w, LinedStaffCoords &coords,
+                                      FitPolicy policy);
 
     /**
      * Set a single pixmap to a notation element, or split it into
@@ -429,7 +429,7 @@ protected:
      * separately.
      */
     virtual void setPixmap(NotationElement *, QCanvasPixmap *, int z,
-			   FitPolicy policy);
+                           FitPolicy policy);
 
     bool isSelected(NotationElementList::iterator);
 

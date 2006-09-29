@@ -43,45 +43,45 @@ public:
     ~SequencerMmapper();
     
     void updatePositionPointer(RealTime time) {
-	m_sequencerDataBlock->setPositionPointer(time);
+        m_sequencerDataBlock->setPositionPointer(time);
     }
 
     void updateVisual(MappedEvent *ev) {
-	m_sequencerDataBlock->setVisual(ev);
+        m_sequencerDataBlock->setVisual(ev);
     }
 
     void updateRecordingBuffer(MappedComposition *mC) {
-	m_sequencerDataBlock->addRecordedEvents(mC);
+        m_sequencerDataBlock->addRecordedEvents(mC);
     }
 
     void setTrackLevel(TrackId track, const LevelInfo &info) {
-	m_sequencerDataBlock->setTrackLevel(track, info);
+        m_sequencerDataBlock->setTrackLevel(track, info);
     }
 
     void setInstrumentLevel(InstrumentId id,
-			    const LevelInfo &info) {
-	m_sequencerDataBlock->setInstrumentLevel(id, info);
+                            const LevelInfo &info) {
+        m_sequencerDataBlock->setInstrumentLevel(id, info);
     }
 
     void setInstrumentRecordLevel(InstrumentId id,
-				  const LevelInfo &info) {
-	m_sequencerDataBlock->setInstrumentRecordLevel(id, info);
+                                  const LevelInfo &info) {
+        m_sequencerDataBlock->setInstrumentRecordLevel(id, info);
     }
 
     void setSubmasterLevel(int submaster,
-			   const LevelInfo &info) {
-	m_sequencerDataBlock->setSubmasterLevel(submaster, info);
+                           const LevelInfo &info) {
+        m_sequencerDataBlock->setSubmasterLevel(submaster, info);
     }
 
     void setMasterLevel(const LevelInfo &info) {
-	m_sequencerDataBlock->setMasterLevel(info);
+        m_sequencerDataBlock->setMasterLevel(info);
     }
 
     SequencerDataBlock *getSequencerDataBlock() {
-	return m_sequencerDataBlock;
+        return m_sequencerDataBlock;
     }
     void setControlBlock(ControlBlock *cb) {
-	m_sequencerDataBlock->setControlBlock(cb);
+        m_sequencerDataBlock->setControlBlock(cb);
     }
 
 protected:

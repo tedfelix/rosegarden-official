@@ -42,10 +42,10 @@ class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
 {
 public:
     MakeAccidentalsCautionaryCommand(bool cautionary,
-				     EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(cautionary), selection, true),
-	m_selection(&selection),
-	m_cautionary(cautionary) { }
+                                     EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(cautionary), selection, true),
+        m_selection(&selection),
+        m_cautionary(cautionary) { }
     
     static QString getGlobalName(bool cautionary);
     

@@ -45,9 +45,9 @@ class MoveCommand : public BasicCommand
 {
 public:
     MoveCommand(Segment &segment,
-		timeT delta,
-		bool useNotationTimings,
-		EventSelection &selection);
+                timeT delta,
+                bool useNotationTimings,
+                EventSelection &selection);
     
     static QString getGlobalName(timeT delta = 0);
 

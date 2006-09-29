@@ -99,18 +99,18 @@ private:
     KComboBox           *m_recDevice;
     KComboBox           *m_recChannel;
 
-    QPushButton		*m_presetButton;
-    QPushButton		*m_highButton;
-    QPushButton		*m_lowButton;
+    QPushButton         *m_presetButton;
+    QPushButton         *m_highButton;
+    QPushButton         *m_lowButton;
 
-    KComboBox		*m_defClef;
-    KComboBox		*m_defColor;
+    KComboBox           *m_defClef;
+    KComboBox           *m_defColor;
 
-    KComboBox		*m_defTranspose;
+    KComboBox           *m_defTranspose;
 
-    int			m_addColourPos;
-    int			m_highestPlayable;
-    int 		m_lowestPlayable;
+    int                 m_addColourPos;
+    int                 m_highestPlayable;
+    int                 m_lowestPlayable;
     ColourTable::ColourList  m_colourList;
     
     QLabel              *m_trackLabel;
@@ -137,7 +137,7 @@ private:
     QLabel              *m_clefLbl;
     QLabel              *m_transpLbl;
     QLabel              *m_colorLbl;
-    QLabel		*m_rangeLbl;
+    QLabel              *m_rangeLbl;
     QLabel              *m_psetLbl;
 };
 

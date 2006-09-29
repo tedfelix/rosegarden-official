@@ -117,16 +117,16 @@ public:
      * multiple of the vstep.
      */
     int snapY(int y) const {
-	if (m_vstep == 0) return y;
-	else return y / m_vstep * m_vstep;
+        if (m_vstep == 0) return y;
+        else return y / m_vstep * m_vstep;
     }
 
     /**
      * Return the vstep bin number for the given y-coordinate.
      */
     int getYBin(int y) const {
-	if (m_vstep == 0) return y;
-	else return y / m_vstep;
+        if (m_vstep == 0) return y;
+        else return y / m_vstep;
     }
 
     /**
@@ -134,20 +134,20 @@ public:
      * of the given vstep bin.
      */
     int getYBinCoordinate(int bin) const {
-	if (m_vstep == 0) return bin;
-	else return bin * m_vstep;
+        if (m_vstep == 0) return bin;
+        else return bin * m_vstep;
     }
 
     int getYSnap() const {
-	return m_vstep;
+        return m_vstep;
     }
 
     RulerScale *getRulerScale() {
-	return m_rulerScale;
+        return m_rulerScale;
     }
 
     const RulerScale *getRulerScale() const {
-	return m_rulerScale;
+        return m_rulerScale;
     }
 
 protected:

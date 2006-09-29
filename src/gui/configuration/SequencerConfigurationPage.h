@@ -86,7 +86,7 @@ protected slots:
 protected:
 
     int updateTimeSlider(int msec, int minPower, int maxPower, int multiplier,
-			 QSlider *slider, QLabel *label, QString klabel);
+                         QSlider *slider, QLabel *label, QString klabel);
 
     //--------------- Data members ---------------------------------
 

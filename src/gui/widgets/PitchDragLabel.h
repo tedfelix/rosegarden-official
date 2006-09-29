@@ -47,7 +47,7 @@ class PitchDragLabel : public QWidget
     Q_OBJECT
 public:
     PitchDragLabel(QWidget *parent,
-			     int defaultPitch = 60);
+                             int defaultPitch = 60);
     ~PitchDragLabel();
 
     int getPitch() const { return m_pitch; }

@@ -46,8 +46,8 @@ class RemoveTimeSignatureCommand : public KNamedCommand
 {
 public:
     RemoveTimeSignatureCommand(Composition *composition,
-			       int index):
-	KNamedCommand(getGlobalName()),
+                               int index):
+        KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_timeSigIndex(index),
         m_oldTime(0),

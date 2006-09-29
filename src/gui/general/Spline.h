@@ -49,8 +49,8 @@ public:
      * heap-allocated container.
      */
     static PointList *calculate(const QPoint &start, const QPoint &finish,
-				const PointList &controlPoints,
-				QPoint &topLeft, QPoint &bottomRight);
+                                const PointList &controlPoints,
+                                QPoint &topLeft, QPoint &bottomRight);
 
 private:
     static void calculateSegment

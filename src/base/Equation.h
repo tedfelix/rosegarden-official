@@ -34,9 +34,9 @@ public:
     enum Unknown { Y, M, X, C };
 
     struct Point {
-	Point(int xx, int yy) : x(xx), y(yy) { }
-	int x;
-	int y;
+        Point(int xx, int yy) : x(xx), y(yy) { }
+        int x;
+        int y;
     };
 
     static void solve(Unknown u, double &y, double &m, double &x, double &c);

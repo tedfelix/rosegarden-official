@@ -51,10 +51,10 @@ public:
     {
         Plain,
         PeakHold,
-	AudioPeakHoldShort, 
+        AudioPeakHoldShort, 
         AudioPeakHoldLong,
-	AudioPeakHoldIEC,
-	AudioPeakHoldIECLong,
+        AudioPeakHoldIEC,
+        AudioPeakHoldIECLong,
         FixedHeightVisiblePeakHold
     } VUMeterType;
 
@@ -85,7 +85,7 @@ protected:
     VUMeter(QWidget *parent = 0,
             VUMeterType type = Plain,
             bool stereo = false,
-	    bool hasRecord = false,
+            bool hasRecord = false,
             int width = 0,
             int height = 0,
             VUAlignment alignment = Horizontal,
@@ -111,7 +111,7 @@ private:
 
     void drawMeterLevel(QPainter *paint);
     void drawColouredBar(QPainter *paint, int channel,
-			 int x, int y, int w, int h);
+                         int x, int y, int w, int h);
 
     VUMeterType m_type;
     VUAlignment m_alignment;

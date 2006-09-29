@@ -43,7 +43,7 @@ public:
     NotePixmapParameters(Note::Type noteType,
                          int dots,
                          Accidental accidental =
-			 Accidentals::NoAccidental);
+                         Accidentals::NoAccidental);
     ~NotePixmapParameters();
 
     void setNoteType(Note::Type type) { m_noteType = type; }
@@ -78,9 +78,9 @@ public:
     void setWidth(int width)              { m_width            = width;     }
     void setGradient(double gradient)     { m_gradient         = gradient;  }
 
-    void setTupletCount(int count)	  { m_tupletCount      = count;	    }
-    void setTuplingLineY(int y)		  { m_tuplingLineY     = y;	    }
-    void setTuplingLineWidth(int width)	  { m_tuplingLineWidth = width;	    }
+    void setTupletCount(int count)        { m_tupletCount      = count;     }
+    void setTuplingLineY(int y)           { m_tuplingLineY     = y;         }
+    void setTuplingLineWidth(int width)   { m_tuplingLineWidth = width;     }
     void setTuplingLineGradient(double g) { m_tuplingLineGradient = g;      }
     void setTuplingLineFollowsBeam(bool b){ m_tuplingLineFollowsBeam = b;   }
 
@@ -131,9 +131,9 @@ private:
     int     m_width;
     double  m_gradient;
 
-    int	    m_tupletCount;
+    int     m_tupletCount;
     int     m_tuplingLineY;
-    int	    m_tuplingLineWidth;
+    int     m_tuplingLineWidth;
     double  m_tuplingLineGradient;
     bool    m_tuplingLineFollowsBeam;
 

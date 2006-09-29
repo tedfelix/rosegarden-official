@@ -63,13 +63,13 @@ public:
     virtual timeT getViewDuration() const;
 
     void getLayoutAirspace(double &x, double &width) {
-	x = m_airX;
-	width = m_airWidth;
+        x = m_airX;
+        width = m_airWidth;
     }
 
     void getCanvasAirspace(double &x, double &width) {
-	x = m_airX - getLayoutX() + getCanvasX();
-	width = m_airWidth;
+        x = m_airX - getLayoutX() + getCanvasX();
+        width = m_airWidth;
     }
 
     /// returns the x pos of the associated canvas item
@@ -85,7 +85,7 @@ public:
      * element as opposed to any other.  These are layout coords
      */
     void setLayoutAirspace(double x, double width) {
-	m_airX = x; m_airWidth = width;
+        m_airX = x; m_airWidth = width;
     }
 
     /// Returns true if the wrapped event is a rest

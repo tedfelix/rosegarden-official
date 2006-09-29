@@ -40,14 +40,14 @@ public:
     typedef unsigned long TransportToken;
 
     enum TransportRequest {
-	TransportNoChange,
-	TransportStop,
-	TransportStart,
-	TransportPlay,
-	TransportRecord,
-	TransportJumpToTime, // time arg required
-	TransportStartAtTime, // time arg required
-	TransportStopAtTime // time arg required
+        TransportNoChange,
+        TransportStop,
+        TransportStart,
+        TransportPlay,
+        TransportRecord,
+        TransportJumpToTime, // time arg required
+        TransportStartAtTime, // time arg required
+        TransportStopAtTime // time arg required
     };
 
     virtual TransportToken transportChange(TransportRequest) = 0;

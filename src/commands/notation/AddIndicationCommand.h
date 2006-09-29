@@ -45,7 +45,7 @@ class AddIndicationCommand : public BasicCommand
 {
 public:
     AddIndicationCommand(std::string indicationType,
-				  EventSelection &selection);
+                                  EventSelection &selection);
     virtual ~AddIndicationCommand();
 
     // tests whether the indication can be added without overlapping
@@ -53,10 +53,10 @@ public:
     bool canExecute();
 
     Event *getLastInsertedEvent() {
-	return m_lastInsertedEvent;
+        return m_lastInsertedEvent;
     }
     virtual timeT getRelayoutEndTime() {
-	return getStartTime() + m_indicationDuration;
+        return getStartTime() + m_indicationDuration;
     }
 
     static QString getGlobalName(std::string indicationType);

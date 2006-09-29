@@ -127,7 +127,7 @@ public:
     unsigned int getAddedEvents() const { return m_segmentEvents.size(); }
 
     const eventcontainer &getSegmentEvents() const { return m_segmentEvents; }
-    eventcontainer &getSegmentEvents()		   { return m_segmentEvents; }
+    eventcontainer &getSegmentEvents()             { return m_segmentEvents; }
 
     const Segment &getSegment() const { return m_originalSegment; }
     Segment &getSegment()             { return m_originalSegment; }
@@ -191,7 +191,7 @@ public:
      * signature there in the source composition.
      */
     TimeSignatureSelection(Composition &, timeT beginTime, timeT endTime,
-			   bool includeOpeningTimeSig);
+                           bool includeOpeningTimeSig);
 
     virtual ~TimeSignatureSelection();
 
@@ -235,7 +235,7 @@ public:
      * in the source composition.
      */
     TempoSelection(Composition &, timeT beginTime, timeT endTime,
-		   bool includeOpeningTempo);
+                   bool includeOpeningTempo);
 
     virtual ~TempoSelection();
 

@@ -84,7 +84,7 @@ public:
 
     filterRange getWheel();
 
-    bool filterNote() 	    { return m_noteCheckBox->isChecked();       }
+    bool filterNote()       { return m_noteCheckBox->isChecked();       }
 #ifdef COMPILE_DEPRECATED
     bool filterController() { return m_controllerCheckBox->isChecked(); }
     bool filterWheel()      { return m_wheelCheckBox->isChecked();      }
@@ -92,10 +92,10 @@ public:
     
     // returns TRUE if the property value falls with in the filterRange 
     bool eventInRange(filterRange foo, long property) {
-	if (foo.first > foo.second)
-	    return (property <= foo.second || property >= foo.first);
-	else
-	    return (property >= foo.first && property <= foo.second); }
+        if (foo.first > foo.second)
+            return (property <= foo.second || property >= foo.first);
+        else
+            return (property >= foo.first && property <= foo.second); }
 
     // Used to do the work of deciding whether to keep or reject an event
     // based on the state of the dialog's widgets.  Returns TRUE if an event
@@ -127,12 +127,12 @@ protected:
 
 #ifdef COMPILE_DEPRECATED    
     bool controllerNumberIsInclusive() {
-	                         return (m_controllerNumberIncludeComboBox->currentItem()
-	    			                                                      == 0); }
+                                 return (m_controllerNumberIncludeComboBox->currentItem()
+                                                                                      == 0); }
 
     bool controllerValueIsInclusive()  {
-	                         return (m_controllerValueIncludeComboBox->currentItem()
-	                                                                              == 0); }
+                                 return (m_controllerValueIncludeComboBox->currentItem()
+                                                                                      == 0); }
 
     bool wheelIsInclusive()    { return (m_wheelAmountIncludeComboBox->currentItem()  == 0); }
 #endif
@@ -145,35 +145,35 @@ protected:
     QGridLayout* layout;
 
 #ifdef COMPILE_DEPRECATED    
-    QCheckBox* 	 m_controllerCheckBox;
-    QCheckBox*	 m_wheelCheckBox;
+    QCheckBox*   m_controllerCheckBox;
+    QCheckBox*   m_wheelCheckBox;
     QComboBox*   m_controllerNumberIncludeComboBox;
-    QComboBox* 	 m_controllerValueIncludeComboBox;
-    QComboBox* 	 m_wheelAmountIncludeComboBox;
-    QSpinBox*  	 m_controllerNumberFromSpinBox;
-    QSpinBox* 	 m_controllerNumberToSpinBox;
-    QSpinBox* 	 m_controllerValueFromSpinBox;
-    QSpinBox* 	 m_controllerValueToSpinBox;
-    QSpinBox* 	 m_wheelAmountFromSpinBox;
-    QSpinBox* 	 m_wheelAmountToSpinBox;
+    QComboBox*   m_controllerValueIncludeComboBox;
+    QComboBox*   m_wheelAmountIncludeComboBox;
+    QSpinBox*    m_controllerNumberFromSpinBox;
+    QSpinBox*    m_controllerNumberToSpinBox;
+    QSpinBox*    m_controllerValueFromSpinBox;
+    QSpinBox*    m_controllerValueToSpinBox;
+    QSpinBox*    m_wheelAmountFromSpinBox;
+    QSpinBox*    m_wheelAmountToSpinBox;
 #endif
     
-    QCheckBox*	 m_noteCheckBox;
-    QComboBox*	 m_noteDurationFromComboBox;
-    QComboBox* 	 m_noteDurationIncludeComboBox;
-    QComboBox* 	 m_noteDurationToComboBox;
-    QComboBox*	 m_notePitchIncludeComboBox;
-    QComboBox* 	 m_noteVelocityIncludeComboBox;
+    QCheckBox*   m_noteCheckBox;
+    QComboBox*   m_noteDurationFromComboBox;
+    QComboBox*   m_noteDurationIncludeComboBox;
+    QComboBox*   m_noteDurationToComboBox;
+    QComboBox*   m_notePitchIncludeComboBox;
+    QComboBox*   m_noteVelocityIncludeComboBox;
     
     QPushButton* m_pitchFromChooserButton;
     QPushButton* m_pitchToChooserButton;
     QPushButton* m_buttonAll;
     QPushButton* m_buttonNone;
     
-    QSpinBox* 	 m_pitchFromSpinBox;
-    QSpinBox* 	 m_pitchToSpinBox;
-    QSpinBox* 	 m_velocityFromSpinBox;
-    QSpinBox* 	 m_velocityToSpinBox;
+    QSpinBox*    m_pitchFromSpinBox;
+    QSpinBox*    m_pitchToSpinBox;
+    QSpinBox*    m_velocityFromSpinBox;
+    QSpinBox*    m_velocityToSpinBox;
 
     std::vector<timeT> m_standardQuantizations;
 

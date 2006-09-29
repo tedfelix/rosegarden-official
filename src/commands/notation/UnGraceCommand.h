@@ -43,7 +43,7 @@ class UnGraceCommand : public BasicSelectionCommand
 {
 public:
     UnGraceCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection) { }
+        BasicSelectionCommand(getGlobalName(), selection) { }
 
     static QString getGlobalName() { return i18n("Ung&race"); }
 

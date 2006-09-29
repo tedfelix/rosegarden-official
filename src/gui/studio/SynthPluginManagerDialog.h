@@ -59,11 +59,11 @@ class SynthPluginManagerDialog : public KMainWindow
 
 public:
     SynthPluginManagerDialog(QWidget *parent,
-			     RosegardenGUIDoc *doc
+                             RosegardenGUIDoc *doc
 #ifdef HAVE_LIBLO
-			     , AudioPluginOSCGUIManager *guiManager
+                             , AudioPluginOSCGUIManager *guiManager
 #endif
-	);
+        );
 
     virtual ~SynthPluginManagerDialog();
 

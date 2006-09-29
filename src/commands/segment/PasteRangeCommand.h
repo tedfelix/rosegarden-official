@@ -41,8 +41,8 @@ class PasteRangeCommand : public KMacroCommand
 {
 public:
     PasteRangeCommand(Composition *composition,
-		      Clipboard *clipboard,
-		      timeT pasteTime);
+                      Clipboard *clipboard,
+                      timeT pasteTime);
 };
     
 

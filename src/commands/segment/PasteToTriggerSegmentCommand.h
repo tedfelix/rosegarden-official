@@ -46,10 +46,10 @@ class PasteToTriggerSegmentCommand : public KNamedCommand
 public:
     /// If basePitch is -1, the first pitch in the selection will be used
     PasteToTriggerSegmentCommand(Composition *composition,
-				 Clipboard *clipboard,
-				 QString label,
-				 int basePitch = -1,
-				 int baseVelocity = -1);
+                                 Clipboard *clipboard,
+                                 QString label,
+                                 int basePitch = -1,
+                                 int baseVelocity = -1);
     virtual ~PasteToTriggerSegmentCommand();
 
     virtual void execute();

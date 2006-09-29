@@ -59,7 +59,7 @@ public:
     } TempoDialogAction;
 
     TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
-		bool timeEditable = false);
+                bool timeEditable = false);
     ~TempoDialog();
 
     // Set the position at which we're checking the tempo
@@ -80,7 +80,7 @@ signals:
     //
     void changeTempo(timeT,  // tempo change time
                      tempoT,  // tempo value
-		     tempoT,  // target tempo value
+                     tempoT,  // target tempo value
                      TempoDialog::TempoDialogAction); // tempo action
 
 protected:
@@ -91,16 +91,16 @@ protected:
 
     RosegardenGUIDoc     *m_doc;
     timeT     m_tempoTime;
-    HSpinBox  	  	 *m_tempoValueSpinBox;
+    HSpinBox             *m_tempoValueSpinBox;
 
     QRadioButton         *m_tempoConstant;
     QRadioButton         *m_tempoRampToNext;
     QRadioButton         *m_tempoRampToTarget;
     HSpinBox             *m_tempoTargetSpinBox; 
 
-    QLabel	         *m_tempoBeatLabel;
-    QLabel	         *m_tempoBeat;
-    QLabel	         *m_tempoBeatsPerMinute;
+    QLabel               *m_tempoBeatLabel;
+    QLabel               *m_tempoBeat;
+    QLabel               *m_tempoBeatsPerMinute;
 
     TimeWidget *m_timeEditor;
 
@@ -110,7 +110,7 @@ protected:
     
     QRadioButton         *m_tempoChangeHere;
     QRadioButton         *m_tempoChangeBefore;
-    QLabel	         *m_tempoChangeBeforeAt;
+    QLabel               *m_tempoChangeBeforeAt;
     QRadioButton         *m_tempoChangeStartOfBar;
     QRadioButton         *m_tempoChangeGlobal;
     QCheckBox            *m_defaultBox;

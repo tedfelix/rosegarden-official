@@ -59,13 +59,13 @@ class NotationVLayout : public ProgressReporter,
 {
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
-		    const NotationProperties &properties,
+                    const NotationProperties &properties,
                     QObject* parent, const char* name = 0);
 
     virtual ~NotationVLayout();
 
     void setNotePixmapFactory(NotePixmapFactory *npf) {
-	m_npf = npf;
+        m_npf = npf;
     }
 
     /**
@@ -77,15 +77,15 @@ public:
      * Resets internal data stores for a specific staff
      */
     virtual void resetStaff(Staff &,
-			    timeT = 0,
-			    timeT = 0);
+                            timeT = 0,
+                            timeT = 0);
 
     /**
      * Lay out a single staff.
      */
     virtual void scanStaff(Staff &,
-			   timeT = 0,
-			   timeT = 0);
+                           timeT = 0,
+                           timeT = 0);
 
     /**
      * Do any layout dependent on more than one staff.  As it
@@ -94,7 +94,7 @@ public:
      * (for slurs), so we should do that here
      */
     virtual void finishLayout(timeT = 0,
-			      timeT = 0);
+                              timeT = 0);
 
 private:
 

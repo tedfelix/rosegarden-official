@@ -44,14 +44,14 @@ class TupletCommand : public BasicCommand
 {
 public:
     TupletCommand(Segment &segment,
-			   timeT startTime,
-			   timeT unit,
-			   int untupled = 3, int tupled = 2,
-			   bool groupHasTimingAlready = false);
+                           timeT startTime,
+                           timeT unit,
+                           int untupled = 3, int tupled = 2,
+                           bool groupHasTimingAlready = false);
 
     static QString getGlobalName(bool simple = true) {
-	if (simple) return i18n("&Triplet");
-	else return i18n("Tu&plet...");
+        if (simple) return i18n("&Triplet");
+        else return i18n("Tu&plet...");
     }
 
 protected:

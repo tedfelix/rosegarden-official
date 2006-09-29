@@ -49,9 +49,9 @@ public:
     virtual ~SegmentItemPreview();
 
     enum PreviewState {
-	PreviewChanged,
-	PreviewCalculating,
-	PreviewCurrent
+        PreviewChanged,
+        PreviewCalculating,
+        PreviewCurrent
     };
 
     virtual void drawShape(QPainter&) = 0;

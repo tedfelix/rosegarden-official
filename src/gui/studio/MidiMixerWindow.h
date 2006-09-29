@@ -70,7 +70,7 @@ public slots:
     void slotSynchronise(); // synchronise with updated studio
 
     void slotControllerDeviceEventReceived(MappedEvent *,
-					   const void *);
+                                           const void *);
 
     void slotCurrentTabChanged(QWidget *);
 

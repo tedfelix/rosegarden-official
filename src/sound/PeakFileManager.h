@@ -62,19 +62,19 @@ public:
     class BadPeakFileException : public Exception
     {
     public:
-	BadPeakFileException(std::string path) :
-	    Exception("Bad peak file " + path), m_path(path) { }
-	BadPeakFileException(std::string path, std::string file, int line) :
-	    Exception("Bad peak file " + path, file, line), m_path(path) { }
-	BadPeakFileException(const SoundFile::BadSoundFileException &e) :
-	    Exception("Bad peak file (malformed audio?) " + e.getPath()), m_path(e.getPath()) { }
+        BadPeakFileException(std::string path) :
+            Exception("Bad peak file " + path), m_path(path) { }
+        BadPeakFileException(std::string path, std::string file, int line) :
+            Exception("Bad peak file " + path, file, line), m_path(path) { }
+        BadPeakFileException(const SoundFile::BadSoundFileException &e) :
+            Exception("Bad peak file (malformed audio?) " + e.getPath()), m_path(e.getPath()) { }
 
-	~BadPeakFileException() throw() { }
+        ~BadPeakFileException() throw() { }
 
-	std::string getPath() const { return m_path; }
+        std::string getPath() const { return m_path; }
 
     private:
-	std::string m_path;
+        std::string m_path;
     };
 
 private:

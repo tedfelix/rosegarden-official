@@ -82,8 +82,8 @@ public:
      * the other.
      */
     iterator getNextAdjacentNote(iterator i,
-				 bool matchPitch = true,
-				 bool allowOverlap = true);
+                                 bool matchPitch = true,
+                                 bool allowOverlap = true);
 
 
     /**
@@ -105,9 +105,9 @@ public:
      * the other.
      */
     iterator getPreviousAdjacentNote(iterator i,
-				     timeT rangeStart = 0,
-				     bool matchPitch = true,
-				     bool allowOverlap = true);
+                                     timeT rangeStart = 0,
+                                     bool matchPitch = true,
+                                     bool allowOverlap = true);
 
 
     /**
@@ -240,7 +240,7 @@ public:
      * rest event already starting at absoluteTime.
      */
     iterator insertNote(timeT absoluteTime, Note note, int pitch,
-			Accidental explicitAccidental);
+                        Accidental explicitAccidental);
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as
@@ -365,7 +365,7 @@ public:
      * As above but given a range in time rather than iterators.
      */
     void makeNotesViable(timeT startTime, timeT endTime,
-			 bool splitAtBars = true);
+                         bool splitAtBars = true);
 
 
     /**
@@ -494,7 +494,7 @@ public:
 
     
     std::pair<Event *, Event *> splitPreservingPerformanceTimes(Event *e,
-								timeT q1);
+                                                                timeT q1);
 
     /**
      * Look for examples of overlapping notes within the given range,
@@ -533,11 +533,11 @@ protected:
 
     /// for use by insertNote and insertRest
     iterator insertSomething(iterator position, int duration,
-			     Event *modelEvent, bool tiedBack);
+                             Event *modelEvent, bool tiedBack);
 
     /// for use by insertSomething
     iterator insertSingleSomething(iterator position, int duration,
-				   Event *modelEvent, bool tiedBack);
+                                   Event *modelEvent, bool tiedBack);
 
     /// for use by insertSingleSomething
     void setInsertedNoteGroup(Event *e, iterator i);
@@ -560,7 +560,7 @@ protected:
     bool hasEffectiveDuration(iterator i);
 
     typedef void (SegmentNotationHelper::*Reorganizer)(timeT, timeT,
-						       std::vector<Event *>&);
+                                                       std::vector<Event *>&);
 
     void reorganizeRests(timeT, timeT, Reorganizer);
 

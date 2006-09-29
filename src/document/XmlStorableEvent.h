@@ -55,7 +55,7 @@ public:
      * absoluteTime reference accordingly.
      */
     XmlStorableEvent(const QXmlAttributes& atts,
-		     timeT &absoluteTime);
+                     timeT &absoluteTime);
 
     /**
      * Construct an XmlStorableEvent from the specified Event.
@@ -66,7 +66,7 @@ public:
      * Set a property from the XML attributes \a atts
      */
     void setPropertyFromAttributes(const QXmlAttributes& atts,
-				   bool persistent);
+                                   bool persistent);
 };
 
 

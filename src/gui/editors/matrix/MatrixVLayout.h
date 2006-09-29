@@ -54,8 +54,8 @@ public:
      * Resets internal data stores for a specific staff
      */
     virtual void resetStaff(Staff &staff,
-			    timeT = 0,
-			    timeT = 0);
+                            timeT = 0,
+                            timeT = 0);
 
     /**
      * Precomputes layout data for a single staff, updating any
@@ -64,8 +64,8 @@ public:
      * segment.
      */
     virtual void scanStaff(Staff &staff,
-			   timeT = 0,
-			   timeT = 0);
+                           timeT = 0,
+                           timeT = 0);
 
     /**
      * Computes any layout data that may depend on the results of
@@ -74,7 +74,7 @@ public:
      * (likely for vertical layout).
      */
     virtual void finishLayout(timeT = 0,
-			      timeT = 0);
+                              timeT = 0);
 
     static const int minMIDIPitch;
     static const int maxMIDIPitch;

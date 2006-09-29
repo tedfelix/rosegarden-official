@@ -43,11 +43,11 @@ class UnTupletCommand : public BasicSelectionCommand
 {
 public:
     UnTupletCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     static QString getGlobalName() {
-	return i18n("&Untuplet");
+        return i18n("&Untuplet");
     }
 
 protected:

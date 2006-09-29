@@ -46,12 +46,12 @@ class ChangeVelocityCommand : public BasicSelectionCommand
 {
 public:
     ChangeVelocityCommand(int delta, EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(delta), selection, true),
-	m_selection(&selection), m_delta(delta) { }
+        BasicSelectionCommand(getGlobalName(delta), selection, true),
+        m_selection(&selection), m_delta(delta) { }
 
     static QString getGlobalName(int delta = 0) {
-	if (delta > 0) return i18n("&Increase Velocity");
-	else return i18n("&Reduce Velocity");
+        if (delta > 0) return i18n("&Increase Velocity");
+        else return i18n("&Reduce Velocity");
     }
 
 protected:

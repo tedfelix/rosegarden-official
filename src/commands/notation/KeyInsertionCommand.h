@@ -48,19 +48,19 @@ class KeyInsertionCommand : public BasicCommand
 {
 public:
     KeyInsertionCommand(Segment &segment,
-			timeT time,
-			Key key,
-			bool shouldConvert,
-			bool shouldTranspose,
-			bool shouldTransposeKey);
+                        timeT time,
+                        Key key,
+                        bool shouldConvert,
+                        bool shouldTranspose,
+                        bool shouldTransposeKey);
     virtual ~KeyInsertionCommand();
 
     static QString getGlobalName(Key *key = 0) {
-	if (key) {
-	    return i18n("Change to &Key %1...").arg(strtoqstr(key->getName()));
-	} else {
-	    return i18n("Add &Key Change...");
-	}
+        if (key) {
+            return i18n("Change to &Key %1...").arg(strtoqstr(key->getName()));
+        } else {
+            return i18n("Add &Key Change...");
+        }
     }
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

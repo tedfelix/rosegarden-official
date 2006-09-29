@@ -62,16 +62,16 @@ public:
 
 protected:
     timeT writeBar(std::ofstream &, 
-			       Composition *,
-			       Segment *,
-			       timeT, timeT,
-			       TimeSignature &,
-			       TrackId);
+                               Composition *,
+                               Segment *,
+                               timeT, timeT,
+                               TimeSignature &,
+                               TrackId);
     void writeClefAndKey(std::ofstream &, TrackId trackNo);
     void writeInventedRests(std::ofstream &,
-			    TimeSignature &timeSig,
-			    timeT offset,
-			    timeT duration);
+                            TimeSignature &timeSig,
+                            timeT offset,
+                            timeT duration);
     void writePitch(std::ofstream &, TrackId, Event *event);
     void writeDuration(std::ofstream &, timeT duration);
 

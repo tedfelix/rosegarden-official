@@ -52,8 +52,8 @@ public:
     virtual ~AudioPlayQueue();
 
     struct FileTimeCmp {
-	bool operator()(const PlayableAudioFile &, const PlayableAudioFile &) const;
-	bool operator()(const PlayableAudioFile *, const PlayableAudioFile *) const;
+        bool operator()(const PlayableAudioFile &, const PlayableAudioFile &) const;
+        bool operator()(const PlayableAudioFile *, const PlayableAudioFile *) const;
     };
     typedef std::set<PlayableAudioFile *, FileTimeCmp> FileSet;
     typedef std::list<PlayableAudioFile *> FileList;
@@ -101,8 +101,8 @@ public:
      * by me and the caller should not delete them.
      */ 
     void getPlayingFiles(const RealTime &sliceStart,
-			 const RealTime &sliceDuration,
-			 FileSet &) const;
+                         const RealTime &sliceDuration,
+                         FileSet &) const;
 
     /**
      * Look up the files playing during a given slice on a given
@@ -112,10 +112,10 @@ public:
      * still owned by me and the caller should not delete them.
      */
     void getPlayingFilesForInstrument(const RealTime &sliceStart,
-				      const RealTime &sliceDuration,
-				      InstrumentId instrumentId,
-				      PlayableAudioFile **files,
-				      size_t &size) const;
+                                      const RealTime &sliceDuration,
+                                      InstrumentId instrumentId,
+                                      PlayableAudioFile **files,
+                                      size_t &size) const;
 
     /**
      * Return true if at least one scheduled or unscheduled file is

@@ -71,13 +71,13 @@ public:
      * The RulerScale will not be destroyed along with the TempoRuler.
      */
     TempoRuler(RulerScale *rulerScale,
-	       RosegardenGUIDoc *doc,
-	       KXMLGUIFactory *factory,
-	       double xorigin = 0.0,
-	       int height = 0,
-	       bool small = false,
-	       QWidget* parent = 0,
-	       const char *name = 0);
+               RosegardenGUIDoc *doc,
+               KXMLGUIFactory *factory,
+               double xorigin = 0.0,
+               int height = 0,
+               bool small = false,
+               QWidget* parent = 0,
+               const char *name = 0);
 
     ~TempoRuler();
 
@@ -97,7 +97,7 @@ signals:
                      TempoDialog::TempoDialogAction); // tempo action
 
     void moveTempo(timeT, // old time
-		   timeT); // new time
+                   timeT); // new time
 
     void deleteTempo(timeT);
 
@@ -156,9 +156,9 @@ private:
     int getYForTempo(tempoT tempo);
     tempoT getTempoForY(int y);
     void showTextFloat(tempoT tempo,
-		       tempoT target = -1,
-		       timeT time = -1,
-		       bool showTime = false);
+                       tempoT target = -1,
+                       timeT time = -1,
+                       bool showTime = false);
 
     Composition *m_composition;
     RulerScale *m_rulerScale;

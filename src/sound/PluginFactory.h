@@ -69,17 +69,17 @@ public:
      * port child objects.
      */
     virtual void populatePluginSlot(QString identifier,
-				    MappedPluginSlot &slot) = 0;
+                                    MappedPluginSlot &slot) = 0;
 
     /**
      * Instantiate a plugin.
      */
     virtual RunnablePluginInstance *instantiatePlugin(QString identifier,
-						      int instrumentId,
-						      int position,
-						      unsigned int sampleRate,
-						      unsigned int blockSize,
-						      unsigned int channels) = 0;
+                                                      int instrumentId,
+                                                      int position,
+                                                      unsigned int sampleRate,
+                                                      unsigned int blockSize,
+                                                      unsigned int channels) = 0;
 
 protected:
     PluginFactory() { }

@@ -73,26 +73,26 @@ protected:
     bool m_pitchBorked;
 
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
-		  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
-		  std::string &prevStyle, eventendlist &eventsInProgress,
-		  std::ofstream &str, bool &nextBarIsAlt1, bool &nextBarIsAlt2,
-		  bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
+                  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
+                  std::string &prevStyle, eventendlist &eventsInProgress,
+                  std::ofstream &str, bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+                  bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
     
     timeT calculateDuration(Segment *s,
-					const Segment::iterator &i,
-					timeT barEnd,
-					timeT &soundingDuration,
-					const std::pair<int, int> &tupletRatio,
-					bool &overlong);
+                                        const Segment::iterator &i,
+                                        timeT barEnd,
+                                        timeT &soundingDuration,
+                                        const std::pair<int, int> &tupletRatio,
+                                        bool &overlong);
 
     void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
     void handleEndingEvents(eventendlist &eventsInProgress,
-			    const Segment::iterator &j, std::ofstream &str);
+                            const Segment::iterator &j, std::ofstream &str);
 
     // convert note pitch into Lilypond format note string
     std::string convertPitchToLilyNote(int pitch,
                                        Accidental accidental,
-				       const Rosegarden::Key &key);
+                                       const Rosegarden::Key &key);
 
     // compose an appropriate Lilypond representation for various Marks
     std::string composeLilyMark(std::string eventMark, bool stemUp);
@@ -104,19 +104,19 @@ protected:
     std::string indent(const int &column);
                   
     void writeSkip(const TimeSignature &timeSig,
-		   timeT offset,
-		   timeT duration,
-		   bool useRests,
-		   std::ofstream &);
+                   timeT offset,
+                   timeT duration,
+                   bool useRests,
+                   std::ofstream &);
 
     /*
      * Handle Lilypond directive.  Returns true if the event was a directive,
      * so subsequent code does not bother to process the event twice
      */
     bool handleDirective(const Event *textEvent,
-	                 std::string &lilyText,
-		         bool &nextBarIsAlt1, bool &nextBarIsAlt2,
-			 bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
+                         std::string &lilyText,
+                         bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+                         bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
 
     void handleText(const Event *, std::string &lilyText, std::string &lilyLyrics);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
@@ -134,10 +134,10 @@ private:
     bool m_exportHeaders;
     bool m_exportMidi;
 
-	// exportTempoMarks meaning:
-	// 0 -> none
-	// 1 -> first
-	// 2 -> all
+        // exportTempoMarks meaning:
+        // 0 -> none
+        // 1 -> first
+        // 2 -> all
     unsigned int m_exportTempoMarks;
     bool m_exportUnmuted;
     bool m_exportPointAndClick;
@@ -146,11 +146,11 @@ private:
     bool m_exportStaffGroup;
     bool m_exportStaffMerge;
 
-	// languagelevel meaning:
-	// 0 -> Lilypond 2.2
-	// 1 -> Lilypond 2.4
-	// 2 -> Lilypond 2.6
-	// 3 -> Lilypond 2.8
+        // languagelevel meaning:
+        // 0 -> Lilypond 2.2
+        // 1 -> Lilypond 2.4
+        // 2 -> Lilypond 2.6
+        // 3 -> Lilypond 2.8
     int m_languageLevel;
 };
 

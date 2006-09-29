@@ -46,10 +46,10 @@ public:
                       const RealTime &startTime,
                       const RealTime &startIndex,
                       const RealTime &duration,
-		      size_t bufferSize = 4096,
-		      size_t smallFileSize = 131072,
-		      int targetChannels = -1, // default same as file
-		      int targetSampleRate = -1); // default same as file
+                      size_t bufferSize = 4096,
+                      size_t smallFileSize = 131072,
+                      int targetChannels = -1, // default same as file
+                      int targetSampleRate = -1); // default same as file
     ~PlayableAudioFile();
 
     static void setRingBufferPoolSizes(size_t n, size_t nframes);
@@ -93,7 +93,7 @@ public:
     // offset frames from the start of the target block.
     //
     size_t addSamples(std::vector<sample_t *> &target,
-		      size_t channels, size_t nframes, size_t offset = 0);
+                      size_t channels, size_t nframes, size_t offset = 0);
 
     unsigned int getSourceChannels();
     unsigned int getTargetChannels();
@@ -226,12 +226,12 @@ public:
     typedef enum
     {
         IDLE,
-	RECORDING,
+        RECORDING,
         DEFUNCT
     } RecordStatus;
 
     RecordableAudioFile(AudioFile *audioFile, // should be already open for writing
-			size_t bufferSize);
+                        size_t bufferSize);
     ~RecordableAudioFile();
 
     void setStatus(const RecordStatus &status) { m_status = status; }

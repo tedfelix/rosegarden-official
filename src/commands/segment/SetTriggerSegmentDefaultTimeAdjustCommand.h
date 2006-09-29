@@ -43,8 +43,8 @@ class SetTriggerSegmentDefaultTimeAdjustCommand : public KNamedCommand
 {
 public:
     SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,
-					      TriggerSegmentId id,
-					      std::string newDefaultTimeAdjust);
+                                              TriggerSegmentId id,
+                                              std::string newDefaultTimeAdjust);
     virtual ~SetTriggerSegmentDefaultTimeAdjustCommand();
 
     virtual void execute();

@@ -45,11 +45,11 @@ class AddControlParameterCommand : public KNamedCommand
 {
 public:
     AddControlParameterCommand(Studio *studio,
-			       DeviceId device,
+                               DeviceId device,
                                ControlParameter control):
         KNamedCommand(getGlobalName()),
         m_studio(studio),
-	m_device(device),
+        m_device(device),
         m_control(control),
         m_id(0) { }
 

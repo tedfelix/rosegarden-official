@@ -56,14 +56,14 @@ public:
     } ControlType;
 
     PluginControl(QWidget *parent,
-		  QGridLayout *layout,
+                  QGridLayout *layout,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
                   int index,
                   float initialValue,
-		  bool showBounds,
-		  bool hidden);
+                  bool showBounds,
+                  bool hidden);
  
     void setValue(float value, bool emitSignals = true);
     float getValue() const;

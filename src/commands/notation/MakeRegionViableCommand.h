@@ -45,9 +45,9 @@ class MakeRegionViableCommand : public BasicCommand
 {
 public:
     MakeRegionViableCommand(Segment &segment,
-					  timeT startTime,
-					  timeT endTime) :
-	BasicCommand(getGlobalName(), segment, startTime, endTime) { }
+                                          timeT startTime,
+                                          timeT endTime) :
+        BasicCommand(getGlobalName(), segment, startTime, endTime) { }
 
     static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
 

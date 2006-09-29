@@ -50,8 +50,8 @@ class TupletDialog : public KDialogBase
 
 public:
     TupletDialog(QWidget *parent,
-		 Note::Type defaultUnitType,
-		 timeT maxDuration = 0);
+                 Note::Type defaultUnitType,
+                 timeT maxDuration = 0);
 
     Note::Type getUnitType() const;
     int getUntupledCount() const;

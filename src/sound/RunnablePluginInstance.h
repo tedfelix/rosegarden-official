@@ -32,7 +32,7 @@ namespace Rosegarden
 {
 
 class PluginFactory;
-	
+        
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
  * process can use to refer to an instance of a plugin without needing
@@ -83,7 +83,7 @@ public:
     virtual QString configure(QString /* key */, QString /* value */) { return QString(); }
 
     virtual void sendEvent(const RealTime & /* eventTime */,
-			   const void * /* event */) { }
+                           const void * /* event */) { }
 
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
@@ -99,7 +99,7 @@ public:
 
 protected:
     RunnablePluginInstance(PluginFactory *factory, QString identifier) :
-	m_factory(factory), m_identifier(identifier) { }
+        m_factory(factory), m_identifier(identifier) { }
 
     PluginFactory *m_factory;
     QString m_identifier;

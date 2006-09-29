@@ -124,7 +124,7 @@ public:
      * @see initMenuBar initToolBar
      */
     RosegardenGUIApp(bool useSequencer = true,
-		     bool useExistingSequencer = false,
+                     bool useExistingSequencer = false,
                      QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenGUIApp();
@@ -1244,7 +1244,7 @@ public slots:
      * Move a tempo change
      */
     void slotMoveTempo(timeT oldTime,
-		       timeT newTime);
+                       timeT newTime);
 
     /**
      * Remove a tempo change
@@ -1410,17 +1410,17 @@ public slots:
      * raise an exising one.
      */
     void slotShowPluginDialog(QWidget *parent,
-			      InstrumentId instrument,
-			      int index);
+                              InstrumentId instrument,
+                              int index);
 
     void slotPluginSelected(InstrumentId instrument,
-			    int index, int plugin);
+                            int index, int plugin);
 
     /**
      * An external GUI has requested a port change.
      */
     void slotChangePluginPort(InstrumentId instrument,
-			      int index, int portIndex, float value);
+                              int index, int portIndex, float value);
 
     /**
      * Our internal GUI has made a port change -- the
@@ -1428,13 +1428,13 @@ public slots:
      * to inform the sequencer and update external GUIs.
      */
     void slotPluginPortChanged(InstrumentId instrument,
-			       int index, int portIndex);
+                               int index, int portIndex);
 
     /**
      * An external GUI has requested a program change.
      */
     void slotChangePluginProgram(InstrumentId instrument,
-				 int index, QString program);
+                                 int index, QString program);
 
     /**
      * Our internal GUI has made a program change -- the
@@ -1443,7 +1443,7 @@ public slots:
      * the port values for the new program.
      */
     void slotPluginProgramChanged(InstrumentId instrument,
-				  int index);
+                                  int index);
 
     /**
      * An external GUI has requested a configure call.  (This can only
@@ -1451,11 +1451,11 @@ public slots:
      * internally.)
      */
     void slotChangePluginConfiguration(InstrumentId, int index,
-				       bool global, QString key, QString value);
+                                       bool global, QString key, QString value);
     void slotPluginDialogDestroyed(InstrumentId instrument,
-				   int index);
+                                   int index);
     void slotPluginBypassed(InstrumentId,
-			    int index, bool bypassed);
+                            int index, bool bypassed);
 
     void slotShowPluginGUI(InstrumentId, int index);
     void slotStopPluginGUI(InstrumentId, int index);
@@ -1578,8 +1578,8 @@ private:
 
     Clipboard *m_clipboard;
 
-    SegmentParameterBox		  *m_segmentParameterBox;
-    InstrumentParameterBox	  *m_instrumentParameterBox;
+    SegmentParameterBox           *m_segmentParameterBox;
+    InstrumentParameterBox        *m_instrumentParameterBox;
     TrackParameterBox             *m_trackParameterBox;
 
     PlayListDialog        *m_playList;

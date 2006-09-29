@@ -45,16 +45,16 @@ class SegmentSplitByPitchCommand : public KNamedCommand
 {
 public:
     enum ClefHandling {
-	LeaveClefs,
-	RecalculateClefs,
-	UseTrebleAndBassClefs
+        LeaveClefs,
+        RecalculateClefs,
+        UseTrebleAndBassClefs
     };
     
     SegmentSplitByPitchCommand(Segment *segment,
-			       int splitPitch,
-			       bool ranging,
-			       bool duplicateNonNoteEvents,
-			       ClefHandling clefHandling);
+                               int splitPitch,
+                               bool ranging,
+                               bool duplicateNonNoteEvents,
+                               ClefHandling clefHandling);
     virtual ~SegmentSplitByPitchCommand();
 
     static QString getGlobalName()

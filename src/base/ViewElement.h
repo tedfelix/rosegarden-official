@@ -133,7 +133,7 @@ public:
     iterator findSingle(ViewElement *);
 
     const_iterator findSingle(ViewElement *e) const {
-	return const_iterator(((const ViewElementList *)this)->findSingle(e));
+        return const_iterator(((const ViewElementList *)this)->findSingle(e));
     }
 
     /**
@@ -143,7 +143,7 @@ public:
     iterator findTime(timeT time);
 
     const_iterator findTime(timeT time) const {
-	return const_iterator(((const ViewElementList *)this)->findTime(time));
+        return const_iterator(((const ViewElementList *)this)->findTime(time));
     }
 
     /**
@@ -153,7 +153,7 @@ public:
     iterator findNearestTime(timeT time);
 
     const_iterator findNearestTime(timeT time) const {
-	return const_iterator(((const ViewElementList *)this)->findNearestTime(time));
+        return const_iterator(((const ViewElementList *)this)->findNearestTime(time));
     }
 };
 

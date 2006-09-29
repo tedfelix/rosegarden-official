@@ -56,8 +56,8 @@ class LoopRuler : public QWidget, public HZoomable
 public:
     LoopRuler(RulerScale *rulerScale,
               int height = 0,
-	      double xorigin = 0.0,
-	      bool invert = false,
+              double xorigin = 0.0,
+              bool invert = false,
               QWidget* parent = 0,
               const char *name = 0);
 
@@ -78,7 +78,7 @@ public:
     
 public slots:
     void slotSetLoopMarker(timeT startLoop,
-			   timeT endLoop);
+                           timeT endLoop);
 
 protected:
     // ActiveItem interface

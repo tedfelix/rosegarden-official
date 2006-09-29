@@ -47,18 +47,18 @@ class TimeDialog : public KDialogBase
 public:
     /// for absolute times
     TimeDialog(QWidget *parent, QString title, Composition *composition,
-	       timeT defaultTime);
+               timeT defaultTime);
 
     /// for durations
     TimeDialog(QWidget *parent, QString title, Composition *composition,
-	       timeT startTime, timeT defaultDuration);
+               timeT startTime, timeT defaultDuration);
 
     timeT getTime() const;
 
 protected:
     TimeWidget *m_timeWidget;
 };
-		     
+                     
 
 
 }

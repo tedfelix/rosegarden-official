@@ -42,7 +42,7 @@ class ModifyDefaultTempoCommand : public KNamedCommand
 public:
     ModifyDefaultTempoCommand(Composition *composition,
                               tempoT tempo):
-	KNamedCommand(getGlobalName()),
+        KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempo(tempo) {}
 

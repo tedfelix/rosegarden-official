@@ -75,16 +75,16 @@ public:
                                     QMouseEvent*);
 
     virtual void handleMouseDoubleClick(timeT,
-					int height,
-					int staffNo,
-					QMouseEvent*,
-					ViewElement*);
+                                        int height,
+                                        int staffNo,
+                                        QMouseEvent*,
+                                        ViewElement*);
 
     virtual void handleMouseTripleClick(timeT,
-					int height,
-					int staffNo,
-					QMouseEvent*,
-					ViewElement*);
+                                        int height,
+                                        int staffNo,
+                                        QMouseEvent*,
+                                        ViewElement*);
 
     /**
      * Create the selection rect
@@ -113,9 +113,9 @@ public:
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Event *event) {
-	if (m_clickedElement && m_clickedElement->event() == event) {
-	    m_clickedElement = 0;
-	}
+        if (m_clickedElement && m_clickedElement->event() == event) {
+            m_clickedElement = 0;
+        }
     }
 
     static const QString ToolName;

@@ -46,16 +46,16 @@ class Configuration : public PropertyMap, public XmlExportable
 public:
     class NoData : public Exception {
     public:
-	NoData(std::string property, std::string file, int line) :
-	    Exception("No data found for property " + property, file, line) { }
+        NoData(std::string property, std::string file, int line) :
+            Exception("No data found for property " + property, file, line) { }
     };
 
     class BadType : public Exception {
     public:
-	BadType(std::string property, std::string expected, std::string actual,
-		std::string file, int line) :
-	    Exception("Bad type for " + property + " (expected " +
-		      expected + ", found " + actual + ")", file, line) { }
+        BadType(std::string property, std::string expected, std::string actual,
+                std::string file, int line) :
+            Exception("Bad type for " + property + " (expected " +
+                      expected + ", found " + actual + ")", file, line) { }
     };
 
     Configuration() {;}
@@ -67,7 +67,7 @@ public:
     template <PropertyType P>
     void
     set(const PropertyName &name,
-	typename PropertyDefn<P>::basic_type value);
+        typename PropertyDefn<P>::basic_type value);
 
     /**
      * get() with a default value
@@ -75,7 +75,7 @@ public:
     template <PropertyType P>
     typename PropertyDefn<P>::basic_type
     get(const PropertyName &name,
-	typename PropertyDefn<P>::basic_type defaultVal) const;
+        typename PropertyDefn<P>::basic_type defaultVal) const;
 
     /**
      * regular get()
@@ -168,9 +168,9 @@ Configuration::get(const PropertyName &name,
     if (sb->getType() == P) {
         return (static_cast<PropertyStore<P> *>(sb))->getData();
     } else {
-	throw BadType(name.getName(),
-		      PropertyDefn<P>::typeName(), sb->getTypeName(),
-		      __FILE__, __LINE__);
+        throw BadType(name.getName(),
+                      PropertyDefn<P>::typeName(), sb->getTypeName(),
+                      __FILE__, __LINE__);
     }
 }
 
@@ -187,9 +187,9 @@ Configuration::get(const PropertyName &name) const
     if (sb->getType() == P) {
         return (static_cast<PropertyStore<P> *>(sb))->getData();
     } else {
-	throw BadType(name.getName(),
-		      PropertyDefn<P>::typeName(), sb->getTypeName(),
-		      __FILE__, __LINE__);
+        throw BadType(name.getName(),
+                      PropertyDefn<P>::typeName(), sb->getTypeName(),
+                      __FILE__, __LINE__);
     }
 }
 

@@ -50,9 +50,9 @@ class BarButtons : public QVBox
 public:
     BarButtons(RosegardenGUIDoc *doc,
                RulerScale *rulerScale,
-	       double xorigin,
+               double xorigin,
                int buttonHeight,
-	       bool invert = false, // draw upside-down
+               bool invert = false, // draw upside-down
                QWidget* parent = 0,
                const char* name = 0,
                WFlags f=0);

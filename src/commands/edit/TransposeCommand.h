@@ -43,17 +43,17 @@ class TransposeCommand : public BasicSelectionCommand
 {
 public:
     TransposeCommand(int semitones, EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(semitones), selection, true),
-	m_selection(&selection), m_semitones(semitones) { }
+        BasicSelectionCommand(getGlobalName(semitones), selection, true),
+        m_selection(&selection), m_semitones(semitones) { }
 
     static QString getGlobalName(int semitones = 0) {
-	switch (semitones) {
-	case   1: return i18n("&Up a Semitone");
-	case  -1: return i18n("&Down a Semitone");
-	case  12: return i18n("Up an &Octave");
-	case -12: return i18n("Down an Octa&ve");
-	default:  return i18n("&Transpose...");
-	}
+        switch (semitones) {
+        case   1: return i18n("&Up a Semitone");
+        case  -1: return i18n("&Down a Semitone");
+        case  12: return i18n("Up an &Octave");
+        case -12: return i18n("Down an Octa&ve");
+        default:  return i18n("&Transpose...");
+        }
     }
 
 protected:

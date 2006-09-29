@@ -43,13 +43,13 @@ class InvertCommand : public BasicSelectionCommand
 {
 public:
     InvertCommand(int semitones, EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(semitones), selection, true),
-	m_selection(&selection), m_semitones(semitones) { }
+        BasicSelectionCommand(getGlobalName(semitones), selection, true),
+        m_selection(&selection), m_semitones(semitones) { }
 
     static QString getGlobalName(int semitones = 0) {
-	switch (semitones) {
-	default:  return i18n("&Invert");
-	}
+        switch (semitones) {
+        default:  return i18n("&Invert");
+        }
     }
 
 protected:

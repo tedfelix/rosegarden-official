@@ -37,69 +37,69 @@ namespace Guitar
     {
     public:
 
-	//! Constructor
+        //! Constructor
         ChordName ();
 
-	//! Copy Constructor
+        //! Copy Constructor
         ChordName (ChordName const& ref);
 
-	//! Destructor
-	virtual ~ChordName ();
+        //! Destructor
+        virtual ~ChordName ();
 
-	//! Return list of alias names for this name
+        //! Return list of alias names for this name
         std::vector<ChordName*> const& getAliasList () const;
 
-	//! Create ChordName object from XML data
+        //! Create ChordName object from XML data
         void load (QDomNode const& nodePtr);
 
-	//! Create ChordName object as XML data
+        //! Create ChordName object as XML data
         void save (QDomNode& nodePtr, bool isAlias = false);
 
-	//! Add new alias for this name
+        //! Add new alias for this name
         void addAlias (ChordName* name);
 
-	//! Display chord name in GUI
+        //! Display chord name in GUI
         void write (QListBox*& major, QListBox*& modifier, QListBox*& suffix);
 
-	//! Set data for ChordName
+        //! Set data for ChordName
         void setName (QString scale, QString modifier, QString suffix, unsigned int version = 0);
 
-	//! Convert data to text string
-	std::string toString (void) const;
+        //! Convert data to text string
+        std::string toString (void) const;
 
-	//! Return the scale value for this chord name (e.g. C)
+        //! Return the scale value for this chord name (e.g. C)
         QString const& getScale (void) const;
 
-	//! Return the modifier value for this chord name (e.g. Major)
+        //! Return the modifier value for this chord name (e.g. Major)
         QString const& getModifier (void) const;
 
-	//! Return the suffix string for this chord (e.g. 2nd, 7(#5) )
+        //! Return the suffix string for this chord (e.g. 2nd, 7(#5) )
         QString const& getSuffix (void) const;
 
-	//! Return the version value for this chord (e.g. 1)
-	unsigned int const& getVersion (void) const;
+        //! Return the version value for this chord (e.g. 1)
+        unsigned int const& getVersion (void) const;
 
-	//! Set the version value for this chord
-	void setVersion (unsigned int value);
+        //! Set the version value for this chord
+        void setVersion (unsigned int value);
 
-	//! Return if the chord names match
-	bool operator== (ChordName const& rhs) const;
+        //! Return if the chord names match
+        bool operator== (ChordName const& rhs) const;
 
     private:
 
-	//! Chord - (e.g. C)
+        //! Chord - (e.g. C)
         QString m_scale;
 
-	//! Chord modifier - (e.g. Major)
+        //! Chord modifier - (e.g. Major)
         QString m_modifier;
 
-	//! Chord suffix - (e.g. 2nd)
+        //! Chord suffix - (e.g. 2nd)
         QString m_suffix;
 
-	//! Chord Version
-	unsigned int m_version;
+        //! Chord Version
+        unsigned int m_version;
 
-	//! List of alias names for chord
+        //! List of alias names for chord
         std::vector<ChordName*> m_aliases;
     };
 

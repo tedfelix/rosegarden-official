@@ -50,49 +50,49 @@ public:
     ~SequencerMapper();
 
     RealTime getPositionPointer() const {
-	return m_sequencerDataBlock->getPositionPointer();
+        return m_sequencerDataBlock->getPositionPointer();
     }
 
     bool getVisual(MappedEvent &ev) const {
-	return m_sequencerDataBlock->getVisual(ev);
+        return m_sequencerDataBlock->getVisual(ev);
     }
 
     int getRecordedEvents(MappedComposition &mC) const {
-	return m_sequencerDataBlock->getRecordedEvents(mC);
+        return m_sequencerDataBlock->getRecordedEvents(mC);
     }
 
     bool getTrackLevel(TrackId track,
-		       LevelInfo &info) const {
-	return m_sequencerDataBlock->getTrackLevel(track, info);
+                       LevelInfo &info) const {
+        return m_sequencerDataBlock->getTrackLevel(track, info);
     }
 
     bool getInstrumentLevel(InstrumentId id,
-			    LevelInfo &info) const {
-	return m_sequencerDataBlock->getInstrumentLevel(id, info);
+                            LevelInfo &info) const {
+        return m_sequencerDataBlock->getInstrumentLevel(id, info);
     }
 
     bool getInstrumentLevelForMixer(InstrumentId id,
-			    LevelInfo &info) const {
-	return m_sequencerDataBlock->getInstrumentLevelForMixer(id, info);
+                            LevelInfo &info) const {
+        return m_sequencerDataBlock->getInstrumentLevelForMixer(id, info);
     }
 
     bool getInstrumentRecordLevel(InstrumentId id,
-				  LevelInfo &info) const {
-	return m_sequencerDataBlock->getInstrumentRecordLevel(id, info);
+                                  LevelInfo &info) const {
+        return m_sequencerDataBlock->getInstrumentRecordLevel(id, info);
     }
 
     bool getInstrumentRecordLevelForMixer(InstrumentId id,
-					  LevelInfo &info) const {
-	return m_sequencerDataBlock->getInstrumentRecordLevelForMixer(id, info);
+                                          LevelInfo &info) const {
+        return m_sequencerDataBlock->getInstrumentRecordLevelForMixer(id, info);
     }
 
     bool getSubmasterLevel(int submaster,
-			   LevelInfo &info) const {
-	return m_sequencerDataBlock->getSubmasterLevel(submaster, info);
+                           LevelInfo &info) const {
+        return m_sequencerDataBlock->getSubmasterLevel(submaster, info);
     }
 
     bool getMasterLevel(LevelInfo &info) const {
-	return m_sequencerDataBlock->getMasterLevel(info);
+        return m_sequencerDataBlock->getMasterLevel(info);
     }
 
 protected:

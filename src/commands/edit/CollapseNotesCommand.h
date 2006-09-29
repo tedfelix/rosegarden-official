@@ -44,8 +44,8 @@ class CollapseNotesCommand : public BasicSelectionCommand
 {
 public:
     CollapseNotesCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("Collapse &Equal-Pitch Notes"); }
 

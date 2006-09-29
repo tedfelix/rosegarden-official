@@ -49,7 +49,7 @@ class MidiFaderWidget : public QFrame
 
 public:
     MidiFaderWidget(QWidget *parent,
-		    QString id = "");
+                    QString id = "");
     
     AudioVUMeter              *m_vuMeter;
 

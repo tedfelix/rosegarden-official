@@ -137,11 +137,11 @@ private:
     bool           m_armed;
 
     // default parameters for new segments created belonging to this track
-    int		   m_clef;
-    int		   m_transpose;
-    int		   m_color;
-    int		   m_highestPlayable;
-    int		   m_lowestPlayable;
+    int            m_clef;
+    int            m_transpose;
+    int            m_color;
+    int            m_highestPlayable;
+    int            m_lowestPlayable;
 };
 
 }

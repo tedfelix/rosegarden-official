@@ -44,11 +44,11 @@ class ChangeSlurPositionCommand : public BasicSelectionCommand
 {
 public:
     ChangeSlurPositionCommand(bool above, EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(above), selection, true),
-	m_selection(&selection), m_above(above) { }
+        BasicSelectionCommand(getGlobalName(above), selection, true),
+        m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-	return above ? i18n("Slur &Above") : i18n("Slur &Below");
+        return above ? i18n("Slur &Above") : i18n("Slur &Below");
     }
 
 protected:

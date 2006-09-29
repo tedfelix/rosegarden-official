@@ -41,24 +41,24 @@ class NotationProperties;
 
 
 class NotationChord : public GenericChord<NotationElement,
-		                                      NotationElementList,
-		                                      true>
+                                                      NotationElementList,
+                                                      true>
 {
 public:
     NotationChord(NotationElementList &c,
-		  NotationElementList::iterator i,
-		  const Quantizer *quantizer,
-		  const NotationProperties &properties,
-		  const Clef &clef = Clef::DefaultClef,
-		  const Key &key = Key::DefaultKey);
+                  NotationElementList::iterator i,
+                  const Quantizer *quantizer,
+                  const NotationProperties &properties,
+                  const Clef &clef = Clef::DefaultClef,
+                  const Key &key = Key::DefaultKey);
 
     virtual ~NotationChord() { }
 
     virtual int getHighestNoteHeight() const {
-	return getHeight(getHighestNote());
+        return getHeight(getHighestNote());
     }
     virtual int getLowestNoteHeight() const {
-	return getHeight(getLowestNote());
+        return getHeight(getLowestNote());
     }
 
     virtual bool hasStem() const;
@@ -66,13 +66,13 @@ public:
 
     virtual bool hasNoteHeadShifted() const;
     virtual bool isNoteHeadShifted(const NotationElementList::iterator &itr)
-	const;
+        const;
 
     void applyAccidentalShiftProperties();
 
     virtual int getMaxAccidentalShift(bool &extra) const;
     virtual int getAccidentalShift(const NotationElementList::iterator &itr,
-				   bool &extra) const;
+                                   bool &extra) const;
 
 protected:
     const NotationProperties &m_properties;

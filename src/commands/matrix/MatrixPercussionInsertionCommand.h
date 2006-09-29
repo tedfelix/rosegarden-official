@@ -43,8 +43,8 @@ class MatrixPercussionInsertionCommand : public BasicCommand
 {
 public:
     MatrixPercussionInsertionCommand(Segment &segment,
-				     timeT time,
-				     Event *event);
+                                     timeT time,
+                                     Event *event);
 
     virtual ~MatrixPercussionInsertionCommand();
 
@@ -54,11 +54,11 @@ protected:
     virtual void modifySegment();
 
     timeT getEffectiveStartTime(Segment &segment,
-					    timeT startTime,
-					    Event &event);
+                                            timeT startTime,
+                                            Event &event);
     timeT getEndTime(Segment &segment,
-				 timeT endTime,
-				 Event &event);
+                                 timeT endTime,
+                                 Event &event);
 
     Event *m_event;
     timeT m_time;

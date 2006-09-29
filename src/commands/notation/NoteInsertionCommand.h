@@ -44,14 +44,14 @@ class NoteInsertionCommand : public BasicCommand
 {
 public:
     NoteInsertionCommand(Segment &segment,
-			 timeT time,
-			 timeT endTime,
-			 Note note,
-			 int pitch,
-			 Accidental accidental,
-			 bool autoBeam,
-			 bool matrixType,
-			 NoteStyleName noteStyle);
+                         timeT time,
+                         timeT endTime,
+                         Note note,
+                         int pitch,
+                         Accidental accidental,
+                         bool autoBeam,
+                         bool matrixType,
+                         NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
@@ -60,7 +60,7 @@ protected:
     virtual void modifySegment();
 
     timeT getModificationStartTime(Segment &,
-					       timeT);
+                                               timeT);
 
     timeT m_insertionTime;
     Note m_note;

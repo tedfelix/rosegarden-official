@@ -25,18 +25,18 @@
 
 // used variously by TPB, SPB, PresetHandler to correlate combo box indices to
 // clef types
-enum { TrebleClef,			// G clef, line 2
-       BassClef,			// F clef, line 4
-       CrotalesClef,			// G clef, line 2, 15 above
-       XylophoneClef,			// G clef, line 2,  8 above
-       GuitarClef,			// G clef, line 2,  8 below
-       ContrabassClef, 			// F clef, line 4,  8 below
-       CelestaClef,			// F clef, line 4, 15 above
-       OldCelestaClef,			// F clef, line 4,  8 above
-       SopranoClef,			// C clef, line 1            
-       AltoClef,			// C clef, line 3
-       TenorClef,			// C clef, line 4
-       TwoBarClef			// percussion clef  //!!! doesn't exist yet!
+enum { TrebleClef,                      // G clef, line 2
+       BassClef,                        // F clef, line 4
+       CrotalesClef,                    // G clef, line 2, 15 above
+       XylophoneClef,                   // G clef, line 2,  8 above
+       GuitarClef,                      // G clef, line 2,  8 below
+       ContrabassClef,                  // F clef, line 4,  8 below
+       CelestaClef,                     // F clef, line 4, 15 above
+       OldCelestaClef,                  // F clef, line 4,  8 above
+       SopranoClef,                     // C clef, line 1            
+       AltoClef,                        // C clef, line 3
+       TenorClef,                       // C clef, line 4
+       TwoBarClef                       // percussion clef  //!!! doesn't exist yet!
      };
 
 #endif // _CLEF_INDEX_H_

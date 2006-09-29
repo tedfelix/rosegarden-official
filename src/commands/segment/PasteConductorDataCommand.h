@@ -47,8 +47,8 @@ class PasteConductorDataCommand : public KNamedCommand
 {
 public:
     PasteConductorDataCommand(Composition *composition,
-			      Clipboard *clipboard,
-			      timeT t);
+                              Clipboard *clipboard,
+                              timeT t);
     virtual ~PasteConductorDataCommand();
 
     virtual void execute();

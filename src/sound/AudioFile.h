@@ -138,8 +138,8 @@ public:
     // results in buf, return actual number of frames read.
     //
     virtual unsigned int getSampleFrames(std::ifstream *file,
-					 char *buf,
-					 unsigned int frames) = 0;
+                                         char *buf,
+                                         unsigned int frames) = 0;
 
     // Return a number of (possibly) interleaved samples
     // over a time slice from current file pointer position.
@@ -183,12 +183,12 @@ public:
     // success.  This function does crappy resampling if necessary.
     // 
     virtual bool decode(const unsigned char *sourceData,
-			size_t sourceBytes,
-			size_t targetSampleRate,
-			size_t targetChannels,
-			size_t targetFrames,
-			std::vector<float *> &targetData,
-			bool addToResultBuffers = false) = 0;
+                        size_t sourceBytes,
+                        size_t targetSampleRate,
+                        size_t targetChannels,
+                        size_t targetFrames,
+                        std::vector<float *> &targetData,
+                        bool addToResultBuffers = false) = 0;
 
 protected:
 

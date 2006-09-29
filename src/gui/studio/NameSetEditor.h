@@ -63,11 +63,11 @@ public slots:
 
 protected:
     NameSetEditor(BankEditorDialog *bankEditor,
-		  QString title,
-		  QWidget *parent,
-		  const char *name,
-		  QString headingPrefix = "",
-		  bool showEntryButtons = false);
+                  QString title,
+                  QWidget *parent,
+                  const char *name,
+                  QString headingPrefix = "",
+                  bool showEntryButtons = false);
 
     QPushButton *getEntryButton(int n) { return m_entryButtons[n]; }
     const QPushButton *getEntryButton(int n) const { return m_entryButtons[n]; }

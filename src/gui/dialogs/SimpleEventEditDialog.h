@@ -54,8 +54,8 @@ class SimpleEventEditDialog : public KDialogBase
 public:
     SimpleEventEditDialog(QWidget *parent,
                           RosegardenGUIDoc *doc,
-		          const Event &event,
-		          bool inserting = false); // inserting or editing
+                          const Event &event,
+                          bool inserting = false); // inserting or editing
 
     bool isModified() const { return m_modified; }
     Event getEvent();

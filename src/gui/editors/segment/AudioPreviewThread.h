@@ -53,18 +53,18 @@ public:
     virtual void finish();
     
     struct Request {
-	int audioFileId;
-	RealTime audioStartTime;
-	RealTime audioEndTime;
-	int width;
-	bool showMinima;
-	QObject *notify;
+        int audioFileId;
+        RealTime audioStartTime;
+        RealTime audioEndTime;
+        int width;
+        bool showMinima;
+        QObject *notify;
     };
 
     virtual int requestPreview(const Request &request);
     virtual void cancelPreview(int token);
     virtual void getPreview(int token, unsigned int &channels,
-			    std::vector<float> &values);
+                            std::vector<float> &values);
 
     void setEmptyQueueListener(QObject* o) { m_emptyQueueListener = o; }
 

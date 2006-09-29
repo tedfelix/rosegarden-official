@@ -62,12 +62,12 @@ public:
     // success.  This function does crappy resampling if necessary.
     // 
     virtual bool decode(const unsigned char *sourceData,
-			size_t sourceBytes,
-			size_t targetSampleRate,
-			size_t targetChannels,
-			size_t targetFrames,
-			std::vector<float *> &targetData,
-			bool addToResultBuffers = false);
+                        size_t sourceBytes,
+                        size_t targetSampleRate,
+                        size_t targetChannels,
+                        size_t targetFrames,
+                        std::vector<float *> &targetData,
+                        bool addToResultBuffers = false);
 
     // Get all header information
     //

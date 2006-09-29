@@ -50,7 +50,7 @@ public:
 
     /// for removing audio segment when removing an audio file
     SegmentEraseCommand(Segment *segment,
-			AudioFileManager *mgr);
+                        AudioFileManager *mgr);
     virtual ~SegmentEraseCommand();
 
     virtual void execute();

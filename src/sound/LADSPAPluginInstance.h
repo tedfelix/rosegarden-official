@@ -76,24 +76,24 @@ protected:
     // Constructor that creates the buffers internally
     // 
     LADSPAPluginInstance(PluginFactory *factory,
-			 InstrumentId instrument,
-			 QString identifier,
+                         InstrumentId instrument,
+                         QString identifier,
                          int position,
-			 unsigned long sampleRate,
-			 size_t blockSize,
-			 int idealChannelCount,
+                         unsigned long sampleRate,
+                         size_t blockSize,
+                         int idealChannelCount,
                          const LADSPA_Descriptor* descriptor);
 
     // Constructor that uses shared buffers
     // 
     LADSPAPluginInstance(PluginFactory *factory,
-			 InstrumentId instrument,
-			 QString identifier,
+                         InstrumentId instrument,
+                         QString identifier,
                          int position,
-			 unsigned long sampleRate,
-			 size_t blockSize,
-			 sample_t **inputBuffers,
-			 sample_t **outputBuffers,
+                         unsigned long sampleRate,
+                         size_t blockSize,
+                         sample_t **inputBuffers,
+                         sample_t **outputBuffers,
                          const LADSPA_Descriptor* descriptor);
 
     void init(int idealChannelCount = 0);

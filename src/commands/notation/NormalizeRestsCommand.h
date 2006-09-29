@@ -45,9 +45,9 @@ class NormalizeRestsCommand : public BasicCommand
 {
 public:
     NormalizeRestsCommand(Segment &s,
-					timeT startTime,
-					timeT endTime) :
-	BasicCommand(getGlobalName(), s, startTime, endTime) { }
+                                        timeT startTime,
+                                        timeT endTime) :
+        BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
     NormalizeRestsCommand(EventSelection &selection);
 

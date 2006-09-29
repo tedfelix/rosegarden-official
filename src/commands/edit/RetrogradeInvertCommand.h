@@ -43,13 +43,13 @@ class RetrogradeInvertCommand : public BasicSelectionCommand
 {
 public:
     RetrogradeInvertCommand(int semitones, EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(semitones), selection, true),
-	m_selection(&selection), m_semitones(semitones) { }
+        BasicSelectionCommand(getGlobalName(semitones), selection, true),
+        m_selection(&selection), m_semitones(semitones) { }
 
     static QString getGlobalName(int semitones = 0) {
-	switch (semitones) {
-	default:  return i18n("Re&trograde Invert");
-	}
+        switch (semitones) {
+        default:  return i18n("Re&trograde Invert");
+        }
     }
 
 protected:

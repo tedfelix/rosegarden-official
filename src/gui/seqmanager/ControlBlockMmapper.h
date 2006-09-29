@@ -56,7 +56,7 @@ public:
     void updateMetronomeForRecord();
     bool updateSoloData(bool solo, TrackId selectedTrack);
     void updateMidiFilters(MidiFilter thruFilter,
-			   MidiFilter recordFilter);
+                           MidiFilter recordFilter);
     void setDocument(RosegardenGUIDoc*);
     void enableMIDIThruRouting(bool state);
 

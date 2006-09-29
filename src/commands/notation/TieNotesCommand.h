@@ -43,8 +43,8 @@ class TieNotesCommand : public BasicSelectionCommand
 {
 public:
     TieNotesCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("&Tie"); }
 

@@ -47,9 +47,9 @@ public:
                         const std::string &name,
                         int client,
                         int port,
-			unsigned int clientType,
-			unsigned int portType,
-			unsigned int capability,
+                        unsigned int clientType,
+                        unsigned int portType,
+                        unsigned int capability,
                         PortDirection direction);
 
     Instrument::InstrumentType m_type;
@@ -62,10 +62,10 @@ public:
     PortDirection              m_direction; // or can deduce from capability
 
     bool isReadable()  { return m_direction == ReadOnly ||
-			        m_direction == Duplex; }
+                                m_direction == Duplex; }
 
     bool isWriteable() { return m_direction == WriteOnly ||
-			        m_direction == Duplex; }
+                                m_direction == Duplex; }
 
 };
 

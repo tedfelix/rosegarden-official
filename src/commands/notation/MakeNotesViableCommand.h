@@ -45,12 +45,12 @@ class MakeNotesViableCommand : public BasicSelectionCommand
 {
 public:
     MakeNotesViableCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     MakeNotesViableCommand(Segment &segment) :
-	BasicSelectionCommand(getGlobalName(), segment, true),
-	m_selection(0) { }
+        BasicSelectionCommand(getGlobalName(), segment, true),
+        m_selection(0) { }
 
     static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
 

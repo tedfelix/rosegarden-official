@@ -84,8 +84,8 @@ public:
     virtual std::string getSampleFrames(std::ifstream *file,
                                         unsigned int frames);
     virtual unsigned int getSampleFrames(std::ifstream *file,
-					 char *buf,
-					 unsigned int frames);
+                                         char *buf,
+                                         unsigned int frames);
     virtual std::string getSampleFrames(unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
@@ -111,12 +111,12 @@ public:
     //!!! NOT IMPLEMENTED YET
     // 
     virtual bool decode(const unsigned char *sourceData,
-			size_t sourceBytes,
-			size_t targetSampleRate,
-			size_t targetChannels,
-			size_t targetFrames,
-			std::vector<float *> &targetData,
-			bool addToResultBuffers = false) { return false; }
+                        size_t sourceBytes,
+                        size_t targetSampleRate,
+                        size_t targetChannels,
+                        size_t targetFrames,
+                        std::vector<float *> &targetData,
+                        bool addToResultBuffers = false) { return false; }
 
 };
 

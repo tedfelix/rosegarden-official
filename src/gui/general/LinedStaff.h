@@ -70,19 +70,19 @@ public:
     typedef std::pair<double, int> LinedStaffCoords;
 
     enum PageMode {
-	LinearMode = 0,
-	ContinuousPageMode,
-	MultiPageMode
+        LinearMode = 0,
+        ContinuousPageMode,
+        MultiPageMode
     };
 
     enum BarStyle {
-	PlainBar = 0,
-	DoubleBar,
-	HeavyDoubleBar,
-	RepeatEndBar,
-	RepeatStartBar,
-	RepeatBothBar,
-	NoVisibleBar
+        PlainBar = 0,
+        DoubleBar,
+        HeavyDoubleBar,
+        RepeatEndBar,
+        RepeatStartBar,
+        RepeatBothBar,
+        NoVisibleBar
     };
 
 protected:
@@ -128,7 +128,7 @@ protected:
      */
     LinedStaff(QCanvas *, Segment *, SnapGrid *,
                int id, int resolution, int lineThickness,
-	       double pageWidth, int rowsPerPage, int rowSpacing);
+               double pageWidth, int rowsPerPage, int rowSpacing);
 
     /**
      * Create a new LinedStaff for the given Segment, with
@@ -136,7 +136,7 @@ protected:
      */
     LinedStaff(QCanvas *, Segment *, SnapGrid *,
                int id, int resolution, int lineThickness, PageMode pageMode,
-	       double pageWidth, int rowsPerPage, int rowSpacing);
+               double pageWidth, int rowsPerPage, int rowSpacing);
 
 public:
     virtual ~LinedStaff();
@@ -174,8 +174,8 @@ protected:
      * staff line.  This is deliberately not virtual.
      */
     int getTopLineHeight() const {
-	return getBottomLineHeight() +
-	    (getLineCount() - 1) * getHeightPerLine();
+        return getBottomLineHeight() +
+            (getLineCount() - 1) * getHeightPerLine();
     }
 
     /**
@@ -184,7 +184,7 @@ protected:
      * will be displaced vertically by half a line spacing.
      */
     virtual bool elementsInSpaces() const {
-	return false;
+        return false;
     }
 
     /**
@@ -192,7 +192,7 @@ protected:
      * each beat, in between the (darker) bar lines.
      */
     virtual bool showBeatLines() const {
-	return false;
+        return false;
     }
 
     /**
@@ -202,14 +202,14 @@ protected:
      * numbered.
      */
     virtual int showBarNumbersEvery() const {
-	return 0;
+        return 0;
     }
 
     /**
      * Returns the bar line / repeat style for the start of the given bar.
      */
     virtual BarStyle getBarStyle(int /* barNo */) const {
-	return PlainBar;
+        return PlainBar;
     }
 
     /**
@@ -218,7 +218,7 @@ protected:
      * where a repeat bar has to appear after the clef and key.
      */
     virtual double getBarInset(int /* barNo */, bool /* isFirstBarInRow */) const {
-	return 0;
+        return 0;
     }
 
 protected:
@@ -324,8 +324,8 @@ public:
      * Returns the total number of pages used by the staff.
      */
     int getPageCount() const {
-	if (m_pageMode != MultiPageMode) return 1;
-	else return 1 + (getRowForLayoutX(m_endLayoutX) / getRowsPerPage());
+        if (m_pageMode != MultiPageMode) return 1;
+        else return 1 + (getRowForLayoutX(m_endLayoutX) / getRowsPerPage());
     }
 
     /**
@@ -333,7 +333,7 @@ public:
      * neighbouring visible staff lines.  Deliberately non-virtual
      */
     int getLineSpacing() const {
-	return m_resolution + m_lineThickness;
+        return m_resolution + m_lineThickness;
     }
 
     /**
@@ -474,7 +474,7 @@ public:
      * because this method may be called less often.
      */
     virtual void renderElements(ViewElementList::iterator from,
-				ViewElementList::iterator to);
+                                ViewElementList::iterator to);
 
     /**
      * Call renderElements(from, to) on the whole staff.
@@ -491,7 +491,7 @@ public:
      * chooses in this method as well.
      */
     virtual void positionElements(timeT from,
-				  timeT to) = 0;
+                                  timeT to) = 0;
  
     /**
      * Call positionElements(from, to) on the whole staff.
@@ -522,10 +522,10 @@ public:
     (double x, int y, 
      Event *&clef, Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) {
-	LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
-	return getClosestElementToLayoutX
-	    (layoutCoords.first, clef, key,
-	     notesAndRestsOnly, proximityThreshold);
+        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+        return getClosestElementToLayoutX
+            (layoutCoords.first, clef, key,
+             notesAndRestsOnly, proximityThreshold);
     }
 
     /**
@@ -548,7 +548,7 @@ public:
     (double x,
      Event *&clef, Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) {
-	return getViewElementList()->end();
+        return getViewElementList()->end();
     }
 
     /**
@@ -565,8 +565,8 @@ public:
      */
     virtual ViewElementList::iterator getElementUnderCanvasCoords
     (double x, int y, Event *&clef, Event *&key) {
-	LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
-	return getElementUnderLayoutX(layoutCoords.first, clef, key);
+        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+        return getElementUnderLayoutX(layoutCoords.first, clef, key);
     }
 
     /**
@@ -582,7 +582,7 @@ public:
      */
     virtual ViewElementList::iterator getElementUnderLayoutX
     (double x, Event *&clef, Event *&key) {
-	return getViewElementList()->end();
+        return getViewElementList()->end();
     }
 
     // The default implementation of the following is empty.  The
@@ -635,15 +635,15 @@ protected:
     // canvas lines rather than a smaller number of very long ones.)
 
     int getTopLineOffset() const {
-	return getLineSpacing() * getLegerLineCount();
+        return getLineSpacing() * getLegerLineCount();
     }
 
     int getBarLineHeight() const {
-	return getLineSpacing() * (getLineCount() - 1) + m_lineThickness;
+        return getLineSpacing() * (getLineCount() - 1) + m_lineThickness;
     }
 
     int getRowForLayoutX(double x) const {
-	return (int)(x / m_pageWidth);
+        return (int)(x / m_pageWidth);
     }
 
     int getRowForCanvasCoords(double x, int y) const;
@@ -651,25 +651,25 @@ protected:
     int getCanvasYForTopOfStaff(int row = -1) const;
 
     int getCanvasYForTopLine(int row = -1) const {
-	return getCanvasYForTopOfStaff(row) + getTopLineOffset();
+        return getCanvasYForTopOfStaff(row) + getTopLineOffset();
     }
 
     double getCanvasXForLeftOfRow(int row) const;
 
     double getCanvasXForRightOfRow(int row) const {
-	return getCanvasXForLeftOfRow(row) + m_pageWidth;
+        return getCanvasXForLeftOfRow(row) + m_pageWidth;
     }
 
     LinedStaffCoords
     getCanvasOffsetsForLayoutCoords(double x, int y) const {
-	LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
-	return LinedStaffCoords(cc.first - x, cc.second - y);
+        LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
+        return LinedStaffCoords(cc.first - x, cc.second - y);
     }
 
     double getCanvasXForLayoutX(double x) const;
 
     int getRowsPerPage() const {
-	return m_rowsPerPage;
+        return m_rowsPerPage;
     }
 
 protected:
@@ -688,13 +688,13 @@ protected:
 
     virtual void deleteBars();
     virtual void insertBar(double layoutX, double width, bool isCorrect,
-			   const TimeSignature &,
-			   int barNo, bool showBarNo);
+                           const TimeSignature &,
+                           int barNo, bool showBarNo);
 
     // The default implementations of the following two are empty.
     virtual void deleteTimeSignatures();
     virtual void insertTimeSignature(double layoutX,
-				     const TimeSignature &);
+                                     const TimeSignature &);
 
     // The default implementations of the following two are empty.
     virtual void deleteRepeatedClefsAndKeys();
@@ -709,20 +709,20 @@ protected:
     QCanvas *m_canvas;
     SnapGrid *m_snapGrid;
 
-    int	     m_id;
+    int      m_id;
 
     double   m_x;
-    int	     m_y;
+    int      m_y;
     double   m_margin;
     int      m_titleHeight;
-    int	     m_resolution;
-    int	     m_lineThickness;
+    int      m_resolution;
+    int      m_lineThickness;
     
     PageMode m_pageMode;
     double   m_pageWidth;
     int      m_rowsPerPage;
-    int	     m_rowSpacing;
-    int	     m_connectingLineLength;
+    int      m_rowSpacing;
+    int      m_connectingLineLength;
 
     double   m_startLayoutX;
     double   m_endLayoutX;

@@ -42,9 +42,9 @@ class AddSlashesCommand : public BasicSelectionCommand
 {
 public:
     AddSlashesCommand(int number,
-			       EventSelection &selection) :
-	BasicSelectionCommand(i18n("Slashes"), selection, true),
-	m_selection(&selection), m_number(number) { }
+                               EventSelection &selection) :
+        BasicSelectionCommand(i18n("Slashes"), selection, true),
+        m_selection(&selection), m_number(number) { }
 
 protected:
     virtual void modifySegment();

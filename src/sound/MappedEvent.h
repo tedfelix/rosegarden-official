@@ -138,10 +138,10 @@ public:
         SystemMetronomeDevice    = 1 << 18,
         // Set Audio inputs/outputs: data1 num inputs, data2 num submasters
         SystemAudioPortCounts    = 1 << 19,
-	// Set whether we create various Audio ports (data1 is an AudioOutMask)
-	SystemAudioPorts         = 1 << 20,
-	// Some failure has occurred: data1 contains FailureCode
-	SystemFailure            = 1 << 21,
+        // Set whether we create various Audio ports (data1 is an AudioOutMask)
+        SystemAudioPorts         = 1 << 20,
+        // Some failure has occurred: data1 contains FailureCode
+        SystemFailure            = 1 << 21,
 
         // Time sig. event (from time sig. composition reference segment)
         TimeSignature            = 1 << 22,
@@ -149,30 +149,30 @@ public:
         Tempo                    = 1 << 23,
         
         // Panic function
-        Panic			 = 1 << 24,
+        Panic                    = 1 << 24,
 
         // Set RG as MTC master/slave
         SystemMTCTransport       = 1 << 25,
         // Auto-connect sync outputs
         SystemMIDISyncAuto       = 1 << 26,
-	// File format used for audio recording (data1 is 0=PCM,1=float)
-	SystemAudioFileFormat    = 1 << 27
+        // File format used for audio recording (data1 is 0=PCM,1=float)
+        SystemAudioFileFormat    = 1 << 27
 
     } MappedEventType;
 
     typedef enum
     {
-	// These values are OR'd to produce the data2 field in a
-	// SystemAudioPorts event.
-	FaderOuts                = 1 << 0,
-	SubmasterOuts            = 1 << 1
+        // These values are OR'd to produce the data2 field in a
+        // SystemAudioPorts event.
+        FaderOuts                = 1 << 0,
+        SubmasterOuts            = 1 << 1
 
     } MappedEventAudioOutMask;
 
     typedef enum
     {
         // JACK is having some xruns - warn the user maybe
-	FailureXRuns             = 0,
+        FailureXRuns             = 0,
         // JACK has died or kicked us out
         FailureJackDied          = 1,
         // Audio subsystem failed to read from disc fast enough
@@ -183,17 +183,17 @@ public:
         FailureBussMixUnderrun   = 4,
         // Audio subsystem failed to mix instruments fast enough
         FailureMixUnderrun       = 5,
-	// Using a timer that has too low a resolution (e.g. 100Hz system timer)
-	WarningImpreciseTimer    = 6,
-	// Too much CPU time spent in audio processing -- risk of xruns and lockup
-	FailureCPUOverload       = 7,
+        // Using a timer that has too low a resolution (e.g. 100Hz system timer)
+        WarningImpreciseTimer    = 6,
+        // Too much CPU time spent in audio processing -- risk of xruns and lockup
+        FailureCPUOverload       = 7,
         // JACK kicked us out, but we've reconnected
         FailureJackRestart       = 8,
         // JACK kicked us out, and now the reconnection has failed
         FailureJackRestartFailed = 9,
-	// A necessary ALSA call has returned an error code
-	FailureALSACallFailed    = 10,
-    } FailureCode;	
+        // A necessary ALSA call has returned an error code
+        FailureALSACallFailed    = 10,
+    } FailureCode;      
 
     MappedEvent(): m_trackId(0),
                    m_instrument(0),
@@ -381,7 +381,7 @@ public:
 
     // Construct perhaps without initialising, for placement new or equivalent
     MappedEvent(bool initialise) {
-	if (initialise) *this = MappedEvent();
+        if (initialise) *this = MappedEvent();
     }
 
     // Event time
@@ -493,8 +493,8 @@ public:
     //
     unsigned int getRecordedChannel() const { return m_recordedChannel; }
     void setRecordedChannel(const unsigned int channel) 
-	    { m_recordedChannel = channel; }
-	    
+            { m_recordedChannel = channel; }
+            
     // Original event record device as it was recorded
     //
     unsigned int getRecordedDevice() const { return m_recordedDevice; }
@@ -534,8 +534,8 @@ private:
     // input event original data,
     // stored as it was recorded
     //
-    unsigned int	  m_recordedChannel;
-    unsigned int	  m_recordedDevice;
+    unsigned int          m_recordedChannel;
+    unsigned int          m_recordedDevice;
 };
 
 

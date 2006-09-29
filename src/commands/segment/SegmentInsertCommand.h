@@ -50,8 +50,8 @@ public:
                          timeT startTime,
                          timeT endTime);
     SegmentInsertCommand(Composition *composition,
-			 Segment *segment,
-			 TrackId track);
+                         Segment *segment,
+                         TrackId track);
     virtual ~SegmentInsertCommand();
 
     Segment *getSegment() const; // after invocation

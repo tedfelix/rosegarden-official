@@ -96,8 +96,8 @@ public:
      * the relevant segments.
      */
     virtual void refreshSegment(Segment *segment,
-				timeT startTime = 0,
-				timeT endTime = 0) = 0;
+                                timeT startTime = 0,
+                                timeT endTime = 0) = 0;
 
     /**
      * Get the document's global command history
@@ -127,7 +127,7 @@ public:
      * by deleting them from the events when the view closes.
      */
     std::string getViewLocalPropertyPrefix() {
-	return m_viewLocalPropertyPrefix;
+        return m_viewLocalPropertyPrefix;
     }
 
     /*

@@ -63,7 +63,7 @@ public:
     AudioPluginDialog(QWidget *parent,
                       AudioPluginManager *aPM,
 #ifdef HAVE_LIBLO
-		      AudioPluginOSCGUIManager *aGM,
+                      AudioPluginOSCGUIManager *aGM,
 #endif
                       PluginContainer *instrument,
                       int index);
@@ -100,7 +100,7 @@ signals:
     void pluginPortChanged(InstrumentId, int pluginIndex, int portIndex);
     void pluginProgramChanged(InstrumentId, int pluginIndex);
     void changePluginConfiguration(InstrumentId, int pluginIndex,
-				   bool global, QString key, QString value);
+                                   bool global, QString key, QString value);
     void showPluginGUI(InstrumentId, int pluginIndex);
     void stopPluginGUI(InstrumentId, int pluginIndex);
 
@@ -129,7 +129,7 @@ protected:
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;
 
-    QFrame		*m_pluginParamsBox;
+    QFrame              *m_pluginParamsBox;
     QWidget             *m_pluginCategoryBox;
     KComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;
@@ -137,7 +137,7 @@ protected:
     std::vector<int>     m_pluginsInList;
     QLabel              *m_insOuts;
     QLabel              *m_pluginId;
-    QCheckBox		*m_bypass;
+    QCheckBox           *m_bypass;
     QPushButton         *m_copyButton;
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;

@@ -46,7 +46,7 @@ class MarkerModifyDialog : public KDialogBase
     Q_OBJECT
 public:
     MarkerModifyDialog(QWidget *parent,
-		       Composition *composition,
+                       Composition *composition,
                        int time,
                        const QString &name,
                        const QString &des);

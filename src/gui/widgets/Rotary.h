@@ -48,11 +48,11 @@ class Rotary : public QWidget
 public:
 
     enum TickMode {
-	NoTicks,        // plain circle with no marks for end points etc
-	LimitTicks,     // marks at end points but not any intermediate points
-	IntervalTicks,  // end points plus quarter, half, three-quarters
-	PageStepTicks,  // end points plus every page-step interval
-	StepTicks       // end points plus every step interval
+        NoTicks,        // plain circle with no marks for end points etc
+        LimitTicks,     // marks at end points but not any intermediate points
+        IntervalTicks,  // end points plus quarter, half, three-quarters
+        PageStepTicks,  // end points plus every page-step interval
+        StepTicks       // end points plus every step interval
     };
 
     Rotary(QWidget *parent,
@@ -62,9 +62,9 @@ public:
                      float pageStep = 10.0,
                      float initialPosition = 50.0,
                      int size = 20,
-		     TickMode ticks = NoTicks,
-		     bool snapToTicks = false,
-		     bool centred = false);
+                     TickMode ticks = NoTicks,
+                     bool snapToTicks = false,
+                     bool centred = false);
     ~Rotary();
 
     void setMinValue(float min) { m_minValue = min; }
@@ -129,29 +129,29 @@ protected:
 
     struct CacheIndex {
 
-	CacheIndex(int _s, int _c, int _a, int _n, int _ct) :
-	    size(_s), colour(_c), angle(_a), numTicks(_n), centred(_ct) { }
+        CacheIndex(int _s, int _c, int _a, int _n, int _ct) :
+            size(_s), colour(_c), angle(_a), numTicks(_n), centred(_ct) { }
 
-	bool operator<(const CacheIndex &i) const {
-	    // woo!
-	    if (size < i.size) return true;
-	    else if (size > i.size) return false;
-	    else if (colour < i.colour) return true;
-	    else if (colour > i.colour) return false;
-	    else if (angle < i.angle) return true;
-	    else if (angle > i.angle) return false;
-	    else if (numTicks < i.numTicks) return true;
-	    else if (numTicks > i.numTicks) return false;
-	    else if (centred == i.centred) return false;
-	    else if (!centred) return true;
-	    return false;
-	}
+        bool operator<(const CacheIndex &i) const {
+            // woo!
+            if (size < i.size) return true;
+            else if (size > i.size) return false;
+            else if (colour < i.colour) return true;
+            else if (colour > i.colour) return false;
+            else if (angle < i.angle) return true;
+            else if (angle > i.angle) return false;
+            else if (numTicks < i.numTicks) return true;
+            else if (numTicks > i.numTicks) return false;
+            else if (centred == i.centred) return false;
+            else if (!centred) return true;
+            return false;
+        }
 
-	int          size;
-	unsigned int colour;
-	int          angle;
-	int          numTicks;
-	bool         centred;
+        int          size;
+        unsigned int colour;
+        int          angle;
+        int          numTicks;
+        bool         centred;
     };
 
     typedef std::map<CacheIndex, QPixmap> PixmapCache;

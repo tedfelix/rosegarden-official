@@ -49,8 +49,8 @@ class MidiKeyMappingEditor : public NameSetEditor
 
 public:
     MidiKeyMappingEditor(BankEditorDialog *bankEditor,
-			 QWidget *parent,
-			 const char *name = 0);
+                         QWidget *parent,
+                         const char *name = 0);
 
     void clearAll();
     void populate(QListViewItem *);

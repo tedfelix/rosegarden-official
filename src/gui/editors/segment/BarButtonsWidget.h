@@ -52,7 +52,7 @@ public:
     BarButtonsWidget(RosegardenGUIDoc *doc,
                      RulerScale *rulerScale,
                      int buttonHeight,
-		     double xorigin = 0.0,
+                     double xorigin = 0.0,
                      QWidget* parent = 0,
                      const char* name = 0,
                      WFlags f=0);

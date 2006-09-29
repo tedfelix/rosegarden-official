@@ -76,9 +76,9 @@ protected:
      * it's just normally a waste of memory.
      */
     BasicCommand(const QString &name,
-		 Segment &segment,
-		 timeT start, timeT end,
-		 bool bruteForceRedoRequired = false);
+                 Segment &segment,
+                 timeT start, timeT end,
+                 bool bruteForceRedoRequired = false);
 
     virtual void modifySegment() = 0;
 
@@ -91,9 +91,9 @@ private:
     void copyFrom(Segment *);
 
     timeT calculateStartTime(timeT given,
-					 Segment &segment);
+                                         Segment &segment);
     timeT calculateEndTime(timeT given,
-				       Segment &segment);
+                                       Segment &segment);
 
     timeT m_startTime;
     timeT m_endTime;

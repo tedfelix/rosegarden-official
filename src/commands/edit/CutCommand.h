@@ -46,11 +46,11 @@ class CutCommand : public KMacroCommand
 public:
     /// Make a CutCommand that cuts events from within a Segment
     CutCommand(EventSelection &selection,
-	       Clipboard *clipboard);
+               Clipboard *clipboard);
 
     /// Make a CutCommand that cuts whole Segments
     CutCommand(SegmentSelection &selection,
-	       Clipboard *clipboard);
+               Clipboard *clipboard);
 
     static QString getGlobalName() { return i18n("Cu&t"); }
 };

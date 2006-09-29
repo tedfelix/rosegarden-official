@@ -43,7 +43,7 @@ namespace Rosegarden
 class BeatsBarsDialog : public KDialogBase
 {
     Q_OBJECT
-	
+        
 public:
     BeatsBarsDialog();
     BeatsBarsDialog(QWidget *parent);

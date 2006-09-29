@@ -45,12 +45,12 @@ class ReconnectDeviceCommand : public KNamedCommand
 {
 public:
     ReconnectDeviceCommand(Studio *studio,
-			   DeviceId deviceId,
-			   std::string newConnection) :
-	KNamedCommand(getGlobalName()),
-	m_studio(studio),
-	m_deviceId(deviceId),
-	m_newConnection(newConnection) { }
+                           DeviceId deviceId,
+                           std::string newConnection) :
+        KNamedCommand(getGlobalName()),
+        m_studio(studio),
+        m_deviceId(deviceId),
+        m_newConnection(newConnection) { }
 
     static QString getGlobalName() { return i18n("Reconnect Device"); }
 

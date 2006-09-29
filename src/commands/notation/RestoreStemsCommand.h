@@ -43,8 +43,8 @@ class RestoreStemsCommand : public BasicSelectionCommand
 {
 public:
     RestoreStemsCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("&Restore Computed Stems"); }
 

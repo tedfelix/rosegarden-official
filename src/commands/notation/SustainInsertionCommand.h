@@ -46,17 +46,17 @@ class SustainInsertionCommand : public BasicCommand
 {
 public:
     SustainInsertionCommand(Segment &segment,
-			    timeT time,
-			    bool down,
-			    int controllerNumber);
+                            timeT time,
+                            bool down,
+                            int controllerNumber);
     virtual ~SustainInsertionCommand();
 
     static QString getGlobalName(bool down) {
-	if (down) {
-	    return i18n("Add Pedal &Press");
-	} else {
-	    return i18n("Add Pedal &Release");
-	}
+        if (down) {
+            return i18n("Add Pedal &Press");
+        } else {
+            return i18n("Add Pedal &Release");
+        }
     }
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

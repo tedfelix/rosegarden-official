@@ -56,9 +56,9 @@ class AudioFaderBox : public QFrame
 
 public:
     AudioFaderBox(QWidget *parent,
-		  QString id = "",
-		  bool haveInOut = true,
-		  const char *name = 0);
+                  QString id = "",
+                  bool haveInOut = true,
+                  const char *name = 0);
 
     void setAudioChannels(int);
 
@@ -97,7 +97,7 @@ signals:
 
 public slots:
     void slotSetInstrument(Studio *studio,
-			   Instrument *instrument);
+                           Instrument *instrument);
 
 protected slots:
     void slotChannelStateChanged();

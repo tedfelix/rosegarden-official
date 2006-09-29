@@ -56,7 +56,7 @@ public:
     virtual float getPortValue(unsigned int portNumber);
     virtual QString configure(QString key, QString value);
     virtual void sendEvent(const RealTime &eventTime,
-			   const void *event);
+                           const void *event);
 
     virtual size_t getBufferSize() { return m_blockSize; }
     virtual size_t getAudioInputCount() { return m_audioPortsIn.size(); }
@@ -89,25 +89,25 @@ protected:
     // Constructor that creates the buffers internally
     // 
     DSSIPluginInstance(PluginFactory *factory,
-		       InstrumentId instrument,
-		       QString identifier,
-		       int position,
-		       unsigned long sampleRate,
-		       size_t blockSize,
-		       int idealChannelCount,
-		       const DSSI_Descriptor* descriptor);
+                       InstrumentId instrument,
+                       QString identifier,
+                       int position,
+                       unsigned long sampleRate,
+                       size_t blockSize,
+                       int idealChannelCount,
+                       const DSSI_Descriptor* descriptor);
     
     // Constructor that uses shared buffers
     // 
     DSSIPluginInstance(PluginFactory *factory,
-		       InstrumentId instrument,
-		       QString identifier,
-		       int position,
-		       unsigned long sampleRate,
-		       size_t blockSize,
-		       sample_t **inputBuffers,
-		       sample_t **outputBuffers,
-		       const DSSI_Descriptor* descriptor);
+                       InstrumentId instrument,
+                       QString identifier,
+                       int position,
+                       unsigned long sampleRate,
+                       size_t blockSize,
+                       sample_t **inputBuffers,
+                       sample_t **outputBuffers,
+                       const DSSI_Descriptor* descriptor);
 
     void init();
     void instantiate(unsigned long sampleRate);
@@ -141,16 +141,16 @@ protected:
     std::vector<int>          m_audioPortsOut;
 
     struct ProgramControl {
-	int msb;
-	int lsb;
-	int program;
+        int msb;
+        int lsb;
+        int program;
     };
     ProgramControl m_pending;
 
     struct ProgramDescriptor {
-	int bank;
-	int program;
-	QString name;
+        int bank;
+        int program;
+        QString name;
     };
     std::vector<ProgramDescriptor> m_cachedPrograms;
     bool m_programCacheValid;

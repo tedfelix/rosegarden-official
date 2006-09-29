@@ -44,11 +44,11 @@ class ChangeStemsCommand : public BasicSelectionCommand
 {
 public:
     ChangeStemsCommand(bool up, EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(up), selection, true),
-	m_selection(&selection), m_up(up) { }
+        BasicSelectionCommand(getGlobalName(up), selection, true),
+        m_selection(&selection), m_up(up) { }
 
     static QString getGlobalName(bool up) {
-	return up ? i18n("Stems &Up") : i18n("Stems &Down");
+        return up ? i18n("Stems &Up") : i18n("Stems &Down");
     }
 
 protected:

@@ -41,8 +41,8 @@ class AddTimeSignatureAndNormalizeCommand : public KMacroCommand
 {
 public:
     AddTimeSignatureAndNormalizeCommand(Composition *composition,
-					timeT time,
-					TimeSignature timeSig);
+                                        timeT time,
+                                        TimeSignature timeSig);
     virtual ~AddTimeSignatureAndNormalizeCommand();
 };
 

@@ -85,7 +85,7 @@ protected:
 
     /// Set the currently loaded programs to new MSB and LSB
     void modifyCurrentPrograms(const MidiBank &oldBank,
-			       const MidiBank &newBank);
+                               const MidiBank &newBank);
     
     // Get a program (pointer into program list) for modification
     //

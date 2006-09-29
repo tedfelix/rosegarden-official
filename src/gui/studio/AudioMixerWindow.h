@@ -65,7 +65,7 @@ public:
 
 public slots:
     void slotControllerDeviceEventReceived(MappedEvent *,
-					   const void *);
+                                           const void *);
 
 signals:
     void selectPlugin(QWidget *, InstrumentId id, int index);
@@ -129,33 +129,33 @@ private:
 
     struct FaderRec {
 
-	FaderRec() :
-	    m_populated(false),
-	    m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
-	    m_muteButton(0), m_soloButton(0), m_recordButton(0),
-	    m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
-	{ }
+        FaderRec() :
+            m_populated(false),
+            m_input(0), m_output(0), m_pan(0), m_fader(0), m_meter(0),
+            m_muteButton(0), m_soloButton(0), m_recordButton(0),
+            m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
+        { }
 
         void setVisible(bool);
         void setPluginButtonsVisible(bool);
         
-	bool m_populated;
+        bool m_populated;
 
-	AudioRouteMenu *m_input;
-	AudioRouteMenu *m_output;
+        AudioRouteMenu *m_input;
+        AudioRouteMenu *m_output;
 
-	Rotary *m_pan;
-	Fader *m_fader;
-	AudioVUMeter *m_meter;
+        Rotary *m_pan;
+        Fader *m_fader;
+        AudioVUMeter *m_meter;
 
-	QPushButton *m_muteButton;
-	QPushButton *m_soloButton;
-	QPushButton *m_recordButton;
-	QPushButton *m_stereoButton;
-	bool m_stereoness;
+        QPushButton *m_muteButton;
+        QPushButton *m_soloButton;
+        QPushButton *m_recordButton;
+        QPushButton *m_stereoButton;
+        bool m_stereoness;
 
-	QVBox *m_pluginBox;
-	std::vector<QPushButton *> m_plugins;
+        QVBox *m_pluginBox;
+        std::vector<QPushButton *> m_plugins;
     };
 
     QHBox *m_surroundBox;

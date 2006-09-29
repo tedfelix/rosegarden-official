@@ -80,9 +80,9 @@ protected:
 
     static const char * const ConfigGroup;
     
-    KComboBox	*m_categoryCombo;
-    KComboBox	*m_instrumentCombo;
-    KComboBox	*m_playerCombo;
+    KComboBox   *m_categoryCombo;
+    KComboBox   *m_instrumentCombo;
+    KComboBox   *m_playerCombo;
 
 protected slots:
 

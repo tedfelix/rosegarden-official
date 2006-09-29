@@ -51,7 +51,7 @@ signals:
 
 protected:
     void wheelEvent(QWheelEvent *e) {
-	emit wheel(e->delta() > 0);
+        emit wheel(e->delta() > 0);
     }
 };
 

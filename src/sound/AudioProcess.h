@@ -38,8 +38,8 @@ public:
     typedef float sample_t;
 
     AudioThread(std::string name, // for diagnostics
-		SoundDriver *driver,
-		unsigned int sampleRate);
+                SoundDriver *driver,
+                unsigned int sampleRate);
 
     virtual ~AudioThread();
 
@@ -84,9 +84,9 @@ class AudioBussMixer : public AudioThread
 {
 public:
     AudioBussMixer(SoundDriver *driver,
-		   AudioInstrumentMixer *instrumentMixer,
-		   unsigned int sampleRate,
-		   unsigned int blockSize);
+                   AudioInstrumentMixer *instrumentMixer,
+                   unsigned int sampleRate,
+                   unsigned int blockSize);
 
     virtual ~AudioBussMixer();
 
@@ -105,7 +105,7 @@ public:
     void emptyBuffers();
 
     int getBussCount() {
-	return m_bussCount;
+        return m_bussCount;
     }
 
     /**
@@ -114,18 +114,18 @@ public:
      * playback.
      */
     bool isBussDormant(int buss) {
-	return m_bufferMap[buss].dormant;
+        return m_bufferMap[buss].dormant;
     }
 
     /**
      * Busses are currently always stereo.
      */
     RingBuffer<sample_t> *getRingBuffer(int buss, unsigned int channel) {
-	if (channel < m_bufferMap[buss].buffers.size()) {
-	    return m_bufferMap[buss].buffers[channel];
-	} else {
-	    return 0;
-	}
+        if (channel < m_bufferMap[buss].buffers.size()) {
+            return m_bufferMap[buss].buffers[channel];
+        } else {
+            return 0;
+        }
     }
 
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
@@ -148,22 +148,22 @@ protected:
 
     struct BufferRec
     {
-	BufferRec() : dormant(true), buffers(), instruments(),
-		      gainLeft(0.0), gainRight(0.0) { }
-	~BufferRec();
+        BufferRec() : dormant(true), buffers(), instruments(),
+                      gainLeft(0.0), gainRight(0.0) { }
+        ~BufferRec();
 
-	bool dormant;
+        bool dormant;
 
-	std::vector<RingBuffer<sample_t> *> buffers;
-	std::vector<bool> instruments; // index is instrument id minus base
+        std::vector<RingBuffer<sample_t> *> buffers;
+        std::vector<bool> instruments; // index is instrument id minus base
 
-	float gainLeft;
-	float gainRight;
+        float gainLeft;
+        float gainRight;
     };
 
     typedef std::map<int, BufferRec> BufferMap;
     BufferMap m_bufferMap;
-};		   
+};                 
 
 
 class AudioFileReader;
@@ -177,9 +177,9 @@ public:
     typedef std::map<InstrumentId, RunnablePluginInstance *> SynthPluginMap;
 
     AudioInstrumentMixer(SoundDriver *driver,
-			 AudioFileReader *fileReader,
-			 unsigned int sampleRate,
-			 unsigned int blockSize);
+                         AudioFileReader *fileReader,
+                         unsigned int sampleRate,
+                         unsigned int blockSize);
 
     virtual ~AudioInstrumentMixer();
 
@@ -192,9 +192,9 @@ public:
     void removeAllPlugins();
 
     void setPluginPortValue(InstrumentId id, int position,
-			    unsigned int port, float value);
+                            unsigned int port, float value);
     float getPluginPortValue(InstrumentId id, int position,
-			     unsigned int port);
+                             unsigned int port);
 
     void setPluginBypass(InstrumentId, int position, bool bypass);
 
@@ -249,7 +249,7 @@ public:
      * instruments can safely be ignored during playback.
      */
     bool isInstrumentEmpty(InstrumentId id) {
-	return m_bufferMap[id].empty;
+        return m_bufferMap[id].empty;
     }
 
     /**
@@ -259,7 +259,7 @@ public:
      * be ignored (unless also empty).
      */
     bool isInstrumentDormant(InstrumentId id) {
-	return m_bufferMap[id].dormant;
+        return m_bufferMap[id].dormant;
     }
 
     /**
@@ -269,11 +269,11 @@ public:
      * these buffers.
      */
     RingBuffer<sample_t, 2> *getRingBuffer(InstrumentId id, unsigned int channel) {
-	if (channel < m_bufferMap[id].buffers.size()) {
-	    return m_bufferMap[id].buffers[channel];
-	} else {
-	    return 0;
-	}
+        if (channel < m_bufferMap[id].buffers.size()) {
+            return m_bufferMap[id].buffers[channel];
+        } else {
+            return 0;
+        }
     }
 
     /// For call from MappedStudio.  Pan is in range -100.0 -> 100.0
@@ -309,24 +309,24 @@ protected:
 
     struct BufferRec
     {
-	BufferRec() : empty(true), dormant(true), zeroFrames(0),
-		      filledTo(RealTime::zeroTime), channels(2),
-		      buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0),
-		      muted(false) { }
-	~BufferRec();
+        BufferRec() : empty(true), dormant(true), zeroFrames(0),
+                      filledTo(RealTime::zeroTime), channels(2),
+                      buffers(), gainLeft(0.0), gainRight(0.0), volume(0.0),
+                      muted(false) { }
+        ~BufferRec();
 
-	bool empty;
-	bool dormant;
-	size_t zeroFrames;
+        bool empty;
+        bool dormant;
+        size_t zeroFrames;
 
-	RealTime filledTo;
-	size_t channels;
-	std::vector<RingBuffer<sample_t, 2> *> buffers;
+        RealTime filledTo;
+        size_t channels;
+        std::vector<RingBuffer<sample_t, 2> *> buffers;
 
-	float gainLeft;
-	float gainRight;
-	float volume;
-	bool muted;
+        float gainLeft;
+        float gainRight;
+        float volume;
+        bool muted;
     };
 
     typedef std::map<InstrumentId, BufferRec> BufferMap;
@@ -338,7 +338,7 @@ class AudioFileReader : public AudioThread
 {
 public:
     AudioFileReader(SoundDriver *driver,
-		    unsigned int sampleRate);
+                    unsigned int sampleRate);
 
     virtual ~AudioFileReader();
 
@@ -359,7 +359,7 @@ class AudioFileWriter : public AudioThread
 {
 public:
     AudioFileWriter(SoundDriver *driver,
-		    unsigned int sampleRate);
+                    unsigned int sampleRate);
 
     virtual ~AudioFileWriter();
 

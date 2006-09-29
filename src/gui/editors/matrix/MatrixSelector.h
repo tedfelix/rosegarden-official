@@ -79,19 +79,19 @@ public:
      * Double-click: edit an event or make a whole-bar selection
      */
     virtual void handleMouseDoubleClick(timeT time,
-					int height,
-					int staffNo,
-					QMouseEvent* event,
-					ViewElement *element);
+                                        int height,
+                                        int staffNo,
+                                        QMouseEvent* event,
+                                        ViewElement *element);
 
     /**
      * Triple-click: maybe make a whole-staff selection
      */
     virtual void handleMouseTripleClick(timeT time,
-					int height,
-					int staffNo,
-					QMouseEvent* event,
-					ViewElement *element);
+                                        int height,
+                                        int staffNo,
+                                        QMouseEvent* event,
+                                        ViewElement *element);
 
 
     /**

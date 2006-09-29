@@ -42,8 +42,8 @@ class SetTriggerSegmentBaseVelocityCommand : public KNamedCommand
 {
 public:
     SetTriggerSegmentBaseVelocityCommand(Composition *composition,
-				      TriggerSegmentId id,
-				      int newVelocity);
+                                      TriggerSegmentId id,
+                                      int newVelocity);
     virtual ~SetTriggerSegmentBaseVelocityCommand();
     
     virtual void execute();

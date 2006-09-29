@@ -43,8 +43,8 @@ class FixNotationQuantizeCommand : public BasicSelectionCommand
 {
 public:
     FixNotationQuantizeCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
     
     static QString getGlobalName() { return i18n("Fi&x Notation Quantization"); }
     

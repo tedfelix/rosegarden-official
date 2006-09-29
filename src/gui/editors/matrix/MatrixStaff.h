@@ -91,7 +91,7 @@ public:
     int getElementHeight() { return m_resolution; }
 
     virtual void positionElements(timeT from,
-				  timeT to);
+                                  timeT to);
 
     virtual void positionElement(ViewElement*);
 

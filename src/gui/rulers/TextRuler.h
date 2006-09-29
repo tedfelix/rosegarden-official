@@ -74,7 +74,7 @@ public:
      * The RulerScale will not be destroyed along with the TextRuler.
      */
     TextRuler(RulerScale *rulerScale,
-	      Segment *segment,
+              Segment *segment,
               int height = 0,
               QWidget* parent = 0,
               const char *name = 0);

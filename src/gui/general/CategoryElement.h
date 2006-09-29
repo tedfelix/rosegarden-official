@@ -44,12 +44,12 @@ public:
     ~CategoryElement();
 
     void addPreset(QString name,
-		  int clef,
-		  int transpose,
-		  int highAm,
-		  int lowAm,
-		  int highPro,
-		  int lowPro);
+                  int clef,
+                  int transpose,
+                  int highAm,
+                  int lowAm,
+                  int highPro,
+                  int lowPro);
 
     QString getName() { return m_name; }
 

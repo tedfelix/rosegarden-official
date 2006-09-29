@@ -66,11 +66,11 @@ public:
      * setReady is called (because the first refresh is expensive).
      */
     ChordNameRuler(RulerScale *rulerScale,
-		   RosegardenGUIDoc *doc,
-		   double xorigin = 0.0,
-		   int height = 0,
-		   QWidget* parent = 0,
-		   const char *name = 0);
+                   RosegardenGUIDoc *doc,
+                   double xorigin = 0.0,
+                   int height = 0,
+                   QWidget* parent = 0,
+                   const char *name = 0);
 
     /**
      * Construct a ChordNameRuler that displays the chords in the
@@ -79,12 +79,12 @@ public:
      * setReady is called (because the first refresh is expensive).
      */
     ChordNameRuler(RulerScale *rulerScale,
-		   RosegardenGUIDoc *doc,
-		   std::vector<Segment *> &segments,
-		   double xorigin = 0.0,
-		   int height = 0,
-		   QWidget* parent = 0,
-		   const char *name = 0);
+                   RosegardenGUIDoc *doc,
+                   std::vector<Segment *> &segments,
+                   double xorigin = 0.0,
+                   int height = 0,
+                   QWidget* parent = 0,
+                   const char *name = 0);
 
     ~ChordNameRuler();
 
@@ -110,7 +110,7 @@ protected:
 
 private:
     void recalculate(timeT from = 0,
-		     timeT to = 0);
+                     timeT to = 0);
 
     double m_xorigin;
     int    m_height;

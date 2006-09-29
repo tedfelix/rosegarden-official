@@ -56,8 +56,8 @@ public:
     ~RIFFAudioFile();
 
     typedef enum {
-	PCM,
-	FLOAT
+        PCM,
+        FLOAT
     } SubFormat;
 
     // Our main control methods - again keeping abstract at this level
@@ -97,8 +97,8 @@ public:
     virtual std::string getSampleFrames(std::ifstream *file,
                                         unsigned int frames);
     virtual unsigned int getSampleFrames(std::ifstream *file,
-					 char *buf,
-					 unsigned int frames);
+                                         char *buf,
+                                         unsigned int frames);
     virtual std::string getSampleFrames(unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
@@ -137,12 +137,12 @@ public:
     // success.  This function does crappy resampling if necessary.
     // 
     virtual bool decode(const unsigned char *sourceData,
-			size_t sourceBytes,
-			size_t targetSampleRate,
-			size_t targetChannels,
-			size_t targetFrames,
-			std::vector<float *> &targetData,
-			bool addToResultBuffers = false) = 0;
+                        size_t sourceBytes,
+                        size_t targetSampleRate,
+                        size_t targetChannels,
+                        size_t targetFrames,
+                        std::vector<float *> &targetData,
+                        bool addToResultBuffers = false) = 0;
 
 protected:
     //virtual void parseHeader(const std::string &header);

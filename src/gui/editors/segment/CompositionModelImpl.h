@@ -157,9 +157,9 @@ protected:
     bool isRecording(const Segment*) const;
     
     void computeRepeatMarks(CompositionRect& sr, const Segment* s);
-	unsigned int computeZForSegment(const Segment* s);
-	
-	// segment preview stuff
+        unsigned int computeZForSegment(const Segment* s);
+        
+        // segment preview stuff
 
     void updatePreviewCacheForNotationSegment(const Segment* s, rectlist*);
     void updatePreviewCacheForAudioSegment(const Segment* s, AudioPreviewData*);

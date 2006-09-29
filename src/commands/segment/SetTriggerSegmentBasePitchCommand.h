@@ -42,8 +42,8 @@ class SetTriggerSegmentBasePitchCommand : public KNamedCommand
 {
 public:
     SetTriggerSegmentBasePitchCommand(Composition *composition,
-				      TriggerSegmentId id,
-				      int newPitch);
+                                      TriggerSegmentId id,
+                                      int newPitch);
     virtual ~SetTriggerSegmentBasePitchCommand();
     
     virtual void execute();

@@ -45,8 +45,8 @@ class RenameTrackCommand : public KNamedCommand
 {
 public:
     RenameTrackCommand(Composition *composition,
-		       TrackId track, 
-		       std::string name);
+                       TrackId track, 
+                       std::string name);
     virtual ~RenameTrackCommand();
 
     static QString getGlobalName() { return i18n("Rename Track"); }

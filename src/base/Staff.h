@@ -59,7 +59,7 @@ public:
      * (even if passed new arguments)
      */
     ViewElementList *getViewElementList(Segment::iterator from,
-					   Segment::iterator to);
+                                           Segment::iterator to);
 
     /**
      * Return the Segment wrapped by this object 

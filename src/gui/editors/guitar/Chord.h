@@ -38,47 +38,47 @@ namespace Guitar
 
         typedef QMap<ChordName,Chord*> Chord_Map;
 
-	//! Constructor
+        //! Constructor
         Chord ();
 
-	//! Constructor used by chordConverter
-	Chord (ChordName*);
+        //! Constructor used by chordConverter
+        Chord (ChordName*);
 
-	//! Constructor
-	Chord (ChordName*, Fingering*);
+        //! Constructor
+        Chord (ChordName*, Fingering*);
 
-	//! Copy Constructor
-	Chord (Chord const& rhs);
+        //! Copy Constructor
+        Chord (Chord const& rhs);
 
-	//! Destructor
-	virtual ~Chord();
+        //! Destructor
+        virtual ~Chord();
 
-	//! Return the ChordName object describing this Chord
+        //! Return the ChordName object describing this Chord
         ChordName* getName ();
 
-	//! Return the Fingering object describing the finger positions of this Chord
+        //! Return the Fingering object describing the finger positions of this Chord
         Fingering* getArrangement ();
 
-	//! Create Chord object from XML data
+        //! Create Chord object from XML data
         void load (QDomNode const& obj);
 
-	//! Save Chord object as XML data
+        //! Save Chord object as XML data
         void save (QDomNode& obj);
 
-	bool operator== (Chord const& rhs) const;
+        bool operator== (Chord const& rhs) const;
 
-	std::string toString (void) const;
+        std::string toString (void) const;
 
     private:
 
-	//! Name for this Chord
+        //! Name for this Chord
         ChordName* m_name;
 
-	//! Fingering positions for this Chord
+        //! Fingering positions for this Chord
         Fingering* m_arrangement;
 
-	//! Used to mark a chord when saving it to file
-	bool m_written;
+        //! Used to mark a chord when saving it to file
+        bool m_written;
     };
 }
 

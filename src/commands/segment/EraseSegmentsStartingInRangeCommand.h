@@ -45,8 +45,8 @@ class EraseSegmentsStartingInRangeCommand : public KNamedCommand
 {
 public:
     EraseSegmentsStartingInRangeCommand(Composition *composition,
-					timeT begin,
-					timeT end);
+                                        timeT begin,
+                                        timeT end);
     virtual ~EraseSegmentsStartingInRangeCommand();
     
     virtual void execute();

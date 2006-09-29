@@ -47,7 +47,7 @@ class PasteNotationDialog : public KDialogBase
 
 public:
     PasteNotationDialog(QWidget *parent,
-			PasteEventsCommand::PasteType defaultType);
+                        PasteEventsCommand::PasteType defaultType);
 
     PasteEventsCommand::PasteType getPasteType() const;
     bool setAsDefault() const;

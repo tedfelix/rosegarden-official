@@ -45,7 +45,7 @@ class AudioSegmentResizeFromStartCommand : public KNamedCommand
 {
 public:
     AudioSegmentResizeFromStartCommand(Segment *segment,
-				       timeT newStartTime);
+                                       timeT newStartTime);
     virtual ~AudioSegmentResizeFromStartCommand();
 
     virtual void execute();

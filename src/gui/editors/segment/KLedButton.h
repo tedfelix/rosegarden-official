@@ -49,13 +49,13 @@ class KLedButton : public KLed  {
   public: 
    KLedButton(const QColor &col=Qt::green, QWidget *parent=0, const char *name=0);
    KLedButton(const QColor& col, KLed::State st, KLed::Look look, KLed::Shape shape,
-	      QWidget *parent=0, const char *name=0);
-   ~KLedButton();	
+              QWidget *parent=0, const char *name=0);
+   ~KLedButton();       
 
   signals:
    void stateChanged( bool newState );
 
-  protected:	
+  protected:    
    void mousePressEvent ( QMouseEvent *e );
 };
 

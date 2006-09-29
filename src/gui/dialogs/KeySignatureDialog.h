@@ -50,19 +50,19 @@ class KeySignatureDialog : public KDialogBase
 
 public:
     enum ConversionType {
-	NoConversion,
-	Convert,
-	Transpose
+        NoConversion,
+        Convert,
+        Transpose
     };
 
     KeySignatureDialog(QWidget *parent,
-		       NotePixmapFactory *npf,
-		       Clef clef,
-		       Rosegarden::Key defaultKey =
-		       Rosegarden::Key::DefaultKey,
-		       bool showApplyToAll = true,
-		       bool showConversionOptions = true,
-		       QString explanatoryText = 0);
+                       NotePixmapFactory *npf,
+                       Clef clef,
+                       Rosegarden::Key defaultKey =
+                       Rosegarden::Key::DefaultKey,
+                       bool showApplyToAll = true,
+                       bool showConversionOptions = true,
+                       QString explanatoryText = 0);
 
     bool isValid() const;
     Key getKey() const;

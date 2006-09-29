@@ -45,23 +45,23 @@ class SetTriggerCommand : public BasicSelectionCommand
 {
 public:
     SetTriggerCommand(EventSelection &selection,
-		      TriggerSegmentId triggerSegmentId,
-		      bool notesOnly,
-		      bool retune,
-		      std::string timeAdjust,
-		      Mark mark,
-		      QString name = 0) :
-	BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_triggerSegmentId(triggerSegmentId),
-	m_notesOnly(notesOnly),
-	m_retune(retune),
-	m_timeAdjust(timeAdjust),
-	m_mark(mark)
+                      TriggerSegmentId triggerSegmentId,
+                      bool notesOnly,
+                      bool retune,
+                      std::string timeAdjust,
+                      Mark mark,
+                      QString name = 0) :
+        BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_triggerSegmentId(triggerSegmentId),
+        m_notesOnly(notesOnly),
+        m_retune(retune),
+        m_timeAdjust(timeAdjust),
+        m_mark(mark)
     { }
 
     static QString getGlobalName() {
-	return i18n("Tri&gger Segment");
+        return i18n("Tri&gger Segment");
     }
 
 protected:

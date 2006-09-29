@@ -73,7 +73,7 @@ public:
         InSegment,
         InStudio,
         InInstrument,
-	InBuss,
+        InBuss,
         InAudioFiles,
         InPlugin,
         InAppearance
@@ -85,7 +85,7 @@ public:
      */
     RoseXmlHandler(RosegardenGUIDoc *doc,
                    unsigned int elementCount,
-		   bool createNewDevicesWhenNeeded);
+                   bool createNewDevicesWhenNeeded);
 
     virtual ~RoseXmlHandler();
 
@@ -179,7 +179,7 @@ protected:
     unsigned int                      m_elementsSoFar;
 
     XmlSubHandler                    *m_subHandler;
-    bool		              m_deprecation;
+    bool                              m_deprecation;
     bool                              m_createDevices;
     bool                              m_haveControls;
     bool                              m_cancelled;

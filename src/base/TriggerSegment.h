@@ -33,7 +33,7 @@ typedef unsigned int TriggerSegmentId;
 class Segment;
 
 class TriggerSegmentRec
-{	
+{       
 public:
     typedef std::set<int> SegmentRuntimeIdSet;
     ~TriggerSegmentRec();
@@ -66,8 +66,8 @@ public:
 protected:
     friend class Composition;
     TriggerSegmentRec(TriggerSegmentId id, Segment *segment,
-		      int basePitch = -1, int baseVelocity = -1,
-		      std::string defaultTimeAdjust = "", bool defaultRetune = true);
+                      int basePitch = -1, int baseVelocity = -1,
+                      std::string defaultTimeAdjust = "", bool defaultRetune = true);
 
     void setReferences(const SegmentRuntimeIdSet &s) { m_references = s; }
 
@@ -87,10 +87,10 @@ protected:
 struct TriggerSegmentCmp
 {
     bool operator()(const TriggerSegmentRec &r1, const TriggerSegmentRec &r2) const {
-	return r1.getId() < r2.getId();
+        return r1.getId() < r2.getId();
     }
     bool operator()(const TriggerSegmentRec *r1, const TriggerSegmentRec *r2) const {
-	return r1->getId() < r2->getId();
+        return r1->getId() < r2->getId();
     }
 };
 

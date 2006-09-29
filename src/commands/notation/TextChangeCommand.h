@@ -43,8 +43,8 @@ class TextChangeCommand : public BasicCommand
 {
 public:
     TextChangeCommand(Segment &segment,
-		      Event *event,
-		      Text text);
+                      Event *event,
+                      Text text);
     virtual ~TextChangeCommand();
 
 protected:

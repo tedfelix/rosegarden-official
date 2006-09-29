@@ -29,8 +29,8 @@ namespace Rosegarden
 
 namespace Guitar
 { 
-	class FingeringConstructor;
-	class ChordInfo;
+        class FingeringConstructor;
+        class ChordInfo;
 }
 
 class GuitarChordEditor : public KDialogBase
