@@ -46,7 +46,7 @@ public:
     {
         Midi,
         Audio,
-	SoftSynth
+        SoftSynth
     } DeviceType;
 
     // special device ids

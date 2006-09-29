@@ -42,8 +42,8 @@ class SetTriggerSegmentDefaultRetuneCommand : public KNamedCommand
 {
 public:
     SetTriggerSegmentDefaultRetuneCommand(Composition *composition,
-					  TriggerSegmentId id,
-					  bool newDefaultRetune);
+                                          TriggerSegmentId id,
+                                          bool newDefaultRetune);
     virtual ~SetTriggerSegmentDefaultRetuneCommand();
 
     virtual void execute();

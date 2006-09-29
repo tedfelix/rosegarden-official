@@ -71,9 +71,9 @@ class TempoView : public EditViewBase, public CompositionObserver
 
     enum Filter
     {
-	None          = 0x0000,
-	Tempo         = 0x0001,
-	TimeSignature = 0x0002
+        None          = 0x0000,
+        Tempo         = 0x0001,
+        TimeSignature = 0x0002
     };
 
 public:
@@ -85,8 +85,8 @@ public:
     virtual bool applyLayout(int staffNo = -1);
 
     virtual void refreshSegment(Segment *segment,
-				timeT startTime = 0,
-				timeT endTime = 0);
+                                timeT startTime = 0,
+                                timeT endTime = 0);
 
     virtual void updateView();
 

@@ -52,13 +52,13 @@ public:
 protected:
     /// selection from segment
     BasicSelectionCommand(const QString &name,
-			  EventSelection &selection,
-			  bool bruteForceRedoRequired = false);
+                          EventSelection &selection,
+                          bool bruteForceRedoRequired = false);
 
     /// entire segment
     BasicSelectionCommand(const QString &name,
-			  Segment &segment,
-			  bool bruteForceRedoRequired = false);
+                          Segment &segment,
+                          bool bruteForceRedoRequired = false);
 };
 
 

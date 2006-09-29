@@ -345,7 +345,7 @@ public:
      * This is intended for use from file load or from undo/redo.
      */
     TriggerSegmentRec *addTriggerSegment(Segment *, TriggerSegmentId,
-					 int basePitch = -1, int baseVelocity = -1);
+                                         int basePitch = -1, int baseVelocity = -1);
 
     /**
      * Get the ID of the next trigger segment that will be inserted.
@@ -387,14 +387,14 @@ public:
      * Return the starting time of bar n
      */
     timeT getBarStart(int n) const {
-	return getBarRange(n).first;
+        return getBarRange(n).first;
     } 
 
     /**
      * Return the ending time of bar n
      */
     timeT getBarEnd(int n) const {
-	return getBarRange(n).second;
+        return getBarRange(n).second;
     }
 
     /**
@@ -410,14 +410,14 @@ public:
      * Return the starting time of the bar that contains time t
      */
     timeT getBarStartForTime(timeT t) const {
-	return getBarRangeForTime(t).first;
+        return getBarRangeForTime(t).first;
     }
 
     /**
      * Return the ending time of the bar that contains time t
      */
     timeT getBarEndForTime(timeT t) const {
-	return getBarRangeForTime(t).second;
+        return getBarRangeForTime(t).second;
     }
 
     /**
@@ -579,14 +579,14 @@ public:
      * Get the slowest assigned tempo in the composition.
      */
     tempoT getMinTempo() const {
-	return ((m_minTempo != 0) ? m_minTempo : m_defaultTempo);
+        return ((m_minTempo != 0) ? m_minTempo : m_defaultTempo);
     }
 
     /**
      * Get the fastest assigned tempo in the composition.
      */
     tempoT getMaxTempo() const { 
-	return ((m_maxTempo != 0) ? m_maxTempo : m_defaultTempo);
+        return ((m_maxTempo != 0) ? m_maxTempo : m_defaultTempo);
     }
 
 
@@ -624,8 +624,8 @@ public:
      * into account any tempo changes between the two times.
      */
     RealTime getRealTimeDifference(timeT t0, timeT t1) const {
-	if (t1 > t0) return getElapsedRealTime(t1) - getElapsedRealTime(t0);
-	else	     return getElapsedRealTime(t0) - getElapsedRealTime(t1);
+        if (t1 > t0) return getElapsedRealTime(t1) - getElapsedRealTime(t0);
+        else         return getElapsedRealTime(t0) - getElapsedRealTime(t1);
     }
 
 
@@ -638,8 +638,8 @@ public:
      * corresponding to a given absolute time.
      */
     void getMusicalTimeForAbsoluteTime(timeT absoluteTime,
-				       int &bar, int &beat,
-				       int &fraction, int &remainder);
+                                       int &bar, int &beat,
+                                       int &fraction, int &remainder);
 
     /**
      * Return (by reference) the number of bars and beats/divisions
@@ -648,15 +648,15 @@ public:
      * time signature.
      */
     void getMusicalTimeForDuration(timeT absoluteTime, timeT duration,
-				   int &bars, int &beats,
-				   int &fractions, int &remainder);
+                                   int &bars, int &beats,
+                                   int &fractions, int &remainder);
 
     /**
      * Return the absolute time corresponding to a given bar number
      * and beat/division values.
      */
     timeT getAbsoluteTimeForMusicalTime(int bar, int beat,
-					int fraction, int remainder);
+                                        int fraction, int remainder);
 
     /**
      * Return the duration corresponding to a given number of bars and
@@ -665,8 +665,8 @@ public:
      * signature.
      */
     timeT getDurationForMusicalTime(timeT absoluteTime,
-				    int bars, int beats,
-				    int fractions, int remainder);
+                                    int bars, int beats,
+                                    int fractions, int remainder);
 
 
     /**
@@ -716,18 +716,18 @@ public:
     // Who's making this racket?
     //
     Configuration &getMetadata() {
-	return m_metadata;
+        return m_metadata;
     }
     const Configuration &getMetadata() const {
-	return m_metadata;
+        return m_metadata;
     }
     
     std::string getCopyrightNote() const { 
-	return m_metadata.get<String>(CompositionMetadataKeys::Copyright,
-				      "");
+        return m_metadata.get<String>(CompositionMetadataKeys::Copyright,
+                                      "");
     }
     void setCopyrightNote(const std::string &cr) {
-	m_metadata.set<String>(CompositionMetadataKeys::Copyright, cr);
+        m_metadata.set<String>(CompositionMetadataKeys::Copyright, cr);
     }
 
 
@@ -762,7 +762,7 @@ public:
      * note duration).
      */
     const BasicQuantizer *getBasicQuantizer() const {
-	return m_basicQuantizer;
+        return m_basicQuantizer;
     }
 
     /**
@@ -770,7 +770,7 @@ public:
      * only.
      */
     const NotationQuantizer *getNotationQuantizer() const {
-	return m_notationQuantizer;
+        return m_notationQuantizer;
     }
 
 
@@ -780,16 +780,16 @@ public:
 
     // delegate RefreshStatusArray API
     unsigned int getNewRefreshStatusId() {
-	return m_refreshStatusArray.getNewRefreshStatusId();
+        return m_refreshStatusArray.getNewRefreshStatusId();
     }
     
     RefreshStatus& getRefreshStatus(unsigned int id) {
-	return m_refreshStatusArray.getRefreshStatus(id);
+        return m_refreshStatusArray.getRefreshStatus(id);
     }
 
     /// Set all refresh statuses to true
     void updateRefreshStatuses() {
-	m_refreshStatusArray.updateRefreshStatuses();
+        m_refreshStatusArray.updateRefreshStatuses();
     }
 
 
@@ -813,21 +813,21 @@ protected:
 
     struct ReferenceSegmentEventCmp
     {
-	bool operator()(const Event &e1, const Event &e2) const;
-	bool operator()(const Event *e1, const Event *e2) const {
-	    return operator()(*e1, *e2);
-	}
+        bool operator()(const Event &e1, const Event &e2) const;
+        bool operator()(const Event *e1, const Event *e2) const {
+            return operator()(*e1, *e2);
+        }
     };
     
     struct BarNumberComparator
     {
-	bool operator()(const Event &e1, const Event &e2) const {
-	    return (e1.get<Int>(BarNumberProperty) <
-		    e2.get<Int>(BarNumberProperty));
-	}
-	bool operator()(const Event *e1, const Event *e2) const {
-	    return operator()(*e1, *e2);
-	}
+        bool operator()(const Event &e1, const Event &e2) const {
+            return (e1.get<Int>(BarNumberProperty) <
+                    e2.get<Int>(BarNumberProperty));
+        }
+        bool operator()(const Event *e1, const Event *e2) const {
+            return operator()(*e1, *e2);
+        }
     };
  
     /**
@@ -857,41 +857,41 @@ protected:
      * event, and can only have one event at each absolute time
      */
     class ReferenceSegment :
-	public FastVector<Event *> // not a set: want random access for bars
+        public FastVector<Event *> // not a set: want random access for bars
     {
-	typedef FastVector<Event *> Impl;
+        typedef FastVector<Event *> Impl;
 
     public:
-	ReferenceSegment(std::string eventType);
-	virtual ~ReferenceSegment();
+        ReferenceSegment(std::string eventType);
+        virtual ~ReferenceSegment();
     private:
         ReferenceSegment(const ReferenceSegment &);
         ReferenceSegment& operator=(const ReferenceSegment &);
     public:
-	typedef Impl::iterator iterator;
-	typedef Impl::size_type size_type;
-	typedef Impl::difference_type difference_type;
+        typedef Impl::iterator iterator;
+        typedef Impl::size_type size_type;
+        typedef Impl::difference_type difference_type;
 
-	void clear();
+        void clear();
 
-	timeT getDuration() const;
-	
-	/// Inserts a single event, removing any existing one at that time
-	iterator insert(Event *e); // may throw Event::BadType
+        timeT getDuration() const;
+        
+        /// Inserts a single event, removing any existing one at that time
+        iterator insert(Event *e); // may throw Event::BadType
 
-	void erase(Event *e);
+        void erase(Event *e);
 
-	iterator findTime(timeT time);
-	iterator findNearestTime(timeT time);
+        iterator findTime(timeT time);
+        iterator findNearestTime(timeT time);
 
-	iterator findRealTime(RealTime time);
-	iterator findNearestRealTime(RealTime time);
+        iterator findRealTime(RealTime time);
+        iterator findNearestRealTime(RealTime time);
 
         std::string getEventType() const { return m_eventType; }
 
     private:
-  	iterator find(Event *e);
-	std::string m_eventType;
+        iterator find(Event *e);
+        std::string m_eventType;
     };
 
     /// Contains time signature events
@@ -910,14 +910,14 @@ protected:
     mutable bool m_tempoTimestampsNeedCalculating;
     RealTime time2RealTime(timeT time, tempoT tempo) const;
     RealTime time2RealTime(timeT time, tempoT tempo,
-			   timeT targetTempoTime, tempoT targetTempo) const;
+                           timeT targetTempoTime, tempoT targetTempo) const;
     timeT realTime2Time(RealTime rtime, tempoT tempo) const;
     timeT realTime2Time(RealTime rtime, tempoT tempo,
-			timeT targetTempoTime, tempoT targetTempo) const;
+                        timeT targetTempoTime, tempoT targetTempo) const;
 
     bool getTempoTarget(ReferenceSegment::const_iterator i,
-			tempoT &target,
-			timeT &targetTime) const;
+                        tempoT &target,
+                        timeT &targetTime) const;
 
     static RealTime getTempoTimestamp(const Event *e);
     static void setTempoTimestamp(Event *e, RealTime r);
@@ -1034,7 +1034,7 @@ public:
      */
     virtual void segmentEventsTimingChanged(const Composition *, Segment *,
                                             timeT /* delay */,
-					    RealTime /* rtDelay */) { }
+                                            RealTime /* rtDelay */) { }
 
     /**
      * Called when the segment's transpose value has changed
@@ -1052,7 +1052,7 @@ public:
      * Called when the segment's track has changed
      */
     virtual void segmentTrackChanged(const Composition *, Segment *,
-				     TrackId /* id */) { }
+                                     TrackId /* id */) { }
 
     /**
      * Called after the composition's end marker time has been
@@ -1084,7 +1084,7 @@ public:
      * Called when solo status changes (solo on/off, and selected track)
      */
     virtual void soloChanged(const Composition *, bool /* solo */,
-			     TrackId /* selectedTrack */) { }
+                             TrackId /* selectedTrack */) { }
 
     /**
      * Called when solo status changes (solo on/off, and selected track)

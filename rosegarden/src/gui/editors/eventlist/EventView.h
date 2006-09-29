@@ -74,8 +74,8 @@ class EventView : public EditViewBase, public SegmentObserver
         PitchBend          = 0x0040,
         ChannelPressure    = 0x0080,
         KeyPressure        = 0x0100,
-	Indication	   = 0x0200,
-	Other		   = 0x0400
+        Indication         = 0x0200,
+        Other              = 0x0400
     };
 
 public:
@@ -90,8 +90,8 @@ public:
     virtual bool applyLayout(int staffNo = -1);
 
     virtual void refreshSegment(Segment *segment,
-				timeT startTime = 0,
-				timeT endTime = 0);
+                                timeT startTime = 0,
+                                timeT endTime = 0);
 
     virtual void updateView();
 
@@ -165,7 +165,7 @@ protected:
     void makeInitialSelection(timeT);
     QString makeTimeString(timeT time, int timeMode);
     QString makeDurationString(timeT time,
-			       timeT duration, int timeMode);
+                               timeT duration, int timeMode);
     virtual Segment *getCurrentSegment();
 
     virtual void updateViewCaption();

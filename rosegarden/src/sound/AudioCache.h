@@ -80,14 +80,14 @@ protected:
     void clear();
 
     struct CacheRec {
-	CacheRec() : data(0), channels(0), nframes(0), refCount(0) { }
-	CacheRec(float **d, size_t c, size_t n) :
-	    data(d), channels(c), nframes(n), refCount(1) { }
-	~CacheRec();
-	float **data;
-	size_t channels;
-	size_t nframes;
-	int refCount;
+        CacheRec() : data(0), channels(0), nframes(0), refCount(0) { }
+        CacheRec(float **d, size_t c, size_t n) :
+            data(d), channels(c), nframes(n), refCount(1) { }
+        ~CacheRec();
+        float **data;
+        size_t channels;
+        size_t nframes;
+        int refCount;
     };
 
     std::map<void *, CacheRec *> m_cache;

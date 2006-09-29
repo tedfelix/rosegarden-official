@@ -73,27 +73,27 @@ public:
     // Set many values to values
     //
     static bool setStudioObjectProperties(const MappedObjectIdList &ids,
-					  const MappedObjectPropertyList &properties,
-					  const MappedObjectValueList &values);
+                                          const MappedObjectPropertyList &properties,
+                                          const MappedObjectValueList &values);
 
     // Set a value to a string 
     //
     static bool setStudioObjectProperty(MappedObjectId id,
                                         const MappedObjectProperty &property,
-					const QString &value);
+                                        const QString &value);
 
     // Set a value to a string list
     //
     static bool setStudioObjectPropertyList(MappedObjectId id,
-					    const MappedObjectProperty &property,
-					    const MappedObjectPropertyList &values);
+                                            const MappedObjectProperty &property,
+                                            const MappedObjectPropertyList &values);
 
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,
                                     MappedObjectValue value);
 
     static MappedObjectValue getStudioPluginPort(MappedObjectId pluginId,
-						 unsigned long portId);
+                                                 unsigned long portId);
 
     // Get all plugin information
     //
@@ -111,9 +111,9 @@ public:
     // Connection
     //
     static void connectStudioObjects(MappedObjectId id1,
-				     MappedObjectId id2);
+                                     MappedObjectId id2);
     static void disconnectStudioObjects(MappedObjectId id1,
-					MappedObjectId id2);
+                                        MappedObjectId id2);
     static void disconnectStudioObject(MappedObjectId id);
 
     // Send controllers and other one off MIDI events using these

@@ -54,7 +54,7 @@ class ControlEditorDialog : public KMainWindow
 public:
     ControlEditorDialog(QWidget *parent,
                         RosegardenGUIDoc *doc,
-			DeviceId device);
+                        DeviceId device);
 
     ~ControlEditorDialog();
 

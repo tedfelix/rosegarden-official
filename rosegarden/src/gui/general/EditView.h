@@ -120,8 +120,8 @@ public:
      * command invocation anyway.)
      */
     virtual void setCurrentSelection(EventSelection* s,
-				     bool preview = false,
-				     bool redrawNow = false) = 0;
+                                     bool preview = false,
+                                     bool redrawNow = false) = 0;
 
     EventSelection* getCurrentSelection()
         { return m_currentEventSelection; }
@@ -331,9 +331,9 @@ protected:
      * returns any specified accidental through the reference arg.
      */
     int getPitchFromNoteInsertAction(QString actionName,
-				     Accidental &acc,
-				     const Clef &clef,
-				     const Key &key);
+                                     Accidental &acc,
+                                     const Clef &clef,
+                                     const Key &key);
 
     /**
      * Abstract method to get the view size
@@ -358,7 +358,7 @@ protected:
      * implementation is okay but slow.
      */ 
     virtual timeT getInsertionTime(Clef &clef,
-					       Key &key);
+                                               Key &key);
 
     /**
      * Abstract method to get current staff (the returned staff will be

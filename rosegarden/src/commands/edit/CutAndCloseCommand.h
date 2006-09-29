@@ -48,7 +48,7 @@ class CutAndCloseCommand : public KMacroCommand
 {
 public:
     CutAndCloseCommand(EventSelection &selection,
-		       Clipboard *clipboard);
+                       Clipboard *clipboard);
 
     static QString getGlobalName() { return i18n("C&ut and Close"); }
 
@@ -56,22 +56,22 @@ protected:
     class CloseCommand : public KNamedCommand
     {
     public:
-	CloseCommand(Segment *segment,
-		     timeT fromTime,
-		     timeT toTime) :
-	    KNamedCommand("Close"),
-	    m_segment(segment),
-	    m_gapEnd(fromTime),
-	    m_gapStart(toTime) { }
+        CloseCommand(Segment *segment,
+                     timeT fromTime,
+                     timeT toTime) :
+            KNamedCommand("Close"),
+            m_segment(segment),
+            m_gapEnd(fromTime),
+            m_gapStart(toTime) { }
 
-	virtual void execute();
-	virtual void unexecute();
+        virtual void execute();
+        virtual void unexecute();
 
     private:
-	Segment *m_segment;
-	timeT m_gapEnd;
-	timeT m_gapStart;
-	int m_staticEvents;
+        Segment *m_segment;
+        timeT m_gapEnd;
+        timeT m_gapStart;
+        int m_staticEvents;
     };
 };    
 

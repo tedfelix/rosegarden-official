@@ -58,7 +58,7 @@ class RG21Loader : public ProgressReporter
 {
 public:
     RG21Loader(Studio *,
-	       QObject *parent = 0, const char *name = 0);
+               QObject *parent = 0, const char *name = 0);
     ~RG21Loader();
     
     /**
@@ -78,23 +78,23 @@ protected:
 
     // RG21 chord mods
     enum { ModDot     = (1<<0),
-	   ModLegato  = (1<<1),
-	   ModAccent  = (1<<2),
-	   ModSfz     = (1<<3),
-	   ModRfz     = (1<<4),
-	   ModTrill   = (1<<5),
-	   ModTurn    = (1<<6),
-	   ModPause   = (1<<7)
+           ModLegato  = (1<<1),
+           ModAccent  = (1<<2),
+           ModSfz     = (1<<3),
+           ModRfz     = (1<<4),
+           ModTrill   = (1<<5),
+           ModTurn    = (1<<6),
+           ModPause   = (1<<7)
     };
 
     // RG21 text positions
     enum { TextAboveStave = 0,
-	   TextAboveStaveLarge,
-	   TextAboveBarLine,
-	   TextBelowStave,
-	   TextBelowStaveItalic,
-	   TextChordName,
-	   TextDynamic
+           TextAboveStaveLarge,
+           TextAboveBarLine,
+           TextBelowStave,
+           TextBelowStaveItalic,
+           TextChordName,
+           TextDynamic
     };
 
     bool parseClef();

@@ -48,15 +48,15 @@ class ClefDialog : public KDialogBase
 
 public:
     enum ConversionType {
-	NoConversion,
-	ChangeOctave,
-	Transpose,
+        NoConversion,
+        ChangeOctave,
+        Transpose,
     };
 
     ClefDialog(QWidget *parent,
-	       NotePixmapFactory *npf,
-	       Clef defaultClef,
-	       bool showConversionOptions = true);
+               NotePixmapFactory *npf,
+               Clef defaultClef,
+               bool showConversionOptions = true);
 
     Clef getClef() const;
     ConversionType getConversionType() const;

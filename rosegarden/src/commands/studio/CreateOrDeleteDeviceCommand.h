@@ -47,25 +47,25 @@ class CreateOrDeleteDeviceCommand : public KNamedCommand
 public:
     // Creation constructor
     CreateOrDeleteDeviceCommand(Studio *studio,
-				std::string name,
-				Device::DeviceType type,
-				MidiDevice::DeviceDirection direction,
-				std::string connection) :
-	KNamedCommand(getGlobalName(false)),
-	m_studio(studio),
-	m_name(name),
-	m_type(type),
-	m_direction(direction),
-	m_connection(connection),
-	m_deviceId(Device::NO_DEVICE),
-	m_deviceCreated(false) { }
+                                std::string name,
+                                Device::DeviceType type,
+                                MidiDevice::DeviceDirection direction,
+                                std::string connection) :
+        KNamedCommand(getGlobalName(false)),
+        m_studio(studio),
+        m_name(name),
+        m_type(type),
+        m_direction(direction),
+        m_connection(connection),
+        m_deviceId(Device::NO_DEVICE),
+        m_deviceCreated(false) { }
 
     // Deletion constructor
     CreateOrDeleteDeviceCommand(Studio *studio,
-				DeviceId deviceId);
+                                DeviceId deviceId);
     
     static QString getGlobalName(bool deletion) {
-	return (deletion ? i18n("Delete Device") : i18n("Create Device")); 
+        return (deletion ? i18n("Delete Device") : i18n("Create Device")); 
     }
     
     virtual void execute();

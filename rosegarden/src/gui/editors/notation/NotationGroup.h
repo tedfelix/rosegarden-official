@@ -46,7 +46,7 @@ class Clef;
 /// Several sorts of "Beamed Group"
 
 class NotationGroup : public AbstractSet<NotationElement,
-		                                     NotationElementList>
+                                                     NotationElementList>
 {
 public:
     typedef NotationElementList::iterator NELIterator;
@@ -55,15 +55,15 @@ public:
 
     /// Group contents will be sampled from elements surrounding elementInGroup
     NotationGroup(NotationElementList &nel, NELIterator elementInGroup,
-		  const Quantizer *,
-		  std::pair<timeT, timeT> barRange,
-		  const NotationProperties &properties,
+                  const Quantizer *,
+                  std::pair<timeT, timeT> barRange,
+                  const NotationProperties &properties,
                   const Clef &clef, const Key &key);
 
     /// Caller intends to call sample() for each item in the group, _in order_
     NotationGroup(NotationElementList &nel,
-		  const Quantizer *,
-		  const NotationProperties &properties,
+                  const Quantizer *,
+                  const NotationProperties &properties,
                   const Clef &clef, const Key &key);
 
     virtual ~NotationGroup();

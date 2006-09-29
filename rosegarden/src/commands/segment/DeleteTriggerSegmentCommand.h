@@ -44,7 +44,7 @@ class DeleteTriggerSegmentCommand : public KNamedCommand
 {
 public:
     DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
-				TriggerSegmentId);
+                                TriggerSegmentId);
     virtual ~DeleteTriggerSegmentCommand();
 
     virtual void execute();

@@ -44,10 +44,10 @@ class AutoBeamCommand : public BasicSelectionCommand
 {
 public:
     AutoBeamCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection) { }
+        BasicSelectionCommand(getGlobalName(), selection) { }
 
     AutoBeamCommand(Segment &segment) :
-	BasicSelectionCommand(getGlobalName(), segment) { }
+        BasicSelectionCommand(getGlobalName(), segment) { }
 
     static QString getGlobalName() { return i18n("&Auto-Beam"); }
 

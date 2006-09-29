@@ -41,9 +41,9 @@ class CutRangeCommand : public KMacroCommand
 {
 public:
     CutRangeCommand(Composition *composition,
-		    timeT begin,
-		    timeT end,
-		    Clipboard *clipboard);
+                    timeT begin,
+                    timeT end,
+                    Clipboard *clipboard);
 };
     
 

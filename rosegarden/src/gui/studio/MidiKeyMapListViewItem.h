@@ -43,7 +43,7 @@ class MidiKeyMapListViewItem : public MidiDeviceListViewItem
 {
 public:
     MidiKeyMapListViewItem(DeviceId deviceId,
-			   QListViewItem* parent, QString name);
+                           QListViewItem* parent, QString name);
 
     virtual int compare(QListViewItem *i, int col, bool ascending) const;
 

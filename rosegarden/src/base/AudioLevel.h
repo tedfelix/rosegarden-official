@@ -38,11 +38,11 @@ public:
     static const float DB_FLOOR;
 
     enum FaderType {
-	     ShortFader = 0, // -40 -> +6  dB
+             ShortFader = 0, // -40 -> +6  dB
               LongFader = 1, // -70 -> +10 dB
             IEC268Meter = 2, // -70 ->  0  dB
         IEC268LongMeter = 3, // -70 -> +10 dB (0dB aligns with LongFader)
-	   PreviewLevel = 4
+           PreviewLevel = 4
     };
 
     static float multiplier_to_dB(float multiplier);
@@ -53,7 +53,7 @@ public:
 
     static float fader_to_multiplier(int level, int maxLevel, FaderType type);
     static int   multiplier_to_fader(float multiplier, int maxFaderLevel,
-				     FaderType type);
+                                     FaderType type);
 
     // fast if "levels" doesn't change often -- for audio segment previews
     static int   multiplier_to_preview(float multiplier, int levels);

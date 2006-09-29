@@ -47,7 +47,7 @@ class NoteFontViewer : public KDialogBase
 
 public:
     NoteFontViewer(QWidget *parent, QString noteFontName,
-		   QStringList systemFontNames, int pixelSize);
+                   QStringList systemFontNames, int pixelSize);
 
 protected slots:
     void slotFontChanged(const QString &);

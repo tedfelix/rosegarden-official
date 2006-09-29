@@ -46,7 +46,7 @@ public:
     MappedDevice(DeviceId id,
                  Device::DeviceType type,
                  std::string name,
-		 std::string connection = "");
+                 std::string connection = "");
 
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
@@ -88,7 +88,7 @@ protected:
     std::string                     m_name;
     std::string                     m_connection;
     MidiDevice::DeviceDirection     m_direction;
-    bool			    m_recording;
+    bool                            m_recording;
 };
 
 typedef std::vector<MappedInstrument*>::const_iterator

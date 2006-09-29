@@ -35,52 +35,52 @@ namespace Guitar
     class Barre
     {
     public:
- 	static const PropertyName BARRE_FRET;
- 	static const PropertyName BARRE_START;
-	static const PropertyName BARRE_END;
+        static const PropertyName BARRE_FRET;
+        static const PropertyName BARRE_START;
+        static const PropertyName BARRE_END;
 
-	//! Constructor
+        //! Constructor
         Barre ();
 
-	Barre (unsigned int fret, unsigned int start, unsigned int end);
+        Barre (unsigned int fret, unsigned int start, unsigned int end);
 
-	//! Create Barre object from XML data
+        //! Create Barre object from XML data
         void load (QDomNode const& obj);
 
-	//! Save Barre object as XML data
+        //! Save Barre object as XML data
         void save (QDomNode& obj);
 
-	//! Return present fret number where Barre is positioned
+        //! Return present fret number where Barre is positioned
         unsigned int getFret (void) const;
 
-	//! Return string number where Barre starts
+        //! Return string number where Barre starts
         unsigned int getStart (void) const;
 
-	//! Return string number where Barre ends
+        //! Return string number where Barre ends
         unsigned int getEnd (void) const;
 
-	//! Set Barre data
+        //! Set Barre data
         void setBarre (unsigned int fret, unsigned int start, unsigned int end);
 
-	//! Display Barre object using QPainter object
+        //! Display Barre object using QPainter object
         void drawContents (QPainter* p,
-			   unsigned int startFret,
-			   unsigned int stringCount,
-			   unsigned int fretDisplayed);
+                           unsigned int startFret,
+                           unsigned int stringCount,
+                           unsigned int fretDisplayed);
 
-	//! Set the base fret for Barre object
+        //! Set the base fret for Barre object
         void setFirstFret (int const& fretChange);
 
-	//! Display Barre object data as a text string
-	QString toString (void) const;
+        //! Display Barre object data as a text string
+        QString toString (void) const;
 
-    	bool operator== (Barre const& rhs) const;
+        bool operator== (Barre const& rhs) const;
 
     private:
 
-	unsigned int m_fret;
-	unsigned int m_start;
-	unsigned int m_end;
+        unsigned int m_fret;
+        unsigned int m_start;
+        unsigned int m_end;
 
     };
 

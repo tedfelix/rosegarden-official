@@ -59,7 +59,7 @@ public:
      * LC_LANG to en_GB.
      */
     static QString getNoteName(Note note,
-			       bool plural = false, bool triplet = false);
+                               bool plural = false, bool triplet = false);
 
     /**
      * Get the UNTRANSLATED American name of a note.  This may be
@@ -67,7 +67,7 @@ public:
      * names to local names.
      */
     static QString getAmericanName(Note note,
-				   bool plural = false, bool triplet = false);
+                                   bool plural = false, bool triplet = false);
 
     /**
      * Get the short name of a note.  The default return values are
@@ -77,7 +77,7 @@ public:
      * LC_LANG to en_GB.
      */
     static QString getShortNoteName(Note note,
-				    bool plural = false, bool triplet = false);
+                                    bool plural = false, bool triplet = false);
 
 
     /**
@@ -103,16 +103,16 @@ public:
      * match for the required duration.
      */
     static QString makeNoteMenuLabel(timeT duration,
-				     bool brief,
-				     timeT &errorReturn,
-				     bool plural = false);
+                                     bool brief,
+                                     timeT &errorReturn,
+                                     bool plural = false);
 
 private:
     /**
      * Return a string representing the dotted version of the input str.
      */
     static QString addDots(QString s, int dots,
-			   bool hyphenate, bool internationalize);
+                           bool hyphenate, bool internationalize);
 
 };    
 

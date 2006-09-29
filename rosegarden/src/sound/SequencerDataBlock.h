@@ -28,7 +28,7 @@
 
 namespace Rosegarden
 {
-	
+        
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  * (and this struct mustn't have a constructor)
@@ -55,11 +55,11 @@ public:
     SequencerDataBlock(bool initialise);
 
     RealTime getPositionPointer() const {
-	return RealTime(m_positionSec, m_positionNsec);
+        return RealTime(m_positionSec, m_positionNsec);
     }
     void setPositionPointer(const RealTime &rt) {
-	m_positionSec = rt.sec;
-	m_positionNsec = rt.nsec;
+        m_positionSec = rt.sec;
+        m_positionNsec = rt.nsec;
     }
     
     bool getVisual(MappedEvent &ev) const;
@@ -117,7 +117,7 @@ protected:
     
     int m_recordEventIndex;
     char m_recordBuffer[sizeof(MappedEvent) *
-			SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
+                        SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
 
     InstrumentId m_knownInstruments[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     int m_knownInstrumentCount;

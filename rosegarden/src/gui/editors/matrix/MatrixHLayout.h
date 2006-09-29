@@ -57,8 +57,8 @@ public:
      * Resets internal data stores for a specific staff
      */
     virtual void resetStaff(Staff &staff,
-			    timeT = 0,
-			    timeT = 0);
+                            timeT = 0,
+                            timeT = 0);
 
     /**
      * Returns the total length of all elements once layout is done.
@@ -89,8 +89,8 @@ public:
      * segment.
      */
     virtual void scanStaff(Staff&,
-			   timeT = 0,
-			   timeT = 0);
+                           timeT = 0,
+                           timeT = 0);
 
     /**
      * Computes any layout data that may depend on the results of
@@ -99,7 +99,7 @@ public:
      * (likely for vertical layout).
      */
     virtual void finishLayout(timeT = 0,
-			      timeT = 0);
+                              timeT = 0);
 
     /**
      * Returns true if there is a new time signature in the given bar,
@@ -107,9 +107,9 @@ public:
      * x-coord
      */
     virtual bool getTimeSignaturePosition(Staff &staff,
-					  int barNo,
-					  TimeSignature &timeSig,
-					  double &timeSigX);
+                                          int barNo,
+                                          TimeSignature &timeSig,
+                                          double &timeSigX);
 
 protected:
 

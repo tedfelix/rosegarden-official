@@ -53,8 +53,8 @@ public:
      * Quantize a section of a Segment.
      */
     void quantize(Segment *,
-		  Segment::iterator from,
-		  Segment::iterator to) const;
+                  Segment::iterator from,
+                  Segment::iterator to) const;
 
     /**
      * Quantize an EventSelection.
@@ -71,8 +71,8 @@ public:
      * still work afterwards.)
      */
     void fixQuantizedValues(Segment *,
-			    Segment::iterator from,
-			    Segment::iterator to) const;
+                            Segment::iterator from,
+                            Segment::iterator to) const;
 
     /**
      * Return the quantized duration of the event if it has been
@@ -108,7 +108,7 @@ public:
      * different propertyNamePrefix values will remain.
      */
     void unquantize(Segment *,
-		    Segment::iterator from, Segment::iterator to) const;
+                    Segment::iterator from, Segment::iterator to) const;
 
     /**
      * Unquantize a selection of Events
@@ -205,14 +205,14 @@ protected:
      * are seen to change.
      */
     virtual void quantizeSingle(Segment *,
-				Segment::iterator) const { }
+                                Segment::iterator) const { }
 
     /**
      * See note for quantizeSingle.
      */
     virtual void quantizeRange(Segment *,
-			       Segment::iterator,
-			       Segment::iterator) const;
+                               Segment::iterator,
+                               Segment::iterator) const;
 
     std::string m_source;
     std::string m_target;
@@ -250,10 +250,10 @@ public:
     // The default unit is the shortest note type.  A unit of
     // zero means do no quantization (rather pointlessly).
     BasicQuantizer(timeT unit = -1, bool doDurations = false,
-		   int swingPercent = 0, int iteratePercent = 100);
+                   int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(std::string source, std::string target,
-		   timeT unit = -1, bool doDurations = false,
-		   int swingPercent = 0, int iteratePercent = 100);
+                   timeT unit = -1, bool doDurations = false,
+                   int swingPercent = 0, int iteratePercent = 100);
     BasicQuantizer(const BasicQuantizer &);
     virtual ~BasicQuantizer();
 
@@ -293,7 +293,7 @@ public:
 
 protected:
     virtual void quantizeSingle(Segment *,
-				Segment::iterator) const;
+                                Segment::iterator) const;
 
 private:
     BasicQuantizer &operator=(const BasicQuantizer &); // not provided
@@ -324,12 +324,12 @@ public:
     timeT getUnit() const { return m_unit; }
 
     virtual void quantizeRange(Segment *,
-			       Segment::iterator,
-			       Segment::iterator) const;
+                               Segment::iterator,
+                               Segment::iterator) const;
 
 protected:
     virtual void quantizeSingle(Segment *, Segment::iterator,
-				Segment::iterator &) const;
+                                Segment::iterator &) const;
 
     timeT quantizeTime(timeT) const;
 
@@ -389,8 +389,8 @@ public:
 
 protected:
     virtual void quantizeRange(Segment *,
-			       Segment::iterator,
-			       Segment::iterator) const;
+                               Segment::iterator,
+                               Segment::iterator) const;
 
 protected:
     // avoid having to rebuild absolutely everything each time we

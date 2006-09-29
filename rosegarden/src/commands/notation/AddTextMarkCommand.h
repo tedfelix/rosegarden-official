@@ -44,9 +44,9 @@ class AddTextMarkCommand : public BasicSelectionCommand
 {
 public:
     AddTextMarkCommand(std::string text,
-				EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection), m_text(text) { }
+                                EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection), m_text(text) { }
 
     static QString getGlobalName() { return i18n("Add Te&xt Mark..."); }
 

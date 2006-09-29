@@ -58,8 +58,8 @@ public:
      * through getEvent().
      */
     EventEditDialog(QWidget *parent,
-		    const Event &event,
-		    bool editable = true);
+                    const Event &event,
+                    bool editable = true);
 
     bool isModified() const { return m_modified; }
     Event getEvent() const;

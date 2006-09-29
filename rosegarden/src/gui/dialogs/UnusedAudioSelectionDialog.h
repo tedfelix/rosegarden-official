@@ -44,9 +44,9 @@ class UnusedAudioSelectionDialog : public KDialogBase
 {
 public:
     UnusedAudioSelectionDialog(QWidget *,
-			       QString introductoryText,
-			       std::vector<QString> fileNames,
-			       bool offerCancel = true);
+                               QString introductoryText,
+                               std::vector<QString> fileNames,
+                               bool offerCancel = true);
     
     std::vector<QString> getSelectedAudioFileNames() const;
 

@@ -47,7 +47,7 @@ class RemoveTempoChangeCommand : public KNamedCommand
 public:
     RemoveTempoChangeCommand(Composition *composition,
                              int index):
-	KNamedCommand(getGlobalName()),
+        KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempoChangeIndex(index),
         m_oldTime(0),

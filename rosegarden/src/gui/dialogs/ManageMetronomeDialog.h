@@ -81,7 +81,7 @@ protected:
     InstrumentParameterBox *m_instrumentParameterBox;
     QCheckBox              *m_playEnabled;
     QCheckBox              *m_recordEnabled;
-    	
+        
     bool                   m_modified;
     MidiByte   m_barPitch;
     MidiByte   m_beatPitch;

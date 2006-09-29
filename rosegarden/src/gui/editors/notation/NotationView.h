@@ -109,9 +109,9 @@ class NotationView : public EditView,
 
 public:
     explicit NotationView(RosegardenGUIDoc *doc,
-			  std::vector<Segment *> segments,
-			  QWidget *parent,
-			  bool showProgressive); // update during initial render?
+                          std::vector<Segment *> segments,
+                          QWidget *parent,
+                          bool showProgressive); // update during initial render?
 
     /**
      * Constructor for printing only.  If parent is provided, a
@@ -120,9 +120,9 @@ public:
      * for printing will be taken from that view.
      */
     explicit NotationView(RosegardenGUIDoc *doc,
-			  std::vector<Segment *> segments,
-			  QWidget *parent,
-			  NotationView *referenceView);
+                          std::vector<Segment *> segments,
+                          QWidget *parent,
+                          NotationView *referenceView);
 
     ~NotationView();
 
@@ -143,12 +143,12 @@ public:
 
     /// Return a pointer to the staff at the specified index
     Staff *getStaff(int i) {
-	return getLinedStaff(i);
+        return getLinedStaff(i);
     }
 
     /// Return a pointer to the staff corresponding to the given segment
     Staff *getStaff(const Segment &segment) {
-	return getLinedStaff(segment);
+        return getLinedStaff(segment);
     }
 
     /// Return a pointer to the staff at the specified index
@@ -255,7 +255,7 @@ public:
     void showPreviewNote(int staffNo, double layoutX,
                          int pitch, int height,
                          const Note &note,
-			 int velocity = -1);
+                         int velocity = -1);
 
     /// Remove any visible preview note
     void clearPreviewNote();
@@ -616,7 +616,7 @@ public slots:
      * view
      */
     void slotUpdateRecordingSegment(Segment *recordingSegment,
-				    timeT updatedFrom);
+                                    timeT updatedFrom);
 
     /// Set the current staff to the one containing the given canvas Y coord
     void slotSetCurrentStaff(double canvasX, int canvasY);
@@ -820,7 +820,7 @@ protected:
     virtual void readOptions();
 
     void setOneToolbar(const char *actionName, 
-		       const char *toolbarName);
+                       const char *toolbarName);
 
     /**
      * create menus and toolbars
@@ -909,7 +909,7 @@ protected:
     virtual Segment *getCurrentSegment();
     virtual Staff *getCurrentStaff() { return getCurrentLinedStaff(); }
     virtual LinedStaff *getCurrentLinedStaff();
-	
+        
 
     /**
      * Return the time at which the insert cursor may be found.

@@ -65,7 +65,7 @@ public:
         { return m_selectedInstrument; }
 
     void setAudioMeter(float dBleft, float dBright,
-		       float recDBleft, float recDBright);
+                       float recDBleft, float recDBright);
 
     void setDocument(RosegardenGUIDoc* doc);
     

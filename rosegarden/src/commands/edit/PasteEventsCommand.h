@@ -48,11 +48,11 @@ class PasteEventsCommand : public BasicCommand
 {
 public:
     enum PasteType {
-	Restricted,		// paste into existing gap
-	Simple,			// erase existing events to make room
-	OpenAndPaste,		// bump up existing events to make room
-	NoteOverlay,		// overlay and tie notation-style
-	MatrixOverlay		// overlay raw matrix-style
+        Restricted,             // paste into existing gap
+        Simple,                 // erase existing events to make room
+        OpenAndPaste,           // bump up existing events to make room
+        NoteOverlay,            // overlay and tie notation-style
+        MatrixOverlay           // overlay raw matrix-style
     };
 
     typedef std::map<PasteType, QString> PasteTypeMap;
@@ -63,9 +63,9 @@ public:
      * the events to be pasted.
      */
     PasteEventsCommand(Segment &segment,
-		       Clipboard *clipboard,
-		       timeT pasteTime,
-		       PasteType pasteType);
+                       Clipboard *clipboard,
+                       timeT pasteTime,
+                       PasteType pasteType);
 
     /**
      * Construct a Paste command from a clipboard that will contain
@@ -77,10 +77,10 @@ public:
      * by the paste.
      */
     PasteEventsCommand(Segment &segment,
-		       Clipboard *clipboard,
-		       timeT pasteTime,
-		       timeT pasteEndTime,
-		       PasteType pasteType);
+                       Clipboard *clipboard,
+                       timeT pasteTime,
+                       timeT pasteEndTime,
+                       PasteType pasteType);
 
     virtual ~PasteEventsCommand();
 
@@ -94,8 +94,8 @@ public:
 protected:
     virtual void modifySegment();
     timeT getEffectiveEndTime(Segment &,
-					  Clipboard *,
-					  timeT);
+                                          Clipboard *,
+                                          timeT);
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;

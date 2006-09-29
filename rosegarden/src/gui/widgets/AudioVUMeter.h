@@ -44,23 +44,23 @@ public:
     AudioVUMeter(QWidget *parent = 0,
                  VUMeter::VUMeterType type = VUMeter::AudioPeakHoldShort,
                  bool stereo = true,
-		 bool hasRecord = false,
+                 bool hasRecord = false,
                  int width = 12,
                  int height = 140,
                  const char *name = 0);
 
     void setLevel(double dB) {
-	m_meter->setLevel(dB);
+        m_meter->setLevel(dB);
     }
     void setLevel(double dBleft, double dBright) {
-	m_meter->setLevel(dBleft, dBright);
+        m_meter->setLevel(dBleft, dBright);
     }
 
     void setRecordLevel(double dB) {
-	m_meter->setRecordLevel(dB);
+        m_meter->setRecordLevel(dB);
     }
     void setRecordLevel(double dBleft, double dBright) {
-	m_meter->setRecordLevel(dBleft, dBright);
+        m_meter->setRecordLevel(dBleft, dBright);
     }
 
     virtual void paintEvent(QPaintEvent*);
@@ -69,18 +69,18 @@ protected:
     class AudioVUMeterImpl : public VUMeter
     {
     public:
-	AudioVUMeterImpl(QWidget *parent,
-			 VUMeterType type,
-			 bool stereo,
-			 bool hasRecord,
-			 int width,
-			 int height,
-			 const char *name);
+        AudioVUMeterImpl(QWidget *parent,
+                         VUMeterType type,
+                         bool stereo,
+                         bool hasRecord,
+                         int width,
+                         int height,
+                         const char *name);
     protected:
-	virtual void meterStart() { }
-	virtual void meterStop() { }
+        virtual void meterStart() { }
+        virtual void meterStop() { }
     };
-	
+        
     AudioVUMeterImpl *m_meter;
     bool m_stereo;
     int m_yoff;

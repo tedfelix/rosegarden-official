@@ -43,9 +43,9 @@ class RestInsertionCommand : public NoteInsertionCommand
 {
 public:
     RestInsertionCommand(Segment &segment,
-			 timeT time,
-			 timeT endTime,
-			 Note note);
+                         timeT time,
+                         timeT endTime,
+                         Note note);
     virtual ~RestInsertionCommand();
 
 protected:

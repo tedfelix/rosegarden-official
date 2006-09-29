@@ -46,13 +46,13 @@ class EventUnquantizeCommand : public BasicCommand
 public:
     /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(Segment &segment,
-			   timeT startTime,
-			   timeT endTime,
-			   Quantizer *);
+                           timeT startTime,
+                           timeT endTime,
+                           Quantizer *);
     
     /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(EventSelection &selection,
-			   Quantizer *);
+                           Quantizer *);
 
     ~EventUnquantizeCommand();
     

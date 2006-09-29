@@ -136,7 +136,7 @@ public:
      * 10 means that one pixel equals 10 time units.)
      */
     SimpleRulerScale(Composition *composition,
-		     double origin, double unitsPerPixel);
+                     double origin, double unitsPerPixel);
     virtual ~SimpleRulerScale();
 
     double getOrigin() const { return m_origin; }

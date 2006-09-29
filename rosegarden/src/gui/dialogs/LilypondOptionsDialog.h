@@ -46,8 +46,8 @@ class LilypondOptionsDialog : public KDialogBase
 
 public:
     LilypondOptionsDialog(QWidget *parent,
-			  QString windowCaption = "",
-			  QString heading = "");
+                          QString windowCaption = "",
+                          QString heading = "");
 
 public slots:
     void slotOk();

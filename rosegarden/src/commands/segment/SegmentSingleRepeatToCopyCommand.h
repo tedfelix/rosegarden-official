@@ -43,7 +43,7 @@ class SegmentSingleRepeatToCopyCommand : public KNamedCommand
 {
 public:
     SegmentSingleRepeatToCopyCommand(Segment *segment,
-				     timeT time);
+                                     timeT time);
     virtual ~SegmentSingleRepeatToCopyCommand();
 
     virtual void execute();

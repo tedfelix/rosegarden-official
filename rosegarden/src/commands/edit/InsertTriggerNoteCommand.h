@@ -46,15 +46,15 @@ class InsertTriggerNoteCommand : public BasicCommand
 {
 public:
     InsertTriggerNoteCommand(Segment &,
-			     timeT time,
-			     Note note,
-			     int pitch,
-			     int velocity,
-			     NoteStyleName noteStyle,
-			     TriggerSegmentId id,
-			     bool retune,
-			     std::string timeAdjust,
-			     Mark mark);
+                             timeT time,
+                             Note note,
+                             int pitch,
+                             int velocity,
+                             NoteStyleName noteStyle,
+                             TriggerSegmentId id,
+                             bool retune,
+                             std::string timeAdjust,
+                             Mark mark);
     virtual ~InsertTriggerNoteCommand();
 
 protected:

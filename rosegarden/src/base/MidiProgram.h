@@ -61,7 +61,7 @@ class MidiProgram
 public:
     MidiProgram();
     MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "",
-		std::string keyMapping = "");
+                std::string keyMapping = "");
 
     // comparator disregards name
     bool operator==(const MidiProgram &p) const;
@@ -133,10 +133,10 @@ public:
                   MidiByte barPitch = 37,
                   MidiByte beatPitch = 37,
                   MidiByte subBeatPitch = 37,
-		  int depth = 2,
+                  int depth = 2,
                   MidiByte barVely = 120,
                   MidiByte beatVely = 100,
-		  MidiByte subBeatVely = 80);
+                  MidiByte subBeatVely = 80);
 
     InstrumentId        getInstrument() const { return m_instrument; }
     MidiByte            getBarPitch() const { return m_barPitch; }

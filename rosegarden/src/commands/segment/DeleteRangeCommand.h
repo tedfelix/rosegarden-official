@@ -44,36 +44,36 @@ class DeleteRangeCommand : public KMacroCommand
 {
 public:
     DeleteRangeCommand(Composition *composition,
-		       timeT begin,
-		       timeT end);
+                       timeT begin,
+                       timeT end);
     virtual ~DeleteRangeCommand();
 
 private:
     class RejoinCommand : public KNamedCommand
     {
     public:
-	// This command rejoins s on to a subsequent segment on the same
-	// track that ends at endMarkerTime (presumably the original end
-	// marker time of s, with the range duration subtracted).
+        // This command rejoins s on to a subsequent segment on the same
+        // track that ends at endMarkerTime (presumably the original end
+        // marker time of s, with the range duration subtracted).
 
-	RejoinCommand(Composition *c,
-		      Segment *s,
-		      timeT endMarkerTime) :
-	    KNamedCommand(i18n("Rejoin Command")),
-	    m_composition(c), m_segment(s), m_endMarkerTime(endMarkerTime),
-	    m_joinCommand(0) { }
+        RejoinCommand(Composition *c,
+                      Segment *s,
+                      timeT endMarkerTime) :
+            KNamedCommand(i18n("Rejoin Command")),
+            m_composition(c), m_segment(s), m_endMarkerTime(endMarkerTime),
+            m_joinCommand(0) { }
 
-	~RejoinCommand() { delete m_joinCommand; }
+        ~RejoinCommand() { delete m_joinCommand; }
 
-	void execute();
-	void unexecute() { if (m_joinCommand) m_joinCommand->unexecute(); }
+        void execute();
+        void unexecute() { if (m_joinCommand) m_joinCommand->unexecute(); }
 
     private:
-	Composition *m_composition;
-	Segment *m_segment;
-	timeT m_endMarkerTime;
+        Composition *m_composition;
+        Segment *m_segment;
+        timeT m_endMarkerTime;
 
-	SegmentJoinCommand *m_joinCommand;
+        SegmentJoinCommand *m_joinCommand;
     };
 };
 

@@ -56,7 +56,7 @@ public:
     // two channels.
     //
     void setAudioMeter(float dBleft, float dBright,
-		       float recDBleft, float recDBright);
+                       float recDBleft, float recDBright);
 
     // Set the button colour
     //

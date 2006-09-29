@@ -85,9 +85,9 @@ protected:
     virtual void dump();
 
     void mergeTriggerSegment(Segment **target,
-			     Event *trigger,
-			     timeT performanceDuration,
-			     TriggerSegmentRec *rec);
+                             Event *trigger,
+                             timeT performanceDuration,
+                             TriggerSegmentRec *rec);
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;

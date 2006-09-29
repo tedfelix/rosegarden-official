@@ -45,12 +45,12 @@ class RenameDeviceCommand : public KNamedCommand
 {
 public:
     RenameDeviceCommand(Studio *studio,
-			DeviceId deviceId,
-			std::string name) :
-	KNamedCommand(getGlobalName()),
-	m_studio(studio),
-	m_deviceId(deviceId),
-	m_name(name) { }
+                        DeviceId deviceId,
+                        std::string name) :
+        KNamedCommand(getGlobalName()),
+        m_studio(studio),
+        m_deviceId(deviceId),
+        m_name(name) { }
 
     static QString getGlobalName() { return i18n("Rename Device"); }
 

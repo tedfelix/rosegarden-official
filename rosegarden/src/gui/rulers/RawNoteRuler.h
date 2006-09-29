@@ -58,16 +58,16 @@ class RawNoteRuler : public QWidget
 
 public:
     RawNoteRuler(RulerScale *rulerScale,
-		 Segment *segment,
-		 double xorigin = 0.0,
-		 int height = 0,
-		 QWidget* parent = 0,
-		 const char *name = 0);
+                 Segment *segment,
+                 double xorigin = 0.0,
+                 int height = 0,
+                 QWidget* parent = 0,
+                 const char *name = 0);
 
     ~RawNoteRuler();
 
     void setCurrentSegment(Segment *segment) {
-	m_segment = segment;
+        m_segment = segment;
     }
 
     virtual QSize sizeHint() const;
@@ -92,21 +92,21 @@ private:
 
     struct EventTreeNode
     {
-	typedef std::vector<EventTreeNode *> NodeList;
-	
-	EventTreeNode(Segment::iterator n) : node(n) { }
-	~EventTreeNode() {
-	    for (NodeList::iterator i = children.begin();
-		 i != children.end(); ++i) {
-		delete *i;
-	    }
-	}
+        typedef std::vector<EventTreeNode *> NodeList;
+        
+        EventTreeNode(Segment::iterator n) : node(n) { }
+        ~EventTreeNode() {
+            for (NodeList::iterator i = children.begin();
+                 i != children.end(); ++i) {
+                delete *i;
+            }
+        }
 
-	int getDepth();
-	int getChildrenAboveOrBelow(bool below = false, int pitch = -1);
-	
-	Segment::iterator node;
-	NodeList children;
+        int getDepth();
+        int getChildrenAboveOrBelow(bool below = false, int pitch = -1);
+        
+        Segment::iterator node;
+        NodeList children;
     };
 
     std::pair<timeT, timeT> getExtents(Segment::iterator);
@@ -116,7 +116,7 @@ private:
     void buildForest(Segment *, Segment::iterator, Segment::iterator);
 
     void drawNode(QPainter &, DefaultVelocityColour &, EventTreeNode *,
-		  double height, double yorigin);
+                  double height, double yorigin);
 
     // needs to be class with dtor &c and containing above methods
     EventTreeNode::NodeList m_forest;

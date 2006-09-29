@@ -44,7 +44,7 @@ class AudioPluginOSCGUI
 {
 public:
     AudioPluginOSCGUI(AudioPluginInstance *instance,
-		      QString serverURL, QString friendlyName);
+                      QString serverURL, QString friendlyName);
     virtual ~AudioPluginOSCGUI();
 
     void setGUIUrl(QString url);

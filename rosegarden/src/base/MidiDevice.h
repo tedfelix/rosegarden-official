@@ -42,27 +42,27 @@ class MidiDevice : public Device, public Controllable
 public:
     typedef enum
     {
-	Play = 0,
-	Record = 1
+        Play = 0,
+        Record = 1
     } DeviceDirection;
 
     typedef enum
     {
-	NoVariations,
-	VariationFromLSB,
-	VariationFromMSB
+        NoVariations,
+        VariationFromLSB,
+        VariationFromMSB
     } VariationType;
 
     MidiDevice();
     MidiDevice(const MidiDevice &);
     MidiDevice(DeviceId id,
-	       const MidiDevice &);
+               const MidiDevice &);
     MidiDevice(DeviceId id,
                const std::string &name,
                DeviceDirection dir);
     MidiDevice(DeviceId id,
                const std::string &name,
-	       const std::string &label,
+               const std::string &label,
                DeviceDirection dir);
     virtual ~MidiDevice();
 
@@ -197,7 +197,7 @@ protected:
     
     // Is this device recording?
     //
-    bool m_recording;	
+    bool m_recording;   
     
     // Should we present LSB or MSB of bank info as a Variation number?
     //

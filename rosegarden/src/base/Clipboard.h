@@ -116,7 +116,7 @@ public:
      * most situations it will only insert one).
      */
     void newSegment(const Segment *copyFrom, timeT from, timeT to,
-		    bool expandRepeats);
+                    bool expandRepeats);
 
     /**
      * Add a new segment to the clipboard, containing copied of

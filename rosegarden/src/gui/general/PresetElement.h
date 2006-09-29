@@ -41,23 +41,23 @@ class PresetElement
 public:
 
     PresetElement(QString name,
-		  int clef,
-		  int transpose,
-		  int highAm,
-		  int lowAm,
-		  int highPro,
-		  int lowPro);
+                  int clef,
+                  int transpose,
+                  int highAm,
+                  int lowAm,
+                  int highPro,
+                  int lowPro);
 
     ~PresetElement();
 
     // accessors
-    QString getName()	 { return m_name;      }
-    int getClef()    	 { return m_clef;      }
+    QString getName()    { return m_name;      }
+    int getClef()        { return m_clef;      }
     int getTranspose()   { return m_transpose; }
-    int getHighAm()	 { return m_highAm;    }     
-    int getLowAm()	 { return m_lowAm;     }
-    int getHighPro()	 { return m_highPro;   }
-    int getLowPro() 	 { return m_lowPro;    }
+    int getHighAm()      { return m_highAm;    }     
+    int getLowAm()       { return m_lowAm;     }
+    int getHighPro()     { return m_highPro;   }
+    int getLowPro()      { return m_lowPro;    }
 
 private:
     QString m_name;

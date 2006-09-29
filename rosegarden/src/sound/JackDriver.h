@@ -92,35 +92,35 @@ public:
                                             float value);
 
     virtual float getPluginInstancePortValue(InstrumentId id,
-					     int position,
-					     unsigned long portNumber);
+                                             int position,
+                                             unsigned long portNumber);
 
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value);
 
     virtual QStringList getPluginInstancePrograms(InstrumentId id,
-						  int position); 
+                                                  int position); 
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
-					     int position); 
+                                             int position); 
   
     virtual QString getPluginInstanceProgram(InstrumentId id,
-					     int position,
-					     int bank,
-					     int program); 
+                                             int position,
+                                             int bank,
+                                             int program); 
   
     virtual unsigned long getPluginInstanceProgram(InstrumentId id,
-						   int position,
-						   QString name);
+                                                   int position,
+                                                   QString name);
   
     virtual void setPluginInstanceProgram(InstrumentId id,
-					  int position,
-					  QString program);
+                                          int position,
+                                          QString program);
 
     virtual QString configurePlugin(InstrumentId id,
-				    int position, 
-				    QString key, QString value);
+                                    int position, 
+                                    QString key, QString value);
 
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 
@@ -133,9 +133,9 @@ public:
     // the integrity is correct (sample sizes must be written).
     //
     bool openRecordFile(InstrumentId id,
-			const std::string &fileName);
+                        const std::string &fileName);
     bool closeRecordFile(InstrumentId id,
-			 AudioFileId &returnedId);
+                         AudioFileId &returnedId);
 
     // Set or change the number of audio inputs and outputs.
     // The first of these is slightly misnamed -- the submasters
@@ -210,18 +210,18 @@ protected:
 
     // static JACK transport callbacks
     static int   jackSyncCallback(jack_transport_state_t,
-				  jack_position_t *, void *);
+                                  jack_position_t *, void *);
     static int   jackTimebaseCallback(jack_transport_state_t,
-				      jack_nframes_t,
-				      jack_position_t *,
-				      int,
-				      void *);
+                                      jack_nframes_t,
+                                      jack_position_t *,
+                                      int,
+                                      void *);
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
     int          jackProcessRecord(InstrumentId id,
-				   jack_nframes_t nframes,
-				   sample_t *, sample_t *, bool);
+                                   jack_nframes_t nframes,
+                                   sample_t *, sample_t *, bool);
     int          jackProcessEmpty(jack_nframes_t nframes);
 
     // other helper methods:
@@ -272,11 +272,11 @@ protected:
     bool                         m_haveAsyncAudioEvent;
 
     struct RecordInputDesc {
-	int   input;
-	int   channel;
-	float level;
-	RecordInputDesc(int i = 1000, int c = -1, float l = 0.0f) :
-	    input(i), channel(c), level(l) { }
+        int   input;
+        int   channel;
+        float level;
+        RecordInputDesc(int i = 1000, int c = -1, float l = 0.0f) :
+            input(i), channel(c), level(l) { }
     };
     typedef std::map<InstrumentId, RecordInputDesc> RecordInputMap;
     RecordInputMap               m_recordInputs;

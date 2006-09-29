@@ -68,7 +68,7 @@ class SequenceManager : public QObject, public CompositionObserver
     Q_OBJECT
 public:
     SequenceManager(RosegardenGUIDoc *doc,
-		    TransportDialog *transport);
+                    TransportDialog *transport);
     ~SequenceManager();
 
     /**
@@ -196,7 +196,7 @@ public:
 
     /// for the gui to call to indicate that a MIDI filter needs to be remapped
     void filtersChanged(MidiFilter thruFilter,
-			MidiFilter recordFilter);
+                        MidiFilter recordFilter);
 
     /// Return the current sequencer memory mapped file
     SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }

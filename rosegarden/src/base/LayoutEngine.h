@@ -54,8 +54,8 @@ public:
      * the given section.
      */
     virtual void resetStaff(Staff &staff,
-			    timeT startTime = 0,
-			    timeT endTime = 0) = 0;
+                            timeT startTime = 0,
+                            timeT endTime = 0) = 0;
 
     /**
      * Precomputes layout data for a single staff, updating any
@@ -67,8 +67,8 @@ public:
      * the given section.
      */
     virtual void scanStaff(Staff &staff,
-			   timeT startTime = 0,
-			   timeT endTime = 0) = 0;
+                           timeT startTime = 0,
+                           timeT endTime = 0) = 0;
 
     /**
      * Computes any layout data that may depend on the results of
@@ -80,7 +80,7 @@ public:
      * the given section.
      */
     virtual void finishLayout(timeT startTime = 0,
-			      timeT endTime = 0) = 0;
+                              timeT endTime = 0) = 0;
 
     unsigned int getStatus() const { return m_status; }
 
@@ -90,7 +90,7 @@ protected:
 
 
 class HorizontalLayoutEngine : public LayoutEngine,
-			       public RulerScale
+                               public RulerScale
 {
 public:
     HorizontalLayoutEngine(Composition *c);
@@ -115,7 +115,7 @@ public:
      * staff
      */
     virtual int getFirstVisibleBarOnStaff(Staff &) {
-	return  getFirstVisibleBar();
+        return  getFirstVisibleBar();
     }
 
     /**
@@ -123,7 +123,7 @@ public:
      * staff
      */
     virtual int getLastVisibleBarOnStaff(Staff &) {
-	return  getLastVisibleBar();
+        return  getLastVisibleBar();
     }
 
     /**
@@ -140,7 +140,7 @@ public:
      */
     virtual bool getTimeSignaturePosition
     (Staff &, int /* barNo */, TimeSignature &, double &/* timeSigX */) {
-	return 0;
+        return 0;
     }
 };
 

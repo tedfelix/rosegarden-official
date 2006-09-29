@@ -44,8 +44,8 @@ class SegmentRescaleCommand : public KNamedCommand
 {
 public:
     SegmentRescaleCommand(Segment *segment,
-			  int multiplier,
-			  int divisor);
+                          int multiplier,
+                          int divisor);
     virtual ~SegmentRescaleCommand();
 
     virtual void execute();

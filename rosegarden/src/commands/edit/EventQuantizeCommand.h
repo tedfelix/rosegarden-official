@@ -49,25 +49,25 @@ class EventQuantizeCommand : public QObject, public BasicCommand
 public:
     /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Segment &segment,
-			 timeT startTime,
-			 timeT endTime,
-			 Quantizer *);
+                         timeT startTime,
+                         timeT endTime,
+                         Quantizer *);
     
     /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(EventSelection &selection,
-			 Quantizer *);
+                         Quantizer *);
 
     /// Constructs own quantizer based on KConfig data in given group
     EventQuantizeCommand(Segment &segment,
-			 timeT startTime,
-			 timeT endTime,
-			 QString configGroup,
-			 bool notationDefault);
+                         timeT startTime,
+                         timeT endTime,
+                         QString configGroup,
+                         bool notationDefault);
     
     /// Constructs own quantizer based on KConfig data in given group
     EventQuantizeCommand(EventSelection &selection,
-			 QString configGroup,
-			 bool notationDefault);
+                         QString configGroup,
+                         bool notationDefault);
 
     ~EventQuantizeCommand();
     

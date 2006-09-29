@@ -44,16 +44,16 @@ class SetNoteTypeCommand : public BasicSelectionCommand
 {
 public:
     SetNoteTypeCommand(EventSelection &selection,
-		       Note::Type type,
-		       bool notationOnly) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_type(type),
-	m_notationOnly(notationOnly)
+                       Note::Type type,
+                       bool notationOnly) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_type(type),
+        m_notationOnly(notationOnly)
     { }
 
     static QString getGlobalName() {
-	return i18n("&Set Note Type");
+        return i18n("&Set Note Type");
     }
 
 protected:

@@ -43,13 +43,13 @@ class AddDotCommand : public BasicSelectionCommand
 {
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_notationOnly(notationOnly)
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_notationOnly(notationOnly)
     { }
 
     static QString getGlobalName() {
-	return i18n("&Add Dot");
+        return i18n("&Add Dot");
     }
 
 protected:

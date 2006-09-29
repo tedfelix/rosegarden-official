@@ -45,9 +45,9 @@ class CollapseRestsCommand : public BasicCommand
 {
 public:
     CollapseRestsCommand(Segment &s,
-				       timeT startTime,
-				       timeT endTime) :
-	BasicCommand(getGlobalName(), s, startTime, endTime) { }
+                                       timeT startTime,
+                                       timeT endTime) :
+        BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
     CollapseRestsCommand(EventSelection &selection);
 

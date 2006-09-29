@@ -44,8 +44,8 @@ class TextInsertionCommand : public BasicCommand
 {
 public:
     TextInsertionCommand(Segment &segment,
-			 timeT time,
-			 Text text);
+                         timeT time,
+                         Text text);
     virtual ~TextInsertionCommand();
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }

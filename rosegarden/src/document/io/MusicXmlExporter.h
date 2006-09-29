@@ -68,10 +68,10 @@ protected:
     void writeKey(Event *event, std::ofstream &str);
     void writeTime(TimeSignature timeSignature, std::ofstream &str);
     void writeNote(Event *e, timeT lastNoteTime,
-		   AccidentalTable &table,
-		   const Clef &clef,
-		   const Rosegarden::Key &key,
-		   std::ofstream &str);
+                   AccidentalTable &table,
+                   const Clef &clef,
+                   const Rosegarden::Key &key,
+                   std::ofstream &str);
 
  private:
     static const int MAX_DOTS = 4;

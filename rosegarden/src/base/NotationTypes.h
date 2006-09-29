@@ -267,11 +267,11 @@ public:
     Clef &operator=(const Clef &c);
 
     bool operator==(const Clef &c) const {
-	return c.m_clef == m_clef && c.m_octaveOffset == m_octaveOffset;
+        return c.m_clef == m_clef && c.m_octaveOffset == m_octaveOffset;
     }
 
     bool operator!=(const Clef &c) const {
-	return !(c == *this);
+        return !(c == *this);
     }
 
     ~Clef() { }
@@ -385,13 +385,13 @@ public:
     Key(const Key &kc);
 
     ~Key() {
-	delete m_accidentalHeights;
+        delete m_accidentalHeights;
     }
 
     Key &operator=(const Key &kc);
 
     bool operator==(const Key &k) const {
-	return k.m_name == m_name;
+        return k.m_name == m_name;
     }
 
     /**
@@ -477,8 +477,8 @@ public:
      * found in the given previous key.
      */
     int convertFrom(int pitch, const Key &previousKey,
-		    const Accidental &explicitAccidental =
-		    Accidentals::NoAccidental) const;
+                    const Accidental &explicitAccidental =
+                    Accidentals::NoAccidental) const;
 
     /**
      * Return the result of transposing the given pitch into
@@ -494,7 +494,7 @@ public:
      * by the preceding method.
      */
     static inline unsigned int canonicalHeight(int height) {
-	return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
+        return (height > 0) ? (height % 7) : ((7 - (-height % 7)) % 7);
     }
 
     typedef std::vector<Key> KeyList;
@@ -519,13 +519,13 @@ private:
         int    m_sharpCount;
         std::string m_equivalence;
         std::string m_rg2name;
-	int    m_tonicPitch;
+        int    m_tonicPitch;
 
         KeyDetails(); // ctor needed in order to live in a map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
                    std::string equivalence, std::string rg2name,
-				   int m_tonicPitch);
+                                   int m_tonicPitch);
 
         KeyDetails(const KeyDetails &d);
 
@@ -570,10 +570,10 @@ public:
     Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Indication(const std::string &s, timeT indicationDuration)
-	/* throw (BadIndicationName) */;
+        /* throw (BadIndicationName) */;
 
     Indication(const Indication &m) : m_indicationType(m.m_indicationType),
-				      m_duration(m.m_duration) { }
+                                      m_duration(m.m_duration) { }
 
     Indication &operator=(const Indication &m);
 
@@ -583,18 +583,18 @@ public:
     timeT getIndicationDuration() const { return m_duration; }
 
     bool isOttavaType() const {
-	return
-	    m_indicationType == QuindicesimaUp ||
-	    m_indicationType == OttavaUp ||
-	    m_indicationType == OttavaDown ||
-	    m_indicationType == QuindicesimaDown;
+        return
+            m_indicationType == QuindicesimaUp ||
+            m_indicationType == OttavaUp ||
+            m_indicationType == OttavaDown ||
+            m_indicationType == QuindicesimaDown;
     }
 
     int getOttavaShift() const {
-	return (m_indicationType == QuindicesimaUp ? 2 :
-		m_indicationType == OttavaUp ? 1 :
-		m_indicationType == OttavaDown ? -1 :
-		m_indicationType == QuindicesimaDown ? -2 : 0);
+        return (m_indicationType == QuindicesimaUp ? 2 :
+                m_indicationType == OttavaUp ? 1 :
+                m_indicationType == OttavaDown ? -1 :
+                m_indicationType == QuindicesimaDown ? -2 : 0);
     }
 
     /// Returned event is on heap; caller takes responsibility for ownership
@@ -657,9 +657,9 @@ public:
     static const std::string NormalSize;  // begin \normalsize font section
 
     Text(const Event &e)
-	/* throw (Event::NoData, Event::BadType) */;
+        /* throw (Event::NoData, Event::BadType) */;
     Text(const std::string &text,
-	 const std::string &textType = UnspecifiedType);
+         const std::string &textType = UnspecifiedType);
     Text(const Text &);
     Text &operator=(const Text &);
     ~Text();
@@ -710,13 +710,13 @@ public:
      * property will also be used if present.
      */
     Pitch(const Event &e)
-	/* throw Event::NoData */;
+        /* throw Event::NoData */;
 
     /**
      * Construct a Pitch object based on the given performance (MIDI) pitch.
      */
     Pitch(int performancePitch, 
-	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
+          const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
      * Construct a Pitch based on octave and pitch in octave.  The
@@ -725,8 +725,8 @@ public:
      * 0-11 where 0 is C, 1 is C sharp, etc.
      */
     Pitch(int pitchInOctave, int octave,
-	  const Accidental &explicitAccidental = Accidentals::NoAccidental,
-	  int octaveBase = -2);
+          const Accidental &explicitAccidental = Accidentals::NoAccidental,
+          int octaveBase = -2);
 
     /**
      * Construct a Pitch based on octave and note in scale.  The
@@ -742,8 +742,8 @@ public:
      * For minor keys, the harmonic scale is used.
      */
     Pitch(int noteInScale, int octave, const Key &key,
-	  const Accidental &explicitAccidental = Accidentals::NoAccidental,
-	  int octaveBase = -2);
+          const Accidental &explicitAccidental = Accidentals::NoAccidental,
+          int octaveBase = -2);
 
     /**
      * Construct a Pitch based on octave and note name.  The lowest
@@ -753,8 +753,8 @@ public:
      * so that we know how to interpret the NoAccidental case.
      */
     Pitch(char noteName, int octave, const Key &key,
-	  const Accidental &explicitAccidental = Accidentals::NoAccidental,
-	  int octaveBase = -2);
+          const Accidental &explicitAccidental = Accidentals::NoAccidental,
+          int octaveBase = -2);
     
     /**
      * Construct a Pitch corresponding a staff line or space on a
@@ -763,7 +763,7 @@ public:
      * permissible.
      */
     Pitch(int heightOnStaff, const Clef &clef, const Key &key,
-	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
+          const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     Pitch(const Pitch &);
     Pitch &operator=(const Pitch &);
@@ -855,8 +855,8 @@ public:
      * If inclOctave is false, this will return C, Bb, etc.  
      */
     std::string getAsString(bool useSharps,
-			    bool inclOctave = true,
-			    int octaveBase = -2) const;
+                            bool inclOctave = true,
+                            int octaveBase = -2) const;
 
     /**
      * Return a number 0-6 corresponding to the given note name, which
@@ -878,9 +878,9 @@ public:
      * in the given clef and key
      */
     static int getPerformancePitchFromRG21Pitch(int heightOnStaff,
-						const Accidental &accidental,
-						const Clef &clef,
-						const Key &key);
+                                                const Accidental &accidental,
+                                                const Clef &clef,
+                                                const Key &key);
 
 private:
     int m_pitch;
@@ -948,10 +948,10 @@ public:
      * relevant to rests as actual notes.
      */
     Note(Type type, int dots = 0) :
-	m_type(type < Shortest ? Shortest :
-	       type >  Longest ?  Longest :
-	       type),
-	m_dots(dots) { }
+        m_type(type < Shortest ? Shortest :
+               type >  Longest ?  Longest :
+               type),
+        m_dots(dots) { }
 
     Note(const Note &n) : m_type(n.m_type), m_dots(n.m_dots) { }
     ~Note() { }
@@ -1011,7 +1011,7 @@ public:
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),
         m_denominator(DefaultTimeSignature.m_denominator),
-	m_common(false), m_hidden(false), m_hiddenBars(false) { }
+        m_common(false), m_hidden(false), m_hiddenBars(false) { }
 
     /**
      * Construct a TimeSignature object describing a time signature
@@ -1023,34 +1023,34 @@ public:
      * between this time signature and the next will not be shown.
      */
     TimeSignature(int numerator, int denominator,
-		  bool preferCommon = false,
-		  bool hidden = false,
-		  bool hiddenBars = false)
+                  bool preferCommon = false,
+                  bool hidden = false,
+                  bool hiddenBars = false)
         /* throw (BadTimeSignature) */;
     
     TimeSignature(const TimeSignature &ts) :
         m_numerator(ts.m_numerator),
         m_denominator(ts.m_denominator),
-	m_common(ts.m_common),
-	m_hidden(ts.m_hidden),
-	m_hiddenBars(ts.m_hiddenBars) { }
+        m_common(ts.m_common),
+        m_hidden(ts.m_hidden),
+        m_hiddenBars(ts.m_hiddenBars) { }
 
     ~TimeSignature() { }
 
     TimeSignature &operator=(const TimeSignature &ts);
 
     bool operator==(const TimeSignature &ts) const {
-	return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
+        return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
     }
     bool operator!=(const TimeSignature &ts) const {
-	return !operator==(ts);
+        return !operator==(ts);
     }
 
     int getNumerator()     const { return m_numerator; }
     int getDenominator()   const { return m_denominator; }
     
     bool isCommon()        const { return m_common; }
-    bool isHidden()	   const { return m_hidden; }
+    bool isHidden()        const { return m_hidden; }
     bool hasHiddenBars()   const { return m_hiddenBars; }
 
     timeT getBarDuration() const;
@@ -1183,27 +1183,27 @@ class AccidentalTable
 {
 public:
     enum OctaveType {
-	OctavesIndependent, // if c' and c'' sharp, mark them both sharp
-	OctavesCautionary,  // if c' and c'' sharp, put the second one in brackets
-	OctavesEquivalent   // if c' and c'' sharp, only mark the first one
+        OctavesIndependent, // if c' and c'' sharp, mark them both sharp
+        OctavesCautionary,  // if c' and c'' sharp, put the second one in brackets
+        OctavesEquivalent   // if c' and c'' sharp, only mark the first one
     };
 
     enum BarResetType {
-	BarResetNone,       // c# | c -> omit natural
-	BarResetCautionary, // c# | c -> add natural to c in brackets
-	BarResetExplicit    // c# | c -> add natural to c
+        BarResetNone,       // c# | c -> omit natural
+        BarResetCautionary, // c# | c -> add natural to c in brackets
+        BarResetExplicit    // c# | c -> add natural to c
     };
 
     AccidentalTable(const Key &, const Clef &,
-		    OctaveType = OctavesCautionary,
-		    BarResetType = BarResetCautionary);
+                    OctaveType = OctavesCautionary,
+                    BarResetType = BarResetCautionary);
 
     AccidentalTable(const AccidentalTable &);
     AccidentalTable &operator=(const AccidentalTable &);
 
     Accidental processDisplayAccidental(const Accidental &displayAcc,
-					int heightOnStaff,
-					bool &cautionary);
+                                        int heightOnStaff,
+                                        bool &cautionary);
 
     void update();
 
@@ -1217,10 +1217,10 @@ private:
     BarResetType m_barReset;
 
     struct AccidentalRec {
-	AccidentalRec() : accidental(Accidentals::NoAccidental), previousBar(false) { }
-	AccidentalRec(Accidental a, bool p) : accidental(a), previousBar(p) { }
-	Accidental accidental;
-	bool previousBar;
+        AccidentalRec() : accidental(Accidentals::NoAccidental), previousBar(false) { }
+        AccidentalRec(Accidental a, bool p) : accidental(a), previousBar(p) { }
+        Accidental accidental;
+        bool previousBar;
     };
 
     typedef std::map<int, AccidentalRec> AccidentalMap;

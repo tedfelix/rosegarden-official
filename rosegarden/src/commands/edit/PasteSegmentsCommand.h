@@ -50,10 +50,10 @@ class PasteSegmentsCommand : public KNamedCommand
 {
 public:
     PasteSegmentsCommand(Composition *composition,
-			 Clipboard *clipboard,
-			 timeT pasteTime,
-			 TrackId baseTrack,
-			 bool useExactTracks);
+                         Clipboard *clipboard,
+                         timeT pasteTime,
+                         TrackId baseTrack,
+                         bool useExactTracks);
 
     virtual ~PasteSegmentsCommand();
 

@@ -50,9 +50,9 @@ class OpenOrCloseRangeCommand : public KNamedCommand
 {
 public:
     OpenOrCloseRangeCommand(Composition *composition,
-			    timeT rangeBegin,
-			    timeT rangeEnd,
-			    bool open);
+                            timeT rangeBegin,
+                            timeT rangeEnd,
+                            bool open);
     virtual ~OpenOrCloseRangeCommand();
 
     virtual void execute();

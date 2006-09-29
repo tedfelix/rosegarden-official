@@ -44,8 +44,8 @@ class EraseEventCommand : public BasicCommand
 {
 public:
     EraseEventCommand(Segment &segment,
-		      Event *event,
-		      bool collapseRest);
+                      Event *event,
+                      bool collapseRest);
     virtual ~EraseEventCommand();
 
     virtual timeT getRelayoutEndTime();

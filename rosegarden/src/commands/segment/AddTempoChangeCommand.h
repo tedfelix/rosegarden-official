@@ -44,12 +44,12 @@ public:
     AddTempoChangeCommand(Composition *composition,
                           timeT time,
                           tempoT tempo,
-			  tempoT target = -1):
-	KNamedCommand(getGlobalName()),
+                          tempoT target = -1):
+        KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
-	m_target(target),
+        m_target(target),
         m_oldTempo(0),
         m_tempoChangeIndex(0) {}
 

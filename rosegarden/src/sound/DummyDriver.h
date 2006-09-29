@@ -44,7 +44,7 @@ public:
     virtual void stopPlayback() { }
     virtual void punchOut() { }
     virtual void resetPlayback(const RealTime & /*old position*/,
-			       const RealTime & /*position*/) { }
+                               const RealTime & /*position*/) { }
     virtual void allNotesOff()  { }
     
     virtual RealTime getSequencerTime() { return RealTime(0, 0);}
@@ -55,8 +55,8 @@ public:
     virtual void processEventsOut(const MappedComposition & /*mC*/) { }
 
     virtual void processEventsOut(const MappedComposition &,
-				  const RealTime &,
-				  const RealTime &) { }
+                                  const RealTime &,
+                                  const RealTime &) { }
 
     // Activate a recording state
     //
@@ -94,44 +94,44 @@ public:
                                             float /*value*/) { }
 
     virtual float getPluginInstancePortValue(InstrumentId ,
-					     int ,
-					     unsigned long ) { return 0; }
+                                             int ,
+                                             unsigned long ) { return 0; }
 
     virtual void setPluginInstanceBypass(InstrumentId /*id*/,
                                          int /*position*/,
                                          bool /*value*/) { }
 
     virtual QStringList getPluginInstancePrograms(InstrumentId ,
-						  int ) { return QStringList(); }
+                                                  int ) { return QStringList(); }
 
     virtual QString getPluginInstanceProgram(InstrumentId,
-					     int ) { return QString(); }
+                                             int ) { return QString(); }
 
     virtual QString getPluginInstanceProgram(InstrumentId,
-					     int,
-					     int,
-					     int) { return QString(); }
+                                             int,
+                                             int,
+                                             int) { return QString(); }
 
     virtual unsigned long getPluginInstanceProgram(InstrumentId,
-						   int ,
-						   QString) { return 0; }
+                                                   int ,
+                                                   QString) { return 0; }
     
     virtual void setPluginInstanceProgram(InstrumentId,
-					  int ,
-					  QString ) { }
+                                          int ,
+                                          QString ) { }
 
     virtual QString configurePlugin(InstrumentId,
-				    int,
-				    QString ,
-				    QString ) { return QString(); }
+                                    int,
+                                    QString ,
+                                    QString ) { return QString(); }
 
     virtual void setAudioBussLevels(int ,
-				    float ,
-				    float ) { }
+                                    float ,
+                                    float ) { }
 
     virtual void setAudioInstrumentLevels(InstrumentId,
-					  float,
-					  float) { }
+                                          float,
+                                          float) { }
 
     virtual bool checkForNewClients() { return false; }
 
@@ -142,10 +142,10 @@ public:
         { return std::vector<PlayableAudioFile*>(); }
 
     virtual void getAudioInstrumentNumbers(InstrumentId &i, int &n) {
-	i = 0; n = 0;
+        i = 0; n = 0;
     }
     virtual void getSoftSynthInstrumentNumbers(InstrumentId &i, int &n) {
-	i = 0; n = 0;
+        i = 0; n = 0;
     }
 
     virtual void claimUnwantedPlugin(void *plugin) { }

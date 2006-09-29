@@ -100,8 +100,8 @@ public:
      * Note that the source pixmap _must_ have a mask.
      */
     static void drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
-				 int x, int y,
-				 const QPixmap &source);
+                                 int x, int y,
+                                 const QPixmap &source);
 };
 
 

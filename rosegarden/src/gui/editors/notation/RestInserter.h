@@ -59,10 +59,10 @@ protected:
     RestInserter(NotationView*);
 
     virtual Event *doAddCommand(Segment &,
-					    timeT time,
-					    timeT endTime,
-					    const Note &,
-					    int pitch, Accidental);
+                                            timeT time,
+                                            timeT endTime,
+                                            const Note &,
+                                            int pitch, Accidental);
     virtual void showPreview();
 
 protected slots:

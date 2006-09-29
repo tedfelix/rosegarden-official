@@ -54,7 +54,7 @@ class TriggerSegmentManager : public KMainWindow
 
 public:
     TriggerSegmentManager(QWidget *parent,
-			  RosegardenGUIDoc *doc);
+                          RosegardenGUIDoc *doc);
     ~TriggerSegmentManager();
 
     void initDialog();
@@ -94,7 +94,7 @@ protected:
 
     void setupActions();
     QString makeDurationString(timeT startTime,
-			       timeT duration, int timeMode);
+                               timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc        *m_doc;

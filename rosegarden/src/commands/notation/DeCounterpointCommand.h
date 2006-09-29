@@ -45,12 +45,12 @@ class DeCounterpointCommand : public BasicSelectionCommand
 {
 public:
     DeCounterpointCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     DeCounterpointCommand(Segment &segment) :
-	BasicSelectionCommand(getGlobalName(), segment, true),
-	m_selection(0) { }
+        BasicSelectionCommand(getGlobalName(), segment, true),
+        m_selection(0) { }
 
     static QString getGlobalName() { return i18n("Split-and-Tie Overlapping &Chords"); }
 

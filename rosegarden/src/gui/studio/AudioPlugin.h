@@ -48,9 +48,9 @@ public:
                 const QString &label,
                 const QString &author,
                 const QString &copyright,
-		bool isSynth,
-		bool isGrouped,
-		const QString &category);
+                bool isSynth,
+                bool isGrouped,
+                const QString &category);
 
     QString getIdentifier() const { return m_identifier; }
 
@@ -61,13 +61,13 @@ public:
     QString getCopyright() const { return m_copyright; }
     bool isSynth() const { return m_isSynth; }
     bool isEffect() const { // true if >0 audio inputs
-	for (unsigned int i = 0; i < m_ports.size(); ++i) {
-	    if ((m_ports[i]->getType() & PluginPort::Input) &&
-		(m_ports[i]->getType() & PluginPort::Audio)) {
-		return true;
-	    }
-	}
-	return false;
+        for (unsigned int i = 0; i < m_ports.size(); ++i) {
+            if ((m_ports[i]->getType() & PluginPort::Input) &&
+                (m_ports[i]->getType() & PluginPort::Audio)) {
+                return true;
+            }
+        }
+        return false;
     }
     bool isGrouped() const { return m_isGrouped; }
     QString getCategory() const { return m_category; }
@@ -78,7 +78,7 @@ public:
                  PluginPort::PortDisplayHint hint,
                  PortData lowerBound,
                  PortData upperBound,
-		 PortData defaultVale);
+                 PortData defaultVale);
 
     typedef std::vector<PluginPort*>::iterator PortIterator;
 

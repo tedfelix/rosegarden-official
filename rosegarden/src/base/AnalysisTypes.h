@@ -134,7 +134,7 @@ public:
      * the timeslice in the given CompositionTimeSliceAdapter.
      */
     void labelChords(CompositionTimeSliceAdapter &c, Segment &s,
-		     const Quantizer *quantizer);
+                     const Quantizer *quantizer);
 
     /**
      * Returns a time signature that is probably reasonable for the
@@ -171,7 +171,7 @@ protected:
     /// For use by guessHarmonies
     void refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
                                 HarmonyGuessList& l,
-				Segment &);
+                                Segment &);
 
     /// For use by guessHarmonies (makeHarmonyGuessList)
     class PitchProfile

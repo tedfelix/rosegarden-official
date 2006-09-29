@@ -60,7 +60,7 @@ public:
      * to the user as a nice continuous range.
      */
     ZoomSlider(const std::vector<T> &sizes, T defaultValue,
-	       Orientation, QWidget * parent, const char * name=0);
+               Orientation, QWidget * parent, const char * name=0);
 
     virtual ~ZoomSlider();
     
@@ -84,8 +84,8 @@ protected:
 
 template<class T>
 ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
-			  T initialSize, Orientation o,
-			  QWidget *parent, const char *name) :
+                          T initialSize, Orientation o,
+                          QWidget *parent, const char *name) :
     QSlider(0, sizes.size()-1, 1,
             getIndex(sizes, initialSize), o, parent, name),
     m_sizes(sizes),

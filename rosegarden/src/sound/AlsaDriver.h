@@ -69,8 +69,8 @@ public:
     virtual MappedComposition *getMappedComposition();
     
     virtual bool record(RecordStatus recordStatus,
-			const std::vector<InstrumentId> *armedInstruments = 0,
-			const std::vector<QString> *audioFileNames = 0);
+                        const std::vector<InstrumentId> *armedInstruments = 0,
+                        const std::vector<QString> *audioFileNames = 0);
 
     virtual void startClocks();
     virtual void startClocksApproved(); // called by JACK driver in sync mode
@@ -79,17 +79,17 @@ public:
 
     virtual void processEventsOut(const MappedComposition &mC);
     virtual void processEventsOut(const MappedComposition &mC,
-				  const RealTime &sliceStart,
-				  const RealTime &sliceEnd);
+                                  const RealTime &sliceStart,
+                                  const RealTime &sliceEnd);
 
     // Return the sample rate
     //
     virtual unsigned int getSampleRate() const {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getSampleRate();
-	else return 0;
+        if (m_jackDriver) return m_jackDriver->getSampleRate();
+        else return 0;
 #else
-	return 0;
+        return 0;
 #endif
     }
 
@@ -119,32 +119,32 @@ public:
     
     virtual RealTime getAudioPlayLatency() {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getAudioPlayLatency();
+        if (m_jackDriver) return m_jackDriver->getAudioPlayLatency();
 #endif
-	return RealTime::zeroTime;
+        return RealTime::zeroTime;
     }
 
     virtual RealTime getAudioRecordLatency() {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getAudioRecordLatency();
+        if (m_jackDriver) return m_jackDriver->getAudioRecordLatency();
 #endif
-	return RealTime::zeroTime;
+        return RealTime::zeroTime;
     }
 
     virtual RealTime getInstrumentPlayLatency(InstrumentId id) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getInstrumentPlayLatency(id);
+        if (m_jackDriver) return m_jackDriver->getInstrumentPlayLatency(id);
 #endif
-	return RealTime::zeroTime;
+        return RealTime::zeroTime;
     }
 
     virtual RealTime getMaximumPlayLatency() {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getMaximumPlayLatency();
+        if (m_jackDriver) return m_jackDriver->getMaximumPlayLatency();
 #endif
-	return RealTime::zeroTime;
+        return RealTime::zeroTime;
     }
-	
+        
 
     // Plugin instance management
     //
@@ -152,13 +152,13 @@ public:
                                    QString identifier,
                                    int position) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setPluginInstance(id, identifier, position);
+        if (m_jackDriver) m_jackDriver->setPluginInstance(id, identifier, position);
 #endif
     }
 
     virtual void removePluginInstance(InstrumentId id, int position) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->removePluginInstance(id, position);
+        if (m_jackDriver) m_jackDriver->removePluginInstance(id, position);
 #endif
     }
 
@@ -166,7 +166,7 @@ public:
     //
     virtual void removePluginInstances() {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->removePluginInstances();
+        if (m_jackDriver) m_jackDriver->removePluginInstances();
 #endif
     }
 
@@ -175,93 +175,93 @@ public:
                                             unsigned long portNumber,
                                             float value) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
+        if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
 #endif
     }
 
     virtual float getPluginInstancePortValue(InstrumentId id,
-					     int position,
-					     unsigned long portNumber) {
+                                             int position,
+                                             unsigned long portNumber) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getPluginInstancePortValue(id, position, portNumber);
+        if (m_jackDriver) return m_jackDriver->getPluginInstancePortValue(id, position, portNumber);
 #endif
-	return 0;
+        return 0;
     }
 
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setPluginInstanceBypass(id, position, value);
+        if (m_jackDriver) m_jackDriver->setPluginInstanceBypass(id, position, value);
 #endif
     }
 
     virtual QStringList getPluginInstancePrograms(InstrumentId id,
-						  int position) {
+                                                  int position) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getPluginInstancePrograms(id, position);
+        if (m_jackDriver) return m_jackDriver->getPluginInstancePrograms(id, position);
 #endif
-	return QStringList();
+        return QStringList();
     }
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
-					     int position) {
+                                             int position) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position);
+        if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position);
 #endif
-	return QString();
+        return QString();
     }
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
-					     int position,
-					     int bank,
-					     int program) {
+                                             int position,
+                                             int bank,
+                                             int program) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, bank, program);
+        if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, bank, program);
 #endif
-	return QString();
+        return QString();
     }
 
     virtual unsigned long getPluginInstanceProgram(InstrumentId id,
-						   int position,
-						   QString name) {
+                                                   int position,
+                                                   QString name) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, name);
+        if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, name);
 #endif
-	return 0;
+        return 0;
     }
     
     virtual void setPluginInstanceProgram(InstrumentId id,
-					  int position,
-					  QString program) {
+                                          int position,
+                                          QString program) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setPluginInstanceProgram(id, position, program);
+        if (m_jackDriver) m_jackDriver->setPluginInstanceProgram(id, position, program);
 #endif
     }
 
     virtual QString configurePlugin(InstrumentId id,
-				    int position,
-				    QString key,
-				    QString value) {
+                                    int position,
+                                    QString key,
+                                    QString value) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) return m_jackDriver->configurePlugin(id, position, key, value);
+        if (m_jackDriver) return m_jackDriver->configurePlugin(id, position, key, value);
 #endif
-	return QString();
+        return QString();
     }
 
     virtual void setAudioBussLevels(int bussId,
-				    float dB,
-				    float pan) {
+                                    float dB,
+                                    float pan) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setAudioBussLevels(bussId, dB, pan);
+        if (m_jackDriver) m_jackDriver->setAudioBussLevels(bussId, dB, pan);
 #endif
     }
 
     virtual void setAudioInstrumentLevels(InstrumentId instrument,
-					  float dB,
-					  float pan) {
+                                          float dB,
+                                          float pan) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setAudioInstrumentLevels(instrument, dB, pan);
+        if (m_jackDriver) m_jackDriver->setAudioInstrumentLevels(instrument, dB, pan);
 #endif
     }
 
@@ -331,17 +331,17 @@ public:
     virtual bool canReconnect(Device::DeviceType type);
 
     virtual DeviceId addDevice(Device::DeviceType type,
-			       MidiDevice::DeviceDirection direction);
+                               MidiDevice::DeviceDirection direction);
     virtual void removeDevice(DeviceId id);
     virtual void renameDevice(DeviceId id, QString name);
 
     // Get available connections per device
     // 
     virtual unsigned int getConnections(Device::DeviceType type,
-					MidiDevice::DeviceDirection direction);
+                                        MidiDevice::DeviceDirection direction);
     virtual QString getConnection(Device::DeviceType type,
-				  MidiDevice::DeviceDirection direction,
-				  unsigned int connectionNo);
+                                  MidiDevice::DeviceDirection direction,
+                                  unsigned int connectionNo);
     virtual void setConnection(DeviceId deviceId, QString connection);
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
 
@@ -351,22 +351,22 @@ public:
     virtual void setCurrentTimer(QString);
  
     virtual void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
-					   int &audioInstrumentCount) {
-	audioInstrumentBase = AudioInstrumentBase;
+                                           int &audioInstrumentCount) {
+        audioInstrumentBase = AudioInstrumentBase;
 #ifdef HAVE_LIBJACK
-	audioInstrumentCount = AudioInstrumentCount;
+        audioInstrumentCount = AudioInstrumentCount;
 #else
-	audioInstrumentCount = 0;
+        audioInstrumentCount = 0;
 #endif
     }
  
     virtual void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
-					       int &ssInstrumentCount) {
-	ssInstrumentBase = SoftSynthInstrumentBase;
+                                               int &ssInstrumentCount) {
+        ssInstrumentBase = SoftSynthInstrumentBase;
 #ifdef HAVE_DSSI
-	ssInstrumentCount = SoftSynthInstrumentCount;
+        ssInstrumentCount = SoftSynthInstrumentCount;
 #else
-	ssInstrumentCount = 0;
+        ssInstrumentCount = 0;
 #endif
     }
 
@@ -401,15 +401,15 @@ protected:
 
     void addInstrumentsForDevice(MappedDevice *device);
     MappedDevice *createMidiDevice(AlsaPortDescription *,
-				   MidiDevice::DeviceDirection);
+                                   MidiDevice::DeviceDirection);
 
     virtual void processMidiOut(const MappedComposition &mC,
-				const RealTime &sliceStart,
-				const RealTime &sliceEnd);
+                                const RealTime &sliceStart,
+                                const RealTime &sliceEnd);
 
     virtual void processSoftSynthEventOut(InstrumentId id,
-					  const snd_seq_event_t *event,
-					  bool now);
+                                          const snd_seq_event_t *event,
+                                          bool now);
 
     virtual bool isRecording(AlsaPortDescription *port);
 
@@ -417,7 +417,7 @@ protected:
 
     virtual void setConnectionToDevice(MappedDevice &device, QString connection);
     virtual void setConnectionToDevice(MappedDevice &device, QString connection,
-				       const ClientPortPair &pair);
+                                       const ClientPortPair &pair);
 
 private:
     RealTime getAlsaTime();
@@ -427,7 +427,7 @@ private:
     void sendDeviceController(DeviceId device,
                               MidiByte byte1,
                               MidiByte byte2);
-			      
+                              
     int checkAlsaError(int rc, const char *message);
 
     AlsaPortList m_alsaPorts;
@@ -509,13 +509,13 @@ private:
     DeviceId getSpareDeviceId();
 
     struct AlsaTimerInfo {
-	int clas;
-	int sclas;
-	int card;
-	int device;
-	int subdevice;
-	std::string name;
-	long resolution;
+        int clas;
+        int sclas;
+        int card;
+        int device;
+        int subdevice;
+        std::string name;
+        long resolution;
     };
     std::vector<AlsaTimerInfo> m_timers;
     std::string m_currentTimer;

@@ -97,7 +97,7 @@ public:
      */
     RosegardenGUIDoc(QWidget *parent,
                      AudioPluginManager *audioPluginManager = 0,
-		     bool skipAutoload = false,
+                     bool skipAutoload = false,
                      const char *name=0);
 
 private:
@@ -185,7 +185,7 @@ public:
      * the sequencer's device list will be left alone.
      */
     bool openDocument(const QString &filename, bool permanent = true,
-		      const char *format=0);
+                      const char *format=0);
 
     /**
      * merge another document into this one
@@ -196,17 +196,17 @@ public:
      * saves the document under filename and format.
      *
      * errMsg will be set to a user-readable error message if save fails
-     */	
+     */ 
     bool saveDocument(const QString &filename, QString& errMsg,
-		      bool autosave = false);
+                      bool autosave = false);
 
     /**
      * exports all or part of the studio to a file.  If devices is
      * empty, exports all devices.
-     */	
+     */ 
     bool exportStudio(const QString &filename,
-		      std::vector<DeviceId> devices =
-		      std::vector<DeviceId>());
+                      std::vector<DeviceId> devices =
+                      std::vector<DeviceId>());
 
     /**
      *   sets the path to the file connected with the document
@@ -238,7 +238,7 @@ public:
      * returns the global command history
      */
     MultiViewCommandHistory *getCommandHistory() {
-	return m_commandHistory;
+        return m_commandHistory;
     }
 
     /**
@@ -487,7 +487,7 @@ signals:
      * end of the segment.
      */
     void recordMIDISegmentUpdated(Segment *recordSegment,
-				  timeT updatedFrom);
+                                  timeT updatedFrom);
 
     /**
      * Emitted when a new MIDI recording segment is set
@@ -531,7 +531,7 @@ protected:
     bool xmlParse(QString fileContents, QString &errMsg,
                   ProgressDialog *progress,
                   unsigned int elementCount,
-		  bool permanent,
+                  bool permanent,
                   bool &cancelled);
 
     /**
@@ -598,7 +598,7 @@ protected:
     /**
      * the list of the views currently connected to the document
      */
-    QList<RosegardenGUIView> m_viewList;	
+    QList<RosegardenGUIView> m_viewList;        
 
     /**
      * the list of the edit views currently editing a part of this document
@@ -661,12 +661,12 @@ protected:
     /**
      * a map[Channel] of PitchMap
      */
-    typedef std::map<int, PitchMap>				ChanMap;
+    typedef std::map<int, PitchMap>                             ChanMap;
     
     /**
      * a map[Port] of ChanMap
      */
-    typedef std::map<int, ChanMap>				NoteOnMap;
+    typedef std::map<int, ChanMap>                              NoteOnMap;
 
     /**
      * During recording, we collect note-ons that haven't yet had a note-off

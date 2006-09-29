@@ -57,7 +57,7 @@ class Composition;
 
 
 class SegmentParameterBox : public RosegardenParameterBox,
-			    public CompositionObserver
+                            public CompositionObserver
 {
 Q_OBJECT
 
@@ -68,7 +68,7 @@ public:
         None,
         Some,
         All,
-	NotApplicable // no applicable segments selected
+        NotApplicable // no applicable segments selected
     } Tristate;
 
     SegmentParameterBox(RosegardenGUIDoc *doc,
@@ -89,7 +89,7 @@ public:
     // CompositionObserver interface
     //
     virtual void segmentRemoved(const Composition *,
-				Segment *);
+                                Segment *);
 
     virtual void showAdditionalControls(bool showThem);
 
@@ -132,8 +132,8 @@ protected:
     QLabel                     *m_label;
     QLabel                     *m_rangeLabel;
     QPushButton                *m_labelButton;
-    QPushButton		       *m_highButton;
-    QPushButton		       *m_lowButton;
+    QPushButton                *m_highButton;
+    QPushButton                *m_lowButton;
     TristateCheckBox *m_repeatValue;
     KComboBox                  *m_quantizeValue;
     KComboBox                  *m_transposeValue;
@@ -153,8 +153,8 @@ protected:
 
     // used to keep track of highest/lowest as there is no associated spinbox
     // to query for its value
-    int			       m_highestPlayable;
-    int			       m_lowestPlayable;
+    int                        m_highestPlayable;
+    int                        m_lowestPlayable;
 
     std::vector<Segment*> m_segments;
     std::vector<timeT> m_standardQuantizations;

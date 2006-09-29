@@ -50,9 +50,9 @@ public:
     typedef enum
     {
         NoHint      = 0x00,
-	Toggled     = 0x01,
-	Integer     = 0x02,
-	Logarithmic = 0x04
+        Toggled     = 0x01,
+        Integer     = 0x02,
+        Logarithmic = 0x04
     } PortDisplayHint;
 
     PluginPort(int number,
@@ -61,7 +61,7 @@ public:
                PortDisplayHint displayHint,
                PortData lowerBound,
                PortData upperBound,
-	       PortData defaultValue);
+               PortData defaultValue);
 
     int getNumber() const { return m_number; }
     std::string getName() const { return m_name; }
@@ -87,7 +87,7 @@ class PluginPortInstance
 public:
     PluginPortInstance(unsigned int n,
                        float v)
-	: number(n), value(v), changedSinceProgramChange(false) {;}
+        : number(n), value(v), changedSinceProgramChange(false) {;}
 
     int number;
     PortData value;
@@ -104,7 +104,7 @@ public:
     AudioPluginInstance(unsigned int position);
 
     AudioPluginInstance(std::string identifier,
-			unsigned int position);
+                        unsigned int position);
 
     void setIdentifier(std::string identifier) { m_identifier = identifier; }
     std::string getIdentifier() const { return m_identifier; }

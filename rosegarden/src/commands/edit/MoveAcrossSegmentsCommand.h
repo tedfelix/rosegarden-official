@@ -44,10 +44,10 @@ class MoveAcrossSegmentsCommand : public KMacroCommand
 {
 public:
     MoveAcrossSegmentsCommand(Segment &firstSegment,
-			      Segment &secondSegment,
-			      timeT newStartTime,
-			      bool notation,
-			      EventSelection &selection);
+                              Segment &secondSegment,
+                              timeT newStartTime,
+                              bool notation,
+                              EventSelection &selection);
     virtual ~MoveAcrossSegmentsCommand();
 
     static QString getGlobalName();

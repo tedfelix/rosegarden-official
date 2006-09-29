@@ -44,8 +44,8 @@ class RescaleCommand : public BasicCommand
 {
 public:
     RescaleCommand(EventSelection &selection,
-		   timeT newDuration,
-		   bool closeGap);
+                   timeT newDuration,
+                   bool closeGap);
 
     static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
     
@@ -55,8 +55,8 @@ protected:
 private:
     timeT rescale(timeT);
     timeT getAffectedEndTime(EventSelection &selection,
-					 timeT newDuration,
-					 bool closeGap);
+                                         timeT newDuration,
+                                         bool closeGap);
 
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     timeT m_oldDuration;

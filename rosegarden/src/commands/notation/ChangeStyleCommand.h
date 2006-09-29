@@ -46,11 +46,11 @@ class ChangeStyleCommand : public BasicSelectionCommand
 public:
     ChangeStyleCommand(NoteStyleName style,
                        EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(style), selection, true),
-	m_selection(&selection), m_style(style) { }
+        BasicSelectionCommand(getGlobalName(style), selection, true),
+        m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-	return i18n("Change &Note Style");
+        return i18n("Change &Note Style");
     }
 
     static QString getGlobalName(NoteStyleName style);

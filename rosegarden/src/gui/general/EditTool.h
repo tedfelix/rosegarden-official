@@ -111,10 +111,10 @@ public:
      * Do nothing
      */
     virtual void handleMouseDoubleClick(timeT time,
-					int height,
-					int staffNo,
-					QMouseEvent*,
-					ViewElement*);
+                                        int height,
+                                        int staffNo,
+                                        QMouseEvent*,
+                                        ViewElement*);
 
     /**
      * Do nothing.

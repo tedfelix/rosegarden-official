@@ -65,9 +65,9 @@ public:
         Studio,
         AudioFader,          // connectable fader - interfaces with devices
         AudioBuss,           // connectable buss - inferfaces with faders
-	AudioInput,          // connectable record input
-	PluginSlot,
-	PluginPort
+        AudioInput,          // connectable record input
+        PluginSlot,
+        PluginPort
 
     } MappedObjectType;
 
@@ -94,12 +94,12 @@ public:
         getPropertyList(const MappedObjectProperty &property) = 0;
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value) = 0;
+                             MappedObjectValue &value) = 0;
 
     // Only relevant to objects that have string properties
     // 
     virtual bool getProperty(const MappedObjectProperty &/* property */,
-			     QString &/* value */) { return false; }
+                             QString &/* value */) { return false; }
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) = 0;
@@ -112,7 +112,7 @@ public:
     // Only relevant to objects that have list properties
     //
     virtual void setPropertyList(const MappedObjectProperty &/* property */,
-				 const MappedObjectPropertyList &/* values */) { }
+                                 const MappedObjectPropertyList &/* values */) { }
 
     // Ownership
     //
@@ -219,7 +219,7 @@ public:
             const MappedObjectProperty &property);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
+                             MappedObjectValue &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
@@ -299,9 +299,9 @@ public:
     } ConnectionDirection;
 
     MappedConnectableObject(MappedObject *parent,
-			    const std::string &name,
-			    MappedObjectType type,
-			    MappedObjectId id);
+                            const std::string &name,
+                            MappedObjectType type,
+                            MappedObjectId id);
 
     ~MappedConnectableObject();
 
@@ -344,7 +344,7 @@ public:
                         const MappedObjectProperty &property);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
+                             MappedObjectValue &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
@@ -393,7 +393,7 @@ public:
                         const MappedObjectProperty &property);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
+                             MappedObjectValue &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
@@ -419,14 +419,14 @@ public:
     static const MappedObjectProperty InputNumber;
 
     MappedAudioInput(MappedObject *parent,
-		     MappedObjectId id);
+                     MappedObjectId id);
     ~MappedAudioInput();
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
+                             MappedObjectValue &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
@@ -462,10 +462,10 @@ public:
                         const MappedObjectProperty &property);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
+                             MappedObjectValue &value);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     QString &value);
+                             QString &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
@@ -474,7 +474,7 @@ public:
                              QString value);
 
     virtual void setPropertyList(const MappedObjectProperty &,
-				 const MappedObjectPropertyList &);
+                                 const MappedObjectPropertyList &);
 
     void  setPort(unsigned long portNumber, float value);
     float getPort(unsigned long portNumber);
@@ -520,10 +520,10 @@ public:
                         const MappedObjectProperty &property);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
+                             MappedObjectValue &value);
 
     virtual bool getProperty(const MappedObjectProperty &property,
-			     QString &value);
+                             QString &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);

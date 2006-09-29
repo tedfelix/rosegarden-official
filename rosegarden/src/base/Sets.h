@@ -156,7 +156,7 @@ protected:
 
 template <class Element, class Container, bool singleStaff>
 class GenericChord : public AbstractSet<Element, Container>,
-		     public std::vector<typename Container::iterator>
+                     public std::vector<typename Container::iterator>
 {
 public:
     typedef typename Container::iterator Iterator;
@@ -166,9 +166,9 @@ public:
        which case this constructor will write those properties
        in to the chord for you */
     GenericChord(Container &c,
-		 Iterator elementInChord,
-		 const Quantizer *quantizer,
-		 PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
+                 Iterator elementInChord,
+                 const Quantizer *quantizer,
+                 PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
 
     virtual ~GenericChord();
 
@@ -207,7 +207,7 @@ protected:
 
     class PitchGreater {
     public:
-	bool operator()(const Iterator &a, const Iterator &b);
+        bool operator()(const Iterator &a, const Iterator &b);
     };
 
     void copyGroupProperties(Event *e0, Event *e1) const;
@@ -259,7 +259,7 @@ setMaybe__String(Event *e, const PropertyName &name, const std::string &value);
 
 template <class Element, class Container>
 AbstractSet<Element, Container>::AbstractSet(Container &c,
-					     Iterator i, const Quantizer *q):
+                                             Iterator i, const Quantizer *q):
     m_container(c),
     m_initial(c.end()),
     m_final(c.end()),
@@ -286,8 +286,8 @@ AbstractSet<Element, Container>::initialise()
     sample(m_baseIterator, true);
 
     if (getAsEvent(m_baseIterator)->isa(Note::EventType)) {
-	m_initialNote = m_baseIterator;
-	m_finalNote = m_baseIterator;
+        m_initialNote = m_baseIterator;
+        m_finalNote = m_baseIterator;
     }
 
     Iterator i, j;
@@ -297,9 +297,9 @@ AbstractSet<Element, Container>::initialise()
 
     for (i = j = m_baseIterator; i != getContainer().begin() && test(--j); i = j){
         if (sample(j, false)) {
-	    m_initial = j;
-	    if (getAsEvent(j)->isa(Note::EventType)) m_initialNote = j;
-	}
+            m_initial = j;
+            if (getAsEvent(j)->isa(Note::EventType)) m_initialNote = j;
+        }
     }
 
     j = m_baseIterator;
@@ -309,9 +309,9 @@ AbstractSet<Element, Container>::initialise()
 
     for (i = j = m_baseIterator; ++j != getContainer().end() && test(j); i = j) {
         if (sample(j, true)) {
-	    m_final = j;
-	    if (getAsEvent(j)->isa(Note::EventType)) m_finalNote = j;
-	}
+            m_final = j;
+            if (getAsEvent(j)->isa(Note::EventType)) m_finalNote = j;
+        }
     }
 }
 
@@ -326,12 +326,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
     if (e->isa(Note::EventType) || d > 0) {
         if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(getAsEvent(m_longest))) {
-//	    std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
+//          std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_longest = i;
         }
         if (m_shortest == getContainer().end() ||
             d < q.getQuantizedDuration(getAsEvent(m_shortest))) {
-//	    std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
+//          std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_shortest = i;
         }
     }
@@ -341,12 +341,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 
         if (m_highest == getContainer().end() ||
             p > get__Int(getAsEvent(m_highest), BaseProperties::PITCH)) {
-//	    std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
+//          std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_highest = i;
         }
         if (m_lowest == getContainer().end() ||
             p < get__Int(getAsEvent(m_lowest), BaseProperties::PITCH)) {
-//	    std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
+//          std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_lowest = i;
         }
     }
@@ -359,16 +359,16 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
  
 template <class Element, class Container, bool singleStaff>
 GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
-							    Iterator i,
-							    const Quantizer *q,
-							    PropertyName stemUpProperty) :
+                                                            Iterator i,
+                                                            const Quantizer *q,
+                                                            PropertyName stemUpProperty) :
     AbstractSet<Element, Container>(c, i, q),
     m_stemUpProperty(stemUpProperty),
     m_time(q->getQuantizedAbsoluteTime(getAsEvent(i))),
     m_subordering(getAsEvent(i)->getSubOrdering()),
     m_firstReject(c.end())
 {
-	AbstractSet<Element, Container>::initialise();
+        AbstractSet<Element, Container>::initialise();
 
     if (std::vector<typename Container::iterator>::size() > 1) {
         std::stable_sort(std::vector<typename Container::iterator>::begin(), std::vector<typename Container::iterator>::end(), PitchGreater());
@@ -379,14 +379,14 @@ GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
     int prevPitch = -999;
     for (unsigned int i = 0; i < size(); ++i) {
         try {
-	    int pitch = getAsEvent((*this)[i])->get<Int>(BaseProperties::PITCH);
+            int pitch = getAsEvent((*this)[i])->get<Int>(BaseProperties::PITCH);
 //            std::cerr << i << ": " << pitch << std::endl;
-	    if (pitch < prevPitch) {
-		cerr << "ERROR: Pitch less than previous pitch (" << pitch
-		     << " < " << prevPitch << ")" << std::endl;
-		throw(1);
-	    }
-	} catch (Event::NoData) {
+            if (pitch < prevPitch) {
+                cerr << "ERROR: Pitch less than previous pitch (" << pitch
+                     << " < " << prevPitch << ")" << std::endl;
+                throw(1);
+            }
+        } catch (Event::NoData) {
             std::cerr << i << ": no pitch property" << std::endl;
         }
     }
@@ -418,83 +418,83 @@ GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 
     std::string type(e->getType());
     return (type == Note::EventType ||
-	    type == Note::EventRestType ||
-	    type == Text::EventType ||
-	    type == Indication::EventType ||
-	    type == PitchBend::EventType ||
-	    type == Controller::EventType ||
-	    type == KeyPressure::EventType ||
-	    type == ChannelPressure::EventType);
+            type == Note::EventRestType ||
+            type == Text::EventType ||
+            type == Indication::EventType ||
+            type == PitchBend::EventType ||
+            type == Controller::EventType ||
+            type == KeyPressure::EventType ||
+            type == ChannelPressure::EventType);
 }
 
 template <class Element, class Container, bool singleStaff>
 bool
 GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
-						      bool goingForwards)
+                                                      bool goingForwards)
 {
     Event *e1 = getAsEvent(i);
     if (!e1->isa(Note::EventType)) {
-	if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end()) m_firstReject = i;
-	return false;
+        if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end()) m_firstReject = i;
+        return false;
     }
 
     if (singleStaff) {
 
-	// Two notes that would otherwise be in a chord but are
-	// explicitly in different groups, or have stems pointing in
-	// different directions by design, or have substantially
-	// different x displacements, count as separate chords.
-	
-	// Per #930473 ("Inserting notes into beamed chords is
-	// broken"), if one note is in a group and the other isn't,
-	// that's no problem.  In fact we should actually modify the
-	// one that isn't so as to suggest that it is.
+        // Two notes that would otherwise be in a chord but are
+        // explicitly in different groups, or have stems pointing in
+        // different directions by design, or have substantially
+        // different x displacements, count as separate chords.
+        
+        // Per #930473 ("Inserting notes into beamed chords is
+        // broken"), if one note is in a group and the other isn't,
+        // that's no problem.  In fact we should actually modify the
+        // one that isn't so as to suggest that it is.
 
-	if (AbstractSet<Element, Container>::m_baseIterator != AbstractSet<Element, Container>::getContainer().end()) {
+        if (AbstractSet<Element, Container>::m_baseIterator != AbstractSet<Element, Container>::getContainer().end()) {
 
-	    Event *e0 = getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
+            Event *e0 = getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
 
-	    if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
+            if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
 
-		if (e0->has(m_stemUpProperty) &&
-		    e1->has(m_stemUpProperty) &&
-		    isPersistent__Bool(e0, m_stemUpProperty) &&
-		    isPersistent__Bool(e1, m_stemUpProperty) &&
-		    get__Bool(e0, m_stemUpProperty) !=
-		    get__Bool(e1, m_stemUpProperty)) {
+                if (e0->has(m_stemUpProperty) &&
+                    e1->has(m_stemUpProperty) &&
+                    isPersistent__Bool(e0, m_stemUpProperty) &&
+                    isPersistent__Bool(e1, m_stemUpProperty) &&
+                    get__Bool(e0, m_stemUpProperty) !=
+                    get__Bool(e1, m_stemUpProperty)) {
 
-		    if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
-			m_firstReject = i;
-		    return false;
-		}
-	    }
+                    if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
+                        m_firstReject = i;
+                    return false;
+                }
+            }
 
-	    long dx0 = 0, dx1 = 0;
-	    get__Int(e0, BaseProperties::DISPLACED_X, dx0);
-	    get__Int(e1, BaseProperties::DISPLACED_X, dx1);
-	    if (abs(dx0 - dx1) >= 700) {
-		if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
-		    m_firstReject = i;
-		return false;
-	    }
+            long dx0 = 0, dx1 = 0;
+            get__Int(e0, BaseProperties::DISPLACED_X, dx0);
+            get__Int(e1, BaseProperties::DISPLACED_X, dx1);
+            if (abs(dx0 - dx1) >= 700) {
+                if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
+                    m_firstReject = i;
+                return false;
+            }
 
-	    if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
-		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
-		    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
-			get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
-			if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
-			    m_firstReject = i;
-			return false;
-		    }
-		} else {
-		    copyGroupProperties(e0, e1); // #930473
-		}
-	    } else {
-		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
-		    copyGroupProperties(e1, e0); // #930473
-		}
-	    }
-	}
+            if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
+                if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
+                    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
+                        get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
+                        if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
+                            m_firstReject = i;
+                        return false;
+                    }
+                } else {
+                    copyGroupProperties(e0, e1); // #930473
+                }
+            } else {
+                if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
+                    copyGroupProperties(e1, e0); // #930473
+                }
+            }
+        }
     }
 
     AbstractSet<Element, Container>::sample(i, goingForwards);
@@ -505,27 +505,27 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 template <class Element, class Container, bool singleStaff>
 void
 GenericChord<Element, Container, singleStaff>::copyGroupProperties(Event *e0,
-								   Event *e1) const
+                                                                   Event *e1) const
 {
     if (e0->has(BaseProperties::BEAMED_GROUP_TYPE)) {
-	setMaybe__String(e1, BaseProperties::BEAMED_GROUP_TYPE,
-			 get__String(e0, BaseProperties::BEAMED_GROUP_TYPE));
+        setMaybe__String(e1, BaseProperties::BEAMED_GROUP_TYPE,
+                         get__String(e0, BaseProperties::BEAMED_GROUP_TYPE));
     }
     if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
-	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_ID,
-		      get__Int(e0, BaseProperties::BEAMED_GROUP_ID));
+        setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_ID,
+                      get__Int(e0, BaseProperties::BEAMED_GROUP_ID));
     }
     if (e0->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
-	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_TUPLET_BASE,
-		      get__Int(e0, BaseProperties::BEAMED_GROUP_TUPLET_BASE));
+        setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_TUPLET_BASE,
+                      get__Int(e0, BaseProperties::BEAMED_GROUP_TUPLET_BASE));
     }
     if (e0->has(BaseProperties::BEAMED_GROUP_TUPLED_COUNT)) {
-	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_TUPLED_COUNT,
-		      get__Int(e0, BaseProperties::BEAMED_GROUP_TUPLED_COUNT));
+        setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_TUPLED_COUNT,
+                      get__Int(e0, BaseProperties::BEAMED_GROUP_TUPLED_COUNT));
     }
     if (e0->has(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT)) {
-	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT,
-		      get__Int(e0, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT));
+        setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT,
+                      get__Int(e0, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT));
     }
 }
 
@@ -540,12 +540,12 @@ GenericChord<Element, Container, singleStaff>::getMarkCountForChord() const
 
     for (unsigned int i = 0; i < std::vector<typename Container::iterator>::size(); ++i) {
 
-	Event *e = getAsEvent((*this)[i]);
-	std::vector<Mark> marks(Marks::getMarks(*e));
+        Event *e = getAsEvent((*this)[i]);
+        std::vector<Mark> marks(Marks::getMarks(*e));
 
-	for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
-	    cmarks.insert(*j);
-	}
+        for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+            cmarks.insert(*j);
+        }
     }
 
     return cmarks.size();
@@ -560,19 +560,19 @@ GenericChord<Element, Container, singleStaff>::getMarksForChord() const
 
     for (unsigned int i = 0; i < std::vector<typename Container::iterator>::size(); ++i) {
 
-	Event *e = getAsEvent((*this)[i]);
-	std::vector<Mark> marks(Marks::getMarks(*e));
+        Event *e = getAsEvent((*this)[i]);
+        std::vector<Mark> marks(Marks::getMarks(*e));
 
 
-	for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+        for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
 
-	    // We permit multiple identical fingering marks per chord,
-	    // but not any other sort
-	    if (Marks::isFingeringMark(*j) ||
-		std::find(cmarks.begin(), cmarks.end(), *j) == cmarks.end()) {
-		cmarks.push_back(*j);
-	    }
-	}
+            // We permit multiple identical fingering marks per chord,
+            // but not any other sort
+            if (Marks::isFingeringMark(*j) ||
+                std::find(cmarks.begin(), cmarks.end(), *j) == cmarks.end()) {
+                cmarks.push_back(*j);
+            }
+        }
     }
 
     return cmarks;
@@ -586,14 +586,14 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
     std::vector<int> pitches;
 
     for (typename std::vector<typename Container::iterator>::const_iterator
-	     i = std::vector<typename Container::iterator>::begin(); i != std::vector<typename Container::iterator>::end(); ++i) {
-	if (getAsEvent(*i)->has(BaseProperties::PITCH)) {
-	    int pitch = get__Int
-		(getAsEvent(*i), BaseProperties::PITCH);
-	    if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
-		continue;
-	    pitches.push_back(pitch);
-	}
+             i = std::vector<typename Container::iterator>::begin(); i != std::vector<typename Container::iterator>::end(); ++i) {
+        if (getAsEvent(*i)->has(BaseProperties::PITCH)) {
+            int pitch = get__Int
+                (getAsEvent(*i), BaseProperties::PITCH);
+            if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
+                continue;
+            pitches.push_back(pitch);
+        }
     }
 
     return pitches;
@@ -605,8 +605,8 @@ bool
 GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
 {
     for (typename std::vector<typename Container::iterator>::const_iterator
-	     i = std::vector<typename Container::iterator>::begin();
-	 i != std::vector<typename Container::iterator>::end(); ++i) {
+             i = std::vector<typename Container::iterator>::begin();
+         i != std::vector<typename Container::iterator>::end(); ++i) {
         if (*i == itr) return true;
     }
     return false;
@@ -619,11 +619,11 @@ GenericChord<Element, Container, singleStaff>::getPreviousNote()
 {
     Iterator i(AbstractSet<Element, Container>::getInitialElement());
     while (1) {
-	if (i == AbstractSet<Element, Container>::getContainer().begin()) return AbstractSet<Element, Container>::getContainer().end();
-	--i;
-	if (getAsEvent(i)->isa(Note::EventType)) {
-	    return i;
-	}
+        if (i == AbstractSet<Element, Container>::getContainer().begin()) return AbstractSet<Element, Container>::getContainer().end();
+        --i;
+        if (getAsEvent(i)->isa(Note::EventType)) {
+            return i;
+        }
     }
 }
 
@@ -634,10 +634,10 @@ GenericChord<Element, Container, singleStaff>::getNextNote()
 {
     Iterator i(AbstractSet<Element, Container>::getFinalElement());
     while (  i != AbstractSet<Element, Container>::getContainer().end() &&
-	   ++i != AbstractSet<Element, Container>::getContainer().end()) {
-	if (getAsEvent(i)->isa(Note::EventType)) {
-	    return i;
-	}
+           ++i != AbstractSet<Element, Container>::getContainer().end()) {
+        if (getAsEvent(i)->isa(Note::EventType)) {
+            return i;
+        }
     }
     return AbstractSet<Element, Container>::getContainer().end();
 }
@@ -650,19 +650,19 @@ GenericChord<Element, Container, singleStaff>::getFirstElementNotInChord()
     return m_firstReject;
 }
 
-	
-template <class Element, class Container, bool singleStaff>	
+        
+template <class Element, class Container, bool singleStaff>     
 bool
 GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const Iterator &a,
-							   const Iterator &b)
+                                                           const Iterator &b)
 {
     try {
-	long ap = get__Int(getAsEvent(a), BaseProperties::PITCH);
-	long bp = get__Int(getAsEvent(b), BaseProperties::PITCH);
-	return (ap < bp);
+        long ap = get__Int(getAsEvent(a), BaseProperties::PITCH);
+        long bp = get__Int(getAsEvent(b), BaseProperties::PITCH);
+        return (ap < bp);
     } catch (Event::NoData) {
-	std::cerr << "Bad karma: PitchGreater failed to find one or both pitches" << std::endl;
-	return false;
+        std::cerr << "Bad karma: PitchGreater failed to find one or both pitches" << std::endl;
+        return false;
     }
 }
 

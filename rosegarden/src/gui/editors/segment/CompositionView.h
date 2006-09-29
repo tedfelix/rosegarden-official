@@ -244,37 +244,37 @@ protected:
 
 protected slots:
     void slotSegmentsDrawBufferNeedsRefresh() {
-	m_segmentsDrawBufferRefresh =
-	    QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+        m_segmentsDrawBufferRefresh =
+            QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
     }
 
     void slotSegmentsDrawBufferNeedsRefresh(QRect r) {
-	m_segmentsDrawBufferRefresh |=
-	    (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
-	     & r);
+        m_segmentsDrawBufferRefresh |=
+            (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
+             & r);
     }
 
     void slotArtifactsDrawBufferNeedsRefresh() {
-	m_artifactsDrawBufferRefresh = 
-	    QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+        m_artifactsDrawBufferRefresh = 
+            QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
         updateContents();
     }
 
     void slotArtifactsDrawBufferNeedsRefresh(QRect r) {
-	m_artifactsDrawBufferRefresh |=
-	    (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
-	     & r);
+        m_artifactsDrawBufferRefresh |=
+            (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
+             & r);
         updateContents(r);
     }
 
     void slotAllDrawBuffersNeedRefresh() {
-	slotSegmentsDrawBufferNeedsRefresh();
-	slotArtifactsDrawBufferNeedsRefresh();
+        slotSegmentsDrawBufferNeedsRefresh();
+        slotArtifactsDrawBufferNeedsRefresh();
     }
 
     void slotAllDrawBuffersNeedRefresh(QRect r) {
-	slotSegmentsDrawBufferNeedsRefresh(r);
-	slotArtifactsDrawBufferNeedsRefresh(r);
+        slotSegmentsDrawBufferNeedsRefresh(r);
+        slotArtifactsDrawBufferNeedsRefresh(r);
     }
 
 protected:         

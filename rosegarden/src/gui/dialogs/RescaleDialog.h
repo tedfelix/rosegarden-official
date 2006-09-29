@@ -47,10 +47,10 @@ class RescaleDialog : public KDialogBase
 
 public:
     RescaleDialog(QWidget *parent,
-		  Composition *composition, // for TimeWidget calculations
-		  timeT startTime,
-		  timeT originalDuration,
-		  bool showCloseGapOption);
+                  Composition *composition, // for TimeWidget calculations
+                  timeT startTime,
+                  timeT originalDuration,
+                  bool showCloseGapOption);
 
     timeT getNewDuration();
     bool shouldCloseGap();

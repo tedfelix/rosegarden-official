@@ -62,17 +62,17 @@ class AccidentalTable;
  */
 
 class NotationHLayout : public ProgressReporter,
-			public HorizontalLayoutEngine
+                        public HorizontalLayoutEngine
 {
 public:
     NotationHLayout(Composition *c, NotePixmapFactory *npf,
-		     const NotationProperties &properties,
-		     QObject* parent, const char* name = 0);
+                     const NotationProperties &properties,
+                     QObject* parent, const char* name = 0);
 
     virtual ~NotationHLayout();
 
     void setNotePixmapFactory(NotePixmapFactory *npf) {
-	m_npf = npf;
+        m_npf = npf;
     }
 
     /**
@@ -83,8 +83,8 @@ public:
      * set of staffs is preparsed.
      */
     virtual void scanStaff(Staff &staff,
-			   timeT startTime = 0,
-			   timeT endTime = 0);
+                           timeT startTime = 0,
+                           timeT endTime = 0);
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
@@ -97,14 +97,14 @@ public:
      * in the BarDataMap used to retain the data computed by scanStaff().
      */
     virtual void resetStaff(Staff &staff,
-			    timeT startTime = 0,
-			    timeT endTime = 0);
+                            timeT startTime = 0,
+                            timeT endTime = 0);
 
     /**
      * Lays out all staffs that have been scanned
      */
     virtual void finishLayout(timeT startTime = 0,
-			      timeT endTime = 0);
+                              timeT endTime = 0);
 
     /**
      * Set page mode
@@ -237,22 +237,22 @@ public:
 
     /// purely optional, used only for progress reporting
     void setStaffCount(int staffCount) {
-	m_staffCount = staffCount;
+        m_staffCount = staffCount;
     }
 
 protected:
 
     struct Chunk {
-	timeT duration;
-	short subordering;
-	float fixed;
-	float stretchy;
-	float x;
+        timeT duration;
+        short subordering;
+        float fixed;
+        float stretchy;
+        float x;
 
-	Chunk(timeT d, short sub, float f, float s) :
-	    duration(d), subordering(sub), fixed(f), stretchy(s), x(0) { }
-	Chunk(short sub, float f) :
-	    duration(0), subordering(sub), fixed(f), stretchy(0), x(0) { }
+        Chunk(timeT d, short sub, float f, float s) :
+            duration(d), subordering(sub), fixed(f), stretchy(s), x(0) { }
+        Chunk(short sub, float f) :
+            duration(0), subordering(sub), fixed(f), stretchy(0), x(0) { }
     };
     typedef std::vector<Chunk> ChunkList;
 
@@ -261,52 +261,52 @@ protected:
      */
     struct BarData
     {
-	ChunkList chunks;
+        ChunkList chunks;
         
-	struct BasicData
-	{   // slots that can be filled at construction time
+        struct BasicData
+        {   // slots that can be filled at construction time
 
-	    NotationElementList::iterator start; // i.e. event following barline
-	    bool correct; // bar preceding barline has correct duration
-	    TimeSignature timeSignature;
-	    bool newTimeSig;
+            NotationElementList::iterator start; // i.e. event following barline
+            bool correct; // bar preceding barline has correct duration
+            TimeSignature timeSignature;
+            bool newTimeSig;
 
-	} basicData;
+        } basicData;
 
-	struct SizeData
-	{   // slots that can be filled when the following bar has been scanned
+        struct SizeData
+        {   // slots that can be filled when the following bar has been scanned
 
-	    float idealWidth;    // theoretical width of bar following barline
-	    float reconciledWidth;
-	    float fixedWidth;       // width of non-chunk items in bar
-	    int clefKeyWidth;
-	    timeT actualDuration; // may exceed nominal duration
+            float idealWidth;    // theoretical width of bar following barline
+            float reconciledWidth;
+            float fixedWidth;       // width of non-chunk items in bar
+            int clefKeyWidth;
+            timeT actualDuration; // may exceed nominal duration
 
-	} sizeData;
+        } sizeData;
 
-	struct LayoutData
-	{   // slots either assumed, or only known at layout time
-	    bool needsLayout;
-	    double x;             // coordinate for display of barline
-	    int timeSigX;
+        struct LayoutData
+        {   // slots either assumed, or only known at layout time
+            bool needsLayout;
+            double x;             // coordinate for display of barline
+            int timeSigX;
 
-	} layoutData;
+        } layoutData;
 
         BarData(NotationElementList::iterator i,
-		bool correct, TimeSignature timeSig, bool newTimeSig) {
+                bool correct, TimeSignature timeSig, bool newTimeSig) {
             basicData.start = i;
-	    basicData.correct = correct;
-	    basicData.timeSignature = timeSig;
-	    basicData.newTimeSig = newTimeSig;
-	    sizeData.idealWidth = 0;
-	    sizeData.reconciledWidth = 0;
-	    sizeData.fixedWidth = 0;
-	    sizeData.clefKeyWidth = 0;
-	    sizeData.actualDuration = 0;
-	    layoutData.needsLayout = true;
-	    layoutData.x = -1;
-	    layoutData.timeSigX = -1;
-	}
+            basicData.correct = correct;
+            basicData.timeSignature = timeSig;
+            basicData.newTimeSig = newTimeSig;
+            sizeData.idealWidth = 0;
+            sizeData.reconciledWidth = 0;
+            sizeData.fixedWidth = 0;
+            sizeData.clefKeyWidth = 0;
+            sizeData.actualDuration = 0;
+            layoutData.needsLayout = true;
+            layoutData.x = -1;
+            layoutData.timeSigX = -1;
+        }
     };
 
     typedef std::map<int, BarData> BarDataList;
@@ -326,8 +326,8 @@ protected:
      * records and/or fill with empty ones as appropriate.
      */
     void setBarBasicData(Staff &staff, int barNo,
-			 NotationElementList::iterator start, bool correct,
-			 TimeSignature timeSig, bool newTimeSig);
+                         NotationElementList::iterator start, bool correct,
+                         TimeSignature timeSig, bool newTimeSig);
 
     /**
      * Set the size data for the given barNo.  If barNo is
@@ -335,7 +335,7 @@ protected:
      * records and/or fill with empty ones as appropriate.
      */
     void setBarSizeData(Staff &staff, int barNo,
-			float fixedWidth, timeT actualDuration);
+                        float fixedWidth, timeT actualDuration);
 
     /**
      * Returns the bar positions for a given staff, provided that
@@ -360,8 +360,8 @@ protected:
     void reconcileBarsPage();
 
     void layout(BarDataMap::iterator,
-		timeT startTime,
-		timeT endTime);
+                timeT startTime,
+                timeT endTime);
     
     /// Find earliest element with quantized time of t or greater
     NotationElementList::iterator getStartOfQuantizedSlice 
@@ -398,7 +398,7 @@ protected:
     (Staff &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
-			 const Key &) const;
+                         const Key &) const;
 
     int getBarMargin() const;
     int getPreBarMargin() const;

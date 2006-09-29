@@ -50,7 +50,7 @@ class SegmentResizeFromStartCommand : public BasicCommand
 {
 public:
     SegmentResizeFromStartCommand(Segment *segment,
-				  timeT newStartTime);
+                                  timeT newStartTime);
     virtual ~SegmentResizeFromStartCommand();
 
 protected:

@@ -103,61 +103,61 @@ private:
 #endif
     {
     public:
-	iterator_base() :
-	    m_v(0), m_i(-1) {
-	}
-	iterator_base(const iterator_base &i) :
-	    m_v(i.m_v), m_i(i.m_i) {
-	}
-	iterator_base &operator=(const iterator_base &i) {
-	    if (&i != this) { m_v = i.m_v; m_i = i.m_i; }
-	    return *this;
-	}
+        iterator_base() :
+            m_v(0), m_i(-1) {
+        }
+        iterator_base(const iterator_base &i) :
+            m_v(i.m_v), m_i(i.m_i) {
+        }
+        iterator_base &operator=(const iterator_base &i) {
+            if (&i != this) { m_v = i.m_v; m_i = i.m_i; }
+            return *this;
+        }
 
-	iterator_base &operator--() { --m_i; return *this; }
-	iterator_base operator--(int) {
+        iterator_base &operator--() { --m_i; return *this; }
+        iterator_base operator--(int) {
             iterator_base i(*this);
             --m_i;
             return i;
         }
-	iterator_base &operator++() { ++m_i; return *this; }
-	iterator_base operator++(int) {
+        iterator_base &operator++() { ++m_i; return *this; }
+        iterator_base operator++(int) {
             iterator_base i(*this);
             ++m_i;
             return i;
         }
 
-	bool operator==(const iterator_base &i) const {
-	    return (m_v == i.m_v && m_i == i.m_i);
-	}
+        bool operator==(const iterator_base &i) const {
+            return (m_v == i.m_v && m_i == i.m_i);
+        }
 
-	bool operator!=(const iterator_base &i) const {
-	    return (m_v != i.m_v || m_i != i.m_i);
-	}
+        bool operator!=(const iterator_base &i) const {
+            return (m_v != i.m_v || m_i != i.m_i);
+        }
 
-	iterator_base &operator+=(FastVector<T>::difference_type i) {
-	    m_i += i; return *this;
-	}
-	iterator_base &operator-=(FastVector<T>::difference_type i) {
-	    m_i -= i; return *this;
-	}
+        iterator_base &operator+=(FastVector<T>::difference_type i) {
+            m_i += i; return *this;
+        }
+        iterator_base &operator-=(FastVector<T>::difference_type i) {
+            m_i -= i; return *this;
+        }
 
-	iterator_base operator+(FastVector<T>::difference_type i) const {
-	    iterator_base n(*this); n += i; return n;
-	}
-	iterator_base operator-(FastVector<T>::difference_type i) const {
-	    iterator_base n(*this); n -= i; return n;
-	}
+        iterator_base operator+(FastVector<T>::difference_type i) const {
+            iterator_base n(*this); n += i; return n;
+        }
+        iterator_base operator-(FastVector<T>::difference_type i) const {
+            iterator_base n(*this); n -= i; return n;
+        }
 
-	typename FastVector<T>::difference_type operator-(const iterator_base &i) const{
-	    assert(m_v == i.m_v);
+        typename FastVector<T>::difference_type operator-(const iterator_base &i) const{
+            assert(m_v == i.m_v);
             return m_i - i.m_i;
-	}
+        }
 
     protected:
-	iterator_base(FastVector<T> *v, size_type i) : m_v(v), m_i(i) { }
-	FastVector<T> *m_v;
-	size_type m_i;
+        iterator_base(FastVector<T> *v, size_type i) : m_v(v), m_i(i) { }
+        FastVector<T> *m_v;
+        size_type m_i;
     };
 
 public:
@@ -168,21 +168,21 @@ public:
     {
     public:
         iterator() : iterator_base() { }
-	iterator(const iterator_base &i) : iterator_base(i) { }
+        iterator(const iterator_base &i) : iterator_base(i) { }
         iterator &operator=(const iterator &i) {
             iterator_base::operator=(i);
             return *this;
         }
 
         T &operator*() { return iterator_base::m_v->at(iterator_base::m_i); }
-	T *operator->() { return &(operator*()); }
+        T *operator->() { return &(operator*()); }
 
-	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_i); }
-	const T *operator->() const { return &(operator*()); }
+        const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_i); }
+        const T *operator->() const { return &(operator*()); }
 
     protected:
-	friend class FastVector<T>;
-	iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
+        friend class FastVector<T>;
+        iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
     };
 
     class reverse_iterator : public
@@ -190,21 +190,21 @@ public:
     {
     public:
         reverse_iterator() : iterator_base() { }
-	reverse_iterator(const iterator_base &i) : iterator_base(i) { }
+        reverse_iterator(const iterator_base &i) : iterator_base(i) { }
         reverse_iterator &operator=(const reverse_iterator &i) {
             iterator_base::operator=(i);
             return *this;
         }
 
         T &operator*() { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
-	T *operator->() { return &(operator*()); }
+        T *operator->() { return &(operator*()); }
 
-	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
-	const T *operator->() const { return &(operator*()); }
+        const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
+        const T *operator->() const { return &(operator*()); }
 
     protected:
-	friend class FastVector<T>;
-	reverse_iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
+        friend class FastVector<T>;
+        reverse_iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
     };
 
     class const_iterator : public
@@ -212,18 +212,18 @@ public:
     {
     public:
         const_iterator() : iterator_base() { }
-	const_iterator(const iterator_base &i) : iterator_base(i) { }
+        const_iterator(const iterator_base &i) : iterator_base(i) { }
         const_iterator &operator=(const const_iterator &i) {
             iterator_base::operator=(i);
             return *this;
         }
 
-	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_i); }
-	const T *operator->() const { return &(operator*()); }
+        const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_i); }
+        const T *operator->() const { return &(operator*()); }
 
     protected:
-	friend class FastVector<T>;
-	const_iterator(const FastVector<T> *v, size_type i) :
+        friend class FastVector<T>;
+        const_iterator(const FastVector<T> *v, size_type i) :
             iterator_base(const_cast<FastVector<T> *>(v),i) { }
     };
 
@@ -232,33 +232,33 @@ public:
     {
     public:
         const_reverse_iterator() : iterator_base() { }
-	const_reverse_iterator(const iterator_base &i) : iterator_base(i) { }
+        const_reverse_iterator(const iterator_base &i) : iterator_base(i) { }
         const_reverse_iterator &operator=(const const_reverse_iterator &i) {
             iterator_base::operator=(i);
             return *this;
         }
 
-	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
-	const T *operator->() const { return &(operator*()); }
+        const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
+        const T *operator->() const { return &(operator*()); }
 
     protected:
-	friend class FastVector<T>;
-	const_reverse_iterator(const FastVector<T> *v, size_type i) :
+        friend class FastVector<T>;
+        const_reverse_iterator(const FastVector<T> *v, size_type i) :
             iterator_base(const_cast<FastVector<T> *>(v),i) { }
     };
 
 public: 
     FastVector() :
-	m_items(0), m_count(0), m_gapStart(-1),
-	m_gapLength(0), m_size(0) { }
+        m_items(0), m_count(0), m_gapStart(-1),
+        m_gapLength(0), m_size(0) { }
     FastVector(const FastVector<T> &);
     virtual ~FastVector();
 
     template <class InputIterator>
     FastVector(InputIterator first, InputIterator last) :
-	m_items(0), m_count(0), m_gapStart(-1),
-	m_gapLength(0), m_size(0) {
-	insert(begin(), first, last);
+        m_items(0), m_count(0), m_gapStart(-1),
+        m_gapLength(0), m_size(0) {
+        insert(begin(), first, last);
     }
 
     FastVector<T> &operator=(const FastVector<T> &);
@@ -288,42 +288,42 @@ public:
     bool operator>=(const FastVector<T> &) const;
 
     T& at(size_type index) {
-	assert(index >= 0 && index < m_count);
-	return m_items[externalToInternal(index)];
+        assert(index >= 0 && index < m_count);
+        return m_items[externalToInternal(index)];
     }
     const T& at(size_type index) const {
-	return (const_cast<FastVector<T> *>(this))->at(index);
+        return (const_cast<FastVector<T> *>(this))->at(index);
     }
  
     T &operator[](size_type index) {
-	return at(index);
+        return at(index);
     }
     const T &operator[](size_type index) const {
-	return at(index);
+        return at(index);
     }
 
     virtual T* array(size_type index, size_type count); 
 
     /** We *guarantee* that push methods etc modify the FastVector
-	only through a call to insert(size_type, T), and that erase
-	etc modify it only through a call to remove(size_type).  This
-	is important because subclasses only need to override those
-	functions to catch all mutations */
+        only through a call to insert(size_type, T), and that erase
+        etc modify it only through a call to remove(size_type).  This
+        is important because subclasses only need to override those
+        functions to catch all mutations */
     virtual void push_front(const T& item) { insert(0, item); }
     virtual void push_back(const T& item) { insert(m_count, item); }
 
     virtual iterator insert(const iterator &p, const T &t) {
-	insert(p.m_i, t);
-	return p;
+        insert(p.m_i, t);
+        return p;
     }
 
     template <class InputIterator>
     iterator insert(const iterator &p, InputIterator &i, InputIterator &j);
     
     virtual iterator erase(const iterator &i) {
-	assert(i.m_v == this);
-	remove(i.m_i);
-	return iterator(this, i.m_i);
+        assert(i.m_v == this);
+        remove(i.m_i);
+        return iterator(this, i.m_i);
     }
 
     virtual iterator erase(const iterator &i, const iterator &j);
@@ -339,39 +339,39 @@ protected:
 private:
     void resize(size_type needed); // needed is internal (i.e. including gap)
 
-    void moveGapTo(size_type index);	// index is external
+    void moveGapTo(size_type index);    // index is external
     void closeGap() {
-	if (m_gapStart >= 0) moveGapTo(m_count);
-	m_gapStart = -1;
+        if (m_gapStart >= 0) moveGapTo(m_count);
+        m_gapStart = -1;
     }
 
     size_type bestNewCount(size_type n, size_t) const {
-	if (m_size == 0) {
-	    if (n < 8) return 8;
-	    else return n;
-	} else {
-	    // double up each time -- it's faster than just incrementing
-	    size_type s(m_size);
-	    if (s > n*2) return s/2;
-	    while (s <= n) s *= 2;
-	    return s;
-	}
+        if (m_size == 0) {
+            if (n < 8) return 8;
+            else return n;
+        } else {
+            // double up each time -- it's faster than just incrementing
+            size_type s(m_size);
+            if (s > n*2) return s/2;
+            while (s <= n) s *= 2;
+            return s;
+        }
     }
 
     size_type externalToInternal(size_type index) const {
-	return ((index < m_gapStart || m_gapStart < 0) ?
-		index : index + m_gapLength);
+        return ((index < m_gapStart || m_gapStart < 0) ?
+                index : index + m_gapLength);
     } 
 
     size_type minSize() const { return 8; }
     size_t minBlock() const {
-	return minSize() * sizeof(T) > 64 ? minSize() * sizeof(T) : 64;
+        return minSize() * sizeof(T) > 64 ? minSize() * sizeof(T) : 64;
     }
 
     T* m_items;
-    size_type m_count;		// not counting gap
-    size_type m_gapStart;		// -1 for no gap
-    size_type m_gapLength;		// undefined if no gap
+    size_type m_count;          // not counting gap
+    size_type m_gapStart;               // -1 for no gap
+    size_type m_gapLength;              // undefined if no gap
     size_type m_size;
 };  
 
@@ -420,15 +420,15 @@ void FastVector<T>::moveGapTo(size_type index)
     assert(m_gapStart >= 0);
 
     if (m_gapStart < index) {
-	// need to move some stuff left to fill the gap
-	memmove(&m_items[m_gapStart],
-		&m_items[m_gapStart + m_gapLength],
-		(index - m_gapStart) * sizeof(T));
-	
+        // need to move some stuff left to fill the gap
+        memmove(&m_items[m_gapStart],
+                &m_items[m_gapStart + m_gapLength],
+                (index - m_gapStart) * sizeof(T));
+        
     } else if (m_gapStart > index) {
-	// need to move some stuff right to fill the gap
-	memmove(&m_items[index + m_gapLength], &m_items[index],
-		(m_gapStart - index) * sizeof(T));
+        // need to move some stuff right to fill the gap
+        memmove(&m_items[index + m_gapLength], &m_items[index],
+                (m_gapStart - index) * sizeof(T));
     }
 
     m_gapStart = index;
@@ -440,9 +440,9 @@ void FastVector<T>::resize(size_type needed)
     size_type newSize = bestNewCount(needed, sizeof(T));
 
     if (m_items) {
-	m_items = static_cast<T *>(realloc(m_items, newSize * sizeof(T)));
+        m_items = static_cast<T *>(realloc(m_items, newSize * sizeof(T)));
     } else {
-	m_items = static_cast<T *>(malloc(newSize * sizeof(T)));
+        m_items = static_cast<T *>(malloc(newSize * sizeof(T)));
     }
 
     m_size = newSize;
@@ -454,29 +454,29 @@ void FastVector<T>::remove(size_type index)
     assert(index >= 0 && index < m_count);
 
     if (index == m_count - 1) {
-	// shorten the list without disturbing an existing gap, unless
-	// the item we're taking was the only one after the gap
-	m_items[externalToInternal(index)].T::~T();
-	if (m_gapStart == index) m_gapStart = -1;
+        // shorten the list without disturbing an existing gap, unless
+        // the item we're taking was the only one after the gap
+        m_items[externalToInternal(index)].T::~T();
+        if (m_gapStart == index) m_gapStart = -1;
     } else {
-	if (m_gapStart >= 0) {
-	    // moveGapTo shifts the gap around ready for insertion.
-	    // It actually moves the indexed object out of the way, so
-	    // that it's now at the end of the gap.  We have to cope.
-	    moveGapTo(index);
-	    m_items[m_gapStart + m_gapLength].T::~T();
-	    ++m_gapLength;
-	} else {		// no gap, make one
-	    m_gapStart = index;
-	    m_items[m_gapStart].T::~T();
-	    m_gapLength = 1;
-	}
+        if (m_gapStart >= 0) {
+            // moveGapTo shifts the gap around ready for insertion.
+            // It actually moves the indexed object out of the way, so
+            // that it's now at the end of the gap.  We have to cope.
+            moveGapTo(index);
+            m_items[m_gapStart + m_gapLength].T::~T();
+            ++m_gapLength;
+        } else {                // no gap, make one
+            m_gapStart = index;
+            m_items[m_gapStart].T::~T();
+            m_gapLength = 1;
+        }
     }
 
     if (--m_count == 0) m_gapStart = -1;
     if (m_count < m_size/3 && m_size > minSize()) {
-	closeGap();
-	resize(m_count);	// recover some memory
+        closeGap();
+        resize(m_count);        // recover some memory
     }
 }
 
@@ -487,50 +487,50 @@ void FastVector<T>::insert(size_type index, const T&t)
 
     if (index == m_count) {
 
-	// Appending.  No need to disturb the gap, if there is one --
-	// we'd rather waste a bit of memory than bother closing it up
+        // Appending.  No need to disturb the gap, if there is one --
+        // we'd rather waste a bit of memory than bother closing it up
 
-	if (externalToInternal(m_count) >= m_size || !m_items) {
-	    resize(m_size + 1);
-	}
+        if (externalToInternal(m_count) >= m_size || !m_items) {
+            resize(m_size + 1);
+        }
 
-	new (this, &m_items[externalToInternal(index)]) T(t);
+        new (this, &m_items[externalToInternal(index)]) T(t);
 
     } else if (m_gapStart < 0) {
 
-	// Inserting somewhere, when there's no gap we can use.
+        // Inserting somewhere, when there's no gap we can use.
 
-	if (m_count >= m_size) resize(m_size + 1);
+        if (m_count >= m_size) resize(m_size + 1);
 
-	// I think it's going to be more common to insert elements
-	// at the same point repeatedly than at random points.
-	// So, if we can make a gap here ready for more insertions
-	// *without* exceeding the m_size limit (i.e. if we've got
-	// slack left over from a previous gap), then let's.  But
-	// not too much -- ideally we'd like some space left for
-	// appending.  Say half.
+        // I think it's going to be more common to insert elements
+        // at the same point repeatedly than at random points.
+        // So, if we can make a gap here ready for more insertions
+        // *without* exceeding the m_size limit (i.e. if we've got
+        // slack left over from a previous gap), then let's.  But
+        // not too much -- ideally we'd like some space left for
+        // appending.  Say half.
 
-	if (m_count < m_size-2) {
-	    m_gapStart = index+1;
-	    m_gapLength = (m_size - m_count) / 2;
-	    memmove(&m_items[m_gapStart + m_gapLength], &m_items[index],
-		    (m_count - index) * sizeof(T));
-	} else {
-	    memmove(&m_items[index + 1], &m_items[index],
-		    (m_count - index) * sizeof(T));
-	}
+        if (m_count < m_size-2) {
+            m_gapStart = index+1;
+            m_gapLength = (m_size - m_count) / 2;
+            memmove(&m_items[m_gapStart + m_gapLength], &m_items[index],
+                    (m_count - index) * sizeof(T));
+        } else {
+            memmove(&m_items[index + 1], &m_items[index],
+                    (m_count - index) * sizeof(T));
+        }
 
-	new (this, &m_items[index]) T(t);
+        new (this, &m_items[index]) T(t);
 
     } else {
-	
-	// There's already a gap, all we have to do is move it (with
-	// no need to resize)
+        
+        // There's already a gap, all we have to do is move it (with
+        // no need to resize)
 
-	if (index != m_gapStart) moveGapTo(index);
-	new (this, &m_items[m_gapStart]) T(t);
-	if (--m_gapLength == 0) m_gapStart = -1;
-	else ++m_gapStart;
+        if (index != m_gapStart) moveGapTo(index);
+        new (this, &m_items[m_gapStart]) T(t);
+        if (--m_gapLength == 0) m_gapStart = -1;
+        else ++m_gapStart;
     }
 
     ++m_count;
@@ -543,8 +543,8 @@ typename FastVector<T>::iterator FastVector<T>::insert
 {
     size_type n = p.m_i;
     while (i != j) {
-	--j;
-	insert(n, *j);
+        --j;
+        insert(n, *j);
     }
     return begin() + n;
 }
@@ -572,12 +572,12 @@ T* FastVector<T>::array(size_type index, size_type count)
     assert(index >= 0 && count > 0 && index + count <= m_count);
 
     if (m_gapStart < 0 || index + count <= m_gapStart) {
-	return m_items + index;
+        return m_items + index;
     } else if (index >= m_gapStart) {
-	return m_items + index + m_gapLength;
+        return m_items + index + m_gapLength;
     } else {
-	closeGap();
-	return m_items + index;
+        closeGap();
+        return m_items + index;
     }
 }
 
@@ -586,7 +586,7 @@ bool FastVector<T>::operator==(const FastVector<T> &v) const
 {
     if (size() != v.size()) return false;
     for (size_type i = 0; i < m_count; ++i) {
-	if (at(i) != v.at(i)) return false;
+        if (at(i) != v.at(i)) return false;
     }
     return true;
 }

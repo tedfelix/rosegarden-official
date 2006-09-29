@@ -43,13 +43,13 @@ class ClearTriggersCommand : public BasicSelectionCommand
 {
 public:
     ClearTriggersCommand(EventSelection &selection,
-			 QString name = 0) :
-	BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
-	m_selection(&selection)
+                         QString name = 0) :
+        BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
+        m_selection(&selection)
     { }
 
     static QString getGlobalName() {
-	return i18n("&Clear Triggers");
+        return i18n("&Clear Triggers");
     }
 
 protected:

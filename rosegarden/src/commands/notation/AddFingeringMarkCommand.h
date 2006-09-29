@@ -43,9 +43,9 @@ class AddFingeringMarkCommand : public BasicSelectionCommand
 {
 public:
     AddFingeringMarkCommand(std::string text,
-				     EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection), m_text(text) { }
+                                     EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection), m_text(text) { }
 
     static QString getGlobalName(QString fingering = "");
 

@@ -92,7 +92,7 @@ public:
     bool getInversionGlyph(int size, CharName charName, int &glyph) const;
 
     bool getHotspot(int size, CharName charName, int width, int height,
-		    int &x, int &y) const;
+                    int &x, int &y) const;
 
     // Xml handler methods:
 
@@ -118,22 +118,22 @@ private:
     {
     public:
         SymbolData() : m_fontId(0),
-		       m_src(""), m_inversionSrc(""),
-		       m_code(-1), m_inversionCode(-1),
-		       m_glyph(-1), m_inversionGlyph(-1) { }
+                       m_src(""), m_inversionSrc(""),
+                       m_code(-1), m_inversionCode(-1),
+                       m_glyph(-1), m_inversionGlyph(-1) { }
         ~SymbolData() { }
 
-	void setFontId(int id) { m_fontId = id; }
-	int  getFontId() const { return m_fontId; }
+        void setFontId(int id) { m_fontId = id; }
+        int  getFontId() const { return m_fontId; }
 
         void setSrc(std::string src) { m_src = src; }
         std::string getSrc() const { return m_src; }
 
-	void setCode(int code) { m_code = code; }
-	int  getCode() const { return m_code; }
+        void setCode(int code) { m_code = code; }
+        int  getCode() const { return m_code; }
 
-	void setGlyph(int glyph) { m_glyph = glyph; }
-	int  getGlyph() const { return m_glyph; }
+        void setGlyph(int glyph) { m_glyph = glyph; }
+        int  getGlyph() const { return m_glyph; }
 
         void setInversionSrc(std::string inversion) { m_inversionSrc = inversion; }
         std::string getInversionSrc() const { return m_inversionSrc; }
@@ -145,19 +145,19 @@ private:
         int  getInversionGlyph() const { return m_inversionGlyph; }
 
         bool hasInversion() const {
-	    return m_inversionGlyph >= 0 ||
-		   m_inversionCode  >= 0 ||
-		   m_inversionSrc   != "";
-	}
+            return m_inversionGlyph >= 0 ||
+                   m_inversionCode  >= 0 ||
+                   m_inversionSrc   != "";
+        }
 
     private:
-	int m_fontId;
+        int m_fontId;
         std::string m_src;
         std::string m_inversionSrc;
-	int m_code;
-	int m_inversionCode;
-	int m_glyph;
-	int m_inversionGlyph;
+        int m_code;
+        int m_inversionCode;
+        int m_glyph;
+        int m_inversionGlyph;
     };
 
     class HotspotData
@@ -175,15 +175,15 @@ private:
             m_data[size] = Point(x, y);
         }
 
-	void setScaledHotspot(double x, double y) {
-	    m_scaled = ScaledPoint(x, y);
-	}
+        void setScaledHotspot(double x, double y) {
+            m_scaled = ScaledPoint(x, y);
+        }
 
         bool getHotspot(int size, int width, int height, int &x, int &y) const;
 
     private:
         DataMap m_data;
-	ScaledPoint m_scaled;
+        ScaledPoint m_scaled;
     };
 
     class SizeData
@@ -215,9 +215,9 @@ private:
         void setLegerLineThickness(unsigned int i) {
             m_legerLineThickness = (int)i;
         }
-	void setFontHeight(int fontId, unsigned int h) {
-	    m_fontHeights[fontId] = (int)h;
-	}
+        void setFontHeight(int fontId, unsigned int h) {
+            m_fontHeights[fontId] = (int)h;
+        }
 
         bool getStemThickness(unsigned int &i) const {
             if (m_stemThickness >= 0) {
@@ -261,14 +261,14 @@ private:
             } else return false;
         }
 
-	bool getFontHeight(int fontId, unsigned int &h) const {
-	    std::map<int, int>::const_iterator fhi = m_fontHeights.find(fontId);
-	    if (fhi != m_fontHeights.end()) {
-		h = (unsigned int)fhi->second;
-		return true;
-	    }
-	    return false;
-	}	
+        bool getFontHeight(int fontId, unsigned int &h) const {
+            std::map<int, int>::const_iterator fhi = m_fontHeights.find(fontId);
+            if (fhi != m_fontHeights.end()) {
+                h = (unsigned int)fhi->second;
+                return true;
+            }
+            return false;
+        }       
        
     private:
         int m_stemThickness;
@@ -277,7 +277,7 @@ private:
         int m_flagSpacing;
         int m_staffLineThickness;
         int m_legerLineThickness;
-	std::map<int, int> m_fontHeights; // per-font-id
+        std::map<int, int> m_fontHeights; // per-font-id
     };
 
     //--------------- Data members ---------------------------------

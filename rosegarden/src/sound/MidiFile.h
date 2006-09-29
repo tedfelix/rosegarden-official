@@ -70,18 +70,18 @@ public:
 
     typedef enum
     {
-	MIDI_SINGLE_TRACK_FILE          = 0x00,
-	MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
-	MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
-	MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
-	MIDI_FILE_NOT_LOADED            = 0xFF
+        MIDI_SINGLE_TRACK_FILE          = 0x00,
+        MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
+        MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
+        MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
+        MIDI_FILE_NOT_LOADED            = 0xFF
     } MIDIFileFormatType;
 
     typedef enum
     {
-	CONVERT_REPLACE,
-	CONVERT_AUGMENT,
-	CONVERT_APPEND
+        CONVERT_REPLACE,
+        CONVERT_AUGMENT,
+        CONVERT_APPEND
     } ConversionType;
 
     MidiFile(Studio *studio);

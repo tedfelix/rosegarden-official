@@ -49,8 +49,8 @@ class PercussionPitchRuler : public PitchRuler
     Q_OBJECT
 public:
     PercussionPitchRuler(QWidget *parent,
-			 const MidiKeyMapping *mapping,
-			 int lineSpacing);
+                         const MidiKeyMapping *mapping,
+                         int lineSpacing);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;

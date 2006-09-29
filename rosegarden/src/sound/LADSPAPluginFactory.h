@@ -51,11 +51,11 @@ public:
     virtual void populatePluginSlot(QString identifier, MappedPluginSlot &slot);
 
     virtual RunnablePluginInstance *instantiatePlugin(QString identifier,
-						      int instrumentId,
-						      int position,
-						      unsigned int sampleRate,
-						      unsigned int blockSize,
-						      unsigned int channels);
+                                                      int instrumentId,
+                                                      int position,
+                                                      unsigned int sampleRate,
+                                                      unsigned int blockSize,
+                                                      unsigned int channels);
 
     MappedObjectValue getPortMinimum(const LADSPA_Descriptor *, int port);
     MappedObjectValue getPortMaximum(const LADSPA_Descriptor *, int port);

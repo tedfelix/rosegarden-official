@@ -64,19 +64,19 @@ public:
     class BadAudioPathException : public Exception
     {
     public:
-	BadAudioPathException(std::string path) :
-	    Exception("Bad audio file path " + path), m_path(path) { }
-	BadAudioPathException(std::string path, std::string file, int line) :
-	    Exception("Bad audio file path " + path, file, line), m_path(path) { }
-	BadAudioPathException(const SoundFile::BadSoundFileException &e) :
-	    Exception("Bad audio file path (malformed file?) " + e.getPath()), m_path(e.getPath()) { }
+        BadAudioPathException(std::string path) :
+            Exception("Bad audio file path " + path), m_path(path) { }
+        BadAudioPathException(std::string path, std::string file, int line) :
+            Exception("Bad audio file path " + path, file, line), m_path(path) { }
+        BadAudioPathException(const SoundFile::BadSoundFileException &e) :
+            Exception("Bad audio file path (malformed file?) " + e.getPath()), m_path(e.getPath()) { }
 
-	~BadAudioPathException() throw() { }
+        ~BadAudioPathException() throw() { }
 
-	std::string getPath() const { return m_path; }
+        std::string getPath() const { return m_path; }
 
     private:
-	std::string m_path;
+        std::string m_path;
     };
 
 private:

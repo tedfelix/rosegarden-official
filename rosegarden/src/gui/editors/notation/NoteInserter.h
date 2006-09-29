@@ -73,15 +73,15 @@ public:
     virtual void ready();
 
     Note getCurrentNote() {
-	return Note(m_noteType, m_noteDots);
+        return Note(m_noteType, m_noteDots);
     }
 
     /// Insert a note as if the user has clicked at the given time & pitch
     void insertNote(Segment &segment,
-		    timeT insertionTime,
-		    int pitch,
-		    Accidental accidental,
-		    bool suppressPreview = false);
+                    timeT insertionTime,
+                    int pitch,
+                    Accidental accidental,
+                    bool suppressPreview = false);
 
     static const QString ToolName;
 
@@ -102,16 +102,16 @@ protected:
     NoteInserter(const QString& menuName, NotationView*);
 
     timeT getOffsetWithinRest(int staffNo,
-					  const NotationElementList::iterator&,
-					  double &canvasX);
+                                          const NotationElementList::iterator&,
+                                          double &canvasX);
 
     int getOttavaShift(Segment &segment, timeT time);
 
     virtual Event *doAddCommand(Segment &,
-					    timeT time,
-					    timeT endTime,
-					    const Note &,
-					    int pitch, Accidental);
+                                            timeT time,
+                                            timeT endTime,
+                                            const Note &,
+                                            int pitch, Accidental);
 
     virtual bool computeLocationAndPreview(QMouseEvent *e);
     virtual void showPreview();

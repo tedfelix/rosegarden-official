@@ -50,8 +50,8 @@ public:
     enum SizeMode { FixWidth, FixHeight };
 
     ScrollBox(QWidget *parent = 0,
-	      SizeMode mode = FixWidth,
-	      const char *name = 0);
+              SizeMode mode = FixWidth,
+              const char *name = 0);
 
 public slots:
     void setPageSize(const QSize&);

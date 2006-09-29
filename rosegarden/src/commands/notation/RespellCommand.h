@@ -42,18 +42,18 @@ class RespellCommand : public BasicSelectionCommand
 {
 public:
     enum Type {
-	Set,
-	Up,
-	Down,
-	Restore
+        Set,
+        Up,
+        Down,
+        Restore
     };
 
     RespellCommand(Type type, Accidental acc,
-		   EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(type, acc), selection, true),
-	m_selection(&selection),
-	m_type(type),
-	m_accidental(acc) { }
+                   EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(type, acc), selection, true),
+        m_selection(&selection),
+        m_type(type),
+        m_accidental(acc) { }
 
     static QString getGlobalName(Type type, Accidental acc);
 

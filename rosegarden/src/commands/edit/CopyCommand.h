@@ -50,17 +50,17 @@ class CopyCommand : public KNamedCommand
 public:
     /// Make a CopyCommand that copies events from within a Segment
     CopyCommand(EventSelection &selection,
-		Clipboard *clipboard);
+                Clipboard *clipboard);
 
     /// Make a CopyCommand that copies whole Segments
     CopyCommand(SegmentSelection &selection,
-		Clipboard *clipboard);
+                Clipboard *clipboard);
 
     /// Make a CopyCommand that copies a range of a Composition
     CopyCommand(Composition *composition,
-		timeT beginTime,
-		timeT endTime,
-		Clipboard *clipboard);
+                timeT beginTime,
+                timeT endTime,
+                Clipboard *clipboard);
 
     virtual ~CopyCommand();
 

@@ -36,30 +36,30 @@ namespace Guitar
         typedef std::vector<Barre*>::iterator iterator;
         typedef std::vector<Barre*>::const_iterator const_iterator;
 
-	//! Add Barre object to list
+        //! Add Barre object to list
         void push_back (Barre* obj);
 
-	//! Return iterator to start of Barre list
+        //! Return iterator to start of Barre list
         iterator begin (void);
 
-	//! Return iterator to end of Barre list
+        //! Return iterator to end of Barre list
         iterator end (void);
 
-	//! Return TRUE if Barre list is empty
+        //! Return TRUE if Barre list is empty
         bool empty (void) const;
 
-	//! Return Barre list size
+        //! Return Barre list size
         unsigned int const size (void) const;
 
-	//! Remove the contents of the Barre list iterator from Barre lsit
+        //! Remove the contents of the Barre list iterator from Barre lsit
         void erase (BarreList::iterator& pos);
 
-	//! Remove the Barre object from Barre list
+        //! Remove the Barre object from Barre list
         void erase (Barre* bar_ptr);
 
     private:
 
-	//! List of contained Barre objects
+        //! List of contained Barre objects
         std::vector<Barre*> m_data;
     };
 

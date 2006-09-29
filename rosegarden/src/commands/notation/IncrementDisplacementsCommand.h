@@ -43,11 +43,11 @@ class IncrementDisplacementsCommand : public BasicSelectionCommand
 {
 public:
     IncrementDisplacementsCommand(EventSelection &selection,
-				  long dx, long dy) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_dx(dx),
-	m_dy(dy) { }
+                                  long dx, long dy) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_dx(dx),
+        m_dy(dy) { }
 
     static QString getGlobalName() { return i18n("Fine Reposition"); }
 

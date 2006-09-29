@@ -51,10 +51,10 @@ public:
     enum Format { Compact, Regular };
 
     AudioRouteMenu(QWidget *parent,
-		   Direction direction,
-		   Format format,
-		   Studio *studio = 0,
-		   Instrument *instrument = 0);
+                   Direction direction,
+                   Format format,
+                   Studio *studio = 0,
+                   Instrument *instrument = 0);
 
     QWidget *getWidget();
 

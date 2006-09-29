@@ -45,9 +45,9 @@ class AddTriggerSegmentCommand : public KNamedCommand
 {
 public:
     AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
-			     timeT duration, // start time always 0
-			     int basePitch = -1,
-			     int baseVelocity = -1);
+                             timeT duration, // start time always 0
+                             int basePitch = -1,
+                             int baseVelocity = -1);
     virtual ~AddTriggerSegmentCommand();
 
     TriggerSegmentId getId() const; // after invocation

@@ -173,15 +173,15 @@ public:
     // note-off events as appropriate.
     //
     virtual void processEventsOut(const MappedComposition &mC,
-				  const RealTime &sliceStart,
-				  const RealTime &sliceEnd) = 0;
+                                  const RealTime &sliceStart,
+                                  const RealTime &sliceEnd) = 0;
 
     // Activate a recording state.  armedInstruments and audioFileNames
     // can be NULL if no audio tracks recording.
     //
     virtual bool record(RecordStatus recordStatus,
-			const std::vector<InstrumentId> *armedInstruments = 0,
-			const std::vector<QString> *audioFileNames = 0) = 0;
+                        const std::vector<InstrumentId> *armedInstruments = 0,
+                        const std::vector<QString> *audioFileNames = 0) = 0;
 
     // Process anything that's pending
     //
@@ -210,44 +210,44 @@ public:
                                             float value) = 0;
 
     virtual float getPluginInstancePortValue(InstrumentId id,
-					     int position,
-					     unsigned long portNumber) = 0;
+                                             int position,
+                                             unsigned long portNumber) = 0;
 
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value) = 0;
 
     virtual QStringList getPluginInstancePrograms(InstrumentId id,
-						  int position) = 0;
+                                                  int position) = 0;
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
-					     int position) = 0;
+                                             int position) = 0;
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
-					     int position,
-					     int bank,
-					     int program) = 0;
+                                             int position,
+                                             int bank,
+                                             int program) = 0;
 
     virtual unsigned long getPluginInstanceProgram(InstrumentId id,
-						   int position,
-						   QString name) = 0;
+                                                   int position,
+                                                   QString name) = 0;
     
     virtual void setPluginInstanceProgram(InstrumentId id,
-					  int position,
-					  QString program) = 0;
+                                          int position,
+                                          QString program) = 0;
 
     virtual QString configurePlugin(InstrumentId id,
-				    int position,
-				    QString key,
-				    QString value) = 0;
+                                    int position,
+                                    QString key,
+                                    QString value) = 0;
 
     virtual void setAudioBussLevels(int bussId,
-				    float dB,
-				    float pan) = 0;
+                                    float dB,
+                                    float pan) = 0;
 
     virtual void setAudioInstrumentLevels(InstrumentId id,
-					  float dB,
-					  float pan) = 0;
+                                          float dB,
+                                          float pan) = 0;
 
     // Poll for new clients (for new Devices/Instruments)
     //
@@ -297,17 +297,17 @@ public:
     virtual bool canReconnect(Device::DeviceType) { return false; }
 
     virtual DeviceId addDevice(Device::DeviceType,
-			       MidiDevice::DeviceDirection) {
-	return Device::NO_DEVICE;
+                               MidiDevice::DeviceDirection) {
+        return Device::NO_DEVICE;
     }
     virtual void removeDevice(DeviceId) { }
     virtual void renameDevice(DeviceId, QString) { }
 
     virtual unsigned int getConnections(Device::DeviceType,
-					MidiDevice::DeviceDirection) { return 0; }
+                                        MidiDevice::DeviceDirection) { return 0; }
     virtual QString getConnection(Device::DeviceType,
-				  MidiDevice::DeviceDirection,
-				  unsigned int) { return ""; }
+                                  MidiDevice::DeviceDirection,
+                                  unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
 
@@ -353,11 +353,11 @@ public:
     // Buffer sizes
     //
     void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
-			     int smallFileSize) {
-	m_audioMixBufferLength = mix;
-	m_audioReadBufferLength = read;
-	m_audioWriteBufferLength = write;
-	m_smallFileSize = smallFileSize;
+                             int smallFileSize) {
+        m_audioMixBufferLength = mix;
+        m_audioReadBufferLength = read;
+        m_audioWriteBufferLength = write;
+        m_smallFileSize = smallFileSize;
     }
 
     RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
@@ -418,10 +418,10 @@ public:
     void setSequencerDataBlock(SequencerDataBlock *d) { m_sequencerDataBlock = d; }
 
     ExternalTransport *getExternalTransportControl() const {
-	return m_externalTransport;
+        return m_externalTransport;
     }
     void setExternalTransportControl(ExternalTransport *transport) {
-	m_externalTransport = transport;
+        m_externalTransport = transport;
     }
 
     // Do any bits and bobs of work that need to be done continuously
@@ -438,7 +438,7 @@ protected:
     //
     virtual void processMidiOut(const MappedComposition &mC,
                                 const RealTime &sliceStart,
-				const RealTime &sliceEnd) = 0;
+                                const RealTime &sliceEnd) = 0;
     virtual void generateInstruments() = 0;
 
     // Audio

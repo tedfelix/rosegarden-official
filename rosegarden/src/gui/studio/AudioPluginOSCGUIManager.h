@@ -66,14 +66,14 @@ public:
     void updateProgram(InstrumentId id, int position);
     void updatePort(InstrumentId id, int position, int port);
     void updateConfiguration(InstrumentId id, int position,
-			     QString key);
+                             QString key);
 
     QString getOSCUrl(InstrumentId instrument, int position,
-		      QString identifier);
+                      QString identifier);
     QString getFriendlyName(InstrumentId instrument, int position,
-			    QString identifier);
+                            QString identifier);
     bool parseOSCPath(QString path, InstrumentId &instrument, int &position,
-		      QString &method);
+                      QString &method);
 
     static void timerCallback(void *data);
     static void guiExitedCallback(void *data);

@@ -7,8 +7,8 @@
 class QScrollBar;
 
 /*
-	KGuitar interface was used as a guideline for design the FingeringConstructor. Where the code
-	from the project was used is defined by comments.
+        KGuitar interface was used as a guideline for design the FingeringConstructor. Where the code
+        from the project was used is defined by comments.
 */
 
 namespace Rosegarden

@@ -43,8 +43,8 @@ class RemoveFingeringMarksCommand : public BasicSelectionCommand
 {
 public:
     RemoveFingeringMarksCommand(EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("&Remove Fingerings"); }
 

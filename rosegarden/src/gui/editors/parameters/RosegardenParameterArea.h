@@ -65,8 +65,8 @@ public:
     // widgets within the parameter area.
 
     enum Arrangement {
-	CLASSIC_STYLE,  // A simple vertical tiling of parameter-box widgets.
-	TAB_BOX_STYLE   // A horizontal list of tabs, displaying one box at a time.
+        CLASSIC_STYLE,  // A simple vertical tiling of parameter-box widgets.
+        TAB_BOX_STYLE   // A horizontal list of tabs, displaying one box at a time.
     };
 
     // Redisplay the widgets with a different layout style.
@@ -91,7 +91,7 @@ private:
     // Move a RosegardenParameterBox widget from one container to another.
 
     void moveWidget(QWidget *old_container, QWidget *new_container,
-		    RosegardenParameterBox *box);
+                    RosegardenParameterBox *box);
 
     QScrollView *m_scrollView; // Holds the m_classic container
     QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.

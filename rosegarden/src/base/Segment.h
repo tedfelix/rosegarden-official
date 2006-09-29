@@ -113,7 +113,7 @@ public:
      * if it isn't, this will return zero
      */
     Composition *getComposition() const {
-	return m_composition;
+        return m_composition;
     }
 
     /**
@@ -347,7 +347,7 @@ public:
     iterator findSingle(Event*);
 
     const_iterator findSingle(Event *e) const {
-	return const_iterator(((Segment *)this)->findSingle(e));
+        return const_iterator(((Segment *)this)->findSingle(e));
     }
 
     /**
@@ -357,7 +357,7 @@ public:
     iterator findTime(timeT time);
 
     const_iterator findTime(timeT time) const {
-	return const_iterator(((Segment *)this)->findTime(time));
+        return const_iterator(((Segment *)this)->findTime(time));
     }
 
     /**
@@ -368,7 +368,7 @@ public:
     iterator findNearestTime(timeT time);
 
     const_iterator findNearestTime(timeT time) const {
-	return const_iterator(((Segment *)this)->findNearestTime(time));
+        return const_iterator(((Segment *)this)->findNearestTime(time));
     }
 
 
@@ -526,7 +526,7 @@ public:
 
     /// Should only be called by Composition
     void setComposition(Composition *composition) {
-	m_composition = composition;
+        m_composition = composition;
     }
 
     // The runtime id for this segment
@@ -594,11 +594,11 @@ public:
     // delegate part of the RefreshStatusArray API
 
     unsigned int getNewRefreshStatusId() {
-	return m_refreshStatusArray.getNewRefreshStatusId();
+        return m_refreshStatusArray.getNewRefreshStatusId();
     }
 
     SegmentRefreshStatus &getRefreshStatus(unsigned int id) {
-	return m_refreshStatusArray.getRefreshStatus(id);
+        return m_refreshStatusArray.getRefreshStatus(id);
     }
 
     void updateRefreshStatuses(timeT startTime, timeT endTime);
@@ -740,7 +740,7 @@ protected:
     Segment::iterator end()   { return segment().end();   }
 
     bool isBeforeEndMarker(Segment::const_iterator i) {
-	return segment().isBeforeEndMarker(i);
+        return segment().isBeforeEndMarker(i);
     }
 
     Segment::iterator insert(Event *e) { return segment().insert(e); }

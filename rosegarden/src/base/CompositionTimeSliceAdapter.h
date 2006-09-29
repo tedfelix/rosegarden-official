@@ -11,7 +11,7 @@
 
     This file is Copyright 2002
         Randall Farmer      <rfarme@simons-rock.edu>
-	with additional work by Chris Cannam.
+        with additional work by Chris Cannam.
 
     The moral right of the authors to claim authorship of this work
     has been asserted.
@@ -61,8 +61,8 @@ public:
      * end are equal, the whole composition will be used.
      */
     CompositionTimeSliceAdapter(Composition* c,
-				timeT begin = 0,
-				timeT end = 0);
+                                timeT begin = 0,
+                                timeT end = 0);
 
     /**
      * Construct a CompositionTimeSliceAdapter that operates on the
@@ -71,9 +71,9 @@ public:
      * duration of the composition will be used.
      */
     CompositionTimeSliceAdapter(Composition* c,
-				SegmentSelection* s,
-				timeT begin = 0,
-				timeT end = 0);
+                                SegmentSelection* s,
+                                timeT begin = 0,
+                                timeT end = 0);
 
     /**
      * Construct a CompositionTimeSliceAdapter that operates on the
@@ -82,9 +82,9 @@ public:
      * equal, the whole duration of the composition will be used.
      */
     CompositionTimeSliceAdapter(Composition *c,
-				const TrackSet &trackIDs,
-				timeT begin = 0,
-				timeT end = 0);
+                                const TrackSet &trackIDs,
+                                timeT begin = 0,
+                                timeT end = 0);
 
     ~CompositionTimeSliceAdapter() { };
 
@@ -98,36 +98,36 @@ public:
     Composition *getComposition() { return m_composition; }
 
     class iterator {
-	friend class CompositionTimeSliceAdapter;
+        friend class CompositionTimeSliceAdapter;
 
     public:
-	iterator() :
-	    m_a(0), m_curEvent(0), m_curTrack(-1), m_needFill(true) { }
-	iterator(const CompositionTimeSliceAdapter *a) :
-	    m_a(a), m_curEvent(0), m_curTrack(-1), m_needFill(true) { }
-	iterator(const iterator &);
-	iterator &operator=(const iterator &);
-	~iterator() { };
+        iterator() :
+            m_a(0), m_curEvent(0), m_curTrack(-1), m_needFill(true) { }
+        iterator(const CompositionTimeSliceAdapter *a) :
+            m_a(a), m_curEvent(0), m_curTrack(-1), m_needFill(true) { }
+        iterator(const iterator &);
+        iterator &operator=(const iterator &);
+        ~iterator() { };
 
-	iterator &operator++();
-	iterator &operator--();
+        iterator &operator++();
+        iterator &operator--();
 
-	bool operator==(const iterator& other) const;
-	bool operator!=(const iterator& other) const;
+        bool operator==(const iterator& other) const;
+        bool operator!=(const iterator& other) const;
 
-	Event *operator*() const;
-	Event &operator->() const;
+        Event *operator*() const;
+        Event &operator->() const;
 
-	int getTrack() const;
+        int getTrack() const;
 
     private:
-	segmentitrlist m_segmentItrList;
-	const CompositionTimeSliceAdapter *m_a;
-	Event*	m_curEvent;
-	int     m_curTrack;
-	bool    m_needFill;
+        segmentitrlist m_segmentItrList;
+        const CompositionTimeSliceAdapter *m_a;
+        Event*  m_curEvent;
+        int     m_curTrack;
+        bool    m_needFill;
 
-	static bool strictLessThan(Event *, Event *);
+        static bool strictLessThan(Event *, Event *);
     };
 
 

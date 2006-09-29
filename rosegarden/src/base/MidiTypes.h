@@ -40,9 +40,9 @@ namespace Rosegarden
 class MIDIValueOutOfRange : public Exception {
 public:
     MIDIValueOutOfRange(std::string name) :
-	Exception("Value of " + name + " out of byte range") { }
+        Exception("Value of " + name + " out of byte range") { }
     MIDIValueOutOfRange(std::string name, std::string file, int line) :
-	Exception("Value of " + name + " out of byte range", file, line) { }
+        Exception("Value of " + name + " out of byte range", file, line) { }
 };
 
 
@@ -192,7 +192,7 @@ public:
     static const int EventSubOrdering;
 
     struct BadEncoding : public Exception {
-	BadEncoding() : Exception("Bad SysEx encoding") { }
+        BadEncoding() : Exception("Bad SysEx encoding") { }
     };
 
     static const PropertyName DATABLOCK;

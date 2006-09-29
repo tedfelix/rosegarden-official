@@ -82,38 +82,38 @@ public:
 
     /// Returns false if not available
     bool getCharacter(CharName charName,
-		      NoteCharacter &character,
-		      CharacterType type = Screen,
-		      bool inverted = false);
+                      NoteCharacter &character,
+                      CharacterType type = Screen,
+                      bool inverted = false);
 
     /// Returns an empty character if not available
     NoteCharacter getCharacter(CharName charName,
-			       CharacterType type = Screen,
-			       bool inverted = false);
+                               CharacterType type = Screen,
+                               bool inverted = false);
 
     /// Returns false if not available
     bool getCharacterColoured(CharName charName,
-			      int hue, int minValue,
-			      NoteCharacter &character,
-			      CharacterType type = Screen,
-			      bool inverted = false);
+                              int hue, int minValue,
+                              NoteCharacter &character,
+                              CharacterType type = Screen,
+                              bool inverted = false);
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
-				       int hue, int minValue,
-				       CharacterType type = Screen,
-				       bool inverted = false);
+                                       int hue, int minValue,
+                                       CharacterType type = Screen,
+                                       bool inverted = false);
 
     /// Returns false if not available
     bool getCharacterShaded(CharName charName,
-			    NoteCharacter &character,
-			    CharacterType type = Screen,
-			    bool inverted = false);
+                            NoteCharacter &character,
+                            CharacterType type = Screen,
+                            bool inverted = false);
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterShaded(CharName charName,
-				     CharacterType type = Screen,
-				     bool inverted = false);
+                                     CharacterType type = Screen,
+                                     bool inverted = false);
 
     /// Returns false + dimensions of blank pixmap if none found
     bool getDimensions(CharName charName, int &x, int &y,
@@ -140,11 +140,11 @@ private:
     /// Returns false + blank pixmap if it can't find the right one
     bool getColouredPixmap(CharName charName, QPixmap &pixmap,
                            int hue, int minValue,
-			   bool inverted = false) const;
+                           bool inverted = false) const;
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getShadedPixmap(CharName charName, QPixmap &pixmap,
-			 bool inverted = false) const;
+                         bool inverted = false) const;
 
     friend class NoteFontFactory;
     NoteFont(std::string fontName, int size = 0);

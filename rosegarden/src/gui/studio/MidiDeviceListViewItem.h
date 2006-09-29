@@ -49,7 +49,7 @@ public:
     // Bank
     MidiDeviceListViewItem(DeviceId id,
                            QListViewItem* parent, QString name,
-			   bool percussion,
+                           bool percussion,
                            int msb, int lsb);
 
     // Key Mapping

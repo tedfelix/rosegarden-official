@@ -66,8 +66,8 @@ class BankEditorDialog : public KMainWindow
 public:
     BankEditorDialog(QWidget *parent,
                      RosegardenGUIDoc *doc,
-		     DeviceId defaultDevice =
-		     Device::NO_DEVICE);
+                     DeviceId defaultDevice =
+                     Device::NO_DEVICE);
 
     ~BankEditorDialog();
 

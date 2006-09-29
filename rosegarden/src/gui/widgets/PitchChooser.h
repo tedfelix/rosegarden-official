@@ -46,8 +46,8 @@ class PitchChooser : public QGroupBox
     Q_OBJECT
 public:
     PitchChooser(QString title,
-			   QWidget *parent,
-			   int defaultPitch = 60);
+                           QWidget *parent,
+                           int defaultPitch = 60);
     
     int getPitch() const;
 

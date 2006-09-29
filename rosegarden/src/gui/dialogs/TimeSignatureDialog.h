@@ -51,12 +51,12 @@ class TimeSignatureDialog : public KDialogBase
 
 public:
     TimeSignatureDialog(QWidget *parent,
-			Composition *composition,
-			timeT insertionTime,
-			TimeSignature defaultSig =
-			    TimeSignature::DefaultTimeSignature,
-			bool timeEditable = false,
-			QString explanatoryText = 0);
+                        Composition *composition,
+                        timeT insertionTime,
+                        TimeSignature defaultSig =
+                            TimeSignature::DefaultTimeSignature,
+                        bool timeEditable = false,
+                        QString explanatoryText = 0);
 
     TimeSignature getTimeSignature() const;
 

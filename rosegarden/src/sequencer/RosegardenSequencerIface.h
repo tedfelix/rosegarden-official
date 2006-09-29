@@ -66,7 +66,7 @@ public:
                      long audioReadNsec,
                      long audioWriteSec,
                      long audioWriteNsec,
-		     long smallFileSize) = 0;
+                     long smallFileSize) = 0;
 
     // record from a given time with given parameters
     //
@@ -74,13 +74,13 @@ public:
                        long timeNsec,
                        long readAheadSec,
                        long readAheadNsec,
-		       long audioMixSec,
-		       long audioMixNsec,
-		       long audioReadSec,
-		       long audioReadNsec,
-		       long audioWriteSec,
-		       long audioWriteNsec,
-		       long smallFileSize,
+                       long audioMixSec,
+                       long audioMixNsec,
+                       long audioReadSec,
+                       long audioReadNsec,
+                       long audioWriteSec,
+                       long audioWriteNsec,
+                       long smallFileSize,
                        long recordMode) = 0;
 
     // stop the sequencer
@@ -195,8 +195,8 @@ public:
     // Returns the empty string for invalid parameters.
     // 
     virtual QString getConnection(int type,
-				  unsigned int direction,
-				  unsigned int connectionNo) = 0;
+                                  unsigned int direction,
+                                  unsigned int connectionNo) = 0;
 
     // Reconnect a particular device.
     // Ignored if driver does not permit reconnections or the connection
@@ -209,7 +209,7 @@ public:
     // Ignored if driver does not permit reconnections.
     // 
     virtual void setPlausibleConnection(unsigned int deviceId,
-					QString idealConnection) = 0;
+                                        QString idealConnection) = 0;
 
     // Return the number of different timers we are capable of
     // sychronising against.  This may return 0 if the driver has no
@@ -248,8 +248,8 @@ public:
     // Set many properties on many MappedObjects
     //
     virtual void setMappedProperties(const MappedObjectIdList &ids,
-				     const MappedObjectPropertyList &properties,
-				     const MappedObjectValueList &values) = 0;
+                                     const MappedObjectPropertyList &properties,
+                                     const MappedObjectValueList &values) = 0;
 
     // Set a string property on a MappedObject
     //
@@ -294,7 +294,7 @@ public:
                                float value) = 0;
 
     virtual float getMappedPort(int pluginIn,
-				unsigned long id) = 0;
+                                unsigned long id) = 0;
 
     // Create a (transient, writeable) object
     //
@@ -352,9 +352,9 @@ public:
     virtual void closeAllSegments() = 0;
 
     /** Update mute (etc) statuses while playing. The sequencer handles
-	this automatically (with no need for this call) for MIDI events,
-	but it needs to be prodded when an already-playing audio segment
-	drops in or out.
+        this automatically (with no need for this call) for MIDI events,
+        but it needs to be prodded when an already-playing audio segment
+        drops in or out.
     */
     virtual void remapTracks() = 0;
 };

@@ -45,7 +45,7 @@ public:
                         Event *oldEvent,
                         Event *newEvent,
                         bool isMove,
-			bool normalize);
+                        bool normalize);
 
 protected:
     virtual void modifySegment();

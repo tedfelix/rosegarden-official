@@ -37,7 +37,7 @@ class PropertyDefn
 {
 public:
     struct PropertyDefnNotDefined {
-	PropertyDefnNotDefined() { throw(0); }
+        PropertyDefnNotDefined() { throw(0); }
     };
     typedef PropertyDefnNotDefined basic_type;
 

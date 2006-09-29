@@ -43,10 +43,10 @@ public:
 
     virtual ~Audit() {
 #if (__GNUC__ < 3)
-	*this << std::ends;
+        *this << std::ends;
 #endif
-	std::cerr << str();
-	m_audit += str();
+        std::cerr << str();
+        m_audit += str();
     }
 
     static std::string getAudit() { return m_audit; }

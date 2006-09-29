@@ -77,7 +77,7 @@ class SoundDriver;
  */
 class RosegardenSequencerApp : public KMainWindow,
                                virtual public RosegardenSequencerIface,
-			       public ExternalTransport
+                               public ExternalTransport
 {
     Q_OBJECT
 
@@ -97,18 +97,18 @@ public:
     //
     int play(const RealTime &position,
              const RealTime &readAhead,
-	     const RealTime &audioMix,
-	     const RealTime &audioRead,
-	     const RealTime &audioWrite,
-	     long smallFileSize);
+             const RealTime &audioMix,
+             const RealTime &audioRead,
+             const RealTime &audioWrite,
+             long smallFileSize);
 
     // recording
     int record(const RealTime &position,
                const RealTime &readAhead,
-	       const RealTime &audioMix,
-	       const RealTime &audioRead,
-	       const RealTime &audioWrite,
-	       long smallFileSize,
+               const RealTime &audioMix,
+               const RealTime &audioRead,
+               const RealTime &audioWrite,
+               long smallFileSize,
                long recordMode);
 
     virtual int punchOut();
@@ -124,13 +124,13 @@ public:
                      long timeNsec,
                      long readAheadSec,
                      long readAheadNsec,
-		     long audioMixSec,
-		     long audioMixNsec,
-		     long audioReadSec,
-		     long audioReadNsec,
-		     long audioWriteSec,
-		     long audioWriteNsec,
-		     long smallFileSize);
+                     long audioMixSec,
+                     long audioMixNsec,
+                     long audioReadSec,
+                     long audioReadNsec,
+                     long audioWriteSec,
+                     long audioWriteNsec,
+                     long smallFileSize);
 
     // Record wrapper for DCOP
     //
@@ -138,13 +138,13 @@ public:
                        long timeNsec,
                        long readAheadSec,
                        long readAheadNsec,
-		       long audioMixSec,
-		       long audioMixNsec,
-		       long audioReadSec,
-		       long audioReadNsec,
-		       long audioWriteSec,
-		       long audioWriteNsec,
-		       long smallFileSize,
+                       long audioMixSec,
+                       long audioMixNsec,
+                       long audioReadSec,
+                       long audioReadNsec,
+                       long audioWriteSec,
+                       long audioWriteNsec,
+                       long smallFileSize,
                        long recordMode);
 
     
@@ -212,10 +212,10 @@ public:
     virtual void renameDevice(unsigned int id, QString name);
     virtual unsigned int getConnections(int type, unsigned int direction);
     virtual QString getConnection(int type, unsigned int direction,
-				  unsigned int connectionNo);
+                                  unsigned int connectionNo);
     virtual void setConnection(unsigned int deviceId, QString connection);
     virtual void setPlausibleConnection(unsigned int deviceId,
-					QString idealConnection);
+                                        QString idealConnection);
     
     virtual unsigned int getTimers();
     virtual QString getTimer(unsigned int n);
@@ -238,8 +238,8 @@ public:
     // Set many properties on many MappedObjects
     //
     virtual void setMappedProperties(const MappedObjectIdList &ids,
-				     const MappedObjectPropertyList &properties,
-				     const MappedObjectValueList &values);
+                                     const MappedObjectPropertyList &properties,
+                                     const MappedObjectValueList &values);
 
     // Set a MappedObject to a string
     //
@@ -250,8 +250,8 @@ public:
     // Set a MappedObject to a property list
     //
     virtual void setMappedPropertyList(int id,
-				       const QString &property,
-				       const MappedObjectPropertyList &values);
+                                       const QString &property,
+                                       const MappedObjectPropertyList &values);
 
     // Get a MappedObject for a type
     //
@@ -275,7 +275,7 @@ public:
                                float value);
 
     virtual float getMappedPort(int pluginId,
-				unsigned long portId);
+                                unsigned long portId);
 
     // Create a MappedObject
     virtual int createMappedObject(int type);
@@ -374,8 +374,8 @@ public:
     // the supplied filer.
     //
     void applyFiltering(MappedComposition *mC,
-			MidiFilter filter,
-			bool filterControlDevice);
+                        MidiFilter filter,
+                        bool filterControlDevice);
 
     // This method assigns an Instrument to each MappedEvent 
     // belongin to the MappedComposition, and sends the 
@@ -432,16 +432,16 @@ protected:
     // get events whilst handling loop
     //
     void fetchEvents(MappedComposition &,
-		     const RealTime &start,
-		     const RealTime &end,
-		     bool firstFetch);
+                     const RealTime &start,
+                     const RealTime &end,
+                     bool firstFetch);
 
     // just get a slice of events between markers
     //
     void getSlice(MappedComposition &,
-		  const RealTime &start,
-		  const RealTime &end,
-		  bool firstFetch);
+                  const RealTime &start,
+                  const RealTime &end,
+                  bool firstFetch);
 
     // adjust event times according to relative instrument latencies
     //

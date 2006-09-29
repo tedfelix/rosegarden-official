@@ -43,9 +43,9 @@ class SetVisibilityCommand : public BasicSelectionCommand
 {
 public:
     SetVisibilityCommand(EventSelection &selection, bool visible) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_visible(visible) { }
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_visible(visible) { }
 
     static QString getGlobalName() { return i18n("Set Visibility"); }
 

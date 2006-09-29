@@ -95,17 +95,17 @@ public:
     static const char* const ConfigGroup;
 
     virtual bool applyLayout(int staffNo = -1,
-			     timeT startTime = 0,
-			     timeT endTime = 0);
+                             timeT startTime = 0,
+                             timeT endTime = 0);
 
     virtual void refreshSegment(Segment *segment,
-				timeT startTime = 0,
-				timeT endTime = 0);
+                                timeT startTime = 0,
+                                timeT endTime = 0);
 
     QCanvas* canvas() { return getCanvasView()->canvas(); }
 
     void setCanvasCursor(const QCursor &cursor) {
-	getCanvasView()->viewport()->setCursor(cursor);
+        getCanvasView()->viewport()->setCursor(cursor);
     }
 
     MatrixStaff* getStaff(int i)
@@ -140,24 +140,24 @@ public:
      * command invocation anyway.)
      */
     virtual void setCurrentSelection(EventSelection* s,
-				     bool preview = false,
-				     bool redrawNow = false);
+                                     bool preview = false,
+                                     bool redrawNow = false);
 
     /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(int staffNo,
                                 Event *event,
-				bool preview = false,
-				bool redrawNow = false);
+                                bool preview = false,
+                                bool redrawNow = false);
 
     /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(Segment &segment,
                                 Event *event,
-				bool preview = false,
-				bool redrawNow = false);
+                                bool preview = false,
+                                bool redrawNow = false);
 
 
     /**
@@ -325,7 +325,7 @@ public slots:
      * @see MatrixCanvasView#hoveredOverNoteChanged()
      */
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent,
-				    timeT evTime);
+                                    timeT evTime);
 
     /**
      * Called when the mouse cursor moves over a different key on
@@ -352,7 +352,7 @@ public slots:
      * Set the time pointer position during playback
      */
     void slotSetPointerPosition(timeT time,
-				bool scroll);
+                                bool scroll);
 
     /**
      * Set the insertion pointer position (from the bottom LoopRuler)
@@ -360,7 +360,7 @@ public slots:
     void slotSetInsertCursorPosition(timeT position, bool scroll);
 
     virtual void slotSetInsertCursorPosition(timeT position) {
-	slotSetInsertCursorPosition(position, true);
+        slotSetInsertCursorPosition(position, true);
     }
 
     /**
@@ -464,7 +464,7 @@ public slots:
     void slotStepByStepTargetRequested(QObject *);
 
     void slotInstrumentLevelsChanged(InstrumentId,
-				     const LevelInfo &);
+                                     const LevelInfo &);
 
 protected slots:
     void slotCanvasBottomWidgetHeightChanged(int newHeight);
@@ -650,11 +650,11 @@ protected:
 // class NoteSender : public QObject
 // {
 //     Q_OBJECT
-	
+        
 // public:
 //     NoteSender(int i, int p) : m_insid(i), m_pitch(p) { }
 //     virtual ~NoteSender();
-	
+        
 // public slots:
 // void sendNote();
     

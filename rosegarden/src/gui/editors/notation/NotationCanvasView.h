@@ -69,7 +69,7 @@ class NotationCanvasView : public RosegardenCanvasView
 
 public:
     NotationCanvasView(const LinedStaffManager &staffmgr,
-		       QCanvas *viewing, QWidget *parent=0,
+                       QCanvas *viewing, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
 
     ~NotationCanvasView();
@@ -102,14 +102,14 @@ signals:
      * active nor a notation element
      */
     void nonNotationItemPressed(QMouseEvent *,
-				QCanvasItem *);
+                                QCanvasItem *);
 
     /**
      * Emitted when the user clicks on a QCanvasItem which is a
      * plain QCanvasText
      */
     void textItemPressed(QMouseEvent *,
-			 QCanvasItem *);
+                         QCanvasItem *);
 
     /**
      * Emitted when the mouse cursor moves to a different height

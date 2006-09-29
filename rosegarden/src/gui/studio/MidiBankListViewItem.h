@@ -45,7 +45,7 @@ public:
     MidiBankListViewItem(DeviceId deviceId,
                          int bankNb,
                          QListViewItem* parent, QString name,
-			 bool percussion,
+                         bool percussion,
                          int msb, int lsb);
 
     int getBank()     { return m_bankNb; }

@@ -58,12 +58,12 @@ public:
     static const int AllInterpretations; // all of the above
 
     InterpretCommand(EventSelection &selection,
-				   const Quantizer *quantizer,
-				   int interpretations) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_quantizer(quantizer),
-	m_interpretations(interpretations) { }
+                                   const Quantizer *quantizer,
+                                   int interpretations) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_quantizer(quantizer),
+        m_interpretations(interpretations) { }
 
     virtual ~InterpretCommand();
 
@@ -78,7 +78,7 @@ private:
     int m_interpretations;
 
     typedef std::map<timeT,
-		     Indication *> IndicationMap;
+                     Indication *> IndicationMap;
     IndicationMap m_indications;
 
     void guessDirections();
@@ -90,7 +90,7 @@ private:
     // test if the event is within an indication of the given type, return
     // an iterator pointing to that indication if so
     IndicationMap::iterator findEnclosingIndication(Event *,
-						    std::string type);
+                                                    std::string type);
     int getVelocityForDynamic(std::string dynamic);
 };
 

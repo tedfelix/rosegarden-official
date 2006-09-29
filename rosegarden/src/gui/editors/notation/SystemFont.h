@@ -43,13 +43,13 @@ class SystemFont
 {
 public:
     enum Strategy {
-	PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
+        PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
     };
 
     virtual QPixmap renderChar(CharName charName,
-			       int glyph, int code,
-			       Strategy strategy,
-			       bool &success) = 0;
+                               int glyph, int code,
+                               Strategy strategy,
+                               bool &success) = 0;
 
     static SystemFont *loadSystemFont(const SystemFontSpec &spec);
 };

@@ -83,22 +83,22 @@ protected:
                            const QString &label,
                            const QString &author,
                            const QString &copyright,
-			   bool isSynth,
-			   bool isGrouped,
-			   const QString &category);
+                           bool isSynth,
+                           bool isGrouped,
+                           const QString &category);
 
     bool removePlugin(const QString &identifier);
 
     class Enumerator : public QThread
     {
     public:
-	Enumerator(AudioPluginManager *);
-	virtual void run();
-	bool isDone() const { return m_done; }
-	
+        Enumerator(AudioPluginManager *);
+        virtual void run();
+        bool isDone() const { return m_done; }
+        
     protected:
-	AudioPluginManager *m_manager;
-	bool m_done;
+        AudioPluginManager *m_manager;
+        bool m_done;
     };
 
     void awaitEnumeration();

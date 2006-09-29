@@ -90,9 +90,9 @@ public:
     QCanvasPixmap* makeRestPixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap* makeClefPixmap(const Clef &clef);
     QCanvasPixmap* makeKeyPixmap(const Key &key,
-				 const Clef &clef,
-				 Key previousKey =
-				 Key::DefaultKey);
+                                 const Clef &clef,
+                                 Key previousKey =
+                                 Key::DefaultKey);
     QCanvasPixmap* makeTimeSigPixmap(const TimeSignature& sig);
     QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
     QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above, bool phrasing);
@@ -102,36 +102,36 @@ public:
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Text &text);
     QCanvasPixmap* makeFretboardPixmap(const Guitar::Fingering &arrangement,
-				       int x, int y);
+                                       int x, int y);
 
     // Printing methods -- draw direct to a paint device:
 
     void drawNote(const NotePixmapParameters &parameters,
-		  QPainter &painter, int x, int y);
+                  QPainter &painter, int x, int y);
     void drawRest(const NotePixmapParameters &parameters,
-		  QPainter &painter, int x, int y);
+                  QPainter &painter, int x, int y);
     void drawHairpin(int length, bool isCrescendo,
-		     QPainter &painter, int x, int y);
+                     QPainter &painter, int x, int y);
     void drawSlur(int length, int dy, bool above, bool phrasing,
-		  QPainter &painter, int x, int y);
+                  QPainter &painter, int x, int y);
     void drawOttava(int length, int octavesUp,
-		    QPainter &painter, int x, int y);
+                    QPainter &painter, int x, int y);
     void drawText(const Text &text,
-		  QPainter &painter, int x, int y);
+                  QPainter &painter, int x, int y);
 
     // Other support methods for producing pixmaps for other contexts:
 
     static QCanvasPixmap *makeToolbarPixmap(const char *name);
     static QCanvasPixmap *makeNoteMenuPixmap(timeT duration,
-					     timeT &errorReturn);
+                                             timeT &errorReturn);
     static QCanvasPixmap *makeMarkMenuPixmap(Mark);
 
     QCanvasPixmap* makePitchDisplayPixmap(int pitch,
-					  const Clef &clef,
-					  bool useSharps);
+                                          const Clef &clef,
+                                          bool useSharps);
     QCanvasPixmap* makeClefDisplayPixmap(const Clef &clef);
     QCanvasPixmap* makeKeyDisplayPixmap(const Key &key,
-				       const Clef &clef);
+                                       const Clef &clef);
 
     // Bounding box and other geometry methods:
 
@@ -142,7 +142,7 @@ public:
                           Note::Crotchet) const;
 
     int getAccidentalWidth (const Accidental &,
-			    int shift = 0, bool extra = false) const;
+                            int shift = 0, bool extra = false) const;
     int getAccidentalHeight(const Accidental &) const;
 
     int getLineSpacing()        const;
@@ -151,13 +151,13 @@ public:
     int getStaffLineThickness() const;
     int getLegerLineThickness() const;
     int getDotWidth()           const;
-    int getBarMargin()	        const;
+    int getBarMargin()          const;
 
     int getClefWidth(const Clef &clef) const;
     int getTimeSigWidth(const TimeSignature &timesig) const;
     int getRestWidth(const Note &restType) const;
     int getKeyWidth(const Key &key,
-		    Key previousKey = Key::DefaultKey) const;
+                    Key previousKey = Key::DefaultKey) const;
     int getTextWidth(const Text &text) const;
 
     /**
@@ -182,18 +182,18 @@ protected:
     void initMaybe() { if (!m_font) init("", -1); }
 
     void drawNoteAux(const NotePixmapParameters &parameters,
-		     QPainter *painter, int x, int y);
+                     QPainter *painter, int x, int y);
     void drawRestAux(const NotePixmapParameters &parameters, QPoint &hotspot,
-		     QPainter *painter, int x, int y);
+                     QPainter *painter, int x, int y);
     void drawHairpinAux(int length, bool isCrescendo,
-			QPainter *painter, int x, int y);
+                        QPainter *painter, int x, int y);
     void drawSlurAux(int length, int dy, bool above, bool smooth, bool tie, bool phrasing,
-		     QPoint &hotspot,
-		     QPainter *painter, int x, int y);
+                     QPoint &hotspot,
+                     QPainter *painter, int x, int y);
     void drawOttavaAux(int length, int octavesUp,
-		       QPainter *painter, int x, int y);
+                       QPainter *painter, int x, int y);
     void drawTextAux(const Text &text,
-		     QPainter *painter, int x, int y);
+                     QPainter *painter, int x, int y);
 
     int getStemLength(const NotePixmapParameters &) const;
 
@@ -207,20 +207,20 @@ protected:
     void drawLegerLines(const NotePixmapParameters &params);
 
     void makeRoomForStemAndFlags(int flagCount, int stemLength,
-				 const NotePixmapParameters &params,
-				 QPoint &startPoint, QPoint &endPoint);
+                                 const NotePixmapParameters &params,
+                                 QPoint &startPoint, QPoint &endPoint);
     void drawFlags(int flagCount, const NotePixmapParameters &params,
-		   const QPoint &startPoint, const QPoint &endPoint);
+                   const QPoint &startPoint, const QPoint &endPoint);
     void drawStem(const NotePixmapParameters &params,
-		  const QPoint &startPoint, const QPoint &endPoint,
-		  int shortening);
+                  const QPoint &startPoint, const QPoint &endPoint,
+                  int shortening);
 
     void makeRoomForBeams(const NotePixmapParameters &params);
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
                    int beamCount);
 
     void drawSlashes(const QPoint &, const NotePixmapParameters &params,
-		     int slashCount);
+                     int slashCount);
 
     void makeRoomForTuplingLine(const NotePixmapParameters &params);
     void drawTuplingLine(const NotePixmapParameters &params);
@@ -237,16 +237,16 @@ protected:
     QCanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilypondDirective);
 
     void createPixmapAndMask(int width, int height,
-			     int maskWidth = -1,
-			     int maskHeight = -1);
+                             int maskWidth = -1,
+                             int maskHeight = -1);
     QCanvasPixmap* makeCanvasPixmap(QPoint hotspot, bool generateMask = false);
 
     enum ColourType {
-	PlainColour,
-	QuantizedColour,
-	HighlightedColour,
-	TriggerColour,
-	OutRangeColour
+        PlainColour,
+        QuantizedColour,
+        HighlightedColour,
+        TriggerColour,
+        OutRangeColour
     };
 
     /// draws selected/shaded status from m_selected/m_shaded:

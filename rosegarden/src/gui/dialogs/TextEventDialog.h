@@ -51,12 +51,12 @@ class TextEventDialog : public KDialogBase
 
 public:
     TextEventDialog(QWidget *parent,
-		    NotePixmapFactory *npf,
-		    Text defaultText,
-		    int maxLength = -1); // for Qt default
+                    NotePixmapFactory *npf,
+                    Text defaultText,
+                    int maxLength = -1); // for Qt default
 
     Text getText() const {
-	return Text(getTextString(), getTextType());
+        return Text(getTextString(), getTextType());
     }
 
 public slots:

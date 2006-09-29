@@ -58,7 +58,7 @@ class CompositionModel : public QObject, public CompositionObserver, public Segm
 public:
 
     struct CompositionItemCompare {
-	bool operator()(const CompositionItem &c1, const CompositionItem &c2) const;
+        bool operator()(const CompositionItem &c1, const CompositionItem &c2) const;
     };
 
     typedef std::vector<QRect> rectlist;
@@ -92,7 +92,7 @@ public:
     class AudioPreviewData {
     public:
         AudioPreviewData(bool showMinima, unsigned int channels) : m_showMinima(showMinima), m_channels(channels) {};
-	// ~AudioPreviewData();
+        // ~AudioPreviewData();
 
         bool showsMinima()              { return m_showMinima; }
         void setShowMinima(bool s)      { m_showMinima = s;    }
@@ -101,7 +101,7 @@ public:
         void setChannels(unsigned int c) { m_channels = c;      }
 
         const std::vector<float> &getValues() const { return m_values;  }
-	void setValues(const std::vector<float>&v) { m_values = v; }
+        void setValues(const std::vector<float>&v) { m_values = v; }
 
         QRect getSegmentRect()              { return m_segmentRect; }
         void setSegmentRect(const QRect& r) { m_segmentRect = r; }

@@ -53,9 +53,9 @@ class RosegardenParameterBox : public QFrame
     Q_OBJECT
 public:
     RosegardenParameterBox(const QString &shortLabel, // e.g. i18n("Track")
-			   const QString &longLabel,  // e.g. i18n("Track Parameters")
-			   QWidget *parent = 0,
-			   const char *name = 0);
+                           const QString &longLabel,  // e.g. i18n("Track Parameters")
+                           QWidget *parent = 0,
+                           const char *name = 0);
 
     // Ask for a one-word string that can be used to label the widget.
     QString getShortLabel() const;
@@ -74,8 +74,8 @@ protected:
     // List the layout styles that may be requested via a call to setStyle().
 
     enum LayoutMode {
-	LANDSCAPE_MODE,  // Optimize the layout for a tall and narrow parent.
-	PORTRAIT_MODE    // Optimize the layout for a short and wide parent.
+        LANDSCAPE_MODE,  // Optimize the layout for a tall and narrow parent.
+        PORTRAIT_MODE    // Optimize the layout for a short and wide parent.
     };
 
     void setLayoutMode(LayoutMode mode);

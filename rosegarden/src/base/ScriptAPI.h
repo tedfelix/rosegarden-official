@@ -46,36 +46,36 @@ public:
     // event instead of the raw ones.
 
     enum Resolution {
-	Unquantized,
-	Notation,
-	Quantized64,
-	Quantized32,
-	Quantized16
+        Unquantized,
+        Notation,
+        Quantized64,
+        Quantized32,
+        Quantized16
     };
 
     enum Scope {
-	Global,
-	Segment
+        Global,
+        Segment
     };
 
     class ScriptEvent {
-	EventId    id;
-	int        bar;   // number, 1-based
-	ScriptTime time;  // within bar
-	ScriptTime duration;
-	int        pitch; // 0-127 if note, -1 otherwise
+        EventId    id;
+        int        bar;   // number, 1-based
+        ScriptTime time;  // within bar
+        ScriptTime duration;
+        int        pitch; // 0-127 if note, -1 otherwise
     };
 
     class ScriptTimeSignature {
-	int        numerator;
-	int        denominator;
-	ScriptTime duration;
+        int        numerator;
+        int        denominator;
+        ScriptTime duration;
     };
 
     class ScriptKeySignature {
-	int accidentals;
-	bool sharps;
-	bool minor;
+        int accidentals;
+        bool sharps;
+        bool minor;
     };
 
     ScriptInterface(Composition *composition);
@@ -102,10 +102,10 @@ public:
     ScriptKeySignature getKeySignature(ScriptId id);
 
     EventId addNote(ScriptId id,
-		    int bar, ScriptTime time, ScriptTime duration, int pitch);
+                    int bar, ScriptTime time, ScriptTime duration, int pitch);
 
     EventId addEvent(ScriptId id,
-		     std::string type, int bar, ScriptTime time, ScriptTime duration);
+                     std::string type, int bar, ScriptTime time, ScriptTime duration);
 
     void deleteEvent(ScriptId id, EventId id);
 
@@ -125,4 +125,4 @@ protected:
 
 #endif
 
-	
+        

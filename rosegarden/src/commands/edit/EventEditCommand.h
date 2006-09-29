@@ -49,8 +49,8 @@ class EventEditCommand : public BasicCommand
 {
 public:
     EventEditCommand(Segment &segment,
-		     Event *eventToModify,
-		     const Event &newEvent);
+                     Event *eventToModify,
+                     const Event &newEvent);
 
     static QString getGlobalName() { return i18n("Edit E&vent"); }
 

@@ -42,15 +42,15 @@ class SegmentOrderer : public CompositionObserver {
 public:
     SegmentOrderer() : m_currentMaxZ(0) {};
     
-	unsigned int getZForSegment(const Segment*);
+        unsigned int getZForSegment(const Segment*);
 
-	void segmentClicked(const Segment *);
-	
+        void segmentClicked(const Segment *);
+        
 protected:
 
     //--------------- Data members ---------------------------------
-	std::map<const Segment*, unsigned int> m_segmentZs;
-	unsigned int m_currentMaxZ;
+        std::map<const Segment*, unsigned int> m_segmentZs;
+        unsigned int m_currentMaxZ;
 };
 
 

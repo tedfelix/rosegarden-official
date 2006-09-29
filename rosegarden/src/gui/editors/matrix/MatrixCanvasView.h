@@ -51,8 +51,8 @@ class MatrixCanvasView : public RosegardenCanvasView
 
 public:
     MatrixCanvasView(MatrixStaff&,
-		     SnapGrid *,
-		     bool drumMode,
+                     SnapGrid *,
+                     bool drumMode,
                      QCanvas *viewing,
                      QWidget *parent=0, const char *name=0, WFlags f=0);
 
@@ -76,7 +76,7 @@ signals:
      * on the staff.  Returns the new pitch.
      */
     void hoveredOverNoteChanged(int evPitch, bool haveEvent,
-				timeT evTime);
+                                timeT evTime);
 
     /**
      * Emitted when the mouse cursor moves to a note which is at a
