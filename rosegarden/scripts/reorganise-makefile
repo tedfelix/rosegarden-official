@@ -37,9 +37,9 @@ LDLIBS		= \
 		-lkdeprint -lkdeui -lkdecore -lqt-mt \
 		-ljack -lasound -llo -llrdf -lraptor -lmad -llirc_client
 
-HEADERS		= $(wildcard */*.h */*/*.h)
+HEADERS		= $(wildcard */*.h */*/*.h */*/*/*.h)
+SOURCES		= $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp)
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
-SOURCES		= $(wildcard */*.cpp */*/*.cpp)
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
 UI		= $(wildcard gui/ui/*.ui)
