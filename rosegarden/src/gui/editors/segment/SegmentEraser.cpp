@@ -74,3 +74,4 @@ int SegmentEraser::handleMouseMove(QMouseEvent*)
 }
 
 }
+#include "SegmentEraser.moc"

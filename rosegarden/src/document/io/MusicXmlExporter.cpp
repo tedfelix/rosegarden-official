@@ -25,6 +25,7 @@
 
 #include "MusicXmlExporter.h"
 
+#include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/CompositionTimeSliceAdapter.h"
 #include "base/Event.h"
@@ -32,12 +33,14 @@
 #include "base/NotationTypes.h"
 #include "base/XmlExportable.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/general/ProgressReporter.h"
 #include <qobject.h>
 
-
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 MusicXmlExporter::MusicXmlExporter(QObject *parent,
                                    RosegardenGUIDoc *doc,
@@ -58,7 +61,7 @@ void
 MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
                             AccidentalTable &accTable,
                             const Clef &clef,
-                            const Key &key,
+                            const Rosegarden::Key &key,
                             std::ofstream &str)
 {
     str << "\t\t\t<note>" << std::endl;
@@ -189,7 +192,7 @@ MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
 void
 MusicXmlExporter::writeKey(Event *event, std::ofstream &str)
 {
-    Key whichKey(*event);
+    Rosegarden::Key whichKey(*event);
     str << "\t\t\t\t<key>" << std::endl;
     str << "\t\t\t\t<fifths>"
     << (whichKey.isSharp() ? "" : "-")
@@ -320,7 +323,7 @@ MusicXmlExporter::write()
 
         int oldMeasureNumber = -1;
         bool startedAttributes = false;
-        Key key;
+        Rosegarden::Key key;
         Clef clef;
         AccidentalTable accTable(key, clef);
         TimeSignature prevTimeSignature;
@@ -372,14 +375,14 @@ MusicXmlExporter::write()
             oldMeasureNumber = measureNumber;
 
             // process event
-            if (event->isa(Key::EventType)) {
+            if (event->isa(Rosegarden::Key::EventType)) {
 
                 if (!startedAttributes) {
                     str << "\t\t\t<attributes>" << std::endl;
                     startedAttributes = true;
                 }
                 writeKey(event, str);
-                key = Key(*event);
+                key = Rosegarden::Key(*event);
                 accTable = AccidentalTable(key, clef);
 
             } else if (event->isa(Clef::EventType)) {

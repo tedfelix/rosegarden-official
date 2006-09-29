@@ -734,3 +734,4 @@ MidiMixerWindow::slotSynchronise()
 }
 
 }
+#include "MidiMixerWindow.moc"

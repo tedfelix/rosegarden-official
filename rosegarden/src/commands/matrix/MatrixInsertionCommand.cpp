@@ -30,10 +30,14 @@
 #include "base/Segment.h"
 #include "base/SegmentMatrixHelper.h"
 #include "document/BasicCommand.h"
+#include "base/BaseProperties.h"
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
         timeT time,

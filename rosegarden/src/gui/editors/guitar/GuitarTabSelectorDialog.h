@@ -18,12 +18,12 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_TAB_SELECTOR_H_
 #define GUITAR_TAB_SELECTOR_H_
 
-#include "fingering.h"
-#include "chordmap.h"
-#include "fingers.h"
+#include "Fingering.h"
+#include "ChordMap.h"
 
 #include <kdialogbase.h>
 
@@ -32,7 +32,6 @@
 namespace Rosegarden
 {
     class Event;
-}
 
 class GuitarTabSelectorDialog : public KDialogBase
 {
@@ -126,4 +125,7 @@ private:
     bool m_setup;
 };
 
+}
+
 #endif /* GUITAR_TAB_EDITOR_H_ */
+

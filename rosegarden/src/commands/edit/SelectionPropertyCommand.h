@@ -40,6 +40,18 @@ namespace Rosegarden
 
 class EventSelection;
 
+// Patterns of properties
+//
+typedef enum 
+{
+    FlatPattern,          // set selection to velocity 1.
+    AlternatingPattern,   // alternate between velocity 1 and 2 on
+    // subsequent events.
+    CrescendoPattern,     // increasing from velocity 1 to velocity 2.
+    DecrescendoPattern,   // decreasing from velocity 1 to velocity 2.
+    RingingPattern        // between velocity 1 and 2, dying away.
+} PropertyPattern;
+
 
 class SelectionPropertyCommand : public BasicSelectionCommand
 {

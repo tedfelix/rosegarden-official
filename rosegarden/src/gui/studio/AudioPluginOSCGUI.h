@@ -26,6 +26,8 @@
 #ifndef _RG_AUDIOPLUGINOSCGUI_H_
 #define _RG_AUDIOPLUGINOSCGUI_H_
 
+#ifdef HAVE_LIBLO
+
 #include <qstring.h>
 
 
@@ -66,5 +68,8 @@ protected:
 
 
 }
+
+
+#endif
 
 #endif

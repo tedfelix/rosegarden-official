@@ -27,9 +27,11 @@
 
 #include "base/Event.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
+#include "base/BaseProperties.h"
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -37,6 +39,8 @@
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 SetLyricsCommand::SetLyricsCommand(Segment *segment, QString newLyricData) :
         KNamedCommand(getGlobalName()),

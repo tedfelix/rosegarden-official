@@ -505,3 +505,4 @@ void ControlRuler::flipBackwards()
 }
 
 }
+#include "ControlRuler.moc"

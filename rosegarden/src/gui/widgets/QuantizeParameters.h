@@ -30,12 +30,12 @@
 #include <qstring.h>
 #include <vector>
 #include "base/Event.h"
+#include <qgroupbox.h>
 
 
 class QWidget;
 class QPushButton;
 class QLabel;
-class QGroupBox;
 class QGridLayout;
 class QCheckBox;
 class KComboBox;
@@ -54,11 +54,11 @@ public:
     enum QuantizerType { Grid, Legato, Notation };
 
     QuantizeParameters(QWidget *parent,
-				 QuantizerType defaultQuantizer,
-				 bool showNotationOption,
-				 bool showAdvancedButton,
-				 QString configCategory,
-				 QString preamble = 0);
+                       QuantizerType defaultQuantizer,
+                       bool showNotationOption,
+                       bool showAdvancedButton,
+                       QString configCategory,
+                       QString preamble = 0);
     
     /**
      * Returned quantizer object is on heap -- caller must delete.

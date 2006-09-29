@@ -1866,3 +1866,4 @@ RosegardenGUIView::initChordNameRuler()
 }
 
 }
+#include "RosegardenGUIView.moc"

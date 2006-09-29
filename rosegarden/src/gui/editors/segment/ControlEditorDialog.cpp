@@ -436,3 +436,4 @@ ControlEditorDialog::setDocument(RosegardenGUIDoc *doc)
 }
 
 }
+#include "ControlEditorDialog.moc"

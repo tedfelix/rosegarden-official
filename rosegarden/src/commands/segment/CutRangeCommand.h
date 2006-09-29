@@ -27,8 +27,7 @@
 #define _RG_CUTRANGECOMMAND_H_
 
 #include "base/Event.h"
-
-
+#include <kcommand.h>
 
 
 namespace Rosegarden

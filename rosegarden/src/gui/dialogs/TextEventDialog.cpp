@@ -566,3 +566,4 @@ TextEventDialog::slotLilypondDirectiveChanged(const QString &)
 }
 
 }
+#include "TextEventDialog.moc"

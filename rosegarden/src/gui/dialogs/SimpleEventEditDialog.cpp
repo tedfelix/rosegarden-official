@@ -1020,3 +1020,4 @@ SimpleEventEditDialog::slotSysexSave()
 }
 
 }
+#include "SimpleEventEditDialog.moc"

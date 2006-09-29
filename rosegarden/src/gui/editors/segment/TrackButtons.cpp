@@ -939,3 +939,4 @@ TrackButtons::slotTrackInstrumentSelection(TrackId trackId, int item)
 }
 
 }
+#include "TrackButtons.moc"

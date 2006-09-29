@@ -27,6 +27,7 @@
 #define _RG_MODIFYINSTRUMENTMAPPINGCOMMAND_H_
 
 #include "base/MidiProgram.h"
+#include "base/Track.h"
 #include <kcommand.h>
 #include <qstring.h>
 #include <vector>

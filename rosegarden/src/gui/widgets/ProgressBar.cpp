@@ -41,3 +41,4 @@ ProgressBar::ProgressBar(int totalSteps,
 {}
 
 }
+#include "ProgressBar.moc"

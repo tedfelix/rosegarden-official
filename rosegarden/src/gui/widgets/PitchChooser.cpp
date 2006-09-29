@@ -110,3 +110,4 @@ PitchChooser::slotResetToDefault()
 }
 
 }
+#include "PitchChooser.moc"

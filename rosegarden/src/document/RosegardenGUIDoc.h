@@ -65,6 +65,12 @@ class Clipboard;
 class AudioPluginManager;
 
 
+static const int MERGE_AT_END           = (1 << 0);
+static const int MERGE_IN_NEW_TRACKS    = (1 << 1);
+static const int MERGE_KEEP_OLD_TIMINGS = (1 << 2);
+static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
+
+
 /**
   * RosegardenGUIDoc provides a document object for a document-view model.
   *

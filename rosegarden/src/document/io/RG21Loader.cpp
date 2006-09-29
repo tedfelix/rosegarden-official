@@ -29,6 +29,7 @@
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Event.h"
+#include "base/BaseProperties.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
@@ -42,10 +43,18 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
+#include <string>
+#include <vector>
+
+using std::vector;
+using std::string;
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
+using namespace Accidentals;
 
 RG21Loader::RG21Loader(Studio *studio,
                        QObject *parent, const char* name)
@@ -99,7 +108,7 @@ bool RG21Loader::parseKey()
                       .arg(keyBase)
                       .arg(m_tokens[3].lower());
 
-    m_currentKey = Key(qstrtostr(keyName));
+    m_currentKey = Rosegarden::Key(qstrtostr(keyName));
     Event *keyEvent = m_currentKey.getAsEvent(m_currentSegmentTime);
     m_currentSegment->insert(keyEvent);
 

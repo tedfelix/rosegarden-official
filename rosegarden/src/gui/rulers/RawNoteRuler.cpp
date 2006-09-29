@@ -535,3 +535,4 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 }
 
 }
+#include "RawNoteRuler.moc"

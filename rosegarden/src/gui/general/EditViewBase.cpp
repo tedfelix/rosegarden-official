@@ -692,3 +692,4 @@ EditViewBase::handleEventRemoved(Event *event)
 }
 
 }
+#include "EditViewBase.moc"

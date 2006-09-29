@@ -1,11 +1,15 @@
-#include "fingering.h"
+#include "Fingering.h"
 #include <iostream>
 #include <sstream>
-#include "symbols.h"
+#include "NoteSymbols.h"
 #include "base/Exception.h"
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
+
 const std::string Fingering::EventType = "fingering";
 const short Fingering::EventSubOrdering = -60;
 
@@ -681,6 +685,8 @@ Fingering::getAsEvent ( timeT absoluteTime )
         ++i;
     }
     return e_ptr;
+}
+
 }
 
 }

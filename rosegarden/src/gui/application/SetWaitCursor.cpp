@@ -26,12 +26,14 @@
 #include "SetWaitCursor.h"
 
 #include "gui/editors/segment/TrackEditor.h"
+#include "gui/editors/segment/CompositionView.h"
 #include "misc/Debug.h"
 #include "RosegardenGUIApp.h"
+#include "RosegardenGUIView.h"
 #include <kcursor.h>
 #include <qcursor.h>
 #include <qwidget.h>
-
+#include <kapplication.h>
 
 namespace Rosegarden
 {

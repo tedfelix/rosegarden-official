@@ -21,8 +21,6 @@
 
 #include <cstring>
 
-#include "rosedebug.h" // remove this
-
 #include "ControlBlock.h"
 
 namespace Rosegarden

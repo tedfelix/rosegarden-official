@@ -29,15 +29,13 @@
 #include <map>
 #include <kcommand.h>
 #include "base/Event.h"
+#include "base/Composition.h" // for tempoT
 
 
 
 
 namespace Rosegarden
 {
-
-class Segment;
-class Composition;
 
 
 /**

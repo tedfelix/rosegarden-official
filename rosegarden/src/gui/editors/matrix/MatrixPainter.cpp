@@ -299,3 +299,4 @@ void MatrixPainter::slotMatrixScrolled(int newX, int newY)
 }
 
 }
+#include "MatrixPainter.moc"

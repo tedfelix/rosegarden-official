@@ -41,6 +41,9 @@
 namespace Rosegarden
 {
 
+const unsigned int _smallWhiteKeyHeight = 14;
+const unsigned int _whiteKeyHeight = 18;
+    
 PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         : PitchRuler(parent),
         m_keySize(48, 18),
@@ -291,3 +294,4 @@ void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
 }
 
 }
+#include "PianoKeyboard.moc"

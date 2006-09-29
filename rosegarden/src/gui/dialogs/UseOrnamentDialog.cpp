@@ -259,3 +259,4 @@ UseOrnamentDialog::slotOk()
 }
 
 }
+#include "UseOrnamentDialog.moc"

@@ -111,3 +111,4 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 }
 
 }
+#include "ConfigureDialog.moc"

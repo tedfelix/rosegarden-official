@@ -1158,3 +1158,4 @@ MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
 }
 
 }
+#include "MIDIInstrumentParameterPanel.moc"

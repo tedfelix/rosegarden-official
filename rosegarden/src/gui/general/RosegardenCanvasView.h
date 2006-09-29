@@ -28,19 +28,18 @@
 
 #include <qpoint.h>
 #include <qtimer.h>
-
+#include <qcanvas.h>
+#include <qdatetime.h>
+#include <qwmatrix.h>
 
 class QWidget;
 class QWheelEvent;
 class QScrollBar;
 class QResizeEvent;
-class QCanvas;
 
 
 namespace Rosegarden
 {
-
-
 
 /**
  * A QCanvasView with an auxiliary horiz. scrollbar
@@ -49,6 +48,7 @@ namespace Rosegarden
  * the auxilliary horiz. scrollbar range in sync with the
  * one of its own scrollbar with slotUpdate().
  */
+
 class RosegardenCanvasView : public QCanvasView
 {
     Q_OBJECT

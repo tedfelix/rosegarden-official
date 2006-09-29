@@ -30,13 +30,12 @@
 #include "base/Event.h"
 #include <klocale.h>
 
-
+#include "SegmentJoinCommand.h"
 
 
 namespace Rosegarden
 {
 
-class SegmentJoinCommand;
 class Segment;
 class Composition;
 

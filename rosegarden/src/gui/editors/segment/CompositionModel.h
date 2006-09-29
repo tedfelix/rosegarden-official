@@ -31,11 +31,13 @@
 #include <set>
 #include <qcolor.h>
 #include <qobject.h>
+#include <qimage.h>
 #include <qpoint.h>
 #include <qrect.h>
 #include <utility>
 #include <vector>
 #include "base/Event.h"
+#include "CompositionRect.h"
 
 
 class RectRanges;
@@ -47,6 +49,7 @@ namespace Rosegarden
 {
 
 class SnapGrid;
+typedef std::vector<QImage> PixmapArray;
 
 
 class CompositionModel : public QObject, public CompositionObserver, public SegmentObserver

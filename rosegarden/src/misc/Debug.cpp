@@ -89,7 +89,7 @@ operator<<(kdbgstream &dbg, const Rosegarden::Segment &t)
 kdbgstream&
 operator<<(kdbgstream &dbg, const Rosegarden::RealTime &t)
 {
-    dbg << "sec : " << t.sec << ", nsec : " << t.nsec;
+    dbg << t.toString();
     return dbg;
 }
 

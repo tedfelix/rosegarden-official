@@ -34,10 +34,13 @@
 #include "document/BasicCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
+#include "base/BaseProperties.h"
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         timeT endTime, Note note, int pitch,

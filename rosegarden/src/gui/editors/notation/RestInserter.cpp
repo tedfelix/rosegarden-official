@@ -143,3 +143,4 @@ const char* NoteInserter::m_actionsAccidental[][4] =
     }
 
     }
+#include "RestInserter.moc"

@@ -1468,3 +1468,4 @@ CompositionView::slotTextFloatTimeout()
 }
 
 }
+#include "CompositionView.moc"

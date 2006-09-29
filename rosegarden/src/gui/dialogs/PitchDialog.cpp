@@ -54,3 +54,4 @@ PitchDialog::getPitch() const
 }
 
 }
+#include "PitchDialog.moc"

@@ -492,3 +492,4 @@ void MatrixSelector::setViewCurrentSelection()
 }
 
 }
+#include "MatrixSelector.moc"

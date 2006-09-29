@@ -120,3 +120,4 @@ InterpretDialog::getInterpretations()
 }
 
 }
+#include "InterpretDialog.moc"

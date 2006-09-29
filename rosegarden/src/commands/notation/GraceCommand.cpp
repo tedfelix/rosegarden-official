@@ -29,11 +29,14 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+#include "base/BaseProperties.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 GraceCommand::GraceCommand(EventSelection &selection) :
         BasicCommand(getGlobalName(),

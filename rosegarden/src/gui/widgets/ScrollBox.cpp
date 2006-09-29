@@ -151,3 +151,4 @@ void ScrollBox::setThumbnail(QPixmap img)
 }
 
 }
+#include "ScrollBox.moc"

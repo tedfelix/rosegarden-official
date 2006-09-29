@@ -33,7 +33,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/TimeWidget.h"
-#include "HSpinBox.h"
+#include "gui/widgets/HSpinBox.h"
 #include <kdialogbase.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -419,3 +419,4 @@ TempoDialog::slotOk()
 }
 
 }
+#include "TempoDialog.moc"

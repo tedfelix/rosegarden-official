@@ -564,3 +564,4 @@ Fader::calculateButtonPixmap()
 }
 
 }
+#include "Fader.moc"

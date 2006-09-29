@@ -420,3 +420,4 @@ void MatrixMover::slotMatrixScrolled(int newX, int newY)
 }
 
 }
+#include "MatrixMover.moc"

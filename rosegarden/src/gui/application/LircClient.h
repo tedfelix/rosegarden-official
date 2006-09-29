@@ -26,6 +26,8 @@
 #ifndef _RG_LIRCCLIENT_H_
 #define _RG_LIRCCLIENT_H_
 
+#ifdef HAVE_LIRC
+
 #include <qobject.h>
 
 
@@ -60,5 +62,7 @@ private:
 
 
 }
+
+#endif
 
 #endif

@@ -288,3 +288,4 @@ AudioFaderBox::slotChannelStateChanged()
 }
 
 }
+#include "AudioFaderBox.moc"

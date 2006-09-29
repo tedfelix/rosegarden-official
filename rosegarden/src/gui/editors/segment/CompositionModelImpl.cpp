@@ -1036,3 +1036,4 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
 }
 
 }
+#include "CompositionModelImpl.moc"

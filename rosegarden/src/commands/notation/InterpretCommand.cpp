@@ -28,8 +28,11 @@
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "misc/Debug.h"
 #include "base/Quantizer.h"
 #include "base/Segment.h"
+#include "base/Sets.h"
+#include "base/BaseProperties.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/guitar/Chord.h"
@@ -38,6 +41,8 @@
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 InterpretCommand::~InterpretCommand()
 {

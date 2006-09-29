@@ -303,3 +303,4 @@ void LoopRuler::slotSetLoopMarker(timeT startLoop,
 }
 
 }
+#include "LoopRuler.moc"

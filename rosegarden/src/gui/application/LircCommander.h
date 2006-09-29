@@ -26,8 +26,9 @@
 #ifndef _RG_LIRCCOMMANDER_H_
 #define _RG_LIRCCOMMANDER_H_
 
-#include <qobject.h>
+#ifdef HAVE_LIRC
 
+#include <qobject.h>
 
 
 
@@ -73,5 +74,7 @@ private:
 
 
 }
+
+#endif
 
 #endif

@@ -227,3 +227,4 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
 }
 
 }
+#include "CompositionModel.moc"

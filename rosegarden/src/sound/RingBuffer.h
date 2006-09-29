@@ -25,7 +25,7 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 
-#include <Scavenger.h>
+#include "Scavenger.h"
 
 //#define DEBUG_RINGBUFFER 1
 //#define DEBUG_RINGBUFFER_CREATE_DESTROY 1

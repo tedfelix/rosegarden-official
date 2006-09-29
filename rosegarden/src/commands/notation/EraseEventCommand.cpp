@@ -57,10 +57,10 @@ EraseEventCommand::~EraseEventCommand()
     // nothing
 }
 
-string
-EraseEventCommand::makeName(string e)
+std::string
+EraseEventCommand::makeName(std::string e)
 {
-    string n = "Erase ";
+    std::string n = "Erase ";
     n += (char)toupper(e[0]);
     n += e.substr(1);
     return n;

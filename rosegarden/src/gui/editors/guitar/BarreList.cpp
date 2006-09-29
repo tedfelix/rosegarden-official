@@ -1,4 +1,7 @@
-#include "barrelist.h"
+#include "BarreList.h"
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -44,6 +47,8 @@ void BarreList::erase (Barre* bar_ptr)
     if (pos != m_data.end()) {
         m_data.erase (pos);
     }
+}
+
 }
 
 }

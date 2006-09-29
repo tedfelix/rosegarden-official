@@ -1,8 +1,7 @@
-#include "guitartabselector.h"
-#include "guitarchordeditor.h"
-#include "guitarxmlhandler.h"
+#include "GuitarTabSelectorDialog.h"
+#include "GuitarChordEditor.h"
+#include "GuitarXmlHandler.h"
 #include "base/Exception.h"
-#include "guitartabselector.moc"
 #include "DuplicateException.h"
 
 #include <iostream>
@@ -21,6 +20,9 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kpushbutton.h>
+
+namespace Rosegarden
+{
 
 /*---------------------------------------------------------------
               GuitarTabSelectorDialog
@@ -417,3 +419,8 @@ void GuitarTabSelectorDialog::createChord()
         setupNameList();
     }
 }
+
+}
+
+#include "GuitarTabSelectorDialog.moc"
+

@@ -37,6 +37,7 @@
 #include "document/ConfigGroups.h"
 #include "base/AudioDevice.h"
 #include "base/AudioPluginInstance.h"
+#include "base/BaseProperties.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Configuration.h"
@@ -81,6 +82,7 @@
 #include "sound/MappedCommon.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedDevice.h"
+#include "sound/MappedInstrument.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedRealTime.h"
 #include "sound/MappedStudio.h"
@@ -108,6 +110,8 @@
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    AudioPluginManager *pluginManager,
@@ -2860,3 +2864,4 @@ RosegardenGUIDoc::addOrphanedAudioFile(QString fileName)
 }
 
 }
+#include "RosegardenGUIDoc.moc"

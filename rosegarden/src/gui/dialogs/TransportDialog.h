@@ -31,7 +31,7 @@
 #include <qcolor.h>
 #include <qpixmap.h>
 #include "document/ConfigGroups.h"
-
+#include "gui/ui/RosegardenTransport.h"
 
 class RosegardenTransport;
 class QWidget;
@@ -45,7 +45,6 @@ namespace Rosegarden
 {
 
 class TimeSignature;
-class tempoT;
 class RealTime;
 class MappedEvent;
 

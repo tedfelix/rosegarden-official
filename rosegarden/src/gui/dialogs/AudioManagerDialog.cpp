@@ -44,6 +44,7 @@
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "sound/AudioFile.h"
@@ -1258,3 +1259,4 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 }
 
 }
+#include "AudioManagerDialog.moc"

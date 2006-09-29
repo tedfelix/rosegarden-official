@@ -176,3 +176,4 @@ void FretboardInserter::createNewFretboard (ViewElement* element, Staff *staff, 
 }
 
 }
+#include "FretboardInserter.moc"

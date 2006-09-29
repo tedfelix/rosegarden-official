@@ -33,10 +33,13 @@
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
 #include <qstring.h>
+#include "base/BaseProperties.h"
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        Clipboard *clipboard,

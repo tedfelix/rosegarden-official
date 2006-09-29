@@ -1707,3 +1707,4 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
 }
 
 }
+#include "BankEditorDialog.moc"

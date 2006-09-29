@@ -81,3 +81,4 @@ CompositionLengthDialog::getEndMarker()
 }
 
 }
+#include "CompositionLengthDialog.moc"

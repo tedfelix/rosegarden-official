@@ -26,6 +26,7 @@
 #include "SegmentChangeQuantizationCommand.h"
 
 #include "base/Segment.h"
+#include "base/Quantizer.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include <qstring.h>
 

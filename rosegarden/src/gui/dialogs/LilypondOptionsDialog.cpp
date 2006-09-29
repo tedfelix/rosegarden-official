@@ -186,3 +186,4 @@ LilypondOptionsDialog::slotOk()
 }
 
 }
+#include "LilypondOptionsDialog.moc"

@@ -1596,3 +1596,4 @@ EventView::updateViewCaption()
 }
 
 }
+#include "EventView.moc"

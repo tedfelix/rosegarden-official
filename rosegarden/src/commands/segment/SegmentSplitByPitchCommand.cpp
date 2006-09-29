@@ -26,6 +26,7 @@
 #include "SegmentSplitByPitchCommand.h"
 
 #include "base/BaseProperties.h"
+#include "base/Sets.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Event.h"

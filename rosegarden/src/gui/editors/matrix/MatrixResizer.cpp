@@ -291,3 +291,4 @@ void MatrixResizer::slotMatrixScrolled(int newX, int newY)
 }
 
 }
+#include "MatrixResizer.moc"

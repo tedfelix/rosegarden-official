@@ -23,21 +23,16 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG__COMPOSITIONITEM_H_
-#define _RG__COMPOSITIONITEM_H_
+#ifndef _RG_COMPOSITIONITEM_H_
+#define _RG_COMPOSITIONITEM_H_
 
 #include <qguardedptr.h>
 #include <qobject.h>
 #include <qrect.h>
 
 
-class CompositionItem;
-
-
 namespace Rosegarden
 {
-
-
 
 class _CompositionItem : public QObject {
 public:

@@ -1,5 +1,8 @@
 #include "DuplicateException.h"
-#include "chord.h"
+#include "Chord.h"
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -17,6 +20,8 @@ Chord* DuplicateException::getDuplicate () const
 Chord* DuplicateException::getOriginal () const
 {
     return m_orig_ptr;
+}
+
 }
 
 }

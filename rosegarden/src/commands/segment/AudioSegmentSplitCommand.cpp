@@ -29,6 +29,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/RealTime.h"
+#include "base/Composition.h"
 #include "base/Segment.h"
 #include <qstring.h>
 

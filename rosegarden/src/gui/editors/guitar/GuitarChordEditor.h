@@ -1,12 +1,3 @@
-/****************************************************************************
-** Form interface generated from reading ui file 'guitarchordeditor.ui'
-**
-** Created: Sun Nov 13 13:07:07 2005
-**      by: The User Interface Compiler ($Id: guitarchordeditor.h 7158 2006-02-23 22:50:58Z glaurent $)
-**
-** WARNING! All changes made in this file will be lost!
-****************************************************************************/
-
 #ifndef GUITARCHORDEDITOR_H
 #define GUITARCHORDEDITOR_H
 
@@ -16,24 +7,31 @@
 #include <kstatusbar.h>
 #include <kdialogbase.h>
 
-#include "chordname.h"
-#include "chord.h"
-#include "chordmap.h"
-#include "fingers.h"
+#include "ChordName.h"
+#include "Chord.h"
+#include "ChordMap.h"
+#include "Fingering.h"
 #include <list>
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class FingeringConstructor;
 class QTabWidget;
 class QWidget;
 class QLabel;
 class KComboBox;
 class KLineEdit;
 class KPushButton;
-class ChordInfo;
+
+namespace Rosegarden
+{
+
+namespace Guitar
+{ 
+	class FingeringConstructor;
+	class ChordInfo;
+}
 
 class GuitarChordEditor : public KDialogBase
 {
@@ -87,4 +85,7 @@ private:
 
 };
 
+}
+
 #endif // GUITARCHORDEDITOR_H
+

@@ -73,6 +73,7 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     m_setAsDefaultButton->setChecked(true);
 }
 
+PasteEventsCommand::PasteType
 PasteNotationDialog::getPasteType() const
 {
     for (unsigned int i = 0; i < m_pasteTypeButtons.size(); ++i) {
@@ -97,3 +98,4 @@ PasteNotationDialog::slotPasteTypeChanged()
 }
 
 }
+#include "PasteNotationDialog.moc"

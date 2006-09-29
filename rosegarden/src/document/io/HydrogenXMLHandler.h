@@ -26,6 +26,7 @@
 #ifndef _RG_HYDROGENXMLHANDLER_H_
 #define _RG_HYDROGENXMLHANDLER_H_
 
+#include "HydrogenLoader.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include <string>

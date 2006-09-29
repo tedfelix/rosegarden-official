@@ -18,6 +18,7 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_CHORD_MAP_H_
 #define GUITAR_CHORD_MAP_H_
 
@@ -25,8 +26,11 @@
 
 #include <map>
 
-#include "chord.h"
+#include "Chord.h"
 #include "DuplicateException.h"
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -144,6 +148,9 @@ private:
     //! Total number of chords in map
     unsigned int m_mapSize;
 };
+
+}
+
 }
 
 #endif /* GUITAR_CHORD_MAP_H_ */

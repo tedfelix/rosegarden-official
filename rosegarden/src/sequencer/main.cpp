@@ -19,7 +19,7 @@
   COPYING included with this distribution for more information.
 */
 
-#include "rosegardensequencer.h"
+#include "RosegardenSequencerApp.h"
 
 #include <signal.h>
 #include <iostream>
@@ -35,11 +35,13 @@
 #include "sound/MappedComposition.h"
 
 #include "gui/application/RosegardenDCOP.h"
-#include "debug/Debug.h"
+#include "misc/Debug.h"
 
 using std::cout;
 using std::cerr;
 using std::endl;
+
+using namespace Rosegarden;
 
 static const char *description = I18N_NOOP("RosegardenSequencer");
 static RosegardenSequencerApp *roseSeq = 0;
@@ -258,3 +260,4 @@ int main(int argc, char *argv[])
     SEQUENCER_DEBUG << "Toodle-pip." << endl;
     return rv;
 }
+

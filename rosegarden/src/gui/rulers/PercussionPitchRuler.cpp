@@ -201,3 +201,4 @@ void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
 }
 
 }
+#include "PercussionPitchRuler.moc"

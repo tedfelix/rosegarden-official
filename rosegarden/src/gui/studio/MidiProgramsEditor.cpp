@@ -607,3 +607,4 @@ void MidiProgramsEditor::blockAllSignals(bool block)
 }
 
 }
+#include "MidiProgramsEditor.moc"

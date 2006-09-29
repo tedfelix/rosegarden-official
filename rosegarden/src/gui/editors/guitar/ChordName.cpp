@@ -1,7 +1,10 @@
-#include "chordname.h"
+#include "ChordName.h"
 #include "base/Exception.h"
 
 #include <sstream>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -217,6 +220,8 @@ ChordName::operator== ( ChordName const& rhs ) const
     }
 
     return result;
+}
+
 }
 
 }

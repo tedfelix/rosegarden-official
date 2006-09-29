@@ -30,6 +30,7 @@
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
 #include <qstring.h>
+#include <iostream>
 
 
 namespace Rosegarden

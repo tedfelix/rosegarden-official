@@ -22,6 +22,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef HAVE_LIRC
 
 #include "LircCommander.h"
 
@@ -117,3 +118,7 @@ void LircCommander::f_fastForwardToEnd()
 }
 
 }
+
+#include "LircCommander.moc"
+
+#endif

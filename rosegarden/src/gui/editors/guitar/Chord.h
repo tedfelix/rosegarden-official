@@ -18,13 +18,17 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_CHORD_H_
 #define GUITAR_CHORD_H_
 
-#include "chordname.h"
-#include "fingering.h"
+#include "ChordName.h"
+#include "Fingering.h"
 
 #include <qdom.h>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -76,6 +80,8 @@ namespace Guitar
 	//! Used to mark a chord when saving it to file
 	bool m_written;
     };
+}
+
 }
 
 # endif /* GUITAR_CHORD_H_ */

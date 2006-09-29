@@ -26,7 +26,6 @@
 #ifndef _RG_ROSEGARDENCOLOURTABLE_H_
 #define _RG_ROSEGARDENCOLOURTABLE_H_
 
-#include <less>
 #include <map>
 #include <qtable.h>
 #include <vector>

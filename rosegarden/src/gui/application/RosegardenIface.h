@@ -32,6 +32,8 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
+#include <base/Instrument.h>
+
 
 class QCString;
 class KMainWindow;

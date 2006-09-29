@@ -289,3 +289,4 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 }
 
 }
+#include "SegmentMover.moc"

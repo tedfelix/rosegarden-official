@@ -319,3 +319,4 @@ ControlParameterEditDialog::slotIPBPositionChanged(int value)
 }
 
 }
+#include "ControlParameterEditDialog.moc"

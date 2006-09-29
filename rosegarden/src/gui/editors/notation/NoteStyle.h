@@ -43,6 +43,8 @@ namespace Rosegarden
 
 class Clef;
 
+typedef std::string NoteStyleName;
+
 
 class NoteStyle
 {

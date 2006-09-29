@@ -2027,3 +2027,4 @@ SequenceManager::enableMIDIThruRouting(bool state)
 }
 
 }
+#include "SequenceManager.moc"

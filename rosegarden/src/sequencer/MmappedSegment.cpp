@@ -1,37 +1,39 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
-  Rosegarden-4
-  A sequencer and musical notation editor.
- 
-  This program is Copyright 2000-2006
-  Guillaume Laurent   <glaurent@telegraph-road.org>,
-  Chris Cannam        <cannam@all-day-breakfast.com>,
-  Richard Bown        <bownie@bownie.com>
- 
-  The moral right of the authors to claim authorship of this work
-  has been asserted.
- 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+
+    This program is Copyright 2000-2006
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
-#include "mmappedsegment.h"
-#include "rosedebug.h"
+#include "MmappedSegment.h"
+#include "misc/Debug.h"
 
-#include "MappedComposition.h"
-#include "Midi.h"
-
-using std::cerr;
-using std::endl;
-using std::cout;
-using MappedEvent;
+#include "sound/MappedComposition.h"
+#include "sound/Midi.h"
 
 //#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
 
+namespace Rosegarden
+{
 
 MmappedSegment::MmappedSegment(const QString filename)
         : m_fd( -1),
@@ -247,35 +249,6 @@ bool MmappedSegment::iterator::atEnd() const
            (m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1));
 }
 
-// Ew ew ew - move this to base
-// [or rather, this is a dup of code in base]
-kdbgstream&
-operator<<(kdbgstream &out, const RealTime &rt)
-{
-    if (rt < RealTime::zeroTime) {
-        out << "-";
-    } else {
-        out << " ";
-    }
-
-    int s = (rt.sec < 0 ? -rt.sec : rt.sec);
-    int n = (rt.nsec < 0 ? -rt.nsec : rt.nsec);
-
-    out << s << ".";
-
-    int nn(n);
-    if (nn == 0)
-        out << "00000000";
-    else
-        while (nn < (1000000000 / 10)) {
-            out << "0";
-            nn *= 10;
-        }
-
-    out << n << "R";
-    return out;
-}
-
 //----------------------------------------
 
 MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(
@@ -334,7 +307,7 @@ void MmappedSegmentsMetaIterator::reset()
 
 bool MmappedSegmentsMetaIterator::jumpToTime(const RealTime& startTime)
 {
-    SEQUENCER_DEBUG << "jumpToTime(" << startTime << ")\n";
+    SEQUENCER_DEBUG << "jumpToTime(" << startTime << ")" << endl;
 
     reset();
 
@@ -725,6 +698,5 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const RealTime &
     return m_playingAudioSegments;
 }
 
-
-
+}
 

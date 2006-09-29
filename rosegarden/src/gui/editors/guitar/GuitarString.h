@@ -18,10 +18,14 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 #ifndef GUITAR_STRING_H_
 #define GUITAR_STRING_H_
 
 #include <qstring.h>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -125,6 +129,9 @@ public:
     //! FUTURE USE: Base tuning of string
     unsigned int m_tune;
 };
+
+}
+
 }
 
 #endif /* GUITAR_STRING_H_ */

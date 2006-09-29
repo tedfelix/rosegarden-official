@@ -286,3 +286,4 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const Q
 }
 
 }
+#include "SegmentResizer.moc"

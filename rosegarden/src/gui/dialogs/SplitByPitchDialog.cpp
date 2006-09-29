@@ -26,6 +26,7 @@
 #include "SplitByPitchDialog.h"
 
 #include <klocale.h>
+#include "commands/segment/SegmentSplitByPitchCommand.h"
 #include "gui/general/ClefIndex.h"
 #include "gui/widgets/PitchChooser.h"
 #include <kcombobox.h>
@@ -35,6 +36,7 @@
 #include <qlabel.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qlayout.h>
 
 
 namespace Rosegarden
@@ -106,3 +108,4 @@ SplitByPitchDialog::getClefHandling()
 }
 
 }
+#include "SplitByPitchDialog.moc"

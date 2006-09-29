@@ -29,10 +29,13 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
+#include "base/BaseProperties.h"
 
 
 namespace Rosegarden
 {
+
+using namespace BaseProperties;
 
 void
 ChangeVelocityCommand::modifySegment()
@@ -57,8 +60,7 @@ ChangeVelocityCommand::modifySegment()
                 velocity = 0;
             if (velocity > 127)
                 velocity = 127;
-            (*i)->set
-            <Int>(VELOCITY, velocity);
+            (*i)->set<Int>(VELOCITY, velocity);
         }
     }
 }

@@ -28,7 +28,7 @@
 
 #include <qstring.h>
 #include "base/Event.h"
-
+#include <kcommand.h>
 
 
 

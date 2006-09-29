@@ -1,7 +1,6 @@
-#include "guitartabeditor.h"
-#include "guitarxmlhandler.h"
+#include "GuitarTabEditorWindow.h"
+#include "GuitarXmlhandler.h"
 #include "base/Exception.h"
-#include "guitartabeditor.moc"
 
 #include <iostream>
 
@@ -17,6 +16,9 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstddirs.h>
+
+namespace Rosegarden
+{
 
 /*---------------------------------------------------------------
               GuitarTabEditorWindow
@@ -218,3 +220,8 @@ GuitarTabEditorWindow::closeEvent( QCloseEvent *e )
     emit closing();
     KMainWindow::closeEvent( e );
 }
+
+
+}
+
+#include "GuitarTabEditorWindow.moc"

@@ -58,3 +58,4 @@ InstrumentParameterPanel::setDocument(RosegardenGUIDoc* doc)
 }
 
 }
+#include "InstrumentParameterPanel.moc"

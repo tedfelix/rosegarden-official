@@ -29,7 +29,7 @@
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
 #include "base/Event.h"
-
+#include "gui/editors/notation/NoteStyle.h"
 
 
 

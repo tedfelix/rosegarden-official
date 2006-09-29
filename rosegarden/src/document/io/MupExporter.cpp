@@ -26,20 +26,24 @@
 #include "MupExporter.h"
 
 #include "misc/Debug.h"
+#include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
+#include "base/Sets.h"
 #include "base/Track.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include <qobject.h>
 
+using std::string;
 
 namespace Rosegarden
 {
+using namespace BaseProperties;
 
 MupExporter::MupExporter(QObject *parent,
                          Composition *composition,
@@ -187,8 +191,7 @@ MupExporter::writeBar(std::ofstream &str,
             timeT duration = e->getNotationDuration();
             try {
                 // tuplet compensation, etc
-                Note::Type type = e->get
-                                  <Int>(NOTE_TYPE);
+                Note::Type type = e->get<Int>(NOTE_TYPE);
                 int dots = e->get
                            <Int>(NOTE_DOTS);
                 duration = Note(type, dots).getDuration();
@@ -346,7 +349,7 @@ MupExporter::writeClefAndKey(std::ofstream &str, TrackId trackNo)
         if ((*i)->getTrack() == trackNo) {
 
             Clef clef((*i)->getClefAtTime((*i)->getStartTime()));
-            Key key((*i)->getKeyAtTime((*i)->getStartTime()));
+            Rosegarden::Key key((*i)->getKeyAtTime((*i)->getStartTime()));
 
 
             str << "staff " << trackNo + 1 << "\n";

@@ -10,8 +10,13 @@ class QScrollBar;
 	KGuitar interface was used as a guideline for design the FingeringConstructor. Where the code
 	from the project was used is defined by comments.
 */
+
+namespace Rosegarden
+{
+
 namespace Guitar
 {
+
 class Fingering;
 class GuitarNeck;
 class NoteSymbols;
@@ -164,5 +169,7 @@ public:
 };
 
 } /* namespace */
+
+}
 
 #endif

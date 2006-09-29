@@ -27,8 +27,7 @@
 #define _RG_PASTERANGECOMMAND_H_
 
 #include "base/Event.h"
-
-
+#include <kcommand.h>
 
 
 namespace Rosegarden

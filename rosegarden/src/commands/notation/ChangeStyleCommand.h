@@ -27,6 +27,7 @@
 #define _RG_ADJUSTMENUCHANGESTYLECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
+#include "gui/editors/notation/NoteStyle.h"
 #include <qstring.h>
 #include <klocale.h>
 
@@ -44,7 +45,7 @@ class ChangeStyleCommand : public BasicSelectionCommand
 {
 public:
     ChangeStyleCommand(NoteStyleName style,
-				     EventSelection &selection) :
+                       EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(style), selection, true),
 	m_selection(&selection), m_style(style) { }
 

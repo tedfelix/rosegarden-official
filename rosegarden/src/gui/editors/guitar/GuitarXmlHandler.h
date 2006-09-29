@@ -22,8 +22,11 @@
 #ifndef GUITAR_XML_HANDLER_H_
 #define GUITAR_XML_HANDLER_H_
 
-#include "chordmap.h"
+#include "ChordMap.h"
 #include <qdom.h>
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -49,6 +52,9 @@ namespace Guitar
     };
 
 } /* namespace Guitar */
+
+}
+
 
 #endif /* GUITAR_XML_HANDLER_H_ */
 

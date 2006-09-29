@@ -212,3 +212,4 @@ PresetHandlerDialog::slotOk()
 }
 
 }
+#include "PresetHandlerDialog.moc"

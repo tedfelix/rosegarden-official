@@ -172,3 +172,4 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
 }
 
 }
+#include "PropertyViewRuler.moc"

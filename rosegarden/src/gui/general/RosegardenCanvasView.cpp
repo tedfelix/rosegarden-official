@@ -420,3 +420,4 @@ void RosegardenCanvasView::wheelEvent(QWheelEvent *e)
 }
 
 }
+#include "RosegardenCanvasView.moc"

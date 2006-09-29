@@ -101,3 +101,4 @@ FileLocateDialog::slotUser2()
 }
 
 }
+#include "FileLocateDialog.moc"

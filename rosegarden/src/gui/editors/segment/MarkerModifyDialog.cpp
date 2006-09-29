@@ -85,3 +85,4 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
 }
 
 }
+#include "MarkerModifyDialog.moc"

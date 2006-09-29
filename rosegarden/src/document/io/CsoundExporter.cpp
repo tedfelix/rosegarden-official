@@ -33,6 +33,8 @@
 #include "base/Track.h"
 #include "gui/general/ProgressReporter.h"
 #include <qobject.h>
+#include <fstream>
+#include "gui/application/RosegardenApplication.h"
 
 
 namespace Rosegarden
@@ -51,6 +53,12 @@ CsoundExporter::CsoundExporter(QObject *parent,
 CsoundExporter::~CsoundExporter()
 {
     // nothing
+}
+
+static double
+convertTime(Rosegarden::timeT t)
+{
+    return double(t) / double(Note(Note::Crotchet).getDuration());
 }
 
 bool

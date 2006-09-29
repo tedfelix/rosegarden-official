@@ -34,6 +34,7 @@
 #include <qstring.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include "document/RosegardenGUIDoc.h"
 
 
 namespace Rosegarden
@@ -80,3 +81,4 @@ FileMergeDialog::getMergeOptions()
 }
 
 }
+#include "FileMergeDialog.moc"

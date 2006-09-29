@@ -762,3 +762,4 @@ NotationSelector::getStaffForElement(NotationElement *elt)
 }
 
 }
+#include "NotationSelector.moc"

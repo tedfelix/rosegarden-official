@@ -50,7 +50,7 @@ namespace Rosegarden
 KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                                        NotePixmapFactory *npf,
                                        Clef clef,
-                                       Key defaultKey,
+                                       Rosegarden::Key defaultKey,
                                        bool showApplyToAll,
                                        bool showConversionOptions,
                                        QString explanatoryText) :
@@ -210,7 +210,7 @@ KeySignatureDialog::slotKeyUp()
     }
 
     try {
-        m_key = Key(ac, sharp, m_key.isMinor());
+        m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
     } catch (Key::BadKeySpec s) {
         std::cerr << s.getMessage() << std::endl;
@@ -239,7 +239,7 @@ KeySignatureDialog::slotKeyDown()
     }
 
     try {
-        m_key = Key(ac, sharp, m_key.isMinor());
+        m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
     } catch (Key::BadKeySpec s) {
         std::cerr << s.getMessage() << std::endl;
@@ -322,7 +322,7 @@ KeySignatureDialog::slotKeyNameChanged(const QString &s)
     std::string name(getKeyName(s, m_key.isMinor()));
 
     try {
-        m_key = Key(name);
+        m_key = Rosegarden::Key(name);
         setValid(true);
 
         int space = name.find(' ');
@@ -347,7 +347,7 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
     std::string name(getKeyName(m_keyCombo->currentText(), s == "Minor"));
 
     try {
-        m_key = Key(name);
+        m_key = Rosegarden::Key(name);
         setValid(true);
     } catch (Key::BadKeyName s) {
         std::cerr << s.getMessage() << std::endl;
@@ -376,3 +376,4 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
 }
 
 }
+#include "KeySignatureDialog.moc"

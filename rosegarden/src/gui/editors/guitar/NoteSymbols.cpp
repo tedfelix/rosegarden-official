@@ -1,4 +1,7 @@
-#include "symbols.h"
+#include "NoteSymbols.h"
+
+namespace Rosegarden
+{
 
 namespace Guitar
 {
@@ -349,4 +352,6 @@ float const NoteSymbols::FRETBOARD_HEIGHT_PERCENTAGE = 0.8;
 
 
 } /* namespace Guitar */
+
+}
 

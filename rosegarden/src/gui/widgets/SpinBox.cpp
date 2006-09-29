@@ -69,3 +69,4 @@ SpinBox::mapTextToValue(bool * /*ok*/)
 }
 
 }
+#include "SpinBox.moc"

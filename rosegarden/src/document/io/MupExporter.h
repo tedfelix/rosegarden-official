@@ -32,6 +32,8 @@
 #include <string>
 #include <utility>
 #include "base/Event.h"
+#include "base/NotationTypes.h"
+#include <fstream>
 
 
 class QObject;
@@ -73,7 +75,7 @@ protected:
     void writePitch(std::ofstream &, TrackId, Event *event);
     void writeDuration(std::ofstream &, timeT duration);
 
-    typedef std::pair<Clef, Key> ClefKeyPair;
+    typedef std::pair<Clef, Rosegarden::Key> ClefKeyPair;
     typedef std::map<TrackId, ClefKeyPair> ClefKeyMap;
     ClefKeyMap m_clefKeyMap;
 

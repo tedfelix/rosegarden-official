@@ -1063,3 +1063,4 @@ TempoRuler::slotEditTempos()
 }
 
 }
+#include "TempoRuler.moc"

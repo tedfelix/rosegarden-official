@@ -29,6 +29,7 @@
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"
 #include "document/BasicCommand.h"
+#include "gui/editors/notation/NoteStyle.h"
 #include <string>
 #include "base/Event.h"
 

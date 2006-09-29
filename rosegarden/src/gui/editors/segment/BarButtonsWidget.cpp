@@ -316,3 +316,4 @@ BarButtonsWidget::mouseDoubleClickEvent(QMouseEvent *)
 }
 
 }
+#include "BarButtonsWidget.moc"

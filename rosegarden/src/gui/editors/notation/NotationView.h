@@ -32,6 +32,7 @@
 #include "gui/general/LinedStaff.h"
 #include "gui/general/LinedStaffManager.h"
 #include "NotationProperties.h"
+#include "NotationCanvasView.h"
 #include <string>
 #include <qmap.h>
 #include <qsize.h>
@@ -51,14 +52,10 @@ class QLabel;
 class QCursor;
 class QCanvasItem;
 class QCanvas;
-class NoteChangeActionDataMap;
-class NoteActionDataMap;
-class MarkActionDataMap;
 class KProgress;
 class KComboBox;
 class KActionMenu;
 class KAction;
-class If;
 
 
 namespace Rosegarden
@@ -77,7 +74,12 @@ class NotationVLayout;
 class NotationStaff;
 class NotationHLayout;
 class NotationElement;
-class NotationCanvasView;
+class NoteActionData;
+class NoteActionDataMap;
+class MarkActionData;
+class MarkActionDataMap;
+class NoteChangeActionData;
+class NoteChangeActionDataMap;
 class Key;
 class EventSelection;
 class Event;
@@ -189,7 +191,7 @@ public:
     /**
      * Set the note or rest selected by the user from the toolbars
      */
-    void setCurrentSelectedNote(NoteActionData);
+    void setCurrentSelectedNote(const NoteActionData &);
     
     /**
      * Discover whether chord-mode insertions are enabled (as opposed
@@ -1006,13 +1008,13 @@ protected:
     
     KAction* m_selectDefaultNote;
 
-    typedef QMap<QString, NoteActionData> NoteActionDataMap;
+    typedef QMap<QString, NoteActionData *> NoteActionDataMap;
     static NoteActionDataMap* m_noteActionDataMap;
 
-    typedef QMap<QString, NoteChangeActionData> NoteChangeActionDataMap;
+    typedef QMap<QString, NoteChangeActionData *> NoteChangeActionDataMap;
     static NoteChangeActionDataMap* m_noteChangeActionDataMap;
 
-    typedef QMap<QString, MarkActionData> MarkActionDataMap;
+    typedef QMap<QString, MarkActionData *> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;
 
     KComboBox       *m_fontCombo;

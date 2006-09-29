@@ -54,3 +54,4 @@ void KLedButton::mousePressEvent( QMouseEvent *e )
 }
 
 }
+#include "KLedButton.moc"

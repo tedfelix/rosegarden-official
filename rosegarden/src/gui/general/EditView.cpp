@@ -1552,3 +1552,4 @@ EditView::slotFlipBackwards()
 }
 
 }
+#include "EditView.moc"

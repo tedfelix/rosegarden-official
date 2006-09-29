@@ -2931,3 +2931,4 @@ MatrixView::slotCanvasBottomWidgetHeightChanged(int newHeight)
 }
 
 }
+#include "MatrixView.moc"

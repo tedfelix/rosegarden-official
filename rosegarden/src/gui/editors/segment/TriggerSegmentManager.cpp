@@ -567,3 +567,4 @@ TriggerSegmentManager::slotRawTime()
 }
 
 }
+#include "TriggerSegmentManager.moc"

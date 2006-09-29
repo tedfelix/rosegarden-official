@@ -191,3 +191,4 @@ void MidiKeyMappingEditor::blockAllSignals(bool block)
 }
 
 }
+#include "MidiKeyMappingEditor.moc"

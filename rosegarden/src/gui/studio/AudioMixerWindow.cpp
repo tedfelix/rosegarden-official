@@ -1714,3 +1714,4 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
 }
 
 }
+#include "AudioMixerWindow.moc"
