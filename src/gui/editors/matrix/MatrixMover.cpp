@@ -47,6 +47,7 @@
 #include <qiconset.h>
 #include <qpoint.h>
 #include <qstring.h>
+#include "misc/Debug.h"
 
 
 namespace Rosegarden

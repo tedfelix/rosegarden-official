@@ -10,6 +10,9 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
 
+    Portions of this file Copyright 2003
+        Mark Hymers         <markh@linuxfromscratch.org>
+
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 

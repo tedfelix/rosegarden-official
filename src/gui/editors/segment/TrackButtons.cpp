@@ -40,7 +40,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
-#include "KLedButton.h"
+#include "gui/kdeext/KLedButton.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PluginIdentifier.h"
 #include "TrackLabel.h"

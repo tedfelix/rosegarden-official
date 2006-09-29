@@ -9,6 +9,9 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
 
+    This file contains code borrowed from KDevelop 2.0
+    Copyright (c) The KDevelop Development Team.
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
@@ -19,18 +22,11 @@
     COPYING included with this distribution for more information.
 */
 
-// This file contains code borrowed from KDevelop 2.0
-// (c) The KDevelop Development Team
-
 #ifndef KSTARTUPLOGO_H
 #define KSTARTUPLOGO_H
 
 #include <qwidget.h>
 #include <qpixmap.h>
-
-/**
-  *@author ??
-  */
 
 class KStartupLogo : public QWidget
 {

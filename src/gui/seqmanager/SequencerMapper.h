@@ -29,6 +29,7 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Track.h"
+#include "sound/SequencerDataBlock.h"
 #include <qstring.h>
 
 
@@ -38,7 +39,6 @@ class LevelInfo;
 namespace Rosegarden
 {
 
-class SequencerDataBlock;
 class MappedEvent;
 class MappedComposition;
 

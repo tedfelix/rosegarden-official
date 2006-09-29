@@ -27,6 +27,7 @@
 #define _RG_USEORNAMENTDIALOG_H_
 
 #include "base/TriggerSegment.h"
+#include "base/NotationTypes.h"
 #include <string>
 #include <kdialogbase.h>
 #include <vector>

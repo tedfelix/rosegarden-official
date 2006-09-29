@@ -34,6 +34,8 @@
 #include <qcanvas.h>
 #include <qpoint.h>
 #include <qwidget.h>
+#include "misc/Debug.h"
+
 
 
 namespace Rosegarden

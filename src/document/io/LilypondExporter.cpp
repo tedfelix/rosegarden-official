@@ -12,6 +12,17 @@
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
  
+    This file is Copyright 2002
+        Hans Kieserman      <hkieserman@mail.com>
+    with heavy lifting from csoundio as it was on 13/5/2002.
+
+    Numerous additions and bug fixes by
+        Michael McIntyre    <dmmcintyr@users.sourceforge.net>
+
+    Some restructuring by Chris Cannam.
+
+    Brain surgery to support LilyPond 2.x export by Heikki Junes.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
  

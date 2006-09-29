@@ -29,14 +29,13 @@
 #include <kdialogbase.h>
 #include <qstring.h>
 
+#include "gui/widgets/PitchChooser.h"
 
 class QWidget;
 
 
 namespace Rosegarden
 {
-
-class PitchChooser;
 
 
 class PitchPickerDialog : public KDialogBase

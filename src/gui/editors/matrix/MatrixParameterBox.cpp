@@ -34,6 +34,7 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qframe.h>
+#include <qlayout.h>
 #include <qwidget.h>
 
 
