@@ -21,6 +21,7 @@
 */
 
 #include "AudioPlayQueue.h"
+#include "misc/Debug.h"
 #include "PlayableAudioFile.h"
 #include "Profiler.h"
 

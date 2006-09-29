@@ -24,6 +24,7 @@
 
 
 #include "NotationStrings.h"
+#include <kapplication.h>
 
 #include <klocale.h>
 #include "misc/Strings.h"

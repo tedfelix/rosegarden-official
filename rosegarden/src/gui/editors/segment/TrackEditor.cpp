@@ -24,6 +24,8 @@
 
 
 #include "TrackEditor.h"
+#include <qlayout.h>
+#include <kapplication.h>
 
 #include <klocale.h>
 #include <kstddirs.h>

@@ -20,6 +20,7 @@
 */
 
 #include <vector>
+#include "misc/Debug.h"
 
 #include <qpainter.h>
 

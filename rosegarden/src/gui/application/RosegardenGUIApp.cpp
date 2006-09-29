@@ -24,6 +24,7 @@
 
 
 #include "RosegardenGUIApp.h"
+#include <kapplication.h>
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"

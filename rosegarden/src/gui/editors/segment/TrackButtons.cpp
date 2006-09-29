@@ -24,6 +24,7 @@
 
 
 #include "TrackButtons.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kstddirs.h>

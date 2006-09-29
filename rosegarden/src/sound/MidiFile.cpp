@@ -21,6 +21,8 @@
 
 
 #include <iostream>
+#include "misc/Debug.h"
+#include <kapplication.h>
 #include <fstream>
 #include <string>
 #include <cstdio>

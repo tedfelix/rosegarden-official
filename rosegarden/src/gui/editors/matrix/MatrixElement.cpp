@@ -24,6 +24,7 @@
 
 
 #include "MatrixElement.h"
+#include "misc/Debug.h"
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"

@@ -24,6 +24,7 @@
 
 
 #include "InterpretDialog.h"
+#include <kapplication.h>
 
 #include <klocale.h>
 #include "document/ConfigGroups.h"

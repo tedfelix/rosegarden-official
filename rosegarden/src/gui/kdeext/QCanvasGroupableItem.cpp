@@ -20,6 +20,7 @@
 */
 
 #include <qcanvas.h>
+#include "misc/Debug.h"
 
 #include "qcanvasgroupableitem.h"
 #include "rosestrings.h"

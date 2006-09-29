@@ -24,6 +24,7 @@
 
 
 #include "NotationElement.h"
+#include "misc/Debug.h"
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"

@@ -24,6 +24,7 @@
 
 
 #include "GUIPalette.h"
+#include <kapplication.h>
 
 #include "base/Colour.h"
 #include <kconfig.h>

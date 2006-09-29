@@ -20,6 +20,7 @@
 
 
 #include <iostream>
+#include <kapplication.h>
 #include <fstream>
 #include <string>
 #include <dirent.h> // for new recording file

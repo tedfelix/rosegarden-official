@@ -24,6 +24,7 @@
 
 
 #include "CountdownDialog.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include "CountdownBar.h"

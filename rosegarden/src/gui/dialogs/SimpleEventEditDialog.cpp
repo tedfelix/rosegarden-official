@@ -24,6 +24,7 @@
 
 
 #include "SimpleEventEditDialog.h"
+#include <qlayout.h>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>

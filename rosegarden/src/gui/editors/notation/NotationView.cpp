@@ -24,6 +24,9 @@
 
 
 #include "NotationView.h"
+#include <qlayout.h>
+#include "misc/Debug.h"
+#include <kapplication.h>
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"

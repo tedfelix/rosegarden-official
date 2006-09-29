@@ -23,6 +23,7 @@
 */
 
 #include <unistd.h>
+#include <kapplication.h>
 
 #include <qpainter.h>
 #include <qfontmetrics.h>

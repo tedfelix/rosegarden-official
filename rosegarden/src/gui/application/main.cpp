@@ -20,6 +20,7 @@
 */
 
 #include <qtimer.h>
+#include <kapplication.h>
 #include <sys/time.h>
 #include "base/RealTime.h"
 

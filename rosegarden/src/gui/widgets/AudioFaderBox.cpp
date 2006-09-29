@@ -24,6 +24,7 @@
 
 
 #include "AudioFaderBox.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kstddirs.h>

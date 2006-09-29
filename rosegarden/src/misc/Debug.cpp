@@ -20,6 +20,7 @@
 */
 
 #include "Strings.h"
+#include "misc/Debug.h"
 #include "Debug.h"
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)

@@ -24,6 +24,7 @@
 
 
 #include "MidiPitchLabel.h"
+#include <kapplication.h>
 
 #include "document/ConfigGroups.h"
 #include <kconfig.h>

@@ -24,6 +24,7 @@
 
 
 #include "RosegardenGUIView.h"
+#include <kapplication.h>
 
 #include "sound/Midi.h"
 #include "gui/editors/segment/TrackButtons.h"

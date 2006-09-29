@@ -24,6 +24,7 @@
 
 
 #include "DocumentConfigureDialog.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include "ConfigureDialogBase.h"

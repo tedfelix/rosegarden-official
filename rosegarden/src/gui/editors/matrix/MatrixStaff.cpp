@@ -24,6 +24,7 @@
 
 
 #include "MatrixStaff.h"
+#include "misc/Debug.h"
 
 #include "base/BaseProperties.h"
 #include "base/Composition.h"

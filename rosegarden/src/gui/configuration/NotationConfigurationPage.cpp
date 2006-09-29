@@ -24,6 +24,7 @@
 
 
 #include "NotationConfigurationPage.h"
+#include <qlayout.h>
 
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"

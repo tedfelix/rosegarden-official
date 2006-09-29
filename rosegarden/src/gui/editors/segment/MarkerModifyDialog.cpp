@@ -24,6 +24,7 @@
 
 
 #include "MarkerModifyDialog.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include "base/Composition.h"

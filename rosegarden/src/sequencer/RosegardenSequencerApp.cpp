@@ -23,6 +23,7 @@
 */
 
 #include "RosegardenSequencerApp.h"
+#include <kapplication.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>

@@ -24,6 +24,7 @@
 
 
 #include "PitchPickerDialog.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include "gui/widgets/PitchChooser.h"
