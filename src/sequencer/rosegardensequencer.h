@@ -40,13 +40,16 @@
 
 #include <qtimer.h>
 
-#include "Composition.h"
-#include "rosegardendcop.h"
+#include "base/Composition.h"
+#include "gui/application/RosegardenDCOP.h"
+
 #include "rosegardensequenceriface.h"
-#include "MappedComposition.h"
-#include "Event.h"
-#include "MappedStudio.h"
-#include "ExternalTransport.h"
+
+#include "sound/MappedComposition.h"
+#include "base/Event.h"
+#include "sound/MappedStudio.h"
+#include "sound/ExternalTransport.h"
+
 #include "mmappedsegment.h"
 #include "sequencermapper.h"
 
@@ -55,12 +58,15 @@
 class KURL;
 class KRecentFilesAction;
 
+namespace Rosegarden { 
+
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
 class ControlBlockMmapper;
 
-namespace Rosegarden { class MappedInstrument; class SoundDriver; }
+class MappedInstrument;
+class SoundDriver;
 
 /**
  * The sequencer application
@@ -515,5 +521,7 @@ protected:
 
     bool                            m_isEndOfCompReached;
 };
+
+}
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

@@ -25,15 +25,18 @@
 // #include <qvaluevector.h>
 // #include <qpair.h>
 
-#include "rosegardendcop.h"
-#include "Event.h"
-#include "MappedComposition.h"
-#include "MappedEvent.h"
-#include "Instrument.h"
-#include "MappedDevice.h"
-#include "MappedRealTime.h"
-#include "MappedStudio.h"
-#include "MappedCommon.h"
+#include "gui/application/RosegardenDCOP.h"
+
+#include "base/Event.h"
+#include "sound/MappedComposition.h"
+#include "sound/MappedEvent.h"
+#include "base/Instrument.h"
+#include "sound/MappedDevice.h"
+#include "sound/MappedRealTime.h"
+#include "sound/MappedStudio.h"
+#include "sound/MappedCommon.h"
+
+namespace Rosegarden {
 
 class RosegardenSequencerIface : virtual public DCOPObject
 {
@@ -351,5 +354,7 @@ public:
     */
     virtual void remapTracks() = 0;
 };
+
+}
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

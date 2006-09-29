@@ -21,10 +21,15 @@
 #ifndef _SEQUENCERMAPPER_H_
 #define _SEQUENCERMAPPER_H_
 
-#include "SequencerDataBlock.h"
-#include "RealTime.h"
+#include "sound/SequencerDataBlock.h"
+#include "base/RealTime.h"
 
-namespace Rosegarden { class MappedEvent; class MappedComposition; }
+namespace Rosegarden
+{
+
+class MappedEvent;
+class MappedComposition;
+
 
 class SequencerMmapper
 {
@@ -88,5 +93,6 @@ protected:
     SequencerDataBlock *m_sequencerDataBlock;
 };
 
+}
 
 #endif // _SEQUENCERMAPPER_H_
