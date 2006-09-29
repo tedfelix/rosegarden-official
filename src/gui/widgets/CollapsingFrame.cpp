@@ -24,6 +24,8 @@
 
 
 #include "CollapsingFrame.h"
+#include <qlayout.h>
+#include <kapplication.h>
 
 #include <kstddirs.h>
 #include <kconfig.h>

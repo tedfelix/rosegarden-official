@@ -24,6 +24,7 @@
 
 
 #include "TriggerSegmentDialog.h"
+#include <kapplication.h>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>

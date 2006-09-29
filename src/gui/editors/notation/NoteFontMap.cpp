@@ -24,6 +24,7 @@
 
 
 #include "NoteFontMap.h"
+#include "misc/Debug.h"
 
 #include <klocale.h>
 #include <kstddirs.h>

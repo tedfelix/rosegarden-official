@@ -24,6 +24,7 @@
 
 
 #include "LatencyConfigurationPage.h"
+#include <qlayout.h>
 
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"

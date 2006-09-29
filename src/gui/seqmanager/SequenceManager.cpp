@@ -24,6 +24,7 @@
 
 
 #include "SequenceManager.h"
+#include <kapplication.h>
 
 #include "sound/Midi.h"
 #include <klocale.h>

@@ -24,6 +24,7 @@
 
 
 #include "MidiMixerWindow.h"
+#include <qlayout.h>
 
 #include "sound/Midi.h"
 #include <klocale.h>

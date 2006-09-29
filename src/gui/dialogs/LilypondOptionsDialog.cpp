@@ -24,6 +24,8 @@
 
 
 #include "LilypondOptionsDialog.h"
+#include <qlayout.h>
+#include <kapplication.h>
 
 #include <klocale.h>
 #include "document/ConfigGroups.h"

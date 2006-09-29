@@ -24,6 +24,7 @@
 
 
 #include "AudioManagerDialog.h"
+#include <kapplication.h>
 
 #include "base/Event.h"
 #include <klocale.h>

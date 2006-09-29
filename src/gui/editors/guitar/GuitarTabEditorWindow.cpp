@@ -1,4 +1,5 @@
 #include "GuitarTabEditorWindow.h"
+#include <kapplication.h>
 #include "GuitarXmlhandler.h"
 #include "base/Exception.h"
 

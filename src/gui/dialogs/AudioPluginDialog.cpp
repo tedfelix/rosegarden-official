@@ -24,6 +24,7 @@
 
 
 #include "AudioPluginDialog.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include "misc/Debug.h"

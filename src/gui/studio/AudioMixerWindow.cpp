@@ -24,6 +24,8 @@
 
 
 #include "AudioMixerWindow.h"
+#include <qlayout.h>
+#include <kapplication.h>
 
 #include "sound/Midi.h"
 #include <klocale.h>

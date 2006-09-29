@@ -24,6 +24,8 @@
 
 
 #include "NotationStaff.h"
+#include "misc/Debug.h"
+#include <kapplication.h>
 
 #include <klocale.h>
 #include "misc/Strings.h"

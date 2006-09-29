@@ -24,6 +24,7 @@
 
 
 #include "MatrixVLayout.h"
+#include "misc/Debug.h"
 
 #include "base/BaseProperties.h"
 #include "base/LayoutEngine.h"

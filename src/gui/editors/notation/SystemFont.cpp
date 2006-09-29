@@ -24,6 +24,7 @@
 
 
 #include "SystemFont.h"
+#include "misc/Debug.h"
 
 #include <kstddirs.h>
 #include "NoteFontMap.h"

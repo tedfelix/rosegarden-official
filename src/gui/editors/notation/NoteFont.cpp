@@ -24,6 +24,7 @@
 
 
 #include "NoteFont.h"
+#include "misc/Debug.h"
 
 #include "misc/Strings.h"
 #include "base/Exception.h"

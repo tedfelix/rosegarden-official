@@ -24,6 +24,7 @@
 
 
 #include "TupletDialog.h"
+#include <qlayout.h>
 
 #include <klocale.h>
 #include "base/NotationTypes.h"

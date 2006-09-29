@@ -24,6 +24,7 @@
 
 
 #include "NotationTool.h"
+#include "misc/Debug.h"
 
 #include "gui/general/EditTool.h"
 #include "NotationView.h"

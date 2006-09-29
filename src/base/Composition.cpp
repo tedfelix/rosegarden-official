@@ -20,6 +20,7 @@
 */
 
 #include "Composition.h"
+#include "misc/Debug.h"
 #include "Segment.h"
 #include "FastVector.h"
 #include "BaseProperties.h"

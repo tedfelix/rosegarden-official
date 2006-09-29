@@ -24,6 +24,7 @@
 
 
 #include "ControlBlockMmapper.h"
+#include "misc/Debug.h"
 
 #include <kstddirs.h>
 #include "misc/Strings.h"

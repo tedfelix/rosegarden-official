@@ -24,6 +24,7 @@
 
 
 #include "NotationGroup.h"
+#include "misc/Debug.h"
 
 #include "base/Equation.h"
 #include "base/Event.h"

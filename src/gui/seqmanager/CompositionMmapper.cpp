@@ -24,6 +24,7 @@
 
 
 #include "CompositionMmapper.h"
+#include "misc/Debug.h"
 
 #include <kstddirs.h>
 #include "base/Composition.h"

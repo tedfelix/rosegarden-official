@@ -24,6 +24,7 @@
 
 
 #include "SegmentMmapper.h"
+#include "misc/Debug.h"
 
 #include "misc/Strings.h"
 #include "base/Composition.h"

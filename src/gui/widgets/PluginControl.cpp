@@ -24,6 +24,7 @@
 
 
 #include "PluginControl.h"
+#include <qlayout.h>
 
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"

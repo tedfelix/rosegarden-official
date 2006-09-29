@@ -24,6 +24,7 @@
 
 
 #include "FontViewFrame.h"
+#include <kapplication.h>
 
 #include <klocale.h>
 #include <qfontmetrics.h>

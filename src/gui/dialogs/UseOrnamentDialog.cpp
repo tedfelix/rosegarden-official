@@ -24,6 +24,8 @@
 
 
 #include "UseOrnamentDialog.h"
+#include <qlayout.h>
+#include <kapplication.h>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>

@@ -24,6 +24,8 @@
 
 
 #include "QuantizeParameters.h"
+#include <qlayout.h>
+#include <kapplication.h>
 
 #include <klocale.h>
 #include "base/NotationTypes.h"

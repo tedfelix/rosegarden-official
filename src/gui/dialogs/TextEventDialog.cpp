@@ -24,6 +24,7 @@
 
 
 #include "TextEventDialog.h"
+#include <kapplication.h>
 
 #include <klocale.h>
 #include "misc/Strings.h"

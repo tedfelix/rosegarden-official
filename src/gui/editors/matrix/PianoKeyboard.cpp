@@ -24,6 +24,7 @@
 
 
 #include "PianoKeyboard.h"
+#include "misc/Debug.h"
 
 #include "gui/general/GUIPalette.h"
 #include "gui/general/MidiPitchLabel.h"
