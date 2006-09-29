@@ -43,15 +43,15 @@
 #include "base/Composition.h"
 #include "gui/application/RosegardenDCOP.h"
 
-#include "rosegardensequenceriface.h"
+#include "RosegardenSequencerIface.h"
 
 #include "sound/MappedComposition.h"
 #include "base/Event.h"
 #include "sound/MappedStudio.h"
 #include "sound/ExternalTransport.h"
 
-#include "mmappedsegment.h"
-#include "sequencermapper.h"
+#include "MmappedSegment.h"
+#include "SequencerMmapper.h"
 
 #include <deque>
 
