@@ -59,15 +59,20 @@ public:
                          QString label7 = QString::null, 
                          QString label8 = QString::null):
         QListViewItem(parent, label1, label2, label3, label4,
-                      label5, label6, label7, label8) { ; }
+                      label5, label6, label7, label8),
+	m_rawTime(0), m_fake(false) { ; }
 
     virtual int compare(QListViewItem * i, int col, bool ascending) const;
 
     void setRawTime(Rosegarden::timeT rawTime) { m_rawTime = rawTime; }
     Rosegarden::timeT getRawTime() const { return m_rawTime; }
 
+    void setFake(bool fake) { m_fake = true; }
+    bool isFake() const { return m_fake; }
+
 protected:
-    Rosegarden::timeT   m_rawTime;
+    Rosegarden::timeT m_rawTime;
+    bool m_fake;
 };
 
 int
@@ -297,6 +302,7 @@ MarkerEditorDialog::slotUpdate()
     {
         QListViewItem *item = 
             new MarkerEditorViewItem(m_listView, i18n("<none>"));
+	((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->insertItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
@@ -322,7 +328,7 @@ MarkerEditorDialog::slotDeleteAll()
     {
 	MarkerEditorViewItem *ei = 
 	    dynamic_cast<MarkerEditorViewItem *>(item);
-	if (!ei) continue;
+	if (!ei || ei->isFake()) continue;
 
         RemoveMarkerCommand *rc = 
             new RemoveMarkerCommand(&m_doc->getComposition(),
@@ -360,7 +366,7 @@ MarkerEditorDialog::slotDelete()
     MarkerEditorViewItem *ei = 
         dynamic_cast<MarkerEditorViewItem *>(item);
 
-    if (!ei) return;
+    if (!ei || ei->isFake()) return;
 
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&m_doc->getComposition(),
@@ -495,7 +501,7 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
     MarkerEditorViewItem *item = 
         dynamic_cast<MarkerEditorViewItem*>(i);
 
-    if (!item) return;
+    if (!item || item->isFake()) return;
 
     MarkerModifyDialog dialog(this,
 			      &m_doc->getComposition(),
@@ -586,7 +592,7 @@ MarkerEditorDialog::slotItemClicked(QListViewItem *item)
     MarkerEditorViewItem *ei = 
         dynamic_cast<MarkerEditorViewItem *>(item);
 
-    if (ei)
+    if (ei && !ei->isFake())
     {
         RG_DEBUG << "MarkerEditorDialog::slotItemClicked - "
                  << "jump to marker at " << ei->getRawTime() << endl;
