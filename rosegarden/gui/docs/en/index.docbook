@@ -69,7 +69,8 @@
        something seems ambiguous without, try rewording it instead.
 
 
-    About Screenshots =================
+    About Screenshots
+    =================
 
     We recommend saving your current user preferences as a new theme
     using the KDE theme manager, so you can restore your usual
@@ -173,8 +174,6 @@
     * Event editor dialogs
 
     * Tempo / timesig editor
-
-    * Triggered segments
 
     * Split by Pitch
 
@@ -761,14 +760,14 @@
       </guimenuitem></menuchoice> to collect any scattered audio files
       together in one place.</para>
 
-      <para>The audio manager dialog also shows the sample-rate and other
-      information for each audio file, and marks with an asterisk any
-      audio file whose sample rate does not match that of the current
-      JACK audio session that Rosegarden is using.  Rosegarden will
-      resample these files at playback time using a fast (but
-      correspondingly very low quality) linear resampler.  You are
-      advised to resample them separately using a separate
-      dedicated audio editor instead.
+      <para>The audio manager dialog also shows the sample-rate and
+      other information for each audio file, and marks with an
+      asterisk any audio file whose sample rate does not match that of
+      the current JACK audio session that Rosegarden is using.
+      Rosegarden will resample these files at playback time using a
+      very low quality zero order hold resampler.  You are advised to
+      resample them separately using a separate dedicated audio editor
+      instead.
       </para>
 
     </sect1>
@@ -785,7 +784,12 @@
       <sect2 id="segment-view-selector">
 	<title>The Select tool</title>
 	<para>
-	  The "select tool" (the arrow tool) is actually a
+	  The select tool	  <inlinemediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-select.png"/>
+	</imageobject>
+	</inlinemediaobject>
+          is actually a
 	  multipurpose tool: it can be used to select, move, copy,
 	  resize and create segments.</para>
 
@@ -815,11 +819,21 @@
       <sect2 id="segment-view-move-resize">
 	<title>Move and Resize tools</title>
 	<para>To move a segment to a different start time or track,
-	  use the Move tool and click and drag on the segment you want
+	  use the move tool	  <inlinemediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-move.png"/>
+	</imageobject>
+	</inlinemediaobject>
+           and click and drag on the segment you want
 	  to move.  If you hold down the Ctrl key while dragging, the
 	  segment will be copied instead of moved.</para>
 
-	<para>To resize a segment, use the Resize tool, and click
+	<para>To resize a segment, use the resize tool	  <inlinemediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-resize.png"/>
+	</imageobject>
+	</inlinemediaobject>
+           and click
 	  and drag on the right-hand end of the segment.</para>
 
 	<para>For both move and resize you can hold Shift for fine
@@ -831,7 +845,7 @@
       <sect2 id="segment-view-split-join">
 	<title>Split tool</title>
 	<para>
-	  You can use the split tool 
+	  You can use the split tool
 	  <inlinemediaobject>
 	    <imageobject>
 	      <imagedata fileref="rg-split.png"/>
@@ -891,7 +905,18 @@
 	  a tempo ruler, which can be optionally displayed at the top
 	  of the editing area.</para>
 
-	<!-- !!! PICTURE -->
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-temporuler.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s tempo ruler (and the bar and beat ruler beneath it)</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
 
 	<para>The tempo ruler shows changes to tempo and time
 	signature throughout the composition, and can be used for
@@ -965,7 +990,21 @@
 	your &rosegarden; file.</para>
 
 	<para>Markers are shown in the main ruler at the top of each
-	of &rosegarden;'s editor windows. <!-- !!! PICTURE --> To add
+	of &rosegarden;'s editor windows.</para>
+
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-markerloop.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>A marker and a loop range</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+        <para>To add
 	a new marker, double-click on the marker area (top half) of
 	the ruler to open the marker editor.  Make sure &rosegarden;'s
 	playback pointer (see <link linkend="transport">The
@@ -1048,6 +1087,127 @@
 
 	</sect3>
       </sect2>
+    </sect1>
+
+    <sect1 id="triggered-segments">
+      <title>Triggered segments</title>
+
+	<para>A triggered segment is a segment that does not appear on
+	the main canvas and is not positioned at a particular time or
+	on any particular instrument, but is instead triggered during
+	playback by one or more notes in other segments.  These
+	triggering notes serve as a shorthand for the full triggered
+	segment, in the same way as written ornaments such as trills
+	in notation serve as shorthand for the notes that make up the
+	trill.  One use of triggered segments is in fact for
+	<link linkend="nv-ornaments">playing ornaments</link>.</para>
+
+    <para>Rosegarden can optionally stretch or squash each triggered
+    segment to match the duration of the note that triggers it, and
+    can raise or lower the pitch and velocity of the segment likewise
+    to match.  A triggered segment is played on the same instrument as
+    its triggering event.</para>
+
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-triggersegment.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s Trigger Segment dialog, as reached from the matrix editor</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+ 
+    <para>Triggered segments are managed through a window available
+    via the <menuchoice> <guimenu
+    lang="en">Segments</guimenu><guimenuitem>Manage Triggered
+    Segments</guimenuitem></menuchoice> option in the main segment
+    canvas.  To make a new triggered segment, copy a segment or part
+    of a segment to Rosegarden's clipboard, then use the <menuchoice>
+    <guimenu lang="en">Edit</guimenu> <guimenuitem>Paste as New
+    Triggered Segment</guimenuitem></menuchoice> menu option in this
+    manager window.  You can then set a particular note to play this
+    triggered segment instead of the original note, using the
+    <menuchoice> <guimenu lang="en">Adjust</guimenu>
+    <guimenuitem>Trigger Segment...</guimenuitem></menuchoice>
+    function in the matrix or <menuchoice> <guimenu
+    lang="en">Ornament</guimenu> <guimenuitem>Trigger
+    Ornament...</guimenuitem></menuchoice> function in the notation
+    editor.</para>
+
+    <para>When triggering a segment, you will be offered a choice for
+    how it is played in terms of timing, because the triggered segment
+    (or ornament) may have a different underlying duration from your
+    triggering note.  The options for playback timing are:</para>
+
+    <variablelist>
+
+      <varlistentry>
+	<term>As stored</term>
+	<listitem>
+	  <para>Play the triggered segment with a start time
+	  coinciding with that of the note, and at the original speed.
+	  Keep playing the triggered segment until it ends, even if it
+	  is longer than the triggering note.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Truncate if longer than note</term>
+	<listitem>
+	  <para>Play the triggered segment with a start time
+	  coinciding with that of the note, and at the original speed.
+	  If the triggered segment is longer than the triggering note,
+	  truncate it so that it ends at the end time of the note.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>End at same time as note</term>
+	<listitem>
+	  <para>Play the triggered segment with its end time
+	  coinciding with the end of the note, and at the original
+	  speed.  This means the start of the triggered segment may be
+	  chopped off if it is longer than the triggering note.
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Stretch or squash segment to note duration</term>
+	<listitem>
+	  <para>Speed up or slow down the triggered segment so that it
+	  fits exactly into the duration of the triggering note.  This
+	  is the default.
+	  </para>
+	</listitem>
+      </varlistentry>
+ 
+    </variablelist>
+ 
+    <para>A triggered segment may contain silence at the start or end,
+    and this will be "played" (and stretched or squashed if
+    appropriate) as well as the notes and other events in the segment.</para>
+ 
+    <para>It is not currently possible to make a triggered segment
+    start playing before the start time of its triggering note. You
+    also can't trigger a segment from within another triggered
+    segment, and you can't trigger audio segments.</para>
+ 
+    <para>To edit the contents of a triggered segment, either
+    double-click on it in the Manage Triggered Segments window, or
+    double-click on any note that triggers it.  Apart from editing the
+    notes in the segment, you can also change the duration of the
+    segment itself from the Edit menu of the resulting event list
+    view.  Remember that editing a triggered segment will affect all
+    the notes that trigger it, not just the one that you
+    double-clicked to get to the editing window.</para>
+
     </sect1>
   </chapter>
 
@@ -2926,8 +3086,23 @@
     use with percussion programs on MIDI instruments, in which each
     note pitch plays a different percussion sound.</para>
 
-    <para>See also <link linkend="studio-keymappings">Percussion Key
-    Mappings</link></para>
+    <para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rg-percussionmatrix.png" format="PNG"/>
+    </imageobject>
+      <textobject>
+	<phrase>&rosegarden;'s percussion matrix editor</phrase>
+      </textobject>
+    </mediaobject>
+    </screenshot>
+      The pitch names are only shown if the segment being edited is
+      playing through a percussion instrument that has an associated
+      key mapping to define the names; otherwise the standard matrix
+      view piano keyboard will appear instead.  See <link
+      linkend="studio-keymappings">Percussion Key Mappings</link> for
+      more information about key mappings.</para>
   </chapter>
 
   <chapter id="notation-view">
@@ -4426,7 +4601,7 @@ actions all of this is talking about, and bring this bit up to date.
       <!-- !!! -->
       <para>
 	  You can use the Interpret function<menuchoice>
-	      <guimenu>Adjust</guimenu><guimenuitem>Notes...</guimenuitem><guimenuitem>Interpret</guimenuitem>
+	      <guimenu>Adjust</guimenu><guimenu>Notes</guimenu><guimenuitem>Interpret...</guimenuitem>
 	  </menuchoice>
 	  to modify the velocities and timings of notes according to any
 	  written or indicated dynamics found. The selection of
@@ -4695,6 +4870,59 @@ actions all of this is talking about, and bring this bit up to date.
 	</sect3>
       </sect2>
     </sect1>
+
+    <sect1 id="nv-ornaments">
+
+      <title>Playing ornaments</title>
+
+      <para>Rosegarden supports playback of ornaments using its <link
+      linkend="triggered-segments">triggered segments</link>
+      mechanism.  You can create triggered segments containing any of
+      the various types of trill or ornament you might want, and
+      associate them with the notes that want to play them.</para>
+ 
+      <para>To create a new type of ornament, first write out the
+      notes "in longhand" that you want the ornament to play, and then
+      select the notes and use <menuchoice>
+      <guimenu>Notes</guimenu><guimenu>Ornaments</guimenu><guimenuitem>Make
+      Ornament...</guimenuitem></menuchoice>.  This cuts the notes to
+      the clipboard, pastes them into a new triggered segment, and
+      replaces them with a single note of the same duration that
+      triggers this segment.</para>
+ 
+      <para>To make a note play an existing ornament, select it and
+      use <menuchoice>
+      <guimenu>Notes</guimenu><guimenu>Ornaments</guimenu><guimenuitem>Trigger
+      Ornament...</guimenuitem></menuchoice>.</para>
+
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-useornament.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s Trigger Ornament dialog</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+
+      <para>To edit the notes played in a triggered ornament, you can
+      double-click on the note that triggers it.  This will
+      change all uses of that ornament, not just the one that you
+      double-clicked on.</para>
+
+      <para>Note that while Rosegarden can shift triggered segments up
+      and down in pitch to match their triggering notes, it is not
+      clever enough to perform transposition into a different
+      key or scale position.</para>
+
+      <para>See <link linkend="triggered-segments">triggered
+      segments</link> for more details about ornaments and other uses
+      of triggered segments.</para>
+    </sect1>
+
     <sect1 id="nv-note-styles">
       <title>Note styles</title>
 
