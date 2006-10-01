@@ -1,21 +1,24 @@
+# translation of fi-140.po to Finnish
 # translation of fi.po to
 # Finnish translation of Rosegarden.
 # This file is put in the public domain.
 #
 #
 # Heikki Johannes Junes <hjunes@cc.hut.fi>, 2006.
+# Asmo Koskinen <asmo.koskinen@arkki.info>, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-16 11:44+0100\n"
-"PO-Revision-Date: 2006-09-16 23:58+0300\n"
-"Last-Translator: Heikki Junes <hjunes@cc.hut.fi>\n"
-"Language-Team: Suomi <fi@li.org>\n"
+"PO-Revision-Date: 2006-10-01 15:42+0300\n"
+"Last-Translator: Asmo Koskinen <asmo.koskinen@arkki.info>\n"
+"Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../gui/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
@@ -812,7 +815,7 @@ msgstr "Versio"
 
 #: ../gui/guitar/guitartabeditor.cpp:84
 msgid "Fingering"
-msgstr "&Sormitus"
+msgstr "Sormitus"
 
 #: ../gui/guitar/guitartabselector.cpp:270
 msgid "&New"
@@ -1171,7 +1174,7 @@ msgstr "Ryhmitä nykyisenä aikana:"
 
 #: ../gui/dialogs.cpp:845
 msgid "Group with new timing:"
-msgstr "Ryhmitä uutena aikana"
+msgstr "Ryhmitä uutena aikana:"
 
 #: ../gui/dialogs.cpp:851
 msgid "Gap created by timing change:"
@@ -1468,7 +1471,7 @@ msgstr "Tapahtumatyyppi: "
 
 #: ../gui/dialogs.cpp:1662
 msgid "Absolute time: "
-msgstr "Täysi aika:"
+msgstr "Täysi aika: "
 
 #: ../gui/dialogs.cpp:1672
 msgid "Duration: "
@@ -1832,7 +1835,7 @@ msgstr "Olemassa olevan sävellyksen lopusta"
 
 #: ../gui/dialogs.cpp:3498
 msgid "The file has different time signatures or tempos."
-msgstr "Tiedostolla on eri tahtilajimerkinnät tai tempot"
+msgstr "Tiedostolla on eri tahtilajimerkinnät tai tempot."
 
 #: ../gui/dialogs.cpp:3499
 msgid "Import these as well"
@@ -1848,7 +1851,7 @@ msgstr "&Ohita"
 
 #: ../gui/dialogs.cpp:3530
 msgid "Skip &All"
-msgstr "Ohita kaikkia"
+msgstr "Ohita &kaikki"
 
 #: ../gui/dialogs.cpp:3531
 msgid "&Locate"
@@ -2074,7 +2077,7 @@ msgstr "Sekvensseri ei ole käynnissä tai se ei vastaa."
 
 #: ../gui/dialogs.cpp:4458
 msgid "Sequencer is not returning a valid status report."
-msgstr "Sekvensseri ei vastaa kelpoa tilatietoa"
+msgstr "Sekvensseri ei vastaa kelpoa tilatietoa."
 
 #: ../gui/dialogs.cpp:4484
 msgid "Recording..."
@@ -2374,11 +2377,11 @@ msgstr "Esitys"
 
 #: ../gui/dialogs.cpp:5310
 msgid "Perform using triggered segment: "
-msgstr "Esitä käyttäen sysättävää osaa:"
+msgstr "Esitä käyttäen sysättävää osaa: "
 
 #: ../gui/dialogs.cpp:5324 ../gui/dialogs.cpp:5483
 msgid "Perform with timing: "
-msgstr "Esitä aikana:"
+msgstr "Esitä aikana: "
 
 #: ../gui/dialogs.cpp:5330 ../gui/dialogs.cpp:5489
 msgid "As stored"
@@ -2606,7 +2609,7 @@ msgstr ""
 
 #: ../gui/audiomanagerdialog.cpp:1043 ../gui/rosegardenguidoc.cpp:442
 msgid "File %1 could not be deleted."
-msgstr "Tiedostoa %1 ei voitu poistaa"
+msgstr "Tiedostoa %1 ei voitu poistaa."
 
 #: ../gui/rosegardenguidoc.cpp:500
 msgid "Can't open file '%1'"
@@ -2912,7 +2915,7 @@ msgstr "Pitkä pureutuminen"
 
 #: ../gui/notationcommands.cpp:1277
 msgid "Lon&g Inverted Mordent"
-msgstr "Pitkä käänteispureutuminen"
+msgstr "Pit&kä käänteispureutuminen"
 
 #: ../gui/notationcommands.cpp:1278
 msgid "&%1%2"
@@ -2925,7 +2928,7 @@ msgstr "Lisää %1"
 
 #: ../gui/notationcommands.cpp:1322
 msgid "Add Other &Fingering..."
-msgstr "Lisää muu &sormitus"
+msgstr "Lisää muu &sormitus..."
 
 #: ../gui/notationcommands.cpp:1323
 msgid "Add Fingering &0 (Thumb)"
@@ -3012,7 +3015,7 @@ msgstr "Muokkaa ta&pahtumaa"
 
 #: ../gui/editcommands.h:327
 msgid "Collapse &Equal-Pitch Notes"
-msgstr "Kasaa nuotit, joilla on sama sävelkorkeus"
+msgstr "Kasaa &nuotit, joilla on sama sävelkorkeus"
 
 #: ../gui/editcommands.h:349
 msgid "Set &Property"
@@ -3250,7 +3253,7 @@ msgstr "<uusi kartoitus>"
 
 #: ../gui/bankeditor.cpp:2037
 msgid "<new mapping %1>"
-msgstr "<uusi kartoitus &1>"
+msgstr "<uusi kartoitus %1>"
 
 #: ../gui/bankeditor.cpp:2078
 msgid "Really delete this bank?"
@@ -3547,7 +3550,7 @@ msgstr "Kytke työkalupalkki..."
 
 #: ../gui/editviewbase.cpp:508 ../gui/rosegardengui.cpp:3183
 msgid "Toggle the statusbar..."
-msgstr "Kytke tilapalkki"
+msgstr "Kytke tilapalkki..."
 
 #: ../gui/editviewbase.cpp:651 ../gui/rosegardengui.cpp:2826
 msgid "Segment Start Time"
@@ -3635,7 +3638,7 @@ msgstr "Muuta sä&vellyksen alku- ja lopputahti..."
 
 #: ../gui/segmentcommands.h:747
 msgid "Split by &Pitch..."
-msgstr "Jaa sävelkorkeuden mukaan..."
+msgstr "Jaa &sävelkorkeuden mukaan..."
 
 #: ../gui/segmentcommands.h:774
 msgid "Split by &Recording Source..."
@@ -3643,7 +3646,7 @@ msgstr "Jaa &Nauhoituslähteen mukaan..."
 
 #: ../gui/segmentcommands.h:797
 msgid "Re&label..."
-msgstr "Ni&meä uudelleen"
+msgstr "Ni&meä uudelleen..."
 
 #: ../gui/segmentcommands.h:817
 msgid "Change Segment Color..."
@@ -3651,7 +3654,7 @@ msgstr "Muuta osan väriä..."
 
 #: ../gui/segmentcommands.h:836
 msgid "Change Segment Color Map..."
-msgstr "Muuta osan värikarttaa"
+msgstr "Muuta osan värikarttaa..."
 
 #: ../gui/segmentcommands.h:1063
 msgid "Rejoin Command"
@@ -3684,7 +3687,7 @@ msgstr "yksikköä"
 
 #: ../gui/timewidget.cpp:176
 msgid "Measures:"
-msgstr "Tahdit"
+msgstr "Tahdit:"
 
 #: ../gui/timewidget.cpp:176
 msgid "Measure:"
@@ -4175,7 +4178,7 @@ msgstr "kaari"
 
 #: ../gui/notationviewslots.cpp:1003
 msgid "Adding phrasing slur..."
-msgstr "Lisätään muotoilukaari "
+msgstr "Lisätään muotoilukaari..."
 
 #: ../gui/notationviewslots.cpp:1004
 msgid "phrasing slur"
@@ -4269,7 +4272,7 @@ msgstr "Palautetaan kaarten sijainnit..."
 
 #: ../gui/notationviewslots.cpp:1204
 msgid "Fixing notation quantization..."
-msgstr "Korjataan nuottien yksiköintiä.."
+msgstr "Korjataan nuottien yksiköintiä..."
 
 #: ../gui/notationviewslots.cpp:1213
 msgid "Removing notation quantization..."
@@ -4596,7 +4599,7 @@ msgstr "<portit>"
 
 #: ../gui/audioplugindialog.cpp:122
 msgid "Input and output port counts."
-msgstr "Sisään- ja ulostuloporttien määrä"
+msgstr "Sisään- ja ulostuloporttien määrä."
 
 #: ../gui/audioplugindialog.cpp:124 ../gui/audioplugindialog.cpp:355
 msgid "<id>"
@@ -4604,7 +4607,7 @@ msgstr "<id>"
 
 #: ../gui/audioplugindialog.cpp:126
 msgid "Unique ID of plugin."
-msgstr "Lisäosan uniikki ID"
+msgstr "Lisäosan uniikki ID."
 
 #: ../gui/audioplugindialog.cpp:139
 msgid "Copy plugin parameters"
@@ -5037,7 +5040,7 @@ msgid ""
 "High: ----"
 msgstr ""
 "_: käytetty sisäisesti välistykseen\n"
-"Korkea: ---"
+"Korkea: ----"
 
 #: ../gui/segmentparameterbox.cpp:177 ../gui/segmentparameterbox.cpp:740
 #: ../gui/trackparameterbox.cpp:294
@@ -5289,7 +5292,7 @@ msgstr "avattava tiedosto"
 
 #: ../gui/main.cpp:357
 msgid "Installation contains the wrong version of Rosegarden."
-msgstr "Asennus sisältää väärän Rosegarden-version"
+msgstr "Asennus sisältää väärän Rosegarden-version."
 
 #: ../gui/main.cpp:358
 msgid ""
@@ -6330,7 +6333,7 @@ msgstr "&Sointujen syöttötila"
 
 #: ../gui/matrixview.cpp:621 ../gui/notationview.cpp:1468
 msgid "Ste&p Recording"
-msgstr "Askelnauhoitus"
+msgstr "&Askelnauhoitus"
 
 #: ../gui/matrixview.cpp:631 ../gui/rosegardengui.cpp:885
 msgid "Repeat Last Quantize"
@@ -6504,7 +6507,7 @@ msgid ""
 "_n:   1 event selected \n"
 "  %n events selected "
 msgstr ""
-"  1 tapahtuma valittu \n"
+"1 tapahtuma valittu \n"
 "  %n tapahtumaa valittu "
 
 #: ../gui/matrixview.cpp:1140 ../gui/notationview.cpp:2821
@@ -6885,7 +6888,7 @@ msgstr ""
 
 #: ../gui/rosegardenguiview.cpp:1509 ../gui/rosegardenguiview.cpp:1513
 msgid "Can't add dropped file. "
-msgstr "Ei voitu lisätä tiputettua tiedostoa."
+msgstr "Ei voitu lisätä tiputettua tiedostoa. "
 
 #: ../gui/editcommands.cpp:212
 msgid "(excerpt)"
@@ -7158,7 +7161,7 @@ msgstr "T&ee koru..."
 
 #: ../gui/notationview.cpp:1888
 msgid "Trigger &Ornament..."
-msgstr "Synnytä koru..."
+msgstr "Synnytä &koru..."
 
 #: ../gui/notationview.cpp:1892
 msgid "Remove Ornament..."
@@ -7398,7 +7401,7 @@ msgstr "Sulauta &MIDI-tiedosto..."
 
 #: ../gui/rosegardengui.cpp:570
 msgid "Merge &Rosegarden 2.1 file..."
-msgstr "Sulauta &Rosegarden 2.1 -tiedosto"
+msgstr "Sulauta &Rosegarden 2.1 -tiedosto..."
 
 #: ../gui/rosegardengui.cpp:574
 msgid "Merge &Hydrogen file..."
@@ -7406,7 +7409,7 @@ msgstr "Sulauta &Hydrogen-tiedosto..."
 
 #: ../gui/rosegardengui.cpp:578
 msgid "Export Rosegarden &Project file..."
-msgstr "Vie Rosegarden-projekti -tiedosto..."
+msgstr "Vie Rosegarden-&projekti -tiedosto..."
 
 #: ../gui/rosegardengui.cpp:582
 msgid "Export &MIDI file..."
@@ -7426,11 +7429,11 @@ msgstr "Vie &Csound-nuottitiedosto..."
 
 #: ../gui/rosegardengui.cpp:598
 msgid "Export M&up file..."
-msgstr "Vie M&up-tiedosto"
+msgstr "Vie M&up-tiedosto..."
 
 #: ../gui/rosegardengui.cpp:602
 msgid "Preview with Lil&yPond..."
-msgstr "Esikatsele LilyPondilla..."
+msgstr "Esikatsele &LilyPondilla..."
 
 #: ../gui/rosegardengui.cpp:606
 msgid "Play&list"
@@ -7462,7 +7465,7 @@ msgstr "Näytä Siir&to"
 
 #: ../gui/rosegardengui.cpp:679
 msgid "Show Track &Labels"
-msgstr "Näytä &raitojen &nimet"
+msgstr "Näytä &raitojen nimet"
 
 #: ../gui/rosegardengui.cpp:684
 msgid "Show Playback Position R&uler"
@@ -7538,11 +7541,11 @@ msgstr "Muuta tois&tomerkinnät jäljennöksiksi"
 
 #: ../gui/rosegardengui.cpp:935
 msgid "Manage Tri&ggered Segments"
-msgstr "Hallitse liipaistuja osia"
+msgstr "Hallitse &liipaistuja osia"
 
 #: ../gui/rosegardengui.cpp:939
 msgid "Set Tempos from &Beat Segment"
-msgstr "Aseta tempot iskualaosasta"
+msgstr "Aseta &tempot iskualaosasta"
 
 #: ../gui/rosegardengui.cpp:943
 msgid "Set &Tempo to Audio Segment Duration"
@@ -7554,7 +7557,7 @@ msgstr "Hallitse tiedostoja jotka liittyvät ää&niosiin"
 
 #: ../gui/rosegardengui.cpp:954
 msgid "Show Segment Labels"
-msgstr "Näytä &osien nimet"
+msgstr "Näytä osien nimet"
 
 #: ../gui/rosegardengui.cpp:963
 msgid "Add &Track"
@@ -7598,11 +7601,11 @@ msgstr "Kartoita instrumentit &uudelleen..."
 
 #: ../gui/rosegardengui.cpp:1020
 msgid "&Audio Mixer"
-msgstr "Äänisekoitin"
+msgstr "Ääni&sekoitin"
 
 #: ../gui/rosegardengui.cpp:1026
 msgid "Midi Mi&xer"
-msgstr "MIDI-sekoitin"
+msgstr "&MIDI-sekoitin"
 
 #: ../gui/rosegardengui.cpp:1032
 msgid "Manage MIDI &Devices"
@@ -7746,7 +7749,7 @@ msgstr "Tämä toiminto ei tarvitse kuin yhden valitun osan."
 
 #: ../gui/rosegardengui.cpp:2550
 msgid "Can't join Audio segments"
-msgstr "Ei voitu liittää ääniosia."
+msgstr "Ei voitu liittää ääniosia"
 
 #: ../gui/rosegardengui.cpp:2653
 msgid "Jog Selection"
@@ -7814,7 +7817,7 @@ msgstr "Liitäntätyökalua ei ole toteutettu vielä"
 
 #: ../gui/rosegardengui.cpp:3367
 msgid "Add Multiple Tracks"
-msgstr "Lisää &useita raitoja"
+msgstr "Lisää useita raitoja"
 
 #: ../gui/rosegardengui.cpp:3368
 msgid "How many tracks do you want to add?"
@@ -7822,7 +7825,7 @@ msgstr "Kuinka monta raitaa haluat lisätä?"
 
 #: ../gui/rosegardengui.cpp:3512
 msgid "Revert modified document to previous saved version?"
-msgstr "Palauta muutettu dokumentti aikaisemmaksi tallennetuksi versioksi."
+msgstr "Palauta muutettu dokumentti aikaisemmaksi tallennetuksi versioksi?"
 
 #: ../gui/rosegardengui.cpp:3526
 msgid ""
@@ -7874,7 +7877,7 @@ msgstr "Avaa Rosegarden 2.1 -tiedosto"
 
 #: ../gui/rosegardengui.cpp:3840
 msgid "Importing Rosegarden 2.1 file..."
-msgstr "Tuo Rosegarden 2.1 -tiedosto"
+msgstr "Tuo Rosegarden 2.1 -tiedosto..."
 
 #: ../gui/rosegardengui.cpp:3866
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
@@ -7914,7 +7917,7 @@ msgstr "Ajetaan alas jackd..."
 
 #: ../gui/rosegardengui.cpp:4535
 msgid "Starting jackd..."
-msgstr "Aloitetaan jackd"
+msgstr "Aloitetaan jackd..."
 
 #: ../gui/rosegardengui.cpp:4574
 msgid ""
@@ -8002,7 +8005,7 @@ msgstr "Esikatsellaan LilyPond-tiedostoa..."
 
 #: ../gui/rosegardengui.cpp:4756
 msgid "Failed to open a temporary file for Lilypond export."
-msgstr "Väliaikaisen tiedoston lataaminen LilyPond-vientiä varten epäonnistui"
+msgstr "Väliaikaisen tiedoston lataaminen LilyPond-vientiä varten epäonnistui."
 
 #: ../gui/rosegardengui.cpp:4783
 msgid "Lilypond Preview Options"
@@ -8337,7 +8340,7 @@ msgid ""
 "Turn it on and off from the Settings->Rulers menu."
 msgstr ""
 "Sointunimi-viivain.\n"
-"Kytke se päälle ja pois kohdasta Asetukset->Viivaimet -valikko"
+"Kytke se päälle ja pois kohdasta Asetukset->Viivaimet -valikko."
 
 #: ../gui/notationcommands.h:154
 msgid "Change to &Key %1..."
@@ -8381,7 +8384,7 @@ msgstr "Tu&pletti..."
 
 #: ../gui/notationcommands.h:329
 msgid "&Untuplet"
-msgstr "Poista tupletti"
+msgstr "Poista &tupletti"
 
 #: ../gui/notationcommands.h:343
 msgid "Make &Grace Notes"
@@ -8413,11 +8416,11 @@ msgstr "&Pura side"
 
 #: ../gui/notationcommands.h:492 ../gui/notationcommands.h:510
 msgid "Tie Notes at &Barlines"
-msgstr "Sidotut nuotit tahtiviivoilla"
+msgstr "Sidotut nuotit &tahtiviivoilla"
 
 #: ../gui/notationcommands.h:528
 msgid "Split-and-Tie Overlapping &Chords"
-msgstr "Jaa -ja- sido päällekkäiset soinnut"
+msgstr "Jaa -ja- sido päällekkäiset &soinnut"
 
 #: ../gui/notationcommands.h:546
 msgid "Stems &Up"
@@ -9358,7 +9361,7 @@ msgstr "&Siirto"
 #: rc.cpp:6
 #, no-c-format
 msgid "Number of Stereo &Inputs"
-msgstr "Stereo-sisääntulojen lukumäärä"
+msgstr "Stereo-&sisääntulojen lukumäärä"
 
 #: rc.cpp:8
 #, no-c-format
@@ -9408,7 +9411,7 @@ msgstr "&Osat"
 #: rc.cpp:26 rc.cpp:70 rc.cpp:172 rc.cpp:232
 #, no-c-format
 msgid "Edit &With"
-msgstr "Muokkaa työkalulla"
+msgstr "Muokkaa &työkalulla"
 
 #: rc.cpp:28
 #, no-c-format
@@ -9688,7 +9691,7 @@ msgstr "Paniikkinappula"
 #: rc.cpp:252
 #, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
-msgstr "Nollaa kaikki MIDI-laitteet, jos sait lukkiutuneita nuotteja."
+msgstr "Nollaa kaikki MIDI-laitteet, jos sait lukkiutuneita nuotteja"
 
 #: rc.cpp:257
 #, no-c-format
@@ -9793,7 +9796,7 @@ msgstr "Kelaa taaksepäin"
 #: rc.cpp:311
 #, no-c-format
 msgid "Moves the current pointer position back one bar."
-msgstr "Siirtää nykyisen osoittimen sijainnin yhden tahdin taaksepäin"
+msgstr "Siirtää nykyisen osoittimen sijainnin yhden tahdin taaksepäin."
 
 #: rc.cpp:314
 #, no-c-format
@@ -9826,7 +9829,7 @@ msgstr ""
 #: rc.cpp:326
 #, no-c-format
 msgid "Stops playback or recording."
-msgstr "Lopettaa toisto tai nauhoituksen"
+msgstr "Lopettaa toisto tai nauhoituksen."
 
 #: rc.cpp:329
 #, no-c-format
@@ -9836,7 +9839,7 @@ msgstr "Pikakelaus"
 #: rc.cpp:331
 #, no-c-format
 msgid "Moves the current pointer position forwards one bar."
-msgstr "Siirtää nykyisen osoittimen sijainnin yhden tahdin eteenpäin"
+msgstr "Siirtää nykyisen osoittimen sijainnin yhden tahdin eteenpäin."
 
 #: rc.cpp:334
 #, no-c-format
