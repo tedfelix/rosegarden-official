@@ -2883,9 +2883,12 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch, int velocity)
 
     if (velocity < 0) velocity = Rosegarden::MidiMaxValue;
 
+    pitch = pitch + s.getTranspose();
+    if (pitch < 0 || pitch > 127) return;
+
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
-                               pitch + s.getTranspose(),
+                               pitch,
                                velocity,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 250000000),
