@@ -1654,7 +1654,7 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 void MatrixView::slotKeyReleased(unsigned int y, bool repeating)
 {
     MatrixStaff& staff = *(m_staffs[0]);
-    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasCoords(-1, y);
+    int evPitch = staff.getHeightAtCanvasCoords(-1, y);
 
     if (m_lastNote == evPitch && repeating)
         return;
@@ -1674,9 +1674,12 @@ void MatrixView::slotKeyReleased(unsigned int y, bool repeating)
     if (ins == 0)
         return;
 
+    evPitch = evPitch + segment.getTranspose();
+    if (evPitch < 0 || evPitch > 127) return;
+
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNote,
-                               evPitch + segment.getTranspose(),
+                               evPitch,
                                0,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime::zeroTime,
@@ -1796,13 +1799,16 @@ void MatrixView::playNote(Rosegarden::Event *event)
     Rosegarden::RealTime duration =
             comp.getElapsedRealTime(event->getDuration());
 
+    int pitch = event->get<Rosegarden::Int>
+	(Rosegarden::BaseProperties::PITCH) +
+	m_staffs[0]->getSegment().getTranspose();
+    if (pitch < 0 || pitch > 127) return;
+
     // create
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
                                (Rosegarden::MidiByte)
-                               event->get<Rosegarden::Int>
-                               (Rosegarden::BaseProperties::PITCH) +
-			       m_staffs[0]->getSegment().getTranspose(),
+                               pitch,
                                velocity,
                                Rosegarden::RealTime::zeroTime,
                                duration,
@@ -1830,9 +1836,12 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch,
 
     if (velocity < 0) velocity = Rosegarden::MidiMaxValue;
 
+    pitch = pitch + segment.getTranspose();
+    if (pitch < 0 || pitch > 127) return;
+
     Rosegarden::MappedEvent mE(ins->getId(),
                                Rosegarden::MappedEvent::MidiNoteOneShot,
-                               pitch + segment.getTranspose(),
+                               pitch,
                                velocity,
                                Rosegarden::RealTime::zeroTime,
                                Rosegarden::RealTime(0, 250000000),
