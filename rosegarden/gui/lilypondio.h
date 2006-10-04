@@ -139,6 +139,7 @@ private:
 	// 1 -> Lilypond 2.4
 	// 2 -> Lilypond 2.6
 	// 3 -> Lilypond 2.8
+	// 4 -> Lilypond 2.10
     int m_languageLevel;
 };
 

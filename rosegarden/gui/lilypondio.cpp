@@ -402,6 +402,7 @@ LilypondExporter::write()
 	// 1 -> Lilypond 2.4
 	// 2 -> Lilypond 2.6
 	// 3 -> Lilypond 2.8
+	// 4 -> Lilypond 2.10
 
     case 0:
 	str << "\\version \"2.2.0\"" << std::endl;
@@ -417,6 +418,10 @@ LilypondExporter::write()
 
     case 3:
 	str << "\\version \"2.8.0\"" << std::endl;
+	break;
+
+    case 4:
+	str << "\\version \"2.10.0\"" << std::endl;
 	break;
 
     default:
