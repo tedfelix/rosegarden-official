@@ -42,6 +42,9 @@
 #include "kdeext/KStartupLogo.h"
 
 #include "gui/application/RosegardenApplication.h"
+#include "gui/application/RosegardenDCOP.h"
+
+using namespace Rosegarden;
 
 /*! \mainpage Rosegarden-4 global design
  

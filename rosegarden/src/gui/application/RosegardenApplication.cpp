@@ -42,6 +42,8 @@
 #include <qsessionmanager.h>
 #include <qstring.h>
 #include <dcopclient.h>
+#include <kconfig.h>
+#include <kstatusbar.h>
 
 
 namespace Rosegarden
