@@ -28,8 +28,6 @@
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/application/RosegardenDCOP.h"
@@ -82,15 +80,19 @@
 #include "document/io/CsoundExporter.h"
 #include "document/io/HydrogenLoader.h"
 #include "document/io/LilypondExporter.h"
+#include "document/MultiViewCommandHistory.h"
+#include "document/io/RG21Loader.h"
 #include "document/io/MupExporter.h"
 #include "document/io/MusicXmlExporter.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/AudioPluginDialog.h"
 #include "gui/dialogs/AudioSplitDialog.h"
 #include "gui/dialogs/BeatsBarsDialog.h"
 #include "gui/dialogs/CompositionLengthDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
+#include "gui/dialogs/CountdownDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
@@ -109,9 +111,11 @@
 #include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
+#include "gui/editors/segment/CompositionView.h"
 #include "gui/editors/segment/ControlEditorDialog.h"
 #include "gui/editors/segment/MarkerEditorDialog.h"
 #include "gui/editors/segment/PlayListDialog.h"
+#include "gui/editors/segment/PlayList.h"
 #include "gui/editors/segment/SegmentEraser.h"
 #include "gui/editors/segment/SegmentJoiner.h"
 #include "gui/editors/segment/SegmentMover.h"
@@ -122,6 +126,7 @@
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
 #include "gui/editors/tempo/TempoView.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/kdeext/KStartupLogo.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
@@ -153,7 +158,9 @@
 #include "sound/MappedStudio.h"
 #include "sound/MidiFile.h"
 #include "sound/PluginIdentifier.h"
+#include "sound/SoundDriver.h"
 #include "StartupTester.h"
+#include <dcopclient.h>
 #include <dcopobject.h>
 #include <dcopref.h>
 #include <kaction.h>
@@ -164,18 +171,24 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kinputdialog.h>
+#include <kio/netaccess.h>
 #include <kkeydialog.h>
+#include <klocale.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <kprocess.h>
+#include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <kstddirs.h>
 #include <ktempfile.h>
+#include <ktip.h>
 #include <ktoolbar.h>
 #include <kurl.h>
 #include <kxmlguiclient.h>
 #include <qaccel.h>
+#include <qcanvas.h>
 #include <qcstring.h>
 #include <qcursor.h>
 #include <qdatastream.h>
@@ -189,6 +202,8 @@
 #include <qobject.h>
 #include <qobjectlist.h>
 #include <qpixmap.h>
+#include <qpopupmenu.h>
+#include <qpushbutton.h>
 #include <qregexp.h>
 #include <qslider.h>
 #include <qstring.h>
@@ -3183,7 +3198,7 @@ void RosegardenGUIApp::slotStatusMsg(QString text)
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
     statusBar()->clear();
-    statusBar()->changeItem(text, ID_STATUS_MSG);
+    statusBar()->changeItem(text, EditViewBase::ID_STATUS_MSG);
 }
 
 void RosegardenGUIApp::slotStatusHelpMsg(QString text)
@@ -3718,7 +3733,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
 
         for (Segment::iterator si = segment.begin();
                 segment.isBeforeEndMarker(si); ++si) {
-            if ((*si)->isa(Key::EventType)) {
+            if ((*si)->isa(Rosegarden::Key::EventType)) {
                 firstKeyTime = (*si)->getAbsoluteTime();
                 break;
             }
@@ -4481,6 +4496,7 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
     return res;
 }
 
+#ifdef HAVE_LIBJACK
 bool RosegardenGUIApp::launchJack()
 {
     KConfig* config = kapp->config();
@@ -4529,6 +4545,7 @@ bool RosegardenGUIApp::launchJack()
 
     return m_jackProcess != 0 ? m_jackProcess->isRunning() : true;
 }
+#endif
 
 void RosegardenGUIApp::slotDocumentDevicesResyncd()
 {
@@ -4720,6 +4737,9 @@ void RosegardenGUIApp::slotExportLilypond()
     exportLilypondFile(fileName);
 }
 
+std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
+
+
 void RosegardenGUIApp::slotPreviewLilypond()
 {
     KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
@@ -4739,14 +4759,14 @@ void RosegardenGUIApp::slotPreviewLilypond()
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(slotLilypondViewProcessExited(KProcess *)));
-    lilyTempFileMap[proc] = file;
+    m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
 void RosegardenGUIApp::slotLilypondViewProcessExited(KProcess *p)
 {
-    delete lilyTempFileMap[p];
-    lilyTempFileMap.erase(p);
+    delete m_lilyTempFileMap[p];
+    m_lilyTempFileMap.erase(p);
     delete p;
 }
 
