@@ -135,6 +135,6 @@ void RosegardenApplication::saveState(QSessionManager& sm)
 
 QByteArray RosegardenApplication::Empty;
 
-#include "rgapplication.moc"
+#include "RosegardenApplication.moc"
 
 }

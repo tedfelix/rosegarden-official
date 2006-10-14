@@ -39,7 +39,7 @@
 #include "misc/Debug.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "document/RosegardenGUIDoc.h"
-#include "kdeext/KStartupLogo.h"
+#include "gui/kdeext/KStartupLogo.h"
 
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenDCOP.h"

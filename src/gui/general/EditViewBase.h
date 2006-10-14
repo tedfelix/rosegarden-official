@@ -59,8 +59,6 @@ class EditTool;
 
 class EditViewBase : public KDockMainWindow
 {
-    static const unsigned int ID_STATUS_MSG;
-    static const unsigned int NbLayoutRows;
 
     Q_OBJECT
 
@@ -140,6 +138,10 @@ public:
      * Let tools know if their current element has gone
      */
     virtual void handleEventRemoved(Event *event);
+
+    static const unsigned int ID_STATUS_MSG;
+    static const unsigned int NbLayoutRows;
+
 
 signals:
     /**

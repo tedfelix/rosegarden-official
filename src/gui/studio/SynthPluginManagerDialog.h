@@ -47,12 +47,6 @@ class AudioPluginOSCGUIManager;
 class AudioPluginManager;
 
 
-#endif
-
-    class Studio;
-    class AudioPluginManager;
-
-
 class SynthPluginManagerDialog : public KMainWindow
 {
     Q_OBJECT
