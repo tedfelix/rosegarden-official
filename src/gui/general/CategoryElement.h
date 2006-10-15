@@ -36,7 +36,10 @@ namespace Rosegarden
 {
 
 
-
+/*
+ * A container class for storing a collection of PresetElement objects grouped
+ * into the same musical category (eg. Flutes, Clarinets, Strings)
+ */
 class CategoryElement
 {
 public:
@@ -61,11 +64,7 @@ private:
     ElementContainer m_categoryPresets;
 }; // CategoryElement
 
-
-/*
- * Read presets.xml from disk and store a collection of PresetElement objects
- * which can then be used to populate and run the chooser GUI
- */
+typedef std::vector<CategoryElement> CategoriesContainer;
 
 }
 

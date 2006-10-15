@@ -43,7 +43,7 @@ class QAccel;
 class KToggleAction;
 class KConfig;
 class KCommand;
-class EditViewTimeSigNotifier;
+namespace Rosegarden { class EditViewTimeSigNotifier; }
 
 
 namespace Rosegarden

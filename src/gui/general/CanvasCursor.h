@@ -27,6 +27,7 @@
 #define _RG_CANVASCURSOR_H_
 
 
+#include <qcanvas.h>
 
 class QCanvas;
 
