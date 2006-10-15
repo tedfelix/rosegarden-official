@@ -27,8 +27,6 @@
 #include <kapplication.h>
 
 #include "base/Event.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "AudioPlayingDialog.h"
@@ -46,12 +44,16 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/application/RosegardenApplication.h"
+#include "gui/general/AudioListItem.h"
+#include "gui/general/AudioListView.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/WAVAudioFile.h"
 #include "UnusedAudioSelectionDialog.h"
+#include <klocale.h>
+#include <kstddirs.h>
 #include <kaction.h>
 #include <kcommand.h>
 #include <kfiledialog.h>
@@ -63,10 +65,12 @@
 #include <kstdaction.h>
 #include <kurl.h>
 #include <kxmlguiclient.h>
+#include <kio/netaccess.h>
 #include <qaccel.h>
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qdialog.h>
+#include <qdragobject.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qiconset.h>

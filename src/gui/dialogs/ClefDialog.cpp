@@ -25,9 +25,10 @@
 
 #include "ClefDialog.h"
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/BigArrowButton.h"
+#include <klocale.h>
 #include <kdialogbase.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>

@@ -33,12 +33,12 @@
 class QWidget;
 class QRadioButton;
 class QLabel;
-class BigArrowButton;
 
 
 namespace Rosegarden
 {
 
+class BigArrowButton;
 class NotePixmapFactory;
 
 
