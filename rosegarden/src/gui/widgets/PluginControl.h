@@ -88,7 +88,7 @@ protected:
     ControlType          m_type;
     PluginPort          *m_port;
 
-    Rotary    *m_dial;
+    ::Rosegarden::Rotary              *m_dial; // we have to specify the namespace here otherwise gcc 4.1 thinks it's the enum value above
     AudioPluginManager  *m_pluginManager;
 
     int                  m_index;

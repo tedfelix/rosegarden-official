@@ -37,7 +37,7 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/AudioPluginOSCGUIManager.h"
 #include "gui/studio/StudioControl.h"
-#include "PluginControl.h"
+#include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
@@ -54,7 +54,7 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
-
+#include <set>
 
 namespace Rosegarden
 {
@@ -167,11 +167,14 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_accelerators = new QAccel(this);
 }
 
+#ifdef HAVE_LIBLO
+
 void
 AudioPluginDialog::slotDetails()
 {
     slotShowGUI();
 }
+#endif
 
 void
 AudioPluginDialog::slotShowGUI()
