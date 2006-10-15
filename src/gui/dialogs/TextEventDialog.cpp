@@ -350,11 +350,13 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_text->setText(strtoqstr(defaultText.getText()));
 }
 
+std::string
 TextEventDialog::getTextType() const
 {
     return m_styles[m_typeCombo->currentItem()];
 }
 
+std::string
 TextEventDialog::getTextString() const
 {
     return std::string(qstrtostr(m_text->text()));

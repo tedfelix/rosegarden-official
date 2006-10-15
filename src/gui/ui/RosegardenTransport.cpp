@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'gui/ui/RosegardenTransport.ui'
 **
-** Created: Fri Oct 13 00:16:53 2006
+** Created: Sun Oct 15 22:32:16 2006
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.6   edited Aug 31 2005 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -1386,7 +1386,7 @@ RosegardenTransport::RosegardenTransport( QWidget* parent,  const char* name )
     TempoLabel_font.setItalic( TRUE );
     TempoLabel->setFont( TempoLabel_font ); 
 
-    TimeSigDisplay = new RosegardenLabel( LCDBoxFrame, "TimeSigDisplay" );
+    TimeSigDisplay = new Rosegarden::Label( LCDBoxFrame, "TimeSigDisplay" );
     TimeSigDisplay->setGeometry( QRect( 23, 51, 33, 16 ) );
 
     ToEndLabel = new QLabel( LCDBoxFrame, "ToEndLabel" );
@@ -1539,7 +1539,7 @@ RosegardenTransport::RosegardenTransport( QWidget* parent,  const char* name )
     ThousandthsPixmap->setPixmap( image8 );
     ThousandthsPixmap->setScaledContents( TRUE );
 
-    TempoDisplay = new RosegardenLabel( LCDBoxFrame, "TempoDisplay" );
+    TempoDisplay = new Rosegarden::Label( LCDBoxFrame, "TempoDisplay" );
     TempoDisplay->setGeometry( QRect( 159, 51, 55, 16 ) );
 
     TimeDisplayButton = new QPushButton( MainFrame, "TimeDisplayButton" );

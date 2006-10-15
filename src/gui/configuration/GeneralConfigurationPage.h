@@ -26,15 +26,15 @@
 #ifndef _RG_GENERALCONFIGURATIONPAGE_H_
 #define _RG_GENERALCONFIGURATIONPAGE_H_
 
-#include "gui/editors/eventlist/EventView.h"
 #include "TabbedConfigurationPage.h"
+#include "gui/editors/eventlist/EventView.h"
 #include <qstring.h>
-#include <klocale.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-
+#include <klocale.h>
+#include <kiconloader.h>
 
 class QWidget;
 class KConfig;
@@ -111,6 +111,14 @@ protected:
     QComboBox* m_sidebarStyle;
 
 };
+
+static inline QPixmap loadIcon(const char *name)
+{
+  return KGlobal::instance()->iconLoader()
+    ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
+}
+
+
 
 
 }

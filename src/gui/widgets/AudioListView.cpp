@@ -25,6 +25,9 @@
 
 #include "AudioListView.h"
 
+#include "gui/widgets/AudioListItem.h"
+#include "qdragobject.h"
+
 namespace Rosegarden {
         
 AudioListView::AudioListView(QWidget *parent, const char *name)

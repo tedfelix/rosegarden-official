@@ -31,6 +31,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/BigArrowButton.h"
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <qbuttongroup.h>

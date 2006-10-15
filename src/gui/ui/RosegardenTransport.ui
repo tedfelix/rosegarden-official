@@ -3246,7 +3246,7 @@
                     <string>TEMPO</string>
                 </property>
             </widget>
-            <widget class="RosegardenLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TimeSigDisplay</cstring>
                 </property>
@@ -3945,7 +3945,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="RosegardenLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TempoDisplay</cstring>
                 </property>
@@ -4266,7 +4266,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>RosegardenLabel</class>
+        <class>Rosegarden::Label</class>
         <header location="local">widgets.h</header>
         <sizehint>
             <width>-1</width>

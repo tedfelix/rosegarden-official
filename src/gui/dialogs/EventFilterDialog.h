@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -35,13 +34,12 @@
 #include "base/Event.h"
 #include "document/ConfigGroups.h"
 #include <qcheckbox.h>
-
+#include <qcombobox.h>
 
 class QWidget;
 class QSpinBox;
 class QPushButton;
 class QGridLayout;
-class QComboBox;
 class KConfig;
 
 
@@ -139,6 +137,47 @@ protected:
 
     bool wheelIsInclusive()    { return (m_wheelAmountIncludeComboBox->currentItem()  == 0); }
 #endif
+
+protected slots:
+
+    // set widget values to include everything
+    void slotToggleAll();
+
+    // set widget values to include nothing
+    void slotToggleNone();
+
+    // write out settings to kconfig data for next time and call accept()
+    virtual void slotOk();
+
+    // hooked up to disable their associated widgets
+    void slotNoteCheckBoxToggle(int);
+// DEPRECATED
+    void slotControllerCheckBoxToggle(int);
+    void slotWheelCheckBoxToggle(int);
+// END DEPRECATED
+    
+    // update note name text display and ensure From <= To
+    void slotPitchFromChanged(int pitch);
+    void slotPitchToChanged(int pitch);
+    
+    // ensure From <= To to guarantee a logical range for these sets
+    void slotVelocityFromChanged(int velocity);
+    void slotVelocityToChanged(int velocity);
+    void slotDurationFromChanged(int index);
+    void slotDurationToChanged(int index);
+
+// DEPRECATED
+    void slotControllerFromChanged(int controller);
+    void slotControllerToChanged(int controller);
+    void slotValueFromChanged(int value);
+    void slotValueToChanged(int value);
+    void slotWheelFromChanged(int value);
+    void slotWheelToChanged(int value);
+// END DEPRECATED
+
+    // create a pitch chooser widget sub-dialog to show pitch on staff
+    void slotPitchFromChooser();
+    void slotPitchToChooser();
     
 
     //---------[ data members ]-----------------------------
@@ -180,46 +219,6 @@ protected:
 
     std::vector<timeT> m_standardQuantizations;
 
-protected slots:
-
-    // set widget values to include everything
-    void slotToggleAll();
-
-    // set widget values to include nothing
-    void slotToggleNone();
-
-    // write out settings to kconfig data for next time and call accept()
-    virtual void slotOk();
-
-    // hooked up to disable their associated widgets
-    void slotNoteCheckBoxToggle(int);
-#ifdef COMPILE_DEPRECATED
-    void slotControllerCheckBoxToggle(int);
-    void slotWheelCheckBoxToggle(int);
-#endif
-    
-    // update note name text display and ensure From <= To
-    void slotPitchFromChanged(int pitch);
-    void slotPitchToChanged(int pitch);
-    
-    // ensure From <= To to guarantee a logical range for these sets
-    void slotVelocityFromChanged(int velocity);
-    void slotVelocityToChanged(int velocity);
-    void slotDurationFromChanged(int index);
-    void slotDurationToChanged(int index);
-
-#ifdef COMPILE_DEPRECATED
-    void slotControllerFromChanged(int controller);
-    void slotControllerToChanged(int controller);
-    void slotValueFromChanged(int value);
-    void slotValueToChanged(int value);
-    void slotWheelFromChanged(int value);
-    void slotWheelToChanged(int value);
-#endif
-
-    // create a pitch chooser widget sub-dialog to show pitch on staff
-    void slotPitchFromChooser();
-    void slotPitchToChooser();
 };
 
 

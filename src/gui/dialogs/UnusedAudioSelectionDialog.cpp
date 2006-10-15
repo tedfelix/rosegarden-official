@@ -70,6 +70,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     m_listView->setSelectionMode(QListView::Multi);
 }
 
+std::vector<QString>
 UnusedAudioSelectionDialog::getSelectedAudioFileNames() const
 {
     std::vector<QString> selectedNames;

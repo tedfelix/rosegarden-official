@@ -85,6 +85,9 @@ public slots:
 
 protected:
 
+    std::string getTextType() const;
+    std::string getTextString() const;
+
     //--------------- Data members ---------------------------------
 
     QLineEdit *m_text;
@@ -117,8 +120,6 @@ protected:
     std::vector<std::string> m_styles;
 //    std::vector<std::string> m_directives;
 
-    std::string getTextType() const;
-    std::string getTextString() const;
 };
 
 

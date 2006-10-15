@@ -32,7 +32,7 @@
 #include <qstring.h>
 #include <qvbox.h>
 #include <qwidget.h>
-
+#include <cmath>
 
 namespace Rosegarden
 {

@@ -29,6 +29,7 @@
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/BigArrowButton.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <qbuttongroup.h>
@@ -212,7 +213,7 @@ KeySignatureDialog::slotKeyUp()
     try {
         m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
-    } catch (Key::BadKeySpec s) {
+    } catch (Rosegarden::Key::BadKeySpec s) {
         std::cerr << s.getMessage() << std::endl;
         setValid(false);
     }
@@ -241,7 +242,7 @@ KeySignatureDialog::slotKeyDown()
     try {
         m_key = Rosegarden::Key(ac, sharp, m_key.isMinor());
         setValid(true);
-    } catch (Key::BadKeySpec s) {
+    } catch (Rosegarden::Key::BadKeySpec s) {
         std::cerr << s.getMessage() << std::endl;
         setValid(false);
     }
@@ -249,6 +250,14 @@ KeySignatureDialog::slotKeyDown()
     regenerateKeyCombo();
     redrawKeyPixmap();
 }
+
+struct KeyNameComparator
+{
+    bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) {
+        return (k1.getName() < k2.getName());
+    }
+};
+
 
 void
 KeySignatureDialog::regenerateKeyCombo()
@@ -258,13 +267,13 @@ KeySignatureDialog::regenerateKeyCombo()
 
     m_ignoreComboChanges = true;
     QString currentText = m_keyCombo->currentText();
-    Key::KeyList keys(Key::getKeys(m_key.isMinor()));
+    Rosegarden::Key::KeyList keys(Rosegarden::Key::getKeys(m_key.isMinor()));
     m_keyCombo->clear();
 
     std::sort(keys.begin(), keys.end(), KeyNameComparator());
     bool textSet = false;
 
-    for (Key::KeyList::iterator i = keys.begin();
+    for (Rosegarden::Key::KeyList::iterator i = keys.begin();
             i != keys.end(); ++i) {
 
         QString name(strtoqstr(i->getName()));
@@ -292,7 +301,7 @@ KeySignatureDialog::isValid() const
     return m_valid;
 }
 
-Key
+Rosegarden::Key
 KeySignatureDialog::getKey() const
 {
     return m_key;
@@ -330,7 +339,7 @@ KeySignatureDialog::slotKeyNameChanged(const QString &s)
             name = name.substr(0, space);
         m_keyCombo->setEditText(strtoqstr(name));
 
-    } catch (Key::BadKeyName s) {
+    } catch (Rosegarden::Key::BadKeyName s) {
         std::cerr << s.getMessage() << std::endl;
         setValid(false);
     }
@@ -349,7 +358,7 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
     try {
         m_key = Rosegarden::Key(name);
         setValid(true);
-    } catch (Key::BadKeyName s) {
+    } catch (Rosegarden::Key::BadKeyName s) {
         std::cerr << s.getMessage() << std::endl;
         setValid(false);
     }
@@ -365,6 +374,7 @@ KeySignatureDialog::setValid(bool valid)
     enableButton(Ok, m_valid);
 }
 
+std::string
 KeySignatureDialog::getKeyName(const QString &s, bool minor)
 {
     QString u((s.length() >= 1) ? (s.left(1).upper() + s.right(s.length() - 1))

@@ -143,6 +143,7 @@ TriggerSegmentDialog::getRetune() const
     return m_retune->isChecked();
 }
 
+std::string
 TriggerSegmentDialog::getTimeAdjust() const
 {
     int option = m_adjustTime->currentItem();
