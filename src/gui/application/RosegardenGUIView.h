@@ -26,14 +26,14 @@
 #ifndef _RG_ROSEGARDENGUIVIEW_H_
 #define _RG_ROSEGARDENGUIVIEW_H_
 
+#include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/Selection.h"
 #include "base/Track.h"
 #include "sound/AudioFile.h"
+#include "gui/editors/segment/TrackEditor.h"
 #include <qstring.h>
 #include <qvbox.h>
-#include "base/Event.h"
-#include "gui/editors/segment/TrackEditor.h"
 
 
 class QWidget;
@@ -60,7 +60,7 @@ class MappedEvent;
 class InstrumentParameterBox;
 class EventView;
 class Composition;
-
+class LevelInfo;
 
 /**
  * The RosegardenGUIView class provides the view widget for the

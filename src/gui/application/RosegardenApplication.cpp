@@ -25,7 +25,6 @@
 
 #include "RosegardenApplication.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
@@ -33,6 +32,7 @@
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "RosegardenGUIApp.h"
 #include <kcmdlineargs.h>
+#include <klocale.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
@@ -135,6 +135,7 @@ void RosegardenApplication::saveState(QSessionManager& sm)
 
 QByteArray RosegardenApplication::Empty;
 
-#include "RosegardenApplication.moc"
 
 }
+
+#include "RosegardenApplication.moc"

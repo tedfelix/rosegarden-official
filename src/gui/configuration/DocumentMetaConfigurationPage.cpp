@@ -33,6 +33,7 @@
 #include "base/Configuration.h"
 #include "base/NotationTypes.h"
 #include "base/PropertyName.h"
+#include "base/Quantizer.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "ConfigurationPage.h"

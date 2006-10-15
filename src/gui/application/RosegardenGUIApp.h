@@ -26,19 +26,19 @@
 #ifndef _RG_ROSEGARDENGUIAPP_H_
 #define _RG_ROSEGARDENGUIAPP_H_
 
+#include <map>
+#include <set>
 #include "base/MidiProgram.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
-#include <map>
 #include "RosegardenIface.h"
-#include <set>
+#include "base/Event.h"
+#include "document/ConfigGroups.h"
+#include "sound/AudioFile.h"
+#include "sound/Midi.h"
 #include <kdockwidget.h>
 #include <qstring.h>
 #include <qvaluevector.h>
-#include "base/Event.h"
-#include "sound/Midi.h"
-#include "document/ConfigGroups.h"
-#include "sound/AudioFile.h"
 
 
 class QWidget;
@@ -92,7 +92,6 @@ class AudioPluginManager;
 class AudioPluginDialog;
 class AudioMixerWindow;
 class AudioManagerDialog;
-
 
 /**
   * The base class for RosegardenGUI application windows. It sets up the main

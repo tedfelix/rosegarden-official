@@ -52,6 +52,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
+#include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/editors/eventlist/EventView.h"
@@ -60,16 +61,22 @@
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
+#include "gui/editors/segment/BarButtons.h"
+#include "gui/editors/segment/CompositionView.h"
 #include "gui/editors/segment/SegmentSelector.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/seqmanager/SequencerMapper.h"
+#include "gui/rulers/ChordNameRuler.h"
+#include "gui/rulers/LoopRuler.h"
+#include "gui/rulers/TempoRuler.h"
 #include "RosegardenGUIApp.h"
 #include "SetWaitCursor.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedEvent.h"
 #include <kcommand.h>
+#include <kconfig.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <qapplication.h>
@@ -84,6 +91,24 @@
 
 namespace Rosegarden
 {
+
+// Use this to define the basic unit of the main QCanvas size.
+//
+// This apparently arbitrary figure is what we think is an
+// appropriate width in pixels for a 4/4 bar.  Beware of making it
+// too narrow, as shorter bars will be proportionally smaller --
+// the visual difference between 2/4 and 4/4 is perhaps greater
+// than it sounds.
+//
+static double barWidth44 = 100.0;
+
+const QWidget *RosegardenGUIView::m_lastActiveMainWindow = 0;
+
+// This is the maximum number of matrix, event view or percussion
+// matrix editors to open in a single operation (not the maximum that
+// can be open at a time -- there isn't one)
+//
+static int maxEditorsToOpen = 8;
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      SegmentParameterBox* segmentParameterBox,
