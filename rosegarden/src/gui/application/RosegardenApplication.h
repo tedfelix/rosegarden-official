@@ -29,7 +29,6 @@
 #include <kuniqueapplication.h>
 #include <qcstring.h>
 #include <qstring.h>
-#include <qobject.h>
 
 
 class QSessionManager;
