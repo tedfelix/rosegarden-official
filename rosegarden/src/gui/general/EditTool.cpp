@@ -33,7 +33,7 @@
 #include "RosegardenCanvasView.h"
 #include <kxmlguiclient.h>
 #include <qevent.h>
-#include <qobject.h>
+#include <qpopupmenu.h>
 #include <qstring.h>
 
 

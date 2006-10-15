@@ -40,6 +40,7 @@
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/Instrument.h"
+#include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
@@ -49,6 +50,7 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "base/SoftSynthDevice.h"
 #include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/ViewElement.h"
@@ -78,6 +80,7 @@
 #include <kcommand.h>
 #include <kdockwidget.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 #include <ktabwidget.h>
 #include <kxmlguiclient.h>
 #include <qaccel.h>
@@ -85,8 +88,8 @@
 #include <qdialog.h>
 #include <qframe.h>
 #include <qinputdialog.h>
-#include <qobject.h>
 #include <qobjectlist.h>
+#include <qpopupmenu.h>
 #include <qsize.h>
 #include <qstring.h>
 #include <qtabwidget.h>
@@ -97,6 +100,10 @@
 
 namespace Rosegarden
 {
+
+// Just some simple features we might want to show - make them bit maskable
+//
+static int FeatureShowVelocity = 0x00001; // show the velocity ruler
 
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Segment *> segments,
@@ -412,7 +419,7 @@ EditView::getCurrentDevice()
 
 timeT
 EditView::getInsertionTime(Clef &clef,
-                           Key &key)
+                           Rosegarden::Key &key)
 {
     timeT t = getInsertionTime();
     Segment *segment = getCurrentSegment();
@@ -422,7 +429,7 @@ EditView::getInsertionTime(Clef &clef,
         key = segment->getKeyAtTime(t);
     } else {
         clef = Clef();
-        key = Key();
+        key = ::Rosegarden::Key();
     }
 
     return t;
@@ -1102,7 +1109,7 @@ int
 EditView::getPitchFromNoteInsertAction(QString name,
                                        Accidental &accidental,
                                        const Clef &clef,
-                                       const Key &key)
+                                       const ::Rosegarden::Key &key)
 {
     using namespace Accidentals;
 

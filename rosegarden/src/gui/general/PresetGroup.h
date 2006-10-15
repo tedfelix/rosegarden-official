@@ -41,8 +41,10 @@ class QXmlAttributes;
 namespace Rosegarden
 {
 
-
-
+/*
+ * Read presets.xml from disk and store a collection of PresetElement objects
+ * which can then be used to populate and run the chooser GUI
+ */
 class PresetGroup : public QXmlDefaultHandler
 {
 public:

@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include "misc/Debug.h"
+#include "base/Clipboard.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
@@ -41,6 +42,7 @@
 #include "EditView.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/TimeDialog.h"
+#include "gui/general/EditViewTimeSigNotifier.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include <kaction.h>
 #include <kcommand.h>
@@ -50,10 +52,12 @@
 #include <kglobal.h>
 #include <kkeydialog.h>
 #include <kmainwindow.h>
+#include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <kxmlguiclient.h>
 #include <qaccel.h>
+#include <qcanvas.h>
 #include <qdialog.h>
 #include <qframe.h>
 #include <qiconset.h>
@@ -288,10 +292,9 @@ EditViewBase::slotOpenInEventList()
     emit openInEventList(m_segments);
 }
 
-EditViewBase::m_viewNumberPool;
+std::set<int> EditViewBase::m_viewNumberPool;
 
 std::string
-
 EditViewBase::makeViewLocalPropertyPrefix()
 {
     static char buffer[100];
@@ -526,7 +529,7 @@ void EditViewBase::setCompositionModified(bool c)
 
 bool EditViewBase::getSegmentsOnlyRestsAndClefs()
 {
-    using Segment;
+    using Rosegarden::Segment;
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
 

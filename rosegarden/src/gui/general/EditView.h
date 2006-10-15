@@ -333,7 +333,7 @@ protected:
     int getPitchFromNoteInsertAction(QString actionName,
                                      Accidental &acc,
                                      const Clef &clef,
-                                     const Key &key);
+                                     const ::Rosegarden::Key &key);
 
     /**
      * Abstract method to get the view size
@@ -357,8 +357,7 @@ protected:
      * and the time signature, clef and key at that time.  Default
      * implementation is okay but slow.
      */ 
-    virtual timeT getInsertionTime(Clef &clef,
-                                               Key &key);
+    virtual timeT getInsertionTime(Clef &clef, ::Rosegarden::Key &key);
 
     /**
      * Abstract method to get current staff (the returned staff will be

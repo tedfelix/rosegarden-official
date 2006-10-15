@@ -27,6 +27,7 @@
 
 #include "misc/Debug.h"
 
+#include <qcanvas.h>
 
 namespace Rosegarden
 {

@@ -31,14 +31,17 @@
 
 #include <qstring.h>
 
+#include <vector>
 
 
 
 namespace Rosegarden
 {
 
-
-
+/*
+ * A container class for storing a set of data describing a real world
+ * instrument for which one is writing musical notation
+ */
 class PresetElement
 {
 public:
@@ -72,11 +75,7 @@ private:
     int m_lowPro;
 }; // PresetElement
 
-
-/*
- * A container class for storing a collection of PresetElement objects grouped
- * into the same musical category (eg. Flutes, Clarinets, Strings)
- */
+typedef std::vector<PresetElement> ElementContainer;
 
 }
 

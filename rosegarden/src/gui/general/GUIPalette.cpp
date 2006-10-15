@@ -34,8 +34,6 @@
 namespace Rosegarden
 {
 
-namespace Rosegarden
-{
 QColor GUIPalette::getColour(const char* const colourName)
 {
     KConfig* config = kapp->config();
