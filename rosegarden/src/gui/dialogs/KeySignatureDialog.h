@@ -65,7 +65,7 @@ public:
                        QString explanatoryText = 0);
 
     bool isValid() const;
-    Key getKey() const;
+    ::Rosegarden::Key getKey() const;
 
     bool shouldApplyToAll() const;
     bool shouldBeTransposed() const; 
@@ -82,6 +82,7 @@ protected:
     void redrawKeyPixmap();
     void regenerateKeyCombo();
     void setValid(bool valid);
+    std::string getKeyName(const QString &s, bool minor);
 
     //--------------- Data members ---------------------------------
 
@@ -104,7 +105,6 @@ protected:
     QRadioButton *m_convertButton;
     QRadioButton *m_transposeButton;
 
-    std::string getKeyName(const QString &s, bool minor);
 };
 
 

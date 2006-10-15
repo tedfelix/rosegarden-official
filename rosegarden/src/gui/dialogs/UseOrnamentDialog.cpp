@@ -216,6 +216,7 @@ UseOrnamentDialog::getRetune() const
     return m_retune->isChecked();
 }
 
+std::string
 UseOrnamentDialog::getTimeAdjust() const
 {
     int option = m_adjustTime->currentItem();

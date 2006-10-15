@@ -30,8 +30,10 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/studio/StudioControl.h"
+#include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
 #include <kconfig.h>
 #include <kglobal.h>
@@ -53,10 +55,9 @@
 namespace Rosegarden
 {
 
-namespace Rosegarden
-            TransportDialog::TransportDialog(QWidget *parent,
-                                             const char *name,
-                                             WFlags flags):
+TransportDialog::TransportDialog(QWidget *parent,
+                                 const char *name,
+                                 WFlags flags):
             KDockMainWindow(parent, name, flags | WType_Dialog | WDestructiveClose),
             m_transport(0),
             m_lastTenHours(0),

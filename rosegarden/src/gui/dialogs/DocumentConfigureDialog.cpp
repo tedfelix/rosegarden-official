@@ -32,6 +32,7 @@
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/configuration/ColourConfigurationPage.h"
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
+#include "gui/configuration/GeneralConfigurationPage.h"
 #include <kdialogbase.h>
 #include <qstring.h>
 #include <qwidget.h>

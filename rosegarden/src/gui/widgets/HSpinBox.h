@@ -37,52 +37,22 @@ namespace Rosegarden
 
 class HSpinBox : public QSpinBox
 {
-    QString mapValueToText(int j)
-    {
-        QString str;
-        str.sprintf(m_format, float(j) / m_scaleFactor);
-        return str;
-    }
+    QString mapValueToText(int j);
 
-    int mapTextToValue( bool* ok )
-    {
-        *ok = true;
-        float f = atof(text());
-        return int(f * m_scaleFactor);
-    }
+    int mapTextToValue( bool* ok );
   
 public:
     HSpinBox( int minV, int maxV, int step, QWidget* parent,
-              double bottom, double top, int decimals, float initialValue)
-      : QSpinBox(minV,maxV,step,parent)
-    {
-        setValidator(new QDoubleValidator(bottom,top,decimals,this));
-        initialize(decimals);
-        setValuef(initialValue);
-    }
+              double bottom, double top, int decimals, float initialValue);
 
   //constructor with default settings
     HSpinBox( QWidget* parent,  float initialValue = 0.2, int step=1, 
               double bottom=-25.0, double top=25.0, int decimals=3,
-              const QObject* recv=NULL, const char* mem=NULL)
-      : QSpinBox((int)(bottom*pow(10.0, decimals)), 
-                 (int)(top*pow(10.0, decimals)), step, parent)
-    {
-        setValidator(new QDoubleValidator(bottom,top,decimals,this));
-        initialize(decimals);
-        setValuef(initialValue);
-        if (recv != NULL && mem != NULL)
-          QObject::connect(this, SIGNAL(valueChanged(int)), recv, mem);
-    }
+              const QObject* recv=NULL, const char* mem=NULL);
   
-    float valuef() { return float(value()) / m_scaleFactor; }
-    void setValuef(float v) { setValue(static_cast<int>(v * m_scaleFactor)); }
-
-private:
-    void initialize(int digits) {
-        m_scaleFactor = pow(10.0, digits);
-        sprintf(m_format, "%c%1i.%1if", '%', digits+3, digits);
-    }
+    float valuef();
+    void setValuef(float v);
+    void initialize(int digits);
 
 private: 
 

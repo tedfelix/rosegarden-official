@@ -33,11 +33,13 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenGUIDoc.h"
+#include "sound/SF2PatchExtractor.h"
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 #include <kurl.h>
+#include <kio/netaccess.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
@@ -209,37 +211,37 @@ ImportDeviceDialog::slotCancel()
     reject();
 }
 
-ImportDeviceDialog::getDeviceName() const
+std::string  ImportDeviceDialog::getDeviceName() const
 {
     return m_device->getName();
 }
 
-ImportDeviceDialog::getBanks() const
+const BankList& ImportDeviceDialog::getBanks() const
 {
     return m_device->getBanks();
 }
 
-ImportDeviceDialog::getPrograms() const
+const ProgramList& ImportDeviceDialog::getPrograms() const
 {
     return m_device->getPrograms();
 }
 
-ImportDeviceDialog::getKeyMappings() const
+const KeyMappingList& ImportDeviceDialog::getKeyMappings() const
 {
     return m_device->getKeyMappings();
 }
 
-ImportDeviceDialog::getControllers() const
+const ControlList& ImportDeviceDialog::getControllers() const
 {
     return m_device->getControlParameters();
 }
 
-ImportDeviceDialog::getLibrarianName() const
+std::string ImportDeviceDialog::getLibrarianName() const
 {
     return m_device->getLibrarianName();
 }
 
-ImportDeviceDialog::getLibrarianEmail() const
+std::string ImportDeviceDialog::getLibrarianEmail() const
 {
     return m_device->getLibrarianEmail();
 }

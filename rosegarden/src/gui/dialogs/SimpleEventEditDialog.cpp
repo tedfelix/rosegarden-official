@@ -27,17 +27,18 @@
 #include <qlayout.h>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/editors/guitar/Fingering.h"
+#include "misc/Strings.h"
 #include "PitchDialog.h"
 #include "TimeDialog.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <kfiledialog.h>
+#include <klocale.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
 #include <qfile.h>
@@ -97,7 +98,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         m_typeCombo->insertItem(strtoqstr(Text::EventType));
         m_typeCombo->insertItem(strtoqstr(Note::EventRestType));
         m_typeCombo->insertItem(strtoqstr(Clef::EventType));
-        m_typeCombo->insertItem(strtoqstr(Key::EventType));
+        m_typeCombo->insertItem(strtoqstr(::Rosegarden::Key::EventType));
         m_typeCombo->insertItem(strtoqstr(Guitar::Fingering::EventType));
 
         // Connect up the combos
@@ -609,7 +610,7 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(10);
-    } else if (m_type == Key::EventType) {
+    } else if (m_type == ::Rosegarden::Key::EventType) {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -624,7 +625,7 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabel->setText(i18n("Key name:"));
 
         try {
-            Key key(m_event);
+            ::Rosegarden::Key key(m_event);
             m_controllerLabelValue->setText(strtoqstr(key.getName()));
         } catch (...) {
             m_controllerLabelValue->setText(i18n("<none>"));
@@ -719,8 +720,8 @@ SimpleEventEditDialog::getEvent()
             subordering = Indication::EventSubOrdering;
         } else if (m_type == Clef::EventType) {
             subordering = Clef::EventSubOrdering;
-        } else if (m_type == Key::EventType) {
-            subordering = Key::EventSubOrdering;
+        } else if (m_type == ::Rosegarden::Key::EventType) {
+            subordering = ::Rosegarden::Key::EventSubOrdering;
         } else if (m_type == Text::EventType) {
             subordering = Text::EventSubOrdering;
         } else if (m_type == Note::EventRestType) {
@@ -784,9 +785,9 @@ SimpleEventEditDialog::getEvent()
         event.set<String>(Clef::ClefPropertyName,
                           qstrtostr(m_controllerLabelValue->text()));
 
-    } else if (m_type == Key::EventType) {
+    } else if (m_type == ::Rosegarden::Key::EventType) {
 
-        event.set<String>(Key::KeyPropertyName,
+        event.set<String>(::Rosegarden::Key::KeyPropertyName,
                           qstrtostr(m_controllerLabelValue->text()));
 
     } else if (m_type == SystemExclusive::EventType) {

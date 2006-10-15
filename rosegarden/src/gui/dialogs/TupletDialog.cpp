@@ -181,6 +181,7 @@ TupletDialog::slotHasTimingChanged()
     m_timingDisplayBox->setEnabled(!m_hasTimingAlready->isChecked());
 }
 
+Note::Type
 TupletDialog::getUnitType() const
 {
     return Note::Shortest + m_unitCombo->currentItem();

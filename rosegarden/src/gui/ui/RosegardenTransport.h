@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'gui/ui/RosegardenTransport.ui'
 **
-** Created: Fri Oct 13 00:16:53 2006
+** Created: Sun Oct 15 22:32:16 2006
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.6   edited Aug 31 2005 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -18,7 +18,9 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QSpacerItem;
-class RosegardenLabel;
+namespace Rosegarden {
+class Label;
+}
 class QPushButton;
 class QLabel;
 
@@ -59,7 +61,7 @@ public:
     QLabel* DivisionLabel;
     QLabel* DivisionDisplay;
     QLabel* TempoLabel;
-    RosegardenLabel* TimeSigDisplay;
+    Rosegarden::Label* TimeSigDisplay;
     QLabel* ToEndLabel;
     QLabel* TimeDisplayLabel;
     QLabel* TenThousandthsPixmap;
@@ -68,7 +70,7 @@ public:
     QLabel* HundredthColonPixmap;
     QLabel* TenthsPixmap;
     QLabel* ThousandthsPixmap;
-    RosegardenLabel* TempoDisplay;
+    Rosegarden::Label* TempoDisplay;
     QPushButton* TimeDisplayButton;
     QPushButton* PanelOpenButton;
     QPushButton* RewindButton;

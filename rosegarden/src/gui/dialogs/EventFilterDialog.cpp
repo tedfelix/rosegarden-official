@@ -27,32 +27,33 @@
 
 
 #include "EventFilterDialog.h"
-#include <qlayout.h>
-#include <kapplication.h>
 
-#include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Debug.h"
+#include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
+#include <klocale.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qdialog.h>
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
 #include <qspinbox.h>
 #include <qstring.h>
 #include <qtooltip.h>
+#include <qvbox.h>
 #include <qwidget.h>
 
 
@@ -395,12 +396,14 @@ EventFilterDialog::slotToggleAll()
     m_velocityToSpinBox ->setValue(127);
     m_noteDurationFromComboBox ->setCurrentItem(11); // hard coded; should be variable
     m_noteDurationToComboBox ->setCurrentItem(0);  // 0 = unlimited; 11 = 0
+#ifdef COMPILE_DEPRECATED    
     m_controllerNumberFromSpinBox->setValue(0);
     m_controllerNumberToSpinBox ->setValue(127);
     m_controllerValueFromSpinBox ->setValue(0);
     m_controllerValueToSpinBox ->setValue(127);
     m_wheelAmountFromSpinBox ->setValue( -8192);
     m_wheelAmountToSpinBox ->setValue(8191);
+#endif    
 }
 
 void
@@ -413,12 +416,14 @@ EventFilterDialog::slotToggleNone()
     m_velocityToSpinBox ->setValue(0);
     m_noteDurationFromComboBox ->setCurrentItem(11);
     m_noteDurationToComboBox ->setCurrentItem(11);
+#ifdef COMPILE_DEPRECATED    
     m_controllerNumberFromSpinBox->setValue(0);
     m_controllerNumberToSpinBox ->setValue(0);
     m_controllerValueFromSpinBox ->setValue(0);
     m_controllerValueToSpinBox ->setValue(0);
     m_wheelAmountFromSpinBox ->setValue(0);
     m_wheelAmountToSpinBox ->setValue(0);
+#endif    
 }
 
 void
@@ -479,9 +484,11 @@ EventFilterDialog::slotNoteCheckBoxToggle(int)
     m_noteDurationFromComboBox ->setEnabled(state);
 }
 
+
 void
 EventFilterDialog::slotControllerCheckBoxToggle(int)
 {
+#ifdef COMPILE_DEPRECATED    
     bool state = m_controllerCheckBox->isChecked();
     m_controllerNumberIncludeComboBox->setEnabled(state);
     m_controllerValueIncludeComboBox ->setEnabled(state);
@@ -489,15 +496,18 @@ EventFilterDialog::slotControllerCheckBoxToggle(int)
     m_controllerNumberFromSpinBox ->setEnabled(state);
     m_controllerValueToSpinBox ->setEnabled(state);
     m_controllerValueFromSpinBox ->setEnabled(state);
+#endif
 }
 
 void
 EventFilterDialog::slotWheelCheckBoxToggle(int)
 {
+#ifdef COMPILE_DEPRECATED
     bool state = m_wheelCheckBox->isChecked();
     m_wheelAmountIncludeComboBox->setEnabled(state);
     m_wheelAmountToSpinBox ->setEnabled(state);
     m_wheelAmountFromSpinBox ->setEnabled(state);
+#endif
 }
 
 void
@@ -542,47 +552,62 @@ EventFilterDialog::slotDurationToChanged(int index)
         m_noteDurationFromComboBox->setCurrentItem(index);
 }
 
+
 void
 EventFilterDialog::slotControllerFromChanged(int controller)
 {
+#ifdef COMPILE_DEPRECATED    
     if (controller > m_controllerNumberToSpinBox->value())
         m_controllerNumberToSpinBox->setValue(controller);
+#endif
 }
 
 void
 EventFilterDialog::slotControllerToChanged(int controller)
 {
+#ifdef COMPILE_DEPRECATED    
     if (controller < m_controllerNumberFromSpinBox->value())
         m_controllerNumberFromSpinBox->setValue(controller);
+#endif
 }
 
 void
 EventFilterDialog::slotValueFromChanged(int value)
 {
+#ifdef COMPILE_DEPRECATED    
     if (value > m_controllerValueToSpinBox->value())
         m_controllerValueToSpinBox->setValue(value);
+#endif
 }
 
 void
 EventFilterDialog::slotValueToChanged(int value)
 {
+#ifdef COMPILE_DEPRECATED    
     if (value < m_controllerValueFromSpinBox->value())
         m_controllerValueFromSpinBox->setValue(value);
+#endif
 }
 
 void
 EventFilterDialog::slotWheelFromChanged(int value)
 {
+#ifdef COMPILE_DEPRECATED    
     if (value > m_wheelAmountToSpinBox->value())
         m_wheelAmountToSpinBox->setValue(value);
+#endif
 }
 
 void
 EventFilterDialog::slotWheelToChanged(int value)
 {
+#ifdef COMPILE_DEPRECATED    
     if (value < m_wheelAmountFromSpinBox->value())
         m_wheelAmountFromSpinBox->setValue(value);
+#endif    
 }
+
+
 
 void
 EventFilterDialog::slotPitchFromChooser()
@@ -697,11 +722,13 @@ EventFilterDialog::filterRange
 
 EventFilterDialog::getController()
 {
-    EventFilterDialog::filterRange foo;
+    EventFilterDialog::filterRange foo;    
+#ifdef COMPILE_DEPRECATED    
     foo.first = m_controllerNumberFromSpinBox->value();
     foo.second = m_controllerNumberToSpinBox ->value();
     if (!controllerNumberIsInclusive())
         invert(foo);
+#endif
     return foo;
 }
 
@@ -710,10 +737,12 @@ EventFilterDialog::filterRange
 EventFilterDialog::getValue()
 {
     EventFilterDialog::filterRange foo;
+#ifdef COMPILE_DEPRECATED        
     foo.first = m_controllerValueFromSpinBox->value();
     foo.second = m_controllerValueToSpinBox ->value();
     if (!controllerValueIsInclusive())
         invert(foo);
+#endif        
     return foo;
 }
 
@@ -722,10 +751,12 @@ EventFilterDialog::filterRange
 EventFilterDialog::getWheel()
 {
     EventFilterDialog::filterRange foo;
+#ifdef COMPILE_DEPRECATED    
     foo.first = m_wheelAmountFromSpinBox->value();
     foo.second = m_wheelAmountToSpinBox ->value();
     if (!wheelIsInclusive())
         invert(foo);
+#endif
     return foo;
 }
 

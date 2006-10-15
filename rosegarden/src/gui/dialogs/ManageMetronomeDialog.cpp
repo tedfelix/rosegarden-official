@@ -38,6 +38,7 @@
 #include "base/Studio.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PitchChooser.h"
 #include "sound/MappedEvent.h"

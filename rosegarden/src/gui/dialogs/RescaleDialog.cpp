@@ -91,6 +91,7 @@ RescaleDialog::shouldCloseGap()
     }
 }
 
+/*
 int
 RescaleDialog::getMultiplier()
 {
@@ -122,6 +123,7 @@ RescaleDialog::slotToChanged(int i)
                        arg(perTenThou / 100).
                        arg(perTenThou % 100));
 }
+*/
 
 }
 #include "RescaleDialog.moc"
