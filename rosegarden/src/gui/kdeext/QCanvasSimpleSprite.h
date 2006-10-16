@@ -25,7 +25,7 @@
 #include <qwmatrix.h>
 #include <qcanvas.h>
 
-#include "notepixmapfactory.h"
+#include "gui/editors/notation/NotePixmapFactory.h"
 
 /**
  * A QCanvasSprite with 1 frame only

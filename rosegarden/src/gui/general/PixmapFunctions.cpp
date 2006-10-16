@@ -31,6 +31,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
+#include <iostream>
 
 namespace Rosegarden
 {
@@ -194,6 +195,7 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
     return rmap;
 }
 
+std::pair<QPixmap, QPixmap>
 PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
 {
     QPixmap left(x, pixmap.height(), pixmap.depth());

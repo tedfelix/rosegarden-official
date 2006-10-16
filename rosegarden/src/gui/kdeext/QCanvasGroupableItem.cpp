@@ -22,9 +22,7 @@
 #include <qcanvas.h>
 #include "misc/Debug.h"
 
-#include "qcanvasgroupableitem.h"
-#include "rosestrings.h"
-#include "rosedebug.h"
+#include "QCanvasGroupableItem.h"
 
 QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
         QCanvasItemGroup *g,

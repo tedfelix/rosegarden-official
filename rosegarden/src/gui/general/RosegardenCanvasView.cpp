@@ -26,6 +26,7 @@
 #include "RosegardenCanvasView.h"
 
 #include "misc/Debug.h"
+#include "gui/general/CanvasItemGC.h"
 #include <qcanvas.h>
 #include <qcursor.h>
 #include <qpoint.h>

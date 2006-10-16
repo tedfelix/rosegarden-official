@@ -26,6 +26,7 @@
 #ifndef _RG_STAFFLINE_H_
 #define _RG_STAFFLINE_H_
 
+#include "gui/kdeext/QCanvasGroupableItem.h"
 #include <qpen.h>
 
 

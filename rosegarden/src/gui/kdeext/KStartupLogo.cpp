@@ -152,4 +152,5 @@ void KStartupLogo::hideIfStillThere()
 
 KStartupLogo* KStartupLogo::m_instance = 0;
 bool KStartupLogo::m_wasClosed = false;
-#include "kstartuplogo.moc"
+
+#include "KStartupLogo.moc"

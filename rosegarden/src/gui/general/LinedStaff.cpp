@@ -35,6 +35,7 @@
 #include "base/Staff.h"
 #include "base/ViewElement.h"
 #include "GUIPalette.h"
+#include "BarLine.h"
 #include <qcanvas.h>
 #include <qcolor.h>
 #include <qfont.h>
@@ -46,6 +47,11 @@
 
 namespace Rosegarden
 {
+
+// width of pointer
+//
+const int pointerWidth = 3;
+
 
 LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
                        SnapGrid *snapGrid, int id,

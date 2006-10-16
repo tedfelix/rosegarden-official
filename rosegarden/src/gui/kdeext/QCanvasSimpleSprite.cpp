@@ -24,9 +24,7 @@
 
 #include <qpainter.h>
 
-#include "qcanvassimplesprite.h"
-#include "rosestrings.h"
-#include "rosedebug.h"
+#include "QCanvasSimpleSprite.h"
 
 QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas)
         : QCanvasSprite(0, canvas),
