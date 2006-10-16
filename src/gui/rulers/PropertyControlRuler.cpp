@@ -25,8 +25,11 @@
 
 #include "PropertyControlRuler.h"
 
-#include "base/BaseProperties.h"
+#include "ControlRuler.h"
+#include "ControlItem.h"
+#include "ViewElementAdapter.h"
 #include "misc/Debug.h"
+#include "base/BaseProperties.h"
 #include "base/NotationTypes.h"
 #include "base/PropertyName.h"
 #include "base/RulerScale.h"
@@ -35,9 +38,9 @@
 #include "base/Staff.h"
 #include "base/ViewElement.h"
 #include "commands/edit/SelectionPropertyCommand.h"
-#include "ControlRuler.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
+#include "gui/general/LinedStaff.h"
 #include <qcanvas.h>
 #include <qcolor.h>
 #include <qpoint.h>

@@ -37,6 +37,10 @@
 #include "base/Selection.h"
 #include "commands/edit/EraseCommand.h"
 #include "ControlRuler.h"
+#include "ControlItem.h"
+#include "ControllerEventAdapter.h"
+#include "ControlRulerEventInsertCommand.h"
+#include "ControlRulerEventEraseCommand.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
 #include <klineeditdlg.h>
@@ -44,6 +48,7 @@
 #include <qcolor.h>
 #include <qpoint.h>
 #include <qstring.h>
+#include <qvalidator.h>
 #include <qwidget.h>
 
 
@@ -288,8 +293,8 @@ void ControllerEventsRuler::eraseControllerEvent()
 {
     RG_DEBUG << "ControllerEventsRuler::eraseControllerEvent() : deleting selected events\n";
 
-    ControllerEventEraseCommand* command =
-        new ControllerEventEraseCommand(m_selectedItems,
+    ControlRulerEventEraseCommand* command =
+        new ControlRulerEventEraseCommand(m_selectedItems,
                                         *m_segment,
                                         m_eventSelection->getStartTime(),
                                         m_eventSelection->getEndTime());

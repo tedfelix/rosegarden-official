@@ -25,8 +25,9 @@
 
 #include "RawNoteRuler.h"
 
-#include "base/BaseProperties.h"
 #include "misc/Debug.h"
+#include "base/BaseProperties.h"
+#include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "base/RulerScale.h"
@@ -109,6 +110,7 @@ RawNoteRuler::minimumSizeHint() const
     return res;
 }
 
+std::pair<timeT, timeT>
 RawNoteRuler::getExtents(Segment::iterator i)
 {
     const Quantizer *q =
@@ -126,6 +128,7 @@ RawNoteRuler::getExtents(Segment::iterator i)
     return std::pair<timeT, timeT>(t0, t1);
 }
 
+Segment::iterator
 RawNoteRuler::addChildren(Segment *s,
                           Segment::iterator to,
                           timeT rightBound,
@@ -301,7 +304,7 @@ RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p)
     long pitch(p);
     if (pitch < 0)
         (*node)->get
-        <Int>(PITCH, pitch);
+        <Int>(BaseProperties::PITCH, pitch);
 
     int max = 0;
 
@@ -310,7 +313,7 @@ RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p)
         int forThisChild = (*i)->getChildrenAboveOrBelow(below, pitch);
         long thisChildPitch = pitch;
         (*(*i)->node)->get
-        <Int>(PITCH, thisChildPitch);
+        <Int>(BaseProperties::PITCH, thisChildPitch);
         if (below ? (thisChildPitch < pitch) : (thisChildPitch > pitch)) {
             ++forThisChild;
         }
@@ -347,7 +350,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     double myOrigin = yorigin + (heightPer * above);
     long myPitch = 60;
     (*node->node)->get
-    <Int>(PITCH, myPitch);
+    <Int>(BaseProperties::PITCH, myPitch);
 
     long velocity = 100;
     (*node->node)->get
@@ -412,7 +415,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 
         long nodePitch = myPitch;
         (*(*i)->node)->get
-        <Int>(PITCH, nodePitch);
+        <Int>(BaseProperties::PITCH, nodePitch);
 
         if (nodePitch < myPitch) {
 
