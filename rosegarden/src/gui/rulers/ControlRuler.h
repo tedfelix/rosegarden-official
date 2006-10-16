@@ -42,14 +42,14 @@ class QMouseEvent;
 class QContextMenuEvent;
 class QCanvasRectangle;
 class QCanvas;
-class ControlTool;
-class ControlSelector;
-class ControlItem;
 
 
 namespace Rosegarden
 {
 
+class ControlTool;
+class ControlSelector;
+class ControlItem;
 class TextFloat;
 class Segment;
 class RulerScale;

@@ -35,7 +35,6 @@ class QWidget;
 class QMouseEvent;
 class QCanvasLine;
 class QCanvas;
-class ControlItem;
 
 
 namespace Rosegarden
@@ -46,6 +45,7 @@ class RulerScale;
 class Event;
 class EditViewBase;
 class ControlParameter;
+class ControlItem;
 
 
 /**

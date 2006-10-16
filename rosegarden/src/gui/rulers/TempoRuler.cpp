@@ -34,6 +34,7 @@
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/GUIPalette.h"

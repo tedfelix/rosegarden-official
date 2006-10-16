@@ -30,8 +30,13 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "ControlChangeCommand.h"
+#include "ControlItem.h"
+#include "ControlSelector.h"
+#include "ControlTool.h"
 #include "DefaultVelocityColour.h"
-#include "gui/general/EditViewBase.h"
+#include "ElementAdapter.h"
+#include "gui/general/EditView.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/widgets/TextFloat.h"
 #include <kmainwindow.h>
@@ -73,7 +78,6 @@ ControlRuler::ControlRuler(Segment *segment,
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
 
-    setControlTool(new TestTool);
     m_selectionRect->setPen(Qt::red);
 
     setFixedHeight(sizeHint().height());

@@ -35,6 +35,7 @@
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/PropertyName.h"
+#include "base/Quantizer.h"
 #include "base/RefreshStatus.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
@@ -42,6 +43,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/GUIPalette.h"
 #include <qfont.h>
@@ -382,7 +384,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
         Clef clef = m_currentSegment->getClefAtTime(clefKeyTime);
         m_chordSegment->insert(clef.getAsEvent( -1));
 
-        Key key = m_currentSegment->getKeyAtTime(clefKeyTime);
+        ::Rosegarden::Key key = m_currentSegment->getKeyAtTime(clefKeyTime);
         m_chordSegment->insert(key.getAsEvent( -1));
 
         from = 0;

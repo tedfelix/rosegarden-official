@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'gui/ui/RosegardenTransport.ui'
 **
-** Created: Mon Oct 16 15:50:11 2006
+** Created: Mon Oct 16 18:46:56 2006
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.6   edited Aug 31 2005 $)
 **
 ** WARNING! All changes made in this file will be lost!

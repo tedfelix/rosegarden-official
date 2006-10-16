@@ -30,6 +30,7 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "SegmentMmapperFactory.h"
 #include "SegmentMmapper.h"
 #include <kglobal.h>
