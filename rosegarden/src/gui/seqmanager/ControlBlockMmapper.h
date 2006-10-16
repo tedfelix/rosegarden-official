@@ -28,7 +28,6 @@
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "sequencer/mmappedcontrolblock.h"
 #include <qstring.h>
 
 

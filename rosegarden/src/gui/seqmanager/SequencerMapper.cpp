@@ -35,6 +35,11 @@
 #include "sound/SequencerDataBlock.h"
 #include <qfileinfo.h>
 #include <qstring.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <errno.h>
 
 
 namespace Rosegarden

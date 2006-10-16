@@ -27,6 +27,7 @@
 #include "misc/Debug.h"
 
 #include "misc/Strings.h"
+#include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/Exception.h"
@@ -39,6 +40,11 @@
 #include "sound/MappedEvent.h"
 #include <qfile.h>
 #include <qstring.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <errno.h>
 
 
 namespace Rosegarden
@@ -298,7 +304,7 @@ void SegmentMmapper::dump()
 
                 long triggerId = -1;
                 (**k)->get
-                <Int>(TRIGGER_SEGMENT_ID, triggerId);
+                <Int>(BaseProperties::TRIGGER_SEGMENT_ID, triggerId);
 
                 if (triggerId >= 0) {
 
@@ -435,28 +441,28 @@ SegmentMmapper::mergeTriggerSegment(Segment **target,
         return ;
 
     bool retune = false;
-    std::string timeAdjust = TRIGGER_SEGMENT_ADJUST_NONE;
+    std::string timeAdjust = BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE;
 
     trigger->get
     <Bool>
-    (TRIGGER_SEGMENT_RETUNE, retune);
+    (BaseProperties::TRIGGER_SEGMENT_RETUNE, retune);
 
     trigger->get
     <String>
-    (TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
+    (BaseProperties::TRIGGER_SEGMENT_ADJUST_TIMES, timeAdjust);
 
     long evPitch = rec->getBasePitch();
     (void)trigger->get
-    <Int>(PITCH, evPitch);
+    <Int>(BaseProperties::PITCH, evPitch);
     int pitchDiff = evPitch - rec->getBasePitch();
 
     long evVelocity = rec->getBaseVelocity();
     (void)trigger->get
-    <Int>(VELOCITY, evVelocity);
+    <Int>(BaseProperties::VELOCITY, evVelocity);
     int velocityDiff = evVelocity - rec->getBaseVelocity();
 
     timeT offset = 0;
-    if (timeAdjust == TRIGGER_SEGMENT_ADJUST_SYNC_END) {
+    if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
         offset = evDuration - trDuration;
     }
 
@@ -467,7 +473,7 @@ SegmentMmapper::mergeTriggerSegment(Segment **target,
         timeT d = (*i)->getDuration();
 
         if (evDuration != trDuration &&
-                timeAdjust == TRIGGER_SEGMENT_ADJUST_SQUISH) {
+                timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
             t = timeT(double(t * evDuration) / double(trDuration));
             d = timeT(double(d * evDuration) / double(trDuration));
         }
@@ -483,7 +489,7 @@ SegmentMmapper::mergeTriggerSegment(Segment **target,
             }
         }
 
-        if (timeAdjust == TRIGGER_SEGMENT_ADJUST_SYNC_START) {
+        if (timeAdjust == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
             if (t + d > evTime + evDuration) {
                 if (t >= evTime + evDuration)
                     continue;
@@ -495,26 +501,26 @@ SegmentMmapper::mergeTriggerSegment(Segment **target,
 
         Event *newEvent = new Event(**i, t, d);
 
-        if (retune && newEvent->has(PITCH)) {
+        if (retune && newEvent->has(BaseProperties::PITCH)) {
             int pitch = newEvent->get
-                        <Int>(PITCH) + pitchDiff;
+                        <Int>(BaseProperties::PITCH) + pitchDiff;
             if (pitch > 127)
                 pitch = 127;
             if (pitch < 0)
                 pitch = 0;
             newEvent->set
-            <Int>(PITCH, pitch);
+            <Int>(BaseProperties::PITCH, pitch);
         }
 
-        if (newEvent->has(VELOCITY)) {
+        if (newEvent->has(BaseProperties::VELOCITY)) {
             int velocity = newEvent->get
-                           <Int>(VELOCITY) + velocityDiff;
+                           <Int>(BaseProperties::VELOCITY) + velocityDiff;
             if (velocity > 127)
                 velocity = 127;
             if (velocity < 0)
                 velocity = 0;
             newEvent->set
-            <Int>(VELOCITY, velocity);
+            <Int>(BaseProperties::VELOCITY, velocity);
         }
 
         (*target)->insert(newEvent);
