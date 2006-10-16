@@ -28,15 +28,16 @@
 
 #include "PresetGroup.h"
 
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ClefIndex.h"
 #include "base/Exception.h"
 #include "CategoryElement.h"
+#include <klocale.h>
+#include <kstddirs.h>
 #include <kglobal.h>
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qregexp.h>
 #include <qstring.h>
 

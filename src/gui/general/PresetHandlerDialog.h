@@ -32,7 +32,7 @@
 #include <kdialogbase.h>
 #include <qstring.h>
 #include "document/ConfigGroups.h"
-
+#include "CategoryElement.h"
 
 class QWidget;
 class KConfig;

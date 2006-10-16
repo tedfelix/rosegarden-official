@@ -31,9 +31,6 @@
 #include <utility>
 
 
-class QRgb;
-
-
 namespace Rosegarden
 {
 

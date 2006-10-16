@@ -28,6 +28,7 @@
 
 #include <qpoint.h>
 #include <qscrollview.h>
+#include <qdatetime.h>
 #include <qtimer.h>
 
 

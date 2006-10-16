@@ -26,22 +26,22 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
-#include "ktmpstatusmsg.h"
-#include "rgapplication.h"
+#include "KTmpStatusMsg.h"
+#include "gui/application/RosegardenApplication.h"
 
 KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KMainWindow* window, int id)
         : m_mainWindow(window),
         m_id(id)
 {
     m_mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), m_id);
-    rgapp->refreshGUI(50);
+    Rosegarden::rgapp->refreshGUI(50);
 }
 
 KTmpStatusMsg::~KTmpStatusMsg()
 {
     m_mainWindow->statusBar()->clear();
     m_mainWindow->statusBar()->changeItem(m_defaultMsg, m_id);
-    rgapp->refreshGUI(50);
+    Rosegarden::rgapp->refreshGUI(50);
 }
 
 

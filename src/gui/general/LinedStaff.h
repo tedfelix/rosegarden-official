@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -26,13 +25,13 @@
 #ifndef _RG_LINEDSTAFF_H_
 #define _RG_LINEDSTAFF_H_
 
+#include "base/Event.h"
 #include "base/FastVector.h"
 #include "base/Staff.h"
 #include "base/ViewElement.h"
 #include <qrect.h>
 #include <utility>
 #include <vector>
-#include "base/Event.h"
 
 
 class QCanvasLine;
@@ -40,12 +39,12 @@ class QCanvasItem;
 class QCanvas;
 class isFirstBarInRow;
 class barNo;
-class BarLine;
 
 
 namespace Rosegarden
 {
 
+class BarLine;
 class TimeSignature;
 class SnapGrid;
 class Segment;

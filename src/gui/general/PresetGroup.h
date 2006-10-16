@@ -30,6 +30,7 @@
 #define _RG_PRESETGROUP_H_
 
 #include "base/Exception.h"
+#include "CategoryElement.h"
 #include <qstring.h>
 #include <qxml.h>
 
