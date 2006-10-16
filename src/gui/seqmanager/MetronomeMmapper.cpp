@@ -109,7 +109,6 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     int mtcMode = config->readNumEntry("mtcmode", 0);
 
     if (midiClock == 1) {
-        using Note;
         timeT quarterNote = Note(Note::Crotchet).getDuration();
 
         // Insert 24 clocks per quarter note

@@ -27,17 +27,17 @@
 #define _RG_SEQUENCEMANAGER_H_
 
 #include "base/Composition.h"
+#include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Track.h"
-#include <map>
+#include "gui/application/RosegardenDCOP.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
 #include <qobject.h>
 #include <qstring.h>
 #include <vector>
-#include "base/Event.h"
-#include "gui/application/RosegardenDCOP.h"
+#include <map>
 
 
 class QTimer;

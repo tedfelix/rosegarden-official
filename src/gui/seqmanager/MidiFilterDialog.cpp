@@ -29,6 +29,7 @@
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
 #include <kdialogbase.h>
 #include <qbuttongroup.h>

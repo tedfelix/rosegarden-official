@@ -33,12 +33,15 @@
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
-#include "sequencer/mmappedcontrolblock.h"
 #include "sound/ControlBlock.h"
 #include <kglobal.h>
 #include <qfile.h>
 #include <qstring.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <errno.h>
 
 namespace Rosegarden
 {

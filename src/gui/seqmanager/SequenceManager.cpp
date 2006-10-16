@@ -24,11 +24,8 @@
 
 
 #include "SequenceManager.h"
-#include <kapplication.h>
 
 #include "sound/Midi.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
@@ -43,6 +40,8 @@
 #include "base/TriggerSegment.h"
 #include "CompositionMmapper.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/AudioManagerDialog.h"
@@ -53,13 +52,16 @@
 #include "MetronomeMmapper.h"
 #include "SegmentMmapperFactory.h"
 #include "SequencerMapper.h"
-#include "sequencer/mmappedcontrolblock.h"
+#include "ControlBlockMmapper.h"
 #include "sound/AudioFile.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include "sound/SoundDriver.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
+#include <klocale.h>
+#include <kstddirs.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
@@ -69,6 +71,7 @@
 #include <qdatastream.h>
 #include <qevent.h>
 #include <qobject.h>
+#include <qpushbutton.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtimer.h>
@@ -77,9 +80,8 @@
 namespace Rosegarden
 {
 
-namespace Rosegarden
-            SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
-                                             TransportDialog *transport):
+SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
+                                 TransportDialog *transport):
             m_doc(doc),
             m_compositionMmapper(new CompositionMmapper(m_doc)),
             m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
