@@ -30,6 +30,7 @@
 #include "base/MidiProgram.h"
 #include "base/Profiler.h"
 #include "base/RealTime.h"
+#include "gui/application/RosegardenApplication.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
@@ -43,9 +44,8 @@
 namespace Rosegarden
 {
 
-namespace Rosegarden
-            MappedObjectId
-            StudioControl::createStudioObject(MappedObject::MappedObjectType type)
+MappedObjectId
+StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
 Profiler profiler("StudioControl::createStudioObject", true);
 

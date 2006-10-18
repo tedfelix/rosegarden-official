@@ -27,6 +27,7 @@
 
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include <qcanvas.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qsize.h>

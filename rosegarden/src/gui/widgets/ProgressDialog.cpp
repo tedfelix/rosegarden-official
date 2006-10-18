@@ -24,15 +24,14 @@
 
 
 #include "ProgressDialog.h"
-#include <kapplication.h>
-
-#include <klocale.h>
-#include "misc/Debug.h"
 #include "CurrentProgressDialog.h"
-#include <qapplication.h>
+#include "misc/Debug.h"
+#include "gui/application/RosegardenApplication.h"
+#include <klocale.h>
 #include <qcursor.h>
 #include <qprogressdialog.h>
 #include <qstring.h>
+#include <qtimer.h>
 #include <qwidget.h>
 
 

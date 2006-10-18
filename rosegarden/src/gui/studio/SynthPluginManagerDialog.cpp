@@ -36,6 +36,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "document/RosegardenGUIDoc.h"
+#include <kaction.h>
 #include <kcombobox.h>
 #include <kmainwindow.h>
 #include <kstdaction.h>
@@ -52,8 +53,9 @@
 namespace Rosegarden
 {
 
-const char *const SynthPluginManagerDialog::SynthPluginManagerConfigGroup =
-    SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
+const char *const SynthPluginManagerDialog::SynthPluginManagerConfigGroup = "Synth Plugin Manager";
+
+SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             RosegardenGUIDoc *doc
 #ifdef HAVE_LIBLO
             , AudioPluginOSCGUIManager *guiManager

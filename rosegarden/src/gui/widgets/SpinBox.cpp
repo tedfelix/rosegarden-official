@@ -24,6 +24,7 @@
 
 
 #include "SpinBox.h"
+#include "misc/Strings.h"
 
 #include <qspinbox.h>
 #include <qstring.h>

@@ -4267,7 +4267,7 @@
 <customwidgets>
     <customwidget>
         <class>Rosegarden::Label</class>
-        <header location="local">widgets.h</header>
+        <header location="local">gui/widgets/Label.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

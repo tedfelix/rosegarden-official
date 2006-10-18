@@ -24,13 +24,13 @@
 
 
 #include "Rotary.h"
-#include <kapplication.h>
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
+#include <kapplication.h>
+#include <klocale.h>
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qdialog.h>
@@ -44,10 +44,18 @@
 #include <qtimer.h>
 #include <qtooltip.h>
 #include <qwidget.h>
+#include <cmath>
 
 
 namespace Rosegarden
 {
+
+#define ROTARY_MIN (0.25 * M_PI)
+#define ROTARY_MAX (1.75 * M_PI)
+#define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
+
+static TextFloat* _float = 0;
+static QTimer *_floatTimer = 0;
 
 Rotary::PixmapCache Rotary::m_pixmaps;
 

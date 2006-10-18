@@ -25,13 +25,14 @@
 
 #include "MidiProgramsEditor.h"
 #include "MidiBankListViewItem.h"
+#include "NameSetEditor.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "BankEditorDialog.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
-#include "NameSetEditor.h"
+#include "gui/widgets/RosegardenPopupMenu.h"
 #include <kcompletion.h>
 #include <kglobal.h>
 #include <klineedit.h>
@@ -439,15 +440,6 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     }
 }
 
-class BlahPopupMenu2 : public QPopupMenu
-{
-    // just to make itemHeight public
-public:
-    BlahPopupMenu2(QWidget *parent) : QPopupMenu(parent) { }
-    using QPopupMenu::itemHeight;
-};
-
-
 void
 MidiProgramsEditor::slotEntryButtonPressed()
 {
@@ -474,7 +466,7 @@ MidiProgramsEditor::slotEntryButtonPressed()
         return ;
     m_currentMenuProgram = id;
 
-    BlahPopupMenu2 *menu = new BlahPopupMenu2(button);
+    RosegardenPopupMenu *menu = new RosegardenPopupMenu(button);
 
     const MidiKeyMapping *currentMapping =
         m_device->getKeyMappingForProgram(*program);

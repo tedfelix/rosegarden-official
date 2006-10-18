@@ -26,8 +26,10 @@
 #ifndef _RG_ROSEGARDENPROGRESSDIALOG_H_
 #define _RG_ROSEGARDENPROGRESSDIALOG_H_
 
+#define private protected // fugly
 #include <kprogress.h>
-
+#undef private
+#include <qdatetime.h>
 
 class QWidget;
 class QString;

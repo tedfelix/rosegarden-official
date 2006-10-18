@@ -31,6 +31,7 @@
 
 #include <qapplication.h>
 #include <qframe.h>
+#include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpoint.h>

@@ -26,12 +26,11 @@
 #ifndef _RG_OSCMESSAGE_H_
 #define _RG_OSCMESSAGE_H_
 
+#include <lo/lo.h>
+
 #include <string>
 #include <utility>
 #include <vector>
-
-
-
 
 namespace Rosegarden
 {

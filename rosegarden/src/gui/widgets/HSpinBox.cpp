@@ -55,9 +55,9 @@ HSpinBox::HSpinBox( int minV, int maxV, int step, QWidget* parent,
 }
 
   //constructor with default settings
-HSpinBox::HSpinBox( QWidget* parent,  float initialValue = 0.2, int step=1, 
-              double bottom=-25.0, double top=25.0, int decimals=3,
-              const QObject* recv=NULL, const char* mem=NULL)
+HSpinBox::HSpinBox( QWidget* parent,  float initialValue, int step, 
+              double bottom, double top, int decimals,
+              const QObject* recv, const char* mem)
       : QSpinBox((int)(bottom*pow(10.0, decimals)), 
                  (int)(top*pow(10.0, decimals)), step, parent)
 {

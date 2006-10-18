@@ -26,6 +26,7 @@
 #ifndef _RG_REMAPINSTRUMENTDIALOG_H_
 #define _RG_REMAPINSTRUMENTDIALOG_H_
 
+#include "base/Studio.h"
 #include <kdialogbase.h>
 
 
@@ -38,6 +39,7 @@ class KComboBox;
 
 namespace Rosegarden
 {
+
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;

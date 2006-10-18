@@ -25,6 +25,7 @@
 
 #include "AudioListView.h"
 
+#include "misc/Debug.h"
 #include "gui/widgets/AudioListItem.h"
 #include "qdragobject.h"
 
