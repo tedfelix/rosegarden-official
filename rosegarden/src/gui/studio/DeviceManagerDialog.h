@@ -27,11 +27,11 @@
 #define _RG_DEVICEMANAGERDIALOG_H_
 
 #include "base/Device.h"
+#include "document/ConfigGroups.h"
 #include <kmainwindow.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <vector>
-#include "document/ConfigGroups.h"
 
 
 class QWidget;

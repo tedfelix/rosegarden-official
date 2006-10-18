@@ -27,11 +27,8 @@
 #define _RG_MIDIDEVICELISTVIEWITEM_H_
 
 #include "base/Device.h"
+#include <klistview.h>
 #include <qstring.h>
-
-
-class QListViewItem;
-class QListView;
 
 
 namespace Rosegarden

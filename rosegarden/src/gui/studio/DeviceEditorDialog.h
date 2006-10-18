@@ -26,9 +26,10 @@
 #ifndef _RG_DEVICEEDITORDIALOG_H_
 #define _RG_DEVICEEDITORDIALOG_H_
 
-#include <set>
+#include <base/Studio.h>
 #include <kdialogbase.h>
 #include <qstringlist.h>
+#include <set>
 
 
 class QWidget;

@@ -24,17 +24,16 @@
 
 
 #include "NameSetEditor.h"
-#include <qlayout.h>
-
-#include <klocale.h>
 #include "BankEditorDialog.h"
 #include <kcompletion.h>
 #include <kglobalsettings.h>
 #include <klineedit.h>
+#include <klocale.h>
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qhbox.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qtabwidget.h>
@@ -42,7 +41,7 @@
 #include <qvbox.h>
 #include <qvgroupbox.h>
 #include <qwidget.h>
-
+#include <iostream>
 
 namespace Rosegarden
 {
