@@ -35,9 +35,12 @@
 #include "MidiKeyMapListViewItem.h"
 #include "NameSetEditor.h"
 #include <kcompletion.h>
+#include <klineedit.h>
 #include <qframe.h>
+#include <qlayout.h>
 #include <qlabel.h>
 #include <qobject.h>
+#include <qobjectlist.h>
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qvgroupbox.h>

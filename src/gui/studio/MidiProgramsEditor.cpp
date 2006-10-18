@@ -24,10 +24,7 @@
 
 
 #include "MidiProgramsEditor.h"
-#include <qlayout.h>
-
-#include <klocale.h>
-#include <kstddirs.h>
+#include "MidiBankListViewItem.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "BankEditorDialog.h"
@@ -37,21 +34,25 @@
 #include "NameSetEditor.h"
 #include <kcompletion.h>
 #include <kglobal.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kstddirs.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
 #include <qfile.h>
 #include <qframe.h>
 #include <qlabel.h>
-#include <qobject.h>
+#include <qlayout.h>
+#include <qobjectlist.h>
 #include <qpixmap.h>
 #include <qpoint.h>
+#include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qstring.h>
 #include <qtooltip.h>
 #include <qvgroupbox.h>
 #include <qwidget.h>
-
 
 namespace Rosegarden
 {
@@ -362,6 +363,23 @@ MidiProgramsEditor::slotNewLSB(int value)
     m_bankEditor->setModified(true);
 }
 
+struct ProgramCmp
+{
+    bool operator()(const Rosegarden::MidiProgram &p1,
+                    const Rosegarden::MidiProgram &p2)
+    {
+        if (p1.getProgram() == p2.getProgram()) {
+            const Rosegarden::MidiBank &b1(p1.getBank());
+            const Rosegarden::MidiBank &b2(p2.getBank());
+            if (b1.getMSB() == b2.getMSB())
+                if (b1.getLSB() == b2.getLSB()) 
+                    return ((b1.isPercussion() ? 1 : 0) < (b2.isPercussion() ? 1 : 0));
+                else return (b1.getLSB() < b2.getLSB());
+            else return (b1.getMSB() < b2.getMSB());
+        } else return (p1.getProgram() < p2.getProgram());
+    }
+};
+
 void
 MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
@@ -420,6 +438,15 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         m_bankEditor->setModified(true);
     }
 }
+
+class BlahPopupMenu2 : public QPopupMenu
+{
+    // just to make itemHeight public
+public:
+    BlahPopupMenu2(QWidget *parent) : QPopupMenu(parent) { }
+    using QPopupMenu::itemHeight;
+};
+
 
 void
 MidiProgramsEditor::slotEntryButtonPressed()

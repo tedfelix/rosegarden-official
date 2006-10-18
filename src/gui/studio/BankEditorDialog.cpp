@@ -57,7 +57,6 @@
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <kxmlguiclient.h>
-#include <editor.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
 #include <qdir.h>
@@ -1254,6 +1253,7 @@ BankEditorDialog::getMidiDevice(QListViewItem* item)
     return getMidiDevice(deviceItem->getDeviceId());
 }
 
+std::pair<int, int>
 BankEditorDialog::getFirstFreeBank(QListViewItem* item)
 {
     //!!! percussion? this is actually only called in the expectation

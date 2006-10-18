@@ -35,6 +35,8 @@
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
+#include "gui/application/RosegardenApplication.h"
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 #include <qcstring.h>

@@ -27,12 +27,13 @@
 #include <qlayout.h>
 #include <kapplication.h>
 
+#include "AudioPlugin.h"
+#include "AudioPluginManager.h"
+#include "MixerWindow.h"
+#include "StudioControl.h"
 #include "sound/Midi.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "gui/application/RosegardenDCOP.h"
-#include "AudioPlugin.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Composition.h"
@@ -44,16 +45,17 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/seqmanager/SequencerMapper.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
-#include "MixerWindow.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedStudio.h"
-#include "StudioControl.h"
+#include <klocale.h>
+#include <kstddirs.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <kmainwindow.h>
@@ -77,6 +79,15 @@
 
 namespace Rosegarden
 {
+
+// We define these such that the default of no-bits-set for the
+// studio's mixer display options produces the most sensible result
+static const unsigned int MIXER_OMIT_FADERS            = 1 << 0;
+static const unsigned int MIXER_OMIT_SUBMASTERS        = 1 << 1;
+static const unsigned int MIXER_OMIT_PLUGINS           = 1 << 2;
+static const unsigned int MIXER_SHOW_UNASSIGNED_FADERS = 1 << 3;
+static const unsigned int MIXER_OMIT_SYNTH_FADERS      = 1 << 4;
+
 
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
                                    RosegardenGUIDoc *document):

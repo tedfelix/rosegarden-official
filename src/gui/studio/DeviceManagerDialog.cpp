@@ -24,11 +24,8 @@
 
 
 #include "DeviceManagerDialog.h"
-#include <qlayout.h>
-#include <kapplication.h>
 
-#include <klocale.h>
-#include <kstddirs.h>
+#include "ChangeRecordDeviceCommand.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Device.h"
@@ -41,9 +38,14 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
+#include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
+#include <kapplication.h>
+#include <klocale.h>
+#include <kstddirs.h>
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -59,6 +61,7 @@
 #include <qframe.h>
 #include <qgrid.h>
 #include <qgroupbox.h>
+#include <qlayout.h>
 #include <qpushbutton.h>
 #include <qsizepolicy.h>
 #include <qstring.h>
@@ -71,8 +74,18 @@
 namespace Rosegarden
 {
 
+static const int PLAY_NAME_COL = 0;
+static const int PLAY_CONNECTION_COL = 1;
+
+static const int RECORD_NAME_COL = 0;
+static const int RECORD_CURRENT_COL = 1;
+static const int RECORD_CONNECTION_COL = 2;
+
 const char *const DeviceManagerDialog::DeviceManagerConfigGroup =
-    DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
+"Device Manager";
+
+
+DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
             RosegardenGUIDoc *document) :
             KMainWindow(parent, "deviceeditordialog"),
             m_document(document),

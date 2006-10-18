@@ -25,9 +25,10 @@
 
 #include "MidiKeyMapListViewItem.h"
 
-#include <klocale.h>
-#include "base/Device.h"
 #include "MidiDeviceListViewItem.h"
+#include "MidiBankListViewItem.h"
+#include "base/Device.h"
+#include <klocale.h>
 #include <qstring.h>
 
 

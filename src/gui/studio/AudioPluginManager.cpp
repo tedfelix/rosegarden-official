@@ -29,6 +29,7 @@
 #include "AudioPluginClipboard.h"
 #include "AudioPlugin.h"
 #include "base/AudioPluginInstance.h"
+#include "gui/application/RosegardenApplication.h"
 #include "sound/PluginFactory.h"
 #include "sound/PluginIdentifier.h"
 #include <qcstring.h>
@@ -41,8 +42,7 @@
 namespace Rosegarden
 {
 
-namespace Rosegarden
-            AudioPluginManager::AudioPluginManager() :
+AudioPluginManager::AudioPluginManager() :
             m_sampleRate(0),
             m_enumerator(this)
 {
@@ -172,6 +172,7 @@ AudioPluginManager::removePlugin(const QString &identifier)
     return false;
 }
 
+std::vector<QString>
 AudioPluginManager::getPluginNames()
 {
     awaitEnumeration();
