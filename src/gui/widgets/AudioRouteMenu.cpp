@@ -24,20 +24,21 @@
 
 
 #include "AudioRouteMenu.h"
+#include "WheelyButton.h"
 
-#include <klocale.h>
 #include "base/Instrument.h"
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"
+#include "gui/widgets/RosegardenPopupMenu.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
 #include <kcombobox.h>
+#include <klocale.h>
 #include <qcursor.h>
 #include <qobject.h>
 #include <qpoint.h>
 #include <qstring.h>
 #include <qwidget.h>
-#include "WheelyButton.h"
 
 
 namespace Rosegarden
@@ -132,7 +133,7 @@ AudioRouteMenu::slotShowMenu()
     if (getNumEntries() == 0)
         return ;
 
-    BlahPopupMenu *menu = new BlahPopupMenu((QWidget *)parent());
+    RosegardenPopupMenu *menu = new RosegardenPopupMenu((QWidget *)parent());
 
     for (int i = 0; i < getNumEntries(); ++i) {
 

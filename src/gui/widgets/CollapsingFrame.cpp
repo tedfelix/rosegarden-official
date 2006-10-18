@@ -24,18 +24,18 @@
 
 
 #include "CollapsingFrame.h"
-#include <qlayout.h>
 #include <kapplication.h>
-
 #include <kstddirs.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <qfont.h>
 #include <qframe.h>
+#include <qlayout.h>
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qtoolbutton.h>
 #include <qwidget.h>
+#include <cassert>
 
 
 namespace Rosegarden

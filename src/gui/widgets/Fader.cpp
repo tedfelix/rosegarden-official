@@ -24,10 +24,10 @@
 
 
 #include "Fader.h"
+#include "TextFloat.h"
 
 #include "misc/Debug.h"
 #include "base/AudioLevel.h"
-#include "TextFloat.h"
 #include <qcolor.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -36,7 +36,7 @@
 #include <qstring.h>
 #include <qtimer.h>
 #include <qwidget.h>
-
+#include <cmath>
 
 namespace Rosegarden
 {

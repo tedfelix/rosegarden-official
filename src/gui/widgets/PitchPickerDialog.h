@@ -26,6 +26,7 @@
 #ifndef _RG_PITCHPICKERDIALOG_H_
 #define _RG_PITCHPICKERDIALOG_H_
 
+#include "PitchChooser.h"
 #include <kdialogbase.h>
 
 
@@ -34,9 +35,6 @@ class QWidget;
 
 namespace Rosegarden
 {
-
-class PitchChooser;
-
 
 class PitchPickerDialog : public KDialogBase
 {
@@ -52,7 +50,6 @@ public:
 private:
     PitchChooser* m_pitch;
 };
-*/
 
 
 }

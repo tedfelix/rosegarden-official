@@ -25,7 +25,6 @@
 
 #include "RemapInstrumentDialog.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Device.h"
 #include "base/Instrument.h"
@@ -39,6 +38,7 @@
 #include <kcombobox.h>
 #include <kcommand.h>
 #include <kdialogbase.h>
+#include <klocale.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qlabel.h>

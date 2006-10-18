@@ -25,10 +25,13 @@
 #ifndef _RG_AUDIOLISTITEM_H_
 #define _RG_AUDIOLISTITEM_H_
 
+#include <sound/AudioFile.h>
 #include <klistview.h>
 
 namespace Rosegarden
 {
+
+class Segment;
 
 // Add an Id to a QListViewItem
 //

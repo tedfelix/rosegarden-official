@@ -24,8 +24,7 @@
 
 
 #include "PluginControl.h"
-#include <qlayout.h>
-
+#include "Rotary.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "gui/general/GUIPalette.h"
@@ -34,6 +33,7 @@
 #include <qfont.h>
 #include <qhbox.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qwidget.h>
@@ -107,7 +107,7 @@ PluginControl::PluginControl(QWidget *parent,
         }
         low->setFont(plainFont);
 
-        m_dial = new Rotary(parent,
+        m_dial = new ::Rosegarden::Rotary(parent,
                             lowerBound,    // min
                             upperBound,    // max
                             step,          // step

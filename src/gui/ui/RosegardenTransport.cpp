@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'gui/ui/RosegardenTransport.ui'
 **
-** Created: Mon Oct 16 18:46:56 2006
+** Created: Wed Oct 18 19:15:56 2006
 **      by: The User Interface Compiler ($Id: qt/main.cpp   3.3.6   edited Aug 31 2005 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -19,7 +19,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 
-#include "widgets.h"
+#include "gui/widgets/Label.h"
 static const unsigned char image0_data[] = { 
     0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
     0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00, 0x0b,

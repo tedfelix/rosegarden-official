@@ -27,7 +27,7 @@
 #define _RG_ROSEGARDENCOLOURTABLEITEM_H_
 
 #include <qcolor.h>
-
+#include <qtable.h>
 
 class QTable;
 class QRect;
