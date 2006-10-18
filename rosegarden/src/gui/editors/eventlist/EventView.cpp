@@ -24,13 +24,12 @@
 
 
 #include "EventView.h"
-#include <qlayout.h>
-
+#include "EventViewItem.h"
+#include "TrivialVelocityDialog.h"
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "base/Clipboard.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
@@ -58,19 +57,25 @@
 #include "gui/general/EditViewBase.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/widgets/EventFilterDialog.h"
+#include "gui/dialogs/EventFilterDialog.h"
 #include <kaction.h>
+#include <kconfig.h>
+#include <klocale.h>
+#include <kstatusbar.h>
+#include <kstddirs.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
 #include <klistview.h>
 #include <kxmlguiclient.h>
 #include <qbuttongroup.h>
+#include <qcanvas.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qiconset.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qlistview.h>
 #include <qpixmap.h>
 #include <qpoint.h>
@@ -88,7 +93,6 @@ int
 EventView::m_lastSetEventFilter = -1;
 
 
-int
 EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent):
@@ -410,11 +414,11 @@ EventView::applyLayout(int /*staffNo*/)
                                          <String>
                                          (Indication::
                                           IndicationTypePropertyName)));
-            } else if ((*it)->has(Key::KeyPropertyName)) {
+            } else if ((*it)->has(::Rosegarden::Key::KeyPropertyName)) {
                 data1Str = QString("%1  ").
                            arg(strtoqstr((*it)->get
                                          <String>
-                                         (Key::KeyPropertyName)));
+                                         (::Rosegarden::Key::KeyPropertyName)));
             } else if ((*it)->has(Clef::ClefPropertyName)) {
                 data1Str = QString("%1  ").
                            arg(strtoqstr((*it)->get
