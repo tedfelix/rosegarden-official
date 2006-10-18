@@ -8,7 +8,7 @@
 #include <iostream>
 #include <sstream>
 
-namespace Rosegarden;
+namespace Rosegarden
 {
 
 namespace Guitar
