@@ -26,11 +26,10 @@
 #include "MatrixView.h"
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioLevel.h"
+#include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/Instrument.h"
@@ -62,6 +61,7 @@
 #include "commands/matrix/MatrixInsertionCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenGUIApp.h"
+#include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/TriggerSegmentDialog.h"
@@ -71,19 +71,20 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/editors/segment/BarButtons.h"
+#include "gui/general/ActiveItem.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditView.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/rulers/ChordNameRuler.h"
+#include "gui/rulers/LoopRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
 #include "gui/rulers/PitchRuler.h"
 #include "gui/rulers/PropertyBox.h"
 #include "gui/rulers/PropertyViewRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/widgets/EventFilterDialog.h"
 #include "gui/widgets/QDeferScrollView.h"
 #include "MatrixCanvasView.h"
 #include "MatrixElement.h"
@@ -98,19 +99,24 @@
 #include "MatrixVLayout.h"
 #include "PianoKeyboard.h"
 #include "sound/MappedEvent.h"
+#include "sound/SequencerDataBlock.h"
+#include <klocale.h>
+#include <kstddirs.h>
 #include <kaction.h>
 #include <kcombobox.h>
+#include <kconfig.h>
 #include <kdockwidget.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
 #include <qcanvas.h>
 #include <qcursor.h>
 #include <qdialog.h>
+#include <qlayout.h>
 #include <qiconset.h>
 #include <qlabel.h>
-#include <qobject.h>
 #include <qpixmap.h>
 #include <qpoint.h>
 #include <qscrollview.h>
@@ -123,6 +129,9 @@
 
 namespace Rosegarden
 {
+
+static double xorigin = 0.0;
+
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
@@ -1245,8 +1254,6 @@ void MatrixView::slotResizeSelected()
 
 void MatrixView::slotTransformsQuantize()
 {
-    using Quantizer;
-
     if (!m_currentEventSelection)
         return ;
 
@@ -1262,8 +1269,6 @@ void MatrixView::slotTransformsQuantize()
 
 void MatrixView::slotTransformsRepeatQuantize()
 {
-    using Quantizer;
-
     if (!m_currentEventSelection)
         return ;
 
@@ -1285,8 +1290,6 @@ void MatrixView::slotTransformsCollapseNotes()
 
 void MatrixView::slotTransformsLegato()
 {
-    using Quantizer;
-
     if (!m_currentEventSelection)
         return ;
 
@@ -1727,7 +1730,7 @@ void MatrixView::slotInsertNoteFromAction()
         Accidentals::NoAccidental;
 
     timeT time(getInsertionTime());
-    Key key = segment.getKeyAtTime(time);
+    ::Rosegarden::Key key = segment.getKeyAtTime(time);
     Clef clef = segment.getClefAtTime(time);
 
     try {
@@ -1973,7 +1976,6 @@ MatrixView::slotQuantizeSelection(int q)
 {
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
-    using Quantizer;
     timeT unit =
         ((unsigned int)q < m_quantizations.size() ? m_quantizations[q] : 0);
 
@@ -2027,7 +2029,6 @@ MatrixView::initActionsToolbar()
     QLabel *sLabel = new QLabel(i18n(" Grid: "), actionsToolbar, "kde toolbar widget");
     sLabel->setIndent(10);
 
-    using Note;
     QPixmap noMap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
 
     m_snapGridCombo = new KComboBox(actionsToolbar);

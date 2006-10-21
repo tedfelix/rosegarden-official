@@ -72,7 +72,7 @@ private:
     Guitar::ChordMap* m_map;
     QPixmap image0;
 
-    typedef std::pair <QWidget*, ChordInfo*> InfoPair;
+    typedef std::pair <QWidget*, Guitar::ChordInfo*> InfoPair;
     typedef std::list <InfoPair> InfoMap;
     InfoMap m_infoMap;
 

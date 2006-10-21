@@ -21,8 +21,8 @@
 
 #include "Fingering.h"
 #include "GuitarNeck.h"
-#include "GuitarXmlhandler.h"
-#include "NoteSymbols"
+#include "GuitarXmlHandler.h"
+#include "NoteSymbols.h"
 #include <iostream>
 #include <sstream>
 

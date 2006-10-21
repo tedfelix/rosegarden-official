@@ -30,6 +30,7 @@
 #include "base/LayoutEngine.h"
 #include "base/Staff.h"
 #include "MatrixElement.h"
+#include "MatrixStaff.h"
 
 
 namespace Rosegarden

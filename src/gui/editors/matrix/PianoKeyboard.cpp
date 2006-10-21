@@ -32,6 +32,7 @@
 #include "MatrixStaff.h"
 #include "MatrixView.h"
 #include <qcolor.h>
+#include <qcursor.h>
 #include <qevent.h>
 #include <qfont.h>
 #include <qpainter.h>

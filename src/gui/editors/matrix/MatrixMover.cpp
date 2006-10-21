@@ -190,9 +190,9 @@ int MatrixMover::handleMouseMove(timeT newTime,
     // Add this fiddle factor to ensure the notes butt properly
     //
     if (diffX < 0)
-        diffX -= int(_fiddleFactor);
+        diffX -= int(fiddleFactor);
     else if (diffX > 0)
-        diffX += int(_fiddleFactor);
+        diffX += int(fiddleFactor);
 
     int diffY =
         int(((m_currentStaff->getLayoutYForHeight(newPitch) -
@@ -224,9 +224,9 @@ int MatrixMover::handleMouseMove(timeT newTime,
                                m_currentStaff->getTimeScaleFactor());
 
             if (newDiffX < 0)
-                newDiffX -= int(_fiddleFactor);
+                newDiffX -= int(fiddleFactor);
             else if (newDiffX > 0)
-                newDiffX += int(_fiddleFactor);
+                newDiffX += int(fiddleFactor);
 
             int newX = int(m_currentElement->getLayoutX() + newDiffX);
             int newY = int(element->getLayoutY() + diffY);
