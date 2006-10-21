@@ -38,6 +38,7 @@
 #include "base/Staff.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
+#include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/rulers/DefaultVelocityColour.h"
@@ -190,6 +191,7 @@ MatrixStaff::makeViewElement(Event* e)
     return new MatrixElement(e, m_view->isDrumMode());
 }
 
+const MidiKeyMapping*
 MatrixStaff::getKeyMapping() const
 {
     Composition *comp = getSegment().getComposition();

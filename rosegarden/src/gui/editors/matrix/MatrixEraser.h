@@ -28,8 +28,6 @@
 
 #include "MatrixTool.h"
 #include <qstring.h>
-#include "base/Event.h"
-
 
 class QMouseEvent;
 
@@ -61,13 +59,6 @@ protected:
 
     MatrixStaff* m_currentStaff;
 };
-
-#include "Selection.h"
-class QCanvasRectangle;
-
-// Selector is a multipurpose tool and delegates often to other
-// tools to speciliase its behaviour.
-//
 
 }
 

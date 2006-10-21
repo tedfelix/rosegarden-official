@@ -27,6 +27,7 @@
 
 #include "gui/general/EditTool.h"
 #include "MatrixView.h"
+#include <kaction.h>
 #include <qstring.h>
 
 
@@ -67,6 +68,9 @@ MatrixTool::slotDrawSelected()
 {
     m_parentView->actionCollection()->action("draw")->activate();
 }
+
+const double
+MatrixTool::fiddleFactor = 1.0;
 
 }
 #include "MatrixTool.moc"

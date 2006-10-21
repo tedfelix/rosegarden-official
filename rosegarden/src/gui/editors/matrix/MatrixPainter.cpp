@@ -134,7 +134,7 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
     double width = ev->getDuration() * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(int(width + _fiddleFactor)); // fiddle factor
+    m_currentElement->setWidth(int(width + fiddleFactor)); // fiddle factor
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
@@ -165,7 +165,7 @@ int MatrixPainter::handleMouseMove(timeT time,
     if (width == 0)
         width = initialWidth;
     else
-        width += _fiddleFactor; // fiddle factor
+        width += fiddleFactor; // fiddle factor
 
     m_currentElement->setWidth(int(width));
 

@@ -1,5 +1,6 @@
 
 #include "GuitarChordEditor.h"
+#include "FingeringConstructor.h"
 
 #include <qvariant.h>
 #include <qpushbutton.h>
@@ -23,6 +24,8 @@
 namespace Rosegarden
 {
 
+namespace Guitar {
+                
 class ChordInfo
 {
 public:
@@ -32,6 +35,7 @@ public:
     KComboBox* modifierComboBox;
     KLineEdit* suffixLineEdit;
 };
+}
 
 /*
  *  Constructs a GuitarChordEditor as a child of 'parent', with the
@@ -169,7 +173,7 @@ void GuitarChordEditor::clearDisplay()
 void GuitarChordEditor::createTab ( QString const& name )
 {
     QFrame * nameFrame = new QFrame ( tabWidget );
-    ChordInfo* cInfo = new ChordInfo();
+    Guitar::ChordInfo* cInfo = new Guitar::ChordInfo();
 
     // Setup the scale line of the tab
     QGridLayout* nameLayout = new QGridLayout ( nameFrame, 1, 1, 20, 6 );
@@ -245,7 +249,7 @@ void GuitarChordEditor::setChord ( Guitar::Chord* c_ptr )
     Guitar::ChordName* name_ptr = c_ptr->getName();
     InfoMap::reverse_iterator m_pos = m_infoMap.rbegin();
     InfoPair map_pair = ( *m_pos );
-    ChordInfo* info_ptr = map_pair.second;
+    Guitar::ChordInfo* info_ptr = map_pair.second;
     info_ptr->scaleComboBox->setCurrentItem ( name_ptr->getScale() );
     info_ptr->modifierComboBox->setCurrentItem ( name_ptr->getModifier() );
     info_ptr->suffixLineEdit->setText ( name_ptr->getSuffix() );
@@ -320,6 +324,7 @@ void GuitarChordEditor::toggleMode()
 }
 
 }
+
 
 #include "GuitarChordEditor.moc"
 

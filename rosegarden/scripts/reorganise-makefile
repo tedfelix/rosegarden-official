@@ -1,12 +1,12 @@
 
-KDEDIR		= /usr
-QTDIR		= $(KDEDIR)
+KDEDIR		= /opt/kde3.5
+QTDIR		= /opt/qt3
 
-KDEINC		= /usr/include/kde
-KDELIB		= /usr/lib
+KDEINC		= $(KDEDIR)/include
+KDELIB		= $(KDEDIR)/lib
 
-QTINC		= /usr/include/qt3
-QTLIB		= /usr/lib
+QTINC		= $(QTDIR)/include
+QTLIB		= $(QTDIR)/lib
 
 CCDIR		= /usr
 
@@ -14,8 +14,8 @@ CCACHE		=
 CC		= $(CCACHE) $(CCDIR)/bin/cc
 CXX		= $(CCACHE) $(CCDIR)/bin/c++
 LD		= $(CXX)
-MOC		= $(QTDIR)/bin/moc-qt3
-UIC		= $(QTDIR)/bin/uic-qt3
+MOC		= $(QTDIR)/bin/moc
+UIC		= $(QTDIR)/bin/uic
 
 #CXXFLAGS	= -w1 -wr748 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g 
 CXXFLAGS	= -Wall -O0 -g -DQT_THREAD_SUPPORT -D'VERSION="1.5.0-reorg"'
@@ -37,8 +37,8 @@ LDLIBS		= \
 		-lkdeprint -lkdeui -lkdecore -lqt-mt \
 		-ljack -lasound -llo -llrdf -lraptor -lmad -llirc_client
 
-HEADERS		= $(wildcard */*.h */*/*.h */*/*/*.h)
-SOURCES		= $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp)
+HEADERS		= $(filter-out gui/editors/guitar/%.h, $(wildcard */*.h */*/*.h */*/*/*.h))
+SOURCES		= $(filter-out gui/editors/guitar/%.cpp, $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp))
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
@@ -64,3 +64,5 @@ all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EX
 clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
 
+test:
+	echo $(QSOURCES)

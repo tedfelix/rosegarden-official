@@ -24,6 +24,7 @@
 
 
 #include "MatrixHLayout.h"
+#include "MatrixElement.h"
 #include "misc/Debug.h"
 
 #include "base/Composition.h"

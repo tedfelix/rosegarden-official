@@ -28,23 +28,13 @@
 
 #include "gui/general/EditToolBox.h"
 
-
 class QString;
 
 
 namespace Rosegarden
 {
 
-class MatrixView;
 class EditTool;
-
-
-//////////////////////////////////////////////////////////////////////
-
-#include "NotationTypes.h"
-
-#include "edittool.h"
-
 class MatrixView;
 class MatrixElement;
 class MatrixStaff;

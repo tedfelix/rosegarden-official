@@ -36,6 +36,7 @@
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/general/EditTool.h"
+#include "gui/general/EditToolBox.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "MatrixElement.h"

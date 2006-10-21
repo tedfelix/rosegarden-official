@@ -63,6 +63,12 @@ protected:
     //--------------- Data members ---------------------------------
 
     MatrixView* m_mParentView;
+    
+    // Use this to make sure that Matrix events butt up to the grid
+    // lines in a pleasing fashion,
+    //
+    static const double fiddleFactor;
+    
 };
 
 

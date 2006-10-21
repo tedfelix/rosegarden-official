@@ -145,9 +145,9 @@ int MatrixResizer::handleMouseMove(timeT newTime,
 
     // Don't allow zero width here - always at least _fiddleFactor wide
     if (width > 0)
-        width += _fiddleFactor;
+        width += fiddleFactor;
     else if (width < 0)
-        width -= _fiddleFactor;
+        width -= fiddleFactor;
 
     int diffWidth = initialWidth - int(width);
 
