@@ -32,6 +32,7 @@
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
 
+#include <qcanvas.h>
 
 namespace Rosegarden
 {

@@ -54,7 +54,7 @@ protected:
     QCanvasPixmapArray* m_pixmapArray;
 };
 
-class NotationElement;
+namespace Rosegarden { class NotationElement; }
 
 /**
  * A QCanvasSprite referencing a NotationElement
@@ -62,17 +62,17 @@ class NotationElement;
 class QCanvasNotationSprite : public QCanvasSimpleSprite
 {
 public:
-    QCanvasNotationSprite(NotationElement&, QPixmap*, QCanvas*);
-    QCanvasNotationSprite(NotationElement&, QCanvasPixmap*, QCanvas*);
+    QCanvasNotationSprite(Rosegarden::NotationElement&, QPixmap*, QCanvas*);
+    QCanvasNotationSprite(Rosegarden::NotationElement&, QCanvasPixmap*, QCanvas*);
 
     virtual ~QCanvasNotationSprite();
     
-    NotationElement& getNotationElement() { return m_notationElement; }
+    Rosegarden::NotationElement& getNotationElement() { return m_notationElement; }
 
 protected:
     //--------------- Data members ---------------------------------
 
-    NotationElement& m_notationElement;
+    Rosegarden::NotationElement& m_notationElement;
 };
 
 class QCanvasNonElementSprite : public QCanvasSimpleSprite

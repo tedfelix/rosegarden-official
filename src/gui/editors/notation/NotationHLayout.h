@@ -398,7 +398,7 @@ protected:
     (Staff &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
-                         const Key &) const;
+                         const ::Rosegarden::Key &) const;
 
     int getBarMargin() const;
     int getPreBarMargin() const;

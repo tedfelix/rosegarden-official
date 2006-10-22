@@ -31,7 +31,6 @@
 #include "NotationProperties.h"
 #include "NoteStyleFactory.h"
 
-
 namespace Rosegarden
 {
 
@@ -40,7 +39,7 @@ NotationChord::NotationChord(NotationElementList &c,
                              const Quantizer *quantizer,
                              const NotationProperties &properties,
                              const Clef &clef,
-                             const Key &key) :
+                             const ::Rosegarden::Key &key) :
         GenericChord < NotationElement,
         NotationElementList, true > (c, i, quantizer,
                                      NotationProperties::STEM_UP),
@@ -86,7 +85,7 @@ NotationChord::hasStem() const
     for (;;) {
         long note;
         if (!getAsEvent(i)->get
-                <Int>(NOTE_TYPE, note)) return true;
+                <Int>(BaseProperties::NOTE_TYPE, note)) return true;
         if (NoteStyleFactory::getStyleForEvent(getAsEvent(i))->hasStem(note))
             return true;
         if (i == getFinalNote())

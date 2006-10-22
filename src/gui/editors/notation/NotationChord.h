@@ -28,7 +28,7 @@
 
 #include "base/NotationTypes.h"
 #include "base/Sets.h"
-
+#include "NotationElement.h"
 
 class Iterator;
 
