@@ -35,6 +35,7 @@
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include "NoteStyleFactory.h"
+#include "NotePixmapFactory.h"
 
 
 namespace Rosegarden
@@ -58,7 +59,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
 {
     if (!(*i)->event()->get
             <Int>
-            (BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
+            (BaseProperties::BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
 
     initialise();
 
@@ -124,14 +125,14 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
 
     std::string t;
     if (!(*i)->event()->get
-            <String>(BEAMED_GROUP_TYPE, t)) {
+            <String>(BaseProperties::BEAMED_GROUP_TYPE, t)) {
         //	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for non-beamed element" << endl;
         return false;
     }
 
     long n;
     if (!(*i)->event()->get
-            <Int>(BEAMED_GROUP_ID, n)) return false;
+            <Int>(BaseProperties::BEAMED_GROUP_ID, n)) return false;
     if (m_groupNo == -1) {
         m_groupNo = n;
     } else if (n != m_groupNo) {
@@ -139,11 +140,11 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
         return false;
     }
 
-    if (t == GROUP_TYPE_BEAMED) {
+    if (t == BaseProperties::GROUP_TYPE_BEAMED) {
         m_type = Beamed;
-    } else if (t == GROUP_TYPE_TUPLED) {
+    } else if (t == BaseProperties::GROUP_TYPE_TUPLED) {
         m_type = Tupled;
-    } else if (t == GROUP_TYPE_GRACE) {
+    } else if (t == BaseProperties::GROUP_TYPE_GRACE) {
         m_type = Grace;
     } else {
         NOTATION_DEBUG << "NotationGroup::NotationGroup: Warning: Rejecting sample() for unknown GroupType \"" << t << "\"" << endl;
@@ -289,11 +290,11 @@ NotationGroup::applyStemProperties()
         el->event()->setMaybe<Bool>(NotationProperties::BEAM_ABOVE, aboveNotes);
 
         if (el->isNote() &&
-                el->event()->has(NOTE_TYPE) &&
+                el->event()->has(BaseProperties::NOTE_TYPE) &&
                 el->event()->get
-                <Int>(NOTE_TYPE) < Note::Crotchet &&
-                el->event()->has(BEAMED_GROUP_ID) &&
-                el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
+                <Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
+                el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
+                el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
 
             el->event()->setMaybe<Bool>(NotationProperties::BEAMED, true);
             //	    el->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
@@ -325,11 +326,11 @@ const
         NotationElement* el = static_cast<NotationElement*>(*i);
 
         if (el->isNote() &&
-                el->event()->has(NOTE_TYPE) &&
+                el->event()->has(BaseProperties::NOTE_TYPE) &&
                 el->event()->get
-                <Int>(NOTE_TYPE) < Note::Crotchet &&
-                el->event()->has(BEAMED_GROUP_ID) &&
-                el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
+                <Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
+                el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
+                el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
             if (found) return true; // a rest is wholly enclosed by beamed notes
             inside = true;
         }
@@ -470,7 +471,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     using std::min;
     long shortestNoteType = Note::Quaver;
     if (!(*getShortestElement())->event()->get
-            <Int>(NOTE_TYPE,
+            <Int>(BaseProperties::NOTE_TYPE,
                   shortestNoteType)) {
         NOTATION_DEBUG << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
         NOTATION_DEBUG << "(Event dump follows)" << endl;
@@ -660,11 +661,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
         el->event()->unset(m_properties.TUPLING_LINE_MY_Y);
 
         if (el->isNote() &&
-                el->event()->has(NOTE_TYPE) &&
+                el->event()->has(BaseProperties::NOTE_TYPE) &&
                 el->event()->get
-                <Int>(NOTE_TYPE) < Note::Crotchet &&
-                el->event()->has(BEAMED_GROUP_ID) &&
-                el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
+                <Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
+                el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
+                el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
 
             NotationChord chord(getContainer(), i, &getQuantizer(),
                                 m_properties, m_clef, m_key);
@@ -698,14 +699,14 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
                 long dots = 0;
                 (void)el->event()->get
-                <Int>(NOTE_DOTS, dots);
+                <Int>(BaseProperties::NOTE_DOTS, dots);
 
                 el->event()->setMaybe<Bool>
                 (m_properties.NOTE_DOT_SHIFTED, false);
                 if (hasShifted && beam.aboveNotes) {
                     long dots = 0;
                     (void)el->event()->get
-                    <Int>(NOTE_DOTS, dots);
+                    <Int>(BaseProperties::NOTE_DOTS, dots);
                     if (dots > 0) {
                         el->event()->setMaybe<Bool>
                         (m_properties.NOTE_DOT_SHIFTED, true);
@@ -732,7 +733,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
             int beamCount =
                 NoteStyleFactory::getStyleForEvent(el->event())->
                 getFlagCount(el->event()->get
-                             <Int>(NOTE_TYPE));
+                             <Int>(BaseProperties::NOTE_TYPE));
 
             // If THIS_PART_BEAMS is true, then when drawing the
             // chord, if it requires more beams than the following
@@ -769,7 +770,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
                 int prevBeamCount =
                     NoteStyleFactory::getStyleForEvent(prevEl->event())->
                     getFlagCount(prevEl->event()->get
-                                 <Int>(NOTE_TYPE));
+                                 <Int>(BaseProperties::NOTE_TYPE));
 
                 if ((beamCount > 0) && (prevBeamCount > 0)) {
                     el->event()->setMaybe<Bool>(m_properties.BEAMED, true);

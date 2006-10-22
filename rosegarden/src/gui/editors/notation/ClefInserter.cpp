@@ -32,6 +32,7 @@
 #include "commands/notation/ClefInsertionCommand.h"
 #include "gui/general/EditTool.h"
 #include "gui/general/LinedStaff.h"
+#include "NotationElement.h"
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"

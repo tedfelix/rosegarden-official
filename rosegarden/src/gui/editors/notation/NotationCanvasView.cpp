@@ -29,6 +29,8 @@
 #include "misc/Strings.h"
 #include "gui/general/LinedStaffManager.h"
 #include "gui/general/RosegardenCanvasView.h"
+#include "gui/kdeext/QCanvasGroupableItem.h"
+#include "gui/kdeext/QCanvasSimpleSprite.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
 #include "NotationStaff.h"

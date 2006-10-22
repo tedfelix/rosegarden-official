@@ -80,6 +80,7 @@ NotationHLayout::~NotationHLayout()
     // empty
 }
 
+std::vector<int>
 NotationHLayout::getAvailableSpacings()
 {
     if (m_availableSpacings.size() == 0) {
@@ -94,6 +95,7 @@ NotationHLayout::getAvailableSpacings()
     return m_availableSpacings;
 }
 
+std::vector<int>
 NotationHLayout::getAvailableProportions()
 {
     if (m_availableProportions.size() == 0) {
@@ -126,6 +128,7 @@ NotationHLayout::getBarData(Staff &staff) const
     return ((NotationHLayout *)this)->getBarData(staff);
 }
 
+NotationElementList::iterator
 NotationHLayout::getStartOfQuantizedSlice(NotationElementList *notes,
         timeT t)
 const
@@ -189,7 +192,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         helper.setNotationProperties(startTime, endTime);
     }
 
-    Key key = segment.getKeyAtTime(startTime);
+    ::Rosegarden::Key key = segment.getKeyAtTime(startTime);
     Clef clef = segment.getClefAtTime(startTime);
     TimeSignature timeSignature =
         segment.getComposition()->getTimeSignatureAt(startTime);
@@ -332,15 +335,15 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
             bool invisible = false;
             if (el->event()->get
-                    <Bool>(INVISIBLE, invisible) && invisible) {
+                    <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
                 if (!showInvisibles)
                     continue;
             }
 
-            if (el->event()->has(BEAMED_GROUP_ID)) {
+            if (el->event()->has(BaseProperties::BEAMED_GROUP_ID)) {
                 NOTATION_DEBUG << "element is beamed" << endl;
                 long groupId = el->event()->get
-                               <Int>(BEAMED_GROUP_ID);
+                               <Int>(BaseProperties::BEAMED_GROUP_ID);
                 if (groupIds.find(groupId) == groupIds.end()) {
                     NOTATION_DEBUG << "it's a new beamed group, applying stem properties" << endl;
                     NotationGroup group(*staff.getViewElementList(),
@@ -363,13 +366,13 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                 clef = Clef(*el->event());
                 accTable.newClef(clef);
 
-            } else if (el->event()->isa(Key::EventType)) {
+            } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
                 //		NOTATION_DEBUG << "Found key" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, key)));
 
-                key = Key(*el->event());
+                key = ::Rosegarden::Key(*el->event());
 
                 accTable = AccidentalTable
                            (key, clef, octaveType, barResetType);
@@ -1718,17 +1721,17 @@ NotationHLayout::positionChord(Staff &staff,
 
 float
 NotationHLayout::getLayoutWidth(ViewElement &ve,
-                                const Key &previousKey) const
+                                const ::Rosegarden::Key &previousKey) const
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
 
-    if ((e.isNote() || e.isRest()) && e.event()->has(NOTE_TYPE)) {
+    if ((e.isNote() || e.isRest()) && e.event()->has(BaseProperties::NOTE_TYPE)) {
 
         long noteType = e.event()->get
-                        <Int>(NOTE_TYPE);
+                        <Int>(BaseProperties::NOTE_TYPE);
         long dots = 0;
         (void)e.event()->get
-        <Int>(NOTE_DOTS, dots);
+        <Int>(BaseProperties::NOTE_DOTS, dots);
 
         double bw = 0;
 

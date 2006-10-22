@@ -22,16 +22,21 @@
 #ifndef GUITAR_TAB_SELECTOR_H_
 #define GUITAR_TAB_SELECTOR_H_
 
-#include "Fingering.h"
-#include "ChordMap.h"
+//#include "Fingering.h"
+//#include "ChordMap.h"
 
 #include <kdialogbase.h>
+#include <qstring.h>
+#include <vector>
 
-#include <qtextedit.h>
+class QListBox;
+class QTextEdit;
 
 namespace Rosegarden
 {
-    class Event;
+class Event;
+
+namespace Guitar { class Fingering; class ChordMap; class GuitarNeck; class FingeringConstructor; }
 
 class GuitarTabSelectorDialog : public KDialogBase
 {
