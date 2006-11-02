@@ -1012,13 +1012,10 @@ NoteFontMap::dump() const
     << getMappedBy() << "\nType: " << getType()
     << "\nSmooth: " << isSmooth() << std::endl;
 
-    set
-        <int> sizes = getSizes();
-    set
-        <CharName> names = getCharNames();
+    std::set<int> sizes = getSizes();
+    std::set<CharName> names = getCharNames();
 
-    for (set
-            <int>::iterator sizei = sizes.begin(); sizei != sizes.end();
+    for (std::set<int>::iterator sizei = sizes.begin(); sizei != sizes.end();
             ++sizei) {
 
         std::cout << "\nSize: " << *sizei << "\n" << std::endl;
@@ -1049,8 +1046,7 @@ NoteFontMap::dump() const
             std::cout << "Flag spacing: " << t << std::endl;
         }
 
-        for (set
-                <CharName>::iterator namei = names.begin();
+        for (std::set<CharName>::iterator namei = names.begin();
                 namei != names.end(); ++namei) {
 
             std::cout << "\nCharacter: " << namei->c_str() << std::endl;

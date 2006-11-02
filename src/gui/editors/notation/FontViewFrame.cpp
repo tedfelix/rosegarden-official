@@ -33,6 +33,7 @@
 #include <qsize.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include <qpainter.h>
 
 #ifdef HAVE_XFT
 #include <ft2build.h>

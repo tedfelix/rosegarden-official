@@ -71,6 +71,13 @@
 namespace Rosegarden
 {
 
+using namespace Accidentals;
+
+static clock_t drawBeamsTime = 0;
+static clock_t makeNotesTime = 0;
+static int drawBeamsCount = 0;
+static int drawBeamsBeamCount = 0;
+
 class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
 {
     // nothing to add -- just so we can predeclare it in the header
@@ -3134,8 +3141,6 @@ QPoint
 NotePixmapFactory::m_pointZero;
 
 
-
-QPoint
 int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
 const
 {

@@ -1,10 +1,12 @@
 #!/bin/bash
+files="$@"
 tried=0
 succeeded=0
-time for x in `find . -name \*.cpp -print` ; do 
+if [ -z "$files" ]; then files=`find . -name \*.cpp -print`; fi
+time for x in $files ; do 
     	tried=$(($tried+1))
 	o=`dirname $x`/`basename $x .cpp`.o
-	if [ -f "$o" ] || /usr/bin/c++ -c -Wall -O0 -g -DQT_THREAD_SUPPORT -D'VERSION="1.5.0-reorg"' -I/usr/include -I/usr/local/include -I/usr/include/qt3 -I/usr/include/kde -I/usr/include/freetype2 -Ibase -I. $x -o "$o" > /tmp/out_$$ 2>&1 ; then
+	if [ -f "$o" ] || /usr/bin/c++ -c -Wall -O0 -g -DHAVE_XFT -DQT_THREAD_SUPPORT -D'VERSION="1.5.0-reorg"' -I/usr/include -I/usr/local/include -I/usr/include/qt3 -I/usr/include/kde -I/usr/include/freetype2 -Ibase -I. $x -o "$o" > /tmp/out_$$ 2>&1 ; then
 		succeeded=$(($succeeded+1))
 		echo "YES!! ($succeeded of $tried) $x"
 	else
