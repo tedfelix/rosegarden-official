@@ -27,6 +27,7 @@
 #define _RG_SEGMENTTOOLBOX_H_
 
 #include "gui/general/BaseToolBox.h"
+#include "SegmentTool.h"
 
 
 class QString;
@@ -35,7 +36,6 @@ class QString;
 namespace Rosegarden
 {
 
-class SegmentTool;
 class RosegardenGUIDoc;
 class CompositionView;
 

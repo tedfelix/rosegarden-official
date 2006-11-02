@@ -19,7 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "notecharname.h"
+#include "NoteCharacterNames.h"
 
 namespace Rosegarden
 {

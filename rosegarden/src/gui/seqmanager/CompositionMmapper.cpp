@@ -38,6 +38,7 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <stdint.h>
 
 
 namespace Rosegarden

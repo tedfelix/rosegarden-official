@@ -90,6 +90,7 @@ NotePixmapParameters::removeMarks()
     m_marks.clear();
 }
 
+std::vector<Rosegarden::Mark>
 NotePixmapParameters::getNormalMarks() const
 {
     std::vector<Mark> marks;
@@ -113,6 +114,7 @@ NotePixmapParameters::getNormalMarks() const
     return marks;
 }
 
+std::vector<Rosegarden::Mark>
 NotePixmapParameters::getAboveMarks() const
 {
     std::vector<Mark> marks;

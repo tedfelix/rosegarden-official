@@ -27,6 +27,8 @@
 
 #include "gui/editors/notation/NotePixmapFactory.h"
 
+namespace Rosegarden {
+
 /**
  * A QCanvasSprite with 1 frame only
  */
@@ -54,7 +56,7 @@ protected:
     QCanvasPixmapArray* m_pixmapArray;
 };
 
-namespace Rosegarden { class NotationElement; }
+class NotationElement;
 
 /**
  * A QCanvasSprite referencing a NotationElement
@@ -125,5 +127,7 @@ protected:
 
     static std::vector<QCanvasPixmapArray*> m_pixmapArrays;
 };
+
+}
 
 #endif

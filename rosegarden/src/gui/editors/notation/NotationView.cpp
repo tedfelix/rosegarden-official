@@ -115,6 +115,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "FretboardInserter.h"
 #include "gui/application/SetWaitCursor.h"
+#include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/InterpretDialog.h"
@@ -137,9 +138,11 @@
 #include "gui/general/ProgressReporter.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/kdeext/QCanvasSimpleSprite.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/RawNoteRuler.h"
 #include "gui/rulers/TempoRuler.h"
+#include "gui/rulers/LoopRuler.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/EventFilterDialog.h"
 #include "gui/widgets/ProgressBar.h"
@@ -433,7 +436,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                     false, getCentralWidget()));
 
     m_topBarButtons->getLoopRuler()->setBackgroundColor
-    (GUIPalette::getColour(GUIPalette::InsertCursorRuler));
+        (GUIPalette::getColour(GUIPalette::InsertCursorRuler));
 
     m_chordNameRuler = new ChordNameRuler
                        (m_hlayout, doc, segments, m_leftGutter, 20, getCentralWidget());

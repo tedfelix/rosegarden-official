@@ -41,9 +41,6 @@
 class QPainter;
 class QCanvasPixmap;
 class QBitmap;
-class NotePixmapPainter;
-class NotePixmapCache;
-class Accidental;
 
 
 namespace Rosegarden
@@ -57,6 +54,8 @@ class NoteStyle;
 class NotePixmapParameters;
 class NoteFont;
 class Fingering;
+class NotePixmapPainter;
+class NotePixmapCache;
 class Clef;
 
 

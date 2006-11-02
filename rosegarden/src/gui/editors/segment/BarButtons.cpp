@@ -33,6 +33,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
+#include "document/RosegardenGUIDoc.h"
 #include <qobject.h>
 #include <qtooltip.h>
 #include <qvbox.h>

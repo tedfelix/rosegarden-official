@@ -32,6 +32,7 @@
 #include "base/PropertyName.h"
 #include "base/Selection.h"
 #include "base/ViewElement.h"
+#include "base/BaseProperties.h"
 #include "commands/edit/MoveAcrossSegmentsCommand.h"
 #include "commands/edit/MoveCommand.h"
 #include "commands/edit/TransposeCommand.h"
@@ -56,6 +57,8 @@
 
 namespace Rosegarden
 {
+ 
+using namespace BaseProperties;
 
 NotationSelector::NotationSelector(NotationView* view)
         : NotationTool("NotationSelector", view),
@@ -397,16 +400,13 @@ void NotationSelector::drag(int x, int y, bool final)
     timeT clickedTime = m_clickedElement->event()->getNotationAbsoluteTime();
 
     Accidental clickedAccidental = Accidentals::NoAccidental;
-    (void)m_clickedElement->event()->get
-    <String>(ACCIDENTAL, clickedAccidental);
+    (void)m_clickedElement->event()->get<String>(ACCIDENTAL, clickedAccidental);
 
     long clickedPitch = 0;
-    (void)m_clickedElement->event()->get
-    <Int>(PITCH, clickedPitch);
+    (void)m_clickedElement->event()->get<Int>(PITCH, clickedPitch);
 
     long clickedHeight = 0;
-    (void)m_clickedElement->event()->get
-    <Int>
+    (void)m_clickedElement->event()->get<Int>
     (NotationProperties::HEIGHT_ON_STAFF, clickedHeight);
 
     Event *clefEvt = 0, *keyEvt = 0;

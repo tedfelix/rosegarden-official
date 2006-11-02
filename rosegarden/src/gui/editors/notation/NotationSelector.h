@@ -27,6 +27,7 @@
 #define _RG_NOTATIONSELECTOR_H_
 
 #include "NotationTool.h"
+#include "NotationElement.h"
 #include <qstring.h>
 #include "base/Event.h"
 

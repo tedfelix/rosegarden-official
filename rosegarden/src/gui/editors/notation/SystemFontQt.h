@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,40 +22,27 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYSTEMFONT_H_
-#define _RG_SYSTEMFONT_H_
+#ifndef _RG_SYSTEMFONTQT_H_
+#define _RG_SYSTEMFONTQT_H_
 
-#include <qpixmap.h>
-#include "gui/editors/notation/NoteCharacterNames.h"
+#include "SystemFont.h"
 
+#include <qfont.h>
 
-class SystemFontSpec;
+namespace Rosegarden {
 
-
-namespace Rosegarden
-{
-
-typedef std::pair<QString, int> SystemFontSpec;
-
-
-class SystemFont
+class SystemFontQt : public SystemFont
 {
 public:
-    enum Strategy {
-        PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
-    };
+    SystemFontQt(QFont &font) : m_font(font) { }
+    virtual ~SystemFontQt() { }
 
-    virtual QPixmap renderChar(CharName charName,
-                               int glyph, int code,
-                               Strategy strategy,
-                               bool &success) = 0;
+    virtual QPixmap renderChar(CharName charName, int glyph, int code,
+			       Strategy strategy, bool &success);
 
-    static SystemFont *loadSystemFont(const SystemFontSpec &spec);
+private:
+    QFont m_font;
 };
-
-
-// Helper class for looking up information about a font
-
 
 }
 

@@ -38,6 +38,7 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
+#include "NotationElement.h"
 #include <kaction.h>
 #include <qdialog.h>
 #include <qiconset.h>

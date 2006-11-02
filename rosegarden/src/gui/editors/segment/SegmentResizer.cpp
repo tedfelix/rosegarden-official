@@ -32,6 +32,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
+#include "base/SnapGrid.h"
 #include "commands/segment/AudioSegmentResizeFromStartCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "commands/segment/SegmentResizeFromStartCommand.h"

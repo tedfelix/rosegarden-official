@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,41 +22,37 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYSTEMFONT_H_
-#define _RG_SYSTEMFONT_H_
+#ifndef _RG_SYSTEMFONTXFT_H_
+#define _RG_SYSTEMFONTXFT_H_
 
-#include <qpixmap.h>
-#include "gui/editors/notation/NoteCharacterNames.h"
+#ifdef HAVE_XFT
 
+#include "SystemFont.h"
 
-class SystemFontSpec;
+#include <ft2build.h>
+#include FT_FREETYPE_H 
+#include FT_OUTLINE_H
+#include FT_GLYPH_H
+#include <X11/Xft/Xft.h>
 
+namespace Rosegarden {
 
-namespace Rosegarden
-{
-
-typedef std::pair<QString, int> SystemFontSpec;
-
-
-class SystemFont
+class SystemFontXft : public SystemFont
 {
 public:
-    enum Strategy {
-        PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
-    };
+    SystemFontXft(Display *dpy, XftFont *font) : m_dpy(dpy), m_font(font) { }
+    virtual ~SystemFontXft() { if (m_font) XftFontClose(m_dpy, m_font); }
+    
+    virtual QPixmap renderChar(CharName charName, int glyph, int code,
+			       Strategy strategy, bool &success);
 
-    virtual QPixmap renderChar(CharName charName,
-                               int glyph, int code,
-                               Strategy strategy,
-                               bool &success) = 0;
-
-    static SystemFont *loadSystemFont(const SystemFontSpec &spec);
+private:
+    Display *m_dpy;
+    XftFont *m_font;
 };
 
-
-// Helper class for looking up information about a font
-
-
 }
+
+#endif
 
 #endif

@@ -297,7 +297,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     if (clefEvt)
         clef = Clef(*clefEvt);
     if (keyEvt)
-        key = Key(*keyEvt);
+        key = Rosegarden::Key(*keyEvt);
 
     NotationElement* el = static_cast<NotationElement*>(*itr);
     if (el->isRest() && el->getCanvasItem()) {
@@ -640,6 +640,25 @@ void NoteInserter::slotRestsSelected()
         action->activate();
     }
 }
+
+const char* NoteInserter::m_actionsAccidental[][4] =
+{
+    { "No accidental",  "1slotNoAccidental()",  "no_accidental",
+      "accidental-none" },
+    { "Follow accidental",  "1slotFollowAccidental()",  "follow_accidental",
+      "accidental-follow" },
+    { "Sharp",          "1slotSharp()",         "sharp_accidental",
+      "accidental-sharp" },
+    { "Flat",           "1slotFlat()",          "flat_accidental",
+      "accidental-flat" },
+    { "Natural",        "1slotNatural()",       "natural_accidental",
+      "accidental-natural" },
+    { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
+      "accidental-doublesharp" },
+    { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
+      "accidental-doubleflat" }
+};
+
 
 }
 #include "NoteInserter.moc"

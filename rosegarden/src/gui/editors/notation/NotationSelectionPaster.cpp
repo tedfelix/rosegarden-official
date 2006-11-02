@@ -34,6 +34,7 @@
 #include "gui/general/LinedStaff.h"
 #include "NotationTool.h"
 #include "NotationView.h"
+#include "NotationElement.h"
 
 
 namespace Rosegarden

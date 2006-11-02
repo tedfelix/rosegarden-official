@@ -39,6 +39,7 @@
 namespace Rosegarden
 {
 
+QString
 NotationStrings::addDots(QString s, int dots,
                          bool hyphenate, bool internationalize)
 {

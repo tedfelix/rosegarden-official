@@ -28,6 +28,8 @@
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"
+#include "NotationElement.h"
+#include "NoteStyle.h"
 #include <qstring.h>
 #include "base/Event.h"
 
@@ -102,16 +104,16 @@ protected:
     NoteInserter(const QString& menuName, NotationView*);
 
     timeT getOffsetWithinRest(int staffNo,
-                                          const NotationElementList::iterator&,
-                                          double &canvasX);
+                              const NotationElementList::iterator&,
+                              double &canvasX);
 
     int getOttavaShift(Segment &segment, timeT time);
 
     virtual Event *doAddCommand(Segment &,
-                                            timeT time,
-                                            timeT endTime,
-                                            const Note &,
-                                            int pitch, Accidental);
+                                timeT time,
+                                timeT endTime,
+                                const Note &,
+                                int pitch, Accidental);
 
     virtual bool computeLocationAndPreview(QMouseEvent *e);
     virtual void showPreview();

@@ -24,6 +24,9 @@
 
 
 #include "SystemFont.h"
+#include "SystemFontQt.h"
+#include "SystemFontXft.h"
+
 #include "misc/Debug.h"
 
 #include <kstddirs.h>

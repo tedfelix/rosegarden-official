@@ -31,6 +31,7 @@
 #include "base/Exception.h"
 #include "NotationProperties.h"
 #include "NoteStyle.h"
+#include "NoteStyleFileReader.h"
 #include <kglobal.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -41,6 +42,7 @@
 namespace Rosegarden
 {
 
+std::vector<NoteStyleName>
 NoteStyleFactory::getAvailableStyleNames()
 {
     std::vector<NoteStyleName> names;
@@ -116,11 +118,5 @@ NoteStyleFactory::getStyleForEvent(Event *event)
 
 NoteStyleFactory::StyleMap NoteStyleFactory::m_styles;
 
-
-
-NoteStyle::~NoteStyle()
-{
-    // nothing
-}
 
 }
