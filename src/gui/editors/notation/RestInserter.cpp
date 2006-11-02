@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "base/BaseProperties.h"
 #include "base/Segment.h"
 #include "commands/notation/NoteInsertionCommand.h"
 #include "commands/notation/RestInsertionCommand.h"
@@ -48,99 +49,100 @@
 namespace Rosegarden
 {
 
-const char* NoteInserter::m_actionsAccidental[][4] =
-    RestInserter::RestInserter(NotationView* view)
-            : NoteInserter("RestInserter", view)
-    {
-        QIconSet icon;
+using namespace BaseProperties;
 
-        icon = QIconSet
-               (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                             makeToolbarPixmap("dotted-rest-crotchet")));
-        new KToggleAction(i18n("Dotted rest"), icon, 0, this,
-                          SLOT(slotToggleDot()), actionCollection(),
-                          "toggle_dot");
+RestInserter::RestInserter(NotationView* view)
+    : NoteInserter("RestInserter", view)
+{
+    QIconSet icon;
+    
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::
+                                      makeToolbarPixmap("dotted-rest-crotchet")));
+    new KToggleAction(i18n("Dotted rest"), icon, 0, this,
+                      SLOT(slotToggleDot()), actionCollection(),
+                      "toggle_dot");
+    
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+                                                 makeToolbarPixmap("select")));
+    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+                SLOT(slotSelectSelected()), actionCollection(),
+                "select");
 
-        icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                        makeToolbarPixmap("select")));
-        new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                    SLOT(slotSelectSelected()), actionCollection(),
-                    "select");
+    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+                SLOT(slotEraseSelected()), actionCollection(),
+                "erase");
 
-        new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                    SLOT(slotEraseSelected()), actionCollection(),
-                    "erase");
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::
+                                      makeToolbarPixmap("crotchet")));
+    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
+                SLOT(slotNotesSelected()), actionCollection(),
+                "notes");
 
-        icon = QIconSet
-               (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                             makeToolbarPixmap("crotchet")));
-        new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
-                    SLOT(slotNotesSelected()), actionCollection(),
-                    "notes");
+    createMenu("restinserter.rc");
+}
 
-        createMenu("restinserter.rc");
+void
+RestInserter::showPreview()
+{
+    // no preview available for now
+}
+
+Event *
+RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
+                           const Note &note, int, Accidental)
+{
+    if (time < segment.getStartTime() ||
+        endTime > segment.getEndMarkerTime() ||
+        time + note.getDuration() > segment.getEndMarkerTime()) {
+        return 0;
     }
 
-    void
-    RestInserter::showPreview()
-    {
-        // no preview available for now
-    }
+    NoteInsertionCommand *insertionCommand =
+        new RestInsertionCommand(segment, time, endTime, note);
 
-    Event *
-    RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
-                               const Note &note, int, Accidental)
-    {
-        if (time < segment.getStartTime() ||
-                endTime > segment.getEndMarkerTime() ||
-                time + note.getDuration() > segment.getEndMarkerTime()) {
-            return 0;
-        }
+    KCommand *activeCommand = insertionCommand;
 
-        NoteInsertionCommand *insertionCommand =
-            new RestInsertionCommand(segment, time, endTime, note);
+    if (m_nParentView->isInTripletMode()) {
+        Segment::iterator i(segment.findTime(time));
+        if (i != segment.end() &&
+            !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
-        KCommand *activeCommand = insertionCommand;
-
-        if (m_nParentView->isInTripletMode()) {
-            Segment::iterator i(segment.findTime(time));
-            if (i != segment.end() &&
-                    !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
-
-                KMacroCommand *command = new KMacroCommand(insertionCommand->name());
-                command->addCommand(new TupletCommand
-                                    (segment, time, note.getDuration()));
-                command->addCommand(insertionCommand);
-                activeCommand = command;
-            }
-        }
-
-        m_nParentView->addCommandToHistory(activeCommand);
-
-        return insertionCommand->getLastInsertedEvent();
-    }
-
-    void RestInserter::slotToggleDot()
-    {
-        m_noteDots = (m_noteDots) ? 0 : 1;
-        Note note(m_noteType, m_noteDots);
-        QString actionName(NotationStrings::getReferenceName(note, true));
-        actionName.replace(QRegExp("-"), "_");
-        KAction *action = m_parentView->actionCollection()->action(actionName);
-        if (!action) {
-            std::cerr << "WARNING: No such action as " << actionName << std::endl;
-        } else {
-            action->activate();
+            KMacroCommand *command = new KMacroCommand(insertionCommand->name());
+            command->addCommand(new TupletCommand
+                                (segment, time, note.getDuration()));
+            command->addCommand(insertionCommand);
+            activeCommand = command;
         }
     }
 
-    void RestInserter::slotNotesSelected()
-    {
-        Note note(m_noteType, m_noteDots);
-        QString actionName(NotationStrings::getReferenceName(note));
-        actionName.replace(QRegExp(" "), "_");
-        m_parentView->actionCollection()->action(actionName)->activate();
-    }
+    m_nParentView->addCommandToHistory(activeCommand);
 
+    return insertionCommand->getLastInsertedEvent();
+}
+
+void RestInserter::slotToggleDot()
+{
+    m_noteDots = (m_noteDots) ? 0 : 1;
+    Note note(m_noteType, m_noteDots);
+    QString actionName(NotationStrings::getReferenceName(note, true));
+    actionName.replace(QRegExp("-"), "_");
+    KAction *action = m_parentView->actionCollection()->action(actionName);
+    if (!action) {
+        std::cerr << "WARNING: No such action as " << actionName << std::endl;
+    } else {
+        action->activate();
     }
+}
+
+void RestInserter::slotNotesSelected()
+{
+    Note note(m_noteType, m_noteDots);
+    QString actionName(NotationStrings::getReferenceName(note));
+    actionName.replace(QRegExp(" "), "_");
+    m_parentView->actionCollection()->action(actionName)->activate();
+}
+
+}
 #include "RestInserter.moc"

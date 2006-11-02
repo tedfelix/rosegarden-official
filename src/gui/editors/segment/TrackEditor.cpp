@@ -28,6 +28,7 @@
 #include <kapplication.h>
 
 #include <klocale.h>
+#include <kconfig.h>
 #include <kstddirs.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"

@@ -52,6 +52,8 @@
 namespace Rosegarden
 {
 
+const QString notShowing(i18n("<not showing>"));
+
 ControlParameterEditDialog::ControlParameterEditDialog(
     QWidget *parent,
     ControlParameter *control,

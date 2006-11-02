@@ -27,6 +27,7 @@
 
 #include "misc/Debug.h"
 #include "base/Segment.h"
+#include "base/SnapGrid.h"
 #include "commands/segment/AudioSegmentSplitCommand.h"
 #include "commands/segment/SegmentSplitCommand.h"
 #include "CompositionItemHelper.h"

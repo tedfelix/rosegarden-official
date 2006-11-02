@@ -24,6 +24,7 @@
 
 
 #include "TriggerSegmentManager.h"
+#include "TriggerManagerItem.h"
 #include <qlayout.h>
 #include <kapplication.h>
 
@@ -53,6 +54,7 @@
 #include <kmessagebox.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
+#include <kconfig.h>
 #include <qaccel.h>
 #include <qdialog.h>
 #include <qframe.h>
@@ -64,6 +66,7 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qcanvas.h>
 
 
 namespace Rosegarden

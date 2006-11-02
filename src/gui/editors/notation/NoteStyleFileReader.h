@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,40 +22,37 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SYSTEMFONT_H_
-#define _RG_SYSTEMFONT_H_
+#ifndef _RG_NOTESTYLEFILEREADER_H_
+#define _RG_NOTESTYLEFILEREADER_H_
 
-#include <qpixmap.h>
-#include "gui/editors/notation/NoteCharacterNames.h"
+#include <qxml.h>
 
+#include "NoteStyle.h"
 
-class SystemFontSpec;
+namespace Rosegarden {
 
-
-namespace Rosegarden
-{
-
-typedef std::pair<QString, int> SystemFontSpec;
-
-
-class SystemFont
+class NoteStyleFileReader : public QXmlDefaultHandler
 {
 public:
-    enum Strategy {
-        PreferGlyphs, PreferCodes, OnlyGlyphs, OnlyCodes
-    };
+    NoteStyleFileReader(NoteStyleName name);
 
-    virtual QPixmap renderChar(CharName charName,
-                               int glyph, int code,
-                               Strategy strategy,
-                               bool &success) = 0;
+    typedef Rosegarden::Exception StyleFileReadFailed;
+    
+    NoteStyle *getStyle() { return m_style; }
 
-    static SystemFont *loadSystemFont(const SystemFontSpec &spec);
+    // Xml handler methods:
+
+    virtual bool startElement
+    (const QString& namespaceURI, const QString& localName,
+     const QString& qName, const QXmlAttributes& atts);
+    
+private:
+    bool setFromAttributes(Note::Type type, const QXmlAttributes &attributes);
+
+    QString m_errorString;
+    NoteStyle *m_style;
+    bool m_haveNote;
 };
-
-
-// Helper class for looking up information about a font
-
 
 }
 

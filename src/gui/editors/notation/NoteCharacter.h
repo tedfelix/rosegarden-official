@@ -28,16 +28,20 @@
 
 #include <qpixmap.h>
 #include <qpoint.h>
+#include <qpointarray.h>
 
 
 class QPainter;
 class QCanvasPixmap;
-class NoteCharacterDrawRep;
-
 
 namespace Rosegarden
 {
 
+class NoteCharacterDrawRep : public QPointArray
+{
+public:
+    NoteCharacterDrawRep(int size = 0) : QPointArray(size) { }
+};
 
 
 /**

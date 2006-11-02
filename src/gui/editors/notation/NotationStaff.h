@@ -36,6 +36,7 @@
 #include <string>
 #include <utility>
 #include "base/Event.h"
+#include "NotationElement.h"
 
 
 class QPainter;
@@ -58,7 +59,6 @@ class NotePixmapFactory;
 class Note;
 class NotationView;
 class NotationProperties;
-class NotationElement;
 class Key;
 class Event;
 class Clef;

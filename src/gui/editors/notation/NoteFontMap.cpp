@@ -43,7 +43,7 @@
 namespace Rosegarden
 {
 
-NoteFontMap::NoteFontMap(string name) :
+NoteFontMap::NoteFontMap(std::string name) :
         m_name(name),
         m_smooth(false),
         m_srcDirectory(name),
@@ -174,7 +174,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("autocrop");
         if (s) {
-            cerr << "Warning: autocrop attribute in note font mapping file is no longer supported\n(all fonts are now always autocropped)" << endl;
+            std::cerr << "Warning: autocrop attribute in note font mapping file is no longer supported\n(all fonts are now always autocropped)" << std::endl;
         }
 
         s = attributes.value("smooth");
@@ -220,12 +220,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("border-x");
         if (s) {
-            cerr << "Warning: border-x attribute in note font mapping file is no longer supported\n(use hotspot-x for note head or flag)" << endl;
+            std::cerr << "Warning: border-x attribute in note font mapping file is no longer supported\n(use hotspot-x for note head or flag)" << std::endl;
         }
 
         s = attributes.value("border-y");
         if (s) {
-            cerr << "Warning: border-y attribute in note font mapping file is no longer supported" << endl;
+            std::cerr << "Warning: border-y attribute in note font mapping file is no longer supported" << std::endl;
         }
 
         int fontId = 0;
@@ -595,7 +595,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                 m_systemFontNames[n] = name;
                 delete font;
             } else {
-                cerr << QString("Warning: Unable to load font \"%1\"").arg(name) << endl;
+                std::cerr << QString("Warning: Unable to load font \"%1\"").arg(name) << std::endl;
                 m_ok = false;
             }
 
@@ -614,8 +614,8 @@ NoteFontMap::startElement(const QString &, const QString &,
                 }
             }
             if (!have) {
-                cerr << QString("Warning: Unable to load any of the fonts in \"%1\"").
-                arg(names) << endl;
+                std::cerr << QString("Warning: Unable to load any of the fonts in \"%1\"").
+                arg(names) << std::endl;
                 m_ok = false;
             }
 
@@ -637,9 +637,9 @@ NoteFontMap::startElement(const QString &, const QString &,
             else if (s == "only-codes")
                 strategy = SystemFont::OnlyCodes;
             else {
-                cerr << "Warning: Unknown strategy value " << s
+                std::cerr << "Warning: Unknown strategy value " << s
                 << " (known values are prefer-glyphs, prefer-codes,"
-                << " only-glyphs, only-codes)" << endl;
+                << " only-glyphs, only-codes)" << std::endl;
             }
         }
 
@@ -675,38 +675,34 @@ NoteFontMap::fatalError(const QXmlParseException& exception)
     return QXmlDefaultHandler::fatalError(exception);
 }
 
-set
-    <int>
-    NoteFontMap::getSizes() const
-    {
-        set
-            <int> sizes;
-
-        for (SizeDataMap::const_iterator i = m_sizes.begin();
-                i != m_sizes.end(); ++i) {
-            sizes.insert(i->first);
-        }
-
-        return sizes;
+std::set<int>
+NoteFontMap::getSizes() const
+{
+    std::set<int> sizes;
+    
+    for (SizeDataMap::const_iterator i = m_sizes.begin();
+         i != m_sizes.end(); ++i) {
+        sizes.insert(i->first);
     }
+    
+    return sizes;
+}
 
-set
-    <CharName>
-    NoteFontMap::getCharNames() const
-    {
-        set
-            <CharName> names;
+std::set<CharName>
+NoteFontMap::getCharNames() const
+{
+    std::set<CharName> names;
 
-        for (SymbolDataMap::const_iterator i = m_data.begin();
-                i != m_data.end(); ++i) {
-            names.insert(i->first);
-        }
-
-        return names;
+    for (SymbolDataMap::const_iterator i = m_data.begin();
+         i != m_data.end(); ++i) {
+        names.insert(i->first);
     }
+    
+    return names;
+}
 
 bool
-NoteFontMap::checkFile(int size, string &src) const
+NoteFontMap::checkFile(int size, std::string &src) const
 {
     QString pixmapFileMixedName = QString("%1/%2/%3/%4.xpm")
                                   .arg(m_fontDirectory)
@@ -728,12 +724,12 @@ NoteFontMap::checkFile(int size, string &src) const
 
         if (!pixmapFileLowerInfo.isReadable()) {
             if (pixmapFileMixedName != pixmapFileLowerName) {
-                cerr << "Warning: Unable to open pixmap file "
+                std::cerr << "Warning: Unable to open pixmap file "
                 << pixmapFileMixedName << " or " << pixmapFileLowerName
-                << endl;
+                << std::endl;
             } else {
-                cerr << "Warning: Unable to open pixmap file "
-                << pixmapFileMixedName << endl;
+                std::cerr << "Warning: Unable to open pixmap file "
+                << pixmapFileMixedName << std::endl;
             }
             return false;
         } else {
@@ -756,7 +752,7 @@ NoteFontMap::hasInversion(int, CharName charName) const
 }
 
 bool
-NoteFontMap::getSrc(int size, CharName charName, string &src) const
+NoteFontMap::getSrc(int size, CharName charName, std::string &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end())
@@ -769,7 +765,7 @@ NoteFontMap::getSrc(int size, CharName charName, string &src) const
 }
 
 bool
-NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
+NoteFontMap::getInversionSrc(int size, CharName charName, std::string &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end())
@@ -832,8 +828,8 @@ const
     return font;
 }
 
-NoteFontMap::getStrategy(int, CharName charName)
-const
+SystemFont::Strategy
+NoteFontMap::getStrategy(int, CharName charName) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end())
@@ -1011,10 +1007,10 @@ NoteFontMap::dump() const
 {
     // debug code
 
-    cout << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
+    std::cout << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
     << "\nCopyright: " << getCopyright() << "\nMapped by: "
     << getMappedBy() << "\nType: " << getType()
-    << "\nSmooth: " << isSmooth() << endl;
+    << "\nSmooth: " << isSmooth() << std::endl;
 
     set
         <int> sizes = getSizes();
@@ -1025,69 +1021,69 @@ NoteFontMap::dump() const
             <int>::iterator sizei = sizes.begin(); sizei != sizes.end();
             ++sizei) {
 
-        cout << "\nSize: " << *sizei << "\n" << endl;
+        std::cout << "\nSize: " << *sizei << "\n" << std::endl;
 
         unsigned int t = 0;
 
         if (getStaffLineThickness(*sizei, t)) {
-            cout << "Staff line thickness: " << t << endl;
+            std::cout << "Staff line thickness: " << t << std::endl;
         }
 
         if (getLegerLineThickness(*sizei, t)) {
-            cout << "Leger line thickness: " << t << endl;
+            std::cout << "Leger line thickness: " << t << std::endl;
         }
 
         if (getStemThickness(*sizei, t)) {
-            cout << "Stem thickness: " << t << endl;
+            std::cout << "Stem thickness: " << t << std::endl;
         }
 
         if (getBeamThickness(*sizei, t)) {
-            cout << "Beam thickness: " << t << endl;
+            std::cout << "Beam thickness: " << t << std::endl;
         }
 
         if (getStemLength(*sizei, t)) {
-            cout << "Stem length: " << t << endl;
+            std::cout << "Stem length: " << t << std::endl;
         }
 
         if (getFlagSpacing(*sizei, t)) {
-            cout << "Flag spacing: " << t << endl;
+            std::cout << "Flag spacing: " << t << std::endl;
         }
 
         for (set
                 <CharName>::iterator namei = names.begin();
                 namei != names.end(); ++namei) {
 
-            cout << "\nCharacter: " << namei->c_str() << endl;
+            std::cout << "\nCharacter: " << namei->c_str() << std::endl;
 
-            string s;
+            std::string s;
             int x, y, c;
 
             if (getSrc(*sizei, *namei, s)) {
-                cout << "Src: " << s << endl;
+                std::cout << "Src: " << s << std::endl;
             }
 
             if (getInversionSrc(*sizei, *namei, s)) {
-                cout << "Inversion src: " << s << endl;
+                std::cout << "Inversion src: " << s << std::endl;
             }
 
             if (getCode(*sizei, *namei, c)) {
-                cout << "Code: " << c << endl;
+                std::cout << "Code: " << c << std::endl;
             }
 
             if (getInversionCode(*sizei, *namei, c)) {
-                cout << "Inversion code: " << c << endl;
+                std::cout << "Inversion code: " << c << std::endl;
             }
 
             if (getGlyph(*sizei, *namei, c)) {
-                cout << "Glyph: " << c << endl;
+                std::cout << "Glyph: " << c << std::endl;
             }
 
             if (getInversionGlyph(*sizei, *namei, c)) {
-                cout << "Inversion glyph: " << c << endl;
+                std::cout << "Inversion glyph: " << c << std::endl;
             }
 
             if (getHotspot(*sizei, *namei, 1, 1, x, y)) {
-                cout << "Hot spot: (" << x << "," << y << ")" << endl;
+                std::cout << "Hot spot: (" << x << "," << y << ")" << std::endl;
             }
         }
     }

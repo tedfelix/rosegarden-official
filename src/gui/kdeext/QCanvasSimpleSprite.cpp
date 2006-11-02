@@ -26,6 +26,8 @@
 
 #include "QCanvasSimpleSprite.h"
 
+namespace Rosegarden {
+
 QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas)
         : QCanvasSprite(0, canvas),
         m_pixmapArray(0)
@@ -209,5 +211,7 @@ void PixmapArrayGC::deleteAll()
 }
 
 std::vector<QCanvasPixmapArray*> PixmapArrayGC::m_pixmapArrays;
+
+}
 
 //////////////////////////////////////////////////////////////////////

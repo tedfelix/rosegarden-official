@@ -29,6 +29,7 @@
 
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kconfig.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Exception.h"
@@ -46,6 +47,7 @@
 #include "NoteFontFactory.h"
 #include "NoteFont.h"
 #include "NotePixmapParameters.h"
+#include "NotePixmapPainter.h"
 #include "NoteStyleFactory.h"
 #include "NoteStyle.h"
 #include <kglobal.h>
@@ -68,6 +70,11 @@
 
 namespace Rosegarden
 {
+
+class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
+{
+    // nothing to add -- just so we can predeclare it in the header
+};
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_selected(false),
@@ -187,7 +194,7 @@ NotePixmapFactory::init(std::string fontName, int size)
     QFont timeSigFont(defaultTimeSigFontFamily),
     textFont(defaultSerifFontFamily);
     KConfig* config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     m_timeSigFont = config->readFontEntry("timesigfont", &timeSigFont);
     m_timeSigFont.setBold(true);
@@ -225,7 +232,7 @@ NotePixmapFactory::~NotePixmapFactory()
     delete m_dottedRestCache;
 }
 
-string
+std::string
 NotePixmapFactory::getFontName() const
 {
     return m_font->getName();
@@ -1789,7 +1796,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 
     QFont defaultOctaveFont(defaultSerifFontFamily);
     KConfig* config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
     QFont octaveFont = config->readFontEntry("textfont", &defaultOctaveFont);
     octaveFont.setPixelSize(getLineSpacing() * 3 / 2);
     QFontMetrics octaveFontMetrics(octaveFont);

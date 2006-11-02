@@ -27,12 +27,20 @@
 #include <kapplication.h>
 
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <qfontmetrics.h>
 #include <qframe.h>
 #include <qsize.h>
 #include <qstring.h>
 #include <qwidget.h>
 
+#ifdef HAVE_XFT
+#include <ft2build.h>
+#include FT_FREETYPE_H 
+#include FT_OUTLINE_H
+#include FT_GLYPH_H
+#include <X11/Xft/Xft.h>
+#endif
 
 namespace Rosegarden
 {

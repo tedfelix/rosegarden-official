@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpoint.h>
+#include <qcanvas.h>
 
 
 namespace Rosegarden

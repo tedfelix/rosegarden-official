@@ -65,7 +65,6 @@ int
 TempoView::m_lastSetFilter = -1;
 
 
-int
 TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
         EditViewBase(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
         m_filter(Tempo | TimeSignature),

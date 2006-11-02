@@ -32,6 +32,8 @@
 #include <map>
 #include "base/Event.h"
 
+#include "NotationElement.h"
+
 
 class SlurList;
 class QObject;
@@ -42,6 +44,7 @@ namespace Rosegarden
 
 class Staff;
 class Quantizer;
+class Composition;
 class NotePixmapFactory;
 class NotationStaff;
 class NotationProperties;
@@ -97,7 +100,6 @@ public:
                               timeT = 0);
 
 private:
-
     void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 
     typedef FastVector<NotationElementList::iterator> SlurList;

@@ -46,6 +46,7 @@
 namespace Rosegarden
 {
 
+std::set<std::string>
 NoteFontFactory::getFontNames(bool forceRescan)
 {
     NOTATION_DEBUG << "NoteFontFactory::getFontNames: forceRescan = " << forceRescan << endl;
@@ -75,8 +76,8 @@ NoteFontFactory::getFontNames(bool forceRescan)
             KGlobal::dirs()->findResource("appdata", "fonts/mappings/");
         QDir dir(mappingDir);
         if (!dir.exists()) {
-            cerr << "NoteFontFactory::getFontNames: mapping directory \""
-            << mappingDir << "\" not found" << endl;
+            std::cerr << "NoteFontFactory::getFontNames: mapping directory \""
+                      << mappingDir << "\" not found" << std::endl;
             return m_fontNames;
         }
 
@@ -86,7 +87,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
 
             if ((*i).length() > 4 && (*i).right(4).lower() == ".xml") {
 
-                string name(qstrtostr((*i).left((*i).length() - 4)));
+                std::string name(qstrtostr((*i).left((*i).length() - 4)));
 
                 try {
                     NoteFontMap map(name);
@@ -115,6 +116,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
     return m_fontNames;
 }
 
+std::vector<int>
 NoteFontFactory::getAllSizes(std::string fontName)
 {
     NoteFont *font = getFont(fontName, 0);
@@ -133,6 +135,7 @@ NoteFontFactory::getAllSizes(std::string fontName)
     return v;
 }
 
+std::vector<int>
 NoteFontFactory::getScreenSizes(std::string fontName)
 {
     NoteFont *font = getFont(fontName, 0);
@@ -172,6 +175,7 @@ NoteFontFactory::getFont(std::string fontName, int size)
     }
 }
 
+std::string
 NoteFontFactory::getDefaultFontName()
 {
     static std::string defaultFont = "";

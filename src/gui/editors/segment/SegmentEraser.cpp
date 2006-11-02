@@ -28,6 +28,7 @@
 #include "misc/Debug.h"
 #include "commands/segment/SegmentEraseCommand.h"
 #include "CompositionView.h"
+#include "CompositionItemImpl.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
