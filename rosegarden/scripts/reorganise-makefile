@@ -1,6 +1,8 @@
 
-KDEDIR		= /opt/kde3.5
-QTDIR		= /opt/qt3
+#KDEDIR		= /opt/kde3.5
+#QTDIR		= /opt/qt3
+KDEDIR		= /usr
+QTDIR		= /usr
 
 KDEINC		= $(KDEDIR)/include
 KDELIB		= $(KDEDIR)/lib
@@ -18,7 +20,7 @@ MOC		= $(QTDIR)/bin/moc
 UIC		= $(QTDIR)/bin/uic
 
 #CXXFLAGS	= -w1 -wr748 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g 
-CXXFLAGS	= -Wall -O0 -g -DQT_THREAD_SUPPORT -D'VERSION="1.5.0-reorg"'
+CXXFLAGS	= -Wall -O0 -g -DHAVE_XFT -DQT_THREAD_SUPPORT -D'VERSION="1.5.0-reorg"'
 LDFLAGS		= 
 
 INCLUDES	= \

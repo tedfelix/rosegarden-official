@@ -32,6 +32,7 @@
 #include "commands/edit/PasteEventsCommand.h"
 #include "gui/general/EditTool.h"
 #include "gui/general/LinedStaff.h"
+#include "document/RosegardenGUIDoc.h"
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotationElement.h"
