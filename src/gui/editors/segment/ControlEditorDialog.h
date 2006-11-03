@@ -27,6 +27,7 @@
 #define _RG_CONTROLEDITORDIALOG_H_
 
 #include "base/Device.h"
+#include "base/MidiDevice.h"
 #include <kmainwindow.h>
 #include "document/ConfigGroups.h"
 

@@ -34,6 +34,7 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/AudioFaderBox.h"
@@ -137,8 +138,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
 
     } else {
 
-        AudioPlugin *pluginClass
-        = m_doc->getPluginManager()->getPlugin(plugin);
+        AudioPlugin *pluginClass = m_doc->getPluginManager()->getPlugin(plugin);
 
         if (pluginClass) {
             button->setText(pluginClass->getLabel());

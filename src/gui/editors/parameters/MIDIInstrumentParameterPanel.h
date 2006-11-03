@@ -27,6 +27,7 @@
 #define _RG_MIDIINSTRUMENTPARAMETERPANEL_H_
 
 #include "base/MidiProgram.h"
+#include "base/MidiDevice.h"
 #include "InstrumentParameterPanel.h"
 #include <qstring.h>
 

@@ -35,9 +35,12 @@
 #include <qscrollview.h>
 #include <qstring.h>
 #include <qvbox.h>
+#include <qlayout.h>
 #include <qvgroupbox.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
+#include <iostream>
+#include <set>
 
 
 namespace Rosegarden
@@ -140,8 +143,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
         // Move the parameter boxes from the old container to the new one.
 
         std::vector<RosegardenParameterBox *> sorted;
-        std::set
-            <RosegardenParameterBox *> unsorted;
+        std::set<RosegardenParameterBox *> unsorted;
 
         for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
             unsorted.insert(m_parameterBoxes[i]);
@@ -150,8 +152,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
         QString previous = "";
 
         while (!unsorted.empty()) {
-            std::set
-                <RosegardenParameterBox *>::iterator i = unsorted.begin();
+            std::set<RosegardenParameterBox *>::iterator i = unsorted.begin();
             bool have = false;
             while (i != unsorted.end()) {
                 if ((*i)->getPreviousBox(style) == previous) {

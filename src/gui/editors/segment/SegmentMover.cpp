@@ -39,6 +39,7 @@
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
+#include "SegmentToolBox.h"
 #include <kcommand.h>
 #include <qcursor.h>
 #include <qevent.h>

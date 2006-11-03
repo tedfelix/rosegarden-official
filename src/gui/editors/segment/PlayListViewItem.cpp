@@ -22,43 +22,21 @@
     COPYING included with this distribution for more information.
 */
 
+#include "PlayListViewItem.h"
 
-#include "TrackHeader.h"
+namespace Rosegarden {
 
-#include <qheader.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qwidget.h>
-
-
-namespace Rosegarden
+PlayListViewItem::PlayListViewItem(KListView* parent, KURL kurl)
+    : KListViewItem(parent, kurl.fileName(), kurl.prettyURL()),
+      m_kurl(kurl)
 {
+}
 
-TrackHeader::~TrackHeader()
-{}
-
-void
-TrackHeader::paintEvent(QPaintEvent *e)
+PlayListViewItem::PlayListViewItem(KListView* parent, QListViewItem* after, KURL kurl)
+    : KListViewItem(parent, after, kurl.fileName(), kurl.prettyURL()),
+      m_kurl(kurl)
 {
-    QPainter p( this );
-    p.setPen( colorGroup().buttonText() );
-    int pos = (orientation() == Horizontal)
-              ? e->rect().left()
-              : e->rect().top();
-    int id = mapToIndex( sectionAt( pos + offset() ) );
-    if ( id < 0 )
-        if ( pos > 0 )
-            return ;
-        else
-            id = 0;
-    for ( int i = id; i < count(); i++ ) {
-        QRect r = sRect( i );
-        paintSection( &p, i, r );
-        if ( orientation() == Horizontal && r. right() >= e->rect().right() ||
-                orientation() == Vertical && r. bottom() >= e->rect().bottom() )
-            return ;
-    }
-
 }
 
 }
+

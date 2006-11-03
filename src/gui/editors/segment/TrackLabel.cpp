@@ -37,6 +37,7 @@
 #include <qtooltip.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
+#include <qvalidator.h>
 
 
 namespace Rosegarden

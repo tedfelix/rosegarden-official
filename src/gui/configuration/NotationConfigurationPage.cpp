@@ -38,6 +38,7 @@
 #include "gui/editors/notation/NoteFontFactory.h"
 #include "gui/editors/notation/NoteFont.h"
 #include "gui/editors/notation/NoteFontMap.h"
+#include "gui/editors/notation/NoteFontViewer.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "gui/widgets/QuantizeParameters.h"
