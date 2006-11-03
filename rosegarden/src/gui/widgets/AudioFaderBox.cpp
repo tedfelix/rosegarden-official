@@ -36,6 +36,8 @@
 #include "base/Studio.h"
 #include "Fader.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/application/RosegardenGUIApp.h"
+#include "gui/studio/AudioPluginOSCGUIManager.h"
 #include "Rotary.h"
 #include <kglobal.h>
 #include <qframe.h>

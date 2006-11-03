@@ -283,7 +283,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     Event *clefEvt = 0, *keyEvt = 0;
     Clef clef;
-    Key key;
+    Rosegarden::Key key;
 
     NotationElementList::iterator itr =
         staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
@@ -314,30 +314,25 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     // is found more recently than the last key signature.
 
     if (m_accidental == Accidentals::NoAccidental &&
-            m_followAccidental) {
+        m_followAccidental) {
         Segment &segment = staff->getSegment();
         m_lastAccidental = m_accidental;
         Segment::iterator i = segment.findNearestTime(time);
         while (i != segment.end()) {
-            if ((*i)->isa(Key::EventType))
-                break;
+            if ((*i)->isa(Rosegarden::Key::EventType)) break;
             if ((*i)->isa(Note::EventType)) {
                 if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF) &&
-                        (*i)->has(BaseProperties::PITCH)) {
-                    int h = (*i)->get
-                            <Int>(NotationProperties::HEIGHT_ON_STAFF);
+                    (*i)->has(BaseProperties::PITCH)) {
+                    int h = (*i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF);
                     if (h == height) {
-                        pitch = (*i)->get
-                                <Int>(BaseProperties::PITCH);
-                        (*i)->get
-                        <String>(BaseProperties::ACCIDENTAL,
-                                 m_lastAccidental);
+                        pitch = (*i)->get<Int>(BaseProperties::PITCH);
+                        (*i)->get<String>(BaseProperties::ACCIDENTAL,
+                                          m_lastAccidental);
                         break;
                     }
                 }
             }
-            if (i == segment.begin())
-                break;
+            if (i == segment.begin()) break;
             --i;
         }
     }
@@ -346,9 +341,9 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     if (m_clickHappened) {
         if (time != m_clickTime ||
-                pitch != m_clickPitch ||
-                height != m_clickHeight ||
-                staffNo != m_clickStaffNo) {
+            pitch != m_clickPitch ||
+            height != m_clickHeight ||
+            staffNo != m_clickStaffNo) {
             changed = true;
         }
     } else {
@@ -506,7 +501,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     if (m_nParentView->isInTripletMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
-                !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+            !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
 
             KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 

@@ -213,6 +213,10 @@
 #include <qvaluevector.h>
 #include <qwidget.h>
 
+#ifdef HAVE_LIBJACK
+#include <jack/jack.h>
+#endif
+
 
 namespace Rosegarden
 {

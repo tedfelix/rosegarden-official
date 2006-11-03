@@ -35,7 +35,7 @@
 #include "Midi.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
-#include "rosestrings.h"
+#include "misc/Strings.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/types.h>

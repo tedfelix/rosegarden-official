@@ -35,7 +35,9 @@
 #include "CompositionItemHelper.h"
 #include "CompositionItemImpl.h"
 #include "CompositionModel.h"
+#include "CompositionModelImpl.h"
 #include "CompositionRect.h"
+#include "AudioPreviewPainter.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
@@ -64,6 +66,21 @@
 
 namespace Rosegarden
 {
+
+class PreviewRect : public QRect {
+public:
+    PreviewRect(int left, int top, int width, int height) :
+        QRect(left, top, width, height) {};
+
+    PreviewRect(const QRect& r) :
+        QRect(r) {};
+
+    const QColor& getColor() const { return m_color; }
+    void setColor(QColor c) { m_color = c; }
+
+protected:
+    QColor m_color;
+};
 
 CompositionView::CompositionView(RosegardenGUIDoc* doc,
                                  CompositionModel* model,

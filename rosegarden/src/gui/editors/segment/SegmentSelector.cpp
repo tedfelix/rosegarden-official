@@ -30,6 +30,7 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
+#include "base/SnapGrid.h"
 #include "base/Selection.h"
 #include "base/Track.h"
 #include "commands/segment/SegmentQuickCopyCommand.h"

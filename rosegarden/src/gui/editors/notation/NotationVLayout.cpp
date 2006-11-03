@@ -34,6 +34,7 @@
 #include "base/Quantizer.h"
 #include "base/Staff.h"
 #include "gui/general/ProgressReporter.h"
+#include "gui/editors/guitar/Fingering.h"
 #include "NotationChord.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"

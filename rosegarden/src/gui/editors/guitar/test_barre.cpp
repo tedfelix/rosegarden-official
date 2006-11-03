@@ -18,9 +18,12 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#ifdef COMPILE_GUITAR_TESTS
+
 #include <iostream>
 
-#include "barre.h"
+#include "Barre.h"
 
 using namespace Guitar;
 
@@ -233,3 +236,5 @@ int main ( int, char* [] )
     test_equal();
     return 0;
 }
+
+#endif

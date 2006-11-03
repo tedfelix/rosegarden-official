@@ -30,6 +30,7 @@
 #include "BarButtonsWidget.h"
 #include "base/RulerScale.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
@@ -76,8 +77,8 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
     }
 
     QObject::connect
-    (doc->getCommandHistory(), SIGNAL(commandExecuted()),
-     this, SLOT(update()));
+        (doc->getCommandHistory(), SIGNAL(commandExecuted()),
+         this, SLOT(update()));
 
     QToolTip::add
         (this, i18n("Left Click to position the playback pointer.\nShift + Left Click + Drag to select a range for looping or editing.\nShift + Left Click to clear the loop or range."));

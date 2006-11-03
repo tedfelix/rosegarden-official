@@ -22,26 +22,31 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PLAYLISTVIEWITEM_H_
-#define _RG_PLAYLISTVIEWITEM_H_
-
-#include <klistview.h>
-#include <kurl.h>
+#include "TempoListItem.h"
 
 namespace Rosegarden {
 
-class PlayListViewItem : public KListViewItem
+int
+TempoListItem::compare(QListViewItem *i, int col, bool ascending) const
 {
-public:
-    PlayListViewItem(KListView* parent, KURL);
-    PlayListViewItem(KListView* parent, QListViewItem*, KURL);
+    TempoListItem *ti = dynamic_cast<TempoListItem *>(i);
+    if (!ti) return QListViewItem::compare(i, col, ascending);
 
-    const KURL& getURL() { return m_kurl; }
-
-protected:
-    KURL m_kurl;
-};
-
+    if (col == 0) { // time
+	if (m_time == ti->m_time) {
+	    return int(m_type) - int(ti->m_type);
+	} else {
+	    return int(m_time - ti->m_time);
+	}
+    } else if (col == 1) { // type
+	if (m_type == ti->m_type) {
+	    return int(m_time - ti->m_time);
+	} else {
+	    return int(m_type) - int(ti->m_type);
+	}
+    } else {
+	return key(col, ascending).compare(i->key(col, ascending));
+    }
 }
 
-#endif
+}

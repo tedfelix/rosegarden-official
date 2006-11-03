@@ -18,15 +18,21 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+
+// This class was not actually used in the previous RG tree
+#ifdef NOT_DEFINED
+
 #ifndef GUITAR_TAB_EDITOR_H_
 #define GUITAR_TAB_EDITOR_H_
 
 #include "Fingering.h"
 #include "ChordMap.h"
-#include "GuitarTabBase.h"
+//#include "GuitarTabBase.h"
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <qvbox.h>
+#include <kdialog.h>
 
 namespace Rosegarden
 {
@@ -98,3 +104,5 @@ private:
 }
 
 #endif /* GUITAR_TAB_EDITOR_H_ */
+
+#endif

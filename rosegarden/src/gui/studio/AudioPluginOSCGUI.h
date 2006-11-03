@@ -28,6 +28,8 @@
 
 #ifdef HAVE_LIBLO
 
+#include <lo/lo.h>
+
 #include <qstring.h>
 
 

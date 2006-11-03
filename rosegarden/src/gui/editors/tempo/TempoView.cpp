@@ -42,8 +42,10 @@
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
+#include "TempoListItem.h"
 #include <kaction.h>
 #include <kglobal.h>
+#include <kconfig.h>
 #include <klistview.h>
 #include <kxmlguiclient.h>
 #include <qbuttongroup.h>
@@ -55,7 +57,9 @@
 #include <qptrlist.h>
 #include <qsize.h>
 #include <qstring.h>
-#include <qwidget.h>
+#include <qlayout.h>
+#include <qcanvas.h>
+#include <kstatusbar.h>
 
 
 namespace Rosegarden
@@ -194,7 +198,7 @@ TempoView::applyLayout(int /*staffNo*/)
     if (m_filter & TimeSignature) {
         for (int i = 0; i < comp->getTimeSignatureCount(); ++i) {
 
-            std::pair<timeT, TimeSignature> sig =
+            std::pair<timeT, Rosegarden::TimeSignature> sig =
                 comp->getTimeSignatureChange(i);
 
             QString properties;
@@ -234,7 +238,7 @@ TempoView::applyLayout(int /*staffNo*/)
             int qpmTenths = int((qpm - qpmUnits) * 10 + 0.001);
             int qpmHundredths = int((qpm - qpmUnits - qpmTenths / 10.0) * 100 + 0.001);
 
-            TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
+            Rosegarden::TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
             if (sig.getBeatDuration() ==
                     Note(Note::Crotchet).getDuration()) {
                 desc = i18n("%1.%2%3").
@@ -511,7 +515,7 @@ TempoView::slotEditInsertTimeSignature()
     }
 
     Composition &composition(m_doc->getComposition());
-    TimeSignature sig = composition.getTimeSignatureAt(insertTime);
+    Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(insertTime);
 
     TimeSignatureDialog dialog(this, &composition, insertTime, sig, true);
 
@@ -775,47 +779,49 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 
     switch (item->getType()) {
 
-    case TempoListItem::Tempo: {
-            TempoDialog dialog(this, getDocument(), true);
-            dialog.setTempoPosition(time);
+    case TempoListItem::Tempo:
+    {
+        TempoDialog dialog(this, getDocument(), true);
+        dialog.setTempoPosition(time);
+        
+        connect(&dialog,
+                SIGNAL(changeTempo(timeT,
+                                   tempoT,
+                                   tempoT,
+                                   TempoDialog::TempoDialogAction)),
+                this,
+                SIGNAL(changeTempo(timeT,
+                                   tempoT,
+                                   tempoT,
+                                   TempoDialog::TempoDialogAction)));
+        
+        dialog.exec();
+        break;
+    }
 
-            connect(&dialog,
-                    SIGNAL(changeTempo(timeT,
-                                       tempoT,
-                                       tempoT,
-                                       TempoDialog::TempoDialogAction)),
-                    this,
-                    SIGNAL(changeTempo(timeT,
-                                       tempoT,
-                                       tempoT,
-                                       TempoDialog::TempoDialogAction)));
-
-            dialog.exec();
-            break;
-        }
-
-    case TempoListItem::TimeSignature: {
-            Composition &composition(getDocument()->getComposition());
-            TimeSignature sig = composition.getTimeSignatureAt(time);
-
-            TimeSignatureDialog dialog(this, &composition, time, sig, true);
-
-            if (dialog.exec() == QDialog::Accepted) {
-
-                time = dialog.getTime();
-
-                if (dialog.shouldNormalizeRests()) {
-                    addCommandToHistory
+    case TempoListItem::TimeSignature:
+    {
+        Composition &composition(getDocument()->getComposition());
+        Rosegarden::TimeSignature sig = composition.getTimeSignatureAt(time);
+        
+        TimeSignatureDialog dialog(this, &composition, time, sig, true);
+        
+        if (dialog.exec() == QDialog::Accepted) {
+            
+            time = dialog.getTime();
+            
+            if (dialog.shouldNormalizeRests()) {
+                addCommandToHistory
                     (new AddTimeSignatureAndNormalizeCommand
                      (&composition, time, dialog.getTimeSignature()));
-                } else {
-                    addCommandToHistory
+            } else {
+                addCommandToHistory
                     (new AddTimeSignatureCommand
                      (&composition, time, dialog.getTimeSignature()));
-                }
             }
         }
-
+    }
+    
     default:
         break;
     }

@@ -31,6 +31,7 @@
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/Track.h"
+#include "base/SnapGrid.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "CompositionItemHelper.h"
 #include "CompositionModel.h"
@@ -40,6 +41,7 @@
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
+#include "SegmentSelector.h"
 #include <kcommand.h>
 #include <qcursor.h>
 #include <qevent.h>
