@@ -22,7 +22,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#include <cmath>
 #include "NotationVLayout.h"
 #include "misc/Debug.h"
 
