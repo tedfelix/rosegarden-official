@@ -22,43 +22,30 @@
     COPYING included with this distribution for more information.
 */
 
+#include "MarkerEditorViewItem.h"
 
-#include "TrackHeader.h"
+namespace Rosegarden {
 
-#include <qheader.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qwidget.h>
-
-
-namespace Rosegarden
+int
+MarkerEditorViewItem::compare(QListViewItem * i, int col, bool ascending) const
 {
+    MarkerEditorViewItem *ei = 
+        dynamic_cast<MarkerEditorViewItem *>(i);
 
-TrackHeader::~TrackHeader()
-{}
+    if (!ei) return KListViewItem::compare(i, col, ascending);
 
-void
-TrackHeader::paintEvent(QPaintEvent *e)
-{
-    QPainter p( this );
-    p.setPen( colorGroup().buttonText() );
-    int pos = (orientation() == Horizontal)
-              ? e->rect().left()
-              : e->rect().top();
-    int id = mapToIndex( sectionAt( pos + offset() ) );
-    if ( id < 0 )
-        if ( pos > 0 )
-            return ;
-        else
-            id = 0;
-    for ( int i = id; i < count(); i++ ) {
-        QRect r = sRect( i );
-        paintSection( &p, i, r );
-        if ( orientation() == Horizontal && r. right() >= e->rect().right() ||
-                orientation() == Vertical && r. bottom() >= e->rect().bottom() )
-            return ;
+    // Raw time sorting on time column
+    //
+    if (col == 0) {  
+
+        if (m_rawTime < ei->getRawTime()) return -1;
+        else if (ei->getRawTime() < m_rawTime) return 1;
+        else return 0;
+
+    } else {
+        return KListViewItem::compare(i, col, ascending);
     }
-
 }
 
 }
+

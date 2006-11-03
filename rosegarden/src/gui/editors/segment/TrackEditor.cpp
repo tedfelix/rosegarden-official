@@ -72,6 +72,7 @@
 #include <qstringlist.h>
 #include <qstrlist.h>
 #include <qwidget.h>
+#include <qvalidator.h>
 
 
 namespace Rosegarden

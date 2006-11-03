@@ -36,12 +36,12 @@ class QListViewItem;
 class QHBoxLayout;
 class QFrame;
 class QDropEvent;
-class PlayListView;
 
 
 namespace Rosegarden
 {
 
+class PlayListView;
 
 
 class PlayList : public QVBox

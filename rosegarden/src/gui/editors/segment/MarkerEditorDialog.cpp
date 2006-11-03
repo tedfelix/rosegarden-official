@@ -24,6 +24,7 @@
 
 
 #include "MarkerEditorDialog.h"
+#include "MarkerEditorViewItem.h"
 #include <qlayout.h>
 #include <kapplication.h>
 

@@ -48,6 +48,9 @@
 namespace Rosegarden
 {
 
+using namespace BaseProperties;
+
+
 NotationVLayout::NotationVLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
                                  QObject* parent, const char* name) :
@@ -110,8 +113,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
         // of meaningful.
         double displacedY = 0.0;
         long dyRaw = 0;
-        el->event()->get
-        <Int>(DISPLACED_Y, dyRaw);
+        el->event()->get<Int>(DISPLACED_Y, dyRaw);
         displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
         el->setLayoutY(staff.getLayoutYForHeight( -9) + displacedY);
@@ -697,13 +699,11 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     double displacedX = 0.0, displacedY = 0.0;
 
     long dxRaw = 0;
-    (*i)->event()->get
-    <Int>(DISPLACED_X, dxRaw);
+    (*i)->event()->get<Int>(DISPLACED_X, dxRaw);
     displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
     long dyRaw = 0;
-    (*i)->event()->get
-    <Int>(DISPLACED_Y, dyRaw);
+    (*i)->event()->get<Int>(DISPLACED_Y, dyRaw);
     displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
     (*i)->setLayoutX(startX + displacedX);

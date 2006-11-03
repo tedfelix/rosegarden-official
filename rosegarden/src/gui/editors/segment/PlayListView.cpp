@@ -22,43 +22,45 @@
     COPYING included with this distribution for more information.
 */
 
+#include "PlayListView.h"
 
-#include "TrackHeader.h"
+#include <klocale.h>
+#include <qdragobject.h>
 
-#include <qheader.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qwidget.h>
+namespace Rosegarden {
 
-
-namespace Rosegarden
+PlayListView::PlayListView(QWidget *parent, const char *name)
+    : KListView(parent, name)
 {
+    addColumn(i18n("Title"));
+    addColumn(i18n("File name"));
 
-TrackHeader::~TrackHeader()
-{}
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropVisualizer(true);
 
-void
-TrackHeader::paintEvent(QPaintEvent *e)
+    setShowToolTips(true);
+    setShowSortIndicator(true);
+    setAllColumnsShowFocus(true);
+    setItemsMovable(true);
+    setSorting(-1);
+}
+
+bool PlayListView::acceptDrag(QDropEvent* e) const
 {
-    QPainter p( this );
-    p.setPen( colorGroup().buttonText() );
-    int pos = (orientation() == Horizontal)
-              ? e->rect().left()
-              : e->rect().top();
-    int id = mapToIndex( sectionAt( pos + offset() ) );
-    if ( id < 0 )
-        if ( pos > 0 )
-            return ;
-        else
-            id = 0;
-    for ( int i = id; i < count(); i++ ) {
-        QRect r = sRect( i );
-        paintSection( &p, i, r );
-        if ( orientation() == Horizontal && r. right() >= e->rect().right() ||
-                orientation() == Vertical && r. bottom() >= e->rect().bottom() )
-            return ;
-    }
+    return QUriDrag::canDecode(e) || KListView::acceptDrag(e);
+}
 
+
+QListViewItem* PlayListView::previousSibling(QListViewItem* item)
+{
+    QListViewItem* prevSib = firstChild();
+
+    while(prevSib && prevSib->nextSibling() != item)
+        prevSib = prevSib->nextSibling();
+
+    return prevSib;
 }
 
 }
+

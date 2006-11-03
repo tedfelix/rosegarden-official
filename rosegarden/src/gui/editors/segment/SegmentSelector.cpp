@@ -43,6 +43,7 @@
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentTool.h"
+#include "SegmentToolBox.h"
 #include <kcommand.h>
 #include <qcursor.h>
 #include <qevent.h>

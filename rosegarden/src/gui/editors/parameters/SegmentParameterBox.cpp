@@ -998,7 +998,7 @@ SegmentParameterBox::updateHighLow()
     // Key of C major and NoAccidental means any "black key" notes will be
     // written as sharps.
     Accidental accidental = Accidentals::NoAccidental;
-    Key key = Key("C major");
+    Rosegarden::Key key = Rosegarden::Key("C major");
 
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);

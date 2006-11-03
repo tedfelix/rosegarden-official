@@ -213,6 +213,7 @@ TrackButtons::populateButtons()
 
 }
 
+std::vector<int>
 TrackButtons::mutedTracks()
 {
     std::vector<int> mutedTracks;
@@ -482,6 +483,7 @@ TrackButtons::selectLabel(int position)
     }
 }
 
+std::vector<int>
 TrackButtons::getHighlightedTracks()
 {
     std::vector<int> retList;
@@ -596,17 +598,17 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
         connectedPixmap.load
-        (QString("%1/misc/connected.xpm").arg(pixmapDir));
+            (QString("%1/misc/connected.xpm").arg(pixmapDir));
         connectedUsedPixmap.load
-        (QString("%1/misc/connected-used.xpm").arg(pixmapDir));
+            (QString("%1/misc/connected-used.xpm").arg(pixmapDir));
         connectedSelectedPixmap.load
-        (QString("%1/misc/connected-selected.xpm").arg(pixmapDir));
+            (QString("%1/misc/connected-selected.xpm").arg(pixmapDir));
         unconnectedPixmap.load
-        (QString("%1/misc/unconnected.xpm").arg(pixmapDir));
+            (QString("%1/misc/unconnected.xpm").arg(pixmapDir));
         unconnectedUsedPixmap.load
-        (QString("%1/misc/unconnected-used.xpm").arg(pixmapDir));
+            (QString("%1/misc/unconnected-used.xpm").arg(pixmapDir));
         unconnectedSelectedPixmap.load
-        (QString("%1/misc/unconnected-selected.xpm").arg(pixmapDir));
+            (QString("%1/misc/unconnected-selected.xpm").arg(pixmapDir));
 
         havePixmaps = true;
     }
@@ -642,7 +644,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
         if ((*it)->getType() == Instrument::SoftSynth) {
             pname = "";
             AudioPluginInstance *plugin = (*it)->getPlugin
-                                          (Instrument::SYNTH_PLUGIN_POSITION);
+                (Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
                 pname = strtoqstr(plugin->getProgram());
                 QString identifier = strtoqstr(plugin->getIdentifier());
@@ -650,7 +652,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
                     connected = true;
                     QString type, soName, label;
                     PluginIdentifier::parseIdentifier
-                    (identifier, type, soName, label);
+                        (identifier, type, soName, label);
                     if (pname == "") {
                         pname = strtoqstr(plugin->getDistinctiveConfigurationText());
                     }
@@ -685,8 +687,8 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
                 deviceUsedByAnyone = true;
             else {
                 for (Composition::trackcontainer::iterator tit =
-                            comp.getTracks().begin();
-                        tit != comp.getTracks().end(); ++tit) {
+                         comp.getTracks().begin();
+                     tit != comp.getTracks().end(); ++tit) {
 
                     if (tit->second->getInstrument() == (*it)->getId()) {
                         instrUsedByAnyone = true;
@@ -703,11 +705,11 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
             }
 
             QIconSet iconSet
-            (connected ?
-             (deviceUsedByAnyone ?
-              connectedUsedPixmap : connectedPixmap) :
-                     (deviceUsedByAnyone ?
-                      unconnectedUsedPixmap : unconnectedPixmap));
+                (connected ?
+                 (deviceUsedByAnyone ?
+                  connectedUsedPixmap : connectedPixmap) :
+                 (deviceUsedByAnyone ?
+                  unconnectedUsedPixmap : unconnectedPixmap));
 
             currentDevId = int(devId);
 
@@ -721,11 +723,11 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
             connect(subMenu, SIGNAL(activated(int)),
                     SLOT(slotInstrumentPopupActivated(int)));
 
-} else if (!instrUsedByMe) {
+        } else if (!instrUsedByMe) {
 
             for (Composition::trackcontainer::iterator tit =
-                        comp.getTracks().begin();
-                    tit != comp.getTracks().end(); ++tit) {
+                     comp.getTracks().begin();
+                 tit != comp.getTracks().end(); ++tit) {
 
                 if (tit->second->getInstrument() == (*it)->getId()) {
                     instrUsedByAnyone = true;
@@ -735,15 +737,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
         }
 
         QIconSet iconSet
-        (connected ?
-         (instrUsedByAnyone ?
-          instrUsedByMe ?
-          connectedSelectedPixmap :
-  connectedUsedPixmap : connectedPixmap) :
-                 (instrUsedByAnyone ?
-                  instrUsedByMe ?
-                  unconnectedSelectedPixmap :
-                  unconnectedUsedPixmap : unconnectedPixmap));
+            (connected ?
+             (instrUsedByAnyone ?
+              instrUsedByMe ?
+              connectedSelectedPixmap :
+              connectedUsedPixmap : connectedPixmap) :
+             (instrUsedByAnyone ?
+              instrUsedByMe ?
+              unconnectedSelectedPixmap :
+              unconnectedUsedPixmap : unconnectedPixmap));
 
         if (pname != "")
             iname += " (" + pname + ")";

@@ -24,6 +24,8 @@
 
 
 #include "PlayList.h"
+#include "PlayListView.h"
+#include "PlayListViewItem.h"
 #include <qlayout.h>
 
 #include <klocale.h>

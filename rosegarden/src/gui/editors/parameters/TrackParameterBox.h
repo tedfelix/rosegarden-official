@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,6 +30,7 @@
 #define _RG_TRACKPARAMETERBOX_H_
 
 #include "base/MidiProgram.h"
+#include "base/Track.h"
 #include "gui/widgets/ColourTable.h"
 #include <map>
 #include "RosegardenParameterArea.h"

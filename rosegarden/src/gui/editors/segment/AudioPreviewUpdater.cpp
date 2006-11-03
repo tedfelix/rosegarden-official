@@ -39,6 +39,8 @@
 namespace Rosegarden
 {
 
+static int apuExtantCount = 0;
+
 AudioPreviewUpdater::AudioPreviewUpdater(AudioPreviewThread &thread,
         const Composition& c, const Segment* s,
         const QRect& r,

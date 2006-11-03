@@ -53,6 +53,9 @@
 namespace Rosegarden
 {
 
+using namespace BaseProperties;
+
+
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
                                  QObject* parent, const char* name) :
@@ -335,16 +338,14 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
             }
 
             bool invisible = false;
-            if (el->event()->get
-                    <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
+            if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
                 if (!showInvisibles)
                     continue;
             }
 
-            if (el->event()->has(BaseProperties::BEAMED_GROUP_ID)) {
+            if (el->event()->has(BEAMED_GROUP_ID)) {
                 NOTATION_DEBUG << "element is beamed" << endl;
-                long groupId = el->event()->get
-                               <Int>(BaseProperties::BEAMED_GROUP_ID);
+                long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
                 if (groupIds.find(groupId) == groupIds.end()) {
                     NOTATION_DEBUG << "it's a new beamed group, applying stem properties" << endl;
                     NotationGroup group(*staff.getViewElementList(),
@@ -384,13 +385,11 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                 // contribute to a fixed area following the next chord
 
                 if (el->event()->has(Text::TextTypePropertyName) &&
-                        el->event()->get
-                        <String>(Text::TextTypePropertyName) ==
+                        el->event()->get<String>(Text::TextTypePropertyName) ==
                         Text::Lyric) {
                     lyricWidth = m_npf->getTextWidth(Text(*el->event()));
                     NOTATION_DEBUG << "Setting lyric width to " << lyricWidth
-                    << " for text " << el->event()->get
-                    <String>(Text::TextPropertyName) << endl;
+                                   << " for text " << el->event()->get<String>(Text::TextPropertyName) << endl;
                 }
                 chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
@@ -568,15 +567,13 @@ NotationHLayout::scanChord(NotationElementList *notes,
             grace = true;
 
         long pitch = 64;
-        if (!el->event()->get
-                <Int>(BaseProperties::PITCH, pitch)) {
+        if (!el->event()->get<Int>(PITCH, pitch)) {
             NOTATION_DEBUG <<
             "WARNING: NotationHLayout::scanChord: couldn't get pitch for element, using default pitch of " << pitch << endl;
         }
 
         Accidental explicitAccidental = Accidentals::NoAccidental;
-        (void)el->event()->get
-        <String>(BaseProperties::ACCIDENTAL, explicitAccidental);
+        (void)el->event()->get<String>(ACCIDENTAL, explicitAccidental);
 
         Pitch p(pitch, explicitAccidental);
         int h = p.getHeightOnStaff(clef, key);
@@ -594,8 +591,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
         bool cautionary = false;
         if (el->event()->has(m_properties.USE_CAUTIONARY_ACCIDENTAL)) {
-            cautionary = el->event()->get
-                         <Bool>(m_properties.USE_CAUTIONARY_ACCIDENTAL);
+            cautionary = el->event()->get<Bool>(m_properties.USE_CAUTIONARY_ACCIDENTAL);
         }
         Accidental dacc = accTable.processDisplayAccidental(acc, h, cautionary);
         el->event()->setMaybe<String>(m_properties.DISPLAY_ACCIDENTAL, dacc);
@@ -1365,16 +1361,14 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
         if (el->event()->isa(Note::EventType)) {
                 long pitch = 0;
-                el->event()->get
-                <Int>(BaseProperties::PITCH, pitch);
+                el->event()->get<Int>(PITCH, pitch);
                 NOTATION_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
             } else {
                 NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
             }
 
             bool invisible = false;
-            if (el->event()->get
-                    <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
+            if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
                 if (!showInvisibles)
                     continue;
             }
@@ -1427,8 +1421,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             double displacedX = 0.0;
             long dxRaw = 0;
-            el->event()->get
-            <Int>(BaseProperties::DISPLACED_X, dxRaw);
+            el->event()->get<Int>(DISPLACED_X, dxRaw);
             displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
             el->setLayoutX(x + displacedX);
@@ -1464,8 +1457,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                 // hairpin immediately follows it
 
                 if (el->event()->has(Text::TextTypePropertyName) &&
-                        el->event()->get
-                        <String>(Text::TextTypePropertyName) ==
+                        el->event()->get<String>(Text::TextTypePropertyName) ==
                         Text::Dynamic) {
                     lastDynamicText = el;
                 }
@@ -1481,8 +1473,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                 // preceded the indication in the staff because it has
                 // a smaller subordering
 
-                if (el->event()->get
-                        <String>
+                if (el->event()->get<String>
                         (Indication::IndicationTypePropertyName, type) &&
                         (type == Indication::Crescendo ||
                          type == Indication::Decrescendo) &&
@@ -1550,7 +1541,7 @@ NotationHLayout::sampleGroupElement(Staff &staff,
 {
     NotationElement *el = static_cast<NotationElement *>(*itr);
 
-    if (el->event()->has(BaseProperties::BEAMED_GROUP_ID)) {
+    if (el->event()->has(BEAMED_GROUP_ID)) {
 
         //!!! Gosh.  We need some clever logic to establish whether
         // one group is happening while another has not yet ended --
@@ -1561,8 +1552,7 @@ NotationHLayout::sampleGroupElement(Staff &staff,
         // -- we could just use HEIGHT_ON_STAFF of their first notes
         // to determine this, as if that doesn't work, nothing will
 
-        long groupId = el->event()->get
-                       <Int>(BaseProperties::BEAMED_GROUP_ID);
+        long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
         NOTATION_DEBUG << "group id: " << groupId << endl;
         if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
             NOTATION_DEBUG << "(new group)" << endl;
@@ -1652,8 +1642,7 @@ NotationHLayout::positionChord(Staff &staff,
 
         double displacedX = 0.0;
         long dxRaw = 0;
-        elt->event()->get
-        <Int>(BaseProperties::DISPLACED_X, dxRaw);
+        elt->event()->get<Int>(DISPLACED_X, dxRaw);
         displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
         elt->setLayoutX(baseX + displacedX);
@@ -1681,15 +1670,12 @@ NotationHLayout::positionChord(Staff &staff,
         bool tiedForwards = false;
         bool tiedBack = false;
 
-        note->event()->get
-        <Bool>(BaseProperties::TIED_FORWARD, tiedForwards);
-        note->event()->get
-        <Bool>(BaseProperties::TIED_BACKWARD, tiedBack);
+        note->event()->get<Bool>(TIED_FORWARD, tiedForwards);
+        note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
 
-        if (!note->event()->has(BaseProperties::PITCH))
+        if (!note->event()->has(PITCH))
             continue;
-        int pitch = note->event()->get
-                    <Int>(BaseProperties::PITCH);
+        int pitch = note->event()->get<Int>(PITCH);
 
         if (tiedBack) {
             TieMap::iterator ti(tieMap.find(pitch));
@@ -1739,13 +1725,11 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
 
-    if ((e.isNote() || e.isRest()) && e.event()->has(BaseProperties::NOTE_TYPE)) {
+    if ((e.isNote() || e.isRest()) && e.event()->has(NOTE_TYPE)) {
 
-        long noteType = e.event()->get
-                        <Int>(BaseProperties::NOTE_TYPE);
+        long noteType = e.event()->get<Int>(NOTE_TYPE);
         long dots = 0;
-        (void)e.event()->get
-        <Int>(BaseProperties::NOTE_DOTS, dots);
+        (void)e.event()->get<Int>(NOTE_DOTS, dots);
 
         double bw = 0;
 
